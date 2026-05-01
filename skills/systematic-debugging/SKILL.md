@@ -1,0 +1,61 @@
+---
+name: systematic-debugging
+description: 系统化调试流程，面向根因未明的问题定位与修复验证
+triggers:
+  - 出现真实故障且根因不明确时
+  - 回归失败但无法直接定位到单一改动时
+non_triggers:
+  - 已有明确根因且只需执行已确认修复
+  - 纯文档或命名修改
+inputs:
+  - 现象描述、触发条件、日志与监控证据
+outputs:
+  - 假设矩阵、实验记录、根因结论与修复验证证据
+constraints:
+  - 先做只读诊断，未经确认不做破坏性操作
+  - 单轮仅验证一个假设并记录正负结果
+  - 没有证据链不得给出根因结论
+---
+
+# systematic-debugging
+
+## Goal
+- 用最小实验成本定位根因，并输出可复现、可验证、可回归的修复路径。
+
+## Prerequisites
+- 固定问题复现条件（版本、环境、输入、时间窗）。
+- 预先定义观测指标与日志采集方式。
+
+## Workflow
+1. 固定问题边界：明确现象、影响范围、触发条件与不受影响范围。
+2. 构建假设矩阵：按概率和影响排序，先验证高价值假设。
+3. 单变量实验：每轮只变更一个变量，记录命令、输入、结果。
+4. 负结果留痕：对被证伪假设记录“为何不成立”，避免重复试错。
+5. 根因收敛与复验：给出根因证据链，执行修复前后对比验证。
+6. 失败升级策略：同类实验连续失败时，回到假设矩阵重排优先级。
+
+## Commands
+```bash
+<repro-cmd> --case <id>
+<log-collect-cmd> --since <timestamp>
+```
+
+## Evidence Template
+```md
+- Repro Baseline:
+- Hypothesis Matrix:
+- Experiment #n (single variable):
+- Negative Findings:
+- Root Cause Chain:
+- Fix Verification:
+```
+
+## Failure Handling
+- 连续两轮实验无信息增量时，必须重排假设矩阵。
+- 复现不稳定时先固化环境，不继续追加修复改动。
+
+## Quality Gate
+- 调试记录必须包含时间线、实验步骤、观察结果和结论映射。
+- 至少有一条被证伪假设的记录。
+- 修复结论必须包含“复现 -> 修复 -> 回归”三段证据。
+- 若根因仍不确定，必须显式标记为 `needs-fix`，禁止“疑似已修复”式结论。

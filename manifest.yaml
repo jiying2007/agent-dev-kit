@@ -1,0 +1,251 @@
+version: 0.3.0
+locale: zh-CN
+platforms:
+  - linux-embedded
+  - mcu-baremetal
+  - mcu-rtos
+
+tool_targets:
+  codex:
+    display_name: Codex
+    default_root: ~/.codex
+    agents_dir: agents
+    skills_dir: skills
+    detect:
+      - $CODEX_HOME
+      - ~/.codex
+  claude-code:
+    display_name: Claude Code
+    default_root: ~/.claude
+    agents_dir: agents
+    skills_dir: skills
+    detect:
+      - ~/.claude
+  hermes-agent:
+    display_name: Hermes Agent
+    default_root: ~/.hermes
+    agents_dir: agents
+    skills_dir: skills
+    detect:
+      - ~/.hermes
+  opencode:
+    display_name: OpenCode
+    default_root: ~/.config/opencode
+    agents_dir: agents
+    skills_dir: skills
+    detect:
+      - ~/.config/opencode
+
+quality_tiers:
+  p0:
+    description: 核心主干资产，必须具备可执行流程与验收证据模板
+  p1:
+    description: 稳定扩展资产，必须具备命令、样例和质量门禁
+  p2:
+    description: 可选场景资产，必须具备边界说明和最小验证路径
+
+profiles:
+  core:
+    description: 通用研发核心配置（跨模块需求、实现、验证与评审）
+    include_agents:
+      - requirements-analyst
+      - architecture-planner
+      - application-engineer
+      - test-validation-engineer
+      - code-review-governor
+    include_skills:
+      - requirements-triage
+      - task-breakdown
+      - interface-contract-design
+      - unit-test-embedded
+      - static-analysis-c-cpp
+      - systematic-debugging
+      - verification-before-completion
+      - commit-pr-quality-gate
+  embedded-fullstack:
+    description: C/C++ 嵌入式全栈默认配置（驱动、组件、应用）
+    extends:
+      - core
+    include_agents:
+      - driver-engineer
+      - component-engineer
+      - build-release-engineer
+      - performance-reliability-engineer
+      - security-compliance-reviewer
+    include_skills:
+      - adr-writer
+      - register-map-design
+      - driver-bringup-checklist
+      - bsp-porting-playbook
+      - rtos-task-design
+      - interrupt-dma-patterns
+      - protocol-stack-integration
+      - component-api-stability
+      - cmake-cross-build
+      - toolchain-debug-openocd-gdb
+      - integration-hil-sil
+      - fault-injection-recovery
+      - performance-profiling-embedded
+      - release-versioning
+  release-hardening:
+    description: 发布前强化配置（安全、可靠性、发布治理）
+    optional: true
+    include_agents:
+      - build-release-engineer
+      - performance-reliability-engineer
+      - security-compliance-reviewer
+    include_skills:
+      - integration-hil-sil
+      - static-analysis-c-cpp
+      - fault-injection-recovery
+      - performance-profiling-embedded
+      - release-versioning
+
+default_profile: embedded-fullstack
+
+agents:
+  - name: requirements-analyst
+    path: agents/requirements-analyst/AGENTS.md
+    role: 需求澄清与验收标准固化
+    language: zh-CN
+    quality_tier: p0
+  - name: architecture-planner
+    path: agents/architecture-planner/AGENTS.md
+    role: 架构设计与技术选型
+    language: zh-CN
+    quality_tier: p0
+  - name: driver-engineer
+    path: agents/driver-engineer/AGENTS.md
+    role: 驱动与外设集成实现
+    language: zh-CN
+    quality_tier: p0
+  - name: component-engineer
+    path: agents/component-engineer/AGENTS.md
+    role: 组件抽象与中间件实现
+    language: zh-CN
+    quality_tier: p0
+  - name: application-engineer
+    path: agents/application-engineer/AGENTS.md
+    role: 应用层业务与系统编排实现
+    language: zh-CN
+    quality_tier: p0
+  - name: build-release-engineer
+    path: agents/build-release-engineer/AGENTS.md
+    role: 构建、打包与发布流程
+    language: zh-CN
+    quality_tier: p0
+  - name: test-validation-engineer
+    path: agents/test-validation-engineer/AGENTS.md
+    role: 测试设计与验证闭环
+    language: zh-CN
+    quality_tier: p0
+  - name: performance-reliability-engineer
+    path: agents/performance-reliability-engineer/AGENTS.md
+    role: 性能与可靠性优化
+    language: zh-CN
+    quality_tier: p0
+  - name: security-compliance-reviewer
+    path: agents/security-compliance-reviewer/AGENTS.md
+    role: 安全与合规评审
+    language: zh-CN
+    quality_tier: p0
+  - name: code-review-governor
+    path: agents/code-review-governor/AGENTS.md
+    role: 代码评审与质量门禁裁决
+    language: zh-CN
+    quality_tier: p0
+
+skills:
+  - name: requirements-triage
+    path: skills/requirements-triage/SKILL.md
+    quality_tier: p0
+  - name: adr-writer
+    path: skills/adr-writer/SKILL.md
+    quality_tier: p1
+  - name: task-breakdown
+    path: skills/task-breakdown/SKILL.md
+    quality_tier: p0
+  - name: interface-contract-design
+    path: skills/interface-contract-design/SKILL.md
+    quality_tier: p0
+  - name: register-map-design
+    path: skills/register-map-design/SKILL.md
+    quality_tier: p1
+  - name: driver-bringup-checklist
+    path: skills/driver-bringup-checklist/SKILL.md
+    quality_tier: p1
+  - name: bsp-porting-playbook
+    path: skills/bsp-porting-playbook/SKILL.md
+    quality_tier: p1
+  - name: rtos-task-design
+    path: skills/rtos-task-design/SKILL.md
+    quality_tier: p1
+  - name: interrupt-dma-patterns
+    path: skills/interrupt-dma-patterns/SKILL.md
+    quality_tier: p1
+  - name: protocol-stack-integration
+    path: skills/protocol-stack-integration/SKILL.md
+    quality_tier: p1
+  - name: component-api-stability
+    path: skills/component-api-stability/SKILL.md
+    quality_tier: p1
+  - name: cmake-cross-build
+    path: skills/cmake-cross-build/SKILL.md
+    quality_tier: p1
+  - name: toolchain-debug-openocd-gdb
+    path: skills/toolchain-debug-openocd-gdb/SKILL.md
+    quality_tier: p1
+  - name: static-analysis-c-cpp
+    path: skills/static-analysis-c-cpp/SKILL.md
+    quality_tier: p0
+  - name: systematic-debugging
+    path: skills/systematic-debugging/SKILL.md
+    quality_tier: p0
+  - name: unit-test-embedded
+    path: skills/unit-test-embedded/SKILL.md
+    quality_tier: p0
+  - name: verification-before-completion
+    path: skills/verification-before-completion/SKILL.md
+    quality_tier: p0
+  - name: integration-hil-sil
+    path: skills/integration-hil-sil/SKILL.md
+    quality_tier: p1
+  - name: fault-injection-recovery
+    path: skills/fault-injection-recovery/SKILL.md
+    quality_tier: p1
+  - name: performance-profiling-embedded
+    path: skills/performance-profiling-embedded/SKILL.md
+    quality_tier: p1
+  - name: release-versioning
+    path: skills/release-versioning/SKILL.md
+    quality_tier: p1
+  - name: commit-pr-quality-gate
+    path: skills/commit-pr-quality-gate/SKILL.md
+    quality_tier: p0
+
+optional_skills:
+  - name: test-flakiness-triage
+    path: optional-skills/test-flakiness-triage/SKILL.md
+    quality_tier: p2
+    description: 测试波动问题定位与稳定化
+  - name: cross-team-handoff
+    path: optional-skills/cross-team-handoff/SKILL.md
+    quality_tier: p2
+    description: 跨团队交接清单与风险闭环
+  - name: incident-rca-report
+    path: optional-skills/incident-rca-report/SKILL.md
+    quality_tier: p2
+    description: 线上事故根因分析与修复复盘
+
+install:
+  default_mode: symlink
+  default_tool: auto
+  default_target: ""
+  command: ./scripts/install_assets.sh --tool auto --mode symlink --profile embedded-fullstack
+
+dependencies:
+  required:
+    - bash>=4
+  optional:
+    - rsync
+    - shellcheck

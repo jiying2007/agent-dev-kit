@@ -1,0 +1,36 @@
+name: global-dev-kit-release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate and smoke
+        run: |
+          bash scripts/validate_assets.sh --strict
+          bash scripts/check_format.sh
+          bash tests/run_all.sh
+
+      - name: Build cross-tool bundles
+        run: |
+          bash scripts/convert_assets.sh --target codex --profile embedded-fullstack --out dist --clean
+          bash scripts/convert_assets.sh --target claude-code --profile embedded-fullstack --out dist --clean
+          bash scripts/convert_assets.sh --target hermes-agent --profile embedded-fullstack --out dist --clean
+          bash scripts/convert_assets.sh --target opencode --profile embedded-fullstack --out dist --clean
+
+      - name: Archive release bundle
+        run: tar -czf global-dev-kit-dist.tar.gz dist
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: global-dev-kit-dist
+          path: global-dev-kit-dist.tar.gz

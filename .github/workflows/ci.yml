@@ -1,0 +1,25 @@
+name: global-dev-kit-ci
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  validate-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate manifest and assets
+        run: bash scripts/validate_assets.sh --strict
+
+      - name: Format consistency check
+        run: bash scripts/check_format.sh
+
+      - name: Regression and smoke tests
+        run: bash tests/run_all.sh
