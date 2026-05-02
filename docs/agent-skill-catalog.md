@@ -1,6 +1,6 @@
 # Agent and Skill Catalog
 
-- generated_at: 2026-04-27T03:43:42Z
+- generated_at: 2026-05-02T10:35:30Z
 - source: manifest.yaml
 
 ## Agents
@@ -53,32 +53,22 @@
 | `cross-team-handoff` | 跨团队交接时统一目标、边界和验收责任 | 模块即将交接给其他团队维护 | `optional-skills/cross-team-handoff/SKILL.md` |
 | `incident-rca-report` | 线上事故复盘与根因分析闭环 | 出现线上故障且需要复盘闭环 | `optional-skills/incident-rca-report/SKILL.md` |
 | `artifact-gated-lite` | 高风险变更时使用轻量 artifact 标签与门禁模板固定交付证据 | 涉及公共接口、schema、发布链路等高风险变更 | `optional-skills/artifact-gated-lite/SKILL.md` |
+| `planning-execution-loop` | 长任务计划审查、分阶段执行、恢复与收口闭环 | 有书面计划需要持续执行时 | `optional-skills/planning-execution-loop/SKILL.md` |
+| `skill-composition-governance` | 治理技能组合、触发优先级、fallback 与弃用关系 | 新增或调整多个 skill 的组合关系时 | `optional-skills/skill-composition-governance/SKILL.md` |
+| `security-supply-chain` | 第三方技能、脚本与参考资产引入前的安全和供应链审查 | 引入第三方 skill、agent、脚本或参考资产前 | `optional-skills/security-supply-chain/SKILL.md` |
 
 ## Profiles
 
 | Name | Description | Optional | Extends |
 |---|---|---|---|
 | `core` | 通用研发核心配置（跨模块需求、实现、验证与评审） | false | - |
+| `personal-core` | 个人 ~/.codex 生产默认配置（精简核心 + 完成前门禁） | false | core |
 | `embedded-fullstack` | C/C++ 嵌入式全栈默认配置（驱动、组件、应用） | false | core |
 | `release-hardening` | 发布前强化配置（安全、可靠性、发布治理） | true | - |
 | `artifact-gated-lite` | 高风险变更的轻量产物门禁配置（强调可追溯交付证据） | true | core |
+| `team-core` | 团队交付配置（责任矩阵、交接、验证与评审） | true | core |
+| `openspec-driven` | Spec 驱动变更配置（requirements/design/tasks 与 gdk workflow 对齐） | true | core |
+| `large-refactor` | 大型重构配置（边界冻结、API 稳定性、基线对比与回归） | true | core |
+| `incident-response` | 事故响应配置（根因定位、复盘、恢复与验证） | true | core |
+| `research-intake` | 参考仓吸收配置（候选筛选、组合治理与供应链审查） | true | - |
 
-## Scenario Routing
-
-| 场景 | Agent 链 | Skill 组合 | Runbook |
-|---|---|---|---|
-| 新功能迭代 | `requirements-analyst -> architecture-planner -> application-engineer -> test-validation-engineer -> code-review-governor` | `requirements-triage + task-breakdown + adr-writer + unit-test-embedded + verification-before-completion` | `docs/runbooks/feature-delivery.md` |
-| 缺陷修复 | `application-engineer -> test-validation-engineer -> code-review-governor` | `systematic-debugging + task-breakdown + verification-before-completion` | `docs/runbooks/bugfix-delivery.md` |
-| 重构压实 | `requirements-analyst -> architecture-planner -> application-engineer -> test-validation-engineer -> code-review-governor` | `requirements-triage + task-breakdown + component-api-stability + unit-test-embedded + verification-before-completion` | `docs/runbooks/refactor-hardening.md` |
-| 发布收口 | `test-validation-engineer -> security-compliance-reviewer -> build-release-engineer` | `static-analysis-c-cpp + fault-injection-recovery + release-versioning + commit-pr-quality-gate` | `docs/runbooks/release-hardening.md` |
-| codex 运行闭环 | `application-engineer -> test-validation-engineer -> code-review-governor` | `verification-before-completion + commit-pr-quality-gate` | `docs/runbooks/codex-runtime-pilot.md` |
-| 跨团队交接 | `requirements-analyst -> application-engineer -> test-validation-engineer -> code-review-governor` | `task-breakdown + cross-team-handoff + verification-before-completion` | `docs/runbooks/cross-team-handoff-delivery.md` |
-| 大型工程交付 | `architecture-planner -> application-engineer -> test-validation-engineer -> code-review-governor` | `requirements-triage + task-breakdown + commit-pr-quality-gate + verification-before-completion` | `docs/runbooks/large-platform-delivery.md` |
-| 证据索引交付 | `requirements-analyst -> application-engineer -> test-validation-engineer -> code-review-governor` | `systematic-debugging + verification-before-completion + commit-pr-quality-gate` | `docs/runbooks/evidence-index-delivery.md` |
-| 阶段式迁移交付 | `architecture-planner -> application-engineer -> test-validation-engineer -> build-release-engineer -> code-review-governor` | `requirements-triage + task-breakdown + release-versioning + verification-before-completion + commit-pr-quality-gate` | `docs/runbooks/migration-stage-delivery.md` |
-| 配置基线治理 | `requirements-analyst -> application-engineer -> test-validation-engineer -> code-review-governor` | `requirements-triage + task-breakdown + verification-before-completion + commit-pr-quality-gate` | `docs/runbooks/config-baseline-governance.md` |
-| codex 设置审计 | `requirements-analyst -> test-validation-engineer -> code-review-governor` | `requirements-triage + verification-before-completion + commit-pr-quality-gate` | `docs/runbooks/codex-settings-audit.md` |
-| Spec 链路交付 | `requirements-analyst -> architecture-planner -> application-engineer -> test-validation-engineer -> code-review-governor` | `requirements-triage + adr-writer + task-breakdown + verification-before-completion` | `docs/runbooks/spec-chain-delivery.md` |
-| 技能候选筛选交付 | `requirements-analyst -> architecture-planner -> code-review-governor` | `requirements-triage + task-breakdown + commit-pr-quality-gate + verification-before-completion` | `docs/runbooks/skill-curation-delivery.md` |
-| Prompt 演进交付 | `requirements-analyst -> application-engineer -> test-validation-engineer -> code-review-governor` | `requirements-triage + task-breakdown + verification-before-completion + commit-pr-quality-gate` | `docs/runbooks/prompt-evolution-delivery.md` |
-| Lead-Agent 收敛交付 | `requirements-analyst -> architecture-planner -> application-engineer -> test-validation-engineer -> code-review-governor` | `requirements-triage + task-breakdown + verification-before-completion + commit-pr-quality-gate` | `docs/runbooks/lead-agent-convergence-delivery.md` |

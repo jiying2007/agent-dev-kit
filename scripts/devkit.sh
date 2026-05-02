@@ -16,6 +16,7 @@ Commands:
   catalog   生成或检索 Agent/Skill 目录索引
   match     根据输入文本匹配 skill 触发条件
   bridge    执行 OpenSpec 与 gdk 变更工件桥接（import/export）
+  evidence  追加命令级 Evidence Index 记录
   propose   创建变更提案工件
   apply     更新变更状态为已实施
   verify    执行变更验证并写报告
@@ -28,6 +29,7 @@ Examples:
   ./scripts/devkit.sh convert --target claude-code --profile core
   ./scripts/devkit.sh catalog build
   ./scripts/devkit.sh match --skill requirements-triage --text "收到模糊需求"
+  ./scripts/devkit.sh evidence append --file docs/changes/my-change/negative-results.md --command "bash tests/run_all.sh" --exit-code 0 --summary "all tests passed" --evidence-path docs/changes/my-change/verify-report.md --layer Workflow --artifact verify-report
   ./scripts/devkit.sh propose --change add-can-fd --title "新增 CAN-FD 接入"
   ./scripts/devkit.sh review --change add-can-fd --result pass --blockers 0 --majors 0 --minors 1
 USAGE
@@ -59,6 +61,9 @@ case "$CMD" in
     ;;
   bridge)
     exec "$SCRIPT_DIR/openspec_bridge.sh" "$@"
+    ;;
+  evidence)
+    exec "$SCRIPT_DIR/evidence_index.sh" "$@"
     ;;
   propose|apply|verify|review|archive)
     exec "$SCRIPT_DIR/workflow.sh" "$CMD" "$@"

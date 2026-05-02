@@ -170,6 +170,46 @@
 - 关键纪律：先判定模式，再推进执行，最后输出收敛结论
 - Runbook：`docs/runbooks/lead-agent-convergence-delivery.md`
 
+### 场景 S：生产运行路由（Runtime Routing）
+
+- Agent：`requirements-analyst -> architecture-planner -> code-review-governor`
+- Skill：`skill-composition-governance + verification-before-completion`
+- 命令：`catalog -> match -> check-runtime-routing`
+- 关键纪律：一个场景只能有一个主 skill，辅助 skill 不抢占入口
+- Runbook：`docs/runbooks/runtime-routing.md`
+
+### 场景 T：长任务计划执行（Planning Execution Loop）
+
+- Agent：`requirements-analyst -> architecture-planner -> application-engineer -> test-validation-engineer -> code-review-governor`
+- Skill：`planning-execution-loop + task-breakdown + verification-before-completion`
+- 命令：`propose -> apply -> verify -> review`
+- 关键纪律：每个阶段必须有检查点、恢复摘要和验证证据
+- Runbook：`docs/runbooks/planning-execution-loop.md`
+
+### 场景 U：生产部署（Production Deployment）
+
+- Agent：`build-release-engineer -> test-validation-engineer -> code-review-governor`
+- Skill：`release-versioning + verification-before-completion + commit-pr-quality-gate`
+- 命令：`validate -> install --backup --install-report -> check-global-codex-health -> check-gdk-harden-readiness`
+- 关键纪律：生产安装必须可回滚，并记录安装报告
+- Runbook：`docs/runbooks/production-deployment.md`
+
+### 场景 V：上游吸收（Upstream Intake）
+
+- Agent：`requirements-analyst -> architecture-planner -> code-review-governor`
+- Skill：`skill-composition-governance + security-supply-chain + commit-pr-quality-gate`
+- 命令：`sync-subrepos -> diff-scan -> check-upstream-intake-readiness`
+- 关键纪律：参考资产不得直接混装进 `~/.codex`
+- Runbook：`docs/runbooks/upstream-intake.md`
+
+### 场景 W：团队生产交付（Team Delivery）
+
+- Agent：`requirements-analyst -> application-engineer -> test-validation-engineer -> code-review-governor`
+- Skill：`task-breakdown + cross-team-handoff + verification-before-completion`
+- 命令：`propose -> verify -> review`
+- 关键纪律：Owner Matrix、handoff token、接收方复验三项缺一不可
+- Runbook：`docs/runbooks/team-delivery.md`
+
 ## 变更工件约定
 
 - `proposal.md`：为什么做、做什么、不做什么

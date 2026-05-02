@@ -17,6 +17,9 @@ bash scripts/devkit.sh install --tool auto --mode symlink --profile embedded-ful
 # 指定工具与目标目录，安装 core + 强化 profile
 bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile core --extra-profile release-hardening
 
+# 生产安装：备份 + 安装报告 + 版本锁定
+bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --backup --install-report reports/gdk-install-report.md --lock-version 0.3.0
+
 # 在 profile 基础上叠加可选技能
 bash scripts/devkit.sh install --tool codex --profile core --with-optional-skill incident-rca-report
 ```
@@ -29,6 +32,9 @@ bash scripts/devkit.sh install --tool codex --profile core --with-optional-skill
 - `--extra-profile`：可选叠加 profile（可重复）
 - `--with-optional-skill`：按需叠加可选技能（可重复）
 - `--target`：覆盖 manifest 里的工具默认根目录
+- `--backup`：安装前备份目标 `agents/skills`
+- `--install-report`：生成安装报告
+- `--lock-version`：要求 manifest version 匹配
 
 ## 3) 资产转换
 
@@ -73,6 +79,12 @@ bash scripts/devkit.sh review --change can-fd-bringup --result pass --blockers 0
 
 # 归档到 docs/changes/archive
 bash scripts/devkit.sh archive --change can-fd-bringup
+```
+
+命令级 Evidence Index：
+
+```bash
+bash scripts/devkit.sh evidence append --file docs/changes/can-fd-bringup/negative-results.md --command "bash tests/run_all.sh" --exit-code 0 --summary "all tests passed" --evidence-path docs/changes/can-fd-bringup/verify-report.md --layer Workflow --artifact verify-report
 ```
 
 注意事项：

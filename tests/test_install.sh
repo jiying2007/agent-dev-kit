@@ -7,6 +7,7 @@ TMP_DIR="$(mktemp -d)"
 trap 'rm -rf "$TMP_DIR"' EXIT
 
 TARGET="$TMP_DIR/.codex"
+REPORT="$TMP_DIR/install-report.md"
 
 "$ROOT_DIR/scripts/install_assets.sh" \
   --tool codex \
@@ -24,9 +25,15 @@ TARGET="$TMP_DIR/.codex"
   --mode copy \
   --target "$TARGET" \
   --profile core \
-  --extra-profile release-hardening
+  --extra-profile release-hardening \
+  --backup \
+  --install-report "$REPORT" \
+  --lock-version "$(awk '/^version:/ {print $2; exit}' "$ROOT_DIR/manifest.yaml")"
 
 [[ -d "$TARGET/agents/security-compliance-reviewer" ]] || { echo "[FAIL] missing extra-profile agent" >&2; exit 1; }
+[[ -d "$TARGET/.gdk-backups" ]] || { echo "[FAIL] missing install backup" >&2; exit 1; }
+[[ -f "$REPORT" ]] || { echo "[FAIL] missing install report" >&2; exit 1; }
+grep -q "manifest_version" "$REPORT" || { echo "[FAIL] install report missing version" >&2; exit 1; }
 
 "$ROOT_DIR/scripts/install_assets.sh" \
   --tool codex \

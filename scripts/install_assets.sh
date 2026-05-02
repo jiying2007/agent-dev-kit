@@ -18,6 +18,10 @@ Options:
   --profile <profile name>
   --extra-profile <profile name>   # 可重复
   --with-optional-skill <skill>    # 可重复
+  --backup                         # 安装前备份目标 agents/skills
+  --backup-dir <path>              # 备份目录，默认 <target>/.gdk-backups
+  --install-report <path>          # 写入安装报告
+  --lock-version <version>         # 要求 manifest version 匹配
   --list-tools
   --list-profiles
   --list-optional-skills
@@ -37,6 +41,10 @@ TARGET=""
 PROFILE=""
 EXTRA_PROFILES=()
 OPTIONAL_SKILLS=()
+BACKUP=0
+BACKUP_DIR=""
+INSTALL_REPORT=""
+LOCK_VERSION=""
 DRY_RUN=0
 LIST_TOOLS=0
 LIST_PROFILES=0
@@ -66,6 +74,22 @@ while [[ $# -gt 0 ]]; do
       ;;
     --with-optional-skill)
       OPTIONAL_SKILLS+=("$2")
+      shift 2
+      ;;
+    --backup)
+      BACKUP=1
+      shift
+      ;;
+    --backup-dir)
+      BACKUP_DIR="$2"
+      shift 2
+      ;;
+    --install-report)
+      INSTALL_REPORT="$2"
+      shift 2
+      ;;
+    --lock-version)
+      LOCK_VERSION="$2"
       shift 2
       ;;
     --list-tools)
@@ -101,6 +125,17 @@ run_cmd() {
     echo "[dry-run] $*"
   else
     "$@"
+  fi
+}
+
+write_file() {
+  local file="$1"
+  shift
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    echo "[dry-run] write $file"
+    printf '%s\n' "$@"
+  else
+    printf '%s\n' "$@" > "$file"
   fi
 }
 
@@ -159,6 +194,12 @@ install_item() {
 }
 
 gdk_require_manifest
+
+MANIFEST_VERSION="$(awk '/^version:/ {print $2; exit}' "$GDK_MANIFEST")"
+if [[ -n "$LOCK_VERSION" && "$LOCK_VERSION" != "$MANIFEST_VERSION" ]]; then
+  echo "[FAIL] manifest version mismatch: expected $LOCK_VERSION, got $MANIFEST_VERSION" >&2
+  exit 1
+fi
 
 if [[ "$LIST_TOOLS" -eq 1 ]]; then
   gdk_list_tool_names
@@ -227,6 +268,12 @@ if [[ -z "$TARGET" || -z "$AGENTS_DIR_NAME" || -z "$SKILLS_DIR_NAME" ]]; then
 fi
 
 TARGET="$(expand_path "$TARGET")"
+if [[ -n "$BACKUP_DIR" ]]; then
+  BACKUP_DIR="$(expand_path "$BACKUP_DIR")"
+fi
+if [[ -n "$INSTALL_REPORT" ]]; then
+  INSTALL_REPORT="$(expand_path "$INSTALL_REPORT")"
+fi
 AGENT_DST="$TARGET/$AGENTS_DIR_NAME"
 SKILL_DST="$TARGET/$SKILLS_DIR_NAME"
 
@@ -243,6 +290,21 @@ fi
 if [[ ${#SKILLS_TO_INSTALL[@]} -eq 0 ]]; then
   echo "[FAIL] no skills resolved from profiles: ${ALL_PROFILES[*]}" >&2
   exit 1
+fi
+
+BACKUP_PATH=""
+if [[ "$BACKUP" -eq 1 ]]; then
+  if [[ -z "$BACKUP_DIR" ]]; then
+    BACKUP_DIR="$TARGET/.gdk-backups"
+  fi
+  BACKUP_PATH="$BACKUP_DIR/$(date -u +%Y%m%dT%H%M%SZ)"
+  run_cmd mkdir -p "$BACKUP_PATH"
+  if [[ -e "$AGENT_DST" ]]; then
+    run_cmd cp -a "$AGENT_DST" "$BACKUP_PATH/agents"
+  fi
+  if [[ -e "$SKILL_DST" ]]; then
+    run_cmd cp -a "$SKILL_DST" "$BACKUP_PATH/skills"
+  fi
 fi
 
 run_cmd mkdir -p "$AGENT_DST" "$SKILL_DST"
@@ -268,3 +330,27 @@ echo "  mode=$MODE"
 echo "  target=$TARGET"
 echo "  profiles=${ALL_PROFILES[*]}"
 echo "  agents=${#AGENTS_TO_INSTALL[@]} skills=${#SKILLS_TO_INSTALL[@]} optional_skills=${#OPTIONAL_SKILLS[@]}"
+if [[ -n "$BACKUP_PATH" ]]; then
+  echo "  backup=$BACKUP_PATH"
+fi
+if [[ -n "$INSTALL_REPORT" ]]; then
+  write_file "$INSTALL_REPORT" \
+    "# global-dev-kit install report" \
+    "" \
+    "- manifest_version: $MANIFEST_VERSION" \
+    "- tool: $TOOL" \
+    "- mode: $MODE" \
+    "- target: $TARGET" \
+    "- profiles: ${ALL_PROFILES[*]}" \
+    "- optional_skills: ${OPTIONAL_SKILLS[*]:-none}" \
+    "- agents_count: ${#AGENTS_TO_INSTALL[@]}" \
+    "- skills_count: ${#SKILLS_TO_INSTALL[@]}" \
+    "- backup: ${BACKUP_PATH:-none}" \
+    "" \
+    "## Agents" \
+    "$(printf -- '- %s\n' "${AGENTS_TO_INSTALL[@]}")" \
+    "" \
+    "## Skills" \
+    "$(printf -- '- %s\n' "${SKILLS_TO_INSTALL[@]}")"
+  echo "  install_report=$INSTALL_REPORT"
+fi

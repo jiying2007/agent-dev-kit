@@ -9,6 +9,7 @@
 ```bash
 bash scripts/devkit.sh install --tool auto --mode symlink --profile embedded-fullstack
 bash scripts/devkit.sh install --tool codex --profile core --with-optional-skill incident-rca-report
+bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --backup --install-report reports/gdk-install-report.md
 ```
 
 ## validate
@@ -57,6 +58,14 @@ bash scripts/devkit.sh bridge import --change add-dark-mode --openspec-root /rep
 bash scripts/devkit.sh bridge import --change add-dark-mode --from-archive --openspec-root /repo/openspec
 bash scripts/devkit.sh bridge export --change add-dark-mode --openspec-root /repo/openspec
 bash scripts/devkit.sh bridge export --change add-dark-mode --archive-date 2026-05-02 --openspec-root /repo/openspec
+```
+
+## evidence
+
+追加命令级 Evidence Index 记录。
+
+```bash
+bash scripts/devkit.sh evidence append --file docs/changes/my-change/negative-results.md --command "bash tests/run_all.sh" --exit-code 0 --summary "all tests passed" --evidence-path docs/changes/my-change/verify-report.md --layer Workflow --artifact verify-report
 ```
 
 ## propose
@@ -114,3 +123,7 @@ bash scripts/devkit.sh test
 
 - `--list-optional-skills`：列出所有可选技能
 - `--with-optional-skill <name>`：按需叠加可选技能（可重复）
+- `--backup`：安装前备份目标 `agents/skills`
+- `--backup-dir <path>`：指定备份目录
+- `--install-report <path>`：生成安装报告
+- `--lock-version <version>`：要求 manifest version 匹配

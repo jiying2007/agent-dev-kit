@@ -22,6 +22,13 @@
 - `release-hardening.md`：发布前收口与风险压实
 - `artifact-gated-delivery.md`：高风险变更的轻量产物门禁
 - `openspec-bridge.md`：openspec 与 gdk 变更工件桥接
+- `runtime-routing.md`：`~/.codex` 运行入口与技能路由仲裁
+- `planning-execution-loop.md`：长任务计划审查、执行检查点与跨会话恢复
+- `production-deployment.md`：生产安装、备份、健康检查与回滚
+- `upstream-intake.md`：参考仓同步、候选评估与回灌闭环
+- `compatibility-matrix.md`：多工具转换能力与降级边界
+- `security-supply-chain.md`：第三方资产引入前安全与供应链审查
+- `team-delivery.md`：团队责任矩阵、交接签收与复验闭环
 
 ## 使用方式
 

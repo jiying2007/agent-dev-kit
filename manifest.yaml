@@ -62,6 +62,15 @@ profiles:
       - systematic-debugging
       - verification-before-completion
       - commit-pr-quality-gate
+  personal-core:
+    description: 个人 ~/.codex 生产默认配置（精简核心 + 完成前门禁）
+    extends:
+      - core
+    include_agents:
+      - build-release-engineer
+    include_skills:
+      - adr-writer
+      - release-versioning
   embedded-fullstack:
     description: C/C++ 嵌入式全栈默认配置（驱动、组件、应用）
     extends:
@@ -113,6 +122,59 @@ profiles:
       - requirements-triage
       - task-breakdown
       - verification-before-completion
+      - commit-pr-quality-gate
+  team-core:
+    description: 团队交付配置（责任矩阵、交接、验证与评审）
+    optional: true
+    extends:
+      - core
+    include_agents:
+      - build-release-engineer
+      - security-compliance-reviewer
+    include_skills:
+      - adr-writer
+      - release-versioning
+  openspec-driven:
+    description: Spec 驱动变更配置（requirements/design/tasks 与 gdk workflow 对齐）
+    optional: true
+    extends:
+      - core
+    include_agents:
+      - architecture-planner
+    include_skills:
+      - adr-writer
+  large-refactor:
+    description: 大型重构配置（边界冻结、API 稳定性、基线对比与回归）
+    optional: true
+    extends:
+      - core
+    include_agents:
+      - architecture-planner
+      - build-release-engineer
+    include_skills:
+      - component-api-stability
+      - release-versioning
+  incident-response:
+    description: 事故响应配置（根因定位、复盘、恢复与验证）
+    optional: true
+    extends:
+      - core
+    include_agents:
+      - performance-reliability-engineer
+      - security-compliance-reviewer
+    include_skills:
+      - fault-injection-recovery
+      - release-versioning
+  research-intake:
+    description: 参考仓吸收配置（候选筛选、组合治理与供应链审查）
+    optional: true
+    include_agents:
+      - requirements-analyst
+      - architecture-planner
+      - code-review-governor
+    include_skills:
+      - requirements-triage
+      - task-breakdown
       - commit-pr-quality-gate
 
 default_profile: embedded-fullstack
@@ -254,6 +316,18 @@ optional_skills:
     path: optional-skills/artifact-gated-lite/SKILL.md
     quality_tier: p2
     description: 轻量 artifact 标签与门禁模板
+  - name: planning-execution-loop
+    path: optional-skills/planning-execution-loop/SKILL.md
+    quality_tier: p2
+    description: 长任务计划审查、分阶段执行、恢复与收口闭环
+  - name: skill-composition-governance
+    path: optional-skills/skill-composition-governance/SKILL.md
+    quality_tier: p2
+    description: 技能组合、触发优先级、fallback 与弃用治理
+  - name: security-supply-chain
+    path: optional-skills/security-supply-chain/SKILL.md
+    quality_tier: p2
+    description: 第三方技能、脚本与参考资产引入前安全审查
 
 install:
   default_mode: symlink
