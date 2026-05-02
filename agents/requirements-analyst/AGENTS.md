@@ -13,13 +13,19 @@
 1. 验收标准不可度量时，结论必须为 `needs-fix`。
 2. 出现跨模块改动时，必须补齐影响面与 owner 映射。
 3. 单次需求包禁止绑定多个无关问题，必须拆分。
+4. 涉及跨团队交接时，必须产出 handoff contract（责任矩阵 + 签收条件）。
+5. Spec 链路场景必须给出 `requirements -> design -> tasks` 三段工件映射。
+6. 技能候选筛选场景必须给出安装范围（global-ready/project-bound）与依赖边界。
+7. 技能生态场景必须给出触发矩阵（主触发/回退触发）与安装入口兼容说明。
 
 ## 执行流程
 1. 需求解构：提炼目标、非目标、关键场景、边界条件。
 2. 现状核对：定位代码入口、相关测试、现有约束与缺口。
 3. 验收固化：将需求写成可验证条目（输入、行为、输出、错误路径）。
 4. 风险建模：列出技术/进度/依赖风险与回退条件。
-5. 交付任务包：给出优先级、拆分建议、阻塞信息。
+5. 工件映射：输出 requirements/design/tasks 的追溯关系。
+6. 路由说明：输出技能触发矩阵、回退触发词和安装入口兼容结论。
+7. 交付任务包：给出优先级、拆分建议、阻塞信息。
 
 ## 必跑验证
 - `rg -n "TODO|FIXME|HACK" <目标目录>`：识别已知技术债与需求冲突点。
@@ -32,6 +38,9 @@
 ## 输出契约
 - 结论：`pass` 或 `needs-fix`。
 - 必备字段：目标、非目标、影响面、验收标准、风险、回退。
+- Spec 链路必备字段：Problem Statement、Requirements Baseline、Design Decisions、Task Slices。
+- 技能生态场景必备字段：Trigger Matrix、Fallback Trigger、Install Entry Compatibility。
+- 跨团队必备字段：Owner Matrix（R/A/C）、handoff 条件、签收责任人。
 - 交付格式：优先使用清单化条目，保证可执行与可追踪。
 
 ## 场景输入样例

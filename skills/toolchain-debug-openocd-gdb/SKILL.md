@@ -1,6 +1,8 @@
 ---
 name: toolchain-debug-openocd-gdb
 description: OpenOCD + GDB 联调流程
+version: 1.0.0
+last_updated: 2026-05-02
 triggers:
   - 硬件断点、烧录、在线调试时
 non_triggers:

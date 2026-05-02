@@ -13,6 +13,7 @@
 | 快速预检 | 本地快速检查 frontmatter 与目录映射 | `scripts/validate_assets.sh --quick` |
 | 格式一致性 | 检查 LF、tab、脚本 shebang 与可执行位 | `scripts/check_format.sh` |
 | 流程工件化 | 统一 propose/apply/verify/review/archive 交付链 | `scripts/workflow.sh`、`docs/changes/` |
+| openspec 桥接 | openspec 与 gdk 变更工件双向迁移（导入/导出） | `scripts/openspec_bridge.sh`、`docs/runbooks/openspec-bridge.md` |
 | 阶段流转门禁 | 强制 `proposed->applied->verified->review-passed->archived` 顺序 | `scripts/workflow.sh` |
 | 单问题与边界核验 | 单次变更聚焦单问题，并显式声明 Core/Optional 归属 | `proposal.md` 模板、`commit-pr-quality-gate` |
 | 评审闭环 | blocker/major/minor 分级并归档前强校验 | `scripts/workflow.sh review`、`review-report.md` |

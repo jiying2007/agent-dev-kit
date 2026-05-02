@@ -1,6 +1,8 @@
 ---
 name: systematic-debugging
 description: 系统化调试流程，面向根因未明的问题定位与修复验证
+version: 1.0.0
+last_updated: 2026-05-02
 triggers:
   - 出现真实故障且根因不明确时
   - 回归失败但无法直接定位到单一改动时

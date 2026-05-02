@@ -1,6 +1,8 @@
 ---
 name: interrupt-dma-patterns
 description: 中断与 DMA 协作模式设计
+version: 1.0.0
+last_updated: 2026-05-02
 triggers:
   - 高吞吐或低时延 I/O 场景
 non_triggers:

@@ -1,6 +1,8 @@
 ---
 name: bsp-porting-playbook
 description: BSP 移植流程与风险控制
+version: 1.0.0
+last_updated: 2026-05-02
 triggers:
   - SoC/板卡迁移或内核升级时
 non_triggers:

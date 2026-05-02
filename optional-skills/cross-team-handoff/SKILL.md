@@ -1,6 +1,8 @@
 ---
 name: cross-team-handoff
 description: 跨团队交接时统一目标、边界和验收责任
+version: 1.0.0
+last_updated: 2026-05-02
 triggers:
   - 模块即将交接给其他团队维护
 non_triggers:
@@ -25,8 +27,9 @@ constraints:
 ## Workflow
 1. 盘点范围内资产、接口和运行约束。
 2. 输出责任矩阵（交接方/接收方/批准方）与关键时间点。
-3. 对未决风险给出处置策略：继续推进、延期、降级或冻结。
-4. 约定验收证据、回退路径和升级通道，并形成签收记录。
+3. 切分 section ownership：每个模块/文档只允许一个主负责人，其他人只评审不并行改写。
+4. 对未决风险给出处置策略：继续推进、延期、降级或冻结。
+5. 约定验收证据、回退路径和升级通道，并形成签收记录。
 
 ## Commands
 ```bash
@@ -38,10 +41,12 @@ git diff --name-status <handoff-base>...HEAD
 ```md
 - Scope and Exclusions:
 - Owner Matrix (R/A/C):
+- Section Ownership:
 - Open Risks + Decisions:
 - Acceptance Evidence:
 - Rollback Path:
 - Escalation Channel:
+- Sign-off (handoff / receiver / approver):
 ```
 
 ## Failure Handling
@@ -50,3 +55,4 @@ git diff --name-status <handoff-base>...HEAD
 
 ## Quality Gate
 - 交接文档必须覆盖范围、风险、验收、回退与升级通道。
+- 每个关键模块必须有唯一主负责人，禁止责任重叠。

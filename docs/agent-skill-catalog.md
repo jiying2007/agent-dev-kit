@@ -62,3 +62,23 @@
 | `embedded-fullstack` | C/C++ 嵌入式全栈默认配置（驱动、组件、应用） | false | core |
 | `release-hardening` | 发布前强化配置（安全、可靠性、发布治理） | true | - |
 | `artifact-gated-lite` | 高风险变更的轻量产物门禁配置（强调可追溯交付证据） | true | core |
+
+## Scenario Routing
+
+| 场景 | Agent 链 | Skill 组合 | Runbook |
+|---|---|---|---|
+| 新功能迭代 | `requirements-analyst -> architecture-planner -> application-engineer -> test-validation-engineer -> code-review-governor` | `requirements-triage + task-breakdown + adr-writer + unit-test-embedded + verification-before-completion` | `docs/runbooks/feature-delivery.md` |
+| 缺陷修复 | `application-engineer -> test-validation-engineer -> code-review-governor` | `systematic-debugging + task-breakdown + verification-before-completion` | `docs/runbooks/bugfix-delivery.md` |
+| 重构压实 | `requirements-analyst -> architecture-planner -> application-engineer -> test-validation-engineer -> code-review-governor` | `requirements-triage + task-breakdown + component-api-stability + unit-test-embedded + verification-before-completion` | `docs/runbooks/refactor-hardening.md` |
+| 发布收口 | `test-validation-engineer -> security-compliance-reviewer -> build-release-engineer` | `static-analysis-c-cpp + fault-injection-recovery + release-versioning + commit-pr-quality-gate` | `docs/runbooks/release-hardening.md` |
+| codex 运行闭环 | `application-engineer -> test-validation-engineer -> code-review-governor` | `verification-before-completion + commit-pr-quality-gate` | `docs/runbooks/codex-runtime-pilot.md` |
+| 跨团队交接 | `requirements-analyst -> application-engineer -> test-validation-engineer -> code-review-governor` | `task-breakdown + cross-team-handoff + verification-before-completion` | `docs/runbooks/cross-team-handoff-delivery.md` |
+| 大型工程交付 | `architecture-planner -> application-engineer -> test-validation-engineer -> code-review-governor` | `requirements-triage + task-breakdown + commit-pr-quality-gate + verification-before-completion` | `docs/runbooks/large-platform-delivery.md` |
+| 证据索引交付 | `requirements-analyst -> application-engineer -> test-validation-engineer -> code-review-governor` | `systematic-debugging + verification-before-completion + commit-pr-quality-gate` | `docs/runbooks/evidence-index-delivery.md` |
+| 阶段式迁移交付 | `architecture-planner -> application-engineer -> test-validation-engineer -> build-release-engineer -> code-review-governor` | `requirements-triage + task-breakdown + release-versioning + verification-before-completion + commit-pr-quality-gate` | `docs/runbooks/migration-stage-delivery.md` |
+| 配置基线治理 | `requirements-analyst -> application-engineer -> test-validation-engineer -> code-review-governor` | `requirements-triage + task-breakdown + verification-before-completion + commit-pr-quality-gate` | `docs/runbooks/config-baseline-governance.md` |
+| codex 设置审计 | `requirements-analyst -> test-validation-engineer -> code-review-governor` | `requirements-triage + verification-before-completion + commit-pr-quality-gate` | `docs/runbooks/codex-settings-audit.md` |
+| Spec 链路交付 | `requirements-analyst -> architecture-planner -> application-engineer -> test-validation-engineer -> code-review-governor` | `requirements-triage + adr-writer + task-breakdown + verification-before-completion` | `docs/runbooks/spec-chain-delivery.md` |
+| 技能候选筛选交付 | `requirements-analyst -> architecture-planner -> code-review-governor` | `requirements-triage + task-breakdown + commit-pr-quality-gate + verification-before-completion` | `docs/runbooks/skill-curation-delivery.md` |
+| Prompt 演进交付 | `requirements-analyst -> application-engineer -> test-validation-engineer -> code-review-governor` | `requirements-triage + task-breakdown + verification-before-completion + commit-pr-quality-gate` | `docs/runbooks/prompt-evolution-delivery.md` |
+| Lead-Agent 收敛交付 | `requirements-analyst -> architecture-planner -> application-engineer -> test-validation-engineer -> code-review-governor` | `requirements-triage + task-breakdown + verification-before-completion + commit-pr-quality-gate` | `docs/runbooks/lead-agent-convergence-delivery.md` |

@@ -1,6 +1,8 @@
 ---
 name: test-flakiness-triage
 description: 定位测试波动根因并给出稳定化方案
+version: 1.0.0
+last_updated: 2026-05-02
 triggers:
   - 回归测试同代码多次执行结果不一致
 non_triggers:

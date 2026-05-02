@@ -1,6 +1,8 @@
 ---
 name: register-map-design
 description: 定义寄存器映射与位域文档
+version: 1.0.0
+last_updated: 2026-05-02
 triggers:
   - 驱动开发前期或芯片适配时
 non_triggers:

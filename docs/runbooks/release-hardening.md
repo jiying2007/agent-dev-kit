@@ -39,3 +39,5 @@ bash scripts/devkit.sh archive --change <change-id>
 - 关键风险项有 owner 与截止时间
 - 若存在 breaking change，必须包含迁移窗口与回退触发条件
 - 评审报告中 blocker/major 必须为 0
+- 若触及发布脚本或构建入口，必须附 release gate 专项验证证据
+- contribution checklist（影响面、验证口径、兼容性说明）必须完整

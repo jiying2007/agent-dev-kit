@@ -1,6 +1,8 @@
 ---
 name: artifact-gated-lite
 description: 高风险变更时使用轻量 artifact 标签与门禁模板固定交付证据
+version: 1.0.0
+last_updated: 2026-05-02
 triggers:
   - 涉及公共接口、schema、发布链路等高风险变更
   - 需要跨角色交接且必须保留可追溯产物

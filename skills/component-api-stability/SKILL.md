@@ -1,6 +1,8 @@
 ---
 name: component-api-stability
 description: 组件 API 稳定性治理
+version: 1.0.0
+last_updated: 2026-05-02
 triggers:
   - 公共组件准备对外复用时
 non_triggers:

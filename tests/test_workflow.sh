@@ -8,11 +8,19 @@ trap 'rm -rf "$TMP_DIR"' EXIT
 
 CHANGE_ROOT="$TMP_DIR/changes"
 CHANGE_ID="smoke-change"
+CHANGE_ID_ARTIFACT_FAIL="artifact-consistency-fail"
+CHANGE_ID_ARTIFACT_PASS="artifact-consistency-pass"
 
 "$ROOT_DIR/scripts/workflow.sh" propose --change "$CHANGE_ID" --title "workflow smoke" --root "$CHANGE_ROOT"
 [[ -f "$CHANGE_ROOT/$CHANGE_ID/negative-results.md" ]] || { echo "[FAIL] missing negative-results artifact" >&2; exit 1; }
 grep -q "^## 问题陈述（单问题）" "$CHANGE_ROOT/$CHANGE_ID/proposal.md" || { echo "[FAIL] missing single-problem section" >&2; exit 1; }
+grep -q "^## Spec 链路检查" "$CHANGE_ROOT/$CHANGE_ID/proposal.md" || { echo "[FAIL] missing spec-chain section" >&2; exit 1; }
 grep -q "^## Ownership 与并行冲突检查" "$CHANGE_ROOT/$CHANGE_ID/tasks.md" || { echo "[FAIL] missing ownership section" >&2; exit 1; }
+grep -q "^## 轻量工件与收敛结论" "$CHANGE_ROOT/$CHANGE_ID/tasks.md" || { echo "[FAIL] missing convergence section" >&2; exit 1; }
+grep -q "^- \\[ \\] Prompt before/after 对比证据" "$CHANGE_ROOT/$CHANGE_ID/checklist.md" || { echo "[FAIL] missing prompt regression checklist item" >&2; exit 1; }
+grep -q "^- \\[ \\] Evidence Index 命令级字段完整（命令/退出码/结果摘要/证据路径/层级）" "$CHANGE_ROOT/$CHANGE_ID/checklist.md" || { echo "[FAIL] missing evidence index checklist item" >&2; exit 1; }
+grep -q "^## Evidence Index（命令级）" "$CHANGE_ROOT/$CHANGE_ID/negative-results.md" || { echo "[FAIL] missing command evidence index section" >&2; exit 1; }
+grep -q "^| 命令 | 退出码 | 结果摘要 | 证据路径 | 层级 |" "$CHANGE_ROOT/$CHANGE_ID/negative-results.md" || { echo "[FAIL] missing command evidence index table header" >&2; exit 1; }
 
 if "$ROOT_DIR/scripts/workflow.sh" review --change "$CHANGE_ID" --root "$CHANGE_ROOT" --result pass --blockers 0 --majors 0 --minors 0 >/dev/null 2>&1; then
   echo "[FAIL] review should fail before verify stage" >&2
@@ -31,5 +39,51 @@ fi
 
 ARCHIVE_MATCH="$(find "$CHANGE_ROOT/archive" -maxdepth 1 -type d -name "*-smoke-change" | head -n 1 || true)"
 [[ -n "$ARCHIVE_MATCH" ]] || { echo "[FAIL] archive directory not found" >&2; exit 1; }
+
+## artifact consistency checks - fail path
+"$ROOT_DIR/scripts/workflow.sh" propose --change "$CHANGE_ID_ARTIFACT_FAIL" --title "artifact consistency fail" --root "$CHANGE_ROOT"
+"$ROOT_DIR/scripts/workflow.sh" apply --change "$CHANGE_ID_ARTIFACT_FAIL" --root "$CHANGE_ROOT"
+
+cat >> "$CHANGE_ROOT/$CHANGE_ID_ARTIFACT_FAIL/design.md" <<'ARTIFACTS'
+
+[artifact:ReviewReport]
+status: PASS
+owner: tester
+verdict: pass
+
+[artifact:TestReport]
+status: PASS
+owner: tester
+tests_run:
+- fake test result
+ARTIFACTS
+
+"$ROOT_DIR/scripts/workflow.sh" verify --change "$CHANGE_ID_ARTIFACT_FAIL" --root "$CHANGE_ROOT"
+
+if "$ROOT_DIR/scripts/workflow.sh" review --change "$CHANGE_ID_ARTIFACT_FAIL" --root "$CHANGE_ROOT" --result needs-fix --blockers 0 --majors 0 --minors 1 >/dev/null 2>&1; then
+  echo "[FAIL] review should fail when result conflicts with artifact PASS/PASS" >&2
+  exit 1
+fi
+
+## artifact consistency checks - pass path
+"$ROOT_DIR/scripts/workflow.sh" propose --change "$CHANGE_ID_ARTIFACT_PASS" --title "artifact consistency pass" --root "$CHANGE_ROOT"
+"$ROOT_DIR/scripts/workflow.sh" apply --change "$CHANGE_ID_ARTIFACT_PASS" --root "$CHANGE_ROOT"
+
+cat >> "$CHANGE_ROOT/$CHANGE_ID_ARTIFACT_PASS/design.md" <<'ARTIFACTS'
+
+[artifact:ReviewReport]
+status: PASS
+owner: tester
+verdict: pass
+
+[artifact:TestReport]
+status: PASS
+owner: tester
+tests_run:
+- fake test result
+ARTIFACTS
+
+"$ROOT_DIR/scripts/workflow.sh" verify --change "$CHANGE_ID_ARTIFACT_PASS" --root "$CHANGE_ROOT"
+"$ROOT_DIR/scripts/workflow.sh" review --change "$CHANGE_ID_ARTIFACT_PASS" --root "$CHANGE_ROOT" --result pass --blockers 0 --majors 0 --minors 1
 
 echo "[PASS] workflow"

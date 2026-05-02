@@ -14,6 +14,10 @@
 - `review` 仅允许从 `verified` 进入
 - `archive` 仅允许从 `review-passed` 进入（`--force` 除外）
 
+`review` 一致性新增硬约束：
+- 若变更工件中存在 `[artifact:ReviewReport]` / `[artifact:TestReport]`，则 `review --result` 必须与 artifact 结论一致
+- `review --result pass` 时，`ReviewReport.status` 与 `TestReport.status` 必须同时为 `PASS`
+
 `propose` 工件新增强制检查：
 - `proposal.md` 必须包含：`问题陈述（单问题）`、`上下文充分性检查`、`Core/Optional 边界检查`、`变更重复性检查`、`Breaking Change 检查`
 - `tasks.md` 必须包含：`Ownership 与并行冲突检查`
@@ -61,6 +65,110 @@
   2. `propose -> apply -> verify -> review`
   3. `review` 结论必须与 `artifact:ReviewReport` / `artifact:TestReport` 一致
 - 适用条件：变更涉及共享契约、发布链路、跨角色交接，且需要可追溯交付证据
+
+### 场景 F：缺陷修复闭环（Bugfix）
+
+- Agent：`application-engineer -> test-validation-engineer -> code-review-governor`
+- Skill：`systematic-debugging + task-breakdown + verification-before-completion`
+- 命令：`propose -> apply -> verify -> review -> archive`
+- 关键纪律：禁止“顺手重构”无关区域；必须保留负结果证据
+- Runbook：`docs/runbooks/bugfix-delivery.md`
+
+### 场景 G：重构压实（Refactor）
+
+- Agent：`requirements-analyst -> architecture-planner -> application-engineer -> test-validation-engineer -> code-review-governor`
+- Skill：`requirements-triage + task-breakdown + component-api-stability + unit-test-embedded + verification-before-completion`
+- 命令：`propose -> apply -> verify -> review -> archive`
+- 关键纪律：基线验证与重构后回归必须同口径对比
+- Runbook：`docs/runbooks/refactor-hardening.md`
+
+### 场景 H：codex 运行闭环（Runtime Pilot）
+
+- Agent：`application-engineer -> test-validation-engineer -> code-review-governor`
+- Skill：`verification-before-completion + commit-pr-quality-gate`
+- 命令：`doctor(~/.codex) -> check-global-codex-health -> check-gdk-harden-readiness --require-pilot`
+- 关键纪律：未通过 pilot 验证不得给出“可放行/可追踪上游更新”结论
+- Runbook：`docs/runbooks/codex-runtime-pilot.md`
+
+### 场景 I：跨团队交接收口（Handoff Delivery）
+
+- Agent：`requirements-analyst -> application-engineer -> test-validation-engineer -> code-review-governor`
+- Skill：`task-breakdown + cross-team-handoff + verification-before-completion`
+- 命令：`propose -> apply -> verify -> review`
+- 关键纪律：Owner Matrix、Section Ownership、Sign-off 三项缺一不可
+- Runbook：`docs/runbooks/cross-team-handoff-delivery.md`
+
+### 场景 J：大型工程交付收口（Large Platform Delivery）
+
+- Agent：`architecture-planner -> application-engineer -> test-validation-engineer -> code-review-governor`
+- Skill：`requirements-triage + task-breakdown + commit-pr-quality-gate + verification-before-completion`
+- 命令：`catalog -> propose -> apply -> verify -> review`
+- 关键纪律：先给 module ownership map，再执行跨模块改动
+- Runbook：`docs/runbooks/large-platform-delivery.md`
+
+### 场景 K：证据索引化交付（Evidence Index Delivery）
+
+- Agent：`requirements-analyst -> application-engineer -> test-validation-engineer -> code-review-governor`
+- Skill：`systematic-debugging + verification-before-completion + commit-pr-quality-gate`
+- 命令：`propose -> apply -> verify -> review`
+- 关键纪律：验证命令必须索引化记录（命令/退出码/证据路径）
+- Runbook：`docs/runbooks/evidence-index-delivery.md`
+
+### 场景 L：阶段式迁移交付（Migration Stage Delivery）
+
+- Agent：`architecture-planner -> application-engineer -> test-validation-engineer -> build-release-engineer -> code-review-governor`
+- Skill：`requirements-triage + task-breakdown + release-versioning + verification-before-completion + commit-pr-quality-gate`
+- 命令：`catalog -> propose -> apply -> verify -> review`
+- 关键纪律：必须按里程碑输出阶段结论与回退锚点，禁止跳阶段推进
+- Runbook：`docs/runbooks/migration-stage-delivery.md`
+
+### 场景 M：配置基线治理（Config Baseline Governance）
+
+- Agent：`requirements-analyst -> application-engineer -> test-validation-engineer -> code-review-governor`
+- Skill：`requirements-triage + task-breakdown + verification-before-completion + commit-pr-quality-gate`
+- 命令：`propose -> apply -> verify -> review`
+- 关键纪律：配置摘要、验证命令、行为影响结论三项缺一不可
+- Runbook：`docs/runbooks/config-baseline-governance.md`
+
+### 场景 N：codex 设置审计（Codex Settings Audit）
+
+- Agent：`requirements-analyst -> test-validation-engineer -> code-review-governor`
+- Skill：`requirements-triage + verification-before-completion + commit-pr-quality-gate`
+- 命令：`propose -> verify -> check-global-codex-health -> codex mcp list -> review`
+- 关键纪律：声明配置与运行态加载结果必须一致
+- Runbook：`docs/runbooks/codex-settings-audit.md`
+
+### 场景 O：Spec 链路交付（Spec Chain Delivery）
+
+- Agent：`requirements-analyst -> architecture-planner -> application-engineer -> test-validation-engineer -> code-review-governor`
+- Skill：`requirements-triage + adr-writer + task-breakdown + verification-before-completion`
+- 命令：`propose -> apply -> verify -> review`
+- 关键纪律：`requirements/design/tasks` 三段链路缺一不可
+- Runbook：`docs/runbooks/spec-chain-delivery.md`
+
+### 场景 P：技能候选筛选交付（Skill Curation Delivery）
+
+- Agent：`requirements-analyst -> architecture-planner -> code-review-governor`
+- Skill：`requirements-triage + task-breakdown + commit-pr-quality-gate + verification-before-completion`
+- 命令：`catalog -> match -> validate --strict -> review`
+- 关键纪律：必须声明 `global-ready/project-bound` 与 `core/optional/reject` 归属结论
+- Runbook：`docs/runbooks/skill-curation-delivery.md`
+
+### 场景 Q：Prompt 演进交付（Prompt Evolution Delivery）
+
+- Agent：`requirements-analyst -> application-engineer -> test-validation-engineer -> code-review-governor`
+- Skill：`requirements-triage + task-breakdown + verification-before-completion + commit-pr-quality-gate`
+- 命令：`propose -> apply -> verify -> review`
+- 关键纪律：必须保留 before/after 对比与失败样例证据
+- Runbook：`docs/runbooks/prompt-evolution-delivery.md`
+
+### 场景 R：Lead-Agent 收敛交付（Lead-Agent Convergence Delivery）
+
+- Agent：`requirements-analyst -> architecture-planner -> application-engineer -> test-validation-engineer -> code-review-governor`
+- Skill：`requirements-triage + task-breakdown + verification-before-completion + commit-pr-quality-gate`
+- 命令：`catalog -> propose -> apply -> verify -> review`
+- 关键纪律：先判定模式，再推进执行，最后输出收敛结论
+- Runbook：`docs/runbooks/lead-agent-convergence-delivery.md`
 
 ## 变更工件约定
 

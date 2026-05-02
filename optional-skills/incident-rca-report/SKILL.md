@@ -1,6 +1,8 @@
 ---
 name: incident-rca-report
 description: 线上事故复盘与根因分析闭环
+version: 1.0.0
+last_updated: 2026-05-02
 triggers:
   - 出现线上故障且需要复盘闭环
 non_triggers:

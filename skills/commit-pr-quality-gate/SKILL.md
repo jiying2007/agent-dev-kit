@@ -1,6 +1,8 @@
 ---
 name: commit-pr-quality-gate
 description: 提交与 PR 质量门禁检查
+version: 1.0.0
+last_updated: 2026-05-02
 triggers:
   - 准备 commit/PR 或代码评审前
   - 需要声明“可合并/可交付”前
@@ -24,27 +26,37 @@ constraints:
 ## Prerequisites
 - 汇总改动范围、验证命令结果、评审分级信息。
 - 明确本次改动是否涉及 breaking change 与迁移影响。
+- 若包含配置文件改动，先给出配置摘要（变更键、行为影响、回退方式）。
 
 ## Workflow
 1. 真实性核验：确认问题可复现，证据与改动目标一一对应。
 2. 范围核验：确认单次改动是否聚焦一个问题，避免捆绑无关变更。
 3. 证据核验：逐项核对 lint/test/build/smoke 命令与执行结果。
-4. 分级评审：按 blocker/major/minor 输出问题清单与闭环状态。
-5. 兼容性核验：显式声明 breaking change、迁移与回退路径。
-6. Core/Optional 核验：确认能力归属是否应进 core，场景化能力应进入 optional。
+4. 证据索引：为关键验证命令记录退出码、结果摘要、证据路径、层级（Evidence Index）。
+5. 分级评审：按 blocker/major/minor 输出问题清单与闭环状态。
+6. 配置漂移核验：若触及配置文件，必须输出配置摘要与行为影响结论（Config Drift Decision）。
+7. 技能候选核验：若触及技能资产，必须声明 `global-ready/project-bound` 与 `core/optional/reject`。
+8. 兼容性核验：显式声明 breaking change、迁移与回退路径。
+9. 发布链路核验：若触及 `scripts/` 或关键构建入口，追加 release gate 专项验证。
+10. Core/Optional 核验：确认能力归属是否应进 core，场景化能力应进入 optional。
 
 ## Commands
 ```bash
 git diff --stat <base>...HEAD
 <project-lint-cmd> && <project-test-cmd>
+git diff --name-only <base>...HEAD
 ```
 
 ## Evidence Template
 ```md
 - Scope Check:
 - Verification Commands + Results:
+- Evidence Index (command/exit_code/result_summary/evidence_path/layer):
 - Review Findings (B/M/m):
+- Config Drift Decision:
+- Skill Intake Decision:
 - Breaking Change Decision:
+- Release Gate Decision:
 - Core/Optional Decision:
 - Final Gate Result:
 ```
@@ -57,3 +69,7 @@ git diff --stat <base>...HEAD
 - 输出必须可执行、可验证、可追溯。
 - 结论必须与分级统计一致，且可复核。
 - 若存在“多问题捆绑”或“证据缺失”，结论必须为 `needs-fix`。
+- 若触及发布链路但无专项验证证据，结论必须为 `needs-fix`。
+- 若触及配置但无配置摘要或无行为影响结论，结论必须为 `needs-fix`。
+- 若触及技能资产但无安装范围或归属结论，结论必须为 `needs-fix`。
+- 若缺少负结果或被证伪路径记录，结论必须为 `needs-fix`。

@@ -15,6 +15,7 @@ Commands:
   convert   转换资产到目标工具格式
   catalog   生成或检索 Agent/Skill 目录索引
   match     根据输入文本匹配 skill 触发条件
+  bridge    执行 OpenSpec 与 gdk 变更工件桥接（import/export）
   propose   创建变更提案工件
   apply     更新变更状态为已实施
   verify    执行变更验证并写报告
@@ -55,6 +56,9 @@ case "$CMD" in
     ;;
   match)
     exec "$SCRIPT_DIR/skill_match.sh" "$@"
+    ;;
+  bridge)
+    exec "$SCRIPT_DIR/openspec_bridge.sh" "$@"
     ;;
   propose|apply|verify|review|archive)
     exec "$SCRIPT_DIR/workflow.sh" "$CMD" "$@"

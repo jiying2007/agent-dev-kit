@@ -43,7 +43,9 @@
 
 落地点：
 - `scripts/workflow.sh`（`proposal/design/tasks/checklist/negative-results/review-report`）
+- `scripts/openspec_bridge.sh`（openspec `changes/` 与 gdk `docs/changes/` 双向桥接）
 - `docs/workflows.md`、`docs/changes/README.md`
+- `docs/runbooks/openspec-bridge.md`
 
 ## 5. 不纳入项（有意排除）
 

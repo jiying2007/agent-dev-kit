@@ -161,50 +161,70 @@ run_verify_checks() {
   "$ROOT_DIR/scripts/check_format.sh"
 }
 
+artifact_field_value() {
+  local change_dir="$1"
+  local artifact="$2"
+  local field="$3"
+
+  awk -v artifact="${artifact}" -v field="${field}" '
+    $0 ~ "^[[]artifact:" artifact "[]]" {in_block=1; next}
+    in_block && $0 ~ "^[[]artifact:" {in_block=0}
+    in_block && $0 ~ "^" field ":" {
+      value=$0
+      sub("^" field ":[ ]*", "", value)
+      gsub(/^"|"$/, "", value)
+      print value
+      exit
+    }
+  ' "$change_dir"/*.md 2>/dev/null || true
+}
+
+validate_artifact_consistency() {
+  local change_dir="$1"
+  local result="$2"
+  local review_status review_verdict test_status
+  local review_status_up review_verdict_norm test_status_up
+
+  if ! rg -q '\[artifact:(ReviewReport|TestReport)\]' "$change_dir"/*.md 2>/dev/null; then
+    return 0
+  fi
+
+  review_status="$(artifact_field_value "$change_dir" "ReviewReport" "status")"
+  review_verdict="$(artifact_field_value "$change_dir" "ReviewReport" "verdict")"
+  test_status="$(artifact_field_value "$change_dir" "TestReport" "status")"
+
+  if [[ -z "$review_status" || -z "$test_status" ]]; then
+    echo "[FAIL] artifact blocks detected but status fields are incomplete (ReviewReport/TestReport)" >&2
+    return 1
+  fi
+
+  review_status_up="$(printf "%s" "$review_status" | tr '[:lower:]' '[:upper:]')"
+  test_status_up="$(printf "%s" "$test_status" | tr '[:lower:]' '[:upper:]')"
+  review_verdict_norm="$(printf "%s" "$review_verdict" | tr '[:upper:]' '[:lower:]')"
+
+  if [[ "$result" == "pass" ]]; then
+    if [[ "$review_status_up" != "PASS" || "$test_status_up" != "PASS" ]]; then
+      echo "[FAIL] review result pass requires artifact ReviewReport/TestReport status both PASS" >&2
+      return 1
+    fi
+    if [[ -n "$review_verdict_norm" && "$review_verdict_norm" != "pass" ]]; then
+      echo "[FAIL] review result pass conflicts with artifact ReviewReport verdict=${review_verdict}" >&2
+      return 1
+    fi
+    return 0
+  fi
+
+  if [[ "$review_status_up" == "PASS" && "$test_status_up" == "PASS" && "$review_verdict_norm" == "pass" ]]; then
+    echo "[FAIL] review result needs-fix conflicts with artifact PASS/PASS verdict=pass" >&2
+    return 1
+  fi
+
+  return 0
+}
+
 validate_change_artifacts() {
   local change_dir="$1"
-
-  for file in proposal.md design.md tasks.md checklist.md negative-results.md; do
-    [[ -f "$change_dir/$file" ]] || {
-      echo "[FAIL] missing required artifact: $change_dir/$file" >&2
-      return 1
-    }
-  done
-
-  grep -q "^## 问题陈述（单问题）" "$change_dir/proposal.md" || {
-    echo "[FAIL] proposal.md missing section: 问题陈述（单问题）" >&2
-    return 1
-  }
-
-  grep -q "^## 上下文充分性检查" "$change_dir/proposal.md" || {
-    echo "[FAIL] proposal.md missing section: 上下文充分性检查" >&2
-    return 1
-  }
-
-  grep -q "^## Core/Optional 边界检查" "$change_dir/proposal.md" || {
-    echo "[FAIL] proposal.md missing section: Core/Optional 边界检查" >&2
-    return 1
-  }
-
-  grep -q "^## 变更重复性检查" "$change_dir/proposal.md" || {
-    echo "[FAIL] proposal.md missing section: 变更重复性检查" >&2
-    return 1
-  }
-
-  grep -q "^## Breaking Change 检查" "$change_dir/proposal.md" || {
-    echo "[FAIL] proposal.md missing section: Breaking Change 检查" >&2
-    return 1
-  }
-
-  grep -q "^## Ownership 与并行冲突检查" "$change_dir/tasks.md" || {
-    echo "[FAIL] tasks.md missing section: Ownership 与并行冲突检查" >&2
-    return 1
-  }
-
-  grep -q "^## 已验证的负结果" "$change_dir/negative-results.md" || {
-    echo "[FAIL] negative-results.md missing section: 已验证的负结果" >&2
-    return 1
-  }
+  bash "$ROOT_DIR/scripts/check_change_governance.sh" "$change_dir"
 }
 
 propose() {
@@ -257,6 +277,23 @@ propose() {
 - [ ] 否：不涉及兼容性破坏
 - [ ] 是：涉及兼容性破坏（必须补充迁移与回退计划）
 
+## Spec 链路检查
+- requirements 基线：
+- design 决策：
+- tasks 追溯关系：
+
+## 安装范围与依赖边界
+- 安装范围（global-ready/project-bound）：
+- 依赖边界（脚本/数据/上下文）：
+
+## Prompt 回归证据计划
+- before/after 对比输入：
+- 失败样例保留方式：
+
+## 收敛模式与退出条件
+- 当前模式（diagnosis/repro/planning/execution）：
+- 退出条件（进入执行/收敛）：
+
 ## 备选方案与取舍
 - 方案 A：
 - 方案 B：
@@ -295,6 +332,12 @@ DESIGN
 - 写入范围（scope_write）：
 - 读取范围（scope_read）：
 - 是否与其他任务冲突（同文件/同 contract/同配置）：
+
+## 轻量工件与收敛结论
+- 需求梳理工件：
+- task checklist 工件：
+- 执行反馈/验收记录工件：
+- 收敛结论或阻塞说明：
 TASKS
 
   cat > "$change_dir/checklist.md" <<CHECKLIST
@@ -304,7 +347,11 @@ TASKS
 - [ ] 风险项评估完成
 - [ ] 回退方案可执行
 - [ ] 验证证据可追溯
+- [ ] Evidence Index 命令级字段完整（命令/退出码/结果摘要/证据路径/层级）
 - [ ] 评审结果为 pass（无 blocker/major 未闭环）
+- [ ] Prompt before/after 对比证据
+- [ ] Skill Intake 归属与安装范围结论
+- [ ] 收敛结论或阻塞说明
 CHECKLIST
 
   cat > "$change_dir/negative-results.md" <<NEGATIVE
@@ -314,6 +361,11 @@ CHECKLIST
 | 时间 | 假设/方案 | 验证方法 | 结果 | 不采用原因 |
 |---|---|---|---|---|
 | T0 | 待补充 | 待补充 | 待补充 | 待补充 |
+
+## Evidence Index（命令级）
+| 命令 | 退出码 | 结果摘要 | 证据路径 | 层级 |
+|---|---|---|---|---|
+| 待补充 | 待补充 | 待补充 | 待补充 | Workflow |
 NEGATIVE
 
   write_state "$change_dir" "proposed"
@@ -351,6 +403,7 @@ verify_change() {
     echo "- 验证命令："
     echo "  - scripts/validate_assets.sh --strict"
     echo "  - scripts/check_format.sh"
+    echo "  - scripts/check_change_governance.sh <change_dir>"
     echo "- 工件检查：proposal/design/tasks/checklist/negative-results"
     echo
   } > "$report"
@@ -392,6 +445,11 @@ review_change() {
   ensure_non_negative_int "$BLOCKERS" "--blockers"
   ensure_non_negative_int "$MAJORS" "--majors"
   ensure_non_negative_int "$MINORS" "--minors"
+
+  if ! validate_artifact_consistency "$change_dir" "$RESULT"; then
+    write_state "$change_dir" "review-failed"
+    exit 1
+  fi
 
   local report="$change_dir/review-report.md"
   {

@@ -1,6 +1,8 @@
 ---
 name: unit-test-embedded
 description: 嵌入式单元测试策略与样例
+version: 1.0.0
+last_updated: 2026-05-02
 triggers:
   - 新增逻辑模块或回归缺陷时
 non_triggers:

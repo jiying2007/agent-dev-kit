@@ -1,6 +1,8 @@
 ---
 name: integration-hil-sil
 description: HIL/SIL 集成验证编排
+version: 1.0.0
+last_updated: 2026-05-02
 triggers:
   - 跨模块联调或发布前验收时
 non_triggers:

@@ -22,6 +22,8 @@
 ## 命令模板
 
 ```bash
+bash scripts/devkit.sh catalog build
+bash scripts/devkit.sh match --skill requirements-triage --text "<需求摘要>"
 bash scripts/devkit.sh propose --change <change-id> --title "<目标>"
 bash scripts/devkit.sh apply --change <change-id>
 bash scripts/devkit.sh verify --change <change-id>
@@ -31,6 +33,7 @@ bash scripts/devkit.sh archive --change <change-id>
 
 ## 验收门禁
 
+- `catalog/match` 结果与本次技能选型一致，可解释为何选择 core/optional 能力。
 - 需求边界、非目标、风险在 `proposal.md` 可追溯
 - 关键接口/状态机变更在 `design.md` 记录
 - `proposal.md` 必须显式完成 breaking change 检查

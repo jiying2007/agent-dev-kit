@@ -23,7 +23,7 @@
    - `[artifact:ReviewReport]`
    - `[artifact:TestReport]`
 4. 执行 `verify`，记录真实命令输出。
-5. 执行 `review`，确保与标签化结论一致后再归档。
+5. 执行 `review`，确保与标签化结论一致后再归档（`workflow.sh` 会自动校验一致性）。
 
 ## 4. 最小标签模板
 
@@ -50,4 +50,3 @@ tests_run:
 
 - 缺失标签或证据：结论必须 `needs-fix`，禁止归档。
 - 发现共享契约影响未评估：升级到架构评审再继续。
-

@@ -1,6 +1,8 @@
 ---
 name: interface-contract-design
 description: 定义模块/API/消息接口契约
+version: 1.0.0
+last_updated: 2026-05-02
 triggers:
   - 新增或变更跨模块接口时
 non_triggers:

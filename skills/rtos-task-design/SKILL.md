@@ -1,6 +1,8 @@
 ---
 name: rtos-task-design
 description: RTOS 任务模型与优先级设计
+version: 1.0.0
+last_updated: 2026-05-02
 triggers:
   - 新增实时任务或调度异常时
 non_triggers:

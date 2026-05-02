@@ -47,6 +47,18 @@ bash scripts/devkit.sh match --skill requirements-triage --text "收到模糊需
 bash scripts/devkit.sh match --skill incident-rca-report --scope optional-skill --text "出现线上故障且需要复盘闭环"
 ```
 
+## bridge
+
+执行 `openspec` 与 `global-dev-kit` 的变更工件桥接。  
+用于把 `openspec/changes/<change-id>/` 导入到 `docs/changes/<change-id>/`，或反向导出。
+
+```bash
+bash scripts/devkit.sh bridge import --change add-dark-mode --openspec-root /repo/openspec
+bash scripts/devkit.sh bridge import --change add-dark-mode --from-archive --openspec-root /repo/openspec
+bash scripts/devkit.sh bridge export --change add-dark-mode --openspec-root /repo/openspec
+bash scripts/devkit.sh bridge export --change add-dark-mode --archive-date 2026-05-02 --openspec-root /repo/openspec
+```
+
 ## propose
 
 创建变更工件目录与模板：`proposal.md`、`design.md`、`tasks.md`、`checklist.md`、`negative-results.md`。
