@@ -100,6 +100,20 @@ profiles:
       - fault-injection-recovery
       - performance-profiling-embedded
       - release-versioning
+  artifact-gated-lite:
+    description: 高风险变更的轻量产物门禁配置（强调可追溯交付证据）
+    optional: true
+    extends:
+      - core
+    include_agents:
+      - architecture-planner
+      - test-validation-engineer
+      - code-review-governor
+    include_skills:
+      - requirements-triage
+      - task-breakdown
+      - verification-before-completion
+      - commit-pr-quality-gate
 
 default_profile: embedded-fullstack
 
@@ -236,6 +250,10 @@ optional_skills:
     path: optional-skills/incident-rca-report/SKILL.md
     quality_tier: p2
     description: 线上事故根因分析与修复复盘
+  - name: artifact-gated-lite
+    path: optional-skills/artifact-gated-lite/SKILL.md
+    quality_tier: p2
+    description: 轻量 artifact 标签与门禁模板
 
 install:
   default_mode: symlink

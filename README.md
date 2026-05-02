@@ -5,7 +5,7 @@
 ## 1. 核心能力
 
 - 多工具安装：`codex` / `claude-code` / `hermes-agent` / `opencode`，支持 `--tool auto` 自动检测。
-- Profile 分层：`core`（通用核心）+ `embedded-fullstack`（默认）+ `release-hardening`（可选叠加）。
+- Profile 分层：`core`（通用核心）+ `embedded-fullstack`（默认）+ `release-hardening` / `artifact-gated-lite`（可选叠加）。
 - 可选技能库：`optional-skills/` 提供按需安装能力，不污染默认 profile。
 - 资产转换：按目标工具导出目录结构与元数据（`scripts/convert_assets.sh`）。
 - 资产目录索引：`catalog` 生成 Agent/Skill/Profile 可检索目录。
@@ -48,6 +48,9 @@ bash scripts/devkit.sh install --tool codex --target ~/.codex --profile core --e
 
 # 安装 profile 并叠加可选技能
 bash scripts/devkit.sh install --tool codex --profile core --with-optional-skill incident-rca-report
+
+# 高风险变更：叠加轻量 artifact 门禁
+bash scripts/devkit.sh install --tool codex --profile core --extra-profile artifact-gated-lite --with-optional-skill artifact-gated-lite
 
 # 导出到 Claude Code 结构
 bash scripts/devkit.sh convert --target claude-code --profile embedded-fullstack --out dist --clean
@@ -116,13 +119,14 @@ bash scripts/devkit.sh archive --change can-fd-bringup
 | `release-versioning` | 发布版本与变更治理 | 里程碑切版、量产发布 |
 | `commit-pr-quality-gate` | commit/PR 合规门禁 | 提交前、合并前检查 |
 
-## 6. Optional Skills（3）
+## 6. Optional Skills（4）
 
 | Skill | 用途 | 典型触发 |
 |---|---|---|
 | `test-flakiness-triage` | 测试波动定位与稳定化 | 同代码多次回归结果不一致 |
 | `cross-team-handoff` | 跨团队交接清单与责任闭环 | 模块交接、Owner 变更 |
 | `incident-rca-report` | 故障复盘与 RCA 报告沉淀 | 线上事故复盘闭环 |
+| `artifact-gated-lite` | 高风险变更的轻量 artifact 标签与门禁模板 | 涉及共享契约/发布链路且需可追溯交付 |
 
 ## 7. 场景工作流推荐
 
@@ -130,17 +134,20 @@ bash scripts/devkit.sh archive --change can-fd-bringup
 - 新外设 bring-up：`requirements-analyst -> driver-engineer -> component-engineer -> test-validation-engineer`
 - BSP 迁移：`architecture-planner -> driver-engineer -> build-release-engineer -> test-validation-engineer`
 - 发布收口：`test-validation-engineer -> security-compliance-reviewer -> build-release-engineer -> code-review-governor`
+- 高风险变更门禁：`architecture-planner -> application-engineer -> test-validation-engineer -> code-review-governor`
 
 建议配套技能：
 - 需求阶段：`requirements-triage` + `task-breakdown`
 - 设计阶段：`adr-writer` + `interface-contract-design`
 - 调试阶段：`systematic-debugging` + `test-flakiness-triage`（可选）
 - 验证阶段：`unit-test-embedded` + `integration-hil-sil` + `verification-before-completion` + `commit-pr-quality-gate`
+- 高风险变更：`artifact-gated-lite`（可选）+ `verification-before-completion` + `commit-pr-quality-gate`
 
 场景手册入口：
 - `docs/runbooks/feature-delivery.md`
 - `docs/runbooks/driver-bringup.md`
 - `docs/runbooks/release-hardening.md`
+- `docs/runbooks/artifact-gated-delivery.md`
 
 ## 8. 测试与发布
 

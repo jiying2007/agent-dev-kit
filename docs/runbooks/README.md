@@ -7,6 +7,7 @@
 - `feature-delivery.md`：需求到交付
 - `driver-bringup.md`：新外设驱动上板联调
 - `release-hardening.md`：发布前收口与风险压实
+- `artifact-gated-delivery.md`：高风险变更的轻量产物门禁
 
 ## 使用方式
 

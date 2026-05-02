@@ -52,6 +52,16 @@
 - Skill：`incident-rca-report + test-flakiness-triage + systematic-debugging`
 - 命令：先 `install --with-optional-skill incident-rca-report`，再 `propose -> apply -> verify -> review`
 
+### 场景 E：高风险变更的轻量产物门禁（可选配置）
+
+- Agent：`architecture-planner -> application-engineer -> test-validation-engineer -> code-review-governor`
+- Skill：`artifact-gated-lite + verification-before-completion + commit-pr-quality-gate`
+- 命令：
+  1. `install --extra-profile artifact-gated-lite --with-optional-skill artifact-gated-lite`
+  2. `propose -> apply -> verify -> review`
+  3. `review` 结论必须与 `artifact:ReviewReport` / `artifact:TestReport` 一致
+- 适用条件：变更涉及共享契约、发布链路、跨角色交接，且需要可追溯交付证据
+
 ## 变更工件约定
 
 - `proposal.md`：为什么做、做什么、不做什么

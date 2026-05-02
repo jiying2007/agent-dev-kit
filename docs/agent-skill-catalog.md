@@ -52,6 +52,7 @@
 | `test-flakiness-triage` | 定位测试波动根因并给出稳定化方案 | 回归测试同代码多次执行结果不一致 | `optional-skills/test-flakiness-triage/SKILL.md` |
 | `cross-team-handoff` | 跨团队交接时统一目标、边界和验收责任 | 模块即将交接给其他团队维护 | `optional-skills/cross-team-handoff/SKILL.md` |
 | `incident-rca-report` | 线上事故复盘与根因分析闭环 | 出现线上故障且需要复盘闭环 | `optional-skills/incident-rca-report/SKILL.md` |
+| `artifact-gated-lite` | 高风险变更时使用轻量 artifact 标签与门禁模板固定交付证据 | 涉及公共接口、schema、发布链路等高风险变更 | `optional-skills/artifact-gated-lite/SKILL.md` |
 
 ## Profiles
 
@@ -60,4 +61,4 @@
 | `core` | 通用研发核心配置（跨模块需求、实现、验证与评审） | false | - |
 | `embedded-fullstack` | C/C++ 嵌入式全栈默认配置（驱动、组件、应用） | false | core |
 | `release-hardening` | 发布前强化配置（安全、可靠性、发布治理） | true | - |
-
+| `artifact-gated-lite` | 高风险变更的轻量产物门禁配置（强调可追溯交付证据） | true | core |

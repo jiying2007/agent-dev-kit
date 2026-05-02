@@ -11,6 +11,10 @@ echo "$LIST_OUTPUT" | grep -Fxq "incident-rca-report" || {
   echo "[FAIL] optional skill list missing incident-rca-report" >&2
   exit 1
 }
+echo "$LIST_OUTPUT" | grep -Fxq "artifact-gated-lite" || {
+  echo "[FAIL] optional skill list missing artifact-gated-lite" >&2
+  exit 1
+}
 
 TARGET="$TMP_DIR/.codex"
 "$ROOT_DIR/scripts/install_assets.sh" \
@@ -19,7 +23,8 @@ TARGET="$TMP_DIR/.codex"
   --target "$TARGET" \
   --profile core \
   --with-optional-skill test-flakiness-triage \
-  --with-optional-skill incident-rca-report
+  --with-optional-skill incident-rca-report \
+  --with-optional-skill artifact-gated-lite
 
 [[ -d "$TARGET/skills/test-flakiness-triage" ]] || {
   echo "[FAIL] missing installed optional skill test-flakiness-triage" >&2
@@ -27,6 +32,10 @@ TARGET="$TMP_DIR/.codex"
 }
 [[ -d "$TARGET/skills/incident-rca-report" ]] || {
   echo "[FAIL] missing installed optional skill incident-rca-report" >&2
+  exit 1
+}
+[[ -d "$TARGET/skills/artifact-gated-lite" ]] || {
+  echo "[FAIL] missing installed optional skill artifact-gated-lite" >&2
   exit 1
 }
 
