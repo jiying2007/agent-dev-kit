@@ -67,10 +67,10 @@ require_section "tasks.md" "## 轻量工件与收敛结论"
 
 require_section "negative-results.md" "## 已验证的负结果"
 require_section "negative-results.md" "## Evidence Index（命令级）"
-require_line "negative-results.md" "| 命令 | 退出码 | 结果摘要 | 证据路径 | 层级 |"
+require_line "negative-results.md" "| Command | Exit Code | Result Summary | Evidence Path | Layer | Related Artifact |"
 
 require_line "checklist.md" "- [ ] Prompt before/after 对比证据"
-require_line "checklist.md" "- [ ] Evidence Index 命令级字段完整（命令/退出码/结果摘要/证据路径/层级）"
+require_line "checklist.md" "- [ ] Evidence Index 命令级字段完整（命令/退出码/结果摘要/证据路径/层级/关联工件）"
 require_line "checklist.md" "- [ ] Skill Intake 归属与安装范围结论"
 require_line "checklist.md" "- [ ] 收敛结论或阻塞说明"
 

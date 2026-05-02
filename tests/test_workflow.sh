@@ -18,9 +18,9 @@ grep -q "^## Spec 链路检查" "$CHANGE_ROOT/$CHANGE_ID/proposal.md" || { echo 
 grep -q "^## Ownership 与并行冲突检查" "$CHANGE_ROOT/$CHANGE_ID/tasks.md" || { echo "[FAIL] missing ownership section" >&2; exit 1; }
 grep -q "^## 轻量工件与收敛结论" "$CHANGE_ROOT/$CHANGE_ID/tasks.md" || { echo "[FAIL] missing convergence section" >&2; exit 1; }
 grep -q "^- \\[ \\] Prompt before/after 对比证据" "$CHANGE_ROOT/$CHANGE_ID/checklist.md" || { echo "[FAIL] missing prompt regression checklist item" >&2; exit 1; }
-grep -q "^- \\[ \\] Evidence Index 命令级字段完整（命令/退出码/结果摘要/证据路径/层级）" "$CHANGE_ROOT/$CHANGE_ID/checklist.md" || { echo "[FAIL] missing evidence index checklist item" >&2; exit 1; }
+grep -q "^- \\[ \\] Evidence Index 命令级字段完整（命令/退出码/结果摘要/证据路径/层级/关联工件）" "$CHANGE_ROOT/$CHANGE_ID/checklist.md" || { echo "[FAIL] missing evidence index checklist item" >&2; exit 1; }
 grep -q "^## Evidence Index（命令级）" "$CHANGE_ROOT/$CHANGE_ID/negative-results.md" || { echo "[FAIL] missing command evidence index section" >&2; exit 1; }
-grep -q "^| 命令 | 退出码 | 结果摘要 | 证据路径 | 层级 |" "$CHANGE_ROOT/$CHANGE_ID/negative-results.md" || { echo "[FAIL] missing command evidence index table header" >&2; exit 1; }
+grep -q "^| Command | Exit Code | Result Summary | Evidence Path | Layer | Related Artifact |" "$CHANGE_ROOT/$CHANGE_ID/negative-results.md" || { echo "[FAIL] missing command evidence index table header" >&2; exit 1; }
 
 if "$ROOT_DIR/scripts/workflow.sh" review --change "$CHANGE_ID" --root "$CHANGE_ROOT" --result pass --blockers 0 --majors 0 --minors 0 >/dev/null 2>&1; then
   echo "[FAIL] review should fail before verify stage" >&2

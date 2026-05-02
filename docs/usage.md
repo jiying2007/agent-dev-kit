@@ -95,10 +95,11 @@ bash scripts/devkit.sh evidence append --file docs/changes/can-fd-bringup/negati
 ## 6) 测试与回归
 
 ```bash
-# 全量测试（validate + format + install + optional + convert + workflow + catalog + trigger matrix）
+# 全量测试（validate + format + install + profile coherence + optional + convert + workflow + catalog + trigger matrix）
 bash scripts/devkit.sh test
 
 # 单项检查
 bash scripts/check_format.sh
 bash scripts/validate_assets.sh --strict
+bash scripts/check_profile_coherence.sh
 ```

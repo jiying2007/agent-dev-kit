@@ -29,6 +29,8 @@
 
 ## 场景建议
 
+说明：下列 `Skill` 列表均按 `Primary -> Supporting` 排列；第一个为主技能，其余只补充检查项，不抢占入口。若场景需要多个可选技能，必须先确认 profile/安装范围，再执行匹配。
+
 ### 场景 A：新功能迭代
 
 - Agent：`requirements-analyst -> architecture-planner -> application-engineer`

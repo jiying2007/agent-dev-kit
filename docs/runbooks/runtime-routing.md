@@ -22,12 +22,15 @@
 - 主技能只能有一个。
 - 支撑技能只补充检查项，不抢占触发入口。
 - fallback 必须显式声明，禁止多个技能同时争抢同一任务。
+- 场景文档中的 Skill 列表统一按 `Primary -> Supporting` 排列。
+- profile 只声明增量能力；若已通过 `extends` 继承，不得重复声明同名 Agent/Skill。
 
 ## 命令模板
 
 ```bash
 bash scripts/devkit.sh catalog build
 bash scripts/devkit.sh match --skill requirements-triage --text "<task>"
+bash scripts/check_profile_coherence.sh
 bash ../scripts/check-runtime-routing.sh ..
 ```
 
@@ -35,4 +38,5 @@ bash ../scripts/check-runtime-routing.sh ..
 
 - `check-runtime-routing.sh` 通过。
 - `check-skill-routing-conflicts.sh` 通过。
+- `check_profile_coherence.sh` 通过。
 - 任务场景能映射到 profile、Agent 链、主 Skill 和 Workflow 状态。

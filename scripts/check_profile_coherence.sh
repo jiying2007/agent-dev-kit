@@ -1,0 +1,145 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+# shellcheck source=./lib_manifest.sh
+source "$SCRIPT_DIR/lib_manifest.sh"
+
+usage() {
+  cat <<USAGE
+Usage:
+  ./scripts/check_profile_coherence.sh
+
+Checks:
+  - profile extends must not redeclare inherited agents/skills
+  - profile direct includes must not contain duplicate entries
+  - profile references must point to manifest-declared agents/skills
+  - default_profile must exist
+USAGE
+}
+
+if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
+  usage
+  exit 0
+fi
+
+if [[ $# -gt 0 ]]; then
+  echo "[FAIL] unexpected arguments: $*" >&2
+  usage >&2
+  exit 1
+fi
+
+gdk_require_manifest
+
+manifest_contains() {
+  local section="$1"
+  local name="$2"
+  gdk_list_manifest_names "$section" | grep -Fxq "$name"
+}
+
+check_direct_duplicates() {
+  local profile="$1"
+  local key="$2"
+  local duplicates
+
+  duplicates="$(gdk_get_profile_list "$profile" "$key" | awk '
+    NF {
+      seen[$0]++
+    }
+    END {
+      for (item in seen) {
+        if (seen[item] > 1) {
+          print item
+        }
+      }
+    }
+  ')"
+
+  if [[ -n "$duplicates" ]]; then
+    while IFS= read -r item; do
+      [[ -z "$item" ]] && continue
+      echo "[FAIL] profile ${profile} duplicates ${key}: ${item}" >&2
+    done <<< "$duplicates"
+    return 1
+  fi
+}
+
+check_inherited_redeclaration() {
+  local profile="$1"
+  local key="$2"
+  local parents parent item inherited
+  local failed=0
+
+  parents="$(gdk_get_profile_list "$profile" "extends")"
+  [[ -n "$parents" ]] || return 0
+
+  inherited="$(mktemp)"
+  while IFS= read -r parent; do
+    [[ -z "$parent" ]] && continue
+    if ! gdk_profile_exists "$parent"; then
+      echo "[FAIL] profile ${profile} extends unknown profile: ${parent}" >&2
+      failed=1
+      continue
+    fi
+    gdk_collect_profile_items "$parent" "$key" "" >> "$inherited"
+  done <<< "$parents"
+
+  sort -u "$inherited" -o "$inherited"
+  while IFS= read -r item; do
+    [[ -z "$item" ]] && continue
+    if grep -Fxq "$item" "$inherited"; then
+      echo "[FAIL] profile ${profile} redeclares inherited ${key}: ${item}" >&2
+      failed=1
+    fi
+  done < <(gdk_get_profile_list "$profile" "$key")
+
+  rm -f "$inherited"
+  return "$failed"
+}
+
+check_manifest_references() {
+  local profile="$1"
+  local key="$2"
+  local section="$3"
+  local item failed=0
+
+  while IFS= read -r item; do
+    [[ -z "$item" ]] && continue
+    if ! manifest_contains "$section" "$item"; then
+      echo "[FAIL] profile ${profile} references unknown ${key}: ${item}" >&2
+      failed=1
+    fi
+  done < <(gdk_get_profile_list "$profile" "$key")
+
+  return "$failed"
+}
+
+failed=0
+default_profile="$(awk '/^default_profile:/ {print $2; exit}' "$GDK_MANIFEST")"
+if [[ -z "$default_profile" ]] || ! gdk_profile_exists "$default_profile"; then
+  echo "[FAIL] default_profile is missing or unknown: ${default_profile:-<empty>}" >&2
+  failed=1
+fi
+
+while IFS= read -r profile; do
+  [[ -z "$profile" ]] && continue
+  if [[ -z "$(gdk_get_profile_value "$profile" "description")" ]]; then
+    echo "[FAIL] profile ${profile} missing description" >&2
+    failed=1
+  fi
+
+  check_direct_duplicates "$profile" "include_agents" || failed=1
+  check_direct_duplicates "$profile" "include_skills" || failed=1
+  check_inherited_redeclaration "$profile" "include_agents" || failed=1
+  check_inherited_redeclaration "$profile" "include_skills" || failed=1
+  check_manifest_references "$profile" "include_agents" "agents" || failed=1
+  check_manifest_references "$profile" "include_skills" "skills" || failed=1
+done < <(gdk_list_profile_names)
+
+if [[ "$failed" -ne 0 ]]; then
+  echo "[FAIL] profile coherence checks failed" >&2
+  exit 1
+fi
+
+echo "[PASS] profile coherence checks passed"

@@ -114,15 +114,6 @@ profiles:
     optional: true
     extends:
       - core
-    include_agents:
-      - architecture-planner
-      - test-validation-engineer
-      - code-review-governor
-    include_skills:
-      - requirements-triage
-      - task-breakdown
-      - verification-before-completion
-      - commit-pr-quality-gate
   team-core:
     description: 团队交付配置（责任矩阵、交接、验证与评审）
     optional: true
@@ -139,8 +130,6 @@ profiles:
     optional: true
     extends:
       - core
-    include_agents:
-      - architecture-planner
     include_skills:
       - adr-writer
   large-refactor:
@@ -149,7 +138,6 @@ profiles:
     extends:
       - core
     include_agents:
-      - architecture-planner
       - build-release-engineer
     include_skills:
       - component-api-stability

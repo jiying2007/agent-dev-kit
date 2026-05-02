@@ -13,6 +13,12 @@
 5. 落地 Agent/Skill/Workflow 至少一层。
 6. 回归通过后再进入 `~/.codex` pilot。
 
+## 技能路由
+
+- Primary Skill：`skill-composition-governance`
+- Supporting Skills：`security-supply-chain`、`commit-pr-quality-gate`
+- Fallback：若候选涉及安全、依赖或脚本执行风险，先切到 `security-supply-chain`，审查通过后再回到组合治理。
+
 ## 命令模板
 
 ```bash

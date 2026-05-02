@@ -13,7 +13,8 @@
 ## 推荐组合
 
 - Agent：`requirements-analyst -> architecture-planner -> application-engineer -> test-validation-engineer -> code-review-governor`
-- Skill：`planning-execution-loop + task-breakdown + verification-before-completion`
+- Primary Skill：`planning-execution-loop`
+- Supporting Skills：`task-breakdown`、`verification-before-completion`
 
 ## 工件
 

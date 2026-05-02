@@ -347,7 +347,7 @@ TASKS
 - [ ] 风险项评估完成
 - [ ] 回退方案可执行
 - [ ] 验证证据可追溯
-- [ ] Evidence Index 命令级字段完整（命令/退出码/结果摘要/证据路径/层级）
+- [ ] Evidence Index 命令级字段完整（命令/退出码/结果摘要/证据路径/层级/关联工件）
 - [ ] 评审结果为 pass（无 blocker/major 未闭环）
 - [ ] Prompt before/after 对比证据
 - [ ] Skill Intake 归属与安装范围结论
@@ -363,9 +363,9 @@ CHECKLIST
 | T0 | 待补充 | 待补充 | 待补充 | 待补充 |
 
 ## Evidence Index（命令级）
-| 命令 | 退出码 | 结果摘要 | 证据路径 | 层级 |
-|---|---|---|---|---|
-| 待补充 | 待补充 | 待补充 | 待补充 | Workflow |
+| Command | Exit Code | Result Summary | Evidence Path | Layer | Related Artifact |
+|---|---|---|---|---|---|
+| 待补充 | 待补充 | 待补充 | 待补充 | Workflow | negative-results |
 NEGATIVE
 
   write_state "$change_dir" "proposed"
