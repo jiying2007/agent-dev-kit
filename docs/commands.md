@@ -135,3 +135,20 @@ bash scripts/check_profile_coherence.sh
 - `--backup-dir <path>`：指定备份目录
 - `--install-report <path>`：生成安装报告
 - `--lock-version <version>`：要求 manifest version 匹配
+
+## production codex install
+
+生产安装到 `~/.codex` 时，推荐使用 `personal-core + release-hardening`，并叠加长任务、组合治理、供应链、交接与 artifact 门禁五类 optional skills。
+
+```bash
+bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --with-optional-skill planning-execution-loop --with-optional-skill skill-composition-governance --with-optional-skill security-supply-chain --with-optional-skill cross-team-handoff --with-optional-skill artifact-gated-lite --backup --install-report ../reports/gdk-install-report-$(date +%F).md --lock-version 0.3.0
+```
+
+安装后在 `llm_agent` 根目录运行：
+
+```bash
+rtk scripts/check-global-codex-health.sh ~/.codex minimal
+rtk scripts/check-gdk-harden-readiness.sh . --require-pilot
+```
+
+`~/.codex/AGENTS.md` 不由 gdk 安装器覆盖，配合方式见 `docs/codex-agents-integration.md`。

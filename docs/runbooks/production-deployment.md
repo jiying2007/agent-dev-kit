@@ -8,7 +8,7 @@
 
 ```bash
 bash scripts/devkit.sh validate --strict
-bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --backup --install-report reports/gdk-install-report.md
+bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --with-optional-skill planning-execution-loop --with-optional-skill skill-composition-governance --with-optional-skill security-supply-chain --with-optional-skill cross-team-handoff --with-optional-skill artifact-gated-lite --backup --install-report ../reports/gdk-install-report-$(date +%F).md --lock-version 0.3.0
 bash ../scripts/check-global-codex-health.sh ~/.codex minimal
 bash ../scripts/check-gdk-harden-readiness.sh .. --require-pilot
 ```
@@ -18,6 +18,8 @@ bash ../scripts/check-gdk-harden-readiness.sh .. --require-pilot
 - 生产安装使用 `copy`，避免工作区变动影响运行目录。
 - 安装前启用 `--backup`。
 - 安装后必须生成 install report。
+- 安装时使用 `--lock-version` 固定 manifest 版本。
+- 不覆盖 `~/.codex/AGENTS.md`；该文件只追加 gdk 配合规则，详见 `docs/codex-agents-integration.md`。
 - 若健康检查失败，回滚到安装报告记录的 backup 路径。
 
 ## 验收门禁

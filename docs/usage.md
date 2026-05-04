@@ -6,9 +6,37 @@
 cd global-dev-kit
 bash scripts/devkit.sh validate --strict
 bash scripts/devkit.sh validate --quick
+bash scripts/devkit.sh test
 ```
 
-## 2) 资产安装
+说明：
+
+- `validate --strict`：检查 manifest、路径、frontmatter、profile 引用和质量分级。
+- `validate --quick`：快速结构检查，适合编辑中间态。
+- `test`：全量回归，包含 validate、格式、内容质量、安装、profile coherence、optional、convert、workflow、catalog、trigger matrix。
+
+## 2) Profile 选择
+
+| Profile | 推荐场景 |
+|---|---|
+| `core` | 通用研发最小主干 |
+| `personal-core` | 个人 `~/.codex` 生产默认 |
+| `embedded-fullstack` | 嵌入式全栈，gdk 默认 profile |
+| `release-hardening` | 发布前强化 |
+| `artifact-gated-lite` | 高风险变更轻量 artifact 门禁 |
+| `team-core` | 团队交付与交接 |
+| `openspec-driven` | Spec 驱动变更 |
+| `large-refactor` | 大型重构 |
+| `incident-response` | 事故响应 |
+| `research-intake` | 参考仓吸收 |
+
+Profile 继承一致性检查：
+
+```bash
+bash scripts/check_profile_coherence.sh
+```
+
+## 3) 资产安装
 
 ```bash
 # 自动识别工具并软链接安装
@@ -20,8 +48,8 @@ bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --prof
 # 生产安装：备份 + 安装报告 + 版本锁定
 bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --backup --install-report reports/gdk-install-report.md --lock-version 0.3.0
 
-# 在 profile 基础上叠加可选技能
-bash scripts/devkit.sh install --tool codex --profile core --with-optional-skill incident-rca-report
+# 生产推荐：personal-core + release-hardening + 五个生产 optional skills
+bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --with-optional-skill planning-execution-loop --with-optional-skill skill-composition-governance --with-optional-skill security-supply-chain --with-optional-skill cross-team-handoff --with-optional-skill artifact-gated-lite --backup --install-report ../reports/gdk-install-report-$(date +%F).md --lock-version 0.3.0
 ```
 
 参数说明：
@@ -36,7 +64,14 @@ bash scripts/devkit.sh install --tool codex --profile core --with-optional-skill
 - `--install-report`：生成安装报告
 - `--lock-version`：要求 manifest version 匹配
 
-## 3) 资产转换
+生产安装纪律：
+
+- `~/.codex` 推荐使用 `copy`，避免源仓未提交变动影响运行目录。
+- 必须启用 `--backup` 与 `--install-report`。
+- 安装后运行 `llm_agent/scripts/check-global-codex-health.sh ~/.codex minimal`。
+- 若用于生产放行，还需运行 `llm_agent/scripts/check-gdk-harden-readiness.sh . --require-pilot`。
+
+## 4) 资产转换
 
 ```bash
 # 导出到 Claude Code
@@ -49,7 +84,7 @@ bash scripts/devkit.sh convert --target hermes-agent --profile core --extra-prof
 bash scripts/devkit.sh convert --target codex --profile core --with-optional-skill test-flakiness-triage --out dist --clean
 ```
 
-## 4) 目录索引与触发匹配
+## 5) 目录索引与触发匹配
 
 ```bash
 # 生成 Agent/Skill/Profile 索引
@@ -60,9 +95,17 @@ bash scripts/devkit.sh catalog find --type optional-skill --keyword 事故
 
 # 触发匹配（0 命中，1 未命中）
 bash scripts/devkit.sh match --skill requirements-triage --text "收到模糊需求或跨团队需求时"
+bash scripts/devkit.sh match --skill planning-execution-loop --scope optional-skill --text "复杂任务需要计划审查和执行检查点时"
 ```
 
-## 5) 工作流命令
+技能组合规则：
+
+- 一个场景只有一个 primary skill。
+- supporting skills 只补检查项，不抢入口。
+- 多技能冲突时使用 `skill-composition-governance`。
+- 第三方资产进入全局环境前使用 `security-supply-chain`。
+
+## 6) 工作流命令
 
 ```bash
 # 创建变更提案
@@ -92,7 +135,7 @@ bash scripts/devkit.sh evidence append --file docs/changes/can-fd-bringup/negati
 - `review` 只接受 `verified` 状态，`archive` 默认只接受 `review-passed` 状态。
 - `proposal.md` 需补全单问题、充分性、边界、重复性与 breaking change 检查项。
 
-## 6) 测试与回归
+## 7) 测试与回归
 
 ```bash
 # 全量测试（validate + format + install + profile coherence + optional + convert + workflow + catalog + trigger matrix）
@@ -103,3 +146,33 @@ bash scripts/check_format.sh
 bash scripts/validate_assets.sh --strict
 bash scripts/check_profile_coherence.sh
 ```
+
+## 8) `~/.codex/AGENTS.md` 配合
+
+gdk 不覆盖 `~/.codex/AGENTS.md`。推荐分工：
+
+- `~/.codex/AGENTS.md`：全局策略、命令硬约束、流程升级/降级、技能路由原则。
+- `~/.codex/agents`：由 gdk 安装的 Agent。
+- `~/.codex/skills`：由 gdk 安装的 Skills 与已治理个人技能。
+- `global-dev-kit`：源资产、测试、profile、runbook。
+
+详细说明见：
+
+```text
+docs/codex-agents-integration.md
+```
+
+## 9) 生产验证与回滚
+
+生产验证由 `llm_agent` 根脚本统一执行：
+
+```bash
+rtk scripts/check-gdk-harden-readiness.sh . --require-pilot
+```
+
+若安装后异常：
+
+1. 从 install report 找到 backup 路径。
+2. 经用户确认后恢复 `agents/` 与 `skills/`。
+3. 运行 `rtk scripts/check-global-codex-health.sh ~/.codex minimal`。
+4. 在 `reports/` 写入回滚记录。
