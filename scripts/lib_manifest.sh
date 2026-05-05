@@ -226,6 +226,33 @@ gdk_get_optional_skill_path() {
   gdk_get_manifest_item_value "optional_skills" "$skill" "path"
 }
 
+# --- Common utility functions ---
+
+gdk_to_lower() {
+  printf '%s' "$1" | tr '[:upper:]' '[:lower:]'
+}
+
+# Requires caller to set DRY_RUN (0 or 1).
+gdk_run_cmd() {
+  if [[ "${DRY_RUN:-0}" -eq 1 ]]; then
+    echo "[dry-run] $*"
+  else
+    "$@"
+  fi
+}
+
+# Resolve items from multiple profiles at once.
+# Usage: gdk_resolve_profile_items_all <key> <profile1> [profile2 ...]
+gdk_resolve_profile_items_all() {
+  local key="$1"
+  shift
+  local profiles=("$@")
+  local profile
+  for profile in "${profiles[@]}"; do
+    gdk_resolve_profile_items "$profile" "$key"
+  done | awk 'NF' | sort -u
+}
+
 # --- Routing table functions ---
 
 gdk_list_routing_intents() {

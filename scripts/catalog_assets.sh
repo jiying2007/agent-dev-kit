@@ -97,14 +97,10 @@ frontmatter_first_list_item() {
   ' "$file"
 }
 
-to_lower() {
-  printf '%s' "$1" | tr '[:upper:]' '[:lower:]'
-}
-
 match_keyword() {
   local text="$1"
   local needle="$2"
-  [[ "$(to_lower "$text")" == *"$(to_lower "$needle")"* ]]
+  [[ "$(gdk_to_lower "$text")" == *"$(gdk_to_lower "$needle")"* ]]
 }
 
 emit_agents_table() {

@@ -82,24 +82,6 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-run_cmd() {
-  if [[ "$DRY_RUN" -eq 1 ]]; then
-    echo "[dry-run] $*"
-  else
-    "$@"
-  fi
-}
-
-resolve_profile_items() {
-  local key="$1"
-  shift
-  local profiles=("$@")
-  local profile
-  for profile in "${profiles[@]}"; do
-    gdk_resolve_profile_items "$profile" "$key"
-  done | awk 'NF' | sort -u
-}
-
 resolve_destination() {
   local kind="$1"
   local name="$2"
@@ -138,7 +120,7 @@ write_with_metadata() {
   local name="$4"
 
   if [[ "$TARGET" == "codex" ]]; then
-    run_cmd cp -a "$src" "$dst"
+    gdk_run_cmd cp -a "$src" "$dst"
     return
   fi
 
@@ -211,19 +193,19 @@ for skill in "${OPTIONAL_SKILLS[@]}"; do
 done
 
 ALL_PROFILES=("$PROFILE" "${EXTRA_PROFILES[@]}")
-mapfile -t AGENTS_TO_EXPORT < <(resolve_profile_items "include_agents" "${ALL_PROFILES[@]}")
-mapfile -t SKILLS_TO_EXPORT < <(resolve_profile_items "include_skills" "${ALL_PROFILES[@]}")
+mapfile -t AGENTS_TO_EXPORT < <(gdk_resolve_profile_items_all "include_agents" "${ALL_PROFILES[@]}")
+mapfile -t SKILLS_TO_EXPORT < <(gdk_resolve_profile_items_all "include_skills" "${ALL_PROFILES[@]}")
 
 TARGET_DIR="$OUT_DIR/$TARGET"
 if [[ "$CLEAN" -eq 1 ]]; then
-  run_cmd rm -rf "$TARGET_DIR"
+  gdk_run_cmd rm -rf "$TARGET_DIR"
 fi
 
 for name in "${AGENTS_TO_EXPORT[@]}"; do
   src="$ROOT_DIR/agents/$name/AGENTS.md"
   dst="$(resolve_destination "agent" "$name")"
   [[ -n "$dst" ]] || { echo "[FAIL] failed to resolve destination for agent: $name" >&2; exit 1; }
-  run_cmd mkdir -p "$(dirname "$dst")"
+  gdk_run_cmd mkdir -p "$(dirname "$dst")"
   write_with_metadata "$src" "$dst" "agent" "$name"
 done
 
@@ -231,7 +213,7 @@ for name in "${SKILLS_TO_EXPORT[@]}"; do
   src="$ROOT_DIR/skills/$name/SKILL.md"
   dst="$(resolve_destination "skill" "$name")"
   [[ -n "$dst" ]] || { echo "[FAIL] failed to resolve destination for skill: $name" >&2; exit 1; }
-  run_cmd mkdir -p "$(dirname "$dst")"
+  gdk_run_cmd mkdir -p "$(dirname "$dst")"
   write_with_metadata "$src" "$dst" "skill" "$name"
 done
 
@@ -241,7 +223,7 @@ for name in "${OPTIONAL_SKILLS[@]}"; do
   src="$ROOT_DIR/$optional_path"
   dst="$(resolve_destination "skill" "$name")"
   [[ -n "$dst" ]] || { echo "[FAIL] failed to resolve destination for optional skill: $name" >&2; exit 1; }
-  run_cmd mkdir -p "$(dirname "$dst")"
+  gdk_run_cmd mkdir -p "$(dirname "$dst")"
   write_with_metadata "$src" "$dst" "skill" "$name"
 done
 

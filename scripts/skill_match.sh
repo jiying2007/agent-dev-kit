@@ -56,20 +56,16 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-to_lower() {
-  printf '%s' "$1" | tr '[:upper:]' '[:lower:]'
-}
-
 contains_phrase() {
   local text="$1"
   local phrase="$2"
   local lower_text
-  lower_text="$(to_lower "$text")"
+  lower_text="$(gdk_to_lower "$text")"
   # Split on "/" and match any sub-phrase
   IFS='/' read -ra parts <<< "$phrase"
   for part in "${parts[@]}"; do
     [[ -z "$part" ]] && continue
-    if [[ "$lower_text" == *"$(to_lower "$part")"* ]]; then
+    if [[ "$lower_text" == *"$(gdk_to_lower "$part")"* ]]; then
       return 0
     fi
   done

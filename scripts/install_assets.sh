@@ -120,14 +120,6 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-run_cmd() {
-  if [[ "$DRY_RUN" -eq 1 ]]; then
-    echo "[dry-run] $*"
-  else
-    "$@"
-  fi
-}
-
 write_file() {
   local file="$1"
   shift
@@ -166,16 +158,6 @@ detect_tool_auto() {
   echo "codex"
 }
 
-resolve_profile_items() {
-  local key="$1"
-  shift
-  local profiles=("$@")
-  local profile
-  for profile in "${profiles[@]}"; do
-    gdk_resolve_profile_items "$profile" "$key"
-  done | awk 'NF' | sort -u
-}
-
 install_item() {
   local src="$1"
   local dst="$2"
@@ -185,11 +167,11 @@ install_item() {
     exit 1
   fi
 
-  run_cmd rm -rf "$dst"
+  gdk_run_cmd rm -rf "$dst"
   if [[ "$MODE" == "copy" ]]; then
-    run_cmd cp -a "$src" "$dst"
+    gdk_run_cmd cp -a "$src" "$dst"
   else
-    run_cmd ln -s "$src" "$dst"
+    gdk_run_cmd ln -s "$src" "$dst"
   fi
 }
 
@@ -279,8 +261,8 @@ SKILL_DST="$TARGET/$SKILLS_DIR_NAME"
 
 ALL_PROFILES=("$PROFILE" "${EXTRA_PROFILES[@]}")
 
-mapfile -t AGENTS_TO_INSTALL < <(resolve_profile_items "include_agents" "${ALL_PROFILES[@]}")
-mapfile -t SKILLS_TO_INSTALL < <(resolve_profile_items "include_skills" "${ALL_PROFILES[@]}")
+mapfile -t AGENTS_TO_INSTALL < <(gdk_resolve_profile_items_all "include_agents" "${ALL_PROFILES[@]}")
+mapfile -t SKILLS_TO_INSTALL < <(gdk_resolve_profile_items_all "include_skills" "${ALL_PROFILES[@]}")
 
 if [[ ${#AGENTS_TO_INSTALL[@]} -eq 0 ]]; then
   echo "[FAIL] no agents resolved from profiles: ${ALL_PROFILES[*]}" >&2
@@ -298,16 +280,16 @@ if [[ "$BACKUP" -eq 1 ]]; then
     BACKUP_DIR="$TARGET/.gdk-backups"
   fi
   BACKUP_PATH="$BACKUP_DIR/$(date -u +%Y%m%dT%H%M%SZ)"
-  run_cmd mkdir -p "$BACKUP_PATH"
+  gdk_run_cmd mkdir -p "$BACKUP_PATH"
   if [[ -e "$AGENT_DST" ]]; then
-    run_cmd cp -a "$AGENT_DST" "$BACKUP_PATH/agents"
+    gdk_run_cmd cp -a "$AGENT_DST" "$BACKUP_PATH/agents"
   fi
   if [[ -e "$SKILL_DST" ]]; then
-    run_cmd cp -a "$SKILL_DST" "$BACKUP_PATH/skills"
+    gdk_run_cmd cp -a "$SKILL_DST" "$BACKUP_PATH/skills"
   fi
 fi
 
-run_cmd mkdir -p "$AGENT_DST" "$SKILL_DST"
+gdk_run_cmd mkdir -p "$AGENT_DST" "$SKILL_DST"
 
 for agent in "${AGENTS_TO_INSTALL[@]}"; do
   install_item "$ROOT_DIR/agents/$agent" "$AGENT_DST/$agent"
