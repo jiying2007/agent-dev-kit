@@ -1,5 +1,7 @@
 # 用户故事（UserStory）模板
 
+> **使用说明**: 在 propose 阶段将 PRD 拆解为可执行用户故事时使用此模板。填写用户角色、故事描述和验收条件，handoff 给架构师。
+
 [artifact:UserStory]
 status: READY
 owner: requirements-analyst

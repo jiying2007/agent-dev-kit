@@ -16,6 +16,7 @@
 | 技能组合指南 | skill-composition-guide.md | Skill 组合策略 |
 | 映射矩阵 | mapping-matrix.md | Agent/Skill/Profile 映射 |
 | 参考采纳指南 | reference-adoption.md | 如何从参考仓吸收 |
+| Profile 选择指南 | profile-guide.md | Profile 选择与叠加规则 |
 
 ## 技术文档
 
@@ -89,6 +90,21 @@
 |-------|------|------|------|
 | fetch-url-content | optional-skills/data-fetch/ | skills/天工 | URL 正文提取 |
 | email-imap-fetch | optional-skills/data-fetch/ | skills/天工 | IMAP 邮件获取 |
+
+### 新增运维命令 (v2.0.0)
+
+| 命令 | 说明 |
+|------|------|
+| `devkit health` | 健康检查（结构/依赖/配置/测试/质量） |
+| `devkit backup` | 备份/恢复/回滚操作 |
+| `devkit ops` | 日常/周常/月常运维编排 |
+| `devkit monitor` | 系统监控与告警 |
+| `devkit perf` | 性能分析与优化 |
+| `devkit security` | 安全扫描与加固 |
+| `devkit release` | 发布准备/验证/构建/发布/回滚 |
+| `devkit version` | 版本查看/锁定/升级/对比 |
+
+详细用法见 [commands.md](commands.md)。
 
 ### 新增文档
 | 文档 | 路径 | 说明 |

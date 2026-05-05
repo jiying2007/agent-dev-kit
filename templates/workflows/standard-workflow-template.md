@@ -8,6 +8,8 @@
 
 ## 工作流概述
 
+> **何时使用**: 适用于正常的功能开发、Bug 修复、重构等非紧急变更流程。如遇生产环境 P0/P1 故障，请改用 emergency-workflow-template。
+
 标准工作流定义了 global-dev-kit 中变更从提出到归档的完整生命周期。
 包含 5 个阶段，每个阶段有明确的 Entry Criteria（进入条件）、执行步骤和 Exit Criteria（退出条件）。
 

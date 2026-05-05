@@ -15,6 +15,12 @@ constraints:
 
 # <skill-name>
 
+## 使用说明
+- 用途: 创建新 Skill 时使用此模板作为骨架
+- 填写: 替换 frontmatter 字段和 body 中的 [bracket] 占位符
+- 触发词: triggers 必须使用可匹配关键词，不要写描述性句子
+- 工具: 由 devkit.sh install 安装到目标工具目录
+
 ## Goal
 - <目标>
 

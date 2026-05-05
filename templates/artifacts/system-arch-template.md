@@ -1,5 +1,7 @@
 # System Architecture (系统架构文档)
 
+> **使用说明**: 在项目初期或重大架构变更时使用此模板。定义系统整体架构、组件关系、部署视图和技术选型，供架构评审。
+
 [artifact:system-arch]
 status: DRAFT
 owner: [填写架构师]

@@ -211,9 +211,8 @@ optimize_performance() {
     # 3. 优化文档
     log_info "优化文档"
     if [[ -d "$ROOT_DIR/docs" ]]; then
-        # 压缩大文件
-        # Removed: gzip on .md files produces unwanted .gz copies alongside originals
-        # find "$ROOT_DIR/docs" -name "*.md" -type f -size +100k -exec gzip -k {} \; 2>/dev/null || true
+        # 压缩大文件 - 已禁用: gzip 会在原始文件旁产生不需要的 .gz 副本
+        : # no-op placeholder
     fi
     
     log_success "性能优化完成"

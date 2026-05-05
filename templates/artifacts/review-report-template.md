@@ -1,5 +1,7 @@
 # Code Review Report (代码审查报告)
 
+> **使用说明**: 在 review 阶段对代码变更进行系统性审查时使用此模板。填写发现汇总、质量评分和审查结论(PASS/NEEDS-FIX/REJECT)。
+
 [artifact:review-report]
 status: DRAFT
 owner: [填写审查人]

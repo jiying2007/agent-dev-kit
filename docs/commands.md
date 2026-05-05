@@ -127,6 +127,84 @@ bash scripts/devkit.sh test
 bash scripts/check_profile_coherence.sh
 ```
 
+## health
+
+健康检查：结构/依赖/配置/测试/质量全面扫描。
+
+```bash
+bash scripts/devkit.sh health
+```
+
+## backup
+
+备份/恢复/回滚操作。
+
+```bash
+bash scripts/devkit.sh backup create
+bash scripts/devkit.sh backup restore --id <backup-id>
+bash scripts/devkit.sh backup rollback --id <backup-id>
+```
+
+## ops
+
+日常/周常/月常运维编排。
+
+```bash
+bash scripts/devkit.sh ops daily
+bash scripts/devkit.sh ops weekly
+bash scripts/devkit.sh ops monthly
+```
+
+## monitor
+
+系统监控与告警。
+
+```bash
+bash scripts/devkit.sh monitor status
+bash scripts/devkit.sh monitor alert
+```
+
+## perf
+
+性能分析与优化。
+
+```bash
+bash scripts/devkit.sh perf analyze
+bash scripts/devkit.sh perf optimize
+```
+
+## security
+
+安全扫描与加固。
+
+```bash
+bash scripts/devkit.sh security scan
+bash scripts/devkit.sh security harden
+```
+
+## release
+
+发布准备/验证/构建/发布/回滚。
+
+```bash
+bash scripts/devkit.sh release prepare
+bash scripts/devkit.sh release verify
+bash scripts/devkit.sh release build
+bash scripts/devkit.sh release publish
+bash scripts/devkit.sh release rollback
+```
+
+## version
+
+版本查看/锁定/升级/对比。
+
+```bash
+bash scripts/devkit.sh version show
+bash scripts/devkit.sh version lock --target 2.0.0
+bash scripts/devkit.sh version upgrade
+bash scripts/devkit.sh version diff --from 1.0.0 --to 2.0.0
+```
+
 ## install_assets.sh 扩展参数
 
 - `--list-optional-skills`：列出所有可选技能

@@ -1,5 +1,7 @@
 # Design Specification (设计规格文档)
 
+> **使用说明**: 在 propose 阶段创建技术方案时使用此模板。填写架构决策、组件设计、接口契约和数据模型，供团队评审后进入实施阶段。
+
 [artifact:design-spec]
 status: DRAFT
 owner: [填写负责人]

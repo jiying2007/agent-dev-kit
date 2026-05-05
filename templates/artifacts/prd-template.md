@@ -1,5 +1,7 @@
 # 产品需求文档（PRD）模板
 
+> **使用说明**: 在项目启动阶段定义产品需求时使用此模板。填写产品背景、功能范围、技术约束和验收标准，作为后续架构和开发的输入。
+
 [artifact:PRD]
 status: READY
 owner: requirements-analyst

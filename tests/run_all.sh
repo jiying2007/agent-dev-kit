@@ -18,6 +18,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 "$SCRIPT_DIR/test_openspec_bridge.sh"
 "$SCRIPT_DIR/test_catalog.sh"
 "$SCRIPT_DIR/test_skill_trigger_matrix.sh"
+"$SCRIPT_DIR/test_boundary_conditions_match.sh"
 
 # 新增测试
 "$SCRIPT_DIR/test_enhanced_gate_check.sh"

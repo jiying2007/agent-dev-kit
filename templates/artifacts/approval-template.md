@@ -1,5 +1,7 @@
 # Approval Document (审批文档)
 
+> **使用说明**: 在 review 阶段作为正式审批流程载体时使用此模板。填写变更概要、影响分析、审查状态和多方签核，记录审批全流程。
+
 [artifact:approval]
 status: DRAFT
 owner: [填写发起人]

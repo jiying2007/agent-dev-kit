@@ -1,5 +1,7 @@
 # Implementation Plan (实施计划)
 
+> **使用说明**: 在 propose/apply 阶段将设计文档转化为可执行计划时使用此模板。填写任务分解、依赖关系、时间线和风险缓解措施。
+
 [artifact:implementation-plan]
 status: DRAFT
 owner: [填写负责人]

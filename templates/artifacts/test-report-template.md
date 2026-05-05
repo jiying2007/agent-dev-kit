@@ -1,5 +1,7 @@
 # Test Report (测试报告)
 
+> **使用说明**: 在 verify 阶段输出测试执行结果时使用此模板。填写用例汇总、覆盖率指标和已知问题，证明变更符合预期且无回归。
+
 [artifact:test-report]
 status: DRAFT
 owner: [填写负责人]
