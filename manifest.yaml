@@ -1,4 +1,4 @@
-version: 2.0.0
+version: 2.1.0
 locale: zh-CN
 platforms:
   - linux-embedded
@@ -473,6 +473,30 @@ routing:
     intent_zh: "版本发布/准备发布/要上线了"
     primary_skill: release-versioning
     supporting_skills: [commit-pr-quality-gate]
+  - intent: "Code review in Chinese"
+    intent_zh: "中文代码审查/代码评审/review 代码"
+    primary_skill: chinese-code-review
+    supporting_skills: []
+  - intent: "Chinese commit conventions"
+    intent_zh: "中文提交/commit 规范/提交信息格式"
+    primary_skill: chinese-commit-conventions
+    supporting_skills: []
+  - intent: "Simplify code"
+    intent_zh: "代码简化/简化代码/重构简化"
+    primary_skill: code-simplification
+    supporting_skills: []
+  - intent: "Context engineering"
+    intent_zh: "上下文工程/context 工程/提示词工程"
+    primary_skill: context-engineering
+    supporting_skills: []
+  - intent: "Diagnose issues"
+    intent_zh: "诊断循环/诊断问题/故障诊断"
+    primary_skill: diagnose-loop
+    supporting_skills: []
+  - intent: "Review with documentation"
+    intent_zh: "文档审查/review with docs/查文档验证"
+    primary_skill: grill-with-docs
+    supporting_skills: []
 
 install:
   # default_mode 改为 copy，避免 symlink 在工作区变动时影响运行目录稳定性
