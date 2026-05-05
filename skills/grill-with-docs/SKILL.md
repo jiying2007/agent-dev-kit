@@ -53,6 +53,10 @@ constraints:
 4. 确认理解：用自己的话复述需求，请用户确认
 5. 生成结构化文档：输出标准需求格式
 
+## 与 requirements-triage 的区别
+- grill-with-docs: 通过结构化提问消除模糊需求
+- requirements-triage: 将明确需求转为可验证的工程条目
+
 ## Quality Gate
 - 所有模糊点已对齐并记录
 - 用户已确认需求理解

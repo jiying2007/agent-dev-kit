@@ -147,8 +147,8 @@ bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --prof
 安装后在 `llm_agent` 根目录运行：
 
 ```bash
-rtk scripts/check-global-codex-health.sh ~/.codex minimal
-rtk scripts/check-gdk-harden-readiness.sh . --require-pilot
+rtk scripts/check-global-codex-health.sh ~/.codex minimal  # 注意: 此脚本在 llm_agent 父仓库中，非本仓库
+rtk scripts/check-gdk-harden-readiness.sh . --require-pilot  # 注意: 此脚本在 llm_agent 父仓库中，非本仓库
 ```
 
 `~/.codex/AGENTS.md` 不由 gdk 安装器覆盖，配合方式见 `docs/codex-agents-integration.md`。

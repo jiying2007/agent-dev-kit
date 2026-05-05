@@ -56,6 +56,10 @@ constraints:
 4. 修复：最小变更修复根因
 5. 防护：添加测试防止回归
 
+## 与 systematic-debugging 的区别
+- diagnose-loop: 快速诊断循环，适用于多轮假设验证
+- systematic-debugging: 结构化调试流程，适用于复杂故障的系统化排查
+
 ## Quality Gate
 - 问题已复现并定位根因
 - 修复已通过测试验证

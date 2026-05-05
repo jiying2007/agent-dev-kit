@@ -73,6 +73,10 @@ Evidence Index（命令级）:
 - 关键命令无法执行时，必须说明原因并降级完成度表述。
 - 若 blocker 未闭环，结论固定为 `needs-fix`，不得放行。
 
+## 与 commit-pr-quality-gate 的区别
+- verification-before-completion: 完成前自检（验证命令、证据、边界）
+- commit-pr-quality-gate: 提交/PR 质量门禁（格式、规范、评审）
+
 ## Quality Gate
 - 输出必须包含验证命令、关键结果、风险项和处理状态。
 - 若存在未闭环 blocker，结论必须为 `needs-fix`。

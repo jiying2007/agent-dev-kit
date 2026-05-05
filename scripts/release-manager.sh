@@ -41,7 +41,7 @@ USAGE
 }
 
 prepare_release() {
-    local version="$1" dry_run="$2"
+    local version="$1" dry_run="$2" force="$3"
     log_info "准备发布版本: $version"
     
     if [[ "$dry_run" == "true" ]]; then
@@ -58,10 +58,9 @@ prepare_release() {
     if [[ -n "$(git status --porcelain)" ]]; then
         log_warning "工作目录有未提交的更改"
         if [[ "$dry_run" != "true" ]]; then
-            read -p "是否继续? (y/N): " -n 1 -r; echo
-            if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-                log_info "取消发布准备"
-                return 0
+            if [[ "${force:-}" != "true" ]]; then
+                echo "[FAIL] --force required" >&2
+                exit 1
             fi
         fi
     fi
@@ -348,7 +347,7 @@ main() {
     done
     
     case "$command" in
-        prepare) [[ -z "$version" ]] && { log_error "缺少--version"; exit 1; }; prepare_release "$version" "$dry_run" ;;
+        prepare) [[ -z "$version" ]] && { log_error "缺少--version"; exit 1; }; prepare_release "$version" "$dry_run" "$force" ;;
         validate) [[ -z "$version" ]] && { log_error "缺少--version"; exit 1; }; validate_release "$version" ;;
         build) [[ -z "$version" ]] && { log_error "缺少--version"; exit 1; }; build_release "$version" ;;
         publish) [[ -z "$version" || -z "$target" ]] && { log_error "缺少参数"; exit 1; }; publish_release "$version" "$target" "$force" ;;

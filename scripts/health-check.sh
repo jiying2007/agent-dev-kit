@@ -92,7 +92,7 @@ check_dependencies() {
         log_info "Git已安装: $(git --version)"
     fi
     
-    local tools=("tar" "grep" "sed" "awk")
+    local tools=("tar" "grep" "sed" "awk" "rg")
     for tool in "${tools[@]}"; do
         if ! command -v "$tool" &> /dev/null; then
             errors+=("未安装$tool")

@@ -65,6 +65,10 @@ bash scripts/devkit.sh match --skill <skill-name> --text "<需求片段>"
 - 上下文不足时输出 `needs-fix` 并列出待补信息，不进入实现。
 - 若需求混入多个无关问题，先拆分再继续。
 
+## 与 grill-with-docs 的区别
+- requirements-triage: 需求结构化拆解与验收标准固化
+- grill-with-docs: 烤问式需求对齐，通过提问消除模糊
+
 ## Quality Gate
 - 输出必须包含目标、非目标、影响面、验收标准四项。
 - 至少给出一个关键风险及对应验证方式。

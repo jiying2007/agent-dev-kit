@@ -68,8 +68,8 @@ bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --prof
 
 - `~/.codex` 推荐使用 `copy`，避免源仓未提交变动影响运行目录。
 - 必须启用 `--backup` 与 `--install-report`。
-- 安装后运行 `llm_agent/scripts/check-global-codex-health.sh ~/.codex minimal`。
-- 若用于生产放行，还需运行 `llm_agent/scripts/check-gdk-harden-readiness.sh . --require-pilot`。
+- 安装后运行 `llm_agent/scripts/check-global-codex-health.sh ~/.codex minimal`。（注意: 此脚本在 llm_agent 父仓库中，非本仓库）
+- 若用于生产放行，还需运行 `llm_agent/scripts/check-gdk-harden-readiness.sh . --require-pilot`。（注意: 此脚本在 llm_agent 父仓库中，非本仓库）
 
 ## 4) 资产转换
 
@@ -167,12 +167,12 @@ docs/codex-agents-integration.md
 生产验证由 `llm_agent` 根脚本统一执行：
 
 ```bash
-rtk scripts/check-gdk-harden-readiness.sh . --require-pilot
+rtk scripts/check-gdk-harden-readiness.sh . --require-pilot  # 注意: 此脚本在 llm_agent 父仓库中，非本仓库
 ```
 
 若安装后异常：
 
 1. 从 install report 找到 backup 路径。
 2. 经用户确认后恢复 `agents/` 与 `skills/`。
-3. 运行 `rtk scripts/check-global-codex-health.sh ~/.codex minimal`。
+3. 运行 `rtk scripts/check-global-codex-health.sh ~/.codex minimal`。（注意: 此脚本在 llm_agent 父仓库中，非本仓库）
 4. 在 `reports/` 写入回滚记录。

@@ -66,10 +66,14 @@ git diff --name-only <base>...HEAD
 - 任一 blocker 未闭环，直接输出 `needs-fix` 并阻断合并。
 - 若证据缺失或命令不可复现，退回补证，不得先给通过结论。
 
+## 与 verification-before-completion 的区别
+- commit-pr-quality-gate: 提交/PR 门禁（格式规范、评审闭环）
+- verification-before-completion: 完成前自检（验证命令、证据完整性）
+
 ## Quality Gate
 - 输出必须可执行、可验证、可追溯。
 - 结论必须与分级统计一致，且可复核。
-- 若存在“多问题捆绑”或“证据缺失”，结论必须为 `needs-fix`。
+- 若存在"多问题捆绑"或"证据缺失"，结论必须为 `needs-fix`。
 - 若触及发布链路但无专项验证证据，结论必须为 `needs-fix`。
 - 若触及配置但无配置摘要或无行为影响结论，结论必须为 `needs-fix`。
 - 若触及技能资产但无安装范围或归属结论，结论必须为 `needs-fix`。

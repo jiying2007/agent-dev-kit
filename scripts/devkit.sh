@@ -23,6 +23,14 @@ Commands:
   review    执行分级评审并闭环门禁
   archive   归档已验证变更
   test      运行回归测试集
+  health    健康检查（结构/依赖/配置/测试/质量）
+  backup    备份/恢复/回滚操作
+  ops       日常/周常/月常运维编排
+  monitor   系统监控与告警
+  perf      性能分析与优化
+  security  安全扫描与加固
+  release   发布准备/验证/构建/发布/回滚
+  version   版本查看/锁定/升级/对比
 
 Examples:
   ./scripts/devkit.sh install --tool auto --profile embedded-fullstack
@@ -70,6 +78,30 @@ case "$CMD" in
     ;;
   test)
     exec "$ROOT_DIR/tests/run_all.sh" "$@"
+    ;;
+  health)
+    exec "$SCRIPT_DIR/health-check.sh" "$@"
+    ;;
+  backup)
+    exec "$SCRIPT_DIR/backup-rollback.sh" "$@"
+    ;;
+  ops)
+    exec "$SCRIPT_DIR/auto-ops.sh" "$@"
+    ;;
+  monitor)
+    exec "$SCRIPT_DIR/monitoring.sh" "$@"
+    ;;
+  perf)
+    exec "$SCRIPT_DIR/performance.sh" "$@"
+    ;;
+  security)
+    exec "$SCRIPT_DIR/security.sh" "$@"
+    ;;
+  release)
+    exec "$SCRIPT_DIR/release-manager.sh" "$@"
+    ;;
+  version)
+    exec "$SCRIPT_DIR/version-manager.sh" "$@"
     ;;
   -h|--help|help)
     usage

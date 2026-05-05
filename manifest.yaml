@@ -418,7 +418,7 @@ routing:
     primary_skill: commit-pr-quality-gate
     supporting_skills: [verification-before-completion]
   - intent: "Write ADR"
-    intent_zh: "写架构决策记录"
+    intent_zh: "写ADR/架构决策记录"
     primary_skill: adr-writer
     supporting_skills: []
   - intent: "Design register map"
@@ -434,16 +434,20 @@ routing:
     primary_skill: bsp-porting-playbook
     supporting_skills: [driver-bringup-checklist]
   - intent: "Design RTOS tasks"
-    intent_zh: "RTOS任务设计"
+    intent_zh: "RTOS任务设计/实时任务调度"
     primary_skill: rtos-task-design
     supporting_skills: []
   - intent: "Handle interrupts or DMA"
-    intent_zh: "中断/DMA处理"
+    intent_zh: "中断处理/DMA处理/中断DMA"
     primary_skill: interrupt-dma-patterns
     supporting_skills: []
   - intent: "Integrate protocol stack"
-    intent_zh: "协议栈集成"
+    intent_zh: "协议栈集成/协议集成"
     primary_skill: protocol-stack-integration
+    supporting_skills: [interface-contract-design]
+  - intent: "Component API stability"
+    intent_zh: "API稳定性/组件API兼容/接口稳定性"
+    primary_skill: component-api-stability
     supporting_skills: [interface-contract-design]
   - intent: "Cross-compile with CMake"
     intent_zh: "CMake交叉编译"
