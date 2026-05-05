@@ -2,7 +2,7 @@
 
 `global-dev-kit`（gdk）是面向 `~/.codex` 等开发代理运行目录的 Agent/Skill/Profile 生产资产包。它的目标是把参考仓中的优秀方法论压实为可安装、可验证、可回滚、可持续迭代的工程资产。
 
-当前版本：`0.3.0`。
+当前版本：`2.0.0`。
 
 ## 1. 核心定位
 
@@ -62,7 +62,7 @@ bash scripts/devkit.sh test
 命令：
 
 ```bash
-rtk bash -lc "cd global-dev-kit && bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --with-optional-skill planning-execution-loop --with-optional-skill skill-composition-governance --with-optional-skill security-supply-chain --with-optional-skill cross-team-handoff --with-optional-skill artifact-gated-lite --backup --install-report ../reports/gdk-install-report-$(date +%F).md --lock-version 0.3.0"
+rtk bash -lc "cd global-dev-kit && bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --with-optional-skill planning-execution-loop --with-optional-skill skill-composition-governance --with-optional-skill security-supply-chain --with-optional-skill cross-team-handoff --with-optional-skill artifact-gated-lite --backup --install-report ../reports/gdk-install-report-$(date +%F).md --lock-version 2.0.0"
 rtk scripts/check-global-codex-health.sh ~/.codex minimal
 rtk scripts/check-gdk-harden-readiness.sh . --require-pilot
 ```
@@ -193,7 +193,7 @@ rtk scripts/check-gdk-harden-readiness.sh . --require-pilot
 - `docs/runbooks/upstream-intake.md`：上游吸收。
 - `docs/codex-agents-integration.md`：`~/.codex/AGENTS.md` 配合指南。
 
-## 版本 1.0.0 新增功能
+## 版本 2.0.0 新增功能
 
 ### 文档体系完善
 - **快速入门指南** (`docs/quick-start.md`): 帮助新用户快速上手
@@ -213,7 +213,7 @@ rtk scripts/check-gdk-harden-readiness.sh . --require-pilot
 - 所有测试通过 (59/59)
 - 健康检查全部通过
 - 质量门禁全部通过
-- 版本已锁定为 1.0.0
+- 版本已锁定为 2.0.0
 
 ## 使用新功能
 
@@ -244,7 +244,7 @@ bash scripts/backup-rollback.sh restore --target ~/.codex --version 20260505
 bash scripts/version-manager.sh current
 
 # 锁定版本
-bash scripts/version-manager.sh lock --version 1.0.0
+bash scripts/version-manager.sh lock --version 2.0.0
 
 # 升级版本
 bash scripts/version-manager.sh upgrade --target 1.1.0
@@ -276,7 +276,7 @@ bash scripts/version-manager.sh upgrade --target 1.1.0
 - 所有测试通过 (59/59)
 - 健康检查全部通过
 - 质量门禁全部通过
-- 版本已锁定为 1.0.0
+- 版本已锁定为 2.0.0
 
 ## 使用新功能
 
@@ -320,7 +320,7 @@ bash scripts/backup-rollback.sh rollback --target ~/.codex --version 20260505
 bash scripts/version-manager.sh current
 
 # 锁定版本
-bash scripts/version-manager.sh lock --version 1.0.0
+bash scripts/version-manager.sh lock --version 2.0.0
 
 # 解锁版本
 bash scripts/version-manager.sh unlock
@@ -329,7 +329,7 @@ bash scripts/version-manager.sh unlock
 bash scripts/version-manager.sh upgrade --target 1.1.0
 
 # 比较版本
-bash scripts/version-manager.sh compare --version 1.0.0 --target 1.1.0
+bash scripts/version-manager.sh compare --version 2.0.0 --target 1.1.0
 
 # 生成变更日志
 bash scripts/version-manager.sh changelog
@@ -364,7 +364,7 @@ bash scripts/version-manager.sh changelog
 - ✅ 生产部署运行手册
 
 
-## 版本 1.0.0 第四阶段新增功能
+## 版本 2.0.0 第四阶段新增功能
 
 ### 版本发布管理
 - **版本发布管理脚本** (`scripts/release-manager.sh`): 完整的版本发布管理
@@ -386,19 +386,19 @@ bash scripts/version-manager.sh changelog
 ### 版本发布管理
 ```bash
 # 准备发布
-bash scripts/release-manager.sh prepare --version 1.0.0
+bash scripts/release-manager.sh prepare --version 2.0.0
 
 # 验证发布
-bash scripts/release-manager.sh validate --version 1.0.0
+bash scripts/release-manager.sh validate --version 2.0.0
 
 # 构建发布包
-bash scripts/release-manager.sh build --version 1.0.0
+bash scripts/release-manager.sh build --version 2.0.0
 
 # 发布版本
-bash scripts/release-manager.sh publish --version 1.0.0 --target production
+bash scripts/release-manager.sh publish --version 2.0.0 --target production
 
 # 回滚发布
-bash scripts/release-manager.sh rollback --version 1.0.0 --target production
+bash scripts/release-manager.sh rollback --version 2.0.0 --target production
 
 # 查看状态
 bash scripts/release-manager.sh status

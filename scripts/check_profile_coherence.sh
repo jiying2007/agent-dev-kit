@@ -115,6 +115,35 @@ check_manifest_references() {
   return "$failed"
 }
 
+# === Profile 冲突检测 ===
+check_profile_conflicts() {
+  local manifest="$1"
+  local conflicts_found=0
+  local current_profile=""
+
+  # 解析 manifest，找到带 conflicts_with 的 profile
+  while IFS= read -r line; do
+    # 匹配 profile 名称行（2空格缩进 + kebab-case 名称 + 冒号）
+    if [[ "$line" =~ ^\ \ ([a-z][a-z0-9-]+):$ ]]; then
+      current_profile="${BASH_REMATCH[1]}"
+    fi
+    # 匹配 conflicts_with 字段
+    if [[ "$line" =~ conflicts_with:\ \[(.+)\] ]]; then
+      local conflicts="${BASH_REMATCH[1]}"
+      for conflict in ${conflicts//,/ }; do
+        conflict=$(echo "$conflict" | tr -d " ")
+        if [[ -n "$conflict" ]]; then
+          echo "[WARN] Profile '$current_profile' conflicts with '$conflict'"
+          conflicts_found=$((conflicts_found + 1))
+        fi
+      done
+    fi
+  done < "$manifest"
+
+  return $conflicts_found
+}
+
+
 failed=0
 default_profile="$(awk '/^default_profile:/ {print $2; exit}' "$GDK_MANIFEST")"
 if [[ -z "$default_profile" ]] || ! gdk_profile_exists "$default_profile"; then
@@ -136,6 +165,9 @@ while IFS= read -r profile; do
   check_manifest_references "$profile" "include_agents" "agents" || failed=1
   check_manifest_references "$profile" "include_skills" "skills" || failed=1
 done < <(gdk_list_profile_names)
+
+# 检测 profile 冲突
+check_profile_conflicts "$GDK_MANIFEST" || true
 
 if [[ "$failed" -ne 0 ]]; then
   echo "[FAIL] profile coherence checks failed" >&2

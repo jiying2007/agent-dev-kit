@@ -1,4 +1,4 @@
-version: 1.0.0
+version: 2.0.0
 locale: zh-CN
 platforms:
   - linux-embedded
@@ -47,6 +47,7 @@ quality_tiers:
 profiles:
   core:
     description: 通用研发核心配置（跨模块需求、实现、验证与评审）
+    trigger_examples: ["开始新功能开发", "需要写代码", "帮我实现这个需求"]
     include_agents:
       - requirements-analyst
       - architecture-planner
@@ -64,6 +65,7 @@ profiles:
       - commit-pr-quality-gate
   personal-core:
     description: 个人 ~/.codex 生产默认配置（精简核心 + 完成前门禁）
+    trigger_examples: ["个人项目开发", "我在写自己的代码"]
     extends:
       - core
     include_agents:
@@ -73,6 +75,7 @@ profiles:
       - release-versioning
   embedded-fullstack:
     description: C/C++ 嵌入式全栈默认配置（驱动、组件、应用）
+    trigger_examples: ["嵌入式开发", "写驱动代码", "移植BSP"]
     extends:
       - core
     include_agents:
@@ -98,7 +101,9 @@ profiles:
       - release-versioning
   release-hardening:
     description: 发布前强化配置（安全、可靠性、发布治理）
+    trigger_examples: ["准备发布", "发布前检查", "要上线了"]
     optional: true
+    conflicts_with: [incident-response]
     include_agents:
       - build-release-engineer
       - performance-reliability-engineer
@@ -116,6 +121,7 @@ profiles:
       - core
   team-core:
     description: 团队交付配置（责任矩阵、交接、验证与评审）
+    trigger_examples: ["团队协作", "多人开发", "代码交接"]
     optional: true
     extends:
       - core
@@ -127,6 +133,7 @@ profiles:
       - release-versioning
   openspec-driven:
     description: Spec 驱动变更配置（requirements/design/tasks 与 gdk workflow 对齐）
+    trigger_examples: ["用 Spec 驱动开发", "先写规格再编码"]
     optional: true
     extends:
       - core
@@ -134,7 +141,9 @@ profiles:
       - adr-writer
   large-refactor:
     description: 大型重构配置（边界冻结、API 稳定性、基线对比与回归）
+    trigger_examples: ["大型重构", "重构老代码", "架构升级"]
     optional: true
+    conflicts_with: [release-hardening]
     extends:
       - core
     include_agents:
@@ -144,7 +153,9 @@ profiles:
       - release-versioning
   incident-response:
     description: 事故响应配置（根因定位、复盘、恢复与验证）
+    trigger_examples: ["线上事故", "紧急修复", "生产问题"]
     optional: true
+    conflicts_with: [release-hardening]
     extends:
       - core
     include_agents:
@@ -155,6 +166,7 @@ profiles:
       - release-versioning
   research-intake:
     description: 参考仓吸收配置（候选筛选、组合治理与供应链审查）
+    trigger_examples: ["吸收参考仓", "评估新工具", "引入新技术"]
     optional: true
     include_agents:
       - requirements-analyst
@@ -223,69 +235,115 @@ skills:
   - name: requirements-triage
     path: skills/requirements-triage/SKILL.md
     quality_tier: p0
+    depends_on: []
   - name: adr-writer
     path: skills/adr-writer/SKILL.md
     quality_tier: p1
+    depends_on: []
   - name: task-breakdown
     path: skills/task-breakdown/SKILL.md
     quality_tier: p0
+    depends_on: [requirements-triage]
   - name: interface-contract-design
     path: skills/interface-contract-design/SKILL.md
     quality_tier: p0
+    depends_on: [requirements-triage]
   - name: register-map-design
     path: skills/register-map-design/SKILL.md
     quality_tier: p1
+    depends_on: [interface-contract-design]
   - name: driver-bringup-checklist
     path: skills/driver-bringup-checklist/SKILL.md
     quality_tier: p1
+    depends_on: [register-map-design]
   - name: bsp-porting-playbook
     path: skills/bsp-porting-playbook/SKILL.md
     quality_tier: p1
+    depends_on: [driver-bringup-checklist]
   - name: rtos-task-design
     path: skills/rtos-task-design/SKILL.md
     quality_tier: p1
+    depends_on: []
   - name: interrupt-dma-patterns
     path: skills/interrupt-dma-patterns/SKILL.md
     quality_tier: p1
+    depends_on: []
   - name: protocol-stack-integration
     path: skills/protocol-stack-integration/SKILL.md
     quality_tier: p1
+    depends_on: [interface-contract-design]
   - name: component-api-stability
     path: skills/component-api-stability/SKILL.md
     quality_tier: p1
+    depends_on: [interface-contract-design]
   - name: cmake-cross-build
     path: skills/cmake-cross-build/SKILL.md
     quality_tier: p1
+    depends_on: []
   - name: toolchain-debug-openocd-gdb
     path: skills/toolchain-debug-openocd-gdb/SKILL.md
     quality_tier: p1
+    depends_on: [systematic-debugging]
   - name: static-analysis-c-cpp
     path: skills/static-analysis-c-cpp/SKILL.md
     quality_tier: p0
+    depends_on: []
   - name: systematic-debugging
     path: skills/systematic-debugging/SKILL.md
     quality_tier: p0
+    depends_on: []
   - name: unit-test-embedded
     path: skills/unit-test-embedded/SKILL.md
     quality_tier: p0
+    depends_on: []
   - name: verification-before-completion
     path: skills/verification-before-completion/SKILL.md
     quality_tier: p0
+    depends_on: []
   - name: integration-hil-sil
     path: skills/integration-hil-sil/SKILL.md
     quality_tier: p1
+    depends_on: [unit-test-embedded]
   - name: fault-injection-recovery
     path: skills/fault-injection-recovery/SKILL.md
     quality_tier: p1
+    depends_on: [integration-hil-sil]
   - name: performance-profiling-embedded
     path: skills/performance-profiling-embedded/SKILL.md
     quality_tier: p1
+    depends_on: [systematic-debugging]
   - name: release-versioning
     path: skills/release-versioning/SKILL.md
     quality_tier: p1
+    depends_on: [commit-pr-quality-gate]
   - name: commit-pr-quality-gate
     path: skills/commit-pr-quality-gate/SKILL.md
     quality_tier: p0
+    depends_on: [verification-before-completion]
+  - name: grill-with-docs
+    path: skills/grill-with-docs/SKILL.md
+    quality_tier: p0
+    depends_on: []
+  - name: diagnose-loop
+    path: skills/diagnose-loop/SKILL.md
+    quality_tier: p0
+    depends_on: []
+  - name: code-simplification
+    path: skills/code-simplification/SKILL.md
+    quality_tier: p1
+    depends_on: []
+  - name: context-engineering
+    path: skills/context-engineering/SKILL.md
+    quality_tier: p1
+    depends_on: []
+  - name: chinese-commit-conventions
+    path: skills/chinese-commit-conventions/SKILL.md
+    quality_tier: p1
+    depends_on: []
+  - name: chinese-code-review
+    path: skills/chinese-code-review/SKILL.md
+    quality_tier: p1
+    depends_on: []
 
 optional_skills:
   - name: test-flakiness-triage
@@ -316,9 +374,104 @@ optional_skills:
     path: optional-skills/security-supply-chain/SKILL.md
     quality_tier: p2
     description: 第三方技能、脚本与参考资产引入前安全审查
+  - name: fetch-url-content
+    path: optional-skills/data-fetch/fetch-url-content/SKILL.md
+    quality_tier: p2
+    description: URL 正文提取——从网页提取结构化内容
+  - name: email-imap-fetch
+    path: optional-skills/data-fetch/email-imap-fetch/SKILL.md
+    quality_tier: p2
+    description: IMAP 邮件获取——从邮箱获取邮件列表和内容
+
+routing:
+  - intent: "Requirements are unclear"
+    intent_zh: "需求不清楚/需要澄清"
+    primary_skill: requirements-triage
+    supporting_skills: []
+  - intent: "Break down a large task"
+    intent_zh: "拆解大任务/分解需求"
+    primary_skill: task-breakdown
+    supporting_skills: [requirements-triage]
+  - intent: "Design API or interface"
+    intent_zh: "设计接口/API设计"
+    primary_skill: interface-contract-design
+    supporting_skills: [requirements-triage]
+  - intent: "Write unit tests"
+    intent_zh: "写单元测试"
+    primary_skill: unit-test-embedded
+    supporting_skills: []
+  - intent: "Run static analysis"
+    intent_zh: "静态分析/代码检查"
+    primary_skill: static-analysis-c-cpp
+    supporting_skills: []
+  - intent: "Debug an issue"
+    intent_zh: "调试/排查问题"
+    primary_skill: systematic-debugging
+    supporting_skills: []
+  - intent: "Ready to complete"
+    intent_zh: "准备完成/要提交了"
+    primary_skill: verification-before-completion
+    supporting_skills: [commit-pr-quality-gate]
+  - intent: "Submit code or PR"
+    intent_zh: "提交代码/发起PR"
+    primary_skill: commit-pr-quality-gate
+    supporting_skills: [verification-before-completion]
+  - intent: "Write ADR"
+    intent_zh: "写架构决策记录"
+    primary_skill: adr-writer
+    supporting_skills: []
+  - intent: "Design register map"
+    intent_zh: "设计寄存器映射"
+    primary_skill: register-map-design
+    supporting_skills: [interface-contract-design]
+  - intent: "Bring up driver"
+    intent_zh: "驱动开发/驱动调试"
+    primary_skill: driver-bringup-checklist
+    supporting_skills: [register-map-design]
+  - intent: "Port BSP"
+    intent_zh: "BSP移植"
+    primary_skill: bsp-porting-playbook
+    supporting_skills: [driver-bringup-checklist]
+  - intent: "Design RTOS tasks"
+    intent_zh: "RTOS任务设计"
+    primary_skill: rtos-task-design
+    supporting_skills: []
+  - intent: "Handle interrupts or DMA"
+    intent_zh: "中断/DMA处理"
+    primary_skill: interrupt-dma-patterns
+    supporting_skills: []
+  - intent: "Integrate protocol stack"
+    intent_zh: "协议栈集成"
+    primary_skill: protocol-stack-integration
+    supporting_skills: [interface-contract-design]
+  - intent: "Cross-compile with CMake"
+    intent_zh: "CMake交叉编译"
+    primary_skill: cmake-cross-build
+    supporting_skills: []
+  - intent: "Debug with OpenOCD/GDB"
+    intent_zh: "OpenOCD/GDB调试"
+    primary_skill: toolchain-debug-openocd-gdb
+    supporting_skills: [systematic-debugging]
+  - intent: "Integration test HIL/SIL"
+    intent_zh: "HIL/SIL集成测试"
+    primary_skill: integration-hil-sil
+    supporting_skills: [unit-test-embedded]
+  - intent: "Fault injection testing"
+    intent_zh: "故障注入测试"
+    primary_skill: fault-injection-recovery
+    supporting_skills: [integration-hil-sil]
+  - intent: "Performance profiling"
+    intent_zh: "性能分析/性能优化"
+    primary_skill: performance-profiling-embedded
+    supporting_skills: [systematic-debugging]
+  - intent: "Version release"
+    intent_zh: "版本发布"
+    primary_skill: release-versioning
+    supporting_skills: [commit-pr-quality-gate]
 
 install:
-  default_mode: symlink
+  # default_mode 改为 copy，避免 symlink 在工作区变动时影响运行目录稳定性
+  default_mode: copy
   default_tool: auto
   default_target: ""
   command: ./scripts/install_assets.sh --tool auto --mode symlink --profile embedded-fullstack
