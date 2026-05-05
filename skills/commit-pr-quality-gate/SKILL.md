@@ -4,8 +4,9 @@ description: 提交与 PR 质量门禁检查
 version: 1.0.0
 last_updated: 2026-05-02
 triggers:
-  - 准备 commit/PR 或代码评审前
-  - 需要声明“可合并/可交付”前
+  - "提交代码"
+  - "发起PR"
+  - "代码评审"
 non_triggers:
   - 纯探索性代码阅读
 inputs:

@@ -141,7 +141,7 @@ bash scripts/check_profile_coherence.sh
 生产安装到 `~/.codex` 时，推荐使用 `personal-core + release-hardening`，并叠加长任务、组合治理、供应链、交接与 artifact 门禁五类 optional skills。
 
 ```bash
-bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --with-optional-skill planning-execution-loop --with-optional-skill skill-composition-governance --with-optional-skill security-supply-chain --with-optional-skill cross-team-handoff --with-optional-skill artifact-gated-lite --backup --install-report ../reports/gdk-install-report-$(date +%F).md --lock-version 0.3.0
+bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --with-optional-skill planning-execution-loop --with-optional-skill skill-composition-governance --with-optional-skill security-supply-chain --with-optional-skill cross-team-handoff --with-optional-skill artifact-gated-lite --backup --install-report ../reports/gdk-install-report-$(date +%F).md --lock-version 2.0.0
 ```
 
 安装后在 `llm_agent` 根目录运行：

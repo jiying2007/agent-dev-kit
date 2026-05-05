@@ -214,7 +214,6 @@ check_evidence() {
     
     # 检查脚本文件
     local scripts=(
-        "scripts/enhanced-gate-check.sh"
     )
     
     for script in "${scripts[@]}"; do

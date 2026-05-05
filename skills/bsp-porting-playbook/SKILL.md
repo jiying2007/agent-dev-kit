@@ -4,7 +4,8 @@ description: BSP 移植流程与风险控制
 version: 1.0.0
 last_updated: 2026-05-02
 triggers:
-  - SoC/板卡迁移或内核升级时
+  - "BSP移植"
+  - "板级移植"
 non_triggers:
   - 仅业务代码改动
 inputs:

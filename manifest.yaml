@@ -103,7 +103,7 @@ profiles:
     description: 发布前强化配置（安全、可靠性、发布治理）
     trigger_examples: ["准备发布", "发布前检查", "要上线了"]
     optional: true
-    conflicts_with: [incident-response]
+    conflicts_with: [incident-response, large-refactor]
     include_agents:
       - build-release-engineer
       - performance-reliability-engineer
@@ -117,6 +117,7 @@ profiles:
   artifact-gated-lite:
     description: 高风险变更的轻量产物门禁配置（强调可追溯交付证据）
     optional: true
+    trigger_examples: ["高风险变更", "需要追溯证据", "门禁交付"]
     extends:
       - core
   team-core:
@@ -385,15 +386,15 @@ optional_skills:
 
 routing:
   - intent: "Requirements are unclear"
-    intent_zh: "需求不清楚/需要澄清"
+    intent_zh: "需求不清楚/需要澄清/需求模糊/需求不明确"
     primary_skill: requirements-triage
     supporting_skills: []
   - intent: "Break down a large task"
-    intent_zh: "拆解大任务/分解需求"
+    intent_zh: "拆解大任务/分解需求/任务太大/任务拆分"
     primary_skill: task-breakdown
     supporting_skills: [requirements-triage]
   - intent: "Design API or interface"
-    intent_zh: "设计接口/API设计"
+    intent_zh: "设计接口/API设计/接口设计"
     primary_skill: interface-contract-design
     supporting_skills: [requirements-triage]
   - intent: "Write unit tests"
@@ -409,7 +410,7 @@ routing:
     primary_skill: systematic-debugging
     supporting_skills: []
   - intent: "Ready to complete"
-    intent_zh: "准备完成/要提交了"
+    intent_zh: "准备完成/要提交了/准备提交"
     primary_skill: verification-before-completion
     supporting_skills: [commit-pr-quality-gate]
   - intent: "Submit code or PR"
@@ -425,7 +426,7 @@ routing:
     primary_skill: register-map-design
     supporting_skills: [interface-contract-design]
   - intent: "Bring up driver"
-    intent_zh: "驱动开发/驱动调试"
+    intent_zh: "驱动开发/驱动调试/写驱动/驱动bringup"
     primary_skill: driver-bringup-checklist
     supporting_skills: [register-map-design]
   - intent: "Port BSP"
@@ -461,11 +462,11 @@ routing:
     primary_skill: fault-injection-recovery
     supporting_skills: [integration-hil-sil]
   - intent: "Performance profiling"
-    intent_zh: "性能分析/性能优化"
+    intent_zh: "性能分析/性能优化/性能调优"
     primary_skill: performance-profiling-embedded
     supporting_skills: [systematic-debugging]
   - intent: "Version release"
-    intent_zh: "版本发布"
+    intent_zh: "版本发布/准备发布/要上线了"
     primary_skill: release-versioning
     supporting_skills: [commit-pr-quality-gate]
 
@@ -474,7 +475,7 @@ install:
   default_mode: copy
   default_tool: auto
   default_target: ""
-  command: ./scripts/install_assets.sh --tool auto --mode symlink --profile embedded-fullstack
+  command: ./scripts/install_assets.sh --tool auto --mode copy --profile embedded-fullstack
 
 dependencies:
   required:

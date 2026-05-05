@@ -4,7 +4,9 @@ description: 故障注入与恢复策略验证
 version: 1.0.0
 last_updated: 2026-05-02
 triggers:
-  - 需要验证韧性与恢复能力时
+  - "故障注入"
+  - "故障恢复"
+  - "容错测试"
 non_triggers:
   - 无状态纯计算脚本
 inputs:

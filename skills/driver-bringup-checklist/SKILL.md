@@ -4,7 +4,9 @@ description: 驱动 bring-up 标准检查清单
 version: 1.0.0
 last_updated: 2026-05-02
 triggers:
-  - 新外设上板、驱动初次联调时
+  - "驱动开发"
+  - "驱动调试"
+  - "外设联调"
 non_triggers:
   - 稳定量产驱动小改
 inputs:

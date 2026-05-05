@@ -1,6 +1,8 @@
 ---
 name: fetch-url-content
 description: URL 正文提取——从网页提取结构化内容
+version: 1.0.0
+last_updated: 2026-05-05
 triggers:
   - "获取网页内容"
   - "抓取链接正文"

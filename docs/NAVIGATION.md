@@ -23,7 +23,6 @@
 |------|------|------|
 | 场景工作流 | workflows.md | 7+ 场景详细建议 |
 | Agent/Skill 目录 | agent-skill-catalog.md | 全量资产索引 |
-| 技能路由表 | skill-routing.md | 意图→技能映射 |
 | 技能依赖图 | skill-dependency-graph.md | Skill 间依赖关系 |
 
 ## Runbooks (26 个)

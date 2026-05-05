@@ -1,6 +1,6 @@
 # Agent and Skill Catalog
 
-- generated_at: 2026-05-02T11:18:13Z
+- generated_at: 2026-05-05T10:40:14Z
 - source: manifest.yaml
 
 ## Agents
@@ -44,6 +44,12 @@
 | `performance-profiling-embedded` | 嵌入式性能剖析与优化路径 | 出现时延抖动、CPU 占用过高时 | `skills/performance-profiling-embedded/SKILL.md` |
 | `release-versioning` | 版本策略、变更说明与发布基线 | 里程碑发布、量产切版前 | `skills/release-versioning/SKILL.md` |
 | `commit-pr-quality-gate` | 提交与 PR 质量门禁检查 | 准备 commit/PR 或代码评审前 | `skills/commit-pr-quality-gate/SKILL.md` |
+| `grill-with-docs` | 烤问式需求对齐——通过结构化提问消除模糊需求 | "需求不清楚" | `skills/grill-with-docs/SKILL.md` |
+| `diagnose-loop` | 纪律化调试循环——系统性根因分析 | "代码有问题" | `skills/diagnose-loop/SKILL.md` |
+| `code-simplification` | 代码简化——在不改变行为的前提下提高清晰度 | "代码太复杂" | `skills/code-simplification/SKILL.md` |
+| `context-engineering` | 上下文工程——优化 Agent 上下文设置 | "上下文不够" | `skills/context-engineering/SKILL.md` |
+| `chinese-commit-conventions` | 中文 Git 提交规范——适配国内开发团队 | "提交代码" | `skills/chinese-commit-conventions/SKILL.md` |
+| `chinese-code-review` | 中文代码审查规范——适配国内团队沟通风格 | "代码审查" | `skills/chinese-code-review/SKILL.md` |
 
 ## Optional Skills
 
@@ -56,6 +62,8 @@
 | `planning-execution-loop` | 长任务计划审查、分阶段执行、恢复与收口闭环 | 有书面计划需要持续执行时 | `optional-skills/planning-execution-loop/SKILL.md` |
 | `skill-composition-governance` | 治理技能组合、触发优先级、fallback 与弃用关系 | 新增或调整多个 skill 的组合关系时 | `optional-skills/skill-composition-governance/SKILL.md` |
 | `security-supply-chain` | 第三方技能、脚本与参考资产引入前的安全和供应链审查 | 引入第三方 skill、agent、脚本或参考资产前 | `optional-skills/security-supply-chain/SKILL.md` |
+| `fetch-url-content` | URL 正文提取——从网页提取结构化内容 | "获取网页内容" | `optional-skills/data-fetch/fetch-url-content/SKILL.md` |
+| `email-imap-fetch` | IMAP 邮件获取——从邮箱获取邮件列表和内容 | "获取邮件" | `optional-skills/data-fetch/email-imap-fetch/SKILL.md` |
 
 ## Profiles
 

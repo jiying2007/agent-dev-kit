@@ -4,7 +4,9 @@ description: 嵌入式单元测试策略与样例
 version: 1.0.0
 last_updated: 2026-05-02
 triggers:
-  - 新增逻辑模块或回归缺陷时
+  - "单元测试"
+  - "写测试"
+  - "测试用例"
 non_triggers:
   - 纯硬件连线问题
 inputs:

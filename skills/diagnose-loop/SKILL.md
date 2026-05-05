@@ -1,6 +1,8 @@
 ---
 name: diagnose-loop
 description: 纪律化调试循环——系统性根因分析
+version: 1.0.0
+last_updated: 2026-05-05
 triggers:
   - "代码有问题"
   - "调试失败"

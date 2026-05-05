@@ -67,8 +67,10 @@ restore_backup() {
     
     if [[ -d "$target" && "$force" != "true" ]]; then
         log_warning "目标目录已存在: $target"
-        read -p "是否覆盖? (y/N): " -n 1 -r; echo
-        if [[ ! $REPLY =~ ^[Yy]$ ]]; then log_info "取消恢复"; return 0; fi
+        if [[ "${force:-}" != "true" ]]; then
+            echo "[FAIL] --force required for overwrite" >&2
+            exit 1
+        fi
     fi
     
     [[ -d "$target" ]] && rm -rf "$target"

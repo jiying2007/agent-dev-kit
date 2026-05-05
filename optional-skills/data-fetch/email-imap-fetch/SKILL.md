@@ -1,6 +1,8 @@
 ---
 name: email-imap-fetch
 description: IMAP 邮件获取——从邮箱获取邮件列表和内容
+version: 1.0.0
+last_updated: 2026-05-05
 triggers:
   - "获取邮件"
   - "读取邮箱"

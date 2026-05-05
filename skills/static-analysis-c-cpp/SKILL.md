@@ -4,7 +4,9 @@ description: C/C++ 静态分析与缺陷治理
 version: 1.0.0
 last_updated: 2026-05-02
 triggers:
-  - 质量门禁或疑难 bug 排查时
+  - "静态分析"
+  - "代码检查"
+  - "lint"
 non_triggers:
   - 快速原型验证
 inputs:

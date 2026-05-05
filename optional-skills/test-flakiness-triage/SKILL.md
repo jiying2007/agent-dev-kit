@@ -4,7 +4,9 @@ description: 定位测试波动根因并给出稳定化方案
 version: 1.0.0
 last_updated: 2026-05-02
 triggers:
-  - 回归测试同代码多次执行结果不一致
+  - "测试波动"
+  - "flaky test"
+  - "测试不稳定"
 non_triggers:
   - 测试稳定失败且根因明确
 inputs:

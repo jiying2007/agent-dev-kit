@@ -1,6 +1,8 @@
 ---
 name: chinese-code-review
 description: 中文代码审查规范——适配国内团队沟通风格
+version: 1.0.0
+last_updated: 2026-05-05
 triggers:
   - "代码审查"
   - "review 代码"

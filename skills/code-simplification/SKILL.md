@@ -1,6 +1,8 @@
 ---
 name: code-simplification
 description: 代码简化——在不改变行为的前提下提高清晰度
+version: 1.0.0
+last_updated: 2026-05-05
 triggers:
   - "代码太复杂"
   - "简化代码"

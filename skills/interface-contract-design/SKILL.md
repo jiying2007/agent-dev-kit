@@ -4,7 +4,9 @@ description: 定义模块/API/消息接口契约
 version: 1.0.0
 last_updated: 2026-05-02
 triggers:
-  - 新增或变更跨模块接口时
+  - "设计接口"
+  - "API设计"
+  - "接口契约"
 non_triggers:
   - 纯内部重命名
 inputs:

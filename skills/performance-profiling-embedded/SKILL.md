@@ -4,7 +4,9 @@ description: 嵌入式性能剖析与优化路径
 version: 1.0.0
 last_updated: 2026-05-02
 triggers:
-  - 出现时延抖动、CPU 占用过高时
+  - "性能分析"
+  - "性能优化"
+  - "性能调优"
 non_triggers:
   - 无性能指标诉求的小改
 inputs:

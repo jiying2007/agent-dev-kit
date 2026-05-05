@@ -1,6 +1,8 @@
 ---
 name: grill-with-docs
 description: 烤问式需求对齐——通过结构化提问消除模糊需求
+version: 1.0.0
+last_updated: 2026-05-05
 triggers:
   - "需求不清楚"
   - "帮我理清需求"

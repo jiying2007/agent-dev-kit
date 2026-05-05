@@ -4,7 +4,9 @@ description: 跨团队交接时统一目标、边界和验收责任
 version: 1.0.0
 last_updated: 2026-05-02
 triggers:
-  - 模块即将交接给其他团队维护
+  - "团队交接"
+  - "模块移交"
+  - "跨团队"
 non_triggers:
   - 同团队内小范围任务流转
 inputs:

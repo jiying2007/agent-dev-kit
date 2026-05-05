@@ -4,8 +4,9 @@ description: 高风险变更时使用轻量 artifact 标签与门禁模板固定
 version: 1.0.0
 last_updated: 2026-05-02
 triggers:
-  - 涉及公共接口、schema、发布链路等高风险变更
-  - 需要跨角色交接且必须保留可追溯产物
+  - "高风险变更"
+  - "产物门禁"
+  - "追溯证据"
 non_triggers:
   - 单文件低风险修复且无需跨团队交接
 inputs:

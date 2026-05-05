@@ -4,7 +4,9 @@ description: 产出 Architecture Decision Record 并固化技术决策
 version: 1.0.0
 last_updated: 2026-05-02
 triggers:
-  - 涉及选型、架构调整、权衡讨论时
+  - "写ADR"
+  - "架构决策"
+  - "决策记录"
 non_triggers:
   - 临时性小修补
 inputs:

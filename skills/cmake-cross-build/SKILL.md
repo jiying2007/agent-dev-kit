@@ -4,7 +4,9 @@ description: CMake 交叉编译与多目标构建
 version: 1.0.0
 last_updated: 2026-05-02
 triggers:
-  - 新增目标板或 toolchain 时
+  - "CMake"
+  - "交叉编译"
+  - "构建配置"
 non_triggers:
   - 与构建无关的需求分析
 inputs:

@@ -1,6 +1,8 @@
 ---
 name: chinese-commit-conventions
 description: 中文 Git 提交规范——适配国内开发团队
+version: 1.0.0
+last_updated: 2026-05-05
 triggers:
   - "提交代码"
   - "写 commit message"

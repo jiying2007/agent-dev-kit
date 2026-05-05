@@ -4,7 +4,9 @@ description: HIL/SIL 集成验证编排
 version: 1.0.0
 last_updated: 2026-05-02
 triggers:
-  - 跨模块联调或发布前验收时
+  - "集成测试"
+  - "HIL测试"
+  - "SIL测试"
 non_triggers:
   - 只改注释文档
 inputs:

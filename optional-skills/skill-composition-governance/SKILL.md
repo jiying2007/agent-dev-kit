@@ -4,9 +4,9 @@ description: 治理技能组合、触发优先级、fallback 与弃用关系
 version: 1.0.0
 last_updated: 2026-05-02
 triggers:
-  - 新增或调整多个 skill 的组合关系时
-  - 发现 skill 触发冲突或职责重叠时
-  - 需要声明主技能和辅助技能时
+  - "技能组合"
+  - "触发冲突"
+  - "技能治理"
 non_triggers:
   - 单个 skill 文案微调且不影响触发规则
   - 仅安装已有 profile 且不改变组合关系

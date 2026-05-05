@@ -4,7 +4,10 @@ description: 线上事故复盘与根因分析闭环
 version: 1.0.0
 last_updated: 2026-05-02
 triggers:
-  - 出现线上故障且需要复盘闭环
+  - "线上事故"
+  - "故障复盘"
+  - "RCA分析"
+  - "根因分析"
 non_triggers:
   - 本地开发阶段的临时报错
 inputs:

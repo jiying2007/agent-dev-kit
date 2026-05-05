@@ -4,7 +4,8 @@ description: 协议栈接入与状态机整合
 version: 1.0.0
 last_updated: 2026-05-02
 triggers:
-  - 串口/网络/现场总线协议接入时
+  - "协议栈"
+  - "协议集成"
 non_triggers:
   - 只改 UI 文案
 inputs:

@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
 # shellcheck disable=SC2034
 GDK_LIB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -223,4 +224,29 @@ gdk_optional_skill_exists() {
 gdk_get_optional_skill_path() {
   local skill="$1"
   gdk_get_manifest_item_value "optional_skills" "$skill" "path"
+}
+
+# --- Routing table functions ---
+
+gdk_list_routing_intents() {
+  # Output: intent_zh<TAB>primary_skill for each routing entry
+  awk '
+    $0 ~ /^routing:/ {in_routing=1; next}
+    in_routing && $0 ~ /^[^ ]/ {in_routing=0}
+    in_routing && $0 ~ /^  - intent:/ {has_intent=1; next}
+    in_routing {
+      if ($0 ~ /^    intent_zh:/) {
+        val=$0; sub(/^    intent_zh: */, "", val); gsub(/^"|"$/, "", val)
+        intent_zh=val
+      }
+      if ($0 ~ /^    primary_skill:/) {
+        val=$0; sub(/^    primary_skill: */, "", val)
+        primary=val
+        if (intent_zh != "" && primary != "") {
+          print intent_zh "\t" primary
+          intent_zh=""; primary=""
+        }
+      }
+    }
+  ' "$GDK_MANIFEST"
 }

@@ -46,10 +46,10 @@ bash scripts/devkit.sh install --tool auto --mode symlink --profile embedded-ful
 bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile core --extra-profile release-hardening
 
 # 生产安装：备份 + 安装报告 + 版本锁定
-bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --backup --install-report reports/gdk-install-report.md --lock-version 0.3.0
+bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --backup --install-report reports/gdk-install-report.md --lock-version 2.0.0
 
 # 生产推荐：personal-core + release-hardening + 五个生产 optional skills
-bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --with-optional-skill planning-execution-loop --with-optional-skill skill-composition-governance --with-optional-skill security-supply-chain --with-optional-skill cross-team-handoff --with-optional-skill artifact-gated-lite --backup --install-report ../reports/gdk-install-report-$(date +%F).md --lock-version 0.3.0
+bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --with-optional-skill planning-execution-loop --with-optional-skill skill-composition-governance --with-optional-skill security-supply-chain --with-optional-skill cross-team-handoff --with-optional-skill artifact-gated-lite --backup --install-report ../reports/gdk-install-report-$(date +%F).md --lock-version 2.0.0
 ```
 
 参数说明：

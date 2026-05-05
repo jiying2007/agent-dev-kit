@@ -1,6 +1,8 @@
 ---
 name: context-engineering
 description: 上下文工程——优化 Agent 上下文设置
+version: 1.0.0
+last_updated: 2026-05-05
 triggers:
   - "上下文不够"
   - "AI 理解错了"

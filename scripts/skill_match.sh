@@ -2,22 +2,27 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 # shellcheck source=./lib_manifest.sh
 source "$SCRIPT_DIR/lib_manifest.sh"
 
 usage() {
   cat <<USAGE
 Usage:
-  ./scripts/skill_match.sh --skill <name> --text <input> [options]
+  ./scripts/skill_match.sh --text <input> [--skill <name>] [--scope auto|skill|optional-skill]
 
 Options:
-  --scope auto|skill|optional-skill      # 默认 auto
+  --text <input>                   # 用户输入文本（必填）
+  --skill <name>                   # 指定 skill 名称（可选，不指定则自动匹配）
+  --scope auto|skill|optional-skill  # 默认 auto
   -h, --help
 
 Examples:
+  # 自动匹配（推荐）: 扫描 routing 表，再扫描 skill triggers
+  ./scripts/skill_match.sh --text "需求不清楚"
+  ./scripts/skill_match.sh --text "我要写驱动"
+
+  # 指定 skill 匹配（向后兼容）
   ./scripts/skill_match.sh --skill requirements-triage --text "收到模糊需求"
-  ./scripts/skill_match.sh --skill incident-rca-report --scope optional-skill --text "出现线上故障且需要复盘闭环"
 USAGE
 }
 
@@ -58,7 +63,17 @@ to_lower() {
 contains_phrase() {
   local text="$1"
   local phrase="$2"
-  [[ "$(to_lower "$text")" == *"$(to_lower "$phrase")"* ]]
+  local lower_text
+  lower_text="$(to_lower "$text")"
+  # Split on "/" and match any sub-phrase
+  IFS='/' read -ra parts <<< "$phrase"
+  for part in "${parts[@]}"; do
+    [[ -z "$part" ]] && continue
+    if [[ "$lower_text" == *"$(to_lower "$part")"* ]]; then
+      return 0
+    fi
+  done
+  return 1
 }
 
 extract_frontmatter_list() {
@@ -71,6 +86,7 @@ extract_frontmatter_list() {
     in_list && $0 ~ "^  - " {
       value=$0
       sub("^  - ", "", value)
+      gsub(/^"|"$/, "", value)
       print value
       next
     }
@@ -81,31 +97,26 @@ extract_frontmatter_list() {
 resolve_skill_file() {
   local name="$1"
   local scope="$2"
-  local path=""
 
   case "$scope" in
     skill)
-      echo "$ROOT_DIR/skills/$name/SKILL.md"
+      echo "$GDK_ROOT_DIR/skills/$name/SKILL.md"
       ;;
     optional-skill)
+      local path
       path="$(gdk_get_optional_skill_path "$name")"
-      [[ -n "$path" ]] || {
-        echo ""
-        return 0
-      }
-      echo "$ROOT_DIR/$path"
+      [[ -n "$path" ]] || { echo ""; return 0; }
+      echo "$GDK_ROOT_DIR/$path"
       ;;
     auto)
-      if [[ -f "$ROOT_DIR/skills/$name/SKILL.md" ]]; then
-        echo "$ROOT_DIR/skills/$name/SKILL.md"
+      if [[ -f "$GDK_ROOT_DIR/skills/$name/SKILL.md" ]]; then
+        echo "$GDK_ROOT_DIR/skills/$name/SKILL.md"
         return 0
       fi
+      local path
       path="$(gdk_get_optional_skill_path "$name")"
-      [[ -n "$path" ]] || {
-        echo ""
-        return 0
-      }
-      echo "$ROOT_DIR/$path"
+      [[ -n "$path" ]] || { echo ""; return 0; }
+      echo "$GDK_ROOT_DIR/$path"
       ;;
     *)
       echo "[FAIL] unsupported --scope: $scope" >&2
@@ -114,9 +125,71 @@ resolve_skill_file() {
   esac
 }
 
-gdk_require_manifest
+# --- Mode 1: Auto-match (no --skill) ---
+# Scan routing table first, then all skill triggers
 
-[[ -n "$SKILL" ]] || { echo "[FAIL] --skill is required" >&2; exit 1; }
+if [[ -z "$SKILL" ]]; then
+  [[ -n "$TEXT" ]] || { echo "[FAIL] --text is required" >&2; exit 1; }
+
+  # Phase 1: Scan routing table intent_zh
+  while IFS=$'\t' read -r intent_zh primary_skill; do
+    [[ -z "$intent_zh" ]] && continue
+    if contains_phrase "$TEXT" "$intent_zh"; then
+      # Get supporting skills if any
+      supporting=""
+      while IFS= read -r s; do
+        [[ -z "$s" ]] && continue
+        [[ -n "$supporting" ]] && supporting="$supporting,$s"
+        [[ -z "$supporting" ]] && supporting="$s"
+      done < <(awk -v skill="$primary_skill" '
+        $0 ~ /^routing:/ {in_r=1; next}
+        in_r && $0 ~ /^[^ ]/ {in_r=0}
+        in_r && $0 ~ "primary_skill: " skill {found=1; next}
+        found && $0 ~ /supporting_skills:/ {in_sup=1; next}
+        in_sup && $0 ~ /^      - / {item=$0; sub(/^      - /, "", item); print item; next}
+        in_sup && $0 ~ /^    [a-z]/ {found=0; in_sup=0}
+      ' "$GDK_MANIFEST")
+      echo "match=true source=routing skill=$primary_skill intent_zh=\"$intent_zh\"${supporting:+ supporting_skills=$supporting}"
+      exit 0
+    fi
+  done < <(gdk_list_routing_intents)
+
+  # Phase 2: Scan all core skill triggers
+  while IFS=' ' read -r name path; do
+    [[ -z "$name" || -z "$path" ]] && continue
+    local_file="$GDK_ROOT_DIR/$path"
+    [[ -f "$local_file" ]] || continue
+    mapfile -t triggers < <(extract_frontmatter_list "$local_file" "triggers")
+    for phrase in "${triggers[@]}"; do
+      [[ -z "$phrase" ]] && continue
+      if contains_phrase "$TEXT" "$phrase"; then
+        echo "match=true source=skill_trigger skill=$name trigger=\"$phrase\""
+        exit 0
+      fi
+    done
+  done < <(gdk_list_manifest_paths "skills")
+
+  # Phase 3: Scan optional skill triggers
+  while IFS=' ' read -r name path; do
+    [[ -z "$name" || -z "$path" ]] && continue
+    local_file="$GDK_ROOT_DIR/$path"
+    [[ -f "$local_file" ]] || continue
+    mapfile -t triggers < <(extract_frontmatter_list "$local_file" "triggers")
+    for phrase in "${triggers[@]}"; do
+      [[ -z "$phrase" ]] && continue
+      if contains_phrase "$TEXT" "$phrase"; then
+        echo "match=true source=optional_skill_trigger skill=$name trigger=\"$phrase\""
+        exit 0
+      fi
+    done
+  done < <(gdk_list_manifest_paths "optional_skills")
+
+  echo "match=false reason=no_match_found"
+  exit 1
+fi
+
+# --- Mode 2: Specific skill match (--skill provided) ---
+
 [[ -n "$TEXT" ]] || { echo "[FAIL] --text is required" >&2; exit 1; }
 
 SKILL_FILE="$(resolve_skill_file "$SKILL" "$SCOPE")"

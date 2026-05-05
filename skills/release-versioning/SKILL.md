@@ -4,8 +4,9 @@ description: 版本策略、变更说明与发布基线
 version: 1.0.0
 last_updated: 2026-05-02
 triggers:
-  - 里程碑发布、量产切版前
-  - 分阶段迁移切换前
+  - "版本发布"
+  - "版本管理"
+  - "发版"
 non_triggers:
   - 开发中临时调试
 inputs:

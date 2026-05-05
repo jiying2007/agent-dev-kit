@@ -4,7 +4,9 @@ description: OpenOCD + GDB 联调流程
 version: 1.0.0
 last_updated: 2026-05-02
 triggers:
-  - 硬件断点、烧录、在线调试时
+  - "OpenOCD"
+  - "GDB调试"
+  - "JTAG调试"
 non_triggers:
   - 纯单元测试场景
 inputs:

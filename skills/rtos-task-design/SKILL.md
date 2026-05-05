@@ -4,7 +4,9 @@ description: RTOS 任务模型与优先级设计
 version: 1.0.0
 last_updated: 2026-05-02
 triggers:
-  - 新增实时任务或调度异常时
+  - "RTOS任务"
+  - "任务设计"
+  - "实时任务"
 non_triggers:
   - 无 RTOS 的裸机项目
 inputs:

@@ -104,7 +104,8 @@ optimize_performance() {
             # 清理构建目录
             rm -rf "$ROOT_DIR/dist" 2>/dev/null || true
             # 优化文档
-            find "$ROOT_DIR/docs" -name "*.md" -type f -exec sed -i 's/^[[:space:]]*$//' {} \; 2>/dev/null || true
+            # Removed: destructive sed that strips blank lines from .md files breaks markdown rendering
+            # find "$ROOT_DIR/docs" -name "*.md" -type f -exec sed -i 's/^[[:space:]]*$//' {} \; 2>/dev/null || true
             ;;
     esac
     
