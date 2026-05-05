@@ -4,7 +4,9 @@ description: 烤问式需求对齐——通过结构化提问消除模糊需求
 version: 1.0.0
 last_updated: 2026-05-05
 triggers:
-  - "需求不清楚"
+  - "文档审查"
+  - "review with docs"
+  - "查文档验证"
   - "帮我理清需求"
   - "这个功能怎么做"
 non_triggers:
