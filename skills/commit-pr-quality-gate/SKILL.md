@@ -2,7 +2,7 @@
 name: commit-pr-quality-gate
 description: 提交与 PR 质量门禁检查
 version: 1.0.0
-last_updated: 2026-05-02
+last_updated: 2026-05-06
 triggers:
   - "提交代码"
   - "发起PR"

@@ -2,7 +2,7 @@
 name: security-supply-chain
 description: 第三方技能、脚本与参考资产引入前的安全和供应链审查
 version: 1.0.0
-last_updated: 2026-05-02
+last_updated: 2026-05-06
 triggers:
   - "供应链审查"
   - "第三方引入"

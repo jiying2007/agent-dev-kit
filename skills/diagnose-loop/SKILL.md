@@ -2,14 +2,16 @@
 name: diagnose-loop
 description: 纪律化调试循环——系统性根因分析
 version: 1.0.0
-last_updated: 2026-05-05
+last_updated: 2026-05-06
 triggers:
   - "代码有问题"
   - "调试失败"
   - "不知道哪里出错了"
+  - "故障诊断"
+  - "问题定位"
 non_triggers:
   - "开始写代码"
-  - "需求不清楚"
+  - "需求不明确"
 inputs:
   - 错误信息/异常现象
 outputs:

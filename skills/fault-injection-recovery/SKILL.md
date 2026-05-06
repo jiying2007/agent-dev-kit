@@ -2,7 +2,7 @@
 name: fault-injection-recovery
 description: 故障注入与恢复策略验证
 version: 1.0.0
-last_updated: 2026-05-02
+last_updated: 2026-05-06
 triggers:
   - "故障注入"
   - "故障恢复"

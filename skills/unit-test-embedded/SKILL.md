@@ -2,7 +2,7 @@
 name: unit-test-embedded
 description: 嵌入式单元测试策略与样例
 version: 1.0.0
-last_updated: 2026-05-02
+last_updated: 2026-05-06
 triggers:
   - "单元测试"
   - "写测试"

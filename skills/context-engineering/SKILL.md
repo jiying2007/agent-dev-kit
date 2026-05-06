@@ -2,14 +2,16 @@
 name: context-engineering
 description: 上下文工程——优化 Agent 上下文设置
 version: 1.0.0
-last_updated: 2026-05-05
+last_updated: 2026-05-06
 triggers:
   - "上下文不够"
   - "AI 理解错了"
   - "设置项目上下文"
+  - "构建上下文"
+  - "context 构建"
 non_triggers:
   - "写代码"
-  - "运行测试"
+  - "测试运行"
 inputs:
   - 项目结构和规范
 outputs:

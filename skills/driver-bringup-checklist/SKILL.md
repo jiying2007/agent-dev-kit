@@ -2,7 +2,7 @@
 name: driver-bringup-checklist
 description: 驱动 bring-up 标准检查清单
 version: 1.0.0
-last_updated: 2026-05-02
+last_updated: 2026-05-06
 triggers:
   - "驱动开发"
   - "驱动调试"

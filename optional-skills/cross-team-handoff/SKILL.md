@@ -2,7 +2,7 @@
 name: cross-team-handoff
 description: 跨团队交接时统一目标、边界和验收责任
 version: 1.0.0
-last_updated: 2026-05-02
+last_updated: 2026-05-06
 triggers:
   - "团队交接"
   - "模块移交"

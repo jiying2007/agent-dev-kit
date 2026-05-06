@@ -2,7 +2,7 @@
 name: interface-contract-design
 description: 定义模块/API/消息接口契约
 version: 1.0.0
-last_updated: 2026-05-02
+last_updated: 2026-05-06
 triggers:
   - "设计接口"
   - "API设计"

@@ -2,7 +2,7 @@
 name: toolchain-debug-openocd-gdb
 description: OpenOCD + GDB 联调流程
 version: 1.0.0
-last_updated: 2026-05-02
+last_updated: 2026-05-06
 triggers:
   - "OpenOCD"
   - "GDB调试"

@@ -2,7 +2,7 @@
 name: test-flakiness-triage
 description: 定位测试波动根因并给出稳定化方案
 version: 1.0.0
-last_updated: 2026-05-02
+last_updated: 2026-05-06
 triggers:
   - "测试波动"
   - "flaky test"

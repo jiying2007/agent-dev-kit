@@ -2,7 +2,7 @@
 name: interrupt-dma-patterns
 description: 中断与 DMA 协作模式设计
 version: 1.0.0
-last_updated: 2026-05-02
+last_updated: 2026-05-06
 triggers:
   - "中断处理"
   - "DMA处理"

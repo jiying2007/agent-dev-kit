@@ -2,7 +2,7 @@
 name: planning-execution-loop
 description: 长任务计划审查、分阶段执行、恢复与收口闭环
 version: 1.0.0
-last_updated: 2026-05-02
+last_updated: 2026-05-06
 triggers:
   - "执行计划"
   - "多阶段任务"

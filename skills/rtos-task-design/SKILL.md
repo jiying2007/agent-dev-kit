@@ -2,7 +2,7 @@
 name: rtos-task-design
 description: RTOS 任务模型与优先级设计
 version: 1.0.0
-last_updated: 2026-05-02
+last_updated: 2026-05-06
 triggers:
   - "RTOS任务"
   - "任务设计"

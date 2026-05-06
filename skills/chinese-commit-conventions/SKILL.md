@@ -9,8 +9,10 @@ triggers:
   - "提交信息格式"
   - "写 commit message"
   - "git commit"
+  - "提交格式"
+  - "commit message 格式"
 non_triggers:
-  - "需求不清楚"
+  - "需求模糊"
   - "调试代码"
 inputs:
   - 代码变更内容

@@ -2,7 +2,7 @@
 name: component-api-stability
 description: 组件 API 稳定性治理
 version: 1.0.0
-last_updated: 2026-05-02
+last_updated: 2026-05-06
 triggers:
   - "API稳定性"
   - "组件API"

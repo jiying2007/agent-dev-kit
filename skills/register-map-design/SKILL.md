@@ -2,7 +2,7 @@
 name: register-map-design
 description: 定义寄存器映射与位域文档
 version: 1.0.0
-last_updated: 2026-05-02
+last_updated: 2026-05-06
 triggers:
   - "设计寄存器"
   - "寄存器映射"

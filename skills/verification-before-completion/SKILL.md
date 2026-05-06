@@ -2,7 +2,7 @@
 name: verification-before-completion
 description: 完成前验证门禁，确保交付声明与证据一致
 version: 1.0.0
-last_updated: 2026-05-02
+last_updated: 2026-05-06
 triggers:
   - "准备完成"
   - "准备提交"

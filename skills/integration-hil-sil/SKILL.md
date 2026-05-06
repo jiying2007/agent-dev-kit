@@ -2,7 +2,7 @@
 name: integration-hil-sil
 description: HIL/SIL 集成验证编排
 version: 1.0.0
-last_updated: 2026-05-02
+last_updated: 2026-05-06
 triggers:
   - "集成测试"
   - "HIL测试"

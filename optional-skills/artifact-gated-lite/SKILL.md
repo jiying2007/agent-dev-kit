@@ -2,7 +2,7 @@
 name: artifact-gated-lite
 description: 高风险变更时使用轻量 artifact 标签与门禁模板固定交付证据
 version: 1.0.0
-last_updated: 2026-05-02
+last_updated: 2026-05-06
 triggers:
   - "高风险变更"
   - "产物门禁"

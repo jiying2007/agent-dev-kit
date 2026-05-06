@@ -2,7 +2,7 @@
 name: protocol-stack-integration
 description: 协议栈接入与状态机整合
 version: 1.0.0
-last_updated: 2026-05-02
+last_updated: 2026-05-06
 triggers:
   - "协议栈"
   - "协议集成"

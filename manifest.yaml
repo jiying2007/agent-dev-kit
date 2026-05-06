@@ -522,11 +522,11 @@ routing:
     primary_skill: release-versioning
     supporting_skills: [commit-pr-quality-gate]
   - intent: "Code review in Chinese"
-    intent_zh: "中文代码审查/代码评审/review 代码"
+    intent_zh: "中文代码审查/代码评审/review 代码/运行测试"
     primary_skill: chinese-code-review
     supporting_skills: []
   - intent: "Chinese commit conventions"
-    intent_zh: "中文提交/commit 规范/提交信息格式"
+    intent_zh: "中文提交/commit 规范/提交信息格式/提交格式/commit message 格式"
     primary_skill: chinese-commit-conventions
     supporting_skills: []
   - intent: "Simplify code"
@@ -534,15 +534,15 @@ routing:
     primary_skill: code-simplification
     supporting_skills: []
   - intent: "Context engineering"
-    intent_zh: "上下文工程/context 工程/提示词工程"
+    intent_zh: "上下文工程/context 工程/提示词工程/构建上下文/context 构建"
     primary_skill: context-engineering
     supporting_skills: []
   - intent: "Diagnose issues"
-    intent_zh: "诊断循环/诊断问题/故障诊断"
+    intent_zh: "诊断循环/诊断问题/故障诊断/问题定位"
     primary_skill: diagnose-loop
     supporting_skills: []
   - intent: "Review with documentation"
-    intent_zh: "文档审查/review with docs/查文档验证"
+    intent_zh: "文档审查/review with docs/查文档验证/文档验证/验证文档"
     primary_skill: grill-with-docs
     supporting_skills: []
 

@@ -2,7 +2,7 @@
 name: skill-composition-governance
 description: 治理技能组合、触发优先级、fallback 与弃用关系
 version: 1.0.0
-last_updated: 2026-05-02
+last_updated: 2026-05-06
 triggers:
   - "技能组合"
   - "触发冲突"

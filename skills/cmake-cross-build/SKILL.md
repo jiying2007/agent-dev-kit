@@ -2,7 +2,7 @@
 name: cmake-cross-build
 description: CMake 交叉编译与多目标构建
 version: 1.0.0
-last_updated: 2026-05-02
+last_updated: 2026-05-06
 triggers:
   - "CMake"
   - "交叉编译"

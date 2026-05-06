@@ -7,9 +7,9 @@ triggers:
   - "代码审查"
   - "review 代码"
   - "检查代码质量"
+  - "运行测试"
 non_triggers:
   - "写代码"
-  - "运行测试"
 inputs:
   - 代码变更（diff）
 outputs:

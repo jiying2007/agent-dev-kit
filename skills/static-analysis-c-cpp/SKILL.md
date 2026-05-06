@@ -2,7 +2,7 @@
 name: static-analysis-c-cpp
 description: C/C++ 静态分析与缺陷治理
 version: 1.0.0
-last_updated: 2026-05-02
+last_updated: 2026-05-06
 triggers:
   - "静态分析"
   - "代码检查"

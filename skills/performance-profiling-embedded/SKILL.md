@@ -2,7 +2,7 @@
 name: performance-profiling-embedded
 description: 嵌入式性能剖析与优化路径
 version: 1.0.0
-last_updated: 2026-05-02
+last_updated: 2026-05-06
 triggers:
   - "性能分析"
   - "性能优化"
