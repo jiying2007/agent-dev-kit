@@ -2,7 +2,7 @@
 
 `global-dev-kit`（gdk）是面向 `~/.codex` 等开发代理运行目录的 Agent/Skill/Profile 生产资产包。它的目标是把参考仓中的优秀方法论压实为可安装、可验证、可回滚、可持续迭代的工程资产。
 
-当前版本：`2.0.0`。
+当前版本：`2.6.0`。
 
 ## 1. 核心定位
 
@@ -17,8 +17,8 @@ gdk 不是参考仓集合，也不是直接替换 `~/.codex/AGENTS.md` 的全局
 ## 2. 当前资产概览
 
 - Agents：10 个角色 Agent。
-- Core Skills：22 个稳定技能。
-- Optional Skills：7 个可选技能。
+- Core Skills：28 个稳定技能。
+- Optional Skills：10 个可选技能。
 - Profiles：`core`、`personal-core`、`embedded-fullstack`、`release-hardening`、`artifact-gated-lite`、`team-core`、`openspec-driven`、`large-refactor`、`incident-response`、`research-intake`。
 - Tool Targets：`codex`、`claude-code`、`hermes-agent`、`opencode`。
 

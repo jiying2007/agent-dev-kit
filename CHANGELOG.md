@@ -1,5 +1,35 @@
 # Changelog
 
+## v2.6.0 (2026-05-06)
+### 新增
+- 脚本 smoke 测试：test_scripts_smoke.sh 覆盖 11 个脚本
+
+## v2.5.0 (2026-05-06)
+### 修复
+- Trigger 冲突：修复 6 个 skill 的 trigger 重复
+- Skills last_updated 日期更新为 2026-05-06
+
+## v2.4.0 (2026-05-06)
+### 修复
+- manifest.yaml optional_skills 列表错误修正
+- Docs 中 7 个脚本引用路径修正
+- data-fetch SKILL.md 创建
+
+## v2.3.0 (2026-05-06)
+### 增强
+- 10 个 Agents 全部充实（50-67L → 103-123L）
+- 7 个 Optional Skills 全部充实（59-77L → 128-152L）
+
+## v2.2.0 (2026-05-06)
+### 增强
+- 28 个 Core Skills 全部充实（65-106L → 80-195L）
+- Skill 内容质量测试：test_skill_content.sh（196 检查点）
+
+## v2.1.0 (2026-05-06)
+### 增强
+- Routing 全覆盖：28/28 skills
+- user-story-template 扩充（29L → 235L）
+
 ## v2.0.0 (2026-05-05)
 
 ### 新增
