@@ -29,5 +29,6 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 "$SCRIPT_DIR/test_profile_coherence_enhanced.sh"
 "$SCRIPT_DIR/test_match_effectiveness.sh"
 "$SCRIPT_DIR/test_skill_content.sh"
+"$SCRIPT_DIR/test_scripts_smoke.sh"
 
 echo "All tests passed"
