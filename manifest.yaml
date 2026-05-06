@@ -347,42 +347,90 @@ skills:
     depends_on: []
 
 optional_skills:
-  - name: test-flakiness-triage
-    path: optional-skills/test-flakiness-triage/SKILL.md
-    quality_tier: p2
-    description: 测试波动问题定位与稳定化
-  - name: cross-team-handoff
-    path: optional-skills/cross-team-handoff/SKILL.md
-    quality_tier: p2
-    description: 跨团队交接清单与风险闭环
-  - name: incident-rca-report
-    path: optional-skills/incident-rca-report/SKILL.md
-    quality_tier: p2
-    description: 线上事故根因分析与修复复盘
   - name: artifact-gated-lite
     path: optional-skills/artifact-gated-lite/SKILL.md
     quality_tier: p2
-    description: 轻量 artifact 标签与门禁模板
-  - name: planning-execution-loop
-    path: optional-skills/planning-execution-loop/SKILL.md
+    description: 高风险变更时使用轻量 artifact 标签与门禁模板固定交付证据
+    triggers:
+      - "高风险变更"
+      - "产物门禁"
+      - "追溯证据"
+  - name: cross-team-handoff
+    path: optional-skills/cross-team-handoff/SKILL.md
     quality_tier: p2
-    description: 长任务计划审查、分阶段执行、恢复与收口闭环
-  - name: skill-composition-governance
-    path: optional-skills/skill-composition-governance/SKILL.md
+    description: 跨团队交接时统一目标、边界和验收责任
+    triggers:
+      - "团队交接"
+      - "模块移交"
+      - "跨团队"
+  - name: data-fetch
+    path: optional-skills/data-fetch/SKILL.md
     quality_tier: p2
-    description: 技能组合、触发优先级、fallback 与弃用治理
-  - name: security-supply-chain
-    path: optional-skills/security-supply-chain/SKILL.md
-    quality_tier: p2
-    description: 第三方技能、脚本与参考资产引入前安全审查
-  - name: fetch-url-content
-    path: optional-skills/data-fetch/fetch-url-content/SKILL.md
-    quality_tier: p2
-    description: URL 正文提取——从网页提取结构化内容
+    description: 数据获取技能组合——包含邮件获取与网页正文提取
+    triggers:
+      - "获取数据"
+      - "数据抓取"
+      - "fetch data"
+    sub_skills:
+      - email-imap-fetch
+      - fetch-url-content
   - name: email-imap-fetch
     path: optional-skills/data-fetch/email-imap-fetch/SKILL.md
     quality_tier: p2
     description: IMAP 邮件获取——从邮箱获取邮件列表和内容
+    triggers:
+      - "获取邮件"
+      - "读取邮箱"
+      - "imap fetch"
+  - name: fetch-url-content
+    path: optional-skills/data-fetch/fetch-url-content/SKILL.md
+    quality_tier: p2
+    description: URL 正文提取——从网页提取结构化内容
+    triggers:
+      - "获取网页内容"
+      - "抓取链接正文"
+      - "fetch url"
+  - name: incident-rca-report
+    path: optional-skills/incident-rca-report/SKILL.md
+    quality_tier: p2
+    description: 线上事故复盘与根因分析闭环
+    triggers:
+      - "线上事故"
+      - "故障复盘"
+      - "RCA分析"
+      - "根因分析"
+  - name: planning-execution-loop
+    path: optional-skills/planning-execution-loop/SKILL.md
+    quality_tier: p2
+    description: 长任务计划审查、分阶段执行、恢复与收口闭环
+    triggers:
+      - "执行计划"
+      - "多阶段任务"
+      - "计划审查"
+  - name: security-supply-chain
+    path: optional-skills/security-supply-chain/SKILL.md
+    quality_tier: p2
+    description: 第三方技能、脚本与参考资产引入前的安全和供应链审查
+    triggers:
+      - "供应链审查"
+      - "第三方引入"
+      - "安全审查"
+  - name: skill-composition-governance
+    path: optional-skills/skill-composition-governance/SKILL.md
+    quality_tier: p2
+    description: 治理技能组合、触发优先级、fallback 与弃用关系
+    triggers:
+      - "技能组合"
+      - "触发冲突"
+      - "技能治理"
+  - name: test-flakiness-triage
+    path: optional-skills/test-flakiness-triage/SKILL.md
+    quality_tier: p2
+    description: 定位测试波动根因并给出稳定化方案
+    triggers:
+      - "测试波动"
+      - "flaky test"
+      - "测试不稳定"
 
 routing:
   - intent: "Requirements are unclear"

@@ -20,7 +20,7 @@
 ```bash
 bash scripts/devkit.sh propose --change <change-id> --title "<codex 配置审计目标>"
 bash scripts/devkit.sh verify --change <change-id>
-bash scripts/check-global-codex-health.sh ~/.codex minimal
+bash ../scripts/check-global-codex-health.sh ~/.codex minimal
 codex mcp list
 bash scripts/devkit.sh review --change <change-id> --result pass --blockers 0 --majors 0 --minors 0
 ```

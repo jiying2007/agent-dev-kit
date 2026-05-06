@@ -27,7 +27,7 @@
 
 ```bash
 rtk bash -lc "cd global-dev-kit && bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --with-optional-skill planning-execution-loop --with-optional-skill skill-composition-governance --with-optional-skill security-supply-chain --with-optional-skill cross-team-handoff --with-optional-skill artifact-gated-lite --backup --install-report ../reports/gdk-install-report-$(date +%F).md --lock-version 0.3.0"
-rtk scripts/check-global-codex-health.sh ~/.codex minimal
+rtk ../scripts/check-global-codex-health.sh ~/.codex minimal
 ```
 
 说明：
@@ -87,7 +87,7 @@ rtk bash -lc "cd global-dev-kit && bash scripts/devkit.sh test"
 
 ```bash
 rtk bash -lc "cd global-dev-kit && bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --with-optional-skill planning-execution-loop --with-optional-skill skill-composition-governance --with-optional-skill security-supply-chain --with-optional-skill cross-team-handoff --with-optional-skill artifact-gated-lite --backup --install-report ../reports/gdk-install-report-$(date +%F).md --lock-version 0.3.0"
-rtk scripts/check-global-codex-health.sh ~/.codex minimal
+rtk ../scripts/check-global-codex-health.sh ~/.codex minimal
 ```
 
 ### 6.3 修改 `~/.codex/AGENTS.md`
@@ -95,13 +95,13 @@ rtk scripts/check-global-codex-health.sh ~/.codex minimal
 修改后至少运行：
 
 ```bash
-rtk scripts/check-global-codex-health.sh ~/.codex minimal
+rtk ../scripts/check-global-codex-health.sh ~/.codex minimal
 ```
 
 若修改影响 gdk 生产结论，继续运行：
 
 ```bash
-rtk scripts/check-gdk-harden-readiness.sh . --require-pilot
+rtk ../scripts/check-gdk-harden-readiness.sh . --require-pilot
 ```
 
 ## 7. 冲突处理
@@ -119,9 +119,9 @@ rtk scripts/check-gdk-harden-readiness.sh . --require-pilot
 可以声明 `~/.codex/AGENTS.md` 与 gdk 配合健康，必须满足：
 
 ```bash
-rtk scripts/check-global-codex-health.sh ~/.codex minimal
-rtk scripts/check-runtime-routing.sh .
-rtk scripts/check-gdk-harden-readiness.sh . --require-pilot
+rtk ../scripts/check-global-codex-health.sh ~/.codex minimal
+rtk ../scripts/check-runtime-routing.sh .
+rtk ../scripts/check-gdk-harden-readiness.sh . --require-pilot
 ```
 
 若任一命令失败，只能声明“已更新文档/配置，尚未生产放行”。

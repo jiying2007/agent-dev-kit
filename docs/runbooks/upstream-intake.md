@@ -22,9 +22,9 @@
 ## 命令模板
 
 ```bash
-bash scripts/sync-subrepos.sh . fetch
-bash scripts/diff-scan.sh . 7 reports/weekly-change-report.md
-bash scripts/check-upstream-intake-readiness.sh .
+bash ../scripts/sync-subrepos.sh . fetch
+bash ../scripts/diff-scan.sh . 7 reports/weekly-change-report.md
+bash ../scripts/check-upstream-intake-readiness.sh .
 ```
 
 ## 验收门禁

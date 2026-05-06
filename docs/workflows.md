@@ -88,7 +88,7 @@
 
 - Agent：`application-engineer -> test-validation-engineer -> code-review-governor`
 - Skill：`verification-before-completion + commit-pr-quality-gate`
-- 命令：`doctor(~/.codex) -> check-global-codex-health -> check-gdk-harden-readiness --require-pilot`
+- 命令：`health-check(~/.codex) -> check-global-codex-health -> check-gdk-harden-readiness --require-pilot`
 - 关键纪律：未通过 pilot 验证不得给出“可放行/可追踪上游更新”结论
 - Runbook：`docs/runbooks/codex-runtime-pilot.md`
 

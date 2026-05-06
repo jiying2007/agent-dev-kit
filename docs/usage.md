@@ -167,12 +167,12 @@ docs/codex-agents-integration.md
 生产验证由 `llm_agent` 根脚本统一执行：
 
 ```bash
-rtk scripts/check-gdk-harden-readiness.sh . --require-pilot  # 注意: 此脚本在 llm_agent 父仓库中，非本仓库
+rtk ../scripts/check-gdk-harden-readiness.sh . --require-pilot
 ```
 
 若安装后异常：
 
 1. 从 install report 找到 backup 路径。
 2. 经用户确认后恢复 `agents/` 与 `skills/`。
-3. 运行 `rtk scripts/check-global-codex-health.sh ~/.codex minimal`。（注意: 此脚本在 llm_agent 父仓库中，非本仓库）
+3. 运行 `rtk ../scripts/check-global-codex-health.sh ~/.codex minimal`。
 4. 在 `reports/` 写入回滚记录。
