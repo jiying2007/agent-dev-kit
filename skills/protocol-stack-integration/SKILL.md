@@ -36,7 +36,36 @@ constraints:
 ```bash
 <protocol-simulator-cmd> --scenario reconnect
 <packet-capture-cmd> --filter <protocol>
+tcpdump -i eth0 -w capture.pcap 'port <port>'
+wireshark -r capture.pcap -Y '<protocol>.field == <value>'
+tshark -r capture.pcap -T fields -e <protocol>.field1 -e <protocol>.field2
+scapy.all.sniff(filter="port <port>", count=100, prn=lambda p: p.summary())
 ```
+
+## 协议栈分层架构
+| 层级 | 职责 | 典型协议 |
+|------|------|----------|
+| Application | 用户业务逻辑 | MQTT/CoAP/HTTP |
+| Session/Security | 加密与鉴权 | TLS/DTLS |
+| Transport | 连接与拥塞控制 | TCP/UDP/QUIC |
+| Network | 路由与寻址 | IP/IPv6 |
+| Link | 帧收发与 MAC | Ethernet/WiFi/BLE |
+| Physical | 信号调制 | PHY/射频 |
+
+## 分层测试策略
+| 层级 | 测试重点 | 工具 |
+|------|----------|------|
+| 物理层 | 信号质量、误码率 | 示波器、频谱仪 |
+| 链路层 | 帧收发、MAC 仲裁 | 抓包 + 帧注入器 |
+| 传输层 | 连接管理、拥塞控制 | tc netem + iperf3 |
+| 应用层 | 协议语义、状态机 | 模拟器 + Fuzz 测试 |
+
+## 合理化借口拦截
+
+| 借口 | 现实 | 正确做法 |
+|------|------|---------|
+| "协议文档看过了不用抓包" | 文档可能有错误或版本差异 | 抓包验证实际行为 |
+| "正常流程通了就行" | 异常场景才是协议可靠性的试金石 | 必须测试丢包/乱序/重连 |
 
 ## Evidence Template
 ```md

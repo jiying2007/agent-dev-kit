@@ -37,6 +37,36 @@ constraints:
 ```bash
 clang-tidy -p build compile_commands.json <file_or_dir>
 cppcheck --enable=warning,style,performance --project=compile_commands.json
+pvs-studio-analyzer analyze -o PVS-Studio.log -e <exclude_dir>
+plog-converter -a GA:1,2 -t tasklist PVS-Studio.log -o tasks.txt
+clang-tidy -p build --list-checks --checks='*' <file> 2>&1 | head -50
+cppcheck --enable=all --suppress=missingIncludeSystem --xml <src_dir> 2> report.xml
+```
+
+## 工具配置与规则集
+| 工具 | 配置文件 | 说明 |
+|------|----------|------|
+| cppcheck | `.cppcheck-suppress` | 逐行抑制误报，必须附理由 |
+| clang-tidy | `.clang-tidy` | 启用/禁用检查项，按项目风险定制 |
+| PVS-Studio | `.pvsconfig` | 规则集选择与项目排除 |
+| compile_commands.json | `build/` | cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON 生成 |
+
+## 缺陷严重级别映射
+| 级别 | 定义 | 处理策略 |
+|------|------|----------|
+| Blocker | 内存越界/UAF/空指针解引用 | 阻断合并，立即修复 |
+| Major | 整数溢出/未初始化/资源泄漏 | 48 小时内修复 |
+| Minor | 代码风格/命名规范 | 下个迭代修复 |
+| Info | 潜在优化建议 | 按需处理 |
+
+## CI 集成示例
+```yaml
+# .github/workflows/static-analysis.yml
+static-analysis:
+  steps:
+    - run: cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -B build
+    - run: cppcheck --enable=warning --error-exitcode=1 --project=build/compile_commands.json
+    - run: clang-tidy -p build $(git diff --name-only HEAD~1 -- '*.c' '*.cpp')
 ```
 
 ## Evidence Template

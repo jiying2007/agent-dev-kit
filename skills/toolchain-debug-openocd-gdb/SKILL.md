@@ -37,7 +37,44 @@ constraints:
 ```bash
 openocd -f interface/<probe>.cfg -f target/<chip>.cfg
 gdb-multiarch <firmware.elf> -ex "target remote :3333" -ex "monitor reset halt"
+gdb-multiarch <firmware.elf> -x debug.gdb  # 批量脚本
+openocd -f interface/stlink.cfg -f target/stm32f4x.cfg -c "program <file>.elf verify reset exit"
 ```
+
+## OpenOCD 配置详解
+```tcl
+source [find interface/stlink.cfg]  # 探针驱动
+transport select hla_swd             # SWD/JTAG 选择
+adapter speed 4000                    # 时钟频率（kHz）
+source [find target/stm32f4x.cfg]   # 目标芯片配置
+$_TARGETNAME configure -rtos auto    # 自动检测 RTOS
+```
+
+## GDB 常用命令速查
+| 命令 | 说明 |
+|------|------|
+| `b main` | 在 main 函数设断点 |
+| `hb *0x08001234` | 硬件断点（Flash 中必须用） |
+| `watch *ptr` | 数据观察点（值变化时中断） |
+| `x/20xw 0x20000000` | 查看内存（20 个 word 十六进制）|
+| `monitor reset halt` | 复位并暂停在 Reset_Handler |
+| `bt` | 查看调用栈回溯 |
+| `info threads` | 查看 RTOS 线程（需 RTOS 支持）|
+
+## 断点管理策略
+| 场景 | 策略 |
+|------|------|
+| Flash 中的代码 | 必须用硬件断点 `hb`（数量有限，通常 4-6 个）|
+| RAM 中的代码 | 用软件断点 `b`（数量不限）|
+| 条件断点 | `b foo if x > 10`（注意性能影响）|
+| 临时断点 | `tbreak`（命中一次后自动删除）|
+
+## 合理化借口拦截
+
+| 借口 | 现实 | 正确做法 |
+|------|------|---------|
+| "串口 printf 够用了" | printf 无法暂停查看状态 | 关键路径必须 GDB 断点验证 |
+| "硬件断点不够用" | 合理规划 + 条件断点可以覆盖绝大多数场景 | 先清理不需要的断点 |
 
 ## Evidence Template
 ```md
@@ -57,12 +94,7 @@ gdb-multiarch <firmware.elf> -ex "target remote :3333" -ex "monitor reset halt"
 - 必须提供至少一条异常定位证据（backtrace/寄存器快照）。
 - 调试步骤需区分“烧录问题”与“运行时问题”。
 
----
-
 ## 健壮性规范
-
-- **输入验证**: 执行前校验所有必要输入是否存在且格式正确
-- **重试策略**: 外部命令失败时最多重试 3 次，指数退避（1s, 2s, 4s）
-- **超时控制**: 单步操作超时 30 秒，整体流程超时 300 秒
-- **异常隔离**: 单个步骤失败不阻塞其他独立步骤
-- **日志记录**: 关键操作记录命令、退出码、耗时
+- **输入验证**: 校验探针连接、芯片 ID、ELF 符号文件
+- **异常隔离**: 烧录失败不影响调试会话，反之亦然
+- **日志记录**: 记录 OpenOCD/GDB 命令序列与输出

@@ -37,7 +37,34 @@ constraints:
 ```bash
 <unit-test-cmd> --module <module_name>
 <coverage-cmd> --module <module_name>
+# Unity 框架
+ceedling test:<module_name>
+ceedling gcov:<module_name>
+# CMock 自动生成 Mock
+ceedling module:create<module_name>
+# 覆盖率报告
+gcovr --root . --filter src/ --xml -o coverage.xml
+lcov --capture --directory build --output-file coverage.info
+genhtml coverage.info --output-directory coverage_html
 ```
+
+## Unity/CMock 框架速查
+```c
+// Unity 常用断言
+TEST_ASSERT_EQUAL_INT(expected, actual);
+TEST_ASSERT_EQUAL_STRING(expected, actual);
+TEST_ASSERT_TRUE(condition);
+TEST_ASSERT_NULL(pointer);
+TEST_ASSERT_EQUAL_MEMORY(expected, actual, len);
+```
+
+## 测试覆盖率策略
+| 覆盖类型 | 目标 | 工具 |
+|----------|------|------|
+| 行覆盖率 | ≥80% | gcov / lcov |
+| 分支覆盖率 | ≥70% | gcov -b |
+| 函数覆盖率 | 100%（公开 API）| lcov |
+| MC/DC | 安全关键模块 | BullseyeCoverage |
 
 ## Evidence Template
 ```md

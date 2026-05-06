@@ -36,8 +36,38 @@ constraints:
 ## Commands
 ```bash
 perf stat -p <pid> -- sleep 30
+perf record -g -p <pid> -- sleep 30 && perf report --stdio
+gprof <binary> gmon.out > analysis.txt
+valgrind --tool=callgrind --callgrind-out-file=callgrind.out <binary>
+callgrind_annotate callgrind.out
+valgrind --tool=massif --pages-as-heap=yes <binary>
+ms_print massif.out.<pid>
 <benchmark-cmd> --scenario <name> --repeat 5
 ```
+
+## 火焰图生成
+```bash
+perf script | stackcollapse-perf.pl | flamegraph.pl > flamegraph.svg
+# 嵌入式场景：从 DWT/ETM trace 导出
+<trace-decode-cmd> --input etm_trace.bin | stackcollapse-perf.pl | flamegraph.pl > mcu_flame.svg
+```
+
+## 瓶颈定位清单
+| 瓶颈类型 | 诊断信号 | 工具 |
+|----------|----------|------|
+| CPU 热点 | 函数采样占比 >20% | perf record + flame graph |
+| 内存泄漏 | 堆持续增长 | valgrind --tool=memcheck |
+| I/O 阻塞 | 线程长时间 wait | strace -T / perf trace |
+| 锁竞争 | mutex wait 时间长 | perf lock / lockstat |
+| 缓存未命中 | LLC miss rate 高 | perf stat -e cache-misses |
+
+## 合理化借口拦截
+
+| 借口 | 现实 | 正确做法 |
+|------|------|---------|
+| "看起来没问题了" | 未经量化对比无法确认优化效果 | 必须提供前后同口径数据 |
+| "Valgrind 太慢不实用" | 生产环境的内存泄漏代价更高 | CI 中用 -O0 跑 memcheck |
+| "火焰图看不懂" | 火焰图是最直观的热点可视化 | 先看宽峰（占比高的函数） |
 
 ## Evidence Template
 ```md

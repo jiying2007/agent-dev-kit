@@ -37,7 +37,42 @@ constraints:
 ```bash
 rg -n "#define.*REG_|BIT\(|MASK" <driver_path>
 rg -n "TODO.*register|FIXME.*reg" <driver_path>
+rg -n "reserved|RESERVED" <header_path>
+python3 scripts/gen_reg_header.py --input reg_map.yaml --output reg_defs.h
+python3 scripts/validate_reg_map.py --input reg_map.yaml --datasheet ds.pdf
 ```
+
+## SVD 生成与验证
+```yaml
+# 寄存器映射 YAML 示例
+peripherals:
+  - name: GPIOA
+    base_address: 0x40020000
+    registers:
+      - name: MODER
+        offset: 0x00
+        size: 32
+        access: read-write
+        reset_value: 0x00000000
+        fields:
+          - { name: MODE0, bit_offset: 0, bit_width: 2, enum: [Input:0, Output:1] }
+```
+
+## 位域设计规范
+| 规则 | 说明 |
+|------|------|
+| 保留位处理 | 读返回 0，写忽略；不得用于新功能 |
+| 读改写原子性 | 多位域共享寄存器需提供原子操作或锁 |
+| 写 1 清除 | W1C 类型位必须在 ISR 中明确处理 |
+| 复位值一致性 | 代码中复位值必须与 datasheet 一致 |
+| 端序 | 多字节寄存器必须标注字节序 |
+
+## 合理化借口拦截
+
+| 借口 | 现实 | 正确做法 |
+|------|------|---------|
+| "寄存器很简单不用文档" | 口头传递是寄存器 bug 的温床 | 每个寄存器必须有映射表 |
+| "reserved 位随便写" | 某些芯片 reserved 位有隐藏功能 | 严格按 datasheet 读写规则 |
 
 ## Evidence Template
 ```md
@@ -57,12 +92,7 @@ rg -n "TODO.*register|FIXME.*reg" <driver_path>
 - 必须说明保留位处理策略与读改写规则。
 - 必须附最小验证清单（读写/中断/异常）。
 
----
-
 ## 健壮性规范
-
-- **输入验证**: 执行前校验所有必要输入是否存在且格式正确
-- **重试策略**: 外部命令失败时最多重试 3 次，指数退避（1s, 2s, 4s）
-- **超时控制**: 单步操作超时 30 秒，整体流程超时 300 秒
-- **异常隔离**: 单个步骤失败不阻塞其他独立步骤
-- **日志记录**: 关键操作记录命令、退出码、耗时
+- **输入验证**: 校验 datasheet 版本与寄存器地址是否匹配
+- **异常隔离**: 单个寄存器定义错误不影响其他外设映射
+- **日志记录**: 记录每个寄存器的来源（datasheet 页码/版本）

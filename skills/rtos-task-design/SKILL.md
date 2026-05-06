@@ -37,7 +37,34 @@ constraints:
 ```bash
 <rtos-trace-cmd> --duration 60
 rg -n "xTaskCreate|thread_create|mutex|semaphore" <src_path>
+rg -n "priority|PRIO" <src_path>
+rg -n "deadlock|DEADLOCK|lock_order" <src_path>
 ```
+
+## 任务优先级设计
+| 原则 | 说明 |
+|------|------|
+| Rate Monotonic | 周期越短优先级越高 |
+| Deadline Monotonic | 截止时间越近优先级越高 |
+| 关键性提升 | 安全关键任务可覆盖 deadline 排序 |
+| 中断与任务分离 | ISR 仅做信号量/队列通知，不在 ISR 中处理逻辑 |
+
+## 资源竞争与死锁预防
+| 策略 | 说明 |
+|------|------|
+| 优先级继承 (PIP) | 低优先级任务持有锁时继承高优先级 |
+| 优先级天花板 (PCP) | 锁创建时设定天花板优先级 |
+| 锁序协议 | 全局统一锁获取顺序，禁止嵌套反转 |
+| 无锁设计 | 用 ring buffer + 原子操作替代互斥锁 |
+| 超时机制 | mutex 获取必须带超时，避免无限阻塞 |
+
+## 合理化借口拦截
+
+| 借口 | 现实 | 正确做法 |
+|------|------|---------|
+| "任务少不需要优先级分析" | 即使 2 个任务也可能死锁 | 用 RMA/DMA 方法论分配优先级 |
+| "互斥锁够用了" | 优先级反转会让高优先级任务饿死 | 引入 PIP 或 PCP 协议 |
+| "死锁概率很低" | 死锁一旦发生系统完全挂死 | 必须有锁序或超时保护 |
 
 ## Evidence Template
 ```md
