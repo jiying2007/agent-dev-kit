@@ -1,8 +1,8 @@
 ---
 name: task-breakdown
 description: 将需求拆解为可并行执行的任务包
-version: 1.0.0
-last_updated: 2026-05-02
+version: 1.1.0
+last_updated: 2026-05-06
 triggers:
   - "拆解任务"
   - "任务拆分"
@@ -28,29 +28,69 @@ constraints:
 - 已有需求包和至少一个可执行验收标准。
 - 明确共享文件、共享 contract 和根配置触点。
 
+## 任务拆分原则
+
+1. **单一职责**：每个任务只做一件事，验证一个目标。
+2. **可独立验证**：每个任务有独立的验收命令，不依赖其他任务的产出。
+3. **粒度适中**：单任务 2-8 小时，超 8 小时必须再拆，低于 0.5 小时合并。
+4. **依赖最小化**：任务间依赖越少越好，优先串行再考虑并行。
+5. **共享写独占**：同一文件/contract 的写操作只能在一个任务中。
+
+## 估时方法
+
+| 方法 | 适用场景 | 操作方式 |
+|------|---------|---------|
+| 类比估时 | 有类似历史任务 | 参考历史任务实际耗时 |
+| 三点估时 | 不确定性高 | (乐观 + 4×最可能 + 悲观) / 6 |
+| T-shirt | 快速粗估 | S(0.5h)/M(2h)/L(4h)/XL(8h) |
+| 专家判断 | 领域专精 | 由 owner 直接给出 |
+
 ## Workflow
-1. 定义拆分边界：明确 scope_write、scope_read、输入输出与完成标准。
-2. 并行准入判断：检查是否存在同文件写冲突、共享 contract、根配置冲突。
-3. 生成任务包：每个任务给出 owner、依赖、验证命令与阻塞条件。
-4. 定义交接令牌：每个任务声明 `ready_to_handoff` 条件与接收方。
-5. 轻量工件：输出 `需求梳理`、`task checklist`、`执行反馈/验收记录` 三段模板。
-6. 规划整合顺序：列出 merge order、联调点与最终统一验证步骤。
-7. 大仓触点梳理：若涉及大型多模块仓，补关键触点清单（scripts/entry/command registry/shared contract）。
-8. 输出执行建议：适合并行则给 2-4 个任务包，不适合则给单线程方案。
+1. **定义拆分边界**：明确 scope_write、scope_read、输入输出与完成标准。
+2. **并行准入判断**：检查是否存在同文件写冲突、共享 contract、根配置冲突。
+3. **绘制依赖图**：
+   ```bash
+   # 列出文件依赖关系
+   rg -n "import|require|include|#include" <target_path> | head -30
+   # 查看模块间调用
+   rg -n "call|invoke|dispatch|emit|publish" <target_path> | head -20
+   ```
+   依赖图格式：`T1 → T2 → T3`（箭头表示"被依赖"）
+4. **生成任务包**：每个任务给出 owner、依赖、验证命令与阻塞条件。
+5. **估时与排期**：用三点估时法计算每个任务工时，标注关键路径。
+6. **定义交接令牌**：每个任务声明 `ready_to_handoff` 条件与接收方。
+7. **规划整合顺序**：列出 merge order、联调点与最终统一验证步骤。
+8. **大仓触点梳理**：若涉及大型多模块仓，补关键触点清单。
+9. **输出执行建议**：适合并行则给 2-4 个任务包，不适合则给单线程方案。
 
 ## Commands
 ```bash
+# 扫描共享依赖和 contract
 rg -n "contract|schema|shared|entry|router|package.json" <repo_root>
+
+# 查看变更范围
 git diff --name-only <base>...HEAD
+
+# 查看模块间依赖
+rg -n "import|require|include" <target_path> | head -20
+
+# 统计文件复杂度（辅助估时）
+wc -l <target_files>
+cloc <target_path> 2>/dev/null || echo "cloc not installed"
 ```
 
 ## Evidence Template
 ```md
-- Parallel Suitability: yes/no
-- Task Packages (owner/scope/dependency):
+- Parallel Suitability: yes/no + 理由
+- 任务包列表:
+  | ID | 描述 | Owner | 依赖 | 估时 | 验证命令 |
+  |----|------|-------|------|------|---------|
+  | T1 | ... | ... | 无 | 2h | ... |
+  | T2 | ... | ... | T1 | 4h | ... |
+- 关键路径: T1 → T2 → T4（总工期 Xh）
+- 估时方法: 三点估时 / 类比 / T-shirt
 - Work Mode (diagnosis/repro/planning/execution):
 - Handoff Token (ready_to_handoff + receiver):
-- Lightweight Artifacts (需求梳理/task checklist/执行反馈):
 - Large-Repo Touchpoints (scripts/entry/command-registry/shared-contract):
 - Conflict Matrix:
 - Merge Order:
@@ -60,15 +100,17 @@ git diff --name-only <base>...HEAD
 ## Failure Handling
 - 若拆分后冲突面扩大，降级为单线程执行方案。
 - 若出现未识别共享依赖，暂停并重新划分 scope。
+- 估时偏差超过 50% 时，重新评估并更新任务包。
+- 依赖图出现环时，必须打破循环依赖再继续。
 
 ## Quality Gate
 - 每个任务必须具备独立验证命令与可交付产物。
 - 必须显式标记共享文件/共享 contract 冲突面。
-- 每个任务必须声明 handoff 条件，避免“完成定义”不一致。
-- 必须给出“适合并行/不适合并行”的明确结论与理由。
+- 每个任务必须声明 handoff 条件，避免"完成定义"不一致。
+- 必须给出"适合并行/不适合并行"的明确结论与理由。
 - 必须给出当前推进模式与收敛条件，避免持续空转分析。
-
----
+- 任务粒度必须在 0.5h-8h 范围内。
+- 依赖图必须无环。
 
 ## 合理化借口拦截
 
