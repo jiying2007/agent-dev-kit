@@ -28,12 +28,12 @@
 2. 编写/更新 design-spec（设计规格文档）
 3. 编写 implementation-plan（实施计划）
 4. 如有架构变更，更新 system-arch（系统架构文档）
-5. 编写 task-breakdown（任务分解）
+5. 编写 gdk-task-breakdown（任务分解）
 
 **产出物**:
 - design-spec (status: DRAFT)
 - implementation-plan (status: DRAFT)
-- task-breakdown (status: DRAFT)
+- gdk-task-breakdown (status: DRAFT)
 
 **Exit Criteria**:
 - [ ] 设计文档已通过团队评审
@@ -53,7 +53,7 @@
 - [ ] 依赖项已确认可用
 
 **执行步骤**:
-1. 按 task-breakdown 中的任务顺序开发
+1. 按 gdk-task-breakdown 中的任务顺序开发
 2. 编写代码和对应单元测试
 3. 本地构建和测试通过
 4. 更新相关文档（API 文档、README 等）

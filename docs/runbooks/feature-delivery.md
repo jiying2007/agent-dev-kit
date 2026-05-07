@@ -11,19 +11,19 @@
 
 ## 推荐 Skill 组合
 
-- `requirements-triage`
-- `task-breakdown`
-- `adr-writer`
-- `interface-contract-design`
-- `unit-test-embedded`
-- `verification-before-completion`
-- `commit-pr-quality-gate`
+- `gdk-requirements-triage`
+- `gdk-task-breakdown`
+- `gdk-adr-writer`
+- `gdk-interface-contract-design`
+- `gdk-unit-test-embedded`
+- `gdk-verification-before-completion`
+- `gdk-commit-pr-quality-gate`
 
 ## 命令模板
 
 ```bash
 bash scripts/devkit.sh catalog build
-bash scripts/devkit.sh match --skill requirements-triage --text "<需求摘要>"
+bash scripts/devkit.sh match --skill gdk-requirements-triage --text "<需求摘要>"
 bash scripts/devkit.sh propose --change <change-id> --title "<目标>"
 bash scripts/devkit.sh apply --change <change-id>
 bash scripts/devkit.sh verify --change <change-id>

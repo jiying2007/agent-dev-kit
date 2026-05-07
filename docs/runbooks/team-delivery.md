@@ -11,8 +11,8 @@
 ## 推荐组合
 
 - Agent：`requirements-analyst -> application-engineer -> test-validation-engineer -> code-review-governor`
-- Primary Skill：`cross-team-handoff`
-- Supporting Skills：`task-breakdown`、`verification-before-completion`
+- Primary Skill：`gdk-cross-team-handoff`
+- Supporting Skills：`gdk-task-breakdown`、`gdk-verification-before-completion`
 
 ## 工件
 

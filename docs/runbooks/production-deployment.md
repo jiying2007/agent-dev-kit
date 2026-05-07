@@ -8,7 +8,7 @@
 
 ```bash
 bash scripts/devkit.sh validate --strict
-bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --with-optional-skill planning-execution-loop --with-optional-skill skill-composition-governance --with-optional-skill security-supply-chain --with-optional-skill cross-team-handoff --with-optional-skill artifact-gated-lite --backup --install-report ../reports/gdk-install-report-$(date +%F).md --lock-version 0.3.0
+bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --with-optional-skill gdk-planning-execution-loop --with-optional-skill gdk-skill-composition-governance --with-optional-skill gdk-security-supply-chain --with-optional-skill gdk-cross-team-handoff --with-optional-skill gdk-artifact-gated-lite --backup --install-report ../reports/gdk-install-report-$(date +%F).md --lock-version 0.3.0
 bash ../scripts/check-global-codex-health.sh ~/.codex minimal
 bash ../scripts/check-gdk-harden-readiness.sh .. --require-pilot
 ```

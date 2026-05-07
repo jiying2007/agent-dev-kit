@@ -9,8 +9,8 @@
 - 证据驱动结论与负结果留痕
 
 落地点：
-- `skills/requirements-triage/SKILL.md`
-- `skills/systematic-debugging/SKILL.md`
+- `skills/gdk-requirements-triage/SKILL.md`
+- `skills/gdk-systematic-debugging/SKILL.md`
 - `scripts/workflow.sh`（`proposal.md` 强制“上下文充分性检查”）
 
 ## 2. 参考源 B（门禁与反“未验先结论”）
@@ -21,8 +21,8 @@
 - 单问题变更，避免捆绑无关改动
 
 落地点：
-- `skills/verification-before-completion/SKILL.md`
-- `skills/commit-pr-quality-gate/SKILL.md`
+- `skills/gdk-verification-before-completion/SKILL.md`
+- `skills/gdk-commit-pr-quality-gate/SKILL.md`
 - `scripts/workflow.sh`（`review` 强制在 `verified` 后执行，`archive` 强制 `review-passed`）
 
 ## 3. 参考源 C（工程可维护性与边界清晰）
@@ -32,7 +32,7 @@
 - 变更前明确模块边界与责任范围
 
 落地点：
-- `skills/task-breakdown/SKILL.md`（`scope_write/scope_read` + ownership + 冲突矩阵）
+- `skills/gdk-task-breakdown/SKILL.md`（`scope_write/scope_read` + ownership + 冲突矩阵）
 - `scripts/workflow.sh`（`tasks.md` 强制 `Ownership 与并行冲突检查`）
 
 ## 4. 参考源 D（规格驱动与可追溯工件）
@@ -60,8 +60,8 @@
 - 门禁结论必须与测试/评审证据一致
 
 落地点：
-- `optional-skills/artifact-gated-lite/SKILL.md`
+- `optional-skills/gdk-artifact-gated-lite/SKILL.md`
 - `docs/runbooks/artifact-gated-delivery.md`
-- `manifest.yaml`（`artifact-gated-lite` profile + optional skill）
+- `manifest.yaml`（`gdk-artifact-gated-lite` profile + optional skill）
 
 结论：`global-dev-kit` 保留“规则思想”，但全部转换为本仓库可执行脚本、模板和测试门禁，确保离线独立可用。

@@ -11,9 +11,9 @@
 
 ## 推荐 Skill 组合
 
-- `verification-before-completion`
-- `commit-pr-quality-gate`
-- `systematic-debugging`（仅在运行异常时触发）
+- `gdk-verification-before-completion`
+- `gdk-commit-pr-quality-gate`
+- `gdk-systematic-debugging`（仅在运行异常时触发）
 
 ## 命令模板
 
@@ -28,4 +28,4 @@ bash ../scripts/check-gdk-harden-readiness.sh . --require-pilot --skip-full-suit
 - `health-check` 与 `check-global-codex-health` 必须均为 PASS。
 - `check-gdk-harden-readiness` 必须在 `--require-pilot` 条件下通过。
 - 验证结论必须包含三联证据：health-check / global health / pilot gate。
-- 若任一命令失败，必须记录失败证据并转入 `systematic-debugging`，不得声明可放行。
+- 若任一命令失败，必须记录失败证据并转入 `gdk-systematic-debugging`，不得声明可放行。

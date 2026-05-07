@@ -7,7 +7,7 @@
 ## 推荐组合
 
 - Agent：`security-compliance-reviewer -> code-review-governor`
-- Skill：`security-supply-chain + commit-pr-quality-gate`
+- Skill：`gdk-security-supply-chain + gdk-commit-pr-quality-gate`
 
 ## 检查项
 

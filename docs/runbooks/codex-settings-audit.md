@@ -11,9 +11,9 @@
 
 ## 推荐 Skill 组合
 
-- `requirements-triage`
-- `verification-before-completion`
-- `commit-pr-quality-gate`
+- `gdk-requirements-triage`
+- `gdk-verification-before-completion`
+- `gdk-commit-pr-quality-gate`
 
 ## 命令模板
 

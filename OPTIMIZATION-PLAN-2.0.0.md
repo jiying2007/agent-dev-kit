@@ -64,7 +64,7 @@
 
 | 借口 | 现实 | 正确做法 |
 |------|------|---------|
-| "这个太简单，不需要测试" | 简单代码也会有边界条件 | 按 verification-before-completion 执行 |
+| "这个太简单，不需要测试" | 简单代码也会有边界条件 | 按 gdk-verification-before-completion 执行 |
 | "我已经验证过了" | 口头验证不是证据 | 写入 Evidence Index |
 ```
 
@@ -86,12 +86,12 @@
 routing:
   - intent: "需求不明确/需要澄清"
     intent_zh: "需求不清楚"
-    primary_skill: requirements-triage
+    primary_skill: gdk-requirements-triage
     supporting_skills: []
   - intent: "准备提交代码"
     intent_zh: "要提交了"
-    primary_skill: commit-pr-quality-gate
-    supporting_skills: [verification-before-completion]
+    primary_skill: gdk-commit-pr-quality-gate
+    supporting_skills: [gdk-verification-before-completion]
 ```
 
 **验证**: `bash scripts/devkit.sh validate --strict` 通过
@@ -207,7 +207,7 @@ blocked.md 模板:
 
 目录结构:
 ```
-skills/systematic-debugging/
+skills/gdk-systematic-debugging/
 ├── SKILL.md              # 精简入口（触发条件+核心流程）
 └── references/
     ├── patterns.md       # 调试模式库
@@ -245,17 +245,17 @@ profiles:
 
 ### 3.1 新增工程方法论 Skill（从 agent-skills 吸收）
 
-**参考来源**: agent-skills（grill-with-docs, diagnose, code-simplification）
+**参考来源**: agent-skills（gdk-grill-with-docs, diagnose, gdk-code-simplification）
 **新增 Skill**:
 
 | Skill | 来源 | 用途 | 质量层 |
 |-------|------|------|--------|
-| grill-with-docs | mattpocock-skills | 烤问式需求对齐 | p0 |
-| diagnose-loop | agent-skills | 纪律化调试循环 | p0 |
-| code-simplification | agent-skills | 代码简化（Chesterton's Fence） | p1 |
-| context-engineering | agent-skills | 上下文工程优化 | p1 |
+| gdk-grill-with-docs | mattpocock-skills | 烤问式需求对齐 | p0 |
+| gdk-diagnose-loop | agent-skills | 纪律化调试循环 | p0 |
+| gdk-code-simplification | agent-skills | 代码简化（Chesterton's Fence） | p1 |
+| gdk-context-engineering | agent-skills | 上下文工程优化 | p1 |
 
-**验证**: `ls skills/{grill-with-docs,diagnose-loop,code-simplification,context-engineering}/SKILL.md`
+**验证**: `ls skills/{gdk-grill-with-docs,gdk-diagnose-loop,gdk-code-simplification,gdk-context-engineering}/SKILL.md`
 
 ---
 
@@ -266,8 +266,8 @@ profiles:
 
 | Skill | 来源 | 用途 | 质量层 |
 |-------|------|------|--------|
-| chinese-commit-conventions | superpowers-zh | 中文 Git 提交规范 | p1 |
-| chinese-code-review | superpowers-zh | 中文代码审查规范 | p1 |
+| gdk-chinese-commit-conventions | superpowers-zh | 中文 Git 提交规范 | p1 |
+| gdk-chinese-code-review | superpowers-zh | 中文代码审查规范 | p1 |
 
 **验证**: `ls skills/chinese-*/SKILL.md`
 
@@ -280,12 +280,12 @@ profiles:
 
 | Skill | 来源 | 用途 | 质量层 |
 |-------|------|------|--------|
-| fetch-url-content | skills | URL 正文提取 | p2 |
-| email-imap-fetch | skills | IMAP 邮件获取 | p2 |
+| gdk-fetch-url-content | skills | URL 正文提取 | p2 |
+| gdk-email-imap-fetch | skills | IMAP 邮件获取 | p2 |
 
-**新增 Optional Skill 目录**: `optional-skills/data-fetch/`
+**新增 Optional Skill 目录**: `optional-skills/gdk-data-fetch/`
 
-**验证**: `ls optional-skills/data-fetch/`
+**验证**: `ls optional-skills/gdk-data-fetch/`
 
 ---
 
@@ -335,12 +335,12 @@ profiles:
 示例:
 ```yaml
 skills:
-  - name: commit-pr-quality-gate
-    depends_on: [verification-before-completion]
+  - name: gdk-commit-pr-quality-gate
+    depends_on: [gdk-verification-before-completion]
     enables: []
-  - name: verification-before-completion
+  - name: gdk-verification-before-completion
     depends_on: []
-    enables: [commit-pr-quality-gate]
+    enables: [gdk-commit-pr-quality-gate]
 ```
 
 **验证**: `bash scripts/devkit.sh validate --strict` 检查依赖完整性
@@ -456,9 +456,9 @@ skills:
 - [ ] `bash scripts/check_profile_coherence.sh` 支持冲突检测
 
 ### 阶段三验收
-- [ ] `ls skills/grill-with-docs/SKILL.md` 存在
-- [ ] `ls skills/diagnose-loop/SKILL.md` 存在
-- [ ] `ls skills/chinese-commit-conventions/SKILL.md` 存在
+- [ ] `ls skills/gdk-grill-with-docs/SKILL.md` 存在
+- [ ] `ls skills/gdk-diagnose-loop/SKILL.md` 存在
+- [ ] `ls skills/gdk-chinese-commit-conventions/SKILL.md` 存在
 - [ ] `grep -c 'intent_zh' manifest.yaml` > 20
 - [ ] `test -f templates/agent-handoff.md` 通过
 - [ ] `test -f docs/skill-dependency-graph.md` 通过

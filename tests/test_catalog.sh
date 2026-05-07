@@ -24,13 +24,13 @@ grep -q '`requirements-analyst`' "$CATALOG_OUT" || {
   exit 1
 }
 
-grep -q '`incident-rca-report`' "$CATALOG_OUT" || {
+grep -q '`gdk-incident-rca-report`' "$CATALOG_OUT" || {
   echo "[FAIL] catalog missing optional skill" >&2
   exit 1
 }
 
 FIND_OUTPUT="$("$ROOT_DIR/scripts/catalog_assets.sh" find --type skill --keyword bring-up)"
-echo "$FIND_OUTPUT" | grep -q 'driver-bringup-checklist' || {
+echo "$FIND_OUTPUT" | grep -q 'gdk-driver-bringup-checklist' || {
   echo "[FAIL] find command missing expected skill" >&2
   exit 1
 }

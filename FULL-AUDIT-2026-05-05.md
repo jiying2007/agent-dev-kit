@@ -74,7 +74,7 @@
     74|    74|    74|    74|    74|| personal-core | core | - | - | 3条 OK |
     75|    75|    75|    75|    75|| embedded-fullstack | core | - | - | 3条 OK |
     76|    76|    76|    76|    76|| release-hardening | - | yes | incident-response | 3条 OK |
-    77|    77|    77|    77|    77|| artifact-gated-lite | core | yes | - | 无 缺失 |
+    77|    77|    77|    77|    77|| gdk-artifact-gated-lite | core | yes | - | 无 缺失 |
     78|    78|    78|    78|    78|| team-core | core | yes | - | 3条 OK |
     79|    79|    79|    79|    79|| openspec-driven | core | yes | - | 3条 OK |
     80|    80|    80|    80|    80|| large-refactor | core | yes | release-hardening | 3条 OK |
@@ -82,13 +82,13 @@
     82|    82|    82|    82|    82|| research-intake | - | yes | - | 3条 OK |
     83|    83|    83|    83|    83|
     84|    84|    84|    84|    84|发现:
-    85|    85|    85|    85|    85|- artifact-gated-lite 缺少 trigger_examples
+    85|    85|    85|    85|    85|- gdk-artifact-gated-lite 缺少 trigger_examples
     86|    86|    86|    86|    86|- 冲突不对称: large-refactor 声明 conflicts_with release-hardening，但 release-hardening 未声明 conflicts_with large-refactor
     87|    87|    87|    87|    87|
     88|    88|    88|    88|    88|### 3.5 Routing 表
     89|    89|    89|    89|    89|
     90|    90|    90|    90|    90|- 21 条路由条目，覆盖全部 28 个 core skills 中的 21 个
-    91|    91|    91|    91|    91|- 7 个 skill 未被 routing 覆盖: adr-writer, bsp-porting-playbook, rtos-task-design, interrupt-dma-patterns, protocol-stack-integration, component-api-stability, cmake-cross-build
+    91|    91|    91|    91|    91|- 7 个 skill 未被 routing 覆盖: gdk-adr-writer, gdk-bsp-porting-playbook, gdk-rtos-task-design, gdk-interrupt-dma-patterns, gdk-protocol-stack-integration, gdk-component-api-stability, gdk-cmake-cross-build
     92|    92|    92|    92|    92|- routing 表未被 skill_match.sh 消费（详见 Scripts 层审计）
     93|    93|    93|    93|    93|
     94|    94|    94|    94|---
@@ -159,13 +159,13 @@
    159|   159|   159|   159|routing 表（21 条 intent_zh）存在但 match 脚本完全不读取。
    160|   160|   160|   160|
    161|   161|   161|   161|测试结果:
-   162|   162|   162|   162|- "需要澄清需求"    -> requirements-triage:    FAIL
-   163|   163|   163|   163|- "拆解这个任务"    -> task-breakdown:         FAIL
-   164|   164|   164|   164|- "写单元测试"      -> unit-test-embedded:     FAIL
-   165|   165|   165|   165|- "调试这个问题"    -> systematic-debugging:   FAIL
-   166|   166|   166|   166|- "准备提交代码"    -> commit-pr-quality-gate:  FAIL
-   167|   167|   167|   167|- "设计寄存器映射"  -> register-map-design:    FAIL
-   168|   168|   168|   168|- "我要写驱动"      -> driver-bringup-checklist: FAIL
+   162|   162|   162|   162|- "需要澄清需求"    -> gdk-requirements-triage:    FAIL
+   163|   163|   163|   163|- "拆解这个任务"    -> gdk-task-breakdown:         FAIL
+   164|   164|   164|   164|- "写单元测试"      -> gdk-unit-test-embedded:     FAIL
+   165|   165|   165|   165|- "调试这个问题"    -> gdk-systematic-debugging:   FAIL
+   166|   166|   166|   166|- "准备提交代码"    -> gdk-commit-pr-quality-gate:  FAIL
+   167|   167|   167|   167|- "设计寄存器映射"  -> gdk-register-map-design:    FAIL
+   168|   168|   168|   168|- "我要写驱动"      -> gdk-driver-bringup-checklist: FAIL
    169|   169|   169|   169|
    170|   170|   170|   170|### 4.4 高优问题
    171|   171|   171|   171|
@@ -233,29 +233,29 @@
    233|   233|   233|### 5.2 Frontmatter 完整性
    234|   234|   234|
    235|   235|   235|缺失 version + last_updated 的 10 个 skill:
-   236|   236|   236|- grill-with-docs, diagnose-loop, code-simplification, context-engineering
-   237|   237|   237|- chinese-commit-conventions, chinese-code-review
-   238|   238|   238|- fetch-url-content, email-imap-fetch
+   236|   236|   236|- gdk-grill-with-docs, gdk-diagnose-loop, gdk-code-simplification, gdk-context-engineering
+   237|   237|   237|- gdk-chinese-commit-conventions, gdk-chinese-code-review
+   238|   238|   238|- gdk-fetch-url-content, gdk-email-imap-fetch
    239|   239|   239|
    240|   240|   240|其余 27 个均具备 name/description/version/last_updated/triggers/non_triggers/inputs/outputs/constraints 共 9 个字段。
    241|   241|   241|
    242|   242|   242|### 5.3 Trigger 质量分类
    243|   243|   243|
    244|   244|   244|可匹配（关键词式，8 个）:
-   245|   245|   245|- grill-with-docs: "需求不清楚"
-   246|   246|   246|- diagnose-loop: "诊断循环"
-   247|   247|   247|- code-simplification: "代码简化"
-   248|   248|   248|- context-engineering: "上下文工程"
-   249|   249|   249|- chinese-commit-conventions: "中文提交"
-   250|   250|   250|- chinese-code-review: "中文评审"
-   251|   251|   251|- fetch-url-content: "抓取网页"
-   252|   252|   252|- email-imap-fetch: "获取邮件"
+   245|   245|   245|- gdk-grill-with-docs: "需求不清楚"
+   246|   246|   246|- gdk-diagnose-loop: "诊断循环"
+   247|   247|   247|- gdk-code-simplification: "代码简化"
+   248|   248|   248|- gdk-context-engineering: "上下文工程"
+   249|   249|   249|- gdk-chinese-commit-conventions: "中文提交"
+   250|   250|   250|- gdk-chinese-code-review: "中文评审"
+   251|   251|   251|- gdk-fetch-url-content: "抓取网页"
+   252|   252|   252|- gdk-email-imap-fetch: "获取邮件"
    253|   253|   253|
    254|   254|   254|不可匹配（描述性句子，29 个）:
-   255|   255|   255|- "收到模糊需求或跨团队需求时"（requirements-triage）
-   256|   256|   256|- "任务过大或多人协作时"（task-breakdown）
-   257|   257|   257|- "准备声明完成并发起PR前"（verification-before-completion）
-   258|   258|   258|- "准备 commit/PR 或代码评审前"（commit-pr-quality-gate）
+   255|   255|   255|- "收到模糊需求或跨团队需求时"（gdk-requirements-triage）
+   256|   256|   256|- "任务过大或多人协作时"（gdk-task-breakdown）
+   257|   257|   257|- "准备声明完成并发起PR前"（gdk-verification-before-completion）
+   258|   258|   258|- "准备 commit/PR 或代码评审前"（gdk-commit-pr-quality-gate）
    259|   259|   259|- ...其余 25 个类似
    260|   260|   260|
    261|   261|   261|核心矛盾: 两种 trigger 风格并存，匹配引擎只能处理一种。
@@ -264,13 +264,13 @@
    264|   264|   264|
    265|   265|   265|| Skill A | Skill B | 重叠程度 | 说明 |
    266|   266|   266||---------|---------|---------|------|
-   267|   267|   267|| systematic-debugging | diagnose-loop | 高 | 都是调试定位流程 |
-   268|   268|   268|| verification-before-completion | commit-pr-quality-gate | 中 | 都涉及提交前检查 |
-   269|   269|   269|| requirements-triage | grill-with-docs | 中 | 都涉及需求澄清 |
+   267|   267|   267|| gdk-systematic-debugging | gdk-diagnose-loop | 高 | 都是调试定位流程 |
+   268|   268|   268|| gdk-verification-before-completion | gdk-commit-pr-quality-gate | 中 | 都涉及提交前检查 |
+   269|   269|   269|| gdk-requirements-triage | gdk-grill-with-docs | 中 | 都涉及需求澄清 |
    270|   270|   270|
    271|   271|   271|### 5.5 内部重复段落
    272|   272|   272|
-   273|   273|   273|grill-with-docs 和 diagnose-loop 存在内部重复章节（核心流程 = Workflow 重复出现）。
+   273|   273|   273|gdk-grill-with-docs 和 gdk-diagnose-loop 存在内部重复章节（核心流程 = Workflow 重复出现）。
    274|   274|   274|
    275|   275|   275|### 5.6 尾部模板不一致
    276|   276|   276|
@@ -329,7 +329,7 @@
    329|   329||---------|---------|---------|
    330|   330|| personal-core | core | 正确 |
    331|   331|| embedded-fullstack | core | 正确 |
-   332|   332|| artifact-gated-lite | core | 正确 |
+   332|   332|| gdk-artifact-gated-lite | core | 正确 |
    333|   333|| team-core | core | 正确 |
    334|   334|| openspec-driven | core | 正确 |
    335|   335|| large-refactor | core | 正确 |
@@ -362,7 +362,7 @@
    362|   362|| 编号 | 严重度 | 问题 |
    363|   363||------|--------|------|
    364|   364|| P-1 | 高 | 冲突不对称: large-refactor -> release-hardening 存在，但反向缺失 |
-   365|   365|| P-2 | 中 | artifact-gated-lite 缺少 trigger_examples |
+   365|   365|| P-2 | 中 | gdk-artifact-gated-lite 缺少 trigger_examples |
    366|   366|| P-3 | 低 | release-hardening 独立（不 extends core），与其他 optional profile 风格不一致 |
    367|   367|
    368|---
@@ -392,7 +392,7 @@
    392|| review-report-template.md | 17 | 桩 | 仅占位概述 |
    393|| implementation-plan-template.md | 17 | 桩 | 仅占位概述 |
    394|| system-arch-template.md | 17 | 桩 | 仅占位概述 |
-   395|| task-breakdown-template.md | 17 | 桩 | 仅占位概述 |
+   395|| gdk-task-breakdown-template.md | 17 | 桩 | 仅占位概述 |
    396|| approval-template.md | 17 | 桩 | 仅占位概述 |
    397|
    398|**问题: 7/8 个工件模板是桩文件（17 行，仅占位概述），无实际结构。**
@@ -572,7 +572,7 @@ docs/changes/archive/20260505-test-e2e-001/ 是之前审计时的测试产物，
 6. 统一 trigger 风格 — 全部改为可匹配关键词短语
 7. 补齐 10 个 skill 缺失的 version + last_updated
 8. 修复冲突不对称: release-hardening.conflicts_with 加入 large-refactor
-9. 补齐 artifact-gated-lite 的 trigger_examples
+9. 补齐 gdk-artifact-gated-lite 的 trigger_examples
 10. 将重复函数收入 lib_manifest.sh
 11. 添加 rg 依赖检查到 health-check.sh
 12. 消除交互式 read -p（改用 --force 门控）

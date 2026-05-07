@@ -23,7 +23,7 @@ bash scripts/devkit.sh test
 | `personal-core` | 个人 `~/.codex` 生产默认 |
 | `embedded-fullstack` | 嵌入式全栈，gdk 默认 profile |
 | `release-hardening` | 发布前强化 |
-| `artifact-gated-lite` | 高风险变更轻量 artifact 门禁 |
+| `gdk-artifact-gated-lite` | 高风险变更轻量 artifact 门禁 |
 | `team-core` | 团队交付与交接 |
 | `openspec-driven` | Spec 驱动变更 |
 | `large-refactor` | 大型重构 |
@@ -49,7 +49,7 @@ bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --prof
 bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --backup --install-report reports/gdk-install-report.md --lock-version 2.0.0
 
 # 生产推荐：personal-core + release-hardening + 五个生产 optional skills
-bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --with-optional-skill planning-execution-loop --with-optional-skill skill-composition-governance --with-optional-skill security-supply-chain --with-optional-skill cross-team-handoff --with-optional-skill artifact-gated-lite --backup --install-report ../reports/gdk-install-report-$(date +%F).md --lock-version 2.0.0
+bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --with-optional-skill gdk-planning-execution-loop --with-optional-skill gdk-skill-composition-governance --with-optional-skill gdk-security-supply-chain --with-optional-skill gdk-cross-team-handoff --with-optional-skill gdk-artifact-gated-lite --backup --install-report ../reports/gdk-install-report-$(date +%F).md --lock-version 2.0.0
 ```
 
 参数说明：
@@ -81,7 +81,7 @@ bash scripts/devkit.sh convert --target claude-code --profile embedded-fullstack
 bash scripts/devkit.sh convert --target hermes-agent --profile core --extra-profile release-hardening --out dist --clean
 
 # 导出并包含可选技能
-bash scripts/devkit.sh convert --target codex --profile core --with-optional-skill test-flakiness-triage --out dist --clean
+bash scripts/devkit.sh convert --target codex --profile core --with-optional-skill gdk-test-flakiness-triage --out dist --clean
 ```
 
 ## 5) 目录索引与触发匹配
@@ -94,16 +94,16 @@ bash scripts/devkit.sh catalog build
 bash scripts/devkit.sh catalog find --type optional-skill --keyword 事故
 
 # 触发匹配（0 命中，1 未命中）
-bash scripts/devkit.sh match --skill requirements-triage --text "收到模糊需求或跨团队需求时"
-bash scripts/devkit.sh match --skill planning-execution-loop --scope optional-skill --text "复杂任务需要计划审查和执行检查点时"
+bash scripts/devkit.sh match --skill gdk-requirements-triage --text "收到模糊需求或跨团队需求时"
+bash scripts/devkit.sh match --skill gdk-planning-execution-loop --scope optional-skill --text "复杂任务需要计划审查和执行检查点时"
 ```
 
 技能组合规则：
 
 - 一个场景只有一个 primary skill。
 - supporting skills 只补检查项，不抢入口。
-- 多技能冲突时使用 `skill-composition-governance`。
-- 第三方资产进入全局环境前使用 `security-supply-chain`。
+- 多技能冲突时使用 `gdk-skill-composition-governance`。
+- 第三方资产进入全局环境前使用 `gdk-security-supply-chain`。
 
 ## 6) 工作流命令
 

@@ -19,7 +19,7 @@ gdk 不是参考仓集合，也不是直接替换 `~/.codex/AGENTS.md` 的全局
 - Agents：10 个角色 Agent。
 - Core Skills：28 个稳定技能。
 - Optional Skills：10 个可选技能。
-- Profiles：`core`、`personal-core`、`embedded-fullstack`、`release-hardening`、`artifact-gated-lite`、`team-core`、`openspec-driven`、`large-refactor`、`incident-response`、`research-intake`。
+- Profiles：`core`、`personal-core`、`embedded-fullstack`、`release-hardening`、`gdk-artifact-gated-lite`、`team-core`、`openspec-driven`、`large-refactor`、`incident-response`、`research-intake`。
 - Tool Targets：`codex`、`claude-code`、`hermes-agent`、`opencode`。
 
 ## 3. 目录结构
@@ -57,12 +57,12 @@ bash scripts/devkit.sh test
 
 - 主 profile：`personal-core`
 - 叠加 profile：`release-hardening`
-- optional skills：`planning-execution-loop`、`skill-composition-governance`、`security-supply-chain`、`cross-team-handoff`、`artifact-gated-lite`
+- optional skills：`gdk-planning-execution-loop`、`gdk-skill-composition-governance`、`gdk-security-supply-chain`、`gdk-cross-team-handoff`、`gdk-artifact-gated-lite`
 
 命令：
 
 ```bash
-rtk bash -lc "cd global-dev-kit && bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --with-optional-skill planning-execution-loop --with-optional-skill skill-composition-governance --with-optional-skill security-supply-chain --with-optional-skill cross-team-handoff --with-optional-skill artifact-gated-lite --backup --install-report ../reports/gdk-install-report-$(date +%F).md --lock-version 2.0.0"
+rtk bash -lc "cd global-dev-kit && bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --with-optional-skill gdk-planning-execution-loop --with-optional-skill gdk-skill-composition-governance --with-optional-skill gdk-security-supply-chain --with-optional-skill gdk-cross-team-handoff --with-optional-skill gdk-artifact-gated-lite --backup --install-report ../reports/gdk-install-report-$(date +%F).md --lock-version 2.0.0"
 rtk scripts/check-global-codex-health.sh ~/.codex minimal
 rtk scripts/check-gdk-harden-readiness.sh . --require-pilot
 ```
@@ -83,7 +83,7 @@ rtk scripts/check-gdk-harden-readiness.sh . --require-pilot
 | `personal-core` | 个人 `~/.codex` 生产默认 | 在 `core` 基础上增加发布与 ADR 能力 |
 | `embedded-fullstack` | 嵌入式全栈 | 默认 profile，覆盖驱动、组件、BSP、RTOS、构建、性能、发布 |
 | `release-hardening` | 发布前强化 | 安全、可靠性、HIL/SIL、版本发布 |
-| `artifact-gated-lite` | 高风险变更 | 复用 `core`，配合 optional skill 产出轻量 artifact 门禁 |
+| `gdk-artifact-gated-lite` | 高风险变更 | 复用 `core`，配合 optional skill 产出轻量 artifact 门禁 |
 | `team-core` | 团队交付 | 责任矩阵、交接、复验、发布治理 |
 | `openspec-driven` | Spec 驱动 | requirements/design/tasks 与 gdk workflow 对齐 |
 | `large-refactor` | 大型重构 | API 稳定性、边界冻结、回归压实 |
@@ -102,18 +102,18 @@ bash scripts/check_profile_coherence.sh
 
 | Optional Skill | 场景 |
 |---|---|
-| `test-flakiness-triage` | 测试波动定位 |
-| `cross-team-handoff` | 跨团队交接 |
-| `incident-rca-report` | 事故复盘 |
-| `artifact-gated-lite` | 高风险 artifact 门禁 |
-| `planning-execution-loop` | 长任务计划、检查点、恢复和收口 |
-| `skill-composition-governance` | 主技能、辅助技能、fallback、弃用治理 |
-| `security-supply-chain` | 第三方资产、脚本、技能引入前审查 |
+| `gdk-test-flakiness-triage` | 测试波动定位 |
+| `gdk-cross-team-handoff` | 跨团队交接 |
+| `gdk-incident-rca-report` | 事故复盘 |
+| `gdk-artifact-gated-lite` | 高风险 artifact 门禁 |
+| `gdk-planning-execution-loop` | 长任务计划、检查点、恢复和收口 |
+| `gdk-skill-composition-governance` | 主技能、辅助技能、fallback、弃用治理 |
+| `gdk-security-supply-chain` | 第三方资产、脚本、技能引入前审查 |
 
 安装 optional skill 示例：
 
 ```bash
-bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --with-optional-skill planning-execution-loop
+bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --with-optional-skill gdk-planning-execution-loop
 ```
 
 ## 8. 工作流命令

@@ -36,7 +36,7 @@ Examples:
   ./scripts/devkit.sh install --tool auto --profile embedded-fullstack
   ./scripts/devkit.sh convert --target claude-code --profile core
   ./scripts/devkit.sh catalog build
-  ./scripts/devkit.sh match --skill requirements-triage --text "收到模糊需求"
+  ./scripts/devkit.sh match --skill gdk-requirements-triage --text "收到模糊需求"
   ./scripts/devkit.sh evidence append --file docs/changes/my-change/negative-results.md --command "bash tests/run_all.sh" --exit-code 0 --summary "all tests passed" --evidence-path docs/changes/my-change/verify-report.md --layer Workflow --artifact verify-report
   ./scripts/devkit.sh propose --change add-can-fd --title "新增 CAN-FD 接入"
   ./scripts/devkit.sh review --change add-can-fd --result pass --blockers 0 --majors 0 --minors 1

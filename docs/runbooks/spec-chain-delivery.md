@@ -11,10 +11,10 @@
 
 ## 推荐 Skill 组合
 
-- `requirements-triage`
-- `adr-writer`
-- `task-breakdown`
-- `verification-before-completion`
+- `gdk-requirements-triage`
+- `gdk-adr-writer`
+- `gdk-task-breakdown`
+- `gdk-verification-before-completion`
 
 ## 命令模板
 

@@ -8,14 +8,14 @@ echo "=== Anti-Rationalization 测试 ==="
 
 # 所有 p0 skill 必须有"借口拦截"章节
 P0_SKILLS=(
-  requirements-triage
-  task-breakdown
-  interface-contract-design
-  unit-test-embedded
-  static-analysis-c-cpp
-  systematic-debugging
-  verification-before-completion
-  commit-pr-quality-gate
+  gdk-requirements-triage
+  gdk-task-breakdown
+  gdk-interface-contract-design
+  gdk-unit-test-embedded
+  gdk-static-analysis-c-cpp
+  gdk-systematic-debugging
+  gdk-verification-before-completion
+  gdk-commit-pr-quality-gate
 )
 
 pass=0

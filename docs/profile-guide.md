@@ -13,7 +13,7 @@
 | 团队协作 | team-core | 交接/验证/评审 |
 | Spec 驱动 | openspec-driven | 需求/设计/任务链路 |
 | 吸收参考仓 | research-intake | 候选筛选与审查 |
-| 高风险变更 | artifact-gated-lite + core | 产物门禁 |
+| 高风险变更 | gdk-artifact-gated-lite + core | 产物门禁 |
 
 ## 叠加规则
 - 可叠加: 任意 optional profile 可叠加 core 或 embedded-fullstack

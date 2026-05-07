@@ -7,15 +7,15 @@
 
 ## 2. 推荐能力组合
 
-- Profile：`core + artifact-gated-lite`
-- Optional Skill：`artifact-gated-lite`
-- 必备技能：`verification-before-completion`、`commit-pr-quality-gate`
+- Profile：`core + gdk-artifact-gated-lite`
+- Optional Skill：`gdk-artifact-gated-lite`
+- 必备技能：`gdk-verification-before-completion`、`gdk-commit-pr-quality-gate`
 
 ## 3. 执行步骤
 
 1. 安装能力组合：
    ```bash
-   bash scripts/devkit.sh install --tool codex --profile core --extra-profile artifact-gated-lite --with-optional-skill artifact-gated-lite
+   bash scripts/devkit.sh install --tool codex --profile core --extra-profile gdk-artifact-gated-lite --with-optional-skill gdk-artifact-gated-lite
    ```
 2. 创建变更工件并进入 `propose -> apply`。
 3. 在变更工件中补齐三类标签：

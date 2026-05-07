@@ -22,7 +22,7 @@ Examples:
   ./scripts/skill_match.sh --text "我要写驱动"
 
   # 指定 skill 匹配（向后兼容）
-  ./scripts/skill_match.sh --skill requirements-triage --text "收到模糊需求"
+  ./scripts/skill_match.sh --skill gdk-requirements-triage --text "收到模糊需求"
 USAGE
 }
 

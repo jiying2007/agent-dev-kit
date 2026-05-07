@@ -26,7 +26,7 @@
 ## 3. 推荐安装组合
 
 ```bash
-rtk bash -lc "cd global-dev-kit && bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --with-optional-skill planning-execution-loop --with-optional-skill skill-composition-governance --with-optional-skill security-supply-chain --with-optional-skill cross-team-handoff --with-optional-skill artifact-gated-lite --backup --install-report ../reports/gdk-install-report-$(date +%F).md --lock-version 0.3.0"
+rtk bash -lc "cd global-dev-kit && bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --with-optional-skill gdk-planning-execution-loop --with-optional-skill gdk-skill-composition-governance --with-optional-skill gdk-security-supply-chain --with-optional-skill gdk-cross-team-handoff --with-optional-skill gdk-artifact-gated-lite --backup --install-report ../reports/gdk-install-report-$(date +%F).md --lock-version 0.3.0"
 rtk ../scripts/check-global-codex-health.sh ~/.codex minimal
 ```
 
@@ -34,11 +34,11 @@ rtk ../scripts/check-global-codex-health.sh ~/.codex minimal
 
 - `personal-core`：个人生产默认研发能力。
 - `release-hardening`：发布、可靠性、安全强化。
-- `planning-execution-loop`：长任务计划与恢复。
-- `skill-composition-governance`：多技能组合治理。
-- `security-supply-chain`：第三方资产引入审查。
-- `cross-team-handoff`：团队交接。
-- `artifact-gated-lite`：高风险变更轻量证据门禁。
+- `gdk-planning-execution-loop`：长任务计划与恢复。
+- `gdk-skill-composition-governance`：多技能组合治理。
+- `gdk-security-supply-chain`：第三方资产引入审查。
+- `gdk-cross-team-handoff`：团队交接。
+- `gdk-artifact-gated-lite`：高风险变更轻量证据门禁。
 
 ## 4. `~/.codex/AGENTS.md` 建议追加小节
 
@@ -56,12 +56,12 @@ rtk ../scripts/check-global-codex-health.sh ~/.codex minimal
 
 ### gdk Skill 路由
 
-- 长任务、跨会话恢复、复杂计划执行：优先 `planning-execution-loop`。
-- 多技能触发冲突、profile 组合、fallback 判定：优先 `skill-composition-governance`。
-- 第三方 skill、agent、脚本、参考资产引入前：必须使用 `security-supply-chain`。
-- 跨团队交接、Owner 变更、签收复验：使用 `cross-team-handoff`。
-- 高风险变更、共享契约、发布链路：叠加 `artifact-gated-lite`。
-- 完成、提交、发布、可用性声明前：必须使用 `verification-before-completion`。
+- 长任务、跨会话恢复、复杂计划执行：优先 `gdk-planning-execution-loop`。
+- 多技能触发冲突、profile 组合、fallback 判定：优先 `gdk-skill-composition-governance`。
+- 第三方 skill、agent、脚本、参考资产引入前：必须使用 `gdk-security-supply-chain`。
+- 跨团队交接、Owner 变更、签收复验：使用 `gdk-cross-team-handoff`。
+- 高风险变更、共享契约、发布链路：叠加 `gdk-artifact-gated-lite`。
+- 完成、提交、发布、可用性声明前：必须使用 `gdk-verification-before-completion`。
 ```
 
 ## 5. 不建议写入 `~/.codex/AGENTS.md` 的内容
@@ -86,7 +86,7 @@ rtk bash -lc "cd global-dev-kit && bash scripts/devkit.sh test"
 ### 6.2 重新安装到 `~/.codex`
 
 ```bash
-rtk bash -lc "cd global-dev-kit && bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --with-optional-skill planning-execution-loop --with-optional-skill skill-composition-governance --with-optional-skill security-supply-chain --with-optional-skill cross-team-handoff --with-optional-skill artifact-gated-lite --backup --install-report ../reports/gdk-install-report-$(date +%F).md --lock-version 0.3.0"
+rtk bash -lc "cd global-dev-kit && bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --with-optional-skill gdk-planning-execution-loop --with-optional-skill gdk-skill-composition-governance --with-optional-skill gdk-security-supply-chain --with-optional-skill gdk-cross-team-handoff --with-optional-skill gdk-artifact-gated-lite --backup --install-report ../reports/gdk-install-report-$(date +%F).md --lock-version 0.3.0"
 rtk ../scripts/check-global-codex-health.sh ~/.codex minimal
 ```
 
@@ -109,9 +109,9 @@ rtk ../scripts/check-gdk-harden-readiness.sh . --require-pilot
 | 冲突 | 处理方式 |
 |---|---|
 | `~/.codex/AGENTS.md` 规则与 gdk skill 触发冲突 | 以 `~/.codex/AGENTS.md` 为运行时优先级，并回灌 gdk routing 文档 |
-| 多个 skill 同时像主技能 | 使用 `skill-composition-governance` 判定 primary/supporting/fallback |
+| 多个 skill 同时像主技能 | 使用 `gdk-skill-composition-governance` 判定 primary/supporting/fallback |
 | optional skill 越来越多导致触发噪音 | 调整 profile 或减少默认安装 optional skill |
-| 参考仓资产想直接进入生产 | 先走 `security-supply-chain` + adoption matrix + gdk 门禁 |
+| 参考仓资产想直接进入生产 | 先走 `gdk-security-supply-chain` + adoption matrix + gdk 门禁 |
 | 安装后行为异常 | 使用 install report 中的 backup 回滚，并记录报告 |
 
 ## 8. 验收标准

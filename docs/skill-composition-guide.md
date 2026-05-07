@@ -13,29 +13,29 @@
 ## 常见技能组合
 
 ### 1. 驱动开发组合
-- requirements-triage
-- register-map-design
-- interface-contract-design
-- driver-bringup-checklist
-- static-analysis-c-cpp
-- unit-test-embedded
-- integration-hil-sil
-- verification-before-completion
+- gdk-requirements-triage
+- gdk-register-map-design
+- gdk-interface-contract-design
+- gdk-driver-bringup-checklist
+- gdk-static-analysis-c-cpp
+- gdk-unit-test-embedded
+- gdk-integration-hil-sil
+- gdk-verification-before-completion
 
 ### 2. BSP移植组合
-- requirements-triage
-- bsp-porting-playbook
-- cmake-cross-build
-- static-analysis-c-cpp
-- unit-test-embedded
-- integration-hil-sil
-- verification-before-completion
+- gdk-requirements-triage
+- gdk-bsp-porting-playbook
+- gdk-cmake-cross-build
+- gdk-static-analysis-c-cpp
+- gdk-unit-test-embedded
+- gdk-integration-hil-sil
+- gdk-verification-before-completion
 
 ### 3. 协议栈集成组合
-- requirements-triage
-- protocol-stack-integration
-- interface-contract-design
-- static-analysis-c-cpp
-- unit-test-embedded
-- integration-hil-sil
-- verification-before-completion
+- gdk-requirements-triage
+- gdk-protocol-stack-integration
+- gdk-interface-contract-design
+- gdk-static-analysis-c-cpp
+- gdk-unit-test-embedded
+- gdk-integration-hil-sil
+- gdk-verification-before-completion

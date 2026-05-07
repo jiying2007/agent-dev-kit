@@ -8,7 +8,7 @@
 
 ```bash
 bash scripts/devkit.sh install --tool auto --mode symlink --profile embedded-fullstack
-bash scripts/devkit.sh install --tool codex --profile core --with-optional-skill incident-rca-report
+bash scripts/devkit.sh install --tool codex --profile core --with-optional-skill gdk-incident-rca-report
 bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --backup --install-report reports/gdk-install-report.md
 ```
 
@@ -27,7 +27,7 @@ bash scripts/devkit.sh validate --quick
 
 ```bash
 bash scripts/devkit.sh convert --target claude-code --profile core --out dist --clean
-bash scripts/devkit.sh convert --target codex --profile core --with-optional-skill test-flakiness-triage
+bash scripts/devkit.sh convert --target codex --profile core --with-optional-skill gdk-test-flakiness-triage
 ```
 
 ## catalog
@@ -44,8 +44,8 @@ bash scripts/devkit.sh catalog find --type skill --keyword bring-up
 根据输入文本判断是否命中 skill 触发条件（优先过滤 `non_triggers`）。
 
 ```bash
-bash scripts/devkit.sh match --skill requirements-triage --text "收到模糊需求或跨团队需求时"
-bash scripts/devkit.sh match --skill incident-rca-report --scope optional-skill --text "出现线上故障且需要复盘闭环"
+bash scripts/devkit.sh match --skill gdk-requirements-triage --text "收到模糊需求或跨团队需求时"
+bash scripts/devkit.sh match --skill gdk-incident-rca-report --scope optional-skill --text "出现线上故障且需要复盘闭环"
 ```
 
 ## bridge
@@ -219,7 +219,7 @@ bash scripts/devkit.sh version diff --from 1.0.0 --to 2.0.0
 生产安装到 `~/.codex` 时，推荐使用 `personal-core + release-hardening`，并叠加长任务、组合治理、供应链、交接与 artifact 门禁五类 optional skills。
 
 ```bash
-bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --with-optional-skill planning-execution-loop --with-optional-skill skill-composition-governance --with-optional-skill security-supply-chain --with-optional-skill cross-team-handoff --with-optional-skill artifact-gated-lite --backup --install-report ../reports/gdk-install-report-$(date +%F).md --lock-version 2.0.0
+bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --with-optional-skill gdk-planning-execution-loop --with-optional-skill gdk-skill-composition-governance --with-optional-skill gdk-security-supply-chain --with-optional-skill gdk-cross-team-handoff --with-optional-skill gdk-artifact-gated-lite --backup --install-report ../reports/gdk-install-report-$(date +%F).md --lock-version 2.0.0
 ```
 
 安装后在 `llm_agent` 根目录运行：

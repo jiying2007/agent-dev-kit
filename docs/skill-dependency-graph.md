@@ -5,33 +5,33 @@
 ## 依赖关系
 
 ```
-requirements-triage
-├── task-breakdown
-├── interface-contract-design
-│   ├── register-map-design
-│   │   └── driver-bringup-checklist
-│   │       └── bsp-porting-playbook
-│   ├── protocol-stack-integration
-│   └── component-api-stability
+gdk-requirements-triage
+├── gdk-task-breakdown
+├── gdk-interface-contract-design
+│   ├── gdk-register-map-design
+│   │   └── gdk-driver-bringup-checklist
+│   │       └── gdk-bsp-porting-playbook
+│   ├── gdk-protocol-stack-integration
+│   └── gdk-component-api-stability
 
-unit-test-embedded
-└── integration-hil-sil
-    └── fault-injection-recovery
+gdk-unit-test-embedded
+└── gdk-integration-hil-sil
+    └── gdk-fault-injection-recovery
 
-systematic-debugging
-├── toolchain-debug-openocd-gdb
-└── performance-profiling-embedded
+gdk-systematic-debugging
+├── gdk-toolchain-debug-openocd-gdb
+└── gdk-performance-profiling-embedded
 
-verification-before-completion
-└── commit-pr-quality-gate
-    └── release-versioning
+gdk-verification-before-completion
+└── gdk-commit-pr-quality-gate
+    └── gdk-release-versioning
 
 独立 skills (无依赖):
-- adr-writer
-- static-analysis-c-cpp
-- rtos-task-design
-- interrupt-dma-patterns
-- cmake-cross-build
+- gdk-adr-writer
+- gdk-static-analysis-c-cpp
+- gdk-rtos-task-design
+- gdk-interrupt-dma-patterns
+- gdk-cmake-cross-build
 ```
 
 ## 说明

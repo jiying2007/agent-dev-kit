@@ -2,7 +2,7 @@
 
 > **使用说明**: 将 Epic/Feature 拆解为可执行任务时使用此模板。填写用户故事、任务清单、依赖关系和验收标准，用于迭代规划和进度跟踪。
 
-[artifact:task-breakdown]
+[artifact:gdk-task-breakdown]
 status: DRAFT
 owner: [填写负责人]
 scope:

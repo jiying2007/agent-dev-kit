@@ -11,16 +11,16 @@
 
 ## 推荐 Skill 组合
 
-- `requirements-triage`
-- `task-breakdown`
-- `commit-pr-quality-gate`
-- `verification-before-completion`
+- `gdk-requirements-triage`
+- `gdk-task-breakdown`
+- `gdk-commit-pr-quality-gate`
+- `gdk-verification-before-completion`
 
 ## 命令模板
 
 ```bash
 bash scripts/devkit.sh catalog build
-bash scripts/devkit.sh match --skill requirements-triage --text "<候选技能描述>"
+bash scripts/devkit.sh match --skill gdk-requirements-triage --text "<候选技能描述>"
 bash scripts/devkit.sh validate --strict
 bash scripts/devkit.sh review --change <change-id> --result pass --blockers 0 --majors 0 --minors 0
 ```

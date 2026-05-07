@@ -31,13 +31,13 @@
 
 **测试结果:**
 ```
-"需要澄清需求"    → requirements-triage:    ❌
-"拆解这个任务"    → task-breakdown:         ❌
-"写单元测试"      → unit-test-embedded:     ❌
-"调试这个问题"    → systematic-debugging:   ❌
-"准备提交代码"    → commit-pr-quality-gate:  ❌
-"设计寄存器映射"  → register-map-design:    ❌
-"我要写驱动"      → driver-bringup-checklist: ❌
+"需要澄清需求"    → gdk-requirements-triage:    ❌
+"拆解这个任务"    → gdk-task-breakdown:         ❌
+"写单元测试"      → gdk-unit-test-embedded:     ❌
+"调试这个问题"    → gdk-systematic-debugging:   ❌
+"准备提交代码"    → gdk-commit-pr-quality-gate:  ❌
+"设计寄存器映射"  → gdk-register-map-design:    ❌
+"我要写驱动"      → gdk-driver-bringup-checklist: ❌
 命中率: 0/7
 ```
 
@@ -92,8 +92,8 @@ skills/release-readiness-gate/SKILL.md     → ❌ MISSING
 
 **孤立资产:**
 ```
-optional-skills/data-fetch/fetch-url-content/SKILL.md   → 无 profile 引用
-optional-skills/data-fetch/email-imap-fetch/SKILL.md    → 无 profile 引用
+optional-skills/gdk-data-fetch/gdk-fetch-url-content/SKILL.md   → 无 profile 引用
+optional-skills/gdk-data-fetch/gdk-email-imap-fetch/SKILL.md    → 无 profile 引用
 ```
 
 **影响:** 即使使用 `embedded-fullstack` profile 安装，也不会包含这两个 skill。
@@ -120,9 +120,9 @@ tests/test_agents_profiles.sh   → No such file or directory
 ```yaml
 routing:
   - intent_zh: "需求不清楚怎么办"
-    primary_skill: grill-with-docs
+    primary_skill: gdk-grill-with-docs
   - intent_zh: "任务太大怎么拆"
-    primary_skill: task-breakdown
+    primary_skill: gdk-task-breakdown
   ...
 ```
 
@@ -171,7 +171,7 @@ routing:
 
 ### 阶段 B: 修复高优问题（P1）
 
-5. **将 optional skills 关联到 profile** — 至少一个 profile 应包含 fetch-url-content
+5. **将 optional skills 关联到 profile** — 至少一个 profile 应包含 gdk-fetch-url-content
 6. **修复测试脚本** — 创建缺失的 test_manifest.sh 和 test_agents_profiles.sh
 7. **triggers 重写** — 将描述性句子改为可匹配的关键词短语
 

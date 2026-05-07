@@ -26,9 +26,9 @@
 - **可选技能**：特定场景能力，按需安装
 
 **示例**：
-- `requirements-triage`：需求分类与优先级排序
-- `systematic-debugging`：系统化调试方法
-- `verification-before-completion`：完成前验证检查
+- `gdk-requirements-triage`：需求分类与优先级排序
+- `gdk-systematic-debugging`：系统化调试方法
+- `gdk-verification-before-completion`：完成前验证检查
 
 ### 3. Profile（配置）
 **定义**：针对特定开发场景的技能和Agent组合配置。
@@ -137,7 +137,7 @@ propose -> apply -> verify -> review -> archive
 
 ### 1. Agent 使用示例
 ```
-需求分析师（requirements-analyst）使用需求分类技能（requirements-triage）
+需求分析师（requirements-analyst）使用需求分类技能（gdk-requirements-triage）
 对用户需求进行分类和优先级排序，产出需求文档（PRD）。
 ```
 

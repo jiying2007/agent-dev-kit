@@ -11,12 +11,12 @@
 
 ## 推荐 Skill 组合
 
-- `requirements-triage`
-- `task-breakdown`
-- `component-api-stability`
-- `unit-test-embedded`
-- `verification-before-completion`
-- `commit-pr-quality-gate`
+- `gdk-requirements-triage`
+- `gdk-task-breakdown`
+- `gdk-component-api-stability`
+- `gdk-unit-test-embedded`
+- `gdk-verification-before-completion`
+- `gdk-commit-pr-quality-gate`
 
 ## 命令模板
 

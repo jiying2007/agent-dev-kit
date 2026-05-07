@@ -11,10 +11,10 @@
 
 ## 推荐 Skill 组合
 
-- `systematic-debugging`
-- `task-breakdown`
-- `verification-before-completion`
-- `commit-pr-quality-gate`
+- `gdk-systematic-debugging`
+- `gdk-task-breakdown`
+- `gdk-verification-before-completion`
+- `gdk-commit-pr-quality-gate`
 
 ## 命令模板
 

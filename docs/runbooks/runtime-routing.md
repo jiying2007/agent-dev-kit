@@ -8,9 +8,9 @@
 
 - 只读分析：不创建 change，输出结论与证据路径。
 - 行为变更：进入 `propose -> apply -> verify -> review`。
-- 高风险变更：叠加 `artifact-gated-lite`。
-- 长任务：叠加 `planning-execution-loop`。
-- 团队交接：叠加 `cross-team-handoff`。
+- 高风险变更：叠加 `gdk-artifact-gated-lite`。
+- 长任务：叠加 `gdk-planning-execution-loop`。
+- 团队交接：叠加 `gdk-cross-team-handoff`。
 - 上游吸收：使用 `research-intake` profile。
 
 ## Agent 链
@@ -29,7 +29,7 @@
 
 ```bash
 bash scripts/devkit.sh catalog build
-bash scripts/devkit.sh match --skill requirements-triage --text "<task>"
+bash scripts/devkit.sh match --skill gdk-requirements-triage --text "<task>"
 bash scripts/check_profile_coherence.sh
 bash ../scripts/check-runtime-routing.sh ..
 ```

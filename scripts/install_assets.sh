@@ -31,7 +31,7 @@ Options:
 Examples:
   ./scripts/install_assets.sh --tool auto --mode symlink --profile embedded-fullstack
   ./scripts/install_assets.sh --tool codex --target ~/.codex --profile core --extra-profile release-hardening
-  ./scripts/install_assets.sh --tool codex --profile core --with-optional-skill test-flakiness-triage
+  ./scripts/install_assets.sh --tool codex --profile core --with-optional-skill gdk-test-flakiness-triage
 USAGE
 }
 

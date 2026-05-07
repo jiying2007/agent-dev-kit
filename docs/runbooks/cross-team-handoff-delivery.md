@@ -11,9 +11,9 @@
 
 ## 推荐 Skill 组合
 
-- `task-breakdown`
-- `cross-team-handoff`（optional）
-- `verification-before-completion`
+- `gdk-task-breakdown`
+- `gdk-cross-team-handoff`（optional）
+- `gdk-verification-before-completion`
 
 ## 命令模板
 

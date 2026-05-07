@@ -28,7 +28,7 @@
 - `bash scripts/devkit.sh install --tool codex --profile core`: install assets.
 - `bash scripts/devkit.sh convert --target claude-code --profile core --out dist --clean`: export assets.
 - `bash scripts/devkit.sh catalog build`: regenerate catalog docs.
-- `bash scripts/devkit.sh match --skill requirements-triage --text "..."`: trigger matching.
+- `bash scripts/devkit.sh match --skill gdk-requirements-triage --text "..."`: trigger matching.
 - `bash tests/run_all.sh`: complete regression (required before merge).
 
 ## Coding Style & Naming Conventions
