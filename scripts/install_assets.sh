@@ -31,7 +31,7 @@ Options:
 Examples:
   ./scripts/install_assets.sh --tool auto --mode symlink --profile embedded-fullstack
   ./scripts/install_assets.sh --tool codex --target ~/.codex --profile core --extra-profile release-hardening
-  ./scripts/install_assets.sh --tool codex --profile core --with-optional-skill gdk-test-flakiness-triage
+  ./scripts/install_assets.sh --tool codex --profile core --with-optional-skill adk-test-flakiness-triage
 USAGE
 }
 
@@ -317,7 +317,7 @@ if [[ -n "$BACKUP_PATH" ]]; then
 fi
 if [[ -n "$INSTALL_REPORT" ]]; then
   write_file "$INSTALL_REPORT" \
-    "# global-dev-kit install report" \
+    "# agent-dev-kit install report" \
     "" \
     "- manifest_version: $MANIFEST_VERSION" \
     "- tool: $TOOL" \

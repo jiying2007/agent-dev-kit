@@ -1,7 +1,7 @@
 <!-- repo-intro:start -->
 ## 仓库介绍（持续维护）
 
-- 仓库名称：`global-dev-kit`
+- 仓库名称：`agent-dev-kit`
 - 仓库定位：全局 Agent/Skill 资产与工作流门禁工具仓库
 - 维护状态：持续维护（人工 + Agent 协作）
 - 维护目标：在不偏离上游核心定位的前提下，保持中文可读说明、可执行流程与可验证交付。
@@ -28,7 +28,7 @@
 - `bash scripts/devkit.sh install --tool codex --profile core`: install assets.
 - `bash scripts/devkit.sh convert --target claude-code --profile core --out dist --clean`: export assets.
 - `bash scripts/devkit.sh catalog build`: regenerate catalog docs.
-- `bash scripts/devkit.sh match --skill gdk-requirements-triage --text "..."`: trigger matching.
+- `bash scripts/devkit.sh match --skill adk-requirements-triage --text "..."`: trigger matching.
 - `bash tests/run_all.sh`: complete regression (required before merge).
 
 ## Coding Style & Naming Conventions

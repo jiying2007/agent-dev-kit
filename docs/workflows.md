@@ -34,36 +34,36 @@
 ### 场景 A：新功能迭代
 
 - Agent：`requirements-analyst -> architecture-planner -> application-engineer`
-- Skill：`gdk-requirements-triage + gdk-adr-writer + gdk-task-breakdown + gdk-unit-test-embedded + gdk-verification-before-completion`
+- Skill：`adk-requirements-triage + adk-adr-writer + adk-task-breakdown + adk-unit-test-embedded + adk-verification-before-completion`
 - 命令：先 `propose`，开发完成后 `verify -> review -> archive`
 - Runbook：`docs/runbooks/feature-delivery.md`
 
 ### 场景 B：驱动 Bring-up
 
 - Agent：`driver-engineer -> component-engineer -> test-validation-engineer`
-- Skill：`gdk-register-map-design + gdk-driver-bringup-checklist + gdk-interrupt-dma-patterns + gdk-integration-hil-sil + gdk-systematic-debugging`
+- Skill：`adk-register-map-design + adk-driver-bringup-checklist + adk-interrupt-dma-patterns + adk-integration-hil-sil + adk-systematic-debugging`
 - 命令：`propose` 后逐步落地，`verify` 必须含 HIL/SIL 证据，`review` 闭环后归档
 - Runbook：`docs/runbooks/driver-bringup.md`
 
 ### 场景 C：发布前收口
 
 - Agent：`test-validation-engineer -> security-compliance-reviewer -> build-release-engineer`
-- Skill：`gdk-static-analysis-c-cpp + gdk-fault-injection-recovery + gdk-release-versioning + gdk-commit-pr-quality-gate + gdk-verification-before-completion`
+- Skill：`adk-static-analysis-c-cpp + adk-fault-injection-recovery + adk-release-versioning + adk-commit-pr-quality-gate + adk-verification-before-completion`
 - 命令：`verify` + `review --result pass` 后再 `archive`
 - Runbook：`docs/runbooks/release-hardening.md`
 
 ### 场景 D：线上事故复盘（可选技能）
 
 - Agent：`application-engineer -> test-validation-engineer -> code-review-governor`
-- Skill：`gdk-incident-rca-report + gdk-test-flakiness-triage + gdk-systematic-debugging`
-- 命令：先 `install --with-optional-skill gdk-incident-rca-report`，再 `propose -> apply -> verify -> review`
+- Skill：`adk-incident-rca-report + adk-test-flakiness-triage + adk-systematic-debugging`
+- 命令：先 `install --with-optional-skill adk-incident-rca-report`，再 `propose -> apply -> verify -> review`
 
 ### 场景 E：高风险变更的轻量产物门禁（可选配置）
 
 - Agent：`architecture-planner -> application-engineer -> test-validation-engineer -> code-review-governor`
-- Skill：`gdk-artifact-gated-lite + gdk-verification-before-completion + gdk-commit-pr-quality-gate`
+- Skill：`adk-artifact-gated-lite + adk-verification-before-completion + adk-commit-pr-quality-gate`
 - 命令：
-  1. `install --extra-profile gdk-artifact-gated-lite --with-optional-skill gdk-artifact-gated-lite`
+  1. `install --extra-profile adk-artifact-gated-lite --with-optional-skill adk-artifact-gated-lite`
   2. `propose -> apply -> verify -> review`
   3. `review` 结论必须与 `artifact:ReviewReport` / `artifact:TestReport` 一致
 - 适用条件：变更涉及共享契约、发布链路、跨角色交接，且需要可追溯交付证据
@@ -71,7 +71,7 @@
 ### 场景 F：缺陷修复闭环（Bugfix）
 
 - Agent：`application-engineer -> test-validation-engineer -> code-review-governor`
-- Skill：`gdk-systematic-debugging + gdk-task-breakdown + gdk-verification-before-completion`
+- Skill：`adk-systematic-debugging + adk-task-breakdown + adk-verification-before-completion`
 - 命令：`propose -> apply -> verify -> review -> archive`
 - 关键纪律：禁止“顺手重构”无关区域；必须保留负结果证据
 - Runbook：`docs/runbooks/bugfix-delivery.md`
@@ -79,7 +79,7 @@
 ### 场景 G：重构压实（Refactor）
 
 - Agent：`requirements-analyst -> architecture-planner -> application-engineer -> test-validation-engineer -> code-review-governor`
-- Skill：`gdk-requirements-triage + gdk-task-breakdown + gdk-component-api-stability + gdk-unit-test-embedded + gdk-verification-before-completion`
+- Skill：`adk-requirements-triage + adk-task-breakdown + adk-component-api-stability + adk-unit-test-embedded + adk-verification-before-completion`
 - 命令：`propose -> apply -> verify -> review -> archive`
 - 关键纪律：基线验证与重构后回归必须同口径对比
 - Runbook：`docs/runbooks/refactor-hardening.md`
@@ -87,7 +87,7 @@
 ### 场景 H：codex 运行闭环（Runtime Pilot）
 
 - Agent：`application-engineer -> test-validation-engineer -> code-review-governor`
-- Skill：`gdk-verification-before-completion + gdk-commit-pr-quality-gate`
+- Skill：`adk-verification-before-completion + adk-commit-pr-quality-gate`
 - 命令：`health-check(~/.codex) -> check-global-codex-health -> check-gdk-harden-readiness --require-pilot`
 - 关键纪律：未通过 pilot 验证不得给出“可放行/可追踪上游更新”结论
 - Runbook：`docs/runbooks/codex-runtime-pilot.md`
@@ -95,15 +95,15 @@
 ### 场景 I：跨团队交接收口（Handoff Delivery）
 
 - Agent：`requirements-analyst -> application-engineer -> test-validation-engineer -> code-review-governor`
-- Skill：`gdk-task-breakdown + gdk-cross-team-handoff + gdk-verification-before-completion`
+- Skill：`adk-task-breakdown + adk-cross-team-handoff + adk-verification-before-completion`
 - 命令：`propose -> apply -> verify -> review`
 - 关键纪律：Owner Matrix、Section Ownership、Sign-off 三项缺一不可
-- Runbook：`docs/runbooks/gdk-cross-team-handoff-delivery.md`
+- Runbook：`docs/runbooks/adk-cross-team-handoff-delivery.md`
 
 ### 场景 J：大型工程交付收口（Large Platform Delivery）
 
 - Agent：`architecture-planner -> application-engineer -> test-validation-engineer -> code-review-governor`
-- Skill：`gdk-requirements-triage + gdk-task-breakdown + gdk-commit-pr-quality-gate + gdk-verification-before-completion`
+- Skill：`adk-requirements-triage + adk-task-breakdown + adk-commit-pr-quality-gate + adk-verification-before-completion`
 - 命令：`catalog -> propose -> apply -> verify -> review`
 - 关键纪律：先给 module ownership map，再执行跨模块改动
 - Runbook：`docs/runbooks/large-platform-delivery.md`
@@ -111,7 +111,7 @@
 ### 场景 K：证据索引化交付（Evidence Index Delivery）
 
 - Agent：`requirements-analyst -> application-engineer -> test-validation-engineer -> code-review-governor`
-- Skill：`gdk-systematic-debugging + gdk-verification-before-completion + gdk-commit-pr-quality-gate`
+- Skill：`adk-systematic-debugging + adk-verification-before-completion + adk-commit-pr-quality-gate`
 - 命令：`propose -> apply -> verify -> review`
 - 关键纪律：验证命令必须索引化记录（命令/退出码/证据路径）
 - Runbook：`docs/runbooks/evidence-index-delivery.md`
@@ -119,7 +119,7 @@
 ### 场景 L：阶段式迁移交付（Migration Stage Delivery）
 
 - Agent：`architecture-planner -> application-engineer -> test-validation-engineer -> build-release-engineer -> code-review-governor`
-- Skill：`gdk-requirements-triage + gdk-task-breakdown + gdk-release-versioning + gdk-verification-before-completion + gdk-commit-pr-quality-gate`
+- Skill：`adk-requirements-triage + adk-task-breakdown + adk-release-versioning + adk-verification-before-completion + adk-commit-pr-quality-gate`
 - 命令：`catalog -> propose -> apply -> verify -> review`
 - 关键纪律：必须按里程碑输出阶段结论与回退锚点，禁止跳阶段推进
 - Runbook：`docs/runbooks/migration-stage-delivery.md`
@@ -127,7 +127,7 @@
 ### 场景 M：配置基线治理（Config Baseline Governance）
 
 - Agent：`requirements-analyst -> application-engineer -> test-validation-engineer -> code-review-governor`
-- Skill：`gdk-requirements-triage + gdk-task-breakdown + gdk-verification-before-completion + gdk-commit-pr-quality-gate`
+- Skill：`adk-requirements-triage + adk-task-breakdown + adk-verification-before-completion + adk-commit-pr-quality-gate`
 - 命令：`propose -> apply -> verify -> review`
 - 关键纪律：配置摘要、验证命令、行为影响结论三项缺一不可
 - Runbook：`docs/runbooks/config-baseline-governance.md`
@@ -135,7 +135,7 @@
 ### 场景 N：codex 设置审计（Codex Settings Audit）
 
 - Agent：`requirements-analyst -> test-validation-engineer -> code-review-governor`
-- Skill：`gdk-requirements-triage + gdk-verification-before-completion + gdk-commit-pr-quality-gate`
+- Skill：`adk-requirements-triage + adk-verification-before-completion + adk-commit-pr-quality-gate`
 - 命令：`propose -> verify -> check-global-codex-health -> codex mcp list -> review`
 - 关键纪律：声明配置与运行态加载结果必须一致
 - Runbook：`docs/runbooks/codex-settings-audit.md`
@@ -143,7 +143,7 @@
 ### 场景 O：Spec 链路交付（Spec Chain Delivery）
 
 - Agent：`requirements-analyst -> architecture-planner -> application-engineer -> test-validation-engineer -> code-review-governor`
-- Skill：`gdk-requirements-triage + gdk-adr-writer + gdk-task-breakdown + gdk-verification-before-completion`
+- Skill：`adk-requirements-triage + adk-adr-writer + adk-task-breakdown + adk-verification-before-completion`
 - 命令：`propose -> apply -> verify -> review`
 - 关键纪律：`requirements/design/tasks` 三段链路缺一不可
 - Runbook：`docs/runbooks/spec-chain-delivery.md`
@@ -151,7 +151,7 @@
 ### 场景 P：技能候选筛选交付（Skill Curation Delivery）
 
 - Agent：`requirements-analyst -> architecture-planner -> code-review-governor`
-- Skill：`gdk-requirements-triage + gdk-task-breakdown + gdk-commit-pr-quality-gate + gdk-verification-before-completion`
+- Skill：`adk-requirements-triage + adk-task-breakdown + adk-commit-pr-quality-gate + adk-verification-before-completion`
 - 命令：`catalog -> match -> validate --strict -> review`
 - 关键纪律：必须声明 `global-ready/project-bound` 与 `core/optional/reject` 归属结论
 - Runbook：`docs/runbooks/skill-curation-delivery.md`
@@ -159,7 +159,7 @@
 ### 场景 Q：Prompt 演进交付（Prompt Evolution Delivery）
 
 - Agent：`requirements-analyst -> application-engineer -> test-validation-engineer -> code-review-governor`
-- Skill：`gdk-requirements-triage + gdk-task-breakdown + gdk-verification-before-completion + gdk-commit-pr-quality-gate`
+- Skill：`adk-requirements-triage + adk-task-breakdown + adk-verification-before-completion + adk-commit-pr-quality-gate`
 - 命令：`propose -> apply -> verify -> review`
 - 关键纪律：必须保留 before/after 对比与失败样例证据
 - Runbook：`docs/runbooks/prompt-evolution-delivery.md`
@@ -167,7 +167,7 @@
 ### 场景 R：Lead-Agent 收敛交付（Lead-Agent Convergence Delivery）
 
 - Agent：`requirements-analyst -> architecture-planner -> application-engineer -> test-validation-engineer -> code-review-governor`
-- Skill：`gdk-requirements-triage + gdk-task-breakdown + gdk-verification-before-completion + gdk-commit-pr-quality-gate`
+- Skill：`adk-requirements-triage + adk-task-breakdown + adk-verification-before-completion + adk-commit-pr-quality-gate`
 - 命令：`catalog -> propose -> apply -> verify -> review`
 - 关键纪律：先判定模式，再推进执行，最后输出收敛结论
 - Runbook：`docs/runbooks/lead-agent-convergence-delivery.md`
@@ -175,7 +175,7 @@
 ### 场景 S：生产运行路由（Runtime Routing）
 
 - Agent：`requirements-analyst -> architecture-planner -> code-review-governor`
-- Skill：`gdk-skill-composition-governance + gdk-verification-before-completion`
+- Skill：`adk-skill-composition-governance + adk-verification-before-completion`
 - 命令：`catalog -> match -> check-runtime-routing`
 - 关键纪律：一个场景只能有一个主 skill，辅助 skill 不抢占入口
 - Runbook：`docs/runbooks/runtime-routing.md`
@@ -183,15 +183,15 @@
 ### 场景 T：长任务计划执行（Planning Execution Loop）
 
 - Agent：`requirements-analyst -> architecture-planner -> application-engineer -> test-validation-engineer -> code-review-governor`
-- Skill：`gdk-planning-execution-loop + gdk-task-breakdown + gdk-verification-before-completion`
+- Skill：`adk-planning-execution-loop + adk-task-breakdown + adk-verification-before-completion`
 - 命令：`propose -> apply -> verify -> review`
 - 关键纪律：每个阶段必须有检查点、恢复摘要和验证证据
-- Runbook：`docs/runbooks/gdk-planning-execution-loop.md`
+- Runbook：`docs/runbooks/adk-planning-execution-loop.md`
 
 ### 场景 U：生产部署（Production Deployment）
 
 - Agent：`build-release-engineer -> test-validation-engineer -> code-review-governor`
-- Skill：`gdk-release-versioning + gdk-verification-before-completion + gdk-commit-pr-quality-gate`
+- Skill：`adk-release-versioning + adk-verification-before-completion + adk-commit-pr-quality-gate`
 - 命令：`validate -> install --backup --install-report -> check-global-codex-health -> check-gdk-harden-readiness`
 - 关键纪律：生产安装必须可回滚，并记录安装报告
 - Runbook：`docs/runbooks/production-deployment.md`
@@ -199,7 +199,7 @@
 ### 场景 V：上游吸收（Upstream Intake）
 
 - Agent：`requirements-analyst -> architecture-planner -> code-review-governor`
-- Skill：`gdk-skill-composition-governance + gdk-security-supply-chain + gdk-commit-pr-quality-gate`
+- Skill：`adk-skill-composition-governance + adk-security-supply-chain + adk-commit-pr-quality-gate`
 - 命令：`sync-subrepos -> diff-scan -> check-upstream-intake-readiness`
 - 关键纪律：参考资产不得直接混装进 `~/.codex`
 - Runbook：`docs/runbooks/upstream-intake.md`
@@ -207,7 +207,7 @@
 ### 场景 W：团队生产交付（Team Delivery）
 
 - Agent：`requirements-analyst -> application-engineer -> test-validation-engineer -> code-review-governor`
-- Skill：`gdk-task-breakdown + gdk-cross-team-handoff + gdk-verification-before-completion`
+- Skill：`adk-task-breakdown + adk-cross-team-handoff + adk-verification-before-completion`
 - 命令：`propose -> verify -> review`
 - 关键纪律：Owner Matrix、handoff token、接收方复验三项缺一不可
 - Runbook：`docs/runbooks/team-delivery.md`

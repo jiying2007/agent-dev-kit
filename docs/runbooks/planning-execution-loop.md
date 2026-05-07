@@ -13,8 +13,8 @@
 ## 推荐组合
 
 - Agent：`requirements-analyst -> architecture-planner -> application-engineer -> test-validation-engineer -> code-review-governor`
-- Primary Skill：`gdk-planning-execution-loop`
-- Supporting Skills：`gdk-task-breakdown`、`gdk-verification-before-completion`
+- Primary Skill：`adk-planning-execution-loop`
+- Supporting Skills：`adk-task-breakdown`、`adk-verification-before-completion`
 
 ## 工件
 

@@ -2,7 +2,7 @@
 
 ## 概述
 
-本指南帮助你快速上手 global-dev-kit（gdk），了解其核心概念和基本使用方法。
+本指南帮助你快速上手 agent-dev-kit（gdk），了解其核心概念和基本使用方法。
 
 ## 前置条件
 
@@ -16,7 +16,7 @@
 
 ```bash
 git clone <repository-url>
-cd global-dev-kit
+cd agent-dev-kit
 ```
 
 ### 2. 验证安装

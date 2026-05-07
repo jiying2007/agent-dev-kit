@@ -110,7 +110,7 @@ $ bash scripts/release-manager.sh validate --version 1.0.0
 
 $ bash scripts/release-manager.sh build --version 1.0.0
 [INFO] 构建发布包: 1.0.0
-[SUCCESS] 发布包构建完成: /home/aiot03/aiot/llm_agent/global-dev-kit/dist/global-dev-kit-1.0.0.tar.gz
+[SUCCESS] 发布包构建完成: /home/aiot03/aiot/llm_agent/agent-dev-kit/dist/agent-dev-kit-1.0.0.tar.gz
 ```
 
 ### 2. 监控和告警

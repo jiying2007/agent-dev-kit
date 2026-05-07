@@ -7,12 +7,12 @@ TMP_DIR="$(mktemp -d)"
 trap 'rm -rf "$TMP_DIR"' EXIT
 
 LIST_OUTPUT="$("$ROOT_DIR/scripts/install_assets.sh" --list-optional-skills)"
-echo "$LIST_OUTPUT" | grep -Fxq "gdk-incident-rca-report" || {
-  echo "[FAIL] optional skill list missing gdk-incident-rca-report" >&2
+echo "$LIST_OUTPUT" | grep -Fxq "adk-incident-rca-report" || {
+  echo "[FAIL] optional skill list missing adk-incident-rca-report" >&2
   exit 1
 }
-echo "$LIST_OUTPUT" | grep -Fxq "gdk-artifact-gated-lite" || {
-  echo "[FAIL] optional skill list missing gdk-artifact-gated-lite" >&2
+echo "$LIST_OUTPUT" | grep -Fxq "adk-artifact-gated-lite" || {
+  echo "[FAIL] optional skill list missing adk-artifact-gated-lite" >&2
   exit 1
 }
 
@@ -22,20 +22,20 @@ TARGET="$TMP_DIR/.codex"
   --mode copy \
   --target "$TARGET" \
   --profile core \
-  --with-optional-skill gdk-test-flakiness-triage \
-  --with-optional-skill gdk-incident-rca-report \
-  --with-optional-skill gdk-artifact-gated-lite
+  --with-optional-skill adk-test-flakiness-triage \
+  --with-optional-skill adk-incident-rca-report \
+  --with-optional-skill adk-artifact-gated-lite
 
-[[ -d "$TARGET/skills/gdk-test-flakiness-triage" ]] || {
-  echo "[FAIL] missing installed optional skill gdk-test-flakiness-triage" >&2
+[[ -d "$TARGET/skills/adk-test-flakiness-triage" ]] || {
+  echo "[FAIL] missing installed optional skill adk-test-flakiness-triage" >&2
   exit 1
 }
-[[ -d "$TARGET/skills/gdk-incident-rca-report" ]] || {
-  echo "[FAIL] missing installed optional skill gdk-incident-rca-report" >&2
+[[ -d "$TARGET/skills/adk-incident-rca-report" ]] || {
+  echo "[FAIL] missing installed optional skill adk-incident-rca-report" >&2
   exit 1
 }
-[[ -d "$TARGET/skills/gdk-artifact-gated-lite" ]] || {
-  echo "[FAIL] missing installed optional skill gdk-artifact-gated-lite" >&2
+[[ -d "$TARGET/skills/adk-artifact-gated-lite" ]] || {
+  echo "[FAIL] missing installed optional skill adk-artifact-gated-lite" >&2
   exit 1
 }
 

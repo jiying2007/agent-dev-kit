@@ -14,48 +14,48 @@ Audited: 37 SKILL.md files (28 core + 9 optional)
 
 | skill_name | tier | FM | trigger_quality | body_sections | anti_rational | robust | lines | issues |
 |---|---|---|---|---|---|---|---|---|
-| gdk-requirements-triage | p0 | Y | descriptive | ALL | Y | N | 79 | triggers are descriptive sentences, not matchable keywords |
-| gdk-adr-writer | p1 | Y | descriptive | ALL | N | Y | 63 | triggers are descriptive sentences |
-| gdk-task-breakdown | p0 | Y | descriptive | ALL | Y | N | 78 | triggers are descriptive sentences |
-| gdk-interface-contract-design | p0 | Y | descriptive | ALL | Y | N | 67 | triggers are descriptive sentences |
-| gdk-register-map-design | p1 | Y | descriptive | ALL | N | Y | 66 | triggers are descriptive sentences |
-| gdk-driver-bringup-checklist | p1 | Y | descriptive | ALL | N | Y | 67 | triggers are descriptive sentences |
-| gdk-bsp-porting-playbook | p1 | Y | descriptive | ALL | N | Y | 67 | triggers are descriptive sentences |
-| gdk-rtos-task-design | p1 | Y | descriptive | ALL | N | Y | 66 | triggers are descriptive sentences |
-| gdk-interrupt-dma-patterns | p1 | Y | descriptive | ALL | N | Y | 66 | triggers are descriptive sentences |
-| gdk-protocol-stack-integration | p1 | Y | descriptive | ALL | N | Y | 66 | triggers are descriptive sentences |
-| gdk-component-api-stability | p1 | Y | descriptive | ALL | N | Y | 66 | triggers are descriptive sentences |
-| gdk-cmake-cross-build | p1 | Y | descriptive | ALL | N | Y | 67 | triggers are descriptive sentences |
-| gdk-toolchain-debug-openocd-gdb | p1 | Y | descriptive | ALL | N | Y | 66 | triggers are descriptive sentences |
-| gdk-static-analysis-c-cpp | p0 | Y | descriptive | ALL | Y | N | 66 | triggers are descriptive sentences |
-| gdk-systematic-debugging | p0 | Y | descriptive | ALL | Y | N | 73 | OVERLAPS with gdk-diagnose-loop (same debugging workflow) |
-| gdk-unit-test-embedded | p0 | Y | descriptive | ALL | Y | N | 66 | triggers are descriptive sentences |
-| gdk-verification-before-completion | p0 | Y | descriptive | ALL | Y | N | 95 | OVERLAPS with gdk-commit-pr-quality-gate |
-| gdk-integration-hil-sil | p1 | Y | descriptive | ALL | N | Y | 66 | triggers are descriptive sentences |
-| gdk-fault-injection-recovery | p1 | Y | descriptive | ALL | N | Y | 66 | triggers are descriptive sentences |
-| gdk-performance-profiling-embedded | p1 | Y | descriptive | ALL | N | Y | 66 | triggers are descriptive sentences |
-| gdk-release-versioning | p1 | Y | descriptive | ALL | N | Y | 72 | triggers are descriptive sentences |
-| gdk-commit-pr-quality-gate | p0 | Y | descriptive | ALL | Y | N | 85 | OVERLAPS with gdk-verification-before-completion |
-| gdk-grill-with-docs | p0 | N | matchable | ALL | Y | Y | 79 | MISSING version+last_updated; DUPLICATE 核心流程/Workflow sections |
-| gdk-diagnose-loop | p0 | N | matchable | ALL | Y | Y | 83 | MISSING version+last_updated; OVERLAPS with gdk-systematic-debugging; DUPLICATE 核心流程/Workflow |
-| gdk-code-simplification | p1 | N | matchable | ALL | Y | Y | 79 | MISSING version+last_updated |
-| gdk-context-engineering | p1 | N | matchable | ALL | Y | Y | 78 | MISSING version+last_updated |
-| gdk-chinese-commit-conventions | p1 | N | matchable | ALL | Y | Y | 102 | MISSING version+last_updated |
-| gdk-chinese-code-review | p1 | N | matchable | ALL | Y | Y | 92 | MISSING version+last_updated |
+| adk-requirements-triage | p0 | Y | descriptive | ALL | Y | N | 79 | triggers are descriptive sentences, not matchable keywords |
+| adk-adr-writer | p1 | Y | descriptive | ALL | N | Y | 63 | triggers are descriptive sentences |
+| adk-task-breakdown | p0 | Y | descriptive | ALL | Y | N | 78 | triggers are descriptive sentences |
+| adk-interface-contract-design | p0 | Y | descriptive | ALL | Y | N | 67 | triggers are descriptive sentences |
+| adk-register-map-design | p1 | Y | descriptive | ALL | N | Y | 66 | triggers are descriptive sentences |
+| adk-driver-bringup-checklist | p1 | Y | descriptive | ALL | N | Y | 67 | triggers are descriptive sentences |
+| adk-bsp-porting-playbook | p1 | Y | descriptive | ALL | N | Y | 67 | triggers are descriptive sentences |
+| adk-rtos-task-design | p1 | Y | descriptive | ALL | N | Y | 66 | triggers are descriptive sentences |
+| adk-interrupt-dma-patterns | p1 | Y | descriptive | ALL | N | Y | 66 | triggers are descriptive sentences |
+| adk-protocol-stack-integration | p1 | Y | descriptive | ALL | N | Y | 66 | triggers are descriptive sentences |
+| adk-component-api-stability | p1 | Y | descriptive | ALL | N | Y | 66 | triggers are descriptive sentences |
+| adk-cmake-cross-build | p1 | Y | descriptive | ALL | N | Y | 67 | triggers are descriptive sentences |
+| adk-toolchain-debug-openocd-gdb | p1 | Y | descriptive | ALL | N | Y | 66 | triggers are descriptive sentences |
+| adk-static-analysis-c-cpp | p0 | Y | descriptive | ALL | Y | N | 66 | triggers are descriptive sentences |
+| adk-systematic-debugging | p0 | Y | descriptive | ALL | Y | N | 73 | OVERLAPS with adk-diagnose-loop (same debugging workflow) |
+| adk-unit-test-embedded | p0 | Y | descriptive | ALL | Y | N | 66 | triggers are descriptive sentences |
+| adk-verification-before-completion | p0 | Y | descriptive | ALL | Y | N | 95 | OVERLAPS with adk-commit-pr-quality-gate |
+| adk-integration-hil-sil | p1 | Y | descriptive | ALL | N | Y | 66 | triggers are descriptive sentences |
+| adk-fault-injection-recovery | p1 | Y | descriptive | ALL | N | Y | 66 | triggers are descriptive sentences |
+| adk-performance-profiling-embedded | p1 | Y | descriptive | ALL | N | Y | 66 | triggers are descriptive sentences |
+| adk-release-versioning | p1 | Y | descriptive | ALL | N | Y | 72 | triggers are descriptive sentences |
+| adk-commit-pr-quality-gate | p0 | Y | descriptive | ALL | Y | N | 85 | OVERLAPS with adk-verification-before-completion |
+| adk-grill-with-docs | p0 | N | matchable | ALL | Y | Y | 79 | MISSING version+last_updated; DUPLICATE 核心流程/Workflow sections |
+| adk-diagnose-loop | p0 | N | matchable | ALL | Y | Y | 83 | MISSING version+last_updated; OVERLAPS with adk-systematic-debugging; DUPLICATE 核心流程/Workflow |
+| adk-code-simplification | p1 | N | matchable | ALL | Y | Y | 79 | MISSING version+last_updated |
+| adk-context-engineering | p1 | N | matchable | ALL | Y | Y | 78 | MISSING version+last_updated |
+| adk-chinese-commit-conventions | p1 | N | matchable | ALL | Y | Y | 102 | MISSING version+last_updated |
+| adk-chinese-code-review | p1 | N | matchable | ALL | Y | Y | 92 | MISSING version+last_updated |
 
 ## OPTIONAL SKILLS (9)
 
 | skill_name | tier | FM | trigger_quality | body_sections | anti_rational | robust | lines | issues |
 |---|---|---|---|---|---|---|---|---|
-| gdk-test-flakiness-triage | p2 | Y | descriptive | ALL | N | N | 57 | triggers are descriptive sentences |
-| gdk-cross-team-handoff | p2 | Y | descriptive | ALL | N | N | 58 | triggers are descriptive sentences |
-| gdk-incident-rca-report | p2 | Y | descriptive | ALL | N | N | 58 | triggers are descriptive sentences |
-| gdk-artifact-gated-lite | p2 | Y | descriptive | ALL | N | N | 76 | triggers are descriptive sentences |
-| gdk-planning-execution-loop | p2 | Y | descriptive | ALL | N | N | 65 | triggers are descriptive sentences |
-| gdk-skill-composition-governance | p2 | Y | descriptive | ALL | N | N | 63 | triggers are descriptive sentences |
-| gdk-security-supply-chain | p2 | Y | descriptive | ALL | N | N | 63 | triggers are descriptive sentences |
-| gdk-fetch-url-content | p2 | N | matchable | ALL | N | Y | 52 | MISSING version+last_updated |
-| gdk-email-imap-fetch | p2 | N | matchable | ALL | N | Y | 52 | MISSING version+last_updated |
+| adk-test-flakiness-triage | p2 | Y | descriptive | ALL | N | N | 57 | triggers are descriptive sentences |
+| adk-cross-team-handoff | p2 | Y | descriptive | ALL | N | N | 58 | triggers are descriptive sentences |
+| adk-incident-rca-report | p2 | Y | descriptive | ALL | N | N | 58 | triggers are descriptive sentences |
+| adk-artifact-gated-lite | p2 | Y | descriptive | ALL | N | N | 76 | triggers are descriptive sentences |
+| adk-planning-execution-loop | p2 | Y | descriptive | ALL | N | N | 65 | triggers are descriptive sentences |
+| adk-skill-composition-governance | p2 | Y | descriptive | ALL | N | N | 63 | triggers are descriptive sentences |
+| adk-security-supply-chain | p2 | Y | descriptive | ALL | N | N | 63 | triggers are descriptive sentences |
+| adk-fetch-url-content | p2 | N | matchable | ALL | N | Y | 52 | MISSING version+last_updated |
+| adk-email-imap-fetch | p2 | N | matchable | ALL | N | Y | 52 | MISSING version+last_updated |
 
 ## SUMMARY STATISTICS
 
@@ -79,7 +79,7 @@ Two "waves" of skills exist:
 - **Wave 1** (27 skills): Full frontmatter with version: 1.0.0, last_updated: 2026-05-02
 - **Wave 2** (10 skills): Missing version and last_updated fields
 
-Missing skills: gdk-grill-with-docs, gdk-diagnose-loop, gdk-code-simplification, gdk-context-engineering, gdk-chinese-commit-conventions, gdk-chinese-code-review, gdk-fetch-url-content, gdk-email-imap-fetch, and 2 more from wave 2.
+Missing skills: adk-grill-with-docs, adk-diagnose-loop, adk-code-simplification, adk-context-engineering, adk-chinese-commit-conventions, adk-chinese-code-review, adk-fetch-url-content, adk-email-imap-fetch, and 2 more from wave 2.
 
 ### 2. Trigger Quality Split
 
@@ -93,14 +93,14 @@ The `scripts/devkit.sh match` command can only reliably match Wave 2 style trigg
 
 | Pair | Overlap Type | Recommendation |
 |---|---|---|
-| gdk-systematic-debugging ↔ gdk-diagnose-loop | Both are p0 debugging workflows with identical reproduce→locate→root-cause→fix→protect flow | Merge into one; gdk-diagnose-loop is a simplified duplicate |
-| gdk-verification-before-completion ↔ gdk-commit-pr-quality-gate | Both are p0 quality gates checking evidence, blockers, breaking changes, evidence index | Clarify scope boundary or merge |
-| gdk-requirements-triage ↔ gdk-grill-with-docs | Both address requirements clarity | gdk-grill-with-docs should be the "interview" phase feeding into gdk-requirements-triage "decomposition" |
+| adk-systematic-debugging ↔ adk-diagnose-loop | Both are p0 debugging workflows with identical reproduce→locate→root-cause→fix→protect flow | Merge into one; adk-diagnose-loop is a simplified duplicate |
+| adk-verification-before-completion ↔ adk-commit-pr-quality-gate | Both are p0 quality gates checking evidence, blockers, breaking changes, evidence index | Clarify scope boundary or merge |
+| adk-requirements-triage ↔ adk-grill-with-docs | Both address requirements clarity | adk-grill-with-docs should be the "interview" phase feeding into adk-requirements-triage "decomposition" |
 
 ### 4. Duplicate Internal Sections (2 skills)
 
-- **gdk-grill-with-docs**: "核心流程" (lines 29-35) and "Workflow" (lines 47-53) contain identical steps
-- **gdk-diagnose-loop**: "核心流程" (lines 29-35) and "Workflow" (lines 50-55) contain identical steps
+- **adk-grill-with-docs**: "核心流程" (lines 29-35) and "Workflow" (lines 47-53) contain identical steps
+- **adk-diagnose-loop**: "核心流程" (lines 29-35) and "Workflow" (lines 50-55) contain identical steps
 
 ### 5. Inconsistent Template Sections
 
@@ -117,8 +117,8 @@ AGENTS.md repo analysis states "Core Skills: 22 (p0:8, p1:14)" but manifest.yaml
 
 1. Add version+last_updated to the 10 missing skills immediately
 2. Standardize all triggers to matchable keyword format (Wave 2 style)
-3. Resolve gdk-diagnose-loop ↔ gdk-systematic-debugging overlap (merge or clearly differentiate)
-4. Resolve gdk-verification-before-completion ↔ gdk-commit-pr-quality-gate overlap
-5. Remove duplicate 核心流程 sections from gdk-grill-with-docs and gdk-diagnose-loop
+3. Resolve adk-diagnose-loop ↔ adk-systematic-debugging overlap (merge or clearly differentiate)
+4. Resolve adk-verification-before-completion ↔ adk-commit-pr-quality-gate overlap
+5. Remove duplicate 核心流程 sections from adk-grill-with-docs and adk-diagnose-loop
 6. Choose one tail section template (健壮性规范 OR 合理化借口拦截) and apply consistently
 7. Update AGENTS.md repo analysis to reflect actual 28 core skills / 10 p0 count

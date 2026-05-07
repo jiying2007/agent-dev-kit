@@ -34,8 +34,8 @@
 | Runtime Routing | runbooks/runtime-routing.md | 路由规则与冲突 |
 | 上游吸收 | runbooks/upstream-intake.md | 参考仓评估与吸收 |
 | 团队交付 | runbooks/team-delivery.md | 团队协作流程 |
-| 计划执行循环 | runbooks/gdk-planning-execution-loop.md | 长任务管理 |
-| 安全供应链 | runbooks/gdk-security-supply-chain.md | 第三方审查 |
+| 计划执行循环 | runbooks/adk-planning-execution-loop.md | 长任务管理 |
+| 安全供应链 | runbooks/adk-security-supply-chain.md | 第三方审查 |
 | 兼容性矩阵 | runbooks/compatibility-matrix.md | 工具兼容性 |
 | Prompt 演进 | runbooks/prompt-evolution-delivery.md | 提示词优化 |
 | 配置基线 | runbooks/config-baseline-governance.md | 配置管理 |
@@ -48,7 +48,7 @@
 | 迁移阶段 | runbooks/migration-stage-delivery.md | 渐进迁移 |
 | 发布强化 | runbooks/release-hardening.md | 发布前检查 |
 | 大平台交付 | runbooks/large-platform-delivery.md | 大型项目 |
-| 跨团队交接 | runbooks/gdk-cross-team-handoff-delivery.md | 交接清单 |
+| 跨团队交接 | runbooks/adk-cross-team-handoff-delivery.md | 交接清单 |
 | 功能交付 | runbooks/feature-delivery.md | 功能开发 |
 | 重构强化 | runbooks/refactor-hardening.md | 重构流程 |
 | 缺陷修复 | runbooks/bugfix-delivery.md | Bug 修复 |
@@ -78,18 +78,18 @@
 ### 新增 Skill (v2.0.0)
 | Skill | 路径 | 来源 | 用途 |
 |-------|------|------|------|
-| gdk-grill-with-docs | skills/gdk-grill-with-docs/ | mattpocock-skills | 烤问式需求对齐 |
-| gdk-diagnose-loop | skills/gdk-diagnose-loop/ | agent-skills | 纪律化调试循环 |
-| gdk-code-simplification | skills/gdk-code-simplification/ | agent-skills | 代码简化 |
-| gdk-context-engineering | skills/gdk-context-engineering/ | agent-skills | 上下文工程 |
-| gdk-chinese-commit-conventions | skills/gdk-chinese-commit-conventions/ | 方法论 | 中文提交规范 |
-| gdk-chinese-code-review | skills/gdk-chinese-code-review/ | 方法论 | 中文代码审查 |
+| adk-grill-with-docs | skills/adk-grill-with-docs/ | mattpocock-skills | 烤问式需求对齐 |
+| adk-diagnose-loop | skills/adk-diagnose-loop/ | agent-skills | 纪律化调试循环 |
+| adk-code-simplification | skills/adk-code-simplification/ | agent-skills | 代码简化 |
+| adk-context-engineering | skills/adk-context-engineering/ | agent-skills | 上下文工程 |
+| adk-chinese-commit-conventions | skills/adk-chinese-commit-conventions/ | 方法论 | 中文提交规范 |
+| adk-chinese-code-review | skills/adk-chinese-code-review/ | 方法论 | 中文代码审查 |
 
 ### 新增可选 Skill (v2.0.0)
 | Skill | 路径 | 来源 | 用途 |
 |-------|------|------|------|
-| gdk-fetch-url-content | optional-skills/gdk-data-fetch/ | skills/天工 | URL 正文提取 |
-| gdk-email-imap-fetch | optional-skills/gdk-data-fetch/ | skills/天工 | IMAP 邮件获取 |
+| adk-fetch-url-content | optional-skills/adk-data-fetch/ | skills/天工 | URL 正文提取 |
+| adk-email-imap-fetch | optional-skills/adk-data-fetch/ | skills/天工 | IMAP 邮件获取 |
 
 ### 新增运维命令 (v2.0.0)
 

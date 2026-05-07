@@ -2,7 +2,7 @@
 
 ## 概述
 
-欢迎贡献到 global-dev-kit！本指南帮助你了解如何为项目做出贡献。
+欢迎贡献到 agent-dev-kit！本指南帮助你了解如何为项目做出贡献。
 
 ## 贡献方式
 
@@ -35,8 +35,8 @@
 ```bash
 # 1. Fork项目
 # 2. 克隆仓库
-git clone https://github.com/your-username/global-dev-kit.git
-cd global-dev-kit
+git clone https://github.com/your-username/agent-dev-kit.git
+cd agent-dev-kit
 
 # 3. 创建分支
 git checkout -b feature/my-feature

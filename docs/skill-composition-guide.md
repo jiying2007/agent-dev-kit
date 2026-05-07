@@ -2,7 +2,7 @@
 
 ## 概述
 
-本指南介绍如何组合使用global-dev-kit中的技能。
+本指南介绍如何组合使用agent-dev-kit中的技能。
 
 ## 技能组合原则
 
@@ -13,29 +13,29 @@
 ## 常见技能组合
 
 ### 1. 驱动开发组合
-- gdk-requirements-triage
-- gdk-register-map-design
-- gdk-interface-contract-design
-- gdk-driver-bringup-checklist
-- gdk-static-analysis-c-cpp
-- gdk-unit-test-embedded
-- gdk-integration-hil-sil
-- gdk-verification-before-completion
+- adk-requirements-triage
+- adk-register-map-design
+- adk-interface-contract-design
+- adk-driver-bringup-checklist
+- adk-static-analysis-c-cpp
+- adk-unit-test-embedded
+- adk-integration-hil-sil
+- adk-verification-before-completion
 
 ### 2. BSP移植组合
-- gdk-requirements-triage
-- gdk-bsp-porting-playbook
-- gdk-cmake-cross-build
-- gdk-static-analysis-c-cpp
-- gdk-unit-test-embedded
-- gdk-integration-hil-sil
-- gdk-verification-before-completion
+- adk-requirements-triage
+- adk-bsp-porting-playbook
+- adk-cmake-cross-build
+- adk-static-analysis-c-cpp
+- adk-unit-test-embedded
+- adk-integration-hil-sil
+- adk-verification-before-completion
 
 ### 3. 协议栈集成组合
-- gdk-requirements-triage
-- gdk-protocol-stack-integration
-- gdk-interface-contract-design
-- gdk-static-analysis-c-cpp
-- gdk-unit-test-embedded
-- gdk-integration-hil-sil
-- gdk-verification-before-completion
+- adk-requirements-triage
+- adk-protocol-stack-integration
+- adk-interface-contract-design
+- adk-static-analysis-c-cpp
+- adk-unit-test-embedded
+- adk-integration-hil-sil
+- adk-verification-before-completion

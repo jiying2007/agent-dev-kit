@@ -11,21 +11,21 @@
 
 ## 推荐 Skill 组合
 
-- `gdk-release-versioning`
-- `gdk-static-analysis-c-cpp`
-- `gdk-fault-injection-recovery`
-- `gdk-performance-profiling-embedded`
-- `gdk-verification-before-completion`
-- `gdk-commit-pr-quality-gate`
+- `adk-release-versioning`
+- `adk-static-analysis-c-cpp`
+- `adk-fault-injection-recovery`
+- `adk-performance-profiling-embedded`
+- `adk-verification-before-completion`
+- `adk-commit-pr-quality-gate`
 
 可选增强（按需安装）：
-- `gdk-incident-rca-report`
-- `gdk-test-flakiness-triage`
+- `adk-incident-rca-report`
+- `adk-test-flakiness-triage`
 
 ## 命令模板
 
 ```bash
-bash scripts/devkit.sh install --tool codex --profile core --extra-profile release-hardening --with-optional-skill gdk-incident-rca-report
+bash scripts/devkit.sh install --tool codex --profile core --extra-profile release-hardening --with-optional-skill adk-incident-rca-report
 bash scripts/devkit.sh propose --change <change-id> --title "发布收口"
 bash scripts/devkit.sh verify --change <change-id>
 bash scripts/devkit.sh review --change <change-id> --result pass --blockers 0 --majors 0 --minors 0

@@ -189,7 +189,7 @@ write_bridge_meta() {
   local stage="$2"
 
   cat > "$dest_dir/.openspec-bridge.yaml" <<META
-source: global-dev-kit
+source: agent-dev-kit
 change_id: $CHANGE_ID
 gdk_change_root: $GDK_ROOT
 gdk_stage: $stage

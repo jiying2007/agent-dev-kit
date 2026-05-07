@@ -22,48 +22,48 @@
 
 | Name | Description | First Trigger | Path |
 |---|---|---|---|
-| `gdk-requirements-triage` | 将需求转为可实现、可验证的工程条目 | 收到模糊需求或跨团队需求时 | `skills/gdk-requirements-triage/SKILL.md` |
-| `gdk-adr-writer` | 产出 Architecture Decision Record 并固化技术决策 | 涉及选型、架构调整、权衡讨论时 | `skills/gdk-adr-writer/SKILL.md` |
-| `gdk-task-breakdown` | 将需求拆解为可并行执行的任务包 | 任务过大或多人协作时 | `skills/gdk-task-breakdown/SKILL.md` |
-| `gdk-interface-contract-design` | 定义模块/API/消息接口契约 | 新增或变更跨模块接口时 | `skills/gdk-interface-contract-design/SKILL.md` |
-| `gdk-register-map-design` | 定义寄存器映射与位域文档 | 驱动开发前期或芯片适配时 | `skills/gdk-register-map-design/SKILL.md` |
-| `gdk-driver-bringup-checklist` | 驱动 bring-up 标准检查清单 | 新外设上板、驱动初次联调时 | `skills/gdk-driver-bringup-checklist/SKILL.md` |
-| `gdk-bsp-porting-playbook` | BSP 移植流程与风险控制 | SoC/板卡迁移或内核升级时 | `skills/gdk-bsp-porting-playbook/SKILL.md` |
-| `gdk-rtos-task-design` | RTOS 任务模型与优先级设计 | 新增实时任务或调度异常时 | `skills/gdk-rtos-task-design/SKILL.md` |
-| `gdk-interrupt-dma-patterns` | 中断与 DMA 协作模式设计 | 高吞吐或低时延 I/O 场景 | `skills/gdk-interrupt-dma-patterns/SKILL.md` |
-| `gdk-protocol-stack-integration` | 协议栈接入与状态机整合 | 串口/网络/现场总线协议接入时 | `skills/gdk-protocol-stack-integration/SKILL.md` |
-| `gdk-component-api-stability` | 组件 API 稳定性治理 | 公共组件准备对外复用时 | `skills/gdk-component-api-stability/SKILL.md` |
-| `gdk-cmake-cross-build` | CMake 交叉编译与多目标构建 | 新增目标板或 toolchain 时 | `skills/gdk-cmake-cross-build/SKILL.md` |
-| `gdk-toolchain-debug-openocd-gdb` | OpenOCD + GDB 联调流程 | 硬件断点、烧录、在线调试时 | `skills/gdk-toolchain-debug-openocd-gdb/SKILL.md` |
-| `gdk-static-analysis-c-cpp` | C/C++ 静态分析与缺陷治理 | 质量门禁或疑难 bug 排查时 | `skills/gdk-static-analysis-c-cpp/SKILL.md` |
-| `gdk-systematic-debugging` | 系统化调试流程，面向根因未明的问题定位与修复验证 | 出现真实故障且根因不明确时 | `skills/gdk-systematic-debugging/SKILL.md` |
-| `gdk-unit-test-embedded` | 嵌入式单元测试策略与样例 | 新增逻辑模块或回归缺陷时 | `skills/gdk-unit-test-embedded/SKILL.md` |
-| `gdk-verification-before-completion` | 完成前验证门禁，确保交付声明与证据一致 | 准备声明完成并发起PR前 | `skills/gdk-verification-before-completion/SKILL.md` |
-| `gdk-integration-hil-sil` | HIL/SIL 集成验证编排 | 跨模块联调或发布前验收时 | `skills/gdk-integration-hil-sil/SKILL.md` |
-| `gdk-fault-injection-recovery` | 故障注入与恢复策略验证 | 需要验证韧性与恢复能力时 | `skills/gdk-fault-injection-recovery/SKILL.md` |
-| `gdk-performance-profiling-embedded` | 嵌入式性能剖析与优化路径 | 出现时延抖动、CPU 占用过高时 | `skills/gdk-performance-profiling-embedded/SKILL.md` |
-| `gdk-release-versioning` | 版本策略、变更说明与发布基线 | 里程碑发布、量产切版前 | `skills/gdk-release-versioning/SKILL.md` |
-| `gdk-commit-pr-quality-gate` | 提交与 PR 质量门禁检查 | 准备 commit/PR 或代码评审前 | `skills/gdk-commit-pr-quality-gate/SKILL.md` |
-| `gdk-grill-with-docs` | 烤问式需求对齐——通过结构化提问消除模糊需求 | "需求不清楚" | `skills/gdk-grill-with-docs/SKILL.md` |
-| `gdk-diagnose-loop` | 纪律化调试循环——系统性根因分析 | "代码有问题" | `skills/gdk-diagnose-loop/SKILL.md` |
-| `gdk-code-simplification` | 代码简化——在不改变行为的前提下提高清晰度 | "代码太复杂" | `skills/gdk-code-simplification/SKILL.md` |
-| `gdk-context-engineering` | 上下文工程——优化 Agent 上下文设置 | "上下文不够" | `skills/gdk-context-engineering/SKILL.md` |
-| `gdk-chinese-commit-conventions` | 中文 Git 提交规范——适配国内开发团队 | "提交代码" | `skills/gdk-chinese-commit-conventions/SKILL.md` |
-| `gdk-chinese-code-review` | 中文代码审查规范——适配国内团队沟通风格 | "代码审查" | `skills/gdk-chinese-code-review/SKILL.md` |
+| `adk-requirements-triage` | 将需求转为可实现、可验证的工程条目 | 收到模糊需求或跨团队需求时 | `skills/adk-requirements-triage/SKILL.md` |
+| `adk-adr-writer` | 产出 Architecture Decision Record 并固化技术决策 | 涉及选型、架构调整、权衡讨论时 | `skills/adk-adr-writer/SKILL.md` |
+| `adk-task-breakdown` | 将需求拆解为可并行执行的任务包 | 任务过大或多人协作时 | `skills/adk-task-breakdown/SKILL.md` |
+| `adk-interface-contract-design` | 定义模块/API/消息接口契约 | 新增或变更跨模块接口时 | `skills/adk-interface-contract-design/SKILL.md` |
+| `adk-register-map-design` | 定义寄存器映射与位域文档 | 驱动开发前期或芯片适配时 | `skills/adk-register-map-design/SKILL.md` |
+| `adk-driver-bringup-checklist` | 驱动 bring-up 标准检查清单 | 新外设上板、驱动初次联调时 | `skills/adk-driver-bringup-checklist/SKILL.md` |
+| `adk-bsp-porting-playbook` | BSP 移植流程与风险控制 | SoC/板卡迁移或内核升级时 | `skills/adk-bsp-porting-playbook/SKILL.md` |
+| `adk-rtos-task-design` | RTOS 任务模型与优先级设计 | 新增实时任务或调度异常时 | `skills/adk-rtos-task-design/SKILL.md` |
+| `adk-interrupt-dma-patterns` | 中断与 DMA 协作模式设计 | 高吞吐或低时延 I/O 场景 | `skills/adk-interrupt-dma-patterns/SKILL.md` |
+| `adk-protocol-stack-integration` | 协议栈接入与状态机整合 | 串口/网络/现场总线协议接入时 | `skills/adk-protocol-stack-integration/SKILL.md` |
+| `adk-component-api-stability` | 组件 API 稳定性治理 | 公共组件准备对外复用时 | `skills/adk-component-api-stability/SKILL.md` |
+| `adk-cmake-cross-build` | CMake 交叉编译与多目标构建 | 新增目标板或 toolchain 时 | `skills/adk-cmake-cross-build/SKILL.md` |
+| `adk-toolchain-debug-openocd-gdb` | OpenOCD + GDB 联调流程 | 硬件断点、烧录、在线调试时 | `skills/adk-toolchain-debug-openocd-gdb/SKILL.md` |
+| `adk-static-analysis-c-cpp` | C/C++ 静态分析与缺陷治理 | 质量门禁或疑难 bug 排查时 | `skills/adk-static-analysis-c-cpp/SKILL.md` |
+| `adk-systematic-debugging` | 系统化调试流程，面向根因未明的问题定位与修复验证 | 出现真实故障且根因不明确时 | `skills/adk-systematic-debugging/SKILL.md` |
+| `adk-unit-test-embedded` | 嵌入式单元测试策略与样例 | 新增逻辑模块或回归缺陷时 | `skills/adk-unit-test-embedded/SKILL.md` |
+| `adk-verification-before-completion` | 完成前验证门禁，确保交付声明与证据一致 | 准备声明完成并发起PR前 | `skills/adk-verification-before-completion/SKILL.md` |
+| `adk-integration-hil-sil` | HIL/SIL 集成验证编排 | 跨模块联调或发布前验收时 | `skills/adk-integration-hil-sil/SKILL.md` |
+| `adk-fault-injection-recovery` | 故障注入与恢复策略验证 | 需要验证韧性与恢复能力时 | `skills/adk-fault-injection-recovery/SKILL.md` |
+| `adk-performance-profiling-embedded` | 嵌入式性能剖析与优化路径 | 出现时延抖动、CPU 占用过高时 | `skills/adk-performance-profiling-embedded/SKILL.md` |
+| `adk-release-versioning` | 版本策略、变更说明与发布基线 | 里程碑发布、量产切版前 | `skills/adk-release-versioning/SKILL.md` |
+| `adk-commit-pr-quality-gate` | 提交与 PR 质量门禁检查 | 准备 commit/PR 或代码评审前 | `skills/adk-commit-pr-quality-gate/SKILL.md` |
+| `adk-grill-with-docs` | 烤问式需求对齐——通过结构化提问消除模糊需求 | "需求不清楚" | `skills/adk-grill-with-docs/SKILL.md` |
+| `adk-diagnose-loop` | 纪律化调试循环——系统性根因分析 | "代码有问题" | `skills/adk-diagnose-loop/SKILL.md` |
+| `adk-code-simplification` | 代码简化——在不改变行为的前提下提高清晰度 | "代码太复杂" | `skills/adk-code-simplification/SKILL.md` |
+| `adk-context-engineering` | 上下文工程——优化 Agent 上下文设置 | "上下文不够" | `skills/adk-context-engineering/SKILL.md` |
+| `adk-chinese-commit-conventions` | 中文 Git 提交规范——适配国内开发团队 | "提交代码" | `skills/adk-chinese-commit-conventions/SKILL.md` |
+| `adk-chinese-code-review` | 中文代码审查规范——适配国内团队沟通风格 | "代码审查" | `skills/adk-chinese-code-review/SKILL.md` |
 
 ## Optional Skills
 
 | Name | Description | First Trigger | Path |
 |---|---|---|---|
-| `gdk-test-flakiness-triage` | 定位测试波动根因并给出稳定化方案 | 回归测试同代码多次执行结果不一致 | `optional-skills/gdk-test-flakiness-triage/SKILL.md` |
-| `gdk-cross-team-handoff` | 跨团队交接时统一目标、边界和验收责任 | 模块即将交接给其他团队维护 | `optional-skills/gdk-cross-team-handoff/SKILL.md` |
-| `gdk-incident-rca-report` | 线上事故复盘与根因分析闭环 | 出现线上故障且需要复盘闭环 | `optional-skills/gdk-incident-rca-report/SKILL.md` |
-| `gdk-artifact-gated-lite` | 高风险变更时使用轻量 artifact 标签与门禁模板固定交付证据 | 涉及公共接口、schema、发布链路等高风险变更 | `optional-skills/gdk-artifact-gated-lite/SKILL.md` |
-| `gdk-planning-execution-loop` | 长任务计划审查、分阶段执行、恢复与收口闭环 | 有书面计划需要持续执行时 | `optional-skills/gdk-planning-execution-loop/SKILL.md` |
-| `gdk-skill-composition-governance` | 治理技能组合、触发优先级、fallback 与弃用关系 | 新增或调整多个 skill 的组合关系时 | `optional-skills/gdk-skill-composition-governance/SKILL.md` |
-| `gdk-security-supply-chain` | 第三方技能、脚本与参考资产引入前的安全和供应链审查 | 引入第三方 skill、agent、脚本或参考资产前 | `optional-skills/gdk-security-supply-chain/SKILL.md` |
-| `gdk-fetch-url-content` | URL 正文提取——从网页提取结构化内容 | "获取网页内容" | `optional-skills/gdk-data-fetch/gdk-fetch-url-content/SKILL.md` |
-| `gdk-email-imap-fetch` | IMAP 邮件获取——从邮箱获取邮件列表和内容 | "获取邮件" | `optional-skills/gdk-data-fetch/gdk-email-imap-fetch/SKILL.md` |
+| `adk-test-flakiness-triage` | 定位测试波动根因并给出稳定化方案 | 回归测试同代码多次执行结果不一致 | `optional-skills/adk-test-flakiness-triage/SKILL.md` |
+| `adk-cross-team-handoff` | 跨团队交接时统一目标、边界和验收责任 | 模块即将交接给其他团队维护 | `optional-skills/adk-cross-team-handoff/SKILL.md` |
+| `adk-incident-rca-report` | 线上事故复盘与根因分析闭环 | 出现线上故障且需要复盘闭环 | `optional-skills/adk-incident-rca-report/SKILL.md` |
+| `adk-artifact-gated-lite` | 高风险变更时使用轻量 artifact 标签与门禁模板固定交付证据 | 涉及公共接口、schema、发布链路等高风险变更 | `optional-skills/adk-artifact-gated-lite/SKILL.md` |
+| `adk-planning-execution-loop` | 长任务计划审查、分阶段执行、恢复与收口闭环 | 有书面计划需要持续执行时 | `optional-skills/adk-planning-execution-loop/SKILL.md` |
+| `adk-skill-composition-governance` | 治理技能组合、触发优先级、fallback 与弃用关系 | 新增或调整多个 skill 的组合关系时 | `optional-skills/adk-skill-composition-governance/SKILL.md` |
+| `adk-security-supply-chain` | 第三方技能、脚本与参考资产引入前的安全和供应链审查 | 引入第三方 skill、agent、脚本或参考资产前 | `optional-skills/adk-security-supply-chain/SKILL.md` |
+| `adk-fetch-url-content` | URL 正文提取——从网页提取结构化内容 | "获取网页内容" | `optional-skills/adk-data-fetch/adk-fetch-url-content/SKILL.md` |
+| `adk-email-imap-fetch` | IMAP 邮件获取——从邮箱获取邮件列表和内容 | "获取邮件" | `optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md` |
 
 ## Profiles
 
@@ -73,7 +73,7 @@
 | `personal-core` | 个人 ~/.codex 生产默认配置（精简核心 + 完成前门禁） | false | core |
 | `embedded-fullstack` | C/C++ 嵌入式全栈默认配置（驱动、组件、应用） | false | core |
 | `release-hardening` | 发布前强化配置（安全、可靠性、发布治理） | true | - |
-| `gdk-artifact-gated-lite` | 高风险变更的轻量产物门禁配置（强调可追溯交付证据） | true | core |
+| `adk-artifact-gated-lite` | 高风险变更的轻量产物门禁配置（强调可追溯交付证据） | true | core |
 | `team-core` | 团队交付配置（责任矩阵、交接、验证与评审） | true | core |
 | `openspec-driven` | Spec 驱动变更配置（requirements/design/tasks 与 gdk workflow 对齐） | true | core |
 | `large-refactor` | 大型重构配置（边界冻结、API 稳定性、基线对比与回归） | true | core |

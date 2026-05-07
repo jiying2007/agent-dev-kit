@@ -1,4 +1,4 @@
-name: global-dev-kit-ci
+name: agent-dev-kit-ci
 
 on:
   push:

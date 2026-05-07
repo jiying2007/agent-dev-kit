@@ -10,7 +10,7 @@
 
 > **何时使用**: 适用于正常的功能开发、Bug 修复、重构等非紧急变更流程。如遇生产环境 P0/P1 故障，请改用 emergency-workflow-template。
 
-标准工作流定义了 global-dev-kit 中变更从提出到归档的完整生命周期。
+标准工作流定义了 agent-dev-kit 中变更从提出到归档的完整生命周期。
 包含 5 个阶段，每个阶段有明确的 Entry Criteria（进入条件）、执行步骤和 Exit Criteria（退出条件）。
 
 ---
@@ -28,12 +28,12 @@
 2. 编写/更新 design-spec（设计规格文档）
 3. 编写 implementation-plan（实施计划）
 4. 如有架构变更，更新 system-arch（系统架构文档）
-5. 编写 gdk-task-breakdown（任务分解）
+5. 编写 adk-task-breakdown（任务分解）
 
 **产出物**:
 - design-spec (status: DRAFT)
 - implementation-plan (status: DRAFT)
-- gdk-task-breakdown (status: DRAFT)
+- adk-task-breakdown (status: DRAFT)
 
 **Exit Criteria**:
 - [ ] 设计文档已通过团队评审
@@ -53,7 +53,7 @@
 - [ ] 依赖项已确认可用
 
 **执行步骤**:
-1. 按 gdk-task-breakdown 中的任务顺序开发
+1. 按 adk-task-breakdown 中的任务顺序开发
 2. 编写代码和对应单元测试
 3. 本地构建和测试通过
 4. 更新相关文档（API 文档、README 等）

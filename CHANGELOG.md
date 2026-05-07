@@ -13,7 +13,7 @@
 ### 修复
 - manifest.yaml optional_skills 列表错误修正
 - Docs 中 7 个脚本引用路径修正
-- gdk-data-fetch SKILL.md 创建
+- adk-data-fetch SKILL.md 创建
 
 ## v2.3.0 (2026-05-06)
 ### 增强
@@ -43,9 +43,9 @@
 - 渐进式披露：skill references/ 子目录支持
 - Profile 冲突检测：manifest.yaml conflicts_with 字段
 - Skill 依赖图：manifest.yaml depends_on/enables 字段
-- 新增 Skill: gdk-grill-with-docs, gdk-diagnose-loop, gdk-code-simplification, gdk-context-engineering
-- 新增 Skill: gdk-chinese-commit-conventions, gdk-chinese-code-review
-- 新增 Optional Skill: gdk-fetch-url-content, gdk-email-imap-fetch
+- 新增 Skill: adk-grill-with-docs, adk-diagnose-loop, adk-code-simplification, adk-context-engineering
+- 新增 Skill: adk-chinese-commit-conventions, adk-chinese-code-review
+- 新增 Optional Skill: adk-fetch-url-content, adk-email-imap-fetch
 - 文档导航: docs/NAVIGATION.md
 - 测试: test_anti_rationalization.sh, test_routing.sh, test_skill_dependencies.sh, test_profile_conflicts.sh
 

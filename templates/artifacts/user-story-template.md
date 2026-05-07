@@ -221,7 +221,7 @@ US-001 ──> US-004
 ### 8.2 参考文档
 
 - [PRD 模板](prd-template.md)
-- [任务分解模板](gdk-task-breakdown-template.md)
+- [任务分解模板](adk-task-breakdown-template.md)
 - [设计规格模板](design-spec-template.md)
 
 ---

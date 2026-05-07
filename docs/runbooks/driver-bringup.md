@@ -11,12 +11,12 @@
 
 ## 推荐 Skill 组合
 
-- `gdk-register-map-design`
-- `gdk-driver-bringup-checklist`
-- `gdk-interrupt-dma-patterns`
-- `gdk-toolchain-debug-openocd-gdb`
-- `gdk-integration-hil-sil`
-- `gdk-systematic-debugging`
+- `adk-register-map-design`
+- `adk-driver-bringup-checklist`
+- `adk-interrupt-dma-patterns`
+- `adk-toolchain-debug-openocd-gdb`
+- `adk-integration-hil-sil`
+- `adk-systematic-debugging`
 
 ## 命令模板
 

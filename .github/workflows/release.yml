@@ -1,4 +1,4 @@
-name: global-dev-kit-release
+name: agent-dev-kit-release
 
 on:
   push:
@@ -27,10 +27,10 @@ jobs:
           bash scripts/convert_assets.sh --target opencode --profile embedded-fullstack --out dist --clean
 
       - name: Archive release bundle
-        run: tar -czf global-dev-kit-dist.tar.gz dist
+        run: tar -czf agent-dev-kit-dist.tar.gz dist
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: global-dev-kit-dist
-          path: global-dev-kit-dist.tar.gz
+          name: agent-dev-kit-dist
+          path: agent-dev-kit-dist.tar.gz

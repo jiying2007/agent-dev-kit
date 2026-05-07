@@ -123,8 +123,8 @@ $ bash scripts/health-check.sh check-all
 ### 2. 安装备份
 ```bash
 $ bash scripts/backup-rollback.sh backup --target ~/.codex
-[INFO] 创建备份: ~/.codex -> /home/aiot03/aiot/llm_agent/global-dev-kit/.backups
-[SUCCESS] 备份创建成功: /home/aiot03/aiot/llm_agent/global-dev-kit/.backups/backup-20260505-20260505093000.tar.gz
+[INFO] 创建备份: ~/.codex -> /home/aiot03/aiot/llm_agent/agent-dev-kit/.backups
+[SUCCESS] 备份创建成功: /home/aiot03/aiot/llm_agent/agent-dev-kit/.backups/backup-20260505-20260505093000.tar.gz
 ```
 
 ### 3. 版本管理

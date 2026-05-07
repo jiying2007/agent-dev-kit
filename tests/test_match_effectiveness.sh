@@ -40,62 +40,62 @@ run_test() {
 test_routing_needs_triage() {
     local output
     output=$("$MATCH_SCRIPT" --text "需求不清楚" 2>&1) || true
-    [[ "$output" == *"match=true"* && "$output" == *"source=routing"* && "$output" == *"skill=gdk-requirements-triage"* ]]
+    [[ "$output" == *"match=true"* && "$output" == *"source=routing"* && "$output" == *"skill=adk-requirements-triage"* ]]
 }
 
 test_routing_task_breakdown() {
     local output
     output=$("$MATCH_SCRIPT" --text "任务太大" 2>&1) || true
-    [[ "$output" == *"match=true"* && "$output" == *"source=routing"* && "$output" == *"skill=gdk-task-breakdown"* ]]
+    [[ "$output" == *"match=true"* && "$output" == *"source=routing"* && "$output" == *"skill=adk-task-breakdown"* ]]
 }
 
 test_routing_unit_test() {
     local output
     output=$("$MATCH_SCRIPT" --text "写单元测试" 2>&1) || true
-    [[ "$output" == *"match=true"* && "$output" == *"source=routing"* && "$output" == *"skill=gdk-unit-test-embedded"* ]]
+    [[ "$output" == *"match=true"* && "$output" == *"source=routing"* && "$output" == *"skill=adk-unit-test-embedded"* ]]
 }
 
 test_routing_debugging() {
     local output
     output=$("$MATCH_SCRIPT" --text "调试问题" 2>&1) || true
-    [[ "$output" == *"match=true"* && "$output" == *"source=routing"* && "$output" == *"skill=gdk-systematic-debugging"* ]]
+    [[ "$output" == *"match=true"* && "$output" == *"source=routing"* && "$output" == *"skill=adk-systematic-debugging"* ]]
 }
 
 test_routing_commit_pr() {
     local output
     output=$("$MATCH_SCRIPT" --text "提交代码" 2>&1) || true
-    [[ "$output" == *"match=true"* && "$output" == *"source=routing"* && "$output" == *"skill=gdk-commit-pr-quality-gate"* ]]
+    [[ "$output" == *"match=true"* && "$output" == *"source=routing"* && "$output" == *"skill=adk-commit-pr-quality-gate"* ]]
 }
 
 test_routing_register_map() {
     local output
     output=$("$MATCH_SCRIPT" --text "设计寄存器" 2>&1) || true
     # 路由表 intent_zh 为"设计寄存器映射"，输入"设计寄存器"通过 skill_trigger 匹配
-    [[ "$output" == *"match=true"* && "$output" == *"skill=gdk-register-map-design"* ]]
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-register-map-design"* ]]
 }
 
 test_routing_driver() {
     local output
     output=$("$MATCH_SCRIPT" --text "写驱动" 2>&1) || true
-    [[ "$output" == *"match=true"* && "$output" == *"source=routing"* && "$output" == *"skill=gdk-driver-bringup-checklist"* ]]
+    [[ "$output" == *"match=true"* && "$output" == *"source=routing"* && "$output" == *"skill=adk-driver-bringup-checklist"* ]]
 }
 
 test_routing_release() {
     local output
     output=$("$MATCH_SCRIPT" --text "准备发布" 2>&1) || true
-    [[ "$output" == *"match=true"* && "$output" == *"source=routing"* && "$output" == *"skill=gdk-release-versioning"* ]]
+    [[ "$output" == *"match=true"* && "$output" == *"source=routing"* && "$output" == *"skill=adk-release-versioning"* ]]
 }
 
 test_routing_bsp() {
     local output
     output=$("$MATCH_SCRIPT" --text "BSP移植" 2>&1) || true
-    [[ "$output" == *"match=true"* && "$output" == *"source=routing"* && "$output" == *"skill=gdk-bsp-porting-playbook"* ]]
+    [[ "$output" == *"match=true"* && "$output" == *"source=routing"* && "$output" == *"skill=adk-bsp-porting-playbook"* ]]
 }
 
 test_routing_performance() {
     local output
     output=$("$MATCH_SCRIPT" --text "性能分析" 2>&1) || true
-    [[ "$output" == *"match=true"* && "$output" == *"source=routing"* && "$output" == *"skill=gdk-performance-profiling-embedded"* ]]
+    [[ "$output" == *"match=true"* && "$output" == *"source=routing"* && "$output" == *"skill=adk-performance-profiling-embedded"* ]]
 }
 
 # --- 负向测试用例 (should NOT match) ---
@@ -124,16 +124,16 @@ echo "================================="
 
 echo ""
 echo "--- Positive cases (should match routing) ---"
-run_test "需求不清楚 -> gdk-requirements-triage" test_routing_needs_triage
-run_test "任务太大 -> gdk-task-breakdown" test_routing_task_breakdown
-run_test "写单元测试 -> gdk-unit-test-embedded" test_routing_unit_test
-run_test "调试问题 -> gdk-systematic-debugging" test_routing_debugging
-run_test "提交代码 -> gdk-commit-pr-quality-gate" test_routing_commit_pr
-run_test "设计寄存器 -> gdk-register-map-design" test_routing_register_map
-run_test "写驱动 -> gdk-driver-bringup-checklist" test_routing_driver
-run_test "准备发布 -> gdk-release-versioning" test_routing_release
-run_test "BSP移植 -> gdk-bsp-porting-playbook" test_routing_bsp
-run_test "性能分析 -> gdk-performance-profiling-embedded" test_routing_performance
+run_test "需求不清楚 -> adk-requirements-triage" test_routing_needs_triage
+run_test "任务太大 -> adk-task-breakdown" test_routing_task_breakdown
+run_test "写单元测试 -> adk-unit-test-embedded" test_routing_unit_test
+run_test "调试问题 -> adk-systematic-debugging" test_routing_debugging
+run_test "提交代码 -> adk-commit-pr-quality-gate" test_routing_commit_pr
+run_test "设计寄存器 -> adk-register-map-design" test_routing_register_map
+run_test "写驱动 -> adk-driver-bringup-checklist" test_routing_driver
+run_test "准备发布 -> adk-release-versioning" test_routing_release
+run_test "BSP移植 -> adk-bsp-porting-playbook" test_routing_bsp
+run_test "性能分析 -> adk-performance-profiling-embedded" test_routing_performance
 
 echo ""
 echo "--- Negative cases (should not match) ---"

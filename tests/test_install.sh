@@ -16,9 +16,9 @@ REPORT="$TMP_DIR/install-report.md"
   --profile core
 
 [[ -d "$TARGET/agents/requirements-analyst" ]] || { echo "[FAIL] missing core agent" >&2; exit 1; }
-[[ -d "$TARGET/skills/gdk-requirements-triage" ]] || { echo "[FAIL] missing core skill" >&2; exit 1; }
+[[ -d "$TARGET/skills/adk-requirements-triage" ]] || { echo "[FAIL] missing core skill" >&2; exit 1; }
 [[ ! -d "$TARGET/agents/driver-engineer" ]] || { echo "[FAIL] unexpected non-core agent" >&2; exit 1; }
-[[ ! -d "$TARGET/skills/gdk-incident-rca-report" ]] || { echo "[FAIL] unexpected optional skill without request" >&2; exit 1; }
+[[ ! -d "$TARGET/skills/adk-incident-rca-report" ]] || { echo "[FAIL] unexpected optional skill without request" >&2; exit 1; }
 
 "$ROOT_DIR/scripts/install_assets.sh" \
   --tool codex \

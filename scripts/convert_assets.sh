@@ -23,7 +23,7 @@ Options:
 
 Example:
   ./scripts/convert_assets.sh --target claude-code --profile core --out dist
-  ./scripts/convert_assets.sh --target codex --profile core --with-optional-skill gdk-incident-rca-report
+  ./scripts/convert_assets.sh --target codex --profile core --with-optional-skill adk-incident-rca-report
 USAGE
 }
 

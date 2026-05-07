@@ -15,9 +15,9 @@
 
 ## 技能路由
 
-- Primary Skill：`gdk-skill-composition-governance`
-- Supporting Skills：`gdk-security-supply-chain`、`gdk-commit-pr-quality-gate`
-- Fallback：若候选涉及安全、依赖或脚本执行风险，先切到 `gdk-security-supply-chain`，审查通过后再回到组合治理。
+- Primary Skill：`adk-skill-composition-governance`
+- Supporting Skills：`adk-security-supply-chain`、`adk-commit-pr-quality-gate`
+- Fallback：若候选涉及安全、依赖或脚本执行风险，先切到 `adk-security-supply-chain`，审查通过后再回到组合治理。
 
 ## 命令模板
 

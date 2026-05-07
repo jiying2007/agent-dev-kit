@@ -1,6 +1,6 @@
 # openspec Bridge Runbook
 
-目标：把 `openspec` 的变更工件与 `global-dev-kit` 的 `workflow.sh` 工件链打通，支持双向迁移并保留最小可追溯信息。
+目标：把 `openspec` 的变更工件与 `agent-dev-kit` 的 `workflow.sh` 工件链打通，支持双向迁移并保留最小可追溯信息。
 
 ## 适用场景
 
@@ -10,7 +10,7 @@
 ## 前置条件
 
 1. openspec 根目录存在（默认 `./openspec`）。
-2. gdk 变更目录存在（默认 `global-dev-kit/docs/changes`）。
+2. gdk 变更目录存在（默认 `agent-dev-kit/docs/changes`）。
 3. `change-id` 为 kebab-case（如 `add-dark-mode`）。
 
 ## 1) openspec -> gdk（导入）

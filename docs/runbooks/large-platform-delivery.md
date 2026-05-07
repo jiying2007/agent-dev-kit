@@ -11,10 +11,10 @@
 
 ## 推荐 Skill 组合
 
-- `gdk-requirements-triage`
-- `gdk-task-breakdown`
-- `gdk-commit-pr-quality-gate`
-- `gdk-verification-before-completion`
+- `adk-requirements-triage`
+- `adk-task-breakdown`
+- `adk-commit-pr-quality-gate`
+- `adk-verification-before-completion`
 
 ## 命令模板
 

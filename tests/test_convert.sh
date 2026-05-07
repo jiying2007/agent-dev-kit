@@ -9,13 +9,13 @@ trap 'rm -rf "$TMP_DIR"' EXIT
 "$ROOT_DIR/scripts/convert_assets.sh" \
   --target claude-code \
   --profile core \
-  --with-optional-skill gdk-incident-rca-report \
+  --with-optional-skill adk-incident-rca-report \
   --out "$TMP_DIR" \
   --clean
 
 [[ -f "$TMP_DIR/claude-code/agent/requirements-analyst.md" ]] || { echo "[FAIL] missing converted agent" >&2; exit 1; }
-[[ -f "$TMP_DIR/claude-code/skill/gdk-requirements-triage.md" ]] || { echo "[FAIL] missing converted skill" >&2; exit 1; }
-[[ -f "$TMP_DIR/claude-code/skill/gdk-incident-rca-report.md" ]] || { echo "[FAIL] missing converted optional skill" >&2; exit 1; }
+[[ -f "$TMP_DIR/claude-code/skill/adk-requirements-triage.md" ]] || { echo "[FAIL] missing converted skill" >&2; exit 1; }
+[[ -f "$TMP_DIR/claude-code/skill/adk-incident-rca-report.md" ]] || { echo "[FAIL] missing converted optional skill" >&2; exit 1; }
 
 grep -q '^target: claude-code$' "$TMP_DIR/claude-code/agent/requirements-analyst.md" || {
   echo "[FAIL] converted metadata missing" >&2

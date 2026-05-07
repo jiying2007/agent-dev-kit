@@ -109,7 +109,7 @@ test_unicode_chinese() {
 test_emoji_input() {
     local output
     output=$("$MATCH_SCRIPT" --text '🚗 驱动开发需要帮忙 🚀' 2>&1) || true
-    # 应能匹配到 gdk-driver-bringup-checklist
+    # 应能匹配到 adk-driver-bringup-checklist
     [[ "$output" == *"match=true"* ]]
 }
 
@@ -126,158 +126,158 @@ test_unicode_mixed() {
 # 22 个 Routing 关键词逐一匹配测试
 # ============================================================
 
-# 1. gdk-requirements-triage
+# 1. adk-requirements-triage
 test_routing_01_needs_triage() {
     local output
     output=$("$MATCH_SCRIPT" --text "需求不清楚" 2>&1) || true
-    [[ "$output" == *"match=true"* && "$output" == *"skill=gdk-requirements-triage"* ]]
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-requirements-triage"* ]]
 }
 
-# 2. gdk-task-breakdown
+# 2. adk-task-breakdown
 test_routing_02_task_breakdown() {
     local output
     output=$("$MATCH_SCRIPT" --text "拆解大任务" 2>&1) || true
-    [[ "$output" == *"match=true"* && "$output" == *"skill=gdk-task-breakdown"* ]]
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-task-breakdown"* ]]
 }
 
-# 3. gdk-interface-contract-design
+# 3. adk-interface-contract-design
 test_routing_03_interface_design() {
     local output
     output=$("$MATCH_SCRIPT" --text "设计接口" 2>&1) || true
-    [[ "$output" == *"match=true"* && "$output" == *"skill=gdk-interface-contract-design"* ]]
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-interface-contract-design"* ]]
 }
 
-# 4. gdk-unit-test-embedded
+# 4. adk-unit-test-embedded
 test_routing_04_unit_test() {
     local output
     output=$("$MATCH_SCRIPT" --text "写单元测试" 2>&1) || true
-    [[ "$output" == *"match=true"* && "$output" == *"skill=gdk-unit-test-embedded"* ]]
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-unit-test-embedded"* ]]
 }
 
-# 5. gdk-static-analysis-c-cpp
+# 5. adk-static-analysis-c-cpp
 test_routing_05_static_analysis() {
     local output
     output=$("$MATCH_SCRIPT" --text "静态分析" 2>&1) || true
-    [[ "$output" == *"match=true"* && "$output" == *"skill=gdk-static-analysis-c-cpp"* ]]
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-static-analysis-c-cpp"* ]]
 }
 
-# 6. gdk-systematic-debugging
+# 6. adk-systematic-debugging
 test_routing_06_debugging() {
     local output
     output=$("$MATCH_SCRIPT" --text "调试" 2>&1) || true
-    [[ "$output" == *"match=true"* && "$output" == *"skill=gdk-systematic-debugging"* ]]
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-systematic-debugging"* ]]
 }
 
-# 7. gdk-verification-before-completion
+# 7. adk-verification-before-completion
 test_routing_07_ready_to_complete() {
     local output
     output=$("$MATCH_SCRIPT" --text "准备完成" 2>&1) || true
-    [[ "$output" == *"match=true"* && "$output" == *"skill=gdk-verification-before-completion"* ]]
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-verification-before-completion"* ]]
 }
 
-# 8. gdk-commit-pr-quality-gate
+# 8. adk-commit-pr-quality-gate
 test_routing_08_submit_code() {
     local output
     output=$("$MATCH_SCRIPT" --text "提交代码" 2>&1) || true
-    [[ "$output" == *"match=true"* && "$output" == *"skill=gdk-commit-pr-quality-gate"* ]]
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-commit-pr-quality-gate"* ]]
 }
 
-# 9. gdk-adr-writer
+# 9. adk-adr-writer
 test_routing_09_adr() {
     local output
     output=$("$MATCH_SCRIPT" --text "写ADR" 2>&1) || true
-    [[ "$output" == *"match=true"* && "$output" == *"skill=gdk-adr-writer"* ]]
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-adr-writer"* ]]
 }
 
-# 10. gdk-register-map-design
+# 10. adk-register-map-design
 test_routing_10_register_map() {
     local output
     output=$("$MATCH_SCRIPT" --text "设计寄存器映射" 2>&1) || true
-    [[ "$output" == *"match=true"* && "$output" == *"skill=gdk-register-map-design"* ]]
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-register-map-design"* ]]
 }
 
-# 11. gdk-driver-bringup-checklist
+# 11. adk-driver-bringup-checklist
 test_routing_11_driver_bringup() {
     local output
     output=$("$MATCH_SCRIPT" --text "驱动开发" 2>&1) || true
-    [[ "$output" == *"match=true"* && "$output" == *"skill=gdk-driver-bringup-checklist"* ]]
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-driver-bringup-checklist"* ]]
 }
 
-# 12. gdk-bsp-porting-playbook
+# 12. adk-bsp-porting-playbook
 test_routing_12_bsp_porting() {
     local output
     output=$("$MATCH_SCRIPT" --text "BSP移植" 2>&1) || true
-    [[ "$output" == *"match=true"* && "$output" == *"skill=gdk-bsp-porting-playbook"* ]]
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-bsp-porting-playbook"* ]]
 }
 
-# 13. gdk-rtos-task-design
+# 13. adk-rtos-task-design
 test_routing_13_rtos_task() {
     local output
     output=$("$MATCH_SCRIPT" --text "RTOS任务设计" 2>&1) || true
-    [[ "$output" == *"match=true"* && "$output" == *"skill=gdk-rtos-task-design"* ]]
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-rtos-task-design"* ]]
 }
 
-# 14. gdk-interrupt-dma-patterns
+# 14. adk-interrupt-dma-patterns
 test_routing_14_interrupt_dma() {
     local output
     output=$("$MATCH_SCRIPT" --text "中断处理" 2>&1) || true
-    [[ "$output" == *"match=true"* && "$output" == *"skill=gdk-interrupt-dma-patterns"* ]]
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-interrupt-dma-patterns"* ]]
 }
 
-# 15. gdk-protocol-stack-integration
+# 15. adk-protocol-stack-integration
 test_routing_15_protocol_stack() {
     local output
     output=$("$MATCH_SCRIPT" --text "协议栈集成" 2>&1) || true
-    [[ "$output" == *"match=true"* && "$output" == *"skill=gdk-protocol-stack-integration"* ]]
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-protocol-stack-integration"* ]]
 }
 
-# 16. gdk-component-api-stability
+# 16. adk-component-api-stability
 test_routing_16_api_stability() {
     local output
     output=$("$MATCH_SCRIPT" --text "API稳定性" 2>&1) || true
-    [[ "$output" == *"match=true"* && "$output" == *"skill=gdk-component-api-stability"* ]]
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-component-api-stability"* ]]
 }
 
-# 17. gdk-cmake-cross-build
+# 17. adk-cmake-cross-build
 test_routing_17_cmake_cross() {
     local output
     output=$("$MATCH_SCRIPT" --text "CMake交叉编译" 2>&1) || true
-    [[ "$output" == *"match=true"* && "$output" == *"skill=gdk-cmake-cross-build"* ]]
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-cmake-cross-build"* ]]
 }
 
-# 18. gdk-toolchain-debug-openocd-gdb
+# 18. adk-toolchain-debug-openocd-gdb
 test_routing_18_openocd_gdb() {
     local output
     output=$("$MATCH_SCRIPT" --text "OpenOCD" 2>&1) || true
-    [[ "$output" == *"match=true"* && "$output" == *"skill=gdk-toolchain-debug-openocd-gdb"* ]]
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-toolchain-debug-openocd-gdb"* ]]
 }
 
-# 19. gdk-integration-hil-sil
+# 19. adk-integration-hil-sil
 test_routing_19_hil_sil() {
     local output
     output=$("$MATCH_SCRIPT" --text "HIL/SIL集成测试" 2>&1) || true
-    [[ "$output" == *"match=true"* && "$output" == *"skill=gdk-integration-hil-sil"* ]]
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-integration-hil-sil"* ]]
 }
 
-# 20. gdk-fault-injection-recovery
+# 20. adk-fault-injection-recovery
 test_routing_20_fault_injection() {
     local output
     output=$("$MATCH_SCRIPT" --text "故障注入测试" 2>&1) || true
-    [[ "$output" == *"match=true"* && "$output" == *"skill=gdk-fault-injection-recovery"* ]]
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-fault-injection-recovery"* ]]
 }
 
-# 21. gdk-performance-profiling-embedded
+# 21. adk-performance-profiling-embedded
 test_routing_21_performance() {
     local output
     output=$("$MATCH_SCRIPT" --text "性能分析" 2>&1) || true
-    [[ "$output" == *"match=true"* && "$output" == *"skill=gdk-performance-profiling-embedded"* ]]
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-performance-profiling-embedded"* ]]
 }
 
-# 22. gdk-release-versioning
+# 22. adk-release-versioning
 test_routing_22_release() {
     local output
     output=$("$MATCH_SCRIPT" --text "版本发布" 2>&1) || true
-    [[ "$output" == *"match=true"* && "$output" == *"skill=gdk-release-versioning"* ]]
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-release-versioning"* ]]
 }
 
 # ============================================================
@@ -287,28 +287,28 @@ test_multi_slash_intent_zh_first() {
     # "需求不清楚/需要澄清/需求模糊/需求不明确" - 匹配第一段
     local output
     output=$("$MATCH_SCRIPT" --text "需求模糊" 2>&1) || true
-    [[ "$output" == *"match=true"* && "$output" == *"skill=gdk-requirements-triage"* ]]
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-requirements-triage"* ]]
 }
 
 test_multi_slash_intent_zh_last() {
     # "需求不清楚/需要澄清/需求模糊/需求不明确" - 匹配最后一段
     local output
     output=$("$MATCH_SCRIPT" --text "需求不明确" 2>&1) || true
-    [[ "$output" == *"match=true"* && "$output" == *"skill=gdk-requirements-triage"* ]]
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-requirements-triage"* ]]
 }
 
 test_multi_slash_intent_zh_substring() {
     # "驱动开发/驱动调试/写驱动/驱动bringup" - 匹配写驱动段
     local output
     output=$("$MATCH_SCRIPT" --text "写驱动" 2>&1) || true
-    [[ "$output" == *"match=true"* && "$output" == *"skill=gdk-driver-bringup-checklist"* ]]
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-driver-bringup-checklist"* ]]
 }
 
 test_multi_slash_intent_zh_partial() {
     # "中断处理/DMA处理/中断DMA" - 匹配部分
     local output
     output=$("$MATCH_SCRIPT" --text "DMA处理" 2>&1) || true
-    [[ "$output" == *"match=true"* && "$output" == *"skill=gdk-interrupt-dma-patterns"* ]]
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-interrupt-dma-patterns"* ]]
 }
 
 # ============================================================
@@ -329,28 +329,28 @@ run_test "Emoji input" test_emoji_input
 run_test "Unicode mixed (EN+CN)" test_unicode_mixed
 
 # 22 routing keyword tests
-run_test "Routing 01: gdk-requirements-triage" test_routing_01_needs_triage
-run_test "Routing 02: gdk-task-breakdown" test_routing_02_task_breakdown
-run_test "Routing 03: gdk-interface-contract-design" test_routing_03_interface_design
-run_test "Routing 04: gdk-unit-test-embedded" test_routing_04_unit_test
-run_test "Routing 05: gdk-static-analysis-c-cpp" test_routing_05_static_analysis
-run_test "Routing 06: gdk-systematic-debugging" test_routing_06_debugging
-run_test "Routing 07: gdk-verification-before-completion" test_routing_07_ready_to_complete
-run_test "Routing 08: gdk-commit-pr-quality-gate" test_routing_08_submit_code
-run_test "Routing 09: gdk-adr-writer" test_routing_09_adr
-run_test "Routing 10: gdk-register-map-design" test_routing_10_register_map
-run_test "Routing 11: gdk-driver-bringup-checklist" test_routing_11_driver_bringup
-run_test "Routing 12: gdk-bsp-porting-playbook" test_routing_12_bsp_porting
-run_test "Routing 13: gdk-rtos-task-design" test_routing_13_rtos_task
-run_test "Routing 14: gdk-interrupt-dma-patterns" test_routing_14_interrupt_dma
-run_test "Routing 15: gdk-protocol-stack-integration" test_routing_15_protocol_stack
-run_test "Routing 16: gdk-component-api-stability" test_routing_16_api_stability
-run_test "Routing 17: gdk-cmake-cross-build" test_routing_17_cmake_cross
-run_test "Routing 18: gdk-toolchain-debug-openocd-gdb" test_routing_18_openocd_gdb
-run_test "Routing 19: gdk-integration-hil-sil" test_routing_19_hil_sil
-run_test "Routing 20: gdk-fault-injection-recovery" test_routing_20_fault_injection
-run_test "Routing 21: gdk-performance-profiling-embedded" test_routing_21_performance
-run_test "Routing 22: gdk-release-versioning" test_routing_22_release
+run_test "Routing 01: adk-requirements-triage" test_routing_01_needs_triage
+run_test "Routing 02: adk-task-breakdown" test_routing_02_task_breakdown
+run_test "Routing 03: adk-interface-contract-design" test_routing_03_interface_design
+run_test "Routing 04: adk-unit-test-embedded" test_routing_04_unit_test
+run_test "Routing 05: adk-static-analysis-c-cpp" test_routing_05_static_analysis
+run_test "Routing 06: adk-systematic-debugging" test_routing_06_debugging
+run_test "Routing 07: adk-verification-before-completion" test_routing_07_ready_to_complete
+run_test "Routing 08: adk-commit-pr-quality-gate" test_routing_08_submit_code
+run_test "Routing 09: adk-adr-writer" test_routing_09_adr
+run_test "Routing 10: adk-register-map-design" test_routing_10_register_map
+run_test "Routing 11: adk-driver-bringup-checklist" test_routing_11_driver_bringup
+run_test "Routing 12: adk-bsp-porting-playbook" test_routing_12_bsp_porting
+run_test "Routing 13: adk-rtos-task-design" test_routing_13_rtos_task
+run_test "Routing 14: adk-interrupt-dma-patterns" test_routing_14_interrupt_dma
+run_test "Routing 15: adk-protocol-stack-integration" test_routing_15_protocol_stack
+run_test "Routing 16: adk-component-api-stability" test_routing_16_api_stability
+run_test "Routing 17: adk-cmake-cross-build" test_routing_17_cmake_cross
+run_test "Routing 18: adk-toolchain-debug-openocd-gdb" test_routing_18_openocd_gdb
+run_test "Routing 19: adk-integration-hil-sil" test_routing_19_hil_sil
+run_test "Routing 20: adk-fault-injection-recovery" test_routing_20_fault_injection
+run_test "Routing 21: adk-performance-profiling-embedded" test_routing_21_performance
+run_test "Routing 22: adk-release-versioning" test_routing_22_release
 
 # Multi-slash intent_zh tests
 run_test "Multi-slash: first segment" test_multi_slash_intent_zh_first

@@ -182,7 +182,7 @@ build_release() {
 \`\`\`bash
 # 克隆仓库
 git clone <repository-url>
-cd global-dev-kit
+cd agent-dev-kit
 
 # 验证安装
 bash scripts/health-check.sh check-all
@@ -248,7 +248,7 @@ INSTALLEOF
     
     # 4. 创建压缩包
     log_info "创建压缩包..."
-    local archive_name="global-dev-kit-$version.tar.gz"
+    local archive_name="agent-dev-kit-$version.tar.gz"
     tar -czf "$ROOT_DIR/dist/$archive_name" -C "$ROOT_DIR/dist" "$version"
     
     log_success "发布包构建完成: $ROOT_DIR/dist/$archive_name"
@@ -260,7 +260,7 @@ publish_release() {
     log_info "发布版本: $version -> $target"
     
     # 1. 验证发布包
-    local archive_name="global-dev-kit-$version.tar.gz"
+    local archive_name="agent-dev-kit-$version.tar.gz"
     if [[ ! -f "$ROOT_DIR/dist/$archive_name" ]]; then
         log_error "发布包不存在: $archive_name"
         return 1
@@ -276,13 +276,13 @@ publish_release() {
     log_info "部署到目标环境: $target"
     if [[ "$target" == "production" ]]; then
         # 生产环境部署
-        local deploy_dir="/opt/global-dev-kit"
+        local deploy_dir="/opt/agent-dev-kit"
         mkdir -p "$deploy_dir"
         tar -xzf "$ROOT_DIR/dist/$archive_name" -C "$deploy_dir"
         log_success "部署完成: $deploy_dir"
     elif [[ "$target" == "staging" ]]; then
         # 预发布环境部署
-        local deploy_dir="/opt/global-dev-kit-staging"
+        local deploy_dir="/opt/agent-dev-kit-staging"
         mkdir -p "$deploy_dir"
         tar -xzf "$ROOT_DIR/dist/$archive_name" -C "$deploy_dir"
         log_success "部署完成: $deploy_dir"
