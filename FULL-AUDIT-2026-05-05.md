@@ -487,7 +487,7 @@
 
 commands.md 和 usage.md 引用了不属于本仓库的脚本:
 - scripts/check-global-codex-health.sh（在父仓库 llm_agent 中）
-- scripts/check-gdk-harden-readiness.sh（在父仓库 llm_agent 中）
+- scripts/check-adk-harden-readiness.sh（在父仓库 llm_agent 中）
 
 这些是跨仓库引用，未标注说明，会让新用户困惑。
 

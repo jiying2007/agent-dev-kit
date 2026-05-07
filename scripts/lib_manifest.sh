@@ -2,30 +2,30 @@
 set -euo pipefail
 
 # shellcheck disable=SC2034
-GDK_LIB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ADK_LIB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck disable=SC2034
-GDK_ROOT_DIR="$(cd "$GDK_LIB_DIR/.." && pwd)"
+ADK_ROOT_DIR="$(cd "$ADK_LIB_DIR/.." && pwd)"
 # shellcheck disable=SC2034
-GDK_MANIFEST="$GDK_ROOT_DIR/manifest.yaml"
+ADK_MANIFEST="$ADK_ROOT_DIR/manifest.yaml"
 
-gdk_require_manifest() {
-  [[ -f "$GDK_MANIFEST" ]] || {
-    echo "[FAIL] manifest.yaml not found: $GDK_MANIFEST" >&2
+adk_require_manifest() {
+  [[ -f "$ADK_MANIFEST" ]] || {
+    echo "[FAIL] manifest.yaml not found: $ADK_MANIFEST" >&2
     return 1
   }
 }
 
-gdk_section_block() {
+adk_section_block() {
   local section="$1"
   awk -v section="$section" '
     $0 ~ "^" section ":" {in_section=1; next}
     in_section && $0 ~ "^[^ ]" {in_section=0}
     in_section {print}
-  ' "$GDK_MANIFEST"
+  ' "$ADK_MANIFEST"
 }
 
-gdk_list_tool_names() {
-  gdk_section_block "tool_targets" | awk '
+adk_list_tool_names() {
+  adk_section_block "tool_targets" | awk '
     $0 ~ /^  [a-z0-9-]+:$/ {
       name=$1
       sub(":", "", name)
@@ -34,12 +34,12 @@ gdk_list_tool_names() {
   '
 }
 
-gdk_tool_exists() {
+adk_tool_exists() {
   local tool="$1"
-  gdk_list_tool_names | grep -Fxq "$tool"
+  adk_list_tool_names | grep -Fxq "$tool"
 }
 
-gdk_get_tool_value() {
+adk_get_tool_value() {
   local tool="$1"
   local key="$2"
   awk -v tool="$tool" -v key="$key" '
@@ -56,10 +56,10 @@ gdk_get_tool_value() {
         exit
       }
     }
-  ' "$GDK_MANIFEST"
+  ' "$ADK_MANIFEST"
 }
 
-gdk_get_tool_list() {
+adk_get_tool_list() {
   local tool="$1"
   local key="$2"
   awk -v tool="$tool" -v key="$key" '
@@ -81,11 +81,11 @@ gdk_get_tool_list() {
         }
       }
     }
-  ' "$GDK_MANIFEST"
+  ' "$ADK_MANIFEST"
 }
 
-gdk_list_profile_names() {
-  gdk_section_block "profiles" | awk '
+adk_list_profile_names() {
+  adk_section_block "profiles" | awk '
     $0 ~ /^  [a-z0-9-]+:$/ {
       name=$1
       sub(":", "", name)
@@ -94,12 +94,12 @@ gdk_list_profile_names() {
   '
 }
 
-gdk_profile_exists() {
+adk_profile_exists() {
   local profile="$1"
-  gdk_list_profile_names | grep -Fxq "$profile"
+  adk_list_profile_names | grep -Fxq "$profile"
 }
 
-gdk_get_profile_value() {
+adk_get_profile_value() {
   local profile="$1"
   local key="$2"
   awk -v profile="$profile" -v key="$key" '
@@ -116,10 +116,10 @@ gdk_get_profile_value() {
         exit
       }
     }
-  ' "$GDK_MANIFEST"
+  ' "$ADK_MANIFEST"
 }
 
-gdk_get_profile_list() {
+adk_get_profile_list() {
   local profile="$1"
   local key="$2"
   awk -v profile="$profile" -v key="$key" '
@@ -141,10 +141,10 @@ gdk_get_profile_list() {
         }
       }
     }
-  ' "$GDK_MANIFEST"
+  ' "$ADK_MANIFEST"
 }
 
-gdk_collect_profile_items() {
+adk_collect_profile_items() {
   local profile="$1"
   local key="$2"
   local visited="${3:-}"
@@ -158,28 +158,28 @@ gdk_collect_profile_items() {
   local parent
   while IFS= read -r parent; do
     [[ -z "$parent" ]] && continue
-    gdk_collect_profile_items "$parent" "$key" "$visited"
-  done < <(gdk_get_profile_list "$profile" "extends")
+    adk_collect_profile_items "$parent" "$key" "$visited"
+  done < <(adk_get_profile_list "$profile" "extends")
 
-  gdk_get_profile_list "$profile" "$key"
+  adk_get_profile_list "$profile" "$key"
 }
 
-gdk_resolve_profile_items() {
+adk_resolve_profile_items() {
   local profile="$1"
   local key="$2"
-  gdk_collect_profile_items "$profile" "$key" "" | awk 'NF' | sort -u
+  adk_collect_profile_items "$profile" "$key" "" | awk 'NF' | sort -u
 }
 
-gdk_list_manifest_names() {
+adk_list_manifest_names() {
   local section="$1"
-  gdk_section_block "$section" | awk '
+  adk_section_block "$section" | awk '
     $0 ~ /^  - name:/ {print $3}
   '
 }
 
-gdk_list_manifest_paths() {
+adk_list_manifest_paths() {
   local section="$1"
-  gdk_section_block "$section" | awk '
+  adk_section_block "$section" | awk '
     $0 ~ /^  - name:/ {
       name=$3
       next
@@ -191,7 +191,7 @@ gdk_list_manifest_paths() {
   '
 }
 
-gdk_get_manifest_item_value() {
+adk_get_manifest_item_value() {
   local section="$1"
   local name="$2"
   local key="$3"
@@ -209,31 +209,31 @@ gdk_get_manifest_item_value() {
       print value
       exit
     }
-  ' "$GDK_MANIFEST"
+  ' "$ADK_MANIFEST"
 }
 
-gdk_list_optional_skill_names() {
-  gdk_list_manifest_names "optional_skills"
+adk_list_optional_skill_names() {
+  adk_list_manifest_names "optional_skills"
 }
 
-gdk_optional_skill_exists() {
+adk_optional_skill_exists() {
   local skill="$1"
-  gdk_list_optional_skill_names | grep -Fxq "$skill"
+  adk_list_optional_skill_names | grep -Fxq "$skill"
 }
 
-gdk_get_optional_skill_path() {
+adk_get_optional_skill_path() {
   local skill="$1"
-  gdk_get_manifest_item_value "optional_skills" "$skill" "path"
+  adk_get_manifest_item_value "optional_skills" "$skill" "path"
 }
 
 # --- Common utility functions ---
 
-gdk_to_lower() {
+adk_to_lower() {
   printf '%s' "$1" | tr '[:upper:]' '[:lower:]'
 }
 
 # Requires caller to set DRY_RUN (0 or 1).
-gdk_run_cmd() {
+adk_run_cmd() {
   if [[ "${DRY_RUN:-0}" -eq 1 ]]; then
     echo "[dry-run] $*"
   else
@@ -242,20 +242,20 @@ gdk_run_cmd() {
 }
 
 # Resolve items from multiple profiles at once.
-# Usage: gdk_resolve_profile_items_all <key> <profile1> [profile2 ...]
-gdk_resolve_profile_items_all() {
+# Usage: adk_resolve_profile_items_all <key> <profile1> [profile2 ...]
+adk_resolve_profile_items_all() {
   local key="$1"
   shift
   local profiles=("$@")
   local profile
   for profile in "${profiles[@]}"; do
-    gdk_resolve_profile_items "$profile" "$key"
+    adk_resolve_profile_items "$profile" "$key"
   done | awk 'NF' | sort -u
 }
 
 # --- Routing table functions ---
 
-gdk_list_routing_intents() {
+adk_list_routing_intents() {
   # Output: intent_zh<TAB>primary_skill for each routing entry
   awk '
     $0 ~ /^routing:/ {in_routing=1; next}
@@ -275,5 +275,5 @@ gdk_list_routing_intents() {
         }
       }
     }
-  ' "$GDK_MANIFEST"
+  ' "$ADK_MANIFEST"
 }

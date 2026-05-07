@@ -120,7 +120,7 @@ write_with_metadata() {
   local name="$4"
 
   if [[ "$TARGET" == "codex" ]]; then
-    gdk_run_cmd cp -a "$src" "$dst"
+    adk_run_cmd cp -a "$src" "$dst"
     return
   fi
 
@@ -147,10 +147,10 @@ write_with_metadata() {
   } > "$dst"
 }
 
-gdk_require_manifest
+adk_require_manifest
 
 if [[ "$LIST_OPTIONAL_SKILLS" -eq 1 ]]; then
-  gdk_list_optional_skill_names
+  adk_list_optional_skill_names
   exit 0
 fi
 
@@ -169,43 +169,43 @@ case "$TARGET" in
 esac
 
 if [[ -z "$PROFILE" ]]; then
-  PROFILE="$(awk '/^default_profile:/ {print $2; exit}' "$GDK_MANIFEST")"
+  PROFILE="$(awk '/^default_profile:/ {print $2; exit}' "$ADK_MANIFEST")"
   [[ -n "$PROFILE" ]] || PROFILE="embedded-fullstack"
 fi
 
-gdk_profile_exists "$PROFILE" || {
+adk_profile_exists "$PROFILE" || {
   echo "[FAIL] unknown profile: $PROFILE" >&2
   exit 1
 }
 
 for profile in "${EXTRA_PROFILES[@]}"; do
-  gdk_profile_exists "$profile" || {
+  adk_profile_exists "$profile" || {
     echo "[FAIL] unknown extra profile: $profile" >&2
     exit 1
   }
 done
 
 for skill in "${OPTIONAL_SKILLS[@]}"; do
-  gdk_optional_skill_exists "$skill" || {
+  adk_optional_skill_exists "$skill" || {
     echo "[FAIL] unknown optional skill: $skill" >&2
     exit 1
   }
 done
 
 ALL_PROFILES=("$PROFILE" "${EXTRA_PROFILES[@]}")
-mapfile -t AGENTS_TO_EXPORT < <(gdk_resolve_profile_items_all "include_agents" "${ALL_PROFILES[@]}")
-mapfile -t SKILLS_TO_EXPORT < <(gdk_resolve_profile_items_all "include_skills" "${ALL_PROFILES[@]}")
+mapfile -t AGENTS_TO_EXPORT < <(adk_resolve_profile_items_all "include_agents" "${ALL_PROFILES[@]}")
+mapfile -t SKILLS_TO_EXPORT < <(adk_resolve_profile_items_all "include_skills" "${ALL_PROFILES[@]}")
 
 TARGET_DIR="$OUT_DIR/$TARGET"
 if [[ "$CLEAN" -eq 1 ]]; then
-  gdk_run_cmd rm -rf "$TARGET_DIR"
+  adk_run_cmd rm -rf "$TARGET_DIR"
 fi
 
 for name in "${AGENTS_TO_EXPORT[@]}"; do
   src="$ROOT_DIR/agents/$name/AGENTS.md"
   dst="$(resolve_destination "agent" "$name")"
   [[ -n "$dst" ]] || { echo "[FAIL] failed to resolve destination for agent: $name" >&2; exit 1; }
-  gdk_run_cmd mkdir -p "$(dirname "$dst")"
+  adk_run_cmd mkdir -p "$(dirname "$dst")"
   write_with_metadata "$src" "$dst" "agent" "$name"
 done
 
@@ -213,17 +213,17 @@ for name in "${SKILLS_TO_EXPORT[@]}"; do
   src="$ROOT_DIR/skills/$name/SKILL.md"
   dst="$(resolve_destination "skill" "$name")"
   [[ -n "$dst" ]] || { echo "[FAIL] failed to resolve destination for skill: $name" >&2; exit 1; }
-  gdk_run_cmd mkdir -p "$(dirname "$dst")"
+  adk_run_cmd mkdir -p "$(dirname "$dst")"
   write_with_metadata "$src" "$dst" "skill" "$name"
 done
 
 for name in "${OPTIONAL_SKILLS[@]}"; do
-  optional_path="$(gdk_get_optional_skill_path "$name")"
+  optional_path="$(adk_get_optional_skill_path "$name")"
   [[ -n "$optional_path" ]] || { echo "[FAIL] optional skill path missing: $name" >&2; exit 1; }
   src="$ROOT_DIR/$optional_path"
   dst="$(resolve_destination "skill" "$name")"
   [[ -n "$dst" ]] || { echo "[FAIL] failed to resolve destination for optional skill: $name" >&2; exit 1; }
-  gdk_run_cmd mkdir -p "$(dirname "$dst")"
+  adk_run_cmd mkdir -p "$(dirname "$dst")"
   write_with_metadata "$src" "$dst" "skill" "$name"
 done
 

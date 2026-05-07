@@ -30,12 +30,12 @@ if [[ $# -gt 0 ]]; then
   exit 1
 fi
 
-gdk_require_manifest
+adk_require_manifest
 
 manifest_contains() {
   local section="$1"
   local name="$2"
-  gdk_list_manifest_names "$section" | grep -Fxq "$name"
+  adk_list_manifest_names "$section" | grep -Fxq "$name"
 }
 
 check_direct_duplicates() {
@@ -43,7 +43,7 @@ check_direct_duplicates() {
   local key="$2"
   local duplicates
 
-  duplicates="$(gdk_get_profile_list "$profile" "$key" | awk '
+  duplicates="$(adk_get_profile_list "$profile" "$key" | awk '
     NF {
       seen[$0]++
     }
@@ -71,18 +71,18 @@ check_inherited_redeclaration() {
   local parents parent item inherited
   local failed=0
 
-  parents="$(gdk_get_profile_list "$profile" "extends")"
+  parents="$(adk_get_profile_list "$profile" "extends")"
   [[ -n "$parents" ]] || return 0
 
   inherited="$(mktemp)"
   while IFS= read -r parent; do
     [[ -z "$parent" ]] && continue
-    if ! gdk_profile_exists "$parent"; then
+    if ! adk_profile_exists "$parent"; then
       echo "[FAIL] profile ${profile} extends unknown profile: ${parent}" >&2
       failed=1
       continue
     fi
-    gdk_collect_profile_items "$parent" "$key" "" >> "$inherited"
+    adk_collect_profile_items "$parent" "$key" "" >> "$inherited"
   done <<< "$parents"
 
   sort -u "$inherited" -o "$inherited"
@@ -92,7 +92,7 @@ check_inherited_redeclaration() {
       echo "[FAIL] profile ${profile} redeclares inherited ${key}: ${item}" >&2
       failed=1
     fi
-  done < <(gdk_get_profile_list "$profile" "$key")
+  done < <(adk_get_profile_list "$profile" "$key")
 
   rm -f "$inherited"
   return "$failed"
@@ -110,7 +110,7 @@ check_manifest_references() {
       echo "[FAIL] profile ${profile} references unknown ${key}: ${item}" >&2
       failed=1
     fi
-  done < <(gdk_get_profile_list "$profile" "$key")
+  done < <(adk_get_profile_list "$profile" "$key")
 
   return "$failed"
 }
@@ -145,15 +145,15 @@ check_profile_conflicts() {
 
 
 failed=0
-default_profile="$(awk '/^default_profile:/ {print $2; exit}' "$GDK_MANIFEST")"
-if [[ -z "$default_profile" ]] || ! gdk_profile_exists "$default_profile"; then
+default_profile="$(awk '/^default_profile:/ {print $2; exit}' "$ADK_MANIFEST")"
+if [[ -z "$default_profile" ]] || ! adk_profile_exists "$default_profile"; then
   echo "[FAIL] default_profile is missing or unknown: ${default_profile:-<empty>}" >&2
   failed=1
 fi
 
 while IFS= read -r profile; do
   [[ -z "$profile" ]] && continue
-  if [[ -z "$(gdk_get_profile_value "$profile" "description")" ]]; then
+  if [[ -z "$(adk_get_profile_value "$profile" "description")" ]]; then
     echo "[FAIL] profile ${profile} missing description" >&2
     failed=1
   fi
@@ -164,10 +164,10 @@ while IFS= read -r profile; do
   check_inherited_redeclaration "$profile" "include_skills" || failed=1
   check_manifest_references "$profile" "include_agents" "agents" || failed=1
   check_manifest_references "$profile" "include_skills" "skills" || failed=1
-done < <(gdk_list_profile_names)
+done < <(adk_list_profile_names)
 
 # 检测 profile 冲突
-check_profile_conflicts "$GDK_MANIFEST" || true
+check_profile_conflicts "$ADK_MANIFEST" || true
 
 if [[ "$failed" -ne 0 ]]; then
   echo "[FAIL] profile coherence checks failed" >&2

@@ -15,8 +15,8 @@ if rg -n "$PATTERN" \
   "$ROOT_DIR/agents" \
   "$ROOT_DIR/skills" \
   "$ROOT_DIR/optional-skills" \
-  >/tmp/gdk_ext_repo_refs.txt 2>/dev/null; then
-  cat /tmp/gdk_ext_repo_refs.txt >&2
+  >/tmp/adk_ext_repo_refs.txt 2>/dev/null; then
+  cat /tmp/adk_ext_repo_refs.txt >&2
   echo "[FAIL] external repository references found in docs/assets" >&2
   exit 1
 fi

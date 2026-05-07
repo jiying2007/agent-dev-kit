@@ -2,7 +2,7 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-GDK_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+ADK_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 PASS_COUNT=0
 FAIL_COUNT=0
@@ -27,11 +27,11 @@ run_smoke() {
 echo "=== Script Smoke Tests ==="
 echo ""
 
-cd "$GDK_ROOT"
+cd "$ADK_ROOT"
 
 run_smoke "devkit.sh help"                scripts/devkit.sh help
 run_smoke "health-check.sh"              scripts/health-check.sh
-run_smoke "lib_manifest.sh (source)"     -c "source scripts/lib_manifest.sh && type gdk_require_manifest >/dev/null 2>&1"
+run_smoke "lib_manifest.sh (source)"     -c "source scripts/lib_manifest.sh && type adk_require_manifest >/dev/null 2>&1"
 run_smoke "version-manager.sh"           scripts/version-manager.sh
 run_smoke "backup-rollback.sh"           scripts/backup-rollback.sh
 run_smoke "release-manager.sh"           scripts/release-manager.sh

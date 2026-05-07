@@ -20,12 +20,12 @@
 ```bash
 bash ../scripts/health-check.sh ~/.codex minimal
 bash ../scripts/check-global-codex-health.sh ~/.codex minimal
-bash ../scripts/check-gdk-harden-readiness.sh . --require-pilot --skip-full-suite
+bash ../scripts/check-adk-harden-readiness.sh . --require-pilot --skip-full-suite
 ```
 
 ## 验收门禁
 
 - `health-check` 与 `check-global-codex-health` 必须均为 PASS。
-- `check-gdk-harden-readiness` 必须在 `--require-pilot` 条件下通过。
+- `check-adk-harden-readiness` 必须在 `--require-pilot` 条件下通过。
 - 验证结论必须包含三联证据：health-check / global health / pilot gate。
 - 若任一命令失败，必须记录失败证据并转入 `adk-systematic-debugging`，不得声明可放行。

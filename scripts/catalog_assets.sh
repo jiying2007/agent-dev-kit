@@ -100,7 +100,7 @@ frontmatter_first_list_item() {
 match_keyword() {
   local text="$1"
   local needle="$2"
-  [[ "$(gdk_to_lower "$text")" == *"$(gdk_to_lower "$needle")"* ]]
+  [[ "$(adk_to_lower "$text")" == *"$(adk_to_lower "$needle")"* ]]
 }
 
 emit_agents_table() {
@@ -111,10 +111,10 @@ emit_agents_table() {
   local name role path
   while IFS= read -r name; do
     [[ -z "$name" ]] && continue
-    role="$(gdk_get_manifest_item_value "agents" "$name" "role")"
-    path="$(gdk_get_manifest_item_value "agents" "$name" "path")"
+    role="$(adk_get_manifest_item_value "agents" "$name" "role")"
+    path="$(adk_get_manifest_item_value "agents" "$name" "path")"
     echo "| \`$name\` | $role | \`$path\` |"
-  done < <(gdk_list_manifest_names "agents")
+  done < <(adk_list_manifest_names "agents")
   echo
 }
 
@@ -130,12 +130,12 @@ emit_skills_table() {
   local name path file desc trigger
   while IFS= read -r name; do
     [[ -z "$name" ]] && continue
-    path="$(gdk_get_manifest_item_value "$section" "$name" "path")"
+    path="$(adk_get_manifest_item_value "$section" "$name" "path")"
     file="$ROOT_DIR/$path"
     desc="$(frontmatter_value "$file" "description")"
     trigger="$(frontmatter_first_list_item "$file" "triggers")"
     echo "| \`$name\` | $desc | $trigger | \`$path\` |"
-  done < <(gdk_list_manifest_names "$section")
+  done < <(adk_list_manifest_names "$section")
   echo
 }
 
@@ -147,13 +147,13 @@ emit_profiles_table() {
   local profile desc optional extends
   while IFS= read -r profile; do
     [[ -z "$profile" ]] && continue
-    desc="$(gdk_get_profile_value "$profile" "description")"
-    optional="$(gdk_get_profile_value "$profile" "optional")"
+    desc="$(adk_get_profile_value "$profile" "description")"
+    optional="$(adk_get_profile_value "$profile" "optional")"
     [[ -n "$optional" ]] || optional="false"
-    extends="$(gdk_get_profile_list "$profile" "extends" | paste -sd ',' -)"
+    extends="$(adk_get_profile_list "$profile" "extends" | paste -sd ',' -)"
     [[ -n "$extends" ]] || extends="-"
     echo "| \`$profile\` | $desc | $optional | $extends |"
-  done < <(gdk_list_profile_names)
+  done < <(adk_list_profile_names)
   echo
 }
 
@@ -192,50 +192,50 @@ find_items() {
   if [[ "$TYPE" == "all" || "$TYPE" == "agent" ]]; then
     local name role path
     while IFS= read -r name; do
-      role="$(gdk_get_manifest_item_value "agents" "$name" "role")"
-      path="$(gdk_get_manifest_item_value "agents" "$name" "path")"
+      role="$(adk_get_manifest_item_value "agents" "$name" "role")"
+      path="$(adk_get_manifest_item_value "agents" "$name" "path")"
       if match_keyword "$name $role" "$KEYWORD"; then
         emit_find_row "agent" "$name" "$role" "$path"
       fi
-    done < <(gdk_list_manifest_names "agents")
+    done < <(adk_list_manifest_names "agents")
   fi
 
   if [[ "$TYPE" == "all" || "$TYPE" == "skill" ]]; then
     local name path file desc
     while IFS= read -r name; do
-      path="$(gdk_get_manifest_item_value "skills" "$name" "path")"
+      path="$(adk_get_manifest_item_value "skills" "$name" "path")"
       file="$ROOT_DIR/$path"
       desc="$(frontmatter_value "$file" "description")"
       if match_keyword "$name $desc" "$KEYWORD"; then
         emit_find_row "skill" "$name" "$desc" "$path"
       fi
-    done < <(gdk_list_manifest_names "skills")
+    done < <(adk_list_manifest_names "skills")
   fi
 
   if [[ "$TYPE" == "all" || "$TYPE" == "optional-skill" ]]; then
     local name path file desc
     while IFS= read -r name; do
-      path="$(gdk_get_manifest_item_value "optional_skills" "$name" "path")"
+      path="$(adk_get_manifest_item_value "optional_skills" "$name" "path")"
       file="$ROOT_DIR/$path"
       desc="$(frontmatter_value "$file" "description")"
       if match_keyword "$name $desc" "$KEYWORD"; then
         emit_find_row "optional-skill" "$name" "$desc" "$path"
       fi
-    done < <(gdk_list_manifest_names "optional_skills")
+    done < <(adk_list_manifest_names "optional_skills")
   fi
 
   if [[ "$TYPE" == "all" || "$TYPE" == "profile" ]]; then
     local profile desc
     while IFS= read -r profile; do
-      desc="$(gdk_get_profile_value "$profile" "description")"
+      desc="$(adk_get_profile_value "$profile" "description")"
       if match_keyword "$profile $desc" "$KEYWORD"; then
         emit_find_row "profile" "$profile" "$desc" "manifest.yaml"
       fi
-    done < <(gdk_list_profile_names)
+    done < <(adk_list_profile_names)
   fi
 }
 
-gdk_require_manifest
+adk_require_manifest
 
 case "$ACTION" in
   build)

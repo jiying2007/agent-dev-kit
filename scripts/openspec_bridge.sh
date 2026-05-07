@@ -12,7 +12,7 @@ Usage:
 Options:
   --change <change-id>           # kebab-case, import/export 必填
   --openspec-root <path>         # 默认: \$PWD/openspec
-  --gdk-root <path>              # 默认: <repo>/docs/changes
+  --adk-root <path>              # 默认: <repo>/docs/changes
   --from-archive                 # import: 从 openspec/changes/archive/*-<change-id> 导入
   --archive-date <YYYY-MM-DD>    # export: 导出到 archive/<date>-<change-id>
   --stage <proposed|applied|verified|review-passed|archived> # import 时覆盖推断阶段
@@ -140,7 +140,7 @@ printf '%s\t%s\t%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$stage" "openspec-bridge
 
 import_change() {
   local src_dir=""
-  local target_dir="$GDK_ROOT/$CHANGE_ID"
+  local target_dir="$ADK_ROOT/$CHANGE_ID"
   local stage="$STAGE_OVERRIDE"
   local archive_base="$OPENSPEC_ROOT/changes/archive"
 
@@ -191,21 +191,21 @@ write_bridge_meta() {
   cat > "$dest_dir/.openspec-bridge.yaml" <<META
 source: agent-dev-kit
 change_id: $CHANGE_ID
-gdk_change_root: $GDK_ROOT
-gdk_stage: $stage
+adk_change_root: $ADK_ROOT
+adk_stage: $stage
 exported_at: $(date -u +%Y-%m-%dT%H:%M:%SZ)
 META
 }
 
 export_change() {
-  local src_dir="$GDK_ROOT/$CHANGE_ID"
+  local src_dir="$ADK_ROOT/$CHANGE_ID"
   local dest_dir=""
   local stage=""
 
-  [[ -d "$src_dir" ]] || fail "gdk change not found: $src_dir"
-  [[ -f "$src_dir/proposal.md" ]] || fail "missing gdk proposal.md: $src_dir"
-  [[ -f "$src_dir/tasks.md" ]] || fail "missing gdk tasks.md: $src_dir"
-  [[ -f "$src_dir/design.md" ]] || fail "missing gdk design.md: $src_dir"
+  [[ -d "$src_dir" ]] || fail "adk change not found: $src_dir"
+  [[ -f "$src_dir/proposal.md" ]] || fail "missing adk proposal.md: $src_dir"
+  [[ -f "$src_dir/tasks.md" ]] || fail "missing adk tasks.md: $src_dir"
+  [[ -f "$src_dir/design.md" ]] || fail "missing adk design.md: $src_dir"
 
   stage="$(awk '/^stage:/ {print $2; exit}' "$src_dir/state.yaml" 2>/dev/null || true)"
   [[ -n "$stage" ]] || stage="unknown"
@@ -235,17 +235,17 @@ export_change() {
   echo "[OK] exported change: $CHANGE_ID"
   echo "[INFO] from=$src_dir"
   echo "[INFO] to=$dest_dir"
-  echo "[INFO] gdk_stage=$stage"
+  echo "[INFO] adk_stage=$stage"
 }
 
 print_status_map() {
   cat <<'MAP'
-OpenSpec -> gdk stage mapping
+OpenSpec -> adk stage mapping
 - openspec/changes/archive/*-<change-id> : archived
 - openspec/changes/<change-id> + has unchecked tasks (`- [ ]`) : proposed
 - openspec/changes/<change-id> + all tasks checked : applied
 
-gdk -> OpenSpec export mapping
+adk -> OpenSpec export mapping
 - no --archive-date: export to openspec/changes/<change-id>
 - with --archive-date YYYY-MM-DD: export to openspec/changes/archive/YYYY-MM-DD-<change-id>
 MAP
@@ -261,7 +261,7 @@ shift
 
 CHANGE_ID=""
 OPENSPEC_ROOT="${PWD}/openspec"
-GDK_ROOT="$ROOT_DIR/docs/changes"
+ADK_ROOT="$ROOT_DIR/docs/changes"
 FROM_ARCHIVE=0
 ARCHIVE_DATE=""
 STAGE_OVERRIDE=""
@@ -276,8 +276,8 @@ while [[ $# -gt 0 ]]; do
       OPENSPEC_ROOT="$2"
       shift 2
       ;;
-    --gdk-root)
-      GDK_ROOT="$2"
+    --adk-root)
+      ADK_ROOT="$2"
       shift 2
       ;;
     --from-archive)
@@ -305,7 +305,7 @@ done
 case "$ACTION" in
   import)
     [[ -d "$OPENSPEC_ROOT" ]] || fail "openspec root not found: $OPENSPEC_ROOT"
-    [[ -d "$GDK_ROOT" ]] || fail "gdk change root not found: $GDK_ROOT"
+    [[ -d "$ADK_ROOT" ]] || fail "adk change root not found: $ADK_ROOT"
     ensure_kebab_change_id "$CHANGE_ID"
     if [[ -n "$ARCHIVE_DATE" ]]; then
       fail "--archive-date only supports export action"
@@ -317,7 +317,7 @@ case "$ACTION" in
     ;;
   export)
     [[ -d "$OPENSPEC_ROOT" ]] || fail "openspec root not found: $OPENSPEC_ROOT"
-    [[ -d "$GDK_ROOT" ]] || fail "gdk change root not found: $GDK_ROOT"
+    [[ -d "$ADK_ROOT" ]] || fail "adk change root not found: $ADK_ROOT"
     ensure_kebab_change_id "$CHANGE_ID"
     if [[ "$FROM_ARCHIVE" -eq 1 ]]; then
       fail "--from-archive only supports import action"

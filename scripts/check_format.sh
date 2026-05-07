@@ -15,13 +15,13 @@ warn() {
 
 cd "$ROOT_DIR"
 
-if rg -n $'\r' README.md manifest.yaml docs scripts agents skills optional-skills templates tests .github >/tmp/gdk_crlf_check.txt 2>/dev/null; then
-  cat /tmp/gdk_crlf_check.txt >&2
+if rg -n $'\r' README.md manifest.yaml docs scripts agents skills optional-skills templates tests .github >/tmp/adk_crlf_check.txt 2>/dev/null; then
+  cat /tmp/adk_crlf_check.txt >&2
   fail "detected CRLF line endings"
 fi
 
-if rg -n '\t' manifest.yaml >/tmp/gdk_tab_check.txt 2>/dev/null; then
-  cat /tmp/gdk_tab_check.txt >&2
+if rg -n '\t' manifest.yaml >/tmp/adk_tab_check.txt 2>/dev/null; then
+  cat /tmp/adk_tab_check.txt >&2
   fail "manifest.yaml contains tab characters"
 fi
 

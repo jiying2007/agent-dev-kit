@@ -53,7 +53,7 @@ warn() {
 
 require_key() {
   local key="$1"
-  grep -q "^$key:" "$GDK_MANIFEST" || fail "manifest missing top-level key: $key"
+  grep -q "^$key:" "$ADK_MANIFEST" || fail "manifest missing top-level key: $key"
 }
 
 is_kebab_case() {
@@ -77,7 +77,7 @@ validate_top_level_schema() {
 }
 
 list_quality_tier_names() {
-  gdk_section_block "quality_tiers" | awk '
+  adk_section_block "quality_tiers" | awk '
     $0 ~ /^  [a-z0-9-]+:$/ {
       tier=$1
       sub(":", "", tier)
@@ -107,7 +107,7 @@ get_quality_tier_description() {
         exit
       }
     }
-  ' "$GDK_MANIFEST"
+  ' "$ADK_MANIFEST"
 }
 
 validate_quality_tiers() {
@@ -126,17 +126,17 @@ validate_quality_tiers() {
 }
 
 validate_tool_targets() {
-  mapfile -t tools < <(gdk_list_tool_names)
+  mapfile -t tools < <(adk_list_tool_names)
   [[ ${#tools[@]} -gt 0 ]] || fail "manifest has no tool_targets"
 
   local tool
   for tool in "${tools[@]}"; do
     for key in display_name default_root agents_dir skills_dir; do
-      value="$(gdk_get_tool_value "$tool" "$key")"
+      value="$(adk_get_tool_value "$tool" "$key")"
       [[ -n "$value" ]] || fail "tool target '$tool' missing key: $key"
     done
 
-    mapfile -t detect_markers < <(gdk_get_tool_list "$tool" "detect")
+    mapfile -t detect_markers < <(adk_get_tool_list "$tool" "detect")
     if [[ "$STRICT" -eq 1 && ${#detect_markers[@]} -eq 0 ]]; then
       fail "tool target '$tool' detect list is empty in strict mode"
     fi
@@ -147,7 +147,7 @@ validate_agents_and_manifest_mapping() {
   mapfile -t dir_agents < <(find "$ROOT_DIR/agents" -mindepth 1 -maxdepth 1 -type d -printf '%f\n' | sort)
   [[ ${#dir_agents[@]} -gt 0 ]] || fail "no agents found in agents/"
 
-  mapfile -t manifest_agents < <(gdk_list_manifest_names "agents")
+  mapfile -t manifest_agents < <(adk_list_manifest_names "agents")
   [[ ${#manifest_agents[@]} -gt 0 ]] || fail "manifest agents section is empty"
 
   local name
@@ -166,7 +166,7 @@ validate_agents_and_manifest_mapping() {
     entry_name="${pair%% *}"
     entry_path="${pair#* }"
     [[ -f "$ROOT_DIR/$entry_path" ]] || fail "manifest agent path missing: $entry_name -> $entry_path"
-  done < <(gdk_list_manifest_paths "agents")
+  done < <(adk_list_manifest_paths "agents")
 }
 
 validate_skill_file() {
@@ -216,7 +216,7 @@ validate_skills_and_manifest_mapping() {
   mapfile -t dir_skills < <(find "$ROOT_DIR/skills" -mindepth 1 -maxdepth 1 -type d -printf '%f\n' | sort)
   [[ ${#dir_skills[@]} -gt 0 ]] || fail "no skills found in skills/"
 
-  mapfile -t manifest_skills < <(gdk_list_manifest_names "skills")
+  mapfile -t manifest_skills < <(adk_list_manifest_names "skills")
   [[ ${#manifest_skills[@]} -gt 0 ]] || fail "manifest skills section is empty"
 
   local name
@@ -237,14 +237,14 @@ validate_skills_and_manifest_mapping() {
     entry_name="${pair%% *}"
     entry_path="${pair#* }"
     [[ -f "$ROOT_DIR/$entry_path" ]] || fail "manifest skill path missing: $entry_name -> $entry_path"
-  done < <(gdk_list_manifest_paths "skills")
+  done < <(adk_list_manifest_paths "skills")
 }
 
 validate_optional_skills_mapping() {
-  mapfile -t optional_names < <(gdk_list_optional_skill_names)
+  mapfile -t optional_names < <(adk_list_optional_skill_names)
   [[ ${#optional_names[@]} -gt 0 ]] || fail "manifest optional_skills section is empty"
 
-  mapfile -t manifest_skills < <(gdk_list_manifest_names "skills")
+  mapfile -t manifest_skills < <(adk_list_manifest_names "skills")
 
   local name
   for name in "${optional_names[@]}"; do
@@ -253,7 +253,7 @@ validate_optional_skills_mapping() {
 
     local path
     local file
-    path="$(gdk_get_optional_skill_path "$name")"
+    path="$(adk_get_optional_skill_path "$name")"
     [[ -n "$path" ]] || fail "optional skill '$name' missing path"
     file="$ROOT_DIR/$path"
     validate_skill_file "$file" "$name" "optional skill"
@@ -264,13 +264,13 @@ validate_manifest_quality_tiers() {
   local section="$1"
   local label="$2"
 
-  mapfile -t names < <(gdk_list_manifest_names "$section")
+  mapfile -t names < <(adk_list_manifest_names "$section")
   [[ ${#names[@]} -gt 0 ]] || fail "manifest $section section is empty"
 
   local name
   local tier
   for name in "${names[@]}"; do
-    tier="$(gdk_get_manifest_item_value "$section" "$name" "quality_tier")"
+    tier="$(adk_get_manifest_item_value "$section" "$name" "quality_tier")"
     if [[ "$STRICT" -eq 1 ]]; then
       [[ -n "$tier" ]] || fail "$label '$name' missing quality_tier in strict mode"
     fi
@@ -281,27 +281,27 @@ validate_manifest_quality_tiers() {
 }
 
 validate_profiles() {
-  mapfile -t profiles < <(gdk_list_profile_names)
+  mapfile -t profiles < <(adk_list_profile_names)
   [[ ${#profiles[@]} -gt 0 ]] || fail "manifest has no profiles"
 
-  default_profile="$(awk '/^default_profile:/ {print $2; exit}' "$GDK_MANIFEST")"
+  default_profile="$(awk '/^default_profile:/ {print $2; exit}' "$ADK_MANIFEST")"
   [[ -n "$default_profile" ]] || fail "default_profile is empty"
-  gdk_profile_exists "$default_profile" || fail "default_profile not found in profiles: $default_profile"
+  adk_profile_exists "$default_profile" || fail "default_profile not found in profiles: $default_profile"
 
   local profile
   for profile in "${profiles[@]}"; do
     if [[ "$STRICT" -eq 1 ]]; then
-      desc="$(gdk_get_profile_value "$profile" "description")"
+      desc="$(adk_get_profile_value "$profile" "description")"
       [[ -n "$desc" ]] || fail "profile '$profile' missing description in strict mode"
     fi
 
-    mapfile -t parents < <(gdk_get_profile_list "$profile" "extends")
+    mapfile -t parents < <(adk_get_profile_list "$profile" "extends")
     for parent in "${parents[@]}"; do
-      gdk_profile_exists "$parent" || fail "profile '$profile' extends missing profile '$parent'"
+      adk_profile_exists "$parent" || fail "profile '$profile' extends missing profile '$parent'"
     done
 
-    mapfile -t agents < <(gdk_resolve_profile_items "$profile" "include_agents")
-    mapfile -t skills < <(gdk_resolve_profile_items "$profile" "include_skills")
+    mapfile -t agents < <(adk_resolve_profile_items "$profile" "include_agents")
+    mapfile -t skills < <(adk_resolve_profile_items "$profile" "include_skills")
 
     [[ ${#agents[@]} -gt 0 ]] || fail "profile '$profile' resolves to zero agents"
     [[ ${#skills[@]} -gt 0 ]] || fail "profile '$profile' resolves to zero skills"

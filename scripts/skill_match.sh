@@ -60,12 +60,12 @@ contains_phrase() {
   local text="$1"
   local phrase="$2"
   local lower_text
-  lower_text="$(gdk_to_lower "$text")"
+  lower_text="$(adk_to_lower "$text")"
   # Split on "/" and match any sub-phrase
   IFS='/' read -ra parts <<< "$phrase"
   for part in "${parts[@]}"; do
     [[ -z "$part" ]] && continue
-    if [[ "$lower_text" == *"$(gdk_to_lower "$part")"* ]]; then
+    if [[ "$lower_text" == *"$(adk_to_lower "$part")"* ]]; then
       return 0
     fi
   done
@@ -96,23 +96,23 @@ resolve_skill_file() {
 
   case "$scope" in
     skill)
-      echo "$GDK_ROOT_DIR/skills/$name/SKILL.md"
+      echo "$ADK_ROOT_DIR/skills/$name/SKILL.md"
       ;;
     optional-skill)
       local path
-      path="$(gdk_get_optional_skill_path "$name")"
+      path="$(adk_get_optional_skill_path "$name")"
       [[ -n "$path" ]] || { echo ""; return 0; }
-      echo "$GDK_ROOT_DIR/$path"
+      echo "$ADK_ROOT_DIR/$path"
       ;;
     auto)
-      if [[ -f "$GDK_ROOT_DIR/skills/$name/SKILL.md" ]]; then
-        echo "$GDK_ROOT_DIR/skills/$name/SKILL.md"
+      if [[ -f "$ADK_ROOT_DIR/skills/$name/SKILL.md" ]]; then
+        echo "$ADK_ROOT_DIR/skills/$name/SKILL.md"
         return 0
       fi
       local path
-      path="$(gdk_get_optional_skill_path "$name")"
+      path="$(adk_get_optional_skill_path "$name")"
       [[ -n "$path" ]] || { echo ""; return 0; }
-      echo "$GDK_ROOT_DIR/$path"
+      echo "$ADK_ROOT_DIR/$path"
       ;;
     *)
       echo "[FAIL] unsupported --scope: $scope" >&2
@@ -144,16 +144,16 @@ if [[ -z "$SKILL" ]]; then
         found && $0 ~ /supporting_skills:/ {in_sup=1; next}
         in_sup && $0 ~ /^      - / {item=$0; sub(/^      - /, "", item); print item; next}
         in_sup && $0 ~ /^    [a-z]/ {found=0; in_sup=0}
-      ' "$GDK_MANIFEST")
+      ' "$ADK_MANIFEST")
       echo "match=true source=routing skill=$primary_skill intent_zh=\"$intent_zh\"${supporting:+ supporting_skills=$supporting}"
       exit 0
     fi
-  done < <(gdk_list_routing_intents)
+  done < <(adk_list_routing_intents)
 
   # Phase 2: Scan all core skill triggers
   while IFS=' ' read -r name path; do
     [[ -z "$name" || -z "$path" ]] && continue
-    local_file="$GDK_ROOT_DIR/$path"
+    local_file="$ADK_ROOT_DIR/$path"
     [[ -f "$local_file" ]] || continue
     mapfile -t triggers < <(extract_frontmatter_list "$local_file" "triggers")
     for phrase in "${triggers[@]}"; do
@@ -163,12 +163,12 @@ if [[ -z "$SKILL" ]]; then
         exit 0
       fi
     done
-  done < <(gdk_list_manifest_paths "skills")
+  done < <(adk_list_manifest_paths "skills")
 
   # Phase 3: Scan optional skill triggers
   while IFS=' ' read -r name path; do
     [[ -z "$name" || -z "$path" ]] && continue
-    local_file="$GDK_ROOT_DIR/$path"
+    local_file="$ADK_ROOT_DIR/$path"
     [[ -f "$local_file" ]] || continue
     mapfile -t triggers < <(extract_frontmatter_list "$local_file" "triggers")
     for phrase in "${triggers[@]}"; do
@@ -178,7 +178,7 @@ if [[ -z "$SKILL" ]]; then
         exit 0
       fi
     done
-  done < <(gdk_list_manifest_paths "optional_skills")
+  done < <(adk_list_manifest_paths "optional_skills")
 
   echo "match=false reason=no_match_found"
   exit 1

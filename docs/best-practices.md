@@ -2,7 +2,7 @@
 
 ## 概述
 
-本指南总结了使用 agent-dev-kit 的最佳实践，帮助你更高效地使用 gdk 进行开发。
+本指南总结了使用 agent-dev-kit 的最佳实践，帮助你更高效地使用 adk 进行开发。
 
 ## 变更管理最佳实践
 
@@ -159,8 +159,8 @@ git commit -m "描述"
 
 ```bash
 # 创建测试目录
-mkdir -p /tmp/gdk-test
-cd /tmp/gdk-test
+mkdir -p /tmp/adk-test
+cd /tmp/adk-test
 
 # 运行测试
 bash tests/run_all.sh

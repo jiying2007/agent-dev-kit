@@ -15,7 +15,7 @@ Commands:
   convert   转换资产到目标工具格式
   catalog   生成或检索 Agent/Skill 目录索引
   match     根据输入文本匹配 skill 触发条件
-  bridge    执行 OpenSpec 与 gdk 变更工件桥接（import/export）
+  bridge    执行 OpenSpec 与 adk 变更工件桥接（import/export）
   evidence  追加命令级 Evidence Index 记录
   propose   创建变更提案工件
   apply     更新变更状态为已实施

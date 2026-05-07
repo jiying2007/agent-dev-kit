@@ -16,8 +16,8 @@ BANNED_PATTERNS=(
 )
 
 for pattern in "${BANNED_PATTERNS[@]}"; do
-  if rg -n "$pattern" "$ROOT_DIR/agents" "$ROOT_DIR/skills" "$ROOT_DIR/optional-skills" >/tmp/gdk_asset_content_quality.txt 2>/dev/null; then
-    cat /tmp/gdk_asset_content_quality.txt >&2
+  if rg -n "$pattern" "$ROOT_DIR/agents" "$ROOT_DIR/skills" "$ROOT_DIR/optional-skills" >/tmp/adk_asset_content_quality.txt 2>/dev/null; then
+    cat /tmp/adk_asset_content_quality.txt >&2
     fail "template phrase still exists: $pattern"
   fi
 done

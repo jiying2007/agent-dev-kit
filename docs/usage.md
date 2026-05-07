@@ -21,7 +21,7 @@ bash scripts/devkit.sh test
 |---|---|
 | `core` | 通用研发最小主干 |
 | `personal-core` | 个人 `~/.codex` 生产默认 |
-| `embedded-fullstack` | 嵌入式全栈，gdk 默认 profile |
+| `embedded-fullstack` | 嵌入式全栈，adk 默认 profile |
 | `release-hardening` | 发布前强化 |
 | `adk-artifact-gated-lite` | 高风险变更轻量 artifact 门禁 |
 | `team-core` | 团队交付与交接 |
@@ -46,10 +46,10 @@ bash scripts/devkit.sh install --tool auto --mode symlink --profile embedded-ful
 bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile core --extra-profile release-hardening
 
 # 生产安装：备份 + 安装报告 + 版本锁定
-bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --backup --install-report reports/gdk-install-report.md --lock-version 2.0.0
+bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --backup --install-report reports/adk-install-report.md --lock-version 2.0.0
 
 # 生产推荐：personal-core + release-hardening + 五个生产 optional skills
-bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --with-optional-skill adk-planning-execution-loop --with-optional-skill adk-skill-composition-governance --with-optional-skill adk-security-supply-chain --with-optional-skill adk-cross-team-handoff --with-optional-skill adk-artifact-gated-lite --backup --install-report ../reports/gdk-install-report-$(date +%F).md --lock-version 2.0.0
+bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --with-optional-skill adk-planning-execution-loop --with-optional-skill adk-skill-composition-governance --with-optional-skill adk-security-supply-chain --with-optional-skill adk-cross-team-handoff --with-optional-skill adk-artifact-gated-lite --backup --install-report ../reports/adk-install-report-$(date +%F).md --lock-version 2.0.0
 ```
 
 参数说明：
@@ -69,7 +69,7 @@ bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --prof
 - `~/.codex` 推荐使用 `copy`，避免源仓未提交变动影响运行目录。
 - 必须启用 `--backup` 与 `--install-report`。
 - 安装后运行 `llm_agent/scripts/check-global-codex-health.sh ~/.codex minimal`。（注意: 此脚本在 llm_agent 父仓库中，非本仓库）
-- 若用于生产放行，还需运行 `llm_agent/scripts/check-gdk-harden-readiness.sh . --require-pilot`。（注意: 此脚本在 llm_agent 父仓库中，非本仓库）
+- 若用于生产放行，还需运行 `llm_agent/scripts/check-adk-harden-readiness.sh . --require-pilot`。（注意: 此脚本在 llm_agent 父仓库中，非本仓库）
 
 ## 4) 资产转换
 
@@ -149,11 +149,11 @@ bash scripts/check_profile_coherence.sh
 
 ## 8) `~/.codex/AGENTS.md` 配合
 
-gdk 不覆盖 `~/.codex/AGENTS.md`。推荐分工：
+adk 不覆盖 `~/.codex/AGENTS.md`。推荐分工：
 
 - `~/.codex/AGENTS.md`：全局策略、命令硬约束、流程升级/降级、技能路由原则。
-- `~/.codex/agents`：由 gdk 安装的 Agent。
-- `~/.codex/skills`：由 gdk 安装的 Skills 与已治理个人技能。
+- `~/.codex/agents`：由 adk 安装的 Agent。
+- `~/.codex/skills`：由 adk 安装的 Skills 与已治理个人技能。
 - `agent-dev-kit`：源资产、测试、profile、runbook。
 
 详细说明见：
@@ -167,7 +167,7 @@ docs/codex-agents-integration.md
 生产验证由 `llm_agent` 根脚本统一执行：
 
 ```bash
-rtk ../scripts/check-gdk-harden-readiness.sh . --require-pilot
+rtk ../scripts/check-adk-harden-readiness.sh . --require-pilot
 ```
 
 若安装后异常：

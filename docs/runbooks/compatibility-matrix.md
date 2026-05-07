@@ -2,7 +2,7 @@
 
 ## 目标
 
-明确 gdk 在 Codex、Claude Code、Hermes Agent、OpenCode 之间的可迁移能力和降级边界。
+明确 adk 在 Codex、Claude Code、Hermes Agent、OpenCode 之间的可迁移能力和降级边界。
 
 ## 工具目标
 
@@ -13,7 +13,7 @@
 
 ## 兼容规则
 
-- workflow 脚本是 gdk 本仓能力，目标工具不一定原生执行。
+- workflow 脚本是 adk 本仓能力，目标工具不一定原生执行。
 - 子代理、插件、MCP、hook 能力必须显式标注是否支持。
 - 不支持的能力必须在 runbook 中写明降级方式。
 

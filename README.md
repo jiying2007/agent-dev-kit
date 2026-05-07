@@ -1,12 +1,12 @@
 # Global Dev Kit
 
-`agent-dev-kit`（gdk）是面向 `~/.codex` 等开发代理运行目录的 Agent/Skill/Profile 生产资产包。它的目标是把参考仓中的优秀方法论压实为可安装、可验证、可回滚、可持续迭代的工程资产。
+`agent-dev-kit`（adk）是面向 `~/.codex` 等开发代理运行目录的 Agent/Skill/Profile 生产资产包。它的目标是把参考仓中的优秀方法论压实为可安装、可验证、可回滚、可持续迭代的工程资产。
 
 当前版本：`2.6.0`。
 
 ## 1. 核心定位
 
-gdk 不是参考仓集合，也不是直接替换 `~/.codex/AGENTS.md` 的全局策略文件。它负责：
+adk 不是参考仓集合，也不是直接替换 `~/.codex/AGENTS.md` 的全局策略文件。它负责：
 
 1. 维护 Agent/Skill/Profile 单一事实源：`manifest.yaml`。
 2. 提供安装、转换、匹配、catalog、workflow、evidence 命令。
@@ -62,9 +62,9 @@ bash scripts/devkit.sh test
 命令：
 
 ```bash
-rtk bash -lc "cd agent-dev-kit && bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --with-optional-skill adk-planning-execution-loop --with-optional-skill adk-skill-composition-governance --with-optional-skill adk-security-supply-chain --with-optional-skill adk-cross-team-handoff --with-optional-skill adk-artifact-gated-lite --backup --install-report ../reports/gdk-install-report-$(date +%F).md --lock-version 2.0.0"
+rtk bash -lc "cd agent-dev-kit && bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --with-optional-skill adk-planning-execution-loop --with-optional-skill adk-skill-composition-governance --with-optional-skill adk-security-supply-chain --with-optional-skill adk-cross-team-handoff --with-optional-skill adk-artifact-gated-lite --backup --install-report ../reports/adk-install-report-$(date +%F).md --lock-version 2.0.0"
 rtk scripts/check-global-codex-health.sh ~/.codex minimal
-rtk scripts/check-gdk-harden-readiness.sh . --require-pilot
+rtk scripts/check-adk-harden-readiness.sh . --require-pilot
 ```
 
 生产纪律：
@@ -85,7 +85,7 @@ rtk scripts/check-gdk-harden-readiness.sh . --require-pilot
 | `release-hardening` | 发布前强化 | 安全、可靠性、HIL/SIL、版本发布 |
 | `adk-artifact-gated-lite` | 高风险变更 | 复用 `core`，配合 optional skill 产出轻量 artifact 门禁 |
 | `team-core` | 团队交付 | 责任矩阵、交接、复验、发布治理 |
-| `openspec-driven` | Spec 驱动 | requirements/design/tasks 与 gdk workflow 对齐 |
+| `openspec-driven` | Spec 驱动 | requirements/design/tasks 与 adk workflow 对齐 |
 | `large-refactor` | 大型重构 | API 稳定性、边界冻结、回归压实 |
 | `incident-response` | 事故响应 | RCA、恢复、可靠性、安全复盘 |
 | `research-intake` | 参考仓吸收 | 候选筛选、组合治理、供应链审查 |
@@ -118,7 +118,7 @@ bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --prof
 
 ## 8. 工作流命令
 
-gdk 的变更工件按固定顺序推进：
+adk 的变更工件按固定顺序推进：
 
 ```text
 propose -> apply -> verify -> review -> archive
@@ -148,7 +148,7 @@ Evidence Index 字段固定为：
 
 ## 9. 生产验证
 
-gdk 源仓内最小验证：
+adk 源仓内最小验证：
 
 ```bash
 bash scripts/devkit.sh validate --strict
@@ -158,7 +158,7 @@ bash scripts/devkit.sh test
 `llm_agent` 工作区生产放行验证：
 
 ```bash
-rtk scripts/check-gdk-harden-readiness.sh . --require-pilot
+rtk scripts/check-adk-harden-readiness.sh . --require-pilot
 ```
 
 当前 `--require-pilot` 会校验 `reports/codex-pilot-report.md` 中六类场景：
@@ -170,7 +170,7 @@ rtk scripts/check-gdk-harden-readiness.sh . --require-pilot
 - 团队交接
 - 上游吸收
 
-边界：当前 pilot 是 gdk 自举 + 生产安装验证，真实业务长期样例仍需持续补充。
+边界：当前 pilot 是 adk 自举 + 生产安装验证，真实业务长期样例仍需持续补充。
 
 ## 10. `~/.codex/AGENTS.md` 配合方式
 
@@ -179,9 +179,9 @@ rtk scripts/check-gdk-harden-readiness.sh . --require-pilot
 原则：
 
 - `~/.codex/AGENTS.md` 保留个人全局策略、命令硬约束和流程路由。
-- gdk 安装 `agents/` 与 `skills/`，不覆盖 `~/.codex/AGENTS.md`。
-- 若要把 gdk 策略加入 `~/.codex/AGENTS.md`，采用追加小节方式，不整体替换。
-- 第三方参考仓资产必须先经过 gdk 审查和门禁，不直接进入 `~/.codex`。
+- adk 安装 `agents/` 与 `skills/`，不覆盖 `~/.codex/AGENTS.md`。
+- 若要把 adk 策略加入 `~/.codex/AGENTS.md`，采用追加小节方式，不整体替换。
+- 第三方参考仓资产必须先经过 adk 审查和门禁，不直接进入 `~/.codex`。
 
 ## 11. 重要文档
 

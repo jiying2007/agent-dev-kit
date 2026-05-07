@@ -9,7 +9,7 @@
 ```bash
 bash scripts/devkit.sh install --tool auto --mode symlink --profile embedded-fullstack
 bash scripts/devkit.sh install --tool codex --profile core --with-optional-skill adk-incident-rca-report
-bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --backup --install-report reports/gdk-install-report.md
+bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --backup --install-report reports/adk-install-report.md
 ```
 
 ## validate
@@ -219,14 +219,14 @@ bash scripts/devkit.sh version diff --from 1.0.0 --to 2.0.0
 生产安装到 `~/.codex` 时，推荐使用 `personal-core + release-hardening`，并叠加长任务、组合治理、供应链、交接与 artifact 门禁五类 optional skills。
 
 ```bash
-bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --with-optional-skill adk-planning-execution-loop --with-optional-skill adk-skill-composition-governance --with-optional-skill adk-security-supply-chain --with-optional-skill adk-cross-team-handoff --with-optional-skill adk-artifact-gated-lite --backup --install-report ../reports/gdk-install-report-$(date +%F).md --lock-version 2.0.0
+bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --with-optional-skill adk-planning-execution-loop --with-optional-skill adk-skill-composition-governance --with-optional-skill adk-security-supply-chain --with-optional-skill adk-cross-team-handoff --with-optional-skill adk-artifact-gated-lite --backup --install-report ../reports/adk-install-report-$(date +%F).md --lock-version 2.0.0
 ```
 
 安装后在 `llm_agent` 根目录运行：
 
 ```bash
 rtk ../scripts/check-global-codex-health.sh ~/.codex minimal
-rtk ../scripts/check-gdk-harden-readiness.sh . --require-pilot
+rtk ../scripts/check-adk-harden-readiness.sh . --require-pilot
 ```
 
-`~/.codex/AGENTS.md` 不由 gdk 安装器覆盖，配合方式见 `docs/codex-agents-integration.md`。
+`~/.codex/AGENTS.md` 不由 adk 安装器覆盖，配合方式见 `docs/codex-agents-integration.md`。

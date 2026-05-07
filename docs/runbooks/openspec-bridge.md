@@ -4,16 +4,16 @@
 
 ## 适用场景
 
-- 你已有 `openspec/changes/<change-id>/`，希望接入 gdk 的 `verify/review/archive` 门禁。
-- 你在 gdk 内完成了变更，希望导出回 openspec（活动变更或归档目录）。
+- 你已有 `openspec/changes/<change-id>/`，希望接入 adk 的 `verify/review/archive` 门禁。
+- 你在 adk 内完成了变更，希望导出回 openspec（活动变更或归档目录）。
 
 ## 前置条件
 
 1. openspec 根目录存在（默认 `./openspec`）。
-2. gdk 变更目录存在（默认 `agent-dev-kit/docs/changes`）。
+2. adk 变更目录存在（默认 `agent-dev-kit/docs/changes`）。
 3. `change-id` 为 kebab-case（如 `add-dark-mode`）。
 
-## 1) openspec -> gdk（导入）
+## 1) openspec -> adk（导入）
 
 ```bash
 bash scripts/devkit.sh bridge import --change add-dark-mode --openspec-root /repo/openspec
@@ -22,7 +22,7 @@ bash scripts/devkit.sh bridge import --change add-dark-mode --openspec-root /rep
 行为说明：
 - 复制 `proposal.md`、`tasks.md`、`design.md(若缺失则补默认模板)`。
 - 复制 `specs/`（若存在）。
-- 自动补齐 gdk 必需工件：`checklist.md`、`negative-results.md`。
+- 自动补齐 adk 必需工件：`checklist.md`、`negative-results.md`。
 - 生成 `state.yaml` 与 `history.log`。
 
 阶段映射（默认推断）：
@@ -36,7 +36,7 @@ bash scripts/devkit.sh bridge import --change add-dark-mode --openspec-root /rep
 bash scripts/devkit.sh bridge import --change add-dark-mode --stage verified --openspec-root /repo/openspec
 ```
 
-## 2) gdk -> openspec（导出）
+## 2) adk -> openspec（导出）
 
 导出为活动变更：
 
@@ -53,7 +53,7 @@ bash scripts/devkit.sh bridge export --change add-dark-mode --archive-date 2026-
 行为说明：
 - 复制 `proposal.md`、`design.md`、`tasks.md`。
 - 若存在 `specs/`、`verify-report.md`、`review-report.md` 则一并复制。
-- 生成 `.openspec-bridge.yaml`，记录导出时间与 gdk 阶段。
+- 生成 `.openspec-bridge.yaml`，记录导出时间与 adk 阶段。
 
 ## 3) 常见失败与处理
 
@@ -68,7 +68,7 @@ bash scripts/devkit.sh bridge export --change add-dark-mode --archive-date 2026-
 
 ## 4) 导入后建议动作
 
-1. 在 gdk 侧补齐 `proposal.md` 中单问题、边界与 breaking change 检查项。
+1. 在 adk 侧补齐 `proposal.md` 中单问题、边界与 breaking change 检查项。
 2. 执行：
 
 ```bash

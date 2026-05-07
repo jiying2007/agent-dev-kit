@@ -31,7 +31,7 @@ REPORT="$TMP_DIR/install-report.md"
   --lock-version "$(awk '/^version:/ {print $2; exit}' "$ROOT_DIR/manifest.yaml")"
 
 [[ -d "$TARGET/agents/security-compliance-reviewer" ]] || { echo "[FAIL] missing extra-profile agent" >&2; exit 1; }
-[[ -d "$TARGET/.gdk-backups" ]] || { echo "[FAIL] missing install backup" >&2; exit 1; }
+[[ -d "$TARGET/.adk-backups" ]] || { echo "[FAIL] missing install backup" >&2; exit 1; }
 [[ -f "$REPORT" ]] || { echo "[FAIL] missing install report" >&2; exit 1; }
 grep -q "manifest_version" "$REPORT" || { echo "[FAIL] install report missing version" >&2; exit 1; }
 

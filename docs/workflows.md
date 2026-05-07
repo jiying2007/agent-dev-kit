@@ -88,7 +88,7 @@
 
 - Agent：`application-engineer -> test-validation-engineer -> code-review-governor`
 - Skill：`adk-verification-before-completion + adk-commit-pr-quality-gate`
-- 命令：`health-check(~/.codex) -> check-global-codex-health -> check-gdk-harden-readiness --require-pilot`
+- 命令：`health-check(~/.codex) -> check-global-codex-health -> check-adk-harden-readiness --require-pilot`
 - 关键纪律：未通过 pilot 验证不得给出“可放行/可追踪上游更新”结论
 - Runbook：`docs/runbooks/codex-runtime-pilot.md`
 
@@ -192,7 +192,7 @@
 
 - Agent：`build-release-engineer -> test-validation-engineer -> code-review-governor`
 - Skill：`adk-release-versioning + adk-verification-before-completion + adk-commit-pr-quality-gate`
-- 命令：`validate -> install --backup --install-report -> check-global-codex-health -> check-gdk-harden-readiness`
+- 命令：`validate -> install --backup --install-report -> check-global-codex-health -> check-adk-harden-readiness`
 - 关键纪律：生产安装必须可回滚，并记录安装报告
 - Runbook：`docs/runbooks/production-deployment.md`
 

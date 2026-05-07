@@ -133,7 +133,7 @@ profiles:
       - adk-adr-writer
       - adk-release-versioning
   openspec-driven:
-    description: Spec 驱动变更配置（requirements/design/tasks 与 gdk workflow 对齐）
+    description: Spec 驱动变更配置（requirements/design/tasks 与 adk workflow 对齐）
     trigger_examples: ["用 Spec 驱动开发", "先写规格再编码"]
     optional: true
     extends:

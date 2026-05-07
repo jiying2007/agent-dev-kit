@@ -19,7 +19,7 @@ Options:
   --extra-profile <profile name>   # 可重复
   --with-optional-skill <skill>    # 可重复
   --backup                         # 安装前备份目标 agents/skills
-  --backup-dir <path>              # 备份目录，默认 <target>/.gdk-backups
+  --backup-dir <path>              # 备份目录，默认 <target>/.adk-backups
   --install-report <path>          # 写入安装报告
   --lock-version <version>         # 要求 manifest version 匹配
   --list-tools
@@ -152,8 +152,8 @@ detect_tool_auto() {
         echo "$tool"
         return 0
       fi
-    done < <(gdk_get_tool_list "$tool" "detect")
-  done < <(gdk_list_tool_names)
+    done < <(adk_get_tool_list "$tool" "detect")
+  done < <(adk_list_tool_names)
 
   echo "codex"
 }
@@ -167,34 +167,34 @@ install_item() {
     exit 1
   fi
 
-  gdk_run_cmd rm -rf "$dst"
+  adk_run_cmd rm -rf "$dst"
   if [[ "$MODE" == "copy" ]]; then
-    gdk_run_cmd cp -a "$src" "$dst"
+    adk_run_cmd cp -a "$src" "$dst"
   else
-    gdk_run_cmd ln -s "$src" "$dst"
+    adk_run_cmd ln -s "$src" "$dst"
   fi
 }
 
-gdk_require_manifest
+adk_require_manifest
 
-MANIFEST_VERSION="$(awk '/^version:/ {print $2; exit}' "$GDK_MANIFEST")"
+MANIFEST_VERSION="$(awk '/^version:/ {print $2; exit}' "$ADK_MANIFEST")"
 if [[ -n "$LOCK_VERSION" && "$LOCK_VERSION" != "$MANIFEST_VERSION" ]]; then
   echo "[FAIL] manifest version mismatch: expected $LOCK_VERSION, got $MANIFEST_VERSION" >&2
   exit 1
 fi
 
 if [[ "$LIST_TOOLS" -eq 1 ]]; then
-  gdk_list_tool_names
+  adk_list_tool_names
   exit 0
 fi
 
 if [[ "$LIST_PROFILES" -eq 1 ]]; then
-  gdk_list_profile_names
+  adk_list_profile_names
   exit 0
 fi
 
 if [[ "$LIST_OPTIONAL_SKILLS" -eq 1 ]]; then
-  gdk_list_optional_skill_names
+  adk_list_optional_skill_names
   exit 0
 fi
 
@@ -204,24 +204,24 @@ if [[ "$MODE" != "copy" && "$MODE" != "symlink" ]]; then
 fi
 
 if [[ -z "$PROFILE" ]]; then
-  PROFILE="$(awk '/^default_profile:/ {print $2; exit}' "$GDK_MANIFEST")"
+  PROFILE="$(awk '/^default_profile:/ {print $2; exit}' "$ADK_MANIFEST")"
   [[ -n "$PROFILE" ]] || PROFILE="embedded-fullstack"
 fi
 
-if ! gdk_profile_exists "$PROFILE"; then
+if ! adk_profile_exists "$PROFILE"; then
   echo "[FAIL] unknown profile: $PROFILE" >&2
   exit 1
 fi
 
 for profile in "${EXTRA_PROFILES[@]}"; do
-  if ! gdk_profile_exists "$profile"; then
+  if ! adk_profile_exists "$profile"; then
     echo "[FAIL] unknown extra profile: $profile" >&2
     exit 1
   fi
 done
 
 for skill in "${OPTIONAL_SKILLS[@]}"; do
-  if ! gdk_optional_skill_exists "$skill"; then
+  if ! adk_optional_skill_exists "$skill"; then
     echo "[FAIL] unknown optional skill: $skill" >&2
     exit 1
   fi
@@ -232,17 +232,17 @@ if [[ "$TOOL" == "auto" ]]; then
   echo "[INFO] auto-detected tool: $TOOL"
 fi
 
-if ! gdk_tool_exists "$TOOL"; then
+if ! adk_tool_exists "$TOOL"; then
   echo "[FAIL] unknown tool: $TOOL" >&2
   exit 1
 fi
 
 if [[ -z "$TARGET" ]]; then
-  TARGET="$(gdk_get_tool_value "$TOOL" "default_root")"
+  TARGET="$(adk_get_tool_value "$TOOL" "default_root")"
 fi
 
-AGENTS_DIR_NAME="$(gdk_get_tool_value "$TOOL" "agents_dir")"
-SKILLS_DIR_NAME="$(gdk_get_tool_value "$TOOL" "skills_dir")"
+AGENTS_DIR_NAME="$(adk_get_tool_value "$TOOL" "agents_dir")"
+SKILLS_DIR_NAME="$(adk_get_tool_value "$TOOL" "skills_dir")"
 
 if [[ -z "$TARGET" || -z "$AGENTS_DIR_NAME" || -z "$SKILLS_DIR_NAME" ]]; then
   echo "[FAIL] tool target config incomplete for: $TOOL" >&2
@@ -261,8 +261,8 @@ SKILL_DST="$TARGET/$SKILLS_DIR_NAME"
 
 ALL_PROFILES=("$PROFILE" "${EXTRA_PROFILES[@]}")
 
-mapfile -t AGENTS_TO_INSTALL < <(gdk_resolve_profile_items_all "include_agents" "${ALL_PROFILES[@]}")
-mapfile -t SKILLS_TO_INSTALL < <(gdk_resolve_profile_items_all "include_skills" "${ALL_PROFILES[@]}")
+mapfile -t AGENTS_TO_INSTALL < <(adk_resolve_profile_items_all "include_agents" "${ALL_PROFILES[@]}")
+mapfile -t SKILLS_TO_INSTALL < <(adk_resolve_profile_items_all "include_skills" "${ALL_PROFILES[@]}")
 
 if [[ ${#AGENTS_TO_INSTALL[@]} -eq 0 ]]; then
   echo "[FAIL] no agents resolved from profiles: ${ALL_PROFILES[*]}" >&2
@@ -277,19 +277,19 @@ fi
 BACKUP_PATH=""
 if [[ "$BACKUP" -eq 1 ]]; then
   if [[ -z "$BACKUP_DIR" ]]; then
-    BACKUP_DIR="$TARGET/.gdk-backups"
+    BACKUP_DIR="$TARGET/.adk-backups"
   fi
   BACKUP_PATH="$BACKUP_DIR/$(date -u +%Y%m%dT%H%M%SZ)"
-  gdk_run_cmd mkdir -p "$BACKUP_PATH"
+  adk_run_cmd mkdir -p "$BACKUP_PATH"
   if [[ -e "$AGENT_DST" ]]; then
-    gdk_run_cmd cp -a "$AGENT_DST" "$BACKUP_PATH/agents"
+    adk_run_cmd cp -a "$AGENT_DST" "$BACKUP_PATH/agents"
   fi
   if [[ -e "$SKILL_DST" ]]; then
-    gdk_run_cmd cp -a "$SKILL_DST" "$BACKUP_PATH/skills"
+    adk_run_cmd cp -a "$SKILL_DST" "$BACKUP_PATH/skills"
   fi
 fi
 
-gdk_run_cmd mkdir -p "$AGENT_DST" "$SKILL_DST"
+adk_run_cmd mkdir -p "$AGENT_DST" "$SKILL_DST"
 
 for agent in "${AGENTS_TO_INSTALL[@]}"; do
   install_item "$ROOT_DIR/agents/$agent" "$AGENT_DST/$agent"
@@ -300,7 +300,7 @@ for skill in "${SKILLS_TO_INSTALL[@]}"; do
 done
 
 for skill in "${OPTIONAL_SKILLS[@]}"; do
-  optional_path="$(gdk_get_optional_skill_path "$skill")"
+  optional_path="$(adk_get_optional_skill_path "$skill")"
   [[ -n "$optional_path" ]] || { echo "[FAIL] optional skill path missing: $skill" >&2; exit 1; }
   optional_dir="$ROOT_DIR/${optional_path%/SKILL.md}"
   install_item "$optional_dir" "$SKILL_DST/$skill"
