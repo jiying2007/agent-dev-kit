@@ -47,7 +47,7 @@ rtk ../scripts/check-global-codex-health.sh ~/.codex minimal
 ```md
 ## agent-dev-kit 配合规则
 
-- `agent-dev-kit` 是全局 Agent/Skill/Profile 的生产资产来源。
+- `agent-dev-kit` 是嵌入式系统开发 Agent/Skill/Profile 的生产资产来源。
 - adk 只负责安装 `agents/` 与 `skills/`，不覆盖本文件。
 - 不手工把参考仓资产直接复制进 `~/.codex/agents` 或 `~/.codex/skills`。
 - adk 资产更新必须先在 `llm_agent/agent-dev-kit` 通过 `tests/run_all.sh`，再用 `scripts/devkit.sh install` 安装。
