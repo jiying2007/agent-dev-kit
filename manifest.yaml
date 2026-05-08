@@ -345,6 +345,14 @@ skills:
     path: skills/adk-chinese-code-review/SKILL.md
     quality_tier: p1
     depends_on: []
+  - name: adk-repo-prompt-analyzer
+    path: skills/adk-repo-prompt-analyzer/SKILL.md
+    quality_tier: p1
+    depends_on: []
+  - name: adk-skill-deep-analyzer
+    path: skills/adk-skill-deep-analyzer/SKILL.md
+    quality_tier: p1
+    depends_on: []
 
 optional_skills:
   - name: adk-artifact-gated-lite
@@ -546,6 +554,10 @@ routing:
     primary_skill: adk-grill-with-docs
     supporting_skills: []
 
+  - name: adk-skill-deep-analyzer
+    path: skills/adk-skill-deep-analyzer/SKILL.md
+    quality_tier: p1
+    depends_on: []
 install:
   # default_mode 改为 copy，避免 symlink 在工作区变动时影响运行目录稳定性
   default_mode: copy
@@ -559,3 +571,4 @@ dependencies:
   optional:
     - rsync
     - shellcheck
+
