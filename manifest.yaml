@@ -46,7 +46,7 @@ quality_tiers:
 
 profiles:
   core:
-    description: 通用研发核心配置（跨模块需求、实现、验证与评审）
+    description: 嵌入式系统开发核心配置（需求、架构、实现、验证与评审）
     trigger_examples: ["开始新功能开发", "需要写代码", "帮我实现这个需求"]
     include_agents:
       - requirements-analyst

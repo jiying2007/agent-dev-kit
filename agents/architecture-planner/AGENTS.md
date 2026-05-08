@@ -89,9 +89,9 @@
 - 依赖分析：`madge --circular <entry>`、`deptry <dir>`
 - 架构图：`plantuml`、`mermaid`、`draw.io`
 - ADR 管理：`adr-tools`（`adr init`、`adr new`）
-- 适应度函数：`archunit`（Java）、`dependency-cruiser`（JS）
+- 适应度函数：自定义脚本验证架构约束
 - 代码搜索：`rg -n "interface|contract|schema" <dir>`
-- 模块分析：`lerna list`（JS）、`cargo metadata`（Rust）
+- 模块分析：`cargo metadata`（Rust）、CMake 依赖分析
 
 ## 协作接口
 - **→ component-engineer**：架构方案落地需组件工程师实现。

@@ -72,36 +72,37 @@
 5. **日志黑洞**：关键路径无日志，出问题无法定位。
 
 ## 工具箱
-- 状态机：`xstate`（JS）、`transitions`（Python）、手动实现
-- 日志：`spdlog`（C++）、`log4j`（Java）、`winston`（JS）
-- 链路追踪：`jaeger`、`zipkin`、`opentelemetry`
-- 错误注入：`chaosblade`、`toxiproxy`
+- 状态机：手动实现（C/C++ 状态机模式）
+- 日志：`spdlog`（C++）、自定义日志模块
+- 链路追踪：嵌入式追踪框架（如 Segger SystemView）
+- 错误注入：硬件故障注入、软件 Mock
 - 业务测试：`<project-test-cmd> --filter <module>`
 - 代码搜索：`rg -n "TODO|FIXME|panic|assert" <dir>`
 
 ## 协作接口
 - **→ architecture-planner**：业务架构变更需架构评审。
 - **→ component-engineer**：业务组件接口需组件工程师确认。
+- **→ driver-engineer**：硬件交互需驱动工程师确认。
 - **→ test-validation-engineer**：业务测试用例需测试工程师验收。
 - **→ performance-reliability-engineer**：业务热点路径需性能评估。
 - **← requirements-analyst**：接收业务需求包与验收标准。
 - **→ code-review-governor**：业务逻辑变更需代码评审门禁。
 
 ## 场景输入样例
-- 输入：新增"订单超时自动取消"流程，要求幂等，超时阈值 15 分钟。
-- 约束：不得修改支付服务接口；失败需可重试且可观测。
+- 输入：新增"设备超时自动断开"流程，要求幂等，超时阈值 30 秒。
+- 约束：不得修改底层驱动接口；失败需可重试且可观测。
 - 目标：补状态机、异常分支和回滚补偿。
 
 ## 输出样例
 ### pass
 - 结论：`pass`
-- 状态变更：`CREATED -> PAYING -> TIMEOUT_CANCELLED`，补偿动作已落地。
+- 状态变更：`IDLE -> CONNECTING -> CONNECTED -> TIMEOUT_DISCONNECTED`，补偿动作已落地。
 - 日志：关键状态变更记录 trace_id，支持链路追踪。
-- 幂等：重复取消请求通过事务键短路，返回相同结果。
-- 验证证据：`<project-test-cmd> --filter order-flow` 全通过，超时回放通过。
+- 幂等：重复断开请求通过事务键短路，返回相同结果。
+- 验证证据：`<project-test-cmd> --filter device-connection` 全通过，超时回放通过。
 
 ### needs-fix
 - 结论：`needs-fix`
-- 问题：超时取消后重复回调会二次扣减库存，缺少幂等守卫。
-- 日志缺陷：取消操作无日志记录，无法审计。
+- 问题：超时断开后重复回调会二次触发重连，缺少幂等守卫。
+- 日志缺陷：断开操作无日志记录，无法审计。
 - 处理建议：补唯一事务键与重复回调短路逻辑，增加结构化日志后复测。
