@@ -65,12 +65,12 @@ adk 是面向 ~/.codex 等开发代理运行目录的 Agent/Skill/Profile 生产
 
 ### 资产统计
 - Agents: 10 个角色（全部 p0 级）
-- Core Skills: 22 个（p0:8, p1:14）
-- Optional Skills: 7 个（p2 级）
+ Core Skills: 33 个（p0:8, p1:14）
+ Optional Skills: 10 个（p2 级）
 - Profiles: 10 个（core + 7 extends + 2 独立）
 - Scripts: 24 个
-- Tests: 21 个测试文件，59 个用例
-- Docs: 42 个文档 + 26 个 Runbook
+ Tests: 29 个测试文件，59 个用例
+ Docs: 58 个文档 + 26 个 Runbook
 
 ### 质量评分: 8.0/10
 

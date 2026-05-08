@@ -143,6 +143,15 @@ handoff_complete: true | false
 4. 状态机转换经脚本校验
 5. 交接签收记录完整
 
+## Workflow
+
+1. 识别变更范围与影响角色
+2. 为每个 artifact 生成统一标签（ImplementationPlan / ReviewReport / TestReport）
+3. 填充状态字段（draft → in-review → approved / needs-fix / BLOCKED）
+4. 执行验证命令并附加证据
+5. 交接签收：接收方确认 artifact 完整性
+6. 门禁结论：全部 artifact approved 且无矛盾 → pass
+
 ## 待完善事项
 
 - [ ] 跨仓库 artifact 路径标准化（当前各仓路径约定不统一）

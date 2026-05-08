@@ -1,5 +1,7 @@
 # 最佳实践指南
 
+> 📖 **相关文档**: 如需面向具体场景的实战模板与方法论框架，参见 [Codex Cookbook](best-practices-cookbook.md)（道法术器分层结构）。
+
 ## 概述
 
 本指南总结了使用 agent-dev-kit 的最佳实践，帮助你更高效地使用 adk 进行开发。

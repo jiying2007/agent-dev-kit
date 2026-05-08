@@ -226,6 +226,24 @@ bash scripts/check-agents-coverage.sh
 bash scripts/check-adk-harden-readiness.sh . --skip-full-suite
 ```
 
+## Workflow
+
+1. 扫描候选仓库（GitHub trending / 社区推荐 / 自动发现）
+2. 5 分钟快筛（README / LICENSE / 目录结构 / 活跃度）
+3. 深度分析（四阶段 Prompt 逆向 + 八阶段 Skill 拆解）
+4. 提炼优点/缺点（需有具体证据支撑）
+5. 接入决策（adopt / watch / reject）
+6. 治理覆盖（更新 registry.csv + adoption-matrix.md）
+7. 压实验证（adk 本地验证通过后才标记 adopted）
+
+## Quality Gate
+
+1. 未完成深度分析不得标记为 adopted
+2. 优点/缺点必须有具体证据支撑
+3. 接入决策必须更新 registry.csv 和 adoption-matrix.md
+4. watch 类仓库必须设定复查周期
+5. reject 决策必须记录具体原因
+
 ## 待完善事项
 
 - [ ] `scripts/new-repo-onboard.sh` 脚本实现（当前为手动流程）

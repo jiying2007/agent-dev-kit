@@ -1,6 +1,8 @@
-# Reference Adoption Matrix
+# Reference Adoption Summary（已采纳总结）
 
-本文件记录“参考仓库可借鉴内容”在 `agent-dev-kit` 的落地情况，仅保留已本地化、可执行、可验证的能力。
+> 本文档记录"参考仓库可借鉴内容"在 `agent-dev-kit` 的落地情况，仅保留已本地化、可执行、可验证的能力。
+>
+> - 如需查看每个候选项的详细评估（价值/成本/风险/决策/验收状态/证据），参见 [全量评估矩阵](reference-adoption-matrix.md)。
 
 ## 1. 参考源 A（流程化上下文与证据链）
 

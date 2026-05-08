@@ -154,6 +154,23 @@ bash scripts/check-adk-harden-readiness.sh . --require-pilot --skip-full-suite
 bash scripts/generate-weekly-report.sh --pilot
 ```
 
+## Workflow
+
+1. 定义试跑场景（目标运行目录、预期行为、验收标准）
+2. 准备试跑环境（隔离配置、基线快照）
+3. 执行试跑（运行能力、收集证据）
+4. 门禁验收（health-check / global-health / pilot-gate 三联）
+5. 记录结果（pass/fail + 根因 + 负结果留痕）
+6. 回灌建议（采纳/改进/淘汰 → 更新 adoption-matrix.md）
+
+## Quality Gate
+
+1. 无真实运行证据不得声明 pilot 通过
+2. 门禁三联证据必须全部 PASS（health-check / global-health / pilot-gate）
+3. 失败项必须记录根因并转入调试流程
+4. 负结果必须留痕（negative-results.md）
+5. 回灌建议必须有具体证据支撑
+
 ## 待完善事项
 
 - [ ] 试跑场景自动发现（从 AGENTS.md 意图路由表自动生成场景）

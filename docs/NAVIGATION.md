@@ -10,12 +10,12 @@
 | 使用指南 | usage.md | 完整使用说明 |
 | 命令参考 | commands.md | devkit.sh 子命令详解 |
 | 故障排除 | troubleshooting.md | 常见问题解决 |
-| 最佳实践 | best-practices.md | 生产使用建议 |
+| 最佳实践 | best-practices.md | 生产使用建议（另有 [Cookbook](best-practices-cookbook.md) 实战模板） |
 | 贡献指南 | CONTRIBUTING.md | 如何参与贡献 |
 | Codex 集成 | codex-agents-integration.md | ~/.codex/AGENTS.md 配合 |
 | 技能组合指南 | skill-composition-guide.md | Skill 组合策略 |
 | 映射矩阵 | mapping-matrix.md | Agent/Skill/Profile 映射 |
-| 参考采纳指南 | reference-adoption.md | 如何从参考仓吸收 |
+| 参考采纳指南 | reference-adoption.md | 已采纳总结（另有 [全量评估矩阵](reference-adoption-matrix.md)） |
 | Profile 选择指南 | profile-guide.md | Profile 选择与叠加规则 |
 
 ## 技术文档
@@ -109,6 +109,6 @@
 ### 新增文档
 | 文档 | 路径 | 说明 |
 |------|------|------|
-| Skill 格式指南 | docs/skill-format-guide.md | 渐进式披露规范 |
+| Skill 格式指南 | docs/skill-format-guide.md | 渐进式披露规范（含 XML 语义标签增强格式） |
 | Skill 依赖图 | docs/skill-dependency-graph.md | Skill 间依赖关系 |
 | 变更日志 | CHANGELOG.md | 版本变更记录 |
