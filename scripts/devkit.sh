@@ -1,8 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+# ============================================================================
+# devkit.sh — agent-dev-kit 仓库内统一入口
+#
+# 职责: 管理 agent-dev-kit 仓库内部的资产（install/validate/convert/catalog/match）
+# 特点: 功能更专注，仅处理仓库内部内容
+# 对应: llm_agent/scripts/devkit.sh 是工作区级完整版
+# ============================================================================
 
 usage() {
   cat <<USAGE

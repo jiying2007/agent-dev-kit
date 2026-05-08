@@ -1,8 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+# ============================================================================
+# backup-rollback.sh — agent-dev-kit 仓库内备份回滚
+#
+# 职责: 备份和回滚 agent-dev-kit 仓库内部的配置和数据
+# 特点: 功能更专注，仅处理仓库内部内容
+# 对应: llm_agent/scripts/backup-rollback.sh 是工作区级完整版
+# ============================================================================
 
 RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'; BLUE='\033[0;34m'; NC='\033[0m'
 log_info() { echo -e "${BLUE}[INFO]${NC} $1"; }

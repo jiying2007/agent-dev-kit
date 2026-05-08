@@ -1,8 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+# ============================================================================
+# version-manager.sh — agent-dev-kit 仓库内版本管理
+#
+# 职责: 管理 agent-dev-kit 仓库内部的版本锁定和升级路径
+# 特点: 功能更专注，仅处理仓库内部内容
+# 对应: llm_agent/scripts/version-manager.sh 是工作区级完整版
+# ============================================================================
 
 RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'; BLUE='\033[0;34m'; NC='\033[0m'
 log_info() { echo -e "${BLUE}[INFO]${NC} $1"; }
