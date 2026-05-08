@@ -1,6 +1,8 @@
-# Global Dev Kit
+# Agent Dev Kit — 嵌入式系统开发工具包
 
-`agent-dev-kit`（adk）是面向 `~/.codex` 等开发代理运行目录的 Agent/Skill/Profile 生产资产包。它的目标是把参考仓中的优秀方法论压实为可安装、可验证、可回滚、可持续迭代的工程资产。
+`agent-dev-kit`（adk）是面向嵌入式系统开发的 Agent/Skill/Profile 生产资产包。它的目标是把参考仓中的优秀方法论压实为可安装、可验证、可回滚、可持续迭代的工程资产。
+
+**定位边界**：adk 专注于嵌入式系统开发（BSP/驱动/RTOS/协议栈/硬件调试），不覆盖前端/后端/云原生等通用软件开发领域。
 
 当前版本：`2.7.0`。
 
@@ -13,6 +15,17 @@ adk 不是参考仓集合，也不是直接替换 `~/.codex/AGENTS.md` 的全局
 3. 用测试和门禁压实 Agent/Skill/Workflow/runbook。
 4. 把稳定资产安装到 `~/.codex/agents` 与 `~/.codex/skills`。
 5. 为真实生产使用提供安装报告、备份、pilot 与健康检查证据。
+
+**领域覆盖**：
+- ✅ BSP/驱动开发（寄存器、中断、DMA、设备树）
+- ✅ RTOS 任务设计（FreeRTOS、Zephyr、RT-Thread）
+- ✅ 协议栈集成（I2C/SPI/UART/CAN/Ethernet）
+- ✅ 硬件调试（OpenOCD/GDB、JTAG、逻辑分析仪）
+- ✅ 交叉编译（CMake、Yocto、Buildroot）
+- ✅ 嵌入式测试（HIL/SIL、单元测试、故障注入）
+- ❌ 前端开发（React/Vue/Angular、CSS、移动端）
+- ❌ 后端开发（Node.js/Python/Go/Java、API、数据库）
+- ❌ 云原生（Docker/K8s、AWS/Azure、微服务）
 
 ## 2. 当前资产概览
 
