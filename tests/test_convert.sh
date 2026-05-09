@@ -6,7 +6,7 @@ ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 TMP_DIR="$(mktemp -d)"
 trap 'rm -rf "$TMP_DIR"' EXIT
 
-"$ROOT_DIR/scripts/convert_assets.sh" \
+"$ROOT_DIR/scripts/convert-assets.sh" \
   --target claude-code \
   --profile core \
   --with-optional-skill adk-incident-rca-report \

@@ -7,7 +7,7 @@ ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 usage() {
   cat <<USAGE
 Usage:
-  ./scripts/openspec_bridge.sh <import|export|status-map> [options]
+  ./scripts/openspec-bridge.sh <import|export|status-map> [options]
 
 Options:
   --change <change-id>           # kebab-case, import/export 必填
@@ -19,10 +19,10 @@ Options:
   -h, --help
 
 Examples:
-  ./scripts/openspec_bridge.sh import --change add-dark-mode --openspec-root /repo/openspec
-  ./scripts/openspec_bridge.sh import --change add-dark-mode --from-archive --openspec-root /repo/openspec
-  ./scripts/openspec_bridge.sh export --change add-dark-mode --openspec-root /repo/openspec
-  ./scripts/openspec_bridge.sh export --change add-dark-mode --archive-date 2026-05-02 --openspec-root /repo/openspec
+  ./scripts/openspec-bridge.sh import --change add-dark-mode --openspec-root /repo/openspec
+  ./scripts/openspec-bridge.sh import --change add-dark-mode --from-archive --openspec-root /repo/openspec
+  ./scripts/openspec-bridge.sh export --change add-dark-mode --openspec-root /repo/openspec
+  ./scripts/openspec-bridge.sh export --change add-dark-mode --archive-date 2026-05-02 --openspec-root /repo/openspec
 USAGE
 }
 

@@ -4,7 +4,7 @@ set -euo pipefail
 usage() {
   cat <<USAGE
 Usage:
-  ./scripts/validate_assets.sh [--strict] [--quick]
+  ./scripts/validate-assets.sh [--strict] [--quick]
 
 Options:
   --strict   启用严格校验（名称一致性、描述必填等）
@@ -39,8 +39,8 @@ done
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-# shellcheck source=./lib_manifest.sh
-source "$SCRIPT_DIR/lib_manifest.sh"
+# shellcheck source=./lib-manifest.sh
+source "$SCRIPT_DIR/lib-manifest.sh"
 
 fail() {
   echo "[FAIL] $1" >&2

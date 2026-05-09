@@ -3,13 +3,13 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-# shellcheck source=./lib_manifest.sh
-source "$SCRIPT_DIR/lib_manifest.sh"
+# shellcheck source=./lib-manifest.sh
+source "$SCRIPT_DIR/lib-manifest.sh"
 
 usage() {
   cat <<USAGE
 Usage:
-  ./scripts/catalog_assets.sh <build|find> [options]
+  ./scripts/catalog-assets.sh <build|find> [options]
 
 Commands:
   build  生成 Agent/Skill/Profile 索引文档
@@ -22,8 +22,8 @@ Options:
   -h, --help
 
 Examples:
-  ./scripts/catalog_assets.sh build
-  ./scripts/catalog_assets.sh find --type skill --keyword bring-up
+  ./scripts/catalog-assets.sh build
+  ./scripts/catalog-assets.sh find --type skill --keyword bring-up
 USAGE
 }
 

@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# 加载公共日志库
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/lib-logging.sh"
+
 # ============================================================================
 # backup-rollback.sh — agent-dev-kit 仓库内备份回滚
 #
@@ -9,11 +13,11 @@ set -euo pipefail
 # 对应: llm_agent/scripts/backup-rollback.sh 是工作区级完整版
 # ============================================================================
 
-RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'; BLUE='\033[0;34m'; NC='\033[0m'
-log_info() { echo -e "${BLUE}[INFO]${NC} $1"; }
-log_success() { echo -e "${GREEN}[SUCCESS]${NC} $1"; }
-log_warning() { echo -e "${YELLOW}[WARNING]${NC} $1"; }
-log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
+; ; ; BLUE='\033[0;34m'; 
+[INFO]${NC} $1"; }
+[SUCCESS]${NC} $1"; }
+[WARNING]${NC} $1"; }
+[ERROR]${NC} $1"; }
 
 usage() {
     cat <<USAGE

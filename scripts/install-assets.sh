@@ -3,13 +3,13 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-# shellcheck source=./lib_manifest.sh
-source "$SCRIPT_DIR/lib_manifest.sh"
+# shellcheck source=./lib-manifest.sh
+source "$SCRIPT_DIR/lib-manifest.sh"
 
 usage() {
   cat <<USAGE
 Usage:
-  ./scripts/install_assets.sh [options]
+  ./scripts/install-assets.sh [options]
 
 Options:
   --tool auto|codex|claude-code|hermes-agent|opencode
@@ -29,9 +29,9 @@ Options:
   -h, --help
 
 Examples:
-  ./scripts/install_assets.sh --tool auto --mode symlink --profile embedded-fullstack
-  ./scripts/install_assets.sh --tool codex --target ~/.codex --profile core --extra-profile release-hardening
-  ./scripts/install_assets.sh --tool codex --profile core --with-optional-skill adk-test-flakiness-triage
+  ./scripts/install-assets.sh --tool auto --mode symlink --profile embedded-fullstack
+  ./scripts/install-assets.sh --tool codex --target ~/.codex --profile core --extra-profile release-hardening
+  ./scripts/install-assets.sh --tool codex --profile core --with-optional-skill adk-test-flakiness-triage
 USAGE
 }
 

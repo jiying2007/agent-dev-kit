@@ -13,14 +13,14 @@ CASES_FILE="$SCRIPT_DIR/fixtures/skill_trigger_cases.tsv"
 tail -n +2 "$CASES_FILE" | while IFS=$'\t' read -r skill scope expected input_text; do
   [[ -n "$skill" ]] || continue
 
-  if "$ROOT_DIR/scripts/skill_match.sh" --skill "$skill" --scope "$scope" --text "$input_text" >/tmp/adk_skill_match.txt 2>&1; then
+  if "$ROOT_DIR/scripts/skill-match.sh" --skill "$skill" --scope "$scope" --text "$input_text" >/tmp/adk_skill-match.txt 2>&1; then
     actual=1
   else
     actual=0
   fi
 
   if [[ "$actual" != "$expected" ]]; then
-    cat /tmp/adk_skill_match.txt >&2
+    cat /tmp/adk_skill-match.txt >&2
     echo "[FAIL] mismatch case skill=$skill scope=$scope expected=$expected actual=$actual" >&2
     exit 1
   fi

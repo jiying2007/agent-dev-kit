@@ -1,14 +1,18 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# 加载公共日志库
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/lib-logging.sh"
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'; BLUE='\033[0;34m'; NC='\033[0m'
-log_info() { echo -e "${BLUE}[INFO]${NC} $1"; }
-log_success() { echo -e "${GREEN}[SUCCESS]${NC} $1"; }
-log_warning() { echo -e "${YELLOW}[WARNING]${NC} $1"; }
-log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
+; ; ; BLUE='\033[0;34m'; 
+[INFO]${NC} $1"; }
+[SUCCESS]${NC} $1"; }
+[WARNING]${NC} $1"; }
+[ERROR]${NC} $1"; }
 
 usage() {
     cat <<USAGE
@@ -185,32 +189,3 @@ $(find "$ROOT_DIR" -type f -exec du -h {} \; 2>/dev/null | sort -hr | head -10)
 3. 优化脚本权限
 4. 清理旧备份
 5. 监控磁盘使用
-EOF
-    
-    log_success "性能报告已生成: $report_file"
-}
-
-main() {
-    [[ $# -lt 1 ]] && { usage; exit 1; }
-    local command="$1"; shift
-    local target="" level="basic"
-    
-    while [[ $# -gt 0 ]]; do
-        case "$1" in
-            --target) target="$2"; shift 2 ;;
-            --level) level="$2"; shift 2 ;;
-            -h|--help) usage; exit 0 ;;
-            *) log_error "未知参数: $1"; usage; exit 1 ;;
-        esac
-    done
-    
-    case "$command" in
-        analyze) analyze_performance ;;
-        optimize) optimize_performance "$level" ;;
-        benchmark) run_benchmark ;;
-        report) generate_report ;;
-        *) log_error "未知命令: $command"; usage; exit 1 ;;
-    esac
-}
-
-main "$@"

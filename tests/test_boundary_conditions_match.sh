@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# 边界条件测试 - skill_match.sh match 函数
+# 边界条件测试 - skill-match.sh match 函数
 # 测试: 空输入、超长输入、特殊字符、Unicode/emoji、
 #       全部22个routing关键词逐一匹配、多'/'的intent_zh
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-MATCH_SCRIPT="$ROOT_DIR/scripts/skill_match.sh"
+MATCH_SCRIPT="$ROOT_DIR/scripts/skill-match.sh"
 
 # 颜色定义
 RED='\033[0;31m'

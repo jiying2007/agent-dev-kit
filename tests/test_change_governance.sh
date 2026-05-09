@@ -11,11 +11,11 @@ CHANGE_ID="governance-smoke"
 CHANGE_DIR="$CHANGE_ROOT/$CHANGE_ID"
 
 "$ROOT_DIR/scripts/workflow.sh" propose --change "$CHANGE_ID" --title "governance smoke" --root "$CHANGE_ROOT"
-bash "$ROOT_DIR/scripts/check_change_governance.sh" "$CHANGE_DIR"
+bash "$ROOT_DIR/scripts/check-change-governance.sh" "$CHANGE_DIR"
 
 # 删除一个关键段落，校验脚本应失败
 sed -i '/^## Spec 链路检查$/,/^## 安装范围与依赖边界$/d' "$CHANGE_DIR/proposal.md"
-if bash "$ROOT_DIR/scripts/check_change_governance.sh" "$CHANGE_DIR" >/dev/null 2>&1; then
+if bash "$ROOT_DIR/scripts/check-change-governance.sh" "$CHANGE_DIR" >/dev/null 2>&1; then
   echo "[FAIL] governance check should fail when required section is missing" >&2
   exit 1
 fi

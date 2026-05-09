@@ -6,7 +6,7 @@ ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 TMP_DIR="$(mktemp -d)"
 trap 'rm -rf "$TMP_DIR"' EXIT
 
-BRIDGE="$ROOT_DIR/scripts/openspec_bridge.sh"
+BRIDGE="$ROOT_DIR/scripts/openspec-bridge.sh"
 OPENSPEC_ROOT="$TMP_DIR/openspec"
 ADK_CHANGE_ROOT="$TMP_DIR/adk/changes"
 

@@ -76,7 +76,7 @@ Audited: 37 SKILL.md files (28 core + 9 optional)
 ### 1. Frontmatter Inconsistency (10 skills missing version+last_updated)
 
 Two "waves" of skills exist:
-- **Wave 1** (27 skills): Full frontmatter with version: 1.0.0, last_updated: 2026-05-02
+- **Wave 1** (27 skills): Full frontmatter with version: 2.7.0, last_updated: 2026-05-02
 - **Wave 2** (10 skills): Missing version and last_updated fields
 
 Missing skills: adk-grill-with-docs, adk-diagnose-loop, adk-code-simplification, adk-context-engineering, adk-chinese-commit-conventions, adk-chinese-code-review, adk-fetch-url-content, adk-email-imap-fetch, and 2 more from wave 2.

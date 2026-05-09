@@ -7,7 +7,7 @@ TMP_DIR="$(mktemp -d)"
 trap 'rm -rf "$TMP_DIR"' EXIT
 
 CATALOG_OUT="$TMP_DIR/catalog.md"
-"$ROOT_DIR/scripts/catalog_assets.sh" build --out "$CATALOG_OUT"
+"$ROOT_DIR/scripts/catalog-assets.sh" build --out "$CATALOG_OUT"
 
 [[ -f "$CATALOG_OUT" ]] || {
   echo "[FAIL] catalog file not generated" >&2
@@ -29,7 +29,7 @@ grep -q '`adk-incident-rca-report`' "$CATALOG_OUT" || {
   exit 1
 }
 
-FIND_OUTPUT="$("$ROOT_DIR/scripts/catalog_assets.sh" find --type skill --keyword bring-up)"
+FIND_OUTPUT="$("$ROOT_DIR/scripts/catalog-assets.sh" find --type skill --keyword bring-up)"
 echo "$FIND_OUTPUT" | grep -q 'adk-driver-bringup-checklist' || {
   echo "[FAIL] find command missing expected skill" >&2
   exit 1

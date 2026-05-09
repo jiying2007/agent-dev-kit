@@ -4,7 +4,7 @@ set -euo pipefail
 usage() {
   cat <<USAGE
 Usage:
-  ./scripts/evidence_index.sh append --file <path> --command <cmd> --exit-code <n> --summary <text> --evidence-path <path> --layer <Agent|Skill|Workflow> [--artifact <name>]
+  ./scripts/evidence-index.sh append --file <path> --command <cmd> --exit-code <n> --summary <text> --evidence-path <path> --layer <Agent|Skill|Workflow> [--artifact <name>]
 USAGE
 }
 

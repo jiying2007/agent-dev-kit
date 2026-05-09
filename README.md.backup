@@ -75,7 +75,7 @@ bash scripts/devkit.sh test
 命令：
 
 ```bash
-rtk bash -lc "cd agent-dev-kit && bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --with-optional-skill adk-planning-execution-loop --with-optional-skill adk-skill-composition-governance --with-optional-skill adk-security-supply-chain --with-optional-skill adk-cross-team-handoff --with-optional-skill adk-artifact-gated-lite --backup --install-report ../reports/adk-install-report-$(date +%F).md --lock-version 2.7.0"
+rtk bash -lc "cd agent-dev-kit && bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --with-optional-skill adk-planning-execution-loop --with-optional-skill adk-skill-composition-governance --with-optional-skill adk-security-supply-chain --with-optional-skill adk-cross-team-handoff --with-optional-skill adk-artifact-gated-lite --backup --install-report ../reports/adk-install-report-$(date +%F).md --lock-version 2.0.0"
 rtk scripts/check-global-codex-health.sh ~/.codex minimal
 rtk scripts/check-adk-harden-readiness.sh . --require-pilot
 ```
@@ -257,10 +257,10 @@ bash scripts/backup-rollback.sh restore --target ~/.codex --version 20260505
 bash scripts/version-manager.sh current
 
 # 锁定版本
-bash scripts/version-manager.sh lock --version 2.7.0
+bash scripts/version-manager.sh lock --version 2.0.0
 
 # 升级版本
-bash scripts/version-manager.sh upgrade --target 2.7.0
+bash scripts/version-manager.sh upgrade --target 1.1.0
 ```
 
 
@@ -333,16 +333,16 @@ bash scripts/backup-rollback.sh rollback --target ~/.codex --version 20260505
 bash scripts/version-manager.sh current
 
 # 锁定版本
-bash scripts/version-manager.sh lock --version 2.7.0
+bash scripts/version-manager.sh lock --version 2.0.0
 
 # 解锁版本
 bash scripts/version-manager.sh unlock
 
 # 升级版本
-bash scripts/version-manager.sh upgrade --target 2.7.0
+bash scripts/version-manager.sh upgrade --target 1.1.0
 
 # 比较版本
-bash scripts/version-manager.sh compare --version 2.7.0 --target 2.7.0
+bash scripts/version-manager.sh compare --version 2.0.0 --target 1.1.0
 
 # 生成变更日志
 bash scripts/version-manager.sh changelog
@@ -399,19 +399,19 @@ bash scripts/version-manager.sh changelog
 ### 版本发布管理
 ```bash
 # 准备发布
-bash scripts/release-manager.sh prepare --version 2.7.0
+bash scripts/release-manager.sh prepare --version 2.0.0
 
 # 验证发布
-bash scripts/release-manager.sh validate --version 2.7.0
+bash scripts/release-manager.sh validate --version 2.0.0
 
 # 构建发布包
-bash scripts/release-manager.sh build --version 2.7.0
+bash scripts/release-manager.sh build --version 2.0.0
 
 # 发布版本
-bash scripts/release-manager.sh publish --version 2.7.0 --target production
+bash scripts/release-manager.sh publish --version 2.0.0 --target production
 
 # 回滚发布
-bash scripts/release-manager.sh rollback --version 2.7.0 --target production
+bash scripts/release-manager.sh rollback --version 2.0.0 --target production
 
 # 查看状态
 bash scripts/release-manager.sh status

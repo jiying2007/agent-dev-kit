@@ -2,4 +2,4 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-exec "$SCRIPT_DIR/install_assets.sh" --tool codex "$@"
+exec "$SCRIPT_DIR/install-assets.sh" --tool codex "$@"

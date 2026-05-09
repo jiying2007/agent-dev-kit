@@ -3,13 +3,13 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-# shellcheck source=./lib_manifest.sh
-source "$SCRIPT_DIR/lib_manifest.sh"
+# shellcheck source=./lib-manifest.sh
+source "$SCRIPT_DIR/lib-manifest.sh"
 
 usage() {
   cat <<USAGE
 Usage:
-  ./scripts/convert_assets.sh --target codex|claude-code|hermes-agent|opencode [options]
+  ./scripts/convert-assets.sh --target codex|claude-code|hermes-agent|opencode [options]
 
 Options:
   --profile <profile name>
@@ -22,8 +22,8 @@ Options:
   -h, --help
 
 Example:
-  ./scripts/convert_assets.sh --target claude-code --profile core --out dist
-  ./scripts/convert_assets.sh --target codex --profile core --with-optional-skill adk-incident-rca-report
+  ./scripts/convert-assets.sh --target claude-code --profile core --out dist
+  ./scripts/convert-assets.sh --target codex --profile core --with-optional-skill adk-incident-rca-report
 USAGE
 }
 

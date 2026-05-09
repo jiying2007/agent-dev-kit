@@ -1,14 +1,18 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# 加载公共日志库
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/lib-logging.sh"
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'; BLUE='\033[0;34m'; NC='\033[0m'
-log_info() { echo -e "${BLUE}[INFO]${NC} $1"; }
-log_success() { echo -e "${GREEN}[SUCCESS]${NC} $1"; }
-log_warning() { echo -e "${YELLOW}[WARNING]${NC} $1"; }
-log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
+; ; ; BLUE='\033[0;34m'; 
+[INFO]${NC} $1"; }
+[SUCCESS]${NC} $1"; }
+[WARNING]${NC} $1"; }
+[ERROR]${NC} $1"; }
 
 usage() {
     cat <<USAGE
@@ -294,34 +298,3 @@ $(bash "$ROOT_DIR/scripts/backup-rollback.sh" list --target ~/.codex 2>/dev/null
 3. 及时处理告警
 4. 定期备份数据
 5. 定期更新版本
-EOF
-    
-    log_success "月度报告已生成: $report_file"
-}
-
-main() {
-    [[ $# -lt 1 ]] && { usage; exit 1; }
-    local command="$1"; shift
-    local dry_run="false" force="false"
-    
-    while [[ $# -gt 0 ]]; do
-        case "$1" in
-            --dry-run) dry_run="true"; shift ;;
-            --force) force="true"; shift ;;
-            -h|--help) usage; exit 0 ;;
-            *) log_error "未知参数: $1"; usage; exit 1 ;;
-        esac
-    done
-    
-    case "$command" in
-        daily) daily_ops "$dry_run" ;;
-        weekly) weekly_ops "$dry_run" ;;
-        monthly) monthly_ops "$dry_run" ;;
-        cleanup) cleanup_temp_files ;;
-        optimize) optimize_performance ;;
-        security) security_check ;;
-        *) log_error "未知命令: $command"; usage; exit 1 ;;
-    esac
-}
-
-main "$@"

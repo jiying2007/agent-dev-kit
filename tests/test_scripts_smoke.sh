@@ -31,7 +31,7 @@ cd "$ADK_ROOT"
 
 run_smoke "devkit.sh help"                scripts/devkit.sh help
 run_smoke "health-check.sh"              scripts/health-check.sh
-run_smoke "lib_manifest.sh (source)"     -c "source scripts/lib_manifest.sh && type adk_require_manifest >/dev/null 2>&1"
+run_smoke "lib-manifest.sh (source)"     -c "source scripts/lib-manifest.sh && type adk_require_manifest >/dev/null 2>&1"
 run_smoke "version-manager.sh"           scripts/version-manager.sh
 run_smoke "backup-rollback.sh"           scripts/backup-rollback.sh
 run_smoke "release-manager.sh"           scripts/release-manager.sh
@@ -39,7 +39,7 @@ run_smoke "auto-ops.sh"                  scripts/auto-ops.sh
 run_smoke "monitoring.sh"                scripts/monitoring.sh
 run_smoke "performance.sh"               scripts/performance.sh
 run_smoke "security.sh"                  scripts/security.sh
-run_smoke "sync_codex_assets.sh"         scripts/sync_codex_assets.sh
+run_smoke "sync-codex-assets.sh"         scripts/sync-codex-assets.sh
 
 echo ""
 echo "=== Summary: $PASS_COUNT/$TOTAL PASS, $FAIL_COUNT FAIL ==="

@@ -21,6 +21,12 @@ constraints:
 ---
 
 ## Goal
+## Prerequisites
+
+- 理解相关领域的基本概念
+- 熟悉项目结构和工作流程
+- 具备基本的文档编写能力
+
 从产品视角深度拆解目标仓库中的 Skill 设计，提炼可复用的设计模式和最佳实践。
 
 ## Workflow
@@ -116,3 +122,45 @@ constraints:
 - 禁止直接引用 description 字段，必须从实现反推
 - 5 维评分每项必须给出≥1个具体证据
 - 输出报告必须包含"可借鉴点清单"章节
+
+## Commands
+
+```bash
+# 分析仓库的 prompt 结构
+bash scripts/devkit.sh analyze --repo <repo-path>
+
+# 生成分析报告
+bash scripts/devkit.sh analyze --repo <repo-path> --output reports/analysis.md
+
+# 验证分析结果
+bash scripts/devkit.sh verify --analysis reports/analysis.md
+```
+
+## Evidence Template
+
+### 分析报告模板
+
+```markdown
+# <仓库名> Prompt 分析报告
+
+> 分析时间: YYYY-MM-DD
+> 分析工具: adk-repo-prompt-analyzer
+
+## 发现的 Prompts
+
+| # | 文件路径 | Prompt 类型 | 用途 |
+|---|---------|------------|------|
+| 1 | ... | ... | ... |
+
+## 建议
+
+- 建议 1
+- 建议 2
+
+## 验证
+
+- [ ] 所有 prompts 已识别
+- [ ] 分类准确
+- [ ] 建议可执行
+```
+

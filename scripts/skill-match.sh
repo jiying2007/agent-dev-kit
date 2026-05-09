@@ -2,13 +2,13 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# shellcheck source=./lib_manifest.sh
-source "$SCRIPT_DIR/lib_manifest.sh"
+# shellcheck source=./lib-manifest.sh
+source "$SCRIPT_DIR/lib-manifest.sh"
 
 usage() {
   cat <<USAGE
 Usage:
-  ./scripts/skill_match.sh --text <input> [--skill <name>] [--scope auto|skill|optional-skill]
+  ./scripts/skill-match.sh --text <input> [--skill <name>] [--scope auto|skill|optional-skill]
 
 Options:
   --text <input>                   # 用户输入文本（必填）
@@ -18,11 +18,11 @@ Options:
 
 Examples:
   # 自动匹配（推荐）: 扫描 routing 表，再扫描 skill triggers
-  ./scripts/skill_match.sh --text "需求不清楚"
-  ./scripts/skill_match.sh --text "我要写驱动"
+  ./scripts/skill-match.sh --text "需求不清楚"
+  ./scripts/skill-match.sh --text "我要写驱动"
 
   # 指定 skill 匹配（向后兼容）
-  ./scripts/skill_match.sh --skill adk-requirements-triage --text "收到模糊需求"
+  ./scripts/skill-match.sh --skill adk-requirements-triage --text "收到模糊需求"
 USAGE
 }
 

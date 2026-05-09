@@ -31,6 +31,13 @@ constraints:
 
 在跨仓库、跨角色交付场景中，用统一的 artifact 标签体系和状态机门禁，消灭"口头完成"和"结论无证据"问题。
 
+## Prerequisites
+
+- 理解 artifact 门禁的基本概念
+- 熟悉跨角色协作流程
+- 了解状态机转换规则
+- 具备基本的文档编写能力
+
 ## 来源说明
 
 - **核心来源**：`artifact-gated-agents` 仓库的 Artifact/Gate 多角色协议

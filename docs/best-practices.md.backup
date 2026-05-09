@@ -175,7 +175,7 @@ bash tests/run_all.sh
 
 ```bash
 # 锁定版本
-bash scripts/version-manager.sh lock --version 2.7.0
+bash scripts/version-manager.sh lock --version 1.0.0
 ```
 
 ### 2. 版本升级
@@ -183,7 +183,7 @@ bash scripts/version-manager.sh lock --version 2.7.0
 
 ```bash
 # 升级版本
-bash scripts/version-manager.sh upgrade --target 2.7.0
+bash scripts/version-manager.sh upgrade --target 1.1.0
 ```
 
 ### 3. 版本记录

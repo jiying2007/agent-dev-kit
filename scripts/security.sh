@@ -1,14 +1,18 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# 加载公共日志库
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/lib-logging.sh"
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'; BLUE='\033[0;34m'; NC='\033[0m'
-log_info() { echo -e "${BLUE}[INFO]${NC} $1"; }
-log_success() { echo -e "${GREEN}[SUCCESS]${NC} $1"; }
-log_warning() { echo -e "${YELLOW}[WARNING]${NC} $1"; }
-log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
+; ; ; BLUE='\033[0;34m'; 
+[INFO]${NC} $1"; }
+[SUCCESS]${NC} $1"; }
+[WARNING]${NC} $1"; }
+[ERROR]${NC} $1"; }
 
 usage() {
     cat <<USAGE
@@ -141,139 +145,3 @@ ALLOW_WORLD_WRITABLE=false
 ALLOW_SENSITIVE_FILES=false
 ALLOW_SUDO=false
 ALLOW_EVAL=false
-EOF
-            fi
-            ;;
-    esac
-    
-    log_success "安全加固完成"
-}
-
-security_audit() {
-    log_info "安全审计"
-    
-    echo "=== 安全审计报告 ==="
-    echo ""
-    
-    # 1. 系统信息
-    echo "1. 系统信息:"
-    echo "   - 操作系统: $(uname -s)"
-    echo "   - 内核版本: $(uname -r)"
-    echo "   - 架构: $(uname -m)"
-    echo ""
-    
-    # 2. 用户信息
-    echo "2. 用户信息:"
-    echo "   - 当前用户: $(whoami)"
-    echo "   - 用户ID: $(id -u)"
-    echo "   - 组ID: $(id -g)"
-    echo ""
-    
-    # 3. 文件权限
-    echo "3. 文件权限:"
-    echo "   - 世界可写文件: $(find "$ROOT_DIR" -type f -perm -o+w 2>/dev/null | wc -l)"
-    echo "   - 可执行文件: $(find "$ROOT_DIR" -type f -executable 2>/dev/null | wc -l)"
-    echo ""
-    
-    # 4. 敏感文件
-    echo "4. 敏感文件:"
-    local sensitive_patterns=(".env" "*.key" "*.pem" "*.p12" "*.pfx" "*.jks")
-    for pattern in "${sensitive_patterns[@]}"; do
-        local found=$(find "$ROOT_DIR" -name "$pattern" -type f 2>/dev/null | wc -l)
-        echo "   - $pattern: $found"
-    done
-    echo ""
-    
-    # 5. 脚本安全
-    echo "5. 脚本安全:"
-    echo "   - 使用sudo的脚本: $(grep -r "sudo" "$ROOT_DIR/scripts" 2>/dev/null | wc -l)"
-    echo "   - 使用eval的脚本: $(grep -r "eval" "$ROOT_DIR/scripts" 2>/dev/null | wc -l)"
-    echo "   - 使用curl的脚本: $(grep -r "curl" "$ROOT_DIR/scripts" 2>/dev/null | wc -l)"
-    echo ""
-    
-    # 6. 网络服务
-    echo "6. 网络服务:"
-    echo "   - 开放端口: $(netstat -tuln 2>/dev/null | grep -c "LISTEN" || echo "0")"
-    echo ""
-    
-    # 7. 安全建议
-    echo "7. 安全建议:"
-    echo "   - 定期运行安全扫描"
-    echo "   - 及时修复安全问题"
-    echo "   - 监控敏感文件"
-    echo "   - 限制脚本权限"
-}
-
-generate_report() {
-    log_info "生成安全报告"
-    
-    local report_file="$ROOT_DIR/.monitoring/security-report-$(date +%Y%m%d%H%M%S).md"
-    
-    cat > "$report_file" <<EOF
-# 安全报告
-
-## 报告信息
-- 生成时间: $(date)
-- 系统信息: $(uname -a)
-
-## 系统信息
-- 操作系统: $(uname -s)
-- 内核版本: $(uname -r)
-- 架构: $(uname -m)
-- 当前用户: $(whoami)
-- 用户ID: $(id -u)
-- 组ID: $(id -g)
-
-## 文件权限
-- 世界可写文件: $(find "$ROOT_DIR" -type f -perm -o+w 2>/dev/null | wc -l)
-- 可执行文件: $(find "$ROOT_DIR" -type f -executable 2>/dev/null | wc -l)
-
-## 敏感文件
-$(for pattern in ".env" "*.key" "*.pem" "*.p12" "*.pfx" "*.jks"; do
-    echo "- $pattern: $(find "$ROOT_DIR" -name "$pattern" -type f 2>/dev/null | wc -l)"
-done)
-
-## 脚本安全
-- 使用sudo的脚本: $(grep -r "sudo" "$ROOT_DIR/scripts" 2>/dev/null | wc -l)
-- 使用eval的脚本: $(grep -r "eval" "$ROOT_DIR/scripts" 2>/dev/null | wc -l)
-- 使用curl的脚本: $(grep -r "curl" "$ROOT_DIR/scripts" 2>/dev/null | wc -l)
-
-## 网络服务
-- 开放端口: $(netstat -tuln 2>/dev/null | grep -c "LISTEN" || echo "0")
-
-## 安全建议
-1. 定期运行安全扫描
-2. 及时修复安全问题
-3. 监控敏感文件
-4. 限制脚本权限
-5. 使用安全配置
-6. 定期审计日志
-EOF
-    
-    log_success "安全报告已生成: $report_file"
-}
-
-main() {
-    [[ $# -lt 1 ]] && { usage; exit 1; }
-    local command="$1"; shift
-    local level="basic" fix="false"
-    
-    while [[ $# -gt 0 ]]; do
-        case "$1" in
-            --level) level="$2"; shift 2 ;;
-            --fix) fix="true"; shift ;;
-            -h|--help) usage; exit 0 ;;
-            *) log_error "未知参数: $1"; usage; exit 1 ;;
-        esac
-    done
-    
-    case "$command" in
-        scan) security_scan ;;
-        harden) security_harden "$level" "$fix" ;;
-        audit) security_audit ;;
-        report) generate_report ;;
-        *) log_error "未知命令: $command"; usage; exit 1 ;;
-    esac
-}
-
-main "$@"

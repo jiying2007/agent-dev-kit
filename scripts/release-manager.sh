@@ -1,14 +1,18 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# 加载公共日志库
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/lib-logging.sh"
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'; BLUE='\033[0;34m'; NC='\033[0m'
-log_info() { echo -e "${BLUE}[INFO]${NC} $1"; }
-log_success() { echo -e "${GREEN}[SUCCESS]${NC} $1"; }
-log_warning() { echo -e "${YELLOW}[WARNING]${NC} $1"; }
-log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
+; ; ; BLUE='\033[0;34m'; 
+[INFO]${NC} $1"; }
+[SUCCESS]${NC} $1"; }
+[WARNING]${NC} $1"; }
+[ERROR]${NC} $1"; }
 
 usage() {
     cat <<USAGE
@@ -211,150 +215,3 @@ bash scripts/health-check.sh check-all
 
 ## 反馈
 如有问题或建议，请提交Issue。
-EOF
-    
-    # 3. 创建安装脚本
-    log_info "创建安装脚本..."
-    cat > "$build_dir/install.sh" <<'INSTALLEOF'
-#!/usr/bin/env bash
-set -euo pipefail
-
-echo "安装 Global Dev Kit..."
-
-# 检查依赖
-if ! command -v bash &> /dev/null; then
-    echo "错误: 未安装Bash"
-    exit 1
-fi
-
-# 设置权限
-chmod +x scripts/*.sh
-chmod +x tests/*.sh
-
-# 运行健康检查
-echo "运行健康检查..."
-if bash scripts/health-check.sh check-all; then
-    echo "安装成功！"
-    echo ""
-    echo "快速开始:"
-    echo "  bash scripts/version-manager.sh current"
-    echo "  bash scripts/health-check.sh check-all"
-    echo "  bash tests/run_all.sh"
-else
-    echo "警告: 健康检查失败，请检查环境"
-fi
-INSTALLEOF
-    chmod +x "$build_dir/install.sh"
-    
-    # 4. 创建压缩包
-    log_info "创建压缩包..."
-    local archive_name="agent-dev-kit-$version.tar.gz"
-    tar -czf "$ROOT_DIR/dist/$archive_name" -C "$ROOT_DIR/dist" "$version"
-    
-    log_success "发布包构建完成: $ROOT_DIR/dist/$archive_name"
-    return 0
-}
-
-publish_release() {
-    local version="$1" target="$2" force="$3"
-    log_info "发布版本: $version -> $target"
-    
-    # 1. 验证发布包
-    local archive_name="agent-dev-kit-$version.tar.gz"
-    if [[ ! -f "$ROOT_DIR/dist/$archive_name" ]]; then
-        log_error "发布包不存在: $archive_name"
-        return 1
-    fi
-    
-    # 2. 备份当前版本
-    if [[ "$target" == "production" ]]; then
-        log_info "创建生产环境备份..."
-        bash "$ROOT_DIR/scripts/backup-rollback.sh" backup --target "$target"
-    fi
-    
-    # 3. 部署到目标环境
-    log_info "部署到目标环境: $target"
-    if [[ "$target" == "production" ]]; then
-        # 生产环境部署
-        local deploy_dir="/opt/agent-dev-kit"
-        mkdir -p "$deploy_dir"
-        tar -xzf "$ROOT_DIR/dist/$archive_name" -C "$deploy_dir"
-        log_success "部署完成: $deploy_dir"
-    elif [[ "$target" == "staging" ]]; then
-        # 预发布环境部署
-        local deploy_dir="/opt/agent-dev-kit-staging"
-        mkdir -p "$deploy_dir"
-        tar -xzf "$ROOT_DIR/dist/$archive_name" -C "$deploy_dir"
-        log_success "部署完成: $deploy_dir"
-    else
-        log_error "未知目标环境: $target"
-        return 1
-    fi
-    
-    # 4. 验证部署
-    log_info "验证部署..."
-    if [[ -f "$deploy_dir/scripts/health-check.sh" ]]; then
-        bash "$deploy_dir/scripts/health-check.sh" check-all
-    fi
-    
-    log_success "发布完成: $version -> $target"
-    return 0
-}
-
-rollback_release() {
-    local version="$1" target="$2"
-    log_info "回滚发布: $version -> $target"
-    
-    # 1. 创建备份
-    log_info "创建当前版本备份..."
-    bash "$ROOT_DIR/scripts/backup-rollback.sh" backup --target "$target"
-    
-    # 2. 恢复备份
-    log_info "恢复备份..."
-    bash "$ROOT_DIR/scripts/backup-rollback.sh" restore --target "$target" --version "$version" --force
-    
-    log_success "回滚完成: $version"
-    return 0
-}
-
-show_status() {
-    log_info "发布状态:"
-    echo ""
-    echo "当前版本:"
-    bash "$ROOT_DIR/scripts/version-manager.sh" current
-    echo ""
-    echo "发布包:"
-    ls -la "$ROOT_DIR/dist/" 2>/dev/null || echo "  无发布包"
-    echo ""
-    echo "备份:"
-    bash "$ROOT_DIR/scripts/backup-rollback.sh" list --target ~/.codex 2>/dev/null || echo "  无备份"
-}
-
-main() {
-    [[ $# -lt 1 ]] && { usage; exit 1; }
-    local command="$1"; shift
-    local version="" target="" force="false" dry_run="false"
-    
-    while [[ $# -gt 0 ]]; do
-        case "$1" in
-            --version) version="$2"; shift 2 ;;
-            --target) target="$2"; shift 2 ;;
-            --force) force="true"; shift ;;
-            --dry-run) dry_run="true"; shift ;;
-            -h|--help) usage; exit 0 ;;
-            *) log_error "未知参数: $1"; usage; exit 1 ;;
-        esac
-    done
-    
-    case "$command" in
-        prepare) [[ -z "$version" ]] && { log_error "缺少--version"; exit 1; }; prepare_release "$version" "$dry_run" "$force" ;;
-        validate) [[ -z "$version" ]] && { log_error "缺少--version"; exit 1; }; validate_release "$version" ;;
-        build) [[ -z "$version" ]] && { log_error "缺少--version"; exit 1; }; build_release "$version" ;;
-        publish) [[ -z "$version" || -z "$target" ]] && { log_error "缺少参数"; exit 1; }; publish_release "$version" "$target" "$force" ;;
-        rollback) [[ -z "$version" || -z "$target" ]] && { log_error "缺少参数"; exit 1; }; rollback_release "$version" "$target" ;;
-        status) show_status ;;
-        *) log_error "未知命令: $command"; usage; exit 1 ;;
-    esac
-}
-
-main "$@"

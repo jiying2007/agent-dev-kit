@@ -16,7 +16,7 @@ else
 fi
 
 # 运行 profile coherence 检查
-COHERENCE_SCRIPT="$(dirname "$SCRIPT_DIR")/scripts/check_profile_coherence.sh"
+COHERENCE_SCRIPT="$(dirname "$SCRIPT_DIR")/scripts/check-profile-coherence.sh"
 if [[ -f "$COHERENCE_SCRIPT" ]]; then
   if bash "$COHERENCE_SCRIPT" 2>/dev/null; then
     echo "[PASS] profile coherence 检查通过"
@@ -24,7 +24,7 @@ if [[ -f "$COHERENCE_SCRIPT" ]]; then
     echo "[WARN] profile coherence 检查有告警（非阻塞）"
   fi
 else
-  echo "[WARN] check_profile_coherence.sh 不存在"
+  echo "[WARN] check-profile-coherence.sh 不存在"
 fi
 
 echo ""

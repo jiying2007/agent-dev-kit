@@ -5,7 +5,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-MATCH_SCRIPT="$ROOT_DIR/scripts/skill_match.sh"
+MATCH_SCRIPT="$ROOT_DIR/scripts/skill-match.sh"
 
 # 颜色定义
 RED='\033[0;31m'

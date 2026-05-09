@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
+# 加载公共日志库
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/lib-logging.sh"
 
 # 质量门禁检查脚本
 # 检查Artifact/Gate协议的完整性

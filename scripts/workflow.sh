@@ -157,8 +157,8 @@ write_state() {
 }
 
 run_verify_checks() {
-  "$ROOT_DIR/scripts/validate_assets.sh" --strict
-  "$ROOT_DIR/scripts/check_format.sh"
+  "$ROOT_DIR/scripts/validate-assets.sh" --strict
+  "$ROOT_DIR/scripts/check-format.sh"
 }
 
 artifact_field_value() {
@@ -224,7 +224,7 @@ validate_artifact_consistency() {
 
 validate_change_artifacts() {
   local change_dir="$1"
-  bash "$ROOT_DIR/scripts/check_change_governance.sh" "$change_dir"
+  bash "$ROOT_DIR/scripts/check-change-governance.sh" "$change_dir"
 }
 
 propose() {
@@ -401,9 +401,9 @@ verify_change() {
     echo "- 时间：$(date -u +%Y-%m-%dT%H:%M:%SZ)"
     echo "- 执行人：$OWNER"
     echo "- 验证命令："
-    echo "  - scripts/validate_assets.sh --strict"
-    echo "  - scripts/check_format.sh"
-    echo "  - scripts/check_change_governance.sh <change_dir>"
+    echo "  - scripts/validate-assets.sh --strict"
+    echo "  - scripts/check-format.sh"
+    echo "  - scripts/check-change-governance.sh <change_dir>"
     echo "- 工件检查：proposal/design/tasks/checklist/negative-results"
     echo
   } > "$report"

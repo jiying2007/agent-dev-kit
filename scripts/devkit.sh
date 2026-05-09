@@ -9,6 +9,9 @@ set -euo pipefail
 # 对应: llm_agent/scripts/devkit.sh 是工作区级完整版
 # ============================================================================
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOT_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
+
 usage() {
   cat <<USAGE
 Usage:
@@ -58,25 +61,25 @@ shift
 
 case "$CMD" in
   install)
-    exec "$SCRIPT_DIR/install_assets.sh" "$@"
+    exec "$SCRIPT_DIR/install-assets.sh" "$@"
     ;;
   validate)
-    exec "$SCRIPT_DIR/validate_assets.sh" "$@"
+    exec "$SCRIPT_DIR/validate-assets.sh" "$@"
     ;;
   convert)
-    exec "$SCRIPT_DIR/convert_assets.sh" "$@"
+    exec "$SCRIPT_DIR/convert-assets.sh" "$@"
     ;;
   catalog)
-    exec "$SCRIPT_DIR/catalog_assets.sh" "$@"
+    exec "$SCRIPT_DIR/catalog-assets.sh" "$@"
     ;;
   match)
-    exec "$SCRIPT_DIR/skill_match.sh" "$@"
+    exec "$SCRIPT_DIR/skill-match.sh" "$@"
     ;;
   bridge)
-    exec "$SCRIPT_DIR/openspec_bridge.sh" "$@"
+    exec "$SCRIPT_DIR/openspec-bridge.sh" "$@"
     ;;
   evidence)
-    exec "$SCRIPT_DIR/evidence_index.sh" "$@"
+    exec "$SCRIPT_DIR/evidence-index.sh" "$@"
     ;;
   propose|apply|verify|review|archive)
     exec "$SCRIPT_DIR/workflow.sh" "$CMD" "$@"

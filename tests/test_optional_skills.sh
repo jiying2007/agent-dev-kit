@@ -6,7 +6,7 @@ ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 TMP_DIR="$(mktemp -d)"
 trap 'rm -rf "$TMP_DIR"' EXIT
 
-LIST_OUTPUT="$("$ROOT_DIR/scripts/install_assets.sh" --list-optional-skills)"
+LIST_OUTPUT="$("$ROOT_DIR/scripts/install-assets.sh" --list-optional-skills)"
 echo "$LIST_OUTPUT" | grep -Fxq "adk-incident-rca-report" || {
   echo "[FAIL] optional skill list missing adk-incident-rca-report" >&2
   exit 1
@@ -17,7 +17,7 @@ echo "$LIST_OUTPUT" | grep -Fxq "adk-artifact-gated-lite" || {
 }
 
 TARGET="$TMP_DIR/.codex"
-"$ROOT_DIR/scripts/install_assets.sh" \
+"$ROOT_DIR/scripts/install-assets.sh" \
   --tool codex \
   --mode copy \
   --target "$TARGET" \

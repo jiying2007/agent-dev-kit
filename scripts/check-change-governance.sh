@@ -4,7 +4,7 @@ set -euo pipefail
 usage() {
   cat <<USAGE
 Usage:
-  ./scripts/check_change_governance.sh <change_dir>
+  ./scripts/check-change-governance.sh <change_dir>
 USAGE
 }
 

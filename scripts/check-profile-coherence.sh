@@ -3,13 +3,13 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-# shellcheck source=./lib_manifest.sh
-source "$SCRIPT_DIR/lib_manifest.sh"
+# shellcheck source=./lib-manifest.sh
+source "$SCRIPT_DIR/lib-manifest.sh"
 
 usage() {
   cat <<USAGE
 Usage:
-  ./scripts/check_profile_coherence.sh
+  ./scripts/check-profile-coherence.sh
 
 Checks:
   - profile extends must not redeclare inherited agents/skills
