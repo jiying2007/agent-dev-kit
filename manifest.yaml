@@ -44,6 +44,53 @@ quality_tiers:
   p2:
     description: 可选场景资产，必须具备边界说明和最小验证路径
 
+knowledge_layers:
+  L0:
+    name: toolchain
+    description: 工具链配置知识（Codex/Claude Code/Hermes Agent 配置）
+    location: knowledge/L0-toolchain/
+  L1:
+    name: general-tech
+    description: 通用技术知识（语言、框架、算法、设计模式）
+    location: knowledge/L1-general-tech/
+  L2:
+    name: domain
+    description: 业务领域知识（BSP/驱动/RTOS/协议栈）
+    location: knowledge/L2-domain/
+  L3:
+    name: project
+    description: 项目上下文（架构决策、设计模式、历史决策）
+    location: knowledge/L3-project/
+  L4:
+    name: session
+    description: 会话上下文（临时状态，不持久化）
+    location: knowledge/L4-session/
+
+knowledge_types:
+  rules:
+    description: 必须遵守的约束和规范
+    location: rules/
+  patterns:
+    description: 可复用的解决方案和设计模式
+    location: skills/
+  cases:
+    description: 具体的实现示例和代码片段
+    location: templates/
+  experiences:
+    description: 踩坑记录和最佳实践
+    location: docs/explorations/
+  indexes:
+    description: 知识的元数据和导航
+    location: docs/reference/
+
+knowledge_maturity:
+  draft:
+    description: 初始记录，未经验证
+  verified:
+    description: 经过实践验证
+  mature:
+    description: 被广泛引用，稳定可靠
+
 agents:
   - name: requirements-analyst
     path: agents/requirements-analyst/AGENTS.md
