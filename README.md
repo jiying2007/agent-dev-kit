@@ -4,7 +4,7 @@
 
 **定位边界**：adk 专注于嵌入式系统开发（BSP/驱动/RTOS/协议栈/硬件调试），不覆盖前端/后端/云原生等通用软件开发领域。
 
-当前版本：`2.7.0`。
+当前版本：`2.8.0`。
 
 ## 1. 核心定位
 
@@ -43,10 +43,31 @@ adk 不是参考仓集合，也不是直接替换 `~/.codex/AGENTS.md` 的全局
 | `agents/` | 角色化 Agent 定义 |
 | `skills/` | 默认可安装技能 |
 | `optional-skills/` | 按需安装技能 |
+| `knowledge/` | 五层知识存储架构 |
 | `scripts/` | 安装、转换、验证、catalog、workflow、evidence 脚本 |
 | `tests/` | 全量回归与 smoke 测试 |
 | `docs/` | 使用指南、命令说明、workflow、runbook、生产配合说明 |
 | `docs/runbooks/` | 场景化生产操作手册 |
+
+## 3.1 知识分层架构
+
+> 来源: 腾讯技术工程文章《Harness不是目的，知识才是护城河》
+
+adk 引入五层知识存储架构，实现知识的精准组织和按需消费：
+
+| 层级 | 目录 | 说明 |
+|---|---|---|
+| L0 | `knowledge/L0-toolchain/` | 工具链配置知识（Codex/Claude Code/Hermes Agent） |
+| L1 | `knowledge/L1-general-tech/` | 通用技术知识（语言、框架、设计模式） |
+| L2 | `knowledge/L2-domain/` | 业务领域知识（BSP/驱动/RTOS/协议栈） |
+| L3 | `knowledge/L3-project/` | 项目上下文（架构决策、历史决策） |
+| L4 | `knowledge/L4-session/` | 会话上下文（临时状态） |
+
+**知识健康检查**：
+
+```bash
+bash scripts/knowledge-health-check.sh check-all
+```
 
 ## 4. 快速验证
 
