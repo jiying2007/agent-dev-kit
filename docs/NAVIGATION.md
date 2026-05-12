@@ -1,6 +1,6 @@
 # 文档导航索引
 
-> 自动生成于 2026-05-05 | 共 55+ 文档 + 28 Runbooks
+> 自动生成于 2026-05-05 | 共 56+ 文档 + 28 Runbooks
 
 ## 用户文档
 
@@ -17,6 +17,7 @@
 | 映射矩阵 | mapping-matrix.md | Agent/Skill/Profile 映射 |
 | 参考采纳指南 | reference-adoption.md | 已采纳总结（另有 [全量评估矩阵](reference-adoption-matrix.md)） |
 | Profile 选择指南 | profile-guide.md | Profile 选择与叠加规则 |
+| **吸收治理规则** | absorption-governance.md | **必读**：禁止完全增量更新，要求全盘深入考量 |
 
 
 ## 技术文档
