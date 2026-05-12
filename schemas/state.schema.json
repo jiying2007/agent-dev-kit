@@ -1,0 +1,173 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ADK Lifecycle State",
+  "description": "8 阶段生命周期状态文件规范",
+  "version": "1.0.0",
+  "type": "object",
+  "required": ["version", "feature", "phase", "created_at", "updated_at", "artifacts", "gates_passed", "gates_pending", "history"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "state.json 版本",
+      "const": "1.0.0"
+    },
+    "feature": {
+      "type": "string",
+      "description": "功能名称，使用 kebab-case",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "minLength": 1,
+      "maxLength": 64
+    },
+    "phase": {
+      "type": "string",
+      "description": "当前阶段",
+      "enum": ["spark", "design", "tasks", "build", "review", "test", "ship", "reflect"]
+    },
+    "mode": {
+      "type": "string",
+      "description": "工作流模式",
+      "enum": ["full", "quick"],
+      "default": "full"
+    },
+    "created_at": {
+      "type": "string",
+      "description": "创建时间 (ISO 8601)",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "description": "更新时间 (ISO 8601)",
+      "format": "date-time"
+    },
+    "artifacts": {
+      "type": "object",
+      "description": "产物路径映射",
+      "properties": {
+        "requirements": {
+          "type": "string",
+          "description": "需求文档路径"
+        },
+        "design": {
+          "type": "string",
+          "description": "设计文档路径"
+        },
+        "tasks": {
+          "type": "string",
+          "description": "任务清单路径"
+        },
+        "feature_list": {
+          "type": "string",
+          "description": "功能列表路径"
+        },
+        "code": {
+          "type": "string",
+          "description": "代码变更路径"
+        },
+        "tests": {
+          "type": "string",
+          "description": "测试报告路径"
+        },
+        "review": {
+          "type": "string",
+          "description": "审查报告路径"
+        },
+        "release": {
+          "type": "string",
+          "description": "发布产物路径"
+        },
+        "reflect": {
+          "type": "string",
+          "description": "复盘报告路径"
+        }
+      }
+    },
+    "gates_passed": {
+      "type": "array",
+      "description": "已通过的门禁",
+      "items": {
+        "type": "string",
+        "enum": ["spark", "design", "tasks", "build", "review", "test", "ship", "reflect"]
+      },
+      "uniqueItems": true
+    },
+    "gates_pending": {
+      "type": "array",
+      "description": "待通过的门禁",
+      "items": {
+        "type": "string",
+        "enum": ["spark", "design", "tasks", "build", "review", "test", "ship", "reflect"]
+      },
+      "uniqueItems": true
+    },
+    "history": {
+      "type": "array",
+      "description": "阶段转换历史",
+      "items": {
+        "type": "object",
+        "required": ["phase", "entered_at"],
+        "properties": {
+          "phase": {
+            "type": "string",
+            "enum": ["spark", "design", "tasks", "build", "review", "test", "ship", "reflect"]
+          },
+          "entered_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "exited_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "gate_result": {
+            "type": "string",
+            "enum": ["pass", "fail", "bypass"]
+          },
+          "bypass_reason": {
+            "type": "string",
+            "description": "绕过门禁的原因"
+          },
+          "executor": {
+            "type": "string",
+            "description": "执行者"
+          }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "description": "元数据",
+      "properties": {
+        "author": {
+          "type": "string",
+          "description": "作者"
+        },
+        "priority": {
+          "type": "string",
+          "enum": ["low", "medium", "high", "critical"],
+          "default": "medium"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "标签"
+        },
+        "description": {
+          "type": "string",
+          "description": "功能描述"
+        },
+        "assignee": {
+          "type": "string",
+          "description": "负责人"
+        },
+        "due_date": {
+          "type": "string",
+          "format": "date",
+          "description": "截止日期"
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

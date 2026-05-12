@@ -57,6 +57,115 @@
 - One change should focus on one real problem; avoid bundling unrelated fixes.
 - Explicitly decide whether a capability belongs to `core` or `optional-skills`.
 
+## 8 阶段生命周期框架（VibeFlow 吸收）
+
+> 来源: vibeflow 子仓深度分析 (2026-05-12)
+
+### 生命周期定义
+
+```
+Spark → Design → Tasks → Build → Review → Test → Ship → Reflect
+```
+
+| 阶段 | 目标 | 输入 | 输出 | 门禁 |
+|------|------|------|------|------|
+| **Spark** | 需求澄清与价值验证 | 用户需求/问题描述 | 需求文档、价值评估 | 需求完整性检查 |
+| **Design** | 技术方案设计 | 需求文档 | 设计文档、接口规范 | 三维评审通过 |
+| **Tasks** | 合同化任务拆解 | 设计文档 | tasks.md、feature-list.json | 任务边界清晰 |
+| **Build** | TDD 驱动开发 | tasks.md | 代码、单元测试 | 测试通过 |
+| **Review** | 多视角代码审查 | 代码变更 | 审查报告 | 无阻塞性问题 |
+| **Test** | 系统测试与 QA | 代码变更 | 测试报告 | 测试通过 |
+| **Ship** | 发布部署 | 测试通过的代码 | 发布产物 | 发布门禁通过 |
+| **Reflect** | 复盘沉淀 | 发布产物 | 复盘报告、经验教训 | 复盘完成 |
+
+### 阶段转换规则
+
+```yaml
+transitions:
+  spark_to_design:
+    condition: 需求文档完成 && 价值评估通过
+    gate: 需求完整性检查
+  design_to_tasks:
+    condition: 设计文档完成 && 三维评审通过
+    gate: 设计评审门禁
+  tasks_to_build:
+    condition: tasks.md 完成 && 任务边界清晰
+    gate: 任务合同检查
+  build_to_review:
+    condition: 代码完成 && 单元测试通过
+    gate: 测试覆盖率检查
+  review_to_test:
+    condition: 审查通过 && 无阻塞性问题
+    gate: 审查门禁
+  test_to_ship:
+    condition: 系统测试通过 && QA 签收
+    gate: 测试门禁
+  ship_to_reflect:
+    condition: 发布成功 && 部署验证
+    gate: 发布门禁
+  reflect_to_spark:
+    condition: 复盘完成 && 经验沉淀
+    gate: 复盘门禁
+```
+
+### 快速模式
+
+对于小型变更，支持快速模式（跳过非必要阶段）：
+
+```
+Spark → Tasks → Build → Ship
+```
+
+快速模式条件：
+- 变更范围 < 3 个文件
+- 不涉及架构变更
+- 不涉及外部接口变更
+- 用户明确指定快速模式
+
+### 状态持久化
+
+工作流状态持久化到 `.adk/state.json`，支持：
+- 中断恢复
+- 跨会话交接
+- 状态查询
+
+详见 `docs/workflows/lifecycle.md`
+
+## Gate 机制设计原则（VibeFlow 吸收）
+
+> 来源: vibeflow vision.md
+
+### Gate 选择标准
+
+新增 gate 前，必须回答 4 个问题：
+
+1. **这件事是不是 100% 可机械化？** → 脚本化
+2. **这件事是不是必须稳定复现？** → 状态机
+3. **这件事是不是经常忘，而且忘了会出事？** → Gate
+4. **这件事能不能更自然地由 agent runtime、skill 提示词或项目产物来承担？** → 不做 Gate
+
+**前三个问题都答"是"，才做 Gate。**
+
+### 现有 Gate 清单
+
+| Gate | 拦截内容 | 自动化程度 |
+|------|----------|-----------|
+| 需求完整性检查 | 缺少需求文档 | 半自动 |
+| 设计评审门禁 | 设计文档不完整 | 人工 |
+| 任务合同检查 | 任务边界模糊 | 半自动 |
+| 测试覆盖率检查 | 测试覆盖率不足 | 全自动 |
+| 审查门禁 | 阻塞性问题未解决 | 人工 |
+| 测试门禁 | 系统测试未通过 | 全自动 |
+| 发布门禁 | 发布产物不完整 | 半自动 |
+| 复盘门禁 | 复盘未完成 | 人工 |
+
+### Gate 实现原则
+
+1. **Gate 不接管执行** — 只拦截，不自动修复
+2. **Gate 有明确的通过标准** — 不依赖主观判断
+3. **Gate 支持绕过** — 紧急情况可绕过，但必须记录原因
+4. **Gate 有审计日志** — 记录谁在什么时候绕过了哪个 Gate
+
 ---
 
 ## 仓库深度分析报告 (2026-05-05)
