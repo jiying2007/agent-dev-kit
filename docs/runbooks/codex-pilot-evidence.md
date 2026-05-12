@@ -30,7 +30,7 @@
    - optional skill：`artifact-gated-lite`
    - runbook：`docs/runbooks/artifact-gated-delivery.md`
 5. 关键验证已通过：
-   - `rtk scripts/check-adk-harden-readiness.sh . --open-gate`
+   - `rtk ../scripts/check-adk-harden-readiness.sh . --open-gate`
    - `rtk scripts/sync-subrepos.sh . fetch`
    - `rtk scripts/diff-scan.sh . 7 reports/weekly-change-report.md`
 6. 本轮 `adoption-matrix` 已回填（adopt/observe/reject）。
@@ -110,9 +110,9 @@ status: PASS
 owner: Codex
 tests_run:
 - `rtk bash -lc 'cd agent-dev-kit && bash scripts/devkit.sh validate --strict'` -> `Validation passed. strict=1 quick=0`
-- `rtk bash -lc 'cd agent-dev-kit && bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --with-optional-skill planning-execution-loop --with-optional-skill skill-composition-governance --with-optional-skill security-supply-chain --with-optional-skill cross-team-handoff --with-optional-skill artifact-gated-lite --backup --install-report ../reports/adk-install-report-2026-05-02.md --lock-version 0.3.0'` -> `backup=/home/aiot03/.codex/.adk-backups/20260502T104514Z`
-- `rtk scripts/check-global-codex-health.sh ~/.codex minimal` -> `errors=0 warnings=0`
-- `rtk scripts/check-adk-harden-readiness.sh . --require-pilot` -> `global codex health ready`
+- `rtk bash -lc 'cd agent-dev-kit && bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --with-optional-skill planning-execution-loop --with-optional-skill skill-composition-governance --with-optional-skill security-supply-chain --with-optional-skill cross-team-handoff --with-optional-skill artifact-gated-lite --backup --install-report ../reports/adk-install-report-2026-05-02.md --lock-version 2.8.0'` -> `backup=/home/aiot03/.codex/.adk-backups/20260502T104514Z`
+- `rtk ../scripts/check-global-codex-health.sh ~/.codex minimal` -> `errors=0 warnings=0`
+- `rtk ../scripts/check-adk-harden-readiness.sh . --require-pilot` -> `global codex health ready`
 known_issues:
 - 生产安装和六类 adk 自举 pilot 已完成；真实业务任务样例仍需后续补充
 
@@ -254,7 +254,7 @@ status: READY
 owner: Codex
 scope:
 - 使用 release-hardening profile 执行 dry-run 安装
-- 带入 `security-supply-chain` optional skill 与 `--lock-version 0.3.0`
+- 带入 `security-supply-chain` optional skill 与 `--lock-version 2.8.0`
 - 验证安装计划不会直接写入生产目录
 inputs:
 - agent-dev-kit/scripts/install_assets.sh
@@ -277,14 +277,14 @@ can_follow_up:
 status: PASS
 owner: Codex
 tests_run:
-- `rtk bash -lc 'cd agent-dev-kit && bash scripts/devkit.sh install --tool codex --target /tmp/adk-release-pilot-codex --mode copy --profile release-hardening --with-optional-skill security-supply-chain --install-report /tmp/adk-release-pilot-install.md --lock-version 0.3.0 --dry-run'` -> `Install completed`
+- `rtk bash -lc 'cd agent-dev-kit && bash scripts/devkit.sh install --tool codex --target /tmp/adk-release-pilot-codex --mode copy --profile release-hardening --with-optional-skill security-supply-chain --install-report /tmp/adk-release-pilot-install.md --lock-version 2.8.0 --dry-run'` -> `Install completed`
 known_issues:
 - None
 
 ## Evidence Index（命令级）
 | Command | Exit Code | Result Summary | Evidence Path | Layer | Related Artifact |
 |---|---:|---|---|---|---|
-| `rtk bash -lc 'cd agent-dev-kit && bash scripts/devkit.sh install --tool codex --target /tmp/adk-release-pilot-codex --mode copy --profile release-hardening --with-optional-skill security-supply-chain --install-report /tmp/adk-release-pilot-install.md --lock-version 0.3.0 --dry-run'` | 0 | release-hardening dry-run 安装计划通过 | reports/codex-pilot-report.md#试跑场景-f发布收口已完成 | Workflow | TestReport |
+| `rtk bash -lc 'cd agent-dev-kit && bash scripts/devkit.sh install --tool codex --target /tmp/adk-release-pilot-codex --mode copy --profile release-hardening --with-optional-skill security-supply-chain --install-report /tmp/adk-release-pilot-install.md --lock-version 2.8.0 --dry-run'` | 0 | release-hardening dry-run 安装计划通过 | reports/codex-pilot-report.md#试跑场景-f发布收口已完成 | Workflow | TestReport |
 
 ## 试跑场景 G：团队交接（已完成）
 

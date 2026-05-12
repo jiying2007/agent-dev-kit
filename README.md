@@ -30,7 +30,7 @@ adk 不是参考仓集合，也不是直接替换 `~/.codex/AGENTS.md` 的全局
 ## 2. 当前资产概览
 
 - Agents：10 个角色 Agent。
-- Core Skills：28 个稳定技能。
+- Core Skills：33 个稳定技能。
 - Optional Skills：10 个可选技能。
 - Profiles：`core`、`personal-core`、`embedded-fullstack`、`release-hardening`、`adk-artifact-gated-lite`、`team-core`、`openspec-driven`、`large-refactor`、`incident-response`、`research-intake`。
 - Tool Targets：`codex`、`claude-code`、`hermes-agent`、`opencode`。
@@ -96,9 +96,9 @@ bash scripts/devkit.sh test
 命令：
 
 ```bash
-rtk bash -lc "cd agent-dev-kit && bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --with-optional-skill adk-planning-execution-loop --with-optional-skill adk-skill-composition-governance --with-optional-skill adk-security-supply-chain --with-optional-skill adk-cross-team-handoff --with-optional-skill adk-artifact-gated-lite --backup --install-report ../reports/adk-install-report-$(date +%F).md --lock-version 2.7.0"
-rtk scripts/check-global-codex-health.sh ~/.codex minimal
-rtk scripts/check-adk-harden-readiness.sh . --require-pilot
+rtk bash -lc "cd agent-dev-kit && bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --with-optional-skill adk-planning-execution-loop --with-optional-skill adk-skill-composition-governance --with-optional-skill adk-security-supply-chain --with-optional-skill adk-cross-team-handoff --with-optional-skill adk-artifact-gated-lite --backup --install-report ../reports/adk-install-report-$(date +%F).md --lock-version 2.8.0"
+rtk ../scripts/check-global-codex-health.sh ~/.codex minimal
+rtk ../scripts/check-adk-harden-readiness.sh . --require-pilot
 ```
 
 生产纪律：
@@ -192,7 +192,7 @@ bash scripts/devkit.sh test
 `llm_agent` 工作区生产放行验证：
 
 ```bash
-rtk scripts/check-adk-harden-readiness.sh . --require-pilot
+rtk ../scripts/check-adk-harden-readiness.sh . --require-pilot
 ```
 
 当前 `--require-pilot` 会校验 `reports/codex-pilot-report.md` 中六类场景：

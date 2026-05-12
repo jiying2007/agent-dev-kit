@@ -111,7 +111,7 @@
 2. 第二优先：在 `agent-dev-kit` 完成实装、验证、runbook 化（压实）。
 3. 第三优先：仅在压实门禁通过后，才允许追踪参考子仓增量更新。
 4. 门禁控制文件：`subrepos/phase-gate.env`，默认 `allow_upstream_sync=no`。
-5. 门禁检查脚本：`scripts/check-adk-harden-readiness.sh`。
+5. 门禁检查脚本：`../scripts/check-adk-harden-readiness.sh`。
 
 ---
 
@@ -128,7 +128,7 @@
 ### D3-D4：adk 压实实施
 
 1. 在 `agent-dev-kit` 落地 P0 项（优先低风险高收益）。
-2. 执行 `scripts/check-adk-harden-readiness.sh` 完成压实校验。
+2. 执行 `../scripts/check-adk-harden-readiness.sh` 完成压实校验。
 
 ### D5-D7：codex 实战试跑与回灌
 
@@ -175,7 +175,7 @@
 - 同步脚本：`scripts/sync-subrepos.sh`
 - 差异扫描：`scripts/diff-scan.sh`
 - 覆盖校验：`scripts/check-agents-coverage.sh`
-- 压实校验：`scripts/check-adk-harden-readiness.sh`
+- 压实校验：`../scripts/check-adk-harden-readiness.sh`
 - 一键门禁：`scripts/check-all.sh`（`--quick` 跳过耗时项，`--verbose` 显示详细输出）
 - 统一入口：`scripts/devkit.sh`（`check`/`onboard`/`sync`/`diff`/`health`/`weekly-report`/`cleanup`）
 - 周报模板：`reports/weekly-change-report.template.md`

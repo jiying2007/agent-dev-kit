@@ -8,7 +8,7 @@
 - `bugfix-delivery.md`：缺陷修复从定位到闭环
 - `refactor-hardening.md`：重构场景的风险压实与回归门禁
 - `codex-runtime-pilot.md`：在 `~/.codex` 的真实运行闭环验证
-- `adk-cross-team-handoff-delivery.md`：跨团队交接与签收闭环
+- `cross-team-handoff-delivery.md`：跨团队交接与签收闭环
 - `large-platform-delivery.md`：大型工程的模块边界与关键触点治理
 - `evidence-index-delivery.md`：证据索引化交付与审计回放
 - `migration-stage-delivery.md`：阶段式迁移交付与里程碑验收
@@ -23,11 +23,11 @@
 - `artifact-gated-delivery.md`：高风险变更的轻量产物门禁
 - `openspec-bridge.md`：openspec 与 adk 变更工件桥接
 - `runtime-routing.md`：`~/.codex` 运行入口与技能路由仲裁
-- `adk-planning-execution-loop.md`：长任务计划审查、执行检查点与跨会话恢复
+- `planning-execution-loop.md`：长任务计划审查、执行检查点与跨会话恢复
 - `production-deployment.md`：生产安装、备份、健康检查与回滚
 - `upstream-intake.md`：参考仓同步、候选评估与回灌闭环
 - `compatibility-matrix.md`：多工具转换能力与降级边界
-- `adk-security-supply-chain.md`：第三方资产引入前安全与供应链审查
+- `security-supply-chain.md`：第三方资产引入前安全与供应链审查
 - `team-delivery.md`：团队责任矩阵、交接签收与复验闭环
 
 ## 使用方式

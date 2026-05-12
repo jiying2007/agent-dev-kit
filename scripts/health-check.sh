@@ -11,7 +11,6 @@ source "${SCRIPT_DIR}/lib-logging.sh"
 # 特点: 功能更专注，仅检查仓库内部内容
 # 对应: llm_agent/scripts/health-check.sh 是工作区级完整版
 # ============================================================================
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 RED='\033[0;31m'

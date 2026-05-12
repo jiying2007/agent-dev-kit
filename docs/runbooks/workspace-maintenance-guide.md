@@ -30,7 +30,7 @@
 rtk scripts/check-doc-sync.sh .
 rtk scripts/check-runtime-routing.sh .
 rtk scripts/check-upstream-intake-readiness.sh .
-rtk scripts/check-global-codex-health.sh ~/.codex minimal
+rtk ../scripts/check-global-codex-health.sh ~/.codex minimal
 ```
 
 适用场景：只确认当前状态是否健康，不同步参考仓，不部署。
@@ -38,7 +38,7 @@ rtk scripts/check-global-codex-health.sh ~/.codex minimal
 ### 3.2 adk 压实检查
 
 ```bash
-rtk scripts/check-adk-harden-readiness.sh .
+rtk ../scripts/check-adk-harden-readiness.sh .
 ```
 
 适用场景：修改了 adk 文档、profile、skill、agent、workflow 或 root scripts 后，需要确认基础门禁。
@@ -46,7 +46,7 @@ rtk scripts/check-adk-harden-readiness.sh .
 ### 3.3 生产级放行检查
 
 ```bash
-rtk scripts/check-adk-harden-readiness.sh . --require-pilot
+rtk ../scripts/check-adk-harden-readiness.sh . --require-pilot
 ```
 
 适用场景：准备声明 adk 可用于 `~/.codex` 生产运行，或准备重新部署到 `~/.codex`。
@@ -73,7 +73,7 @@ rtk scripts/check-adk-harden-readiness.sh . --require-pilot
 同步前先跑：
 
 ```bash
-rtk scripts/check-adk-harden-readiness.sh . --require-pilot
+rtk ../scripts/check-adk-harden-readiness.sh . --require-pilot
 ```
 
 同步和扫描：
@@ -97,7 +97,7 @@ rtk scripts/diff-scan.sh . 7 reports/weekly-change-report.md
 ```bash
 rtk scripts/check-adoption-matrix-status.sh .
 rtk scripts/check-upstream-intake-readiness.sh .
-rtk scripts/check-adk-harden-readiness.sh . --require-pilot
+rtk ../scripts/check-adk-harden-readiness.sh . --require-pilot
 ```
 
 ## 4. adk 变更分级
@@ -109,8 +109,8 @@ rtk scripts/check-adk-harden-readiness.sh . --require-pilot
 | Agent/Skill 内容 | `rtk agent-dev-kit/tests/run_all.sh` | 会覆盖 frontmatter、内容质量、触发矩阵 |
 | profile / manifest | `rtk agent-dev-kit/tests/test_profile_coherence.sh` + `rtk agent-dev-kit/tests/run_all.sh` | 防止继承重复与未知引用 |
 | install / convert 脚本 | `rtk agent-dev-kit/tests/run_all.sh` | 必须覆盖安装、转换、dry-run |
-| root 门禁脚本 | `rtk scripts/check-adk-harden-readiness.sh . --require-pilot` | 影响生产放行链路 |
-| `~/.codex` 部署 | `rtk scripts/check-adk-harden-readiness.sh . --require-pilot` + install report | 必须保留 backup |
+| root 门禁脚本 | `rtk ../scripts/check-adk-harden-readiness.sh . --require-pilot` | 影响生产放行链路 |
+| `~/.codex` 部署 | `rtk ../scripts/check-adk-harden-readiness.sh . --require-pilot` + install report | 必须保留 backup |
 
 ## 5. 生产部署流程
 
@@ -118,9 +118,9 @@ rtk scripts/check-adk-harden-readiness.sh . --require-pilot
 
 ```bash
 rtk bash -lc "cd agent-dev-kit && bash scripts/devkit.sh validate --strict"
-rtk bash -lc "cd agent-dev-kit && bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --with-optional-skill planning-execution-loop --with-optional-skill skill-composition-governance --with-optional-skill security-supply-chain --with-optional-skill cross-team-handoff --with-optional-skill artifact-gated-lite --backup --install-report ../reports/adk-install-report-$(date +%F).md --lock-version 0.3.0"
-rtk scripts/check-global-codex-health.sh ~/.codex minimal
-rtk scripts/check-adk-harden-readiness.sh . --require-pilot
+rtk bash -lc "cd agent-dev-kit && bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --with-optional-skill planning-execution-loop --with-optional-skill skill-composition-governance --with-optional-skill security-supply-chain --with-optional-skill cross-team-handoff --with-optional-skill artifact-gated-lite --backup --install-report ../reports/adk-install-report-$(date +%F).md --lock-version 2.8.0"
+rtk ../scripts/check-global-codex-health.sh ~/.codex minimal
+rtk ../scripts/check-adk-harden-readiness.sh . --require-pilot
 ```
 
 生产安装纪律：
@@ -190,7 +190,7 @@ rtk scripts/check-adk-harden-readiness.sh . --require-pilot
 开发中可以临时不加 `--require-pilot`，但不能据此声明生产可用。生产结论必须使用：
 
 ```bash
-rtk scripts/check-adk-harden-readiness.sh . --require-pilot
+rtk ../scripts/check-adk-harden-readiness.sh . --require-pilot
 ```
 
 ### 8.2 是否可以直接更新参考子仓？

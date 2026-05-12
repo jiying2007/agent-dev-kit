@@ -12,14 +12,14 @@
 | 缺失脚本 | 引用来源 |
 |----------|---------|
 | `scripts/analyze-repo.sh` | 父目录 AGENTS.md |
-| `scripts/check-adk-harden-readiness.sh` | 父目录 AGENTS.md, README.md, 多个 SKILL.md, docs/commands.md |
+| `../scripts/check-adk-harden-readiness.sh` | 父目录 AGENTS.md, README.md, 多个 SKILL.md, docs/commands.md |
 | `scripts/check-adoption-matrix-status.sh` | docs/ |
 | `scripts/check-agents-coverage.sh` | 父目录 AGENTS.md, SKILL.md |
 | `scripts/check-all.sh` | 父目录 AGENTS.md |
 | `scripts/check-codex-pilot.sh` | docs/ |
 | `scripts/check-delivery-adopt-depth.sh` | docs/ |
 | `scripts/check-doc-sync.sh` | docs/ |
-| `scripts/check-global-codex-health.sh` | README.md, SKILL.md, docs/commands.md |
+| `../scripts/check-global-codex-health.sh` | README.md, SKILL.md, docs/commands.md |
 | `scripts/check-global-codex-target-policy.sh` | docs/ |
 | `scripts/check-observe-intake-depth.sh` | docs/ |
 | `scripts/check-runtime-routing.sh` | optional-skills/ |

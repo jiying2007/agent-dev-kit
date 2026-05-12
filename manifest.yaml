@@ -127,180 +127,147 @@ skills:
   - name: adk-requirements-triage
     path: skills/adk-requirements-triage/SKILL.md
     quality_tier: p0
-    quality_tier: p0
     depends_on: []
   - name: adk-adr-writer
     path: skills/adk-adr-writer/SKILL.md
-    quality_tier: p0
     quality_tier: p1
     depends_on: []
   - name: adk-task-breakdown
     path: skills/adk-task-breakdown/SKILL.md
-    quality_tier: p0
     quality_tier: p0
     depends_on:
       - adk-requirements-triage
   - name: adk-interface-contract-design
     path: skills/adk-interface-contract-design/SKILL.md
     quality_tier: p0
-    quality_tier: p0
     depends_on:
       - adk-requirements-triage
   - name: adk-register-map-design
     path: skills/adk-register-map-design/SKILL.md
     quality_tier: p0
-    quality_tier: p1
     depends_on:
       - adk-interface-contract-design
   - name: adk-driver-bringup-checklist
     path: skills/adk-driver-bringup-checklist/SKILL.md
     quality_tier: p0
-    quality_tier: p1
     depends_on:
       - adk-register-map-design
   - name: adk-bsp-porting-playbook
     path: skills/adk-bsp-porting-playbook/SKILL.md
     quality_tier: p0
-    quality_tier: p1
     depends_on:
       - adk-driver-bringup-checklist
   - name: adk-rtos-task-design
     path: skills/adk-rtos-task-design/SKILL.md
     quality_tier: p0
-    quality_tier: p1
     depends_on: []
   - name: adk-interrupt-dma-patterns
     path: skills/adk-interrupt-dma-patterns/SKILL.md
     quality_tier: p0
-    quality_tier: p1
     depends_on: []
   - name: adk-protocol-stack-integration
     path: skills/adk-protocol-stack-integration/SKILL.md
     quality_tier: p0
-    quality_tier: p1
     depends_on:
       - adk-interface-contract-design
   - name: adk-component-api-stability
     path: skills/adk-component-api-stability/SKILL.md
     quality_tier: p0
-    quality_tier: p1
     depends_on:
       - adk-interface-contract-design
   - name: adk-cmake-cross-build
     path: skills/adk-cmake-cross-build/SKILL.md
     quality_tier: p0
-    quality_tier: p1
     depends_on: []
   - name: adk-toolchain-debug-openocd-gdb
     path: skills/adk-toolchain-debug-openocd-gdb/SKILL.md
     quality_tier: p0
-    quality_tier: p1
     depends_on:
       - adk-systematic-debugging
   - name: adk-static-analysis-c-cpp
     path: skills/adk-static-analysis-c-cpp/SKILL.md
     quality_tier: p0
-    quality_tier: p0
     depends_on: []
   - name: adk-systematic-debugging
     path: skills/adk-systematic-debugging/SKILL.md
-    quality_tier: p0
     quality_tier: p0
     depends_on: []
   - name: adk-unit-test-embedded
     path: skills/adk-unit-test-embedded/SKILL.md
     quality_tier: p0
-    quality_tier: p0
     depends_on: []
   - name: adk-verification-before-completion
     path: skills/adk-verification-before-completion/SKILL.md
-    quality_tier: p0
     quality_tier: p0
     depends_on: []
   - name: adk-integration-hil-sil
     path: skills/adk-integration-hil-sil/SKILL.md
     quality_tier: p0
-    quality_tier: p1
     depends_on:
       - adk-unit-test-embedded
   - name: adk-fault-injection-recovery
     path: skills/adk-fault-injection-recovery/SKILL.md
     quality_tier: p0
-    quality_tier: p1
     depends_on:
       - adk-integration-hil-sil
   - name: adk-performance-profiling-embedded
     path: skills/adk-performance-profiling-embedded/SKILL.md
     quality_tier: p0
-    quality_tier: p1
     depends_on:
       - adk-systematic-debugging
   - name: adk-release-versioning
     path: skills/adk-release-versioning/SKILL.md
     quality_tier: p0
-    quality_tier: p1
     depends_on:
       - adk-commit-pr-quality-gate
   - name: adk-commit-pr-quality-gate
     path: skills/adk-commit-pr-quality-gate/SKILL.md
-    quality_tier: p0
     quality_tier: p0
     depends_on:
       - adk-verification-before-completion
   - name: adk-grill-with-docs
     path: skills/adk-grill-with-docs/SKILL.md
     quality_tier: p0
-    quality_tier: p0
     depends_on: []
   - name: adk-diagnose-loop
     path: skills/adk-diagnose-loop/SKILL.md
-    quality_tier: p0
     quality_tier: p0
     depends_on: []
   - name: adk-code-simplification
     path: skills/adk-code-simplification/SKILL.md
     quality_tier: p0
-    quality_tier: p1
     depends_on: []
   - name: adk-context-engineering
     path: skills/adk-context-engineering/SKILL.md
     quality_tier: p0
-    quality_tier: p1
     depends_on: []
   - name: adk-chinese-commit-conventions
     path: skills/adk-chinese-commit-conventions/SKILL.md
     quality_tier: p0
-    quality_tier: p1
     depends_on: []
   - name: adk-chinese-code-review
     path: skills/adk-chinese-code-review/SKILL.md
     quality_tier: p0
-    quality_tier: p1
     depends_on: []
   - name: adk-repo-prompt-analyzer
     path: skills/adk-repo-prompt-analyzer/SKILL.md
     quality_tier: p0
-    quality_tier: p1
     depends_on: []
   - name: adk-skill-deep-analyzer
     path: skills/adk-skill-deep-analyzer/SKILL.md
     quality_tier: p0
-    quality_tier: p1
     depends_on: []
   - name: adk-artifact-gating
     path: skills/adk-artifact-gating/SKILL.md
     quality_tier: p0
-    quality_tier: p1
     depends_on: []
   - name: adk-pilot-framework
     path: skills/adk-pilot-framework/SKILL.md
     quality_tier: p0
-    quality_tier: p1
     depends_on: []
   - name: adk-intake-workflow
     path: skills/adk-intake-workflow/SKILL.md
     quality_tier: p0
-    quality_tier: p1
     depends_on: []
 
 default_profile: core
@@ -348,6 +315,139 @@ profiles:
       - adk-unit-test-embedded
       - adk-verification-before-completion
       - adk-commit-pr-quality-gate
+  personal-core:
+    description: 个人 ~/.codex 精简配置（核心功能 + 发布检查）
+    trigger_examples:
+      - "个人项目开发"
+      - "快速原型验证"
+    extends: core
+    include_agents:
+      - requirements-analyst
+      - architecture-planner
+      - driver-engineer
+      - code-review-governor
+    include_skills:
+      - adk-requirements-triage
+      - adk-task-breakdown
+      - adk-commit-pr-quality-gate
+      - adk-release-versioning
+  embedded-fullstack:
+    description: 嵌入式全栈开发配置（驱动/组件/应用全覆盖）
+    trigger_examples:
+      - "嵌入式全栈开发"
+      - "BSP 驱动开发"
+      - "RTOS 应用开发"
+    extends: core
+    include_agents:
+      - requirements-analyst
+      - architecture-planner
+      - driver-engineer
+      - component-engineer
+      - application-engineer
+      - test-validation-engineer
+      - code-review-governor
+    include_skills:
+      - adk-requirements-triage
+      - adk-task-breakdown
+      - adk-interface-contract-design
+      - adk-register-map-design
+      - adk-driver-bringup-checklist
+      - adk-bsp-porting-playbook
+      - adk-rtos-task-design
+      - adk-interrupt-dma-patterns
+      - adk-protocol-stack-integration
+      - adk-component-api-stability
+      - adk-cmake-cross-build
+      - adk-static-analysis-c-cpp
+      - adk-systematic-debugging
+      - adk-unit-test-embedded
+      - adk-verification-before-completion
+      - adk-commit-pr-quality-gate
+  team-core:
+    description: 团队协作配置（交接/验证/评审）
+    trigger_examples:
+      - "团队协作开发"
+      - "代码交接"
+      - "团队评审"
+    extends: core
+    include_agents:
+      - requirements-analyst
+      - architecture-planner
+      - code-review-governor
+    include_skills:
+      - adk-requirements-triage
+      - adk-task-breakdown
+      - adk-commit-pr-quality-gate
+      - adk-grill-with-docs
+      - adk-chinese-commit-conventions
+      - adk-chinese-code-review
+  openspec-driven:
+    description: Spec 驱动开发配置（需求/设计/任务链路）
+    trigger_examples:
+      - "Spec 驱动开发"
+      - "需求分析与设计"
+      - "任务拆解"
+    extends: core
+    include_agents:
+      - requirements-analyst
+      - architecture-planner
+    include_skills:
+      - adk-requirements-triage
+      - adk-task-breakdown
+      - adk-interface-contract-design
+      - adk-adr-writer
+  large-refactor:
+    description: 大型重构配置（API 稳定性 + 代码简化）
+    trigger_examples:
+      - "大型代码重构"
+      - "API 重构"
+      - "架构调整"
+    extends: embedded-fullstack
+    include_agents:
+      - architecture-planner
+      - code-review-governor
+    include_skills:
+      - adk-component-api-stability
+      - adk-code-simplification
+      - adk-static-analysis-c-cpp
+  incident-response:
+    description: 线上事故响应配置（根因/复盘/恢复）
+    trigger_examples:
+      - "线上事故处理"
+      - "故障排查"
+      - "事故复盘"
+    include_agents:
+      - performance-reliability-engineer
+      - security-compliance-reviewer
+    include_skills:
+      - adk-systematic-debugging
+      - adk-diagnose-loop
+      - adk-fault-injection-recovery
+  research-intake:
+    description: 参考仓吸收配置（候选筛选与审查）
+    trigger_examples:
+      - "吸收参考仓"
+      - "研究新技术"
+      - "评估外部方案"
+    include_agents:
+      - requirements-analyst
+    include_skills:
+      - adk-repo-prompt-analyzer
+      - adk-skill-deep-analyzer
+      - adk-intake-workflow
+  adk-artifact-gated-lite:
+    description: 轻量产物门禁配置（高风险变更）
+    trigger_examples:
+      - "高风险变更"
+      - "关键功能修改"
+      - "需要严格门禁"
+    extends: core
+    include_agents:
+      - code-review-governor
+    include_skills:
+      - adk-artifact-gating
+      - adk-commit-pr-quality-gate
+      - adk-verification-before-completion
 
 
 optional_skills:
@@ -362,6 +462,12 @@ optional_skills:
     quality_tier: p2
   - name: adk-data-fetch
     path: optional-skills/adk-data-fetch/SKILL.md
+    quality_tier: p2
+  - name: adk-email-imap-fetch
+    path: optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md
+    quality_tier: p2
+  - name: adk-fetch-url-content
+    path: optional-skills/adk-data-fetch/adk-fetch-url-content/SKILL.md
     quality_tier: p2
   - name: adk-planning-execution-loop
     path: optional-skills/adk-planning-execution-loop/SKILL.md

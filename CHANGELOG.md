@@ -1,5 +1,36 @@
 # Changelog
 
+## v2.8.0 (2026-05-12)
+
+### 修复
+- manifest.yaml: 修复 33 个 skill 的重复 quality_tier YAML 键
+- manifest.yaml: 补充 8 个缺失 Profile 定义 (personal-core, embedded-fullstack, team-core, openspec-driven, large-refactor, incident-response, research-intake, adk-artifact-gated-lite)
+- 文档引用: 修复 7 个文件中的版本锁定引用 (统一为 2.8.0)
+- 导航链接: 修复 NAVIGATION.md 3 个断裂 Runbook 链接
+- Runbook 索引: 修复 runbooks/README.md 3 个错误文件名
+- 脚本引用: 修复 check-global-codex-health.sh 和 check-adk-harden-readiness.sh 路径引用
+- 统计数据: 更新 README.md 和 AGENTS.md 中的过时统计数字
+
+### 统计
+- Agents: 10 个
+- Core Skills: 33 个
+- Optional Skills: 9 个
+- Profiles: 10 个 (新增 8 个)
+- Scripts: 26 个
+
+## v2.7.0 (2026-05-10)
+
+### 增强
+- VibeFlow 生命周期框架吸收 (8 阶段: Spark→Design→Tasks→Build→Review→Test→Ship→Reflect)
+- Gate 机制设计原则 (4 问评估标准)
+- 知识分层架构 (L0-L4) 文档化
+- 仓库深度分析报告更新
+
+### 新增
+- docs/workflows/lifecycle.md: 生命周期工作流文档
+- docs/workflows/gate-design.md: Gate 设计原则文档
+
+
 ## v2.6.0 (2026-05-06)
 ### 新增
 - 脚本 smoke 测试：test_scripts_smoke.sh 覆盖 11 个脚本
