@@ -5,6 +5,7 @@ languages: [all]
 layers: [all]
 stages: [design, build, review]
 checks: [design-rules-documented]
+maturity: verified
 ---
 
 # Global Engineering Rules
