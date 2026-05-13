@@ -1,7 +1,7 @@
 # flow-kit 深度分析与 adk 借鉴
 
 **来源**: [开源，开源，融合多个AI工具的AI规范化编程项目发布了！！](https://mp.weixin.qq.com/s/TKSFcvhBSqugYCOTMEoFrQ)
-**项目**: github.com/rihebty/flow-kit
+**项目**: flow-kit 项目
 **日期**: 2026-05-12
 
 ---

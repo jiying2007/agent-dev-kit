@@ -31,7 +31,7 @@
 | Hook 降级模式 | hook-degradation-pattern.md | Hook 失败时的降级策略 |
 | 参考采纳矩阵 | reference-adoption-matrix.md | 全量评估矩阵 |
 | 工作区治理 | workspace-governance.md | 治理规则与流程 |
-| SuperAgents 参考 | reference/superpowers-agents.md | SuperAgents 角色参考 |
+| 工程参考 | reference/engineering-agents.md | 工程角色参考 |
 | 工具速查表 | reference/tool-cheatsheet.md | 常用工具命令速查 |
 
 ## 审计与分析报告
