@@ -1,6 +1,8 @@
 ---
 name: adk-skill-deep-analyzer
 description: 从产品视角深度拆解 AI Skill 的设计意图、独特解法和可借鉴模式
+version: 1.0.0
+last_updated: 2026-05-16
 triggers:
   - 深度拆解 skill
   - 分析 skill 设计
@@ -163,4 +165,3 @@ bash scripts/devkit.sh verify --analysis reports/analysis.md
 - [ ] 分类准确
 - [ ] 建议可执行
 ```
-

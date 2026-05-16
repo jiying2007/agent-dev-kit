@@ -252,7 +252,7 @@ Spark → Tasks → Build → Ship
 ## 仓库深度分析报告 (2026-05-05)
 
 ### 功能定位
-adk 是面向 ~/.codex 等开发代理运行目录的 Agent/Skill/Profile 生产资产包。核心目标：把参考仓中的优秀方法论压实为可安装、可验证、可回滚、可迭代的工程资产。
+adk 是面向 `~/codex -> ~/.codex` 运行链路的 Agent/Skill/Profile 生产资产包。核心目标：把参考仓中的优秀方法论压实为可交接到 `~/codex`、可验证、可回滚、可迭代的工程资产，再由 `~/codex` apply 到 `~/.codex`。
 
 ### 资产统计
 - Agents: 10 个角色（全部 p0 级）

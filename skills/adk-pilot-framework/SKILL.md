@@ -42,7 +42,7 @@ constraints:
 - **Runbook 参考**：`docs/runbooks/codex-runtime-pilot.md`
 - **门禁机制**：`scripts/check-adk-harden-readiness.sh --require-pilot`
 - **健康检查**：`scripts/health-check.sh` + `scripts/check-global-codex-health.sh`
-- **迭代依据**：`AGENTS.md` 第 3 节"先落地 adk、再在 ~/.codex 试跑、再回灌 adk"双向闭环
+- **迭代依据**：`AGENTS.md` 第 3 节"先在 agent-dev-kit 完成资产化与验证、再交接到 ~/codex、由 ~/codex apply 到 ~/.codex 试跑、再回灌 adk"双向闭环
 
 ## 模式描述
 
@@ -50,9 +50,9 @@ constraints:
 
 | 场景类型 | 说明 | 验证重点 | 典型目录 |
 |----------|------|----------|----------|
-| 功能开发 | 新功能从零实现 | Skill 触发准确率、输出质量 | `~/.codex` |
-| 缺陷修复 | 已知 bug 修复 | 调试流程完整性、修复验证 | `~/.codex` |
-| 重构 | 大规模代码重构 | 回归测试覆盖、破坏性变更检测 | `~/.codex` |
+| 功能开发 | 新功能从零实现 | Skill 触发准确率、输出质量 | `~/codex -> ~/.codex` |
+| 缺陷修复 | 已知 bug 修复 | 调试流程完整性、修复验证 | `~/codex -> ~/.codex` |
+| 重构 | 大规模代码重构 | 回归测试覆盖、破坏性变更检测 | `~/codex -> ~/.codex` |
 | 发布 | 版本发布流程 | 版本号、changelog、门禁全通过 | `agent-dev-kit` |
 | 跨仓协作 | 多仓联动变更 | 交接协议、artifact 完整性 | 多仓 |
 
@@ -67,7 +67,7 @@ constraints:
 [pilot-scenario]
 id: pilot-<date>-<seq>
 type: feature | bugfix | refactor | release | cross-repo
-target_dir: ~/.codex | <project-dir>
+target_dir: ~/codex | ~/.codex | <project-dir>
 skills_under_test:
   - <skill-1>
   - <skill-2>

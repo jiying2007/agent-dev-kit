@@ -258,22 +258,97 @@ adk_resolve_profile_items_all() {
 adk_list_routing_intents() {
   # Output: intent_zh<TAB>primary_skill for each routing entry
   awk '
-    $0 ~ /^routing:/ {in_routing=1; next}
+    function trim(value) {
+      sub(/^[[:space:]]+/, "", value)
+      sub(/[[:space:]]+$/, "", value)
+      gsub(/^"|"$/, "", value)
+      return value
+    }
+    $0 ~ /^routing:/ {in_routing=1; intent_zh=""; primary=""; next}
     in_routing && $0 ~ /^[^ ]/ {in_routing=0}
-    in_routing && $0 ~ /^  - intent:/ {has_intent=1; next}
+    in_routing && $0 ~ /^[[:space:]]+-[[:space:]]+intent:/ {
+      intent_zh=""
+      primary=""
+      next
+    }
     in_routing {
-      if ($0 ~ /^    intent_zh:/) {
-        val=$0; sub(/^    intent_zh: */, "", val); gsub(/^"|"$/, "", val)
-        intent_zh=val
+      if ($0 ~ /^[[:space:]]+intent_zh:/) {
+        val=$0
+        sub(/^[[:space:]]+intent_zh:[[:space:]]*/, "", val)
+        intent_zh=trim(val)
       }
-      if ($0 ~ /^    primary_skill:/) {
-        val=$0; sub(/^    primary_skill: */, "", val)
-        primary=val
+      if ($0 ~ /^[[:space:]]+primary_skill:/) {
+        val=$0
+        sub(/^[[:space:]]+primary_skill:[[:space:]]*/, "", val)
+        primary=trim(val)
         if (intent_zh != "" && primary != "") {
           print intent_zh "\t" primary
           intent_zh=""; primary=""
         }
       }
+    }
+  ' "$ADK_MANIFEST"
+}
+
+adk_get_routing_supporting_skills() {
+  local primary_skill="$1"
+  awk -v skill="$primary_skill" '
+    function trim(value) {
+      sub(/^[[:space:]]+/, "", value)
+      sub(/[[:space:]]+$/, "", value)
+      gsub(/^"|"$/, "", value)
+      return value
+    }
+    function indent(line) {
+      match(line, /[^ ]/)
+      return RSTART ? RSTART - 1 : 0
+    }
+    function emit_inline(value, items, i, item) {
+      gsub(/[\[\]]/, "", value)
+      split(value, items, ",")
+      for (i in items) {
+        item=trim(items[i])
+        if (item != "") {
+          print item
+        }
+      }
+    }
+    $0 ~ /^routing:/ {in_routing=1; found=0; in_supporting=0; supporting_indent=0; next}
+    in_routing && $0 ~ /^[^ ]/ {exit}
+    !in_routing {next}
+    in_routing && $0 ~ /^[[:space:]]+-[[:space:]]+intent:/ {
+      if (found) {
+        exit
+      }
+      found=0
+      in_supporting=0
+      next
+    }
+    in_routing && $0 ~ /^[[:space:]]+primary_skill:/ {
+      val=$0
+      sub(/^[[:space:]]+primary_skill:[[:space:]]*/, "", val)
+      found=(trim(val) == skill)
+      next
+    }
+    found && $0 ~ /^[[:space:]]+supporting_skills:[[:space:]]*\[/ {
+      val=$0
+      sub(/^[[:space:]]+supporting_skills:[[:space:]]*/, "", val)
+      emit_inline(val)
+      next
+    }
+    found && $0 ~ /^[[:space:]]+supporting_skills:/ {
+      in_supporting=1
+      supporting_indent=indent($0)
+      next
+    }
+    in_supporting && indent($0) <= supporting_indent && $0 ~ /^[[:space:]]+[a-zA-Z_-]+:/ {
+      exit
+    }
+    in_supporting && indent($0) > supporting_indent && $0 ~ /^[[:space:]]+-[[:space:]]+/ {
+      item=$0
+      sub(/^[[:space:]]+-[[:space:]]*/, "", item)
+      print trim(item)
+      next
     }
   ' "$ADK_MANIFEST"
 }

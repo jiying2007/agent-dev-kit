@@ -2,7 +2,7 @@
 
 ## 目标
 
-把 `~/.codex` 中的任务入口统一路由到合适的 Agent、Skill、Workflow，避免多套生态混装后的触发冲突。
+把 adk 能力先统一路由到 `~/codex` 的 profile/skill/agent/workflow 声明，再由 `~/codex` apply 到 `~/.codex`，避免多套生态混装后的触发冲突。
 
 ## 默认入口
 
@@ -31,6 +31,7 @@
 bash scripts/devkit.sh catalog build
 bash scripts/devkit.sh match --skill adk-requirements-triage --text "<task>"
 bash scripts/check_profile_coherence.sh
+bash ~/codex/scripts/doctor.sh --scope governance
 bash ../scripts/check-runtime-routing.sh ..
 ```
 
@@ -39,4 +40,5 @@ bash ../scripts/check-runtime-routing.sh ..
 - `check-runtime-routing.sh` 通过。
 - `check-skill-routing-conflicts.sh` 通过。
 - `check_profile_coherence.sh` 通过。
+- `~/codex` governance/build 关系通过。
 - 任务场景能映射到 profile、Agent 链、主 Skill 和 Workflow 状态。

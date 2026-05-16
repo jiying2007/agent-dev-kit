@@ -88,7 +88,7 @@
 
 - Agent：`application-engineer -> test-validation-engineer -> code-review-governor`
 - Skill：`adk-verification-before-completion + adk-commit-pr-quality-gate`
-- 命令：`health-check(~/.codex) -> check-global-codex-health -> check-adk-harden-readiness --require-pilot`
+- 命令：`~/codex doctor/apply dry-run -> health-check(~/.codex) -> check-global-codex-health -> check-adk-harden-readiness --require-pilot`
 - 关键纪律：未通过 pilot 验证不得给出“可放行/可追踪上游更新”结论
 - Runbook：`docs/runbooks/codex-runtime-pilot.md`
 
@@ -201,7 +201,7 @@
 - Agent：`requirements-analyst -> architecture-planner -> code-review-governor`
 - Skill：`adk-skill-composition-governance + adk-security-supply-chain + adk-commit-pr-quality-gate`
 - 命令：`sync-subrepos -> diff-scan -> check-upstream-intake-readiness`
-- 关键纪律：参考资产不得直接混装进 `~/.codex`
+- 关键纪律：参考资产不得直接混装进 `~/.codex`；必须先经过 adk，再进入 `~/codex`，最后由 `~/codex` apply
 - Runbook：`docs/runbooks/upstream-intake.md`
 
 ### 场景 W：团队生产交付（Team Delivery）

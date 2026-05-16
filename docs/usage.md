@@ -20,7 +20,7 @@ bash scripts/devkit.sh test
 | Profile | 推荐场景 |
 |---|---|
 | `core` | 通用研发最小主干 |
-| `personal-core` | 个人 `~/.codex` 生产默认 |
+| `personal-core` | 个人 `~/codex -> ~/.codex` 生产默认 |
 | `embedded-fullstack` | 嵌入式全栈，adk 默认 profile |
 | `release-hardening` | 发布前强化 |
 | `adk-artifact-gated-lite` | 高风险变更轻量 artifact 门禁 |
@@ -36,20 +36,20 @@ Profile 继承一致性检查：
 bash scripts/check_profile_coherence.sh
 ```
 
-## 3) 资产安装
+## 3) 资产安装与生产交接
 
 ```bash
 # 自动识别工具并软链接安装
 bash scripts/devkit.sh install --tool auto --mode symlink --profile embedded-fullstack
 
-# 指定工具与目标目录，安装 core + 强化 profile
-bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile core --extra-profile release-hardening
+# 本地临时目标目录安装 core + 强化 profile（用于测试 install 行为）
+bash scripts/devkit.sh install --tool codex --target /tmp/adk-codex-target --mode copy --profile core --extra-profile release-hardening
 
-# 生产安装：备份 + 安装报告 + 版本锁定
-bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --backup --install-report reports/adk-install-report.md --lock-version 2.8.0
+# 生产推荐：导出符合 ~/codex 源资产与 manifest fragment 规范的 handoff
+bash scripts/devkit.sh convert --target codex --profile personal-core --extra-profile release-hardening --with-optional-skill adk-planning-execution-loop --with-optional-skill adk-skill-composition-governance --with-optional-skill adk-security-supply-chain --with-optional-skill adk-cross-team-handoff --with-optional-skill adk-artifact-gated-lite --codex-profile team-collab --out ../reports/adk-codex-handoff --clean
 
-# 生产推荐：personal-core + release-hardening + 五个生产 optional skills
-bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --with-optional-skill adk-planning-execution-loop --with-optional-skill adk-skill-composition-governance --with-optional-skill adk-security-supply-chain --with-optional-skill adk-cross-team-handoff --with-optional-skill adk-artifact-gated-lite --backup --install-report ../reports/adk-install-report-$(date +%F).md --lock-version 2.8.0
+# 在 /tmp 的 ~/codex 副本中合并 handoff，并运行 ~/codex build/doctor/check-skills
+bash scripts/devkit.sh codex-handoff --codex-root ~/codex
 ```
 
 参数说明：
@@ -59,6 +59,7 @@ bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --prof
 - `--profile`：主 profile（默认 `embedded-fullstack`）
 - `--extra-profile`：可选叠加 profile（可重复）
 - `--with-optional-skill`：按需叠加可选技能（可重复）
+- `--codex-profile`：`target=codex` 时写入 `~/codex` manifest fragment 的 profile，默认 `team-collab`
 - `--target`：覆盖 manifest 里的工具默认根目录
 - `--backup`：安装前备份目标 `agents/skills`
 - `--install-report`：生成安装报告
@@ -66,9 +67,10 @@ bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --prof
 
 生产安装纪律：
 
-- `~/.codex` 推荐使用 `copy`，避免源仓未提交变动影响运行目录。
-- 必须启用 `--backup` 与 `--install-report`。
-- 安装后运行 `llm_agent/scripts/check-global-codex-health.sh ~/.codex minimal`。（注意: 此脚本在 llm_agent 父仓库中，非本仓库）
+- 生产链路推荐先导出到交接目录，再由 `~/codex` 注册、build、doctor、apply 到 `~/.codex`。
+- `target=codex` 的导出物必须包含 `src/codex-home/vendor/...` 与 `manifest-fragments/*.json`，不能是 `~/.codex` 运行目录形态。
+- adk 不直接写入 `~/.codex`，避免绕过 `~/codex` 的 manifest、drift 和 rollback 管理。
+- apply 后运行 `llm_agent/scripts/check-global-codex-health.sh ~/.codex minimal`。（注意: 此脚本在 llm_agent 父仓库中，非本仓库）
 - 若用于生产放行，还需运行 `llm_agent/scripts/check-adk-harden-readiness.sh . --require-pilot`。（注意: 此脚本在 llm_agent 父仓库中，非本仓库）
 
 ## 4) 资产转换
@@ -80,8 +82,8 @@ bash scripts/devkit.sh convert --target claude-code --profile embedded-fullstack
 # 导出到 Hermes Agent（叠加发布强化）
 bash scripts/devkit.sh convert --target hermes-agent --profile core --extra-profile release-hardening --out dist --clean
 
-# 导出并包含可选技能
-bash scripts/devkit.sh convert --target codex --profile core --with-optional-skill adk-test-flakiness-triage --out dist --clean
+# 导出 Codex handoff，并包含可选技能
+bash scripts/devkit.sh convert --target codex --profile core --with-optional-skill adk-test-flakiness-triage --codex-profile team-collab --out dist --clean
 ```
 
 ## 5) 目录索引与触发匹配
@@ -147,14 +149,15 @@ bash scripts/validate_assets.sh --strict
 bash scripts/check_profile_coherence.sh
 ```
 
-## 8) `~/.codex/AGENTS.md` 配合
+## 8) `~/codex` 与 `~/.codex/AGENTS.md` 配合
 
-adk 不覆盖 `~/.codex/AGENTS.md`。推荐分工：
+adk 不覆盖 `~/codex` 或 `~/.codex/AGENTS.md`。推荐分工：
 
+- `~/codex/src/codex-home` 与 `~/codex/manifests`：Codex Home 源资产、profile、skill、agent、workflow 声明。
 - `~/.codex/AGENTS.md`：全局策略、命令硬约束、流程升级/降级、技能路由原则。
-- `~/.codex/agents`：由 adk 安装的 Agent。
-- `~/.codex/skills`：由 adk 安装的 Skills 与已治理个人技能。
-- `agent-dev-kit`：源资产、测试、profile、runbook。
+- `~/.codex/agents`：由 `~/codex` apply 后的 Agent。
+- `~/.codex/skills`：由 `~/codex` apply 后的 Skills、系统保留 skill 与已治理个人技能。
+- `agent-dev-kit`：源资产、测试、profile、runbook、导出物。
 
 详细说明见：
 
@@ -170,9 +173,9 @@ docs/codex-agents-integration.md
 rtk ../scripts/check-adk-harden-readiness.sh . --require-pilot
 ```
 
-若安装后异常：
+若 apply 后异常：
 
-1. 从 install report 找到 backup 路径。
-2. 经用户确认后恢复 `agents/` 与 `skills/`。
+1. 从 `~/codex/build/apply-plan*.json` 或 backup 找到回滚依据。
+2. 经用户确认后运行 `~/codex/scripts/rollback.sh` 或恢复备份。
 3. 运行 `rtk ../scripts/check-global-codex-health.sh ~/.codex minimal`。
 4. 在 `reports/` 写入回滚记录。

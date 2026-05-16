@@ -1,0 +1,24 @@
+# 寄存器定义
+
+## 基本信息
+- 寄存器名称: {register_name}
+- 偏移地址: {offset}
+- 复位值: {reset_value}
+- 访问权限: {access_permission}
+
+## 位域定义
+
+| 位 | 名称 | 读写 | 描述 |
+|----|------|------|------|
+| 31:24 | RESERVED | RO | 保留 |
+| 23:16 | {field_name} | RW | {field_description} |
+| 15:8 | {field_name} | RW | {field_description} |
+| 7:0 | {field_name} | RW | {field_description} |
+
+## 使用说明
+{usage_notes}
+
+## 参考资料
+- SoC: {soc_name}
+- Datasheet 版本: {datasheet_version}
+- 页码: {page_number}

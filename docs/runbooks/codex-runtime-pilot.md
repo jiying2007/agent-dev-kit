@@ -2,7 +2,7 @@
 
 ## 适用场景
 
-- 变更已在 `agent-dev-kit` 通过本地回归，需要在 `~/.codex` 真实运行目录做最小闭环验证。
+- 变更已在 `agent-dev-kit` 通过本地回归，并已交接到 `~/codex`；需要由 `~/codex` apply 到 `~/.codex` 后做最小闭环验证。
 - 准备执行“先压实后追踪”的阶段门禁检查。
 
 ## 推荐 Agent 链
@@ -18,6 +18,8 @@
 ## 命令模板
 
 ```bash
+bash ~/codex/scripts/doctor.sh --scope all
+bash ~/codex/scripts/apply.sh --profile team-collab --dry-run
 bash ../scripts/health-check.sh ~/.codex minimal
 bash ../scripts/check-global-codex-health.sh ~/.codex minimal
 bash ../scripts/check-adk-harden-readiness.sh . --require-pilot --skip-full-suite
@@ -27,5 +29,5 @@ bash ../scripts/check-adk-harden-readiness.sh . --require-pilot --skip-full-suit
 
 - `health-check` 与 `check-global-codex-health` 必须均为 PASS。
 - `check-adk-harden-readiness` 必须在 `--require-pilot` 条件下通过。
-- 验证结论必须包含三联证据：health-check / global health / pilot gate。
+- 验证结论必须包含四联证据：`~/codex` doctor/apply dry-run / health-check / global health / pilot gate。
 - 若任一命令失败，必须记录失败证据并转入 `adk-systematic-debugging`，不得声明可放行。

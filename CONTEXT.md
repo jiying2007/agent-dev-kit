@@ -1,7 +1,7 @@
 # CONTEXT.md — agent-dev-kit 领域语言定义
 
-> 最后更新: 2026-05-09
-> 版本: 2.7.0
+> 最后更新: 2026-05-16
+> 版本: 2.8.0
 
 ---
 
@@ -270,7 +270,42 @@
 
 ---
 
-## 17. 联系方式
+## 17. 术语表
+
+| 术语 | 定义 | 单一事实源 |
+|------|------|------------|
+| Agent | 面向固定职责的执行角色，负责分析、实现、验证或评审中的一个边界 | `agents/<name>/AGENTS.md` |
+| Skill | 可复用能力单元，定义触发条件、输入输出、流程、命令和质量门禁 | `skills/<name>/SKILL.md` |
+| Optional Skill | 默认不安装的扩展能力，只在 profile 或用户明确选择时启用 | `optional-skills/<name>/SKILL.md` |
+| Profile | Agent 与 Skill 的可安装组合，面向具体工作场景 | `manifest.yaml` |
+| Workflow | 从需求、设计、实现、验证到归档的阶段化执行链路 | `docs/workflows.md` |
+| Artifact | 工作流阶段产物，如 proposal、design、tasks、verify-report、review-report | `templates/artifacts/` |
+| Gate | 阶段入口或出口的质量检查，必须有命令或证据支撑 | `scripts/` 与 `tests/` |
+| Evidence | 验证证据，记录命令、退出码、摘要和证据路径 | `docs/changes/<change>/` |
+
+---
+
+## 18. 概念关系
+
+1. `manifest.yaml` 是 Agent、Skill、Optional Skill 与 Profile 的结构化索引。
+2. Profile 选择一组 Agent 和 Skill；安装、转换和 Codex handoff 都从 Profile 解析资产。
+3. Workflow 定义执行顺序；Skill 提供单步方法；Agent 承担角色职责。
+4. Artifact 是 Workflow 的可审计输出；Gate 检查 Artifact 与 Evidence 是否满足进入下一阶段的条件。
+5. `agent-dev-kit` 的生产链路是先生成符合 `~/codex` 规范的 handoff，再由 `~/codex` apply 到 `~/.codex`。
+
+---
+
+## 19. 使用规范
+
+1. 新增或修改 Agent/Skill 必须同步 `manifest.yaml`，并运行 `rtk agent-dev-kit/scripts/devkit.sh validate --strict`。
+2. 修改路由、触发词或 profile 时，必须运行 `rtk agent-dev-kit/tests/test_skill_trigger_matrix.sh` 与 `rtk agent-dev-kit/tests/test_match_effectiveness.sh`。
+3. 修改 Codex 交接链路时，必须运行 `rtk agent-dev-kit/scripts/devkit.sh codex-handoff --codex-root "$HOME/codex"`。
+4. 声明完成前必须运行与改动范围匹配的验证；无验证证据不得声明可发布、可安装或可合并。
+5. 不直接把 `agent-dev-kit` 产物复制到 `~/.codex`；必须先进入 `~/codex` 源资产、manifest 和 apply plan 治理链路。
+
+---
+
+## 20. 联系方式
 
 - **问题反馈**: GitHub Issues
 - **功能建议**: GitHub Discussions
@@ -278,7 +313,7 @@
 
 ---
 
-## 18. 致谢
+## 21. 致谢
 
 感谢所有贡献者和用户的支持！
 

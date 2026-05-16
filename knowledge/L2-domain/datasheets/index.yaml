@@ -1,0 +1,15 @@
+# Datasheet 索引
+
+## 已收录 SoC
+
+| SoC | 厂商 | 版本 | 最后更新 | 状态 |
+|-----|------|------|----------|------|
+| SSC305 | SigmaStar | v1.0 | 2026-05-13 | 已完成 |
+| i.MX8MP | NXP | Rev.1 | 2026-05-13 | 待添加 |
+| V853 | Allwinner | v1.0 | 2026-05-13 | 待添加 |
+
+## 待收录 SoC
+
+- [ ] RK3588 - Rockchip
+- [ ] STM32H7 - STMicroelectronics
+- [ ] AM62x - Texas Instruments

@@ -4,9 +4,10 @@
 
 | 能力域 | 目标 | 实现入口 |
 |---|---|---|
-| 资产安装 | 按工具与 profile 安装 Agents/Skills | `scripts/install_assets.sh`、`scripts/devkit.sh install` |
-| 可选技能注入 | 按需安装 optional skills，不影响默认 profile | `optional-skills/`、`scripts/install_assets.sh --with-optional-skill` |
-| 资产转换 | 导出多目标目录结构与元数据 | `scripts/convert_assets.sh`、`scripts/devkit.sh convert` |
+| 资产安装 | 按工具与 profile 安装 Agents/Skills（仅用于测试或临时目标） | `scripts/install-assets.sh`、`scripts/devkit.sh install` |
+| 可选技能注入 | 按需导出 optional skills，不影响默认 profile；生产 Codex 链路进入 `~/codex` | `optional-skills/`、`scripts/devkit.sh convert --with-optional-skill` |
+| 资产转换 | 导出多目标目录结构与元数据；Codex 目标输出 `~/codex` handoff | `scripts/convert-assets.sh`、`scripts/devkit.sh convert` |
+| Codex handoff 校验 | 在 `/tmp` 的 `~/codex` 副本中合并 handoff 并运行 build/doctor/check-skills | `scripts/check-codex-handoff.sh`、`scripts/devkit.sh codex-handoff` |
 | 目录索引 | 生成 Agent/Skill/Profile 可检索目录 | `scripts/catalog_assets.sh`、`scripts/devkit.sh catalog` |
 | 触发判定 | 输入文本与 skill 触发矩阵匹配 | `scripts/skill_match.sh`、`tests/test_skill_trigger_matrix.sh` |
 | 结构校验 | 校验 manifest、frontmatter、profile 关系 | `scripts/validate_assets.sh`、`scripts/devkit.sh validate --strict` |

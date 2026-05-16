@@ -72,7 +72,7 @@
 ### Frontmatter 完整性
 - 43/43 (100%) 满分 7/7
 - 所有技能均包含 name/description/triggers/non_triggers/inputs/outputs/constraints
-- 额外字段 version (41/43), last_updated (41/43) — adk-skill-deep-analyzer 和 adk-repo-prompt-analyzer 缺失
+- 额外字段 version (43/43), last_updated (43/43)
 
 ### Trigger 质量分布
 - 5/5 (优秀): 23 个 (53%)
@@ -148,8 +148,7 @@
 |---|------|----------|------|
 | P1-1 | adk-repo-prompt-analyzer 缺少 Prerequisites/Commands/Failure Handling 章节 | Body 结构仅 2/5 | 补充标准章节 |
 | P1-2 | adk-skill-deep-analyzer 缺少 Prerequisites/Failure Handling 章节 | Body 结构仅 3/5 | 补充标准章节 |
-| P1-3 | adk-skill-deep-analyzer 和 adk-repo-prompt-analyzer 缺少 version/last_updated 字段 | FM 额外字段不完整 | 补充元数据 |
-| P1-4 | 22 个技能的"健壮性规范"样板完全重复 | 维护成本高，改一处需改 22 处 | 提取为 references/robustness-spec.md 并引用 |
+| P1-3 | 22 个技能的"健壮性规范"样板完全重复 | 维护成本高，改一处需改 22 处 | 提取为 references/robustness-spec.md 并引用 |
 
 ### 轻微问题 (P2)
 

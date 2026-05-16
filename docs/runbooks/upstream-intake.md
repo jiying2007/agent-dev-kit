@@ -11,7 +11,7 @@
 3. `adoption-matrix` 做 `adopt/observe/reject` 决策。
 4. adopt 项必须声明 `core/optional/profile/reject` 归属。
 5. 落地 Agent/Skill/Workflow 至少一层。
-6. 回归通过后再进入 `~/.codex` pilot。
+6. 回归通过后先进入 `~/codex` 治理链路，再由 `~/codex` apply 到 `~/.codex` pilot。
 
 ## 技能路由
 
@@ -31,4 +31,4 @@ bash ../scripts/check-upstream-intake-readiness.sh .
 
 - `adoption-matrix` 不允许真实 pending。
 - `adopt + done` 必须有本地证据。
-- 不能直接把第三方资产混装进 `~/.codex`。
+- 不能直接把第三方资产混装进 `~/.codex`；必须先经过 adk 审查，再进入 `~/codex`。

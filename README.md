@@ -1,6 +1,6 @@
 # Agent Dev Kit — 嵌入式系统开发工具包
 
-`agent-dev-kit`（adk）是面向嵌入式系统开发的 Agent/Skill/Profile 生产资产包。它的目标是把参考仓中的优秀方法论压实为可安装、可验证、可回滚、可持续迭代的工程资产。
+`agent-dev-kit`（adk）是面向嵌入式系统开发的 Agent/Skill/Profile 生产资产包。它的目标是把参考仓中的优秀方法论压实为可交接、可验证、可回滚、可持续迭代的工程资产，并先应用到 `~/codex` 声明式资产仓库，再由 `~/codex` apply 到 `~/.codex` 运行目录。
 
 **定位边界**：adk 专注于嵌入式系统开发（BSP/驱动/RTOS/协议栈/硬件调试），不覆盖前端/后端/云原生等通用软件开发领域。
 
@@ -8,13 +8,14 @@
 
 ## 1. 核心定位
 
-adk 不是参考仓集合，也不是直接替换 `~/.codex/AGENTS.md` 的全局策略文件。它负责：
+adk 不是参考仓集合，也不是直接替换 `~/codex` 或 `~/.codex/AGENTS.md` 的全局策略文件。它负责：
 
 1. 维护 Agent/Skill/Profile 单一事实源：`manifest.yaml`。
 2. 提供安装、转换、匹配、catalog、workflow、evidence 命令。
 3. 用测试和门禁压实 Agent/Skill/Workflow/runbook。
-4. 把稳定资产安装到 `~/.codex/agents` 与 `~/.codex/skills`。
-5. 为真实生产使用提供安装报告、备份、pilot 与健康检查证据。
+4. 导出稳定资产，交给 `~/codex` 的 `src/codex-home/` 与 `manifests/` 治理链路吸收。
+5. 配合 `~/codex` build/doctor/apply，把资产注入 `~/.codex/agents` 与 `~/.codex/skills`。
+6. 为真实生产使用提供导出报告、apply plan、pilot 与健康检查证据。
 
 **领域覆盖**：
 - ✅ BSP/驱动开发（寄存器、中断、DMA、设备树）
@@ -85,7 +86,7 @@ bash scripts/devkit.sh validate --strict
 bash scripts/devkit.sh test
 ```
 
-## 5. 生产安装到 `~/.codex`
+## 5. 生产交接到 `~/codex`，再 apply 到 `~/.codex`
 
 推荐安装组合：
 
@@ -93,28 +94,31 @@ bash scripts/devkit.sh test
 - 叠加 profile：`release-hardening`
 - optional skills：`adk-planning-execution-loop`、`adk-skill-composition-governance`、`adk-security-supply-chain`、`adk-cross-team-handoff`、`adk-artifact-gated-lite`
 
-命令：
+推荐链路：
 
 ```bash
-rtk bash -lc "cd agent-dev-kit && bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --with-optional-skill adk-planning-execution-loop --with-optional-skill adk-skill-composition-governance --with-optional-skill adk-security-supply-chain --with-optional-skill adk-cross-team-handoff --with-optional-skill adk-artifact-gated-lite --backup --install-report ../reports/adk-install-report-$(date +%F).md --lock-version 2.8.0"
+rtk bash -lc "cd agent-dev-kit && bash scripts/devkit.sh convert --target codex --profile personal-core --extra-profile release-hardening --with-optional-skill adk-planning-execution-loop --with-optional-skill adk-skill-composition-governance --with-optional-skill adk-security-supply-chain --with-optional-skill adk-cross-team-handoff --with-optional-skill adk-artifact-gated-lite --codex-profile team-collab --out ../reports/adk-codex-handoff --clean"
+rtk bash -lc "cd agent-dev-kit && bash scripts/devkit.sh codex-handoff --codex-root ~/codex"
+rtk bash -lc "cd ~/codex && rtk bash scripts/build.sh --profile team-collab"
+rtk bash -lc "cd ~/codex && rtk bash scripts/plan.sh --target ~/.codex --output build/apply-plan.json"
+rtk bash -lc "cd ~/codex && rtk bash scripts/apply.sh --profile team-collab --dry-run"
 rtk ../scripts/check-global-codex-health.sh ~/.codex minimal
 rtk ../scripts/check-adk-harden-readiness.sh . --require-pilot
 ```
 
 生产纪律：
 
-- 使用 `copy`，不使用 `symlink`，避免工作区变动影响运行目录。
-- 使用 `--backup`，安装前备份 `~/.codex/agents` 与 `~/.codex/skills`。
-- 使用 `--install-report`，记录安装证据。
-- 使用 `--lock-version`，防止装错版本。
-- 安装后必须运行全局健康检查。
+- adk 不直接写入 `~/.codex`，也不绕过 `~/codex` 的 manifest、build、apply 与 drift 管理。
+- adk 导出目录是交接输入；产物必须包含 `src/codex-home/vendor/...` 与 `manifest-fragments/*.json`，正式进入运行目录前必须在 `~/codex` 合并来源和 profile 绑定。
+- 真正写入 `~/.codex` 时由 `~/codex/scripts/apply.sh` 负责备份、覆盖策略和回滚计划。
+- apply 后必须运行全局健康检查。
 
 ## 6. Profile 选择
 
 | Profile | 场景 | 说明 |
 |---|---|---|
 | `core` | 通用研发 | 最小稳定主干，覆盖需求、任务、接口、测试、调试、验证、PR 门禁 |
-| `personal-core` | 个人 `~/.codex` 生产默认 | 在 `core` 基础上增加发布与 ADR 能力 |
+| `personal-core` | 个人 `~/codex -> ~/.codex` 生产默认 | 在 `core` 基础上增加发布与 ADR 能力 |
 | `embedded-fullstack` | 嵌入式全栈 | 默认 profile，覆盖驱动、组件、BSP、RTOS、构建、性能、发布 |
 | `release-hardening` | 发布前强化 | 安全、可靠性、HIL/SIL、版本发布 |
 | `adk-artifact-gated-lite` | 高风险变更 | 复用 `core`，配合 optional skill 产出轻量 artifact 门禁 |
@@ -144,10 +148,10 @@ bash scripts/check_profile_coherence.sh
 | `adk-skill-composition-governance` | 主技能、辅助技能、fallback、弃用治理 |
 | `adk-security-supply-chain` | 第三方资产、脚本、技能引入前审查 |
 
-安装 optional skill 示例：
+导出 optional skill 给 `~/codex` 示例：
 
 ```bash
-bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --with-optional-skill adk-planning-execution-loop
+bash scripts/devkit.sh convert --target codex --profile personal-core --with-optional-skill adk-planning-execution-loop --codex-profile team-collab --out ../reports/adk-codex-handoff --clean
 ```
 
 ## 8. 工作流命令
@@ -204,18 +208,19 @@ rtk ../scripts/check-adk-harden-readiness.sh . --require-pilot
 - 团队交接
 - 上游吸收
 
-边界：当前 pilot 是 adk 自举 + 生产安装验证，真实业务长期样例仍需持续补充。
+边界：当前 pilot 是 adk 自举 + `~/codex -> ~/.codex` 生产安装验证，真实业务长期样例仍需持续补充。
 
-## 10. `~/.codex/AGENTS.md` 配合方式
+## 10. `~/codex` 与 `~/.codex/AGENTS.md` 配合方式
 
 详见 `docs/codex-agents-integration.md`。
 
 原则：
 
+- `~/codex` 保留 Codex Home 源资产、manifest、build、apply、drift 和 rollback 责任。
 - `~/.codex/AGENTS.md` 保留个人全局策略、命令硬约束和流程路由。
-- adk 安装 `agents/` 与 `skills/`，不覆盖 `~/.codex/AGENTS.md`。
-- 若要把 adk 策略加入 `~/.codex/AGENTS.md`，采用追加小节方式，不整体替换。
-- 第三方参考仓资产必须先经过 adk 审查和门禁，不直接进入 `~/.codex`。
+- adk 提供符合 `~/codex` 规范的 vendor 源资产与 manifest fragments，不覆盖 `~/codex` 或 `~/.codex/AGENTS.md`。
+- 若要把 adk 策略加入 `~/.codex/AGENTS.md`，先进入 `~/codex` 源资产，再由 `~/codex` apply。
+- 第三方参考仓资产必须先经过 adk 审查和门禁，再经过 `~/codex` 治理，不直接进入 `~/.codex`。
 
 ## 11. 重要文档
 
@@ -509,4 +514,3 @@ bash scripts/security.sh audit
 # 生成报告
 bash scripts/security.sh report
 ```
-

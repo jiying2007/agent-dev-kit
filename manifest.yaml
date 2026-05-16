@@ -66,6 +66,62 @@ knowledge_layers:
     description: 会话上下文（临时状态，不持久化）
     location: knowledge/L4-session/
 
+context_layers:
+  L1-always-loaded:
+    description: 会话常驻层（始终加载）
+    max_tokens: 4000
+    files:
+      - AGENTS.md
+      - docs/best-practices.md
+      - docs/workflows.md
+  L2-phase-triggered:
+    description: 阶段触发层（按阶段加载）
+    triggers:
+      propose:
+        - skills/adk-requirements-triage/
+        - skills/adk-adr-writer/
+      apply:
+        - skills/adk-coding-standards/
+        - skills/adk-unit-test-embedded/
+      verify:
+        - skills/adk-verification-before-completion/
+      review:
+        - skills/adk-chinese-code-review/
+  L3-on-demand:
+    description: 按需查询层（按需加载）
+    sources:
+      - knowledge/L2-domain/datasheets/
+      - knowledge/L2-domain/oops-patterns/
+      - knowledge/L2-domain/bsp-history/
+      - knowledge/L2-domain/errata/
+
+embedded_context_layers:
+  L1-always-loaded:
+    description: 嵌入式会话常驻层
+    max_tokens: 4000
+    files:
+      - AGENTS.md
+      - docs/embedded-constraints.md
+      - docs/hardware-interaction-rules.md
+  L2-phase-triggered:
+    description: 嵌入式阶段触发层
+    triggers:
+      bsp-analysis:
+        - skills/adk-bsp-porting-playbook/
+        - knowledge/L2-domain/datasheets/
+      driver-development:
+        - skills/adk-driver-bringup-checklist/
+        - skills/adk-interrupt-dma-patterns/
+      debugging:
+        - skills/adk-systematic-debugging/
+        - knowledge/L2-domain/oops-patterns/
+  L3-on-demand:
+    description: 嵌入式按需查询层
+    sources:
+      - knowledge/L2-domain/datasheets/
+      - knowledge/L2-domain/errata/
+      - knowledge/L2-domain/bsp-history/
+
 knowledge_types:
   rules:
     description: 必须遵守的约束和规范
@@ -122,6 +178,32 @@ agents:
   - name: code-review-governor
     path: agents/code-review-governor/AGENTS.md
     quality_tier: p0
+  # 嵌入式专用 Agent 角色
+  - name: adk-bsp-analyst
+    path: agents/adk-bsp-analyst/AGENTS.md
+    quality_tier: p1
+    description: BSP 代码分析、架构梳理、历史追溯
+  - name: adk-driver-developer
+    path: agents/adk-driver-developer/AGENTS.md
+    quality_tier: p1
+    description: 嵌入式驱动开发
+  - name: adk-hardware-debugger
+    path: agents/adk-hardware-debugger/AGENTS.md
+    quality_tier: p1
+    description: 硬件问题调试、oops 分析
+  # Agent 角色分离
+  - name: adk-planner
+    path: agents/adk-planner/AGENTS.md
+    quality_tier: p1
+    description: 需求分析、任务拆解、方案设计
+  - name: adk-generator
+    path: agents/adk-generator/AGENTS.md
+    quality_tier: p1
+    description: 编码实现、单元测试编写
+  - name: adk-evaluator
+    path: agents/adk-evaluator/AGENTS.md
+    quality_tier: p1
+    description: 代码评审、质量验证
 
 skills:
   - name: adk-requirements-triage
@@ -268,6 +350,32 @@ skills:
   - name: adk-intake-workflow
     path: skills/adk-intake-workflow/SKILL.md
     quality_tier: p0
+    depends_on: []
+  # 嵌入式专用技能
+  - name: adk-bsp-analyst
+    path: skills/adk-bsp-analyst/SKILL.md
+    quality_tier: p1
+    depends_on: []
+  - name: adk-driver-developer
+    path: skills/adk-driver-developer/SKILL.md
+    quality_tier: p1
+    depends_on: []
+  - name: adk-hardware-debugger
+    path: skills/adk-hardware-debugger/SKILL.md
+    quality_tier: p1
+    depends_on: []
+  # Agent 角色分离技能
+  - name: adk-planner
+    path: skills/adk-planner/SKILL.md
+    quality_tier: p1
+    depends_on: []
+  - name: adk-generator
+    path: skills/adk-generator/SKILL.md
+    quality_tier: p1
+    depends_on: []
+  - name: adk-evaluator
+    path: skills/adk-evaluator/SKILL.md
+    quality_tier: p1
     depends_on: []
 
 default_profile: core
@@ -490,6 +598,108 @@ install:
 routing:
   enabled: true
   fallback_profile: core
+  intents:
+    - intent: requirements_triage
+      intent_zh: "需求不清楚/需要澄清/需求模糊/需求不明确"
+      primary_skill: adk-requirements-triage
+      supporting_skills: []
+    - intent: task_breakdown
+      intent_zh: "任务太大/拆解任务/拆解大任务/任务拆分"
+      primary_skill: adk-task-breakdown
+      supporting_skills:
+        - adk-requirements-triage
+    - intent: interface_contract_design
+      intent_zh: "设计接口/接口契约/API设计"
+      primary_skill: adk-interface-contract-design
+      supporting_skills:
+        - adk-requirements-triage
+    - intent: unit_test_embedded
+      intent_zh: "写单元测试/补单测/嵌入式单测"
+      primary_skill: adk-unit-test-embedded
+      supporting_skills: []
+    - intent: static_analysis_c_cpp
+      intent_zh: "静态分析/C静态检查/Cpp静态检查"
+      primary_skill: adk-static-analysis-c-cpp
+      supporting_skills: []
+    - intent: systematic_debugging
+      intent_zh: "调试/调试问题/排查根因"
+      primary_skill: adk-systematic-debugging
+      supporting_skills: []
+    - intent: verification_before_completion
+      intent_zh: "准备完成/完成前验证/交付前验证"
+      primary_skill: adk-verification-before-completion
+      supporting_skills: []
+    - intent: commit_pr_quality_gate
+      intent_zh: "提交代码/准备提交/提交前检查"
+      primary_skill: adk-commit-pr-quality-gate
+      supporting_skills:
+        - adk-verification-before-completion
+    - intent: adr_writer
+      intent_zh: "写ADR/架构决策记录/ADR"
+      primary_skill: adk-adr-writer
+      supporting_skills: []
+    - intent: register_map_design
+      intent_zh: "设计寄存器/寄存器映射/设计寄存器映射"
+      primary_skill: adk-register-map-design
+      supporting_skills:
+        - adk-interface-contract-design
+    - intent: driver_bringup
+      intent_zh: "驱动开发/驱动调试/写驱动/驱动bringup"
+      primary_skill: adk-driver-bringup-checklist
+      supporting_skills:
+        - adk-register-map-design
+    - intent: bsp_porting
+      intent_zh: "BSP移植/BSP适配/板级移植"
+      primary_skill: adk-bsp-porting-playbook
+      supporting_skills:
+        - adk-driver-bringup-checklist
+    - intent: rtos_task_design
+      intent_zh: "RTOS任务设计/任务优先级/RTOS调度"
+      primary_skill: adk-rtos-task-design
+      supporting_skills: []
+    - intent: interrupt_dma_patterns
+      intent_zh: "中断处理/DMA处理/中断DMA"
+      primary_skill: adk-interrupt-dma-patterns
+      supporting_skills: []
+    - intent: protocol_stack_integration
+      intent_zh: "协议栈集成/协议适配/通信协议"
+      primary_skill: adk-protocol-stack-integration
+      supporting_skills:
+        - adk-interface-contract-design
+    - intent: component_api_stability
+      intent_zh: "API稳定性/组件接口稳定/接口兼容"
+      primary_skill: adk-component-api-stability
+      supporting_skills:
+        - adk-interface-contract-design
+    - intent: cmake_cross_build
+      intent_zh: "CMake交叉编译/交叉编译/CMake构建"
+      primary_skill: adk-cmake-cross-build
+      supporting_skills: []
+    - intent: toolchain_debug_openocd_gdb
+      intent_zh: "OpenOCD/GDB调试/JTAG调试"
+      primary_skill: adk-toolchain-debug-openocd-gdb
+      supporting_skills:
+        - adk-systematic-debugging
+    - intent: integration_hil_sil
+      intent_zh: "HIL/SIL集成测试/硬件在环/软件在环"
+      primary_skill: adk-integration-hil-sil
+      supporting_skills:
+        - adk-unit-test-embedded
+    - intent: fault_injection_recovery
+      intent_zh: "故障注入测试/恢复验证/容错测试"
+      primary_skill: adk-fault-injection-recovery
+      supporting_skills:
+        - adk-integration-hil-sil
+    - intent: performance_profiling_embedded
+      intent_zh: "性能分析/性能剖析/嵌入式性能"
+      primary_skill: adk-performance-profiling-embedded
+      supporting_skills:
+        - adk-systematic-debugging
+    - intent: release_versioning
+      intent_zh: "版本发布/准备发布/发布前检查"
+      primary_skill: adk-release-versioning
+      supporting_skills:
+        - adk-commit-pr-quality-gate
 
 
 dependencies:

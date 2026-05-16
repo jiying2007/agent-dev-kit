@@ -1,0 +1,25 @@
+version: "1.0"
+description: "新仓库接入策略配置"
+
+repos:
+  superpowers-openspec-team-skills:
+    repo: "https://github.com/SYZ-Coder/superpowers-openspec-team-skills.git"
+    strategy: "observe-first"
+    reason: "观察期：先安装 dist/codex bundle 试用，再决定是否深入集成"
+    decision_date: "2026-05-13"
+    decision_maker: "用户"
+    status: "active"
+
+strategies:
+  adopt-first:
+    description: "立即采纳，全部安装并验证"
+    when: "社区成熟度高，文档完整，有明确用户群"
+  observe-first:
+    description: "观察期：先安装 dist bundle 试用，再决定是否深入集成"
+    when: "社区有潜力但尚需验证"
+  selective-adopt:
+    description: "选择性采纳：只提取特定文件/工具"
+    when: "仓库有部分可用资产，其余不需要"
+  pilot-first:
+    description: "试点期：先在独立仓库验证，再推广"
+    when: "风险较高或影响范围大"

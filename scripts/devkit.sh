@@ -21,6 +21,7 @@ Commands:
   install   安装 Agents/Skills 到目标工具目录
   validate  校验 manifest 与资产结构
   convert   转换资产到目标工具格式
+  codex-handoff 检查 Codex handoff 是否符合 ~/codex 规范
   catalog   生成或检索 Agent/Skill 目录索引
   match     根据输入文本匹配 skill 触发条件
   bridge    执行 OpenSpec 与 adk 变更工件桥接（import/export）
@@ -43,6 +44,7 @@ Commands:
 Examples:
   ./scripts/devkit.sh install --tool auto --profile embedded-fullstack
   ./scripts/devkit.sh convert --target claude-code --profile core
+  ./scripts/devkit.sh codex-handoff --codex-root ~/codex
   ./scripts/devkit.sh catalog build
   ./scripts/devkit.sh match --skill adk-requirements-triage --text "收到模糊需求"
   ./scripts/devkit.sh evidence append --file docs/changes/my-change/negative-results.md --command "bash tests/run_all.sh" --exit-code 0 --summary "all tests passed" --evidence-path docs/changes/my-change/verify-report.md --layer Workflow --artifact verify-report
@@ -68,6 +70,9 @@ case "$CMD" in
     ;;
   convert)
     exec "$SCRIPT_DIR/convert-assets.sh" "$@"
+    ;;
+  codex-handoff)
+    exec "$SCRIPT_DIR/check-codex-handoff.sh" "$@"
     ;;
   catalog)
     exec "$SCRIPT_DIR/catalog-assets.sh" "$@"

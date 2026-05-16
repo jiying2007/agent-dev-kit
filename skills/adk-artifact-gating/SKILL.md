@@ -8,7 +8,6 @@ triggers:
   - "跨角色交接"
   - "变更工件"
   - "标签化交付"
-  - "高风险变更"
 non_triggers:
   - 单文件低风险修复且无需跨角色交接
   - 纯探索性代码阅读
@@ -110,7 +109,7 @@ tests_run:
 ### 5. 跨仓库场景适配
 
 - **子仓 → adk**：子仓变更必须产出 TestReport，adk 侧做 ReviewReport
-- **adk → ~/.codex**：adk 变更必须通过 `check-adk-harden-readiness.sh` 门禁
+- **adk → ~/codex → ~/.codex**：adk 变更必须先通过 `check-adk-harden-readiness.sh` 门禁，再经 `~/codex` build/apply 链路进入运行目录
 - **多仓联动**：每个仓独立 artifact，汇总为 change-set 后统一门禁
 
 ## Commands

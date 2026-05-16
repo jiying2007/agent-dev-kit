@@ -1,7 +1,10 @@
 # codex 实战试跑报告
 
 - 试跑日期：2026-05-02
-- 目标仓库：`~/.codex`
+- 历史目标仓库：`~/.codex`
+- 当前目标链路：`agent-dev-kit -> ~/codex -> ~/.codex`
+
+> 注：本文保留 2026-05-02 直接安装到 `~/.codex` 的历史试跑证据。当前生产目标已更正为先交接到 `~/codex`，再由 `~/codex` build/apply 到 `~/.codex`。
 - 对应 adk 版本/分支：`agent-dev-kit`（本地当前工作分支）
 - 执行人：Codex（自动化落地）
 

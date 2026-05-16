@@ -5,7 +5,7 @@
 | 场景 | 推荐 Profile | 说明 |
 |------|-------------|------|
 | 通用开发 | core | 最小核心配置 |
-| 个人 ~/.codex | personal-core | 精简核心 + 发布 |
+| 个人 `~/codex -> ~/.codex` | personal-core | 精简核心 + 发布 |
 | 嵌入式全栈 | embedded-fullstack | 驱动/组件/应用全覆盖（默认） |
 | 准备发布 | release-hardening + embedded-fullstack | 叠加发布强化 |
 | 大型重构 | large-refactor + embedded-fullstack | 叠加 API 稳定性 |

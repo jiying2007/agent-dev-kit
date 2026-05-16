@@ -137,14 +137,7 @@ if [[ -z "$SKILL" ]]; then
         [[ -z "$s" ]] && continue
         [[ -n "$supporting" ]] && supporting="$supporting,$s"
         [[ -z "$supporting" ]] && supporting="$s"
-      done < <(awk -v skill="$primary_skill" '
-        $0 ~ /^routing:/ {in_r=1; next}
-        in_r && $0 ~ /^[^ ]/ {in_r=0}
-        in_r && $0 ~ "primary_skill: " skill {found=1; next}
-        found && $0 ~ /supporting_skills:/ {in_sup=1; next}
-        in_sup && $0 ~ /^      - / {item=$0; sub(/^      - /, "", item); print item; next}
-        in_sup && $0 ~ /^    [a-z]/ {found=0; in_sup=0}
-      ' "$ADK_MANIFEST")
+      done < <(adk_get_routing_supporting_skills "$primary_skill")
       echo "match=true source=routing skill=$primary_skill intent_zh=\"$intent_zh\"${supporting:+ supporting_skills=$supporting}"
       exit 0
     fi

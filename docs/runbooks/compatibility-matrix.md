@@ -6,7 +6,7 @@
 
 ## 工具目标
 
-- Codex：生产主目标，安装到 `~/.codex/agents` 和 `~/.codex/skills`。
+- Codex：生产主目标，先交接到 `~/codex` 的源资产与 manifest，再由 `~/codex` apply 到 `~/.codex/agents` 和 `~/.codex/skills`。
 - Claude Code：转换目标，需保留 Agent/Skill 文本语义。
 - Hermes Agent：转换目标，重点保留团队协作资产。
 - OpenCode：转换目标，保留基础 Agent/Skill 目录结构。
@@ -20,7 +20,8 @@
 ## 验收门禁
 
 ```bash
-bash scripts/devkit.sh convert --target codex --profile core --out dist/codex --clean
+bash scripts/devkit.sh convert --target codex --profile core --codex-profile team-collab --out dist/codex --clean
+bash scripts/devkit.sh codex-handoff --codex-root ~/codex
 bash scripts/devkit.sh convert --target claude-code --profile core --out dist/claude-code --clean
 ```
 

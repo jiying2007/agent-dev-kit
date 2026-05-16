@@ -1,6 +1,8 @@
 ---
 name: adk-repo-prompt-analyzer
 description: 逆向分析开源项目中的 Prompt/系统指令设计，提取上下文工程模式
+version: 1.0.0
+last_updated: 2026-05-16
 triggers:
   - 分析子仓 prompt
   - 提取系统指令
@@ -124,4 +126,3 @@ bash scripts/devkit.sh verify --analysis reports/analysis.md
 - [ ] 分类准确
 - [ ] 建议可执行
 ```
-

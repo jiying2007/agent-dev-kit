@@ -4,12 +4,12 @@
 
 ## install
 
-安装 Agent/Skill 到目标工具目录。
+安装 Agent/Skill 到目标工具目录。生产 Codex 链路优先使用 `convert -> ~/codex -> ~/.codex`，不要用 install 直接写入 `~/.codex`。
 
 ```bash
 bash scripts/devkit.sh install --tool auto --mode symlink --profile embedded-fullstack
-bash scripts/devkit.sh install --tool codex --profile core --with-optional-skill adk-incident-rca-report
-bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --backup --install-report reports/adk-install-report.md
+bash scripts/devkit.sh install --tool codex --target /tmp/adk-codex-target --mode copy --profile core --with-optional-skill adk-incident-rca-report
+bash scripts/devkit.sh convert --target codex --profile personal-core --extra-profile release-hardening --codex-profile team-collab --out ../reports/adk-codex-handoff --clean
 ```
 
 ## validate
@@ -27,7 +27,17 @@ bash scripts/devkit.sh validate --quick
 
 ```bash
 bash scripts/devkit.sh convert --target claude-code --profile core --out dist --clean
-bash scripts/devkit.sh convert --target codex --profile core --with-optional-skill adk-test-flakiness-triage
+bash scripts/devkit.sh convert --target codex --profile core --with-optional-skill adk-test-flakiness-triage --codex-profile team-collab
+```
+
+`target=codex` 输出的是 `~/codex` handoff：`src/codex-home/vendor/...` 源资产树和 `manifest-fragments/*.json`，不是 `~/.codex` 运行目录形态。
+
+## codex-handoff
+
+生成生产推荐 handoff，合并到 `/tmp` 中的 `~/codex` 副本，并运行 `~/codex` 的 build、governance、repo、build 与 skill 元数据检查。
+
+```bash
+bash scripts/devkit.sh codex-handoff --codex-root ~/codex
 ```
 
 ## catalog
@@ -214,12 +224,15 @@ bash scripts/devkit.sh version diff --from 2.7.0 --to 2.7.0
 - `--install-report <path>`：生成安装报告
 - `--lock-version <version>`：要求 manifest version 匹配
 
-## production codex install
+## production codex handoff
 
-生产安装到 `~/.codex` 时，推荐使用 `personal-core + release-hardening`，并叠加长任务、组合治理、供应链、交接与 artifact 门禁五类 optional skills。
+生产交接到 `~/codex` 时，推荐使用 `personal-core + release-hardening`，并叠加长任务、组合治理、供应链、交接与 artifact 门禁五类 optional skills；最终由 `~/codex` apply 到 `~/.codex`。
 
 ```bash
-bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --with-optional-skill adk-planning-execution-loop --with-optional-skill adk-skill-composition-governance --with-optional-skill adk-security-supply-chain --with-optional-skill adk-cross-team-handoff --with-optional-skill adk-artifact-gated-lite --backup --install-report ../reports/adk-install-report-$(date +%F).md --lock-version 2.8.0
+bash scripts/devkit.sh convert --target codex --profile personal-core --extra-profile release-hardening --with-optional-skill adk-planning-execution-loop --with-optional-skill adk-skill-composition-governance --with-optional-skill adk-security-supply-chain --with-optional-skill adk-cross-team-handoff --with-optional-skill adk-artifact-gated-lite --codex-profile team-collab --out ../reports/adk-codex-handoff --clean
+bash scripts/devkit.sh codex-handoff --codex-root ~/codex
+cd ~/codex && rtk bash scripts/build.sh --profile team-collab
+cd ~/codex && rtk bash scripts/apply.sh --profile team-collab --dry-run
 ```
 
 安装后在 `llm_agent` 根目录运行：
@@ -229,7 +242,7 @@ rtk ../scripts/check-global-codex-health.sh ~/.codex minimal
 rtk ../scripts/check-adk-harden-readiness.sh . --require-pilot
 ```
 
-`~/.codex/AGENTS.md` 不由 adk 安装器覆盖，配合方式见 `docs/codex-agents-integration.md`。
+`~/.codex/AGENTS.md` 不由 adk 安装器覆盖；adk 资产先进入 `~/codex`，配合方式见 `docs/codex-agents-integration.md`。
 
 
 ## check-change-governance

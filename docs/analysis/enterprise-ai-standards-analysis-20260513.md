@@ -216,33 +216,33 @@ AGENTS.md → 现有代码 → 变更影响 → 当前任务
 
 ---
 
-## 三、配套工具库分析
+## 三、配套流程包分析
 
-### 3.1 superpowers-openspec-team-skills
+### 3.1 外部流程包样本
 
-**项目**: github.com/SYZ-Coder/superpowers-openspec-team-skills
+**来源定位**: 通用 AI 编程助手流程包，作为参考样本，不作为 adk 直接依赖。
 
-**核心亮点**: 文档优先，打包了可直接复制的 SKILL.md 工作流
+**核心亮点**: 文档优先，提供可拆分的 `SKILL.md` 工作流入口。
 
-**包含的工作流**:
+**可借鉴工作流类型**:
 
-| 工作流 | 适用场景 | 适配级别 |
-|--------|----------|----------|
-| openspec-superpowers-workflow | 非简单功能交付 | Level 2/3 |
-| superpowers-openspec-execution-workflow | 需先探索再规范 | Level 2/3 |
-| superpowers-feature-workflow | 无需 OpenSpec 但需规范 | Level 1 |
-| openspec-feature-workflow | 仅需 OpenSpec 规范 | Level 2 |
+| 工作流类型 | 适用场景 | 适配级别 |
+|------------|----------|----------|
+| 完整交付链路 | 非简单功能交付 | Level 2/3 |
+| 探索后规格固化 | 需先探索再进入规范执行 | Level 2/3 |
+| 轻量功能流程 | 无需重规格但需设计、计划、验证纪律 | Level 1 |
+| 规格优先流程 | 只需先补齐 proposal、design、spec、tasks | Level 2 |
 
 ### 3.2 与 adk 的关系
 
-| 维度 | superpowers-openspec-team-skills | adk |
-|------|----------------------------------|-----|
-| 定位 | 工作流技能库 | 工程资产包 |
-| 范围 | 前端/全栈 | 嵌入式系统 |
-| 格式 | SKILL.md | SKILL.md + manifest.yaml |
-| 安装 | 复制到 .codex/skills/ | devkit.sh install |
+| 维度 | 外部流程包样本 | adk |
+|------|----------------|-----|
+| 定位 | 通用工作流技能库 | 嵌入式工程资产包 |
+| 范围 | 通用/全栈场景 | 嵌入式系统 |
+| 格式 | `SKILL.md` 为主 | `SKILL.md` + `AGENTS.md` + `manifest.yaml` |
+| 安装 | 复制到运行目录 | `devkit.sh install` / Codex handoff |
 
-**核心洞察**: 两者互补，adk 专注嵌入式领域，superpowers-openspec-team-skills 专注前端/全栈领域。
+**核心洞察**: adk 可借鉴“显式启用、分级工作流、证据收口”的方法，但必须转换为嵌入式领域资产、profile 规则和本地验证门禁。
 
 ---
 

@@ -70,7 +70,7 @@
 | Name | Description | Optional | Extends |
 |---|---|---|---|
 | `core` | 通用研发核心配置（跨模块需求、实现、验证与评审） | false | - |
-| `personal-core` | 个人 ~/.codex 生产默认配置（精简核心 + 完成前门禁） | false | core |
+| `personal-core` | 个人 `~/codex -> ~/.codex` 生产默认配置（精简核心 + 完成前门禁） | false | core |
 | `embedded-fullstack` | C/C++ 嵌入式全栈默认配置（驱动、组件、应用） | false | core |
 | `release-hardening` | 发布前强化配置（安全、可靠性、发布治理） | true | - |
 | `adk-artifact-gated-lite` | 高风险变更的轻量产物门禁配置（强调可追溯交付证据） | true | core |
@@ -79,4 +79,3 @@
 | `large-refactor` | 大型重构配置（边界冻结、API 稳定性、基线对比与回归） | true | core |
 | `incident-response` | 事故响应配置（根因定位、复盘、恢复与验证） | true | core |
 | `research-intake` | 参考仓吸收配置（候选筛选、组合治理与供应链审查） | true | - |
-
