@@ -40,6 +40,17 @@ bash scripts/devkit.sh convert --target codex --profile core --with-optional-ski
 bash scripts/devkit.sh codex-handoff --codex-root ~/codex
 ```
 
+## file-modes
+
+检查 tracked 文件权限是否匹配 Git index。规则是 `100644` 不可执行，`100755` 可执行；文档、README、manifest、skill、template 默认不应带 executable bit。
+
+```bash
+bash scripts/devkit.sh file-modes
+bash scripts/devkit.sh file-modes --fix
+```
+
+该检查已纳入 `bash scripts/devkit.sh test`。
+
 ## catalog
 
 生成或检索 Agent/Skill/Profile 目录索引。

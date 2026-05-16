@@ -28,6 +28,7 @@ fi
 for script in scripts/*.sh tests/*.sh; do
   [[ -f "$script" ]] || continue
   head -n 1 "$script" | grep -q '^#!/usr/bin/env bash$' || fail "missing bash shebang: $script"
+  [[ "$script" == scripts/lib-*.sh ]] && continue
   [[ -x "$script" ]] || warn "script is not executable: $script"
 done
 

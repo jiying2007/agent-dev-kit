@@ -7,13 +7,15 @@ cd agent-dev-kit
 bash scripts/devkit.sh validate --strict
 bash scripts/devkit.sh validate --quick
 bash scripts/devkit.sh test
+bash scripts/devkit.sh file-modes
 ```
 
 说明：
 
 - `validate --strict`：检查 manifest、路径、frontmatter、profile 引用和质量分级。
 - `validate --quick`：快速结构检查，适合编辑中间态。
-- `test`：全量回归，包含 validate、格式、内容质量、安装、profile coherence、optional、convert、workflow、catalog、trigger matrix。
+- `test`：全量回归，包含 validate、格式、内容质量、文件权限、安装、profile coherence、optional、convert、workflow、catalog、trigger matrix。
+- `file-modes`：按 Git index 检查 tracked 文件权限；`100644` 不可执行，`100755` 可执行，使用 `--fix` 可修复工作区权限漂移。
 
 ## 2) Profile 选择
 

@@ -22,6 +22,7 @@ Commands:
   validate  校验 manifest 与资产结构
   convert   转换资产到目标工具格式
   codex-handoff 检查 Codex handoff 是否符合 ~/codex 规范
+  file-modes 检查 tracked 文件权限是否匹配 Git index
   catalog   生成或检索 Agent/Skill 目录索引
   match     根据输入文本匹配 skill 触发条件
   bridge    执行 OpenSpec 与 adk 变更工件桥接（import/export）
@@ -45,6 +46,7 @@ Examples:
   ./scripts/devkit.sh install --tool auto --profile embedded-fullstack
   ./scripts/devkit.sh convert --target claude-code --profile core
   ./scripts/devkit.sh codex-handoff --codex-root ~/codex
+  ./scripts/devkit.sh file-modes --fix
   ./scripts/devkit.sh catalog build
   ./scripts/devkit.sh match --skill adk-requirements-triage --text "收到模糊需求"
   ./scripts/devkit.sh evidence append --file docs/changes/my-change/negative-results.md --command "bash tests/run_all.sh" --exit-code 0 --summary "all tests passed" --evidence-path docs/changes/my-change/verify-report.md --layer Workflow --artifact verify-report
@@ -73,6 +75,9 @@ case "$CMD" in
     ;;
   codex-handoff)
     exec "$SCRIPT_DIR/check-codex-handoff.sh" "$@"
+    ;;
+  file-modes)
+    exec "$SCRIPT_DIR/check-file-modes.sh" "$ROOT_DIR" "$@"
     ;;
   catalog)
     exec "$SCRIPT_DIR/catalog-assets.sh" "$@"
