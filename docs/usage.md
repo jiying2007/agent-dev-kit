@@ -35,7 +35,7 @@ bash scripts/devkit.sh file-modes
 Profile 继承一致性检查：
 
 ```bash
-bash scripts/check_profile_coherence.sh
+bash scripts/check-profile-coherence.sh
 ```
 
 ## 3) 资产安装与生产交接
@@ -147,8 +147,8 @@ bash scripts/devkit.sh test
 
 # 单项检查
 bash scripts/check_format.sh
-bash scripts/validate_assets.sh --strict
-bash scripts/check_profile_coherence.sh
+bash scripts/validate-assets.sh --strict
+bash scripts/check-profile-coherence.sh
 ```
 
 ## 8) `~/codex` 与 `~/.codex/AGENTS.md` 配合

@@ -140,7 +140,7 @@ rtk ../scripts/check-adk-harden-readiness.sh . --require-pilot
 先从安装报告确认备份路径，例如：
 
 ```text
-/home/aiot03/.codex/.adk-backups/20260502T104514Z
+$HOME/.codex/.adk-backups/YYYYMMDDTHHMMSSZ
 ```
 
 回滚原则：
@@ -317,7 +317,7 @@ scripts/check-upstream-intake-readiness.sh .
 scripts/check-global-codex-target-policy.sh [WORKSPACE_ROOT]
 ```
 
-`check-runtime-routing.sh` 会同时调用 `agent-dev-kit/scripts/check_profile_coherence.sh`，防止 profile 继承后重复声明 Agent/Skill 或引用漂移。
+`check-runtime-routing.sh` 会同时调用 `agent-dev-kit/scripts/check-profile-coherence.sh`，防止 profile 继承后重复声明 Agent/Skill 或引用漂移。
 
 ### 9.4 同步子仓增量
 
@@ -417,10 +417,11 @@ scripts/devkit.sh cleanup           # 清理过期报告（执行）
 ### 9.11 工作区健康检查
 
 ```bash
-scripts/health-check.sh [WORKSPACE_ROOT]
+scripts/health-check.sh check-all --root .
+scripts/health-check.sh .
 ```
 
-功能：综合健康检查（目录结构完整性、关键文件存在性、registry 格式、subrepos 子仓可达性、脚本可执行性），输出通过/失败/警告三级状态报告。
+功能：综合健康检查（目录结构完整性、关键文件存在性、registry 格式、依赖、门禁入口、脚本语法），输出通过/失败/警告三级状态报告。
 
 ### 9.12 版本管理
 
@@ -433,7 +434,7 @@ scripts/version-manager.sh [ACTION] [OPTIONS]
 ### 9.13 自动生成周报
 
 ```bash
-scripts/generate-weekly-report.sh [WORKSPACE_ROOT]
+scripts/generate-weekly-report.sh [WORKSPACE_ROOT] [--output <path>]
 ```
 
 功能：自动汇总最近 7 天 git 提交摘要、读取子仓同步状态、统计 adoption-matrix 决策分布、运行质量门禁快速检查、输出报告到 `reports/weekly-report-YYYY-MM-DD.md`。
@@ -441,7 +442,7 @@ scripts/generate-weekly-report.sh [WORKSPACE_ROOT]
 建议配合 cron 定时执行：
 ```bash
 # 每周五下午 6 点自动生成周报
-0 18 * * 5 cd /home/aiot03/aiot/llm_agent && bash scripts/generate-weekly-report.sh
+0 18 * * 5 cd /path/to/llm_agent && rtk scripts/generate-weekly-report.sh .
 ```
 
 ### 9.14 清理归档旧报告

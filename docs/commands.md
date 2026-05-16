@@ -145,7 +145,7 @@ bash scripts/devkit.sh test
 检查 profile 继承后的增量声明是否存在重复、未知引用或默认 profile 漂移。该检查已纳入 `devkit.sh test`。
 
 ```bash
-bash scripts/check_profile_coherence.sh
+bash scripts/check-profile-coherence.sh
 ```
 
 ## health

@@ -30,7 +30,7 @@
 ```bash
 bash scripts/devkit.sh catalog build
 bash scripts/devkit.sh match --skill adk-requirements-triage --text "<task>"
-bash scripts/check_profile_coherence.sh
+bash scripts/check-profile-coherence.sh
 bash ~/codex/scripts/doctor.sh --scope governance
 bash ../scripts/check-runtime-routing.sh ..
 ```
@@ -39,6 +39,6 @@ bash ../scripts/check-runtime-routing.sh ..
 
 - `check-runtime-routing.sh` 通过。
 - `check-skill-routing-conflicts.sh` 通过。
-- `check_profile_coherence.sh` 通过。
+- `check-profile-coherence.sh` 通过。
 - `~/codex` governance/build 关系通过。
 - 任务场景能映射到 profile、Agent 链、主 Skill 和 Workflow 状态。

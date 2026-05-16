@@ -8,12 +8,6 @@ source "${SCRIPT_DIR}/lib-logging.sh"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-; ; ; BLUE='\033[0;34m'; 
-[INFO]${NC} $1"; }
-[SUCCESS]${NC} $1"; }
-[WARNING]${NC} $1"; }
-[ERROR]${NC} $1"; }
-
 usage() {
     cat <<USAGE
 安全加固脚本
@@ -145,3 +139,80 @@ ALLOW_WORLD_WRITABLE=false
 ALLOW_SENSITIVE_FILES=false
 ALLOW_SUDO=false
 ALLOW_EVAL=false
+EOF
+            fi
+            ;;
+        *)
+            log_error "未知安全级别: $level"
+            return 1
+            ;;
+    esac
+
+    log_success "安全加固完成"
+}
+
+security_audit() {
+    log_info "安全审计"
+    security_scan
+}
+
+generate_report() {
+    mkdir -p "$ROOT_DIR/.security"
+    local report="$ROOT_DIR/.security/security-report-$(date +%Y%m%d).md"
+    cat > "$report" <<EOF
+# 安全报告
+
+- 生成时间: $(date)
+- 工作区: $ROOT_DIR
+
+## 扫描摘要
+
+请结合 \`bash scripts/security.sh scan\` 输出复核。
+EOF
+    log_success "安全报告已生成: $report"
+}
+
+main() {
+    if [[ $# -lt 1 ]]; then
+        usage
+        exit 1
+    fi
+
+    local command="$1"
+    shift
+    local level="basic"
+    local fix="false"
+
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --level)
+                level="$2"
+                shift 2
+                ;;
+            --fix)
+                fix="true"
+                shift
+                ;;
+            -h|--help)
+                usage
+                exit 0
+                ;;
+            *)
+                log_error "未知参数: $1"
+                usage
+                exit 1
+                ;;
+        esac
+    done
+
+    case "$command" in
+        scan) security_scan ;;
+        harden) security_harden "$level" "$fix" ;;
+        audit) security_audit ;;
+        report) generate_report ;;
+        -h|--help) usage ;;
+        *) log_error "未知命令: $command"; usage; exit 1 ;;
+    esac
+}
+
+main "$@"

@@ -25,11 +25,18 @@ DEPRECATED_TERMS=(
 
 for entry in "${DEPRECATED_TERMS[@]}"; do
     IFS='|' read -r pattern message <<< "$entry"
-    matches=$(grep -rn "$pattern" "$ROOT_DIR/skills" "$ROOT_DIR/optional-skills" "$ROOT_DIR/agents"         --include='*.md' 2>/dev/null | grep -v '.git/' | wc -l)
-    if [[ "$matches" -gt 0 ]]; then
-        echo -e "${YELLOW}[WARN]${NC} 发现 $matches 处 '$pattern' — $message"
-        grep -rn "$pattern" "$ROOT_DIR/skills" "$ROOT_DIR/optional-skills" "$ROOT_DIR/agents"             --include='*.md' 2>/dev/null | grep -v '.git/' | head -5
-        ERRORS=$((ERRORS + matches))
+    found="$(
+        grep -rnE "$pattern" "$ROOT_DIR/skills" "$ROOT_DIR/optional-skills" "$ROOT_DIR/agents" --include='*.md' 2>/dev/null \
+            | grep -v '.git/' || true
+    )"
+    count=0
+    if [[ -n "$found" ]]; then
+        count="$(printf '%s\n' "$found" | wc -l | tr -d ' ')"
+    fi
+    if [[ "$count" -gt 0 ]]; then
+        echo -e "${YELLOW}[WARN]${NC} 发现 $count 处 '$pattern' — $message"
+        printf '%s\n' "$found" | head -5
+        ERRORS=$((ERRORS + count))
     fi
 done
 

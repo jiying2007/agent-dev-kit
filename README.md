@@ -131,7 +131,7 @@ rtk ../scripts/check-adk-harden-readiness.sh . --require-pilot
 Profile 继承和重复声明由以下脚本检查：
 
 ```bash
-bash scripts/check_profile_coherence.sh
+bash scripts/check-profile-coherence.sh
 ```
 
 该检查已纳入 `bash scripts/devkit.sh test`。

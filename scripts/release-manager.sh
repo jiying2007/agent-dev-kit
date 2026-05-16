@@ -8,12 +8,6 @@ source "${SCRIPT_DIR}/lib-logging.sh"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-; ; ; BLUE='\033[0;34m'; 
-[INFO]${NC} $1"; }
-[SUCCESS]${NC} $1"; }
-[WARNING]${NC} $1"; }
-[ERROR]${NC} $1"; }
-
 usage() {
     cat <<USAGE
 版本发布管理脚本
@@ -169,7 +163,7 @@ build_release() {
     # 2. 创建发布说明
     log_info "创建发布说明..."
     cat > "$build_dir/RELEASE-NOTES.md" <<EOF
-# Global Dev Kit v$version 发布说明
+# agent-dev-kit v$version 发布说明
 
 ## 版本信息
 - 版本号: $version
@@ -215,3 +209,120 @@ bash scripts/health-check.sh check-all
 
 ## 反馈
 如有问题或建议，请提交Issue。
+EOF
+
+    local archive="$ROOT_DIR/dist/agent-dev-kit-${version}.tar.gz"
+    tar -czf "$archive" -C "$ROOT_DIR/dist" "$version"
+    log_success "发布包构建完成: $archive"
+}
+
+publish_release() {
+    local version="$1"
+    local target="$2"
+    local dry_run="$3"
+    log_info "发布版本: $version target=${target}"
+    if [[ "$dry_run" == "true" ]]; then
+        log_info "[DRY RUN] 跳过真实发布"
+        return 0
+    fi
+    [[ -f "$ROOT_DIR/dist/agent-dev-kit-${version}.tar.gz" ]] || build_release "$version"
+    log_success "发布完成: $version"
+}
+
+rollback_release() {
+    local version="$1"
+    local dry_run="$2"
+    log_warning "回滚发布: $version"
+    if [[ "$dry_run" == "true" ]]; then
+        log_info "[DRY RUN] 跳过真实回滚"
+        return 0
+    fi
+    bash "$ROOT_DIR/scripts/version-manager.sh" unlock || true
+    log_success "回滚流程完成"
+}
+
+show_status() {
+    log_info "发布状态"
+    echo "current_version=$(bash "$ROOT_DIR/scripts/version-manager.sh" current 2>/dev/null || echo unknown)"
+    echo "dist_dir=$ROOT_DIR/dist"
+}
+
+main() {
+    if [[ $# -lt 1 ]]; then
+        usage
+        exit 1
+    fi
+
+    local command="$1"
+    shift
+    local version=""
+    local target="local"
+    local force="false"
+    local dry_run="false"
+
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --version)
+                version="$2"
+                shift 2
+                ;;
+            --target)
+                target="$2"
+                shift 2
+                ;;
+            --force)
+                force="true"
+                shift
+                ;;
+            --dry-run)
+                dry_run="true"
+                shift
+                ;;
+            -h|--help)
+                usage
+                exit 0
+                ;;
+            *)
+                log_error "未知参数: $1"
+                usage
+                exit 1
+                ;;
+        esac
+    done
+
+    case "$command" in
+        prepare)
+            [[ -n "$version" ]] || { log_error "缺少 --version 参数"; exit 1; }
+            prepare_release "$version" "$dry_run" "$force"
+            ;;
+        validate)
+            [[ -n "$version" ]] || { log_error "缺少 --version 参数"; exit 1; }
+            validate_release "$version"
+            ;;
+        build)
+            [[ -n "$version" ]] || { log_error "缺少 --version 参数"; exit 1; }
+            build_release "$version"
+            ;;
+        publish)
+            [[ -n "$version" ]] || { log_error "缺少 --version 参数"; exit 1; }
+            publish_release "$version" "$target" "$dry_run"
+            ;;
+        rollback)
+            [[ -n "$version" ]] || { log_error "缺少 --version 参数"; exit 1; }
+            rollback_release "$version" "$dry_run"
+            ;;
+        status)
+            show_status
+            ;;
+        -h|--help)
+            usage
+            ;;
+        *)
+            log_error "未知命令: $command"
+            usage
+            exit 1
+            ;;
+    esac
+}
+
+main "$@"

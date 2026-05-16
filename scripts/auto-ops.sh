@@ -8,12 +8,6 @@ source "${SCRIPT_DIR}/lib-logging.sh"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-; ; ; BLUE='\033[0;34m'; 
-[INFO]${NC} $1"; }
-[SUCCESS]${NC} $1"; }
-[WARNING]${NC} $1"; }
-[ERROR]${NC} $1"; }
-
 usage() {
     cat <<USAGE
 自动化运维脚本
@@ -298,3 +292,72 @@ $(bash "$ROOT_DIR/scripts/backup-rollback.sh" list --target ~/.codex 2>/dev/null
 3. 及时处理告警
 4. 定期备份数据
 5. 定期更新版本
+EOF
+
+    log_success "月度报告已生成: $report_file"
+}
+
+main() {
+    if [[ $# -lt 1 ]]; then
+        usage
+        exit 1
+    fi
+
+    local command="$1"
+    shift
+    local dry_run="false"
+    local force="false"
+
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --dry-run)
+                dry_run="true"
+                shift
+                ;;
+            --force)
+                force="true"
+                shift
+                ;;
+            -h|--help)
+                usage
+                exit 0
+                ;;
+            *)
+                log_error "未知参数: $1"
+                usage
+                exit 1
+                ;;
+        esac
+    done
+
+    case "$command" in
+        daily)
+            daily_ops "$dry_run"
+            ;;
+        weekly)
+            weekly_ops "$dry_run"
+            ;;
+        monthly)
+            monthly_ops "$dry_run"
+            ;;
+        cleanup)
+            cleanup_temp_files "$dry_run" "$force"
+            ;;
+        optimize)
+            optimize_performance "$dry_run"
+            ;;
+        security)
+            security_check
+            ;;
+        -h|--help)
+            usage
+            ;;
+        *)
+            log_error "未知命令: $command"
+            usage
+            exit 1
+            ;;
+    esac
+}
+
+main "$@"

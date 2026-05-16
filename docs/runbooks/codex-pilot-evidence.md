@@ -43,7 +43,7 @@
    - profile：`personal-core + release-hardening`
    - optional skills：`planning-execution-loop`、`skill-composition-governance`、`security-supply-chain`、`cross-team-handoff`、`artifact-gated-lite`
    - 安装报告：`reports/adk-install-report-2026-05-02.md`
-   - 回滚备份：`/home/aiot03/.codex/.adk-backups/20260502T104514Z`
+   - 回滚备份：`$HOME/.codex/.adk-backups/YYYYMMDDTHHMMSSZ`
 
 ## 试跑场景 A（已完成）
 
@@ -53,11 +53,11 @@
 status: READY
 owner: Codex
 scope:
-- 使用 `~/.codex/control/scripts/doctor.sh` 对 `minimal` profile 执行门禁检查
+- 使用 `~/codex/scripts/doctor.sh` 与 `scripts/check-global-codex-health.sh` 对运行态执行门禁检查
 - 识别 errors/warnings 并形成可追溯结论
 inputs:
-- ~/.codex/control/scripts/doctor.sh
-- ~/.codex/control/catalog/*.csv
+- ~/codex/scripts/doctor.sh
+- ~/.codex/control/state/managed-files.json
 handoff_to:
 - subrepos/adoption-matrix 决策回填
 
@@ -76,7 +76,7 @@ can_follow_up:
 status: PASS
 owner: Codex
 tests_run:
-- `rtk bash ~/.codex/control/scripts/doctor.sh ~/.codex minimal` -> `errors=0 warnings=0`
+- `rtk ../scripts/check-global-codex-health.sh ~/.codex minimal` -> `errors=0 warnings=0`
 known_issues:
 - None
 
@@ -113,7 +113,7 @@ status: PASS
 owner: Codex
 tests_run:
 - `rtk bash -lc 'cd agent-dev-kit && bash scripts/devkit.sh validate --strict'` -> `Validation passed. strict=1 quick=0`
-- `rtk bash -lc 'cd agent-dev-kit && bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --with-optional-skill planning-execution-loop --with-optional-skill skill-composition-governance --with-optional-skill security-supply-chain --with-optional-skill cross-team-handoff --with-optional-skill artifact-gated-lite --backup --install-report ../reports/adk-install-report-2026-05-02.md --lock-version 2.8.0'` -> `backup=/home/aiot03/.codex/.adk-backups/20260502T104514Z`
+- `rtk bash -lc 'cd agent-dev-kit && bash scripts/devkit.sh install --tool codex --target ~/.codex --mode copy --profile personal-core --extra-profile release-hardening --with-optional-skill planning-execution-loop --with-optional-skill skill-composition-governance --with-optional-skill security-supply-chain --with-optional-skill cross-team-handoff --with-optional-skill artifact-gated-lite --backup --install-report ../reports/adk-install-report-2026-05-02.md --lock-version 2.8.0'` -> `backup=$HOME/.codex/.adk-backups/YYYYMMDDTHHMMSSZ`
 - `rtk ../scripts/check-global-codex-health.sh ~/.codex minimal` -> `errors=0 warnings=0`
 - `rtk ../scripts/check-adk-harden-readiness.sh . --require-pilot` -> `global codex health ready`
 known_issues:
@@ -218,7 +218,7 @@ scope:
 - 证明本轮新增 Agent/Skill/Workflow 资产仍满足 manifest 与结构约束
 inputs:
 - agent-dev-kit/manifest.yaml
-- agent-dev-kit/scripts/validate_assets.sh
+- agent-dev-kit/scripts/validate-assets.sh
 handoff_to:
 - 后续较大重构前后的资产一致性门禁
 

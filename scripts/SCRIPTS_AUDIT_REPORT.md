@@ -2,7 +2,7 @@
 
 审计日期: 2026-05-09
 脚本总数: 24 个 (.sh 文件)
-项目路径: /home/aiot03/aiot/llm_agent/agent-dev-kit/scripts
+项目路径: agent-dev-kit/scripts
 
 ---
 
@@ -31,7 +31,7 @@
 | catalog_assets.sh | ✅ | 5 | 4 | 4 | 0 | 0 | 0 | 0 | 8.5 |
 | check_change_governance.sh | ✅ | 3 | 4 | 0 | 0 | 2 | 0 | 0 | 8.0 |
 | check_format.sh | ✅ | 1 | 4 | 0 | 0 | 2 | 0 | 0 | 7.0 |
-| check_profile_coherence.sh | ✅ | 4 | 4 | 3 | 0 | 0 | 0 | 1 | 8.0 |
+| check-profile-coherence.sh | ✅ | 4 | 4 | 3 | 0 | 0 | 0 | 1 | 8.0 |
 | check-terminology-consistency.sh | ✅ | 1 | 4 | 0 | 0 | 0 | 0 | 0 | 7.0 |
 | convert_assets.sh | ✅ | 5 | 4 | 3 | 0 | 0 | 0 | 1 | 8.0 |
 | devkit.sh | ✅ | 4 | 4 | 0 | 0 | 0 | 0 | 0 | 9.0 |
@@ -47,7 +47,7 @@
 | security.sh | ✅ | 5 | 4 | 4 | 0 | 0 | 0 | 0 | 8.5 |
 | skill_match.sh | ✅ | 5 | 4 | 3 | 0 | 0 | 0 | 0 | 8.5 |
 | sync_codex_assets.sh | ✅ | 1 | 4 | 0 | 0 | 0 | 0 | 0 | 7.5 |
-| validate_assets.sh | ✅ | 5 | 4 | 4 | 0 | 0 | 0 | 0 | 8.5 |
+| validate-assets.sh | ✅ | 5 | 4 | 4 | 0 | 0 | 0 | 0 | 8.5 |
 | version-manager.sh | ✅ | 5 | 4 | 4 | 0 | 0 | 0 | 2 | 8.0 |
 | workflow.sh | ✅ | 5 | 4 | 3 | 0 | 1 | 0 | 0 | 8.5 |
 
@@ -108,7 +108,7 @@
 | auto-ops.sh | rm -rf dist/ | L177 | 低 (临时目录) |
 | auto-ops.sh | rm -rf .cache/ | L208 | 低 (缓存目录) |
 | backup-rollback.sh | rm -rf $target | L81 | 中 (恢复操作) |
-| check_profile_coherence.sh | rm -f temp文件 | L97 | 低 |
+| check-profile-coherence.sh | rm -f temp文件 | L97 | 低 |
 | convert_assets.sh | rm -rf $TARGET_DIR | L201 | 中 (输出目录) |
 | install_assets.sh | rm -rf $dst | L170 | 中 (安装目录) |
 | monitoring.sh | rm -f config.json | L79 | 低 |
@@ -166,7 +166,7 @@
 | 核心入口 | 1 | devkit.sh |
 | 库文件 | 1 | lib_manifest.sh |
 | 安装/转换 | 4 | install_assets, convert_assets, sync_codex_assets, catalog_assets |
-| 检查/验证 | 6 | validate_assets, check_format, check_change_governance, check_profile_coherence, check-terminology-consistency, quality-gate-check |
+| 检查/验证 | 6 | validate-assets, check_format, check_change_governance, check-profile-coherence, check-terminology-consistency, quality-gate-check |
 | 工作流/发布 | 3 | workflow, release-manager, version-manager |
 | 运维监控 | 5 | health-check, monitoring, auto-ops, backup-rollback, performance |
 | 安全/桥接 | 3 | security, openspec_bridge, evidence_index |

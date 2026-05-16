@@ -8,12 +8,6 @@ source "${SCRIPT_DIR}/lib-logging.sh"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-; ; ; BLUE='\033[0;34m'; 
-[INFO]${NC} $1"; }
-[SUCCESS]${NC} $1"; }
-[WARNING]${NC} $1"; }
-[ERROR]${NC} $1"; }
-
 usage() {
     cat <<USAGE
 性能优化脚本
@@ -189,3 +183,52 @@ $(find "$ROOT_DIR" -type f -exec du -h {} \; 2>/dev/null | sort -hr | head -10)
 3. 优化脚本权限
 4. 清理旧备份
 5. 监控磁盘使用
+EOF
+
+    log_success "性能报告已生成: $report_file"
+}
+
+main() {
+    if [[ $# -lt 1 ]]; then
+        usage
+        exit 1
+    fi
+
+    local command="$1"
+    shift
+    local target="all"
+    local level="basic"
+
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --target)
+                target="$2"
+                shift 2
+                ;;
+            --level)
+                level="$2"
+                shift 2
+                ;;
+            -h|--help)
+                usage
+                exit 0
+                ;;
+            *)
+                log_error "未知参数: $1"
+                usage
+                exit 1
+                ;;
+        esac
+    done
+
+    case "$command" in
+        analyze) analyze_performance "$target" ;;
+        optimize) optimize_performance "$target" "$level" ;;
+        benchmark) run_benchmark ;;
+        report) generate_report ;;
+        -h|--help) usage ;;
+        *) log_error "未知命令: $command"; usage; exit 1 ;;
+    esac
+}
+
+main "$@"

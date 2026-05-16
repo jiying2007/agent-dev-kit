@@ -21,7 +21,7 @@
 **解决方案**：
 ```bash
 # 1. 运行详细验证
-bash scripts/validate_assets.sh --strict
+bash scripts/validate-assets.sh --strict
 
 # 2. 检查格式
 bash scripts/check_format.sh
