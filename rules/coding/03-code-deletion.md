@@ -9,7 +9,7 @@ checks: [code-deletion-verified]
 
 # 代码删除规则
 
-> 来源: flow-kit RULES.md (2026-05-12)
+> 来源: agent-dev-kit 代码治理基线
 
 ## 规则描述
 
@@ -70,5 +70,5 @@ git diff --stat | grep -E "^\s*\d+\s+deletion"
 
 ## 参考
 
-- flow-kit RULES.md R8
+- agent-dev-kit 代码治理基线 R8
 - AGENTS.md R8 删代码门槛

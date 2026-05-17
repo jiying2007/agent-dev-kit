@@ -4,7 +4,7 @@
 
 **定位边界**：adk 专注于嵌入式系统开发（BSP/驱动/RTOS/协议栈/硬件调试），不覆盖前端/后端/云原生等通用软件开发领域。
 
-当前版本：`2.8.0`。
+当前版本：`2.9.0`。
 
 ## 1. 核心定位
 
@@ -30,10 +30,10 @@ adk 不是参考仓集合，也不是直接替换 `~/codex` 或 `~/.codex/AGENTS
 
 ## 2. 当前资产概览
 
-- Agents：10 个角色 Agent。
-- Core Skills：33 个稳定技能。
-- Optional Skills：10 个可选技能。
-- Profiles：`core`、`personal-core`、`embedded-fullstack`、`release-hardening`、`adk-artifact-gated-lite`、`team-core`、`openspec-driven`、`large-refactor`、`incident-response`、`research-intake`。
+- Agents：16 个角色 Agent。
+- Core Skills：38 个稳定技能。
+- Optional Skills：9 个可选技能。
+- Profiles：`core`、`personal-core`、`embedded-fullstack`、`release-hardening`、`team-core`、`openspec-driven`、`large-refactor`、`incident-response`、`research-intake`。
 - Tool Targets：`codex`、`claude-code`、`hermes-agent`、`opencode`。
 
 ## 3. 目录结构
@@ -92,12 +92,12 @@ bash scripts/devkit.sh test
 
 - 主 profile：`personal-core`
 - 叠加 profile：`release-hardening`
-- optional skills：`adk-planning-execution-loop`、`adk-skill-composition-governance`、`adk-security-supply-chain`、`adk-cross-team-handoff`、`adk-artifact-gated-lite`
+- optional skills：`adk-planning-execution-loop`、`adk-skill-composition-governance`、`adk-security-supply-chain`、`adk-cross-team-handoff`
 
 推荐链路：
 
 ```bash
-rtk bash -lc "cd agent-dev-kit && bash scripts/devkit.sh convert --target codex --profile personal-core --extra-profile release-hardening --with-optional-skill adk-planning-execution-loop --with-optional-skill adk-skill-composition-governance --with-optional-skill adk-security-supply-chain --with-optional-skill adk-cross-team-handoff --with-optional-skill adk-artifact-gated-lite --codex-profile team-collab --out ../reports/adk-codex-handoff --clean"
+rtk bash -lc "cd agent-dev-kit && bash scripts/devkit.sh convert --target codex --profile personal-core --extra-profile release-hardening --with-optional-skill adk-planning-execution-loop --with-optional-skill adk-skill-composition-governance --with-optional-skill adk-security-supply-chain --with-optional-skill adk-cross-team-handoff --codex-profile team-collab --out ../reports/adk-codex-handoff --clean"
 rtk bash -lc "cd agent-dev-kit && bash scripts/devkit.sh codex-handoff --codex-root ~/codex"
 rtk bash -lc "cd ~/codex && rtk bash scripts/build.sh --profile team-collab"
 rtk bash -lc "cd ~/codex && rtk bash scripts/plan.sh --target ~/.codex --output build/apply-plan.json"
@@ -118,10 +118,9 @@ rtk ../scripts/check-adk-harden-readiness.sh . --require-pilot
 | Profile | 场景 | 说明 |
 |---|---|---|
 | `core` | 通用研发 | 最小稳定主干，覆盖需求、任务、接口、测试、调试、验证、PR 门禁 |
-| `personal-core` | 个人 `~/codex -> ~/.codex` 生产默认 | 在 `core` 基础上增加发布与 ADR 能力 |
-| `embedded-fullstack` | 嵌入式全栈 | 默认 profile，覆盖驱动、组件、BSP、RTOS、构建、性能、发布 |
+| `personal-core` | 个人 `~/codex -> ~/.codex` 生产推荐 | 在 `core` 基础上增加发布与 ADR 能力 |
+| `embedded-fullstack` | 嵌入式全栈 | 嵌入式推荐 profile，覆盖驱动、组件、BSP、RTOS、构建、性能、发布 |
 | `release-hardening` | 发布前强化 | 安全、可靠性、HIL/SIL、版本发布 |
-| `adk-artifact-gated-lite` | 高风险变更 | 复用 `core`，配合 optional skill 产出轻量 artifact 门禁 |
 | `team-core` | 团队交付 | 责任矩阵、交接、复验、发布治理 |
 | `openspec-driven` | Spec 驱动 | requirements/design/tasks 与 adk workflow 对齐 |
 | `large-refactor` | 大型重构 | API 稳定性、边界冻结、回归压实 |
@@ -143,7 +142,7 @@ bash scripts/check-profile-coherence.sh
 | `adk-test-flakiness-triage` | 测试波动定位 |
 | `adk-cross-team-handoff` | 跨团队交接 |
 | `adk-incident-rca-report` | 事故复盘 |
-| `adk-artifact-gated-lite` | 高风险 artifact 门禁 |
+| `adk-artifact-gating` | 高风险 artifact 门禁 |
 | `adk-planning-execution-loop` | 长任务计划、检查点、恢复和收口 |
 | `adk-skill-composition-governance` | 主技能、辅助技能、fallback、弃用治理 |
 | `adk-security-supply-chain` | 第三方资产、脚本、技能引入前审查 |

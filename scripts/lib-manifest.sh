@@ -156,6 +156,11 @@ adk_collect_profile_items() {
   visited="$visited $profile"
 
   local parent
+  parent="$(adk_get_profile_value "$profile" "extends")"
+  if [[ -n "$parent" ]]; then
+    adk_collect_profile_items "$parent" "$key" "$visited"
+  fi
+
   while IFS= read -r parent; do
     [[ -z "$parent" ]] && continue
     adk_collect_profile_items "$parent" "$key" "$visited"

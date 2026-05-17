@@ -20,7 +20,8 @@
 - `lead-agent-convergence-delivery.md`：多轮协作收敛与轻量工件闭环
 - `driver-bringup.md`：新外设驱动上板联调
 - `release-hardening.md`：发布前收口与风险压实
-- `artifact-gated-delivery.md`：高风险变更的轻量产物门禁
+- `artifact-gated-delivery.md`：高风险变更的产物门禁
+- `mcp-governance.md`：MCP 声明、审计与 `~/codex` 交接边界
 - `openspec-bridge.md`：openspec 与 adk 变更工件桥接
 - `runtime-routing.md`：`~/.codex` 运行入口与技能路由仲裁
 - `planning-execution-loop.md`：长任务计划审查、执行检查点与跨会话恢复

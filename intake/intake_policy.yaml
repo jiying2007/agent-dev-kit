@@ -1,14 +1,7 @@
 version: "1.0"
 description: "新仓库接入策略配置"
 
-repos:
-  superpowers-openspec-team-skills:
-    repo: "https://github.com/SYZ-Coder/superpowers-openspec-team-skills.git"
-    strategy: "observe-first"
-    reason: "观察期：先安装 dist/codex bundle 试用，再决定是否深入集成"
-    decision_date: "2026-05-13"
-    decision_maker: "用户"
-    status: "active"
+repos: {}
 
 strategies:
   adopt-first:

@@ -12,7 +12,7 @@ bash scripts/devkit.sh file-modes
 
 说明：
 
-- `validate --strict`：检查 manifest、路径、frontmatter、profile 引用和质量分级。
+- `validate --strict`：检查 manifest、路径、frontmatter、profile 引用、workflow、context layer、skill 入口长度和质量分级。
 - `validate --quick`：快速结构检查，适合编辑中间态。
 - `test`：全量回归，包含 validate、格式、内容质量、文件权限、安装、profile coherence、optional、convert、workflow、catalog、trigger matrix。
 - `file-modes`：按 Git index 检查 tracked 文件权限；`100644` 不可执行，`100755` 可执行，使用 `--fix` 可修复工作区权限漂移。
@@ -22,10 +22,9 @@ bash scripts/devkit.sh file-modes
 | Profile | 推荐场景 |
 |---|---|
 | `core` | 通用研发最小主干 |
-| `personal-core` | 个人 `~/codex -> ~/.codex` 生产默认 |
-| `embedded-fullstack` | 嵌入式全栈，adk 默认 profile |
+| `personal-core` | 个人 `~/codex -> ~/.codex` 生产推荐 |
+| `embedded-fullstack` | 嵌入式全栈推荐 profile |
 | `release-hardening` | 发布前强化 |
-| `adk-artifact-gated-lite` | 高风险变更轻量 artifact 门禁 |
 | `team-core` | 团队交付与交接 |
 | `openspec-driven` | Spec 驱动变更 |
 | `large-refactor` | 大型重构 |
@@ -48,7 +47,7 @@ bash scripts/devkit.sh install --tool auto --mode symlink --profile embedded-ful
 bash scripts/devkit.sh install --tool codex --target /tmp/adk-codex-target --mode copy --profile core --extra-profile release-hardening
 
 # 生产推荐：导出符合 ~/codex 源资产与 manifest fragment 规范的 handoff
-bash scripts/devkit.sh convert --target codex --profile personal-core --extra-profile release-hardening --with-optional-skill adk-planning-execution-loop --with-optional-skill adk-skill-composition-governance --with-optional-skill adk-security-supply-chain --with-optional-skill adk-cross-team-handoff --with-optional-skill adk-artifact-gated-lite --codex-profile team-collab --out ../reports/adk-codex-handoff --clean
+bash scripts/devkit.sh convert --target codex --profile personal-core --extra-profile release-hardening --with-optional-skill adk-planning-execution-loop --with-optional-skill adk-skill-composition-governance --with-optional-skill adk-security-supply-chain --with-optional-skill adk-cross-team-handoff --codex-profile team-collab --out ../reports/adk-codex-handoff --clean
 
 # 在 /tmp 的 ~/codex 副本中合并 handoff，并运行 ~/codex build/doctor/check-skills
 bash scripts/devkit.sh codex-handoff --codex-root ~/codex
@@ -58,7 +57,7 @@ bash scripts/devkit.sh codex-handoff --codex-root ~/codex
 
 - `--tool`：`auto|codex|claude-code|hermes-agent|opencode`
 - `--mode`：`symlink|copy`
-- `--profile`：主 profile（默认 `embedded-fullstack`）
+- `--profile`：主 profile（默认 `core`）
 - `--extra-profile`：可选叠加 profile（可重复）
 - `--with-optional-skill`：按需叠加可选技能（可重复）
 - `--codex-profile`：`target=codex` 时写入 `~/codex` manifest fragment 的 profile，默认 `team-collab`
@@ -70,7 +69,7 @@ bash scripts/devkit.sh codex-handoff --codex-root ~/codex
 生产安装纪律：
 
 - 生产链路推荐先导出到交接目录，再由 `~/codex` 注册、build、doctor、apply 到 `~/.codex`。
-- `target=codex` 的导出物必须包含 `src/codex-home/vendor/...` 与 `manifest-fragments/*.json`，不能是 `~/.codex` 运行目录形态。
+- `target=codex` 的导出物必须包含 `src/codex-home/vendor/...` 与 `manifest-fragments/*.json`，其中至少包含 agents、skills、workflows、mcp_servers 四类 fragment，不能是 `~/.codex` 运行目录形态。
 - adk 不直接写入 `~/.codex`，避免绕过 `~/codex` 的 manifest、drift 和 rollback 管理。
 - apply 后运行 `llm_agent/scripts/check-global-codex-health.sh ~/.codex minimal`。（注意: 此脚本在 llm_agent 父仓库中，非本仓库）
 - 若用于生产放行，还需运行 `llm_agent/scripts/check-adk-harden-readiness.sh . --require-pilot`。（注意: 此脚本在 llm_agent 父仓库中，非本仓库）

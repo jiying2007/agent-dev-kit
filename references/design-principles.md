@@ -1,6 +1,6 @@
 # adk 设计原则
 
-> 来源: artifact-gated-agents 5 条设计原则
+> 来源: agent-dev-kit artifact 门禁基线
 
 ## 1. Artifact First（产物优先）
 所有工作流的输出必须是可归档的产物（文档/代码/配置），而非口头承诺。

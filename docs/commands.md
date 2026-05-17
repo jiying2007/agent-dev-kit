@@ -237,10 +237,10 @@ bash scripts/devkit.sh version diff --from 2.7.0 --to 2.7.0
 
 ## production codex handoff
 
-生产交接到 `~/codex` 时，推荐使用 `personal-core + release-hardening`，并叠加长任务、组合治理、供应链、交接与 artifact 门禁五类 optional skills；最终由 `~/codex` apply 到 `~/.codex`。
+生产交接到 `~/codex` 时，推荐使用 `personal-core + release-hardening`，并叠加长任务、组合治理、供应链、交接四类 optional skills；高风险 artifact 门禁由核心 `adk-artifact-gating` 提供，最终由 `~/codex` apply 到 `~/.codex`。
 
 ```bash
-bash scripts/devkit.sh convert --target codex --profile personal-core --extra-profile release-hardening --with-optional-skill adk-planning-execution-loop --with-optional-skill adk-skill-composition-governance --with-optional-skill adk-security-supply-chain --with-optional-skill adk-cross-team-handoff --with-optional-skill adk-artifact-gated-lite --codex-profile team-collab --out ../reports/adk-codex-handoff --clean
+bash scripts/devkit.sh convert --target codex --profile personal-core --extra-profile release-hardening --with-optional-skill adk-planning-execution-loop --with-optional-skill adk-skill-composition-governance --with-optional-skill adk-security-supply-chain --with-optional-skill adk-cross-team-handoff --codex-profile team-collab --out ../reports/adk-codex-handoff --clean
 bash scripts/devkit.sh codex-handoff --codex-root ~/codex
 cd ~/codex && rtk bash scripts/build.sh --profile team-collab
 cd ~/codex && rtk bash scripts/apply.sh --profile team-collab --dry-run

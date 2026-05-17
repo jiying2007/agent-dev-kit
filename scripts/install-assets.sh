@@ -30,7 +30,7 @@ Options:
 
 Examples:
   ./scripts/install-assets.sh --tool auto --mode symlink --profile embedded-fullstack
-  ./scripts/install-assets.sh --tool codex --target ~/.codex --profile core --extra-profile release-hardening
+  ./scripts/install-assets.sh --tool codex --target /tmp/adk-codex-target --profile core --extra-profile release-hardening
   ./scripts/install-assets.sh --tool codex --profile core --with-optional-skill adk-test-flakiness-triage
 USAGE
 }
@@ -250,6 +250,10 @@ if [[ -z "$TARGET" || -z "$AGENTS_DIR_NAME" || -z "$SKILLS_DIR_NAME" ]]; then
 fi
 
 TARGET="$(expand_path "$TARGET")"
+if [[ "$TOOL" == "codex" && "$TARGET" == "$HOME/.codex" ]]; then
+  echo "[FAIL] direct install into ~/.codex is forbidden; run convert --target codex and apply through ~/codex" >&2
+  exit 1
+fi
 if [[ -n "$BACKUP_DIR" ]]; then
   BACKUP_DIR="$(expand_path "$BACKUP_DIR")"
 fi

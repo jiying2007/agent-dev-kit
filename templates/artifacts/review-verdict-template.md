@@ -1,6 +1,6 @@
 # Review/Security/Test 统一评审模板
 
-> 来源: artifact-gated-agents
+> 来源: agent-dev-kit artifact 门禁基线
 
 ## verdict: PASS | FAIL | CONDITIONAL
 

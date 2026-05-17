@@ -1,6 +1,6 @@
 # BLOCKED 报告模板
 
-> 来源: artifact-gated-agents
+> 来源: agent-dev-kit artifact 门禁基线
 
 ## status: BLOCKED
 

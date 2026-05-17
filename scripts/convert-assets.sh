@@ -224,6 +224,8 @@ EOF
 
 CODEX_AGENT_ENTRIES=()
 CODEX_SKILL_ENTRIES=()
+CODEX_WORKFLOW_ENTRIES=()
+CODEX_MCP_ENTRIES=()
 
 add_codex_agent_entry() {
   local name="$1"
@@ -268,6 +270,53 @@ add_codex_skill_entry() {
   j_manifest_version="$(json_string "$MANIFEST_VERSION")"
 
   CODEX_SKILL_ENTRIES+=("{\"name\": ${j_name}, \"enabled\": true, \"source_kind\": \"vendor\", \"version\": ${j_version}, \"vendor_rel\": ${j_vendor_rel}, \"target_rel\": ${j_target_rel}, \"profiles\": ${j_profiles}, \"tags\": [\"agent-dev-kit\", \"adk\", ${j_quality_tier}], \"owner\": \"agent-dev-kit\", \"source_repo\": \"llm_agent/agent-dev-kit\", \"source_ref\": ${j_manifest_version}, \"source_path\": ${j_source_path}, \"imported_at\": ${j_imported_at}, \"review_status\": \"accepted\"}")
+}
+
+manifest_item_list() {
+  local section="$1"
+  local name="$2"
+  local key="$3"
+
+  awk -v section="$section" -v name="$name" -v key="$key" '
+    $0 ~ "^" section ":" {in_section=1; current=""; next}
+    in_section && $0 ~ "^[^ ]" {exit}
+    in_section && $0 ~ /^  - name:/ {
+      if (current == name) {exit}
+      current=$3
+      in_list=0
+      next
+    }
+    in_section && current == name {
+      if ($0 ~ "^    " key ":") {in_list=1; next}
+      if (in_list && $0 ~ /^      - /) {
+        item=$0
+        sub(/^      - /, "", item)
+        gsub(/^"|"$/, "", item)
+        print item
+        next
+      }
+      if (in_list && $0 ~ /^    [a-zA-Z0-9_-]+:/) {exit}
+    }
+  ' "$ADK_MANIFEST"
+}
+
+add_codex_workflow_entry() {
+  local name="$1"
+  local description="$2"
+  local imported_at="$3"
+  local triggers=()
+  local skills=()
+  local agents=()
+  local commands=()
+  local verification=()
+
+  mapfile -t triggers < <(manifest_item_list "workflows" "$name" "triggers")
+  mapfile -t skills < <(manifest_item_list "workflows" "$name" "skills")
+  mapfile -t agents < <(manifest_item_list "workflows" "$name" "agents")
+  mapfile -t commands < <(manifest_item_list "workflows" "$name" "commands")
+  mapfile -t verification < <(manifest_item_list "workflows" "$name" "verification")
+
+  CODEX_WORKFLOW_ENTRIES+=("{\"name\": $(json_string "$name"), \"enabled\": true, \"profiles\": $(json_array "${CODEX_PROFILES[@]}"), \"triggers\": $(json_array "${triggers[@]}"), \"skills\": $(json_array "${skills[@]}"), \"agents\": $(json_array "${agents[@]}"), \"commands\": $(json_array "${commands[@]}"), \"verification\": $(json_array "${verification[@]}"), \"description\": $(json_string "$description"), \"source_repo\": \"llm_agent/agent-dev-kit\", \"source_ref\": $(json_string "$MANIFEST_VERSION"), \"imported_at\": $(json_string "$imported_at")}")
 }
 
 write_codex_fragment() {
@@ -318,6 +367,8 @@ write_codex_handoff_doc() {
 - \`src/codex-home/vendor/agents/agent-dev-kit/<adk-version>/<name>/AGENTS.md\`：符合 \`~/codex\` agent vendor 源资产路径。
 - \`manifest-fragments/skills.json\`：可合并进 \`~/codex/manifests/skills.json\` 的 skill 条目。
 - \`manifest-fragments/agents.json\`：可合并进 \`~/codex/manifests/agents.json\` 的 agent 条目。
+- \`manifest-fragments/workflows.json\`：可合并进 \`~/codex/manifests/workflows.json\` 的 workflow 条目。
+- \`manifest-fragments/mcp_servers.json\`：可合并进 \`~/codex/manifests/mcp_servers.json\` 的 MCP 声明；当前为空表示 adk 不隐式安装 MCP。
 
 ## 交接纪律
 
@@ -337,6 +388,8 @@ rtk bash scripts/apply.sh --profile team-collab --dry-run
 - agents: ${#AGENTS_TO_EXPORT[@]}
 - skills: ${#SKILLS_TO_EXPORT[@]}
 - optional skills: ${#OPTIONAL_SKILLS[@]}
+- workflows: ${#CODEX_WORKFLOW_ENTRIES[@]}
+- mcp servers: ${#CODEX_MCP_ENTRIES[@]}
 EOF
 }
 
@@ -404,8 +457,18 @@ export_codex_handoff() {
     export_codex_skill "optional_skills" "$name" "$optional_path"
   done
 
+  while IFS= read -r name; do
+    [[ -z "$name" ]] && continue
+    local description
+    description="$(adk_get_manifest_item_value "workflows" "$name" "description")"
+    [[ -n "$description" ]] || description="$name"
+    add_codex_workflow_entry "$name" "$description" "$IMPORTED_AT"
+  done < <(adk_list_manifest_names "workflows")
+
   write_codex_fragment "$TARGET_DIR/manifest-fragments/agents.json" "agents" "${CODEX_AGENT_ENTRIES[@]}"
   write_codex_fragment "$TARGET_DIR/manifest-fragments/skills.json" "skills" "${CODEX_SKILL_ENTRIES[@]}"
+  write_codex_fragment "$TARGET_DIR/manifest-fragments/workflows.json" "workflows" "${CODEX_WORKFLOW_ENTRIES[@]}"
+  write_codex_fragment "$TARGET_DIR/manifest-fragments/mcp_servers.json" "mcp_servers" "${CODEX_MCP_ENTRIES[@]}"
   write_codex_handoff_doc
 }
 

@@ -57,9 +57,9 @@
 - One change should focus on one real problem; avoid bundling unrelated fixes.
 - Explicitly decide whether a capability belongs to `core` or `optional-skills`.
 
-## AI 防幻觉与范围控制规则（flow-kit 吸收）
+## AI 防幻觉与范围控制规则
 
-> 来源: flow-kit SYSTEM.md (2026-05-12)
+> 来源: agent-dev-kit 范围控制基线
 
 ### R1 上下文与清窗规则
 
@@ -249,49 +249,21 @@ Spark → Tasks → Build → Ship
 
 ---
 
-## 仓库深度分析报告 (2026-05-05)
+## 当前资产边界（2026-05-17）
 
 ### 功能定位
-adk 是面向 `~/codex -> ~/.codex` 运行链路的 Agent/Skill/Profile 生产资产包。核心目标：把参考仓中的优秀方法论压实为可交接到 `~/codex`、可验证、可回滚、可迭代的工程资产，再由 `~/codex` apply 到 `~/.codex`。
+adk 是面向 `agent-dev-kit -> ~/codex -> ~/.codex` 运行链路的 Agent/Skill/Workflow/Profile 生产资产包。核心目标：把本仓认可的方法论压实为可交接到 `~/codex`、可验证、可回滚、可迭代的工程资产，再由 `~/codex` apply 到 `~/.codex`。
 
 ### 资产统计
-- Agents: 10 个角色（全部 p0 级）
- Core Skills: 33 个（p0:8, p1:14）
- Optional Skills: 9 个（p2 级）
-- Profiles: 10 个（core + 7 extends + 2 独立）
-- Scripts: 26 个
- Tests: 29 个测试文件，59 个用例
- Docs: 58 个文档 + 26 个 Runbook
+- Agents: 16 个角色
+- Core Skills: 38 个
+- Optional Skills: 9 个
+- Profiles: 9 个
+- Workflows: 1 个
+- MCP servers: 显式空清单，默认不隐式安装 MCP
 
-### 质量评分: 8.0/10
-
-### 优点
-1. 方法论工程化：从"口头约定"压实为可安装、可验证、可回滚的工程资产
-2. 嵌入式领域深度：22 个 Core Skill 覆盖嵌入式全栈（寄存器/BSP/RTOS/协议栈/HIL-SIL）
-3. Evidence Index 机制：强制"结论必有证据"，解决 AI Agent 输出可信度问题
-4. Profile 分层：10 个 Profile 覆盖个人/团队/嵌入式/发布/重构/事故场景
-5. 工作流门禁：propose->apply->verify->review->archive 状态机 + 分级评审
-6. 多工具支持：codex/claude-code/hermes-agent/opencode 四个工具目标
-
-### 缺点
-1. 版本撕裂：manifest(1.0.0) vs README(0.3.0) 不一致
-2. 配置冲突：manifest default_mode(symlink) vs README 推荐(copy)
-3. 动态路由缺失：runtime routing 是静态文档，缺少运行时路由引擎
-4. Evidence Index 纯 Markdown 表格，缺少结构化查询能力
-5. 生产运维脚本（monitoring/auto-ops/performance/security）实现深度待验证
-6. 42 个文档缺少统一导航索引
-7. Profile 冲突检测缺失（两个 optional profile 叠加时的兼容性）
-8. 技能间依赖关系未在 manifest 中显式声明
-
-### 可借鉴点（供其他仓库参考）
-1. manifest.yaml 单一事实源设计
-2. Profile extends 继承机制
-3. Evidence Index 命令级证据追加
-4. devkit.sh 统一命令入口
-5. check_profile_coherence.sh 自动一致性检查
-
-### 资产来源
-- 方法论类资产：从外部参考仓吸收并本地化
-- 技能格式规范：遵循通用 skill 格式标准
-- 门禁协议：基于通用 artifact 门禁机制
-- 变更管理：基于通用变更管理流程
+### 硬边界
+1. 不直接把 adk 资产安装到 `~/.codex`。
+2. 不保留重复 skill/profile；调试统一走 `adk-systematic-debugging`，artifact 门禁统一走 `adk-artifact-gating`。
+3. 参考仓只作为治理输入，不作为生产资产来源；生产资产必须由 manifest 和 handoff fragment 声明。
+4. `SKILL.md` 只保留触发、流程和输出契约；长示例与背景进入 `references/`。

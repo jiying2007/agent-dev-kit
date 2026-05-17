@@ -25,7 +25,7 @@
 | `rules/` | `docs/best-practices.md` | 需要拆分为独立的规则文件 |
 | `skills/` | `skills/` 目录 | ✅ 已有，结构良好 |
 | `changes/` | 无对应 | 🔴 **关键缺失**：需要变更管理目录 |
-| `mcp/` | 无对应 | 🔴 **关键缺失**：需要 MCP 集成配置 |
+| `mcp/` | `manifest.yaml:mcp_servers` + `manifest-fragments/mcp_servers.json` + `docs/runbooks/mcp-governance.md` | ✅ 显式声明；默认空清单，禁止隐式安装 MCP |
 
 ---
 
@@ -234,7 +234,7 @@ context_layers:
         - skills/adk-requirements-triage/
         - skills/adk-adr-writer/
       apply:
-        - skills/adk-coding-standards/
+        - skills/adk-code-simplification/
         - skills/adk-unit-test-embedded/
       verify:
         - skills/adk-verification-before-completion/

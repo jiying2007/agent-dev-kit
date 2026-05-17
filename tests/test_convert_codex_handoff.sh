@@ -14,7 +14,7 @@ trap 'rm -rf "$TMP_DIR"' EXIT
   --out "$TMP_DIR" \
   --clean
 
-[[ -f "$TMP_DIR/codex/src/codex-home/vendor/agents/agent-dev-kit/2.8.0/requirements-analyst/AGENTS.md" ]] || {
+[[ -f "$TMP_DIR/codex/src/codex-home/vendor/agents/agent-dev-kit/2.9.0/requirements-analyst/AGENTS.md" ]] || {
   echo "[FAIL] missing codex vendor agent" >&2
   exit 1
 }
@@ -39,6 +39,16 @@ trap 'rm -rf "$TMP_DIR"' EXIT
   exit 1
 }
 
+[[ -f "$TMP_DIR/codex/manifest-fragments/workflows.json" ]] || {
+  echo "[FAIL] missing codex workflows manifest fragment" >&2
+  exit 1
+}
+
+[[ -f "$TMP_DIR/codex/manifest-fragments/mcp_servers.json" ]] || {
+  echo "[FAIL] missing codex MCP manifest fragment" >&2
+  exit 1
+}
+
 rtk python3 - "$TMP_DIR/codex" <<'PY'
 import json
 import pathlib
@@ -47,18 +57,25 @@ import sys
 root = pathlib.Path(sys.argv[1])
 agents = json.loads((root / "manifest-fragments/agents.json").read_text())
 skills = json.loads((root / "manifest-fragments/skills.json").read_text())
+workflows = json.loads((root / "manifest-fragments/workflows.json").read_text())
+mcp_servers = json.loads((root / "manifest-fragments/mcp_servers.json").read_text())
 
 agent = next(item for item in agents["agents"] if item["name"] == "requirements-analyst")
 skill = next(item for item in skills["skills"] if item["name"] == "adk-requirements-triage")
 optional = next(item for item in skills["skills"] if item["name"] == "adk-incident-rca-report")
+workflow = next(item for item in workflows["workflows"] if item["name"] == "adk-delivery-gate")
 
-assert agent["vendor_rel"] == "vendor/agents/agent-dev-kit/2.8.0/requirements-analyst/AGENTS.md"
+assert agent["vendor_rel"] == "vendor/agents/agent-dev-kit/2.9.0/requirements-analyst/AGENTS.md"
 assert agent["target_rel"] == "agents/requirements-analyst/AGENTS.md"
 assert agent["profiles"] == ["team-collab"]
 assert skill["vendor_rel"] == "vendor/skills/adk-requirements-triage/1.1.0"
 assert skill["target_rel"] == "skills/adk-requirements-triage"
 assert optional["vendor_rel"] == "vendor/skills/adk-incident-rca-report/1.0.0"
 assert optional["profiles"] == ["team-collab"]
+assert workflow["profiles"] == ["team-collab"]
+assert "adk-verification-before-completion" in workflow["skills"]
+assert "code-review-governor" in workflow["agents"]
+assert mcp_servers["mcp_servers"] == []
 PY
 
 echo "[PASS] convert codex handoff"

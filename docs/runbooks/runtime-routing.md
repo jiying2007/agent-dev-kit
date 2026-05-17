@@ -8,7 +8,7 @@
 
 - 只读分析：不创建 change，输出结论与证据路径。
 - 行为变更：进入 `propose -> apply -> verify -> review`。
-- 高风险变更：叠加 `adk-artifact-gated-lite`。
+- 高风险变更：使用核心 `adk-artifact-gating`，不再叠加 lite optional skill。
 - 长任务：叠加 `adk-planning-execution-loop`。
 - 团队交接：叠加 `adk-cross-team-handoff`。
 - 上游吸收：使用 `research-intake` profile。

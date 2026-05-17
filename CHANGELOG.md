@@ -1,10 +1,23 @@
 # Changelog
 
+## v2.9.0 (2026-05-17)
+
+### 破坏性变更
+- 移除重复调试技能 `adk-diagnose-loop`，统一由 `adk-systematic-debugging` 承接诊断闭环。
+- 移除重复产物门禁 optional skill `adk-artifact-gated-lite`，统一由核心 `adk-artifact-gating` 承接高风险门禁。
+- Codex 交付硬切换为 `agent-dev-kit -> ~/codex -> ~/.codex`，禁止直接安装到 `~/.codex`。
+
+### 增强
+- manifest 新增一等 `workflows` 与显式空 `mcp_servers` 声明。
+- Codex handoff 新增 `workflows.json` 与 `mcp_servers.json` manifest fragment。
+- 严格校验新增 context layer 路径、workflow 声明和 SKILL.md 入口长度门禁。
+- 长 SKILL.md 拆分到 `references/details.md`，减少默认上下文加载。
+
 ## v2.8.0 (2026-05-12)
 
 ### 修复
 - manifest.yaml: 修复 33 个 skill 的重复 quality_tier YAML 键
-- manifest.yaml: 补充 8 个缺失 Profile 定义 (personal-core, embedded-fullstack, team-core, openspec-driven, large-refactor, incident-response, research-intake, adk-artifact-gated-lite)
+- manifest.yaml: 补充 7 个缺失 Profile 定义 (personal-core, embedded-fullstack, team-core, openspec-driven, large-refactor, incident-response, research-intake)
 - 文档引用: 修复 7 个文件中的版本锁定引用 (统一为 2.8.0)
 - 导航链接: 修复 NAVIGATION.md 3 个断裂 Runbook 链接
 - Runbook 索引: 修复 runbooks/README.md 3 个错误文件名
@@ -74,7 +87,7 @@
 - 渐进式披露：skill references/ 子目录支持
 - Profile 冲突检测：manifest.yaml conflicts_with 字段
 - Skill 依赖图：manifest.yaml depends_on/enables 字段
-- 新增 Skill: adk-grill-with-docs, adk-diagnose-loop, adk-code-simplification, adk-context-engineering
+- 新增 Skill: adk-grill-with-docs, adk-code-simplification, adk-context-engineering
 - 新增 Skill: adk-chinese-commit-conventions, adk-chinese-code-review
 - 新增 Optional Skill: adk-fetch-url-content, adk-email-imap-fetch
 - 文档导航: docs/NAVIGATION.md

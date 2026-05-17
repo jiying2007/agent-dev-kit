@@ -1,6 +1,6 @@
 # 验收标准格式
 
-> 来源: codex-skill-spec WHEN/THEN/SHALL 格式
+> 来源: agent-dev-kit 验收标准基线
 
 ## 标准格式
 

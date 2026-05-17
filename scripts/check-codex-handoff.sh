@@ -14,7 +14,6 @@ OPTIONAL_SKILLS=(
   "adk-skill-composition-governance"
   "adk-security-supply-chain"
   "adk-cross-team-handoff"
-  "adk-artifact-gated-lite"
 )
 CODEX_PROFILES=("team-collab")
 
@@ -28,7 +27,7 @@ Options:
   --out <path>                     # 保留 handoff 输出目录；默认使用临时目录
   --profile <adk-profile>          # 默认 personal-core
   --extra-profile <adk-profile>    # 可重复；默认 release-hardening
-  --with-optional-skill <skill>    # 可重复；默认生产推荐五类 optional skills
+  --with-optional-skill <skill>    # 可重复；默认生产推荐四类 optional skills
   --codex-profile <profile>        # 可重复；默认 team-collab
   --keep-tmp
   -h, --help
@@ -57,7 +56,7 @@ while [[ $# -gt 0 ]]; do
       shift 2
       ;;
     --with-optional-skill)
-      if [[ "${#OPTIONAL_SKILLS[@]}" -eq 5 && "${OPTIONAL_SKILLS[0]}" == "adk-planning-execution-loop" ]]; then
+      if [[ "${#OPTIONAL_SKILLS[@]}" -eq 4 && "${OPTIONAL_SKILLS[0]}" == "adk-planning-execution-loop" ]]; then
         OPTIONAL_SKILLS=()
       fi
       OPTIONAL_SKILLS+=("$2")
@@ -134,6 +133,14 @@ if [[ ! -f "$HANDOFF_DIR/manifest-fragments/agents.json" ]]; then
   echo "[FAIL] handoff missing agent manifest fragment" >&2
   exit 1
 fi
+if [[ ! -f "$HANDOFF_DIR/manifest-fragments/workflows.json" ]]; then
+  echo "[FAIL] handoff missing workflow manifest fragment" >&2
+  exit 1
+fi
+if [[ ! -f "$HANDOFF_DIR/manifest-fragments/mcp_servers.json" ]]; then
+  echo "[FAIL] handoff missing MCP manifest fragment" >&2
+  exit 1
+fi
 
 WORK_CODEX="$TMP_ROOT/codex"
 mkdir -p "$WORK_CODEX"
@@ -158,7 +165,11 @@ shutil.copytree(src, dst, dirs_exist_ok=True)
 def merge_manifest(filename: str, key: str) -> None:
     base_path = repo / "manifests" / filename
     fragment_path = handoff / "manifest-fragments" / filename
-    base = json.loads(base_path.read_text(encoding="utf-8"))
+    base_path.parent.mkdir(parents=True, exist_ok=True)
+    if base_path.exists():
+        base = json.loads(base_path.read_text(encoding="utf-8"))
+    else:
+        base = {"schema_version": 2, key: []}
     fragment = json.loads(fragment_path.read_text(encoding="utf-8"))
     items = {item["name"]: item for item in base.get(key, [])}
     for item in fragment.get(key, []):
@@ -168,6 +179,8 @@ def merge_manifest(filename: str, key: str) -> None:
 
 merge_manifest("skills.json", "skills")
 merge_manifest("agents.json", "agents")
+merge_manifest("workflows.json", "workflows")
+merge_manifest("mcp_servers.json", "mcp_servers")
 PY
 
 BUILD_PROFILE="${CODEX_PROFILES[0]:-team-collab}"

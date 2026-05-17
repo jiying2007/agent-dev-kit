@@ -1,4 +1,4 @@
-version: 2.8.0
+version: 2.9.0
 locale: zh-CN
 platforms:
   - linux-embedded
@@ -81,7 +81,7 @@ context_layers:
         - skills/adk-requirements-triage/
         - skills/adk-adr-writer/
       apply:
-        - skills/adk-coding-standards/
+        - skills/adk-code-simplification/
         - skills/adk-unit-test-embedded/
       verify:
         - skills/adk-verification-before-completion/
@@ -311,10 +311,6 @@ skills:
     path: skills/adk-grill-with-docs/SKILL.md
     quality_tier: p0
     depends_on: []
-  - name: adk-diagnose-loop
-    path: skills/adk-diagnose-loop/SKILL.md
-    quality_tier: p0
-    depends_on: []
   - name: adk-code-simplification
     path: skills/adk-code-simplification/SKILL.md
     quality_tier: p0
@@ -529,7 +525,6 @@ profiles:
       - security-compliance-reviewer
     include_skills:
       - adk-systematic-debugging
-      - adk-diagnose-loop
       - adk-fault-injection-recovery
   research-intake:
     description: 参考仓吸收配置（候选筛选与审查）
@@ -543,25 +538,33 @@ profiles:
       - adk-repo-prompt-analyzer
       - adk-skill-deep-analyzer
       - adk-intake-workflow
-  adk-artifact-gated-lite:
-    description: 轻量产物门禁配置（高风险变更）
-    trigger_examples:
-      - "高风险变更"
-      - "关键功能修改"
-      - "需要严格门禁"
-    extends: core
-    include_agents:
-      - code-review-governor
-    include_skills:
-      - adk-artifact-gating
-      - adk-commit-pr-quality-gate
-      - adk-verification-before-completion
 
+workflows:
+  - name: adk-delivery-gate
+    description: agent-dev-kit 到 ~/codex 的生产交付门禁
+    triggers:
+      - "优化 adk"
+      - "agent-dev-kit 交付"
+      - "嵌入式资产发布"
+      - "完成前验证"
+    skills:
+      - adk-requirements-triage
+      - adk-task-breakdown
+      - adk-verification-before-completion
+      - adk-commit-pr-quality-gate
+    agents:
+      - requirements-analyst
+      - architecture-planner
+      - test-validation-engineer
+      - code-review-governor
+    commands:
+      - "rtk bash scripts/check-skills.sh"
+    verification:
+      - "rtk bash scripts/check.sh"
+
+mcp_servers: []
 
 optional_skills:
-  - name: adk-artifact-gated-lite
-    path: optional-skills/adk-artifact-gated-lite/SKILL.md
-    quality_tier: p2
   - name: adk-incident-rca-report
     path: optional-skills/adk-incident-rca-report/SKILL.md
     quality_tier: p2

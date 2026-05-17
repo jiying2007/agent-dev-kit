@@ -23,10 +23,12 @@ constraints:
 - 输出稳定、可验证的接口契约，降低跨模块返工。
 - 确保嵌入式组件间接口（HAL/驱动/协议栈）有明确的版本化契约。
 
+
 ## Prerequisites
 - 明确调用链 owner、版本策略和兼容窗口。
 - 确定输入输出数据源与错误语义边界。
 - 了解目标平台约束（内存对齐、字节序、对齐要求）。
+
 
 ## Workflow
 1. **定义接口清单**：请求、响应、错误码、幂等语义。
@@ -80,67 +82,8 @@ constraints:
 5. **生成契约用例**：正常、边界、异常三类样例。
    ```bash
    # 编译契约测试
-   gcc -I include/ -o iface_test tests/iface_contract.c -lcomponent
-   # 运行契约验证
-   ./iface_test --suite contract
-   ```
-6. **同步消费者影响**：列出受影响模块与改造顺序。
 
-## Commands
-```bash
-# 接口定义扫描
-rg -n "interface|api|contract|schema" <module_path>
-rg -n "typedef.*\(" include/<module>/*.h
-
-# 错误码一致性检查
-rg -n "= -[0-9]+" include/<module>/errors.h | sort -t= -k2 -n
-
-# 版本信息检查
-rg -n "VERSION|version|COMPAT" include/<module>/
-
-# 废弃接口扫描
-rg -n "TODO.*compat|deprecated|DEPRECATED" <module_path>
-
-# 契约测试
-gcc -I include/ -Wall -Werror -o contract_test tests/contract.c && ./contract_test
-
-# 结构体对齐检查（嵌入式关键）
-pahole --class_name=iface_msg_t <module>.o
-
-# 字节序验证
-python3 -c "import struct; print(struct.pack('<I', 0xCAFEBABE).hex())"
-```
-
-## Evidence Template
-```md
-- Interface Definition:
-  - Name: ____
-  - Version: ____
-  - Owner: ____
-- Input/Output Spec:
-  | Field | Type | Size | Description |
-  |-------|------|------|-------------|
-  | magic | uint32_t | 4B | 0xCAFEBABE |
-  | version | uint16_t | 2B | 接口版本 |
-- Error Codes:
-  | Code | Value | Meaning | Recovery |
-  |------|-------|---------|----------|
-  | IFACE_OK | 0 | 成功 | - |
-  | IFACE_ERR_TIMEOUT | -2 | 超时 | 重试 |
-- Version Compatibility: [major 兼容 / minor 向后兼容]
-- Deprecation Plan: [废弃周期与迁移路径]
-- Validation Cases:
-  - [ ] 正常路径: ____
-  - [ ] 边界条件: ____
-  - [ ] 异常路径: ____
-- Struct Alignment: [packed/aligned, padding bytes]
-```
-
-## Failure Handling
-- 若调用方未确认兼容策略，结论置为 `needs-fix`。
-- 若错误语义不一致，先冻结接口变更并回到设计讨论。
-- 若结构体对齐不符合目标平台要求，添加 `__attribute__((packed))` 或调整字段顺序。
-- 若版本协商失败，回退到最低公共版本并记录兼容降级。
+> 详细内容已移至 `references/details.md`。
 
 ## Quality Gate
 - 契约必须包含输入/输出/错误码/超时语义。
@@ -151,10 +94,26 @@ python3 -c "import struct; print(struct.pack('<I', 0xCAFEBABE).hex())"
 
 ---
 
-## 合理化借口拦截
 
-| 借口 | 现实 | 正确做法 |
-|------|------|---------|
-| "接口很简单不需要契约" | 无契约的接口是集成阶段的定时炸弹 | 按 SKILL.md 至少定义输入/输出/错误码/超时语义 |
-| "先写代码后面再补接口文档" | 后补的文档永远追不上代码的真实行为 | 先设计契约再实现，契约即测试依据 |
-| "我们口头对齐过了" | 口头对齐在跨模块联调时毫无约束力 | 产出版本化的接口契约并附验证用例 |
+## Failure Handling
+- 若调用方未确认兼容策略，结论置为 `needs-fix`。
+- 若错误语义不一致，先冻结接口变更并回到设计讨论。
+- 若结构体对齐不符合目标平台要求，添加 `__attribute__((packed))` 或调整字段顺序。
+- 若版本协商失败，回退到最低公共版本并记录兼容降级。
+
+
+## Evidence Template
+
+```md
+status: pass | needs-fix | BLOCKED
+commands:
+- <command + exit code>
+evidence:
+- <path or output summary>
+risks:
+- <remaining risk or none>
+```
+
+## References
+- 详细背景、命令、模板、示例和扩展检查项保存在 `references/details.md`。
+- 入口文件只保留触发和执行所需的最小上下文，避免默认加载过多 token。

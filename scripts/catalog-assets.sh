@@ -150,7 +150,10 @@ emit_profiles_table() {
     desc="$(adk_get_profile_value "$profile" "description")"
     optional="$(adk_get_profile_value "$profile" "optional")"
     [[ -n "$optional" ]] || optional="false"
-    extends="$(adk_get_profile_list "$profile" "extends" | paste -sd ',' -)"
+    extends="$(adk_get_profile_value "$profile" "extends")"
+    if [[ -z "$extends" ]]; then
+      extends="$(adk_get_profile_list "$profile" "extends" | paste -sd ',' -)"
+    fi
     [[ -n "$extends" ]] || extends="-"
     echo "| \`$profile\` | $desc | $optional | $extends |"
   done < <(adk_list_profile_names)

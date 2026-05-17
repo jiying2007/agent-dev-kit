@@ -55,15 +55,15 @@
 - 与本仓库目标冲突或不可本地验证的规则。
 - 会引入外部依赖耦合的流程要求。
 
-## 6. 参考源 E（产物标签与门禁协同）
+## 6. 产物标签与门禁协同
 
 借鉴点：
 - 交付物必须带标签与状态，避免跨角色交接歧义
 - 门禁结论必须与测试/评审证据一致
 
 落地点：
-- `optional-skills/adk-artifact-gated-lite/SKILL.md`
+- `skills/adk-artifact-gating/SKILL.md`
 - `docs/runbooks/artifact-gated-delivery.md`
-- `manifest.yaml`（`adk-artifact-gated-lite` profile + optional skill）
+- `manifest.yaml`（核心 skill + workflow 门禁）
 
 结论：`agent-dev-kit` 保留“规则思想”，但全部转换为本仓库可执行脚本、模板和测试门禁，确保离线独立可用。

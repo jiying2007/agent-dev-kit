@@ -9,7 +9,7 @@ checks: [migration-included]
 
 # 数据库迁移规则
 
-> 来源: flow-kit RULES.md (2026-05-12)
+> 来源: agent-dev-kit 数据变更治理基线
 
 ## 规则描述
 
@@ -76,5 +76,5 @@ done
 
 ## 参考
 
-- flow-kit RULES.md
+- agent-dev-kit 数据变更治理基线
 - AGENTS.md R9 数据库迁移规则

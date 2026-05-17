@@ -29,7 +29,7 @@
 ## 3. 推荐交接组合
 
 ```bash
-rtk bash -lc "cd agent-dev-kit && bash scripts/devkit.sh convert --target codex --profile personal-core --extra-profile release-hardening --with-optional-skill adk-planning-execution-loop --with-optional-skill adk-skill-composition-governance --with-optional-skill adk-security-supply-chain --with-optional-skill adk-cross-team-handoff --with-optional-skill adk-artifact-gated-lite --codex-profile team-collab --out ../reports/adk-codex-handoff --clean"
+rtk bash -lc "cd agent-dev-kit && bash scripts/devkit.sh convert --target codex --profile personal-core --extra-profile release-hardening --with-optional-skill adk-planning-execution-loop --with-optional-skill adk-skill-composition-governance --with-optional-skill adk-security-supply-chain --with-optional-skill adk-cross-team-handoff --codex-profile team-collab --out ../reports/adk-codex-handoff --clean"
 rtk bash -lc "cd agent-dev-kit && bash scripts/devkit.sh codex-handoff --codex-root ~/codex"
 rtk bash -lc "cd ~/codex && rtk bash scripts/build.sh --profile team-collab"
 rtk bash -lc "cd ~/codex && rtk bash scripts/doctor.sh --scope all"
@@ -45,7 +45,7 @@ rtk ../scripts/check-global-codex-health.sh ~/.codex minimal
 - `adk-skill-composition-governance`：多技能组合治理。
 - `adk-security-supply-chain`：第三方资产引入审查。
 - `adk-cross-team-handoff`：团队交接。
-- `adk-artifact-gated-lite`：高风险变更轻量证据门禁。
+- `adk-artifact-gating`：高风险变更证据门禁。
 
 说明：`../reports/adk-codex-handoff` 是交接目录，不是最终运行目录。目录内必须使用 `src/codex-home/vendor/...` 与 `manifest-fragments/*.json` 形态；正式生效前必须在 `~/codex` 中合并来源、profile 绑定和 apply plan。
 
@@ -69,7 +69,7 @@ rtk ../scripts/check-global-codex-health.sh ~/.codex minimal
 - 多技能触发冲突、profile 组合、fallback 判定：优先 `adk-skill-composition-governance`。
 - 第三方 skill、agent、脚本、参考资产引入前：必须使用 `adk-security-supply-chain`。
 - 跨团队交接、Owner 变更、签收复验：使用 `adk-cross-team-handoff`。
-- 高风险变更、共享契约、发布链路：叠加 `adk-artifact-gated-lite`。
+- 高风险变更、共享契约、发布链路：使用核心 `adk-artifact-gating`。
 - 完成、提交、发布、可用性声明前：必须使用 `adk-verification-before-completion`。
 ```
 
@@ -95,7 +95,7 @@ rtk bash -lc "cd agent-dev-kit && bash scripts/devkit.sh test"
 ### 6.2 交接到 `~/codex` 并预览 apply
 
 ```bash
-rtk bash -lc "cd agent-dev-kit && bash scripts/devkit.sh convert --target codex --profile personal-core --extra-profile release-hardening --with-optional-skill adk-planning-execution-loop --with-optional-skill adk-skill-composition-governance --with-optional-skill adk-security-supply-chain --with-optional-skill adk-cross-team-handoff --with-optional-skill adk-artifact-gated-lite --codex-profile team-collab --out ../reports/adk-codex-handoff --clean"
+rtk bash -lc "cd agent-dev-kit && bash scripts/devkit.sh convert --target codex --profile personal-core --extra-profile release-hardening --with-optional-skill adk-planning-execution-loop --with-optional-skill adk-skill-composition-governance --with-optional-skill adk-security-supply-chain --with-optional-skill adk-cross-team-handoff --codex-profile team-collab --out ../reports/adk-codex-handoff --clean"
 rtk bash -lc "cd agent-dev-kit && bash scripts/devkit.sh codex-handoff --codex-root ~/codex"
 rtk bash -lc "cd ~/codex && rtk bash scripts/build.sh --profile team-collab"
 rtk bash -lc "cd ~/codex && rtk bash scripts/apply.sh --profile team-collab --dry-run"

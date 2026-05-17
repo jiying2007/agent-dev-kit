@@ -41,8 +41,6 @@
 | Codex Pilot 证据 | runbooks/codex-pilot-evidence.md | 运行时验证证据 |
 | GitLab Runner 设置 | runbooks/gitlab-runner-setup.md | CI/CD Runner 配置 |
 | 工作区维护指南 | runbooks/workspace-maintenance-guide.md | 日常维护流程 |
-| 文档-代码一致性审计 | doc-code-consistency-audit-2026-05-08.md | 2026-05-08 审计报告 |
-| Skill 审计报告 | skills-audit-report.md | 2026-05-09 Skill 审计 |
 | 腾讯文章分析 | analysis/tencent-article-analysis-20260512.md | 行业文章分析 |
 
 ## Runbooks (28 个)
@@ -98,7 +96,6 @@
 | Skill | 路径 | 来源 | 用途 |
 |-------|------|------|------|
 | adk-grill-with-docs | skills/adk-grill-with-docs/ | mattpocock-skills | 烤问式需求对齐 |
-| adk-diagnose-loop | skills/adk-diagnose-loop/ | agent-skills | 纪律化调试循环 |
 | adk-code-simplification | skills/adk-code-simplification/ | agent-skills | 代码简化 |
 | adk-context-engineering | skills/adk-context-engineering/ | agent-skills | 上下文工程 |
 | adk-chinese-commit-conventions | skills/adk-chinese-commit-conventions/ | 方法论 | 中文提交规范 |

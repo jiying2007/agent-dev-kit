@@ -1,6 +1,6 @@
 # 渐进式上下文收集指南
 
-> 来源: vscode-codex-settings AGENTS.md
+> 来源: agent-dev-kit 上下文收集基线
 
 ## 4 步骤流程
 

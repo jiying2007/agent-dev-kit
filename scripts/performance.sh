@@ -24,6 +24,7 @@ Commands:
 Options:
   --target <target>      优化目标
   --level <level>        优化级别
+  --apply                执行清理动作；默认只报告将要执行的动作
   -h, --help             显示帮助
 
 Examples:
@@ -73,6 +74,16 @@ analyze_performance() {
 optimize_performance() {
     local level="$1"
     log_info "优化性能 (级别: $level)"
+
+    if [[ "${APPLY:-0}" -ne 1 ]]; then
+        echo "=== 性能优化 dry-run ==="
+        echo "- 将清理受控临时文件: *.tmp"
+        echo "- 将清理 7 天前日志: *.log"
+        echo "- 将规范 scripts/tests 下 shell 脚本可执行位"
+        echo "- medium/advanced 级别还会清理 .cache、旧备份或 dist"
+        echo "[INFO] 添加 --apply 后才会执行清理"
+        return 0
+    fi
     
     case "$level" in
         basic)
@@ -198,6 +209,7 @@ main() {
     shift
     local target="all"
     local level="basic"
+    APPLY=0
 
     while [[ $# -gt 0 ]]; do
         case "$1" in
@@ -208,6 +220,10 @@ main() {
             --level)
                 level="$2"
                 shift 2
+                ;;
+            --apply)
+                APPLY=1
+                shift
                 ;;
             -h|--help)
                 usage
@@ -223,7 +239,7 @@ main() {
 
     case "$command" in
         analyze) analyze_performance "$target" ;;
-        optimize) optimize_performance "$target" "$level" ;;
+        optimize) optimize_performance "$level" ;;
         benchmark) run_benchmark ;;
         report) generate_report ;;
         -h|--help) usage ;;

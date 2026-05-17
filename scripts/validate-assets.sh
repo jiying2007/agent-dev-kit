@@ -71,6 +71,8 @@ validate_top_level_schema() {
   require_key "default_profile"
   require_key "agents"
   require_key "skills"
+  require_key "workflows"
+  require_key "mcp_servers"
   require_key "optional_skills"
   require_key "install"
   require_key "dependencies"
@@ -280,6 +282,57 @@ validate_manifest_quality_tiers() {
   done
 }
 
+validate_existing_path() {
+  local ref="$1"
+  [[ -n "$ref" ]] || return 0
+
+  case "$ref" in
+    skills/*|docs/*|knowledge/*|rules/*|templates/*)
+      [[ -e "$ROOT_DIR/$ref" ]] || fail "manifest references missing path: $ref"
+      ;;
+  esac
+}
+
+validate_context_layers() {
+  [[ "$STRICT" -eq 1 ]] || return 0
+
+  awk '
+    /^context_layers:/ || /^embedded_context_layers:/ {in_section=1; next}
+    in_section && /^[^ ]/ {in_section=0}
+    in_section && /^[[:space:]]+- / {
+      item=$0
+      sub(/^[[:space:]]+- /, "", item)
+      print item
+    }
+  ' "$ADK_MANIFEST" | while IFS= read -r ref; do
+    validate_existing_path "$ref"
+  done
+}
+
+validate_workflows() {
+  [[ "$STRICT" -eq 1 ]] || return 0
+
+  mapfile -t workflows < <(adk_list_manifest_names "workflows")
+  [[ ${#workflows[@]} -gt 0 ]] || fail "manifest workflows section is empty"
+
+  local name
+  for name in "${workflows[@]}"; do
+    is_kebab_case "$name" || fail "invalid workflow name: $name"
+  done
+}
+
+validate_skill_entry_size() {
+  [[ "$STRICT" -eq 1 ]] || return 0
+
+  local file
+  local lines
+  while IFS= read -r file; do
+    [[ -z "$file" ]] && continue
+    lines="$(wc -l < "$file")"
+    [[ "$lines" -le 150 ]] || fail "skill entry exceeds 150 lines: ${file#$ROOT_DIR/} (${lines})"
+  done < <(find "$ROOT_DIR/skills" "$ROOT_DIR/optional-skills" -name SKILL.md -type f | sort)
+}
+
 validate_profiles() {
   mapfile -t profiles < <(adk_list_profile_names)
   [[ ${#profiles[@]} -gt 0 ]] || fail "manifest has no profiles"
@@ -325,6 +378,9 @@ validate_optional_skills_mapping
 validate_manifest_quality_tiers "agents" "agent"
 validate_manifest_quality_tiers "skills" "skill"
 validate_manifest_quality_tiers "optional_skills" "optional skill"
+validate_context_layers
+validate_workflows
+validate_skill_entry_size
 if [[ "$QUICK" -eq 1 ]]; then
   warn "quick mode enabled: skipped profile dependency validation"
 else
