@@ -22,6 +22,8 @@ Commands:
   validate  校验 manifest 与资产结构
   convert   转换资产到目标工具格式
   codex-handoff 检查 Codex handoff 是否符合 ~/codex 规范
+  runtime-boundary 检查 adk 是否绕过 ~/codex 直接写入 ~/.codex
+  workflow-closure 检查 workflow 引用是否在 profile 闭包内
   file-modes 检查 tracked 文件权限是否匹配 Git index
   catalog   生成或检索 Agent/Skill 目录索引
   match     根据输入文本匹配 skill 触发条件
@@ -75,6 +77,12 @@ case "$CMD" in
     ;;
   codex-handoff)
     exec "$SCRIPT_DIR/check-codex-handoff.sh" "$@"
+    ;;
+  runtime-boundary)
+    exec "$SCRIPT_DIR/check-runtime-boundary.sh" "$@"
+    ;;
+  workflow-closure)
+    exec "$SCRIPT_DIR/check-workflow-closure.sh" "$@"
     ;;
   file-modes)
     exec "$SCRIPT_DIR/check-file-modes.sh" "$ROOT_DIR" "$@"

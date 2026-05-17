@@ -6,11 +6,11 @@ ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 TMP_DIR="$(mktemp -d)"
 trap 'rm -rf "$TMP_DIR"' EXIT
 
-TARGET="$TMP_DIR/.codex"
+TARGET="$TMP_DIR/.claude"
 REPORT="$TMP_DIR/install-report.md"
 
 "$ROOT_DIR/scripts/install-assets.sh" \
-  --tool codex \
+  --tool claude-code \
   --mode copy \
   --target "$TARGET" \
   --profile core
@@ -22,7 +22,7 @@ REPORT="$TMP_DIR/install-report.md"
 [[ ! -d "$TARGET/skills/adk-incident-rca-report" ]] || { echo "[FAIL] unexpected optional skill without request" >&2; exit 1; }
 
 "$ROOT_DIR/scripts/install-assets.sh" \
-  --tool codex \
+  --tool claude-code \
   --mode copy \
   --target "$TARGET" \
   --profile core \
@@ -37,10 +37,20 @@ REPORT="$TMP_DIR/install-report.md"
 grep -q "manifest_version" "$REPORT" || { echo "[FAIL] install report missing version" >&2; exit 1; }
 
 "$ROOT_DIR/scripts/install-assets.sh" \
-  --tool codex \
+  --tool claude-code \
   --mode symlink \
   --target "$TARGET" \
   --profile core \
   --dry-run
+
+CODEX_INSTALL_OUT="$TMP_DIR/codex-install.out"
+if "$ROOT_DIR/scripts/install-assets.sh" --tool codex --target "$TMP_DIR/codex" --profile core >"$CODEX_INSTALL_OUT" 2>&1; then
+  echo "[FAIL] codex install should be disabled" >&2
+  exit 1
+fi
+grep -q "codex install is disabled" "$CODEX_INSTALL_OUT" || {
+  echo "[FAIL] codex install failure message missing" >&2
+  exit 1
+}
 
 echo "[PASS] install"

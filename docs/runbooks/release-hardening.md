@@ -25,7 +25,7 @@
 ## 命令模板
 
 ```bash
-bash scripts/devkit.sh install --tool codex --profile core --extra-profile release-hardening --with-optional-skill adk-incident-rca-report
+bash scripts/devkit.sh convert --target codex --profile core --extra-profile release-hardening --with-optional-skill adk-incident-rca-report --codex-profile team-collab --out ../reports/adk-codex-handoff --clean
 bash scripts/devkit.sh propose --change <change-id> --title "发布收口"
 bash scripts/devkit.sh verify --change <change-id>
 bash scripts/devkit.sh review --change <change-id> --result pass --blockers 0 --majors 0 --minors 0

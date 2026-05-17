@@ -194,8 +194,8 @@ bash tests/run_all.sh
 # 查看版本
 bash scripts/version-manager.sh current
 
-# 创建备份
-bash scripts/backup-rollback.sh backup --target ~/.codex
+# 创建声明式资产仓库备份
+bash scripts/backup-rollback.sh backup --target ~/codex
 
 # 健康检查
 bash scripts/health-check.sh check-all

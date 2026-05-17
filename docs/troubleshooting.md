@@ -114,14 +114,14 @@ bash scripts/version-manager.sh upgrade --target 2.7.0 --force
 
 **解决方案**：
 ```bash
-# 1. 检查目标目录
-ls -la ~/.codex
+# 1. 检查声明式资产仓库
+ls -la ~/codex
 
 # 2. 创建目录
-mkdir -p ~/.codex
+mkdir -p ~/codex
 
 # 3. 重新备份
-bash scripts/backup-rollback.sh backup --target ~/.codex
+bash scripts/backup-rollback.sh backup --target ~/codex
 ```
 
 ### 6. 健康检查问题
@@ -228,7 +228,7 @@ tail -f ~/.codex/logs/*.log
 
 ```bash
 # 创建定期备份
-bash scripts/backup-rollback.sh backup --target ~/.codex
+bash scripts/backup-rollback.sh backup --target ~/codex
 ```
 
 ### 2. 定期检查

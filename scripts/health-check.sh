@@ -42,6 +42,7 @@ Commands:
 Options:
   --verbose              详细输出
   --fix                  自动修复问题
+  --summary-json         输出低 token JSON 摘要（仅 check-all）
   -h, --help             显示帮助
 
 Examples:
@@ -204,6 +205,26 @@ check_quality() {
     else
         errors+=("缺失quality-gate-check.sh脚本")
     fi
+
+    if [[ -f "$ROOT_DIR/scripts/check-runtime-boundary.sh" ]]; then
+        if ! bash "$ROOT_DIR/scripts/check-runtime-boundary.sh" >/dev/null 2>&1; then
+            errors+=("运行态边界检查失败")
+        elif [[ "$verbose" == "true" ]]; then
+            log_info "运行态边界检查通过"
+        fi
+    else
+        errors+=("缺失check-runtime-boundary.sh脚本")
+    fi
+
+    if [[ -f "$ROOT_DIR/scripts/check-workflow-closure.sh" ]]; then
+        if ! bash "$ROOT_DIR/scripts/check-workflow-closure.sh" >/dev/null 2>&1; then
+            errors+=("workflow闭包检查失败")
+        elif [[ "$verbose" == "true" ]]; then
+            log_info "workflow闭包检查通过"
+        fi
+    else
+        errors+=("缺失check-workflow-closure.sh脚本")
+    fi
     
     if [[ ${#errors[@]} -eq 0 ]]; then
         log_success "质量检查通过"
@@ -213,6 +234,38 @@ check_quality() {
         for error in "${errors[@]}"; do echo "  - $error"; done
         return 1
     fi
+}
+
+json_status() {
+    local name="$1"
+    local status="$2"
+    printf '"%s":"%s"' "$name" "$status"
+}
+
+check_all_summary_json() {
+    local fix="$1"
+    local structure="pass" dependencies="pass" configuration="pass" tests="pass" quality="pass"
+
+    check_structure "false" >/dev/null 2>&1 || structure="fail"
+    check_dependencies "false" >/dev/null 2>&1 || dependencies="fail"
+    check_configuration "false" >/dev/null 2>&1 || configuration="fail"
+    check_tests "false" "$fix" >/dev/null 2>&1 || tests="fail"
+    check_quality "false" >/dev/null 2>&1 || quality="fail"
+
+    local status="pass"
+    if [[ "$structure" != "pass" || "$dependencies" != "pass" || "$configuration" != "pass" || "$tests" != "pass" || "$quality" != "pass" ]]; then
+        status="fail"
+    fi
+
+    printf '{"schema_version":1,"status":"%s",' "$status"
+    json_status "structure" "$structure"; printf ','
+    json_status "dependencies" "$dependencies"; printf ','
+    json_status "configuration" "$configuration"; printf ','
+    json_status "tests" "$tests"; printf ','
+    json_status "quality" "$quality"
+    printf '}\n'
+
+    [[ "$status" == "pass" ]]
 }
 
 check_all() {
@@ -242,18 +295,26 @@ main() {
     local command="$1"; shift
     local verbose="false"
     local fix="false"
+    local summary_json="false"
     
     while [[ $# -gt 0 ]]; do
         case "$1" in
             --verbose) verbose="true"; shift ;;
             --fix) fix="true"; shift ;;
+            --summary-json) summary_json="true"; shift ;;
             -h|--help) usage; exit 0 ;;
             *) log_error "未知参数: $1"; usage; exit 1 ;;
         esac
     done
     
     case "$command" in
-        check-all) check_all "$verbose" "$fix" ;;
+        check-all)
+            if [[ "$summary_json" == "true" ]]; then
+                check_all_summary_json "$fix"
+            else
+                check_all "$verbose" "$fix"
+            fi
+            ;;
         check-structure) check_structure "$verbose" ;;
         check-dependencies) check_dependencies "$verbose" ;;
         check-configuration) check_configuration "$verbose" ;;

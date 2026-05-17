@@ -201,7 +201,7 @@ bash scripts/version-manager.sh changelog
 
 ```bash
 # 创建备份
-bash scripts/backup-rollback.sh backup --target ~/.codex
+bash scripts/backup-rollback.sh backup --target ~/codex
 ```
 
 ### 2. 备份验证
@@ -217,7 +217,7 @@ bash scripts/backup-rollback.sh verify --version 20260505
 
 ```bash
 # 恢复备份
-bash scripts/backup-rollback.sh restore --target ~/.codex --version 20260505
+bash scripts/backup-rollback.sh restore --target ~/codex --version 20260505
 ```
 
 ## 文档最佳实践

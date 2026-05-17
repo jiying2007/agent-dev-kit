@@ -4,11 +4,11 @@
 
 ## install
 
-安装 Agent/Skill 到目标工具目录。生产 Codex 链路优先使用 `convert -> ~/codex -> ~/.codex`，不要用 install 直接写入 `~/.codex`。
+安装 Agent/Skill 到非 Codex 目标工具目录。Codex 链路已硬切换为 `convert -> ~/codex -> ~/.codex`，`install --tool codex` 会直接失败。
 
 ```bash
 bash scripts/devkit.sh install --tool auto --mode symlink --profile embedded-fullstack
-bash scripts/devkit.sh install --tool codex --target /tmp/adk-codex-target --mode copy --profile core --with-optional-skill adk-incident-rca-report
+bash scripts/devkit.sh install --tool claude-code --target /tmp/adk-claude-target --mode copy --profile core --with-optional-skill adk-incident-rca-report
 bash scripts/devkit.sh convert --target codex --profile personal-core --extra-profile release-hardening --codex-profile team-collab --out ../reports/adk-codex-handoff --clean
 ```
 
@@ -19,6 +19,7 @@ bash scripts/devkit.sh convert --target codex --profile personal-core --extra-pr
 ```bash
 bash scripts/devkit.sh validate --strict
 bash scripts/devkit.sh validate --quick
+bash scripts/devkit.sh validate --strict --summary-json
 ```
 
 ## convert
@@ -38,6 +39,24 @@ bash scripts/devkit.sh convert --target codex --profile core --with-optional-ski
 
 ```bash
 bash scripts/devkit.sh codex-handoff --codex-root ~/codex
+```
+
+## runtime-boundary
+
+检查 adk 是否绕过 `~/codex` 直接写入 `~/.codex`。
+
+```bash
+bash scripts/devkit.sh runtime-boundary
+bash scripts/devkit.sh runtime-boundary --summary-json
+```
+
+## workflow-closure
+
+检查 workflow 引用的 agent/skill 是否都在目标 profile 闭包内。
+
+```bash
+bash scripts/devkit.sh workflow-closure --profile core
+bash scripts/devkit.sh workflow-closure --profile personal-core --extra-profile release-hardening --summary-json
 ```
 
 ## file-modes
@@ -278,14 +297,6 @@ bash scripts/check-format.sh <root>
 
 ```bash
 bash scripts/check-terminology-consistency.sh <root>
-```
-
-## sync-codex-assets
-
-同步 Codex 资产到目标目录。
-
-```bash
-bash scripts/sync-codex-assets.sh <source> <target>
 ```
 
 ## quality-gate-check

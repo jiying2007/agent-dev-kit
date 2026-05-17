@@ -29,6 +29,7 @@ rtk ../scripts/check-global-codex-health.sh ~/.codex minimal
 - `manifest-fragments/skills.json`
 - `manifest-fragments/workflows.json`
 - `manifest-fragments/mcp_servers.json`
+- `manifest-fragments/change_sets.json`
 - `~/codex` build 输出
 - `~/codex` apply dry-run 输出
 - `~/.codex` health 输出

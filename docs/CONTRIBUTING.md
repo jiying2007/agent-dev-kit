@@ -269,7 +269,7 @@ bash tests/run_all.sh
 bash scripts/quality-gate-check.sh check-all
 
 # 3. 创建备份
-bash scripts/backup-rollback.sh backup --target ~/.codex
+bash scripts/backup-rollback.sh backup --target ~/codex
 
 # 4. 升级版本
 bash scripts/version-manager.sh upgrade --target 2.7.0

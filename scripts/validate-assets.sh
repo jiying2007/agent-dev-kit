@@ -4,17 +4,19 @@ set -euo pipefail
 usage() {
   cat <<USAGE
 Usage:
-  ./scripts/validate-assets.sh [--strict] [--quick]
+  ./scripts/validate-assets.sh [--strict] [--quick] [--summary-json]
 
 Options:
   --strict   启用严格校验（名称一致性、描述必填等）
   --quick    快速预检（跳过 profile 解析关系）
+  --summary-json  输出低 token JSON 摘要
   -h, --help
 USAGE
 }
 
 STRICT=0
 QUICK=0
+SUMMARY_JSON=0
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --strict)
@@ -23,6 +25,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --quick)
       QUICK=1
+      shift
+      ;;
+    --summary-json)
+      SUMMARY_JSON=1
       shift
       ;;
     -h|--help)
@@ -48,6 +54,7 @@ fail() {
 }
 
 warn() {
+  [[ "$SUMMARY_JSON" -eq 1 ]] && return 0
   echo "[WARN] $1" >&2
 }
 
@@ -73,6 +80,7 @@ validate_top_level_schema() {
   require_key "skills"
   require_key "workflows"
   require_key "mcp_servers"
+  require_key "change_sets"
   require_key "optional_skills"
   require_key "install"
   require_key "dependencies"
@@ -143,6 +151,13 @@ validate_tool_targets() {
       fail "tool target '$tool' detect list is empty in strict mode"
     fi
   done
+
+  if [[ "$(adk_get_tool_value "codex" "default_root")" != "~/codex" ]]; then
+    fail "tool target 'codex' default_root must be ~/codex; direct ~/.codex install is forbidden"
+  fi
+  if adk_get_tool_list "codex" "detect" | grep -Fxq "~/.codex"; then
+    fail "tool target 'codex' detect list must not use ~/.codex"
+  fi
 }
 
 validate_agents_and_manifest_mapping() {
@@ -318,6 +333,64 @@ validate_workflows() {
   local name
   for name in "${workflows[@]}"; do
     is_kebab_case "$name" || fail "invalid workflow name: $name"
+
+    local desc
+    desc="$(adk_get_manifest_item_value "workflows" "$name" "description")"
+    [[ -n "$desc" ]] || fail "workflow '$name' missing description"
+
+    local item
+    while IFS= read -r item; do
+      [[ -z "$item" ]] && continue
+      [[ -d "$ROOT_DIR/agents/$item" ]] || fail "workflow '$name' references unknown agent '$item'"
+    done < <(adk_get_manifest_item_list "workflows" "$name" "agents")
+
+    while IFS= read -r item; do
+      [[ -z "$item" ]] && continue
+      [[ -d "$ROOT_DIR/skills/$item" ]] || fail "workflow '$name' references unknown skill '$item'"
+    done < <(adk_get_manifest_item_list "workflows" "$name" "skills")
+  done
+}
+
+validate_mcp_servers() {
+  [[ "$STRICT" -eq 1 ]] || return 0
+
+  if grep -q '^mcp_servers:[[:space:]]*\[\][[:space:]]*$' "$ADK_MANIFEST"; then
+    return 0
+  fi
+
+  mapfile -t servers < <(adk_list_manifest_names "mcp_servers")
+  local name command transport risk_level
+  for name in "${servers[@]}"; do
+    is_kebab_case "$name" || fail "invalid MCP server name: $name"
+    command="$(adk_get_manifest_item_value "mcp_servers" "$name" "command")"
+    transport="$(adk_get_manifest_item_value "mcp_servers" "$name" "transport")"
+    risk_level="$(adk_get_manifest_item_value "mcp_servers" "$name" "risk_level")"
+    [[ -n "$command" ]] || fail "MCP server '$name' missing command"
+    [[ -n "$transport" ]] || fail "MCP server '$name' missing transport"
+    [[ "$transport" =~ ^(stdio|http|sse)$ ]] || fail "MCP server '$name' has invalid transport '$transport'"
+    [[ "$risk_level" =~ ^(low|medium|high)$ ]] || fail "MCP server '$name' must declare risk_level low|medium|high"
+  done
+}
+
+validate_change_sets() {
+  [[ "$STRICT" -eq 1 ]] || return 0
+
+  mapfile -t change_sets < <(adk_list_manifest_names "change_sets")
+  [[ ${#change_sets[@]} -gt 0 ]] || fail "manifest change_sets section is empty"
+
+  local name root archive_root
+  for name in "${change_sets[@]}"; do
+    is_kebab_case "$name" || fail "invalid change set name: $name"
+    root="$(adk_get_manifest_item_value "change_sets" "$name" "root")"
+    archive_root="$(adk_get_manifest_item_value "change_sets" "$name" "archive_root")"
+    [[ -n "$root" ]] || fail "change set '$name' missing root"
+    [[ -d "$ROOT_DIR/$root" ]] || fail "change set '$name' root missing: $root"
+    [[ -n "$archive_root" ]] || fail "change set '$name' missing archive_root"
+    [[ -d "$ROOT_DIR/$archive_root" ]] || fail "change set '$name' archive_root missing: $archive_root"
+
+    local count
+    count="$(adk_get_manifest_item_list "change_sets" "$name" "required_files" | awk 'END {print NR+0}')"
+    [[ "$count" -gt 0 ]] || fail "change set '$name' required_files is empty"
   done
 }
 
@@ -380,11 +453,30 @@ validate_manifest_quality_tiers "skills" "skill"
 validate_manifest_quality_tiers "optional_skills" "optional skill"
 validate_context_layers
 validate_workflows
+validate_mcp_servers
+validate_change_sets
 validate_skill_entry_size
+if [[ "$STRICT" -eq 1 ]]; then
+  "$ROOT_DIR/scripts/check-runtime-boundary.sh" >/dev/null
+  default_profile_for_workflow="$(awk '/^default_profile:/ {print $2; exit}' "$ADK_MANIFEST")"
+  "$ROOT_DIR/scripts/check-workflow-closure.sh" --profile "$default_profile_for_workflow" >/dev/null
+fi
 if [[ "$QUICK" -eq 1 ]]; then
   warn "quick mode enabled: skipped profile dependency validation"
 else
   validate_profiles
 fi
 
-echo "Validation passed. strict=$STRICT quick=$QUICK"
+if [[ "$SUMMARY_JSON" -eq 1 ]]; then
+  printf '{"schema_version":1,"status":"pass","strict":%s,"quick":%s,"agents":%s,"skills":%s,"optional_skills":%s,"profiles":%s,"workflows":%s,"change_sets":%s}\n' \
+    "$STRICT" \
+    "$QUICK" \
+    "$(adk_list_manifest_names "agents" | awk 'END {print NR+0}')" \
+    "$(adk_list_manifest_names "skills" | awk 'END {print NR+0}')" \
+    "$(adk_list_manifest_names "optional_skills" | awk 'END {print NR+0}')" \
+    "$(adk_list_profile_names | awk 'END {print NR+0}')" \
+    "$(adk_list_manifest_names "workflows" | awk 'END {print NR+0}')" \
+    "$(adk_list_manifest_names "change_sets" | awk 'END {print NR+0}')"
+else
+  echo "Validation passed. strict=$STRICT quick=$QUICK"
+fi

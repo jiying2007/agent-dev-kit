@@ -15,7 +15,7 @@
 
 1. 在临时目标验证核心能力：
    ```bash
-   bash scripts/devkit.sh install --tool codex --target /tmp/adk-codex-target --profile core
+   bash scripts/devkit.sh convert --target codex --profile core --codex-profile team-collab --out /tmp/adk-codex-handoff --clean
    ```
 2. 创建变更工件并进入 `propose -> apply`。
 3. 在变更工件中补齐三类标签：

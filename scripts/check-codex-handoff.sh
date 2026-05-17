@@ -30,9 +30,12 @@ Options:
   --with-optional-skill <skill>    # 可重复；默认生产推荐四类 optional skills
   --codex-profile <profile>        # 可重复；默认 team-collab
   --keep-tmp
+  --summary-json
   -h, --help
 USAGE
 }
+
+SUMMARY_JSON=0
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -71,6 +74,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --keep-tmp)
       KEEP_TMP=1
+      shift
+      ;;
+    --summary-json)
+      SUMMARY_JSON=1
       shift
       ;;
     -h|--help)
@@ -141,6 +148,10 @@ if [[ ! -f "$HANDOFF_DIR/manifest-fragments/mcp_servers.json" ]]; then
   echo "[FAIL] handoff missing MCP manifest fragment" >&2
   exit 1
 fi
+if [[ ! -f "$HANDOFF_DIR/manifest-fragments/change_sets.json" ]]; then
+  echo "[FAIL] handoff missing change set manifest fragment" >&2
+  exit 1
+fi
 
 WORK_CODEX="$TMP_ROOT/codex"
 mkdir -p "$WORK_CODEX"
@@ -181,6 +192,7 @@ merge_manifest("skills.json", "skills")
 merge_manifest("agents.json", "agents")
 merge_manifest("workflows.json", "workflows")
 merge_manifest("mcp_servers.json", "mcp_servers")
+merge_manifest("change_sets.json", "change_sets")
 PY
 
 BUILD_PROFILE="${CODEX_PROFILES[0]:-team-collab}"
@@ -195,4 +207,30 @@ echo "[INFO] run ~/codex-compatible build checks profile=$BUILD_PROFILE"
   rtk bash scripts/check-skills.sh
 )
 
-echo "[PASS] codex handoff conforms to ~/codex source and manifest contract"
+if [[ "$SUMMARY_JSON" -eq 1 ]]; then
+  rtk python3 - "$HANDOFF_DIR" "$BUILD_PROFILE" <<'PY'
+import json
+import pathlib
+import sys
+
+handoff = pathlib.Path(sys.argv[1])
+profile = sys.argv[2]
+summary = {
+    "schema_version": 1,
+    "status": "pass",
+    "build_profile": profile,
+}
+for filename, key in (
+    ("agents.json", "agents"),
+    ("skills.json", "skills"),
+    ("workflows.json", "workflows"),
+    ("mcp_servers.json", "mcp_servers"),
+    ("change_sets.json", "change_sets"),
+):
+    data = json.loads((handoff / "manifest-fragments" / filename).read_text())
+    summary[key] = len(data.get(key, []))
+print(json.dumps(summary, ensure_ascii=False, separators=(",", ":")))
+PY
+else
+  echo "[PASS] codex handoff conforms to ~/codex source and manifest contract"
+fi

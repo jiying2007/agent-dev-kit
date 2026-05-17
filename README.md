@@ -248,10 +248,10 @@ rtk ../scripts/check-adk-harden-readiness.sh . --require-pilot
 - **生产部署运行手册** (`docs/runbooks/production-deployment.md`): 完整的部署指南
 
 ### 质量保证
-- 所有测试通过 (59/59)
+- 全量回归以 `bash scripts/devkit.sh test` 输出为准
 - 健康检查全部通过
 - 质量门禁全部通过
-- 版本已锁定为 2.0.0
+- 版本以 `manifest.yaml:version` 为准
 
 ## 使用新功能
 
@@ -266,14 +266,14 @@ bash scripts/health-check.sh check-all --verbose
 
 ### 安装备份
 ```bash
-# 创建备份
-bash scripts/backup-rollback.sh backup --target ~/.codex
+# 创建 ~/codex 声明式资产仓库备份
+bash scripts/backup-rollback.sh backup --target ~/codex
 
 # 列出备份
-bash scripts/backup-rollback.sh list --target ~/.codex
+bash scripts/backup-rollback.sh list
 
 # 恢复备份
-bash scripts/backup-rollback.sh restore --target ~/.codex --version 20260505
+bash scripts/backup-rollback.sh restore --target ~/codex --version 20260505
 ```
 
 ### 版本管理
@@ -300,8 +300,10 @@ bash scripts/version-manager.sh upgrade --target 2.7.0
 - **贡献指南** (`docs/CONTRIBUTING.md`): 如何为项目做贡献
 
 ### 生产部署能力
-- **安装备份和回滚** (`scripts/backup-rollback.sh`): 完整的备份恢复机制
+- **声明式资产备份和回滚** (`scripts/backup-rollback.sh`): 面向 `~/codex` 的备份恢复机制
 - **健康检查** (`scripts/health-check.sh`): 全面的系统健康检查
+- **运行态边界检查** (`scripts/check-runtime-boundary.sh`): 禁止 adk 绕过 `~/codex` 直接写入 `~/.codex`
+- **Workflow 闭包检查** (`scripts/check-workflow-closure.sh`): 确认 workflow 引用在 profile 中完整可用
 - **版本管理** (`scripts/version-manager.sh`): 版本锁定和升级路径
 
 ### 运行手册
@@ -311,10 +313,10 @@ bash scripts/version-manager.sh upgrade --target 2.7.0
 - **上游集成** (`docs/runbooks/upstream-intake.md`): 上游集成指南
 
 ### 质量保证
-- 所有测试通过 (59/59)
+- 全量回归以 `bash scripts/devkit.sh test` 输出为准
 - 健康检查全部通过
 - 质量门禁全部通过
-- 版本已锁定为 2.0.0
+- 版本以 `manifest.yaml:version` 为准
 
 ## 使用新功能
 
@@ -337,19 +339,19 @@ bash scripts/health-check.sh check-quality
 ### 安装备份
 ```bash
 # 创建备份
-bash scripts/backup-rollback.sh backup --target ~/.codex
+bash scripts/backup-rollback.sh backup --target ~/codex
 
 # 列出备份
-bash scripts/backup-rollback.sh list --target ~/.codex
+bash scripts/backup-rollback.sh list
 
 # 恢复备份
-bash scripts/backup-rollback.sh restore --target ~/.codex --version 20260505
+bash scripts/backup-rollback.sh restore --target ~/codex --version 20260505
 
 # 验证备份
 bash scripts/backup-rollback.sh verify --version 20260505
 
 # 回滚版本
-bash scripts/backup-rollback.sh rollback --target ~/.codex --version 20260505
+bash scripts/backup-rollback.sh rollback --target ~/codex --version 20260505
 ```
 
 ### 版本管理

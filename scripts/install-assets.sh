@@ -30,8 +30,8 @@ Options:
 
 Examples:
   ./scripts/install-assets.sh --tool auto --mode symlink --profile embedded-fullstack
-  ./scripts/install-assets.sh --tool codex --target /tmp/adk-codex-target --profile core --extra-profile release-hardening
-  ./scripts/install-assets.sh --tool codex --profile core --with-optional-skill adk-test-flakiness-triage
+  ./scripts/install-assets.sh --tool claude-code --target /tmp/adk-claude-target --profile core --extra-profile release-hardening
+  ./scripts/install-assets.sh --tool claude-code --profile core --with-optional-skill adk-test-flakiness-triage
 USAGE
 }
 
@@ -143,6 +143,7 @@ detect_tool_auto() {
   local tool
   while IFS= read -r tool; do
     [[ -z "$tool" ]] && continue
+    [[ "$tool" == "codex" ]] && continue
     local marker
     while IFS= read -r marker; do
       [[ -z "$marker" ]] && continue
@@ -155,7 +156,7 @@ detect_tool_auto() {
     done < <(adk_get_tool_list "$tool" "detect")
   done < <(adk_list_tool_names)
 
-  echo "codex"
+  echo "claude-code"
 }
 
 install_item() {
@@ -237,6 +238,11 @@ if ! adk_tool_exists "$TOOL"; then
   exit 1
 fi
 
+if [[ "$TOOL" == "codex" ]]; then
+  echo "[FAIL] codex install is disabled; run convert --target codex and apply through ~/codex" >&2
+  exit 1
+fi
+
 if [[ -z "$TARGET" ]]; then
   TARGET="$(adk_get_tool_value "$TOOL" "default_root")"
 fi
@@ -250,10 +256,6 @@ if [[ -z "$TARGET" || -z "$AGENTS_DIR_NAME" || -z "$SKILLS_DIR_NAME" ]]; then
 fi
 
 TARGET="$(expand_path "$TARGET")"
-if [[ "$TOOL" == "codex" && "$TARGET" == "$HOME/.codex" ]]; then
-  echo "[FAIL] direct install into ~/.codex is forbidden; run convert --target codex and apply through ~/codex" >&2
-  exit 1
-fi
 if [[ -n "$BACKUP_DIR" ]]; then
   BACKUP_DIR="$(expand_path "$BACKUP_DIR")"
 fi

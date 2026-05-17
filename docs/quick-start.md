@@ -82,7 +82,7 @@ bash scripts/quality-gate-check.sh check-all
 ### 2. 创建备份
 
 ```bash
-bash scripts/backup-rollback.sh backup --target ~/.codex
+bash scripts/backup-rollback.sh backup --target ~/codex
 ```
 
 ### 3. 查看版本

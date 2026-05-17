@@ -16,9 +16,9 @@ if echo "$LIST_OUTPUT" | grep -Fxq "adk-artifact-gated-lite"; then
   exit 1
 fi
 
-TARGET="$TMP_DIR/.codex"
+TARGET="$TMP_DIR/.claude"
 "$ROOT_DIR/scripts/install-assets.sh" \
-  --tool codex \
+  --tool claude-code \
   --mode copy \
   --target "$TARGET" \
   --profile core \

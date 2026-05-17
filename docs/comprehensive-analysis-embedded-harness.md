@@ -255,9 +255,9 @@ adk-hardware-debugger:
 #### 3.2.1 变更管理：标准化目录结构
 
 ```bash
-# 在 agent-dev-kit/ 下创建 changes/ 目录
+# 使用 agent-dev-kit/docs/changes/ 目录，并通过 manifest.yaml:change_sets 导出
 
-changes/
+docs/changes/
 ├── README.md                     # 变更管理说明
 ├── templates/                    # 变更模板
 │   ├── summary-template.md       # 全流程追溯摘要

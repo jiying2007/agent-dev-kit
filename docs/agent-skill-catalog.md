@@ -87,11 +87,10 @@
 |---|---|---|---|
 | `core` | 嵌入式系统开发核心配置（需求、架构、实现、验证与评审） | false | - |
 | `release-hardening` | 发布加固配置（安全审查、性能优化、合规检查） | false | - |
-| `personal-core` | 个人 ~/.codex 精简配置（核心功能 + 发布检查） | false | core |
+| `personal-core` | 个人 ~/codex 声明式交付配置（核心功能 + 发布检查） | false | core |
 | `embedded-fullstack` | 嵌入式全栈开发配置（驱动/组件/应用全覆盖） | false | core |
 | `team-core` | 团队协作配置（交接/验证/评审） | false | core |
 | `openspec-driven` | Spec 驱动开发配置（需求/设计/任务链路） | false | core |
 | `large-refactor` | 大型重构配置（API 稳定性 + 代码简化） | false | embedded-fullstack |
 | `incident-response` | 线上事故响应配置（根因/复盘/恢复） | false | - |
 | `research-intake` | 参考仓吸收配置（候选筛选与审查） | false | - |
-

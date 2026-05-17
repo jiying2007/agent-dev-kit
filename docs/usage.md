@@ -43,8 +43,8 @@ bash scripts/check-profile-coherence.sh
 # 自动识别工具并软链接安装
 bash scripts/devkit.sh install --tool auto --mode symlink --profile embedded-fullstack
 
-# 本地临时目标目录安装 core + 强化 profile（用于测试 install 行为）
-bash scripts/devkit.sh install --tool codex --target /tmp/adk-codex-target --mode copy --profile core --extra-profile release-hardening
+# 本地临时目标目录安装 core + 强化 profile（仅用于非 Codex 工具测试 install 行为）
+bash scripts/devkit.sh install --tool claude-code --target /tmp/adk-claude-target --mode copy --profile core --extra-profile release-hardening
 
 # 生产推荐：导出符合 ~/codex 源资产与 manifest fragment 规范的 handoff
 bash scripts/devkit.sh convert --target codex --profile personal-core --extra-profile release-hardening --with-optional-skill adk-planning-execution-loop --with-optional-skill adk-skill-composition-governance --with-optional-skill adk-security-supply-chain --with-optional-skill adk-cross-team-handoff --codex-profile team-collab --out ../reports/adk-codex-handoff --clean
@@ -55,7 +55,7 @@ bash scripts/devkit.sh codex-handoff --codex-root ~/codex
 
 参数说明：
 
-- `--tool`：`auto|codex|claude-code|hermes-agent|opencode`
+- `--tool`：`auto|claude-code|hermes-agent|opencode`；Codex 生产链路使用 `convert --target codex`
 - `--mode`：`symlink|copy`
 - `--profile`：主 profile（默认 `core`）
 - `--extra-profile`：可选叠加 profile（可重复）
@@ -69,7 +69,7 @@ bash scripts/devkit.sh codex-handoff --codex-root ~/codex
 生产安装纪律：
 
 - 生产链路推荐先导出到交接目录，再由 `~/codex` 注册、build、doctor、apply 到 `~/.codex`。
-- `target=codex` 的导出物必须包含 `src/codex-home/vendor/...` 与 `manifest-fragments/*.json`，其中至少包含 agents、skills、workflows、mcp_servers 四类 fragment，不能是 `~/.codex` 运行目录形态。
+- `target=codex` 的导出物必须包含 `src/codex-home/vendor/...` 与 `manifest-fragments/*.json`，其中至少包含 agents、skills、workflows、mcp_servers、change_sets 五类 fragment，不能是 `~/.codex` 运行目录形态。
 - adk 不直接写入 `~/.codex`，避免绕过 `~/codex` 的 manifest、drift 和 rollback 管理。
 - apply 后运行 `llm_agent/scripts/check-global-codex-health.sh ~/.codex minimal`。（注意: 此脚本在 llm_agent 父仓库中，非本仓库）
 - 若用于生产放行，还需运行 `llm_agent/scripts/check-adk-harden-readiness.sh . --require-pilot`。（注意: 此脚本在 llm_agent 父仓库中，非本仓库）

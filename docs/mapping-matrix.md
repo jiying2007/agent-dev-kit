@@ -4,7 +4,7 @@
 
 | 能力域 | 目标 | 实现入口 |
 |---|---|---|
-| 资产安装 | 按工具与 profile 安装 Agents/Skills（仅用于测试或临时目标） | `scripts/install-assets.sh`、`scripts/devkit.sh install` |
+| 资产安装 | 按非 Codex 工具与 profile 安装 Agents/Skills（仅用于测试或临时目标） | `scripts/install-assets.sh`、`scripts/devkit.sh install` |
 | 可选技能注入 | 按需导出 optional skills，不影响默认 profile；生产 Codex 链路进入 `~/codex` | `optional-skills/`、`scripts/devkit.sh convert --with-optional-skill` |
 | 资产转换 | 导出多目标目录结构与元数据；Codex 目标输出 `~/codex` handoff | `scripts/convert-assets.sh`、`scripts/devkit.sh convert` |
 | Codex handoff 校验 | 在 `/tmp` 的 `~/codex` 副本中合并 handoff 并运行 build/doctor/check-skills | `scripts/check-codex-handoff.sh`、`scripts/devkit.sh codex-handoff` |
@@ -13,7 +13,9 @@
 | 结构校验 | 校验 manifest、frontmatter、profile 关系 | `scripts/validate-assets.sh`、`scripts/devkit.sh validate --strict` |
 | 快速预检 | 本地快速检查 frontmatter 与目录映射 | `scripts/validate-assets.sh --quick` |
 | 格式一致性 | 检查 LF、tab、脚本 shebang 与可执行位 | `scripts/check_format.sh` |
-| 流程工件化 | 统一 propose/apply/verify/review/archive 交付链 | `scripts/workflow.sh`、`docs/changes/` |
+| 流程工件化 | 统一 propose/apply/verify/review/archive 交付链，并作为 change set 导出到 `~/codex` | `scripts/workflow.sh`、`docs/changes/`、`manifest.yaml:change_sets` |
+| 运行态边界 | 禁止 adk 绕过 `~/codex` 直接写入 `~/.codex` | `scripts/check-runtime-boundary.sh`、`scripts/devkit.sh runtime-boundary` |
+| Workflow 闭包 | 检查 workflow 引用是否在目标 profile 闭包内 | `scripts/check-workflow-closure.sh`、`scripts/devkit.sh workflow-closure` |
 | openspec 桥接 | openspec 与 adk 变更工件双向迁移（导入/导出） | `scripts/openspec_bridge.sh`、`docs/runbooks/openspec-bridge.md` |
 | 阶段流转门禁 | 强制 `proposed->applied->verified->review-passed->archived` 顺序 | `scripts/workflow.sh` |
 | 单问题与边界核验 | 单次变更聚焦单问题，并显式声明 Core/Optional 归属 | `proposal.md` 模板、`adk-commit-pr-quality-gate` |

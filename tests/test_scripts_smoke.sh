@@ -39,7 +39,6 @@ run_smoke "auto-ops.sh"                  scripts/auto-ops.sh
 run_smoke "monitoring.sh"                scripts/monitoring.sh
 run_smoke "performance.sh"               scripts/performance.sh
 run_smoke "security.sh"                  scripts/security.sh
-run_smoke "sync-codex-assets.sh"         scripts/sync-codex-assets.sh
 
 echo ""
 echo "=== Summary: $PASS_COUNT/$TOTAL PASS, $FAIL_COUNT FAIL ==="

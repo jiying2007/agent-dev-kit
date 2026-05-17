@@ -48,9 +48,9 @@ Options:
   -h, --help             显示帮助
 
 Examples:
-  ./scripts/backup-rollback.sh backup --target ~/.codex
-  ./scripts/backup-rollback.sh restore --target ~/.codex --version 20260505
-  ./scripts/backup-rollback.sh list --target ~/.codex
+  ./scripts/backup-rollback.sh backup --target ~/codex
+  ./scripts/backup-rollback.sh restore --target ~/codex --version 20260505
+  ./scripts/backup-rollback.sh list
 USAGE
 }
 

@@ -7,6 +7,7 @@ source "${SCRIPT_DIR}/lib-logging.sh"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+CODEX_DECLARATION_ROOT="${CODEX_ROOT:-$HOME/codex}"
 
 usage() {
     cat <<USAGE
@@ -74,7 +75,7 @@ daily_ops() {
     # 5. 检查备份
     log_info "5. 检查备份"
     if [[ "$dry_run" != "true" ]]; then
-        bash "$ROOT_DIR/scripts/backup-rollback.sh" list --target ~/.codex 2>/dev/null || log_warning "无备份"
+        bash "$ROOT_DIR/scripts/backup-rollback.sh" list 2>/dev/null || log_warning "无备份"
     fi
     
     log_success "每日运维完成"
@@ -97,7 +98,7 @@ weekly_ops() {
     # 2. 创建备份
     log_info "2. 创建备份"
     if [[ "$dry_run" != "true" ]]; then
-        bash "$ROOT_DIR/scripts/backup-rollback.sh" backup --target ~/.codex
+        bash "$ROOT_DIR/scripts/backup-rollback.sh" backup --target "$CODEX_DECLARATION_ROOT"
     fi
     
     # 3. 生成监控报告
@@ -281,7 +282,7 @@ generate_monthly_report() {
 - 测试用例: $(bash "$ROOT_DIR/tests/run_all.sh" 2>&1 | grep -E "Total:|Passed:|Failed:" | tail -3)
 
 ## 备份状态
-$(bash "$ROOT_DIR/scripts/backup-rollback.sh" list --target ~/.codex 2>/dev/null || echo "无备份")
+$(bash "$ROOT_DIR/scripts/backup-rollback.sh" list 2>/dev/null || echo "无备份")
 
 ## 版本信息
 - 当前版本: $(bash "$ROOT_DIR/scripts/version-manager.sh" current 2>/dev/null || echo "未知")

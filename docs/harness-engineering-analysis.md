@@ -24,7 +24,7 @@
 | `agents/` | `skills/` 目录 | 可以扩展为独立的 agents/ 目录 |
 | `rules/` | `docs/best-practices.md` | 需要拆分为独立的规则文件 |
 | `skills/` | `skills/` 目录 | ✅ 已有，结构良好 |
-| `changes/` | 无对应 | 🔴 **关键缺失**：需要变更管理目录 |
+| `changes/` | `docs/changes/` + `manifest.yaml:change_sets` + `manifest-fragments/change_sets.json` | ✅ 已纳入声明式变更工件治理 |
 | `mcp/` | `manifest.yaml:mcp_servers` + `manifest-fragments/mcp_servers.json` + `docs/runbooks/mcp-governance.md` | ✅ 显式声明；默认空清单，禁止隐式安装 MCP |
 
 ---
@@ -33,7 +33,7 @@
 
 ### 2.1 🔴 高优先级：变更管理（Changes）
 
-**问题**: 当前 adk 没有标准化的变更管理目录，每个需求的过程文档没有统一结构。
+**状态**: 当前 adk 已使用 `docs/changes/` 作为变更工件目录，并通过 `manifest.yaml:change_sets` 导出到 `~/codex` handoff。后续优化重点是补真实业务样例和更多自动化一致性检查。
 
 **Harness Engineering 方案**:
 ```
@@ -52,20 +52,20 @@
 └── deployment/                   # 部署验证报告
 ```
 
-**adk 优化建议**:
+**adk 当前结构**:
 ```yaml
-# 在 agent-dev-kit/ 下新增 changes/ 目录
-changes/
-├── README.md                     # 变更管理说明
-├── templates/                    # 变更模板
-│   ├── summary-template.md
-│   ├── spec-template.md
-│   └── tasks-template.md
-└── examples/                     # 变更示例
-    └── add-modbus-tcp/
-        ├── summary.md
-        ├── request_analysis/
-        └── coding/
+change_sets:
+  - name: adk-change-governance
+    root: docs/changes
+    archive_root: docs/changes/archive
+    required_files:
+      - proposal.md
+      - design.md
+      - tasks.md
+      - checklist.md
+      - negative-results.md
+      - verify-report.md
+      - review-report.md
 ```
 
 ### 2.2 🔴 高优先级：质量门禁可程序化验证
@@ -271,7 +271,7 @@ ADK_ROOT="$(dirname "$SCRIPT_DIR")"
 
 # 创建虚拟变更
 VIRTUAL_CHANGE="dry-run-test-$(date +%Y%m%d)"
-CHANGE_DIR="$ADK_ROOT/changes/$VIRTUAL_CHANGE"
+CHANGE_DIR="$ADK_ROOT/docs/changes/$VIRTUAL_CHANGE"
 
 echo "=== Dry Run 开始 ==="
 echo "虚拟变更: $VIRTUAL_CHANGE"
@@ -349,10 +349,10 @@ echo "所有阶段验证通过"
 
 ### 4.1 第一阶段：变更管理（1-2 天）
 
-1. 在 `agent-dev-kit/` 下创建 `changes/` 目录
-2. 创建变更模板文件
+1. 继续压实 `docs/changes/` 变更工件目录
+2. 维护 `manifest.yaml:change_sets` 与 `manifest-fragments/change_sets.json`
 3. 更新 `workflows.md` 文档
-4. 提供变更管理示例
+4. 提供真实业务变更管理示例
 
 ### 4.2 第二阶段：质量门禁（2-3 天）
 

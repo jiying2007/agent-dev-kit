@@ -217,6 +217,55 @@ adk_get_manifest_item_value() {
   ' "$ADK_MANIFEST"
 }
 
+adk_get_manifest_item_list() {
+  local section="$1"
+  local name="$2"
+  local key="$3"
+
+  awk -v section="$section" -v name="$name" -v key="$key" '
+    function trim(value) {
+      sub(/^[[:space:]]+/, "", value)
+      sub(/[[:space:]]+$/, "", value)
+      gsub(/^"|"$/, "", value)
+      return value
+    }
+    function emit_inline(value, items, i, item) {
+      gsub(/[\[\]]/, "", value)
+      split(value, items, ",")
+      for (i in items) {
+        item=trim(items[i])
+        if (item != "") {
+          print item
+        }
+      }
+    }
+    $0 ~ "^" section ":" {in_section=1; current=""; next}
+    in_section && $0 ~ "^[^ ]" {exit}
+    in_section && $0 ~ /^  - name:/ {
+      if (current == name) {exit}
+      current=$3
+      in_list=0
+      next
+    }
+    in_section && current == name {
+      if ($0 ~ "^    " key ":[[:space:]]*\\[") {
+        value=$0
+        sub("^    " key ":[[:space:]]*", "", value)
+        emit_inline(value)
+        next
+      }
+      if ($0 ~ "^    " key ":") {in_list=1; next}
+      if (in_list && $0 ~ /^      - /) {
+        item=$0
+        sub(/^      - /, "", item)
+        print trim(item)
+        next
+      }
+      if (in_list && $0 ~ /^    [a-zA-Z0-9_-]+:/) {exit}
+    }
+  ' "$ADK_MANIFEST"
+}
+
 adk_list_optional_skill_names() {
   adk_list_manifest_names "optional_skills"
 }
