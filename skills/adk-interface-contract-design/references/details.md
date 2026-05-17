@@ -39,7 +39,7 @@ constraints:
        uint32_t payload_len;  /* 负载长度 */
        uint8_t  payload[];    /* 柔性数组 */
    } __attribute__((packed)) iface_msg_t;
-   
+
    /* 错误码定义 */
    typedef enum {
        IFACE_OK          =  0,
@@ -57,7 +57,7 @@ constraints:
    #define IFACE_VERSION_MINOR  1
    #define IFACE_VERSION_MAKE(maj, min) (((maj) << 8) | (min))
    #define IFACE_VERSION_CUR    IFACE_VERSION_MAKE(2, 1)
-   
+
    bool iface_version_compatible(uint16_t remote_ver) {
        uint8_t remote_major = remote_ver >> 8;
        return (remote_major == IFACE_VERSION_MAJOR);
