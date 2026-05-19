@@ -29,4 +29,4 @@ adk 的 pilot 以嵌入式全栈开发为主，覆盖芯片/板级约束、启�
 - `planned` 不能作为下线证据。
 - `fallback-sunset-matrix.tsv` 中 `candidate-sunset` 和 `sunset` 行必须引用存在的 pilot 文件。
 - 每次修改 `index.tsv` 或 evidence 文件后运行 `bash scripts/pilot-readiness.sh`；需要门禁摘要时运行 `bash scripts/pilot-readiness.sh --summary-json`。
-- 嵌入式全栈 pilot 优先覆盖芯片/板级、启动链、BSP/rootfs、Linux/RTOS、驱动、组件、设备应用、上位机/产测/诊断工具、交叉编译、QEMU/SIL、HIL、静态分析、故障注入、发布收口、OTA/回滚和现场维护。
+- 嵌入式全栈 pilot 优先覆盖芯片/板级、启动链、BSP/rootfs、Linux/RTOS、驱动、组件、设备应用、上位机/产测/诊断工具、交叉编译、QEMU/SIL、HIL、静态分析、故障注入、完成前验证、发布收口、OTA/回滚和现场维护。

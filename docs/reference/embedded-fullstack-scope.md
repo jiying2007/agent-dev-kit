@@ -33,6 +33,7 @@ adk 面向嵌入式全栈开发，覆盖从芯片和板级约束、启动链、B
 - 量产、烧录、产测、诊断、OTA、回滚和现场维护默认使用 `adk-production-field-readiness`。
 - 测试策略默认使用 `adk-test-strategy`，并按 host unit、cross-build、SIL/QEMU、HIL、手工板级证据分层。
 - 发布、版本和回退策略默认使用 `adk-release-versioning`，但不替代量产/现场 readiness。
+- 最小可复跑测试样例位于 `examples/embedded-test-matrix/`，用于说明 host unit、CMake/CTest、交叉编译 smoke、QEMU/SIL、HIL 手工记录和故障注入证据形态。
 
 ## Pilot 覆盖要求
 

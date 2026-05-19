@@ -15,6 +15,7 @@ for pilot in \
   embedded-bugfix-systematic-debugging \
   embedded-tdd-test-strategy \
   embedded-review-code-review-loop \
+  embedded-verification-completion \
   embedded-parallel-worktree-governance \
   embedded-branch-closeout
 do
@@ -45,6 +46,11 @@ rg -q "root_cause:" "$OUT_DIR/embedded-bugfix-systematic-debugging/root-cause.md
 
 rg -q "scope_write_checked: pass" "$OUT_DIR/embedded-parallel-worktree-governance/subagent-review.md" || {
   echo "[FAIL] parallel governance pilot did not record subagent review" >&2
+  exit 1
+}
+
+rg -q "Final Gate Result: pass" "$OUT_DIR/embedded-verification-completion/final-gate.md" || {
+  echo "[FAIL] verification pilot did not record final gate result" >&2
   exit 1
 }
 

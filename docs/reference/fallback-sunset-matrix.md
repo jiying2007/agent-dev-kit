@@ -58,7 +58,7 @@ replacement score 固定为 5 项：routing、profile、pilot、handoff、live�
 | systematic-debugging | adk-systematic-debugging | explicit-fallback | 已有 bugfix evidence-ready，需要真实驱动/RTOS/构建缺陷复跑 | 绑定真实 bug 样例 |
 | requesting-code-review | adk-code-review-loop + adk-commit-pr-quality-gate | explicit-fallback | 已有 review evidence-ready，需要真实 diff/reviewer 反馈 | 绑定真实 review 样例 |
 | receiving-code-review | adk-code-review-loop | explicit-fallback | 已有误报/越界反馈 evidence-ready，需要真实反馈样例 | 绑定真实反馈样例 |
-| verification-before-completion | adk-verification-before-completion | explicit-fallback | 已有门禁强，但缺少按能力面绑定的 pilot | 用真实业务 pilot 确认后再提升 candidate-sunset |
+| verification-before-completion | adk-verification-before-completion | explicit-fallback | 已有 completion evidence-ready pilot，需要继续绑定真实业务完成场景 | 评估 candidate-sunset 前补更多真实 completion 样例 |
 | dispatching-parallel-agents | adk-parallel-agent-governance | explicit-fallback | 已有并行治理 evidence-ready，需要真实多 agent 写入复跑 | 绑定真实多 agent 写入样例 |
 | subagent-driven-development | adk-parallel-agent-governance + adk-code-review-loop | explicit-fallback | 已有 scope/review/integration evidence-ready，需要真实平台子代理复跑 | 评估 candidate-sunset 前补真实多 agent 复审 |
 | using-git-worktrees | adk-worktree-governance | explicit-fallback | worktree 创建清理和 PR 场景仍需真实 git 样例 | 补真实 worktree pilot |

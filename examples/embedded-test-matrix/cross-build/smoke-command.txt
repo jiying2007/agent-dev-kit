@@ -1,0 +1,1 @@
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -I src -c src/adc_scale.c -o build/adc_scale.o

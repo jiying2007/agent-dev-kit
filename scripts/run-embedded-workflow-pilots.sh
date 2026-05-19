@@ -19,6 +19,7 @@ Pilots:
   bugfix
   test-strategy
   review
+  verification
   parallel-governance
   branch-closeout
 
@@ -63,7 +64,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 case "$PILOT" in
-  all|long-task|bugfix|test-strategy|review|parallel-governance|branch-closeout)
+  all|long-task|bugfix|test-strategy|review|verification|parallel-governance|branch-closeout)
     ;;
   *)
     echo "[FAIL] unsupported pilot: $PILOT" >&2
@@ -368,6 +369,56 @@ EOF
   finish_pilot
 }
 
+run_verification() {
+  PILOT_ID="embedded-verification-completion"
+  init_pilot "$PILOT_ID"
+  cat > "$PILOT_DIR/scope-summary.md" <<'EOF'
+scope:
+- embedded full-stack skill and pilot evidence closeout
+- fallback sunset matrix verification
+non_scope:
+- real hardware production readiness declaration
+EOF
+  cat > "$PILOT_DIR/verification-index.md" <<'EOF'
+| Command | Exit Code | Result |
+|---|---:|---|
+| rtk bash tests/run_all.sh | 0 | pass |
+| rtk bash scripts/pilot-readiness.sh --summary-json | 0 | 9/9 evidence-ready |
+| rtk bash scripts/check-fallback-sunset.sh --summary-json | 0 | replacement score passes threshold |
+EOF
+  cat > "$PILOT_DIR/negative-results.md" <<'EOF'
+missing-evidence: reject completion claim when verification command is absent
+missing-hardware: do not promote dry-run production pilot to production-ready
+EOF
+  cat > "$PILOT_DIR/runtime-config-audit.md" <<'EOF'
+runtime_config:
+- codex handoff must be checked before live installation claims
+- global health must be checked before ~/.codex production claims
+status: pass
+EOF
+  cat > "$PILOT_DIR/breaking-change.md" <<'EOF'
+breaking_change: no
+migration_required: no
+rollback: revert pilot/index/matrix changes as one commit if checks fail
+EOF
+  cat > "$PILOT_DIR/final-gate.md" <<'EOF'
+Final Gate Result: pass
+blockers: 0
+majors: 0
+minors: 0
+residual_risk:
+- real hardware evidence remains a separate production-field gate
+EOF
+
+  run_step required "scope-summary" "completion scope and non-scope are explicit" "$PILOT_DIR" rg -q "non_scope" scope-summary.md
+  run_step required "verification-index" "command-level verification index is present" "$PILOT_DIR" rg -q "check-fallback-sunset" verification-index.md
+  run_step expect-fail "missing-evidence-negative-path" "missing evidence blocks completion claims" "$PILOT_DIR" bash -c "rg -q '^missing-evidence:' negative-results.md && exit 1"
+  run_step required "runtime-config-audit" "runtime config audit requirement is recorded" "$PILOT_DIR" rg -q "global health" runtime-config-audit.md
+  run_step required "breaking-change" "breaking change and rollback decision are explicit" "$PILOT_DIR" rg -q "breaking_change: no" breaking-change.md
+  run_step required "final-gate" "final gate result has zero blockers" "$PILOT_DIR" rg -q "blockers: 0" final-gate.md
+  finish_pilot
+}
+
 run_parallel() {
   PILOT_ID="embedded-parallel-worktree-governance"
   init_pilot "$PILOT_ID"
@@ -455,6 +506,7 @@ run_selected() {
     bugfix) run_bugfix ;;
     test-strategy) run_test_strategy ;;
     review) run_review ;;
+    verification) run_verification ;;
     parallel-governance) run_parallel ;;
     branch-closeout) run_branch_closeout ;;
   esac
@@ -465,6 +517,7 @@ if [[ "$PILOT" == "all" ]]; then
   run_selected bugfix
   run_selected test-strategy
   run_selected review
+  run_selected verification
   run_selected parallel-governance
   run_selected branch-closeout
 else
