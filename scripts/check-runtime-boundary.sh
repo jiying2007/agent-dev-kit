@@ -12,6 +12,7 @@ Usage:
 Checks:
   - Codex declaration root is ~/codex, not ~/.codex.
   - scripts do not install, restore, rollback, copy, remove, or write directly into ~/.codex.
+  - active docs/templates/skills do not recommend direct adk-to-~/.codex install commands.
   - read-only health/list references to ~/.codex remain allowed.
 USAGE
 }
@@ -75,6 +76,21 @@ while IFS= read -r hit; do
 done < <(
   rg -n '(^|[[:space:]])(cp|mv|rm|mkdir|ln|rsync|tar)([[:space:]]|$)[^\n]*(~/.codex|\$HOME/\.codex)' "$ROOT_DIR/scripts" \
     | rg -v 'check-runtime-boundary\.sh|check-global-codex-health|codex mcp list|logs' || true
+)
+
+while IFS= read -r hit; do
+  [[ -z "$hit" ]] && continue
+  record_failure "prohibited active doc direct codex install: $hit"
+done < <(
+  rg -n --pcre2 \
+    -g '!reports/archive/**' \
+    'devkit\.sh install[^\n]*(--tool[ =]codex|--target[ =][^\n]*~/.codex)|install-assets\.sh[^\n]*--tool[ =]codex|sync-codex-assets\.sh' \
+    "$ROOT_DIR/README.md" \
+    "$ROOT_DIR/CONTEXT.md" \
+    "$ROOT_DIR/docs" \
+    "$ROOT_DIR/skills" \
+    "$ROOT_DIR/optional-skills" \
+    "$ROOT_DIR/templates" || true
 )
 
 if [[ "${#failures[@]}" -gt 0 ]]; then

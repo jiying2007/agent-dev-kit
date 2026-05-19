@@ -12,7 +12,7 @@ usage() {
 usage: scripts/pilot-readiness.sh [--pilot <pilot_id>] [--summary-json] [--list]
 
 Checks pilot evidence readiness:
-  - pilot index schema and status values
+  - pilot index schema, status values and readiness dimensions
   - pilot evidence files exist and mirror indexed status
   - planned pilots keep pending evidence explicit
   - evidence-ready/regression-ready pilots include verification evidence
@@ -89,7 +89,7 @@ linked_fallbacks_for_file() {
 [[ -f "${PILOT_INDEX}" ]] || fail "pilot index missing: ${PILOT_INDEX}"
 [[ -f "${FALLBACK_MATRIX}" ]] || fail "fallback matrix missing: ${FALLBACK_MATRIX}"
 
-expected_pilot_header=$'pilot_id\tstatus\tcapability\tprimary_skill\tfallback_used\tevidence_file\tverification'
+expected_pilot_header=$'pilot_id\tstatus\tcapability\tprimary_skill\tfallback_used\tevidence_file\tverification\tworkflow_readiness\tartifact_readiness\tdevice_readiness\treadiness_note'
 actual_pilot_header="$(head -n 1 "${PILOT_INDEX}")"
 [[ "${actual_pilot_header}" == "${expected_pilot_header}" ]] || fail "pilot index header mismatch"
 
@@ -98,13 +98,15 @@ actual_fallback_header="$(head -n 1 "${FALLBACK_MATRIX}")"
 [[ "${actual_fallback_header}" == "${expected_fallback_header}" ]] || fail "fallback matrix header mismatch"
 
 valid_pilot_statuses=" planned evidence-ready regression-ready rejected "
+valid_readiness_values=" pass partial pending needs-fix not-applicable "
 pilots=0
 ready=0
 planned=0
 rejected=0
+device_needs_fix=0
 found=0
 
-while IFS=$'\t' read -r pilot_id status capability primary_skill fallback_used evidence_file verification; do
+while IFS=$'\t' read -r pilot_id status capability primary_skill fallback_used evidence_file verification workflow_readiness artifact_readiness device_readiness readiness_note; do
   [[ -n "${pilot_id}" ]] || continue
   if [[ -n "${PILOT_FILTER}" && "${pilot_id}" != "${PILOT_FILTER}" ]]; then
     continue
@@ -115,6 +117,10 @@ while IFS=$'\t' read -r pilot_id status capability primary_skill fallback_used e
   [[ "${valid_pilot_statuses}" == *" ${status} "* ]] || fail "invalid pilot status for ${pilot_id}: ${status}"
   [[ -n "${capability}" && -n "${primary_skill}" ]] || fail "pilot row incomplete: ${pilot_id}"
   [[ "${fallback_used}" == "yes" || "${fallback_used}" == "no" ]] || fail "invalid fallback_used for ${pilot_id}: ${fallback_used}"
+  [[ "${valid_readiness_values}" == *" ${workflow_readiness} "* ]] || fail "invalid workflow_readiness for ${pilot_id}: ${workflow_readiness}"
+  [[ "${valid_readiness_values}" == *" ${artifact_readiness} "* ]] || fail "invalid artifact_readiness for ${pilot_id}: ${artifact_readiness}"
+  [[ "${valid_readiness_values}" == *" ${device_readiness} "* ]] || fail "invalid device_readiness for ${pilot_id}: ${device_readiness}"
+  [[ -n "${readiness_note}" && "${readiness_note}" != "-" ]] || fail "missing readiness_note for ${pilot_id}"
   [[ -f "${ROOT}/${evidence_file}" ]] || fail "pilot evidence file missing: ${evidence_file}"
   rg -q "^status: ${status}$" "${ROOT}/${evidence_file}" || fail "pilot file status mismatch for ${pilot_id}: ${evidence_file}"
   require_heading "${ROOT}/${evidence_file}" "## 目标场景"
@@ -136,9 +142,12 @@ while IFS=$'\t' read -r pilot_id status capability primary_skill fallback_used e
       rejected=$((rejected + 1))
       ;;
   esac
+  if [[ "${device_readiness}" == "needs-fix" ]]; then
+    device_needs_fix=$((device_needs_fix + 1))
+  fi
 
   linked_fallbacks="$(linked_fallbacks_for_file "${evidence_file}")"
-  log "[PILOT] ${pilot_id} status=${status} readiness=${readiness} linked_fallbacks=${linked_fallbacks} evidence=${evidence_file} verification=${verification}"
+  log "[PILOT] ${pilot_id} status=${status} readiness=${readiness} workflow=${workflow_readiness} artifact=${artifact_readiness} device=${device_readiness} linked_fallbacks=${linked_fallbacks} evidence=${evidence_file} verification=${verification}"
 done < <(tail -n +2 "${PILOT_INDEX}")
 
 if [[ -n "${PILOT_FILTER}" && "${found}" -eq 0 ]]; then
@@ -147,8 +156,8 @@ fi
 [[ "${pilots}" -gt 0 ]] || fail "pilot index has no rows"
 
 if [[ "${SUMMARY_JSON}" -eq 1 ]]; then
-  printf '{"status":"pass","pilots":%s,"ready":%s,"planned":%s,"rejected":%s}\n' "${pilots}" "${ready}" "${planned}" "${rejected}"
+  printf '{"status":"pass","pilots":%s,"ready":%s,"planned":%s,"rejected":%s,"device_needs_fix":%s}\n' "${pilots}" "${ready}" "${planned}" "${rejected}" "${device_needs_fix}"
 else
-  echo "[INFO] pilot_readiness ready=${ready} planned=${planned} rejected=${rejected} total=${pilots}"
+  echo "[INFO] pilot_readiness ready=${ready} planned=${planned} rejected=${rejected} device_needs_fix=${device_needs_fix} total=${pilots}"
   echo "[PASS] pilot readiness checks passed (${pilots} pilots)"
 fi

@@ -85,7 +85,7 @@
 | 探索文档 | explorations/ | 探索性分析 |
 | 规范文档 | specs/ | 技术规范 |
 
-## 新增内容 (v2.0.0)
+## 主要能力索引
 
 ### 新增模板
 | 模板 | 路径 | 说明 |
@@ -96,7 +96,7 @@
 | 质量评分卡 | templates/quality-score.md | 五维度自评 |
 | Agent 交接 | templates/agent-handoff.md | 角色间交接协议 |
 
-### 新增 Skill (v2.0.0)
+### 核心 Skill
 | Skill | 路径 | 来源 | 用途 |
 |-------|------|------|------|
 | adk-runtime-router | skills/adk-runtime-router/ | 方法论 | adk-first 运行时技能路由 |
@@ -111,13 +111,13 @@
 | adk-chinese-commit-conventions | skills/adk-chinese-commit-conventions/ | 方法论 | 中文提交规范 |
 | adk-chinese-code-review | skills/adk-chinese-code-review/ | 方法论 | 中文代码审查 |
 
-### 新增可选 Skill (v2.0.0)
+### 可选 Skill
 | Skill | 路径 | 来源 | 用途 |
 |-------|------|------|------|
 | adk-fetch-url-content | optional-skills/adk-data-fetch/ | skills/天工 | URL 正文提取 |
 | adk-email-imap-fetch | optional-skills/adk-data-fetch/ | skills/天工 | IMAP 邮件获取 |
 
-### 新增运维命令 (v2.0.0)
+### 运维命令
 
 | 命令 | 说明 |
 |------|------|

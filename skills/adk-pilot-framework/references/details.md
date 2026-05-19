@@ -67,7 +67,7 @@ constraints:
 [pilot-scenario]
 id: pilot-<date>-<seq>
 type: feature | bugfix | refactor | release | cross-repo
-target_dir: ~/codex | ~/.codex | <project-dir>
+target_dir: ~/codex | <project-dir>
 skills_under_test:
   - <skill-1>
   - <skill-2>
@@ -75,11 +75,10 @@ expected_behavior: <预期行为描述>
 success_criteria: <可量化验收标准>
 ```
 
-**Step 2: 能力安装**
+**Step 2: 能力交接**
 ```bash
-bash scripts/devkit.sh install --tool codex --profile core
-# 如需额外能力
-bash scripts/devkit.sh install --tool codex --profile core --extra-profile <profile>
+bash scripts/devkit.sh convert --target codex --out /tmp/adk-codex-handoff --profile personal-core
+bash scripts/check-codex-handoff.sh --codex-root ~/codex
 ```
 
 **Step 3: 真实执行**
@@ -148,8 +147,9 @@ bash scripts/check-adk-harden-readiness.sh . --require-pilot --skip-full-suite
 ## Commands
 
 ```bash
-# 安装试跑能力
-bash scripts/devkit.sh install --tool codex --profile core
+# 交接试跑能力
+bash scripts/devkit.sh convert --target codex --out /tmp/adk-codex-handoff --profile personal-core
+bash scripts/check-codex-handoff.sh --codex-root ~/codex
 
 # 健康检查三联
 bash scripts/health-check.sh ~/.codex minimal

@@ -265,7 +265,7 @@ bash scripts/devkit.sh version upgrade
 bash scripts/devkit.sh version diff --from 2.7.0 --to 2.7.0
 ```
 
-## install_assets.sh 扩展参数
+## install-assets.sh 扩展参数
 
 - `--list-optional-skills`：列出所有可选技能
 - `--with-optional-skill <name>`：按需叠加可选技能（可重复）

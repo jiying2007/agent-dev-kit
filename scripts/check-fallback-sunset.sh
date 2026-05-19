@@ -5,11 +5,12 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 MATRIX="${ROOT}/docs/reference/fallback-sunset-matrix.tsv"
 PILOT_INDEX="${ROOT}/docs/pilots/index.tsv"
 SCORE_TSV=""
+CANDIDATE_TSV=""
 SUMMARY_JSON=0
 
 usage() {
   cat <<USAGE
-usage: scripts/check-fallback-sunset.sh [--score-tsv <path>] [--summary-json]
+usage: scripts/check-fallback-sunset.sh [--score-tsv <path>] [--candidate-tsv <path>] [--summary-json]
 
 Checks fallback sunset readiness:
   - matrix schema and status transitions
@@ -17,10 +18,12 @@ Checks fallback sunset readiness:
   - candidate-sunset/sunset rows reference ready pilot evidence
   - active-fallback rows have owner, next_step and non-expired review_by
   - status-specific replacement score thresholds stay above the sunset gate
-  - pilot index and pilot files stay in sync
+  - pilot index, readiness dimensions and pilot files stay in sync
 
 Options:
   --score-tsv <path>  Write machine-readable replacement score rows.
+  --candidate-tsv <path>
+                      Write machine-readable sunset candidate queue rows.
   --summary-json     Print compact JSON summary instead of verbose rows.
 USAGE
 }
@@ -29,6 +32,10 @@ while [[ $# -gt 0 ]]; do
   case "$1" in
     --score-tsv)
       SCORE_TSV="$2"
+      shift 2
+      ;;
+    --candidate-tsv)
+      CANDIDATE_TSV="$2"
       shift 2
       ;;
     --summary-json)
@@ -64,13 +71,14 @@ expected_matrix_header=$'fallback_skill\tadk_equivalent\tstatus\towner\treview_b
 actual_matrix_header="$(head -n 1 "${MATRIX}")"
 [[ "${actual_matrix_header}" == "${expected_matrix_header}" ]] || fail "fallback matrix header mismatch"
 
-expected_pilot_header=$'pilot_id\tstatus\tcapability\tprimary_skill\tfallback_used\tevidence_file\tverification'
+expected_pilot_header=$'pilot_id\tstatus\tcapability\tprimary_skill\tfallback_used\tevidence_file\tverification\tworkflow_readiness\tartifact_readiness\tdevice_readiness\treadiness_note'
 actual_pilot_header="$(head -n 1 "${PILOT_INDEX}")"
 [[ "${actual_pilot_header}" == "${expected_pilot_header}" ]] || fail "pilot index header mismatch"
 
 valid_statuses=" active-fallback explicit-fallback candidate-sunset sunset "
 valid_live_requirements=" core-live-required optional-live-allowed handoff-ready-only "
 valid_pilot_statuses=" planned evidence-ready regression-ready rejected "
+valid_readiness_values=" pass partial pending needs-fix not-applicable "
 rows=0
 score_rows=0
 score_total=0
@@ -154,6 +162,11 @@ require_pilot_heading() {
 if [[ -n "${SCORE_TSV}" ]]; then
   mkdir -p "$(dirname "${SCORE_TSV}")"
   printf "fallback_skill\tstatus\tmatched_skill\trouting\tprofile\tpilot\thandoff\tlive\tscore\tmax_score\n" > "${SCORE_TSV}"
+fi
+
+if [[ -n "${CANDIDATE_TSV}" ]]; then
+  mkdir -p "$(dirname "${CANDIDATE_TSV}")"
+  printf "fallback_skill\tcurrent_status\tmatched_skill\tscore\tlive\tcandidate_state\tnext_step\tpilot_refs\n" > "${CANDIDATE_TSV}"
 fi
 
 while IFS=$'\t' read -r fallback_skill adk_equivalent status owner review_by live_requirement next_step match_text pilot_refs; do
@@ -250,16 +263,41 @@ while IFS=$'\t' read -r fallback_skill adk_equivalent status owner review_by liv
       "${live_label}" \
       "${row_score}" >> "${SCORE_TSV}"
   fi
+  if [[ -n "${CANDIDATE_TSV}" ]]; then
+    candidate_state="not-ready"
+    if [[ "${status}" == "sunset" ]]; then
+      candidate_state="already-sunset"
+    elif [[ "${status}" == "candidate-sunset" ]]; then
+      candidate_state="candidate"
+    elif [[ "${row_score}" -eq 5 ]]; then
+      candidate_state="review-second-pilot-before-candidate"
+    elif [[ "${row_score}" -eq 4 && "${live_score}" -eq 0 ]]; then
+      candidate_state="live-gap"
+    fi
+    printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" \
+      "${fallback_skill}" \
+      "${status}" \
+      "${matched_skill}" \
+      "${row_score}/5" \
+      "${live_label}" \
+      "${candidate_state}" \
+      "${next_step}" \
+      "${pilot_refs:-}" >> "${CANDIDATE_TSV}"
+  fi
   log "[SCORE] ${fallback_skill}=${row_score}/5 threshold=${required_score} routing=$(score_field "${routing_score}") profile=$(score_field "${profile_score}") pilot=$(score_field "${pilot_score}") handoff=$(score_field "${handoff_score}") live=${live_label} live_requirement=${live_requirement} matched=${matched_skill} status=${status}"
 done < <(tail -n +2 "${MATRIX}")
 
 [[ "${rows}" -gt 0 ]] || fail "fallback matrix has no rows"
 
-while IFS=$'\t' read -r pilot_id status capability primary_skill fallback_used evidence_file verification; do
+while IFS=$'\t' read -r pilot_id status capability primary_skill fallback_used evidence_file verification workflow_readiness artifact_readiness device_readiness readiness_note; do
   [[ -n "${pilot_id}" ]] || continue
   [[ "${valid_pilot_statuses}" == *" ${status} "* ]] || fail "invalid pilot status for ${pilot_id}: ${status}"
   [[ -n "${status}" && -n "${capability}" && -n "${primary_skill}" ]] || fail "pilot row incomplete: ${pilot_id}"
   [[ "${fallback_used}" == "yes" || "${fallback_used}" == "no" ]] || fail "invalid fallback_used for ${pilot_id}: ${fallback_used}"
+  [[ "${valid_readiness_values}" == *" ${workflow_readiness} "* ]] || fail "invalid workflow_readiness for ${pilot_id}: ${workflow_readiness}"
+  [[ "${valid_readiness_values}" == *" ${artifact_readiness} "* ]] || fail "invalid artifact_readiness for ${pilot_id}: ${artifact_readiness}"
+  [[ "${valid_readiness_values}" == *" ${device_readiness} "* ]] || fail "invalid device_readiness for ${pilot_id}: ${device_readiness}"
+  [[ -n "${readiness_note}" && "${readiness_note}" != "-" ]] || fail "missing readiness_note for ${pilot_id}"
   [[ -f "${ROOT}/${evidence_file}" ]] || fail "pilot evidence file missing: ${evidence_file}"
   rg -q "^status: ${status}$" "${ROOT}/${evidence_file}" || fail "pilot file status mismatch for ${pilot_id}: ${evidence_file}"
   require_pilot_heading "${ROOT}/${evidence_file}" "## 目标场景"
@@ -279,6 +317,9 @@ else
   echo "[INFO] replacement_score=${score_total}/${max_score}"
   if [[ -n "${SCORE_TSV}" ]]; then
     echo "[INFO] score_tsv=${SCORE_TSV}"
+  fi
+  if [[ -n "${CANDIDATE_TSV}" ]]; then
+    echo "[INFO] candidate_tsv=${CANDIDATE_TSV}"
   fi
   echo "[PASS] fallback sunset matrix checks passed (${rows} rows)"
 fi
