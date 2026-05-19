@@ -41,6 +41,12 @@ rtk ../scripts/check-global-codex-health.sh ~/.codex minimal
 
 - `personal-core`：个人生产默认研发能力。
 - `release-hardening`：发布、可靠性、安全强化。
+- `adk-runtime-router`：adk-first 运行时技能路由裁决。
+- `adk-test-strategy`：通用测试策略与 TDD 分级。
+- `adk-code-review-loop`：独立代码审查与反馈修复闭环。
+- `adk-parallel-agent-governance`：并行子代理任务包、冲突矩阵和整合验证。
+- `adk-worktree-governance`：git worktree 隔离开发治理。
+- `adk-branch-closeout`：开发分支收尾、PR、保留和清理决策。
 - `adk-planning-execution-loop`：长任务计划与恢复。
 - `adk-skill-composition-governance`：多技能组合治理。
 - `adk-security-supply-chain`：第三方资产引入审查。
@@ -56,17 +62,25 @@ rtk ../scripts/check-global-codex-health.sh ~/.codex minimal
 ```md
 ## agent-dev-kit 配合规则
 
-- `agent-dev-kit` 是嵌入式系统开发 Agent/Skill/Profile 的生产资产来源。
+- `agent-dev-kit` 是嵌入式全栈开发 Agent/Skill/Profile 的生产资产来源，覆盖芯片/板级约束、启动链、BSP、OS/runtime、驱动、组件、设备应用、上位机/产测/诊断工具、构建调试、验证、发布、量产和现场维护。
 - adk 只负责提供经过验证且符合 `~/codex` 规范的 vendor 源资产与 manifest fragments，不覆盖本文件。
 - 不手工把参考仓资产或 adk 导出物直接复制进 `~/.codex/agents` 或 `~/.codex/skills`。
 - adk 资产更新必须先在 `llm_agent/agent-dev-kit` 通过 `tests/run_all.sh`，再交给 `~/codex` 注册、build、doctor 和 apply。
 - 生产可用结论必须附 `llm_agent/scripts/check-adk-harden-readiness.sh . --require-pilot` 证据。
+- fallback 下线或替代结论必须附 `agent-dev-kit/scripts/check-fallback-sunset.sh` 与 `agent-dev-kit/scripts/pilot-readiness.sh --summary-json` 证据；需要归档时附 `--score-tsv` 输出。`planned` pilot 不能作为下线依据。
 - 涉及 `~/.codex` 运行目录时，必须附 `~/codex` build/apply 证据与 `llm_agent/scripts/check-global-codex-health.sh ~/.codex minimal` 证据。
 
 ### adk Skill 路由
 
+- 任务开始前需要选择技能、判定 fallback：优先 `adk-runtime-router`。
+- 通用测试策略、TDD、回归测试：优先 `adk-test-strategy`。
+- 独立代码审查、review 反馈修复、复审：优先 `adk-code-review-loop`。
+- 并行子代理调度：优先 `adk-parallel-agent-governance`。
+- worktree 隔离开发：优先 `adk-worktree-governance`。
+- 开发完成后的合并、PR、保留或丢弃：优先 `adk-branch-closeout`。
 - 长任务、跨会话恢复、复杂计划执行：优先 `adk-planning-execution-loop`。
 - 多技能触发冲突、profile 组合、fallback 判定：优先 `adk-skill-composition-governance`。
+- 量产、产测、烧录、诊断、OTA、回滚和现场维护：优先 `adk-production-field-readiness`。
 - 第三方 skill、agent、脚本、参考资产引入前：必须使用 `adk-security-supply-chain`。
 - 跨团队交接、Owner 变更、签收复验：使用 `adk-cross-team-handoff`。
 - 高风险变更、共享契约、发布链路：使用核心 `adk-artifact-gating`。
@@ -121,7 +135,7 @@ rtk ../scripts/check-adk-harden-readiness.sh . --require-pilot
 | 冲突 | 处理方式 |
 |---|---|
 | `~/.codex/AGENTS.md` 规则与 adk skill 触发冲突 | 以 `~/.codex/AGENTS.md` 为运行时优先级，并回灌 `~/codex` 与 adk routing 文档 |
-| 多个 skill 同时像主技能 | 使用 `adk-skill-composition-governance` 判定 primary/supporting/fallback |
+| 多个 skill 同时像主技能 | 先用 `adk-runtime-router` 裁决 primary/supporting/fallback；复杂组合再叠加 `adk-skill-composition-governance` |
 | optional skill 越来越多导致触发噪音 | 调整 profile 或减少默认安装 optional skill |
 | 参考仓资产想直接进入生产 | 先走 `adk-security-supply-chain` + adoption matrix + adk 门禁，再进入 `~/codex` |
 | apply 后行为异常 | 使用 `~/codex` apply plan 或 backup 回滚，并记录报告 |

@@ -6,7 +6,7 @@
 |------|-------------|------|
 | 通用开发 | core | 最小核心配置 |
 | 个人 `~/codex -> ~/.codex` | personal-core | 精简核心 + 发布 |
-| 嵌入式全栈 | embedded-fullstack | 驱动/组件/应用全覆盖 |
+| 嵌入式全栈 | embedded-fullstack | 芯片/板级、启动链、BSP、驱动、组件、应用、工具、验证、量产和现场维护 |
 | 准备发布 | release-hardening + embedded-fullstack | 叠加发布强化 |
 | 大型重构 | large-refactor + embedded-fullstack | 叠加 API 稳定性 |
 | 线上事故 | incident-response | 根因/复盘/恢复 |

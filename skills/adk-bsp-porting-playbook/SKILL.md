@@ -6,6 +6,11 @@ last_updated: 2026-05-06
 triggers:
   - "BSP移植"
   - "板级移植"
+  - "BSP适配"
+  - "启动链"
+  - "Bootloader"
+  - "rootfs"
+  - "secure boot"
 non_triggers:
   - 仅业务代码改动
 inputs:

@@ -210,6 +210,12 @@ test_routing_12_bsp_porting() {
     [[ "$output" == *"match=true"* && "$output" == *"skill=adk-bsp-porting-playbook"* ]]
 }
 
+test_routing_12b_boot_chain() {
+    local output
+    output=$("$MATCH_SCRIPT" --text "启动链 Bootloader rootfs 最小启动" 2>&1) || true
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-bsp-porting-playbook"* ]]
+}
+
 # 13. adk-rtos-task-design
 test_routing_13_rtos_task() {
     local output
@@ -280,6 +286,13 @@ test_routing_22_release() {
     [[ "$output" == *"match=true"* && "$output" == *"skill=adk-release-versioning"* ]]
 }
 
+# 23. adk-production-field-readiness
+test_routing_23_production_field() {
+    local output
+    output=$("$MATCH_SCRIPT" --text "量产产测烧录诊断 OTA升级 回滚 现场维护" 2>&1) || true
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-production-field-readiness"* ]]
+}
+
 # ============================================================
 # 边界条件: intent_zh 中多 '/' 分隔符
 # ============================================================
@@ -328,7 +341,7 @@ run_test "Unicode Chinese" test_unicode_chinese
 run_test "Emoji input" test_emoji_input
 run_test "Unicode mixed (EN+CN)" test_unicode_mixed
 
-# 22 routing keyword tests
+# routing keyword tests
 run_test "Routing 01: adk-requirements-triage" test_routing_01_needs_triage
 run_test "Routing 02: adk-task-breakdown" test_routing_02_task_breakdown
 run_test "Routing 03: adk-interface-contract-design" test_routing_03_interface_design
@@ -341,6 +354,7 @@ run_test "Routing 09: adk-adr-writer" test_routing_09_adr
 run_test "Routing 10: adk-register-map-design" test_routing_10_register_map
 run_test "Routing 11: adk-driver-bringup-checklist" test_routing_11_driver_bringup
 run_test "Routing 12: adk-bsp-porting-playbook" test_routing_12_bsp_porting
+run_test "Routing 12b: boot chain -> adk-bsp-porting-playbook" test_routing_12b_boot_chain
 run_test "Routing 13: adk-rtos-task-design" test_routing_13_rtos_task
 run_test "Routing 14: adk-interrupt-dma-patterns" test_routing_14_interrupt_dma
 run_test "Routing 15: adk-protocol-stack-integration" test_routing_15_protocol_stack
@@ -351,6 +365,7 @@ run_test "Routing 19: adk-integration-hil-sil" test_routing_19_hil_sil
 run_test "Routing 20: adk-fault-injection-recovery" test_routing_20_fault_injection
 run_test "Routing 21: adk-performance-profiling-embedded" test_routing_21_performance
 run_test "Routing 22: adk-release-versioning" test_routing_22_release
+run_test "Routing 23: adk-production-field-readiness" test_routing_23_production_field
 
 # Multi-slash intent_zh tests
 run_test "Multi-slash: first segment" test_multi_slash_intent_zh_first

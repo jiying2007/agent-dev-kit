@@ -1,5 +1,25 @@
 # Changelog
 
+## Unreleased
+
+### 增强
+- 新增 `adk-runtime-router` 核心技能，作为 adk-first 运行时路由入口，统一 primary/supporting/fallback 裁决。
+- 新增 `adk-test-strategy`、`adk-code-review-loop`、`adk-parallel-agent-governance`、`adk-worktree-governance`、`adk-branch-closeout` 五个核心技能，减少对 Superpowers TDD/review/parallel/worktree/branch closeout fallback 的默认依赖。
+- 扩充 `adk-requirements-triage` 与 `adk-systematic-debugging` 自然语言触发覆盖，降低真实任务漏匹配概率。
+- 新增 `docs/reference/fallback-sunset-matrix.md` 与 `fallback-sunset-matrix.tsv`，跟踪 fallback 到 adk 原生能力的下线状态。
+- 新增 `scripts/check-fallback-sunset.sh`、pilot 证据库和嵌入式优先模板，防止在缺少真实能力面证据时提前宣布 sunset。
+- 调整 `adk-test-strategy` 为嵌入式优先、兼容通用工具链脚本的测试策略定位。
+- 强化 fallback 下线门禁：逐行执行 `devkit.sh match --text`、校验命中 skill 属于等价能力、检查 active-fallback 复核日期，并输出 routing/profile/pilot/handoff/live replacement score。
+- fallback 下线门禁新增 `--score-tsv` 与 `--summary-json`，并检查 pilot index 与 evidence 文件状态、章节是否一致。
+- fallback 下线门禁新增 `live_requirement`、按状态评分阈值和 `scripts/pilot-readiness.sh` 独立 pilot 成熟度检查。
+- 将 adk 定位修正为嵌入式全栈，覆盖 SoC、MCU、Linux、RTOS、驱动、组件、设备应用、上位机、产测诊断工具和交付验证，不扩展到通用 Web/互联网后端/云原生。
+- 扩展嵌入式全栈范围为完整工程闭环：芯片/板级约束、启动链、BSP/rootfs、OS/runtime、验证、发布、量产和现场维护；新增 `adk-production-field-readiness` 承接量产/现场 readiness。
+- 为 active-fallback 能力补充 discovery、子代理审查、skill 生命周期、长任务恢复和嵌入式全栈测试矩阵模板。
+
+### 修复
+- 生命周期文档移除未落地的 `adk-*workflow` 与 `adk lifecycle` 占位入口，改为当前 `scripts/devkit.sh` 真实命令。
+- 维护文档统一使用 `adk-*` 技能名称，减少 Superpowers 迁移期命名漂移。
+
 ## v2.9.0 (2026-05-17)
 
 ### 破坏性变更

@@ -20,6 +20,8 @@
 - `lead-agent-convergence-delivery.md`：多轮协作收敛与轻量工件闭环
 - `driver-bringup.md`：新外设驱动上板联调
 - `release-hardening.md`：发布前收口与风险压实
+- `embedded-production-field-readiness.md`：嵌入式量产、烧录、OTA、回滚与现场维护证据试跑
+- `run-embedded-workflow-pilots.sh`：长任务恢复、测试策略、review 闭环和并行治理的可复跑 pilot runner
 - `artifact-gated-delivery.md`：高风险变更的产物门禁
 - `mcp-governance.md`：MCP 声明、审计与 `~/codex` 交接边界
 - `openspec-bridge.md`：openspec 与 adk 变更工件桥接

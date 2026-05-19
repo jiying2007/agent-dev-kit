@@ -43,6 +43,48 @@ test_routing_needs_triage() {
     [[ "$output" == *"match=true"* && "$output" == *"source=routing"* && "$output" == *"skill=adk-requirements-triage"* ]]
 }
 
+test_routing_runtime_router() {
+    local output
+    output=$("$MATCH_SCRIPT" --text "开始任务前判断使用哪个技能" 2>&1) || true
+    [[ "$output" == *"match=true"* && "$output" == *"source=routing"* && "$output" == *"skill=adk-runtime-router"* ]]
+}
+
+test_routing_feature_triage_natural_language() {
+    local output
+    output=$("$MATCH_SCRIPT" --text "帮我实现一个新功能，需要先明确目标、边界和验收标准" 2>&1) || true
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-requirements-triage"* ]]
+}
+
+test_routing_test_strategy() {
+    local output
+    output=$("$MATCH_SCRIPT" --text "这个功能需要先写测试并设计测试矩阵" 2>&1) || true
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-test-strategy"* ]]
+}
+
+test_routing_code_review_loop() {
+    local output
+    output=$("$MATCH_SCRIPT" --text "收到 review 反馈后需要做审查反馈闭环" 2>&1) || true
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-code-review-loop"* ]]
+}
+
+test_routing_parallel_agent_governance() {
+    local output
+    output=$("$MATCH_SCRIPT" --text "多 agent 并行施工需要明确 scope_write" 2>&1) || true
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-parallel-agent-governance"* ]]
+}
+
+test_routing_worktree_governance() {
+    local output
+    output=$("$MATCH_SCRIPT" --text "需要创建 worktree 做隔离分支开发" 2>&1) || true
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-worktree-governance"* ]]
+}
+
+test_routing_branch_closeout() {
+    local output
+    output=$("$MATCH_SCRIPT" --text "开发完成后准备创建 PR 并做分支收尾" 2>&1) || true
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-branch-closeout"* ]]
+}
+
 test_routing_task_breakdown() {
     local output
     output=$("$MATCH_SCRIPT" --text "任务太大" 2>&1) || true
@@ -59,6 +101,12 @@ test_routing_debugging() {
     local output
     output=$("$MATCH_SCRIPT" --text "调试问题" 2>&1) || true
     [[ "$output" == *"match=true"* && "$output" == *"source=routing"* && "$output" == *"skill=adk-systematic-debugging"* ]]
+}
+
+test_routing_debugging_natural_language() {
+    local output
+    output=$("$MATCH_SCRIPT" --text "真实问题排查需要定位根因再修复" 2>&1) || true
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-systematic-debugging"* ]]
 }
 
 test_routing_commit_pr() {
@@ -90,6 +138,18 @@ test_routing_bsp() {
     local output
     output=$("$MATCH_SCRIPT" --text "BSP移植" 2>&1) || true
     [[ "$output" == *"match=true"* && "$output" == *"source=routing"* && "$output" == *"skill=adk-bsp-porting-playbook"* ]]
+}
+
+test_routing_boot_chain() {
+    local output
+    output=$("$MATCH_SCRIPT" --text "启动链 bring-up BootROM SPL U-Boot kernel rootfs" 2>&1) || true
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-bsp-porting-playbook"* ]]
+}
+
+test_routing_production_field() {
+    local output
+    output=$("$MATCH_SCRIPT" --text "量产产测诊断烧录 OTA升级 回滚 现场维护" 2>&1) || true
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-production-field-readiness"* ]]
 }
 
 test_routing_performance() {
@@ -124,15 +184,25 @@ echo "================================="
 
 echo ""
 echo "--- Positive cases (should match routing) ---"
+run_test "开始任务前判断技能 -> adk-runtime-router" test_routing_runtime_router
 run_test "需求不清楚 -> adk-requirements-triage" test_routing_needs_triage
+run_test "新功能自然语言 -> adk-requirements-triage" test_routing_feature_triage_natural_language
+run_test "测试矩阵 -> adk-test-strategy" test_routing_test_strategy
+run_test "review 反馈闭环 -> adk-code-review-loop" test_routing_code_review_loop
+run_test "多 agent 并行 -> adk-parallel-agent-governance" test_routing_parallel_agent_governance
+run_test "worktree 隔离 -> adk-worktree-governance" test_routing_worktree_governance
+run_test "分支收尾 -> adk-branch-closeout" test_routing_branch_closeout
 run_test "任务太大 -> adk-task-breakdown" test_routing_task_breakdown
 run_test "写单元测试 -> adk-unit-test-embedded" test_routing_unit_test
 run_test "调试问题 -> adk-systematic-debugging" test_routing_debugging
+run_test "真实问题排查 -> adk-systematic-debugging" test_routing_debugging_natural_language
 run_test "提交代码 -> adk-commit-pr-quality-gate" test_routing_commit_pr
 run_test "设计寄存器 -> adk-register-map-design" test_routing_register_map
 run_test "写驱动 -> adk-driver-bringup-checklist" test_routing_driver
 run_test "准备发布 -> adk-release-versioning" test_routing_release
 run_test "BSP移植 -> adk-bsp-porting-playbook" test_routing_bsp
+run_test "启动链 -> adk-bsp-porting-playbook" test_routing_boot_chain
+run_test "量产现场 -> adk-production-field-readiness" test_routing_production_field
 run_test "性能分析 -> adk-performance-profiling-embedded" test_routing_performance
 
 echo ""

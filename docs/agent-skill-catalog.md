@@ -1,6 +1,6 @@
 # Agent and Skill Catalog
 
-- generated_at: 2026-05-17T02:14:21Z
+- generated_at: 2026-05-19T01:41:26Z
 - source: manifest.yaml
 
 ## Agents
@@ -29,6 +29,12 @@
 | Name | Description | First Trigger | Path |
 |---|---|---|---|
 | `adk-requirements-triage` | 将需求转为可实现、可验证的工程条目 | "需求不清楚" | `skills/adk-requirements-triage/SKILL.md` |
+| `adk-runtime-router` | adk-first 运行时技能路由入口，统一判定 primary/supporting/fallback 与跳过条件 | "技能路由" | `skills/adk-runtime-router/SKILL.md` |
+| `adk-test-strategy` | 嵌入式全栈测试策略与 TDD 分级，覆盖板级、启动链、BSP、OS/runtime、驱动、组件、设备应用、上位机工具、量产和现场维护的验证证据 | "测试策略" | `skills/adk-test-strategy/SKILL.md` |
+| `adk-code-review-loop` | 独立代码审查与反馈修复闭环，覆盖发现分级、真实性核验、修复验证和复审 | "独立代码审查" | `skills/adk-code-review-loop/SKILL.md` |
+| `adk-parallel-agent-governance` | 并行子代理治理，定义任务分片、scope_write、冲突矩阵、等待和整合验证 | "并行 agent" | `skills/adk-parallel-agent-governance/SKILL.md` |
+| `adk-worktree-governance` | git worktree 隔离开发治理，规范创建准入、目录、基线验证、同步、清理和禁止操作 | "worktree" | `skills/adk-worktree-governance/SKILL.md` |
+| `adk-branch-closeout` | 开发分支收尾治理，验证完成后选择本地合并、创建 PR、保留或丢弃并执行清理 | "分支收尾" | `skills/adk-branch-closeout/SKILL.md` |
 | `adk-adr-writer` | 产出 Architecture Decision Record 并固化技术决策 | "写ADR" | `skills/adk-adr-writer/SKILL.md` |
 | `adk-task-breakdown` | 将需求拆解为可并行执行的任务包 | "拆解任务" | `skills/adk-task-breakdown/SKILL.md` |
 | `adk-interface-contract-design` | 定义模块/API/消息接口契约 | "设计接口" | `skills/adk-interface-contract-design/SKILL.md` |
@@ -49,6 +55,7 @@
 | `adk-fault-injection-recovery` | 故障注入与恢复策略验证 | "故障注入" | `skills/adk-fault-injection-recovery/SKILL.md` |
 | `adk-performance-profiling-embedded` | 嵌入式性能剖析与优化路径 | "性能分析" | `skills/adk-performance-profiling-embedded/SKILL.md` |
 | `adk-release-versioning` | 版本策略、变更说明与发布基线 | "版本发布" | `skills/adk-release-versioning/SKILL.md` |
+| `adk-production-field-readiness` | 嵌入式量产、产测、烧录、诊断、OTA、回滚与现场维护 readiness | "量产" | `skills/adk-production-field-readiness/SKILL.md` |
 | `adk-commit-pr-quality-gate` | 提交与 PR 质量门禁检查 | "提交代码" | `skills/adk-commit-pr-quality-gate/SKILL.md` |
 | `adk-grill-with-docs` | 烤问式需求对齐——通过结构化提问消除模糊需求 | "文档审查" | `skills/adk-grill-with-docs/SKILL.md` |
 | `adk-code-simplification` | 代码简化——在不改变行为的前提下提高清晰度 | "代码太复杂" | `skills/adk-code-simplification/SKILL.md` |
@@ -85,10 +92,10 @@
 
 | Name | Description | Optional | Extends |
 |---|---|---|---|
-| `core` | 嵌入式系统开发核心配置（需求、架构、实现、验证与评审） | false | - |
+| `core` | 嵌入式全栈开发核心配置（需求、架构、实现、验证与评审） | false | - |
 | `release-hardening` | 发布加固配置（安全审查、性能优化、合规检查） | false | - |
 | `personal-core` | 个人 ~/codex 声明式交付配置（核心功能 + 发布检查） | false | core |
-| `embedded-fullstack` | 嵌入式全栈开发配置（驱动/组件/应用全覆盖） | false | core |
+| `embedded-fullstack` | 嵌入式全栈开发配置（芯片/板级、启动链、BSP、驱动、组件、应用、工具、验证、量产和现场维护） | false | core |
 | `team-core` | 团队协作配置（交接/验证/评审） | false | core |
 | `openspec-driven` | Spec 驱动开发配置（需求/设计/任务链路） | false | core |
 | `large-refactor` | 大型重构配置（API 稳定性 + 代码简化） | false | embedded-fullstack |

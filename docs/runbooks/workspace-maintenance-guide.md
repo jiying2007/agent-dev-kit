@@ -91,7 +91,7 @@ rtk scripts/diff-scan.sh . 7 reports/weekly-change-report.md
 2. 给出 `adopt/observe/reject`。
 3. 对 `adopt + done`，必须有本地证据路径。
 4. 对 delivery 类 adopt，必须覆盖 Agent/Skill/Workflow 至少一层。
-5. 对安全、脚本、第三方资产，先走 `security-supply-chain`。
+5. 对安全、脚本、第三方资产，先走 `adk-security-supply-chain`。
 6. 最终执行：
 
 ```bash
@@ -172,13 +172,16 @@ $HOME/.codex/.adk-backups/YYYYMMDDTHHMMSSZ
 ```md
 ## agent-dev-kit 配合规则
 
-- `agent-dev-kit` 是嵌入式系统开发 Agent/Skill/Profile 的生产资产来源。
+- `agent-dev-kit` 是嵌入式全栈开发 Agent/Skill/Profile 的生产资产来源，覆盖芯片/板级约束、启动链、BSP、OS/runtime、驱动、组件、设备应用、上位机/产测/诊断工具、构建调试、验证、发布、量产和现场维护。
 - 不手工把参考仓资产或 adk 导出物直接复制进 `~/.codex/agents` 或 `~/.codex/skills`。
 - adk 资产更新必须先在 `llm_agent/agent-dev-kit` 通过回归，再交给 `~/codex` 注册、build、doctor 和 apply。
-- 长任务优先使用 `planning-execution-loop`。
-- 多技能冲突时以 `skill-composition-governance` 判定 primary/supporting/fallback。
-- 第三方技能、脚本或参考资产进入全局环境前必须使用 `security-supply-chain`。
-- 完成前必须使用 `verification-before-completion` 核对证据。
+- 任务开始前如需判定技能、fallback 或跳过条件，优先使用 `adk-runtime-router`。
+- 测试策略、代码审查、并行 agent、worktree 和分支收尾分别优先使用 `adk-test-strategy`、`adk-code-review-loop`、`adk-parallel-agent-governance`、`adk-worktree-governance`、`adk-branch-closeout`。
+- 兼容 fallback 状态以 `docs/reference/fallback-sunset-matrix.md` 为准，不做无证据下线。
+- 长任务优先使用 `adk-planning-execution-loop`。
+- 多技能冲突时以 `adk-runtime-router` 先做 primary/supporting/fallback 裁决；需要组合治理时再叠加 `adk-skill-composition-governance`。
+- 第三方技能、脚本或参考资产进入全局环境前必须使用 `adk-security-supply-chain`。
+- 完成前必须使用 `adk-verification-before-completion` 核对证据。
 - 涉及 `~/.codex` 生产可用性结论时，必须同时附 `~/codex` build/apply 证据和 `check-global-codex-health.sh ~/.codex minimal` 证据。
 ```
 

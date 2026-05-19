@@ -88,7 +88,7 @@ Spark → Design → Tasks → Build → Review → Test → Ship → Reflect
 - 测试覆盖率 >= 80%
 - 无阻塞性问题
 
-**相关 Skill**: `adk-tdd-workflow`
+**相关 Skill**: `adk-test-strategy`、`adk-unit-test-embedded`
 
 ### 5. Review（代码审查）
 
@@ -106,7 +106,7 @@ Spark → Design → Tasks → Build → Review → Test → Ship → Reflect
 - 代码质量达标
 - 安全性检查通过
 
-**相关 Skill**: `adk-review-workflow`
+**相关 Skill**: `adk-code-review-loop`、`adk-commit-pr-quality-gate`
 
 ### 6. Test（系统测试）
 
@@ -124,7 +124,7 @@ Spark → Design → Tasks → Build → Review → Test → Ship → Reflect
 - 性能测试达标
 - 兼容性测试通过
 
-**相关 Skill**: `adk-test-workflow`
+**相关 Skill**: `adk-test-strategy`、`adk-verification-before-completion`、`adk-integration-hil-sil`
 
 ### 7. Ship（发布部署）
 
@@ -142,7 +142,7 @@ Spark → Design → Tasks → Build → Review → Test → Ship → Reflect
 - 部署验证通过
 - 回滚计划就绪
 
-**相关 Skill**: `adk-release-workflow`
+**相关 Skill**: `adk-release-versioning`、`adk-branch-closeout`
 
 ### 8. Reflect（复盘沉淀）
 
@@ -223,20 +223,21 @@ Spark → Design → Tasks → Build → Review → Test → Ship → Reflect
 ### 状态管理命令
 
 ```bash
-# 初始化状态
-adk lifecycle init --feature login-module
+# 初始化变更状态
+bash scripts/devkit.sh propose --change login-module --title "登录模块"
 
 # 查询状态
-adk lifecycle status --feature login-module
+cat docs/changes/login-module/state.yaml
 
 # 转换阶段
-adk lifecycle transition --feature login-module --to design
+bash scripts/devkit.sh apply --change login-module
+bash scripts/devkit.sh verify --change login-module
 
-# 绕过门禁（紧急情况）
-adk lifecycle bypass --feature login-module --gate design --reason "紧急修复"
+# 紧急情况
+# 使用 templates/workflows/emergency-workflow-template.md 记录原因、验证和补审计划。
 
 # 重置状态
-adk lifecycle reset --feature login-module
+# 不提供自动重置命令；需要人工确认后归档或新建 change-id。
 ```
 
 ## 快速模式
@@ -284,10 +285,11 @@ Spark → Tasks → Build → Ship
 
 ```bash
 # 恢复工作流
-adk lifecycle resume --feature login-module
+cat docs/changes/login-module/state.yaml
+tail -n 20 docs/changes/login-module/history.log
 
 # 查看恢复点
-adk lifecycle checkpoint --feature login-module
+rg -n "checkpoint|阶段|验证|阻塞" docs/changes/login-module
 ```
 
 ## 跨会话交接
@@ -309,10 +311,10 @@ adk lifecycle checkpoint --feature login-module
 
 ```bash
 # 交接工作流
-adk lifecycle handoff --feature login-module --to <next-executor>
+cp templates/agent-handoff.md docs/changes/login-module/handoff.md
 
 # 查看交接历史
-adk lifecycle history --feature login-module
+cat docs/changes/login-module/history.log
 ```
 
 ## 与现有工作流的集成

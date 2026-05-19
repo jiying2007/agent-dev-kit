@@ -2,7 +2,7 @@
 name: adk-systematic-debugging
 description: 系统化调试流程，面向根因未明的问题定位与修复验证
 version: 1.1.0
-last_updated: 2026-05-06
+last_updated: 2026-05-18
 triggers:
   - "调试"
   - "排查问题"
@@ -10,6 +10,11 @@ triggers:
   - "代码有问题"
   - "诊断循环"
   - "根因排查"
+  - "问题排查"
+  - "定位根因"
+  - "真实问题排查"
+  - "根因未明"
+  - "失败定位"
 non_triggers:
   - 已有明确根因且只需执行已确认修复
   - 纯文档或命名修改

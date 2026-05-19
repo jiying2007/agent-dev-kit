@@ -175,10 +175,38 @@
 ### 场景 S：生产运行路由（Runtime Routing）
 
 - Agent：`requirements-analyst -> architecture-planner -> code-review-governor`
-- Skill：`adk-skill-composition-governance + adk-verification-before-completion`
-- 命令：`catalog -> match -> check-runtime-routing`
-- 关键纪律：一个场景只能有一个主 skill，辅助 skill 不抢占入口
+- Skill：`adk-runtime-router + adk-skill-composition-governance + adk-verification-before-completion`
+- 命令：`catalog -> match -> check-runtime-routing -> check-fallback-sunset`
+- 关键纪律：一个场景只能有一个主 skill，辅助 skill 不抢占入口；fallback 下线必须有结构化矩阵和 pilot 证据
 - Runbook：`docs/runbooks/runtime-routing.md`
+
+### 场景 S1：通用测试策略（Test Strategy）
+
+- Agent：`test-validation-engineer -> code-review-governor`
+- Skill：`adk-test-strategy + adk-verification-before-completion`
+- 命令：`match -> project-test-command -> verify`
+- 关键纪律：嵌入式全栈优先，按芯片/板级、启动链、BSP、OS/runtime、驱动、组件、设备应用、上位机/产测工具、量产和现场维护影响面选择 Level 0/1/2，Level 2 必须有红灯和绿灯证据
+
+### 场景 S2：代码审查闭环（Code Review Loop）
+
+- Agent：`code-review-governor -> application-engineer -> test-validation-engineer`
+- Skill：`adk-code-review-loop + adk-commit-pr-quality-gate`
+- 命令：`diff -> review -> verify`
+- 关键纪律：blocker/major 必须闭环，误报和越界建议必须记录依据
+
+### 场景 S3：并行与 worktree 治理（Parallel / Worktree）
+
+- Agent：`requirements-analyst -> architecture-planner -> application-engineer -> test-validation-engineer`
+- Skill：`adk-parallel-agent-governance + adk-worktree-governance + adk-verification-before-completion`
+- 命令：`task-breakdown -> parallel-plan -> final-verification`
+- 关键纪律：并行写入必须有 scope_write、must_not_touch 和最终整合验证
+
+### 场景 S4：开发分支收尾（Branch Closeout）
+
+- Agent：`build-release-engineer -> test-validation-engineer -> code-review-governor`
+- Skill：`adk-branch-closeout + adk-verification-before-completion`
+- 命令：`status -> test -> merge/pr/keep/discard decision`
+- 关键纪律：先验证再选择收尾路径，丢弃或清理必须明确确认
 
 ### 场景 T：长任务计划执行（Planning Execution Loop）
 
@@ -186,7 +214,7 @@
 - Skill：`adk-planning-execution-loop + adk-task-breakdown + adk-verification-before-completion`
 - 命令：`propose -> apply -> verify -> review`
 - 关键纪律：每个阶段必须有检查点、恢复摘要和验证证据
-- Runbook：`docs/runbooks/adk-planning-execution-loop.md`
+- Runbook：`docs/runbooks/planning-execution-loop.md`
 
 ### 场景 U：生产部署（Production Deployment）
 

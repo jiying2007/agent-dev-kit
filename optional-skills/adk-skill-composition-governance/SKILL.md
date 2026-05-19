@@ -7,6 +7,10 @@ triggers:
   - "技能组合"
   - "触发冲突"
   - "技能治理"
+  - "创建 skill"
+  - "skill 生命周期"
+  - "fallback 下线"
+  - "弃用治理"
 non_triggers:
   - 单个 skill 文案微调且不影响触发规则
   - 仅安装已有 profile 且不改变组合关系
@@ -24,6 +28,7 @@ constraints:
 ## Goal
 - 用小技能组合提高覆盖面，同时避免 `~/.codex` 中触发噪音和职责重叠。
 - 建立技能组合规则、冲突检测机制和治理矩阵。
+- 建立 adk 原生 skill 创作、profile 归属、pilot 证据和弃用下线流程。
 
 ## Prerequisites
 - 已列出涉及的 skill、optional skill 和目标 profile。
@@ -88,6 +93,8 @@ deprecated:
 - <场景1>: <skill-a> 优先因为 <原因>
 - <场景2>: <skill-e> 优先因为 <原因>
 ```
+
+adk 原生 skill 创作和弃用生命周期模板：`references/adk-skill-lifecycle.md`。
 
 ## Commands
 ```bash

@@ -27,6 +27,10 @@
 | 场景工作流 | workflows.md | 7+ 场景详细建议 |
 | Agent/Skill 目录 | agent-skill-catalog.md | 全量资产索引 |
 | 技能依赖图 | skill-dependency-graph.md | Skill 间依赖关系 |
+| 嵌入式全栈范围 | reference/embedded-fullstack-scope.md | adk 领域边界与层级 |
+| Fallback 下线矩阵 | reference/fallback-sunset-matrix.md | fallback 状态与下线准入 |
+| Fallback 结构化矩阵 | reference/fallback-sunset-matrix.tsv | fallback 下线门禁源数据 |
+| Pilot 证据库 | pilots/README.md | 能力面真实验证证据入口 |
 | 最佳实践手册 | best-practices-cookbook.md | 实战模板与案例 |
 | Hook 降级模式 | hook-degradation-pattern.md | Hook 失败时的降级策略 |
 | 参考采纳矩阵 | reference-adoption-matrix.md | 全量评估矩阵 |
@@ -95,6 +99,12 @@
 ### 新增 Skill (v2.0.0)
 | Skill | 路径 | 来源 | 用途 |
 |-------|------|------|------|
+| adk-runtime-router | skills/adk-runtime-router/ | 方法论 | adk-first 运行时技能路由 |
+| adk-test-strategy | skills/adk-test-strategy/ | 方法论 | 通用测试策略与 TDD 分级 |
+| adk-code-review-loop | skills/adk-code-review-loop/ | 方法论 | 独立代码审查与反馈闭环 |
+| adk-parallel-agent-governance | skills/adk-parallel-agent-governance/ | 方法论 | 并行子代理治理 |
+| adk-worktree-governance | skills/adk-worktree-governance/ | 方法论 | git worktree 隔离治理 |
+| adk-branch-closeout | skills/adk-branch-closeout/ | 方法论 | 开发分支收尾 |
 | adk-grill-with-docs | skills/adk-grill-with-docs/ | mattpocock-skills | 烤问式需求对齐 |
 | adk-code-simplification | skills/adk-code-simplification/ | agent-skills | 代码简化 |
 | adk-context-engineering | skills/adk-context-engineering/ | agent-skills | 上下文工程 |
@@ -128,3 +138,4 @@
 | Skill 格式指南 | docs/skill-format-guide.md | 渐进式披露规范（含 XML 语义标签增强格式） |
 | Skill 依赖图 | docs/skill-dependency-graph.md | Skill 间依赖关系 |
 | 变更日志 | CHANGELOG.md | 版本变更记录 |
+| Pilot 证据索引 | docs/pilots/index.tsv | fallback 下线证据清单 |

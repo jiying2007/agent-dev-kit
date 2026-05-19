@@ -167,6 +167,26 @@ bash scripts/devkit.sh test
 bash scripts/check-profile-coherence.sh
 ```
 
+## fallback sunset
+
+检查 Superpowers fallback 到 adk 原生能力的替代门禁，包含 routing、profile、pilot、handoff、live health 和状态阈值。
+
+```bash
+bash scripts/check-fallback-sunset.sh
+bash scripts/check-fallback-sunset.sh --score-tsv /tmp/adk-replacement-score.tsv
+bash scripts/check-fallback-sunset.sh --summary-json
+```
+
+## pilot readiness
+
+检查 `docs/pilots/index.tsv` 与 evidence 文件状态、章节和验证字段是否一致。
+
+```bash
+bash scripts/pilot-readiness.sh
+bash scripts/pilot-readiness.sh --pilot embedded-tdd-test-strategy
+bash scripts/pilot-readiness.sh --summary-json
+```
+
 ## health
 
 健康检查：结构/依赖/配置/测试/质量全面扫描。

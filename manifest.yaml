@@ -54,7 +54,7 @@ knowledge_layers:
     location: knowledge/L1-general-tech/
   L2:
     name: domain
-    description: 业务领域知识（BSP/驱动/RTOS/协议栈）
+    description: 业务领域知识（芯片/板级、启动链、BSP、驱动、RTOS、协议栈、量产现场）
     location: knowledge/L2-domain/
   L3:
     name: project
@@ -70,13 +70,16 @@ context_layers:
     description: 会话常驻层（始终加载）
     max_tokens: 4000
     files:
-      - AGENTS.md
-      - docs/best-practices.md
-      - docs/workflows.md
+        - AGENTS.md
+        - docs/best-practices.md
+        - docs/workflows.md
   L2-phase-triggered:
     description: 阶段触发层（按阶段加载）
     triggers:
+      route:
+        - skills/adk-runtime-router/
       propose:
+        - skills/adk-runtime-router/
         - skills/adk-requirements-triage/
         - skills/adk-adr-writer/
       apply:
@@ -209,6 +212,35 @@ skills:
     path: skills/adk-requirements-triage/SKILL.md
     quality_tier: p0
     depends_on: []
+  - name: adk-runtime-router
+    path: skills/adk-runtime-router/SKILL.md
+    quality_tier: p0
+    depends_on: []
+  - name: adk-test-strategy
+    path: skills/adk-test-strategy/SKILL.md
+    quality_tier: p0
+    depends_on:
+      - adk-runtime-router
+  - name: adk-code-review-loop
+    path: skills/adk-code-review-loop/SKILL.md
+    quality_tier: p0
+    depends_on:
+      - adk-verification-before-completion
+  - name: adk-parallel-agent-governance
+    path: skills/adk-parallel-agent-governance/SKILL.md
+    quality_tier: p0
+    depends_on:
+      - adk-task-breakdown
+  - name: adk-worktree-governance
+    path: skills/adk-worktree-governance/SKILL.md
+    quality_tier: p0
+    depends_on:
+      - adk-task-breakdown
+  - name: adk-branch-closeout
+    path: skills/adk-branch-closeout/SKILL.md
+    quality_tier: p0
+    depends_on:
+      - adk-verification-before-completion
   - name: adk-adr-writer
     path: skills/adk-adr-writer/SKILL.md
     quality_tier: p1
@@ -301,6 +333,12 @@ skills:
     quality_tier: p0
     depends_on:
       - adk-commit-pr-quality-gate
+  - name: adk-production-field-readiness
+    path: skills/adk-production-field-readiness/SKILL.md
+    quality_tier: p0
+    depends_on:
+      - adk-release-versioning
+      - adk-integration-hil-sil
   - name: adk-commit-pr-quality-gate
     path: skills/adk-commit-pr-quality-gate/SKILL.md
     quality_tier: p0
@@ -376,7 +414,7 @@ skills:
 default_profile: core
 profiles:
   core:
-    description: 嵌入式系统开发核心配置（需求、架构、实现、验证与评审）
+    description: 嵌入式全栈开发核心配置（需求、架构、实现、验证与评审）
     trigger_examples:
       - "开始新功能开发"
       - "需要写代码"
@@ -389,8 +427,14 @@ profiles:
       - test-validation-engineer
       - code-review-governor
     include_skills:
+      - adk-runtime-router
       - adk-requirements-triage
       - adk-task-breakdown
+      - adk-test-strategy
+      - adk-code-review-loop
+      - adk-parallel-agent-governance
+      - adk-worktree-governance
+      - adk-branch-closeout
       - adk-interface-contract-design
       - adk-static-analysis-c-cpp
       - adk-systematic-debugging
@@ -410,6 +454,9 @@ profiles:
     include_skills:
       - adk-release-versioning
       - adk-grill-with-docs
+      - adk-test-strategy
+      - adk-code-review-loop
+      - adk-branch-closeout
       - adk-requirements-triage
       - adk-task-breakdown
       - adk-interface-contract-design
@@ -435,11 +482,12 @@ profiles:
       - adk-commit-pr-quality-gate
       - adk-release-versioning
   embedded-fullstack:
-    description: 嵌入式全栈开发配置（驱动/组件/应用全覆盖）
+    description: 嵌入式全栈开发配置（芯片/板级、启动链、BSP、驱动、组件、应用、工具、验证、量产和现场维护）
     trigger_examples:
       - "嵌入式全栈开发"
       - "BSP 驱动开发"
       - "RTOS 应用开发"
+      - "量产产测和现场维护"
     extends: core
     include_agents:
       - requirements-analyst
@@ -461,9 +509,15 @@ profiles:
       - adk-protocol-stack-integration
       - adk-component-api-stability
       - adk-cmake-cross-build
+      - adk-toolchain-debug-openocd-gdb
       - adk-static-analysis-c-cpp
       - adk-systematic-debugging
       - adk-unit-test-embedded
+      - adk-integration-hil-sil
+      - adk-fault-injection-recovery
+      - adk-performance-profiling-embedded
+      - adk-release-versioning
+      - adk-production-field-readiness
       - adk-verification-before-completion
       - adk-commit-pr-quality-gate
   team-core:
@@ -547,8 +601,11 @@ workflows:
       - "嵌入式资产发布"
       - "完成前验证"
     skills:
+      - adk-runtime-router
       - adk-requirements-triage
       - adk-task-breakdown
+      - adk-test-strategy
+      - adk-code-review-loop
       - adk-verification-before-completion
       - adk-commit-pr-quality-gate
     agents:
@@ -621,8 +678,12 @@ routing:
   enabled: true
   fallback_profile: core
   intents:
+    - intent: runtime_router
+      intent_zh: "技能路由/选择技能/任务分流/adk路由/adk-first/判断使用哪个技能/运行时路由/开始任务前"
+      primary_skill: adk-runtime-router
+      supporting_skills: []
     - intent: requirements_triage
-      intent_zh: "需求不清楚/需要澄清/需求模糊/需求不明确"
+      intent_zh: "需求不清楚/需要澄清/需求模糊/需求不明确/新功能/实现新功能/验收标准/目标边界"
       primary_skill: adk-requirements-triage
       supporting_skills: []
     - intent: task_breakdown
@@ -630,11 +691,26 @@ routing:
       primary_skill: adk-task-breakdown
       supporting_skills:
         - adk-requirements-triage
+    - intent: parallel_agent_governance
+      intent_zh: "并行agent/多agent/子代理/并行施工/并行调度/多任务并行"
+      primary_skill: adk-parallel-agent-governance
+      supporting_skills:
+        - adk-task-breakdown
+    - intent: worktree_governance
+      intent_zh: "worktree/工作树/隔离分支/多分支并行/外部并行规划/创建worktree"
+      primary_skill: adk-worktree-governance
+      supporting_skills:
+        - adk-task-breakdown
     - intent: interface_contract_design
       intent_zh: "设计接口/接口契约/API设计"
       primary_skill: adk-interface-contract-design
       supporting_skills:
         - adk-requirements-triage
+    - intent: test_strategy
+      intent_zh: "测试策略/TDD/先写测试/补测试/回归测试/测试矩阵/验证策略"
+      primary_skill: adk-test-strategy
+      supporting_skills:
+        - adk-unit-test-embedded
     - intent: unit_test_embedded
       intent_zh: "写单元测试/补单测/嵌入式单测"
       primary_skill: adk-unit-test-embedded
@@ -644,7 +720,7 @@ routing:
       primary_skill: adk-static-analysis-c-cpp
       supporting_skills: []
     - intent: systematic_debugging
-      intent_zh: "调试/调试问题/排查根因"
+      intent_zh: "调试/调试问题/排查根因/问题排查/定位根因/真实问题排查/根因未明"
       primary_skill: adk-systematic-debugging
       supporting_skills: []
     - intent: verification_before_completion
@@ -654,6 +730,16 @@ routing:
     - intent: commit_pr_quality_gate
       intent_zh: "提交代码/准备提交/提交前检查"
       primary_skill: adk-commit-pr-quality-gate
+      supporting_skills:
+        - adk-verification-before-completion
+    - intent: code_review_loop
+      intent_zh: "独立代码审查/code review loop/review闭环/审查反馈/收到review/修复review/复审"
+      primary_skill: adk-code-review-loop
+      supporting_skills:
+        - adk-commit-pr-quality-gate
+    - intent: branch_closeout
+      intent_zh: "分支收尾/开发完成/创建PR/合并分支/结束开发分支/branch closeout"
+      primary_skill: adk-branch-closeout
       supporting_skills:
         - adk-verification-before-completion
     - intent: adr_writer
@@ -671,7 +757,7 @@ routing:
       supporting_skills:
         - adk-register-map-design
     - intent: bsp_porting
-      intent_zh: "BSP移植/BSP适配/板级移植"
+      intent_zh: "BSP移植/BSP适配/板级移植/启动链/BootROM/SPL/U-Boot/Bootloader/rootfs/最小启动/secure boot"
       primary_skill: adk-bsp-porting-playbook
       supporting_skills:
         - adk-driver-bringup-checklist
@@ -717,6 +803,13 @@ routing:
       primary_skill: adk-performance-profiling-embedded
       supporting_skills:
         - adk-systematic-debugging
+    - intent: production_field_readiness
+      intent_zh: "量产/产测/烧录/诊断/现场维护/OTA升级/回滚/RMA/设备健康检查"
+      primary_skill: adk-production-field-readiness
+      supporting_skills:
+        - adk-release-versioning
+        - adk-integration-hil-sil
+        - adk-verification-before-completion
     - intent: release_versioning
       intent_zh: "版本发布/准备发布/发布前检查"
       primary_skill: adk-release-versioning

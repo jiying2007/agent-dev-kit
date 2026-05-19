@@ -1,8 +1,8 @@
-# Agent Dev Kit — 嵌入式系统开发工具包
+# Agent Dev Kit — 嵌入式全栈开发工具包
 
-`agent-dev-kit`（adk）是面向嵌入式系统开发的 Agent/Skill/Profile 生产资产包。它的目标是把参考仓中的优秀方法论压实为可交接、可验证、可回滚、可持续迭代的工程资产，并先应用到 `~/codex` 声明式资产仓库，再由 `~/codex` apply 到 `~/.codex` 运行目录。
+`agent-dev-kit`（adk）是面向嵌入式全栈开发的 Agent/Skill/Profile 生产资产包。它的目标是把参考仓中的优秀方法论压实为可交接、可验证、可回滚、可持续迭代的工程资产，并先应用到 `~/codex` 声明式资产仓库，再由 `~/codex` apply 到 `~/.codex` 运行目录。
 
-**定位边界**：adk 专注于嵌入式系统开发（BSP/驱动/RTOS/协议栈/硬件调试），不覆盖前端/后端/云原生等通用软件开发领域。
+**定位边界**：adk 专注于嵌入式全栈开发，覆盖芯片/板级约束、启动链、BSP、OS/runtime、驱动、中间件、协议栈、设备侧应用、上位机/产测/诊断工具、构建调试、验证、发布、量产和现场维护；不覆盖通用 Web、互联网后端、云原生和纯业务系统开发。
 
 当前版本：`2.9.0`。
 
@@ -18,20 +18,25 @@ adk 不是参考仓集合，也不是直接替换 `~/codex` 或 `~/.codex/AGENTS
 6. 为真实生产使用提供导出报告、apply plan、pilot 与健康检查证据。
 
 **领域覆盖**：
-- ✅ BSP/驱动开发（寄存器、中断、DMA、设备树）
-- ✅ RTOS 任务设计（FreeRTOS、Zephyr、RT-Thread）
-- ✅ 协议栈集成（I2C/SPI/UART/CAN/Ethernet）
-- ✅ 硬件调试（OpenOCD/GDB、JTAG、逻辑分析仪）
-- ✅ 交叉编译（CMake、Yocto、Buildroot）
-- ✅ 嵌入式测试（HIL/SIL、单元测试、故障注入）
+- ✅ SoC/MCU/MPU、DSP/NPU/GPU、FPGA、板卡、电源、时钟、复位、pinmux、memory map
+- ✅ BootROM、SPL、Bootloader、secure boot、分区、镜像、rootfs、启动失败恢复
+- ✅ BSP、设备树、Kconfig、Linux kernel、RTOS、bare-metal、AMP/SMP、IPC、调度、内存
+- ✅ 驱动、寄存器、中断、DMA、协议栈、组件/中间件、网络/文件系统/升级/诊断
+- ✅ 设备侧应用、Linux 用户态工具、系统服务、CLI/daemon、配置与升级链路
+- ✅ 上位机、产测、诊断、烧录、标定、日志分析、HIL 控制和调试辅助工具
+- ✅ 交叉编译、Yocto/Buildroot/CMake、SDK、OpenOCD/GDB/JTAG、trace、逻辑分析
+- ✅ 嵌入式全栈测试（host unit、ctest、QEMU/SIL、HIL、静态分析、故障注入、长稳、OTA/回滚演练）
+- ✅ 量产、RMA、现场日志、远程升级、设备健康检查和现场恢复流程
 - ❌ 前端开发（React/Vue/Angular、CSS、移动端）
-- ❌ 后端开发（Node.js/Python/Go/Java、API、数据库）
+- ❌ 通用后端开发（互联网 API、数据库业务系统、企业 SaaS）
 - ❌ 云原生（Docker/K8s、AWS/Azure、微服务）
+
+完整范围层级见 `docs/reference/embedded-fullstack-scope.md`。
 
 ## 2. 当前资产概览
 
 - Agents：16 个角色 Agent。
-- Core Skills：38 个稳定技能。
+- Core Skills：45 个稳定技能。
 - Optional Skills：9 个可选技能。
 - Profiles：`core`、`personal-core`、`embedded-fullstack`、`release-hardening`、`team-core`、`openspec-driven`、`large-refactor`、`incident-response`、`research-intake`。
 - Tool Targets：`codex`、`claude-code`、`hermes-agent`、`opencode`。
@@ -117,7 +122,7 @@ rtk ../scripts/check-adk-harden-readiness.sh . --require-pilot
 
 | Profile | 场景 | 说明 |
 |---|---|---|
-| `core` | 通用研发 | 最小稳定主干，覆盖需求、任务、接口、测试、调试、验证、PR 门禁 |
+| `core` | 嵌入式研发主干 | 最小稳定主干，覆盖需求、任务、接口、测试、调试、验证、PR 门禁 |
 | `personal-core` | 个人 `~/codex -> ~/.codex` 生产推荐 | 在 `core` 基础上增加发布与 ADR 能力 |
 | `embedded-fullstack` | 嵌入式全栈 | 嵌入式推荐 profile，覆盖驱动、组件、BSP、RTOS、构建、性能、发布 |
 | `release-hardening` | 发布前强化 | 安全、可靠性、HIL/SIL、版本发布 |
@@ -134,6 +139,18 @@ bash scripts/check-profile-coherence.sh
 ```
 
 该检查已纳入 `bash scripts/devkit.sh test`。
+
+## 6.1 Fallback 原生替代能力
+
+| Core Skill | 场景 |
+|---|---|
+| `adk-runtime-router` | 任务开始前选择 primary/supporting/fallback |
+| `adk-test-strategy` | 嵌入式全栈测试策略、TDD 分级和测试矩阵 |
+| `adk-code-review-loop` | 独立代码审查、review 反馈修复与复审 |
+| `adk-parallel-agent-governance` | 并行子代理任务包、冲突矩阵和最终整合 |
+| `adk-worktree-governance` | git worktree 隔离开发与清理治理 |
+| `adk-branch-closeout` | 开发分支合并、PR、保留或丢弃收尾 |
+| `adk-production-field-readiness` | 量产、产测、烧录、诊断、OTA、回滚和现场维护 readiness |
 
 ## 7. Optional Skills
 
@@ -208,6 +225,17 @@ rtk ../scripts/check-adk-harden-readiness.sh . --require-pilot
 - 上游吸收
 
 边界：当前 pilot 是 adk 自举 + `~/codex -> ~/.codex` 生产安装验证，真实业务长期样例仍需持续补充。
+
+fallback 下线治理另有结构化门禁：
+
+```bash
+bash scripts/check-fallback-sunset.sh
+bash scripts/check-fallback-sunset.sh --score-tsv /tmp/adk-replacement-score.tsv
+bash scripts/check-fallback-sunset.sh --summary-json
+bash scripts/pilot-readiness.sh --summary-json
+```
+
+能力面 pilot 清单位于 `docs/pilots/index.tsv`。`planned` pilot 只表示待验证，不可作为 `candidate-sunset` 或 `sunset` 证据。`check-fallback-sunset.sh` 会校验 routing、profile、pilot、handoff、live health 和状态阈值；`pilot-readiness.sh` 单独校验证据文件成熟度。`--score-tsv` 可生成可归档 replacement score 明细，`--summary-json` 用于低 token 门禁摘要。
 
 ## 10. `~/codex` 与 `~/.codex/AGENTS.md` 配合方式
 

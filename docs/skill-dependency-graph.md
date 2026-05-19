@@ -5,8 +5,13 @@
 ## 依赖关系
 
 ```
+adk-runtime-router
+└── adk-test-strategy
+
 adk-requirements-triage
 ├── adk-task-breakdown
+│   ├── adk-parallel-agent-governance
+│   └── adk-worktree-governance
 ├── adk-interface-contract-design
 │   ├── adk-register-map-design
 │   │   └── adk-driver-bringup-checklist
@@ -16,15 +21,19 @@ adk-requirements-triage
 
 adk-unit-test-embedded
 └── adk-integration-hil-sil
-    └── adk-fault-injection-recovery
+    ├── adk-fault-injection-recovery
+    └── adk-production-field-readiness
 
 adk-systematic-debugging
 ├── adk-toolchain-debug-openocd-gdb
 └── adk-performance-profiling-embedded
 
 adk-verification-before-completion
-└── adk-commit-pr-quality-gate
-    └── adk-release-versioning
+├── adk-commit-pr-quality-gate
+│   └── adk-release-versioning
+│       └── adk-production-field-readiness
+├── adk-code-review-loop
+└── adk-branch-closeout
 
 独立 skills (无依赖):
 - adk-adr-writer

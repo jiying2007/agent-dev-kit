@@ -7,6 +7,11 @@ triggers:
   - "执行计划"
   - "多阶段任务"
   - "计划审查"
+  - "长任务"
+  - "分阶段执行"
+  - "恢复摘要"
+  - "中途改范围"
+  - "失败阶段回退"
 non_triggers:
   - 单文件低风险修改
   - 仅做只读分析且无需执行计划
@@ -24,6 +29,7 @@ constraints:
 ## Goal
 - 把长任务从"靠会话记忆推进"改为可恢复、可验证、可审查的执行闭环。
 - 通过检查点机制确保每个阶段的产出可独立验证。
+- 覆盖嵌入式全栈长任务：芯片/板级 bring-up、启动链/rootfs、Linux BSP 迁移、RTOS 应用联调、驱动到应用链路、上位机产测工具交付、OTA/回滚和现场维护闭环。
 
 ## Prerequisites
 - 已有需求或计划来源。
@@ -38,67 +44,9 @@ constraints:
 6. 收口验证：进入完成声明前，执行 completion gate 并核对证据支持结论。
 7. 复盘归档：任务完成后输出复盘记录，沉淀经验与改进项。
 
-## 计划-执行循环状态机
-```
-PLAN → READY → EXECUTING → CHECKPOINT → CONTINUE
-  ↑       ↓        ↓            ↓
-  └── BLOCKED    DEVIATE → PLAN (重新审查)
-                   ↓
-              NEEDS-FIX → PLAN
-```
-
-## 检查点设计模板
-```md
-[checkpoint]
-stage_id: <阶段编号>
-stage_name: <阶段名称>
-status: pending | executing | done | blocked | deviate
-started_at: <时间>
-completed_at: <时间>
-done_criteria:
-- <验收条件 1>
-- <验收条件 2>
-verification_commands:
-- <命令 1>: <结果>
-- <命令 2>: <结果>
-evidence:
-- <证据路径或描述>
-risks_identified:
-- <风险描述 + 影响>
-next_actions:
-- <下一步动作>
-```
-
-## 偏差处理流程
-```md
-[deviation-record]
-detected_at: <时间>
-stage_id: <阶段编号>
-deviation_type: plan_error | contract_conflict | verification_failure | resource_unavailable
-description: <偏差描述>
-impact: <影响范围>
-decision: replan | skip | abort | workaround
-resolution: <处理方式>
-```
-
-## 复盘模板
-```md
-[retrospective]
-task_id: <任务ID>
-total_stages: <阶段数>
-completed_stages: <完成数>
-blocked_stages: <阻塞数>
-deviation_count: <偏差次数>
-
-what_went_well:
-- <做得好的方面>
-
-what_could_improve:
-- <改进点>
-
-action_items:
-- <改进动作 + owner + due>
-```
+## Templates
+- 长任务恢复与中途改范围处理模板：`references/long-task-recovery.md`。
+- 检查点、偏差记录、恢复 prompt 和失败回退锚点都应写入可复用工件，不依赖会话记忆。
 
 ## Commands
 ```bash

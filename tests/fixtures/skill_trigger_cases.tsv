@@ -1,11 +1,28 @@
 skill	scope	expected	input
+adk-runtime-router	skill	1	开始任务前先判断使用哪个 adk skill
+adk-runtime-router	skill	0	子代理已收到明确任务包无需重新路由
+adk-test-strategy	skill	1	这个功能需要先写测试并设计测试矩阵
+adk-test-strategy	skill	0	纯文档修改且无行为变化
+adk-code-review-loop	skill	1	收到 review 反馈后需要做审查反馈闭环
+adk-code-review-loop	skill	0	纯格式化且已有自动格式检查
+adk-parallel-agent-governance	skill	1	多 agent 并行施工需要明确 scope_write
+adk-parallel-agent-governance	skill	0	单文件小修不需要并行
+adk-worktree-governance	skill	1	需要创建 worktree 做隔离分支开发
+adk-worktree-governance	skill	0	当前分支内单点小改
+adk-branch-closeout	skill	1	开发完成后准备创建 PR 并做分支收尾
+adk-branch-closeout	skill	0	仍有测试失败且未定位根因
 adk-requirements-triage	skill	1	需求不清楚，需要先梳理验收标准
+adk-requirements-triage	skill	1	帮我实现一个新功能，需要先明确目标、边界和验收标准
 adk-requirements-triage	skill	0	这次只是纯代码风格调整
 adk-driver-bringup-checklist	skill	1	驱动开发新外设联调
 adk-driver-bringup-checklist	skill	0	稳定量产驱动小改可以直接修复
 adk-release-versioning	skill	1	版本发布前需要整理版本策略
 adk-release-versioning	skill	0	开发中临时调试无需发布说明
+adk-bsp-porting-playbook	skill	1	启动链 bring-up 需要检查 Bootloader 和 rootfs
+adk-production-field-readiness	skill	1	量产产测烧录诊断 OTA 回滚和现场维护 readiness
+adk-production-field-readiness	skill	0	通用 Web 发布不涉及设备交付
 adk-systematic-debugging	skill	1	调试排查问题根因不明确
+adk-systematic-debugging	skill	1	真实问题排查需要定位根因再修复
 adk-systematic-debugging	skill	0	纯文档或命名修改不需要调试流程
 adk-verification-before-completion	skill	1	准备提交前需要先过完成前验证
 adk-verification-before-completion	skill	0	仅做方案讨论且尚未产生实现改动
