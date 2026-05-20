@@ -16,6 +16,14 @@
 - Sandbox/approval policy:
 - Hook involvement:
 
+## MCP / Plugin Readiness
+
+- Exposure inventory:
+- Input/output schema:
+- Auth scope:
+- Smoke or inspector evidence:
+- Plugin manifest/profile binding:
+
 ## Allowed Actions
 
 | Action | Allowed input | Allowed path/domain | Required validation | Audit field |
@@ -38,6 +46,7 @@
 |---|---|---|---|
 | allow-path |  | allow |  |
 | deny-path |  | deny |  |
+| deny-scope |  | deny |  |
 
 ## Rollback
 

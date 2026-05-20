@@ -2,7 +2,7 @@
 name: adk-security-supply-chain
 description: 第三方技能、脚本与参考资产引入前的安全和供应链审查
 version: 1.0.0
-last_updated: 2026-05-06
+last_updated: 2026-05-20
 triggers:
   - "供应链审查"
   - "第三方引入"
@@ -15,7 +15,7 @@ non_triggers:
 inputs:
   - 候选资产路径、许可证、脚本清单、外部依赖、安装范围、运行态权限
 outputs:
-  - 安全审查结论、阻塞项、允许范围、tool-call policy、回滚要求
+  - 安全审查结论、阻塞项、允许范围、MCP/plugin readiness、tool-call policy、回滚要求
 constraints:
   - 未知许可证或敏感信息风险未处理前不得进入 core
   - 可执行脚本必须说明用途与验证命令
@@ -42,8 +42,9 @@ constraints:
 7. 签名验证：验证资产完整性与发布者身份。
 8. 运行态信任边界审查：确认 base URL、relay、MCP server、hooks、sandbox 和 approval policy。
 9. 工具调用策略审查：为读文件、写文件、命令执行、网络访问、凭证读取列出 allow/deny 条件。
-10. 安装范围审查：确认仅进入 core/optional/profile 中的最小范围。
-11. 回滚审查：给出移除方式和安装回退点。
+10. MCP/plugin readiness：核对暴露清单、schema/smoke、auth scope、依赖边界和回滚步骤。
+11. 安装范围审查：确认仅进入 core/optional/profile/plugin 中的最小范围。
+12. 回滚审查：给出移除方式和安装回退点。
 
 ## Runtime Boundary Checklist
 - Provider/API relay：默认只允许官方或已审查端点；非标准 base URL 必须有 owner、用途、凭证边界和关闭方式。
@@ -51,6 +52,12 @@ constraints:
 - Tool call：LLM 返回的调用请求视为不可信输入，执行前由本地 policy 确定允许或拒绝。
 - Hooks：只允许做 secret scan、validator、lint/test gate 和审计记录，不得静默修改运行配置。
 - Audit log：高风险调用至少记录 tool、args 摘要、cwd、policy decision、exit code。
+
+## MCP / Plugin Readiness
+- MCP 必须有 tool/resource/prompt 暴露清单、输入输出 schema、`codex mcp list` 或 inspector/smoke 证据。
+- OAuth/API token 必须声明最小 scope、凭证来源、轮换和撤销方式。
+- 从 skill 晋级 plugin 时，必须声明 plugin manifest、owner、version、license、profile 绑定和 rollback。
+- 缺少 deny-path guard test、隐藏工具或运行态清单漂移时，结论为 `needs-fix`。
 
 ## Commands
 ```bash
@@ -79,6 +86,7 @@ sha256sum -c <checksum_file>
 - Secret Scan:
 - Signature Verification:
 - Runtime Trust Boundary:
+- MCP/Plugin Readiness:
 - Tool-call Policy:
 - Guard Test:
 - Install Scope:
@@ -93,6 +101,7 @@ sha256sum -c <checksum_file>
 - SBOM 生成失败时，手动列出依赖并记录审查范围限制。
 - 非标准 base URL 或 MCP server 无 owner/用途/权限边界时，结论为 `needs-fix`。
 - 高风险工具缺少 guard test 或拒绝样例时，不得进入生产 profile。
+- MCP/plugin 缺少暴露清单、scope、smoke 或 rollback 时，不得进入生产 profile。
 
 ## Quality Gate
 - 进入 `core` 前必须完成安全与供应链审查，包括 SBOM 和 CVE 扫描。
@@ -101,3 +110,4 @@ sha256sum -c <checksum_file>
 - 敏感信息扫描必须覆盖所有文件类型，包括二进制和配置文件。
 - 签名验证结果必须记录在审查报告中，未签名资产必须标注风险等级。
 - 涉及 MCP、hooks、provider relay 或命令执行时，必须附 tool-call policy 和至少一个 deny-path 验证。
+- MCP/plugin 进入生产 profile 前必须附加载结果、暴露清单一致性和禁用回滚证据。

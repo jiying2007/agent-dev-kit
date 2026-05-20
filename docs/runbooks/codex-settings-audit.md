@@ -34,6 +34,8 @@ bash scripts/devkit.sh review --change <change-id> --result pass --blockers 0 --
 - provider relay、base URL、sandbox、approval policy、hooks 和 MCP server 属于运行态安全基线，必须逐项列出。
 - 非标准 base URL 必须给出审查来源、用途、凭证边界和回退方式；否则结论为 `needs-fix`。
 - hooks 只能作为校验和拦截层，不得绕过 `~/codex` 写入 `~/.codex`。
+- MCP/plugin 变更必须附暴露清单、auth scope、schema/smoke、deny-path guard 和 rollback。
+- plugin 晋级必须说明为何普通 skill 不足，以及 plugin manifest、profile 绑定和禁用路径。
 
 ## 审计模板
 
@@ -45,7 +47,13 @@ bash scripts/devkit.sh review --change <change-id> --result pass --blockers 0 --
 - Runtime Loaded Result:
 - MCP Declared List:
 - MCP Loaded List:
+- MCP/Plugin Readiness:
+- Exposure Inventory:
+- Auth Scope:
+- Schema/Smoke Evidence:
 - Tool-call Policy:
+- Guard Tests:
+- Rollback Path:
 - Diff Decision:
 - Verify Commands:
 - Final Gate Result:
@@ -57,3 +65,4 @@ bash scripts/devkit.sh review --change <change-id> --result pass --blockers 0 --
 - MCP 清单不一致且无解释时，结论固定为 `needs-fix`。
 - `~/.codex` 健康检查失败时，不得给 `pass`。
 - `security` profile 发现未审查 base URL、未声明 MCP 写权限或未解释 hooks 时，不得给 `pass`。
+- MCP/plugin 缺少暴露清单、schema/smoke、deny-path guard 或禁用回滚时，不得给 `pass`。

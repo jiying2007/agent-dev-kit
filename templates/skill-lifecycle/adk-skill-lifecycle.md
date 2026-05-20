@@ -19,18 +19,26 @@
 | Fallback / replaced_by declared | pass |  |
 | Output contract declared | pass |  |
 | Deterministic guard declared | pass |  |
+| Plugin boundary checked | pass |  |
 
 ## Pattern Classification
 
 | Pattern | Fit | Required hard gate |
 |---|---|---|
-| Tool Wrapper | wraps CLI/API/MCP | command allowlist, input validation, rollback |
+| Tool Wrapper | wraps CLI/API/MCP | command allowlist, input validation, exposure inventory, rollback |
 | Generator | creates code/docs/assets | schema or template, overwrite policy, verification |
 | Reviewer | evaluates existing work | severity rubric, evidence paths, false-positive handling |
 | Inversion | user gives goal, agent controls workflow | explicit stop/ask conditions, state file, owner |
 | Pipeline | multi-stage orchestration | code-level state check, checkpoints, resume and abort path |
 
 Pipeline and Inversion skills must not rely only on prose such as "do not proceed". They need executable state checks, structured output validation, or an external workflow gate.
+
+## Plugin Boundary
+
+- Keep as skill when the workflow is prompt/process only and has no external runtime.
+- Promote to plugin when it bundles MCP servers, hooks, apps, native binaries, background services, credentials, or third-party installers.
+- Plugin promotion requires manifest, owner, version, license, source anchor, profile binding, readiness evidence and rollback.
+- MCP-backed plugins must include exposure inventory, auth scope, schema/smoke evidence and deny-path guard tests.
 
 ## Output Contract
 

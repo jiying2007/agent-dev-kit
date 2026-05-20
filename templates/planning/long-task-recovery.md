@@ -7,6 +7,9 @@
 - Last completed checkpoint:
 - Current blocker:
 - Changed scope:
+- Retry budget:
+- Staleness threshold:
+- Heartbeat:
 
 ## Planning Artifacts
 
@@ -21,6 +24,27 @@
 | Stage | Owner | Status | Done Criteria | Verification | Evidence | Next |
 |---|---|---|---|---|---|---|
 | S1 |  | pending |  |  |  |  |
+
+## Goal Closure
+
+- Goal statement:
+- Completion claim:
+- Claimant:
+- Verifier:
+- Required evidence:
+- Open items:
+- Stop condition: pass | replan | split | blocked | abort
+- Decision: pass | needs-fix | blocked
+
+## Repair Ledger
+
+- Failed scope:
+- Passing scope to preserve:
+- Minimal rerun:
+- Rollback anchor:
+- Repair action:
+- Semantic verification:
+- Do not repeat:
 
 ## Checkpoint Hygiene
 
@@ -44,6 +68,9 @@ Current state:
 Do not repeat:
 Next action:
 Required verification:
+Retry budget:
+Staleness threshold:
+Open items:
 ```
 
 ## Failure Rollback

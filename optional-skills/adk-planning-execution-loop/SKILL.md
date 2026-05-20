@@ -2,7 +2,7 @@
 name: adk-planning-execution-loop
 description: 长任务计划审查、分阶段执行、恢复与收口闭环
 version: 1.0.0
-last_updated: 2026-05-06
+last_updated: 2026-05-20
 triggers:
   - "执行计划"
   - "多阶段任务"
@@ -18,10 +18,11 @@ non_triggers:
 inputs:
   - 计划文件、任务边界、验证命令、阻塞条件、恢复上下文
 outputs:
-  - 执行检查点、恢复摘要、风险台账、完成前验证结论
+  - 执行检查点、目标闭环记录、恢复摘要、风险台账、完成前验证结论
 constraints:
   - 每个阶段必须有明确完成标准和验证证据
   - 阻塞条件不清时不得继续执行
+  - 长任务必须定义 retry budget、staleness threshold 和停止条件
 ---
 
 # adk-planning-execution-loop
@@ -42,13 +43,24 @@ constraints:
 4. 执行检查点：每完成一个阶段，更新状态、证据和风险。
 5. 恢复记录：维护 `session-state`、`next-actions`、`risk-ledger`、`resume-prompt`。
 6. 偏离处理：发现计划错误、共享契约冲突或验证失败时，暂停并回到计划审查。
-7. 收口验证：进入完成声明前，执行 completion gate 并核对证据支持结论。
-8. 复盘归档：任务完成后输出复盘记录，沉淀经验与改进项。
+7. 目标闭环检查：核对原始目标、当前声明、证据、剩余未闭环项和停止条件。
+8. 卡死保护：检查 retry budget、heartbeat、staleness threshold 和连续无信息增量轮次。
+9. 收口验证：进入完成声明前，执行 completion gate 并核对证据支持结论。
+10. 复盘归档：任务完成后输出复盘记录，沉淀经验与改进项。
 
 ## Templates
 - 长任务恢复与中途改范围处理模板：`references/long-task-recovery.md`。
 - 检查点、偏差记录、恢复 prompt 和失败回退锚点都应写入可复用工件，不依赖会话记忆。
 - 检查点默认存放在当前 change 或任务目录下；临时材料只能进入 session 级状态，不得进入长期 knowledge。
+
+## Goal Closure / Anti-stall
+
+长任务不能只依赖“执行者认为完成”。必须显式记录目标闭环状态，并把完成声明交给独立验证步骤核对。
+
+- 必填字段：`goal_statement`、`completion_claim`、`required_evidence`、`claimant`、`verifier`、`open_items`。
+- 防卡死字段：`retry_budget`、`staleness_threshold`、`heartbeat`、`stop_condition`。
+- `verifier` 必须核对证据本身，不能只复述 claimant 结论。
+- `stop_condition` 只能是 pass / replan / split / blocked / abort。
 
 ## Checkpoint Hygiene
 - 每个 checkpoint 必须声明 owner、阶段状态、验证命令、证据路径和下一步。
@@ -82,6 +94,8 @@ bash scripts/devkit.sh archive --change <change-id>
 - Plan Review:
 - Stage Checklist:
 - Planning Artifacts:
+- Goal Closure:
+- Anti-stall Check:
 - Session State:
 - Next Actions:
 - Risk Ledger:
@@ -97,10 +111,14 @@ bash scripts/devkit.sh archive --change <change-id>
 - 缺少恢复摘要时，不得声明长任务可交接。
 - 若计划偏差超过 30%，必须触发完整计划重审。
 - 若检查点连续 3 次阻塞，必须升级到管理层并考虑任务拆分。
+- retry budget 用尽或 heartbeat 连续过期时，禁止继续盲目推进，必须 replan、split 或 blocked。
+- completion claim 找不到对应证据时，结论固定为 `needs-fix`，并记录缺失证据。
 
 ## Quality Gate
 - 每个阶段必须有验证证据，禁止无证据的阶段推进。
 - 恢复摘要必须能让新会话继续执行，包含完整上下文。
+- 目标闭环记录必须能从原始目标追溯到完成声明、证据和剩余风险。
+- Anti-stall 检查必须包含 retry budget、staleness threshold、heartbeat 和停止条件。
 - 完成结论必须经过 `adk-verification-before-completion`。
 - 偏差记录必须完整，包含根因、影响和处理决策。
 - 复盘必须在任务完成后 48 小时内完成。
