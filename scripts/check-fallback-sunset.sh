@@ -97,6 +97,27 @@ skill_optional() {
   [[ -f "${ROOT}/optional-skills/${skill}/SKILL.md" ]]
 }
 
+skill_live_installed() {
+  local skill="$1"
+  local codex_root="${CODEX_ROOT:-${HOME}/.codex}"
+  local found=""
+
+  [[ -f "${codex_root}/skills/${skill}/SKILL.md" ]] && return 0
+  [[ -f "${codex_root}/skills/.system/${skill}/SKILL.md" ]] && return 0
+
+  if [[ -d "${codex_root}/vendor/skills/${skill}" ]]; then
+    found="$(find "${codex_root}/vendor/skills/${skill}" -mindepth 2 -maxdepth 2 -name SKILL.md -type f -print -quit 2>/dev/null || true)"
+    [[ -n "${found}" ]] && return 0
+  fi
+
+  if [[ -d "${codex_root}/vendor/plugins" ]]; then
+    found="$(find "${codex_root}/vendor/plugins" -path "*/skills/${skill}/SKILL.md" -type f -print -quit 2>/dev/null || true)"
+    [[ -n "${found}" ]] && return 0
+  fi
+
+  return 1
+}
+
 skill_in_equivalent() {
   local skill="$1"
   local equivalent="$2"
@@ -207,7 +228,7 @@ while IFS=$'\t' read -r fallback_skill adk_equivalent status owner review_by liv
   handoff_score="${profile_score}"
   live_score=0
   live_label="gap"
-  if [[ -f "${HOME}/.codex/skills/${matched_skill}/SKILL.md" ]]; then
+  if skill_live_installed "${matched_skill}"; then
     live_score=1
     live_label="pass"
   elif [[ "${live_requirement}" == "optional-live-allowed" ]] && skill_optional "${matched_skill}" && [[ "${handoff_score}" -eq 1 ]]; then

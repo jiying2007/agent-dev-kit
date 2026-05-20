@@ -40,82 +40,19 @@ constraints:
 8. 安装范围审查：确认仅进入 core/optional/profile 中的最小范围。
 9. 回滚审查：给出移除方式和安装回退点。
 
-## SBOM 生成
-```bash
-# 使用 syft 生成 SBOM
-syft <candidate_path> -o spdx-json > sbom.spdx.json
-
-# 使用 cyclonedx 生成 SBOM
-cyclonedx-bom -o sbom.json
-
-# 列出所有依赖
-cat sbom.spdx.json | jq '.packages[] | .name + " " + .versionInfo'
-```
-
-## CVE 扫描
-```bash
-# 使用 grype 扫描已知漏洞
-grype sbom:sbom.spdx.json --output table
-
-# 使用 trivy 扫描目录
-trivy fs --security-checks vuln <candidate_path>
-
-# 使用 npm audit（Node.js 项目）
-npm audit --json | jq '.vulnerabilities'
-
-# 使用 pip-audit（Python 项目）
-pip-audit -r <requirements.txt> --format json
-```
-
-## 依赖审计
-```bash
-# 检查依赖树
-cat package.json | jq '.dependencies, .devDependencies'
-
-# 检查 lock 文件一致性
-npm ci --dry-run 2>&1 | grep "added\|removed\|changed"
-
-# 检查许可证合规
-license-checker --summary --production
-
-# 列出可执行文件
-find <candidate_path> -type f -perm -111 -exec ls -la {} \;
-```
-
-## 签名验证
-```bash
-# 验证 GPG 签名
-gpg --verify <signature_file> <artifact_file>
-
-# 验证 npm 包签名
-npm audit signatures
-
-# 验证 Docker 镜像签名
-cosign verify <image_digest>
-
-# 检查 checksum
-sha256sum -c <checksum_file>
-```
-
 ## Commands
 ```bash
-# 搜索敏感信息
 rg -n "api[_-]?key|token|secret|password|PRIVATE KEY" <candidate_path>
-
-# 列出可执行文件
 find <candidate_path> -type f -perm -111
-
-# 验证仓库结构
 bash scripts/devkit.sh validate --strict
-
-# 生成审查报告
 rg -n "license|LICENSE" <candidate_path> | head -20
-
-# 检查网络访问
 rg -n "curl|wget|fetch|http|https" <candidate_path>
-
-# 检查写入路径
 rg -n "writeFile|fs\.write|os\.path|open\(" <candidate_path>
+syft <candidate_path> -o spdx-json > sbom.spdx.json
+grype sbom:sbom.spdx.json --output table
+trivy fs --security-checks vuln <candidate_path>
+gpg --verify <signature_file> <artifact_file>
+sha256sum -c <checksum_file>
 ```
 
 ## Evidence Template

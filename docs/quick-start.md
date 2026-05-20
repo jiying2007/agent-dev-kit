@@ -31,6 +31,8 @@ bash scripts/health-check.sh check-all
 bash tests/run_all.sh
 ```
 
+默认输出为紧凑摘要；排查失败时再运行 `bash scripts/devkit.sh test --verbose`。
+
 ## 核心概念
 
 ### 1. 产物（Artifacts）

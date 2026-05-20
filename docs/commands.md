@@ -50,6 +50,15 @@ bash scripts/devkit.sh runtime-boundary
 bash scripts/devkit.sh runtime-boundary --summary-json
 ```
 
+## token-budget
+
+检查 active Skill 入口、active docs、高信号治理脚本和全量测试输出策略是否符合低 token 预算。
+
+```bash
+bash scripts/devkit.sh token-budget
+bash scripts/devkit.sh token-budget --summary-json
+```
+
 ## workflow-closure
 
 检查 workflow 引用的 agent/skill 是否都在目标 profile 闭包内。
@@ -153,10 +162,11 @@ bash scripts/devkit.sh archive --change my-change
 
 ## test
 
-执行全量回归测试。
+执行全量回归测试。默认输出为紧凑模式：每个子测试只输出一行 PASS/FAIL，失败时只展开有界日志。需要完整子测试输出时使用 `--verbose`。
 
 ```bash
 bash scripts/devkit.sh test
+bash scripts/devkit.sh test --verbose
 ```
 
 ## profile coherence

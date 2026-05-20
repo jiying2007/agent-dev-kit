@@ -26,7 +26,17 @@ head -n 1 "$CANDIDATE_TSV" | grep -Fxq $'fallback_skill\tcurrent_status\tmatched
   exit 1
 }
 
-grep -q 'review-second-pilot-before-candidate' "$CANDIDATE_TSV" || {
+grep -q $'\tcandidate-sunset\t' "$CANDIDATE_TSV" || {
+  echo "[FAIL] candidate TSV missing candidate-sunset rows" >&2
+  exit 1
+}
+
+grep -q $'\tcandidate\t' "$CANDIDATE_TSV" || {
+  echo "[FAIL] candidate TSV missing candidate rows" >&2
+  exit 1
+}
+
+grep -q $'\treview-second-pilot-before-candidate\t' "$CANDIDATE_TSV" || {
   echo "[FAIL] candidate TSV missing review queue rows" >&2
   exit 1
 }

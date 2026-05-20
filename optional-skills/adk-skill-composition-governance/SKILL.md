@@ -35,86 +35,31 @@ constraints:
 - 已有至少一条代表性任务输入。
 
 ## Workflow
-1. 确定主技能：每个场景选择一个 primary skill。
-2. 标注辅助技能：supporting skills 只作为建议，不直接抢占入口。
-3. 定义 fallback：主技能不适用时，给出明确后备 skill。
-4. 定义互斥关系：职责冲突或触发重叠时，明确优先级。
-5. 冲突检测：检查触发词重叠与职责边界模糊。
-6. 弃用治理：旧技能需给 `deprecated_by` 或 `replaced_by`。
-7. 回归样例：为每个组合场景补触发测试。
-8. 更新治理矩阵：记录所有组合规则与优先级决策。
+1. 确定主技能：每个场景只能有一个 primary skill。
+2. 标注辅助技能：supporting skill 只在 primary 明确需要时激活。
+3. 定义 fallback：主技能不适用时给出后备 skill、触发条件和退出条件。
+4. 定义互斥关系：职责冲突或触发重叠时写明优先级。
+5. 冲突检测：检查 triggers、non_triggers、profile 和实际 match 样例。
+6. 弃用治理：旧 skill 必须给 `deprecated_by` 或 `replaced_by`。
+7. 回归样例：为 primary/supporting/fallback 各补代表输入。
+8. 更新治理矩阵：记录场景、主技能、辅助技能、fallback、互斥和优先级。
 
-## 技能组合规则
-```md
-[composition-rules]
-rule-1: 一个场景只能有一个 primary skill，禁止多主竞争。
-rule-2: supporting skills 只在 primary 明确请求时激活。
-rule-3: fallback skill 必须在 profile 中可安装。
-rule-4: 互斥 skill 必须有明确优先级，禁止同时激活。
-rule-5: deprecated skill 必须有替代方案，禁止无替代弃用。
-```
-
-## 冲突检测
-```bash
-# 检查触发词重叠
-comm -12 <(sort skill-a-triggers.txt) <(sort skill-b-triggers.txt)
-
-# 检查 non_trigger 边界
-rg -n "non_triggers:" skills/*/SKILL.md
-
-# 列出所有触发词
-rg -n "triggers:" skills/*/SKILL.md | sed 's/.*triggers: //' | tr ',' '\n' | sort | uniq -d
-```
-
-## 依赖图模板
-```md
-[dependency-graph]
-场景: <场景名称>
-primary: <主技能>
-supporting:
-  - <辅助技能-1>: <激活条件>
-  - <辅助技能-2>: <激活条件>
-fallback: <后备技能>
-mutually_exclusive:
-  - <互斥技能>: <优先级>
-deprecated:
-  - <旧技能> → <新技能>: <迁移说明>
-```
-
-## 治理矩阵
-```md
-[governance-matrix]
-| 场景 | 主技能 | 辅助技能 | Fallback | 互斥 | 优先级 |
-|------|--------|----------|----------|------|--------|
-| <场景1> | <skill-a> | <skill-b> | <skill-c> | <skill-d> | 1 |
-| <场景2> | <skill-e> | <skill-f> | <skill-g> | <skill-h> | 2 |
-
-决策依据:
-- <场景1>: <skill-a> 优先因为 <原因>
-- <场景2>: <skill-e> 优先因为 <原因>
-```
+## 组合规则
+- 一个场景一个 primary；supporting 不抢占触发。
+- fallback 必须在目标 profile 或可选安装范围内可用。
+- deprecated skill 必须有替代方案，禁止无替代删除。
+- candidate-sunset / sunset 必须有 ready pilot 和路由回归证据。
 
 adk 原生 skill 创作和弃用生命周期模板：`references/adk-skill-lifecycle.md`。
 
 ## Commands
 ```bash
-# 重建技能目录
 bash scripts/devkit.sh catalog build
-
-# 测试技能匹配
 bash scripts/devkit.sh match --skill <skill> --text "<task text>"
-
-# 检查运行时路由
 bash ../scripts/check-runtime-routing.sh ..
-
-# 列出所有触发词
 rg -n "triggers:" skills/*/SKILL.md optional-skills/*/SKILL.md
-
-# 检查触发词冲突
-rg -n "triggers:" skills/*/SKILL.md | awk -F: '{print $3}' | sort | uniq -d
-
-# 验证 profile 一致性
 bash scripts/check_profile_coherence.sh
+bash scripts/check-fallback-sunset.sh --summary-json
 ```
 
 ## Evidence Template

@@ -30,83 +30,31 @@ constraints:
 
 ## Workflow
 1. **上电前检查**：电源电压、时钟源、复位信号、pinmux 配置。
-   ```bash
-   # 验证时钟使能
-   devmem2 0x40023830 w  # RCC_AHB1ENR (STM32 示例)
-   # 验证 pinmux
-   devmem2 0x40020000 w  # GPIOA_MODER
-   ```
-2. **驱动框架结构确认**：确认驱动代码遵循平台框架（Linux platform_driver / RTOS 设备模型）。
-   ```bash
-   # Linux: 检查设备树节点与驱动匹配
-   ls /sys/bus/platform/devices/
-   cat /proc/device-tree/soc/serial@40011000/status
-   # RTOS: 检查设备注册
-   list_device
-   ```
-3. **总线连通性验证**：I2C/SPI/UART/CAN 基础收发。
-   ```bash
-   # I2C 扫描
-   i2cdetect -y 0
-   # SPI 回环测试
-   spidev_test -D /dev/spidev0.0 -p "Hello" -v
-   # UART 收发
-   echo "AT" > /dev/ttyS1 && cat /dev/ttyS1
-   # CAN 发送
-   cansend can0 123#DEADBEEF
-   ```
-4. **设备注册与初始化路径验证**：最小功能先通，再启中断/DMA。
-   ```bash
-   # 检查中断注册
-   cat /proc/interrupts | grep <device>
-   # 检查 DMA 通道
-   cat /sys/class/dma/dma0chan*/in_use
-   # dmesg 驱动初始化日志
-   dmesg | grep -i <driver_name>
-   ```
+2. **驱动框架确认**：核对 Linux platform_driver、RTOS 设备模型或 bare-metal init 顺序。
+3. **总线连通性验证**：I2C/SPI/UART/CAN/USB/Ethernet 先完成最小收发。
+4. **初始化路径验证**：probe/init、设备节点、日志、资源申请和错误退出路径。
+5. **中断/DMA 验证**：先轮询最小闭环，再逐步开启 IRQ、DMA 和低功耗路径。
 5. **异常分支验证**：超时、CRC 错误、设备不存在、总线错误。
 6. **稳定性检查**：循环收发、长稳运行（>= 24h）、重启恢复。
 
 ## Commands
 ```bash
-# 寄存器读写
 devmem2 <phys_addr> w <value>
 devmem2 <phys_addr>
-
-# 内核日志
 dmesg | tail -n 200
-dmesg -w  # 实时跟踪
-
-# 设备节点检查
 ls -la /dev/<device>*
 cat /sys/class/<class>/<device>/uevent
-
-# 中断统计
 cat /proc/interrupts
-cat /proc/softirqs
-
-# I2C/SPI 工具
 i2cdetect -y <bus>
-i2cget -y <bus> <addr> <reg>
-i2cset -y <bus> <addr> <reg> <value>
 spidev_test -D /dev/spidev<b>.<c> -p "test"
-
-# GPIO 操作
-echo <pin> > /sys/class/gpio/export
-echo out > /sys/class/gpio/gpio<pin>/direction
-echo 1 > /sys/class/gpio/gpio<pin>/value
-
-# 驱动自检
+cansend can0 123#DEADBEEF
 <driver-selftest-cmd> --smoke
 ```
 
 ## Evidence Template
 ```md
 - Hardware Baseline:
-  - Board Rev: ____
-  - SoC: ____
-  - Power Rail: ____V (measured)
-  - Clock Source: ____ MHz
+  - Board Rev / SoC / Power Rail / Clock Source:
 - Pinmux Config: [link to dts/pinctrl diff]
 - Bus Probe Result:
   | Bus | Device | Address | Status |
@@ -137,9 +85,6 @@ echo 1 > /sys/class/gpio/gpio<pin>/value
 ---
 
 ## 健壮性规范
-
-- **输入验证**: 执行前校验所有必要输入是否存在且格式正确
-- **重试策略**: 外部命令失败时最多重试 3 次，指数退避（1s, 2s, 4s）
-- **超时控制**: 单步操作超时 30 秒，整体流程超时 300 秒
-- **异常隔离**: 单个步骤失败不阻塞其他独立步骤
-- **日志记录**: 关键操作记录命令、退出码、耗时
+- 执行前校验输入、工具、板卡状态和权限。
+- 外部命令记录命令、退出码、耗时和失败日志。
+- 单步失败不阻塞独立检查，但不得隐藏未验证项。

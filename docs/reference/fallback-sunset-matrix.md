@@ -51,19 +51,19 @@ replacement score 固定为 5 项：routing、profile、pilot、handoff、live�
 | Superpowers Skill | adk 等价能力 | 当前状态 | 缺口 | 下一步 |
 |---|---|---|---|---|
 | using-superpowers | adk-runtime-router | explicit-fallback | 需要更多真实任务触发语料 | 扩充 prompt 回归 |
-| brainstorming | adk-requirements-triage + adk-grill-with-docs | explicit-fallback | 已有 discovery evidence-ready，需要第二个真实业务 pilot | 评估 candidate-sunset 前补更多真实任务样例 |
-| writing-plans | adk-task-breakdown + adk-planning-execution-loop | explicit-fallback | 已有长任务恢复 evidence-ready，需要真实 BSP/OTA 复跑 | 评估 candidate-sunset 前补真实长任务 |
-| executing-plans | adk-planning-execution-loop | explicit-fallback | 已有阶段执行与恢复 evidence-ready，需要真实 BSP/OTA 复跑 | 评估 candidate-sunset 前补真实阶段执行 |
+| brainstorming | adk-requirements-triage + adk-grill-with-docs | candidate-sunset | routing/profile/pilot/handoff/live 均已就绪 | 观察一轮 live 使用，无 fallback 需求则推进 sunset |
+| writing-plans | adk-task-breakdown + adk-planning-execution-loop | candidate-sunset | routing/profile/pilot/handoff/live 均已就绪 | 观察一轮 live 长任务计划使用 |
+| executing-plans | adk-planning-execution-loop | candidate-sunset | routing/profile/pilot/handoff/live 均已就绪 | 观察一轮 live 阶段执行使用 |
 | test-driven-development | adk-test-strategy + adk-unit-test-embedded | explicit-fallback | 已有测试策略 evidence-ready，需要真实 C/C++/ctest/HIL 项目入口 | 接入真实项目测试入口 |
-| systematic-debugging | adk-systematic-debugging | explicit-fallback | 已有 bugfix evidence-ready，需要真实驱动/RTOS/构建缺陷复跑 | 绑定真实 bug 样例 |
+| systematic-debugging | adk-systematic-debugging | candidate-sunset | routing/profile/pilot/handoff/live 均已就绪 | 观察一轮 live 调试使用 |
 | requesting-code-review | adk-code-review-loop + adk-commit-pr-quality-gate | explicit-fallback | 已有 review evidence-ready，需要真实 diff/reviewer 反馈 | 绑定真实 review 样例 |
 | receiving-code-review | adk-code-review-loop | explicit-fallback | 已有误报/越界反馈 evidence-ready，需要真实反馈样例 | 绑定真实反馈样例 |
-| verification-before-completion | adk-verification-before-completion | explicit-fallback | 已有 completion evidence-ready pilot，需要继续绑定真实业务完成场景 | 评估 candidate-sunset 前补更多真实 completion 样例 |
+| verification-before-completion | adk-verification-before-completion | candidate-sunset | routing/profile/pilot/handoff/live 均已就绪 | 观察一轮 live completion 使用 |
 | dispatching-parallel-agents | adk-parallel-agent-governance | explicit-fallback | 已有并行治理 evidence-ready，需要真实多 agent 写入复跑 | 绑定真实多 agent 写入样例 |
 | subagent-driven-development | adk-parallel-agent-governance + adk-code-review-loop | explicit-fallback | 已有 scope/review/integration evidence-ready，需要真实平台子代理复跑 | 评估 candidate-sunset 前补真实多 agent 复审 |
 | using-git-worktrees | adk-worktree-governance | explicit-fallback | worktree 创建清理和 PR 场景仍需真实 git 样例 | 补真实 worktree pilot |
 | finishing-a-development-branch | adk-branch-closeout | explicit-fallback | 已有 closeout evidence-ready，远端 PR 操作仍需人工确认 | 绑定真实分支 closeout |
-| writing-skills | skill-creator + adk-skill-composition-governance | explicit-fallback | 已有 skill lifecycle evidence-ready，需要第二个真实 skill pilot | 评估 candidate-sunset 前补更多 skill 创作样例 |
+| writing-skills | skill-creator + adk-skill-composition-governance | candidate-sunset | routing/profile/pilot/handoff/live 均已就绪 | 观察一轮 live skill 生命周期使用 |
 
 ## 维护规则
 

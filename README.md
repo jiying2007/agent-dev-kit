@@ -91,6 +91,8 @@ bash scripts/devkit.sh validate --strict
 bash scripts/devkit.sh test
 ```
 
+`devkit.sh test` 默认只输出紧凑摘要，失败时展开有界日志；需要完整子测试日志时运行 `bash scripts/devkit.sh test --verbose`。
+
 ## 5. 生产交接到 `~/codex`，再 apply 到 `~/.codex`
 
 推荐安装组合：

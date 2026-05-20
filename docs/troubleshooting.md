@@ -48,7 +48,7 @@ All tests passed -> Some tests failed
 bash tests/test_workflow.sh
 
 # 2. 查看详细输出
-bash tests/run_all.sh 2>&1 | grep -A 5 "FAIL"
+bash scripts/devkit.sh test --verbose
 
 # 3. 检查测试文件
 ls -la tests/

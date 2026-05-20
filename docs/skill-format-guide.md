@@ -2,7 +2,7 @@
 
 ## SKILL.md 规范
 
-SKILL.md 是 skill 的入口文件，应保持精简（建议 <150 行）。
+SKILL.md 是 skill 的入口文件，应保持精简（默认门禁 ≤140 行）。
 
 ### 必需章节
 1. YAML frontmatter (name, description, triggers, non_triggers)
@@ -16,7 +16,7 @@ SKILL.md 是 skill 的入口文件，应保持精简（建议 <150 行）。
 
 ## references/ 子目录
 
-当 SKILL.md 超过 150 行时，将详细参考资料拆分到 references/ 子目录：
+当 SKILL.md 接近 140 行时，将详细参考资料拆分到 references/ 子目录：
 
 ```
 skills/<skill-name>/

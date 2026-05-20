@@ -39,6 +39,8 @@ run_smoke "auto-ops.sh"                  scripts/auto-ops.sh
 run_smoke "monitoring.sh"                scripts/monitoring.sh
 run_smoke "performance.sh"               scripts/performance.sh
 run_smoke "security.sh"                  scripts/security.sh
+run_smoke "token budget help"            scripts/check-token-budget.sh --help
+run_smoke "run_all help"                 tests/run_all.sh --help
 run_smoke "production field pilot help"  scripts/run-embedded-production-field-pilot.sh --help
 run_smoke "workflow pilots help"         scripts/run-embedded-workflow-pilots.sh --help
 

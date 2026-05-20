@@ -144,6 +144,9 @@ bash scripts/devkit.sh evidence append --file docs/changes/can-fd-bringup/negati
 # 全量测试（validate + format + install + profile coherence + optional + convert + workflow + catalog + trigger matrix）
 bash scripts/devkit.sh test
 
+# 需要完整子测试日志时再展开
+bash scripts/devkit.sh test --verbose
+
 # 单项检查
 bash scripts/check_format.sh
 bash scripts/validate-assets.sh --strict

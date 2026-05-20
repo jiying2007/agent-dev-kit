@@ -37,26 +37,10 @@ constraints:
 - 固定问题复现条件（版本、环境、输入、时间窗）。
 - 预先定义观测指标与日志采集方式。
 
-## 调试方法论
-
-### 5-Why 分析法
-逐层追问"为什么"，从表象挖到根因：
-```
-现象: 设备启动后 30 秒死机
-Why 1: 看门狗超时 → 为什么超时？
-Why 2: 主循环阻塞 → 为什么阻塞？
-Why 3: SPI 传输卡死 → 为什么卡死？
-Why 4: DMA 通道被占用 → 为什么被占用？
-Why 5: 中断优先级配置错误 → 根因
-```
-规则：每层 Why 必须有证据支撑，不能凭猜测。
-
-### 二分法定位
-将问题空间对半缩小，快速收敛：
-- **代码二分**：`git bisect` 定位引入问题的 commit
-- **配置二分**：逐步禁用配置项，定位问题配置
-- **模块二分**：逐步注释/绕过模块，定位问题模块
-- **数据二分**：缩小输入范围，定位问题数据
+## 方法选择
+- 5-Why：用于已有强现象链的问题；每层 Why 必须有证据。
+- 二分法：用于范围过大或回归引入点未知的问题，覆盖代码、配置、模块和输入数据。
+- 假设矩阵：用于多根因并存场景，按概率、影响和验证成本排序。
 
 ## Workflow
 1. **固定问题边界**：明确现象、影响范围、触发条件与不受影响范围。
@@ -71,57 +55,29 @@ Why 5: 中断优先级配置错误 → 根因
 
 ## Commands
 ```bash
-# Git bisect 二分定位
 git bisect start
 git bisect bad HEAD
 git bisect good <last_good_commit>
-# 测试当前 commit，然后 git bisect good/bad
-
-# 日志分析
-tail -f /var/log/syslog | grep -i "error\|fatal\|panic"
+rg -n "error|fatal|panic|timeout|reset" <log-or-src>
 journalctl --since "1 hour ago" --priority=err
-
-# 进程/资源排查
-top -b -n 1 | head -20
-strace -p <pid> -e trace=write 2>&1 | head -50
-lsof -p <pid> | head -20
-
-# 网络排查
 ss -tlnp | grep <port>
-tcpdump -i any port <port> -c 100 -w /tmp/capture.pcap
-
-# 嵌入式调试
-openocd -f <interface.cfg> -f <target.cfg> &
+openocd -f <interface.cfg> -f <target.cfg>
 arm-none-eabi-gdb <elf> -ex "target remote :3333"
 ```
 
 ## Evidence Template
 ```md
 - Repro Baseline:
-  - 环境: OS/版本/硬件
-  - 复现步骤: 1. ... 2. ...
-  - 复现率: X/Y 次
+  - 环境 / 复现步骤 / 复现率:
 - Hypothesis Matrix:
   | # | 假设 | 概率 | 验证方式 | 结果 |
   |---|------|------|---------|------|
-  | 1 | ... | 高 | ... | ✅/❌ |
-- 5-Why Chain:
-  - Why 1: ... → 证据: ...
-  - Why 2: ... → 证据: ...
-  - Why 5: ... → 根因
-- Experiment #n (single variable):
-  - 变量: ...
-  - 命令: ...
-  - 结果: ...
+  | 1 | ... | 高 | ... | pass/fail |
+- 5-Why Chain: Why -> 证据 -> 下一层 Why -> 根因
+- Experiment #n: 变量 / 命令 / 结果
 - Negative Findings:
-  - ❌ 假设 X 不成立，因为...
-- Root Cause Chain:
-  - 根因: ...
-  - 证据: [e1, e2, e3]
-- Fix Verification:
-  - 修复前: <现象>
-  - 修复后: <现象消失>
-  - 回归测试: pass/fail
+- Root Cause Chain: 根因 + 证据列表
+- Fix Verification: 修复前 / 修复后 / 回归测试
 ```
 
 ## Failure Handling
@@ -142,6 +98,6 @@ arm-none-eabi-gdb <elf> -ex "target remote :3333"
 
 | 借口 | 现实 | 正确做法 |
 |------|------|---------|
-| "我大概知道问题在哪" | "大概"是调试最大的敌人，直觉需要实验验证 | 按 SKILL.md 流程假设-实验-证伪，记录完整时间线 |
-| "改了一处就好了不用深究" | 表面修复掩盖根因，问题必然复发 | 必须完成"复现 -> 修复 -> 回归"三段证据链 |
-| "这个问题偶现不好复现" | 偶现不代表不存在，放过的 bug 会在最坏时机爆发 | 标记为 `needs-fix` 并记录触发条件，禁止"疑似已修复" |
+| "大概知道问题在哪" | 直觉需要实验验证 | 按假设-实验-证伪记录时间线 |
+| "改一处好了不用深究" | 表面修复会复发 | 完成复现、修复、回归三段证据 |
+| "偶现不好复现" | 偶现仍是缺陷 | 标记 `needs-fix` 并固化触发条件 |
