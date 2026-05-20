@@ -7,16 +7,19 @@ triggers:
   - "供应链审查"
   - "第三方引入"
   - "安全审查"
+  - "MCP 安全"
+  - "工具调用策略"
 non_triggers:
   - 仅读取参考仓库做背景调研
   - 修改本仓已有文档且不引入外部资产
 inputs:
-  - 候选资产路径、许可证、脚本清单、外部依赖、安装范围
+  - 候选资产路径、许可证、脚本清单、外部依赖、安装范围、运行态权限
 outputs:
-  - 安全审查结论、阻塞项、允许范围、回滚要求
+  - 安全审查结论、阻塞项、允许范围、tool-call policy、回滚要求
 constraints:
   - 未知许可证或敏感信息风险未处理前不得进入 core
   - 可执行脚本必须说明用途与验证命令
+  - MCP/server/API relay 未声明信任边界前不得启用工具调用
 ---
 
 # adk-security-supply-chain
@@ -37,8 +40,17 @@ constraints:
 5. 脚本审查：列出可执行脚本、危险命令、网络访问和写入路径。
 6. 敏感信息审查：检查密钥、token、个人路径和内部域名。
 7. 签名验证：验证资产完整性与发布者身份。
-8. 安装范围审查：确认仅进入 core/optional/profile 中的最小范围。
-9. 回滚审查：给出移除方式和安装回退点。
+8. 运行态信任边界审查：确认 base URL、relay、MCP server、hooks、sandbox 和 approval policy。
+9. 工具调用策略审查：为读文件、写文件、命令执行、网络访问、凭证读取列出 allow/deny 条件。
+10. 安装范围审查：确认仅进入 core/optional/profile 中的最小范围。
+11. 回滚审查：给出移除方式和安装回退点。
+
+## Runtime Boundary Checklist
+- Provider/API relay：默认只允许官方或已审查端点；非标准 base URL 必须有 owner、用途、凭证边界和关闭方式。
+- MCP server：必须声明 command、args、cwd、env、网络目标、读写路径和工具集合。
+- Tool call：LLM 返回的调用请求视为不可信输入，执行前由本地 policy 确定允许或拒绝。
+- Hooks：只允许做 secret scan、validator、lint/test gate 和审计记录，不得静默修改运行配置。
+- Audit log：高风险调用至少记录 tool、args 摘要、cwd、policy decision、exit code。
 
 ## Commands
 ```bash
@@ -48,6 +60,7 @@ bash scripts/devkit.sh validate --strict
 rg -n "license|LICENSE" <candidate_path> | head -20
 rg -n "curl|wget|fetch|http|https" <candidate_path>
 rg -n "writeFile|fs\.write|os\.path|open\(" <candidate_path>
+rg -n "BASE_URL|base_url|mcp|hook|approval|sandbox" <candidate_path>
 syft <candidate_path> -o spdx-json > sbom.spdx.json
 grype sbom:sbom.spdx.json --output table
 trivy fs --security-checks vuln <candidate_path>
@@ -65,6 +78,9 @@ sha256sum -c <checksum_file>
 - External Dependencies:
 - Secret Scan:
 - Signature Verification:
+- Runtime Trust Boundary:
+- Tool-call Policy:
+- Guard Test:
 - Install Scope:
 - Rollback Path:
 - Final Decision:
@@ -75,6 +91,8 @@ sha256sum -c <checksum_file>
 - CVE 扫描发现高危漏洞（CVSS >= 7.0）时，必须等待修复或给出缓解方案。
 - 签名验证失败时，必须确认资产完整性后再继续审查。
 - SBOM 生成失败时，手动列出依赖并记录审查范围限制。
+- 非标准 base URL 或 MCP server 无 owner/用途/权限边界时，结论为 `needs-fix`。
+- 高风险工具缺少 guard test 或拒绝样例时，不得进入生产 profile。
 
 ## Quality Gate
 - 进入 `core` 前必须完成安全与供应链审查，包括 SBOM 和 CVE 扫描。
@@ -82,3 +100,4 @@ sha256sum -c <checksum_file>
 - 所有可执行脚本必须说明用途，禁止引入用途不明的脚本。
 - 敏感信息扫描必须覆盖所有文件类型，包括二进制和配置文件。
 - 签名验证结果必须记录在审查报告中，未签名资产必须标注风险等级。
+- 涉及 MCP、hooks、provider relay 或命令执行时，必须附 tool-call policy 和至少一个 deny-path 验证。

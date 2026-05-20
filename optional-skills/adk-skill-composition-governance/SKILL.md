@@ -17,10 +17,11 @@ non_triggers:
 inputs:
   - skill 清单、触发词、non_trigger、profile、候选任务场景
 outputs:
-  - 主技能、辅助技能、fallback、互斥关系和弃用决策
+  - 主技能、辅助技能、fallback、互斥关系、模式分类和弃用决策
 constraints:
   - 一个场景只能有一个主技能
   - 辅助技能不得抢占主技能触发
+  - Pipeline/Inversion 类 skill 必须有可执行门禁或结构化状态检查
 ---
 
 # adk-skill-composition-governance
@@ -39,10 +40,13 @@ constraints:
 2. 标注辅助技能：supporting skill 只在 primary 明确需要时激活。
 3. 定义 fallback：主技能不适用时给出后备 skill、触发条件和退出条件。
 4. 定义互斥关系：职责冲突或触发重叠时写明优先级。
-5. 冲突检测：检查 triggers、non_triggers、profile 和实际 match 样例。
-6. 弃用治理：旧 skill 必须给 `deprecated_by` 或 `replaced_by`。
-7. 回归样例：为 primary/supporting/fallback 各补代表输入。
-8. 更新治理矩阵：记录场景、主技能、辅助技能、fallback、互斥和优先级。
+5. 模式分类：标注 Tool Wrapper、Generator、Reviewer、Inversion 或 Pipeline。
+6. 输出契约审查：Generator/Reviewer 必须有 schema、失败条件和复验方式。
+7. 硬门禁审查：Pipeline/Inversion 必须有状态文件、callback、脚本 gate 或外部编排，不得只靠自然语言约束。
+8. 冲突检测：检查 triggers、non_triggers、profile 和实际 match 样例。
+9. 弃用治理：旧 skill 必须给 `deprecated_by` 或 `replaced_by`。
+10. 回归样例：为 primary/supporting/fallback 各补代表输入。
+11. 更新治理矩阵：记录场景、主技能、辅助技能、fallback、互斥和优先级。
 
 ## 组合规则
 - 一个场景一个 primary；supporting 不抢占触发。
@@ -51,6 +55,13 @@ constraints:
 - candidate-sunset / sunset 必须有 ready pilot 和路由回归证据。
 
 adk 原生 skill 创作和弃用生命周期模板：`references/adk-skill-lifecycle.md`。
+
+## Skill Pattern Rules
+- Tool Wrapper：必须声明命令/API/MCP 边界、输入校验、失败回滚。
+- Generator：必须声明产物路径、覆盖策略、格式化/测试命令。
+- Reviewer：必须声明严重级别、证据路径和误报处理方式。
+- Inversion：必须声明 stop/ask 条件、owner 和状态恢复入口。
+- Pipeline：必须声明阶段状态、检查点、resume/abort 路径和最终整合验证。
 
 ## Commands
 ```bash
@@ -69,6 +80,9 @@ bash scripts/check-fallback-sunset.sh --summary-json
 - Supporting Skills:
 - Fallback Skill:
 - Mutually Exclusive Skills:
+- Pattern Classification:
+- Output Contract:
+- Hard Gate:
 - Deprecated/Replaced Decision:
 - Trigger Regression:
 - Composition Rules:
@@ -88,3 +102,4 @@ bash scripts/check-fallback-sunset.sh --summary-json
 - 治理矩阵必须覆盖所有已知场景。
 - 冲突检测必须在每次 profile 变更后重新执行。
 - 依赖图必须可视化展示技能间关系，禁止隐式依赖。
+- Generator/Reviewer/Pipeline/Inversion 的输出契约和硬门禁必须可验证。

@@ -23,6 +23,9 @@ constraints:
 ---
 
 ## Goal
+
+从产品视角深度拆解目标仓库中的 Skill 设计，提炼可复用的设计模式、确定性边界和吸收边界。
+
 ## Prerequisites
 
 - 理解相关领域的基本概念
@@ -33,16 +36,25 @@ constraints:
 
 ## Workflow
 
-<what-to-do>
+1. 扫描资源构成：`SKILL.md`、scripts、references、assets、tests、manifest。
+2. 反推真实痛点：禁止只摘 description，必须从流程、脚本和失败处理推导。
+3. 标注模式类型：Tool Wrapper、Generator、Reviewer、Inversion、Pipeline 或混合型。
+4. 拆解确定性边界：哪些步骤由脚本/模板/schema 固化，哪些留给 LLM 判断。
+5. 检查渐进式披露：frontmatter、入口正文、references/assets 是否层次清晰。
+6. 评估输出契约：产物、schema、pass/needs-fix、deny-path 和复验方式是否明确。
+7. 提炼可借鉴点：每项必须包含通用做法、Skill 做法、设计巧思、适用边界。
+8. 给出吸收建议：ADOPT、MERGE、REJECT、ENHANCE，并说明与现有 adk 资产关系。
 
 ## 执行流程（八阶段）
 
 ### 阶段 1: 结构扫描
 1. 识别资源构成：SKILL.md / scripts / references / assets
 2. 判断 Skill 类型：
-   - 轻量知识型（纯文档，无脚本）
-   - 流程编排型（脚本串联，有状态机）
-   - 工具集成型（调用外部 API/CLI）
+   - Tool Wrapper（封装 CLI/API/MCP）
+   - Generator（生成代码、文档、配置或资产）
+   - Reviewer（评审、打分、复验）
+   - Inversion（用户给目标，Agent 接管流程）
+   - Pipeline（多阶段编排）
    - 混合型
 3. 统计资源规模
 
@@ -66,6 +78,7 @@ constraints:
    - 哪些环节用脚本固化（确定性高）
    - 哪些环节留给 LLM 即兴（灵活性高）
    - 这个权衡是否合理？
+5. 检查高风险工具是否有执行前 policy、deny-path 样例和审计字段。
 
 ### 阶段 5: References 拆解
 1. 知识分层设计：元信息 → 核心知识 → 扩展资料
@@ -89,6 +102,12 @@ constraints:
 
 提炼可复用的设计模式。
 
+### 阶段 7.5: 吸收边界判断
+1. 是否已有 adk 同类 skill 或 runbook；若有，优先 MERGE。
+2. 是否符合嵌入式全栈或 Codex 资产治理边界；不符合则 REJECT/OBSERVE。
+3. 是否需要 manifest、profile、hook、MCP 或 `~/codex` 交付链路变更。
+4. 临时参考资料只作为输入证据，不进入长期 knowledge 或 adoption matrix。
+
 ### 阶段 8: 综合评估
 5 维评分（每项 0-20，满分 100）：
 1. **痛点精准度**：是否解决了真实痛点？
@@ -98,9 +117,7 @@ constraints:
 5. **可扩展性**：是否易于修改和扩展？
 
 输出：评分表 + 最佳实践总结 + 改进空间
-</what-to-do>
 
-<supporting-info>
 ## 来源
 方法论来源于 comeonzhj/comeonzhj-claude-plugins 的 howSkills.md，经 adk 本地化改造。
 
@@ -117,7 +134,6 @@ constraints:
 - 与 `adk-repo-prompt-analyzer` 配合使用
 - 输出的"独特解法"可直接用于 adk 的 skill 设计参考
 - 输出的"5 维评分"可纳入 adk 的质量评估体系
-</supporting-info>
 
 ## Quality Gate
 - 分析报告必须包含具体文件/行号证据

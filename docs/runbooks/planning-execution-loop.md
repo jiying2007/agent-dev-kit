@@ -18,10 +18,14 @@
 
 ## 工件
 
+- `PROJECT.md`：目标、边界、非目标、长期约束。
+- `REQUIREMENTS.md`：可证伪需求、验收条件、开放问题。
+- `PLAN.md`：阶段、依赖、done criteria、验证命令。
 - `session-state.md`：当前阶段、已完成项、未闭环项。
 - `next-actions.md`：下一步命令和完成标准。
 - `risk-ledger.md`：风险、阻塞、被证伪路径。
 - `resume-prompt.md`：新会话恢复入口。
+- `SUMMARY.md`：会话压缩摘要和最终交接上下文。
 
 ## 命令模板
 
@@ -37,3 +41,5 @@ bash scripts/devkit.sh review --change <change-id> --result pass --blockers 0 --
 - 每个阶段都有 done criteria 与验证证据。
 - 恢复工件足够让新会话继续执行。
 - 完成声明前必须通过 completion gate。
+- checkpoint 写入后必须可读、可追溯，并且无孤儿临时状态。
+- 临时参考材料只能作为背景输入，不能未经评估进入长期知识或 adoption matrix。

@@ -8,11 +8,25 @@
 - Current blocker:
 - Changed scope:
 
+## Planning Artifacts
+
+- PROJECT:
+- REQUIREMENTS:
+- PLAN:
+- STATE:
+- SUMMARY:
+
 ## Checkpoints
 
-| Stage | Status | Done Criteria | Verification | Evidence |
-|---|---|---|---|---|
-| S1 | pending |  |  |  |
+| Stage | Owner | Status | Done Criteria | Verification | Evidence | Next |
+|---|---|---|---|---|---|---|
+| S1 |  | pending |  |  |  |  |
+
+## Checkpoint Hygiene
+
+- Retention decision: keep-final | archive-negative-result | delete-orphan
+- Orphan checkpoint scan:
+- Write-after validation:
 
 ## Scope Change Handling
 

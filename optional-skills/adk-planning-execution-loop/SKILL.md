@@ -38,15 +38,23 @@ constraints:
 ## Workflow
 1. 计划审查：检查依赖顺序、验证命令、隐含环境假设和阻塞条件。
 2. 任务切片：每个阶段输出目标、scope、done criteria、验证命令。
-3. 执行检查点：每完成一个阶段，更新状态、证据和风险。
-4. 恢复记录：维护 `session-state`、`next-actions`、`risk-ledger`、`resume-prompt`。
-5. 偏离处理：发现计划错误、共享契约冲突或验证失败时，暂停并回到计划审查。
-6. 收口验证：进入完成声明前，执行 completion gate 并核对证据支持结论。
-7. 复盘归档：任务完成后输出复盘记录，沉淀经验与改进项。
+3. 状态外化：建立或更新 `PROJECT/REQUIREMENTS/STATE/PLAN/SUMMARY` 等同类 planning 工件。
+4. 执行检查点：每完成一个阶段，更新状态、证据和风险。
+5. 恢复记录：维护 `session-state`、`next-actions`、`risk-ledger`、`resume-prompt`。
+6. 偏离处理：发现计划错误、共享契约冲突或验证失败时，暂停并回到计划审查。
+7. 收口验证：进入完成声明前，执行 completion gate 并核对证据支持结论。
+8. 复盘归档：任务完成后输出复盘记录，沉淀经验与改进项。
 
 ## Templates
 - 长任务恢复与中途改范围处理模板：`references/long-task-recovery.md`。
 - 检查点、偏差记录、恢复 prompt 和失败回退锚点都应写入可复用工件，不依赖会话记忆。
+- 检查点默认存放在当前 change 或任务目录下；临时材料只能进入 session 级状态，不得进入长期 knowledge。
+
+## Checkpoint Hygiene
+- 每个 checkpoint 必须声明 owner、阶段状态、验证命令、证据路径和下一步。
+- checkpoint 连续失败两次时，先更新假设和风险，不继续堆叠同类尝试。
+- 任务完成或中止后清理 orphan checkpoint，只保留最终摘要、负结果和可复用决策。
+- 写入 checkpoint 后运行适用的 lint/test/dry-run，避免半截恢复状态误导下一会话。
 
 ## Commands
 ```bash
@@ -73,6 +81,7 @@ bash scripts/devkit.sh archive --change <change-id>
 ```md
 - Plan Review:
 - Stage Checklist:
+- Planning Artifacts:
 - Session State:
 - Next Actions:
 - Risk Ledger:
@@ -95,3 +104,4 @@ bash scripts/devkit.sh archive --change <change-id>
 - 完成结论必须经过 `adk-verification-before-completion`。
 - 偏差记录必须完整，包含根因、影响和处理决策。
 - 复盘必须在任务完成后 48 小时内完成。
+- orphan checkpoint 和过期临时状态必须有保留或删除决策。

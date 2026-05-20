@@ -25,6 +25,7 @@ constraints:
 # 分析仓库的 prompt 结构
 
 ## Goal
+从产品视角深度拆解目标仓库中的 Skill 设计，提炼可复用的设计模式、确定性边界和不适合吸收的风险。
 
 ## Prerequisites
 
@@ -32,12 +33,23 @@ constraints:
 - 熟悉项目结构和工作流程
 - 具备基本的文档编写能力
 
-从产品视角深度拆解目标仓库中的 Skill 设计，提炼可复用的设计模式和最佳实践。
-
-
 ## Workflow
 
-<what-to-do>
+1. 扫描资源构成：`SKILL.md`、scripts、references、assets、tests、manifest。
+2. 反推真实痛点：禁止只摘 description，必须从流程、脚本和失败处理推导。
+3. 标注模式类型：Tool Wrapper、Generator、Reviewer、Inversion、Pipeline 或混合型。
+4. 拆解确定性边界：哪些步骤由脚本/模板/schema 固化，哪些留给 LLM 判断。
+5. 检查渐进式披露：frontmatter、入口正文、references/assets 是否层次清晰。
+6. 评估输出契约：产物、schema、pass/needs-fix、deny-path 和复验方式是否明确。
+7. 提炼可借鉴点：每项必须包含通用做法、Skill 做法、设计巧思、适用边界。
+8. 给出吸收建议：ADOPT、MERGE、REJECT、ENHANCE，并说明与现有 adk 资产关系。
+
+## Pattern Checklist
+- Tool Wrapper：看命令 allowlist、输入校验、错误码、回滚。
+- Generator：看模板/schema、覆盖策略、格式化和测试。
+- Reviewer：看证据路径、严重级别、误报处置。
+- Inversion：看 stop/ask 条件、状态恢复、owner。
+- Pipeline：看代码级状态机、checkpoint、resume/abort 和最终验证。
 
 
 ## Quality Gate
@@ -45,6 +57,7 @@ constraints:
 - 禁止直接引用 description 字段，必须从实现反推
 - 5 维评分每项必须给出≥1个具体证据
 - 输出报告必须包含"可借鉴点清单"章节
+- 不得把临时参考素材直接写入长期 knowledge 或 adoption matrix
 
 
 ## Evidence Template
