@@ -4,6 +4,12 @@
 
 把参考仓更新转成可追踪、可裁剪、可验证的 adk 候选项。
 
+## 来源仓与目标仓边界
+
+- `llm_agent` 只把外部参考子仓作为 intake 来源。
+- `agent-dev-kit` 是落地目标仓，不作为来源仓参与 `adopt/observe/reject` 评估。
+- 目标仓变更走 `harden -> verify -> handoff` 闭环，不走来源仓 intake 流程。
+
 ## 流程
 
 1. `sync-subrepos` 拉取参考仓更新。
@@ -12,6 +18,13 @@
 4. adopt 项必须声明 `core/optional/profile/reject` 归属。
 5. 落地 Agent/Skill/Workflow 至少一层。
 6. 回归通过后先进入 `~/codex` 治理链路，再由 `~/codex` apply 到 `~/.codex` pilot。
+
+## 30 天重吸收分级
+
+- `re-intake-priority`：30 天内治理相关提交 `>=20`，进入下一波落地候选池。
+- `light-recheck`：30 天内治理相关提交 `1~19`，做轻量复核与证据刷新。
+- `no-action`：30 天内无治理相关提交，维持现状，等待下一周期。
+- `keep-reject-optional-pilot`：当前为 reject 且需保留探索价值，只允许 optional 试点，不进 core。
 
 ## 临时参考素材边界
 

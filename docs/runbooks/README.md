@@ -31,6 +31,7 @@
 - `upstream-intake.md`：参考仓同步、候选评估与回灌闭环
 - `compatibility-matrix.md`：多工具转换能力与降级边界
 - `security-supply-chain.md`：第三方资产引入前安全与供应链审查
+- `optional-pilot-boundary.md`：reject 项在 optional 层的试点边界与回退约束
 - `team-delivery.md`：团队责任矩阵、交接签收与复验闭环
 
 ## 使用方式

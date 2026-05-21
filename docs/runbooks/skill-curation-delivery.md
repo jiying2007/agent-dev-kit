@@ -30,6 +30,13 @@ bash scripts/devkit.sh review --change <change-id> --result pass --blockers 0 --
 - 每个候选技能必须给出归属结论：`core` / `optional` / `reject`。
 - 必须声明安装范围：`global-ready` 或 `project-bound`。
 - 必须记录依赖边界：是否依赖项目内脚本、数据目录或私有上下文。
+- 候选技能文档推荐使用结构化章节：`what-to-do` 与 `supporting-info`，降低路由歧义与冗余解释成本。
+
+## Skill 结构契约（推荐）
+
+- `what-to-do`：只写行动步骤、输入输出和完成判据。
+- `supporting-info`：集中放约束、背景、反例与兼容说明。
+- 两类信息分区后，优先让路由和执行读取 `what-to-do`，减少上下文开销。
 
 ## 候选筛选模板
 
