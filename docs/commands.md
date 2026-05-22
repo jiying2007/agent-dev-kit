@@ -52,7 +52,7 @@ bash scripts/devkit.sh runtime-boundary --summary-json
 
 ## token-budget
 
-检查 active Skill 入口、active docs、高信号治理脚本和全量测试输出策略是否符合低 token 预算。
+检查 active Skill 入口、active docs、高信号治理脚本、全量测试输出策略和保真省 Token 资产是否符合低 token 预算。
 
 ```bash
 bash scripts/devkit.sh token-budget

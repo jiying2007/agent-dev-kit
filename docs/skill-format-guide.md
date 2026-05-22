@@ -2,7 +2,7 @@
 
 ## SKILL.md 规范
 
-SKILL.md 是 skill 的入口文件，应保持精简（默认门禁 ≤140 行）。
+SKILL.md 是 skill 的入口文件，应保持精简（严格门禁 ≤140 行）。它是写给 Agent 的岗位 SOP 入口，不是 prompt 仓库，也不是长篇百科。
 
 ### 必需章节
 1. YAML frontmatter (name, description, triggers, non_triggers)
@@ -13,6 +13,21 @@ SKILL.md 是 skill 的入口文件，应保持精简（默认门禁 ≤140 行�
 - 合理化借口拦截
 - 健壮性规范
 - 示例
+
+### Description 触发质量
+
+`description` 会参与运行时 discovery，必须写成“何时使用 + 产出什么”的短句，而不是泛化能力名。
+
+要求：
+- 具体说明任务场景，避免“优化流程”“提升质量”这类空泛描述。
+- 能与相邻 skill 区分，避免多个 skill 同时争抢 primary。
+- 与 `triggers`、`non_triggers` 和 `manifest.yaml` routing 语义一致。
+- 不得包含 `TODO`、`TBD`、`待补充`、`示例技能` 等占位内容。
+- 高风险 skill 应在 description 或 constraints 中体现运行边界。
+
+示例：
+- 好：`完成前验证门禁，确保交付声明与证据一致`
+- 差：`验证优化`
 
 ## references/ 子目录
 
@@ -31,6 +46,10 @@ skills/<skill-name>/
 - SKILL.md = Agent 需要立即知道的信息
 - references/ = Agent 按需查阅的详细信息
 - 减少 token 消耗，提高上下文效率
+
+## 运行时分层
+
+Skill 只定义“应该怎么做”；Agent 负责运行时执行和调度；Sub-agent 是被拆分出去的短生命周期执行实例；MCP/tool 只提供外部能力接口。完整分层见 `docs/skill-agent-runtime-model.md`。
 
 ---
 

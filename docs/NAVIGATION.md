@@ -1,6 +1,6 @@
 # 文档导航索引
 
-> 自动生成于 2026-05-05 | 共 56+ 文档 + 28 Runbooks
+> 自动生成于 2026-05-05 | 共 57+ 文档 + 29 Runbooks
 
 ## 用户文档
 
@@ -55,6 +55,8 @@
 | Runtime Routing | runbooks/runtime-routing.md | 路由规则与冲突 |
 | 上游吸收 | runbooks/upstream-intake.md | 参考仓评估与吸收 |
 | 团队交付 | runbooks/team-delivery.md | 团队协作流程 |
+| 记忆治理 | runbooks/memory-governance.md | AAR 复盘与 memory candidate 治理 |
+| Token 上下文治理 | runbooks/token-context-governance.md | 保真省 Token、原文回退与证据保留 |
 | 计划执行循环 | runbooks/planning-execution-loop.md | 长任务管理 |
 | 安全供应链 | runbooks/security-supply-chain.md | 第三方审查 |
 | 兼容性矩阵 | runbooks/compatibility-matrix.md | 工具兼容性 |
@@ -105,11 +107,21 @@
 | adk-parallel-agent-governance | skills/adk-parallel-agent-governance/ | 方法论 | 并行子代理治理 |
 | adk-worktree-governance | skills/adk-worktree-governance/ | 方法论 | git worktree 隔离治理 |
 | adk-branch-closeout | skills/adk-branch-closeout/ | 方法论 | 开发分支收尾 |
+| adk-after-action-review | skills/adk-after-action-review/ | 方法论 | 任务复盘与经验记忆候选治理 |
 | adk-grill-with-docs | skills/adk-grill-with-docs/ | mattpocock-skills | 烤问式需求对齐 |
 | adk-code-simplification | skills/adk-code-simplification/ | agent-skills | 代码简化 |
 | adk-context-engineering | skills/adk-context-engineering/ | agent-skills | 上下文工程 |
+| adk-token-context-governance | skills/adk-token-context-governance/ | 方法论 | 保真省 Token 与工具输出读取治理 |
 | adk-chinese-commit-conventions | skills/adk-chinese-commit-conventions/ | 方法论 | 中文提交规范 |
 | adk-chinese-code-review | skills/adk-chinese-code-review/ | 方法论 | 中文代码审查 |
+
+### 上下文治理模板
+| 模板 | 路径 | 用途 |
+|------|------|------|
+| Context Budget Profile | templates/context/context-budget-profile.md | 任务类型、风险等级、预算模式、读层级与原文回退配置 |
+| Tool Output Summary | templates/context/tool-output-summary.md | 压缩工具输出时保留证据、置信度与回退条件 |
+| Raw Evidence Index | templates/context/raw-evidence-index.md | 登记可回读的完整日志、diff、测试输出或原文 |
+| Project Map | templates/context/project-map.md | 维护长期项目入口、测试、禁读目录和高风险区域 |
 
 ### 可选 Skill
 | Skill | 路径 | 来源 | 用途 |

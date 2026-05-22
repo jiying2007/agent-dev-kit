@@ -20,6 +20,11 @@ pass_skill() {
   pass=$((pass + 1))
 }
 
+frontmatter_has_key() {
+  local key="$1" file="$2"
+  awk -v key="$key" 'NR <= 30 && $0 ~ "^" key ":" { found = 1 } END { exit found ? 0 : 1 }' "$file"
+}
+
 for skill_dir in "$SKILLS_DIR"/*/; do
   [ -d "$skill_dir" ] || continue
   skill_name="$(basename "$skill_dir")"
@@ -35,21 +40,21 @@ for skill_dir in "$SKILLS_DIR"/*/; do
   body_lines="$(echo "$body" | wc -l)"
 
   # Check 1: frontmatter must contain 'name'
-  if echo "$content" | head -30 | rg -q '^name:'; then
+  if frontmatter_has_key "name" "$skill_file"; then
     pass_skill "$skill_name" "frontmatter has name"
   else
     fail_skill "$skill_name" "frontmatter missing 'name'"
   fi
 
   # Check 2: frontmatter must contain 'description'
-  if echo "$content" | head -30 | rg -q '^description:'; then
+  if frontmatter_has_key "description" "$skill_file"; then
     pass_skill "$skill_name" "frontmatter has description"
   else
     fail_skill "$skill_name" "frontmatter missing 'description'"
   fi
 
   # Check 3: frontmatter must contain 'triggers'
-  if echo "$content" | head -30 | rg -q '^triggers:'; then
+  if frontmatter_has_key "triggers" "$skill_file"; then
     pass_skill "$skill_name" "frontmatter has triggers"
   else
     fail_skill "$skill_name" "frontmatter missing 'triggers'"
@@ -82,6 +87,14 @@ for skill_dir in "$SKILLS_DIR"/*/; do
     pass_skill "$skill_name" "triggers is non-empty"
   else
     fail_skill "$skill_name" "triggers is empty"
+  fi
+
+  # Check 8: SKILL.md must stay as a compact SOP entrypoint
+  total_lines="$(wc -l < "$skill_file")"
+  if [ "$total_lines" -le 140 ]; then
+    pass_skill "$skill_name" "entry has $total_lines lines (<= 140)"
+  else
+    fail_skill "$skill_name" "entry has $total_lines lines (> 140)"
   fi
 done
 

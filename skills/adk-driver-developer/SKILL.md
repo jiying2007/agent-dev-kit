@@ -1,6 +1,6 @@
 ---
 name: adk-driver-developer
-description: 嵌入式驱动开发
+description: 嵌入式驱动实现、联调验证与风险收口
 version: 1.0.0
 last_updated: 2026-05-16
 triggers:

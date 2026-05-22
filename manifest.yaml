@@ -313,6 +313,11 @@ skills:
     path: skills/adk-verification-before-completion/SKILL.md
     quality_tier: p0
     depends_on: []
+  - name: adk-after-action-review
+    path: skills/adk-after-action-review/SKILL.md
+    quality_tier: p0
+    depends_on:
+      - adk-verification-before-completion
   - name: adk-integration-hil-sil
     path: skills/adk-integration-hil-sil/SKILL.md
     quality_tier: p0
@@ -356,6 +361,12 @@ skills:
     path: skills/adk-context-engineering/SKILL.md
     quality_tier: p0
     depends_on: []
+  - name: adk-token-context-governance
+    path: skills/adk-token-context-governance/SKILL.md
+    quality_tier: p0
+    depends_on:
+      - adk-context-engineering
+      - adk-verification-before-completion
   - name: adk-chinese-commit-conventions
     path: skills/adk-chinese-commit-conventions/SKILL.md
     quality_tier: p0
@@ -440,6 +451,8 @@ profiles:
       - adk-systematic-debugging
       - adk-unit-test-embedded
       - adk-verification-before-completion
+      - adk-after-action-review
+      - adk-token-context-governance
       - adk-commit-pr-quality-gate
   release-hardening:
     description: 发布加固配置（安全审查、性能优化、合规检查）
@@ -464,6 +477,8 @@ profiles:
       - adk-systematic-debugging
       - adk-unit-test-embedded
       - adk-verification-before-completion
+      - adk-after-action-review
+      - adk-token-context-governance
       - adk-commit-pr-quality-gate
   personal-core:
     description: 个人 ~/codex 声明式交付配置（核心功能 + 发布检查）
@@ -519,6 +534,8 @@ profiles:
       - adk-release-versioning
       - adk-production-field-readiness
       - adk-verification-before-completion
+      - adk-after-action-review
+      - adk-token-context-governance
       - adk-commit-pr-quality-gate
   team-core:
     description: 团队协作配置（交接/验证/评审）
@@ -535,6 +552,8 @@ profiles:
       - adk-requirements-triage
       - adk-task-breakdown
       - adk-commit-pr-quality-gate
+      - adk-after-action-review
+      - adk-token-context-governance
       - adk-grill-with-docs
       - adk-chinese-commit-conventions
       - adk-chinese-code-review
@@ -607,6 +626,8 @@ workflows:
       - adk-test-strategy
       - adk-code-review-loop
       - adk-verification-before-completion
+      - adk-after-action-review
+      - adk-token-context-governance
       - adk-commit-pr-quality-gate
     agents:
       - requirements-analyst
@@ -682,6 +703,12 @@ routing:
       intent_zh: "技能路由/选择技能/任务分流/adk路由/adk-first/判断使用哪个技能/运行时路由/开始任务前"
       primary_skill: adk-runtime-router
       supporting_skills: []
+    - intent: token_context_governance
+      intent_zh: "省token/上下文太大/压缩输出/工具输出太长/日志太长/回退原文/token budget"
+      primary_skill: adk-token-context-governance
+      supporting_skills:
+        - adk-context-engineering
+        - adk-verification-before-completion
     - intent: requirements_triage
       intent_zh: "需求不清楚/需要澄清/需求模糊/需求不明确/新功能/实现新功能/验收标准/目标边界"
       primary_skill: adk-requirements-triage
@@ -727,6 +754,11 @@ routing:
       intent_zh: "准备完成/完成前验证/交付前验证"
       primary_skill: adk-verification-before-completion
       supporting_skills: []
+    - intent: after_action_review
+      intent_zh: "任务复盘/经验沉淀/memory candidate/After Action Review/避免重复犯错/复盘lessons"
+      primary_skill: adk-after-action-review
+      supporting_skills:
+        - adk-verification-before-completion
     - intent: commit_pr_quality_gate
       intent_zh: "提交代码/准备提交/提交前检查"
       primary_skill: adk-commit-pr-quality-gate

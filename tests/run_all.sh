@@ -63,6 +63,7 @@ TESTS=(
   test_convert_codex_handoff.sh
   test_runtime_boundary.sh
   test_token_budget.sh
+  test_token_context_governance.sh
   test_workflow_closure.sh
   test_change_governance.sh
   test_evidence_index.sh
@@ -84,6 +85,8 @@ TESTS=(
   test_profile_coherence_enhanced.sh
   test_match_effectiveness.sh
   test_skill_content.sh
+  test_skill_sop_quality.sh
+  test_memory_governance.sh
   test_scripts_smoke.sh
 )
 

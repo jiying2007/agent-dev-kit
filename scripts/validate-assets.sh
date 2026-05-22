@@ -68,6 +68,22 @@ is_kebab_case() {
   [[ "$value" =~ ^[a-z0-9]+(-[a-z0-9]+)*$ ]]
 }
 
+extract_frontmatter_scalar() {
+  local file="$1"
+  local key="$2"
+  awk -v key="$key" '
+    NR==1 && $0=="---" {in_fm=1; next}
+    in_fm && $0=="---" {exit}
+    in_fm && $0 ~ "^" key ":" {
+      value=$0
+      sub("^" key ":[ ]*", "", value)
+      gsub(/^"|"$/, "", value)
+      print value
+      exit
+    }
+  ' "$file"
+}
+
 validate_top_level_schema() {
   require_key "version"
   require_key "locale"
@@ -192,6 +208,7 @@ validate_skill_file() {
   local section="$3"
   local frontmatter=""
   local declared_name=""
+  local description=""
 
   [[ -s "$file" ]] || fail "missing or empty skill file: $file"
 
@@ -205,6 +222,18 @@ validate_skill_file() {
   for key in name description triggers non_triggers inputs outputs constraints; do
     echo "$frontmatter" | grep -q "^$key:" || fail "frontmatter key '$key' missing: $file"
   done
+
+  description="$(extract_frontmatter_scalar "$file" "description")"
+  [[ -n "$description" ]] || fail "$section '$expected_name' description is empty: $file"
+  if [[ "$STRICT" -eq 1 ]]; then
+    [[ "${#description}" -ge 8 ]] || fail "$section '$expected_name' description too short for discovery: $description"
+    if [[ "$description" =~ (TODO|TBD|FIXME|待补充|描述待定|示例技能|占位) ]]; then
+      fail "$section '$expected_name' description contains placeholder text: $description"
+    fi
+    if [[ "$description" =~ ^(优化|改进|验证|测试|文档|流程|工具|助手)$ ]]; then
+      fail "$section '$expected_name' description is too generic for discovery: $description"
+    fi
+  fi
 
   for key in triggers non_triggers inputs outputs constraints; do
     local count
@@ -275,6 +304,23 @@ validate_optional_skills_mapping() {
     file="$ROOT_DIR/$path"
     validate_skill_file "$file" "$name" "optional skill"
   done
+}
+
+validate_skill_description_uniqueness() {
+  [[ "$STRICT" -eq 1 ]] || return 0
+
+  declare -A seen_descriptions=()
+  local file
+  local desc
+  while IFS= read -r file; do
+    [[ -z "$file" ]] && continue
+    desc="$(extract_frontmatter_scalar "$file" "description")"
+    [[ -n "$desc" ]] || continue
+    if [[ -n "${seen_descriptions[$desc]:-}" ]]; then
+      fail "duplicate skill description: '$desc' in ${seen_descriptions[$desc]#$ROOT_DIR/} and ${file#$ROOT_DIR/}"
+    fi
+    seen_descriptions[$desc]="$file"
+  done < <(find "$ROOT_DIR/skills" "$ROOT_DIR/optional-skills" -name SKILL.md -type f | sort)
 }
 
 validate_manifest_quality_tiers() {
@@ -402,7 +448,7 @@ validate_skill_entry_size() {
   while IFS= read -r file; do
     [[ -z "$file" ]] && continue
     lines="$(wc -l < "$file")"
-    [[ "$lines" -le 150 ]] || fail "skill entry exceeds 150 lines: ${file#$ROOT_DIR/} (${lines})"
+    [[ "$lines" -le 140 ]] || fail "skill entry exceeds 140 lines: ${file#$ROOT_DIR/} (${lines})"
   done < <(find "$ROOT_DIR/skills" "$ROOT_DIR/optional-skills" -name SKILL.md -type f | sort)
 }
 
@@ -448,6 +494,7 @@ validate_tool_targets
 validate_agents_and_manifest_mapping
 validate_skills_and_manifest_mapping
 validate_optional_skills_mapping
+validate_skill_description_uniqueness
 validate_manifest_quality_tiers "agents" "agent"
 validate_manifest_quality_tiers "skills" "skill"
 validate_manifest_quality_tiers "optional_skills" "optional skill"

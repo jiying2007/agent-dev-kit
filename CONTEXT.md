@@ -8,26 +8,35 @@
 ## 1. 核心概念
 
 ### 1.1 Agent (代理)
-- **定义**: 具有特定角色和职责的 AI 助手实例
+- **定义**: 运行时执行主体，负责读取上下文、选择 Skill、调用工具、推进任务并对结果负责
 - **位置**: `agents/<name>/AGENTS.md`
 - **示例**: requirements-analyst, architecture-planner, driver-engineer
 
 ### 1.2 Skill (技能)
-- **定义**: 可复用的、特定领域的知识和流程模块
+- **定义**: 可复用、可版本化的岗位 SOP，定义某类任务应该怎么做、输入输出、完成标准、失败收口和验证要求
 - **位置**: `skills/<name>/SKILL.md` 或 `optional-skills/<name>/SKILL.md`
 - **分类**:
   - **Core Skills**: 核心技能，必须具备可执行流程与验收证据模板
   - **Optional Skills**: 可选技能，仅在明确请求时安装
 
-### 1.3 Profile (配置文件)
+### 1.3 Sub-agent (子代理)
+- **定义**: 由主 Agent 派生的短生命周期执行实例，只处理边界明确、可独立验证的子任务
+- **契约**: 必须通过 `templates/planning/worker-contract.md` 或等价任务包声明 `scope_read`、`scope_write`、`must_not_touch`、`verification_commands` 和回传 schema
+- **边界**: Sub-agent 不是 Skill；它可以使用 Skill，但不能把临时任务细节沉淀为长期方法论
+
+### 1.4 Profile (配置文件)
 - **定义**: 预定义的 Agent/Skill 组合，用于特定场景
 - **位置**: `manifest.yaml` 中的 `profiles` 部分
 - **示例**: core, embedded-fullstack, release-hardening
 
-### 1.4 Manifest (清单)
+### 1.5 Manifest (清单)
 - **定义**: 单一事实源，定义所有 Agent/Skill/Profile 的元数据和依赖关系
 - **位置**: `manifest.yaml`
 - **作用**: 驱动安装、验证、转换等所有操作
+
+### 1.6 MCP / Tool (能力接口)
+- **定义**: 外部系统和确定性能力接口，例如 Git、文档、设备、浏览器或 API 连接
+- **边界**: MCP/tool 只说明“能连什么、风险是什么”，不承担 Skill 的执行方法论职责
 
 ---
 
@@ -171,6 +180,12 @@
 每个 SKILL.md 必须包含:
 - **Frontmatter**: name, description, triggers, non_triggers, inputs, outputs, constraints
 - **Body**: Goal, Prerequisites, Workflow, Quality Gate, Failure Handling
+- **入口长度**: 严格门禁下不超过 140 行，长背景和示例进入 `references/`
+- **Description**: 必须能表达触发场景和产出，不能使用占位或泛化描述
+
+### 9.3 分层文档
+- Skill / Agent / Sub-agent / Workflow / MCP 的职责边界见 `docs/skill-agent-runtime-model.md`
+- 并行 worker 任务契约模板见 `templates/planning/worker-contract.md`
 
 ---
 

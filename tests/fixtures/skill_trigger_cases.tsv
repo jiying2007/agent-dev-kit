@@ -26,5 +26,11 @@ adk-systematic-debugging	skill	1	真实问题排查需要定位根因再修复
 adk-systematic-debugging	skill	0	纯文档或命名修改不需要调试流程
 adk-verification-before-completion	skill	1	准备提交前需要先过完成前验证
 adk-verification-before-completion	skill	0	仅做方案讨论且尚未产生实现改动
+adk-after-action-review	skill	1	任务结束后做任务复盘并提取 memory candidate
+adk-after-action-review	skill	1	这次踩坑了，需要经验沉淀避免重复犯错
+adk-after-action-review	skill	0	只保存完整聊天记录不要提取经验
+adk-token-context-governance	skill	1	上下文太大，需要先压缩输出再按需回退原文
+adk-token-context-governance	skill	1	docker 日志太长，先做 token budget 摘要并保留 raw_evidence
+adk-token-context-governance	skill	0	高风险审计要求直接看原文
 adk-incident-rca-report	optional-skill	1	线上事故需要做根因分析复盘
 adk-incident-rca-report	optional-skill	0	本地开发阶段的临时报错先不复盘

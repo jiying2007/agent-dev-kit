@@ -67,3 +67,73 @@
 - `manifest.yaml`（核心 skill + workflow 门禁）
 
 结论：`agent-dev-kit` 保留“规则思想”，但全部转换为本仓库可执行脚本、模板和测试门禁，确保离线独立可用。
+
+## 7. Codex Skills 岗位 SOP 模型（2026-05-21）
+
+借鉴点：
+- Skill 不是 prompt 升级版，而是可版本化、可审查、可复用的岗位 SOP。
+- `SKILL.md` 应作为精简入口，长背景、示例和领域资料进入 `references/`。
+- `description` 是 discovery 入口，必须具体、可区分、可匹配。
+- Skill、Agent、Sub-agent、MCP/tool 分属方法、执行者、短生命周期执行实例和能力接口四层。
+- 多 Agent 并行时，主 Agent 必须把 scope、Skill、Done criteria、验证和 report schema 作为任务契约分发。
+
+落地点：
+- `docs/skill-agent-runtime-model.md`
+- `docs/skill-format-guide.md`
+- `templates/planning/worker-contract.md`
+- `scripts/validate-assets.sh`
+- `tests/test_skill_sop_quality.sh`
+- `skills/adk-parallel-agent-governance/SKILL.md`
+
+有意排除：
+- 不把第三方 Skill 安装成功视为生产采纳完成。
+- 不绕过 `agent-dev-kit -> ~/codex -> ~/.codex` 声明式交付链路。
+- 不把个人偏好、一次性 prompt 或外部仓库路径直接写入 adk core 规则。
+
+## 8. Agent 记忆与 AAR 自我进化治理（2026-05-21）
+
+借鉴点：
+- Agent 记忆不等于保存聊天记录，而是保存下次同类任务会用到的偏好、项目规则、工作流和 lessons。
+- 任务后必须把成功路径、失败根因、修复动作和验证证据整理为 After Action Review。
+- 记忆候选需要分层：`session/user/project/lesson`，并带 `risk/confidence/evidence/last_verified/write_route`。
+- 低风险可自动形成候选，高风险如自动发布、删除文件、生产数据库、支付动作、凭据保存必须人工确认。
+- 记忆需要 stale / conflict / supersedes 机制，避免旧规则长期污染上下文。
+
+落地点：
+- `skills/adk-after-action-review/SKILL.md`
+- `templates/memory/after-action-review.md`
+- `templates/memory/memory-candidate.md`
+- `docs/runbooks/memory-governance.md`
+- `scripts/check-memory-governance.sh`
+- `tests/test_memory_governance.sh`
+
+有意排除：
+- 不保存完整聊天记录、临时草稿、未经确认推测、密钥或隐私原文。
+- 不默认引入向量库、知识图谱或数据库；先用可审查 Markdown 模板稳定结构。
+- 不让 Agent 静默修改 `~/.codex/memories`、`AGENTS.md` 或高风险生产规则。
+
+## 9. 保真省 Token 与上下文读取治理（2026-05-21）
+
+借鉴点：
+- 省 Token 应优先压缩低密度工具输出，而不是压缩用户目标和验收约束。
+- 默认先读摘要，再按置信度和风险回退局部原文或完整原文。
+- 高风险任务包括安全、权限、支付、数据库迁移、生产故障、协议兼容、签名和性能瓶颈，不能只凭摘要判断。
+- 压缩摘要必须保留 `raw_evidence`、`confidence`、`fallback_condition`，否则不可作为交付证据。
+- 项目索引应维护入口、测试、禁读目录、高风险区域和已验证时间，减少重复扫仓。
+- 上下文预算应按极速、均衡、精确、审计四种模式切换；高风险结论证据必须走审计/原文路径。
+- 外部记忆和会话索引工具应先作为 observe 候选，不默认进入 core 依赖，避免召回污染和运维复杂度。
+
+落地点：
+- `skills/adk-token-context-governance/SKILL.md`
+- `templates/context/tool-output-summary.md`
+- `templates/context/raw-evidence-index.md`
+- `templates/context/context-budget-profile.md`
+- `templates/context/project-map.md`
+- `docs/runbooks/token-context-governance.md`
+- `scripts/check-token-budget.sh`
+- `tests/test_token_context_governance.sh`
+
+有意排除：
+- 不对写操作、删除、部署、数据库写入等命令做“压缩后替代审查”。
+- 不只保存摘要而丢弃原文入口，避免复盘时证据不可追溯。
+- 不把一次性日志、过期项目结构或未经确认的猜测写成长期索引。

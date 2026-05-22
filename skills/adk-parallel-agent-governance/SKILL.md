@@ -49,7 +49,7 @@ constraints:
 1. **准入判断**：给出 Parallel Suitability: yes/no 和理由。
 2. **冻结共享边界**：列出禁止并行写入的文件、contract、schema 和根配置。
 3. **生成任务包**：每个子任务包含目标、scope_write、scope_read、验证命令、停止条件。
-4. **定义子代理提示**：提示必须自包含，说明不独占代码库且不得回滚他人改动。
+4. **定义子代理提示**：使用 `templates/planning/worker-contract.md` 或等价结构，提示必须自包含，说明不独占代码库且不得回滚他人改动。
 5. **调度执行**：优先并发运行独立任务；阻塞任务保留在主线程。
 6. **等待与收集**：使用平台子代理等待语义，收集 DONE/BLOCKED/NEEDS_CONTEXT。
 7. **整合审查**：检查文件冲突、逻辑依赖、测试覆盖和文档一致性。
@@ -70,9 +70,11 @@ verification_commands:
 blocked_conditions:
 expected_output:
 handoff_summary_required: yes
+report_schema: DONE|BLOCKED|NEEDS_CONTEXT + changed_files + verification + risks
 ```
 
 完整嵌入式全栈任务包模板：`references/parallel-worktree-task-package.md`。
+通用 worker 契约模板：`templates/planning/worker-contract.md`。
 子任务完成后使用 `references/subagent-review-checklist.md` 做 scope、验证和整合审查。
 
 ## Commands
@@ -96,6 +98,7 @@ rg -n "contract|schema|shared|router|entry|package.json|lockfile" .
 ## Quality Gate
 - 必须输出并行适用性结论。
 - 每个子任务必须有独立验证命令和明确 `must_not_touch`。
+- 每个子任务必须声明 primary_skill、report_schema 和冲突处理策略。
 - 所有子任务结束后必须有统一整合验证。
 - 任何越界写入、共享契约变更或根配置变更都必须重新审批。
 - 最终报告必须区分子任务完成和整体完成。
