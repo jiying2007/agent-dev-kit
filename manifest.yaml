@@ -153,33 +153,43 @@ agents:
   - name: requirements-analyst
     path: agents/requirements-analyst/AGENTS.md
     quality_tier: p0
+    description: 需求澄清、验收标准和范围边界分析
   - name: architecture-planner
     path: agents/architecture-planner/AGENTS.md
     quality_tier: p0
+    description: 架构方案、模块边界和技术决策规划
   - name: driver-engineer
     path: agents/driver-engineer/AGENTS.md
     quality_tier: p0
+    description: 驱动实现、bring-up 和底层联调
   - name: component-engineer
     path: agents/component-engineer/AGENTS.md
     quality_tier: p0
+    description: 组件接口、模块实现和集成边界治理
   - name: application-engineer
     path: agents/application-engineer/AGENTS.md
     quality_tier: p0
+    description: 设备侧应用、上位机工具和业务逻辑实现
   - name: build-release-engineer
     path: agents/build-release-engineer/AGENTS.md
     quality_tier: p0
+    description: 构建、打包、版本发布和回滚链路
   - name: test-validation-engineer
     path: agents/test-validation-engineer/AGENTS.md
     quality_tier: p0
+    description: 测试策略、验证证据和完成前门禁
   - name: performance-reliability-engineer
     path: agents/performance-reliability-engineer/AGENTS.md
     quality_tier: p0
+    description: 性能剖析、稳定性和可靠性风险治理
   - name: security-compliance-reviewer
     path: agents/security-compliance-reviewer/AGENTS.md
     quality_tier: p0
+    description: 安全、合规、凭据和供应链风险审查
   - name: code-review-governor
     path: agents/code-review-governor/AGENTS.md
     quality_tier: p0
+    description: 代码审查、反馈闭环和质量放行治理
   # 嵌入式专用 Agent 角色
   - name: adk-bsp-analyst
     path: agents/adk-bsp-analyst/AGENTS.md
@@ -836,7 +846,7 @@ routing:
       supporting_skills:
         - adk-systematic-debugging
     - intent: production_field_readiness
-      intent_zh: "量产/产测/烧录/诊断/现场维护/OTA升级/回滚/RMA/设备健康检查"
+      intent_zh: "量产/产测/烧录/诊断/现场维护/OTA升级/回滚/RMA/设备健康检查/production-field/field readiness/embedded-production-field-readiness/simulate-device/模拟设备/设备状态机/自动推进"
       primary_skill: adk-production-field-readiness
       supporting_skills:
         - adk-release-versioning

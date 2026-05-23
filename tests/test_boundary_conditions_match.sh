@@ -293,6 +293,12 @@ test_routing_23_production_field() {
     [[ "$output" == *"match=true"* && "$output" == *"skill=adk-production-field-readiness"* ]]
 }
 
+test_routing_23b_production_field_sim_device() {
+    local output
+    output=$("$MATCH_SCRIPT" --text "production-field simulate-device 设备状态机" 2>&1) || true
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-production-field-readiness"* ]]
+}
+
 # ============================================================
 # 边界条件: intent_zh 中多 '/' 分隔符
 # ============================================================
@@ -366,6 +372,7 @@ run_test "Routing 20: adk-fault-injection-recovery" test_routing_20_fault_inject
 run_test "Routing 21: adk-performance-profiling-embedded" test_routing_21_performance
 run_test "Routing 22: adk-release-versioning" test_routing_22_release
 run_test "Routing 23: adk-production-field-readiness" test_routing_23_production_field
+run_test "Routing 23b: production-field sim-device alias" test_routing_23b_production_field_sim_device
 
 # Multi-slash intent_zh tests
 run_test "Multi-slash: first segment" test_multi_slash_intent_zh_first

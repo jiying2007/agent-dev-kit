@@ -1,28 +1,28 @@
 # Agent and Skill Catalog
 
-- generated_at: 2026-05-23T08:47:33Z
+- generated_at: 2026-05-23T10:26:49Z
 - source: manifest.yaml
 
 ## Agents
 
-| Name | Role | Path |
+| Name | Description | Path |
 |---|---|---|
-| `requirements-analyst` |  | `agents/requirements-analyst/AGENTS.md` |
-| `architecture-planner` |  | `agents/architecture-planner/AGENTS.md` |
-| `driver-engineer` |  | `agents/driver-engineer/AGENTS.md` |
-| `component-engineer` |  | `agents/component-engineer/AGENTS.md` |
-| `application-engineer` |  | `agents/application-engineer/AGENTS.md` |
-| `build-release-engineer` |  | `agents/build-release-engineer/AGENTS.md` |
-| `test-validation-engineer` |  | `agents/test-validation-engineer/AGENTS.md` |
-| `performance-reliability-engineer` |  | `agents/performance-reliability-engineer/AGENTS.md` |
-| `security-compliance-reviewer` |  | `agents/security-compliance-reviewer/AGENTS.md` |
-| `code-review-governor` |  | `agents/code-review-governor/AGENTS.md` |
-| `adk-bsp-analyst` |  | `agents/adk-bsp-analyst/AGENTS.md` |
-| `adk-driver-developer` |  | `agents/adk-driver-developer/AGENTS.md` |
-| `adk-hardware-debugger` |  | `agents/adk-hardware-debugger/AGENTS.md` |
-| `adk-planner` |  | `agents/adk-planner/AGENTS.md` |
-| `adk-generator` |  | `agents/adk-generator/AGENTS.md` |
-| `adk-evaluator` |  | `agents/adk-evaluator/AGENTS.md` |
+| `requirements-analyst` | 需求澄清、验收标准和范围边界分析 | `agents/requirements-analyst/AGENTS.md` |
+| `architecture-planner` | 架构方案、模块边界和技术决策规划 | `agents/architecture-planner/AGENTS.md` |
+| `driver-engineer` | 驱动实现、bring-up 和底层联调 | `agents/driver-engineer/AGENTS.md` |
+| `component-engineer` | 组件接口、模块实现和集成边界治理 | `agents/component-engineer/AGENTS.md` |
+| `application-engineer` | 设备侧应用、上位机工具和业务逻辑实现 | `agents/application-engineer/AGENTS.md` |
+| `build-release-engineer` | 构建、打包、版本发布和回滚链路 | `agents/build-release-engineer/AGENTS.md` |
+| `test-validation-engineer` | 测试策略、验证证据和完成前门禁 | `agents/test-validation-engineer/AGENTS.md` |
+| `performance-reliability-engineer` | 性能剖析、稳定性和可靠性风险治理 | `agents/performance-reliability-engineer/AGENTS.md` |
+| `security-compliance-reviewer` | 安全、合规、凭据和供应链风险审查 | `agents/security-compliance-reviewer/AGENTS.md` |
+| `code-review-governor` | 代码审查、反馈闭环和质量放行治理 | `agents/code-review-governor/AGENTS.md` |
+| `adk-bsp-analyst` | BSP 代码分析、架构梳理、历史追溯 | `agents/adk-bsp-analyst/AGENTS.md` |
+| `adk-driver-developer` | 嵌入式驱动开发 | `agents/adk-driver-developer/AGENTS.md` |
+| `adk-hardware-debugger` | 硬件问题调试、oops 分析 | `agents/adk-hardware-debugger/AGENTS.md` |
+| `adk-planner` | 需求分析、任务拆解、方案设计 | `agents/adk-planner/AGENTS.md` |
+| `adk-generator` | 编码实现、单元测试编写 | `agents/adk-generator/AGENTS.md` |
+| `adk-evaluator` | 代码评审、质量验证 | `agents/adk-evaluator/AGENTS.md` |
 
 ## Skills
 

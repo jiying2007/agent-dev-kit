@@ -152,6 +152,12 @@ test_routing_production_field() {
     [[ "$output" == *"match=true"* && "$output" == *"skill=adk-production-field-readiness"* ]]
 }
 
+test_routing_production_field_pilot_id() {
+    local output
+    output=$("$MATCH_SCRIPT" --text "embedded-production-field-readiness，模拟设备自动推进" 2>&1) || true
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-production-field-readiness"* ]]
+}
+
 test_routing_performance() {
     local output
     output=$("$MATCH_SCRIPT" --text "性能分析" 2>&1) || true
@@ -203,6 +209,7 @@ run_test "准备发布 -> adk-release-versioning" test_routing_release
 run_test "BSP移植 -> adk-bsp-porting-playbook" test_routing_bsp
 run_test "启动链 -> adk-bsp-porting-playbook" test_routing_boot_chain
 run_test "量产现场 -> adk-production-field-readiness" test_routing_production_field
+run_test "production-field pilot id -> adk-production-field-readiness" test_routing_production_field_pilot_id
 run_test "性能分析 -> adk-performance-profiling-embedded" test_routing_performance
 
 echo ""

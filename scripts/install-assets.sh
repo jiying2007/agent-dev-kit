@@ -135,8 +135,13 @@ expand_path() {
   local raw="$1"
   local expanded="$raw"
   expanded="${expanded/#\~/$HOME}"
-  # 仅展开受信任 manifest 中定义的环境变量占位
-  eval "printf '%s' \"$expanded\""
+  case "$expanded" in
+    *'$'*|*'`'*|*'('*|*')'*)
+      echo "[FAIL] unsupported dynamic path in manifest: $raw" >&2
+      exit 1
+      ;;
+  esac
+  printf '%s' "$expanded"
 }
 
 detect_tool_auto() {

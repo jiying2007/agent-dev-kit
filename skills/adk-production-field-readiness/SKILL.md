@@ -13,6 +13,13 @@ triggers:
   - "回滚"
   - "RMA"
   - "设备健康检查"
+  - "production-field"
+  - "field readiness"
+  - "embedded-production-field-readiness"
+  - "simulate-device"
+  - "模拟设备"
+  - "设备状态机"
+  - "自动推进"
 non_triggers:
   - 通用 Web 发布
   - 纯版本号整理且不涉及设备交付

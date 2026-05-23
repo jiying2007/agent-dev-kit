@@ -57,12 +57,14 @@ security_scan() {
     
     # 3. 脚本安全检查
     log_info "3. 脚本安全检查"
-    local scripts_with_sudo=$(grep -r "sudo" "$ROOT_DIR/scripts" 2>/dev/null | wc -l)
+    local scripts_with_sudo
+    scripts_with_sudo=$({ grep -RIl --exclude="$(basename "$0")" "sudo" "$ROOT_DIR/scripts" 2>/dev/null || true; } | wc -l)
     if [[ "$scripts_with_sudo" -gt 0 ]]; then
         issues+=("发现 $scripts_with_sudo 个脚本使用sudo")
     fi
     
-    local scripts_with_eval=$(grep -r "eval" "$ROOT_DIR/scripts" 2>/dev/null | wc -l)
+    local scripts_with_eval
+    scripts_with_eval=$({ grep -RIl --exclude="$(basename "$0")" -E '(^|[^[:alnum:]_])eval([[:space:]]|$)' "$ROOT_DIR/scripts" 2>/dev/null || true; } | wc -l)
     if [[ "$scripts_with_eval" -gt 0 ]]; then
         issues+=("发现 $scripts_with_eval 个脚本使用eval")
     fi

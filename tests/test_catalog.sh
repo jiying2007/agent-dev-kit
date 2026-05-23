@@ -24,8 +24,19 @@ grep -q '`requirements-analyst`' "$CATALOG_OUT" || {
   exit 1
 }
 
+grep -q '| `adk-hardware-debugger` | 硬件问题调试、oops 分析 | `agents/adk-hardware-debugger/AGENTS.md` |' "$CATALOG_OUT" || {
+  echo "[FAIL] catalog missing agent description" >&2
+  exit 1
+}
+
 grep -q '`adk-incident-rca-report`' "$CATALOG_OUT" || {
   echo "[FAIL] catalog missing optional skill" >&2
+  exit 1
+}
+
+FIND_AGENT_OUTPUT="$("$ROOT_DIR/scripts/catalog-assets.sh" find --type agent --keyword 硬件)"
+echo "$FIND_AGENT_OUTPUT" | grep -q 'adk-hardware-debugger' || {
+  echo "[FAIL] find command missing expected agent" >&2
   exit 1
 }
 

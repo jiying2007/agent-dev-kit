@@ -197,18 +197,16 @@ confirm() {
 
 # 执行命令（支持 dry-run）
 run_cmd() {
-  local cmd="$*"
-  
   if [[ "$DRY_RUN" == "true" ]]; then
-    log_info "[DRY-RUN] $cmd"
+    log_info "[DRY-RUN] $*"
     return 0
   fi
   
   if [[ "$VERBOSE" == "true" ]]; then
-    log_info "执行: $cmd"
+    log_info "执行: $*"
   fi
   
-  eval "$cmd"
+  "$@"
 }
 
 # 检查依赖

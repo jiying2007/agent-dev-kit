@@ -106,14 +106,15 @@ match_keyword() {
 emit_agents_table() {
   echo "## Agents"
   echo
-  echo "| Name | Role | Path |"
+  echo "| Name | Description | Path |"
   echo "|---|---|---|"
-  local name role path
+  local name desc path
   while IFS= read -r name; do
     [[ -z "$name" ]] && continue
-    role="$(adk_get_manifest_item_value "agents" "$name" "role")"
+    desc="$(adk_get_manifest_item_value "agents" "$name" "description")"
+    [[ -n "$desc" ]] || desc="$(adk_get_manifest_item_value "agents" "$name" "role")"
     path="$(adk_get_manifest_item_value "agents" "$name" "path")"
-    echo "| \`$name\` | $role | \`$path\` |"
+    echo "| \`$name\` | $desc | \`$path\` |"
   done < <(adk_list_manifest_names "agents")
   echo
 }
@@ -157,7 +158,6 @@ emit_profiles_table() {
     [[ -n "$extends" ]] || extends="-"
     echo "| \`$profile\` | $desc | $optional | $extends |"
   done < <(adk_list_profile_names)
-  echo
 }
 
 build_catalog() {
@@ -193,12 +193,13 @@ find_items() {
   echo -e "type\tname\tdescription\tpath"
 
   if [[ "$TYPE" == "all" || "$TYPE" == "agent" ]]; then
-    local name role path
+    local name desc path
     while IFS= read -r name; do
-      role="$(adk_get_manifest_item_value "agents" "$name" "role")"
+      desc="$(adk_get_manifest_item_value "agents" "$name" "description")"
+      [[ -n "$desc" ]] || desc="$(adk_get_manifest_item_value "agents" "$name" "role")"
       path="$(adk_get_manifest_item_value "agents" "$name" "path")"
-      if match_keyword "$name $role" "$KEYWORD"; then
-        emit_find_row "agent" "$name" "$role" "$path"
+      if match_keyword "$name $desc" "$KEYWORD"; then
+        emit_find_row "agent" "$name" "$desc" "$path"
       fi
     done < <(adk_list_manifest_names "agents")
   fi
