@@ -98,12 +98,13 @@ actual_fallback_header="$(head -n 1 "${FALLBACK_MATRIX}")"
 [[ "${actual_fallback_header}" == "${expected_fallback_header}" ]] || fail "fallback matrix header mismatch"
 
 valid_pilot_statuses=" planned evidence-ready regression-ready rejected "
-valid_readiness_values=" pass partial pending needs-fix not-applicable "
+valid_readiness_values=" pass partial pending needs-fix simulated-pass not-applicable "
 pilots=0
 ready=0
 planned=0
 rejected=0
 device_needs_fix=0
+device_simulated_pass=0
 found=0
 
 while IFS=$'\t' read -r pilot_id status capability primary_skill fallback_used evidence_file verification workflow_readiness artifact_readiness device_readiness readiness_note; do
@@ -145,6 +146,9 @@ while IFS=$'\t' read -r pilot_id status capability primary_skill fallback_used e
   if [[ "${device_readiness}" == "needs-fix" ]]; then
     device_needs_fix=$((device_needs_fix + 1))
   fi
+  if [[ "${device_readiness}" == "simulated-pass" ]]; then
+    device_simulated_pass=$((device_simulated_pass + 1))
+  fi
 
   linked_fallbacks="$(linked_fallbacks_for_file "${evidence_file}")"
   log "[PILOT] ${pilot_id} status=${status} readiness=${readiness} workflow=${workflow_readiness} artifact=${artifact_readiness} device=${device_readiness} linked_fallbacks=${linked_fallbacks} evidence=${evidence_file} verification=${verification}"
@@ -156,8 +160,8 @@ fi
 [[ "${pilots}" -gt 0 ]] || fail "pilot index has no rows"
 
 if [[ "${SUMMARY_JSON}" -eq 1 ]]; then
-  printf '{"status":"pass","pilots":%s,"ready":%s,"planned":%s,"rejected":%s,"device_needs_fix":%s}\n' "${pilots}" "${ready}" "${planned}" "${rejected}" "${device_needs_fix}"
+  printf '{"status":"pass","pilots":%s,"ready":%s,"planned":%s,"rejected":%s,"device_needs_fix":%s,"device_simulated_pass":%s}\n' "${pilots}" "${ready}" "${planned}" "${rejected}" "${device_needs_fix}" "${device_simulated_pass}"
 else
-  echo "[INFO] pilot_readiness ready=${ready} planned=${planned} rejected=${rejected} device_needs_fix=${device_needs_fix} total=${pilots}"
+  echo "[INFO] pilot_readiness ready=${ready} planned=${planned} rejected=${rejected} device_needs_fix=${device_needs_fix} device_simulated_pass=${device_simulated_pass} total=${pilots}"
   echo "[PASS] pilot readiness checks passed (${pilots} pilots)"
 fi

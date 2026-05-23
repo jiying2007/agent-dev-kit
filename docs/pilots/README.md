@@ -23,9 +23,9 @@ adk 的 pilot 以嵌入式全栈开发为主，覆盖芯片/板级约束、启�
 |---|---|
 | workflow_readiness | adk workflow / skill 是否能按预期路由、执行和复跑 |
 | artifact_readiness | 生成物、报告、脚本入口、证据索引是否足以支撑工程审计 |
-| device_readiness | 实机、工装、HIL、OTA、回滚、现场包等设备侧证据是否闭环 |
+| device_readiness | 设备侧证据是否闭环；`simulated-pass` 只表示模拟设备状态机通过，不等于真实硬件放行 |
 
-可选值：`pass`、`partial`、`pending`、`needs-fix`、`not-applicable`。
+可选值：`pass`、`partial`、`pending`、`needs-fix`、`simulated-pass`、`not-applicable`。
 
 ## 最小记录项
 
@@ -39,7 +39,7 @@ adk 的 pilot 以嵌入式全栈开发为主，覆盖芯片/板级约束、启�
 
 - `index.tsv` 是 pilot 清单。
 - `planned` 不能作为下线证据。
-- `evidence-ready` 只代表 pilot 证据成熟；若 `device_readiness=needs-fix`，不得声明设备 production-ready。
+- `evidence-ready` 只代表 pilot 证据成熟；若 `device_readiness=needs-fix` 或 `simulated-pass`，不得声明真实设备 production-ready。
 - `fallback-sunset-matrix.tsv` 中 `candidate-sunset` 和 `sunset` 行必须引用存在的 pilot 文件。
 - 每次修改 `index.tsv` 或 evidence 文件后运行 `bash scripts/pilot-readiness.sh`；需要门禁摘要时运行 `bash scripts/pilot-readiness.sh --summary-json`。
 - 嵌入式全栈 pilot 优先覆盖芯片/板级、启动链、BSP/rootfs、Linux/RTOS、驱动、组件、设备应用、上位机/产测/诊断工具、交叉编译、QEMU/SIL、HIL、静态分析、故障注入、完成前验证、发布收口、OTA/回滚和现场维护。

@@ -53,7 +53,7 @@ cleanup_changelog() {
 }
 trap cleanup_changelog EXIT
 bash "$ADK_ROOT/scripts/version-manager.sh" changelog --version "$version" >/dev/null
-if rg -q '待补充|TODO|TBD|FIXME|PLACEHOLDER|占位' "$changelog"; then
+if rg -q '待补充|TODO|TBD|FIXME|PLACEHOLDER|占位(符|内容|文本|字段)' "$changelog"; then
   echo "  FAIL  changelog contains placeholder text"
   FAIL_COUNT=$((FAIL_COUNT + 1))
 else

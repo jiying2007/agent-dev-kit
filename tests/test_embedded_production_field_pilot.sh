@@ -156,6 +156,7 @@ chmod +x \
 "$ROOT_DIR/scripts/run-embedded-production-field-pilot.sh" \
   --mcu-root "$MCU_ROOT" \
   --soc-root "$SOC_ROOT" \
+  --simulate-device \
   --out "$OUT_DIR" \
   >"$RUNNER_STDOUT"
 
@@ -175,6 +176,12 @@ rg -q '"status": "pass"' "$OUT_DIR/summary.json" || {
   exit 1
 }
 
+rg -q '"device_readiness": "simulated-pass"' "$OUT_DIR/summary.json" || {
+  echo "[FAIL] simulated device readiness was not recorded" >&2
+  cat "$OUT_DIR/summary.json" >&2
+  exit 1
+}
+
 rg -q 'mcu-erase-protection' "$RUNNER_STDOUT" || {
   echo "[FAIL] expected erase protection step was not executed" >&2
   exit 1
@@ -182,6 +189,16 @@ rg -q 'mcu-erase-protection' "$RUNNER_STDOUT" || {
 
 rg -q 'pass-expected-failure' "$OUT_DIR/evidence.md" || {
   echo "[FAIL] expected negative evidence was not recorded" >&2
+  exit 1
+}
+
+rg -q 'sim-device-rollback' "$RUNNER_STDOUT" || {
+  echo "[FAIL] simulated rollback step was not executed" >&2
+  exit 1
+}
+
+[[ -f "$OUT_DIR/sim-device/state/field-package/manifest.json" ]] || {
+  echo "[FAIL] simulated field package manifest was not generated" >&2
   exit 1
 }
 

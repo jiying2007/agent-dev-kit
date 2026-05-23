@@ -174,16 +174,16 @@ bash tests/run_all.sh
 **推荐**：在稳定版本上锁定
 
 ```bash
-# 锁定版本
-bash scripts/version-manager.sh lock --version 2.7.0
+# 锁定当前稳定版本
+bash scripts/version-manager.sh lock --version 2.9.0
 ```
 
 ### 2. 版本升级
 **推荐**：按语义化版本升级
 
 ```bash
-# 升级版本
-bash scripts/version-manager.sh upgrade --target 2.7.0
+# 升级到下一目标版本
+bash scripts/version-manager.sh upgrade --target 3.0.0
 ```
 
 ### 3. 版本记录

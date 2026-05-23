@@ -86,6 +86,7 @@ done < <(
     -g '!reports/archive/**' \
     'devkit\.sh install[^\n]*(--tool[ =]codex|--target[ =][^\n]*~/.codex)|install-assets\.sh[^\n]*--tool[ =]codex|sync-codex-assets\.sh' \
     "$ROOT_DIR/README.md" \
+    "$ROOT_DIR/AGENTS.md" \
     "$ROOT_DIR/CONTEXT.md" \
     "$ROOT_DIR/docs" \
     "$ROOT_DIR/skills" \

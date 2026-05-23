@@ -97,8 +97,8 @@ bash scripts/version-manager.sh current
 # 2. 解锁版本
 bash scripts/version-manager.sh unlock
 
-# 3. 强制升级
-bash scripts/version-manager.sh upgrade --target 2.7.0 --force
+# 3. 强制升级到下一目标版本
+bash scripts/version-manager.sh upgrade --target 3.0.0 --force
 ```
 
 ### 5. 备份问题
@@ -241,8 +241,8 @@ bash scripts/health-check.sh check-all
 ### 3. 版本管理
 
 ```bash
-# 锁定稳定版本
-bash scripts/version-manager.sh lock --version 2.7.0
+# 锁定当前稳定版本
+bash scripts/version-manager.sh lock --version 2.9.0
 ```
 
 ### 4. 测试验证

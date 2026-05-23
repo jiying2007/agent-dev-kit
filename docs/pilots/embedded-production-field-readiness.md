@@ -27,26 +27,41 @@ status: evidence-ready
 |---|---|---|
 | MCU firmware release tools | MCU 制品、manifest、checksum、烧录脚本、OTA payload、NAS 发布 dry-run | 使用 `mm32spin023c` profile，在 `/tmp/adk-pilot/mm32` 生成样本 boot/app IHEX、package、checksum、dry-run 烧录/readback 和 NAS would-publish 证据 |
 | PCR02 SoC build script | SoC/Linux 源码门禁、自检、模块状态、整机 OTA 入口 | 执行 `verify`、`self-check`、`modules-status`、MCU resolver self-test 与 OTA packager self-test；默认 clean gate 失败作为负证据保留 |
+| Simulated device harness | 无硬件的设备状态机验证 | `--simulate-device` 自动生成 flash/readback/boot/HIL/OTA/rollback/field-package 证据，推进到 `simulated-pass` |
 
 ### Scope / Non-goal
 
 - 本 pilot 证明 adk 可以把真实 MCU + SoC 发布链路收敛为可审计 evidence-ready 证据。
-- 本次没有执行真实 J-Link 烧录、readback、启动串口采集、HIL 产测、整机 OTA 包生成、NAS publish、tag 或 push。
-- 因没有实机/工装证据，本 pilot 不能声明设备已 production-ready；最终设备 readiness 仍是 `needs-fix`，待硬件验证补齐。
+- 本次没有执行真实 J-Link 烧录、真实 readback、真实启动串口采集、真实 HIL 产测、真实整机 OTA 包生成、NAS publish、tag 或 push。
+- 模拟设备闭环可把 pilot 推进到 `simulated-pass`，但不能声明设备已 production-ready；生产放行仍需真实硬件和现场证据。
 
 ### Readiness Matrix
 
 | Area | Item | Evidence | Status |
 |---|---|---|---|
-| artifact | MCU package manifest、image list、checksum、zip | `package_manifest.json` schemaVersion `2.0`，`validation.passed=true`，`checksums.sha256.txt` 校验通过 | pass |
-| flashing | 默认烧录脚本、factory recovery 脚本、保留区保护 | `burn_firmware.py --dry-run` 生成 merged image J-Link script；`erase_and_burn.py --dry-run` 拒绝擦除保留区；`--force-erase --role production-full --dry-run` 生成 factory script | partial |
-| readback | readback 验证入口 | `readback_verify.py --dry-run` 生成 `savebin` 脚本，范围 `0x08000000..0x08001807` | partial |
-| ota | MCU app OTA payload、SoC 整机 OTA 工具入口 | `ota_upgrade_plan.json` 指向 `mm32spin023c_app.bin`；PCR02 resolver self-test 与 ota-packager self-test 通过 | partial |
+| artifact | MCU package manifest、image list、checksum、zip、模拟现场包 | `package_manifest.json` schemaVersion `2.0`，`validation.passed=true`，`checksums.sha256.txt` 校验通过；模拟现场包含 manifest 和 guide | pass |
+| flashing | 默认烧录脚本、factory recovery 脚本、保留区保护、模拟 flash | `burn_firmware.py --dry-run` 生成 merged image J-Link script；`erase_and_burn.py --dry-run` 拒绝擦除保留区；`--force-erase --role production-full --dry-run` 生成 factory script；模拟 flash 写入版本化状态 | simulated-pass |
+| readback | readback 验证入口与模拟 hash 对比 | `readback_verify.py --dry-run` 生成 `savebin` 脚本；模拟 readback digest 与 flash state 匹配 | simulated-pass |
+| ota | MCU app OTA payload、SoC 整机 OTA 工具入口、模拟 OTA | `ota_upgrade_plan.json` 指向 `mm32spin023c_app.bin`；PCR02 resolver self-test 与 ota-packager self-test 通过；模拟 OTA 切换 inactive slot 并启动新版本 | simulated-pass |
 | release | NAS 挂载检查与发布 dry-run | `setup-nas-mount.sh --check` 通过；`publish-nas --dry-run --json` 输出 `would-publish` | partial |
 | source | SoC 源码一致性门禁 | 默认 `build.sh verify/self-check` 因 dirty gate 失败；`--allow-dirty` 只读复跑通过并输出 main/app SHA | partial |
 | modules | SoC 组件状态 | `modules-status` 输出 repo/local/prebuilt 模块状态；存在 dirty repo 与一个未链接模块，保留为下一阶段风险 | needs-fix |
-| production-test | 工装产测、boot log、HIL/SIL | 本次未跑真实设备或工装 | pending |
-| field | RMA、现场日志、升级失败恢复 | 本次仅覆盖 dry-run 与恢复脚本入口，未覆盖现场包和回滚演练 | pending |
+| production-test | boot log、HIL/SIL、诊断 CLI | 模拟 boot log 输出 `BOOT_OK`，模拟 HIL 覆盖 power-cycle、diagnostic CLI 和 fault injection；真实工装待补 | simulated-pass |
+| field | RMA、现场日志、升级失败恢复 | 模拟 rollback 恢复旧版本和 active slot，生成无凭据现场维护包；真实现场包待补 | simulated-pass |
+
+### 模拟设备自动推进
+
+`scripts/run-embedded-production-field-pilot.sh --simulate-device` 会在输出目录下生成 `sim-device/` 状态机：
+
+1. `sim-device-flash`：写入 profile、version 和 flash digest。
+2. `sim-device-readback`：计算 readback digest 并与 flash digest 比对。
+3. `sim-device-boot`：生成 `BOOT_OK` 和诊断通过日志。
+4. `sim-device-hil`：生成 power-cycle、diagnostic CLI、fault injection 报告。
+5. `sim-device-ota`：模拟 inactive slot OTA 升级并启动新版本。
+6. `sim-device-rollback`：模拟回滚到上一版本和 active slot。
+7. `sim-device-field-package`：生成不含凭据的现场维护包 manifest 与 guide。
+
+该模式只用于无硬件环境的自动推进和回归，不替代真实设备放行。
 
 ### Command Evidence
 
@@ -71,12 +86,13 @@ status: evidence-ready
 | `rtk bash build.sh modules-status` | 0 | 输出 local/repo/prebuilt 模块状态，暴露 dirty repo 与未链接模块风险 | command output |
 | `rtk bash tools/firmware-release-tools/resolve-latest-release.sh --self-test` | 0 | MCU release resolver 自检通过，不访问 NAS | command output |
 | `rtk bash tools/ota-packager/ota-packager.sh self-test --json` | 0 | OTA packager CLI 自检通过 | command output |
-| `rtk bash scripts/run-embedded-production-field-pilot.sh --mcu-root <firmware-release-tools> --soc-root <soc-build-root> --out /tmp/adk-pilot/embedded-production-field-readiness` | 0 | MCU + SoC production-field evidence runner 可复跑，生成 `evidence.md` 和 `summary.json` | command output |
+| `rtk bash scripts/run-embedded-production-field-pilot.sh --mcu-root <firmware-release-tools> --soc-root <soc-build-root> --simulate-device --out /tmp/adk-pilot/embedded-production-field-readiness` | 0 | MCU + SoC + simulated device production-field evidence runner 可复跑，生成 `evidence.md`、`summary.json` 和模拟设备现场包 | command output |
 
 ### 生成制品摘要
 
 - Package dir: `/tmp/adk-pilot/mm32/out/mm32spin023c_firmware_bundle`
 - Runner evidence: `/tmp/adk-pilot/embedded-production-field-readiness/evidence.md`
+- Simulated device state: `/tmp/adk-pilot/embedded-production-field-readiness/sim-device/state`
 - Version: `0.0.9`
 - Default image: `mm32spin023c_boot_flag_app_merged.hex`
 - Factory image: `mm32spin023c_flash_full.hex`
@@ -90,14 +106,14 @@ status: evidence-ready
 | Decision | Result | Reason |
 |---|---|---|
 | Pilot status | `evidence-ready` | 已有真实工程输入、可复跑命令、正负路径证据和制品清单 |
-| Device production readiness | `needs-fix` | 缺少实机烧录/readback、boot log、HIL 产测、整机 OTA/rollback 与现场包证据 |
+| Device production readiness | `simulated-pass` | 模拟设备 flash/readback/boot/HIL/OTA/rollback/field-package 闭环通过；真实硬件放行仍需补证据 |
 | Fallback decision | `no fallback` | 该场景由 adk 原生 `adk-production-field-readiness` 承接，Superpowers 无需介入 |
 
 ### 残留缺口
 
 - 设备型号、硬件版本和固件/镜像版本。
-- 实机 J-Link 烧录、readback 对比和串口 boot log。
+- 实机 J-Link 烧录、真实 readback 对比和串口 boot log。
 - PCR02 `release`、`vehicle-ota` 和 `publish-soc` 的真实或 dry-run 输出。
 - 产测矩阵、HIL/SIL 报告、诊断包与错误码清单。
-- OTA 升级和回滚演练。
-- RMA/现场维护 runbook、现场日志包和责任 owner。
+- 真实 OTA 升级和回滚演练。
+- RMA/现场维护 runbook、真实现场日志包和责任 owner。

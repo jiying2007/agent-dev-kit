@@ -270,9 +270,9 @@ bash scripts/devkit.sh release rollback
 
 ```bash
 bash scripts/devkit.sh version show
-bash scripts/devkit.sh version lock --target 2.7.0
+bash scripts/devkit.sh version lock --version 2.9.0
 bash scripts/devkit.sh version upgrade
-bash scripts/devkit.sh version diff --from 2.7.0 --to 2.7.0
+bash scripts/devkit.sh version compare --version 2.9.0 --target 3.0.0
 ```
 
 ## install-assets.sh 扩展参数

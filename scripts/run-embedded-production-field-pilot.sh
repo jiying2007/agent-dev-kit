@@ -12,6 +12,7 @@ TIMESTAMP="$(date +%Y%m%d-%H%M%S)"
 OUT_DIR="${ADK_PILOT_OUT:-/tmp/adk-pilot/embedded-production-field-readiness/${TIMESTAMP}}"
 SKIP_MCU=0
 SKIP_SOC=0
+SIMULATE_DEVICE=0
 
 usage() {
   cat <<USAGE
@@ -29,6 +30,7 @@ Options:
   --version <x.y.z>   Sample firmware version. Default: ${VERSION}
   --skip-mcu          Skip MCU release evidence.
   --skip-soc          Skip SoC build evidence.
+  --simulate-device   Generate deterministic simulated flash/readback/boot/HIL/OTA/rollback evidence.
   -h, --help          Show this help.
 
 Environment aliases:
@@ -80,6 +82,10 @@ while [[ $# -gt 0 ]]; do
       SKIP_SOC=1
       shift
       ;;
+    --simulate-device)
+      SIMULATE_DEVICE=1
+      shift
+      ;;
     -h|--help)
       usage
       exit 0
@@ -111,6 +117,7 @@ LOG_DIR="$OUT_DIR/logs"
 EVIDENCE_MD="$OUT_DIR/evidence.md"
 SUMMARY_JSON="$OUT_DIR/summary.json"
 rm -rf "$LOG_DIR" "$OUT_DIR/mcu-samples" "$OUT_DIR/mcu-package" "$OUT_DIR/nas-release"
+rm -rf "$OUT_DIR/sim-device"
 mkdir -p "$LOG_DIR"
 
 escape_cell() {
@@ -223,6 +230,104 @@ EOF
   echo "[INFO] sample_ihex_dir=$sample_dir"
 }
 
+write_simulated_device_ctl() {
+  local sim_dir="$1"
+  local simctl="$sim_dir/simctl.sh"
+  mkdir -p "$sim_dir"
+  cat > "$simctl" <<'SH'
+#!/usr/bin/env bash
+set -euo pipefail
+
+cmd="${1:-}"
+state="${2:-}"
+profile="${3:-sim-board}"
+version="${4:-0.0.0}"
+
+[[ -n "$cmd" && -n "$state" ]] || {
+  echo "usage: simctl.sh <flash|readback|boot|hil|ota|rollback|field-package> <state-dir> [profile] [version]" >&2
+  exit 2
+}
+
+mkdir -p "$state"
+
+hash_state() {
+  printf '%s' "$1" | sha256sum | awk '{print $1}'
+}
+
+case "$cmd" in
+  flash)
+    digest="$(hash_state "${profile}:${version}:flash")"
+    printf 'profile=%s\nversion=%s\ndigest=%s\n' "$profile" "$version" "$digest" > "$state/flash-report.txt"
+    printf '%s\n' "$digest" > "$state/readback.expected"
+    printf '%s\n' "$version" > "$state/current-version"
+    printf 'slot=A\n' > "$state/slot-state"
+    echo "SIM_FLASH_OK profile=$profile version=$version digest=$digest"
+    ;;
+  readback)
+    [[ -f "$state/readback.expected" ]] || { echo "missing simulated flash state" >&2; exit 3; }
+    expected="$(cat "$state/readback.expected")"
+    actual="$(hash_state "${profile}:${version}:flash")"
+    [[ "$actual" == "$expected" ]] || { echo "readback mismatch expected=$expected actual=$actual" >&2; exit 4; }
+    printf 'expected=%s\nactual=%s\nresult=match\n' "$expected" "$actual" > "$state/readback-report.txt"
+    echo "SIM_READBACK_OK digest=$actual"
+    ;;
+  boot)
+    [[ -f "$state/current-version" ]] || { echo "device is not flashed" >&2; exit 3; }
+    cat > "$state/boot.log" <<EOF
+BOOT_OK
+profile=$profile
+version=$(cat "$state/current-version")
+diagnostic=pass
+EOF
+    echo "SIM_BOOT_OK"
+    ;;
+  hil)
+    cat > "$state/hil-report.json" <<EOF
+{"profile":"$profile","version":"$(cat "$state/current-version" 2>/dev/null || printf '%s' "$version")","power_cycle":"pass","diagnostic_cli":"pass","fault_injection":"pass"}
+EOF
+    echo "SIM_HIL_OK"
+    ;;
+  ota)
+    [[ -f "$state/current-version" ]] || { echo "device is not flashed" >&2; exit 3; }
+    old="$(cat "$state/current-version")"
+    printf '%s\n' "$old" > "$state/rollback-version"
+    printf '%s\n' "$version" > "$state/current-version"
+    printf 'slot=B\n' > "$state/slot-state"
+    cat > "$state/ota-report.json" <<EOF
+{"from":"$old","to":"$version","download":"pass","apply":"pass","boot_after_update":"pass","active_slot":"B"}
+EOF
+    echo "SIM_OTA_OK from=$old to=$version"
+    ;;
+  rollback)
+    [[ -f "$state/rollback-version" ]] || { echo "missing rollback version" >&2; exit 3; }
+    rollback="$(cat "$state/rollback-version")"
+    current="$(cat "$state/current-version")"
+    printf '%s\n' "$rollback" > "$state/current-version"
+    printf 'slot=A\n' > "$state/slot-state"
+    cat > "$state/rollback-report.json" <<EOF
+{"from":"$current","to":"$rollback","rollback":"pass","boot_after_rollback":"pass","active_slot":"A"}
+EOF
+    echo "SIM_ROLLBACK_OK from=$current to=$rollback"
+    ;;
+  field-package)
+    pkg="$state/field-package"
+    mkdir -p "$pkg"
+    cat > "$pkg/manifest.json" <<EOF
+{"profile":"$profile","version":"$(cat "$state/current-version" 2>/dev/null || printf '%s' "$version")","contains":["flash-report","readback-report","boot-log","hil-report","ota-report","rollback-report"],"credential_material":"none"}
+EOF
+    printf '现场维护包（模拟）：包含启动、诊断、OTA 和回滚证据索引。\n' > "$pkg/FIELD_SERVICE_GUIDE.md"
+    echo "SIM_FIELD_PACKAGE_OK path=$pkg"
+    ;;
+  *)
+    echo "unsupported simulated device command: $cmd" >&2
+    exit 2
+    ;;
+esac
+SH
+  chmod +x "$simctl"
+  printf '%s\n' "$simctl"
+}
+
 if [[ "$SKIP_MCU" -eq 0 ]]; then
   SAMPLE_DIR="$OUT_DIR/mcu-samples"
   APP_HEX="$SAMPLE_DIR/app_v${VERSION}.hex"
@@ -273,9 +378,35 @@ if [[ "$SKIP_SOC" -eq 0 ]]; then
     bash tools/ota-packager/ota-packager.sh self-test --json
 fi
 
+if [[ "$SIMULATE_DEVICE" -eq 1 ]]; then
+  SIM_DIR="$OUT_DIR/sim-device"
+  SIM_STATE="$SIM_DIR/state"
+  SIM_CTL="$(write_simulated_device_ctl "$SIM_DIR")"
+  SIM_OTA_VERSION="${VERSION}-ota"
+
+  run_step required "sim-device-flash" "Simulated device flash writes versioned state without hardware access" "$OUT_DIR" \
+    "$SIM_CTL" flash "$SIM_STATE" "$PROFILE" "$VERSION"
+  run_step required "sim-device-readback" "Simulated readback hash matches flashed state" "$OUT_DIR" \
+    "$SIM_CTL" readback "$SIM_STATE" "$PROFILE" "$VERSION"
+  run_step required "sim-device-boot" "Simulated boot log reports BOOT_OK and diagnostic pass" "$OUT_DIR" \
+    "$SIM_CTL" boot "$SIM_STATE" "$PROFILE" "$VERSION"
+  run_step required "sim-device-hil" "Simulated HIL covers power-cycle, diagnostic CLI and fault injection" "$OUT_DIR" \
+    "$SIM_CTL" hil "$SIM_STATE" "$PROFILE" "$VERSION"
+  run_step required "sim-device-ota" "Simulated OTA updates inactive slot and boots updated version" "$OUT_DIR" \
+    "$SIM_CTL" ota "$SIM_STATE" "$PROFILE" "$SIM_OTA_VERSION"
+  run_step required "sim-device-rollback" "Simulated rollback restores previous version and active slot" "$OUT_DIR" \
+    "$SIM_CTL" rollback "$SIM_STATE" "$PROFILE" "$VERSION"
+  run_step required "sim-device-field-package" "Simulated field service package is generated without credentials" "$OUT_DIR" \
+    "$SIM_CTL" field-package "$SIM_STATE" "$PROFILE" "$VERSION"
+fi
+
 STATUS="pass"
 if [[ "$FAILURES" -gt 0 ]]; then
   STATUS="fail"
+fi
+DEVICE_READINESS="needs-fix"
+if [[ "$SIMULATE_DEVICE" -eq 1 && "$STATUS" == "pass" ]]; then
+  DEVICE_READINESS="simulated-pass"
 fi
 
 {
@@ -284,6 +415,8 @@ fi
   printf '  "steps": %s,\n' "$STEP"
   printf '  "failures": %s,\n' "$FAILURES"
   printf '  "warnings": %s,\n' "$WARNINGS"
+  printf '  "simulate_device": %s,\n' "$SIMULATE_DEVICE"
+  printf '  "device_readiness": "%s",\n' "$DEVICE_READINESS"
   printf '  "evidence": "%s",\n' "$EVIDENCE_MD"
   printf '  "logs": "%s"\n' "$LOG_DIR"
   printf '}\n'
@@ -297,6 +430,11 @@ fi
   echo "- steps: ${STEP}"
   echo "- failures: ${FAILURES}"
   echo "- warnings: ${WARNINGS}"
+  echo "- simulate_device: ${SIMULATE_DEVICE}"
+  echo "- device_readiness: ${DEVICE_READINESS}"
+  if [[ "$DEVICE_READINESS" == "simulated-pass" ]]; then
+    echo "- hardware_readiness: not-claimed"
+  fi
   echo "- summary_json: ${SUMMARY_JSON}"
 } >> "$EVIDENCE_MD"
 

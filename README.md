@@ -36,7 +36,7 @@ adk 不是参考仓集合，也不是直接替换 `~/codex` 或 `~/.codex/AGENTS
 ## 2. 当前资产概览
 
 - Agents：16 个角色 Agent。
-- Core Skills：45 个稳定技能。
+- Core Skills：47 个稳定技能。
 - Optional Skills：9 个可选技能。
 - Profiles：`core`、`personal-core`、`embedded-fullstack`、`release-hardening`、`team-core`、`openspec-driven`、`large-refactor`、`incident-response`、`research-intake`。
 - Tool Targets：`codex`、`claude-code`、`hermes-agent`、`opencode`。
@@ -161,7 +161,9 @@ bash scripts/check-profile-coherence.sh
 | `adk-test-flakiness-triage` | 测试波动定位 |
 | `adk-cross-team-handoff` | 跨团队交接 |
 | `adk-incident-rca-report` | 事故复盘 |
-| `adk-artifact-gating` | 高风险 artifact 门禁 |
+| `adk-data-fetch` | 数据获取组合入口 |
+| `adk-email-imap-fetch` | IMAP 邮件获取 |
+| `adk-fetch-url-content` | URL 正文提取 |
 | `adk-planning-execution-loop` | 长任务计划、检查点、恢复和收口 |
 | `adk-skill-composition-governance` | 主技能、辅助技能、fallback、弃用治理 |
 | `adk-security-supply-chain` | 第三方资产、脚本、技能引入前审查 |
@@ -311,11 +313,11 @@ bash scripts/backup-rollback.sh restore --target ~/codex --version 20260505
 # 查看当前版本
 bash scripts/version-manager.sh current
 
-# 锁定版本
-bash scripts/version-manager.sh lock --version 2.7.0
+# 锁定当前版本
+bash scripts/version-manager.sh lock --version 2.9.0
 
-# 升级版本
-bash scripts/version-manager.sh upgrade --target 2.7.0
+# 升级到下一目标版本
+bash scripts/version-manager.sh upgrade --target 3.0.0
 ```
 
 
@@ -389,17 +391,17 @@ bash scripts/backup-rollback.sh rollback --target ~/codex --version 20260505
 # 查看当前版本
 bash scripts/version-manager.sh current
 
-# 锁定版本
-bash scripts/version-manager.sh lock --version 2.7.0
+# 锁定当前版本
+bash scripts/version-manager.sh lock --version 2.9.0
 
 # 解锁版本
 bash scripts/version-manager.sh unlock
 
-# 升级版本
-bash scripts/version-manager.sh upgrade --target 2.7.0
+# 升级到下一目标版本
+bash scripts/version-manager.sh upgrade --target 3.0.0
 
 # 比较版本
-bash scripts/version-manager.sh compare --version 2.7.0 --target 2.7.0
+bash scripts/version-manager.sh compare --version 2.9.0 --target 3.0.0
 
 # 生成变更日志
 bash scripts/version-manager.sh changelog
@@ -456,19 +458,19 @@ bash scripts/version-manager.sh changelog
 ### 版本发布管理
 ```bash
 # 准备发布
-bash scripts/release-manager.sh prepare --version 2.7.0
+bash scripts/release-manager.sh prepare --version 2.9.0
 
 # 验证发布
-bash scripts/release-manager.sh validate --version 2.7.0
+bash scripts/release-manager.sh validate --version 2.9.0
 
 # 构建发布包
-bash scripts/release-manager.sh build --version 2.7.0
+bash scripts/release-manager.sh build --version 2.9.0
 
 # 发布版本
-bash scripts/release-manager.sh publish --version 2.7.0 --target production
+bash scripts/release-manager.sh publish --version 2.9.0 --target production
 
 # 回滚发布
-bash scripts/release-manager.sh rollback --version 2.7.0 --target production
+bash scripts/release-manager.sh rollback --version 2.9.0 --target production
 
 # 查看状态
 bash scripts/release-manager.sh status

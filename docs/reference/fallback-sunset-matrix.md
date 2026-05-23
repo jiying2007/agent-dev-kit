@@ -72,7 +72,7 @@ replacement score 固定为 5 项：routing、profile、pilot、handoff、live�
 - `scripts/check-fallback-sunset.sh` 会输出 replacement score，包含 routing、profile、pilot、handoff、live health 五项。
 - 需要归档评分明细时使用 `scripts/check-fallback-sunset.sh --score-tsv <path>`；需要候选队列时使用 `--candidate-tsv <path>`；需要低 token 摘要时使用 `--summary-json`。
 - Pilot 证据成熟度单独用 `scripts/pilot-readiness.sh` 检查；需要低 token 摘要时使用 `scripts/pilot-readiness.sh --summary-json`。
-- Pilot index 与 evidence 文件必须同步：`status:` 行必须与 `docs/pilots/index.tsv` 一致，planned pilot 必须有待补证据，ready pilot 必须有验证证据；`workflow_readiness`、`artifact_readiness`、`device_readiness` 用于区分流程证据、制品证据和真实设备 readiness。
+- Pilot index 与 evidence 文件必须同步：`status:` 行必须与 `docs/pilots/index.tsv` 一致，planned pilot 必须有待补证据，ready pilot 必须有验证证据；`workflow_readiness`、`artifact_readiness`、`device_readiness` 用于区分流程证据、制品证据和设备侧 readiness；`device_readiness=simulated-pass` 只代表模拟设备闭环，不代表真实硬件放行。
 - 状态不能从 `active-fallback` 直接跳到 `sunset`，必须经过 `explicit-fallback` 或 `candidate-sunset`。
 - 若真实任务中出现漏匹配、过重流程或验证缺口，状态降级并补回归样例。
 - 下线不是删除上游资产，而是从默认路由中移除；用户点名仍可使用。

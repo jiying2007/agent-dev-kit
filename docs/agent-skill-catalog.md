@@ -1,6 +1,6 @@
 # Agent and Skill Catalog
 
-- generated_at: 2026-05-19T01:41:26Z
+- generated_at: 2026-05-23T08:47:33Z
 - source: manifest.yaml
 
 ## Agents
@@ -51,6 +51,7 @@
 | `adk-systematic-debugging` | 系统化调试流程，面向根因未明的问题定位与修复验证 | "调试" | `skills/adk-systematic-debugging/SKILL.md` |
 | `adk-unit-test-embedded` | 嵌入式单元测试策略与样例 | "单元测试" | `skills/adk-unit-test-embedded/SKILL.md` |
 | `adk-verification-before-completion` | 完成前验证门禁，确保交付声明与证据一致 | "准备完成" | `skills/adk-verification-before-completion/SKILL.md` |
+| `adk-after-action-review` | 任务复盘与经验记忆候选治理，提取 lessons、风险分级和写入路由 | "任务复盘" | `skills/adk-after-action-review/SKILL.md` |
 | `adk-integration-hil-sil` | HIL/SIL 集成验证编排 | "集成测试" | `skills/adk-integration-hil-sil/SKILL.md` |
 | `adk-fault-injection-recovery` | 故障注入与恢复策略验证 | "故障注入" | `skills/adk-fault-injection-recovery/SKILL.md` |
 | `adk-performance-profiling-embedded` | 嵌入式性能剖析与优化路径 | "性能分析" | `skills/adk-performance-profiling-embedded/SKILL.md` |
@@ -60,6 +61,7 @@
 | `adk-grill-with-docs` | 烤问式需求对齐——通过结构化提问消除模糊需求 | "文档审查" | `skills/adk-grill-with-docs/SKILL.md` |
 | `adk-code-simplification` | 代码简化——在不改变行为的前提下提高清晰度 | "代码太复杂" | `skills/adk-code-simplification/SKILL.md` |
 | `adk-context-engineering` | 上下文工程——优化 Agent 上下文设置 | "上下文不够" | `skills/adk-context-engineering/SKILL.md` |
+| `adk-token-context-governance` | 保真省 Token 的上下文读取治理，分层摘要、原文回退与高风险原文门禁 | "省 token" | `skills/adk-token-context-governance/SKILL.md` |
 | `adk-chinese-commit-conventions` | 中文 Git 提交规范——适配国内开发团队 | "中文提交" | `skills/adk-chinese-commit-conventions/SKILL.md` |
 | `adk-chinese-code-review` | 中文代码审查规范——适配国内团队沟通风格 | "代码审查" | `skills/adk-chinese-code-review/SKILL.md` |
 | `adk-repo-prompt-analyzer` | 逆向分析开源项目中的 Prompt/系统指令设计，提取上下文工程模式 | 分析子仓 prompt | `skills/adk-repo-prompt-analyzer/SKILL.md` |
@@ -68,7 +70,7 @@
 | `adk-pilot-framework` | 跨仓库 Pilot 试跑框架——场景定义、证据收集与门禁验收 | "试跑" | `skills/adk-pilot-framework/SKILL.md` |
 | `adk-intake-workflow` | 子仓接入工作流——扫描、分析、决策与治理覆盖 | "接入新仓库" | `skills/adk-intake-workflow/SKILL.md` |
 | `adk-bsp-analyst` | BSP 代码分析、架构梳理、历史追溯 | bsp 分析 | `skills/adk-bsp-analyst/SKILL.md` |
-| `adk-driver-developer` | 嵌入式驱动开发 | 驱动开发 | `skills/adk-driver-developer/SKILL.md` |
+| `adk-driver-developer` | 嵌入式驱动实现、联调验证与风险收口 | 驱动开发 | `skills/adk-driver-developer/SKILL.md` |
 | `adk-hardware-debugger` | 硬件问题调试、oops 分析 | 硬件调试 | `skills/adk-hardware-debugger/SKILL.md` |
 | `adk-planner` | 需求分析、任务拆解、方案设计 | 需求分析 | `skills/adk-planner/SKILL.md` |
 | `adk-generator` | 编码实现、单元测试编写 | 编码实现 | `skills/adk-generator/SKILL.md` |

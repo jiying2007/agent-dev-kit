@@ -26,7 +26,7 @@
 ## Build, Test, and Development Commands
 - `bash scripts/devkit.sh validate --strict`: full structure/schema validation.
 - `bash scripts/devkit.sh validate --quick`: fast pre-check for local iteration.
-- `bash scripts/devkit.sh install --tool codex --profile core`: install assets.
+- `bash scripts/devkit.sh convert --target codex --profile core --codex-profile team-collab --out dist/codex --clean`: export Codex handoff assets.
 - `bash scripts/devkit.sh convert --target claude-code --profile core --out dist --clean`: export assets.
 - `bash scripts/devkit.sh catalog build`: regenerate catalog docs.
 - `bash scripts/devkit.sh match --skill adk-requirements-triage --text "..."`: trigger matching.
@@ -256,7 +256,7 @@ adk 是面向 `agent-dev-kit -> ~/codex -> ~/.codex` 运行链路的 Agent/Skill
 
 ### 资产统计
 - Agents: 16 个角色
-- Core Skills: 45 个
+- Core Skills: 47 个
 - Optional Skills: 9 个
 - Profiles: 9 个
 - Workflows: 1 个

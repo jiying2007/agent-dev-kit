@@ -271,14 +271,14 @@ bash scripts/quality-gate-check.sh check-all
 # 3. 创建备份
 bash scripts/backup-rollback.sh backup --target ~/codex
 
-# 4. 升级版本
-bash scripts/version-manager.sh upgrade --target 2.7.0
+# 4. 升级到下一目标版本
+bash scripts/version-manager.sh upgrade --target 3.0.0
 ```
 
 ### 3. 发布执行
 ```bash
-# 1. 锁定版本
-bash scripts/version-manager.sh lock --version 2.7.0
+# 1. 锁定当前稳定版本
+bash scripts/version-manager.sh lock --version 2.9.0
 
 # 2. 生成变更日志
 bash scripts/version-manager.sh changelog
