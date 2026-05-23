@@ -11,6 +11,24 @@ CHANGE_ID="smoke-change"
 CHANGE_ID_ARTIFACT_FAIL="artifact-consistency-fail"
 CHANGE_ID_ARTIFACT_PASS="artifact-consistency-pass"
 
+fill_negative_results() {
+  local change_id="$1"
+  local file="$CHANGE_ROOT/$change_id/negative-results.md"
+  cat > "$file" <<NEGATIVE
+# 负结果记录：$change_id
+
+## 已验证的负结果
+| 时间 | 假设/方案 | 验证方法 | 结果 | 不采用原因 |
+|---|---|---|---|---|
+| T1 | 未补证据即可验证 | workflow verify smoke | 失败 | check-change-governance 需要真实负结果 |
+
+## Evidence Index（命令级）
+| Command | Exit Code | Result Summary | Evidence Path | Layer | Related Artifact |
+|---|---|---|---|---|---|
+| workflow verify precheck | 1 | default template blocked before evidence fill | negative-results.md | Workflow | negative-results |
+NEGATIVE
+}
+
 "$ROOT_DIR/scripts/workflow.sh" propose --change "$CHANGE_ID" --title "workflow smoke" --root "$CHANGE_ROOT"
 [[ -f "$CHANGE_ROOT/$CHANGE_ID/negative-results.md" ]] || { echo "[FAIL] missing negative-results artifact" >&2; exit 1; }
 grep -q "^## 问题陈述（单问题）" "$CHANGE_ROOT/$CHANGE_ID/proposal.md" || { echo "[FAIL] missing single-problem section" >&2; exit 1; }
@@ -33,6 +51,7 @@ if "$ROOT_DIR/scripts/workflow.sh" archive --change "$CHANGE_ID" --root "$CHANGE
   exit 1
 fi
 
+fill_negative_results "$CHANGE_ID"
 "$ROOT_DIR/scripts/workflow.sh" verify --change "$CHANGE_ID" --root "$CHANGE_ROOT"
 "$ROOT_DIR/scripts/workflow.sh" review --change "$CHANGE_ID" --root "$CHANGE_ROOT" --result pass --blockers 0 --majors 0 --minors 1
 "$ROOT_DIR/scripts/workflow.sh" archive --change "$CHANGE_ID" --root "$CHANGE_ROOT"
@@ -43,6 +62,7 @@ ARCHIVE_MATCH="$(find "$CHANGE_ROOT/archive" -maxdepth 1 -type d -name "*-smoke-
 ## artifact consistency checks - fail path
 "$ROOT_DIR/scripts/workflow.sh" propose --change "$CHANGE_ID_ARTIFACT_FAIL" --title "artifact consistency fail" --root "$CHANGE_ROOT"
 "$ROOT_DIR/scripts/workflow.sh" apply --change "$CHANGE_ID_ARTIFACT_FAIL" --root "$CHANGE_ROOT"
+fill_negative_results "$CHANGE_ID_ARTIFACT_FAIL"
 
 cat >> "$CHANGE_ROOT/$CHANGE_ID_ARTIFACT_FAIL/design.md" <<'ARTIFACTS'
 
@@ -68,6 +88,7 @@ fi
 ## artifact consistency checks - pass path
 "$ROOT_DIR/scripts/workflow.sh" propose --change "$CHANGE_ID_ARTIFACT_PASS" --title "artifact consistency pass" --root "$CHANGE_ROOT"
 "$ROOT_DIR/scripts/workflow.sh" apply --change "$CHANGE_ID_ARTIFACT_PASS" --root "$CHANGE_ROOT"
+fill_negative_results "$CHANGE_ID_ARTIFACT_PASS"
 
 cat >> "$CHANGE_ROOT/$CHANGE_ID_ARTIFACT_PASS/design.md" <<'ARTIFACTS'
 

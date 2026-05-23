@@ -360,12 +360,10 @@ CHECKLIST
 ## 已验证的负结果
 | 时间 | 假设/方案 | 验证方法 | 结果 | 不采用原因 |
 |---|---|---|---|---|
-| T0 | 待补充 | 待补充 | 待补充 | 待补充 |
 
 ## Evidence Index（命令级）
 | Command | Exit Code | Result Summary | Evidence Path | Layer | Related Artifact |
 |---|---|---|---|---|---|
-| 待补充 | 待补充 | 待补充 | 待补充 | Workflow | negative-results |
 NEGATIVE
 
   write_state "$change_dir" "proposed"
@@ -461,10 +459,18 @@ review_change() {
     echo "- 分级统计：blocker=$BLOCKERS major=$MAJORS minor=$MINORS"
     echo
     echo "## 必改项（blocker/major）"
-    echo "- 待补充"
+    if [[ "$BLOCKERS" -eq 0 && "$MAJORS" -eq 0 ]]; then
+      echo "- 无未闭环 blocker/major。"
+    else
+      echo "- blocker=$BLOCKERS，major=$MAJORS；需在后续评审记录中逐项闭环。"
+    fi
     echo
     echo "## 可延期项（minor）"
-    echo "- 待补充"
+    if [[ "$MINORS" -eq 0 ]]; then
+      echo "- 无可延期 minor。"
+    else
+      echo "- minor=$MINORS；允许延期但需保留 owner 与后续跟踪。"
+    fi
     echo
     echo "## 问题真实性与证据"
     echo "- 问题是否可复现："

@@ -67,16 +67,16 @@ write_default_design_if_missing() {
 # 设计说明
 
 ## 架构影响
-- 待补充：从 OpenSpec 导入时原始变更未提供 design.md。
+- OpenSpec 导入源未提供 design.md；验证前需补齐架构影响结论。
 
 ## 数据与配置影响
-- 待补充。
+- OpenSpec 导入源未提供数据与配置影响；验证前需补齐兼容性结论。
 
 ## 兼容性与迁移方案
-- 待补充。
+- OpenSpec 导入源未提供迁移方案；验证前需补齐升级和回退路径。
 
 ## 验证策略
-- 待补充。
+- OpenSpec 导入源未提供验证策略；验证前需补齐可复跑命令。
 DESIGN
 }
 
@@ -103,7 +103,10 @@ write_default_negative_results_if_missing() {
 ## 已验证的负结果
 | 时间 | 假设/方案 | 验证方法 | 结果 | 不采用原因 |
 |---|---|---|---|---|
-| T0 | 待补充 | 待补充 | 待补充 | 待补充 |
+
+## Evidence Index（命令级）
+| Command | Exit Code | Result Summary | Evidence Path | Layer | Related Artifact |
+|---|---|---|---|---|---|
 NEGATIVE
 }
 

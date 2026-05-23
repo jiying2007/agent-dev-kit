@@ -27,6 +27,19 @@ log_success() { echo -e "${GREEN}[SUCCESS]${NC} $1"; }
 log_warning() { echo -e "${YELLOW}[WARNING]${NC} $1"; }
 log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
 
+format_recent_changes() {
+    local changes="$1"
+    local pattern="$2"
+    local lines
+
+    lines="$(printf '%s\n' "$changes" | awk -v pattern="$pattern" '$0 ~ pattern && count < 10 {print "- " $0; count++}')"
+    if [[ -n "$lines" ]]; then
+        printf '%s\n' "$lines"
+    else
+        printf '%s\n' "- 无自动识别条目。"
+    fi
+}
+
 usage() {
     cat <<USAGE
 版本锁定和升级路径脚本
@@ -139,28 +152,35 @@ compare_versions() {
 generate_changelog() {
     local version="$1"
     local changelog_file="$ROOT_DIR/CHANGELOG-$version.md"
+    local release_date
+    local maintainer
+    local recent_changes
+
+    release_date="$(date +%Y-%m-%d)"
+    maintainer="$(whoami)"
+    recent_changes="$(git -C "$ROOT_DIR" log --oneline --no-merges -n 20 2>/dev/null || true)"
 
     cat > "$changelog_file" <<EOF
 # 变更日志 - $version
 
 ## 版本信息
 - 版本号: $version
-- 发布日期: $(date +%Y-%m-%d)
-- 维护者: $(whoami)
+- 发布日期: $release_date
+- 维护者: $maintainer
 
 ## 变更内容
 
 ### 新增功能
-- 待补充
+$(format_recent_changes "$recent_changes" ' feat([(]|:)')
 
 ### 改进优化
-- 待补充
+$(format_recent_changes "$recent_changes" ' (docs|refactor|perf|chore)([(]|:)')
 
 ### 修复问题
-- 待补充
+$(format_recent_changes "$recent_changes" ' fix([(]|:)')
 
 ### 已知问题
-- 待补充
+- 未在自动生成阶段登记新的已知问题；发布前以验证报告和 issue 跟踪为准。
 EOF
 
     log_success "变更日志已生成: $changelog_file"

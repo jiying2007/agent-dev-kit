@@ -45,6 +45,25 @@ run_smoke "production field pilot help"  scripts/run-embedded-production-field-p
 run_smoke "workflow pilots help"         scripts/run-embedded-workflow-pilots.sh --help
 
 echo ""
+echo "=== Version Changelog Placeholder Test ==="
+version="smoke-$(date +%s)"
+changelog="$ADK_ROOT/CHANGELOG-$version.md"
+cleanup_changelog() {
+  rm -f "$changelog"
+}
+trap cleanup_changelog EXIT
+bash "$ADK_ROOT/scripts/version-manager.sh" changelog --version "$version" >/dev/null
+if rg -q '待补充|TODO|TBD|FIXME|PLACEHOLDER|占位' "$changelog"; then
+  echo "  FAIL  changelog contains placeholder text"
+  FAIL_COUNT=$((FAIL_COUNT + 1))
+else
+  echo "  PASS  changelog has no placeholder text"
+  PASS_COUNT=$((PASS_COUNT + 1))
+fi
+TOTAL=$((TOTAL + 1))
+cleanup_changelog
+
+echo ""
 echo "=== Summary: $PASS_COUNT/$TOTAL PASS, $FAIL_COUNT FAIL ==="
 
 if [[ $FAIL_COUNT -gt 0 ]]; then

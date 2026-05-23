@@ -16,6 +16,25 @@ TESTS_TOTAL=0
 TESTS_PASSED=0
 TESTS_FAILED=0
 
+fill_negative_results() {
+    local change_dir="$1"
+    local change_id
+    change_id="$(basename "$change_dir")"
+    cat > "$change_dir/negative-results.md" <<NEGATIVE
+# 负结果记录：$change_id
+
+## 已验证的负结果
+| 时间 | 假设/方案 | 验证方法 | 结果 | 不采用原因 |
+|---|---|---|---|---|
+| T1 | 未补证据即可验证 | integration workflow precheck | 失败 | check-change-governance 需要真实负结果 |
+
+## Evidence Index（命令级）
+| Command | Exit Code | Result Summary | Evidence Path | Layer | Related Artifact |
+|---|---|---|---|---|---|
+| integration verify precheck | 1 | default template blocked before evidence fill | negative-results.md | Workflow | negative-results |
+NEGATIVE
+}
+
 # 测试函数
 run_test() {
     local test_name="$1"
@@ -47,6 +66,7 @@ test_full_workflow() {
     [[ "$output" == *"OK"* ]] || return 1
     
     # Verify
+    fill_negative_results "$tmp_dir/changes/integration-test"
     output=$("$ROOT_DIR/scripts/workflow.sh" verify --change integration-test --root "$tmp_dir/changes" 2>&1)
     [[ "$output" == *"OK"* ]] || return 1
     
@@ -131,6 +151,7 @@ test_verify_report_generation() {
     "$ROOT_DIR/scripts/workflow.sh" apply --change verify-test --root "$tmp_dir/changes" >/dev/null 2>&1
     
     # Verify
+    fill_negative_results "$tmp_dir/changes/verify-test"
     "$ROOT_DIR/scripts/workflow.sh" verify --change verify-test --root "$tmp_dir/changes" >/dev/null 2>&1
     
     # 检查验证报告
@@ -147,6 +168,7 @@ test_review_report_generation() {
     # Propose, Apply, Verify
     "$ROOT_DIR/scripts/workflow.sh" propose --change review-test --title "Review Test" --root "$tmp_dir/changes" >/dev/null 2>&1
     "$ROOT_DIR/scripts/workflow.sh" apply --change review-test --root "$tmp_dir/changes" >/dev/null 2>&1
+    fill_negative_results "$tmp_dir/changes/review-test"
     "$ROOT_DIR/scripts/workflow.sh" verify --change review-test --root "$tmp_dir/changes" >/dev/null 2>&1
     
     # Review
@@ -166,6 +188,7 @@ test_archive_functionality() {
     # 完整流程
     "$ROOT_DIR/scripts/workflow.sh" propose --change archive-test --title "Archive Test" --root "$tmp_dir/changes" >/dev/null 2>&1
     "$ROOT_DIR/scripts/workflow.sh" apply --change archive-test --root "$tmp_dir/changes" >/dev/null 2>&1
+    fill_negative_results "$tmp_dir/changes/archive-test"
     "$ROOT_DIR/scripts/workflow.sh" verify --change archive-test --root "$tmp_dir/changes" >/dev/null 2>&1
     "$ROOT_DIR/scripts/workflow.sh" review --change archive-test --result pass --blockers 0 --majors 0 --minors 0 --root "$tmp_dir/changes" >/dev/null 2>&1
     "$ROOT_DIR/scripts/workflow.sh" archive --change archive-test --root "$tmp_dir/changes" >/dev/null 2>&1
