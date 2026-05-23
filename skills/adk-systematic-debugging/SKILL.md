@@ -123,6 +123,7 @@ arm-none-eabi-gdb <elf> -ex "target remote :3333"
 - 若根因仍不确定，必须显式标记为 `needs-fix`，禁止"疑似已修复"式结论。
 - 5-Why 链必须每层有证据支撑。
 - 使用二分法时必须记录每步 good/bad 判定依据。
+- AI 工具/CLI 行为异常不得先归因实现 bug；必须固定复现、对照文档版本、追到源码或配置决策点，并用 git log/blame 建时间线。
 
 ## 合理化借口拦截
 

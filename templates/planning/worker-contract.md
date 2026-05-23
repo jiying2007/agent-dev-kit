@@ -2,6 +2,8 @@
 
 task_id:
 owner:
+agent_identity:
+runtime_identity:
 primary_skill:
 supporting_skills:
 
@@ -21,12 +23,20 @@ must_not_touch:
 dependencies:
 - 
 
+context_strategy:
+  context_health:
+  branch_action: continue | rewind_to_evidence | fresh_brief | compact_with_goal | subtask
+  raw_evidence:
+  summary:
+
 ## Execution Rules
 
 - Worker is not alone in the codebase.
+- Agent identity, runtime profile, workspace and message entrypoint must be stated explicitly; do not infer identity from directory path alone.
 - Do not revert or overwrite changes outside `scope_write`.
 - Stop and report if the task requires editing `must_not_touch` or a shared contract.
 - Keep implementation aligned with the assigned `primary_skill`.
+- If context is polluted by failed attempts or irrelevant logs, stop and request a fresh brief instead of continuing from stale assumptions.
 
 ## Done Criteria
 
@@ -45,6 +55,9 @@ report_schema:
 {
   "task_id": "",
   "status": "DONE|BLOCKED|NEEDS_CONTEXT",
+  "verified_facts": [],
+  "inferences": [],
+  "evidence": [],
   "changed_files": [],
   "verification": [],
   "risks": [],

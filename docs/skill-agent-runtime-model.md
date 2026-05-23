@@ -8,6 +8,8 @@
 
 | 对象 | 生命周期 | 主要职责 | 资产位置 |
 |------|----------|----------|----------|
+| Automation | 确定性运行单元 | 执行规则明确、输入输出稳定、无需运行时推理的重复动作 | 脚本、CI job、cron job 或受控命令 |
+| CLI/script | 操作入口或包装层 | 暴露命令、参数和机器可读输出，不定义任务方法论 | `scripts/`、tool wrapper、受控二进制 |
 | Skill | 长期版本化资产 | 定义某类任务应该怎么做、输入输出、Done criteria、失败收口和验证要求 | `skills/<name>/SKILL.md` 或 `optional-skills/<name>/SKILL.md` |
 | Agent | 运行时执行主体 | 读取上下文、选择 Skill、调用工具、推进任务并对结果负责 | `agents/<name>/AGENTS.md` |
 | Sub-agent | 短生命周期执行实例 | 在主 Agent 拆分后处理边界明确的子任务，回传结构化结果 | 由运行时调度，任务契约由模板约束 |
@@ -21,6 +23,11 @@
 - Sub-agent 任务必须通过任务契约传递，不把临时任务细节沉淀到长期 Skill。
 - MCP/tool 只声明能力和风险边界，不承担流程编排职责。
 - Workflow 只管理阶段状态和门禁，不重复 Skill 的领域步骤。
+- CLI/script 只作为确定性执行入口或包装层，不替代 Skill SOP、MCP/tool policy 或 Workflow 状态机。
+- 默认选择最低充分抽象层：确定性重复任务用 Automation，预定义多步骤用 Workflow，需要上下文感知和运行时决策时才升级为 Agent。
+- Agent/runtime 身份必须在任务契约中显式声明；workspace、消息入口、目录位置或启动方式都不能单独等同于执行 Agent。
+- 只有任务类型长期稳定分化，且上下文、权限、工具面或交付责任确需隔离时，才拆新 Agent；否则优先用 Skill、Workflow 或 worker contract 约束。
+- Intent/router 只能做候选选择和证据排序，不能绕过 Skill、Workflow、tool policy 或 owner approval 直接授予执行权限。
 
 ## Skill 入口规范
 
@@ -51,6 +58,8 @@
 
 主 Agent 派生 Sub-agent 前，必须把执行规则作为任务契约分发，而不是只给一句自然语言目标。任务契约至少包含：
 
+- `agent_identity`
+- `runtime_identity`
 - `primary_skill`
 - `supporting_skills`
 - `scope_read`
@@ -73,3 +82,15 @@
 4. 通过 `manifest.yaml`、验证脚本和测试门禁后，才允许进入 `agent-dev-kit -> ~/codex -> ~/.codex` 链路。
 
 安装成功不等于采纳完成；生产资产以 `manifest.yaml` 和验证证据为准。
+
+## 临时文章吸收
+
+公众号文章、教程摘录和趋势榜单只作为 intake 输入。允许吸收的是可复用执行规则、边界条件、完成标准、验证命令和失败收口；不得吸收的是原文表达、工具热度、未经审查的安装命令、领域专用代码和平台宣传。
+
+若候选内容与现有 Skill/Agent/Workflow 重叠，默认 `MERGE` 到已有资产；只有证明现有入口无法表达新职责，才允许新增资产。新增资产必须同时说明触发边界、非触发条件、依赖边界和回退方式。
+
+外部 AGENTS、CLAUDE、GEMINI 或平台配置分享必须先拆层：项目事实进入项目地图或 README 类工件，Agent/Skill 可移植规则进入对应治理文档，runtime connector、MCP、hook、provider、API key、平台协作命令和安装片段保持 report-only，直到供应链和运行态权限审查完成。
+
+同一份 Skill 在不同宿主 runtime 下可能因 discovery timing、项目规则优先级、memory/context injection、sub-agent delegation、sandbox/approval、hook 和工具权限不同而表现不同。跨平台吸收只能记录触发边界、字段兼容矩阵和验证规则，不能继承平台私有 API、字段语义或默认权限。
+
+Agent 能执行任务不等于允许自治运行。定时、事件、webhook、消息机器人、自动发送、自动发布和后台循环属于 Workflow/runtime 入口，必须先声明 owner、触发条件、输入输出、审批点、dry-run、日志、禁用路径和回滚方式。
