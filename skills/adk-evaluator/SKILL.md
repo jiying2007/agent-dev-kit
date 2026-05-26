@@ -46,7 +46,7 @@ constraints:
 git diff --stat
 git diff --name-only
 <changed-test-cmd>
-bash scripts/devkit.sh codex-handoff --codex-root ~/codex
+bash scripts/devkit.sh runtime-boundary
 ```
 
 ## Evidence Template

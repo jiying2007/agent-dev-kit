@@ -195,7 +195,7 @@ bash tests/run_all.sh
 bash scripts/version-manager.sh current
 
 # 创建声明式资产仓库备份
-bash scripts/backup-rollback.sh backup --target ~/codex
+bash scripts/backup-rollback.sh backup --target /tmp/adk-runtime
 
 # 健康检查
 bash scripts/health-check.sh check-all

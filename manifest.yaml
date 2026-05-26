@@ -6,13 +6,6 @@ platforms:
   - mcu-rtos
 
 tool_targets:
-  codex:
-    display_name: Codex
-    default_root: ~/codex
-    agents_dir: src/codex-home/vendor/agents
-    skills_dir: src/codex-home/vendor/skills
-    detect:
-      - ~/codex
   claude-code:
     display_name: Claude Code
     default_root: ~/.claude
@@ -46,7 +39,7 @@ quality_tiers:
 knowledge_layers:
   L0:
     name: toolchain
-    description: 工具链配置知识（Codex/Claude Code/Hermes Agent 配置）
+    description: 工具链配置知识（外部 agent runtime 与工具配置参考）
     location: knowledge/L0-toolchain/
   L1:
     name: general-tech
@@ -491,7 +484,7 @@ profiles:
       - adk-token-context-governance
       - adk-commit-pr-quality-gate
   personal-core:
-    description: 个人 ~/codex 声明式交付配置（核心功能 + 发布检查）
+    description: 个人通用 ADK 资产配置（核心功能 + 发布检查）
     trigger_examples:
       - "个人项目开发"
       - "快速原型验证"
@@ -623,7 +616,7 @@ profiles:
 
 workflows:
   - name: adk-delivery-gate
-    description: agent-dev-kit 到 ~/codex 的生产交付门禁
+    description: agent-dev-kit 通用资产生产交付门禁
     triggers:
       - "优化 adk"
       - "agent-dev-kit 交付"

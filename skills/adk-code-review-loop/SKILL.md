@@ -35,7 +35,7 @@ constraints:
 - 已有明确 diff 或变更文件清单。
 - 已知道本次变更目标和非目标。
 - 已收集基本验证结果，至少知道相关测试是否可运行。
-- 若 review 来自 CI/Codex runner，必须有结构化 findings、trusted-trigger/secret 隔离决策和 SCM 发布边界。
+- 若 review 来自 CI/AI runner，必须有结构化 findings、trusted-trigger/secret 隔离决策和 SCM 发布边界。
 
 ## 发现分级
 

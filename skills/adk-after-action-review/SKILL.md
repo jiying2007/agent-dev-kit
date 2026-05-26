@@ -20,7 +20,7 @@ outputs:
   - AAR 复盘、memory candidate、风险分级、写入位置路由、人工确认项
 constraints:
   - 不保存完整聊天记录、密钥、隐私原文或一次性噪声
-  - 不自动写入 ~/.codex/memories、AGENTS.md、生产规则或高风险策略
+  - 不自动写入运行时 memories、AGENTS.md、生产规则或高风险策略
   - 每条候选必须包含 evidence、last_verified、confidence、risk、write_route
   - 高风险规则必须由用户确认后才能落地
 ---

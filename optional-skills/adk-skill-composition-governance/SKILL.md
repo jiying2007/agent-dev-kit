@@ -27,7 +27,7 @@ constraints:
 # adk-skill-composition-governance
 
 ## Goal
-- 用小技能组合提高覆盖面，同时避免 `~/.codex` 中触发噪音和职责重叠。
+- 用小技能组合提高覆盖面，同时避免运行时目录中触发噪音和职责重叠。
 - 建立技能组合规则、冲突检测机制和治理矩阵。
 - 建立 adk 原生 skill 创作、profile 归属、pilot 证据和弃用下线流程。
 

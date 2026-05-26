@@ -269,7 +269,7 @@ bash tests/run_all.sh
 bash scripts/quality-gate-check.sh check-all
 
 # 3. 创建备份
-bash scripts/backup-rollback.sh backup --target ~/codex
+bash scripts/backup-rollback.sh backup --target /tmp/adk-runtime
 
 # 4. 升级到下一目标版本
 bash scripts/version-manager.sh upgrade --target 3.0.0

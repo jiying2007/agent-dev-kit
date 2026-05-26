@@ -81,7 +81,7 @@ OpenAI Agents SDK 文档中的 handoff/ownership 语义在 adk 中落地为本�
 1. 作为候选资产进入参考或 intake 记录。
 2. 做安全、许可证、触发边界、重复能力和运行时权限检查。
 3. 需要采纳时转写为 adk 原生 `skills/` 或 `optional-skills/`。
-4. 通过 `manifest.yaml`、验证脚本和测试门禁后，才允许进入 `agent-dev-kit -> ~/codex -> ~/.codex` 链路。
+4. 通过 `manifest.yaml`、验证脚本和测试门禁后，才允许进入显式 tool target 适配链路。
 
 安装成功不等于采纳完成；生产资产以 `manifest.yaml` 和验证证据为准。
 

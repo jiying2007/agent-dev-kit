@@ -26,7 +26,7 @@
 ## Build, Test, and Development Commands
 - `bash scripts/devkit.sh validate --strict`: full structure/schema validation.
 - `bash scripts/devkit.sh validate --quick`: fast pre-check for local iteration.
-- `bash scripts/devkit.sh convert --target codex --profile core --codex-profile team-collab --out dist/codex --clean`: export Codex handoff assets.
+- `bash scripts/devkit.sh convert --target claude-code --profile core --out dist --clean`: export generic ADK assets for a declared tool target.
 - `bash scripts/devkit.sh convert --target claude-code --profile core --out dist --clean`: export assets.
 - `bash scripts/devkit.sh catalog build`: regenerate catalog docs.
 - `bash scripts/devkit.sh match --skill adk-requirements-triage --text "..."`: trigger matching.
@@ -252,7 +252,7 @@ Spark → Tasks → Build → Ship
 ## 当前资产边界（2026-05-17）
 
 ### 功能定位
-adk 是面向 `agent-dev-kit -> ~/codex -> ~/.codex` 运行链路的 Agent/Skill/Workflow/Profile 生产资产包。核心目标：把本仓认可的方法论压实为可交接到 `~/codex`、可验证、可回滚、可迭代的工程资产，再由 `~/codex` apply 到 `~/.codex`。
+adk 是面向通用 Agent/Skill/Workflow/Profile 的生产资产包。核心目标：把本仓认可的方法论压实为可交接到显式 tool target、可验证、可回滚、可迭代的工程资产，不绑定单一运行时。
 
 ### 资产统计
 - Agents: 16 个角色
@@ -263,7 +263,7 @@ adk 是面向 `agent-dev-kit -> ~/codex -> ~/.codex` 运行链路的 Agent/Skill
 - MCP servers: 显式空清单，默认不隐式安装 MCP
 
 ### 硬边界
-1. 不直接把 adk 资产安装到 `~/.codex`。
+1. 不直接把 adk 资产安装到未声明或未审查的运行时目录。
 2. 不保留重复 skill/profile；调试统一走 `adk-systematic-debugging`，artifact 门禁统一走 `adk-artifact-gating`。
 3. 参考仓只作为治理输入，不作为生产资产来源；生产资产必须由 manifest 和 handoff fragment 声明。
 4. `SKILL.md` 只保留触发、流程和输出契约；长示例与背景进入 `references/`。

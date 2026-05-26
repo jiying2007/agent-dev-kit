@@ -1,10 +1,12 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-05-25",
+  "last_updated": "2026-05-26",
+  "scope_model": "platform-neutral-adk-runtime-api",
   "source_docs": [
     "openai-codex-app-server-api-overview",
     "openai-codex-agent-approvals-security-dangerous-settings"
   ],
+  "reference_boundary": "OpenAI product docs are used only as official reference material. This manifest defines platform-neutral ADK runtime API risk taxonomy and does not include compatibility bindings.",
   "transport_policy": {
     "supported": [
       "stdio",
@@ -132,7 +134,7 @@
         "exit code",
         "postcondition check"
       ],
-      "approval_boundary": "thread/shellCommand and process/spawn run outside the thread sandbox; do not expose as background automation defaults."
+      "approval_boundary": "Open-world process control runs outside the managed thread sandbox; do not expose as background automation defaults."
     },
     {
       "id": "sandboxed-command-exec",

@@ -10,7 +10,7 @@
       "id": "minimal-skill-plugin",
       "owner": "agent-dev-kit",
       "required_files": [
-        ".codex-plugin/plugin.json",
+        ".adk-plugin/plugin.json",
         "skills/<skill-name>/SKILL.md"
       ],
       "naming": {
@@ -54,7 +54,7 @@
     },
     {
       "id": "personal-marketplace",
-      "owner": "codex-runtime",
+      "owner": "agent-dev-kit",
       "path": "~/.agents/plugins/marketplace.json",
       "required_fields": [
         "name",
@@ -64,7 +64,7 @@
         "plugins[].policy.authentication",
         "plugins[].category"
       ],
-      "source_path_policy": "local personal entries should prefer ./.codex/plugins/<plugin-name> when testing",
+      "source_path_policy": "local personal entries should prefer ./.adk/plugins/<plugin-name> when testing",
       "install_policy_values": [
         "AVAILABLE",
         "INSTALLED_BY_DEFAULT",

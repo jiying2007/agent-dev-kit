@@ -34,8 +34,8 @@ constraints:
 2. 完成声明分离：记录 claimant 的完成声明，再由 verifier 逐条核验证据，不直接采信声明文本。
 3. 证据核验：核对 lint/test/build/smoke 等结果与执行环境。
 4. 评审闭环：按 blocker/major/minor 分级，检查必须项是否关闭。
-5. 运行目标检查：若目标是 `~/.codex`，必须补 `~/codex` build/apply 证据与运行目录健康验证证据。
-6. 配置加载核验：若涉及 codex 配置变更，补 `声明配置 vs 运行态加载` 对比证据。
+5. 运行目标检查：若目标是运行时目录，必须补显式 tool target 适配证据与运行目录健康验证证据。
+6. 配置加载核验：若涉及运行时配置变更，补 `声明配置 vs 运行态加载` 对比证据。
 7. prompt 回归核验：若改动提示词或策略文本，补 before/after 行为对比与失败样例。
 8. 证据索引化：关键命令必须记录命令、退出码、结果摘要、证据路径、层级（Agent/Skill/Workflow）与关联工件。
 9. 兼容性检查：显式判断是否存在 breaking change，并给出迁移与回退方案。
@@ -48,8 +48,8 @@ constraints:
 ```bash
 git diff --name-only <base>...HEAD
 <project-lint-cmd> && <project-test-cmd> && <project-build-cmd>
-bash scripts/check-global-codex-health.sh ~/.codex minimal
-codex mcp list
+bash scripts/devkit.sh runtime-boundary
+<runtime-mcp-list-cmd>
 ```
 
 ## Evidence Template
@@ -89,8 +89,8 @@ Evidence Index（命令级）:
 - 完成声明必须区分 claimant、verifier、证据列表、缺失证据和 open items。
 - 若存在未闭环 blocker，结论必须为 `needs-fix`。
 - 完成声明需与实际证据逐项可追溯。
-- 若声明目标可在 `~/.codex` 放行，必须附 `~/codex` build/apply 证据和运行目录健康验证结果。
-- 若涉及 codex 配置变更，必须附声明配置与运行态加载一致性结论。
+- 若声明目标可在运行时目录放行，必须附显式 tool target 适配证据和运行目录健康验证结果。
+- 若涉及运行时配置变更，必须附声明配置与运行态加载一致性结论。
 - 若涉及 prompt/policy 文本变更，必须附 before/after 行为对比与失败样例。
 - 若涉及模型切换、上下文扩容或工具权限变化，必须附本地回归和 approval/deny gate 未放宽证据。
 - 关键验证命令必须存在 Evidence Index 记录，且字段完整（命令/退出码/结果摘要/证据路径/层级）。

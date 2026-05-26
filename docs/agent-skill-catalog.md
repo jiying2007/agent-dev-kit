@@ -96,7 +96,7 @@
 |---|---|---|---|
 | `core` | 嵌入式全栈开发核心配置（需求、架构、实现、验证与评审） | false | - |
 | `release-hardening` | 发布加固配置（安全审查、性能优化、合规检查） | false | - |
-| `personal-core` | 个人 ~/codex 声明式交付配置（核心功能 + 发布检查） | false | core |
+| `personal-core` | 个人通用 ADK 资产配置（核心功能 + 发布检查） | false | core |
 | `embedded-fullstack` | 嵌入式全栈开发配置（芯片/板级、启动链、BSP、驱动、组件、应用、工具、验证、量产和现场维护） | false | core |
 | `team-core` | 团队协作配置（交接/验证/评审） | false | core |
 | `openspec-driven` | Spec 驱动开发配置（需求/设计/任务链路） | false | core |

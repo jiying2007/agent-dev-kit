@@ -23,14 +23,15 @@ knowledge/
 **定义**: AI 编码工具的配置、约定和最佳实践
 
 **内容**:
-- Codex/Claude Code/Hermes Agent 配置
+- Codex/Claude Code/Hermes Agent/OpenCode 配置参考
 - IDE 集成配置
 - 工具链版本和兼容性
 
 **示例**:
 ```
 L0-toolchain/
-├── codex-config.md          # Codex 配置指南
+├── codex-config.md          # Codex 配置参考，不作为 adk 默认运行时
+├── runtime-config.md        # 通用运行时配置指南
 ├── claude-code-config.md    # Claude Code 配置指南
 ├── hermes-agent-config.md   # Hermes Agent 配置指南
 ├── ide-integration.md       # IDE 集成说明

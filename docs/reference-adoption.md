@@ -68,7 +68,7 @@
 
 结论：`agent-dev-kit` 保留“规则思想”，但全部转换为本仓库可执行脚本、模板和测试门禁，确保离线独立可用。
 
-## 7. Codex Skills 岗位 SOP 模型（2026-05-21）
+## 7. Skills 岗位 SOP 模型（2026-05-21）
 
 借鉴点：
 - Skill 不是 prompt 升级版，而是可版本化、可审查、可复用的岗位 SOP。
@@ -87,7 +87,7 @@
 
 有意排除：
 - 不把第三方 Skill 安装成功视为生产采纳完成。
-- 不绕过 `agent-dev-kit -> ~/codex -> ~/.codex` 声明式交付链路。
+- 不绕过 `agent-dev-kit -> explicit tool target` 声明式交付链路。
 - 不把个人偏好、一次性 prompt 或外部仓库路径直接写入 adk core 规则。
 
 ## 8. Agent 记忆与 AAR 自我进化治理（2026-05-21）
@@ -110,7 +110,7 @@
 有意排除：
 - 不保存完整聊天记录、临时草稿、未经确认推测、密钥或隐私原文。
 - 不默认引入向量库、知识图谱或数据库；先用可审查 Markdown 模板稳定结构。
-- 不让 Agent 静默修改 `~/.codex/memories`、`AGENTS.md` 或高风险生产规则。
+- 不让 Agent 静默修改运行时 memories、`AGENTS.md` 或高风险生产规则。
 
 ## 9. 保真省 Token 与上下文读取治理（2026-05-21）
 

@@ -32,7 +32,7 @@
 ## 阻塞与升级
 - 发现需求或设计矛盾时，返回 adk-planner。
 - 验证失败且根因超出任务边界时，切换到 systematic debugging。
-- 涉及 release、production、`~/codex` 或 `~/.codex` 链路时，升级 completion verification。
+- 涉及 release、production 或运行时适配链路时，升级 completion verification。
 
 ## 输出契约
 - 结论：`pass` 或 `needs-fix`。
@@ -41,18 +41,18 @@
 - 若未运行关键验证，不得声明可提交或可合并。
 
 ## 场景输入样例
-- 输入：实现 Codex handoff 转换脚本和对应测试。
-- 约束：不得直接写入 `~/codex` 或 `~/.codex`。
-- 目标：输出可被 `~/codex` build/doctor 消费的产物。
+- 输入：实现通用 handoff 转换脚本和对应测试。
+- 约束：不得直接写入未声明运行时目录。
+- 目标：输出可被显式 tool target 消费的产物。
 
 ## 输出样例
 ### pass
 - 结论：`pass`
-- 改动：新增 handoff 生成、manifest fragments 和定向测试。
-- 验证：convert 测试、codex-handoff、脚本语法检查通过。
-- 风险：正式合并到 `~/codex` 仍需人工审阅 manifest diff。
+- 改动：新增 handoff 生成、目标元数据和定向测试。
+- 验证：convert 测试、runtime-boundary、脚本语法检查通过。
+- 风险：正式接入目标运行时仍需人工审阅 manifest diff。
 
 ### needs-fix
 - 结论：`needs-fix`
-- 问题：测试只检查目录存在，未验证 `~/codex` build。
-- 下一步：补临时副本合并并运行 doctor/check-skills。
+- 问题：测试只检查目录存在，未验证目标运行时适配。
+- 下一步：补临时目标目录转换并运行 smoke/check-skills。

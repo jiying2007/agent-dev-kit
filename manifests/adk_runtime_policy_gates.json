@@ -1,28 +1,31 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-05-25",
+  "last_updated": "2026-05-26",
+  "scope_model": "platform-neutral-adk-runtime",
   "source_docs": [
     "openai-codex-config-reference",
     "openai-codex-requirements-toml",
     "openai-codex-sandbox-defaults",
-    "openai-codex-agent-approvals-security-dangerous-settings"
+    "openai-codex-agent-approvals-security-dangerous-settings",
+    "openai-codex-best-practices"
   ],
+  "reference_boundary": "OpenAI product docs are used only as official reference material. This manifest defines platform-neutral ADK runtime policy and does not include compatibility bindings.",
   "policy_layers": [
     {
-      "id": "admin-enforced-requirements",
+      "id": "managed-runtime-requirements",
       "owner": "agent-dev-kit",
-      "config_file": "requirements.toml",
-      "precedence": "admin-enforced",
+      "config_file": "managed runtime requirements",
+      "precedence": "administrator-or-team-enforced",
       "user_override_allowed": false,
       "required_controls": [
         "allowed_approval_policies",
         "allowed_sandbox_modes",
-        "allowed_web_search_modes",
-        "mcp_servers.identity",
+        "allowed_live_search_modes",
+        "tool_server.identity",
         "permissions.filesystem.deny_read",
-        "rules.prefix_rules"
+        "command_rules.prefix_rules"
       ],
-      "managed_hooks_policy": "allow_managed_hooks_only may disable user, project, session and plugin hooks while preserving managed hooks.",
+      "managed_hooks_policy": "Managed hooks may disable user, project, session and plugin hooks while preserving team-enforced hooks.",
       "network_policy": {
         "deny_wins": true,
         "global_allow_allowed": false,
@@ -43,38 +46,37 @@
         "full_access_live_default_must_be_overridden": true
       },
       "verification": [
-        "debug-config evidence when available",
+        "runtime config evidence when available",
         "check-openai-developers-governance",
         "runtime-boundary"
       ]
     },
     {
-      "id": "project-config-boundary",
+      "id": "project-runtime-boundary",
       "owner": "agent-dev-kit",
-      "config_file": ".codex/config.toml",
+      "config_file": "project-local agent runtime config",
       "precedence": "project-scoped-when-trusted",
       "user_override_allowed": true,
       "must_not_override": [
-        "openai_base_url",
-        "chatgpt_base_url",
+        "provider_base_url",
+        "auth_provider",
         "model_provider",
         "model_providers",
-        "notify",
+        "notifications",
         "profile",
         "profiles",
-        "experimental_realtime_ws_base_url",
-        "otel"
+        "telemetry"
       ],
       "required_controls": [
         "approval_policy",
         "sandbox_mode",
-        "sandbox_workspace_write.writable_roots",
-        "mcp_servers.<id>.enabled_tools",
-        "mcp_servers.<id>.disabled_tools",
-        "mcp_servers.<id>.tools.<tool>.approval_mode"
+        "workspace_write.writable_roots",
+        "tool_servers.<id>.enabled_tools",
+        "tool_servers.<id>.disabled_tools",
+        "tool_servers.<id>.tools.<tool>.approval_mode"
       ],
       "verification": [
-        "debug-config evidence when available",
+        "runtime config evidence when available",
         "check-openai-developers-governance"
       ]
     }
@@ -126,21 +128,21 @@
       "id": "danger-full-access-never",
       "sandbox_mode": "danger-full-access",
       "approval_policy": "never",
-      "reason": "Equivalent to full access and must not be a default adk runtime preset."
+      "reason": "Equivalent to full access and must not be a default ADK runtime preset."
     },
     {
       "id": "network-global-allow",
-      "pattern": "experimental_network.domains.* = allow",
+      "pattern": "network.domains.* = allow",
       "reason": "Global network allow broadly opens outbound access; use scoped domains and deny-wins policy."
     },
     {
       "id": "network-proxy-non-loopback",
-      "pattern": "features.network_proxy.dangerously_allow_non_loopback_proxy = true",
+      "pattern": "network_proxy.dangerously_allow_non_loopback_proxy = true",
       "reason": "Non-loopback proxy listeners widen local trust boundaries and require explicit approval plus remote exposure review."
     },
     {
       "id": "all-unix-sockets",
-      "pattern": "features.network_proxy.dangerously_allow_all_unix_sockets = true",
+      "pattern": "network_proxy.dangerously_allow_all_unix_sockets = true",
       "reason": "Bypassing the Unix socket allowlist can expose local daemons; use explicit socket allow rules instead."
     },
     {

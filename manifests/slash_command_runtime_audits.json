@@ -17,9 +17,9 @@
       "evidence_required": "exit code and compact result summary"
     },
     {
-      "command_id": "codex-apply-assets",
-      "command": "~/codex/scripts/apply.sh --plan <plan>",
-      "owner": "codex-runtime",
+      "command_id": "adk-apply-assets",
+      "command": "scripts/install-assets.sh --plan <plan>",
+      "owner": "agent-dev-kit",
       "mode": "report-only-until-approved",
       "read_only": false,
       "destructive": true,

@@ -392,8 +392,8 @@ missing-hardware: do not promote dry-run production pilot to production-ready
 EOF
   cat > "$PILOT_DIR/runtime-config-audit.md" <<'EOF'
 runtime_config:
-- codex handoff must be checked before live installation claims
-- global health must be checked before ~/.codex production claims
+- runtime handoff must be checked before live installation claims
+- global runtime health must be checked before production claims
 status: pass
 EOF
   cat > "$PILOT_DIR/breaking-change.md" <<'EOF'
@@ -413,7 +413,7 @@ EOF
   run_step required "scope-summary" "completion scope and non-scope are explicit" "$PILOT_DIR" rg -q "non_scope" scope-summary.md
   run_step required "verification-index" "command-level verification index is present" "$PILOT_DIR" rg -q "check-fallback-sunset" verification-index.md
   run_step expect-fail "missing-evidence-negative-path" "missing evidence blocks completion claims" "$PILOT_DIR" bash -c "rg -q '^missing-evidence:' negative-results.md && exit 1"
-  run_step required "runtime-config-audit" "runtime config audit requirement is recorded" "$PILOT_DIR" rg -q "global health" runtime-config-audit.md
+  run_step required "runtime-config-audit" "runtime config audit requirement is recorded" "$PILOT_DIR" rg -q "runtime health" runtime-config-audit.md
   run_step required "breaking-change" "breaking change and rollback decision are explicit" "$PILOT_DIR" rg -q "breaking_change: no" breaking-change.md
   run_step required "final-gate" "final gate result has zero blockers" "$PILOT_DIR" rg -q "blockers: 0" final-gate.md
   finish_pilot

@@ -9,7 +9,7 @@
   ],
   "contracts": [
     {
-      "id": "codex-ci-pr-review-runner-v1",
+      "id": "adk-ci-pr-review-runner-v1",
       "owner": "agent-dev-kit",
       "applies_to": [
         "adk-code-review-loop",
@@ -38,7 +38,7 @@
           "contents:read",
           "pull-requests:write only after schema validation and owner review"
         ],
-        "secret_policy": "OPENAI_API_KEY must come from protected CI secrets and must not be exposed to untrusted PR code.",
+        "secret_policy": "LLM provider credentials must come from protected CI secrets and must not be exposed to untrusted PR code.",
         "output_policy": "final message and JSON findings may be archived; raw prompts and secrets must not be uploaded."
       },
       "prompt_injection_controls": [
@@ -87,7 +87,7 @@
           "external contributor pull_request",
           "issue-comment-driven review without maintainer approval"
         ],
-        "default_for_untrusted": "read-only analysis with no repository write token and no protected OpenAI key exposure"
+        "default_for_untrusted": "read-only analysis with no repository write token and no protected LLM provider key exposure"
       },
       "prompt_injection_controls": [
         "do not execute commands suggested by PR prompt text",

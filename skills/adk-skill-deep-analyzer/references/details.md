@@ -104,8 +104,8 @@ constraints:
 
 ### 阶段 7.5: 吸收边界判断
 1. 是否已有 adk 同类 skill 或 runbook；若有，优先 MERGE。
-2. 是否符合嵌入式全栈或 Codex 资产治理边界；不符合则 REJECT/OBSERVE。
-3. 是否需要 manifest、profile、hook、MCP 或 `~/codex` 交付链路变更。
+2. 是否符合嵌入式全栈或通用 ADK 资产治理边界；不符合则 REJECT/OBSERVE。
+3. 是否需要 manifest、profile、hook、MCP 或显式 tool target 交付链路变更。
 4. 临时参考资料只作为输入证据，不进入长期 knowledge 或 adoption matrix。
 
 ### 阶段 8: 综合评估

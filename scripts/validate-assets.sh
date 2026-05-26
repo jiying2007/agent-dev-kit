@@ -168,12 +168,6 @@ validate_tool_targets() {
     fi
   done
 
-  if [[ "$(adk_get_tool_value "codex" "default_root")" != "~/codex" ]]; then
-    fail "tool target 'codex' default_root must be ~/codex; direct ~/.codex install is forbidden"
-  fi
-  if adk_get_tool_list "codex" "detect" | grep -Fxq "~/.codex"; then
-    fail "tool target 'codex' detect list must not use ~/.codex"
-  fi
 }
 
 validate_agents_and_manifest_mapping() {

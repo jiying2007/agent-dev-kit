@@ -1,16 +1,18 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-05-25",
+  "last_updated": "2026-05-26",
+  "scope_model": "platform-neutral-adk-command-policy",
   "source_docs": [
     "openai-codex-rules",
     "openai-codex-requirements-toml"
   ],
+  "reference_boundary": "OpenAI product docs are used only as official reference material. This manifest defines platform-neutral ADK command policy and does not include compatibility bindings.",
   "contracts": [
     {
-      "id": "rtk-shell-command-prefix-rules",
+      "id": "adk-shell-command-prefix-rules",
       "owner": "agent-dev-kit",
-      "scope": "llm_agent and codex asset runtime command approvals",
-      "rules_file": "rules/default.rules or admin-enforced requirements.toml",
+      "scope": "ADK-managed shell command approvals across supported agent runtimes",
+      "rules_file": "rules/default.rules or managed runtime requirements",
       "decision_values": [
         "allow",
         "prompt",
@@ -25,7 +27,7 @@
       ],
       "minimum_match_examples": 1,
       "minimum_not_match_examples": 1,
-      "compound_shell_policy": "split simple shell chains when Codex can parse them; treat advanced shell features as a single high-risk wrapper invocation",
+      "compound_shell_policy": "split simple shell chains when the runtime can parse them; treat advanced shell features as a single high-risk wrapper invocation",
       "forbidden_prefix_examples": [
         [
           "rm"
@@ -42,7 +44,7 @@
         ]
       ],
       "verification": [
-        "codex execpolicy check for each promoted rule",
+        "runtime rule check for each promoted rule",
         "check-openai-developers-governance",
         "runtime-boundary"
       ],
@@ -52,7 +54,7 @@
       "id": "managed-restrictive-prefix-rules",
       "owner": "agent-dev-kit",
       "scope": "team or machine enforced command policy",
-      "rules_file": "requirements.toml",
+      "rules_file": "managed runtime requirements",
       "decision_values": [
         "prompt",
         "forbidden"
@@ -80,8 +82,8 @@
         ]
       ],
       "verification": [
-        "codex execpolicy check",
-        "debug-config evidence when available",
+        "runtime rule check",
+        "runtime config evidence when available",
         "check-openai-developers-governance"
       ],
       "promotion_gate": "Admin rules may narrow capability without project consent; project-local rules must not widen managed restrictions."

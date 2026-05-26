@@ -84,13 +84,13 @@
 - 关键纪律：基线验证与重构后回归必须同口径对比
 - Runbook：`docs/runbooks/refactor-hardening.md`
 
-### 场景 H：codex 运行闭环（Runtime Pilot）
+### 场景 H：通用运行闭环（Runtime Pilot）
 
 - Agent：`application-engineer -> test-validation-engineer -> code-review-governor`
 - Skill：`adk-verification-before-completion + adk-commit-pr-quality-gate`
-- 命令：`~/codex doctor/apply dry-run -> health-check(~/.codex) -> check-global-codex-health -> check-adk-harden-readiness --require-pilot`
+- 命令：`validate -> runtime-boundary -> target smoke -> check-adk-harden-readiness --require-pilot`
 - 关键纪律：未通过 pilot 验证不得给出“可放行/可追踪上游更新”结论
-- Runbook：`docs/runbooks/codex-runtime-pilot.md`
+- Runbook：`docs/runbooks/production-deployment.md`
 
 ### 场景 I：跨团队交接收口（Handoff Delivery）
 
@@ -132,13 +132,13 @@
 - 关键纪律：配置摘要、验证命令、行为影响结论三项缺一不可
 - Runbook：`docs/runbooks/config-baseline-governance.md`
 
-### 场景 N：codex 设置审计（Codex Settings Audit）
+### 场景 N：运行时设置审计（Runtime Settings Audit）
 
 - Agent：`requirements-analyst -> test-validation-engineer -> code-review-governor`
 - Skill：`adk-requirements-triage + adk-verification-before-completion + adk-commit-pr-quality-gate`
-- 命令：`propose -> verify -> check-global-codex-health -> codex mcp list -> review`
+- 命令：`propose -> verify -> runtime-boundary -> target MCP smoke -> review`
 - 关键纪律：声明配置与运行态加载结果必须一致
-- Runbook：`docs/runbooks/codex-settings-audit.md`
+- Runbook：`docs/runbooks/runtime-routing.md`
 
 ### 场景 O：Spec 链路交付（Spec Chain Delivery）
 
@@ -220,7 +220,7 @@
 
 - Agent：`build-release-engineer -> test-validation-engineer -> code-review-governor`
 - Skill：`adk-release-versioning + adk-verification-before-completion + adk-commit-pr-quality-gate`
-- 命令：`validate -> install --backup --install-report -> check-global-codex-health -> check-adk-harden-readiness`
+- 命令：`validate -> install --backup --install-report -> runtime-boundary -> check-adk-harden-readiness`
 - 关键纪律：生产安装必须可回滚，并记录安装报告
 - Runbook：`docs/runbooks/production-deployment.md`
 
@@ -229,7 +229,7 @@
 - Agent：`requirements-analyst -> architecture-planner -> code-review-governor`
 - Skill：`adk-skill-composition-governance + adk-security-supply-chain + adk-commit-pr-quality-gate`
 - 命令：`sync-subrepos -> diff-scan -> check-upstream-intake-readiness`
-- 关键纪律：参考资产不得直接混装进 `~/.codex`；必须先经过 adk，再进入 `~/codex`，最后由 `~/codex` apply
+- 关键纪律：参考资产不得直接混装进运行目录；必须先经过 adk 审查，再进入显式 tool target
 - Runbook：`docs/runbooks/upstream-intake.md`
 
 ### 场景 W：团队生产交付（Team Delivery）

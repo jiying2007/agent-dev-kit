@@ -45,7 +45,7 @@
       "owner": "agent-dev-kit",
       "applies_to": [
         "managed skills",
-        "Codex handoff",
+        "ADK handoff",
         "plugin packaging"
       ],
       "required_fields": [

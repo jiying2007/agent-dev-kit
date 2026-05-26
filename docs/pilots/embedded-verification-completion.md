@@ -31,7 +31,7 @@ rtk bash scripts/run-embedded-workflow-pilots.sh --pilot verification --out /tmp
 | `scope-summary.md` | 完成声明的目标范围和非目标 |
 | `verification-index.md` | 命令级验证证据索引 |
 | `negative-results.md` | 不能放行的负路径 |
-| `runtime-config-audit.md` | `~/codex -> ~/.codex` 运行态声明要求 |
+| `runtime-config-audit.md` | 通用运行态声明要求 |
 | `breaking-change.md` | breaking change、迁移和回滚判断 |
 | `final-gate.md` | 最终门禁结论和残留风险 |
 
@@ -44,4 +44,4 @@ rtk bash scripts/run-embedded-workflow-pilots.sh --pilot verification --out /tmp
 ### 残留缺口
 
 - 该 pilot 证明 completion gate 行为，不替代真实硬件 HIL、OTA rollback 或现场维护证据。
-- 涉及 `~/.codex` 生产可用性声明时，仍必须附 `~/codex` build/apply 和 global health 证据。
+- 涉及生产可用性声明时，仍必须附目标运行时 smoke 和 global health 证据。

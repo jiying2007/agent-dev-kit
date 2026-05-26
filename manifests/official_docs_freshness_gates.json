@@ -240,7 +240,7 @@
       "review_status": "adopted",
       "adoption_scope": "P0",
       "owner": "agent-dev-kit",
-      "decision": "Use as the source for Codex, VS Code, Cursor and Claude Code official Docs MCP setup and AGENTS guidance.",
+      "decision": "Use as the source for official Docs MCP setup and AGENTS guidance across supported MCP-capable clients.",
       "required_checks": [
         "check-openai-developers-governance"
       ]
@@ -311,7 +311,7 @@
       "review_status": "adopted",
       "adoption_scope": "P1",
       "owner": "agent-dev-kit",
-      "decision": "Use as the source for Codex MCP runner and reply contracts, thread continuation and approval correlation.",
+      "decision": "Use as the source for generic ADK runner and reply contracts, thread continuation and approval correlation.",
       "required_checks": [
         "check-openai-developers-governance"
       ]

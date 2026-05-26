@@ -10,10 +10,9 @@ Usage:
   ./scripts/check-runtime-boundary.sh [--summary-json]
 
 Checks:
-  - Codex declaration root is ~/codex, not ~/.codex.
-  - scripts do not install, restore, rollback, copy, remove, or write directly into ~/.codex.
-  - active docs/templates/skills do not recommend direct adk-to-~/.codex install commands.
-  - read-only health/list references to ~/.codex remain allowed.
+  - generic ADK does not declare a Codex-specific tool target
+  - generic ADK scripts and tests do not expose Codex-specific commands
+  - legacy Codex handoff scripts are removed
 USAGE
 }
 
@@ -45,53 +44,29 @@ record_failure() {
   failures+=("$1")
 }
 
-codex_root="$(adk_get_tool_value "codex" "default_root")"
-if [[ "$codex_root" != "~/codex" ]]; then
-  record_failure "manifest tool_targets.codex.default_root must be ~/codex, got ${codex_root:-empty}"
+if adk_tool_exists "codex"; then
+  record_failure "manifest tool_targets must not include codex"
 fi
 
-if adk_get_tool_list "codex" "detect" | grep -Fxq "~/.codex"; then
-  record_failure "manifest tool_targets.codex.detect must not include ~/.codex"
-fi
+for stale in \
+  "$ROOT_DIR/scripts/check-codex-handoff.sh" \
+  "$ROOT_DIR/scripts/sync-codex-assets.sh" \
+  "$ROOT_DIR/tests/test_convert_codex_handoff.sh"; do
+  if [[ -e "$stale" ]]; then
+    record_failure "stale Codex-bound file must be removed: ${stale#$ROOT_DIR/}"
+  fi
+done
 
 while IFS= read -r hit; do
   [[ -z "$hit" ]] && continue
-  record_failure "prohibited direct codex install: $hit"
+  record_failure "Codex-bound residue in active runtime surface: $hit"
 done < <(
-  rg -n 'install-assets\.sh|devkit\.sh install|sync-codex-assets\.sh' "$ROOT_DIR/scripts" \
-    | rg -- '--target[ =][^#]*~/.codex|--tool[ =]codex' \
-    | rg -v 'codex install is disabled|check-runtime-boundary\.sh' || true
-)
-
-while IFS= read -r hit; do
-  [[ -z "$hit" ]] && continue
-  record_failure "prohibited runtime restore/rollback: $hit"
-done < <(
-  rg -n 'backup-rollback\.sh[^\n]*(restore|rollback)[^\n]*--target[ =][^#]*~/.codex' "$ROOT_DIR/scripts" || true
-)
-
-while IFS= read -r hit; do
-  [[ -z "$hit" ]] && continue
-  record_failure "prohibited direct runtime mutation: $hit"
-done < <(
-  rg -n '(^|[[:space:]])(cp|mv|rm|mkdir|ln|rsync|tar)([[:space:]]|$)[^\n]*(~/.codex|\$HOME/\.codex)' "$ROOT_DIR/scripts" \
-    | rg -v 'check-runtime-boundary\.sh|check-global-codex-health|codex mcp list|logs' || true
-)
-
-while IFS= read -r hit; do
-  [[ -z "$hit" ]] && continue
-  record_failure "prohibited active doc direct codex install: $hit"
-done < <(
-  rg -n --pcre2 \
-    -g '!reports/archive/**' \
-    'devkit\.sh install[^\n]*(--tool[ =]codex|--target[ =][^\n]*~/.codex)|install-assets\.sh[^\n]*--tool[ =]codex|sync-codex-assets\.sh' \
-    "$ROOT_DIR/README.md" \
-    "$ROOT_DIR/AGENTS.md" \
-    "$ROOT_DIR/CONTEXT.md" \
-    "$ROOT_DIR/docs" \
-    "$ROOT_DIR/skills" \
-    "$ROOT_DIR/optional-skills" \
-    "$ROOT_DIR/templates" || true
+  rg -n 'codex|Codex|\.codex|~/codex' \
+    "$ROOT_DIR/manifest.yaml" \
+    "$ROOT_DIR/scripts" \
+    "$ROOT_DIR/tests" \
+    -g '!check-runtime-boundary.sh' \
+    -g '!check-openai-developers-governance.sh' || true
 )
 
 if [[ "${#failures[@]}" -gt 0 ]]; then
@@ -105,7 +80,7 @@ if [[ "${#failures[@]}" -gt 0 ]]; then
 fi
 
 if [[ "$SUMMARY_JSON" -eq 1 ]]; then
-  printf '{"schema_version":1,"status":"pass","failures":0,"codex_root":"~/codex"}\n'
+  printf '{"schema_version":1,"status":"pass","failures":0,"runtime_scope":"generic-adk"}\n'
 else
   echo "[PASS] runtime boundary check"
 fi

@@ -48,7 +48,7 @@ skills/<skill-name>/
 - SKILL.md = Agent 需要立即知道的信息
 - references/ = Agent 按需查阅的详细信息
 - 减少 token 消耗，提高上下文效率
-- 官方 Codex skills 模型采用渐进式披露：初始上下文只暴露名称、description 和路径；完整 `SKILL.md` 只在选中 skill 后读取。adk skill 设计必须保持入口可短读，避免把长案例、历史证据和平台教程塞进入口文件。
+- 官方 Codex skills 模型可作为渐进式披露参考：初始上下文只暴露名称、description 和路径；完整 `SKILL.md` 只在选中 skill 后读取。adk skill 设计必须保持入口可短读，避免把长案例、历史证据和平台教程塞进入口文件。
 - 大 skill 生态按 `manifests/tool_search_contracts.json` 的 lazy-loading 契约治理：初始只暴露 namespace/skill 摘要，命中后再读取 `SKILL.md`、references、scripts 或 assets。
 - 需要 MCP 或外部工具的 skill 必须区分“发现用摘要”和“执行用 schema”；延迟加载不能绕过 tool approval、auth boundary 或安全审查。
 - 生产使用的 skill 必须按 `manifests/skill_reproducibility_contracts.json` 固定版本，并记录兼容的模型/运行态假设、验证命令和回滚路径；开发期使用 `latest` 也必须有 freshness review。

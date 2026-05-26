@@ -33,7 +33,7 @@
 
 ### 2.1 🔴 高优先级：变更管理（Changes）
 
-**状态**: 当前 adk 已使用 `docs/changes/` 作为变更工件目录，并通过 `manifest.yaml:change_sets` 导出到 `~/codex` handoff。后续优化重点是补真实业务样例和更多自动化一致性检查。
+**状态**: 当前 adk 已使用 `docs/changes/` 作为变更工件目录，并通过 `manifest.yaml:change_sets` 纳入通用 handoff 治理。后续优化重点是补真实业务样例和更多自动化一致性检查。
 
 **Harness Engineering 方案**:
 ```

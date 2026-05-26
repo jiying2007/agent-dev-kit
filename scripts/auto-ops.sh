@@ -7,7 +7,7 @@ source "${SCRIPT_DIR}/lib-logging.sh"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-CODEX_DECLARATION_ROOT="${CODEX_ROOT:-$HOME/codex}"
+ADK_DECLARATION_ROOT="${ADK_ROOT:-$ROOT_DIR}"
 
 usage() {
     cat <<USAGE

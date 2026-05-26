@@ -1,15 +1,17 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-05-25",
+  "last_updated": "2026-05-26",
+  "scope_model": "platform-neutral-adk-runner",
   "source_docs": [
     "openai-codex-as-mcp-server"
   ],
+  "reference_boundary": "OpenAI product docs are used only as official reference material. This manifest defines platform-neutral ADK runner contracts and does not include compatibility bindings.",
   "contracts": [
     {
-      "id": "codex-run-session",
+      "id": "adk-run-session",
       "owner": "agent-dev-kit",
-      "tool": "codex",
-      "purpose": "Start a bounded Codex session from an MCP client.",
+      "tool": "run-session",
+      "purpose": "Start a bounded agent runtime session from an MCP client or local orchestration layer.",
       "required_inputs": [
         "prompt"
       ],
@@ -21,7 +23,8 @@
         "include-plan-tool",
         "model",
         "profile",
-        "sandbox"
+        "sandbox",
+        "runtime_adapter"
       ],
       "approval_boundary": "approval-policy must be recorded and cannot silently widen sandbox access",
       "sandbox_boundary": "sandbox must be read-only, workspace-write, or danger-full-access with explicit evidence",
@@ -34,21 +37,23 @@
         "approval-policy",
         "profile",
         "threadId",
+        "runtime_adapter",
         "result summary"
       ],
       "stop_condition": "pass | replan | split | blocked | abort"
     },
     {
-      "id": "codex-reply-session",
+      "id": "adk-reply-session",
       "owner": "agent-dev-kit",
-      "tool": "codex-reply",
-      "purpose": "Continue an existing Codex MCP session.",
+      "tool": "reply-session",
+      "purpose": "Continue an existing agent runtime session.",
       "required_inputs": [
         "prompt",
         "threadId"
       ],
       "optional_inputs": [
-        "conversationId"
+        "conversationId",
+        "runtime_adapter"
       ],
       "approval_boundary": "approval prompts must carry the same threadId for audit correlation",
       "sandbox_boundary": "inherits original session boundary unless explicitly reconfigured and audited",
@@ -59,6 +64,7 @@
         "threadId",
         "prompt purpose",
         "approval prompts",
+        "runtime_adapter",
         "result summary"
       ],
       "stop_condition": "pass | replan | split | blocked | abort"

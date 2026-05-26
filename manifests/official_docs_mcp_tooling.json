@@ -12,14 +12,13 @@
   },
   "tooling_targets": [
     {
-      "id": "codex",
+      "id": "generic-mcp-client",
       "config_files": [
-        "~/.codex/config.toml",
-        ".codex/config.toml"
+        "<client-specific MCP config>"
       ],
-      "install_command": "codex mcp add openaiDeveloperDocs --url https://developers.openai.com/mcp",
+      "install_command": "Configure a streamable HTTP MCP server named openaiDeveloperDocs with URL https://developers.openai.com/mcp.",
       "verification": [
-        "codex mcp list",
+        "client MCP server list shows openaiDeveloperDocs",
         "ask an OpenAI docs question with citations"
       ],
       "agents_instruction": "Use OpenAI Docs MCP tools first for OpenAI product/API questions; fallback only to official OpenAI domains."
@@ -53,7 +52,7 @@
       "config_files": [
         "claude mcp project or user configuration"
       ],
-      "install_command": "claude mcp add openaiDeveloperDocs https://developers.openai.com/mcp",
+      "install_command": "Add openaiDeveloperDocs as a streamable HTTP MCP server with URL https://developers.openai.com/mcp.",
       "verification": [
         "/mcp shows connected server",
         "ask an OpenAI docs question with citations"

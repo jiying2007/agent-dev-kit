@@ -8,7 +8,7 @@
     {
       "id": "default-worker-contract",
       "owner": "lead-agent",
-      "runtime_identity": "codex-subagent",
+      "runtime_identity": "adk-subagent",
       "primary_skill": "task-specific",
       "supporting_skills": [],
       "scope_read": [

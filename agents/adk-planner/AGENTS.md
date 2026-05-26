@@ -41,18 +41,18 @@
 - 不允许输出无法验证的“优化一下”“完善一下”任务。
 
 ## 场景输入样例
-- 输入：优化 adk 到 `~/codex` 的交接链路。
-- 约束：不能直接写入 `~/.codex`，必须保留 rollback。
+- 输入：优化 adk 到显式 tool target 的交接链路。
+- 约束：不能直接写入未声明运行时目录，必须保留 rollback。
 - 目标：形成可执行任务和验证门禁。
 
 ## 输出样例
 ### pass
 - 结论：`pass`
-- 方案：adk 导出 handoff，`~/codex` 合并 manifest 后 build/apply。
+- 方案：adk 导出 handoff，目标适配层合并 manifest 后执行 smoke。
 - 任务：转换脚本、handoff 校验、文档同步、回归验证四段。
-- 验证：convert 测试、codex-handoff、doctor、check-skills。
+- 验证：convert 测试、runtime-boundary、doctor、check-skills。
 
 ### needs-fix
 - 结论：`needs-fix`
-- 问题：未定义产物结构，无法判断是否符合 `~/codex` 规范。
+- 问题：未定义产物结构，无法判断是否符合目标运行时规范。
 - 下一步：补源资产路径、manifest 字段和验收命令。

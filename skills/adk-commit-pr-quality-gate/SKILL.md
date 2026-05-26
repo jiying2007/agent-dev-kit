@@ -42,7 +42,7 @@ constraints:
 10. 结构变更核验：DB schema 变更必须带迁移/回滚证据；删除较大代码、公共 API 或 shared contract 前必须列调用点和 approval gate。
 11. 发布链路核验：若触及 `scripts/` 或关键构建入口，追加 release gate 专项验证。
 12. Core/Optional 核验：确认能力归属是否应进 core，场景化能力应进入 optional。
-13. CI/PR review 核验：若使用 Codex/AI runner 生成 PR review，必须核对 trusted-trigger、secret 隔离、结构化 findings、SCM payload review 和 inline anchoring。
+13. CI/PR review 核验：若使用 AI runner 生成 PR review，必须核对 trusted-trigger、secret 隔离、结构化 findings、SCM payload review 和 inline anchoring。
 
 ## Commands
 ```bash

@@ -25,7 +25,7 @@ constraints:
 # adk-security-supply-chain
 
 ## Goal
-- 防止第三方资产未经审查进入 `~/.codex` 生产运行环境。
+- 防止第三方资产未经审查进入生产运行环境。
 - 建立可追溯的供应链安全审查流程，确保每个引入决策有据可查。
 
 ## Prerequisites
@@ -54,7 +54,7 @@ constraints:
 - Audit log：高风险调用至少记录 tool、args 摘要、cwd、policy decision、exit code。
 
 ## MCP / Plugin Readiness
-- MCP 必须有 tool/resource/prompt 暴露清单、输入输出 schema、`codex mcp list` 或 inspector/smoke 证据。
+- MCP 必须有 tool/resource/prompt 暴露清单、输入输出 schema、runtime MCP list 或 inspector/smoke 证据。
 - OAuth/API token 必须声明最小 scope、凭证来源、轮换和撤销方式。
 - 从 skill 晋级 plugin 时，必须声明 plugin manifest、owner、version、license、profile 绑定和 rollback。
 - 缺少 deny-path guard test、隐藏工具或运行态清单漂移时，结论为 `needs-fix`。

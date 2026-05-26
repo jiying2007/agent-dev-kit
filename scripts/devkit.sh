@@ -21,8 +21,7 @@ Commands:
   install   安装 Agents/Skills 到目标工具目录
   validate  校验 manifest 与资产结构
   convert   转换资产到目标工具格式
-  codex-handoff 检查 Codex handoff 是否符合 ~/codex 规范
-  runtime-boundary 检查 adk 是否绕过 ~/codex 直接写入 ~/.codex
+  runtime-boundary 检查 adk 是否保持通用运行时边界
   token-budget 检查 skill/doc/script 是否符合低 token 预算
   openai-governance 检查 OpenAI 官方 Developers 参考治理
   workflow-closure 检查 workflow 引用是否在 profile 闭包内
@@ -49,7 +48,6 @@ Commands:
 Examples:
   ./scripts/devkit.sh install --tool auto --profile embedded-fullstack
   ./scripts/devkit.sh convert --target claude-code --profile core
-  ./scripts/devkit.sh codex-handoff --codex-root ~/codex
   ./scripts/devkit.sh file-modes --fix
   ./scripts/devkit.sh catalog build
   ./scripts/devkit.sh match --skill adk-requirements-triage --text "收到模糊需求"
@@ -76,9 +74,6 @@ case "$CMD" in
     ;;
   convert)
     exec "$SCRIPT_DIR/convert-assets.sh" "$@"
-    ;;
-  codex-handoff)
-    exec "$SCRIPT_DIR/check-codex-handoff.sh" "$@"
     ;;
   runtime-boundary)
     exec "$SCRIPT_DIR/check-runtime-boundary.sh" "$@"

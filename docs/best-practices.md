@@ -1,6 +1,6 @@
 # 最佳实践指南
 
-> 📖 **相关文档**: 如需面向具体场景的实战模板与方法论框架，参见 [Codex Cookbook](best-practices-cookbook.md)（道法术器分层结构）。
+> 📖 **相关文档**: 如需面向具体场景的实战模板与方法论框架，参见 [Codex Cookbook](best-practices-cookbook.md)（作为参考方法论，不作为 adk 运行时绑定）。
 
 ## 概述
 
@@ -201,7 +201,7 @@ bash scripts/version-manager.sh changelog
 
 ```bash
 # 创建备份
-bash scripts/backup-rollback.sh backup --target ~/codex
+bash scripts/backup-rollback.sh backup --target /tmp/adk-runtime
 ```
 
 ### 2. 备份验证
@@ -217,7 +217,7 @@ bash scripts/backup-rollback.sh verify --version 20260505
 
 ```bash
 # 恢复备份
-bash scripts/backup-rollback.sh restore --target ~/codex --version 20260505
+bash scripts/backup-rollback.sh restore --target /tmp/adk-runtime --version 20260505
 ```
 
 ## 文档最佳实践

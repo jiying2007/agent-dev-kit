@@ -28,7 +28,7 @@
 - `git diff --stat`
 - `git diff --name-only`
 - `<changed-test-cmd>` 或变更指定的最小验证命令。
-- 对 Codex 链路变更：`bash scripts/devkit.sh codex-handoff --codex-root ~/codex`。
+- 对运行时边界变更：`bash scripts/devkit.sh runtime-boundary`。
 
 ## 阻塞与升级
 - 验证证据缺失、失败或不可复现时，标记 `needs-fix`。
@@ -42,19 +42,19 @@
 - 没有问题时也必须说明测试缺口或剩余风险。
 
 ## 场景输入样例
-- 输入：审查 adk Codex handoff 转换和门禁脚本。
-- 约束：不能修改 `~/codex` 本体，只能在临时副本验证。
+- 输入：审查 adk handoff 转换和门禁脚本。
+- 约束：不能修改真实运行时目录，只能在临时副本验证。
 - 目标：判断是否可进入生产交接流程。
 
 ## 输出样例
 ### pass
 - 结论：`pass`
 - Findings：无 blocker/major。
-- 验证：convert、codex-handoff、doctor、check-skills 均通过。
-- 残留风险：正式合并 manifest 前仍需人工 review diff。
+- 验证：convert、runtime-boundary、doctor、check-skills 均通过。
+- 残留风险：正式合并目标 manifest 前仍需人工 review diff。
 
 ### needs-fix
 - 结论：`needs-fix`
-- blocker：handoff 只输出 `skills/` 运行目录，无法被 `~/codex` manifest 管理。
+- blocker：handoff 只输出 `skills/` 运行目录，无法被目标 manifest 管理。
 - 影响：绕过 drift、lock 和 rollback。
 - 建议：改为 vendor 源资产 + manifest fragments。

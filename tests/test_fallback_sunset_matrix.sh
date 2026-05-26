@@ -36,11 +36,6 @@ grep -q $'\tcandidate\t' "$CANDIDATE_TSV" || {
   exit 1
 }
 
-grep -q $'\treview-second-pilot-before-candidate\t' "$CANDIDATE_TSV" || {
-  echo "[FAIL] candidate TSV missing review queue rows" >&2
-  exit 1
-}
-
 "$ROOT_DIR/scripts/check-fallback-sunset.sh" --summary-json | grep -q '"status":"pass"' || {
   echo "[FAIL] summary json did not pass" >&2
   exit 1

@@ -99,19 +99,19 @@ skill_optional() {
 
 skill_live_installed() {
   local skill="$1"
-  local codex_root="${CODEX_ROOT:-${HOME}/.codex}"
+  local runtime_root="${ADK_RUNTIME_ROOT:-${HOME}/.adk}"
   local found=""
 
-  [[ -f "${codex_root}/skills/${skill}/SKILL.md" ]] && return 0
-  [[ -f "${codex_root}/skills/.system/${skill}/SKILL.md" ]] && return 0
+  [[ -f "${runtime_root}/skills/${skill}/SKILL.md" ]] && return 0
+  [[ -f "${runtime_root}/skills/.system/${skill}/SKILL.md" ]] && return 0
 
-  if [[ -d "${codex_root}/vendor/skills/${skill}" ]]; then
-    found="$(find "${codex_root}/vendor/skills/${skill}" -mindepth 2 -maxdepth 2 -name SKILL.md -type f -print -quit 2>/dev/null || true)"
+  if [[ -d "${runtime_root}/vendor/skills/${skill}" ]]; then
+    found="$(find "${runtime_root}/vendor/skills/${skill}" -mindepth 2 -maxdepth 2 -name SKILL.md -type f -print -quit 2>/dev/null || true)"
     [[ -n "${found}" ]] && return 0
   fi
 
-  if [[ -d "${codex_root}/vendor/plugins" ]]; then
-    found="$(find "${codex_root}/vendor/plugins" -path "*/skills/${skill}/SKILL.md" -type f -print -quit 2>/dev/null || true)"
+  if [[ -d "${runtime_root}/vendor/plugins" ]]; then
+    found="$(find "${runtime_root}/vendor/plugins" -path "*/skills/${skill}/SKILL.md" -type f -print -quit 2>/dev/null || true)"
     [[ -n "${found}" ]] && return 0
   fi
 

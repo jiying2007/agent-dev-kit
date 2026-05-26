@@ -8,7 +8,7 @@ triggers:
   - "pilot"
   - "真实场景验证"
   - "运行目录验证"
-  - "codex 试跑"
+  - "运行时试跑"
 non_triggers:
   - 纯本地单元测试（无需运行目录验证）
   - 文档编写或方案讨论
@@ -34,15 +34,15 @@ constraints:
 - 具备基本的文档编写能力
 
 
-在将 adk 资产正式发布前，通过结构化的"场景→试跑→证据→门禁→回灌"闭环，在真实运行目录中验证能力有效性，避免"本地通过但实战失败"。
+在将 adk 资产正式发布前，通过结构化的"场景→试跑→证据→门禁→回灌"闭环，在显式 tool target 中验证能力有效性，避免"本地通过但实战失败"。
 
 ## 来源说明
 
-- **核心来源**：`llm_agent/AGENTS.md` 中的"D5-D7 codex 实战试跑与回灌"流程
-- **Runbook 参考**：`docs/runbooks/codex-runtime-pilot.md`
+- **核心来源**：`llm_agent/AGENTS.md` 中的"D5-D7 实战试跑与回灌"流程
+- **Runbook 参考**：`docs/runbooks/production-deployment.md`
 - **门禁机制**：`scripts/check-adk-harden-readiness.sh --require-pilot`
-- **健康检查**：`scripts/health-check.sh` + `scripts/check-global-codex-health.sh`
-- **迭代依据**：`AGENTS.md` 第 3 节"先在 agent-dev-kit 完成资产化与验证、再交接到 ~/codex、由 ~/codex apply 到 ~/.codex 试跑、再回灌 adk"双向闭环
+- **健康检查**：`scripts/health-check.sh` + target-specific smoke checks
+- **迭代依据**：`AGENTS.md` 第 3 节"先在 agent-dev-kit 完成资产化与验证、再交接到显式 tool target 试跑、再回灌 adk"双向闭环
 
 ## 模式描述
 
@@ -50,9 +50,9 @@ constraints:
 
 | 场景类型 | 说明 | 验证重点 | 典型目录 |
 |----------|------|----------|----------|
-| 功能开发 | 新功能从零实现 | Skill 触发准确率、输出质量 | `~/codex -> ~/.codex` |
-| 缺陷修复 | 已知 bug 修复 | 调试流程完整性、修复验证 | `~/codex -> ~/.codex` |
-| 重构 | 大规模代码重构 | 回归测试覆盖、破坏性变更检测 | `~/codex -> ~/.codex` |
+| 功能开发 | 新功能从零实现 | Skill 触发准确率、输出质量 | 显式 tool target |
+| 缺陷修复 | 已知 bug 修复 | 调试流程完整性、修复验证 | 显式 tool target |
+| 重构 | 大规模代码重构 | 回归测试覆盖、破坏性变更检测 | 显式 tool target |
 | 发布 | 版本发布流程 | 版本号、changelog、门禁全通过 | `agent-dev-kit` |
 | 跨仓协作 | 多仓联动变更 | 交接协议、artifact 完整性 | 多仓 |
 
@@ -67,7 +67,7 @@ constraints:
 [pilot-scenario]
 id: pilot-<date>-<seq>
 type: feature | bugfix | refactor | release | cross-repo
-target_dir: ~/codex | <project-dir>
+target_dir: <tool-target-dir> | <project-dir>
 skills_under_test:
   - <skill-1>
   - <skill-2>
@@ -77,8 +77,8 @@ success_criteria: <可量化验收标准>
 
 **Step 2: 能力交接**
 ```bash
-bash scripts/devkit.sh convert --target codex --out /tmp/adk-codex-handoff --profile personal-core
-bash scripts/check-codex-handoff.sh --codex-root ~/codex
+bash scripts/devkit.sh convert --target claude-code --out /tmp/adk-handoff --profile personal-core
+bash scripts/devkit.sh runtime-boundary
 ```
 
 **Step 3: 真实执行**
@@ -89,8 +89,8 @@ bash scripts/check-codex-handoff.sh --codex-root ~/codex
 **Step 4: 证据收集**
 ```bash
 # 三联门禁证据
-bash scripts/health-check.sh ~/.codex minimal
-bash scripts/check-global-codex-health.sh ~/.codex minimal
+bash scripts/health-check.sh <tool-target-dir> minimal
+bash scripts/devkit.sh runtime-boundary
 bash scripts/check-adk-harden-readiness.sh . --require-pilot --skip-full-suite
 ```
 
@@ -148,12 +148,12 @@ bash scripts/check-adk-harden-readiness.sh . --require-pilot --skip-full-suite
 
 ```bash
 # 交接试跑能力
-bash scripts/devkit.sh convert --target codex --out /tmp/adk-codex-handoff --profile personal-core
-bash scripts/check-codex-handoff.sh --codex-root ~/codex
+bash scripts/devkit.sh convert --target claude-code --out /tmp/adk-handoff --profile personal-core
+bash scripts/devkit.sh runtime-boundary
 
 # 健康检查三联
-bash scripts/health-check.sh ~/.codex minimal
-bash scripts/check-global-codex-health.sh ~/.codex minimal
+bash scripts/health-check.sh <tool-target-dir> minimal
+bash scripts/devkit.sh runtime-boundary
 bash scripts/check-adk-harden-readiness.sh . --require-pilot --skip-full-suite
 
 # 生成试跑报告

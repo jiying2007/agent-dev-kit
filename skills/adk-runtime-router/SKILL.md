@@ -55,7 +55,7 @@ constraints:
 
 ## Workflow
 1. **识别任务模式**：判定只读分析、实现、debug、review、release、并行/worktree、会话收口。
-2. **判定风险等级**：检查是否涉及 shared contract、schema、根配置、CI、依赖、运行态 `~/.codex` 或发布链路。
+2. **判定风险等级**：检查是否涉及 shared contract、schema、根配置、CI、依赖、运行态目录或发布链路。
 3. **选择 primary skill**：每个任务只能有一个 primary skill；其他 skill 只能补充检查项。
 4. **声明 supporting skills**：列出辅助 skill 的用途，避免辅助 skill 抢占入口。
 5. **路由裁决分层**：将 recall、reasoning、ranking、feedback 分开；LLM 只产出候选理解，执行裁决必须来自确定性规则、结构化校验或 owner approval。

@@ -43,13 +43,13 @@ grep -q "manifest_version" "$REPORT" || { echo "[FAIL] install report missing ve
   --profile core \
   --dry-run
 
-CODEX_INSTALL_OUT="$TMP_DIR/codex-install.out"
-if "$ROOT_DIR/scripts/install-assets.sh" --tool codex --target "$TMP_DIR/codex" --profile core >"$CODEX_INSTALL_OUT" 2>&1; then
-  echo "[FAIL] codex install should be disabled" >&2
+BOUND_TARGET_OUT="$TMP_DIR/platform-bound-target.out"
+if "$ROOT_DIR/scripts/install-assets.sh" --tool vendor-specific-runtime --target "$TMP_DIR/platform-bound-target" --profile core >"$BOUND_TARGET_OUT" 2>&1; then
+  echo "[FAIL] platform-bound target should be rejected" >&2
   exit 1
 fi
-grep -q "codex install is disabled" "$CODEX_INSTALL_OUT" || {
-  echo "[FAIL] codex install failure message missing" >&2
+grep -q "unknown tool: vendor-specific-runtime" "$BOUND_TARGET_OUT" || {
+  echo "[FAIL] platform-bound target rejection message missing" >&2
   exit 1
 }
 

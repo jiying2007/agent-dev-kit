@@ -60,7 +60,6 @@ TESTS=(
   test_profile_coherence.sh
   test_optional_skills.sh
   test_convert.sh
-  test_convert_codex_handoff.sh
   test_runtime_boundary.sh
   test_token_budget.sh
   test_token_context_governance.sh

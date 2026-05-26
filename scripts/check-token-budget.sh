@@ -140,7 +140,6 @@ done < <(
 for script in \
   "$ROOT_DIR/scripts/validate-assets.sh" \
   "$ROOT_DIR/scripts/convert-assets.sh" \
-  "$ROOT_DIR/scripts/check-codex-handoff.sh" \
   "$ROOT_DIR/scripts/check-runtime-boundary.sh" \
   "$ROOT_DIR/scripts/check-workflow-closure.sh" \
   "$ROOT_DIR/scripts/pilot-readiness.sh" \

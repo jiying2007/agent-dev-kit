@@ -17,7 +17,7 @@
 5. 缺少 Evidence Index（命令/退出码/结果摘要/证据路径/层级）时不得给 `pass`。
 6. 配置审计场景缺少"声明配置 vs 运行态加载"对比证据时一律 `needs-fix`。
 7. prompt/policy 变更场景缺少 before/after 对比或失败样例时一律 `needs-fix`。
-8. codex runtime 场景缺少 doctor/health/pilot 三联证据时一律 `needs-fix`。
+8. runtime 场景缺少 adapter/health/pilot 三联证据时一律 `needs-fix`。
 9. Evidence Index 未包含负结果或被证伪路径记录时一律 `needs-fix`。
 
 ## 测试策略
@@ -71,7 +71,7 @@
 - 交接场景必含：handoff 验收项、接收方复验结果、签收状态。
 - 配置审计场景必含：配置摘要、运行态加载结果、差异结论。
 - prompt 变更场景必含：测试输入、before/after 对比、失败样例与最终判定。
-- codex runtime 场景必含：doctor 结果、global health 结果、pilot gate 结果。
+- runtime 场景必含：adapter 结果、health 结果、pilot gate 结果。
 - 必含：Evidence Index（命令、退出码、结果摘要、证据路径、层级、关联工件）。
 - 必含：至少一条负结果或被证伪路径，并可追溯到 `negative-results`。
 - 结论必须与失败统计一致，不得"带病放行"。

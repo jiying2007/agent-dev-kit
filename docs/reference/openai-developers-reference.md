@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This note records the official OpenAI Developers content that is safe to use as an `agent-dev-kit` reference source. It is not an instruction to rewrite adk around the Agents SDK. The current strategy is to absorb stable governance patterns into existing adk assets, keep OpenAI-specific implementation details behind freshness gates, and require local validation before promotion.
+This note records the official OpenAI Developers content that is safe to use as an `agent-dev-kit` reference source. It is not an instruction to rewrite adk around the Agents SDK. The current strategy is to absorb stable governance patterns into existing adk assets, keep OpenAI-specific implementation details behind freshness gates, and require local validation before promotion. Product names that remain in source IDs, titles or URLs are citation metadata only; promoted ADK contracts must stay platform-neutral and must not carry compatibility bindings.
 
 ## Source Inventory
 
@@ -22,12 +22,12 @@ This note records the official OpenAI Developers content that is safe to use as 
 | openai-codex-mcp-options | https://developers.openai.com/codex/mcp#other-configuration-options | 2026-05-25 | 2026-08-23 | P1 | Adopt MCP timeout, required, enabled/disabled tools, per-tool approval, OAuth callback and scopes audit fields. |
 | openai-codex-app-server-api-overview | https://developers.openai.com/codex/app-server#api-overview | 2026-05-25 | 2026-08-23 | P1 | Adopt App Server runtime API read/write/destructive/open-world classification. |
 | openai-context-engineering-session-memory | https://developers.openai.com/cookbook/examples/agents_sdk/session_memory#why-context-management-matters | 2026-05-25 | 2026-08-23 | P1 | Adopt latest-goal anchoring, stale-plan invalidation, per-issue summaries and error isolation for handoff context. |
-| openai-docs-mcp-quickstart | https://developers.openai.com/learn/docs-mcp#quickstart | 2026-05-25 | 2026-08-23 | P0 | Adopt cross-tool Docs MCP setup strategy for Codex, VS Code, Cursor and Claude Code. |
+| openai-docs-mcp-quickstart | https://developers.openai.com/learn/docs-mcp#quickstart | 2026-05-25 | 2026-08-23 | P0 | Adopt cross-tool Docs MCP setup strategy for supported MCP-capable clients. |
 | openai-responses-migration | https://developers.openai.com/api/docs/guides/migrate-to-responses | 2026-05-25 | 2026-08-23 | P2 | Watch as a future API-backed runner reference; no adk rewrite without local pilot. |
 | openai-codex-hooks | https://developers.openai.com/codex/hooks | 2026-05-25 | 2026-08-23 | P1 | Adopt lifecycle hook audit, trust, matcher and side-effect classification. |
 | openai-codex-hooks-common-output-fields | https://developers.openai.com/codex/hooks#common-output-fields | 2026-05-25 | 2026-08-23 | P1 | Adopt event-specific hook output field validation. |
 | openai-codex-slash-commands | https://developers.openai.com/codex/cli/slash-commands#built-in-slash-commands | 2026-05-25 | 2026-08-23 | P1 | Adopt slash command control-plane classification and runtime evidence capture. |
-| openai-codex-as-mcp-server | https://developers.openai.com/codex/guides/agents-sdk#running-codex-as-an-mcp-server | 2026-05-25 | 2026-08-23 | P1 | Adopt Codex MCP runner/reply contracts and thread continuation audit. |
+| openai-codex-as-mcp-server | https://developers.openai.com/codex/guides/agents-sdk#running-codex-as-an-mcp-server | 2026-05-25 | 2026-08-23 | P1 | Adopt generic ADK runner/reply contracts and thread continuation audit. |
 | openai-codex-plugin-build | https://developers.openai.com/codex/plugins/build#create-a-plugin-manually | 2026-05-25 | 2026-08-23 | P2 | Adopt optional adk plugin packaging contracts after assets are stable. |
 | openai-codex-plugin-marketplace | https://developers.openai.com/codex/plugins/build#marketplace-metadata | 2026-05-25 | 2026-08-23 | P2 | Adopt marketplace metadata, install policy, auth policy and source path containment. |
 | openai-codex-best-practices | https://developers.openai.com/codex/learn/best-practices | 2026-05-25 | 2026-08-23 | P0 | Adopt task framing, planning, AGENTS.md, test/review, MCP, skills, automations and session controls. |
@@ -42,7 +42,7 @@ This note records the official OpenAI Developers content that is safe to use as 
 | openai-file-search-retrieval | https://developers.openai.com/api/docs/guides/tools-file-search | 2026-05-26 | 2026-08-24 | P2 | Watch as a local archive/retrieval design reference; hosted file_search is not enabled by default. |
 | openai-codex-app-automations | https://developers.openai.com/codex/app/automations | 2026-05-26 | 2026-08-24 | P1 | Adopt report-only automation records, durable prompts, cadence, stop conditions, sandbox policy and review gates. |
 | openai-codex-app-worktrees | https://developers.openai.com/codex/app/worktrees | 2026-05-26 | 2026-08-24 | P1 | Adopt background worktree isolation, handoff gates, branch limitations and cleanup policy. |
-| openai-agent-improvement-loop | https://developers.openai.com/cookbook/examples/agents_sdk/agent_improvement_loop | 2026-05-26 | 2026-08-24 | P1 | Adopt trace-feedback-eval-Codex-handoff improvement loops with human approval before deeper automation. |
+| openai-agent-improvement-loop | https://developers.openai.com/cookbook/examples/agents_sdk/agent_improvement_loop | 2026-05-26 | 2026-08-24 | P1 | Adopt trace-feedback-eval-ADK-handoff improvement loops with human approval before deeper automation. |
 | openai-codex-github-action | https://developers.openai.com/codex/github-action | 2026-05-26 | 2026-08-24 | P1 | Adopt controlled CI/PR review runner contracts, protected secret handling, sandbox defaults and prompt-injection checks. |
 | openai-codex-code-review-sdk | https://developers.openai.com/cookbook/examples/codex/build_code_review_with_codex_sdk | 2026-05-26 | 2026-08-24 | P1 | Adopt PR diff inputs, structured review findings, SCM review publishing and inline anchoring validation. |
 | openai-skills-api-operational-practices | https://developers.openai.com/cookbook/examples/skills_in_api#operational-best-practices | 2026-05-26 | 2026-08-24 | P1 | Adopt skill discoverability, negative examples, version pinning, deterministic stdout and network allowlist governance. |
@@ -60,10 +60,10 @@ This note records the official OpenAI Developers content that is safe to use as 
 - Require `url`, `retrieved_at`, `review_status`, `expires_at` and `adoption_scope` before official-doc-derived guidance can become a rule.
 - Treat `requirements.toml` as the model for non-overridable team policy: allowed approval policies, sandbox modes, web search modes, managed hooks, MCP identity allowlists, filesystem deny-read and restrictive command rules.
 - Treat `workspace-write + on-request` as the low-risk local automation preset. `danger-full-access + never` is a critical full-access state and cannot become an adk default.
-- Keep project-scoped `.codex/config.toml` away from machine-local provider, auth, notification, profile and telemetry routing keys.
+- Keep project-scoped runtime config away from machine-local provider, auth, notification, profile and telemetry routing keys.
 - Require command `prefix_rule` records to include `pattern`, `decision`, `justification`, and inline `match` / `not_match` examples before promotion.
 - Keep network proxy dangerous settings, broad Unix socket access and live web search out of defaults. Live web content remains untrusted even when the source is useful.
-- Standardize OpenAI Docs MCP lookup across Codex, VS Code, Cursor and Claude Code: MCP first, official OpenAI-domain fallback only, citations required for API/product claims.
+- Standardize OpenAI Docs MCP lookup across supported MCP-capable clients: MCP first, official OpenAI-domain fallback only, citations required for API/product claims.
 
 ## P1 Landing
 
@@ -79,7 +79,7 @@ This note records the official OpenAI Developers content that is safe to use as 
 - Use tool-search style lazy loading for large skill/tool catalogs: route on short namespace summaries first, then load full `SKILL.md`, references or tool schemas only after the intent match is justified.
 - Automation records must be report-only by default, disabled until reviewed, bounded by data source/cadence/stop condition, and tested manually before scheduling.
 - Worktree-backed background work must record base branch/commit, dirty-state decision, worktree path, handoff plan and cleanup/retention decision.
-- Improvement loops must connect trace summaries, human/model feedback, eval candidates, validation results, ranked recommendations and a Codex handoff artifact before changing guidance.
+- Improvement loops must connect trace summaries, human/model feedback, eval candidates, validation results, ranked recommendations and an ADK handoff artifact before changing guidance.
 - CI/PR review runners must be disabled by default, treat PR text as untrusted, protect secrets from fork code, require structured findings before SCM publishing and never treat AI review as human approval.
 - Inline review comments require validated diff anchoring. If new, renamed, deleted or multi-line locations cannot be mapped safely, keep the finding in the summary instead of posting a misleading inline comment.
 - Skill version and model/runtime assumptions must be pinned for production workflows; treat `skill version` as a reproducibility field. Scripted skills need deterministic stdout, known output paths, loud failures and explicit network allowlists when network is needed.
@@ -87,8 +87,8 @@ This note records the official OpenAI Developers content that is safe to use as 
 - Keep external writes in report-only mode until dry-run, approval and rollback evidence exist.
 - Audit hooks by event. Do not rely on unsupported hook output fields, especially `continue` from `PreToolUse` or matchers on `Stop`.
 - Classify slash commands as read-only, permission-changing, context-changing or runtime-changing before using them as evidence or control-plane operations.
-- If Codex is run as an MCP server, record `threadId`, `cwd`, sandbox, approval policy, profile, approval prompts and result summary.
-- Classify Codex App Server methods before exposing them in automation: lifecycle reads, state writes, destructive thread state, sandboxed command exec, open-world process/shell, filesystem/config/plugin writes and MCP/app tool bridge.
+- If an agent runtime is exposed through MCP, record `threadId`, `cwd`, sandbox, approval policy, profile, runtime adapter, approval prompts and result summary.
+- Classify runtime API methods before exposing them in automation: lifecycle reads, state writes, destructive thread state, sandboxed command exec, open-world process/shell, filesystem/config/plugin writes and MCP/app tool bridge.
 - Context summaries must anchor the latest goal, invalidate stale goals, isolate failed assumptions, split multi-issue handoffs and preserve raw evidence fallback.
 
 ## P2 Landing
@@ -96,7 +96,7 @@ This note records the official OpenAI Developers content that is safe to use as 
 - Use Agents SDK docs as a vocabulary reference for agent definitions, running state, sandbox, handoffs, guardrails, tools and observability.
 - Do not replace existing adk lifecycle assets unless a local pilot proves lower complexity and better verification.
 - Any future SDK-backed implementation must first pass supply-chain review, permission review, local regression and rollback planning.
-- Package adk assets as Codex plugins only after the underlying skills/workflows are stable. Plugin promotion requires `.codex-plugin/plugin.json`, `skills/<skill-name>/SKILL.md`, version/publisher metadata, install policy, auth policy and marketplace source path containment.
+- Package adk assets as ADK plugins only after the underlying skills/workflows are stable. Plugin promotion requires `.adk-plugin/plugin.json`, `skills/<skill-name>/SKILL.md`, version/publisher metadata, install policy, auth policy and marketplace source path containment.
 - Treat Responses API migration as watch/pilot only for now. Future API-backed runners must prove statefulness, `previous_response_id`, phase preservation, structured outputs and retention policy in evals before promotion.
 - Treat hosted file search and external vector stores as watch-only until a local archive/retrieval pilot proves metadata filtering, citation handling, freshness and sensitive-data boundaries.
 
@@ -124,18 +124,18 @@ tests/test_openai_developers_governance.sh
 | Manifest | Purpose |
 |---|---|
 | `manifests/official_docs_freshness_gates.json` | Official URL inventory, retrieval dates, review status, expiry and adoption scope. |
-| `manifests/codex_runtime_policy_gates.json` | Runtime config, admin requirements, sandbox presets and forbidden defaults. |
-| `manifests/codex_rules_contracts.json` | Codex `.rules` / `requirements.toml` prefix-rule fields, inline examples and promotion gates. |
-| `manifests/codex_runtime_api_contracts.json` | Codex App Server method groups classified by read/write/destructive/open-world and sandbox inheritance. |
+| `manifests/adk_runtime_policy_gates.json` | Runtime config, managed requirements, sandbox presets and forbidden defaults. |
+| `manifests/adk_rules_contracts.json` | ADK command prefix-rule fields, inline examples and promotion gates. |
+| `manifests/adk_runtime_api_contracts.json` | ADK runtime API method groups classified by read/write/destructive/open-world and sandbox inheritance. |
 | `manifests/context_state_contracts.json` | Long-thread session summaries, stale-goal invalidation, evidence fallback and future Responses state handoff contracts. |
-| `manifests/official_docs_mcp_tooling.json` | OpenAI Docs MCP setup and fallback policy across Codex, VS Code, Cursor and Claude Code. |
+| `manifests/official_docs_mcp_tooling.json` | OpenAI Docs MCP setup and fallback policy across supported MCP-capable clients. |
 | `manifests/hooks_runtime_audits.json` | Hook event support, output-field support, trust, side-effect and log-redaction policy. |
 | `manifests/slash_command_runtime_audits.json` | Slash command read/write/open-world/destructive classification. |
-| `manifests/codex_mcp_runner_contracts.json` | Codex MCP `codex` and `codex-reply` runner contracts. |
-| `manifests/plugin_marketplace_contracts.json` | Codex plugin and marketplace packaging contracts. |
+| `manifests/adk_runner_contracts.json` | ADK `run-session` and `reply-session` runner contracts. |
+| `manifests/plugin_marketplace_contracts.json` | ADK plugin and marketplace packaging contracts. |
 | `manifests/structured_output_contracts.json` | Schema-backed task package, evidence index and handoff summary contracts. |
 | `manifests/tool_search_contracts.json` | Skill/tool namespace lazy-loading and deferred schema exposure contracts. |
 | `manifests/pr_review_governance_contracts.json` | CI/PR review runner, untrusted PR isolation and inline comment anchoring contracts. |
 | `manifests/skill_reproducibility_contracts.json` | Skill discoverability, version pinning and tiny-CLI reproducibility contracts. |
 | `manifests/automation_worktree_contracts.json` | Report-only automation, thread heartbeat and worktree handoff/cleanup contracts. |
-| `manifests/agent_improvement_loop_contracts.json` | Trace-feedback-eval-validation-Codex handoff improvement loop contracts. |
+| `manifests/agent_improvement_loop_contracts.json` | Trace-feedback-eval-validation-ADK handoff improvement loop contracts. |

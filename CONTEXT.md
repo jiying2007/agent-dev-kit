@@ -88,7 +88,7 @@
 ## 4. 工具目标
 
 ### 4.1 支持的工具
-- **Codex**: OpenAI 的 AI 编程助手
+- **Tool target**: ADK 显式声明的运行时适配目标
 - **Claude Code**: Anthropic 的 AI 编程助手
 - **Hermes Agent**: 开源 AI Agent 框架
 - **OpenCode**: 开源 AI 编程助手
@@ -303,10 +303,10 @@
 ## 18. 概念关系
 
 1. `manifest.yaml` 是 Agent、Skill、Optional Skill 与 Profile 的结构化索引。
-2. Profile 选择一组 Agent 和 Skill；安装、转换和 Codex handoff 都从 Profile 解析资产。
+2. Profile 选择一组 Agent 和 Skill；安装、转换和 handoff 都从 Profile 解析资产。
 3. Workflow 定义执行顺序；Skill 提供单步方法；Agent 承担角色职责。
 4. Artifact 是 Workflow 的可审计输出；Gate 检查 Artifact 与 Evidence 是否满足进入下一阶段的条件。
-5. `agent-dev-kit` 的生产链路是先生成符合 `~/codex` 规范的 handoff，再由 `~/codex` apply 到 `~/.codex`。
+5. `agent-dev-kit` 的生产链路是先生成通用 ADK 资产，再交给显式 tool target 的适配层处理。
 
 ---
 
@@ -314,9 +314,9 @@
 
 1. 新增或修改 Agent/Skill 必须同步 `manifest.yaml`，并运行 `rtk agent-dev-kit/scripts/devkit.sh validate --strict`。
 2. 修改路由、触发词或 profile 时，必须运行 `rtk agent-dev-kit/tests/test_skill_trigger_matrix.sh` 与 `rtk agent-dev-kit/tests/test_match_effectiveness.sh`。
-3. 修改 Codex 交接链路时，必须运行 `rtk agent-dev-kit/scripts/devkit.sh codex-handoff --codex-root "$HOME/codex"`。
+3. 修改运行时边界时，必须运行 `rtk agent-dev-kit/scripts/devkit.sh runtime-boundary`。
 4. 声明完成前必须运行与改动范围匹配的验证；无验证证据不得声明可发布、可安装或可合并。
-5. 不直接把 `agent-dev-kit` 产物复制到 `~/.codex`；必须先进入 `~/codex` 源资产、manifest 和 apply plan 治理链路。
+5. 不直接把 `agent-dev-kit` 产物复制到未声明运行目录；必须先经过 tool target、manifest 和 rollback 治理链路。
 
 ---
 

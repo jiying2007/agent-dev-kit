@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # bash 测试辅助库
-# 来源: superpowers test-sync-to-codex-plugin.sh (571行) 精简版
+# 来源: superpowers shell test helper，已按 adk 通用测试裁剪
 
 # 断言: 等于
 assert_equals() {

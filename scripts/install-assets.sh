@@ -12,7 +12,7 @@ Usage:
   ./scripts/install-assets.sh [options]
 
 Options:
-  --tool auto|codex|claude-code|hermes-agent|opencode
+  --tool auto|claude-code|hermes-agent|opencode
   --mode copy|symlink
   --target <tool root path>
   --profile <profile name>
@@ -148,7 +148,6 @@ detect_tool_auto() {
   local tool
   while IFS= read -r tool; do
     [[ -z "$tool" ]] && continue
-    [[ "$tool" == "codex" ]] && continue
     local marker
     while IFS= read -r marker; do
       [[ -z "$marker" ]] && continue
@@ -240,11 +239,6 @@ fi
 
 if ! adk_tool_exists "$TOOL"; then
   echo "[FAIL] unknown tool: $TOOL" >&2
-  exit 1
-fi
-
-if [[ "$TOOL" == "codex" ]]; then
-  echo "[FAIL] codex install is disabled; run convert --target codex and apply through ~/codex" >&2
   exit 1
 fi
 

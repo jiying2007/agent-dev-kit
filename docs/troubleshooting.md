@@ -115,13 +115,13 @@ bash scripts/version-manager.sh upgrade --target 3.0.0 --force
 **解决方案**：
 ```bash
 # 1. 检查声明式资产仓库
-ls -la ~/codex
+ls -la /tmp/adk-runtime
 
 # 2. 创建目录
-mkdir -p ~/codex
+mkdir -p /tmp/adk-runtime
 
 # 3. 重新备份
-bash scripts/backup-rollback.sh backup --target ~/codex
+bash scripts/backup-rollback.sh backup --target /tmp/adk-runtime
 ```
 
 ### 6. 健康检查问题
@@ -210,7 +210,7 @@ bash scripts/quality-gate-check.sh check-all
 tail -f /var/log/syslog
 
 # 查看应用日志
-tail -f ~/.codex/logs/*.log
+tail -f /tmp/adk-runtime/logs/*.log
 ```
 
 ### 3. 提交问题
@@ -228,7 +228,7 @@ tail -f ~/.codex/logs/*.log
 
 ```bash
 # 创建定期备份
-bash scripts/backup-rollback.sh backup --target ~/codex
+bash scripts/backup-rollback.sh backup --target /tmp/adk-runtime
 ```
 
 ### 2. 定期检查

@@ -22,7 +22,7 @@
 3. `active-fallback` 必须有 owner、next_step 和未过期的 `review_by`。
 4. `candidate-sunset` / `sunset` 必须引用 `evidence-ready` 或 `regression-ready` pilot。
 5. `tests/run_all.sh` 和 `check-adk-harden-readiness.sh --require-pilot --skip-full-suite` 通过。
-6. `~/codex` handoff 不产生重复 skill name 或 manifest 漂移。
+6. 通用 handoff 不产生重复 skill name 或 manifest 漂移。
 7. 真实嵌入式全栈 pilot 至少覆盖一次该能力面。
 
 ## live_requirement 与评分阈值
@@ -31,8 +31,8 @@
 
 | live_requirement | 含义 |
 |---|---|
-| core-live-required | 期望 `~/.codex/skills/<skill>/SKILL.md` 已存在；缺失会记为 live gap |
-| optional-live-allowed | optional skill 可只在 adk handoff/profile 中就绪；若已安装到 `~/.codex` 则记为 pass |
+| core-live-required | 期望运行时 skills 目录中的 `<skill>/SKILL.md` 已存在；缺失会记为 live gap |
+| optional-live-allowed | optional skill 可只在 adk handoff/profile 中就绪；若已安装到运行时目录则记为 pass |
 | handoff-ready-only | 只要求 adk 侧 handoff/profile 就绪，不要求当前运行目录已安装 |
 
 replacement score 固定为 5 项：routing、profile、pilot、handoff、live。当前阈值：

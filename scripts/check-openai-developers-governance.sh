@@ -17,13 +17,13 @@ Checks OpenAI Developers reference governance:
   - MCP/tool hint audits
   - slash command runtime audit risk fields
   - subagent ownership and handoff contract fields
-  - Codex runtime policy and sandbox gates
-  - Codex command rule contracts
-  - Codex app-server runtime API risk groups
+  - ADK runtime policy and sandbox gates
+  - ADK command rule contracts
+  - ADK runtime API risk groups
   - context state and session memory contracts
   - OpenAI Docs MCP cross-tool setup contracts
   - hooks runtime audit contracts
-  - Codex-as-MCP runner contracts
+  - ADK runner contracts
   - plugin marketplace packaging contracts
   - CI/PR review governance contracts
   - skill reproducibility and version pin contracts
@@ -84,13 +84,13 @@ trace = load_json("manifests/trace_eval_contracts.json")
 mcp = load_json("manifests/skill_mcp_dependencies.json")
 slash = load_json("manifests/slash_command_runtime_audits.json")
 subagents = load_json("manifests/subagent_contracts.json")
-runtime_policy = load_json("manifests/codex_runtime_policy_gates.json")
-rules = load_json("manifests/codex_rules_contracts.json")
-runtime_api = load_json("manifests/codex_runtime_api_contracts.json")
+runtime_policy = load_json("manifests/adk_runtime_policy_gates.json")
+rules = load_json("manifests/adk_rules_contracts.json")
+runtime_api = load_json("manifests/adk_runtime_api_contracts.json")
 context_state = load_json("manifests/context_state_contracts.json")
 docs_mcp_tooling = load_json("manifests/official_docs_mcp_tooling.json")
 hooks = load_json("manifests/hooks_runtime_audits.json")
-codex_mcp = load_json("manifests/codex_mcp_runner_contracts.json")
+adk_runner = load_json("manifests/adk_runner_contracts.json")
 plugins = load_json("manifests/plugin_marketplace_contracts.json")
 structured_outputs = load_json("manifests/structured_output_contracts.json")
 tool_search = load_json("manifests/tool_search_contracts.json")
@@ -177,13 +177,13 @@ for manifest, rel in (
     (mcp, "manifests/skill_mcp_dependencies.json"),
     (slash, "manifests/slash_command_runtime_audits.json"),
     (subagents, "manifests/subagent_contracts.json"),
-    (runtime_policy, "manifests/codex_runtime_policy_gates.json"),
-    (rules, "manifests/codex_rules_contracts.json"),
-    (runtime_api, "manifests/codex_runtime_api_contracts.json"),
+    (runtime_policy, "manifests/adk_runtime_policy_gates.json"),
+    (rules, "manifests/adk_rules_contracts.json"),
+    (runtime_api, "manifests/adk_runtime_api_contracts.json"),
     (context_state, "manifests/context_state_contracts.json"),
     (docs_mcp_tooling, "manifests/official_docs_mcp_tooling.json"),
     (hooks, "manifests/hooks_runtime_audits.json"),
-    (codex_mcp, "manifests/codex_mcp_runner_contracts.json"),
+    (adk_runner, "manifests/adk_runner_contracts.json"),
     (plugins, "manifests/plugin_marketplace_contracts.json"),
     (structured_outputs, "manifests/structured_output_contracts.json"),
     (tool_search, "manifests/tool_search_contracts.json"),
@@ -193,6 +193,28 @@ for manifest, rel in (
     (skill_repro, "manifests/skill_reproducibility_contracts.json"),
 ):
     require_source_refs(manifest, rel)
+
+for forbidden_manifest in (
+    "manifests/codex_runtime_policy_gates.json",
+    "manifests/codex_rules_contracts.json",
+    "manifests/codex_runtime_api_contracts.json",
+    "manifests/codex_mcp_runner_contracts.json",
+):
+    if (root / forbidden_manifest).exists():
+        fail(f"stale Codex-bound manifest must be removed: {forbidden_manifest}")
+
+for manifest, rel in (
+    (runtime_policy, "manifests/adk_runtime_policy_gates.json"),
+    (rules, "manifests/adk_rules_contracts.json"),
+    (runtime_api, "manifests/adk_runtime_api_contracts.json"),
+    (adk_runner, "manifests/adk_runner_contracts.json"),
+):
+    if "platform_bindings" in manifest:
+        fail(f"{rel} must not define platform_bindings")
+    if not manifest.get("reference_boundary"):
+        fail(f"{rel} missing reference_boundary")
+    if not str(manifest.get("scope_model", "")).startswith("platform-neutral-adk-"):
+        fail(f"{rel} must use a platform-neutral ADK scope_model")
 
 suite_categories = {suite.get("category") for suite in evals.get("suites", [])}
 for category in ("routing", "governance", "completion", "macro-eval"):
@@ -314,17 +336,17 @@ runtime_layers = runtime_policy.get("policy_layers", [])
 if not runtime_layers:
     fail("runtime policy layers are empty")
 layer_ids = {layer.get("id") for layer in runtime_layers}
-for expected in ("admin-enforced-requirements", "project-config-boundary"):
+for expected in ("managed-runtime-requirements", "project-runtime-boundary"):
     if expected not in layer_ids:
         fail(f"runtime policy layer missing: {expected}")
 for layer in runtime_layers:
     lid = layer.get("id")
     require_keys(layer, ["id", "owner", "config_file", "precedence", "user_override_allowed", "required_controls", "verification"], f"runtime policy layer {lid}")
-    if lid == "admin-enforced-requirements" and layer.get("user_override_allowed") is not False:
-        fail("admin-enforced requirements must not allow user override")
-    if lid == "project-config-boundary":
+    if lid == "managed-runtime-requirements" and layer.get("user_override_allowed") is not False:
+        fail("managed runtime requirements must not allow user override")
+    if lid == "project-runtime-boundary":
         must_not_override = set(layer.get("must_not_override", []))
-        for key in ("model_providers", "profile", "otel"):
+        for key in ("model_providers", "profile", "telemetry"):
             if key not in must_not_override:
                 fail(f"project config boundary missing must_not_override: {key}")
     network = layer.get("network_policy")
@@ -373,7 +395,7 @@ for forbidden_id in ("network-proxy-non-loopback", "all-unix-sockets", "web-sear
 
 rule_contracts = rules.get("contracts", [])
 if not rule_contracts:
-    fail("Codex rules contracts are empty")
+    fail("ADK rules contracts are empty")
 for contract in rule_contracts:
     cid = contract.get("id")
     require_keys(
@@ -408,7 +430,7 @@ for contract in rule_contracts:
 
 runtime_api_groups = runtime_api.get("method_groups", [])
 if not runtime_api_groups:
-    fail("Codex runtime API method groups are empty")
+    fail("ADK runtime API method groups are empty")
 required_api_groups = {
     "thread-lifecycle-read",
     "thread-state-write",
@@ -421,18 +443,18 @@ required_api_groups = {
 api_group_ids = {group.get("id") for group in runtime_api_groups}
 for group_id in required_api_groups:
     if group_id not in api_group_ids:
-        fail(f"Codex runtime API group missing: {group_id}")
+        fail(f"ADK runtime API group missing: {group_id}")
 transport_policy = runtime_api.get("transport_policy", {})
-require_keys(transport_policy, ["supported", "experimental", "forbidden_defaults", "required_auth_for_remote"], "Codex runtime API transport policy")
+require_keys(transport_policy, ["supported", "experimental", "forbidden_defaults", "required_auth_for_remote"], "ADK runtime API transport policy")
 if "non-loopback unauthenticated websocket" not in transport_policy.get("forbidden_defaults", []):
-    fail("Codex runtime API transport policy must forbid non-loopback unauthenticated websocket")
+    fail("ADK runtime API transport policy must forbid non-loopback unauthenticated websocket")
 for group in runtime_api_groups:
     gid = group.get("id")
-    require_keys(group, ["id", "owner", "methods", "risk", "classification", "required_evidence", "approval_boundary"], f"Codex runtime API group {gid}")
+    require_keys(group, ["id", "owner", "methods", "risk", "classification", "required_evidence", "approval_boundary"], f"ADK runtime API group {gid}")
     classification = group.get("classification", {})
     for key in ("read_only", "destructive", "open_world", "sandbox_inherited"):
         if key not in classification or not isinstance(classification[key], bool):
-            fail(f"Codex runtime API group {gid} missing boolean classification.{key}")
+            fail(f"ADK runtime API group {gid} missing boolean classification.{key}")
     if gid == "process-and-shell-open-world":
         if "thread/shellCommand" not in group.get("methods", []):
             fail("process-and-shell-open-world must include thread/shellCommand")
@@ -469,7 +491,7 @@ docs_tool_targets = docs_mcp_tooling.get("tooling_targets", [])
 if not docs_tool_targets:
     fail("OpenAI Docs MCP tooling targets are empty")
 target_ids = {target.get("id") for target in docs_tool_targets}
-for target_id in ("codex", "vscode", "cursor", "claude-code"):
+for target_id in ("generic-mcp-client", "vscode", "cursor", "claude-code"):
     if target_id not in target_ids:
         fail(f"OpenAI Docs MCP tooling target missing: {target_id}")
 for target in docs_tool_targets:
@@ -511,21 +533,21 @@ if not hooks.get("deny_path"):
 if not hooks.get("log_redaction"):
     fail("hooks log_redaction is empty")
 
-codex_contracts = codex_mcp.get("contracts", [])
-if not codex_contracts:
-    fail("Codex MCP runner contracts are empty")
-codex_tools = {contract.get("tool") for contract in codex_contracts}
-for tool in ("codex", "codex-reply"):
-    if tool not in codex_tools:
-        fail(f"Codex MCP runner contract missing tool: {tool}")
-for contract in codex_contracts:
+adk_runner_contracts = adk_runner.get("contracts", [])
+if not adk_runner_contracts:
+    fail("ADK runner contracts are empty")
+adk_runner_tools = {contract.get("tool") for contract in adk_runner_contracts}
+for tool in ("run-session", "reply-session"):
+    if tool not in adk_runner_tools:
+        fail(f"ADK runner contract missing tool: {tool}")
+for contract in adk_runner_contracts:
     cid = contract.get("id")
-    require_keys(contract, ["id", "owner", "tool", "purpose", "required_inputs", "approval_boundary", "sandbox_boundary", "state_output", "must_record", "stop_condition"], f"Codex MCP contract {cid}")
-    if contract.get("tool") == "codex-reply" and "threadId" not in contract.get("required_inputs", []):
-        fail("codex-reply contract must require threadId")
+    require_keys(contract, ["id", "owner", "tool", "purpose", "required_inputs", "approval_boundary", "sandbox_boundary", "state_output", "must_record", "stop_condition"], f"ADK runner contract {cid}")
+    if contract.get("tool") == "reply-session" and "threadId" not in contract.get("required_inputs", []):
+        fail("reply-session contract must require threadId")
     for token in ("pass", "replan", "split", "blocked", "abort"):
         if token not in contract.get("stop_condition", ""):
-            fail(f"Codex MCP contract {cid} stop_condition missing {token}")
+            fail(f"ADK runner contract {cid} stop_condition missing {token}")
 
 plugin_contracts = plugins.get("plugin_contracts", [])
 marketplace_contracts = plugins.get("marketplace_contracts", [])
@@ -537,7 +559,7 @@ for contract in plugin_contracts:
     cid = contract.get("id")
     require_keys(contract, ["id", "owner", "required_files", "naming", "allowed_extensions", "required_review"], f"plugin contract {cid}")
     files = set(contract.get("required_files", []))
-    for required_file in (".codex-plugin/plugin.json", "skills/<skill-name>/SKILL.md"):
+    for required_file in (".adk-plugin/plugin.json", "skills/<skill-name>/SKILL.md"):
         if required_file not in files:
             fail(f"plugin contract {cid} missing required file: {required_file}")
     if "stable kebab-case" not in contract.get("naming", {}).get("plugin_name", ""):
@@ -736,10 +758,10 @@ for loop in improvement_loops:
         ],
         f"agent improvement loop {lid}",
     )
-    for stage in ("collect_sanitized_traces", "generate_eval_suite_candidate", "run_validation_gate", "write_codex_handoff", "human_approve_before_merge"):
+    for stage in ("collect_sanitized_traces", "generate_eval_suite_candidate", "run_validation_gate", "write_adk_handoff", "human_approve_before_merge"):
         if stage not in loop.get("stages", []):
             fail(f"agent improvement loop {lid} missing stage: {stage}")
-    for artifact in ("trace_summary_set", "eval_suite_candidate", "validation_result", "codex_handoff"):
+    for artifact in ("trace_summary_set", "eval_suite_candidate", "validation_result", "adk_handoff"):
         if artifact not in loop.get("required_artifacts", []):
             fail(f"agent improvement loop {lid} missing artifact: {artifact}")
 improvement_gate = improvement_loop.get("quality_gate", {})
@@ -748,7 +770,7 @@ require_keys(
     [
         "requires_human_approval_before_apply",
         "requires_validation_gate",
-        "requires_codex_handoff_artifact",
+        "requires_adk_handoff_artifact",
         "requires_trace_feedback_linkage",
     ],
     "agent improvement loop quality_gate",
@@ -756,7 +778,7 @@ require_keys(
 for key in (
     "requires_human_approval_before_apply",
     "requires_validation_gate",
-    "requires_codex_handoff_artifact",
+    "requires_adk_handoff_artifact",
     "requires_trace_feedback_linkage",
 ):
     if improvement_gate.get(key) is not True:
@@ -766,7 +788,7 @@ pr_review_contracts = pr_review.get("contracts", [])
 if not pr_review_contracts:
     fail("PR review governance contracts are empty")
 pr_review_ids = {contract.get("id") for contract in pr_review_contracts}
-for expected in ("codex-ci-pr-review-runner-v1", "untrusted-pr-isolation-v1", "inline-review-anchoring-v1"):
+for expected in ("adk-ci-pr-review-runner-v1", "untrusted-pr-isolation-v1", "inline-review-anchoring-v1"):
     if expected not in pr_review_ids:
         fail(f"PR review governance contract missing: {expected}")
 for contract in pr_review_contracts:
@@ -793,20 +815,20 @@ for contract in pr_review_contracts:
         fail(f"PR review governance contract {cid} has too few required inputs")
     if not any("prompt" in item.lower() for item in contract.get("prompt_injection_controls", [])):
         fail(f"PR review governance contract {cid} must include prompt injection controls")
-    if cid == "codex-ci-pr-review-runner-v1":
+    if cid == "adk-ci-pr-review-runner-v1":
         policy = contract.get("runner_policy", {})
         if policy.get("sandbox") != "workspace-write":
-            fail("Codex CI PR review runner must default to workspace-write sandbox")
+            fail("ADK CI PR review runner must default to workspace-write sandbox")
         if "drop-sudo" not in policy.get("safety_strategy", ""):
-            fail("Codex CI PR review runner must require drop-sudo or equivalent")
+            fail("ADK CI PR review runner must require drop-sudo or equivalent")
         if not any("structured output" in item.lower() for item in contract.get("publishing_policy", [])):
-            fail("Codex CI PR review runner publishing policy must require structured output validation")
+            fail("ADK CI PR review runner publishing policy must require structured output validation")
     if cid == "untrusted-pr-isolation-v1":
         policy = contract.get("runner_policy", {})
         if "fork pull_request" not in policy.get("untrusted_events", []):
             fail("untrusted PR isolation must include fork pull_request")
-        if "no protected OpenAI key exposure" not in policy.get("default_for_untrusted", ""):
-            fail("untrusted PR isolation must deny protected OpenAI key exposure")
+        if "no protected LLM provider key exposure" not in policy.get("default_for_untrusted", ""):
+            fail("untrusted PR isolation must deny protected LLM provider key exposure")
     if cid == "inline-review-anchoring-v1":
         policy = contract.get("runner_policy", {})
         for case in ("new file", "modified file", "renamed file", "deleted file", "multi-line finding"):
@@ -881,7 +903,7 @@ if summary_json:
         "docs_mcp_tooling_targets": len(docs_tool_targets),
         "sandbox_presets": len(sandbox_presets),
         "hook_events": len(hook_events),
-        "codex_mcp_contracts": len(codex_contracts),
+        "adk_runner_contracts": len(adk_runner_contracts),
         "plugin_contracts": len(plugin_contracts),
         "marketplace_contracts": len(marketplace_contracts),
         "structured_output_contracts": len(structured_contracts),
