@@ -2,8 +2,8 @@
 ## 仓库介绍（持续维护）
 
 - 仓库名称：`agent-dev-kit`
-- 仓库定位：嵌入式全栈开发 Agent/Skill 资产与工作流门禁工具包
-- 领域范围：芯片/板级约束、启动链、BSP、OS/runtime、驱动、中间件、协议栈、设备应用、上位机/产测/诊断工具、构建调试、验证、发布、量产和现场维护（不包含通用 Web/互联网后端/云原生）
+- 仓库定位：通用 ADK Agent/Skill 资产与工作流门禁工具包，当前深度覆盖嵌入式全栈开发
+- 领域范围：core 保持平台中立；`embedded-fullstack` profile 覆盖芯片/板级约束、启动链、BSP、OS/runtime、驱动、中间件、协议栈、设备应用、上位机/产测/诊断工具、构建调试、验证、发布、量产和现场维护
 - 维护状态：持续维护（人工 + Agent 协作）
 - 维护目标：在不偏离上游核心定位的前提下，保持中文可读说明、可执行流程与可验证交付。
 - 维护边界：默认优先更新文档、规则与配置；涉及大规模重构或行为变更需先评估影响并记录。
@@ -27,7 +27,6 @@
 - `bash scripts/devkit.sh validate --strict`: full structure/schema validation.
 - `bash scripts/devkit.sh validate --quick`: fast pre-check for local iteration.
 - `bash scripts/devkit.sh convert --target claude-code --profile core --out dist --clean`: export generic ADK assets for a declared tool target.
-- `bash scripts/devkit.sh convert --target claude-code --profile core --out dist --clean`: export assets.
 - `bash scripts/devkit.sh catalog build`: regenerate catalog docs.
 - `bash scripts/devkit.sh match --skill adk-requirements-triage --text "..."`: trigger matching.
 - `bash tests/run_all.sh`: complete regression (required before merge).

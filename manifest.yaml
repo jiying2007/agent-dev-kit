@@ -428,7 +428,7 @@ skills:
 default_profile: core
 profiles:
   core:
-    description: 嵌入式全栈开发核心配置（需求、架构、实现、验证与评审）
+    description: 通用 ADK 核心配置（需求、架构、实现、验证与评审）
     trigger_examples:
       - "开始新功能开发"
       - "需要写代码"

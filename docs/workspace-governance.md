@@ -50,7 +50,7 @@
 | `superpowers` | 工程流程体系 | 生命周期完整，质量门禁强 | 流程偏重 | 轻重分流 + 可降级执行 |
 | `superpowers-zh` | 中文化流程体系 | 中文可读性高 | 与上游漂移风险 | 中文表达与触发词设计 |
 | `OpenSpec` | Spec 驱动工件体系 | 变更追溯清晰 | 与现有流程重叠 | 变更单元命名与状态映射 |
-| `codex` | `.codex` 全局工程化管理 | 控制层结构化、profile 化 | 本地环境耦合 | `catalog + scripts + doctor` 结构借鉴 |
+| `~/codex` | Codex 声明式资产仓库参考（外部运行体系，不是 ADK core target） | 控制层结构化、profile 化 | 本地环境耦合 | `catalog + scripts + doctor` 结构可借鉴，运行链路不进入 ADK core |
 
 ### 2.2 Agent / Skill 生态
 
@@ -86,19 +86,19 @@
 
 | 仓库 | 当前定位 | 优势 | 短板 | 主迭代方向 |
 |---|---|---|---|---|
-| `agent-dev-kit` | 嵌入式全栈开发 Agent/Skill/Workflow 工程底座 | 结构清晰，routing、pilot readiness、fallback sunset、Codex handoff 与运行态边界门禁已自动化 | active 文档、历史证据与真实设备 readiness 仍需持续防漂移 | 持续迭代治理门禁、真实项目验证与 fallback 下线 |
+| `agent-dev-kit` | 通用 ADK Agent/Skill/Workflow 工程底座，当前深度覆盖嵌入式全栈 | 结构清晰，routing、pilot readiness、fallback sunset 与运行态边界门禁已自动化 | active 文档、历史证据、真实设备 readiness 与多 target 适配仍需持续防漂移 | 持续迭代治理门禁、真实项目验证与 fallback 下线 |
 
 ---
 
-## 3. 面向 codex 项目的联动策略
+## 3. 面向运行体系的联动策略
 
-`adk` 后续将实用化于本机 Codex 运行体系，执行“先在 `agent-dev-kit` 完成资产化与验证、再交接到 `~/codex`、由 `~/codex` apply 到 `~/.codex` 试跑、最后回灌 adk”的双向闭环：
+`adk` 后续面向多运行体系实用化。基本顺序是“先在 `agent-dev-kit` 完成资产化与验证、再通过显式 tool target 交付给具体运行体系、由目标运行体系完成自身 build/apply/smoke、最后把真实运行结果回灌 adk”。Codex、Claude Code、Hermes Agent、OpenCode 或其他平台都只能作为显式 target 或参考来源，不能成为 ADK core 的隐式前提。
 
 1. `llm_agent`：拉取参考源，产生候选改进项。
-2. `agent-dev-kit`：实现标准资产、门禁脚本和可交接导出物。
-3. `~/codex`：作为声明式资产仓库吸收、注册、构建和审计 adk 资产。
-4. `~/.codex`：只接收 `~/codex` apply 后的真实运行资产，并执行真实场景验证（功能开发 / 缺陷修复 / 重构）。
-5. 结果回灌：把通过验证的做法升级为 adk 默认推荐。
+2. `agent-dev-kit`：实现标准资产、门禁脚本和可交付导出物。
+3. 目标运行体系：按自身声明式资产仓、配置目录或插件机制吸收、注册、构建和审计 ADK 资产。
+4. 真实运行环境：只接收目标运行体系治理后的资产，并执行真实场景验证（功能开发 / 缺陷修复 / 重构）。
+5. 结果回灌：把通过验证的做法升级为 ADK 默认推荐或特定 profile。
 
 ### 3.1 执行顺序硬约束（新增）
 
@@ -125,10 +125,10 @@
 1. 在 `agent-dev-kit` 落地 P0 项（优先低风险高收益）。
 2. 执行 `../scripts/check-adk-harden-readiness.sh` 完成压实校验。
 
-### D5-D7：codex 实战试跑与回灌
+### D5-D7：运行体系实战试跑与回灌
 
-1. 在 `codex` 场景中验证已压实能力。
-2. 回写 `reports/codex-pilot-report.md` 与 `subrepos/adoption-matrix.md`。
+1. 在至少一个显式 target 场景中验证已压实能力。
+2. 回写 pilot report 与 `subrepos/adoption-matrix.md`。
 
 ### D8-D10：开启增量追踪（满足门禁后）
 
@@ -226,7 +226,7 @@
 
 | 版本 | 日期 | 主要变更 |
 |------|------|----------|
-| v2.9.0 | 2026-05-17 | 扩展 fallback sunset、pilot readiness 与 Codex handoff 门禁 |
+| v2.9.0 | 2026-05-17 | 扩展 fallback sunset、pilot readiness 与运行态边界门禁 |
 | v2.0.0 | 2026-05-05 | adk 基线压实、资产结构与质量门禁成型 |
 | v1.0.0 | 2026-05-02 | 生产级落地，`~/codex -> ~/.codex` 安装验证 |
 | v0.3.0 | 2026-05-01 | 初始版本，26 子仓治理骨架 |
