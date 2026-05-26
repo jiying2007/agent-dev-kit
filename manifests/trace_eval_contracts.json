@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2026-05-25",
+  "source_docs": [
+    "openai-agents-tracing",
+    "openai-agent-evals",
+    "openai-codex-best-practices",
+    "openai-agentic-macro-evals"
+  ],
+  "contracts": [
+    {
+      "id": "adk-workflow-trace-summary-v1",
+      "owner": "agent-dev-kit",
+      "applies_to": [
+        "adk-planning-execution-loop",
+        "adk-systematic-debugging",
+        "adk-verification-before-completion",
+        "adk-parallel-agent-governance"
+      ],
+      "required_fields": [
+        "run_id",
+        "task_id",
+        "goal",
+        "primary_skill",
+        "phase",
+        "model_version",
+        "prompt_version",
+        "orchestration_mode",
+        "model_calls",
+        "tool_calls",
+        "tools_used",
+        "handoffs",
+        "guardrails",
+        "verification",
+        "blockers",
+        "failure_pattern",
+        "next_goal"
+      ],
+      "evidence_policy": {
+        "store_raw_trace": false,
+        "store_sanitized_summary": true,
+        "pii_redaction": "required",
+        "raw_fallback": "link to local evidence path or platform trace id only when allowed"
+      },
+      "eval_use": "Feed high-signal pass/fail examples into routing, governance, completion and macro-eval regression suites.",
+      "macro_eval_policy": {
+        "group_by": [
+          "model_version",
+          "prompt_version",
+          "orchestration_mode",
+          "primary_skill",
+          "failure_pattern"
+        ],
+        "promotion_rule": "Promote only frequent and consequential failures with representative evidence into deterministic regression suites.",
+        "must_not": [
+          "store raw traces with secrets",
+          "treat one-off cookbook examples as regression evidence",
+          "change an agent, tool or handoff before inspecting representative trace summaries"
+        ]
+      }
+    }
+  ]
+}

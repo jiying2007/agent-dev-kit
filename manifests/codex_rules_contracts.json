@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2026-05-25",
+  "source_docs": [
+    "openai-codex-rules",
+    "openai-codex-requirements-toml"
+  ],
+  "contracts": [
+    {
+      "id": "rtk-shell-command-prefix-rules",
+      "owner": "agent-dev-kit",
+      "scope": "llm_agent and codex asset runtime command approvals",
+      "rules_file": "rules/default.rules or admin-enforced requirements.toml",
+      "decision_values": [
+        "allow",
+        "prompt",
+        "forbidden"
+      ],
+      "required_fields": [
+        "pattern",
+        "decision",
+        "justification",
+        "match",
+        "not_match"
+      ],
+      "minimum_match_examples": 1,
+      "minimum_not_match_examples": 1,
+      "compound_shell_policy": "split simple shell chains when Codex can parse them; treat advanced shell features as a single high-risk wrapper invocation",
+      "forbidden_prefix_examples": [
+        [
+          "rm"
+        ],
+        [
+          "git",
+          "reset",
+          "--hard"
+        ],
+        [
+          "git",
+          "checkout",
+          "--"
+        ]
+      ],
+      "verification": [
+        "codex execpolicy check for each promoted rule",
+        "check-openai-developers-governance",
+        "runtime-boundary"
+      ],
+      "promotion_gate": "No prefix rule can be promoted without positive and negative examples that prove the prefix is not broader than the intended command family."
+    },
+    {
+      "id": "managed-restrictive-prefix-rules",
+      "owner": "agent-dev-kit",
+      "scope": "team or machine enforced command policy",
+      "rules_file": "requirements.toml",
+      "decision_values": [
+        "prompt",
+        "forbidden"
+      ],
+      "required_fields": [
+        "pattern",
+        "decision",
+        "justification",
+        "match",
+        "not_match"
+      ],
+      "minimum_match_examples": 1,
+      "minimum_not_match_examples": 1,
+      "compound_shell_policy": "managed rules must remain restrictive when shell wrappers contain redirection, substitution, assignment, wildcard, or control flow",
+      "forbidden_prefix_examples": [
+        [
+          "bash",
+          "-lc",
+          "rm"
+        ],
+        [
+          "sh",
+          "-c",
+          "curl"
+        ]
+      ],
+      "verification": [
+        "codex execpolicy check",
+        "debug-config evidence when available",
+        "check-openai-developers-governance"
+      ],
+      "promotion_gate": "Admin rules may narrow capability without project consent; project-local rules must not widen managed restrictions."
+    }
+  ]
+}

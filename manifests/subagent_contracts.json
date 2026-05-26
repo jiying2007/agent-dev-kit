@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2026-05-25",
+  "source_docs": [
+    "openai-agents-sdk-starting-point"
+  ],
+  "contracts": [
+    {
+      "id": "default-worker-contract",
+      "owner": "lead-agent",
+      "runtime_identity": "codex-subagent",
+      "primary_skill": "task-specific",
+      "supporting_skills": [],
+      "scope_read": [
+        "explicit task files",
+        "local tests",
+        "referenced runbooks"
+      ],
+      "scope_write": [
+        "assigned files only"
+      ],
+      "must_not_touch": [
+        ".git",
+        "unassigned shared contracts",
+        "credentials",
+        "runtime apply targets"
+      ],
+      "handoff_condition": "Return when assigned scope is implemented, blocked, or verification fails twice.",
+      "reply_owner": "lead-agent",
+      "stop_condition": "pass | replan | split | blocked | abort",
+      "report_schema": [
+        "changed_files",
+        "verification_commands",
+        "result",
+        "risks",
+        "open_items"
+      ],
+      "conflict_policy": "Do not revert other workers or user changes; report overlap and stop before editing conflicting files."
+    }
+  ]
+}

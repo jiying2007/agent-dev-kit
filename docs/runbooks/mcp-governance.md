@@ -33,7 +33,9 @@ MCP server 首选“薄连接器”设计：把 AI 工具调用翻译为已有 A
 设计约束：
 
 - 工具 `description` 是选择器契约，必须写清适用场景、输入边界、幂等性和风险等级。
+- 工具名称和描述必须面向动作：写清 “Use this when...”、不适用场景、相近工具区分、参数形状、枚举约束和副作用等级。
 - 工具 schema 必须声明必填字段、默认值、有效范围、返回值语义和错误语义；模糊的 `search`、`run`、`query` 类工具名不得进入生产 profile。
+- 新增工具优先按 strict schema 设计：必填字段明确、枚举约束清楚、对象默认拒绝额外属性；确需宽松 schema 时必须说明原因和验证补偿。
 - 私有 API、数据库和生产系统默认只读优先；写操作必须单独列出审批点、dry-run、幂等键、回滚路径和拒绝样例。
 - 写操作工具不得接受无界 selector；批量变更必须先 dry-run 返回 `affected_count`、范围摘要、最大上限、回滚/审计字段，并经显式 approval 后执行。
 - 凭证只来自运行时环境或密钥管理器，不进入 skill、runbook、manifest、日志或归档。
@@ -52,6 +54,33 @@ MCP server 暴露面按三类登记：
 | Prompts | 暴露提示模板或流程入口 | 不能绕过项目 `AGENTS.md`、Skill 和人工审批 |
 
 Server 只实现其中一类时，不得在运行态暴露未声明的其他原语。
+
+## 3.3 Data-only MCP Compatibility
+
+面向文档、知识库、检索和研究场景的 MCP server 优先实现 data-only 兼容形态：
+
+| Tool | 输入 | 输出要求 | 风险控制 |
+|---|---|---|---|
+| `search` | 单个 query 字符串 | `structuredContent.results[]`，每项包含 `id`、`title`、`url` | 限制来源、结果数量和敏感字段 |
+| `fetch` | `search` 返回的唯一 `id` | `structuredContent` 包含 `id`、`title`、`text`、`url`，可选 `metadata` | 原文大小限制、脱敏、引用 URL 可追溯 |
+
+兼容要求：
+
+- `structuredContent` 是主输出；需要兼容旧客户端时，`content` 中可放同值 JSON 字符串。
+- `url` 必须能支持引用或追溯，不得伪造来源。
+- 检索内容一律视为不可信上下文，可能包含 prompt injection。
+- 不把检索到的完整原文自动写入长期 memory、AGENTS 或 skill；只有经归档流程确认的摘要和决策才能沉淀。
+
+## 3.4 Tool Search And Deferred Loading
+
+大工具集、插件集或 skill/MCP 混合目录不应一次性全部暴露给模型。优先采用 tool-search 风格的分层加载：
+
+- 初始上下文只放 namespace/server/skill 的名称、短描述、触发边界、读写风险和认证边界。
+- 具体工具 schema、参数说明、错误语义、长参考文档和脚本只在命中 namespace 后加载。
+- 每个 namespace 建议少于 10 个高相关工具；超过后应继续按业务域拆分。
+- 客户端执行的工具搜索只能从可信 inventory 返回工具定义；返回的新 schema 必须重新走 schema、安全和审批审查。
+- 每次加载的工具集合必须作为证据记录，包含 namespace、loaded tools、approval mode 和拒绝的相邻工具。
+- 延迟加载不等于权限批准；写能力、open-world 能力和 destructive 能力仍按 MCP/tool policy 逐项审批。
 
 ## 4. Production Readiness Gate
 
@@ -114,6 +143,20 @@ MCP 清单按能力类别评估，而不是按热度、榜单或教程推荐采�
 ## 5. Tool-call Policy
 
 MCP 返回的工具调用请求一律视为不可信输入。允许执行前必须完成确定性检查，不依赖 LLM 自行判断。
+
+## 5.1 OpenAI Tool Hint Audit Baseline
+
+OpenAI Apps SDK 审核文档中的 tool hint 规则被纳入 adk 的 MCP/tool 安全基线。任何 MCP 或 slash command 候选进入 profile 前，必须在 `manifests/skill_mcp_dependencies.json` 或 `manifests/slash_command_runtime_audits.json` 中声明：
+
+- `readOnlyHint`: 只有严格查询、检索、列举且无状态变更时才为 true。
+- `destructiveHint`: 删除、覆盖、发送、撤销权限、不可逆 admin action 或间接不可逆副作用时必须为 true。
+- `openWorldHint`: 能改变公开互联网或外部系统可见状态时必须为 true。
+- PII 与 debug payload 审计：返回字段必须最小化，禁止泄露 token、内部账号、trace/request id、原始日志和无关个人标识。
+- 写操作默认 report-only 或 dry-run；没有 approval、dry-run evidence、postcondition 和 rollback 时不得进入生产 profile。
+- 工具调用 JSON payload 必须可审阅；写操作执行前检查目标对象、范围、参数、敏感字段和预期副作用。
+- “记住允许/拒绝”只作为当前对话内的操作便利，不得转化为 adk 默认批准策略。
+
+这些字段不是模型选择提示，而是本地门禁输入。运行态权限仍由 adk 和 `~/codex` 的 deterministic policy 决定。
 
 | 风险面 | 必须声明 | 默认策略 |
 |---|---|---|

@@ -24,6 +24,7 @@ Commands:
   codex-handoff 检查 Codex handoff 是否符合 ~/codex 规范
   runtime-boundary 检查 adk 是否绕过 ~/codex 直接写入 ~/.codex
   token-budget 检查 skill/doc/script 是否符合低 token 预算
+  openai-governance 检查 OpenAI 官方 Developers 参考治理
   workflow-closure 检查 workflow 引用是否在 profile 闭包内
   file-modes 检查 tracked 文件权限是否匹配 Git index
   catalog   生成或检索 Agent/Skill 目录索引
@@ -84,6 +85,9 @@ case "$CMD" in
     ;;
   token-budget)
     exec "$SCRIPT_DIR/check-token-budget.sh" "$@"
+    ;;
+  openai-governance)
+    exec "$SCRIPT_DIR/check-openai-developers-governance.sh" "$@"
     ;;
   workflow-closure)
     exec "$SCRIPT_DIR/check-workflow-closure.sh" "$@"

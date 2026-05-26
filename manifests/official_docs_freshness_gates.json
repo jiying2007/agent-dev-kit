@@ -1,0 +1,620 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2026-05-26",
+  "review_policy": {
+    "allowed_domains": [
+      "developers.openai.com",
+      "platform.openai.com"
+    ],
+    "max_age_days": 90,
+    "required_fields": [
+      "url",
+      "retrieved_at",
+      "review_status",
+      "expires_at",
+      "adoption_scope"
+    ],
+    "review_status_values": [
+      "adopted",
+      "watch",
+      "rejected"
+    ]
+  },
+  "sources": [
+    {
+      "id": "openai-codex-customization-skills",
+      "title": "Codex customization: AGENTS, skills, plugins, MCP, subagents",
+      "url": "https://developers.openai.com/codex/concepts/customization#skills",
+      "retrieved_at": "2026-05-25",
+      "expires_at": "2026-08-23",
+      "review_status": "adopted",
+      "adoption_scope": "P0",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for skill/plugin layering, progressive disclosure, and AGENTS.md precedence.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "check-token-budget",
+        "validate-assets --strict"
+      ]
+    },
+    {
+      "id": "openai-agents-sdk-starting-point",
+      "title": "Agents SDK: starting points for definitions, state, handoffs, guardrails, tools, observability",
+      "url": "https://developers.openai.com/api/docs/guides/agents#choose-your-starting-point",
+      "retrieved_at": "2026-05-25",
+      "expires_at": "2026-08-23",
+      "review_status": "adopted",
+      "adoption_scope": "P2",
+      "owner": "agent-dev-kit",
+      "decision": "Use as a classification reference without rewriting existing adk orchestration.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "check-workflow-closure"
+      ]
+    },
+    {
+      "id": "openai-agents-tracing",
+      "title": "Agents SDK integrations and observability: tracing",
+      "url": "https://developers.openai.com/api/docs/guides/agents/integrations-observability#tracing",
+      "retrieved_at": "2026-05-25",
+      "expires_at": "2026-08-23",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use traces as evidence for workflow debugging and as input to eval suites.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "test_openai_developers_governance"
+      ]
+    },
+    {
+      "id": "openai-agent-evals",
+      "title": "Evaluate agent workflows",
+      "url": "https://developers.openai.com/api/docs/guides/agent-evals",
+      "retrieved_at": "2026-05-25",
+      "expires_at": "2026-08-23",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use datasets, graders, and eval runs to harden routing, governance, and completion behavior.",
+      "required_checks": [
+        "check-openai-developers-governance"
+      ]
+    },
+    {
+      "id": "openai-reasoning-models",
+      "title": "Using reasoning models",
+      "url": "https://developers.openai.com/api/docs/guides/latest-model#using-reasoning-models",
+      "retrieved_at": "2026-05-25",
+      "expires_at": "2026-08-23",
+      "review_status": "adopted",
+      "adoption_scope": "P0",
+      "owner": "agent-dev-kit",
+      "decision": "Use for context compaction, prompt-cache-friendly layout, structured outputs, tool descriptions, and tool preambles.",
+      "required_checks": [
+        "check-token-budget",
+        "check-openai-developers-governance"
+      ]
+    },
+    {
+      "id": "openai-apps-sdk-review-tool-hints",
+      "title": "Apps SDK submission FAQ: MCP tools, PII, readOnlyHint, destructiveHint, openWorldHint",
+      "url": "https://developers.openai.com/apps-sdk/deploy/submission#app-review--approval-faqs",
+      "retrieved_at": "2026-05-25",
+      "expires_at": "2026-08-23",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the safety baseline for MCP/tool audit manifests and runtime command audits.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "check-runtime-boundary"
+      ]
+    },
+    {
+      "id": "openai-codex-config-reference",
+      "title": "Codex configuration reference: config.toml, project config, agents, MCP, permissions",
+      "url": "https://developers.openai.com/codex/config-reference#configtoml",
+      "retrieved_at": "2026-05-25",
+      "expires_at": "2026-08-23",
+      "review_status": "adopted",
+      "adoption_scope": "P0",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for runtime config boundary, project config non-overrides, agent limits, MCP tool approval and permissions audit.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "runtime-boundary"
+      ]
+    },
+    {
+      "id": "openai-codex-requirements-toml",
+      "title": "Codex admin-enforced requirements.toml",
+      "url": "https://developers.openai.com/codex/config-reference#requirementstoml",
+      "retrieved_at": "2026-05-25",
+      "expires_at": "2026-08-23",
+      "review_status": "adopted",
+      "adoption_scope": "P0",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for non-overridable team policy, managed hooks, MCP identity allowlists, filesystem deny_read and restrictive command rules.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "runtime-boundary"
+      ]
+    },
+    {
+      "id": "openai-codex-sandbox-defaults",
+      "title": "Codex sandbox and approvals: configure defaults",
+      "url": "https://developers.openai.com/codex/concepts/sandboxing#configure-defaults",
+      "retrieved_at": "2026-05-25",
+      "expires_at": "2026-08-23",
+      "review_status": "adopted",
+      "adoption_scope": "P0",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for safe default sandbox presets and full-access denial gates.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "runtime-boundary"
+      ]
+    },
+    {
+      "id": "openai-codex-rules",
+      "title": "Codex command execution rules",
+      "url": "https://developers.openai.com/codex/rules#create-a-rules-file",
+      "retrieved_at": "2026-05-25",
+      "expires_at": "2026-08-23",
+      "review_status": "adopted",
+      "adoption_scope": "P0",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for prefix_rule fields, inline match/not_match unit tests and restrictive admin command rules.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "runtime-boundary"
+      ]
+    },
+    {
+      "id": "openai-codex-agent-approvals-security-dangerous-settings",
+      "title": "Codex agent approvals and security: dangerous settings, network proxy and web search",
+      "url": "https://developers.openai.com/codex/agent-approvals-security#dangerous-settings",
+      "retrieved_at": "2026-05-25",
+      "expires_at": "2026-08-23",
+      "review_status": "adopted",
+      "adoption_scope": "P0",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for network proxy, Unix socket, live web search and prompt-injection runtime hard gates.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "runtime-boundary"
+      ]
+    },
+    {
+      "id": "openai-codex-mcp-options",
+      "title": "Codex MCP configuration options",
+      "url": "https://developers.openai.com/codex/mcp#other-configuration-options",
+      "retrieved_at": "2026-05-25",
+      "expires_at": "2026-08-23",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for MCP startup/tool timeouts, required servers, enabled/disabled tools, per-tool approval mode, OAuth callback and scopes.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "check-runtime-boundary"
+      ]
+    },
+    {
+      "id": "openai-codex-app-server-api-overview",
+      "title": "Codex App Server API overview",
+      "url": "https://developers.openai.com/codex/app-server#api-overview",
+      "retrieved_at": "2026-05-25",
+      "expires_at": "2026-08-23",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for runtime API read/write/destructive/open-world classification, especially shellCommand, process, filesystem, config and plugin methods.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "runtime-boundary"
+      ]
+    },
+    {
+      "id": "openai-context-engineering-session-memory",
+      "title": "Context Engineering: short-term memory management with sessions",
+      "url": "https://developers.openai.com/cookbook/examples/agents_sdk/session_memory#why-context-management-matters",
+      "retrieved_at": "2026-05-25",
+      "expires_at": "2026-08-23",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for latest-goal anchoring, stale-plan invalidation, error isolation, per-issue summaries and handoff-quality context contracts.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "check-token-budget"
+      ]
+    },
+    {
+      "id": "openai-docs-mcp-quickstart",
+      "title": "OpenAI Docs MCP quickstart",
+      "url": "https://developers.openai.com/learn/docs-mcp#quickstart",
+      "retrieved_at": "2026-05-25",
+      "expires_at": "2026-08-23",
+      "review_status": "adopted",
+      "adoption_scope": "P0",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for Codex, VS Code, Cursor and Claude Code official Docs MCP setup and AGENTS guidance.",
+      "required_checks": [
+        "check-openai-developers-governance"
+      ]
+    },
+    {
+      "id": "openai-responses-migration",
+      "title": "Migrate to the Responses API",
+      "url": "https://developers.openai.com/api/docs/guides/migrate-to-responses",
+      "retrieved_at": "2026-05-25",
+      "expires_at": "2026-08-23",
+      "review_status": "watch",
+      "adoption_scope": "P2",
+      "owner": "agent-dev-kit",
+      "decision": "Watch as a future API-backed runner reference; do not rewrite adk until a local pilot proves the migration path.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "pilot eval before promotion"
+      ]
+    },
+    {
+      "id": "openai-codex-hooks",
+      "title": "Codex lifecycle hooks",
+      "url": "https://developers.openai.com/codex/hooks",
+      "retrieved_at": "2026-05-25",
+      "expires_at": "2026-08-23",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for hook lifecycle audits, trust gates, matcher policy and side-effect classification.",
+      "required_checks": [
+        "check-openai-developers-governance"
+      ]
+    },
+    {
+      "id": "openai-codex-hooks-common-output-fields",
+      "title": "Codex hooks common output fields",
+      "url": "https://developers.openai.com/codex/hooks#common-output-fields",
+      "retrieved_at": "2026-05-25",
+      "expires_at": "2026-08-23",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for event-specific hook output field validation and unsupported-field denial.",
+      "required_checks": [
+        "check-openai-developers-governance"
+      ]
+    },
+    {
+      "id": "openai-codex-slash-commands",
+      "title": "Codex CLI built-in slash commands",
+      "url": "https://developers.openai.com/codex/cli/slash-commands#built-in-slash-commands",
+      "retrieved_at": "2026-05-25",
+      "expires_at": "2026-08-23",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for slash command control-plane classification and runtime evidence capture.",
+      "required_checks": [
+        "check-openai-developers-governance"
+      ]
+    },
+    {
+      "id": "openai-codex-as-mcp-server",
+      "title": "Running Codex as an MCP server",
+      "url": "https://developers.openai.com/codex/guides/agents-sdk#running-codex-as-an-mcp-server",
+      "retrieved_at": "2026-05-25",
+      "expires_at": "2026-08-23",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for Codex MCP runner and reply contracts, thread continuation and approval correlation.",
+      "required_checks": [
+        "check-openai-developers-governance"
+      ]
+    },
+    {
+      "id": "openai-codex-plugin-build",
+      "title": "Build Codex plugins",
+      "url": "https://developers.openai.com/codex/plugins/build#create-a-plugin-manually",
+      "retrieved_at": "2026-05-25",
+      "expires_at": "2026-08-23",
+      "review_status": "adopted",
+      "adoption_scope": "P2",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for optional adk plugin packaging contracts after skill/workflow assets are stable.",
+      "required_checks": [
+        "check-openai-developers-governance"
+      ]
+    },
+    {
+      "id": "openai-codex-plugin-marketplace",
+      "title": "Codex plugin marketplace metadata",
+      "url": "https://developers.openai.com/codex/plugins/build#marketplace-metadata",
+      "retrieved_at": "2026-05-25",
+      "expires_at": "2026-08-23",
+      "review_status": "adopted",
+      "adoption_scope": "P2",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for marketplace metadata, install policy, authentication policy and local source path containment.",
+      "required_checks": [
+        "check-openai-developers-governance"
+      ]
+    },
+    {
+      "id": "openai-codex-best-practices",
+      "title": "Codex best practices: context, AGENTS.md, testing, MCP, skills, automations and session controls",
+      "url": "https://developers.openai.com/codex/learn/best-practices",
+      "retrieved_at": "2026-05-25",
+      "expires_at": "2026-08-23",
+      "review_status": "adopted",
+      "adoption_scope": "P0",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for Goal/Context/Constraints/Done-when task framing, planning-before-coding, AGENTS.md practicality, test/review loops, MCP/skill/automation layering and one-thread-per-task discipline.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "check-token-budget",
+        "check-workflow-closure"
+      ]
+    },
+    {
+      "id": "openai-codex-agent-skills",
+      "title": "Codex Agent Skills: progressive disclosure, description-trigger matching, storage scopes and plugin distribution",
+      "url": "https://developers.openai.com/codex/skills",
+      "retrieved_at": "2026-05-25",
+      "expires_at": "2026-08-23",
+      "review_status": "adopted",
+      "adoption_scope": "P0",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for skill description quality, progressive disclosure budget, optional scripts/references/assets layout and plugin promotion boundaries.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "check-skill-metadata",
+        "check-skill-routing-conflicts"
+      ]
+    },
+    {
+      "id": "openai-tools-guide",
+      "title": "OpenAI tools guide: hosted tools, function tools, MCP, shell, computer use, file search and tool search",
+      "url": "https://developers.openai.com/api/docs/guides/tools",
+      "retrieved_at": "2026-05-25",
+      "expires_at": "2026-08-23",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for tool semantics, tool_choice policy, Agents SDK tool placement and deferred tool-definition guidance without enabling new hosted tools by default.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "check-runtime-boundary"
+      ]
+    },
+    {
+      "id": "openai-chatgpt-developer-mode",
+      "title": "ChatGPT Developer mode: MCP app creation, tool selection, JSON payload review and write-action confirmation",
+      "url": "https://developers.openai.com/api/docs/guides/developer-mode#how-to-use",
+      "retrieved_at": "2026-05-25",
+      "expires_at": "2026-08-23",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for action-oriented tool descriptions, explicit tool disambiguation, input-shape sequencing, JSON payload review and write-action confirmation policy.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "check-runtime-boundary"
+      ]
+    },
+    {
+      "id": "openai-mcp-chatgpt-api-integrations",
+      "title": "Building MCP servers for ChatGPT Apps and API integrations",
+      "url": "https://developers.openai.com/api/docs/mcp",
+      "retrieved_at": "2026-05-25",
+      "expires_at": "2026-08-23",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for data-only MCP search/fetch compatibility, structuredContent output, OAuth/auth boundaries and prompt-injection risk review.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "check-runtime-boundary"
+      ]
+    },
+    {
+      "id": "openai-agentic-macro-evals",
+      "title": "Macro Evals for Agentic Systems",
+      "url": "https://developers.openai.com/cookbook/examples/partners/macro_evals_for_agentic_systems/macro_evals_for_agentic_systems",
+      "retrieved_at": "2026-05-25",
+      "expires_at": "2026-08-23",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for aggregating traced runs into recurring behavior patterns and promoting high-signal failures into regression suites.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "test_openai_developers_governance"
+      ]
+    },
+    {
+      "id": "openai-structured-model-outputs",
+      "title": "Structured model outputs: JSON schema adherence, refusals and schema drift controls",
+      "url": "https://developers.openai.com/api/docs/guides/structured-outputs",
+      "retrieved_at": "2026-05-26",
+      "expires_at": "2026-08-24",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for schema-backed task packages, handoffs, evidence reports, trace summaries and refusal/parse-failure handling.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "validate-assets --strict"
+      ]
+    },
+    {
+      "id": "openai-function-calling-strict",
+      "title": "Function calling: strict schemas, tool descriptions, namespaces and tool-call output flow",
+      "url": "https://developers.openai.com/api/docs/guides/function-calling",
+      "retrieved_at": "2026-05-26",
+      "expires_at": "2026-08-24",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for strict tool schema policy, namespace grouping, call-output correlation and function/tool boundary reviews.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "check-runtime-boundary"
+      ]
+    },
+    {
+      "id": "openai-tool-search",
+      "title": "Tool search: deferred tools, namespaces, MCP search surfaces and cache-preserving loading",
+      "url": "https://developers.openai.com/api/docs/guides/tools-tool-search",
+      "retrieved_at": "2026-05-26",
+      "expires_at": "2026-08-24",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for skill/tool catalog lazy loading, namespace summaries and token-budget-aware progressive disclosure.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "check-token-budget"
+      ]
+    },
+    {
+      "id": "openai-file-search-retrieval",
+      "title": "File search and retrieval: vector stores, metadata filters, citations and result controls",
+      "url": "https://developers.openai.com/api/docs/guides/tools-file-search",
+      "retrieved_at": "2026-05-26",
+      "expires_at": "2026-08-24",
+      "review_status": "watch",
+      "adoption_scope": "P2",
+      "owner": "agent-dev-kit",
+      "decision": "Watch as a reference for local archive and reference-retrieval design; do not enable hosted file_search by default.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "pilot eval before promotion"
+      ]
+    },
+    {
+      "id": "openai-codex-app-automations",
+      "title": "Codex app automations: recurring tasks, skills, sandbox, approval policy and first-run review",
+      "url": "https://developers.openai.com/codex/app/automations",
+      "retrieved_at": "2026-05-26",
+      "expires_at": "2026-08-24",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for report-only automation records, durable prompts, cadence, stop conditions, sandbox policy and review gates.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "check-runtime-boundary"
+      ]
+    },
+    {
+      "id": "openai-codex-app-worktrees",
+      "title": "Codex app worktrees: background isolation, handoff, detached HEAD and cleanup",
+      "url": "https://developers.openai.com/codex/app/worktrees",
+      "retrieved_at": "2026-05-26",
+      "expires_at": "2026-08-24",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for background worktree isolation, handoff gates, branch checkout limitations and cleanup policy.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "check-workflow-closure"
+      ]
+    },
+    {
+      "id": "openai-agent-improvement-loop",
+      "title": "Build an Agent Improvement Loop with Traces, Evals, and Codex",
+      "url": "https://developers.openai.com/cookbook/examples/agents_sdk/agent_improvement_loop",
+      "retrieved_at": "2026-05-26",
+      "expires_at": "2026-08-24",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for trace-feedback-eval-handoff improvement loops with human approval before deeper automation.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "test_openai_developers_governance"
+      ]
+    },
+    {
+      "id": "openai-codex-github-action",
+      "title": "Codex GitHub Action: CI/CD Codex execution, outputs, sandbox and security checklist",
+      "url": "https://developers.openai.com/codex/github-action",
+      "retrieved_at": "2026-05-26",
+      "expires_at": "2026-08-24",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for controlled CI review runner contracts, sandbox defaults, protected secret handling and prompt-injection checks.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "check-runtime-boundary"
+      ]
+    },
+    {
+      "id": "openai-codex-code-review-sdk",
+      "title": "Build Code Review with the Codex SDK: structured findings and SCM review publishing",
+      "url": "https://developers.openai.com/cookbook/examples/codex/build_code_review_with_codex_sdk",
+      "retrieved_at": "2026-05-26",
+      "expires_at": "2026-08-24",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for PR diff review inputs, structured output schemas, SCM review publishing and inline anchoring validation.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "test_openai_developers_governance"
+      ]
+    },
+    {
+      "id": "openai-skills-api-operational-practices",
+      "title": "Skills in OpenAI API: discoverability, version pinning, tiny CLI behavior and network boundaries",
+      "url": "https://developers.openai.com/cookbook/examples/skills_in_api#operational-best-practices",
+      "retrieved_at": "2026-05-26",
+      "expires_at": "2026-08-24",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for skill discoverability, negative examples, version pinning, deterministic stdout and network allowlist governance.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "check-skills"
+      ]
+    },
+    {
+      "id": "openai-optimizing-llm-accuracy",
+      "title": "Optimizing LLM Accuracy: prompt baseline, eval sets, RAG, fine-tuning and production accuracy tradeoffs",
+      "url": "https://developers.openai.com/api/docs/guides/optimizing-llm-accuracy",
+      "retrieved_at": "2026-05-26",
+      "expires_at": "2026-08-24",
+      "review_status": "watch",
+      "adoption_scope": "P2",
+      "owner": "agent-dev-kit",
+      "decision": "Watch as the source for future prompt/RAG/fine-tuning optimization decisions; do not promote complex optimization methods without eval baselines.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "eval baseline before promotion"
+      ]
+    },
+    {
+      "id": "openai-codex-agents-sdk-multi-agent-workflows",
+      "title": "Codex with Agents SDK: multi-agent workflows, MCP handoffs and traces",
+      "url": "https://developers.openai.com/codex/guides/agents-sdk#creating-multi-agent-workflows",
+      "retrieved_at": "2026-05-26",
+      "expires_at": "2026-08-24",
+      "review_status": "watch",
+      "adoption_scope": "P2",
+      "owner": "agent-dev-kit",
+      "decision": "Watch as a future orchestration reference; do not replace existing adk-first spawn_agent governance without a local pilot.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "parallel governance pilot before promotion"
+      ]
+    }
+  ]
+}

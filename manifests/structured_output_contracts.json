@@ -1,0 +1,135 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2026-05-26",
+  "source_docs": [
+    "openai-structured-model-outputs",
+    "openai-function-calling-strict",
+    "openai-reasoning-models",
+    "openai-codex-code-review-sdk"
+  ],
+  "contracts": [
+    {
+      "id": "adk-task-package-schema-v1",
+      "owner": "agent-dev-kit",
+      "applies_to": [
+        "adk-task-breakdown",
+        "adk-planning-execution-loop",
+        "adk-parallel-agent-governance"
+      ],
+      "schema_target": "task_package",
+      "schema_format": "json_schema",
+      "strict": true,
+      "required_fields": [
+        "goal",
+        "context",
+        "constraints",
+        "done_when",
+        "primary_action",
+        "action_mode",
+        "verification",
+        "artifacts",
+        "blockers"
+      ],
+      "additional_properties": false,
+      "refusal_handling": "If the requested task cannot fit the schema, return blocked with a reason instead of inventing fields.",
+      "drift_controls": [
+        "schema and template changes must be reviewed together",
+        "CI must fail when required fields or enum values disappear",
+        "Markdown summaries must be generated from structured fields when automation consumes them"
+      ]
+    },
+    {
+      "id": "adk-evidence-index-schema-v1",
+      "owner": "agent-dev-kit",
+      "applies_to": [
+        "adk-verification-before-completion",
+        "adk-code-review-loop",
+        "adk-commit-pr-quality-gate"
+      ],
+      "schema_target": "evidence_index",
+      "schema_format": "json_schema",
+      "strict": true,
+      "required_fields": [
+        "command",
+        "exit_code",
+        "result_summary",
+        "evidence_path",
+        "layer",
+        "related_artifact"
+      ],
+      "additional_properties": false,
+      "refusal_handling": "Completion gate returns needs-fix when command evidence cannot be represented.",
+      "drift_controls": [
+        "evidence rows must preserve command exit status",
+        "negative or rejected path must be recorded for completion gates",
+        "human-readable reports cannot omit machine evidence fields"
+      ]
+    },
+    {
+      "id": "adk-handoff-summary-schema-v1",
+      "owner": "agent-dev-kit",
+      "applies_to": [
+        "context-compress-handoff",
+        "session-wrap",
+        "worktree-closeout"
+      ],
+      "schema_target": "handoff_summary",
+      "schema_format": "json_schema",
+      "strict": true,
+      "required_fields": [
+        "latest_goal",
+        "invalidated_goals",
+        "completed_actions",
+        "raw_evidence",
+        "unresolved_blockers",
+        "next_goal",
+        "fallback_condition"
+      ],
+      "additional_properties": false,
+      "refusal_handling": "When source evidence is missing, mark the handoff incomplete instead of fabricating continuity.",
+      "drift_controls": [
+        "schema fields must map to context_state_contracts",
+        "raw evidence references must remain local paths or source URLs",
+        "excluded context must not re-enter active instructions"
+      ]
+    },
+    {
+      "id": "adk-pr-review-findings-schema-v1",
+      "owner": "agent-dev-kit",
+      "applies_to": [
+        "adk-code-review-loop",
+        "adk-commit-pr-quality-gate"
+      ],
+      "schema_target": "pr_review_findings",
+      "schema_format": "json_schema",
+      "strict": true,
+      "required_fields": [
+        "review_id",
+        "source",
+        "base_ref",
+        "head_ref",
+        "findings",
+        "summary",
+        "publication_decision",
+        "human_review_required"
+      ],
+      "additional_properties": false,
+      "refusal_handling": "CI review publishing is blocked when findings cannot be represented in the schema.",
+      "drift_controls": [
+        "finding locations must map to parsed diff metadata",
+        "SCM publishing code must read schema fields instead of prose",
+        "untrusted PR isolation decision must be recorded before write actions"
+      ]
+    }
+  ],
+  "quality_gate": {
+    "must_use_structured_outputs_over_json_mode": true,
+    "json_mode_allowed_only_with_validation": true,
+    "must_detect_refusals": true,
+    "must_not": [
+      "treat valid JSON as schema compliance",
+      "hide schema parse failure in prose",
+      "let prompt wording replace machine schema validation"
+    ]
+  }
+}

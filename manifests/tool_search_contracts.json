@@ -1,0 +1,89 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2026-05-26",
+  "source_docs": [
+    "openai-tool-search",
+    "openai-function-calling-strict",
+    "openai-codex-agent-skills",
+    "openai-tools-guide"
+  ],
+  "contracts": [
+    {
+      "id": "skill-catalog-lazy-loading-v1",
+      "owner": "agent-dev-kit",
+      "applies_to": [
+        "skill routing",
+        "OpenAI Developers reference lookup",
+        "large reference subrepo analysis"
+      ],
+      "namespace": "adk.skills",
+      "initial_surface": [
+        "skill name",
+        "short description",
+        "trigger phrases",
+        "boundary summary"
+      ],
+      "deferred_surface": [
+        "full SKILL.md workflow",
+        "references",
+        "scripts",
+        "assets"
+      ],
+      "max_initial_items": 20,
+      "max_namespace_tools": 10,
+      "selection_evidence": [
+        "user intent",
+        "matched trigger phrase",
+        "rejection reason for adjacent skills"
+      ],
+      "cache_policy": "Keep stable namespace summaries ahead of dynamic task context; load detailed references only after routing.",
+      "must_not": [
+        "load all skill bodies before intent routing",
+        "expose write-capable tools without approval class",
+        "treat deferred loading as permission approval"
+      ]
+    },
+    {
+      "id": "mcp-tool-search-compat-v1",
+      "owner": "agent-dev-kit",
+      "applies_to": [
+        "future MCP servers",
+        "data-only MCP search/fetch servers",
+        "OpenAI Docs MCP compatible lookup"
+      ],
+      "namespace": "adk.mcp",
+      "initial_surface": [
+        "server name",
+        "server description",
+        "read/write class",
+        "auth boundary"
+      ],
+      "deferred_surface": [
+        "individual tool schemas",
+        "parameter descriptions",
+        "side-effect policy",
+        "error semantics"
+      ],
+      "max_initial_items": 20,
+      "max_namespace_tools": 10,
+      "selection_evidence": [
+        "server selected",
+        "tools loaded",
+        "approval mode",
+        "prompt-injection review"
+      ],
+      "cache_policy": "Prefer namespace or MCP-server level discovery before loading large tool schemas.",
+      "must_not": [
+        "accept untrusted client-executed search results without schema review",
+        "load tools not declared in the candidate inventory unless explicitly reviewed",
+        "break cache by changing loaded tool sets without evidence"
+      ]
+    }
+  ],
+  "quality_gate": {
+    "deferred_loading_requires_namespace_summary": true,
+    "tool_schema_review_required": true,
+    "client_executed_search_requires_trusted_inventory": true,
+    "must_record_loaded_tools": true
+  }
+}

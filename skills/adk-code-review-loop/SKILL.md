@@ -35,6 +35,7 @@ constraints:
 - 已有明确 diff 或变更文件清单。
 - 已知道本次变更目标和非目标。
 - 已收集基本验证结果，至少知道相关测试是否可运行。
+- 若 review 来自 CI/Codex runner，必须有结构化 findings、trusted-trigger/secret 隔离决策和 SCM 发布边界。
 
 ## 发现分级
 
@@ -55,6 +56,7 @@ constraints:
 7. **执行或交接修复**：修复不得顺带重构无关文件。
 8. **复审**：修复后重新检查原发现是否闭环，新增风险是否出现。
 9. **门禁交接**：将结论交给 `adk-commit-pr-quality-gate` 或 `adk-verification-before-completion`。
+10. **CI/PR 发布核验**：若要发布 SCM comment，必须按 `manifests/pr_review_governance_contracts.json` 验证结构化输出、untrusted PR 隔离和 inline anchoring。
 
 ## Review Report Template
 ```md
@@ -66,6 +68,11 @@ constraints:
   |---|---|---|---|---|---|
 - False Positives:
 - Out-of-scope Suggestions:
+- CI/PR Review Boundary:
+  - trusted_trigger:
+  - protected_secret_exposure:
+  - structured_output_valid:
+  - inline_anchor_valid:
 - Fix Plan:
 - Re-review Result:
 - Final Verdict: pass | needs-fix
@@ -99,6 +106,9 @@ git diff -- <path>
 - 复审必须引用修复后的验证命令或代码证据。
 - 提交/PR 前必须再过 `adk-commit-pr-quality-gate`。
 - AI review 只能作为第一轮风险扫描；高风险、业务语义或 owner 责任结论必须由人类 reviewer 或明确 owner 最终确认。
+- 机器发布 review comment 前必须有 schema-backed findings；不能从自由文本直接生成 SCM 写 payload。
+- fork/public PR 默认不接收 protected secrets；没有 trusted-trigger 决策时只允许只读分析。
+- inline comment 位置无法验证时，必须降级为 summary finding。
 
 ## 合理化借口拦截
 

@@ -1,0 +1,109 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2026-05-26",
+  "source_docs": [
+    "openai-skills-api-operational-practices",
+    "openai-codex-agent-skills",
+    "openai-tool-search"
+  ],
+  "contracts": [
+    {
+      "id": "skill-discoverability-v1",
+      "owner": "agent-dev-kit",
+      "applies_to": [
+        "SKILL.md",
+        "manifest.yaml",
+        "agents/openai.yaml"
+      ],
+      "required_fields": [
+        "name",
+        "description",
+        "triggers",
+        "non_triggers",
+        "inputs",
+        "outputs",
+        "constraints"
+      ],
+      "routing_examples": {
+        "positive_required": true,
+        "negative_required": true,
+        "update_order": [
+          "description",
+          "triggers/non_triggers",
+          "examples",
+          "code"
+        ]
+      },
+      "must_not": [
+        "fix routing by duplicating the whole skill body into system prompts",
+        "hide gotchas outside SKILL.md when they affect triggering",
+        "use broad descriptions that compete with adjacent skills"
+      ]
+    },
+    {
+      "id": "skill-version-pin-v1",
+      "owner": "agent-dev-kit",
+      "applies_to": [
+        "managed skills",
+        "Codex handoff",
+        "plugin packaging"
+      ],
+      "required_fields": [
+        "skill_name",
+        "version",
+        "source_path",
+        "model_or_runtime_assumption",
+        "verification_command",
+        "rollback_path"
+      ],
+      "pinning_policy": {
+        "production": "pin explicit skill version and compatible runtime/model assumption",
+        "development": "latest is allowed only with freshness review and rollback plan",
+        "handoff": "record version in generated catalog or manifest"
+      },
+      "must_not": [
+        "ship production workflows that depend on whatever latest means",
+        "change skill version and model/runtime assumption without validation",
+        "overwrite an installed skill without rollback evidence"
+      ]
+    },
+    {
+      "id": "skill-tiny-cli-v1",
+      "owner": "agent-dev-kit",
+      "applies_to": [
+        "skills with scripts",
+        "optional-skills with tools",
+        "plugin-packaged skills"
+      ],
+      "required_fields": [
+        "command",
+        "usage",
+        "deterministic_stdout",
+        "known_output_paths",
+        "failure_exit_codes",
+        "dry_run_mode"
+      ],
+      "execution_policy": {
+        "stdout": "machine-consumed output must be deterministic or schema-backed",
+        "errors": "fail loudly with usage or actionable diagnostics",
+        "network": "network access requires allowlist, data-egress rule and approval boundary"
+      },
+      "must_not": [
+        "silently write outputs to unknown paths",
+        "swallow command failures and report success",
+        "combine open network access with skills without explicit allowlists"
+      ]
+    }
+  ],
+  "quality_gate": {
+    "negative_examples_required_for_routing_changes": true,
+    "production_skill_version_must_be_pinned": true,
+    "scripted_skills_require_deterministic_cli_contract": true,
+    "networked_skills_require_allowlist_and_egress_policy": true,
+    "must_not": [
+      "duplicate full skill procedures in global prompts",
+      "promote unversioned skills into production defaults",
+      "treat nondeterministic stdout as a stable integration contract"
+    ]
+  }
+}

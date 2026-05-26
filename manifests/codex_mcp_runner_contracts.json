@@ -1,0 +1,67 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2026-05-25",
+  "source_docs": [
+    "openai-codex-as-mcp-server"
+  ],
+  "contracts": [
+    {
+      "id": "codex-run-session",
+      "owner": "agent-dev-kit",
+      "tool": "codex",
+      "purpose": "Start a bounded Codex session from an MCP client.",
+      "required_inputs": [
+        "prompt"
+      ],
+      "optional_inputs": [
+        "approval-policy",
+        "base-instructions",
+        "config",
+        "cwd",
+        "include-plan-tool",
+        "model",
+        "profile",
+        "sandbox"
+      ],
+      "approval_boundary": "approval-policy must be recorded and cannot silently widen sandbox access",
+      "sandbox_boundary": "sandbox must be read-only, workspace-write, or danger-full-access with explicit evidence",
+      "state_output": [
+        "structuredContent.threadId"
+      ],
+      "must_record": [
+        "cwd",
+        "sandbox",
+        "approval-policy",
+        "profile",
+        "threadId",
+        "result summary"
+      ],
+      "stop_condition": "pass | replan | split | blocked | abort"
+    },
+    {
+      "id": "codex-reply-session",
+      "owner": "agent-dev-kit",
+      "tool": "codex-reply",
+      "purpose": "Continue an existing Codex MCP session.",
+      "required_inputs": [
+        "prompt",
+        "threadId"
+      ],
+      "optional_inputs": [
+        "conversationId"
+      ],
+      "approval_boundary": "approval prompts must carry the same threadId for audit correlation",
+      "sandbox_boundary": "inherits original session boundary unless explicitly reconfigured and audited",
+      "state_output": [
+        "structuredContent.threadId"
+      ],
+      "must_record": [
+        "threadId",
+        "prompt purpose",
+        "approval prompts",
+        "result summary"
+      ],
+      "stop_condition": "pass | replan | split | blocked | abort"
+    }
+  ]
+}

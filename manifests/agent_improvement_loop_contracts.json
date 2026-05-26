@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2026-05-26",
+  "source_docs": [
+    "openai-agent-improvement-loop",
+    "openai-agentic-macro-evals",
+    "openai-agent-evals",
+    "openai-agents-tracing"
+  ],
+  "loops": [
+    {
+      "id": "trace-feedback-eval-handoff-v1",
+      "owner": "agent-dev-kit",
+      "applies_to": [
+        "skill prompt evolution",
+        "workflow regression hardening",
+        "Codex handoff quality improvement"
+      ],
+      "stages": [
+        "collect_sanitized_traces",
+        "collect_human_feedback",
+        "collect_model_feedback",
+        "generate_eval_suite_candidate",
+        "run_validation_gate",
+        "rank_recommendations",
+        "write_codex_handoff",
+        "human_approve_before_merge"
+      ],
+      "required_artifacts": [
+        "trace_summary_set",
+        "feedback_summary",
+        "eval_suite_candidate",
+        "validation_result",
+        "ranked_recommendations",
+        "codex_handoff"
+      ],
+      "promotion_gate": [
+        "representative traces cover at least one pass and one failure",
+        "recommendations cite evidence",
+        "eval candidate fails before the fix and passes after the fix when feasible",
+        "developer approves the diff before merge or apply",
+        "automation depth is explicitly bounded"
+      ],
+      "must_not": [
+        "open, merge or deploy pull requests automatically by default",
+        "promote model feedback without human or deterministic validation",
+        "store raw traces containing secrets",
+        "treat one traced run as a recurring failure pattern"
+      ]
+    }
+  ],
+  "quality_gate": {
+    "requires_human_approval_before_apply": true,
+    "requires_validation_gate": true,
+    "requires_codex_handoff_artifact": true,
+    "requires_trace_feedback_linkage": true
+  }
+}

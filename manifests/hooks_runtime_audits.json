@@ -1,0 +1,108 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2026-05-25",
+  "source_docs": [
+    "openai-codex-hooks",
+    "openai-codex-hooks-common-output-fields"
+  ],
+  "events": [
+    {
+      "event": "PreToolUse",
+      "supports_matcher": true,
+      "supported_output_fields": [
+        "systemMessage"
+      ],
+      "must_not_rely_on": [
+        "continue",
+        "stopReason",
+        "suppressOutput"
+      ],
+      "side_effect_policy": "report-only",
+      "trust_required": true,
+      "concurrency_risk": "multiple matching hooks may run concurrently"
+    },
+    {
+      "event": "PermissionRequest",
+      "supports_matcher": true,
+      "supported_output_fields": [
+        "systemMessage"
+      ],
+      "must_not_rely_on": [
+        "continue",
+        "stopReason",
+        "suppressOutput"
+      ],
+      "side_effect_policy": "approval-boundary",
+      "trust_required": true,
+      "concurrency_risk": "multiple matching hooks may run concurrently"
+    },
+    {
+      "event": "PostToolUse",
+      "supports_matcher": true,
+      "supported_output_fields": [
+        "systemMessage",
+        "continue",
+        "stopReason"
+      ],
+      "must_not_rely_on": [
+        "suppressOutput"
+      ],
+      "side_effect_policy": "validation-or-summary",
+      "trust_required": true,
+      "concurrency_risk": "multiple matching hooks may run concurrently"
+    },
+    {
+      "event": "PreCompact",
+      "supports_matcher": true,
+      "supported_output_fields": [
+        "continue",
+        "stopReason",
+        "systemMessage",
+        "suppressOutput"
+      ],
+      "must_not_rely_on": [
+        "none"
+      ],
+      "side_effect_policy": "context-audit",
+      "trust_required": true,
+      "concurrency_risk": "compact-time hooks can change retained context guidance"
+    },
+    {
+      "event": "Stop",
+      "supports_matcher": false,
+      "supported_output_fields": [
+        "continue",
+        "stopReason",
+        "systemMessage",
+        "suppressOutput"
+      ],
+      "must_not_rely_on": [
+        "matcher"
+      ],
+      "side_effect_policy": "final-validation",
+      "trust_required": true,
+      "concurrency_risk": "turn-scope stop hooks must not hide failed validation"
+    }
+  ],
+  "required_audit_fields": [
+    "event",
+    "supports_matcher",
+    "supported_output_fields",
+    "must_not_rely_on",
+    "side_effect_policy",
+    "trust_required",
+    "concurrency_risk"
+  ],
+  "deny_path": [
+    "credentials",
+    ".git",
+    "runtime apply targets",
+    "external writes without approval"
+  ],
+  "log_redaction": [
+    "tokens",
+    "api keys",
+    "oauth credentials",
+    "raw user prompts unless explicitly opted in"
+  ]
+}

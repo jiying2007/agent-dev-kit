@@ -1,0 +1,117 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2026-05-25",
+  "source_docs": [
+    "openai-apps-sdk-review-tool-hints",
+    "openai-codex-customization-skills",
+    "openai-codex-mcp-options",
+    "openai-docs-mcp-quickstart",
+    "openai-chatgpt-developer-mode",
+    "openai-mcp-chatgpt-api-integrations",
+    "openai-tools-guide"
+  ],
+  "tool_description_policy": {
+    "required_elements": [
+      "action-oriented name",
+      "Use this when guidance",
+      "disallowed or edge cases",
+      "required input shape",
+      "parameter descriptions and enums when applicable",
+      "side-effect and approval class"
+    ],
+    "review_payloads": "Write-capable tools must expose JSON payloads for human or deterministic policy review before execution.",
+    "remembered_approvals": "Conversation-local approval remembers are not durable adk permission grants."
+  },
+  "data_only_mcp_compatibility": {
+    "preferred_tools": [
+      "search",
+      "fetch"
+    ],
+    "search_required_output": [
+      "structuredContent.results[].id",
+      "structuredContent.results[].title",
+      "structuredContent.results[].url"
+    ],
+    "fetch_required_output": [
+      "structuredContent.id",
+      "structuredContent.title",
+      "structuredContent.text",
+      "structuredContent.url"
+    ],
+    "compatibility_note": "For clients that require content-array compatibility, include the same JSON value as a text content item without leaking secrets.",
+    "risk_review": [
+      "prompt injection in indexed content",
+      "sensitive-data exfiltration through read queries",
+      "write action confusion when readOnlyHint is missing or wrong",
+      "untrusted custom MCP server ownership"
+    ]
+  },
+  "dependencies": [
+    {
+      "skill": "openai-docs",
+      "mcp_server": "openaiDeveloperDocs",
+      "purpose": "Fetch current official OpenAI developer documentation before advising on OpenAI APIs or products.",
+      "transport": "streamable-http",
+      "required": false,
+      "enabled_tools": [
+        "search_openai_docs",
+        "fetch_openai_doc",
+        "list_openai_docs",
+        "get_openapi_spec"
+      ],
+      "disabled_tools": [],
+      "startup_timeout_sec": 10,
+      "tool_timeout_sec": 60,
+      "default_tools_approval_mode": "auto",
+      "per_tool_approval_mode": {
+        "search_openai_docs": "auto",
+        "fetch_openai_doc": "auto",
+        "list_openai_docs": "auto",
+        "get_openapi_spec": "auto"
+      },
+      "oauth": {
+        "callback_port": null,
+        "callback_url": null,
+        "scopes": []
+      },
+      "tool_hints": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": false
+      },
+      "auth_boundary": "No project secrets; official docs lookup only.",
+      "pii_policy": "Do not send user secrets or private source snippets unless the user explicitly asks and the data is already intended for official docs lookup.",
+      "dry_run": "Not applicable; read-only.",
+      "fallback": "Use official OpenAI-domain web lookup only when the MCP source is unavailable."
+    },
+    {
+      "skill": "adk-security-supply-chain",
+      "mcp_server": "candidate-external-service",
+      "purpose": "Template record for any future external MCP dependency attached to an adk skill.",
+      "transport": "stdio-or-http",
+      "required": false,
+      "enabled_tools": [],
+      "disabled_tools": [],
+      "startup_timeout_sec": 10,
+      "tool_timeout_sec": 60,
+      "default_tools_approval_mode": "prompt",
+      "per_tool_approval_mode": {},
+      "oauth": {
+        "callback_port": "declare-before-enable",
+        "callback_url": "declare-before-enable",
+        "scopes": [
+          "declare-before-enable"
+        ]
+      },
+      "tool_hints": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      },
+      "auth_boundary": "Must declare credential source, scopes, owner, deny paths, and rollback before enablement.",
+      "pii_policy": "Audit nested fields, debug payloads, trace IDs, internal account IDs, tokens, and raw logs before promotion.",
+      "dry_run": "Required for write-capable tools.",
+      "fallback": "Keep report-only until security and runtime-boundary review passes."
+    }
+  ]
+}

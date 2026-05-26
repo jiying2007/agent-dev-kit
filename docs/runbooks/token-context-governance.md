@@ -71,6 +71,22 @@
 
 使用 `templates/context/tool-output-summary.md` 记录摘要，使用 `templates/context/raw-evidence-index.md` 登记完整材料。敏感日志先脱敏，密钥、账号和隐私内容不得写入长期归档。
 
+## OpenAI Reasoning Guidance 对齐
+
+面向 GPT-5 系列 reasoning model 的上下文包按“稳定在前、动态在后”组织，以提高提示缓存命中和降低重复上下文成本。稳定内容包括目标、仓库规则、skill 契约、验证命令和长期决策；动态内容包括用户本轮输入、最新 diff、命令输出、失败样本和未闭环阻塞。
+
+长任务压缩必须保留：
+
+- 已完成动作和可复跑证据。
+- 当前假设、运行 ID、文件路径、工具结果和退出码。
+- 未解决 blocker、被排除方案和下一步具体目标。
+- 最新用户目标与已失效目标必须分开记录，避免旧计划覆盖新请求。
+- 多问题会话必须拆成 per-issue mini summary，分别记录状态、证据和下一步。
+- 错误事实、失败路径和被证伪假设必须进入 excluded context 或风险台账，不得混入 active plan。
+- 如果手动传回 Responses 状态或等价运行状态，必须保留阶段/phase 语义，不得把中间输出压成只有自然语言结论。
+
+工具说明优先下沉到 tool、MCP、skill 或 manifest 描述：工具做什么、何时使用、必填输入、副作用、重试安全和常见错误。只有跨工具通用策略才进入系统级或 AGENTS 级规则。
+
 ## 预算分配建议
 
 | 任务类型 | project_map | search | source | logs | diff | docs |
@@ -96,6 +112,17 @@
 上下文工具化按轻到重升级：项目地图和阶段摘要先行，仍无法支撑跨会话连续性时再考虑外部 continuity pack 或 historical search。外部工具的 MCP、hook、embedding、数据库和配置写入保持 `report-only`，直到供应链和运行态权限审查完成。
 
 切换或升级模型前必须做任务本地回归，覆盖工具调用、长上下文、权限扩大和擅自执行风险。模型能力提升不能替代 deterministic gate、approval gate 或原文证据回读。
+
+## Session Memory 质量门禁
+
+面向长线程、恢复线程和跨 agent handoff，压缩结果必须满足 `manifests/context_state_contracts.json`：
+
+- `stable`：目标、仓库规则、验证命令、长期决策和工具契约。
+- `dynamic`：本轮用户输入、最新 diff、命令输出、失败样本和阻塞。
+- `evidence`：原文路径、source URL、命令、退出码、artifact 或可复跑报告。
+- `excluded`：过期计划、错误结论、被证伪假设、不得重复的失败路径。
+
+压缩前先确认下一步目标；压缩后必须能回答：最新目标是什么、哪些旧目标已失效、哪些事实来自证据、什么条件下回读原文。
 
 ## 验证
 

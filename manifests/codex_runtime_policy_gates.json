@@ -1,0 +1,152 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2026-05-25",
+  "source_docs": [
+    "openai-codex-config-reference",
+    "openai-codex-requirements-toml",
+    "openai-codex-sandbox-defaults",
+    "openai-codex-agent-approvals-security-dangerous-settings"
+  ],
+  "policy_layers": [
+    {
+      "id": "admin-enforced-requirements",
+      "owner": "agent-dev-kit",
+      "config_file": "requirements.toml",
+      "precedence": "admin-enforced",
+      "user_override_allowed": false,
+      "required_controls": [
+        "allowed_approval_policies",
+        "allowed_sandbox_modes",
+        "allowed_web_search_modes",
+        "mcp_servers.identity",
+        "permissions.filesystem.deny_read",
+        "rules.prefix_rules"
+      ],
+      "managed_hooks_policy": "allow_managed_hooks_only may disable user, project, session and plugin hooks while preserving managed hooks.",
+      "network_policy": {
+        "deny_wins": true,
+        "global_allow_allowed": false,
+        "managed_allowed_domains_only_preferred": true,
+        "network_proxy_required_when_network_enabled": true,
+        "allow_local_binding_default": false,
+        "dangerously_allow_non_loopback_proxy_default": false,
+        "dangerously_allow_all_unix_sockets_default": false,
+        "unix_sockets_allowlist_required": true
+      },
+      "web_search_policy": {
+        "allowed_modes": [
+          "disabled",
+          "cached"
+        ],
+        "live_requires_explicit_approval": true,
+        "treat_results_as_untrusted": true,
+        "full_access_live_default_must_be_overridden": true
+      },
+      "verification": [
+        "debug-config evidence when available",
+        "check-openai-developers-governance",
+        "runtime-boundary"
+      ]
+    },
+    {
+      "id": "project-config-boundary",
+      "owner": "agent-dev-kit",
+      "config_file": ".codex/config.toml",
+      "precedence": "project-scoped-when-trusted",
+      "user_override_allowed": true,
+      "must_not_override": [
+        "openai_base_url",
+        "chatgpt_base_url",
+        "model_provider",
+        "model_providers",
+        "notify",
+        "profile",
+        "profiles",
+        "experimental_realtime_ws_base_url",
+        "otel"
+      ],
+      "required_controls": [
+        "approval_policy",
+        "sandbox_mode",
+        "sandbox_workspace_write.writable_roots",
+        "mcp_servers.<id>.enabled_tools",
+        "mcp_servers.<id>.disabled_tools",
+        "mcp_servers.<id>.tools.<tool>.approval_mode"
+      ],
+      "verification": [
+        "debug-config evidence when available",
+        "check-openai-developers-governance"
+      ]
+    }
+  ],
+  "sandbox_presets": [
+    {
+      "id": "low-risk-local-automation",
+      "sandbox_mode": "workspace-write",
+      "approval_policy": "on-request",
+      "approvals_reviewer": "user",
+      "risk": "low",
+      "default_allowed": true,
+      "required_evidence": [
+        "writable roots",
+        "approval policy",
+        "command prefix exceptions"
+      ]
+    },
+    {
+      "id": "auto-reviewed-local-automation",
+      "sandbox_mode": "workspace-write",
+      "approval_policy": "on-request",
+      "approvals_reviewer": "auto_review",
+      "risk": "medium",
+      "default_allowed": false,
+      "required_evidence": [
+        "auto-review policy",
+        "denial retry path",
+        "sandbox boundary unchanged"
+      ]
+    },
+    {
+      "id": "full-access",
+      "sandbox_mode": "danger-full-access",
+      "approval_policy": "never",
+      "approvals_reviewer": "none",
+      "risk": "critical",
+      "default_allowed": false,
+      "required_evidence": [
+        "explicit user approval",
+        "rollback path",
+        "bounded target",
+        "postcondition check"
+      ]
+    }
+  ],
+  "forbidden_defaults": [
+    {
+      "id": "danger-full-access-never",
+      "sandbox_mode": "danger-full-access",
+      "approval_policy": "never",
+      "reason": "Equivalent to full access and must not be a default adk runtime preset."
+    },
+    {
+      "id": "network-global-allow",
+      "pattern": "experimental_network.domains.* = allow",
+      "reason": "Global network allow broadly opens outbound access; use scoped domains and deny-wins policy."
+    },
+    {
+      "id": "network-proxy-non-loopback",
+      "pattern": "features.network_proxy.dangerously_allow_non_loopback_proxy = true",
+      "reason": "Non-loopback proxy listeners widen local trust boundaries and require explicit approval plus remote exposure review."
+    },
+    {
+      "id": "all-unix-sockets",
+      "pattern": "features.network_proxy.dangerously_allow_all_unix_sockets = true",
+      "reason": "Bypassing the Unix socket allowlist can expose local daemons; use explicit socket allow rules instead."
+    },
+    {
+      "id": "web-search-live-default",
+      "pattern": "web_search = live",
+      "reason": "Live web search exposes the agent to fresh untrusted content and prompt injection; cached or disabled is the safe default."
+    }
+  ]
+}

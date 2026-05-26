@@ -64,6 +64,7 @@ TESTS=(
   test_runtime_boundary.sh
   test_token_budget.sh
   test_token_context_governance.sh
+  test_openai_developers_governance.sh
   test_workflow_closure.sh
   test_change_governance.sh
   test_evidence_index.sh

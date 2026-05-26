@@ -72,6 +72,8 @@
 
 标准模板见 `templates/planning/worker-contract.md`。
 
+OpenAI Agents SDK 文档中的 handoff/ownership 语义在 adk 中落地为本地 contract，而不是直接绑定 SDK。`manifests/subagent_contracts.json` 是默认审计入口，必须声明 owner、`scope_read`、`scope_write`、`must_not_touch`、handoff condition、reply owner、stop condition 和 report schema。最终回复归属默认保留在主 Agent，子代理只交付结构化结果和验证证据。
+
 ## 外部 Skill 引入
 
 第三方 Skill 不直接进入生产资产链路。默认流程是：

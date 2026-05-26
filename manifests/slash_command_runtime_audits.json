@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2026-05-25",
+  "source_docs": [
+    "openai-apps-sdk-review-tool-hints"
+  ],
+  "audits": [
+    {
+      "command_id": "devkit-validate",
+      "command": "scripts/devkit.sh validate --strict",
+      "owner": "agent-dev-kit",
+      "mode": "local-check",
+      "read_only": true,
+      "destructive": false,
+      "open_world": false,
+      "approval": "none",
+      "evidence_required": "exit code and compact result summary"
+    },
+    {
+      "command_id": "codex-apply-assets",
+      "command": "~/codex/scripts/apply.sh --plan <plan>",
+      "owner": "codex-runtime",
+      "mode": "report-only-until-approved",
+      "read_only": false,
+      "destructive": true,
+      "open_world": false,
+      "approval": "explicit-user-approval",
+      "evidence_required": "dry-run plan, changed paths, rollback path, postcondition check"
+    },
+    {
+      "command_id": "external-message-send",
+      "command": "<connector>/send-message",
+      "owner": "runtime-connector-owner",
+      "mode": "report-only-until-approved",
+      "read_only": false,
+      "destructive": true,
+      "open_world": true,
+      "approval": "explicit-user-approval",
+      "evidence_required": "recipient, payload preview, dry-run result, audit id, rollback/undo status"
+    }
+  ]
+}

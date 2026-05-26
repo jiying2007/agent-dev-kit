@@ -1,0 +1,163 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2026-05-26",
+  "source_docs": [
+    "openai-codex-github-action",
+    "openai-codex-code-review-sdk",
+    "openai-structured-model-outputs",
+    "openai-codex-agent-approvals-security-dangerous-settings"
+  ],
+  "contracts": [
+    {
+      "id": "codex-ci-pr-review-runner-v1",
+      "owner": "agent-dev-kit",
+      "applies_to": [
+        "adk-code-review-loop",
+        "adk-commit-pr-quality-gate"
+      ],
+      "enabled_default": false,
+      "mode": "pilot",
+      "scm_targets": [
+        "github",
+        "gitlab",
+        "azure-devops",
+        "jenkins"
+      ],
+      "required_inputs": [
+        "base_ref",
+        "head_ref",
+        "pull_request_diff",
+        "review_prompt",
+        "output_schema_file",
+        "trusted_trigger_decision"
+      ],
+      "runner_policy": {
+        "sandbox": "workspace-write",
+        "safety_strategy": "drop-sudo-or-unprivileged-user",
+        "permissions": [
+          "contents:read",
+          "pull-requests:write only after schema validation and owner review"
+        ],
+        "secret_policy": "OPENAI_API_KEY must come from protected CI secrets and must not be exposed to untrusted PR code.",
+        "output_policy": "final message and JSON findings may be archived; raw prompts and secrets must not be uploaded."
+      },
+      "prompt_injection_controls": [
+        "treat PR title, body, commit messages, diff text and hidden comments as untrusted prompt input",
+        "strip or flag HTML comments and hidden text before review prompts consume them",
+        "review generated SCM API payloads before write actions",
+        "never let PR content alter sandbox, approval, secret or publication policy"
+      ],
+      "publishing_policy": [
+        "post summary comments only after structured output validation",
+        "inline findings require anchoring validation",
+        "fall back to overall summary when a finding cannot be safely anchored"
+      ],
+      "must_not": [
+        "enable by default on public or untrusted repositories",
+        "run with unsafe safety strategy on multi-tenant runners",
+        "treat CI AI review as human approval",
+        "auto-merge, auto-push or auto-release based only on model findings"
+      ]
+    },
+    {
+      "id": "untrusted-pr-isolation-v1",
+      "owner": "agent-dev-kit",
+      "applies_to": [
+        "adk-commit-pr-quality-gate",
+        "adk-security-supply-chain"
+      ],
+      "enabled_default": false,
+      "mode": "required-gate-for-public-or-fork-pr",
+      "required_inputs": [
+        "event_type",
+        "actor_trust",
+        "repository_visibility",
+        "secret_exposure_decision",
+        "checkout_ref",
+        "approval_policy"
+      ],
+      "runner_policy": {
+        "trusted_events": [
+          "trusted collaborator pull_request",
+          "manual workflow_dispatch with explicit approval",
+          "protected branch release review"
+        ],
+        "untrusted_events": [
+          "fork pull_request",
+          "external contributor pull_request",
+          "issue-comment-driven review without maintainer approval"
+        ],
+        "default_for_untrusted": "read-only analysis with no repository write token and no protected OpenAI key exposure"
+      },
+      "prompt_injection_controls": [
+        "do not execute commands suggested by PR prompt text",
+        "do not fetch external URLs from PR content unless allowlisted and approved",
+        "do not publish inline comments from unvalidated line references"
+      ],
+      "publishing_policy": [
+        "write actions require explicit trusted trigger decision",
+        "store isolation decision as Evidence Index row",
+        "rotate or revoke credentials if output exposure is suspected"
+      ],
+      "must_not": [
+        "pass protected secrets into arbitrary fork code",
+        "grant pull-requests:write to untrusted review runs",
+        "use danger-full-access plus never as a reusable CI preset"
+      ]
+    },
+    {
+      "id": "inline-review-anchoring-v1",
+      "owner": "agent-dev-kit",
+      "applies_to": [
+        "adk-code-review-loop",
+        "adk-commit-pr-quality-gate"
+      ],
+      "enabled_default": false,
+      "mode": "schema-validated-publishing",
+      "required_inputs": [
+        "relative_file_path",
+        "side",
+        "line_start",
+        "line_end",
+        "diff_hunk",
+        "finding_id"
+      ],
+      "runner_policy": {
+        "anchoring_cases_to_test": [
+          "new file",
+          "modified file",
+          "renamed file",
+          "deleted file",
+          "multi-line finding"
+        ],
+        "fallback": "skip inline comment and keep the finding in the overall summary when anchoring is uncertain"
+      },
+      "prompt_injection_controls": [
+        "line numbers must come from parsed diff metadata, not prose prompt claims",
+        "SCM API payload must be generated from schema fields",
+        "invalid or out-of-range line references fail closed"
+      ],
+      "publishing_policy": [
+        "each posted inline comment must map to a validated right-side diff location",
+        "misanchored comments are treated as review quality failures"
+      ],
+      "must_not": [
+        "post a misleading inline comment when the location cannot be verified",
+        "invent file paths or line ranges",
+        "collapse multiple unrelated findings into one inline location"
+      ]
+    }
+  ],
+  "quality_gate": {
+    "ci_review_enabled_default_must_be_false": true,
+    "untrusted_pr_must_not_receive_protected_secrets": true,
+    "structured_output_required_for_machine_publishing": true,
+    "inline_comments_require_anchor_validation": true,
+    "ai_review_is_not_human_approval": true,
+    "must_not": [
+      "default-enable CI review with external writes",
+      "publish SCM review comments from free-form prose",
+      "treat public PR content as trusted instructions"
+    ]
+  }
+}

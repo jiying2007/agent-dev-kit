@@ -1,0 +1,224 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2026-05-25",
+  "source_docs": [
+    "openai-codex-app-server-api-overview",
+    "openai-codex-agent-approvals-security-dangerous-settings"
+  ],
+  "transport_policy": {
+    "supported": [
+      "stdio",
+      "unix-socket",
+      "loopback-websocket"
+    ],
+    "experimental": [
+      "websocket"
+    ],
+    "forbidden_defaults": [
+      "non-loopback unauthenticated websocket",
+      "raw bearer token in command arguments"
+    ],
+    "required_auth_for_remote": [
+      "capability-token",
+      "signed-bearer-token"
+    ]
+  },
+  "method_groups": [
+    {
+      "id": "thread-lifecycle-read",
+      "owner": "agent-dev-kit",
+      "methods": [
+        "thread/read",
+        "thread/list",
+        "thread/turns/list",
+        "thread/loaded/list",
+        "thread/goal/get"
+      ],
+      "risk": "low",
+      "classification": {
+        "read_only": true,
+        "destructive": false,
+        "open_world": false,
+        "sandbox_inherited": true
+      },
+      "required_evidence": [
+        "threadId or query filters",
+        "pagination bounds",
+        "redaction policy for returned items"
+      ],
+      "approval_boundary": "No approval when reading bounded metadata; require review before exposing full turn items containing source or secrets."
+    },
+    {
+      "id": "thread-state-write",
+      "owner": "agent-dev-kit",
+      "methods": [
+        "thread/start",
+        "thread/resume",
+        "thread/fork",
+        "thread/name/set",
+        "thread/goal/set",
+        "thread/goal/clear",
+        "thread/metadata/update",
+        "thread/compact/start",
+        "turn/start",
+        "turn/steer",
+        "turn/interrupt",
+        "review/start"
+      ],
+      "risk": "medium",
+      "classification": {
+        "read_only": false,
+        "destructive": false,
+        "open_world": false,
+        "sandbox_inherited": true
+      },
+      "required_evidence": [
+        "threadId",
+        "cwd",
+        "model",
+        "sandbox policy",
+        "approval policy",
+        "goal or review target"
+      ],
+      "approval_boundary": "Changing sandbox, model, cwd, goal, or review target must be recorded as runtime evidence."
+    },
+    {
+      "id": "thread-destructive-state",
+      "owner": "agent-dev-kit",
+      "methods": [
+        "thread/archive",
+        "thread/unarchive",
+        "thread/rollback",
+        "thread/backgroundTerminals/clean"
+      ],
+      "risk": "high",
+      "classification": {
+        "read_only": false,
+        "destructive": true,
+        "open_world": false,
+        "sandbox_inherited": true
+      },
+      "required_evidence": [
+        "explicit user intent",
+        "threadId",
+        "rollback or restore path",
+        "postcondition check"
+      ],
+      "approval_boundary": "Requires explicit user intent and postcondition evidence before the action is treated as successful."
+    },
+    {
+      "id": "process-and-shell-open-world",
+      "owner": "agent-dev-kit",
+      "methods": [
+        "thread/shellCommand",
+        "process/spawn",
+        "process/writeStdin",
+        "process/resizePty",
+        "process/kill"
+      ],
+      "risk": "critical",
+      "classification": {
+        "read_only": false,
+        "destructive": true,
+        "open_world": true,
+        "sandbox_inherited": false
+      },
+      "required_evidence": [
+        "explicit user-initiated command",
+        "argv or command preview",
+        "cwd",
+        "full-access acknowledgement",
+        "timeout",
+        "exit code",
+        "postcondition check"
+      ],
+      "approval_boundary": "thread/shellCommand and process/spawn run outside the thread sandbox; do not expose as background automation defaults."
+    },
+    {
+      "id": "sandboxed-command-exec",
+      "owner": "agent-dev-kit",
+      "methods": [
+        "command/exec",
+        "command/exec/write",
+        "command/exec/resize",
+        "command/exec/terminate"
+      ],
+      "risk": "medium",
+      "classification": {
+        "read_only": false,
+        "destructive": false,
+        "open_world": false,
+        "sandbox_inherited": true
+      },
+      "required_evidence": [
+        "argv",
+        "cwd",
+        "sandboxPolicy",
+        "timeoutMs",
+        "exitCode"
+      ],
+      "approval_boundary": "Treat dangerFullAccess or externalSandbox as a high-risk exception with the same evidence as open-world process control."
+    },
+    {
+      "id": "fs-config-plugin-write",
+      "owner": "agent-dev-kit",
+      "methods": [
+        "fs/writeFile",
+        "fs/createDirectory",
+        "fs/remove",
+        "fs/copy",
+        "config/value/write",
+        "config/batchWrite",
+        "skills/config/write",
+        "plugin/install",
+        "plugin/uninstall",
+        "marketplace/add",
+        "marketplace/upgrade",
+        "externalAgentConfig/import"
+      ],
+      "risk": "high",
+      "classification": {
+        "read_only": false,
+        "destructive": true,
+        "open_world": true,
+        "sandbox_inherited": false
+      },
+      "required_evidence": [
+        "absolute target path or marketplace source",
+        "source containment",
+        "auth policy",
+        "install policy",
+        "rollback path",
+        "postcondition check"
+      ],
+      "approval_boundary": "Writes to filesystem, config, plugin marketplaces, or imported external-agent assets require explicit approval and rollback evidence."
+    },
+    {
+      "id": "mcp-app-tool-bridge",
+      "owner": "agent-dev-kit",
+      "methods": [
+        "mcpServer/oauth/login",
+        "mcpServerStatus/list",
+        "mcpServer/resource/read",
+        "mcpServer/tool/call",
+        "config/mcpServer/reload",
+        "app/list"
+      ],
+      "risk": "medium",
+      "classification": {
+        "read_only": false,
+        "destructive": false,
+        "open_world": true,
+        "sandbox_inherited": false
+      },
+      "required_evidence": [
+        "server name",
+        "tool name when applicable",
+        "auth status",
+        "tool hint classification",
+        "approval mode"
+      ],
+      "approval_boundary": "MCP and app tools inherit their advertised side effects; destructive tools must prompt even if read-only hints also exist."
+    }
+  ]
+}

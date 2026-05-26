@@ -220,7 +220,7 @@ validate_skill_file() {
   [[ -n "$frontmatter" ]] || fail "missing frontmatter: $file"
 
   for key in name description triggers non_triggers inputs outputs constraints; do
-    echo "$frontmatter" | grep -q "^$key:" || fail "frontmatter key '$key' missing: $file"
+    grep -q "^$key:" <<<"$frontmatter" || fail "frontmatter key '$key' missing: $file"
   done
 
   description="$(extract_frontmatter_scalar "$file" "description")"
@@ -253,7 +253,7 @@ validate_skill_file() {
   done
 
   if [[ "$STRICT" -eq 1 ]]; then
-    declared_name="$(echo "$frontmatter" | awk '/^name:/ {print $2; exit}')"
+    declared_name="$(awk '/^name:/ {print $2; exit}' <<<"$frontmatter")"
     [[ "$declared_name" == "$expected_name" ]] || fail "$section '$expected_name' frontmatter name mismatch: $declared_name"
   fi
 }

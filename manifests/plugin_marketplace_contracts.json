@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2026-05-25",
+  "source_docs": [
+    "openai-codex-plugin-build",
+    "openai-codex-plugin-marketplace"
+  ],
+  "plugin_contracts": [
+    {
+      "id": "minimal-skill-plugin",
+      "owner": "agent-dev-kit",
+      "required_files": [
+        ".codex-plugin/plugin.json",
+        "skills/<skill-name>/SKILL.md"
+      ],
+      "naming": {
+        "plugin_name": "stable kebab-case",
+        "component_namespace": "derived from plugin name"
+      },
+      "allowed_extensions": [
+        "mcp config",
+        "app integrations",
+        "marketplace metadata"
+      ],
+      "required_review": [
+        "version metadata",
+        "publisher metadata",
+        "install-surface copy",
+        "auth policy",
+        "source path containment"
+      ]
+    }
+  ],
+  "marketplace_contracts": [
+    {
+      "id": "repo-marketplace",
+      "owner": "agent-dev-kit",
+      "path": "$REPO_ROOT/.agents/plugins/marketplace.json",
+      "required_fields": [
+        "name",
+        "interface.displayName",
+        "plugins[].source.path",
+        "plugins[].policy.installation",
+        "plugins[].policy.authentication",
+        "plugins[].category"
+      ],
+      "source_path_policy": "relative path must start with ./ and stay inside marketplace root",
+      "install_policy_values": [
+        "AVAILABLE",
+        "INSTALLED_BY_DEFAULT",
+        "NOT_AVAILABLE"
+      ],
+      "failure_policy": "unresolvable plugin source skips that plugin entry rather than failing the whole marketplace"
+    },
+    {
+      "id": "personal-marketplace",
+      "owner": "codex-runtime",
+      "path": "~/.agents/plugins/marketplace.json",
+      "required_fields": [
+        "name",
+        "interface.displayName",
+        "plugins[].source.path",
+        "plugins[].policy.installation",
+        "plugins[].policy.authentication",
+        "plugins[].category"
+      ],
+      "source_path_policy": "local personal entries should prefer ./.codex/plugins/<plugin-name> when testing",
+      "install_policy_values": [
+        "AVAILABLE",
+        "INSTALLED_BY_DEFAULT",
+        "NOT_AVAILABLE"
+      ],
+      "failure_policy": "do not promote personal marketplace entries into adk without source and auth review"
+    }
+  ]
+}

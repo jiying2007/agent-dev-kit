@@ -1,0 +1,92 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2026-05-26",
+  "source_docs": [
+    "openai-codex-app-automations",
+    "openai-codex-app-worktrees",
+    "openai-codex-best-practices",
+    "openai-codex-sandbox-defaults"
+  ],
+  "automation_contracts": [
+    {
+      "id": "report-only-official-docs-refresh",
+      "owner": "agent-dev-kit",
+      "mode": "report-only",
+      "enabled_default": false,
+      "prompt_requirements": [
+        "durable task description",
+        "bounded data sources",
+        "cadence",
+        "stop condition",
+        "review destination"
+      ],
+      "run_context": "standalone",
+      "sandbox_policy": "workspace-write + on-request unless explicitly reviewed",
+      "approval_policy": "human review before file writes, commits, pushes, publishes, deletes or external notifications",
+      "first_run_review": true,
+      "result_policy": "findings go to triage or report artifact; no silent mutation",
+      "cleanup_policy": "archive stale runs and do not pin worktrees unless retention is intentional"
+    },
+    {
+      "id": "thread-heartbeat-long-task",
+      "owner": "agent-dev-kit",
+      "mode": "report-only",
+      "enabled_default": false,
+      "prompt_requirements": [
+        "durable thread wake-up prompt",
+        "current thread goal",
+        "heartbeat interval",
+        "condition for reporting",
+        "condition for stopping",
+        "manual input trigger"
+      ],
+      "run_context": "thread",
+      "sandbox_policy": "inherits current thread policy; must not widen permissions",
+      "approval_policy": "no unattended write unless the active workflow already has explicit approval and rollback evidence",
+      "first_run_review": true,
+      "result_policy": "preserve context in the current thread and update blockers only when evidence changed",
+      "cleanup_policy": "remove heartbeat when stop condition is met"
+    }
+  ],
+  "worktree_contracts": [
+    {
+      "id": "background-worktree-isolation",
+      "owner": "agent-dev-kit",
+      "applies_to": [
+        "adk-worktree-governance",
+        "adk-parallel-agent-governance",
+        "automation tasks"
+      ],
+      "creation_gate": [
+        "git repository confirmed",
+        "base branch or commit recorded",
+        "dirty local changes classified",
+        "write scope is disjoint from foreground work"
+      ],
+      "handoff_gate": [
+        "thread id or task id recorded",
+        "worktree path recorded",
+        "branch checkout limitation acknowledged",
+        "validation environment chosen",
+        "handoff to Local only after user review"
+      ],
+      "cleanup_gate": [
+        "archive or preserve decision",
+        "pinned/permanent status checked",
+        "snapshot or diff evidence recorded",
+        "no deletion while task is in progress"
+      ],
+      "must_not": [
+        "assume the same branch can be checked out in two worktrees",
+        "delete a worktree without preserving review evidence",
+        "run background automation against a dirty local checkout without an explicit decision"
+      ]
+    }
+  ],
+  "quality_gate": {
+    "automations_enabled_default_must_be_false": true,
+    "first_runs_require_review": true,
+    "full_access_never_for_default_automation": true,
+    "worktree_cleanup_requires_retention_decision": true
+  }
+}

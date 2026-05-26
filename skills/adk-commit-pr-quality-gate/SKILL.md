@@ -42,6 +42,7 @@ constraints:
 10. 结构变更核验：DB schema 变更必须带迁移/回滚证据；删除较大代码、公共 API 或 shared contract 前必须列调用点和 approval gate。
 11. 发布链路核验：若触及 `scripts/` 或关键构建入口，追加 release gate 专项验证。
 12. Core/Optional 核验：确认能力归属是否应进 core，场景化能力应进入 optional。
+13. CI/PR review 核验：若使用 Codex/AI runner 生成 PR review，必须核对 trusted-trigger、secret 隔离、结构化 findings、SCM payload review 和 inline anchoring。
 
 ## Commands
 ```bash
@@ -62,6 +63,7 @@ git diff --name-only <base>...HEAD
 - Breaking Change Decision:
 - Release Gate Decision:
 - Core/Optional Decision:
+- CI/PR Review Decision:
 - Final Gate Result:
 ```
 
@@ -83,6 +85,8 @@ git diff --name-only <base>...HEAD
 - 若 AI-assisted output 缺少 human owner、复审责任或冲突修复证据，结论必须为 `needs-fix`。
 - 若 DB/schema/API 删除或迁移缺少调用点、迁移或 approval 证据，结论必须为 `needs-fix`。
 - 若缺少负结果或被证伪路径记录，结论必须为 `needs-fix`。
+- 若 AI/CI review 缺少结构化 findings、trusted-trigger 或 untrusted PR secret 隔离证据，结论必须为 `needs-fix`。
+- 若 SCM review comment 来自自由文本或 inline anchoring 未验证，结论必须为 `needs-fix`。
 
 ---
 

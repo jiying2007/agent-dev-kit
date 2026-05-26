@@ -1,0 +1,130 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2026-05-25",
+  "source_docs": [
+    "openai-agent-evals",
+    "openai-agents-tracing",
+    "openai-agentic-macro-evals",
+    "openai-codex-best-practices"
+  ],
+  "suites": [
+    {
+      "id": "routing-eval-core-skill-selection",
+      "category": "routing",
+      "owner": "agent-dev-kit",
+      "goal": "Verify that natural-language tasks select the intended primary skill and avoid adjacent skills.",
+      "dataset_path": "tests/fixtures/skill_trigger_cases.tsv",
+      "fixtures": [
+        {
+          "id": "routing-use-openai-docs",
+          "input": "查询 OpenAI 官方文档并给出当前 API 建议",
+          "expected": "openai-docs"
+        },
+        {
+          "id": "routing-use-verification",
+          "input": "准备完成前核对验证证据",
+          "expected": "adk-verification-before-completion"
+        },
+        {
+          "id": "routing-use-planning",
+          "input": "分阶段执行一个跨文档和脚本的长任务",
+          "expected": "adk-planning-execution-loop"
+        }
+      ],
+      "graders": [
+        {
+          "name": "primary_skill_exact_match",
+          "type": "deterministic",
+          "threshold": 1.0
+        }
+      ],
+      "minimum_gate": "all fixtures pass before routing rule promotion"
+    },
+    {
+      "id": "governance-eval-official-docs-freshness",
+      "category": "governance",
+      "owner": "agent-dev-kit",
+      "goal": "Block official-doc-derived guidance that lacks source URL, retrieval date, review status, or expiry.",
+      "dataset_path": "manifests/official_docs_freshness_gates.json",
+      "fixtures": [
+        {
+          "id": "freshness-missing-expires-at",
+          "input": "source without expires_at",
+          "expected": "reject"
+        },
+        {
+          "id": "freshness-official-source-valid",
+          "input": "developers.openai.com source with retrieved_at and expires_at",
+          "expected": "accept"
+        }
+      ],
+      "graders": [
+        {
+          "name": "required_field_presence",
+          "type": "deterministic",
+          "threshold": 1.0
+        }
+      ],
+      "minimum_gate": "all official source records satisfy the freshness schema"
+    },
+    {
+      "id": "completion-eval-evidence-index",
+      "category": "completion",
+      "owner": "agent-dev-kit",
+      "goal": "Ensure completion claims are backed by command-level evidence and at least one negative or rejected path.",
+      "dataset_path": "docs/runbooks/evidence-index-delivery.md",
+      "fixtures": [
+        {
+          "id": "completion-no-evidence",
+          "input": "claim without command, exit code, or evidence path",
+          "expected": "needs-fix"
+        },
+        {
+          "id": "completion-evidence-index-present",
+          "input": "claim with command, exit code, summary, evidence path, layer, artifact",
+          "expected": "pass"
+        }
+      ],
+      "graders": [
+        {
+          "name": "evidence_index_fields",
+          "type": "deterministic",
+          "threshold": 1.0
+        }
+      ],
+      "minimum_gate": "completion gate cannot pass without evidence index fields"
+    },
+    {
+      "id": "macro-eval-recurring-agentic-patterns",
+      "category": "macro-eval",
+      "owner": "agent-dev-kit",
+      "goal": "Detect recurring, consequential workflow failures across traced adk runs before changing skills, tools or handoff policy.",
+      "dataset_path": "manifests/trace_eval_contracts.json",
+      "fixtures": [
+        {
+          "id": "macro-pattern-missing-primary-skill",
+          "input": "trace summary lacks primary_skill or orchestration_mode",
+          "expected": "reject"
+        },
+        {
+          "id": "macro-pattern-promote-high-signal",
+          "input": "repeated failure pattern with model_version, prompt_version, primary_skill, representative evidence and severity",
+          "expected": "promote-to-regression-candidate"
+        }
+      ],
+      "graders": [
+        {
+          "name": "trace_pattern_required_fields",
+          "type": "deterministic",
+          "threshold": 1.0
+        },
+        {
+          "name": "representative_evidence_present",
+          "type": "deterministic",
+          "threshold": 1.0
+        }
+      ],
+      "minimum_gate": "macro findings must be grouped by version/orchestration/primary skill and backed by representative trace summaries before promotion"
+    }
+  ]
+}
