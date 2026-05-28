@@ -48,6 +48,40 @@ This note records the official OpenAI Developers content that is safe to use as 
 | openai-skills-api-operational-practices | https://developers.openai.com/cookbook/examples/skills_in_api#operational-best-practices | 2026-05-26 | 2026-08-24 | P1 | Adopt skill discoverability, negative examples, version pinning, deterministic stdout and network allowlist governance. |
 | openai-optimizing-llm-accuracy | https://developers.openai.com/api/docs/guides/optimizing-llm-accuracy | 2026-05-26 | 2026-08-24 | P2 | Watch for prompt/RAG/fine-tuning optimization decisions; require eval baseline before promotion. |
 | openai-codex-agents-sdk-multi-agent-workflows | https://developers.openai.com/codex/guides/agents-sdk#creating-multi-agent-workflows | 2026-05-26 | 2026-08-24 | P2 | Watch as a future multi-agent orchestration reference; do not replace existing adk-first governance without a pilot. |
+| openai-latest-model-gpt-5-5 | https://developers.openai.com/api/docs/models | 2026-05-27 | 2026-06-26 | P2 | Watch as a volatile model-selection source; do not hardcode current-model claims into durable ADK rules. |
+| openai-prompt-caching | https://developers.openai.com/api/docs/guides/prompt-caching | 2026-05-27 | 2026-08-25 | P1 | Adopt stable-prefix and dynamic-tail prompt layout, cache-key discipline and cached-token observability for API-backed runners. |
+| openai-agents-orchestration-handoffs | https://developers.openai.com/api/docs/guides/agents/orchestration | 2026-05-27 | 2026-08-25 | P1 | Adopt handoff vs agents-as-tools ownership vocabulary for ADK orchestration contracts. |
+| openai-graders | https://developers.openai.com/api/docs/guides/graders | 2026-05-27 | 2026-08-25 | P1 | Adopt grader taxonomy for deterministic routing, governance, completion and macro-eval gates. |
+| openai-prompt-optimization-golden-examples | https://developers.openai.com/cookbook/examples/optimize_prompts#4-using-evaluations-to-arrive-at-these-agents | 2026-05-27 | 2026-08-25 | P1 | Adopt positive and negative golden examples before changing prompts, AGENTS.md routing text or skill descriptions. |
+| openai-codex-iterative-repair-loop | https://developers.openai.com/cookbook/examples/codex/build_iterative_repair_loops_with_codex | 2026-05-27 | 2026-08-25 | P1 | Adopt Review -> Repair -> Validate as a closed-loop repair and completion-evidence contract. |
+| openai-model-optimization-workflow | https://developers.openai.com/api/docs/guides/model-optimization#model-optimization-workflow | 2026-05-27 | 2026-08-25 | P0 | Adopt eval-baseline-first optimization for prompt, model, context and tool changes. |
+| openai-prompt-engineering-roles | https://developers.openai.com/api/docs/guides/prompt-engineering#message-roles-and-instruction-following | 2026-05-27 | 2026-08-25 | P0 | Adopt developer/user/context/tool-output authority boundaries. |
+| openai-prompt-engineering-formatting | https://developers.openai.com/api/docs/guides/prompt-engineering#message-formatting-with-markdown-and-xml | 2026-05-27 | 2026-08-25 | P0 | Adopt stable prompt sections and explicit context boundaries. |
+| openai-stored-completion-monitoring | https://developers.openai.com/cookbook/examples/evaluation/use-cases/completion-monitoring | 2026-05-27 | 2026-08-25 | P1 | Watch as a sanitized session-derived regression monitoring pattern; disabled by default. |
+| openai-agentic-governance-test-dataset | https://developers.openai.com/cookbook/examples/partners/agentic_governance_guide/agentic_governance_cookbook#step-2-create-a-test-dataset | 2026-05-27 | 2026-08-25 | P1 | Adopt guardrail datasets with positive, negative, adversarial and borderline cases. |
+| openai-eval-driven-system-design | https://developers.openai.com/cookbook/examples/partners/eval_driven_system_design/receipt_inspection#further-improvements | 2026-05-27 | 2026-08-25 | P1 | Adopt improvement ladder and eval/training data separation. |
+| openai-model-selection-guide | https://developers.openai.com/cookbook/examples/partners/model_selection_guide/model_selection_guide | 2026-05-27 | 2026-08-25 | P1 | Adopt model-selection decision records with KPI/SLO, cost, latency, A/B and rollback fields. |
+| openai-ai-native-engineering-team-docs | https://developers.openai.com/codex/guides/build-ai-native-engineering-team#how-coding-agents-help-5 | 2026-05-27 | 2026-08-25 | P1 | Adopt documentation freshness, diagrams and release summaries as delivery-pipeline artifacts. |
+| openai-data-controls-responses | https://developers.openai.com/api/docs/guides/your-data#v1responses | 2026-05-28 | 2026-08-26 | P0 | Adopt Data retention and ZDR fields for API-backed runner, MCP and hosted-tool pilots. |
+| openai-responses-migration-statefulness | https://developers.openai.com/api/docs/guides/migrate-to-responses#4-decide-when-to-use-statefulness | 2026-05-28 | 2026-08-26 | P1 | Adopt Responses statefulness choices, encrypted reasoning and call_id correlation as pilot-only contracts. |
+| openai-prompt-cache-retention | https://developers.openai.com/api/docs/guides/prompt-caching#prompt-cache-retention | 2026-05-28 | 2026-08-26 | P1 | Adopt Prompt cache retention policy, model-support freshness and cache-miss-safe layout gates. |
+
+## 2026-05-28 Delta Landing
+
+- Data retention is now a first-class governance contract. API-backed runner pilots must record `store_policy`, retention duration, ZDR behavior, background mode retention, remote MCP retention, hosted container lifecycle and owner approval before promotion.
+- Responses statefulness remains pilot-only, but the contract now distinguishes `previous_response_id`, Conversation state, manual output replay and encrypted reasoning. Function-call outputs must preserve `call_id` correlation.
+- Prompt cache retention is treated as a policy choice, not a correctness dependency. Runners must record `in_memory`, `24h` or `model_default`, cite model-support freshness and keep cache misses behavior-preserving.
+- Server-retained response state, encrypted reasoning payloads and hosted-tool temporary state must not be copied into ADK long-term memory. Evidence should cite manifests and sanitized artifacts instead.
+
+## 2026-05-27 Delta Landing
+
+- Keep model catalog claims behind a short freshness window. Durable ADK guidance may say "check the official model catalog", but must not freeze a "latest" model name without retrieval metadata.
+- Treat prompt caching as a context-layout optimization: static rules, schemas and examples first; dynamic task data, logs, diffs and user-specific evidence last.
+- Add golden examples for prompt and routing changes. Each proposed trigger improvement needs at least one positive case and one adjacent-skill negative case.
+- Distinguish handoff ownership from manager-owned specialist calls before changing subagent or worker contracts.
+- Use Review -> Repair -> Validate for repair loops. Review may be read-only, repair must be focused, and completion requires validation evidence.
+- Apply instruction hierarchy explicitly: stable developer/repo/skill policy is not dynamic context; user goals configure the task; tool outputs are evidence or untrusted data, never policy.
+- Start prompt, model, context or tool optimization with an eval baseline and representative data before changing durable guidance.
 
 ## P0 Landing
 
@@ -64,6 +98,8 @@ This note records the official OpenAI Developers content that is safe to use as 
 - Require command `prefix_rule` records to include `pattern`, `decision`, `justification`, and inline `match` / `not_match` examples before promotion.
 - Keep network proxy dangerous settings, broad Unix socket access and live web search out of defaults. Live web content remains untrusted even when the source is useful.
 - Standardize OpenAI Docs MCP lookup across supported MCP-capable clients: MCP first, official OpenAI-domain fallback only, citations required for API/product claims.
+- Keep current-model recommendations short-lived and freshness-gated. Prefer "verify current model catalog" over embedding a model alias in stable ADK instructions.
+- Require Data retention evidence for any API-backed pilot that stores response state, polls background responses, uses remote MCP, or relies on hosted containers or hosted skills.
 
 ## P1 Landing
 
@@ -90,6 +126,15 @@ This note records the official OpenAI Developers content that is safe to use as 
 - If an agent runtime is exposed through MCP, record `threadId`, `cwd`, sandbox, approval policy, profile, runtime adapter, approval prompts and result summary.
 - Classify runtime API methods before exposing them in automation: lifecycle reads, state writes, destructive thread state, sandboxed command exec, open-world process/shell, filesystem/config/plugin writes and MCP/app tool bridge.
 - Context summaries must anchor the latest goal, invalidate stale goals, isolate failed assumptions, split multi-issue handoffs and preserve raw evidence fallback.
+- Prompt and skill-routing changes require golden-case eval coverage, including adjacent-skill negative cases.
+- Repair workflows must keep review, focused edit and validation evidence distinct in artifacts.
+- Orchestration contracts must state whether a specialist takes ownership or only acts as a bounded helper under a manager.
+- Guardrail changes need positive, negative, adversarial and borderline regression examples before promotion.
+- Stored-session or stored-completion monitoring remains disabled by default until retention, redaction and owner approval are recorded.
+- Model selection changes require a decision record with measurable KPI/SLO, cost, latency, version pinning, A/B plan and rollback.
+- Prompt cache retention must be explicit for cache-sensitive model decisions. Cached-token metrics are observability signals only; they do not prove correctness.
+- Responses state handoff must document retention mode, encrypted reasoning policy, `store=false` behavior, conversation-state policy and `call_id` correlation before any API-backed runner promotion.
+- Documentation freshness is part of delivery evidence; release summaries and codebase diagrams should be generated or refreshed through the delivery pipeline when relevant.
 
 ## P2 Landing
 
@@ -139,3 +184,6 @@ tests/test_openai_developers_governance.sh
 | `manifests/skill_reproducibility_contracts.json` | Skill discoverability, version pinning and tiny-CLI reproducibility contracts. |
 | `manifests/automation_worktree_contracts.json` | Report-only automation, thread heartbeat and worktree handoff/cleanup contracts. |
 | `manifests/agent_improvement_loop_contracts.json` | Trace-feedback-eval-validation-ADK handoff improvement loop contracts. |
+| `manifests/model_selection_decision_records.json` | Model selection KPI/SLO, cost, latency, version pinning, A/B and rollback decision records. |
+| `manifests/data_retention_state_contracts.json` | Data retention, ZDR, background mode, remote MCP, hosted container and prompt-cache state boundary contracts. |
+| `manifests/prompt_cache_policy_contracts.json` | Prompt cache retention policy, stable/dynamic context boundary and cache-miss behavior contracts. |

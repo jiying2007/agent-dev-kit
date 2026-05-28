@@ -1,11 +1,12 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-05-25",
+  "last_updated": "2026-05-27",
   "source_docs": [
     "openai-agents-tracing",
     "openai-agent-evals",
     "openai-codex-best-practices",
-    "openai-agentic-macro-evals"
+    "openai-agentic-macro-evals",
+    "openai-stored-completion-monitoring"
   ],
   "contracts": [
     {
@@ -56,6 +57,28 @@
           "store raw traces with secrets",
           "treat one-off cookbook examples as regression evidence",
           "change an agent, tool or handoff before inspecting representative trace summaries"
+        ]
+      },
+      "stored_session_monitoring_policy": {
+        "enabled_default": false,
+        "allowed_sources": [
+          "sanitized trace summary",
+          "explicitly approved stored response id",
+          "local redacted session artifact"
+        ],
+        "required_fields": [
+          "source_id",
+          "retention_policy",
+          "redaction_status",
+          "prompt_version",
+          "candidate_prompt_version",
+          "expected_regression_signal",
+          "owner_approval"
+        ],
+        "must_not": [
+          "store raw user prompts containing secrets",
+          "enable production logging without data-retention approval",
+          "use stored outputs for long-term memory unless explicitly archived"
         ]
       }
     }

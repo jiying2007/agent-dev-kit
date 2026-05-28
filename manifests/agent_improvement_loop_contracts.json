@@ -1,11 +1,13 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-05-26",
+  "last_updated": "2026-05-27",
   "source_docs": [
     "openai-agent-improvement-loop",
     "openai-agentic-macro-evals",
     "openai-agent-evals",
-    "openai-agents-tracing"
+    "openai-agents-tracing",
+    "openai-model-optimization-workflow",
+    "openai-eval-driven-system-design"
   ],
   "loops": [
     {
@@ -46,6 +48,54 @@
         "promote model feedback without human or deterministic validation",
         "store raw traces containing secrets",
         "treat one traced run as a recurring failure pattern"
+      ]
+    },
+    {
+      "id": "eval-baseline-first-optimization-v1",
+      "owner": "agent-dev-kit",
+      "applies_to": [
+        "prompt changes",
+        "skill description changes",
+        "model selection changes",
+        "tool or context contract changes"
+      ],
+      "stages": [
+        "define_success_metrics",
+        "capture_eval_baseline",
+        "change_prompt_context_model_or_tool",
+        "run_representative_eval",
+        "compare_against_baseline",
+        "record_decision_and_risk",
+        "promote_or_rollback"
+      ],
+      "improvement_ladder": [
+        "model_selection_or_reasoning_budget",
+        "prompt_tuning",
+        "examples_and_context",
+        "tooling_or_retrieval",
+        "accessory_guardrail_or_supervisor_models",
+        "fine_tuning_only_after_separate_approval"
+      ],
+      "required_artifacts": [
+        "success_metrics",
+        "baseline_eval_result",
+        "candidate_change",
+        "representative_eval_result",
+        "comparison_summary",
+        "rollback_decision"
+      ],
+      "promotion_gate": [
+        "baseline exists before candidate change is promoted",
+        "representative eval data includes pass and fail or boundary cases",
+        "change rationale cites which ladder step was used",
+        "higher-cost or higher-risk steps require owner approval",
+        "fine-tuning is blocked unless a separate training-data and leakage review exists"
+      ],
+      "must_not": [
+        "start with fine-tuning when prompt/context/tool improvements are untested",
+        "promote prompt changes without eval evidence",
+        "reuse eval datasets as training data without leakage review",
+        "optimize only for cost without quality and latency checks"
       ]
     }
   ],

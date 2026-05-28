@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2026-05-28",
+  "source_docs": [
+    "openai-prompt-caching",
+    "openai-prompt-cache-retention"
+  ],
+  "reference_boundary": "Prompt cache guidance is used only for API-backed runner pilots and token/cost governance. Durable ADK skills must keep semantic behavior independent of cache hits.",
+  "contracts": [
+    {
+      "id": "prompt-cache-retention-policy-v1",
+      "owner": "agent-dev-kit",
+      "applies_to": [
+        "api-backed agent runner pilots",
+        "prompt-cache-friendly context layout",
+        "model selection decision records"
+      ],
+      "required_fields": [
+        "prompt_cache_key_strategy",
+        "stable_prefix_boundary",
+        "dynamic_tail_boundary",
+        "retention_policy",
+        "model_support_source",
+        "cached_token_metric",
+        "privacy_boundary",
+        "fallback_when_cache_misses",
+        "owner_approval"
+      ],
+      "allowed_retention_policies": [
+        "in_memory",
+        "24h",
+        "model_default"
+      ],
+      "quality_gates": [
+        "stable prefix contains durable policy, schemas and reusable examples",
+        "dynamic tail contains task-specific user context, logs and diffs",
+        "retention policy records whether in_memory, 24h or model_default is used",
+        "model support and unsupported in_memory cases are freshness-gated",
+        "cached token metrics are observed without becoming correctness criteria",
+        "cache misses must not change semantic behavior"
+      ],
+      "must_not": [
+        "treat cache hit rate as correctness evidence",
+        "put secrets into stable cache prefix",
+        "hardcode volatile model cache support without freshness source",
+        "depend on cache persistence for workflow state"
+      ]
+    }
+  ],
+  "quality_gate": {
+    "stable_dynamic_boundary_required": true,
+    "retention_policy_required": true,
+    "model_support_freshness_required": true,
+    "cache_miss_must_be_behavior_preserving": true,
+    "cached_token_metric_observation_only": true
+  }
+}

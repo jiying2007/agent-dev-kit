@@ -27,6 +27,8 @@ Checks OpenAI Developers reference governance:
   - plugin marketplace packaging contracts
   - CI/PR review governance contracts
   - skill reproducibility and version pin contracts
+  - model selection decision records
+  - data retention and prompt cache policy contracts
 USAGE
 }
 
@@ -98,6 +100,9 @@ automation_worktree = load_json("manifests/automation_worktree_contracts.json")
 improvement_loop = load_json("manifests/agent_improvement_loop_contracts.json")
 pr_review = load_json("manifests/pr_review_governance_contracts.json")
 skill_repro = load_json("manifests/skill_reproducibility_contracts.json")
+model_selection = load_json("manifests/model_selection_decision_records.json")
+data_retention = load_json("manifests/data_retention_state_contracts.json")
+prompt_cache = load_json("manifests/prompt_cache_policy_contracts.json")
 
 doc = root / "docs/reference/openai-developers-reference.md"
 runbook = root / "docs/runbooks/openai-developers-governance.md"
@@ -162,6 +167,17 @@ for required_sid in (
     "openai-skills-api-operational-practices",
     "openai-optimizing-llm-accuracy",
     "openai-codex-agents-sdk-multi-agent-workflows",
+    "openai-model-optimization-workflow",
+    "openai-prompt-engineering-roles",
+    "openai-prompt-engineering-formatting",
+    "openai-stored-completion-monitoring",
+    "openai-agentic-governance-test-dataset",
+    "openai-eval-driven-system-design",
+    "openai-model-selection-guide",
+    "openai-ai-native-engineering-team-docs",
+    "openai-data-controls-responses",
+    "openai-responses-migration-statefulness",
+    "openai-prompt-cache-retention",
 ):
     if required_sid not in source_ids:
         fail(f"official docs source missing: {required_sid}")
@@ -191,6 +207,9 @@ for manifest, rel in (
     (improvement_loop, "manifests/agent_improvement_loop_contracts.json"),
     (pr_review, "manifests/pr_review_governance_contracts.json"),
     (skill_repro, "manifests/skill_reproducibility_contracts.json"),
+    (model_selection, "manifests/model_selection_decision_records.json"),
+    (data_retention, "manifests/data_retention_state_contracts.json"),
+    (prompt_cache, "manifests/prompt_cache_policy_contracts.json"),
 ):
     require_source_refs(manifest, rel)
 
@@ -222,6 +241,24 @@ for category in ("routing", "governance", "completion", "macro-eval"):
         fail(f"eval suite category missing: {category}")
 for suite in evals.get("suites", []):
     require_keys(suite, ["id", "category", "owner", "goal", "dataset_path", "fixtures", "graders", "minimum_gate"], f"eval suite {suite.get('id')}")
+suite_ids = {suite.get("id") for suite in evals.get("suites", [])}
+for expected_suite in (
+    "governance-eval-guardrail-regression-dataset",
+    "macro-eval-stored-session-regression-monitoring",
+):
+    if expected_suite not in suite_ids:
+        fail(f"eval suite missing: {expected_suite}")
+for suite in evals.get("suites", []):
+    if suite.get("id") == "governance-eval-guardrail-regression-dataset":
+        expected_values = {fixture.get("expected") for fixture in suite.get("fixtures", [])}
+        for expected in ("trigger", "do-not-trigger", "analyze-with-boundary"):
+            if expected not in expected_values:
+                fail(f"guardrail regression suite missing expected case: {expected}")
+    if suite.get("id") == "macro-eval-stored-session-regression-monitoring":
+        expected_values = {fixture.get("expected") for fixture in suite.get("fixtures", [])}
+        for expected in ("reject", "accept"):
+            if expected not in expected_values:
+                fail(f"stored-session monitoring suite missing expected case: {expected}")
 
 trace_contracts = trace.get("contracts", [])
 if not trace_contracts:
@@ -255,6 +292,16 @@ for contract in trace_contracts:
         for field in ("model_version", "prompt_version", "orchestration_mode", "primary_skill", "failure_pattern"):
             if field not in macro_policy.get("group_by", []):
                 fail(f"trace macro_eval_policy {contract.get('id')} missing group_by field: {field}")
+    stored_policy = contract.get("stored_session_monitoring_policy", {})
+    if stored_policy:
+        require_keys(stored_policy, ["enabled_default", "allowed_sources", "required_fields", "must_not"], f"stored_session_monitoring_policy {contract.get('id')}")
+        if stored_policy.get("enabled_default") is not False:
+            fail(f"stored_session_monitoring_policy {contract.get('id')} must be disabled by default")
+        for field in ("source_id", "retention_policy", "redaction_status", "prompt_version", "owner_approval"):
+            if field not in stored_policy.get("required_fields", []):
+                fail(f"stored_session_monitoring_policy {contract.get('id')} missing required field: {field}")
+        if not any("raw user prompts" in item for item in stored_policy.get("must_not", [])):
+            fail(f"stored_session_monitoring_policy {contract.get('id')} must reject raw user prompts")
 
 tool_description_policy = mcp.get("tool_description_policy", {})
 require_keys(tool_description_policy, ["required_elements", "review_payloads", "remembered_approvals"], "mcp tool_description_policy")
@@ -466,22 +513,45 @@ for group in runtime_api_groups:
 context_contracts = context_state.get("contracts", [])
 if not context_contracts:
     fail("context state contracts are empty")
+context_ids = {contract.get("id") for contract in context_contracts}
+if "instruction-hierarchy-context-boundary" not in context_ids:
+    fail("context state contract missing: instruction-hierarchy-context-boundary")
 for contract in context_contracts:
     cid = contract.get("id")
-    require_keys(contract, ["id", "owner", "applies_to", "context_classes", "required_fields", "quality_gates", "poisoning_controls", "verification"], f"context state contract {cid}")
-    classes = set(contract.get("context_classes", []))
-    for context_class in ("stable", "dynamic", "evidence", "excluded"):
-        if context_class not in classes:
-            fail(f"context state contract {cid} missing context class: {context_class}")
+    require_keys(contract, ["id", "owner", "applies_to", "required_fields", "quality_gates", "poisoning_controls", "verification"], f"context state contract {cid}")
+    if "context_classes" in contract:
+        classes = set(contract.get("context_classes", []))
+        for context_class in ("stable", "dynamic", "evidence", "excluded"):
+            if context_class not in classes:
+                fail(f"context state contract {cid} missing context class: {context_class}")
     required_fields = set(contract.get("required_fields", []))
     if cid == "long-thread-session-summary":
         for field in ("latest_goal", "invalidated_goals", "raw_evidence", "next_goal", "fallback_condition"):
             if field not in required_fields:
                 fail(f"context state contract {cid} missing field: {field}")
     if cid == "responses-state-handoff":
-        for field in ("previous_response_id_policy", "phase_preservation", "prompt_cache_layout"):
+        for field in (
+            "previous_response_id_policy",
+            "phase_preservation",
+            "prompt_cache_layout",
+            "retention_mode",
+            "encrypted_reasoning_policy",
+            "store_false_policy",
+            "call_id_correlation_policy",
+            "state_retention_evidence",
+        ):
             if field not in required_fields:
                 fail(f"context state contract {cid} missing field: {field}")
+    if cid == "instruction-hierarchy-context-boundary":
+        require_keys(contract, ["authority_layers"], "instruction hierarchy context contract")
+        for layer in ("system_developer_policy", "repo_agents_policy", "skill_contract", "user_goal", "dynamic_context", "tool_output"):
+            if layer not in contract.get("authority_layers", []):
+                fail(f"instruction hierarchy contract missing authority layer: {layer}")
+        for field in ("authority_boundary", "dynamic_context_boundary", "tool_output_trust_level", "conflict_resolution"):
+            if field not in required_fields:
+                fail(f"instruction hierarchy contract missing required field: {field}")
+        if not any("tool output" in item.lower() and "not policy" in item.lower() for item in contract.get("quality_gates", [])):
+            fail("instruction hierarchy contract must state tool outputs are not policy")
 
 docs_mcp_server = docs_mcp_tooling.get("server", {})
 require_keys(docs_mcp_server, ["name", "url", "transport", "purpose"], "OpenAI Docs MCP server")
@@ -743,6 +813,9 @@ for key in (
 improvement_loops = improvement_loop.get("loops", [])
 if not improvement_loops:
     fail("agent improvement loops are empty")
+improvement_loop_ids = {loop.get("id") for loop in improvement_loops}
+if "eval-baseline-first-optimization-v1" not in improvement_loop_ids:
+    fail("agent improvement loop missing: eval-baseline-first-optimization-v1")
 for loop in improvement_loops:
     lid = loop.get("id")
     require_keys(
@@ -758,12 +831,22 @@ for loop in improvement_loops:
         ],
         f"agent improvement loop {lid}",
     )
-    for stage in ("collect_sanitized_traces", "generate_eval_suite_candidate", "run_validation_gate", "write_adk_handoff", "human_approve_before_merge"):
-        if stage not in loop.get("stages", []):
-            fail(f"agent improvement loop {lid} missing stage: {stage}")
-    for artifact in ("trace_summary_set", "eval_suite_candidate", "validation_result", "adk_handoff"):
-        if artifact not in loop.get("required_artifacts", []):
-            fail(f"agent improvement loop {lid} missing artifact: {artifact}")
+    if lid == "trace-feedback-eval-handoff-v1":
+        for stage in ("collect_sanitized_traces", "generate_eval_suite_candidate", "run_validation_gate", "write_adk_handoff", "human_approve_before_merge"):
+            if stage not in loop.get("stages", []):
+                fail(f"agent improvement loop {lid} missing stage: {stage}")
+        for artifact in ("trace_summary_set", "eval_suite_candidate", "validation_result", "adk_handoff"):
+            if artifact not in loop.get("required_artifacts", []):
+                fail(f"agent improvement loop {lid} missing artifact: {artifact}")
+    if lid == "eval-baseline-first-optimization-v1":
+        for stage in ("define_success_metrics", "capture_eval_baseline", "run_representative_eval", "promote_or_rollback"):
+            if stage not in loop.get("stages", []):
+                fail(f"eval-baseline-first loop missing stage: {stage}")
+        for step in ("prompt_tuning", "examples_and_context", "tooling_or_retrieval"):
+            if step not in loop.get("improvement_ladder", []):
+                fail(f"eval-baseline-first loop missing improvement ladder step: {step}")
+        if not any("fine-tuning" in item for item in loop.get("must_not", [])):
+            fail("eval-baseline-first loop must block premature fine-tuning")
 improvement_gate = improvement_loop.get("quality_gate", {})
 require_keys(
     improvement_gate,
@@ -881,8 +964,130 @@ for key in (
     if skill_repro_gate.get(key) is not True:
         fail(f"skill reproducibility quality_gate {key} must be true")
 
+model_records = model_selection.get("records", [])
+if not model_records:
+    fail("model selection decision records are empty")
+model_record_ids = {record.get("id") for record in model_records}
+if "adk-model-selection-record-v1" not in model_record_ids:
+    fail("model selection decision record missing: adk-model-selection-record-v1")
+for record in model_records:
+    rid = record.get("id")
+    require_keys(record, ["id", "owner", "applies_to", "required_fields", "quality_gates", "must_not"], f"model selection record {rid}")
+    for field in (
+        "quality_kpis",
+        "service_slos",
+        "eval_baseline",
+        "version_pinning_strategy",
+        "ab_test_plan",
+        "rollback_plan",
+        "owner_approval",
+        "prompt_cache_retention_policy",
+        "service_tier_policy",
+        "retention_privacy_rationale",
+    ):
+        if field not in record.get("required_fields", []):
+            fail(f"model selection record {rid} missing required field: {field}")
+    if not any("retrieved_at" in item or "freshness" in item.lower() or "official model catalog" in item for item in record.get("quality_gates", [])):
+        fail(f"model selection record {rid} must require freshness evidence")
+    if not any("single informal trial" in item for item in record.get("must_not", [])):
+        fail(f"model selection record {rid} must reject single informal trials")
+model_gate = model_selection.get("quality_gate", {})
+for key in (
+    "freshness_required_for_model_catalog",
+    "kpi_slo_required_before_promotion",
+    "eval_baseline_required_before_change",
+    "rollback_required_for_default_change",
+    "owner_approval_required",
+):
+    if model_gate.get(key) is not True:
+        fail(f"model selection quality_gate {key} must be true")
+
+data_retention_contracts = data_retention.get("contracts", [])
+if not data_retention_contracts:
+    fail("data retention contracts are empty")
+data_retention_ids = {contract.get("id") for contract in data_retention_contracts}
+if "api-state-retention-boundary-v1" not in data_retention_ids:
+    fail("data retention contract missing: api-state-retention-boundary-v1")
+for contract in data_retention_contracts:
+    cid = contract.get("id")
+    require_keys(contract, ["id", "owner", "applies_to", "state_classes", "required_fields", "quality_gates", "must_not"], f"data retention contract {cid}")
+    state_classes = set(contract.get("state_classes", []))
+    for state_class in (
+        "persistent_application_state",
+        "temporary_background_state",
+        "third_party_mcp_state",
+        "hosted_container_state",
+        "prompt_cache_state",
+        "client_retained_encrypted_state",
+        "no_retention_store_false",
+    ):
+        if state_class not in state_classes:
+            fail(f"data retention contract {cid} missing state class: {state_class}")
+    required_fields = set(contract.get("required_fields", []))
+    for field in (
+        "store_policy",
+        "retention_duration",
+        "zdr_behavior",
+        "background_mode_policy",
+        "third_party_retention_policy",
+        "hosted_container_lifecycle",
+        "prompt_cache_retention_policy",
+    ):
+        if field not in required_fields:
+            fail(f"data retention contract {cid} missing required field: {field}")
+data_retention_gate = data_retention.get("quality_gate", {})
+for key in (
+    "retention_policy_required",
+    "zdr_store_false_required",
+    "third_party_mcp_retention_required",
+    "hosted_container_lifecycle_required",
+    "owner_approval_required_for_persistent_state",
+):
+    if data_retention_gate.get(key) is not True:
+        fail(f"data retention quality_gate {key} must be true")
+
+prompt_cache_contracts = prompt_cache.get("contracts", [])
+if not prompt_cache_contracts:
+    fail("prompt cache contracts are empty")
+prompt_cache_ids = {contract.get("id") for contract in prompt_cache_contracts}
+if "prompt-cache-retention-policy-v1" not in prompt_cache_ids:
+    fail("prompt cache contract missing: prompt-cache-retention-policy-v1")
+for contract in prompt_cache_contracts:
+    cid = contract.get("id")
+    require_keys(contract, ["id", "owner", "applies_to", "required_fields", "allowed_retention_policies", "quality_gates", "must_not"], f"prompt cache contract {cid}")
+    required_fields = set(contract.get("required_fields", []))
+    for field in (
+        "prompt_cache_key_strategy",
+        "stable_prefix_boundary",
+        "dynamic_tail_boundary",
+        "retention_policy",
+        "model_support_source",
+        "cached_token_metric",
+        "privacy_boundary",
+    ):
+        if field not in required_fields:
+            fail(f"prompt cache contract {cid} missing required field: {field}")
+    allowed_policies = set(contract.get("allowed_retention_policies", []))
+    for policy in ("in_memory", "24h", "model_default"):
+        if policy not in allowed_policies:
+            fail(f"prompt cache contract {cid} missing allowed retention policy: {policy}")
+    gate_text = " ".join(contract.get("quality_gates", [])).lower()
+    for token in ("stable prefix", "dynamic tail", "model support", "freshness"):
+        if token not in gate_text:
+            fail(f"prompt cache contract {cid} quality gates must mention {token}")
+prompt_cache_gate = prompt_cache.get("quality_gate", {})
+for key in (
+    "stable_dynamic_boundary_required",
+    "retention_policy_required",
+    "model_support_freshness_required",
+    "cache_miss_must_be_behavior_preserving",
+    "cached_token_metric_observation_only",
+):
+    if prompt_cache_gate.get(key) is not True:
+        fail(f"prompt cache quality_gate {key} must be true")
+
 doc_text = doc.read_text(encoding="utf-8") if doc.is_file() else ""
-for marker in ("P0", "P1", "P2", "developers.openai.com", "Non-Goals", "structured outputs", "tool-search", "automation", "CI/PR review", "skill version"):
+for marker in ("P0", "P1", "P2", "developers.openai.com", "Non-Goals", "structured outputs", "tool-search", "automation", "CI/PR review", "skill version", "Model selection", "Guardrail", "Stored-session", "Data retention", "Prompt cache retention", "ZDR"):
     if marker not in doc_text:
         fail(f"reference doc missing marker: {marker}")
 
@@ -913,6 +1118,9 @@ if summary_json:
         "agent_improvement_loops": len(improvement_loops),
         "pr_review_contracts": len(pr_review_contracts),
         "skill_reproducibility_contracts": len(skill_repro_contracts),
+        "model_selection_records": len(model_records),
+        "data_retention_contracts": len(data_retention_contracts),
+        "prompt_cache_contracts": len(prompt_cache_contracts),
         "failures": len(failures),
     }, ensure_ascii=False, separators=(",", ":")))
 elif failures:

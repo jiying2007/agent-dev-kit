@@ -1,0 +1,65 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2026-05-28",
+  "source_docs": [
+    "openai-data-controls-responses",
+    "openai-responses-migration-statefulness",
+    "openai-prompt-cache-retention"
+  ],
+  "reference_boundary": "Official OpenAI retention guidance defines risk fields and gates only. ADK remains platform-neutral; local runner behavior must be validated before promotion.",
+  "contracts": [
+    {
+      "id": "api-state-retention-boundary-v1",
+      "owner": "agent-dev-kit",
+      "applies_to": [
+        "api-backed agent runner pilots",
+        "stored-session monitoring",
+        "MCP-backed tools",
+        "hosted tool or hosted skill pilots"
+      ],
+      "state_classes": [
+        "persistent_application_state",
+        "temporary_background_state",
+        "third_party_mcp_state",
+        "hosted_container_state",
+        "prompt_cache_state",
+        "client_retained_encrypted_state",
+        "no_retention_store_false"
+      ],
+      "required_fields": [
+        "endpoint_or_tool",
+        "store_policy",
+        "retention_duration",
+        "zdr_behavior",
+        "background_mode_policy",
+        "third_party_retention_policy",
+        "hosted_container_lifecycle",
+        "prompt_cache_retention_policy",
+        "compaction_retention_policy",
+        "owner_approval"
+      ],
+      "quality_gates": [
+        "store=true or default-stored flows require retention duration and owner approval",
+        "store=false or ZDR flows must not rely on server-side persistent state",
+        "background mode records polling retention and must not be treated as no-retention",
+        "remote MCP tools record third-party data retention boundaries before promotion",
+        "hosted containers and hosted skills record active-container lifecycle and deletion condition",
+        "prompt cache retention records in_memory versus 24h policy and content boundary"
+      ],
+      "must_not": [
+        "assume store=false preserves previous_response_id state",
+        "treat background mode polling state as zero-retention",
+        "treat remote MCP provider retention as covered by ADK defaults",
+        "store raw reasoning or encrypted reasoning payloads in long-term memory",
+        "promote hosted tool pilots without lifecycle and deletion evidence"
+      ]
+    }
+  ],
+  "quality_gate": {
+    "retention_policy_required": true,
+    "zdr_store_false_required": true,
+    "third_party_mcp_retention_required": true,
+    "hosted_container_lifecycle_required": true,
+    "owner_approval_required_for_persistent_state": true
+  }
+}

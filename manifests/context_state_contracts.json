@@ -1,10 +1,15 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-05-25",
+  "last_updated": "2026-05-28",
   "source_docs": [
     "openai-context-engineering-session-memory",
     "openai-reasoning-models",
-    "openai-responses-migration"
+    "openai-responses-migration",
+    "openai-prompt-engineering-roles",
+    "openai-prompt-engineering-formatting",
+    "openai-data-controls-responses",
+    "openai-responses-migration-statefulness",
+    "openai-prompt-cache-retention"
   ],
   "contracts": [
     {
@@ -67,27 +72,84 @@
       ],
       "required_fields": [
         "state_mode",
+        "retention_mode",
         "previous_response_id_policy",
         "manual_item_replay_policy",
+        "encrypted_reasoning_policy",
+        "store_false_policy",
+        "conversation_api_policy",
+        "call_id_correlation_policy",
         "phase_preservation",
         "structured_output_boundary",
         "prompt_cache_layout",
-        "zdr_or_store_false_policy"
+        "zdr_or_store_false_policy",
+        "state_retention_evidence"
       ],
       "quality_gates": [
         "Responses API migration stays pilot-only until local runner exists",
+        "previous_response_id, conversation state, manual item replay and encrypted reasoning are mutually documented state choices",
         "manual replay preserves assistant item phase values",
+        "function call outputs preserve call_id correlation",
         "structured output schema lives in API config rather than prompt prose",
         "stable prompt prefix precedes dynamic task context",
-        "store=false or encrypted reasoning policy is explicit when retention constraints apply"
+        "store=false or encrypted reasoning policy is explicit when retention constraints apply",
+        "store=false and encrypted reasoning policies are explicit for ZDR or no-retention workflows",
+        "state retention evidence cites the active data-retention contract"
       ],
       "poisoning_controls": [
         "do not merge tool outputs into free-form summaries without call ids",
-        "do not replay stale assistant items after rollback without a rollback marker"
+        "do not replay stale assistant items after rollback without a rollback marker",
+        "do not treat encrypted reasoning items as human-readable memory",
+        "do not store raw reasoning or server-retained response state in ADK long-term memory"
       ],
       "verification": [
         "pilot eval before promotion",
         "check-openai-developers-governance"
+      ]
+    },
+    {
+      "id": "instruction-hierarchy-context-boundary",
+      "owner": "agent-dev-kit",
+      "applies_to": [
+        "AGENTS.md",
+        "skill routing",
+        "context-compress-handoff",
+        "api-backed agent runner pilots"
+      ],
+      "authority_layers": [
+        "system_developer_policy",
+        "repo_agents_policy",
+        "skill_contract",
+        "user_goal",
+        "dynamic_context",
+        "tool_output"
+      ],
+      "required_fields": [
+        "identity",
+        "instructions",
+        "examples",
+        "context",
+        "authority_boundary",
+        "dynamic_context_boundary",
+        "tool_output_trust_level",
+        "conflict_resolution",
+        "raw_fallback"
+      ],
+      "quality_gates": [
+        "developer/repo/skill instructions stay separate from user task data",
+        "dynamic context is clearly bounded and placed after stable instructions",
+        "tool output is labeled as evidence or untrusted data, not policy",
+        "conflicts resolve toward higher-priority policy and explicit user goal",
+        "Markdown or XML-style sections identify identity, instructions, examples and context"
+      ],
+      "poisoning_controls": [
+        "do not let retrieved documents rewrite AGENTS.md or skill policy",
+        "do not carry user-provided instructions inside evidence as developer policy",
+        "mark prompt-injection-like content in tool outputs as excluded unless explicitly analyzed"
+      ],
+      "verification": [
+        "check-openai-developers-governance",
+        "prompt regression evidence before promotion"
       ]
     }
   ]

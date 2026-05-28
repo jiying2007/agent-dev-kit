@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-05-26",
+  "last_updated": "2026-05-28",
   "review_policy": {
     "allowed_domains": [
       "developers.openai.com",
@@ -614,6 +614,261 @@
       "required_checks": [
         "check-openai-developers-governance",
         "parallel governance pilot before promotion"
+      ]
+    },
+    {
+      "id": "openai-latest-model-gpt-5-5",
+      "title": "Models: current OpenAI model catalog and latest-model guidance",
+      "url": "https://developers.openai.com/api/docs/models",
+      "retrieved_at": "2026-05-27",
+      "expires_at": "2026-06-26",
+      "review_status": "watch",
+      "adoption_scope": "P2",
+      "owner": "agent-dev-kit",
+      "decision": "Watch as a volatile source for model-selection and latest-model claims; do not hardcode durable adk defaults from this page without freshness review.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "model freshness review before promotion"
+      ]
+    },
+    {
+      "id": "openai-prompt-caching",
+      "title": "Prompt caching: prompt structure, cache key and cached-token observability",
+      "url": "https://developers.openai.com/api/docs/guides/prompt-caching",
+      "retrieved_at": "2026-05-27",
+      "expires_at": "2026-08-25",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for stable-prefix/dynamic-tail context layout and API-backed cache observability guidance.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "check-token-budget"
+      ]
+    },
+    {
+      "id": "openai-agents-orchestration-handoffs",
+      "title": "Agents SDK orchestration: handoffs and agents as tools",
+      "url": "https://developers.openai.com/api/docs/guides/agents/orchestration",
+      "retrieved_at": "2026-05-27",
+      "expires_at": "2026-08-25",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for ownership vocabulary: handoff when a specialist owns the branch, agent-as-tool when the manager keeps final-answer ownership.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "parallel governance pilot before promotion"
+      ]
+    },
+    {
+      "id": "openai-graders",
+      "title": "Graders: deterministic and model-graded evaluation checks",
+      "url": "https://developers.openai.com/api/docs/guides/graders",
+      "retrieved_at": "2026-05-27",
+      "expires_at": "2026-08-25",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for grader taxonomy in routing, governance and completion eval gates.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "eval baseline before promotion"
+      ]
+    },
+    {
+      "id": "openai-prompt-optimization-golden-examples",
+      "title": "Optimize Prompts cookbook: golden examples for instruction tuning",
+      "url": "https://developers.openai.com/cookbook/examples/optimize_prompts#4-using-evaluations-to-arrive-at-these-agents",
+      "retrieved_at": "2026-05-27",
+      "expires_at": "2026-08-25",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for positive and negative golden examples before promoting prompt, AGENTS.md or skill-trigger changes.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "eval baseline before promotion"
+      ]
+    },
+    {
+      "id": "openai-codex-iterative-repair-loop",
+      "title": "Build iterative repair loops with Codex",
+      "url": "https://developers.openai.com/cookbook/examples/codex/build_iterative_repair_loops_with_codex",
+      "retrieved_at": "2026-05-27",
+      "expires_at": "2026-08-25",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for Review -> Repair -> Validate closed-loop repair contracts and validation-backed completion claims.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "adk-verification-before-completion"
+      ]
+    },
+    {
+      "id": "openai-model-optimization-workflow",
+      "title": "Model optimization workflow: eval baseline, prompt, representative eval and iteration",
+      "url": "https://developers.openai.com/api/docs/guides/model-optimization#model-optimization-workflow",
+      "retrieved_at": "2026-05-27",
+      "expires_at": "2026-08-25",
+      "review_status": "adopted",
+      "adoption_scope": "P0",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for eval-baseline-first optimization loops before prompt, model, context or tool changes are promoted.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "eval baseline before promotion"
+      ]
+    },
+    {
+      "id": "openai-prompt-engineering-roles",
+      "title": "Prompt engineering: message roles and instruction following",
+      "url": "https://developers.openai.com/api/docs/guides/prompt-engineering#message-roles-and-instruction-following",
+      "retrieved_at": "2026-05-27",
+      "expires_at": "2026-08-25",
+      "review_status": "adopted",
+      "adoption_scope": "P0",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for developer/user/context/tool-output authority boundaries in ADK context contracts.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "prompt regression evidence before promotion"
+      ]
+    },
+    {
+      "id": "openai-prompt-engineering-formatting",
+      "title": "Prompt engineering: message formatting with Markdown and XML",
+      "url": "https://developers.openai.com/api/docs/guides/prompt-engineering#message-formatting-with-markdown-and-xml",
+      "retrieved_at": "2026-05-27",
+      "expires_at": "2026-08-25",
+      "review_status": "adopted",
+      "adoption_scope": "P0",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for stable prompt sections, explicit context boundaries and dynamic context placement.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "check-token-budget"
+      ]
+    },
+    {
+      "id": "openai-stored-completion-monitoring",
+      "title": "Evals use case: monitoring stored completions for prompt regressions",
+      "url": "https://developers.openai.com/cookbook/examples/evaluation/use-cases/completion-monitoring",
+      "retrieved_at": "2026-05-27",
+      "expires_at": "2026-08-25",
+      "review_status": "watch",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Watch as a pattern for sanitized stored-session regression monitoring; keep disabled by default until retention, redaction and owner approval exist.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "data retention approval before promotion"
+      ]
+    },
+    {
+      "id": "openai-agentic-governance-test-dataset",
+      "title": "Agentic governance guide: guardrail positive and negative test datasets",
+      "url": "https://developers.openai.com/cookbook/examples/partners/agentic_governance_guide/agentic_governance_cookbook#step-2-create-a-test-dataset",
+      "retrieved_at": "2026-05-27",
+      "expires_at": "2026-08-25",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for prompt-injection and guardrail regression datasets with positive, negative, adversarial and borderline cases.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "guardrail regression before promotion"
+      ]
+    },
+    {
+      "id": "openai-eval-driven-system-design",
+      "title": "Eval driven system design: improvement ladder and eval data separation",
+      "url": "https://developers.openai.com/cookbook/examples/partners/eval_driven_system_design/receipt_inspection#further-improvements",
+      "retrieved_at": "2026-05-27",
+      "expires_at": "2026-08-25",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for the improvement ladder and for keeping eval datasets separate from training/fine-tuning data.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "owner approval before high-risk optimization"
+      ]
+    },
+    {
+      "id": "openai-model-selection-guide",
+      "title": "Practical guide for model selection: KPIs, SLOs, cost, versioning, A/B and rollback",
+      "url": "https://developers.openai.com/cookbook/examples/partners/model_selection_guide/model_selection_guide",
+      "retrieved_at": "2026-05-27",
+      "expires_at": "2026-08-25",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for model-selection decision records covering measurable KPIs/SLOs, cost, latency, version pinning, A/B tests and rollback.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "model-selection decision record before promotion"
+      ]
+    },
+    {
+      "id": "openai-ai-native-engineering-team-docs",
+      "title": "Building an AI-native engineering team: documentation in delivery workflows",
+      "url": "https://developers.openai.com/codex/guides/build-ai-native-engineering-team#how-coding-agents-help-5",
+      "retrieved_at": "2026-05-27",
+      "expires_at": "2026-08-25",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for treating documentation freshness, diagrams and release summaries as delivery-pipeline artifacts.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "repo-drift-remediation before release"
+      ]
+    },
+    {
+      "id": "openai-data-controls-responses",
+      "title": "Data controls: /v1/responses retention controls",
+      "url": "https://developers.openai.com/api/docs/guides/your-data#v1responses",
+      "retrieved_at": "2026-05-28",
+      "expires_at": "2026-08-26",
+      "review_status": "adopted",
+      "adoption_scope": "P0",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for response state retention, store=false/ZDR behavior, background mode, remote MCP, hosted container and hosted skill retention boundaries.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "data retention approval before promotion"
+      ]
+    },
+    {
+      "id": "openai-responses-migration-statefulness",
+      "title": "Responses migration: deciding when to use statefulness",
+      "url": "https://developers.openai.com/api/docs/guides/migrate-to-responses#4-decide-when-to-use-statefulness",
+      "retrieved_at": "2026-05-28",
+      "expires_at": "2026-08-26",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for previous_response_id, manual item replay, store=false, encrypted reasoning, conversation state and call_id correlation policies in API-backed runner pilots.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "pilot eval before promotion"
+      ]
+    },
+    {
+      "id": "openai-prompt-cache-retention",
+      "title": "Prompt caching: retention policy and model support",
+      "url": "https://developers.openai.com/api/docs/guides/prompt-caching#prompt-cache-retention",
+      "retrieved_at": "2026-05-28",
+      "expires_at": "2026-08-26",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for in_memory versus 24h prompt cache retention, model support freshness and cache-miss-safe prompt layout governance.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "check-token-budget"
       ]
     }
   ]

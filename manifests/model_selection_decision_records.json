@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2026-05-28",
+  "source_docs": [
+    "openai-model-selection-guide",
+    "openai-model-optimization-workflow",
+    "openai-latest-model-gpt-5-5",
+    "openai-prompt-cache-retention"
+  ],
+  "reference_boundary": "Official OpenAI guidance is used only to define the decision-record fields and gates. Actual model choices remain freshness-gated and must be validated locally.",
+  "records": [
+    {
+      "id": "adk-model-selection-record-v1",
+      "owner": "agent-dev-kit",
+      "applies_to": [
+        "api-backed runner pilots",
+        "eval grader model changes",
+        "production skill runtime assumptions",
+        "model default changes in docs or config"
+      ],
+      "required_fields": [
+        "decision_id",
+        "use_case",
+        "candidate_models",
+        "selected_model",
+        "model_catalog_source",
+        "retrieved_at",
+        "capability_rationale",
+        "cost_rationale",
+        "latency_rationale",
+        "prompt_cache_retention_policy",
+        "service_tier_policy",
+        "retention_privacy_rationale",
+        "quality_kpis",
+        "service_slos",
+        "eval_baseline",
+        "golden_dataset",
+        "version_pinning_strategy",
+        "ab_test_plan",
+        "rollback_plan",
+        "owner_approval"
+      ],
+      "quality_gates": [
+        "decision cites a current official model catalog or freshness-gated source",
+        "quality KPIs and service SLOs are measurable from logs or eval artifacts",
+        "model changes require an eval baseline before and after the change",
+        "prompt cache retention, service tier and privacy rationale are recorded when cache-sensitive models are considered",
+        "production workflows pin model/runtime assumptions or document why floating is allowed",
+        "rollback plan names the previous model, trigger threshold and owner"
+      ],
+      "must_not": [
+        "use latest/current/default model claims without retrieved_at and expires_at",
+        "change production model defaults based on a single informal trial",
+        "compare models without comparable prompts, tools and datasets",
+        "treat lower cost as acceptable without quality and latency evidence"
+      ]
+    }
+  ],
+  "quality_gate": {
+    "freshness_required_for_model_catalog": true,
+    "kpi_slo_required_before_promotion": true,
+    "eval_baseline_required_before_change": true,
+    "rollback_required_for_default_change": true,
+    "owner_approval_required": true
+  }
+}
