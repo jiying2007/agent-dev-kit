@@ -163,6 +163,8 @@ for asset in \
   "$ROOT_DIR/templates/context/raw-evidence-index.md" \
   "$ROOT_DIR/templates/context/context-budget-profile.md" \
   "$ROOT_DIR/templates/context/project-map.md" \
+  "$ROOT_DIR/templates/context/memory-search-result.md" \
+  "$ROOT_DIR/templates/context/low-token-profile.md" \
   "$ROOT_DIR/docs/runbooks/token-context-governance.md"; do
   require_context_asset "$asset"
 done
@@ -188,6 +190,10 @@ require_context_text "$ROOT_DIR/templates/context/context-budget-profile.md" 'au
 require_context_text "$ROOT_DIR/templates/context/project-map.md" 'Generated / Do Not Read Fully' 'generated exclusion section'
 require_context_text "$ROOT_DIR/templates/context/project-map.md" 'High-Risk Raw-Read Areas' 'high-risk raw-read section'
 require_context_text "$ROOT_DIR/templates/context/project-map.md" 'Last Verified' 'last verified section'
+require_context_text "$ROOT_DIR/templates/context/memory-search-result.md" 'detail_fetch_reason:' 'memory detail fetch reason'
+require_context_text "$ROOT_DIR/templates/context/memory-search-result.md" 'owner_approval_for_persistent_memory:' 'persistent memory approval'
+require_context_text "$ROOT_DIR/templates/context/low-token-profile.md" 'safety_exception:' 'low token safety exception'
+require_context_text "$ROOT_DIR/templates/context/low-token-profile.md" 'restore_condition:' 'low token restore condition'
 require_context_text "$ROOT_DIR/docs/runbooks/token-context-governance.md" 'L0' 'read tier L0'
 require_context_text "$ROOT_DIR/docs/runbooks/token-context-governance.md" 'L1' 'read tier L1'
 require_context_text "$ROOT_DIR/docs/runbooks/token-context-governance.md" 'L2' 'read tier L2'

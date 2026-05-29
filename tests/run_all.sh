@@ -87,6 +87,7 @@ TESTS=(
   test_skill_content.sh
   test_skill_sop_quality.sh
   test_memory_governance.sh
+  test_capability_uplift.sh
   test_docs_cli_alignment.sh
   test_scripts_smoke.sh
 )

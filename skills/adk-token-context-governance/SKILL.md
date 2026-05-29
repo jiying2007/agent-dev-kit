@@ -68,6 +68,16 @@ constraints:
 | L2 | 根因未明、接口/测试失败 | 相关文件窗口、局部日志、关键 diff |
 | L3 | 高风险或交付争议 | 完整日志、完整 diff、完整原文 |
 
+## Compiled Knowledge Boundary
+
+LLM Wiki / Knowledge Compile 的读取顺序是 `schema` / index -> `maintained_wiki` -> `raw_sources`。`maintained_wiki` 综合页只用于快速定位、去重和关系梳理；综合页不是原始证据，不能作为高风险结论、记忆晋升、规则提升或交付争议的唯一依据。
+
+读取 compiled knowledge 时必须保留 `raw_fallback`：
+
+- wiki 条目缺少 `raw_source_path`、`source_url_or_local_path` 或 `schema_path` 时，只能作为候选线索。
+- 遇到 stale claims、弱链接、孤立页面、schema 冲突、低置信度或用户要求精确依据时，回退 `raw_sources`。
+- 从综合页得到的新 synthesis 需要写回时，先进入待审查 `change_log`，不得覆盖原始材料。
+
 ## Quality Gate
 - 摘要必须包含 `raw_evidence`、`confidence`、`fallback_condition`。
 - 预算配置必须包含 `task_type`、`risk_level`、`read_tier`、`budget_profile`、`compress_allowed`、`raw_required`。

@@ -21,6 +21,18 @@
 
 依赖图、调用图、代码地图或 review graph 可以作为 `scope_read` 候选来源，但不能替代源码审查。使用这类索引时必须记录生成时间、语言/目录覆盖范围、已知漏报风险和 raw fallback；高风险改动仍需回读调用方、测试、配置和权限边界。
 
+## Memory Search 渐进披露
+
+`memory-search-progressive-disclosure-v1` 只作为只读检索能力落地，不启用外部 worker、hook、本地 HTTP 服务、向量数据库写入或自动记忆采集。默认流程按 `search_index -> timeline_context -> observation_details` 逐层披露，任何长期记忆写入仍需单独的 owner review、脱敏状态和可回滚证据。
+
+1. `search_index`：先用紧凑索引回答“有哪些候选记忆”。只返回 `query`、`result_ids`、`time_window`、`project_scope`、`observation_type`、`redaction_status` 和 `raw_fallback`，不得把全部历史 observation 注入上下文。
+2. `timeline_context`：仅对选中的 `result_ids` 或严格收窄后的查询读取时间线。时间线只保留日期、项目、事件摘要、相关证据入口和缺口，不展开原始工具输出。
+3. `observation_details`：只有在实现、审查、排障或交接确实需要时才按 ID 批量读取详情，并记录 `detail_fetch_reason`。详情读取仍必须保留 raw fallback，且不能把摘要当作主证据。
+4. 原文回退：当摘要与源码、日志、diff、测试或用户最新目标冲突时，以原始证据和可复跑命令为准；缺少证据路径的 memory hit 只能作为候选线索。
+5. 写入边界：长期记忆、新增 archive、提升为 guidance 或修改 memory store 都不是 memory search 的默认副作用，必须走对应审查流程。
+
+检索结果使用 `templates/context/memory-search-result.md`。若需要进一步读取详情，先补齐 `detail_fetch_reason`；若结果包含敏感内容，先记录 `redaction_status`，再决定是否进入 L2/L3。
+
 ## Context Rot 防护
 
 长任务不得依赖单一长会话硬扛上下文。推荐采用轻量编排器模式：
@@ -54,6 +66,21 @@
 | 审计 | 安全、权限、支付、迁移、生产事故 | L3，不压缩结论证据，只做去重、排序或脱敏 |
 
 简化规则：粗看开压缩，精看限压缩，审计看原文。出现 `HOT`、`CTX_PRESSURE`、阶段切换或目标切换时，先产出交接摘要，再用预算配置限制下一阶段只读取必要证据。
+
+## Low Token Profile
+
+`low-token-communication-profile-v1` 是通信 profile，不是证据压缩豁免。触发条件包括用户明确要求低 token、上下文压力告警、只需状态更新或短战术答复。启用时使用 `templates/context/low-token-profile.md` 记录 `trigger`、`active_scope`、`technical_terms_preserved`、`safety_exception`、`restore_condition` 和 `user_override`。
+
+低 token 输出可以减少寒暄、背景复述和重复过程，但不得移除命令、路径、来源、风险、验证证据、阻塞条件或不确定性。中文技术回答必须保留精确英文术语、文件名、字段名和错误码。
+
+以下安全例外必须临时恢复完整清晰表达：
+
+- `security warning`：安全、凭证、权限、隐私、供应链或生产风险告警。
+- `irreversible action confirmation`：删除、覆盖、发布、迁移、reset、清理、提交历史重写等不可逆或难回滚动作确认。
+- `multi-step ambiguity`：多步骤指令压缩后会增加歧义、顺序误解或审批边界不清。
+- `review finding precision`：代码审查发现需要精确文件、行号、行为链路、证据和影响说明。
+
+用户可以用显式要求退出低 token profile；进入高风险任务、需要审查证据、发生歧义或需要教学解释时，也应按 `restore_condition` 自动恢复正常表达。
 
 ## 可压缩对象
 
@@ -128,6 +155,7 @@
 
 ```bash
 scripts/check-token-budget.sh
+scripts/check-context-experience-patterns.sh
 scripts/validate-assets.sh --strict
 tests/test_token_budget.sh
 ```

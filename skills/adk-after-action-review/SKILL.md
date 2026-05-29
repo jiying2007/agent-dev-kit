@@ -17,11 +17,12 @@ non_triggers:
 inputs:
   - 任务目标、执行结果、错误与修复、验证结果、现有 AGENTS/runbook 约束
 outputs:
-  - AAR 复盘、memory candidate、风险分级、写入位置路由、人工确认项
+  - AAR 复盘、memory candidate、Codify Decision、风险分级、写入位置路由、人工确认项
 constraints:
   - 不保存完整聊天记录、密钥、隐私原文或一次性噪声
   - 不自动写入运行时 memories、AGENTS.md、生产规则或高风险策略
   - 每条候选必须包含 evidence、last_verified、confidence、risk、write_route
+  - 每个完成后沉淀决策必须包含 reusable_pattern、promotion_candidate、do_not_promote_reason、owner_review、rollback_path、verification_evidence
   - 高风险规则必须由用户确认后才能落地
 ---
 
@@ -50,13 +51,16 @@ constraints:
    - `high`: 自动发布、删除文件、生产数据库、支付动作、凭据保存、权限扩大。
 6. 写入路由：为每条候选选择 `none/session-summary/project-runbook/project-AGENTS/user-memory/archive/skill-template`。
 7. 生成候选：使用 `templates/memory/memory-candidate.md`，补齐 `evidence`、`last_verified`、`confidence`、`next_review_by`。
-8. 审批控制：`high` 必须输出为待确认项；`medium` 至少说明影响范围和回退位置；`low` 可作为候选自动写入审计材料。
-9. 过期处理：若规则依赖 API、路径、平台策略或用户偏好，设置复验日期；若与旧规则冲突，标记 `supersedes` 或 `conflicts_with`。
-10. 门禁校验：新增或修改模板、runbook、候选格式后运行 `rtk bash scripts/check-memory-governance.sh`。
+8. Codify Decision：若任务已交付或阶段性完成，使用 `templates/governance/codify-decision.md` 记录 `delivery_goal`、`reusable_pattern`、`affected_asset`、`promotion_candidate`、`do_not_promote_reason`、`owner_review`、`rollback_path`、`verification_evidence`。
+9. 推广判定：`promotion_candidate` 只能用于确有复用价值的约定、组件、runbook、manifest 或 skill/template；若不推广，必须填写 `do_not_promote_reason`，避免把一次性会话噪声沉淀为长期规则。
+10. 审批控制：`high` 必须输出为待确认项；`medium` 至少说明影响范围和回退位置；`low` 可作为候选自动写入审计材料。涉及持久指导规则推广时，`owner_review`、`rollback_path` 和 `verification_evidence` 不得为空。
+11. 过期处理：若规则依赖 API、路径、平台策略或用户偏好，设置复验日期；若与旧规则冲突，标记 `supersedes` 或 `conflicts_with`。
+12. 门禁校验：新增或修改模板、runbook、候选格式后运行 `rtk bash scripts/check-memory-governance.sh`；涉及 Codify Decision 时运行 `rtk bash scripts/check-codify-governance.sh`。
 
 ## Commands
 ```bash
 rtk bash scripts/check-memory-governance.sh
+rtk bash scripts/check-codify-governance.sh
 rtk bash scripts/validate-assets.sh --strict
 ```
 
@@ -66,10 +70,15 @@ rtk bash scripts/validate-assets.sh --strict
 ## Memory Candidate Template
 使用 `templates/memory/memory-candidate.md` 输出可审查候选，不直接改长期记忆。
 
+## Codify Decision Template
+使用 `templates/governance/codify-decision.md` 输出完成后沉淀决策；即使结论是不推广，也要记录 `do_not_promote_reason` 和验证依据。
+
 ## Quality Gate
 - AAR 必须包含目标、成功项、失败/返工、根因、lesson、验证和剩余风险。
 - 每条 memory candidate 必须能说明“下次同类任务为何会用到”。
 - 候选必须包含 scope、risk、confidence、evidence、last_verified、write_route。
+- Codify Decision 必须包含 reusable_pattern、promotion_candidate、do_not_promote_reason、owner_review、rollback_path、verification_evidence。
+- `promotion_candidate: true` 时必须说明 affected_asset、owner_review、rollback_path 和 verification_evidence。
 - 高风险候选必须标记 `requires_user_confirmation: true`，不得自动落地。
 - 不得把完整聊天记录、临时草稿、过期价格、未经确认推测、密钥或隐私原文写入长期记忆。
 - 若无可复用经验，输出 `memory_candidates: []` 并说明原因。

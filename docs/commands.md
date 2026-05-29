@@ -72,6 +72,30 @@ bash scripts/devkit.sh token-budget
 bash scripts/devkit.sh token-budget --summary-json
 ```
 
+## codify-governance
+
+检查交付后可复用模式沉淀门禁。该命令确认 AAR、完成前验证和 Codify Decision 模板都包含 reusable pattern、do-not-promote、owner review、rollback 和 verification evidence 字段。
+
+```bash
+bash scripts/devkit.sh codify-governance
+```
+
+## knowledge-compile
+
+检查知识编译三层模型。该命令确认 knowledge compile runbook、note 模板和 token context skill 同步声明 `raw_sources`、`maintained_wiki`、`schema`、`ingest/query/lint` 与 raw fallback 边界。
+
+```bash
+bash scripts/devkit.sh knowledge-compile
+```
+
+## context-experience
+
+检查渐进记忆检索与低 token profile。该命令确认 `search_index -> timeline_context -> observation_details` 只读披露流程、memory search result 模板、low-token profile 模板和安全例外保持一致。
+
+```bash
+bash scripts/devkit.sh context-experience
+```
+
 ## openai-governance
 
 校验 OpenAI 官方 Developers 参考来源、freshness、promotion gate 和平台中立 ADK 契约。

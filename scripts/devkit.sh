@@ -23,6 +23,9 @@ Commands:
   convert   转换资产到目标工具格式
   runtime-boundary 检查 adk 是否保持通用运行时边界
   token-budget 检查 skill/doc/script 是否符合低 token 预算
+  codify-governance 检查交付后可复用模式沉淀门禁
+  knowledge-compile 检查知识编译三层模型
+  context-experience 检查渐进记忆检索与低 token profile
   openai-governance 检查 OpenAI 官方 Developers 参考治理
   workflow-closure 检查 workflow 引用是否在 profile 闭包内
   file-modes 检查 tracked 文件权限是否匹配 Git index
@@ -80,6 +83,15 @@ case "$CMD" in
     ;;
   token-budget)
     exec "$SCRIPT_DIR/check-token-budget.sh" "$@"
+    ;;
+  codify-governance)
+    exec "$SCRIPT_DIR/check-codify-governance.sh" "$@"
+    ;;
+  knowledge-compile)
+    exec "$SCRIPT_DIR/check-knowledge-compile-model.sh" "$@"
+    ;;
+  context-experience)
+    exec "$SCRIPT_DIR/check-context-experience-patterns.sh" "$@"
     ;;
   openai-governance)
     exec "$SCRIPT_DIR/check-openai-developers-governance.sh" "$@"
