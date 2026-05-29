@@ -1,0 +1,310 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2026-05-29",
+  "reference_boundary": "External agent, plugin, memory and skill sources are method-only references until a separate supply-chain review targets a specific versioned asset. This manifest does not enable external runtimes, hooks, workers, MCP servers or plugin installs.",
+  "source_refs": [
+    {
+      "id": "mattpocock-caveman-skill",
+      "title": "caveman skill from mattpocock-skills",
+      "url": "https://skilld.dev/skills/mattpocock/skills/caveman",
+      "local_path": "mattpocock-skills/skills/productivity/caveman/SKILL.md",
+      "retrieved_at": "2026-05-29",
+      "decision": "adopt-method-only",
+      "notes": "Use as a low-token communication profile reference; do not make it the default style."
+    },
+    {
+      "id": "thedotmack-claude-mem",
+      "title": "claude-mem persistent context plugin",
+      "url": "https://github.com/thedotmack/claude-mem",
+      "local_path": "dotfiles/home/base/tui/AI/claude.nix",
+      "retrieved_at": "2026-05-29",
+      "decision": "adopt-method-only",
+      "notes": "Use progressive disclosure memory search and observation schema ideas; do not enable worker, hooks, Chroma, Bun or automatic capture."
+    },
+    {
+      "id": "everyinc-compound-engineering",
+      "title": "EveryInc compound engineering plugin",
+      "url": "https://github.com/EveryInc/compound-engineering-plugin",
+      "local_path": "dotfiles/home/base/tui/AI/skills-catalog.nix",
+      "retrieved_at": "2026-05-29",
+      "decision": "adopt-method-only",
+      "notes": "Use Plan -> Delegate -> Assess -> Codify workflow vocabulary; do not import the plugin, agents or full skill set."
+    },
+    {
+      "id": "karpathy-llm-wiki-pattern",
+      "title": "Karpathy LLM Wiki pattern",
+      "url": "https://karpathy-wiki.lol/en",
+      "local_path": "hermes-agent/skills/research/llm-wiki/SKILL.md",
+      "retrieved_at": "2026-05-29",
+      "decision": "adopt-method-only",
+      "notes": "Use raw sources, maintained wiki, schema and ingest/query/lint loops for archive and memory governance."
+    }
+  ],
+  "candidate_decisions": [
+    {
+      "id": "caveman-low-token-profile",
+      "source_ref": "mattpocock-caveman-skill",
+      "priority": "P2",
+      "install_scope": "none-method-only",
+      "runtime_enabled": false,
+      "landing_targets": [
+        "communication profile guidance",
+        "context pressure response"
+      ],
+      "must_not": [
+        "set as default output style",
+        "compress destructive-action warnings",
+        "compress multi-step instructions where ambiguity increases risk"
+      ]
+    },
+    {
+      "id": "claude-mem-progressive-memory-search",
+      "source_ref": "thedotmack-claude-mem",
+      "priority": "P1",
+      "install_scope": "none-method-only",
+      "runtime_enabled": false,
+      "landing_targets": [
+        "adk-token-context-governance",
+        "memory-curator",
+        "context-compress-handoff"
+      ],
+      "must_not": [
+        "enable automatic session capture",
+        "start background workers",
+        "write long-term memory without review",
+        "expose local HTTP or vector services by default"
+      ]
+    },
+    {
+      "id": "compound-engineering-codify-loop",
+      "source_ref": "everyinc-compound-engineering",
+      "priority": "P0",
+      "install_scope": "none-method-only",
+      "runtime_enabled": false,
+      "landing_targets": [
+        "adk-verification-before-completion",
+        "adk-after-action-review",
+        "guidance promotion gates"
+      ],
+      "must_not": [
+        "import full external skill inventory",
+        "replace adk-first routing",
+        "spawn external agents without local contract"
+      ]
+    },
+    {
+      "id": "karpathy-llm-wiki-archive-model",
+      "source_ref": "karpathy-llm-wiki-pattern",
+      "priority": "P0",
+      "install_scope": "none-method-only",
+      "runtime_enabled": false,
+      "landing_targets": [
+        "knowledge-archive",
+        "archive-governance",
+        "memory-curator"
+      ],
+      "must_not": [
+        "replace docs/archive with an unreviewed external tool",
+        "edit raw source material",
+        "treat synthesized wiki pages as source of truth without raw fallback"
+      ]
+    }
+  ],
+  "contracts": [
+    {
+      "id": "llm-wiki-knowledge-compile-v1",
+      "owner": "agent-dev-kit",
+      "source_refs": [
+        "karpathy-llm-wiki-pattern"
+      ],
+      "architecture_layers": [
+        "raw_sources",
+        "maintained_wiki",
+        "schema"
+      ],
+      "recurring_operations": [
+        "ingest",
+        "query",
+        "lint"
+      ],
+      "required_fields": [
+        "raw_source_path",
+        "wiki_page_path",
+        "schema_path",
+        "source_url_or_local_path",
+        "summary",
+        "cross_references",
+        "stale_claims",
+        "raw_fallback",
+        "change_log"
+      ],
+      "quality_gates": [
+        "raw sources are immutable and never edited by the agent",
+        "wiki pages cite source material or raw evidence paths",
+        "schema defines naming, frontmatter, links and maintenance rules",
+        "lint checks stale claims, weak links, orphan pages and unresolved questions",
+        "query answers from compiled wiki must record valuable new synthesis back into the wiki only after review"
+      ],
+      "must_not": [
+        "treat generated wiki summaries as primary evidence",
+        "overwrite raw sources",
+        "create duplicate entity or concept pages without index lookup",
+        "promote external wiki tools without supply-chain review"
+      ]
+    },
+    {
+      "id": "codify-after-delivery-v1",
+      "owner": "agent-dev-kit",
+      "source_refs": [
+        "everyinc-compound-engineering"
+      ],
+      "workflow_stages": [
+        "plan",
+        "delegate",
+        "assess",
+        "codify"
+      ],
+      "required_fields": [
+        "delivery_goal",
+        "reusable_pattern",
+        "affected_asset",
+        "promotion_candidate",
+        "do_not_promote_reason",
+        "owner_review",
+        "rollback_path",
+        "verification_evidence"
+      ],
+      "quality_gates": [
+        "each completed substantial task explicitly decides whether a reusable convention, component, runbook or manifest update is justified",
+        "codify decisions distinguish reusable learning from one-off session noise",
+        "guidance promotions require owner review, verification evidence and rollback path",
+        "external workflow vocabulary cannot override adk-first routing"
+      ],
+      "must_not": [
+        "promote every session note into durable guidance",
+        "import a full external workflow suite without scope review",
+        "replace local verification with external plugin claims"
+      ]
+    },
+    {
+      "id": "memory-search-progressive-disclosure-v1",
+      "owner": "agent-dev-kit",
+      "source_refs": [
+        "thedotmack-claude-mem"
+      ],
+      "search_layers": [
+        "search_index",
+        "timeline_context",
+        "observation_details"
+      ],
+      "required_fields": [
+        "query",
+        "result_ids",
+        "time_window",
+        "project_scope",
+        "observation_type",
+        "redaction_status",
+        "detail_fetch_reason",
+        "owner_approval_for_persistent_memory"
+      ],
+      "quality_gates": [
+        "start with compact search results before fetching full observations",
+        "fetch timeline context only for selected IDs or scoped queries",
+        "batch detail fetches by ID and record why details are needed",
+        "long-term memory writes require review and redaction status",
+        "memory search must preserve raw evidence fallback"
+      ],
+      "must_not": [
+        "inject all historical observations into context by default",
+        "auto-capture raw tool output into long-term memory",
+        "start background workers or local HTTP services by default",
+        "treat vector search as authority without source evidence"
+      ]
+    },
+    {
+      "id": "low-token-communication-profile-v1",
+      "owner": "agent-dev-kit",
+      "source_refs": [
+        "mattpocock-caveman-skill"
+      ],
+      "trigger_conditions": [
+        "explicit low-token request",
+        "context pressure warning",
+        "status-only update",
+        "short tactical answer"
+      ],
+      "required_fields": [
+        "trigger",
+        "active_scope",
+        "technical_terms_preserved",
+        "safety_exception",
+        "restore_condition",
+        "user_override"
+      ],
+      "safety_exceptions": [
+        "security warning",
+        "irreversible action confirmation",
+        "multi-step instruction where compression risks ambiguity",
+        "user asks for clarification",
+        "review finding that needs precise evidence"
+      ],
+      "quality_gates": [
+        "token reduction must not remove command, path, source, risk or verification evidence",
+        "high-risk actions temporarily use full clarity",
+        "user can return to normal mode explicitly",
+        "Chinese technical answers keep terminology precise even when compressed"
+      ],
+      "must_not": [
+        "make terse style the default for all users",
+        "compress legal, security, data-loss or commit-risk warnings",
+        "hide uncertainty or missing evidence to save tokens"
+      ]
+    },
+    {
+      "id": "external-agent-plugin-intake-v1",
+      "owner": "agent-dev-kit",
+      "source_refs": [
+        "thedotmack-claude-mem",
+        "everyinc-compound-engineering",
+        "karpathy-llm-wiki-pattern",
+        "mattpocock-caveman-skill"
+      ],
+      "required_fields": [
+        "source_url",
+        "version_or_commit",
+        "license",
+        "install_surface",
+        "hooks",
+        "background_processes",
+        "local_ports",
+        "mcp_tools",
+        "data_retention",
+        "deny_path",
+        "secret_scan",
+        "rollback",
+        "disabled_by_default"
+      ],
+      "quality_gates": [
+        "external executable code requires supply-chain review before optional/profile promotion",
+        "plugins with hooks, workers, local ports or MCP tools require explicit runtime trust boundary",
+        "memory systems require retention, redaction, owner approval and raw fallback policy",
+        "large external skill inventories require sampling and conflict review before import",
+        "method-only adoption must not add install commands, package manager steps, plugin manifests or live runtime config"
+      ],
+      "must_not": [
+        "enable third-party hooks by default",
+        "run package-manager install commands during method-only absorption",
+        "write to ~/.codex or ~/.claude as part of reference intake",
+        "treat popularity, stars or marketplace presence as trust proof"
+      ]
+    }
+  ],
+  "quality_gate": {
+    "method_only_default": true,
+    "runtime_enabled_default_must_be_false": true,
+    "external_code_requires_supply_chain_review": true,
+    "memory_capture_requires_owner_approval": true,
+    "raw_evidence_fallback_required": true,
+    "low_token_profile_requires_safety_exceptions": true
+  }
+}
