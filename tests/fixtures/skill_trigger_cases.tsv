@@ -31,6 +31,9 @@ adk-after-action-review	skill	1	这次踩坑了，需要经验沉淀避免重复
 adk-after-action-review	skill	0	只保存完整聊天记录不要提取经验
 adk-token-context-governance	skill	1	上下文太大，需要先压缩输出再按需回退原文
 adk-token-context-governance	skill	1	docker 日志太长，先做 token budget 摘要并保留 raw_evidence
+adk-token-context-governance	skill	1	请低 token 汇报，但保留命令路径风险和验证证据
+adk-token-context-governance	skill	1	把这份报告做 Knowledge Compile，保留 raw_fallback
+adk-token-context-governance	skill	1	查最近决策时使用 Progressive Memory Search 渐进记忆检索
 adk-token-context-governance	skill	0	高风险审计要求直接看原文
 adk-incident-rca-report	optional-skill	1	线上事故需要做根因分析复盘
 adk-incident-rca-report	optional-skill	0	本地开发阶段的临时报错先不复盘

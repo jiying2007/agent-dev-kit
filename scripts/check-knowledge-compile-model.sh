@@ -23,10 +23,12 @@ require_text() {
 RUNBOOK="docs/runbooks/knowledge-compile-model.md"
 TEMPLATE="templates/memory/knowledge-compile-note.md"
 SKILL="skills/adk-token-context-governance/SKILL.md"
+EXAMPLE="tests/fixtures/knowledge-compile/example-note.md"
 
 require_file "$RUNBOOK"
 require_file "$TEMPLATE"
 require_file "$SKILL"
+require_file "$EXAMPLE"
 
 for layer in raw_sources maintained_wiki schema; do
   require_text "$RUNBOOK" "$layer"
@@ -62,5 +64,18 @@ require_text "$SKILL" "raw_fallback"
 require_text "$SKILL" "raw_sources"
 require_text "$SKILL" "maintained_wiki"
 require_text "$SKILL" "schema"
+
+for pattern in \
+  "raw_source_path" \
+  "raw_sources/runtime-pilot-raw.md" \
+  "wiki_page_path" \
+  "maintained_wiki/runtime-pilot.md" \
+  "schema_path" \
+  "schema/knowledge-compile.schema.json" \
+  "raw_fallback" \
+  "required_for: promotion, dispute, stale claim review" \
+  "change_log"; do
+  require_text "$EXAMPLE" "$pattern"
+done
 
 echo "[PASS] knowledge compile model"

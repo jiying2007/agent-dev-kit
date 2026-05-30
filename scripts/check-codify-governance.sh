@@ -23,6 +23,8 @@ require_text() {
 require_file "skills/adk-after-action-review/SKILL.md"
 require_file "skills/adk-verification-before-completion/SKILL.md"
 require_file "templates/governance/codify-decision.md"
+require_file "tests/fixtures/codify-decision/promotion_candidate_true.md"
+require_file "tests/fixtures/codify-decision/promotion_candidate_false.md"
 
 for field in delivery_goal reusable_pattern affected_asset promotion_candidate do_not_promote_reason owner_review rollback_path verification_evidence; do
   require_text "templates/governance/codify-decision.md" "^${field}:"
@@ -36,5 +38,28 @@ require_text "skills/adk-after-action-review/SKILL.md" "promotion_candidate: tru
 require_text "skills/adk-verification-before-completion/SKILL.md" "promotion_candidate: true"
 require_text "skills/adk-verification-before-completion/SKILL.md" "needs-fix"
 require_text "templates/governance/codify-decision.md" "negative_or_disproved_path"
+
+TRUE_FIXTURE="tests/fixtures/codify-decision/promotion_candidate_true.md"
+FALSE_FIXTURE="tests/fixtures/codify-decision/promotion_candidate_false.md"
+
+for pattern in \
+  "^promotion_candidate: true" \
+  "^do_not_promote_reason: not-applicable" \
+  "status: approved" \
+  "rollback_path:" \
+  "verification_evidence:" \
+  "negative_or_disproved_path:"; do
+  require_text "$TRUE_FIXTURE" "$pattern"
+done
+
+for pattern in \
+  "^promotion_candidate: false" \
+  "do_not_promote_reason: one-off runtime observation" \
+  "status: not-required" \
+  "rollback_path:" \
+  "verification_evidence:" \
+  "negative_or_disproved_path:"; do
+  require_text "$FALSE_FIXTURE" "$pattern"
+done
 
 echo "[PASS] codify governance"

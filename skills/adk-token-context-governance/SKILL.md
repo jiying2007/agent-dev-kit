@@ -13,6 +13,13 @@ triggers:
   - "token budget"
   - "上下文预算"
   - "审计模式"
+  - "低 token"
+  - "Low Token"
+  - "Low Token Profile"
+  - "知识编译"
+  - "Knowledge Compile"
+  - "渐进记忆检索"
+  - "Progressive Memory Search"
 non_triggers:
   - "单文件小改且上下文已充足"
   - "高风险审计要求直接看原文"

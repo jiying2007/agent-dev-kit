@@ -33,8 +33,10 @@ RUNBOOK="$ROOT_DIR/docs/runbooks/token-context-governance.md"
 MEMORY_TEMPLATE="$ROOT_DIR/templates/context/memory-search-result.md"
 LOW_TOKEN_TEMPLATE="$ROOT_DIR/templates/context/low-token-profile.md"
 MANIFEST="$ROOT_DIR/manifests/external_agent_pattern_contracts.json"
+MEMORY_EXAMPLE="$ROOT_DIR/tests/fixtures/context/memory-search-result-example.md"
+LOW_TOKEN_EXAMPLE="$ROOT_DIR/tests/fixtures/context/low-token-safety-exceptions.md"
 
-for file in "$RUNBOOK" "$MEMORY_TEMPLATE" "$LOW_TOKEN_TEMPLATE" "$MANIFEST"; do
+for file in "$RUNBOOK" "$MEMORY_TEMPLATE" "$LOW_TOKEN_TEMPLATE" "$MANIFEST" "$MEMORY_EXAMPLE" "$LOW_TOKEN_EXAMPLE"; do
   require_file "$file"
 done
 
@@ -84,6 +86,33 @@ for contract_id in \
   'low-token-communication-profile-v1'; do
   require_text "$MANIFEST" "$contract_id" "manifest contract: $contract_id"
 done
+
+for layer in \
+  'search_layer: search_index' \
+  'search_layer: timeline_context' \
+  'search_layer: observation_details'; do
+  require_text "$MEMORY_EXAMPLE" "$layer" "memory example layer: $layer"
+done
+
+for field in \
+  'detail_fetch_reason: implementation handoff requires exact prior decision' \
+  'raw_fallback: reports/adk-capability-runtime-pilot-2026-05-30.md' \
+  'owner_approval_for_persistent_memory: not-requested' \
+  'redaction_status: none'; do
+  require_text "$MEMORY_EXAMPLE" "$field" "memory example field: $field"
+done
+
+for exception in \
+  'security warning example' \
+  'irreversible action confirmation example' \
+  'multi-step ambiguity example' \
+  'review finding precision example'; do
+  require_text "$LOW_TOKEN_EXAMPLE" "$exception" "low-token example: $exception"
+done
+
+require_text "$LOW_TOKEN_EXAMPLE" 'full_clarity_required: true' 'low-token full clarity restore'
+require_text "$LOW_TOKEN_EXAMPLE" 'active_scope: status_update_only' 'low-token compressed scope example'
+require_text "$LOW_TOKEN_EXAMPLE" 'active_scope: approval_prompt' 'low-token approval scope example'
 
 if [[ "${#failures[@]}" -gt 0 ]]; then
   for failure in "${failures[@]}"; do
