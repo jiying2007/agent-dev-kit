@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-05-26",
+  "last_updated": "2026-05-31",
   "source_docs": [
     "openai-structured-model-outputs",
     "openai-function-calling-strict",
@@ -100,7 +100,7 @@
         "adk-plan-lite"
       ],
       "schema_target": "lightweight_plan",
-      "schema_format": "markdown_sections",
+      "schema_format": "json_schema",
       "strict": true,
       "required_fields": [
         "scope",
@@ -124,7 +124,7 @@
         "adk-developer-growth-review"
       ],
       "schema_target": "developer_growth_review",
-      "schema_format": "markdown_sections",
+      "schema_format": "json_schema",
       "strict": true,
       "required_fields": [
         "source_scope",
@@ -151,7 +151,7 @@
         "adk-knowledge-archive"
       ],
       "schema_target": "archive_governance_report",
-      "schema_format": "markdown_sections",
+      "schema_format": "json_schema",
       "strict": true,
       "required_fields": [
         "scope",
@@ -177,7 +177,7 @@
         "adk-repo-drift-remediation"
       ],
       "schema_target": "repo_drift_report",
-      "schema_format": "markdown_sections",
+      "schema_format": "json_schema",
       "strict": true,
       "required_fields": [
         "scope",
@@ -204,7 +204,7 @@
         "adk-embedded-diagnostic-harness"
       ],
       "schema_target": "embedded_release_or_diagnostic_gate",
-      "schema_format": "markdown_sections",
+      "schema_format": "json_schema",
       "strict": true,
       "required_fields": [
         "release_or_diagnostic_scope",

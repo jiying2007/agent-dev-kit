@@ -11,26 +11,26 @@ risk: low
 
 ## raw_source_path
 
-- 
+-
 
 ## wiki_page_path
 
-- 
+-
 
 ## schema_path
 
-- 
+-
 
 ## source_url_or_local_path
 
-- 
+-
 
 ## summary
 
 
 ## cross_references
 
-- 
+-
 
 ## stale_claims
 
