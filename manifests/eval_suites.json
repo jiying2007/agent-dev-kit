@@ -35,6 +35,41 @@
           "id": "routing-use-planning",
           "input": "分阶段执行一个跨文档和脚本的长任务",
           "expected": "adk-planning-execution-loop"
+        },
+        {
+          "id": "routing-use-plan-lite",
+          "input": "先给我一个实现计划，不要修改文件",
+          "expected": "adk-plan-lite"
+        },
+        {
+          "id": "routing-use-developer-growth-review",
+          "input": "做一次开发者成长复盘，跨项目分析我的编码习惯和学习建议",
+          "expected": "adk-developer-growth-review"
+        },
+        {
+          "id": "routing-use-context-compress-handoff",
+          "input": "上下文压缩并生成恢复提示，方便新线程接着干",
+          "expected": "adk-context-compress-handoff"
+        },
+        {
+          "id": "routing-use-archive-governance",
+          "input": "archive-check 报 topic 未登记和 meta v2 缺失，需要归档治理",
+          "expected": "adk-archive-governance"
+        },
+        {
+          "id": "routing-use-embedded-diagnostic-harness",
+          "input": "diag 命令 strict suite invoke_ret 语义需要诊断验证",
+          "expected": "adk-embedded-diagnostic-harness"
+        },
+        {
+          "id": "routing-use-embedded-release-orchestration",
+          "input": "嵌入式发布编排需要生成 OTA 发布包和 NAS publish dry-run",
+          "expected": "adk-embedded-release-orchestration"
+        },
+        {
+          "id": "routing-use-repo-drift-remediation",
+          "input": "全仓漂移治理，清理残留和文档代码不一致",
+          "expected": "adk-repo-drift-remediation"
         }
       ],
       "graders": [
@@ -152,7 +187,7 @@
         {
           "id": "golden-use-context-handoff-for-session-continuity",
           "input": "压缩上下文并生成恢复提示，方便新线程接着干",
-          "expected": "context-compress-handoff"
+          "expected": "adk-context-compress-handoff"
         }
       ],
       "graders": [

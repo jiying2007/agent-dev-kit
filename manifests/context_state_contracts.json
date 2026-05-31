@@ -16,7 +16,7 @@
       "id": "long-thread-session-summary",
       "owner": "agent-dev-kit",
       "applies_to": [
-        "context-compress-handoff",
+        "adk-context-compress-handoff",
         "adk-token-context-governance",
         "session-wrap"
       ],
@@ -113,7 +113,7 @@
       "applies_to": [
         "AGENTS.md",
         "skill routing",
-        "context-compress-handoff",
+        "adk-context-compress-handoff",
         "api-backed agent runner pilots"
       ],
       "authority_layers": [

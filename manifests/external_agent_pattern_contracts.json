@@ -65,8 +65,8 @@
       "runtime_enabled": false,
       "landing_targets": [
         "adk-token-context-governance",
-        "memory-curator",
-        "context-compress-handoff"
+        "adk-memory-curator",
+        "adk-context-compress-handoff"
       ],
       "must_not": [
         "enable automatic session capture",
@@ -99,9 +99,9 @@
       "install_scope": "none-method-only",
       "runtime_enabled": false,
       "landing_targets": [
-        "knowledge-archive",
-        "archive-governance",
-        "memory-curator"
+        "adk-knowledge-archive",
+        "adk-archive-governance",
+        "adk-memory-curator"
       ],
       "must_not": [
         "replace docs/archive with an unreviewed external tool",

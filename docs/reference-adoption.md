@@ -137,3 +137,45 @@
 - 不对写操作、删除、部署、数据库写入等命令做“压缩后替代审查”。
 - 不只保存摘要而丢弃原文入口，避免复盘时证据不可追溯。
 - 不把一次性日志、过期项目结构或未经确认的猜测写成长期索引。
+
+## 10. Composio Codex Skill 方法迁移（2026-05-31）
+
+借鉴点：
+- `create-plan` 的轻量只读计划输出：用户明确要求计划时，先给范围、行动项、验证和风险，不进入实现。
+- `developer-growth-analysis` 的个人成长复盘思路：从本地开发历史中识别重复问题、能力短板和学习建议。
+
+落地点：
+- `skills/adk-plan-lite/SKILL.md`
+- `skills/adk-developer-growth-review/SKILL.md`
+- `manifest.yaml` routing：`plan_lite`、`developer_growth_review`
+- `manifests/structured_output_contracts.json`
+- `tests/fixtures/skill_trigger_cases.tsv`
+
+有意排除：
+- 不复制外部 Slack 自动发送能力；外部发送必须用户显式授权。
+- 不复制默认 HackerNews 联网检索；学习资源搜索是显式可选增强。
+- 不把第三方 skill 原样并入 ADK；只吸收方法论，并用 ADK 的本地宽读、证据索引、隐私脱敏和 memory candidate 门禁重构。
+
+## 11. Codex 本地治理 Skill 方法迁移（2026-05-31）
+
+借鉴点：
+- 嵌入式诊断 harness 的 `prog_tool`、`diag`、`strict/env suite`、`invoke_ret/code` 语义，迁移为 ADK 的可验证诊断门禁。
+- 嵌入式发布编排的 SoC/MCU/bootloader、SD/OTA/NAS、版本、校验和、dry-run、non-overwrite 与回滚链路。
+- 上下文压缩、记忆整理、知识归档、归档治理和仓库漂移治理的本地只读优先、证据索引、候选写入和人工审批边界。
+
+落地点：
+- `skills/adk-embedded-diagnostic-harness/SKILL.md`
+- `skills/adk-embedded-release-orchestration/SKILL.md`
+- `skills/adk-context-compress-handoff/SKILL.md`
+- `skills/adk-memory-curator/SKILL.md`
+- `skills/adk-archive-governance/SKILL.md`
+- `skills/adk-knowledge-archive/SKILL.md`
+- `skills/adk-repo-drift-remediation/SKILL.md`
+- `manifest.yaml` routing：`embedded_diagnostic_harness`、`embedded_release_orchestration`、`context_compress_handoff`、`memory_curator`、`archive_governance`、`knowledge_archive`、`repo_drift_remediation`
+- `manifests/structured_output_contracts.json`
+- `tests/fixtures/skill_trigger_cases.tsv`
+
+有意排除：
+- 不把旧 `~/codex` 本地 skill 作为长期双轨维护；ADK 版本通过 `~/codex` 声明式资产链路发布到 live。
+- 不默认发布、删除、覆盖 NAS/产线/归档/记忆文件；高风险写操作保持显式审批。
+- 不启用外部服务、后台 worker、MCP server 或联网学习资源；本次迁移只吸收本地方法和运行边界。

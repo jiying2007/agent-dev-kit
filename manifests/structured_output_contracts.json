@@ -69,7 +69,7 @@
       "id": "adk-handoff-summary-schema-v1",
       "owner": "agent-dev-kit",
       "applies_to": [
-        "context-compress-handoff",
+        "adk-context-compress-handoff",
         "session-wrap",
         "worktree-closeout"
       ],
@@ -91,6 +91,136 @@
         "schema fields must map to context_state_contracts",
         "raw evidence references must remain local paths or source URLs",
         "excluded context must not re-enter active instructions"
+      ]
+    },
+    {
+      "id": "adk-plan-lite-schema-v1",
+      "owner": "agent-dev-kit",
+      "applies_to": [
+        "adk-plan-lite"
+      ],
+      "schema_target": "lightweight_plan",
+      "schema_format": "markdown_sections",
+      "strict": true,
+      "required_fields": [
+        "scope",
+        "action_items",
+        "validation_items",
+        "risk_items",
+        "open_questions"
+      ],
+      "additional_properties": false,
+      "refusal_handling": "If the task is too large for read-only lightweight planning, route to adk-task-breakdown or adk-planning-execution-loop.",
+      "drift_controls": [
+        "read-only plan output must not imply files were changed",
+        "validation items must remain visible in the final plan",
+        "large or executable tasks must record escalation decision"
+      ]
+    },
+    {
+      "id": "adk-developer-growth-review-schema-v1",
+      "owner": "agent-dev-kit",
+      "applies_to": [
+        "adk-developer-growth-review"
+      ],
+      "schema_target": "developer_growth_review",
+      "schema_format": "markdown_sections",
+      "strict": true,
+      "required_fields": [
+        "source_scope",
+        "privacy_handling",
+        "work_pattern_summary",
+        "recurring_trends",
+        "improvement_areas",
+        "training_plan",
+        "optional_followups"
+      ],
+      "additional_properties": false,
+      "refusal_handling": "If local evidence is unavailable, return needs-fix with missing sources instead of inventing trends.",
+      "drift_controls": [
+        "findings must cite local evidence or be marked low confidence",
+        "external search and external delivery remain disabled unless user-authorized",
+        "memory writes remain candidates until explicitly approved"
+      ]
+    },
+    {
+      "id": "adk-archive-governance-schema-v1",
+      "owner": "agent-dev-kit",
+      "applies_to": [
+        "adk-archive-governance",
+        "adk-knowledge-archive"
+      ],
+      "schema_target": "archive_governance_report",
+      "schema_format": "markdown_sections",
+      "strict": true,
+      "required_fields": [
+        "scope",
+        "archive_findings",
+        "metadata_actions",
+        "topic_registry_decision",
+        "sensitive_data_check",
+        "verification",
+        "remaining_risks"
+      ],
+      "additional_properties": false,
+      "refusal_handling": "If archive evidence is unavailable, return needs-fix with missing paths instead of inventing metadata decisions.",
+      "drift_controls": [
+        "new archive notes and existing archive governance remain separate intents",
+        "topic registry changes must cite the affected archive paths",
+        "raw source evidence must remain reachable from generated notes"
+      ]
+    },
+    {
+      "id": "adk-repo-drift-remediation-schema-v1",
+      "owner": "agent-dev-kit",
+      "applies_to": [
+        "adk-repo-drift-remediation"
+      ],
+      "schema_target": "repo_drift_report",
+      "schema_format": "markdown_sections",
+      "strict": true,
+      "required_fields": [
+        "scope",
+        "baseline",
+        "drift_findings",
+        "classification",
+        "recommended_actions",
+        "verification",
+        "do_not_touch"
+      ],
+      "additional_properties": false,
+      "refusal_handling": "If the repository state cannot be read safely, return blocked with the missing command or permission boundary.",
+      "drift_controls": [
+        "known baseline drift must be separated from real remediation changes",
+        "subrepo worktree dirtiness must not be treated as root gitlink movement without evidence",
+        "cleanup actions must remain explicit and reviewable"
+      ]
+    },
+    {
+      "id": "adk-embedded-release-orchestration-schema-v1",
+      "owner": "agent-dev-kit",
+      "applies_to": [
+        "adk-embedded-release-orchestration",
+        "adk-embedded-diagnostic-harness"
+      ],
+      "schema_target": "embedded_release_or_diagnostic_gate",
+      "schema_format": "markdown_sections",
+      "strict": true,
+      "required_fields": [
+        "release_or_diagnostic_scope",
+        "artifacts",
+        "version_and_checksum",
+        "dry_run_or_hil_sil_evidence",
+        "publishing_decision",
+        "rollback_plan",
+        "remaining_risks"
+      ],
+      "additional_properties": false,
+      "refusal_handling": "If hardware, signing or publishing access is missing, return needs-fix with the safe dry-run evidence that was available.",
+      "drift_controls": [
+        "publish and delete actions require explicit user approval",
+        "OTA, SD, MCU and NAS artifacts must record version, checksum and destination",
+        "diagnostic expected codes and invoke_ret semantics must stay machine-readable"
       ]
     },
     {

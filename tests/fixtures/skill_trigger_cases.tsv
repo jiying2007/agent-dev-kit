@@ -14,6 +14,27 @@ adk-branch-closeout	skill	0	仍有测试失败且未定位根因
 adk-requirements-triage	skill	1	需求不清楚，需要先梳理验收标准
 adk-requirements-triage	skill	1	帮我实现一个新功能，需要先明确目标、边界和验收标准
 adk-requirements-triage	skill	0	这次只是纯代码风格调整
+adk-plan-lite	skill	1	先给我一个实现计划，不要修改文件
+adk-plan-lite	skill	1	create plan for this coding task
+adk-plan-lite	skill	0	任务太大需要拆解任务并规划并行边界
+adk-developer-growth-review	skill	1	做一次开发者成长复盘，分析我的编码习惯和学习建议
+adk-developer-growth-review	skill	1	请做 developer growth review，跨项目看长期趋势
+adk-developer-growth-review	skill	0	只总结当前会话，不做成长分析
+adk-context-compress-handoff	skill	1	上下文压缩并生成恢复提示，方便新线程接着干
+adk-context-compress-handoff	skill	1	请做 context preflight 和 resume prompt
+adk-context-compress-handoff	skill	0	只做当前会话总结，不需要接力恢复提示
+adk-memory-curator	skill	1	整理 memory 并生成长期记忆候选
+adk-memory-curator	skill	1	做一次记忆审计，清理过期 memory candidate
+adk-memory-curator	skill	0	只做任务复盘，不整理长期记忆
+adk-archive-governance	skill	1	archive-check 报 topic 未登记和 meta v2 缺失
+adk-archive-governance	skill	1	修复 docs/archive 归档不合规元数据
+adk-archive-governance	skill	0	新建一篇归档笔记，不检查已有归档
+adk-knowledge-archive	skill	1	把排障结论保存到 docs/archive
+adk-knowledge-archive	skill	1	将研究笔记归档并长期沉淀
+adk-knowledge-archive	skill	0	归档检查失败需要治理已有 meta
+adk-repo-drift-remediation	skill	1	全仓漂移治理，清理残留和文档代码不一致
+adk-repo-drift-remediation	skill	1	做 repo drift 检查并给出处置建议
+adk-repo-drift-remediation	skill	0	单文件小改，不做全仓治理
 adk-driver-bringup-checklist	skill	1	驱动开发新外设联调
 adk-driver-bringup-checklist	skill	0	稳定量产驱动小改可以直接修复
 adk-release-versioning	skill	1	版本发布前需要整理版本策略
@@ -21,6 +42,12 @@ adk-release-versioning	skill	0	开发中临时调试无需发布说明
 adk-bsp-porting-playbook	skill	1	启动链 bring-up 需要检查 Bootloader 和 rootfs
 adk-production-field-readiness	skill	1	量产产测烧录诊断 OTA 回滚和现场维护 readiness
 adk-production-field-readiness	skill	0	通用 Web 发布不涉及设备交付
+adk-embedded-diagnostic-harness	skill	1	diag 命令 strict suite invoke_ret 语义需要诊断验证
+adk-embedded-diagnostic-harness	skill	1	prog_tool 产测诊断 harness 需要 env suite 和 expected code
+adk-embedded-diagnostic-harness	skill	0	普通单元测试不涉及诊断 harness
+adk-embedded-release-orchestration	skill	1	嵌入式发布编排需要生成 OTA 发布包和 NAS publish dry-run
+adk-embedded-release-orchestration	skill	1	固件发布需要 SD 升级包、MCU 固件包和 release bundle
+adk-embedded-release-orchestration	skill	0	只写 changelog 不做发布编排
 adk-systematic-debugging	skill	1	调试排查问题根因不明确
 adk-systematic-debugging	skill	1	真实问题排查需要定位根因再修复
 adk-systematic-debugging	skill	0	纯文档或命名修改不需要调试流程

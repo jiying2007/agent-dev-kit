@@ -253,6 +253,16 @@ skills:
     quality_tier: p0
     depends_on:
       - adk-requirements-triage
+  - name: adk-plan-lite
+    path: skills/adk-plan-lite/SKILL.md
+    quality_tier: p1
+    depends_on: []
+  - name: adk-context-compress-handoff
+    path: skills/adk-context-compress-handoff/SKILL.md
+    quality_tier: p1
+    depends_on:
+      - adk-token-context-governance
+      - adk-verification-before-completion
   - name: adk-interface-contract-design
     path: skills/adk-interface-contract-design/SKILL.md
     quality_tier: p0
@@ -321,6 +331,28 @@ skills:
     quality_tier: p0
     depends_on:
       - adk-verification-before-completion
+  - name: adk-developer-growth-review
+    path: skills/adk-developer-growth-review/SKILL.md
+    quality_tier: p1
+    depends_on:
+      - adk-after-action-review
+      - adk-token-context-governance
+  - name: adk-memory-curator
+    path: skills/adk-memory-curator/SKILL.md
+    quality_tier: p1
+    depends_on:
+      - adk-after-action-review
+      - adk-token-context-governance
+  - name: adk-archive-governance
+    path: skills/adk-archive-governance/SKILL.md
+    quality_tier: p1
+    depends_on:
+      - adk-verification-before-completion
+  - name: adk-knowledge-archive
+    path: skills/adk-knowledge-archive/SKILL.md
+    quality_tier: p1
+    depends_on:
+      - adk-archive-governance
   - name: adk-integration-hil-sil
     path: skills/adk-integration-hil-sil/SKILL.md
     quality_tier: p0
@@ -347,6 +379,18 @@ skills:
     depends_on:
       - adk-release-versioning
       - adk-integration-hil-sil
+  - name: adk-embedded-diagnostic-harness
+    path: skills/adk-embedded-diagnostic-harness/SKILL.md
+    quality_tier: p0
+    depends_on:
+      - adk-test-strategy
+      - adk-integration-hil-sil
+  - name: adk-embedded-release-orchestration
+    path: skills/adk-embedded-release-orchestration/SKILL.md
+    quality_tier: p0
+    depends_on:
+      - adk-release-versioning
+      - adk-production-field-readiness
   - name: adk-commit-pr-quality-gate
     path: skills/adk-commit-pr-quality-gate/SKILL.md
     quality_tier: p0
@@ -369,6 +413,11 @@ skills:
     quality_tier: p0
     depends_on:
       - adk-context-engineering
+      - adk-verification-before-completion
+  - name: adk-repo-drift-remediation
+    path: skills/adk-repo-drift-remediation/SKILL.md
+    quality_tier: p1
+    depends_on:
       - adk-verification-before-completion
   - name: adk-chinese-commit-conventions
     path: skills/adk-chinese-commit-conventions/SKILL.md
@@ -443,6 +492,7 @@ profiles:
     include_skills:
       - adk-runtime-router
       - adk-requirements-triage
+      - adk-plan-lite
       - adk-task-breakdown
       - adk-test-strategy
       - adk-code-review-loop
@@ -456,6 +506,8 @@ profiles:
       - adk-verification-before-completion
       - adk-after-action-review
       - adk-token-context-governance
+      - adk-context-compress-handoff
+      - adk-repo-drift-remediation
       - adk-commit-pr-quality-gate
   release-hardening:
     description: 发布加固配置（安全审查、性能优化、合规检查）
@@ -482,6 +534,9 @@ profiles:
       - adk-verification-before-completion
       - adk-after-action-review
       - adk-token-context-governance
+      - adk-context-compress-handoff
+      - adk-repo-drift-remediation
+      - adk-embedded-release-orchestration
       - adk-commit-pr-quality-gate
   personal-core:
     description: 个人通用 ADK 资产配置（核心功能 + 发布检查）
@@ -496,9 +551,16 @@ profiles:
       - code-review-governor
     include_skills:
       - adk-requirements-triage
+      - adk-plan-lite
       - adk-task-breakdown
       - adk-commit-pr-quality-gate
       - adk-release-versioning
+      - adk-developer-growth-review
+      - adk-context-compress-handoff
+      - adk-memory-curator
+      - adk-archive-governance
+      - adk-knowledge-archive
+      - adk-repo-drift-remediation
   embedded-fullstack:
     description: 嵌入式全栈开发配置（芯片/板级、启动链、BSP、驱动、组件、应用、工具、验证、量产和现场维护）
     trigger_examples:
@@ -536,6 +598,8 @@ profiles:
       - adk-performance-profiling-embedded
       - adk-release-versioning
       - adk-production-field-readiness
+      - adk-embedded-diagnostic-harness
+      - adk-embedded-release-orchestration
       - adk-verification-before-completion
       - adk-after-action-review
       - adk-token-context-governance
@@ -553,10 +617,17 @@ profiles:
       - code-review-governor
     include_skills:
       - adk-requirements-triage
+      - adk-plan-lite
       - adk-task-breakdown
       - adk-commit-pr-quality-gate
       - adk-after-action-review
       - adk-token-context-governance
+      - adk-developer-growth-review
+      - adk-context-compress-handoff
+      - adk-memory-curator
+      - adk-archive-governance
+      - adk-knowledge-archive
+      - adk-repo-drift-remediation
       - adk-grill-with-docs
       - adk-chinese-commit-conventions
       - adk-chinese-code-review
@@ -613,6 +684,9 @@ profiles:
       - adk-repo-prompt-analyzer
       - adk-skill-deep-analyzer
       - adk-intake-workflow
+      - adk-archive-governance
+      - adk-knowledge-archive
+      - adk-memory-curator
 
 workflows:
   - name: adk-delivery-gate
@@ -721,6 +795,15 @@ routing:
       primary_skill: adk-task-breakdown
       supporting_skills:
         - adk-requirements-triage
+    - intent: plan_lite
+      intent_zh: "给我一个计划/制定计划/实现计划/只要计划/先给计划/create plan/plan only/轻量计划"
+      primary_skill: adk-plan-lite
+      supporting_skills: []
+    - intent: context_compress_handoff
+      intent_zh: "上下文压缩/会话接力/恢复提示/压缩前处理/context preflight/resume prompt/90秒模板"
+      primary_skill: adk-context-compress-handoff
+      supporting_skills:
+        - adk-token-context-governance
     - intent: parallel_agent_governance
       intent_zh: "并行agent/多agent/子代理/并行施工/并行调度/多任务并行"
       primary_skill: adk-parallel-agent-governance
@@ -760,6 +843,33 @@ routing:
     - intent: after_action_review
       intent_zh: "任务复盘/经验沉淀/memory candidate/After Action Review/避免重复犯错/复盘lessons"
       primary_skill: adk-after-action-review
+      supporting_skills:
+        - adk-verification-before-completion
+    - intent: developer_growth_review
+      intent_zh: "开发者成长复盘/成长分析/学习建议/分析我的编码习惯/分析最近工作/developer growth/growth review/个人成长报告"
+      primary_skill: adk-developer-growth-review
+      supporting_skills:
+        - adk-after-action-review
+        - adk-token-context-governance
+    - intent: memory_curator
+      intent_zh: "记忆整理/memory curator/整理memory/记忆审计/长期记忆候选/memory candidate/清理记忆"
+      primary_skill: adk-memory-curator
+      supporting_skills:
+        - adk-after-action-review
+        - adk-token-context-governance
+    - intent: archive_governance
+      intent_zh: "归档治理/归档检查/归档修复/archive-check/meta v2/topic未登记/归档不合规/归档元数据"
+      primary_skill: adk-archive-governance
+      supporting_skills:
+        - adk-verification-before-completion
+    - intent: knowledge_archive
+      intent_zh: "知识归档/长期沉淀/保存到archive/保存到docs/archive/日报归档/会话总结归档/排障结论归档/研究笔记归档"
+      primary_skill: adk-knowledge-archive
+      supporting_skills:
+        - adk-archive-governance
+    - intent: repo_drift_remediation
+      intent_zh: "仓库漂移/全仓漂移/repo drift/全面检查/残留清理/边界不清/文档代码不一致/全仓治理/提交前质量收口"
+      primary_skill: adk-repo-drift-remediation
       supporting_skills:
         - adk-verification-before-completion
     - intent: commit_pr_quality_gate
@@ -845,6 +955,18 @@ routing:
         - adk-release-versioning
         - adk-integration-hil-sil
         - adk-verification-before-completion
+    - intent: embedded_diagnostic_harness
+      intent_zh: "诊断harness/diag命令/prog_tool/strict suite/env suite/invoke_ret/产测诊断/诊断验证/diagnostic harness"
+      primary_skill: adk-embedded-diagnostic-harness
+      supporting_skills:
+        - adk-test-strategy
+        - adk-integration-hil-sil
+    - intent: embedded_release_orchestration
+      intent_zh: "嵌入式发布编排/固件发布/OTA发布/NAS发布/产线发布/release bundle/SD升级包/MCU固件包"
+      primary_skill: adk-embedded-release-orchestration
+      supporting_skills:
+        - adk-release-versioning
+        - adk-production-field-readiness
     - intent: release_versioning
       intent_zh: "版本发布/准备发布/发布前检查"
       primary_skill: adk-release-versioning
