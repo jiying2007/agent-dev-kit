@@ -210,11 +210,14 @@ check_memory_constraints() {
 #### 3.1.3 Agent 角色：嵌入式专用角色
 
 ```yaml
-# 在 agent-dev-kit/skills/ 下新增嵌入式专用角色
+# 在 agent-dev-kit/agents/ 下保留领域角色，在 skills/ 下保留能力型技能
 
 # 1. BSP 分析师
-adk-bsp-analyst:
+bsp-analyst:
   description: BSP 代码分析、架构梳理、历史追溯
+  default_skills:
+    - adk-bsp-analysis
+    - adk-bsp-porting-playbook
   responsibilities:
     - 梳理 vendor BSP 代码结构
     - 识别关键函数调用关系
@@ -225,21 +228,24 @@ adk-bsp-analyst:
     - 必须标注置信度
     - 不确定的事实必须明示"待确认"
 
-# 2. 驱动开发者
-adk-driver-developer:
-  description: 嵌入式驱动开发
+# 2. 驱动实现能力
+adk-driver-implementation:
+  description: 嵌入式驱动实现、联调验证与风险收口
   responsibilities:
     - 按 datasheet 编写寄存器读写代码
     - 实现中断处理函数
     - 编写 DMA 传输逻辑
   constraints:
     - 中断处理函数禁止 mutex_lock/kmalloc(GFP_KERNEL)
-    - 价格字段必须用 long 类型（单位为分）
-    - 外部服务调用必须设置超时和降级
+    - 外设访问必须设置超时和错误路径
+    - DMA 路径必须处理映射、同步和回收
 
 # 3. 硬件调试员
-adk-hardware-debugger:
+hardware-debugger:
   description: 硬件问题调试、oops 分析
+  default_skills:
+    - adk-hardware-debugging
+    - adk-systematic-debugging
   responsibilities:
     - 分析 kernel oops/panic 信息
     - 定位硬件交互问题
@@ -363,11 +369,16 @@ check_doc_sync() {
 #### 3.2.3 Agent 角色专业化分离
 
 ```yaml
-# 在 agent-dev-kit/skills/ 下新增角色分离的技能
+# 硬切换后不保留 Planner/Generator/Evaluator 旧角色。
+# 规划、实现、评估分别归入现有稳定角色和能力型 Skill。
 
-# 1. Planner 角色
-adk-planner:
+# 1. 需求与任务规划
+requirements-analyst + architecture-planner:
   description: 需求分析、任务拆解、方案设计
+  skills:
+    - adk-requirements-triage
+    - adk-task-breakdown
+    - adk-interface-contract-design
   responsibilities:
     - 需求澄清与确认
     - 任务拆解与依赖分析
@@ -377,9 +388,12 @@ adk-planner:
     - tasks.md
     - design.md
 
-# 2. Generator 角色
-adk-generator:
+# 2. 实现执行
+driver-engineer + component-engineer + application-engineer:
   description: 编码实现、单元测试编写
+  skills:
+    - adk-driver-implementation
+    - adk-unit-test-embedded
   responsibilities:
     - 按规范编码实现
     - 编写单元测试
@@ -389,9 +403,12 @@ adk-generator:
     - unit tests
     - coding_report.md
 
-# 3. Evaluator 角色
-adk-evaluator:
+# 3. 验证与评审
+test-validation-engineer + code-review-governor:
   description: 代码评审、质量验证
+  skills:
+    - adk-verification-before-completion
+    - adk-code-review-loop
   responsibilities:
     - 代码评审
     - 质量门禁检查

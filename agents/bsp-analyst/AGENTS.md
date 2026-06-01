@@ -1,4 +1,4 @@
-# adk-bsp-analyst
+# bsp-analyst
 
 ## 角色定位
 - 职责：分析 BSP 代码结构、启动链路、平台抽象和历史补丁，形成可追溯的架构认知。
@@ -32,7 +32,7 @@
 ## 阻塞与升级
 - 缺少 datasheet、schematic 或启动日志，且问题依赖硬件事实时，标记 `needs-fix`。
 - 发现 shared clock/reset/pinctrl 变更会影响多驱动时，升级到 architecture-planner。
-- 发现 oops/panic、总线超时或信号异常时，交给 adk-hardware-debugger 继续定位。
+- 发现 oops/panic、总线超时或信号异常时，交给 hardware-debugger 继续定位。
 
 ## 输出契约
 - 结论：`pass` 或 `needs-fix`。

@@ -157,21 +157,26 @@ check_doc_sync() {
 
 ### 2.3 🟡 中优先级：Agent 角色专业化分离
 
-**问题**: 当前 adk 的 Agent 角色没有明确分离 Planner、Generator、Evaluator。
+**问题**: 旧版 adk 曾使用 Planner、Generator、Evaluator 阶段型角色，容易与稳定职责角色重复。
 
 **Harness Engineering 方案**:
-- **Planner**: 负责需求分析、任务拆解、方案设计
-- **Generator**: 负责编码实现、单元测试编写
-- **Evaluator**: 负责代码评审、质量验证
+- **requirements-analyst / architecture-planner**: 负责需求分析、任务拆解、方案设计
+- **driver-engineer / component-engineer / application-engineer**: 负责编码实现、单元测试编写
+- **test-validation-engineer / code-review-governor**: 负责代码评审、质量验证
 
 **adk 优化建议**:
 
 ```yaml
-# 在 agent-dev-kit/skills/ 下新增角色分离的技能
+# 硬切换后不保留 Planner/Generator/Evaluator 旧角色。
+# 规划、实现、评估分别归入现有稳定角色和能力型 Skill。
 
-# 1. Planner 角色
-adk-planner:
+# 1. 规划职责
+requirements-analyst + architecture-planner:
   description: 需求分析、任务拆解、方案设计
+  skills:
+    - adk-requirements-triage
+    - adk-task-breakdown
+    - adk-interface-contract-design
   responsibilities:
     - 需求澄清与确认
     - 任务拆解与依赖分析
@@ -181,9 +186,12 @@ adk-planner:
     - tasks.md
     - design.md
 
-# 2. Generator 角色
-adk-generator:
+# 2. 实现职责
+driver-engineer + component-engineer + application-engineer:
   description: 编码实现、单元测试编写
+  skills:
+    - adk-driver-implementation
+    - adk-unit-test-embedded
   responsibilities:
     - 按规范编码实现
     - 编写单元测试
@@ -193,9 +201,12 @@ adk-generator:
     - unit tests
     - coding_report.md
 
-# 3. Evaluator 角色
-adk-evaluator:
+# 3. 评估职责
+test-validation-engineer + code-review-governor:
   description: 代码评审、质量验证
+  skills:
+    - adk-verification-before-completion
+    - adk-code-review-loop
   responsibilities:
     - 代码评审
     - 质量门禁检查

@@ -1,4 +1,4 @@
-# adk-hardware-debugger
+# hardware-debugger
 
 ## 角色定位
 - 职责：定位 kernel oops/panic、总线异常、寄存器状态异常和硬件交互失败。
@@ -32,7 +32,7 @@
 ## 阻塞与升级
 - 缺少完整日志、符号表或复现步骤时，标记 `needs-fix`。
 - 发现硬件连接、供电、时钟或信号完整性问题时，升级给硬件 owner。
-- 发现驱动设计缺陷时，交给 adk-driver-developer 产出修复任务。
+- 发现驱动设计缺陷时，交给 driver-engineer 产出修复任务。
 
 ## 输出契约
 - 结论：`pass` 或 `needs-fix`。

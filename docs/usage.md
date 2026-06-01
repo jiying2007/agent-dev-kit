@@ -2,6 +2,8 @@
 
 `agent-dev-kit` 是通用 ADK 资产包。它维护 Agent、Skill、Profile、Workflow 和治理契约，并通过显式 tool target 导出到不同运行时；core 不绑定任何单一平台。
 
+完整使用指南见 `docs/adk-usage-guide.md`；本文保留为常用命令速查。
+
 ## 1. 预检查
 
 ```bash
@@ -20,6 +22,7 @@ bash scripts/devkit.sh test
 - `openai-governance`：检查官方资料 freshness、提升状态和平台中立契约。
 - `test`：全量回归，包含 validate、格式、内容质量、文件权限、安装、profile coherence、optional、convert、workflow contract、catalog、trigger matrix、governance 和 smoke。
 - `catalog build`：生成 Agent/Skill/Workflow/Profile 索引，并在默认输出模式下同步生成 `docs/workflow-contract-matrix.md`。
+- 资产命名与边界标准见 `docs/asset-contract-standard.md`；历史角色型资产硬切换，不保留兼容 alias。
 
 ## 2. Profile 选择
 

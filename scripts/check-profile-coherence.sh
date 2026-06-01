@@ -15,6 +15,7 @@ Checks:
   - profile extends must not redeclare inherited agents/skills
   - profile direct includes must not contain duplicate entries
   - profile references must point to manifest-declared agents/skills
+  - every resolved profile must include each resolved Agent's default_skills
   - default_profile must exist
 USAGE
 }
@@ -65,13 +66,25 @@ check_direct_duplicates() {
   fi
 }
 
+profile_parents() {
+  local profile="$1"
+  local parent
+
+  parent="$(adk_get_profile_value "$profile" "extends")"
+  if [[ -n "$parent" ]]; then
+    printf '%s\n' "$parent"
+  fi
+
+  adk_get_profile_list "$profile" "extends"
+}
+
 check_inherited_redeclaration() {
   local profile="$1"
   local key="$2"
   local parents parent item inherited
   local failed=0
 
-  parents="$(adk_get_profile_list "$profile" "extends")"
+  parents="$(profile_parents "$profile")"
   [[ -n "$parents" ]] || return 0
 
   inherited="$(mktemp)"
@@ -112,6 +125,29 @@ check_manifest_references() {
     fi
   done < <(adk_get_profile_list "$profile" "$key")
 
+  return "$failed"
+}
+
+check_default_skill_closure() {
+  local profile="$1"
+  local skills_file agent skill
+  local failed=0
+
+  skills_file="$(mktemp)"
+  adk_resolve_profile_items "$profile" "include_skills" > "$skills_file"
+
+  while IFS= read -r agent; do
+    [[ -z "$agent" ]] && continue
+    while IFS= read -r skill; do
+      [[ -z "$skill" ]] && continue
+      if ! grep -Fxq "$skill" "$skills_file"; then
+        echo "[FAIL] profile ${profile} includes agent '${agent}' but misses default skill '${skill}'" >&2
+        failed=1
+      fi
+    done < <(adk_get_manifest_item_list "agents" "$agent" "default_skills")
+  done < <(adk_resolve_profile_items "$profile" "include_agents")
+
+  rm -f "$skills_file"
   return "$failed"
 }
 
@@ -164,6 +200,7 @@ while IFS= read -r profile; do
   check_inherited_redeclaration "$profile" "include_skills" || failed=1
   check_manifest_references "$profile" "include_agents" "agents" || failed=1
   check_manifest_references "$profile" "include_skills" "skills" || failed=1
+  check_default_skill_closure "$profile" || failed=1
 done < <(adk_list_profile_names)
 
 # 检测 profile 冲突

@@ -1,6 +1,6 @@
 # Agent and Skill Catalog
 
-- generated_at: 2026-06-01T12:19:14Z
+- generated_at: 2026-06-01T15:18:21Z
 - source: manifest.yaml
 
 ## Agents
@@ -17,12 +17,8 @@
 | `performance-reliability-engineer` | 性能剖析、稳定性和可靠性风险治理 | `agents/performance-reliability-engineer/AGENTS.md` |
 | `security-compliance-reviewer` | 安全、合规、凭据和供应链风险审查 | `agents/security-compliance-reviewer/AGENTS.md` |
 | `code-review-governor` | 代码审查、反馈闭环和质量放行治理 | `agents/code-review-governor/AGENTS.md` |
-| `adk-bsp-analyst` | BSP 代码分析、架构梳理、历史追溯 | `agents/adk-bsp-analyst/AGENTS.md` |
-| `adk-driver-developer` | 嵌入式驱动实现、接口适配和 bring-up 修复 | `agents/adk-driver-developer/AGENTS.md` |
-| `adk-hardware-debugger` | 硬件故障定位、oops 分析和板级调试证据整理 | `agents/adk-hardware-debugger/AGENTS.md` |
-| `adk-planner` | 需求分析、任务拆解和工程方案设计 | `agents/adk-planner/AGENTS.md` |
-| `adk-generator` | 按任务契约完成编码实现和单元测试补充 | `agents/adk-generator/AGENTS.md` |
-| `adk-evaluator` | 代码评审、质量验证和放行风险判断 | `agents/adk-evaluator/AGENTS.md` |
+| `bsp-analyst` | BSP 代码分析、架构梳理、历史追溯 | `agents/bsp-analyst/AGENTS.md` |
+| `hardware-debugger` | 硬件故障定位、oops 分析和板级调试证据整理 | `agents/hardware-debugger/AGENTS.md` |
 
 ## Agent Contract Matrix
 
@@ -30,7 +26,7 @@
 |---|---|---|---|---|---|
 | `requirements-analyst` | 需求边界, 验收标准 | 代码实现, 发布操作 | architecture-planner, test-validation-engineer, code-review-governor | adk-requirements-triage, adk-task-breakdown | 目标、非目标、影响面、验收标准和风险必须可验证 |
 | `architecture-planner` | 架构边界, 接口决策 | 直接编码, 发布签核 | component-engineer, driver-engineer, code-review-governor | adk-interface-contract-design, adk-adr-writer | 设计必须包含接口、兼容性、迁移和回退边界 |
-| `driver-engineer` | 驱动实现, bring-up 证据 | 产品需求裁剪, 发布放行 | test-validation-engineer, code-review-governor | adk-driver-bringup-checklist, adk-systematic-debugging | 驱动变更必须绑定硬件约束、验证证据和回归路径 |
+| `driver-engineer` | 驱动实现, bring-up 证据 | 产品需求裁剪, 发布放行 | test-validation-engineer, code-review-governor | adk-driver-implementation, adk-driver-bringup-checklist, adk-systematic-debugging | 驱动变更必须绑定硬件约束、验证证据和回归路径 |
 | `component-engineer` | 组件接口, 模块实现 | 需求验收口径, 发布版本策略 | test-validation-engineer, code-review-governor | adk-interface-contract-design, adk-component-api-stability | 组件变更必须保留 API 稳定性和集成验证证据 |
 | `application-engineer` | 应用逻辑, 工具行为 | 架构最终裁决, 发布放行 | test-validation-engineer, code-review-governor | adk-systematic-debugging, adk-unit-test-embedded | 应用行为变更必须包含用户路径、错误路径和回归证据 |
 | `build-release-engineer` | 构建打包, 发布回滚 | 需求变更, 安全风险豁免 | security-compliance-reviewer, performance-reliability-engineer | adk-release-versioning, adk-commit-pr-quality-gate | 发布必须绑定版本、制品、校验、回滚和放行证据 |
@@ -38,12 +34,8 @@
 | `performance-reliability-engineer` | 性能分析, 可靠性风险 | 功能需求裁决, 安全签核 | build-release-engineer, code-review-governor | adk-performance-profiling-embedded, adk-fault-injection-recovery | 性能和可靠性结论必须包含基线、负载条件和对比证据 |
 | `security-compliance-reviewer` | 安全审查, 供应链风险 | 功能实现, 发布执行 | build-release-engineer, code-review-governor | adk-static-analysis-c-cpp, adk-commit-pr-quality-gate | 高风险项必须修复、降级或显式记录风险接受 |
 | `code-review-governor` | 审查分级, 放行判断 | 直接修复代码, 发布执行 | requirements-analyst, test-validation-engineer | adk-code-review-loop, adk-commit-pr-quality-gate | blocker 必须修复或明确风险接受后才能放行 |
-| `adk-bsp-analyst` | BSP 分析, 历史追溯 | 驱动实现, 发布放行 | adk-driver-developer, architecture-planner | adk-bsp-analyst, adk-bsp-porting-playbook | BSP 结论必须包含入口、依赖、风险和追溯证据 |
-| `adk-driver-developer` | 嵌入式驱动实现, 接口适配 | BSP 架构裁决, 发布放行 | adk-evaluator, test-validation-engineer | adk-driver-developer, adk-driver-bringup-checklist | 驱动实现必须包含 bring-up、错误路径和验证证据 |
-| `adk-hardware-debugger` | 硬件故障定位, oops 分析 | 长期架构设计, 发布放行 | adk-driver-developer, test-validation-engineer | adk-hardware-debugger, adk-systematic-debugging | 硬件调试结论必须包含现象、假设、实验和证据 |
-| `adk-planner` | 计划拆解, 方案设计 | 代码实现, 质量放行 | adk-generator, adk-evaluator | adk-planner, adk-task-breakdown | 计划必须包含 scope、依赖、验证和阻塞条件 |
-| `adk-generator` | 编码实现, 单元测试补充 | 需求重写, 审查放行 | adk-evaluator, test-validation-engineer | adk-generator, adk-unit-test-embedded | 实现必须匹配任务契约并通过定向验证 |
-| `adk-evaluator` | 质量验证, 风险判断 | 编码修复, 需求变更 | adk-planner, code-review-governor | adk-evaluator, adk-code-review-loop | 评估结论必须列出 blocker、验证证据和剩余风险 |
+| `bsp-analyst` | BSP 分析, 历史追溯 | 驱动实现, 发布放行 | driver-engineer, architecture-planner | adk-bsp-analysis, adk-bsp-porting-playbook | BSP 结论必须包含入口、依赖、风险和追溯证据 |
+| `hardware-debugger` | 硬件故障定位, oops 分析 | 长期架构设计, 发布放行 | driver-engineer, test-validation-engineer | adk-hardware-debugging, adk-systematic-debugging | 硬件调试结论必须包含现象、假设、实验和证据 |
 
 ## Skills
 
@@ -99,12 +91,9 @@
 | `adk-artifact-gating` | 跨仓库 Artifact 门禁协议——统一标签、状态机与交接规范 | "artifact 门禁" | `skills/adk-artifact-gating/SKILL.md` |
 | `adk-pilot-framework` | 跨仓库 Pilot 试跑框架——场景定义、证据收集与门禁验收 | "试跑" | `skills/adk-pilot-framework/SKILL.md` |
 | `adk-intake-workflow` | 子仓接入工作流——扫描、分析、决策与治理覆盖 | "接入新仓库" | `skills/adk-intake-workflow/SKILL.md` |
-| `adk-bsp-analyst` | BSP 代码分析、架构梳理、历史追溯 | bsp 分析 | `skills/adk-bsp-analyst/SKILL.md` |
-| `adk-driver-developer` | 嵌入式驱动实现、联调验证与风险收口 | 驱动开发 | `skills/adk-driver-developer/SKILL.md` |
-| `adk-hardware-debugger` | 硬件问题调试、oops 分析 | 硬件调试 | `skills/adk-hardware-debugger/SKILL.md` |
-| `adk-planner` | 需求分析、任务拆解、方案设计 | 需求分析 | `skills/adk-planner/SKILL.md` |
-| `adk-generator` | 编码实现、单元测试编写 | 编码实现 | `skills/adk-generator/SKILL.md` |
-| `adk-evaluator` | 代码评审、质量验证 | 代码评审 | `skills/adk-evaluator/SKILL.md` |
+| `adk-bsp-analysis` | BSP 代码分析、架构梳理、历史追溯 | bsp 分析 | `skills/adk-bsp-analysis/SKILL.md` |
+| `adk-driver-implementation` | 嵌入式驱动实现、联调验证与风险收口 | 驱动开发 | `skills/adk-driver-implementation/SKILL.md` |
+| `adk-hardware-debugging` | 硬件问题调试、oops 分析 | 硬件调试 | `skills/adk-hardware-debugging/SKILL.md` |
 
 ## Optional Skills
 

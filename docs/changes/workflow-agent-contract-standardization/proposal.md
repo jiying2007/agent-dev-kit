@@ -15,7 +15,7 @@ Agent 与 Workflow 已具备基础资产结构，但 Workflow 不是完整一等
 现有 `docs/workflows.md` 有场景说明，但缺少 `workflows/<name>/WORKFLOW.md` 一等资产和机器校验；本次是将说明提升为可校验契约，不重复已有 Skill SOP。
 
 ## Breaking Change 检查
-对资产校验更严格，属于治理门禁增强。现有 16 个 Agent、56 个 core Skill、9 个 optional Skill、9 个 Profile 均已通过新 strict 校验。
+对资产校验更严格，属于治理门禁增强。命名硬切换后现有 12 个 Agent、53 个 core Skill、9 个 optional Skill、9 个 Profile 均已通过新 strict 校验。
 
 ## Spec 链路检查
 - Requirements: Agent/Workflow 契约必须可审查、可闭包、可验证。

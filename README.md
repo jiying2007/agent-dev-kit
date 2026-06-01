@@ -93,6 +93,7 @@ bash scripts/devkit.sh test
 
 - `docs/commands.md`：完整命令参考。
 - `docs/usage.md`：常用工作流。
+- `docs/adk-usage-guide.md`：面向使用者的 ADK 概念、profile、工作流、资产变更和提交门禁指南。
 - `docs/runbooks/workspace-maintenance-guide.md`：维护与发布前检查。
 - `docs/runbooks/mcp-governance.md`：MCP、plugin、automation 外部能力准入。
 - `docs/reference/openai-developers-reference.md`：OpenAI 官方资料采纳记录。

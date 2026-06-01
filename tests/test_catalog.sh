@@ -24,7 +24,7 @@ grep -q '`requirements-analyst`' "$CATALOG_OUT" || {
   exit 1
 }
 
-grep -q '| `adk-hardware-debugger` | 硬件故障定位、oops 分析和板级调试证据整理 | `agents/adk-hardware-debugger/AGENTS.md` |' "$CATALOG_OUT" || {
+grep -q '| `hardware-debugger` | 硬件故障定位、oops 分析和板级调试证据整理 | `agents/hardware-debugger/AGENTS.md` |' "$CATALOG_OUT" || {
   echo "[FAIL] catalog missing agent description" >&2
   exit 1
 }
@@ -60,7 +60,7 @@ grep -q '| `feature-delivery` | core, embedded-fullstack | low | `requirements-a
 }
 
 FIND_AGENT_OUTPUT="$("$ROOT_DIR/scripts/catalog-assets.sh" find --type agent --keyword 硬件)"
-echo "$FIND_AGENT_OUTPUT" | grep -q 'adk-hardware-debugger' || {
+echo "$FIND_AGENT_OUTPUT" | grep -q 'hardware-debugger' || {
   echo "[FAIL] find command missing expected agent" >&2
   exit 1
 }

@@ -193,6 +193,7 @@ agents:
       - test-validation-engineer
       - code-review-governor
     default_skills:
+      - adk-driver-implementation
       - adk-driver-bringup-checklist
       - adk-systematic-debugging
     quality_gate: 驱动变更必须绑定硬件约束、验证证据和回归路径
@@ -316,8 +317,8 @@ agents:
       - adk-commit-pr-quality-gate
     quality_gate: blocker 必须修复或明确风险接受后才能放行
   # 嵌入式专用 Agent 角色
-  - name: adk-bsp-analyst
-    path: agents/adk-bsp-analyst/AGENTS.md
+  - name: bsp-analyst
+    path: agents/bsp-analyst/AGENTS.md
     quality_tier: p1
     description: BSP 代码分析、架构梳理、历史追溯
     owns:
@@ -327,31 +328,14 @@ agents:
       - 驱动实现
       - 发布放行
     handoff_to:
-      - adk-driver-developer
+      - driver-engineer
       - architecture-planner
     default_skills:
-      - adk-bsp-analyst
+      - adk-bsp-analysis
       - adk-bsp-porting-playbook
     quality_gate: BSP 结论必须包含入口、依赖、风险和追溯证据
-  - name: adk-driver-developer
-    path: agents/adk-driver-developer/AGENTS.md
-    quality_tier: p1
-    description: 嵌入式驱动实现、接口适配和 bring-up 修复
-    owns:
-      - 嵌入式驱动实现
-      - 接口适配
-    does_not_own:
-      - BSP 架构裁决
-      - 发布放行
-    handoff_to:
-      - adk-evaluator
-      - test-validation-engineer
-    default_skills:
-      - adk-driver-developer
-      - adk-driver-bringup-checklist
-    quality_gate: 驱动实现必须包含 bring-up、错误路径和验证证据
-  - name: adk-hardware-debugger
-    path: agents/adk-hardware-debugger/AGENTS.md
+  - name: hardware-debugger
+    path: agents/hardware-debugger/AGENTS.md
     quality_tier: p1
     description: 硬件故障定位、oops 分析和板级调试证据整理
     owns:
@@ -361,64 +345,12 @@ agents:
       - 长期架构设计
       - 发布放行
     handoff_to:
-      - adk-driver-developer
+      - driver-engineer
       - test-validation-engineer
     default_skills:
-      - adk-hardware-debugger
+      - adk-hardware-debugging
       - adk-systematic-debugging
     quality_gate: 硬件调试结论必须包含现象、假设、实验和证据
-  # Agent 角色分离
-  - name: adk-planner
-    path: agents/adk-planner/AGENTS.md
-    quality_tier: p1
-    description: 需求分析、任务拆解和工程方案设计
-    owns:
-      - 计划拆解
-      - 方案设计
-    does_not_own:
-      - 代码实现
-      - 质量放行
-    handoff_to:
-      - adk-generator
-      - adk-evaluator
-    default_skills:
-      - adk-planner
-      - adk-task-breakdown
-    quality_gate: 计划必须包含 scope、依赖、验证和阻塞条件
-  - name: adk-generator
-    path: agents/adk-generator/AGENTS.md
-    quality_tier: p1
-    description: 按任务契约完成编码实现和单元测试补充
-    owns:
-      - 编码实现
-      - 单元测试补充
-    does_not_own:
-      - 需求重写
-      - 审查放行
-    handoff_to:
-      - adk-evaluator
-      - test-validation-engineer
-    default_skills:
-      - adk-generator
-      - adk-unit-test-embedded
-    quality_gate: 实现必须匹配任务契约并通过定向验证
-  - name: adk-evaluator
-    path: agents/adk-evaluator/AGENTS.md
-    quality_tier: p1
-    description: 代码评审、质量验证和放行风险判断
-    owns:
-      - 质量验证
-      - 风险判断
-    does_not_own:
-      - 编码修复
-      - 需求变更
-    handoff_to:
-      - adk-planner
-      - code-review-governor
-    default_skills:
-      - adk-evaluator
-      - adk-code-review-loop
-    quality_gate: 评估结论必须列出 blocker、验证证据和剩余风险
 
 skills:
   - name: adk-requirements-triage
@@ -658,29 +590,16 @@ skills:
     quality_tier: p0
     depends_on: []
   # 嵌入式专用技能
-  - name: adk-bsp-analyst
-    path: skills/adk-bsp-analyst/SKILL.md
+  - name: adk-bsp-analysis
+    path: skills/adk-bsp-analysis/SKILL.md
     quality_tier: p1
     depends_on: []
-  - name: adk-driver-developer
-    path: skills/adk-driver-developer/SKILL.md
+  - name: adk-driver-implementation
+    path: skills/adk-driver-implementation/SKILL.md
     quality_tier: p1
     depends_on: []
-  - name: adk-hardware-debugger
-    path: skills/adk-hardware-debugger/SKILL.md
-    quality_tier: p1
-    depends_on: []
-  # Agent 角色分离技能
-  - name: adk-planner
-    path: skills/adk-planner/SKILL.md
-    quality_tier: p1
-    depends_on: []
-  - name: adk-generator
-    path: skills/adk-generator/SKILL.md
-    quality_tier: p1
-    depends_on: []
-  - name: adk-evaluator
-    path: skills/adk-evaluator/SKILL.md
+  - name: adk-hardware-debugging
+    path: skills/adk-hardware-debugging/SKILL.md
     quality_tier: p1
     depends_on: []
 
@@ -709,7 +628,11 @@ profiles:
       - adk-parallel-agent-governance
       - adk-worktree-governance
       - adk-branch-closeout
+      - adk-adr-writer
       - adk-interface-contract-design
+      - adk-component-api-stability
+      - adk-driver-implementation
+      - adk-driver-bringup-checklist
       - adk-static-analysis-c-cpp
       - adk-systematic-debugging
       - adk-unit-test-embedded
@@ -747,6 +670,8 @@ profiles:
       - adk-context-compress-handoff
       - adk-repo-drift-remediation
       - adk-embedded-release-orchestration
+      - adk-fault-injection-recovery
+      - adk-performance-profiling-embedded
       - adk-commit-pr-quality-gate
   personal-core:
     description: 个人通用 ADK 资产配置（核心功能 + 发布检查）
@@ -754,23 +679,12 @@ profiles:
       - "个人项目开发"
       - "快速原型验证"
     extends: core
-    include_agents:
-      - requirements-analyst
-      - architecture-planner
-      - driver-engineer
-      - code-review-governor
     include_skills:
-      - adk-requirements-triage
-      - adk-plan-lite
-      - adk-task-breakdown
-      - adk-commit-pr-quality-gate
       - adk-release-versioning
       - adk-developer-growth-review
-      - adk-context-compress-handoff
       - adk-memory-curator
       - adk-archive-governance
       - adk-knowledge-archive
-      - adk-repo-drift-remediation
   embedded-fullstack:
     description: 嵌入式全栈开发配置（芯片/板级、启动链、BSP、驱动、组件、应用、工具、验证、量产和现场维护）
     trigger_examples:
@@ -780,29 +694,19 @@ profiles:
       - "量产产测和现场维护"
     extends: core
     include_agents:
-      - requirements-analyst
-      - architecture-planner
-      - driver-engineer
-      - component-engineer
+      - bsp-analyst
+      - hardware-debugger
       - application-engineer
-      - test-validation-engineer
-      - code-review-governor
     include_skills:
-      - adk-requirements-triage
-      - adk-task-breakdown
-      - adk-interface-contract-design
+      - adk-bsp-analysis
+      - adk-hardware-debugging
       - adk-register-map-design
-      - adk-driver-bringup-checklist
       - adk-bsp-porting-playbook
       - adk-rtos-task-design
       - adk-interrupt-dma-patterns
       - adk-protocol-stack-integration
-      - adk-component-api-stability
       - adk-cmake-cross-build
       - adk-toolchain-debug-openocd-gdb
-      - adk-static-analysis-c-cpp
-      - adk-systematic-debugging
-      - adk-unit-test-embedded
       - adk-integration-hil-sil
       - adk-fault-injection-recovery
       - adk-performance-profiling-embedded
@@ -810,10 +714,6 @@ profiles:
       - adk-production-field-readiness
       - adk-embedded-diagnostic-harness
       - adk-embedded-release-orchestration
-      - adk-verification-before-completion
-      - adk-after-action-review
-      - adk-token-context-governance
-      - adk-commit-pr-quality-gate
   team-core:
     description: 团队协作配置（交接/验证/评审）
     trigger_examples:
@@ -821,23 +721,11 @@ profiles:
       - "代码交接"
       - "团队评审"
     extends: core
-    include_agents:
-      - requirements-analyst
-      - architecture-planner
-      - code-review-governor
     include_skills:
-      - adk-requirements-triage
-      - adk-plan-lite
-      - adk-task-breakdown
-      - adk-commit-pr-quality-gate
-      - adk-after-action-review
-      - adk-token-context-governance
       - adk-developer-growth-review
-      - adk-context-compress-handoff
       - adk-memory-curator
       - adk-archive-governance
       - adk-knowledge-archive
-      - adk-repo-drift-remediation
       - adk-grill-with-docs
       - adk-chinese-commit-conventions
       - adk-chinese-code-review
@@ -848,14 +736,6 @@ profiles:
       - "需求分析与设计"
       - "任务拆解"
     extends: core
-    include_agents:
-      - requirements-analyst
-      - architecture-planner
-    include_skills:
-      - adk-requirements-triage
-      - adk-task-breakdown
-      - adk-interface-contract-design
-      - adk-adr-writer
   large-refactor:
     description: 大型重构配置（API 稳定性 + 代码简化）
     trigger_examples:
@@ -863,13 +743,8 @@ profiles:
       - "API 重构"
       - "架构调整"
     extends: embedded-fullstack
-    include_agents:
-      - architecture-planner
-      - code-review-governor
     include_skills:
-      - adk-component-api-stability
       - adk-code-simplification
-      - adk-static-analysis-c-cpp
   incident-response:
     description: 线上事故响应配置（根因/复盘/恢复）
     trigger_examples:
@@ -882,6 +757,9 @@ profiles:
     include_skills:
       - adk-systematic-debugging
       - adk-fault-injection-recovery
+      - adk-performance-profiling-embedded
+      - adk-static-analysis-c-cpp
+      - adk-commit-pr-quality-gate
   research-intake:
     description: 参考仓吸收配置（候选筛选与审查）
     trigger_examples:
@@ -891,6 +769,8 @@ profiles:
     include_agents:
       - requirements-analyst
     include_skills:
+      - adk-requirements-triage
+      - adk-task-breakdown
       - adk-repo-prompt-analyzer
       - adk-skill-deep-analyzer
       - adk-intake-workflow

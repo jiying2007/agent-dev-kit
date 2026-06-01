@@ -1,5 +1,5 @@
 ---
-name: adk-hardware-debugger
+name: adk-hardware-debugging
 description: 硬件问题调试、oops 分析
 version: 1.0.0
 last_updated: 2026-05-16
@@ -25,7 +25,7 @@ constraints:
   - 不能假设应该可以工作
 ---
 
-# adk-hardware-debugger
+# adk-hardware-debugging
 
 ## Goal
 - 基于日志、调用栈、寄存器和硬件证据定位异常根因，输出可复现的排查路径。

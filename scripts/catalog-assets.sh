@@ -232,7 +232,6 @@ emit_workflow_matrix() {
     verification="$(join_manifest_list "workflows" "$name" "verification")"
     echo "| \`$name\` | $profiles | $risk | \`$agent\` | \`$skill\` | $supporting | $verification |"
   done < <(adk_list_manifest_names "workflows")
-  echo
 }
 
 write_workflow_matrix_doc() {
@@ -261,6 +260,7 @@ build_catalog() {
     emit_skills_table "optional_skills" "Optional Skills"
     emit_workflows_table
     emit_workflow_matrix
+    echo
     emit_profiles_table
   } > "$OUT_PATH"
   echo "[OK] catalog generated: $OUT_PATH"

@@ -1,5 +1,5 @@
 ---
-name: adk-bsp-analyst
+name: adk-bsp-analysis
 description: BSP 代码分析、架构梳理、历史追溯
 version: 1.0.0
 last_updated: 2026-05-16
@@ -25,7 +25,7 @@ constraints:
   - 不确定事实必须明示待确认
 ---
 
-# adk-bsp-analyst
+# adk-bsp-analysis
 
 ## Goal
 - 分析 BSP 代码结构、启动链路、平台抽象和历史补丁，输出可验证的架构理解与迁移风险。

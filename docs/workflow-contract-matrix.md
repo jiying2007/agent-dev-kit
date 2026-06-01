@@ -1,6 +1,6 @@
 # Workflow Contract Matrix
 
-- generated_at: 2026-06-01T12:19:16Z
+- generated_at: 2026-06-01T15:18:24Z
 - source: manifest.yaml
 
 ## Workflow Matrix
@@ -13,4 +13,3 @@
 | `release-hardening` | release-hardening | medium | `build-release-engineer` | `adk-release-versioning` | adk-test-strategy, adk-code-review-loop, adk-branch-closeout, adk-verification-before-completion, adk-commit-pr-quality-gate | rtk bash tests/test_validate.sh, rtk bash tests/test_profile_coherence.sh |
 | `runtime-routing` | core, embedded-fullstack | low | `architecture-planner` | `adk-runtime-router` | adk-verification-before-completion, adk-repo-drift-remediation | rtk bash tests/test_skill_trigger_matrix.sh, rtk bash tests/test_workflow_closure.sh |
 | `skill-curation-delivery` | core, team-core | low | `requirements-analyst` | `adk-requirements-triage` | adk-task-breakdown, adk-commit-pr-quality-gate, adk-verification-before-completion | rtk bash tests/test_catalog.sh, rtk bash tests/test_skill_sop_quality.sh |
-

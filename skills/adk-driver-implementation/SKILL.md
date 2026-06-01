@@ -1,5 +1,5 @@
 ---
-name: adk-driver-developer
+name: adk-driver-implementation
 description: 嵌入式驱动实现、联调验证与风险收口
 version: 1.0.0
 last_updated: 2026-05-16
@@ -24,7 +24,7 @@ constraints:
   - DMA 路径必须处理映射、同步和回收
 ---
 
-# adk-driver-developer
+# adk-driver-implementation
 
 ## Goal
 - 基于设计文档、datasheet 和目标框架实现嵌入式驱动，并交付可验证代码与测试。
