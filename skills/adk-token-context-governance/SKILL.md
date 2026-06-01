@@ -81,8 +81,8 @@ LLM Wiki / Knowledge Compile 的读取顺序是 `schema` / index -> `maintained_
 
 读取 compiled knowledge 时必须保留 `raw_fallback`：
 
-- wiki 条目缺少 `raw_source_path`、`source_url_or_local_path` 或 `schema_path` 时，只能作为候选线索。
-- 遇到 stale claims、弱链接、孤立页面、schema 冲突、低置信度或用户要求精确依据时，回退 `raw_sources`。
+- wiki 条目缺少 `raw_source_path`、`source_url_or_local_path`、`schema_path`、`retrieved_at`、`review_status`、`expires_at` 或 `duplicate_concept_check` 时，只能作为候选线索。
+- 遇到 stale claims、弱链接、孤立页面、重复概念页、schema 冲突、低置信度、过期来源或用户要求精确依据时，回退 `raw_sources`。
 - 从综合页得到的新 synthesis 需要写回时，先进入待审查 `change_log`，不得覆盖原始材料。
 
 ## Quality Gate

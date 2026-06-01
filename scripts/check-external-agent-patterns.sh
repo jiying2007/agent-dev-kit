@@ -39,6 +39,7 @@ required_sources = {
     "thedotmack-claude-mem",
     "everyinc-compound-engineering",
     "karpathy-llm-wiki-pattern",
+    "pbnz-newton-skill",
 }
 for source_id in required_sources:
     if source_id not in source_ids:
@@ -74,6 +75,7 @@ contract_by_id = {contract.get("id"): contract for contract in contracts}
 required_contracts = {
     "llm-wiki-knowledge-compile-v1",
     "codify-after-delivery-v1",
+    "reuse-before-rebuild-v1",
     "memory-search-progressive-disclosure-v1",
     "low-token-communication-profile-v1",
     "external-agent-plugin-intake-v1",
@@ -96,7 +98,7 @@ for layer in ("raw_sources", "maintained_wiki", "schema"):
 for op in ("ingest", "query", "lint"):
     if op not in wiki.get("recurring_operations", []):
         fail(f"llm wiki contract missing operation: {op}")
-for field in ("raw_source_path", "wiki_page_path", "schema_path", "raw_fallback", "change_log"):
+for field in ("raw_source_path", "wiki_page_path", "schema_path", "retrieved_at", "review_status", "expires_at", "duplicate_concept_check", "raw_fallback", "change_log"):
     if field not in wiki.get("required_fields", []):
         fail(f"llm wiki contract missing field: {field}")
 
@@ -104,9 +106,17 @@ codify = contract_by_id.get("codify-after-delivery-v1", {})
 for stage in ("plan", "delegate", "assess", "codify"):
     if stage not in codify.get("workflow_stages", []):
         fail(f"codify contract missing stage: {stage}")
-for field in ("reusable_pattern", "promotion_candidate", "do_not_promote_reason", "owner_review", "rollback_path"):
+for field in ("reusable_pattern", "promotion_candidate", "next_task_friction_reduced", "reduced_by", "reduction_evidence", "do_not_promote_reason", "owner_review", "rollback_path"):
     if field not in codify.get("required_fields", []):
         fail(f"codify contract missing field: {field}")
+
+reuse = contract_by_id.get("reuse-before-rebuild-v1", {})
+for option in ("use-as-is", "adapt-existing", "build-fresh", "reference-only"):
+    if option not in reuse.get("decision_options", []):
+        fail(f"reuse-before-rebuild contract missing option: {option}")
+for field in ("problem_statement", "existing_asset_search", "candidate_assets", "decision", "build_fresh_reason", "verification_evidence"):
+    if field not in reuse.get("required_fields", []):
+        fail(f"reuse-before-rebuild contract missing field: {field}")
 
 memory = contract_by_id.get("memory-search-progressive-disclosure-v1", {})
 for layer in ("search_index", "timeline_context", "observation_details"):
@@ -133,6 +143,7 @@ for key in (
     "external_code_requires_supply_chain_review",
     "memory_capture_requires_owner_approval",
     "raw_evidence_fallback_required",
+    "reuse_before_rebuild_required",
     "low_token_profile_requires_safety_exceptions",
 ):
     if gate.get(key) is not True:

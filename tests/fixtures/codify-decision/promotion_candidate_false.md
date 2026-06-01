@@ -14,6 +14,15 @@ affected_asset:
 
 promotion_candidate: false
 
+next_task_friction_reduced: false
+
+reduced_by:
+  - none
+
+reduction_evidence:
+  summary: no durable asset reduces future work for this one-off observation
+  evidence_path: reports/adk-capability-runtime-pilot-2026-05-30.md
+
 do_not_promote_reason: one-off runtime observation
 
 owner_review:

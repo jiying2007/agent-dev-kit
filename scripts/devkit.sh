@@ -25,6 +25,7 @@ Commands:
   token-budget 检查 skill/doc/script 是否符合低 token 预算
   codify-governance 检查交付后可复用模式沉淀门禁
   knowledge-compile 检查知识编译三层模型
+  reuse-before-rebuild 检查新增资产前复用优先门禁
   context-experience 检查渐进记忆检索与低 token profile
   openai-governance 检查 OpenAI 官方 Developers 参考治理
   workflow-closure 检查 workflow 引用是否在 profile 闭包内
@@ -89,6 +90,9 @@ case "$CMD" in
     ;;
   knowledge-compile)
     exec "$SCRIPT_DIR/check-knowledge-compile-model.sh" "$@"
+    ;;
+  reuse-before-rebuild)
+    exec "$SCRIPT_DIR/check-reuse-before-rebuild.sh" "$@"
     ;;
   context-experience)
     exec "$SCRIPT_DIR/check-context-experience-patterns.sh" "$@"

@@ -14,6 +14,16 @@ affected_asset:
 
 promotion_candidate: true
 
+next_task_friction_reduced: true
+
+reduced_by:
+  - skill-trigger
+  - semantic-gate
+
+reduction_evidence:
+  summary: future runtime phrase additions are covered by the same trigger fixture and semantic gate
+  evidence_path: reports/adk-capability-runtime-pilot-2026-05-30.md
+
 do_not_promote_reason: not-applicable
 
 owner_review:

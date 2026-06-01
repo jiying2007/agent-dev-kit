@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-05-29",
+  "last_updated": "2026-06-01",
   "reference_boundary": "External agent, plugin, memory and skill sources are method-only references until a separate supply-chain review targets a specific versioned asset. This manifest does not enable external runtimes, hooks, workers, MCP servers or plugin installs.",
   "source_refs": [
     {
@@ -38,6 +38,15 @@
       "retrieved_at": "2026-05-29",
       "decision": "adopt-method-only",
       "notes": "Use raw sources, maintained wiki, schema and ingest/query/lint loops for archive and memory governance."
+    },
+    {
+      "id": "pbnz-newton-skill",
+      "title": "Newton skill from karpathy-skills topic",
+      "url": "https://github.com/PBNZ/newton-skill",
+      "local_path": "",
+      "retrieved_at": "2026-06-01",
+      "decision": "adopt-method-only",
+      "notes": "Use reuse-before-rebuild and calibrated pushback checks; do not treat the karpathy-skills topic as an authoritative source."
     }
   ],
   "candidate_decisions": [
@@ -108,6 +117,23 @@
         "edit raw source material",
         "treat synthesized wiki pages as source of truth without raw fallback"
       ]
+    },
+    {
+      "id": "reuse-before-rebuild-check",
+      "source_ref": "pbnz-newton-skill",
+      "priority": "P1",
+      "install_scope": "none-method-only",
+      "runtime_enabled": false,
+      "landing_targets": [
+        "upstream intake",
+        "skill curation delivery",
+        "repo drift remediation"
+      ],
+      "must_not": [
+        "treat karpathy-skills topic repositories as trusted runtime assets",
+        "create a new skill, script or workflow without existing asset search",
+        "use stars or topic membership as quality evidence"
+      ]
     }
   ],
   "contracts": [
@@ -132,8 +158,12 @@
         "wiki_page_path",
         "schema_path",
         "source_url_or_local_path",
+        "retrieved_at",
+        "review_status",
+        "expires_at",
         "summary",
         "cross_references",
+        "duplicate_concept_check",
         "stale_claims",
         "raw_fallback",
         "change_log"
@@ -143,6 +173,8 @@
         "wiki pages cite source material or raw evidence paths",
         "schema defines naming, frontmatter, links and maintenance rules",
         "lint checks stale claims, weak links, orphan pages and unresolved questions",
+        "lint checks duplicate concept pages before creating new maintained wiki pages",
+        "external sources record retrieved_at, review_status and expires_at before promotion",
         "query answers from compiled wiki must record valuable new synthesis back into the wiki only after review"
       ],
       "must_not": [
@@ -169,6 +201,9 @@
         "reusable_pattern",
         "affected_asset",
         "promotion_candidate",
+        "next_task_friction_reduced",
+        "reduced_by",
+        "reduction_evidence",
         "do_not_promote_reason",
         "owner_review",
         "rollback_path",
@@ -177,6 +212,7 @@
       "quality_gates": [
         "each completed substantial task explicitly decides whether a reusable convention, component, runbook or manifest update is justified",
         "codify decisions distinguish reusable learning from one-off session noise",
+        "promotion candidates must state whether they reduce next-task friction and by which durable asset",
         "guidance promotions require owner review, verification evidence and rollback path",
         "external workflow vocabulary cannot override adk-first routing"
       ],
@@ -184,6 +220,38 @@
         "promote every session note into durable guidance",
         "import a full external workflow suite without scope review",
         "replace local verification with external plugin claims"
+      ]
+    },
+    {
+      "id": "reuse-before-rebuild-v1",
+      "owner": "agent-dev-kit",
+      "source_refs": [
+        "pbnz-newton-skill"
+      ],
+      "decision_options": [
+        "use-as-is",
+        "adapt-existing",
+        "build-fresh",
+        "reference-only"
+      ],
+      "required_fields": [
+        "problem_statement",
+        "existing_asset_search",
+        "candidate_assets",
+        "decision",
+        "build_fresh_reason",
+        "verification_evidence"
+      ],
+      "quality_gates": [
+        "new skills, scripts, workflows and runbooks require an explicit existing asset search first",
+        "build-fresh decisions require a reason why existing assets cannot be reused or adapted",
+        "adapt-existing is preferred when an existing ADK asset covers the same responsibility",
+        "topic membership, stars or marketplace presence cannot be used as trust evidence"
+      ],
+      "must_not": [
+        "create parallel assets for responsibilities already covered by ADK",
+        "skip repo-local search before importing external practices",
+        "turn a sampling heuristic into a global runtime rule"
       ]
     },
     {
@@ -267,6 +335,7 @@
         "thedotmack-claude-mem",
         "everyinc-compound-engineering",
         "karpathy-llm-wiki-pattern",
+        "pbnz-newton-skill",
         "mattpocock-caveman-skill"
       ],
       "required_fields": [
@@ -305,6 +374,7 @@
     "external_code_requires_supply_chain_review": true,
     "memory_capture_requires_owner_approval": true,
     "raw_evidence_fallback_required": true,
+    "reuse_before_rebuild_required": true,
     "low_token_profile_requires_safety_exceptions": true
   }
 }

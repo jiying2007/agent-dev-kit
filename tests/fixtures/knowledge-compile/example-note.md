@@ -1,8 +1,11 @@
 ---
 id: runtime-pilot-knowledge-compile-example
 created_at: 2026-05-30
+retrieved_at: 2026-05-30
 last_verified: 2026-05-30
 next_review_by: 2026-06-15
+expires_at: 2026-06-30
+review_status: reviewed
 status: candidate
 risk: low
 ---
@@ -24,6 +27,13 @@ risk: low
 ## source_url_or_local_path
 
 - reports/adk-capability-runtime-pilot-2026-05-30.md
+
+## duplicate_concept_check
+
+- searched_index: docs/archive/adk-runtime-pilot/maintained_wiki/index.md
+  candidate_matches:
+    - maintained_wiki/runtime-pilot.md
+  decision: update-existing
 
 ## summary
 

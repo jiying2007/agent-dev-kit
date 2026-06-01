@@ -43,8 +43,12 @@ for field in \
   wiki_page_path \
   schema_path \
   source_url_or_local_path \
+  retrieved_at \
+  review_status \
+  expires_at \
   summary \
   cross_references \
+  duplicate_concept_check \
   stale_claims \
   raw_fallback \
   change_log; do
@@ -56,7 +60,9 @@ require_text "$RUNBOOK" "综合页用于降低重复阅读成本，不是原始�
 require_text "$RUNBOOK" "raw sources 保持不可变"
 require_text "$RUNBOOK" "weak links"
 require_text "$RUNBOOK" "orphan pages"
+require_text "$RUNBOOK" "duplicate concept pages"
 require_text "$RUNBOOK" "unresolved questions"
+require_text "$RUNBOOK" "过期来源"
 
 require_text "$SKILL" "Compiled Knowledge"
 require_text "$SKILL" "综合页不是原始证据"
@@ -64,10 +70,17 @@ require_text "$SKILL" "raw_fallback"
 require_text "$SKILL" "raw_sources"
 require_text "$SKILL" "maintained_wiki"
 require_text "$SKILL" "schema"
+require_text "$SKILL" "duplicate_concept_check"
+require_text "$SKILL" "expires_at"
 
 for pattern in \
   "raw_source_path" \
   "raw_sources/runtime-pilot-raw.md" \
+  "retrieved_at: 2026-05-30" \
+  "review_status: reviewed" \
+  "expires_at: 2026-06-30" \
+  "duplicate_concept_check" \
+  "decision: update-existing" \
   "wiki_page_path" \
   "maintained_wiki/runtime-pilot.md" \
   "schema_path" \

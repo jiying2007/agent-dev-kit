@@ -14,6 +14,15 @@ affected_asset:
 
 promotion_candidate: false
 
+next_task_friction_reduced: false
+
+reduced_by:
+  - none
+
+reduction_evidence:
+  summary:
+  evidence_path:
+
 do_not_promote_reason:
 
 owner_review:

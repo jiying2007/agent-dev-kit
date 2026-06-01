@@ -16,8 +16,10 @@
 2. `diff-scan` 生成变化报告。
 3. `adoption-matrix` 做 `adopt/observe/reject` 决策。
 4. adopt 项必须声明 `core/optional/profile/reject` 归属。
-5. 落地 Agent/Skill/Workflow 至少一层。
-6. 回归通过后先进入显式 tool target 治理链路，再执行目标运行时 pilot。
+5. 进入实现前必须完成 `reuse-before-rebuild` 判定，使用 `templates/governance/reuse-before-rebuild-decision.md` 记录 `existing_asset_search`、候选资产和结论。
+6. reuse 结论只能是 `use-as-is`、`adapt-existing`、`build-fresh` 或 `reference-only`；默认优先 `adapt-existing`，`build-fresh` 必须说明为什么现有 skill、script、workflow 或 runbook 无法复用。
+7. 落地 Agent/Skill/Workflow 至少一层。
+8. 回归通过后先进入显式 tool target 治理链路，再执行目标运行时 pilot。
 
 ## 30 天重吸收分级
 
@@ -51,5 +53,6 @@ bash ../scripts/check-upstream-intake-readiness.sh .
 
 - `adoption-matrix` 不允许真实 pending。
 - `adopt + done` 必须有本地证据。
+- 新增 skill、script、workflow 或 runbook 前必须有 `reuse-before-rebuild` 记录；缺少 `existing_asset_search` 时结论固定为 `needs-fix`。
 - 不能直接把第三方资产混装进运行目录；必须先经过 adk 审查，再进入显式 tool target。
 - 临时参考素材不得成为完成声明的唯一证据。

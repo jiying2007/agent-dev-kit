@@ -37,6 +37,7 @@ bash scripts/devkit.sh review --change <change-id> --result pass --blockers 0 --
 - 从真实使用中演化 Skill 时，必须同时保留成功样例的不变量和失败样例的修复目标；不得只根据单次失败把局部补丁写进长期 Skill。
 - 平台特定 Skill frontmatter、hook、slash command、allowed-tools、fork/context、动态命令注入或 marketplace 字段只能作为兼容线索；进入 adk 时必须映射到本仓的 `SKILL.md` frontmatter、manifest、profile 和验证脚本，不保留不可验证的平台私有语义。
 - 研发场景热门 Skill 榜单只能用于发现候选能力，不得因“热门/推荐/高 star”直接新增 core Skill；必须先证明与现有 adk Skill 不重复，并通过 reuse threshold。
+- `reuse-before-rebuild` 是新增 Skill 前的硬门禁：先记录 `existing_asset_search` 和 candidate assets；能 `use-as-is` 或 `adapt-existing` 时不得 `build-fresh`。
 - Skill 正文优先沉淀稳定指令；配套脚本不是默认选项。只有任务需要确定性执行、依赖边界可声明、可 dry-run 或测试，且不引入未审查外部 API、凭据或平台私有语义时，才允许进入 `scripts/` 或等价可执行资产。
 
 ## Skill 结构契约（推荐）
@@ -127,5 +128,6 @@ Skill 更新不是文案改写，必须走候选验证：
 
 - `proposal.md` 必须包含归属决策与安装范围。
 - `proposal.md` 必须说明为何不是 `REFERENCE_ONLY`，以及是否已有等价 Skill 可合并。
+- 新建 Skill 前必须附 `templates/governance/reuse-before-rebuild-decision.md` 等价字段；缺少 `existing_asset_search` 或 `build_fresh_reason` 时不得进入 core/optional。
 - 触发词路由必须可解释，且不与现有核心技能冲突。
 - 缺少依赖边界声明或归属结论时，结论固定为 `needs-fix`。

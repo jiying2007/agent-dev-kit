@@ -42,6 +42,7 @@ run_smoke "security.sh"                  scripts/security.sh
 run_smoke "token budget help"            scripts/check-token-budget.sh --help
 run_smoke "devkit codify governance"     scripts/devkit.sh codify-governance
 run_smoke "devkit knowledge compile"     scripts/devkit.sh knowledge-compile
+run_smoke "devkit reuse before rebuild"  scripts/devkit.sh reuse-before-rebuild
 run_smoke "devkit context experience"    scripts/devkit.sh context-experience
 run_smoke "openai governance help"       scripts/check-openai-developers-governance.sh --help
 run_smoke "run_all help"                 tests/run_all.sh --help

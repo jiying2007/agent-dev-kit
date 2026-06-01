@@ -1,8 +1,11 @@
 ---
 id:
 created_at:
+retrieved_at:
 last_verified:
 next_review_by:
+expires_at:
+review_status: pending
 status: candidate
 risk: low
 ---
@@ -24,6 +27,12 @@ risk: low
 ## source_url_or_local_path
 
 -
+
+## duplicate_concept_check
+
+- searched_index:
+- candidate_matches:
+- decision: update-existing
 
 ## summary
 

@@ -26,7 +26,7 @@ require_file "templates/governance/codify-decision.md"
 require_file "tests/fixtures/codify-decision/promotion_candidate_true.md"
 require_file "tests/fixtures/codify-decision/promotion_candidate_false.md"
 
-for field in delivery_goal reusable_pattern affected_asset promotion_candidate do_not_promote_reason owner_review rollback_path verification_evidence; do
+for field in delivery_goal reusable_pattern affected_asset promotion_candidate next_task_friction_reduced reduced_by reduction_evidence do_not_promote_reason owner_review rollback_path verification_evidence; do
   require_text "templates/governance/codify-decision.md" "^${field}:"
   require_text "skills/adk-after-action-review/SKILL.md" "$field"
   require_text "skills/adk-verification-before-completion/SKILL.md" "$field"
@@ -44,6 +44,10 @@ FALSE_FIXTURE="tests/fixtures/codify-decision/promotion_candidate_false.md"
 
 for pattern in \
   "^promotion_candidate: true" \
+  "^next_task_friction_reduced: true" \
+  "skill-trigger" \
+  "semantic-gate" \
+  "reduction_evidence:" \
   "^do_not_promote_reason: not-applicable" \
   "status: approved" \
   "rollback_path:" \
@@ -54,6 +58,9 @@ done
 
 for pattern in \
   "^promotion_candidate: false" \
+  "^next_task_friction_reduced: false" \
+  "none" \
+  "reduction_evidence:" \
   "do_not_promote_reason: one-off runtime observation" \
   "status: not-required" \
   "rollback_path:" \

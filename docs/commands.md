@@ -88,6 +88,14 @@ bash scripts/devkit.sh codify-governance
 bash scripts/devkit.sh knowledge-compile
 ```
 
+## reuse-before-rebuild
+
+检查新增资产前的复用优先门禁。该命令确认 upstream intake、skill curation、reuse decision 模板和 fixture 都要求先做 `existing_asset_search`，再选择 `use-as-is`、`adapt-existing`、`build-fresh` 或 `reference-only`。
+
+```bash
+bash scripts/devkit.sh reuse-before-rebuild
+```
+
 ## context-experience
 
 检查渐进记忆检索与低 token profile。该命令确认 `search_index -> timeline_context -> observation_details` 只读披露流程、memory search result 模板、low-token profile 模板和安全例外保持一致。

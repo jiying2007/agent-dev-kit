@@ -26,11 +26,12 @@ docs/archive/<topic>/schema/
 
 `ingest` 负责把新材料登记为可审计来源，并生成或更新待审查综合页。
 
-1. 为每个输入记录 `source_url_or_local_path`、采集时间、来源类型和脱敏状态。
+1. 为每个输入记录 `source_url_or_local_path`、`retrieved_at`、`review_status`、`expires_at`、来源类型和脱敏状态。
 2. 将原始材料放入 `raw_sources`，或登记只读外部 URL / 本地路径；不得编辑原始材料。
 3. 创建或更新 `maintained_wiki` 页面时，必须填写 `raw_source_path`、`wiki_page_path`、`schema_path` 和 `raw_fallback`。
 4. 新 synthesis 只作为候选内容写入综合页，涉及默认行为、记忆晋升或规则提升时必须走 owner review。
-5. 若发现已有同名实体、概念或主题页，优先更新现有页并追加 `change_log`，不要创建重复页面。
+5. 创建新主题页前必须填写 `duplicate_concept_check`：先查索引、列出候选匹配页，并给出 `update-existing` / `create-new` / `reference-only` 结论。
+6. 若发现已有同名实体、概念或主题页，优先更新现有页并追加 `change_log`，不要创建重复页面。
 
 ## 操作：query
 
@@ -52,8 +53,12 @@ docs/archive/<topic>/schema/
 - `wiki_page_path`
 - `schema_path`
 - `source_url_or_local_path`
+- `retrieved_at`
+- `review_status`
+- `expires_at`
 - `summary`
 - `cross_references`
+- `duplicate_concept_check`
 - `stale_claims`
 - `raw_fallback`
 - `change_log`
@@ -64,6 +69,8 @@ docs/archive/<topic>/schema/
 - wiki 页面引用 source material 或 raw evidence paths。
 - schema 定义 naming、frontmatter、links 和 maintenance rules。
 - lint 标记 stale claims、weak links、orphan pages 和 unresolved questions。
+- lint 标记 duplicate concept pages；缺少 `duplicate_concept_check` 的新综合页不得晋升。
+- 外部来源必须有 `retrieved_at`、`review_status`、`expires_at`，过期来源必须回读 raw source 或重新采集。
 - 来自 compiled wiki 的查询新结论，必须审查后才能写回 wiki。
 
 ## Note 模板

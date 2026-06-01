@@ -18,7 +18,7 @@ constraints:
   - 没有验证证据不得给出完成或通过结论
   - 评审 blocker 未关闭时不得给通过结论
   - breaking change 必须显式声明与迁移/回退方案
-  - 交付后沉淀决策必须记录 reusable_pattern、promotion_candidate、do_not_promote_reason、owner_review、rollback_path、verification_evidence
+  - 交付后沉淀决策必须记录 reusable_pattern、promotion_candidate、next_task_friction_reduced、reduced_by、reduction_evidence、do_not_promote_reason、owner_review、rollback_path、verification_evidence
 ---
 
 # adk-verification-before-completion
@@ -43,8 +43,8 @@ constraints:
 10. 模型/上下文变更核验：若切换模型、扩大上下文或提升工具能力，必须补本地回归和权限/approval 未放宽证据。
 11. 反向核验：逐条检查“结论是否被证据支持”，避免先给结论后补证据。
 12. 卡死/重试核验：长任务必须核对 retry budget、heartbeat、staleness threshold、失败路径、已排除方案和 open items。
-13. Codify Decision：交付前确认是否存在可复用模式，使用 `templates/governance/codify-decision.md` 记录 `delivery_goal`、`reusable_pattern`、`affected_asset`、`promotion_candidate`、`do_not_promote_reason`、`owner_review`、`rollback_path`、`verification_evidence`。
-14. 推广门禁：只有当 `verification_evidence` 支持复用价值、`owner_review` 明确、`rollback_path` 可执行时，才允许把 `promotion_candidate` 标记为 true；否则必须填写 `do_not_promote_reason`。
+13. Codify Decision：交付前确认是否存在可复用模式，使用 `templates/governance/codify-decision.md` 记录 `delivery_goal`、`reusable_pattern`、`affected_asset`、`promotion_candidate`、`next_task_friction_reduced`、`reduced_by`、`reduction_evidence`、`do_not_promote_reason`、`owner_review`、`rollback_path`、`verification_evidence`。
+14. 推广门禁：只有当 `verification_evidence` 支持复用价值、`owner_review` 明确、`rollback_path` 可执行，且 `next_task_friction_reduced` / `reduced_by` / `reduction_evidence` 说明后续成本如何下降时，才允许把 `promotion_candidate` 标记为 true；否则必须填写 `do_not_promote_reason`。
 15. 结论输出：给出 pass/needs-fix，并列出下一步动作与责任人。
 
 ## Commands
@@ -72,6 +72,9 @@ rtk bash scripts/check-codify-governance.sh
   - reusable_pattern:
   - affected_asset:
   - promotion_candidate:
+  - next_task_friction_reduced:
+  - reduced_by:
+  - reduction_evidence:
   - do_not_promote_reason:
   - owner_review:
   - rollback_path:
@@ -110,8 +113,9 @@ Evidence Index（命令级）:
 - 若涉及模型切换、上下文扩容或工具权限变化，必须附本地回归和 approval/deny gate 未放宽证据。
 - 关键验证命令必须存在 Evidence Index 记录，且字段完整（命令/退出码/结果摘要/证据路径/层级）。
 - Evidence Index 至少包含一条负结果或被证伪路径记录。
-- Codify Decision 必须记录 reusable_pattern、promotion_candidate、do_not_promote_reason、owner_review、rollback_path、verification_evidence。
+- Codify Decision 必须记录 reusable_pattern、promotion_candidate、next_task_friction_reduced、reduced_by、reduction_evidence、do_not_promote_reason、owner_review、rollback_path、verification_evidence。
 - `promotion_candidate: true` 缺少 owner_review、rollback_path 或 verification_evidence 时，结论固定为 `needs-fix`。
+- `promotion_candidate: true` 缺少 next_task_friction_reduced、reduced_by 或 reduction_evidence 时，结论固定为 `needs-fix`。
 - 禁止使用"应该可以/理论上通过"等无证据措辞。
 
 ---
