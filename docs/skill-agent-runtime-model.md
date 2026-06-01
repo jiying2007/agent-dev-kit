@@ -13,7 +13,7 @@
 | Skill | 长期版本化资产 | 定义某类任务应该怎么做、输入输出、Done criteria、失败收口和验证要求 | `skills/<name>/SKILL.md` 或 `optional-skills/<name>/SKILL.md` |
 | Agent | 运行时执行主体 | 读取上下文、选择 Skill、调用工具、推进任务并对结果负责 | `agents/<name>/AGENTS.md` |
 | Sub-agent | 短生命周期执行实例 | 在主 Agent 拆分后处理边界明确的子任务，回传结构化结果 | 由运行时调度，任务契约由模板约束 |
-| Workflow | 跨阶段状态机 | 定义 propose/apply/verify/review/archive 等阶段、状态和门禁 | `scripts/workflow.sh`、`docs/workflows.md` |
+| Workflow | 跨阶段状态机 | 定义 propose/apply/verify/review/archive 等阶段、状态和门禁 | `workflows/<name>/WORKFLOW.md`、`scripts/workflow.sh`、`docs/workflows.md` |
 | MCP/tool | 外部能力接口 | 提供 Git、文档、设备、API、浏览器等能力连接，不定义任务方法论 | `manifest.yaml`、运行时配置和边界检查脚本 |
 
 ## 写入边界
@@ -28,6 +28,20 @@
 - Agent/runtime 身份必须在任务契约中显式声明；workspace、消息入口、目录位置或启动方式都不能单独等同于执行 Agent。
 - 只有任务类型长期稳定分化，且上下文、权限、工具面或交付责任确需隔离时，才拆新 Agent；否则优先用 Skill、Workflow 或 worker contract 约束。
 - Intent/router 只能做候选选择和证据排序，不能绕过 Skill、Workflow、tool policy 或 owner approval 直接授予执行权限。
+
+## Agent 入口规范
+
+`AGENTS.md` 是运行角色契约，不是领域知识库。每个 Agent 必须至少包含：
+
+- `角色定位`：职责、核心关注和非职责范围。
+- `适用输入`：可处理的输入材料和上下文边界。
+- `核心决策规则`：必须遵守的判断规则。
+- `执行流程`：推进任务的阶段化动作。
+- `必跑验证`：该角色放行前必须执行或要求的检查。
+- `阻塞与升级`：何时暂停、转交或要求人工确认。
+- `输出契约`：结论字段、证据和交付格式。
+
+Agent 的 manifest 条目必须声明 `description`、`quality_tier`、`owns`、`does_not_own`、`handoff_to`、`default_skills` 和 `quality_gate`。描述用于 discovery，必须与角色职责一致，不能使用占位或泛化描述；`handoff_to` 和 `default_skills` 必须引用已登记资产。Agent 不直接复制 Skill 的 SOP；当流程稳定可复用时沉淀为 Skill，当跨阶段状态需要持久化时沉淀为 Workflow。
 
 ## Skill 入口规范
 
@@ -73,6 +87,19 @@
 标准模板见 `templates/planning/worker-contract.md`。
 
 OpenAI Agents SDK 文档中的 handoff/ownership 语义在 adk 中落地为本地 contract，而不是直接绑定 SDK。`manifests/subagent_contracts.json` 是默认审计入口，必须声明 owner、`scope_read`、`scope_write`、`must_not_touch`、handoff condition、reply owner、stop condition 和 report schema。最终回复归属默认保留在主 Agent，子代理只交付结构化结果和验证证据。
+
+## Workflow 入口规范
+
+Workflow 是一等资产，必须同时出现在 `manifest.yaml:workflows` 和 `workflows/<name>/WORKFLOW.md`。manifest 负责索引与导出闭包；`WORKFLOW.md` 负责阶段契约和人工可审查说明。
+
+每个 Workflow 必须声明：
+
+- `path`、`primary_agent`、`primary_skill` 和 `supporting_skills`。
+- `triggers`、`agents`、`skills`、`commands` 和 `verification`。
+- `WORKFLOW.md` frontmatter 中的 `profiles`、`stages`、`artifacts`、`failure_handling`。
+- 固定章节：`Goal`、`Scope`、`Ownership`、`Stage Contract`、`Artifact Contract`、`Commands`、`Failure Handling`、`Quality Gate`。
+
+Workflow 不重复领域 Skill 的细节；它只定义阶段、工件、门禁、失败回路、审批点和验证闭包。
 
 ## 外部 Skill 引入
 

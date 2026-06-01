@@ -1,6 +1,6 @@
 # Agent and Skill Catalog
 
-- generated_at: 2026-05-31T14:55:12Z
+- generated_at: 2026-06-01T12:19:14Z
 - source: manifest.yaml
 
 ## Agents
@@ -18,11 +18,32 @@
 | `security-compliance-reviewer` | 安全、合规、凭据和供应链风险审查 | `agents/security-compliance-reviewer/AGENTS.md` |
 | `code-review-governor` | 代码审查、反馈闭环和质量放行治理 | `agents/code-review-governor/AGENTS.md` |
 | `adk-bsp-analyst` | BSP 代码分析、架构梳理、历史追溯 | `agents/adk-bsp-analyst/AGENTS.md` |
-| `adk-driver-developer` | 嵌入式驱动开发 | `agents/adk-driver-developer/AGENTS.md` |
-| `adk-hardware-debugger` | 硬件问题调试、oops 分析 | `agents/adk-hardware-debugger/AGENTS.md` |
-| `adk-planner` | 需求分析、任务拆解、方案设计 | `agents/adk-planner/AGENTS.md` |
-| `adk-generator` | 编码实现、单元测试编写 | `agents/adk-generator/AGENTS.md` |
-| `adk-evaluator` | 代码评审、质量验证 | `agents/adk-evaluator/AGENTS.md` |
+| `adk-driver-developer` | 嵌入式驱动实现、接口适配和 bring-up 修复 | `agents/adk-driver-developer/AGENTS.md` |
+| `adk-hardware-debugger` | 硬件故障定位、oops 分析和板级调试证据整理 | `agents/adk-hardware-debugger/AGENTS.md` |
+| `adk-planner` | 需求分析、任务拆解和工程方案设计 | `agents/adk-planner/AGENTS.md` |
+| `adk-generator` | 按任务契约完成编码实现和单元测试补充 | `agents/adk-generator/AGENTS.md` |
+| `adk-evaluator` | 代码评审、质量验证和放行风险判断 | `agents/adk-evaluator/AGENTS.md` |
+
+## Agent Contract Matrix
+
+| Agent | Owns | Does Not Own | Handoff To | Default Skills | Quality Gate |
+|---|---|---|---|---|---|
+| `requirements-analyst` | 需求边界, 验收标准 | 代码实现, 发布操作 | architecture-planner, test-validation-engineer, code-review-governor | adk-requirements-triage, adk-task-breakdown | 目标、非目标、影响面、验收标准和风险必须可验证 |
+| `architecture-planner` | 架构边界, 接口决策 | 直接编码, 发布签核 | component-engineer, driver-engineer, code-review-governor | adk-interface-contract-design, adk-adr-writer | 设计必须包含接口、兼容性、迁移和回退边界 |
+| `driver-engineer` | 驱动实现, bring-up 证据 | 产品需求裁剪, 发布放行 | test-validation-engineer, code-review-governor | adk-driver-bringup-checklist, adk-systematic-debugging | 驱动变更必须绑定硬件约束、验证证据和回归路径 |
+| `component-engineer` | 组件接口, 模块实现 | 需求验收口径, 发布版本策略 | test-validation-engineer, code-review-governor | adk-interface-contract-design, adk-component-api-stability | 组件变更必须保留 API 稳定性和集成验证证据 |
+| `application-engineer` | 应用逻辑, 工具行为 | 架构最终裁决, 发布放行 | test-validation-engineer, code-review-governor | adk-systematic-debugging, adk-unit-test-embedded | 应用行为变更必须包含用户路径、错误路径和回归证据 |
+| `build-release-engineer` | 构建打包, 发布回滚 | 需求变更, 安全风险豁免 | security-compliance-reviewer, performance-reliability-engineer | adk-release-versioning, adk-commit-pr-quality-gate | 发布必须绑定版本、制品、校验、回滚和放行证据 |
+| `test-validation-engineer` | 测试策略, 验证证据 | 功能实现, 风险豁免 | code-review-governor, build-release-engineer | adk-test-strategy, adk-verification-before-completion | 完成结论必须与验证命令、退出码和证据路径一致 |
+| `performance-reliability-engineer` | 性能分析, 可靠性风险 | 功能需求裁决, 安全签核 | build-release-engineer, code-review-governor | adk-performance-profiling-embedded, adk-fault-injection-recovery | 性能和可靠性结论必须包含基线、负载条件和对比证据 |
+| `security-compliance-reviewer` | 安全审查, 供应链风险 | 功能实现, 发布执行 | build-release-engineer, code-review-governor | adk-static-analysis-c-cpp, adk-commit-pr-quality-gate | 高风险项必须修复、降级或显式记录风险接受 |
+| `code-review-governor` | 审查分级, 放行判断 | 直接修复代码, 发布执行 | requirements-analyst, test-validation-engineer | adk-code-review-loop, adk-commit-pr-quality-gate | blocker 必须修复或明确风险接受后才能放行 |
+| `adk-bsp-analyst` | BSP 分析, 历史追溯 | 驱动实现, 发布放行 | adk-driver-developer, architecture-planner | adk-bsp-analyst, adk-bsp-porting-playbook | BSP 结论必须包含入口、依赖、风险和追溯证据 |
+| `adk-driver-developer` | 嵌入式驱动实现, 接口适配 | BSP 架构裁决, 发布放行 | adk-evaluator, test-validation-engineer | adk-driver-developer, adk-driver-bringup-checklist | 驱动实现必须包含 bring-up、错误路径和验证证据 |
+| `adk-hardware-debugger` | 硬件故障定位, oops 分析 | 长期架构设计, 发布放行 | adk-driver-developer, test-validation-engineer | adk-hardware-debugger, adk-systematic-debugging | 硬件调试结论必须包含现象、假设、实验和证据 |
+| `adk-planner` | 计划拆解, 方案设计 | 代码实现, 质量放行 | adk-generator, adk-evaluator | adk-planner, adk-task-breakdown | 计划必须包含 scope、依赖、验证和阻塞条件 |
+| `adk-generator` | 编码实现, 单元测试补充 | 需求重写, 审查放行 | adk-evaluator, test-validation-engineer | adk-generator, adk-unit-test-embedded | 实现必须匹配任务契约并通过定向验证 |
+| `adk-evaluator` | 质量验证, 风险判断 | 编码修复, 需求变更 | adk-planner, code-review-governor | adk-evaluator, adk-code-review-loop | 评估结论必须列出 blocker、验证证据和剩余风险 |
 
 ## Skills
 
@@ -98,6 +119,28 @@
 | `adk-security-supply-chain` | 第三方技能、脚本与参考资产引入前的安全和供应链审查 | "供应链审查" | `optional-skills/adk-security-supply-chain/SKILL.md` |
 | `adk-skill-composition-governance` | 治理技能组合、触发优先级、fallback 与弃用关系 | "技能组合" | `optional-skills/adk-skill-composition-governance/SKILL.md` |
 | `adk-test-flakiness-triage` | 定位测试波动根因并给出稳定化方案 | "测试波动" | `optional-skills/adk-test-flakiness-triage/SKILL.md` |
+
+## Workflows
+
+| Name | Description | Profiles | Primary Agent | Primary Skill | Path |
+|---|---|---|---|---|---|
+| `adk-delivery-gate` | agent-dev-kit 通用资产生产交付门禁 | core, embedded-fullstack | `code-review-governor` | `adk-verification-before-completion` | `workflows/adk-delivery-gate/WORKFLOW.md` |
+| `feature-delivery` | 新功能从需求收敛到验证评审的交付工作流 | core, embedded-fullstack | `requirements-analyst` | `adk-requirements-triage` | `workflows/feature-delivery/WORKFLOW.md` |
+| `bugfix-delivery` | 缺陷复现、根因定位、回归验证和审查闭环工作流 | embedded-fullstack | `application-engineer` | `adk-systematic-debugging` | `workflows/bugfix-delivery/WORKFLOW.md` |
+| `release-hardening` | 发布前安全、性能、版本、回滚和放行证据收口工作流 | release-hardening | `build-release-engineer` | `adk-release-versioning` | `workflows/release-hardening/WORKFLOW.md` |
+| `runtime-routing` | 运行时技能路由、fallback 边界和 profile 闭包验证工作流 | core, embedded-fullstack | `architecture-planner` | `adk-runtime-router` | `workflows/runtime-routing/WORKFLOW.md` |
+| `skill-curation-delivery` | 技能候选筛选、core/optional 归属和触发质量验证工作流 | core, team-core | `requirements-analyst` | `adk-requirements-triage` | `workflows/skill-curation-delivery/WORKFLOW.md` |
+
+## Workflow Matrix
+
+| Workflow | Profiles | Command Risk | Primary Agent | Primary Skill | Supporting Skills | Verification |
+|---|---|---|---|---|---|---|
+| `adk-delivery-gate` | core, embedded-fullstack | low | `code-review-governor` | `adk-verification-before-completion` | adk-runtime-router, adk-requirements-triage, adk-task-breakdown, adk-test-strategy, adk-code-review-loop, adk-after-action-review, adk-token-context-governance, adk-commit-pr-quality-gate | rtk bash tests/run_all.sh --fail-fast |
+| `feature-delivery` | core, embedded-fullstack | low | `requirements-analyst` | `adk-requirements-triage` | adk-task-breakdown, adk-interface-contract-design, adk-unit-test-embedded, adk-verification-before-completion, adk-code-review-loop | rtk bash tests/test_validate.sh, rtk bash tests/test_workflow_closure.sh |
+| `bugfix-delivery` | embedded-fullstack | low | `application-engineer` | `adk-systematic-debugging` | adk-task-breakdown, adk-verification-before-completion, adk-code-review-loop | rtk bash tests/test_workflow.sh, rtk bash tests/test_integration.sh |
+| `release-hardening` | release-hardening | medium | `build-release-engineer` | `adk-release-versioning` | adk-test-strategy, adk-code-review-loop, adk-branch-closeout, adk-verification-before-completion, adk-commit-pr-quality-gate | rtk bash tests/test_validate.sh, rtk bash tests/test_profile_coherence.sh |
+| `runtime-routing` | core, embedded-fullstack | low | `architecture-planner` | `adk-runtime-router` | adk-verification-before-completion, adk-repo-drift-remediation | rtk bash tests/test_skill_trigger_matrix.sh, rtk bash tests/test_workflow_closure.sh |
+| `skill-curation-delivery` | core, team-core | low | `requirements-analyst` | `adk-requirements-triage` | adk-task-breakdown, adk-commit-pr-quality-gate, adk-verification-before-completion | rtk bash tests/test_catalog.sh, rtk bash tests/test_skill_sop_quality.sh |
 
 ## Profiles
 

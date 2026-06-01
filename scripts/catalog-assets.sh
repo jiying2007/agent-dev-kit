@@ -12,13 +12,13 @@ Usage:
   ./scripts/catalog-assets.sh <build|find> [options]
 
 Commands:
-  build  生成 Agent/Skill/Profile 索引文档
-  find   按关键词检索 Agent/Skill/Profile
+  build  生成 Agent/Skill/Workflow/Profile 索引文档
+  find   按关键词检索 Agent/Skill/Workflow/Profile
 
 Options:
   --out <path>                                # build 输出文件，默认 docs/agent-skill-catalog.md
   --keyword <text>                            # find 必填
-  --type all|agent|skill|optional-skill|profile
+  --type all|agent|skill|optional-skill|workflow|profile
   -h, --help
 
 Examples:
@@ -35,7 +35,9 @@ fi
 ACTION="$1"
 shift
 
-OUT_PATH="$ROOT_DIR/docs/agent-skill-catalog.md"
+DEFAULT_OUT_PATH="$ROOT_DIR/docs/agent-skill-catalog.md"
+MATRIX_OUT_PATH="$ROOT_DIR/docs/workflow-contract-matrix.md"
+OUT_PATH="$DEFAULT_OUT_PATH"
 KEYWORD=""
 TYPE="all"
 
@@ -119,6 +121,24 @@ emit_agents_table() {
   echo
 }
 
+emit_agent_contract_matrix() {
+  echo "## Agent Contract Matrix"
+  echo
+  echo "| Agent | Owns | Does Not Own | Handoff To | Default Skills | Quality Gate |"
+  echo "|---|---|---|---|---|---|"
+  local name owns does_not_own handoff skills gate
+  while IFS= read -r name; do
+    [[ -z "$name" ]] && continue
+    owns="$(join_manifest_list "agents" "$name" "owns")"
+    does_not_own="$(join_manifest_list "agents" "$name" "does_not_own")"
+    handoff="$(join_manifest_list "agents" "$name" "handoff_to")"
+    skills="$(join_manifest_list "agents" "$name" "default_skills")"
+    gate="$(adk_get_manifest_item_value "agents" "$name" "quality_gate")"
+    echo "| \`$name\` | $owns | $does_not_own | $handoff | $skills | $gate |"
+  done < <(adk_list_manifest_names "agents")
+  echo
+}
+
 emit_skills_table() {
   local section="$1"
   local title="$2"
@@ -160,6 +180,73 @@ emit_profiles_table() {
   done < <(adk_list_profile_names)
 }
 
+join_manifest_list() {
+  local section="$1"
+  local name="$2"
+  local key="$3"
+  adk_get_manifest_item_list "$section" "$name" "$key" | awk '
+    BEGIN {sep=""}
+    NF {
+      printf "%s%s", sep, $0
+      sep=", "
+    }
+    END {
+      if (sep == "") {
+        printf "-"
+      }
+    }
+  '
+}
+
+emit_workflows_table() {
+  echo "## Workflows"
+  echo
+  echo "| Name | Description | Profiles | Primary Agent | Primary Skill | Path |"
+  echo "|---|---|---|---|---|---|"
+  local name desc profiles agent skill path
+  while IFS= read -r name; do
+    [[ -z "$name" ]] && continue
+    desc="$(adk_get_manifest_item_value "workflows" "$name" "description")"
+    profiles="$(join_manifest_list "workflows" "$name" "profiles")"
+    agent="$(adk_get_manifest_item_value "workflows" "$name" "primary_agent")"
+    skill="$(adk_get_manifest_item_value "workflows" "$name" "primary_skill")"
+    path="$(adk_get_manifest_item_value "workflows" "$name" "path")"
+    echo "| \`$name\` | $desc | $profiles | \`$agent\` | \`$skill\` | \`$path\` |"
+  done < <(adk_list_manifest_names "workflows")
+  echo
+}
+
+emit_workflow_matrix() {
+  echo "## Workflow Matrix"
+  echo
+  echo "| Workflow | Profiles | Command Risk | Primary Agent | Primary Skill | Supporting Skills | Verification |"
+  echo "|---|---|---|---|---|---|---|"
+  local name profiles risk agent skill supporting verification
+  while IFS= read -r name; do
+    [[ -z "$name" ]] && continue
+    profiles="$(join_manifest_list "workflows" "$name" "profiles")"
+    risk="$(adk_get_manifest_item_value "workflows" "$name" "command_risk")"
+    agent="$(adk_get_manifest_item_value "workflows" "$name" "primary_agent")"
+    skill="$(adk_get_manifest_item_value "workflows" "$name" "primary_skill")"
+    supporting="$(join_manifest_list "workflows" "$name" "supporting_skills")"
+    verification="$(join_manifest_list "workflows" "$name" "verification")"
+    echo "| \`$name\` | $profiles | $risk | \`$agent\` | \`$skill\` | $supporting | $verification |"
+  done < <(adk_list_manifest_names "workflows")
+  echo
+}
+
+write_workflow_matrix_doc() {
+  {
+    echo "# Workflow Contract Matrix"
+    echo
+    echo "- generated_at: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+    echo "- source: manifest.yaml"
+    echo
+    emit_workflow_matrix
+  } > "$MATRIX_OUT_PATH"
+  echo "[OK] workflow matrix generated: $MATRIX_OUT_PATH"
+}
+
 build_catalog() {
   mkdir -p "$(dirname "$OUT_PATH")"
   {
@@ -169,11 +256,17 @@ build_catalog() {
     echo "- source: manifest.yaml"
     echo
     emit_agents_table
+    emit_agent_contract_matrix
     emit_skills_table "skills" "Skills"
     emit_skills_table "optional_skills" "Optional Skills"
+    emit_workflows_table
+    emit_workflow_matrix
     emit_profiles_table
   } > "$OUT_PATH"
   echo "[OK] catalog generated: $OUT_PATH"
+  if [[ "$OUT_PATH" == "$DEFAULT_OUT_PATH" ]]; then
+    write_workflow_matrix_doc
+  fi
 }
 
 emit_find_row() {
@@ -228,6 +321,19 @@ find_items() {
     done < <(adk_list_manifest_names "optional_skills")
   fi
 
+  if [[ "$TYPE" == "all" || "$TYPE" == "workflow" ]]; then
+    local name desc path agent skill
+    while IFS= read -r name; do
+      desc="$(adk_get_manifest_item_value "workflows" "$name" "description")"
+      path="$(adk_get_manifest_item_value "workflows" "$name" "path")"
+      agent="$(adk_get_manifest_item_value "workflows" "$name" "primary_agent")"
+      skill="$(adk_get_manifest_item_value "workflows" "$name" "primary_skill")"
+      if match_keyword "$name $desc $agent $skill" "$KEYWORD"; then
+        emit_find_row "workflow" "$name" "$desc" "$path"
+      fi
+    done < <(adk_list_manifest_names "workflows")
+  fi
+
   if [[ "$TYPE" == "all" || "$TYPE" == "profile" ]]; then
     local profile desc
     while IFS= read -r profile; do
@@ -247,7 +353,7 @@ case "$ACTION" in
     ;;
   find)
     case "$TYPE" in
-      all|agent|skill|optional-skill|profile)
+      all|agent|skill|optional-skill|workflow|profile)
         ;;
       *)
         echo "[FAIL] unsupported --type: $TYPE" >&2

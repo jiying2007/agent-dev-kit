@@ -147,68 +147,278 @@ agents:
     path: agents/requirements-analyst/AGENTS.md
     quality_tier: p0
     description: 需求澄清、验收标准和范围边界分析
+    owns:
+      - 需求边界
+      - 验收标准
+    does_not_own:
+      - 代码实现
+      - 发布操作
+    handoff_to:
+      - architecture-planner
+      - test-validation-engineer
+      - code-review-governor
+    default_skills:
+      - adk-requirements-triage
+      - adk-task-breakdown
+    quality_gate: 目标、非目标、影响面、验收标准和风险必须可验证
   - name: architecture-planner
     path: agents/architecture-planner/AGENTS.md
     quality_tier: p0
     description: 架构方案、模块边界和技术决策规划
+    owns:
+      - 架构边界
+      - 接口决策
+    does_not_own:
+      - 直接编码
+      - 发布签核
+    handoff_to:
+      - component-engineer
+      - driver-engineer
+      - code-review-governor
+    default_skills:
+      - adk-interface-contract-design
+      - adk-adr-writer
+    quality_gate: 设计必须包含接口、兼容性、迁移和回退边界
   - name: driver-engineer
     path: agents/driver-engineer/AGENTS.md
     quality_tier: p0
     description: 驱动实现、bring-up 和底层联调
+    owns:
+      - 驱动实现
+      - bring-up 证据
+    does_not_own:
+      - 产品需求裁剪
+      - 发布放行
+    handoff_to:
+      - test-validation-engineer
+      - code-review-governor
+    default_skills:
+      - adk-driver-bringup-checklist
+      - adk-systematic-debugging
+    quality_gate: 驱动变更必须绑定硬件约束、验证证据和回归路径
   - name: component-engineer
     path: agents/component-engineer/AGENTS.md
     quality_tier: p0
     description: 组件接口、模块实现和集成边界治理
+    owns:
+      - 组件接口
+      - 模块实现
+    does_not_own:
+      - 需求验收口径
+      - 发布版本策略
+    handoff_to:
+      - test-validation-engineer
+      - code-review-governor
+    default_skills:
+      - adk-interface-contract-design
+      - adk-component-api-stability
+    quality_gate: 组件变更必须保留 API 稳定性和集成验证证据
   - name: application-engineer
     path: agents/application-engineer/AGENTS.md
     quality_tier: p0
     description: 设备侧应用、上位机工具和业务逻辑实现
+    owns:
+      - 应用逻辑
+      - 工具行为
+    does_not_own:
+      - 架构最终裁决
+      - 发布放行
+    handoff_to:
+      - test-validation-engineer
+      - code-review-governor
+    default_skills:
+      - adk-systematic-debugging
+      - adk-unit-test-embedded
+    quality_gate: 应用行为变更必须包含用户路径、错误路径和回归证据
   - name: build-release-engineer
     path: agents/build-release-engineer/AGENTS.md
     quality_tier: p0
     description: 构建、打包、版本发布和回滚链路
+    owns:
+      - 构建打包
+      - 发布回滚
+    does_not_own:
+      - 需求变更
+      - 安全风险豁免
+    handoff_to:
+      - security-compliance-reviewer
+      - performance-reliability-engineer
+    default_skills:
+      - adk-release-versioning
+      - adk-commit-pr-quality-gate
+    quality_gate: 发布必须绑定版本、制品、校验、回滚和放行证据
   - name: test-validation-engineer
     path: agents/test-validation-engineer/AGENTS.md
     quality_tier: p0
     description: 测试策略、验证证据和完成前门禁
+    owns:
+      - 测试策略
+      - 验证证据
+    does_not_own:
+      - 功能实现
+      - 风险豁免
+    handoff_to:
+      - code-review-governor
+      - build-release-engineer
+    default_skills:
+      - adk-test-strategy
+      - adk-verification-before-completion
+    quality_gate: 完成结论必须与验证命令、退出码和证据路径一致
   - name: performance-reliability-engineer
     path: agents/performance-reliability-engineer/AGENTS.md
     quality_tier: p0
     description: 性能剖析、稳定性和可靠性风险治理
+    owns:
+      - 性能分析
+      - 可靠性风险
+    does_not_own:
+      - 功能需求裁决
+      - 安全签核
+    handoff_to:
+      - build-release-engineer
+      - code-review-governor
+    default_skills:
+      - adk-performance-profiling-embedded
+      - adk-fault-injection-recovery
+    quality_gate: 性能和可靠性结论必须包含基线、负载条件和对比证据
   - name: security-compliance-reviewer
     path: agents/security-compliance-reviewer/AGENTS.md
     quality_tier: p0
     description: 安全、合规、凭据和供应链风险审查
+    owns:
+      - 安全审查
+      - 供应链风险
+    does_not_own:
+      - 功能实现
+      - 发布执行
+    handoff_to:
+      - build-release-engineer
+      - code-review-governor
+    default_skills:
+      - adk-static-analysis-c-cpp
+      - adk-commit-pr-quality-gate
+    quality_gate: 高风险项必须修复、降级或显式记录风险接受
   - name: code-review-governor
     path: agents/code-review-governor/AGENTS.md
     quality_tier: p0
     description: 代码审查、反馈闭环和质量放行治理
+    owns:
+      - 审查分级
+      - 放行判断
+    does_not_own:
+      - 直接修复代码
+      - 发布执行
+    handoff_to:
+      - requirements-analyst
+      - test-validation-engineer
+    default_skills:
+      - adk-code-review-loop
+      - adk-commit-pr-quality-gate
+    quality_gate: blocker 必须修复或明确风险接受后才能放行
   # 嵌入式专用 Agent 角色
   - name: adk-bsp-analyst
     path: agents/adk-bsp-analyst/AGENTS.md
     quality_tier: p1
     description: BSP 代码分析、架构梳理、历史追溯
+    owns:
+      - BSP 分析
+      - 历史追溯
+    does_not_own:
+      - 驱动实现
+      - 发布放行
+    handoff_to:
+      - adk-driver-developer
+      - architecture-planner
+    default_skills:
+      - adk-bsp-analyst
+      - adk-bsp-porting-playbook
+    quality_gate: BSP 结论必须包含入口、依赖、风险和追溯证据
   - name: adk-driver-developer
     path: agents/adk-driver-developer/AGENTS.md
     quality_tier: p1
-    description: 嵌入式驱动开发
+    description: 嵌入式驱动实现、接口适配和 bring-up 修复
+    owns:
+      - 嵌入式驱动实现
+      - 接口适配
+    does_not_own:
+      - BSP 架构裁决
+      - 发布放行
+    handoff_to:
+      - adk-evaluator
+      - test-validation-engineer
+    default_skills:
+      - adk-driver-developer
+      - adk-driver-bringup-checklist
+    quality_gate: 驱动实现必须包含 bring-up、错误路径和验证证据
   - name: adk-hardware-debugger
     path: agents/adk-hardware-debugger/AGENTS.md
     quality_tier: p1
-    description: 硬件问题调试、oops 分析
+    description: 硬件故障定位、oops 分析和板级调试证据整理
+    owns:
+      - 硬件故障定位
+      - oops 分析
+    does_not_own:
+      - 长期架构设计
+      - 发布放行
+    handoff_to:
+      - adk-driver-developer
+      - test-validation-engineer
+    default_skills:
+      - adk-hardware-debugger
+      - adk-systematic-debugging
+    quality_gate: 硬件调试结论必须包含现象、假设、实验和证据
   # Agent 角色分离
   - name: adk-planner
     path: agents/adk-planner/AGENTS.md
     quality_tier: p1
-    description: 需求分析、任务拆解、方案设计
+    description: 需求分析、任务拆解和工程方案设计
+    owns:
+      - 计划拆解
+      - 方案设计
+    does_not_own:
+      - 代码实现
+      - 质量放行
+    handoff_to:
+      - adk-generator
+      - adk-evaluator
+    default_skills:
+      - adk-planner
+      - adk-task-breakdown
+    quality_gate: 计划必须包含 scope、依赖、验证和阻塞条件
   - name: adk-generator
     path: agents/adk-generator/AGENTS.md
     quality_tier: p1
-    description: 编码实现、单元测试编写
+    description: 按任务契约完成编码实现和单元测试补充
+    owns:
+      - 编码实现
+      - 单元测试补充
+    does_not_own:
+      - 需求重写
+      - 审查放行
+    handoff_to:
+      - adk-evaluator
+      - test-validation-engineer
+    default_skills:
+      - adk-generator
+      - adk-unit-test-embedded
+    quality_gate: 实现必须匹配任务契约并通过定向验证
   - name: adk-evaluator
     path: agents/adk-evaluator/AGENTS.md
     quality_tier: p1
-    description: 代码评审、质量验证
+    description: 代码评审、质量验证和放行风险判断
+    owns:
+      - 质量验证
+      - 风险判断
+    does_not_own:
+      - 编码修复
+      - 需求变更
+    handoff_to:
+      - adk-planner
+      - code-review-governor
+    default_skills:
+      - adk-evaluator
+      - adk-code-review-loop
+    quality_gate: 评估结论必须列出 blocker、验证证据和剩余风险
 
 skills:
   - name: adk-requirements-triage
@@ -690,7 +900,23 @@ profiles:
 
 workflows:
   - name: adk-delivery-gate
+    path: workflows/adk-delivery-gate/WORKFLOW.md
     description: agent-dev-kit 通用资产生产交付门禁
+    profiles:
+      - core
+      - embedded-fullstack
+    command_risk: low
+    primary_agent: code-review-governor
+    primary_skill: adk-verification-before-completion
+    supporting_skills:
+      - adk-runtime-router
+      - adk-requirements-triage
+      - adk-task-breakdown
+      - adk-test-strategy
+      - adk-code-review-loop
+      - adk-after-action-review
+      - adk-token-context-governance
+      - adk-commit-pr-quality-gate
     triggers:
       - "优化 adk"
       - "agent-dev-kit 交付"
@@ -712,9 +938,176 @@ workflows:
       - test-validation-engineer
       - code-review-governor
     commands:
-      - "rtk bash scripts/check-skills.sh"
+      - "rtk bash scripts/devkit.sh validate --strict"
+      - "rtk bash scripts/check-workflow-closure.sh --profile core"
     verification:
-      - "rtk bash scripts/check.sh"
+      - "rtk bash tests/run_all.sh --fail-fast"
+  - name: feature-delivery
+    path: workflows/feature-delivery/WORKFLOW.md
+    description: 新功能从需求收敛到验证评审的交付工作流
+    profiles:
+      - core
+      - embedded-fullstack
+    command_risk: low
+    primary_agent: requirements-analyst
+    primary_skill: adk-requirements-triage
+    supporting_skills:
+      - adk-task-breakdown
+      - adk-interface-contract-design
+      - adk-unit-test-embedded
+      - adk-verification-before-completion
+      - adk-code-review-loop
+    triggers:
+      - "新功能迭代"
+      - "功能开发"
+      - "feature delivery"
+    skills:
+      - adk-requirements-triage
+      - adk-task-breakdown
+      - adk-interface-contract-design
+      - adk-unit-test-embedded
+      - adk-verification-before-completion
+      - adk-code-review-loop
+    agents:
+      - requirements-analyst
+      - architecture-planner
+      - component-engineer
+      - test-validation-engineer
+      - code-review-governor
+    commands:
+      - "rtk bash scripts/devkit.sh catalog build"
+      - "rtk bash scripts/devkit.sh validate --strict"
+    verification:
+      - "rtk bash tests/test_validate.sh"
+      - "rtk bash tests/test_workflow_closure.sh"
+  - name: bugfix-delivery
+    path: workflows/bugfix-delivery/WORKFLOW.md
+    description: 缺陷复现、根因定位、回归验证和审查闭环工作流
+    profiles:
+      - embedded-fullstack
+    command_risk: low
+    primary_agent: application-engineer
+    primary_skill: adk-systematic-debugging
+    supporting_skills:
+      - adk-task-breakdown
+      - adk-verification-before-completion
+      - adk-code-review-loop
+    triggers:
+      - "缺陷修复"
+      - "bugfix"
+      - "回归测试"
+    skills:
+      - adk-systematic-debugging
+      - adk-task-breakdown
+      - adk-verification-before-completion
+      - adk-code-review-loop
+    agents:
+      - application-engineer
+      - test-validation-engineer
+      - code-review-governor
+    commands:
+      - "rtk bash scripts/devkit.sh validate --strict"
+      - "rtk bash scripts/check-workflow-closure.sh --profile embedded-fullstack"
+    verification:
+      - "rtk bash tests/test_workflow.sh"
+      - "rtk bash tests/test_integration.sh"
+  - name: release-hardening
+    path: workflows/release-hardening/WORKFLOW.md
+    description: 发布前安全、性能、版本、回滚和放行证据收口工作流
+    profiles:
+      - release-hardening
+    command_risk: medium
+    primary_agent: build-release-engineer
+    primary_skill: adk-release-versioning
+    supporting_skills:
+      - adk-test-strategy
+      - adk-code-review-loop
+      - adk-branch-closeout
+      - adk-verification-before-completion
+      - adk-commit-pr-quality-gate
+    triggers:
+      - "准备发布"
+      - "发布前检查"
+      - "release hardening"
+    skills:
+      - adk-release-versioning
+      - adk-test-strategy
+      - adk-code-review-loop
+      - adk-branch-closeout
+      - adk-verification-before-completion
+      - adk-commit-pr-quality-gate
+    agents:
+      - security-compliance-reviewer
+      - performance-reliability-engineer
+      - build-release-engineer
+    commands:
+      - "rtk bash scripts/devkit.sh validate --strict"
+      - "rtk bash scripts/check-workflow-closure.sh --profile release-hardening"
+    verification:
+      - "rtk bash tests/test_validate.sh"
+      - "rtk bash tests/test_profile_coherence.sh"
+  - name: runtime-routing
+    path: workflows/runtime-routing/WORKFLOW.md
+    description: 运行时技能路由、fallback 边界和 profile 闭包验证工作流
+    profiles:
+      - core
+      - embedded-fullstack
+    command_risk: low
+    primary_agent: architecture-planner
+    primary_skill: adk-runtime-router
+    supporting_skills:
+      - adk-verification-before-completion
+      - adk-repo-drift-remediation
+    triggers:
+      - "运行时路由"
+      - "技能路由"
+      - "runtime routing"
+    skills:
+      - adk-runtime-router
+      - adk-verification-before-completion
+      - adk-repo-drift-remediation
+    agents:
+      - requirements-analyst
+      - architecture-planner
+      - code-review-governor
+    commands:
+      - "rtk bash scripts/devkit.sh match --skill adk-runtime-router --text \"技能路由\""
+      - "rtk bash scripts/check-workflow-closure.sh --profile core"
+    verification:
+      - "rtk bash tests/test_skill_trigger_matrix.sh"
+      - "rtk bash tests/test_workflow_closure.sh"
+  - name: skill-curation-delivery
+    path: workflows/skill-curation-delivery/WORKFLOW.md
+    description: 技能候选筛选、core/optional 归属和触发质量验证工作流
+    profiles:
+      - core
+      - team-core
+    command_risk: low
+    primary_agent: requirements-analyst
+    primary_skill: adk-requirements-triage
+    supporting_skills:
+      - adk-task-breakdown
+      - adk-commit-pr-quality-gate
+      - adk-verification-before-completion
+    triggers:
+      - "技能候选筛选"
+      - "skill curation"
+      - "core optional 归属"
+    skills:
+      - adk-requirements-triage
+      - adk-task-breakdown
+      - adk-commit-pr-quality-gate
+      - adk-verification-before-completion
+    agents:
+      - requirements-analyst
+      - architecture-planner
+      - code-review-governor
+    commands:
+      - "rtk bash scripts/devkit.sh catalog build"
+      - "rtk bash scripts/devkit.sh validate --strict"
+    verification:
+      - "rtk bash tests/test_catalog.sh"
+      - "rtk bash tests/test_skill_sop_quality.sh"
 
 mcp_servers: []
 

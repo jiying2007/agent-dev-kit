@@ -14,11 +14,12 @@ bash scripts/devkit.sh test
 
 说明：
 
-- `validate --strict`：检查 manifest、路径、frontmatter、profile 引用、workflow、context layer、skill 入口长度和质量分级。
+- `validate --strict`：检查 manifest、路径、frontmatter、profile 引用、Agent 章节契约、Workflow 一等资产契约、context layer、skill 入口长度和质量分级。
 - `validate --quick`：快速结构检查，适合编辑中间态。
 - `runtime-boundary`：检查 ADK core 是否保持平台中立，防止平台专属 handoff 和运行目录写入残留。
 - `openai-governance`：检查官方资料 freshness、提升状态和平台中立契约。
-- `test`：全量回归，包含 validate、格式、内容质量、文件权限、安装、profile coherence、optional、convert、workflow、catalog、trigger matrix、governance 和 smoke。
+- `test`：全量回归，包含 validate、格式、内容质量、文件权限、安装、profile coherence、optional、convert、workflow contract、catalog、trigger matrix、governance 和 smoke。
+- `catalog build`：生成 Agent/Skill/Workflow/Profile 索引，并在默认输出模式下同步生成 `docs/workflow-contract-matrix.md`。
 
 ## 2. Profile 选择
 

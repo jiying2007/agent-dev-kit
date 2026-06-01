@@ -18,8 +18,8 @@ if "$ROOT_DIR/scripts/check-workflow-closure.sh" --profile research-intake >"$TM
   echo "[FAIL] research-intake should not satisfy global workflow closure" >&2
   exit 1
 fi
-grep -q "missing agent" "$TMP_DIR/research-intake.out" || {
-  echo "[FAIL] workflow closure failure did not explain missing agent" >&2
+grep -q "found no workflows" "$TMP_DIR/research-intake.out" || {
+  echo "[FAIL] workflow closure failure did not explain missing workflow contract" >&2
   exit 1
 }
 

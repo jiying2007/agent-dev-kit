@@ -84,6 +84,19 @@ extract_frontmatter_scalar() {
   ' "$file"
 }
 
+frontmatter_list_count() {
+  local file="$1"
+  local key="$2"
+  awk -v key="$key" '
+    NR==1 && $0=="---" {in_fm=1; next}
+    in_fm && $0=="---" {exit}
+    in_fm && $0 ~ "^" key ":" {in_list=1; next}
+    in_list && $0 ~ "^  - " {count++; next}
+    in_list && $0 ~ "^[a-zA-Z0-9_-]+:" {in_list=0}
+    END {print count+0}
+  ' "$file"
+}
+
 validate_top_level_schema() {
   require_key "version"
   require_key "locale"
@@ -180,7 +193,7 @@ validate_agents_and_manifest_mapping() {
   local name
   for name in "${dir_agents[@]}"; do
     is_kebab_case "$name" || fail "invalid agent dir name: $name"
-    [[ -s "$ROOT_DIR/agents/$name/AGENTS.md" ]] || fail "missing or empty agent file: agents/$name/AGENTS.md"
+    validate_agent_file "$ROOT_DIR/agents/$name/AGENTS.md" "$name"
     grep -Fxq "$name" <(printf '%s\n' "${manifest_agents[@]}") || fail "manifest missing agent: $name"
   done
 
@@ -194,6 +207,54 @@ validate_agents_and_manifest_mapping() {
     entry_path="${pair#* }"
     [[ -f "$ROOT_DIR/$entry_path" ]] || fail "manifest agent path missing: $entry_name -> $entry_path"
   done < <(adk_list_manifest_paths "agents")
+}
+
+validate_agent_manifest_contracts() {
+  [[ "$STRICT" -eq 1 ]] || return 0
+
+  mapfile -t manifest_agents < <(adk_list_manifest_names "agents")
+
+  local name gate item count
+  for name in "${manifest_agents[@]}"; do
+    gate="$(adk_get_manifest_item_value "agents" "$name" "quality_gate")"
+    [[ -n "$gate" ]] || fail "agent '$name' missing quality_gate in manifest"
+
+    for key in owns does_not_own handoff_to default_skills; do
+      count="$(adk_get_manifest_item_list "agents" "$name" "$key" | awk 'END {print NR+0}')"
+      [[ "$count" -gt 0 ]] || fail "agent '$name' manifest list '$key' is empty"
+    done
+
+    while IFS= read -r item; do
+      [[ -z "$item" ]] && continue
+      [[ -d "$ROOT_DIR/agents/$item" ]] || fail "agent '$name' handoff_to unknown agent '$item'"
+    done < <(adk_get_manifest_item_list "agents" "$name" "handoff_to")
+
+    while IFS= read -r item; do
+      [[ -z "$item" ]] && continue
+      [[ -d "$ROOT_DIR/skills/$item" ]] || fail "agent '$name' default_skills unknown skill '$item'"
+    done < <(adk_get_manifest_item_list "agents" "$name" "default_skills")
+  done
+}
+
+validate_agent_file() {
+  local file="$1"
+  local expected_name="$2"
+  local desc=""
+
+  [[ -s "$file" ]] || fail "missing or empty agent file: $file"
+
+  for heading in "## 角色定位" "## 适用输入" "## 核心决策规则" "## 执行流程" "## 必跑验证" "## 阻塞与升级" "## 输出契约"; do
+    grep -q "^$heading$" "$file" || fail "agent '$expected_name' missing heading '$heading': $file"
+  done
+
+  if [[ "$STRICT" -eq 1 ]]; then
+    desc="$(adk_get_manifest_item_value "agents" "$expected_name" "description")"
+    [[ -n "$desc" ]] || fail "agent '$expected_name' missing description in manifest"
+    [[ "${#desc}" -ge 8 ]] || fail "agent '$expected_name' description too short for discovery: $desc"
+    if [[ "$desc" =~ (TODO|TBD|FIXME|待补充|描述待定|示例|占位) ]]; then
+      fail "agent '$expected_name' description contains placeholder text: $desc"
+    fi
+  fi
 }
 
 validate_skill_file() {
@@ -342,7 +403,7 @@ validate_existing_path() {
   [[ -n "$ref" ]] || return 0
 
   case "$ref" in
-    skills/*|docs/*|knowledge/*|rules/*|templates/*)
+    skills/*|docs/*|knowledge/*|rules/*|templates/*|workflows/*)
       [[ -e "$ROOT_DIR/$ref" ]] || fail "manifest references missing path: $ref"
       ;;
   esac
@@ -374,11 +435,32 @@ validate_workflows() {
   for name in "${workflows[@]}"; do
     is_kebab_case "$name" || fail "invalid workflow name: $name"
 
-    local desc
+    local desc path primary_agent primary_skill command_risk count item
     desc="$(adk_get_manifest_item_value "workflows" "$name" "description")"
     [[ -n "$desc" ]] || fail "workflow '$name' missing description"
 
-    local item
+    path="$(adk_get_manifest_item_value "workflows" "$name" "path")"
+    [[ -n "$path" ]] || fail "workflow '$name' missing path"
+    [[ "$path" == "workflows/$name/WORKFLOW.md" ]] || fail "workflow '$name' path must be workflows/$name/WORKFLOW.md"
+    [[ -f "$ROOT_DIR/$path" ]] || fail "workflow '$name' path missing: $path"
+
+    primary_agent="$(adk_get_manifest_item_value "workflows" "$name" "primary_agent")"
+    primary_skill="$(adk_get_manifest_item_value "workflows" "$name" "primary_skill")"
+    command_risk="$(adk_get_manifest_item_value "workflows" "$name" "command_risk")"
+    [[ -n "$primary_agent" ]] || fail "workflow '$name' missing primary_agent"
+    [[ -n "$primary_skill" ]] || fail "workflow '$name' missing primary_skill"
+    [[ "$command_risk" =~ ^(low|medium|high)$ ]] || fail "workflow '$name' command_risk must be low|medium|high"
+    [[ -d "$ROOT_DIR/agents/$primary_agent" ]] || fail "workflow '$name' primary_agent unknown: $primary_agent"
+    [[ -d "$ROOT_DIR/skills/$primary_skill" ]] || fail "workflow '$name' primary_skill unknown: $primary_skill"
+
+    for key in profiles triggers agents skills commands verification supporting_skills; do
+      count="$(adk_get_manifest_item_list "workflows" "$name" "$key" | awk 'END {print NR+0}')"
+      [[ "$count" -gt 0 ]] || fail "workflow '$name' manifest list '$key' is empty"
+    done
+
+    adk_get_manifest_item_list "workflows" "$name" "agents" | grep -Fxq "$primary_agent" || fail "workflow '$name' primary_agent not listed in agents"
+    adk_get_manifest_item_list "workflows" "$name" "skills" | grep -Fxq "$primary_skill" || fail "workflow '$name' primary_skill not listed in skills"
+
     while IFS= read -r item; do
       [[ -z "$item" ]] && continue
       [[ -d "$ROOT_DIR/agents/$item" ]] || fail "workflow '$name' references unknown agent '$item'"
@@ -386,8 +468,77 @@ validate_workflows() {
 
     while IFS= read -r item; do
       [[ -z "$item" ]] && continue
+      adk_profile_exists "$item" || fail "workflow '$name' references unknown profile '$item'"
+    done < <(adk_get_manifest_item_list "workflows" "$name" "profiles")
+
+    while IFS= read -r item; do
+      [[ -z "$item" ]] && continue
       [[ -d "$ROOT_DIR/skills/$item" ]] || fail "workflow '$name' references unknown skill '$item'"
     done < <(adk_get_manifest_item_list "workflows" "$name" "skills")
+
+    while IFS= read -r item; do
+      [[ -z "$item" ]] && continue
+      [[ -d "$ROOT_DIR/skills/$item" ]] || fail "workflow '$name' references unknown supporting skill '$item'"
+      adk_get_manifest_item_list "workflows" "$name" "skills" | grep -Fxq "$item" || fail "workflow '$name' supporting skill not listed in skills: $item"
+    done < <(adk_get_manifest_item_list "workflows" "$name" "supporting_skills")
+
+    while IFS= read -r item; do
+      [[ -z "$item" ]] && continue
+      validate_workflow_command "$name" "$item"
+    done < <(
+      adk_get_manifest_item_list "workflows" "$name" "commands"
+      adk_get_manifest_item_list "workflows" "$name" "verification"
+    )
+
+    validate_workflow_file "$ROOT_DIR/$path" "$name" "$primary_agent" "$primary_skill" "$command_risk"
+  done
+}
+
+validate_workflow_command() {
+  local workflow="$1"
+  local command="$2"
+  local ref=""
+
+  if [[ "$command" =~ ^rtk[[:space:]]+bash[[:space:]]+((scripts|tests)/[^[:space:]]+) ]]; then
+    ref="${BASH_REMATCH[1]}"
+    [[ -f "$ROOT_DIR/$ref" ]] || fail "workflow '$workflow' command references missing script: $ref"
+    return 0
+  fi
+
+  fail "workflow '$workflow' command must use a checked rtk bash scripts|tests path: $command"
+}
+
+validate_workflow_file() {
+  local file="$1"
+  local expected_name="$2"
+  local expected_agent="$3"
+  local expected_skill="$4"
+  local expected_risk="$5"
+  local declared_name primary_agent primary_skill command_risk count
+
+  [[ -s "$file" ]] || fail "missing or empty workflow file: $file"
+
+  for key in name description version last_updated primary_agent primary_skill command_risk triggers profiles stages artifacts verification failure_handling; do
+    grep -q "^$key:" "$file" || fail "workflow '$expected_name' frontmatter key '$key' missing: $file"
+  done
+
+  declared_name="$(extract_frontmatter_scalar "$file" "name")"
+  [[ "$declared_name" == "$expected_name" ]] || fail "workflow '$expected_name' frontmatter name mismatch: $declared_name"
+
+  primary_agent="$(extract_frontmatter_scalar "$file" "primary_agent")"
+  primary_skill="$(extract_frontmatter_scalar "$file" "primary_skill")"
+  command_risk="$(extract_frontmatter_scalar "$file" "command_risk")"
+  [[ "$primary_agent" == "$expected_agent" ]] || fail "workflow '$expected_name' primary_agent mismatch: $primary_agent"
+  [[ "$primary_skill" == "$expected_skill" ]] || fail "workflow '$expected_name' primary_skill mismatch: $primary_skill"
+  [[ "$command_risk" == "$expected_risk" ]] || fail "workflow '$expected_name' command_risk mismatch: $command_risk"
+
+  for key in triggers profiles stages artifacts verification failure_handling; do
+    count="$(frontmatter_list_count "$file" "$key")"
+    [[ "$count" -gt 0 ]] || fail "workflow '$expected_name' frontmatter list '$key' is empty"
+  done
+
+  for heading in "## Goal" "## Scope" "## Ownership" "## Stage Contract" "## Artifact Contract" "## Commands" "## Failure Handling" "## Quality Gate"; do
+    grep -q "^$heading$" "$file" || fail "workflow '$expected_name' missing heading '$heading': $file"
   done
 }
 
@@ -486,6 +637,7 @@ validate_top_level_schema
 validate_quality_tiers
 validate_tool_targets
 validate_agents_and_manifest_mapping
+validate_agent_manifest_contracts
 validate_skills_and_manifest_mapping
 validate_optional_skills_mapping
 validate_skill_description_uniqueness

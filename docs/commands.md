@@ -135,12 +135,14 @@ bash scripts/devkit.sh file-modes --fix
 
 ## catalog
 
-生成或检索 Agent/Skill/Profile 目录索引。
+生成或检索 Agent/Skill/Workflow/Profile 目录索引。
+生成结果包含 `Agent Contract Matrix`、`Workflows` 和 `Workflow Matrix` 章节，用于审查 Agent ownership、profile、command risk、primary agent、primary skill、supporting skills 和 verification 的三方关系。默认输出到 `docs/agent-skill-catalog.md` 时，会同步生成 `docs/workflow-contract-matrix.md`。
 
 ```bash
 bash scripts/devkit.sh catalog build
 bash scripts/devkit.sh catalog find --type skill --keyword bring-up
 bash scripts/devkit.sh catalog find --type optional-skill --keyword 事故
+bash scripts/devkit.sh catalog find --type workflow --keyword 完成前验证
 ```
 
 ## match

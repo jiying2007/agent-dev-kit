@@ -102,12 +102,23 @@ contains_item() {
   return 1
 }
 
+workflow_applies_to_profiles() {
+  local workflow="$1"
+  local profile
+  while IFS= read -r profile; do
+    [[ -z "$profile" ]] && continue
+    contains_item "$profile" "${ALL_PROFILES[@]}" && return 0
+  done < <(adk_get_manifest_item_list "workflows" "$workflow" "profiles")
+  return 1
+}
+
 failures=()
 checked=0
 exportable=0
 
 while IFS= read -r workflow; do
   [[ -z "$workflow" ]] && continue
+  workflow_applies_to_profiles "$workflow" || continue
   checked=$((checked + 1))
   workflow_ok=1
 
@@ -131,6 +142,16 @@ while IFS= read -r workflow; do
     exportable=$((exportable + 1))
   fi
 done < <(adk_list_manifest_names "workflows")
+
+if [[ "$checked" -eq 0 ]]; then
+  if [[ "$SUMMARY_JSON" -eq 1 ]]; then
+    printf '{"schema_version":1,"status":"fail","profiles":"%s","checked":0,"exportable":0,"failures":1}\n' \
+      "${ALL_PROFILES[*]}"
+  else
+    echo "[FAIL] workflow closure check found no workflows for profiles: ${ALL_PROFILES[*]}" >&2
+  fi
+  exit 1
+fi
 
 if [[ "${#failures[@]}" -gt 0 ]]; then
   if [[ "$SUMMARY_JSON" -eq 1 ]]; then

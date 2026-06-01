@@ -2,6 +2,22 @@
 
 ## 核心流程（默认）
 
+Workflow 是一等资产。生产级 Workflow 必须在 `manifest.yaml:workflows` 中登记，并提供 `workflows/<name>/WORKFLOW.md` 作为可审查契约。manifest 负责导出索引、profile 闭包和主/辅 Agent/Skill 关系；`WORKFLOW.md` 负责阶段、工件、失败处理和质量门禁说明。
+
+当前默认 Workflow：
+
+- `adk-delivery-gate`：`workflows/adk-delivery-gate/WORKFLOW.md`
+- Primary agent：`code-review-governor`
+- Primary skill：`adk-verification-before-completion`
+
+已一等资产化的高频 Workflow：
+
+- `feature-delivery`：新功能从需求收敛到验证评审
+- `bugfix-delivery`：缺陷复现、根因定位和回归验证
+- `release-hardening`：发布前安全、性能、版本和回滚收口
+- `runtime-routing`：技能路由、fallback 边界和 profile 闭包
+- `skill-curation-delivery`：技能候选筛选和 core/optional 归属
+
 1. `propose`：定义背景、目标、非目标、风险与回退。
 2. `apply`：实施代码与文档改动，状态标记为已应用。
 3. `verify`：执行工件检查、结构校验与格式检查，生成验证报告。
@@ -26,6 +42,16 @@
 可选增强：
 - `catalog build`：在变更启动前生成当前 Agent/Skill 能力目录，便于选型。
 - `match`：把任务描述输入匹配器，快速筛选可触发 skill。
+
+Workflow 变更后必须至少运行：
+
+```bash
+rtk bash scripts/devkit.sh validate --strict
+rtk bash scripts/check-workflow-closure.sh --profile core
+rtk bash tests/test_workflow_contract.sh
+```
+
+Workflow manifest 必须声明 `command_risk`，取值为 `low`、`medium` 或 `high`。当前 `validate --strict` 只允许 `rtk bash scripts/...` 与 `rtk bash tests/...` 形式的仓内命令，避免 workflow 契约把平台专属路径或外部写操作带入 ADK core。
 
 ## 场景建议
 
