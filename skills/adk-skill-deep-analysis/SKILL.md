@@ -1,5 +1,5 @@
 ---
-name: adk-skill-deep-analyzer
+name: adk-skill-deep-analysis
 description: 从产品视角深度拆解 AI Skill 的设计意图、独特解法和可借鉴模式
 version: 1.0.0
 last_updated: 2026-05-16

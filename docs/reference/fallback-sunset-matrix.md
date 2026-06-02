@@ -51,7 +51,7 @@ replacement score 固定为 5 项：routing、profile、pilot、handoff、live�
 | Superpowers Skill | adk 等价能力 | 当前状态 | 缺口 | 下一步 |
 |---|---|---|---|---|
 | using-superpowers | adk-runtime-router | explicit-fallback | 需要更多真实任务触发语料 | 扩充 prompt 回归 |
-| brainstorming | adk-requirements-triage + adk-grill-with-docs | candidate-sunset | routing/profile/pilot/handoff/live 均已就绪 | 观察一轮 live 使用，无 fallback 需求则推进 sunset |
+| brainstorming | adk-requirements-triage + adk-structured-requirements-questioning | candidate-sunset | routing/profile/pilot/handoff/live 均已就绪 | 观察一轮 live 使用，无 fallback 需求则推进 sunset |
 | writing-plans | adk-task-breakdown + adk-planning-execution-loop | candidate-sunset | routing/profile/pilot/handoff/live 均已就绪 | 观察一轮 live 长任务计划使用 |
 | executing-plans | adk-planning-execution-loop | candidate-sunset | routing/profile/pilot/handoff/live 均已就绪 | 观察一轮 live 阶段执行使用 |
 | test-driven-development | adk-test-strategy + adk-unit-test-embedded | explicit-fallback | 已有测试策略 evidence-ready，需要真实 C/C++/ctest/HIL 项目入口 | 接入真实项目测试入口 |

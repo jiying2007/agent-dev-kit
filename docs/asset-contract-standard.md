@@ -32,6 +32,11 @@ Examples:
 - Use the `adk-` prefix for ADK-managed capability assets.
 - Skill names describe actions, methods or governance capabilities, not people.
 - Avoid role nouns such as `planner`, `generator`, `evaluator`, `developer`, `analyst` unless they are part of a domain term and cannot be expressed as an action.
+- Prefer capability nouns such as `triage`, `analysis`, `review`, `governance`, `verification`, `planning`, `questioning`, `implementation` and `orchestration`.
+- Avoid tool-like suffixes such as `*-analyzer` when the asset is a reusable method; use `*-analysis` instead.
+- Avoid colloquial or metaphorical names; use the operational capability name that a reviewer can map to triggers and evidence.
+- Avoid variant suffixes such as `*-lite`, `*-full`, `*-simple` and `*-advanced`. If a capability has different weight, encode it as the capability itself, profile membership, or workflow choice.
+- New Skill proposals must include a naming risk check: role noun, tool suffix, colloquial wording, variant suffix, overlap with existing Skill, and profile boundary.
 
 Examples:
 
@@ -41,6 +46,10 @@ Examples:
 - `adk-driver-implementation`
 - `adk-hardware-debugging`
 - `adk-verification-before-completion`
+- `adk-lightweight-planning`
+- `adk-repo-prompt-analysis`
+- `adk-skill-deep-analysis`
+- `adk-structured-requirements-questioning`
 
 ### Workflows
 

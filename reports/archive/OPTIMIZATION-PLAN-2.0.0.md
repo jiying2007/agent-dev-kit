@@ -245,17 +245,17 @@ profiles:
 
 ### 3.1 新增工程方法论 Skill（从 agent-skills 吸收）
 
-**参考来源**: agent-skills（adk-grill-with-docs, diagnose, adk-code-simplification）
+**参考来源**: agent-skills（adk-structured-requirements-questioning, diagnose, adk-code-simplification）
 **新增 Skill**:
 
 | Skill | 来源 | 用途 | 质量层 |
 |-------|------|------|--------|
-| adk-grill-with-docs | mattpocock-skills | 烤问式需求对齐 | p0 |
+| adk-structured-requirements-questioning | mattpocock-skills | 结构化需求提问对齐 | p0 |
 | adk-diagnose-loop | agent-skills | 纪律化调试循环 | p0 |
 | adk-code-simplification | agent-skills | 代码简化（Chesterton's Fence） | p1 |
 | adk-context-engineering | agent-skills | 上下文工程优化 | p1 |
 
-**验证**: `ls skills/{adk-grill-with-docs,adk-diagnose-loop,adk-code-simplification,adk-context-engineering}/SKILL.md`
+**验证**: `ls skills/{adk-structured-requirements-questioning,adk-diagnose-loop,adk-code-simplification,adk-context-engineering}/SKILL.md`
 
 ---
 
@@ -456,7 +456,7 @@ skills:
 - [ ] `bash scripts/check_profile_coherence.sh` 支持冲突检测
 
 ### 阶段三验收
-- [ ] `ls skills/adk-grill-with-docs/SKILL.md` 存在
+- [ ] `ls skills/adk-structured-requirements-questioning/SKILL.md` 存在
 - [ ] `ls skills/adk-diagnose-loop/SKILL.md` 存在
 - [ ] `ls skills/adk-chinese-commit-conventions/SKILL.md` 存在
 - [ ] `grep -c 'intent_zh' manifest.yaml` > 20

@@ -120,7 +120,7 @@ tests/test_agents_profiles.sh   → No such file or directory
 ```yaml
 routing:
   - intent_zh: "需求不清楚怎么办"
-    primary_skill: adk-grill-with-docs
+    primary_skill: adk-structured-requirements-questioning
   - intent_zh: "任务太大怎么拆"
     primary_skill: adk-task-breakdown
   ...

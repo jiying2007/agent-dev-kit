@@ -1,6 +1,6 @@
 # Workflow Contract Matrix
 
-- generated_at: 2026-06-01T15:18:24Z
+- generated_at: 2026-06-02T01:40:04Z
 - source: manifest.yaml
 
 ## Workflow Matrix

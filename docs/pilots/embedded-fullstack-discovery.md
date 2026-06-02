@@ -9,7 +9,7 @@ status: evidence-ready
 ## 预期路由
 
 - primary: `adk-requirements-triage`
-- supporting: `adk-grill-with-docs`, `adk-task-breakdown`
+- supporting: `adk-structured-requirements-questioning`, `adk-task-breakdown`
 - fallback: 未使用
 
 ## 验证证据

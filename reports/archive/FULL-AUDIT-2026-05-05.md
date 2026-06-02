@@ -233,7 +233,7 @@
    233|   233|   233|### 5.2 Frontmatter 完整性
    234|   234|   234|
    235|   235|   235|缺失 version + last_updated 的 10 个 skill:
-   236|   236|   236|- adk-grill-with-docs, adk-diagnose-loop, adk-code-simplification, adk-context-engineering
+   236|   236|   236|- adk-structured-requirements-questioning, adk-diagnose-loop, adk-code-simplification, adk-context-engineering
    237|   237|   237|- adk-chinese-commit-conventions, adk-chinese-code-review
    238|   238|   238|- adk-fetch-url-content, adk-email-imap-fetch
    239|   239|   239|
@@ -242,7 +242,7 @@
    242|   242|   242|### 5.3 Trigger 质量分类
    243|   243|   243|
    244|   244|   244|可匹配（关键词式，8 个）:
-   245|   245|   245|- adk-grill-with-docs: "需求不清楚"
+   245|   245|   245|- adk-structured-requirements-questioning: "需求不清楚"
    246|   246|   246|- adk-diagnose-loop: "诊断循环"
    247|   247|   247|- adk-code-simplification: "代码简化"
    248|   248|   248|- adk-context-engineering: "上下文工程"
@@ -266,11 +266,11 @@
    266|   266|   266||---------|---------|---------|------|
    267|   267|   267|| adk-systematic-debugging | adk-diagnose-loop | 高 | 都是调试定位流程 |
    268|   268|   268|| adk-verification-before-completion | adk-commit-pr-quality-gate | 中 | 都涉及提交前检查 |
-   269|   269|   269|| adk-requirements-triage | adk-grill-with-docs | 中 | 都涉及需求澄清 |
+   269|   269|   269|| adk-requirements-triage | adk-structured-requirements-questioning | 中 | 都涉及需求澄清 |
    270|   270|   270|
    271|   271|   271|### 5.5 内部重复段落
    272|   272|   272|
-   273|   273|   273|adk-grill-with-docs 和 adk-diagnose-loop 存在内部重复章节（核心流程 = Workflow 重复出现）。
+   273|   273|   273|adk-structured-requirements-questioning 和 adk-diagnose-loop 存在内部重复章节（核心流程 = Workflow 重复出现）。
    274|   274|   274|
    275|   275|   275|### 5.6 尾部模板不一致
    276|   276|   276|

@@ -145,8 +145,8 @@
 - `developer-growth-analysis` 的个人成长复盘思路：从本地开发历史中识别重复问题、能力短板和学习建议。
 
 落地点：
-- `skills/adk-plan-lite/SKILL.md`
-- `skills/adk-developer-growth-review/SKILL.md`
+- `skills/adk-lightweight-planning/SKILL.md`
+- `skills/adk-engineering-growth-review/SKILL.md`
 - `manifest.yaml` routing：`plan_lite`、`developer_growth_review`
 - `manifests/structured_output_contracts.json`
 - `tests/fixtures/skill_trigger_cases.tsv`

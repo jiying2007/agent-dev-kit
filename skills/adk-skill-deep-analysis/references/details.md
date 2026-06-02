@@ -1,5 +1,5 @@
 ---
-name: adk-skill-deep-analyzer
+name: adk-skill-deep-analysis
 description: 从产品视角深度拆解 AI Skill 的设计意图、独特解法和可借鉴模式
 version: 1.0.0
 last_updated: 2026-05-16
@@ -131,7 +131,7 @@ constraints:
 分析结果写入目标仓库的 `analysis/skill-deep-analysis.md`，或写入 adk 的 `references/skill-patterns/` 目录。
 
 ## 与其他 Skill 的关系
-- 与 `adk-repo-prompt-analyzer` 配合使用
+- 与 `adk-repo-prompt-analysis` 配合使用
 - 输出的"独特解法"可直接用于 adk 的 skill 设计参考
 - 输出的"5 维评分"可纳入 adk 的质量评估体系
 
@@ -162,7 +162,7 @@ bash scripts/devkit.sh verify --analysis reports/analysis.md
 # <仓库名> Prompt 分析报告
 
 > 分析时间: YYYY-MM-DD
-> 分析工具: adk-repo-prompt-analyzer
+> 分析工具: adk-repo-prompt-analysis
 
 ## 发现的 Prompts
 

@@ -107,7 +107,7 @@
 - 渐进式披露：skill references/ 子目录支持
 - Profile 冲突检测：manifest.yaml conflicts_with 字段
 - Skill 依赖图：manifest.yaml depends_on/enables 字段
-- 新增 Skill: adk-grill-with-docs, adk-code-simplification, adk-context-engineering
+- 新增 Skill: adk-structured-requirements-questioning, adk-code-simplification, adk-context-engineering
 - 新增 Skill: adk-chinese-commit-conventions, adk-chinese-code-review
 - 新增 Optional Skill: adk-fetch-url-content, adk-email-imap-fetch
 - 文档导航: docs/NAVIGATION.md

@@ -1,5 +1,5 @@
 ---
-name: adk-repo-prompt-analyzer
+name: adk-repo-prompt-analysis
 description: 逆向分析开源项目中的 Prompt/系统指令设计，提取上下文工程模式
 version: 1.0.0
 last_updated: 2026-05-16
@@ -76,7 +76,7 @@ constraints:
 - **上下文工程思维**：关注如何为 LLM 构造输入上下文
 
 ## 与其他 Skill 的关系
-- 与 `adk-skill-deep-analyzer` 配合使用：先用本 skill 提取 Prompt，再用 deep-analyzer 分析 Skill 设计
+- 与 `adk-skill-deep-analysis` 配合使用：先用本 skill 提取 Prompt，再用深度分析流程拆解 Skill 设计
 - 输出可直接用于 adk 的 `adoption-matrix.md` 更新
 </supporting-info>
 
@@ -107,7 +107,7 @@ bash scripts/devkit.sh verify --analysis reports/analysis.md
 # <仓库名> Prompt 分析报告
 
 > 分析时间: YYYY-MM-DD
-> 分析工具: adk-repo-prompt-analyzer
+> 分析工具: adk-repo-prompt-analysis
 
 ## 发现的 Prompts
 

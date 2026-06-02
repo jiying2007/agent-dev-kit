@@ -41,7 +41,7 @@ constraints:
 - **核心来源**：`llm_agent/AGENTS.md` 第 2 节"参考子仓全量清单"与"D1-D2 优点/缺点提炼"
 - **意图路由**：`AGENTS.md` 第 1.1 节"接入新仓库"意图
 - **治理机制**：`subrepos/registry.csv`（子仓 SSOT）+ `subrepos/adoption-matrix.md`（评估矩阵）
-- **分析技能**：`adk-repo-prompt-analyzer`（Prompt 逆向）+ `adk-skill-deep-analyzer`（Skill 深度拆解）
+- **分析技能**：`adk-repo-prompt-analysis`（Prompt 逆向）+ `adk-skill-deep-analysis`（Skill 深度拆解）
 - **脚本入口**：`scripts/new-repo-onboard.sh`（自动化接入）
 
 ## 模式描述
@@ -93,7 +93,7 @@ find /tmp/intake-<repo-name> -type f | wc -l
 
 #### Phase 3: 深度分析
 
-使用 `adk-repo-prompt-analyzer` + `adk-skill-deep-analyzer` 执行结构化分析：
+使用 `adk-repo-prompt-analysis` + `adk-skill-deep-analysis` 执行结构化分析：
 
 **3.1 Prompt 逆向（四阶段）**
 1. 识别仓库中的指令型文档（AGENTS.md / README / CONTRIBUTING 等）
@@ -256,5 +256,5 @@ bash scripts/check-adk-harden-readiness.sh . --skip-full-suite
 - [ ] 仓库自动发现机制（GitHub API 集成）
 - [ ] 分析报告模板标准化（当前各报告格式不统一）
 - [ ] 接入决策的自动化程度提升（当前依赖人工判断）
-- [ ] 与 `adk-skill-deep-analyzer` 的流程串联（当前为独立执行）
+- [ ] 与 `adk-skill-deep-analysis` 的流程串联（当前为独立执行）
 - [ ] 接入后的定期复查机制（watch 类仓库的自动提醒）

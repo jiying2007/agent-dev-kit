@@ -94,10 +94,10 @@
       ]
     },
     {
-      "id": "adk-plan-lite-schema-v1",
+      "id": "adk-lightweight-planning-schema-v1",
       "owner": "agent-dev-kit",
       "applies_to": [
-        "adk-plan-lite"
+        "adk-lightweight-planning"
       ],
       "schema_target": "lightweight_plan",
       "schema_format": "json_schema",
@@ -118,12 +118,12 @@
       ]
     },
     {
-      "id": "adk-developer-growth-review-schema-v1",
+      "id": "adk-engineering-growth-review-schema-v1",
       "owner": "agent-dev-kit",
       "applies_to": [
-        "adk-developer-growth-review"
+        "adk-engineering-growth-review"
       ],
-      "schema_target": "developer_growth_review",
+      "schema_target": "engineering_growth_review",
       "schema_format": "json_schema",
       "strict": true,
       "required_fields": [

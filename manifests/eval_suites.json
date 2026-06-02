@@ -37,14 +37,14 @@
           "expected": "adk-planning-execution-loop"
         },
         {
-          "id": "routing-use-plan-lite",
+          "id": "routing-use-lightweight-planning",
           "input": "先给我一个实现计划，不要修改文件",
-          "expected": "adk-plan-lite"
+          "expected": "adk-lightweight-planning"
         },
         {
-          "id": "routing-use-developer-growth-review",
+          "id": "routing-use-engineering-growth-review",
           "input": "做一次开发者成长复盘，跨项目分析我的编码习惯和学习建议",
-          "expected": "adk-developer-growth-review"
+          "expected": "adk-engineering-growth-review"
         },
         {
           "id": "routing-use-context-compress-handoff",

@@ -1,6 +1,6 @@
 # Agent and Skill Catalog
 
-- generated_at: 2026-06-01T15:18:21Z
+- generated_at: 2026-06-02T01:40:02Z
 - source: manifest.yaml
 
 ## Agents
@@ -50,7 +50,7 @@
 | `adk-branch-closeout` | 开发分支收尾治理，验证完成后选择本地合并、创建 PR、保留或丢弃并执行清理 | "分支收尾" | `skills/adk-branch-closeout/SKILL.md` |
 | `adk-adr-writer` | 产出 Architecture Decision Record 并固化技术决策 | "写ADR" | `skills/adk-adr-writer/SKILL.md` |
 | `adk-task-breakdown` | 将需求拆解为可并行执行的任务包 | "拆解任务" | `skills/adk-task-breakdown/SKILL.md` |
-| `adk-plan-lite` | 轻量只读计划生成能力，用于用户明确要求先给计划但尚未要求执行或写文件的编码任务 | "给我一个计划" | `skills/adk-plan-lite/SKILL.md` |
+| `adk-lightweight-planning` | 轻量只读计划生成能力，用于用户明确要求先给计划但尚未要求执行或写文件的编码任务 | "给我一个计划" | `skills/adk-lightweight-planning/SKILL.md` |
 | `adk-context-compress-handoff` | 上下文压缩与会话接力，区分 stable/dynamic/evidence/excluded context，生成可恢复摘要、下一步和风险边界 | "上下文压缩" | `skills/adk-context-compress-handoff/SKILL.md` |
 | `adk-interface-contract-design` | 定义模块/API/消息接口契约 | "设计接口" | `skills/adk-interface-contract-design/SKILL.md` |
 | `adk-register-map-design` | 定义寄存器映射与位域文档 | "设计寄存器" | `skills/adk-register-map-design/SKILL.md` |
@@ -67,7 +67,7 @@
 | `adk-unit-test-embedded` | 嵌入式单元测试策略与样例 | "单元测试" | `skills/adk-unit-test-embedded/SKILL.md` |
 | `adk-verification-before-completion` | 完成前验证门禁，确保交付声明与证据一致 | "准备完成" | `skills/adk-verification-before-completion/SKILL.md` |
 | `adk-after-action-review` | 任务复盘与经验记忆候选治理，提取 lessons、风险分级和写入路由 | "任务复盘" | `skills/adk-after-action-review/SKILL.md` |
-| `adk-developer-growth-review` | 本地开发者成长复盘与学习建议，宽读本地 Codex 历史、归档、日报和项目证据，识别长期趋势、重复问题和训练计划 | "开发者成长复盘" | `skills/adk-developer-growth-review/SKILL.md` |
+| `adk-engineering-growth-review` | 本地工程成长复盘与学习建议，宽读本地 Codex 历史、归档、日报和项目证据，识别长期趋势、重复问题和训练计划 | "开发者成长复盘" | `skills/adk-engineering-growth-review/SKILL.md` |
 | `adk-memory-curator` | 记忆整理与候选治理，审计 memories、AGENTS、归档、session 总结和决策记录，生成可审查 memory candidate | "记忆整理" | `skills/adk-memory-curator/SKILL.md` |
 | `adk-archive-governance` | docs/archive 归档治理，覆盖 meta、topic registry、文件名、hash、superseded、敏感材料和归档门禁修复 | "归档治理" | `skills/adk-archive-governance/SKILL.md` |
 | `adk-knowledge-archive` | 知识归档与长期沉淀，将高价值总结、研究、排障、决策和会话材料写成脱敏、可检索、可治理的归档候选 | "知识归档" | `skills/adk-knowledge-archive/SKILL.md` |
@@ -79,15 +79,15 @@
 | `adk-embedded-diagnostic-harness` | 嵌入式诊断 harness 治理，覆盖 prog_tool、diag 命令、strict/env 套件、返回码语义、HIL/SIL 证据和产测 CLI 验证 | "诊断 harness" | `skills/adk-embedded-diagnostic-harness/SKILL.md` |
 | `adk-embedded-release-orchestration` | 嵌入式全栈发布编排，覆盖 SoC、MCU、bootloader、SD 升级、OTA、NAS/产线发布、版本标签、制品包和非覆盖发布门禁 | "嵌入式发布编排" | `skills/adk-embedded-release-orchestration/SKILL.md` |
 | `adk-commit-pr-quality-gate` | 提交与 PR 质量门禁检查 | "提交代码" | `skills/adk-commit-pr-quality-gate/SKILL.md` |
-| `adk-grill-with-docs` | 烤问式需求对齐——通过结构化提问消除模糊需求 | "文档审查" | `skills/adk-grill-with-docs/SKILL.md` |
+| `adk-structured-requirements-questioning` | 结构化需求提问对齐，通过有序问题消除模糊需求 | "文档审查" | `skills/adk-structured-requirements-questioning/SKILL.md` |
 | `adk-code-simplification` | 代码简化——在不改变行为的前提下提高清晰度 | "代码太复杂" | `skills/adk-code-simplification/SKILL.md` |
 | `adk-context-engineering` | 上下文工程——优化 Agent 上下文设置 | "上下文不够" | `skills/adk-context-engineering/SKILL.md` |
 | `adk-token-context-governance` | 保真省 Token 的上下文读取治理，分层摘要、原文回退与高风险原文门禁 | "省 token" | `skills/adk-token-context-governance/SKILL.md` |
 | `adk-repo-drift-remediation` | 仓库漂移治理，面向全仓偏离、冗余、残留、边界不清、文档代码不一致和提交前质量收口 | "仓库漂移" | `skills/adk-repo-drift-remediation/SKILL.md` |
 | `adk-chinese-commit-conventions` | 中文 Git 提交规范——适配国内开发团队 | "中文提交" | `skills/adk-chinese-commit-conventions/SKILL.md` |
 | `adk-chinese-code-review` | 中文代码审查规范——适配国内团队沟通风格 | "代码审查" | `skills/adk-chinese-code-review/SKILL.md` |
-| `adk-repo-prompt-analyzer` | 逆向分析开源项目中的 Prompt/系统指令设计，提取上下文工程模式 | 分析子仓 prompt | `skills/adk-repo-prompt-analyzer/SKILL.md` |
-| `adk-skill-deep-analyzer` | 从产品视角深度拆解 AI Skill 的设计意图、独特解法和可借鉴模式 | 深度拆解 skill | `skills/adk-skill-deep-analyzer/SKILL.md` |
+| `adk-repo-prompt-analysis` | 逆向分析开源项目中的 Prompt/系统指令设计，提取上下文工程模式 | 分析子仓 prompt | `skills/adk-repo-prompt-analysis/SKILL.md` |
+| `adk-skill-deep-analysis` | 从产品视角深度拆解 AI Skill 的设计意图、独特解法和可借鉴模式 | 深度拆解 skill | `skills/adk-skill-deep-analysis/SKILL.md` |
 | `adk-artifact-gating` | 跨仓库 Artifact 门禁协议——统一标签、状态机与交接规范 | "artifact 门禁" | `skills/adk-artifact-gating/SKILL.md` |
 | `adk-pilot-framework` | 跨仓库 Pilot 试跑框架——场景定义、证据收集与门禁验收 | "试跑" | `skills/adk-pilot-framework/SKILL.md` |
 | `adk-intake-workflow` | 子仓接入工作流——扫描、分析、决策与治理覆盖 | "接入新仓库" | `skills/adk-intake-workflow/SKILL.md` |

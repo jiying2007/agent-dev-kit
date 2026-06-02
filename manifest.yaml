@@ -395,8 +395,8 @@ skills:
     quality_tier: p0
     depends_on:
       - adk-requirements-triage
-  - name: adk-plan-lite
-    path: skills/adk-plan-lite/SKILL.md
+  - name: adk-lightweight-planning
+    path: skills/adk-lightweight-planning/SKILL.md
     quality_tier: p1
     depends_on: []
   - name: adk-context-compress-handoff
@@ -473,8 +473,8 @@ skills:
     quality_tier: p0
     depends_on:
       - adk-verification-before-completion
-  - name: adk-developer-growth-review
-    path: skills/adk-developer-growth-review/SKILL.md
+  - name: adk-engineering-growth-review
+    path: skills/adk-engineering-growth-review/SKILL.md
     quality_tier: p1
     depends_on:
       - adk-after-action-review
@@ -538,8 +538,8 @@ skills:
     quality_tier: p0
     depends_on:
       - adk-verification-before-completion
-  - name: adk-grill-with-docs
-    path: skills/adk-grill-with-docs/SKILL.md
+  - name: adk-structured-requirements-questioning
+    path: skills/adk-structured-requirements-questioning/SKILL.md
     quality_tier: p0
     depends_on: []
   - name: adk-code-simplification
@@ -569,12 +569,12 @@ skills:
     path: skills/adk-chinese-code-review/SKILL.md
     quality_tier: p0
     depends_on: []
-  - name: adk-repo-prompt-analyzer
-    path: skills/adk-repo-prompt-analyzer/SKILL.md
+  - name: adk-repo-prompt-analysis
+    path: skills/adk-repo-prompt-analysis/SKILL.md
     quality_tier: p0
     depends_on: []
-  - name: adk-skill-deep-analyzer
-    path: skills/adk-skill-deep-analyzer/SKILL.md
+  - name: adk-skill-deep-analysis
+    path: skills/adk-skill-deep-analysis/SKILL.md
     quality_tier: p0
     depends_on: []
   - name: adk-artifact-gating
@@ -621,7 +621,7 @@ profiles:
     include_skills:
       - adk-runtime-router
       - adk-requirements-triage
-      - adk-plan-lite
+      - adk-lightweight-planning
       - adk-task-breakdown
       - adk-test-strategy
       - adk-code-review-loop
@@ -654,7 +654,7 @@ profiles:
       - build-release-engineer
     include_skills:
       - adk-release-versioning
-      - adk-grill-with-docs
+      - adk-structured-requirements-questioning
       - adk-test-strategy
       - adk-code-review-loop
       - adk-branch-closeout
@@ -681,7 +681,7 @@ profiles:
     extends: core
     include_skills:
       - adk-release-versioning
-      - adk-developer-growth-review
+      - adk-engineering-growth-review
       - adk-memory-curator
       - adk-archive-governance
       - adk-knowledge-archive
@@ -722,11 +722,11 @@ profiles:
       - "团队评审"
     extends: core
     include_skills:
-      - adk-developer-growth-review
+      - adk-engineering-growth-review
       - adk-memory-curator
       - adk-archive-governance
       - adk-knowledge-archive
-      - adk-grill-with-docs
+      - adk-structured-requirements-questioning
       - adk-chinese-commit-conventions
       - adk-chinese-code-review
   openspec-driven:
@@ -771,8 +771,8 @@ profiles:
     include_skills:
       - adk-requirements-triage
       - adk-task-breakdown
-      - adk-repo-prompt-analyzer
-      - adk-skill-deep-analyzer
+      - adk-repo-prompt-analysis
+      - adk-skill-deep-analysis
       - adk-intake-workflow
       - adk-archive-governance
       - adk-knowledge-archive
@@ -1070,7 +1070,7 @@ routing:
         - adk-requirements-triage
     - intent: plan_lite
       intent_zh: "给我一个计划/制定计划/实现计划/只要计划/先给计划/create plan/plan only/轻量计划"
-      primary_skill: adk-plan-lite
+      primary_skill: adk-lightweight-planning
       supporting_skills: []
     - intent: context_compress_handoff
       intent_zh: "上下文压缩/会话接力/恢复提示/压缩前处理/context preflight/resume prompt/90秒模板"
@@ -1120,7 +1120,7 @@ routing:
         - adk-verification-before-completion
     - intent: developer_growth_review
       intent_zh: "开发者成长复盘/成长分析/学习建议/分析我的编码习惯/分析最近工作/developer growth/growth review/个人成长报告"
-      primary_skill: adk-developer-growth-review
+      primary_skill: adk-engineering-growth-review
       supporting_skills:
         - adk-after-action-review
         - adk-token-context-governance

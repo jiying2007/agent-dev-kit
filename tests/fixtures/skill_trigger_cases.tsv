@@ -14,12 +14,12 @@ adk-branch-closeout	skill	0	仍有测试失败且未定位根因
 adk-requirements-triage	skill	1	需求不清楚，需要先梳理验收标准
 adk-requirements-triage	skill	1	帮我实现一个新功能，需要先明确目标、边界和验收标准
 adk-requirements-triage	skill	0	这次只是纯代码风格调整
-adk-plan-lite	skill	1	先给我一个实现计划，不要修改文件
-adk-plan-lite	skill	1	create plan for this coding task
-adk-plan-lite	skill	0	任务太大需要拆解任务并规划并行边界
-adk-developer-growth-review	skill	1	做一次开发者成长复盘，分析我的编码习惯和学习建议
-adk-developer-growth-review	skill	1	请做 developer growth review，跨项目看长期趋势
-adk-developer-growth-review	skill	0	只总结当前会话，不做成长分析
+adk-lightweight-planning	skill	1	先给我一个实现计划，不要修改文件
+adk-lightweight-planning	skill	1	create plan for this coding task
+adk-lightweight-planning	skill	0	任务太大需要拆解任务并规划并行边界
+adk-engineering-growth-review	skill	1	做一次开发者成长复盘，分析我的编码习惯和学习建议
+adk-engineering-growth-review	skill	1	请做 developer growth review，跨项目看长期趋势
+adk-engineering-growth-review	skill	0	只总结当前会话，不做成长分析
 adk-context-compress-handoff	skill	1	上下文压缩并生成恢复提示，方便新线程接着干
 adk-context-compress-handoff	skill	1	请做 context preflight 和 resume prompt
 adk-context-compress-handoff	skill	0	只做当前会话总结，不需要接力恢复提示

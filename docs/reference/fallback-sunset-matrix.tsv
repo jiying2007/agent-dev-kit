@@ -1,6 +1,6 @@
 fallback_skill	adk_equivalent	status	owner	review_by	live_requirement	next_step	match_text	pilot_refs
 using-superpowers	adk-runtime-router	explicit-fallback	adk-maintainer	2026-06-15	core-live-required	扩充真实任务触发语料	开始任务前判断使用哪个技能	docs/pilots/embedded-fullstack-discovery.md
-brainstorming	adk-requirements-triage+adk-grill-with-docs	candidate-sunset	adk-maintainer	2026-06-15	core-live-required	观察一轮 live 使用，若无 Superpowers fallback 需求则推进 sunset	嵌入式全栈 boot 到量产现场维护需求目标边界和验收标准不清楚	docs/pilots/embedded-fullstack-discovery.md
+brainstorming	adk-requirements-triage+adk-structured-requirements-questioning	candidate-sunset	adk-maintainer	2026-06-15	core-live-required	观察一轮 live 使用，若无 Superpowers fallback 需求则推进 sunset	嵌入式全栈 boot 到量产现场维护需求目标边界和验收标准不清楚	docs/pilots/embedded-fullstack-discovery.md
 writing-plans	adk-task-breakdown+adk-planning-execution-loop	candidate-sunset	adk-maintainer	2026-06-15	core-live-required	观察一轮 live 长任务计划使用，若无 Superpowers fallback 需求则推进 sunset	任务太大需要拆解计划	docs/pilots/embedded-fullstack-long-task-recovery.md
 executing-plans	adk-planning-execution-loop	candidate-sunset	adk-maintainer	2026-06-15	optional-live-allowed	观察一轮 live 阶段执行使用，若无 Superpowers fallback 需求则推进 sunset	执行计划分阶段执行	docs/pilots/embedded-fullstack-long-task-recovery.md
 test-driven-development	adk-test-strategy+adk-unit-test-embedded	explicit-fallback	adk-maintainer	2026-06-15	core-live-required	接入真实 C/C++/ctest/交叉编译/HIL 项目入口后评估 candidate-sunset	这个功能需要先写测试	docs/pilots/embedded-tdd-test-strategy.md

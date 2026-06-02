@@ -121,7 +121,7 @@
 ### 5.4 发布流程
 1. 版本管理 (adk-release-versioning)
 2. 提交门禁 (adk-commit-pr-quality-gate)
-3. 文档审查 (adk-grill-with-docs)
+3. 文档审查 (adk-structured-requirements-questioning)
 
 ---
 
