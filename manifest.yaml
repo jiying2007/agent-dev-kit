@@ -1114,7 +1114,7 @@ routing:
       primary_skill: adk-verification-before-completion
       supporting_skills: []
     - intent: after_action_review
-      intent_zh: "任务复盘/经验沉淀/memory candidate/After Action Review/避免重复犯错/复盘lessons"
+      intent_zh: "任务复盘/经验沉淀/After Action Review/避免重复犯错/复盘lessons"
       primary_skill: adk-after-action-review
       supporting_skills:
         - adk-verification-before-completion

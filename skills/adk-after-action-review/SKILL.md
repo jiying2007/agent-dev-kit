@@ -2,11 +2,10 @@
 name: adk-after-action-review
 description: 任务复盘与经验记忆候选治理，提取 lessons、风险分级和写入路由
 version: 1.0.0
-last_updated: 2026-05-21
+last_updated: 2026-06-15
 triggers:
   - "任务复盘"
   - "经验沉淀"
-  - "memory candidate"
   - "After Action Review"
   - "避免重复犯错"
   - "复盘 lessons"
