@@ -4,11 +4,12 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 SUMMARY_JSON=0
+FIXTURE_PATH=""
 
 usage() {
   cat <<USAGE
 Usage:
-  ./scripts/check-openai-runtime-capabilities.sh [--summary-json]
+  ./scripts/check-openai-runtime-capabilities.sh [--summary-json] [--fixture <json>]
 
 Checks executable runtime capability gates derived from official OpenAI
 Developers docs:
@@ -16,6 +17,9 @@ Developers docs:
   - MCP runtime contract lint baseline
   - subagent job evidence schema
   - official glossary terminology lint baseline
+
+When --fixture is provided, the checker reads fixture JSON with optional
+manifest overrides and runtime_pilot_cases.
 USAGE
 }
 
@@ -24,6 +28,14 @@ while [[ $# -gt 0 ]]; do
     --summary-json)
       SUMMARY_JSON=1
       shift
+      ;;
+    --fixture)
+      FIXTURE_PATH="${2:-}"
+      if [[ -z "$FIXTURE_PATH" ]]; then
+        echo "[FAIL] --fixture requires a path" >&2
+        exit 1
+      fi
+      shift 2
       ;;
     -h|--help)
       usage
@@ -37,14 +49,16 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-rtk python3 - "$ROOT_DIR" "$SUMMARY_JSON" <<'PY'
+rtk python3 - "$ROOT_DIR" "$SUMMARY_JSON" "$FIXTURE_PATH" <<'PY'
 import json
 import sys
 from pathlib import Path
 
 root = Path(sys.argv[1])
 summary_json = sys.argv[2] == "1"
+fixture_arg = sys.argv[3]
 failures = []
+fixture_data = {}
 
 
 def fail(message):
@@ -63,6 +77,36 @@ def load_json(rel):
         return {}
 
 
+def load_fixture(path_arg):
+    if not path_arg:
+        return {}
+    path = Path(path_arg)
+    if not path.is_absolute():
+        path = root / path
+    if not path.is_file():
+        fail(f"missing fixture: {path_arg}")
+        return {}
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        fail(f"invalid fixture json: {path_arg}: {exc}")
+        return {}
+    if not isinstance(data, dict):
+        fail(f"fixture must be a JSON object: {path_arg}")
+        return {}
+    return data
+
+
+def load_manifest(name, rel):
+    if fixture_data and name in fixture_data:
+        data = fixture_data.get(name)
+        if isinstance(data, dict):
+            return data
+        fail(f"fixture manifest override must be an object: {name}")
+        return {}
+    return load_json(rel)
+
+
 def require_keys(obj, keys, label):
     for key in keys:
         if key not in obj or obj[key] in ("", None, []):
@@ -76,11 +120,84 @@ def contains_all(items, tokens, label):
             fail(f"{label} missing token: {token}")
 
 
-runtime_policy = load_json("manifests/adk_runtime_policy_gates.json")
-mcp = load_json("manifests/skill_mcp_dependencies.json")
-subagents = load_json("manifests/subagent_contracts.json")
-surface_terms_manifest = "manifests/" + "cod" + "ex_surface_terms.json"
-surface_terms = load_json(surface_terms_manifest)
+def validate_permission_profile(template, label):
+    require_keys(template, ["id", "default_permissions", "filesystem", "network", "intended_use"], label)
+    if template.get("extends") == ":danger-full-access":
+        fail(f"{label} must not extend :danger-full-access")
+    filesystem = template.get("filesystem", {})
+    fs_text = json.dumps(filesystem, ensure_ascii=False)
+    if "deny" not in fs_text:
+        fail(f"{label} must include a deny-read rule")
+    if "**" in fs_text and "glob_scan_max_depth" not in filesystem:
+        fail(f"{label} uses unbounded glob without glob_scan_max_depth")
+    network = template.get("network", {})
+    if network.get("enabled") is True:
+        domains = network.get("domains", {})
+        if not domains:
+            fail(f"{label} enables network without domain rules")
+        if domains.get("*") == "allow" and "risk" not in json.dumps(template, ensure_ascii=False).lower():
+            fail(f"{label} uses global network allow without risk record")
+
+
+def validate_mcp_dependency(dep, mcp_policy, label):
+    for field in mcp_policy.get("runtime_contract_required_fields", []):
+        if field not in dep:
+            fail(f"{label} missing key: {field}")
+    hints = dep.get("tool_hints", {})
+    if hints.get("destructiveHint") or hints.get("openWorldHint"):
+        if dep.get("default_tools_approval_mode") != "prompt":
+            fail(f"{label} destructive/open-world tools must default to prompt")
+        if "dry" not in str(dep.get("dry_run", "")).lower() and "report-only" not in str(dep.get("fallback", "")).lower():
+            fail(f"{label} needs dry-run or report-only fallback evidence")
+    if dep.get("required") is True and not dep.get("fallback"):
+        fail(f"{label} required server must include fallback plan")
+
+
+def validate_subagent_batch(case, job_schema, runtime_limits, label):
+    batch = case.get("batch", {})
+    for field in job_schema.get("csv_batch_required_fields", []):
+        if field not in batch or batch[field] in ("", None, []):
+            fail(f"{label} batch missing key: {field}")
+    max_concurrency = batch.get("max_concurrency")
+    max_threads = runtime_limits.get("max_threads_default")
+    if isinstance(max_concurrency, int) and isinstance(max_threads, int) and max_concurrency > max_threads:
+        fail(f"{label} max_concurrency exceeds runtime max_threads_default")
+    if case.get("nested_subagents") is True and runtime_limits.get("nested_subagents_default_allowed") is not True:
+        fail(f"{label} nested subagents require explicit max_depth approval")
+
+    records = case.get("job_evidence", [])
+    if not isinstance(records, list) or not records:
+        fail(f"{label} must include job_evidence records")
+        return
+    seen = set()
+    for index, record in enumerate(records):
+        record_label = f"{label} job_evidence[{index}]"
+        for field in job_schema.get("required_fields", []):
+            if field not in record or record[field] in ("", None, []):
+                fail(f"{record_label} missing key: {field}")
+        status = record.get("status")
+        if status not in job_schema.get("status_values", []):
+            fail(f"{record_label} invalid status: {status}")
+        identity = (record.get("job_id"), record.get("item_id"))
+        if identity in seen:
+            fail(f"{record_label} reports duplicate job/item pair: {identity}")
+        seen.add(identity)
+        if status == "pass" and not record.get("verification_commands"):
+            fail(f"{record_label} pass status requires verification_commands")
+        decision = record.get("parent_integration_decision")
+        if not isinstance(decision, dict):
+            fail(f"{record_label} parent_integration_decision must be an object")
+        else:
+            require_keys(decision, ["decision", "verified_by", "reason"], f"{record_label} parent_integration_decision")
+
+
+fixture_data = load_fixture(fixture_arg)
+runtime_policy = load_manifest("adk_runtime_policy_gates", "manifests/adk_runtime_policy_gates.json")
+mcp = load_manifest("skill_mcp_dependencies", "manifests/skill_mcp_dependencies.json")
+subagents = load_manifest("subagent_contracts", "manifests/subagent_contracts.json")
+surface_terms_key = "cod" + "ex_surface_terms"
+surface_terms_manifest = "manifests/" + surface_terms_key + ".json"
+surface_terms = load_manifest(surface_terms_key, surface_terms_manifest)
 
 permission = runtime_policy.get("permission_profile_policy", {})
 require_keys(
@@ -120,22 +237,7 @@ if len(templates) < 2:
     fail("permission profile policy must include at least two profile templates")
 for template in templates:
     tid = template.get("id", "<missing>")
-    require_keys(template, ["id", "default_permissions", "filesystem", "network", "intended_use"], f"permission profile template {tid}")
-    if template.get("extends") == ":danger-full-access":
-        fail(f"permission profile template {tid} must not extend :danger-full-access")
-    filesystem = template.get("filesystem", {})
-    fs_text = json.dumps(filesystem, ensure_ascii=False)
-    if "deny" not in fs_text:
-        fail(f"permission profile template {tid} must include a deny-read rule")
-    if "**" in fs_text and "glob_scan_max_depth" not in filesystem:
-        fail(f"permission profile template {tid} uses unbounded glob without glob_scan_max_depth")
-    network = template.get("network", {})
-    if network.get("enabled") is True:
-        domains = network.get("domains", {})
-        if not domains:
-            fail(f"permission profile template {tid} enables network without domain rules")
-        if domains.get("*") == "allow" and "risk" not in json.dumps(template, ensure_ascii=False).lower():
-            fail(f"permission profile template {tid} uses global network allow without risk record")
+    validate_permission_profile(template, f"permission profile template {tid}")
 
 mcp_policy = mcp.get("runtime_config_policy", {})
 require_keys(
@@ -187,17 +289,7 @@ if not any("bearer tokens" in item.lower() for item in mcp_policy.get("must_not"
 
 for dep in mcp.get("dependencies", []):
     dep_id = dep.get("skill", "<missing>")
-    for field in mcp_policy.get("runtime_contract_required_fields", []):
-        if field not in dep:
-            fail(f"MCP dependency {dep_id} missing key: {field}")
-    hints = dep.get("tool_hints", {})
-    if hints.get("destructiveHint") or hints.get("openWorldHint"):
-        if dep.get("default_tools_approval_mode") != "prompt":
-            fail(f"MCP dependency {dep_id} destructive/open-world tools must default to prompt")
-        if "dry" not in str(dep.get("dry_run", "")).lower() and "report-only" not in str(dep.get("fallback", "")).lower():
-            fail(f"MCP dependency {dep_id} needs dry-run or report-only fallback evidence")
-    if dep.get("required") is True and not dep.get("fallback"):
-        fail(f"MCP dependency {dep_id} required server must include fallback plan")
+    validate_mcp_dependency(dep, mcp_policy, f"MCP dependency {dep_id}")
 
 runtime_limits = subagents.get("runtime_limits", {})
 require_keys(
@@ -286,15 +378,28 @@ contains_all(
     "terminology must_not_patterns",
 )
 
+pilot_cases = fixture_data.get("runtime_pilot_cases", {}) if fixture_data else {}
+if pilot_cases:
+    for case in pilot_cases.get("permission_profiles", []):
+        validate_permission_profile(case, f"runtime pilot permission profile {case.get('id', '<missing>')}")
+    for case in pilot_cases.get("mcp_servers", []):
+        validate_mcp_dependency(case, mcp_policy, f"runtime pilot MCP server {case.get('mcp_server', '<missing>')}")
+    for case in pilot_cases.get("subagent_batches", []):
+        validate_subagent_batch(case, job_schema, runtime_limits, f"runtime pilot subagent batch {case.get('id', '<missing>')}")
+
 status = "pass" if not failures else "fail"
 summary = {
     "status": status,
+    "fixture": fixture_arg or None,
     "permission_profile_templates": len(templates),
+    "permission_profile_pilots": len(pilot_cases.get("permission_profiles", [])) if pilot_cases else 0,
     "permission_lint_rules": len(permission.get("lint_rules", [])),
     "mcp_dependencies": len(mcp.get("dependencies", [])),
+    "mcp_runtime_pilots": len(pilot_cases.get("mcp_servers", [])) if pilot_cases else 0,
     "mcp_lint_rules": len(mcp_policy.get("lint_rules", [])),
     "subagent_job_fields": len(job_schema.get("required_fields", [])),
     "subagent_csv_fields": len(job_schema.get("csv_batch_required_fields", [])),
+    "subagent_batch_pilots": len(pilot_cases.get("subagent_batches", [])) if pilot_cases else 0,
     "surface_terms": len(terms),
     "terminology_checks": len(term_lint.get("ambiguous_usage_checks", [])),
     "failures": len(failures),

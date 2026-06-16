@@ -122,12 +122,14 @@ Reject or keep as observe-only when:
 23. Memory runtime: require opt-in, source classification, external-context owner review, raw-evidence fallback and redaction decision before memory candidates can be promoted.
 24. Surface terminology: compare new ADK terms against Codex glossary mapping to prevent agent/skill/plugin/automation/worktree/MCP server drift.
 25. Runtime capability gate: run `scripts/check-openai-runtime-capabilities.sh` before promoting permission profiles, MCP servers, subagent batch jobs or terminology changes.
+26. Runtime pilot fixtures: validate positive and negative examples under `fixtures/openai-runtime-capabilities/` before treating manifest gates as behaviorally covered.
 
 ## Verification
 
 ```bash
 scripts/check-openai-developers-governance.sh
 scripts/check-openai-runtime-capabilities.sh
+scripts/check-openai-runtime-capabilities.sh --fixture fixtures/openai-runtime-capabilities/pass/permission-safe-profile.json
 scripts/devkit.sh validate --strict
 tests/test_openai_developers_governance.sh
 tests/test_openai_runtime_capabilities.sh

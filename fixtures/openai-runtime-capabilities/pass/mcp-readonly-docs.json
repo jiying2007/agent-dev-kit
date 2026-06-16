@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0.0",
+  "description": "Runtime pilot fixture: a read-only documentation MCP server with bounded tools and fallback.",
+  "runtime_pilot_cases": {
+    "mcp_servers": [
+      {
+        "mcp_server": "openaiDeveloperDocs",
+        "transport": "streamable-http",
+        "required": false,
+        "enabled_tools": [
+          "search_openai_docs",
+          "fetch_openai_doc"
+        ],
+        "disabled_tools": [
+          "write_file",
+          "submit_form"
+        ],
+        "startup_timeout_sec": 10,
+        "tool_timeout_sec": 60,
+        "default_tools_approval_mode": "auto",
+        "per_tool_approval_mode": {
+          "search_openai_docs": "auto",
+          "fetch_openai_doc": "auto"
+        },
+        "tool_hints": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "auth_boundary": "No project credentials; official documentation lookup only.",
+        "pii_policy": "Do not send private source snippets or user secrets to the documentation MCP.",
+        "dry_run": "Not applicable; read-only.",
+        "fallback": "Use official OpenAI-domain web lookup when the MCP server is unavailable."
+      }
+    ]
+  }
+}

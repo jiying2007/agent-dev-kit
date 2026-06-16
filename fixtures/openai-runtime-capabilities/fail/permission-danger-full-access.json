@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0.0",
+  "description": "Runtime pilot fixture: an unsafe permission profile that must fail.",
+  "runtime_pilot_cases": {
+    "permission_profiles": [
+      {
+        "id": "pilot-danger-full-access",
+        "default_permissions": "workspace-write",
+        "extends": ":danger-full-access",
+        "filesystem": {
+          ":workspace_roots": {
+            ".": "write"
+          }
+        },
+        "network": {
+          "enabled": true,
+          "domains": {
+            "*": "allow"
+          }
+        },
+        "intended_use": "Negative fixture for broad filesystem and network access."
+      }
+    ]
+  }
+}

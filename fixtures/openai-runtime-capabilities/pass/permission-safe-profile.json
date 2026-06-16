@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0.0",
+  "description": "Runtime pilot fixture: a custom permission profile with deny-read and narrow network controls.",
+  "runtime_pilot_cases": {
+    "permission_profiles": [
+      {
+        "id": "pilot-readonly-openai-docs",
+        "default_permissions": "readonly-net",
+        "filesystem": {
+          ":workspace_roots": {
+            ".": "read",
+            "**/*.env": "deny",
+            "**/secrets/**": "deny"
+          },
+          "glob_scan_max_depth": 3
+        },
+        "network": {
+          "enabled": true,
+          "domains": {
+            "platform.openai.com": "allow",
+            "developers.openai.com": "allow"
+          }
+        },
+        "intended_use": "Read official documentation without write access or broad network egress."
+      }
+    ]
+  }
+}

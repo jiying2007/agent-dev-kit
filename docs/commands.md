@@ -125,6 +125,7 @@ bash scripts/devkit.sh openai-governance --summary-json
 ```bash
 bash scripts/devkit.sh openai-runtime-capabilities
 bash scripts/devkit.sh openai-runtime-capabilities --summary-json
+bash scripts/devkit.sh openai-runtime-capabilities --fixture fixtures/openai-runtime-capabilities/pass/permission-safe-profile.json
 ```
 
 ## workflow-closure

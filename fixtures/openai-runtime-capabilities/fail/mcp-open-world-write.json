@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0.0",
+  "description": "Runtime pilot fixture: an open-world write-capable MCP server without required approval, dry-run or fallback controls.",
+  "runtime_pilot_cases": {
+    "mcp_servers": [
+      {
+        "mcp_server": "candidate-open-world-writer",
+        "transport": "streamable-http",
+        "required": true,
+        "enabled_tools": [
+          "search",
+          "write",
+          "delete"
+        ],
+        "disabled_tools": [],
+        "startup_timeout_sec": 10,
+        "tool_timeout_sec": 60,
+        "default_tools_approval_mode": "approve",
+        "per_tool_approval_mode": {
+          "write": "approve",
+          "delete": "approve"
+        },
+        "tool_hints": {
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "openWorldHint": true
+        },
+        "auth_boundary": "Uses external credentials.",
+        "pii_policy": "Not reviewed.",
+        "dry_run": "not available",
+        "fallback": ""
+      }
+    ]
+  }
+}

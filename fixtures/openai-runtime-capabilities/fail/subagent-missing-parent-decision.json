@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0.0",
+  "description": "Runtime pilot fixture: a CSV fan-out result missing the parent integration decision and exceeding concurrency.",
+  "runtime_pilot_cases": {
+    "subagent_batches": [
+      {
+        "id": "pilot-missing-parent-decision",
+        "batch": {
+          "csv_path": "fixtures/openai-runtime-capabilities/pilot-jobs.csv",
+          "id_column": "item_id",
+          "instruction": "Validate one runtime capability fixture category and return structured evidence.",
+          "output_schema": "job_evidence_schema",
+          "output_csv_path": "build/openai-runtime-capabilities/pilot-results.csv",
+          "max_concurrency": 8,
+          "max_runtime_seconds": 300
+        },
+        "job_evidence": [
+          {
+            "job_id": "pilot-missing-parent-decision",
+            "item_id": "permission-profile",
+            "agent_type": "test-validation-engineer",
+            "scope_read": [
+              "fixtures/openai-runtime-capabilities/fail/permission-danger-full-access.json"
+            ],
+            "scope_write": [
+              "build/openai-runtime-capabilities/pilot-results.csv"
+            ],
+            "status": "pass",
+            "result_json": {
+              "checked": "permission profile",
+              "failures": 0
+            },
+            "verification_commands": [
+              "scripts/check-openai-runtime-capabilities.sh --fixture fixtures/openai-runtime-capabilities/fail/permission-danger-full-access.json"
+            ],
+            "last_error": "none"
+          }
+        ]
+      }
+    ]
+  }
+}
