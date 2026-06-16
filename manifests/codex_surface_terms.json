@@ -1,0 +1,146 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2026-06-15",
+  "source_docs": [
+    "openai-codex-glossary"
+  ],
+  "reference_boundary": "Official Codex glossary terms are used to align ADK terminology. This manifest does not make Codex product surfaces mandatory for ADK runtimes.",
+  "terms": [
+    {
+      "official_term": "Agent",
+      "adk_term": "agent",
+      "surface": [
+        "App",
+        "CLI",
+        "IDE extension",
+        "Cloud"
+      ],
+      "definition_boundary": "A worker that reasons over context, uses tools and completes a task.",
+      "adk_usage": "Use for a runtime actor or role, not for every skill or workflow document."
+    },
+    {
+      "official_term": "Skill",
+      "adk_term": "skill",
+      "surface": [
+        "App",
+        "CLI",
+        "IDE extension"
+      ],
+      "definition_boundary": "Reusable workflow package with instructions and optional scripts or references.",
+      "adk_usage": "Use for reusable task workflows with metadata and progressive disclosure."
+    },
+    {
+      "official_term": "Plugin",
+      "adk_term": "plugin",
+      "surface": [
+        "App",
+        "CLI",
+        "IDE extension"
+      ],
+      "definition_boundary": "Installable bundle that can distribute skills, tools and integrations.",
+      "adk_usage": "Use only for installable bundles, not plain skills or manifests."
+    },
+    {
+      "official_term": "MCP server",
+      "adk_term": "mcp_server",
+      "surface": [
+        "App",
+        "CLI",
+        "IDE extension"
+      ],
+      "definition_boundary": "External tool or context provider exposed through MCP.",
+      "adk_usage": "Use only when a live MCP transport or declared connector exists."
+    },
+    {
+      "official_term": "Automation",
+      "adk_term": "automation",
+      "surface": [
+        "App"
+      ],
+      "definition_boundary": "Scheduled or recurring task; a thread automation is a recurring wake-up attached to an existing thread.",
+      "adk_usage": "Use for scheduled/report-only runs with cadence, stop condition and first-run review."
+    },
+    {
+      "official_term": "Subagent",
+      "adk_term": "subagent",
+      "surface": [
+        "App",
+        "CLI"
+      ],
+      "definition_boundary": "Specialized child agent spawned to work on part of a task.",
+      "adk_usage": "Use for delegated child execution with explicit scope_read, scope_write and integration ownership."
+    },
+    {
+      "official_term": "Worktree",
+      "adk_term": "worktree",
+      "surface": [
+        "App",
+        "Git"
+      ],
+      "definition_boundary": "Mode where changes are isolated in a separate Git worktree.",
+      "adk_usage": "Use only when a real Git worktree or equivalent isolated checkout is used."
+    },
+    {
+      "official_term": "Permission profile",
+      "adk_term": "permission_profile",
+      "surface": [
+        "App",
+        "CLI",
+        "IDE extension"
+      ],
+      "definition_boundary": "Named least-privilege policy combining filesystem and network rules.",
+      "adk_usage": "Use for runtime permission presets; do not confuse with skill/profile catalogs."
+    }
+  ],
+  "quality_gate": {
+    "required_terms": [
+      "Agent",
+      "Skill",
+      "Plugin",
+      "MCP server",
+      "Automation",
+      "Subagent",
+      "Worktree",
+      "Permission profile"
+    ],
+    "must_not": [
+      "call every workflow an agent",
+      "call a skill bundle a plugin unless it is installable",
+      "call report-only scripts automations without cadence and stop condition",
+      "claim worktree isolation without a real worktree or equivalent checkout"
+    ]
+  },
+  "terminology_lint": {
+    "scanned_paths": [
+      "docs/",
+      "skills/",
+      "optional-skills/",
+      "agents/",
+      "manifests/"
+    ],
+    "required_context_terms": [
+      "agent",
+      "skill",
+      "plugin",
+      "mcp_server",
+      "automation",
+      "subagent",
+      "worktree",
+      "permission_profile"
+    ],
+    "ambiguous_usage_checks": [
+      "agent must refer to a runtime actor or role",
+      "skill must refer to a reusable workflow package",
+      "plugin must refer to an installable bundle",
+      "automation must include cadence and stop condition",
+      "worktree must refer to a real isolated checkout",
+      "permission profile must refer to filesystem and network runtime policy"
+    ],
+    "must_not_patterns": [
+      "workflow-as-agent",
+      "skill-as-plugin-without-install-manifest",
+      "script-as-automation-without-cadence",
+      "profile-as-permission-profile-without-runtime-policy"
+    ]
+  }
+}

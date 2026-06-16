@@ -28,6 +28,7 @@ Commands:
   reuse-before-rebuild 检查新增资产前复用优先门禁
   context-experience 检查渐进记忆检索与低 token profile
   openai-governance 检查 OpenAI 官方 Developers 参考治理
+  openai-runtime-capabilities 检查 OpenAI 官方内容转化的运行态能力门禁
   workflow-closure 检查 workflow 引用是否在 profile 闭包内
   file-modes 检查 tracked 文件权限是否匹配 Git index
   catalog   生成或检索 Agent/Skill 目录索引
@@ -99,6 +100,9 @@ case "$CMD" in
     ;;
   openai-governance)
     exec "$SCRIPT_DIR/check-openai-developers-governance.sh" "$@"
+    ;;
+  openai-runtime-capabilities)
+    exec "$SCRIPT_DIR/check-openai-runtime-capabilities.sh" "$@"
     ;;
   workflow-closure)
     exec "$SCRIPT_DIR/check-workflow-closure.sh" "$@"

@@ -29,6 +29,7 @@ Checks OpenAI Developers reference governance:
   - skill reproducibility and version pin contracts
   - model selection decision records
   - data retention and prompt cache policy contracts
+  - Codex runtime config, permission, memory and surface-term contracts
 USAGE
 }
 
@@ -103,6 +104,7 @@ skill_repro = load_json("manifests/skill_reproducibility_contracts.json")
 model_selection = load_json("manifests/model_selection_decision_records.json")
 data_retention = load_json("manifests/data_retention_state_contracts.json")
 prompt_cache = load_json("manifests/prompt_cache_policy_contracts.json")
+codex_surface_terms = load_json("manifests/codex_surface_terms.json")
 
 doc = root / "docs/reference/openai-developers-reference.md"
 runbook = root / "docs/runbooks/openai-developers-governance.md"
@@ -178,6 +180,10 @@ for required_sid in (
     "openai-data-controls-responses",
     "openai-responses-migration-statefulness",
     "openai-prompt-cache-retention",
+    "openai-codex-glossary",
+    "openai-codex-permissions",
+    "openai-codex-memories",
+    "openai-codex-subagents-runtime",
 ):
     if required_sid not in source_ids:
         fail(f"official docs source missing: {required_sid}")
@@ -210,6 +216,7 @@ for manifest, rel in (
     (model_selection, "manifests/model_selection_decision_records.json"),
     (data_retention, "manifests/data_retention_state_contracts.json"),
     (prompt_cache, "manifests/prompt_cache_policy_contracts.json"),
+    (codex_surface_terms, "manifests/codex_surface_terms.json"),
 ):
     require_source_refs(manifest, rel)
 
@@ -321,6 +328,36 @@ for field in ("structuredContent.id", "structuredContent.title", "structuredCont
     if field not in data_only_mcp.get("fetch_required_output", []):
         fail(f"mcp data_only_mcp_compatibility missing fetch field: {field}")
 
+mcp_runtime_policy = mcp.get("runtime_config_policy", {})
+require_keys(
+    mcp_runtime_policy,
+    [
+        "required_server_fields",
+        "required_http_fields",
+        "required_oauth_fields",
+        "approval_modes",
+        "quality_gates",
+        "must_not",
+    ],
+    "mcp runtime_config_policy",
+)
+for field in ("enabled", "required", "startup_timeout_sec", "tool_timeout_sec", "enabled_tools", "disabled_tools", "default_tools_approval_mode"):
+    if field not in mcp_runtime_policy.get("required_server_fields", []):
+        fail(f"mcp runtime_config_policy missing server field: {field}")
+for field in ("bearer_token_env_var", "env_http_headers"):
+    if field not in mcp_runtime_policy.get("required_http_fields", []):
+        fail(f"mcp runtime_config_policy missing HTTP field: {field}")
+for field in ("mcp_oauth_credentials_store", "mcp_oauth_callback_port", "mcp_oauth_callback_url", "scopes"):
+    if field not in mcp_runtime_policy.get("required_oauth_fields", []):
+        fail(f"mcp runtime_config_policy missing OAuth field: {field}")
+for mode in ("auto", "prompt", "approve"):
+    if mode not in mcp_runtime_policy.get("approval_modes", []):
+        fail(f"mcp runtime_config_policy missing approval mode: {mode}")
+if not any("destructive" in item.lower() and "prompt" in item.lower() for item in mcp_runtime_policy.get("quality_gates", [])):
+    fail("mcp runtime_config_policy must require prompt mode for write-capable/open-world tools")
+if not any("bearer tokens" in item.lower() for item in mcp_runtime_policy.get("must_not", [])):
+    fail("mcp runtime_config_policy must forbid bearer tokens in manifests or project config")
+
 for dep in mcp.get("dependencies", []):
     require_keys(
         dep,
@@ -379,6 +416,33 @@ for contract in subagents.get("contracts", []):
 if not subagents.get("contracts"):
     fail("subagent contracts are empty")
 
+subagent_runtime_limits = subagents.get("runtime_limits", {})
+require_keys(
+    subagent_runtime_limits,
+    [
+        "max_threads_default",
+        "max_depth_default",
+        "job_max_runtime_seconds_fallback",
+        "nested_subagents_default_allowed",
+        "must_record",
+        "must_not",
+    ],
+    "subagent runtime_limits",
+)
+if subagent_runtime_limits.get("max_threads_default") != 6:
+    fail("subagent runtime_limits max_threads_default must be 6")
+if subagent_runtime_limits.get("max_depth_default") != 1:
+    fail("subagent runtime_limits max_depth_default must be 1")
+if subagent_runtime_limits.get("job_max_runtime_seconds_fallback") != 1800:
+    fail("subagent runtime_limits job_max_runtime_seconds_fallback must be 1800")
+if subagent_runtime_limits.get("nested_subagents_default_allowed") is not False:
+    fail("subagent runtime_limits nested subagents must be disabled by default")
+for field in ("features.multi_agent", "agents.max_threads", "agents.max_depth", "agents.job_max_runtime_seconds", "scope_write"):
+    if field not in subagent_runtime_limits.get("must_record", []):
+        fail(f"subagent runtime_limits missing must_record field: {field}")
+if not any("nested" in item.lower() for item in subagent_runtime_limits.get("must_not", [])):
+    fail("subagent runtime_limits must forbid implicit nested subagents")
+
 runtime_layers = runtime_policy.get("policy_layers", [])
 if not runtime_layers:
     fail("runtime policy layers are empty")
@@ -393,7 +457,7 @@ for layer in runtime_layers:
         fail("managed runtime requirements must not allow user override")
     if lid == "project-runtime-boundary":
         must_not_override = set(layer.get("must_not_override", []))
-        for key in ("model_providers", "profile", "telemetry"):
+        for key in ("openai_base_url", "chatgpt_base_url", "apps_mcp_product_sku", "model_provider", "model_providers", "notify", "profile", "profiles", "experimental_realtime_ws_base_url", "otel"):
             if key not in must_not_override:
                 fail(f"project config boundary missing must_not_override: {key}")
     network = layer.get("network_policy")
@@ -439,6 +503,68 @@ for forbidden in runtime_policy.get("forbidden_defaults", []):
 for forbidden_id in ("network-proxy-non-loopback", "all-unix-sockets", "web-search-live-default"):
     if forbidden_id not in {item.get("id") for item in runtime_policy.get("forbidden_defaults", [])}:
         fail(f"runtime forbidden default missing: {forbidden_id}")
+
+config_boundaries = runtime_policy.get("config_key_boundaries", {})
+require_keys(
+    config_boundaries,
+    [
+        "project_local_must_not_override",
+        "user_level_only",
+        "project_local_allowed_when_trusted",
+        "verification",
+    ],
+    "runtime config_key_boundaries",
+)
+for key in ("openai_base_url", "chatgpt_base_url", "apps_mcp_product_sku", "model_provider", "model_providers", "notify", "profile", "profiles", "experimental_realtime_ws_base_url", "otel"):
+    if key not in config_boundaries.get("project_local_must_not_override", []):
+        fail(f"runtime config_key_boundaries missing project-local deny key: {key}")
+for key in ("provider", "auth", "telemetry_routing"):
+    if key not in config_boundaries.get("user_level_only", []):
+        fail(f"runtime config_key_boundaries missing user-level-only key: {key}")
+if "trust_level" not in " ".join(config_boundaries.get("verification", [])):
+    fail("runtime config_key_boundaries must record trust_level verification")
+
+granular_approval = runtime_policy.get("granular_approval_policy", {})
+require_keys(granular_approval, ["allowed_keys", "default_reviewer", "auto_review_requires_policy", "must_record", "must_not"], "runtime granular_approval_policy")
+for key in ("sandbox_approval", "rules", "mcp_elicitations", "request_permissions", "skill_approval"):
+    if key not in granular_approval.get("allowed_keys", []):
+        fail(f"runtime granular_approval_policy missing key: {key}")
+if granular_approval.get("auto_review_requires_policy") is not True:
+    fail("runtime granular_approval_policy must require auto_review policy")
+if not any("human approval" in item.lower() for item in granular_approval.get("must_not", [])):
+    fail("runtime granular_approval_policy must not treat auto_review as human approval")
+
+permission_policy = runtime_policy.get("permission_profile_policy", {})
+require_keys(permission_policy, ["built_in_profiles", "custom_profile_required_fields", "deny_read_controls", "network_controls", "must_not"], "runtime permission_profile_policy")
+for profile in (":read-only", ":workspace", ":danger-full-access"):
+    if profile not in permission_policy.get("built_in_profiles", []):
+        fail(f"runtime permission_profile_policy missing built-in profile: {profile}")
+for field in ("description", "extends", "filesystem", "network", "workspace_roots"):
+    if field not in permission_policy.get("custom_profile_required_fields", []):
+        fail(f"runtime permission_profile_policy missing custom profile field: {field}")
+if not any("deny" in item.lower() for item in permission_policy.get("deny_read_controls", [])):
+    fail("runtime permission_profile_policy must include deny-read controls")
+if not any("unix" in item.lower() for item in permission_policy.get("network_controls", [])):
+    fail("runtime permission_profile_policy must include Unix socket controls")
+if not any(":danger-full-access" in item for item in permission_policy.get("must_not", [])):
+    fail("runtime permission_profile_policy must forbid extending :danger-full-access")
+
+memory_runtime_policy = runtime_policy.get("memory_runtime_policy", {})
+require_keys(memory_runtime_policy, ["feature_flag", "default_enabled", "required_fields", "external_context_controls", "quality_gates", "must_not"], "runtime memory_runtime_policy")
+if memory_runtime_policy.get("feature_flag") != "features.memories":
+    fail("runtime memory_runtime_policy feature_flag must be features.memories")
+if memory_runtime_policy.get("default_enabled") is not False:
+    fail("runtime memory_runtime_policy must be disabled by default")
+for field in ("memories.generate_memories", "memories.use_memories", "memories.disable_on_external_context", "memories.max_rollout_age_days", "memories.min_rollout_idle_hours"):
+    if field not in memory_runtime_policy.get("required_fields", []):
+        fail(f"runtime memory_runtime_policy missing field: {field}")
+for control in ("MCP", "web_search", "tool_search"):
+    if control not in memory_runtime_policy.get("external_context_controls", []):
+        fail(f"runtime memory_runtime_policy missing external context control: {control}")
+if not any("owner approval" in item.lower() for item in memory_runtime_policy.get("quality_gates", [])):
+    fail("runtime memory_runtime_policy must require owner approval")
+if not any("raw session transcripts" in item.lower() for item in memory_runtime_policy.get("must_not", [])):
+    fail("runtime memory_runtime_policy must forbid raw session transcript memory")
 
 rule_contracts = rules.get("contracts", [])
 if not rule_contracts:
@@ -1086,8 +1212,29 @@ for key in (
     if prompt_cache_gate.get(key) is not True:
         fail(f"prompt cache quality_gate {key} must be true")
 
+surface_terms = codex_surface_terms.get("terms", [])
+if not surface_terms:
+    fail("Codex surface terms are empty")
+surface_terms_by_name = {term.get("official_term"): term for term in surface_terms}
+surface_gate = codex_surface_terms.get("quality_gate", {})
+require_keys(surface_gate, ["required_terms", "must_not"], "Codex surface terms quality_gate")
+for term_name in ("Agent", "Skill", "Plugin", "MCP server", "Automation", "Subagent", "Worktree", "Permission profile"):
+    if term_name not in surface_terms_by_name:
+        fail(f"Codex surface term missing: {term_name}")
+    if term_name not in surface_gate.get("required_terms", []):
+        fail(f"Codex surface terms quality_gate missing required term: {term_name}")
+for term in surface_terms:
+    tid = term.get("official_term")
+    require_keys(term, ["official_term", "adk_term", "surface", "definition_boundary", "adk_usage"], f"Codex surface term {tid}")
+    if not isinstance(term.get("surface"), list) or not term.get("surface"):
+        fail(f"Codex surface term {tid} must define non-empty surface list")
+if not any("workflow" in item.lower() and "agent" in item.lower() for item in surface_gate.get("must_not", [])):
+    fail("Codex surface terms must forbid calling every workflow an agent")
+if not any("plugin" in item.lower() and "installable" in item.lower() for item in surface_gate.get("must_not", [])):
+    fail("Codex surface terms must distinguish plugin from non-installable skills")
+
 doc_text = doc.read_text(encoding="utf-8") if doc.is_file() else ""
-for marker in ("P0", "P1", "P2", "developers.openai.com", "Non-Goals", "structured outputs", "tool-search", "automation", "CI/PR review", "skill version", "Model selection", "Guardrail", "Stored-session", "Data retention", "Prompt cache retention", "ZDR"):
+for marker in ("P0", "P1", "P2", "developers.openai.com", "Non-Goals", "structured outputs", "tool-search", "automation", "CI/PR review", "skill version", "Model selection", "Guardrail", "Stored-session", "Data retention", "Prompt cache retention", "ZDR", "Codex glossary", "permission profile", "memory runtime"):
     if marker not in doc_text:
         fail(f"reference doc missing marker: {marker}")
 
@@ -1121,6 +1268,7 @@ if summary_json:
         "model_selection_records": len(model_records),
         "data_retention_contracts": len(data_retention_contracts),
         "prompt_cache_contracts": len(prompt_cache_contracts),
+        "codex_surface_terms": len(surface_terms),
         "failures": len(failures),
     }, ensure_ascii=False, separators=(",", ":")))
 elif failures:

@@ -1,12 +1,14 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-05-26",
+  "last_updated": "2026-06-15",
   "scope_model": "platform-neutral-adk-runtime",
   "source_docs": [
     "openai-codex-config-reference",
     "openai-codex-requirements-toml",
     "openai-codex-sandbox-defaults",
     "openai-codex-agent-approvals-security-dangerous-settings",
+    "openai-codex-permissions",
+    "openai-codex-memories",
     "openai-codex-best-practices"
   ],
   "reference_boundary": "OpenAI product docs are used only as official reference material. This manifest defines platform-neutral ADK runtime policy and does not include compatibility bindings.",
@@ -60,11 +62,17 @@
       "must_not_override": [
         "provider_base_url",
         "auth_provider",
+        "openai_base_url",
+        "chatgpt_base_url",
+        "apps_mcp_product_sku",
         "model_provider",
         "model_providers",
         "notifications",
+        "notify",
         "profile",
         "profiles",
+        "experimental_realtime_ws_base_url",
+        "otel",
         "telemetry"
       ],
       "required_controls": [
@@ -81,6 +89,170 @@
       ]
     }
   ],
+  "config_key_boundaries": {
+    "project_local_must_not_override": [
+      "openai_base_url",
+      "chatgpt_base_url",
+      "apps_mcp_product_sku",
+      "model_provider",
+      "model_providers",
+      "notify",
+      "profile",
+      "profiles",
+      "experimental_realtime_ws_base_url",
+      "otel"
+    ],
+    "user_level_only": [
+      "provider",
+      "auth",
+      "host_owned_app_request_metadata",
+      "configuration_profile_selection",
+      "telemetry_routing"
+    ],
+    "project_local_allowed_when_trusted": [
+      "approval_policy",
+      "sandbox_mode",
+      "sandbox_workspace_write.*",
+      "skills.config",
+      "hooks",
+      "mcp_servers.<id>.enabled_tools",
+      "mcp_servers.<id>.disabled_tools"
+    ],
+    "verification": [
+      "compare project-local config against deny list",
+      "record trust_level before applying project-scoped config",
+      "check-openai-developers-governance"
+    ]
+  },
+  "granular_approval_policy": {
+    "allowed_keys": [
+      "sandbox_approval",
+      "rules",
+      "mcp_elicitations",
+      "request_permissions",
+      "skill_approval"
+    ],
+    "default_reviewer": "user",
+    "auto_review_requires_policy": true,
+    "must_record": [
+      "approval_policy",
+      "approvals_reviewer",
+      "auto_review.policy",
+      "denial_retry_path",
+      "sandbox_boundary_unchanged"
+    ],
+    "must_not": [
+      "treat auto_review as human approval",
+      "use granular approval to bypass sandbox",
+      "auto-approve destructive or open-world tools without review evidence"
+    ]
+  },
+  "permission_profile_policy": {
+    "built_in_profiles": [
+      ":read-only",
+      ":workspace",
+      ":danger-full-access"
+    ],
+    "custom_profile_required_fields": [
+      "description",
+      "extends",
+      "filesystem",
+      "network",
+      "workspace_roots"
+    ],
+    "deny_read_controls": [
+      "deny exact paths",
+      "workspace-root relative globs",
+      "secret and credential paths"
+    ],
+    "network_controls": [
+      "domains allow/deny with deny-wins",
+      "unix_sockets allowlist",
+      "allow_local_binding default false",
+      "dangerously_allow_all_unix_sockets default false"
+    ],
+    "lint_rules": [
+      "do not combine default_permissions with sandbox_mode or sandbox_workspace_write",
+      "deny-read rules required for secret and credential paths",
+      "unbounded deny-read globs require glob_scan_max_depth",
+      "domain deny rules win over allow rules",
+      "global network wildcard allow requires explicit risk record",
+      "unix_sockets access requires explicit allowlist",
+      "dangerously_allow_non_loopback_proxy and dangerously_allow_all_unix_sockets are forbidden defaults"
+    ],
+    "profile_templates": [
+      {
+        "id": "readonly-net",
+        "default_permissions": "readonly-net",
+        "filesystem": {
+          ":minimal": "read",
+          ":workspace_roots": {
+            ".": "read",
+            "**/*.env": "deny"
+          },
+          "glob_scan_max_depth": 3
+        },
+        "network": {
+          "enabled": true,
+          "domains": {
+            "api.openai.com": "allow"
+          }
+        },
+        "intended_use": "Read-only research or documentation checks with a narrow network allowlist."
+      },
+      {
+        "id": "project-edit",
+        "default_permissions": "project-edit",
+        "extends": ":workspace",
+        "filesystem": {
+          ":workspace_roots": {
+            ".": "write",
+            ".devcontainer": "read",
+            "**/*.env": "deny"
+          },
+          "glob_scan_max_depth": 3
+        },
+        "network": {
+          "enabled": false
+        },
+        "intended_use": "Local implementation work inside assigned workspace roots without outbound network."
+      }
+    ],
+    "must_not": [
+      "extend :danger-full-access",
+      "define cycles or undefined parent profiles",
+      "grant broad network access without domain or socket allowlist"
+    ]
+  },
+  "memory_runtime_policy": {
+    "feature_flag": "features.memories",
+    "default_enabled": false,
+    "required_fields": [
+      "memories.generate_memories",
+      "memories.use_memories",
+      "memories.disable_on_external_context",
+      "memories.max_rollout_age_days",
+      "memories.max_rollouts_per_startup",
+      "memories.min_rollout_idle_hours",
+      "memories.min_rate_limit_remaining_percent"
+    ],
+    "external_context_controls": [
+      "MCP",
+      "web_search",
+      "tool_search"
+    ],
+    "quality_gates": [
+      "threads with external context require source URL or tool evidence before memory candidate promotion",
+      "external-context memories require redaction status and owner approval",
+      "raw tool output must not be stored as durable memory",
+      "rate-limit and idle-hour thresholds must be recorded for automated memory generation"
+    ],
+    "must_not": [
+      "enable memories by default for every profile",
+      "promote MCP, web search or tool search output without raw fallback",
+      "copy raw session transcripts into long-term memory"
+    ]
+  },
   "sandbox_presets": [
     {
       "id": "low-risk-local-automation",

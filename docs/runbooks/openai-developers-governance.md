@@ -19,6 +19,7 @@ Use official OpenAI Developers guidance as a current reference source while keep
 | P0 | Skill discovery, context compaction, official source freshness | reference doc, freshness manifest, token-budget check |
 | P0 | Agent task framing and reusable guidance | task card with Goal/Context/Constraints/Done-when, AGENTS/skill promotion rationale |
 | P0 | ADK runtime policy, managed requirements, sandbox defaults | runtime policy manifest, forbidden default list, runtime-boundary check |
+| P0 | Codex config, permissions and memory runtime boundaries | config-key deny list, granular approval policy, permission profile policy, memory runtime policy |
 | P0 | ADK command rules and Docs MCP setup | rules contract manifest, inline rule examples, cross-tool Docs MCP manifest |
 | P1 | Trace/eval contracts and MCP/tool safety hints | eval suite manifest, trace contract, MCP audit manifest, check script |
 | P1 | Developer-mode tool selection and data-only MCP shape | action-oriented tool descriptions, JSON payload review, search/fetch structuredContent contract |
@@ -31,6 +32,8 @@ Use official OpenAI Developers guidance as a current reference source while keep
 | P1 | Agent improvement loop | traces, human/model feedback, eval candidate, validation gate, ranked recommendation and ADK handoff |
 | P1 | CI/PR review governance | trusted-trigger decision, protected secret boundary, structured findings schema, SCM payload review and inline anchoring tests |
 | P1 | Skill operational reproducibility | discoverability, negative examples, explicit version pinning, deterministic stdout, known output paths and network allowlists |
+| P1 | Codex glossary terminology alignment | surface-term manifest, terminology drift review, docs lint candidate |
+| P1 | Executable runtime capability gates | permission profile lint, MCP runtime contract lint, subagent evidence schema, terminology lint |
 | P2 | Agents SDK taxonomy and future migration boundary | taxonomy note, non-goals, pilot requirement |
 | P2 | ADK plugin and marketplace packaging | plugin marketplace contract, source path containment, install/auth policy review |
 | P2 | Responses API migration and retrieval | watch-only source record, state-handoff contract, archive/retrieval pilot eval requirement |
@@ -63,6 +66,11 @@ Official guidance can become a default adk rule only when:
 - Agent improvement loops include traces, feedback, eval candidate, validation result, ranked recommendations and an ADK handoff before changing prompts, skills or workflows.
 - CI/PR review runners are disabled by default, restrict protected secrets on untrusted PRs, validate structured findings before SCM write actions and record inline anchoring decisions.
 - Production skill usage pins the skill version and compatible runtime/model assumption; scripted skills expose deterministic stdout, known output paths, loud failures and dry-run behavior.
+- Project-local runtime config must not override machine-local provider, auth, profile, notification, base URL, experimental realtime or telemetry keys.
+- Granular approval policies record sandbox posture, command rules, MCP elicitation, `request_permission` behavior and skill approval behavior. Auto-review is evidence, not human approval.
+- Permission profiles define least-privilege filesystem and network boundaries, including workspace roots, deny-read paths, domain policy and Unix socket allowlists.
+- Memory runtime remains opt-in and owner-reviewed when external context contributed to the candidate memory. Raw evidence fallback must remain available.
+- Codex glossary terms are mapped before new manifests, skills or runbooks use agent, skill, plugin, automation, worktree, MCP server or permission profile language.
 
 ## Rejection Gate
 
@@ -109,11 +117,18 @@ Reject or keep as observe-only when:
 18. CI/PR review: record trusted event, actor trust, repository visibility, protected secret exposure decision, schema validation result and SCM write payload review.
 19. Inline review anchoring: test new, modified, renamed, deleted and multi-line findings; skip inline publication when anchoring is uncertain.
 20. Skill reproducibility: record version pin, model/runtime assumption, deterministic stdout contract, output path and rollback path before production promotion.
+21. Codex runtime config: reject project-local attempts to set provider/auth/profile/notification/base URL/telemetry keys; keep those at user, machine or admin scope.
+22. Permission profile: compare declared filesystem and network boundary against the intended task; `danger-full-access` cannot be inherited or treated as a safe base profile.
+23. Memory runtime: require opt-in, source classification, external-context owner review, raw-evidence fallback and redaction decision before memory candidates can be promoted.
+24. Surface terminology: compare new ADK terms against Codex glossary mapping to prevent agent/skill/plugin/automation/worktree/MCP server drift.
+25. Runtime capability gate: run `scripts/check-openai-runtime-capabilities.sh` before promoting permission profiles, MCP servers, subagent batch jobs or terminology changes.
 
 ## Verification
 
 ```bash
 scripts/check-openai-developers-governance.sh
+scripts/check-openai-runtime-capabilities.sh
 scripts/devkit.sh validate --strict
 tests/test_openai_developers_governance.sh
+tests/test_openai_runtime_capabilities.sh
 ```

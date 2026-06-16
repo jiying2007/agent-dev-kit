@@ -1,9 +1,87 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-05-25",
+  "last_updated": "2026-06-15",
   "source_docs": [
-    "openai-agents-sdk-starting-point"
+    "openai-agents-sdk-starting-point",
+    "openai-codex-config-reference",
+    "openai-codex-subagents-runtime"
   ],
+  "runtime_limits": {
+    "max_threads_default": 6,
+    "max_depth_default": 1,
+    "job_max_runtime_seconds_fallback": 1800,
+    "nested_subagents_default_allowed": false,
+    "must_record": [
+      "features.multi_agent",
+      "agents.max_threads",
+      "agents.max_depth",
+      "agents.job_max_runtime_seconds",
+      "agent_type",
+      "scope_write",
+      "stop_condition"
+    ],
+    "must_not": [
+      "spawn nested subagents without explicit max_depth approval",
+      "treat subagent completion as integrated completion",
+      "allow subagents to write shared contracts unless they own the integration task"
+    ]
+  },
+  "job_evidence_schema": {
+    "required_fields": [
+      "job_id",
+      "item_id",
+      "agent_type",
+      "scope_read",
+      "scope_write",
+      "status",
+      "result_json",
+      "verification_commands",
+      "last_error",
+      "parent_integration_decision"
+    ],
+    "status_values": [
+      "pass",
+      "needs-fix",
+      "blocked",
+      "error"
+    ],
+    "csv_batch_required_fields": [
+      "csv_path",
+      "id_column",
+      "instruction",
+      "output_schema",
+      "output_csv_path",
+      "max_concurrency",
+      "max_runtime_seconds"
+    ],
+    "quality_gates": [
+      "each worker reports exactly once",
+      "parent verifies integration after worker completion",
+      "max_concurrency must not exceed agents.max_threads",
+      "nested subagents require explicit max_depth approval"
+    ]
+  },
+  "custom_agent_lint": {
+    "required_fields": [
+      "name",
+      "description",
+      "developer_instructions"
+    ],
+    "optional_runtime_fields": [
+      "nickname_candidates",
+      "model",
+      "model_reasoning_effort",
+      "sandbox_mode",
+      "mcp_servers",
+      "skills.config"
+    ],
+    "quality_gates": [
+      "description must be narrow enough for routing",
+      "write-capable agents must declare sandbox and scope_write",
+      "docs or research agents default to read-only",
+      "custom agent name is the source of truth"
+    ]
+  },
   "contracts": [
     {
       "id": "default-worker-contract",

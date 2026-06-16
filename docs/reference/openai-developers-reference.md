@@ -65,6 +65,19 @@ This note records the official OpenAI Developers content that is safe to use as 
 | openai-data-controls-responses | https://developers.openai.com/api/docs/guides/your-data#v1responses | 2026-05-28 | 2026-08-26 | P0 | Adopt Data retention and ZDR fields for API-backed runner, MCP and hosted-tool pilots. |
 | openai-responses-migration-statefulness | https://developers.openai.com/api/docs/guides/migrate-to-responses#4-decide-when-to-use-statefulness | 2026-05-28 | 2026-08-26 | P1 | Adopt Responses statefulness choices, encrypted reasoning and call_id correlation as pilot-only contracts. |
 | openai-prompt-cache-retention | https://developers.openai.com/api/docs/guides/prompt-caching#prompt-cache-retention | 2026-05-28 | 2026-08-26 | P1 | Adopt Prompt cache retention policy, model-support freshness and cache-miss-safe layout gates. |
+| openai-codex-glossary | https://developers.openai.com/codex/glossary | 2026-06-15 | 2026-09-13 | P1 | Adopt Codex glossary mapping for ADK runtime-surface terminology and drift checks. |
+| openai-codex-permissions | https://developers.openai.com/codex/permissions | 2026-06-15 | 2026-09-13 | P0 | Adopt permission profile, granular approval and least-privilege runtime boundary checks. |
+| openai-codex-memories | https://developers.openai.com/codex/memories | 2026-06-15 | 2026-09-13 | P1 | Adopt opt-in memory runtime, external-context review and raw-evidence fallback policy. |
+| openai-codex-subagents-runtime | https://developers.openai.com/codex/subagents | 2026-06-15 | 2026-09-13 | P1 | Adopt subagent runtime limits, nesting policy and delegated-work evidence fields. |
+
+## 2026-06-15 Delta Landing
+
+- Refresh Codex config reference into a project-local non-overridable key list. Repo-level settings must not take over provider, auth, base URL, profile, notification, realtime or telemetry routing.
+- Treat permission profile as a least-privilege runtime policy. Profile changes must record filesystem roots, deny-read paths, network/domain policy, Unix socket policy, sandbox posture and approval behavior.
+- Keep memory runtime opt-in and external-context aware. Memory candidates created from user files, tool output or retrieved documents require owner review, redaction decision and raw-evidence fallback.
+- Promote subagent runtime limits into first-class governance fields: maximum threads, maximum depth, job runtime fallback, nested-subagent default and delegated-work evidence requirements.
+- Map Codex glossary terms to ADK terminology before adding durable references to agents, skills, plugins, automations, worktrees, MCP servers or permission profiles.
+- Add an executable runtime-capability gate for permission profile lint, MCP runtime contracts, subagent evidence schemas and Codex glossary terminology checks.
 
 ## 2026-05-28 Delta Landing
 
@@ -100,6 +113,9 @@ This note records the official OpenAI Developers content that is safe to use as 
 - Standardize OpenAI Docs MCP lookup across supported MCP-capable clients: MCP first, official OpenAI-domain fallback only, citations required for API/product claims.
 - Keep current-model recommendations short-lived and freshness-gated. Prefer "verify current model catalog" over embedding a model alias in stable ADK instructions.
 - Require Data retention evidence for any API-backed pilot that stores response state, polls background responses, uses remote MCP, or relies on hosted containers or hosted skills.
+- Check project-local runtime config against the official non-overridable key list before promoting repo-level Codex settings.
+- Treat permission profiles as least-privilege runtime policies. `:danger-full-access` cannot be inherited or used as a safe base profile.
+- Keep memory runtime disabled by default. Memory generated from external context needs owner approval, redaction decision and raw evidence fallback.
 
 ## P1 Landing
 
@@ -135,6 +151,8 @@ This note records the official OpenAI Developers content that is safe to use as 
 - Prompt cache retention must be explicit for cache-sensitive model decisions. Cached-token metrics are observability signals only; they do not prove correctness.
 - Responses state handoff must document retention mode, encrypted reasoning policy, `store=false` behavior, conversation-state policy and `call_id` correlation before any API-backed runner promotion.
 - Documentation freshness is part of delivery evidence; release summaries and codebase diagrams should be generated or refreshed through the delivery pipeline when relevant.
+- Align runtime-surface terminology with the Codex glossary before new manifests, skills or runbooks mention agents, plugins, automations, worktrees, MCP servers or permission profiles.
+- Record subagent runtime limits and nested-subagent policy before delegated agents are used for multi-stage work.
 
 ## P2 Landing
 
@@ -160,8 +178,10 @@ This note records the official OpenAI Developers content that is safe to use as 
 
 ```bash
 scripts/check-openai-developers-governance.sh
+scripts/check-openai-runtime-capabilities.sh
 scripts/validate-assets.sh --strict
 tests/test_openai_developers_governance.sh
+tests/test_openai_runtime_capabilities.sh
 ```
 
 ## Manifest Map
@@ -187,3 +207,4 @@ tests/test_openai_developers_governance.sh
 | `manifests/model_selection_decision_records.json` | Model selection KPI/SLO, cost, latency, version pinning, A/B and rollback decision records. |
 | `manifests/data_retention_state_contracts.json` | Data retention, ZDR, background mode, remote MCP, hosted container and prompt-cache state boundary contracts. |
 | `manifests/prompt_cache_policy_contracts.json` | Prompt cache retention policy, stable/dynamic context boundary and cache-miss behavior contracts. |
+| `manifests/codex_surface_terms.json` | Codex glossary to ADK terminology mapping for runtime-surface drift control. |

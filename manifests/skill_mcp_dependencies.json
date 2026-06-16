@@ -1,11 +1,13 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-05-25",
+  "last_updated": "2026-06-15",
   "source_docs": [
     "openai-apps-sdk-review-tool-hints",
     "openai-codex-customization-skills",
     "openai-codex-mcp-options",
     "openai-docs-mcp-quickstart",
+    "openai-codex-config-reference",
+    "openai-codex-mcp-options",
     "openai-chatgpt-developer-mode",
     "openai-mcp-chatgpt-api-integrations",
     "openai-tools-guide"
@@ -44,6 +46,70 @@
       "sensitive-data exfiltration through read queries",
       "write action confusion when readOnlyHint is missing or wrong",
       "untrusted custom MCP server ownership"
+    ]
+  },
+  "runtime_config_policy": {
+    "required_server_fields": [
+      "enabled",
+      "required",
+      "startup_timeout_sec",
+      "tool_timeout_sec",
+      "enabled_tools",
+      "disabled_tools",
+      "default_tools_approval_mode"
+    ],
+    "required_http_fields": [
+      "url",
+      "bearer_token_env_var",
+      "http_headers",
+      "env_http_headers"
+    ],
+    "required_oauth_fields": [
+      "mcp_oauth_credentials_store",
+      "mcp_oauth_callback_port",
+      "mcp_oauth_callback_url",
+      "scopes",
+      "oauth_resource"
+    ],
+    "approval_modes": [
+      "auto",
+      "prompt",
+      "approve"
+    ],
+    "quality_gates": [
+      "destructive, write-capable or open-world tools default to prompt",
+      "enabled_tools or disabled_tools must narrow exposed surface before promotion",
+      "HTTP and OAuth credentials must come from environment or keyring, not project files",
+      "timeouts must be bounded before a server is required at startup"
+    ],
+    "lint_rules": [
+      "required=true requires bounded startup_timeout_sec and fallback plan",
+      "HTTP bearer tokens must be referenced through bearer_token_env_var",
+      "OAuth servers must declare callback port or callback URL and scopes",
+      "enabled_tools or disabled_tools must narrow exposed surface for production use",
+      "destructive or open-world tools must use prompt approval until dry-run and rollback evidence exists",
+      "stdio servers must declare command, cwd and environment variable boundary before enablement"
+    ],
+    "runtime_contract_required_fields": [
+      "mcp_server",
+      "transport",
+      "required",
+      "enabled_tools",
+      "disabled_tools",
+      "startup_timeout_sec",
+      "tool_timeout_sec",
+      "default_tools_approval_mode",
+      "per_tool_approval_mode",
+      "tool_hints",
+      "auth_boundary",
+      "pii_policy",
+      "dry_run",
+      "fallback"
+    ],
+    "must_not": [
+      "make unknown external MCP servers required by default",
+      "store bearer tokens in manifests or project config",
+      "enable destructive tools with approve mode before dry-run and rollback evidence"
     ]
   },
   "dependencies": [

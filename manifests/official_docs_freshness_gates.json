@@ -115,12 +115,12 @@
       "id": "openai-codex-config-reference",
       "title": "Codex configuration reference: config.toml, project config, agents, MCP, permissions",
       "url": "https://developers.openai.com/codex/config-reference#configtoml",
-      "retrieved_at": "2026-05-25",
-      "expires_at": "2026-08-23",
+      "retrieved_at": "2026-06-15",
+      "expires_at": "2026-09-13",
       "review_status": "adopted",
       "adoption_scope": "P0",
       "owner": "agent-dev-kit",
-      "decision": "Use as the source for runtime config boundary, project config non-overrides, agent limits, MCP tool approval and permissions audit.",
+      "decision": "Use as the source for runtime config boundary, project config non-overrides, granular approvals, agent limits, MCP tool approval, memories and permissions audit.",
       "required_checks": [
         "check-openai-developers-governance",
         "runtime-boundary"
@@ -869,6 +869,66 @@
       "required_checks": [
         "check-openai-developers-governance",
         "check-token-budget"
+      ]
+    },
+    {
+      "id": "openai-codex-glossary",
+      "title": "Codex glossary: terms across App, CLI, IDE extension, Cloud, SDK and integrations",
+      "url": "https://developers.openai.com/codex/glossary",
+      "retrieved_at": "2026-06-15",
+      "expires_at": "2026-09-13",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for aligning ADK terms such as agent, skill, plugin, MCP server, automation, subagent, worktree and permission profile.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "docs terminology drift review"
+      ]
+    },
+    {
+      "id": "openai-codex-permissions",
+      "title": "Codex permissions: named least-privilege filesystem and network profiles",
+      "url": "https://developers.openai.com/codex/permissions",
+      "retrieved_at": "2026-06-15",
+      "expires_at": "2026-09-13",
+      "review_status": "adopted",
+      "adoption_scope": "P0",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for permission profile fields, deny-read controls, workspace roots, network domain policy and Unix socket allowlist governance.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "runtime-boundary"
+      ]
+    },
+    {
+      "id": "openai-codex-memories",
+      "title": "Codex memories: local memory feature flags, rollout limits and external-context boundary",
+      "url": "https://developers.openai.com/codex/memories",
+      "retrieved_at": "2026-06-15",
+      "expires_at": "2026-09-13",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for memory runtime policy, external-context memory generation boundaries and owner-reviewed memory promotion.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "check-memory-governance"
+      ]
+    },
+    {
+      "id": "openai-codex-subagents-runtime",
+      "title": "Codex subagents runtime: custom agents, max threads, max depth and job runtime",
+      "url": "https://developers.openai.com/codex/subagents",
+      "retrieved_at": "2026-06-15",
+      "expires_at": "2026-09-13",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for ADK subagent runtime limits, nested subagent policy and role description checks.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "check-workflow-closure"
       ]
     }
   ]
