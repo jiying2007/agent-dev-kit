@@ -16,19 +16,19 @@
       "id": "thedotmack-claude-mem",
       "title": "claude-mem persistent context plugin",
       "url": "https://github.com/thedotmack/claude-mem",
-      "local_path": "dotfiles/home/base/tui/AI/claude.nix",
+      "local_path": "",
       "retrieved_at": "2026-05-29",
       "decision": "adopt-method-only",
-      "notes": "Use progressive disclosure memory search and observation schema ideas; do not enable worker, hooks, Chroma, Bun or automatic capture."
+      "notes": "Use progressive disclosure memory search and observation schema ideas from archived adoption reports; local dotfiles reference repo was removed on 2026-06-25. Do not enable worker, hooks, Chroma, Bun or automatic capture."
     },
     {
       "id": "everyinc-compound-engineering",
       "title": "EveryInc compound engineering plugin",
       "url": "https://github.com/EveryInc/compound-engineering-plugin",
-      "local_path": "dotfiles/home/base/tui/AI/skills-catalog.nix",
+      "local_path": "",
       "retrieved_at": "2026-05-29",
       "decision": "adopt-method-only",
-      "notes": "Use Plan -> Delegate -> Assess -> Codify workflow vocabulary; do not import the plugin, agents or full skill set."
+      "notes": "Use Plan -> Delegate -> Assess -> Codify workflow vocabulary from archived adoption reports; local dotfiles reference repo was removed on 2026-06-25. Do not import the plugin, agents or full skill set."
     },
     {
       "id": "karpathy-llm-wiki-pattern",
