@@ -1,0 +1,514 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2026-06-25",
+  "status": "report-only",
+  "default_mode": "method-only",
+  "reference_boundary": "External harness and loop engineering repositories are absorbed as contracts, vocabulary, evidence fields and gate shapes only. This manifest does not clone, install, import, execute, start daemons, register hooks, enable MCP servers or turn on external runtimes.",
+  "report": "../reports/harness-loop-engineering-adoption-candidates-2026-06-25.md",
+  "source_refs": [
+    {
+      "id": "google-adk-python",
+      "title": "Google Agent Development Kit for Python",
+      "repo": "google/adk-python",
+      "url": "https://github.com/google/adk-python",
+      "retrieved_at": "2026-06-25",
+      "priority": "P0",
+      "track_mode": "adopt-contract",
+      "decision": "adopt-method-only",
+      "evidence_strength": "high",
+      "runtime_enabled": false,
+      "absorb_target": [
+        "durable-agent-loop-v1",
+        "workflow-state-contract-v1"
+      ],
+      "notes": "Use workflow runtime vocabulary around routing, fan-out/fan-in, loops, retry, state, human gates and nested workflows. Do not import the runtime."
+    },
+    {
+      "id": "langgraph",
+      "title": "LangGraph",
+      "repo": "langchain-ai/langgraph",
+      "url": "https://github.com/langchain-ai/langgraph",
+      "retrieved_at": "2026-06-25",
+      "priority": "P0",
+      "track_mode": "adopt-contract",
+      "decision": "adopt-method-only",
+      "evidence_strength": "high",
+      "runtime_enabled": false,
+      "absorb_target": [
+        "durable-agent-loop-v1",
+        "trace-observability-contract-v1"
+      ],
+      "notes": "Use state graph, checkpoint, resume, human-in-loop and durable execution ideas as contract fields only."
+    },
+    {
+      "id": "swe-bench",
+      "title": "SWE-bench",
+      "repo": "SWE-bench/SWE-bench",
+      "url": "https://github.com/SWE-bench/SWE-bench",
+      "retrieved_at": "2026-06-25",
+      "priority": "P0",
+      "track_mode": "adopt-contract",
+      "decision": "adopt-method-only",
+      "evidence_strength": "high",
+      "runtime_enabled": false,
+      "absorb_target": [
+        "repo-task-evaluation-harness-v1"
+      ],
+      "notes": "Use repo task, pinned environment, patch artifact and reproducible grading shape. Do not run arbitrary benchmark containers by default."
+    },
+    {
+      "id": "inspect-ai",
+      "title": "Inspect AI",
+      "repo": "UKGovernmentBEIS/inspect_ai",
+      "url": "https://github.com/UKGovernmentBEIS/inspect_ai",
+      "retrieved_at": "2026-06-25",
+      "priority": "P0",
+      "track_mode": "adopt-contract",
+      "decision": "adopt-method-only",
+      "evidence_strength": "high",
+      "runtime_enabled": false,
+      "absorb_target": [
+        "agent-eval-ci-gate-v1"
+      ],
+      "notes": "Use dataset, solver, scorer and task-result decomposition for evaluation manifest structure."
+    },
+    {
+      "id": "promptfoo",
+      "title": "promptfoo",
+      "repo": "promptfoo/promptfoo",
+      "url": "https://github.com/promptfoo/promptfoo",
+      "retrieved_at": "2026-06-25",
+      "priority": "P0",
+      "track_mode": "adopt-contract",
+      "decision": "adopt-method-only",
+      "evidence_strength": "high",
+      "runtime_enabled": false,
+      "absorb_target": [
+        "agent-eval-ci-gate-v1",
+        "red-team-safety-eval-v1"
+      ],
+      "notes": "Use declarative eval cases, assertions, CI thresholds and red-team scope fields. Do not import its CLI or provider configuration by default."
+    },
+    {
+      "id": "openai-agents-python",
+      "title": "OpenAI Agents SDK for Python",
+      "repo": "openai/openai-agents-python",
+      "url": "https://github.com/openai/openai-agents-python",
+      "retrieved_at": "2026-06-25",
+      "priority": "P0",
+      "track_mode": "adopt-contract",
+      "decision": "adopt-method-only",
+      "evidence_strength": "high",
+      "runtime_enabled": false,
+      "absorb_target": [
+        "trace-observability-contract-v1",
+        "guardrail-handoff-contract-v1"
+      ],
+      "notes": "Use guardrails, handoffs, sessions, tracing and human-in-loop vocabulary to strengthen ADK evidence contracts."
+    },
+    {
+      "id": "openhands",
+      "title": "OpenHands",
+      "repo": "OpenHands/OpenHands",
+      "url": "https://github.com/OpenHands/OpenHands",
+      "retrieved_at": "2026-06-25",
+      "priority": "P1",
+      "track_mode": "observe-method-only",
+      "decision": "observe-method-only",
+      "evidence_strength": "medium",
+      "runtime_enabled": false,
+      "absorb_target": [
+        "coding-agent-loop-v1",
+        "sandbox-boundary-contract-v1"
+      ],
+      "notes": "Use agent backend, workspace and sandbox boundary language as optional pilot reference only."
+    },
+    {
+      "id": "swe-agent",
+      "title": "SWE-agent",
+      "repo": "SWE-agent/SWE-agent",
+      "url": "https://github.com/SWE-agent/SWE-agent",
+      "retrieved_at": "2026-06-25",
+      "priority": "P1",
+      "track_mode": "observe-method-only",
+      "decision": "observe-method-only",
+      "evidence_strength": "medium",
+      "runtime_enabled": false,
+      "absorb_target": [
+        "coding-agent-loop-v1"
+      ],
+      "notes": "Use issue-to-patch loop and Agent-Computer Interface concepts as vocabulary. Prefer newer minimal implementations only after separate review."
+    },
+    {
+      "id": "smolagents",
+      "title": "smolagents",
+      "repo": "huggingface/smolagents",
+      "url": "https://github.com/huggingface/smolagents",
+      "retrieved_at": "2026-06-25",
+      "priority": "P1",
+      "track_mode": "observe-method-only",
+      "decision": "observe-method-only",
+      "evidence_strength": "medium",
+      "runtime_enabled": false,
+      "absorb_target": [
+        "coding-agent-loop-v1",
+        "sandbox-boundary-contract-v1"
+      ],
+      "notes": "Use code-action loop and sandbox warning shape as method reference. Do not enable code execution runtime."
+    },
+    {
+      "id": "deepeval",
+      "title": "DeepEval",
+      "repo": "confident-ai/deepeval",
+      "url": "https://github.com/confident-ai/deepeval",
+      "retrieved_at": "2026-06-25",
+      "priority": "P1",
+      "track_mode": "observe-method-only",
+      "decision": "observe-method-only",
+      "evidence_strength": "medium",
+      "runtime_enabled": false,
+      "absorb_target": [
+        "agent-eval-ci-gate-v1"
+      ],
+      "notes": "Use pytest-like eval organization and agentic metric naming as optional reference."
+    },
+    {
+      "id": "phoenix",
+      "title": "Phoenix",
+      "repo": "Arize-ai/phoenix",
+      "url": "https://github.com/Arize-ai/phoenix",
+      "retrieved_at": "2026-06-25",
+      "priority": "P1",
+      "track_mode": "observe-method-only",
+      "decision": "observe-method-only",
+      "evidence_strength": "medium",
+      "runtime_enabled": false,
+      "absorb_target": [
+        "trace-observability-contract-v1"
+      ],
+      "notes": "Use OpenTelemetry trace, dataset, experiment and evaluation observability shape. Do not run the service."
+    },
+    {
+      "id": "lm-evaluation-harness",
+      "title": "Language Model Evaluation Harness",
+      "repo": "EleutherAI/lm-evaluation-harness",
+      "url": "https://github.com/EleutherAI/lm-evaluation-harness",
+      "retrieved_at": "2026-06-25",
+      "priority": "P1",
+      "track_mode": "observe-method-only",
+      "decision": "observe-method-only",
+      "evidence_strength": "medium",
+      "runtime_enabled": false,
+      "absorb_target": [
+        "model-eval-harness-v1"
+      ],
+      "notes": "Use task registry, backend separation and reproducible result shape as optional evaluation-harness reference."
+    },
+    {
+      "id": "autogen",
+      "title": "AutoGen",
+      "repo": "microsoft/autogen",
+      "url": "https://github.com/microsoft/autogen",
+      "retrieved_at": "2026-06-25",
+      "priority": "P2",
+      "track_mode": "historical-reference-only",
+      "decision": "observe-method-only",
+      "evidence_strength": "low",
+      "runtime_enabled": false,
+      "absorb_target": [
+        "multi-agent-architecture-vocabulary"
+      ],
+      "notes": "Keep as historical layered architecture and benchmark reference only; do not use as a new P0 runtime source."
+    }
+  ],
+  "harness_contracts": [
+    {
+      "id": "repo-task-evaluation-harness-v1",
+      "owner": "agent-dev-kit",
+      "source_refs": [
+        "swe-bench",
+        "inspect-ai"
+      ],
+      "required_fields": [
+        "task_id",
+        "source_repo",
+        "pinned_revision",
+        "environment_spec",
+        "runner_command",
+        "scorer",
+        "expected_artifacts",
+        "resource_budget",
+        "reproducibility_evidence",
+        "failure_replay"
+      ],
+      "quality_gates": [
+        "task execution is reproducible from pinned source, environment and runner command",
+        "scorer is declared before execution and does not depend on hidden manual judgement",
+        "failure replay stores enough evidence to re-run the failing case",
+        "resource budget is explicit before long-running or containerized evaluation"
+      ],
+      "must_not": [
+        "run arbitrary benchmark containers by default",
+        "score without pinned source revision",
+        "claim pass without artifact evidence"
+      ]
+    },
+    {
+      "id": "agent-eval-ci-gate-v1",
+      "owner": "agent-dev-kit",
+      "source_refs": [
+        "inspect-ai",
+        "promptfoo",
+        "deepeval",
+        "lm-evaluation-harness"
+      ],
+      "required_fields": [
+        "eval_suite_id",
+        "positive_cases",
+        "negative_cases",
+        "judge_policy",
+        "non_llm_assertions",
+        "ci_mode",
+        "threshold",
+        "flaky_policy",
+        "red_team_scope"
+      ],
+      "quality_gates": [
+        "eval suite declares positive and negative cases before promotion",
+        "non-LLM assertions are preferred when deterministic checks exist",
+        "LLM judge policy records model, prompt version, threshold and retry budget",
+        "red-team scope is explicit for security or safety-sensitive routing"
+      ],
+      "must_not": [
+        "use only happy-path eval cases",
+        "hide flaky failures under aggregate pass rate",
+        "treat judge output as source of truth without sampled review"
+      ]
+    },
+    {
+      "id": "model-eval-harness-v1",
+      "owner": "agent-dev-kit",
+      "source_refs": [
+        "lm-evaluation-harness",
+        "promptfoo"
+      ],
+      "required_fields": [
+        "task_registry_id",
+        "backend_adapter",
+        "dataset_version",
+        "prompt_or_template_version",
+        "metric",
+        "seed_or_sampling_policy",
+        "result_schema",
+        "comparison_baseline"
+      ],
+      "quality_gates": [
+        "task registry separates task definition from backend adapter",
+        "dataset and prompt versions are pinned for comparisons",
+        "result schema is stable enough for trend comparison"
+      ],
+      "must_not": [
+        "mix model comparison with unpinned prompt changes",
+        "compare runs without backend and dataset metadata"
+      ]
+    }
+  ],
+  "loop_contracts": [
+    {
+      "id": "durable-agent-loop-v1",
+      "owner": "agent-dev-kit",
+      "source_refs": [
+        "google-adk-python",
+        "langgraph"
+      ],
+      "required_fields": [
+        "state_schema",
+        "transition_edges",
+        "checkpoint_policy",
+        "resume_policy",
+        "retry_budget",
+        "stop_condition",
+        "human_gate",
+        "failure_replay"
+      ],
+      "quality_gates": [
+        "loop state is explicit and serializable before durable resume is claimed",
+        "retry and stop conditions are declared before execution",
+        "human gate records input, decision and resume point",
+        "failure replay names the checkpoint and observation needed to reproduce the branch"
+      ],
+      "must_not": [
+        "use hidden conversational state as the only loop state",
+        "retry without budget",
+        "resume without checkpoint evidence"
+      ]
+    },
+    {
+      "id": "coding-agent-loop-v1",
+      "owner": "agent-dev-kit",
+      "source_refs": [
+        "swe-bench",
+        "openai-agents-python",
+        "openhands",
+        "swe-agent",
+        "smolagents"
+      ],
+      "required_fields": [
+        "workspace_boundary",
+        "sandbox_policy",
+        "action_format",
+        "observation_capture",
+        "patch_artifact",
+        "test_command",
+        "rollback_path",
+        "approval_boundary"
+      ],
+      "quality_gates": [
+        "workspace boundary distinguishes read, write and destructive actions",
+        "each loop action captures observation and resulting artifact path",
+        "test command and rollback path are known before patch application",
+        "approval boundary is explicit for network, privileged and destructive actions"
+      ],
+      "must_not": [
+        "execute generated code without sandbox policy",
+        "mutate workspace without observation capture",
+        "merge patch artifacts without verification command"
+      ]
+    },
+    {
+      "id": "workflow-state-contract-v1",
+      "owner": "agent-dev-kit",
+      "source_refs": [
+        "google-adk-python",
+        "langgraph"
+      ],
+      "required_fields": [
+        "workflow_id",
+        "node_id",
+        "input_contract",
+        "output_contract",
+        "edge_condition",
+        "parallel_join_policy",
+        "state_persistence",
+        "timeout_policy"
+      ],
+      "quality_gates": [
+        "parallel branches declare join policy before execution",
+        "edge conditions are inspectable and testable",
+        "timeouts have failure handling and handoff evidence"
+      ],
+      "must_not": [
+        "encode routing only in prose when a manifest contract is available",
+        "fan out without join ownership"
+      ]
+    },
+    {
+      "id": "sandbox-boundary-contract-v1",
+      "owner": "agent-dev-kit",
+      "source_refs": [
+        "openai-agents-python",
+        "openhands",
+        "smolagents"
+      ],
+      "required_fields": [
+        "filesystem_scope",
+        "network_policy",
+        "process_policy",
+        "secret_policy",
+        "tool_allowlist",
+        "deny_path",
+        "log_redaction",
+        "escape_hatch"
+      ],
+      "quality_gates": [
+        "sandbox policy is reviewed before enabling code execution tools",
+        "deny paths and secret policy are explicit",
+        "logs are redacted before long-term storage"
+      ],
+      "must_not": [
+        "default-enable code execution from external agent runtimes",
+        "store secrets in traces",
+        "open network access without owner approval"
+      ]
+    }
+  ],
+  "observability_contracts": [
+    {
+      "id": "trace-observability-contract-v1",
+      "owner": "agent-dev-kit",
+      "source_refs": [
+        "openai-agents-python",
+        "langgraph",
+        "phoenix"
+      ],
+      "required_fields": [
+        "trace_id",
+        "span_kind",
+        "agent_id",
+        "tool_calls",
+        "handoff",
+        "guardrail_result",
+        "session_id",
+        "redaction_policy",
+        "evidence_path"
+      ],
+      "quality_gates": [
+        "trace evidence links decisions, tool calls, handoffs and guardrail outcomes",
+        "redaction policy is declared before storing traces",
+        "trace spans can be mapped back to evaluation failures"
+      ],
+      "must_not": [
+        "store raw secrets or private user data in traces",
+        "claim observability from console logs only"
+      ]
+    },
+    {
+      "id": "guardrail-handoff-contract-v1",
+      "owner": "agent-dev-kit",
+      "source_refs": [
+        "openai-agents-python",
+        "promptfoo"
+      ],
+      "required_fields": [
+        "guardrail_id",
+        "trigger_condition",
+        "decision",
+        "handoff_target",
+        "user_visible_effect",
+        "override_policy",
+        "audit_evidence"
+      ],
+      "quality_gates": [
+        "guardrail trigger condition is testable through positive and negative cases",
+        "handoff target and user-visible effect are explicit",
+        "override policy requires evidence and owner review"
+      ],
+      "must_not": [
+        "silently suppress tool failures",
+        "handoff ownership without audit evidence"
+      ]
+    }
+  ],
+  "quality_gate": {
+    "method_only_default": true,
+    "runtime_enabled_default_must_be_false": true,
+    "external_code_requires_supply_chain_review": true,
+    "container_or_code_execution_requires_owner_approval": true,
+    "source_mapping_requires_report": true,
+    "source_mapping_requires_adoption_matrix_evidence": true,
+    "each_contract_requires_at_least_one_p0_source": true,
+    "eval_cases_require_positive_and_negative_examples": true,
+    "durable_loop_requires_checkpoint_and_stop_condition": true,
+    "trace_storage_requires_redaction_policy": true,
+    "failure_replay_required_for_harness_and_loop_claims": true
+  },
+  "rejected_runtime_surfaces": [
+    "external_cli_install",
+    "benchmark_container_execution_by_default",
+    "browser_or_desktop_automation_runtime",
+    "daemon_or_background_worker",
+    "hook_registration",
+    "mcp_server_enablement",
+    "unreviewed_code_execution_sandbox"
+  ]
+}
