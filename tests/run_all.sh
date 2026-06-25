@@ -65,6 +65,7 @@ TESTS=(
   test_token_context_governance.sh
   test_openai_developers_governance.sh
   test_openai_runtime_capabilities.sh
+  test_tool_skill_evidence_contracts.sh
   test_workflow_contract.sh
   test_workflow_closure.sh
   test_change_governance.sh

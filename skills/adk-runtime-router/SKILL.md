@@ -61,8 +61,9 @@ constraints:
 5. **路由裁决分层**：将 recall、reasoning、ranking、feedback 分开；LLM 只产出候选理解，执行裁决必须来自确定性规则、结构化校验或 owner approval。
 6. **检查 fallback**：只有 adk 缺失等价能力、用户明确点名、迁移期对照验证或平台约束时才 fallback。
 7. **输出路由裁决**：写明 primary/supporting/fallback/skip reason/verification path。
-8. **进入执行 skill**：加载 primary skill，并按其 workflow 推进。
-9. **完成前复核**：若产生改动，最终必须经过 `adk-verification-before-completion`。
+8. **生成 Tool / Skill Evidence Plan**：中高风险任务记录 required/recommended skills、required artifacts、tool fallback、skipped skills、fallback evidence 和 evidence paths；工具不可用时必须记录降级原因，不能把 fallback 当成已验证成功。
+9. **进入执行 skill**：加载 primary skill，并按其 workflow 推进。
+10. **完成前复核**：若产生改动，最终必须经过 `adk-verification-before-completion`。
 
 ## Route Decision Template
 ```md
@@ -75,6 +76,14 @@ constraints:
   - reason:
   - exit_condition:
 - Skip Reasons:
+- Tool / Skill Evidence Plan:
+  - Required Skills:
+  - Recommended Skills:
+  - Required Artifacts:
+  - Skipped Skills:
+  - Tool Fallback:
+  - Fallback Evidence:
+  - Evidence Paths:
 - Verification Path:
 - Next Action:
 ```
@@ -100,6 +109,7 @@ bash ../scripts/check-runtime-routing.sh ..
 
 ## Quality Gate
 - 输出必须包含 primary skill、supporting skills、fallback 与验证路径。
+- 中高风险任务必须包含 Tool / Skill Evidence Plan；若有 skipped skills 或工具降级，必须记录 skipped reason 与 fallback evidence。
 - fallback 必须有明确原因，不能只写“更熟悉”或“更方便”。
 - 不得同时声明两个 primary skill。
 - 修改 skill、manifest、workflow 或 routing 后必须运行匹配测试与严格校验。

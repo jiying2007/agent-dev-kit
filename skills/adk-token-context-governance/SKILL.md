@@ -56,6 +56,7 @@ constraints:
 8. 出现 `HOT`、`CTX_PRESSURE`、长会话阶段切换或目标切换时，输出交接摘要并把下一阶段限制为预算配置中的必要证据。
 9. 长期项目维护 `PROJECT_MAP.md`，只保存入口、测试、禁读目录、高风险区域和已验证时间，不保存一次性日志。
 10. 完成前运行 token budget 与资产严格校验，并在报告中说明是否发生回退原文。
+11. 可选代码智能提供方只能缩小阅读范围。记录 `code_intelligence_provider_contract`：provider、query、provider_answered、fallback_used、confidence、returned_files、raw_evidence、omitted_reasons、source_reread_required；高风险变更必须回读源码。
 
 ## Budget Modes
 
@@ -84,6 +85,8 @@ LLM Wiki / Knowledge Compile 的读取顺序是 `schema` / index -> `maintained_
 - wiki 条目缺少 `raw_source_path`、`source_url_or_local_path`、`schema_path`、`retrieved_at`、`review_status`、`expires_at` 或 `duplicate_concept_check` 时，只能作为候选线索。
 - 遇到 stale claims、弱链接、孤立页面、重复概念页、schema 冲突、低置信度、过期来源或用户要求精确依据时，回退 `raw_sources`。
 - 从综合页得到的新 synthesis 需要写回时，先进入待审查 `change_log`，不得覆盖原始材料。
+- context pack 必须记录 included sections 与 `omitted_reasons`；省略原因只能是低相关、已有更近证据、已读摘要可回退或预算限制，不得省略高风险原文入口。
+- `code_intelligence_provider_contract` 的结果不是 source of truth。`source_reread_required: true` 时，完成前必须回读对应源码或标记为未闭环。
 
 ## Quality Gate
 - 摘要必须包含 `raw_evidence`、`confidence`、`fallback_condition`。
@@ -101,4 +104,12 @@ LLM Wiki / Knowledge Compile 的读取顺序是 `schema` / index -> `maintained_
 - confidence: low / medium / high
 - fallback_condition: <when to read local/raw/full context>
 - high_risk_raw_read: yes / no / not-applicable
+- code_intelligence_provider_contract:
+  - provider:
+  - provider_answered:
+  - fallback_used:
+  - confidence:
+  - returned_files:
+  - omitted_reasons:
+  - source_reread_required:
 ```

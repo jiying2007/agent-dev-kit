@@ -32,6 +32,9 @@
 - 外部记忆后端、跨工具会话索引、LLM wiki、MCP memory provider、embedding 服务和数据库适配层默认按运行态连接器审查。必须声明数据驻留位置、凭据来源、namespace 隔离、写入权限、备份/回滚、日志脱敏、删除能力和禁用路径；未完成前只能作为 `report-only` 架构参考。
 - 会写入用户目录、重建运行时目录、创建符号链接投影、安装 marketplace 包、配置消息机器人、开启 cron/hook/web server 或远程命令执行的教程，默认 `reject`，除非另有完整供应链和运行态权限审查。
 - AI 工具执行环境默认最小权限、无凭证、可隔离；模型切换、能力升级或长上下文扩容不得降低 sandbox、approval、allow/deny、审计日志和人工确认要求。
+- `verification_command_safety`：外部 manifest、报告或教程里的验证命令在 review 前都只是数据；必须记录 command_id、source、trust_level、expected_exit_codes、mutates_state、network_required、evidence_path 和 review_status。
+- `unsafe_shell_tokens` 包含 `$(`、反引号、管道、`&&`、`||`、`;`、重定向等 shell 组合能力；未审查命令不得通过 shell 字符串执行。
+- dependency audit 默认 offline/report-only。网络审计、install、postinstall 或 lockfile 改写必须有显式审批和证据，baseline findings 不得并入 allowlist 隐藏。
 
 ## 命令模板
 
@@ -54,3 +57,4 @@ bash scripts/devkit.sh validate --strict
 - 只有营销数据、榜单热度或教程截图，没有版本锚点、许可证和验证证据时，不得进入 `manifest.yaml` 或生产 profile。
 - 私有仓库只证明分发范围受控；若缺少管理员审核记录、自动扫描结果或 rollback 证据，不得作为 `global-ready` Skill 安装来源。
 - 动态采集类工具必须默认静态优先、低预算、摘要输出和完整证据落盘；只有在授权明确、静态证据不足且人工确认后，才允许升级到动态执行。
+- 未审查的 verification command、dependency audit 或安装命令不得进入默认门禁；含 `unsafe_shell_tokens` 的命令必须先人工拆解为参数化命令或保持 report-only。

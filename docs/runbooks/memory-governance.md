@@ -97,6 +97,9 @@ Agent 记忆只保存可复用经验，不保存噪声。任务结束后先做 A
 - 外部 API、平台规则、路径和用户偏好不是永久真理，必须设置 `next_review_by`。
 - 新候选与旧规则冲突时，使用 `conflicts_with` 标记，不静默覆盖。
 - 新规则替代旧规则时，使用 `supersedes` 标记并说明依据。
+- 整理报告必须显式列出 `promotion_candidates`、`stale_active`、`duplicate_groups`、`contradictions`、`missing_evidence` 和 `suggested_docs`；缺证据项不得进入 active memory。
+- 每条候选必须记录 `contradiction_status`，取值可为 `none`、`duplicate`、`stale`、`conflicts_with`、`supersedes`、`missing_evidence` 或 `conflict_review`。
+- failure replay 只能生成 incident candidate，先进入 evidence/conflict/owner review；不得把失败回放结论直接晋升为长期默认规则。
 - 长期未使用或被验证推翻的候选应降权、归档或删除。
 - 遗忘、降权和删除必须可审计，至少包含最小阈值、宽限期、复核条件和原文回退入口。不得仅因向量相似度低、短期未命中或模型判断“不重要”就删除长期候选。
 - 项目 AGENTS 或 runbook 的经验规则只保存会改变未来默认行为的具体结论。优先修订已有规则，避免叠加近义规则；过时经验必须可审计降权、归档或删除。

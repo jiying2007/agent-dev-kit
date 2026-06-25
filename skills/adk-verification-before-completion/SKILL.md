@@ -39,13 +39,14 @@ constraints:
 6. 配置加载核验：若涉及运行时配置变更，补 `声明配置 vs 运行态加载` 对比证据。
 7. prompt 回归核验：若改动提示词或策略文本，补 before/after 行为对比与失败样例。
 8. 证据索引化：关键命令必须记录命令、退出码、结果摘要、证据路径、层级（Agent/Skill/Workflow）与关联工件。
-9. 兼容性检查：显式判断是否存在 breaking change，并给出迁移与回退方案。
-10. 模型/上下文变更核验：若切换模型、扩大上下文或提升工具能力，必须补本地回归和权限/approval 未放宽证据。
-11. 反向核验：逐条检查“结论是否被证据支持”，避免先给结论后补证据。
-12. 卡死/重试核验：长任务必须核对 retry budget、heartbeat、staleness threshold、失败路径、已排除方案和 open items。
-13. Codify Decision：交付前确认是否存在可复用模式，使用 `templates/governance/codify-decision.md` 记录 `delivery_goal`、`reusable_pattern`、`affected_asset`、`promotion_candidate`、`next_task_friction_reduced`、`reduced_by`、`reduction_evidence`、`do_not_promote_reason`、`owner_review`、`rollback_path`、`verification_evidence`。
-14. 推广门禁：只有当 `verification_evidence` 支持复用价值、`owner_review` 明确、`rollback_path` 可执行，且 `next_task_friction_reduced` / `reduced_by` / `reduction_evidence` 说明后续成本如何下降时，才允许把 `promotion_candidate` 标记为 true；否则必须填写 `do_not_promote_reason`。
-15. 结论输出：给出 pass/needs-fix，并列出下一步动作与责任人。
+9. Tool / Skill Evidence Plan 核验：检查 primary/supporting skills、required artifacts、skipped skills、tool fallback、fallback evidence 和 evidence paths 是否完整；required artifact 缺失或 skipped skill 无原因时不得放行。
+10. 兼容性检查：显式判断是否存在 breaking change，并给出迁移与回退方案。
+11. 模型/上下文变更核验：若切换模型、扩大上下文或提升工具能力，必须补本地回归和权限/approval 未放宽证据。
+12. 反向核验：逐条检查“结论是否被证据支持”，避免先给结论后补证据。
+13. 卡死/重试核验：长任务必须核对 retry budget、heartbeat、staleness threshold、失败路径、已排除方案和 open items。
+14. Codify Decision：交付前确认是否存在可复用模式，使用 `templates/governance/codify-decision.md` 记录 `delivery_goal`、`reusable_pattern`、`affected_asset`、`promotion_candidate`、`next_task_friction_reduced`、`reduced_by`、`reduction_evidence`、`do_not_promote_reason`、`owner_review`、`rollback_path`、`verification_evidence`。
+15. 推广门禁：只有当 `verification_evidence` 支持复用价值、`owner_review` 明确、`rollback_path` 可执行，且 `next_task_friction_reduced` / `reduced_by` / `reduction_evidence` 说明后续成本如何下降时，才允许把 `promotion_candidate` 标记为 true；否则必须填写 `do_not_promote_reason`。
+16. 结论输出：给出 pass/needs-fix，并列出下一步动作与责任人。
 
 ## Commands
 ```bash
@@ -67,6 +68,14 @@ rtk bash scripts/check-codify-governance.sh
 - Prompt Regression Evidence:
 - Model / Context Regression Evidence:
 - Evidence Index:
+- Tool / Skill Evidence Plan:
+  - primary_skill:
+  - supporting_skills:
+  - required_artifacts:
+  - skipped skills:
+  - tool_fallback:
+  - fallback_evidence:
+  - evidence_paths:
 - Codify Decision:
   - delivery_goal:
   - reusable_pattern:
@@ -112,6 +121,7 @@ Evidence Index（命令级）:
 - 若涉及 prompt/policy 文本变更，必须附 before/after 行为对比与失败样例。
 - 若涉及模型切换、上下文扩容或工具权限变化，必须附本地回归和 approval/deny gate 未放宽证据。
 - 关键验证命令必须存在 Evidence Index 记录，且字段完整（命令/退出码/结果摘要/证据路径/层级）。
+- 中高风险任务必须核对 Tool / Skill Evidence Plan；required artifacts、skipped skills、tool fallback 或 fallback evidence 缺失时结论固定为 `needs-fix`。
 - Evidence Index 至少包含一条负结果或被证伪路径记录。
 - Codify Decision 必须记录 reusable_pattern、promotion_candidate、next_task_friction_reduced、reduced_by、reduction_evidence、do_not_promote_reason、owner_review、rollback_path、verification_evidence。
 - `promotion_candidate: true` 缺少 owner_review、rollback_path 或 verification_evidence 时，结论固定为 `needs-fix`。

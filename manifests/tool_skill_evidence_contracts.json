@@ -1,0 +1,157 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2026-06-25",
+  "scope_model": "platform-neutral-adk-governance",
+  "reference_boundary": "External agent runtimes are used as governance references only. This manifest keeps ADK assets report-only and does not adopt external orchestrators, hooks, dashboards, databases, dependency runners, or provider implementations.",
+  "tool_skill_evidence_plan": {
+    "required_fields": [
+      "task_mode",
+      "risk_level",
+      "primary_skill",
+      "supporting_skills",
+      "required_artifacts",
+      "verification_commands",
+      "tool_plan",
+      "fallback_plan",
+      "skipped_reasons",
+      "evidence_paths"
+    ],
+    "tool_plan_fields": [
+      "scenario",
+      "primary_capability",
+      "fallback_capability",
+      "approval_mode",
+      "mandatory_evidence"
+    ],
+    "skill_plan_fields": [
+      "skill",
+      "role",
+      "required",
+      "reason",
+      "output_artifact",
+      "skip_reason"
+    ],
+    "must_record": [
+      "required vs recommended skills",
+      "unavailable tool fallback",
+      "skipped skill reason",
+      "verification command evidence path",
+      "report-only boundary when runtime capability is absent"
+    ],
+    "must_not": [
+      "treat fallback as success without evidence",
+      "mark completion pass when required artifacts are missing",
+      "enable external hooks or orchestrators from this contract"
+    ]
+  },
+  "memory_maintenance_report": {
+    "required_sections": [
+      "source_scope",
+      "source_counts",
+      "promotion_candidates",
+      "stale_active",
+      "duplicate_groups",
+      "contradictions",
+      "missing_evidence",
+      "suggested_docs",
+      "archive_only_items",
+      "drop_or_review_items",
+      "gate_result"
+    ],
+    "candidate_required_fields": [
+      "scope",
+      "risk",
+      "confidence",
+      "evidence",
+      "raw_evidence",
+      "last_verified",
+      "next_review_by",
+      "write_route",
+      "requires_user_confirmation",
+      "contradiction_status"
+    ],
+    "promotion_rules": [
+      "active memory candidates require at least one evidence path",
+      "failure replay creates incident candidates before promotion",
+      "contradictions require conflict_review instead of direct promotion",
+      "high-risk candidates remain report-only until owner review"
+    ],
+    "must_not": [
+      "write formal memory silently",
+      "promote chat transcript excerpts",
+      "delete stale memory without raw fallback and audit note"
+    ]
+  },
+  "verification_command_safety": {
+    "required_fields": [
+      "command_id",
+      "command",
+      "source",
+      "trust_level",
+      "expected_exit_codes",
+      "mutates_state",
+      "network_required",
+      "evidence_path",
+      "review_status"
+    ],
+    "unsafe_shell_tokens": [
+      "$(",
+      "`",
+      "|",
+      "&&",
+      "||",
+      ";",
+      ">",
+      "<"
+    ],
+    "policy": [
+      "commands sourced from external manifests are data until reviewed",
+      "offline dependency audit is preferred for default gates",
+      "network or install steps require explicit approval and evidence",
+      "baseline findings must stay separate from allowlists"
+    ],
+    "must_not": [
+      "execute unreviewed command strings through a shell",
+      "run dependency install or audit network calls in default report-only gates",
+      "hide baseline findings by merging them into allowlists"
+    ]
+  },
+  "code_intelligence_provider_contract": {
+    "required_fields": [
+      "provider",
+      "query",
+      "provider_answered",
+      "fallback_used",
+      "confidence",
+      "returned_files",
+      "raw_evidence",
+      "omitted_reasons",
+      "source_reread_required"
+    ],
+    "confidence_values": [
+      "low",
+      "medium",
+      "high"
+    ],
+    "rules": [
+      "provider output narrows reading scope only",
+      "high-risk changes require source reread",
+      "fallback output must record why provider output was absent or insufficient",
+      "context packs must record included and omitted sections with reasons"
+    ],
+    "must_not": [
+      "treat code graph output as source of truth",
+      "install provider backends from this contract",
+      "skip raw source review for high-risk behavior changes"
+    ]
+  },
+  "rejected_runtime_surfaces": [
+    "external orchestrator runtime",
+    "external hook runtime",
+    "dashboard or TUI runtime",
+    "SQLite or vector memory backend",
+    "network dependency audit runner",
+    "code graph provider installation",
+    "active security or visual probe runtime"
+  ]
+}

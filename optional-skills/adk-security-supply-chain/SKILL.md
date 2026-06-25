@@ -85,6 +85,14 @@ sha256sum -c <checksum_file>
 - External Dependencies:
 - Secret Scan:
 - Signature Verification:
+- verification_command_safety:
+  - command_id:
+  - source:
+  - trust_level:
+  - unsafe_shell_tokens:
+  - mutates_state:
+  - network_required:
+  - review_status:
 - Runtime Trust Boundary:
 - MCP/Plugin Readiness:
 - Tool-call Policy:
