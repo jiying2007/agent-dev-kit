@@ -7,10 +7,10 @@
       "id": "mattpocock-caveman-skill",
       "title": "caveman skill from mattpocock-skills",
       "url": "https://skilld.dev/skills/mattpocock/skills/caveman",
-      "local_path": "mattpocock-skills/skills/productivity/caveman/SKILL.md",
+      "local_path": "",
       "retrieved_at": "2026-05-29",
       "decision": "adopt-method-only",
-      "notes": "Use as a low-token communication profile reference; do not make it the default style."
+      "notes": "Use as a low-token communication profile reference from archived adoption reports; local mattpocock-skills reference repo was removed on 2026-06-25. Do not make it the default style."
     },
     {
       "id": "thedotmack-claude-mem",
@@ -34,10 +34,10 @@
       "id": "karpathy-llm-wiki-pattern",
       "title": "Karpathy LLM Wiki pattern",
       "url": "https://karpathy-wiki.lol/en",
-      "local_path": "hermes-agent/skills/research/llm-wiki/SKILL.md",
+      "local_path": "",
       "retrieved_at": "2026-05-29",
       "decision": "adopt-method-only",
-      "notes": "Use raw sources, maintained wiki, schema and ingest/query/lint loops for archive and memory governance."
+      "notes": "Use raw sources, maintained wiki, schema and ingest/query/lint loops for archive and memory governance from archived adoption reports; local hermes-agent reference repo was removed on 2026-06-25."
     },
     {
       "id": "pbnz-newton-skill",
