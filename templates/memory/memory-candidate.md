@@ -1,6 +1,8 @@
 # Memory Candidate
 
 id:
+stable_identity_key:
+protected_entry_class:
 scope:
 type:
 risk:
@@ -23,6 +25,7 @@ write_route:
 requires_user_confirmation:
 supersedes:
 conflicts_with:
+duplicate_key_status:
 contradiction_status: none | duplicate | stale | conflicts_with | supersedes | missing_evidence | conflict_review
 raw_evidence:
 owner:
@@ -35,8 +38,10 @@ notes:
 - 不包含密钥、凭据、隐私原文:
 - 风险分级已说明:
 - 事件类型为 ADD / UPDATE / DELETE / NONE:
+- stable_identity_key 已记录；纠正、决策、进度和执行日志必须带 protected_entry_class:
 - 旧记忆、新事实和原始证据入口已记录:
 - active 候选至少有一个 evidence 或 raw_evidence 路径:
+- duplicate_key_status 已标记；同 key 冲突不得自动晋升:
 - contradiction_status 已标记；冲突项进入 conflict_review:
 - 评分依据、作用域和跨会话重复证据已记录:
 - `[REDACTED]`、疑似密钥、token、cookie、连接串或原始敏感日志已阻断:

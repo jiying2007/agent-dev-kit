@@ -24,8 +24,9 @@ require_file "skills/adk-after-action-review/SKILL.md"
 require_file "templates/memory/after-action-review.md"
 require_file "templates/memory/memory-candidate.md"
 require_file "docs/runbooks/memory-governance.md"
+require_file "tests/fixtures/context/protected-key-collision-negative.md"
 
-for field in id scope type risk confidence status created_at last_verified next_review_by source evidence content reusable_when write_route requires_user_confirmation; do
+for field in id stable_identity_key protected_entry_class scope type risk confidence status created_at last_verified next_review_by source evidence content reusable_when write_route requires_user_confirmation duplicate_key_status; do
   require_text "templates/memory/memory-candidate.md" "^${field}:"
 done
 
@@ -56,5 +57,15 @@ require_text "docs/runbooks/memory-governance.md" "offline_sync"
 require_text "docs/runbooks/memory-governance.md" "purge_semantics"
 require_text "docs/runbooks/memory-governance.md" "hash-only tombstone"
 require_text "docs/runbooks/memory-governance.md" "stable identity key"
+require_text "docs/runbooks/memory-governance.md" "protected_entry_class"
+require_text "docs/runbooks/memory-governance.md" "duplicate_key_status: collision"
+
+for token in correction decision progress execution-log stable_identity_key duplicate_key_status contradiction_status conflict_review raw_evidence expected_failure; do
+  require_text "tests/fixtures/context/protected-key-collision-negative.md" "$token"
+done
+
+if rg -q "promotion_action: auto_promote_candidate|promotion_action: promoted" "$ROOT_DIR/tests/fixtures/context/protected-key-collision-negative.md"; then
+  fail "protected key collision fixture must not auto-promote duplicate keys"
+fi
 
 echo "[PASS] memory governance"

@@ -73,6 +73,8 @@ backend capability matrix 还必须覆盖下列字段，避免把记忆产品或
 
 写入前先做 deterministic pre-filter：寒暄、确认、分隔符和重复工具输出默认不生成长期候选；用户纠正、明确决策、任务进度、执行日志和路径/API 变更必须保留来源与 stable identity key。LLM 可以帮助摘要，但不能决定是否覆盖旧候选；覆盖、追加、阻断和删除必须由可审计规则和 owner review 共同约束。
 
+受保护条目必须标记 `protected_entry_class`，当前最小集合是 `correction`、`decision`、`progress` 和 `execution-log`。若新候选与旧候选使用相同 `stable_identity_key`，必须设置 `duplicate_key_status: collision` 与 `contradiction_status: conflict_review`，并把 `promotion_action` 固定为 `conflict_review`。这类候选不得使用 `auto_promote_candidate` 或 `promoted`，即使摘要文本看起来更短或更完整。
+
 外部记忆工具只能在 AGENTS、项目地图、阶段摘要和归档索引仍不足以支撑跨会话连续性时升级。升级前先区分需求是 continuity pack 还是 historical search：前者优化下一轮继续执行所需的目标、约束、阻塞和完成标准；后者优化跨会话查找历史证据。两者都必须保留 `raw_evidence`、来源置信度和回退路径。
 
 ## 写入准入

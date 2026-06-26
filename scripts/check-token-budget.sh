@@ -124,6 +124,18 @@ require_context_text() {
   fi
 }
 
+require_context_absent_text() {
+  local file="$1"
+  local pattern="$2"
+  local label="$3"
+  if [[ ! -f "$file" ]]; then
+    return
+  fi
+  if rg -q -- "$pattern" "$file"; then
+    record_failure "context governance forbidden text present: ${file#$ROOT_DIR/} forbids ${label}"
+  fi
+}
+
 while IFS= read -r -d '' file; do
   check_file_budget "$file" "$MAX_SKILL_LINES" skill
 done < <(find "$ROOT_DIR/skills" "$ROOT_DIR/optional-skills" -name SKILL.md -print0)
@@ -165,6 +177,7 @@ for asset in \
   "$ROOT_DIR/templates/context/project-map.md" \
   "$ROOT_DIR/templates/context/memory-search-result.md" \
   "$ROOT_DIR/templates/context/low-token-profile.md" \
+  "$ROOT_DIR/tests/fixtures/context/protected-key-collision-negative.md" \
   "$ROOT_DIR/docs/runbooks/token-context-governance.md"; do
   require_context_asset "$asset"
 done
@@ -209,6 +222,15 @@ require_context_text "$ROOT_DIR/docs/runbooks/token-context-governance.md" 'whol
 require_context_text "$ROOT_DIR/docs/runbooks/token-context-governance.md" 'deterministic pre-filter' 'deterministic pre-filter'
 require_context_text "$ROOT_DIR/docs/runbooks/token-context-governance.md" 'stable key' 'stable key preservation'
 require_context_text "$ROOT_DIR/docs/runbooks/token-context-governance.md" '被保护条目' 'protected entry summary'
+require_context_text "$ROOT_DIR/tests/fixtures/context/protected-key-collision-negative.md" 'expected_failure:' 'protected key collision expected failure'
+require_context_text "$ROOT_DIR/tests/fixtures/context/protected-key-collision-negative.md" 'protected_entry_class: correction' 'correction protected key'
+require_context_text "$ROOT_DIR/tests/fixtures/context/protected-key-collision-negative.md" 'protected_entry_class: decision' 'decision protected key'
+require_context_text "$ROOT_DIR/tests/fixtures/context/protected-key-collision-negative.md" 'protected_entry_class: progress' 'progress protected key'
+require_context_text "$ROOT_DIR/tests/fixtures/context/protected-key-collision-negative.md" 'protected_entry_class: execution-log' 'execution-log protected key'
+require_context_text "$ROOT_DIR/tests/fixtures/context/protected-key-collision-negative.md" 'duplicate_key_status: collision' 'duplicate key collision marker'
+require_context_text "$ROOT_DIR/tests/fixtures/context/protected-key-collision-negative.md" 'contradiction_status: conflict_review' 'conflict review marker'
+require_context_text "$ROOT_DIR/tests/fixtures/context/protected-key-collision-negative.md" 'raw_evidence:' 'raw fallback for protected collision'
+require_context_absent_text "$ROOT_DIR/tests/fixtures/context/protected-key-collision-negative.md" 'promotion_action: auto_promote_candidate|promotion_action: promoted' 'auto promotion for protected key collision'
 
 status="pass"
 if [[ "${#failures[@]}" -gt 0 ]]; then
