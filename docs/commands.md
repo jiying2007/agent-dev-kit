@@ -132,6 +132,8 @@ bash scripts/devkit.sh openai-runtime-capabilities --fixture fixtures/openai-run
 
 检查外部 harness/loop engineering 合同门禁。该命令确认 repo-task eval、CI gate、durable loop、coding agent loop、trace observability 和 guardrail handoff 只作为 method-only 证据吸收，不启用外部 runtime、hook、daemon 或自动写操作。
 
+新增或调整合同 fixture 时，先按 `templates/governance/contract-fixture.md` 填写 source mapping、positive fixture、negative fixture 和 rollback path，再按 `docs/runbooks/contract-fixture-authoring.md` 更新 manifest 与 checker。
+
 ```bash
 bash scripts/devkit.sh harness-loop-engineering
 bash scripts/devkit.sh harness-loop-engineering --summary-json

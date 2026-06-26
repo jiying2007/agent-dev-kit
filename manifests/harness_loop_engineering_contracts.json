@@ -49,6 +49,42 @@
       ]
     }
   ],
+  "fixture_authoring": {
+    "guide": "docs/runbooks/contract-fixture-authoring.md",
+    "template": "templates/governance/contract-fixture.md",
+    "minimum_positive_fixture_fields": [
+      "id",
+      "runtime_enabled",
+      "fixture_mode",
+      "source_mapping",
+      "contract_under_test",
+      "required_fields",
+      "verification_command",
+      "evidence_path",
+      "rollback_path"
+    ],
+    "minimum_negative_fixture_fields": [
+      "id",
+      "runtime_enabled",
+      "fixture_mode",
+      "expected_failure",
+      "contract_under_test",
+      "missing_or_invalid_field",
+      "verification_command"
+    ],
+    "authoring_rules": [
+      "clean_room_only",
+      "runtime_enabled_false",
+      "method_only_default",
+      "positive_and_negative_examples",
+      "oracle_or_assertion_required",
+      "local_ci_parity_required_for_pipeline_claims",
+      "version_or_digest_required_for_artifact_claims",
+      "expected_failure_must_match_gate_output",
+      "rollback_path_required",
+      "source_mapping_required"
+    ]
+  },
   "source_refs": [
     {
       "id": "temporal",

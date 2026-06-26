@@ -64,6 +64,16 @@ def require_keys(obj, keys, label):
         check(key in obj and obj[key] not in ("", None, []), f"{label} missing key: {key}")
 
 
+def require_file_contains(path, tokens, label):
+    file_path = root / path
+    check(file_path.is_file(), f"missing {label}: {path}")
+    if not file_path.is_file():
+        return
+    text = file_path.read_text(encoding="utf-8")
+    for token in tokens:
+        check(token in text, f"{label} missing token: {token}")
+
+
 if not manifest_path.is_file():
     fail("missing manifest: manifests/harness_loop_engineering_contracts.json")
     manifest = {}
@@ -419,6 +429,63 @@ for negative_fixture in negative_fixtures if isinstance(negative_fixtures, list)
         continue
     if expected_failure not in negative_failures:
         fail(f"negative fixture {rel_path} missing expected failure: {expected_failure}")
+
+fixture_authoring = manifest.get("fixture_authoring", {})
+require_keys(
+    fixture_authoring,
+    ["guide", "template", "minimum_positive_fixture_fields", "minimum_negative_fixture_fields", "authoring_rules"],
+    "fixture_authoring",
+)
+for field in (
+    "source_mapping",
+    "contract_under_test",
+    "verification_command",
+    "evidence_path",
+    "rollback_path",
+):
+    check(field in fixture_authoring.get("minimum_positive_fixture_fields", []), f"fixture_authoring minimum_positive_fixture_fields missing: {field}")
+for field in (
+    "expected_failure",
+    "contract_under_test",
+    "missing_or_invalid_field",
+    "verification_command",
+):
+    check(field in fixture_authoring.get("minimum_negative_fixture_fields", []), f"fixture_authoring minimum_negative_fixture_fields missing: {field}")
+for rule in (
+    "clean_room_only",
+    "runtime_enabled_false",
+    "method_only_default",
+    "positive_and_negative_examples",
+    "expected_failure_must_match_gate_output",
+    "source_mapping_required",
+):
+    check(rule in fixture_authoring.get("authoring_rules", []), f"fixture_authoring authoring_rules missing: {rule}")
+
+require_file_contains(
+    fixture_authoring.get("template", ""),
+    [
+        "runtime_enabled: false",
+        "fixture_mode: method-only",
+        "source_mapping",
+        "positive_fixture",
+        "negative_fixture",
+        "expected_failure",
+        "rollback_path",
+    ],
+    "contract fixture template",
+)
+require_file_contains(
+    fixture_authoring.get("guide", ""),
+    [
+        "clean-room positive fixture",
+        "negative fixture",
+        "expected_failure",
+        "local CI parity",
+        "version_or_digest",
+        "Runtime enablement requires a separate owner-approved gate",
+    ],
+    "contract fixture authoring guide",
+)
 
 for key in (
     "method_only_default",
