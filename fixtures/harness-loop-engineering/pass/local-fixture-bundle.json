@@ -1,0 +1,93 @@
+{
+  "schema_version": "1.0.0",
+  "description": "Clean-room method-only fixture for ADK harness/loop engineering contracts. It is not an executable benchmark and must not start external runtimes.",
+  "runtime_enabled": false,
+  "fixture_mode": "method-only",
+  "sandbox_terminal_harness": {
+    "task_instruction": "Create a deterministic text artifact and verify its content without network access.",
+    "sandbox_backend": "workspace-tempdir",
+    "setup_command": "printf 'ready\\n' > build/harness-loop/terminal-task.txt",
+    "agent_command": "printf 'ADK harness fixture\\n' > build/harness-loop/result.txt",
+    "test_script": "grep -q 'ADK harness fixture' build/harness-loop/result.txt",
+    "oracle_solution": "build/harness-loop/result.txt contains exactly one expected marker line.",
+    "timeout_policy": {
+      "seconds": 30,
+      "on_timeout": "fail-and-capture-output"
+    },
+    "resource_budget": {
+      "max_processes": 1,
+      "max_network": "disabled",
+      "max_disk_mb": 5
+    },
+    "stdout_stderr_capture": {
+      "stdout_path": "build/harness-loop/stdout.log",
+      "stderr_path": "build/harness-loop/stderr.log",
+      "redaction": "no secrets expected; still redact tokens before archive"
+    },
+    "exit_code_policy": {
+      "pass": 0,
+      "nonzero": "fail"
+    },
+    "cleanup_policy": "remove build/harness-loop unless evidence retention is requested",
+    "dataset_version": "synthetic-local-v1"
+  },
+  "reproducible_execution_pipeline": {
+    "pipeline_id": "harness-loop-local-fixture-v1",
+    "local_ci_parity": {
+      "local_command": "rtk bash agent-dev-kit/scripts/check-harness-loop-engineering-contracts.sh",
+      "ci_command": "rtk bash agent-dev-kit/scripts/check-harness-loop-engineering-contracts.sh",
+      "parity_expectation": "same manifest and fixture checks"
+    },
+    "container_or_runtime_spec": "none; shell-only contract validation",
+    "dag_or_step_graph": [
+      {
+        "step_id": "read-manifest",
+        "produces": [
+          "manifest-contract-index"
+        ]
+      },
+      {
+        "step_id": "validate-fixture",
+        "consumes": [
+          "manifest-contract-index"
+        ],
+        "produces": [
+          "fixture-validation-evidence"
+        ]
+      }
+    ],
+    "artifact_inputs": [
+      "manifests/harness_loop_engineering_contracts.json",
+      "fixtures/harness-loop-engineering/pass/local-fixture-bundle.json"
+    ],
+    "artifact_outputs": [
+      "command transcript",
+      "summary-json status"
+    ],
+    "cache_policy": "no cache; read current tracked files",
+    "trace_export_policy": {
+      "trace_id": "harness-loop-local-fixture-trace",
+      "redaction": "store command names and status only"
+    },
+    "schedule_policy": "manual only",
+    "retry_policy": {
+      "attempts": 1,
+      "retry_on": []
+    },
+    "archive_policy": "retain report path and command status; do not store raw secrets",
+    "rollback_path": "remove fixture path and manifest fixture reference"
+  },
+  "artifact_lineage_evidence": {
+    "artifact_id": "harness-loop-local-fixture-bundle",
+    "source_input": "reports/harness-loop-engineering-adoption-candidates-2026-06-26-batch2.md",
+    "producer_step": "manual clean-room fixture authoring",
+    "consumer_step": "scripts/check-harness-loop-engineering-contracts.sh fixture validation",
+    "version_or_digest": "synthetic-local-v1",
+    "materialization_time": "2026-06-26T00:00:00Z",
+    "metadata_schema": "harness-loop-engineering-fixture-v1",
+    "quality_check": "required contract fields are present and runtime_enabled is false",
+    "retention_policy": "tracked fixture retained with manifest contract",
+    "supersedes": "none",
+    "evidence_path": "fixtures/harness-loop-engineering/pass/local-fixture-bundle.json"
+  }
+}

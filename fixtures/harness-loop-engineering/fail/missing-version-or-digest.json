@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0.0",
+  "description": "Negative fixture: artifact lineage evidence is missing version_or_digest and must be rejected.",
+  "runtime_enabled": false,
+  "fixture_mode": "method-only",
+  "expected_failure": "fixture artifact_lineage_evidence missing field: version_or_digest",
+  "artifact_lineage_evidence": {
+    "artifact_id": "harness-loop-negative-fixture-bundle",
+    "source_input": "reports/harness-loop-engineering-adoption-candidates-2026-06-26-batch2.md",
+    "producer_step": "manual clean-room fixture authoring",
+    "consumer_step": "scripts/check-harness-loop-engineering-contracts.sh fixture validation",
+    "materialization_time": "2026-06-26T00:00:00Z",
+    "metadata_schema": "harness-loop-engineering-fixture-v1",
+    "quality_check": "required contract fields are present and runtime_enabled is false",
+    "retention_policy": "tracked fixture retained with manifest contract",
+    "supersedes": "none",
+    "evidence_path": "fixtures/harness-loop-engineering/fail/missing-version-or-digest.json"
+  }
+}

@@ -6,7 +6,48 @@
   "reference_boundary": "External harness and loop engineering repositories are absorbed as contracts, vocabulary, evidence fields and gate shapes only. This manifest does not clone, install, import, execute, start daemons, register hooks, enable MCP servers or turn on external runtimes.",
   "report": "../reports/harness-loop-engineering-adoption-candidates-2026-06-25.md",
   "supplemental_reports": [
-    "../reports/harness-loop-engineering-adoption-candidates-2026-06-26.md"
+    "../reports/harness-loop-engineering-adoption-candidates-2026-06-26.md",
+    "../reports/harness-loop-engineering-adoption-candidates-2026-06-26-batch2.md"
+  ],
+  "fixtures": [
+    {
+      "id": "harness-loop-local-fixture-bundle-v1",
+      "path": "fixtures/harness-loop-engineering/pass/local-fixture-bundle.json",
+      "mode": "method-only",
+      "runtime_enabled": false,
+      "covers": [
+        "sandbox-terminal-harness-v1",
+        "reproducible-execution-pipeline-v1",
+        "artifact-lineage-evidence-contract-v1"
+      ],
+      "notes": "Clean-room synthetic fixture; validates contract fields without running external benchmark, container, daemon, service or scheduler."
+    }
+  ],
+  "negative_fixtures": [
+    {
+      "id": "harness-loop-missing-oracle-solution-v1",
+      "path": "fixtures/harness-loop-engineering/fail/missing-oracle-solution.json",
+      "expected_failure": "fixture sandbox_terminal_harness missing field: oracle_solution",
+      "covers": [
+        "sandbox-terminal-harness-v1"
+      ]
+    },
+    {
+      "id": "harness-loop-missing-local-ci-parity-v1",
+      "path": "fixtures/harness-loop-engineering/fail/missing-local-ci-parity.json",
+      "expected_failure": "fixture reproducible_execution_pipeline missing field: local_ci_parity",
+      "covers": [
+        "reproducible-execution-pipeline-v1"
+      ]
+    },
+    {
+      "id": "harness-loop-missing-version-or-digest-v1",
+      "path": "fixtures/harness-loop-engineering/fail/missing-version-or-digest.json",
+      "expected_failure": "fixture artifact_lineage_evidence missing field: version_or_digest",
+      "covers": [
+        "artifact-lineage-evidence-contract-v1"
+      ]
+    }
   ],
   "source_refs": [
     {
@@ -174,6 +215,245 @@
         "coding-agent-loop-v1"
       ],
       "notes": "Use coding context and IDE boundary as historical reference only; repository maintenance status prevents active tracking."
+    },
+    {
+      "id": "inspect-evals",
+      "title": "Inspect Evals",
+      "repo": "UKGovernmentBEIS/inspect_evals",
+      "url": "https://github.com/UKGovernmentBEIS/inspect_evals",
+      "retrieved_at": "2026-06-26",
+      "priority": "P0",
+      "track_mode": "adopt-contract",
+      "decision": "adopt-method-only",
+      "evidence_strength": "high",
+      "runtime_enabled": false,
+      "absorb_target": [
+        "agent-eval-ci-gate-v1",
+        "trace-eval-evidence-bundle-v1",
+        "artifact-lineage-evidence-contract-v1"
+      ],
+      "notes": "Use eval registry, task metadata, validation and contribution workflow vocabulary to strengthen ADK eval evidence. Do not import eval packages or execute benchmark tasks."
+    },
+    {
+      "id": "terminal-bench",
+      "title": "Terminal-Bench",
+      "repo": "laude-institute/terminal-bench",
+      "url": "https://github.com/laude-institute/terminal-bench",
+      "retrieved_at": "2026-06-26",
+      "priority": "P0",
+      "track_mode": "adopt-contract",
+      "decision": "adopt-method-only",
+      "evidence_strength": "high",
+      "runtime_enabled": false,
+      "absorb_target": [
+        "sandbox-terminal-harness-v1"
+      ],
+      "notes": "Use terminal task instruction, setup, agent command, oracle, timeout, stdout/stderr capture and cleanup vocabulary. Do not run benchmark containers."
+    },
+    {
+      "id": "mini-swe-agent",
+      "title": "mini-swe-agent",
+      "repo": "SWE-agent/mini-swe-agent",
+      "url": "https://github.com/SWE-agent/mini-swe-agent",
+      "retrieved_at": "2026-06-26",
+      "priority": "P0",
+      "track_mode": "adopt-contract",
+      "decision": "adopt-method-only",
+      "evidence_strength": "high",
+      "runtime_enabled": false,
+      "absorb_target": [
+        "coding-agent-loop-v1",
+        "coding-repair-loop-v1",
+        "sandbox-boundary-contract-v1",
+        "sandbox-terminal-harness-v1"
+      ],
+      "notes": "Use minimal auditable coding-loop shape, independent process action boundaries and bounded repair attempts. Do not adopt runtime defaults or automatic commit behavior."
+    },
+    {
+      "id": "swe-rex",
+      "title": "SWE-ReX",
+      "repo": "SWE-bench/SWE-ReX",
+      "url": "https://github.com/SWE-bench/SWE-ReX",
+      "retrieved_at": "2026-06-26",
+      "priority": "P0",
+      "track_mode": "adopt-contract",
+      "decision": "adopt-method-only",
+      "evidence_strength": "high",
+      "runtime_enabled": false,
+      "absorb_target": [
+        "sandbox-boundary-contract-v1",
+        "sandbox-terminal-harness-v1"
+      ],
+      "notes": "Use sandbox backend and terminal command boundary vocabulary for reproducible agent tasks. Do not enable external execution backends."
+    },
+    {
+      "id": "dagger",
+      "title": "Dagger",
+      "repo": "dagger/dagger",
+      "url": "https://github.com/dagger/dagger",
+      "retrieved_at": "2026-06-26",
+      "priority": "P0",
+      "track_mode": "adopt-contract",
+      "decision": "adopt-method-only",
+      "evidence_strength": "high",
+      "runtime_enabled": false,
+      "absorb_target": [
+        "reproducible-execution-pipeline-v1",
+        "artifact-lineage-evidence-contract-v1"
+      ],
+      "notes": "Use local/CI parity, container/runtime spec, artifact input/output and trace export vocabulary. Do not adopt container runtime or engine execution."
+    },
+    {
+      "id": "argo-workflows",
+      "title": "Argo Workflows",
+      "repo": "argoproj/argo-workflows",
+      "url": "https://github.com/argoproj/argo-workflows",
+      "retrieved_at": "2026-06-26",
+      "priority": "P0",
+      "track_mode": "adopt-contract",
+      "decision": "adopt-method-only",
+      "evidence_strength": "high",
+      "runtime_enabled": false,
+      "absorb_target": [
+        "reproducible-execution-pipeline-v1",
+        "workflow-state-contract-v1"
+      ],
+      "notes": "Use DAG, steps, artifacts, archive, retry and schedule policy vocabulary. Do not enable Kubernetes controllers or workflow runtime."
+    },
+    {
+      "id": "tau-bench",
+      "title": "tau-bench",
+      "repo": "sierra-research/tau-bench",
+      "url": "https://github.com/sierra-research/tau-bench",
+      "retrieved_at": "2026-06-26",
+      "priority": "P1",
+      "track_mode": "observe-method-only",
+      "decision": "observe-method-only",
+      "evidence_strength": "medium",
+      "runtime_enabled": false,
+      "absorb_target": [
+        "agent-eval-ci-gate-v1"
+      ],
+      "notes": "Use tool-user simulation and task success vocabulary as future eval reference. Do not adopt service stack or simulation runtime."
+    },
+    {
+      "id": "agentbench",
+      "title": "AgentBench",
+      "repo": "THUDM/AgentBench",
+      "url": "https://github.com/THUDM/AgentBench",
+      "retrieved_at": "2026-06-26",
+      "priority": "P1",
+      "track_mode": "observe-method-only",
+      "decision": "observe-method-only",
+      "evidence_strength": "medium",
+      "runtime_enabled": false,
+      "absorb_target": [
+        "repo-task-evaluation-harness-v1",
+        "agent-eval-ci-gate-v1"
+      ],
+      "notes": "Use multi-domain agent benchmark taxonomy as optional harness vocabulary. Do not import benchmark environment code."
+    },
+    {
+      "id": "webarena",
+      "title": "WebArena",
+      "repo": "web-arena-x/webarena",
+      "url": "https://github.com/web-arena-x/webarena",
+      "retrieved_at": "2026-06-26",
+      "priority": "P1",
+      "track_mode": "observe-method-only",
+      "decision": "observe-method-only",
+      "evidence_strength": "medium",
+      "runtime_enabled": false,
+      "absorb_target": [
+        "sandbox-boundary-contract-v1",
+        "agent-eval-ci-gate-v1"
+      ],
+      "notes": "Use browser task and service boundary vocabulary for future optional pilots. Do not enable browser automation runtime."
+    },
+    {
+      "id": "osworld",
+      "title": "OSWorld",
+      "repo": "xlang-ai/OSWorld",
+      "url": "https://github.com/xlang-ai/OSWorld",
+      "retrieved_at": "2026-06-26",
+      "priority": "P1",
+      "track_mode": "observe-method-only",
+      "decision": "observe-method-only",
+      "evidence_strength": "medium",
+      "runtime_enabled": false,
+      "absorb_target": [
+        "sandbox-boundary-contract-v1",
+        "agent-eval-ci-gate-v1"
+      ],
+      "notes": "Use desktop agent task boundary and observation/action vocabulary as watch-only reference. Do not enable GUI automation runtime."
+    },
+    {
+      "id": "openai-evals",
+      "title": "OpenAI Evals",
+      "repo": "openai/evals",
+      "url": "https://github.com/openai/evals",
+      "retrieved_at": "2026-06-26",
+      "priority": "P1",
+      "track_mode": "observe-method-only",
+      "decision": "observe-method-only",
+      "evidence_strength": "medium",
+      "runtime_enabled": false,
+      "absorb_target": [
+        "model-eval-harness-v1",
+        "agent-eval-ci-gate-v1"
+      ],
+      "notes": "Use task registry, dataset version and eval result schema as historical and optional model-eval reference."
+    },
+    {
+      "id": "simple-evals",
+      "title": "simple-evals",
+      "repo": "openai/simple-evals",
+      "url": "https://github.com/openai/simple-evals",
+      "retrieved_at": "2026-06-26",
+      "priority": "P2",
+      "track_mode": "historical-reference-only",
+      "decision": "observe-method-only",
+      "evidence_strength": "low",
+      "runtime_enabled": false,
+      "absorb_target": [
+        "model-eval-harness-v1"
+      ],
+      "notes": "Use compact eval baseline examples as historical reference only; do not track as active runtime source."
+    },
+    {
+      "id": "prefect",
+      "title": "Prefect",
+      "repo": "PrefectHQ/prefect",
+      "url": "https://github.com/PrefectHQ/prefect",
+      "retrieved_at": "2026-06-26",
+      "priority": "P1",
+      "track_mode": "observe-method-only",
+      "decision": "observe-method-only",
+      "evidence_strength": "medium",
+      "runtime_enabled": false,
+      "absorb_target": [
+        "durable-execution-contract-v1",
+        "workflow-state-contract-v1",
+        "reproducible-execution-pipeline-v1"
+      ],
+      "notes": "Use task flow, retry, schedule, state and recovery vocabulary only. Do not run server, worker or cloud integration."
+    },
+    {
+      "id": "dagster",
+      "title": "Dagster",
+      "repo": "dagster-io/dagster",
+      "url": "https://github.com/dagster-io/dagster",
+      "retrieved_at": "2026-06-26",
+      "priority": "P1",
+      "track_mode": "observe-method-only",
+      "decision": "observe-method-only",
+      "evidence_strength": "medium",
+      "runtime_enabled": false,
+      "absorb_target": [
+        "artifact-lineage-evidence-contract-v1",
+        "reproducible-execution-pipeline-v1"
+      ],
+      "notes": "Use asset/materialization, lineage, metadata, quality check and freshness vocabulary. Do not adopt orchestrator runtime or hosted control plane."
     },
     {
       "id": "google-adk-python",
@@ -480,6 +760,40 @@
         "mix model comparison with unpinned prompt changes",
         "compare runs without backend and dataset metadata"
       ]
+    },
+    {
+      "id": "sandbox-terminal-harness-v1",
+      "owner": "agent-dev-kit",
+      "source_refs": [
+        "terminal-bench",
+        "swe-rex",
+        "mini-swe-agent"
+      ],
+      "required_fields": [
+        "task_instruction",
+        "sandbox_backend",
+        "setup_command",
+        "agent_command",
+        "test_script",
+        "oracle_solution",
+        "timeout_policy",
+        "resource_budget",
+        "stdout_stderr_capture",
+        "exit_code_policy",
+        "cleanup_policy",
+        "dataset_version"
+      ],
+      "quality_gates": [
+        "terminal task execution claims require a declared test script and oracle before run",
+        "sandbox backend, timeout, resource budget and cleanup policy are explicit",
+        "stdout, stderr and exit code are captured as replay evidence",
+        "dataset version is pinned for comparison across agents or models"
+      ],
+      "must_not": [
+        "run terminal benchmarks on unrestricted host shell",
+        "execute unreviewed setup commands without owner approval",
+        "claim pass without oracle and exit code evidence"
+      ]
     }
   ],
   "loop_contracts": [
@@ -489,7 +803,8 @@
       "source_refs": [
         "temporal",
         "pydantic-ai",
-        "langgraph"
+        "langgraph",
+        "prefect"
       ],
       "required_fields": [
         "workflow_id",
@@ -552,7 +867,8 @@
         "openai-agents-python",
         "openhands",
         "swe-agent",
-        "smolagents"
+        "smolagents",
+        "mini-swe-agent"
       ],
       "required_fields": [
         "workspace_boundary",
@@ -612,7 +928,9 @@
       "owner": "agent-dev-kit",
       "source_refs": [
         "google-adk-python",
-        "langgraph"
+        "langgraph",
+        "argo-workflows",
+        "prefect"
       ],
       "required_fields": [
         "workflow_id",
@@ -635,13 +953,49 @@
       ]
     },
     {
+      "id": "reproducible-execution-pipeline-v1",
+      "owner": "agent-dev-kit",
+      "source_refs": [
+        "dagger",
+        "argo-workflows",
+        "prefect",
+        "dagster"
+      ],
+      "required_fields": [
+        "pipeline_id",
+        "local_ci_parity",
+        "container_or_runtime_spec",
+        "dag_or_step_graph",
+        "artifact_inputs",
+        "artifact_outputs",
+        "cache_policy",
+        "trace_export_policy",
+        "schedule_policy",
+        "retry_policy",
+        "archive_policy",
+        "rollback_path"
+      ],
+      "quality_gates": [
+        "pipeline claims declare local and CI parity before promotion",
+        "artifact inputs and outputs are named before execution",
+        "trace export, archive and rollback policies are present before scheduled automation",
+        "container or runtime spec requires owner approval before any execution"
+      ],
+      "must_not": [
+        "require a hosted service for baseline ADK verification",
+        "mutate production resources from report-only pipeline definitions",
+        "run background jobs without owner, schedule and stop policy"
+      ]
+    },
+    {
       "id": "coding-repair-loop-v1",
       "owner": "agent-dev-kit",
       "source_refs": [
         "aider",
         "swe-agent",
         "openhands",
-        "swe-bench"
+        "swe-bench",
+        "mini-swe-agent"
       ],
       "required_fields": [
         "repo_map_evidence",
@@ -673,7 +1027,11 @@
       "source_refs": [
         "openai-agents-python",
         "openhands",
-        "smolagents"
+        "smolagents",
+        "mini-swe-agent",
+        "swe-rex",
+        "webarena",
+        "osworld"
       ],
       "required_fields": [
         "filesystem_scope",
@@ -699,6 +1057,40 @@
   ],
   "observability_contracts": [
     {
+      "id": "artifact-lineage-evidence-contract-v1",
+      "owner": "agent-dev-kit",
+      "source_refs": [
+        "dagger",
+        "dagster",
+        "argo-workflows",
+        "inspect-evals"
+      ],
+      "required_fields": [
+        "artifact_id",
+        "source_input",
+        "producer_step",
+        "consumer_step",
+        "version_or_digest",
+        "materialization_time",
+        "metadata_schema",
+        "quality_check",
+        "retention_policy",
+        "supersedes",
+        "evidence_path"
+      ],
+      "quality_gates": [
+        "artifact evidence links producer step, consumer step and source input",
+        "version or digest is recorded before artifact reuse",
+        "quality check, retention policy and supersedes relation are explicit",
+        "evidence path exists before artifact-backed completion claims"
+      ],
+      "must_not": [
+        "store unversioned evidence as reusable artifact",
+        "overwrite artifacts without supersedes linkage",
+        "hide generated artifacts outside report or evidence paths"
+      ]
+    },
+    {
       "id": "trace-eval-evidence-bundle-v1",
       "owner": "agent-dev-kit",
       "source_refs": [
@@ -706,7 +1098,8 @@
         "phoenix",
         "promptfoo",
         "deepeval",
-        "ragas"
+        "ragas",
+        "inspect-evals"
       ],
       "required_fields": [
         "trace_id",
@@ -801,6 +1194,9 @@
     "durable_execution_requires_replay_idempotency_timeout": true,
     "typed_hitl_graph_requires_schema_decision_resume": true,
     "coding_repair_requires_repo_map_lint_test_budget": true,
+    "sandbox_terminal_requires_test_oracle_timeout": true,
+    "reproducible_pipeline_requires_local_ci_parity_trace": true,
+    "artifact_lineage_requires_digest_quality_retention": true,
     "trace_eval_bundle_requires_dataset_prompt_score": true,
     "trace_storage_requires_redaction_policy": true,
     "failure_replay_required_for_harness_and_loop_claims": true

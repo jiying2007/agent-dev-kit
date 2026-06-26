@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0.0",
+  "description": "Negative fixture: sandbox terminal harness is missing oracle_solution and must be rejected.",
+  "runtime_enabled": false,
+  "fixture_mode": "method-only",
+  "expected_failure": "fixture sandbox_terminal_harness missing field: oracle_solution",
+  "sandbox_terminal_harness": {
+    "task_instruction": "Create a deterministic text artifact and verify its content without network access.",
+    "sandbox_backend": "workspace-tempdir",
+    "setup_command": "printf 'ready\\n' > build/harness-loop/terminal-task.txt",
+    "agent_command": "printf 'ADK harness fixture\\n' > build/harness-loop/result.txt",
+    "test_script": "grep -q 'ADK harness fixture' build/harness-loop/result.txt",
+    "timeout_policy": {
+      "seconds": 30,
+      "on_timeout": "fail-and-capture-output"
+    },
+    "resource_budget": {
+      "max_processes": 1,
+      "max_network": "disabled",
+      "max_disk_mb": 5
+    },
+    "stdout_stderr_capture": {
+      "stdout_path": "build/harness-loop/stdout.log",
+      "stderr_path": "build/harness-loop/stderr.log",
+      "redaction": "no secrets expected; still redact tokens before archive"
+    },
+    "exit_code_policy": {
+      "pass": 0,
+      "nonzero": "fail"
+    },
+    "cleanup_policy": "remove build/harness-loop unless evidence retention is requested",
+    "dataset_version": "synthetic-local-v1"
+  }
+}

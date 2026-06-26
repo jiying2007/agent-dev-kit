@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0.0",
+  "description": "Negative fixture: reproducible execution pipeline is missing local_ci_parity and must be rejected.",
+  "runtime_enabled": false,
+  "fixture_mode": "method-only",
+  "expected_failure": "fixture reproducible_execution_pipeline missing field: local_ci_parity",
+  "reproducible_execution_pipeline": {
+    "pipeline_id": "harness-loop-negative-fixture-v1",
+    "container_or_runtime_spec": "none; shell-only contract validation",
+    "dag_or_step_graph": [
+      {
+        "step_id": "read-manifest",
+        "produces": [
+          "manifest-contract-index"
+        ]
+      }
+    ],
+    "artifact_inputs": [
+      "manifests/harness_loop_engineering_contracts.json"
+    ],
+    "artifact_outputs": [
+      "summary-json status"
+    ],
+    "cache_policy": "no cache; read current tracked files",
+    "trace_export_policy": {
+      "trace_id": "harness-loop-negative-fixture-trace",
+      "redaction": "store command names and status only"
+    },
+    "schedule_policy": "manual only",
+    "retry_policy": {
+      "attempts": 1,
+      "retry_on": []
+    },
+    "archive_policy": "retain report path and command status; do not store raw secrets",
+    "rollback_path": "remove fixture path and manifest fixture reference"
+  }
+}
