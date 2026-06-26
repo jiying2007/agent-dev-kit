@@ -1,11 +1,180 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-06-25",
+  "last_updated": "2026-06-26",
   "status": "report-only",
   "default_mode": "method-only",
   "reference_boundary": "External harness and loop engineering repositories are absorbed as contracts, vocabulary, evidence fields and gate shapes only. This manifest does not clone, install, import, execute, start daemons, register hooks, enable MCP servers or turn on external runtimes.",
   "report": "../reports/harness-loop-engineering-adoption-candidates-2026-06-25.md",
+  "supplemental_reports": [
+    "../reports/harness-loop-engineering-adoption-candidates-2026-06-26.md"
+  ],
   "source_refs": [
+    {
+      "id": "temporal",
+      "title": "Temporal",
+      "repo": "temporalio/temporal",
+      "url": "https://github.com/temporalio/temporal",
+      "retrieved_at": "2026-06-26",
+      "priority": "P0",
+      "track_mode": "adopt-contract",
+      "decision": "adopt-method-only",
+      "evidence_strength": "high",
+      "runtime_enabled": false,
+      "absorb_target": [
+        "durable-execution-contract-v1"
+      ],
+      "notes": "Use durable execution, workflow history, activity boundary, retry, timeout, cancellation and idempotency vocabulary. Do not run Temporal server, workers or SDK runtime."
+    },
+    {
+      "id": "pydantic-ai",
+      "title": "PydanticAI",
+      "repo": "pydantic/pydantic-ai",
+      "url": "https://github.com/pydantic/pydantic-ai",
+      "retrieved_at": "2026-06-26",
+      "priority": "P0",
+      "track_mode": "adopt-contract",
+      "decision": "adopt-method-only",
+      "evidence_strength": "high",
+      "runtime_enabled": false,
+      "absorb_target": [
+        "typed-hitl-graph-contract-v1",
+        "durable-execution-contract-v1"
+      ],
+      "notes": "Use typed agent dependencies, durable agents, graph support and human approval vocabulary as contract fields only."
+    },
+    {
+      "id": "langfuse",
+      "title": "Langfuse",
+      "repo": "langfuse/langfuse",
+      "url": "https://github.com/langfuse/langfuse",
+      "retrieved_at": "2026-06-26",
+      "priority": "P0",
+      "track_mode": "adopt-contract",
+      "decision": "adopt-method-only",
+      "evidence_strength": "high",
+      "runtime_enabled": false,
+      "absorb_target": [
+        "trace-eval-evidence-bundle-v1"
+      ],
+      "notes": "Use trace, dataset, prompt version, score and regression evidence bundle shape. Do not run the service, database, UI or telemetry."
+    },
+    {
+      "id": "aider",
+      "title": "Aider",
+      "repo": "Aider-AI/aider",
+      "url": "https://github.com/Aider-AI/aider",
+      "retrieved_at": "2026-06-26",
+      "priority": "P0",
+      "track_mode": "adopt-contract",
+      "decision": "adopt-method-only",
+      "evidence_strength": "high",
+      "runtime_enabled": false,
+      "absorb_target": [
+        "coding-repair-loop-v1",
+        "coding-agent-loop-v1"
+      ],
+      "notes": "Use repo map, git diff, lint/test and repair-loop evidence shape. Do not adopt automatic commit or model runtime defaults."
+    },
+    {
+      "id": "mastra",
+      "title": "Mastra",
+      "repo": "mastra-ai/mastra",
+      "url": "https://github.com/mastra-ai/mastra",
+      "retrieved_at": "2026-06-26",
+      "priority": "P0",
+      "track_mode": "adopt-contract",
+      "decision": "adopt-method-only",
+      "evidence_strength": "high",
+      "runtime_enabled": false,
+      "absorb_target": [
+        "typed-hitl-graph-contract-v1",
+        "workflow-state-contract-v1"
+      ],
+      "notes": "Use workflow graph, suspend/resume, HITL and eval/observability vocabulary. Do not run npm, studio, MCP servers or endpoints."
+    },
+    {
+      "id": "semantic-kernel",
+      "title": "Semantic Kernel",
+      "repo": "microsoft/semantic-kernel",
+      "url": "https://github.com/microsoft/semantic-kernel",
+      "retrieved_at": "2026-06-26",
+      "priority": "P1",
+      "track_mode": "observe-method-only",
+      "decision": "observe-method-only",
+      "evidence_strength": "medium",
+      "runtime_enabled": false,
+      "absorb_target": [
+        "workflow-state-contract-v1",
+        "sandbox-boundary-contract-v1"
+      ],
+      "notes": "Use process framework, plugin and multi-agent orchestration vocabulary only; account for Microsoft Agent Framework migration boundary."
+    },
+    {
+      "id": "haystack",
+      "title": "Haystack",
+      "repo": "deepset-ai/haystack",
+      "url": "https://github.com/deepset-ai/haystack",
+      "retrieved_at": "2026-06-26",
+      "priority": "P1",
+      "track_mode": "observe-method-only",
+      "decision": "observe-method-only",
+      "evidence_strength": "medium",
+      "runtime_enabled": false,
+      "absorb_target": [
+        "workflow-state-contract-v1"
+      ],
+      "notes": "Use explicit context pipeline vocabulary around retrieval, routing, memory, generation, branches and loops. Do not import RAG framework runtime."
+    },
+    {
+      "id": "ragas",
+      "title": "Ragas",
+      "repo": "vibrantlabsai/ragas",
+      "url": "https://github.com/vibrantlabsai/ragas",
+      "retrieved_at": "2026-06-26",
+      "priority": "P1",
+      "track_mode": "observe-method-only",
+      "decision": "observe-method-only",
+      "evidence_strength": "medium",
+      "runtime_enabled": false,
+      "absorb_target": [
+        "trace-eval-evidence-bundle-v1",
+        "agent-eval-ci-gate-v1"
+      ],
+      "notes": "Use metric, test-data generation and feedback-loop vocabulary as optional eval reference; agent/workflow eval templates remain watch-only."
+    },
+    {
+      "id": "crewai",
+      "title": "CrewAI",
+      "repo": "crewAIInc/crewAI",
+      "url": "https://github.com/crewAIInc/crewAI",
+      "retrieved_at": "2026-06-26",
+      "priority": "P1",
+      "track_mode": "observe-method-only",
+      "decision": "observe-method-only",
+      "evidence_strength": "medium",
+      "runtime_enabled": false,
+      "absorb_target": [
+        "workflow-state-contract-v1",
+        "typed-hitl-graph-contract-v1"
+      ],
+      "notes": "Use crews versus flows separation and role/task vocabulary only. Do not adopt cloud control plane, scaffolding or package runtime."
+    },
+    {
+      "id": "continue",
+      "title": "Continue",
+      "repo": "continuedev/continue",
+      "url": "https://github.com/continuedev/continue",
+      "retrieved_at": "2026-06-26",
+      "priority": "P2",
+      "track_mode": "historical-reference-only",
+      "decision": "observe-method-only",
+      "evidence_strength": "low",
+      "runtime_enabled": false,
+      "absorb_target": [
+        "coding-agent-loop-v1"
+      ],
+      "notes": "Use coding context and IDE boundary as historical reference only; repository maintenance status prevents active tracking."
+    },
     {
       "id": "google-adk-python",
       "title": "Google Agent Development Kit for Python",
@@ -315,6 +484,38 @@
   ],
   "loop_contracts": [
     {
+      "id": "durable-execution-contract-v1",
+      "owner": "agent-dev-kit",
+      "source_refs": [
+        "temporal",
+        "pydantic-ai",
+        "langgraph"
+      ],
+      "required_fields": [
+        "workflow_id",
+        "state_history",
+        "deterministic_replay_policy",
+        "activity_boundary",
+        "retry_policy",
+        "timeout_policy",
+        "cancellation_policy",
+        "idempotency_key",
+        "failure_replay",
+        "recovery_owner"
+      ],
+      "quality_gates": [
+        "durable execution claims include replayable state history and deterministic replay policy",
+        "external side effects are isolated behind activity boundaries",
+        "retry, timeout and cancellation policies are declared before execution",
+        "idempotency evidence is present for repeated or resumed actions"
+      ],
+      "must_not": [
+        "claim durability from narrative state only",
+        "retry side effects without idempotency key",
+        "resume without recovery owner and failure replay evidence"
+      ]
+    },
+    {
       "id": "durable-agent-loop-v1",
       "owner": "agent-dev-kit",
       "source_refs": [
@@ -376,6 +577,37 @@
       ]
     },
     {
+      "id": "typed-hitl-graph-contract-v1",
+      "owner": "agent-dev-kit",
+      "source_refs": [
+        "pydantic-ai",
+        "mastra",
+        "langgraph"
+      ],
+      "required_fields": [
+        "graph_node_id",
+        "typed_input_schema",
+        "typed_output_schema",
+        "dependency_context",
+        "tool_approval_request",
+        "human_decision_record",
+        "resume_point",
+        "state_storage_policy",
+        "validation_error_policy"
+      ],
+      "quality_gates": [
+        "graph nodes declare typed input and output schemas before execution",
+        "human approval requests record requested action, risk and allowed decisions",
+        "resume points and state storage policy are available before HITL suspension",
+        "validation failures have an explicit repair or handoff policy"
+      ],
+      "must_not": [
+        "resume a human-gated flow without a recorded decision",
+        "hide schema validation failures in free-form notes",
+        "store graph state without a reviewed storage policy"
+      ]
+    },
+    {
       "id": "workflow-state-contract-v1",
       "owner": "agent-dev-kit",
       "source_refs": [
@@ -400,6 +632,39 @@
       "must_not": [
         "encode routing only in prose when a manifest contract is available",
         "fan out without join ownership"
+      ]
+    },
+    {
+      "id": "coding-repair-loop-v1",
+      "owner": "agent-dev-kit",
+      "source_refs": [
+        "aider",
+        "swe-agent",
+        "openhands",
+        "swe-bench"
+      ],
+      "required_fields": [
+        "repo_map_evidence",
+        "edit_scope",
+        "patch_artifact",
+        "lint_command",
+        "test_command",
+        "failure_observation",
+        "repair_attempt_budget",
+        "git_diff_review",
+        "rollback_path",
+        "completion_evidence"
+      ],
+      "quality_gates": [
+        "coding loop captures repo map or equivalent codebase context before edit",
+        "patch scope, lint command, test command and rollback path are known before repair",
+        "failed lint or test output is recorded as the next repair observation",
+        "completion requires git diff review and command evidence"
+      ],
+      "must_not": [
+        "auto-commit or merge without owner policy",
+        "repair indefinitely without attempt budget",
+        "claim completion without lint or test evidence when such commands exist"
       ]
     },
     {
@@ -433,6 +698,40 @@
     }
   ],
   "observability_contracts": [
+    {
+      "id": "trace-eval-evidence-bundle-v1",
+      "owner": "agent-dev-kit",
+      "source_refs": [
+        "langfuse",
+        "phoenix",
+        "promptfoo",
+        "deepeval",
+        "ragas"
+      ],
+      "required_fields": [
+        "trace_id",
+        "dataset_id",
+        "prompt_version",
+        "eval_run_id",
+        "score_schema",
+        "metric_threshold",
+        "production_feedback_source",
+        "redaction_policy",
+        "evidence_bundle_path",
+        "regression_link"
+      ],
+      "quality_gates": [
+        "eval evidence links trace, dataset, prompt version and score schema",
+        "metric thresholds and regression links are declared before promotion",
+        "production feedback sources are redacted and classified before storage",
+        "evidence bundle path exists for completion and routing claims"
+      ],
+      "must_not": [
+        "compare eval runs without dataset and prompt version",
+        "store raw production traces without redaction policy",
+        "promote an agent loop from aggregate score alone"
+      ]
+    },
     {
       "id": "trace-observability-contract-v1",
       "owner": "agent-dev-kit",
@@ -499,6 +798,10 @@
     "each_contract_requires_at_least_one_p0_source": true,
     "eval_cases_require_positive_and_negative_examples": true,
     "durable_loop_requires_checkpoint_and_stop_condition": true,
+    "durable_execution_requires_replay_idempotency_timeout": true,
+    "typed_hitl_graph_requires_schema_decision_resume": true,
+    "coding_repair_requires_repo_map_lint_test_budget": true,
+    "trace_eval_bundle_requires_dataset_prompt_score": true,
     "trace_storage_requires_redaction_policy": true,
     "failure_replay_required_for_harness_and_loop_claims": true
   },
