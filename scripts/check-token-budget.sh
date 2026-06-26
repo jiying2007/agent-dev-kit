@@ -204,6 +204,11 @@ require_context_text "$ROOT_DIR/docs/runbooks/token-context-governance.md" 'dock
 require_context_text "$ROOT_DIR/docs/runbooks/token-context-governance.md" '不得压缩' 'no-compression boundary'
 require_context_text "$ROOT_DIR/docs/runbooks/token-context-governance.md" '上下文预算模式' 'context budget modes'
 require_context_text "$ROOT_DIR/docs/runbooks/token-context-governance.md" 'CTX_PRESSURE' 'handoff pressure guidance'
+require_context_text "$ROOT_DIR/docs/runbooks/token-context-governance.md" 'incremental compression' 'incremental compression boundary'
+require_context_text "$ROOT_DIR/docs/runbooks/token-context-governance.md" 'whole-context compression' 'whole-context compression boundary'
+require_context_text "$ROOT_DIR/docs/runbooks/token-context-governance.md" 'deterministic pre-filter' 'deterministic pre-filter'
+require_context_text "$ROOT_DIR/docs/runbooks/token-context-governance.md" 'stable key' 'stable key preservation'
+require_context_text "$ROOT_DIR/docs/runbooks/token-context-governance.md" '被保护条目' 'protected entry summary'
 
 status="pass"
 if [[ "${#failures[@]}" -gt 0 ]]; then

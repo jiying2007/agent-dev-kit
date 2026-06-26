@@ -128,6 +128,15 @@ bash scripts/devkit.sh openai-runtime-capabilities --summary-json
 bash scripts/devkit.sh openai-runtime-capabilities --fixture fixtures/openai-runtime-capabilities/pass/permission-safe-profile.json
 ```
 
+## harness-loop-engineering
+
+检查外部 harness/loop engineering 合同门禁。该命令确认 repo-task eval、CI gate、durable loop、coding agent loop、trace observability 和 guardrail handoff 只作为 method-only 证据吸收，不启用外部 runtime、hook、daemon 或自动写操作。
+
+```bash
+bash scripts/devkit.sh harness-loop-engineering
+bash scripts/devkit.sh harness-loop-engineering --summary-json
+```
+
 ## workflow-closure
 
 检查 workflow 引用的 agent/skill 是否都在目标 profile 闭包内。

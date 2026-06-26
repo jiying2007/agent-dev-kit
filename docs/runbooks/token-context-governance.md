@@ -21,6 +21,14 @@
 
 依赖图、调用图、代码地图或 review graph 可以作为 `scope_read` 候选来源，但不能替代源码审查。使用这类索引时必须记录生成时间、语言/目录覆盖范围、已知漏报风险和 raw fallback；高风险改动仍需回读调用方、测试、配置和权限边界。
 
+## 增量压缩与保护边界
+
+长线程摘要优先采用 incremental compression：先处理新增片段，再更新对应阶段摘要；不得等上下文接近上限后做一次性 whole-context compression。任何压缩层都必须保留 `raw_evidence`、`confidence`、`fallback_condition` 和 stable key，避免摘要层之间失去可追溯身份。
+
+进入摘要前先做 deterministic pre-filter。寒暄、确认、分隔符、重复工具输出和重复文件读取可以折叠；用户纠正、明确决策、任务进度、执行日志、路径/API 变更和未完成任务不得被噪音过滤吞掉。若保护条目与去重或摘要冲突，优先保留保护条目的原文入口，并把冲突写入 excluded context 或风险台账。
+
+压缩摘要不得只留下结论。每个阶段摘要至少说明：本阶段目标、已完成动作、未闭环风险、被保护条目、失效旧目标、下一步读取层级和原文回退入口。若摘要无法回答这些问题，必须回退 L2/L3，而不是继续叠加摘要。
+
 ## Memory Search 渐进披露
 
 `memory-search-progressive-disclosure-v1` 只作为只读检索能力落地，不启用外部 worker、hook、本地 HTTP 服务、向量数据库写入或自动记忆采集。默认流程按 `search_index -> timeline_context -> observation_details` 逐层披露，任何长期记忆写入仍需单独的 owner review、脱敏状态和可回滚证据。

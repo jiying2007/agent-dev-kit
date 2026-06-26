@@ -40,6 +40,19 @@ Agent 记忆只保存可复用经验，不保存噪声。任务结束后先做 A
 
 外部长期记忆层进入候选前，必须先写清 backend capability matrix：`data_model`、`query_mode`、`transaction_consistency`、`namespace_isolation`、`backup/rollback`、`audit` 和 `resource_cost`。数据库、向量、图谱、MCP 或跨工具索引的选型不能只依据教程、榜单或厂商能力声明；未完成 owner、license、版本锚点、凭据边界和回滚审查前保持 `report-only`。
 
+backend capability matrix 还必须覆盖下列字段，避免把记忆产品或论文概念直接提升为运行时：
+
+| 字段 | 必须回答的问题 |
+|---|---|
+| `temporal_strata` | 是否区分片段、会话、日报、周报、画像等时间层级；层级只影响检索候选，不得绕过证据审查。 |
+| `lifecycle_model` | raw/research、engineering、archive 等状态如何流转；每次晋升需要哪些验证和回退证据。 |
+| `retrieval_fusion` | 语义、关键词、时间、可信度、热度或图关系如何合成；必须返回命中理由和 raw fallback。 |
+| `deterministic_pre_filter` | 写入或摘要前哪些噪音、纠正、决策、进度、执行日志信号由规则识别，而不是交给 LLM 自行判断。 |
+| `identity_keys` | 计划、进度、决策、纠正和执行日志如何生成稳定 key；冲突时如何做 `ADD`、`UPDATE`、`DELETE` 或 `NONE` 判定。 |
+| `graph_topology` | 图谱节点、边、孤立节点和过时关系如何维护；图谱只能辅助召回，不能替代来源证据。 |
+| `offline_sync` | 离线缓存、端云同步和冲突合并的真相源、幂等性、审计日志与失败回滚方式。 |
+| `purge_semantics` | 删除、降权、哈希化、墓碑和物理清除分别代表什么；hash-only tombstone 不能单独声明为合规删除。 |
+
 长期记忆层必须区分 resident memory 与 retrievable memory。resident memory 只保留少量稳定规则和偏好；retrievable memory 负责历史事实、长会话、关系和证据召回。引入外部层前必须声明写入触发条件、召回融合与去重策略、token 裁剪规则、memory scope、备份路径和审计路径。
 
 ## 策略选择
@@ -57,6 +70,8 @@ Agent 记忆只保存可复用经验，不保存噪声。任务结束后先做 A
 默认混合策略：短期任务保留结构化状态和必要原文入口；长期只保存事实抽取、失败教训和流程规则候选；语义检索只负责找候选，不负责直接改写行为。
 
 记忆写入分两步：先从原始对话、日志或归档中抽取可审计 facts，再基于当前旧记忆和 new facts 做变更判定。判定事件必须是 `ADD`、`UPDATE`、`DELETE` 或 `NONE` 之一，并记录来源、旧值、冲突、风险和审计说明；不得把原始聊天、检索结果或 LLM 摘要直接写入长期记忆。
+
+写入前先做 deterministic pre-filter：寒暄、确认、分隔符和重复工具输出默认不生成长期候选；用户纠正、明确决策、任务进度、执行日志和路径/API 变更必须保留来源与 stable identity key。LLM 可以帮助摘要，但不能决定是否覆盖旧候选；覆盖、追加、阻断和删除必须由可审计规则和 owner review 共同约束。
 
 外部记忆工具只能在 AGENTS、项目地图、阶段摘要和归档索引仍不足以支撑跨会话连续性时升级。升级前先区分需求是 continuity pack 还是 historical search：前者优化下一轮继续执行所需的目标、约束、阻塞和完成标准；后者优化跨会话查找历史证据。两者都必须保留 `raw_evidence`、来源置信度和回退路径。
 
