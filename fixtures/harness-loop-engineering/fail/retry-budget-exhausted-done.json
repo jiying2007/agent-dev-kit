@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0.0",
+  "description": "Negative fixture: durable agent loop exhausted its retry budget but still claims done.",
+  "runtime_enabled": false,
+  "fixture_mode": "method-only",
+  "expected_failure": "fixture durable_agent_loop invalid completion: retry_budget_exhausted cannot be done",
+  "durable_agent_loop": {
+    "state_schema": {
+      "states": [
+        "queued",
+        "running",
+        "blocked",
+        "done"
+      ]
+    },
+    "transition_edges": [
+      "queued -> running",
+      "running -> blocked",
+      "blocked -> done"
+    ],
+    "checkpoint_policy": "checkpoint after each attempt",
+    "resume_policy": "resume only from last successful checkpoint",
+    "retry_budget": {
+      "max_attempts": 3,
+      "attempts_used": 3,
+      "remaining_attempts": 0,
+      "exhausted": true
+    },
+    "stop_condition": "stop when retry budget is exhausted or validation passes",
+    "human_gate": "owner review required after exhausted retries",
+    "failure_replay": "replay failing attempt before any completion claim",
+    "completion_status": "done"
+  }
+}

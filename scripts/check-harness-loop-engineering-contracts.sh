@@ -374,9 +374,13 @@ else:
 
 fixture_sections = {
     "sandbox-terminal-harness-v1": "sandbox_terminal_harness",
+    "durable-agent-loop-v1": "durable_agent_loop",
+    "durable-execution-contract-v1": "durable_execution",
+    "coding-repair-loop-v1": "coding_repair_loop",
     "reproducible-execution-pipeline-v1": "reproducible_execution_pipeline",
     "artifact-lineage-evidence-contract-v1": "artifact_lineage_evidence",
 }
+default_fixture_contracts = tuple(fixture.get("covers", []))
 
 
 def validate_fixture_data(data, selected_contracts=None):
@@ -388,13 +392,46 @@ def validate_fixture_data(data, selected_contracts=None):
 
     local_check(data.get("runtime_enabled") is False, "fixture data must keep runtime_enabled=false")
     local_check(data.get("fixture_mode") == "method-only", "fixture data must be method-only")
-    contracts = selected_contracts or tuple(fixture_sections.keys())
+    contracts = selected_contracts or default_fixture_contracts
     for contract_id in contracts:
         section_name = fixture_sections[contract_id]
         section = data.get(section_name, {})
         local_check(isinstance(section, dict), f"fixture section must be object: {section_name}")
         for field in required_fields[contract_id]:
             local_check(field in section and section[field] not in ("", None, []), f"fixture {section_name} missing field: {field}")
+        if section_name == "durable_agent_loop":
+            retry_budget = section.get("retry_budget", {})
+            completion_status = section.get("completion_status") or section.get("status")
+            retry_exhausted = isinstance(retry_budget, dict) and (
+                retry_budget.get("exhausted") is True or retry_budget.get("remaining_attempts") == 0
+            )
+            local_check(
+                not (retry_exhausted and completion_status in ("done", "completed", "pass", "passed")),
+                "fixture durable_agent_loop invalid completion: retry_budget_exhausted cannot be done",
+            )
+        if section_name == "durable_execution":
+            heartbeat_status = section.get("heartbeat_status", {})
+            completion_status = section.get("completion_status") or section.get("status")
+            heartbeat_stale = isinstance(heartbeat_status, dict) and heartbeat_status.get("state") == "stale"
+            local_check(
+                not (heartbeat_stale and completion_status in ("done", "completed", "pass", "passed")),
+                "fixture durable_execution invalid completion: heartbeat_stale cannot be done",
+            )
+        if section_name == "coding_repair_loop":
+            completion_evidence = section.get("completion_evidence", {})
+            completion_status = completion_evidence.get("status") if isinstance(completion_evidence, dict) else None
+            artifact_lineage_required = (
+                isinstance(completion_evidence, dict)
+                and completion_evidence.get("artifact_lineage_required") is True
+            )
+            local_check(
+                not (
+                    artifact_lineage_required
+                    and completion_status in ("done", "completed", "pass", "passed")
+                    and "artifact_lineage_evidence" not in data
+                ),
+                "fixture coding_repair_loop completion missing artifact_lineage_evidence",
+            )
     return local_failures
 
 
@@ -457,6 +494,7 @@ for rule in (
     "method_only_default",
     "positive_and_negative_examples",
     "expected_failure_must_match_gate_output",
+    "failure_state_must_not_enter_done",
     "source_mapping_required",
 ):
     check(rule in fixture_authoring.get("authoring_rules", []), f"fixture_authoring authoring_rules missing: {rule}")
@@ -506,6 +544,7 @@ for key in (
     "trace_eval_bundle_requires_dataset_prompt_score",
     "trace_storage_requires_redaction_policy",
     "failure_replay_required_for_harness_and_loop_claims",
+    "failure_state_must_not_enter_done",
 ):
     check(gate.get(key) is True, f"quality_gate {key} must be true")
 

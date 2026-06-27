@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0.0",
+  "description": "Negative fixture: durable execution heartbeat is stale but workflow still claims done.",
+  "runtime_enabled": false,
+  "fixture_mode": "method-only",
+  "expected_failure": "fixture durable_execution invalid completion: heartbeat_stale cannot be done",
+  "durable_execution": {
+    "workflow_id": "harness-loop-stale-heartbeat-negative-v1",
+    "state_history": [
+      "started",
+      "activity-running",
+      "heartbeat-stale",
+      "done"
+    ],
+    "deterministic_replay_policy": "replay state history before completion",
+    "activity_boundary": "single synthetic activity",
+    "retry_policy": {
+      "attempts": 1,
+      "retry_on": []
+    },
+    "timeout_policy": {
+      "heartbeat_timeout_seconds": 120,
+      "on_timeout": "blocked"
+    },
+    "cancellation_policy": "cancel stale activity before retry",
+    "idempotency_key": "harness-loop-stale-heartbeat-negative-v1",
+    "failure_replay": "capture stale heartbeat before status transition",
+    "recovery_owner": "adk-maintainer",
+    "heartbeat_status": {
+      "state": "stale",
+      "last_seen_age_seconds": 900,
+      "max_age_seconds": 120
+    },
+    "completion_status": "done"
+  }
+}

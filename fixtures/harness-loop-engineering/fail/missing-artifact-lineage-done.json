@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0.0",
+  "description": "Negative fixture: coding repair loop claims done without artifact lineage evidence.",
+  "runtime_enabled": false,
+  "fixture_mode": "method-only",
+  "expected_failure": "fixture coding_repair_loop completion missing artifact_lineage_evidence",
+  "coding_repair_loop": {
+    "repo_map_evidence": "synthetic repo map path",
+    "edit_scope": "single fixture-only change",
+    "patch_artifact": "synthetic patch id",
+    "lint_command": "rtk git diff --check",
+    "test_command": "rtk bash agent-dev-kit/scripts/check-harness-loop-engineering-contracts.sh",
+    "failure_observation": "missing artifact lineage should block completion",
+    "repair_attempt_budget": {
+      "max_attempts": 1,
+      "remaining_attempts": 0
+    },
+    "git_diff_review": "reviewed synthetic diff",
+    "rollback_path": "remove fixture path and manifest fixture reference",
+    "completion_evidence": {
+      "status": "done",
+      "artifact_lineage_required": true
+    }
+  }
+}
