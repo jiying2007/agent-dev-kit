@@ -25,8 +25,9 @@ require_file "templates/memory/after-action-review.md"
 require_file "templates/memory/memory-candidate.md"
 require_file "docs/runbooks/memory-governance.md"
 require_file "tests/fixtures/context/protected-key-collision-negative.md"
+require_file "tests/fixtures/memory/archive-lifecycle-promotion-negative.md"
 
-for field in id stable_identity_key protected_entry_class scope type risk confidence status created_at last_verified next_review_by source evidence content reusable_when write_route requires_user_confirmation duplicate_key_status; do
+for field in id stable_identity_key protected_entry_class scope type risk confidence status created_at last_verified next_review_by source evidence content reusable_when write_route requires_user_confirmation duplicate_key_status lifecycle_state requested_promotion owner_review rollback_path; do
   require_text "templates/memory/memory-candidate.md" "^${field}:"
 done
 
@@ -59,6 +60,9 @@ require_text "docs/runbooks/memory-governance.md" "hash-only tombstone"
 require_text "docs/runbooks/memory-governance.md" "stable identity key"
 require_text "docs/runbooks/memory-governance.md" "protected_entry_class"
 require_text "docs/runbooks/memory-governance.md" "duplicate_key_status: collision"
+require_text "docs/runbooks/memory-governance.md" "research -> engineering -> archive"
+require_text "docs/runbooks/memory-governance.md" "owner_review"
+require_text "docs/runbooks/memory-governance.md" "rollback_path"
 
 for token in correction decision progress execution-log stable_identity_key duplicate_key_status contradiction_status conflict_review raw_evidence expected_failure; do
   require_text "tests/fixtures/context/protected-key-collision-negative.md" "$token"
@@ -66,6 +70,14 @@ done
 
 if rg -q "promotion_action: auto_promote_candidate|promotion_action: promoted" "$ROOT_DIR/tests/fixtures/context/protected-key-collision-negative.md"; then
   fail "protected key collision fixture must not auto-promote duplicate keys"
+fi
+
+for token in research engineering archive lifecycle_state requested_promotion raw_evidence owner_review rollback_path expected_failure "promotion_action: blocked"; do
+  require_text "tests/fixtures/memory/archive-lifecycle-promotion-negative.md" "$token"
+done
+
+if rg -q "promotion_action: auto_promote_candidate|promotion_action: promoted" "$ROOT_DIR/tests/fixtures/memory/archive-lifecycle-promotion-negative.md"; then
+  fail "archive lifecycle promotion fixture must not promote incomplete candidates"
 fi
 
 echo "[PASS] memory governance"

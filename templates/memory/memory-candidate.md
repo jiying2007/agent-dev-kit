@@ -20,6 +20,8 @@ content:
 reusable_when:
 promotion_score:
 promotion_action: review | conflict_review | blocked | auto_promote_candidate | promoted | discard
+lifecycle_state: research | engineering | archive
+requested_promotion: none | engineering | archive
 safety_filter:
 write_route:
 requires_user_confirmation:
@@ -28,6 +30,8 @@ conflicts_with:
 duplicate_key_status:
 contradiction_status: none | duplicate | stale | conflicts_with | supersedes | missing_evidence | conflict_review
 raw_evidence:
+owner_review:
+rollback_path:
 owner:
 notes:
 
@@ -41,6 +45,7 @@ notes:
 - stable_identity_key 已记录；纠正、决策、进度和执行日志必须带 protected_entry_class:
 - 旧记忆、新事实和原始证据入口已记录:
 - active 候选至少有一个 evidence 或 raw_evidence 路径:
+- 请求晋升到 engineering / archive 的候选已记录 raw_evidence、owner_review 和 rollback_path:
 - duplicate_key_status 已标记；同 key 冲突不得自动晋升:
 - contradiction_status 已标记；冲突项进入 conflict_review:
 - 评分依据、作用域和跨会话重复证据已记录:

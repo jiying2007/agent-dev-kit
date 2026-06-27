@@ -11,7 +11,7 @@ grep -q '"status":"pass"' "$OUT_FILE" || {
   echo "[FAIL] token context governance summary did not pass" >&2
   exit 1
 }
-grep -q '"context_governance_assets":9' "$OUT_FILE" || {
+grep -q '"context_governance_assets":10' "$OUT_FILE" || {
   echo "[FAIL] token context governance assets not counted" >&2
   exit 1
 }

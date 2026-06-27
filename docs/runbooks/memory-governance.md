@@ -53,6 +53,8 @@ backend capability matrix 还必须覆盖下列字段，避免把记忆产品或
 | `offline_sync` | 离线缓存、端云同步和冲突合并的真相源、幂等性、审计日志与失败回滚方式。 |
 | `purge_semantics` | 删除、降权、哈希化、墓碑和物理清除分别代表什么；hash-only tombstone 不能单独声明为合规删除。 |
 
+`research -> engineering -> archive` 晋升必须同时记录 `raw_evidence`、`owner_review` 和 `rollback_path`。任一缺失时，候选固定进入 `contradiction_status: missing_evidence` 与 `promotion_action: blocked`，不得晋升为工程规则、归档事实或长期默认记忆。
+
 长期记忆层必须区分 resident memory 与 retrievable memory。resident memory 只保留少量稳定规则和偏好；retrievable memory 负责历史事实、长会话、关系和证据召回。引入外部层前必须声明写入触发条件、召回融合与去重策略、token 裁剪规则、memory scope、备份路径和审计路径。
 
 ## 策略选择
@@ -86,6 +88,7 @@ backend capability matrix 还必须覆盖下列字段，避免把记忆产品或
 3. 作用域清楚，不能把项目规则误写成全局用户规则。
 4. 风险分级清楚，且高风险需要人工确认。
 5. 有 `last_verified`；依赖外部 API、路径、平台策略或用户偏好时必须有 `next_review_by`。
+6. 请求晋升到 `engineering` 或 `archive` 时，必须有 `raw_evidence`、`owner_review` 和 `rollback_path`。
 
 候选晋升必须先进入 inbox 或 candidate 工件，再按频率、跨会话重复、作用域、安全性、冲突状态和验证证据评分。含 `[REDACTED]`、疑似密钥、token、cookie、连接串、账号路径或原始敏感日志的候选固定为 `blocked`；`conflict_review`、高风险、项目局部事实和权限相关候选不得自动晋升到全局用户记忆。
 

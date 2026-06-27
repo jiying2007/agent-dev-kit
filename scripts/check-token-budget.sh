@@ -176,9 +176,10 @@ for asset in \
   "$ROOT_DIR/templates/context/context-budget-profile.md" \
   "$ROOT_DIR/templates/context/project-map.md" \
   "$ROOT_DIR/templates/context/memory-search-result.md" \
-  "$ROOT_DIR/templates/context/low-token-profile.md" \
-  "$ROOT_DIR/tests/fixtures/context/protected-key-collision-negative.md" \
-  "$ROOT_DIR/docs/runbooks/token-context-governance.md"; do
+	  "$ROOT_DIR/templates/context/low-token-profile.md" \
+	  "$ROOT_DIR/tests/fixtures/context/protected-key-collision-negative.md" \
+	  "$ROOT_DIR/tests/fixtures/memory/archive-lifecycle-promotion-negative.md" \
+	  "$ROOT_DIR/docs/runbooks/token-context-governance.md"; do
   require_context_asset "$asset"
 done
 
@@ -231,6 +232,15 @@ require_context_text "$ROOT_DIR/tests/fixtures/context/protected-key-collision-n
 require_context_text "$ROOT_DIR/tests/fixtures/context/protected-key-collision-negative.md" 'contradiction_status: conflict_review' 'conflict review marker'
 require_context_text "$ROOT_DIR/tests/fixtures/context/protected-key-collision-negative.md" 'raw_evidence:' 'raw fallback for protected collision'
 require_context_absent_text "$ROOT_DIR/tests/fixtures/context/protected-key-collision-negative.md" 'promotion_action: auto_promote_candidate|promotion_action: promoted' 'auto promotion for protected key collision'
+require_context_text "$ROOT_DIR/tests/fixtures/memory/archive-lifecycle-promotion-negative.md" 'expected_failure:' 'archive lifecycle expected failure'
+require_context_text "$ROOT_DIR/tests/fixtures/memory/archive-lifecycle-promotion-negative.md" 'lifecycle_state: research' 'research lifecycle state'
+require_context_text "$ROOT_DIR/tests/fixtures/memory/archive-lifecycle-promotion-negative.md" 'requested_promotion: engineering' 'engineering promotion request'
+require_context_text "$ROOT_DIR/tests/fixtures/memory/archive-lifecycle-promotion-negative.md" 'requested_promotion: archive' 'archive promotion request'
+require_context_text "$ROOT_DIR/tests/fixtures/memory/archive-lifecycle-promotion-negative.md" 'raw_evidence:' 'archive lifecycle raw evidence gate'
+require_context_text "$ROOT_DIR/tests/fixtures/memory/archive-lifecycle-promotion-negative.md" 'owner_review:' 'archive lifecycle owner review gate'
+require_context_text "$ROOT_DIR/tests/fixtures/memory/archive-lifecycle-promotion-negative.md" 'rollback_path:' 'archive lifecycle rollback gate'
+require_context_text "$ROOT_DIR/tests/fixtures/memory/archive-lifecycle-promotion-negative.md" 'promotion_action: blocked' 'blocked promotion action'
+require_context_absent_text "$ROOT_DIR/tests/fixtures/memory/archive-lifecycle-promotion-negative.md" 'promotion_action: auto_promote_candidate|promotion_action: promoted' 'auto promotion for archive lifecycle'
 
 status="pass"
 if [[ "${#failures[@]}" -gt 0 ]]; then
