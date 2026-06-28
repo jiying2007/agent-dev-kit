@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0.0",
+  "description": "Negative fixture: trace/eval promotion evidence omits regression_link.",
+  "runtime_enabled": false,
+  "fixture_mode": "method-only",
+  "expected_failure": "fixture trace_eval_evidence_bundle missing field: regression_link",
+  "trace_eval_evidence_bundle": {
+    "trace_id": "trace-eval-negative-missing-regression-link-v1",
+    "dataset_id": "dataset-synthetic-v1",
+    "prompt_version": "prompt-fixture-v1",
+    "eval_run_id": "eval-run-synthetic-v1",
+    "score_schema": "task_success >= threshold",
+    "metric_threshold": {
+      "metric": "task_success",
+      "minimum": 0.95
+    },
+    "production_feedback_source": "synthetic-local-fixture",
+    "redaction_policy": "store synthetic ids only",
+    "evidence_bundle_path": "fixtures/harness-loop-engineering/fail/missing-trace-eval-regression-link.json",
+    "promotion_candidate": true,
+    "decision": {
+      "status": "promote"
+    }
+  }
+}

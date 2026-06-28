@@ -1,13 +1,14 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-06-27",
+  "last_updated": "2026-06-28",
   "status": "report-only",
   "default_mode": "method-only",
   "reference_boundary": "External harness and loop engineering repositories are absorbed as contracts, vocabulary, evidence fields and gate shapes only. This manifest does not clone, install, import, execute, start daemons, register hooks, enable MCP servers or turn on external runtimes.",
   "report": "../reports/harness-loop-engineering-adoption-candidates-2026-06-25.md",
   "supplemental_reports": [
     "../reports/harness-loop-engineering-adoption-candidates-2026-06-26.md",
-    "../reports/harness-loop-engineering-adoption-candidates-2026-06-26-batch2.md"
+    "../reports/harness-loop-engineering-adoption-candidates-2026-06-26-batch2.md",
+    "../reports/trace-eval-evidence-bundle-fixtures-2026-06-28.md"
   ],
   "fixtures": [
     {
@@ -70,6 +71,30 @@
       "expected_failure": "fixture coding_repair_loop completion missing artifact_lineage_evidence",
       "covers": [
         "coding-repair-loop-v1"
+      ]
+    },
+    {
+      "id": "harness-loop-missing-trace-eval-dataset-id-v1",
+      "path": "fixtures/harness-loop-engineering/fail/missing-trace-eval-dataset-id.json",
+      "expected_failure": "fixture trace_eval_evidence_bundle missing field: dataset_id",
+      "covers": [
+        "trace-eval-evidence-bundle-v1"
+      ]
+    },
+    {
+      "id": "harness-loop-missing-trace-eval-prompt-version-v1",
+      "path": "fixtures/harness-loop-engineering/fail/missing-trace-eval-prompt-version.json",
+      "expected_failure": "fixture trace_eval_evidence_bundle missing field: prompt_version",
+      "covers": [
+        "trace-eval-evidence-bundle-v1"
+      ]
+    },
+    {
+      "id": "harness-loop-missing-trace-eval-regression-link-v1",
+      "path": "fixtures/harness-loop-engineering/fail/missing-trace-eval-regression-link.json",
+      "expected_failure": "fixture trace_eval_evidence_bundle missing field: regression_link",
+      "covers": [
+        "trace-eval-evidence-bundle-v1"
       ]
     }
   ],

@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0.0",
+  "description": "Negative fixture: trace/eval promotion evidence omits prompt_version.",
+  "runtime_enabled": false,
+  "fixture_mode": "method-only",
+  "expected_failure": "fixture trace_eval_evidence_bundle missing field: prompt_version",
+  "trace_eval_evidence_bundle": {
+    "trace_id": "trace-eval-negative-missing-prompt-version-v1",
+    "dataset_id": "dataset-synthetic-v1",
+    "eval_run_id": "eval-run-synthetic-v1",
+    "score_schema": "task_success >= threshold",
+    "metric_threshold": {
+      "metric": "task_success",
+      "minimum": 0.95
+    },
+    "production_feedback_source": "synthetic-local-fixture",
+    "redaction_policy": "store synthetic ids only",
+    "evidence_bundle_path": "fixtures/harness-loop-engineering/fail/missing-trace-eval-prompt-version.json",
+    "regression_link": "tests/regression/trace-eval-synthetic-v1",
+    "promotion_candidate": true,
+    "decision": {
+      "status": "promote"
+    }
+  }
+}

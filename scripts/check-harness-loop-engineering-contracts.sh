@@ -379,6 +379,7 @@ fixture_sections = {
     "coding-repair-loop-v1": "coding_repair_loop",
     "reproducible-execution-pipeline-v1": "reproducible_execution_pipeline",
     "artifact-lineage-evidence-contract-v1": "artifact_lineage_evidence",
+    "trace-eval-evidence-bundle-v1": "trace_eval_evidence_bundle",
 }
 default_fixture_contracts = tuple(fixture.get("covers", []))
 
@@ -432,6 +433,16 @@ def validate_fixture_data(data, selected_contracts=None):
                 ),
                 "fixture coding_repair_loop completion missing artifact_lineage_evidence",
             )
+        if section_name == "trace_eval_evidence_bundle":
+            decision = section.get("decision", {})
+            decision_status = decision.get("status") if isinstance(decision, dict) else None
+            promotion_candidate = section.get("promotion_candidate") is True or decision_status == "promote"
+            if promotion_candidate:
+                for promotion_field in ("dataset_id", "prompt_version", "regression_link"):
+                    local_check(
+                        promotion_field in section and section[promotion_field] not in ("", None, []),
+                        f"fixture trace_eval_evidence_bundle promotion missing field: {promotion_field}",
+                    )
     return local_failures
 
 
