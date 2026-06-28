@@ -602,6 +602,17 @@ skills:
     path: skills/adk-hardware-debugging/SKILL.md
     quality_tier: p1
     depends_on: []
+  - name: adk-offline-core-dump-triage
+    path: skills/adk-offline-core-dump-triage/SKILL.md
+    quality_tier: p1
+    depends_on:
+      - adk-systematic-debugging
+  - name: adk-embedded-storage-layout-migration
+    path: skills/adk-embedded-storage-layout-migration/SKILL.md
+    quality_tier: p1
+    depends_on:
+      - adk-embedded-release-orchestration
+      - adk-production-field-readiness
 
 default_profile: core
 profiles:
@@ -1206,6 +1217,11 @@ routing:
       primary_skill: adk-toolchain-debug-openocd-gdb
       supporting_skills:
         - adk-systematic-debugging
+    - intent: offline_core_dump_triage
+      intent_zh: "core dump/core文件/离线core/BuildID/符号不匹配/gdb分析core/SIGSEGV core"
+      primary_skill: adk-offline-core-dump-triage
+      supporting_skills:
+        - adk-systematic-debugging
     - intent: integration_hil_sil
       intent_zh: "HIL/SIL集成测试/硬件在环/软件在环"
       primary_skill: adk-integration-hil-sil
@@ -1239,6 +1255,12 @@ routing:
       primary_skill: adk-embedded-release-orchestration
       supporting_skills:
         - adk-release-versioning
+        - adk-production-field-readiness
+    - intent: embedded_storage_layout_migration
+      intent_zh: "UBIFS/SquashFS/ubiblock/业务分区/分区保留/存储布局迁移/OTA布局迁移/文件系统切换"
+      primary_skill: adk-embedded-storage-layout-migration
+      supporting_skills:
+        - adk-embedded-release-orchestration
         - adk-production-field-readiness
     - intent: release_versioning
       intent_zh: "版本发布/准备发布/发布前检查"
