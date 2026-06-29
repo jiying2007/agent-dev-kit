@@ -43,6 +43,9 @@ bash scripts/devkit.sh validate --strict
 bash scripts/devkit.sh runtime-boundary
 bash scripts/devkit.sh openai-governance --summary-json
 bash scripts/devkit.sh workflow-closure --profile core
+bash scripts/devkit.sh goal check --summary-json
+bash scripts/devkit.sh capability health --summary-json
+bash scripts/devkit.sh perf budget --summary-json
 bash tests/run_all.sh --fail-fast
 ```
 
@@ -53,6 +56,7 @@ bash tests/run_all.sh --fail-fast
 | README、usage、commands、runbook | `bash scripts/devkit.sh validate --strict` + 相关文档测试 | 防止文档与 CLI 漂移 |
 | Agent/Skill 内容 | `bash scripts/devkit.sh validate --strict` + `bash tests/run_all.sh --fail-fast` | 覆盖 frontmatter、触发和质量规则 |
 | Profile/manifest | `bash scripts/devkit.sh validate --strict` + `bash scripts/devkit.sh workflow-closure --profile core` | 防止未知引用和 profile 闭包漂移 |
+| 目标/功能/性能契约 | `bash scripts/devkit.sh goal check --summary-json` + `bash scripts/devkit.sh capability health --summary-json` + `bash scripts/devkit.sh perf budget --summary-json` | 防止目标、能力和预算只停留在文档声明 |
 | install/convert/runtime 脚本 | 相关单测 + `bash tests/run_all.sh` | 防止交付路径回归 |
 | MCP/plugin/hook/automation 契约 | `bash scripts/devkit.sh openai-governance --summary-json` + 安全审查 | 默认 report-only |
 | 发布前 | `bash scripts/devkit.sh test` | 必须带 rollback note |
@@ -121,6 +125,7 @@ bash scripts/devkit.sh runtime-boundary --summary-json
 - 变更摘要。
 - 验证命令和结果。
 - runtime-boundary 结论。
+- 若涉及 `perf`、`ops` 或测试运行器，附 summary-json、report-only 或 timing 证据。
 - 若涉及官方资料，附 freshness/governance 结论。
 - 若涉及外部能力，附安全边界和回滚方式。
 - 剩余风险或未处理项。

@@ -1,0 +1,180 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2026-06-29",
+  "scope_model": "platform-neutral-adk-goals",
+  "boundary": "ADK goals define reusable agent, skill, workflow, evidence, performance, and maintenance contracts. They must not encode private project paths, live runtime installs, or one-off incident facts.",
+  "required_goal_fields": [
+    "goal_id",
+    "profile",
+    "success_criteria",
+    "non_goals",
+    "required_evidence",
+    "primary_workflows",
+    "performance_budget",
+    "maintenance_owner"
+  ],
+  "goals": [
+    {
+      "goal_id": "adk-platform-neutral-governance",
+      "profile": "core",
+      "success_criteria": [
+        "runtime boundaries stay platform-neutral",
+        "assets validate in strict mode",
+        "workflow closure passes for core profile"
+      ],
+      "non_goals": [
+        "direct live runtime install",
+        "private project policy",
+        "external orchestrator adoption"
+      ],
+      "required_evidence": [
+        {
+          "evidence_id": "runtime-boundary",
+          "path": "scripts/check-runtime-boundary.sh"
+        },
+        {
+          "evidence_id": "strict-validate",
+          "path": "scripts/validate-assets.sh"
+        },
+        {
+          "evidence_id": "workflow-closure",
+          "path": "scripts/check-workflow-closure.sh"
+        }
+      ],
+      "primary_workflows": [
+        {
+          "workflow": "adk-delivery-gate"
+        },
+        {
+          "workflow": "runtime-routing"
+        }
+      ],
+      "performance_budget": {
+        "quick_gate_seconds": 120,
+        "full_gate_seconds": 600
+      },
+      "maintenance_owner": "adk-core"
+    },
+    {
+      "goal_id": "adk-functional-capability-closure",
+      "profile": "core",
+      "success_criteria": [
+        "agent, skill, workflow, script, test, and doc references are resolvable",
+        "capabilities expose summary-json checks",
+        "new assets prefer reuse before rebuild"
+      ],
+      "non_goals": [
+        "adding duplicate skills without a proven gap",
+        "manual checklist-only governance"
+      ],
+      "required_evidence": [
+        {
+          "evidence_id": "capability-health",
+          "path": "scripts/check-capability-health.sh"
+        },
+        {
+          "evidence_id": "reuse-before-rebuild",
+          "path": "scripts/check-reuse-before-rebuild.sh"
+        },
+        {
+          "evidence_id": "catalog-index",
+          "path": "scripts/catalog-assets.sh"
+        }
+      ],
+      "primary_workflows": [
+        {
+          "workflow": "feature-delivery"
+        },
+        {
+          "workflow": "skill-curation-delivery"
+        }
+      ],
+      "performance_budget": {
+        "quick_gate_seconds": 120,
+        "full_gate_seconds": 600
+      },
+      "maintenance_owner": "adk-assets"
+    },
+    {
+      "goal_id": "adk-performance-and-ops-readiness",
+      "profile": "core",
+      "success_criteria": [
+        "performance checks emit summary-json",
+        "ops actions default to report-only",
+        "test runner emits timing json for quick and full gates"
+      ],
+      "non_goals": [
+        "destructive cleanup by default",
+        "network benchmark dependency",
+        "hard failing report-only performance drift"
+      ],
+      "required_evidence": [
+        {
+          "evidence_id": "performance-budget",
+          "path": "scripts/check-performance-budgets.sh"
+        },
+        {
+          "evidence_id": "performance-ops-test",
+          "path": "tests/test_performance_ops.sh"
+        },
+        {
+          "evidence_id": "run-all-timing",
+          "path": "tests/run_all.sh"
+        }
+      ],
+      "primary_workflows": [
+        {
+          "workflow": "adk-delivery-gate"
+        },
+        {
+          "workflow": "release-hardening"
+        }
+      ],
+      "performance_budget": {
+        "quick_gate_seconds": 120,
+        "full_gate_seconds": 600
+      },
+      "maintenance_owner": "adk-quality"
+    },
+    {
+      "goal_id": "adk-embedded-fullstack-readiness",
+      "profile": "embedded-fullstack",
+      "success_criteria": [
+        "embedded profile resolves required agents and skills",
+        "pilot readiness remains evidence-based",
+        "production-field gates keep simulated and real device evidence separate"
+      ],
+      "non_goals": [
+        "embedding project-specific hardware facts in core",
+        "treating simulated evidence as real device readiness"
+      ],
+      "required_evidence": [
+        {
+          "evidence_id": "pilot-readiness",
+          "path": "scripts/pilot-readiness.sh"
+        },
+        {
+          "evidence_id": "embedded-production-field-pilot",
+          "path": "scripts/run-embedded-production-field-pilot.sh"
+        },
+        {
+          "evidence_id": "embedded-workflow-pilots",
+          "path": "scripts/run-embedded-workflow-pilots.sh"
+        }
+      ],
+      "primary_workflows": [
+        {
+          "workflow": "bugfix-delivery"
+        },
+        {
+          "workflow": "release-hardening"
+        }
+      ],
+      "performance_budget": {
+        "quick_gate_seconds": 120,
+        "full_gate_seconds": 600
+      },
+      "maintenance_owner": "adk-embedded"
+    }
+  ]
+}

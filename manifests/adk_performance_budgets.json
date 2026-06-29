@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2026-06-29",
+  "scope_model": "report-first-performance-budgets",
+  "boundary": "Performance budgets are local, report-only by default, and become blocking only when --strict is used with fresh timing evidence.",
+  "budgets": [
+    {
+      "budget_id": "quick-test-loop",
+      "mode": "quick",
+      "command": "tests/run_all.sh --quick --timing-json <path>",
+      "max_elapsed_ms": 120000,
+      "slow_threshold_sec": 10,
+      "test": "tests/run_all.sh"
+    },
+    {
+      "budget_id": "full-regression-loop",
+      "mode": "full",
+      "command": "tests/run_all.sh --timing-json <path>",
+      "max_elapsed_ms": 600000,
+      "slow_threshold_sec": 30,
+      "test": "tests/run_all.sh"
+    },
+    {
+      "budget_id": "performance-ops-smoke",
+      "mode": "benchmark",
+      "command": "scripts/performance.sh benchmark --summary-json",
+      "max_elapsed_ms": 120000,
+      "slow_threshold_sec": 10,
+      "script": "scripts/performance.sh",
+      "test": "tests/test_performance_ops.sh"
+    }
+  ]
+}

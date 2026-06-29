@@ -31,6 +31,8 @@ Commands:
   openai-runtime-capabilities 检查 OpenAI 官方内容转化的运行态能力门禁
   harness-loop-engineering 检查外部 harness/loop engineering 合同门禁
   workflow-closure 检查 workflow 引用是否在 profile 闭包内
+  goal      检查 ADK 目标契约
+  capability 检查 ADK 功能健康闭环
   file-modes 检查 tracked 文件权限是否匹配 Git index
   catalog   生成或检索 Agent/Skill 目录索引
   match     根据输入文本匹配 skill 触发条件
@@ -47,6 +49,7 @@ Commands:
   ops       日常/周常/月常运维编排
   monitor   系统监控与告警
   perf      性能分析与优化
+  perf-budget 检查性能预算契约
   security  安全扫描与加固
   release   发布准备/验证/构建/发布/回滚
   version   版本查看/锁定/升级/对比
@@ -111,6 +114,24 @@ case "$CMD" in
   workflow-closure)
     exec "$SCRIPT_DIR/check-workflow-closure.sh" "$@"
     ;;
+  goal)
+    subcmd="${1:-}"
+    if [[ "$subcmd" != "check" ]]; then
+      echo "[FAIL] usage: scripts/devkit.sh goal check [--summary-json]" >&2
+      exit 1
+    fi
+    shift
+    exec "$SCRIPT_DIR/check-goal-contracts.sh" "$@"
+    ;;
+  capability)
+    subcmd="${1:-}"
+    if [[ "$subcmd" != "health" ]]; then
+      echo "[FAIL] usage: scripts/devkit.sh capability health [--summary-json]" >&2
+      exit 1
+    fi
+    shift
+    exec "$SCRIPT_DIR/check-capability-health.sh" "$@"
+    ;;
   file-modes)
     exec "$SCRIPT_DIR/check-file-modes.sh" "$ROOT_DIR" "$@"
     ;;
@@ -146,6 +167,9 @@ case "$CMD" in
     ;;
   perf)
     exec "$SCRIPT_DIR/performance.sh" "$@"
+    ;;
+  perf-budget)
+    exec "$SCRIPT_DIR/check-performance-budgets.sh" "$@"
     ;;
   security)
     exec "$SCRIPT_DIR/security.sh" "$@"

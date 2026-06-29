@@ -25,16 +25,73 @@ Commands:
   security               安全检查
 
 Options:
-  --dry-run              模拟运行
-  --force                强制执行
+  --dry-run              report-only 兼容别名（默认行为）
+  --apply                执行写入、清理、备份或报告生成动作
+  --force                强制执行；必须与 --apply 同时使用
+  --summary-json         输出低 token JSON 摘要
   -h, --help             显示帮助
 
 Examples:
   ./scripts/auto-ops.sh daily
-  ./scripts/auto-ops.sh weekly --dry-run
-  ./scripts/auto-ops.sh cleanup
-  ./scripts/auto-ops.sh optimize
+  ./scripts/auto-ops.sh weekly --summary-json
+  ./scripts/auto-ops.sh cleanup --apply
+  ./scripts/auto-ops.sh optimize --apply
 USAGE
+}
+
+APPLY=0
+SUMMARY_JSON=0
+
+json_string() {
+    local value="$1"
+    value="${value//\\/\\\\}"
+    value="${value//\"/\\\"}"
+    value="${value//$'\n'/\\n}"
+    printf '"%s"' "$value"
+}
+
+ops_summary_json() {
+    local command="$1"
+    local status="pass"
+    local writes="none"
+    case "$command" in
+        daily)
+            writes="health/test/cleanup/backup-check when apply=1"
+            ;;
+        weekly)
+            writes="daily ops, backup, monitoring report, security check when apply=1"
+            ;;
+        monthly)
+            writes="weekly ops, performance optimize, old backup cleanup, monthly report when apply=1"
+            ;;
+        cleanup)
+            writes="delete controlled temp/log/bak/dist files when apply=1"
+            ;;
+        optimize)
+            writes="chmod scripts/tests and remove cache when apply=1"
+            ;;
+        security)
+            writes="none"
+            ;;
+        *)
+            status="fail"
+            writes="unknown command"
+            ;;
+    esac
+    printf '{"schema_version":1,"status":%s,"command":%s,"apply":%s,"writes":%s,"target":%s}\n' \
+        "$(json_string "$status")" "$(json_string "$command")" "$APPLY" "$(json_string "$writes")" "$(json_string "$ROOT_DIR")"
+    [[ "$status" == "pass" ]]
+}
+
+report_only_action() {
+    local title="$1"
+    shift
+    log_info "${title} (report-only)"
+    local action
+    for action in "$@"; do
+        echo "- ${action}"
+    done
+    echo "[INFO] 添加 --apply 后才会执行写入或清理动作"
 }
 
 daily_ops() {
@@ -98,7 +155,7 @@ weekly_ops() {
     # 2. 创建备份
     log_info "2. 创建备份"
     if [[ "$dry_run" != "true" ]]; then
-        bash "$ROOT_DIR/scripts/backup-rollback.sh" backup --target "$CODEX_DECLARATION_ROOT"
+        bash "$ROOT_DIR/scripts/backup-rollback.sh" backup --target "$ADK_DECLARATION_ROOT"
     fi
     
     # 3. 生成监控报告
@@ -306,7 +363,7 @@ main() {
 
     local command="$1"
     shift
-    local dry_run="false"
+    local dry_run="true"
     local force="false"
 
     while [[ $# -gt 0 ]]; do
@@ -315,8 +372,17 @@ main() {
                 dry_run="true"
                 shift
                 ;;
+            --apply)
+                APPLY=1
+                dry_run="false"
+                shift
+                ;;
             --force)
                 force="true"
+                shift
+                ;;
+            --summary-json)
+                SUMMARY_JSON=1
                 shift
                 ;;
             -h|--help)
@@ -331,6 +397,16 @@ main() {
         esac
     done
 
+    if [[ "$force" == "true" && "$APPLY" -ne 1 ]]; then
+        log_error "--force 必须与 --apply 同时使用"
+        exit 1
+    fi
+
+    if [[ "$SUMMARY_JSON" -eq 1 ]]; then
+        ops_summary_json "$command"
+        exit $?
+    fi
+
     case "$command" in
         daily)
             daily_ops "$dry_run"
@@ -342,10 +418,25 @@ main() {
             monthly_ops "$dry_run"
             ;;
         cleanup)
-            cleanup_temp_files "$dry_run" "$force"
+            if [[ "$dry_run" == "true" ]]; then
+                report_only_action "清理临时文件" \
+                    "将清理 7 天前 *.tmp" \
+                    "将清理 30 天前 *.log" \
+                    "将清理 7 天前 *.bak" \
+                    "将清理 dist 目录"
+            else
+                cleanup_temp_files
+            fi
             ;;
         optimize)
-            optimize_performance "$dry_run"
+            if [[ "$dry_run" == "true" ]]; then
+                report_only_action "优化性能" \
+                    "将规范 scripts/tests 下 shell 脚本可执行位" \
+                    "将清理 .cache 目录" \
+                    "不会压缩或改写 docs"
+            else
+                optimize_performance
+            fi
             ;;
         security)
             security_check

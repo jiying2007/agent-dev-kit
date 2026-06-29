@@ -1,0 +1,88 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2026-06-29",
+  "scope_model": "goal-to-capability-health",
+  "boundary": "Capability health links ADK goals to concrete agents, skills, workflows, scripts, tests, and docs. It is a reportable governance contract, not a runtime orchestrator.",
+  "required_capability_fields": [
+    "capability_id",
+    "goal_id",
+    "agent",
+    "skill",
+    "workflow",
+    "script",
+    "test",
+    "doc"
+  ],
+  "capabilities": [
+    {
+      "capability_id": "runtime-boundary-governance",
+      "goal_id": "adk-platform-neutral-governance",
+      "agent": "architecture-planner",
+      "skill": "adk-runtime-router",
+      "workflow": "runtime-routing",
+      "script": "scripts/check-runtime-boundary.sh",
+      "test": "tests/test_runtime_boundary.sh",
+      "doc": "docs/runbooks/runtime-routing.md"
+    },
+    {
+      "capability_id": "delivery-evidence-gate",
+      "goal_id": "adk-platform-neutral-governance",
+      "agent": "test-validation-engineer",
+      "skill": "adk-verification-before-completion",
+      "workflow": "adk-delivery-gate",
+      "script": "scripts/evidence-index.sh",
+      "test": "tests/test_evidence_index.sh",
+      "doc": "docs/runbooks/evidence-index-delivery.md"
+    },
+    {
+      "capability_id": "asset-catalog-closure",
+      "goal_id": "adk-functional-capability-closure",
+      "agent": "requirements-analyst",
+      "skill": "adk-requirements-triage",
+      "workflow": "feature-delivery",
+      "script": "scripts/catalog-assets.sh",
+      "test": "tests/test_catalog.sh",
+      "doc": "docs/agent-skill-catalog.md"
+    },
+    {
+      "capability_id": "skill-curation-reuse",
+      "goal_id": "adk-functional-capability-closure",
+      "agent": "code-review-governor",
+      "skill": "adk-skill-deep-analysis",
+      "workflow": "skill-curation-delivery",
+      "script": "scripts/check-reuse-before-rebuild.sh",
+      "test": "tests/test_skill_content.sh",
+      "doc": "docs/runbooks/skill-curation-delivery.md"
+    },
+    {
+      "capability_id": "performance-budget-gate",
+      "goal_id": "adk-performance-and-ops-readiness",
+      "agent": "performance-reliability-engineer",
+      "skill": "adk-performance-profiling-embedded",
+      "workflow": "release-hardening",
+      "script": "scripts/check-performance-budgets.sh",
+      "test": "tests/test_performance_budgets.sh",
+      "doc": "docs/runbooks/workspace-maintenance-guide.md"
+    },
+    {
+      "capability_id": "ops-report-only-safety",
+      "goal_id": "adk-performance-and-ops-readiness",
+      "agent": "build-release-engineer",
+      "skill": "adk-release-versioning",
+      "workflow": "release-hardening",
+      "script": "scripts/auto-ops.sh",
+      "test": "tests/test_performance_ops.sh",
+      "doc": "docs/commands.md"
+    },
+    {
+      "capability_id": "embedded-production-field-readiness",
+      "goal_id": "adk-embedded-fullstack-readiness",
+      "agent": "test-validation-engineer",
+      "skill": "adk-production-field-readiness",
+      "workflow": "release-hardening",
+      "script": "scripts/run-embedded-production-field-pilot.sh",
+      "test": "tests/test_embedded_production_field_pilot.sh",
+      "doc": "docs/runbooks/embedded-production-field-readiness.md"
+    }
+  ]
+}

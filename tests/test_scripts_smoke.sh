@@ -14,9 +14,9 @@ run_smoke() {
   TOTAL=$((TOTAL + 1))
   local rc=0
   timeout 5 bash "$@" </dev/null >/dev/null 2>&1 || rc=$?
-  # Fatal signals: 131=SIGBUS, 132=SIGFPE, 134=SIGABRT, 136=SIGFPE, 137=SIGKILL, 139=SIGSEGV
-  if [[ $rc -ge 128 && $rc -ne 124 ]]; then
-    echo "  FAIL  $name (signal exit $rc)"
+  # 127 means the script path did not resolve; fatal signals are 128+ except timeout 124.
+  if [[ $rc -eq 127 || ( $rc -ge 128 && $rc -ne 124 ) ]]; then
+    echo "  FAIL  $name (fatal exit $rc)"
     FAIL_COUNT=$((FAIL_COUNT + 1))
   else
     echo "  PASS  $name (rc=$rc)"
@@ -44,6 +44,9 @@ run_smoke "devkit codify governance"     scripts/devkit.sh codify-governance
 run_smoke "devkit knowledge compile"     scripts/devkit.sh knowledge-compile
 run_smoke "devkit reuse before rebuild"  scripts/devkit.sh reuse-before-rebuild
 run_smoke "devkit context experience"    scripts/devkit.sh context-experience
+run_smoke "devkit goal check"            scripts/devkit.sh goal check --summary-json
+run_smoke "devkit capability health"     scripts/devkit.sh capability health --summary-json
+run_smoke "devkit perf budget"           scripts/devkit.sh perf budget --summary-json
 run_smoke "openai governance help"       scripts/check-openai-developers-governance.sh --help
 run_smoke "openai runtime capabilities help" scripts/check-openai-runtime-capabilities.sh --help
 run_smoke "run_all help"                 tests/run_all.sh --help

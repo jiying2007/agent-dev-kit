@@ -148,6 +148,24 @@ bash scripts/devkit.sh workflow-closure --profile core
 bash scripts/devkit.sh workflow-closure --profile personal-core --extra-profile release-hardening --summary-json
 ```
 
+## goal
+
+检查 ADK 目标契约，确认目标、非目标、验收证据、workflow、性能预算和维护责任都能解析到当前资产。
+
+```bash
+bash scripts/devkit.sh goal check
+bash scripts/devkit.sh goal check --summary-json
+```
+
+## capability
+
+检查 ADK 功能健康闭环，确认 goal -> agent -> skill -> workflow -> script -> test -> doc 引用完整。
+
+```bash
+bash scripts/devkit.sh capability health
+bash scripts/devkit.sh capability health --summary-json
+```
+
 ## file-modes
 
 检查 tracked 文件权限是否匹配 Git index。规则是 `100644` 不可执行，`100755` 可执行；文档、README、manifest、skill、template 默认不应带 executable bit。
@@ -267,10 +285,11 @@ bash scripts/devkit.sh backup list
 
 ## ops
 
-执行日常、周常或月常运维编排。自动化默认 report-only，写操作必须有人工审批点。
+执行日常、周常或月常运维编排。自动化默认 report-only，写操作必须显式传 `--apply`。
 
 ```bash
-bash scripts/devkit.sh ops weekly
+bash scripts/devkit.sh ops weekly --summary-json
+bash scripts/devkit.sh ops cleanup --apply
 ```
 
 ## monitor
@@ -283,10 +302,23 @@ bash scripts/devkit.sh monitor
 
 ## perf
 
-执行性能分析与优化检查。
+执行性能分析与优化检查。`analyze` 和 `benchmark` 支持低 token JSON 摘要；`benchmark` 默认只跑轻量 validate smoke，显式传 `--include-quick-tests`、`--include-quality` 或 `--include-io` 才扩大测量面；`report` 默认输出到 stdout，只有 `--out` 才写文件。
 
 ```bash
-bash scripts/devkit.sh perf
+bash scripts/devkit.sh perf analyze --summary-json
+bash scripts/devkit.sh perf benchmark --summary-json
+bash scripts/devkit.sh perf budget --summary-json
+bash scripts/devkit.sh perf budget --strict --timing-json /tmp/adk-run-all-quick.json
+bash scripts/devkit.sh perf report --out /tmp/adk-performance-report.md
+```
+
+## perf-budget
+
+性能预算契约的直达入口，等价于 `bash scripts/devkit.sh perf budget`，用于脚本化门禁中减少一层子命令分发。
+
+```bash
+bash scripts/devkit.sh perf-budget --summary-json
+bash scripts/devkit.sh perf-budget --strict --timing-json /tmp/adk-run-all-quick.json
 ```
 
 ## security
