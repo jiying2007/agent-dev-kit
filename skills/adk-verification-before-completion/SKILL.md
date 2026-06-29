@@ -2,7 +2,7 @@
 name: adk-verification-before-completion
 description: 完成前验证门禁，确保交付声明与证据一致
 version: 1.0.0
-last_updated: 2026-05-20
+last_updated: 2026-06-29
 triggers:
   - "准备完成"
   - "准备提交"
@@ -27,8 +27,7 @@ constraints:
 - 在交付前统一核对验证证据、评审状态和风险闭环，避免“未验先结论”。
 
 ## Prerequisites
-- 已整理改动文件清单与影响范围。
-- 已收集 lint/test/build/smoke 与评审状态证据。
+- 已整理改动范围，并收集 lint/test/build/smoke 与评审状态证据。
 
 ## Workflow
 1. 收敛改动范围：确认本次改动边界、影响面与非目标。
@@ -46,16 +45,15 @@ constraints:
 13. 卡死/重试核验：长任务必须核对 retry budget、heartbeat、staleness threshold、失败路径、已排除方案和 open items。
 14. Codify Decision：交付前确认是否存在可复用模式，使用 `templates/governance/codify-decision.md` 记录 `delivery_goal`、`reusable_pattern`、`affected_asset`、`promotion_candidate`、`next_task_friction_reduced`、`reduced_by`、`reduction_evidence`、`do_not_promote_reason`、`owner_review`、`rollback_path`、`verification_evidence`。
 15. 推广门禁：只有当 `verification_evidence` 支持复用价值、`owner_review` 明确、`rollback_path` 可执行，且 `next_task_friction_reduced` / `reduced_by` / `reduction_evidence` 说明后续成本如何下降时，才允许把 `promotion_candidate` 标记为 true；否则必须填写 `do_not_promote_reason`。
-16. 结论输出：给出 pass/needs-fix，并列出下一步动作与责任人。
+16. Completion Guard Payload 核验：中高风险任务必须有结构化 guard payload，至少记录 build/lint/test/smoke/security/release 中适用项的 `status`、`exit_code`、`command`、`evidence_path`、`verified_at` 和 `verifier`；缺失、失败或过期时不得进入完成态。
+17. 结论输出：给出 pass/needs-fix，并列出下一步动作与责任人。
 
 ## Commands
 ```bash
 rtk git diff --name-only <base>...HEAD
 rtk <project-lint-cmd>
 rtk <project-test-cmd>
-rtk <project-build-cmd>
 rtk bash scripts/devkit.sh runtime-boundary
-rtk <runtime-mcp-list-cmd>
 rtk bash scripts/check-codify-governance.sh
 ```
 
@@ -88,6 +86,7 @@ rtk bash scripts/check-codify-governance.sh
   - owner_review:
   - rollback_path:
   - verification_evidence:
+- Completion Guard Payload: required_checks / passed_checks / failed_checks / skipped_with_reason / stale_checks / verifier / completion_allowed
 - Review Status (B/M/m):
 - Breaking Change Decision:
 - Risk + Rollback:
@@ -126,6 +125,7 @@ Evidence Index（命令级）:
 - Codify Decision 必须记录 reusable_pattern、promotion_candidate、next_task_friction_reduced、reduced_by、reduction_evidence、do_not_promote_reason、owner_review、rollback_path、verification_evidence。
 - `promotion_candidate: true` 缺少 owner_review、rollback_path 或 verification_evidence 时，结论固定为 `needs-fix`。
 - `promotion_candidate: true` 缺少 next_task_friction_reduced、reduced_by 或 reduction_evidence 时，结论固定为 `needs-fix`。
+- 中高风险任务缺少 Completion Guard Payload，或 payload 显示必需 build/lint/test/smoke/security/release 检查未通过、无 evidence_path、无 verifier、结果过期时，结论固定为 `needs-fix`。
 - 禁止使用"应该可以/理论上通过"等无证据措辞。
 
 ---

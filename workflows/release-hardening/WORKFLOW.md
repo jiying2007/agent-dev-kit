@@ -2,7 +2,7 @@
 name: release-hardening
 description: 发布前安全、性能、版本、回滚和放行证据收口工作流
 version: 1.0.0
-last_updated: 2026-06-01
+last_updated: 2026-06-29
 primary_agent: build-release-engineer
 primary_skill: adk-release-versioning
 triggers:
@@ -23,6 +23,7 @@ artifacts:
   - verify-report.md
   - review-report.md
   - rollback-plan.md
+  - release-readiness-report.md
 verification:
   - "rtk bash tests/test_validate.sh"
   - "rtk bash tests/test_profile_coherence.sh"
@@ -57,6 +58,7 @@ failure_handling:
 - `release-notes.md` 必须包含版本、变更、兼容性和已知问题。
 - `rollback-plan.md` 必须包含触发条件、步骤和验证方式。
 - `verify-report.md` 必须列出发布门禁命令和结果。
+- `release-readiness-report.md` 必须记录 package dry-run、官方 demo 或等价示例、至少一个真实项目/fixture smoke、运行时产物排除检查和剩余风险。
 
 ## Commands
 ```bash
@@ -68,7 +70,10 @@ rtk bash scripts/check-workflow-closure.sh --profile release-hardening
 - 制品不可复现或校验缺失时结论为 hold。
 - 回滚不可验证时不得进入 release 决策。
 - 安全 blocker 未闭环时必须暂停或记录人工风险接受。
+- 官方 demo/fixture smoke 或真实项目轻量落地验证失败时，发布结论为 hold；历史债务可以留存，但不得掩盖本次新增或变更范围。
+- release metadata 同步、镜像发布或外部平台 token 操作必须保持本地显式命令和人工审批，不得把第三方 token 放入通用 CI secret 或默认 workflow。
 
 ## Quality Gate
 - 发布结论必须绑定版本、制品、验证证据和回滚路径。
 - 任何无法执行的验证必须说明影响和剩余风险。
+- 发布放行前必须证明：核心入口可运行、包/制品 dry-run 可复现、示例或官方 demo 能闭环、至少一个真实项目/fixture smoke 能解释失败或通过、runtime evidence / memory candidate / HTML artifact / 测试报告等本地运行产物不会被默认提交。

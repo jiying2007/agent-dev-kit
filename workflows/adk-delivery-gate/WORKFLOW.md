@@ -2,7 +2,7 @@
 name: adk-delivery-gate
 description: agent-dev-kit 通用资产生产交付门禁
 version: 1.0.0
-last_updated: 2026-06-01
+last_updated: 2026-06-29
 primary_agent: code-review-governor
 primary_skill: adk-verification-before-completion
 triggers:
@@ -78,3 +78,4 @@ rtk bash tests/run_all.sh --fail-fast
 - `manifest.yaml` 的 workflow 条目必须指向本文件，并声明 primary agent、primary skill、supporting skills、commands 和 verification。
 - Workflow 引用的 Agent/Skill 必须在所选 profile 闭包内可用。
 - 完成声明必须有可复查的命令证据。
+- 中高风险交付必须附 Completion Guard Payload；必需检查未通过、缺少证据路径或缺少 verifier 时，不得把任务状态标记为完成。

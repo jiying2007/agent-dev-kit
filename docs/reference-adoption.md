@@ -200,3 +200,18 @@
 - 不把旧 `~/codex` 本地 skill 作为长期双轨维护；ADK 版本通过 `~/codex` 声明式资产链路发布到 live。
 - 不默认发布、删除、覆盖 NAS/产线/归档/记忆文件；高风险写操作保持显式审批。
 - 不启用外部服务、后台 worker、MCP server 或联网学习资源；本次迁移只吸收本地方法和运行边界。
+
+## 12. scale-engine release 与 task guard 方法迁移（2026-06-29）
+
+借鉴点：
+- 完成态不能只依赖 Agent 自述，必须由 build/lint/test/smoke/security/release 等 guard payload 阻断假完成。
+- 发布前不仅要跑测试，还要验证 package dry-run、官方 demo 或等价示例、真实项目/fixture smoke、运行产物排除和剩余风险。
+
+落地点：
+- `skills/adk-verification-before-completion/SKILL.md`
+- `workflows/adk-delivery-gate/WORKFLOW.md`
+- `workflows/release-hardening/WORKFLOW.md`
+
+有意排除：
+- 不导入 `scale` CLI、npm scripts、hook、orchestrator、dashboard、active red team、visual gate 或外部 token 同步运行态。
+- 不把报告本身当成 ADK 证据；采纳矩阵必须指向真实存在的 `agent-dev-kit/...` 资产。
