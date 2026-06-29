@@ -22,7 +22,7 @@
 | 2026-05-02 | agency-agents-zh | agent-ecosystem | 角色职责矩阵与术语体系（角色覆盖丰富，保留为术语与职责参考，不直接并入核心） | 中 | 中 | 中 | adopt | done | agent-dev-kit | agent-dev-kit/docs/runbooks/lead-agent-convergence-delivery.md |
 | 2026-05-02 | agent-skills | agent-ecosystem | 技能触发路由与生命周期映射（流程完备，保留方法论参考） | 中 | 中 | 中 | adopt | done | agent-dev-kit | agent-dev-kit/docs/agent-skill-catalog.md |
 | 2026-05-02 | skills | agent-ecosystem | skills CLI 目录约定与安装入口（安装机制已吸收为兼容性约束） | 中 | 低 | 中 | adopt | done | agent-dev-kit | agent-dev-kit/docs/runbooks/feature-delivery.md |
-| 2026-05-02 | mattpocock-skills | agent-ecosystem | 小技能组合范式与 deprecated 分层治理 | 中 | 中 | 低 | adopt | done | agent-dev-kit | reports/weekly-change-report.md |
+| 2026-05-02 | mattpocock-skills | agent-ecosystem | 小技能组合范式与 deprecated 分层治理 | 中 | 中 | 低 | adopt | done | agent-dev-kit | agent-dev-kit/docs/runbooks/skill-curation-delivery.md |
 | 2026-05-02 | hermes-collaboration-skill | agent-ecosystem | 多人协作文档模板与 runbook 化结构（文档范式已吸收，以 runbook 方式落地） | 中 | 低 | 中 | adopt | done | agent-dev-kit | agent-dev-kit/optional-skills/cross-team-handoff/SKILL.md |
 | 2026-05-02 | Migrationed_skills | skill-pool | 历史技能池候选筛选机制（资产池价值高，保留为按需提取来源） | 中 | 中 | 中 | adopt | done | agent-dev-kit | agent-dev-kit/docs/runbooks/skill-curation-delivery.md |
 | 2026-05-02 | hermes-agent | delivery | 大型 Agent 工程目录职责与发布脚本治理（已吸收为大仓交付触点模板与收口约束） | 中 | 中 | 中 | adopt | done | agent-dev-kit | agent-dev-kit/docs/runbooks/large-platform-delivery.md |
@@ -30,9 +30,9 @@
 | 2026-05-02 | arthas | delivery | 贡献规范与发布质量门槛模板（已吸收为评审分级与发布门禁标准） | 中 | 中 | 低 | adopt | done | agent-dev-kit | agent-dev-kit/docs/runbooks/release-hardening.md |
 | 2026-05-02 | ai-coding-guide | knowledge | 场景化工作流导览与风险提示清单（方法论导览价值高，已纳入 adopt） | 中 | 低 | 低 | adopt | done | agent-dev-kit | agent-dev-kit/docs/runbooks/bugfix-delivery.md |
 | 2026-05-02 | prompts | knowledge | 提示词资产的轻量演进机制（保留参考，不进入强约束） | 低 | 低 | 中 | adopt | done | agent-dev-kit | agent-dev-kit/docs/runbooks/prompt-evolution-delivery.md |
-| 2026-05-02 | auto-research | knowledge | 负结果留痕与复盘机制（研究/工程双场景留痕机制可复用） | 中 | 低 | 低 | adopt | done | agent-dev-kit | reports/weekly-change-report.md |
+| 2026-05-02 | auto-research | knowledge | 负结果留痕与复盘机制（研究/工程双场景留痕机制可复用） | 中 | 低 | 低 | adopt | done | agent-dev-kit | agent-dev-kit/scripts/check-change-governance.sh; agent-dev-kit/tests/test_change_governance.sh; agent-dev-kit/workflows/adk-delivery-gate/WORKFLOW.md; agent-dev-kit/skills/adk-after-action-review/SKILL.md; agent-dev-kit/docs/runbooks/memory-governance.md |
 | 2026-05-02 | dotfiles | config | 最小变更 + 基线校验策略（配置基线思想已吸收为治理约束） | 中 | 中 | 中 | adopt | done | agent-dev-kit | agent-dev-kit/docs/runbooks/config-baseline-governance.md |
-| 2026-05-02 | codex | runtime-target | control/scripts/catalog/doctor 真实运行闭环验证 | 高 | 中 | 中 | adopt | done | codex, agent-dev-kit | reports/codex-pilot-report.md |
+| 2026-05-02 | codex | runtime-target | Codex runtime pilot evidence 与 ADK handoff/boundary 交接验证 | 高 | 中 | 中 | adopt | done | codex, agent-dev-kit | agent-dev-kit/docs/runbooks/codex-pilot-evidence.md; agent-dev-kit/docs/runbooks/production-deployment.md; agent-dev-kit/scripts/check-runtime-boundary.sh; reports/codex-pilot-report.md; scripts/check-codex-adk-live.sh |
 | 2026-05-02 | agent-dev-kit | adk-core | 压实总门禁编排（metadata/routing/doc-sync/full-suite/pilot）与发布级回归基线 | 高 | 中 | 低 | adopt | done | agent-dev-kit, codex | reports/adk-production-landing-implementation-2026-05-02.md |
 | 2026-05-02 | codex-cookbook | knowledge | Codex 实战模板与 cookbook 任务样例（经验模板已吸收，不并入 core 流程强约束） | 中 | 低 | 中 | adopt | done | agent-dev-kit | agent-dev-kit/docs/runbooks/lead-agent-convergence-delivery.md |
 | 2026-05-25 | OpenAI Developers | adk-core | Codex Customization 与 reasoning model 指南（skill/plugin 分层、progressive disclosure、上下文压缩、tool description 下沉） | 高 | 低 | 低 | adopt | done | agent-dev-kit | agent-dev-kit/docs/reference/openai-developers-reference.md; agent-dev-kit/manifests/official_docs_freshness_gates.json; agent-dev-kit/scripts/check-openai-developers-governance.sh |

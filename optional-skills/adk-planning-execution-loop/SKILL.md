@@ -40,16 +40,18 @@ constraints:
 1. 计划审查：检查依赖顺序、验证命令、隐含环境假设和阻塞条件。
 2. 任务切片：每个阶段输出目标、scope、done criteria、验证命令。
 3. 状态外化：建立或更新 `PROJECT/REQUIREMENTS/STATE/PLAN/SUMMARY` 等同类 planning 工件。
-4. 执行检查点：每完成一个阶段，更新状态、证据和风险。
-5. 恢复记录：维护 `session-state`、`next-actions`、`risk-ledger`、`resume-prompt`。
-6. 偏离处理：发现计划错误、共享契约冲突或验证失败时，暂停并回到计划审查。
-7. 目标闭环检查：核对原始目标、当前声明、证据、剩余未闭环项和停止条件。
-8. 卡死保护：检查 retry budget、heartbeat、staleness threshold 和连续无信息增量轮次。
-9. 收口验证：进入完成声明前，执行 completion gate 并核对证据支持结论。
-10. 复盘归档：任务完成后输出复盘记录，沉淀经验与改进项。
+4. 连续性证明：长任务必须记录 active plan、findings、progress、attestation 和 excluded context。
+5. 执行检查点：每完成一个阶段，更新状态、证据和风险。
+6. 恢复记录：维护 `session-state`、`next-actions`、`risk-ledger`、`resume-prompt`。
+7. 偏离处理：发现计划错误、共享契约冲突或验证失败时，暂停并回到计划审查。
+8. 目标闭环检查：核对原始目标、当前声明、证据、剩余未闭环项和停止条件。
+9. 卡死保护：检查 retry budget、heartbeat、staleness threshold 和连续无信息增量轮次。
+10. 收口验证：进入完成声明前，执行 completion gate 并核对证据支持结论。
+11. 复盘归档：任务完成后输出复盘记录，沉淀经验与改进项。
 
 ## Templates
 - 长任务恢复与中途改范围处理模板：`references/long-task-recovery.md`。
+- 连续性证明模板：`templates/context/continuity-attestation.md`。
 - 检查点、偏差记录、恢复 prompt 和失败回退锚点都应写入可复用工件，不依赖会话记忆。
 - 检查点默认存放在当前 change 或任务目录下；临时材料只能进入 session 级状态，不得进入长期 knowledge。
 
@@ -94,6 +96,7 @@ bash scripts/devkit.sh archive --change <change-id>
 - Plan Review:
 - Stage Checklist:
 - Planning Artifacts:
+- Continuity Attestation:
 - Goal Closure:
 - Anti-stall Check:
 - Session State:

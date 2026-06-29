@@ -118,6 +118,27 @@
 - 省 Token 应优先压缩低密度工具输出，而不是压缩用户目标和验收约束。
 - 默认先读摘要，再按置信度和风险回退局部原文或完整原文。
 - 高风险任务包括安全、权限、支付、数据库迁移、生产故障、协议兼容、签名和性能瓶颈，不能只凭摘要判断。
+
+## 10. 需求探索、连续性证明与运行态方法边界（2026-06-29）
+
+借鉴点：
+- 需求不清时先短发散，再拷问目标、非目标、术语、边界、验收和验证方式。
+- 长任务必须把 active plan、findings、progress、attestation 和 excluded context 外化到可恢复工件。
+- Codex 运行态经验只吸收 goal、worktree、doctor、release evidence 和 state scope 的 method-only 规则，不导入外部 runtime。
+
+落地点：
+- `skills/adk-requirements-triage/SKILL.md`
+- `skills/adk-requirements-triage/references/exploratory-requirements-brief.md`
+- `skills/adk-structured-requirements-questioning/SKILL.md`
+- `optional-skills/adk-planning-execution-loop/SKILL.md`
+- `skills/adk-context-compress-handoff/SKILL.md`
+- `templates/context/continuity-attestation.md`
+- `docs/runbooks/codex-runtime-method-boundary.md`
+
+有意排除：
+- 不安装外部 skill、plugin、hook、MCP server 或全局 runtime。
+- 不把临时共享语言静默写入长期 memory 或项目文件。
+- 不把 llm_agent 报告本身当作 ADK 落地证据；`target=agent-dev-kit` 的完成项必须列出存在的 `agent-dev-kit/...` 路径。
 - 压缩摘要必须保留 `raw_evidence`、`confidence`、`fallback_condition`，否则不可作为交付证据。
 - 项目索引应维护入口、测试、禁读目录、高风险区域和已验证时间，减少重复扫仓。
 - 上下文预算应按极速、均衡、精确、审计四种模式切换；高风险结论证据必须走审计/原文路径。
