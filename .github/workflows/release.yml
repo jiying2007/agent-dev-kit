@@ -11,7 +11,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
+
+      - name: Install CI dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ripgrep
 
       - name: Validate and smoke
         run: |
@@ -21,10 +26,10 @@ jobs:
 
       - name: Build cross-tool bundles
         run: |
-          bash scripts/convert_assets.sh --target codex --profile embedded-fullstack --out dist --clean
-          bash scripts/convert_assets.sh --target claude-code --profile embedded-fullstack --out dist --clean
-          bash scripts/convert_assets.sh --target hermes-agent --profile embedded-fullstack --out dist --clean
-          bash scripts/convert_assets.sh --target opencode --profile embedded-fullstack --out dist --clean
+          bash scripts/convert-assets.sh --target codex --profile embedded-fullstack --out dist --clean
+          bash scripts/convert-assets.sh --target claude-code --profile embedded-fullstack --out dist --clean
+          bash scripts/convert-assets.sh --target hermes-agent --profile embedded-fullstack --out dist --clean
+          bash scripts/convert-assets.sh --target opencode --profile embedded-fullstack --out dist --clean
 
       - name: Archive release bundle
         run: tar -czf agent-dev-kit-dist.tar.gz dist
