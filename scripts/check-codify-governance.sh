@@ -17,7 +17,7 @@ require_file() {
 require_text() {
   local file="$1"
   local pattern="$2"
-  rtk rg -q "$pattern" "$ROOT_DIR/$file" || fail "$file missing pattern: $pattern"
+  rg -q "$pattern" "$ROOT_DIR/$file" || fail "$file missing pattern: $pattern"
 }
 
 require_file "skills/adk-after-action-review/SKILL.md"

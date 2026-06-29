@@ -17,7 +17,7 @@ require_file() {
 require_text() {
   local file="$1"
   local pattern="$2"
-  rtk rg -q -- "$pattern" "$ROOT_DIR/$file" || fail "$file missing pattern: $pattern"
+  rg -q -- "$pattern" "$ROOT_DIR/$file" || fail "$file missing pattern: $pattern"
 }
 
 TEMPLATE="templates/governance/reuse-before-rebuild-decision.md"
@@ -54,4 +54,3 @@ require_text "$FIXTURE" "build-fresh skill rejected"
 require_text "$FIXTURE" "negative_or_disproved_path"
 
 echo "[PASS] reuse-before-rebuild"
-

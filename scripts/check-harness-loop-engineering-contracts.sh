@@ -35,7 +35,7 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-rtk python3 - "$ROOT_DIR" "$SUMMARY_JSON" <<'PY'
+python3 - "$ROOT_DIR" "$SUMMARY_JSON" <<'PY'
 import json
 import sys
 from pathlib import Path

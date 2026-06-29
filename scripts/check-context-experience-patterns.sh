@@ -24,7 +24,7 @@ require_text() {
   if [[ ! -f "$file" ]]; then
     return
   fi
-  if ! rtk rg -q -- "$pattern" "$file"; then
+  if ! rg -q -- "$pattern" "$file"; then
     record_failure "${file#$ROOT_DIR/} missing ${label}"
   fi
 }

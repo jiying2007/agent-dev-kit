@@ -51,7 +51,7 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-rtk python3 - "$ROOT_DIR" "$SUMMARY_JSON" <<'PY'
+python3 - "$ROOT_DIR" "$SUMMARY_JSON" <<'PY'
 import datetime as dt
 import json
 import sys
