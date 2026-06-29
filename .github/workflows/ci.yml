@@ -16,10 +16,10 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Validate manifest and assets
-        run: bash scripts/validate_assets.sh --strict
+        run: bash scripts/validate-assets.sh --strict
 
       - name: Format consistency check
-        run: bash scripts/check_format.sh
+        run: bash scripts/check-format.sh
 
       - name: Regression and smoke tests
         run: bash tests/run_all.sh

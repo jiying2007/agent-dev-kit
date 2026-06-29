@@ -15,8 +15,8 @@ jobs:
 
       - name: Validate and smoke
         run: |
-          bash scripts/validate_assets.sh --strict
-          bash scripts/check_format.sh
+          bash scripts/validate-assets.sh --strict
+          bash scripts/check-format.sh
           bash tests/run_all.sh
 
       - name: Build cross-tool bundles
