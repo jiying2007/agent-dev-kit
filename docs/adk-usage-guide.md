@@ -60,6 +60,36 @@ rtk bash tests/run_all.sh
 
 本文命令示例默认写成普通 shell 形式。若在本机 Codex 会话里执行，请在前面加 `rtk`。
 
+### 3.1 本机命令、ADK 脚本和 CI 的边界
+
+`rtk` 是本机 Codex 会话的操作者侧包装，不是 ADK 的运行依赖。ADK active scripts、测试脚本和 GitHub Actions 必须能在没有 `rtk` 的普通 runner 上执行。
+
+| 场景 | 推荐写法 | 边界 |
+|---|---|---|
+| 普通 shell / GitHub Actions | `bash scripts/devkit.sh validate --strict` | ADK 本体必须可脱离本机代理包装运行 |
+| 本机 Codex 会话 | `rtk bash scripts/devkit.sh validate --strict` | 只在操作者命令边界加 `rtk` |
+| ADK active scripts | `bash`、`python3`、`rg` 等显式依赖 | 不直接调用 `rtk`、用户目录或平台专属 CLI |
+| workflow / evidence 文本 | 可记录 `rtk bash ...` | 这是本机执行证据或命令契约，不等于脚本依赖 |
+
+GitHub `validate-test` 失败时，优先用普通 runner 视角复现：
+
+```bash
+bash scripts/validate-assets.sh --strict
+bash scripts/check-format.sh
+bash tests/run_all.sh
+```
+
+若错误是 `command not found`，先查 active scripts 是否误引入本机专属命令，再用收窄后的 `PATH` 复现：
+
+```bash
+rg -n '(^|[;&|({[:space:]])rtk[[:space:]]+' scripts tests .github
+PATH=/usr/bin:/bin bash scripts/validate-assets.sh --strict
+PATH=/usr/bin:/bin bash scripts/check-format.sh
+PATH=/usr/bin:/bin bash tests/run_all.sh
+```
+
+允许 `rtk` 出现在本机操作说明、fixture、Evidence Index 或 workflow 命令契约中；不允许作为 GitHub runner 必需命令。
+
 ## 4. 推荐上手路径
 
 第一次使用 ADK，按下面顺序走即可：

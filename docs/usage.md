@@ -24,6 +24,16 @@ bash scripts/devkit.sh test
 - `catalog build`：生成 Agent/Skill/Workflow/Profile 索引，并在默认输出模式下同步生成 `docs/workflow-contract-matrix.md`。
 - 资产命名与边界标准见 `docs/asset-contract-standard.md`；历史角色型资产硬切换，不保留兼容 alias。
 
+CI / runner 复现：
+
+```bash
+PATH=/usr/bin:/bin bash scripts/validate-assets.sh --strict
+PATH=/usr/bin:/bin bash scripts/check-format.sh
+PATH=/usr/bin:/bin bash tests/run_all.sh
+```
+
+ADK active scripts 不直接依赖 `rtk`；本机 Codex 会话只在操作者命令边界加 `rtk`。
+
 ## 2. Profile 选择
 
 | Profile | 推荐场景 |

@@ -24,11 +24,34 @@
 bash scripts/validate-assets.sh --strict
 
 # 2. 检查格式
-bash scripts/check_format.sh
+bash scripts/check-format.sh
 
 # 3. 检查必需文件
 ls -la manifest.yaml CONTEXT.md README.md
 ```
+
+#### 问题：GitHub Actions 报 `command not found`
+```
+scripts/<name>.sh: line N: rtk: command not found
+```
+
+**可能原因**：
+- active scripts 误依赖本机 Codex 包装命令
+- 本地环境 PATH 比 GitHub runner 更宽，掩盖了依赖缺失
+- workflow 未安装脚本所需的显式依赖
+
+**解决方案**：
+```bash
+# 1. 查 active scripts 是否引用本机专属命令
+rg -n '(^|[;&|({[:space:]])rtk[[:space:]]+' scripts tests .github
+
+# 2. 用普通 runner 视角复现
+PATH=/usr/bin:/bin bash scripts/validate-assets.sh --strict
+PATH=/usr/bin:/bin bash scripts/check-format.sh
+PATH=/usr/bin:/bin bash tests/run_all.sh
+```
+
+ADK 脚本和 CI 不应直接调用 `rtk`；在本机 Codex 会话中执行这些命令时，才由操作者在命令最前面加 `rtk`。
 
 ### 2. 测试问题
 

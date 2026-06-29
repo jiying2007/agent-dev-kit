@@ -3,6 +3,7 @@
 | Area | Document | Purpose |
 |---|---|---|
 | Usage | `usage.md` | 通用使用入口 |
+| Usage Guide | `adk-usage-guide.md` | 完整使用路径、资产修改、CI 边界和提交门禁 |
 | Commands | `commands.md` | CLI 命令说明 |
 | Profiles | `profile-guide.md` | Profile 选择 |
 | Mapping | `mapping-matrix.md` | 能力到脚本/工件映射 |
