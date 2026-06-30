@@ -37,6 +37,8 @@ require_text "skills/adk-verification-before-completion/SKILL.md" "templates/gov
 require_text "skills/adk-after-action-review/SKILL.md" "promotion_candidate: true"
 require_text "skills/adk-verification-before-completion/SKILL.md" "promotion_candidate: true"
 require_text "skills/adk-verification-before-completion/SKILL.md" "needs-fix"
+require_text "skills/adk-verification-before-completion/SKILL.md" "Subjective Feature Proof"
+require_text "skills/adk-verification-before-completion/SKILL.md" "independent_verifier"
 require_text "templates/governance/codify-decision.md" "negative_or_disproved_path"
 
 TRUE_FIXTURE="tests/fixtures/codify-decision/promotion_candidate_true.md"

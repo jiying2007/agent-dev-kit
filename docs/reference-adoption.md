@@ -215,3 +215,21 @@
 有意排除：
 - 不导入 `scale` CLI、npm scripts、hook、orchestrator、dashboard、active red team、visual gate 或外部 token 同步运行态。
 - 不把报告本身当成 ADK 证据；采纳矩阵必须指向真实存在的 `agent-dev-kit/...` 资产。
+
+## 13. AI-Builder-Club loop engineer 方法迁移（2026-06-30）
+
+借鉴点：
+- 周期性 automation 或 loop 首次建立时必须有小范围真实试跑，无法实跑时记录明确 dry-run 缺口、timeline/run-record、发现摘要和下一次入口。
+- 主观或用户可见功能不能由实现者自证完成，必须有独立 verifier 的 expected/observed/evidence/verdict。
+- e2e 证据应验证真实流程和稳定断言，不为了变绿削弱断言。
+
+落地点：
+- `skills/adk-verification-before-completion/SKILL.md`
+- `manifests/automation_worktree_contracts.json`
+- `scripts/check-openai-developers-governance.sh`
+- `scripts/check-codify-governance.sh`
+
+有意排除：
+- 不加入 `AI-Builder-Club/skills` 为 active reference repo。
+- 不复制 Claude plugin、`CLAUDE.md` 结构、crabbox/Daytona runtime、云凭证或第三方模板。
+- 不把外部 skill 文案原样写入 ADK；只保留可由本地门禁验证的方法字段。

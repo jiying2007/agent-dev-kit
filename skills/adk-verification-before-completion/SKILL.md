@@ -2,7 +2,7 @@
 name: adk-verification-before-completion
 description: 完成前验证门禁，确保交付声明与证据一致
 version: 1.0.0
-last_updated: 2026-06-29
+last_updated: 2026-06-30
 triggers:
   - "准备完成"
   - "准备提交"
@@ -32,7 +32,7 @@ constraints:
 ## Workflow
 1. 收敛改动范围：确认本次改动边界、影响面与非目标。
 2. 完成声明分离：记录 claimant 的完成声明，再由 verifier 逐条核验证据，不直接采信声明文本。
-3. 证据核验：核对 lint/test/build/smoke 等结果与执行环境。
+3. 证据核验：核对 lint/test/build/smoke 等结果与执行环境；主观或用户可见功能必须有独立 verifier 的 Subjective Feature Proof，不能由实现者自证。
 4. 评审闭环：按 blocker/major/minor 分级，检查必须项是否关闭。
 5. 运行目标检查：若目标是运行时目录，必须补显式 tool target 适配证据与运行目录健康验证证据。
 6. 配置加载核验：若涉及运行时配置变更，补 `声明配置 vs 运行态加载` 对比证据。
@@ -87,6 +87,7 @@ rtk bash scripts/check-codify-governance.sh
   - rollback_path:
   - verification_evidence:
 - Completion Guard Payload: required_checks / passed_checks / failed_checks / skipped_with_reason / stale_checks / verifier / completion_allowed
+- Subjective Feature Proof: feature / independent_verifier / expected / observed / evidence / verdict
 - Review Status (B/M/m):
 - Breaking Change Decision:
 - Risk + Rollback:
@@ -103,7 +104,7 @@ Evidence Index（命令级）:
 ## Failure Handling
 - 关键命令无法执行时，必须说明原因并降级完成度表述。
 - 若 blocker 未闭环，结论固定为 `needs-fix`，不得放行。
-- claimant 声明缺少对应证据、证据过期或 verifier 未独立核对时，结论固定为 `needs-fix`。
+- claimant 声明缺少对应证据、证据过期、verifier 未独立核对，或主观/用户可见功能缺少 verifier verdict 时，结论固定为 `needs-fix`。
 - retry budget 用尽、heartbeat 过期或 open items 未解释时，不得给出 `pass`。
 
 ## 与 adk-commit-pr-quality-gate 的区别
@@ -112,7 +113,7 @@ Evidence Index（命令级）:
 
 ## Quality Gate
 - 输出必须包含验证命令、关键结果、风险项和处理状态。
-- 完成声明必须区分 claimant、verifier、证据列表、缺失证据和 open items。
+- 完成声明必须区分 claimant、verifier、证据列表、缺失证据和 open items；主观/用户可见功能还必须区分 expected/observed/verdict。
 - 若存在未闭环 blocker，结论必须为 `needs-fix`。
 - 完成声明需与实际证据逐项可追溯。
 - 若声明目标可在运行时目录放行，必须附显式 tool target 适配证据和运行目录健康验证结果。

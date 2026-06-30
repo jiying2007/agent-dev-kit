@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-05-26",
+  "last_updated": "2026-06-30",
   "source_docs": [
     "openai-codex-app-automations",
     "openai-codex-app-worktrees",
@@ -24,6 +24,13 @@
       "sandbox_policy": "workspace-write + on-request unless explicitly reviewed",
       "approval_policy": "human review before file writes, commits, pushes, publishes, deletes or external notifications",
       "first_run_review": true,
+      "first_run_evidence": [
+        "small-scope real run or explicit dry-run gap",
+        "timeline or run-record entry",
+        "findings summary",
+        "missing tools or credentials",
+        "next cadence entry point"
+      ],
       "result_policy": "findings go to triage or report artifact; no silent mutation",
       "cleanup_policy": "archive stale runs and do not pin worktrees unless retention is intentional"
     },
@@ -44,6 +51,13 @@
       "sandbox_policy": "inherits current thread policy; must not widen permissions",
       "approval_policy": "no unattended write unless the active workflow already has explicit approval and rollback evidence",
       "first_run_review": true,
+      "first_run_evidence": [
+        "heartbeat smoke or explicit dry-run gap",
+        "thread timeline entry",
+        "changed blocker summary",
+        "missing context or manual input",
+        "next wake-up or stop decision"
+      ],
       "result_policy": "preserve context in the current thread and update blockers only when evidence changed",
       "cleanup_policy": "remove heartbeat when stop condition is met"
     }
@@ -86,6 +100,7 @@
   "quality_gate": {
     "automations_enabled_default_must_be_false": true,
     "first_runs_require_review": true,
+    "first_run_evidence_required": true,
     "full_access_never_for_default_automation": true,
     "worktree_cleanup_requires_retention_decision": true
   }

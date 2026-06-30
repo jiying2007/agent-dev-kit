@@ -894,6 +894,7 @@ for contract in automation_contracts:
             "sandbox_policy",
             "approval_policy",
             "first_run_review",
+            "first_run_evidence",
             "result_policy",
             "cleanup_policy",
         ],
@@ -905,6 +906,12 @@ for contract in automation_contracts:
         fail(f"automation contract {cid} must be disabled by default")
     if contract.get("first_run_review") is not True:
         fail(f"automation contract {cid} must require first-run review")
+    first_run_evidence = contract.get("first_run_evidence", [])
+    if len(first_run_evidence) < 3:
+        fail(f"automation contract {cid} first_run_evidence must contain at least three evidence items")
+    for required_evidence in ("run", "summary"):
+        if not any(required_evidence in item for item in first_run_evidence):
+            fail(f"automation contract {cid} first_run_evidence missing {required_evidence}")
     for required_prompt in ("durable", "stop"):
         if not any(required_prompt in item for item in contract.get("prompt_requirements", [])):
             fail(f"automation contract {cid} prompt_requirements missing {required_prompt}")
@@ -922,6 +929,7 @@ require_keys(
     [
         "automations_enabled_default_must_be_false",
         "first_runs_require_review",
+        "first_run_evidence_required",
         "full_access_never_for_default_automation",
         "worktree_cleanup_requires_retention_decision",
     ],
@@ -930,6 +938,7 @@ require_keys(
 for key in (
     "automations_enabled_default_must_be_false",
     "first_runs_require_review",
+    "first_run_evidence_required",
     "full_access_never_for_default_automation",
     "worktree_cleanup_requires_retention_decision",
 ):
