@@ -36,6 +36,86 @@ quality_tiers:
   p2:
     description: 可选场景资产，必须具备边界说明和最小验证路径
 
+asset_taxonomy:
+  skill_categories:
+    - name: routing
+      lifecycle_order: 10
+      description: 运行时路由、profile 选择和上下文入口
+    - name: intake
+      lifecycle_order: 20
+      description: 需求收敛、问题澄清和验收定义
+    - name: planning
+      lifecycle_order: 30
+      description: 计划、任务拆解、并行治理和长任务执行闭环
+    - name: design
+      lifecycle_order: 40
+      description: 架构、接口、协议和契约设计
+    - name: implementation
+      lifecycle_order: 50
+      description: 具体实现方法、领域开发、构建和工具接入
+    - name: debugging
+      lifecycle_order: 60
+      description: 根因定位、日志、core、设备调试和性能诊断
+    - name: verification
+      lifecycle_order: 70
+      description: 测试策略、完成前验证和证据检查
+    - name: review_quality
+      lifecycle_order: 80
+      description: review、提交、PR、静态分析和漂移治理
+    - name: release_closure
+      lifecycle_order: 90
+      description: 发布、版本、分支收口、交接和复盘
+    - name: governance
+      lifecycle_order: 100
+      description: skill、profile、workflow、归档、记忆和知识治理
+  workflow_types:
+    - name: feature-delivery
+      lifecycle_order: 10
+      description: 新功能和增强交付闭环
+    - name: bugfix-delivery
+      lifecycle_order: 20
+      description: 缺陷复现、根因定位、修复和回归闭环
+    - name: refactor-delivery
+      lifecycle_order: 30
+      description: 重构、接口稳定性和回归闭环
+    - name: embedded-bringup-delivery
+      lifecycle_order: 40
+      description: BSP、驱动、设备 bring-up 和板级验证闭环
+    - name: diagnostic-delivery
+      lifecycle_order: 50
+      description: 诊断、日志、core 和现场问题闭环
+    - name: release-hardening
+      lifecycle_order: 60
+      description: 发布、版本、回滚和放行证据闭环
+    - name: incident-response
+      lifecycle_order: 70
+      description: 事故响应、恢复和复盘闭环
+    - name: research-intake
+      lifecycle_order: 80
+      description: 外部资料、参考仓和候选实践吸收闭环
+    - name: skill-curation-delivery
+      lifecycle_order: 90
+      description: skill 新增、替换、弃用和触发治理闭环
+    - name: archive-memory-governance
+      lifecycle_order: 100
+      description: 归档、记忆和长期知识治理闭环
+    - name: adk-governance
+      lifecycle_order: 110
+      description: ADK 资产生产、分类、路由和交付门禁闭环
+  skill_patterns:
+    - tool-wrapper
+    - generator
+    - reviewer
+    - inversion
+    - pipeline
+    - playbook
+    - governance
+  activation_modes:
+    - primary
+    - supporting
+    - fallback
+    - governance
+
 knowledge_layers:
   L0:
     name: toolchain
@@ -108,6 +188,7 @@ embedded_context_layers:
         - skills/adk-driver-bringup-checklist/
         - skills/adk-interrupt-dma-patterns/
       debugging:
+        - skills/adk-embedded-remote-debug-log-triage/
         - skills/adk-systematic-debugging/
         - knowledge/L2-domain/oops-patterns/
   L3-on-demand:
@@ -349,6 +430,7 @@ agents:
       - test-validation-engineer
     default_skills:
       - adk-hardware-debugging
+      - adk-embedded-remote-debug-log-triage
       - adk-systematic-debugging
     quality_gate: 硬件调试结论必须包含现象、假设、实验和证据
 
@@ -356,260 +438,548 @@ skills:
   - name: adk-requirements-triage
     path: skills/adk-requirements-triage/SKILL.md
     quality_tier: p0
+    category: intake
+    lifecycle_order: 20
+    stage_order: 10
+    activation_mode: primary
+    pattern: playbook
     depends_on: []
   - name: adk-runtime-router
     path: skills/adk-runtime-router/SKILL.md
     quality_tier: p0
+    category: routing
+    lifecycle_order: 10
+    stage_order: 10
+    activation_mode: primary
+    pattern: governance
     depends_on: []
   - name: adk-test-strategy
     path: skills/adk-test-strategy/SKILL.md
     quality_tier: p0
+    category: verification
+    lifecycle_order: 70
+    stage_order: 10
+    activation_mode: primary
+    pattern: playbook
     depends_on:
       - adk-runtime-router
   - name: adk-code-review-loop
     path: skills/adk-code-review-loop/SKILL.md
     quality_tier: p0
+    category: review_quality
+    lifecycle_order: 80
+    stage_order: 30
+    activation_mode: primary
+    pattern: reviewer
     depends_on:
       - adk-verification-before-completion
   - name: adk-parallel-agent-governance
     path: skills/adk-parallel-agent-governance/SKILL.md
     quality_tier: p0
+    category: planning
+    lifecycle_order: 30
+    stage_order: 30
+    activation_mode: primary
+    pattern: governance
     depends_on:
       - adk-task-breakdown
   - name: adk-worktree-governance
     path: skills/adk-worktree-governance/SKILL.md
     quality_tier: p0
+    category: planning
+    lifecycle_order: 30
+    stage_order: 40
+    activation_mode: primary
+    pattern: governance
     depends_on:
       - adk-task-breakdown
   - name: adk-branch-closeout
     path: skills/adk-branch-closeout/SKILL.md
     quality_tier: p0
+    category: release_closure
+    lifecycle_order: 90
+    stage_order: 60
+    activation_mode: primary
+    pattern: governance
     depends_on:
       - adk-verification-before-completion
   - name: adk-adr-writer
     path: skills/adk-adr-writer/SKILL.md
     quality_tier: p1
+    category: design
+    lifecycle_order: 40
+    stage_order: 20
+    activation_mode: primary
+    pattern: generator
     depends_on: []
   - name: adk-task-breakdown
     path: skills/adk-task-breakdown/SKILL.md
     quality_tier: p0
+    category: planning
+    lifecycle_order: 30
+    stage_order: 20
+    activation_mode: primary
+    pattern: playbook
     depends_on:
       - adk-requirements-triage
   - name: adk-lightweight-planning
     path: skills/adk-lightweight-planning/SKILL.md
     quality_tier: p1
+    category: planning
+    lifecycle_order: 30
+    stage_order: 10
+    activation_mode: primary
+    pattern: playbook
     depends_on: []
   - name: adk-context-compress-handoff
     path: skills/adk-context-compress-handoff/SKILL.md
     quality_tier: p1
+    category: planning
+    lifecycle_order: 30
+    stage_order: 50
+    activation_mode: primary
+    pattern: generator
     depends_on:
       - adk-token-context-governance
       - adk-verification-before-completion
   - name: adk-interface-contract-design
     path: skills/adk-interface-contract-design/SKILL.md
     quality_tier: p0
+    category: design
+    lifecycle_order: 40
+    stage_order: 10
+    activation_mode: primary
+    pattern: generator
     depends_on:
       - adk-requirements-triage
   - name: adk-register-map-design
     path: skills/adk-register-map-design/SKILL.md
     quality_tier: p0
+    category: design
+    lifecycle_order: 40
+    stage_order: 40
+    activation_mode: primary
+    pattern: generator
     depends_on:
       - adk-interface-contract-design
   - name: adk-driver-bringup-checklist
     path: skills/adk-driver-bringup-checklist/SKILL.md
     quality_tier: p0
+    category: implementation
+    lifecycle_order: 50
+    stage_order: 20
+    activation_mode: primary
+    pattern: playbook
     depends_on:
       - adk-register-map-design
   - name: adk-bsp-porting-playbook
     path: skills/adk-bsp-porting-playbook/SKILL.md
     quality_tier: p0
+    category: implementation
+    lifecycle_order: 50
+    stage_order: 30
+    activation_mode: primary
+    pattern: playbook
     depends_on:
       - adk-driver-bringup-checklist
   - name: adk-rtos-task-design
     path: skills/adk-rtos-task-design/SKILL.md
     quality_tier: p0
+    category: implementation
+    lifecycle_order: 50
+    stage_order: 40
+    activation_mode: primary
+    pattern: playbook
     depends_on: []
   - name: adk-interrupt-dma-patterns
     path: skills/adk-interrupt-dma-patterns/SKILL.md
     quality_tier: p0
+    category: implementation
+    lifecycle_order: 50
+    stage_order: 50
+    activation_mode: primary
+    pattern: playbook
     depends_on: []
   - name: adk-protocol-stack-integration
     path: skills/adk-protocol-stack-integration/SKILL.md
     quality_tier: p0
+    category: implementation
+    lifecycle_order: 50
+    stage_order: 60
+    activation_mode: primary
+    pattern: playbook
     depends_on:
       - adk-interface-contract-design
   - name: adk-component-api-stability
     path: skills/adk-component-api-stability/SKILL.md
     quality_tier: p0
+    category: design
+    lifecycle_order: 40
+    stage_order: 30
+    activation_mode: primary
+    pattern: reviewer
     depends_on:
       - adk-interface-contract-design
   - name: adk-cmake-cross-build
     path: skills/adk-cmake-cross-build/SKILL.md
     quality_tier: p0
+    category: implementation
+    lifecycle_order: 50
+    stage_order: 70
+    activation_mode: primary
+    pattern: tool-wrapper
     depends_on: []
-  - name: adk-toolchain-debug-openocd-gdb
-    path: skills/adk-toolchain-debug-openocd-gdb/SKILL.md
+  - name: adk-embedded-debug-transport
+    path: skills/adk-embedded-debug-transport/SKILL.md
     quality_tier: p0
+    category: debugging
+    lifecycle_order: 60
+    stage_order: 20
+    activation_mode: primary
+    pattern: tool-wrapper
     depends_on:
       - adk-systematic-debugging
   - name: adk-static-analysis-c-cpp
     path: skills/adk-static-analysis-c-cpp/SKILL.md
     quality_tier: p0
+    category: review_quality
+    lifecycle_order: 80
+    stage_order: 50
+    activation_mode: primary
+    pattern: reviewer
     depends_on: []
   - name: adk-systematic-debugging
     path: skills/adk-systematic-debugging/SKILL.md
     quality_tier: p0
+    category: debugging
+    lifecycle_order: 60
+    stage_order: 10
+    activation_mode: primary
+    pattern: playbook
     depends_on: []
   - name: adk-unit-test-embedded
     path: skills/adk-unit-test-embedded/SKILL.md
     quality_tier: p0
+    category: verification
+    lifecycle_order: 70
+    stage_order: 20
+    activation_mode: primary
+    pattern: generator
     depends_on: []
   - name: adk-verification-before-completion
     path: skills/adk-verification-before-completion/SKILL.md
     quality_tier: p0
+    category: verification
+    lifecycle_order: 70
+    stage_order: 80
+    activation_mode: primary
+    pattern: reviewer
     depends_on: []
   - name: adk-after-action-review
     path: skills/adk-after-action-review/SKILL.md
     quality_tier: p0
+    category: release_closure
+    lifecycle_order: 90
+    stage_order: 70
+    activation_mode: primary
+    pattern: reviewer
     depends_on:
       - adk-verification-before-completion
   - name: adk-engineering-growth-review
     path: skills/adk-engineering-growth-review/SKILL.md
     quality_tier: p1
+    category: governance
+    lifecycle_order: 100
+    stage_order: 50
+    activation_mode: primary
+    pattern: reviewer
     depends_on:
       - adk-after-action-review
       - adk-token-context-governance
   - name: adk-memory-curator
     path: skills/adk-memory-curator/SKILL.md
     quality_tier: p1
+    category: governance
+    lifecycle_order: 100
+    stage_order: 10
+    activation_mode: primary
+    pattern: governance
     depends_on:
       - adk-after-action-review
       - adk-token-context-governance
   - name: adk-archive-governance
     path: skills/adk-archive-governance/SKILL.md
     quality_tier: p1
+    category: governance
+    lifecycle_order: 100
+    stage_order: 20
+    activation_mode: primary
+    pattern: governance
     depends_on:
       - adk-verification-before-completion
   - name: adk-knowledge-archive
     path: skills/adk-knowledge-archive/SKILL.md
     quality_tier: p1
+    category: governance
+    lifecycle_order: 100
+    stage_order: 30
+    activation_mode: primary
+    pattern: generator
     depends_on:
       - adk-archive-governance
   - name: adk-integration-hil-sil
     path: skills/adk-integration-hil-sil/SKILL.md
     quality_tier: p0
+    category: verification
+    lifecycle_order: 70
+    stage_order: 30
+    activation_mode: primary
+    pattern: playbook
     depends_on:
       - adk-unit-test-embedded
   - name: adk-fault-injection-recovery
     path: skills/adk-fault-injection-recovery/SKILL.md
     quality_tier: p0
+    category: verification
+    lifecycle_order: 70
+    stage_order: 50
+    activation_mode: primary
+    pattern: playbook
     depends_on:
       - adk-integration-hil-sil
   - name: adk-performance-profiling-embedded
     path: skills/adk-performance-profiling-embedded/SKILL.md
     quality_tier: p0
+    category: debugging
+    lifecycle_order: 60
+    stage_order: 60
+    activation_mode: primary
+    pattern: tool-wrapper
     depends_on:
       - adk-systematic-debugging
   - name: adk-release-versioning
     path: skills/adk-release-versioning/SKILL.md
     quality_tier: p0
+    category: release_closure
+    lifecycle_order: 90
+    stage_order: 10
+    activation_mode: primary
+    pattern: generator
     depends_on:
       - adk-commit-pr-quality-gate
   - name: adk-production-field-readiness
     path: skills/adk-production-field-readiness/SKILL.md
     quality_tier: p0
+    category: release_closure
+    lifecycle_order: 90
+    stage_order: 20
+    activation_mode: primary
+    pattern: reviewer
     depends_on:
       - adk-release-versioning
       - adk-integration-hil-sil
   - name: adk-embedded-diagnostic-harness
     path: skills/adk-embedded-diagnostic-harness/SKILL.md
     quality_tier: p0
+    category: verification
+    lifecycle_order: 70
+    stage_order: 40
+    activation_mode: primary
+    pattern: tool-wrapper
     depends_on:
       - adk-test-strategy
       - adk-integration-hil-sil
   - name: adk-embedded-release-orchestration
     path: skills/adk-embedded-release-orchestration/SKILL.md
     quality_tier: p0
+    category: release_closure
+    lifecycle_order: 90
+    stage_order: 30
+    activation_mode: primary
+    pattern: pipeline
     depends_on:
       - adk-release-versioning
       - adk-production-field-readiness
   - name: adk-commit-pr-quality-gate
     path: skills/adk-commit-pr-quality-gate/SKILL.md
     quality_tier: p0
+    category: review_quality
+    lifecycle_order: 80
+    stage_order: 60
+    activation_mode: primary
+    pattern: reviewer
     depends_on:
       - adk-verification-before-completion
   - name: adk-structured-requirements-questioning
     path: skills/adk-structured-requirements-questioning/SKILL.md
     quality_tier: p0
+    category: intake
+    lifecycle_order: 20
+    stage_order: 20
+    activation_mode: primary
+    pattern: inversion
     depends_on: []
   - name: adk-code-simplification
     path: skills/adk-code-simplification/SKILL.md
     quality_tier: p0
+    category: implementation
+    lifecycle_order: 50
+    stage_order: 80
+    activation_mode: primary
+    pattern: reviewer
     depends_on: []
   - name: adk-context-engineering
     path: skills/adk-context-engineering/SKILL.md
     quality_tier: p0
+    category: routing
+    lifecycle_order: 10
+    stage_order: 30
+    activation_mode: primary
+    pattern: governance
     depends_on: []
   - name: adk-token-context-governance
     path: skills/adk-token-context-governance/SKILL.md
     quality_tier: p0
+    category: routing
+    lifecycle_order: 10
+    stage_order: 20
+    activation_mode: primary
+    pattern: governance
     depends_on:
       - adk-context-engineering
       - adk-verification-before-completion
   - name: adk-repo-drift-remediation
     path: skills/adk-repo-drift-remediation/SKILL.md
     quality_tier: p1
+    category: review_quality
+    lifecycle_order: 80
+    stage_order: 40
+    activation_mode: primary
+    pattern: reviewer
     depends_on:
       - adk-verification-before-completion
   - name: adk-chinese-commit-conventions
     path: skills/adk-chinese-commit-conventions/SKILL.md
     quality_tier: p0
+    category: review_quality
+    lifecycle_order: 80
+    stage_order: 10
+    activation_mode: supporting
+    pattern: reviewer
     depends_on: []
   - name: adk-chinese-code-review
     path: skills/adk-chinese-code-review/SKILL.md
     quality_tier: p0
+    category: review_quality
+    lifecycle_order: 80
+    stage_order: 20
+    activation_mode: supporting
+    pattern: reviewer
     depends_on: []
   - name: adk-repo-prompt-analysis
     path: skills/adk-repo-prompt-analysis/SKILL.md
     quality_tier: p0
+    category: intake
+    lifecycle_order: 20
+    stage_order: 30
+    activation_mode: primary
+    pattern: reviewer
     depends_on: []
   - name: adk-skill-deep-analysis
     path: skills/adk-skill-deep-analysis/SKILL.md
     quality_tier: p0
+    category: intake
+    lifecycle_order: 20
+    stage_order: 40
+    activation_mode: primary
+    pattern: reviewer
     depends_on: []
   - name: adk-artifact-gating
     path: skills/adk-artifact-gating/SKILL.md
     quality_tier: p0
+    category: verification
+    lifecycle_order: 70
+    stage_order: 60
+    activation_mode: primary
+    pattern: reviewer
     depends_on: []
   - name: adk-pilot-framework
     path: skills/adk-pilot-framework/SKILL.md
     quality_tier: p0
+    category: verification
+    lifecycle_order: 70
+    stage_order: 70
+    activation_mode: primary
+    pattern: pipeline
     depends_on: []
   - name: adk-intake-workflow
     path: skills/adk-intake-workflow/SKILL.md
     quality_tier: p0
+    category: intake
+    lifecycle_order: 20
+    stage_order: 50
+    activation_mode: primary
+    pattern: pipeline
     depends_on: []
   # 嵌入式专用技能
   - name: adk-bsp-analysis
     path: skills/adk-bsp-analysis/SKILL.md
     quality_tier: p1
+    category: design
+    lifecycle_order: 40
+    stage_order: 50
+    activation_mode: primary
+    pattern: playbook
     depends_on: []
   - name: adk-driver-implementation
     path: skills/adk-driver-implementation/SKILL.md
     quality_tier: p1
+    category: implementation
+    lifecycle_order: 50
+    stage_order: 10
+    activation_mode: primary
+    pattern: playbook
     depends_on: []
   - name: adk-hardware-debugging
     path: skills/adk-hardware-debugging/SKILL.md
     quality_tier: p1
+    category: debugging
+    lifecycle_order: 60
+    stage_order: 50
+    activation_mode: primary
+    pattern: playbook
     depends_on: []
+  - name: adk-embedded-remote-debug-log-triage
+    path: skills/adk-embedded-remote-debug-log-triage/SKILL.md
+    quality_tier: p1
+    category: debugging
+    lifecycle_order: 60
+    stage_order: 30
+    activation_mode: primary
+    pattern: playbook
+    depends_on:
+      - adk-systematic-debugging
+      - adk-offline-core-dump-triage
+      - adk-embedded-diagnostic-harness
+      - adk-token-context-governance
   - name: adk-offline-core-dump-triage
     path: skills/adk-offline-core-dump-triage/SKILL.md
     quality_tier: p1
+    category: debugging
+    lifecycle_order: 60
+    stage_order: 40
+    activation_mode: primary
+    pattern: playbook
     depends_on:
       - adk-systematic-debugging
   - name: adk-embedded-storage-layout-migration
     path: skills/adk-embedded-storage-layout-migration/SKILL.md
     quality_tier: p1
+    category: release_closure
+    lifecycle_order: 90
+    stage_order: 40
+    activation_mode: primary
+    pattern: pipeline
     depends_on:
       - adk-embedded-release-orchestration
       - adk-production-field-readiness
@@ -631,28 +1001,30 @@ profiles:
       - code-review-governor
     include_skills:
       - adk-runtime-router
+      - adk-token-context-governance
+      - adk-context-engineering
       - adk-requirements-triage
+      - adk-structured-requirements-questioning
       - adk-lightweight-planning
       - adk-task-breakdown
-      - adk-test-strategy
-      - adk-code-review-loop
       - adk-parallel-agent-governance
       - adk-worktree-governance
-      - adk-branch-closeout
-      - adk-adr-writer
+      - adk-context-compress-handoff
       - adk-interface-contract-design
+      - adk-adr-writer
       - adk-component-api-stability
       - adk-driver-implementation
       - adk-driver-bringup-checklist
-      - adk-static-analysis-c-cpp
       - adk-systematic-debugging
+      - adk-test-strategy
       - adk-unit-test-embedded
       - adk-verification-before-completion
-      - adk-after-action-review
-      - adk-token-context-governance
-      - adk-context-compress-handoff
+      - adk-code-review-loop
       - adk-repo-drift-remediation
+      - adk-static-analysis-c-cpp
       - adk-commit-pr-quality-gate
+      - adk-branch-closeout
+      - adk-after-action-review
   release-hardening:
     description: 发布加固配置（安全审查、性能优化、合规检查）
     trigger_examples:
@@ -664,26 +1036,26 @@ profiles:
       - performance-reliability-engineer
       - build-release-engineer
     include_skills:
-      - adk-release-versioning
-      - adk-structured-requirements-questioning
-      - adk-test-strategy
-      - adk-code-review-loop
-      - adk-branch-closeout
-      - adk-requirements-triage
-      - adk-task-breakdown
-      - adk-interface-contract-design
-      - adk-static-analysis-c-cpp
-      - adk-systematic-debugging
-      - adk-unit-test-embedded
-      - adk-verification-before-completion
-      - adk-after-action-review
       - adk-token-context-governance
+      - adk-requirements-triage
+      - adk-structured-requirements-questioning
+      - adk-task-breakdown
       - adk-context-compress-handoff
-      - adk-repo-drift-remediation
-      - adk-embedded-release-orchestration
-      - adk-fault-injection-recovery
+      - adk-interface-contract-design
+      - adk-systematic-debugging
       - adk-performance-profiling-embedded
+      - adk-test-strategy
+      - adk-unit-test-embedded
+      - adk-fault-injection-recovery
+      - adk-verification-before-completion
+      - adk-code-review-loop
+      - adk-repo-drift-remediation
+      - adk-static-analysis-c-cpp
       - adk-commit-pr-quality-gate
+      - adk-release-versioning
+      - adk-embedded-release-orchestration
+      - adk-branch-closeout
+      - adk-after-action-review
   personal-core:
     description: 个人通用 ADK 资产配置（核心功能 + 发布检查）
     trigger_examples:
@@ -692,10 +1064,10 @@ profiles:
     extends: core
     include_skills:
       - adk-release-versioning
-      - adk-engineering-growth-review
       - adk-memory-curator
       - adk-archive-governance
       - adk-knowledge-archive
+      - adk-engineering-growth-review
   embedded-fullstack:
     description: 嵌入式全栈开发配置（芯片/板级、启动链、BSP、驱动、组件、应用、工具、验证、量产和现场维护）
     trigger_examples:
@@ -709,21 +1081,22 @@ profiles:
       - hardware-debugger
       - application-engineer
     include_skills:
-      - adk-bsp-analysis
-      - adk-hardware-debugging
       - adk-register-map-design
+      - adk-bsp-analysis
       - adk-bsp-porting-playbook
       - adk-rtos-task-design
       - adk-interrupt-dma-patterns
       - adk-protocol-stack-integration
       - adk-cmake-cross-build
-      - adk-toolchain-debug-openocd-gdb
-      - adk-integration-hil-sil
-      - adk-fault-injection-recovery
+      - adk-embedded-debug-transport
+      - adk-embedded-remote-debug-log-triage
+      - adk-hardware-debugging
       - adk-performance-profiling-embedded
+      - adk-integration-hil-sil
+      - adk-embedded-diagnostic-harness
+      - adk-fault-injection-recovery
       - adk-release-versioning
       - adk-production-field-readiness
-      - adk-embedded-diagnostic-harness
       - adk-embedded-release-orchestration
   team-core:
     description: 团队协作配置（交接/验证/评审）
@@ -733,13 +1106,12 @@ profiles:
       - "团队评审"
     extends: core
     include_skills:
-      - adk-engineering-growth-review
+      - adk-chinese-commit-conventions
+      - adk-chinese-code-review
       - adk-memory-curator
       - adk-archive-governance
       - adk-knowledge-archive
-      - adk-structured-requirements-questioning
-      - adk-chinese-commit-conventions
-      - adk-chinese-code-review
+      - adk-engineering-growth-review
   openspec-driven:
     description: Spec 驱动开发配置（需求/设计/任务链路）
     trigger_examples:
@@ -767,8 +1139,9 @@ profiles:
       - security-compliance-reviewer
     include_skills:
       - adk-systematic-debugging
-      - adk-fault-injection-recovery
+      - adk-embedded-remote-debug-log-triage
       - adk-performance-profiling-embedded
+      - adk-fault-injection-recovery
       - adk-static-analysis-c-cpp
       - adk-commit-pr-quality-gate
   research-intake:
@@ -781,18 +1154,20 @@ profiles:
       - requirements-analyst
     include_skills:
       - adk-requirements-triage
-      - adk-task-breakdown
       - adk-repo-prompt-analysis
       - adk-skill-deep-analysis
       - adk-intake-workflow
+      - adk-task-breakdown
+      - adk-memory-curator
       - adk-archive-governance
       - adk-knowledge-archive
-      - adk-memory-curator
 
 workflows:
   - name: adk-delivery-gate
     path: workflows/adk-delivery-gate/WORKFLOW.md
     description: agent-dev-kit 通用资产生产交付门禁
+    workflow_type: adk-governance
+    lifecycle_order: 110
     profiles:
       - core
       - embedded-fullstack
@@ -813,6 +1188,13 @@ workflows:
       - "agent-dev-kit 交付"
       - "嵌入式资产发布"
       - "完成前验证"
+    entry_conditions:
+      - "ADK active 资产、manifest、profile、workflow 或门禁发生变更"
+      - "需要把变更声明和验证证据绑定到完成前门禁"
+    exit_evidence:
+      - "strict validate 通过"
+      - "workflow closure 或 profile coherence 通过"
+      - "run_all 或等效定向回归证据"
     skills:
       - adk-runtime-router
       - adk-requirements-triage
@@ -836,6 +1218,8 @@ workflows:
   - name: feature-delivery
     path: workflows/feature-delivery/WORKFLOW.md
     description: 新功能从需求收敛到验证评审的交付工作流
+    workflow_type: feature-delivery
+    lifecycle_order: 10
     profiles:
       - core
       - embedded-fullstack
@@ -852,6 +1236,13 @@ workflows:
       - "新功能迭代"
       - "功能开发"
       - "feature delivery"
+    entry_conditions:
+      - "用户目标包含新功能、增强或可验收行为变化"
+      - "需求可以通过目标、非目标和验收标准表达"
+    exit_evidence:
+      - "需求和任务拆解闭环"
+      - "实现范围与验收标准一致"
+      - "目标测试和完成前验证通过"
     skills:
       - adk-requirements-triage
       - adk-task-breakdown
@@ -874,6 +1265,8 @@ workflows:
   - name: bugfix-delivery
     path: workflows/bugfix-delivery/WORKFLOW.md
     description: 缺陷复现、根因定位、回归验证和审查闭环工作流
+    workflow_type: bugfix-delivery
+    lifecycle_order: 20
     profiles:
       - embedded-fullstack
     command_risk: low
@@ -887,6 +1280,14 @@ workflows:
       - "缺陷修复"
       - "bugfix"
       - "回归测试"
+    entry_conditions:
+      - "观察行为与预期行为不一致"
+      - "需要先复现、定位根因，再实施修复"
+    exit_evidence:
+      - "根因陈述"
+      - "修复摘要"
+      - "复现路径或负结果说明"
+      - "定向回归验证"
     skills:
       - adk-systematic-debugging
       - adk-task-breakdown
@@ -905,6 +1306,8 @@ workflows:
   - name: release-hardening
     path: workflows/release-hardening/WORKFLOW.md
     description: 发布前安全、性能、版本、回滚和放行证据收口工作流
+    workflow_type: release-hardening
+    lifecycle_order: 60
     profiles:
       - release-hardening
     command_risk: medium
@@ -920,6 +1323,14 @@ workflows:
       - "准备发布"
       - "发布前检查"
       - "release hardening"
+    entry_conditions:
+      - "变更准备进入发布、打包、交付或现场放行阶段"
+      - "需要版本、回滚、安全、性能或放行证据"
+    exit_evidence:
+      - "版本与制品信息"
+      - "回滚路径"
+      - "发布前验证结果"
+      - "commit/PR 或放行门禁结论"
     skills:
       - adk-release-versioning
       - adk-test-strategy
@@ -940,6 +1351,8 @@ workflows:
   - name: runtime-routing
     path: workflows/runtime-routing/WORKFLOW.md
     description: 运行时技能路由、fallback 边界和 profile 闭包验证工作流
+    workflow_type: adk-governance
+    lifecycle_order: 110
     profiles:
       - core
       - embedded-fullstack
@@ -953,6 +1366,13 @@ workflows:
       - "运行时路由"
       - "技能路由"
       - "runtime routing"
+    entry_conditions:
+      - "新增、替换、弃用或重排 skill/profile/workflow 路由"
+      - "需要确认 primary/supporting/fallback 和 profile 闭包"
+    exit_evidence:
+      - "routing matrix 与 manifest 一致"
+      - "trigger 冲突检查通过"
+      - "profile coherence 和 workflow closure 通过"
     skills:
       - adk-runtime-router
       - adk-verification-before-completion
@@ -970,6 +1390,8 @@ workflows:
   - name: skill-curation-delivery
     path: workflows/skill-curation-delivery/WORKFLOW.md
     description: 技能候选筛选、core/optional 归属和触发质量验证工作流
+    workflow_type: skill-curation-delivery
+    lifecycle_order: 90
     profiles:
       - core
       - team-core
@@ -984,6 +1406,13 @@ workflows:
       - "技能候选筛选"
       - "skill curation"
       - "core optional 归属"
+    entry_conditions:
+      - "新增、导入、拆分、替换或弃用 skill 候选"
+      - "需要判断 core/optional 归属和触发质量"
+    exit_evidence:
+      - "归属决策"
+      - "正例、反例和 fallback 样例"
+      - "catalog、SOP 和触发矩阵验证"
     skills:
       - adk-requirements-triage
       - adk-task-breakdown
@@ -1026,35 +1455,310 @@ optional_skills:
   - name: adk-incident-rca-report
     path: optional-skills/adk-incident-rca-report/SKILL.md
     quality_tier: p2
+    category: release_closure
+    lifecycle_order: 90
+    stage_order: 80
+    activation_mode: fallback
+    pattern: generator
   - name: adk-cross-team-handoff
     path: optional-skills/adk-cross-team-handoff/SKILL.md
     quality_tier: p2
+    category: release_closure
+    lifecycle_order: 90
+    stage_order: 50
+    activation_mode: supporting
+    pattern: generator
   - name: adk-data-fetch
     path: optional-skills/adk-data-fetch/SKILL.md
     quality_tier: p2
+    category: implementation
+    lifecycle_order: 50
+    stage_order: 90
+    activation_mode: supporting
+    pattern: tool-wrapper
   - name: adk-email-imap-fetch
     path: optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md
     quality_tier: p2
+    category: implementation
+    lifecycle_order: 50
+    stage_order: 91
+    activation_mode: supporting
+    pattern: tool-wrapper
   - name: adk-fetch-url-content
     path: optional-skills/adk-data-fetch/adk-fetch-url-content/SKILL.md
     quality_tier: p2
+    category: implementation
+    lifecycle_order: 50
+    stage_order: 92
+    activation_mode: supporting
+    pattern: tool-wrapper
   - name: adk-planning-execution-loop
     path: optional-skills/adk-planning-execution-loop/SKILL.md
     quality_tier: p2
+    category: planning
+    lifecycle_order: 30
+    stage_order: 60
+    activation_mode: primary
+    pattern: pipeline
   - name: adk-security-supply-chain
     path: optional-skills/adk-security-supply-chain/SKILL.md
     quality_tier: p2
+    category: review_quality
+    lifecycle_order: 80
+    stage_order: 70
+    activation_mode: primary
+    pattern: reviewer
   - name: adk-skill-composition-governance
     path: optional-skills/adk-skill-composition-governance/SKILL.md
     quality_tier: p2
+    category: governance
+    lifecycle_order: 100
+    stage_order: 40
+    activation_mode: primary
+    pattern: governance
   - name: adk-test-flakiness-triage
     path: optional-skills/adk-test-flakiness-triage/SKILL.md
     quality_tier: p2
+    category: verification
+    lifecycle_order: 70
+    stage_order: 90
+    activation_mode: primary
+    pattern: playbook
 
 install:
   default_mode: symlink
   backup_before_install: true
   lock_version: false
+
+skill_routing_matrix:
+  - name: runtime_routing
+    description: 任务开始前选择 profile、primary skill 和 supporting skill
+    primary_skill: adk-runtime-router
+    supporting_skills: []
+    fallback_skills:
+      - adk-requirements-triage
+    mutually_exclusive: []
+    workflow: runtime-routing
+    profiles:
+      - core
+      - embedded-fullstack
+    positive_examples:
+      - "判断这个任务应该使用哪个技能"
+      - "adk-first 路由这个需求"
+    negative_examples:
+      - "只要计划，不要修改文件"
+  - name: unclear_requirement
+    description: 需求、边界、验收或优先级不清，需要先收敛
+    primary_skill: adk-requirements-triage
+    supporting_skills:
+      - adk-structured-requirements-questioning
+    fallback_skills: []
+    mutually_exclusive:
+      - adk-lightweight-planning
+      - adk-planning-execution-loop
+    workflow: feature-delivery
+    profiles:
+      - core
+      - embedded-fullstack
+    positive_examples:
+      - "需求不清楚，先梳理目标和验收标准"
+      - "这个新功能边界不明确"
+    negative_examples:
+      - "按已有计划直接执行"
+  - name: planning_only
+    description: 用户明确要求只读计划，不创建、不修改、不删除文件
+    primary_skill: adk-lightweight-planning
+    supporting_skills: []
+    fallback_skills:
+      - adk-requirements-triage
+    mutually_exclusive:
+      - adk-planning-execution-loop
+    workflow: "-"
+    profiles:
+      - core
+    positive_examples:
+      - "先给计划，不要改文件"
+      - "只要轻量计划"
+    negative_examples:
+      - "按计划执行并修改代码"
+  - name: task_breakdown
+    description: 需求已明确但任务过大，需要拆成可执行任务包
+    primary_skill: adk-task-breakdown
+    supporting_skills:
+      - adk-requirements-triage
+    fallback_skills:
+      - adk-lightweight-planning
+    mutually_exclusive: []
+    workflow: feature-delivery
+    profiles:
+      - core
+      - embedded-fullstack
+    positive_examples:
+      - "任务太大，拆解成任务包"
+      - "把这个需求拆成可并行条目"
+    negative_examples:
+      - "根因不明，先定位问题"
+  - name: long_execution
+    description: 长任务需要计划审查、检查点、恢复和完成前闭环
+    availability: optional-skill-required
+    primary_skill: adk-planning-execution-loop
+    supporting_skills:
+      - adk-task-breakdown
+      - adk-verification-before-completion
+    fallback_skills:
+      - adk-lightweight-planning
+    mutually_exclusive:
+      - adk-lightweight-planning
+    workflow: feature-delivery
+    profiles:
+      - core
+      - embedded-fullstack
+    positive_examples:
+      - "分阶段执行并持续验证"
+      - "长任务需要恢复摘要和检查点"
+    negative_examples:
+      - "只要计划，不要执行"
+  - name: unknown_root_cause_bug
+    description: 行为异常但根因未明，需要系统化定位再修复
+    primary_skill: adk-systematic-debugging
+    supporting_skills:
+      - adk-test-strategy
+      - adk-verification-before-completion
+    fallback_skills: []
+    mutually_exclusive:
+      - adk-lightweight-planning
+    workflow: bugfix-delivery
+    profiles:
+      - core
+      - embedded-fullstack
+    positive_examples:
+      - "问题根因不明确，需要定位后修复"
+      - "测试失败但不知道原因"
+    negative_examples:
+      - "新功能需求需要先拆解"
+  - name: embedded_log_analysis
+    description: 嵌入式串口、boot、dmesg、ADB/logcat、OTA 或现场日志分析
+    primary_skill: adk-embedded-remote-debug-log-triage
+    supporting_skills:
+      - adk-systematic-debugging
+      - adk-embedded-debug-transport
+      - adk-offline-core-dump-triage
+    fallback_skills:
+      - adk-systematic-debugging
+    mutually_exclusive: []
+    workflow: bugfix-delivery
+    profiles:
+      - embedded-fullstack
+      - incident-response
+    positive_examples:
+      - "分析这段串口日志和 dmesg"
+      - "ADB logcat 里有异常重启"
+    negative_examples:
+      - "定义一个新接口契约"
+  - name: embedded_core_dump
+    description: 嵌入式 Linux core dump、BuildID、符号和 backtrace 离线分析
+    primary_skill: adk-offline-core-dump-triage
+    supporting_skills:
+      - adk-systematic-debugging
+      - adk-embedded-remote-debug-log-triage
+    fallback_skills:
+      - adk-systematic-debugging
+    mutually_exclusive: []
+    workflow: bugfix-delivery
+    profiles:
+      - embedded-fullstack
+      - incident-response
+    positive_examples:
+      - "分析这个 core dump 和符号匹配"
+      - "SIGSEGV backtrace 损坏，需要离线定位"
+    negative_examples:
+      - "只需要查询 skill 分类"
+  - name: embedded_debug_transport
+    description: ADB、SSH、串口、GDB remote、调试探针或厂商 CLI 的连接边界治理
+    primary_skill: adk-embedded-debug-transport
+    supporting_skills:
+      - adk-systematic-debugging
+    fallback_skills:
+      - adk-embedded-remote-debug-log-triage
+    mutually_exclusive: []
+    workflow: bugfix-delivery
+    profiles:
+      - embedded-fullstack
+    positive_examples:
+      - "ADB SSH 串口 GDB remote 调试通道"
+      - "设备调试通道连接和证据采集"
+    negative_examples:
+      - "只读生成一个实现计划"
+  - name: completion_gate
+    description: 完成前核对声明、验证证据、风险和回退边界
+    primary_skill: adk-verification-before-completion
+    supporting_skills:
+      - adk-test-strategy
+    fallback_skills: []
+    mutually_exclusive: []
+    workflow: adk-delivery-gate
+    profiles:
+      - core
+      - embedded-fullstack
+    positive_examples:
+      - "准备完成，做完成前检查"
+      - "核对验证证据是否支持完成声明"
+    negative_examples:
+      - "需求边界还没明确"
+  - name: commit_pr_gate
+    description: 提交或 PR 前质量门禁、格式、评审和证据检查
+    primary_skill: adk-commit-pr-quality-gate
+    supporting_skills:
+      - adk-verification-before-completion
+      - adk-code-review-loop
+    fallback_skills: []
+    mutually_exclusive: []
+    workflow: adk-delivery-gate
+    profiles:
+      - core
+      - release-hardening
+    positive_examples:
+      - "准备 commit，跑提交门禁"
+      - "PR 前检查质量和验证证据"
+    negative_examples:
+      - "只分析日志，不提交"
+  - name: release_versioning
+    description: 发布、版本、制品、回滚和放行证据收口
+    primary_skill: adk-release-versioning
+    supporting_skills:
+      - adk-commit-pr-quality-gate
+      - adk-verification-before-completion
+    fallback_skills:
+      - adk-branch-closeout
+    mutually_exclusive: []
+    workflow: release-hardening
+    profiles:
+      - release-hardening
+      - embedded-fullstack
+    positive_examples:
+      - "准备发布并生成版本说明"
+      - "发布前检查回滚和制品证据"
+    negative_examples:
+      - "代码根因还没定位"
+  - name: skill_governance
+    description: skill 组合、触发优先级、fallback、弃用和 profile 归属治理
+    availability: optional-skill-required
+    primary_skill: adk-skill-composition-governance
+    supporting_skills:
+      - adk-repo-drift-remediation
+      - adk-verification-before-completion
+    fallback_skills:
+      - adk-requirements-triage
+    mutually_exclusive: []
+    workflow: skill-curation-delivery
+    profiles:
+      - core
+      - team-core
+    positive_examples:
+      - "skill、workflow 分类和排序需要治理"
+      - "检查技能触发冲突和 fallback 边界"
+    negative_examples:
+      - "设备日志里有内核 oops"
 
 routing:
   enabled: true
@@ -1116,6 +1820,19 @@ routing:
       intent_zh: "静态分析/C静态检查/Cpp静态检查"
       primary_skill: adk-static-analysis-c-cpp
       supporting_skills: []
+    - intent: embedded_debug_transport
+      intent_zh: "调试通道/设备调试通道/设备连接调试/ADB调试/adb logcat/SSH调试/串口调试/串口控制台/GDB remote/调试探针/厂商调试CLI"
+      primary_skill: adk-embedded-debug-transport
+      supporting_skills:
+        - adk-systematic-debugging
+    - intent: embedded_remote_debug_log_triage
+      intent_zh: "远程调试/设备端调试/嵌入式日志分析/串口日志/boot log/dmesg/设备日志/GDB远程/带日志远程GDB/现场日志/core和日志/OTA日志/prog日志"
+      primary_skill: adk-embedded-remote-debug-log-triage
+      supporting_skills:
+        - adk-systematic-debugging
+        - adk-offline-core-dump-triage
+        - adk-embedded-diagnostic-harness
+        - adk-token-context-governance
     - intent: systematic_debugging
       intent_zh: "调试/调试问题/排查根因/问题排查/定位根因/真实问题排查/根因未明"
       primary_skill: adk-systematic-debugging
@@ -1155,6 +1872,13 @@ routing:
       intent_zh: "仓库漂移/全仓漂移/repo drift/全面检查/残留清理/边界不清/文档代码不一致/全仓治理/提交前质量收口"
       primary_skill: adk-repo-drift-remediation
       supporting_skills:
+        - adk-verification-before-completion
+    - intent: skill_composition_governance
+      intent_zh: "技能组合/skill组合/skill治理/skill分类/workflow分类/skill、workflow 分类和排序/分类排序/触发冲突/fallback边界/弃用治理/skill生命周期"
+      availability: optional-skill-required
+      primary_skill: adk-skill-composition-governance
+      supporting_skills:
+        - adk-repo-drift-remediation
         - adk-verification-before-completion
     - intent: commit_pr_quality_gate
       intent_zh: "提交代码/准备提交/提交前检查"
@@ -1212,11 +1936,6 @@ routing:
       intent_zh: "CMake交叉编译/交叉编译/CMake构建"
       primary_skill: adk-cmake-cross-build
       supporting_skills: []
-    - intent: toolchain_debug_openocd_gdb
-      intent_zh: "OpenOCD/GDB调试/JTAG调试"
-      primary_skill: adk-toolchain-debug-openocd-gdb
-      supporting_skills:
-        - adk-systematic-debugging
     - intent: offline_core_dump_triage
       intent_zh: "core dump/core文件/离线core/BuildID/符号不匹配/gdb分析core/SIGSEGV core"
       primary_skill: adk-offline-core-dump-triage

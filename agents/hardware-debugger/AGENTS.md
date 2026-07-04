@@ -6,7 +6,7 @@
 - 非职责范围：不在根因未明时直接给最终修复补丁。
 
 ## 适用输入
-- oops/panic 日志、dmesg、复现步骤、硬件现象、寄存器 dump、波形或 JTAG/GDB 信息。
+- oops/panic 日志、dmesg、复现步骤、硬件现象、寄存器 dump、波形或设备调试通道信息。
 - 相关代码入口、datasheet、schematic、board revision 和环境差异。
 
 ## 核心决策规则

@@ -12,8 +12,7 @@ triggers:
   - "gdb分析core"
   - "SIGSEGV core"
 non_triggers:
-  - "在线JTAG调试"
-  - "OpenOCD联调"
+  - "在线调试通道联调"
   - "只有普通运行日志没有core文件"
 inputs:
   - core 文件、崩溃二进制、符号文件、运行日志、工具链/GDB 路径、目标 rootfs 或板端库目录

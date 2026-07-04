@@ -14,7 +14,7 @@
 - `adk-register-map-design`
 - `adk-driver-bringup-checklist`
 - `adk-interrupt-dma-patterns`
-- `adk-toolchain-debug-openocd-gdb`
+- `adk-embedded-debug-transport`
 - `adk-integration-hil-sil`
 - `adk-systematic-debugging`
 

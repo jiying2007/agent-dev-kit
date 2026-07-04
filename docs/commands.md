@@ -177,10 +177,25 @@ bash scripts/devkit.sh file-modes --fix
 
 该检查已纳入 `bash scripts/devkit.sh test`。
 
+## asset-taxonomy
+
+检查 Skill/Optional Skill 分类元数据、Workflow 类型与入口/退出证据、Profile include 顺序和 `skill_routing_matrix` 引用完整性。
+
+```bash
+bash scripts/devkit.sh asset-taxonomy
+```
+
+该检查会阻止：
+
+- skill 缺少 `category`、`lifecycle_order`、`stage_order`、`activation_mode` 或 `pattern`。
+- workflow 缺少 `workflow_type`、`lifecycle_order`、`entry_conditions` 或 `exit_evidence`。
+- profile 的 `include_skills` 顺序偏离生命周期或阶段顺序。
+- routing matrix 引用不存在的 skill、workflow 或 profile。
+
 ## catalog
 
 生成或检索 Agent/Skill/Workflow/Profile 目录索引。
-生成结果包含 `Agent Contract Matrix`、`Workflows` 和 `Workflow Matrix` 章节，用于审查 Agent ownership、profile、command risk、primary agent、primary skill、supporting skills 和 verification 的三方关系。默认输出到 `docs/agent-skill-catalog.md` 时，会同步生成 `docs/workflow-contract-matrix.md`。
+生成结果包含 `Agent Contract Matrix`、按 taxonomy 排序的 `Skills`、`Workflows`、`Workflow Matrix` 和 `Skill Routing Matrix` 章节，用于审查 Agent ownership、profile、command risk、primary agent、primary skill、supporting/fallback skills、entry/exit evidence 和 verification 的关系。默认输出到 `docs/agent-skill-catalog.md` 时，会同步生成 `docs/workflow-contract-matrix.md` 和 `docs/reference/skill-routing-matrix.md`。
 
 ```bash
 bash scripts/devkit.sh catalog build

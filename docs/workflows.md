@@ -42,11 +42,13 @@ Workflow 是一等资产。生产级 Workflow 必须在 `manifest.yaml:workflows
 可选增强：
 - `catalog build`：在变更启动前生成当前 Agent/Skill 能力目录，便于选型。
 - `match`：把任务描述输入匹配器，快速筛选可触发 skill。
+- `asset-taxonomy`：检查 skill/workflow 分类、profile 顺序和场景 routing matrix。
 
 Workflow 变更后必须至少运行：
 
 ```bash
 rtk bash scripts/devkit.sh validate --strict
+rtk bash scripts/devkit.sh asset-taxonomy
 rtk bash scripts/check-workflow-closure.sh --profile core
 rtk bash tests/test_workflow_contract.sh
 ```
@@ -55,7 +57,7 @@ Workflow manifest 必须声明 `command_risk`，取值为 `low`、`medium` 或 `
 
 ## 场景建议
 
-说明：下列 `Skill` 列表均按 `Primary -> Supporting` 排列；第一个为主技能，其余只补充检查项，不抢占入口。若场景需要多个可选技能，必须先确认 profile/安装范围，再执行匹配。
+说明：下列 `Skill` 列表是人工 runbook 摘要，按 `Primary -> Supporting` 排列；第一个为主技能，其余只补充检查项，不抢占入口。场景级 SSOT 是 `manifest.yaml:skill_routing_matrix` 和 `docs/reference/skill-routing-matrix.md`；若本节与 routing matrix 不一致，以 routing matrix 为准。若场景需要多个可选技能，必须先确认 profile/安装范围，再执行匹配。
 
 ### 场景 A：新功能迭代
 

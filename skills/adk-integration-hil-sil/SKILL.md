@@ -42,16 +42,11 @@ constraints:
    # 或使用 pytest-embedded
    pytest tests/sil/ --tb=short -v
    ```
-3. **HIL 环境搭建**：配置硬件探针、串口、CAN 适配器。
+3. **HIL 环境搭建**：配置调试通道、串口、CAN 适配器。
    ```bash
-   # OpenOCD 连接目标板
-   openocd -f interface/stlink.cfg -f target/stm32f4x.cfg &
-   # GDB 加载固件
-   gdb-multiarch build/hil/firmware.elf \
-     -ex "target remote :3333" \
-     -ex "monitor reset halt" \
-     -ex "load" \
-     -ex "continue"
+   # 调试通道连接目标板，具体命令由板卡和工装决定
+   <debug-transport> connect --target <board> --mode readonly
+   <debug-transport> load --artifact build/hil/firmware.elf --dry-run
    # 串口监控
    picocom -b 115200 /dev/ttyUSB0
    ```
@@ -77,9 +72,8 @@ constraints:
 cmake --preset sil-debug && cmake --build build/sil-debug -j$(nproc)
 ctest --test-dir build/sil-debug --output-on-failure
 
-# HIL 固件烧录
-openocd -f interface/<probe>.cfg -f target/<chip>.cfg \
-  -c "program build/hil/firmware.elf verify reset exit"
+# HIL 固件装载或烧录，先 dry-run 再进入实机阶段
+<debug-transport> program build/hil/firmware.elf --verify --dry-run
 
 # HIL 测试执行
 pytest tests/hil/ --board=<board> --port=/dev/ttyUSB0 -v
@@ -118,7 +112,7 @@ pytest tests/hil/ --html=results/hil_report.html --self-contained-html
 - HIL 资源不可用时，先以 SIL 保持回归连续性并标注硬件覆盖缺口。
 - HIL/SIL 结果冲突时，优先核对环境差异与 mock 假设是否偏离真实硬件行为。
 - HIL 测试超时，检查串口连接与目标板状态（可能 hang）。
-- 固件烧录失败，检查 OpenOCD 配置与目标板供电。
+- 固件烧录失败，检查调试通道配置与目标板供电。
 
 ## Quality Gate
 - 必须说明 HIL 与 SIL 的覆盖分工。

@@ -25,7 +25,7 @@ constraints:
 
 ## Prerequisites
 - 确认硬件版本、引脚复用（pinmux）、供电和时钟配置一致。
-- 准备串口日志、调试探针和寄存器读写工具（devmem/OpenOCD）。
+- 准备串口日志、调试通道和寄存器读写工具（例如 devmem 或厂商 CLI）。
 - 获取芯片参考手册（TRM）与外设寄存器映射表。
 
 ## Workflow

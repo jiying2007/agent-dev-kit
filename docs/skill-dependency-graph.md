@@ -25,7 +25,7 @@ adk-unit-test-embedded
     └── adk-production-field-readiness
 
 adk-systematic-debugging
-├── adk-toolchain-debug-openocd-gdb
+├── adk-embedded-debug-transport
 └── adk-performance-profiling-embedded
 
 adk-verification-before-completion

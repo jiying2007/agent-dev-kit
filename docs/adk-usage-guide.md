@@ -150,16 +150,18 @@ bash scripts/check-profile-coherence.sh
 
 典型分流：
 
-| 用户意图 | Primary Skill | 常见 Workflow |
-|---|---|---|
-| 需求不清、验收标准模糊 | `adk-requirements-triage` | `feature-delivery` |
-| 需要拆解中大型任务 | `adk-task-breakdown` | `feature-delivery` |
-| 长任务需要计划、检查点和恢复 | `adk-planning-execution-loop` | `feature-delivery` |
-| Bug 根因不明 | `adk-systematic-debugging` | `bugfix-delivery` |
-| 提交或 PR 前检查 | `adk-commit-pr-quality-gate` | `bugfix-delivery` 或 `feature-delivery` |
-| 完成前确认验证证据 | `adk-verification-before-completion` | 任意交付 Workflow |
-| 发布前强化 | `adk-release-versioning` | `release-hardening` |
-| Skill 候选归属判断 | `adk-skill-composition-governance` | `skill-curation-delivery` |
+| 用户意图 | Primary Skill | 常见 Workflow | 说明 |
+|---|---|---|---|
+| 需求不清、验收标准模糊 | `adk-requirements-triage` | `feature-delivery` | 可用 `adk-structured-requirements-questioning` 辅助提问 |
+| 只要计划、不改文件 | `adk-lightweight-planning` | 无 | 只读计划；用户要求执行时退出该 skill |
+| 需要拆解中大型任务 | `adk-task-breakdown` | `feature-delivery` | 依赖已明确的目标和验收边界 |
+| 长任务需要计划、检查点和恢复 | `adk-planning-execution-loop` | `feature-delivery` | Optional skill；需要显式可用或安装 |
+| Bug 根因不明 | `adk-systematic-debugging` | `bugfix-delivery` | 先定位根因，再修复 |
+| 设备日志、core 或调试通道治理 | `adk-embedded-remote-debug-log-triage` / `adk-offline-core-dump-triage` / `adk-embedded-debug-transport` | `bugfix-delivery` | 仅嵌入式/事故响应相关 profile 使用 |
+| 提交或 PR 前检查 | `adk-commit-pr-quality-gate` | `adk-delivery-gate` | 提交质量门禁不替代完成前验证 |
+| 完成前确认验证证据 | `adk-verification-before-completion` | 任意交付 Workflow | 核对声明、证据和剩余风险 |
+| 发布前强化 | `adk-release-versioning` | `release-hardening` | 绑定版本、制品、回滚和放行证据 |
+| Skill / Workflow 分类、排序和归属治理 | `adk-skill-composition-governance` | `skill-curation-delivery` | Optional governance skill；场景入口以 routing matrix 为准 |
 
 组合规则：
 
@@ -181,6 +183,7 @@ bash scripts/devkit.sh catalog build
 
 - `docs/agent-skill-catalog.md`
 - `docs/workflow-contract-matrix.md`
+- `docs/reference/skill-routing-matrix.md`
 
 按关键词查找：
 
@@ -286,17 +289,21 @@ ADK 支持两类交付动作：`install` 和 `convert`。
 修改 Skill 时检查：
 
 - `SKILL.md` frontmatter 至少包含 `name`、`description`、`version`、`last_updated`。
+- `manifest.yaml:skills` 或 `optional_skills` 是否声明 `category`、`lifecycle_order`、`stage_order`、`activation_mode` 和 `pattern`。
 - `description` 是否能支撑准确路由。
 - `triggers` 和 `non_triggers` 是否清楚。
 - 命令、证据、失败模式和质量门禁是否可执行。
 - 是否应放在 `skills/` 还是 `optional-skills/`。
+- 如果作为场景 primary，`activation_mode` 必须为 `primary`；optional primary 必须在 routing matrix 或 intent 中声明 `availability: optional-skill-required`。
 
 修改 Workflow 时检查：
 
 - primary Agent、primary Skill 和 supporting Skills 是否都在目标 profile 闭包中。
+- `workflow_type`、`lifecycle_order`、`entry_conditions` 和 `exit_evidence` 是否同步更新。
 - 每个阶段是否有明确输入、输出和完成标准。
 - 是否定义了验证命令和 review 产物。
 - 是否与 `docs/workflow-contract-matrix.md` 一致。
+- 是否与 `docs/reference/skill-routing-matrix.md` 的场景入口一致。
 
 修改 Profile 时检查：
 
@@ -305,7 +312,7 @@ ADK 支持两类交付动作：`install` 和 `convert`。
 - 每个 resolved Agent 的 `default_skills` 都被 resolved profile 包含。
 - 不把专用领域能力误放进 `core`。
 
-修改后运行 `bash scripts/devkit.sh validate --strict`、`bash scripts/check-profile-coherence.sh`、`bash scripts/devkit.sh catalog build`、`bash tests/test_catalog.sh`、`bash tests/test_workflow_contract.sh`。涉及 manifest、脚本、profile、workflow 或跨资产重命名时，运行 `bash tests/run_all.sh`。
+修改后运行 `bash scripts/devkit.sh validate --strict`、`bash scripts/check-profile-coherence.sh`、`bash scripts/devkit.sh asset-taxonomy`、`bash scripts/devkit.sh catalog build`、`bash tests/test_catalog.sh`、`bash tests/test_workflow_contract.sh`。涉及 manifest、脚本、profile、workflow 或跨资产重命名时，运行 `bash tests/run_all.sh`。
 
 ## 11. 常用验证门禁
 
@@ -315,10 +322,11 @@ ADK 支持两类交付动作：`install` 和 `convert`。
 | `bash scripts/devkit.sh validate --quick` | 快速结构检查，适合编辑中间态 |
 | `bash scripts/check-profile-coherence.sh` | 检查 profile 继承、重复声明和 default_skills 闭包 |
 | `bash scripts/devkit.sh runtime-boundary` | 检查 core 是否保持平台中立，防止平台专属残留 |
+| `bash scripts/devkit.sh asset-taxonomy` | 检查 skill/workflow 分类、profile 生命周期顺序和场景路由矩阵 |
 | `bash scripts/devkit.sh openai-governance --summary-json` | 检查官方资料 freshness 和提升门禁 |
 | `bash scripts/devkit.sh workflow-closure --profile core` | 检查 workflow 引用是否在 profile 闭包内 |
 | `bash scripts/devkit.sh file-modes` | 检查 tracked 文件权限 |
-| `bash scripts/devkit.sh catalog build` | 重新生成资产目录和 workflow matrix |
+| `bash scripts/devkit.sh catalog build` | 重新生成资产目录、workflow matrix 和 skill routing matrix |
 | `bash scripts/devkit.sh test` | 执行全量回归入口 |
 | `bash tests/run_all.sh` | 执行测试套件 |
 
@@ -327,8 +335,8 @@ ADK 支持两类交付动作：`install` 和 `convert`。
 | 变更范围 | 最小验证 |
 |---|---|
 | 纯文档说明 | `validate --strict` |
-| Agent/Skill/Profile/Manifest | `validate --strict`、`check-profile-coherence.sh`、相关 catalog/workflow 测试 |
-| Workflow 或 Change Set | `validate --strict`、`tests/test_workflow_contract.sh` |
+| Agent/Skill/Profile/Manifest | `validate --strict`、`check-profile-coherence.sh`、`asset-taxonomy`、相关 catalog/workflow 测试 |
+| Workflow 或 Change Set | `validate --strict`、`asset-taxonomy`、`tests/test_workflow_contract.sh` |
 | 安装、转换、运行时边界 | `runtime-boundary`、相关脚本 smoke、`tests/run_all.sh` |
 | 发布、推送、交付给运行态 | `tests/run_all.sh`、ready/rollback 证据 |
 
@@ -384,7 +392,7 @@ fix(catalog): 修复 workflow matrix 生成格式
 
 普通编辑：`bash scripts/devkit.sh validate --strict`、`bash tests/test_catalog.sh`、`bash tests/test_workflow_contract.sh`。
 
-资产或 manifest 变更：`bash scripts/check-profile-coherence.sh`、`bash scripts/devkit.sh catalog build`、`bash tests/run_all.sh`。
+资产或 manifest 变更：`bash scripts/check-profile-coherence.sh`、`bash scripts/devkit.sh asset-taxonomy`、`bash scripts/devkit.sh catalog build`、`bash tests/run_all.sh`。
 
 发布或推送前：`bash tests/run_all.sh`；本机 Codex 运行态收口再执行 `rtk bash ~/codex/scripts/final-ready.sh`。
 
@@ -393,7 +401,7 @@ fix(catalog): 修复 workflow matrix 生成格式
 - 先复用现有 Agent/Skill/Workflow，再考虑新增。
 - 新增资产必须有清楚边界、触发条件、失败模式和验证门禁。
 - 历史资产硬切换时删除旧目录和旧 ID 引用，不保留兼容 alias。
-- 文档、manifest、catalog、workflow matrix 必须同步。
+- 文档、manifest、catalog、workflow matrix 和 skill routing matrix 必须同步。
 - 没有验证证据，不声明完成、可提交、可合并或可发布。
 - ADK core 保持平台中立；运行时差异通过 tool target、profile 和外部交付链路表达。
 
@@ -424,63 +432,67 @@ Agent 使用要点：
 
 ## 18. Skill 详细介绍
 
-本节覆盖当前全部 core Skill。Skill 表示“怎么做”，重点是触发场景、执行方法、产物和验证门禁。
+本节覆盖主要 live Skill。完整、按 taxonomy 排序的实时列表以 `docs/agent-skill-catalog.md` 为准；场景 primary/supporting/fallback 入口以 `docs/reference/skill-routing-matrix.md` 为准。
 
 | Skill | 适用场景 | 主要产物 / 门禁 | 使用边界 |
 |---|---|---|---|
 | `adk-runtime-router` | 任务开始前需要判断 primary/supporting/fallback skill，或需要验证 adk-first 路由 | 路由决策、跳过条件、fallback 边界 | 只做路由裁决，不替代具体 Skill 执行 |
-| `adk-requirements-triage` | 需求不清、范围不明、验收标准缺失、新功能入口 | 目标、非目标、影响面、验收标准、风险 | 不直接实现代码；实现前必须形成可验证条目 |
-| `adk-task-breakdown` | 需求已经可描述，但任务过大或需要并行拆分 | 任务包、owner、读写范围、验证命令 | 依赖需求边界；不用于绕过需求澄清 |
-| `adk-lightweight-planning` | 用户明确只要计划、尚未要求写文件或执行 | 轻量计划、行动项、开放问题 | 只读计划，不进入实现流程 |
-| `adk-planning-execution-loop` | 长任务需要计划审查、阶段检查点、恢复和收口 | 阶段计划、checkpoint、恢复提示、完成判定 | optional skill；小任务不要升级为重流程 |
-| `adk-context-compress-handoff` | 上下文压力高、需要会话接力或恢复提示 | stable/dynamic/evidence/excluded context、resume prompt | 不写长期记忆；长期提升另走 memory/archive 治理 |
 | `adk-token-context-governance` | 日志、diff、上下文过大，需要保真省 token | 读取分层、摘要边界、原文回退门禁 | 不能牺牲高风险原文证据 |
 | `adk-context-engineering` | 需要优化 Agent 上下文、加载层或提示结构 | 上下文分层方案、加载策略 | 不替代具体业务 Skill |
+| `adk-requirements-triage` | 需求不清、范围不明、验收标准缺失、新功能入口 | 目标、非目标、影响面、验收标准、风险 | 不直接实现代码；实现前必须形成可验证条目 |
+| `adk-structured-requirements-questioning` | 用结构化提问消除需求或文档模糊点 | 问题清单、澄清结论 | 与 triage 区分：它更偏提问对齐 |
+| `adk-repo-prompt-analysis` | 逆向分析参考仓 Prompt/系统指令 | prompt 结构、上下文工程模式、采纳建议 | 只做分析和候选，不直接提升 active rule |
+| `adk-skill-deep-analysis` | 从产品视角深度拆解 AI Skill | 八阶段拆解、独特解法、吸收边界 | 不做无审查的直接迁移 |
+| `adk-intake-workflow` | 子仓接入、扫描、分析、决策和治理覆盖 | 接入报告、采纳/观察/拒绝决策 | 禁止只做增量吸收，必须全盘考量 |
+| `adk-lightweight-planning` | 用户明确只要计划、尚未要求写文件或执行 | 轻量计划、行动项、开放问题 | 只读计划，不进入实现流程 |
+| `adk-task-breakdown` | 需求已经可描述，但任务过大或需要并行拆分 | 任务包、owner、读写范围、验证命令 | 依赖需求边界；不用于绕过需求澄清 |
+| `adk-parallel-agent-governance` | 并行子代理任务分片和整合治理 | scope_read/write、must_not_touch、整合验证 | 不用于边界不清或强耦合任务 |
+| `adk-worktree-governance` | git worktree 隔离开发、多分支并行治理 | worktree plan、冲突矩阵、清理规则 | 共享 schema、根配置、lockfile 默认串行 |
+| `adk-context-compress-handoff` | 上下文压力高、需要会话接力或恢复提示 | stable/dynamic/evidence/excluded context、resume prompt | 不写长期记忆；长期提升另走 memory/archive 治理 |
+| `adk-planning-execution-loop` | 长任务需要计划审查、阶段检查点、恢复和收口 | 阶段计划、checkpoint、恢复提示、完成判定 | optional skill；小任务不要升级为重流程 |
 | `adk-interface-contract-design` | 模块、API、消息、组件边界需要定义契约 | 接口契约、兼容性、迁移和回退边界 | 依赖需求边界；不负责具体实现 |
 | `adk-adr-writer` | 需要固化架构或技术选型决策 | ADR、决策背景、取舍、后果 | 不用于记录临时过程噪音 |
+| `adk-component-api-stability` | 组件 API 变更、兼容性治理、集成边界保护 | API 稳定性评估、迁移说明、兼容证据 | 破坏性变更必须显式记录 |
 | `adk-register-map-design` | 需要定义寄存器映射、位域、SVD 或硬件接口 | register map、位域规则、验证证据 | 嵌入式硬件语义场景使用 |
+| `adk-bsp-analysis` | BSP 代码分析、入口梳理、历史追溯 | BSP 入口、依赖、风险、追溯证据 | 只分析和定位，不承担驱动实现 |
 | `adk-driver-implementation` | 嵌入式驱动实现、联调、寄存器/中断/DMA 风险收口 | 驱动实现计划、联调证据、风险清单 | 不裁剪产品需求，不做发布放行 |
 | `adk-driver-bringup-checklist` | 驱动 bring-up 前后需要标准检查 | bring-up checklist、硬件约束、回归路径 | 不能替代真实板级或仿真验证 |
-| `adk-bsp-analysis` | BSP 代码分析、入口梳理、历史追溯 | BSP 入口、依赖、风险、追溯证据 | 只分析和定位，不承担驱动实现 |
 | `adk-bsp-porting-playbook` | BSP 移植、板级适配、启动链或设备树迁移 | 移植步骤、依赖矩阵、失败回退 | 需绑定目标板和启动链证据 |
 | `adk-rtos-task-design` | RTOS 任务模型、优先级、资源竞争设计 | 任务模型、优先级、同步和死锁预防 | 不用于普通线程模型泛泛讨论 |
 | `adk-interrupt-dma-patterns` | 中断、DMA、cache coherency、ring buffer 等协作设计 | ISR/DMA 协作模式、证据模板 | 必须绑定平台约束和验证路径 |
 | `adk-protocol-stack-integration` | 协议栈接入、状态机和分层测试 | 协议层次、状态机、集成测试策略 | 不把协议业务逻辑和底层驱动混写 |
-| `adk-component-api-stability` | 组件 API 变更、兼容性治理、集成边界保护 | API 稳定性评估、迁移说明、兼容证据 | 破坏性变更必须显式记录 |
 | `adk-cmake-cross-build` | CMake 交叉编译、多目标构建和工具链配置 | toolchain file、构建矩阵、产物路径 | 不解决业务代码正确性 |
-| `adk-toolchain-debug-openocd-gdb` | OpenOCD + GDB 联调、断点、烧录和调试 | 调试会话记录、命令证据、失败诊断 | 需要目标硬件或仿真环境事实 |
-| `adk-static-analysis-c-cpp` | C/C++ 静态分析、规则集和缺陷治理 | 静态分析结果、分级、修复或接受记录 | 不能替代编译、单测和运行验证 |
+| `adk-code-simplification` | 在不改变行为的前提下简化代码 | 简化方案、行为保持证据 | 不做功能变更或大范围重构逃逸 |
 | `adk-systematic-debugging` | 根因不明的问题、测试失败、异常行为定位 | 现象、假设、实验、根因、修复验证 | 禁止盲改、盲重试和无证据归因 |
-| `adk-unit-test-embedded` | 嵌入式单元测试、host test、mock、边界用例 | 单测策略、样例、覆盖证据 | 不替代 HIL/SIL 或真实设备验证 |
-| `adk-test-strategy` | 需要测试矩阵、TDD 分级、验证策略 | 测试层级、矩阵、证据要求 | 不直接实现测试，先定义策略 |
-| `adk-integration-hil-sil` | HIL/SIL 集成验证编排 | 集成环境、执行记录、设备/仿真证据 | 需要明确硬件、仿真或替代验证边界 |
-| `adk-fault-injection-recovery` | 故障注入、恢复策略、回滚和韧性验证 | 故障矩阵、恢复证据、失败处理 | 不用于未定义恢复目标的泛泛测试 |
+| `adk-embedded-debug-transport` | ADB/logcat、SSH、串口、GDB remote、调试探针和厂商 CLI 等设备调试通道治理 | 调试通道矩阵、命令风险、连接证据、回滚锚点 | 不绑定具体工具；写操作、刷写、擦除和重启必须审批 |
+| `adk-embedded-remote-debug-log-triage` | 嵌入式串口、boot、dmesg、ADB/logcat、OTA、prog 和现场日志分析 | 日志异常、假设矩阵、下一步探针、知识库历史召回 | 不替代真实复现；日志证据不足时必须列缺口 |
+| `adk-offline-core-dump-triage` | 嵌入式 Linux core dump、BuildID、符号和 backtrace 离线分析 | core/binary/symbol 校验、可信 backtrace、根因边界 | 在线调试通道联调不走该 skill |
+| `adk-hardware-debugging` | 硬件问题调试、oops 分析 | 现象、假设、实验和证据 | 不替代长期架构设计或发布放行 |
 | `adk-performance-profiling-embedded` | 嵌入式性能剖析、瓶颈定位和优化 | 基线、负载条件、对比数据 | 没有基线和测量条件不得下结论 |
+| `adk-test-strategy` | 需要测试矩阵、TDD 分级、验证策略 | 测试层级、矩阵、证据要求 | 不直接实现测试，先定义策略 |
+| `adk-unit-test-embedded` | 嵌入式单元测试、host test、mock、边界用例 | 单测策略、样例、覆盖证据 | 不替代 HIL/SIL 或真实设备验证 |
+| `adk-integration-hil-sil` | HIL/SIL 集成验证编排 | 集成环境、执行记录、设备/仿真证据 | 需要明确硬件、仿真或替代验证边界 |
+| `adk-embedded-diagnostic-harness` | prog_tool、diag、strict/env、HIL/SIL 诊断 harness | 诊断 CLI 契约、返回码、证据矩阵 | 不把临时调试脚本伪装成产测工具 |
+| `adk-fault-injection-recovery` | 故障注入、恢复策略、回滚和韧性验证 | 故障矩阵、恢复证据、失败处理 | 不用于未定义恢复目标的泛泛测试 |
+| `adk-artifact-gating` | 跨仓 Artifact 标签、状态机和交接协议 | artifact 标签、状态、交接记录 | 不替代具体 workflow 验证 |
+| `adk-pilot-framework` | 跨仓 Pilot 试跑场景、证据和门禁 | pilot scenario、运行记录、回灌建议 | 试跑通过前不升级默认规则 |
 | `adk-verification-before-completion` | 完成前确认声明、命令和证据一致 | 验证清单、命令退出码、证据路径 | 不负责提交质量全审；提交前用 commit gate |
+| `adk-chinese-commit-conventions` | 中文 Git 提交规范 | type/scope/summary 检查 | 不替代实际 diff 审查 |
+| `adk-chinese-code-review` | 中文代码审查沟通和分级规范 | 中文 review 发现和结论 | 审查语气规范不能降低技术严格度 |
 | `adk-code-review-loop` | 独立代码审查、发现分级、修复闭环 | blocker/major/minor、复审结论 | 不直接修复代码；审查与实现职责分离 |
+| `adk-repo-drift-remediation` | 全仓偏离、冗余、残留、边界不清治理 | 漂移清单、修复计划、验证证据 | 用于治理，不用于随意格式化全仓 |
+| `adk-static-analysis-c-cpp` | C/C++ 静态分析、规则集和缺陷治理 | 静态分析结果、分级、修复或接受记录 | 不能替代编译、单测和运行验证 |
 | `adk-commit-pr-quality-gate` | commit/PR 前质量门禁 | staged diff、验证结果、提交风险 | 不替代完成前验证；两者关注点不同 |
-| `adk-branch-closeout` | 分支收尾、本地合并、PR、保留或丢弃决策 | 分支状态、验证、清理计划 | 不自动执行破坏性清理 |
-| `adk-worktree-governance` | git worktree 隔离开发、多分支并行治理 | worktree plan、冲突矩阵、清理规则 | 共享 schema、根配置、lockfile 默认串行 |
-| `adk-parallel-agent-governance` | 并行子代理任务分片和整合治理 | scope_read/write、must_not_touch、整合验证 | 不用于边界不清或强耦合任务 |
 | `adk-release-versioning` | 版本策略、变更说明、发布基线 | version decision、changelog、release gate | 发布必须绑定回滚和验证证据 |
 | `adk-production-field-readiness` | 量产、产测、烧录、OTA、回滚和现场维护 readiness | readiness matrix、产测/现场证据 | 不具备现场恢复路径时不能放行 |
-| `adk-embedded-diagnostic-harness` | prog_tool、diag、strict/env、HIL/SIL 诊断 harness | 诊断 CLI 契约、返回码、证据矩阵 | 不把临时调试脚本伪装成产测工具 |
 | `adk-embedded-release-orchestration` | 嵌入式全栈发布编排、制品包、OTA/NAS/产线发布 | 发布编排、制品校验、非覆盖门禁 | command risk 高于普通开发，需回滚路径 |
+| `adk-embedded-storage-layout-migration` | 嵌入式存储布局、文件系统和 OTA 迁移治理 | 分区/卷迁移方案、启动日志校验、回滚边界 | 涉及数据保留和非覆盖升级时必须显式验收 |
+| `adk-branch-closeout` | 分支收尾、本地合并、PR、保留或丢弃决策 | 分支状态、验证、清理计划 | 不自动执行破坏性清理 |
 | `adk-after-action-review` | 任务复盘、lessons、memory candidate 和 codify decision | AAR、风险分级、可提升/不提升结论 | 不静默写入长期 memory |
-| `adk-engineering-growth-review` | 基于本地历史和归档做开发者成长复盘 | 趋势、重复问题、训练计划 | 需要限定数据源和隐私边界 |
 | `adk-memory-curator` | memory/memories/AGENTS/归档候选治理 | memory candidate、审计报告 | 不直接覆盖 `~/.codex/memories` |
 | `adk-archive-governance` | `docs/archive` 元数据、命名、hash、superseded 治理 | 归档检查和修复报告 | 只在归档治理异常时使用 |
 | `adk-knowledge-archive` | 把高价值总结、研究、排障和决策沉淀为归档候选 | 脱敏、可检索、可治理归档候选 | 不把一次性过程噪音写入长期归档 |
-| `adk-structured-requirements-questioning` | 用结构化提问消除需求或文档模糊点 | 问题清单、澄清结论 | 与 triage 区分：它更偏提问对齐 |
-| `adk-code-simplification` | 在不改变行为的前提下简化代码 | 简化方案、行为保持证据 | 不做功能变更或大范围重构逃逸 |
-| `adk-repo-drift-remediation` | 全仓偏离、冗余、残留、边界不清治理 | 漂移清单、修复计划、验证证据 | 用于治理，不用于随意格式化全仓 |
-| `adk-chinese-commit-conventions` | 中文 Git 提交规范 | type/scope/summary 检查 | 不替代实际 diff 审查 |
-| `adk-chinese-code-review` | 中文代码审查沟通和分级规范 | 中文 review 发现和结论 | 审查语气规范不能降低技术严格度 |
-| `adk-repo-prompt-analysis` | 逆向分析参考仓 Prompt/系统指令 | prompt 结构、上下文工程模式、采纳建议 | 只做分析和候选，不直接提升 active rule |
-| `adk-skill-deep-analysis` | 从产品视角深度拆解 AI Skill | 八阶段拆解、独特解法、吸收边界 | 不做无审查的直接迁移 |
-| `adk-artifact-gating` | 跨仓 Artifact 标签、状态机和交接协议 | artifact 标签、状态、交接记录 | 不替代具体 workflow 验证 |
-| `adk-pilot-framework` | 跨仓 Pilot 试跑场景、证据和门禁 | pilot scenario、运行记录、回灌建议 | 试跑通过前不升级默认规则 |
-| `adk-intake-workflow` | 子仓接入、扫描、分析、决策和治理覆盖 | 接入报告、采纳/观察/拒绝决策 | 禁止只做增量吸收，必须全盘考量 |
+| `adk-engineering-growth-review` | 基于本地历史和归档做开发者成长复盘 | 趋势、重复问题、训练计划 | 需要限定数据源和隐私边界 |
 
 ## 19. Optional Skill 详细介绍
 
@@ -488,15 +500,15 @@ Optional Skill 默认不进入 core profile，需要显式选择或由特定 pro
 
 | Optional Skill | 适用场景 | 主要产物 / 门禁 | 使用边界 |
 |---|---|---|---|
-| `adk-incident-rca-report` | 线上事故、故障复盘、根因分析闭环 | 时间线、5-Why、RCA、纠正预防措施 | 无事实证据不得归因 |
-| `adk-cross-team-handoff` | 跨团队交接、责任边界和验收对齐 | 目标、范围、owner、验收责任 | 不替代项目管理审批 |
+| `adk-planning-execution-loop` | 长任务、跨阶段执行、恢复和收口 | 阶段计划、checkpoint、恢复提示 | 小任务不要默认启用 |
 | `adk-data-fetch` | 需要组合邮件和网页正文获取能力 | 数据源、获取方式、证据路径 | 只做受控数据获取，不绕过权限或登录 |
 | `adk-email-imap-fetch` | 通过 IMAP 获取邮件列表或内容 | 邮件查询条件、结果摘要、证据 | 必须有凭据边界和最小读取范围 |
 | `adk-fetch-url-content` | 从 URL 提取网页正文或结构化内容 | URL、正文摘要、提取证据 | 不做大规模抓取或绕过反爬 |
-| `adk-planning-execution-loop` | 长任务、跨阶段执行、恢复和收口 | 阶段计划、checkpoint、恢复提示 | 小任务不要默认启用 |
-| `adk-security-supply-chain` | 第三方 skill、脚本、插件、MCP 或参考资产引入前审查 | 来源、权限、deny-path、回滚、风险结论 | 未完成审查不得启用外部写操作 |
-| `adk-skill-composition-governance` | Skill 组合、触发优先级、fallback、弃用关系治理 | primary/supporting/fallback 决策、生命周期判断 | 不解决具体业务任务，只治理组合关系 |
 | `adk-test-flakiness-triage` | 测试波动、不稳定 CI、偶发失败定位 | flaky 分类、重试策略、隔离和根因记录 | 不能把不稳定测试简单标记为可忽略 |
+| `adk-security-supply-chain` | 第三方 skill、脚本、插件、MCP 或参考资产引入前审查 | 来源、权限、deny-path、回滚、风险结论 | 未完成审查不得启用外部写操作 |
+| `adk-cross-team-handoff` | 跨团队交接、责任边界和验收对齐 | 目标、范围、owner、验收责任 | 不替代项目管理审批 |
+| `adk-incident-rca-report` | 线上事故、故障复盘、根因分析闭环 | 时间线、5-Why、RCA、纠正预防措施 | 无事实证据不得归因 |
+| `adk-skill-composition-governance` | Skill 组合、触发优先级、fallback、弃用关系治理 | primary/supporting/fallback 决策、生命周期判断 | 不解决具体业务任务，只治理组合关系 |
 
 ## 20. Workflow 详细介绍
 

@@ -58,6 +58,8 @@ Agent 的 manifest 条目必须声明 `description`、`quality_tier`、`owns`、
 
 长背景、示例、领域知识、检查清单和历史决策进入 `references/`。入口文件必须保持短小，严格门禁下不超过 140 行。
 
+每个 live Skill 还必须在 `manifest.yaml:skills` 或 `manifest.yaml:optional_skills` 中声明 `category`、`lifecycle_order`、`stage_order`、`activation_mode` 和 `pattern`。`lifecycle_order` 定义大类阶段，`stage_order` 定义同一阶段内的执行/呈现顺序。场景级 primary/supporting/fallback 关系不由 `SKILL.md` 自行声明，统一以 `manifest.yaml:skill_routing_matrix` 为准；optional skill 被作为 primary 使用时，相关 routing entry 必须声明 `availability: optional-skill-required`。
+
 ## Description 触发质量
 
 `description` 是运行时 discovery 的第一层入口，必须能让 Agent 判断何时使用该 Skill。新增或大改 Skill 时必须满足：
@@ -95,6 +97,7 @@ Workflow 是一等资产，必须同时出现在 `manifest.yaml:workflows` 和 `
 每个 Workflow 必须声明：
 
 - `path`、`primary_agent`、`primary_skill` 和 `supporting_skills`。
+- `workflow_type`、`lifecycle_order`、`entry_conditions` 和 `exit_evidence`。
 - `triggers`、`agents`、`skills`、`commands` 和 `verification`。
 - `WORKFLOW.md` frontmatter 中的 `profiles`、`stages`、`artifacts`、`failure_handling`。
 - 固定章节：`Goal`、`Scope`、`Ownership`、`Stage Contract`、`Artifact Contract`、`Commands`、`Failure Handling`、`Quality Gate`。

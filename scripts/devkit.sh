@@ -31,6 +31,7 @@ Commands:
   openai-runtime-capabilities 检查 OpenAI 官方内容转化的运行态能力门禁
   harness-loop-engineering 检查外部 harness/loop engineering 合同门禁
   workflow-closure 检查 workflow 引用是否在 profile 闭包内
+  asset-taxonomy 检查 skill/workflow 分类、profile 排序和 routing matrix
   goal      检查 ADK 目标契约
   capability 检查 ADK 功能健康闭环
   file-modes 检查 tracked 文件权限是否匹配 Git index
@@ -113,6 +114,9 @@ case "$CMD" in
     ;;
   workflow-closure)
     exec "$SCRIPT_DIR/check-workflow-closure.sh" "$@"
+    ;;
+  asset-taxonomy)
+    exec "$SCRIPT_DIR/check-asset-taxonomy.sh" "$@"
     ;;
   goal)
     subcmd="${1:-}"

@@ -14,7 +14,7 @@
 
 禁止在 pilot 初跑阶段执行：
 
-- 真实 J-Link 烧录或 readback。
+- 真实调试探针烧录或 readback。
 - `--publish`、`--push-tag`、`--force-publish-soc`。
 - 修改 NAS、挂载配置、凭证文件或工厂发布目录。
 - 清理 dirty worktree、重置源码或删除产物。
@@ -84,7 +84,7 @@ rtk bash tools/ota-packager/ota-packager.sh self-test --json
 
 满足以下条件后才允许从 `evidence-ready` 升级：
 
-- 至少一次真实 J-Link 烧录和 readback 对比通过。
+- 至少一次真实调试探针烧录和 readback 对比通过。
 - 串口 boot log 证明镜像启动到预期服务或 RTOS task。
 - HIL/SIL 或工装产测报告覆盖关键外设、通信、校准和唯一标识。
 - `vehicle-ota` 或等价整机 OTA 包生成通过，并记录升级和回滚演练。

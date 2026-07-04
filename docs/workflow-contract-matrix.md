@@ -1,15 +1,15 @@
 # Workflow Contract Matrix
 
-- generated_at: 2026-06-02T01:40:04Z
+- generated_at: 2026-07-04T16:35:56Z
 - source: manifest.yaml
 
 ## Workflow Matrix
 
-| Workflow | Profiles | Command Risk | Primary Agent | Primary Skill | Supporting Skills | Verification |
-|---|---|---|---|---|---|---|
-| `adk-delivery-gate` | core, embedded-fullstack | low | `code-review-governor` | `adk-verification-before-completion` | adk-runtime-router, adk-requirements-triage, adk-task-breakdown, adk-test-strategy, adk-code-review-loop, adk-after-action-review, adk-token-context-governance, adk-commit-pr-quality-gate | rtk bash tests/run_all.sh --fail-fast |
-| `feature-delivery` | core, embedded-fullstack | low | `requirements-analyst` | `adk-requirements-triage` | adk-task-breakdown, adk-interface-contract-design, adk-unit-test-embedded, adk-verification-before-completion, adk-code-review-loop | rtk bash tests/test_validate.sh, rtk bash tests/test_workflow_closure.sh |
-| `bugfix-delivery` | embedded-fullstack | low | `application-engineer` | `adk-systematic-debugging` | adk-task-breakdown, adk-verification-before-completion, adk-code-review-loop | rtk bash tests/test_workflow.sh, rtk bash tests/test_integration.sh |
-| `release-hardening` | release-hardening | medium | `build-release-engineer` | `adk-release-versioning` | adk-test-strategy, adk-code-review-loop, adk-branch-closeout, adk-verification-before-completion, adk-commit-pr-quality-gate | rtk bash tests/test_validate.sh, rtk bash tests/test_profile_coherence.sh |
-| `runtime-routing` | core, embedded-fullstack | low | `architecture-planner` | `adk-runtime-router` | adk-verification-before-completion, adk-repo-drift-remediation | rtk bash tests/test_skill_trigger_matrix.sh, rtk bash tests/test_workflow_closure.sh |
-| `skill-curation-delivery` | core, team-core | low | `requirements-analyst` | `adk-requirements-triage` | adk-task-breakdown, adk-commit-pr-quality-gate, adk-verification-before-completion | rtk bash tests/test_catalog.sh, rtk bash tests/test_skill_sop_quality.sh |
+| Order | Type | Workflow | Profiles | Command Risk | Primary Agent | Primary Skill | Supporting Skills | Entry Conditions | Exit Evidence | Verification |
+|---:|---|---|---|---|---|---|---|---|---|---|
+| 10 | `feature-delivery` | `feature-delivery` | core, embedded-fullstack | low | `requirements-analyst` | `adk-requirements-triage` | adk-task-breakdown, adk-interface-contract-design, adk-unit-test-embedded, adk-verification-before-completion, adk-code-review-loop | 用户目标包含新功能、增强或可验收行为变化, 需求可以通过目标、非目标和验收标准表达 | 需求和任务拆解闭环, 实现范围与验收标准一致, 目标测试和完成前验证通过 | rtk bash tests/test_validate.sh, rtk bash tests/test_workflow_closure.sh |
+| 20 | `bugfix-delivery` | `bugfix-delivery` | embedded-fullstack | low | `application-engineer` | `adk-systematic-debugging` | adk-task-breakdown, adk-verification-before-completion, adk-code-review-loop | 观察行为与预期行为不一致, 需要先复现、定位根因，再实施修复 | 根因陈述, 修复摘要, 复现路径或负结果说明, 定向回归验证 | rtk bash tests/test_workflow.sh, rtk bash tests/test_integration.sh |
+| 60 | `release-hardening` | `release-hardening` | release-hardening | medium | `build-release-engineer` | `adk-release-versioning` | adk-test-strategy, adk-code-review-loop, adk-branch-closeout, adk-verification-before-completion, adk-commit-pr-quality-gate | 变更准备进入发布、打包、交付或现场放行阶段, 需要版本、回滚、安全、性能或放行证据 | 版本与制品信息, 回滚路径, 发布前验证结果, commit/PR 或放行门禁结论 | rtk bash tests/test_validate.sh, rtk bash tests/test_profile_coherence.sh |
+| 90 | `skill-curation-delivery` | `skill-curation-delivery` | core, team-core | low | `requirements-analyst` | `adk-requirements-triage` | adk-task-breakdown, adk-commit-pr-quality-gate, adk-verification-before-completion | 新增、导入、拆分、替换或弃用 skill 候选, 需要判断 core/optional 归属和触发质量 | 归属决策, 正例、反例和 fallback 样例, catalog、SOP 和触发矩阵验证 | rtk bash tests/test_catalog.sh, rtk bash tests/test_skill_sop_quality.sh |
+| 110 | `adk-governance` | `adk-delivery-gate` | core, embedded-fullstack | low | `code-review-governor` | `adk-verification-before-completion` | adk-runtime-router, adk-requirements-triage, adk-task-breakdown, adk-test-strategy, adk-code-review-loop, adk-after-action-review, adk-token-context-governance, adk-commit-pr-quality-gate | ADK active 资产、manifest、profile、workflow 或门禁发生变更, 需要把变更声明和验证证据绑定到完成前门禁 | strict validate 通过, workflow closure 或 profile coherence 通过, run_all 或等效定向回归证据 | rtk bash tests/run_all.sh --fail-fast |
+| 110 | `adk-governance` | `runtime-routing` | core, embedded-fullstack | low | `architecture-planner` | `adk-runtime-router` | adk-verification-before-completion, adk-repo-drift-remediation | 新增、替换、弃用或重排 skill/profile/workflow 路由, 需要确认 primary/supporting/fallback 和 profile 闭包 | routing matrix 与 manifest 一致, trigger 冲突检查通过, profile coherence 和 workflow closure 通过 | rtk bash tests/test_skill_trigger_matrix.sh, rtk bash tests/test_workflow_closure.sh |

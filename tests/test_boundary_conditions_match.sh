@@ -251,11 +251,11 @@ test_routing_17_cmake_cross() {
     [[ "$output" == *"match=true"* && "$output" == *"skill=adk-cmake-cross-build"* ]]
 }
 
-# 18. adk-toolchain-debug-openocd-gdb
-test_routing_18_openocd_gdb() {
+# 18. adk-embedded-debug-transport
+test_routing_18_embedded_debug_transport() {
     local output
-    output=$("$MATCH_SCRIPT" --text "OpenOCD" 2>&1) || true
-    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-toolchain-debug-openocd-gdb"* ]]
+    output=$("$MATCH_SCRIPT" --text "ADB SSH 串口 GDB remote 调试通道" 2>&1) || true
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-embedded-debug-transport"* ]]
 }
 
 # 19. adk-integration-hil-sil
@@ -330,6 +330,12 @@ test_multi_slash_intent_zh_partial() {
     [[ "$output" == *"match=true"* && "$output" == *"skill=adk-interrupt-dma-patterns"* ]]
 }
 
+test_routing_24_skill_governance() {
+    local output
+    output=$("$MATCH_SCRIPT" --text "skill、workflow 分类和排序需要治理" 2>&1) || true
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-skill-composition-governance"* ]]
+}
+
 # ============================================================
 # 运行所有测试
 # ============================================================
@@ -366,13 +372,14 @@ run_test "Routing 14: adk-interrupt-dma-patterns" test_routing_14_interrupt_dma
 run_test "Routing 15: adk-protocol-stack-integration" test_routing_15_protocol_stack
 run_test "Routing 16: adk-component-api-stability" test_routing_16_api_stability
 run_test "Routing 17: adk-cmake-cross-build" test_routing_17_cmake_cross
-run_test "Routing 18: adk-toolchain-debug-openocd-gdb" test_routing_18_openocd_gdb
+run_test "Routing 18: adk-embedded-debug-transport" test_routing_18_embedded_debug_transport
 run_test "Routing 19: adk-integration-hil-sil" test_routing_19_hil_sil
 run_test "Routing 20: adk-fault-injection-recovery" test_routing_20_fault_injection
 run_test "Routing 21: adk-performance-profiling-embedded" test_routing_21_performance
 run_test "Routing 22: adk-release-versioning" test_routing_22_release
 run_test "Routing 23: adk-production-field-readiness" test_routing_23_production_field
 run_test "Routing 23b: production-field sim-device alias" test_routing_23b_production_field_sim_device
+run_test "Routing 24: adk-skill-composition-governance" test_routing_24_skill_governance
 
 # Multi-slash intent_zh tests
 run_test "Multi-slash: first segment" test_multi_slash_intent_zh_first

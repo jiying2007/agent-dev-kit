@@ -32,7 +32,7 @@ status: evidence-ready
 ### Scope / Non-goal
 
 - 本 pilot 证明 adk 可以把真实 MCU + SoC 发布链路收敛为可审计 evidence-ready 证据。
-- 本次没有执行真实 J-Link 烧录、真实 readback、真实启动串口采集、真实 HIL 产测、真实整机 OTA 包生成、NAS publish、tag 或 push。
+- 本次没有执行真实调试探针烧录、真实 readback、真实启动串口采集、真实 HIL 产测、真实整机 OTA 包生成、NAS publish、tag 或 push。
 - 模拟设备闭环可把 pilot 推进到 `simulated-pass`，但不能声明设备已 production-ready；生产放行仍需真实硬件和现场证据。
 
 ### Readiness Matrix
@@ -40,7 +40,7 @@ status: evidence-ready
 | Area | Item | Evidence | Status |
 |---|---|---|---|
 | artifact | MCU package manifest、image list、checksum、zip、模拟现场包 | `package_manifest.json` schemaVersion `2.0`，`validation.passed=true`，`checksums.sha256.txt` 校验通过；模拟现场包含 manifest 和 guide | pass |
-| flashing | 默认烧录脚本、factory recovery 脚本、保留区保护、模拟 flash | `burn_firmware.py --dry-run` 生成 merged image J-Link script；`erase_and_burn.py --dry-run` 拒绝擦除保留区；`--force-erase --role production-full --dry-run` 生成 factory script；模拟 flash 写入版本化状态 | simulated-pass |
+| flashing | 默认烧录脚本、factory recovery 脚本、保留区保护、模拟 flash | `burn_firmware.py --dry-run` 生成 merged image 调试探针脚本；`erase_and_burn.py --dry-run` 拒绝擦除保留区；`--force-erase --role production-full --dry-run` 生成 factory script；模拟 flash 写入版本化状态 | simulated-pass |
 | readback | readback 验证入口与模拟 hash 对比 | `readback_verify.py --dry-run` 生成 `savebin` 脚本；模拟 readback digest 与 flash state 匹配 | simulated-pass |
 | ota | MCU app OTA payload、SoC 整机 OTA 工具入口、模拟 OTA | `ota_upgrade_plan.json` 指向 `mm32spin023c_app.bin`；PCR02 resolver self-test 与 ota-packager self-test 通过；模拟 OTA 切换 inactive slot 并启动新版本 | simulated-pass |
 | release | NAS 挂载检查与发布 dry-run | `setup-nas-mount.sh --check` 通过；`publish-nas --dry-run --json` 输出 `would-publish` | partial |
@@ -68,15 +68,15 @@ status: evidence-ready
 | Command | Exit Code | Summary | Evidence |
 |---|---:|---|---|
 | `rtk bash scripts/firmware-release.sh --help` | 0 | MCU release CLI 暴露 profile、package-external、check-package、publish-nas 等入口 | command output |
-| `rtk bash scripts/firmware-release.sh profile mm32spin023c` | 0 | profile 覆盖 flash base/size、boot flag、app address、J-Link、OTA payload | command output |
+| `rtk bash scripts/firmware-release.sh profile mm32spin023c` | 0 | profile 覆盖 flash base/size、boot flag、app address、调试探针、OTA payload | command output |
 | `rtk bash scripts/setup-nas-mount.sh --check` | 0 | CIFS tool、credentials、fstab、mount、release root 检查通过 | command output |
 | `rtk python3 -c "<write_ihex sample boot/app into /tmp/adk-pilot/mm32>"` | 0 | 生成本地 boot/app IHEX 样本，避免依赖真实固件或仓库写入 | `/tmp/adk-pilot/mm32` |
 | `rtk bash scripts/firmware-release.sh check-package /tmp/adk-pilot/mm32/out/mm32spin023c_firmware_bundle` | 2 | 负路径：package 生成前缺少 manifest，检查正确失败 | command output |
 | `rtk bash scripts/firmware-release.sh package-external --profile mm32spin023c --repo /tmp/adk-pilot/mm32 --boot /tmp/adk-pilot/mm32/boot.hex --app /tmp/adk-pilot/mm32/app_v0.0.9.hex --version 0.0.9 --output-dir /tmp/adk-pilot/mm32/out` | 0 | 生成 package、manifest、checksums 和 zip | `/tmp/adk-pilot/mm32/out/mm32spin023c_firmware_bundle` |
 | `rtk bash scripts/firmware-release.sh check-package /tmp/adk-pilot/mm32/out/mm32spin023c_firmware_bundle` | 0 | package manifest 与 checksums 校验通过 | command output |
-| `rtk python3 /tmp/adk-pilot/mm32/out/mm32spin023c_firmware_bundle/burn_firmware.py --dry-run` | 0 | 生成默认 merged image J-Link 烧录脚本，不擦除保留区 | command output |
+| `rtk python3 /tmp/adk-pilot/mm32/out/mm32spin023c_firmware_bundle/burn_firmware.py --dry-run` | 0 | 生成默认 merged image 调试探针烧录脚本，不擦除保留区 | command output |
 | `rtk python3 /tmp/adk-pilot/mm32/out/mm32spin023c_firmware_bundle/erase_and_burn.py --dry-run` | 3 | 负路径：检测到 data reserve，拒绝直接 chip erase | command output |
-| `rtk python3 /tmp/adk-pilot/mm32/out/mm32spin023c_firmware_bundle/erase_and_burn.py --force-erase --role production-full --dry-run` | 0 | 生成 factory/full recovery J-Link 脚本 | command output |
+| `rtk python3 /tmp/adk-pilot/mm32/out/mm32spin023c_firmware_bundle/erase_and_burn.py --force-erase --role production-full --dry-run` | 0 | 生成 factory/full recovery 调试探针脚本 | command output |
 | `rtk python3 /tmp/adk-pilot/mm32/out/mm32spin023c_firmware_bundle/readback_verify.py --dry-run` | 0 | 生成 readback `savebin` 验证脚本 | command output |
 | `rtk bash scripts/firmware-release.sh publish-nas --release-root /tmp/adk-pilot/mm32/nas-release --batch-id adk-pilot --timestamp 20260519-105700 --item mm32spin023c=/tmp/adk-pilot/mm32/out/mm32spin023c_firmware_bundle --dry-run --json` | 0 | NAS 发布 dry-run 输出 `would-publish` 与 source digest | command output |
 | `rtk bash build.sh verify` | 1 | 负路径：默认源码 clean gate 因主仓 dirty 失败 | command output |
@@ -112,7 +112,7 @@ status: evidence-ready
 ### 残留缺口
 
 - 设备型号、硬件版本和固件/镜像版本。
-- 实机 J-Link 烧录、真实 readback 对比和串口 boot log。
+- 实机调试探针烧录、真实 readback 对比和串口 boot log。
 - PCR02 `release`、`vehicle-ota` 和 `publish-soc` 的真实或 dry-run 输出。
 - 产测矩阵、HIL/SIL 报告、诊断包与错误码清单。
 - 真实 OTA 升级和回滚演练。

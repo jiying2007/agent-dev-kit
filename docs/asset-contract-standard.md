@@ -60,7 +60,7 @@ Examples:
   - `*-routing` for runtime or selection logic.
   - `*-hardening` for release readiness and risk reduction.
   - `*-curation` for screening and ownership decisions.
-- Each Workflow must declare `primary_agent`, `primary_skill`, `supporting_skills`, `command_risk`, `profiles` and verification commands.
+- Each Workflow must declare `workflow_type`, `lifecycle_order`, `entry_conditions`, `exit_evidence`, `primary_agent`, `primary_skill`, `supporting_skills`, `command_risk`, `profiles` and verification commands.
 
 ## Boundary Rules
 
@@ -93,6 +93,13 @@ Historical role-style assets are removed from live source, not aliased:
 
 - `rtk bash scripts/devkit.sh validate --strict`
 - `rtk bash scripts/check-profile-coherence.sh`
+- `rtk bash scripts/devkit.sh asset-taxonomy`
 - `rtk bash tests/test_catalog.sh`
 - `rtk bash tests/test_workflow_contract.sh`
 - Residual scans for removed historical IDs must return no matches after cutover.
+
+## Taxonomy and Routing Contract
+
+每个 live Skill 和 Optional Skill 必须在 `manifest.yaml` 声明 `category`、`lifecycle_order`、`stage_order`、`activation_mode` 和 `pattern`。`lifecycle_order` 用于跨类别生命周期排序，`stage_order` 用于同一类别内的流程排序。每个 Workflow 必须声明 `workflow_type`、`lifecycle_order`、`entry_conditions` 和 `exit_evidence`。Profile 的 `include_skills` 必须按生命周期和阶段顺序排列。
+
+场景级入口以 `manifest.yaml:skill_routing_matrix` 为准：一个场景只能有一个 `primary_skill`，`supporting_skills` 不得抢占入口，`fallback_skills` 必须指向已声明的 Skill 或 Optional Skill。默认 catalog 生成会同步更新 `docs/reference/skill-routing-matrix.md`。

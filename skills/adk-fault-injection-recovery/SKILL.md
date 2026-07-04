@@ -26,7 +26,7 @@ constraints:
 ## Prerequisites
 - 定义故障模型（掉电、超时、资源耗尽、链路中断、看门狗超时）。
 - 设定恢复 SLA 与允许的数据损失边界。
-- 准备注入工具（gdb 脚本、fault-injection 框架、硬件断电装置）。
+- 准备注入工具（debug transport 脚本、fault-injection 框架、硬件断电装置）。
 
 ## Workflow
 1. **选择注入点**：按影响范围和可复现性排序。
@@ -45,8 +45,7 @@ echo 1 > /sys/kernel/debug/failslab/verbose
 echo 100 > /sys/kernel/debug/failslab/probability
 echo -1 > /sys/kernel/debug/failslab/times
 echo 1 > /dev/watchdog
-gdb-multiarch <elf> -ex "target remote :3333" \
-  -ex "break <func>" -ex "set variable <var> = <bad_value>" -ex "continue"
+<debug-transport> inject --target <target> --point <func> --value <bad_value>
 <recovery-verify-cmd> --scenario <scenario>
 dmesg | grep -iE "fault|error|panic|recover"
 journalctl -p err --since "10 min ago"
