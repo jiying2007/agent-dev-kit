@@ -184,6 +184,16 @@ def validate_subagent_batch(case, job_schema, runtime_limits, label):
         seen.add(identity)
         if status == "pass" and not record.get("verification_commands"):
             fail(f"{record_label} pass status requires verification_commands")
+        if not isinstance(record.get("summary"), str) or not record.get("summary").strip():
+            fail(f"{record_label} requires a distilled summary")
+        evidence_refs = record.get("evidence_refs")
+        if not isinstance(evidence_refs, list) or not evidence_refs:
+            fail(f"{record_label} requires evidence_refs")
+        raw_policy = str(record.get("raw_output_policy", "")).lower()
+        if not raw_policy:
+            fail(f"{record_label} requires raw_output_policy")
+        if "raw" in raw_policy and not any(token in raw_policy for token in ("artifact", "not retained", "summary-only", "redacted")):
+            fail(f"{record_label} raw_output_policy must state artifact, redaction, not-retained, or summary-only handling")
         decision = record.get("parent_integration_decision")
         if not isinstance(decision, dict):
             fail(f"{record_label} parent_integration_decision must be an object")
@@ -322,7 +332,10 @@ for field in (
     "scope_read",
     "scope_write",
     "status",
+    "summary",
+    "evidence_refs",
     "result_json",
+    "raw_output_policy",
     "verification_commands",
     "parent_integration_decision",
 ):
@@ -334,7 +347,11 @@ for status in ("pass", "needs-fix", "blocked", "error"):
 for field in ("csv_path", "id_column", "output_schema", "max_concurrency", "max_runtime_seconds"):
     if field not in job_schema.get("csv_batch_required_fields", []):
         fail(f"subagent CSV schema missing field: {field}")
-contains_all(job_schema.get("quality_gates", []), ["reports exactly once", "parent verifies", "max_concurrency", "nested"], "subagent job quality gates")
+contains_all(
+    job_schema.get("quality_gates", []),
+    ["reports exactly once", "parent verifies", "max_concurrency", "nested", "summary", "raw"],
+    "subagent job quality gates",
+)
 
 custom_agent_lint = subagents.get("custom_agent_lint", {})
 require_keys(custom_agent_lint, ["required_fields", "optional_runtime_fields", "quality_gates"], "custom_agent_lint")

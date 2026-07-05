@@ -413,6 +413,10 @@ for contract in subagents.get("contracts", []):
     for token in ("pass", "replan", "split", "blocked", "abort"):
         if token not in stop_condition:
             fail(f"subagent contract {contract.get('id')} stop_condition missing {token}")
+    report_schema = contract.get("report_schema", [])
+    for field in ("summary", "evidence_refs", "raw_output_policy"):
+        if field not in report_schema:
+            fail(f"subagent contract {contract.get('id')} report_schema missing {field}")
 if not subagents.get("contracts"):
     fail("subagent contracts are empty")
 
@@ -437,11 +441,22 @@ if subagent_runtime_limits.get("job_max_runtime_seconds_fallback") != 1800:
     fail("subagent runtime_limits job_max_runtime_seconds_fallback must be 1800")
 if subagent_runtime_limits.get("nested_subagents_default_allowed") is not False:
     fail("subagent runtime_limits nested subagents must be disabled by default")
-for field in ("features.multi_agent", "agents.max_threads", "agents.max_depth", "agents.job_max_runtime_seconds", "scope_write"):
+for field in (
+    "features.multi_agent",
+    "agents.max_threads",
+    "agents.max_depth",
+    "agents.job_max_runtime_seconds",
+    "scope_write",
+    "subagent_result.summary",
+    "subagent_result.evidence_refs",
+    "subagent_result.raw_output_retention_decision",
+):
     if field not in subagent_runtime_limits.get("must_record", []):
         fail(f"subagent runtime_limits missing must_record field: {field}")
 if not any("nested" in item.lower() for item in subagent_runtime_limits.get("must_not", [])):
     fail("subagent runtime_limits must forbid implicit nested subagents")
+if not any("raw logs" in item.lower() or "command transcripts" in item.lower() for item in subagent_runtime_limits.get("must_not", [])):
+    fail("subagent runtime_limits must forbid raw noisy output by default")
 
 runtime_layers = runtime_policy.get("policy_layers", [])
 if not runtime_layers:
@@ -895,6 +910,7 @@ for contract in automation_contracts:
             "approval_policy",
             "first_run_review",
             "first_run_evidence",
+            "reliability_promotion_gate",
             "result_policy",
             "cleanup_policy",
         ],
@@ -915,6 +931,12 @@ for contract in automation_contracts:
     for required_prompt in ("durable", "stop"):
         if not any(required_prompt in item for item in contract.get("prompt_requirements", [])):
             fail(f"automation contract {cid} prompt_requirements missing {required_prompt}")
+    promotion_gate = contract.get("reliability_promotion_gate", [])
+    if len(promotion_gate) < 3:
+        fail(f"automation contract {cid} reliability_promotion_gate must contain at least three gate items")
+    for required_gate in ("manual", "report-only", "owner approval", "rollback"):
+        if not any(required_gate in item for item in promotion_gate):
+            fail(f"automation contract {cid} reliability_promotion_gate missing {required_gate}")
 for contract in worktree_contracts:
     cid = contract.get("id")
     require_keys(contract, ["id", "owner", "applies_to", "creation_gate", "handoff_gate", "cleanup_gate", "must_not"], f"worktree contract {cid}")
@@ -930,6 +952,10 @@ require_keys(
         "automations_enabled_default_must_be_false",
         "first_runs_require_review",
         "first_run_evidence_required",
+        "manual_reliable_before_scheduling",
+        "promotion_requires_report_only_history",
+        "promotion_evidence_required",
+        "enabled_mode_requires_owner_approval_and_rollback",
         "full_access_never_for_default_automation",
         "worktree_cleanup_requires_retention_decision",
     ],
@@ -939,6 +965,10 @@ for key in (
     "automations_enabled_default_must_be_false",
     "first_runs_require_review",
     "first_run_evidence_required",
+    "manual_reliable_before_scheduling",
+    "promotion_requires_report_only_history",
+    "promotion_evidence_required",
+    "enabled_mode_requires_owner_approval_and_rollback",
     "full_access_never_for_default_automation",
     "worktree_cleanup_requires_retention_decision",
 ):

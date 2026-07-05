@@ -26,10 +26,15 @@
               "build/openai-runtime-capabilities/pilot-results.csv"
             ],
             "status": "pass",
+            "summary": "Claims permission profile validation passed, but the parent integration decision is intentionally absent.",
+            "evidence_refs": [
+              "fixtures/openai-runtime-capabilities/fail/permission-danger-full-access.json"
+            ],
             "result_json": {
               "checked": "permission profile",
               "failures": 0
             },
+            "raw_output_policy": "summary-only",
             "verification_commands": [
               "scripts/check-openai-runtime-capabilities.sh --fixture fixtures/openai-runtime-capabilities/fail/permission-danger-full-access.json"
             ],

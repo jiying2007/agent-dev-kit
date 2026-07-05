@@ -62,6 +62,7 @@ Official guidance can become a default adk rule only when:
 - Tool/function contracts prefer strict schemas with required fields, enum constraints and explicit additional-property denial.
 - Large skill/tool catalogs expose namespace summaries first and defer full bodies, references or schemas until a routing decision is justified.
 - Automation records are disabled by default, report-only until reviewed, and include cadence, data source, stop condition, first-run review and cleanup policy.
+- Automation promotion requires manual reliability evidence, report-only run history, owner approval and rollback or disable instructions before `enabled=true`, external notification or unattended write behavior.
 - Background worktrees record base branch/commit, dirty-state decision, worktree path, handoff gate and retention/cleanup decision.
 - Agent improvement loops include traces, feedback, eval candidate, validation result, ranked recommendations and an ADK handoff before changing prompts, skills or workflows.
 - CI/PR review runners are disabled by default, restrict protected secrets on untrusted PRs, validate structured findings before SCM write actions and record inline anchoring decisions.
@@ -71,6 +72,7 @@ Official guidance can become a default adk rule only when:
 - Permission profiles define least-privilege filesystem and network boundaries, including workspace roots, deny-read paths, domain policy and Unix socket allowlists.
 - Memory runtime remains opt-in and owner-reviewed when external context contributed to the candidate memory. Raw evidence fallback must remain available.
 - Codex glossary terms are mapped before new manifests, skills or runbooks use agent, skill, plugin, automation, worktree, MCP server or permission profile language.
+- Subagent worker output is summary-first. Parent threads receive distilled summary, evidence references, verification commands and raw-output policy; raw logs or transcripts stay as explicit artifacts only when retained intentionally.
 
 ## Rejection Gate
 
@@ -89,11 +91,13 @@ Reject or keep as observe-only when:
 - The change treats structured output parse failure as a successful result.
 - The change exposes a large tool or skill catalog up front when a namespace/lazy-loading path would preserve context and routing quality.
 - The change schedules unattended automation without first-run review, stop condition or report-only default.
+- The change promotes automation before a manual run and at least one report-only run have produced reviewable evidence.
 - The change deletes or hands off a worktree without diff/snapshot evidence and retention decision.
 - The change promotes model-generated feedback without human or deterministic validation evidence.
 - The change enables CI review publishing without trusted-trigger, secret-isolation or schema-validation evidence.
 - The change posts inline comments without right-side diff anchoring validation.
 - The change promotes an unversioned skill or nondeterministic skill script into production defaults.
+- The change lets subagents paste raw exploration, logs, command transcripts or stack traces into the parent thread without artifact retention and redaction policy.
 
 ## Control Plane Checks
 
@@ -123,6 +127,8 @@ Reject or keep as observe-only when:
 24. Surface terminology: compare new ADK terms against Codex glossary mapping to prevent agent/skill/plugin/automation/worktree/MCP server drift.
 25. Runtime capability gate: run `scripts/check-openai-runtime-capabilities.sh` before promoting permission profiles, MCP servers, subagent batch jobs or terminology changes.
 26. Runtime pilot fixtures: validate positive and negative examples under `fixtures/openai-runtime-capabilities/` before treating manifest gates as behaviorally covered.
+27. Subagent context hygiene: require `summary`, `evidence_refs`, `verification_commands`, `raw_output_policy` and parent integration decision before accepting worker results.
+28. Automation promotion: require manual proof, report-only evidence, owner approval and rollback or disable path before enabling scheduled or write-capable automation.
 
 ## Verification
 

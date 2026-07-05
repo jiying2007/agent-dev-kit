@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-06-30",
+  "last_updated": "2026-07-05",
   "source_docs": [
     "openai-codex-app-automations",
     "openai-codex-app-worktrees",
@@ -31,6 +31,12 @@
         "missing tools or credentials",
         "next cadence entry point"
       ],
+      "reliability_promotion_gate": [
+        "manual run proves the workflow is useful and bounded before any scheduling proposal",
+        "at least one report-only run records inputs, outputs, stop decision and reviewer",
+        "owner approval is recorded before enabled=true or external notification/write behavior",
+        "rollback or disable path is documented before promotion"
+      ],
       "result_policy": "findings go to triage or report artifact; no silent mutation",
       "cleanup_policy": "archive stale runs and do not pin worktrees unless retention is intentional"
     },
@@ -57,6 +63,12 @@
         "changed blocker summary",
         "missing context or manual input",
         "next wake-up or stop decision"
+      ],
+      "reliability_promotion_gate": [
+        "manual heartbeat proves the wake-up prompt preserves context without creating churn",
+        "at least one report-only heartbeat records changed evidence or a no-op stop decision",
+        "owner approval is recorded before unattended writes or repeated wake-ups",
+        "rollback or disable condition and cleanup path are documented before promotion"
       ],
       "result_policy": "preserve context in the current thread and update blockers only when evidence changed",
       "cleanup_policy": "remove heartbeat when stop condition is met"
@@ -101,6 +113,10 @@
     "automations_enabled_default_must_be_false": true,
     "first_runs_require_review": true,
     "first_run_evidence_required": true,
+    "manual_reliable_before_scheduling": true,
+    "promotion_requires_report_only_history": true,
+    "promotion_evidence_required": true,
+    "enabled_mode_requires_owner_approval_and_rollback": true,
     "full_access_never_for_default_automation": true,
     "worktree_cleanup_requires_retention_decision": true
   }

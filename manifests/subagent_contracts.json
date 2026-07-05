@@ -1,10 +1,11 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-06-15",
+  "last_updated": "2026-07-05",
   "source_docs": [
     "openai-agents-sdk-starting-point",
     "openai-codex-config-reference",
-    "openai-codex-subagents-runtime"
+    "openai-codex-subagents-runtime",
+    "openai-codex-best-practices"
   ],
   "runtime_limits": {
     "max_threads_default": 6,
@@ -18,12 +19,16 @@
       "agents.job_max_runtime_seconds",
       "agent_type",
       "scope_write",
-      "stop_condition"
+      "stop_condition",
+      "subagent_result.summary",
+      "subagent_result.evidence_refs",
+      "subagent_result.raw_output_retention_decision"
     ],
     "must_not": [
       "spawn nested subagents without explicit max_depth approval",
       "treat subagent completion as integrated completion",
-      "allow subagents to write shared contracts unless they own the integration task"
+      "allow subagents to write shared contracts unless they own the integration task",
+      "return raw logs, full stack traces, command transcripts or exploratory notes to the parent unless they are explicitly retained as evidence artifacts"
     ]
   },
   "job_evidence_schema": {
@@ -34,7 +39,10 @@
       "scope_read",
       "scope_write",
       "status",
+      "summary",
+      "evidence_refs",
       "result_json",
+      "raw_output_policy",
       "verification_commands",
       "last_error",
       "parent_integration_decision"
@@ -58,7 +66,9 @@
       "each worker reports exactly once",
       "parent verifies integration after worker completion",
       "max_concurrency must not exceed agents.max_threads",
-      "nested subagents require explicit max_depth approval"
+      "nested subagents require explicit max_depth approval",
+      "worker returns distilled summary and evidence references instead of raw intermediate output",
+      "raw logs or transcripts are linked as artifacts only when retention decision is explicit"
     ]
   },
   "custom_agent_lint": {
@@ -79,7 +89,8 @@
       "description must be narrow enough for routing",
       "write-capable agents must declare sandbox and scope_write",
       "docs or research agents default to read-only",
-      "custom agent name is the source of truth"
+      "custom agent name is the source of truth",
+      "delegated agents must keep noisy exploration out of the parent thread and return summary plus evidence references"
     ]
   },
   "contracts": [
@@ -107,9 +118,12 @@
       "reply_owner": "lead-agent",
       "stop_condition": "pass | replan | split | blocked | abort",
       "report_schema": [
+        "summary",
         "changed_files",
+        "evidence_refs",
         "verification_commands",
         "result",
+        "raw_output_policy",
         "risks",
         "open_items"
       ],

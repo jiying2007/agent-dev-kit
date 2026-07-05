@@ -70,6 +70,12 @@ This note records the official OpenAI Developers content that is safe to use as 
 | openai-codex-memories | https://developers.openai.com/codex/memories | 2026-06-15 | 2026-09-13 | P1 | Adopt opt-in memory runtime, external-context review and raw-evidence fallback policy. |
 | openai-codex-subagents-runtime | https://developers.openai.com/codex/subagents | 2026-06-15 | 2026-09-13 | P1 | Adopt subagent runtime limits, nesting policy and delegated-work evidence fields. |
 
+## 2026-07-05 Delta Landing
+
+- Tighten subagent context hygiene. Delegated workers must return a distilled `summary`, `evidence_refs` and `raw_output_policy`; raw logs, command transcripts, stack traces and exploratory notes stay out of the parent thread unless explicitly retained as evidence artifacts.
+- Treat automation promotion as a staged reliability decision. A recurring workflow must prove usefulness through manual execution, then report-only execution, then owner-reviewed promotion with rollback or disable evidence before it can be enabled or allowed to write externally.
+- Keep OpenAI official practice as a governance input, not a parallel runtime. The landing target remains existing ADK manifests and deterministic checks, especially `subagent_contracts.json`, `automation_worktree_contracts.json`, `check-openai-runtime-capabilities.sh` and `check-openai-developers-governance.sh`.
+
 ## 2026-06-15 Delta Landing
 
 - Refresh Codex config reference into a project-local non-overridable key list. Repo-level settings must not take over provider, auth, base URL, profile, notification, realtime or telemetry routing.
@@ -153,6 +159,8 @@ This note records the official OpenAI Developers content that is safe to use as 
 - Documentation freshness is part of delivery evidence; release summaries and codebase diagrams should be generated or refreshed through the delivery pipeline when relevant.
 - Align runtime-surface terminology with the Codex glossary before new manifests, skills or runbooks mention agents, plugins, automations, worktrees, MCP servers or permission profiles.
 - Record subagent runtime limits and nested-subagent policy before delegated agents are used for multi-stage work.
+- Subagent reports must be summary-first and evidence-linked. Do not merge raw worker output into the parent context unless a retention decision, redaction boundary and artifact reference are explicit.
+- Automation promotion must move through manual proof, report-only history and owner approval before scheduling or enabling writes.
 
 ## P2 Landing
 
