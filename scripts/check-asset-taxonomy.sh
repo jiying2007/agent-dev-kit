@@ -161,6 +161,55 @@ check_workflows() {
   done < <(adk_list_manifest_names "workflows")
 }
 
+check_manifest_section_order() {
+  local section="$1"
+  local label="$2"
+  local workflow="${3:-0}"
+  local name order stage sort previous previous_name
+
+  previous=-1
+  previous_name=""
+  while IFS= read -r name; do
+    [[ -z "$name" ]] && continue
+    order="$(adk_get_manifest_item_value "$section" "$name" "lifecycle_order")"
+    if [[ "$workflow" -eq 1 ]]; then
+      stage=0
+    else
+      stage="$(adk_get_manifest_item_value "$section" "$name" "stage_order")"
+    fi
+    [[ -n "$order" ]] || fail "$label '$name' missing lifecycle_order"
+    [[ -n "$stage" ]] || fail "$label '$name' missing stage_order"
+    is_numeric "$order" || fail "$label '$name' lifecycle_order must be numeric: $order"
+    is_numeric "$stage" || fail "$label '$name' stage_order must be numeric: $stage"
+    sort=$((order * 1000 + stage))
+    if [[ "$sort" -lt "$previous" ]]; then
+      fail "$section manifest order drift: '$previous_name'($previous) before '$name'($sort)"
+    fi
+    previous="$sort"
+    previous_name="$name"
+  done < <(adk_list_manifest_names "$section")
+}
+
+check_skill_dependency_order() {
+  local section label skill dependency skill_sort dependency_sort
+  for section in skills optional_skills; do
+    label="skill"
+    [[ "$section" == "optional_skills" ]] && label="optional skill"
+    while IFS= read -r skill; do
+      [[ -z "$skill" ]] && continue
+      skill_sort="$(skill_sort_order "$skill")" || fail "$label '$skill' has invalid sort order"
+      while IFS= read -r dependency; do
+        [[ -z "$dependency" ]] && continue
+        skill_ref_exists "$dependency" || fail "$label '$skill' depends_on unknown skill: $dependency"
+        dependency_sort="$(skill_sort_order "$dependency")" || fail "$label '$skill' dependency '$dependency' has invalid sort order"
+        if [[ "$dependency_sort" -gt "$skill_sort" ]]; then
+          fail "$label '$skill' depends_on later skill '$dependency' ($dependency_sort > $skill_sort)"
+        fi
+      done < <(adk_get_manifest_item_list "$section" "$skill" "depends_on")
+    done < <(adk_list_manifest_names "$section")
+  done
+}
+
 check_profile_skill_order() {
   local profile skill order stage sort previous previous_skill
   while IFS= read -r profile; do
@@ -278,6 +327,10 @@ check_asset_taxonomy_header
 check_skill_section "skills" "skill"
 check_skill_section "optional_skills" "optional skill"
 check_workflows
+check_manifest_section_order "skills" "skill"
+check_manifest_section_order "optional_skills" "optional skill"
+check_manifest_section_order "workflows" "workflow" 1
+check_skill_dependency_order
 check_profile_skill_order
 check_skill_routing_matrix
 check_routing_intents

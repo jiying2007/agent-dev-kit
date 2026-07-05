@@ -1,6 +1,6 @@
 # Skill Routing Matrix
 
-- generated_at: 2026-07-04T16:35:56Z
+- generated_at: 2026-07-05T00:33:52Z
 - source: manifest.yaml:skill_routing_matrix
 
 ## Skill Routing Matrix

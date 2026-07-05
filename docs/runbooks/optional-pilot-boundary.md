@@ -23,6 +23,6 @@
 ## 验收门禁
 
 - `check-runtime-routing.sh` 必须 PASS。
-- `check-skill-routing-conflicts.sh` 必须 PASS。
+- `rtk bash tests/test_skill_trigger_matrix.sh` 必须 PASS。
 - `check-all.sh --quick` 必须 PASS。
 - 必须有一条可复现 evidence 路径记录试点结果。

@@ -42,7 +42,7 @@ Workflow 是一等资产。生产级 Workflow 必须在 `manifest.yaml:workflows
 可选增强：
 - `catalog build`：在变更启动前生成当前 Agent/Skill 能力目录，便于选型。
 - `match`：把任务描述输入匹配器，快速筛选可触发 skill。
-- `asset-taxonomy`：检查 skill/workflow 分类、profile 顺序和场景 routing matrix。
+- `asset-taxonomy`：检查 skill/workflow 分类、manifest 物理顺序、profile 顺序和场景 routing matrix。
 
 Workflow 变更后必须至少运行：
 

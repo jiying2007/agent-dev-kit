@@ -189,6 +189,7 @@ bash scripts/devkit.sh asset-taxonomy
 
 - skill 缺少 `category`、`lifecycle_order`、`stage_order`、`activation_mode` 或 `pattern`。
 - workflow 缺少 `workflow_type`、`lifecycle_order`、`entry_conditions` 或 `exit_evidence`。
+- manifest 中 `skills`、`optional_skills` 或 `workflows` 的物理顺序偏离生命周期或阶段顺序。
 - profile 的 `include_skills` 顺序偏离生命周期或阶段顺序。
 - routing matrix 引用不存在的 skill、workflow 或 profile。
 

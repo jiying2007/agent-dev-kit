@@ -322,7 +322,7 @@ ADK 支持两类交付动作：`install` 和 `convert`。
 | `bash scripts/devkit.sh validate --quick` | 快速结构检查，适合编辑中间态 |
 | `bash scripts/check-profile-coherence.sh` | 检查 profile 继承、重复声明和 default_skills 闭包 |
 | `bash scripts/devkit.sh runtime-boundary` | 检查 core 是否保持平台中立，防止平台专属残留 |
-| `bash scripts/devkit.sh asset-taxonomy` | 检查 skill/workflow 分类、profile 生命周期顺序和场景路由矩阵 |
+| `bash scripts/devkit.sh asset-taxonomy` | 检查 skill/workflow 分类、manifest 物理顺序、profile 生命周期顺序和场景路由矩阵 |
 | `bash scripts/devkit.sh openai-governance --summary-json` | 检查官方资料 freshness 和提升门禁 |
 | `bash scripts/devkit.sh workflow-closure --profile core` | 检查 workflow 引用是否在 profile 闭包内 |
 | `bash scripts/devkit.sh file-modes` | 检查 tracked 文件权限 |
@@ -437,8 +437,8 @@ Agent 使用要点：
 | Skill | 适用场景 | 主要产物 / 门禁 | 使用边界 |
 |---|---|---|---|
 | `adk-runtime-router` | 任务开始前需要判断 primary/supporting/fallback skill，或需要验证 adk-first 路由 | 路由决策、跳过条件、fallback 边界 | 只做路由裁决，不替代具体 Skill 执行 |
-| `adk-token-context-governance` | 日志、diff、上下文过大，需要保真省 token | 读取分层、摘要边界、原文回退门禁 | 不能牺牲高风险原文证据 |
 | `adk-context-engineering` | 需要优化 Agent 上下文、加载层或提示结构 | 上下文分层方案、加载策略 | 不替代具体业务 Skill |
+| `adk-token-context-governance` | 日志、diff、上下文过大，需要保真省 token | 读取分层、摘要边界、原文回退门禁 | 不能牺牲高风险原文证据 |
 | `adk-requirements-triage` | 需求不清、范围不明、验收标准缺失、新功能入口 | 目标、非目标、影响面、验收标准、风险 | 不直接实现代码；实现前必须形成可验证条目 |
 | `adk-structured-requirements-questioning` | 用结构化提问消除需求或文档模糊点 | 问题清单、澄清结论 | 与 triage 区分：它更偏提问对齐 |
 | `adk-repo-prompt-analysis` | 逆向分析参考仓 Prompt/系统指令 | prompt 结构、上下文工程模式、采纳建议 | 只做分析和候选，不直接提升 active rule |
@@ -449,7 +449,6 @@ Agent 使用要点：
 | `adk-parallel-agent-governance` | 并行子代理任务分片和整合治理 | scope_read/write、must_not_touch、整合验证 | 不用于边界不清或强耦合任务 |
 | `adk-worktree-governance` | git worktree 隔离开发、多分支并行治理 | worktree plan、冲突矩阵、清理规则 | 共享 schema、根配置、lockfile 默认串行 |
 | `adk-context-compress-handoff` | 上下文压力高、需要会话接力或恢复提示 | stable/dynamic/evidence/excluded context、resume prompt | 不写长期记忆；长期提升另走 memory/archive 治理 |
-| `adk-planning-execution-loop` | 长任务需要计划审查、阶段检查点、恢复和收口 | 阶段计划、checkpoint、恢复提示、完成判定 | optional skill；小任务不要升级为重流程 |
 | `adk-interface-contract-design` | 模块、API、消息、组件边界需要定义契约 | 接口契约、兼容性、迁移和回退边界 | 依赖需求边界；不负责具体实现 |
 | `adk-adr-writer` | 需要固化架构或技术选型决策 | ADR、决策背景、取舍、后果 | 不用于记录临时过程噪音 |
 | `adk-component-api-stability` | 组件 API 变更、兼容性治理、集成边界保护 | API 稳定性评估、迁移说明、兼容证据 | 破坏性变更必须显式记录 |
@@ -516,12 +515,12 @@ Workflow 表示“按什么阶段推进”，用于规定阶段顺序、主责�
 
 | Workflow | 适用场景 | Profile | 主责 | 阶段和证据重点 | 验证入口 |
 |---|---|---|---|---|---|
-| `adk-delivery-gate` | ADK 资产生产、规范化、发布前交付门禁 | `core`、`embedded-fullstack` | `code-review-governor` + `adk-verification-before-completion` | 路由、需求、任务、测试策略、审查、复盘和 token/context 证据齐备后放行 | `rtk bash tests/run_all.sh --fail-fast` |
 | `feature-delivery` | 新功能从需求收敛到实现、验证和评审 | `core`、`embedded-fullstack` | `requirements-analyst` + `adk-requirements-triage` | proposal、设计、任务、实现范围、单测/回归、review 结论 | `rtk bash tests/test_validate.sh`、`rtk bash tests/test_workflow_closure.sh` |
 | `bugfix-delivery` | 缺陷复现、根因定位、修复、回归和审查 | `embedded-fullstack` | `application-engineer` + `adk-systematic-debugging` | 复现证据、根因假设、实验记录、修复 diff、回归证据 | `rtk bash tests/test_workflow.sh`、`rtk bash tests/test_integration.sh` |
 | `release-hardening` | 发布前安全、性能、版本、回滚和放行证据收口 | `release-hardening` | `build-release-engineer` + `adk-release-versioning` | 版本、制品、静态分析、性能可靠性、回滚、branch/PR 门禁 | `rtk bash tests/test_validate.sh`、`rtk bash tests/test_profile_coherence.sh` |
-| `runtime-routing` | 运行时技能路由、fallback 边界和 profile 闭包验证 | `core`、`embedded-fullstack` | `architecture-planner` + `adk-runtime-router` | primary/supporting/fallback 判定、profile 闭包、漂移治理 | `rtk bash tests/test_skill_trigger_matrix.sh`、`rtk bash tests/test_workflow_closure.sh` |
 | `skill-curation-delivery` | Skill 候选筛选、core/optional 归属和触发质量验证 | `core`、`team-core` | `requirements-analyst` + `adk-requirements-triage` | 现有资产检索、归属判断、触发质量、提交门禁、完成前验证 | `rtk bash tests/test_catalog.sh`、`rtk bash tests/test_skill_sop_quality.sh` |
+| `adk-delivery-gate` | ADK 资产生产、规范化、发布前交付门禁 | `core`、`embedded-fullstack` | `code-review-governor` + `adk-verification-before-completion` | 路由、需求、任务、测试策略、审查、复盘和 token/context 证据齐备后放行 | `rtk bash tests/run_all.sh --fail-fast` |
+| `runtime-routing` | 运行时技能路由、fallback 边界和 profile 闭包验证 | `core`、`embedded-fullstack` | `architecture-planner` + `adk-runtime-router` | primary/supporting/fallback 判定、profile 闭包、漂移治理 | `rtk bash tests/test_skill_trigger_matrix.sh`、`rtk bash tests/test_workflow_closure.sh` |
 
 Workflow 选择规则：
 

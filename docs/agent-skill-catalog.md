@@ -1,6 +1,6 @@
 # Agent and Skill Catalog
 
-- generated_at: 2026-07-04T16:35:49Z
+- generated_at: 2026-07-05T00:33:45Z
 - source: manifest.yaml
 
 ## Agents
@@ -42,8 +42,8 @@
 | Order | Stage | Category | Activation | Pattern | Name | Description | First Trigger | Path |
 |---:|---:|---|---|---|---|---|---|---|
 | 10 | 10 | `routing` | primary | governance | `adk-runtime-router` | adk-first 运行时技能路由入口，统一判定 primary/supporting/fallback 与跳过条件 | "技能路由" | `skills/adk-runtime-router/SKILL.md` |
-| 10 | 20 | `routing` | primary | governance | `adk-token-context-governance` | 保真省 Token 的上下文读取治理，分层摘要、原文回退与高风险原文门禁 | "省 token" | `skills/adk-token-context-governance/SKILL.md` |
-| 10 | 30 | `routing` | primary | governance | `adk-context-engineering` | 上下文工程——优化 Agent 上下文设置 | "上下文不够" | `skills/adk-context-engineering/SKILL.md` |
+| 10 | 20 | `routing` | primary | governance | `adk-context-engineering` | 上下文工程——优化 Agent 上下文设置 | "上下文不够" | `skills/adk-context-engineering/SKILL.md` |
+| 10 | 30 | `routing` | primary | governance | `adk-token-context-governance` | 保真省 Token 的上下文读取治理，分层摘要、原文回退与高风险原文门禁 | "省 token" | `skills/adk-token-context-governance/SKILL.md` |
 | 20 | 10 | `intake` | primary | playbook | `adk-requirements-triage` | 将需求转为可实现、可验证的工程条目 | "需求不清楚" | `skills/adk-requirements-triage/SKILL.md` |
 | 20 | 20 | `intake` | primary | inversion | `adk-structured-requirements-questioning` | 结构化需求提问对齐，通过有序问题消除模糊需求 | "文档审查" | `skills/adk-structured-requirements-questioning/SKILL.md` |
 | 20 | 30 | `intake` | primary | reviewer | `adk-repo-prompt-analysis` | 逆向分析开源项目中的 Prompt/系统指令设计，提取上下文工程模式 | 分析子仓 prompt | `skills/adk-repo-prompt-analysis/SKILL.md` |

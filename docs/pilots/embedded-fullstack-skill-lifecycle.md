@@ -31,7 +31,7 @@ status: evidence-ready
 | Gate | Decision | Evidence |
 |---|---|---|
 | Duplicate skill checked | pass | `devkit.sh catalog find` 未发现量产/OTA 专属 skill |
-| Trigger overlap checked | pass | `check-skill-routing-conflicts.sh` |
+| Trigger overlap checked | pass | `tests/test_skill_trigger_matrix.sh` |
 | Profile ownership decided | pass | `manifest.yaml:embedded-fullstack` |
 | Pilot requirement declared | pass | `docs/pilots/embedded-production-field-readiness.md` |
 | Fallback / replaced_by declared | pass | 本 skill 与 `adk-release-versioning` 分工明确，不替代版本策略 |
@@ -42,7 +42,7 @@ status: evidence-ready
 |---|---:|---|---|
 | `rtk bash scripts/devkit.sh match --text "创建新的 skill 并治理触发冲突"` | 0 | routed to `adk-skill-composition-governance` | command output |
 | `rtk bash scripts/devkit.sh match --text "量产产测烧录诊断 OTA升级 回滚 现场维护"` | 0 | routed to `adk-production-field-readiness` | command output |
-| `rtk scripts/check-skill-routing-conflicts.sh .` | 0 | no skill routing conflicts | command output |
+| `rtk bash tests/test_skill_trigger_matrix.sh` | 0 | no skill routing conflicts | command output |
 | `rtk bash scripts/check-profile-coherence.sh` | 0 | profile coherence passed | command output |
 | `rtk bash tests/test_match_effectiveness.sh` | 0 | 23/23 match effectiveness tests passed | command output |
 | `rtk bash tests/run_all.sh` | 0 | full regression passed | command output |
