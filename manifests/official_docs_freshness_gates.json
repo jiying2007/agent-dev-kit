@@ -20,6 +20,24 @@
       "rejected"
     ]
   },
+  "adoption_review_policy": {
+    "linked_matrices": [
+      "agent-dev-kit/docs/reference-adoption-matrix.md",
+      "subrepos/adoption-matrix.jsonl"
+    ],
+    "source_expiry_action": "needs-review",
+    "missing_review_status_action": "fail",
+    "missing_target_evidence_action": "fail",
+    "review_queue_output": "stdout",
+    "required_target_evidence_prefixes": [
+      "agent-dev-kit/"
+    ],
+    "quality_gates": [
+      "expired official sources must enter the review queue or fail",
+      "OpenAI Developers adoption rows targeting agent-dev-kit must have existing agent-dev-kit evidence",
+      "review queue items must identify source_id or adoption row and next action"
+    ]
+  },
   "sources": [
     {
       "id": "openai-codex-customization-skills",

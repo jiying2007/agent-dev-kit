@@ -237,6 +237,40 @@ for rel, markers in execution_layer_markers.items():
 
 today = dt.date.today()
 allowed_domains = set(official.get("review_policy", {}).get("allowed_domains", []))
+adoption_review_policy = official.get("adoption_review_policy", {})
+require_keys(
+    adoption_review_policy,
+    [
+        "linked_matrices",
+        "source_expiry_action",
+        "missing_review_status_action",
+        "missing_target_evidence_action",
+        "review_queue_output",
+        "required_target_evidence_prefixes",
+        "quality_gates",
+    ],
+    "official docs adoption_review_policy",
+)
+for linked_matrix in (
+    "agent-dev-kit/docs/reference-adoption-matrix.md",
+    "subrepos/adoption-matrix.jsonl",
+):
+    if linked_matrix not in adoption_review_policy.get("linked_matrices", []):
+        fail(f"official docs adoption_review_policy missing linked matrix: {linked_matrix}")
+if adoption_review_policy.get("source_expiry_action") != "needs-review":
+    fail("official docs adoption_review_policy source_expiry_action must be needs-review")
+if adoption_review_policy.get("missing_review_status_action") != "fail":
+    fail("official docs adoption_review_policy missing_review_status_action must be fail")
+if adoption_review_policy.get("missing_target_evidence_action") != "fail":
+    fail("official docs adoption_review_policy missing_target_evidence_action must be fail")
+if adoption_review_policy.get("review_queue_output") != "stdout":
+    fail("official docs adoption_review_policy review_queue_output must be stdout")
+if "agent-dev-kit/" not in adoption_review_policy.get("required_target_evidence_prefixes", []):
+    fail("official docs adoption_review_policy must require agent-dev-kit/ evidence")
+quality_gates = " ".join(adoption_review_policy.get("quality_gates", [])).lower()
+for marker in ("expired official sources", "targeting agent-dev-kit", "review queue"):
+    if marker not in quality_gates:
+        fail(f"official docs adoption_review_policy quality_gates missing marker: {marker}")
 sources = official.get("sources", [])
 if not sources:
     fail("official docs source list is empty")
