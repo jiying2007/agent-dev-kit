@@ -5,7 +5,7 @@
     "openai-prompt-caching",
     "openai-prompt-cache-retention"
   ],
-  "reference_boundary": "Prompt cache guidance is used only for API-backed runner pilots and token/cost governance. Durable ADK skills must keep semantic behavior independent of cache hits.",
+  "reference_boundary": "Official OpenAI prompt cache source docs are citation metadata and governance references only. This manifest defines API-backed runner pilot and token/cost governance fields; it must not make durable ADK skills depend on cache hits, enable hosted runners, user-directory writes, or compatibility defaults.",
   "contracts": [
     {
       "id": "prompt-cache-retention-policy-v1",

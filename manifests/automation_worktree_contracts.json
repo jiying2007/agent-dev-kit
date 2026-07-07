@@ -8,6 +8,7 @@
     "openai-codex-sandbox-defaults",
     "openai-codex-record-and-replay"
   ],
+  "reference_boundary": "OpenAI/Codex source docs are citation metadata and governance references only. This manifest promotes platform-neutral ADK automation and worktree contracts and must not enable Codex runtime bindings, hosted services, background workers, user-directory writes, or compatibility defaults.",
   "automation_contracts": [
     {
       "id": "report-only-official-docs-refresh",

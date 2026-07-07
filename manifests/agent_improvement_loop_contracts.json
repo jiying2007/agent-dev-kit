@@ -9,6 +9,7 @@
     "openai-model-optimization-workflow",
     "openai-eval-driven-system-design"
   ],
+  "reference_boundary": "OpenAI source docs are citation metadata and governance references only. This manifest promotes platform-neutral ADK improvement-loop contracts and must not enable hosted services, external runtimes, user-directory writes, or compatibility defaults.",
   "loops": [
     {
       "id": "trace-feedback-eval-handoff-v1",

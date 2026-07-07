@@ -7,6 +7,7 @@
     "openai-codex-subagents-runtime",
     "openai-codex-best-practices"
   ],
+  "reference_boundary": "OpenAI/Codex source docs are citation metadata and governance references only. This manifest promotes platform-neutral ADK subagent governance contracts and must not enable Agents SDK, Codex subagents runtime, user-directory writes, or compatibility defaults.",
   "runtime_limits": {
     "max_threads_default": 6,
     "max_depth_default": 1,

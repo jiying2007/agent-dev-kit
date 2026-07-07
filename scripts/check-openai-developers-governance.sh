@@ -117,6 +117,27 @@ data_retention = load_json("manifests/data_retention_state_contracts.json")
 prompt_cache = load_json("manifests/prompt_cache_policy_contracts.json")
 codex_surface_terms = load_json("manifests/codex_surface_terms.json")
 
+for manifest_path in sorted((root / "manifests").glob("*.json")):
+    try:
+        manifest_data = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        continue
+    source_refs = manifest_data.get("source_docs") or manifest_data.get("source_refs") or []
+    if not isinstance(source_refs, list):
+        continue
+    if not any("openai" in str(ref).lower() or "codex" in str(ref).lower() for ref in source_refs):
+        continue
+    boundary = manifest_data.get("reference_boundary")
+    rel_manifest = manifest_path.relative_to(root)
+    if not boundary:
+        fail(f"{rel_manifest} references OpenAI/Codex sources but lacks reference_boundary")
+        continue
+    boundary_text = str(boundary).lower()
+    if not any(marker in boundary_text for marker in ("citation", "reference", "source docs", "source material")):
+        fail(f"{rel_manifest} reference_boundary must state source/reference-only semantics")
+    if not any(marker in boundary_text for marker in ("must not", "does not", "not enable", "not make")):
+        fail(f"{rel_manifest} reference_boundary must state non-enablement or non-binding semantics")
+
 doc = root / "docs/reference/openai-developers-reference.md"
 runbook = root / "docs/runbooks/openai-developers-governance.md"
 for rel_path in (doc, runbook):

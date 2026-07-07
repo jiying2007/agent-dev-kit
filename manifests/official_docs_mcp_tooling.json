@@ -4,6 +4,7 @@
   "source_docs": [
     "openai-docs-mcp-quickstart"
   ],
+  "reference_boundary": "Official OpenAI Docs MCP source docs are citation metadata and lookup references only. This manifest documents optional official OpenAI documentation lookup for OpenAI product/API questions; it must not make OpenAI Docs MCP required for generic ADK operation, enable external MCP servers by default, or write runtime config without owner review.",
   "server": {
     "name": "openaiDeveloperDocs",
     "url": "https://developers.openai.com/mcp",

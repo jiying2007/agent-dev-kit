@@ -11,6 +11,7 @@
     "openai-responses-migration-statefulness",
     "openai-prompt-cache-retention"
   ],
+  "reference_boundary": "OpenAI source docs are citation metadata and governance references only. This manifest promotes platform-neutral ADK context-state contracts and must not enable API-backed runners, hosted state, user-directory writes, or compatibility defaults.",
   "contracts": [
     {
       "id": "long-thread-session-summary",

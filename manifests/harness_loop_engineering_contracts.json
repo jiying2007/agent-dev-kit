@@ -3,7 +3,7 @@
   "last_updated": "2026-06-28",
   "status": "report-only",
   "default_mode": "method-only",
-  "reference_boundary": "External harness and loop engineering repositories are absorbed as contracts, vocabulary, evidence fields and gate shapes only. This manifest does not clone, install, import, execute, start daemons, register hooks, enable MCP servers or turn on external runtimes.",
+  "reference_boundary": "External harness and loop engineering source refs are citation metadata and governance references only. This manifest absorbs contracts, vocabulary, evidence fields and gate shapes; it does not clone, install, import, execute, start daemons, register hooks, enable MCP servers or turn on external runtimes.",
   "report": "../reports/harness-loop-engineering-adoption-candidates-2026-06-25.md",
   "supplemental_reports": [
     "../reports/harness-loop-engineering-adoption-candidates-2026-06-26.md",

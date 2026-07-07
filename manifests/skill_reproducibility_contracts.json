@@ -6,6 +6,7 @@
     "openai-codex-agent-skills",
     "openai-tool-search"
   ],
+  "reference_boundary": "OpenAI/Codex source docs are citation metadata and governance references only. This manifest promotes platform-neutral ADK skill reproducibility contracts and must not enable Codex skill installs, hosted skill APIs, user-directory writes, or compatibility defaults.",
   "contracts": [
     {
       "id": "skill-discoverability-v1",

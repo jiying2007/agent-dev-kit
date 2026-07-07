@@ -5,6 +5,7 @@
     "openai-codex-plugin-build",
     "openai-codex-plugin-marketplace"
   ],
+  "reference_boundary": "OpenAI/Codex source docs are citation metadata and governance references only. This manifest promotes platform-neutral ADK plugin packaging contracts and must not enable Codex marketplace installs, hooks, external runtimes, user-directory writes, or compatibility defaults.",
   "plugin_contracts": [
     {
       "id": "minimal-skill-plugin",

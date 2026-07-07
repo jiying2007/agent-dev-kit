@@ -14,6 +14,7 @@
     "openai-model-optimization-workflow",
     "openai-codex-record-and-replay"
   ],
+  "reference_boundary": "OpenAI/Codex source docs are citation metadata and governance references only. This manifest promotes platform-neutral ADK eval-suite contracts and must not enable hosted eval services, stored completions, external runtimes, user-directory writes, or compatibility defaults.",
   "suites": [
     {
       "id": "routing-eval-core-skill-selection",

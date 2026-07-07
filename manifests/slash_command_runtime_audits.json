@@ -4,6 +4,7 @@
   "source_docs": [
     "openai-apps-sdk-review-tool-hints"
   ],
+  "reference_boundary": "OpenAI source docs are citation metadata and governance references only. This manifest promotes platform-neutral ADK slash-command audit contracts and must not enable runtime commands, write actions, user-directory writes, or compatibility defaults.",
   "audits": [
     {
       "command_id": "devkit-validate",

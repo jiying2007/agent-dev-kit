@@ -12,6 +12,15 @@ Use official OpenAI Developers guidance as a current reference source while keep
 4. Expired sources cannot promote new rules until re-reviewed.
 5. Cookbook examples remain examples unless converted into adk-native contracts with tests.
 
+## Boundary Model
+
+| Layer | Meaning | Required Gate |
+|---|---|---|
+| `source_docs` / source IDs | Citation metadata and provenance for adopted ideas | Must not imply runtime enablement, tool target support, MCP activation or user-directory writes |
+| `reference_boundary` | Human-readable statement of what the manifest may and may not promote | Required for every manifest that references OpenAI/Codex sources |
+| Promoted ADK contract | Platform-neutral fields, gates, evidence shapes or vocabulary owned by ADK | Must pass deterministic governance checks and preserve `check-runtime-boundary.sh` |
+| Runtime enablement | Actual MCP server, hosted service, hook, plugin, write action or live target | Requires a separate owner-approved runtime review with rollback and live evidence |
+
 ## Landing Map
 
 | Priority | Landing Target | Required Evidence |

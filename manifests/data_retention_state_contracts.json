@@ -6,7 +6,7 @@
     "openai-responses-migration-statefulness",
     "openai-prompt-cache-retention"
   ],
-  "reference_boundary": "Official OpenAI retention guidance defines risk fields and gates only. ADK remains platform-neutral; local runner behavior must be validated before promotion.",
+  "reference_boundary": "Official OpenAI retention source docs are citation metadata and governance references only. This manifest defines risk fields and gates only; it must not enable API-backed runners, hosted retention behavior, user-directory writes, or compatibility defaults.",
   "contracts": [
     {
       "id": "api-state-retention-boundary-v1",

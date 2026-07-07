@@ -4,7 +4,7 @@
   "source_docs": [
     "openai-codex-glossary"
   ],
-  "reference_boundary": "Official Codex glossary terms are used to align ADK terminology. This manifest does not make Codex product surfaces mandatory for ADK runtimes.",
+  "reference_boundary": "Official Codex glossary source docs are citation metadata and terminology references only. This manifest does not make Codex product surfaces mandatory for ADK runtimes or enable compatibility defaults.",
   "terms": [
     {
       "official_term": "Agent",

@@ -7,7 +7,7 @@
     "openai-latest-model-gpt-5-5",
     "openai-prompt-cache-retention"
   ],
-  "reference_boundary": "Official OpenAI guidance is used only to define the decision-record fields and gates. Actual model choices remain freshness-gated and must be validated locally.",
+  "reference_boundary": "Official OpenAI source docs are citation metadata and governance references only. This manifest defines decision-record fields and gates; it must not select hosted models, enable API-backed runners, user-directory writes, or compatibility defaults.",
   "records": [
     {
       "id": "adk-model-selection-record-v1",
