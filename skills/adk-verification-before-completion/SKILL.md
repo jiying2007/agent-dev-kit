@@ -1,7 +1,7 @@
 ---
 name: adk-verification-before-completion
 description: 完成前验证门禁，确保交付声明与证据一致
-version: 1.2.0
+version: 1.3.0
 last_updated: 2026-07-07
 triggers:
   - "准备完成"
@@ -42,12 +42,13 @@ constraints:
 13. 标准/架构/发布披露核验：跨模块、协议、数据、发布、存储、资源或 UI/UX 变更必须附 standards impact、architecture review、ship disclosure、canonical resolution parity、browser evidence 或 not-applicable 证据。
 14. 兼容性检查：显式判断是否存在 breaking change，并给出迁移与回退方案。
 15. 模型/上下文变更核验：若切换模型、扩大上下文或提升工具能力，必须补本地回归和权限/approval 未放宽证据。
-16. 反向核验：逐条检查“结论是否被证据支持”，避免先给结论后补证据。
-17. 卡死/重试核验：长任务必须核对 retry budget、heartbeat、staleness threshold、plan completeness、attestation readback、失败路径、已排除方案和 open items。
-18. Codify Decision：交付前确认是否存在可复用模式，使用 `templates/governance/codify-decision.md` 记录 `delivery_goal`、`reusable_pattern`、`affected_asset`、`promotion_candidate`、`next_task_friction_reduced`、`reduced_by`、`reduction_evidence`、`do_not_promote_reason`、`owner_review`、`rollback_path`、`verification_evidence`。
-19. 推广门禁：只有当 `verification_evidence` 支持复用价值、`owner_review` 明确、`rollback_path` 可执行，且 `next_task_friction_reduced` / `reduced_by` / `reduction_evidence` 说明后续成本如何下降时，才允许把 `promotion_candidate` 标记为 true；否则必须填写 `do_not_promote_reason`。
-20. Completion Guard Payload 核验：中高风险任务必须有结构化 guard payload，至少记录 build/lint/test/smoke/security/release 中适用项的 `status`、`exit_code`、`command`、`evidence_path`、`verified_at` 和 `verifier`；缺失、失败或过期时不得进入完成态。
-21. 结论输出：给出 pass/needs-fix，并列出下一步动作与责任人。
+16. Runtime Control Plane Audit：若改动 slash command、MCP/tool server、hook、permission profile、approval policy 或 sandbox，必须记录 `slash_command_runtime_audit`、`mcp_runtime_contract`、`permission_profile_decision`、`loaded_tools`、`approval_boundary`、`deny_path_test`、`runtime_config_diff` 和 `rollback_path`；确认权限未放宽或说明审批依据。
+17. 反向核验：逐条检查“结论是否被证据支持”，避免先给结论后补证据。
+18. 卡死/重试核验：长任务必须核对 retry budget、heartbeat、staleness threshold、plan completeness、attestation readback、失败路径、已排除方案和 open items。
+19. Codify Decision：交付前确认是否存在可复用模式，使用 `templates/governance/codify-decision.md` 记录 `delivery_goal`、`reusable_pattern`、`affected_asset`、`promotion_candidate`、`next_task_friction_reduced`、`reduced_by`、`reduction_evidence`、`do_not_promote_reason`、`owner_review`、`rollback_path`、`verification_evidence`。
+20. 推广门禁：只有当 `verification_evidence` 支持复用价值、`owner_review` 明确、`rollback_path` 可执行，且 `next_task_friction_reduced` / `reduced_by` / `reduction_evidence` 说明后续成本如何下降时，才允许把 `promotion_candidate` 标记为 true；否则必须填写 `do_not_promote_reason`。
+21. Completion Guard Payload 核验：中高风险任务必须有结构化 guard payload，至少记录 build/lint/test/smoke/security/release 中适用项的 `status`、`exit_code`、`command`、`evidence_path`、`verified_at` 和 `verifier`；缺失、失败或过期时不得进入完成态。
+22. 结论输出：给出 pass/needs-fix，并列出下一步动作与责任人。
 
 ## Commands
 ```bash
@@ -66,6 +67,7 @@ rtk bash scripts/check-codify-governance.sh
 - Runtime Config Audit:
 - Prompt Regression Evidence:
 - Model / Context Regression Evidence:
+- Runtime Control Plane Audit: slash_command_runtime_audit / mcp_runtime_contract / permission_profile_decision / loaded_tools / approval_boundary / deny_path_test / runtime_config_diff / rollback_path
 - Standards / Architecture / Ship Disclosure / Resolution Parity / Browser Evidence:
 - Evidence Index:
 - Replayable Evidence Bundle: input_snapshot / environment_snapshot / tool_transcript_digest / artifact_hashes / expected_assertions / sensitive_data_review / non_replayable_reason
@@ -107,6 +109,7 @@ Evidence Index（命令级）:
 - 若涉及运行时配置变更，必须附声明配置与运行态加载一致性结论。
 - 若涉及 prompt/policy 文本变更，必须附 before/after 行为对比与失败样例。
 - 若涉及模型切换、上下文扩容或工具权限变化，必须附本地回归和 approval/deny gate 未放宽证据。
+- 若涉及 slash command、MCP/tool server、hook、permission profile、approval policy 或 sandbox，必须附 Runtime Control Plane Audit；缺少 deny-path test、loaded_tools 或 rollback_path 时不得放行。
 - 跨模块、协议、数据、发布、存储、资源或 UI/UX 变更必须有 standards/architecture/ship disclosure/canonical resolution parity/browser evidence 或 not-applicable 证据，不得隐藏兼容性、回滚或用户可见影响。
 - 关键验证命令必须存在 Evidence Index 记录，且字段完整（命令/退出码/结果摘要/证据路径/层级）。
 - 中高风险任务必须存在 Replayable Evidence Bundle；无法回放时必须填写不可回放原因和替代证据。

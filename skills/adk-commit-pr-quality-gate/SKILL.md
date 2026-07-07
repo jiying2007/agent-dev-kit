@@ -1,8 +1,8 @@
 ---
 name: adk-commit-pr-quality-gate
 description: 提交与 PR 质量门禁检查
-version: 1.0.0
-last_updated: 2026-05-06
+version: 1.1.0
+last_updated: 2026-07-07
 triggers:
   - "提交代码"
   - "发起PR"
@@ -43,6 +43,7 @@ constraints:
 11. 发布链路核验：若触及 `scripts/` 或关键构建入口，追加 release gate 专项验证。
 12. Core/Optional 核验：确认能力归属是否应进 core，场景化能力应进入 optional。
 13. CI/PR review 核验：若使用 AI runner 生成 PR review，必须核对 trusted-trigger、secret 隔离、结构化 findings、SCM payload review 和 inline anchoring。
+14. Runtime Control Plane 核验：若改动 slash command、MCP/tool server、hook、permission profile、approval policy 或 sandbox，必须核对 `slash_command_runtime_audit`、`mcp_runtime_contract`、`permission_profile_decision`、`approval_boundary`、`deny_path_test`、`runtime_config_diff` 和 rollback。
 
 ## Commands
 ```bash
@@ -64,6 +65,7 @@ git diff --name-only <base>...HEAD
 - Release Gate Decision:
 - Core/Optional Decision:
 - CI/PR Review Decision:
+- Runtime Control Plane Decision:
 - Final Gate Result:
 ```
 
@@ -87,6 +89,7 @@ git diff --name-only <base>...HEAD
 - 若缺少负结果或被证伪路径记录，结论必须为 `needs-fix`。
 - 若 AI/CI review 缺少结构化 findings、trusted-trigger 或 untrusted PR secret 隔离证据，结论必须为 `needs-fix`。
 - 若 SCM review comment 来自自由文本或 inline anchoring 未验证，结论必须为 `needs-fix`。
+- 若运行控制面变更缺少 slash/MCP/permission 审计、deny-path test、approval boundary 或 rollback 证据，结论必须为 `needs-fix`。
 
 ---
 

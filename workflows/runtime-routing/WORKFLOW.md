@@ -1,8 +1,8 @@
 ---
 name: runtime-routing
 description: 运行时技能路由、fallback 边界和 profile 闭包验证工作流
-version: 1.0.0
-last_updated: 2026-06-01
+version: 1.1.0
+last_updated: 2026-07-07
 primary_agent: architecture-planner
 primary_skill: adk-runtime-router
 triggers:
@@ -16,11 +16,13 @@ command_risk: low
 stages:
   - inventory
   - route-design
+  - runtime-control-plane-audit
   - closure-check
   - verify
   - review
 artifacts:
   - route-decision.md
+  - runtime-control-plane-audit.md
   - profile-closure.md
   - verify-report.md
   - review-report.md
@@ -41,6 +43,7 @@ failure_handling:
 ## Scope
 - 适用于 core 和 embedded-fullstack 的运行时路由、触发词调整和 fallback 下线。
 - 不直接授予工具权限或绕过 tool policy。
+- slash command、MCP/tool server、hook、permission profile、approval policy 和 sandbox 只作为控制面审计对象；启用或放宽权限必须另走安全/供应链和完成前验证。
 
 ## Ownership
 - Primary agent: `architecture-planner`
@@ -50,12 +53,14 @@ failure_handling:
 ## Stage Contract
 1. `inventory`: 列出候选 Agent、Skill、Workflow 和 profile。
 2. `route-design`: 判定 primary、supporting、fallback 和跳过条件。
-3. `closure-check`: 验证所选 profile 能导出全部引用。
-4. `verify`: 运行触发矩阵、workflow closure 和 routing 相关测试。
-5. `review`: 审查冲突、遗漏、fallback 风险和文档同步。
+3. `runtime-control-plane-audit`: 若路由变更触及 slash/MCP/hook/permission/sandbox，记录 `slash_command_runtime_audit`、`mcp_runtime_contract`、`permission_profile_decision`、`approval_boundary`、`deny_path_test`、`loaded_tools` 和 rollback；默认不得放宽权限。
+4. `closure-check`: 验证所选 profile 能导出全部引用。
+5. `verify`: 运行触发矩阵、workflow closure 和 routing 相关测试。
+6. `review`: 审查冲突、遗漏、fallback 风险和文档同步。
 
 ## Artifact Contract
 - `route-decision.md` 记录触发、非触发和 primary 选择依据。
+- `runtime-control-plane-audit.md` 记录 slash/MCP/permission 控制面影响、deny-path、approval boundary、runtime config diff 和回滚。
 - `profile-closure.md` 记录导出 profile、缺失引用和修复动作。
 - `verify-report.md` 记录 matching、closure 和回归结果。
 
@@ -73,3 +78,4 @@ rtk bash scripts/check-workflow-closure.sh --profile core
 ## Quality Gate
 - 一个场景只能有一个 primary skill。
 - Workflow 引用必须能在声明 profile 中闭包通过。
+- 运行控制面影响必须有 audit artifact；缺少 deny-path、approval boundary、loaded_tools 或 rollback 时不得发布运行态路由。

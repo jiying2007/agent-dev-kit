@@ -134,6 +134,13 @@ execution_layer_markers = {
         "Replayable Evidence Bundle",
         "Appshots / UI Evidence Boundary",
         "Runner Smoke Contract",
+        "Runtime Control Plane Audit",
+        "runtime_config_diff",
+    ],
+    "skills/adk-commit-pr-quality-gate/SKILL.md": [
+        "Runtime Control Plane",
+        "permission_profile_decision",
+        "deny-path test",
     ],
     "skills/adk-requirements-triage/SKILL.md": [
         "Done-when",
@@ -211,6 +218,16 @@ execution_layer_markers = {
         "skill-catalog-lazy-loading-v1",
         "initial_surface",
         "deferred_surface",
+    ],
+    "optional-skills/adk-security-supply-chain/SKILL.md": [
+        "Runtime Control Plane Audit",
+        "mcp_runtime_contract",
+        "permission_profile_decision",
+    ],
+    "workflows/runtime-routing/WORKFLOW.md": [
+        "runtime-control-plane-audit",
+        "slash_command_runtime_audit",
+        "loaded_tools",
     ],
 }
 for rel, markers in execution_layer_markers.items():
