@@ -1,6 +1,6 @@
 # 最佳实践指南
 
-> 📖 **相关文档**: 如需面向具体场景的实战模板与方法论框架，参见 [Codex Cookbook](best-practices-cookbook.md)（作为参考方法论，不作为 adk 运行时绑定）。
+> 📖 **相关文档**: 如需面向具体场景的实战模板与方法论框架，参见 [ADK Practice Cookbook](best-practices-cookbook.md)（作为参考方法论，不作为任何运行时绑定）。
 
 ## 概述
 

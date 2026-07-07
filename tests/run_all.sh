@@ -83,8 +83,8 @@ TESTS=(
   test_runtime_boundary.sh
   test_token_budget.sh
   test_token_context_governance.sh
-  test_openai_developers_governance.sh
-  test_openai_runtime_capabilities.sh
+  test_official_docs_governance.sh
+  test_runtime_capabilities.sh
   test_tool_skill_evidence_contracts.sh
   test_asset_taxonomy.sh
   test_workflow_contract.sh

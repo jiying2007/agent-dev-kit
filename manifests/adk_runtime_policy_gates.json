@@ -49,7 +49,7 @@
       },
       "verification": [
         "runtime config evidence when available",
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "runtime-boundary"
       ]
     },
@@ -85,7 +85,7 @@
       ],
       "verification": [
         "runtime config evidence when available",
-        "check-openai-developers-governance"
+        "check-official-docs-governance"
       ]
     }
   ],
@@ -121,7 +121,7 @@
     "verification": [
       "compare project-local config against deny list",
       "record trust_level before applying project-scoped config",
-      "check-openai-developers-governance"
+      "check-official-docs-governance"
     ]
   },
   "granular_approval_policy": {

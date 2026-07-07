@@ -50,7 +50,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for skill/plugin layering, progressive disclosure, and AGENTS.md precedence.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "check-token-budget",
         "validate-assets --strict"
       ]
@@ -66,7 +66,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as a classification reference without rewriting existing adk orchestration.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "check-workflow-closure"
       ]
     },
@@ -81,8 +81,8 @@
       "owner": "agent-dev-kit",
       "decision": "Use traces as evidence for workflow debugging and as input to eval suites.",
       "required_checks": [
-        "check-openai-developers-governance",
-        "test_openai_developers_governance"
+        "check-official-docs-governance",
+        "test_official_docs_governance"
       ]
     },
     {
@@ -96,7 +96,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use datasets, graders, and eval runs to harden routing, governance, and completion behavior.",
       "required_checks": [
-        "check-openai-developers-governance"
+        "check-official-docs-governance"
       ]
     },
     {
@@ -111,7 +111,7 @@
       "decision": "Use for context compaction, prompt-cache-friendly layout, structured outputs, tool descriptions, and tool preambles.",
       "required_checks": [
         "check-token-budget",
-        "check-openai-developers-governance"
+        "check-official-docs-governance"
       ]
     },
     {
@@ -125,7 +125,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the safety baseline for MCP/tool audit manifests and runtime command audits.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "check-runtime-boundary"
       ]
     },
@@ -140,7 +140,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for runtime config boundary, project config non-overrides, granular approvals, agent limits, MCP tool approval, memories and permissions audit.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "runtime-boundary"
       ]
     },
@@ -155,7 +155,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for non-overridable team policy, managed hooks, MCP identity allowlists, filesystem deny_read and restrictive command rules.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "runtime-boundary"
       ]
     },
@@ -170,7 +170,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for safe default sandbox presets and full-access denial gates.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "runtime-boundary"
       ]
     },
@@ -185,7 +185,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for prefix_rule fields, inline match/not_match unit tests and restrictive admin command rules.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "runtime-boundary"
       ]
     },
@@ -200,7 +200,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for network proxy, Unix socket, live web search and prompt-injection runtime hard gates.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "runtime-boundary"
       ]
     },
@@ -215,7 +215,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for MCP startup/tool timeouts, required servers, enabled/disabled tools, per-tool approval mode, OAuth callback and scopes.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "check-runtime-boundary"
       ]
     },
@@ -230,7 +230,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for runtime API read/write/destructive/open-world classification, especially shellCommand, process, filesystem, config and plugin methods.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "runtime-boundary"
       ]
     },
@@ -245,7 +245,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for latest-goal anchoring, stale-plan invalidation, error isolation, per-issue summaries and handoff-quality context contracts.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "check-token-budget"
       ]
     },
@@ -260,7 +260,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for official Docs MCP setup and AGENTS guidance across supported MCP-capable clients.",
       "required_checks": [
-        "check-openai-developers-governance"
+        "check-official-docs-governance"
       ]
     },
     {
@@ -274,7 +274,7 @@
       "owner": "agent-dev-kit",
       "decision": "Watch as a future API-backed runner reference; do not rewrite adk until a local pilot proves the migration path.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "pilot eval before promotion"
       ]
     },
@@ -289,7 +289,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for hook lifecycle audits, trust gates, matcher policy and side-effect classification.",
       "required_checks": [
-        "check-openai-developers-governance"
+        "check-official-docs-governance"
       ]
     },
     {
@@ -303,7 +303,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for event-specific hook output field validation and unsupported-field denial.",
       "required_checks": [
-        "check-openai-developers-governance"
+        "check-official-docs-governance"
       ]
     },
     {
@@ -317,7 +317,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for slash command control-plane classification and runtime evidence capture.",
       "required_checks": [
-        "check-openai-developers-governance"
+        "check-official-docs-governance"
       ]
     },
     {
@@ -331,7 +331,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for generic ADK runner and reply contracts, thread continuation and approval correlation.",
       "required_checks": [
-        "check-openai-developers-governance"
+        "check-official-docs-governance"
       ]
     },
     {
@@ -345,7 +345,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for optional adk plugin packaging contracts after skill/workflow assets are stable.",
       "required_checks": [
-        "check-openai-developers-governance"
+        "check-official-docs-governance"
       ]
     },
     {
@@ -359,7 +359,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for marketplace metadata, install policy, authentication policy and local source path containment.",
       "required_checks": [
-        "check-openai-developers-governance"
+        "check-official-docs-governance"
       ]
     },
     {
@@ -373,7 +373,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for Goal/Context/Constraints/Done-when task framing, planning-before-coding, AGENTS.md practicality, test/review loops, MCP/skill/automation layering and one-thread-per-task discipline.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "check-token-budget",
         "check-workflow-closure"
       ]
@@ -389,7 +389,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for skill description quality, progressive disclosure budget, optional scripts/references/assets layout and plugin promotion boundaries.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "check-skill-metadata",
         "check-skill-routing-conflicts"
       ]
@@ -405,7 +405,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for tool semantics, tool_choice policy, Agents SDK tool placement and deferred tool-definition guidance without enabling new hosted tools by default.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "check-runtime-boundary"
       ]
     },
@@ -420,7 +420,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for action-oriented tool descriptions, explicit tool disambiguation, input-shape sequencing, JSON payload review and write-action confirmation policy.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "check-runtime-boundary"
       ]
     },
@@ -435,7 +435,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for data-only MCP search/fetch compatibility, structuredContent output, OAuth/auth boundaries and prompt-injection risk review.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "check-runtime-boundary"
       ]
     },
@@ -450,8 +450,8 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for aggregating traced runs into recurring behavior patterns and promoting high-signal failures into regression suites.",
       "required_checks": [
-        "check-openai-developers-governance",
-        "test_openai_developers_governance"
+        "check-official-docs-governance",
+        "test_official_docs_governance"
       ]
     },
     {
@@ -465,7 +465,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for schema-backed task packages, handoffs, evidence reports, trace summaries and refusal/parse-failure handling.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "validate-assets --strict"
       ]
     },
@@ -480,7 +480,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for strict tool schema policy, namespace grouping, call-output correlation and function/tool boundary reviews.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "check-runtime-boundary"
       ]
     },
@@ -495,7 +495,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for skill/tool catalog lazy loading, namespace summaries and token-budget-aware progressive disclosure.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "check-token-budget"
       ]
     },
@@ -510,7 +510,7 @@
       "owner": "agent-dev-kit",
       "decision": "Watch as a reference for local archive and reference-retrieval design; do not enable hosted file_search by default.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "pilot eval before promotion"
       ]
     },
@@ -525,7 +525,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for report-only automation records, durable prompts, cadence, stop conditions, sandbox policy and review gates.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "check-runtime-boundary"
       ]
     },
@@ -540,7 +540,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for background worktree isolation, handoff gates, branch checkout limitations and cleanup policy.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "check-workflow-closure"
       ]
     },
@@ -555,8 +555,8 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for trace-feedback-eval-handoff improvement loops with human approval before deeper automation.",
       "required_checks": [
-        "check-openai-developers-governance",
-        "test_openai_developers_governance"
+        "check-official-docs-governance",
+        "test_official_docs_governance"
       ]
     },
     {
@@ -570,7 +570,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for controlled CI review runner contracts, sandbox defaults, protected secret handling and prompt-injection checks.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "check-runtime-boundary"
       ]
     },
@@ -585,8 +585,8 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for PR diff review inputs, structured output schemas, SCM review publishing and inline anchoring validation.",
       "required_checks": [
-        "check-openai-developers-governance",
-        "test_openai_developers_governance"
+        "check-official-docs-governance",
+        "test_official_docs_governance"
       ]
     },
     {
@@ -600,7 +600,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for skill discoverability, negative examples, version pinning, deterministic stdout and network allowlist governance.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "check-skills"
       ]
     },
@@ -615,7 +615,7 @@
       "owner": "agent-dev-kit",
       "decision": "Watch as the source for future prompt/RAG/fine-tuning optimization decisions; do not promote complex optimization methods without eval baselines.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "eval baseline before promotion"
       ]
     },
@@ -630,7 +630,7 @@
       "owner": "agent-dev-kit",
       "decision": "Watch as a future orchestration reference; do not replace existing adk-first spawn_agent governance without a local pilot.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "parallel governance pilot before promotion"
       ]
     },
@@ -645,7 +645,7 @@
       "owner": "agent-dev-kit",
       "decision": "Watch as a volatile source for model-selection and latest-model claims; do not hardcode durable adk defaults from this page without freshness review.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "model freshness review before promotion"
       ]
     },
@@ -660,7 +660,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for stable-prefix/dynamic-tail context layout and API-backed cache observability guidance.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "check-token-budget"
       ]
     },
@@ -675,7 +675,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for ownership vocabulary: handoff when a specialist owns the branch, agent-as-tool when the manager keeps final-answer ownership.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "parallel governance pilot before promotion"
       ]
     },
@@ -690,7 +690,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for grader taxonomy in routing, governance and completion eval gates.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "eval baseline before promotion"
       ]
     },
@@ -705,7 +705,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for positive and negative golden examples before promoting prompt, AGENTS.md or skill-trigger changes.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "eval baseline before promotion"
       ]
     },
@@ -720,7 +720,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for Review -> Repair -> Validate closed-loop repair contracts and validation-backed completion claims.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "adk-verification-before-completion"
       ]
     },
@@ -735,7 +735,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for eval-baseline-first optimization loops before prompt, model, context or tool changes are promoted.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "eval baseline before promotion"
       ]
     },
@@ -750,7 +750,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for developer/user/context/tool-output authority boundaries in ADK context contracts.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "prompt regression evidence before promotion"
       ]
     },
@@ -765,7 +765,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for stable prompt sections, explicit context boundaries and dynamic context placement.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "check-token-budget"
       ]
     },
@@ -780,7 +780,7 @@
       "owner": "agent-dev-kit",
       "decision": "Watch as a pattern for sanitized stored-session regression monitoring; keep disabled by default until retention, redaction and owner approval exist.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "data retention approval before promotion"
       ]
     },
@@ -795,7 +795,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for prompt-injection and guardrail regression datasets with positive, negative, adversarial and borderline cases.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "guardrail regression before promotion"
       ]
     },
@@ -810,7 +810,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for the improvement ladder and for keeping eval datasets separate from training/fine-tuning data.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "owner approval before high-risk optimization"
       ]
     },
@@ -825,7 +825,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for model-selection decision records covering measurable KPIs/SLOs, cost, latency, version pinning, A/B tests and rollback.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "model-selection decision record before promotion"
       ]
     },
@@ -840,7 +840,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for treating documentation freshness, diagrams and release summaries as delivery-pipeline artifacts.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "repo-drift-remediation before release"
       ]
     },
@@ -855,7 +855,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for response state retention, store=false/ZDR behavior, background mode, remote MCP, hosted container and hosted skill retention boundaries.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "data retention approval before promotion"
       ]
     },
@@ -870,7 +870,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for previous_response_id, manual item replay, store=false, encrypted reasoning, conversation state and call_id correlation policies in API-backed runner pilots.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "pilot eval before promotion"
       ]
     },
@@ -885,7 +885,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for in_memory versus 24h prompt cache retention, model support freshness and cache-miss-safe prompt layout governance.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "check-token-budget"
       ]
     },
@@ -900,7 +900,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for aligning ADK terms such as agent, skill, plugin, MCP server, automation, subagent, worktree and permission profile.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "docs terminology drift review"
       ]
     },
@@ -915,7 +915,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for permission profile fields, deny-read controls, workspace roots, network domain policy and Unix socket allowlist governance.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "runtime-boundary"
       ]
     },
@@ -930,7 +930,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for memory runtime policy, external-context memory generation boundaries and owner-reviewed memory promotion.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "check-memory-governance"
       ]
     },
@@ -945,7 +945,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for ADK subagent runtime limits, nested subagent policy and role description checks.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "check-workflow-closure"
       ]
     },
@@ -960,7 +960,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for replayable run evidence bundles, stable workflow success criteria, sensitive-data review and skill packaging boundaries. Do not enable Computer Use or generated skills by default.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "trace-eval evidence bundle review"
       ]
     },
@@ -975,7 +975,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for UI/App evidence capture boundaries: frontmost-window scope, visible text limits, sensitive-content review and explicit macOS permission handling.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "check-external-agent-patterns"
       ]
     },
@@ -990,7 +990,7 @@
       "owner": "agent-dev-kit",
       "decision": "Use as the source for runner smoke contracts covering JSONL output, structured schema output, sandbox/approval recording, ephemeral runs, resume behavior and CI-safe credential boundaries.",
       "required_checks": [
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "runner smoke contract review"
       ]
     }

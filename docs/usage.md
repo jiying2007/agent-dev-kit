@@ -11,7 +11,7 @@ bash scripts/devkit.sh validate --strict
 bash scripts/devkit.sh validate --quick
 bash scripts/devkit.sh runtime-boundary
 bash scripts/devkit.sh asset-taxonomy
-bash scripts/devkit.sh openai-governance --summary-json
+bash scripts/devkit.sh official-docs-governance --summary-json
 bash scripts/devkit.sh test
 ```
 
@@ -21,7 +21,7 @@ bash scripts/devkit.sh test
 - `validate --quick`：快速结构检查，适合编辑中间态。
 - `runtime-boundary`：检查 ADK core 是否保持平台中立，防止平台专属 handoff、运行目录写入残留和 direct/external target 边界混用。
 - `asset-taxonomy`：检查 skill/workflow 分类、manifest 物理顺序、profile 生命周期顺序和场景路由矩阵。
-- `openai-governance`：检查官方资料 freshness、提升状态和平台中立契约。
+- `official-docs-governance`：检查官方资料 freshness、提升状态和平台中立契约。
 - `test`：全量回归，包含 validate、格式、内容质量、文件权限、安装、profile coherence、optional、convert、workflow contract、catalog、trigger matrix、governance 和 smoke。
 - `catalog build`：生成 Agent/Skill/Workflow/Profile 索引，并在默认输出模式下同步生成 `docs/workflow-contract-matrix.md` 和 `docs/reference/skill-routing-matrix.md`。
 - 资产命名与边界标准见 `docs/asset-contract-standard.md`；历史角色型资产硬切换，不保留兼容 alias。
@@ -151,7 +151,7 @@ bash scripts/devkit.sh version show
 ```bash
 bash scripts/devkit.sh validate --strict
 bash scripts/devkit.sh runtime-boundary
-bash scripts/devkit.sh openai-governance --summary-json
+bash scripts/devkit.sh official-docs-governance --summary-json
 bash scripts/devkit.sh test
 ```
 

@@ -47,8 +47,8 @@ run_smoke "devkit context experience"    scripts/devkit.sh context-experience
 run_smoke "devkit goal check"            scripts/devkit.sh goal check --summary-json
 run_smoke "devkit capability health"     scripts/devkit.sh capability health --summary-json
 run_smoke "devkit perf budget"           scripts/devkit.sh perf budget --summary-json
-run_smoke "openai governance help"       scripts/check-openai-developers-governance.sh --help
-run_smoke "openai runtime capabilities help" scripts/check-openai-runtime-capabilities.sh --help
+run_smoke "official docs governance help" scripts/check-official-docs-governance.sh --help
+run_smoke "runtime capabilities help"    scripts/check-runtime-capabilities.sh --help
 run_smoke "run_all help"                 tests/run_all.sh --help
 run_smoke "production field pilot help"  scripts/run-embedded-production-field-pilot.sh --help
 run_smoke "workflow pilots help"         scripts/run-embedded-workflow-pilots.sh --help

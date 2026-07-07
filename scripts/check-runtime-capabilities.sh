@@ -9,10 +9,10 @@ FIXTURE_PATH=""
 usage() {
   cat <<USAGE
 Usage:
-  ./scripts/check-openai-runtime-capabilities.sh [--summary-json] [--fixture <json>]
+  ./scripts/check-runtime-capabilities.sh [--summary-json] [--fixture <json>]
 
-Checks executable runtime capability gates derived from official OpenAI
-Developers docs:
+Checks executable runtime capability gates derived from governed practice
+sources:
   - permission profile lint baseline
   - MCP runtime contract lint baseline
   - subagent job evidence schema
@@ -428,7 +428,7 @@ elif failures:
     for item in failures:
         print(f"[FAIL] {item}", file=sys.stderr)
 else:
-    print("[PASS] OpenAI runtime capability gates")
+    print("[PASS] runtime capability gates")
 
 if failures:
     sys.exit(1)

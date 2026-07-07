@@ -6,11 +6,11 @@
       {
         "id": "pilot-runtime-fixture-fanout",
         "batch": {
-          "csv_path": "fixtures/openai-runtime-capabilities/pilot-jobs.csv",
+          "csv_path": "fixtures/runtime-capabilities/pilot-jobs.csv",
           "id_column": "item_id",
           "instruction": "Validate one runtime capability fixture category and return structured evidence.",
           "output_schema": "job_evidence_schema",
-          "output_csv_path": "build/openai-runtime-capabilities/pilot-results.csv",
+          "output_csv_path": "build/runtime-capabilities/pilot-results.csv",
           "max_concurrency": 2,
           "max_runtime_seconds": 300
         },
@@ -20,15 +20,15 @@
             "item_id": "permission-profile",
             "agent_type": "test-validation-engineer",
             "scope_read": [
-              "fixtures/openai-runtime-capabilities/pass/permission-safe-profile.json"
+              "fixtures/runtime-capabilities/pass/permission-safe-profile.json"
             ],
             "scope_write": [
-              "build/openai-runtime-capabilities/pilot-results.csv"
+              "build/runtime-capabilities/pilot-results.csv"
             ],
             "status": "pass",
             "summary": "Validated the permission profile fixture and found no runtime capability failures.",
             "evidence_refs": [
-              "fixtures/openai-runtime-capabilities/pass/permission-safe-profile.json"
+              "fixtures/runtime-capabilities/pass/permission-safe-profile.json"
             ],
             "result_json": {
               "checked": "permission profile",
@@ -36,7 +36,7 @@
             },
             "raw_output_policy": "summary-only; raw command output is not retained because the fixture passed and the command is reproducible",
             "verification_commands": [
-              "scripts/check-openai-runtime-capabilities.sh --fixture fixtures/openai-runtime-capabilities/pass/permission-safe-profile.json"
+              "scripts/check-runtime-capabilities.sh --fixture fixtures/runtime-capabilities/pass/permission-safe-profile.json"
             ],
             "last_error": "none",
             "parent_integration_decision": {
@@ -50,15 +50,15 @@
             "item_id": "mcp-runtime",
             "agent_type": "test-validation-engineer",
             "scope_read": [
-              "fixtures/openai-runtime-capabilities/pass/mcp-readonly-docs.json"
+              "fixtures/runtime-capabilities/pass/mcp-readonly-docs.json"
             ],
             "scope_write": [
-              "build/openai-runtime-capabilities/pilot-results.csv"
+              "build/runtime-capabilities/pilot-results.csv"
             ],
             "status": "pass",
             "summary": "Validated the read-only MCP runtime fixture and found no runtime capability failures.",
             "evidence_refs": [
-              "fixtures/openai-runtime-capabilities/pass/mcp-readonly-docs.json"
+              "fixtures/runtime-capabilities/pass/mcp-readonly-docs.json"
             ],
             "result_json": {
               "checked": "MCP runtime",
@@ -66,7 +66,7 @@
             },
             "raw_output_policy": "summary-only; raw command output is not retained because the fixture passed and the command is reproducible",
             "verification_commands": [
-              "scripts/check-openai-runtime-capabilities.sh --fixture fixtures/openai-runtime-capabilities/pass/mcp-readonly-docs.json"
+              "scripts/check-runtime-capabilities.sh --fixture fixtures/runtime-capabilities/pass/mcp-readonly-docs.json"
             ],
             "last_error": "none",
             "parent_integration_decision": {

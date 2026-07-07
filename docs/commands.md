@@ -109,28 +109,28 @@ bash scripts/devkit.sh reuse-before-rebuild
 bash scripts/devkit.sh context-experience
 ```
 
-## openai-governance
+## official-docs-governance
 
-校验 OpenAI 官方 Developers 参考来源、freshness、promotion gate 和平台中立 ADK 契约。该命令治理的是 `reference_sources` 和 promoted contracts，不表示 ADK 绑定 OpenAI runtime。
+校验官方参考来源、freshness、promotion gate 和平台中立 ADK 契约。该命令治理的是 `reference_sources` 和 promoted contracts，不表示 ADK 绑定任何来源平台 runtime。
 
 ```bash
-bash scripts/devkit.sh openai-governance
-bash scripts/devkit.sh openai-governance --summary-json
+bash scripts/devkit.sh official-docs-governance
+bash scripts/devkit.sh official-docs-governance --summary-json
 ```
 
-## openai-runtime-capabilities
+## runtime-capabilities
 
-校验 OpenAI 官方 Codex Developers 内容转化后的运行态能力门禁。该命令聚焦可执行检查，而不是资料登记本身：
+校验官方或参考来源实践转化后的运行态能力门禁。该命令聚焦可执行检查，而不是资料登记本身：
 
 - permission profile lint baseline：禁止混用旧 sandbox 配置，要求 deny-read、glob depth、domain deny-wins、Unix socket allowlist 和危险网络默认禁用。
 - MCP runtime contract lint：要求 tool allowlist/denylist、timeout、approval mode、OAuth/callback/scope、凭证边界、dry-run/fallback。
 - subagent job evidence schema：要求 worker job、CSV fan-out、parent integration decision 和 nested subagent 默认禁用。
-- terminology lint baseline：用 Codex glossary 对齐 agent、skill、plugin、automation、worktree、MCP server、permission profile 等术语。
+- terminology lint baseline：用声明的 runtime surface glossary 对齐 agent、skill、plugin、automation、worktree、MCP server、permission profile 等术语。
 
 ```bash
-bash scripts/devkit.sh openai-runtime-capabilities
-bash scripts/devkit.sh openai-runtime-capabilities --summary-json
-bash scripts/devkit.sh openai-runtime-capabilities --fixture fixtures/openai-runtime-capabilities/pass/permission-safe-profile.json
+bash scripts/devkit.sh runtime-capabilities
+bash scripts/devkit.sh runtime-capabilities --summary-json
+bash scripts/devkit.sh runtime-capabilities --fixture fixtures/runtime-capabilities/pass/permission-safe-profile.json
 ```
 
 ## harness-loop-engineering

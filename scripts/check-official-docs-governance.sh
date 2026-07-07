@@ -8,9 +8,9 @@ SUMMARY_JSON=0
 usage() {
   cat <<USAGE
 Usage:
-  ./scripts/check-openai-developers-governance.sh [--summary-json]
+  ./scripts/check-official-docs-governance.sh [--summary-json]
 
-Checks OpenAI Developers reference governance:
+Checks official documentation reference governance:
   - official source freshness records
   - routing/governance/completion eval suite coverage
   - trace evidence contract fields
@@ -21,7 +21,7 @@ Checks OpenAI Developers reference governance:
   - ADK command rule contracts
   - ADK runtime API risk groups
   - context state and session memory contracts
-  - OpenAI Docs MCP cross-tool setup contracts
+  - official docs MCP cross-tool setup contracts
   - hooks runtime audit contracts
   - ADK runner contracts
   - plugin marketplace packaging contracts
@@ -29,8 +29,8 @@ Checks OpenAI Developers reference governance:
   - skill reproducibility and version pin contracts
   - model selection decision records
   - data retention and prompt cache policy contracts
-  - Codex runtime config, permission, memory and surface-term contracts
-  - workflow, agent and skill execution-layer absorption of Codex evidence practices
+  - external runtime config, permission, memory and surface-term contracts
+  - workflow, agent and skill execution-layer absorption of sourced evidence practices
 USAGE
 }
 
@@ -139,7 +139,7 @@ for manifest_path in sorted((root / "manifests").glob("*.json")):
         fail(f"{rel_manifest} reference_boundary must state non-enablement or non-binding semantics")
 
 doc = root / "docs/reference/openai-developers-reference.md"
-runbook = root / "docs/runbooks/openai-developers-governance.md"
+runbook = root / "docs/runbooks/official-docs-governance.md"
 for rel_path in (doc, runbook):
     if not rel_path.is_file():
         fail(f"missing doc: {rel_path.relative_to(root)}")
@@ -1619,7 +1619,7 @@ elif failures:
     for item in failures:
         print(f"[FAIL] {item}", file=sys.stderr)
 else:
-    print("[PASS] OpenAI Developers governance")
+    print("[PASS] official docs governance")
 
 if failures:
     sys.exit(1)

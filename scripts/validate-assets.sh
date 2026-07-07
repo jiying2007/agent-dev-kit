@@ -711,7 +711,7 @@ validate_change_sets
 validate_skill_entry_size
 if [[ "$STRICT" -eq 1 ]]; then
   "$ROOT_DIR/scripts/check-runtime-boundary.sh" >/dev/null
-  "$ROOT_DIR/scripts/check-openai-developers-governance.sh" >/dev/null
+  "$ROOT_DIR/scripts/check-official-docs-governance.sh" >/dev/null
   default_profile_for_workflow="$(awk '/^default_profile:/ {print $2; exit}' "$ADK_MANIFEST")"
   "$ROOT_DIR/scripts/check-workflow-closure.sh" --profile "$default_profile_for_workflow" >/dev/null
 fi

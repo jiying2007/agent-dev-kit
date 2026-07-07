@@ -14,7 +14,7 @@ Checks:
   - Codex support is declared only as an external source-to-live handoff
   - reference sources cannot imply runtime enablement
   - generic ADK scripts and tests do not expose Codex-specific commands
-  - legacy Codex handoff scripts are removed
+  - legacy source-branded command names and Codex handoff scripts are removed
 USAGE
 }
 
@@ -96,11 +96,29 @@ done
 for stale in \
   "$ROOT_DIR/scripts/check-codex-handoff.sh" \
   "$ROOT_DIR/scripts/sync-codex-assets.sh" \
-  "$ROOT_DIR/tests/test_convert_codex_handoff.sh"; do
+  "$ROOT_DIR/tests/test_convert_codex_handoff.sh" \
+  "$ROOT_DIR/scripts/check-openai-developers-governance.sh" \
+  "$ROOT_DIR/scripts/check-openai-runtime-capabilities.sh" \
+  "$ROOT_DIR/tests/test_openai_developers_governance.sh" \
+  "$ROOT_DIR/tests/test_openai_runtime_capabilities.sh" \
+  "$ROOT_DIR/fixtures/openai-runtime-capabilities"; do
   if [[ -e "$stale" ]]; then
-    record_failure "stale Codex-bound file must be removed: ${stale#$ROOT_DIR/}"
+    record_failure "stale source-branded file must be removed: ${stale#$ROOT_DIR/}"
   fi
 done
+
+while IFS= read -r hit; do
+  [[ -z "$hit" ]] && continue
+  record_failure "source-branded active command residue: $hit"
+done < <(
+  rg -n 'check-openai-developers-governance|check-openai-runtime-capabilities|openai-governance|openai-runtime-capabilities|test_openai_developers_governance|test_openai_runtime_capabilities|fixtures/openai-runtime-capabilities' \
+    "$ROOT_DIR/scripts" \
+    "$ROOT_DIR/tests" \
+    "$ROOT_DIR/docs" \
+    "$ROOT_DIR/README.md" \
+    "$ROOT_DIR/manifests" \
+    -g '!check-runtime-boundary.sh' || true
+)
 
 while IFS= read -r hit; do
   [[ -z "$hit" ]] && continue
@@ -110,8 +128,8 @@ done < <(
     "$ROOT_DIR/scripts" \
     "$ROOT_DIR/tests" \
     -g '!check-runtime-boundary.sh' \
-    -g '!check-openai-developers-governance.sh' \
-    -g '!check-openai-runtime-capabilities.sh' \
+    -g '!check-official-docs-governance.sh' \
+    -g '!check-runtime-capabilities.sh' \
     -g '!validate-assets.sh' \
     -g '!test_runtime_boundary.sh' || true
 )

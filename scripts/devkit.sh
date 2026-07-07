@@ -27,8 +27,8 @@ Commands:
   knowledge-compile 检查知识编译三层模型
   reuse-before-rebuild 检查新增资产前复用优先门禁
   context-experience 检查渐进记忆检索与低 token profile
-  openai-governance 检查 OpenAI 官方 Developers 参考治理
-  openai-runtime-capabilities 检查 OpenAI 官方内容转化的运行态能力门禁
+  official-docs-governance 检查官方文档来源与 promoted contract 治理
+  runtime-capabilities 检查来源实践转化后的运行态能力门禁
   harness-loop-engineering 检查外部 harness/loop engineering 合同门禁
   workflow-closure 检查 workflow 引用是否在 profile 闭包内
   asset-taxonomy 检查 skill/workflow 分类、profile 排序和 routing matrix
@@ -103,11 +103,11 @@ case "$CMD" in
   context-experience)
     exec "$SCRIPT_DIR/check-context-experience-patterns.sh" "$@"
     ;;
-  openai-governance)
-    exec "$SCRIPT_DIR/check-openai-developers-governance.sh" "$@"
+  official-docs-governance)
+    exec "$SCRIPT_DIR/check-official-docs-governance.sh" "$@"
     ;;
-  openai-runtime-capabilities)
-    exec "$SCRIPT_DIR/check-openai-runtime-capabilities.sh" "$@"
+  runtime-capabilities)
+    exec "$SCRIPT_DIR/check-runtime-capabilities.sh" "$@"
     ;;
   harness-loop-engineering)
     exec "$SCRIPT_DIR/check-harness-loop-engineering-contracts.sh" "$@"

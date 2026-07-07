@@ -226,7 +226,7 @@
 落地点：
 - `skills/adk-verification-before-completion/SKILL.md`
 - `manifests/automation_worktree_contracts.json`
-- `scripts/check-openai-developers-governance.sh`
+- `scripts/check-official-docs-governance.sh`
 - `scripts/check-codify-governance.sh`
 
 有意排除：

@@ -86,7 +86,7 @@ This note records the official OpenAI Developers content that is safe to use as 
 
 - Tighten subagent context hygiene. Delegated workers must return a distilled `summary`, `evidence_refs` and `raw_output_policy`; raw logs, command transcripts, stack traces and exploratory notes stay out of the parent thread unless explicitly retained as evidence artifacts.
 - Treat automation promotion as a staged reliability decision. A recurring workflow must prove usefulness through manual execution, then report-only execution, then owner-reviewed promotion with rollback or disable evidence before it can be enabled or allowed to write externally.
-- Keep OpenAI official practice as a governance input, not a parallel runtime. The landing target remains existing ADK manifests and deterministic checks, especially `subagent_contracts.json`, `automation_worktree_contracts.json`, `check-openai-runtime-capabilities.sh` and `check-openai-developers-governance.sh`.
+- Keep OpenAI official practice as a governance input, not a parallel runtime. The landing target remains existing ADK manifests and deterministic checks, especially `subagent_contracts.json`, `automation_worktree_contracts.json`, `check-runtime-capabilities.sh` and `check-official-docs-governance.sh`.
 
 ## 2026-06-15 Delta Landing
 
@@ -200,11 +200,11 @@ This note records the official OpenAI Developers content that is safe to use as 
 ## Verification
 
 ```bash
-scripts/check-openai-developers-governance.sh
-scripts/check-openai-runtime-capabilities.sh
+scripts/check-official-docs-governance.sh
+scripts/check-runtime-capabilities.sh
 scripts/validate-assets.sh --strict
-tests/test_openai_developers_governance.sh
-tests/test_openai_runtime_capabilities.sh
+tests/test_official_docs_governance.sh
+tests/test_runtime_capabilities.sh
 ```
 
 ## Manifest Map

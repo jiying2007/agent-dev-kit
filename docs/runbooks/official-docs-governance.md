@@ -1,12 +1,12 @@
-# OpenAI Developers Governance Runbook
+# Official Docs Governance Runbook
 
 ## Goal
 
-Use official OpenAI Developers guidance as a current reference source while keeping `agent-dev-kit` deterministic, reviewable, locally validated and platform-neutral. OpenAI product-specific pages may be cited as source material, but promoted ADK contracts must use generic runtime, runner, command-policy, tool and handoff terminology.
+Use official product and runtime guidance as current reference sources while keeping `agent-dev-kit` deterministic, reviewable, locally validated and platform-neutral. Source-specific pages may be cited as provenance, but promoted ADK contracts must use generic runtime, runner, command-policy, tool and handoff terminology.
 
 ## Intake Rules
 
-1. Prefer the official OpenAI docs MCP source. Fallback web lookup must stay on official OpenAI domains.
+1. Prefer an official docs MCP/source when one is declared for the source. Fallback web lookup must stay on declared official domains.
 2. Register each adopted source in `manifests/official_docs_freshness_gates.json`.
 3. Each record must include `url`, `retrieved_at`, `review_status`, `expires_at`, `adoption_scope`, owner, decision and required checks.
 4. Expired sources cannot promote new rules until re-reviewed.
@@ -19,7 +19,7 @@ Use official OpenAI Developers guidance as a current reference source while keep
 | `source_docs` / source IDs | Citation metadata and provenance for adopted ideas | Must not imply runtime enablement, tool target support, MCP activation or user-directory writes |
 | `manifest.yaml:reference_sources` | Named external sources used for governance and provenance | Must declare `runtime_enablement: false` |
 | `manifest.yaml:external_handoff_targets` | Non-direct runtime delivery targets handled by another declared chain | Must not duplicate `tool_targets`; Codex must stay `direct_tool_target: false` |
-| `reference_boundary` | Human-readable statement of what the manifest may and may not promote | Required for every manifest that references OpenAI/Codex sources |
+| `reference_boundary` | Human-readable statement of what the manifest may and may not promote | Required for every manifest that references external source docs |
 | Promoted ADK contract | Platform-neutral fields, gates, evidence shapes or vocabulary owned by ADK | Must pass deterministic governance checks and preserve `check-runtime-boundary.sh` |
 | Runtime enablement | Actual MCP server, hosted service, hook, plugin, write action or live target | Requires a separate owner-approved runtime review with rollback and live evidence |
 
@@ -30,7 +30,7 @@ Use official OpenAI Developers guidance as a current reference source while keep
 | P0 | Skill discovery, context compaction, official source freshness | reference doc, freshness manifest, token-budget check |
 | P0 | Agent task framing and reusable guidance | task card with Goal/Context/Constraints/Done-when, AGENTS/skill promotion rationale |
 | P0 | ADK runtime policy, managed requirements, sandbox defaults | runtime policy manifest, forbidden default list, runtime-boundary check |
-| P0 | Codex config, permissions and memory runtime boundaries | config-key deny list, granular approval policy, permission profile policy, memory runtime policy |
+| P0 | Runtime config, permissions and memory runtime boundaries | config-key deny list, granular approval policy, permission profile policy, memory runtime policy |
 | P0 | ADK command rules and Docs MCP setup | rules contract manifest, inline rule examples, cross-tool Docs MCP manifest |
 | P1 | Trace/eval contracts and MCP/tool safety hints | eval suite manifest, trace contract, MCP audit manifest, check script |
 | P1 | Developer-mode tool selection and data-only MCP shape | action-oriented tool descriptions, JSON payload review, search/fetch structuredContent contract |
@@ -43,7 +43,7 @@ Use official OpenAI Developers guidance as a current reference source while keep
 | P1 | Agent improvement loop | traces, human/model feedback, eval candidate, validation gate, ranked recommendation and ADK handoff |
 | P1 | CI/PR review governance | trusted-trigger decision, protected secret boundary, structured findings schema, SCM payload review and inline anchoring tests |
 | P1 | Skill operational reproducibility | discoverability, negative examples, explicit version pinning, deterministic stdout, known output paths and network allowlists |
-| P1 | Codex glossary terminology alignment | surface-term manifest, terminology drift review, docs lint candidate |
+| P1 | Runtime surface terminology alignment | surface-term manifest, terminology drift review, docs lint candidate |
 | P1 | Executable runtime capability gates | permission profile lint, MCP runtime contract lint, subagent evidence schema, terminology lint |
 | P2 | Agents SDK taxonomy and future migration boundary | taxonomy note, non-goals, pilot requirement |
 | P2 | ADK plugin and marketplace packaging | plugin marketplace contract, source path containment, install/auth policy review |
@@ -82,7 +82,7 @@ Official guidance can become a default adk rule only when:
 - Granular approval policies record sandbox posture, command rules, MCP elicitation, `request_permission` behavior and skill approval behavior. Auto-review is evidence, not human approval.
 - Permission profiles define least-privilege filesystem and network boundaries, including workspace roots, deny-read paths, domain policy and Unix socket allowlists.
 - Memory runtime remains opt-in and owner-reviewed when external context contributed to the candidate memory. Raw evidence fallback must remain available.
-- Codex glossary terms are mapped before new manifests, skills or runbooks use agent, skill, plugin, automation, worktree, MCP server or permission profile language.
+- Runtime surface terms are mapped before new manifests, skills or runbooks use agent, skill, plugin, automation, worktree, MCP server or permission profile language.
 - Subagent worker output is summary-first. Parent threads receive distilled summary, evidence references, verification commands and raw-output policy; raw logs or transcripts stay as explicit artifacts only when retained intentionally.
 
 ## Rejection Gate
@@ -120,7 +120,7 @@ Reject or keep as observe-only when:
 6. Command rules: verify `pattern`, `decision`, `justification`, `match`, `not_match` and compound-shell behavior.
 7. App Server API: classify methods before automation exposure. `thread/shellCommand` and `process/spawn` are open-world because they do not inherit the thread sandbox.
 8. Context memory: anchor the newest goal, invalidate stale plans, isolate bad facts, split multi-issue summaries and keep raw evidence fallback.
-9. Docs MCP: use OpenAI Docs MCP first for OpenAI product/API questions across supported MCP-capable clients; fallback only to official OpenAI domains.
+9. Docs MCP: use the declared official docs MCP/source first for current product/API questions across supported MCP-capable clients; fallback only to declared official domains.
 10. Plugin marketplace: verify `.adk-plugin/plugin.json`, skill path, source path containment, install policy and auth policy.
 11. Developer-mode tools: inspect JSON payloads for write actions, keep remembered approvals conversation-local, and do not treat read-only hints as proof of harmlessness.
 12. Macro eval: collect many trace summaries, score local failures, cluster recurring patterns, identify suspect agents/tools/handoffs, then promote only the clearest failures into deterministic suites.
@@ -132,22 +132,22 @@ Reject or keep as observe-only when:
 18. CI/PR review: record trusted event, actor trust, repository visibility, protected secret exposure decision, schema validation result and SCM write payload review.
 19. Inline review anchoring: test new, modified, renamed, deleted and multi-line findings; skip inline publication when anchoring is uncertain.
 20. Skill reproducibility: record version pin, model/runtime assumption, deterministic stdout contract, output path and rollback path before production promotion.
-21. Codex runtime config: reject project-local attempts to set provider/auth/profile/notification/base URL/telemetry keys; keep those at user, machine or admin scope.
+21. Runtime config: reject project-local attempts to set provider/auth/profile/notification/base URL/telemetry keys; keep those at user, machine or admin scope.
 22. Permission profile: compare declared filesystem and network boundary against the intended task; `danger-full-access` cannot be inherited or treated as a safe base profile.
 23. Memory runtime: require opt-in, source classification, external-context owner review, raw-evidence fallback and redaction decision before memory candidates can be promoted.
-24. Surface terminology: compare new ADK terms against Codex glossary mapping to prevent agent/skill/plugin/automation/worktree/MCP server drift.
-25. Runtime capability gate: run `scripts/check-openai-runtime-capabilities.sh` before promoting permission profiles, MCP servers, subagent batch jobs or terminology changes.
-26. Runtime pilot fixtures: validate positive and negative examples under `fixtures/openai-runtime-capabilities/` before treating manifest gates as behaviorally covered.
+24. Surface terminology: compare new ADK terms against declared runtime glossary mappings to prevent agent/skill/plugin/automation/worktree/MCP server drift.
+25. Runtime capability gate: run `scripts/check-runtime-capabilities.sh` before promoting permission profiles, MCP servers, subagent batch jobs or terminology changes.
+26. Runtime pilot fixtures: validate positive and negative examples under `fixtures/runtime-capabilities/` before treating manifest gates as behaviorally covered.
 27. Subagent context hygiene: require `summary`, `evidence_refs`, `verification_commands`, `raw_output_policy` and parent integration decision before accepting worker results.
 28. Automation promotion: require manual proof, report-only evidence, owner approval and rollback or disable path before enabling scheduled or write-capable automation.
 
 ## Verification
 
 ```bash
-scripts/check-openai-developers-governance.sh
-scripts/check-openai-runtime-capabilities.sh
-scripts/check-openai-runtime-capabilities.sh --fixture fixtures/openai-runtime-capabilities/pass/permission-safe-profile.json
+scripts/check-official-docs-governance.sh
+scripts/check-runtime-capabilities.sh
+scripts/check-runtime-capabilities.sh --fixture fixtures/runtime-capabilities/pass/permission-safe-profile.json
 scripts/devkit.sh validate --strict
-tests/test_openai_developers_governance.sh
-tests/test_openai_runtime_capabilities.sh
+tests/test_official_docs_governance.sh
+tests/test_runtime_capabilities.sh
 ```

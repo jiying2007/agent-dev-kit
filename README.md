@@ -12,7 +12,7 @@ adk 负责：
 
 1. 维护 Agent、Skill、Profile、Workflow、Manifest 和治理契约的单一事实源。
 2. 提供需求、设计、实现、验证、评审、发布和复盘的门禁资产。
-3. 管理 OpenAI Developers 等官方参考来源的 freshness、review status 和 promotion gate。
+3. 管理官方参考来源的 freshness、review status 和 promotion gate。
 4. 通过显式 tool target 适配不同运行时。
 5. 防止平台专属 handoff、用户目录写入和兼容残留混入 ADK core。
 
@@ -85,7 +85,7 @@ bash scripts/devkit.sh validate --strict
 bash scripts/devkit.sh install --tool claude-code --profile core --target /tmp/adk-target --mode copy
 bash scripts/devkit.sh convert --target claude-code --profile core --out dist --clean
 bash scripts/devkit.sh runtime-boundary
-bash scripts/devkit.sh openai-governance --summary-json
+bash scripts/devkit.sh official-docs-governance --summary-json
 bash scripts/devkit.sh test
 ```
 
@@ -96,7 +96,7 @@ bash scripts/devkit.sh test
 - `docs/adk-usage-guide.md`：面向使用者的 ADK 概念、profile、工作流、资产变更和提交门禁指南。
 - `docs/runbooks/workspace-maintenance-guide.md`：维护与发布前检查。
 - `docs/runbooks/mcp-governance.md`：MCP、plugin、automation 外部能力准入。
-- `docs/reference/openai-developers-reference.md`：OpenAI 官方资料采纳记录。
+- `docs/reference/openai-developers-reference.md`：OpenAI 官方资料采纳记录，作为 provenance/reference，不作为 core 运行时绑定。
 
 ## 6. 质量门禁
 
@@ -105,7 +105,7 @@ bash scripts/devkit.sh test
 ```bash
 bash scripts/devkit.sh validate --strict
 bash scripts/devkit.sh runtime-boundary
-bash scripts/devkit.sh openai-governance --summary-json
+bash scripts/devkit.sh official-docs-governance --summary-json
 bash tests/run_all.sh
 ```
 
@@ -116,14 +116,14 @@ bash tests/run_all.sh
 | 文档说明 | `bash scripts/devkit.sh validate --strict` |
 | Agent/Skill/Profile/Manifest | `bash scripts/devkit.sh validate --strict` + `bash tests/run_all.sh --fail-fast` |
 | install/convert/runtime 脚本 | 相关单测 + `bash tests/run_all.sh` |
-| MCP/plugin/hook/automation 契约 | `bash scripts/devkit.sh openai-governance --summary-json` + 相关契约测试 |
+| MCP/plugin/hook/automation 契约 | `bash scripts/devkit.sh official-docs-governance --summary-json` + 相关契约测试 |
 | 发布前放行 | `bash scripts/devkit.sh test` + rollback 说明 |
 
 没有验证证据，不声明可发布、可合并或生产可用。
 
 ## 7. 参考吸收
 
-adk 可以吸收 Claude Code、Codex、TRAE、OpenClaw、OpenAI Developers 或其他平台的优秀实践，但吸收时必须先做字段映射：
+adk 可以吸收 Claude Code、Codex、TRAE、OpenClaw、OpenAI Developers 或其他平台的优秀实践，但吸收时必须先做 practice-source 字段映射：
 
 1. 区分“来源平台特性”和“可迁移 ADK 契约”。
 2. 官方 URL、source id、产品名可保留为 citation metadata。

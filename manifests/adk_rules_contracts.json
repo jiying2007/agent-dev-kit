@@ -45,7 +45,7 @@
       ],
       "verification": [
         "runtime rule check for each promoted rule",
-        "check-openai-developers-governance",
+        "check-official-docs-governance",
         "runtime-boundary"
       ],
       "promotion_gate": "No prefix rule can be promoted without positive and negative examples that prove the prefix is not broader than the intended command family."
@@ -84,7 +84,7 @@
       "verification": [
         "runtime rule check",
         "runtime config evidence when available",
-        "check-openai-developers-governance"
+        "check-official-docs-governance"
       ],
       "promotion_gate": "Admin rules may narrow capability without project consent; project-local rules must not widen managed restrictions."
     }

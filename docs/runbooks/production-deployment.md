@@ -7,7 +7,7 @@ Production deployment is target-explicit. ADK produces validated assets; the sel
 ```bash
 bash scripts/devkit.sh validate --strict
 bash scripts/devkit.sh runtime-boundary
-bash scripts/devkit.sh openai-governance --summary-json
+bash scripts/devkit.sh official-docs-governance --summary-json
 bash tests/run_all.sh --fail-fast
 ```
 

@@ -332,7 +332,7 @@ ADK 支持两类交付动作：`install` 和 `convert`。
 | `bash scripts/check-profile-coherence.sh` | 检查 profile 继承、重复声明和 default_skills 闭包 |
 | `bash scripts/devkit.sh runtime-boundary` | 检查 core 是否保持平台中立，防止平台专属残留 |
 | `bash scripts/devkit.sh asset-taxonomy` | 检查 skill/workflow 分类、manifest 物理顺序、profile 生命周期顺序和场景路由矩阵 |
-| `bash scripts/devkit.sh openai-governance --summary-json` | 检查官方资料 freshness 和提升门禁 |
+| `bash scripts/devkit.sh official-docs-governance --summary-json` | 检查官方资料 freshness 和提升门禁 |
 | `bash scripts/devkit.sh workflow-closure --profile core` | 检查 workflow 引用是否在 profile 闭包内 |
 | `bash scripts/devkit.sh file-modes` | 检查 tracked 文件权限 |
 | `bash scripts/devkit.sh catalog build` | 重新生成资产目录、workflow matrix 和 skill routing matrix |
