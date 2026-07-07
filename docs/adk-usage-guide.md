@@ -6,7 +6,7 @@ ADK 的核心原则是：平台中立、资产有主责、流程有证据、变�
 
 ## 1. ADK 是什么
 
-`agent-dev-kit` 简称 ADK，是一套平台中立的 Agent/Skill/Profile/Workflow 资产包。它把工程流程、角色职责、技能方法、交付工作流和验证门禁固化为可维护的源文件，并通过显式声明的 `tool target` 导出到不同运行时。
+`agent-dev-kit` 简称 ADK，是一套平台中立的 Agent/Skill/Profile/Workflow 资产包。它把工程流程、角色职责、技能方法、交付工作流和验证门禁固化为可维护的源文件，并通过显式声明的 `tool target` 导出到不同运行时；需要外部声明式链路承接的运行体系通过 `external_handoff_targets` 记录，不混入 direct export。
 
 ADK 适合用于：
 
@@ -33,7 +33,15 @@ ADK 不负责：
 | Profile | 定义某个使用场景解析后的 Agent/Skill 资产集合 | `manifest.yaml:profiles` |
 | Workflow | 定义阶段顺序、产物契约、主责 Agent/Skill 和验证序列 | `manifest.yaml:workflows`、`workflows/<name>/WORKFLOW.md` |
 | Change Set | 定义一次可审查变更的 proposal、design、tasks、verify、review 和归档记录 | `docs/changes/<change-id>/` |
+| Reference Source | 定义外部资料、官方文档、参考实现和 provenance，不代表运行时启用 | `manifest.yaml:reference_sources`、`manifests/*` |
 | Tool Target | 定义资产导出到某类运行时的格式和目录语义 | `manifest.yaml:tool_targets` |
+| External Handoff Target | 定义由外部声明式链路承接的运行目标，不是 ADK direct export target | `manifest.yaml:external_handoff_targets` |
+
+当前 target 模型：
+
+- `tool_targets` 包含 `claude-code`、`hermes-agent`、`opencode`，它们是 ADK 可直接 install/convert 的导出目标。
+- `external_handoff_targets.codex` 表示 Codex 通过 `~/codex -> ~/.codex` source-to-live 链路承接 ADK 资产，不是 `convert --target codex`。
+- `reference_sources.openai-developers` 和 `reference_sources.codex-runtime-methods` 只提供引用、freshness、adoption 和边界治理；这些名称不授予 MCP、hook、plugin、hosted service、用户目录写入或 runtime enablement。
 
 命名和边界规则见 `docs/asset-contract-standard.md`。日常使用时可以先记住四条硬规则：
 
@@ -262,6 +270,7 @@ ADK 支持两类交付动作：`install` 和 `convert`。
 安装和转换边界：
 
 - `--target` 必须来自 `manifest.yaml:tool_targets`。
+- Codex 当前不是 direct `tool_targets` 成员；Codex 支持由 `manifest.yaml:external_handoff_targets.codex` 描述，并通过外部 `~/codex -> ~/.codex` 链路完成 build/apply/smoke。
 - 不要把平台专属用户目录写成 ADK core 默认路径。
 - 写入真实运行目录前必须有 dry-run、备份或回滚路径。
 - `dist/` 是可丢弃产物，不是事实源。
@@ -382,7 +391,7 @@ fix(catalog): 修复 workflow matrix 生成格式
 | `profile coherence` 失败 | 子 profile 重复声明继承资产，或缺少 Agent default Skills | 删除继承重复项，或补齐 resolved profile 所需 Skill |
 | catalog 生成后有 diff | `manifest.yaml` 已变更但目录文档未更新 | 运行 `bash scripts/devkit.sh catalog build` 并审查 diff |
 | `workflow contract` 失败 | Workflow 引用的 Agent/Skill 不在 profile 闭包内 | 更新 profile membership 或修正 Workflow contract |
-| `runtime-boundary` 失败 | active source 出现平台专属路径、handoff 或运行时写入残留 | 移到 reference/archive metadata，或显式声明 tool target |
+| `runtime-boundary` 失败 | active source 出现平台专属路径、handoff 或运行时写入残留，或 direct/external target 边界混用 | 移到 reference metadata、archive、`external_handoff_targets`，或显式声明 direct tool target 并补转换语义 |
 | `file_modes` 失败 | Git index 中的 executable bit 不符合规则 | 检查是否误加执行位，必要时运行 `file-modes --fix` |
 | Skill 匹配过宽 | `description` 或 `triggers` 太泛 | 收紧描述，增加 `non_triggers` |
 | Skill 匹配不到 | 触发词缺失或 profile 未包含该 Skill | 补触发条件，或调整 profile |
@@ -403,7 +412,7 @@ fix(catalog): 修复 workflow matrix 生成格式
 - 历史资产硬切换时删除旧目录和旧 ID 引用，不保留兼容 alias。
 - 文档、manifest、catalog、workflow matrix 和 skill routing matrix 必须同步。
 - 没有验证证据，不声明完成、可提交、可合并或可发布。
-- ADK core 保持平台中立；运行时差异通过 tool target、profile 和外部交付链路表达。
+- ADK core 保持平台中立；运行时差异通过 direct `tool_targets`、profile 和 `external_handoff_targets` 表达。OpenAI/Codex 资料可作为 `reference_sources`，但不能成为 core runtime 前提。
 
 ## 17. Agent 详细介绍
 

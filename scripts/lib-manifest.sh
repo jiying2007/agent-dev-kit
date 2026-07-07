@@ -39,6 +39,89 @@ adk_tool_exists() {
   adk_list_tool_names | grep -Fxq "$tool"
 }
 
+adk_list_section_entry_names() {
+  local section="$1"
+  adk_section_block "$section" | awk '
+    $0 ~ /^  [a-z0-9-]+:$/ {
+      name=$1
+      sub(":", "", name)
+      print name
+    }
+  '
+}
+
+adk_get_section_entry_value() {
+  local section="$1"
+  local entry="$2"
+  local key="$3"
+  awk -v section="$section" -v entry="$entry" -v key="$key" '
+    $0 ~ "^" section ":" {in_section=1; next}
+    in_section && $0 ~ "^[^ ]" {in_section=0}
+    in_section && $0 ~ "^  " entry ":" {in_entry=1; next}
+    in_entry {
+      if ($0 ~ /^  [a-z0-9-]+:/) {exit}
+      if ($0 ~ "^    " key ":") {
+        value=$0
+        sub("^    " key ":[ ]*", "", value)
+        gsub(/^"|"$/, "", value)
+        print value
+        exit
+      }
+    }
+  ' "$ADK_MANIFEST"
+}
+
+adk_get_section_entry_list() {
+  local section="$1"
+  local entry="$2"
+  local key="$3"
+  awk -v section="$section" -v entry="$entry" -v key="$key" '
+    $0 ~ "^" section ":" {in_section=1; next}
+    in_section && $0 ~ "^[^ ]" {in_section=0}
+    in_section && $0 ~ "^  " entry ":" {in_entry=1; next}
+    in_entry {
+      if ($0 ~ /^  [a-z0-9-]+:/) {exit}
+      if ($0 ~ "^    " key ":") {in_list=1; next}
+      if (in_list) {
+        if ($0 ~ /^      - /) {
+          item=$0
+          sub(/^      - /, "", item)
+          print item
+          next
+        }
+        if ($0 ~ /^    [a-z0-9_-]+:/) {
+          in_list=0
+        }
+      }
+    }
+  ' "$ADK_MANIFEST"
+}
+
+adk_list_reference_source_names() {
+  adk_list_section_entry_names "reference_sources"
+}
+
+adk_get_reference_source_value() {
+  adk_get_section_entry_value "reference_sources" "$1" "$2"
+}
+
+adk_list_external_handoff_target_names() {
+  adk_list_section_entry_names "external_handoff_targets"
+}
+
+adk_external_handoff_target_exists() {
+  local target="$1"
+  adk_list_external_handoff_target_names | grep -Fxq "$target"
+}
+
+adk_get_external_handoff_target_value() {
+  adk_get_section_entry_value "external_handoff_targets" "$1" "$2"
+}
+
+adk_get_external_handoff_target_list() {
+  adk_get_section_entry_list "external_handoff_targets" "$1" "$2"
+}
+
 adk_get_tool_value() {
   local tool="$1"
   local key="$2"

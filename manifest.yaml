@@ -5,6 +5,36 @@ platforms:
   - mcu-baremetal
   - mcu-rtos
 
+reference_sources:
+  openai-developers:
+    display_name: OpenAI Developers
+    source_type: official-docs
+    boundary: citation-provenance-governance-only
+    runtime_enablement: false
+    governance_manifest: manifests/official_docs_freshness_gates.json
+  codex-runtime-methods:
+    display_name: Codex Runtime Methods
+    source_type: runtime-docs
+    boundary: method-only-reference
+    runtime_enablement: false
+    governance_manifest: manifests/codex_surface_terms.json
+
+external_handoff_targets:
+  codex:
+    display_name: Codex
+    runtime: codex
+    handoff_mode: source-to-live
+    direct_tool_target: false
+    handoff_chain: ~/codex -> ~/.codex
+    owner_review_required: true
+    default_enabled: false
+    notes: Codex support is delivered through the external ~/codex source-to-live chain, not ADK direct export.
+    must_not:
+      - direct-write-live-home
+      - direct-convert-target
+      - implicit-tool-target
+      - enable-hooks-plugins-mcp-without-owner-review
+
 tool_targets:
   claude-code:
     display_name: Claude Code

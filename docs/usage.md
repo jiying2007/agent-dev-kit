@@ -1,6 +1,6 @@
 # Usage
 
-`agent-dev-kit` 是通用 ADK 资产包。它维护 Agent、Skill、Profile、Workflow 和治理契约，并通过显式 tool target 导出到不同运行时；core 不绑定任何单一平台。
+`agent-dev-kit` 是通用 ADK 资产包。它维护 Agent、Skill、Profile、Workflow 和治理契约，并通过显式 direct `tool_targets` 导出到不同运行时；需要外部声明式链路承接的运行体系进入 `external_handoff_targets`，core 不绑定任何单一平台。
 
 完整使用指南见 `docs/adk-usage-guide.md`；本文保留为常用命令速查。
 
@@ -19,7 +19,7 @@ bash scripts/devkit.sh test
 
 - `validate --strict`：检查 manifest、路径、frontmatter、profile 引用、Agent 章节契约、Workflow 一等资产契约、context layer、skill 入口长度和质量分级。
 - `validate --quick`：快速结构检查，适合编辑中间态。
-- `runtime-boundary`：检查 ADK core 是否保持平台中立，防止平台专属 handoff 和运行目录写入残留。
+- `runtime-boundary`：检查 ADK core 是否保持平台中立，防止平台专属 handoff、运行目录写入残留和 direct/external target 边界混用。
 - `asset-taxonomy`：检查 skill/workflow 分类、manifest 物理顺序、profile 生命周期顺序和场景路由矩阵。
 - `openai-governance`：检查官方资料 freshness、提升状态和平台中立契约。
 - `test`：全量回归，包含 validate、格式、内容质量、文件权限、安装、profile coherence、optional、convert、workflow contract、catalog、trigger matrix、governance 和 smoke。
@@ -90,6 +90,8 @@ bash scripts/devkit.sh convert --target opencode --profile team-core --with-opti
 生产纪律：
 
 - tool target 必须显式声明，不能把平台专属路径写进 core。
+- Codex 当前不是 direct tool target；Codex 交付由外部 `~/codex -> ~/.codex` source-to-live 链路承接，并记录在 `manifest.yaml:external_handoff_targets.codex`。
+- OpenAI/Codex 官方资料只作为 `manifest.yaml:reference_sources` 和 governance manifest 的引用来源，不表示 runtime enablement。
 - install/convert 的输出是交付物，不是绕过目标运行时治理的理由。
 - 写入真实用户运行目录前必须有 dry-run、备份或回滚路径。
 

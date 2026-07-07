@@ -2,7 +2,7 @@
 
 统一入口：`bash scripts/devkit.sh <command> [options]`
 
-ADK core 只提供平台中立命令。所有运行时适配必须通过 `manifest.yaml:tool_targets` 显式声明，不能把平台专属 handoff 或用户目录写入作为默认路径。
+ADK core 只提供平台中立命令。Direct export 运行时适配必须通过 `manifest.yaml:tool_targets` 显式声明；需要外部声明式链路承接的运行体系进入 `manifest.yaml:external_handoff_targets`，不能把平台专属 handoff 或用户目录写入作为默认路径。
 
 ## install
 
@@ -45,7 +45,9 @@ bash scripts/devkit.sh convert --target hermes-agent --profile core --extra-prof
 bash scripts/devkit.sh convert --target opencode --profile team-core --with-optional-skill adk-test-flakiness-triage --out dist/opencode --clean
 ```
 
-`--target` 的取值必须来自 `manifest.yaml:tool_targets`。新增 target 前先补 manifest、转换语义、拒绝条件、回滚路径和 runtime-boundary 验证。
+`--target` 的取值必须来自 `manifest.yaml:tool_targets`。新增 direct target 前先补 manifest、转换语义、拒绝条件、回滚路径和 runtime-boundary 验证。
+
+Codex 当前不是 direct `tool_targets` 成员，因此不是 `convert --target` 的合法取值；它由 `manifest.yaml:external_handoff_targets.codex` 描述为 `~/codex -> ~/.codex` source-to-live 交付链路。
 
 ## runtime-boundary
 
@@ -59,6 +61,9 @@ bash scripts/devkit.sh runtime-boundary --summary-json
 该门禁检查：
 
 - core 不声明平台专属默认 target。
+- direct `tool_targets` 与 `external_handoff_targets` 不重名、不共用 runtime 语义。
+- Codex 支持只能以 non-direct source-to-live handoff 表达，不能隐式进入 direct export target。
+- `reference_sources` 只能表示 citation/provenance/governance，不能表示 runtime enablement。
 - active 脚本和测试不暴露平台专属 handoff 命令。
 - 已下线兼容脚本不会作为 active path 回流。
 - 平台名只允许出现在 reference metadata、archive 或负向门禁中。
@@ -106,7 +111,7 @@ bash scripts/devkit.sh context-experience
 
 ## openai-governance
 
-校验 OpenAI 官方 Developers 参考来源、freshness、promotion gate 和平台中立 ADK 契约。
+校验 OpenAI 官方 Developers 参考来源、freshness、promotion gate 和平台中立 ADK 契约。该命令治理的是 `reference_sources` 和 promoted contracts，不表示 ADK 绑定 OpenAI runtime。
 
 ```bash
 bash scripts/devkit.sh openai-governance

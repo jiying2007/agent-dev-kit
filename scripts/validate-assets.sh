@@ -101,6 +101,8 @@ validate_top_level_schema() {
   require_key "version"
   require_key "locale"
   require_key "platforms"
+  require_key "reference_sources"
+  require_key "external_handoff_targets"
   require_key "tool_targets"
   require_key "quality_tiers"
   require_key "profiles"
@@ -181,6 +183,62 @@ validate_tool_targets() {
     fi
   done
 
+}
+
+validate_reference_sources() {
+  mapfile -t sources < <(adk_list_reference_source_names)
+  [[ ${#sources[@]} -gt 0 ]] || fail "manifest has no reference_sources"
+
+  local source value
+  for source in "${sources[@]}"; do
+    is_kebab_case "$source" || fail "invalid reference source name: $source"
+
+    for key in display_name source_type boundary runtime_enablement governance_manifest; do
+      value="$(adk_get_reference_source_value "$source" "$key")"
+      [[ -n "$value" ]] || fail "reference source '$source' missing key: $key"
+    done
+
+    value="$(adk_get_reference_source_value "$source" "runtime_enablement")"
+    [[ "$value" == "false" ]] || fail "reference source '$source' must not enable runtime behavior"
+
+    value="$(adk_get_reference_source_value "$source" "governance_manifest")"
+    [[ -f "$ROOT_DIR/$value" ]] || fail "reference source '$source' governance manifest missing: $value"
+  done
+}
+
+validate_external_handoff_targets() {
+  mapfile -t targets < <(adk_list_external_handoff_target_names)
+  [[ ${#targets[@]} -gt 0 ]] || fail "manifest has no external_handoff_targets"
+
+  local target key value runtime
+  for target in "${targets[@]}"; do
+    is_kebab_case "$target" || fail "invalid external handoff target name: $target"
+    adk_tool_exists "$target" && fail "external handoff target '$target' must not duplicate direct tool target"
+
+    for key in display_name runtime handoff_mode direct_tool_target handoff_chain owner_review_required default_enabled; do
+      value="$(adk_get_external_handoff_target_value "$target" "$key")"
+      [[ -n "$value" ]] || fail "external handoff target '$target' missing key: $key"
+    done
+
+    value="$(adk_get_external_handoff_target_value "$target" "direct_tool_target")"
+    [[ "$value" == "false" ]] || fail "external handoff target '$target' must declare direct_tool_target: false"
+
+    runtime="$(adk_get_external_handoff_target_value "$target" "runtime")"
+    if adk_tool_exists "$runtime"; then
+      fail "external handoff target '$target' runtime '$runtime' must not duplicate direct tool target"
+    fi
+  done
+
+  adk_external_handoff_target_exists "codex" || fail "Codex must be declared as an external handoff target"
+  [[ "$(adk_get_external_handoff_target_value "codex" "handoff_mode")" == "source-to-live" ]] || fail "Codex external handoff must use source-to-live mode"
+  [[ "$(adk_get_external_handoff_target_value "codex" "direct_tool_target")" == "false" ]] || fail "Codex external handoff must not be a direct tool target"
+
+  value="$(adk_get_external_handoff_target_value "codex" "handoff_chain")"
+  [[ "$value" == *"~/codex"* && "$value" == *"~/.codex"* ]] || fail "Codex external handoff must document ~/codex -> ~/.codex"
+
+  for key in direct-write-live-home direct-convert-target implicit-tool-target; do
+    adk_get_external_handoff_target_list "codex" "must_not" | grep -Fxq "$key" || fail "Codex external handoff missing must_not guard: $key"
+  done
 }
 
 validate_agents_and_manifest_mapping() {
@@ -635,6 +693,8 @@ validate_profiles() {
 
 validate_top_level_schema
 validate_quality_tiers
+validate_reference_sources
+validate_external_handoff_targets
 validate_tool_targets
 validate_agents_and_manifest_mapping
 validate_agent_manifest_contracts

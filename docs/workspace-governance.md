@@ -94,7 +94,7 @@
 
 ## 3. 面向运行体系的联动策略
 
-`adk` 后续面向多运行体系实用化。基本顺序是“先在 `agent-dev-kit` 完成资产化与验证、再通过显式 tool target 交付给具体运行体系、由目标运行体系完成自身 build/apply/smoke、最后把真实运行结果回灌 adk”。Codex、Claude Code、Hermes Agent、OpenCode 或其他平台都只能作为显式 target 或参考来源，不能成为 ADK core 的隐式前提。
+`adk` 后续面向多运行体系实用化。基本顺序是“先在 `agent-dev-kit` 完成资产化与验证、再通过 direct `tool_targets` 或 `external_handoff_targets` 交付给具体运行体系、由目标运行体系完成自身 build/apply/smoke、最后把真实运行结果回灌 adk”。Claude Code、Hermes Agent、OpenCode 当前是 direct tool target；Codex 当前是 `~/codex -> ~/.codex` external handoff/source-to-live target；OpenAI/Codex 文档和参考仓只能作为 `reference_sources` 或治理证据，不能成为 ADK core 的隐式前提。
 
 1. `llm_agent`：拉取参考源，产生候选改进项。
 2. `agent-dev-kit`：实现标准资产、门禁脚本和可交付导出物。
