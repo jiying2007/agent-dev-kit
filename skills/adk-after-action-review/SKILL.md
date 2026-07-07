@@ -1,7 +1,7 @@
 ---
 name: adk-after-action-review
 description: 任务复盘与经验记忆候选治理，提取 lessons、风险分级和写入路由
-version: 1.1.0
+version: 1.2.0
 last_updated: 2026-07-07
 triggers:
   - "任务复盘"
@@ -55,7 +55,8 @@ constraints:
 10. 审批控制：`high` 必须输出为待确认项；`medium` 至少说明影响范围和回退位置；`low` 可作为候选自动写入审计材料。涉及持久指导规则推广时，`owner_review`、`rollback_path` 和 `verification_evidence` 不得为空。
 11. 过期处理：若规则依赖 API、路径、平台策略或用户偏好，设置复验日期；若与旧规则冲突，标记 `supersedes` 或 `conflicts_with`。
 12. Improvement Loop：若建议修改 prompt、skill、workflow 或 agent，必须形成 trace-feedback-eval-handoff：sanitized trace、feedback summary、eval candidate、validation result、ranked recommendation、ADK handoff 和 human approval。
-13. 门禁校验：新增或修改模板、runbook、候选格式后运行 `rtk bash scripts/check-memory-governance.sh`；涉及 Codify Decision 时运行 `rtk bash scripts/check-codify-governance.sh`。
+13. Trace Eval Regression Case：若复盘发现可重复的失败或回归风险，生成 `trace_eval_regression_case` 候选，至少包含 dataset_id、case_id、source_trace_id、prompt_version、candidate_prompt_version、expected_regression_signal、grader、score_threshold、regression_link、retention_policy、redaction_status 和 owner_approval；不得保存 raw session。
+14. 门禁校验：新增或修改模板、runbook、候选格式后运行 `rtk bash scripts/check-memory-governance.sh`；涉及 Codify Decision 时运行 `rtk bash scripts/check-codify-governance.sh`。
 
 ## Commands
 ```bash
@@ -79,6 +80,7 @@ rtk bash scripts/validate-assets.sh --strict
 - 候选必须包含 scope、risk、confidence、evidence、last_verified、write_route。
 - Codify Decision 必须包含 reusable_pattern、promotion_candidate、next_task_friction_reduced、reduced_by、reduction_evidence、do_not_promote_reason、owner_review、rollback_path、verification_evidence。
 - Guidance promotion 必须有 trace-feedback-eval-handoff；缺 sanitized trace、eval candidate、validation result 或 human approval 时不得推广。
+- trace_eval_regression_case 必须脱敏、可链接到 eval dataset，并有 grader、score_threshold、regression_link、retention_policy 和 owner_approval。
 - `promotion_candidate: true` 时必须说明 affected_asset、owner_review、rollback_path 和 verification_evidence。
 - 高风险候选必须标记 `requires_user_confirmation: true`，不得自动落地。
 - 不得把完整聊天记录、临时草稿、过期价格、未经确认推测、密钥或隐私原文写入长期记忆。

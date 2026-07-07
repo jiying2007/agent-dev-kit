@@ -290,6 +290,11 @@
           "id": "stored-monitoring-redacted-approved-summary",
           "input": "stored session candidate includes source_id, retention policy, redaction status, prompt versions and owner approval",
           "expected": "accept"
+        },
+        {
+          "id": "stored-monitoring-regression-case-ready",
+          "input": "stored session candidate is redacted, has dataset_id, case_id, grader, score_threshold, regression_link, prompt versions and owner approval",
+          "expected": "promote-to-regression-candidate"
         }
       ],
       "graders": [
@@ -300,6 +305,11 @@
         },
         {
           "name": "raw_sensitive_content_rejected",
+          "type": "deterministic",
+          "threshold": 1.0
+        },
+        {
+          "name": "regression_link_present",
           "type": "deterministic",
           "threshold": 1.0
         }

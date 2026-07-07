@@ -81,6 +81,31 @@
           "enable production logging without data-retention approval",
           "use stored outputs for long-term memory unless explicitly archived"
         ]
+      },
+      "regression_case_policy": {
+        "enabled_default": false,
+        "required_fields": [
+          "dataset_id",
+          "case_id",
+          "source_trace_id",
+          "source_summary",
+          "prompt_version",
+          "candidate_prompt_version",
+          "input_snapshot_ref",
+          "expected_regression_signal",
+          "grader",
+          "score_threshold",
+          "regression_link",
+          "retention_policy",
+          "redaction_status",
+          "owner_approval"
+        ],
+        "promotion_rule": "Promote a stored-session or trace summary only after it is redacted, linked to a dataset, has an explicit grader and fails before the candidate fix when feasible.",
+        "must_not": [
+          "promote raw sessions or unredacted traces into fixtures",
+          "use a regression case without dataset_id, grader, score_threshold or regression_link",
+          "enable unattended stored-session monitoring without retention and owner approval"
+        ]
       }
     },
     {

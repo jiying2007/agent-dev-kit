@@ -136,6 +136,7 @@ execution_layer_markers = {
         "Runner Smoke Contract",
         "Runtime Control Plane Audit",
         "runtime_config_diff",
+        "Trace Eval Regression Evidence",
     ],
     "skills/adk-commit-pr-quality-gate/SKILL.md": [
         "Runtime Control Plane",
@@ -187,6 +188,7 @@ execution_layer_markers = {
     "skills/adk-after-action-review/SKILL.md": [
         "trace-feedback-eval-handoff",
         "sanitized trace",
+        "trace_eval_regression_case",
         "human approval",
     ],
     "skills/adk-engineering-growth-review/SKILL.md": [
@@ -388,9 +390,12 @@ for suite in evals.get("suites", []):
                 fail(f"guardrail regression suite missing expected case: {expected}")
     if suite.get("id") == "macro-eval-stored-session-regression-monitoring":
         expected_values = {fixture.get("expected") for fixture in suite.get("fixtures", [])}
-        for expected in ("reject", "accept"):
+        for expected in ("reject", "accept", "promote-to-regression-candidate"):
             if expected not in expected_values:
                 fail(f"stored-session monitoring suite missing expected case: {expected}")
+        grader_names = {grader.get("name") for grader in suite.get("graders", [])}
+        if "regression_link_present" not in grader_names:
+            fail("stored-session monitoring suite missing regression_link_present grader")
     if suite.get("id") == "completion-eval-goal-done-when-negative-fixtures":
         expected_values = {fixture.get("expected") for fixture in suite.get("fixtures", [])}
         for expected in ("needs-fix", "pass"):
@@ -441,6 +446,16 @@ for contract in trace_contracts:
                 fail(f"stored_session_monitoring_policy {contract.get('id')} missing required field: {field}")
         if not any("raw user prompts" in item for item in stored_policy.get("must_not", [])):
             fail(f"stored_session_monitoring_policy {contract.get('id')} must reject raw user prompts")
+    regression_policy = contract.get("regression_case_policy", {})
+    if regression_policy:
+        require_keys(regression_policy, ["enabled_default", "required_fields", "promotion_rule", "must_not"], f"regression_case_policy {contract.get('id')}")
+        if regression_policy.get("enabled_default") is not False:
+            fail(f"regression_case_policy {contract.get('id')} must be disabled by default")
+        for field in ("dataset_id", "case_id", "source_trace_id", "prompt_version", "candidate_prompt_version", "expected_regression_signal", "grader", "score_threshold", "regression_link", "retention_policy", "redaction_status", "owner_approval"):
+            if field not in regression_policy.get("required_fields", []):
+                fail(f"regression_case_policy {contract.get('id')} missing required field: {field}")
+        if not any("raw sessions" in item.lower() or "unredacted traces" in item.lower() for item in regression_policy.get("must_not", [])):
+            fail(f"regression_case_policy {contract.get('id')} must reject raw sessions or unredacted traces")
     replay_policy = contract.get("replay_policy", {})
     if contract.get("id") == "replayable-run-evidence-bundle-v1":
         fields = set(contract.get("required_fields", []))
@@ -466,6 +481,8 @@ for contract in trace_contracts:
             fail("replayable run evidence policy must not promote unattended automation from one demonstration")
 if "replayable-run-evidence-bundle-v1" not in {contract.get("id") for contract in trace_contracts}:
     fail("trace contracts missing replayable-run-evidence-bundle-v1")
+if not any(contract.get("regression_case_policy") for contract in trace_contracts):
+    fail("trace contracts missing regression_case_policy")
 
 tool_description_policy = mcp.get("tool_description_policy", {})
 require_keys(tool_description_policy, ["required_elements", "review_payloads", "remembered_approvals"], "mcp tool_description_policy")
