@@ -1,8 +1,8 @@
 ---
 name: skill-curation-delivery
 description: 技能候选筛选、core/optional 归属和触发质量验证工作流
-version: 1.0.0
-last_updated: 2026-06-01
+version: 1.1.0
+last_updated: 2026-07-07
 primary_agent: requirements-analyst
 primary_skill: adk-requirements-triage
 triggers:
@@ -22,6 +22,7 @@ stages:
 artifacts:
   - intake-summary.md
   - trigger-matrix.md
+  - plugin-packaging-review.md
   - verify-report.md
   - review-report.md
 verification:
@@ -51,13 +52,15 @@ failure_handling:
 1. `intake`: 固定来源、用途、依赖、许可证和安全边界。
 2. `classify`: 判定 core / optional / reject，并说明 profile 影响。
 3. `contract`: 补齐 description、triggers、non_triggers、inputs、outputs、constraints。
-4. `verify`: 跑 catalog、validate、trigger matrix 和 SOP 质量检查。
-5. `review`: 审查重复能力、触发边界和回滚路径。
+4. `package`: 只有底层 skill/workflow 稳定后才评估 plugin/marketplace；记录 `.adk-plugin/plugin.json`、`hooks: {}`、source path containment、install/auth policy。
+5. `verify`: 跑 catalog、validate、trigger matrix 和 SOP 质量检查。
+6. `review`: 审查重复能力、触发边界、plugin packaging 边界和回滚路径。
 
 ## Artifact Contract
 - `intake-summary.md` 记录来源、授权、依赖和风险。
 - `trigger-matrix.md` 记录主触发、非触发、fallback 和冲突项。
 - `verify-report.md` 必须包含 catalog 与 strict validate 结果。
+- `plugin-packaging-review.md` 必须说明是否打包；若打包，必须包含 explicit no-hooks policy、marketplace source containment、install/auth policy 和 rollback path。
 
 ## Commands
 ```bash
@@ -68,8 +71,10 @@ rtk bash scripts/devkit.sh validate --strict
 ## Failure Handling
 - 与现有 Skill 重叠时默认 merge，不新增资产。
 - 无法声明权限边界或验证命令时不得进入 core。
+- 未通过 plugin packaging review 时不得发布 marketplace entry 或默认安装入口。
 - 触发质量不足时先改 description/triggers/non_triggers。
 
 ## Quality Gate
 - 每个晋级 Skill 必须有唯一可辨识 description 和明确非触发条件。
 - core/optional/reject 结论必须可复查。
+- plugin/marketplace 晋级必须显式记录 `hooks: {}`、source path containment、install/auth policy 和 rollback path；缺任一项固定 needs-fix。

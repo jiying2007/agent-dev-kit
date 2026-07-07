@@ -1,8 +1,8 @@
 ---
 name: adk-task-breakdown
 description: 将需求拆解为可并行执行的任务包
-version: 1.2.0
-last_updated: 2026-07-06
+version: 1.3.0
+last_updated: 2026-07-07
 triggers:
   - "拆解任务"
   - "任务拆分"
@@ -17,6 +17,7 @@ outputs:
 constraints:
   - 每个任务必须可独立验证
   - 默认禁止两个任务并行修改同一 shared contract/schema
+  - 机器消费的任务包必须声明 structured_output_schema 和 strict_schema_decision
 ---
 
 # adk-task-breakdown
@@ -63,9 +64,10 @@ constraints:
 6. **右尺寸校准**：任务必须足够小以支持独立测试和 review；setup/config/docs 应并入真正消费它们的任务，避免独立“准备任务”丢失验收上下文。
 7. **估时与排期**：用三点估时法计算每个任务工时，标注关键路径。
 8. **定义交接令牌**：每个任务声明 `ready_to_handoff` 条件与接收方。
-9. **规划整合顺序**：列出 merge order、联调点与最终统一验证步骤。
-10. **大仓触点梳理**：若涉及大型多模块仓，补关键触点清单。
-11. **输出执行建议**：适合并行则给 2-4 个任务包，不适合则给单线程方案。
+9. **结构化输出门禁**：机器消费或并行调度的任务包必须映射到 `adk-task-package-schema-v1`，拒绝自由 JSON、隐式字段和未声明 enum。
+10. **规划整合顺序**：列出 merge order、联调点与最终统一验证步骤。
+11. **大仓触点梳理**：若涉及大型多模块仓，补关键触点清单。
+12. **输出执行建议**：适合并行则给 2-4 个任务包，不适合则给单线程方案。
 
 ## Commands
 ```bash
@@ -96,6 +98,7 @@ cloc <target_path> 2>/dev/null || echo "cloc not installed"
 - 关键路径: T1 → T2 → T4（总工期 Xh）
 - 估时方法: 三点估时 / 类比 / T-shirt
 - Work Mode (diagnosis/repro/planning/execution):
+- Structured Output Schema: adk-task-package-schema-v1 / strict_schema_decision / refusal_handling
 - Handoff Token (ready_to_handoff + receiver):
 - Large-Repo Touchpoints (scripts/entry/command-registry/shared-contract):
 - Conflict Matrix:
@@ -111,6 +114,7 @@ cloc <target_path> 2>/dev/null || echo "cloc not installed"
 
 ## Quality Gate
 - 每个任务必须具备独立验证命令与可交付产物。
+- 机器消费的任务包必须有 structured_output_schema、strict_schema_decision 和 refusal_handling。
 - 每个任务必须继承适用的 global_constraints，并声明 interfaces。
 - 计划预检发现的内部矛盾、不可验证要求或 reviewer-defect 风险必须先处理或记录 owner 决策。
 - 必须显式标记共享文件/共享 contract 冲突面。

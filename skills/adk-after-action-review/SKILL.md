@@ -1,8 +1,8 @@
 ---
 name: adk-after-action-review
 description: 任务复盘与经验记忆候选治理，提取 lessons、风险分级和写入路由
-version: 1.0.0
-last_updated: 2026-06-15
+version: 1.1.0
+last_updated: 2026-07-07
 triggers:
   - "任务复盘"
   - "经验沉淀"
@@ -38,7 +38,7 @@ constraints:
 ## Workflow
 1. 复原目标：用 1-3 句记录本次目标、非目标、最终结果和验证状态。
 2. 提取事实：分开列出成功步骤、失败/返工、根因、修复动作和剩余风险。
-3. 判断可复用性：只保留下次同类任务会用到的偏好、项目规则、工作流、工具限制和踩坑教训。
+3. 判断可复用性：只保留下次同类任务会用到的偏好、项目规则、工作流、工具限制和踩坑教训；单次 trace 只能作为候选，不能直接推广。
 4. 记忆分层：
    - `session`: 本次任务状态，默认不长期保存。
    - `user`: 稳定个人偏好，需避免过度推断。
@@ -54,7 +54,8 @@ constraints:
 9. 推广判定：`promotion_candidate` 只能用于确有复用价值的约定、组件、runbook、manifest 或 skill/template；若不推广，必须填写 `do_not_promote_reason`，避免把一次性会话噪声沉淀为长期规则。若推广，必须说明 `next_task_friction_reduced` 是否为 true、由哪些 `reduced_by` 资产降低后续成本，并给出 `reduction_evidence`。
 10. 审批控制：`high` 必须输出为待确认项；`medium` 至少说明影响范围和回退位置；`low` 可作为候选自动写入审计材料。涉及持久指导规则推广时，`owner_review`、`rollback_path` 和 `verification_evidence` 不得为空。
 11. 过期处理：若规则依赖 API、路径、平台策略或用户偏好，设置复验日期；若与旧规则冲突，标记 `supersedes` 或 `conflicts_with`。
-12. 门禁校验：新增或修改模板、runbook、候选格式后运行 `rtk bash scripts/check-memory-governance.sh`；涉及 Codify Decision 时运行 `rtk bash scripts/check-codify-governance.sh`。
+12. Improvement Loop：若建议修改 prompt、skill、workflow 或 agent，必须形成 trace-feedback-eval-handoff：sanitized trace、feedback summary、eval candidate、validation result、ranked recommendation、ADK handoff 和 human approval。
+13. 门禁校验：新增或修改模板、runbook、候选格式后运行 `rtk bash scripts/check-memory-governance.sh`；涉及 Codify Decision 时运行 `rtk bash scripts/check-codify-governance.sh`。
 
 ## Commands
 ```bash
@@ -77,6 +78,7 @@ rtk bash scripts/validate-assets.sh --strict
 - 每条 memory candidate 必须能说明“下次同类任务为何会用到”。
 - 候选必须包含 scope、risk、confidence、evidence、last_verified、write_route。
 - Codify Decision 必须包含 reusable_pattern、promotion_candidate、next_task_friction_reduced、reduced_by、reduction_evidence、do_not_promote_reason、owner_review、rollback_path、verification_evidence。
+- Guidance promotion 必须有 trace-feedback-eval-handoff；缺 sanitized trace、eval candidate、validation result 或 human approval 时不得推广。
 - `promotion_candidate: true` 时必须说明 affected_asset、owner_review、rollback_path 和 verification_evidence。
 - 高风险候选必须标记 `requires_user_confirmation: true`，不得自动落地。
 - 不得把完整聊天记录、临时草稿、过期价格、未经确认推测、密钥或隐私原文写入长期记忆。

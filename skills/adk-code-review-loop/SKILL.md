@@ -1,8 +1,8 @@
 ---
 name: adk-code-review-loop
 description: 独立代码审查与反馈修复闭环，覆盖发现分级、真实性核验、修复验证和复审
-version: 1.1.0
-last_updated: 2026-07-06
+version: 1.2.0
+last_updated: 2026-07-07
 triggers:
   - "独立代码审查"
   - "code review loop"
@@ -59,7 +59,8 @@ constraints:
 9. **复审**：修复后重新检查原发现是否闭环，新增风险是否出现。
 10. **整体验证**：任务级 review 通过后，仍需一次 whole-diff/whole-branch 视角检查跨任务集成问题。
 11. **门禁交接**：将结论交给 `adk-commit-pr-quality-gate` 或 `adk-verification-before-completion`。
-12. **CI/PR 发布核验**：若要发布 SCM comment，必须按 `manifests/pr_review_governance_contracts.json` 验证结构化输出、untrusted PR 隔离和 inline anchoring。
+12. **CI/PR 发布核验**：若要发布 SCM comment，必须按 `manifests/pr_review_governance_contracts.json` 验证 schema-backed findings、untrusted PR 隔离和 inline anchoring。
+13. **Review 改进闭环**：重复 review 失败模式只能作为 trace-feedback-eval-handoff 候选进入 AAR，不得直接改 durable guidance。
 
 ## Review Report Template
 ```md
@@ -119,6 +120,7 @@ git diff -- <path>
 - 机器发布 review comment 前必须有 schema-backed findings；不能从自由文本直接生成 SCM 写 payload。
 - fork/public PR 默认不接收 protected secrets；没有 trusted-trigger 决策时只允许只读分析。
 - inline comment 位置无法验证时，必须降级为 summary finding。
+- 重复 review 模式若要提升为规则，必须有 sanitized trace、eval candidate、validation result 和 human approval。
 
 ## 合理化借口拦截
 

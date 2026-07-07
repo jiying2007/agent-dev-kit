@@ -1,8 +1,8 @@
 ---
 name: adk-interface-contract-design
 description: 定义模块/API/消息接口契约
-version: 1.0.0
-last_updated: 2026-05-06
+version: 1.1.0
+last_updated: 2026-07-07
 triggers:
   - "设计接口"
   - "API设计"
@@ -15,6 +15,7 @@ outputs:
   - 接口契约草案
 constraints:
   - 必须明确输入、输出、错误码
+  - 机器消费接口必须声明 strict schema、additionalProperties=false 和 refusal handling
 ---
 
 # adk-interface-contract-design
@@ -79,7 +80,8 @@ constraints:
    #define IFACE_MAX_RETRIES    3
    #define IFACE_RETRY_DELAY_MS 100
    ```
-5. **生成契约用例**：正常、边界、异常三类样例。
+5. **结构化输出契约**：API、消息、工具或 handoff schema 必须记录 required fields、enum、additionalProperties=false、refusal handling 和 parse-failure 处理。
+6. **生成契约用例**：正常、边界、异常三类样例。
    ```bash
    # 编译契约测试
 
@@ -87,6 +89,7 @@ constraints:
 
 ## Quality Gate
 - 契约必须包含输入/输出/错误码/超时语义。
+- 机器消费契约必须包含 strict schema、required fields、enum 和 refusal/parse-failure handling。
 - 必须给出版本兼容与迁移方案。
 - 必须附至少 3 条验证用例（正常/边界/异常）。
 - 嵌入式接口必须验证结构体大小与对齐（`pahole` 或 `sizeof` 断言）。
@@ -106,6 +109,7 @@ constraints:
 
 ```md
 status: pass | needs-fix | BLOCKED
+structured_schema: strict | not_applicable
 commands:
 - <command + exit code>
 evidence:

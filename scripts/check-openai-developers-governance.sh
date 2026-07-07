@@ -167,6 +167,36 @@ execution_layer_markers = {
         "Appshots/UI evidence boundary",
         "runner smoke contract",
     ],
+    "skills/adk-task-breakdown/SKILL.md": [
+        "structured_output_schema",
+        "strict_schema_decision",
+        "adk-task-package-schema-v1",
+    ],
+    "skills/adk-interface-contract-design/SKILL.md": [
+        "strict schema",
+        "additionalProperties=false",
+        "refusal handling",
+    ],
+    "skills/adk-after-action-review/SKILL.md": [
+        "trace-feedback-eval-handoff",
+        "sanitized trace",
+        "human approval",
+    ],
+    "skills/adk-engineering-growth-review/SKILL.md": [
+        "trace-feedback-eval-handoff",
+        "eval candidate",
+        "human approval",
+    ],
+    "skills/adk-code-review-loop/SKILL.md": [
+        "schema-backed findings",
+        "untrusted PR",
+        "trace-feedback-eval-handoff",
+    ],
+    "workflows/skill-curation-delivery/WORKFLOW.md": [
+        "plugin-packaging-review.md",
+        "hooks: {}",
+        "source path containment",
+    ],
 }
 for rel, markers in execution_layer_markers.items():
     require_file_contains(rel, markers, f"execution-layer contract {rel}")
