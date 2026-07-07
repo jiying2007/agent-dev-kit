@@ -1,8 +1,8 @@
 ---
 name: adk-parallel-agent-governance
 description: 并行子代理治理，定义任务分片、scope_write、冲突矩阵、等待和整合验证
-version: 1.2.0
-last_updated: 2026-07-06
+version: 1.3.0
+last_updated: 2026-07-07
 triggers:
   - "并行 agent"
   - "多 agent"
@@ -22,6 +22,7 @@ constraints:
   - 禁止两个子代理修改同一文件或同一 shared contract
   - 子代理越界必须停止并上报
   - 子任务完成不等于整体完成
+  - 子代理默认 summary-first，raw output 必须有保留决策、脱敏状态和父任务合并策略
 ---
 
 # adk-parallel-agent-governance
@@ -60,7 +61,7 @@ constraints:
    - reviewer 默认只读，除非任务明确是“修复 review findings”。
    - reviewer 输出必须含 spec verdict、quality verdict、cannot-verify-from-diff 项和文件/行证据。
 8. **调度执行**：优先并发运行独立任务；阻塞任务保留在主线程。
-9. **等待与收集**：使用平台子代理等待语义，收集 DONE/BLOCKED/NEEDS_CONTEXT。
+9. **等待与收集**：使用平台子代理等待语义，收集 DONE/BLOCKED/NEEDS_CONTEXT；执行 context noise budget，默认收集摘要、证据引用、变更清单、验证结果和风险，不直接合并 raw command transcript。
 10. **整合审查**：检查文件冲突、逻辑依赖、测试覆盖和文档一致性。
 11. **最终广域审查**：任务级 review 结束后，对整条分支/diff 做一次跨任务整体验证或高能力 review，覆盖局部 reviewer 看不到的集成风险。
 12. **最终验证**：运行整体验证，不能只依赖子任务验证。
@@ -87,6 +88,7 @@ file_handoff_paths:
 handoff_artifact_policy: data-only + no same-command generated-script execution + provenance required
 review_schema: spec_verdict + quality_verdict + cannot_verify_from_diff + findings(file:line) + evidence
 report_schema: DONE|BLOCKED|NEEDS_CONTEXT + verified_facts + inferences + evidence + changed_files + verification + risks
+context_noise_budget: summary_token_budget + evidence_refs + raw_output_retention_decision + redaction_status + parent_merge_policy + noise_rejection_reason
 ```
 
 完整嵌入式全栈任务包模板：`references/parallel-worktree-task-package.md`。
@@ -115,6 +117,7 @@ rg -n "contract|schema|shared|router|entry|package.json|lockfile" .
 - 必须输出并行适用性结论。
 - 每个子任务必须有独立验证命令和明确 `must_not_touch`。
 - 每个子任务必须声明 primary_skill、report_schema 和冲突处理策略。
+- 每个子任务必须声明 context_noise_budget；raw output 未脱敏、无保留决策或无父任务合并策略时不得进入整合。
 - 每个子任务必须声明模型/能力档位；不能让 reviewer 隐式继承最高成本模型。
 - reviewer 只能根据 diff、任务包和代码证据判断；禁止被父 Agent 或 implementer 指示忽略发现。
 - 文件化 handoff 不得写入 `.git/`，临时目录必须被 `.gitignore` 覆盖或显式排除提交。

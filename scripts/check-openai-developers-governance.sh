@@ -30,6 +30,7 @@ Checks OpenAI Developers reference governance:
   - model selection decision records
   - data retention and prompt cache policy contracts
   - Codex runtime config, permission, memory and surface-term contracts
+  - workflow, agent and skill execution-layer absorption of Codex evidence practices
 USAGE
 }
 
@@ -81,6 +82,16 @@ def require_keys(obj, keys, label):
         if key not in obj or obj[key] in ("", None, []):
             fail(f"{label} missing key: {key}")
 
+def require_file_contains(rel, markers, label):
+    path = root / rel
+    if not path.is_file():
+        fail(f"missing file: {rel}")
+        return
+    text = path.read_text(encoding="utf-8")
+    for marker in markers:
+        if marker not in text:
+            fail(f"{label} missing marker: {marker}")
+
 official = load_json("manifests/official_docs_freshness_gates.json")
 evals = load_json("manifests/eval_suites.json")
 trace = load_json("manifests/trace_eval_contracts.json")
@@ -111,6 +122,54 @@ runbook = root / "docs/runbooks/openai-developers-governance.md"
 for rel_path in (doc, runbook):
     if not rel_path.is_file():
         fail(f"missing doc: {rel_path.relative_to(root)}")
+
+execution_layer_markers = {
+    "workflows/adk-delivery-gate/WORKFLOW.md": [
+        "done-when",
+        "replayable-evidence-bundle.md",
+        "source-to-live-evidence.md",
+        "negative-results",
+    ],
+    "skills/adk-verification-before-completion/SKILL.md": [
+        "Replayable Evidence Bundle",
+        "Appshots / UI Evidence Boundary",
+        "Runner Smoke Contract",
+    ],
+    "skills/adk-requirements-triage/SKILL.md": [
+        "Done-when",
+        "Required Evidence",
+        "Artifact Paths",
+        "Blocker Policy",
+    ],
+    "skills/adk-parallel-agent-governance/SKILL.md": [
+        "context_noise_budget",
+        "raw_output_retention_decision",
+        "parent_merge_policy",
+    ],
+    "skills/adk-worktree-governance/SKILL.md": [
+        "Dirty Worktree Decision",
+        "Automation Risk Decision",
+        "Heartbeat / Staleness Threshold",
+    ],
+    "agents/requirements-analyst/AGENTS.md": [
+        "done-when",
+        "required evidence",
+        "artifact paths",
+        "blocker policy",
+    ],
+    "agents/code-review-governor/AGENTS.md": [
+        "Completion Claim Audit",
+        "Replayable Evidence Bundle",
+        "context_noise_budget",
+    ],
+    "agents/test-validation-engineer/AGENTS.md": [
+        "Replayable Evidence Bundle",
+        "Appshots/UI evidence boundary",
+        "runner smoke contract",
+    ],
+}
+for rel, markers in execution_layer_markers.items():
+    require_file_contains(rel, markers, f"execution-layer contract {rel}")
 
 today = dt.date.today()
 allowed_domains = set(official.get("review_policy", {}).get("allowed_domains", []))

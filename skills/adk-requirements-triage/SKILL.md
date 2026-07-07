@@ -1,8 +1,8 @@
 ---
 name: adk-requirements-triage
 description: 将需求转为可实现、可验证的工程条目
-version: 1.1.0
-last_updated: 2026-05-18
+version: 1.2.0
+last_updated: 2026-07-07
 triggers:
   - "需求不清楚"
   - "需求模糊"
@@ -26,6 +26,7 @@ outputs:
   - skill 路由建议（core/optional）与触发优先级
 constraints:
   - 不得跳过边界与非目标声明
+  - 不得省略 done-when、required evidence、artifact paths 和 blocker policy
   - 信息不足时不得直接进入实现
 ---
 
@@ -70,7 +71,7 @@ constraints:
    - 按层次拆：接口层/逻辑层/数据层
    - 按阶段拆：MVP + 增量迭代
    - 按风险拆：高风险先行验证
-9. **产出需求包**：目标、非目标、影响面、验收标准、回退条件。
+9. **产出需求包**：目标、非目标、影响面、done-when、required evidence、artifact paths、blocker policy、验收标准、回退条件。
 10. **明确下一步**：给出可执行任务切分与责任边界（owner/scope）。
 
 ## Discovery Template
@@ -97,7 +98,7 @@ rg -n "import|require|include|#include" <target_path> | head -20
 
 ## Evidence Template
 ```md
-- Goal / Non-goal:
+- Goal / Non-goal / Done-when / Required Evidence / Artifact Paths / Blocker Policy:
 - 需求分类: 新功能 / 增强 / 缺陷 / 技术债务 / 配置变更
 - 优先级: P0/P1/P2/P3 + 判定依据
 - Impact Scope:
@@ -124,6 +125,7 @@ rg -n "import|require|include|#include" <target_path> | head -20
 
 ## Quality Gate
 - 输出必须包含目标、非目标、影响面、验收标准四项。
+- 输出必须包含 done-when、required evidence、artifact paths 和 blocker policy；缺任一项时结论固定为 `needs-fix`。
 - 至少给出一个关键风险及对应验证方式。
 - 若充分性检查未通过，结论必须为 `needs-fix`，并列出缺失信息。
 - 需求必须有明确分类和优先级。

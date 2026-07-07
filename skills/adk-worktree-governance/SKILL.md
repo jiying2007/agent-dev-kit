@@ -1,8 +1,8 @@
 ---
 name: adk-worktree-governance
 description: git worktree 隔离开发治理，规范创建准入、目录、基线验证、同步、清理和禁止操作
-version: 1.1.0
-last_updated: 2026-07-06
+version: 1.2.0
+last_updated: 2026-07-07
 triggers:
   - "worktree"
   - "工作树"
@@ -21,6 +21,7 @@ constraints:
   - 未经用户确认不得删除 worktree 或强制删除分支
   - 不得在 worktree 间共享未提交临时状态
   - 根配置和 shared contract 默认不并行修改
+  - dirty worktree、unattended automation 和 stale heartbeat 必须先做风险决策再继续
 ---
 
 # adk-worktree-governance
@@ -47,7 +48,7 @@ constraints:
 | 依赖/lockfile/root config 变更 | 通常串行，谨慎使用 |
 
 ## Workflow
-1. **检查当前状态**：记录 `git status --short`，识别未提交改动。
+1. **检查当前状态**：记录 `git status --short`，识别未提交改动，并给出 dirty worktree decision（commit/stash/continue/defer）。
 2. **确认隔离理由**：说明为什么当前分支不足以完成任务。
 3. **规划目录和分支**：优先使用项目内已存在的 `.worktrees/` 或 `worktrees/`；没有时创建 `.worktrees/`。避免使用全局共享 worktree 目录，除非用户明确指定。
 4. **创建前基线验证**：在当前仓库确认基础分支和测试入口。
@@ -55,6 +56,8 @@ constraints:
 6. **scratch 目录隔离**：子代理 brief、review package、进度 ledger 和临时报告不得写入 `.git/`；优先使用项目内自忽略目录（例如 `.adk/tmp/`、`.worktrees/` 下任务目录或工具专属 scratch），并确认不会进入提交。
 7. **最小初始化**：安装依赖或运行 setup 时记录命令和结果。
 8. **执行任务**：遵守 scope_write，不修改共享 contract/root config，除非重新审批。
+   - unattended automation 不得默认写入、提交、推送、发布或清理；必须有 owner approval、stop condition、rollback path 和 first-run evidence。
+   - heartbeat 超过 staleness threshold 时必须 stop/replan/split，不得继续堆叠自动运行。
 9. **同步和整合**：合并前回到主工作区审查 diff 和验证。
 10. **清理决策**：合并、保留、创建 PR 或删除必须显式选择。
 
@@ -65,6 +68,7 @@ constraints:
 - Worktree Path:
 - Isolation Reason:
 - Existing Dirty State:
+- Dirty Worktree Decision:
 - Scope Write:
 - Shared Files Forbidden:
 - Scratch / Ledger Path:
@@ -73,6 +77,8 @@ constraints:
 - Setup Commands:
 - Merge / PR / Keep / Discard Decision:
 - Cleanup Conditions:
+- Automation Risk Decision:
+- Heartbeat / Staleness Threshold:
 ```
 
 若 worktree 与子代理并行同时出现，优先使用 `references/parallel-worktree-task-package.md` 固化 `scope_write`、`must_not_touch` 和最终整合验证。
@@ -93,6 +99,7 @@ git worktree remove <path>
 
 ## Failure Handling
 - 当前工作区有未提交改动且会影响创建基线时，先暂停并让用户选择提交、stash 或继续当前分支。
+- dirty worktree 没有明确决策、automation 缺少停止条件或 heartbeat 过期时，必须停止并重新规划。
 - worktree 创建失败时，检查路径、分支名和基础分支是否存在。
 - setup 失败时记录环境缺口，不得继续声明 worktree 可用。
 - 合并前验证失败时，回到 `adk-systematic-debugging` 或 `adk-code-review-loop`。
@@ -103,6 +110,7 @@ git worktree remove <path>
 - worktree 内验证通过不代表主工作区可合并，必须回主线整体验证。
 - 根配置、依赖和 shared contract 变更必须串行收口。
 - 未通过计划 schema gate 的 worker/worktree 不得创建或继续执行。
+- dirty worktree decision、automation risk decision 和 heartbeat/staleness threshold 缺失时，不得创建或继续执行。
 - 子代理 scratch、review package 和进度 ledger 不得写入 `.git/`；若存放于工作区，必须被 `.gitignore` 覆盖或在收尾前显式排除。
 - 只清理本流程创建且 provenance 明确的 worktree/scratch；无法确认来源时默认保留。
 - 最终必须给出保留或清理决策。
