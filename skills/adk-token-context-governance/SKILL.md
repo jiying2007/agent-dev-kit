@@ -1,8 +1,8 @@
 ---
 name: adk-token-context-governance
 description: 保真省 Token 的上下文读取治理，分层摘要、原文回退与高风险原文门禁
-version: 1.1.0
-last_updated: 2026-05-22
+version: 1.2.0
+last_updated: 2026-07-07
 triggers:
   - "省 token"
   - "上下文太大"
@@ -33,6 +33,7 @@ constraints:
   - 高风险任务必须读取原文或保留原文入口
   - 原始日志/diff/测试输出必须可追溯
   - 置信度不足时必须回退局部或原文
+  - tool/skill 目录读取必须先使用 namespace summary，完整正文、references 和 schema 只在意图命中后加载
 ---
 
 # 保真省 Token 上下文治理
@@ -57,6 +58,7 @@ constraints:
 9. 长期项目维护 `PROJECT_MAP.md`，只保存入口、测试、禁读目录、高风险区域和已验证时间，不保存一次性日志。
 10. 完成前运行 token budget 与资产严格校验，并在报告中说明是否发生回退原文。
 11. 可选代码智能提供方只能缩小阅读范围。记录 `code_intelligence_provider_contract`：provider、query、provider_answered、fallback_used、confidence、returned_files、raw_evidence、omitted_reasons、source_reread_required；高风险变更必须回读源码。
+12. 大型 tool/skill 目录按 `tool_search_context_contract` 读取：记录 `namespace_summary`、`initial_surface`、`deferred_surface`、`loaded_tools`、`trusted_inventory`、`schema_review` 和相邻候选省略原因；不得把 deferred loading 视为权限审批。
 
 ## Budget Modes
 
@@ -87,6 +89,7 @@ LLM Wiki / Knowledge Compile 的读取顺序是 `schema` / index -> `maintained_
 - 从综合页得到的新 synthesis 需要写回时，先进入待审查 `change_log`，不得覆盖原始材料。
 - context pack 必须记录 included sections 与 `omitted_reasons`；省略原因只能是低相关、已有更近证据、已读摘要可回退或预算限制，不得省略高风险原文入口。
 - `code_intelligence_provider_contract` 的结果不是 source of truth。`source_reread_required: true` 时，完成前必须回读对应源码或标记为未闭环。
+- `tool_search_context_contract` 只用于降噪和延迟加载。若 namespace summary 缺少 owner、auth/write class、trigger/boundary 或 trusted inventory，必须回退原始 manifest / SKILL.md / tool schema。
 
 ## Quality Gate
 - 摘要必须包含 `raw_evidence`、`confidence`、`fallback_condition`。
@@ -94,6 +97,7 @@ LLM Wiki / Knowledge Compile 的读取顺序是 `schema` / index -> `maintained_
 - high 风险项不得以压缩摘要作为唯一依据。
 - 原始证据可追溯，复盘时能重新读取。
 - token budget 检查与 strict 资产校验通过。
+- tool/skill 目录压缩必须记录 `trusted_inventory`、`deferred_surface` 和 `loaded_tools`，且 schema review 通过后才能执行工具。
 
 ## Evidence Template
 ```md
@@ -112,4 +116,12 @@ LLM Wiki / Knowledge Compile 的读取顺序是 `schema` / index -> `maintained_
   - returned_files:
   - omitted_reasons:
   - source_reread_required:
+- tool_search_context_contract:
+  - namespace_summary:
+  - initial_surface:
+  - deferred_surface:
+  - loaded_tools:
+  - trusted_inventory:
+  - schema_review:
+  - omitted_reasons:
 ```

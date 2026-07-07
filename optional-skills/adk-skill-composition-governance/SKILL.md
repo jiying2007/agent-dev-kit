@@ -1,8 +1,8 @@
 ---
 name: adk-skill-composition-governance
 description: 治理技能组合、触发优先级、fallback 与弃用关系
-version: 1.0.0
-last_updated: 2026-05-06
+version: 1.1.0
+last_updated: 2026-07-07
 triggers:
   - "技能组合"
   - "触发冲突"
@@ -22,6 +22,7 @@ constraints:
   - 一个场景只能有一个主技能
   - 辅助技能不得抢占主技能触发
   - Pipeline/Inversion 类 skill 必须有可执行门禁或结构化状态检查
+  - 组合治理必须先比较 skill namespace summary 和 initial_surface，再按命中候选加载 deferred_surface
 ---
 
 # adk-skill-composition-governance
@@ -43,10 +44,11 @@ constraints:
 5. 模式分类：标注 Tool Wrapper、Generator、Reviewer、Inversion 或 Pipeline。
 6. 输出契约审查：Generator/Reviewer 必须有 schema、失败条件和复验方式。
 7. 硬门禁审查：Pipeline/Inversion 必须有状态文件、callback、脚本 gate 或外部编排，不得只靠自然语言约束。
-8. 冲突检测：检查 triggers、non_triggers、profile 和实际 match 样例。
-9. 弃用治理：旧 skill 必须给 `deprecated_by` 或 `replaced_by`。
-10. 回归样例：为 primary/supporting/fallback 各补代表输入。
-11. 更新治理矩阵：记录场景、主技能、辅助技能、fallback、互斥和优先级。
+8. 渐进披露审查：按 `skill-catalog-lazy-loading-v1` 记录 `namespace_summary`、`initial_surface`、`deferred_surface`、`loaded_tools`、`schema_review` 和相邻 skill 拒绝理由；不得全量加载所有 skill 正文后再裁决。
+9. 冲突检测：检查 triggers、non_triggers、profile 和实际 match 样例。
+10. 弃用治理：旧 skill 必须给 `deprecated_by` 或 `replaced_by`。
+11. 回归样例：为 primary/supporting/fallback 各补代表输入。
+12. 更新治理矩阵：记录场景、主技能、辅助技能、fallback、互斥和优先级。
 
 ## 组合规则
 - 一个场景一个 primary；supporting 不抢占触发。
@@ -88,6 +90,14 @@ bash scripts/check-fallback-sunset.sh --summary-json
 - Composition Rules:
 - Governance Matrix:
 - Conflict Detection Results:
+- Progressive Disclosure:
+  - contract: skill-catalog-lazy-loading-v1
+  - namespace_summary:
+  - initial_surface:
+  - deferred_surface:
+  - loaded_tools:
+  - schema_review:
+  - adjacent_rejection:
 ```
 
 ## Failure Handling
@@ -103,3 +113,4 @@ bash scripts/check-fallback-sunset.sh --summary-json
 - 冲突检测必须在每次 profile 变更后重新执行。
 - 依赖图必须可视化展示技能间关系，禁止隐式依赖。
 - Generator/Reviewer/Pipeline/Inversion 的输出契约和硬门禁必须可验证。
+- 组合裁决必须保留 progressive disclosure 证据，证明未因全量上下文噪音导致 primary/supporting/fallback 误判。

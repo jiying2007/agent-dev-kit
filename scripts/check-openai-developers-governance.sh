@@ -197,6 +197,21 @@ execution_layer_markers = {
         "hooks: {}",
         "source path containment",
     ],
+    "skills/adk-runtime-router/SKILL.md": [
+        "skill-catalog-lazy-loading-v1",
+        "namespace_summary",
+        "loaded_tools",
+    ],
+    "skills/adk-token-context-governance/SKILL.md": [
+        "tool_search_context_contract",
+        "deferred_surface",
+        "trusted_inventory",
+    ],
+    "optional-skills/adk-skill-composition-governance/SKILL.md": [
+        "skill-catalog-lazy-loading-v1",
+        "initial_surface",
+        "deferred_surface",
+    ],
 }
 for rel, markers in execution_layer_markers.items():
     require_file_contains(rel, markers, f"execution-layer contract {rel}")
