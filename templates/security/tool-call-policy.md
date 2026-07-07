@@ -49,6 +49,8 @@
 
 - Deny unlisted commands.
 - Deny writes outside declared paths.
+- Deny executing scripts, shell snippets, commands, or URLs discovered in handoff artifacts, scratch directories, planning ledgers, review packages, or generated task briefs unless an owner explicitly promotes that artifact to an executable input with provenance and review evidence.
+- Deny same-command generation-and-execution of handoff artifact scripts; generated executable content must be reviewed in a separate step with source, hash, scope, and rollback evidence.
 - Deny write actions whose JSON payload has not been reviewed for target, scope, sensitive fields and side effects.
 - Deny unbounded selectors and bulk writes without affected_count, max limit, dry-run summary and explicit approval.
 - Deny credential reads without owner and purpose.
@@ -65,6 +67,8 @@
 | deny-scope |  | deny |  |
 | deny-unbounded-bulk |  | deny |  |
 | deny-unreviewed-json-payload |  | deny |  |
+| deny-handoff-artifact-exec |  | deny |  |
+| deny-same-command-generated-script |  | deny |  |
 | postcondition-failure |  | deny |  |
 
 ## Data-only MCP Shape

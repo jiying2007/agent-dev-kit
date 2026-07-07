@@ -1099,7 +1099,7 @@ skill_repro_contracts = skill_repro.get("contracts", [])
 if not skill_repro_contracts:
     fail("skill reproducibility contracts are empty")
 skill_repro_ids = {contract.get("id") for contract in skill_repro_contracts}
-for expected in ("skill-discoverability-v1", "skill-version-pin-v1", "skill-tiny-cli-v1"):
+for expected in ("skill-discoverability-v1", "skill-version-pin-v1", "skill-tiny-cli-v1", "third-party-skill-domain-policy-v1"):
     if expected not in skill_repro_ids:
         fail(f"skill reproducibility contract missing: {expected}")
 for contract in skill_repro_contracts:
@@ -1119,12 +1119,20 @@ for contract in skill_repro_contracts:
         execution = contract.get("execution_policy", {})
         if "deterministic" not in execution.get("stdout", ""):
             fail("skill tiny CLI policy must require deterministic stdout")
+    if cid == "third-party-skill-domain-policy-v1":
+        for field in ("trust_level", "review_status", "license", "source_revision", "runtime_boundary", "install_scope", "attribution"):
+            if field not in contract.get("required_fields", []):
+                fail(f"third-party skill domain policy missing field: {field}")
+        trust = contract.get("trust_policy", {})
+        if trust.get("default") != "review-required":
+            fail("third-party skill domain policy must default to review-required")
 skill_repro_gate = skill_repro.get("quality_gate", {})
 for key in (
     "negative_examples_required_for_routing_changes",
     "production_skill_version_must_be_pinned",
     "scripted_skills_require_deterministic_cli_contract",
     "networked_skills_require_allowlist_and_egress_policy",
+    "third_party_skills_default_review_required",
 ):
     if skill_repro_gate.get(key) is not True:
         fail(f"skill reproducibility quality_gate {key} must be true")

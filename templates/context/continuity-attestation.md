@@ -8,6 +8,11 @@
 - current_stage:
 - done_criteria:
 - stop_condition:
+- plan_completeness:
+  - phase_heading_count:
+  - status_formats:
+  - zero_phase_policy:
+  - gate_opt_in:
 
 ## Findings
 
@@ -32,6 +37,9 @@
 - claimant:
 - verifier:
 - evidence_checked:
+- attestation_hash:
+- readback_verification:
+- concurrent_mode_hint:
 - stale_after:
 
 ## Excluded Context

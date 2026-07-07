@@ -1,8 +1,8 @@
 ---
 name: adk-code-review-loop
 description: 独立代码审查与反馈修复闭环，覆盖发现分级、真实性核验、修复验证和复审
-version: 1.0.0
-last_updated: 2026-05-18
+version: 1.1.0
+last_updated: 2026-07-06
 triggers:
   - "独立代码审查"
   - "code review loop"
@@ -45,27 +45,34 @@ constraints:
 | major | 明显质量风险、边界遗漏、可复现回归 | 默认修复 |
 | minor | 可读性、命名、局部风格或后续优化 | 可延期但需记录 |
 | question | 信息不足或假设不明 | 先澄清，不直接改 |
+| cannot-verify-from-diff | 需求依赖未改动代码、外部行为或运行态证据，仅凭 diff 无法判定 | 由主 Agent 或 owner 补查，不得默认为通过 |
 
 ## Workflow
 1. **重述变更目标**：确认 review 对照的是正确需求，而不是泛泛挑刺。
 2. **读取 diff 与测试**：按文件查看实际改动和验证证据。
 3. **列出发现**：每条发现包含文件、位置、现象、影响和建议；检查异常分支、边界条件、权限/安全、兼容性、数据正确性、测试缺口和复杂度。
-4. **真实性核验**：判断问题是否可复现、是否有代码证据、是否属于本次范围。
-5. **分级裁决**：按 blocker/major/minor/question 分类。
-6. **生成修复任务**：每个 blocker/major 对应一个最小修复动作和验证命令。
-7. **执行或交接修复**：修复不得顺带重构无关文件。
-8. **复审**：修复后重新检查原发现是否闭环，新增风险是否出现。
-9. **门禁交接**：将结论交给 `adk-commit-pr-quality-gate` 或 `adk-verification-before-completion`。
-10. **CI/PR 发布核验**：若要发布 SCM comment，必须按 `manifests/pr_review_governance_contracts.json` 验证结构化输出、untrusted PR 隔离和 inline anchoring。
+4. **双 verdict 审查**：同时给出 spec-compliance verdict 与 quality verdict；同一次阅读 diff 覆盖需求符合性和代码质量，不重复派发多个局部 reviewer。
+5. **真实性核验**：判断问题是否可复现、是否有代码证据、是否属于本次范围；不能从 diff 判定的项标记为 `cannot-verify-from-diff`。
+6. **分级裁决**：按 blocker/major/minor/question/cannot-verify-from-diff 分类。
+7. **生成修复任务**：每个 blocker/major 对应一个最小修复动作和验证命令。
+8. **执行或交接修复**：修复不得顺带重构无关文件。
+9. **复审**：修复后重新检查原发现是否闭环，新增风险是否出现。
+10. **整体验证**：任务级 review 通过后，仍需一次 whole-diff/whole-branch 视角检查跨任务集成问题。
+11. **门禁交接**：将结论交给 `adk-commit-pr-quality-gate` 或 `adk-verification-before-completion`。
+12. **CI/PR 发布核验**：若要发布 SCM comment，必须按 `manifests/pr_review_governance_contracts.json` 验证结构化输出、untrusted PR 隔离和 inline anchoring。
 
 ## Review Report Template
 ```md
 - Review Scope:
 - Requirement Baseline:
 - Verification Baseline:
+- Review Mode: task-level | whole-diff | whole-branch
+- Spec Verdict:
+- Quality Verdict:
 - Findings:
   | ID | Severity | File | Evidence | Required Action | Status |
   |---|---|---|---|---|---|
+- Cannot Verify From Diff:
 - False Positives:
 - Out-of-scope Suggestions:
 - CI/PR Review Boundary:
@@ -102,6 +109,9 @@ git diff -- <path>
 ## Quality Gate
 - 每个 blocker/major 必须有状态：fixed、accepted-risk、not-applicable。
 - pass 结论必须满足 blocker=0 且 major=0。
+- pass 结论还必须处理 `cannot-verify-from-diff`：补验证证据、owner 接受风险或明确不适用。
+- reviewer 不得修改工作树、切换分支或执行破坏性操作；审查默认只读。
+- reviewer 不得被要求忽略发现、预设严重级别或接受 implementer rationale 作为证据。
 - 误报必须说明证据，不得只写“不认同”。
 - 复审必须引用修复后的验证命令或代码证据。
 - 提交/PR 前必须再过 `adk-commit-pr-quality-gate`。

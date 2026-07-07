@@ -1,8 +1,8 @@
 ---
 name: adk-planning-execution-loop
 description: 长任务计划审查、分阶段执行、恢复与收口闭环
-version: 1.0.0
-last_updated: 2026-05-20
+version: 1.1.0
+last_updated: 2026-07-07
 triggers:
   - "执行计划"
   - "多阶段任务"
@@ -22,7 +22,7 @@ outputs:
 constraints:
   - 每个阶段必须有明确完成标准和验证证据
   - 阻塞条件不清时不得继续执行
-  - 长任务必须定义 retry budget、staleness threshold 和停止条件
+  - 长任务必须定义 retry budget、staleness threshold、计划完整性判定、attestation readback 和停止条件
 ---
 
 # adk-planning-execution-loop
@@ -45,9 +45,10 @@ constraints:
 6. 恢复记录：维护 `session-state`、`next-actions`、`risk-ledger`、`resume-prompt`。
 7. 偏离处理：发现计划错误、共享契约冲突或验证失败时，暂停并回到计划审查。
 8. 目标闭环检查：核对原始目标、当前声明、证据、剩余未闭环项和停止条件。
-9. 卡死保护：检查 retry budget、heartbeat、staleness threshold 和连续无信息增量轮次。
-10. 收口验证：进入完成声明前，执行 completion gate 并核对证据支持结论。
-11. 复盘归档：任务完成后输出复盘记录，沉淀经验与改进项。
+9. 计划完整性检查：无 phase heading 不得报告 `0/0 complete`；混合状态格式按字段核对；stop gate 只有 explicit opt-in、in_progress 和 ledger progress 同时满足才可阻断。
+10. 卡死保护：检查 retry budget、heartbeat、staleness threshold 和连续无信息增量轮次。
+11. 收口验证：进入完成声明前，执行 completion gate 并核对证据支持结论。
+12. 复盘归档：任务完成后输出复盘记录，沉淀经验与改进项。
 
 ## Templates
 - 长任务恢复与中途改范围处理模板：`references/long-task-recovery.md`。
@@ -60,7 +61,7 @@ constraints:
 长任务不能只依赖“执行者认为完成”。必须显式记录目标闭环状态，并把完成声明交给独立验证步骤核对。
 
 - 必填字段：`goal_statement`、`completion_claim`、`required_evidence`、`claimant`、`verifier`、`open_items`。
-- 防卡死字段：`retry_budget`、`staleness_threshold`、`heartbeat`、`stop_condition`。
+- 防卡死字段：`retry_budget`、`staleness_threshold`、`heartbeat`、`stop_condition`、`plan_completeness`、`attestation_readback`。
 - `verifier` 必须核对证据本身，不能只复述 claimant 结论。
 - `stop_condition` 只能是 pass / replan / split / blocked / abort。
 
@@ -115,6 +116,7 @@ bash scripts/devkit.sh archive --change <change-id>
 - 若计划偏差超过 30%，必须触发完整计划重审。
 - 若检查点连续 3 次阻塞，必须升级到管理层并考虑任务拆分。
 - retry budget 用尽或 heartbeat 连续过期时，禁止继续盲目推进，必须 replan、split 或 blocked。
+- attestation 写入后必须回读校验；校验失败或计划格式不可判定时，不得作为完成证据。
 - completion claim 找不到对应证据时，结论固定为 `needs-fix`，并记录缺失证据。
 
 ## Quality Gate

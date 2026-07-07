@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-05-26",
+  "last_updated": "2026-07-07",
   "source_docs": [
     "openai-skills-api-operational-practices",
     "openai-codex-agent-skills",
@@ -93,6 +93,41 @@
         "swallow command failures and report success",
         "combine open network access with skills without explicit allowlists"
       ]
+    },
+    {
+      "id": "third-party-skill-domain-policy-v1",
+      "owner": "agent-dev-kit",
+      "applies_to": [
+        "third-party skills",
+        "community skill references",
+        "optional skill packs",
+        "plugin-packaged external skills"
+      ],
+      "required_fields": [
+        "skill_id",
+        "domain",
+        "trust_level",
+        "review_status",
+        "license",
+        "source_url",
+        "source_revision",
+        "runtime_boundary",
+        "required_artifacts",
+        "required_verification",
+        "install_scope",
+        "attribution"
+      ],
+      "trust_policy": {
+        "default": "review-required",
+        "project_source": "repo-local managed skill files only",
+        "global_directories": "install state only, not source of truth",
+        "promotion": "requires supply-chain review, version pin, attribution and rollback"
+      },
+      "must_not": [
+        "vendor third-party skill code without license and attribution evidence",
+        "treat global user skill directories as project source of truth",
+        "promote external skills into default profiles without runtime-boundary review"
+      ]
     }
   ],
   "quality_gate": {
@@ -100,6 +135,7 @@
     "production_skill_version_must_be_pinned": true,
     "scripted_skills_require_deterministic_cli_contract": true,
     "networked_skills_require_allowlist_and_egress_policy": true,
+    "third_party_skills_default_review_required": true,
     "must_not": [
       "duplicate full skill procedures in global prompts",
       "promote unversioned skills into production defaults",

@@ -1,8 +1,8 @@
 ---
 name: adk-task-breakdown
 description: 将需求拆解为可并行执行的任务包
-version: 1.1.0
-last_updated: 2026-05-06
+version: 1.2.0
+last_updated: 2026-07-06
 triggers:
   - "拆解任务"
   - "任务拆分"
@@ -35,6 +35,8 @@ constraints:
 3. **粒度适中**：单任务 2-8 小时，超 8 小时必须再拆，低于 0.5 小时合并。
 4. **依赖最小化**：任务间依赖越少越好，优先串行再考虑并行。
 5. **共享写独占**：同一文件/contract 的写操作只能在一个任务中。
+6. **全局约束下沉**：版本下限、依赖禁用、命名、协议字段、文案口径、精确数值等跨任务规则必须进入 `global_constraints`，不能只留在总计划正文。
+7. **接口显式化**：每个任务必须声明 `interfaces`，说明它消费什么、产出什么、与相邻任务的契约是什么。
 
 ## 估时方法
 
@@ -46,9 +48,10 @@ constraints:
 | 专家判断 | 领域专精 | 由 owner 直接给出 |
 
 ## Workflow
-1. **定义拆分边界**：明确 scope_write、scope_read、输入输出与完成标准。
-2. **并行准入判断**：检查是否存在同文件写冲突、共享 contract、根配置冲突。
-3. **绘制依赖图**：
+1. **计划预检**：先检查需求/计划是否存在内部矛盾、不可验证条目、会被 reviewer 判为缺陷的要求，以及缺失的全局约束。
+2. **定义拆分边界**：明确 scope_write、scope_read、输入输出、global_constraints、interfaces 与完成标准。
+3. **并行准入判断**：检查是否存在同文件写冲突、共享 contract、根配置冲突。
+4. **绘制依赖图**：
    ```bash
    # 列出文件依赖关系
    rg -n "import|require|include|#include" <target_path> | head -30
@@ -56,12 +59,13 @@ constraints:
    rg -n "call|invoke|dispatch|emit|publish" <target_path> | head -20
    ```
    依赖图格式：`T1 → T2 → T3`（箭头表示"被依赖"）
-4. **生成任务包**：每个任务给出 owner、依赖、验证命令与阻塞条件。
-5. **估时与排期**：用三点估时法计算每个任务工时，标注关键路径。
-6. **定义交接令牌**：每个任务声明 `ready_to_handoff` 条件与接收方。
-7. **规划整合顺序**：列出 merge order、联调点与最终统一验证步骤。
-8. **大仓触点梳理**：若涉及大型多模块仓，补关键触点清单。
-9. **输出执行建议**：适合并行则给 2-4 个任务包，不适合则给单线程方案。
+5. **生成任务包**：每个任务给出 owner、依赖、验证命令、阻塞条件、global_constraints 子集和 interfaces。
+6. **右尺寸校准**：任务必须足够小以支持独立测试和 review；setup/config/docs 应并入真正消费它们的任务，避免独立“准备任务”丢失验收上下文。
+7. **估时与排期**：用三点估时法计算每个任务工时，标注关键路径。
+8. **定义交接令牌**：每个任务声明 `ready_to_handoff` 条件与接收方。
+9. **规划整合顺序**：列出 merge order、联调点与最终统一验证步骤。
+10. **大仓触点梳理**：若涉及大型多模块仓，补关键触点清单。
+11. **输出执行建议**：适合并行则给 2-4 个任务包，不适合则给单线程方案。
 
 ## Commands
 ```bash
@@ -82,11 +86,13 @@ cloc <target_path> 2>/dev/null || echo "cloc not installed"
 ## Evidence Template
 ```md
 - Parallel Suitability: yes/no + 理由
+- Plan Preflight: conflicts / unverifiable requirements / reviewer-defect risks
+- Global Constraints: version floors / dependency limits / naming / protocol fields / exact values
 - 任务包列表:
-  | ID | 描述 | Owner | 依赖 | 估时 | 验证命令 |
-  |----|------|-------|------|------|---------|
-  | T1 | ... | ... | 无 | 2h | ... |
-  | T2 | ... | ... | T1 | 4h | ... |
+  | ID | 描述 | Owner | 依赖 | Interfaces | 估时 | 验证命令 |
+  |----|------|-------|------|------------|------|---------|
+  | T1 | ... | ... | 无 | consumes/produces | 2h | ... |
+  | T2 | ... | ... | T1 | consumes/produces | 4h | ... |
 - 关键路径: T1 → T2 → T4（总工期 Xh）
 - 估时方法: 三点估时 / 类比 / T-shirt
 - Work Mode (diagnosis/repro/planning/execution):
@@ -105,6 +111,8 @@ cloc <target_path> 2>/dev/null || echo "cloc not installed"
 
 ## Quality Gate
 - 每个任务必须具备独立验证命令与可交付产物。
+- 每个任务必须继承适用的 global_constraints，并声明 interfaces。
+- 计划预检发现的内部矛盾、不可验证要求或 reviewer-defect 风险必须先处理或记录 owner 决策。
 - 必须显式标记共享文件/共享 contract 冲突面。
 - 每个任务必须声明 handoff 条件，避免"完成定义"不一致。
 - 必须给出"适合并行/不适合并行"的明确结论与理由。

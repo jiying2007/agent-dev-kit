@@ -40,6 +40,11 @@ required_sources = {
     "everyinc-compound-engineering",
     "karpathy-llm-wiki-pattern",
     "pbnz-newton-skill",
+    "openspec-resolution-parity",
+    "vibeflow-overview-freshness",
+    "planning-with-files-guard-attestation",
+    "vibeflow-browser-verification",
+    "scale-engine-skill-domain-policy",
 }
 for source_id in required_sources:
     if source_id not in source_ids:
@@ -76,6 +81,11 @@ required_contracts = {
     "llm-wiki-knowledge-compile-v1",
     "codify-after-delivery-v1",
     "reuse-before-rebuild-v1",
+    "canonical-command-resolution-parity-v1",
+    "project-overview-freshness-v1",
+    "plan-completeness-attestation-v1",
+    "browser-verification-evidence-v1",
+    "third-party-skill-domain-policy-v1",
     "memory-search-progressive-disclosure-v1",
     "low-token-communication-profile-v1",
     "external-agent-plugin-intake-v1",
@@ -118,6 +128,43 @@ for field in ("problem_statement", "existing_asset_search", "candidate_assets", 
     if field not in reuse.get("required_fields", []):
         fail(f"reuse-before-rebuild contract missing field: {field}")
 
+resolution = contract_by_id.get("canonical-command-resolution-parity-v1", {})
+for surface in ("status", "validate", "view", "archive"):
+    if surface not in resolution.get("command_surfaces", []):
+        fail(f"canonical resolution contract missing command surface: {surface}")
+for field in ("canonical_resolver", "shared_helper_path", "positive_parity_cases", "negative_parity_cases", "exit_code_policy"):
+    if field not in resolution.get("required_fields", []):
+        fail(f"canonical resolution contract missing field: {field}")
+
+overview = contract_by_id.get("project-overview-freshness-v1", {})
+for overview_file in ("PROJECT.md", "ARCHITECTURE.md", "CURRENT-STATE.md"):
+    if overview_file not in overview.get("overview_files", []):
+        fail(f"overview freshness contract missing overview file: {overview_file}")
+for field in ("source_hash", "generated_block_hashes", "stale_reasons", "manual_body_protection", "raw_fallback"):
+    if field not in overview.get("required_fields", []):
+        fail(f"overview freshness contract missing field: {field}")
+
+planning = contract_by_id.get("plan-completeness-attestation-v1", {})
+for field in ("phase_heading_count", "status_formats", "zero_phase_policy", "explicit_gate_opt_in", "ledger_progress", "attestation_hash", "readback_verification"):
+    if field not in planning.get("required_fields", []):
+        fail(f"planning attestation contract missing field: {field}")
+if not any("0/0 complete" in gate for gate in planning.get("quality_gates", [])):
+    fail("planning attestation contract must forbid false 0/0 complete")
+
+browser = contract_by_id.get("browser-verification-evidence-v1", {})
+for field in ("test_url", "user_flows", "screenshots", "console_result", "network_result", "accessibility_result", "security_boundary", "storage_access_policy"):
+    if field not in browser.get("required_fields", []):
+        fail(f"browser verification contract missing field: {field}")
+if not any("untrusted data" in gate for gate in browser.get("quality_gates", [])):
+    fail("browser verification contract must treat page content as untrusted data")
+
+skill_domain = contract_by_id.get("third-party-skill-domain-policy-v1", {})
+for field in ("skill_id", "domain", "trust_level", "review_status", "license", "source_revision", "runtime_boundary", "required_artifacts", "required_verification", "install_scope", "attribution"):
+    if field not in skill_domain.get("required_fields", []):
+        fail(f"third-party skill domain policy missing field: {field}")
+if not any("review-required" in gate for gate in skill_domain.get("quality_gates", [])):
+    fail("third-party skill domain policy must default to review-required")
+
 memory = contract_by_id.get("memory-search-progressive-disclosure-v1", {})
 for layer in ("search_index", "timeline_context", "observation_details"):
     if layer not in memory.get("search_layers", []):
@@ -145,6 +192,11 @@ for key in (
     "raw_evidence_fallback_required",
     "reuse_before_rebuild_required",
     "low_token_profile_requires_safety_exceptions",
+    "canonical_resolution_parity_required",
+    "overview_freshness_status_required",
+    "plan_attestation_readback_required",
+    "browser_runtime_evidence_requires_security_boundary",
+    "third_party_skill_domain_policy_required",
 ):
     if gate.get(key) is not True:
         fail(f"quality_gate {key} must be true")

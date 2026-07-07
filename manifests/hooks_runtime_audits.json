@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-05-25",
+  "last_updated": "2026-07-06",
   "source_docs": [
     "openai-codex-hooks",
     "openai-codex-hooks-common-output-fields"
@@ -93,6 +93,38 @@
     "trust_required",
     "concurrency_risk"
   ],
+  "manifest_no_hooks_policy": {
+    "applies_to": [
+      "codex plugin manifests",
+      "marketplace plugin packages"
+    ],
+    "disabled_value": "hooks: {}",
+    "must_not_use": [
+      "omitted hooks field",
+      "hooks: []",
+      "empty inline hook list"
+    ],
+    "audit_reason": "An explicit empty object prevents unintended hook auto-discovery when a package root contains hook files for other harnesses."
+  },
+  "runtime_opt_out_policy": {
+    "applies_to": [
+      "planning hooks",
+      "workflow gate hooks",
+      "session context injection hooks"
+    ],
+    "required_controls": [
+      "documented per-invocation opt-out environment variable or equivalent profile flag",
+      "all hook entrypoints honor the same opt-out before reading or mutating project state",
+      "opt-out path exits cleanly without partial state writes",
+      "platform-specific gates such as Pi or IDE hooks require an explicit plan-execute approval mode before enforcing workflow stops"
+    ],
+    "recommended_env": "PLANNING_DISABLED=1",
+    "must_not": [
+      "force planning hooks in one-shot sessions without opt-out",
+      "apply stop/pre-tool gates before checking the opt-out flag",
+      "treat hook installation as permission to write workflow state"
+    ]
+  },
   "deny_path": [
     "credentials",
     ".git",

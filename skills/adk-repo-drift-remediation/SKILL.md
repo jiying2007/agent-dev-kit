@@ -1,8 +1,8 @@
 ---
 name: adk-repo-drift-remediation
 description: 仓库漂移治理，面向全仓偏离、冗余、残留、边界不清、文档代码不一致和提交前质量收口
-version: 1.0.0
-last_updated: 2026-05-31
+version: 1.1.0
+last_updated: 2026-07-07
 triggers:
   - "仓库漂移"
   - "全仓漂移"
@@ -39,7 +39,7 @@ constraints:
 
 ## Workflow
 1. 建立源事实：当前目标、非目标、成功标准、检查命令和维护约定。
-2. 扫描漂移：目标漂移、架构边界、重复文档、残留脚本、生成物、source/live drift、测试缺口。
+2. 扫描漂移：目标漂移、架构边界、重复文档、残留脚本、生成物、source/live drift、测试缺口和 overview freshness。
 3. 风险分级：按 blocker/major/minor 或 P0/P1/P2 排序。
 4. 制定修复包：只修本轮范围内、证据明确、可验证的问题。
 5. 串行处理共享触点：manifest、root config、lockfile、CI、schema、发布脚本。
@@ -70,6 +70,7 @@ rtk bash scripts/doctor.sh --scope all
 
 ## Quality Gate
 - 必须先输出问题地图，再进入大范围修复。
+- 项目 overview 若作为长期上下文，必须记录 source_hash、generated_block_hashes、stale_reasons 和 raw_fallback；不得用过期 overview 替代原始证据。
 - 不得删除历史材料或用户改动，除非有明确授权和替代证据。
 - 共享配置/manifest/lockfile 修改必须升级验证。
 - 完成声明必须说明剩余风险和未处理项。

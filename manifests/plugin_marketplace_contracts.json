@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-05-25",
+  "last_updated": "2026-07-06",
   "source_docs": [
     "openai-codex-plugin-build",
     "openai-codex-plugin-marketplace"
@@ -27,10 +27,41 @@
         "publisher metadata",
         "install-surface copy",
         "auth policy",
-        "source path containment"
+        "source path containment",
+        "hook registration policy",
+        "deterministic packaging evidence",
+        "per-skill OpenAI metadata"
       ]
     }
   ],
+  "codex_plugin_packaging": {
+    "id": "codex-plugin-portal-package",
+    "owner": "agent-dev-kit",
+    "required_manifest_checks": [
+      "explicit hooks policy",
+      "category",
+      "publisher",
+      "version",
+      "skills metadata"
+    ],
+    "no_hooks_policy": {
+      "disabled_value": "hooks: {}",
+      "must_not_use": [
+        "absent hooks field",
+        "hooks: []",
+        "empty inline hook list"
+      ],
+      "reason": "Codex marketplace installers can fall back to auto-discovering root hook files when the manifest omits an explicit empty hooks object."
+    },
+    "package_requirements": [
+      "refuse dirty worktree",
+      "normalize archive entry timestamps",
+      "preserve executable modes",
+      "verify each packaged skill ships OpenAI metadata",
+      "include declared app/composer icons",
+      "support reproducible rebuild from saved metadata source"
+    ]
+  },
   "marketplace_contracts": [
     {
       "id": "repo-marketplace",

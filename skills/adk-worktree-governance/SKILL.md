@@ -1,8 +1,8 @@
 ---
 name: adk-worktree-governance
 description: git worktree 隔离开发治理，规范创建准入、目录、基线验证、同步、清理和禁止操作
-version: 1.0.0
-last_updated: 2026-05-18
+version: 1.1.0
+last_updated: 2026-07-06
 triggers:
   - "worktree"
   - "工作树"
@@ -49,13 +49,14 @@ constraints:
 ## Workflow
 1. **检查当前状态**：记录 `git status --short`，识别未提交改动。
 2. **确认隔离理由**：说明为什么当前分支不足以完成任务。
-3. **规划目录和分支**：使用可读目录名，避免覆盖已有路径。
+3. **规划目录和分支**：优先使用项目内已存在的 `.worktrees/` 或 `worktrees/`；没有时创建 `.worktrees/`。避免使用全局共享 worktree 目录，除非用户明确指定。
 4. **创建前基线验证**：在当前仓库确认基础分支和测试入口。
 5. **创建 worktree**：只在用户同意或任务明确要求时执行。
-6. **最小初始化**：安装依赖或运行 setup 时记录命令和结果。
-7. **执行任务**：遵守 scope_write，不修改共享 contract/root config，除非重新审批。
-8. **同步和整合**：合并前回到主工作区审查 diff 和验证。
-9. **清理决策**：合并、保留、创建 PR 或删除必须显式选择。
+6. **scratch 目录隔离**：子代理 brief、review package、进度 ledger 和临时报告不得写入 `.git/`；优先使用项目内自忽略目录（例如 `.adk/tmp/`、`.worktrees/` 下任务目录或工具专属 scratch），并确认不会进入提交。
+7. **最小初始化**：安装依赖或运行 setup 时记录命令和结果。
+8. **执行任务**：遵守 scope_write，不修改共享 contract/root config，除非重新审批。
+9. **同步和整合**：合并前回到主工作区审查 diff 和验证。
+10. **清理决策**：合并、保留、创建 PR 或删除必须显式选择。
 
 ## Worktree Plan Template
 ```md
@@ -66,6 +67,8 @@ constraints:
 - Existing Dirty State:
 - Scope Write:
 - Shared Files Forbidden:
+- Scratch / Ledger Path:
+- Gitignore Coverage:
 - Baseline Verification:
 - Setup Commands:
 - Merge / PR / Keep / Discard Decision:
@@ -100,6 +103,8 @@ git worktree remove <path>
 - worktree 内验证通过不代表主工作区可合并，必须回主线整体验证。
 - 根配置、依赖和 shared contract 变更必须串行收口。
 - 未通过计划 schema gate 的 worker/worktree 不得创建或继续执行。
+- 子代理 scratch、review package 和进度 ledger 不得写入 `.git/`；若存放于工作区，必须被 `.gitignore` 覆盖或在收尾前显式排除。
+- 只清理本流程创建且 provenance 明确的 worktree/scratch；无法确认来源时默认保留。
 - 最终必须给出保留或清理决策。
 
 ## 合理化借口拦截
