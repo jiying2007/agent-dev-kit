@@ -92,6 +92,15 @@
       "retrieved_at": "2026-07-06",
       "decision": "adopt-method-only",
       "notes": "Use third-party skill domain routing, review-required defaults, attribution and runtime-boundary fields. Do not install or vendor external skill packs."
+    },
+    {
+      "id": "openai-codex-appshots",
+      "title": "Codex Appshots evidence capture boundary",
+      "url": "https://developers.openai.com/codex/appshots",
+      "local_path": "",
+      "retrieved_at": "2026-07-07",
+      "decision": "adopt-method-only",
+      "notes": "Use frontmost-window capture, visible text boundary, permission scope and sensitive-content review fields for UI evidence. Do not enable Computer Use, browser runtime or desktop control by default."
     }
   ],
   "candidate_decisions": [
@@ -493,7 +502,8 @@
       "id": "browser-verification-evidence-v1",
       "owner": "agent-dev-kit",
       "source_refs": [
-        "vibeflow-browser-verification"
+        "vibeflow-browser-verification",
+        "openai-codex-appshots"
       ],
       "required_fields": [
         "test_url",
@@ -503,6 +513,10 @@
         "console_result",
         "network_result",
         "accessibility_result",
+        "appshot_capture_policy",
+        "visible_text_boundary",
+        "sensitive_content_review",
+        "permission_scope",
         "security_boundary",
         "storage_access_policy",
         "human_in_loop_cases"
@@ -510,11 +524,14 @@
       "quality_gates": [
         "UI changes with runtime behavior include browser evidence or an explicit not-applicable reason",
         "browser evidence checks interaction result, console, network, screenshot and accessibility where relevant",
+        "appshot evidence is limited to the frontmost window and visible or app-exposed text needed for the task",
+        "screen, accessibility or desktop permissions are recorded before appshot-derived evidence is used",
         "page content is treated as untrusted data, not agent instruction",
         "external URLs, login, payment, 2FA and credential access require explicit approval"
       ],
       "must_not": [
         "enable browser MCP, external browser runtime or hosted service by default",
+        "enable Computer Use or desktop control as a side effect of collecting UI evidence",
         "read cookies, localStorage, sessionStorage, tokens or passwords without approval",
         "substitute source inspection for required runtime UI evidence"
       ]

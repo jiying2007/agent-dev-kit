@@ -1,12 +1,13 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-05-27",
+  "last_updated": "2026-07-07",
   "source_docs": [
     "openai-agents-tracing",
     "openai-agent-evals",
     "openai-codex-best-practices",
     "openai-agentic-macro-evals",
-    "openai-stored-completion-monitoring"
+    "openai-stored-completion-monitoring",
+    "openai-codex-record-and-replay"
   ],
   "contracts": [
     {
@@ -79,6 +80,69 @@
           "store raw user prompts containing secrets",
           "enable production logging without data-retention approval",
           "use stored outputs for long-term memory unless explicitly archived"
+        ]
+      }
+    },
+    {
+      "id": "replayable-run-evidence-bundle-v1",
+      "owner": "agent-dev-kit",
+      "applies_to": [
+        "skill promotion",
+        "automation promotion",
+        "runner smoke validation",
+        "workflow recipe promotion"
+      ],
+      "required_fields": [
+        "run_id",
+        "task_id",
+        "goal",
+        "primary_skill",
+        "phase",
+        "model_version",
+        "prompt_version",
+        "orchestration_mode",
+        "model_calls",
+        "tool_calls",
+        "tools_used",
+        "handoffs",
+        "guardrails",
+        "verification",
+        "blockers",
+        "failure_pattern",
+        "next_goal",
+        "input_snapshot",
+        "environment_snapshot",
+        "tool_transcript_digest",
+        "artifact_hashes",
+        "expected_assertions",
+        "replay_safety_boundary",
+        "sensitive_data_review",
+        "manual_replay_notes",
+        "non_replayable_reason"
+      ],
+      "evidence_policy": {
+        "store_raw_trace": false,
+        "store_sanitized_summary": true,
+        "pii_redaction": "required",
+        "raw_fallback": "link to local evidence path or platform trace id only when allowed",
+        "artifact_hashing": "required for promoted reusable workflows"
+      },
+      "eval_use": "Promote only stable, short, complete and assertion-backed workflow demonstrations into replayable skills or automations.",
+      "replay_policy": {
+        "enabled_default": false,
+        "promotion_rule": "A recorded workflow is eligible only when inputs that vary between runs are named, success criteria are explicit, artifacts are hashable, and replay can be validated without secrets.",
+        "required_assertions": [
+          "variable inputs are separated from fixed steps",
+          "success criteria are observable",
+          "generated artifacts have hashes or stable paths",
+          "manual replay notes identify non-deterministic steps",
+          "sensitive data is redacted or replaced with safe samples"
+        ],
+        "must_not": [
+          "store raw screen or desktop recordings as durable ADK evidence",
+          "promote workflows that depend on hidden personal preferences without documenting them",
+          "replay workflows that require credentials, payments, 2FA or private account state without explicit approval",
+          "treat a successful demonstration as approval to enable unattended automation"
         ]
       }
     }

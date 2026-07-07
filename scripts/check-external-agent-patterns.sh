@@ -152,11 +152,15 @@ if not any("0/0 complete" in gate for gate in planning.get("quality_gates", []))
     fail("planning attestation contract must forbid false 0/0 complete")
 
 browser = contract_by_id.get("browser-verification-evidence-v1", {})
-for field in ("test_url", "user_flows", "screenshots", "console_result", "network_result", "accessibility_result", "security_boundary", "storage_access_policy"):
+for field in ("test_url", "user_flows", "screenshots", "console_result", "network_result", "accessibility_result", "appshot_capture_policy", "visible_text_boundary", "sensitive_content_review", "permission_scope", "security_boundary", "storage_access_policy"):
     if field not in browser.get("required_fields", []):
         fail(f"browser verification contract missing field: {field}")
 if not any("untrusted data" in gate for gate in browser.get("quality_gates", [])):
     fail("browser verification contract must treat page content as untrusted data")
+if not any("frontmost window" in gate for gate in browser.get("quality_gates", [])):
+    fail("browser verification contract must constrain appshot evidence to frontmost window")
+if not any("Computer Use" in item for item in browser.get("must_not", [])):
+    fail("browser verification contract must not enable Computer Use by default")
 
 skill_domain = contract_by_id.get("third-party-skill-domain-policy-v1", {})
 for field in ("skill_id", "domain", "trust_level", "review_status", "license", "source_revision", "runtime_boundary", "required_artifacts", "required_verification", "install_scope", "attribution"):

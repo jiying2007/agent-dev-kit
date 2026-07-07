@@ -69,6 +69,18 @@ This note records the official OpenAI Developers content that is safe to use as 
 | openai-codex-permissions | https://developers.openai.com/codex/permissions | 2026-06-15 | 2026-09-13 | P0 | Adopt permission profile, granular approval and least-privilege runtime boundary checks. |
 | openai-codex-memories | https://developers.openai.com/codex/memories | 2026-06-15 | 2026-09-13 | P1 | Adopt opt-in memory runtime, external-context review and raw-evidence fallback policy. |
 | openai-codex-subagents-runtime | https://developers.openai.com/codex/subagents | 2026-06-15 | 2026-09-13 | P1 | Adopt subagent runtime limits, nesting policy and delegated-work evidence fields. |
+| openai-codex-record-and-replay | https://developers.openai.com/codex/record-and-replay | 2026-07-07 | 2026-10-05 | P1 | Adopt replayable run evidence bundles and workflow-to-skill promotion boundaries. |
+| openai-codex-appshots | https://developers.openai.com/codex/appshots | 2026-07-07 | 2026-10-05 | P1 | Adopt frontmost-window UI evidence capture, visible text boundaries and permission/sensitive-content review fields. |
+| openai-codex-noninteractive | https://developers.openai.com/codex/noninteractive | 2026-07-07 | 2026-10-05 | P1 | Adopt runner smoke evidence for JSONL/schema output, sandbox/approval records and resume/reply correlation. |
+
+## 2026-07-07 Delta Landing
+
+- Record & Replay is landed as a replayable evidence-bundle contract, not as Computer Use enablement. Promoted workflows must separate variable inputs from fixed steps, define observable assertions, hash artifacts and record sensitive-data review before they become reusable skills or automations.
+- Goal and completion guidance now has explicit negative fixtures. Goals without done-when criteria, required evidence, artifact paths or blocker policy are `needs-fix`, and completion claims without changed files, evidence paths, negative cases or risks are rejected before promotion.
+- Automation and worktree governance now includes risk fixtures for missing stop conditions, unattended full-access, dirty worktree launches without a decision and stale heartbeats without stop/replan handling.
+- UI evidence now absorbs Appshots boundaries: appshot-derived evidence is limited to the frontmost window and visible or app-exposed text needed for the task, with screen/accessibility permission scope and sensitive-content review recorded.
+- Subagent governance now has a context noise budget. Workers return distilled summaries and evidence refs; raw command transcripts or logs are artifact-linked only after an explicit retention and redaction decision.
+- Runner governance now has a smoke contract for programmatic adapters. Machine-consumed output must be JSONL or strict-schema backed, and every run records sandbox, approval policy, cwd, thread correlation and failure/cancel path.
 
 ## 2026-07-05 Delta Landing
 
@@ -161,6 +173,9 @@ This note records the official OpenAI Developers content that is safe to use as 
 - Record subagent runtime limits and nested-subagent policy before delegated agents are used for multi-stage work.
 - Subagent reports must be summary-first and evidence-linked. Do not merge raw worker output into the parent context unless a retention decision, redaction boundary and artifact reference are explicit.
 - Automation promotion must move through manual proof, report-only history and owner approval before scheduling or enabling writes.
+- Replayable workflow evidence must include input snapshots, environment snapshots, artifact hashes, expected assertions, sensitive-data review and manual replay notes before any skill or automation promotion.
+- UI/App evidence can cite appshots only within the frontmost-window and visible/app-exposed-text boundary; Computer Use, browser runtime and desktop control remain disabled unless separately approved.
+- Programmatic runner adapters need a smoke record with JSONL or strict-schema output, sandbox/approval policy, cwd, thread correlation and observable failure/cancel handling.
 
 ## P2 Landing
 
@@ -212,6 +227,7 @@ tests/test_openai_runtime_capabilities.sh
 | `manifests/skill_reproducibility_contracts.json` | Skill discoverability, version pinning and tiny-CLI reproducibility contracts. |
 | `manifests/automation_worktree_contracts.json` | Report-only automation, thread heartbeat and worktree handoff/cleanup contracts. |
 | `manifests/agent_improvement_loop_contracts.json` | Trace-feedback-eval-validation-ADK handoff improvement loop contracts. |
+| `manifests/external_agent_pattern_contracts.json` | Method-only UI/browser/Appshots evidence and third-party pattern boundary contracts. |
 | `manifests/model_selection_decision_records.json` | Model selection KPI/SLO, cost, latency, version pinning, A/B and rollback decision records. |
 | `manifests/data_retention_state_contracts.json` | Data retention, ZDR, background mode, remote MCP, hosted container and prompt-cache state boundary contracts. |
 | `manifests/prompt_cache_policy_contracts.json` | Prompt cache retention policy, stable/dynamic context boundary and cache-miss behavior contracts. |

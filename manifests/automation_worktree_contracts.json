@@ -1,11 +1,12 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-07-05",
+  "last_updated": "2026-07-07",
   "source_docs": [
     "openai-codex-app-automations",
     "openai-codex-app-worktrees",
     "openai-codex-best-practices",
-    "openai-codex-sandbox-defaults"
+    "openai-codex-sandbox-defaults",
+    "openai-codex-record-and-replay"
   ],
   "automation_contracts": [
     {
@@ -118,6 +119,35 @@
     "promotion_evidence_required": true,
     "enabled_mode_requires_owner_approval_and_rollback": true,
     "full_access_never_for_default_automation": true,
-    "worktree_cleanup_requires_retention_decision": true
-  }
+    "worktree_cleanup_requires_retention_decision": true,
+    "risk_fixtures_required": true,
+    "dirty_worktree_requires_decision": true,
+    "stale_heartbeat_requires_stop_or_replan": true
+  },
+  "risk_fixtures": [
+    {
+      "id": "automation-missing-stop-condition",
+      "input": "scheduled automation has cadence and prompt but no stop condition",
+      "expected": "reject",
+      "blocked_gate": "prompt_requirements.stop condition"
+    },
+    {
+      "id": "automation-full-access-unattended",
+      "input": "background automation requests danger-full-access with approval_policy=never",
+      "expected": "reject",
+      "blocked_gate": "quality_gate.full_access_never_for_default_automation"
+    },
+    {
+      "id": "worktree-dirty-local-no-decision",
+      "input": "background worktree starts from local checkout with dirty changes but no dirty-state decision",
+      "expected": "reject",
+      "blocked_gate": "worktree_contracts.creation_gate.dirty local changes classified"
+    },
+    {
+      "id": "thread-heartbeat-stale-no-stop",
+      "input": "thread heartbeat has no changed evidence across repeated runs and no stop or replan decision",
+      "expected": "needs-fix",
+      "blocked_gate": "quality_gate.stale_heartbeat_requires_stop_or_replan"
+    }
+  ]
 }

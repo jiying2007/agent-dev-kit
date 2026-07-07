@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-07-05",
+  "last_updated": "2026-07-07",
   "source_docs": [
     "openai-agents-sdk-starting-point",
     "openai-codex-config-reference",
@@ -69,6 +69,33 @@
       "nested subagents require explicit max_depth approval",
       "worker returns distilled summary and evidence references instead of raw intermediate output",
       "raw logs or transcripts are linked as artifacts only when retention decision is explicit"
+    ]
+  },
+  "context_noise_budget": {
+    "enabled_default": true,
+    "required_fields": [
+      "summary_token_budget",
+      "evidence_ref_count",
+      "raw_output_retention_decision",
+      "redaction_status",
+      "parent_context_merge_policy",
+      "noise_rejection_reason"
+    ],
+    "summary_token_budget": {
+      "default_soft_limit": 1200,
+      "exceed_policy": "link artifacts instead of pasting raw output"
+    },
+    "raw_output_policy": "Raw logs, stack traces, command transcripts and exploratory notes are not merged into the parent context unless retained as explicit evidence artifacts with redaction status.",
+    "quality_gates": [
+      "subagent replies start with distilled summary and evidence references",
+      "raw output requires an explicit retention decision",
+      "parent agent integrates worker results only after checking conflict and verification evidence",
+      "large logs are summarized with artifact references instead of copied into the parent thread"
+    ],
+    "must_not": [
+      "paste raw command transcripts into the parent context by default",
+      "treat worker completion as parent completion",
+      "hide failed verification inside a long raw-output appendix"
     ]
   },
   "custom_agent_lint": {

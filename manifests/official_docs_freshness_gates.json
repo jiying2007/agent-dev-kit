@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-05-28",
+  "last_updated": "2026-07-07",
   "review_policy": {
     "allowed_domains": [
       "developers.openai.com",
@@ -929,6 +929,51 @@
       "required_checks": [
         "check-openai-developers-governance",
         "check-workflow-closure"
+      ]
+    },
+    {
+      "id": "openai-codex-record-and-replay",
+      "title": "Codex Record & Replay: demonstrated workflow to reusable skill",
+      "url": "https://developers.openai.com/codex/record-and-replay",
+      "retrieved_at": "2026-07-07",
+      "expires_at": "2026-10-05",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for replayable run evidence bundles, stable workflow success criteria, sensitive-data review and skill packaging boundaries. Do not enable Computer Use or generated skills by default.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "trace-eval evidence bundle review"
+      ]
+    },
+    {
+      "id": "openai-codex-appshots",
+      "title": "Codex Appshots: frontmost-window capture, visible text and permission safety",
+      "url": "https://developers.openai.com/codex/appshots",
+      "retrieved_at": "2026-07-07",
+      "expires_at": "2026-10-05",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for UI/App evidence capture boundaries: frontmost-window scope, visible text limits, sensitive-content review and explicit macOS permission handling.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "check-external-agent-patterns"
+      ]
+    },
+    {
+      "id": "openai-codex-noninteractive",
+      "title": "Codex non-interactive and programmatic interfaces",
+      "url": "https://developers.openai.com/codex/noninteractive",
+      "retrieved_at": "2026-07-07",
+      "expires_at": "2026-10-05",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the source for runner smoke contracts covering JSONL output, structured schema output, sandbox/approval recording, ephemeral runs, resume behavior and CI-safe credential boundaries.",
+      "required_checks": [
+        "check-openai-developers-governance",
+        "runner smoke contract review"
       ]
     }
   ]

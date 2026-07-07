@@ -184,6 +184,9 @@ for required_sid in (
     "openai-codex-permissions",
     "openai-codex-memories",
     "openai-codex-subagents-runtime",
+    "openai-codex-record-and-replay",
+    "openai-codex-appshots",
+    "openai-codex-noninteractive",
 ):
     if required_sid not in source_ids:
         fail(f"official docs source missing: {required_sid}")
@@ -252,6 +255,7 @@ suite_ids = {suite.get("id") for suite in evals.get("suites", [])}
 for expected_suite in (
     "governance-eval-guardrail-regression-dataset",
     "macro-eval-stored-session-regression-monitoring",
+    "completion-eval-goal-done-when-negative-fixtures",
 ):
     if expected_suite not in suite_ids:
         fail(f"eval suite missing: {expected_suite}")
@@ -266,6 +270,13 @@ for suite in evals.get("suites", []):
         for expected in ("reject", "accept"):
             if expected not in expected_values:
                 fail(f"stored-session monitoring suite missing expected case: {expected}")
+    if suite.get("id") == "completion-eval-goal-done-when-negative-fixtures":
+        expected_values = {fixture.get("expected") for fixture in suite.get("fixtures", [])}
+        for expected in ("needs-fix", "pass"):
+            if expected not in expected_values:
+                fail(f"goal done-when suite missing expected case: {expected}")
+        if not any("done-when" in fixture.get("id", "") for fixture in suite.get("fixtures", [])):
+            fail("goal done-when suite missing explicit done-when negative fixture")
 
 trace_contracts = trace.get("contracts", [])
 if not trace_contracts:
@@ -309,6 +320,31 @@ for contract in trace_contracts:
                 fail(f"stored_session_monitoring_policy {contract.get('id')} missing required field: {field}")
         if not any("raw user prompts" in item for item in stored_policy.get("must_not", [])):
             fail(f"stored_session_monitoring_policy {contract.get('id')} must reject raw user prompts")
+    replay_policy = contract.get("replay_policy", {})
+    if contract.get("id") == "replayable-run-evidence-bundle-v1":
+        fields = set(contract.get("required_fields", []))
+        for field in (
+            "input_snapshot",
+            "environment_snapshot",
+            "tool_transcript_digest",
+            "artifact_hashes",
+            "expected_assertions",
+            "replay_safety_boundary",
+            "sensitive_data_review",
+            "manual_replay_notes",
+            "non_replayable_reason",
+        ):
+            if field not in fields:
+                fail(f"replayable run evidence contract missing field: {field}")
+        require_keys(replay_policy, ["enabled_default", "promotion_rule", "required_assertions", "must_not"], "replayable run evidence policy")
+        if replay_policy.get("enabled_default") is not False:
+            fail("replayable run evidence policy must be disabled by default")
+        if not any("sensitive" in item.lower() for item in replay_policy.get("required_assertions", [])):
+            fail("replayable run evidence policy must require sensitive-data assertion")
+        if not any("unattended automation" in item.lower() for item in replay_policy.get("must_not", [])):
+            fail("replayable run evidence policy must not promote unattended automation from one demonstration")
+if "replayable-run-evidence-bundle-v1" not in {contract.get("id") for contract in trace_contracts}:
+    fail("trace contracts missing replayable-run-evidence-bundle-v1")
 
 tool_description_policy = mcp.get("tool_description_policy", {})
 require_keys(tool_description_policy, ["required_elements", "review_payloads", "remembered_approvals"], "mcp tool_description_policy")
@@ -457,6 +493,38 @@ if not any("nested" in item.lower() for item in subagent_runtime_limits.get("mus
     fail("subagent runtime_limits must forbid implicit nested subagents")
 if not any("raw logs" in item.lower() or "command transcripts" in item.lower() for item in subagent_runtime_limits.get("must_not", [])):
     fail("subagent runtime_limits must forbid raw noisy output by default")
+
+subagent_noise_budget = subagents.get("context_noise_budget", {})
+require_keys(
+    subagent_noise_budget,
+    [
+        "enabled_default",
+        "required_fields",
+        "summary_token_budget",
+        "raw_output_policy",
+        "quality_gates",
+        "must_not",
+    ],
+    "subagent context_noise_budget",
+)
+if subagent_noise_budget.get("enabled_default") is not True:
+    fail("subagent context_noise_budget must be enabled by default")
+for field in (
+    "summary_token_budget",
+    "evidence_ref_count",
+    "raw_output_retention_decision",
+    "redaction_status",
+    "parent_context_merge_policy",
+    "noise_rejection_reason",
+):
+    if field not in subagent_noise_budget.get("required_fields", []):
+        fail(f"subagent context_noise_budget missing required field: {field}")
+if subagent_noise_budget.get("summary_token_budget", {}).get("default_soft_limit", 0) <= 0:
+    fail("subagent context_noise_budget summary soft limit must be positive")
+if not any("raw output" in gate.lower() and "retention" in gate.lower() for gate in subagent_noise_budget.get("quality_gates", [])):
+    fail("subagent context_noise_budget must require raw output retention decision")
+if not any("raw command transcripts" in item.lower() for item in subagent_noise_budget.get("must_not", [])):
+    fail("subagent context_noise_budget must forbid raw command transcripts by default")
 
 runtime_layers = runtime_policy.get("policy_layers", [])
 if not runtime_layers:
@@ -747,6 +815,26 @@ if not hooks.get("log_redaction"):
 adk_runner_contracts = adk_runner.get("contracts", [])
 if not adk_runner_contracts:
     fail("ADK runner contracts are empty")
+runner_smoke = adk_runner.get("smoke_contract", {})
+require_keys(runner_smoke, ["id", "owner", "applies_to", "required_evidence", "quality_gates", "must_not"], "ADK runner smoke_contract")
+for field in (
+    "client_info_or_adapter_id",
+    "thread_start_result",
+    "turn_start_result",
+    "jsonl_or_structured_event_stream",
+    "output_schema_validation",
+    "sandbox_policy_record",
+    "approval_policy_record",
+    "cwd_record",
+    "resume_or_reply_correlation",
+    "failure_or_cancel_path",
+):
+    if field not in runner_smoke.get("required_evidence", []):
+        fail(f"ADK runner smoke_contract missing evidence field: {field}")
+if not any("JSONL" in gate or "strict output schema" in gate for gate in runner_smoke.get("quality_gates", [])):
+    fail("ADK runner smoke_contract must require JSONL or strict schema output")
+if not any("API keys" in item or "auth files" in item for item in runner_smoke.get("must_not", [])):
+    fail("ADK runner smoke_contract must protect API keys or auth files")
 adk_runner_tools = {contract.get("tool") for contract in adk_runner_contracts}
 for tool in ("run-session", "reply-session"):
     if tool not in adk_runner_tools:
@@ -958,6 +1046,9 @@ require_keys(
         "enabled_mode_requires_owner_approval_and_rollback",
         "full_access_never_for_default_automation",
         "worktree_cleanup_requires_retention_decision",
+        "risk_fixtures_required",
+        "dirty_worktree_requires_decision",
+        "stale_heartbeat_requires_stop_or_replan",
     ],
     "automation worktree quality_gate",
 )
@@ -971,9 +1062,22 @@ for key in (
     "enabled_mode_requires_owner_approval_and_rollback",
     "full_access_never_for_default_automation",
     "worktree_cleanup_requires_retention_decision",
+    "risk_fixtures_required",
+    "dirty_worktree_requires_decision",
+    "stale_heartbeat_requires_stop_or_replan",
 ):
     if automation_gate.get(key) is not True:
         fail(f"automation worktree quality_gate {key} must be true")
+automation_risk_fixtures = automation_worktree.get("risk_fixtures", [])
+if len(automation_risk_fixtures) < 4:
+    fail("automation worktree risk_fixtures must include at least four cases")
+fixture_expected = {fixture.get("expected") for fixture in automation_risk_fixtures}
+for expected in ("reject", "needs-fix"):
+    if expected not in fixture_expected:
+        fail(f"automation worktree risk_fixtures missing expected case: {expected}")
+for token in ("stop", "full-access", "dirty", "heartbeat"):
+    if not any(token in fixture.get("id", "") or token in fixture.get("input", "") for fixture in automation_risk_fixtures):
+        fail(f"automation worktree risk_fixtures missing token: {token}")
 
 improvement_loops = improvement_loop.get("loops", [])
 if not improvement_loops:

@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-05-27",
+  "last_updated": "2026-07-07",
   "source_docs": [
     "openai-agent-evals",
     "openai-agents-tracing",
@@ -11,7 +11,8 @@
     "openai-codex-iterative-repair-loop",
     "openai-agentic-governance-test-dataset",
     "openai-stored-completion-monitoring",
-    "openai-model-optimization-workflow"
+    "openai-model-optimization-workflow",
+    "openai-codex-record-and-replay"
   ],
   "suites": [
     {
@@ -304,6 +305,43 @@
         }
       ],
       "minimum_gate": "stored-session monitoring remains disabled by default and requires redaction, retention policy and owner approval"
+    },
+    {
+      "id": "completion-eval-goal-done-when-negative-fixtures",
+      "category": "completion",
+      "owner": "agent-dev-kit",
+      "goal": "Reject goals and completion claims that lack done-when criteria, non-goals, verification evidence, artifact paths, or explicit blockers.",
+      "dataset_path": "manifests/adk_goal_contracts.json",
+      "fixtures": [
+        {
+          "id": "goal-missing-done-when",
+          "input": "goal has broad intent and context, but no done-when condition or required evidence",
+          "expected": "needs-fix"
+        },
+        {
+          "id": "goal-has-done-when-and-evidence",
+          "input": "goal includes success criteria, non-goals, required evidence, verification commands, artifact paths and blocker policy",
+          "expected": "pass"
+        },
+        {
+          "id": "completion-claim-without-artifact",
+          "input": "claim says implemented, but does not identify changed files, evidence paths, negative cases or remaining risks",
+          "expected": "needs-fix"
+        }
+      ],
+      "graders": [
+        {
+          "name": "done_when_required_fields",
+          "type": "deterministic",
+          "threshold": 1.0
+        },
+        {
+          "name": "negative_fixture_rejection",
+          "type": "deterministic",
+          "threshold": 1.0
+        }
+      ],
+      "minimum_gate": "goal and completion-prompt changes must include at least one failing fixture and one passing fixture before promotion"
     }
   ]
 }

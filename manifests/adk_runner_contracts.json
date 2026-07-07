@@ -1,11 +1,48 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-05-26",
+  "last_updated": "2026-07-07",
   "scope_model": "platform-neutral-adk-runner",
   "source_docs": [
-    "openai-codex-as-mcp-server"
+    "openai-codex-as-mcp-server",
+    "openai-codex-app-server-api-overview",
+    "openai-codex-noninteractive"
   ],
   "reference_boundary": "OpenAI product docs are used only as official reference material. This manifest defines platform-neutral ADK runner contracts and does not include compatibility bindings.",
+  "smoke_contract": {
+    "id": "adk-runner-smoke-contract-v1",
+    "owner": "agent-dev-kit",
+    "applies_to": [
+      "codex exec style adapters",
+      "app-server adapters",
+      "MCP runner adapters",
+      "CI runner wrappers"
+    ],
+    "required_evidence": [
+      "client_info_or_adapter_id",
+      "thread_start_result",
+      "turn_start_result",
+      "jsonl_or_structured_event_stream",
+      "output_schema_validation",
+      "sandbox_policy_record",
+      "approval_policy_record",
+      "cwd_record",
+      "resume_or_reply_correlation",
+      "failure_or_cancel_path"
+    ],
+    "quality_gates": [
+      "runner adapters identify their client or adapter before starting work",
+      "machine-consumed output uses JSONL or a strict output schema",
+      "sandbox and approval policy are recorded for each run",
+      "resume and reply paths preserve threadId correlation",
+      "failure, cancellation or blocked status is observable and not collapsed into success"
+    ],
+    "must_not": [
+      "expose API keys or auth files to repository-controlled code",
+      "use danger-full-access or approval never as an unreviewed default",
+      "treat free-form final prose as machine-readable runner evidence",
+      "hide app-server experimental fields behind stable contracts"
+    ]
+  },
   "contracts": [
     {
       "id": "adk-run-session",
