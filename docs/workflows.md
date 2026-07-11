@@ -271,7 +271,7 @@ Workflow manifest 必须声明 `command_risk`，取值为 `low`、`medium` 或 `
 ## 变更工件约定
 
 - `proposal.md`：为什么做、做什么、不做什么
-- `target-architecture-report.md`：长期资产、跨仓治理或运行态链路的当前架构、目标架构、职责边界、任务表和 Evidence Index
+- `target-architecture-report.md`：长期资产、跨仓治理或运行态链路的当前架构、目标架构、职责边界、结构化需求审查、综合优化 backlog、任务表和 Evidence Index；综合优化 backlog 需要有机器可读 SSOT，且设计状态与实现状态分开记录
 - `design.md`：架构影响、配置影响、验证策略
 - `tasks.md`：可执行任务清单
 - `checklist.md`：交付门禁

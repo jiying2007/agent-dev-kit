@@ -111,6 +111,17 @@ handoff_to:
 |---|---|---|---|---|
 | P0-1 | blocker/major/minor | [问题] | [证据] | [处理动作] |
 
+## Structured Requirements Review
+
+| Dimension | Confirmed Requirement | Success Criteria | Non-Goal / Boundary |
+|---|---|---|---|
+| Goal | [要达成的长期目标] | [可验证成功标准] | [不做什么] |
+| Deliverable | [报告/manifest/模板/门禁/代码等交付物] | [可审查产物路径与通过标准] | [不把一次性过程当长期资产] |
+| Scope | [覆盖仓库、profile、runtime 或知识域] | [必须覆盖的资产和接口] | [排除范围] |
+| Quality Dimensions | [目标、功能、性能、维护、扩展、安全、验证、知识沉淀、资产体验] | [每个维度至少有 finding、目标设计或 backlog 项] | [不以单一维度替代全面评估] |
+| Long-term Asset | [长期可复用的规则、模板、manifest、runbook 或门禁] | [有 SSOT、验证命令和恢复路径] | [不静默写 memory 或 live runtime] |
+| Execution Constraint | [dirty worktree、权限、审批、live 写入边界] | [执行边界和停止条件可审查] | [不自动 commit/push/apply] |
+
 ## Phase Roadmap
 
 | Phase | Goal | Done Criteria | Verification |
@@ -125,6 +136,23 @@ handoff_to:
 | A1 | P0 | [任务] | [文件/目录] | [停止条件] | [验证命令] |
 | B1 | P1 | [任务] | [文件/目录] | [停止条件] | [验证命令] |
 | C1 | P2 | [任务] | [文件/目录] | [停止条件] | [验证命令] |
+
+## Comprehensive Optimization Backlog
+
+Machine-readable SSOT / 机器可读 SSOT: `[manifest 或 schema 路径]`。报告中的 ID、优先级、优化领域和验证入口必须与 SSOT 保持一致；设计状态和实现状态必须分开记录。
+
+| ID | Priority | Optimization Area | Terminal Outcome | Implementation Target | Verification |
+|---|---|---|---|---|---|
+| G1 | P0 | Goal and scope control | [跨仓目标有 goal statement、non-goal、成熟度、停止条件和证据] | [模板/状态规则/goal closure 字段] | `[验证命令]` |
+| G2 | P0 | Governance correctness | [registry、adoption、lifecycle、baseline、knowledge 状态不矛盾] | [治理报告/一致性门禁] | `[验证命令]` |
+| G3 | P0 | Evidence integrity | [完成/应用/归档/提升声明绑定命令级证据和负结果] | [Evidence Index/evidence bundle/completion audit] | `[验证命令]` |
+| G4 | P1 | Functional coverage | [能力缺口优先增强现有 agent/skill/workflow] | [manifest/routing/capability health] | `[验证命令]` |
+| G5 | P1 | Performance and token cost | [默认入口短、深证据按需读、报告有 summary gate] | [current-status/token budget] | `[验证命令]` |
+| G6 | P1 | Maintainability | [长期设计、当前状态、执行计划和知识候选各有唯一入口] | [README/current-status/Hub policy] | `[验证命令]` |
+| G7 | P1 | Extensibility | [新 runtime、参考源、profile 先 candidate/dry-run 后 active] | [runtime registry/intake approval] | `[验证命令]` |
+| G8 | P1 | Asset experience | [低 token 入口能找到正确 runbook、skill 和验证命令] | [AGENTS/docs/catalog] | `[验证命令]` |
+| G9 | P2 | Knowledge retention | [高价值结论生成脱敏 candidate，promotion 需 owner review] | [knowledge candidate/status evidence] | `[验证命令]` |
+| G10 | P2 | Release and rollback clarity | [source-to-live、knowledge promotion、cleanup 有独立审批和回滚边界] | [delivery/promotion/removal plan] | `[验证命令]` |
 
 ## Verification Gates
 
@@ -171,7 +199,10 @@ handoff_to:
 - [ ] State Reconciliation Contract 记录状态声明、验证命令、过期条件和修复动作
 - [ ] Status Consistency Gate 能检查当前状态索引是否与 commit、runtime 和 knowledge evidence 一致
 - [ ] 问题地图包含 severity、evidence 和 action
+- [ ] Structured Requirements Review 明确目标、交付物、范围、质量维度、长期资产和执行约束
 - [ ] 实施任务覆盖 P0/P1/P2 或说明为什么不适用
+- [ ] Comprehensive Optimization Backlog 有机器可读 SSOT，且报告与 SSOT 的 G1-G10、优先级、优化领域和验证入口一致
+- [ ] 设计状态和实现状态分开记录，未实现项不得借由设计完成被标记为 done
 - [ ] Evidence Index 至少包含一个通过证据和一个负结果或 before-fix 证据
 - [ ] Goal Closure State 字段完整
 - [ ] source-to-live 或 live 写入动作有显式审批边界

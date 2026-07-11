@@ -146,6 +146,20 @@ test_target_architecture_report_delivery_and_promotion_fields() {
     grep -q "Required Truth" "$template"
 }
 
+# 测试19: 检查TargetArchitectureReport模板包含结构化需求和综合优化backlog
+test_target_architecture_report_requirements_and_optimization_fields() {
+    local template="$ROOT_DIR/templates/artifacts/target-architecture-report-template.md"
+    grep -q "## Structured Requirements Review" "$template" &&
+    grep -q "Confirmed Requirement" "$template" &&
+    grep -q "Quality Dimensions" "$template" &&
+    grep -q "## Comprehensive Optimization Backlog" "$template" &&
+    grep -q "Machine-readable SSOT" "$template" &&
+    grep -q "Goal and scope control" "$template" &&
+    grep -q "Governance correctness" "$template" &&
+    grep -q "Performance and token cost" "$template" &&
+    grep -q "Release and rollback clarity" "$template"
+}
+
 # 运行所有测试
 echo "Running template tests..."
 echo "======================================"
@@ -168,6 +182,7 @@ run_test "Template owner field" test_template_owner_field
 run_test "TargetArchitectureReport V4 sections" test_target_architecture_report_v4_sections
 run_test "TargetArchitectureReport landing levels" test_target_architecture_report_landing_levels
 run_test "TargetArchitectureReport delivery and promotion fields" test_target_architecture_report_delivery_and_promotion_fields
+run_test "TargetArchitectureReport requirements and optimization fields" test_target_architecture_report_requirements_and_optimization_fields
 
 echo "======================================"
 echo "Total: $TESTS_TOTAL, Passed: $TESTS_PASSED, Failed: $TESTS_FAILED"

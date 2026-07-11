@@ -94,6 +94,33 @@ Skill 更新不是文案改写，必须走候选验证：
 - “最值得装”“爆款”“神技”这类榜单只进入候选发现；缺少 owner、license、版本锚点、权限边界和验证样例时，结论固定为 `reference-only`。
 - 垂直业务自动化 Skill 只有在能拆清接口适配层、核心逻辑层、数据/外部依赖层，并声明 I/O schema、验证规则、错误等级、缓存/去重/断点续传策略、密钥来源和人工审批点后，才可进入候选实现。
 
+## 观察仓库抽样吸收
+
+对仍在快速更新的外部 skill/agent 仓库，默认使用 sampled watch，而不是恢复全量子仓或安装运行态。每次抽样必须把外部能力先归入以下 lane，再决定是否改 ADK 资产：
+
+| Lane | 典型来源 | 可吸收内容 | 默认落点 | 禁止事项 |
+|---|---|---|---|---|
+| requirements-and-domain-modeling | `mattpocock/skills` 等需求/建模类 skill | 术语表、实体/状态、非目标、验收样例和实现前拷问契约 | `adk-requirements-triage` 或需求模板 | 不复制外部 skill 文本，不把单次 PRD 写成 core 规则 |
+| review-contract | `mattpocock/skills`、`superpowers` 等 review 能力 | spec verdict、quality verdict、cannot-verify-from-diff、out-of-scope suggestion 处理 | `adk-code-review-loop` | 不把 reviewer 意见当自动修复命令 |
+| lifecycle-gate | `addyosmani/agent-skills` 等生命周期/质量门禁 | eval、security、release、incremental implementation 或 hardening gate 的新增差异 | workflow/runbook/manifest | 不重复已有 ADK 生命周期流程 |
+| catalog-discovery | awesome/marketplace/skill-pool 仓库 | 候选发现、分类、license/owner 线索 | discovery report / adoption matrix | 不安装 CLI，不全量导入 skill pool |
+| runtime-security-review | ECC、Composio、hooks/MCP/tooling 仓库 | install surface、hooks、MCP、credentials、data retention、deny-path、rollback 风险 | `external_agent_pattern_contracts.json` / security review report | 不启用外部 runtime，不写全局目录，不接入凭证 |
+
+抽样吸收步骤：
+
+1. 先查 `subrepos/adoption-matrix.md` 和 `manifests/subrepo_lifecycle.json`，确认该来源是否已吸收、移除、watch 或 archive-only。
+2. 用 `reuse-before-rebuild` 判断是否能增强现有 skill/runbook/manifest；能合并时不得新增 skill。
+3. 对每个候选机制记录 `source repo`、`sampled capability`、`local existing asset`、`decision`、`target asset`、`forbidden action` 和 `verification`。
+4. 只有发现 ADK 未覆盖的新契约，才允许修改 ADK 资产；否则写入 `no-new-absorption` 或 `archive-only`。
+5. 含 hooks、MCP、browser、hosted service、credentials、local ports、memory injection 或 open-world writes 的来源，必须先停在 `runtime-security-review`。
+
+最小报告字段：
+
+```md
+| Source | Lane | Decision | Absorbed Mechanism | Target Asset | Forbidden Action | Verification |
+|---|---|---|---|---|---|---|
+```
+
 ## 平台兼容吸收
 
 吸收 Claude Code、Codex、TRAE、OpenClaw 或其他平台的 Skill 教程时，先做字段映射：

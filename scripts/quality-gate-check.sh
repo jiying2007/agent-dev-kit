@@ -113,12 +113,20 @@ check_artifacts() {
                     "## Knowledge Promotion Contract"
                     "## State Reconciliation Contract"
                     "## Status Consistency Gate"
+                    "## Structured Requirements Review"
+                    "## Comprehensive Optimization Backlog"
                     "dry-run-verified"
                     "live-applied"
                     "knowledge-promoted"
                     "Approval Boundary"
                     "Promotion Mode"
                     "Required Truth"
+                    "Confirmed Requirement"
+                    "Quality Dimensions"
+                    "Goal and scope control"
+                    "Governance correctness"
+                    "Performance and token cost"
+                    "Release and rollback clarity"
                 )
 
                 local token

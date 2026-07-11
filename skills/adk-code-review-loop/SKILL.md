@@ -1,8 +1,8 @@
 ---
 name: adk-code-review-loop
 description: 独立代码审查与反馈修复闭环，覆盖发现分级、真实性核验、修复验证和复审
-version: 1.2.0
-last_updated: 2026-07-07
+version: 1.3.0
+last_updated: 2026-07-11
 triggers:
   - "独立代码审查"
   - "code review loop"
@@ -52,20 +52,22 @@ constraints:
 2. **读取 diff 与测试**：按文件查看实际改动和验证证据。
 3. **列出发现**：每条发现包含文件、位置、现象、影响和建议；检查异常分支、边界条件、权限/安全、兼容性、数据正确性、测试缺口和复杂度。
 4. **双 verdict 审查**：同时给出 spec-compliance verdict 与 quality verdict；同一次阅读 diff 覆盖需求符合性和代码质量，不重复派发多个局部 reviewer。
-5. **真实性核验**：判断问题是否可复现、是否有代码证据、是否属于本次范围；不能从 diff 判定的项标记为 `cannot-verify-from-diff`。
-6. **分级裁决**：按 blocker/major/minor/question/cannot-verify-from-diff 分类。
-7. **生成修复任务**：每个 blocker/major 对应一个最小修复动作和验证命令。
-8. **执行或交接修复**：修复不得顺带重构无关文件。
-9. **复审**：修复后重新检查原发现是否闭环，新增风险是否出现。
-10. **整体验证**：任务级 review 通过后，仍需一次 whole-diff/whole-branch 视角检查跨任务集成问题。
-11. **门禁交接**：将结论交给 `adk-commit-pr-quality-gate` 或 `adk-verification-before-completion`。
-12. **CI/PR 发布核验**：若要发布 SCM comment，必须按 `manifests/pr_review_governance_contracts.json` 验证 schema-backed findings、untrusted PR 隔离和 inline anchoring。
-13. **Review 改进闭环**：重复 review 失败模式只能作为 trace-feedback-eval-handoff 候选进入 AAR，不得直接改 durable guidance。
+5. **Review context 固定**：记录 review 对照的需求包、领域模型、非目标、验证基线和变更范围；缺少这些上下文时先标记 `question` 或 `cannot-verify-from-diff`，不得补脑通过。
+6. **真实性核验**：判断问题是否可复现、是否有代码证据、是否属于本次范围；不能从 diff 判定的项标记为 `cannot-verify-from-diff`。
+7. **分级裁决**：按 blocker/major/minor/question/cannot-verify-from-diff 分类。
+8. **生成修复任务**：每个 blocker/major 对应一个最小修复动作和验证命令。
+9. **执行或交接修复**：修复不得顺带重构无关文件。
+10. **复审**：修复后重新检查原发现是否闭环，新增风险是否出现。
+11. **整体验证**：任务级 review 通过后，仍需一次 whole-diff/whole-branch 视角检查跨任务集成问题。
+12. **门禁交接**：将结论交给 `adk-commit-pr-quality-gate` 或 `adk-verification-before-completion`。
+13. **CI/PR 发布核验**：若要发布 SCM comment，必须按 `manifests/pr_review_governance_contracts.json` 验证 schema-backed findings、untrusted PR 隔离和 inline anchoring。
+14. **Review 改进闭环**：重复 review 失败模式只能作为 trace-feedback-eval-handoff 候选进入 AAR，不得直接改 durable guidance。
 
 ## Review Report Template
 ```md
 - Review Scope:
 - Requirement Baseline:
+- Domain Model Baseline:
 - Verification Baseline:
 - Review Mode: task-level | whole-diff | whole-branch
 - Spec Verdict:
@@ -111,6 +113,7 @@ git diff -- <path>
 - 每个 blocker/major 必须有状态：fixed、accepted-risk、not-applicable。
 - pass 结论必须满足 blocker=0 且 major=0。
 - pass 结论还必须处理 `cannot-verify-from-diff`：补验证证据、owner 接受风险或明确不适用。
+- 缺少 Requirement Baseline、Domain Model Baseline 或 Verification Baseline 时，不得给出 spec-compliance pass；必须先补上下文或降级为 `cannot-verify-from-diff`。
 - reviewer 不得修改工作树、切换分支或执行破坏性操作；审查默认只读。
 - reviewer 不得被要求忽略发现、预设严重级别或接受 implementer rationale 作为证据。
 - 误报必须说明证据，不得只写“不认同”。

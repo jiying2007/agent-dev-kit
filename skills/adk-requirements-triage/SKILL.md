@@ -1,8 +1,8 @@
 ---
 name: adk-requirements-triage
 description: 将需求转为可实现、可验证的工程条目
-version: 1.2.0
-last_updated: 2026-07-07
+version: 1.3.0
+last_updated: 2026-07-11
 triggers:
   - "需求不清楚"
   - "需求模糊"
@@ -62,17 +62,14 @@ constraints:
 1. **探索式开场**：需求宽泛时先用 `references/exploratory-requirements-brief.md` 发散 2-4 个方向，再收敛边界。
 2. **结构化快速扫描**：定位模块入口、现有实现、相关测试与依赖约束。
 3. **识别关键疑问**：列出阻塞规划的问题，并按高/中/低优先级排序。
-4. **上下文充分性检查**：确认接口契约、风险点、验证方式均可陈述。
-5. **需求分类**：按分类规则判定需求类别，选择对应处理方式。
-6. **优先级判定**：按矩阵评估业务影响、技术风险、时间紧迫度。
-7. **触发路由判断**：输出 core/optional 技能建议、触发理由与排除理由。
-8. **需求拆分策略**：若需求过大，按以下策略拆分：
-   - 按模块边界拆：不同模块独立需求包
-   - 按层次拆：接口层/逻辑层/数据层
-   - 按阶段拆：MVP + 增量迭代
-   - 按风险拆：高风险先行验证
-9. **产出需求包**：目标、非目标、影响面、done-when、required evidence、artifact paths、blocker policy、验收标准、回退条件。
-10. **明确下一步**：给出可执行任务切分与责任边界（owner/scope）。
+4. **领域建模预检**：对非纯配置/文案任务，先列出关键术语、实体、状态、接口、数据流和边界样例；字段缺失时不得进入实现。
+5. **上下文充分性检查**：确认接口契约、风险点、验证方式均可陈述。
+6. **需求分类**：按分类规则判定需求类别，选择对应处理方式。
+7. **优先级判定**：按矩阵评估业务影响、技术风险、时间紧迫度。
+8. **触发路由判断**：输出 core/optional 技能建议、触发理由与排除理由。
+9. **需求拆分策略**：若需求过大，按模块、层次、阶段或风险拆成可独立验收的需求包。
+10. **产出需求包**：目标、非目标、影响面、done-when、required evidence、artifact paths、blocker policy、验收标准、回退条件。
+11. **明确下一步**：给出可执行任务切分与责任边界（owner/scope）。
 
 ## Discovery Template
 - 嵌入式需求探索优先使用 `references/embedded-discovery-brief.md`。
@@ -102,6 +99,7 @@ rg -n "import|require|include|#include" <target_path> | head -20
 - 需求分类: 新功能 / 增强 / 缺陷 / 技术债务 / 配置变更
 - 优先级: P0/P1/P2/P3 + 判定依据
 - Impact Scope:
+- Domain Model: 术语 / 实体 / 状态 / 接口 / 数据流 / 边界样例 / 反例
 - Acceptance Criteria:
 - 拆分策略: 模块/层次/阶段/风险
 - Migration/Config Decision:
@@ -126,6 +124,7 @@ rg -n "import|require|include|#include" <target_path> | head -20
 ## Quality Gate
 - 输出必须包含目标、非目标、影响面、验收标准四项。
 - 输出必须包含 done-when、required evidence、artifact paths 和 blocker policy；缺任一项时结论固定为 `needs-fix`。
+- 非纯配置/文案任务必须包含 Domain Model；缺关键术语、实体/状态、接口或边界样例时不得进入实现。
 - 至少给出一个关键风险及对应验证方式。
 - 若充分性检查未通过，结论必须为 `needs-fix`，并列出缺失信息。
 - 需求必须有明确分类和优先级。
