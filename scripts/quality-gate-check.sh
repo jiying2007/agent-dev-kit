@@ -77,6 +77,7 @@ check_artifacts() {
         "templates/artifacts/system-arch-template.md"
         "templates/artifacts/task-breakdown-template.md"
         "templates/artifacts/implementation-plan-template.md"
+        "templates/artifacts/target-architecture-report-template.md"
         "templates/artifacts/review-report-template.md"
         "templates/artifacts/test-report-template.md"
         "templates/artifacts/approval-template.md"

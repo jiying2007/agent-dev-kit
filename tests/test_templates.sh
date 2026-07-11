@@ -63,44 +63,49 @@ test_implementation_plan_template() {
     [[ -f "$ROOT_DIR/templates/artifacts/implementation-plan-template.md" ]]
 }
 
-# 测试7: 检查ReviewReport模板存在
+# 测试7: 检查TargetArchitectureReport模板存在
+test_target_architecture_report_template() {
+    [[ -f "$ROOT_DIR/templates/artifacts/target-architecture-report-template.md" ]]
+}
+
+# 测试8: 检查ReviewReport模板存在
 test_review_report_template() {
     [[ -f "$ROOT_DIR/templates/artifacts/review-report-template.md" ]]
 }
 
-# 测试8: 检查TestReport模板存在
+# 测试9: 检查TestReport模板存在
 test_test_report_template() {
     [[ -f "$ROOT_DIR/templates/artifacts/test-report-template.md" ]]
 }
 
-# 测试9: 检查Approval模板存在
+# 测试10: 检查Approval模板存在
 test_approval_template() {
     [[ -f "$ROOT_DIR/templates/artifacts/approval-template.md" ]]
 }
 
-# 测试10: 检查标准工作流模板存在
+# 测试11: 检查标准工作流模板存在
 test_standard_workflow_template() {
     [[ -f "$ROOT_DIR/templates/workflows/standard-workflow-template.md" ]]
 }
 
-# 测试11: 检查紧急工作流模板存在
+# 测试12: 检查紧急工作流模板存在
 test_emergency_workflow_template() {
     [[ -f "$ROOT_DIR/templates/workflows/emergency-workflow-template.md" ]]
 }
 
-# 测试12: 检查模板包含artifact标签
+# 测试13: 检查模板包含artifact标签
 test_template_artifact_tags() {
     local template="$ROOT_DIR/templates/artifacts/prd-template.md"
     grep -q "\[artifact:PRD\]" "$template"
 }
 
-# 测试13: 检查模板包含status字段
+# 测试14: 检查模板包含status字段
 test_template_status_field() {
     local template="$ROOT_DIR/templates/artifacts/prd-template.md"
     grep -q "status:" "$template"
 }
 
-# 测试14: 检查模板包含owner字段
+# 测试15: 检查模板包含owner字段
 test_template_owner_field() {
     local template="$ROOT_DIR/templates/artifacts/prd-template.md"
     grep -q "owner:" "$template"
@@ -116,6 +121,7 @@ run_test "DesignSpec template exists" test_design_spec_template
 run_test "SystemArch template exists" test_system_arch_template
 run_test "TaskBreakdown template exists" test_task_breakdown_template
 run_test "ImplementationPlan template exists" test_implementation_plan_template
+run_test "TargetArchitectureReport template exists" test_target_architecture_report_template
 run_test "ReviewReport template exists" test_review_report_template
 run_test "TestReport template exists" test_test_report_template
 run_test "Approval template exists" test_approval_template
