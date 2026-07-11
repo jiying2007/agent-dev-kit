@@ -119,7 +119,8 @@ test_target_architecture_report_v4_sections() {
     grep -q "## Landing Protocol" "$template" &&
     grep -q "## Runtime Delivery Contract" "$template" &&
     grep -q "## Knowledge Promotion Contract" "$template" &&
-    grep -q "## State Reconciliation Contract" "$template"
+    grep -q "## State Reconciliation Contract" "$template" &&
+    grep -q "## Status Consistency Gate" "$template"
 }
 
 # 测试17: 检查TargetArchitectureReport模板包含落地成熟度等级
@@ -141,7 +142,8 @@ test_target_architecture_report_delivery_and_promotion_fields() {
     grep -q "Apply Evidence" "$template" &&
     grep -q "Health Gate" "$template" &&
     grep -q "Review Owner" "$template" &&
-    grep -q "Promotion Mode" "$template"
+    grep -q "Promotion Mode" "$template" &&
+    grep -q "Required Truth" "$template"
 }
 
 # 运行所有测试

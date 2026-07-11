@@ -99,6 +99,12 @@ handoff_to:
 |---|---|---|---|---|---|
 | [状态声明] | [SSOT] | `[验证命令]` | [何时更新] | [过期条件] | [修复动作] |
 
+## Status Consistency Gate
+
+| Gate | Required Truth | Blocks |
+|---|---|---|
+| `[状态一致性检查命令]` | [当前状态索引必须与 source、commit、runtime 和 knowledge evidence 一致] | [陈旧 in-progress 状态、commit mismatch、越级 live/knowledge 声明] |
+
 ## Issue Map
 
 | ID | Severity | Finding | Evidence | Action |
@@ -163,6 +169,7 @@ handoff_to:
 - [ ] Runtime Delivery Contract 记录 approval、dry-run、apply、health 和停止条件
 - [ ] Knowledge Promotion Contract 记录脱敏、review owner、promotion mode 和禁止动作
 - [ ] State Reconciliation Contract 记录状态声明、验证命令、过期条件和修复动作
+- [ ] Status Consistency Gate 能检查当前状态索引是否与 commit、runtime 和 knowledge evidence 一致
 - [ ] 问题地图包含 severity、evidence 和 action
 - [ ] 实施任务覆盖 P0/P1/P2 或说明为什么不适用
 - [ ] Evidence Index 至少包含一个通过证据和一个负结果或 before-fix 证据

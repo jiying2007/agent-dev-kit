@@ -112,11 +112,13 @@ check_artifacts() {
                     "## Runtime Delivery Contract"
                     "## Knowledge Promotion Contract"
                     "## State Reconciliation Contract"
+                    "## Status Consistency Gate"
                     "dry-run-verified"
                     "live-applied"
                     "knowledge-promoted"
                     "Approval Boundary"
                     "Promotion Mode"
+                    "Required Truth"
                 )
 
                 local token
