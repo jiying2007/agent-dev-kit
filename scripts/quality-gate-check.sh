@@ -103,6 +103,29 @@ check_artifacts() {
             if ! grep -q "owner:" "$ROOT_DIR/$template"; then
                 errors+=("模板缺少owner字段: $template")
             fi
+
+            if [[ "$template" == "templates/artifacts/target-architecture-report-template.md" ]]; then
+                local target_arch_tokens=(
+                    "## Architecture Operating Model"
+                    "## SSOT Matrix"
+                    "## Landing Protocol"
+                    "## Runtime Delivery Contract"
+                    "## Knowledge Promotion Contract"
+                    "## State Reconciliation Contract"
+                    "dry-run-verified"
+                    "live-applied"
+                    "knowledge-promoted"
+                    "Approval Boundary"
+                    "Promotion Mode"
+                )
+
+                local token
+                for token in "${target_arch_tokens[@]}"; do
+                    if ! grep -q --fixed-strings -- "$token" "$ROOT_DIR/$template"; then
+                        errors+=("目标架构模板缺少闭环字段: $token")
+                    fi
+                done
+            fi
         fi
     done
     

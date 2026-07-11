@@ -111,6 +111,39 @@ test_template_owner_field() {
     grep -q "owner:" "$template"
 }
 
+# 测试16: 检查TargetArchitectureReport模板包含V4闭环章节
+test_target_architecture_report_v4_sections() {
+    local template="$ROOT_DIR/templates/artifacts/target-architecture-report-template.md"
+    grep -q "## Architecture Operating Model" "$template" &&
+    grep -q "## SSOT Matrix" "$template" &&
+    grep -q "## Landing Protocol" "$template" &&
+    grep -q "## Runtime Delivery Contract" "$template" &&
+    grep -q "## Knowledge Promotion Contract" "$template" &&
+    grep -q "## State Reconciliation Contract" "$template"
+}
+
+# 测试17: 检查TargetArchitectureReport模板包含落地成熟度等级
+test_target_architecture_report_landing_levels() {
+    local template="$ROOT_DIR/templates/artifacts/target-architecture-report-template.md"
+    grep -q "report-only" "$template" &&
+    grep -q "source-staged" "$template" &&
+    grep -q "source-committed" "$template" &&
+    grep -q "dry-run-verified" "$template" &&
+    grep -q "live-applied" "$template" &&
+    grep -q "knowledge-promoted" "$template"
+}
+
+# 测试18: 检查TargetArchitectureReport模板包含运行态和知识提升门禁字段
+test_target_architecture_report_delivery_and_promotion_fields() {
+    local template="$ROOT_DIR/templates/artifacts/target-architecture-report-template.md"
+    grep -q "Approval Boundary" "$template" &&
+    grep -q "Dry-run Evidence" "$template" &&
+    grep -q "Apply Evidence" "$template" &&
+    grep -q "Health Gate" "$template" &&
+    grep -q "Review Owner" "$template" &&
+    grep -q "Promotion Mode" "$template"
+}
+
 # 运行所有测试
 echo "Running template tests..."
 echo "======================================"
@@ -130,6 +163,9 @@ run_test "Emergency workflow template exists" test_emergency_workflow_template
 run_test "Template artifact tags" test_template_artifact_tags
 run_test "Template status field" test_template_status_field
 run_test "Template owner field" test_template_owner_field
+run_test "TargetArchitectureReport V4 sections" test_target_architecture_report_v4_sections
+run_test "TargetArchitectureReport landing levels" test_target_architecture_report_landing_levels
+run_test "TargetArchitectureReport delivery and promotion fields" test_target_architecture_report_delivery_and_promotion_fields
 
 echo "======================================"
 echo "Total: $TESTS_TOTAL, Passed: $TESTS_PASSED, Failed: $TESTS_FAILED"

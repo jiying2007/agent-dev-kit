@@ -54,6 +54,51 @@ handoff_to:
 |---|---|---|
 | [决策类型] | [证据/报告/registry] | [agent/skill/workflow/template/script/test] |
 
+## Architecture Operating Model
+
+| Loop | Entry | Decision Owner | Write Target | Gate | Exit |
+|---|---|---|---|---|---|
+| Source Intake | [来源或触发] | [owner] | [registry/report] | [门禁] | adopt / watch / reject |
+| Decision Evidence | [候选能力或结论] | [owner] | [evidence artifact] | [证据门禁] | traceable decision |
+| Asset Productization | [已采纳能力] | [asset owner] | [neutral asset] | [asset validation] | source asset committed |
+| Runtime Delivery | [目标运行态] | [target owner] | [handoff evidence] | [dry-run/apply/health gate] | dry-run-verified / live-applied |
+| Knowledge Feedback | [长期结论] | [knowledge owner] | [archive/candidate] | [review + sanitization gate] | knowledge-promoted / kept-candidate |
+
+## SSOT Matrix
+
+| Fact Type | SSOT | Readers Should Treat As | Update Rule |
+|---|---|---|---|
+| [事实类型] | [权威文件/系统] | [读取语义] | [更新规则] |
+
+## Landing Protocol
+
+| Level | Name | Required Evidence | Allowed Claim | Forbidden Claim |
+|---:|---|---|---|---|
+| L0 | report-only | [报告或分析] | 设计已提出 | 已提交、已应用、已归档 |
+| L1 | source-staged | [staged diff + 定向门禁] | source 变更已准备提交 | source 已提交或 live 已刷新 |
+| L2 | source-committed | [commit + post-commit gate] | source 资产已进入仓库历史 | live runtime 已刷新 |
+| L3 | dry-run-verified | [build/plan/apply dry-run evidence] | live 计划已验证 | live runtime 已刷新 |
+| L4 | live-applied | [apply + routing/health checks] | live runtime 已更新 | 长期知识已生效 |
+| L5 | knowledge-promoted | [review + archive/active evidence] | 长期知识已生效 | 未审查 candidate 已生效 |
+
+## Runtime Delivery Contract
+
+| Target | Source Chain | Approval Boundary | Dry-run Evidence | Apply Evidence | Health Gate | Rollback / Stop Condition |
+|---|---|---|---|---|---|---|
+| [runtime target] | [source -> build -> live target] | [谁批准 live write] | [dry-run artifact] | [apply artifact 或 N/A] | [health command] | [回滚或停止条件] |
+
+## Knowledge Promotion Contract
+
+| Candidate | Target Domain | Sanitization | Review Owner | Promotion Mode | Evidence | Forbidden Action |
+|---|---|---|---|---|---|---|
+| [candidate id] | [domain/topic] | [脱敏结论] | [owner] | candidate / archive / active | [check/promote evidence] | [禁止动作] |
+
+## State Reconciliation Contract
+
+| State Claim | Source of Truth | Verification Command | Update Trigger | Stale Condition | Repair Action |
+|---|---|---|---|---|---|
+| [状态声明] | [SSOT] | `[验证命令]` | [何时更新] | [过期条件] | [修复动作] |
+
 ## Issue Map
 
 | ID | Severity | Finding | Evidence | Action |
@@ -112,6 +157,12 @@ handoff_to:
 - [ ] 当前架构地图可追溯到源事实
 - [ ] 目标架构不混入运行态私有路径或一次性事实
 - [ ] 职责边界清晰，说明哪些内容进入治理仓，哪些进入中立资产
+- [ ] Architecture Operating Model 说明从来源、决策、资产化、运行态交付到知识反馈的闭环
+- [ ] SSOT Matrix 明确每类事实的权威来源、读取语义和更新规则
+- [ ] Landing Protocol 区分 report-only、source-staged、source-committed、dry-run-verified、live-applied 和 knowledge-promoted
+- [ ] Runtime Delivery Contract 记录 approval、dry-run、apply、health 和停止条件
+- [ ] Knowledge Promotion Contract 记录脱敏、review owner、promotion mode 和禁止动作
+- [ ] State Reconciliation Contract 记录状态声明、验证命令、过期条件和修复动作
 - [ ] 问题地图包含 severity、evidence 和 action
 - [ ] 实施任务覆盖 P0/P1/P2 或说明为什么不适用
 - [ ] Evidence Index 至少包含一个通过证据和一个负结果或 before-fix 证据
