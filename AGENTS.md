@@ -248,18 +248,16 @@ Spark → Tasks → Build → Ship
 
 ---
 
-## 当前资产边界（2026-05-17）
+## 当前资产边界
 
 ### 功能定位
 adk 是面向通用 Agent/Skill/Workflow/Profile 的生产资产包。核心目标：把本仓认可的方法论压实为可交接到显式 tool target、可验证、可回滚、可迭代的工程资产，不绑定单一运行时。
 
 ### 资产统计
-- Agents: 16 个角色
-- Core Skills: 47 个
-- Optional Skills: 9 个
-- Profiles: 9 个
-- Workflows: 1 个
-- MCP servers: 显式空清单，默认不隐式安装 MCP
+
+- Agent、Core Skill、Optional Skill、Profile、Workflow 和 MCP server 的数量以 `manifest.yaml` 为单一事实源，不在本文件硬编码。
+- 结构与数量复核使用 `bash scripts/devkit.sh validate --strict`、`bash scripts/devkit.sh catalog build` 和 `bash scripts/health-check.sh check-all --summary-json`。
+- MCP server 保持显式清单；空清单表示默认不隐式安装 MCP。
 
 ### 硬边界
 1. 不直接把 adk 资产安装到未声明或未审查的运行时目录。
