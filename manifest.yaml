@@ -1,4 +1,4 @@
-version: 3.0.0
+version: 3.1.0-rc.1
 locale: zh-CN
 platforms:
   - linux-embedded
@@ -1819,7 +1819,7 @@ routing:
       supporting_skills:
         - adk-token-context-governance
     - intent: parallel_agent_governance
-      intent_zh: "并行agent/多agent/子代理/并行施工/并行调度/多任务并行"
+      intent_zh: "并行agent/多agent/子代理/子代理驱动开发/并行施工/并行调度/多任务并行"
       primary_skill: adk-parallel-agent-governance
       supporting_skills:
         - adk-task-breakdown

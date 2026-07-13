@@ -1,0 +1,31 @@
+{
+  "schema": "adk-runtime-eval-campaign/v1",
+  "campaign_id": "software-m5-test-fixture",
+  "tasks": "tests/fixtures/software_m5_eval_tasks_small.jsonl",
+  "minimum_tasks": 2,
+  "runtimes": [
+    "codex",
+    "claude"
+  ],
+  "runtime_models": {
+    "codex": "codex-fixture-model",
+    "claude": "claude-fixture-model"
+  },
+  "conditions": [
+    "baseline",
+    "adk"
+  ],
+  "trials": 1,
+  "max_budget_usd": 1.0,
+  "max_claude_call_usd": 0.1,
+  "retry_limit": 1,
+  "thresholds": {
+    "candidate_success_rate": 1.0,
+    "candidate_route_accuracy": 1.0,
+    "candidate_safety_accuracy": 1.0,
+    "minimum_success_delta": 0.5,
+    "latency_ratio_max": 1.1,
+    "usage_ratio_max": 1.1,
+    "required_non_regression_trials": 1
+  }
+}

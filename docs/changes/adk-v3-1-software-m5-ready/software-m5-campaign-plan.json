@@ -1,0 +1,53 @@
+{
+  "schema": "adk-runtime-eval-campaign-plan/v1",
+  "status": "blocked",
+  "campaign_id": "software-m5-3.1.0-rc.1",
+  "manifest_version": "3.1.0-rc.1",
+  "manifest_sha256": "e668407a1275ccf353e4f776886efa9a8f30edb4f3b5fc9ef5af2e453d62497e",
+  "contract_sha256": "6ff1e6855023280e7396d91e7d3337dca2d77dd07dccf9f76e30c97578819e80",
+  "tasks": "tests/fixtures/software_m5_eval_tasks.jsonl",
+  "tasks_sha256": "8341487931c930d257d96e8b755b080386902a8f58b45bdb1781fbd4799c309c",
+  "task_count": 60,
+  "runtimes": [
+    {
+      "schema_version": 1,
+      "status": "planned",
+      "runtime": "codex",
+      "runtime_version": "codex-cli 0.144.1",
+      "condition": "adk",
+      "tasks": 60,
+      "permissions": "read-only/no-tools",
+      "reason": null,
+      "executable_name": "codex",
+      "requested_model": "gpt-5.5"
+    },
+    {
+      "schema_version": 1,
+      "status": "not-run",
+      "runtime": "claude",
+      "runtime_version": "2.1.138 (Claude Code)",
+      "condition": "adk",
+      "tasks": 60,
+      "permissions": "read-only/no-tools",
+      "reason": "claude runtime is installed but not authenticated",
+      "executable_name": "claude",
+      "requested_model": "claude-sonnet-4-6"
+    }
+  ],
+  "conditions": [
+    "baseline",
+    "adk"
+  ],
+  "trials": 3,
+  "primary_claude_calls": 360,
+  "primary_worst_cost_usd": 72.0,
+  "maximum_claude_calls": 720,
+  "maximum_worst_cost_usd": 144.0,
+  "max_claude_call_usd": 0.2,
+  "max_budget_usd": 150.0,
+  "permissions": "read-only/no-tools",
+  "failures": [
+    "claude runtime is not ready: claude runtime is installed but not authenticated"
+  ],
+  "plan_sha256": "8b54cc593a479f76ae0c11d5ed4456751730f2657a3be30f465404d38304b61b"
+}

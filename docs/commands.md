@@ -6,12 +6,12 @@ ADK core 只提供平台中立命令。`manifest.json` 是 3.0 结构化 SSOT；
 
 ## install
 
-通过可审查 plan、原子 apply 和 receipt rollback 安装 Agent/Skill。`apply` 只接受未过期、manifest digest 未漂移且无冲突的 plan；未托管目标冲突会在 plan 阶段阻断。
+通过可审查 plan、原子 apply 和 receipt rollback 安装 Agent/Skill。`apply` 只接受未过期、manifest digest 未漂移且无冲突的 plan；未托管目标冲突会在 plan 阶段阻断。新安装写入 `adk-install-receipt/v2`，对 receipt 本体、被替换资产备份和前序 receipt 做 SHA256 完整性校验；`v1` receipt 仅为 3.0 升级/回滚兼容读取，不具备新增的备份完整性声明。
 
 ```bash
 bash scripts/devkit.sh install plan --tool claude-code --target /tmp/adk-live --mode copy --profile core --output /tmp/adk-plan.json
-bash scripts/devkit.sh install apply --plan /tmp/adk-plan.json --summary-json
-bash scripts/devkit.sh install rollback --receipt /tmp/adk-live/.adk-install-receipt.json --summary-json
+bash scripts/devkit.sh install apply --plan /tmp/adk-plan.json --lock-timeout 30 --summary-json
+bash scripts/devkit.sh install rollback --receipt /tmp/adk-live/.adk-install-receipt.json --lock-timeout 30 --summary-json
 ```
 
 常用参数：
@@ -24,6 +24,7 @@ bash scripts/devkit.sh install rollback --receipt /tmp/adk-live/.adk-install-rec
 - `--target <path>`
 - `--output <plan.json>`
 - `--ttl-minutes <n>`
+- `apply/rollback --lock-timeout <seconds>`：等待同一 target 的 active writer，最大 300 秒。
 
 ## validate
 
@@ -41,12 +42,22 @@ bash scripts/devkit.sh validate --strict --summary-json
 python3 tools/migrate_manifest_v2.py --source manifest.yaml --output /tmp/manifest-v3.json
 ```
 
+## doctor
+
+只读检查 manifest、Python/PyYAML、runtime 安装与认证、CLI 版本、target 可写性和 writer lock 状态。输出只包含状态，不读取或打印凭证值。
+
+```bash
+bash scripts/devkit.sh doctor --summary-json
+bash scripts/devkit.sh doctor --require-runtime codex --require-runtime claude --summary-json
+bash scripts/devkit.sh doctor --target /tmp/adk-live --summary-json
+```
+
 ## export
 
 将 profile 资产确定性导出为目标工具格式；同一 manifest 与参数必须产生同一文件集合和 digest。
 
 ```bash
-bash scripts/devkit.sh export --target claude-code --profile core --out dist --clean
+bash scripts/devkit.sh export --target claude-code --profile core --out dist --clean --lock-timeout 30
 bash scripts/devkit.sh export --target hermes-agent --profile core --extra-profile release-hardening --out dist --clean
 bash scripts/devkit.sh export --target opencode --profile team-core --with-optional-skill adk-test-flakiness-triage --out dist --dry-run --summary-json
 ```
@@ -54,6 +65,17 @@ bash scripts/devkit.sh export --target opencode --profile team-core --with-optio
 `--target` 的取值必须来自 `manifest.json:tool_targets`。新增 direct target 前先补 manifest、转换语义、拒绝条件、回滚路径和 runtime-boundary 验证。
 
 Codex 当前不是 direct `tool_targets` 成员，因此不是 `export --target` 的合法取值；它由 `external_handoff_targets.codex` 描述为 `~/codex -> ~/.codex` source-to-live 交付链路。
+
+## lock
+
+查看 export/install/rollback/campaign 使用的 target writer lock。工具不会自动清理 stale lock；人工清理必须先读取状态，再提交完全匹配的 lock ID。
+
+```bash
+bash scripts/devkit.sh lock status --target /tmp/adk-live --summary-json
+bash scripts/devkit.sh lock clear --target /tmp/adk-live --expected-lock-id <lock-id> --summary-json
+```
+
+`lock clear` 会拒绝本机仍存活的 owner；本机已退出的 owner 可按精确 lock ID 清理，远端或无法判活的 owner 必须达到 stale 阈值后才允许清理。工具仍要求先审阅 `lock status`，不能把 clear 当作 writer 抢占机制。
 
 ## runtime-boundary
 
@@ -321,17 +343,29 @@ bash scripts/devkit.sh benchmark report --input /tmp/adk-benchmark.json --output
 
 ## eval
 
-运行 30 条确定性路由评测，或生成/执行 Codex、Claude 的只读真实运行时评测。真实运行时必须显式传 `--execute`；默认只返回执行计划，不产生模型调用费用。baseline 与 ADK 使用同一审批策略；runtime 质量门禁要求综合成功率不低于 0.85、路由准确率不低于 0.90、安全准确率不低于 0.90，且没有 runtime error。
+运行确定性路由评测，或生成/执行 Codex、Claude 的只读真实运行时评测。真实运行时必须显式传 `--execute`；默认只返回执行计划，不产生模型调用费用。baseline 与 ADK 使用同一审批策略；runtime 质量门禁要求综合成功率不低于 0.85、路由准确率不低于 0.90、安全准确率不低于 0.90，且没有 runtime error。
 
 ```bash
 bash scripts/devkit.sh eval run --suite deterministic --output /tmp/adk-eval.json --summary-json
-bash scripts/devkit.sh eval run --suite runtime --runtime codex --condition adk --limit 2 --summary-json
+bash scripts/devkit.sh eval run --suite runtime --runtime codex --model gpt-5.5 --condition adk --limit 2 --summary-json
 bash scripts/devkit.sh eval run --suite runtime --runtime claude --condition baseline --limit 2 --execute --output /tmp/adk-claude-eval.json
 bash scripts/devkit.sh eval compare --baseline /tmp/codex-baseline.json --candidate /tmp/codex-adk.json --output /tmp/codex-comparison.json
 bash scripts/devkit.sh eval report --input /tmp/adk-eval.json --output /tmp/adk-eval.md
 ```
 
 `eval compare` 只在 candidate 达到质量门禁、三个指标都不回退且至少一个指标有可测提升时通过。比较结果同时记录 baseline/candidate 的总耗时、中位数和 nearest-rank P95，但延迟是 `observational-not-gating`：单次模型运行的抖动不能替代重复实验或统计显著性分析。缺少 executable 或认证时结果必须是 `not-run`。
+
+软件 M5 campaign 使用 `manifests/software_m5_eval_contract.json`。正式契约包含 60 个任务、Codex/Claude、baseline/ADK、3 trials、显式模型、最多一次错误重试和 `$150` 硬预算；逐任务结果原子落盘，恢复时拒绝 manifest/contract/task/plan/runtime 版本漂移。
+
+```bash
+bash scripts/devkit.sh eval campaign plan --contract manifests/software_m5_eval_contract.json --summary-json
+bash scripts/devkit.sh eval campaign run --contract manifests/software_m5_eval_contract.json --state-dir /tmp/adk-m5-campaign --execute --approve-budget-usd 150 --summary-json
+bash scripts/devkit.sh eval campaign run --contract manifests/software_m5_eval_contract.json --state-dir /tmp/adk-m5-campaign --execute --approve-budget-usd 150 --resume --summary-json
+bash scripts/devkit.sh eval certify --contract manifests/software_m5_eval_contract.json --state-dir /tmp/adk-m5-campaign --output /tmp/adk-m5-certification.json
+bash scripts/devkit.sh eval campaign report --input /tmp/adk-m5-certification.json --output /tmp/adk-m5-certification.md
+```
+
+`certify` 重新派生 route/safety/status，核验每条 record hash，并要求 success、route、safety、paired bootstrap、P95、token、runtime error 和资源证据门禁全部通过。campaign 通过仍只是软件评测证据，不替代 30 天 field pilot。
 
 ## security
 
@@ -344,13 +378,16 @@ bash scripts/devkit.sh security check --summary-json
 
 ## release
 
-执行发布检查、可复现制品构建和显式 backend 发布。`publish` 不配置 backend、制品或 checksum 时必须失败；发布前会重新计算 SHA256 并核对制品名与版本，当前只支持 GitHub CLI backend。
+执行发布检查、可复现制品构建、本地升级/回滚演练和显式 backend 发布。`publish` 不配置 backend、制品或 checksum 时必须失败；发布前会重新计算 SHA256 并核对制品名与版本，当前只支持 GitHub CLI backend。
 
 ```bash
 bash scripts/devkit.sh release check
-bash scripts/devkit.sh release build --version 3.0.0 --out dist --summary-json
-bash scripts/devkit.sh release publish --version 3.0.0 --backend github --artifact dist/agent-dev-kit-3.0.0.tar.gz --dry-run
+bash scripts/devkit.sh release build --version 3.1.0-rc.1 --out dist --summary-json
+bash scripts/devkit.sh release rehearse --previous-artifact /tmp/agent-dev-kit-3.0.0.tar.gz --candidate-artifact dist/agent-dev-kit-3.1.0-rc.1.tar.gz --output /tmp/adk-release-rehearsal.json
+bash scripts/devkit.sh release publish --version 3.1.0-rc.1 --backend github --artifact dist/agent-dev-kit-3.1.0-rc.1.tar.gz --dry-run
 ```
+
+`release rehearse` 只接受 checksum 匹配且 candidate 版本更高的本地 artifact；它在临时 target 安装上一版、升级候选版、核验 receipt，再回滚并比较上一版受管资产 hash。该命令不创建 tag、不上传制品、不调用远端 backend。rehearsal、runtime smoke、timing 和 campaign state 属于 checkout 内的验证证据，不进入 source distribution，避免制品 SHA 与其自身验证报告形成循环依赖。
 
 ## version
 

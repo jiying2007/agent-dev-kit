@@ -82,6 +82,7 @@ TESTS=(
   test_convert.sh
   test_runtime_boundary.sh
   test_product_maturity_v3.sh
+  test_software_m5_ready.sh
   test_token_budget.sh
   test_token_context_governance.sh
   test_official_docs_governance.sh
@@ -125,6 +126,7 @@ QUICK_TESTS=(
   test_validate.sh
   test_runtime_boundary.sh
   test_product_maturity_v3.sh
+  test_software_m5_ready.sh
   test_token_budget.sh
   test_asset_taxonomy.sh
   test_workflow_contract.sh

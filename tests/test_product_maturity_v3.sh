@@ -2,6 +2,7 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+VERSION="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1], encoding="utf-8"))["version"])' "$ROOT_DIR/manifest.json")"
 
 [[ -f "$ROOT_DIR/manifests/manifest.schema.json" ]] || {
   echo "[FAIL] v3 manifest schema missing" >&2
@@ -26,7 +27,7 @@ if rg -q -- '--target codex' "$ROOT_DIR/.github/workflows/release.yml"; then
   exit 1
 fi
 
-if bash "$ROOT_DIR/scripts/devkit.sh" release publish --version 3.0.0 \
+if bash "$ROOT_DIR/scripts/devkit.sh" release publish --version "$VERSION" \
   >"${TMPDIR:-/tmp}/adk-v3-publish.out" 2>"${TMPDIR:-/tmp}/adk-v3-publish.err"; then
   echo "[FAIL] publish without backend unexpectedly succeeded" >&2
   exit 1
@@ -69,12 +70,12 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest import mock
 
-from agent_dev_kit import compiler
+from agent_dev_kit import compiler, release
 from agent_dev_kit.compiler import export_assets
 from agent_dev_kit.evaluation import SAFETY_POLICY, _catalog_prompt
-from agent_dev_kit.model import Manifest
+from agent_dev_kit.model import Manifest, ManifestError
 from agent_dev_kit.quality import run_benchmark
-from agent_dev_kit.release import _copy_source_distribution
+from agent_dev_kit.release import _copy_source_distribution, _write_deterministic_archive
 
 root = Path(sys.argv[1])
 manifest = Manifest.load(root)
@@ -89,7 +90,7 @@ failures = Manifest(root, invalid, root / "manifest.json").validate(strict=True)
 assert any("must be an array of strings" in item for item in failures), failures
 
 patch_version = copy.deepcopy(manifest.data)
-patch_version["version"] = "3.0.1"
+patch_version["version"] = "3.1.1"
 failures = Manifest(root, patch_version, root / "manifest.json").validate(strict=True)
 assert not any("version must" in item for item in failures), failures
 
@@ -110,11 +111,11 @@ with tempfile.TemporaryDirectory() as temp:
     marker = output / "claude-code" / "previous-export.txt"
     marker.write_text("preserve on replacement failure\n", encoding="utf-8")
     real_replace = compiler.os.replace
-    calls = {"count": 0}
 
     def fail_replacement(source, destination):
-        calls["count"] += 1
-        if calls["count"] == 2:
+        source_path = Path(source)
+        destination_path = Path(destination)
+        if destination_path == output / "claude-code" and source_path.name == "claude-code":
             raise OSError("injected export replacement failure")
         return real_replace(source, destination)
 
@@ -127,6 +128,28 @@ with tempfile.TemporaryDirectory() as temp:
             raise AssertionError("injected export replacement failure did not propagate")
     assert marker.read_text(encoding="utf-8") == "preserve on replacement failure\n"
 
+    def fail_replacement_and_recovery(source, destination):
+        source_path = Path(source)
+        destination_path = Path(destination)
+        if destination_path == output / "claude-code" and source_path.name in (
+            "claude-code",
+            "claude-code.previous",
+        ):
+            raise OSError("injected export replacement/recovery failure")
+        return real_replace(source, destination)
+
+    with mock.patch.object(compiler.os, "replace", side_effect=fail_replacement_and_recovery):
+        try:
+            export_assets(manifest, "claude-code", output, ["core"], clean=True)
+        except ManifestError as exc:
+            assert "recover previous target from" in str(exc)
+        else:
+            raise AssertionError("double export failure did not preserve recovery evidence")
+    recovery_dirs = list(output.glob(".adk-export-*"))
+    assert len(recovery_dirs) == 1, recovery_dirs
+    recovery_marker = recovery_dirs[0] / "claude-code.previous" / "previous-export.txt"
+    assert recovery_marker.read_text(encoding="utf-8") == "preserve on replacement failure\n"
+
 with tempfile.TemporaryDirectory() as temp:
     fake_root = Path(temp) / "source"
     (fake_root / "src" / "agent_dev_kit").mkdir(parents=True)
@@ -137,6 +160,21 @@ with tempfile.TemporaryDirectory() as temp:
     _copy_source_distribution(SimpleNamespace(root=fake_root), destination)
     assert (destination / "src" / "agent_dev_kit" / "core.py").is_file()
     assert not (destination / "src" / "agent_dev_kit.egg-info").exists()
+
+with tempfile.TemporaryDirectory() as temp:
+    source = Path(temp) / "source"
+    source.mkdir()
+    (source / "content.txt").write_text("candidate\n", encoding="utf-8")
+    archive = Path(temp) / "artifact.tar.gz"
+    archive.write_bytes(b"previous-valid-artifact")
+    with mock.patch.object(release.shutil, "copyfileobj", side_effect=OSError("injected archive failure")):
+        try:
+            _write_deterministic_archive(source, archive)
+        except OSError as exc:
+            assert "injected archive failure" in str(exc)
+        else:
+            raise AssertionError("archive write failure did not propagate")
+    assert archive.read_bytes() == b"previous-valid-artifact"
 PY
 
 TARGET="$TMP_DIR/live"
@@ -288,10 +326,10 @@ PY
 bash "$ROOT_DIR/scripts/devkit.sh" install rollback \
   --receipt "$IOFAIL_TARGET/.adk-install-receipt.json" >/dev/null
 
-bash "$ROOT_DIR/scripts/devkit.sh" release build --version 3.0.0 --out "$TMP_DIR/release-a" >/dev/null
-bash "$ROOT_DIR/scripts/devkit.sh" release build --version 3.0.0 --out "$TMP_DIR/release-b" >/dev/null
-cmp "$TMP_DIR/release-a/agent-dev-kit-3.0.0.tar.gz" "$TMP_DIR/release-b/agent-dev-kit-3.0.0.tar.gz"
-tar -tzf "$TMP_DIR/release-a/agent-dev-kit-3.0.0.tar.gz" >"$TMP_DIR/release-files.txt"
+bash "$ROOT_DIR/scripts/devkit.sh" release build --version "$VERSION" --out "$TMP_DIR/release-a" >/dev/null
+bash "$ROOT_DIR/scripts/devkit.sh" release build --version "$VERSION" --out "$TMP_DIR/release-b" >/dev/null
+cmp "$TMP_DIR/release-a/agent-dev-kit-$VERSION.tar.gz" "$TMP_DIR/release-b/agent-dev-kit-$VERSION.tar.gz"
+tar -tzf "$TMP_DIR/release-a/agent-dev-kit-$VERSION.tar.gz" >"$TMP_DIR/release-files.txt"
 for required in \
   source/manifest.json \
   source/src/agent_dev_kit/cli.py \
@@ -307,7 +345,11 @@ if rg -q '(__pycache__|\.egg-info)' "$TMP_DIR/release-files.txt"; then
   echo "[FAIL] release source distribution contains local build residue" >&2
   exit 1
 fi
-python3 - "$TMP_DIR/release-a/agent-dev-kit-3.0.0.tar.gz" <<'PY'
+if rg -q '(release-rehearsal\.json|codex-runtime-smoke\.json|full-test-timing\.json|software-m5-campaign-state)' "$TMP_DIR/release-files.txt"; then
+  echo "[FAIL] release source distribution contains generated local evidence" >&2
+  exit 1
+fi
+python3 - "$TMP_DIR/release-a/agent-dev-kit-$VERSION.tar.gz" <<'PY'
 import sys
 import tarfile
 
@@ -315,7 +357,7 @@ with tarfile.open(sys.argv[1], "r:gz") as archive:
     assert archive.getmember("source/scripts/devkit.sh").mode == 0o755
     assert archive.getmember("source/manifest.json").mode == 0o644
 PY
-tar -xOf "$TMP_DIR/release-a/agent-dev-kit-3.0.0.tar.gz" sbom.spdx.json >"$TMP_DIR/sbom.json"
+tar -xOf "$TMP_DIR/release-a/agent-dev-kit-$VERSION.tar.gz" sbom.spdx.json >"$TMP_DIR/sbom.json"
 python3 - "$TMP_DIR/sbom.json" <<'PY'
 import json
 import sys
@@ -327,11 +369,11 @@ assert sbom["documentDescribes"] == ["SPDXRef-Package-agent-dev-kit"], sbom
 assert any(item["name"] == "PyYAML" for item in sbom["packages"]), sbom
 assert any(item["relationshipType"] == "DEPENDS_ON" for item in sbom["relationships"]), sbom
 PY
-printf 'tamper' >>"$TMP_DIR/release-b/agent-dev-kit-3.0.0.tar.gz"
+printf 'tamper' >>"$TMP_DIR/release-b/agent-dev-kit-$VERSION.tar.gz"
 if bash "$ROOT_DIR/scripts/devkit.sh" release publish \
-  --version 3.0.0 \
+  --version "$VERSION" \
   --backend github \
-  --artifact "$TMP_DIR/release-b/agent-dev-kit-3.0.0.tar.gz" \
+  --artifact "$TMP_DIR/release-b/agent-dev-kit-$VERSION.tar.gz" \
   --dry-run >/dev/null 2>&1; then
   echo "[FAIL] publish accepted an artifact with a mismatched checksum" >&2
   exit 1

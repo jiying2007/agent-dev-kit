@@ -1,4 +1,4 @@
-"""Public ADK 3.0 command-line interface."""
+"""Public ADK 3.x command-line interface."""
 
 from __future__ import annotations
 
@@ -7,10 +7,13 @@ import json
 import os
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence
 
+from .campaign import campaign_markdown, campaign_plan, check_campaign, run_campaign
 from .compiler import export_assets
+from .doctor import run_doctor
 from .evaluation import (
     compare_runtime_reports,
     eval_markdown,
@@ -20,9 +23,11 @@ from .evaluation import (
     runtime_plan,
 )
 from .installer import apply_plan, create_plan, rollback, write_plan
+from .locking import clear_target_lock, target_lock_status
+from .matcher import main as matcher_main
 from .model import Manifest, ManifestError
 from .quality import benchmark_markdown, run_benchmark, security_check
-from .release import build_release, check_release, publish_release
+from .release import build_release, check_release, publish_release, rehearse_release
 
 
 def _discover_root() -> Path:
@@ -68,10 +73,12 @@ LEGACY_COMMANDS = {
 
 PUBLIC_COMMANDS = [
     ("validate", "校验 v3 manifest 与资产结构"),
+    ("doctor", "只读检查运行环境与 M5-ready 前置条件"),
     ("catalog", "生成或检索 Agent/Skill 目录"),
     ("match", "匹配 Skill 路由"),
     ("export", "确定性导出 direct target 资产"),
     ("install", "plan/apply/rollback 安装事务"),
+    ("lock", "检查或显式清理 target writer lock"),
     ("benchmark", "运行或展示资产平台性能基准"),
     ("security", "执行阻断式资产与发布安全检查"),
     ("eval", "运行确定性或真实运行时评测"),
@@ -93,8 +100,22 @@ def _json(value: Any) -> None:
 
 
 def _write_json(path: Path, value: Any) -> None:
+    path = path.resolve()
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    with tempfile.NamedTemporaryFile(
+        mode="w",
+        encoding="utf-8",
+        prefix="." + path.name + ".",
+        suffix=".tmp",
+        dir=str(path.parent),
+        delete=False,
+    ) as stream:
+        temp = Path(stream.name)
+        stream.write(json.dumps(value, ensure_ascii=False, indent=2) + "\n")
+    try:
+        os.replace(str(temp), str(path))
+    finally:
+        temp.unlink(missing_ok=True)
 
 
 def _help() -> None:
@@ -149,12 +170,30 @@ def _cmd_validate(argv: Sequence[str]) -> int:
     return completed.returncode
 
 
+def _cmd_doctor(argv: Sequence[str]) -> int:
+    parser = argparse.ArgumentParser(prog="devkit.sh doctor")
+    parser.add_argument("--require-runtime", action="append", choices=("codex", "claude"), default=[])
+    parser.add_argument("--target")
+    parser.add_argument("--summary-json", action="store_true")
+    args = parser.parse_args(argv)
+    result = run_doctor(
+        _manifest(),
+        required_runtimes=args.require_runtime,
+        target=Path(args.target) if args.target else None,
+    )
+    if args.summary_json:
+        _json(result)
+    else:
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+    return 0 if result["status"] == "pass" else 1
+
+
 def _cmd_catalog(argv: Sequence[str]) -> int:
     return subprocess.call(["bash", str(ROOT / "scripts" / "catalog-assets.sh")] + list(argv), cwd=str(ROOT))
 
 
 def _cmd_match(argv: Sequence[str]) -> int:
-    return subprocess.call(["bash", str(ROOT / "scripts" / "skill-match.sh")] + list(argv), cwd=str(ROOT))
+    return matcher_main(argv)
 
 
 def _cmd_export(argv: Sequence[str]) -> int:
@@ -166,6 +205,7 @@ def _cmd_export(argv: Sequence[str]) -> int:
     parser.add_argument("--out", default="dist")
     parser.add_argument("--clean", action="store_true")
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--lock-timeout", type=float, default=0.0)
     parser.add_argument("--summary-json", action="store_true")
     args = parser.parse_args(argv)
     manifest = _manifest()
@@ -178,6 +218,7 @@ def _cmd_export(argv: Sequence[str]) -> int:
         optional_skills=args.with_optional_skill,
         clean=args.clean,
         dry_run=args.dry_run,
+        lock_timeout_seconds=args.lock_timeout,
     )
     if args.summary_json:
         _json(result)
@@ -201,9 +242,11 @@ def _cmd_install(argv: Sequence[str]) -> int:
     plan.add_argument("--summary-json", action="store_true")
     apply = sub.add_parser("apply")
     apply.add_argument("--plan", required=True)
+    apply.add_argument("--lock-timeout", type=float, default=0.0)
     apply.add_argument("--summary-json", action="store_true")
     undo = sub.add_parser("rollback")
     undo.add_argument("--receipt", required=True)
+    undo.add_argument("--lock-timeout", type=float, default=0.0)
     undo.add_argument("--summary-json", action="store_true")
     args = parser.parse_args(argv)
     if args.action == "plan":
@@ -226,9 +269,31 @@ def _cmd_install(argv: Sequence[str]) -> int:
         return 0 if result["status"] == "ready" else 2
     if args.action == "apply":
         manifest = _manifest()
-        result = apply_plan(manifest, Path(args.plan).resolve())
+        result = apply_plan(manifest, Path(args.plan).resolve(), args.lock_timeout)
     else:
-        result = rollback(Path(args.receipt).resolve())
+        result = rollback(Path(args.receipt).resolve(), args.lock_timeout)
+    if args.summary_json:
+        _json(result)
+    else:
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+    return 0
+
+
+def _cmd_lock(argv: Sequence[str]) -> int:
+    parser = argparse.ArgumentParser(prog="devkit.sh lock")
+    sub = parser.add_subparsers(dest="action", required=True)
+    status = sub.add_parser("status")
+    status.add_argument("--target", required=True)
+    status.add_argument("--summary-json", action="store_true")
+    clear = sub.add_parser("clear")
+    clear.add_argument("--target", required=True)
+    clear.add_argument("--expected-lock-id", required=True)
+    clear.add_argument("--summary-json", action="store_true")
+    args = parser.parse_args(argv)
+    if args.action == "status":
+        result = target_lock_status(Path(args.target))
+    else:
+        result = clear_target_lock(Path(args.target), args.expected_lock_id)
     if args.summary_json:
         _json(result)
     else:
@@ -284,6 +349,7 @@ def _cmd_eval(argv: Sequence[str]) -> int:
     run.add_argument("--tasks", default=str(DEFAULT_TASKS))
     run.add_argument("--limit", type=int)
     run.add_argument("--runtime", choices=("codex", "claude"))
+    run.add_argument("--model")
     run.add_argument("--condition", choices=("baseline", "adk"), default="adk")
     run.add_argument("--execute", action="store_true")
     run.add_argument("--output")
@@ -296,7 +362,82 @@ def _cmd_eval(argv: Sequence[str]) -> int:
     compare.add_argument("--candidate", required=True)
     compare.add_argument("--output")
     compare.add_argument("--summary-json", action="store_true")
+    campaign = sub.add_parser("campaign")
+    campaign_sub = campaign.add_subparsers(dest="campaign_action", required=True)
+    campaign_plan_parser = campaign_sub.add_parser("plan")
+    campaign_plan_parser.add_argument(
+        "--contract", default=str(ROOT / "manifests" / "software_m5_eval_contract.json")
+    )
+    campaign_plan_parser.add_argument("--output")
+    campaign_plan_parser.add_argument("--summary-json", action="store_true")
+    campaign_run_parser = campaign_sub.add_parser("run")
+    campaign_run_parser.add_argument(
+        "--contract", default=str(ROOT / "manifests" / "software_m5_eval_contract.json")
+    )
+    campaign_run_parser.add_argument("--state-dir", required=True)
+    campaign_run_parser.add_argument("--execute", action="store_true")
+    campaign_run_parser.add_argument("--resume", action="store_true")
+    campaign_run_parser.add_argument("--approve-budget-usd", type=float)
+    campaign_run_parser.add_argument("--output")
+    campaign_run_parser.add_argument("--summary-json", action="store_true")
+    campaign_check_parser = campaign_sub.add_parser("check")
+    campaign_check_parser.add_argument(
+        "--contract", default=str(ROOT / "manifests" / "software_m5_eval_contract.json")
+    )
+    campaign_check_parser.add_argument("--state-dir", required=True)
+    campaign_check_parser.add_argument("--certify", action="store_true")
+    campaign_check_parser.add_argument("--output")
+    campaign_check_parser.add_argument("--summary-json", action="store_true")
+    campaign_report_parser = campaign_sub.add_parser("report")
+    campaign_report_parser.add_argument("--input", required=True)
+    campaign_report_parser.add_argument("--output")
+    certify = sub.add_parser("certify")
+    certify.add_argument("--contract", default=str(ROOT / "manifests" / "software_m5_eval_contract.json"))
+    certify.add_argument("--state-dir", required=True)
+    certify.add_argument("--output")
+    certify.add_argument("--summary-json", action="store_true")
     args = parser.parse_args(argv)
+    if args.action == "campaign":
+        if args.campaign_action == "report":
+            value = json.loads(Path(args.input).read_text(encoding="utf-8"))
+            text = campaign_markdown(value)
+            if args.output:
+                Path(args.output).write_text(text, encoding="utf-8")
+            else:
+                print(text, end="")
+            return 0
+        contract = Path(args.contract).resolve()
+        if args.campaign_action == "plan":
+            value = campaign_plan(_manifest(), contract)
+        elif args.campaign_action == "run":
+            if args.execute:
+                if args.approve_budget_usd is None:
+                    parser.error("--approve-budget-usd is required with campaign run --execute")
+                value = run_campaign(
+                    _manifest(),
+                    contract,
+                    Path(args.state_dir),
+                    args.approve_budget_usd,
+                    args.resume,
+                )
+            else:
+                value = campaign_plan(_manifest(), contract)
+        else:
+            value = check_campaign(
+                _manifest(), contract, Path(args.state_dir), certify=args.certify
+            )
+        if getattr(args, "output", None):
+            _write_json(Path(args.output), value)
+        if getattr(args, "summary_json", False) or not getattr(args, "output", None):
+            _json(value)
+        return 0 if value.get("status") in ("ready", "complete", "pass") else 1
+    if args.action == "certify":
+        value = check_campaign(_manifest(), Path(args.contract).resolve(), Path(args.state_dir), certify=True)
+        if args.output:
+            _write_json(Path(args.output), value)
+        if args.summary_json or not args.output:
+            _json(value)
+        return 0 if value.get("status") == "pass" else 1
     if args.action == "report":
         value = json.loads(Path(args.input).read_text(encoding="utf-8"))
         text = eval_markdown(value)
@@ -322,7 +463,7 @@ def _cmd_eval(argv: Sequence[str]) -> int:
             parser.error("--runtime is required for runtime suite")
         plan = runtime_plan(args.runtime, args.condition, len(tasks))
         value = (
-            run_runtime(_manifest(), tasks, args.runtime, args.condition)
+            run_runtime(_manifest(), tasks, args.runtime, args.condition, model=args.model)
             if args.execute and plan.get("status") == "planned"
             else plan
         )
@@ -349,11 +490,23 @@ def _cmd_release(argv: Sequence[str]) -> int:
     publish.add_argument("--repository")
     publish.add_argument("--dry-run", action="store_true")
     publish.add_argument("--summary-json", action="store_true")
+    rehearse = sub.add_parser("rehearse")
+    rehearse.add_argument("--previous-artifact", required=True)
+    rehearse.add_argument("--candidate-artifact", required=True)
+    rehearse.add_argument("--output")
+    rehearse.add_argument("--summary-json", action="store_true")
     args = parser.parse_args(argv)
     if args.action == "check":
         result = check_release(_manifest())
     elif args.action == "build":
         result = build_release(_manifest(), Path(args.out), args.version)
+    elif args.action == "rehearse":
+        result = rehearse_release(
+            Path(args.previous_artifact).resolve(),
+            Path(args.candidate_artifact).resolve(),
+        )
+        if args.output:
+            _write_json(Path(args.output), result)
     else:
         result = publish_release(
             args.version,
@@ -392,6 +545,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             return _run_legacy(command, rest)
         if command == "validate":
             return _cmd_validate(rest)
+        if command == "doctor":
+            return _cmd_doctor(rest)
         if command == "catalog":
             return _cmd_catalog(rest)
         if command == "match":
@@ -400,6 +555,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             return _cmd_export(rest)
         if command == "install":
             return _cmd_install(rest)
+        if command == "lock":
+            return _cmd_lock(rest)
         if command == "benchmark":
             return _cmd_benchmark(rest)
         if command == "security":

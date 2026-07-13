@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import gzip
+import hashlib
 import json
 import os
 import re
@@ -12,10 +13,17 @@ import sys
 import tarfile
 import tempfile
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Sequence
+from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 from .compiler import export_assets
-from .model import Manifest, ManifestError, sha256_file
+from .installer import RECEIPT_NAME, apply_plan, create_plan, rollback, write_plan
+from .model import Manifest, ManifestError, sha256_file, sha256_tree
+
+
+def _report_digest(value: Mapping[str, Any]) -> str:
+    return hashlib.sha256(
+        json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
 
 
 def check_release(manifest: Manifest) -> Dict[str, Any]:
@@ -39,15 +47,19 @@ def check_release(manifest: Manifest) -> Dict[str, Any]:
         ):
             failures.append("release version is not synchronized in {}".format(label))
 
-    mirror_check = subprocess.run(
-        [sys.executable, str(manifest.root / "tools" / "check_manifest_sync.py")],
-        cwd=str(manifest.root),
-        check=False,
-        text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    )
-    if mirror_check.returncode != 0:
+    try:
+        mirror_check = subprocess.run(
+            [sys.executable, str(manifest.root / "tools" / "check_manifest_sync.py")],
+            cwd=str(manifest.root),
+            check=False,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            timeout=30,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        mirror_check = None
+    if mirror_check is None or mirror_check.returncode != 0:
         failures.append("manifest JSON/YAML mirror is not synchronized")
 
     workflow = manifest.root / ".github" / "workflows" / "release.yml"
@@ -87,15 +99,25 @@ def _write_deterministic_archive(source: Path, archive: Path) -> None:
     archive.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.NamedTemporaryFile(prefix="adk-release-", suffix=".tar", delete=False) as temp:
         tar_path = Path(temp.name)
+    with tempfile.NamedTemporaryFile(
+        prefix="." + archive.name + ".",
+        suffix=".tmp",
+        dir=str(archive.parent),
+        delete=False,
+    ) as temp:
+        archive_temp = Path(temp.name)
     try:
         with tarfile.open(str(tar_path), mode="w", format=tarfile.PAX_FORMAT) as tar:
             for child in sorted(source.rglob("*")):
                 tar.add(str(child), arcname=child.relative_to(source).as_posix(), recursive=False, filter=_tar_filter)
-        with tar_path.open("rb") as raw, archive.open("wb") as output:
+        with tar_path.open("rb") as raw, archive_temp.open("wb") as output:
             with gzip.GzipFile(filename="", mode="wb", fileobj=output, mtime=0) as compressed:
                 shutil.copyfileobj(raw, compressed)
+        archive_temp.chmod(0o644)
+        os.replace(str(archive_temp), str(archive))
     finally:
         tar_path.unlink(missing_ok=True)
+        archive_temp.unlink(missing_ok=True)
 
 
 def _copy_source_distribution(manifest: Manifest, destination: Path) -> int:
@@ -133,6 +155,11 @@ def _copy_source_distribution(manifest: Manifest, destination: Path) -> int:
         ".pytest_cache",
         ".mypy_cache",
         ".ruff_cache",
+        "release-rehearsal.json",
+        "codex-runtime-smoke.json",
+        "full-test-timing.json",
+        "software-m5-campaign-plan.json",
+        "software-m5-campaign-state",
     )
     for relative in directories:
         source = manifest.root / relative
@@ -257,8 +284,14 @@ def build_release(manifest: Manifest, output: Path, version: Optional[str] = Non
         _write_deterministic_archive(package_root, archive)
         digest = sha256_file(archive)
         checksum = output / (archive.name + ".sha256")
-        checksum.write_text("{}  {}\n".format(digest, archive.name), encoding="ascii")
-        return {
+        checksum_temp = checksum.with_name("." + checksum.name + ".tmp")
+        try:
+            checksum_temp.write_text("{}  {}\n".format(digest, archive.name), encoding="ascii")
+            checksum_temp.chmod(0o644)
+            os.replace(str(checksum_temp), str(checksum))
+        finally:
+            checksum_temp.unlink(missing_ok=True)
+        result = {
             "schema_version": 1,
             "status": "pass",
             "version": version,
@@ -270,6 +303,7 @@ def build_release(manifest: Manifest, output: Path, version: Optional[str] = Non
             "source_distribution": True,
             "source_file_count": source_file_count,
         }
+        return result
     finally:
         shutil.rmtree(str(staging), ignore_errors=True)
 
@@ -307,7 +341,233 @@ def publish_release(
         command.extend(["--repo", repository])
     if dry_run:
         return {"status": "planned", "backend": backend, "command": command}
-    completed = subprocess.run(command, check=False, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    try:
+        completed = subprocess.run(
+            command,
+            check=False,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            timeout=300,
+        )
+    except subprocess.TimeoutExpired as exc:
+        raise ManifestError("github release timed out after 300 seconds") from exc
+    except OSError as exc:
+        raise ManifestError("github release could not start: {}".format(exc)) from exc
     if completed.returncode != 0:
         raise ManifestError("github release failed: {}".format(completed.stderr.strip()))
     return {"status": "pass", "backend": backend, "version": version, "output": completed.stdout.strip()}
+
+
+def _verify_artifact_checksum(artifact: Path) -> str:
+    artifact = artifact.resolve()
+    if not artifact.is_file():
+        raise ManifestError("release artifact is missing: {}".format(artifact))
+    checksum = artifact.with_name(artifact.name + ".sha256")
+    if not checksum.is_file():
+        raise ManifestError("release checksum is missing: {}".format(checksum))
+    fields = checksum.read_text(encoding="ascii").strip().split()
+    if len(fields) != 2 or fields[1].lstrip("*") != artifact.name:
+        raise ManifestError("release checksum file has an invalid format")
+    digest = sha256_file(artifact)
+    if fields[0].lower() != digest:
+        raise ManifestError("release checksum does not match artifact")
+    return digest
+
+
+def _extract_release(artifact: Path, destination: Path, member_limit: int = 5000) -> Path:
+    destination.mkdir(parents=True, exist_ok=False)
+    roots = set()
+    members = []
+    names = set()
+    total_size = 0
+    destination_root = destination.resolve()
+    with tarfile.open(str(artifact), mode="r:gz") as archive:
+        for member in archive:
+            if len(members) >= member_limit:
+                raise ManifestError("release archive exceeds member limit")
+            path = Path(member.name)
+            if path.is_absolute() or ".." in path.parts or not path.parts or len(member.name) > 512:
+                raise ManifestError("release archive contains an unsafe path")
+            if member.issym() or member.islnk() or not (member.isdir() or member.isfile()):
+                raise ManifestError("release archive contains an unsupported member")
+            if member.name in names:
+                raise ManifestError("release archive contains a duplicate member")
+            names.add(member.name)
+            total_size += member.size
+            if member.size > 128 * 1024 * 1024 or total_size > 512 * 1024 * 1024:
+                raise ManifestError("release archive exceeds extraction size limits")
+            roots.add(path.parts[0])
+            resolved = (destination / path).resolve()
+            try:
+                resolved.relative_to(destination_root)
+            except ValueError as exc:
+                raise ManifestError("release archive escapes extraction root") from exc
+            members.append(member)
+        for member in members:
+            archive.extract(member, path=str(destination), set_attrs=True)
+    if "manifest.json" in names:
+        return destination
+    if len(roots) == 1:
+        root = destination / next(iter(roots))
+        if (root / "manifest.json").is_file():
+            return root
+    raise ManifestError("release archive does not contain a supported ADK root layout")
+
+
+def _release_source_root(release_root: Path) -> Tuple[Manifest, Mapping[str, Any]]:
+    source_root = release_root / "source"
+    release_manifest_path = release_root / "release-manifest.json"
+    if not source_root.is_dir() or not (source_root / "manifest.json").is_file():
+        raise ManifestError("release archive does not contain its source distribution")
+    try:
+        release_manifest = json.loads(release_manifest_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ManifestError("release archive has an invalid release manifest") from exc
+    if not isinstance(release_manifest, dict) or release_manifest.get("schema_version") != 1:
+        raise ManifestError("release archive has an unsupported release manifest")
+    top_manifest = Manifest.load(release_root)
+    source_manifest = Manifest.load(source_root)
+    if top_manifest.digest != source_manifest.digest:
+        raise ManifestError("release top-level and source manifests differ")
+    if release_manifest.get("manifest_sha256") != source_manifest.digest:
+        raise ManifestError("release manifest digest does not match source manifest")
+    if release_manifest.get("version") != source_manifest.version:
+        raise ManifestError("release manifest version does not match source manifest")
+    failures = source_manifest.validate(strict=True)
+    if failures:
+        raise ManifestError("release source manifest is invalid: {}".format("; ".join(failures)))
+    return source_manifest, release_manifest
+
+
+def _prerelease_is_newer(previous: str, candidate: str) -> bool:
+    pattern = re.compile(r"^(\d+)\.(\d+)\.(\d+)(?:-([0-9A-Za-z.-]+))?(?:\+[0-9A-Za-z.-]+)?$")
+    previous_match = pattern.fullmatch(previous)
+    candidate_match = pattern.fullmatch(candidate)
+    if previous_match is None or candidate_match is None:
+        raise ManifestError("release rehearsal versions must be semantic versions")
+    previous_core = tuple(int(value) for value in previous_match.groups()[:3])
+    candidate_core = tuple(int(value) for value in candidate_match.groups()[:3])
+    if previous_core != candidate_core:
+        return candidate_core > previous_core
+    previous_pre = previous_match.group(4)
+    candidate_pre = candidate_match.group(4)
+    if previous_pre is None or candidate_pre is None:
+        return previous_pre is not None and candidate_pre is None
+    previous_parts = previous_pre.split(".")
+    candidate_parts = candidate_pre.split(".")
+    for previous_part, candidate_part in zip(previous_parts, candidate_parts):
+        if previous_part == candidate_part:
+            continue
+        previous_numeric = previous_part.isdigit()
+        candidate_numeric = candidate_part.isdigit()
+        if previous_numeric and candidate_numeric:
+            return int(candidate_part) > int(previous_part)
+        if previous_numeric != candidate_numeric:
+            return not candidate_numeric
+        return candidate_part > previous_part
+    return len(candidate_parts) > len(previous_parts)
+
+
+def _managed_hashes(target: Path) -> Dict[str, str]:
+    receipt_path = target / RECEIPT_NAME
+    try:
+        receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ManifestError("release rehearsal receipt is invalid") from exc
+    installed = receipt.get("installed")
+    if not isinstance(installed, list) or not installed:
+        raise ManifestError("release rehearsal receipt has no installed assets")
+    hashes: Dict[str, str] = {}
+    for item in installed:
+        if not isinstance(item, dict) or not isinstance(item.get("destination"), str):
+            raise ManifestError("release rehearsal receipt contains an invalid asset")
+        destination = str(item["destination"])
+        if destination in hashes:
+            raise ManifestError("release rehearsal receipt contains duplicate assets")
+        path = (target / destination).resolve()
+        try:
+            path.relative_to(target.resolve())
+        except ValueError as exc:
+            raise ManifestError("release rehearsal asset escapes target") from exc
+        if not path.exists() and not path.is_symlink():
+            raise ManifestError("release rehearsal managed asset is missing")
+        hashes[destination] = sha256_tree(path)
+    return hashes
+
+
+def rehearse_release(previous_artifact: Path, candidate_artifact: Path) -> Dict[str, Any]:
+    previous_digest = _verify_artifact_checksum(previous_artifact)
+    candidate_digest = _verify_artifact_checksum(candidate_artifact)
+    workspace = Path(tempfile.mkdtemp(prefix="adk-release-rehearsal-"))
+    try:
+        previous_root = _extract_release(previous_artifact.resolve(), workspace / "previous")
+        candidate_root = _extract_release(candidate_artifact.resolve(), workspace / "candidate")
+        previous_manifest, previous_release_manifest = _release_source_root(previous_root)
+        candidate_manifest, candidate_release_manifest = _release_source_root(candidate_root)
+        if not _prerelease_is_newer(previous_manifest.version, candidate_manifest.version):
+            raise ManifestError("candidate release must be newer than previous release")
+
+        target = workspace / "target"
+        previous_plan_path = workspace / "previous-plan.json"
+        previous_plan = create_plan(
+            previous_manifest,
+            "claude-code",
+            str(target),
+            [previous_manifest.default_profile],
+            [],
+            "copy",
+        )
+        if previous_plan["status"] != "ready":
+            raise ManifestError("previous release install plan is not ready")
+        write_plan(previous_plan, previous_plan_path)
+        previous_apply = apply_plan(previous_manifest, previous_plan_path)
+        previous_hashes = _managed_hashes(target)
+
+        candidate_plan_path = workspace / "candidate-plan.json"
+        candidate_plan = create_plan(
+            candidate_manifest,
+            "claude-code",
+            str(target),
+            [candidate_manifest.default_profile],
+            [],
+            "copy",
+        )
+        if candidate_plan["status"] != "ready":
+            raise ManifestError("candidate release upgrade plan is not ready")
+        write_plan(candidate_plan, candidate_plan_path)
+        candidate_apply = apply_plan(candidate_manifest, candidate_plan_path)
+        candidate_receipt = json.loads((target / RECEIPT_NAME).read_text(encoding="utf-8"))
+        if candidate_receipt.get("manifest_version") != candidate_manifest.version:
+            raise ManifestError("candidate receipt version does not match release")
+
+        rollback_result = rollback(target / RECEIPT_NAME)
+        restored_receipt = json.loads((target / RECEIPT_NAME).read_text(encoding="utf-8"))
+        restored_hashes = _managed_hashes(target)
+        if restored_receipt.get("manifest_version") != previous_manifest.version:
+            raise ManifestError("rollback did not restore the previous receipt")
+        if restored_hashes != previous_hashes:
+            raise ManifestError("rollback did not restore the previous managed asset hashes")
+        result = {
+            "schema_version": 1,
+            "status": "pass",
+            "previous_version": previous_manifest.version,
+            "candidate_version": candidate_manifest.version,
+            "previous_sha256": previous_digest,
+            "candidate_sha256": candidate_digest,
+            "previous_manifest_sha256": previous_release_manifest["manifest_sha256"],
+            "candidate_manifest_sha256": candidate_release_manifest["manifest_sha256"],
+            "previous_installed": previous_apply["installed"],
+            "candidate_installed": candidate_apply["installed"],
+            "rollback": {
+                "status": rollback_result["status"],
+                "removed": rollback_result["removed"],
+                "restored": rollback_result["restored"],
+            },
+            "restored_assets": len(restored_hashes),
+            "remote_publish": "not-in-scope",
+        }
+        result["report_sha256"] = _report_digest(result)
+        return result
+    finally:
+        shutil.rmtree(str(workspace), ignore_errors=True)

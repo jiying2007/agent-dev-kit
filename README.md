@@ -2,7 +2,9 @@
 
 `agent-dev-kit`（adk）是通用 Agent/Skill/Profile/Workflow 资产包。它把参考资料、官方文档和工程经验压实为可验证、可回滚、可迭代的 ADK 资产；资产可以导出到显式声明的 tool target，但 core 不绑定任何单一运行时。
 
-当前版本：`3.0.0`。
+当前版本：`3.1.0-rc.1`。
+
+当前软件状态是 **M5-ready release candidate**，不是已认证 M5：本版本提供可恢复双运行时评测、单写者并发保护、严格环境诊断和本地升级/回滚演练；最终 M5 仍要求 30 天试点、至少一个独立真实软件仓、第二位 operator 和完整 field evidence。
 
 ## 1. 定位边界
 
@@ -83,12 +85,14 @@ adk 不负责：
 
 ```bash
 bash scripts/devkit.sh validate --strict
+bash scripts/devkit.sh doctor --require-runtime codex --require-runtime claude --summary-json
 bash scripts/devkit.sh export --target claude-code --profile core --out dist --clean
 bash scripts/devkit.sh install plan --tool claude-code --profile core --target /tmp/adk-target --mode copy --output /tmp/adk-plan.json
 bash scripts/devkit.sh install apply --plan /tmp/adk-plan.json
 bash scripts/devkit.sh benchmark run --iterations 5 --summary-json
 bash scripts/devkit.sh security check --summary-json
 bash scripts/devkit.sh eval run --suite deterministic --summary-json
+bash scripts/devkit.sh eval campaign plan --contract manifests/software_m5_eval_contract.json --summary-json
 bash scripts/devkit.sh release check --summary-json
 bash scripts/devkit.sh runtime-boundary
 bash scripts/devkit.sh official-docs-governance --summary-json
@@ -123,9 +127,9 @@ bash tests/run_all.sh
 |---|---|
 | 文档说明 | `bash scripts/devkit.sh validate --strict` |
 | Agent/Skill/Profile/Manifest | `bash scripts/devkit.sh validate --strict` + `bash tests/run_all.sh --fail-fast` |
-| install/export/release 脚本 | `bash tests/test_product_maturity_v3.sh` + `bash tests/run_all.sh` |
+| install/export/release 脚本 | `bash tests/test_product_maturity_v3.sh` + `bash tests/test_software_m5_ready.sh` + `bash tests/run_all.sh` |
 | MCP/plugin/hook/automation 契约 | `bash scripts/devkit.sh official-docs-governance --summary-json` + 相关契约测试 |
-| 发布前放行 | `bash scripts/devkit.sh security check` + `bash scripts/devkit.sh release check` + `bash scripts/devkit.sh test` + rollback 说明 |
+| 发布前放行 | `bash scripts/devkit.sh security check` + `bash scripts/devkit.sh release check` + 本地 release rehearsal + `bash scripts/devkit.sh test` + rollback 说明 |
 
 没有验证证据，不声明可发布、可合并或生产可用。
 

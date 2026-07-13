@@ -20,6 +20,25 @@
 - 生命周期文档移除未落地的 `adk-*workflow` 与 `adk lifecycle` 占位入口，改为当前 `scripts/devkit.sh` 真实命令。
 - 维护文档统一使用 `adk-*` 技能名称，减少 Superpowers 迁移期命名漂移。
 
+## v3.1.0-rc.1 (2026-07-13)
+
+### 新增
+- 新增 `doctor`、`lock`、`eval campaign/certify` 和 `release rehearse` 公共入口。
+- 新增 60 任务、Codex/Claude、baseline/ADK、3 trials 的软件 M5 评测契约，固定模型、预算、重复试验和统计门槛。
+- 新增 export/install/rollback/campaign 的 portable single-writer lock，支持显式状态检查和基于 lock ID 的人工清理。
+- 新增 checksum 约束的本地 release 升级/回滚演练，校验 top/source manifest、receipt 和受管资产 hash。
+
+### 改进
+- 将确定性 matcher 收敛为一次结构化加载的 Python core，保留 `skill-match.sh` 参数、输出和退出码兼容。
+- campaign 结果逐任务原子落盘，支持 resume，并绑定 manifest、contract、tasks、frozen plan、runtime 版本、模型和 record hash。
+- Claude 主调用与一次重试的最坏费用受 `$150` 总上限约束；重试的 latency、token 和 cost 全部进入非回退门禁。
+- 安装 receipt 升级为 `v2`，校验 receipt、替换备份和前序 receipt 的 SHA256，同时保留 `v1` 升级回滚兼容。
+- runtime 调用增加有界超时和异常归一化；writer lock 禁止清理仍存活 owner，export 双重故障保留人工恢复目录。
+
+### 成熟度边界
+- `3.1.0-rc.1` 是 M5-ready release candidate，不代表已认证 M5 或 terminal maturity。
+- 最终 `3.1.0` 仍要求 30 天试点、至少一个独立真实软件仓、第二位 operator、双 runtime campaign 和完整 field evidence。
+
 ## v2.9.0 (2026-05-17)
 
 ### 破坏性变更

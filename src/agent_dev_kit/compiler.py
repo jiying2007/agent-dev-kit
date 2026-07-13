@@ -6,11 +6,13 @@ import json
 import os
 import shutil
 import tempfile
+from contextlib import nullcontext
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List, Mapping, Optional, Sequence
 
 from .model import Asset, Manifest, ManifestError, ProfileResolution, ensure_within, sha256_file
+from .locking import TargetLock
 
 
 @dataclass(frozen=True)
@@ -76,6 +78,7 @@ def export_assets(
     optional_skills: Sequence[str] = (),
     clean: bool = False,
     dry_run: bool = False,
+    lock_timeout_seconds: float = 0.0,
 ) -> Dict[str, object]:
     manifest.target(target)
     resolution = manifest.resolve_profiles(profiles, optional_skills)
@@ -89,60 +92,71 @@ def export_assets(
         ensure_within(destination, target_root, "export destination")
         planned.append((asset, destination, _render(manifest, target, asset)))
 
-    if not dry_run:
-        output_root.mkdir(parents=True, exist_ok=True)
-        staging_parent = Path(tempfile.mkdtemp(prefix=".adk-export-", dir=str(output_root)))
-        staging_target = staging_parent / target
-        try:
-            for asset, destination, content in planned:
-                relative = destination.relative_to(target_root)
-                staged = staging_target / relative
-                staged.parent.mkdir(parents=True, exist_ok=True)
-                staged.write_text(content, encoding="utf-8")
-            inventory = {
-                "schema_version": 1,
-                "manifest_version": manifest.version,
-                "manifest_sha256": manifest.digest,
-                "target": target,
-                "profiles": list(resolution.profiles),
-                "optional_skills": list(optional_skills),
-                "files": [
-                    {
-                        "kind": asset.kind,
-                        "name": asset.name,
-                        "path": destination.relative_to(target_root).as_posix(),
-                    }
-                    for asset, destination, _ in planned
-                ],
-            }
-            (staging_target / "adk-export-manifest.json").write_text(
-                json.dumps(inventory, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
-            )
-            backup_target: Optional[Path] = None
-            if target_root.exists() or target_root.is_symlink():
-                if not clean:
-                    raise ManifestError("export target exists; use --clean: {}".format(target_root))
-                backup_target = staging_parent / (target + ".previous")
-                os.replace(str(target_root), str(backup_target))
+    lock = nullcontext() if dry_run else TargetLock(target_root, "export", lock_timeout_seconds)
+    with lock:
+        if not dry_run:
+            output_root.mkdir(parents=True, exist_ok=True)
+            staging_parent = Path(tempfile.mkdtemp(prefix=".adk-export-", dir=str(output_root)))
+            staging_target = staging_parent / target
+            preserve_staging = False
             try:
-                os.replace(str(staging_target), str(target_root))
-            except Exception:
-                if backup_target is not None and (backup_target.exists() or backup_target.is_symlink()):
-                    os.replace(str(backup_target), str(target_root))
-                raise
-        finally:
-            shutil.rmtree(str(staging_parent), ignore_errors=True)
+                for asset, destination, content in planned:
+                    relative = destination.relative_to(target_root)
+                    staged = staging_target / relative
+                    staged.parent.mkdir(parents=True, exist_ok=True)
+                    staged.write_text(content, encoding="utf-8")
+                inventory = {
+                    "schema_version": 1,
+                    "manifest_version": manifest.version,
+                    "manifest_sha256": manifest.digest,
+                    "target": target,
+                    "profiles": list(resolution.profiles),
+                    "optional_skills": list(optional_skills),
+                    "files": [
+                        {
+                            "kind": asset.kind,
+                            "name": asset.name,
+                            "path": destination.relative_to(target_root).as_posix(),
+                        }
+                        for asset, destination, _ in planned
+                    ],
+                }
+                (staging_target / "adk-export-manifest.json").write_text(
+                    json.dumps(inventory, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+                )
+                backup_target: Optional[Path] = None
+                if target_root.exists() or target_root.is_symlink():
+                    if not clean:
+                        raise ManifestError("export target exists; use --clean: {}".format(target_root))
+                    backup_target = staging_parent / (target + ".previous")
+                    os.replace(str(target_root), str(backup_target))
+                try:
+                    os.replace(str(staging_target), str(target_root))
+                except Exception as replacement_error:
+                    if backup_target is not None and (backup_target.exists() or backup_target.is_symlink()):
+                        try:
+                            os.replace(str(backup_target), str(target_root))
+                        except Exception as recovery_error:
+                            preserve_staging = True
+                            raise ManifestError(
+                                "export replacement and recovery failed; recover previous target from {}"
+                                .format(backup_target)
+                            ) from recovery_error
+                    raise
+            finally:
+                if not preserve_staging:
+                    shutil.rmtree(str(staging_parent), ignore_errors=True)
 
-    files = [
-        {
-            "kind": asset.kind,
-            "name": asset.name,
-            "source": _content_file(asset).relative_to(manifest.root).as_posix(),
-            "destination": destination.relative_to(output_root).as_posix(),
-            "sha256": "dry-run" if dry_run else sha256_file(destination),
-        }
-        for asset, destination, _ in planned
-    ]
+        files = [
+            {
+                "kind": asset.kind,
+                "name": asset.name,
+                "source": _content_file(asset).relative_to(manifest.root).as_posix(),
+                "destination": destination.relative_to(output_root).as_posix(),
+                "sha256": "dry-run" if dry_run else sha256_file(destination),
+            }
+            for asset, destination, _ in planned
+        ]
     return {
         "schema_version": 1,
         "status": "planned" if dry_run else "pass",

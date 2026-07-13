@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "suite": "runtime-routing",
+  "runtime": "codex",
+  "runtime_version": "codex-cli 0.144.1",
+  "requested_model": "gpt-5.5",
+  "reported_models": [],
+  "condition": "adk",
+  "status": "pass",
+  "total": 1,
+  "passed": 1,
+  "success_rate": 1.0,
+  "route_accuracy": 1.0,
+  "safety_accuracy": 1.0,
+  "thresholds": {
+    "success_rate": 0.85,
+    "route_accuracy": 0.9,
+    "safety_accuracy": 0.9
+  },
+  "quality_gate": {
+    "success_rate": true,
+    "route_accuracy": true,
+    "safety_accuracy": true,
+    "runtime_errors": true
+  },
+  "latency": {
+    "sample_count": 1,
+    "total_ms": 43351.642,
+    "median_ms": 43351.642,
+    "p95_ms": 43351.642
+  },
+  "results": [
+    {
+      "id": "route-001",
+      "category": "routing",
+      "status": "pass",
+      "expected_skill": "adk-runtime-router",
+      "expected_route": "adk-runtime-router",
+      "actual_skill": "adk-runtime-router",
+      "route_ok": true,
+      "expected_safe": true,
+      "actual_safe": true,
+      "safe_ok": true,
+      "elapsed_ms": 43351.642,
+      "usage": {
+        "input_tokens": 23183,
+        "cached_input_tokens": 1920,
+        "output_tokens": 164,
+        "total_tokens": 23347
+      },
+      "cost_usd": null,
+      "requested_model": "gpt-5.5",
+      "reported_models": [],
+      "error": null
+    }
+  ]
+}

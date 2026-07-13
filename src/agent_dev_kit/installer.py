@@ -11,11 +11,21 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Set
 
-from .model import Manifest, ManifestError, ensure_within, sha256_tree
+from .locking import TargetLock
+from .model import (
+    Manifest,
+    ManifestError,
+    canonical_json_bytes,
+    ensure_within,
+    sha256_bytes,
+    sha256_file,
+    sha256_tree,
+)
 
 
 PLAN_SCHEMA = "adk-install-plan/v1"
-RECEIPT_SCHEMA = "adk-install-receipt/v1"
+LEGACY_RECEIPT_SCHEMA = "adk-install-receipt/v1"
+RECEIPT_SCHEMA = "adk-install-receipt/v2"
 RECEIPT_NAME = ".adk-install-receipt.json"
 
 
@@ -38,14 +48,36 @@ def _expand_target(value: str) -> Path:
     return Path(expanded).resolve()
 
 
+def _receipt_digest(data: Mapping[str, Any]) -> str:
+    content = dict(data)
+    content.pop("receipt_sha256", None)
+    return sha256_bytes(canonical_json_bytes(content))
+
+
+def _read_receipt(path: Path, label: str) -> Mapping[str, Any]:
+    if path.is_symlink():
+        raise ManifestError("{} must not be a symlink: {}".format(label, path))
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ManifestError("{} is invalid JSON: {}".format(label, path)) from exc
+    if not isinstance(data, dict):
+        raise ManifestError("{} must be a JSON object".format(label))
+    schema = data.get("schema")
+    if schema not in (LEGACY_RECEIPT_SCHEMA, RECEIPT_SCHEMA):
+        raise ManifestError("unsupported {} schema".format(label))
+    if schema == RECEIPT_SCHEMA:
+        stored_digest = data.get("receipt_sha256")
+        if not isinstance(stored_digest, str) or stored_digest != _receipt_digest(data):
+            raise ManifestError("{} digest does not match content".format(label))
+    return data
+
+
 def _load_receipt(target: Path) -> Optional[Mapping[str, Any]]:
     path = target / RECEIPT_NAME
     if not path.is_file():
         return None
-    data = json.loads(path.read_text(encoding="utf-8"))
-    if data.get("schema") != RECEIPT_SCHEMA:
-        raise ManifestError("unsupported existing install receipt")
-    return data
+    return _read_receipt(path, "existing install receipt")
 
 
 def create_plan(
@@ -219,9 +251,18 @@ def _validate_plan(manifest: Manifest, plan: Mapping[str, Any]) -> Path:
     return target
 
 
-def apply_plan(manifest: Manifest, plan_path: Path) -> Dict[str, Any]:
+def apply_plan(manifest: Manifest, plan_path: Path, lock_timeout_seconds: float = 0.0) -> Dict[str, Any]:
     plan = json.loads(plan_path.read_text(encoding="utf-8"))
-    target = _validate_plan(manifest, plan)
+    target_value = plan.get("target")
+    if not isinstance(target_value, str) or not target_value:
+        raise ManifestError("install plan target must be a non-empty string")
+    target = _expand_target(target_value)
+    with TargetLock(target, "install-apply", lock_timeout_seconds):
+        validated_target = _validate_plan(manifest, plan)
+        return _apply_validated_plan(manifest, plan, validated_target)
+
+
+def _apply_validated_plan(manifest: Manifest, plan: Mapping[str, Any], target: Path) -> Dict[str, Any]:
     target.mkdir(parents=True, exist_ok=True)
     run_id = _utc_now().strftime("%Y%m%dT%H%M%SZ") + "-" + str(plan["plan_id"])[:8]
     backup_root = ensure_within(target / ".adk-backups" / run_id, target, "backup root")
@@ -233,12 +274,14 @@ def apply_plan(manifest: Manifest, plan_path: Path) -> Dict[str, Any]:
     deployed: List[str] = []
     moved_backups: List[Dict[str, str]] = []
     previous_receipt: Optional[str] = None
+    previous_receipt_sha256: Optional[str] = None
     try:
         receipt_path = target / RECEIPT_NAME
         if receipt_path.is_file():
             previous = backup_root / RECEIPT_NAME
             shutil.copy2(str(receipt_path), str(previous))
             previous_receipt = previous.relative_to(target).as_posix()
+            previous_receipt_sha256 = sha256_file(previous)
         for operation in plan["operations"]:
             source = manifest.root / operation["source"]
             destination = target / operation["destination"]
@@ -250,11 +293,13 @@ def apply_plan(manifest: Manifest, plan_path: Path) -> Dict[str, Any]:
                 os.symlink(str(source), str(staged), target_is_directory=True)
 
             backup_relative: Optional[str] = None
+            backup_sha256: Optional[str] = None
             if destination.exists() or destination.is_symlink():
                 backup = backup_root / operation["destination"]
                 backup.parent.mkdir(parents=True, exist_ok=True)
                 shutil.move(str(destination), str(backup))
                 backup_relative = backup.relative_to(target).as_posix()
+                backup_sha256 = sha256_tree(backup)
                 moved_backups.append({"destination": operation["destination"], "backup": backup_relative})
             destination.parent.mkdir(parents=True, exist_ok=True)
             os.replace(str(staged), str(destination))
@@ -267,6 +312,7 @@ def apply_plan(manifest: Manifest, plan_path: Path) -> Dict[str, Any]:
                     "source_sha256": operation["source_sha256"],
                     "installed_sha256": sha256_tree(destination),
                     "backup": backup_relative,
+                    "backup_sha256": backup_sha256,
                 }
             )
 
@@ -281,8 +327,10 @@ def apply_plan(manifest: Manifest, plan_path: Path) -> Dict[str, Any]:
             "target": str(target),
             "backup_root": backup_root.relative_to(target).as_posix(),
             "previous_receipt": previous_receipt,
+            "previous_receipt_sha256": previous_receipt_sha256,
             "installed": installed,
         }
+        receipt["receipt_sha256"] = _receipt_digest(receipt)
         temp_receipt = target / (RECEIPT_NAME + ".tmp")
         temp_receipt.write_text(json.dumps(receipt, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         os.replace(str(temp_receipt), str(receipt_path))
@@ -305,10 +353,19 @@ def apply_plan(manifest: Manifest, plan_path: Path) -> Dict[str, Any]:
         shutil.rmtree(str(staging_root), ignore_errors=True)
 
 
-def rollback(receipt_path: Path) -> Dict[str, Any]:
-    receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
-    if receipt.get("schema") != RECEIPT_SCHEMA:
-        raise ManifestError("unsupported rollback receipt schema")
+def rollback(receipt_path: Path, lock_timeout_seconds: float = 0.0) -> Dict[str, Any]:
+    initial = _read_receipt(receipt_path, "rollback receipt")
+    target_value = initial.get("target")
+    if not isinstance(target_value, str) or not target_value:
+        raise ManifestError("rollback receipt target must be a non-empty string")
+    target = _expand_target(target_value)
+    with TargetLock(target, "install-rollback", lock_timeout_seconds):
+        return _rollback_locked(receipt_path)
+
+
+def _rollback_locked(receipt_path: Path) -> Dict[str, Any]:
+    receipt = _read_receipt(receipt_path, "rollback receipt")
+    receipt_schema = receipt.get("schema")
     target = _expand_target(str(receipt.get("target", "")))
     resolved_receipt = ensure_within(receipt_path, target, "receipt path")
     expected_receipt = (target / RECEIPT_NAME).resolve(strict=False)
@@ -336,13 +393,25 @@ def rollback(receipt_path: Path) -> Dict[str, Any]:
             backup = ensure_within(target / str(backup_value), target, "rollback backup")
             if not backup.exists() and not backup.is_symlink():
                 raise ManifestError("rollback backup missing: {}".format(backup))
+            if receipt_schema == RECEIPT_SCHEMA:
+                backup_sha256 = item.get("backup_sha256")
+                if not isinstance(backup_sha256, str) or sha256_tree(backup) != backup_sha256:
+                    raise ManifestError("rollback backup changed; refusing rollback: {}".format(backup))
+        elif receipt_schema == RECEIPT_SCHEMA and item.get("backup_sha256") is not None:
+            raise ManifestError("rollback receipt has a backup digest without a backup")
 
     previous_receipt_value = receipt.get("previous_receipt")
     previous_receipt: Optional[Path] = None
     if previous_receipt_value:
         previous_receipt = ensure_within(target / str(previous_receipt_value), target, "previous receipt")
-        if not previous_receipt.is_file():
+        if not previous_receipt.is_file() or previous_receipt.is_symlink():
             raise ManifestError("previous install receipt is missing")
+        if receipt_schema == RECEIPT_SCHEMA:
+            previous_receipt_sha256 = receipt.get("previous_receipt_sha256")
+            if not isinstance(previous_receipt_sha256, str) or sha256_file(previous_receipt) != previous_receipt_sha256:
+                raise ManifestError("previous install receipt changed; refusing rollback")
+    elif receipt_schema == RECEIPT_SCHEMA and receipt.get("previous_receipt_sha256") is not None:
+        raise ManifestError("rollback receipt has a previous receipt digest without a previous receipt")
 
     receipt_id = str(receipt.get("receipt_id", ""))
     if not receipt_id:

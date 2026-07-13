@@ -73,6 +73,12 @@ test_routing_parallel_agent_governance() {
     [[ "$output" == *"match=true"* && "$output" == *"skill=adk-parallel-agent-governance"* ]]
 }
 
+test_routing_parallel_agent_over_driver_phrase() {
+    local output
+    output=$("$MATCH_SCRIPT" --text "子代理驱动开发并复审" 2>&1) || true
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-parallel-agent-governance"* ]]
+}
+
 test_routing_worktree_governance() {
     local output
     output=$("$MATCH_SCRIPT" --text "需要创建 worktree 做隔离分支开发" 2>&1) || true
@@ -196,6 +202,7 @@ run_test "新功能自然语言 -> adk-requirements-triage" test_routing_feature
 run_test "测试矩阵 -> adk-test-strategy" test_routing_test_strategy
 run_test "review 反馈闭环 -> adk-code-review-loop" test_routing_code_review_loop
 run_test "多 agent 并行 -> adk-parallel-agent-governance" test_routing_parallel_agent_governance
+run_test "子代理驱动开发 -> adk-parallel-agent-governance" test_routing_parallel_agent_over_driver_phrase
 run_test "worktree 隔离 -> adk-worktree-governance" test_routing_worktree_governance
 run_test "分支收尾 -> adk-branch-closeout" test_routing_branch_closeout
 run_test "任务太大 -> adk-task-breakdown" test_routing_task_breakdown
