@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "status": "not-run",
+  "runtime": "claude",
+  "condition": "baseline",
+  "tasks": 30,
+  "executable": "/home/leiwenjun/.local/bin/claude",
+  "permissions": "read-only/no-tools",
+  "reason": "claude runtime is installed but not authenticated"
+}

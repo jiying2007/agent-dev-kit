@@ -22,7 +22,7 @@ SKILL.md 是 skill 的入口文件，应保持精简（严格门禁 ≤140 行�
 - 把最关键的使用场景放在前半句；skill 列表被截断或缩短时，仍能保留可路由信息。
 - 具体说明任务场景，避免“优化流程”“提升质量”这类空泛描述。
 - 能与相邻 skill 区分，避免多个 skill 同时争抢 primary。
-- 与 `triggers`、`non_triggers` 和 `manifest.yaml` routing 语义一致。
+- 与 `triggers`、`non_triggers` 和 `manifest.json` routing 语义一致。
 - 不得包含 `TODO`、`TBD`、`待补充`、`示例技能` 等占位内容。
 - 高风险 skill 应在 description 或 constraints 中体现运行边界。
 - 如果 skill 需要 MCP、hook、CLI、外部服务或写操作，description 不直接承诺权限；权限边界进入 manifest、runbook 或 `agents/openai.yaml` 依赖声明。

@@ -278,7 +278,7 @@ bash scripts/version-manager.sh upgrade --target 3.0.0
 ### 3. 发布执行
 ```bash
 # 1. 锁定当前稳定版本
-bash scripts/version-manager.sh lock --version 2.9.0
+bash scripts/version-manager.sh lock --version 3.0.0
 
 # 2. 生成变更日志
 bash scripts/version-manager.sh changelog

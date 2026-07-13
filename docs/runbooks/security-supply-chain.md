@@ -27,7 +27,7 @@
 - 安全研究、逆向、抓取、动态 Hook、浏览器自动化、CDP 断点、反混淆和重放验证类资产默认高风险；必须先确认授权范围、目标域名、数据留存、速率限制、敏感信息脱敏和人工兜底流程。
 - GUI/Computer Use/桌面或移动端自动化默认高风险；启用前必须使用低权限隔离账户、显式应用白名单，拒绝系统设置、终端、钥匙串/凭据库等敏感应用，并对删除、系统快捷键、外发和支付类动作保留人工确认。
 - 对抗性目标、绕过风控、未授权数据提取、Cookie/账号复用、支付/身份/生产系统探测等场景不得通过通用 Skill 自动化执行。
-- 外部 AGENTS/CLAUDE/GEMINI 配置分享中的 MCP server、provider relay、API key、hook、命令行安装片段和平台协作命令默认属于运行态连接器候选；只能登记为 report-only，不能复制到 `manifest.yaml`、profile 或目标运行目录。
+- 外部 AGENTS/CLAUDE/GEMINI 配置分享中的 MCP server、provider relay、API key、hook、命令行安装片段和平台协作命令默认属于运行态连接器候选；只能登记为 report-only，不能复制到 `manifest.json`、profile 或目标运行目录。
 - 团队协作类 Skill 若涉及共享记忆、权限、消息网关、多平台适配或多人写入，必须单独审查 memory scope、access control、adapter parity、audit log、禁用路径和 rollback。未证明隔离、权限和跨平台输出一致性前，不得进入默认 profile。
 - 外部记忆后端、跨工具会话索引、LLM wiki、MCP memory provider、embedding 服务和数据库适配层默认按运行态连接器审查。必须声明数据驻留位置、凭据来源、namespace 隔离、写入权限、备份/回滚、日志脱敏、删除能力和禁用路径；未完成前只能作为 `report-only` 架构参考。
 - 会写入用户目录、重建运行时目录、创建符号链接投影、安装 marketplace 包、配置消息机器人、开启 cron/hook/web server 或远程命令执行的教程，默认 `reject`，除非另有完整供应链和运行态权限审查。
@@ -54,7 +54,7 @@ bash scripts/devkit.sh validate --strict
 - MCP/server/API relay 未声明信任边界前不得启用工具调用。
 - 高风险工具缺少 `templates/security/tool-call-policy.md` 同类策略时不得进入生产 profile。
 - 模型升级或工具守卫生成若缺少本地回归、拒绝样例和 owner 审核证据，不得进入默认 profile。
-- 只有营销数据、榜单热度或教程截图，没有版本锚点、许可证和验证证据时，不得进入 `manifest.yaml` 或生产 profile。
+- 只有营销数据、榜单热度或教程截图，没有版本锚点、许可证和验证证据时，不得进入 `manifest.json` 或生产 profile。
 - 私有仓库只证明分发范围受控；若缺少管理员审核记录、自动扫描结果或 rollback 证据，不得作为 `global-ready` Skill 安装来源。
 - 动态采集类工具必须默认静态优先、低预算、摘要输出和完整证据落盘；只有在授权明确、静态证据不足且人工确认后，才允许升级到动态执行。
 - 未审查的 verification command、dependency audit 或安装命令不得进入默认门禁；含 `unsafe_shell_tokens` 的命令必须先人工拆解为参数化命令或保持 report-only。

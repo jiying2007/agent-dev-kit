@@ -175,7 +175,7 @@ bash tests/run_all.sh
 
 ```bash
 # 锁定当前稳定版本
-bash scripts/version-manager.sh lock --version 2.9.0
+bash scripts/version-manager.sh lock --version 3.0.0
 ```
 
 ### 2. 版本升级

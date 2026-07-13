@@ -2,7 +2,7 @@
 
 ## 核心流程（默认）
 
-Workflow 是一等资产。生产级 Workflow 必须在 `manifest.yaml:workflows` 中登记，并提供 `workflows/<name>/WORKFLOW.md` 作为可审查契约。manifest 负责导出索引、profile 闭包和主/辅 Agent/Skill 关系；`WORKFLOW.md` 负责阶段、工件、失败处理和质量门禁说明。
+Workflow 是一等资产。生产级 Workflow 必须在 `manifest.json:workflows` 中登记，并提供 `workflows/<name>/WORKFLOW.md` 作为可审查契约。manifest 负责导出索引、profile 闭包和主/辅 Agent/Skill 关系；`WORKFLOW.md` 负责阶段、工件、失败处理和质量门禁说明。
 
 当前默认 Workflow：
 
@@ -57,7 +57,7 @@ Workflow manifest 必须声明 `command_risk`，取值为 `low`、`medium` 或 `
 
 ## 场景建议
 
-说明：下列 `Skill` 列表是人工 runbook 摘要，按 `Primary -> Supporting` 排列；第一个为主技能，其余只补充检查项，不抢占入口。场景级 SSOT 是 `manifest.yaml:skill_routing_matrix` 和 `docs/reference/skill-routing-matrix.md`；若本节与 routing matrix 不一致，以 routing matrix 为准。若场景需要多个可选技能，必须先确认 profile/安装范围，再执行匹配。
+说明：下列 `Skill` 列表是人工 runbook 摘要，按 `Primary -> Supporting` 排列；第一个为主技能，其余只补充检查项，不抢占入口。场景级 SSOT 是 `manifest.json:skill_routing_matrix` 和 `docs/reference/skill-routing-matrix.md`；若本节与 routing matrix 不一致，以 routing matrix 为准。若场景需要多个可选技能，必须先确认 profile/安装范围，再执行匹配。
 
 ### 场景 A：新功能迭代
 
@@ -248,7 +248,7 @@ Workflow manifest 必须声明 `command_risk`，取值为 `low`、`medium` 或 `
 
 - Agent：`build-release-engineer -> test-validation-engineer -> code-review-governor`
 - Skill：`adk-release-versioning + adk-verification-before-completion + adk-commit-pr-quality-gate`
-- 命令：`validate -> install --backup --install-report -> runtime-boundary -> check-adk-harden-readiness`
+- 命令：`validate -> install plan -> install apply -> runtime-boundary -> security -> release check`
 - 关键纪律：生产安装必须可回滚，并记录安装报告
 - Runbook：`docs/runbooks/production-deployment.md`
 

@@ -19,7 +19,8 @@ adk 不直接替代具体运行时的全局策略文件，也不默认写任何�
 | 路径 | 职责 | 维护要求 |
 |---|---|---|
 | `AGENTS.md` | 本仓协作规则和安全边界 | 规则变化后跑相关门禁 |
-| `manifest.yaml` | Agent/Skill/Profile/tool target/workflow 单一事实源 | 修改后跑 strict validate 和 profile/workflow 检查 |
+| `manifest.json` | Agent/Skill/Profile/tool target/workflow 结构化单一事实源 | 修改后跑 schema、mirror、strict validate 和 profile/workflow 检查 |
+| `manifest.yaml` | 旧 shell parser 兼容镜像 | 不独立修改；与 JSON 语义漂移会阻断 validate |
 | `agents/` | 角色 Agent 定义 | 保持职责单一，不写平台专属安装路径 |
 | `skills/` | core skills | 入口短读，长证据放 references 或 docs |
 | `optional-skills/` | 可选 skills | 默认不进入 core profile |
@@ -31,7 +32,7 @@ adk 不直接替代具体运行时的全局策略文件，也不默认写任何�
 ## 3. 日常维护循环
 
 1. 明确本次变更范围、非目标和验收命令。
-2. 修改 `manifest.yaml`、agents、skills、docs 或 scripts。
+2. 修改 `manifest.json`、agents、skills、docs 或 scripts，并同步生成兼容镜像。
 3. 先跑定向检查。
 4. 再跑共享门禁。
 5. 记录验证证据、风险和回滚方式。
@@ -45,7 +46,9 @@ bash scripts/devkit.sh official-docs-governance --summary-json
 bash scripts/devkit.sh workflow-closure --profile core
 bash scripts/devkit.sh goal check --summary-json
 bash scripts/devkit.sh capability health --summary-json
-bash scripts/devkit.sh perf budget --summary-json
+bash scripts/devkit.sh benchmark run --iterations 5 --summary-json
+bash scripts/devkit.sh security check --summary-json
+bash scripts/devkit.sh release check --summary-json
 bash tests/run_all.sh --fail-fast
 ```
 
@@ -56,10 +59,10 @@ bash tests/run_all.sh --fail-fast
 | README、usage、commands、runbook | `bash scripts/devkit.sh validate --strict` + 相关文档测试 | 防止文档与 CLI 漂移 |
 | Agent/Skill 内容 | `bash scripts/devkit.sh validate --strict` + `bash tests/run_all.sh --fail-fast` | 覆盖 frontmatter、触发和质量规则 |
 | Profile/manifest | `bash scripts/devkit.sh validate --strict` + `bash scripts/devkit.sh workflow-closure --profile core` | 防止未知引用和 profile 闭包漂移 |
-| 目标/功能/性能契约 | `bash scripts/devkit.sh goal check --summary-json` + `bash scripts/devkit.sh capability health --summary-json` + `bash scripts/devkit.sh perf budget --summary-json` | 防止目标、能力和预算只停留在文档声明 |
-| install/convert/runtime 脚本 | 相关单测 + `bash tests/run_all.sh` | 防止交付路径回归 |
+| 目标/功能/性能契约 | `bash scripts/devkit.sh goal check --summary-json` + `bash scripts/devkit.sh capability health --summary-json` + `bash scripts/devkit.sh benchmark run --summary-json` | 防止目标、能力和预算只停留在文档声明 |
+| install/export/release 脚本 | `bash tests/test_product_maturity_v3.sh` + `bash tests/run_all.sh` | 防止交付路径回归 |
 | MCP/plugin/hook/automation 契约 | `bash scripts/devkit.sh official-docs-governance --summary-json` + 安全审查 | 默认 report-only |
-| 发布前 | `bash scripts/devkit.sh test` | 必须带 rollback note |
+| 发布前 | `bash scripts/devkit.sh security check` + `bash scripts/devkit.sh release check` + `bash scripts/devkit.sh test` | 必须带 rollback note |
 
 ## 5. Runtime Boundary
 
@@ -80,8 +83,8 @@ bash scripts/devkit.sh runtime-boundary --summary-json
 
 如果确需新增 target：
 
-1. 在 `manifest.yaml:tool_targets` 声明 target。
-2. 补齐 install/convert 语义、默认根目录、agents/skills 输出目录和 detect 规则。
+1. 在 `manifest.json:tool_targets` 声明 target。
+2. 补齐 install/export adapter 语义、agents/skills 输出目录和 detect 规则。
 3. 补充安全边界、dry-run、禁用路径和回滚路径。
 4. 更新 `docs/commands.md` 与 `docs/usage.md`。
 5. 增加定向测试后跑全量回归。
@@ -112,7 +115,7 @@ bash scripts/devkit.sh runtime-boundary --summary-json
 回滚前先确认：
 
 1. 受影响文件、target 和 profile。
-2. 是否存在转换输出、安装报告、release note 或备份。
+2. 是否存在 export inventory、install receipt、release note 或备份。
 3. 是否需要用户确认覆盖目标目录。
 4. 回滚后运行哪些验证命令。
 
@@ -125,7 +128,7 @@ bash scripts/devkit.sh runtime-boundary --summary-json
 - 变更摘要。
 - 验证命令和结果。
 - runtime-boundary 结论。
-- 若涉及 `perf`、`ops` 或测试运行器，附 summary-json、report-only 或 timing 证据。
+- 若涉及 benchmark、eval 或测试运行器，附 summary-json、runtime availability 或 timing 证据。
 - 若涉及官方资料，附 freshness/governance 结论。
 - 若涉及外部能力，附安全边界和回滚方式。
 - 剩余风险或未处理项。

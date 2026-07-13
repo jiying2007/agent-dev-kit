@@ -27,7 +27,7 @@ bash scripts/validate-assets.sh --strict
 bash scripts/check-format.sh
 
 # 3. 检查必需文件
-ls -la manifest.yaml CONTEXT.md README.md
+ls -la manifest.json manifest.yaml CONTEXT.md README.md
 ```
 
 #### 问题：GitHub Actions 报 `command not found`
@@ -265,7 +265,7 @@ bash scripts/health-check.sh check-all
 
 ```bash
 # 锁定当前稳定版本
-bash scripts/version-manager.sh lock --version 2.9.0
+bash scripts/version-manager.sh lock --version 3.0.0
 ```
 
 ### 4. 测试验证

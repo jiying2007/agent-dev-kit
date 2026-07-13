@@ -15,7 +15,7 @@
 
 1. 在临时目标验证核心能力：
    ```bash
-   bash scripts/devkit.sh convert --target claude-code --profile core --out /tmp/adk-handoff --clean
+   bash scripts/devkit.sh export --target claude-code --profile core --out /tmp/adk-handoff --clean
    ```
 2. 创建变更工件并进入 `propose -> apply`。
 3. 在变更工件中补齐三类标签：

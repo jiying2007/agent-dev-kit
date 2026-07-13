@@ -17,8 +17,8 @@ must degrade explicitly.
 ## Compatibility Rules
 
 - AGENTS-style policy, skills and runbooks are portable as text assets.
-- Direct export compatibility is claimed only for entries in `manifest.yaml:tool_targets`.
-- Codex compatibility is claimed as external handoff compatibility through `manifest.yaml:external_handoff_targets.codex`, not `convert --target codex`.
+- Direct export compatibility is claimed only for entries in `manifest.json:tool_targets`.
+- Codex compatibility is claimed as external handoff compatibility through `manifest.json:external_handoff_targets.codex`, not `export --target codex`.
 - OpenAI/Codex references in governance docs are provenance and method sources, not runtime enablement.
 - Workflow scripts remain adk-local unless the target runtime has an equivalent
   script entrypoint.

@@ -131,7 +131,8 @@ done < <(
     -g '!check-official-docs-governance.sh' \
     -g '!check-runtime-capabilities.sh' \
     -g '!validate-assets.sh' \
-    -g '!test_runtime_boundary.sh' || true
+    -g '!test_runtime_boundary.sh' \
+    -g '!test_product_maturity_v3.sh' || true
 )
 
 if [[ "${#failures[@]}" -gt 0 ]]; then

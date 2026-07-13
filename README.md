@@ -2,11 +2,11 @@
 
 `agent-dev-kit`（adk）是通用 Agent/Skill/Profile/Workflow 资产包。它把参考资料、官方文档和工程经验压实为可验证、可回滚、可迭代的 ADK 资产；资产可以导出到显式声明的 tool target，但 core 不绑定任何单一运行时。
 
-当前版本：`2.9.0`。
+当前版本：`3.0.0`。
 
 ## 1. 定位边界
 
-adk 的核心定位是“平台中立的 Agent 开发套件”。当前主力验证场景是嵌入式全栈开发，但嵌入式能力通过 `embedded-fullstack` profile 和领域技能承载，不把某个运行平台写成 core 前提。
+adk 的核心定位是“平台中立的 Agent 资产编译与交付控制面”。当前主力验证场景是嵌入式全栈开发，但嵌入式能力通过 `embedded-fullstack` profile 和领域技能承载，不把某个运行平台写成 core 前提。ADK 不实现 LLM 推理循环、session scheduler 或生产 Agent runtime。
 
 adk 负责：
 
@@ -47,16 +47,17 @@ adk 不负责：
 
 | 类型 | 入口 |
 |---|---|
-| Manifest | `manifest.yaml` |
+| Manifest SSOT | `manifest.json` + `manifests/manifest.schema.json` |
+| YAML compatibility mirror | `manifest.yaml`（受语义同步门禁约束） |
 | Agents | `agents/<name>/AGENTS.md` |
 | Core skills | `skills/<name>/SKILL.md` |
 | Optional skills | `optional-skills/<name>/SKILL.md` |
-| Workflows | `manifest.yaml:workflows` |
+| Workflows | `manifest.json:workflows` |
 | Governance manifests | `manifests/*.json` |
 | Runbooks | `docs/runbooks/` |
 | Tests | `tests/run_all.sh` |
 
-当前 tool targets 在 `manifest.yaml:tool_targets` 声明：
+当前 direct tool targets 在 `manifest.json:tool_targets` 声明：
 
 - `claude-code`
 - `hermes-agent`
@@ -82,8 +83,13 @@ adk 不负责：
 
 ```bash
 bash scripts/devkit.sh validate --strict
-bash scripts/devkit.sh install --tool claude-code --profile core --target /tmp/adk-target --mode copy
-bash scripts/devkit.sh convert --target claude-code --profile core --out dist --clean
+bash scripts/devkit.sh export --target claude-code --profile core --out dist --clean
+bash scripts/devkit.sh install plan --tool claude-code --profile core --target /tmp/adk-target --mode copy --output /tmp/adk-plan.json
+bash scripts/devkit.sh install apply --plan /tmp/adk-plan.json
+bash scripts/devkit.sh benchmark run --iterations 5 --summary-json
+bash scripts/devkit.sh security check --summary-json
+bash scripts/devkit.sh eval run --suite deterministic --summary-json
+bash scripts/devkit.sh release check --summary-json
 bash scripts/devkit.sh runtime-boundary
 bash scripts/devkit.sh official-docs-governance --summary-json
 bash scripts/devkit.sh test
@@ -97,6 +103,8 @@ bash scripts/devkit.sh test
 - `docs/runbooks/workspace-maintenance-guide.md`：维护与发布前检查。
 - `docs/runbooks/mcp-governance.md`：MCP、plugin、automation 外部能力准入。
 - `docs/reference/openai-developers-reference.md`：OpenAI 官方资料采纳记录，作为 provenance/reference，不作为 core 运行时绑定。
+
+Python core 可以构建为 wheel 供集成测试或二次开发使用；资产本体仍由独立 ADK checkout/release bundle 管理。使用已安装的 `adk` console script 执行资产命令时，应在 checkout 内运行或设置 `ADK_ROOT=/path/to/agent-dev-kit`，找不到资产根目录会明确失败。仅依赖外部工件的 `install rollback`、`eval compare` 和 `release publish` 不要求 checkout，可从非仓库 cwd 执行。
 
 ## 6. 质量门禁
 
@@ -115,9 +123,9 @@ bash tests/run_all.sh
 |---|---|
 | 文档说明 | `bash scripts/devkit.sh validate --strict` |
 | Agent/Skill/Profile/Manifest | `bash scripts/devkit.sh validate --strict` + `bash tests/run_all.sh --fail-fast` |
-| install/convert/runtime 脚本 | 相关单测 + `bash tests/run_all.sh` |
+| install/export/release 脚本 | `bash tests/test_product_maturity_v3.sh` + `bash tests/run_all.sh` |
 | MCP/plugin/hook/automation 契约 | `bash scripts/devkit.sh official-docs-governance --summary-json` + 相关契约测试 |
-| 发布前放行 | `bash scripts/devkit.sh test` + rollback 说明 |
+| 发布前放行 | `bash scripts/devkit.sh security check` + `bash scripts/devkit.sh release check` + `bash scripts/devkit.sh test` + rollback 说明 |
 
 没有验证证据，不声明可发布、可合并或生产可用。
 

@@ -6,36 +6,42 @@ on:
       - 'v*'
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   package:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: '3.8'
 
       - name: Install CI dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y ripgrep
+          python -m pip install 'PyYAML>=5.3,<7'
 
       - name: Validate and smoke
         run: |
-          bash scripts/validate-assets.sh --strict
+          bash scripts/devkit.sh validate --strict
           bash scripts/check-format.sh
           bash tests/run_all.sh
+          bash scripts/devkit.sh security check
+          bash scripts/devkit.sh release check
 
-      - name: Build cross-tool bundles
-        run: |
-          bash scripts/convert-assets.sh --target codex --profile embedded-fullstack --out dist --clean
-          bash scripts/convert-assets.sh --target claude-code --profile embedded-fullstack --out dist --clean
-          bash scripts/convert-assets.sh --target hermes-agent --profile embedded-fullstack --out dist --clean
-          bash scripts/convert-assets.sh --target opencode --profile embedded-fullstack --out dist --clean
-
-      - name: Archive release bundle
-        run: tar -czf agent-dev-kit-dist.tar.gz dist
+      - name: Build reproducible release
+        run: bash scripts/devkit.sh release build --out dist
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: agent-dev-kit-dist
-          path: agent-dev-kit-dist.tar.gz
+          path: |
+            dist/*.tar.gz
+            dist/*.sha256

@@ -2,7 +2,21 @@
   "schema_version": "1.0.0",
   "last_updated": "2026-06-29",
   "scope_model": "report-first-performance-budgets",
-  "boundary": "Performance budgets are local, report-only by default, and become blocking only when --strict is used with fresh timing evidence.",
+    "boundary": "Performance budgets are local, report-only by default, and become blocking only when --strict is used with fresh timing evidence.",
+    "platform_operations": {
+        "manifest_validate": {
+            "max_p95_ms": 200.0,
+            "scope": "strict typed manifest validation without legacy shell gates"
+        },
+        "profile_resolve": {
+            "max_p95_ms": 50.0,
+            "scope": "embedded-fullstack profile inheritance and asset resolution"
+        },
+        "export_plan": {
+            "max_p95_ms": 100.0,
+            "scope": "Claude Code core export dry-run"
+        }
+    },
   "budgets": [
     {
       "budget_id": "quick-test-loop",

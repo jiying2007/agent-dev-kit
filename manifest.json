@@ -1,0 +1,2671 @@
+{
+  "version": "3.0.0",
+  "locale": "zh-CN",
+  "platforms": [
+    "linux-embedded",
+    "mcu-baremetal",
+    "mcu-rtos"
+  ],
+  "reference_sources": {
+    "openai-developers": {
+      "display_name": "OpenAI Developers",
+      "source_type": "official-docs",
+      "boundary": "citation-provenance-governance-only",
+      "runtime_enablement": false,
+      "governance_manifest": "manifests/official_docs_freshness_gates.json"
+    },
+    "codex-runtime-methods": {
+      "display_name": "Codex Runtime Methods",
+      "source_type": "runtime-docs",
+      "boundary": "method-only-reference",
+      "runtime_enablement": false,
+      "governance_manifest": "manifests/codex_surface_terms.json"
+    }
+  },
+  "external_handoff_targets": {
+    "codex": {
+      "display_name": "Codex",
+      "runtime": "codex",
+      "handoff_mode": "source-to-live",
+      "direct_tool_target": false,
+      "handoff_chain": "~/codex -> ~/.codex",
+      "owner_review_required": true,
+      "default_enabled": false,
+      "notes": "Codex support is delivered through the external ~/codex source-to-live chain, not ADK direct export.",
+      "must_not": [
+        "direct-write-live-home",
+        "direct-convert-target",
+        "implicit-tool-target",
+        "enable-hooks-plugins-mcp-without-owner-review"
+      ]
+    }
+  },
+  "tool_targets": {
+    "claude-code": {
+      "display_name": "Claude Code",
+      "default_root": "~/.claude",
+      "agents_dir": "agents",
+      "skills_dir": "skills",
+      "detect": [
+        "~/.claude"
+      ]
+    },
+    "hermes-agent": {
+      "display_name": "Hermes Agent",
+      "default_root": "~/.hermes",
+      "agents_dir": "agents",
+      "skills_dir": "skills",
+      "detect": [
+        "~/.hermes"
+      ]
+    },
+    "opencode": {
+      "display_name": "OpenCode",
+      "default_root": "~/.config/opencode",
+      "agents_dir": "agents",
+      "skills_dir": "skills",
+      "detect": [
+        "~/.config/opencode"
+      ]
+    }
+  },
+  "quality_tiers": {
+    "p0": {
+      "description": "核心主干资产，必须具备可执行流程与验收证据模板"
+    },
+    "p1": {
+      "description": "稳定扩展资产，必须具备命令、样例和质量门禁"
+    },
+    "p2": {
+      "description": "可选场景资产，必须具备边界说明和最小验证路径"
+    }
+  },
+  "asset_taxonomy": {
+    "skill_categories": [
+      {
+        "name": "routing",
+        "lifecycle_order": 10,
+        "description": "运行时路由、profile 选择和上下文入口"
+      },
+      {
+        "name": "intake",
+        "lifecycle_order": 20,
+        "description": "需求收敛、问题澄清和验收定义"
+      },
+      {
+        "name": "planning",
+        "lifecycle_order": 30,
+        "description": "计划、任务拆解、并行治理和长任务执行闭环"
+      },
+      {
+        "name": "design",
+        "lifecycle_order": 40,
+        "description": "架构、接口、协议和契约设计"
+      },
+      {
+        "name": "implementation",
+        "lifecycle_order": 50,
+        "description": "具体实现方法、领域开发、构建和工具接入"
+      },
+      {
+        "name": "debugging",
+        "lifecycle_order": 60,
+        "description": "根因定位、日志、core、设备调试和性能诊断"
+      },
+      {
+        "name": "verification",
+        "lifecycle_order": 70,
+        "description": "测试策略、完成前验证和证据检查"
+      },
+      {
+        "name": "review_quality",
+        "lifecycle_order": 80,
+        "description": "review、提交、PR、静态分析和漂移治理"
+      },
+      {
+        "name": "release_closure",
+        "lifecycle_order": 90,
+        "description": "发布、版本、分支收口、交接和复盘"
+      },
+      {
+        "name": "governance",
+        "lifecycle_order": 100,
+        "description": "skill、profile、workflow、归档、记忆和知识治理"
+      }
+    ],
+    "workflow_types": [
+      {
+        "name": "feature-delivery",
+        "lifecycle_order": 10,
+        "description": "新功能和增强交付闭环"
+      },
+      {
+        "name": "bugfix-delivery",
+        "lifecycle_order": 20,
+        "description": "缺陷复现、根因定位、修复和回归闭环"
+      },
+      {
+        "name": "refactor-delivery",
+        "lifecycle_order": 30,
+        "description": "重构、接口稳定性和回归闭环"
+      },
+      {
+        "name": "embedded-bringup-delivery",
+        "lifecycle_order": 40,
+        "description": "BSP、驱动、设备 bring-up 和板级验证闭环"
+      },
+      {
+        "name": "diagnostic-delivery",
+        "lifecycle_order": 50,
+        "description": "诊断、日志、core 和现场问题闭环"
+      },
+      {
+        "name": "release-hardening",
+        "lifecycle_order": 60,
+        "description": "发布、版本、回滚和放行证据闭环"
+      },
+      {
+        "name": "incident-response",
+        "lifecycle_order": 70,
+        "description": "事故响应、恢复和复盘闭环"
+      },
+      {
+        "name": "research-intake",
+        "lifecycle_order": 80,
+        "description": "外部资料、参考仓和候选实践吸收闭环"
+      },
+      {
+        "name": "skill-curation-delivery",
+        "lifecycle_order": 90,
+        "description": "skill 新增、替换、弃用和触发治理闭环"
+      },
+      {
+        "name": "archive-memory-governance",
+        "lifecycle_order": 100,
+        "description": "归档、记忆和长期知识治理闭环"
+      },
+      {
+        "name": "adk-governance",
+        "lifecycle_order": 110,
+        "description": "ADK 资产生产、分类、路由和交付门禁闭环"
+      }
+    ],
+    "skill_patterns": [
+      "tool-wrapper",
+      "generator",
+      "reviewer",
+      "inversion",
+      "pipeline",
+      "playbook",
+      "governance"
+    ],
+    "activation_modes": [
+      "primary",
+      "supporting",
+      "fallback",
+      "governance"
+    ]
+  },
+  "knowledge_layers": {
+    "L0": {
+      "name": "toolchain",
+      "description": "工具链配置知识（外部 agent runtime 与工具配置参考）",
+      "location": "knowledge/L0-toolchain/"
+    },
+    "L1": {
+      "name": "general-tech",
+      "description": "通用技术知识（语言、框架、算法、设计模式）",
+      "location": "knowledge/L1-general-tech/"
+    },
+    "L2": {
+      "name": "domain",
+      "description": "业务领域知识（芯片/板级、启动链、BSP、驱动、RTOS、协议栈、量产现场）",
+      "location": "knowledge/L2-domain/"
+    },
+    "L3": {
+      "name": "project",
+      "description": "项目上下文（架构决策、设计模式、历史决策）",
+      "location": "knowledge/L3-project/"
+    },
+    "L4": {
+      "name": "session",
+      "description": "会话上下文（临时状态，不持久化）",
+      "location": "knowledge/L4-session/"
+    }
+  },
+  "context_layers": {
+    "L1-always-loaded": {
+      "description": "会话常驻层（始终加载）",
+      "max_tokens": 4000,
+      "files": [
+        "AGENTS.md",
+        "docs/best-practices.md",
+        "docs/workflows.md"
+      ]
+    },
+    "L2-phase-triggered": {
+      "description": "阶段触发层（按阶段加载）",
+      "triggers": {
+        "route": [
+          "skills/adk-runtime-router/"
+        ],
+        "propose": [
+          "skills/adk-runtime-router/",
+          "skills/adk-requirements-triage/",
+          "skills/adk-adr-writer/"
+        ],
+        "apply": [
+          "skills/adk-code-simplification/",
+          "skills/adk-unit-test-embedded/"
+        ],
+        "verify": [
+          "skills/adk-verification-before-completion/"
+        ],
+        "review": [
+          "skills/adk-chinese-code-review/"
+        ]
+      }
+    },
+    "L3-on-demand": {
+      "description": "按需查询层（按需加载）",
+      "sources": [
+        "knowledge/L2-domain/datasheets/",
+        "knowledge/L2-domain/oops-patterns/",
+        "knowledge/L2-domain/bsp-history/",
+        "knowledge/L2-domain/errata/"
+      ]
+    }
+  },
+  "embedded_context_layers": {
+    "L1-always-loaded": {
+      "description": "嵌入式会话常驻层",
+      "max_tokens": 4000,
+      "files": [
+        "AGENTS.md",
+        "docs/embedded-constraints.md",
+        "docs/hardware-interaction-rules.md"
+      ]
+    },
+    "L2-phase-triggered": {
+      "description": "嵌入式阶段触发层",
+      "triggers": {
+        "bsp-analysis": [
+          "skills/adk-bsp-porting-playbook/",
+          "knowledge/L2-domain/datasheets/"
+        ],
+        "driver-development": [
+          "skills/adk-driver-bringup-checklist/",
+          "skills/adk-interrupt-dma-patterns/"
+        ],
+        "debugging": [
+          "skills/adk-embedded-remote-debug-log-triage/",
+          "skills/adk-systematic-debugging/",
+          "knowledge/L2-domain/oops-patterns/"
+        ]
+      }
+    },
+    "L3-on-demand": {
+      "description": "嵌入式按需查询层",
+      "sources": [
+        "knowledge/L2-domain/datasheets/",
+        "knowledge/L2-domain/errata/",
+        "knowledge/L2-domain/bsp-history/"
+      ]
+    }
+  },
+  "knowledge_types": {
+    "rules": {
+      "description": "必须遵守的约束和规范",
+      "location": "rules/"
+    },
+    "patterns": {
+      "description": "可复用的解决方案和设计模式",
+      "location": "skills/"
+    },
+    "cases": {
+      "description": "具体的实现示例和代码片段",
+      "location": "templates/"
+    },
+    "experiences": {
+      "description": "踩坑记录和最佳实践",
+      "location": "docs/explorations/"
+    },
+    "indexes": {
+      "description": "知识的元数据和导航",
+      "location": "docs/reference/"
+    }
+  },
+  "knowledge_maturity": {
+    "draft": {
+      "description": "初始记录，未经验证"
+    },
+    "verified": {
+      "description": "经过实践验证"
+    },
+    "mature": {
+      "description": "被广泛引用，稳定可靠"
+    }
+  },
+  "agents": [
+    {
+      "name": "requirements-analyst",
+      "path": "agents/requirements-analyst/AGENTS.md",
+      "quality_tier": "p0",
+      "description": "需求澄清、验收标准和范围边界分析",
+      "owns": [
+        "需求边界",
+        "验收标准"
+      ],
+      "does_not_own": [
+        "代码实现",
+        "发布操作"
+      ],
+      "handoff_to": [
+        "architecture-planner",
+        "test-validation-engineer",
+        "code-review-governor"
+      ],
+      "default_skills": [
+        "adk-requirements-triage",
+        "adk-task-breakdown"
+      ],
+      "quality_gate": "目标、非目标、影响面、验收标准和风险必须可验证"
+    },
+    {
+      "name": "architecture-planner",
+      "path": "agents/architecture-planner/AGENTS.md",
+      "quality_tier": "p0",
+      "description": "架构方案、模块边界和技术决策规划",
+      "owns": [
+        "架构边界",
+        "接口决策"
+      ],
+      "does_not_own": [
+        "直接编码",
+        "发布签核"
+      ],
+      "handoff_to": [
+        "component-engineer",
+        "driver-engineer",
+        "code-review-governor"
+      ],
+      "default_skills": [
+        "adk-interface-contract-design",
+        "adk-adr-writer"
+      ],
+      "quality_gate": "设计必须包含接口、兼容性、迁移和回退边界"
+    },
+    {
+      "name": "driver-engineer",
+      "path": "agents/driver-engineer/AGENTS.md",
+      "quality_tier": "p0",
+      "description": "驱动实现、bring-up 和底层联调",
+      "owns": [
+        "驱动实现",
+        "bring-up 证据"
+      ],
+      "does_not_own": [
+        "产品需求裁剪",
+        "发布放行"
+      ],
+      "handoff_to": [
+        "test-validation-engineer",
+        "code-review-governor"
+      ],
+      "default_skills": [
+        "adk-driver-implementation",
+        "adk-driver-bringup-checklist",
+        "adk-systematic-debugging"
+      ],
+      "quality_gate": "驱动变更必须绑定硬件约束、验证证据和回归路径"
+    },
+    {
+      "name": "component-engineer",
+      "path": "agents/component-engineer/AGENTS.md",
+      "quality_tier": "p0",
+      "description": "组件接口、模块实现和集成边界治理",
+      "owns": [
+        "组件接口",
+        "模块实现"
+      ],
+      "does_not_own": [
+        "需求验收口径",
+        "发布版本策略"
+      ],
+      "handoff_to": [
+        "test-validation-engineer",
+        "code-review-governor"
+      ],
+      "default_skills": [
+        "adk-interface-contract-design",
+        "adk-component-api-stability"
+      ],
+      "quality_gate": "组件变更必须保留 API 稳定性和集成验证证据"
+    },
+    {
+      "name": "application-engineer",
+      "path": "agents/application-engineer/AGENTS.md",
+      "quality_tier": "p0",
+      "description": "设备侧应用、上位机工具和业务逻辑实现",
+      "owns": [
+        "应用逻辑",
+        "工具行为"
+      ],
+      "does_not_own": [
+        "架构最终裁决",
+        "发布放行"
+      ],
+      "handoff_to": [
+        "test-validation-engineer",
+        "code-review-governor"
+      ],
+      "default_skills": [
+        "adk-systematic-debugging",
+        "adk-unit-test-embedded"
+      ],
+      "quality_gate": "应用行为变更必须包含用户路径、错误路径和回归证据"
+    },
+    {
+      "name": "build-release-engineer",
+      "path": "agents/build-release-engineer/AGENTS.md",
+      "quality_tier": "p0",
+      "description": "构建、打包、版本发布和回滚链路",
+      "owns": [
+        "构建打包",
+        "发布回滚"
+      ],
+      "does_not_own": [
+        "需求变更",
+        "安全风险豁免"
+      ],
+      "handoff_to": [
+        "security-compliance-reviewer",
+        "performance-reliability-engineer"
+      ],
+      "default_skills": [
+        "adk-release-versioning",
+        "adk-commit-pr-quality-gate"
+      ],
+      "quality_gate": "发布必须绑定版本、制品、校验、回滚和放行证据"
+    },
+    {
+      "name": "test-validation-engineer",
+      "path": "agents/test-validation-engineer/AGENTS.md",
+      "quality_tier": "p0",
+      "description": "测试策略、验证证据和完成前门禁",
+      "owns": [
+        "测试策略",
+        "验证证据"
+      ],
+      "does_not_own": [
+        "功能实现",
+        "风险豁免"
+      ],
+      "handoff_to": [
+        "code-review-governor",
+        "build-release-engineer"
+      ],
+      "default_skills": [
+        "adk-test-strategy",
+        "adk-verification-before-completion"
+      ],
+      "quality_gate": "完成结论必须与验证命令、退出码和证据路径一致"
+    },
+    {
+      "name": "performance-reliability-engineer",
+      "path": "agents/performance-reliability-engineer/AGENTS.md",
+      "quality_tier": "p0",
+      "description": "性能剖析、稳定性和可靠性风险治理",
+      "owns": [
+        "性能分析",
+        "可靠性风险"
+      ],
+      "does_not_own": [
+        "功能需求裁决",
+        "安全签核"
+      ],
+      "handoff_to": [
+        "build-release-engineer",
+        "code-review-governor"
+      ],
+      "default_skills": [
+        "adk-performance-profiling-embedded",
+        "adk-fault-injection-recovery"
+      ],
+      "quality_gate": "性能和可靠性结论必须包含基线、负载条件和对比证据"
+    },
+    {
+      "name": "security-compliance-reviewer",
+      "path": "agents/security-compliance-reviewer/AGENTS.md",
+      "quality_tier": "p0",
+      "description": "安全、合规、凭据和供应链风险审查",
+      "owns": [
+        "安全审查",
+        "供应链风险"
+      ],
+      "does_not_own": [
+        "功能实现",
+        "发布执行"
+      ],
+      "handoff_to": [
+        "build-release-engineer",
+        "code-review-governor"
+      ],
+      "default_skills": [
+        "adk-static-analysis-c-cpp",
+        "adk-commit-pr-quality-gate"
+      ],
+      "quality_gate": "高风险项必须修复、降级或显式记录风险接受"
+    },
+    {
+      "name": "code-review-governor",
+      "path": "agents/code-review-governor/AGENTS.md",
+      "quality_tier": "p0",
+      "description": "代码审查、反馈闭环和质量放行治理",
+      "owns": [
+        "审查分级",
+        "放行判断"
+      ],
+      "does_not_own": [
+        "直接修复代码",
+        "发布执行"
+      ],
+      "handoff_to": [
+        "requirements-analyst",
+        "test-validation-engineer"
+      ],
+      "default_skills": [
+        "adk-code-review-loop",
+        "adk-commit-pr-quality-gate"
+      ],
+      "quality_gate": "blocker 必须修复或明确风险接受后才能放行"
+    },
+    {
+      "name": "bsp-analyst",
+      "path": "agents/bsp-analyst/AGENTS.md",
+      "quality_tier": "p1",
+      "description": "BSP 代码分析、架构梳理、历史追溯",
+      "owns": [
+        "BSP 分析",
+        "历史追溯"
+      ],
+      "does_not_own": [
+        "驱动实现",
+        "发布放行"
+      ],
+      "handoff_to": [
+        "driver-engineer",
+        "architecture-planner"
+      ],
+      "default_skills": [
+        "adk-bsp-analysis",
+        "adk-bsp-porting-playbook"
+      ],
+      "quality_gate": "BSP 结论必须包含入口、依赖、风险和追溯证据"
+    },
+    {
+      "name": "hardware-debugger",
+      "path": "agents/hardware-debugger/AGENTS.md",
+      "quality_tier": "p1",
+      "description": "硬件故障定位、oops 分析和板级调试证据整理",
+      "owns": [
+        "硬件故障定位",
+        "oops 分析"
+      ],
+      "does_not_own": [
+        "长期架构设计",
+        "发布放行"
+      ],
+      "handoff_to": [
+        "driver-engineer",
+        "test-validation-engineer"
+      ],
+      "default_skills": [
+        "adk-hardware-debugging",
+        "adk-embedded-remote-debug-log-triage",
+        "adk-systematic-debugging"
+      ],
+      "quality_gate": "硬件调试结论必须包含现象、假设、实验和证据"
+    }
+  ],
+  "skills": [
+    {
+      "name": "adk-runtime-router",
+      "path": "skills/adk-runtime-router/SKILL.md",
+      "quality_tier": "p0",
+      "category": "routing",
+      "lifecycle_order": 10,
+      "stage_order": 10,
+      "activation_mode": "primary",
+      "pattern": "governance",
+      "depends_on": []
+    },
+    {
+      "name": "adk-context-engineering",
+      "path": "skills/adk-context-engineering/SKILL.md",
+      "quality_tier": "p0",
+      "category": "routing",
+      "lifecycle_order": 10,
+      "stage_order": 20,
+      "activation_mode": "primary",
+      "pattern": "governance",
+      "depends_on": []
+    },
+    {
+      "name": "adk-token-context-governance",
+      "path": "skills/adk-token-context-governance/SKILL.md",
+      "quality_tier": "p0",
+      "category": "routing",
+      "lifecycle_order": 10,
+      "stage_order": 30,
+      "activation_mode": "primary",
+      "pattern": "governance",
+      "depends_on": [
+        "adk-context-engineering"
+      ]
+    },
+    {
+      "name": "adk-requirements-triage",
+      "path": "skills/adk-requirements-triage/SKILL.md",
+      "quality_tier": "p0",
+      "category": "intake",
+      "lifecycle_order": 20,
+      "stage_order": 10,
+      "activation_mode": "primary",
+      "pattern": "playbook",
+      "depends_on": []
+    },
+    {
+      "name": "adk-structured-requirements-questioning",
+      "path": "skills/adk-structured-requirements-questioning/SKILL.md",
+      "quality_tier": "p0",
+      "category": "intake",
+      "lifecycle_order": 20,
+      "stage_order": 20,
+      "activation_mode": "primary",
+      "pattern": "inversion",
+      "depends_on": []
+    },
+    {
+      "name": "adk-repo-prompt-analysis",
+      "path": "skills/adk-repo-prompt-analysis/SKILL.md",
+      "quality_tier": "p0",
+      "category": "intake",
+      "lifecycle_order": 20,
+      "stage_order": 30,
+      "activation_mode": "primary",
+      "pattern": "reviewer",
+      "depends_on": []
+    },
+    {
+      "name": "adk-skill-deep-analysis",
+      "path": "skills/adk-skill-deep-analysis/SKILL.md",
+      "quality_tier": "p0",
+      "category": "intake",
+      "lifecycle_order": 20,
+      "stage_order": 40,
+      "activation_mode": "primary",
+      "pattern": "reviewer",
+      "depends_on": []
+    },
+    {
+      "name": "adk-intake-workflow",
+      "path": "skills/adk-intake-workflow/SKILL.md",
+      "quality_tier": "p0",
+      "category": "intake",
+      "lifecycle_order": 20,
+      "stage_order": 50,
+      "activation_mode": "primary",
+      "pattern": "pipeline",
+      "depends_on": []
+    },
+    {
+      "name": "adk-lightweight-planning",
+      "path": "skills/adk-lightweight-planning/SKILL.md",
+      "quality_tier": "p1",
+      "category": "planning",
+      "lifecycle_order": 30,
+      "stage_order": 10,
+      "activation_mode": "primary",
+      "pattern": "playbook",
+      "depends_on": []
+    },
+    {
+      "name": "adk-task-breakdown",
+      "path": "skills/adk-task-breakdown/SKILL.md",
+      "quality_tier": "p0",
+      "category": "planning",
+      "lifecycle_order": 30,
+      "stage_order": 20,
+      "activation_mode": "primary",
+      "pattern": "playbook",
+      "depends_on": [
+        "adk-requirements-triage"
+      ]
+    },
+    {
+      "name": "adk-parallel-agent-governance",
+      "path": "skills/adk-parallel-agent-governance/SKILL.md",
+      "quality_tier": "p0",
+      "category": "planning",
+      "lifecycle_order": 30,
+      "stage_order": 30,
+      "activation_mode": "primary",
+      "pattern": "governance",
+      "depends_on": [
+        "adk-task-breakdown"
+      ]
+    },
+    {
+      "name": "adk-worktree-governance",
+      "path": "skills/adk-worktree-governance/SKILL.md",
+      "quality_tier": "p0",
+      "category": "planning",
+      "lifecycle_order": 30,
+      "stage_order": 40,
+      "activation_mode": "primary",
+      "pattern": "governance",
+      "depends_on": [
+        "adk-task-breakdown"
+      ]
+    },
+    {
+      "name": "adk-context-compress-handoff",
+      "path": "skills/adk-context-compress-handoff/SKILL.md",
+      "quality_tier": "p1",
+      "category": "planning",
+      "lifecycle_order": 30,
+      "stage_order": 50,
+      "activation_mode": "primary",
+      "pattern": "generator",
+      "depends_on": [
+        "adk-token-context-governance"
+      ]
+    },
+    {
+      "name": "adk-interface-contract-design",
+      "path": "skills/adk-interface-contract-design/SKILL.md",
+      "quality_tier": "p0",
+      "category": "design",
+      "lifecycle_order": 40,
+      "stage_order": 10,
+      "activation_mode": "primary",
+      "pattern": "generator",
+      "depends_on": [
+        "adk-requirements-triage"
+      ]
+    },
+    {
+      "name": "adk-adr-writer",
+      "path": "skills/adk-adr-writer/SKILL.md",
+      "quality_tier": "p1",
+      "category": "design",
+      "lifecycle_order": 40,
+      "stage_order": 20,
+      "activation_mode": "primary",
+      "pattern": "generator",
+      "depends_on": []
+    },
+    {
+      "name": "adk-component-api-stability",
+      "path": "skills/adk-component-api-stability/SKILL.md",
+      "quality_tier": "p0",
+      "category": "design",
+      "lifecycle_order": 40,
+      "stage_order": 30,
+      "activation_mode": "primary",
+      "pattern": "reviewer",
+      "depends_on": [
+        "adk-interface-contract-design"
+      ]
+    },
+    {
+      "name": "adk-register-map-design",
+      "path": "skills/adk-register-map-design/SKILL.md",
+      "quality_tier": "p0",
+      "category": "design",
+      "lifecycle_order": 40,
+      "stage_order": 40,
+      "activation_mode": "primary",
+      "pattern": "generator",
+      "depends_on": [
+        "adk-interface-contract-design"
+      ]
+    },
+    {
+      "name": "adk-bsp-analysis",
+      "path": "skills/adk-bsp-analysis/SKILL.md",
+      "quality_tier": "p1",
+      "category": "design",
+      "lifecycle_order": 40,
+      "stage_order": 50,
+      "activation_mode": "primary",
+      "pattern": "playbook",
+      "depends_on": []
+    },
+    {
+      "name": "adk-driver-implementation",
+      "path": "skills/adk-driver-implementation/SKILL.md",
+      "quality_tier": "p1",
+      "category": "implementation",
+      "lifecycle_order": 50,
+      "stage_order": 10,
+      "activation_mode": "primary",
+      "pattern": "playbook",
+      "depends_on": []
+    },
+    {
+      "name": "adk-driver-bringup-checklist",
+      "path": "skills/adk-driver-bringup-checklist/SKILL.md",
+      "quality_tier": "p0",
+      "category": "implementation",
+      "lifecycle_order": 50,
+      "stage_order": 20,
+      "activation_mode": "primary",
+      "pattern": "playbook",
+      "depends_on": [
+        "adk-register-map-design"
+      ]
+    },
+    {
+      "name": "adk-bsp-porting-playbook",
+      "path": "skills/adk-bsp-porting-playbook/SKILL.md",
+      "quality_tier": "p0",
+      "category": "implementation",
+      "lifecycle_order": 50,
+      "stage_order": 30,
+      "activation_mode": "primary",
+      "pattern": "playbook",
+      "depends_on": [
+        "adk-driver-bringup-checklist"
+      ]
+    },
+    {
+      "name": "adk-rtos-task-design",
+      "path": "skills/adk-rtos-task-design/SKILL.md",
+      "quality_tier": "p0",
+      "category": "implementation",
+      "lifecycle_order": 50,
+      "stage_order": 40,
+      "activation_mode": "primary",
+      "pattern": "playbook",
+      "depends_on": []
+    },
+    {
+      "name": "adk-interrupt-dma-patterns",
+      "path": "skills/adk-interrupt-dma-patterns/SKILL.md",
+      "quality_tier": "p0",
+      "category": "implementation",
+      "lifecycle_order": 50,
+      "stage_order": 50,
+      "activation_mode": "primary",
+      "pattern": "playbook",
+      "depends_on": []
+    },
+    {
+      "name": "adk-protocol-stack-integration",
+      "path": "skills/adk-protocol-stack-integration/SKILL.md",
+      "quality_tier": "p0",
+      "category": "implementation",
+      "lifecycle_order": 50,
+      "stage_order": 60,
+      "activation_mode": "primary",
+      "pattern": "playbook",
+      "depends_on": [
+        "adk-interface-contract-design"
+      ]
+    },
+    {
+      "name": "adk-cmake-cross-build",
+      "path": "skills/adk-cmake-cross-build/SKILL.md",
+      "quality_tier": "p0",
+      "category": "implementation",
+      "lifecycle_order": 50,
+      "stage_order": 70,
+      "activation_mode": "primary",
+      "pattern": "tool-wrapper",
+      "depends_on": []
+    },
+    {
+      "name": "adk-code-simplification",
+      "path": "skills/adk-code-simplification/SKILL.md",
+      "quality_tier": "p0",
+      "category": "implementation",
+      "lifecycle_order": 50,
+      "stage_order": 80,
+      "activation_mode": "primary",
+      "pattern": "reviewer",
+      "depends_on": []
+    },
+    {
+      "name": "adk-systematic-debugging",
+      "path": "skills/adk-systematic-debugging/SKILL.md",
+      "quality_tier": "p0",
+      "category": "debugging",
+      "lifecycle_order": 60,
+      "stage_order": 10,
+      "activation_mode": "primary",
+      "pattern": "playbook",
+      "depends_on": []
+    },
+    {
+      "name": "adk-embedded-debug-transport",
+      "path": "skills/adk-embedded-debug-transport/SKILL.md",
+      "quality_tier": "p0",
+      "category": "debugging",
+      "lifecycle_order": 60,
+      "stage_order": 20,
+      "activation_mode": "primary",
+      "pattern": "tool-wrapper",
+      "depends_on": [
+        "adk-systematic-debugging"
+      ]
+    },
+    {
+      "name": "adk-embedded-remote-debug-log-triage",
+      "path": "skills/adk-embedded-remote-debug-log-triage/SKILL.md",
+      "quality_tier": "p1",
+      "category": "debugging",
+      "lifecycle_order": 60,
+      "stage_order": 30,
+      "activation_mode": "primary",
+      "pattern": "playbook",
+      "depends_on": [
+        "adk-systematic-debugging",
+        "adk-token-context-governance"
+      ]
+    },
+    {
+      "name": "adk-offline-core-dump-triage",
+      "path": "skills/adk-offline-core-dump-triage/SKILL.md",
+      "quality_tier": "p1",
+      "category": "debugging",
+      "lifecycle_order": 60,
+      "stage_order": 40,
+      "activation_mode": "primary",
+      "pattern": "playbook",
+      "depends_on": [
+        "adk-systematic-debugging"
+      ]
+    },
+    {
+      "name": "adk-hardware-debugging",
+      "path": "skills/adk-hardware-debugging/SKILL.md",
+      "quality_tier": "p1",
+      "category": "debugging",
+      "lifecycle_order": 60,
+      "stage_order": 50,
+      "activation_mode": "primary",
+      "pattern": "playbook",
+      "depends_on": []
+    },
+    {
+      "name": "adk-performance-profiling-embedded",
+      "path": "skills/adk-performance-profiling-embedded/SKILL.md",
+      "quality_tier": "p0",
+      "category": "debugging",
+      "lifecycle_order": 60,
+      "stage_order": 60,
+      "activation_mode": "primary",
+      "pattern": "tool-wrapper",
+      "depends_on": [
+        "adk-systematic-debugging"
+      ]
+    },
+    {
+      "name": "adk-test-strategy",
+      "path": "skills/adk-test-strategy/SKILL.md",
+      "quality_tier": "p0",
+      "category": "verification",
+      "lifecycle_order": 70,
+      "stage_order": 10,
+      "activation_mode": "primary",
+      "pattern": "playbook",
+      "depends_on": [
+        "adk-runtime-router"
+      ]
+    },
+    {
+      "name": "adk-unit-test-embedded",
+      "path": "skills/adk-unit-test-embedded/SKILL.md",
+      "quality_tier": "p0",
+      "category": "verification",
+      "lifecycle_order": 70,
+      "stage_order": 20,
+      "activation_mode": "primary",
+      "pattern": "generator",
+      "depends_on": []
+    },
+    {
+      "name": "adk-integration-hil-sil",
+      "path": "skills/adk-integration-hil-sil/SKILL.md",
+      "quality_tier": "p0",
+      "category": "verification",
+      "lifecycle_order": 70,
+      "stage_order": 30,
+      "activation_mode": "primary",
+      "pattern": "playbook",
+      "depends_on": [
+        "adk-unit-test-embedded"
+      ]
+    },
+    {
+      "name": "adk-embedded-diagnostic-harness",
+      "path": "skills/adk-embedded-diagnostic-harness/SKILL.md",
+      "quality_tier": "p0",
+      "category": "verification",
+      "lifecycle_order": 70,
+      "stage_order": 40,
+      "activation_mode": "primary",
+      "pattern": "tool-wrapper",
+      "depends_on": [
+        "adk-test-strategy",
+        "adk-integration-hil-sil"
+      ]
+    },
+    {
+      "name": "adk-fault-injection-recovery",
+      "path": "skills/adk-fault-injection-recovery/SKILL.md",
+      "quality_tier": "p0",
+      "category": "verification",
+      "lifecycle_order": 70,
+      "stage_order": 50,
+      "activation_mode": "primary",
+      "pattern": "playbook",
+      "depends_on": [
+        "adk-integration-hil-sil"
+      ]
+    },
+    {
+      "name": "adk-artifact-gating",
+      "path": "skills/adk-artifact-gating/SKILL.md",
+      "quality_tier": "p0",
+      "category": "verification",
+      "lifecycle_order": 70,
+      "stage_order": 60,
+      "activation_mode": "primary",
+      "pattern": "reviewer",
+      "depends_on": []
+    },
+    {
+      "name": "adk-pilot-framework",
+      "path": "skills/adk-pilot-framework/SKILL.md",
+      "quality_tier": "p0",
+      "category": "verification",
+      "lifecycle_order": 70,
+      "stage_order": 70,
+      "activation_mode": "primary",
+      "pattern": "pipeline",
+      "depends_on": []
+    },
+    {
+      "name": "adk-verification-before-completion",
+      "path": "skills/adk-verification-before-completion/SKILL.md",
+      "quality_tier": "p0",
+      "category": "verification",
+      "lifecycle_order": 70,
+      "stage_order": 80,
+      "activation_mode": "primary",
+      "pattern": "reviewer",
+      "depends_on": []
+    },
+    {
+      "name": "adk-chinese-commit-conventions",
+      "path": "skills/adk-chinese-commit-conventions/SKILL.md",
+      "quality_tier": "p0",
+      "category": "review_quality",
+      "lifecycle_order": 80,
+      "stage_order": 10,
+      "activation_mode": "supporting",
+      "pattern": "reviewer",
+      "depends_on": []
+    },
+    {
+      "name": "adk-chinese-code-review",
+      "path": "skills/adk-chinese-code-review/SKILL.md",
+      "quality_tier": "p0",
+      "category": "review_quality",
+      "lifecycle_order": 80,
+      "stage_order": 20,
+      "activation_mode": "supporting",
+      "pattern": "reviewer",
+      "depends_on": []
+    },
+    {
+      "name": "adk-code-review-loop",
+      "path": "skills/adk-code-review-loop/SKILL.md",
+      "quality_tier": "p0",
+      "category": "review_quality",
+      "lifecycle_order": 80,
+      "stage_order": 30,
+      "activation_mode": "primary",
+      "pattern": "reviewer",
+      "depends_on": [
+        "adk-verification-before-completion"
+      ]
+    },
+    {
+      "name": "adk-repo-drift-remediation",
+      "path": "skills/adk-repo-drift-remediation/SKILL.md",
+      "quality_tier": "p1",
+      "category": "review_quality",
+      "lifecycle_order": 80,
+      "stage_order": 40,
+      "activation_mode": "primary",
+      "pattern": "reviewer",
+      "depends_on": [
+        "adk-verification-before-completion"
+      ]
+    },
+    {
+      "name": "adk-static-analysis-c-cpp",
+      "path": "skills/adk-static-analysis-c-cpp/SKILL.md",
+      "quality_tier": "p0",
+      "category": "review_quality",
+      "lifecycle_order": 80,
+      "stage_order": 50,
+      "activation_mode": "primary",
+      "pattern": "reviewer",
+      "depends_on": []
+    },
+    {
+      "name": "adk-commit-pr-quality-gate",
+      "path": "skills/adk-commit-pr-quality-gate/SKILL.md",
+      "quality_tier": "p0",
+      "category": "review_quality",
+      "lifecycle_order": 80,
+      "stage_order": 60,
+      "activation_mode": "primary",
+      "pattern": "reviewer",
+      "depends_on": [
+        "adk-verification-before-completion"
+      ]
+    },
+    {
+      "name": "adk-release-versioning",
+      "path": "skills/adk-release-versioning/SKILL.md",
+      "quality_tier": "p0",
+      "category": "release_closure",
+      "lifecycle_order": 90,
+      "stage_order": 10,
+      "activation_mode": "primary",
+      "pattern": "generator",
+      "depends_on": [
+        "adk-commit-pr-quality-gate"
+      ]
+    },
+    {
+      "name": "adk-production-field-readiness",
+      "path": "skills/adk-production-field-readiness/SKILL.md",
+      "quality_tier": "p0",
+      "category": "release_closure",
+      "lifecycle_order": 90,
+      "stage_order": 20,
+      "activation_mode": "primary",
+      "pattern": "reviewer",
+      "depends_on": [
+        "adk-release-versioning",
+        "adk-integration-hil-sil"
+      ]
+    },
+    {
+      "name": "adk-embedded-release-orchestration",
+      "path": "skills/adk-embedded-release-orchestration/SKILL.md",
+      "quality_tier": "p0",
+      "category": "release_closure",
+      "lifecycle_order": 90,
+      "stage_order": 30,
+      "activation_mode": "primary",
+      "pattern": "pipeline",
+      "depends_on": [
+        "adk-release-versioning",
+        "adk-production-field-readiness"
+      ]
+    },
+    {
+      "name": "adk-embedded-storage-layout-migration",
+      "path": "skills/adk-embedded-storage-layout-migration/SKILL.md",
+      "quality_tier": "p1",
+      "category": "release_closure",
+      "lifecycle_order": 90,
+      "stage_order": 40,
+      "activation_mode": "primary",
+      "pattern": "pipeline",
+      "depends_on": [
+        "adk-embedded-release-orchestration",
+        "adk-production-field-readiness"
+      ]
+    },
+    {
+      "name": "adk-branch-closeout",
+      "path": "skills/adk-branch-closeout/SKILL.md",
+      "quality_tier": "p0",
+      "category": "release_closure",
+      "lifecycle_order": 90,
+      "stage_order": 60,
+      "activation_mode": "primary",
+      "pattern": "governance",
+      "depends_on": [
+        "adk-verification-before-completion"
+      ]
+    },
+    {
+      "name": "adk-after-action-review",
+      "path": "skills/adk-after-action-review/SKILL.md",
+      "quality_tier": "p0",
+      "category": "release_closure",
+      "lifecycle_order": 90,
+      "stage_order": 70,
+      "activation_mode": "primary",
+      "pattern": "reviewer",
+      "depends_on": [
+        "adk-verification-before-completion"
+      ]
+    },
+    {
+      "name": "adk-memory-curator",
+      "path": "skills/adk-memory-curator/SKILL.md",
+      "quality_tier": "p1",
+      "category": "governance",
+      "lifecycle_order": 100,
+      "stage_order": 10,
+      "activation_mode": "primary",
+      "pattern": "governance",
+      "depends_on": [
+        "adk-after-action-review",
+        "adk-token-context-governance"
+      ]
+    },
+    {
+      "name": "adk-archive-governance",
+      "path": "skills/adk-archive-governance/SKILL.md",
+      "quality_tier": "p1",
+      "category": "governance",
+      "lifecycle_order": 100,
+      "stage_order": 20,
+      "activation_mode": "primary",
+      "pattern": "governance",
+      "depends_on": [
+        "adk-verification-before-completion"
+      ]
+    },
+    {
+      "name": "adk-knowledge-archive",
+      "path": "skills/adk-knowledge-archive/SKILL.md",
+      "quality_tier": "p1",
+      "category": "governance",
+      "lifecycle_order": 100,
+      "stage_order": 30,
+      "activation_mode": "primary",
+      "pattern": "generator",
+      "depends_on": [
+        "adk-archive-governance"
+      ]
+    },
+    {
+      "name": "adk-engineering-growth-review",
+      "path": "skills/adk-engineering-growth-review/SKILL.md",
+      "quality_tier": "p1",
+      "category": "governance",
+      "lifecycle_order": 100,
+      "stage_order": 50,
+      "activation_mode": "primary",
+      "pattern": "reviewer",
+      "depends_on": [
+        "adk-after-action-review",
+        "adk-token-context-governance"
+      ]
+    }
+  ],
+  "default_profile": "core",
+  "profiles": {
+    "core": {
+      "description": "通用 ADK 核心配置（需求、架构、实现、验证与评审）",
+      "trigger_examples": [
+        "开始新功能开发",
+        "需要写代码",
+        "帮我实现这个需求"
+      ],
+      "include_agents": [
+        "requirements-analyst",
+        "architecture-planner",
+        "driver-engineer",
+        "component-engineer",
+        "test-validation-engineer",
+        "code-review-governor"
+      ],
+      "include_skills": [
+        "adk-runtime-router",
+        "adk-context-engineering",
+        "adk-token-context-governance",
+        "adk-requirements-triage",
+        "adk-structured-requirements-questioning",
+        "adk-lightweight-planning",
+        "adk-task-breakdown",
+        "adk-parallel-agent-governance",
+        "adk-worktree-governance",
+        "adk-context-compress-handoff",
+        "adk-interface-contract-design",
+        "adk-adr-writer",
+        "adk-component-api-stability",
+        "adk-driver-implementation",
+        "adk-driver-bringup-checklist",
+        "adk-systematic-debugging",
+        "adk-test-strategy",
+        "adk-unit-test-embedded",
+        "adk-verification-before-completion",
+        "adk-code-review-loop",
+        "adk-repo-drift-remediation",
+        "adk-static-analysis-c-cpp",
+        "adk-commit-pr-quality-gate",
+        "adk-branch-closeout",
+        "adk-after-action-review"
+      ]
+    },
+    "release-hardening": {
+      "description": "发布加固配置（安全审查、性能优化、合规检查）",
+      "trigger_examples": [
+        "准备发布",
+        "发布前检查",
+        "安全审查"
+      ],
+      "include_agents": [
+        "security-compliance-reviewer",
+        "performance-reliability-engineer",
+        "build-release-engineer"
+      ],
+      "include_skills": [
+        "adk-token-context-governance",
+        "adk-requirements-triage",
+        "adk-structured-requirements-questioning",
+        "adk-task-breakdown",
+        "adk-context-compress-handoff",
+        "adk-interface-contract-design",
+        "adk-systematic-debugging",
+        "adk-performance-profiling-embedded",
+        "adk-test-strategy",
+        "adk-unit-test-embedded",
+        "adk-fault-injection-recovery",
+        "adk-verification-before-completion",
+        "adk-code-review-loop",
+        "adk-repo-drift-remediation",
+        "adk-static-analysis-c-cpp",
+        "adk-commit-pr-quality-gate",
+        "adk-release-versioning",
+        "adk-embedded-release-orchestration",
+        "adk-branch-closeout",
+        "adk-after-action-review"
+      ]
+    },
+    "personal-core": {
+      "description": "个人通用 ADK 资产配置（核心功能 + 发布检查）",
+      "trigger_examples": [
+        "个人项目开发",
+        "快速原型验证"
+      ],
+      "extends": "core",
+      "include_skills": [
+        "adk-release-versioning",
+        "adk-memory-curator",
+        "adk-archive-governance",
+        "adk-knowledge-archive",
+        "adk-engineering-growth-review"
+      ]
+    },
+    "embedded-fullstack": {
+      "description": "嵌入式全栈开发配置（芯片/板级、启动链、BSP、驱动、组件、应用、工具、验证、量产和现场维护）",
+      "trigger_examples": [
+        "嵌入式全栈开发",
+        "BSP 驱动开发",
+        "RTOS 应用开发",
+        "量产产测和现场维护"
+      ],
+      "extends": "core",
+      "include_agents": [
+        "bsp-analyst",
+        "hardware-debugger",
+        "application-engineer"
+      ],
+      "include_skills": [
+        "adk-register-map-design",
+        "adk-bsp-analysis",
+        "adk-bsp-porting-playbook",
+        "adk-rtos-task-design",
+        "adk-interrupt-dma-patterns",
+        "adk-protocol-stack-integration",
+        "adk-cmake-cross-build",
+        "adk-embedded-debug-transport",
+        "adk-embedded-remote-debug-log-triage",
+        "adk-hardware-debugging",
+        "adk-performance-profiling-embedded",
+        "adk-integration-hil-sil",
+        "adk-embedded-diagnostic-harness",
+        "adk-fault-injection-recovery",
+        "adk-release-versioning",
+        "adk-production-field-readiness",
+        "adk-embedded-release-orchestration"
+      ]
+    },
+    "team-core": {
+      "description": "团队协作配置（交接/验证/评审）",
+      "trigger_examples": [
+        "团队协作开发",
+        "代码交接",
+        "团队评审"
+      ],
+      "extends": "core",
+      "include_skills": [
+        "adk-chinese-commit-conventions",
+        "adk-chinese-code-review",
+        "adk-memory-curator",
+        "adk-archive-governance",
+        "adk-knowledge-archive",
+        "adk-engineering-growth-review"
+      ]
+    },
+    "openspec-driven": {
+      "description": "Spec 驱动开发配置（需求/设计/任务链路）",
+      "trigger_examples": [
+        "Spec 驱动开发",
+        "需求分析与设计",
+        "任务拆解"
+      ],
+      "extends": "core"
+    },
+    "large-refactor": {
+      "description": "大型重构配置（API 稳定性 + 代码简化）",
+      "trigger_examples": [
+        "大型代码重构",
+        "API 重构",
+        "架构调整"
+      ],
+      "extends": "embedded-fullstack",
+      "include_skills": [
+        "adk-code-simplification"
+      ]
+    },
+    "incident-response": {
+      "description": "线上事故响应配置（根因/复盘/恢复）",
+      "trigger_examples": [
+        "线上事故处理",
+        "故障排查",
+        "事故复盘"
+      ],
+      "include_agents": [
+        "performance-reliability-engineer",
+        "security-compliance-reviewer"
+      ],
+      "include_skills": [
+        "adk-systematic-debugging",
+        "adk-embedded-remote-debug-log-triage",
+        "adk-performance-profiling-embedded",
+        "adk-fault-injection-recovery",
+        "adk-static-analysis-c-cpp",
+        "adk-commit-pr-quality-gate"
+      ]
+    },
+    "research-intake": {
+      "description": "参考仓吸收配置（候选筛选与审查）",
+      "trigger_examples": [
+        "吸收参考仓",
+        "研究新技术",
+        "评估外部方案"
+      ],
+      "include_agents": [
+        "requirements-analyst"
+      ],
+      "include_skills": [
+        "adk-requirements-triage",
+        "adk-repo-prompt-analysis",
+        "adk-skill-deep-analysis",
+        "adk-intake-workflow",
+        "adk-task-breakdown",
+        "adk-memory-curator",
+        "adk-archive-governance",
+        "adk-knowledge-archive"
+      ]
+    }
+  },
+  "workflows": [
+    {
+      "name": "feature-delivery",
+      "path": "workflows/feature-delivery/WORKFLOW.md",
+      "description": "新功能从需求收敛到验证评审的交付工作流",
+      "workflow_type": "feature-delivery",
+      "lifecycle_order": 10,
+      "profiles": [
+        "core",
+        "embedded-fullstack"
+      ],
+      "command_risk": "low",
+      "primary_agent": "requirements-analyst",
+      "primary_skill": "adk-requirements-triage",
+      "supporting_skills": [
+        "adk-task-breakdown",
+        "adk-interface-contract-design",
+        "adk-unit-test-embedded",
+        "adk-verification-before-completion",
+        "adk-code-review-loop"
+      ],
+      "triggers": [
+        "新功能迭代",
+        "功能开发",
+        "feature delivery"
+      ],
+      "entry_conditions": [
+        "用户目标包含新功能、增强或可验收行为变化",
+        "需求可以通过目标、非目标和验收标准表达"
+      ],
+      "exit_evidence": [
+        "需求和任务拆解闭环",
+        "实现范围与验收标准一致",
+        "目标测试和完成前验证通过"
+      ],
+      "skills": [
+        "adk-requirements-triage",
+        "adk-task-breakdown",
+        "adk-interface-contract-design",
+        "adk-unit-test-embedded",
+        "adk-verification-before-completion",
+        "adk-code-review-loop"
+      ],
+      "agents": [
+        "requirements-analyst",
+        "architecture-planner",
+        "component-engineer",
+        "test-validation-engineer",
+        "code-review-governor"
+      ],
+      "commands": [
+        "rtk bash scripts/devkit.sh catalog build",
+        "rtk bash scripts/devkit.sh validate --strict"
+      ],
+      "verification": [
+        "rtk bash tests/test_validate.sh",
+        "rtk bash tests/test_workflow_closure.sh"
+      ]
+    },
+    {
+      "name": "bugfix-delivery",
+      "path": "workflows/bugfix-delivery/WORKFLOW.md",
+      "description": "缺陷复现、根因定位、回归验证和审查闭环工作流",
+      "workflow_type": "bugfix-delivery",
+      "lifecycle_order": 20,
+      "profiles": [
+        "embedded-fullstack"
+      ],
+      "command_risk": "low",
+      "primary_agent": "application-engineer",
+      "primary_skill": "adk-systematic-debugging",
+      "supporting_skills": [
+        "adk-task-breakdown",
+        "adk-verification-before-completion",
+        "adk-code-review-loop"
+      ],
+      "triggers": [
+        "缺陷修复",
+        "bugfix",
+        "回归测试"
+      ],
+      "entry_conditions": [
+        "观察行为与预期行为不一致",
+        "需要先复现、定位根因，再实施修复"
+      ],
+      "exit_evidence": [
+        "根因陈述",
+        "修复摘要",
+        "复现路径或负结果说明",
+        "定向回归验证"
+      ],
+      "skills": [
+        "adk-systematic-debugging",
+        "adk-task-breakdown",
+        "adk-verification-before-completion",
+        "adk-code-review-loop"
+      ],
+      "agents": [
+        "application-engineer",
+        "test-validation-engineer",
+        "code-review-governor"
+      ],
+      "commands": [
+        "rtk bash scripts/devkit.sh validate --strict",
+        "rtk bash scripts/check-workflow-closure.sh --profile embedded-fullstack"
+      ],
+      "verification": [
+        "rtk bash tests/test_workflow.sh",
+        "rtk bash tests/test_integration.sh"
+      ]
+    },
+    {
+      "name": "release-hardening",
+      "path": "workflows/release-hardening/WORKFLOW.md",
+      "description": "发布前安全、性能、版本、回滚和放行证据收口工作流",
+      "workflow_type": "release-hardening",
+      "lifecycle_order": 60,
+      "profiles": [
+        "release-hardening"
+      ],
+      "command_risk": "medium",
+      "primary_agent": "build-release-engineer",
+      "primary_skill": "adk-release-versioning",
+      "supporting_skills": [
+        "adk-test-strategy",
+        "adk-code-review-loop",
+        "adk-branch-closeout",
+        "adk-verification-before-completion",
+        "adk-commit-pr-quality-gate"
+      ],
+      "triggers": [
+        "准备发布",
+        "发布前检查",
+        "release hardening"
+      ],
+      "entry_conditions": [
+        "变更准备进入发布、打包、交付或现场放行阶段",
+        "需要版本、回滚、安全、性能或放行证据"
+      ],
+      "exit_evidence": [
+        "版本与制品信息",
+        "回滚路径",
+        "发布前验证结果",
+        "commit/PR 或放行门禁结论"
+      ],
+      "skills": [
+        "adk-release-versioning",
+        "adk-test-strategy",
+        "adk-code-review-loop",
+        "adk-branch-closeout",
+        "adk-verification-before-completion",
+        "adk-commit-pr-quality-gate"
+      ],
+      "agents": [
+        "security-compliance-reviewer",
+        "performance-reliability-engineer",
+        "build-release-engineer"
+      ],
+      "commands": [
+        "rtk bash scripts/devkit.sh validate --strict",
+        "rtk bash scripts/check-workflow-closure.sh --profile release-hardening"
+      ],
+      "verification": [
+        "rtk bash tests/test_validate.sh",
+        "rtk bash tests/test_profile_coherence.sh"
+      ]
+    },
+    {
+      "name": "skill-curation-delivery",
+      "path": "workflows/skill-curation-delivery/WORKFLOW.md",
+      "description": "技能候选筛选、core/optional 归属和触发质量验证工作流",
+      "workflow_type": "skill-curation-delivery",
+      "lifecycle_order": 90,
+      "profiles": [
+        "core",
+        "team-core"
+      ],
+      "command_risk": "low",
+      "primary_agent": "requirements-analyst",
+      "primary_skill": "adk-requirements-triage",
+      "supporting_skills": [
+        "adk-task-breakdown",
+        "adk-commit-pr-quality-gate",
+        "adk-verification-before-completion"
+      ],
+      "triggers": [
+        "技能候选筛选",
+        "skill curation",
+        "core optional 归属"
+      ],
+      "entry_conditions": [
+        "新增、导入、拆分、替换或弃用 skill 候选",
+        "需要判断 core/optional 归属和触发质量"
+      ],
+      "exit_evidence": [
+        "归属决策",
+        "正例、反例和 fallback 样例",
+        "catalog、SOP 和触发矩阵验证"
+      ],
+      "skills": [
+        "adk-requirements-triage",
+        "adk-task-breakdown",
+        "adk-commit-pr-quality-gate",
+        "adk-verification-before-completion"
+      ],
+      "agents": [
+        "requirements-analyst",
+        "architecture-planner",
+        "code-review-governor"
+      ],
+      "commands": [
+        "rtk bash scripts/devkit.sh catalog build",
+        "rtk bash scripts/devkit.sh validate --strict"
+      ],
+      "verification": [
+        "rtk bash tests/test_catalog.sh",
+        "rtk bash tests/test_skill_sop_quality.sh"
+      ]
+    },
+    {
+      "name": "adk-delivery-gate",
+      "path": "workflows/adk-delivery-gate/WORKFLOW.md",
+      "description": "agent-dev-kit 通用资产生产交付门禁",
+      "workflow_type": "adk-governance",
+      "lifecycle_order": 110,
+      "profiles": [
+        "core",
+        "embedded-fullstack"
+      ],
+      "command_risk": "low",
+      "primary_agent": "code-review-governor",
+      "primary_skill": "adk-verification-before-completion",
+      "supporting_skills": [
+        "adk-runtime-router",
+        "adk-requirements-triage",
+        "adk-task-breakdown",
+        "adk-test-strategy",
+        "adk-code-review-loop",
+        "adk-after-action-review",
+        "adk-token-context-governance",
+        "adk-commit-pr-quality-gate"
+      ],
+      "triggers": [
+        "优化 adk",
+        "agent-dev-kit 交付",
+        "嵌入式资产发布",
+        "完成前验证"
+      ],
+      "entry_conditions": [
+        "ADK active 资产、manifest、profile、workflow 或门禁发生变更",
+        "需要把变更声明和验证证据绑定到完成前门禁"
+      ],
+      "exit_evidence": [
+        "strict validate 通过",
+        "workflow closure 或 profile coherence 通过",
+        "run_all 或等效定向回归证据"
+      ],
+      "skills": [
+        "adk-runtime-router",
+        "adk-requirements-triage",
+        "adk-task-breakdown",
+        "adk-test-strategy",
+        "adk-code-review-loop",
+        "adk-verification-before-completion",
+        "adk-after-action-review",
+        "adk-token-context-governance",
+        "adk-commit-pr-quality-gate"
+      ],
+      "agents": [
+        "requirements-analyst",
+        "architecture-planner",
+        "test-validation-engineer",
+        "code-review-governor"
+      ],
+      "commands": [
+        "rtk bash scripts/devkit.sh validate --strict",
+        "rtk bash scripts/check-workflow-closure.sh --profile core"
+      ],
+      "verification": [
+        "rtk bash tests/run_all.sh --fail-fast"
+      ]
+    },
+    {
+      "name": "runtime-routing",
+      "path": "workflows/runtime-routing/WORKFLOW.md",
+      "description": "运行时技能路由、fallback 边界和 profile 闭包验证工作流",
+      "workflow_type": "adk-governance",
+      "lifecycle_order": 110,
+      "profiles": [
+        "core",
+        "embedded-fullstack"
+      ],
+      "command_risk": "low",
+      "primary_agent": "architecture-planner",
+      "primary_skill": "adk-runtime-router",
+      "supporting_skills": [
+        "adk-verification-before-completion",
+        "adk-repo-drift-remediation"
+      ],
+      "triggers": [
+        "运行时路由",
+        "技能路由",
+        "runtime routing"
+      ],
+      "entry_conditions": [
+        "新增、替换、弃用或重排 skill/profile/workflow 路由",
+        "需要确认 primary/supporting/fallback 和 profile 闭包"
+      ],
+      "exit_evidence": [
+        "routing matrix 与 manifest 一致",
+        "trigger 冲突检查通过",
+        "profile coherence 和 workflow closure 通过"
+      ],
+      "skills": [
+        "adk-runtime-router",
+        "adk-verification-before-completion",
+        "adk-repo-drift-remediation"
+      ],
+      "agents": [
+        "requirements-analyst",
+        "architecture-planner",
+        "code-review-governor"
+      ],
+      "commands": [
+        "rtk bash scripts/devkit.sh match --skill adk-runtime-router --text \"技能路由\"",
+        "rtk bash scripts/check-workflow-closure.sh --profile core"
+      ],
+      "verification": [
+        "rtk bash tests/test_skill_trigger_matrix.sh",
+        "rtk bash tests/test_workflow_closure.sh"
+      ]
+    }
+  ],
+  "mcp_servers": [],
+  "change_sets": [
+    {
+      "name": "adk-change-governance",
+      "description": "agent-dev-kit 变更工件、阶段门禁与证据索引规范",
+      "root": "docs/changes",
+      "archive_root": "docs/changes/archive",
+      "commands": [
+        "rtk bash scripts/devkit.sh propose",
+        "rtk bash scripts/devkit.sh apply",
+        "rtk bash scripts/devkit.sh verify",
+        "rtk bash scripts/devkit.sh review",
+        "rtk bash scripts/devkit.sh archive"
+      ],
+      "required_files": [
+        "proposal.md",
+        "design.md",
+        "tasks.md",
+        "checklist.md",
+        "negative-results.md",
+        "verify-report.md",
+        "review-report.md"
+      ]
+    }
+  ],
+  "optional_skills": [
+    {
+      "name": "adk-planning-execution-loop",
+      "path": "optional-skills/adk-planning-execution-loop/SKILL.md",
+      "quality_tier": "p2",
+      "category": "planning",
+      "lifecycle_order": 30,
+      "stage_order": 60,
+      "activation_mode": "primary",
+      "pattern": "pipeline"
+    },
+    {
+      "name": "adk-data-fetch",
+      "path": "optional-skills/adk-data-fetch/SKILL.md",
+      "quality_tier": "p2",
+      "category": "implementation",
+      "lifecycle_order": 50,
+      "stage_order": 90,
+      "activation_mode": "supporting",
+      "pattern": "tool-wrapper"
+    },
+    {
+      "name": "adk-email-imap-fetch",
+      "path": "optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md",
+      "quality_tier": "p2",
+      "category": "implementation",
+      "lifecycle_order": 50,
+      "stage_order": 91,
+      "activation_mode": "supporting",
+      "pattern": "tool-wrapper"
+    },
+    {
+      "name": "adk-fetch-url-content",
+      "path": "optional-skills/adk-data-fetch/adk-fetch-url-content/SKILL.md",
+      "quality_tier": "p2",
+      "category": "implementation",
+      "lifecycle_order": 50,
+      "stage_order": 92,
+      "activation_mode": "supporting",
+      "pattern": "tool-wrapper"
+    },
+    {
+      "name": "adk-test-flakiness-triage",
+      "path": "optional-skills/adk-test-flakiness-triage/SKILL.md",
+      "quality_tier": "p2",
+      "category": "verification",
+      "lifecycle_order": 70,
+      "stage_order": 90,
+      "activation_mode": "primary",
+      "pattern": "playbook"
+    },
+    {
+      "name": "adk-security-supply-chain",
+      "path": "optional-skills/adk-security-supply-chain/SKILL.md",
+      "quality_tier": "p2",
+      "category": "review_quality",
+      "lifecycle_order": 80,
+      "stage_order": 70,
+      "activation_mode": "primary",
+      "pattern": "reviewer"
+    },
+    {
+      "name": "adk-cross-team-handoff",
+      "path": "optional-skills/adk-cross-team-handoff/SKILL.md",
+      "quality_tier": "p2",
+      "category": "release_closure",
+      "lifecycle_order": 90,
+      "stage_order": 50,
+      "activation_mode": "supporting",
+      "pattern": "generator"
+    },
+    {
+      "name": "adk-incident-rca-report",
+      "path": "optional-skills/adk-incident-rca-report/SKILL.md",
+      "quality_tier": "p2",
+      "category": "release_closure",
+      "lifecycle_order": 90,
+      "stage_order": 80,
+      "activation_mode": "fallback",
+      "pattern": "generator"
+    },
+    {
+      "name": "adk-skill-composition-governance",
+      "path": "optional-skills/adk-skill-composition-governance/SKILL.md",
+      "quality_tier": "p2",
+      "category": "governance",
+      "lifecycle_order": 100,
+      "stage_order": 40,
+      "activation_mode": "primary",
+      "pattern": "governance"
+    }
+  ],
+  "install": {
+    "default_mode": "symlink",
+    "backup_before_install": true,
+    "lock_version": false
+  },
+  "skill_routing_matrix": [
+    {
+      "name": "runtime_routing",
+      "description": "任务开始前选择 profile、primary skill 和 supporting skill",
+      "primary_skill": "adk-runtime-router",
+      "supporting_skills": [],
+      "fallback_skills": [
+        "adk-requirements-triage"
+      ],
+      "mutually_exclusive": [],
+      "workflow": "runtime-routing",
+      "profiles": [
+        "core",
+        "embedded-fullstack"
+      ],
+      "positive_examples": [
+        "判断这个任务应该使用哪个技能",
+        "adk-first 路由这个需求"
+      ],
+      "negative_examples": [
+        "只要计划，不要修改文件"
+      ]
+    },
+    {
+      "name": "unclear_requirement",
+      "description": "需求、边界、验收或优先级不清，需要先收敛",
+      "primary_skill": "adk-requirements-triage",
+      "supporting_skills": [
+        "adk-structured-requirements-questioning"
+      ],
+      "fallback_skills": [],
+      "mutually_exclusive": [
+        "adk-lightweight-planning",
+        "adk-planning-execution-loop"
+      ],
+      "workflow": "feature-delivery",
+      "profiles": [
+        "core",
+        "embedded-fullstack"
+      ],
+      "positive_examples": [
+        "需求不清楚，先梳理目标和验收标准",
+        "这个新功能边界不明确"
+      ],
+      "negative_examples": [
+        "按已有计划直接执行"
+      ]
+    },
+    {
+      "name": "planning_only",
+      "description": "用户明确要求只读计划，不创建、不修改、不删除文件",
+      "primary_skill": "adk-lightweight-planning",
+      "supporting_skills": [],
+      "fallback_skills": [
+        "adk-requirements-triage"
+      ],
+      "mutually_exclusive": [
+        "adk-planning-execution-loop"
+      ],
+      "workflow": "-",
+      "profiles": [
+        "core"
+      ],
+      "positive_examples": [
+        "先给计划，不要改文件",
+        "只要轻量计划"
+      ],
+      "negative_examples": [
+        "按计划执行并修改代码"
+      ]
+    },
+    {
+      "name": "task_breakdown",
+      "description": "需求已明确但任务过大，需要拆成可执行任务包",
+      "primary_skill": "adk-task-breakdown",
+      "supporting_skills": [
+        "adk-requirements-triage"
+      ],
+      "fallback_skills": [
+        "adk-lightweight-planning"
+      ],
+      "mutually_exclusive": [],
+      "workflow": "feature-delivery",
+      "profiles": [
+        "core",
+        "embedded-fullstack"
+      ],
+      "positive_examples": [
+        "任务太大，拆解成任务包",
+        "把这个需求拆成可并行条目"
+      ],
+      "negative_examples": [
+        "根因不明，先定位问题"
+      ]
+    },
+    {
+      "name": "long_execution",
+      "description": "长任务需要计划审查、检查点、恢复和完成前闭环",
+      "availability": "optional-skill-required",
+      "primary_skill": "adk-planning-execution-loop",
+      "supporting_skills": [
+        "adk-task-breakdown",
+        "adk-verification-before-completion"
+      ],
+      "fallback_skills": [
+        "adk-lightweight-planning"
+      ],
+      "mutually_exclusive": [
+        "adk-lightweight-planning"
+      ],
+      "workflow": "feature-delivery",
+      "profiles": [
+        "core",
+        "embedded-fullstack"
+      ],
+      "positive_examples": [
+        "分阶段执行并持续验证",
+        "长任务需要恢复摘要和检查点"
+      ],
+      "negative_examples": [
+        "只要计划，不要执行"
+      ]
+    },
+    {
+      "name": "unknown_root_cause_bug",
+      "description": "行为异常但根因未明，需要系统化定位再修复",
+      "primary_skill": "adk-systematic-debugging",
+      "supporting_skills": [
+        "adk-test-strategy",
+        "adk-verification-before-completion"
+      ],
+      "fallback_skills": [],
+      "mutually_exclusive": [
+        "adk-lightweight-planning"
+      ],
+      "workflow": "bugfix-delivery",
+      "profiles": [
+        "core",
+        "embedded-fullstack"
+      ],
+      "positive_examples": [
+        "问题根因不明确，需要定位后修复",
+        "测试失败但不知道原因"
+      ],
+      "negative_examples": [
+        "新功能需求需要先拆解"
+      ]
+    },
+    {
+      "name": "embedded_log_analysis",
+      "description": "嵌入式串口、boot、dmesg、ADB/logcat、OTA 或现场日志分析",
+      "primary_skill": "adk-embedded-remote-debug-log-triage",
+      "supporting_skills": [
+        "adk-systematic-debugging",
+        "adk-embedded-debug-transport",
+        "adk-offline-core-dump-triage"
+      ],
+      "fallback_skills": [
+        "adk-systematic-debugging"
+      ],
+      "mutually_exclusive": [],
+      "workflow": "bugfix-delivery",
+      "profiles": [
+        "embedded-fullstack",
+        "incident-response"
+      ],
+      "positive_examples": [
+        "分析这段串口日志和 dmesg",
+        "ADB logcat 里有异常重启"
+      ],
+      "negative_examples": [
+        "定义一个新接口契约"
+      ]
+    },
+    {
+      "name": "embedded_core_dump",
+      "description": "嵌入式 Linux core dump、BuildID、符号和 backtrace 离线分析",
+      "primary_skill": "adk-offline-core-dump-triage",
+      "supporting_skills": [
+        "adk-systematic-debugging",
+        "adk-embedded-remote-debug-log-triage"
+      ],
+      "fallback_skills": [
+        "adk-systematic-debugging"
+      ],
+      "mutually_exclusive": [],
+      "workflow": "bugfix-delivery",
+      "profiles": [
+        "embedded-fullstack",
+        "incident-response"
+      ],
+      "positive_examples": [
+        "分析这个 core dump 和符号匹配",
+        "SIGSEGV backtrace 损坏，需要离线定位"
+      ],
+      "negative_examples": [
+        "只需要查询 skill 分类"
+      ]
+    },
+    {
+      "name": "embedded_debug_transport",
+      "description": "ADB、SSH、串口、GDB remote、调试探针或厂商 CLI 的连接边界治理",
+      "primary_skill": "adk-embedded-debug-transport",
+      "supporting_skills": [
+        "adk-systematic-debugging"
+      ],
+      "fallback_skills": [
+        "adk-embedded-remote-debug-log-triage"
+      ],
+      "mutually_exclusive": [],
+      "workflow": "bugfix-delivery",
+      "profiles": [
+        "embedded-fullstack"
+      ],
+      "positive_examples": [
+        "ADB SSH 串口 GDB remote 调试通道",
+        "设备调试通道连接和证据采集"
+      ],
+      "negative_examples": [
+        "只读生成一个实现计划"
+      ]
+    },
+    {
+      "name": "completion_gate",
+      "description": "完成前核对声明、验证证据、风险和回退边界",
+      "primary_skill": "adk-verification-before-completion",
+      "supporting_skills": [
+        "adk-test-strategy"
+      ],
+      "fallback_skills": [],
+      "mutually_exclusive": [],
+      "workflow": "adk-delivery-gate",
+      "profiles": [
+        "core",
+        "embedded-fullstack"
+      ],
+      "positive_examples": [
+        "准备完成，做完成前检查",
+        "核对验证证据是否支持完成声明"
+      ],
+      "negative_examples": [
+        "需求边界还没明确"
+      ]
+    },
+    {
+      "name": "commit_pr_gate",
+      "description": "提交或 PR 前质量门禁、格式、评审和证据检查",
+      "primary_skill": "adk-commit-pr-quality-gate",
+      "supporting_skills": [
+        "adk-verification-before-completion",
+        "adk-code-review-loop"
+      ],
+      "fallback_skills": [],
+      "mutually_exclusive": [],
+      "workflow": "adk-delivery-gate",
+      "profiles": [
+        "core",
+        "release-hardening"
+      ],
+      "positive_examples": [
+        "准备 commit，跑提交门禁",
+        "PR 前检查质量和验证证据"
+      ],
+      "negative_examples": [
+        "只分析日志，不提交"
+      ]
+    },
+    {
+      "name": "release_versioning",
+      "description": "发布、版本、制品、回滚和放行证据收口",
+      "primary_skill": "adk-release-versioning",
+      "supporting_skills": [
+        "adk-commit-pr-quality-gate",
+        "adk-verification-before-completion"
+      ],
+      "fallback_skills": [
+        "adk-branch-closeout"
+      ],
+      "mutually_exclusive": [],
+      "workflow": "release-hardening",
+      "profiles": [
+        "release-hardening",
+        "embedded-fullstack"
+      ],
+      "positive_examples": [
+        "准备发布并生成版本说明",
+        "发布前检查回滚和制品证据"
+      ],
+      "negative_examples": [
+        "代码根因还没定位"
+      ]
+    },
+    {
+      "name": "skill_governance",
+      "description": "skill 组合、触发优先级、fallback、弃用和 profile 归属治理",
+      "availability": "optional-skill-required",
+      "primary_skill": "adk-skill-composition-governance",
+      "supporting_skills": [
+        "adk-repo-drift-remediation",
+        "adk-verification-before-completion"
+      ],
+      "fallback_skills": [
+        "adk-requirements-triage"
+      ],
+      "mutually_exclusive": [],
+      "workflow": "skill-curation-delivery",
+      "profiles": [
+        "core",
+        "team-core"
+      ],
+      "positive_examples": [
+        "skill、workflow 分类和排序需要治理",
+        "检查技能触发冲突和 fallback 边界"
+      ],
+      "negative_examples": [
+        "设备日志里有内核 oops"
+      ]
+    }
+  ],
+  "routing": {
+    "enabled": true,
+    "fallback_profile": "core",
+    "intents": [
+      {
+        "intent": "runtime_router",
+        "intent_zh": "技能路由/选择技能/任务分流/adk路由/adk-first/判断使用哪个技能/运行时路由/开始任务前",
+        "primary_skill": "adk-runtime-router",
+        "supporting_skills": []
+      },
+      {
+        "intent": "token_context_governance",
+        "intent_zh": "省token/上下文太大/压缩输出/工具输出太长/日志太长/回退原文/token budget",
+        "primary_skill": "adk-token-context-governance",
+        "supporting_skills": [
+          "adk-context-engineering",
+          "adk-verification-before-completion"
+        ]
+      },
+      {
+        "intent": "requirements_triage",
+        "intent_zh": "需求不清楚/需要澄清/需求模糊/需求不明确/新功能/实现新功能/验收标准/目标边界",
+        "primary_skill": "adk-requirements-triage",
+        "supporting_skills": []
+      },
+      {
+        "intent": "task_breakdown",
+        "intent_zh": "任务太大/拆解任务/拆解大任务/任务拆分",
+        "primary_skill": "adk-task-breakdown",
+        "supporting_skills": [
+          "adk-requirements-triage"
+        ]
+      },
+      {
+        "intent": "plan_lite",
+        "intent_zh": "给我一个计划/制定计划/实现计划/只要计划/先给计划/create plan/plan only/轻量计划",
+        "primary_skill": "adk-lightweight-planning",
+        "supporting_skills": []
+      },
+      {
+        "intent": "context_compress_handoff",
+        "intent_zh": "上下文压缩/会话接力/恢复提示/压缩前处理/context preflight/resume prompt/90秒模板",
+        "primary_skill": "adk-context-compress-handoff",
+        "supporting_skills": [
+          "adk-token-context-governance"
+        ]
+      },
+      {
+        "intent": "parallel_agent_governance",
+        "intent_zh": "并行agent/多agent/子代理/并行施工/并行调度/多任务并行",
+        "primary_skill": "adk-parallel-agent-governance",
+        "supporting_skills": [
+          "adk-task-breakdown"
+        ]
+      },
+      {
+        "intent": "worktree_governance",
+        "intent_zh": "worktree/工作树/隔离分支/多分支并行/外部并行规划/创建worktree",
+        "primary_skill": "adk-worktree-governance",
+        "supporting_skills": [
+          "adk-task-breakdown"
+        ]
+      },
+      {
+        "intent": "interface_contract_design",
+        "intent_zh": "设计接口/接口契约/API设计",
+        "primary_skill": "adk-interface-contract-design",
+        "supporting_skills": [
+          "adk-requirements-triage"
+        ]
+      },
+      {
+        "intent": "test_strategy",
+        "intent_zh": "测试策略/TDD/先写测试/补测试/回归测试/测试矩阵/验证策略",
+        "primary_skill": "adk-test-strategy",
+        "supporting_skills": [
+          "adk-unit-test-embedded"
+        ]
+      },
+      {
+        "intent": "unit_test_embedded",
+        "intent_zh": "写单元测试/补单测/嵌入式单测",
+        "primary_skill": "adk-unit-test-embedded",
+        "supporting_skills": []
+      },
+      {
+        "intent": "static_analysis_c_cpp",
+        "intent_zh": "静态分析/C静态检查/Cpp静态检查",
+        "primary_skill": "adk-static-analysis-c-cpp",
+        "supporting_skills": []
+      },
+      {
+        "intent": "embedded_debug_transport",
+        "intent_zh": "调试通道/设备调试通道/设备连接调试/ADB调试/adb logcat/SSH调试/串口调试/串口控制台/GDB remote/调试探针/厂商调试CLI",
+        "primary_skill": "adk-embedded-debug-transport",
+        "supporting_skills": [
+          "adk-systematic-debugging"
+        ]
+      },
+      {
+        "intent": "embedded_remote_debug_log_triage",
+        "intent_zh": "远程调试/设备端调试/嵌入式日志分析/串口日志/boot log/dmesg/设备日志/GDB远程/带日志远程GDB/现场日志/core和日志/OTA日志/prog日志",
+        "primary_skill": "adk-embedded-remote-debug-log-triage",
+        "supporting_skills": [
+          "adk-systematic-debugging",
+          "adk-offline-core-dump-triage",
+          "adk-embedded-diagnostic-harness",
+          "adk-token-context-governance"
+        ]
+      },
+      {
+        "intent": "systematic_debugging",
+        "intent_zh": "调试/调试问题/排查根因/问题排查/定位根因/真实问题排查/根因未明",
+        "primary_skill": "adk-systematic-debugging",
+        "supporting_skills": []
+      },
+      {
+        "intent": "verification_before_completion",
+        "intent_zh": "准备完成/完成前验证/交付前验证",
+        "primary_skill": "adk-verification-before-completion",
+        "supporting_skills": []
+      },
+      {
+        "intent": "after_action_review",
+        "intent_zh": "任务复盘/经验沉淀/After Action Review/避免重复犯错/复盘lessons",
+        "primary_skill": "adk-after-action-review",
+        "supporting_skills": [
+          "adk-verification-before-completion"
+        ]
+      },
+      {
+        "intent": "developer_growth_review",
+        "intent_zh": "开发者成长复盘/成长分析/学习建议/分析我的编码习惯/分析最近工作/developer growth/growth review/个人成长报告",
+        "primary_skill": "adk-engineering-growth-review",
+        "supporting_skills": [
+          "adk-after-action-review",
+          "adk-token-context-governance"
+        ]
+      },
+      {
+        "intent": "memory_curator",
+        "intent_zh": "记忆整理/memory curator/整理memory/记忆审计/长期记忆候选/memory candidate/清理记忆",
+        "primary_skill": "adk-memory-curator",
+        "supporting_skills": [
+          "adk-after-action-review",
+          "adk-token-context-governance"
+        ]
+      },
+      {
+        "intent": "archive_governance",
+        "intent_zh": "归档治理/归档检查/归档修复/archive-check/meta v2/topic未登记/归档不合规/归档元数据",
+        "primary_skill": "adk-archive-governance",
+        "supporting_skills": [
+          "adk-verification-before-completion"
+        ]
+      },
+      {
+        "intent": "knowledge_archive",
+        "intent_zh": "知识归档/长期沉淀/保存到archive/保存到docs/archive/日报归档/会话总结归档/排障结论归档/研究笔记归档",
+        "primary_skill": "adk-knowledge-archive",
+        "supporting_skills": [
+          "adk-archive-governance"
+        ]
+      },
+      {
+        "intent": "repo_drift_remediation",
+        "intent_zh": "仓库漂移/全仓漂移/repo drift/全面检查/残留清理/边界不清/文档代码不一致/全仓治理/提交前质量收口",
+        "primary_skill": "adk-repo-drift-remediation",
+        "supporting_skills": [
+          "adk-verification-before-completion"
+        ]
+      },
+      {
+        "intent": "skill_composition_governance",
+        "intent_zh": "技能组合/skill组合/skill治理/skill分类/workflow分类/skill、workflow 分类和排序/分类排序/触发冲突/fallback边界/弃用治理/skill生命周期",
+        "availability": "optional-skill-required",
+        "primary_skill": "adk-skill-composition-governance",
+        "supporting_skills": [
+          "adk-repo-drift-remediation",
+          "adk-verification-before-completion"
+        ]
+      },
+      {
+        "intent": "commit_pr_quality_gate",
+        "intent_zh": "提交代码/准备提交/提交前检查",
+        "primary_skill": "adk-commit-pr-quality-gate",
+        "supporting_skills": [
+          "adk-verification-before-completion"
+        ]
+      },
+      {
+        "intent": "code_review_loop",
+        "intent_zh": "独立代码审查/code review loop/review闭环/审查反馈/收到review/修复review/复审",
+        "primary_skill": "adk-code-review-loop",
+        "supporting_skills": [
+          "adk-commit-pr-quality-gate"
+        ]
+      },
+      {
+        "intent": "branch_closeout",
+        "intent_zh": "分支收尾/开发完成/创建PR/合并分支/结束开发分支/branch closeout",
+        "primary_skill": "adk-branch-closeout",
+        "supporting_skills": [
+          "adk-verification-before-completion"
+        ]
+      },
+      {
+        "intent": "adr_writer",
+        "intent_zh": "写ADR/架构决策记录/ADR",
+        "primary_skill": "adk-adr-writer",
+        "supporting_skills": []
+      },
+      {
+        "intent": "register_map_design",
+        "intent_zh": "设计寄存器/寄存器映射/设计寄存器映射",
+        "primary_skill": "adk-register-map-design",
+        "supporting_skills": [
+          "adk-interface-contract-design"
+        ]
+      },
+      {
+        "intent": "driver_bringup",
+        "intent_zh": "驱动开发/驱动调试/写驱动/驱动bringup",
+        "primary_skill": "adk-driver-bringup-checklist",
+        "supporting_skills": [
+          "adk-register-map-design"
+        ]
+      },
+      {
+        "intent": "bsp_porting",
+        "intent_zh": "BSP移植/BSP适配/板级移植/启动链/BootROM/SPL/U-Boot/Bootloader/rootfs/最小启动/secure boot",
+        "primary_skill": "adk-bsp-porting-playbook",
+        "supporting_skills": [
+          "adk-driver-bringup-checklist"
+        ]
+      },
+      {
+        "intent": "rtos_task_design",
+        "intent_zh": "RTOS任务设计/任务优先级/RTOS调度",
+        "primary_skill": "adk-rtos-task-design",
+        "supporting_skills": []
+      },
+      {
+        "intent": "interrupt_dma_patterns",
+        "intent_zh": "中断处理/DMA处理/中断DMA",
+        "primary_skill": "adk-interrupt-dma-patterns",
+        "supporting_skills": []
+      },
+      {
+        "intent": "protocol_stack_integration",
+        "intent_zh": "协议栈集成/协议适配/通信协议",
+        "primary_skill": "adk-protocol-stack-integration",
+        "supporting_skills": [
+          "adk-interface-contract-design"
+        ]
+      },
+      {
+        "intent": "component_api_stability",
+        "intent_zh": "API稳定性/组件接口稳定/接口兼容",
+        "primary_skill": "adk-component-api-stability",
+        "supporting_skills": [
+          "adk-interface-contract-design"
+        ]
+      },
+      {
+        "intent": "cmake_cross_build",
+        "intent_zh": "CMake交叉编译/交叉编译/CMake构建",
+        "primary_skill": "adk-cmake-cross-build",
+        "supporting_skills": []
+      },
+      {
+        "intent": "offline_core_dump_triage",
+        "intent_zh": "core dump/core文件/离线core/BuildID/符号不匹配/gdb分析core/SIGSEGV core",
+        "primary_skill": "adk-offline-core-dump-triage",
+        "supporting_skills": [
+          "adk-systematic-debugging"
+        ]
+      },
+      {
+        "intent": "integration_hil_sil",
+        "intent_zh": "HIL/SIL集成测试/硬件在环/软件在环",
+        "primary_skill": "adk-integration-hil-sil",
+        "supporting_skills": [
+          "adk-unit-test-embedded"
+        ]
+      },
+      {
+        "intent": "fault_injection_recovery",
+        "intent_zh": "故障注入测试/恢复验证/容错测试",
+        "primary_skill": "adk-fault-injection-recovery",
+        "supporting_skills": [
+          "adk-integration-hil-sil"
+        ]
+      },
+      {
+        "intent": "performance_profiling_embedded",
+        "intent_zh": "性能分析/性能剖析/嵌入式性能",
+        "primary_skill": "adk-performance-profiling-embedded",
+        "supporting_skills": [
+          "adk-systematic-debugging"
+        ]
+      },
+      {
+        "intent": "production_field_readiness",
+        "intent_zh": "量产/产测/烧录/诊断/现场维护/OTA升级/回滚/RMA/设备健康检查/production-field/field readiness/embedded-production-field-readiness/simulate-device/模拟设备/设备状态机/自动推进",
+        "primary_skill": "adk-production-field-readiness",
+        "supporting_skills": [
+          "adk-release-versioning",
+          "adk-integration-hil-sil",
+          "adk-verification-before-completion"
+        ]
+      },
+      {
+        "intent": "embedded_diagnostic_harness",
+        "intent_zh": "诊断harness/diag命令/prog_tool/strict suite/env suite/invoke_ret/产测诊断/诊断验证/diagnostic harness",
+        "primary_skill": "adk-embedded-diagnostic-harness",
+        "supporting_skills": [
+          "adk-test-strategy",
+          "adk-integration-hil-sil"
+        ]
+      },
+      {
+        "intent": "embedded_release_orchestration",
+        "intent_zh": "嵌入式发布编排/固件发布/OTA发布/NAS发布/产线发布/release bundle/SD升级包/MCU固件包",
+        "primary_skill": "adk-embedded-release-orchestration",
+        "supporting_skills": [
+          "adk-release-versioning",
+          "adk-production-field-readiness"
+        ]
+      },
+      {
+        "intent": "embedded_storage_layout_migration",
+        "intent_zh": "UBIFS/SquashFS/ubiblock/业务分区/分区保留/存储布局迁移/OTA布局迁移/文件系统切换",
+        "primary_skill": "adk-embedded-storage-layout-migration",
+        "supporting_skills": [
+          "adk-embedded-release-orchestration",
+          "adk-production-field-readiness"
+        ]
+      },
+      {
+        "intent": "release_versioning",
+        "intent_zh": "版本发布/准备发布/发布前检查",
+        "primary_skill": "adk-release-versioning",
+        "supporting_skills": [
+          "adk-commit-pr-quality-gate"
+        ]
+      }
+    ]
+  },
+  "dependencies": {
+    "required": [
+      "bash",
+      "awk",
+      "sed",
+      "grep"
+    ],
+    "optional": [
+      "yq",
+      "jq",
+      "rg"
+    ]
+  },
+  "schema_version": "3.0.0",
+  "product": {
+    "kind": "agent-asset-platform",
+    "runtime_boundary": "no-llm-runner",
+    "evidence_model": "source-test-runtime-field"
+  }
+}

@@ -14,7 +14,7 @@
 | Agent | 运行时执行主体 | 读取上下文、选择 Skill、调用工具、推进任务并对结果负责 | `agents/<name>/AGENTS.md` |
 | Sub-agent | 短生命周期执行实例 | 在主 Agent 拆分后处理边界明确的子任务，回传结构化结果 | 由运行时调度，任务契约由模板约束 |
 | Workflow | 跨阶段状态机 | 定义 propose/apply/verify/review/archive 等阶段、状态和门禁 | `workflows/<name>/WORKFLOW.md`、`scripts/workflow.sh`、`docs/workflows.md` |
-| MCP/tool | 外部能力接口 | 提供 Git、文档、设备、API、浏览器等能力连接，不定义任务方法论 | `manifest.yaml`、运行时配置和边界检查脚本 |
+| MCP/tool | 外部能力接口 | 提供 Git、文档、设备、API、浏览器等能力连接，不定义任务方法论 | `manifest.json`、运行时配置和边界检查脚本 |
 
 ## 写入边界
 
@@ -58,14 +58,14 @@ Agent 的 manifest 条目必须声明 `description`、`quality_tier`、`owns`、
 
 长背景、示例、领域知识、检查清单和历史决策进入 `references/`。入口文件必须保持短小，严格门禁下不超过 140 行。
 
-每个 live Skill 还必须在 `manifest.yaml:skills` 或 `manifest.yaml:optional_skills` 中声明 `category`、`lifecycle_order`、`stage_order`、`activation_mode` 和 `pattern`。`lifecycle_order` 定义大类阶段，`stage_order` 定义同一阶段内的执行/呈现顺序。场景级 primary/supporting/fallback 关系不由 `SKILL.md` 自行声明，统一以 `manifest.yaml:skill_routing_matrix` 为准；optional skill 被作为 primary 使用时，相关 routing entry 必须声明 `availability: optional-skill-required`。
+每个 live Skill 还必须在 `manifest.json:skills` 或 `manifest.json:optional_skills` 中声明 `category`、`lifecycle_order`、`stage_order`、`activation_mode` 和 `pattern`。`lifecycle_order` 定义大类阶段，`stage_order` 定义同一阶段内的执行/呈现顺序。场景级 primary/supporting/fallback 关系不由 `SKILL.md` 自行声明，统一以 `manifest.json:skill_routing_matrix` 为准；optional skill 被作为 primary 使用时，相关 routing entry 必须声明 `availability: optional-skill-required`。
 
 ## Description 触发质量
 
 `description` 是运行时 discovery 的第一层入口，必须能让 Agent 判断何时使用该 Skill。新增或大改 Skill 时必须满足：
 
 - 描述具体场景和任务结果，不能只写泛化能力名。
-- 与 `triggers`、`non_triggers`、`manifest.yaml` routing 语义一致。
+- 与 `triggers`、`non_triggers`、`manifest.json` routing 语义一致。
 - 能和相邻 Skill 区分，避免多个 Skill 同时成为 primary。
 - 不使用 `TODO`、`TBD`、`待补充`、`示例技能` 等占位内容。
 - 涉及高风险操作时体现边界，例如发布、外部系统、生产设备、凭据或运行态资产。
@@ -92,7 +92,7 @@ OpenAI Agents SDK 文档中的 handoff/ownership 语义在 adk 中落地为本�
 
 ## Workflow 入口规范
 
-Workflow 是一等资产，必须同时出现在 `manifest.yaml:workflows` 和 `workflows/<name>/WORKFLOW.md`。manifest 负责索引与导出闭包；`WORKFLOW.md` 负责阶段契约和人工可审查说明。
+Workflow 是一等资产，必须同时出现在 `manifest.json:workflows` 和 `workflows/<name>/WORKFLOW.md`。manifest 负责索引与导出闭包；`WORKFLOW.md` 负责阶段契约和人工可审查说明。
 
 每个 Workflow 必须声明：
 
@@ -111,9 +111,9 @@ Workflow 不重复领域 Skill 的细节；它只定义阶段、工件、门禁�
 1. 作为候选资产进入参考或 intake 记录。
 2. 做安全、许可证、触发边界、重复能力和运行时权限检查。
 3. 需要采纳时转写为 adk 原生 `skills/` 或 `optional-skills/`。
-4. 通过 `manifest.yaml`、验证脚本和测试门禁后，才允许进入显式 tool target 适配链路。
+4. 通过 `manifest.json`、验证脚本和测试门禁后，才允许进入显式 tool target 适配链路。
 
-安装成功不等于采纳完成；生产资产以 `manifest.yaml` 和验证证据为准。
+安装成功不等于采纳完成；生产资产以 `manifest.json` 和验证证据为准。
 
 ## 临时文章吸收
 

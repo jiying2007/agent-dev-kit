@@ -1,0 +1,310 @@
+{
+  "schema_version": 1,
+  "suite": "deterministic-routing",
+  "status": "pass",
+  "total": 30,
+  "passed": 30,
+  "success_rate": 1.0,
+  "results": [
+    {
+      "id": "route-001",
+      "category": "routing",
+      "expected_skill": "adk-runtime-router",
+      "actual_skill": "adk-runtime-router",
+      "expected_safe": true,
+      "status": "pass",
+      "elapsed_ms": 53.891,
+      "stderr": ""
+    },
+    {
+      "id": "route-002",
+      "category": "context",
+      "expected_skill": "adk-token-context-governance",
+      "actual_skill": "adk-token-context-governance",
+      "expected_safe": true,
+      "status": "pass",
+      "elapsed_ms": 78.02,
+      "stderr": ""
+    },
+    {
+      "id": "route-003",
+      "category": "requirements",
+      "expected_skill": "adk-requirements-triage",
+      "actual_skill": "adk-requirements-triage",
+      "expected_safe": true,
+      "status": "pass",
+      "elapsed_ms": 120.32,
+      "stderr": ""
+    },
+    {
+      "id": "route-004",
+      "category": "planning",
+      "expected_skill": "adk-task-breakdown",
+      "actual_skill": "adk-task-breakdown",
+      "expected_safe": true,
+      "status": "pass",
+      "elapsed_ms": 143.745,
+      "stderr": ""
+    },
+    {
+      "id": "route-005",
+      "category": "planning",
+      "expected_skill": "adk-lightweight-planning",
+      "actual_skill": "adk-lightweight-planning",
+      "expected_safe": true,
+      "status": "pass",
+      "elapsed_ms": 175.486,
+      "stderr": ""
+    },
+    {
+      "id": "route-006",
+      "category": "context",
+      "expected_skill": "adk-context-compress-handoff",
+      "actual_skill": "adk-context-compress-handoff",
+      "expected_safe": true,
+      "status": "pass",
+      "elapsed_ms": 201.32,
+      "stderr": ""
+    },
+    {
+      "id": "route-007",
+      "category": "orchestration",
+      "expected_skill": "adk-parallel-agent-governance",
+      "actual_skill": "adk-parallel-agent-governance",
+      "expected_safe": true,
+      "status": "pass",
+      "elapsed_ms": 239.594,
+      "stderr": ""
+    },
+    {
+      "id": "route-008",
+      "category": "git",
+      "expected_skill": "adk-worktree-governance",
+      "actual_skill": "adk-worktree-governance",
+      "expected_safe": false,
+      "status": "pass",
+      "elapsed_ms": 242.408,
+      "stderr": ""
+    },
+    {
+      "id": "route-009",
+      "category": "architecture",
+      "expected_skill": "adk-interface-contract-design",
+      "actual_skill": "adk-interface-contract-design",
+      "expected_safe": true,
+      "status": "pass",
+      "elapsed_ms": 283.331,
+      "stderr": ""
+    },
+    {
+      "id": "route-010",
+      "category": "test",
+      "expected_skill": "adk-test-strategy",
+      "actual_skill": "adk-test-strategy",
+      "expected_safe": true,
+      "status": "pass",
+      "elapsed_ms": 301.215,
+      "stderr": ""
+    },
+    {
+      "id": "route-011",
+      "category": "test",
+      "expected_skill": "adk-unit-test-embedded",
+      "actual_skill": "adk-unit-test-embedded",
+      "expected_safe": true,
+      "status": "pass",
+      "elapsed_ms": 332.768,
+      "stderr": ""
+    },
+    {
+      "id": "route-012",
+      "category": "quality",
+      "expected_skill": "adk-static-analysis-c-cpp",
+      "actual_skill": "adk-static-analysis-c-cpp",
+      "expected_safe": true,
+      "status": "pass",
+      "elapsed_ms": 345.305,
+      "stderr": ""
+    },
+    {
+      "id": "route-013",
+      "category": "debug",
+      "expected_skill": "adk-embedded-debug-transport",
+      "actual_skill": "adk-embedded-debug-transport",
+      "expected_safe": false,
+      "status": "pass",
+      "elapsed_ms": 368.555,
+      "stderr": ""
+    },
+    {
+      "id": "route-014",
+      "category": "debug",
+      "expected_skill": "adk-embedded-remote-debug-log-triage",
+      "actual_skill": "adk-embedded-remote-debug-log-triage",
+      "expected_safe": true,
+      "status": "pass",
+      "elapsed_ms": 421.033,
+      "stderr": ""
+    },
+    {
+      "id": "route-015",
+      "category": "debug",
+      "expected_skill": "adk-systematic-debugging",
+      "actual_skill": "adk-systematic-debugging",
+      "expected_safe": true,
+      "status": "pass",
+      "elapsed_ms": 446.81,
+      "stderr": ""
+    },
+    {
+      "id": "route-016",
+      "category": "verification",
+      "expected_skill": "adk-verification-before-completion",
+      "actual_skill": "adk-verification-before-completion",
+      "expected_safe": true,
+      "status": "pass",
+      "elapsed_ms": 458.776,
+      "stderr": ""
+    },
+    {
+      "id": "route-017",
+      "category": "learning",
+      "expected_skill": "adk-after-action-review",
+      "actual_skill": "adk-after-action-review",
+      "expected_safe": true,
+      "status": "pass",
+      "elapsed_ms": 486.499,
+      "stderr": ""
+    },
+    {
+      "id": "route-018",
+      "category": "memory",
+      "expected_skill": "adk-memory-curator",
+      "actual_skill": "adk-memory-curator",
+      "expected_safe": false,
+      "status": "pass",
+      "elapsed_ms": 546.062,
+      "stderr": ""
+    },
+    {
+      "id": "route-019",
+      "category": "archive",
+      "expected_skill": "adk-archive-governance",
+      "actual_skill": "adk-archive-governance",
+      "expected_safe": false,
+      "status": "pass",
+      "elapsed_ms": 560.567,
+      "stderr": ""
+    },
+    {
+      "id": "route-020",
+      "category": "archive",
+      "expected_skill": "adk-knowledge-archive",
+      "actual_skill": "adk-knowledge-archive",
+      "expected_safe": false,
+      "status": "pass",
+      "elapsed_ms": 600.641,
+      "stderr": ""
+    },
+    {
+      "id": "route-021",
+      "category": "repository",
+      "expected_skill": "adk-repo-drift-remediation",
+      "actual_skill": "adk-repo-drift-remediation",
+      "expected_safe": true,
+      "status": "pass",
+      "elapsed_ms": 675.863,
+      "stderr": ""
+    },
+    {
+      "id": "route-022",
+      "category": "git",
+      "expected_skill": "adk-commit-pr-quality-gate",
+      "actual_skill": "adk-commit-pr-quality-gate",
+      "expected_safe": false,
+      "status": "pass",
+      "elapsed_ms": 744.222,
+      "stderr": ""
+    },
+    {
+      "id": "route-023",
+      "category": "review",
+      "expected_skill": "adk-code-review-loop",
+      "actual_skill": "adk-code-review-loop",
+      "expected_safe": true,
+      "status": "pass",
+      "elapsed_ms": 778.248,
+      "stderr": ""
+    },
+    {
+      "id": "route-024",
+      "category": "git",
+      "expected_skill": "adk-branch-closeout",
+      "actual_skill": "adk-branch-closeout",
+      "expected_safe": false,
+      "status": "pass",
+      "elapsed_ms": 819.907,
+      "stderr": ""
+    },
+    {
+      "id": "route-025",
+      "category": "architecture",
+      "expected_skill": "adk-adr-writer",
+      "actual_skill": "adk-adr-writer",
+      "expected_safe": true,
+      "status": "pass",
+      "elapsed_ms": 790.767,
+      "stderr": ""
+    },
+    {
+      "id": "route-026",
+      "category": "embedded",
+      "expected_skill": "adk-register-map-design",
+      "actual_skill": "adk-register-map-design",
+      "expected_safe": true,
+      "status": "pass",
+      "elapsed_ms": 846.842,
+      "stderr": ""
+    },
+    {
+      "id": "route-027",
+      "category": "embedded",
+      "expected_skill": "adk-driver-bringup-checklist",
+      "actual_skill": "adk-driver-bringup-checklist",
+      "expected_safe": true,
+      "status": "pass",
+      "elapsed_ms": 873.26,
+      "stderr": ""
+    },
+    {
+      "id": "route-028",
+      "category": "embedded",
+      "expected_skill": "adk-bsp-porting-playbook",
+      "actual_skill": "adk-bsp-porting-playbook",
+      "expected_safe": true,
+      "status": "pass",
+      "elapsed_ms": 911.96,
+      "stderr": ""
+    },
+    {
+      "id": "route-029",
+      "category": "debug",
+      "expected_skill": "adk-offline-core-dump-triage",
+      "actual_skill": "adk-offline-core-dump-triage",
+      "expected_safe": true,
+      "status": "pass",
+      "elapsed_ms": 1022.991,
+      "stderr": ""
+    },
+    {
+      "id": "route-030",
+      "category": "release",
+      "expected_skill": "adk-embedded-release-orchestration",
+      "actual_skill": "adk-embedded-release-orchestration",
+      "expected_safe": false,
+      "status": "pass",
+      "elapsed_ms": 1164.657,
+      "stderr": ""
+    }
+  ]
+}

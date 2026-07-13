@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-dev-kit.local/schemas/manifest-3.0.0.json",
+  "title": "agent-dev-kit manifest",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "version",
+    "product",
+    "agents",
+    "skills",
+    "optional_skills",
+    "profiles",
+    "workflows",
+    "tool_targets",
+    "external_handoff_targets"
+  ],
+  "properties": {
+    "schema_version": {"const": "3.0.0"},
+    "version": {"type": "string", "pattern": "^3\\.[0-9]+\\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?$"},
+    "product": {
+      "type": "object",
+      "required": ["kind", "runtime_boundary", "evidence_model"],
+      "properties": {
+        "kind": {"const": "agent-asset-platform"},
+        "runtime_boundary": {"const": "no-llm-runner"},
+        "evidence_model": {"const": "source-test-runtime-field"}
+      },
+      "additionalProperties": false
+    },
+    "agents": {"type": "array", "items": {"$ref": "#/$defs/asset"}},
+    "skills": {"type": "array", "items": {"$ref": "#/$defs/asset"}},
+    "optional_skills": {"type": "array", "items": {"$ref": "#/$defs/asset"}},
+    "profiles": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {"$ref": "#/$defs/profile"}
+    },
+    "workflows": {"type": "array", "items": {"$ref": "#/$defs/asset"}},
+    "tool_targets": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {"$ref": "#/$defs/directTarget"}
+    },
+    "external_handoff_targets": {"type": "object"}
+  },
+  "$defs": {
+    "asset": {
+      "type": "object",
+      "required": ["name", "path"],
+      "properties": {
+        "name": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "path": {"type": "string", "minLength": 1}
+      }
+    },
+    "profile": {
+      "type": "object",
+      "properties": {
+        "description": {"type": "string"},
+        "trigger_examples": {"type": "array", "items": {"type": "string"}},
+        "extends": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "include_agents": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "include_skills": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+      }
+    },
+    "directTarget": {
+      "type": "object",
+      "required": ["display_name", "agents_dir", "skills_dir"],
+      "properties": {
+        "display_name": {"type": "string", "minLength": 1},
+        "default_root": {"type": "string", "minLength": 1},
+        "agents_dir": {"type": "string", "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"},
+        "skills_dir": {"type": "string", "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"},
+        "detect": {"type": "array", "items": {"type": "string"}}
+      }
+    }
+  }
+}

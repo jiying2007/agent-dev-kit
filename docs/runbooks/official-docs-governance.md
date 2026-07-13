@@ -17,8 +17,8 @@ Use official product and runtime guidance as current reference sources while kee
 | Layer | Meaning | Required Gate |
 |---|---|---|
 | `source_docs` / source IDs | Citation metadata and provenance for adopted ideas | Must not imply runtime enablement, tool target support, MCP activation or user-directory writes |
-| `manifest.yaml:reference_sources` | Named external sources used for governance and provenance | Must declare `runtime_enablement: false` |
-| `manifest.yaml:external_handoff_targets` | Non-direct runtime delivery targets handled by another declared chain | Must not duplicate `tool_targets`; Codex must stay `direct_tool_target: false` |
+| `manifest.json:reference_sources` | Named external sources used for governance and provenance | Must declare `runtime_enablement: false` |
+| `manifest.json:external_handoff_targets` | Non-direct runtime delivery targets handled by another declared chain | Must not duplicate `tool_targets`; Codex must stay `direct_tool_target: false` |
 | `reference_boundary` | Human-readable statement of what the manifest may and may not promote | Required for every manifest that references external source docs |
 | Promoted ADK contract | Platform-neutral fields, gates, evidence shapes or vocabulary owned by ADK | Must pass deterministic governance checks and preserve `check-runtime-boundary.sh` |
 | Runtime enablement | Actual MCP server, hosted service, hook, plugin, write action or live target | Requires a separate owner-approved runtime review with rollback and live evidence |

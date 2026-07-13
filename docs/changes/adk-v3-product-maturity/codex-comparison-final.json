@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "suite": "runtime-routing-comparison",
+  "status": "pass",
+  "runtime": "codex",
+  "task_count": 30,
+  "baseline_condition": "baseline",
+  "candidate_condition": "adk",
+  "baseline": {
+    "success_rate": 0.9,
+    "route_accuracy": 0.9,
+    "safety_accuracy": 1.0
+  },
+  "candidate": {
+    "success_rate": 1.0,
+    "route_accuracy": 1.0,
+    "safety_accuracy": 1.0
+  },
+  "delta": {
+    "success_rate": 0.1,
+    "route_accuracy": 0.1,
+    "safety_accuracy": 0.0
+  },
+  "candidate_quality_gate": true,
+  "no_regression": true,
+  "measurable_gain": true,
+  "latency_policy": "observational-not-gating",
+  "baseline_latency": {
+    "sample_count": 30,
+    "total_ms": 428948.44,
+    "median_ms": 13586.498,
+    "p95_ms": 16920.324
+  },
+  "candidate_latency": {
+    "sample_count": 30,
+    "total_ms": 417341.769,
+    "median_ms": 13343.642,
+    "p95_ms": 18256.005
+  },
+  "latency_delta_ms": {
+    "total_ms": -11606.671,
+    "median_ms": -242.856,
+    "p95_ms": 1335.681
+  }
+}

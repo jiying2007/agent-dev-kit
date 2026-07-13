@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "status": "pass",
+  "manifest_sha256": "86ffdd1c711bdaae4772f5e3d6469dba9dc471ab62022eb7567435b19e3023fb",
+  "iterations": 10,
+  "budgets": {
+    "manifest_validate": {
+      "max_p95_ms": 200.0,
+      "scope": "strict typed manifest validation without legacy shell gates"
+    },
+    "profile_resolve": {
+      "max_p95_ms": 50.0,
+      "scope": "embedded-fullstack profile inheritance and asset resolution"
+    },
+    "export_plan": {
+      "max_p95_ms": 100.0,
+      "scope": "Claude Code core export dry-run"
+    }
+  },
+  "budget_gate": {
+    "manifest_validate": true,
+    "profile_resolve": true,
+    "export_plan": true
+  },
+  "measurements": {
+    "manifest_validate": {
+      "iterations": 10,
+      "median_ms": 49.998,
+      "p95_ms": 54.157,
+      "min_ms": 40.041,
+      "max_ms": 54.157
+    },
+    "profile_resolve": {
+      "iterations": 10,
+      "median_ms": 5.614,
+      "p95_ms": 5.811,
+      "min_ms": 5.501,
+      "max_ms": 5.811
+    },
+    "export_plan": {
+      "iterations": 10,
+      "median_ms": 10.341,
+      "p95_ms": 11.36,
+      "min_ms": 10.08,
+      "max_ms": 11.36
+    }
+  }
+}

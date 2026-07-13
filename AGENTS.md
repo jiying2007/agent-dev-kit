@@ -18,15 +18,19 @@
 - `agents/`: role-specific agent instructions (`agents/<name>/AGENTS.md`).
 - `skills/`: core reusable skills (`skills/<name>/SKILL.md`).
 - `optional-skills/`: opt-in skills, only installed/exported when explicitly requested.
-- `scripts/`: install/convert/validate/workflow/catalog/match entrypoints.
+- `src/agent_dev_kit/`: typed manifest、compiler、installer、quality、evaluation 和 release core。
+- `scripts/`: `devkit.sh` 稳定包装层及 legacy governance check entrypoints。
 - `docs/`: usage, commands, workflow guide, runbooks, change artifacts.
 - `tests/`: shell-based regression suite and fixtures.
-- `manifest.yaml`: single source of truth for tools, profiles, agents, skills, optional skills.
+- `manifest.json`: 3.x single source of truth for product boundary, targets, profiles and assets.
+- `manifest.yaml`: compatibility mirror guarded by `tools/check_manifest_sync.py`.
 
 ## Build, Test, and Development Commands
 - `bash scripts/devkit.sh validate --strict`: full structure/schema validation.
 - `bash scripts/devkit.sh validate --quick`: fast pre-check for local iteration.
-- `bash scripts/devkit.sh convert --target claude-code --profile core --out dist --clean`: export generic ADK assets for a declared tool target.
+- `bash scripts/devkit.sh export --target claude-code --profile core --out dist --clean`: export deterministic assets for a direct target.
+- `bash scripts/devkit.sh install plan ...` / `install apply` / `install rollback`: transactional installation lifecycle.
+- `bash scripts/devkit.sh release check`: validate version, target and release contracts.
 - `bash scripts/devkit.sh catalog build`: regenerate catalog docs.
 - `bash scripts/devkit.sh match --skill adk-requirements-triage --text "..."`: trigger matching.
 - `bash tests/run_all.sh`: complete regression (required before merge).
@@ -255,8 +259,8 @@ adk 是面向通用 Agent/Skill/Workflow/Profile 的生产资产包。核心目�
 
 ### 资产统计
 
-- Agent、Core Skill、Optional Skill、Profile、Workflow 和 MCP server 的数量以 `manifest.yaml` 为单一事实源，不在本文件硬编码。
-- 结构与数量复核使用 `bash scripts/devkit.sh validate --strict`、`bash scripts/devkit.sh catalog build` 和 `bash scripts/health-check.sh check-all --summary-json`。
+- Agent、Core Skill、Optional Skill、Profile、Workflow、Target 和 MCP server 的数量以 `manifest.json` 为单一事实源，不在本文件硬编码；`manifest.yaml` 只用于兼容读取。
+- 结构与数量复核使用 `bash scripts/devkit.sh validate --strict`、`bash scripts/devkit.sh catalog build`、`bash scripts/devkit.sh security check` 和 `bash scripts/devkit.sh release check`。
 - MCP server 保持显式清单；空清单表示默认不隐式安装 MCP。
 
 ### 硬边界

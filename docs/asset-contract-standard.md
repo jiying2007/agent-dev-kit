@@ -100,6 +100,6 @@ Historical role-style assets are removed from live source, not aliased:
 
 ## Taxonomy and Routing Contract
 
-每个 live Skill 和 Optional Skill 必须在 `manifest.yaml` 声明 `category`、`lifecycle_order`、`stage_order`、`activation_mode` 和 `pattern`。`lifecycle_order` 用于跨类别生命周期排序，`stage_order` 用于同一类别内的流程排序。每个 Workflow 必须声明 `workflow_type`、`lifecycle_order`、`entry_conditions` 和 `exit_evidence`。Profile 的 `include_skills` 必须按生命周期和阶段顺序排列。
+每个 live Skill 和 Optional Skill 必须在 `manifest.json` 声明 `category`、`lifecycle_order`、`stage_order`、`activation_mode` 和 `pattern`。`lifecycle_order` 用于跨类别生命周期排序，`stage_order` 用于同一类别内的流程排序。每个 Workflow 必须声明 `workflow_type`、`lifecycle_order`、`entry_conditions` 和 `exit_evidence`。Profile 的 `include_skills` 必须按生命周期和阶段顺序排列。
 
-场景级入口以 `manifest.yaml:skill_routing_matrix` 为准：一个场景只能有一个 `primary_skill`，`supporting_skills` 不得抢占入口，`fallback_skills` 必须指向已声明的 Skill 或 Optional Skill。默认 catalog 生成会同步更新 `docs/reference/skill-routing-matrix.md`。
+场景级入口以 `manifest.json:skill_routing_matrix` 为准：一个场景只能有一个 `primary_skill`，`supporting_skills` 不得抢占入口，`fallback_skills` 必须指向已声明的 Skill 或 Optional Skill。默认 catalog 生成会同步更新 `docs/reference/skill-routing-matrix.md`。

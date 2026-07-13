@@ -27,20 +27,20 @@ ADK 不负责：
 
 | 概念 | 作用 | 单一事实源 |
 |---|---|---|
-| Agent | 定义角色主责、所有权、交接边界和质量门禁 | `manifest.yaml:agents`、`agents/<name>/AGENTS.md` |
-| Skill | 定义可复用方法、触发条件、命令模式、证据模板和质量门禁 | `manifest.yaml:skills`、`skills/<name>/SKILL.md` |
-| Optional Skill | 定义默认 profile 不自动启用、需要显式选择的能力 | `manifest.yaml:optional_skills`、`optional-skills/<name>/SKILL.md` |
-| Profile | 定义某个使用场景解析后的 Agent/Skill 资产集合 | `manifest.yaml:profiles` |
-| Workflow | 定义阶段顺序、产物契约、主责 Agent/Skill 和验证序列 | `manifest.yaml:workflows`、`workflows/<name>/WORKFLOW.md` |
+| Agent | 定义角色主责、所有权、交接边界和质量门禁 | `manifest.json:agents`、`agents/<name>/AGENTS.md` |
+| Skill | 定义可复用方法、触发条件、命令模式、证据模板和质量门禁 | `manifest.json:skills`、`skills/<name>/SKILL.md` |
+| Optional Skill | 定义默认 profile 不自动启用、需要显式选择的能力 | `manifest.json:optional_skills`、`optional-skills/<name>/SKILL.md` |
+| Profile | 定义某个使用场景解析后的 Agent/Skill 资产集合 | `manifest.json:profiles` |
+| Workflow | 定义阶段顺序、产物契约、主责 Agent/Skill 和验证序列 | `manifest.json:workflows`、`workflows/<name>/WORKFLOW.md` |
 | Change Set | 定义一次可审查变更的 proposal、design、tasks、verify、review 和归档记录 | `docs/changes/<change-id>/` |
-| Reference Source | 定义外部资料、官方文档、参考实现和 provenance，不代表运行时启用 | `manifest.yaml:reference_sources`、`manifests/*` |
-| Tool Target | 定义资产导出到某类运行时的格式和目录语义 | `manifest.yaml:tool_targets` |
-| External Handoff Target | 定义由外部声明式链路承接的运行目标，不是 ADK direct export target | `manifest.yaml:external_handoff_targets` |
+| Reference Source | 定义外部资料、官方文档、参考实现和 provenance，不代表运行时启用 | `manifest.json:reference_sources`、`manifests/*` |
+| Tool Target | 定义资产导出到某类运行时的格式和目录语义 | `manifest.json:tool_targets` |
+| External Handoff Target | 定义由外部声明式链路承接的运行目标，不是 ADK direct export target | `manifest.json:external_handoff_targets` |
 
 当前 target 模型：
 
-- `tool_targets` 包含 `claude-code`、`hermes-agent`、`opencode`，它们是 ADK 可直接 install/convert 的导出目标。
-- `external_handoff_targets.codex` 表示 Codex 通过 `~/codex -> ~/.codex` source-to-live 链路承接 ADK 资产，不是 `convert --target codex`。
+- `tool_targets` 包含 `claude-code`、`hermes-agent`、`opencode`，它们是 ADK 可直接 install/export 的目标。
+- `external_handoff_targets.codex` 表示 Codex 通过 `~/codex -> ~/.codex` source-to-live 链路承接 ADK 资产，不是 `export --target codex`。
 - `reference_sources.openai-developers` 和 `reference_sources.codex-runtime-methods` 只提供引用、freshness、adoption 和边界治理；这些名称不授予 MCP、hook、plugin、hosted service、用户目录写入或 runtime enablement。
 
 命名和边界规则见 `docs/asset-contract-standard.md`。日常使用时可以先记住四条硬规则：
@@ -214,7 +214,7 @@ bash scripts/devkit.sh match --skill adk-systematic-debugging --text "问题根�
 - `SKILL.md` frontmatter 的 `description` 是否准确。
 - `triggers` 是否过宽或过窄。
 - `non_triggers` 是否覆盖了不该命中的场景。
-- `manifest.yaml` 里 Skill 所属 profile 是否正确。
+- `manifest.json` 里 Skill 所属 profile 是否正确。
 
 ## 8. 使用 Change Set 推进变更
 
@@ -245,36 +245,41 @@ bash scripts/devkit.sh match --skill adk-systematic-debugging --text "问题根�
 - 未验证的探索结论可以记录，但不能当作放行证据。
 - 失败路径要写入 `negative-results.md`，避免后续重复踩坑。
 
-## 9. 安装与转换
+## 9. 安装与导出
 
-ADK 支持两类交付动作：`install` 和 `convert`。
+ADK 支持两类交付动作：事务 `install` 和 deterministic `export`。
 
-`install` 用于把选定 Profile 的 Agent/Skill 安装到显式目标目录，例如 `bash scripts/devkit.sh install --tool claude-code --target /tmp/adk-target --mode copy --profile core`。
+`install plan` 先计算 ownership、冲突、manifest/source/destination digest 和有效期；`install apply` 只接受完整、未篡改的 ready plan 并生成 receipt；`install rollback` 先预检全部目标，再按 receipt 原子恢复。重复安装的回滚会恢复上一份 receipt；托管资产漂移时不会发生部分删除。
+
+```bash
+bash scripts/devkit.sh install plan --tool claude-code --target /tmp/adk-target --mode copy --profile core --output /tmp/adk-plan.json
+bash scripts/devkit.sh install apply --plan /tmp/adk-plan.json
+bash scripts/devkit.sh install rollback --receipt /tmp/adk-target/.adk-install-receipt.json
+```
 
 常用参数：
 
 | 参数 | 说明 |
 |---|---|
-| `--tool` | `auto`、`claude-code`、`hermes-agent`、`opencode` |
+| `--tool` | `claude-code`、`hermes-agent`、`opencode` |
 | `--target` | 安装目标目录 |
 | `--mode` | `copy` 或 `symlink` |
 | `--profile` | 主 profile |
 | `--extra-profile` | 额外叠加 profile，可重复 |
 | `--with-optional-skill` | 显式叠加 optional skill，可重复 |
-| `--backup` | 安装前备份目标目录 |
-| `--install-report` | 输出安装报告 |
-| `--lock-version` | 要求 manifest version 匹配 |
+| `--output` | plan JSON 输出路径 |
+| `--ttl-minutes` | plan 有效期 |
 
-`convert` 用于导出目标工具格式的中间目录，例如 `bash scripts/devkit.sh convert --target claude-code --profile embedded-fullstack --out dist/claude-code --clean`。
+`export` 用于导出目标工具格式的中间目录，例如 `bash scripts/devkit.sh export --target claude-code --profile embedded-fullstack --out dist --clean`。
 
-安装和转换边界：
+安装和导出边界：
 
-- `--target` 必须来自 `manifest.yaml:tool_targets`。
-- Codex 当前不是 direct `tool_targets` 成员；Codex 支持由 `manifest.yaml:external_handoff_targets.codex` 描述，并通过外部 `~/codex -> ~/.codex` 链路完成 build/apply/smoke。
+- `--target` 必须来自 `manifest.json:tool_targets`。
+- Codex 当前不是 direct `tool_targets` 成员；Codex 支持由 `manifest.json:external_handoff_targets.codex` 描述，并通过外部 `~/codex -> ~/.codex` 链路完成 build/plan/apply/smoke。
 - 不要把平台专属用户目录写成 ADK core 默认路径。
 - 写入真实运行目录前必须有 dry-run、备份或回滚路径。
 - `dist/` 是可丢弃产物，不是事实源。
-- 事实源始终是 `manifest.yaml`、`agents/`、`skills/`、`optional-skills/`、`workflows/` 和 `docs/`。
+- 事实源始终是 `manifest.json`、`agents/`、`skills/`、`optional-skills/`、`workflows/` 和 `docs/`；`manifest.yaml` 只是兼容镜像。
 
 ## 10. 修改 Agent、Skill、Workflow 的准则
 
@@ -291,14 +296,14 @@ ADK 支持两类交付动作：`install` 和 `convert`。
 修改 Agent 时检查：
 
 - `agents/<name>/AGENTS.md` 是否清楚说明职责、边界和交付物。
-- `manifest.yaml:agents` 是否同步更新。
+- `manifest.json:agents` 是否同步更新。
 - `default_skills` 是否足够覆盖该 Agent 的主责。
 - 是否与已有 Agent 发生职责重叠。
 
 修改 Skill 时检查：
 
 - `SKILL.md` frontmatter 至少包含 `name`、`description`、`version`、`last_updated`。
-- `manifest.yaml:skills` 或 `optional_skills` 是否声明 `category`、`lifecycle_order`、`stage_order`、`activation_mode` 和 `pattern`。
+- `manifest.json:skills` 或 `optional_skills` 是否声明 `category`、`lifecycle_order`、`stage_order`、`activation_mode` 和 `pattern`。
 - `description` 是否能支撑准确路由。
 - `triggers` 和 `non_triggers` 是否清楚。
 - 命令、证据、失败模式和质量门禁是否可执行。
@@ -389,13 +394,13 @@ fix(catalog): 修复 workflow matrix 生成格式
 | 现象 | 常见原因 | 处理方式 |
 |---|---|---|
 | `profile coherence` 失败 | 子 profile 重复声明继承资产，或缺少 Agent default Skills | 删除继承重复项，或补齐 resolved profile 所需 Skill |
-| catalog 生成后有 diff | `manifest.yaml` 已变更但目录文档未更新 | 运行 `bash scripts/devkit.sh catalog build` 并审查 diff |
+| catalog 生成后有 diff | `manifest.json` 已变更但目录文档未更新 | 运行 `bash scripts/devkit.sh catalog build` 并审查 diff |
 | `workflow contract` 失败 | Workflow 引用的 Agent/Skill 不在 profile 闭包内 | 更新 profile membership 或修正 Workflow contract |
 | `runtime-boundary` 失败 | active source 出现平台专属路径、handoff 或运行时写入残留，或 direct/external target 边界混用 | 移到 reference metadata、archive、`external_handoff_targets`，或显式声明 direct tool target 并补转换语义 |
 | `file_modes` 失败 | Git index 中的 executable bit 不符合规则 | 检查是否误加执行位，必要时运行 `file-modes --fix` |
 | Skill 匹配过宽 | `description` 或 `triggers` 太泛 | 收紧描述，增加 `non_triggers` |
 | Skill 匹配不到 | 触发词缺失或 profile 未包含该 Skill | 补触发条件，或调整 profile |
-| install/convert 结果不对 | target 未声明、profile 选择错误或输出目录未清理 | 检查 `manifest.yaml:tool_targets`，加 `--clean` 重新导出 |
+| install/export 结果不对 | target 未声明、profile 选择错误或输出目录未清理 | 检查 `manifest.json:tool_targets`，加 `--clean` 重新导出 |
 
 ## 15. 日常最小清单
 
@@ -437,7 +442,7 @@ Agent 使用要点：
 
 - 需求、架构、实现、验证、审查和发布必须由不同职责明确接力，不能让单个 Agent 同时裁决所有风险。
 - 嵌入式专用 Agent 只在 `embedded-fullstack` 等相关 profile 中启用，不应回流到通用 `core` 前提。
-- 修改 Agent 后必须同步检查 `manifest.yaml:agents`、profile 闭包和 `docs/agent-skill-catalog.md`。
+- 修改 Agent 后必须同步检查 `manifest.json:agents`、profile 闭包和 `docs/agent-skill-catalog.md`。
 
 ## 18. Skill 详细介绍
 

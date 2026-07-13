@@ -22,7 +22,7 @@ bash scripts/devkit.sh test
 - `runtime-boundary`：检查 ADK core 是否保持平台中立，防止平台专属 handoff、运行目录写入残留和 direct/external target 边界混用。
 - `asset-taxonomy`：检查 skill/workflow 分类、manifest 物理顺序、profile 生命周期顺序和场景路由矩阵。
 - `official-docs-governance`：检查官方资料 freshness、提升状态和平台中立契约。
-- `test`：全量回归，包含 validate、格式、内容质量、文件权限、安装、profile coherence、optional、convert、workflow contract、catalog、trigger matrix、governance 和 smoke。
+- `test`：全量回归，包含 validate、格式、内容质量、文件权限、事务安装、profile coherence、optional、export、workflow contract、catalog、trigger matrix、governance 和 smoke。
 - `catalog build`：生成 Agent/Skill/Workflow/Profile 索引，并在默认输出模式下同步生成 `docs/workflow-contract-matrix.md` 和 `docs/reference/skill-routing-matrix.md`。
 - 资产命名与边界标准见 `docs/asset-contract-standard.md`；历史角色型资产硬切换，不保留兼容 alias。
 
@@ -56,43 +56,43 @@ Profile 继承一致性检查：
 bash scripts/check-profile-coherence.sh
 ```
 
-## 3. 安装和转换
+## 3. 安装和导出
 
-安装用于把 Agent/Skill 复制或软链接到显式 target 的本地目录：
+安装通过 plan/apply/receipt/rollback 事务把 Agent/Skill 复制或软链接到显式 target。plan 会阻断未托管冲突和过期/漂移输入：
 
 ```bash
-bash scripts/devkit.sh install --tool auto --mode symlink --profile embedded-fullstack
-bash scripts/devkit.sh install --tool claude-code --target /tmp/adk-claude-target --mode copy --profile core --extra-profile release-hardening
+bash scripts/devkit.sh install plan --tool claude-code --target /tmp/adk-claude-target --mode copy --profile core --extra-profile release-hardening --output /tmp/adk-plan.json
+bash scripts/devkit.sh install apply --plan /tmp/adk-plan.json
+bash scripts/devkit.sh install rollback --receipt /tmp/adk-claude-target/.adk-install-receipt.json
 ```
 
-转换用于生成 target 格式的交付目录：
+export 用于生成 target 格式的确定性交付目录：
 
 ```bash
-bash scripts/devkit.sh convert --target claude-code --profile embedded-fullstack --out dist/claude-code --clean
-bash scripts/devkit.sh convert --target hermes-agent --profile core --extra-profile release-hardening --out dist/hermes-agent --clean
-bash scripts/devkit.sh convert --target opencode --profile team-core --with-optional-skill adk-security-supply-chain --out dist/opencode --clean
+bash scripts/devkit.sh export --target claude-code --profile embedded-fullstack --out dist --clean
+bash scripts/devkit.sh export --target hermes-agent --profile core --extra-profile release-hardening --out dist --clean
+bash scripts/devkit.sh export --target opencode --profile team-core --with-optional-skill adk-security-supply-chain --out dist --clean
 ```
 
 参数说明：
 
-- `--tool`：`auto|claude-code|hermes-agent|opencode`。
-- `--target`：转换目标，取值来自 `manifest.yaml:tool_targets`。
+- `--tool`：`claude-code|hermes-agent|opencode`。
+- `--target`：导出目标，取值来自 `manifest.json:tool_targets`。
 - `--mode`：`symlink|copy`。
 - `--profile`：主 profile，默认 `core`。
 - `--extra-profile`：可选叠加 profile，可重复。
 - `--with-optional-skill`：按需叠加 optional skill，可重复。
-- `--out`：转换输出目录。
+- `--out`：导出输出目录。
 - `--clean`：导出前清理输出目录。
-- `--backup`：安装前备份目标 agents/skills。
-- `--install-report`：生成安装报告。
-- `--lock-version`：要求 manifest version 匹配。
+- `--output`：安装 plan 输出路径。
+- `--ttl-minutes`：安装 plan 有效期。
 
 生产纪律：
 
 - tool target 必须显式声明，不能把平台专属路径写进 core。
-- Codex 当前不是 direct tool target；Codex 交付由外部 `~/codex -> ~/.codex` source-to-live 链路承接，并记录在 `manifest.yaml:external_handoff_targets.codex`。
-- OpenAI/Codex 官方资料只作为 `manifest.yaml:reference_sources` 和 governance manifest 的引用来源，不表示 runtime enablement。
-- install/convert 的输出是交付物，不是绕过目标运行时治理的理由。
+- Codex 当前不是 direct tool target；Codex 交付由外部 `~/codex -> ~/.codex` source-to-live 链路承接，并记录在 `manifest.json:external_handoff_targets.codex`。
+- OpenAI/Codex 官方资料只作为 `manifest.json:reference_sources` 和 governance manifest 的引用来源，不表示 runtime enablement。
+- install/export 的输出是交付物，不是绕过目标运行时治理的理由。
 - 写入真实用户运行目录前必须有 dry-run、备份或回滚路径。
 
 ## 4. 目录索引与触发匹配
@@ -141,8 +141,11 @@ bash scripts/devkit.sh evidence append --file docs/changes/can-fd-bringup/negati
 ```bash
 bash scripts/devkit.sh health
 bash scripts/devkit.sh backup list
-bash scripts/devkit.sh ops weekly
+bash scripts/devkit.sh benchmark run --iterations 5 --summary-json
+bash scripts/devkit.sh security check --summary-json
+bash scripts/devkit.sh eval run --suite deterministic --summary-json
 bash scripts/devkit.sh release check
+bash scripts/devkit.sh release build --out dist
 bash scripts/devkit.sh version show
 ```
 
@@ -152,6 +155,8 @@ bash scripts/devkit.sh version show
 bash scripts/devkit.sh validate --strict
 bash scripts/devkit.sh runtime-boundary
 bash scripts/devkit.sh official-docs-governance --summary-json
+bash scripts/devkit.sh security check --summary-json
+bash scripts/devkit.sh release check --summary-json
 bash scripts/devkit.sh test
 ```
 
@@ -165,7 +170,7 @@ bash scripts/devkit.sh test
 
 回滚原则：
 
-1. 先确认 install report、转换输出、发布记录或备份路径。
+1. 先确认 install receipt、导出清单、发布记录或备份路径。
 2. 不直接删除目标运行目录。
 3. 回滚后执行目标工具的健康检查和 ADK 自身回归。
 4. 在变更工件或 session summary 中记录回滚原因、命令和结果。

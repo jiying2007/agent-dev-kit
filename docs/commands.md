@@ -2,28 +2,28 @@
 
 统一入口：`bash scripts/devkit.sh <command> [options]`
 
-ADK core 只提供平台中立命令。Direct export 运行时适配必须通过 `manifest.yaml:tool_targets` 显式声明；需要外部声明式链路承接的运行体系进入 `manifest.yaml:external_handoff_targets`，不能把平台专属 handoff 或用户目录写入作为默认路径。
+ADK core 只提供平台中立命令。`manifest.json` 是 3.0 结构化 SSOT；direct export 适配必须通过 `tool_targets` 显式声明。需要外部声明式链路承接的运行体系进入 `external_handoff_targets`，不能把平台专属 handoff 或用户目录写入作为默认路径。
 
 ## install
 
-安装 Agent/Skill 到受支持工具目录。
+通过可审查 plan、原子 apply 和 receipt rollback 安装 Agent/Skill。`apply` 只接受未过期、manifest digest 未漂移且无冲突的 plan；未托管目标冲突会在 plan 阶段阻断。
 
 ```bash
-bash scripts/devkit.sh install --tool auto --mode symlink --profile embedded-fullstack
-bash scripts/devkit.sh install --tool claude-code --target /tmp/adk-claude-target --mode copy --profile core --extra-profile release-hardening
+bash scripts/devkit.sh install plan --tool claude-code --target /tmp/adk-live --mode copy --profile core --output /tmp/adk-plan.json
+bash scripts/devkit.sh install apply --plan /tmp/adk-plan.json --summary-json
+bash scripts/devkit.sh install rollback --receipt /tmp/adk-live/.adk-install-receipt.json --summary-json
 ```
 
 常用参数：
 
-- `--tool auto|claude-code|hermes-agent|opencode`
+- `--tool claude-code|hermes-agent|opencode`
 - `--mode symlink|copy`
 - `--profile <name>`
 - `--extra-profile <name>`
 - `--with-optional-skill <name>`
 - `--target <path>`
-- `--backup`
-- `--install-report <path>`
-- `--lock-version <version>`
+- `--output <plan.json>`
+- `--ttl-minutes <n>`
 
 ## validate
 
@@ -35,19 +35,25 @@ bash scripts/devkit.sh validate --quick
 bash scripts/devkit.sh validate --strict --summary-json
 ```
 
-## convert
-
-将 profile 资产导出为目标工具格式。
+从 2.x YAML 生成新的 3.0 JSON 时使用一次性迁移器；默认拒绝覆盖已有输出，复核后才可显式传 `--force`：
 
 ```bash
-bash scripts/devkit.sh convert --target claude-code --profile core --out dist/claude-code --clean
-bash scripts/devkit.sh convert --target hermes-agent --profile core --extra-profile release-hardening --out dist/hermes-agent --clean
-bash scripts/devkit.sh convert --target opencode --profile team-core --with-optional-skill adk-test-flakiness-triage --out dist/opencode --clean
+python3 tools/migrate_manifest_v2.py --source manifest.yaml --output /tmp/manifest-v3.json
 ```
 
-`--target` 的取值必须来自 `manifest.yaml:tool_targets`。新增 direct target 前先补 manifest、转换语义、拒绝条件、回滚路径和 runtime-boundary 验证。
+## export
 
-Codex 当前不是 direct `tool_targets` 成员，因此不是 `convert --target` 的合法取值；它由 `manifest.yaml:external_handoff_targets.codex` 描述为 `~/codex -> ~/.codex` source-to-live 交付链路。
+将 profile 资产确定性导出为目标工具格式；同一 manifest 与参数必须产生同一文件集合和 digest。
+
+```bash
+bash scripts/devkit.sh export --target claude-code --profile core --out dist --clean
+bash scripts/devkit.sh export --target hermes-agent --profile core --extra-profile release-hardening --out dist --clean
+bash scripts/devkit.sh export --target opencode --profile team-core --with-optional-skill adk-test-flakiness-triage --out dist --dry-run --summary-json
+```
+
+`--target` 的取值必须来自 `manifest.json:tool_targets`。新增 direct target 前先补 manifest、转换语义、拒绝条件、回滚路径和 runtime-boundary 验证。
+
+Codex 当前不是 direct `tool_targets` 成员，因此不是 `export --target` 的合法取值；它由 `external_handoff_targets.codex` 描述为 `~/codex -> ~/.codex` source-to-live 交付链路。
 
 ## runtime-boundary
 
@@ -304,58 +310,46 @@ bash scripts/devkit.sh health
 bash scripts/devkit.sh backup list
 ```
 
-## ops
+## benchmark
 
-执行日常、周常或月常运维编排。自动化默认 report-only，写操作必须显式传 `--apply`。
-
-```bash
-bash scripts/devkit.sh ops weekly --summary-json
-bash scripts/devkit.sh ops cleanup --apply
-```
-
-## monitor
-
-执行系统监控与告警检查。
+测量 manifest 校验、profile 解析和 export plan 的平台自身性能。该命令不声称测量模型推理性能或终端运行时性能。
 
 ```bash
-bash scripts/devkit.sh monitor
+bash scripts/devkit.sh benchmark run --iterations 10 --output /tmp/adk-benchmark.json --summary-json
+bash scripts/devkit.sh benchmark report --input /tmp/adk-benchmark.json --output /tmp/adk-benchmark.md
 ```
 
-## perf
+## eval
 
-执行性能分析与优化检查。`analyze` 和 `benchmark` 支持低 token JSON 摘要；`benchmark` 默认只跑轻量 validate smoke，显式传 `--include-quick-tests`、`--include-quality` 或 `--include-io` 才扩大测量面；`report` 默认输出到 stdout，只有 `--out` 才写文件。
+运行 30 条确定性路由评测，或生成/执行 Codex、Claude 的只读真实运行时评测。真实运行时必须显式传 `--execute`；默认只返回执行计划，不产生模型调用费用。baseline 与 ADK 使用同一审批策略；runtime 质量门禁要求综合成功率不低于 0.85、路由准确率不低于 0.90、安全准确率不低于 0.90，且没有 runtime error。
 
 ```bash
-bash scripts/devkit.sh perf analyze --summary-json
-bash scripts/devkit.sh perf benchmark --summary-json
-bash scripts/devkit.sh perf budget --summary-json
-bash scripts/devkit.sh perf budget --strict --timing-json /tmp/adk-run-all-quick.json
-bash scripts/devkit.sh perf report --out /tmp/adk-performance-report.md
+bash scripts/devkit.sh eval run --suite deterministic --output /tmp/adk-eval.json --summary-json
+bash scripts/devkit.sh eval run --suite runtime --runtime codex --condition adk --limit 2 --summary-json
+bash scripts/devkit.sh eval run --suite runtime --runtime claude --condition baseline --limit 2 --execute --output /tmp/adk-claude-eval.json
+bash scripts/devkit.sh eval compare --baseline /tmp/codex-baseline.json --candidate /tmp/codex-adk.json --output /tmp/codex-comparison.json
+bash scripts/devkit.sh eval report --input /tmp/adk-eval.json --output /tmp/adk-eval.md
 ```
 
-## perf-budget
-
-性能预算契约的直达入口，等价于 `bash scripts/devkit.sh perf budget`，用于脚本化门禁中减少一层子命令分发。
-
-```bash
-bash scripts/devkit.sh perf-budget --summary-json
-bash scripts/devkit.sh perf-budget --strict --timing-json /tmp/adk-run-all-quick.json
-```
+`eval compare` 只在 candidate 达到质量门禁、三个指标都不回退且至少一个指标有可测提升时通过。比较结果同时记录 baseline/candidate 的总耗时、中位数和 nearest-rank P95，但延迟是 `observational-not-gating`：单次模型运行的抖动不能替代重复实验或统计显著性分析。缺少 executable 或认证时结果必须是 `not-run`。
 
 ## security
 
-执行安全扫描与加固检查。
+执行阻断式安全检查：敏感文件名、疑似凭证内容、仓库外 symlink、world-writable 文件、未固定 SHA 的 GitHub Action 和未固定 digest 的 container action 都会失败。扫描范围包含 tracked 文件与未被 ignore 的 untracked 文件。
 
 ```bash
-bash scripts/devkit.sh security
+bash scripts/devkit.sh security check
+bash scripts/devkit.sh security check --summary-json
 ```
 
 ## release
 
-执行发布准备、验证、构建、发布或回滚相关流程。
+执行发布检查、可复现制品构建和显式 backend 发布。`publish` 不配置 backend、制品或 checksum 时必须失败；发布前会重新计算 SHA256 并核对制品名与版本，当前只支持 GitHub CLI backend。
 
 ```bash
 bash scripts/devkit.sh release check
+bash scripts/devkit.sh release build --version 3.0.0 --out dist --summary-json
+bash scripts/devkit.sh release publish --version 3.0.0 --backend github --artifact dist/agent-dev-kit-3.0.0.tar.gz --dry-run
 ```
 
 ## version
@@ -364,5 +358,5 @@ bash scripts/devkit.sh release check
 
 ```bash
 bash scripts/devkit.sh version show
-bash scripts/devkit.sh version changelog --version 2.9.1
+bash scripts/devkit.sh version changelog --version 3.0.0
 ```
