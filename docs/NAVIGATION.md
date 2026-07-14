@@ -5,6 +5,7 @@
 | Usage | `usage.md` | 通用使用入口 |
 | Usage Guide | `adk-usage-guide.md` | 完整使用路径、资产修改、CI 边界和提交门禁 |
 | Commands | `commands.md` | CLI 命令说明 |
+| Target Migration | `migrations/3.1.0-rc.2.md` | rc.1 到 rc.2 原生路径、plan/receipt 与回滚迁移 |
 | Profiles | `profile-guide.md` | Profile 选择 |
 | Mapping | `mapping-matrix.md` | 能力到脚本/工件映射 |
 | Practice Source Governance | `runbooks/practice-source-governance.md` | 参考来源到 ADK 通用资产的硬边界 |

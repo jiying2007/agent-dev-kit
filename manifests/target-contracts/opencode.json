@@ -1,0 +1,39 @@
+{
+  "schema": "adk-target-contract/v1",
+  "target": "opencode",
+  "status": "experimental",
+  "source": {
+    "urls": [
+      "https://opencode.ai/docs/agents/",
+      "https://opencode.ai/docs/skills/"
+    ],
+    "retrieved_at": "2026-07-13",
+    "review_status": "reviewed",
+    "expires_at": "2026-10-11"
+  },
+  "supported_asset_kinds": ["agent", "skill"],
+  "layouts": {
+    "agent": "agents/{name}.md",
+    "skill": "skills/{name}/SKILL.md"
+  },
+  "frontmatter": {
+    "agent": {
+      "required": ["description", "mode", "permission"],
+      "preserve": [],
+      "static": {"mode": "subagent"}
+    },
+    "skill": {
+      "required": ["name", "description", "metadata"],
+      "preserve": ["license", "compatibility"],
+      "static": {}
+    }
+  },
+  "permission_profiles": {
+    "read-only": {"permission": {"edit": "deny", "bash": "deny", "webfetch": "ask"}},
+    "code-write": {"permission": {"edit": "allow", "bash": "ask", "webfetch": "ask"}},
+    "build-release": {"permission": {"edit": "ask", "bash": "ask", "webfetch": "ask"}},
+    "diagnostic": {"permission": {"edit": "deny", "bash": "ask", "webfetch": "ask"}}
+  },
+  "support_directories": ["references", "scripts", "assets", "templates", "examples"],
+  "smoke_stages": ["discovery", "load", "trigger", "permission"]
+}

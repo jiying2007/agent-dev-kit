@@ -2,14 +2,14 @@
 
 统一入口：`bash scripts/devkit.sh <command> [options]`
 
-ADK core 只提供平台中立命令。`manifest.json` 是 3.0 结构化 SSOT；direct export 适配必须通过 `tool_targets` 显式声明。需要外部声明式链路承接的运行体系进入 `external_handoff_targets`，不能把平台专属 handoff 或用户目录写入作为默认路径。
+ADK core 只提供平台中立命令。`manifest.json` 是 3.1 结构化 SSOT，并由 Draft 2020-12 JSON Schema 与语义规则共同校验；direct export 适配必须通过 `tool_targets` 和 versioned target contract 显式声明。需要外部声明式链路承接的运行体系进入 `external_handoff_targets`，不能把平台专属 handoff 或用户目录写入作为默认路径。
 
 ## install
 
-通过可审查 plan、原子 apply 和 receipt rollback 安装 Agent/Skill。`apply` 只接受未过期、manifest digest 未漂移且无冲突的 plan；未托管目标冲突会在 plan 阶段阻断。新安装写入 `adk-install-receipt/v2`，对 receipt 本体、被替换资产备份和前序 receipt 做 SHA256 完整性校验；`v1` receipt 仅为 3.0 升级/回滚兼容读取，不具备新增的备份完整性声明。
+通过可审查 plan、原子 apply 和 receipt rollback 安装 Agent/Skill。`apply` 只接受 UUID/timestamp/TTL 合法、未过期、manifest/contract digest 未漂移、active receipt SHA256 未变化且无冲突的 `adk-install-plan/v2`；未托管目标冲突会在 plan 阶段阻断。新安装写入 `adk-install-receipt/v3`，记录 target contract digest、逐文件 rendered/source SHA256、mode、asset kind、备份和前序 receipt 完整性；`v1/v2` receipt 仅用于兼容回滚，旧 `v1` plan 明确拒绝。
 
 ```bash
-bash scripts/devkit.sh install plan --tool claude-code --target /tmp/adk-live --mode copy --profile core --output /tmp/adk-plan.json
+bash scripts/devkit.sh install plan --tool claude-code --target /tmp/adk-live --mode copy --profile core --asset-kind skill --output /tmp/adk-plan.json
 bash scripts/devkit.sh install apply --plan /tmp/adk-plan.json --lock-timeout 30 --summary-json
 bash scripts/devkit.sh install rollback --receipt /tmp/adk-live/.adk-install-receipt.json --lock-timeout 30 --summary-json
 ```
@@ -17,7 +17,8 @@ bash scripts/devkit.sh install rollback --receipt /tmp/adk-live/.adk-install-rec
 常用参数：
 
 - `--tool claude-code|hermes-agent|opencode`
-- `--mode symlink|copy`
+- `--mode copy`（target contract 为防止越界与语义漂移而拒绝 symlink）
+- `--asset-kind agent|skill`（Hermes Agent 不受支持并 fail closed）
 - `--profile <name>`
 - `--extra-profile <name>`
 - `--with-optional-skill <name>`
@@ -65,6 +66,18 @@ bash scripts/devkit.sh export --target opencode --profile team-core --with-optio
 `--target` 的取值必须来自 `manifest.json:tool_targets`。新增 direct target 前先补 manifest、转换语义、拒绝条件、回滚路径和 runtime-boundary 验证。
 
 Codex 当前不是 direct `tool_targets` 成员，因此不是 `export --target` 的合法取值；它由 `external_handoff_targets.codex` 描述为 `~/codex -> ~/.codex` source-to-live 交付链路。
+
+## target
+
+`target check` 对 contract schema、支持的 asset kind、原生路径、frontmatter、permission profile 和全部 resolved assets 执行静态检查。`target smoke` 会先完成同样的静态检查，再把原生树交给调用者显式提供的 runtime command；未提供 runtime command 时返回 `not-run`/exit 2，不能把 static 或 fixture 结果冒充真实运行时认证。
+
+```bash
+bash scripts/devkit.sh target check --all --level static --summary-json
+bash scripts/devkit.sh target check --target claude-code --level static --summary-json
+bash scripts/devkit.sh target smoke --target claude-code --stage discovery --profile core --asset-kind skill --runtime-command /path/to/read-only-runtime-smoke
+```
+
+当前 `claude-code`、`opencode`、`hermes-agent` 均为 `experimental`。真实 runtime smoke 至少分 discovery、load、trigger、permission 四阶段；本地结果记录 `started_at`、`duration_ms`、runtime command SHA256、exit code 和 stdout/stderr digest，runtime/version 与可复核证据摘要必须由外部 campaign 一并留存。
 
 ## lock
 
@@ -334,7 +347,7 @@ bash scripts/devkit.sh backup list
 
 ## benchmark
 
-测量 manifest 校验、profile 解析和 export plan 的平台自身性能。该命令不声称测量模型推理性能或终端运行时性能。
+测量 manifest 校验、profile 解析、target static check、CLI cold-start、10x export plan、10x filesystem I/O 和 peak allocation 的平台自身性能。该命令不声称测量模型推理、真实目标运行时、并发 writer 或现场性能。
 
 ```bash
 bash scripts/devkit.sh benchmark run --iterations 10 --output /tmp/adk-benchmark.json --summary-json
@@ -347,6 +360,7 @@ bash scripts/devkit.sh benchmark report --input /tmp/adk-benchmark.json --output
 
 ```bash
 bash scripts/devkit.sh eval run --suite deterministic --output /tmp/adk-eval.json --summary-json
+bash scripts/devkit.sh eval effect --contract manifests/effect_eval_contract.json --output /tmp/adk-effect-eval.json --summary-json
 bash scripts/devkit.sh eval run --suite runtime --runtime codex --model gpt-5.5 --condition adk --limit 2 --summary-json
 bash scripts/devkit.sh eval run --suite runtime --runtime claude --condition baseline --limit 2 --execute --output /tmp/adk-claude-eval.json
 bash scripts/devkit.sh eval compare --baseline /tmp/codex-baseline.json --candidate /tmp/codex-adk.json --output /tmp/codex-comparison.json
@@ -355,13 +369,15 @@ bash scripts/devkit.sh eval report --input /tmp/adk-eval.json --output /tmp/adk-
 
 `eval compare` 只在 candidate 达到质量门禁、三个指标都不回退且至少一个指标有可测提升时通过。比较结果同时记录 baseline/candidate 的总耗时、中位数和 nearest-rank P95，但延迟是 `observational-not-gating`：单次模型运行的抖动不能替代重复实验或统计显著性分析。缺少 executable 或认证时结果必须是 `not-run`。
 
-软件 M5 campaign 使用 `manifests/software_m5_eval_contract.json`。正式契约包含 60 个任务、Codex/Claude、baseline/ADK、3 trials、显式模型、最多一次错误重试和 `$150` 硬预算；逐任务结果原子落盘，恢复时拒绝 manifest/contract/task/plan/runtime 版本漂移。
+`eval effect` 使用输入/标签分离并锁定 hash 的 24 例 source/test 数据集，分别覆盖 12 个 OOD 与 12 个 adversarial case，评分 route、safety、trace、outcome，并禁用 `routing.intents` 做组件消融。它不把标签传入 matcher/runtime prompt，但标签仍对源码 reviewer 可见，因此不是密码学意义的 blind trial，也不替代 runtime/field evidence。
+
+软件 M5 campaign 使用 `manifests/software_m5_eval_contract_rc2.json`。正式契约包含 60 个任务、Codex/Claude、baseline/ADK、3 trials、显式模型、最多一次错误重试和 `$150` 硬预算；逐任务结果原子落盘，恢复时拒绝 manifest/contract/task/plan/runtime 版本漂移。
 
 ```bash
-bash scripts/devkit.sh eval campaign plan --contract manifests/software_m5_eval_contract.json --summary-json
-bash scripts/devkit.sh eval campaign run --contract manifests/software_m5_eval_contract.json --state-dir /tmp/adk-m5-campaign --execute --approve-budget-usd 150 --summary-json
-bash scripts/devkit.sh eval campaign run --contract manifests/software_m5_eval_contract.json --state-dir /tmp/adk-m5-campaign --execute --approve-budget-usd 150 --resume --summary-json
-bash scripts/devkit.sh eval certify --contract manifests/software_m5_eval_contract.json --state-dir /tmp/adk-m5-campaign --output /tmp/adk-m5-certification.json
+bash scripts/devkit.sh eval campaign plan --contract manifests/software_m5_eval_contract_rc2.json --summary-json
+bash scripts/devkit.sh eval campaign run --contract manifests/software_m5_eval_contract_rc2.json --state-dir /tmp/adk-m5-campaign --execute --approve-budget-usd 150 --summary-json
+bash scripts/devkit.sh eval campaign run --contract manifests/software_m5_eval_contract_rc2.json --state-dir /tmp/adk-m5-campaign --execute --approve-budget-usd 150 --resume --summary-json
+bash scripts/devkit.sh eval certify --contract manifests/software_m5_eval_contract_rc2.json --state-dir /tmp/adk-m5-campaign --output /tmp/adk-m5-certification.json
 bash scripts/devkit.sh eval campaign report --input /tmp/adk-m5-certification.json --output /tmp/adk-m5-certification.md
 ```
 
@@ -369,7 +385,7 @@ bash scripts/devkit.sh eval campaign report --input /tmp/adk-m5-certification.js
 
 ## security
 
-执行阻断式安全检查：敏感文件名、疑似凭证内容、仓库外 symlink、world-writable 文件、未固定 SHA 的 GitHub Action 和未固定 digest 的 container action 都会失败。扫描范围包含 tracked 文件与未被 ignore 的 untracked 文件。
+执行阻断式安全检查：敏感文件名、疑似凭证内容、仓库外 symlink、world-writable 文件、未固定 SHA 的 GitHub Action 和未固定 digest 的 container action 都会失败。扫描范围包含 tracked 文件与未被 ignore 的 untracked 文件。CI 另用固定版本 Ruff、pip-audit 和 OpenSSF Scorecard；这些是可替换的外部门禁，不进入 core runtime。
 
 ```bash
 bash scripts/devkit.sh security check
@@ -382,12 +398,12 @@ bash scripts/devkit.sh security check --summary-json
 
 ```bash
 bash scripts/devkit.sh release check
-bash scripts/devkit.sh release build --version 3.1.0-rc.1 --out dist --summary-json
-bash scripts/devkit.sh release rehearse --previous-artifact /tmp/agent-dev-kit-3.0.0.tar.gz --candidate-artifact dist/agent-dev-kit-3.1.0-rc.1.tar.gz --output /tmp/adk-release-rehearsal.json
-bash scripts/devkit.sh release publish --version 3.1.0-rc.1 --backend github --artifact dist/agent-dev-kit-3.1.0-rc.1.tar.gz --dry-run
+bash scripts/devkit.sh release build --version 3.1.0-rc.2 --out dist --summary-json
+bash scripts/devkit.sh release rehearse --previous-artifact /tmp/agent-dev-kit-3.1.0-rc.1.tar.gz --candidate-artifact dist/agent-dev-kit-3.1.0-rc.2.tar.gz --output /tmp/adk-release-rehearsal.json
+bash scripts/devkit.sh release publish --version 3.1.0-rc.2 --backend github --artifact dist/agent-dev-kit-3.1.0-rc.2.tar.gz --dry-run
 ```
 
-`release rehearse` 只接受 checksum 匹配且 candidate 版本更高的本地 artifact；它在临时 target 安装上一版、升级候选版、核验 receipt，再回滚并比较上一版受管资产 hash。该命令不创建 tag、不上传制品、不调用远端 backend。rehearsal、runtime smoke、timing 和 campaign state 属于 checkout 内的验证证据，不进入 source distribution，避免制品 SHA 与其自身验证报告形成循环依赖。
+`release rehearse` 只接受 checksum 匹配且 candidate 版本更高的本地 artifact；它在临时 target 安装上一版、升级候选版、核验 receipt，再回滚并比较上一版受管资产 hash。rc.1 legacy bundle 会先按旧布局建立受管 receipt，再执行 rollback-before-install 迁移；candidate 回滚后，从保留的 rc.1 artifact 重装并逐文件比对 managed hashes，证明 fallback anchor 可用。build 在归档前校验 SPDX 2.3 SBOM 的 package/relationship 完整性并把 SBOM SHA256 写入 release manifest；GitHub release workflow 使用 SHA-pinned `actions/attest` 为 tarball 生成 provenance。该命令不创建 tag、不上传制品、不调用远端 backend。rehearsal、runtime smoke、timing 和 campaign state 属于 checkout 内的验证证据，不进入 source distribution，避免制品 SHA 与其自身验证报告形成循环依赖。
 
 ## version
 

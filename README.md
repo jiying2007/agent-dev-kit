@@ -2,9 +2,9 @@
 
 `agent-dev-kit`（adk）是通用 Agent/Skill/Profile/Workflow 资产包。它把参考资料、官方文档和工程经验压实为可验证、可回滚、可迭代的 ADK 资产；资产可以导出到显式声明的 tool target，但 core 不绑定任何单一运行时。
 
-当前版本：`3.1.0-rc.1`。
+当前版本：`3.1.0-rc.2`。
 
-当前软件状态是 **M5-ready release candidate**，不是已认证 M5：本版本提供可恢复双运行时评测、单写者并发保护、严格环境诊断和本地升级/回滚演练；最终 M5 仍要求 30 天试点、至少一个独立真实软件仓、第二位 operator 和完整 field evidence。
+当前软件状态是 **M5-ready control-plane candidate / M3 release candidate**，不是已认证 M5：本版本提供可恢复双运行时评测、单写者并发保护、严格环境诊断和本地升级/回滚演练；最终 M5 仍要求 30 天试点、至少一个独立真实软件仓、第二位 operator 和完整 field evidence。
 
 ## 1. 定位边界
 
@@ -61,11 +61,11 @@ adk 不负责：
 
 当前 direct tool targets 在 `manifest.json:tool_targets` 声明：
 
-- `claude-code`
-- `hermes-agent`
-- `opencode`
+- `claude-code`（`experimental`）
+- `hermes-agent`（`experimental`，仅支持 Skill）
+- `opencode`（`experimental`）
 
-新增 target 必须显式声明检测路径、agent/skill 输出目录、转换语义、拒绝条件和回滚路径，并通过 `runtime-boundary` 验证。
+三个 target 已通过原生路径、frontmatter、权限、support tree、export/install 同源 hash 和 caller-supplied fixture smoke；尚未取得真实目标运行时的 discovery/load/trigger 证据，因此不得提升为 stable 或 runtime-certified。新增 target 必须提供 versioned target contract、检测路径、agent/skill 输出目录、转换语义、拒绝条件和回滚路径，并通过 `target check`、`runtime-boundary` 与真实 runtime smoke。
 
 ## 4. Profiles
 
@@ -85,6 +85,7 @@ adk 不负责：
 
 ```bash
 bash scripts/devkit.sh validate --strict
+bash scripts/devkit.sh target check --all --level static --summary-json
 bash scripts/devkit.sh doctor --require-runtime codex --require-runtime claude --summary-json
 bash scripts/devkit.sh export --target claude-code --profile core --out dist --clean
 bash scripts/devkit.sh install plan --tool claude-code --profile core --target /tmp/adk-target --mode copy --output /tmp/adk-plan.json
@@ -92,7 +93,8 @@ bash scripts/devkit.sh install apply --plan /tmp/adk-plan.json
 bash scripts/devkit.sh benchmark run --iterations 5 --summary-json
 bash scripts/devkit.sh security check --summary-json
 bash scripts/devkit.sh eval run --suite deterministic --summary-json
-bash scripts/devkit.sh eval campaign plan --contract manifests/software_m5_eval_contract.json --summary-json
+bash scripts/devkit.sh eval effect --contract manifests/effect_eval_contract.json --summary-json
+bash scripts/devkit.sh eval campaign plan --contract manifests/software_m5_eval_contract_rc2.json --summary-json
 bash scripts/devkit.sh release check --summary-json
 bash scripts/devkit.sh runtime-boundary
 bash scripts/devkit.sh official-docs-governance --summary-json

@@ -11,176 +11,90 @@ usage() {
 Usage:
   ./scripts/install-assets.sh [options]
 
+Compatibility wrapper for the unified transactional installer.
+
 Options:
   --tool auto|claude-code|hermes-agent|opencode
-  --mode copy|symlink
+  --mode copy                    # symlink is intentionally unsupported in 3.1
   --target <tool root path>
   --profile <profile name>
-  --extra-profile <profile name>   # 可重复
-  --with-optional-skill <skill>    # 可重复
-  --backup                         # 安装前备份目标 agents/skills
-  --backup-dir <path>              # 备份目录，默认 <target>/.adk-backups
-  --install-report <path>          # 写入安装报告
-  --lock-version <version>         # 要求 manifest version 匹配
+  --extra-profile <profile>      # repeatable
+  --with-optional-skill <skill>  # repeatable
+  --asset-kind agent|skill
+  --backup                       # accepted; v3 apply always creates a rollback anchor
+  --backup-dir <path>            # rejected; backup root is transaction-owned
+  --install-report <path>
+  --lock-version <version>
   --list-tools
   --list-profiles
   --list-optional-skills
-  --dry-run
+  --dry-run                      # create/print plan, do not apply
+  --summary-json
   -h, --help
-
-Examples:
-  ./scripts/install-assets.sh --tool auto --mode symlink --profile embedded-fullstack
-  ./scripts/install-assets.sh --tool claude-code --target /tmp/adk-claude-target --profile core --extra-profile release-hardening
-  ./scripts/install-assets.sh --tool claude-code --profile core --with-optional-skill adk-test-flakiness-triage
 USAGE
 }
 
 TOOL="auto"
-MODE="symlink"
+MODE="copy"
 TARGET=""
 PROFILE=""
 EXTRA_PROFILES=()
 OPTIONAL_SKILLS=()
-BACKUP=0
+ASSET_KIND=""
 BACKUP_DIR=""
 INSTALL_REPORT=""
 LOCK_VERSION=""
 DRY_RUN=0
+SUMMARY_JSON=0
 LIST_TOOLS=0
 LIST_PROFILES=0
 LIST_OPTIONAL_SKILLS=0
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --tool)
-      TOOL="$2"
-      shift 2
-      ;;
-    --mode)
-      MODE="$2"
-      shift 2
-      ;;
-    --target)
-      TARGET="$2"
-      shift 2
-      ;;
-    --profile)
-      PROFILE="$2"
-      shift 2
-      ;;
-    --extra-profile)
-      EXTRA_PROFILES+=("$2")
-      shift 2
-      ;;
-    --with-optional-skill)
-      OPTIONAL_SKILLS+=("$2")
-      shift 2
-      ;;
-    --backup)
-      BACKUP=1
-      shift
-      ;;
-    --backup-dir)
-      BACKUP_DIR="$2"
-      shift 2
-      ;;
-    --install-report)
-      INSTALL_REPORT="$2"
-      shift 2
-      ;;
-    --lock-version)
-      LOCK_VERSION="$2"
-      shift 2
-      ;;
-    --list-tools)
-      LIST_TOOLS=1
-      shift
-      ;;
-    --list-profiles)
-      LIST_PROFILES=1
-      shift
-      ;;
-    --list-optional-skills)
-      LIST_OPTIONAL_SKILLS=1
-      shift
-      ;;
-    --dry-run)
-      DRY_RUN=1
-      shift
-      ;;
-    -h|--help)
-      usage
-      exit 0
-      ;;
+    --tool) TOOL="$2"; shift 2 ;;
+    --mode) MODE="$2"; shift 2 ;;
+    --target) TARGET="$2"; shift 2 ;;
+    --profile) PROFILE="$2"; shift 2 ;;
+    --extra-profile) EXTRA_PROFILES+=("$2"); shift 2 ;;
+    --with-optional-skill) OPTIONAL_SKILLS+=("$2"); shift 2 ;;
+    --asset-kind) ASSET_KIND="$2"; shift 2 ;;
+    --backup) shift ;;
+    --backup-dir) BACKUP_DIR="$2"; shift 2 ;;
+    --install-report) INSTALL_REPORT="$2"; shift 2 ;;
+    --lock-version) LOCK_VERSION="$2"; shift 2 ;;
+    --list-tools) LIST_TOOLS=1; shift ;;
+    --list-profiles) LIST_PROFILES=1; shift ;;
+    --list-optional-skills) LIST_OPTIONAL_SKILLS=1; shift ;;
+    --dry-run) DRY_RUN=1; shift ;;
+    --summary-json) SUMMARY_JSON=1; shift ;;
+    -h|--help) usage; exit 0 ;;
     *)
       echo "[FAIL] Unknown argument: $1" >&2
-      usage
-      exit 1
+      usage >&2
+      exit 2
       ;;
   esac
 done
 
-write_file() {
-  local file="$1"
-  shift
-  if [[ "$DRY_RUN" -eq 1 ]]; then
-    echo "[dry-run] write $file"
-    printf '%s\n' "$@"
-  else
-    printf '%s\n' "$@" > "$file"
-  fi
-}
-
-expand_path() {
-  local raw="$1"
-  local expanded="$raw"
-  expanded="${expanded/#\~/$HOME}"
-  case "$expanded" in
-    *'$'*|*'`'*|*'('*|*')'*)
-      echo "[FAIL] unsupported dynamic path in manifest: $raw" >&2
-      exit 1
-      ;;
-  esac
-  printf '%s' "$expanded"
-}
-
-detect_tool_auto() {
-  local tool
-  while IFS= read -r tool; do
-    [[ -z "$tool" ]] && continue
-    local marker
-    while IFS= read -r marker; do
-      [[ -z "$marker" ]] && continue
-      local probe
-      probe="$(expand_path "$marker")"
-      if [[ -n "$probe" && -e "$probe" ]]; then
-        echo "$tool"
-        return 0
-      fi
-    done < <(adk_get_tool_list "$tool" "detect")
-  done < <(adk_list_tool_names)
-
-  echo "claude-code"
-}
-
-install_item() {
-  local src="$1"
-  local dst="$2"
-
-  if [[ ! -e "$src" ]]; then
-    echo "[FAIL] source not found: $src" >&2
-    exit 1
-  fi
-
-  adk_run_cmd rm -rf "$dst"
-  if [[ "$MODE" == "copy" ]]; then
-    adk_run_cmd cp -a "$src" "$dst"
-  else
-    adk_run_cmd ln -s "$src" "$dst"
-  fi
-}
-
 adk_require_manifest
+
+if [[ "$LIST_TOOLS" -eq 1 ]]; then
+  adk_list_tool_names
+  exit 0
+fi
+if [[ "$LIST_PROFILES" -eq 1 ]]; then
+  adk_list_profile_names
+  exit 0
+fi
+if [[ "$LIST_OPTIONAL_SKILLS" -eq 1 ]]; then
+  adk_list_optional_skill_names
+  exit 0
+fi
+if [[ -n "$BACKUP_DIR" ]]; then
+  echo "[USAGE] unsupported_backup_dir: transactional installer owns <target>/.adk-backups" >&2
+  exit 2
+fi
 
 MANIFEST_VERSION="$(awk '/^version:/ {print $2; exit}' "$ADK_MANIFEST")"
 if [[ -n "$LOCK_VERSION" && "$LOCK_VERSION" != "$MANIFEST_VERSION" ]]; then
@@ -188,156 +102,90 @@ if [[ -n "$LOCK_VERSION" && "$LOCK_VERSION" != "$MANIFEST_VERSION" ]]; then
   exit 1
 fi
 
-if [[ "$LIST_TOOLS" -eq 1 ]]; then
-  adk_list_tool_names
-  exit 0
-fi
-
-if [[ "$LIST_PROFILES" -eq 1 ]]; then
-  adk_list_profile_names
-  exit 0
-fi
-
-if [[ "$LIST_OPTIONAL_SKILLS" -eq 1 ]]; then
-  adk_list_optional_skill_names
-  exit 0
-fi
-
-if [[ "$MODE" != "copy" && "$MODE" != "symlink" ]]; then
-  echo "[FAIL] --mode must be copy or symlink" >&2
-  exit 1
-fi
-
-if [[ -z "$PROFILE" ]]; then
-  PROFILE="$(awk '/^default_profile:/ {print $2; exit}' "$ADK_MANIFEST")"
-  [[ -n "$PROFILE" ]] || PROFILE="embedded-fullstack"
-fi
-
-if ! adk_profile_exists "$PROFILE"; then
-  echo "[FAIL] unknown profile: $PROFILE" >&2
-  exit 1
-fi
-
-for profile in "${EXTRA_PROFILES[@]}"; do
-  if ! adk_profile_exists "$profile"; then
-    echo "[FAIL] unknown extra profile: $profile" >&2
-    exit 1
-  fi
-done
-
-for skill in "${OPTIONAL_SKILLS[@]}"; do
-  if ! adk_optional_skill_exists "$skill"; then
-    echo "[FAIL] unknown optional skill: $skill" >&2
-    exit 1
-  fi
-done
+detect_tool_auto() {
+  local tool marker probe
+  while IFS= read -r tool; do
+    [[ -n "$tool" ]] || continue
+    while IFS= read -r marker; do
+      [[ -n "$marker" ]] || continue
+      probe="${marker/#\~/$HOME}"
+      if [[ -e "$probe" ]]; then
+        printf '%s\n' "$tool"
+        return 0
+      fi
+    done < <(adk_get_tool_list "$tool" detect)
+  done < <(adk_list_tool_names)
+  printf '%s\n' "claude-code"
+}
 
 if [[ "$TOOL" == "auto" ]]; then
   TOOL="$(detect_tool_auto)"
-  echo "[INFO] auto-detected tool: $TOOL"
 fi
-
 if ! adk_tool_exists "$TOOL"; then
   echo "[FAIL] unknown tool: $TOOL" >&2
   exit 1
 fi
-
+if [[ -z "$PROFILE" ]]; then
+  PROFILE="$(awk '/^default_profile:/ {print $2; exit}' "$ADK_MANIFEST")"
+fi
 if [[ -z "$TARGET" ]]; then
-  TARGET="$(adk_get_tool_value "$TOOL" "default_root")"
+  TARGET="$(adk_get_tool_value "$TOOL" default_root)"
 fi
 
-AGENTS_DIR_NAME="$(adk_get_tool_value "$TOOL" "agents_dir")"
-SKILLS_DIR_NAME="$(adk_get_tool_value "$TOOL" "skills_dir")"
+PLAN_PATH="$(mktemp "${TMPDIR:-/tmp}/adk-install-plan.XXXXXX.json")"
+cleanup() {
+  rm -f "$PLAN_PATH"
+}
+trap cleanup EXIT
 
-if [[ -z "$TARGET" || -z "$AGENTS_DIR_NAME" || -z "$SKILLS_DIR_NAME" ]]; then
-  echo "[FAIL] tool target config incomplete for: $TOOL" >&2
-  exit 1
-fi
-
-TARGET="$(expand_path "$TARGET")"
-if [[ -n "$BACKUP_DIR" ]]; then
-  BACKUP_DIR="$(expand_path "$BACKUP_DIR")"
-fi
-if [[ -n "$INSTALL_REPORT" ]]; then
-  INSTALL_REPORT="$(expand_path "$INSTALL_REPORT")"
-fi
-AGENT_DST="$TARGET/$AGENTS_DIR_NAME"
-SKILL_DST="$TARGET/$SKILLS_DIR_NAME"
-
-ALL_PROFILES=("$PROFILE" "${EXTRA_PROFILES[@]}")
-
-mapfile -t AGENTS_TO_INSTALL < <(adk_resolve_profile_items_all "include_agents" "${ALL_PROFILES[@]}")
-mapfile -t SKILLS_TO_INSTALL < <(adk_resolve_profile_items_all "include_skills" "${ALL_PROFILES[@]}")
-
-if [[ ${#AGENTS_TO_INSTALL[@]} -eq 0 ]]; then
-  echo "[FAIL] no agents resolved from profiles: ${ALL_PROFILES[*]}" >&2
-  exit 1
-fi
-
-if [[ ${#SKILLS_TO_INSTALL[@]} -eq 0 ]]; then
-  echo "[FAIL] no skills resolved from profiles: ${ALL_PROFILES[*]}" >&2
-  exit 1
-fi
-
-BACKUP_PATH=""
-if [[ "$BACKUP" -eq 1 ]]; then
-  if [[ -z "$BACKUP_DIR" ]]; then
-    BACKUP_DIR="$TARGET/.adk-backups"
-  fi
-  BACKUP_PATH="$BACKUP_DIR/$(date -u +%Y%m%dT%H%M%SZ)"
-  adk_run_cmd mkdir -p "$BACKUP_PATH"
-  if [[ -e "$AGENT_DST" ]]; then
-    adk_run_cmd cp -a "$AGENT_DST" "$BACKUP_PATH/agents"
-  fi
-  if [[ -e "$SKILL_DST" ]]; then
-    adk_run_cmd cp -a "$SKILL_DST" "$BACKUP_PATH/skills"
-  fi
-fi
-
-adk_run_cmd mkdir -p "$AGENT_DST" "$SKILL_DST"
-
-for agent in "${AGENTS_TO_INSTALL[@]}"; do
-  install_item "$ROOT_DIR/agents/$agent" "$AGENT_DST/$agent"
+PLAN_ARGS=(
+  install plan
+  --tool "$TOOL"
+  --target "$TARGET"
+  --profile "$PROFILE"
+  --mode "$MODE"
+  --output "$PLAN_PATH"
+  --summary-json
+)
+for profile in "${EXTRA_PROFILES[@]}"; do
+  PLAN_ARGS+=(--extra-profile "$profile")
 done
-
-for skill in "${SKILLS_TO_INSTALL[@]}"; do
-  install_item "$ROOT_DIR/skills/$skill" "$SKILL_DST/$skill"
-done
-
 for skill in "${OPTIONAL_SKILLS[@]}"; do
-  optional_path="$(adk_get_optional_skill_path "$skill")"
-  [[ -n "$optional_path" ]] || { echo "[FAIL] optional skill path missing: $skill" >&2; exit 1; }
-  optional_dir="$ROOT_DIR/${optional_path%/SKILL.md}"
-  install_item "$optional_dir" "$SKILL_DST/$skill"
+  PLAN_ARGS+=(--with-optional-skill "$skill")
 done
-
-echo "Install completed"
-echo "  tool=$TOOL"
-echo "  mode=$MODE"
-echo "  target=$TARGET"
-echo "  profiles=${ALL_PROFILES[*]}"
-echo "  agents=${#AGENTS_TO_INSTALL[@]} skills=${#SKILLS_TO_INSTALL[@]} optional_skills=${#OPTIONAL_SKILLS[@]}"
-if [[ -n "$BACKUP_PATH" ]]; then
-  echo "  backup=$BACKUP_PATH"
+if [[ -n "$ASSET_KIND" ]]; then
+  PLAN_ARGS+=(--asset-kind "$ASSET_KIND")
 fi
+
+PLAN_OUTPUT="$(bash "$ROOT_DIR/scripts/devkit.sh" "${PLAN_ARGS[@]}")"
+if [[ "$DRY_RUN" -eq 1 ]]; then
+  printf '%s\n' "$PLAN_OUTPUT"
+  exit 0
+fi
+
+APPLY_OUTPUT="$(bash "$ROOT_DIR/scripts/devkit.sh" install apply --plan "$PLAN_PATH" --summary-json)"
 if [[ -n "$INSTALL_REPORT" ]]; then
-  write_file "$INSTALL_REPORT" \
-    "# agent-dev-kit install report" \
-    "" \
-    "- manifest_version: $MANIFEST_VERSION" \
-    "- tool: $TOOL" \
-    "- mode: $MODE" \
-    "- target: $TARGET" \
-    "- profiles: ${ALL_PROFILES[*]}" \
-    "- optional_skills: ${OPTIONAL_SKILLS[*]:-none}" \
-    "- agents_count: ${#AGENTS_TO_INSTALL[@]}" \
-    "- skills_count: ${#SKILLS_TO_INSTALL[@]}" \
-    "- backup: ${BACKUP_PATH:-none}" \
-    "" \
-    "## Agents" \
-    "$(printf -- '- %s\n' "${AGENTS_TO_INSTALL[@]}")" \
-    "" \
-    "## Skills" \
-    "$(printf -- '- %s\n' "${SKILLS_TO_INSTALL[@]}")"
-  echo "  install_report=$INSTALL_REPORT"
+  mkdir -p "$(dirname "$INSTALL_REPORT")"
+  {
+    printf '# agent-dev-kit install report\n\n'
+    printf -- '- manifest_version: %s\n' "$MANIFEST_VERSION"
+    printf -- '- tool: %s\n' "$TOOL"
+    printf -- '- mode: copy\n'
+    printf -- '- target: %s\n' "$TARGET"
+    printf -- '- profile: %s\n' "$PROFILE"
+    printf -- '- asset_kind: %s\n' "${ASSET_KIND:-all}"
+    printf -- '- receipt: %s/.adk-install-receipt.json\n' "$TARGET"
+  } >"$INSTALL_REPORT"
+fi
+
+if [[ "$SUMMARY_JSON" -eq 1 ]]; then
+  printf '%s\n' "$APPLY_OUTPUT"
+else
+  echo "Install completed"
+  echo "  manifest_version=$MANIFEST_VERSION"
+  echo "  tool=$TOOL"
+  echo "  mode=copy"
+  echo "  target=$TARGET"
+  echo "  receipt=$TARGET/.adk-install-receipt.json"
+  [[ -z "$INSTALL_REPORT" ]] || echo "  install_report=$INSTALL_REPORT"
 fi

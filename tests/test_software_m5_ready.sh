@@ -46,14 +46,14 @@ from agent_dev_kit.release import _extract_release, _prerelease_is_newer, check_
 root = Path(os.sys.argv[1])
 temp_root = Path(os.sys.argv[2])
 manifest = Manifest.load(root)
-assert manifest.version == "3.1.0-rc.1", manifest.version
+assert manifest.version == "3.1.0-rc.2", manifest.version
 assert check_release(manifest)["status"] == "pass"
 assert _prerelease_is_newer("3.0.0", "3.1.0-rc.1")
 assert _prerelease_is_newer("3.1.0-rc.1", "3.1.0-rc.2")
 assert _prerelease_is_newer("3.1.0-rc.2", "3.1.0")
 assert not _prerelease_is_newer("3.1.0", "3.1.0-rc.2")
 
-contract_path = root / "manifests/software_m5_eval_contract.json"
+contract_path = root / "manifests/software_m5_eval_contract_rc2.json"
 contract, tasks_path, tasks = load_campaign_contract(manifest, contract_path)
 assert len(tasks) == 60
 assert len({task["id"] for task in tasks}) == 60
@@ -223,11 +223,11 @@ assert all(not worker.is_alive() and worker.exitcode == 0 for worker in apply_wo
 apply_results = [apply_queue.get(timeout=2) for _ in apply_workers]
 assert sum(1 for status, _ in apply_results if status == "pass") == 1, apply_results
 assert sum(1 for status, _ in apply_results if status == "error") == 1, apply_results
-assert any("destination appeared after plan creation" in detail for status, detail in apply_results if status == "error")
+assert any("active install receipt appeared after plan creation" in detail for status, detail in apply_results if status == "error")
 receipt = install_target / RECEIPT_NAME
 assert receipt.is_file()
 first_receipt = json.loads(receipt.read_text(encoding="utf-8"))
-assert first_receipt["schema"] == "adk-install-receipt/v2"
+assert first_receipt["schema"] == "adk-install-receipt/v3"
 assert isinstance(first_receipt["receipt_sha256"], str)
 first_receipt_text = receipt.read_text(encoding="utf-8")
 first_receipt["manifest_version"] = "tampered"
@@ -241,13 +241,31 @@ else:
 receipt.write_text(first_receipt_text, encoding="utf-8")
 
 reinstall_plan = create_plan(manifest, "claude-code", str(install_target), ["core"], [], "copy")
+assert reinstall_plan["active_receipt_sha256"]
 reinstall_path = temp_root / "concurrent-reinstall-plan.json"
 write_plan(reinstall_plan, reinstall_path)
+
+receipt.write_text(first_receipt_text + "\n", encoding="utf-8")
+try:
+    apply_plan(manifest, reinstall_path)
+except ManifestError as exc:
+    assert "active install receipt changed" in str(exc)
+else:
+    raise AssertionError("installer accepted an active receipt changed after planning")
+receipt.write_text(first_receipt_text, encoding="utf-8")
+
+try:
+    create_plan(manifest, "opencode", str(install_target), ["core"], [], "copy")
+except ManifestError as exc:
+    assert "receipt tool does not match" in str(exc)
+else:
+    raise AssertionError("installer accepted a cross-target active receipt")
+
 apply_plan(manifest, reinstall_path)
 replacement_receipt = json.loads(receipt.read_text(encoding="utf-8"))
 backup_entry = next(item for item in replacement_receipt["installed"] if item["backup"])
-backup_root = install_target / backup_entry["backup"]
-backup_file = next(path for path in backup_root.rglob("*") if path.is_file())
+backup_file = install_target / backup_entry["backup"]
+assert backup_file.is_file(), backup_file
 backup_content = backup_file.read_bytes()
 backup_file.write_bytes(backup_content + b"tamper")
 try:
@@ -295,6 +313,8 @@ assert not any(
     (apply_failure_target / operation["destination"]).exists()
     for operation in apply_failure_plan["operations"]
 )
+backup_parent = apply_failure_target / ".adk-backups"
+assert not backup_parent.exists() or not any(backup_parent.iterdir())
 assert target_lock_status(apply_failure_target)["status"] == "unlocked"
 
 small_contract = root / "tests/fixtures/software_m5_eval_contract_small.json"
@@ -513,7 +533,7 @@ else:
 
 doctor_cli = json.loads((temp_root / "doctor.json").read_text(encoding="utf-8"))
 assert doctor_cli["schema_version"] == 1
-assert doctor_cli["manifest_version"] == "3.1.0-rc.1"
+assert doctor_cli["manifest_version"] == "3.1.0-rc.2"
 assert sentinel not in json.dumps(doctor_cli, ensure_ascii=False)
 PY
 

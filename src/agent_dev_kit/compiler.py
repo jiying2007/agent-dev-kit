@@ -7,67 +7,12 @@ import os
 import shutil
 import tempfile
 from contextlib import nullcontext
-from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, List, Mapping, Optional, Sequence
+from typing import Dict, Optional, Sequence
 
-from .model import Asset, Manifest, ManifestError, ProfileResolution, ensure_within, sha256_file
 from .locking import TargetLock
-
-
-@dataclass(frozen=True)
-class ExportedFile:
-    kind: str
-    name: str
-    source: str
-    destination: str
-    sha256: str
-
-
-def _content_file(asset: Asset) -> Path:
-    filename = "AGENTS.md" if asset.kind == "agent" else "SKILL.md"
-    path = asset.path / filename
-    if not path.is_file():
-        raise ManifestError("asset content missing: {}".format(path))
-    return path
-
-
-def _strip_frontmatter(text: str) -> str:
-    lines = text.splitlines()
-    if not lines or lines[0] != "---":
-        return text.rstrip() + "\n"
-    try:
-        end = lines.index("---", 1)
-    except ValueError:
-        return text.rstrip() + "\n"
-    return "\n".join(lines[end + 1 :]).lstrip("\n").rstrip() + "\n"
-
-
-def _destination(target: str, target_root: Path, asset: Asset) -> Path:
-    if target == "claude-code":
-        return target_root / ("agents" if asset.kind == "agent" else "skills") / (asset.name + ".md")
-    if target == "hermes-agent":
-        if asset.kind == "agent":
-            return target_root / "agents" / asset.name / "instructions.md"
-        return target_root / "skills" / asset.name / "SKILL.md"
-    if target == "opencode":
-        return target_root / "prompts" / asset.kind / (asset.name + ".md")
-    raise ManifestError("no compiler adapter for target: {}".format(target))
-
-
-def _render(manifest: Manifest, target: str, asset: Asset) -> str:
-    source = _content_file(asset)
-    metadata = [
-        "---",
-        "name: {}".format(asset.name),
-        "kind: {}".format(asset.kind),
-        "target: {}".format(target),
-        "manifest_version: {}".format(manifest.version),
-        "source: {}".format(source.relative_to(manifest.root).as_posix()),
-        "---",
-        "",
-    ]
-    return "\n".join(metadata) + _strip_frontmatter(source.read_text(encoding="utf-8"))
+from .model import Manifest, ManifestError, ensure_within
+from .targets import render_selection
 
 
 def export_assets(
@@ -76,21 +21,14 @@ def export_assets(
     output_root: Path,
     profiles: Sequence[str],
     optional_skills: Sequence[str] = (),
+    asset_kind: Optional[str] = None,
     clean: bool = False,
     dry_run: bool = False,
     lock_timeout_seconds: float = 0.0,
 ) -> Dict[str, object]:
-    manifest.target(target)
-    resolution = manifest.resolve_profiles(profiles, optional_skills)
+    bundle = render_selection(manifest, target, profiles, optional_skills, asset_kind)
     output_root = output_root.resolve()
     target_root = ensure_within(output_root / target, output_root, "export target")
-
-    assets: List[Asset] = list(resolution.agents) + list(resolution.skills)
-    planned = []
-    for asset in assets:
-        destination = _destination(target, target_root, asset)
-        ensure_within(destination, target_root, "export destination")
-        planned.append((asset, destination, _render(manifest, target, asset)))
 
     lock = nullcontext() if dry_run else TargetLock(target_root, "export", lock_timeout_seconds)
     with lock:
@@ -100,25 +38,36 @@ def export_assets(
             staging_target = staging_parent / target
             preserve_staging = False
             try:
-                for asset, destination, content in planned:
-                    relative = destination.relative_to(target_root)
-                    staged = staging_target / relative
+                for rendered in bundle.files:
+                    staged = ensure_within(
+                        staging_target / rendered.destination,
+                        staging_target,
+                        "staged export destination",
+                    )
                     staged.parent.mkdir(parents=True, exist_ok=True)
-                    staged.write_text(content, encoding="utf-8")
+                    staged.write_bytes(rendered.content)
+                    staged.chmod(rendered.mode)
                 inventory = {
-                    "schema_version": 1,
+                    "schema": "adk-export-manifest/v2",
+                    "schema_version": 2,
                     "manifest_version": manifest.version,
                     "manifest_sha256": manifest.digest,
                     "target": target,
-                    "profiles": list(resolution.profiles),
+                    "contract_sha256": bundle.contract.digest,
+                    "contract_status": bundle.contract.status,
+                    "profiles": list(bundle.resolution.profiles),
                     "optional_skills": list(optional_skills),
+                    "asset_kind": asset_kind,
                     "files": [
                         {
-                            "kind": asset.kind,
-                            "name": asset.name,
-                            "path": destination.relative_to(target_root).as_posix(),
+                            "kind": rendered.kind,
+                            "name": rendered.name,
+                            "source": rendered.source,
+                            "path": rendered.destination,
+                            "sha256": rendered.sha256,
+                            "mode": format(rendered.mode, "04o"),
                         }
-                        for asset, destination, _ in planned
+                        for rendered in bundle.files
                     ],
                 }
                 (staging_target / "adk-export-manifest.json").write_text(
@@ -132,7 +81,7 @@ def export_assets(
                     os.replace(str(target_root), str(backup_target))
                 try:
                     os.replace(str(staging_target), str(target_root))
-                except Exception as replacement_error:
+                except Exception:
                     if backup_target is not None and (backup_target.exists() or backup_target.is_symlink()):
                         try:
                             os.replace(str(backup_target), str(target_root))
@@ -149,22 +98,28 @@ def export_assets(
 
         files = [
             {
-                "kind": asset.kind,
-                "name": asset.name,
-                "source": _content_file(asset).relative_to(manifest.root).as_posix(),
-                "destination": destination.relative_to(output_root).as_posix(),
-                "sha256": "dry-run" if dry_run else sha256_file(destination),
+                "kind": rendered.kind,
+                "name": rendered.name,
+                "source": rendered.source,
+                "destination": (Path(target) / rendered.destination).as_posix(),
+                "sha256": rendered.sha256,
+                "mode": format(rendered.mode, "04o"),
+                "written": not dry_run,
             }
-            for asset, destination, _ in planned
+            for rendered in bundle.files
         ]
     return {
-        "schema_version": 1,
+        "schema": "adk-export-result/v2",
+        "schema_version": 2,
         "status": "planned" if dry_run else "pass",
         "target": target,
+        "contract_sha256": bundle.contract.digest,
+        "contract_status": bundle.contract.status,
         "output": str(target_root),
-        "profiles": list(resolution.profiles),
-        "agents": len(resolution.agents),
-        "skills": len(resolution.skills),
+        "profiles": list(bundle.resolution.profiles),
+        "asset_kind": asset_kind,
+        "agents": bundle.agent_count,
+        "skills": bundle.skill_count,
         "optional_skills": len(optional_skills),
         "files": files,
     }

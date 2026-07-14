@@ -1,0 +1,27 @@
+{
+  "schema": "adk-target-contract/v1",
+  "target": "hermes-agent",
+  "status": "experimental",
+  "source": {
+    "urls": [
+      "https://hermes-agent.nousresearch.com/docs/user-guide/features/skills"
+    ],
+    "retrieved_at": "2026-07-13",
+    "review_status": "reviewed",
+    "expires_at": "2026-10-11"
+  },
+  "supported_asset_kinds": ["skill"],
+  "layouts": {
+    "skill": "skills/{name}/SKILL.md"
+  },
+  "frontmatter": {
+    "skill": {
+      "required": ["name", "description", "metadata"],
+      "preserve": ["license", "compatibility"],
+      "static": {}
+    }
+  },
+  "permission_profiles": {},
+  "support_directories": ["references", "scripts", "assets", "templates", "examples"],
+  "smoke_stages": ["discovery", "load", "trigger"]
+}

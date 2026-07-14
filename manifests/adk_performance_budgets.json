@@ -1,22 +1,44 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-06-29",
-  "scope_model": "report-first-performance-budgets",
-    "boundary": "Performance budgets are local, report-only by default, and become blocking only when --strict is used with fresh timing evidence.",
-    "platform_operations": {
+  "last_updated": "2026-07-13",
+  "scope_model": "local-end-to-end-performance-budgets",
+  "boundary": "Budgets cover local source/test evidence only. They do not claim remote runtime, concurrent writer, or field-scale performance certification.",
+  "platform_operations": {
         "manifest_validate": {
-            "max_p95_ms": 200.0,
+            "max_p95_ms": 500.0,
             "scope": "strict typed manifest validation without legacy shell gates"
         },
         "profile_resolve": {
-            "max_p95_ms": 50.0,
+            "max_p95_ms": 100.0,
             "scope": "embedded-fullstack profile inheritance and asset resolution"
         },
         "export_plan": {
-            "max_p95_ms": 100.0,
+            "max_p95_ms": 300.0,
             "scope": "Claude Code core export dry-run"
+        },
+        "target_contract_check": {
+            "max_p95_ms": 750.0,
+            "scope": "Claude Code static target contract check"
+        },
+        "cli_cold_start": {
+            "max_p95_ms": 3000.0,
+            "scope": "Fresh Python process executing target static check"
+        },
+        "export_plan_10x": {
+            "max_p95_ms": 3000.0,
+            "scope": "Ten consecutive Claude Code core export plans"
+        },
+        "export_io_10x": {
+            "max_p95_ms": 10000.0,
+            "scope": "Ten native-tree Claude Code core exports including filesystem I/O"
         }
     },
+  "resource_budgets": {
+    "export_plan_10x_peak_memory": {
+      "max_peak_kib": 8192.0,
+      "scope": "tracemalloc peak for ten consecutive export plans"
+    }
+  },
   "budgets": [
     {
       "budget_id": "quick-test-loop",

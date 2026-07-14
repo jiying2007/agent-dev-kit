@@ -81,6 +81,8 @@ TESTS=(
   test_optional_skills.sh
   test_convert.sh
   test_runtime_boundary.sh
+  test_target_contracts.sh
+  test_effect_eval.sh
   test_product_maturity_v3.sh
   test_software_m5_ready.sh
   test_token_budget.sh
@@ -125,6 +127,8 @@ TESTS=(
 QUICK_TESTS=(
   test_validate.sh
   test_runtime_boundary.sh
+  test_target_contracts.sh
+  test_effect_eval.sh
   test_product_maturity_v3.sh
   test_software_m5_ready.sh
   test_token_budget.sh

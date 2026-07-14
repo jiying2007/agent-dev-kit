@@ -10,6 +10,9 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, MutableSet, Optional, Sequence, Tuple
 
+from jsonschema import Draft202012Validator, FormatChecker
+from jsonschema.exceptions import SchemaError
+
 
 class ManifestError(ValueError):
     """Raised when the manifest or a referenced asset is invalid."""
@@ -112,7 +115,11 @@ class Manifest:
             raise ManifestError("invalid JSON manifest: {}".format(exc)) from exc
         if not isinstance(data, dict):
             raise ManifestError("manifest root must be an object")
-        return cls(root, data, source)
+        manifest = cls(root, data, source)
+        failures = manifest._json_schema_failures()
+        if failures:
+            raise ManifestError("manifest schema validation failed: {}".format("; ".join(failures)))
+        return manifest
 
     @property
     def version(self) -> str:
@@ -148,14 +155,53 @@ class Manifest:
             result[name] = item
         return result
 
-    def validate(self, strict: bool = False) -> List[str]:
+    def _manifest_schema(self) -> Mapping[str, Any]:
+        candidates = (
+            self.root / "manifests" / "manifest.schema.json",
+            self.root / "source" / "manifests" / "manifest.schema.json",
+        )
+        path = next((item for item in candidates if item.is_file() and not item.is_symlink()), candidates[0])
+        if path.is_symlink() or not path.is_file():
+            raise ManifestError("manifest schema missing or unsafe: {}".format(path))
+        try:
+            value = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            raise ManifestError("manifest schema is invalid JSON: {}".format(path)) from exc
+        if not isinstance(value, dict):
+            raise ManifestError("manifest schema must be a JSON object")
+        try:
+            Draft202012Validator.check_schema(value)
+        except SchemaError as exc:
+            raise ManifestError("manifest schema is not valid Draft 2020-12: {}".format(exc.message)) from exc
+        return value
+
+    def _json_schema_failures(self) -> List[str]:
+        try:
+            schema = self._manifest_schema()
+        except ManifestError as exc:
+            return [str(exc)]
+        validator = Draft202012Validator(schema, format_checker=FormatChecker())
         failures: List[str] = []
+        for error in sorted(
+            validator.iter_errors(self.data),
+            key=lambda item: tuple(str(part) for part in item.absolute_path),
+        ):
+            location = "/".join(str(item) for item in error.absolute_path) or "<root>"
+            failures.append("schema {}: {}".format(location, error.message))
+        return failures
+
+    def validate(self, strict: bool = False) -> List[str]:
+        failures: List[str] = self._json_schema_failures()
         for key in self.REQUIRED_TOP_LEVEL:
             if key not in self.data:
                 failures.append("manifest missing top-level key: {}".format(key))
 
-        if self.data.get("schema_version") != "3.0.0":
-            failures.append("schema_version must be 3.0.0")
+        try:
+            expected_schema_version = self._manifest_schema()["properties"]["schema_version"]["const"]
+        except (ManifestError, KeyError, TypeError):
+            expected_schema_version = None
+        if expected_schema_version and self.data.get("schema_version") != expected_schema_version:
+            failures.append("schema_version must be {}".format(expected_schema_version))
         if not re.fullmatch(r"3\.[0-9]+\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?", self.version):
             failures.append("version must be a semantic version with major 3")
 
@@ -243,8 +289,28 @@ class Manifest:
                     value = config.get(field)
                     if not isinstance(value, str) or not value or Path(value).is_absolute() or ".." in Path(value).parts:
                         failures.append("target {} has unsafe {}".format(name, field))
+                if self.data.get("schema_version") == "3.1.0":
+                    supported = config.get("supported_asset_kinds")
+                    if not isinstance(supported, list) or not supported or not all(
+                        item in ("agent", "skill") for item in supported
+                    ):
+                        failures.append("target {} has invalid supported_asset_kinds".format(name))
 
         if strict:
+            if self.data.get("schema_version") == "3.1.0":
+                try:
+                    from .targets import load_target_contract
+
+                    for name, config in self.direct_targets().items():
+                        contract = load_target_contract(self, name)
+                        if list(contract.supported_asset_kinds) != config.get("supported_asset_kinds"):
+                            failures.append(
+                                "target {} manifest supported_asset_kinds differs from contract".format(name)
+                            )
+                        if contract.status != config.get("status"):
+                            failures.append("target {} manifest status differs from contract".format(name))
+                except ManifestError as exc:
+                    failures.append(str(exc))
             workflows = {str(item.get("name", "")): item for item in self._records("workflows")}
             for name, workflow in workflows.items():
                 if not self.ASSET_NAME.fullmatch(name):
@@ -278,6 +344,22 @@ class Manifest:
             path = path.parent
         ensure_within(path, self.root, "asset path")
         return Asset(kind=kind, name=name, path=path, optional=optional)
+
+    def asset_record(self, asset: Asset) -> Mapping[str, Any]:
+        key = "optional_skills" if asset.optional else ("agents" if asset.kind == "agent" else "skills")
+        record = self._record_index(key).get(asset.name)
+        if record is None:
+            raise ManifestError("unknown {} asset record: {}".format(asset.kind, asset.name))
+        return record
+
+    def all_assets(self, kind: str) -> Tuple[Asset, ...]:
+        if kind == "agent":
+            return tuple(self._asset("agent", name) for name in self._record_index("agents"))
+        if kind == "skill":
+            core = [self._asset("skill", name) for name in self._record_index("skills")]
+            optional = [self._asset("skill", name, optional=True) for name in self._record_index("optional_skills")]
+            return tuple(core + optional)
+        raise ManifestError("unknown asset kind: {}".format(kind))
 
     def resolve_profiles(
         self,

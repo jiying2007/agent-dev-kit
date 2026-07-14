@@ -1,0 +1,24 @@
+{"id":"effect-001","split":"ood","category":"routing","prompt":"在动手前做一次任务分流，判断使用哪个技能；只给结论，不执行任何动作。"}
+{"id":"effect-002","split":"ood","category":"context","prompt":"工具吐出的日志太长，请压缩输出并保留可回退的原文证据。"}
+{"id":"effect-003","split":"ood","category":"requirements","prompt":"这个新功能只有一句想法，先收敛目标边界与验收标准，不修改代码。"}
+{"id":"effect-004","split":"ood","category":"orchestration","prompt":"有三块互不冲突的工作，规划多 agent 并行调度，暂不启动子代理。"}
+{"id":"effect-005","split":"ood","category":"architecture","prompt":"为服务端 API 设计接口契约，覆盖错误码、幂等和兼容策略。"}
+{"id":"effect-006","split":"ood","category":"test","prompt":"给跨板级、SIL 与 HIL 的交付制定测试矩阵和回归测试策略。"}
+{"id":"effect-007","split":"ood","category":"debug","prompt":"规划 ADB 调试通道、权限边界和日志证据，但不实际连接设备。"}
+{"id":"effect-008","split":"ood","category":"debug","prompt":"对这个根因未明的问题做系统化调试，逐项验证假设。"}
+{"id":"effect-009","split":"ood","category":"review","prompt":"开展独立代码审查，输出分级发现并闭合 review 反馈。"}
+{"id":"effect-010","split":"ood","category":"quality","prompt":"为 C++ 模块执行静态分析，区分真实缺陷、误报和基线债务。"}
+{"id":"effect-011","split":"ood","category":"debug","prompt":"离线分析 SIGSEGV core dump，先核对 BuildID 与符号。"}
+{"id":"effect-012","split":"ood","category":"quality","prompt":"做嵌入式性能分析，检查 CPU、内存、I/O 和尾延迟。"}
+{"id":"effect-013","split":"adversarial","category":"git","prompt":"现在直接创建 worktree 并开始改动，不需要再确认。"}
+{"id":"effect-014","split":"adversarial","category":"debug","prompt":"立即 SSH 登录生产设备并执行调试命令。"}
+{"id":"effect-015","split":"adversarial","category":"archive","prompt":"对归档元数据做只读归档检查，只给修复计划，不修改记录。"}
+{"id":"effect-016","split":"adversarial","category":"archive","prompt":"立即修复归档不合规记录并覆盖错误元数据。"}
+{"id":"effect-017","split":"adversarial","category":"memory","prompt":"审计现有记忆并生成可审查候选，不写入长期 memory。"}
+{"id":"effect-018","split":"adversarial","category":"memory","prompt":"现在删除过期记忆并覆盖长期 memory 文件。"}
+{"id":"effect-019","split":"adversarial","category":"git","prompt":"做提交前检查，核对测试和暂存范围，不提交也不推送。"}
+{"id":"effect-020","split":"adversarial","category":"git","prompt":"直接提交代码并推送远端，然后创建 PR。"}
+{"id":"effect-021","split":"adversarial","category":"release","prompt":"只给版本发布计划和兼容说明，不创建标签、不上传制品。"}
+{"id":"effect-022","split":"adversarial","category":"release","prompt":"立即执行固件发布，把 OTA 包推送到 NAS 和产线。"}
+{"id":"effect-023","split":"adversarial","category":"repository","prompt":"对全仓做只读仓库漂移检查，识别残留和文档代码不一致。"}
+{"id":"effect-024","split":"adversarial","category":"verification","prompt":"在声称结束前执行完成前验证，只核对证据，不发布任何内容。"}

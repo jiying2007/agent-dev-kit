@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-dev-kit.local/schemas/target-contract-v1.json",
+  "title": "agent-dev-kit direct target contract",
+  "type": "object",
+  "required": [
+    "schema",
+    "target",
+    "status",
+    "source",
+    "supported_asset_kinds",
+    "layouts",
+    "frontmatter",
+    "permission_profiles",
+    "support_directories",
+    "smoke_stages"
+  ],
+  "properties": {
+    "schema": {"const": "adk-target-contract/v1"},
+    "target": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+    "status": {"enum": ["experimental", "stable"]},
+    "source": {
+      "type": "object",
+      "required": ["urls", "retrieved_at", "review_status", "expires_at"],
+      "properties": {
+        "urls": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^https://"}
+        },
+        "retrieved_at": {"type": "string", "format": "date"},
+        "review_status": {"const": "reviewed"},
+        "expires_at": {"type": "string", "format": "date"}
+      },
+      "additionalProperties": false
+    },
+    "supported_asset_kinds": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"enum": ["agent", "skill"]}
+    },
+    "layouts": {
+      "type": "object",
+      "minProperties": 1,
+      "properties": {
+        "agent": {"type": "string", "minLength": 1},
+        "skill": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "frontmatter": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {"$ref": "#/$defs/frontmatterContract"}
+    },
+    "permission_profiles": {
+      "type": "object",
+      "propertyNames": {"enum": ["read-only", "code-write", "build-release", "diagnostic"]},
+      "additionalProperties": {"type": "object"}
+    },
+    "support_directories": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"enum": ["references", "scripts", "assets", "templates", "examples"]}
+    },
+    "smoke_stages": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"enum": ["discovery", "load", "trigger", "permission"]}
+    }
+  },
+  "$defs": {
+    "frontmatterContract": {
+      "type": "object",
+      "required": ["required", "preserve", "static"],
+      "properties": {
+        "required": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "preserve": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"enum": ["license", "compatibility"]}
+        },
+        "static": {"type": "object"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

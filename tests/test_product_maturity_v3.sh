@@ -175,6 +175,20 @@ with tempfile.TemporaryDirectory() as temp:
         else:
             raise AssertionError("archive write failure did not propagate")
     assert archive.read_bytes() == b"previous-valid-artifact"
+
+try:
+    release._validate_sbom(
+        {
+            "spdxVersion": "SPDX-2.3",
+            "documentDescribes": ["SPDXRef-Package-agent-dev-kit"],
+            "packages": [],
+            "relationships": [],
+        }
+    )
+except ManifestError as exc:
+    assert "SBOM validation failed" in str(exc)
+else:
+    raise AssertionError("invalid release SBOM unexpectedly passed validation")
 PY
 
 TARGET="$TMP_DIR/live"
@@ -208,8 +222,8 @@ bash "$ROOT_DIR/scripts/devkit.sh" install rollback --receipt "$RECEIPT" --summa
 }
 
 CONFLICT_TARGET="$TMP_DIR/conflict"
-mkdir -p "$CONFLICT_TARGET/agents/requirements-analyst"
-printf 'unmanaged\n' >"$CONFLICT_TARGET/agents/requirements-analyst/local.txt"
+mkdir -p "$CONFLICT_TARGET/agents"
+printf 'unmanaged\n' >"$CONFLICT_TARGET/agents/requirements-analyst.md"
 set +e
 bash "$ROOT_DIR/scripts/devkit.sh" install plan \
   --tool claude-code \
@@ -320,8 +334,8 @@ with mock.patch.object(installer.shutil, "move", side_effect=fail_second_move):
         raise AssertionError("injected rollback failure did not propagate")
 
 assert receipt.is_file(), "active receipt was lost after rollback failure"
-assert (target / "skills/adk-runtime-router").is_dir(), "first staged asset was not restored"
-assert (target / "skills/adk-requirements-triage").is_dir(), "untouched asset disappeared"
+assert (target / "agents/requirements-analyst.md").is_file(), "first staged asset was not restored"
+assert (target / "skills/adk-requirements-triage/SKILL.md").is_file(), "untouched asset disappeared"
 PY
 bash "$ROOT_DIR/scripts/devkit.sh" install rollback \
   --receipt "$IOFAIL_TARGET/.adk-install-receipt.json" >/dev/null
@@ -367,7 +381,14 @@ assert sbom["spdxVersion"] == "SPDX-2.3", sbom
 assert sbom["creationInfo"]["created"] == "1970-01-01T00:00:00Z", sbom
 assert sbom["documentDescribes"] == ["SPDXRef-Package-agent-dev-kit"], sbom
 assert any(item["name"] == "PyYAML" for item in sbom["packages"]), sbom
+assert any(item["name"] == "jsonschema" for item in sbom["packages"]), sbom
 assert any(item["relationshipType"] == "DEPENDS_ON" for item in sbom["relationships"]), sbom
+dependency_ids = {
+    item["relatedSpdxElement"]
+    for item in sbom["relationships"]
+    if item["relationshipType"] == "DEPENDS_ON"
+}
+assert dependency_ids == {"SPDXRef-Package-PyYAML", "SPDXRef-Package-jsonschema"}, dependency_ids
 PY
 printf 'tamper' >>"$TMP_DIR/release-b/agent-dev-kit-$VERSION.tar.gz"
 if bash "$ROOT_DIR/scripts/devkit.sh" release publish \

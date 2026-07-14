@@ -12,11 +12,20 @@ import subprocess
 import sys
 import tarfile
 import tempfile
+from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
+from typing import Any, Dict, List, Mapping, Optional, Tuple
 
 from .compiler import export_assets
-from .installer import RECEIPT_NAME, apply_plan, create_plan, rollback, write_plan
+from .installer import (
+    PREVIOUS_RECEIPT_SCHEMA,
+    RECEIPT_NAME,
+    _receipt_digest,
+    apply_plan,
+    create_plan,
+    rollback,
+    write_plan,
+)
 from .model import Manifest, ManifestError, sha256_file, sha256_tree
 
 
@@ -71,6 +80,11 @@ def check_release(manifest: Manifest) -> Dict[str, Any]:
             failures.append("release workflow treats external Codex handoff as direct target")
         if "release build" not in content:
             failures.append("release workflow does not use the release contract")
+        if not re.search(r"actions/attest@[0-9a-f]{40}", content):
+            failures.append("release workflow does not create SHA-pinned provenance attestation")
+        for permission in ("id-token: write", "attestations: write", "artifact-metadata: write"):
+            if permission not in content:
+                failures.append("release workflow missing attestation permission: {}".format(permission))
 
     return {
         "schema_version": 1,
@@ -122,6 +136,7 @@ def _write_deterministic_archive(source: Path, archive: Path) -> None:
 
 def _copy_source_distribution(manifest: Manifest, destination: Path) -> int:
     directories = (
+        ".github",
         "agents",
         "contexts",
         "docs",
@@ -184,6 +199,51 @@ def _copy_source_distribution(manifest: Manifest, destination: Path) -> int:
     return sum(1 for path in destination.rglob("*") if path.is_file() or path.is_symlink())
 
 
+def _validate_sbom(sbom: Mapping[str, Any]) -> None:
+    failures: List[str] = []
+    if sbom.get("spdxVersion") != "SPDX-2.3":
+        failures.append("spdxVersion must be SPDX-2.3")
+    packages = sbom.get("packages")
+    relationships = sbom.get("relationships")
+    if not isinstance(packages, list) or not packages:
+        failures.append("packages must be a non-empty array")
+        packages = []
+    if not isinstance(relationships, list):
+        failures.append("relationships must be an array")
+        relationships = []
+    package_ids = [item.get("SPDXID") for item in packages if isinstance(item, dict)]
+    if len(package_ids) != len(set(package_ids)) or any(not item for item in package_ids):
+        failures.append("package SPDXIDs must be present and unique")
+    described = sbom.get("documentDescribes")
+    if not isinstance(described, list) or any(item not in package_ids for item in described):
+        failures.append("documentDescribes must reference declared packages")
+    names = {item.get("name") for item in packages if isinstance(item, dict)}
+    dependency_ids = {
+        item.get("relatedSpdxElement")
+        for item in relationships
+        if isinstance(item, dict)
+        and item.get("spdxElementId") == "SPDXRef-Package-agent-dev-kit"
+        and item.get("relationshipType") == "DEPENDS_ON"
+    }
+    for name, package_id in (
+        ("PyYAML", "SPDXRef-Package-PyYAML"),
+        ("jsonschema", "SPDXRef-Package-jsonschema"),
+    ):
+        if name not in names:
+            failures.append("runtime dependency missing from SBOM: {}".format(name))
+        if package_id not in dependency_ids:
+            failures.append("runtime dependency relationship missing from SBOM: {}".format(name))
+    known_ids = set(package_ids)
+    for item in relationships:
+        if not isinstance(item, dict):
+            failures.append("relationship entries must be objects")
+            continue
+        if item.get("spdxElementId") not in known_ids or item.get("relatedSpdxElement") not in known_ids:
+            failures.append("relationship references an unknown SPDXID")
+    if failures:
+        raise ManifestError("release SBOM validation failed: {}".format("; ".join(sorted(set(failures)))))
+
+
 def build_release(manifest: Manifest, output: Path, version: Optional[str] = None) -> Dict[str, Any]:
     version = version or manifest.version
     if version != manifest.version:
@@ -201,11 +261,15 @@ def build_release(manifest: Manifest, output: Path, version: Optional[str] = Non
     try:
         target_results: List[Dict[str, Any]] = []
         for target in sorted(manifest.direct_targets()):
+            target_config = manifest.target(target)
+            supported_kinds = target_config.get("supported_asset_kinds", [])
+            asset_kind = supported_kinds[0] if isinstance(supported_kinds, list) and len(supported_kinds) == 1 else None
             result = export_assets(
                 manifest,
                 target=target,
                 output_root=bundles,
                 profiles=["embedded-fullstack"],
+                asset_kind=asset_kind,
                 clean=True,
             )
             target_results.append({"target": target, "agents": result["agents"], "skills": result["skills"]})
@@ -254,18 +318,35 @@ def build_release(manifest: Manifest, output: Path, version: Optional[str] = Non
                     "filesAnalyzed": False,
                     "summary": "Declared runtime requirement: PyYAML>=5.3,<7",
                 },
+                {
+                    "name": "jsonschema",
+                    "SPDXID": "SPDXRef-Package-jsonschema",
+                    "downloadLocation": "https://pypi.org/project/jsonschema/",
+                    "licenseConcluded": "NOASSERTION",
+                    "licenseDeclared": "MIT",
+                    "filesAnalyzed": False,
+                    "summary": "Declared runtime requirement: jsonschema==4.23.0",
+                },
             ],
             "relationships": [
                 {
                     "spdxElementId": "SPDXRef-Package-agent-dev-kit",
                     "relationshipType": "DEPENDS_ON",
                     "relatedSpdxElement": "SPDXRef-Package-PyYAML",
-                }
+                },
+                {
+                    "spdxElementId": "SPDXRef-Package-agent-dev-kit",
+                    "relationshipType": "DEPENDS_ON",
+                    "relatedSpdxElement": "SPDXRef-Package-jsonschema",
+                },
             ],
         }
-        (package_root / "sbom.spdx.json").write_text(
+        _validate_sbom(sbom)
+        sbom_path = package_root / "sbom.spdx.json"
+        sbom_path.write_text(
             json.dumps(sbom, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
         )
+        sbom_digest = sha256_file(sbom_path)
         release_manifest = {
             "schema_version": 1,
             "version": version,
@@ -275,6 +356,11 @@ def build_release(manifest: Manifest, output: Path, version: Optional[str] = Non
             "source_distribution": True,
             "source_file_count": source_file_count,
             "reproducible": True,
+            "sbom": {
+                "path": "sbom.spdx.json",
+                "sha256": sbom_digest,
+                "validated": True,
+            },
         }
         (package_root / "release-manifest.json").write_text(
             json.dumps(release_manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
@@ -496,6 +582,67 @@ def _managed_hashes(target: Path) -> Dict[str, str]:
     return hashes
 
 
+def _install_legacy_release_bundle(
+    release_root: Path,
+    manifest: Manifest,
+    target: Path,
+) -> Dict[str, Any]:
+    """Stage a pre-contract release as a digest-protected v2 rollback fixture."""
+
+    bundle = release_root / "bundles" / "claude-code"
+    if not bundle.is_dir() or bundle.is_symlink():
+        raise ManifestError("legacy release does not contain a safe Claude Code bundle")
+    files = sorted(path for path in bundle.rglob("*") if path.is_file() or path.is_symlink())
+    if not files or any(path.is_symlink() for path in files):
+        raise ManifestError("legacy release bundle is empty or contains symlinks")
+    target.mkdir(parents=True, exist_ok=True)
+    receipt_id = "legacy-{}".format(manifest.version.replace("/", "-"))
+    backup_root = target / ".adk-backups" / receipt_id
+    backup_root.mkdir(parents=True, exist_ok=False)
+    installed: List[Dict[str, Any]] = []
+    for source in files:
+        relative = source.relative_to(bundle).as_posix()
+        destination = target / relative
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(str(source), str(destination))
+        kind = relative.split("/", 1)[0].rstrip("s")
+        name = source.stem
+        installed.append(
+            {
+                "kind": kind,
+                "name": name,
+                "destination": relative,
+                "source_sha256": sha256_file(source),
+                "installed_sha256": sha256_tree(destination),
+                "backup": None,
+                "backup_sha256": None,
+            }
+        )
+    receipt = {
+        "schema": PREVIOUS_RECEIPT_SCHEMA,
+        "receipt_id": receipt_id,
+        "created_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
+        "plan_id": "legacy-bundle-migration",
+        "manifest_version": manifest.version,
+        "manifest_sha256": manifest.digest,
+        "tool": "claude-code",
+        "target": str(target),
+        "backup_root": backup_root.relative_to(target).as_posix(),
+        "previous_receipt": None,
+        "previous_receipt_sha256": None,
+        "installed": installed,
+    }
+    receipt["receipt_sha256"] = _receipt_digest(receipt)
+    receipt_path = target / RECEIPT_NAME
+    receipt_path.write_text(json.dumps(receipt, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return {
+        "status": "pass",
+        "installed": len(installed),
+        "receipt": str(receipt_path),
+        "migration": "legacy-bundle-v2",
+    }
+
+
 def rehearse_release(previous_artifact: Path, candidate_artifact: Path) -> Dict[str, Any]:
     previous_digest = _verify_artifact_checksum(previous_artifact)
     candidate_digest = _verify_artifact_checksum(candidate_artifact)
@@ -510,19 +657,33 @@ def rehearse_release(previous_artifact: Path, candidate_artifact: Path) -> Dict[
 
         target = workspace / "target"
         previous_plan_path = workspace / "previous-plan.json"
-        previous_plan = create_plan(
-            previous_manifest,
-            "claude-code",
-            str(target),
-            [previous_manifest.default_profile],
-            [],
-            "copy",
-        )
-        if previous_plan["status"] != "ready":
-            raise ManifestError("previous release install plan is not ready")
-        write_plan(previous_plan, previous_plan_path)
-        previous_apply = apply_plan(previous_manifest, previous_plan_path)
+        try:
+            previous_plan = create_plan(
+                previous_manifest,
+                "claude-code",
+                str(target),
+                [previous_manifest.default_profile],
+                [],
+                "copy",
+            )
+        except ManifestError as exc:
+            if "target_contract_missing" not in str(exc):
+                raise
+            previous_apply = _install_legacy_release_bundle(previous_root, previous_manifest, target)
+        else:
+            if previous_plan["status"] != "ready":
+                raise ManifestError("previous release install plan is not ready")
+            write_plan(previous_plan, previous_plan_path)
+            previous_apply = apply_plan(previous_manifest, previous_plan_path)
         previous_hashes = _managed_hashes(target)
+
+        migration_mode = "in-place-replacement"
+        legacy_rollback: Optional[Dict[str, Any]] = None
+        if previous_apply.get("migration") == "legacy-bundle-v2":
+            migration_mode = "rollback-before-install"
+            legacy_rollback = rollback(target / RECEIPT_NAME)
+            if (target / RECEIPT_NAME).exists():
+                raise ManifestError("legacy receipt remained after migration rollback")
 
         candidate_plan_path = workspace / "candidate-plan.json"
         candidate_plan = create_plan(
@@ -542,14 +703,32 @@ def rehearse_release(previous_artifact: Path, candidate_artifact: Path) -> Dict[
             raise ManifestError("candidate receipt version does not match release")
 
         rollback_result = rollback(target / RECEIPT_NAME)
-        restored_receipt = json.loads((target / RECEIPT_NAME).read_text(encoding="utf-8"))
-        restored_hashes = _managed_hashes(target)
-        if restored_receipt.get("manifest_version") != previous_manifest.version:
-            raise ManifestError("rollback did not restore the previous receipt")
-        if restored_hashes != previous_hashes:
-            raise ManifestError("rollback did not restore the previous managed asset hashes")
+        fallback_restore: Optional[Dict[str, Any]] = None
+        if migration_mode == "in-place-replacement":
+            restored_receipt = json.loads((target / RECEIPT_NAME).read_text(encoding="utf-8"))
+            restored_hashes = _managed_hashes(target)
+            if restored_receipt.get("manifest_version") != previous_manifest.version:
+                raise ManifestError("rollback did not restore the previous receipt")
+            if restored_hashes != previous_hashes:
+                raise ManifestError("rollback did not restore the previous managed asset hashes")
+        else:
+            if (target / RECEIPT_NAME).exists():
+                raise ManifestError("candidate receipt remained after rollback")
+            fallback_apply = _install_legacy_release_bundle(previous_root, previous_manifest, target)
+            restored_hashes = _managed_hashes(target)
+            if restored_hashes != previous_hashes:
+                raise ManifestError("previous legacy artifact reinstall did not restore managed hashes")
+            fallback_cleanup = rollback(target / RECEIPT_NAME)
+            if (target / RECEIPT_NAME).exists():
+                raise ManifestError("fallback receipt remained after rehearsal cleanup")
+            fallback_restore = {
+                "status": "pass",
+                "strategy": "reinstall-previous-artifact",
+                "installed": fallback_apply["installed"],
+                "cleanup_removed": fallback_cleanup["removed"],
+            }
         result = {
-            "schema_version": 1,
+            "schema_version": 2,
             "status": "pass",
             "previous_version": previous_manifest.version,
             "candidate_version": candidate_manifest.version,
@@ -559,6 +738,9 @@ def rehearse_release(previous_artifact: Path, candidate_artifact: Path) -> Dict[
             "candidate_manifest_sha256": candidate_release_manifest["manifest_sha256"],
             "previous_installed": previous_apply["installed"],
             "candidate_installed": candidate_apply["installed"],
+            "migration_mode": migration_mode,
+            "legacy_rollback": legacy_rollback,
+            "fallback_restore": fallback_restore,
             "rollback": {
                 "status": rollback_result["status"],
                 "removed": rollback_result["removed"],

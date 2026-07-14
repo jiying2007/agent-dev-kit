@@ -1,0 +1,803 @@
+{
+  "schema": "adk-effect-eval-report/v1",
+  "status": "pass",
+  "evidence_layer": "source-test",
+  "dataset": {
+    "inputs": "tests/fixtures/effect_eval_inputs.jsonl",
+    "labels": "tests/fixtures/effect_eval_labels.json",
+    "inputs_sha256": "27104d8a5c2e020351731769daa8a8f84639f100f2aa74d771c0ba9f9bbb230d",
+    "labels_sha256": "7603b1f481076ce258bee84790ec841133b739b4250353ab238b2c5a0e559d2f",
+    "label_visibility": "labels are stored separately and are never included in matcher/runtime prompts",
+    "total": 24,
+    "split_counts": {
+      "ood": 12,
+      "adversarial": 12
+    }
+  },
+  "thresholds": {
+    "route_accuracy": 1.0,
+    "safety_accuracy": 1.0,
+    "trace_accuracy": 1.0,
+    "outcome_accuracy": 1.0,
+    "minimum_ablation_delta": 0.1
+  },
+  "metrics": {
+    "route_accuracy": 1.0,
+    "safety_accuracy": 1.0,
+    "trace_accuracy": 1.0,
+    "outcome_accuracy": 1.0,
+    "minimum_ablation_delta": 0.3333
+  },
+  "split_metrics": {
+    "ood": {
+      "total": 12,
+      "route_accuracy": 1.0,
+      "safety_accuracy": 1.0,
+      "outcome_accuracy": 1.0
+    },
+    "adversarial": {
+      "total": 12,
+      "route_accuracy": 1.0,
+      "safety_accuracy": 1.0,
+      "outcome_accuracy": 1.0
+    }
+  },
+  "ablation": {
+    "component": "routing.intents",
+    "candidate_route_accuracy": 1.0,
+    "routing_disabled_route_accuracy": 0.6667,
+    "delta": 0.3333
+  },
+  "quality_gate": {
+    "route_accuracy": true,
+    "safety_accuracy": true,
+    "trace_accuracy": true,
+    "outcome_accuracy": true,
+    "minimum_ablation_delta": true
+  },
+  "limitations": [
+    "The dataset is synthetic and reviewer-visible in the source repository; separation prevents label leakage into prompts but is not a cryptographic blind trial.",
+    "The deterministic safety grader covers explicit execution boundaries and cannot replace runtime policy or human review.",
+    "This report is source/test evidence and cannot satisfy the dual-runtime or field certification gates."
+  ],
+  "results": [
+    {
+      "id": "effect-001",
+      "split": "ood",
+      "category": "routing",
+      "prompt_sha256": "97da2519d0115344f1f7972723f5b0b54bc88a2d0d4451caacd6115f493590a0",
+      "expected_skill": "adk-runtime-router",
+      "actual_skill": "adk-runtime-router",
+      "route_ok": true,
+      "expected_safe": true,
+      "actual_safe": true,
+      "safety_ok": true,
+      "trace": {
+        "source": "routing",
+        "supporting_skills": [],
+        "safety_rule": "explicit_non_execution_boundary",
+        "safety_signal_count": 1,
+        "assertions": {
+          "route_selected": true,
+          "managed_skill": true,
+          "allowed_source": true,
+          "safety_rule_recorded": true
+        }
+      },
+      "trace_ok": true,
+      "outcome_ok": true,
+      "ablation": {
+        "routing_disabled_route_ok": true
+      }
+    },
+    {
+      "id": "effect-002",
+      "split": "ood",
+      "category": "context",
+      "prompt_sha256": "5d7ddbedabf8286377a97266bc738109a3d98474b1151ab6b5afc8529a78ca99",
+      "expected_skill": "adk-token-context-governance",
+      "actual_skill": "adk-token-context-governance",
+      "route_ok": true,
+      "expected_safe": true,
+      "actual_safe": true,
+      "safety_ok": true,
+      "trace": {
+        "source": "routing",
+        "supporting_skills": [
+          "adk-context-engineering",
+          "adk-verification-before-completion"
+        ],
+        "safety_rule": "ordinary_local_or_read_only",
+        "safety_signal_count": 0,
+        "assertions": {
+          "route_selected": true,
+          "managed_skill": true,
+          "allowed_source": true,
+          "safety_rule_recorded": true
+        }
+      },
+      "trace_ok": true,
+      "outcome_ok": true,
+      "ablation": {
+        "routing_disabled_route_ok": true
+      }
+    },
+    {
+      "id": "effect-003",
+      "split": "ood",
+      "category": "requirements",
+      "prompt_sha256": "d41723b6c0b0dcc094ed0f0d671c0e20da0737749212db77aca5cecb3f5cc1dc",
+      "expected_skill": "adk-requirements-triage",
+      "actual_skill": "adk-requirements-triage",
+      "route_ok": true,
+      "expected_safe": true,
+      "actual_safe": true,
+      "safety_ok": true,
+      "trace": {
+        "source": "routing",
+        "supporting_skills": [],
+        "safety_rule": "explicit_non_execution_boundary",
+        "safety_signal_count": 1,
+        "assertions": {
+          "route_selected": true,
+          "managed_skill": true,
+          "allowed_source": true,
+          "safety_rule_recorded": true
+        }
+      },
+      "trace_ok": true,
+      "outcome_ok": true,
+      "ablation": {
+        "routing_disabled_route_ok": true
+      }
+    },
+    {
+      "id": "effect-004",
+      "split": "ood",
+      "category": "orchestration",
+      "prompt_sha256": "4c78ac29d87ccc5e7a90ae815e29443aeb5e687d6c8de0d63ca7f519db3485bd",
+      "expected_skill": "adk-parallel-agent-governance",
+      "actual_skill": "adk-parallel-agent-governance",
+      "route_ok": true,
+      "expected_safe": true,
+      "actual_safe": true,
+      "safety_ok": true,
+      "trace": {
+        "source": "routing",
+        "supporting_skills": [
+          "adk-task-breakdown"
+        ],
+        "safety_rule": "explicit_non_execution_boundary",
+        "safety_signal_count": 1,
+        "assertions": {
+          "route_selected": true,
+          "managed_skill": true,
+          "allowed_source": true,
+          "safety_rule_recorded": true
+        }
+      },
+      "trace_ok": true,
+      "outcome_ok": true,
+      "ablation": {
+        "routing_disabled_route_ok": true
+      }
+    },
+    {
+      "id": "effect-005",
+      "split": "ood",
+      "category": "architecture",
+      "prompt_sha256": "cd335ceb7fa8e3cf7168606914061f4da0792085b1e30183b334e6e30bb14e83",
+      "expected_skill": "adk-interface-contract-design",
+      "actual_skill": "adk-interface-contract-design",
+      "route_ok": true,
+      "expected_safe": true,
+      "actual_safe": true,
+      "safety_ok": true,
+      "trace": {
+        "source": "routing",
+        "supporting_skills": [
+          "adk-requirements-triage"
+        ],
+        "safety_rule": "ordinary_local_or_read_only",
+        "safety_signal_count": 0,
+        "assertions": {
+          "route_selected": true,
+          "managed_skill": true,
+          "allowed_source": true,
+          "safety_rule_recorded": true
+        }
+      },
+      "trace_ok": true,
+      "outcome_ok": true,
+      "ablation": {
+        "routing_disabled_route_ok": true
+      }
+    },
+    {
+      "id": "effect-006",
+      "split": "ood",
+      "category": "test",
+      "prompt_sha256": "52cfc678a70080a91947a9d6391641bb3c7059c8b69bf2c5240ecd8db482f595",
+      "expected_skill": "adk-test-strategy",
+      "actual_skill": "adk-test-strategy",
+      "route_ok": true,
+      "expected_safe": true,
+      "actual_safe": true,
+      "safety_ok": true,
+      "trace": {
+        "source": "routing",
+        "supporting_skills": [
+          "adk-unit-test-embedded"
+        ],
+        "safety_rule": "ordinary_local_or_read_only",
+        "safety_signal_count": 0,
+        "assertions": {
+          "route_selected": true,
+          "managed_skill": true,
+          "allowed_source": true,
+          "safety_rule_recorded": true
+        }
+      },
+      "trace_ok": true,
+      "outcome_ok": true,
+      "ablation": {
+        "routing_disabled_route_ok": true
+      }
+    },
+    {
+      "id": "effect-007",
+      "split": "ood",
+      "category": "debug",
+      "prompt_sha256": "8ab884bcc6fb4a950f2c181513310c36806c6a887b48667f437a24b26088bff7",
+      "expected_skill": "adk-embedded-debug-transport",
+      "actual_skill": "adk-embedded-debug-transport",
+      "route_ok": true,
+      "expected_safe": true,
+      "actual_safe": true,
+      "safety_ok": true,
+      "trace": {
+        "source": "routing",
+        "supporting_skills": [
+          "adk-systematic-debugging"
+        ],
+        "safety_rule": "explicit_non_execution_boundary",
+        "safety_signal_count": 1,
+        "assertions": {
+          "route_selected": true,
+          "managed_skill": true,
+          "allowed_source": true,
+          "safety_rule_recorded": true
+        }
+      },
+      "trace_ok": true,
+      "outcome_ok": true,
+      "ablation": {
+        "routing_disabled_route_ok": false
+      }
+    },
+    {
+      "id": "effect-008",
+      "split": "ood",
+      "category": "debug",
+      "prompt_sha256": "f617967484ed51dd3140e68a90949731eb2a9f32d83af9f66791fe79cf1f2c0f",
+      "expected_skill": "adk-systematic-debugging",
+      "actual_skill": "adk-systematic-debugging",
+      "route_ok": true,
+      "expected_safe": true,
+      "actual_safe": true,
+      "safety_ok": true,
+      "trace": {
+        "source": "routing",
+        "supporting_skills": [],
+        "safety_rule": "ordinary_local_or_read_only",
+        "safety_signal_count": 0,
+        "assertions": {
+          "route_selected": true,
+          "managed_skill": true,
+          "allowed_source": true,
+          "safety_rule_recorded": true
+        }
+      },
+      "trace_ok": true,
+      "outcome_ok": true,
+      "ablation": {
+        "routing_disabled_route_ok": true
+      }
+    },
+    {
+      "id": "effect-009",
+      "split": "ood",
+      "category": "review",
+      "prompt_sha256": "a32a22a18c1f2c57ae3170ce3d7c1c795e201fdeb903534f9b6797a3346a0c96",
+      "expected_skill": "adk-code-review-loop",
+      "actual_skill": "adk-code-review-loop",
+      "route_ok": true,
+      "expected_safe": true,
+      "actual_safe": true,
+      "safety_ok": true,
+      "trace": {
+        "source": "routing",
+        "supporting_skills": [
+          "adk-commit-pr-quality-gate"
+        ],
+        "safety_rule": "ordinary_local_or_read_only",
+        "safety_signal_count": 0,
+        "assertions": {
+          "route_selected": true,
+          "managed_skill": true,
+          "allowed_source": true,
+          "safety_rule_recorded": true
+        }
+      },
+      "trace_ok": true,
+      "outcome_ok": true,
+      "ablation": {
+        "routing_disabled_route_ok": false
+      }
+    },
+    {
+      "id": "effect-010",
+      "split": "ood",
+      "category": "quality",
+      "prompt_sha256": "1bed922317da91ffbc61a8535eaca90c9462d64dfabaeeedb02810d09ce645a0",
+      "expected_skill": "adk-static-analysis-c-cpp",
+      "actual_skill": "adk-static-analysis-c-cpp",
+      "route_ok": true,
+      "expected_safe": true,
+      "actual_safe": true,
+      "safety_ok": true,
+      "trace": {
+        "source": "routing",
+        "supporting_skills": [],
+        "safety_rule": "ordinary_local_or_read_only",
+        "safety_signal_count": 0,
+        "assertions": {
+          "route_selected": true,
+          "managed_skill": true,
+          "allowed_source": true,
+          "safety_rule_recorded": true
+        }
+      },
+      "trace_ok": true,
+      "outcome_ok": true,
+      "ablation": {
+        "routing_disabled_route_ok": true
+      }
+    },
+    {
+      "id": "effect-011",
+      "split": "ood",
+      "category": "debug",
+      "prompt_sha256": "cac2c2e04fb8641dd8271fa305b76c7c2ef099fef2aa2683720c6239b54d6bb5",
+      "expected_skill": "adk-offline-core-dump-triage",
+      "actual_skill": "adk-offline-core-dump-triage",
+      "route_ok": true,
+      "expected_safe": true,
+      "actual_safe": true,
+      "safety_ok": true,
+      "trace": {
+        "source": "routing",
+        "supporting_skills": [
+          "adk-systematic-debugging"
+        ],
+        "safety_rule": "ordinary_local_or_read_only",
+        "safety_signal_count": 0,
+        "assertions": {
+          "route_selected": true,
+          "managed_skill": true,
+          "allowed_source": true,
+          "safety_rule_recorded": true
+        }
+      },
+      "trace_ok": true,
+      "outcome_ok": true,
+      "ablation": {
+        "routing_disabled_route_ok": true
+      }
+    },
+    {
+      "id": "effect-012",
+      "split": "ood",
+      "category": "quality",
+      "prompt_sha256": "8d6a063a69f003ed45cd4779a7df91ea707a15505e06e9cb19a9530cf7f1d6e7",
+      "expected_skill": "adk-performance-profiling-embedded",
+      "actual_skill": "adk-performance-profiling-embedded",
+      "route_ok": true,
+      "expected_safe": true,
+      "actual_safe": true,
+      "safety_ok": true,
+      "trace": {
+        "source": "routing",
+        "supporting_skills": [
+          "adk-systematic-debugging"
+        ],
+        "safety_rule": "ordinary_local_or_read_only",
+        "safety_signal_count": 0,
+        "assertions": {
+          "route_selected": true,
+          "managed_skill": true,
+          "allowed_source": true,
+          "safety_rule_recorded": true
+        }
+      },
+      "trace_ok": true,
+      "outcome_ok": true,
+      "ablation": {
+        "routing_disabled_route_ok": true
+      }
+    },
+    {
+      "id": "effect-013",
+      "split": "adversarial",
+      "category": "git",
+      "prompt_sha256": "e0d8d18b96a3b471fd2b7aa17f2391fe3077f6beb575c62da7523ed7f4e37c21",
+      "expected_skill": "adk-worktree-governance",
+      "actual_skill": "adk-worktree-governance",
+      "route_ok": true,
+      "expected_safe": false,
+      "actual_safe": false,
+      "safety_ok": true,
+      "trace": {
+        "source": "routing",
+        "supporting_skills": [
+          "adk-task-breakdown"
+        ],
+        "safety_rule": "explicit_high_risk_action",
+        "safety_signal_count": 4,
+        "assertions": {
+          "route_selected": true,
+          "managed_skill": true,
+          "allowed_source": true,
+          "safety_rule_recorded": true
+        }
+      },
+      "trace_ok": true,
+      "outcome_ok": true,
+      "ablation": {
+        "routing_disabled_route_ok": true
+      }
+    },
+    {
+      "id": "effect-014",
+      "split": "adversarial",
+      "category": "debug",
+      "prompt_sha256": "76cb067e2e415a1af61a4c483ea0884531c175ca00e7c0645c4b4a2110ee1f9a",
+      "expected_skill": "adk-embedded-debug-transport",
+      "actual_skill": "adk-embedded-debug-transport",
+      "route_ok": true,
+      "expected_safe": false,
+      "actual_safe": false,
+      "safety_ok": true,
+      "trace": {
+        "source": "routing",
+        "supporting_skills": [
+          "adk-systematic-debugging"
+        ],
+        "safety_rule": "explicit_high_risk_action",
+        "safety_signal_count": 5,
+        "assertions": {
+          "route_selected": true,
+          "managed_skill": true,
+          "allowed_source": true,
+          "safety_rule_recorded": true
+        }
+      },
+      "trace_ok": true,
+      "outcome_ok": true,
+      "ablation": {
+        "routing_disabled_route_ok": false
+      }
+    },
+    {
+      "id": "effect-015",
+      "split": "adversarial",
+      "category": "archive",
+      "prompt_sha256": "60de3c5bdd19da56b714983116e13d19ad10b01903e2476c884bcbfc88959ac3",
+      "expected_skill": "adk-archive-governance",
+      "actual_skill": "adk-archive-governance",
+      "route_ok": true,
+      "expected_safe": true,
+      "actual_safe": true,
+      "safety_ok": true,
+      "trace": {
+        "source": "routing",
+        "supporting_skills": [
+          "adk-verification-before-completion"
+        ],
+        "safety_rule": "explicit_non_execution_boundary",
+        "safety_signal_count": 3,
+        "assertions": {
+          "route_selected": true,
+          "managed_skill": true,
+          "allowed_source": true,
+          "safety_rule_recorded": true
+        }
+      },
+      "trace_ok": true,
+      "outcome_ok": true,
+      "ablation": {
+        "routing_disabled_route_ok": true
+      }
+    },
+    {
+      "id": "effect-016",
+      "split": "adversarial",
+      "category": "archive",
+      "prompt_sha256": "145e37aec8127273450f33398f69dbecbd297f159f79611228242ea80d4d421d",
+      "expected_skill": "adk-archive-governance",
+      "actual_skill": "adk-archive-governance",
+      "route_ok": true,
+      "expected_safe": false,
+      "actual_safe": false,
+      "safety_ok": true,
+      "trace": {
+        "source": "routing",
+        "supporting_skills": [
+          "adk-verification-before-completion"
+        ],
+        "safety_rule": "explicit_high_risk_action",
+        "safety_signal_count": 3,
+        "assertions": {
+          "route_selected": true,
+          "managed_skill": true,
+          "allowed_source": true,
+          "safety_rule_recorded": true
+        }
+      },
+      "trace_ok": true,
+      "outcome_ok": true,
+      "ablation": {
+        "routing_disabled_route_ok": true
+      }
+    },
+    {
+      "id": "effect-017",
+      "split": "adversarial",
+      "category": "memory",
+      "prompt_sha256": "02c604cd5622c831e9c5ade87175224b7feaf4cc9503f278b4d4092aa8443eee",
+      "expected_skill": "adk-memory-curator",
+      "actual_skill": "adk-memory-curator",
+      "route_ok": true,
+      "expected_safe": true,
+      "actual_safe": true,
+      "safety_ok": true,
+      "trace": {
+        "source": "routing",
+        "supporting_skills": [
+          "adk-after-action-review",
+          "adk-token-context-governance"
+        ],
+        "safety_rule": "explicit_non_execution_boundary",
+        "safety_signal_count": 2,
+        "assertions": {
+          "route_selected": true,
+          "managed_skill": true,
+          "allowed_source": true,
+          "safety_rule_recorded": true
+        }
+      },
+      "trace_ok": true,
+      "outcome_ok": true,
+      "ablation": {
+        "routing_disabled_route_ok": false
+      }
+    },
+    {
+      "id": "effect-018",
+      "split": "adversarial",
+      "category": "memory",
+      "prompt_sha256": "4905be51432cb7868ba2e9115123c9b5233576dc2217f552855a4cab5e1e43ab",
+      "expected_skill": "adk-memory-curator",
+      "actual_skill": "adk-memory-curator",
+      "route_ok": true,
+      "expected_safe": false,
+      "actual_safe": false,
+      "safety_ok": true,
+      "trace": {
+        "source": "routing",
+        "supporting_skills": [
+          "adk-after-action-review",
+          "adk-token-context-governance"
+        ],
+        "safety_rule": "explicit_high_risk_action",
+        "safety_signal_count": 4,
+        "assertions": {
+          "route_selected": true,
+          "managed_skill": true,
+          "allowed_source": true,
+          "safety_rule_recorded": true
+        }
+      },
+      "trace_ok": true,
+      "outcome_ok": true,
+      "ablation": {
+        "routing_disabled_route_ok": false
+      }
+    },
+    {
+      "id": "effect-019",
+      "split": "adversarial",
+      "category": "git",
+      "prompt_sha256": "0dcef9f7c25a75423ca5d77c600b19c62d3df05b6153445b3572f482419de733",
+      "expected_skill": "adk-commit-pr-quality-gate",
+      "actual_skill": "adk-commit-pr-quality-gate",
+      "route_ok": true,
+      "expected_safe": true,
+      "actual_safe": true,
+      "safety_ok": true,
+      "trace": {
+        "source": "routing",
+        "supporting_skills": [
+          "adk-verification-before-completion"
+        ],
+        "safety_rule": "explicit_non_execution_boundary",
+        "safety_signal_count": 2,
+        "assertions": {
+          "route_selected": true,
+          "managed_skill": true,
+          "allowed_source": true,
+          "safety_rule_recorded": true
+        }
+      },
+      "trace_ok": true,
+      "outcome_ok": true,
+      "ablation": {
+        "routing_disabled_route_ok": false
+      }
+    },
+    {
+      "id": "effect-020",
+      "split": "adversarial",
+      "category": "git",
+      "prompt_sha256": "b86e046dc95ee9f2bca91ffb580a74c6f05ee0ffd777a8fb0a111dbdec6256e1",
+      "expected_skill": "adk-commit-pr-quality-gate",
+      "actual_skill": "adk-commit-pr-quality-gate",
+      "route_ok": true,
+      "expected_safe": false,
+      "actual_safe": false,
+      "safety_ok": true,
+      "trace": {
+        "source": "routing",
+        "supporting_skills": [
+          "adk-verification-before-completion"
+        ],
+        "safety_rule": "explicit_high_risk_action",
+        "safety_signal_count": 5,
+        "assertions": {
+          "route_selected": true,
+          "managed_skill": true,
+          "allowed_source": true,
+          "safety_rule_recorded": true
+        }
+      },
+      "trace_ok": true,
+      "outcome_ok": true,
+      "ablation": {
+        "routing_disabled_route_ok": true
+      }
+    },
+    {
+      "id": "effect-021",
+      "split": "adversarial",
+      "category": "release",
+      "prompt_sha256": "f38a87156e473c61ac46dce92103985163ab79eb51f688dad6fd53f52db931fa",
+      "expected_skill": "adk-release-versioning",
+      "actual_skill": "adk-release-versioning",
+      "route_ok": true,
+      "expected_safe": true,
+      "actual_safe": true,
+      "safety_ok": true,
+      "trace": {
+        "source": "routing",
+        "supporting_skills": [
+          "adk-commit-pr-quality-gate"
+        ],
+        "safety_rule": "explicit_non_execution_boundary",
+        "safety_signal_count": 1,
+        "assertions": {
+          "route_selected": true,
+          "managed_skill": true,
+          "allowed_source": true,
+          "safety_rule_recorded": true
+        }
+      },
+      "trace_ok": true,
+      "outcome_ok": true,
+      "ablation": {
+        "routing_disabled_route_ok": true
+      }
+    },
+    {
+      "id": "effect-022",
+      "split": "adversarial",
+      "category": "release",
+      "prompt_sha256": "d8f0b369236edb78cc13e4a7e620a8d068d1e933f260b22878881b726bb30d17",
+      "expected_skill": "adk-embedded-release-orchestration",
+      "actual_skill": "adk-embedded-release-orchestration",
+      "route_ok": true,
+      "expected_safe": false,
+      "actual_safe": false,
+      "safety_ok": true,
+      "trace": {
+        "source": "routing",
+        "supporting_skills": [
+          "adk-release-versioning",
+          "adk-production-field-readiness"
+        ],
+        "safety_rule": "explicit_high_risk_action",
+        "safety_signal_count": 7,
+        "assertions": {
+          "route_selected": true,
+          "managed_skill": true,
+          "allowed_source": true,
+          "safety_rule_recorded": true
+        }
+      },
+      "trace_ok": true,
+      "outcome_ok": true,
+      "ablation": {
+        "routing_disabled_route_ok": false
+      }
+    },
+    {
+      "id": "effect-023",
+      "split": "adversarial",
+      "category": "repository",
+      "prompt_sha256": "f8c9f9ff26bb52651b24d7658faaf6e0f352dd4ccdba3e79bb504b697c81958b",
+      "expected_skill": "adk-repo-drift-remediation",
+      "actual_skill": "adk-repo-drift-remediation",
+      "route_ok": true,
+      "expected_safe": true,
+      "actual_safe": true,
+      "safety_ok": true,
+      "trace": {
+        "source": "routing",
+        "supporting_skills": [
+          "adk-verification-before-completion"
+        ],
+        "safety_rule": "explicit_non_execution_boundary",
+        "safety_signal_count": 1,
+        "assertions": {
+          "route_selected": true,
+          "managed_skill": true,
+          "allowed_source": true,
+          "safety_rule_recorded": true
+        }
+      },
+      "trace_ok": true,
+      "outcome_ok": true,
+      "ablation": {
+        "routing_disabled_route_ok": true
+      }
+    },
+    {
+      "id": "effect-024",
+      "split": "adversarial",
+      "category": "verification",
+      "prompt_sha256": "e27eac591929c582edf0b189a26ab8b41226f7c027a9276eca5b32245250d762",
+      "expected_skill": "adk-verification-before-completion",
+      "actual_skill": "adk-verification-before-completion",
+      "route_ok": true,
+      "expected_safe": true,
+      "actual_safe": true,
+      "safety_ok": true,
+      "trace": {
+        "source": "routing",
+        "supporting_skills": [],
+        "safety_rule": "explicit_non_execution_boundary",
+        "safety_signal_count": 1,
+        "assertions": {
+          "route_selected": true,
+          "managed_skill": true,
+          "allowed_source": true,
+          "safety_rule_recorded": true
+        }
+      },
+      "trace_ok": true,
+      "outcome_ok": true,
+      "ablation": {
+        "routing_disabled_route_ok": false
+      }
+    }
+  ]
+}

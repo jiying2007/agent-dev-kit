@@ -1,10 +1,12 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-07-07",
+  "last_updated": "2026-07-13",
   "review_policy": {
     "allowed_domains": [
+      "code.claude.com",
       "developers.openai.com",
-      "platform.openai.com"
+      "platform.openai.com",
+      "www.anthropic.com"
     ],
     "max_age_days": 90,
     "required_fields": [
@@ -19,6 +21,35 @@
       "watch",
       "rejected"
     ]
+  },
+  "provider_requirements": {
+    "anthropic": {
+      "allowed_domains": [
+        "code.claude.com",
+        "www.anthropic.com"
+      ],
+      "minimum_sources": 5,
+      "required_source_ids": [
+        "anthropic-claude-code-best-practices",
+        "anthropic-claude-code-skills",
+        "anthropic-claude-code-subagents",
+        "anthropic-agent-evals",
+        "anthropic-long-running-agent-harnesses"
+      ]
+    },
+    "openai": {
+      "allowed_domains": [
+        "developers.openai.com",
+        "platform.openai.com"
+      ],
+      "minimum_sources": 64,
+      "required_source_ids": [
+        "openai-codex-best-practices",
+        "openai-codex-agent-skills",
+        "openai-agent-evals",
+        "openai-codex-subagents-runtime"
+      ]
+    }
   },
   "adoption_review_policy": {
     "linked_matrices": [
@@ -992,6 +1023,83 @@
       "required_checks": [
         "check-official-docs-governance",
         "runner smoke contract review"
+      ]
+    },
+    {
+      "id": "anthropic-claude-code-best-practices",
+      "title": "Claude Code best practices: verification, exploration, planning and context management",
+      "url": "https://code.claude.com/docs/en/best-practices",
+      "retrieved_at": "2026-07-13",
+      "expires_at": "2026-10-11",
+      "review_status": "adopted",
+      "adoption_scope": "P0",
+      "owner": "agent-dev-kit",
+      "decision": "Use as provenance for executable verification, explore-plan-code sequencing, concise repository guidance, deterministic hooks and fresh-context review. Keep all promoted contracts platform-neutral.",
+      "required_checks": [
+        "check-official-docs-governance",
+        "validate-assets --strict"
+      ]
+    },
+    {
+      "id": "anthropic-claude-code-skills",
+      "title": "Claude Code skills: discovery paths, frontmatter and progressive disclosure",
+      "url": "https://code.claude.com/docs/en/skills",
+      "retrieved_at": "2026-07-13",
+      "expires_at": "2026-10-11",
+      "review_status": "adopted",
+      "adoption_scope": "P0",
+      "owner": "agent-dev-kit",
+      "decision": "Use as the target-contract source for native skill paths, required description metadata and runtime discovery smoke evidence. Claude Code remains an experimental direct target until native runtime certification passes.",
+      "required_checks": [
+        "check-official-docs-governance",
+        "target check claude-code",
+        "target smoke claude-code"
+      ]
+    },
+    {
+      "id": "anthropic-claude-code-subagents",
+      "title": "Claude Code custom subagents: discovery, frontmatter, permissions and context isolation",
+      "url": "https://code.claude.com/docs/en/sub-agents",
+      "retrieved_at": "2026-07-13",
+      "expires_at": "2026-10-11",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use as provenance for native agent paths, explicit capability metadata, least-privilege profiles and summary-first context handoff. Do not enable delegation or external runtimes by default.",
+      "required_checks": [
+        "check-official-docs-governance",
+        "check-runtime-capabilities",
+        "target check claude-code"
+      ]
+    },
+    {
+      "id": "anthropic-agent-evals",
+      "title": "Demystifying evals for AI agents",
+      "url": "https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents",
+      "retrieved_at": "2026-07-13",
+      "expires_at": "2026-10-11",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use as provenance for separating task, trial, grader, trace and outcome evidence and for blind OOD evaluation. Do not introduce a vendor runtime dependency into the ADK core.",
+      "required_checks": [
+        "check-official-docs-governance",
+        "eval effect"
+      ]
+    },
+    {
+      "id": "anthropic-long-running-agent-harnesses",
+      "title": "Effective harnesses for long-running agents",
+      "url": "https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents",
+      "retrieved_at": "2026-07-13",
+      "expires_at": "2026-10-11",
+      "review_status": "adopted",
+      "adoption_scope": "P1",
+      "owner": "agent-dev-kit",
+      "decision": "Use as provenance for structured feature lists, progress notes, single-feature advancement, recovery baselines and resumable long-task artifacts. Keep execution runtime-neutral.",
+      "required_checks": [
+        "check-official-docs-governance",
+        "check-workflow-closure"
       ]
     }
   ]

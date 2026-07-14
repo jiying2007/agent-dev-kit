@@ -1,5 +1,5 @@
 {
-  "version": "3.1.0-rc.1",
+  "version": "3.1.0-rc.2",
   "locale": "zh-CN",
   "platforms": [
     "linux-embedded",
@@ -7,6 +7,13 @@
     "mcu-rtos"
   ],
   "reference_sources": {
+    "anthropic-official": {
+      "display_name": "Anthropic and Claude Code Official",
+      "source_type": "official-docs",
+      "boundary": "citation-provenance-governance-only",
+      "runtime_enablement": false,
+      "governance_manifest": "manifests/official_docs_freshness_gates.json"
+    },
     "openai-developers": {
       "display_name": "OpenAI Developers",
       "source_type": "official-docs",
@@ -43,6 +50,12 @@
   "tool_targets": {
     "claude-code": {
       "display_name": "Claude Code",
+      "status": "experimental",
+      "contract": "manifests/target-contracts/claude-code.json",
+      "supported_asset_kinds": [
+        "agent",
+        "skill"
+      ],
       "default_root": "~/.claude",
       "agents_dir": "agents",
       "skills_dir": "skills",
@@ -52,6 +65,11 @@
     },
     "hermes-agent": {
       "display_name": "Hermes Agent",
+      "status": "experimental",
+      "contract": "manifests/target-contracts/hermes-agent.json",
+      "supported_asset_kinds": [
+        "skill"
+      ],
       "default_root": "~/.hermes",
       "agents_dir": "agents",
       "skills_dir": "skills",
@@ -61,6 +79,12 @@
     },
     "opencode": {
       "display_name": "OpenCode",
+      "status": "experimental",
+      "contract": "manifests/target-contracts/opencode.json",
+      "supported_asset_kinds": [
+        "agent",
+        "skill"
+      ],
       "default_root": "~/.config/opencode",
       "agents_dir": "agents",
       "skills_dir": "skills",
@@ -351,6 +375,7 @@
       "name": "requirements-analyst",
       "path": "agents/requirements-analyst/AGENTS.md",
       "quality_tier": "p0",
+      "permission_profile": "read-only",
       "description": "需求澄清、验收标准和范围边界分析",
       "owns": [
         "需求边界",
@@ -375,6 +400,7 @@
       "name": "architecture-planner",
       "path": "agents/architecture-planner/AGENTS.md",
       "quality_tier": "p0",
+      "permission_profile": "read-only",
       "description": "架构方案、模块边界和技术决策规划",
       "owns": [
         "架构边界",
@@ -399,6 +425,7 @@
       "name": "driver-engineer",
       "path": "agents/driver-engineer/AGENTS.md",
       "quality_tier": "p0",
+      "permission_profile": "code-write",
       "description": "驱动实现、bring-up 和底层联调",
       "owns": [
         "驱动实现",
@@ -423,6 +450,7 @@
       "name": "component-engineer",
       "path": "agents/component-engineer/AGENTS.md",
       "quality_tier": "p0",
+      "permission_profile": "code-write",
       "description": "组件接口、模块实现和集成边界治理",
       "owns": [
         "组件接口",
@@ -446,6 +474,7 @@
       "name": "application-engineer",
       "path": "agents/application-engineer/AGENTS.md",
       "quality_tier": "p0",
+      "permission_profile": "code-write",
       "description": "设备侧应用、上位机工具和业务逻辑实现",
       "owns": [
         "应用逻辑",
@@ -469,6 +498,7 @@
       "name": "build-release-engineer",
       "path": "agents/build-release-engineer/AGENTS.md",
       "quality_tier": "p0",
+      "permission_profile": "build-release",
       "description": "构建、打包、版本发布和回滚链路",
       "owns": [
         "构建打包",
@@ -492,6 +522,7 @@
       "name": "test-validation-engineer",
       "path": "agents/test-validation-engineer/AGENTS.md",
       "quality_tier": "p0",
+      "permission_profile": "read-only",
       "description": "测试策略、验证证据和完成前门禁",
       "owns": [
         "测试策略",
@@ -515,6 +546,7 @@
       "name": "performance-reliability-engineer",
       "path": "agents/performance-reliability-engineer/AGENTS.md",
       "quality_tier": "p0",
+      "permission_profile": "diagnostic",
       "description": "性能剖析、稳定性和可靠性风险治理",
       "owns": [
         "性能分析",
@@ -538,6 +570,7 @@
       "name": "security-compliance-reviewer",
       "path": "agents/security-compliance-reviewer/AGENTS.md",
       "quality_tier": "p0",
+      "permission_profile": "read-only",
       "description": "安全、合规、凭据和供应链风险审查",
       "owns": [
         "安全审查",
@@ -561,6 +594,7 @@
       "name": "code-review-governor",
       "path": "agents/code-review-governor/AGENTS.md",
       "quality_tier": "p0",
+      "permission_profile": "read-only",
       "description": "代码审查、反馈闭环和质量放行治理",
       "owns": [
         "审查分级",
@@ -584,6 +618,7 @@
       "name": "bsp-analyst",
       "path": "agents/bsp-analyst/AGENTS.md",
       "quality_tier": "p1",
+      "permission_profile": "read-only",
       "description": "BSP 代码分析、架构梳理、历史追溯",
       "owns": [
         "BSP 分析",
@@ -607,6 +642,7 @@
       "name": "hardware-debugger",
       "path": "agents/hardware-debugger/AGENTS.md",
       "quality_tier": "p1",
+      "permission_profile": "diagnostic",
       "description": "硬件故障定位、oops 分析和板级调试证据整理",
       "owns": [
         "硬件故障定位",
@@ -2393,7 +2429,7 @@
       },
       {
         "intent": "embedded_debug_transport",
-        "intent_zh": "调试通道/设备调试通道/设备连接调试/ADB调试/adb logcat/SSH调试/串口调试/串口控制台/GDB remote/调试探针/厂商调试CLI",
+        "intent_zh": "调试通道/设备调试通道/设备连接调试/ADB调试/adb logcat/SSH调试/SSH登录/串口调试/串口控制台/GDB remote/调试探针/厂商调试CLI",
         "primary_skill": "adk-embedded-debug-transport",
         "supporting_skills": [
           "adk-systematic-debugging"
@@ -2441,7 +2477,7 @@
       },
       {
         "intent": "memory_curator",
-        "intent_zh": "记忆整理/memory curator/整理memory/记忆审计/长期记忆候选/memory candidate/清理记忆",
+        "intent_zh": "记忆整理/memory curator/整理memory/记忆审计/审计现有记忆/长期记忆候选/memory candidate/清理记忆/删除过期记忆",
         "primary_skill": "adk-memory-curator",
         "supporting_skills": [
           "adk-after-action-review",
@@ -2662,7 +2698,7 @@
       "rg"
     ]
   },
-  "schema_version": "3.0.0",
+  "schema_version": "3.1.0",
   "product": {
     "kind": "agent-asset-platform",
     "runtime_boundary": "no-llm-runner",

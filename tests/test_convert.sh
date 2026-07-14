@@ -13,11 +13,11 @@ trap 'rm -rf "$TMP_DIR"' EXIT
   --out "$TMP_DIR" \
   --clean
 
-[[ -f "$TMP_DIR/claude-code/agent/requirements-analyst.md" ]] || { echo "[FAIL] missing converted agent" >&2; exit 1; }
-[[ -f "$TMP_DIR/claude-code/skill/adk-requirements-triage.md" ]] || { echo "[FAIL] missing converted skill" >&2; exit 1; }
-[[ -f "$TMP_DIR/claude-code/skill/adk-incident-rca-report.md" ]] || { echo "[FAIL] missing converted optional skill" >&2; exit 1; }
+[[ -f "$TMP_DIR/claude-code/agents/requirements-analyst.md" ]] || { echo "[FAIL] missing converted agent" >&2; exit 1; }
+[[ -f "$TMP_DIR/claude-code/skills/adk-requirements-triage/SKILL.md" ]] || { echo "[FAIL] missing converted skill" >&2; exit 1; }
+[[ -f "$TMP_DIR/claude-code/skills/adk-incident-rca-report/SKILL.md" ]] || { echo "[FAIL] missing converted optional skill" >&2; exit 1; }
 
-grep -q '^target: claude-code$' "$TMP_DIR/claude-code/agent/requirements-analyst.md" || {
+grep -q 'target: claude-code$' "$TMP_DIR/claude-code/agents/requirements-analyst.md" || {
   echo "[FAIL] converted metadata missing" >&2
   exit 1
 }

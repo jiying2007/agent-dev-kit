@@ -12,6 +12,8 @@ Use official product and runtime guidance as current reference sources while kee
 4. Expired sources cannot promote new rules until re-reviewed.
 5. Cookbook examples remain examples unless converted into adk-native contracts with tests.
 
+The shared freshness manifest currently has explicit provider coverage floors for OpenAI and Anthropic. Every globally allowed domain must belong to exactly one provider, each provider must retain its required source IDs and minimum source count, and every record must use a freshness window no longer than `review_policy.max_age_days`.
+
 ## Boundary Model
 
 | Layer | Meaning | Required Gate |
@@ -48,6 +50,8 @@ Use official product and runtime guidance as current reference sources while kee
 | P2 | Agents SDK taxonomy and future migration boundary | taxonomy note, non-goals, pilot requirement |
 | P2 | ADK plugin and marketplace packaging | plugin marketplace contract, source path containment, install/auth policy review |
 | P2 | Responses API migration and retrieval | watch-only source record, state-handoff contract, archive/retrieval pilot eval requirement |
+
+Anthropic and Claude Code sources use the same promotion and rejection gates as OpenAI sources. Their current required baseline covers Claude Code best practices, native Skill discovery, custom subagents, agent eval terminology, and long-running-agent harness design. These records are provenance only: they do not enable Claude Code, Claude Agent SDK, hooks, plugins, network access or external writes.
 
 ## Promotion Gate
 

@@ -1,0 +1,38 @@
+schema: adk-change-state/v1
+change_id: adk-v3-1-rc2-target-conformance
+stage: verified
+status: local-pass-ship-authorized
+owner: Codex
+decision_owner: user
+updated_at: 2026-07-14T01:06:14Z
+heartbeat:
+  last_action: "用户明确授权检查、commit、push 和声明式 apply；提交前 strict/format/change/security/release/ShellCheck/Ruff/pip-audit 门禁通过"
+  next_action: "完成 ADK full 与可复现制品复核后提交并推送；再同步根仓 gitlink/adk.lock，最后执行 ~/codex -> ~/.codex 声明式应用"
+  evidence_delta:
+    - "agent-dev-kit validate --strict: exit 0"
+    - "agent-dev-kit full regression: 51/51 PASS"
+    - "llm_agent check-all --quick: 52/56 PASS；4 FAIL 均来自未提交 rc.2 与 rc.1 锁定边界"
+    - "target static contracts: 3/3 pass；real runtime discovery: not-run/exit 2"
+    - "OpenAI/Anthropic official docs freshness: 69 sources pass"
+    - "effect eval: 24/24 route+safety+trace+outcome pass; routing ablation delta 0.3333 >= 0.1"
+    - "benchmark: all latency/I/O/memory budgets pass"
+    - "ShellCheck/Ruff/security/pip-audit/release focused gates: pass"
+    - "release rc.1 -> rc.2 rollback-before-install + previous artifact fallback restore: evidence in release-rehearsal.json"
+    - "2026-07-14 owner gate: commit/push/apply explicitly authorized; target/runtime/M4/M5 promotion remains out of scope"
+  blockers:
+    - "真实 runtime discovery/load/trigger 尚未执行"
+    - "GitHub CI、Scorecard 和 provenance workflow 尚未在远端触发"
+    - "720-run、第二操作者和 30 天现场门禁不在本地自动执行范围"
+retry_budget: 2
+staleness_threshold_minutes: 45
+stop_condition: pass
+completion_claim:
+  status: local-implementation-verified
+  claimant: Codex
+  verifier: adk-verification-before-completion
+  open_items:
+    - commit-and-root-lock-sync
+    - runtime-certification
+    - paid-campaign
+    - independent-operator
+    - field-observation

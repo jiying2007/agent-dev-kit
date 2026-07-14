@@ -2,6 +2,21 @@
 
 ## Unreleased
 
+## v3.1.0-rc.2 (2026-07-13)
+
+### 修复
+- direct target 输出改由 versioned `TargetContract` 与单一 `TargetAdapter` 生成；Claude Code/OpenCode 使用原生 `agents/<name>.md` 与 `skills/<name>/SKILL.md`，Hermes 明确为 Skill-only。
+- Agent/Skill frontmatter 补齐目标必需字段、显式 Agent permission profile 和 `metadata.adk` provenance；Skill support directories 随主文件确定性导出。
+- export/install 共用 renderer；export manifest 升级到 v2，install plan 升级到 v2，receipt 升级到 v3，并保留 v1/v2 receipt rollback 读取。
+- install plan 绑定 active receipt SHA256、UUID、时区时间与 24 小时 TTL 上限；legacy fallback 演练会从保留的 rc.1 artifact 重装并比对 managed hashes。
+
+### 门禁
+- direct target 保持 `experimental`，只有真实 runtime discovery/load/trigger/permission smoke 完成后才允许提升 stable。
+- manifest schema 升级到 3.1.0，并由 `jsonschema==4.23.0` 按 Draft 2020-12 实际执行。
+- CI 增加 ShellCheck、Ruff、pip-audit 和 OpenSSF Scorecard；release build 校验 SPDX SBOM，并由 SHA-pinned `actions/attest` 生成 provenance。
+- 性能基准增加 CLI cold-start、10x plan/I/O 与 peak allocation；effect eval 增加 24 个 OOD/adversarial route+safety+trace+outcome case，并要求 routing ablation 至少产生 0.1 的准确率差值。
+- `3.1.0-rc.2` 修复 target conformance，不代表 M4/M5 或 terminal maturity 认证。
+
 ### 增强
 - 新增 `adk-runtime-router` 核心技能，作为 adk-first 运行时路由入口，统一 primary/supporting/fallback 裁决。
 - 新增 `adk-test-strategy`、`adk-code-review-loop`、`adk-parallel-agent-governance`、`adk-worktree-governance`、`adk-branch-closeout` 五个核心技能，减少对 Superpowers TDD/review/parallel/worktree/branch closeout fallback 的默认依赖。

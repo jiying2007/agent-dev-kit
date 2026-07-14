@@ -298,7 +298,11 @@ if not sources:
 
 scopes = set()
 source_ids = set()
+source_domains = {}
 review_status_values = set(official.get("review_policy", {}).get("review_status_values", []))
+max_age_days = official.get("review_policy", {}).get("max_age_days")
+if not isinstance(max_age_days, int) or max_age_days < 1:
+    fail("official docs review_policy max_age_days must be a positive integer")
 for source in sources:
     sid = source.get("id", "<missing-id>")
     require_keys(
@@ -306,14 +310,19 @@ for source in sources:
         ["id", "title", "url", "retrieved_at", "expires_at", "review_status", "adoption_scope", "owner", "decision", "required_checks"],
         f"official source {sid}",
     )
+    if sid in source_ids:
+        fail(f"official source id is duplicated: {sid}")
     source_ids.add(sid)
     url = source.get("url", "")
     domain = urlparse(url).netloc
+    source_domains[sid] = domain
     if domain not in allowed_domains:
         fail(f"official source {sid} uses non-official domain: {domain}")
     if source.get("review_status") not in review_status_values:
         fail(f"official source {sid} has invalid review_status: {source.get('review_status')}")
     scopes.add(source.get("adoption_scope"))
+    expires_at = None
+    retrieved_at = None
     try:
         expires_at = dt.date.fromisoformat(source.get("expires_at", ""))
         if expires_at < today:
@@ -321,9 +330,52 @@ for source in sources:
     except ValueError:
         fail(f"official source {sid} has invalid expires_at")
     try:
-        dt.date.fromisoformat(source.get("retrieved_at", ""))
+        retrieved_at = dt.date.fromisoformat(source.get("retrieved_at", ""))
+        if retrieved_at > today:
+            fail(f"official source {sid} has future retrieved_at: {retrieved_at.isoformat()}")
     except ValueError:
         fail(f"official source {sid} has invalid retrieved_at")
+    if expires_at is not None and retrieved_at is not None:
+        age_days = (expires_at - retrieved_at).days
+        if age_days < 0:
+            fail(f"official source {sid} expires before it was retrieved")
+        elif isinstance(max_age_days, int) and age_days > max_age_days:
+            fail(f"official source {sid} freshness window {age_days} exceeds {max_age_days} days")
+
+provider_requirements = official.get("provider_requirements", {})
+if set(provider_requirements) != {"anthropic", "openai"}:
+    fail("official docs provider_requirements must define exactly anthropic and openai")
+claimed_domains = {}
+for provider, requirement in provider_requirements.items():
+    provider_domains = requirement.get("allowed_domains", [])
+    minimum_sources = requirement.get("minimum_sources")
+    required_source_ids = requirement.get("required_source_ids", [])
+    if not provider_domains:
+        fail(f"official docs provider {provider} has no allowed_domains")
+    if not isinstance(minimum_sources, int) or minimum_sources < 1:
+        fail(f"official docs provider {provider} minimum_sources must be a positive integer")
+    if not required_source_ids:
+        fail(f"official docs provider {provider} has no required_source_ids")
+    for domain in provider_domains:
+        if domain not in allowed_domains:
+            fail(f"official docs provider {provider} domain is not globally allowed: {domain}")
+        if domain in claimed_domains:
+            fail(f"official docs provider domain {domain} is claimed by both {claimed_domains[domain]} and {provider}")
+        claimed_domains[domain] = provider
+    provider_source_ids = {
+        sid for sid, domain in source_domains.items() if domain in provider_domains
+    }
+    if isinstance(minimum_sources, int) and len(provider_source_ids) < minimum_sources:
+        fail(
+            f"official docs provider {provider} has {len(provider_source_ids)} sources; "
+            f"minimum is {minimum_sources}"
+        )
+    for required_sid in required_source_ids:
+        if required_sid not in provider_source_ids:
+            fail(f"official docs provider {provider} missing required source: {required_sid}")
+unclaimed_domains = allowed_domains - set(claimed_domains)
+if unclaimed_domains:
+    fail(f"official docs allowed domains lack provider ownership: {sorted(unclaimed_domains)}")
 
 for scope in ("P0", "P1", "P2"):
     if scope not in scopes:

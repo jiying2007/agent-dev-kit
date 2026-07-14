@@ -103,7 +103,7 @@ if [[ -f "$MANIFEST" ]]; then
 fi
 
 for token in \
-  report-first-performance-budgets \
+  local-end-to-end-performance-budgets \
   budget_id \
   mode \
   command \
