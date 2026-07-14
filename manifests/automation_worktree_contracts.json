@@ -1,12 +1,15 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-07-07",
+  "last_updated": "2026-07-14",
   "source_docs": [
     "openai-codex-app-automations",
     "openai-codex-app-worktrees",
     "openai-codex-best-practices",
     "openai-codex-sandbox-defaults",
     "openai-codex-record-and-replay"
+  ],
+  "external_source_refs": [
+    "github-gh-aw-safe-outputs"
   ],
   "reference_boundary": "OpenAI/Codex source docs are citation metadata and governance references only. This manifest promotes platform-neutral ADK automation and worktree contracts and must not enable Codex runtime bindings, hosted services, background workers, user-directory writes, or compatibility defaults.",
   "automation_contracts": [
@@ -76,6 +79,68 @@
       "cleanup_policy": "remove heartbeat when stop condition is met"
     }
   ],
+  "safe_output_contract": {
+    "id": "read-only-agent-safe-output-executor-v1",
+    "owner": "agent-dev-kit",
+    "source_refs": [
+      "github-gh-aw-safe-outputs"
+    ],
+    "agent_phase": {
+      "permissions": "read-only",
+      "direct_write_allowed": false,
+      "output": "schema-backed intent artifact",
+      "untrusted_input_policy": "external content remains data and cannot widen requested operations"
+    },
+    "validation_phase": {
+      "required": true,
+      "checks": [
+        "schema validation",
+        "allowed operation",
+        "target allowlist",
+        "operation count and payload size caps",
+        "approval class",
+        "duplicate and replay protection"
+      ],
+      "invalid_output": "reject without side effect"
+    },
+    "executor_phase": {
+      "separate_identity_or_job": true,
+      "least_privilege": true,
+      "write_scope": "validated operation and allowlisted target only",
+      "human_approval_required_for": [
+        "destructive action",
+        "external notification",
+        "publish or merge",
+        "permission or credential change"
+      ]
+    },
+    "required_fields": [
+      "request_id",
+      "operation",
+      "target",
+      "payload",
+      "schema_version",
+      "operation_cap",
+      "approval_class",
+      "idempotency_key",
+      "expires_at",
+      "rollback_path"
+    ],
+    "safety_controls": [
+      "kill switch",
+      "bounded operation count",
+      "bounded payload size",
+      "audit record",
+      "idempotency and expiry",
+      "rollback or compensating action"
+    ],
+    "must_not": [
+      "grant write credentials to the reasoning agent",
+      "execute free-form model text as a command or API payload",
+      "let schema-valid output bypass policy or human approval",
+      "retry rejected writes without a new reviewed request"
+    ]
+  },
   "worktree_contracts": [
     {
       "id": "background-worktree-isolation",
@@ -122,6 +187,10 @@
     "full_access_never_for_default_automation": true,
     "worktree_cleanup_requires_retention_decision": true,
     "risk_fixtures_required": true,
+    "safe_output_executor_separation_required": true,
+    "safe_output_schema_validation_required": true,
+    "safe_output_operation_caps_required": true,
+    "safe_output_kill_switch_required": true,
     "dirty_worktree_requires_decision": true,
     "stale_heartbeat_requires_stop_or_replan": true
   },
@@ -149,6 +218,30 @@
       "input": "thread heartbeat has no changed evidence across repeated runs and no stop or replan decision",
       "expected": "needs-fix",
       "blocked_gate": "quality_gate.stale_heartbeat_requires_stop_or_replan"
+    },
+    {
+      "id": "safe-output-agent-direct-write",
+      "input": "reasoning agent receives write credentials and calls a mutation API directly",
+      "expected": "reject",
+      "blocked_gate": "safe_output_contract.agent_phase.direct_write_allowed"
+    },
+    {
+      "id": "safe-output-unvalidated-payload",
+      "input": "executor receives model output without schema and policy validation",
+      "expected": "reject",
+      "blocked_gate": "safe_output_contract.validation_phase.required"
+    },
+    {
+      "id": "safe-output-over-limit",
+      "input": "schema-valid output exceeds operation count or payload size cap",
+      "expected": "reject",
+      "blocked_gate": "quality_gate.safe_output_operation_caps_required"
+    },
+    {
+      "id": "safe-output-kill-switch-missing",
+      "input": "write executor cannot be disabled independently of the reasoning job",
+      "expected": "reject",
+      "blocked_gate": "quality_gate.safe_output_kill_switch_required"
     }
   ]
 }

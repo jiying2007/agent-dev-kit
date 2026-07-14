@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0.0",
+  "description": "Negative fixture: an MCP dependency has no artifact digest.",
+  "runtime_enabled": false,
+  "fixture_mode": "method-only",
+  "expected_failure": "fixture mcp_provenance missing field: artifact_digest",
+  "mcp_provenance": {
+    "source_url": "https://example.invalid/mcp/synthetic",
+    "registry_namespace": "io.example.synthetic",
+    "namespace_verification": "synthetic-fixture-only",
+    "package_version": "1.0.0-fixture",
+    "retrieved_at": "2026-07-14",
+    "review_status": "synthetic-reviewed",
+    "expires_at": "2026-09-12",
+    "trust_decision": "fixture-only-never-install"
+  }
+}

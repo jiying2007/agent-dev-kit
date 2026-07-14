@@ -45,6 +45,13 @@ required_sources = {
     "planning-with-files-guard-attestation",
     "vibeflow-browser-verification",
     "scale-engine-skill-domain-policy",
+    "agent-skills-open-format",
+    "owasp-agentic-top10-2026",
+    "github-gh-aw-safe-outputs",
+    "mcp-registry",
+    "otel-genai-semconv",
+    "agent-client-protocol",
+    "a2a-protocol-1-0",
 }
 for source_id in required_sources:
     if source_id not in source_ids:
@@ -59,8 +66,8 @@ for source in sources:
     local_path = source.get("local_path")
     if local_path and not (root.parent / local_path).exists():
         fail(f"source_ref {sid} local_path missing: {local_path}")
-    if source.get("decision") != "adopt-method-only":
-        fail(f"source_ref {sid} must remain adopt-method-only")
+    if source.get("decision") not in {"adopt-method-only", "observe-method-only"}:
+        fail(f"source_ref {sid} must remain method-only")
 
 candidates = manifest.get("candidate_decisions", [])
 if not candidates:
@@ -89,6 +96,7 @@ required_contracts = {
     "memory-search-progressive-disclosure-v1",
     "low-token-communication-profile-v1",
     "external-agent-plugin-intake-v1",
+    "agent-interoperability-watch-v1",
 }
 for contract_id in required_contracts:
     if contract_id not in contract_by_id:
@@ -201,6 +209,10 @@ for key in (
     "plan_attestation_readback_required",
     "browser_runtime_evidence_requires_security_boundary",
     "third_party_skill_domain_policy_required",
+    "ecosystem_sources_require_freshness",
+    "watch_protocols_must_not_enable_runtime",
+    "registry_listing_is_not_trust_certification",
+    "external_method_absorption_requires_local_contract",
 ):
     if gate.get(key) is not True:
         fail(f"quality_gate {key} must be true")

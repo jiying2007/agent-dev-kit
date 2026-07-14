@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-07-07",
+  "last_updated": "2026-07-14",
   "source_docs": [
     "openai-agents-tracing",
     "openai-agent-evals",
@@ -8,6 +8,9 @@
     "openai-agentic-macro-evals",
     "openai-stored-completion-monitoring",
     "openai-codex-record-and-replay"
+  ],
+  "external_source_refs": [
+    "otel-genai-semconv"
   ],
   "reference_boundary": "OpenAI/Codex source docs are citation metadata and governance references only. This manifest promotes platform-neutral ADK trace and eval evidence contracts and must not enable hosted tracing, stored completions, external runtimes, user-directory writes, or compatibility defaults.",
   "contracts": [
@@ -171,6 +174,78 @@
           "treat a successful demonstration as approval to enable unattended automation"
         ]
       }
+    }
+  ],
+  "interoperability_adapters": [
+    {
+      "id": "otel-genai-trace-summary-v1",
+      "owner": "agent-dev-kit",
+      "source_refs": [
+        "otel-genai-semconv"
+      ],
+      "enabled_default": false,
+      "stability": "experimental-version-pinned",
+      "schema_url": "https://opentelemetry.io/schemas/gen-ai/1.42.0",
+      "schema_version": "1.42.0",
+      "input_contract": "adk-workflow-trace-summary-v1",
+      "field_mappings": {
+        "primary_skill": "gen_ai.agent.name",
+        "task_id": "gen_ai.conversation.id",
+        "model_version": "gen_ai.request.model",
+        "tools_used[].name": "gen_ai.tool.name",
+        "tool_calls[].id": "gen_ai.tool.call.id"
+      },
+      "operation_mapping": {
+        "agent": "invoke_agent",
+        "workflow": "invoke_workflow",
+        "tool": "execute_tool"
+      },
+      "native_only_fields": [
+        "goal",
+        "prompt_version",
+        "phase",
+        "orchestration_mode",
+        "guardrails",
+        "verification",
+        "blockers",
+        "failure_pattern",
+        "next_goal"
+      ],
+      "content_capture": {
+        "enabled_default": false,
+        "allow_opt_in": false,
+        "deny_fields": [
+          "gen_ai.input.messages",
+          "gen_ai.output.messages",
+          "gen_ai.system_instructions",
+          "gen_ai.tool.call.arguments",
+          "gen_ai.tool.call.result",
+          "gen_ai.tool.definitions",
+          "gen_ai.retrieval.query.text"
+        ],
+        "reason": "content fields can contain prompts, secrets, private source, tool payloads or high-cardinality data"
+      },
+      "required_fields": [
+        "schema_url",
+        "schema_version",
+        "stability",
+        "enabled_default",
+        "field_mappings",
+        "content_capture",
+        "redaction_status",
+        "export_boundary",
+        "rollback_path"
+      ],
+      "export_boundary": "local sanitized summary only; no hosted exporter is enabled by this adapter",
+      "redaction_status": "required-before-conversion",
+      "unknown_field_policy": "preserve in local ADK summary; do not invent an OpenTelemetry attribute",
+      "rollback_path": "disable adapter and retain the native ADK trace summary",
+      "must_not": [
+        "enable prompt, completion, system instruction, tool argument or tool result capture by default",
+        "export traces to a provider as a side effect of schema conversion",
+        "claim compatibility with unpinned or future semantic-convention versions",
+        "drop native ADK evidence fields that have no stable external mapping"
+      ]
     }
   ]
 }

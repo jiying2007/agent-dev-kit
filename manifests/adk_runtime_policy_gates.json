@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-06-15",
+  "last_updated": "2026-07-14",
   "scope_model": "platform-neutral-adk-runtime",
   "source_docs": [
     "openai-codex-config-reference",
@@ -10,6 +10,9 @@
     "openai-codex-permissions",
     "openai-codex-memories",
     "openai-codex-best-practices"
+  ],
+  "external_source_refs": [
+    "owasp-agentic-top10-2026"
   ],
   "reference_boundary": "OpenAI product docs are used only as official reference material. This manifest defines platform-neutral ADK runtime policy and does not include compatibility bindings.",
   "policy_layers": [
@@ -251,6 +254,234 @@
       "enable memories by default for every profile",
       "promote MCP, web search or tool search output without raw fallback",
       "copy raw session transcripts into long-term memory"
+    ]
+  },
+  "agentic_security_taxonomy": {
+    "id": "owasp-agentic-top10-2026-crosswalk-v1",
+    "source_refs": [
+      "owasp-agentic-top10-2026"
+    ],
+    "required_fields": [
+      "threat_id",
+      "threat_name",
+      "local_surfaces",
+      "preventive_controls",
+      "evidence_required",
+      "residual_risk"
+    ],
+    "coverage_policy": "ASI01-ASI10 are a coverage taxonomy; each category must map to local controls and evidence, but taxonomy presence alone is not a security certification.",
+    "threats": [
+      {
+        "id": "ASI01",
+        "name": "Agent Goal Hijack",
+        "local_surfaces": [
+          "external source ingestion",
+          "tool and skill routing",
+          "browser and MCP content"
+        ],
+        "preventive_controls": [
+          "treat external content as untrusted data",
+          "preserve instruction and goal precedence",
+          "require approval for consequential scope changes"
+        ],
+        "evidence_required": [
+          "source provenance",
+          "instruction-boundary decision",
+          "negative goal-hijack fixture"
+        ],
+        "residual_risk": "model interpretation can still be influenced by novel indirect instructions"
+      },
+      {
+        "id": "ASI02",
+        "name": "Tool Misuse and Exploitation",
+        "local_surfaces": [
+          "tool selection",
+          "write-capable commands",
+          "automation executors"
+        ],
+        "preventive_controls": [
+          "least-capability tool exposure",
+          "schema and policy validation before execution",
+          "bounded approvals and rollback"
+        ],
+        "evidence_required": [
+          "tool allowlist",
+          "side-effect classification",
+          "misuse rejection fixture"
+        ],
+        "residual_risk": "valid tools may still compose into an unsafe multi-step action"
+      },
+      {
+        "id": "ASI03",
+        "name": "Identity and Privilege Abuse",
+        "local_surfaces": [
+          "credentials",
+          "approval identities",
+          "MCP and connector auth"
+        ],
+        "preventive_controls": [
+          "credential source isolation",
+          "least privilege and deny paths",
+          "human approval cannot be inferred from agent output"
+        ],
+        "evidence_required": [
+          "auth boundary",
+          "permission profile",
+          "approval audit record"
+        ],
+        "residual_risk": "provider-side identity and token lifecycle remain outside ADK control"
+      },
+      {
+        "id": "ASI04",
+        "name": "Agentic Supply Chain Vulnerabilities",
+        "local_surfaces": [
+          "skills",
+          "plugins",
+          "MCP dependencies",
+          "external scripts"
+        ],
+        "preventive_controls": [
+          "version and artifact digest pinning",
+          "license and provenance review",
+          "method-only default before runtime promotion"
+        ],
+        "evidence_required": [
+          "source URL and revision",
+          "namespace verification",
+          "supply-chain review and rollback"
+        ],
+        "residual_risk": "trusted namespace ownership does not prove artifact integrity or maintainer intent"
+      },
+      {
+        "id": "ASI05",
+        "name": "Unexpected Code Execution",
+        "local_surfaces": [
+          "shell commands",
+          "generated code",
+          "hooks and tool servers"
+        ],
+        "preventive_controls": [
+          "sandbox and workspace boundaries",
+          "command approval and deny rules",
+          "disable hooks and unknown runtimes by default"
+        ],
+        "evidence_required": [
+          "sandbox profile",
+          "command transcript",
+          "unexpected-execution negative fixture"
+        ],
+        "residual_risk": "sandbox or runtime vulnerabilities may bypass policy controls"
+      },
+      {
+        "id": "ASI06",
+        "name": "Memory and Context Poisoning",
+        "local_surfaces": [
+          "memories",
+          "context summaries",
+          "knowledge archives"
+        ],
+        "preventive_controls": [
+          "memory disabled by default",
+          "source attribution and raw fallback",
+          "redaction and owner review before promotion"
+        ],
+        "evidence_required": [
+          "memory candidate provenance",
+          "redaction status",
+          "poisoned-context rejection fixture"
+        ],
+        "residual_risk": "previously approved summaries can become stale or misleading"
+      },
+      {
+        "id": "ASI07",
+        "name": "Insecure Inter-Agent Communication",
+        "local_surfaces": [
+          "subagent handoffs",
+          "MCP messages",
+          "future ACP and A2A transports"
+        ],
+        "preventive_controls": [
+          "explicit sender, scope and output contract",
+          "schema validation and trust boundary",
+          "ACP and A2A remain watch-only without security review"
+        ],
+        "evidence_required": [
+          "handoff contract",
+          "message provenance",
+          "protocol compatibility and auth review"
+        ],
+        "residual_risk": "cross-runtime identity and message authenticity are not provided by ADK assets alone"
+      },
+      {
+        "id": "ASI08",
+        "name": "Cascading Failures",
+        "local_surfaces": [
+          "multi-step workflows",
+          "automations",
+          "parallel agent orchestration"
+        ],
+        "preventive_controls": [
+          "bounded retries and stop conditions",
+          "operation caps and kill switch",
+          "checkpointed verification before downstream actions"
+        ],
+        "evidence_required": [
+          "retry budget",
+          "checkpoint state",
+          "cascade containment fixture"
+        ],
+        "residual_risk": "externally triggered side effects may not be reversible"
+      },
+      {
+        "id": "ASI09",
+        "name": "Human-Agent Trust Exploitation",
+        "local_surfaces": [
+          "approval prompts",
+          "completion claims",
+          "review artifacts"
+        ],
+        "preventive_controls": [
+          "evidence-backed claims",
+          "explicit uncertainty and residual risk",
+          "structured payload review for write actions"
+        ],
+        "evidence_required": [
+          "claim-to-evidence index",
+          "independent verifier result",
+          "misleading-approval negative fixture"
+        ],
+        "residual_risk": "polished output can still create unjustified operator confidence"
+      },
+      {
+        "id": "ASI10",
+        "name": "Rogue Agents",
+        "local_surfaces": [
+          "long-running tasks",
+          "automations",
+          "delegated agents"
+        ],
+        "preventive_controls": [
+          "least privilege and disabled-by-default automation",
+          "heartbeat, stop condition and kill switch",
+          "scope drift detection and owner escalation"
+        ],
+        "evidence_required": [
+          "declared goal and scope",
+          "timeline and kill-switch audit",
+          "scope-drift rejection fixture"
+        ],
+        "residual_risk": "behavioral drift may emerge without an observable policy violation"
+      }
+    ],
+    "quality_gates": [
+      "all ASI01-ASI10 identifiers are present exactly once",
+      "each threat maps to at least one preventive control and one evidence item",
+      "security claims distinguish static coverage from runtime effectiveness"
+    ],
+    "must_not": [
+      "claim OWASP certification from taxonomy coverage",
+      "copy external mitigation prose into runtime prompts",
+      "treat a static crosswalk as evidence that runtime attacks are prevented"
     ]
   },
   "sandbox_presets": [

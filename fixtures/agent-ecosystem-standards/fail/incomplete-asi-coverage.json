@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0.0",
+  "description": "Negative fixture: ASI10 is missing from the security crosswalk.",
+  "runtime_enabled": false,
+  "fixture_mode": "method-only",
+  "expected_failure": "fixture agentic_security must cover ASI01-ASI10 exactly once",
+  "agentic_security": {
+    "taxonomy": "owasp-agentic-top10-2026-crosswalk-v1",
+    "covered_threats": [
+      "ASI01",
+      "ASI02",
+      "ASI03",
+      "ASI04",
+      "ASI05",
+      "ASI06",
+      "ASI07",
+      "ASI08",
+      "ASI09"
+    ],
+    "static_coverage_only": true,
+    "runtime_certification_claimed": false
+  }
+}

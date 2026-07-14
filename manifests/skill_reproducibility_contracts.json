@@ -1,10 +1,13 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-07-07",
+  "last_updated": "2026-07-14",
   "source_docs": [
     "openai-skills-api-operational-practices",
     "openai-codex-agent-skills",
     "openai-tool-search"
+  ],
+  "external_source_refs": [
+    "agent-skills-open-format"
   ],
   "reference_boundary": "OpenAI/Codex source docs are citation metadata and governance references only. This manifest promotes platform-neutral ADK skill reproducibility contracts and must not enable Codex skill installs, hosted skill APIs, user-directory writes, or compatibility defaults.",
   "contracts": [
@@ -129,6 +132,55 @@
         "treat global user skill directories as project source of truth",
         "promote external skills into default profiles without runtime-boundary review"
       ]
+    },
+    {
+      "id": "agent-skills-portable-format-v1",
+      "owner": "agent-dev-kit",
+      "source_refs": [
+        "agent-skills-open-format"
+      ],
+      "applies_to": [
+        "managed skills",
+        "optional skills",
+        "generated target skills"
+      ],
+      "required_fields": [
+        "skill_directory",
+        "skill_md",
+        "name",
+        "description",
+        "support_files_policy",
+        "progressive_disclosure",
+        "target_profile",
+        "conformance_fixture",
+        "runtime_smoke_status"
+      ],
+      "directory_contract": {
+        "entrypoint": "SKILL.md",
+        "required_frontmatter": [
+          "name",
+          "description"
+        ],
+        "support_files": "optional and loaded only when referenced by the task",
+        "progressive_disclosure": "metadata first, instructions on trigger, support files on demand"
+      },
+      "field_constraints": {
+        "name": "1-64 lowercase alphanumeric or hyphen characters; no leading, trailing or consecutive hyphen; matches parent directory",
+        "description": "1-1024 characters and states both capability and trigger context",
+        "skill_md": "YAML frontmatter followed by Markdown instructions",
+        "support_files": "scripts, references and assets are optional and referenced with relative paths"
+      },
+      "compatibility_policy": {
+        "source_of_truth": "ADK managed skill source",
+        "generated_targets": "must preserve name and description and pass target-specific conformance",
+        "runtime_claim": "static conformance is not runtime certification"
+      },
+      "must_not": [
+        "rebuild target rendering when the existing compiler already preserves the portable fields",
+        "load every support file into context by default",
+        "claim Agent Skills compliance from filename presence alone",
+        "replace richer ADK metadata with the portable minimum"
+      ]
     }
   ],
   "quality_gate": {
@@ -137,6 +189,7 @@
     "scripted_skills_require_deterministic_cli_contract": true,
     "networked_skills_require_allowlist_and_egress_policy": true,
     "third_party_skills_default_review_required": true,
+    "agent_skills_portable_format_required": true,
     "must_not": [
       "duplicate full skill procedures in global prompts",
       "promote unversioned skills into production defaults",

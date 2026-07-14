@@ -1,0 +1,87 @@
+{
+  "schema_version": "1.0.0",
+  "description": "Clean-room method-only bundle for Agent ecosystem standard contracts.",
+  "runtime_enabled": false,
+  "fixture_mode": "method-only",
+  "portable_skill": {
+    "skill_directory": "skills/example-portable-skill",
+    "skill_md": "skills/example-portable-skill/SKILL.md",
+    "name": "example-portable-skill",
+    "description": "Synthetic fixture for portable skill discovery and progressive disclosure.",
+    "support_files_policy": "load only when referenced",
+    "progressive_disclosure": "metadata -> instructions -> support files",
+    "target_profile": "synthetic-local",
+    "conformance_fixture": "local-fixture-bundle",
+    "runtime_smoke_status": "not-run-static-only"
+  },
+  "agentic_security": {
+    "taxonomy": "owasp-agentic-top10-2026-crosswalk-v1",
+    "covered_threats": [
+      "ASI01",
+      "ASI02",
+      "ASI03",
+      "ASI04",
+      "ASI05",
+      "ASI06",
+      "ASI07",
+      "ASI08",
+      "ASI09",
+      "ASI10"
+    ],
+    "static_coverage_only": true,
+    "runtime_certification_claimed": false
+  },
+  "safe_output": {
+    "read_only_agent": true,
+    "direct_write_allowed": false,
+    "structured_output_schema": "safe-output-intent-v1",
+    "schema_validation": true,
+    "separate_write_executor": true,
+    "operation_cap": 5,
+    "payload_size_cap_bytes": 16384,
+    "kill_switch": true,
+    "audit_record": "synthetic-safe-output-audit",
+    "rollback_path": "disable executor and discard unexecuted intent"
+  },
+  "mcp_provenance": {
+    "source_url": "https://example.invalid/mcp/synthetic",
+    "registry_namespace": "io.example.synthetic",
+    "namespace_verification": "synthetic-fixture-only",
+    "package_version": "1.0.0-fixture",
+    "artifact_digest": "sha256:fixture-not-an-executable-artifact",
+    "retrieved_at": "2026-07-14",
+    "review_status": "synthetic-reviewed",
+    "expires_at": "2026-09-12",
+    "trust_decision": "fixture-only-never-install"
+  },
+  "otel_genai_adapter": {
+    "enabled_default": false,
+    "schema_url": "https://opentelemetry.io/schemas/gen-ai/1.42.0",
+    "schema_version": "1.42.0",
+    "content_capture_enabled": false,
+    "deny_fields": [
+      "gen_ai.input.messages",
+      "gen_ai.output.messages",
+      "gen_ai.system_instructions",
+      "gen_ai.tool.call.arguments",
+      "gen_ai.tool.call.result"
+    ],
+    "export_boundary": "local sanitized summary only"
+  },
+  "interoperability_watch": {
+    "protocols": [
+      {
+        "protocol_id": "ACP",
+        "protocol_version": "v1",
+        "runtime_enabled": false,
+        "activation_trigger": "concrete editor integration requirement"
+      },
+      {
+        "protocol_id": "A2A",
+        "protocol_version": "1.0.0",
+        "runtime_enabled": false,
+        "activation_trigger": "concrete cross-agent transport requirement"
+      }
+    ]
+  }
+}

@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-06-15",
+  "last_updated": "2026-07-14",
   "source_docs": [
     "openai-apps-sdk-review-tool-hints",
     "openai-codex-customization-skills",
@@ -11,6 +11,9 @@
     "openai-chatgpt-developer-mode",
     "openai-mcp-chatgpt-api-integrations",
     "openai-tools-guide"
+  ],
+  "external_source_refs": [
+    "mcp-registry"
   ],
   "reference_boundary": "OpenAI/Codex source docs are citation metadata and governance references only. This manifest promotes platform-neutral ADK tool and MCP dependency contracts and must not enable external MCP servers, write-capable tools, hosted services, user-directory writes, or compatibility defaults.",
   "tool_description_policy": {
@@ -24,6 +27,41 @@
     ],
     "review_payloads": "Write-capable tools must expose JSON payloads for human or deterministic policy review before execution.",
     "remembered_approvals": "Conversation-local approval remembers are not durable adk permission grants."
+  },
+  "external_dependency_provenance_policy": {
+    "id": "mcp-dependency-provenance-v1",
+    "source_refs": [
+      "mcp-registry"
+    ],
+    "required_fields": [
+      "source_url",
+      "registry_namespace",
+      "namespace_verification",
+      "package_version",
+      "artifact_digest",
+      "retrieved_at",
+      "review_status",
+      "expires_at",
+      "trust_decision"
+    ],
+    "trust_model": {
+      "registry_listing": "discovery metadata only",
+      "namespace_ownership": "publisher identity evidence, not artifact safety proof",
+      "artifact_integrity": "version plus digest or an explicit remote-service exception",
+      "promotion": "requires security review, runtime boundary, verification and rollback"
+    },
+    "quality_gates": [
+      "every MCP dependency records provenance before enablement",
+      "mutable latest references are forbidden for executable artifacts",
+      "review_status and expires_at must be current at promotion time",
+      "registry namespace verification cannot replace artifact or runtime review"
+    ],
+    "must_not": [
+      "auto-install a registry entry",
+      "treat registry presence as trust certification",
+      "enable an executable MCP package without a version and digest",
+      "store registry or provider credentials in the manifest"
+    ]
   },
   "data_only_mcp_compatibility": {
     "preferred_tools": [
@@ -149,7 +187,18 @@
       "auth_boundary": "No project secrets; official docs lookup only.",
       "pii_policy": "Do not send user secrets or private source snippets unless the user explicitly asks and the data is already intended for official docs lookup.",
       "dry_run": "Not applicable; read-only.",
-      "fallback": "Use official OpenAI-domain web lookup only when the MCP source is unavailable."
+      "fallback": "Use official OpenAI-domain web lookup only when the MCP source is unavailable.",
+      "provenance": {
+        "source_url": "https://developers.openai.com/resources/docs-mcp",
+        "registry_namespace": "not-applicable:first-party-official-service",
+        "namespace_verification": "official-domain-reviewed",
+        "package_version": "provider-managed-remote-service",
+        "artifact_digest": "not-applicable:remote-read-only-service",
+        "retrieved_at": "2026-07-14",
+        "review_status": "reviewed-read-only",
+        "expires_at": "2026-08-13",
+        "trust_decision": "allowed-read-only-optional"
+      }
     },
     {
       "skill": "adk-security-supply-chain",
@@ -178,7 +227,18 @@
       "auth_boundary": "Must declare credential source, scopes, owner, deny paths, and rollback before enablement.",
       "pii_policy": "Audit nested fields, debug payloads, trace IDs, internal account IDs, tokens, and raw logs before promotion.",
       "dry_run": "Required for write-capable tools.",
-      "fallback": "Keep report-only until security and runtime-boundary review passes."
+      "fallback": "Keep report-only until security and runtime-boundary review passes.",
+      "provenance": {
+        "source_url": "declare-before-enable",
+        "registry_namespace": "declare-before-enable",
+        "namespace_verification": "declare-before-enable",
+        "package_version": "declare-before-enable",
+        "artifact_digest": "declare-before-enable",
+        "retrieved_at": "declare-before-enable",
+        "review_status": "unreviewed-template",
+        "expires_at": "declare-before-enable",
+        "trust_decision": "deny-until-reviewed"
+      }
     }
   ]
 }

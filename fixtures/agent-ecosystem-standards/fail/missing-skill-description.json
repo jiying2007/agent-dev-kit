@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0.0",
+  "description": "Negative fixture: portable skill omits description.",
+  "runtime_enabled": false,
+  "fixture_mode": "method-only",
+  "expected_failure": "fixture portable_skill missing field: description",
+  "portable_skill": {
+    "skill_directory": "skills/example-portable-skill",
+    "skill_md": "skills/example-portable-skill/SKILL.md",
+    "name": "example-portable-skill",
+    "support_files_policy": "load only when referenced",
+    "progressive_disclosure": "metadata -> instructions -> support files",
+    "target_profile": "synthetic-local",
+    "conformance_fixture": "missing-skill-description",
+    "runtime_smoke_status": "not-run-static-only"
+  }
+}

@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-07-07",
+  "last_updated": "2026-07-14",
   "reference_boundary": "External agent, plugin, memory and skill sources are method-only references until a separate supply-chain review targets a specific versioned asset. This manifest does not enable external runtimes, hooks, workers, MCP servers or plugin installs.",
   "source_refs": [
     {
@@ -101,6 +101,97 @@
       "retrieved_at": "2026-07-07",
       "decision": "adopt-method-only",
       "notes": "Use frontmost-window capture, visible text boundary, permission scope and sensitive-content review fields for UI evidence. Do not enable Computer Use, browser runtime or desktop control by default."
+    },
+    {
+      "id": "agent-skills-open-format",
+      "title": "Agent Skills specification and reference repository",
+      "url": "https://agentskills.io/specification",
+      "local_path": "",
+      "retrieved_at": "2026-07-14",
+      "review_status": "reviewed",
+      "expires_at": "2026-09-12",
+      "license": "Apache-2.0-code/CC-BY-4.0-docs",
+      "evidence_strength": "high",
+      "decision": "adopt-method-only",
+      "notes": "Use the portable SKILL.md directory contract, required name/description metadata and progressive disclosure model. Do not install reference implementations or replace existing ADK target rendering."
+    },
+    {
+      "id": "owasp-agentic-top10-2026",
+      "title": "OWASP Top 10 for Agentic Applications 2026",
+      "url": "https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/",
+      "local_path": "",
+      "retrieved_at": "2026-07-14",
+      "review_status": "reviewed",
+      "expires_at": "2026-10-12",
+      "license": "CC-BY-SA-4.0",
+      "evidence_strength": "high",
+      "decision": "adopt-method-only",
+      "notes": "Use ASI01-ASI10 as a security coverage taxonomy and map each category to local controls/evidence. Do not copy the guide text or claim OWASP certification."
+    },
+    {
+      "id": "github-gh-aw-safe-outputs",
+      "title": "GitHub Agentic Workflows safe outputs",
+      "url": "https://github.github.com/gh-aw/reference/safe-outputs/",
+      "local_path": "",
+      "retrieved_at": "2026-07-14",
+      "review_status": "reviewed",
+      "expires_at": "2026-08-13",
+      "license": "MIT",
+      "evidence_strength": "high",
+      "decision": "adopt-method-only",
+      "notes": "Use read-only agent, schema-backed output and separate permission-controlled executor architecture with operation caps and kill switch. gh-aw is rapidly evolving; do not import workflows or enable GitHub writes."
+    },
+    {
+      "id": "mcp-registry",
+      "title": "Model Context Protocol Registry",
+      "url": "https://github.com/modelcontextprotocol/registry",
+      "local_path": "",
+      "retrieved_at": "2026-07-14",
+      "review_status": "reviewed",
+      "expires_at": "2026-08-13",
+      "license": "Apache-2.0-current/MIT-historical-review-required",
+      "evidence_strength": "high",
+      "decision": "adopt-method-only",
+      "notes": "Use namespace ownership, version, artifact digest, review and freshness as MCP dependency provenance fields. A registry listing is discovery metadata, not trust certification or install approval."
+    },
+    {
+      "id": "otel-genai-semconv",
+      "title": "OpenTelemetry semantic conventions for generative AI systems",
+      "url": "https://github.com/open-telemetry/semantic-conventions-genai",
+      "local_path": "",
+      "retrieved_at": "2026-07-14",
+      "review_status": "reviewed",
+      "expires_at": "2026-08-13",
+      "license": "Apache-2.0",
+      "evidence_strength": "medium",
+      "decision": "adopt-method-only",
+      "notes": "Use an optional version-pinned field mapping adapter for trace summaries. Conventions remain fast-moving; prompt, completion, tool arguments and tool results stay disabled by default."
+    },
+    {
+      "id": "agent-client-protocol",
+      "title": "Agent Client Protocol",
+      "url": "https://github.com/agentclientprotocol/agent-client-protocol",
+      "local_path": "",
+      "retrieved_at": "2026-07-14",
+      "review_status": "reviewed-watch-only",
+      "expires_at": "2026-09-12",
+      "license": "Apache-2.0",
+      "evidence_strength": "medium",
+      "decision": "observe-method-only",
+      "notes": "Watch editor-to-agent JSON-RPC interoperability and protocol v1 evolution. ADK has no transport runtime requirement, so no binding, dependency or compatibility claim is enabled."
+    },
+    {
+      "id": "a2a-protocol-1-0",
+      "title": "Agent2Agent Protocol 1.0",
+      "url": "https://a2a-protocol.org/latest/specification/",
+      "local_path": "",
+      "retrieved_at": "2026-07-14",
+      "review_status": "reviewed-watch-only",
+      "expires_at": "2026-09-12",
+      "license": "Apache-2.0",
+      "evidence_strength": "medium",
+      "decision": "observe-method-only",
+      "notes": "Watch Agent Card, task and artifact interoperability at protocol version 1.0.0. Do not add network discovery, remote agents, auth flows or runtime bindings without a concrete use case and separate security review."
     }
   ],
   "candidate_decisions": [
@@ -272,6 +363,116 @@
         "vendor third-party skill code without license review",
         "install external skill packs during method-only absorption",
         "treat global user skill directories as source of truth"
+      ]
+    },
+    {
+      "id": "agent-skills-portable-format-check",
+      "source_ref": "agent-skills-open-format",
+      "priority": "P0",
+      "install_scope": "none-method-only",
+      "runtime_enabled": false,
+      "landing_targets": [
+        "skill reproducibility contracts",
+        "target conformance fixtures"
+      ],
+      "must_not": [
+        "replace existing target compiler",
+        "install reference implementations",
+        "treat optional support files as always-loaded context"
+      ]
+    },
+    {
+      "id": "owasp-agentic-security-crosswalk",
+      "source_ref": "owasp-agentic-top10-2026",
+      "priority": "P0",
+      "install_scope": "none-method-only",
+      "runtime_enabled": false,
+      "landing_targets": [
+        "runtime policy gates",
+        "security evidence review"
+      ],
+      "must_not": [
+        "claim OWASP certification",
+        "copy external guidance verbatim",
+        "treat taxonomy coverage as runtime security proof"
+      ]
+    },
+    {
+      "id": "safe-output-executor-separation",
+      "source_ref": "github-gh-aw-safe-outputs",
+      "priority": "P1",
+      "install_scope": "none-method-only",
+      "runtime_enabled": false,
+      "landing_targets": [
+        "automation worktree contracts",
+        "risk fixtures"
+      ],
+      "must_not": [
+        "enable GitHub writes",
+        "let the agent call write APIs directly",
+        "execute output before schema and policy validation"
+      ]
+    },
+    {
+      "id": "mcp-registry-provenance-fields",
+      "source_ref": "mcp-registry",
+      "priority": "P1",
+      "install_scope": "none-method-only",
+      "runtime_enabled": false,
+      "landing_targets": [
+        "skill MCP dependencies",
+        "supply-chain review"
+      ],
+      "must_not": [
+        "auto-install registry entries",
+        "treat namespace ownership as code trust",
+        "enable unknown MCP servers"
+      ]
+    },
+    {
+      "id": "otel-genai-trace-adapter",
+      "source_ref": "otel-genai-semconv",
+      "priority": "P1",
+      "install_scope": "none-method-only",
+      "runtime_enabled": false,
+      "landing_targets": [
+        "trace eval contracts",
+        "optional interoperability adapter"
+      ],
+      "must_not": [
+        "enable content capture by default",
+        "export traces to a hosted backend",
+        "claim stable compatibility without pinned schema"
+      ]
+    },
+    {
+      "id": "acp-protocol-watch",
+      "source_ref": "agent-client-protocol",
+      "priority": "P2",
+      "install_scope": "none-method-only",
+      "runtime_enabled": false,
+      "landing_targets": [
+        "interoperability watch ledger"
+      ],
+      "must_not": [
+        "add an editor transport runtime",
+        "claim ACP compatibility",
+        "add dependencies without a concrete integration target"
+      ]
+    },
+    {
+      "id": "a2a-protocol-watch",
+      "source_ref": "a2a-protocol-1-0",
+      "priority": "P2",
+      "install_scope": "none-method-only",
+      "runtime_enabled": false,
+      "landing_targets": [
+        "interoperability watch ledger"
+      ],
+      "must_not": [
+        "enable remote agent discovery",
+        "claim A2A compatibility",
+        "add auth or network flows without a concrete use case"
       ]
     }
   ],
@@ -680,6 +881,35 @@
         "write to ~/.codex or ~/.claude as part of reference intake",
         "treat popularity, stars or marketplace presence as trust proof"
       ]
+    },
+    {
+      "id": "agent-interoperability-watch-v1",
+      "owner": "agent-dev-kit",
+      "source_refs": [
+        "agent-client-protocol",
+        "a2a-protocol-1-0"
+      ],
+      "required_fields": [
+        "protocol_id",
+        "protocol_version",
+        "scope",
+        "activation_trigger",
+        "runtime_enabled",
+        "owner_approval",
+        "compatibility_evidence",
+        "security_review",
+        "rollback_path"
+      ],
+      "quality_gates": [
+        "watch entries keep runtime_enabled=false until a concrete transport use case exists",
+        "activation requires protocol-version pin, compatibility fixtures, auth boundary, security review and rollback",
+        "watch status does not imply implementation or compatibility"
+      ],
+      "must_not": [
+        "add transport dependencies from watch-only research",
+        "enable network discovery or remote agents by default",
+        "claim protocol compliance without conformance evidence"
+      ]
     }
   ],
   "quality_gate": {
@@ -694,6 +924,10 @@
     "overview_freshness_status_required": true,
     "plan_attestation_readback_required": true,
     "browser_runtime_evidence_requires_security_boundary": true,
-    "third_party_skill_domain_policy_required": true
+    "third_party_skill_domain_policy_required": true,
+    "ecosystem_sources_require_freshness": true,
+    "watch_protocols_must_not_enable_runtime": true,
+    "registry_listing_is_not_trust_certification": true,
+    "external_method_absorption_requires_local_contract": true
   }
 }

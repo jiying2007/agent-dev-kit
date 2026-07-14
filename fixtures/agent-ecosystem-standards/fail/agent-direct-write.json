@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0.0",
+  "description": "Negative fixture: the reasoning agent can write directly.",
+  "runtime_enabled": false,
+  "fixture_mode": "method-only",
+  "expected_failure": "fixture safe_output must forbid direct agent writes",
+  "safe_output": {
+    "read_only_agent": true,
+    "direct_write_allowed": true,
+    "structured_output_schema": "safe-output-intent-v1",
+    "schema_validation": true,
+    "separate_write_executor": true,
+    "operation_cap": 5,
+    "payload_size_cap_bytes": 16384,
+    "kill_switch": true,
+    "audit_record": "synthetic-safe-output-audit",
+    "rollback_path": "disable executor"
+  }
+}

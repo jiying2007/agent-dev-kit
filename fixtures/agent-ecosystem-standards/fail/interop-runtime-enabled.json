@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0.0",
+  "description": "Negative fixture: a watch-only protocol enables runtime.",
+  "runtime_enabled": false,
+  "fixture_mode": "method-only",
+  "expected_failure": "fixture interoperability_watch protocol ACP must keep runtime_enabled=false",
+  "interoperability_watch": {
+    "protocols": [
+      {
+        "protocol_id": "ACP",
+        "protocol_version": "v1",
+        "runtime_enabled": true,
+        "activation_trigger": "concrete editor integration requirement"
+      },
+      {
+        "protocol_id": "A2A",
+        "protocol_version": "1.0.0",
+        "runtime_enabled": false,
+        "activation_trigger": "concrete cross-agent transport requirement"
+      }
+    ]
+  }
+}
