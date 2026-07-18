@@ -168,6 +168,7 @@ def _copy_source_distribution(manifest: Manifest, destination: Path) -> int:
         "__pycache__",
         "*.pyc",
         "*.pyo",
+        "*.log",
         "*.egg-info",
         ".pytest_cache",
         ".mypy_cache",

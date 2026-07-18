@@ -12,6 +12,7 @@
 | 2026-07-18 | 单次约 100 秒即可证明 quick 稳定满足预算 | final quick timing + strict checker | 154962ms，strict 正确退出 1；validate 单项 39059ms | quick 必须按反馈层分层，重型 product/taxonomy 保留在 full/根包装层 |
 | 2026-07-18 | 首轮 suite mode 传递可直接工作 | 运行 quick fail-fast | `MODE` 未定义，`set -u` 立即退出 1 | 改用显式 `SUITE_MODE` 并在同一优化根因 retry budget 内复验 |
 | 2026-07-18 | 根 full 可在未提交候选上全绿 | 执行 62 项根 full | 55/62；旧 release digest、strict dirty 和派生 evidence/status 失败 | 不篡改旧 rc.2 证据；提交/version/rehearsal 必须由 owner 后续授权 |
+| 2026-07-18 | RC2 artifact 可从 release commit 精确重建 | 从 `dd67b48` commit archive 构建并与旧 SHA 比较 | 重建为 520 files，旧最终 artifact 为 521 files；差异是 Git 忽略的 `history.log` 被旧构建器收入 source distribution | RC3 构建器排除 `*.log` 并加归档负例；rehearsal 使用 checksum 有效的历史实际 RC2 artifact，同时保留该 provenance 缺口 |
 | 2026-07-18 | 在 `--cap-drop ALL` 容器中用 `cp -a` 复制只读源码 | Python 3.11 local parity quick | `cp` 尝试保留 owner 并遍历 `.git`/build/cache，因无 `CAP_CHOWN` 和 Git object 读取边界失败 | 不恢复 capability；改用 tar stream、`--no-same-owner`，并排除 Git 和构建残留 |
 | 2026-07-18 | 让容器直接从仓库 bind mount 创建 tar stream | Python 3.11 local parity quick retry | 工作区中 owner-only 文件对容器 user namespace 不可读 | 不批量修改用户文件权限；改由宿主当前用户生成排除残留的 `/tmp` 快照与 SHA256，再只读挂载给容器 |
 | 2026-07-18 | 宿主快照的执行位会原样穿过容器 tar | Python 3.11 build、doctor 后进入 strict validate | 容器二次解包后个别 helper 不可执行 | 仅在容器 tmpfs 副本内规范化 `u=rwX,go=rX`；不修改宿主 mode、不增加 container capability |

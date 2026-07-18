@@ -229,10 +229,12 @@ with tempfile.TemporaryDirectory() as temp:
     (fake_root / "src" / "agent_dev_kit" / "core.py").write_text("VALUE = 1\n", encoding="utf-8")
     (fake_root / "src" / "agent_dev_kit.egg-info").mkdir()
     (fake_root / "src" / "agent_dev_kit.egg-info" / "PKG-INFO").write_text("build residue\n", encoding="utf-8")
+    (fake_root / "src" / "history.log").write_text("generated local evidence\n", encoding="utf-8")
     destination = Path(temp) / "distribution"
     _copy_source_distribution(SimpleNamespace(root=fake_root), destination)
     assert (destination / "src" / "agent_dev_kit" / "core.py").is_file()
     assert not (destination / "src" / "agent_dev_kit.egg-info").exists()
+    assert not (destination / "src" / "history.log").exists()
 
 with tempfile.TemporaryDirectory() as temp:
     source = Path(temp) / "source"
@@ -460,7 +462,7 @@ if rg -q '(__pycache__|\.egg-info)' "$TMP_DIR/release-files.txt"; then
   echo "[FAIL] release source distribution contains local build residue" >&2
   exit 1
 fi
-if rg -q '(release-rehearsal\.json|codex-runtime-smoke\.json|full-test-timing\.json|software-m5-campaign-state)' "$TMP_DIR/release-files.txt"; then
+if rg -q '(\.log$|release-rehearsal\.json|codex-runtime-smoke\.json|full-test-timing\.json|software-m5-campaign-state)' "$TMP_DIR/release-files.txt"; then
   echo "[FAIL] release source distribution contains generated local evidence" >&2
   exit 1
 fi
