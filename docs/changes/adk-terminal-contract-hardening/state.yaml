@@ -1,14 +1,14 @@
 schema: adk-change-state/v1
 change_id: adk-terminal-contract-hardening
-stage: release-preparation
-status: rc3-version-locked-rehearsal-pending
+stage: completed
+status: local-release-rehearsed-external-blocked
 owner: Codex
 decision_owner: user
-updated_at: 2026-07-18T09:42:43Z
+updated_at: 2026-07-18T09:59:54Z
 goal_statement: "让终态相关性能、安装、schema、安全维护和 CI 替代验证门禁真实执行所声明的合同"
 heartbeat:
-  last_action: "owner 已授权本地 commit/version/rehearsal，版本合同同步为 3.1.0-rc.3 并保留 RC2 历史证据"
-  next_action: "提交 source snapshot，构建可复现 RC3 artifact，并执行 rc.2 到 rc.3 rollback/fallback rehearsal"
+  last_action: "RC3 exact-commit artifact 双构建一致，rc.2 到 rc.3 安装/回滚 rehearsal 与 54/54 full 已通过"
+  next_action: "父仓锁定 gitlink/policy/release evidence；恢复真实 remote CI 后重跑，外部认证 blocker 不变"
   evidence_delta:
     - "2026-07-18 终态审计：overall M3、terminal_mature=false"
     - "真实 quick timing 150665ms > 120000ms，但根包装门禁假绿"
@@ -19,17 +19,18 @@ heartbeat:
     - "只读容器首次 pip build 暴露 egg-info 写入假设和旧式 license metadata 弃用告警"
     - "source snapshot 33ab17d4...：Python 3.11/3.12 各 54/54，performance/security/eval/release/wheel/audit 全通过"
     - "gates 使用 --network none 和 uid=65532(adk-ci)；audit 独立 bridge；两个 tool image identity 已核验"
+    - "RC3 source commit defe8a078b9693b6963e434f3131891ebbcf5d62；双构建 SHA256 46afbb507f61fce8facffbfa36c23f59fe3f5498e3f1843ceaa53f2507d8fcd8"
+    - "rc.2 到 rc.3 rehearsal pass：candidate/previous 各 39 项，candidate rollback restored=39，report SHA256 1526ac3aaeb275c4c34da79419e2aed9588620c6487ee6b8805232de31096de9"
+    - "RC3 release tree full 54/54，elapsed_ms=335446"
   blockers:
-    - "RC3 source snapshot 尚未提交，候选 artifact 与 rehearsal digest 尚未生成"
     - "remote CI、真实 runtime、独立操作者和 30 天 field evidence 不可由本地执行替代"
 retry_budget: 2
 staleness_threshold_minutes: 45
 stop_condition: pass
 completion_claim:
-  status: rc3-source-prepared-rehearsal-pending
+  status: local-release-candidate-pass-external-blocked
   claimant: Codex
   verifier: adk-verification-before-completion
   open_items:
-    - commit-and-release-rehearsal
     - supported-python-remote-ci
     - external-certification

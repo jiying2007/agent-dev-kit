@@ -8,10 +8,10 @@
 |---|---:|---|---|---|---|
 | `rtk tests/test_product_maturity_contracts.sh` | 0 | 根包装器必须调用 strict timing checker；根产品合同通过 | `tests/test_product_maturity_contracts.sh` | Source Test | TC-001 |
 | `rtk agent-dev-kit/tests/test_performance_budgets.sh` | 0 | 预算内 fixture 通过，999999ms 超预算 fixture 被稳定拒绝 | `tests/test_performance_budgets.sh` | Source Test | TC-001 |
-| `rtk agent-dev-kit/tests/run_all.sh --quick --timing-json /tmp/adk-quick-terminal-final-3.json` | 0 | 16/16；65331ms | `/tmp/adk-quick-terminal-final-3.json`（会话临时证据） | Workflow Test | quick gate |
-| `rtk agent-dev-kit/scripts/check-performance-budgets.sh --strict --timing-json /tmp/adk-quick-terminal-final-3.json --summary-json` | 0 | quick budget 120000ms；failure=0、warning=0 | 本文件中的命令记录 | Performance | quick strict |
-| `rtk agent-dev-kit/tests/run_all.sh --timing-json /tmp/adk-full-terminal-current.json` | 0 | 当前最终树 53/53；340107ms | `/tmp/adk-full-terminal-current.json`（会话临时证据） | Workflow Test | full gate |
-| `rtk agent-dev-kit/scripts/check-performance-budgets.sh --strict --timing-json /tmp/adk-full-terminal-current.json --summary-json` | 0 | full budget 600000ms；failure=0、warning=0 | 本文件中的命令记录 | Performance | full strict |
+| `rtk agent-dev-kit/tests/run_all.sh --quick --timing-json /tmp/adk-rc3-source-quick.json` | 0 | RC3 source quick 17/17 | `/tmp/adk-rc3-source-quick.json`（会话临时证据） | Workflow Test | quick gate |
+| `rtk agent-dev-kit/scripts/check-performance-budgets.sh --strict --timing-json /tmp/adk-rc3-source-quick.json --summary-json` | 0 | quick budget 120000ms；failure=0、warning=0 | 本文件中的命令记录 | Performance | quick strict |
+| `rtk agent-dev-kit/tests/run_all.sh --fail-fast --timing-json /tmp/adk-rc3-release-full.json` | 0 | RC3 release tree 54/54；335446ms | `/tmp/adk-rc3-release-full.json`（会话临时证据） | Workflow Test | full gate |
+| `rtk agent-dev-kit/scripts/check-performance-budgets.sh --strict --timing-json /tmp/adk-rc3-release-full.json --summary-json` | 0 | full budget 600000ms；failure=0、warning=0 | 本文件中的命令记录 | Performance | full strict |
 | `rtk scripts/check-adk-performance-ops.sh .` | 0 | 产品成熟度、benchmark、security、release、16 项 quick 与 strict timing 全部通过 | `scripts/check-adk-performance-ops.sh` | Workspace Integration | root performance |
 | `rtk scripts/check-all.sh --quick` | 1 | 53/56；仅 current-status、Software M5 readiness、strict subrepo state 因未提交 candidate/旧 digest 失败 | `reports/terminal-closure-remediation-2026-07-18.md` | Workspace | pre-commit boundary |
 | `rtk agent-dev-kit/scripts/devkit.sh benchmark run --iterations 5 --summary-json` | 0 | `manifest_validate` p95=99.853ms，7 个时延与内存 gate 全部通过 | `src/agent_dev_kit/model.py` | Performance | TC-002 |
@@ -22,6 +22,15 @@
 | `rtk shellcheck -S error ...` | 0 | 本轮 shell 与全 ADK script/test error-level ShellCheck 通过 | 本文件中的命令记录 | Static | maintainability |
 | `rtk scripts/check-all.sh --full` | 1 | 55/62；7 项初始失败中性能/goal 已修复，剩余派生于未提交 ADK、旧 rc.2 evidence digest 与严格 subrepo 状态 | `reports/terminal-closure-remediation-2026-07-18.md` | Workspace | open boundary |
 | `rtk bash /home/leiwenjun/codex/scripts/final-ready.sh` | 0 | final-ready pass；session coach 的 CRITICAL/HIGH 信号来自长线程及 `~/codex` 既有 dirty 资产，本轮未修改或 apply 该目录 | 本文件中的命令记录 | Session Governance | final handoff |
+
+## RC3 local release closure
+
+| Command | Exit | Result summary | Evidence path | Layer | Artifact |
+|---|---:|---|---|---|---|
+| `rtk git archive ... defe8a078b9693b6963e434f3131891ebbcf5d62` + 两次 `release build` | 0 | 两个 artifact 字节一致；576 source files；SHA256 `46afbb507f61fce8facffbfa36c23f59fe3f5498e3f1843ceaa53f2507d8fcd8` | `/tmp/adk-rc3-release.733LHn/rc3-fixed-out-{a,b}` | Release Artifact | T7 |
+| `rtk sha256sum -c agent-dev-kit-3.1.0-rc.3.tar.gz.sha256` | 0 | 两个 sidecar 均 OK | 同上 | Integrity | T7 |
+| `rtk bash scripts/devkit.sh release rehearse --previous-artifact ...rc.2... --candidate-artifact ...rc.3...` | 0 | rc.2/rc.3 各安装 39 项；候选 rollback removed/restored=39；report hash pass | `release-rehearsal.json` | Release Runtime | T7 |
+| 从 `dd67b48` archive 重建 RC2 并与旧最终 artifact 比较 | 1（digest mismatch） | 520 vs 521 files；旧 artifact 唯一多出 ignored `history.log`，checksum 本身有效 | `negative-results.md` | Negative Provenance | T7 |
 
 ## Controlled local CI parity
 
@@ -48,5 +57,5 @@
 
 - 宿主机为 Python 3.8.10，且宿主 PyYAML/jsonschema 版本不满足新的发布基线；宿主 `doctor` 正确返回 fail。支持环境证据来自固定 Docker Python 3.11.15/3.12.13 与精确依赖版本，不把旧解释器结果冒充支持矩阵。
 - Ruff 0.15.21、pip-audit 2.10.1、ShellCheck、wheel build 已在身份可核验的本地容器执行；GitHub Actions 未在本轮远程触发，本地 waiver 不替代远程 run URL、attestation 或 provenance。
-- manifest 改变后，旧 `3.1.0-rc.2` rehearsal digest 依法失效；必须在 owner 决定版本、提交后重建候选证据，不能改写旧证据。
-- 未 commit、push、tag、apply `~/codex`/`~/.codex`，未运行付费 runtime campaign，也未生成 field certification。
+- RC3 已从不可变 source commit 构建并重建 rehearsal；RC2 历史 artifact 的 ignored-log provenance 缺口已保留，未改写旧证据。
+- 已执行本地 commit/version/rehearsal；未 push、tag、publish、apply `~/codex`/`~/.codex`，未运行付费 runtime campaign，也未生成 field certification。

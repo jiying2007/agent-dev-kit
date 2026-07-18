@@ -9,7 +9,7 @@
 | T4 integration-regression | completed | evidence/review 工件 | live runtime、远端、field ledger | targeted、quick/full、root applicable checks |
 | T5 completion-review | completed | review/verify/state | commit/push/tag | blocker/major 复核、final-ready、open items |
 | T6 controlled-local-ci-continuation | completed | local parity runner、PEP 639 metadata、waiver/evidence | 远端 CI 状态、release/Software M5/field 声明 | Python 3.11/3.12 container matrix、负例、复审 |
-| T7 version-commit-rehearsal | in_progress | RC3 版本合同、source commit、本地 rehearsal 与证据 | push、tag、publish、live apply、历史 RC2 证据 | exact-commit build、可复现 SHA、rc.2 → rc.3 rollback/fallback |
+| T7 version-commit-rehearsal | completed | RC3 版本合同、source commit、本地 rehearsal 与证据 | push、tag、publish、live apply、历史 RC2 证据 | exact-commit build、可复现 SHA、rc.2 → rc.3 rollback/fallback |
 
 ## Ownership 与并行冲突检查
 
