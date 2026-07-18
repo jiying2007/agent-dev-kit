@@ -1,0 +1,30 @@
+schema: adk-change-state/v1
+change_id: adk-self-readiness-ownership
+stage: review-passed
+status: pass
+owner: Codex
+decision_owner: leiwenjun
+updated_at: 2026-07-18T07:30:00Z
+goal_statement: "让 ADK 自身 context/ownership/freshness 证据满足 Harness readiness 合同"
+heartbeat:
+  last_action: "完成规则拆分、ownership metadata、语义复审和 full regression"
+  next_action: "90 天 freshness 到期前由 owner 重新验证；field evidence 走独立流程"
+  evidence_delta:
+    - "ADK readiness: partial=6, not-applicable=1"
+    - "AGENTS.md: 270 lines > 180"
+    - "OWNERS/CODEOWNERS and readiness metadata missing"
+    - "after: AGENTS.md 86 lines；六个适用维度 pass、MCP not-applicable"
+    - "R1-R8、生命周期与 Gate 规则有机械检索回归"
+  blockers:
+    - "远程 review 与 field evidence 不由本地 ownership 文件替代"
+retry_budget: 2
+staleness_threshold_minutes: 45
+stop_condition: pass
+completion_claim:
+  status: local-implementation-verified
+  claimant: Codex
+  verifier: adk-verification-before-completion
+  open_items:
+    - owner-periodic-reverification
+    - remote-human-review
+    - field-evidence

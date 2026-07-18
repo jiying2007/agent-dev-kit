@@ -1,0 +1,35 @@
+schema: adk-change-state/v1
+change_id: adk-terminal-contract-hardening
+stage: release-preparation
+status: rc3-version-locked-rehearsal-pending
+owner: Codex
+decision_owner: user
+updated_at: 2026-07-18T09:42:43Z
+goal_statement: "让终态相关性能、安装、schema、安全维护和 CI 替代验证门禁真实执行所声明的合同"
+heartbeat:
+  last_action: "owner 已授权本地 commit/version/rehearsal，版本合同同步为 3.1.0-rc.3 并保留 RC2 历史证据"
+  next_action: "提交 source snapshot，构建可复现 RC3 artifact，并执行 rc.2 到 rc.3 rollback/fallback rehearsal"
+  evidence_delta:
+    - "2026-07-18 终态审计：overall M3、terminal_mature=false"
+    - "真实 quick timing 150665ms > 120000ms，但根包装门禁假绿"
+    - "manifest symlink 默认值与 copy-only installer 漂移"
+    - "final quick 16/16，65331ms < 120000ms；full 53/53，严格预算通过"
+    - "manifest_validate p95 从 557.465ms 降至 99.853ms（5 iterations）"
+    - "llm_agent full 55/62；剩余失败归因于未提交 candidate evidence/strict dirty 状态"
+    - "只读容器首次 pip build 暴露 egg-info 写入假设和旧式 license metadata 弃用告警"
+    - "source snapshot 33ab17d4...：Python 3.11/3.12 各 54/54，performance/security/eval/release/wheel/audit 全通过"
+    - "gates 使用 --network none 和 uid=65532(adk-ci)；audit 独立 bridge；两个 tool image identity 已核验"
+  blockers:
+    - "RC3 source snapshot 尚未提交，候选 artifact 与 rehearsal digest 尚未生成"
+    - "remote CI、真实 runtime、独立操作者和 30 天 field evidence 不可由本地执行替代"
+retry_budget: 2
+staleness_threshold_minutes: 45
+stop_condition: pass
+completion_claim:
+  status: rc3-source-prepared-rehearsal-pending
+  claimant: Codex
+  verifier: adk-verification-before-completion
+  open_items:
+    - commit-and-release-rehearsal
+    - supported-python-remote-ci
+    - external-certification

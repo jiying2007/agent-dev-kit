@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+## v3.1.0-rc.3 (2026-07-18)
+
+### 修复
+- 根工作区性能包装器现在执行 quick timing 的严格预算门禁；ADK quick suite 执行 quick manifest validation，把产品成熟度与 catalog/taxonomy 重型回归保留在 full（根性能包装器仍单独执行产品成熟度），避免重复工作并为 120 秒预算保留抖动余量。
+- install manifest、Draft 2020-12 schema、copy-only installer 和用户文档统一；关键 routing、dependency、reference、context、change-set 与空 MCP 合同改为 typed fail-closed schema。
+- Harness readiness 要求结构化权限边界，拒绝否定语境伪证据，并对未来或超过 freshness 窗口的验证日期输出 blocker。
+- Python 打包元数据迁移到 PEP 639 SPDX license 表达式，并增加 Python 3.11/3.12 Docker 本地 CI parity runner：源码快照只读、固定非 root 身份、gates 无网络、dependency audit 独立联网，并核验 base/definition/image identity；本地结果不能替代 release provenance 或远端 CI 状态。
+
+### 破坏性变化
+- 发布支持基线提升到 Python 3.11+，运行依赖固定为 `PyYAML==6.0.3` 与 `jsonschema==4.26.0`；CI 最低版本同步到 3.11。
+- 关键 nested manifest object 现在执行 typed schema 并拒绝未知字段；自定义 manifest 升级前需运行 `bash scripts/devkit.sh validate --strict`，修正错误类型，并把确需保留的产品级扩展迁移到顶层 `x-<name>` namespace。
+
 ## v3.1.0-rc.2 (2026-07-13)
 
 ### 修复

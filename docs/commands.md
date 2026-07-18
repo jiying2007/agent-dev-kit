@@ -45,7 +45,7 @@ python3 tools/migrate_manifest_v2.py --source manifest.yaml --output /tmp/manife
 
 ## doctor
 
-只读检查 manifest、Python/PyYAML、runtime 安装与认证、CLI 版本、target 可写性和 writer lock 状态。输出只包含状态，不读取或打印凭证值。
+只读检查 manifest、Python 3.11+、固定 PyYAML/jsonschema 版本、runtime 安装与认证、CLI 版本、target 可写性和 writer lock 状态。输出只包含状态，不读取或打印凭证值；解释器或依赖不在发布支持基线时返回失败。
 
 ```bash
 bash scripts/devkit.sh doctor --summary-json
@@ -212,6 +212,26 @@ bash scripts/devkit.sh capability health
 bash scripts/devkit.sh capability health --summary-json
 ```
 
+## harness
+
+对任意本地仓库执行确定性、只读的 Harness readiness 证据投影。该命令不执行目标仓代码、不安装 MCP、不调用模型，也不生成加权总分。
+
+七个维度分别输出 `pass|partial|needs-review|blocked|not-applicable`、证据路径、owner、验证时间、阻塞项和下一动作。默认只报告；只有显式 `--gate` 才要求总状态为 `pass`，未就绪时退出 2。
+
+```bash
+bash scripts/devkit.sh harness readiness --root /path/to/repo
+bash scripts/devkit.sh harness readiness --root /path/to/repo --summary-json
+bash scripts/devkit.sh harness readiness --root /path/to/repo --output harness-readiness.md
+bash scripts/devkit.sh harness readiness --root /path/to/repo --gate
+bash scripts/devkit.sh harness readiness --root /path/to/repo --as-of 2026-07-18 --summary-json
+```
+
+目标仓可选在 `.adk/harness-readiness.json` 记录每个维度的 `owner` 与 `last_verified_at`；未来日期和超过合同 freshness 窗口的日期会产生专用 blocker。`--as-of` 仅用于固定可复现的 report-only 评估日期；`--gate` 拒绝显式评估日期并强制使用当天，避免冻结时钟绕过 freshness。
+
+存在 MCP 配置时，完整通过还要求 `tool_and_permission_boundary.permission_boundary` 明确声明 `read_only=true`、`approval_required=true` 和受支持的 `credential_source`。自然语言文档只作为补充证据，否定语境不能使权限边界通过。没有 MCP 配置会得到 `not-applicable`，不是失败；硬编码 MCP 敏感值会得到 `blocked`，报告只显示 JSON key path，不显示值。
+
+维度、扫描预算与脱敏合同见 `manifests/harness_readiness_contracts.json`，吸收决策见 `docs/harness-engineering-analysis.md`。
+
 ## file-modes
 
 检查 tracked 文件权限是否匹配 Git index。规则是 `100644` 不可执行，`100755` 可执行；文档、README、manifest、skill、template 默认不应带 executable bit。
@@ -371,13 +391,13 @@ bash scripts/devkit.sh eval report --input /tmp/adk-eval.json --output /tmp/adk-
 
 `eval effect` 使用输入/标签分离并锁定 hash 的 24 例 source/test 数据集，分别覆盖 12 个 OOD 与 12 个 adversarial case，评分 route、safety、trace、outcome，并禁用 `routing.intents` 做组件消融。它不把标签传入 matcher/runtime prompt，但标签仍对源码 reviewer 可见，因此不是密码学意义的 blind trial，也不替代 runtime/field evidence。
 
-软件 M5 campaign 使用 `manifests/software_m5_eval_contract_rc2.json`。正式契约包含 60 个任务、Codex/Claude、baseline/ADK、3 trials、显式模型、最多一次错误重试和 `$150` 硬预算；逐任务结果原子落盘，恢复时拒绝 manifest/contract/task/plan/runtime 版本漂移。
+软件 M5 campaign 使用 `manifests/software_m5_eval_contract_rc3.json`。正式契约包含 60 个任务、Codex/Claude、baseline/ADK、3 trials、显式模型、最多一次错误重试和 `$150` 硬预算；逐任务结果原子落盘，恢复时拒绝 manifest/contract/task/plan/runtime 版本漂移。
 
 ```bash
-bash scripts/devkit.sh eval campaign plan --contract manifests/software_m5_eval_contract_rc2.json --summary-json
-bash scripts/devkit.sh eval campaign run --contract manifests/software_m5_eval_contract_rc2.json --state-dir /tmp/adk-m5-campaign --execute --approve-budget-usd 150 --summary-json
-bash scripts/devkit.sh eval campaign run --contract manifests/software_m5_eval_contract_rc2.json --state-dir /tmp/adk-m5-campaign --execute --approve-budget-usd 150 --resume --summary-json
-bash scripts/devkit.sh eval certify --contract manifests/software_m5_eval_contract_rc2.json --state-dir /tmp/adk-m5-campaign --output /tmp/adk-m5-certification.json
+bash scripts/devkit.sh eval campaign plan --contract manifests/software_m5_eval_contract_rc3.json --summary-json
+bash scripts/devkit.sh eval campaign run --contract manifests/software_m5_eval_contract_rc3.json --state-dir /tmp/adk-m5-campaign --execute --approve-budget-usd 150 --summary-json
+bash scripts/devkit.sh eval campaign run --contract manifests/software_m5_eval_contract_rc3.json --state-dir /tmp/adk-m5-campaign --execute --approve-budget-usd 150 --resume --summary-json
+bash scripts/devkit.sh eval certify --contract manifests/software_m5_eval_contract_rc3.json --state-dir /tmp/adk-m5-campaign --output /tmp/adk-m5-certification.json
 bash scripts/devkit.sh eval campaign report --input /tmp/adk-m5-certification.json --output /tmp/adk-m5-certification.md
 ```
 
@@ -398,9 +418,9 @@ bash scripts/devkit.sh security check --summary-json
 
 ```bash
 bash scripts/devkit.sh release check
-bash scripts/devkit.sh release build --version 3.1.0-rc.2 --out dist --summary-json
-bash scripts/devkit.sh release rehearse --previous-artifact /tmp/agent-dev-kit-3.1.0-rc.1.tar.gz --candidate-artifact dist/agent-dev-kit-3.1.0-rc.2.tar.gz --output /tmp/adk-release-rehearsal.json
-bash scripts/devkit.sh release publish --version 3.1.0-rc.2 --backend github --artifact dist/agent-dev-kit-3.1.0-rc.2.tar.gz --dry-run
+bash scripts/devkit.sh release build --version 3.1.0-rc.3 --out dist --summary-json
+bash scripts/devkit.sh release rehearse --previous-artifact /tmp/agent-dev-kit-3.1.0-rc.2.tar.gz --candidate-artifact dist/agent-dev-kit-3.1.0-rc.3.tar.gz --output /tmp/adk-release-rehearsal.json
+bash scripts/devkit.sh release publish --version 3.1.0-rc.3 --backend github --artifact dist/agent-dev-kit-3.1.0-rc.3.tar.gz --dry-run
 ```
 
 `release rehearse` 只接受 checksum 匹配且 candidate 版本更高的本地 artifact；它在临时 target 安装上一版、升级候选版、核验 receipt，再回滚并比较上一版受管资产 hash。rc.1 legacy bundle 会先按旧布局建立受管 receipt，再执行 rollback-before-install 迁移；candidate 回滚后，从保留的 rc.1 artifact 重装并逐文件比对 managed hashes，证明 fallback anchor 可用。build 在归档前校验 SPDX 2.3 SBOM 的 package/relationship 完整性并把 SBOM SHA256 写入 release manifest；GitHub release workflow 使用 SHA-pinned `actions/attest` 为 tarball 生成 provenance。该命令不创建 tag、不上传制品、不调用远端 backend。rehearsal、runtime smoke、timing 和 campaign state 属于 checkout 内的验证证据，不进入 source distribution，避免制品 SHA 与其自身验证报告形成循环依赖。

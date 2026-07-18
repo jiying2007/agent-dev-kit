@@ -13,7 +13,7 @@ rg -q '"status":"pass"' "$TMP_DIR/capability-health.json" || {
   cat "$TMP_DIR/capability-health.json" >&2
   exit 1
 }
-rg -q '"capabilities":7' "$TMP_DIR/capability-health.json" || {
+rg -q '"capabilities":8' "$TMP_DIR/capability-health.json" || {
   echo "[FAIL] capability health summary did not count expected capabilities" >&2
   cat "$TMP_DIR/capability-health.json" >&2
   exit 1

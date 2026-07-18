@@ -1,0 +1,155 @@
+{
+  "schema_version": "1.0.0",
+  "contract_version": "1.0.0",
+  "last_updated": "2026-07-17",
+  "status": "implemented",
+  "default_mode": "report-only",
+  "boundary": "Deterministic read-only evidence projection for a target repository. It does not execute repository code, install MCP, score architecture quality, or claim field maturity.",
+  "reference_boundary": "OpenAI and secondary Harness sources are citation metadata and governance references only. This contract promotes platform-neutral repository evidence checks and must not enable Codex bindings, hosted models, external MCP servers, user-directory writes, or compatibility defaults.",
+  "source_refs": [
+    {
+      "id": "openai-harness-engineering-2026",
+      "url": "https://openai.com/index/harness-engineering/",
+      "retrieved_at": "2026-07-17",
+      "review_status": "reviewed",
+      "expires_at": "2026-10-15"
+    },
+    {
+      "id": "user-provided-team-harness-excerpt",
+      "url": "not-provided",
+      "retrieved_at": "2026-07-17",
+      "review_status": "review-required",
+      "expires_at": "2026-10-15"
+    }
+  ],
+  "statuses": [
+    "pass",
+    "partial",
+    "needs-review",
+    "blocked",
+    "not-applicable"
+  ],
+  "aggregation": {
+    "model": "weakest-dimension",
+    "priority": [
+      "blocked",
+      "needs-review",
+      "partial",
+      "pass"
+    ],
+    "weighted_score": false
+  },
+  "metadata_path": ".adk/harness-readiness.json",
+  "verification": {
+    "max_age_days": 90,
+    "future_tolerance_days": 0
+  },
+  "scan": {
+    "max_files": 5000,
+    "max_file_bytes": 1048576,
+    "instruction_max_lines": 180,
+    "max_evidence_per_dimension": 12,
+    "max_blockers_per_dimension": 50,
+    "excluded_directories": [
+      ".git",
+      ".hg",
+      ".svn",
+      ".tox",
+      ".venv",
+      "__pycache__",
+      "archive",
+      "build",
+      "coverage",
+      "dist",
+      "fixtures",
+      "node_modules",
+      "target",
+      "vendor"
+    ]
+  },
+  "mcp": {
+    "max_configs": 20,
+    "max_permission_docs": 20,
+    "config_names": [
+      ".mcp.json",
+      "mcp.json"
+    ],
+    "sensitive_key_fragments": [
+      "api_key",
+      "authorization",
+      "password",
+      "secret",
+      "token"
+    ],
+    "permission_evidence_terms": {
+      "read_only": [
+        "read-only",
+        "readonly",
+        "只读"
+      ],
+      "approval": [
+        "approval",
+        "approve",
+        "审批",
+        "确认"
+      ],
+      "credential_boundary": [
+        "credential",
+        "secret manager",
+        "environment variable",
+        "凭证",
+        "环境变量"
+      ]
+    },
+    "structured_permission_boundary": {
+      "metadata_key": "permission_boundary",
+      "required_true_fields": [
+        "read_only",
+        "approval_required"
+      ],
+      "credential_source_field": "credential_source",
+      "allowed_credential_sources": [
+        "environment-variable",
+        "secret-manager",
+        "external-reference"
+      ]
+    }
+  },
+  "dimensions": [
+    {
+      "dimension_id": "context_legibility",
+      "title": "Context legibility",
+      "next_action": "补齐精简的根 AGENTS.md 与 README，并把细节下沉到可索引文档。"
+    },
+    {
+      "dimension_id": "spec_and_execution_contract",
+      "title": "Spec and execution contract",
+      "next_action": "为非平凡变更保留 spec、task/plan 与可测试验收证据。"
+    },
+    {
+      "dimension_id": "tool_and_permission_boundary",
+      "title": "Tool and permission boundary",
+      "next_action": "固定 MCP 依赖、使用环境凭证，并记录只读、审批、allow/deny 与 fallback 边界。"
+    },
+    {
+      "dimension_id": "state_and_knowledge_continuity",
+      "title": "State and knowledge continuity",
+      "next_action": "持久化变更状态，并把可复用决策写入受治理 decision/runbook/knowledge 工件。"
+    },
+    {
+      "dimension_id": "verification_review_and_eval",
+      "title": "Verification, review and evaluation",
+      "next_action": "补齐测试、CI 和根文档中的可执行验证命令，并保留 review/eval 证据。"
+    },
+    {
+      "dimension_id": "recovery_and_rollback",
+      "title": "Recovery and rollback",
+      "next_action": "记录可执行 rollback/recovery/backup 路径及触发条件。"
+    },
+    {
+      "dimension_id": "freshness_and_entropy_control",
+      "title": "Freshness and entropy control",
+      "next_action": "增加文档/格式/目录新鲜度机械检查和明确 ownership。"
+    }
+  ]
+}

@@ -17,7 +17,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.8', '3.12']
+        python-version: ['3.11', '3.12']
     steps:
       - name: Checkout
         uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
@@ -67,7 +67,7 @@ jobs:
           python-version: '3.12'
 
       - name: Install static and dependency audit tools
-        run: python -m pip install . 'ruff==0.15.21' 'pip-audit==2.10.1'
+        run: python -m pip install '.[quality]'
 
       - name: Run critical Python static analysis
         run: ruff check src tools tests/fixtures/fake_target_runtime.py

@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "unsafe-example": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@example/read-only-mcp@latest"
+      ],
+      "headers": {
+        "Authorization": "Bearer fixture-literal-value",
+        "accessToken": "fixture-camelcase-value",
+        "password": "prefix-${DB_PASSWORD}",
+        "apiKey": {
+          "env": "FIXTURE_API_KEY"
+        }
+      }
+    }
+  }
+}

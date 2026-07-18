@@ -1,0 +1,7 @@
+# Agent Dev Kit repository ownership
+
+owner: leiwenjun
+review_scope: repository-governance, manifest, release, security-boundary
+external_execution: requires-explicit-owner-approval
+review_interval_days: 90
+field_evidence: not-verified

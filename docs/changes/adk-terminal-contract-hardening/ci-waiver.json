@@ -1,0 +1,67 @@
+{
+  "schema_version": "adk-ci-continuation-waiver/v1",
+  "waiver_id": "ci-waiver-2026-07-18-local-continuation",
+  "authorized_by": "user",
+  "authorized_at": "2026-07-18",
+  "expires_at": "2026-07-25",
+  "status": "authorized",
+  "effect": "local-development-continuation-only",
+  "reason": "The user explicitly authorized continued local optimization while temporarily bypassing remote CI.",
+  "scope": {
+    "allow": [
+      "local-development",
+      "local-test",
+      "local-review"
+    ],
+    "deny": [
+      "remote-ci-pass-claim",
+      "release",
+      "publish",
+      "tag",
+      "software-m5-certification",
+      "field-evidence",
+      "source-to-live"
+    ]
+  },
+  "transport": {
+    "kind": "docker",
+    "network": "gates-none; bridge-for-dependency-audit-and-image-prepare",
+    "source_mount": "host-snapshot-read-only",
+    "work_copy": "host-snapshot-plus-isolated-tmpfs",
+    "container_user": "65532:65532",
+    "image_identity": "contract/base/python/definition labels plus immutable image ID",
+    "credentials": "not-mounted",
+    "external_writes": "local-docker-image-store-only"
+  },
+  "alternative_evidence": {
+    "required": [
+      "python-3.11-local-container",
+      "python-3.12-local-container",
+      "strict-validation",
+      "full-regression",
+      "performance-budget",
+      "security-check",
+      "ruff",
+      "shellcheck",
+      "dependency-audit",
+      "wheel-build"
+    ],
+    "status": "pass",
+    "validated_at": "2026-07-18T08:49:30Z",
+    "evidence_refs": [
+      "verification-evidence.md#controlled-local-ci-parity",
+      "source-snapshot-sha256:33ab17d4ef6b21e3bb7a7cce2a58bb04ae437a4789dba621bf3fd74970e1a2ac",
+      "file-mode-inventory-sha256:a7c3a1d961dbeee3b17b00291c1f3103e9872e9e7743fe7bf3b8d94aef9ff6a2",
+      "local-ci-definition-sha256:663f5c72c4db79280a5d82bcb206f765748977d5fcf9817527569c5e3e30113b",
+      "python-3.11-tool-image-id:sha256:2f4ec1f0197b789009d2cae4f5288fcf213e2167adf1afa47665f641c2d4c451",
+      "python-3.12-tool-image-id:sha256:3fcedbe94b2caf8081d7b509eea6ec5279cc7bb5923622598327a36a713878c8"
+    ]
+  },
+  "invalidation": [
+    "expires-at-reached",
+    "source-changed-after-validation",
+    "alternative-evidence-failed",
+    "scope-expanded",
+    "release-or-certification-requested"
+  ]
+}

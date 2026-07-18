@@ -6,6 +6,7 @@ import json
 import math
 import os
 import re
+import stat
 import statistics
 import subprocess
 import sys
@@ -13,7 +14,7 @@ import tempfile
 import time
 import tracemalloc
 from pathlib import Path
-from typing import Any, Callable, Dict, List
+from typing import Any, Callable, Dict, List, Tuple
 
 from .compiler import export_assets
 from .model import Manifest, ManifestError
@@ -22,39 +23,117 @@ from .targets import check_targets
 
 SECRET_NAME_PATTERNS = (".env", ".pem", ".key", ".p12", ".pfx", "id_rsa")
 SECRET_CONTENT = re.compile(r"(?i)(api[_-]?key|secret|token|password)\s*[:=]\s*['\"]?[A-Za-z0-9_\-]{16,}")
+SECURITY_SCAN_MAX_FILES = 50000
+SECURITY_SCAN_EXCLUDED_DIRS = {".git", ".ruff_cache", "__pycache__"}
+SECURITY_SCAN_EXCLUDED_ROOT_DIRS = {"build", "dist"}
+
+
+def _security_inventory(manifest: Manifest) -> Tuple[List[str], str]:
+    try:
+        tracked = subprocess.run(
+            ["git", "-C", str(manifest.root), "ls-files", "--cached", "--others", "--exclude-standard", "-z"],
+            check=False,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+    except OSError:
+        tracked = None
+
+    if tracked is not None and tracked.returncode == 0:
+        relatives = [
+            raw.decode("utf-8", errors="replace")
+            for raw in tracked.stdout.split(b"\0")
+            if raw
+        ]
+        source = "git"
+    else:
+        relatives = []
+        walk_errors: List[str] = []
+
+        def onerror(error: OSError) -> None:
+            walk_errors.append(str(error))
+
+        for current, directory_names, file_names in os.walk(
+            str(manifest.root),
+            topdown=True,
+            followlinks=False,
+            onerror=onerror,
+        ):
+            current_path = Path(current)
+            current_relative = current_path.relative_to(manifest.root)
+            kept_directories = []
+            for name in sorted(directory_names):
+                if name in SECURITY_SCAN_EXCLUDED_DIRS:
+                    continue
+                if current_relative == Path(".") and name in SECURITY_SCAN_EXCLUDED_ROOT_DIRS:
+                    continue
+                if name.endswith(".egg-info"):
+                    continue
+                candidate = current_path / name
+                if candidate.is_symlink():
+                    relatives.append(candidate.relative_to(manifest.root).as_posix())
+                else:
+                    kept_directories.append(name)
+            directory_names[:] = kept_directories
+            for name in sorted(file_names):
+                candidate = current_path / name
+                relatives.append(candidate.relative_to(manifest.root).as_posix())
+                if len(relatives) > SECURITY_SCAN_MAX_FILES:
+                    raise ManifestError("filesystem security inventory exceeds file limit")
+        if walk_errors:
+            raise ManifestError("cannot enumerate files for security check: {}".format(walk_errors[0]))
+        source = "bounded-filesystem-fallback"
+
+    unique_relatives: List[str] = []
+    seen = set()
+    for relative in relatives:
+        relative_path = Path(relative)
+        if relative_path.is_absolute() or ".." in relative_path.parts:
+            raise ManifestError("security inventory contains an unsafe path")
+        normalized = relative_path.as_posix()
+        if normalized in seen:
+            continue
+        seen.add(normalized)
+        unique_relatives.append(normalized)
+        if len(unique_relatives) > SECURITY_SCAN_MAX_FILES:
+            raise ManifestError("security inventory exceeds file limit")
+    if not unique_relatives:
+        raise ManifestError("security inventory is empty")
+    return sorted(unique_relatives), source
 
 
 def security_check(manifest: Manifest) -> Dict[str, Any]:
     failures: List[str] = []
     warnings: List[str] = []
-    tracked = subprocess.run(
-        ["git", "-C", str(manifest.root), "ls-files", "--cached", "--others", "--exclude-standard", "-z"],
-        check=False,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    )
-    if tracked.returncode != 0:
-        raise ManifestError("cannot enumerate tracked files for security check")
-    for raw in tracked.stdout.split(b"\0"):
-        if not raw:
-            continue
-        relative = raw.decode("utf-8", errors="replace")
+    relatives, inventory_source = _security_inventory(manifest)
+    for relative in relatives:
         path = manifest.root / relative
         lowered = path.name.lower()
         if any(lowered == pattern or lowered.endswith(pattern) for pattern in SECRET_NAME_PATTERNS):
             failures.append("tracked sensitive filename: {}".format(relative))
-        if path.is_symlink():
+        is_symlink = path.is_symlink()
+        if is_symlink:
             resolved = path.resolve(strict=False)
             try:
                 resolved.relative_to(manifest.root)
             except ValueError:
                 failures.append("tracked symlink escapes repository: {}".format(relative))
-        if path.is_file() and os.access(str(path), os.W_OK) and path.stat().st_mode & 0o002:
+        try:
+            path_stat = path.lstat()
+        except OSError:
+            failures.append("cannot inspect security inventory path: {}".format(relative))
+            continue
+        if is_symlink:
+            continue
+        if stat.S_ISREG(path_stat.st_mode) and path_stat.st_mode & 0o002:
             failures.append("world-writable tracked file: {}".format(relative))
-        if path.is_file() and path.stat().st_size <= 1024 * 1024:
+        if stat.S_ISREG(path_stat.st_mode) and path_stat.st_size <= 1024 * 1024:
             try:
                 content = path.read_text(encoding="utf-8")
             except UnicodeDecodeError:
+                continue
+            except OSError:
+                failures.append("cannot read security inventory path: {}".format(relative))
                 continue
             for line in content.splitlines():
                 if SECRET_CONTENT.search(line) and not re.search(
@@ -88,6 +167,9 @@ def security_check(manifest: Manifest) -> Dict[str, Any]:
         "status": "fail" if failures else ("warn" if warnings else "pass"),
         "failures": failures,
         "warnings": warnings,
+        "inventory_source": inventory_source,
+        "files_scanned": len(relatives),
+        "scan_limit": SECURITY_SCAN_MAX_FILES,
     }
 
 

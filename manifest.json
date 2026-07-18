@@ -1,5 +1,5 @@
 {
-  "version": "3.1.0-rc.2",
+  "version": "3.1.0-rc.3",
   "locale": "zh-CN",
   "platforms": [
     "linux-embedded",
@@ -2013,7 +2013,10 @@
     }
   ],
   "install": {
-    "default_mode": "symlink",
+    "default_mode": "copy",
+    "supported_modes": [
+      "copy"
+    ],
     "backup_before_install": true,
     "lock_version": false
   },

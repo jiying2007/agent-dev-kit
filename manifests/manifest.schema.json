@@ -44,20 +44,60 @@
       "uniqueItems": true,
       "items": {"type": "string", "minLength": 1}
     },
-    "reference_sources": {"type": "object"},
-    "external_handoff_targets": {"type": "object"},
+    "reference_sources": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {"pattern": "^[a-z0-9][a-z0-9-]*$"},
+      "additionalProperties": {"$ref": "#/$defs/referenceSource"}
+    },
+    "external_handoff_targets": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {"pattern": "^[a-z0-9][a-z0-9-]*$"},
+      "additionalProperties": {"$ref": "#/$defs/externalHandoffTarget"}
+    },
     "tool_targets": {
       "type": "object",
       "minProperties": 1,
       "additionalProperties": {"$ref": "#/$defs/directTarget"}
     },
-    "quality_tiers": {"type": "object"},
-    "asset_taxonomy": {"type": "object"},
-    "knowledge_layers": {"type": "object"},
-    "context_layers": {"type": "object"},
-    "embedded_context_layers": {"type": "object"},
-    "knowledge_types": {"type": "object"},
-    "knowledge_maturity": {"type": "object"},
+    "quality_tiers": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {"pattern": "^p[0-9]+$"},
+      "additionalProperties": {"$ref": "#/$defs/qualityTier"}
+    },
+    "asset_taxonomy": {"$ref": "#/$defs/assetTaxonomy"},
+    "knowledge_layers": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {"pattern": "^L[0-9]+$"},
+      "additionalProperties": {"$ref": "#/$defs/knowledgeLayer"}
+    },
+    "context_layers": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {"pattern": "^L[0-9]+-[a-z0-9-]+$"},
+      "additionalProperties": {"$ref": "#/$defs/contextLayer"}
+    },
+    "embedded_context_layers": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {"pattern": "^L[0-9]+-[a-z0-9-]+$"},
+      "additionalProperties": {"$ref": "#/$defs/contextLayer"}
+    },
+    "knowledge_types": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {"pattern": "^[a-z][a-z0-9-]*$"},
+      "additionalProperties": {"$ref": "#/$defs/knowledgeDescriptor"}
+    },
+    "knowledge_maturity": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {"pattern": "^[a-z][a-z0-9-]*$"},
+      "additionalProperties": {"$ref": "#/$defs/knowledgeDescriptor"}
+    },
     "agents": {
       "type": "array",
       "minItems": 1,
@@ -82,16 +122,28 @@
       "minItems": 1,
       "items": {"$ref": "#/$defs/asset"}
     },
-    "mcp_servers": {"type": "array"},
-    "change_sets": {"type": "array"},
+    "mcp_servers": {
+      "type": "array",
+      "maxItems": 0,
+      "items": false
+    },
+    "change_sets": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/changeSet"}
+    },
     "optional_skills": {
       "type": "array",
       "items": {"$ref": "#/$defs/asset"}
     },
-    "install": {"type": "object"},
-    "skill_routing_matrix": {"type": "array"},
-    "routing": {"type": "object"},
-    "dependencies": {"type": "object"},
+    "install": {"$ref": "#/$defs/install"},
+    "skill_routing_matrix": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/skillRouting"}
+    },
+    "routing": {"$ref": "#/$defs/routing"},
+    "dependencies": {"$ref": "#/$defs/dependencies"},
     "schema_version": {"const": "3.1.0"},
     "product": {
       "type": "object",
@@ -108,6 +160,248 @@
     "^x-[a-z0-9][a-z0-9-]*$": {}
   },
   "$defs": {
+    "stringArray": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "assetNameArray": {
+      "type": "array",
+      "items": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+      "uniqueItems": true
+    },
+    "referenceSource": {
+      "type": "object",
+      "required": [
+        "display_name",
+        "source_type",
+        "boundary",
+        "runtime_enablement",
+        "governance_manifest"
+      ],
+      "properties": {
+        "display_name": {"type": "string", "minLength": 1},
+        "source_type": {"type": "string", "minLength": 1},
+        "boundary": {"type": "string", "minLength": 1},
+        "runtime_enablement": {"const": false},
+        "governance_manifest": {
+          "type": "string",
+          "pattern": "^manifests/[a-z0-9_.-]+\\.json$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "externalHandoffTarget": {
+      "type": "object",
+      "required": [
+        "display_name",
+        "runtime",
+        "handoff_mode",
+        "direct_tool_target",
+        "handoff_chain",
+        "owner_review_required",
+        "default_enabled",
+        "notes",
+        "must_not"
+      ],
+      "properties": {
+        "display_name": {"type": "string", "minLength": 1},
+        "runtime": {"type": "string", "minLength": 1},
+        "handoff_mode": {"const": "source-to-live"},
+        "direct_tool_target": {"const": false},
+        "handoff_chain": {"type": "string", "minLength": 1},
+        "owner_review_required": {"const": true},
+        "default_enabled": {"const": false},
+        "notes": {"type": "string", "minLength": 1},
+        "must_not": {"$ref": "#/$defs/stringArray"}
+      },
+      "additionalProperties": false
+    },
+    "qualityTier": {
+      "type": "object",
+      "required": ["description"],
+      "properties": {
+        "description": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "taxonomyEntry": {
+      "type": "object",
+      "required": ["name", "lifecycle_order", "description"],
+      "properties": {
+        "name": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_-]*$"},
+        "lifecycle_order": {"type": "integer", "minimum": 0},
+        "description": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "assetTaxonomy": {
+      "type": "object",
+      "required": ["skill_categories", "workflow_types", "skill_patterns", "activation_modes"],
+      "properties": {
+        "skill_categories": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/taxonomyEntry"}
+        },
+        "workflow_types": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/taxonomyEntry"}
+        },
+        "skill_patterns": {"$ref": "#/$defs/stringArray"},
+        "activation_modes": {"$ref": "#/$defs/stringArray"}
+      },
+      "additionalProperties": false
+    },
+    "knowledgeLayer": {
+      "type": "object",
+      "required": ["name", "description", "location"],
+      "properties": {
+        "name": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "description": {"type": "string", "minLength": 1},
+        "location": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "knowledgeDescriptor": {
+      "type": "object",
+      "required": ["description"],
+      "properties": {
+        "description": {"type": "string", "minLength": 1},
+        "location": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "contextLayer": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["description", "max_tokens", "files"],
+          "properties": {
+            "description": {"type": "string", "minLength": 1},
+            "max_tokens": {"type": "integer", "minimum": 1},
+            "files": {"$ref": "#/$defs/stringArray"}
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["description", "triggers"],
+          "properties": {
+            "description": {"type": "string", "minLength": 1},
+            "triggers": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": {"$ref": "#/$defs/stringArray"}
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["description", "sources"],
+          "properties": {
+            "description": {"type": "string", "minLength": 1},
+            "sources": {"$ref": "#/$defs/stringArray"}
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "changeSet": {
+      "type": "object",
+      "required": ["name", "description", "root", "archive_root", "commands", "required_files"],
+      "properties": {
+        "name": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "description": {"type": "string", "minLength": 1},
+        "root": {"type": "string", "minLength": 1},
+        "archive_root": {"type": "string", "minLength": 1},
+        "commands": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "pattern": "^rtk "},
+          "uniqueItems": true
+        },
+        "required_files": {"$ref": "#/$defs/stringArray"}
+      },
+      "additionalProperties": false
+    },
+    "install": {
+      "type": "object",
+      "required": ["default_mode", "supported_modes", "backup_before_install", "lock_version"],
+      "properties": {
+        "default_mode": {"const": "copy"},
+        "supported_modes": {"const": ["copy"]},
+        "backup_before_install": {"type": "boolean"},
+        "lock_version": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    },
+    "routingIntent": {
+      "type": "object",
+      "required": ["intent", "intent_zh", "primary_skill", "supporting_skills"],
+      "properties": {
+        "intent": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_]*$"},
+        "intent_zh": {"type": "string", "minLength": 1},
+        "primary_skill": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "supporting_skills": {"$ref": "#/$defs/assetNameArray"},
+        "availability": {"enum": ["optional-skill-required"]}
+      },
+      "additionalProperties": false
+    },
+    "routing": {
+      "type": "object",
+      "required": ["enabled", "fallback_profile", "intents"],
+      "properties": {
+        "enabled": {"const": true},
+        "fallback_profile": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "intents": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/routingIntent"}
+        }
+      },
+      "additionalProperties": false
+    },
+    "dependencies": {
+      "type": "object",
+      "required": ["required", "optional"],
+      "properties": {
+        "required": {"$ref": "#/$defs/stringArray"},
+        "optional": {"$ref": "#/$defs/stringArray"}
+      },
+      "additionalProperties": false
+    },
+    "skillRouting": {
+      "type": "object",
+      "required": [
+        "name",
+        "description",
+        "primary_skill",
+        "supporting_skills",
+        "fallback_skills",
+        "mutually_exclusive",
+        "workflow",
+        "profiles",
+        "positive_examples",
+        "negative_examples"
+      ],
+      "properties": {
+        "name": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_]*$"},
+        "description": {"type": "string", "minLength": 1},
+        "primary_skill": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "supporting_skills": {"$ref": "#/$defs/assetNameArray"},
+        "fallback_skills": {"$ref": "#/$defs/assetNameArray"},
+        "mutually_exclusive": {"$ref": "#/$defs/assetNameArray"},
+        "workflow": {"type": "string", "minLength": 1},
+        "profiles": {"$ref": "#/$defs/assetNameArray"},
+        "positive_examples": {"$ref": "#/$defs/stringArray"},
+        "negative_examples": {"$ref": "#/$defs/stringArray"},
+        "availability": {"enum": ["optional-skill-required"]}
+      },
+      "additionalProperties": false
+    },
     "asset": {
       "type": "object",
       "required": ["name", "path"],
@@ -133,6 +427,7 @@
     },
     "profile": {
       "type": "object",
+      "required": ["description", "trigger_examples"],
       "properties": {
         "description": {"type": "string"},
         "trigger_examples": {"type": "array", "items": {"type": "string"}},
@@ -147,7 +442,8 @@
           "items": {"type": "string"},
           "uniqueItems": true
         }
-      }
+      },
+      "additionalProperties": false
     },
     "directTarget": {
       "type": "object",

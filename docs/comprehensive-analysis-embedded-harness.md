@@ -286,10 +286,16 @@ docs/changes/
 └── README.md
 ```
 
-#### 3.2.2 质量门禁：可程序化验证
+#### 3.2.2 质量门禁：历史方案（已由 canonical change governance 取代）
+
+以下片段是 2026-05 的分析快照，不是当前执行入口。当前请使用：
 
 ```bash
-# scripts/quality-gates.sh
+bash scripts/check-change-governance.sh docs/changes/<change-id>
+```
+
+```bash
+# 历史草案：scripts/quality-gates.sh
 
 # 门禁 1: CI 状态检查
 check_ci_status() {

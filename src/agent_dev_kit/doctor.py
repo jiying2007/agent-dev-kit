@@ -7,12 +7,27 @@ import os
 import shutil
 import subprocess
 import sys
+from importlib import metadata
 from pathlib import Path
 from typing import Any, Dict, Optional, Sequence
 
 from .evaluation import runtime_plan, runtime_version
 from .locking import target_lock_status
 from .model import Manifest
+
+
+MINIMUM_PYTHON = (3, 11)
+REQUIRED_DISTRIBUTIONS = {
+    "PyYAML": "6.0.3",
+    "jsonschema": "4.26.0",
+}
+
+
+def _distribution_version(name: str) -> str:
+    try:
+        return metadata.version(name)
+    except metadata.PackageNotFoundError:
+        return "missing"
 
 
 def _command_version(command: str) -> str:
@@ -41,10 +56,25 @@ def run_doctor(
 ) -> Dict[str, Any]:
     failures = list(manifest.validate(strict=True))
     warnings = []
-    if sys.version_info < (3, 8):
-        failures.append("Python 3.8 or newer is required")
-    if importlib.util.find_spec("yaml") is None:
-        failures.append("PyYAML is required while manifest.yaml compatibility exists")
+    python_supported = sys.version_info >= MINIMUM_PYTHON
+    if not python_supported:
+        failures.append("Python 3.11 or newer is required")
+    dependency_versions = {
+        name: _distribution_version(name) for name in sorted(REQUIRED_DISTRIBUTIONS)
+    }
+    dependency_support = {
+        name: dependency_versions[name] == expected
+        for name, expected in sorted(REQUIRED_DISTRIBUTIONS.items())
+    }
+    for name, supported in dependency_support.items():
+        if not supported:
+            failures.append(
+                "{}=={} is required; found {}".format(
+                    name, REQUIRED_DISTRIBUTIONS[name], dependency_versions[name]
+                )
+            )
+    if importlib.util.find_spec("yaml") is None and dependency_versions["PyYAML"] != "missing":
+        failures.append("PyYAML distribution is installed but yaml import is unavailable")
 
     runtimes: Dict[str, Any] = {}
     for runtime in ("codex", "claude"):
@@ -81,6 +111,13 @@ def run_doctor(
         "manifest_sha256": manifest.digest,
         "root": str(manifest.root),
         "python": sys.version.split()[0],
+        "environment_support": {
+            "python_minimum": "3.11",
+            "python_supported": python_supported,
+            "required_distributions": dict(sorted(REQUIRED_DISTRIBUTIONS.items())),
+            "installed_distributions": dependency_versions,
+            "dependencies_supported": dependency_support,
+        },
         "runtimes": runtimes,
         "tools": tools,
         "target": target_status,

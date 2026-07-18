@@ -4,6 +4,10 @@
 
 完整使用指南见 `docs/adk-usage-guide.md`；本文保留为常用命令速查。
 
+发布支持环境为 Python 3.11+，固定运行依赖为 `PyYAML==6.0.3` 与 `jsonschema==4.26.0`。发布前安装 `.[quality]` 并执行 Ruff 与 pip-audit；工具缺失或审计源不可用时不得声称质量门禁通过。
+
+升级现有自定义 manifest 时，先执行 `bash scripts/devkit.sh validate --strict`。关键 nested object 已改为 typed schema，旧的未知扩展字段、字符串冒充数组/布尔值以及缺失必填项会 fail closed；应按 `manifests/manifest.schema.json` 迁移。确需保留的产品级扩展元数据应移动到顶层 `x-<name>` namespace，不能通过放宽核心 schema 保留未声明行为。
+
 ## 1. 预检查
 
 ```bash
@@ -24,6 +28,7 @@ bash scripts/devkit.sh test
 - `official-docs-governance`：检查官方资料 freshness、提升状态和平台中立契约。
 - `test`：全量回归，包含 validate、格式、内容质量、文件权限、事务安装、profile coherence、optional、export、workflow contract、catalog、trigger matrix、governance 和 smoke。
 - `catalog build`：生成 Agent/Skill/Workflow/Profile 索引，并在默认输出模式下同步生成 `docs/workflow-contract-matrix.md` 和 `docs/reference/skill-routing-matrix.md`。
+- `harness readiness`：只读汇总目标仓 Harness 证据；默认 report-only，不用加权分数替代关键维度判断。
 - 资产命名与边界标准见 `docs/asset-contract-standard.md`；历史角色型资产硬切换，不保留兼容 alias。
 
 CI / runner 复现：
@@ -58,7 +63,7 @@ bash scripts/check-profile-coherence.sh
 
 ## 3. 安装和导出
 
-安装通过 plan/apply/receipt/rollback 事务把 Agent/Skill 复制或软链接到显式 target。plan 会阻断未托管冲突和过期/漂移输入：
+安装通过 plan/apply/receipt/rollback 事务把 Agent/Skill 复制到显式 target。plan 会阻断未托管冲突和过期/漂移输入；`symlink` 模式未实现并会 fail closed：
 
 ```bash
 bash scripts/devkit.sh install plan --tool claude-code --target /tmp/adk-claude-target --mode copy --profile core --extra-profile release-hardening --output /tmp/adk-plan.json
@@ -78,7 +83,7 @@ bash scripts/devkit.sh export --target opencode --profile team-core --with-optio
 
 - `--tool`：`claude-code|hermes-agent|opencode`。
 - `--target`：导出目标，取值来自 `manifest.json:tool_targets`。
-- `--mode`：`symlink|copy`。
+- `--mode`：仅支持 `copy`；`symlink` 返回 `unsupported_install_mode` 且不生成 plan。
 - `--profile`：主 profile，默认 `core`。
 - `--extra-profile`：可选叠加 profile，可重复。
 - `--with-optional-skill`：按需叠加 optional skill，可重复。
@@ -148,6 +153,18 @@ bash scripts/devkit.sh release check
 bash scripts/devkit.sh release build --out dist
 bash scripts/devkit.sh version show
 ```
+
+团队仓库接入或季度复核时，可先生成 Harness readiness 基线：
+
+```bash
+bash scripts/devkit.sh harness readiness --root /path/to/team-repo --output /tmp/harness-readiness.md
+bash scripts/devkit.sh harness readiness --root /path/to/team-repo --gate --summary-json
+bash scripts/devkit.sh harness readiness --root /path/to/team-repo --as-of 2026-07-18 --summary-json
+```
+
+`--as-of` 只用于可复现的 report-only 分析；`--gate` 强制使用当天并拒绝显式日期，防止历史评估时钟绕过 freshness。
+
+先以 report-only 识别 evidence gap；只有团队明确了 owner、freshness 窗口内的验证日期和适用边界后，才把 `--gate` 接入 CI。MCP 存在时还要在 readiness metadata 中结构化声明只读、审批和凭证来源；仅有关键词说明不能替代权限合同。MCP 不适用时保持 `not-applicable`，不要为了“完整度”接入无用外部工具。
 
 发布前最小检查：
 

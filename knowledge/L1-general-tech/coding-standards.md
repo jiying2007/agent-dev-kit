@@ -100,4 +100,4 @@ Before adding a new gate, answer these 4 questions:
 
 - VibeFlow absorption report: `reports/vibeflow-absorption-report-20260512.md`
 - Lifecycle documentation: `docs/workflows/lifecycle.md`
-- Gate mechanism: `AGENTS.md` (Gate 机制设计原则)
+- Gate mechanism: `docs/agent-operating-rules.md` (Gate 机制设计原则)

@@ -7,7 +7,10 @@ ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 "$ROOT_DIR/scripts/check-agent-ecosystem-standards.sh" >/dev/null
 "$ROOT_DIR/scripts/check-agent-ecosystem-standards.sh" --summary-json | rg -q '"status":"pass"'
 "$ROOT_DIR/scripts/check-external-agent-patterns.sh" >/dev/null
-"$ROOT_DIR/scripts/validate-assets.sh" --strict >/dev/null
+"$ROOT_DIR/scripts/check-external-agent-patterns.sh" --help | rg -q -- '--require-local-sources'
+if [[ ! -f "${ADK_TEST_SUITE_DIR:-/nonexistent}/validate-summary.json" ]]; then
+  "$ROOT_DIR/scripts/validate-assets.sh" --strict >/dev/null
+fi
 
 python3 - "$ROOT_DIR" <<'PY'
 import json
@@ -17,6 +20,11 @@ from pathlib import Path
 root = Path(sys.argv[1])
 
 external = json.loads((root / "manifests/external_agent_pattern_contracts.json").read_text(encoding="utf-8"))
+local_policy = external["local_source_policy"]
+assert local_policy["default_required"] is False
+assert local_policy["strict_flag"] == "--require-local-sources"
+assert local_policy["resolution_base"] == "parent-of-adk-root"
+assert set(local_policy["required_fallback_fields"]) == {"url", "retrieved_at", "decision", "notes"}
 sources = {item["id"]: item for item in external["source_refs"]}
 assert sources["agent-skills-open-format"]["decision"] == "adopt-method-only"
 assert sources["owasp-agentic-top10-2026"]["decision"] == "adopt-method-only"

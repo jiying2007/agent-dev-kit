@@ -74,11 +74,84 @@ from agent_dev_kit import compiler, release
 from agent_dev_kit.compiler import export_assets
 from agent_dev_kit.evaluation import SAFETY_POLICY, _catalog_prompt
 from agent_dev_kit.model import Manifest, ManifestError
-from agent_dev_kit.quality import run_benchmark
+from agent_dev_kit.quality import run_benchmark, security_check
 from agent_dev_kit.release import _copy_source_distribution, _write_deterministic_archive
 
 root = Path(sys.argv[1])
 manifest = Manifest.load(root)
+pyproject = (root / "pyproject.toml").read_text(encoding="utf-8")
+assert 'requires = ["setuptools>=77"]' in pyproject, pyproject
+assert 'requires-python = ">=3.11"' in pyproject, pyproject
+assert 'dependencies = ["PyYAML==6.0.3", "jsonschema==4.26.0"]' in pyproject, pyproject
+assert 'license = "MIT"' in pyproject, pyproject
+assert 'license-files = ["LICENSE"]' in pyproject, pyproject
+assert 'License :: OSI Approved :: MIT License' not in pyproject, pyproject
+assert '"Programming Language :: Python :: 3.8"' not in pyproject, pyproject
+assert '"Programming Language :: Python :: 3.11"' in pyproject, pyproject
+assert 'target-version = "py311"' in pyproject, pyproject
+assert 'quality = ["ruff==0.15.21", "pip-audit==2.10.1"]' in pyproject, pyproject
+ci_workflow = (root / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
+assert "python-version: ['3.11', '3.12']" in ci_workflow, ci_workflow
+assert "python -m pip install '.[quality]'" in ci_workflow, ci_workflow
+release_workflow = (root / ".github" / "workflows" / "release.yml").read_text(encoding="utf-8")
+assert "python -m pip install '.[quality]'" in release_workflow, release_workflow
+assert manifest.data["install"] == {
+    "default_mode": "copy",
+    "supported_modes": ["copy"],
+    "backup_before_install": True,
+    "lock_version": False,
+}, manifest.data["install"]
+
+
+def assert_schema_failure(data, expected_path):
+    failures = Manifest(root, data, root / "manifest.json").validate(strict=False)
+    assert any(expected_path in item for item in failures), (expected_path, failures)
+
+
+invalid_install_mode = copy.deepcopy(manifest.data)
+invalid_install_mode["install"]["default_mode"] = "symlink"
+assert_schema_failure(invalid_install_mode, "schema install/default_mode")
+
+unknown_install_field = copy.deepcopy(manifest.data)
+unknown_install_field["install"]["implicit_live_write"] = True
+assert_schema_failure(unknown_install_field, "schema install")
+
+invalid_dependencies = copy.deepcopy(manifest.data)
+invalid_dependencies["dependencies"]["required"] = "bash"
+assert_schema_failure(invalid_dependencies, "schema dependencies/required")
+
+invalid_routing = copy.deepcopy(manifest.data)
+invalid_routing["routing"]["intents"][0]["supporting_skills"] = "adk-context-engineering"
+assert_schema_failure(invalid_routing, "schema routing/intents/0/supporting_skills")
+
+invalid_reference = copy.deepcopy(manifest.data)
+invalid_reference["reference_sources"]["anthropic-official"]["runtime_enablement"] = "false"
+assert_schema_failure(
+    invalid_reference, "schema reference_sources/anthropic-official/runtime_enablement"
+)
+
+invalid_change_set = copy.deepcopy(manifest.data)
+invalid_change_set["change_sets"][0]["commands"] = "rtk bash scripts/devkit.sh propose"
+assert_schema_failure(invalid_change_set, "schema change_sets/0/commands")
+
+implicit_mcp = copy.deepcopy(manifest.data)
+implicit_mcp["mcp_servers"] = [{"name": "implicit-server"}]
+assert_schema_failure(implicit_mcp, "schema mcp_servers")
+
+with tempfile.TemporaryDirectory() as temp:
+    cache_root = Path(temp)
+    schema_dir = cache_root / "manifests"
+    schema_dir.mkdir()
+    schema_path = schema_dir / "manifest.schema.json"
+    schema = json.loads((root / "manifests" / "manifest.schema.json").read_text(encoding="utf-8"))
+    schema_path.write_text(json.dumps(schema), encoding="utf-8")
+    cached_manifest = Manifest(cache_root, manifest.data, cache_root / "manifest.json")
+    assert cached_manifest._json_schema_failures() == []
+    schema["properties"]["version"]["const"] = "0.0.0"
+    schema_path.write_text(json.dumps(schema), encoding="utf-8")
+    failures = cached_manifest._json_schema_failures()
+    assert any("schema version" in item for item in failures), failures
+
 prompt = _catalog_prompt(manifest, "adk")
 assert "adk-embedded-debug-transport" in prompt
 assert "连接边界治理" in prompt
@@ -189,6 +262,31 @@ except ManifestError as exc:
     assert "SBOM validation failed" in str(exc)
 else:
     raise AssertionError("invalid release SBOM unexpectedly passed validation")
+
+with mock.patch(
+    "agent_dev_kit.quality.subprocess.run",
+    return_value=SimpleNamespace(returncode=1, stdout=b"", stderr=b"not a git checkout"),
+):
+    fallback_security = security_check(manifest)
+assert fallback_security["status"] == "pass", fallback_security
+assert fallback_security["inventory_source"] == "bounded-filesystem-fallback", fallback_security
+assert 0 < fallback_security["files_scanned"] <= fallback_security["scan_limit"], fallback_security
+
+with tempfile.TemporaryDirectory(prefix="adk-security-symlink-") as temp:
+    temp_root = Path(temp)
+    scan_root = temp_root / "repo"
+    scan_root.mkdir()
+    outside = temp_root / "outside.txt"
+    outside.write_text("API_" + "KEY=fixture-literal-value\n", encoding="utf-8")
+    (scan_root / "outside-link").symlink_to(outside)
+    scan_manifest = Manifest(scan_root, manifest.data, scan_root / "manifest.json")
+    with mock.patch(
+        "agent_dev_kit.quality.subprocess.run",
+        return_value=SimpleNamespace(returncode=1, stdout=b"", stderr=b"not a git checkout"),
+    ):
+        symlink_security = security_check(scan_manifest)
+    assert "tracked symlink escapes repository: outside-link" in symlink_security["failures"], symlink_security
+    assert "credential-like content: outside-link" not in symlink_security["failures"], symlink_security
 PY
 
 TARGET="$TMP_DIR/live"
@@ -204,6 +302,7 @@ RECEIPT="$TARGET/.adk-install-receipt.json"
   echo "[FAIL] install apply did not emit receipt" >&2
   exit 1
 }
+
 bash "$ROOT_DIR/scripts/devkit.sh" install plan \
   --tool claude-code \
   --target "$TARGET" \
@@ -345,7 +444,9 @@ bash "$ROOT_DIR/scripts/devkit.sh" release build --version "$VERSION" --out "$TM
 cmp "$TMP_DIR/release-a/agent-dev-kit-$VERSION.tar.gz" "$TMP_DIR/release-b/agent-dev-kit-$VERSION.tar.gz"
 tar -tzf "$TMP_DIR/release-a/agent-dev-kit-$VERSION.tar.gz" >"$TMP_DIR/release-files.txt"
 for required in \
+  source/.adk/harness-readiness.json \
   source/manifest.json \
+  source/OWNERS \
   source/src/agent_dev_kit/cli.py \
   source/scripts/devkit.sh \
   source/tests/test_product_maturity_v3.sh \
@@ -382,6 +483,9 @@ assert sbom["creationInfo"]["created"] == "1970-01-01T00:00:00Z", sbom
 assert sbom["documentDescribes"] == ["SPDXRef-Package-agent-dev-kit"], sbom
 assert any(item["name"] == "PyYAML" for item in sbom["packages"]), sbom
 assert any(item["name"] == "jsonschema" for item in sbom["packages"]), sbom
+summaries = {item["name"]: item.get("summary") for item in sbom["packages"]}
+assert summaries["PyYAML"] == "Declared runtime requirement: PyYAML==6.0.3", summaries
+assert summaries["jsonschema"] == "Declared runtime requirement: jsonschema==4.26.0", summaries
 assert any(item["relationshipType"] == "DEPENDS_ON" for item in sbom["relationships"]), sbom
 dependency_ids = {
     item["relatedSpdxElement"]

@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "dimensions": {
+    "context_legibility": {
+      "owner": "platform-team",
+      "last_verified_at": "2026-07-17"
+    },
+    "spec_and_execution_contract": {
+      "owner": "delivery-team",
+      "last_verified_at": "2026-07-17"
+    },
+    "tool_and_permission_boundary": {
+      "owner": "security-team",
+      "last_verified_at": "2026-07-17",
+      "permission_boundary": {
+        "read_only": true,
+        "approval_required": true,
+        "credential_source": "environment-variable"
+      }
+    },
+    "state_and_knowledge_continuity": {
+      "owner": "platform-team",
+      "last_verified_at": "2026-07-17"
+    },
+    "verification_review_and_eval": {
+      "owner": "quality-team",
+      "last_verified_at": "2026-07-17"
+    },
+    "recovery_and_rollback": {
+      "owner": "operations-team",
+      "last_verified_at": "2026-07-17"
+    },
+    "freshness_and_entropy_control": {
+      "owner": "platform-team",
+      "last_verified_at": "2026-07-17"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "read-only-wiki": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@example/read-only-mcp@1.2.3"
+      ],
+      "env": {
+        "API_TOKEN": "${WIKI_API_TOKEN}"
+      },
+      "transportType": "stdio"
+    }
+  }
+}

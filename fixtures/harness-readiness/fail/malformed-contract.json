@@ -1,0 +1,30 @@
+{
+  "contract_version": "broken-fixture",
+  "statuses": [
+    "pass",
+    "partial",
+    "needs-review",
+    "blocked",
+    "not-applicable"
+  ],
+  "metadata_path": ".adk/harness-readiness.json",
+  "scan": {
+    "max_files": 10,
+    "max_file_bytes": 1024,
+    "instruction_max_lines": 100,
+    "max_evidence_per_dimension": 5,
+    "max_blockers_per_dimension": 5,
+    "excluded_directories": [
+      ".git"
+    ]
+  },
+  "dimensions": [
+    {"dimension_id": "context_legibility"},
+    {"dimension_id": "spec_and_execution_contract"},
+    {"dimension_id": "tool_and_permission_boundary"},
+    {"dimension_id": "state_and_knowledge_continuity"},
+    {"dimension_id": "verification_review_and_eval"},
+    {"dimension_id": "recovery_and_rollback"},
+    {"dimension_id": "freshness_and_entropy_control"}
+  ]
+}

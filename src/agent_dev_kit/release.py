@@ -152,10 +152,12 @@ def _copy_source_distribution(manifest: Manifest, destination: Path) -> int:
     )
     files = (
         ".version-lock",
+        ".adk/harness-readiness.json",
         "AGENTS.md",
         "CONTEXT.md",
         "LICENSE",
         "NAVIGATION.md",
+        "OWNERS",
         "README.md",
         "manifest.json",
         "manifest.yaml",
@@ -195,7 +197,9 @@ def _copy_source_distribution(manifest: Manifest, destination: Path) -> int:
     for relative in files:
         source = manifest.root / relative
         if source.is_file():
-            shutil.copy2(str(source), str(destination / relative))
+            target = destination / relative
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(str(source), str(target))
     return sum(1 for path in destination.rglob("*") if path.is_file() or path.is_symlink())
 
 
@@ -316,7 +320,7 @@ def build_release(manifest: Manifest, output: Path, version: Optional[str] = Non
                     "licenseConcluded": "NOASSERTION",
                     "licenseDeclared": "MIT",
                     "filesAnalyzed": False,
-                    "summary": "Declared runtime requirement: PyYAML>=5.3,<7",
+                    "summary": "Declared runtime requirement: PyYAML==6.0.3",
                 },
                 {
                     "name": "jsonschema",
@@ -325,7 +329,7 @@ def build_release(manifest: Manifest, output: Path, version: Optional[str] = Non
                     "licenseConcluded": "NOASSERTION",
                     "licenseDeclared": "MIT",
                     "filesAnalyzed": False,
-                    "summary": "Declared runtime requirement: jsonschema==4.23.0",
+                    "summary": "Declared runtime requirement: jsonschema==4.26.0",
                 },
             ],
             "relationships": [

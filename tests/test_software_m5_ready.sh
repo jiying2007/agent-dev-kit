@@ -12,7 +12,12 @@ bash "$ROOT_DIR/scripts/devkit.sh" help | rg -q 'doctor'
 bash "$ROOT_DIR/scripts/devkit.sh" help | rg -q 'lock'
 bash "$ROOT_DIR/scripts/devkit.sh" eval campaign --help >/dev/null
 bash "$ROOT_DIR/scripts/devkit.sh" release rehearse --help >/dev/null
-bash "$ROOT_DIR/scripts/devkit.sh" doctor --summary-json >"$TMP_DIR/doctor.json"
+doctor_rc=0
+bash "$ROOT_DIR/scripts/devkit.sh" doctor --summary-json >"$TMP_DIR/doctor.json" || doctor_rc=$?
+[[ "$doctor_rc" -eq 0 || "$doctor_rc" -eq 1 ]] || {
+  echo "[FAIL] doctor returned unexpected exit code: $doctor_rc" >&2
+  exit 1
+}
 
 PYTHONPATH="$ROOT_DIR/src" python3 - "$ROOT_DIR" "$TMP_DIR" <<'PY'
 import io
@@ -46,14 +51,15 @@ from agent_dev_kit.release import _extract_release, _prerelease_is_newer, check_
 root = Path(os.sys.argv[1])
 temp_root = Path(os.sys.argv[2])
 manifest = Manifest.load(root)
-assert manifest.version == "3.1.0-rc.2", manifest.version
+assert manifest.version == "3.1.0-rc.3", manifest.version
 assert check_release(manifest)["status"] == "pass"
 assert _prerelease_is_newer("3.0.0", "3.1.0-rc.1")
 assert _prerelease_is_newer("3.1.0-rc.1", "3.1.0-rc.2")
-assert _prerelease_is_newer("3.1.0-rc.2", "3.1.0")
-assert not _prerelease_is_newer("3.1.0", "3.1.0-rc.2")
+assert _prerelease_is_newer("3.1.0-rc.2", "3.1.0-rc.3")
+assert _prerelease_is_newer("3.1.0-rc.3", "3.1.0")
+assert not _prerelease_is_newer("3.1.0", "3.1.0-rc.3")
 
-contract_path = root / "manifests/software_m5_eval_contract_rc2.json"
+contract_path = root / "manifests/software_m5_eval_contract_rc3.json"
 contract, tasks_path, tasks = load_campaign_contract(manifest, contract_path)
 assert len(tasks) == 60
 assert len({task["id"] for task in tasks}) == 60
@@ -125,9 +131,16 @@ sentinel = "doctor-sensitive-must-not-leak"
 os.environ["ADK_DOCTOR_SENSITIVE_FIXTURE"] = sentinel
 with mock.patch("agent_dev_kit.doctor.runtime_plan", side_effect=ready_plan), mock.patch(
     "agent_dev_kit.doctor.runtime_version", side_effect=lambda runtime: runtime + "-fixture-1"
+), mock.patch(
+    "agent_dev_kit.doctor.sys.version_info", (3, 12, 0)
+), mock.patch(
+    "agent_dev_kit.doctor._distribution_version",
+    side_effect=lambda name: {"PyYAML": "6.0.3", "jsonschema": "4.26.0"}[name],
 ):
     doctor = run_doctor(manifest, required_runtimes=("codex", "claude"), target=temp_root / "doctor-target")
 assert doctor["status"] == "pass", doctor
+assert doctor["environment_support"]["python_supported"] is True, doctor
+assert all(doctor["environment_support"]["dependencies_supported"].values()), doctor
 assert sentinel not in json.dumps(doctor, ensure_ascii=False)
 
 lock_target = temp_root / "lock-target"
@@ -533,7 +546,14 @@ else:
 
 doctor_cli = json.loads((temp_root / "doctor.json").read_text(encoding="utf-8"))
 assert doctor_cli["schema_version"] == 1
-assert doctor_cli["manifest_version"] == "3.1.0-rc.2"
+assert doctor_cli["manifest_version"] == "3.1.0-rc.3"
+support = doctor_cli["environment_support"]
+environment_supported = support["python_supported"] and all(
+    support["dependencies_supported"].values()
+)
+assert doctor_cli["status"] == ("pass" if environment_supported else "fail"), doctor_cli
+if not support["python_supported"]:
+    assert "Python 3.11 or newer is required" in doctor_cli["failures"], doctor_cli
 assert sentinel not in json.dumps(doctor_cli, ensure_ascii=False)
 PY
 

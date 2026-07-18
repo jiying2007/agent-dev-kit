@@ -2,7 +2,9 @@
 
 `agent-dev-kit`（adk）是通用 Agent/Skill/Profile/Workflow 资产包。它把参考资料、官方文档和工程经验压实为可验证、可回滚、可迭代的 ADK 资产；资产可以导出到显式声明的 tool target，但 core 不绑定任何单一运行时。
 
-当前版本：`3.1.0-rc.2`。
+当前版本：`3.1.0-rc.3`。
+
+发布支持基线为 Python 3.11+，运行依赖固定为 `PyYAML==6.0.3` 与 `jsonschema==4.26.0`。Python 3.8/3.9 已退出本项目支持范围；源码在旧解释器上偶然可运行不构成发布兼容承诺。
 
 当前软件状态是 **M5-ready control-plane candidate / M3 release candidate**，不是已认证 M5：本版本提供可恢复双运行时评测、单写者并发保护、严格环境诊断和本地升级/回滚演练；最终 M5 仍要求 30 天试点、至少一个独立真实软件仓、第二位 operator 和完整 field evidence。
 
@@ -94,10 +96,11 @@ bash scripts/devkit.sh benchmark run --iterations 5 --summary-json
 bash scripts/devkit.sh security check --summary-json
 bash scripts/devkit.sh eval run --suite deterministic --summary-json
 bash scripts/devkit.sh eval effect --contract manifests/effect_eval_contract.json --summary-json
-bash scripts/devkit.sh eval campaign plan --contract manifests/software_m5_eval_contract_rc2.json --summary-json
+bash scripts/devkit.sh eval campaign plan --contract manifests/software_m5_eval_contract_rc3.json --summary-json
 bash scripts/devkit.sh release check --summary-json
 bash scripts/devkit.sh runtime-boundary
 bash scripts/devkit.sh official-docs-governance --summary-json
+bash scripts/devkit.sh harness readiness --root . --summary-json
 bash scripts/devkit.sh test
 ```
 
@@ -134,6 +137,16 @@ bash tests/run_all.sh
 | 发布前放行 | `bash scripts/devkit.sh security check` + `bash scripts/devkit.sh release check` + 本地 release rehearsal + `bash scripts/devkit.sh test` + rollback 说明 |
 
 没有验证证据，不声明可发布、可合并或生产可用。
+
+本地执行与 CI 相同的 Python 质量门禁：
+
+```bash
+python -m pip install '.[quality]'
+ruff check src tools tests/fixtures/fake_target_runtime.py
+pip-audit --strict --progress-spinner off .
+```
+
+工具未安装或审计数据不可取得时必须报告 unavailable/blocked，不能把未执行记为通过。
 
 ## 7. 参考吸收
 

@@ -96,6 +96,8 @@ TESTS=(
   test_workflow_closure.sh
   test_goal_contracts.sh
   test_capability_health.sh
+  test_harness_readiness.sh
+  test_local_ci_parity.sh
   test_performance_budgets.sh
   test_change_governance.sh
   test_evidence_index.sh
@@ -130,17 +132,16 @@ QUICK_TESTS=(
   test_runtime_boundary.sh
   test_target_contracts.sh
   test_effect_eval.sh
-  test_product_maturity_v3.sh
   test_software_m5_ready.sh
   test_token_budget.sh
   test_agent_ecosystem_standards.sh
-  test_asset_taxonomy.sh
   test_workflow_contract.sh
   test_workflow_closure.sh
   test_goal_contracts.sh
   test_capability_health.sh
+  test_harness_readiness.sh
+  test_local_ci_parity.sh
   test_performance_budgets.sh
-  test_catalog.sh
   test_skill_trigger_matrix.sh
   test_match_effectiveness.sh
   test_scripts_smoke.sh
@@ -149,6 +150,8 @@ QUICK_TESTS=(
 if [[ "$QUICK" -eq 1 ]]; then
   TESTS=("${QUICK_TESTS[@]}")
 fi
+SUITE_MODE="full"
+[[ "$QUICK" -eq 1 ]] && SUITE_MODE="quick"
 
 TMP_DIR="$(mktemp -d)"
 cleanup() {
@@ -237,7 +240,7 @@ run_test() {
 
   if [[ "$VERBOSE" -eq 1 ]]; then
     echo "=== RUN ${name} ==="
-    if "$path"; then
+    if ADK_TEST_SUITE_DIR="$TMP_DIR" ADK_TEST_SUITE_MODE="$SUITE_MODE" "$path"; then
       end_ns="$(date +%s%N)"
       elapsed_ms=$(( (end_ns - start_ns) / 1000000 ))
       echo "[PASS] ${name}"
@@ -248,7 +251,7 @@ run_test() {
       return 0
     fi
   else
-    if "$path" >"$stdout_file" 2>"$stderr_file"; then
+    if ADK_TEST_SUITE_DIR="$TMP_DIR" ADK_TEST_SUITE_MODE="$SUITE_MODE" "$path" >"$stdout_file" 2>"$stderr_file"; then
       end_ns="$(date +%s%N)"
       elapsed_ms=$(( (end_ns - start_ns) / 1000000 ))
       echo "[PASS] ${name}"

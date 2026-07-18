@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "dimensions": {
+    "context_legibility": {
+      "owner": "leiwenjun",
+      "last_verified_at": "2026-07-18"
+    },
+    "spec_and_execution_contract": {
+      "owner": "leiwenjun",
+      "last_verified_at": "2026-07-18"
+    },
+    "tool_and_permission_boundary": {
+      "owner": "leiwenjun",
+      "last_verified_at": "2026-07-18"
+    },
+    "state_and_knowledge_continuity": {
+      "owner": "leiwenjun",
+      "last_verified_at": "2026-07-18"
+    },
+    "verification_review_and_eval": {
+      "owner": "leiwenjun",
+      "last_verified_at": "2026-07-18"
+    },
+    "recovery_and_rollback": {
+      "owner": "leiwenjun",
+      "last_verified_at": "2026-07-18"
+    },
+    "freshness_and_entropy_control": {
+      "owner": "leiwenjun",
+      "last_verified_at": "2026-07-18"
+    }
+  }
+}

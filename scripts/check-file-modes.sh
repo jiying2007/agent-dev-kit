@@ -3,37 +3,53 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 FIX=0
+INDEX_INVENTORY="${ADK_FILE_MODE_INVENTORY:-}"
 
 if [[ $# -gt 0 && "${1}" != -* ]]; then
   ROOT="$1"
   shift
 fi
 
-for arg in "$@"; do
-  case "${arg}" in
+while [[ $# -gt 0 ]]; do
+  case "${1}" in
     --fix)
       FIX=1
+      shift
+      ;;
+    --index-inventory)
+      INDEX_INVENTORY="${2:-}"
+      shift 2
       ;;
     -h|--help)
       cat <<USAGE
-usage: scripts/check-file-modes.sh [root] [--fix]
+usage: scripts/check-file-modes.sh [root] [--fix] [--index-inventory <path>]
 
 Checks tracked regular files against Git index modes:
   100644 -> not executable
   100755 -> executable
 
 Use --fix to chmod the working tree to match the index.
+Use --index-inventory for a read-only Git index mode export when .git is not mounted.
 USAGE
       exit 0
       ;;
     *)
-      echo "[FAIL] unknown arg: ${arg}" >&2
-      exit 1
+      echo "[FAIL] unknown arg: ${1}" >&2
+      exit 2
       ;;
   esac
 done
 
-if [[ ! -d "${ROOT}/.git" ]]; then
+if [[ -n "${INDEX_INVENTORY}" ]]; then
+  if [[ "${FIX}" -eq 1 ]]; then
+    echo "[FAIL] --fix is not allowed with --index-inventory" >&2
+    exit 2
+  fi
+  if [[ ! -f "${INDEX_INVENTORY}" || -L "${INDEX_INVENTORY}" ]]; then
+    echo "[FAIL] file mode index inventory is missing or unsafe: ${INDEX_INVENTORY}" >&2
+    exit 2
+  fi
+elif [[ ! -d "${ROOT}/.git" ]]; then
   echo "[FAIL] not a git repository: ${ROOT}" >&2
   exit 1
 fi
@@ -42,9 +58,16 @@ missing=0
 unexpected_exec=0
 missing_exec=0
 
+check_records() {
 while IFS= read -r -d '' record; do
   mode="${record%% *}"
   path="${record#*$'\t'}"
+
+  if [[ "${record}" != *$'\t'* || -z "${path}" || "${path}" == /* || "${path}" == ../* || "${path}" == */../* || "${path}" == */.. ]]; then
+    echo "[FAIL] invalid file mode inventory record" >&2
+    missing=$((missing + 1))
+    continue
+  fi
 
   case "${mode}" in
     100644|100755) ;;
@@ -79,7 +102,14 @@ while IFS= read -r -d '' record; do
       fi
     fi
   fi
-done < <(git -C "${ROOT}" ls-files -z -s)
+done
+}
+
+if [[ -n "${INDEX_INVENTORY}" ]]; then
+  check_records <"${INDEX_INVENTORY}"
+else
+  check_records < <(git -C "${ROOT}" ls-files -z -s)
+fi
 
 total=$((missing + unexpected_exec + missing_exec))
 if [[ "${total}" -ne 0 ]]; then

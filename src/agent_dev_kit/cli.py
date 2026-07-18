@@ -8,6 +8,7 @@ import os
 import subprocess
 import sys
 import tempfile
+from datetime import date
 from pathlib import Path
 from typing import Any, Optional, Sequence
 
@@ -28,6 +29,7 @@ from .locking import clear_target_lock, target_lock_status
 from .matcher import main as matcher_main
 from .model import Manifest, ManifestError
 from .quality import benchmark_markdown, run_benchmark, security_check
+from .readiness import readiness_markdown, run_harness_readiness
 from .release import build_release, check_release, publish_release, rehearse_release
 from .targets import TargetUsageError, check_targets, run_target_smoke
 
@@ -89,6 +91,7 @@ PUBLIC_COMMANDS = [
     ("test", "运行完整回归测试"),
     ("goal", "检查 ADK 目标契约"),
     ("capability", "检查 ADK 能力健康"),
+    ("harness", "检查目标仓 Harness readiness"),
 ] + [(name, "治理兼容入口") for name in LEGACY_COMMANDS]
 
 
@@ -115,6 +118,25 @@ def _write_json(path: Path, value: Any) -> None:
     ) as stream:
         temp = Path(stream.name)
         stream.write(json.dumps(value, ensure_ascii=False, indent=2) + "\n")
+    try:
+        os.replace(str(temp), str(path))
+    finally:
+        temp.unlink(missing_ok=True)
+
+
+def _write_text(path: Path, value: str) -> None:
+    path = path.resolve()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.NamedTemporaryFile(
+        mode="w",
+        encoding="utf-8",
+        prefix="." + path.name + ".",
+        suffix=".tmp",
+        dir=str(path.parent),
+        delete=False,
+    ) as stream:
+        temp = Path(stream.name)
+        stream.write(value)
     try:
         os.replace(str(temp), str(path))
     finally:
@@ -419,13 +441,13 @@ def _cmd_eval(argv: Sequence[str]) -> int:
     campaign_sub = campaign.add_subparsers(dest="campaign_action", required=True)
     campaign_plan_parser = campaign_sub.add_parser("plan")
     campaign_plan_parser.add_argument(
-        "--contract", default=str(ROOT / "manifests" / "software_m5_eval_contract_rc2.json")
+        "--contract", default=str(ROOT / "manifests" / "software_m5_eval_contract_rc3.json")
     )
     campaign_plan_parser.add_argument("--output")
     campaign_plan_parser.add_argument("--summary-json", action="store_true")
     campaign_run_parser = campaign_sub.add_parser("run")
     campaign_run_parser.add_argument(
-        "--contract", default=str(ROOT / "manifests" / "software_m5_eval_contract_rc2.json")
+        "--contract", default=str(ROOT / "manifests" / "software_m5_eval_contract_rc3.json")
     )
     campaign_run_parser.add_argument("--state-dir", required=True)
     campaign_run_parser.add_argument("--execute", action="store_true")
@@ -435,7 +457,7 @@ def _cmd_eval(argv: Sequence[str]) -> int:
     campaign_run_parser.add_argument("--summary-json", action="store_true")
     campaign_check_parser = campaign_sub.add_parser("check")
     campaign_check_parser.add_argument(
-        "--contract", default=str(ROOT / "manifests" / "software_m5_eval_contract_rc2.json")
+        "--contract", default=str(ROOT / "manifests" / "software_m5_eval_contract_rc3.json")
     )
     campaign_check_parser.add_argument("--state-dir", required=True)
     campaign_check_parser.add_argument("--certify", action="store_true")
@@ -445,7 +467,7 @@ def _cmd_eval(argv: Sequence[str]) -> int:
     campaign_report_parser.add_argument("--input", required=True)
     campaign_report_parser.add_argument("--output")
     certify = sub.add_parser("certify")
-    certify.add_argument("--contract", default=str(ROOT / "manifests" / "software_m5_eval_contract_rc2.json"))
+    certify.add_argument("--contract", default=str(ROOT / "manifests" / "software_m5_eval_contract_rc3.json"))
     certify.add_argument("--state-dir", required=True)
     certify.add_argument("--output")
     certify.add_argument("--summary-json", action="store_true")
@@ -594,6 +616,42 @@ def _cmd_capability(argv: Sequence[str]) -> int:
     return subprocess.call(["bash", str(ROOT / "scripts" / "check-capability-health.sh")] + list(argv[1:]), cwd=str(ROOT))
 
 
+def _cmd_harness(argv: Sequence[str]) -> int:
+    parser = argparse.ArgumentParser(prog="devkit.sh harness")
+    sub = parser.add_subparsers(dest="action", required=True)
+    readiness = sub.add_parser("readiness")
+    readiness.add_argument("--root", default=".")
+    readiness.add_argument(
+        "--contract", default=str(ROOT / "manifests" / "harness_readiness_contracts.json")
+    )
+    readiness.add_argument("--output")
+    readiness.add_argument("--summary-json", action="store_true")
+    readiness.add_argument("--gate", action="store_true")
+    readiness.add_argument(
+        "--as-of", help="固定 report-only 评估日期（YYYY-MM-DD）；--gate 强制使用当天"
+    )
+    args = parser.parse_args(argv)
+    as_of = date.fromisoformat(args.as_of) if args.as_of else None
+    report = run_harness_readiness(
+        Path(args.root),
+        Path(args.contract),
+        mode="gate" if args.gate else "report-only",
+        as_of=as_of,
+    )
+    markdown = readiness_markdown(report)
+    if args.output:
+        _write_text(Path(args.output), markdown)
+    if args.summary_json:
+        _json(report)
+    elif not args.output:
+        print(markdown, end="")
+    else:
+        print("Harness readiness {} -> {}".format(report["overall_status"], Path(args.output).resolve()))
+    if args.gate and report["overall_status"] != "pass":
+        return 2
+    return 0
+
+
 def main(argv: Optional[Sequence[str]] = None) -> int:
     argv = list(sys.argv[1:] if argv is None else argv)
     if not argv or argv[0] in ("help", "-h", "--help"):
@@ -631,6 +689,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             return _cmd_goal(rest)
         if command == "capability":
             return _cmd_capability(rest)
+        if command == "harness":
+            return _cmd_harness(rest)
         if command == "test":
             return subprocess.call(["bash", str(ROOT / "tests" / "run_all.sh")] + rest, cwd=str(ROOT))
         if command in ("propose", "apply", "verify", "review", "archive"):

@@ -1,0 +1,13 @@
+name: ci
+
+permissions:
+  contents: read
+
+on:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: python -m unittest discover -s tests

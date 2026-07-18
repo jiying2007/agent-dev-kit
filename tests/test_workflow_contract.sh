@@ -4,9 +4,11 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-"$ROOT_DIR/scripts/validate-assets.sh" --strict >/dev/null
-
-summary="$("$ROOT_DIR/scripts/validate-assets.sh" --strict --summary-json)"
+if [[ -f "${ADK_TEST_SUITE_DIR:-/nonexistent}/validate-summary.json" ]]; then
+  summary="$(<"${ADK_TEST_SUITE_DIR}/validate-summary.json")"
+else
+  summary="$("$ROOT_DIR/scripts/validate-assets.sh" --strict --summary-json)"
+fi
 echo "$summary" | grep -q '"workflows":6' || {
   echo "[FAIL] validate summary did not report six workflows" >&2
   exit 1

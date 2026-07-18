@@ -1,7 +1,24 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-07-14",
+  "last_updated": "2026-07-18",
   "reference_boundary": "External agent, plugin, memory and skill sources are method-only references until a separate supply-chain review targets a specific versioned asset. This manifest does not enable external runtimes, hooks, workers, MCP servers or plugin installs.",
+  "local_source_policy": {
+    "id": "optional-workspace-reference-clones-v1",
+    "default_required": false,
+    "strict_flag": "--require-local-sources",
+    "resolution_base": "parent-of-adk-root",
+    "required_fallback_fields": [
+      "url",
+      "retrieved_at",
+      "decision",
+      "notes"
+    ],
+    "must_not": [
+      "fail a standalone ADK checkout only because an optional sibling reference clone is absent",
+      "treat an optional local clone as stronger than reviewed provenance",
+      "accept absolute or parent-traversal local paths"
+    ]
+  },
   "source_refs": [
     {
       "id": "mattpocock-caveman-skill",

@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-06-29",
+  "last_updated": "2026-07-17",
   "scope_model": "goal-to-capability-health",
   "boundary": "Capability health links ADK goals to concrete agents, skills, workflows, scripts, tests, and docs. It is a reportable governance contract, not a runtime orchestrator.",
   "required_capability_fields": [
@@ -43,6 +43,16 @@
       "script": "scripts/catalog-assets.sh",
       "test": "tests/test_catalog.sh",
       "doc": "docs/agent-skill-catalog.md"
+    },
+    {
+      "capability_id": "team-harness-readiness",
+      "goal_id": "adk-functional-capability-closure",
+      "agent": "test-validation-engineer",
+      "skill": "adk-verification-before-completion",
+      "workflow": "adk-delivery-gate",
+      "script": "scripts/check-harness-readiness.sh",
+      "test": "tests/test_harness_readiness.sh",
+      "doc": "docs/harness-engineering-analysis.md"
     },
     {
       "capability_id": "skill-curation-reuse",

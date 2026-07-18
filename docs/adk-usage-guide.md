@@ -263,7 +263,7 @@ bash scripts/devkit.sh install rollback --receipt /tmp/adk-target/.adk-install-r
 |---|---|
 | `--tool` | `claude-code`、`hermes-agent`、`opencode` |
 | `--target` | 安装目标目录 |
-| `--mode` | `copy` 或 `symlink` |
+| `--mode` | 仅支持 `copy`；`symlink` fail closed且不生成 plan |
 | `--profile` | 主 profile |
 | `--extra-profile` | 额外叠加 profile，可重复 |
 | `--with-optional-skill` | 显式叠加 optional skill，可重复 |

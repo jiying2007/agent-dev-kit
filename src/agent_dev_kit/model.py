@@ -7,6 +7,7 @@ import json
 import os
 import re
 from dataclasses import dataclass
+from functools import lru_cache
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, MutableSet, Optional, Sequence, Tuple
 
@@ -16,6 +17,28 @@ from jsonschema.exceptions import SchemaError
 
 class ManifestError(ValueError):
     """Raised when the manifest or a referenced asset is invalid."""
+
+
+@lru_cache(maxsize=8)
+def _validated_schema_bundle(source: str, raw: bytes) -> Tuple[Mapping[str, Any], Draft202012Validator]:
+    """Parse and meta-validate immutable schema bytes once per process.
+
+    The raw bytes are part of the cache key, so an on-disk schema change cannot
+    reuse a validator compiled for older content.  The small bound prevents
+    untrusted schema churn from growing the process cache without limit.
+    """
+
+    try:
+        value = json.loads(raw.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ManifestError("manifest schema is invalid JSON: {}".format(source)) from exc
+    if not isinstance(value, dict):
+        raise ManifestError("manifest schema must be a JSON object")
+    try:
+        Draft202012Validator.check_schema(value)
+    except SchemaError as exc:
+        raise ManifestError("manifest schema is not valid Draft 2020-12: {}".format(exc.message)) from exc
+    return value, Draft202012Validator(value, format_checker=FormatChecker())
 
 
 def canonical_json_bytes(value: Any) -> bytes:
@@ -155,7 +178,7 @@ class Manifest:
             result[name] = item
         return result
 
-    def _manifest_schema(self) -> Mapping[str, Any]:
+    def _manifest_schema_bundle(self) -> Tuple[Mapping[str, Any], Draft202012Validator]:
         candidates = (
             self.root / "manifests" / "manifest.schema.json",
             self.root / "source" / "manifests" / "manifest.schema.json",
@@ -164,23 +187,19 @@ class Manifest:
         if path.is_symlink() or not path.is_file():
             raise ManifestError("manifest schema missing or unsafe: {}".format(path))
         try:
-            value = json.loads(path.read_text(encoding="utf-8"))
-        except (OSError, json.JSONDecodeError) as exc:
-            raise ManifestError("manifest schema is invalid JSON: {}".format(path)) from exc
-        if not isinstance(value, dict):
-            raise ManifestError("manifest schema must be a JSON object")
-        try:
-            Draft202012Validator.check_schema(value)
-        except SchemaError as exc:
-            raise ManifestError("manifest schema is not valid Draft 2020-12: {}".format(exc.message)) from exc
-        return value
+            raw = path.read_bytes()
+        except OSError as exc:
+            raise ManifestError("manifest schema cannot be read: {}".format(path)) from exc
+        return _validated_schema_bundle(str(path), raw)
+
+    def _manifest_schema(self) -> Mapping[str, Any]:
+        return self._manifest_schema_bundle()[0]
 
     def _json_schema_failures(self) -> List[str]:
         try:
-            schema = self._manifest_schema()
+            _, validator = self._manifest_schema_bundle()
         except ManifestError as exc:
             return [str(exc)]
-        validator = Draft202012Validator(schema, format_checker=FormatChecker())
         failures: List[str] = []
         for error in sorted(
             validator.iter_errors(self.data),

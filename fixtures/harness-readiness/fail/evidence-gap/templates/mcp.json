@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "template-only": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@example/read-only-mcp@1.2.3"
+      ]
+    }
+  }
+}

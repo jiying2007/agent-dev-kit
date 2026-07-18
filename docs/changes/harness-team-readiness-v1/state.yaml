@@ -1,0 +1,8 @@
+stage: review-passed
+owner: leiwenjun
+updated_at: 2026-07-18T07:30:00Z
+status: pass
+notes: HR-007 through HR-010 fixed; targeted and full source/test evidence pass; field evidence remains not-verified
+retry_budget: 2
+staleness_threshold_minutes: 45
+stop_condition: pass

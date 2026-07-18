@@ -30,7 +30,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y ripgrep shellcheck
-          python -m pip install . 'ruff==0.15.21' 'pip-audit==2.10.1'
+          python -m pip install '.[quality]'
 
       - name: Validate and smoke
         run: |

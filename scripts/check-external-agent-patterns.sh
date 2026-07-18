@@ -3,14 +3,45 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+REQUIRE_LOCAL_SOURCES=0
 
-python3 - "$ROOT_DIR" <<'PY'
+usage() {
+  cat <<'USAGE'
+Usage:
+  scripts/check-external-agent-patterns.sh [--require-local-sources]
+
+Validates method-only external pattern contracts. Sibling reference clones are
+optional for standalone ADK checkouts. Use --require-local-sources only from a
+managed parent workspace that is expected to contain every declared local_path.
+USAGE
+}
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --require-local-sources)
+      REQUIRE_LOCAL_SOURCES=1
+      shift
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      echo "[FAIL] unknown argument: $1" >&2
+      usage >&2
+      exit 2
+      ;;
+  esac
+done
+
+python3 - "$ROOT_DIR" "$REQUIRE_LOCAL_SOURCES" <<'PY'
 import json
 import sys
 from pathlib import Path
 from urllib.parse import urlparse
 
 root = Path(sys.argv[1])
+require_local_sources = sys.argv[2] == "1"
 manifest_path = root / "manifests/external_agent_pattern_contracts.json"
 failures = []
 
@@ -33,6 +64,21 @@ else:
         manifest = {}
 
 sources = manifest.get("source_refs", [])
+local_policy = manifest.get("local_source_policy", {})
+require_keys(
+    local_policy,
+    ["id", "default_required", "strict_flag", "resolution_base", "required_fallback_fields", "must_not"],
+    "local_source_policy",
+)
+if local_policy.get("default_required") is not False:
+    fail("local_source_policy default_required must be false")
+if local_policy.get("strict_flag") != "--require-local-sources":
+    fail("local_source_policy strict_flag must be --require-local-sources")
+if local_policy.get("resolution_base") != "parent-of-adk-root":
+    fail("local_source_policy resolution_base must be parent-of-adk-root")
+for field in ("url", "retrieved_at", "decision", "notes"):
+    if field not in local_policy.get("required_fallback_fields", []):
+        fail(f"local_source_policy missing fallback field: {field}")
 source_ids = {source.get("id") for source in sources}
 required_sources = {
     "mattpocock-caveman-skill",
@@ -64,8 +110,12 @@ for source in sources:
     if parsed.scheme not in {"https", "http"} or not parsed.netloc:
         fail(f"source_ref {sid} has invalid url")
     local_path = source.get("local_path")
-    if local_path and not (root.parent / local_path).exists():
-        fail(f"source_ref {sid} local_path missing: {local_path}")
+    if local_path:
+        local_relative = Path(local_path)
+        if local_relative.is_absolute() or ".." in local_relative.parts:
+            fail(f"source_ref {sid} local_path must be a safe relative path")
+        elif require_local_sources and not (root.parent / local_relative).exists():
+            fail(f"source_ref {sid} local_path missing: {local_path}")
     if source.get("decision") not in {"adopt-method-only", "observe-method-only"}:
         fail(f"source_ref {sid} must remain method-only")
 
