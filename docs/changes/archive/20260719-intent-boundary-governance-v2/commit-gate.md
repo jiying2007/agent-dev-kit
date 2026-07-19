@@ -7,6 +7,6 @@
 - Skill Intake Decision：只增强现有 core/optional Skill；不新增 Skill/Agent/Workflow，不安装或复制上游资产。现有 Skill 仍为 global-ready，其 core/optional 归属不变。
 - Human Owner / Review Responsibility：owner=`leiwenjun`；用户已授权 ENHANCE/硬切/commit/version/rehearsal；本报告是 AI-assisted technical gate，不冒充第三方人工审计。
 - Breaking Change Decision：task-package v1、legacy Codex metadata 和冗余 implicit=true 退役；迁移与 rollback 见 `docs/migrations/3.1.0-rc.5.md`。
-- Release Gate Decision：ADK commits=`6d56834`,`109049c`,`0fe2d4e`；Codex commit=`684f7f8`。从 exact ADK commit `0fe2d4e` 两次构建出相同 609-file artifact，SHA256=`6a82d1142b0b71568bce65acf814af68e82569d7679f9edc8abd96ca8be3c783`；RC4→RC5 rollback/fallback rehearsal pass。publish/tag/remote CI 不执行。
+- Release Gate Decision：ADK implementation/archive commits=`6d56834`,`109049c`,`0fe2d4e`,`66a8c19`；Codex commit=`684f7f8`。从 release source commit `66a8c19` 两次构建出相同 611-file artifact，SHA256=`7c0ddf0c0d0e2174abcb682e0df1e6b5d10fdcb8695bdaaa2dccc37a5daf3907`；RC4→RC5 rollback/fallback rehearsal pass。其后的证据提交只记录结果，不改写 release source；publish/tag/remote CI 不执行。
 - Core/Optional Decision：invocation/typed validator/target adapter 属于 core；planning loop 保持 optional；无 profile 扩权。
 - Final Gate Result：`pass-for-local-rc5-and-managed-archive`；不是 remote publish、tag 或 Software M5 certification。

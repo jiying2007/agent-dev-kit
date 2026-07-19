@@ -43,9 +43,9 @@
 | `rtk bash scripts/check-change-governance.sh ...`（首次） | 1 | 定制工件缺等价章节且完成态 checkbox 被误拒绝 | `negative-results.md` | Workflow | T7 negative |
 | `rtk bash tests/test_change_governance.sh`（修复后） | 0 | `[ ]|[x]` 均可验证，标签改名 fail closed | command output | Workflow/Test | T7 |
 | `rtk bash tests/test_workflow.sh`、`tests/test_integration.sh` | 0 | workflow lifecycle pass；integration 8/8 | command output | Workflow/Test | T7 |
-| ADK implementation commits | 0 | `6d56834` contract hard-cut；`109049c` release boundary；`0fe2d4e` completed-checklist archive gate | git history | Commit | T7 |
+| ADK implementation/release commits | 0 | `6d56834` contract hard-cut；`109049c` release boundary；`0fe2d4e` completed-checklist archive gate；`66a8c19` 受管归档与 release source | git history | Commit | T7 |
 | Codex source commit | 0 | `684f7f8` 精确提交 50 metadata、checker 本次 hunks 与 5 tests | Codex git history | Commit | T6/T7 |
-| RC5 exact-commit deterministic build A/B | 0 | commit=`0fe2d4e`；两份 609-file artifact 字节一致，SHA256=`6a82d1142b0b71568bce65acf814af68e82569d7679f9edc8abd96ca8be3c783`，checksum 均通过 | `/tmp/adk-rc5-release.zxGIZu/candidate-e|candidate-f` | Release | T7 |
+| RC5 exact-commit deterministic build A/B | 0 | release source commit=`66a8c19`；两份 611-file artifact 字节一致，SHA256=`7c0ddf0c0d0e2174abcb682e0df1e6b5d10fdcb8695bdaaa2dccc37a5daf3907`，checksum 均通过 | `/tmp/adk-rc5-release.zxGIZu/candidate-g|candidate-h` | Release | T7 |
 | RC4→RC5 `release rehearse`（最终） | 0 | `target-contract-hard-cut`、rollback-before-install、candidate rollback、RC4 62-asset fallback restore 全 pass | `release-rehearsal.json` | Release | T7 |
 | independent review + re-review | 0 | blocker=0；3 major fixed；0 open minor；verdict=pass | `review-findings.md` | Review | T7 |
 

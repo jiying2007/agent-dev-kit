@@ -29,6 +29,6 @@
 - blocker：0。
 - major：0 open（IBG-001/002/004 均 fixed）。
 - minor：0 open。
-- Final release evidence：ADK commit `0fe2d4e` 双构建 SHA256=`6a82d1142b0b71568bce65acf814af68e82569d7679f9edc8abd96ca8be3c783`；RC4→RC5 hard-cut rehearsal pass；Codex source commit=`684f7f8`。
+- Final release evidence：ADK release source commit `66a8c19` 双构建 611-file artifact，SHA256=`7c0ddf0c0d0e2174abcb682e0df1e6b5d10fdcb8695bdaaa2dccc37a5daf3907`；RC4→RC5 hard-cut rehearsal pass；Codex source commit=`684f7f8`。
 - Pending gate：仅受管 workflow 状态迁移、归档移动与 root gitlink/status commit；无技术 blocker/major。
 - Final Verdict：`pass`，限本地 RC5 release candidate 与运行资产闭环；不等同 remote release 或 Software M5 certification。
