@@ -506,7 +506,11 @@ def _extract_release(artifact: Path, destination: Path, member_limit: int = 5000
     raise ManifestError("release archive does not contain a supported ADK root layout")
 
 
-def _release_source_root(release_root: Path) -> Tuple[Manifest, Mapping[str, Any]]:
+def _release_source_root(
+    release_root: Path,
+    *,
+    enforce_current_contract: bool = True,
+) -> Tuple[Manifest, Mapping[str, Any]]:
     source_root = release_root / "source"
     release_manifest_path = release_root / "release-manifest.json"
     if not source_root.is_dir() or not (source_root / "manifest.json").is_file():
@@ -525,9 +529,10 @@ def _release_source_root(release_root: Path) -> Tuple[Manifest, Mapping[str, Any
         raise ManifestError("release manifest digest does not match source manifest")
     if release_manifest.get("version") != source_manifest.version:
         raise ManifestError("release manifest version does not match source manifest")
-    failures = source_manifest.validate(strict=True)
-    if failures:
-        raise ManifestError("release source manifest is invalid: {}".format("; ".join(failures)))
+    if enforce_current_contract:
+        failures = source_manifest.validate(strict=True)
+        if failures:
+            raise ManifestError("release source manifest is invalid: {}".format("; ".join(failures)))
     return source_manifest, release_manifest
 
 
@@ -591,6 +596,7 @@ def _install_legacy_release_bundle(
     release_root: Path,
     manifest: Manifest,
     target: Path,
+    migration: str = "legacy-bundle-v2",
 ) -> Dict[str, Any]:
     """Stage a pre-contract release as a digest-protected v2 rollback fixture."""
 
@@ -644,7 +650,7 @@ def _install_legacy_release_bundle(
         "status": "pass",
         "installed": len(installed),
         "receipt": str(receipt_path),
-        "migration": "legacy-bundle-v2",
+        "migration": migration,
     }
 
 
@@ -655,7 +661,10 @@ def rehearse_release(previous_artifact: Path, candidate_artifact: Path) -> Dict[
     try:
         previous_root = _extract_release(previous_artifact.resolve(), workspace / "previous")
         candidate_root = _extract_release(candidate_artifact.resolve(), workspace / "candidate")
-        previous_manifest, previous_release_manifest = _release_source_root(previous_root)
+        previous_manifest, previous_release_manifest = _release_source_root(
+            previous_root,
+            enforce_current_contract=False,
+        )
         candidate_manifest, candidate_release_manifest = _release_source_root(candidate_root)
         if not _prerelease_is_newer(previous_manifest.version, candidate_manifest.version):
             raise ManifestError("candidate release must be newer than previous release")
@@ -672,9 +681,19 @@ def rehearse_release(previous_artifact: Path, candidate_artifact: Path) -> Dict[
                 "copy",
             )
         except ManifestError as exc:
-            if "target_contract_missing" not in str(exc):
+            message = str(exc)
+            if "target_contract_missing" in message:
+                previous_migration = "legacy-bundle-v2"
+            elif "target_contract_incompatible" in message:
+                previous_migration = "target-contract-hard-cut"
+            else:
                 raise
-            previous_apply = _install_legacy_release_bundle(previous_root, previous_manifest, target)
+            previous_apply = _install_legacy_release_bundle(
+                previous_root,
+                previous_manifest,
+                target,
+                migration=previous_migration,
+            )
         else:
             if previous_plan["status"] != "ready":
                 raise ManifestError("previous release install plan is not ready")
@@ -684,7 +703,8 @@ def rehearse_release(previous_artifact: Path, candidate_artifact: Path) -> Dict[
 
         migration_mode = "in-place-replacement"
         legacy_rollback: Optional[Dict[str, Any]] = None
-        if previous_apply.get("migration") == "legacy-bundle-v2":
+        previous_migration = previous_apply.get("migration")
+        if previous_migration in ("legacy-bundle-v2", "target-contract-hard-cut"):
             migration_mode = "rollback-before-install"
             legacy_rollback = rollback(target / RECEIPT_NAME)
             if (target / RECEIPT_NAME).exists():
@@ -719,7 +739,12 @@ def rehearse_release(previous_artifact: Path, candidate_artifact: Path) -> Dict[
         else:
             if (target / RECEIPT_NAME).exists():
                 raise ManifestError("candidate receipt remained after rollback")
-            fallback_apply = _install_legacy_release_bundle(previous_root, previous_manifest, target)
+            fallback_apply = _install_legacy_release_bundle(
+                previous_root,
+                previous_manifest,
+                target,
+                migration=str(previous_migration),
+            )
             restored_hashes = _managed_hashes(target)
             if restored_hashes != previous_hashes:
                 raise ManifestError("previous legacy artifact reinstall did not restore managed hashes")
@@ -744,6 +769,7 @@ def rehearse_release(previous_artifact: Path, candidate_artifact: Path) -> Dict[
             "previous_installed": previous_apply["installed"],
             "candidate_installed": candidate_apply["installed"],
             "migration_mode": migration_mode,
+            "previous_install_migration": previous_migration,
             "legacy_rollback": legacy_rollback,
             "fallback_restore": fallback_restore,
             "rollback": {

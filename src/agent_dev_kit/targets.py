@@ -178,7 +178,11 @@ def load_target_contract(manifest: Manifest, target: str) -> TargetContract:
         raise ManifestError(
             "target_contract_invalid: supported kinds/layouts/frontmatter differ for {}".format(target)
         )
-    invocation = data["skill_invocation"]
+    invocation = data.get("skill_invocation")
+    if not isinstance(invocation, dict):
+        raise ManifestError(
+            "target_contract_incompatible: target={} missing skill_invocation".format(target)
+        )
     supported_modes = invocation["supported_modes"]
     explicit_frontmatter = invocation["explicit_only_frontmatter"]
     if "explicit-only" not in supported_modes and explicit_frontmatter:

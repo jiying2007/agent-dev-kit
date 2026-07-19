@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "status": "pass",
+  "manifest_sha256": "6a9c39de1e5b7212e1adbe39e5820996e023dfc3b4cd51a6989faefa58554a18",
+  "iterations": 10,
+  "budgets": {
+    "manifest_validate": {
+      "max_p95_ms": 500.0,
+      "scope": "strict typed manifest validation without legacy shell gates"
+    },
+    "profile_resolve": {
+      "max_p95_ms": 100.0,
+      "scope": "embedded-fullstack profile inheritance and asset resolution"
+    },
+    "export_plan": {
+      "max_p95_ms": 300.0,
+      "scope": "Claude Code core export dry-run"
+    },
+    "target_contract_check": {
+      "max_p95_ms": 750.0,
+      "scope": "Claude Code static target contract check"
+    },
+    "cli_cold_start": {
+      "max_p95_ms": 3000.0,
+      "scope": "Fresh Python process executing target static check"
+    },
+    "export_plan_10x": {
+      "max_p95_ms": 3000.0,
+      "scope": "Ten consecutive Claude Code core export plans"
+    },
+    "export_io_10x": {
+      "max_p95_ms": 10000.0,
+      "scope": "Ten native-tree Claude Code core exports including filesystem I/O"
+    }
+  },
+  "budget_gate": {
+    "manifest_validate": true,
+    "profile_resolve": true,
+    "export_plan": true,
+    "target_contract_check": true,
+    "cli_cold_start": true,
+    "export_plan_10x": true,
+    "export_io_10x": true
+  },
+  "measurements": {
+    "manifest_validate": {
+      "iterations": 10,
+      "median_ms": 101.142,
+      "p95_ms": 112.156,
+      "min_ms": 99.172,
+      "max_ms": 112.156
+    },
+    "profile_resolve": {
+      "iterations": 10,
+      "median_ms": 5.331,
+      "p95_ms": 5.637,
+      "min_ms": 5.146,
+      "max_ms": 5.637
+    },
+    "export_plan": {
+      "iterations": 10,
+      "median_ms": 82.076,
+      "p95_ms": 85.715,
+      "min_ms": 80.061,
+      "max_ms": 85.715
+    },
+    "target_contract_check": {
+      "iterations": 10,
+      "median_ms": 210.914,
+      "p95_ms": 216.006,
+      "min_ms": 198.938,
+      "max_ms": 216.006
+    },
+    "cli_cold_start": {
+      "iterations": 10,
+      "median_ms": 568.616,
+      "p95_ms": 604.828,
+      "min_ms": 529.193,
+      "max_ms": 604.828
+    },
+    "export_plan_10x": {
+      "iterations": 10,
+      "median_ms": 792.389,
+      "p95_ms": 836.641,
+      "min_ms": 785.139,
+      "max_ms": 836.641
+    },
+    "export_io_10x": {
+      "iterations": 10,
+      "median_ms": 909.939,
+      "p95_ms": 924.325,
+      "min_ms": 887.6,
+      "max_ms": 924.325
+    }
+  },
+  "resource_budgets": {
+    "export_plan_10x_peak_memory": {
+      "max_peak_kib": 8192.0,
+      "scope": "tracemalloc peak for ten consecutive export plans"
+    }
+  },
+  "resource_gate": {
+    "export_plan_10x_peak_memory": true
+  },
+  "memory": {
+    "export_plan_10x": {
+      "current_kib": 24.979,
+      "peak_kib": 276.7
+    }
+  },
+  "io_profile": {
+    "file_count": 400,
+    "total_bytes": 1829710
+  }
+}

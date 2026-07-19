@@ -28,6 +28,7 @@ PYTHONPATH="$ROOT_DIR/src" python3 - "$ROOT_DIR" <<'PY'
 import copy
 import json
 import sys
+import tempfile
 from datetime import date
 from pathlib import Path
 
@@ -39,7 +40,7 @@ from agent_dev_kit.intent_boundary import (
     validate_prototype_evidence,
     validate_task_package,
 )
-from agent_dev_kit.model import Manifest
+from agent_dev_kit.model import Manifest, ManifestError
 from agent_dev_kit.targets import TargetUsageError, _render_main, load_target_contract
 
 root = Path(sys.argv[1]).resolve()
@@ -162,6 +163,33 @@ except TargetUsageError as exc:
     assert "unsupported_skill_invocation_mode" in str(exc), exc
 else:
     raise AssertionError("OpenCode explicit-only mapping must fail closed")
+
+with tempfile.TemporaryDirectory(prefix="adk-legacy-target-") as temp:
+    legacy_root = Path(temp)
+    contracts_dir = legacy_root / "manifests/target-contracts"
+    contracts_dir.mkdir(parents=True)
+    target_schema = json.loads((root / "manifests/target-contract.schema.json").read_text(encoding="utf-8"))
+    target_schema["required"].remove("skill_invocation")
+    target_schema["properties"].pop("skill_invocation")
+    (legacy_root / "manifests/target-contract.schema.json").write_text(
+        json.dumps(target_schema), encoding="utf-8"
+    )
+    legacy_contract = json.loads(
+        (root / "manifests/target-contracts/claude-code.json").read_text(encoding="utf-8")
+    )
+    legacy_contract.pop("skill_invocation")
+    (contracts_dir / "claude-code.json").write_text(json.dumps(legacy_contract), encoding="utf-8")
+    legacy_manifest = Manifest(legacy_root, data, legacy_root / "manifest.json")
+    try:
+        load_target_contract(legacy_manifest, "claude-code")
+    except ManifestError as exc:
+        assert "target_contract_incompatible" in str(exc), exc
+    else:
+        raise AssertionError("legacy target contract did not fail with a governed migration error")
+
+release_source = (root / "src/agent_dev_kit/release.py").read_text(encoding="utf-8")
+assert "enforce_current_contract=False" in release_source
+assert 'previous_migration = "target-contract-hard-cut"' in release_source
 PY
 
 "$ROOT_DIR/scripts/check-official-docs-governance.sh" >/dev/null
