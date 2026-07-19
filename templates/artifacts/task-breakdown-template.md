@@ -50,6 +50,25 @@ handoff_to:
 
 ## 3. Tasks (任务清单)
 
+### Work Item v2 合同
+
+每个 Task 必须填写以下字段；只接受 `adk-task-package-schema-v2`：
+
+| 字段 | 值 |
+|---|---|
+| structured_output_schema | adk-task-package-schema-v2 |
+| strict_schema_decision | true |
+| refusal_handling | [不满足 v2 时 blocked/replan] |
+| work_item_kind | decision / research / prototype / implementation |
+| question_to_resolve | [该票唯一要收敛的问题] |
+| evidence_required | [进入 exit gate 前的证据] |
+| implementation_permission | forbidden / approved |
+| exit_gate | owner-decision / evidence-reviewed / prototype-reviewed / implementation-verified |
+| handoff_target | [下一 owner/Skill/Workflow 或 none] |
+| retention_decision | keep-final / archive-negative-result / delete-orphan / expire |
+
+规则：decision/research/prototype 固定 `forbidden`；只有 implementation 可为 `approved`。prototype 必须附 `prototype_evidence`。长任务可在当前 change 的 `tasks/<id>.md` 保存单票并由本文件索引；不固定使用隐藏 `.scratch` 目录。
+
 | Task ID | 所属 Story | 任务名称 | 描述 | 估时 (h) | 优先级 | 负责人 | 状态 |
 |---------|-----------|----------|------|----------|--------|--------|------|
 | T-001 | US-001 | [任务名] | [描述] | [N] | [P0/P1/P2] | [负责人] | [Todo] |
@@ -108,5 +127,6 @@ T-003 + T-005 --> T-006
 - [ ] 任务已分解到可执行粒度 (单个任务≤8h)
 - [ ] 任务有估时、优先级和负责人
 - [ ] 任务依赖关系已识别
+- [ ] 每项 work_item_kind、permission、exit gate、handoff 与 retention 满足 v2 跨字段规则
 - [ ] 完成定义 (DoD) 已确认
 - [ ] 已通过评审 (review-passed)

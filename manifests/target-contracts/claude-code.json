@@ -28,6 +28,10 @@
       "static": {}
     }
   },
+  "skill_invocation": {
+    "supported_modes": ["implicit", "explicit-only"],
+    "explicit_only_frontmatter": {"disable-model-invocation": true}
+  },
   "permission_profiles": {
     "read-only": {"tools": "Read, Grep, Glob"},
     "code-write": {"tools": "Read, Grep, Glob, Edit, Write, Bash"},

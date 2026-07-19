@@ -1,4 +1,4 @@
-version: 3.1.0-rc.4
+version: 3.1.0-rc.5
 locale: zh-CN
 platforms:
   - linux-embedded
@@ -77,6 +77,10 @@ tool_targets:
     skills_dir: skills
     detect:
       - ~/.config/opencode
+
+skill_invocation:
+  default_mode: implicit
+  overrides: {}
 
 quality_tiers:
   p0:

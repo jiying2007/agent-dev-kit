@@ -61,6 +61,10 @@ skills/<skill-name>/
 - Plugin 是安装和分发边界，只有在需要打包多个 skill、MCP、hook、app、native 依赖、凭证或 marketplace 元数据时才晋级。
 - 本地试验期优先保持 repo/user skill；完成触发准确率、重复能力检查、pilot 证据和回滚方案后再考虑 plugin。
 - `agents/openai.yaml` 只放 UI 元数据、隐式触发策略和工具依赖声明；不替代 `SKILL.md` 的执行契约，也不直接授予运行权限。
+- 调用模式的 SSOT 是平台中立 `skill_invocation.default_mode + overrides`，只允许 `implicit|explicit-only`；target adapter 不得从 Skill 名称或 description 猜测。
+- Codex metadata 使用 `interface.display_name` / `interface.short_description` 嵌套结构；`implicit` 省略 policy，`explicit-only` 才生成 `policy.allow_implicit_invocation: false`。顶层旧字段和显式 `true` 禁止进入生成物。
+- Claude Code 仅在 `explicit-only` 时生成 `disable-model-invocation: true`；没有已核验等价字段的 target 必须 fail closed，不得静默降级。
+- explicit invocation 只影响 discovery，不授予工具、网络、写入、子代理、commit、publish 或 install 权限。
 
 ## 运行时分层
 

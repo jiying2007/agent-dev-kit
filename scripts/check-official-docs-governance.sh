@@ -199,7 +199,9 @@ execution_layer_markers = {
     "skills/adk-task-breakdown/SKILL.md": [
         "structured_output_schema",
         "strict_schema_decision",
-        "adk-task-package-schema-v1",
+        "adk-task-package-schema-v2",
+        "work_item_kind",
+        "implementation_permission",
     ],
     "skills/adk-interface-contract-design/SKILL.md": [
         "strict schema",
@@ -1108,6 +1110,8 @@ for contract in plugin_contracts:
             fail(f"plugin contract {cid} missing required file: {required_file}")
     if "stable kebab-case" not in contract.get("naming", {}).get("plugin_name", ""):
         fail(f"plugin contract {cid} must require stable kebab-case plugin name")
+    if "cross-harness invocation parity" not in contract.get("required_review", []):
+        fail(f"plugin contract {cid} must require cross-harness invocation parity")
 for contract in marketplace_contracts:
     cid = contract.get("id")
     require_keys(contract, ["id", "owner", "path", "required_fields", "source_path_policy", "install_policy_values", "failure_policy"], f"marketplace contract {cid}")
@@ -1122,7 +1126,7 @@ for contract in marketplace_contracts:
 structured_contracts = structured_outputs.get("contracts", [])
 if not structured_contracts:
     fail("structured output contracts are empty")
-required_schema_targets = {"task_package", "evidence_index", "handoff_summary", "pr_review_findings"}
+required_schema_targets = {"task_package", "prototype_evidence", "evidence_index", "handoff_summary", "pr_review_findings"}
 seen_schema_targets = {contract.get("schema_target") for contract in structured_contracts}
 for target in required_schema_targets:
     if target not in seen_schema_targets:
@@ -1155,6 +1159,46 @@ for contract in structured_contracts:
         fail(f"structured output contract {cid} has too few required fields")
     if not contract.get("drift_controls"):
         fail(f"structured output contract {cid} missing drift controls")
+task_package = next((item for item in structured_contracts if item.get("schema_target") == "task_package"), {})
+if task_package.get("id") != "adk-task-package-schema-v2":
+    fail("task package contract must hard-cut to adk-task-package-schema-v2")
+for field in (
+    "work_item_kind",
+    "question_to_resolve",
+    "evidence_required",
+    "implementation_permission",
+    "exit_gate",
+    "handoff_target",
+    "retention_decision",
+):
+    if field not in task_package.get("required_fields", []):
+        fail(f"task package v2 missing field: {field}")
+task_field_rules = task_package.get("field_rules", {})
+if set(task_field_rules.get("work_item_kind", [])) != {"decision", "research", "prototype", "implementation"}:
+    fail("task package v2 work_item_kind enum is invalid")
+if len(task_package.get("cross_field_rules", [])) < 5:
+    fail("task package v2 cross-field permission rules are incomplete")
+prototype_evidence = next(
+    (item for item in structured_contracts if item.get("schema_target") == "prototype_evidence"), {}
+)
+for field in (
+    "question",
+    "base_commit",
+    "artifact_path",
+    "artifact_sha256",
+    "observed_result",
+    "verification_command",
+    "verification_exit_code",
+    "retention_decision",
+    "expires_at",
+    "cleanup_owner",
+    "rollback_anchor",
+    "active_references_absent",
+):
+    if field not in prototype_evidence.get("required_fields", []):
+        fail(f"prototype evidence contract missing field: {field}")
+if len(prototype_evidence.get("retention_rules", [])) < 5:
+    fail("prototype evidence retention rules are incomplete")
 structured_gate = structured_outputs.get("quality_gate", {})
 require_keys(
     structured_gate,
@@ -1448,7 +1492,13 @@ skill_repro_contracts = skill_repro.get("contracts", [])
 if not skill_repro_contracts:
     fail("skill reproducibility contracts are empty")
 skill_repro_ids = {contract.get("id") for contract in skill_repro_contracts}
-for expected in ("skill-discoverability-v1", "skill-version-pin-v1", "skill-tiny-cli-v1", "third-party-skill-domain-policy-v1"):
+for expected in (
+    "skill-discoverability-v1",
+    "skill-version-pin-v1",
+    "cross-harness-skill-invocation-v1",
+    "skill-tiny-cli-v1",
+    "third-party-skill-domain-policy-v1",
+):
     if expected not in skill_repro_ids:
         fail(f"skill reproducibility contract missing: {expected}")
 for contract in skill_repro_contracts:
@@ -1468,6 +1518,22 @@ for contract in skill_repro_contracts:
         execution = contract.get("execution_policy", {})
         if "deterministic" not in execution.get("stdout", ""):
             fail("skill tiny CLI policy must require deterministic stdout")
+    if cid == "cross-harness-skill-invocation-v1":
+        policy = contract.get("invocation_policy", {})
+        if set(policy.get("allowed_modes", [])) != {"implicit", "explicit-only"}:
+            fail("cross-harness invocation allowed modes are invalid")
+        if policy.get("default_mode") != "implicit":
+            fail("cross-harness invocation must default to implicit")
+        mappings = contract.get("target_mappings", {})
+        if mappings.get("claude-code", {}).get("explicit-only") != "disable-model-invocation: true":
+            fail("Claude explicit-only mapping is missing")
+        if mappings.get("codex", {}).get("explicit-only") != "policy.allow_implicit_invocation: false":
+            fail("Codex explicit-only mapping is missing")
+        codex_metadata = contract.get("codex_metadata_contract", {})
+        if codex_metadata.get("required_root") != "interface":
+            fail("Codex skill metadata must use nested interface root")
+        if codex_metadata.get("explicit_true_forbidden") is not True:
+            fail("Codex explicit implicit=true output must be forbidden")
     if cid == "third-party-skill-domain-policy-v1":
         for field in ("trust_level", "review_status", "license", "source_revision", "runtime_boundary", "install_scope", "attribution"):
             if field not in contract.get("required_fields", []):
@@ -1482,6 +1548,7 @@ for key in (
     "scripted_skills_require_deterministic_cli_contract",
     "networked_skills_require_allowlist_and_egress_policy",
     "third_party_skills_default_review_required",
+    "cross_harness_invocation_must_be_explicit",
 ):
     if skill_repro_gate.get(key) is not True:
         fail(f"skill reproducibility quality_gate {key} must be true")

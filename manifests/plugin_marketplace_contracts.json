@@ -31,7 +31,8 @@
         "source path containment",
         "hook registration policy",
         "deterministic packaging evidence",
-        "per-skill OpenAI metadata"
+        "per-skill OpenAI metadata",
+        "cross-harness invocation parity"
       ]
     }
   ],

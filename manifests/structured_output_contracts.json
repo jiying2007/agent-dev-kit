@@ -10,7 +10,7 @@
   "reference_boundary": "OpenAI/Codex source docs are citation metadata and governance references only. This manifest promotes platform-neutral ADK structured-output contracts and must not enable hosted models, API-backed runners, external runtimes, user-directory writes, or compatibility defaults.",
   "contracts": [
     {
-      "id": "adk-task-package-schema-v1",
+      "id": "adk-task-package-schema-v2",
       "owner": "agent-dev-kit",
       "applies_to": [
         "adk-task-breakdown",
@@ -21,6 +21,9 @@
       "schema_format": "json_schema",
       "strict": true,
       "required_fields": [
+        "structured_output_schema",
+        "strict_schema_decision",
+        "refusal_handling",
         "goal",
         "context",
         "constraints",
@@ -29,14 +32,98 @@
         "action_mode",
         "verification",
         "artifacts",
-        "blockers"
+        "blockers",
+        "work_item_kind",
+        "question_to_resolve",
+        "evidence_required",
+        "implementation_permission",
+        "exit_gate",
+        "handoff_target",
+        "retention_decision"
+      ],
+      "field_rules": {
+        "work_item_kind": [
+          "decision",
+          "research",
+          "prototype",
+          "implementation"
+        ],
+        "implementation_permission": [
+          "forbidden",
+          "approved"
+        ],
+        "exit_gate": [
+          "owner-decision",
+          "evidence-reviewed",
+          "prototype-reviewed",
+          "implementation-verified"
+        ],
+        "retention_decision": [
+          "keep-final",
+          "archive-negative-result",
+          "delete-orphan",
+          "expire"
+        ]
+      },
+      "cross_field_rules": [
+        "decision requires implementation_permission=forbidden and exit_gate=owner-decision",
+        "research requires implementation_permission=forbidden and exit_gate=evidence-reviewed",
+        "prototype requires implementation_permission=forbidden and exit_gate=prototype-reviewed and a prototype_evidence artifact",
+        "implementation requires implementation_permission=approved and exit_gate=implementation-verified",
+        "non-implementation work items must block or replan before product-code writes"
       ],
       "additional_properties": false,
-      "refusal_handling": "If the requested task cannot fit the schema, return blocked with a reason instead of inventing fields.",
+      "refusal_handling": "If the requested task cannot fit v2 or violates a kind/permission rule, return blocked or replan with a reason instead of inventing fields or reading v1.",
       "drift_controls": [
         "schema and template changes must be reviewed together",
         "CI must fail when required fields or enum values disappear",
-        "Markdown summaries must be generated from structured fields when automation consumes them"
+        "Markdown summaries must be generated from structured fields when automation consumes them",
+        "active assets must not reference the retired task-package schema"
+      ]
+    },
+    {
+      "id": "adk-prototype-evidence-schema-v1",
+      "owner": "agent-dev-kit",
+      "applies_to": [
+        "adk-planning-execution-loop",
+        "adk-task-breakdown",
+        "adk-worktree-governance",
+        "architecture-planner"
+      ],
+      "schema_target": "prototype_evidence",
+      "schema_format": "json_schema",
+      "strict": true,
+      "required_fields": [
+        "structured_output_schema",
+        "question",
+        "base_commit",
+        "scope",
+        "artifact_path",
+        "artifact_sha256",
+        "runtime_assumptions",
+        "observed_result",
+        "decision_supported",
+        "verification_command",
+        "verification_exit_code",
+        "retention_decision",
+        "expires_at",
+        "cleanup_owner",
+        "rollback_anchor",
+        "active_references_absent"
+      ],
+      "retention_rules": [
+        "default to a data-only change/evidence artifact outside .git",
+        "branch or worktree retention requires explicit approval, expiry, cleanup owner and rollback anchor",
+        "expire requires a future expires_at",
+        "delete-orphan requires owner confirmation that no active artifact references remain",
+        "prototype evidence cannot replace production verification"
+      ],
+      "additional_properties": false,
+      "refusal_handling": "If provenance, hash, expiry or cleanup ownership is missing, return needs-fix and do not promote the prototype into implementation evidence.",
+      "drift_controls": [
+        "prototype artifact path and hash must be reviewed together",
+        "retention decision must remain machine-readable",
+        "prototype branches and worktrees must remain governed exceptions rather than defaults"
       ]
     },
     {
@@ -257,6 +344,8 @@
     "must_use_structured_outputs_over_json_mode": true,
     "json_mode_allowed_only_with_validation": true,
     "must_detect_refusals": true,
+    "task_package_v2_permission_rules_required": true,
+    "prototype_evidence_provenance_required": true,
     "must_not": [
       "treat valid JSON as schema compliance",
       "hide schema parse failure in prose",

@@ -1,8 +1,8 @@
 ---
 name: adk-task-breakdown
 description: 将需求拆解为可并行执行的任务包
-version: 1.3.0
-last_updated: 2026-07-07
+version: 1.4.0
+last_updated: 2026-07-19
 triggers:
   - "拆解任务"
   - "任务拆分"
@@ -18,6 +18,7 @@ constraints:
   - 每个任务必须可独立验证
   - 默认禁止两个任务并行修改同一 shared contract/schema
   - 机器消费的任务包必须声明 structured_output_schema 和 strict_schema_decision
+  - 任务包只接受 adk-task-package-schema-v2，work_item_kind 与 implementation_permission 必须满足跨字段规则
 ---
 
 # adk-task-breakdown
@@ -31,7 +32,7 @@ constraints:
 
 ## 任务拆分原则
 
-1. **单一职责**：每个任务只做一件事，验证一个目标。
+1. **单一职责**：每个任务只解决一个问题，并标为 decision/research/prototype/implementation。
 2. **可独立验证**：每个任务有独立的验收命令，不依赖其他任务的产出。
 3. **粒度适中**：单任务 2-8 小时，超 8 小时必须再拆，低于 0.5 小时合并。
 4. **依赖最小化**：任务间依赖越少越好，优先串行再考虑并行。
@@ -50,7 +51,7 @@ constraints:
 
 ## Workflow
 1. **计划预检**：先检查需求/计划是否存在内部矛盾、不可验证条目、会被 reviewer 判为缺陷的要求，以及缺失的全局约束。
-2. **定义拆分边界**：明确 scope_write、scope_read、输入输出、global_constraints、interfaces 与完成标准。
+2. **定义拆分边界**：明确 scope_write/read、work_item_kind、question_to_resolve、evidence_required、implementation_permission、exit_gate、handoff_target、retention_decision、interfaces 与完成标准。
 3. **并行准入判断**：检查是否存在同文件写冲突、共享 contract、根配置冲突。
 4. **绘制依赖图**：
    ```bash
@@ -60,11 +61,11 @@ constraints:
    rg -n "call|invoke|dispatch|emit|publish" <target_path> | head -20
    ```
    依赖图格式：`T1 → T2 → T3`（箭头表示"被依赖"）
-5. **生成任务包**：每个任务给出 owner、依赖、验证命令、阻塞条件、global_constraints 子集和 interfaces。
+5. **生成任务包**：decision/research/prototype 固定 `implementation_permission=forbidden`；只有已批准 implementation 可为 `approved`，并给出 owner、依赖、验证、阻塞和 handoff。
 6. **右尺寸校准**：任务必须足够小以支持独立测试和 review；setup/config/docs 应并入真正消费它们的任务，避免独立“准备任务”丢失验收上下文。
 7. **估时与排期**：用三点估时法计算每个任务工时，标注关键路径。
 8. **定义交接令牌**：每个任务声明 `ready_to_handoff` 条件与接收方。
-9. **结构化输出门禁**：机器消费或并行调度的任务包必须映射到 `adk-task-package-schema-v1`，拒绝自由 JSON、隐式字段和未声明 enum。
+9. **结构化输出门禁**：机器消费或并行调度的任务包必须映射到 `adk-task-package-schema-v2`，拒绝 v1、自由 JSON、隐式字段、未声明 enum 和 kind/permission 冲突。
 10. **规划整合顺序**：列出 merge order、联调点与最终统一验证步骤。
 11. **大仓触点梳理**：若涉及大型多模块仓，补关键触点清单。
 12. **输出执行建议**：适合并行则给 2-4 个任务包，不适合则给单线程方案。
@@ -98,7 +99,8 @@ cloc <target_path> 2>/dev/null || echo "cloc not installed"
 - 关键路径: T1 → T2 → T4（总工期 Xh）
 - 估时方法: 三点估时 / 类比 / T-shirt
 - Work Mode (diagnosis/repro/planning/execution):
-- Structured Output Schema: adk-task-package-schema-v1 / strict_schema_decision / refusal_handling
+- Structured Output Schema: adk-task-package-schema-v2 / strict_schema_decision / refusal_handling
+- Work Item Contract: work_item_kind / question_to_resolve / evidence_required / implementation_permission / exit_gate / handoff_target / retention_decision
 - Handoff Token (ready_to_handoff + receiver):
 - Large-Repo Touchpoints (scripts/entry/command-registry/shared-contract):
 - Conflict Matrix:
@@ -109,12 +111,14 @@ cloc <target_path> 2>/dev/null || echo "cloc not installed"
 ## Failure Handling
 - 若拆分后冲突面扩大，降级为单线程执行方案。
 - 若出现未识别共享依赖，暂停并重新划分 scope。
+- 非 implementation 工作项请求写产品代码时，固定 blocked/replan，不得静默改类型。
 - 估时偏差超过 50% 时，重新评估并更新任务包。
 - 依赖图出现环时，必须打破循环依赖再继续。
 
 ## Quality Gate
 - 每个任务必须具备独立验证命令与可交付产物。
 - 机器消费的任务包必须有 structured_output_schema、strict_schema_decision 和 refusal_handling。
+- 四种 work_item_kind 必须满足 v2 permission/exit gate 规则；prototype 必须引用 prototype_evidence。
 - 每个任务必须继承适用的 global_constraints，并声明 interfaces。
 - 计划预检发现的内部矛盾、不可验证要求或 reviewer-defect 风险必须先处理或记录 owner 决策。
 - 必须显式标记共享文件/共享 contract 冲突面。

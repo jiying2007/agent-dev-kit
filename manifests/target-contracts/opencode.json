@@ -28,6 +28,10 @@
       "static": {}
     }
   },
+  "skill_invocation": {
+    "supported_modes": ["implicit"],
+    "explicit_only_frontmatter": {}
+  },
   "permission_profiles": {
     "read-only": {"permission": {"edit": "deny", "bash": "deny", "webfetch": "ask"}},
     "code-write": {"permission": {"edit": "allow", "bash": "ask", "webfetch": "ask"}},

@@ -46,11 +46,11 @@
 1. 需求验证：确认问题、用户/设备场景、非目标和验收方式。
 2. 方案设计：沉淀架构、接口、数据流、状态机、风险和回退策略。
 3. 评审：对需求、工程、测试、交互或运维影响做针对性审查。
-4. 任务切片：拆成可验证的小任务，声明 `scope_read`、`scope_write`、`must_not_touch` 和验证命令。
+4. 任务切片：使用 `adk-task-package-schema-v2` 拆成 decision/research/prototype/implementation，声明问题、证据、实现权限、exit gate、handoff、retention、`scope_read`、`scope_write`、`must_not_touch` 和验证命令。
 5. 执行与验证：每个任务独立检查结果，不能把“生成了代码”当作完成。
 6. 复盘：记录返工原因、验证缺口和可复用经验候选。
 
-Planner 派发前必须先校验计划 schema：必填字段完整、`dependsOn` 引用存在、依赖图无环、prompt/context 未超预算、`retry_budget` 明确。校验失败时不得创建 worker、worktree 或子代理，必须返回 plan repair。
+Planner 派发前必须先校验计划 schema：必填字段完整、kind/permission/exit gate 一致、`dependsOn` 引用存在、依赖图无环、prompt/context 未超预算、`retry_budget` 明确。decision/research/prototype 固定禁止 implementation 权限；校验失败时不得创建 worker、worktree 或子代理，必须返回 plan repair。
 
 数据库 schema 变更必须同带迁移、回滚和兼容性说明；删除较大代码、公共 API 或共享 contract 前必须列出调用点、影响面和 approval gate。
 

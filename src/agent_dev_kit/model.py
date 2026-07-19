@@ -118,6 +118,7 @@ class Manifest:
         "profiles",
         "workflows",
         "tool_targets",
+        "skill_invocation",
         "external_handoff_targets",
     )
 
@@ -155,6 +156,21 @@ class Manifest:
     @property
     def default_profile(self) -> str:
         return str(self.data.get("default_profile", "core"))
+
+    def skill_invocation_mode(self, asset: Asset) -> str:
+        if asset.kind != "skill":
+            raise ManifestError("skill invocation mode is only defined for skills: {}".format(asset.name))
+        policy = self.data.get("skill_invocation")
+        if not isinstance(policy, dict):
+            raise ManifestError("skill_invocation must be an object")
+        default_mode = policy.get("default_mode")
+        overrides = policy.get("overrides")
+        if default_mode not in ("implicit", "explicit-only") or not isinstance(overrides, dict):
+            raise ManifestError("skill_invocation policy is invalid")
+        mode = overrides.get(asset.name, default_mode)
+        if mode not in ("implicit", "explicit-only"):
+            raise ManifestError("invalid skill invocation mode for {}: {}".format(asset.name, mode))
+        return str(mode)
 
     def _records(self, key: str) -> List[Mapping[str, Any]]:
         value = self.data.get(key, [])
@@ -244,6 +260,18 @@ class Manifest:
         overlap = set(skills).intersection(optional)
         if overlap:
             failures.append("optional skills duplicate core skills: {}".format(", ".join(sorted(overlap))))
+
+        invocation = self.data.get("skill_invocation")
+        if isinstance(invocation, dict):
+            overrides = invocation.get("overrides", {})
+            if isinstance(overrides, dict):
+                unknown_overrides = set(overrides).difference(set(skills).union(optional))
+                if unknown_overrides:
+                    failures.append(
+                        "skill_invocation overrides reference unknown skills: {}".format(
+                            ", ".join(sorted(unknown_overrides))
+                        )
+                    )
 
         for key, records in (("agents", agents), ("skills", skills), ("optional_skills", optional)):
             for name, record in records.items():

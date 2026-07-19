@@ -11,6 +11,7 @@
     "supported_asset_kinds",
     "layouts",
     "frontmatter",
+    "skill_invocation",
     "permission_profiles",
     "support_directories",
     "smoke_stages"
@@ -54,6 +55,20 @@
       "type": "object",
       "minProperties": 1,
       "additionalProperties": {"$ref": "#/$defs/frontmatterContract"}
+    },
+    "skill_invocation": {
+      "type": "object",
+      "required": ["supported_modes", "explicit_only_frontmatter"],
+      "properties": {
+        "supported_modes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"enum": ["implicit", "explicit-only"]}
+        },
+        "explicit_only_frontmatter": {"type": "object"}
+      },
+      "additionalProperties": false
     },
     "permission_profiles": {
       "type": "object",

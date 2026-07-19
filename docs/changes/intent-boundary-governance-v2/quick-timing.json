@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "mode": "quick",
+  "status": "pass",
+  "total": 18,
+  "pass": 18,
+  "fail": 0,
+  "elapsed_ms": 64586,
+  "slow_threshold_sec": 30,
+  "tests": [
+    {"name": "test_validate", "status": "pass", "elapsed_ms": 5328},
+    {"name": "test_runtime_boundary", "status": "pass", "elapsed_ms": 312},
+    {"name": "test_target_contracts", "status": "pass", "elapsed_ms": 7809},
+    {"name": "test_effect_eval", "status": "pass", "elapsed_ms": 1002},
+    {"name": "test_software_m5_ready", "status": "pass", "elapsed_ms": 4168},
+    {"name": "test_token_budget", "status": "pass", "elapsed_ms": 4108},
+    {"name": "test_intent_boundary_governance", "status": "pass", "elapsed_ms": 583},
+    {"name": "test_agent_ecosystem_standards", "status": "pass", "elapsed_ms": 225},
+    {"name": "test_workflow_contract", "status": "pass", "elapsed_ms": 826},
+    {"name": "test_workflow_closure", "status": "pass", "elapsed_ms": 662},
+    {"name": "test_goal_contracts", "status": "pass", "elapsed_ms": 393},
+    {"name": "test_capability_health", "status": "pass", "elapsed_ms": 685},
+    {"name": "test_harness_readiness", "status": "pass", "elapsed_ms": 2633},
+    {"name": "test_local_ci_parity", "status": "pass", "elapsed_ms": 273},
+    {"name": "test_performance_budgets", "status": "pass", "elapsed_ms": 536},
+    {"name": "test_skill_trigger_matrix", "status": "pass", "elapsed_ms": 22597},
+    {"name": "test_match_effectiveness", "status": "pass", "elapsed_ms": 8971},
+    {"name": "test_scripts_smoke", "status": "pass", "elapsed_ms": 3422}
+  ],
+  "slow_tests": [
+
+  ]
+}

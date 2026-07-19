@@ -153,6 +153,8 @@ This note records the official OpenAI Developers content that is safe to use as 
 - CI/PR review runners must be disabled by default, treat PR text as untrusted, protect secrets from fork code, require structured findings before SCM publishing and never treat AI review as human approval.
 - Inline review comments require validated diff anchoring. If new, renamed, deleted or multi-line locations cannot be mapped safely, keep the finding in the summary instead of posting a misleading inline comment.
 - Skill version and model/runtime assumptions must be pinned for production workflows; treat `skill version` as a reproducibility field. Scripted skills need deterministic stdout, known output paths, loud failures and explicit network allowlists when network is needed.
+- Keep Skill invocation intent platform-neutral: `implicit` is the default; `explicit-only` maps to target-native metadata only after that behavior is verified. For Codex, use nested `agents/openai.yaml` interface metadata and `policy.allow_implicit_invocation: false`; explicit invocation never grants runtime permission.
+- Machine-consumed work items use task-package v2 and distinguish decision, research, prototype and implementation. Research/prototype remain implementation-forbidden, and prototype evidence requires provenance, hash, expiry and cleanup ownership.
 - Audit MCP runtime options: `startup_timeout_sec`, `tool_timeout_sec`, `required`, `enabled_tools`, `disabled_tools`, default and per-tool approval modes, OAuth callback settings and scopes.
 - Keep external writes in report-only mode until dry-run, approval and rollback evidence exist.
 - Audit hooks by event. Do not rely on unsupported hook output fields, especially `continue` from `PreToolUse` or matchers on `Stop`.

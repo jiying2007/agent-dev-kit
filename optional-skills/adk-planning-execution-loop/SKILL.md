@@ -1,8 +1,8 @@
 ---
 name: adk-planning-execution-loop
 description: 长任务计划审查、分阶段执行、恢复与收口闭环
-version: 1.1.0
-last_updated: 2026-07-07
+version: 1.2.0
+last_updated: 2026-07-19
 triggers:
   - "执行计划"
   - "多阶段任务"
@@ -38,12 +38,12 @@ constraints:
 
 ## Workflow
 1. 计划审查：检查依赖顺序、验证命令、隐含环境假设和阻塞条件。
-2. 任务切片：每个阶段输出目标、scope、done criteria、验证命令。
+2. 任务切片：每阶段输出 task-package v2 kind/question/evidence/permission/exit/handoff/retention、scope、done criteria 和验证命令。
 3. 状态外化：建立或更新 `PROJECT/REQUIREMENTS/STATE/PLAN/SUMMARY` 等同类 planning 工件。
 4. 连续性证明：长任务必须记录 active plan、findings、progress、attestation 和 excluded context。
 5. 执行检查点：每完成一个阶段，更新状态、证据和风险。
 6. 恢复记录：维护 `session-state`、`next-actions`、`risk-ledger`、`resume-prompt`。
-7. 偏离处理：发现计划错误、共享契约冲突或验证失败时，暂停并回到计划审查。
+7. 偏离处理：发现计划错误、共享契约冲突、验证失败或 research/prototype 请求实现权限时，暂停并回到计划审查。
 8. 目标闭环检查：核对原始目标、当前声明、证据、剩余未闭环项和停止条件。
 9. 计划完整性检查：无 phase heading 不得报告 `0/0 complete`；混合状态格式按字段核对；stop gate 只有 explicit opt-in、in_progress 和 ledger progress 同时满足才可阻断。
 10. 卡死保护：检查 retry budget、heartbeat、staleness threshold 和连续无信息增量轮次。
@@ -67,6 +67,7 @@ constraints:
 
 ## Checkpoint Hygiene
 - 每个 checkpoint 必须声明 owner、阶段状态、验证命令、证据路径和下一步。
+- checkpoint 必须保留 work_item_kind、implementation_permission、exit_gate 和 handoff_target；非 implementation 完成后不得直达代码实现。
 - checkpoint 连续失败两次时，先更新假设和风险，不继续堆叠同类尝试。
 - 任务完成或中止后清理 orphan checkpoint，只保留最终摘要、负结果和可复用决策。
 - 写入 checkpoint 后运行适用的 lint/test/dry-run，避免半截恢复状态误导下一会话。
@@ -96,6 +97,7 @@ bash scripts/devkit.sh archive --change <change-id>
 ```md
 - Plan Review:
 - Stage Checklist:
+- Work Item Contract (kind/question/evidence/permission/exit/handoff/retention):
 - Planning Artifacts:
 - Continuity Attestation:
 - Goal Closure:
@@ -121,6 +123,7 @@ bash scripts/devkit.sh archive --change <change-id>
 
 ## Quality Gate
 - 每个阶段必须有验证证据，禁止无证据的阶段推进。
+- 所有阶段只接受 task-package v2；prototype 必须附 prototype_evidence，v1 或权限冲突固定 needs-fix。
 - 恢复摘要必须能让新会话继续执行，包含完整上下文。
 - 目标闭环记录必须能从原始目标追溯到完成声明、证据和剩余风险。
 - Anti-stall 检查必须包含 retry budget、staleness threshold、heartbeat 和停止条件。

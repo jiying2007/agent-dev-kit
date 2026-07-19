@@ -7,7 +7,8 @@
     "openai-tool-search"
   ],
   "external_source_refs": [
-    "agent-skills-open-format"
+    "agent-skills-open-format",
+    "mattpocock-skills-9603c1cc8118d08bc1b3bf34cf714f62178dea3b"
   ],
   "reference_boundary": "OpenAI/Codex source docs are citation metadata and governance references only. This manifest promotes platform-neutral ADK skill reproducibility contracts and must not enable Codex skill installs, hosted skill APIs, user-directory writes, or compatibility defaults.",
   "contracts": [
@@ -69,6 +70,63 @@
         "ship production workflows that depend on whatever latest means",
         "change skill version and model/runtime assumption without validation",
         "overwrite an installed skill without rollback evidence"
+      ]
+    },
+    {
+      "id": "cross-harness-skill-invocation-v1",
+      "owner": "agent-dev-kit",
+      "applies_to": [
+        "managed skills",
+        "direct target adapters",
+        "external handoff targets",
+        "plugin-packaged skills"
+      ],
+      "required_fields": [
+        "skill_name",
+        "invocation_mode",
+        "target",
+        "metadata_path",
+        "explicit_invocation_evidence",
+        "permission_boundary"
+      ],
+      "invocation_policy": {
+        "allowed_modes": [
+          "implicit",
+          "explicit-only"
+        ],
+        "default_mode": "implicit",
+        "override_policy": "overrides must reference registered skills and include positive/negative routing evidence",
+        "permission_boundary": "invocation controls discovery only and never grants tool, network, write, delegation, commit, publish or install permission"
+      },
+      "target_mappings": {
+        "claude-code": {
+          "implicit": "omit disable-model-invocation",
+          "explicit-only": "disable-model-invocation: true"
+        },
+        "codex": {
+          "implicit": "use nested interface metadata and omit policy",
+          "explicit-only": "policy.allow_implicit_invocation: false"
+        },
+        "unsupported": "fail closed; do not silently downgrade explicit-only to implicit"
+      },
+      "codex_metadata_contract": {
+        "required_root": "interface",
+        "required_interface_fields": [
+          "display_name",
+          "short_description"
+        ],
+        "legacy_top_level_fields_forbidden": [
+          "display_name",
+          "short_description"
+        ],
+        "explicit_true_forbidden": true
+      },
+      "must_not": [
+        "infer invocation mode from the skill name or broad description",
+        "treat explicit invocation as approval for tools or writes",
+        "emit top-level Codex display_name or short_description",
+        "emit allow_implicit_invocation true instead of relying on the official default",
+        "silently map an unsupported explicit-only mode to implicit"
       ]
     },
     {
@@ -190,6 +248,7 @@
     "networked_skills_require_allowlist_and_egress_policy": true,
     "third_party_skills_default_review_required": true,
     "agent_skills_portable_format_required": true,
+    "cross_harness_invocation_must_be_explicit": true,
     "must_not": [
       "duplicate full skill procedures in global prompts",
       "promote unversioned skills into production defaults",

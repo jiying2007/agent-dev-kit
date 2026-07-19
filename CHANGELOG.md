@@ -2,6 +2,21 @@
 
 ## Unreleased
 
+## v3.1.0-rc.5 (2026-07-19)
+
+### 新增
+- 增加平台中立 `skill_invocation` SSOT 和 direct-target mapping；Claude Code 支持 `explicit-only`，未核验等价字段的 target fail closed，Codex 继续由 external handoff adapter 承接。
+- 增加 task-package v2 typed validator，区分 decision/research/prototype/implementation，并用 permission/exit gate 阻止探索票直接进入实现。
+- 增加 architecture hotspot/YAGNI scope 与 prototype evidence provenance/retention 合同。
+
+### 破坏性变化
+- 删除 task-package v1 活跃合同与 reader，不补默认字段、不双写；所有机器消费任务包必须迁移到 v2。
+- Codex Skill metadata 硬切官方嵌套 `interface` 结构；顶层 legacy metadata 与显式 `allow_implicit_invocation: true` 不再接受。
+
+### 门禁
+- 新增 invocation target mapping、未知 override、work-item 越权、prototype 缺 provenance、架构无理由扩域的正负回归。
+- external source 只吸收方法，不安装、复制或运行 `mattpocock/skills`、Claude plugin、hook/MCP 或 in-progress Skill。
+
 ## v3.1.0-rc.4 (2026-07-19)
 
 ### 新增

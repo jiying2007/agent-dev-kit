@@ -178,6 +178,17 @@ def load_target_contract(manifest: Manifest, target: str) -> TargetContract:
         raise ManifestError(
             "target_contract_invalid: supported kinds/layouts/frontmatter differ for {}".format(target)
         )
+    invocation = data["skill_invocation"]
+    supported_modes = invocation["supported_modes"]
+    explicit_frontmatter = invocation["explicit_only_frontmatter"]
+    if "explicit-only" not in supported_modes and explicit_frontmatter:
+        raise ManifestError(
+            "target_contract_invalid: target={} has explicit-only mapping without support".format(target)
+        )
+    if "explicit-only" in supported_modes and not explicit_frontmatter:
+        raise ManifestError(
+            "target_contract_invalid: target={} supports explicit-only without mapping".format(target)
+        )
     contract = TargetContract(target, path, data)
     for kind in supported:
         contract.layout(kind, "contract-probe")
@@ -254,6 +265,18 @@ def _render_main(manifest: Manifest, contract: TargetContract, asset: Asset) -> 
         if isinstance(value, str) and value.strip():
             metadata[str(key)] = value.strip()
     metadata.update(dict(kind_contract["static"]))
+    if asset.kind == "skill":
+        invocation_mode = manifest.skill_invocation_mode(asset)
+        invocation_contract = contract.data["skill_invocation"]
+        supported_modes = tuple(str(item) for item in invocation_contract["supported_modes"])
+        if invocation_mode not in supported_modes:
+            raise TargetUsageError(
+                "unsupported_skill_invocation_mode: target={} skill={} mode={}".format(
+                    contract.name, asset.name, invocation_mode
+                )
+            )
+        if invocation_mode == "explicit-only":
+            metadata.update(dict(invocation_contract["explicit_only_frontmatter"]))
     if asset.kind == "agent":
         permission_profile = record.get("permission_profile")
         if not isinstance(permission_profile, str) or not permission_profile:

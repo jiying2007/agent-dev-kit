@@ -21,6 +21,10 @@
       "static": {}
     }
   },
+  "skill_invocation": {
+    "supported_modes": ["implicit"],
+    "explicit_only_frontmatter": {}
+  },
   "permission_profiles": {},
   "support_directories": ["references", "scripts", "assets", "templates", "examples"],
   "smoke_stages": ["discovery", "load", "trigger"]
