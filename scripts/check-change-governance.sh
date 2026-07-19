@@ -46,6 +46,22 @@ require_line() {
   fi
 }
 
+require_check_item() {
+  local file="$1"
+  local item="$2"
+  if ! awk -v item="${item}" '
+    /^- \[[ xX]\] / {
+      line = $0
+      sub(/^- \[[ xX]\] /, "", line)
+      if (line == item) found = 1
+    }
+    END { exit(found ? 0 : 1) }
+  ' "${CHANGE_DIR}/${file}"; then
+    echo "[FAIL] ${file} missing checklist item: ${item}" >&2
+    exit 1
+  fi
+}
+
 reject_placeholder_text() {
   local file="$1"
   local pattern='待补充|TODO|TBD|FIXME|PLACEHOLDER|占位'
@@ -100,10 +116,10 @@ require_line "negative-results.md" "| Command | Exit Code | Result Summary | Evi
 require_table_data_row_after_section "negative-results.md" "## 已验证的负结果"
 require_table_data_row_after_section "negative-results.md" "## Evidence Index（命令级）"
 
-require_line "checklist.md" "- [ ] Prompt before/after 对比证据"
-require_line "checklist.md" "- [ ] Evidence Index 命令级字段完整（命令/退出码/结果摘要/证据路径/层级/关联工件）"
-require_line "checklist.md" "- [ ] Skill Intake 归属与安装范围结论"
-require_line "checklist.md" "- [ ] 收敛结论或阻塞说明"
+require_check_item "checklist.md" "Prompt before/after 对比证据"
+require_check_item "checklist.md" "Evidence Index 命令级字段完整（命令/退出码/结果摘要/证据路径/层级/关联工件）"
+require_check_item "checklist.md" "Skill Intake 归属与安装范围结论"
+require_check_item "checklist.md" "收敛结论或阻塞说明"
 
 reject_placeholder_text "proposal.md"
 reject_placeholder_text "design.md"

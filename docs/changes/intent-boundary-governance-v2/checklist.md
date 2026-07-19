@@ -11,6 +11,10 @@
 - [x] ADK Skill/token/manifest/target 与 root doc/adoption 门禁通过
 - [x] ADK quick/full、安全、性能和 release check 通过
 - [x] Codex source-to-live rehearsal/apply 与运行态 smoke 通过
-- [ ] 独立 review blocker=0、major=0
-- [ ] Evidence Index、prompt before/after、negative results 和 rollback anchor 完整
+- [x] 独立 review blocker=0、major=0
+- [x] Evidence Index、prompt before/after、negative results 和 rollback anchor 完整
 - [ ] 版本、commit、归档/Knowledge Hub candidate 与最终声明一致
+- [x] Prompt before/after 对比证据
+- [x] Evidence Index 命令级字段完整（命令/退出码/结果摘要/证据路径/层级/关联工件）
+- [x] Skill Intake 归属与安装范围结论
+- [x] 收敛结论或阻塞说明

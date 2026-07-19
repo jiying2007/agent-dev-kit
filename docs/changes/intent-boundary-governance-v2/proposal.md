@@ -47,7 +47,25 @@ ADK 已有 Skill 路由、通用 task package、长任务、并行、架构规�
 - Prototype：新增结构化 evidence contract，并复用 artifact/worktree/retention 治理。
 - 外部实践吸收：继续使用既有 `adk-external-practice-absorption` Workflow，不新增 provider 专属流程。
 
-## Breaking Change
+## 上下文充分性检查
+
+- [x] 输入固定为不可变 upstream revision、当前 ADK/Codex contracts 与用户硬切授权。
+- [x] 输出固定为 manifest/adapter/task/prototype 合同、迁移、测试和可回滚发布证据。
+- [x] 风险覆盖 schema breaking、target drift、权限误授予、source-to-live 覆盖和旧版演练边界。
+- [x] 验证命令、通过标准、证据路径与阻塞条件已在 tasks 和 verification evidence 中声明。
+
+## Core/Optional 边界检查
+
+- [x] invocation SSOT、typed validator、task schema 和 target adapter 属于通用 core。
+- [x] planning loop 保持 optional consumer，不因本变更进入默认激活 profile。
+- 结论：增强既有资产，不新增 provider 专属 Agent、Skill 或 Workflow，不扩大运行权限。
+
+## 变更重复性检查
+
+- 已检索 manifest、target contracts、task/planning/parallel Skills、architecture Agent 与 change history。
+- 既有资产覆盖路由与执行流程，但没有统一 invocation/work-item/prototype 声明式边界；因此采用增强而非新建同类资产。
+
+## Breaking Change 检查
 
 本变更是硬切换，无兼容期：
 
@@ -58,6 +76,23 @@ ADK 已有 Skill 路由、通用 task package、长任务、并行、架构规�
 - 不保留 alias、warning-only wrapper 或兼容转换器。
 
 回退只能整体 revert 本 change，并从 source-to-live 备份恢复运行资产；禁止恢复双 schema 或双 metadata 格式。
+
+## Spec 链路检查
+
+- requirements baseline：本 proposal 的单问题、目标、非目标与成功标准。
+- design decision：`design.md` 的四层合同、direct target 映射、Codex external handoff 与 rollback-only 旧版演练边界。
+- task traceability：`tasks.md` T1–T7；逐项证据进入 `verification-evidence.md`，失败路径进入 `negative-results.md`。
+
+## 安装范围与依赖边界
+
+- ADK core/optional assets：`global-ready`，只依赖仓内 manifest/schema/adapter。
+- Codex metadata：project source，经受管 build/plan/apply 链发布；`~/.codex` 不是手工源。
+- 外部 source：reference-only，不成为运行依赖，不执行其脚本、plugin、hook 或依赖安装。
+
+## Prompt 回归证据计划
+
+- before/after、正例与负例固定在 `prompt-comparison.md`。
+- metadata/task/prototype/hotspot 语义由定向负例与 full regression 机械验证，不以文字对比替代测试。
 
 ## 成功标准
 
@@ -92,3 +127,8 @@ ADK 已有 Skill 路由、通用 task package、长任务、并行、架构规�
 - staleness_threshold：每完成一个任务或 45 分钟更新工件与证据。
 - stop_condition：`pass|replan|split|blocked|abort`。
 - completion claim：只有 source、decision、implementation、verification、rehearsal、review/retire 六类本地证据完整，且 blocker/major 为 0，才能声明本地终态闭环。
+
+## 收敛模式与退出条件
+
+- 当前模式：execution closure；不再扩展 upstream feature scope。
+- 退出条件：ADK/Codex/root 定向与全量门禁通过，exact-commit 双构建一致，RC4→RC5 演练通过，review blocker/major 为 0，并完成受管归档。

@@ -1,4 +1,6 @@
-# 负结果：intent-boundary-governance-v2
+# 负结果记录：intent-boundary-governance-v2
+
+## 已验证的负结果
 
 | 时间 | 阶段 | 命令/路径 | 结果 | 决策 |
 |---|---|---|---|---|
@@ -17,3 +19,18 @@
 | 2026-07-19 | T7 checksum | `rtk sha256sum -c <absolute checksum>`（首次） | checksum 内容是 artifact basename，但命令从仓根执行，两个校验均因文件不在 cwd 而 exit 1 | 在各 candidate artifact 目录重跑；`cmp` 已独立证明两份 tarball 字节一致 |
 | 2026-07-19 | T7 regression | `rtk bash scripts/devkit.sh check --quick`（首次） | `devkit.sh` 不存在 `check` 子命令，exit 2 | 按 CLI help 改为 `test --quick`，18/18 通过 |
 | 2026-07-19 | T7 release gate | `rtk bash scripts/devkit.sh release check --version 3.1.0-rc.5 --summary-json`（首次） | `release check` 从 version lock 取版本，不接受 `--version`，exit 2 | 按 CLI help 去掉参数重跑，RC5 release check 通过 |
+| 2026-07-19 | T7 commit isolation | Codex `git apply --cached`（首次最小 hunk） | 手写 hunk 的 context/count 不一致，Git 报 `corrupt patch`，exit 128；index 未改变 | 修正为三行 context 的最小 patch，随后 exact index tree 独立验证通过 |
+| 2026-07-19 | T7 archive preflight | `rtk bash scripts/check-change-governance.sh docs/changes/intent-boundary-governance-v2`（首次） | 定制 change artifact 缺模板等价章节；同时 checker 只接受未勾选 checklist，无法表达完成态 | 补齐等价章节/Evidence Index；checker 改为接受 `[ ]|[x]` 且标签精确匹配，并增加正负回归 |
+
+## Evidence Index（命令级）
+
+| Command | Exit Code | Result Summary | Evidence Path | Layer | Related Artifact |
+|---|---:|---|---|---|---|
+| `rtk bash scripts/check-official-docs-governance.sh --summary-json`（首次） | 1 | 三个 task consumer 缺 v2 markers，修复后通过 | 本文件 | Contract | T1/T3 |
+| `rtk bash tests/run_all.sh --timing-json .../full-timing.json`（首次） | 1 | 54/55；change 文档携带不应进入分发的具体外部仓引用 | 本文件、`full-timing.json` | Test | T7 |
+| RC4→RC5 `release rehearse`（首次） | 1 | current loader 误读旧 target contract，修复为 release-only hard-cut migration | 本文件、`release-rehearsal.json` | Release | T7 |
+| `rtk bash scripts/check-change-governance.sh docs/changes/intent-boundary-governance-v2`（首次） | 1 | 工件章节与完成态 checkbox 合同不一致 | 本文件 | Workflow | T7 archive |
+| `rtk bash scripts/devkit.sh test --quick` | 0 | quick 18/18 | `quick-timing.json` | Test | T7 |
+| `rtk bash scripts/devkit.sh test --timing-json ...` | 0 | full 55/55 | `full-test-timing.json` | Test | T7 |
+| `rtk bash scripts/devkit.sh security check --summary-json` | 0 | git inventory 零 failure/warning | `verification-evidence.md` | Security | T7 |
+| `rtk bash scripts/devkit.sh release rehearse ...` | 0 | rollback-before-install 与 fallback restore 通过 | `release-rehearsal.json` | Release | T7 |

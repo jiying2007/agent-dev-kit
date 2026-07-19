@@ -6,9 +6,9 @@
 - [x] T4 增强 architecture hotspot scope 与 prototype evidence；verify：Agent 输出契约和结构化 evidence contract 必需字段、扩域条件、retention 条件被机械检查
 - [x] T5 更新文档、migration、版本和 llm_agent adoption/lifecycle 证据；verify：ADK 3.1.0-rc.5、manifest sync、doc sync、adoption structured/status 检查通过，sampled watch 未恢复 submodule
 - [x] T6 硬切 `~/codex` managed metadata 并完成 source-to-live rehearsal/apply；verify：legacy 顶层 metadata/explicit true 零残留，build/doctor/plan/dry-run/apply/routing/check 与运行态 smoke 有证据
-- [ ] T7 完成定向、quick/full、安全、性能、独立 review、提交和复盘；verify：blocker=0、major=0，Evidence Index 与完成声明一致
+- [x] T7 完成定向、quick/full、安全、性能、独立 review、提交和复盘；verify：blocker=0、major=0，Evidence Index 与完成声明一致
 
-## Ownership 与冲突矩阵
+## Ownership 与并行冲突检查
 
 - scope_write：
   - ADK `manifest.json|manifest.yaml`、manifest/target schemas、target adapters、structured/reproducibility/plugin contracts；
@@ -44,3 +44,11 @@
 - staleness_threshold：45 分钟。
 - stop_condition：`pass|replan|split|blocked|abort`。
 - merge/commit order：ADK contract/compiler → ADK consumers/evidence/version → root adoption → Codex source adapter → source-to-live evidence。
+
+## 轻量工件与收敛结论
+
+- 需求梳理工件：`proposal.md`、`design.md`、root source assessment report。
+- task checklist 工件：本文件 T1–T7 与 `checklist.md`。
+- 执行反馈/验收记录工件：`verification-evidence.md`、`negative-results.md`、`review-findings.md`、benchmark/timing/release rehearsal JSON。
+- 收敛结论：ENHANCE 项均在既有 core/optional 资产中完成；OBSERVE/REJECT 项未进入运行依赖；无未闭环 blocker/major。
+- 阻塞说明：无；remote publish、tag 与真实双 runtime certification 明确不在本 change 范围。

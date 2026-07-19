@@ -33,6 +33,19 @@ NEGATIVE
 
 bash "$ROOT_DIR/scripts/check-change-governance.sh" "$CHANGE_DIR"
 
+# 完成态 checklist 仍应通过；门禁约束字段存在性，不应强制保持未勾选。
+sed -i 's/^- \[ \] Prompt before\/after 对比证据$/- [x] Prompt before\/after 对比证据/' "$CHANGE_DIR/checklist.md"
+sed -i 's/^- \[ \] Evidence Index 命令级字段完整/- [x] Evidence Index 命令级字段完整/' "$CHANGE_DIR/checklist.md"
+bash "$ROOT_DIR/scripts/check-change-governance.sh" "$CHANGE_DIR"
+
+# 标签本身仍是合同；改名后必须失败。
+sed -i 's/Prompt before\/after 对比证据/Prompt regression evidence/' "$CHANGE_DIR/checklist.md"
+if bash "$ROOT_DIR/scripts/check-change-governance.sh" "$CHANGE_DIR" >/dev/null 2>&1; then
+  echo "[FAIL] governance check should fail when checklist contract label changes" >&2
+  exit 1
+fi
+sed -i 's/Prompt regression evidence/Prompt before\/after 对比证据/' "$CHANGE_DIR/checklist.md"
+
 # 删除一个关键段落，校验脚本应失败
 sed -i '/^## Spec 链路检查$/,/^## 安装范围与依赖边界$/d' "$CHANGE_DIR/proposal.md"
 if bash "$ROOT_DIR/scripts/check-change-governance.sh" "$CHANGE_DIR" >/dev/null 2>&1; then
