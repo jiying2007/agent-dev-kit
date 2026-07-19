@@ -1,6 +1,6 @@
 # Agent and Skill Catalog
 
-- generated_at: 2026-07-05T00:33:45Z
+- generated_at: 2026-07-19T03:12:33Z
 - source: manifest.yaml
 
 ## Agents
@@ -18,6 +18,7 @@
 | `security-compliance-reviewer` | 安全、合规、凭据和供应链风险审查 | `agents/security-compliance-reviewer/AGENTS.md` |
 | `code-review-governor` | 代码审查、反馈闭环和质量放行治理 | `agents/code-review-governor/AGENTS.md` |
 | `bsp-analyst` | BSP 代码分析、架构梳理、历史追溯 | `agents/bsp-analyst/AGENTS.md` |
+| `external-practice-curator` | 多来源外部实践的来源、重复、合规、安全和资产形态只读审查 | `agents/external-practice-curator/AGENTS.md` |
 | `hardware-debugger` | 硬件故障定位、oops 分析和板级调试证据整理 | `agents/hardware-debugger/AGENTS.md` |
 
 ## Agent Contract Matrix
@@ -35,6 +36,7 @@
 | `security-compliance-reviewer` | 安全审查, 供应链风险 | 功能实现, 发布执行 | build-release-engineer, code-review-governor | adk-static-analysis-c-cpp, adk-commit-pr-quality-gate | 高风险项必须修复、降级或显式记录风险接受 |
 | `code-review-governor` | 审查分级, 放行判断 | 直接修复代码, 发布执行 | requirements-analyst, test-validation-engineer | adk-code-review-loop, adk-commit-pr-quality-gate | blocker 必须修复或明确风险接受后才能放行 |
 | `bsp-analyst` | BSP 分析, 历史追溯 | 驱动实现, 发布放行 | driver-engineer, architecture-planner | adk-bsp-analysis, adk-bsp-porting-playbook | BSP 结论必须包含入口、依赖、风险和追溯证据 |
+| `external-practice-curator` | 外部实践候选审查, 吸收决策材料 | 候选批准, 代码实现, 安装与发布 | requirements-analyst, architecture-planner, security-compliance-reviewer, test-validation-engineer, code-review-governor | adk-requirements-triage, adk-repo-prompt-analysis | 来源、负结果、不可迁移缺点和独立 owner handoff 必须完整，curator 不得自批 |
 | `hardware-debugger` | 硬件故障定位, oops 分析 | 长期架构设计, 发布放行 | driver-engineer, test-validation-engineer | adk-hardware-debugging, adk-embedded-remote-debug-log-triage, adk-systematic-debugging | 硬件调试结论必须包含现象、假设、实验和证据 |
 
 ## Skills
@@ -48,7 +50,6 @@
 | 20 | 20 | `intake` | primary | inversion | `adk-structured-requirements-questioning` | 结构化需求提问对齐，通过有序问题消除模糊需求 | "文档审查" | `skills/adk-structured-requirements-questioning/SKILL.md` |
 | 20 | 30 | `intake` | primary | reviewer | `adk-repo-prompt-analysis` | 逆向分析开源项目中的 Prompt/系统指令设计，提取上下文工程模式 | 分析子仓 prompt | `skills/adk-repo-prompt-analysis/SKILL.md` |
 | 20 | 40 | `intake` | primary | reviewer | `adk-skill-deep-analysis` | 从产品视角深度拆解 AI Skill 的设计意图、独特解法和可借鉴模式 | 深度拆解 skill | `skills/adk-skill-deep-analysis/SKILL.md` |
-| 20 | 50 | `intake` | primary | pipeline | `adk-intake-workflow` | 子仓接入工作流——扫描、分析、决策与治理覆盖 | "接入新仓库" | `skills/adk-intake-workflow/SKILL.md` |
 | 30 | 10 | `planning` | primary | playbook | `adk-lightweight-planning` | 轻量只读计划生成能力，用于用户明确要求先给计划但尚未要求执行或写文件的编码任务 | "给我一个计划" | `skills/adk-lightweight-planning/SKILL.md` |
 | 30 | 20 | `planning` | primary | playbook | `adk-task-breakdown` | 将需求拆解为可并行执行的任务包 | "拆解任务" | `skills/adk-task-breakdown/SKILL.md` |
 | 30 | 30 | `planning` | primary | governance | `adk-parallel-agent-governance` | 并行子代理治理，定义任务分片、scope_write、冲突矩阵、等待和整合验证 | "并行 agent" | `skills/adk-parallel-agent-governance/SKILL.md` |
@@ -102,6 +103,7 @@
 
 | Order | Stage | Category | Activation | Pattern | Name | Description | First Trigger | Path |
 |---:|---:|---|---|---|---|---|---|---|
+| 20 | 50 | `intake` | primary | pipeline | `adk-external-practice-absorption` | 统一评估 GitHub、GitLab、Gitee、OpenAI/Codex 官方、Anthropic/Claude 官方、微信公众号和人工证据中的外部 Agent、Skill、Workflow 与工程实践，并把批准项闭环到 ADK change、验证、pilot、发布复审和退役。用于“吸收外部实践”“评估参考实现”“从官方或社区沉淀 Agent/Skill/Workflow”“Gitee/GitLab/GitHub 实践研究”等请求；不用于普通功能开发、单纯浏览网页或未经 owner 决策的自动安装/复制。 | "吸收外部实践" | `optional-skills/adk-external-practice-absorption/SKILL.md` |
 | 30 | 60 | `planning` | primary | pipeline | `adk-planning-execution-loop` | 长任务计划审查、分阶段执行、恢复与收口闭环 | "执行计划" | `optional-skills/adk-planning-execution-loop/SKILL.md` |
 | 50 | 90 | `implementation` | supporting | tool-wrapper | `adk-data-fetch` | 数据获取技能组合——包含邮件获取与网页正文提取 | "获取数据" | `optional-skills/adk-data-fetch/SKILL.md` |
 | 50 | 91 | `implementation` | supporting | tool-wrapper | `adk-email-imap-fetch` | IMAP 邮件获取——从邮箱获取邮件列表和内容 | "获取邮件" | `optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md` |
@@ -119,6 +121,7 @@
 | 10 | `feature-delivery` | `feature-delivery` | 新功能从需求收敛到验证评审的交付工作流 | core, embedded-fullstack | `requirements-analyst` | `adk-requirements-triage` | `workflows/feature-delivery/WORKFLOW.md` |
 | 20 | `bugfix-delivery` | `bugfix-delivery` | 缺陷复现、根因定位、回归验证和审查闭环工作流 | embedded-fullstack | `application-engineer` | `adk-systematic-debugging` | `workflows/bugfix-delivery/WORKFLOW.md` |
 | 60 | `release-hardening` | `release-hardening` | 发布前安全、性能、版本、回滚和放行证据收口工作流 | release-hardening | `build-release-engineer` | `adk-release-versioning` | `workflows/release-hardening/WORKFLOW.md` |
+| 80 | `research-intake` | `external-practice-absorption` | 多来源外部实践从 report-only candidate 到独立决策、ADK change、验证、pilot、发布复审和退役的治理工作流 | research-intake | `external-practice-curator` | `adk-external-practice-absorption` | `workflows/external-practice-absorption/WORKFLOW.md` |
 | 90 | `skill-curation-delivery` | `skill-curation-delivery` | 技能候选筛选、core/optional 归属和触发质量验证工作流 | core, team-core | `requirements-analyst` | `adk-requirements-triage` | `workflows/skill-curation-delivery/WORKFLOW.md` |
 | 110 | `adk-governance` | `adk-delivery-gate` | agent-dev-kit 通用资产生产交付门禁 | core, embedded-fullstack | `code-review-governor` | `adk-verification-before-completion` | `workflows/adk-delivery-gate/WORKFLOW.md` |
 | 110 | `adk-governance` | `runtime-routing` | 运行时技能路由、fallback 边界和 profile 闭包验证工作流 | core, embedded-fullstack | `architecture-planner` | `adk-runtime-router` | `workflows/runtime-routing/WORKFLOW.md` |
@@ -130,6 +133,7 @@
 | 10 | `feature-delivery` | `feature-delivery` | core, embedded-fullstack | low | `requirements-analyst` | `adk-requirements-triage` | adk-task-breakdown, adk-interface-contract-design, adk-unit-test-embedded, adk-verification-before-completion, adk-code-review-loop | 用户目标包含新功能、增强或可验收行为变化, 需求可以通过目标、非目标和验收标准表达 | 需求和任务拆解闭环, 实现范围与验收标准一致, 目标测试和完成前验证通过 | rtk bash tests/test_validate.sh, rtk bash tests/test_workflow_closure.sh |
 | 20 | `bugfix-delivery` | `bugfix-delivery` | embedded-fullstack | low | `application-engineer` | `adk-systematic-debugging` | adk-task-breakdown, adk-verification-before-completion, adk-code-review-loop | 观察行为与预期行为不一致, 需要先复现、定位根因，再实施修复 | 根因陈述, 修复摘要, 复现路径或负结果说明, 定向回归验证 | rtk bash tests/test_workflow.sh, rtk bash tests/test_integration.sh |
 | 60 | `release-hardening` | `release-hardening` | release-hardening | medium | `build-release-engineer` | `adk-release-versioning` | adk-test-strategy, adk-code-review-loop, adk-branch-closeout, adk-verification-before-completion, adk-commit-pr-quality-gate | 变更准备进入发布、打包、交付或现场放行阶段, 需要版本、回滚、安全、性能或放行证据 | 版本与制品信息, 回滚路径, 发布前验证结果, commit/PR 或放行门禁结论 | rtk bash tests/test_validate.sh, rtk bash tests/test_profile_coherence.sh |
+| 80 | `research-intake` | `external-practice-absorption` | research-intake | low | `external-practice-curator` | `adk-external-practice-absorption` | adk-requirements-triage, adk-repo-prompt-analysis, adk-skill-deep-analysis, adk-task-breakdown, adk-verification-before-completion, adk-code-review-loop | 存在外部实践 candidate、来源 URL 或受治理 metadata evidence, 目标是评估、吸收、合并、增强、观察或拒绝外部实践 | 来源、重复、许可证/版权、安全和架构审查, 独立 owner decision 或 needs-more-evidence 结论, 批准项的 change、验证、pilot、发布复审与退役证据 | rtk bash tests/test_optional_skills.sh, rtk bash tests/test_workflow_closure.sh, rtk bash tests/test_skill_trigger_matrix.sh |
 | 90 | `skill-curation-delivery` | `skill-curation-delivery` | core, team-core | low | `requirements-analyst` | `adk-requirements-triage` | adk-task-breakdown, adk-commit-pr-quality-gate, adk-verification-before-completion | 新增、导入、拆分、替换或弃用 skill 候选, 需要判断 core/optional 归属和触发质量 | 归属决策, 正例、反例和 fallback 样例, catalog、SOP 和触发矩阵验证 | rtk bash tests/test_catalog.sh, rtk bash tests/test_skill_sop_quality.sh |
 | 110 | `adk-governance` | `adk-delivery-gate` | core, embedded-fullstack | low | `code-review-governor` | `adk-verification-before-completion` | adk-runtime-router, adk-requirements-triage, adk-task-breakdown, adk-test-strategy, adk-code-review-loop, adk-after-action-review, adk-token-context-governance, adk-commit-pr-quality-gate | ADK active 资产、manifest、profile、workflow 或门禁发生变更, 需要把变更声明和验证证据绑定到完成前门禁 | strict validate 通过, workflow closure 或 profile coherence 通过, run_all 或等效定向回归证据 | rtk bash tests/run_all.sh --fail-fast |
 | 110 | `adk-governance` | `runtime-routing` | core, embedded-fullstack | low | `architecture-planner` | `adk-runtime-router` | adk-verification-before-completion, adk-repo-drift-remediation | 新增、替换、弃用或重排 skill/profile/workflow 路由, 需要确认 primary/supporting/fallback 和 profile 闭包 | routing matrix 与 manifest 一致, trigger 冲突检查通过, profile coherence 和 workflow closure 通过 | rtk bash tests/test_skill_trigger_matrix.sh, rtk bash tests/test_workflow_closure.sh |
@@ -150,6 +154,7 @@
 | `completion_gate` | 完成前核对声明、验证证据、风险和回退边界 | profile-resolved | core, embedded-fullstack | `adk-delivery-gate` | `adk-verification-before-completion` | adk-test-strategy | - | - | 准备完成，做完成前检查 | 需求边界还没明确 |
 | `commit_pr_gate` | 提交或 PR 前质量门禁、格式、评审和证据检查 | profile-resolved | core, release-hardening | `adk-delivery-gate` | `adk-commit-pr-quality-gate` | adk-verification-before-completion, adk-code-review-loop | - | - | 准备 commit，跑提交门禁 | 只分析日志，不提交 |
 | `release_versioning` | 发布、版本、制品、回滚和放行证据收口 | profile-resolved | release-hardening, embedded-fullstack | `release-hardening` | `adk-release-versioning` | adk-commit-pr-quality-gate, adk-verification-before-completion | adk-branch-closeout | - | 准备发布并生成版本说明 | 代码根因还没定位 |
+| `external_practice_absorption` | 多来源外部实践的来源审查、独立决策、ADK change、验证、pilot、发布复审和退役治理 | optional-skill-required | research-intake | `external-practice-absorption` | `adk-external-practice-absorption` | adk-requirements-triage, adk-repo-prompt-analysis, adk-verification-before-completion | adk-requirements-triage | - | 吸收 Gitee GitHub GitLab 的 Agent 工程实践 | 直接实现已经批准的普通功能 |
 | `skill_governance` | skill 组合、触发优先级、fallback、弃用和 profile 归属治理 | optional-skill-required | core, team-core | `skill-curation-delivery` | `adk-skill-composition-governance` | adk-repo-drift-remediation, adk-verification-before-completion | adk-requirements-triage | - | skill、workflow 分类和排序需要治理 | 设备日志里有内核 oops |
 
 ## Profiles
@@ -164,4 +169,4 @@
 | `openspec-driven` | Spec 驱动开发配置（需求/设计/任务链路） | false | core |
 | `large-refactor` | 大型重构配置（API 稳定性 + 代码简化） | false | embedded-fullstack |
 | `incident-response` | 线上事故响应配置（根因/复盘/恢复） | false | - |
-| `research-intake` | 参考仓吸收配置（候选筛选与审查） | false | - |
+| `research-intake` | 多来源外部实践吸收配置（只读候选审查与独立决策 handoff） | false | - |

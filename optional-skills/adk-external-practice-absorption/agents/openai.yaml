@@ -1,0 +1,6 @@
+interface:
+  display_name: "外部实践吸收治理"
+  short_description: "统一评估外部优秀实践并守住吸收、验证、发布和退役治理边界"
+  default_prompt: "Use $adk-external-practice-absorption to review this external practice and produce a governed adoption decision."
+policy:
+  allow_implicit_invocation: true

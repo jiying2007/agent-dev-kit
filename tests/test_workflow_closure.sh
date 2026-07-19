@@ -15,12 +15,16 @@ echo "$summary" | grep -q '"status":"pass"' || {
 }
 
 if "$ROOT_DIR/scripts/check-workflow-closure.sh" --profile research-intake >"$TMP_DIR/research-intake.out" 2>&1; then
-  echo "[FAIL] research-intake should not satisfy global workflow closure" >&2
+  echo "[FAIL] research-intake must require its optional absorption skill" >&2
   exit 1
 fi
-grep -q "found no workflows" "$TMP_DIR/research-intake.out" || {
-  echo "[FAIL] workflow closure failure did not explain missing workflow contract" >&2
+grep -q "missing skill in selected profiles: adk-external-practice-absorption" "$TMP_DIR/research-intake.out" || {
+  echo "[FAIL] workflow closure failure did not explain the missing optional skill" >&2
   exit 1
 }
+
+"$ROOT_DIR/scripts/check-workflow-closure.sh" \
+  --profile research-intake \
+  --with-optional-skill adk-external-practice-absorption >/dev/null
 
 echo "[PASS] workflow closure"

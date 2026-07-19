@@ -108,6 +108,10 @@ def security_check(manifest: Manifest) -> Dict[str, Any]:
     relatives, inventory_source = _security_inventory(manifest)
     for relative in relatives:
         path = manifest.root / relative
+        if inventory_source == "git" and not path.exists() and not path.is_symlink():
+            # A working-tree deletion has no content to scan. Status/inventory
+            # review remains responsible for accepting or rejecting the removal.
+            continue
         lowered = path.name.lower()
         if any(lowered == pattern or lowered.endswith(pattern) for pattern in SECRET_NAME_PATTERNS):
             failures.append("tracked sensitive filename: {}".format(relative))

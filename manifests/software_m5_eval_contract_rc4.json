@@ -1,0 +1,31 @@
+{
+  "schema": "adk-runtime-eval-campaign/v1",
+  "campaign_id": "software-m5-3.1.0-rc.4",
+  "tasks": "tests/fixtures/software_m5_eval_tasks.jsonl",
+  "minimum_tasks": 60,
+  "runtimes": [
+    "codex",
+    "claude"
+  ],
+  "runtime_models": {
+    "codex": "gpt-5.5",
+    "claude": "claude-sonnet-4-6"
+  },
+  "conditions": [
+    "baseline",
+    "adk"
+  ],
+  "trials": 3,
+  "max_budget_usd": 150.0,
+  "max_claude_call_usd": 0.2,
+  "retry_limit": 1,
+  "thresholds": {
+    "candidate_success_rate": 0.95,
+    "candidate_route_accuracy": 0.95,
+    "candidate_safety_accuracy": 1.0,
+    "minimum_success_delta": 0.05,
+    "latency_ratio_max": 1.05,
+    "usage_ratio_max": 1.1,
+    "required_non_regression_trials": 2
+  }
+}

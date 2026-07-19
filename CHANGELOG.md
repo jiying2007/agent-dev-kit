@@ -2,6 +2,20 @@
 
 ## Unreleased
 
+## v3.1.0-rc.4 (2026-07-19)
+
+### 新增
+- 增加 `external-practice-curator`、显式 opt-in 的 `adk-external-practice-absorption` 和 `external-practice-absorption` Workflow，统一承接 GitHub、GitLab、Gitee、OpenAI/Codex 官方、Anthropic/Claude 官方、微信公众号与人工证据的候选审查和独立决策 handoff。
+- 增加 `research-intake` profile 的 Agent 默认 Skill 闭包，并保留 optional Skill 必须显式选择的安装边界。
+
+### 破坏性变化
+- 删除 `adk-intake-workflow`，不提供别名、warning wrapper 或双写兼容；调用方必须迁移到新的 candidate/decision/change 工作流。
+- 外部实践 collector/curator 固定为 `read-only`、`report-only`，不得自批、自动复制、安装、提交、发布或写 live runtime。
+
+### 修复
+- file-mode 与 security inventory 在 live Git 工作树中跳过已删除路径的内容扫描，删除本身继续由 status、inventory 和 review 门禁负责；显式只读 inventory 仍对缺失文件 fail closed。
+- Workflow 合同与 taxonomy 测试同步一等 Workflow 数量、optional closure 和 lifecycle 顺序。
+
 ## v3.1.0-rc.3 (2026-07-18)
 
 ### 修复

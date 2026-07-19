@@ -22,6 +22,12 @@ if "${ROOT_DIR}/scripts/check-file-modes.sh" "$TMP_DIR" --index-inventory "$TMP_
   exit 1
 fi
 
+printf '100644 0000000000000000000000000000000000000000 0\tmissing.txt\0' >"$TMP_DIR/modes.z"
+if "${ROOT_DIR}/scripts/check-file-modes.sh" "$TMP_DIR" --index-inventory "$TMP_DIR/modes.z" >/dev/null 2>&1; then
+  echo "[FAIL] explicit file mode inventory accepted a missing file" >&2
+  exit 1
+fi
+
 printf '100644 0000000000000000000000000000000000000000 0\t../escape\0' >"$TMP_DIR/modes.z"
 if "${ROOT_DIR}/scripts/check-file-modes.sh" "$TMP_DIR" --index-inventory "$TMP_DIR/modes.z" >/dev/null 2>&1; then
   echo "[FAIL] file mode inventory accepted path traversal" >&2

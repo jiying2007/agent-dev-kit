@@ -9,8 +9,8 @@ if [[ -f "${ADK_TEST_SUITE_DIR:-/nonexistent}/validate-summary.json" ]]; then
 else
   summary="$("$ROOT_DIR/scripts/validate-assets.sh" --strict --summary-json)"
 fi
-echo "$summary" | grep -q '"workflows":6' || {
-  echo "[FAIL] validate summary did not report six workflows" >&2
+echo "$summary" | grep -q '"workflows":7' || {
+  echo "[FAIL] validate summary did not report seven workflows" >&2
   exit 1
 }
 
@@ -46,12 +46,21 @@ grep -q '| `release-hardening` | release-hardening | medium | `build-release-eng
 }
 
 if "$ROOT_DIR/scripts/check-workflow-closure.sh" --profile research-intake >/tmp/adk-workflow-contract-research.out 2>&1; then
-  echo "[FAIL] research-intake should have no applicable workflow contract" >&2
+  echo "[FAIL] research-intake accepted its optional workflow without explicit selection" >&2
   exit 1
 fi
 
-grep -q "found no workflows" /tmp/adk-workflow-contract-research.out || {
-  echo "[FAIL] research-intake failure did not explain missing workflow contract" >&2
+grep -q "missing skill in selected profiles: adk-external-practice-absorption" /tmp/adk-workflow-contract-research.out || {
+  echo "[FAIL] research-intake failure did not explain the missing optional skill" >&2
+  exit 1
+}
+
+"$ROOT_DIR/scripts/check-workflow-closure.sh" \
+  --profile research-intake \
+  --with-optional-skill adk-external-practice-absorption >/dev/null
+
+grep -q '| `external-practice-absorption` | research-intake | low | `external-practice-curator` | `adk-external-practice-absorption` |' "$ROOT_DIR/docs/workflow-contract-matrix.md" || {
+  echo "[FAIL] standalone workflow matrix missing external-practice optional contract" >&2
   exit 1
 }
 

@@ -1,5 +1,5 @@
 {
-  "version": "3.1.0-rc.3",
+  "version": "3.1.0-rc.4",
   "locale": "zh-CN",
   "platforms": [
     "linux-embedded",
@@ -639,6 +639,34 @@
       "quality_gate": "BSP 结论必须包含入口、依赖、风险和追溯证据"
     },
     {
+      "name": "external-practice-curator",
+      "path": "agents/external-practice-curator/AGENTS.md",
+      "quality_tier": "p1",
+      "permission_profile": "read-only",
+      "description": "多来源外部实践的来源、重复、合规、安全和资产形态只读审查",
+      "owns": [
+        "外部实践候选审查",
+        "吸收决策材料"
+      ],
+      "does_not_own": [
+        "候选批准",
+        "代码实现",
+        "安装与发布"
+      ],
+      "handoff_to": [
+        "requirements-analyst",
+        "architecture-planner",
+        "security-compliance-reviewer",
+        "test-validation-engineer",
+        "code-review-governor"
+      ],
+      "default_skills": [
+        "adk-requirements-triage",
+        "adk-repo-prompt-analysis"
+      ],
+      "quality_gate": "来源、负结果、不可迁移缺点和独立 owner handoff 必须完整，curator 不得自批"
+    },
+    {
       "name": "hardware-debugger",
       "path": "agents/hardware-debugger/AGENTS.md",
       "quality_tier": "p1",
@@ -742,17 +770,6 @@
       "stage_order": 40,
       "activation_mode": "primary",
       "pattern": "reviewer",
-      "depends_on": []
-    },
-    {
-      "name": "adk-intake-workflow",
-      "path": "skills/adk-intake-workflow/SKILL.md",
-      "quality_tier": "p0",
-      "category": "intake",
-      "lifecycle_order": 20,
-      "stage_order": 50,
-      "activation_mode": "primary",
-      "pattern": "pipeline",
       "depends_on": []
     },
     {
@@ -1541,21 +1558,32 @@
       ]
     },
     "research-intake": {
-      "description": "参考仓吸收配置（候选筛选与审查）",
+      "description": "多来源外部实践吸收配置（只读候选审查与独立决策 handoff）",
       "trigger_examples": [
-        "吸收参考仓",
-        "研究新技术",
-        "评估外部方案"
+        "吸收 GitHub GitLab Gitee 外部实践",
+        "评估 Codex Claude 官方实践",
+        "从外部候选形成 Agent Skill Workflow"
       ],
       "include_agents": [
-        "requirements-analyst"
+        "requirements-analyst",
+        "external-practice-curator",
+        "architecture-planner",
+        "security-compliance-reviewer",
+        "test-validation-engineer",
+        "code-review-governor"
       ],
       "include_skills": [
         "adk-requirements-triage",
         "adk-repo-prompt-analysis",
         "adk-skill-deep-analysis",
-        "adk-intake-workflow",
         "adk-task-breakdown",
+        "adk-interface-contract-design",
+        "adk-adr-writer",
+        "adk-test-strategy",
+        "adk-verification-before-completion",
+        "adk-code-review-loop",
+        "adk-static-analysis-c-cpp",
+        "adk-commit-pr-quality-gate",
         "adk-memory-curator",
         "adk-archive-governance",
         "adk-knowledge-archive"
@@ -1727,6 +1755,68 @@
       "verification": [
         "rtk bash tests/test_validate.sh",
         "rtk bash tests/test_profile_coherence.sh"
+      ]
+    },
+    {
+      "name": "external-practice-absorption",
+      "path": "workflows/external-practice-absorption/WORKFLOW.md",
+      "description": "多来源外部实践从 report-only candidate 到独立决策、ADK change、验证、pilot、发布复审和退役的治理工作流",
+      "workflow_type": "research-intake",
+      "lifecycle_order": 80,
+      "profiles": [
+        "research-intake"
+      ],
+      "command_risk": "low",
+      "primary_agent": "external-practice-curator",
+      "primary_skill": "adk-external-practice-absorption",
+      "supporting_skills": [
+        "adk-requirements-triage",
+        "adk-repo-prompt-analysis",
+        "adk-skill-deep-analysis",
+        "adk-task-breakdown",
+        "adk-verification-before-completion",
+        "adk-code-review-loop"
+      ],
+      "triggers": [
+        "吸收外部实践",
+        "Gitee GitHub GitLab 实践评估",
+        "Codex Claude 官方实践吸收",
+        "从参考实现生成 Agent Skill Workflow"
+      ],
+      "entry_conditions": [
+        "存在外部实践 candidate、来源 URL 或受治理 metadata evidence",
+        "目标是评估、吸收、合并、增强、观察或拒绝外部实践"
+      ],
+      "exit_evidence": [
+        "来源、重复、许可证/版权、安全和架构审查",
+        "独立 owner decision 或 needs-more-evidence 结论",
+        "批准项的 change、验证、pilot、发布复审与退役证据"
+      ],
+      "skills": [
+        "adk-external-practice-absorption",
+        "adk-requirements-triage",
+        "adk-repo-prompt-analysis",
+        "adk-skill-deep-analysis",
+        "adk-task-breakdown",
+        "adk-verification-before-completion",
+        "adk-code-review-loop"
+      ],
+      "agents": [
+        "external-practice-curator",
+        "requirements-analyst",
+        "architecture-planner",
+        "security-compliance-reviewer",
+        "test-validation-engineer",
+        "code-review-governor"
+      ],
+      "commands": [
+        "rtk bash scripts/devkit.sh validate --strict",
+        "rtk bash scripts/check-workflow-closure.sh --profile research-intake --with-optional-skill adk-external-practice-absorption"
+      ],
+      "verification": [
+        "rtk bash tests/test_optional_skills.sh",
+        "rtk bash tests/test_workflow_closure.sh",
+        "rtk bash tests/test_skill_trigger_matrix.sh"
       ]
     },
     {
@@ -1921,6 +2011,16 @@
     }
   ],
   "optional_skills": [
+    {
+      "name": "adk-external-practice-absorption",
+      "path": "optional-skills/adk-external-practice-absorption/SKILL.md",
+      "quality_tier": "p2",
+      "category": "intake",
+      "lifecycle_order": 20,
+      "stage_order": 50,
+      "activation_mode": "primary",
+      "pattern": "pipeline"
+    },
     {
       "name": "adk-planning-execution-loop",
       "path": "optional-skills/adk-planning-execution-loop/SKILL.md",
@@ -2313,6 +2413,32 @@
       ]
     },
     {
+      "name": "external_practice_absorption",
+      "description": "多来源外部实践的来源审查、独立决策、ADK change、验证、pilot、发布复审和退役治理",
+      "availability": "optional-skill-required",
+      "primary_skill": "adk-external-practice-absorption",
+      "supporting_skills": [
+        "adk-requirements-triage",
+        "adk-repo-prompt-analysis",
+        "adk-verification-before-completion"
+      ],
+      "fallback_skills": [
+        "adk-requirements-triage"
+      ],
+      "mutually_exclusive": [],
+      "workflow": "external-practice-absorption",
+      "profiles": [
+        "research-intake"
+      ],
+      "positive_examples": [
+        "吸收 Gitee GitHub GitLab 的 Agent 工程实践",
+        "评估 Codex Claude 官方实践并形成 Skill Workflow 候选"
+      ],
+      "negative_examples": [
+        "直接实现已经批准的普通功能"
+      ]
+    },
+    {
       "name": "skill_governance",
       "description": "skill 组合、触发优先级、fallback、弃用和 profile 归属治理",
       "availability": "optional-skill-required",
@@ -2508,6 +2634,17 @@
         "intent_zh": "仓库漂移/全仓漂移/repo drift/全面检查/残留清理/边界不清/文档代码不一致/全仓治理/提交前质量收口",
         "primary_skill": "adk-repo-drift-remediation",
         "supporting_skills": [
+          "adk-verification-before-completion"
+        ]
+      },
+      {
+        "intent": "external_practice_absorption",
+        "intent_zh": "吸收外部实践/评估参考实现/Gitee实践/GitHub GitLab Gitee优秀实践/Codex Claude官方实践/从外部实践实现Agent Skill Workflow",
+        "availability": "optional-skill-required",
+        "primary_skill": "adk-external-practice-absorption",
+        "supporting_skills": [
+          "adk-requirements-triage",
+          "adk-repo-prompt-analysis",
           "adk-verification-before-completion"
         ]
       },

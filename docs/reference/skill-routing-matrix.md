@@ -1,6 +1,6 @@
 # Skill Routing Matrix
 
-- generated_at: 2026-07-05T00:33:52Z
+- generated_at: 2026-07-19T03:12:40Z
 - source: manifest.yaml:skill_routing_matrix
 
 ## Skill Routing Matrix
@@ -19,4 +19,5 @@
 | `completion_gate` | 完成前核对声明、验证证据、风险和回退边界 | profile-resolved | core, embedded-fullstack | `adk-delivery-gate` | `adk-verification-before-completion` | adk-test-strategy | - | - | 准备完成，做完成前检查 | 需求边界还没明确 |
 | `commit_pr_gate` | 提交或 PR 前质量门禁、格式、评审和证据检查 | profile-resolved | core, release-hardening | `adk-delivery-gate` | `adk-commit-pr-quality-gate` | adk-verification-before-completion, adk-code-review-loop | - | - | 准备 commit，跑提交门禁 | 只分析日志，不提交 |
 | `release_versioning` | 发布、版本、制品、回滚和放行证据收口 | profile-resolved | release-hardening, embedded-fullstack | `release-hardening` | `adk-release-versioning` | adk-commit-pr-quality-gate, adk-verification-before-completion | adk-branch-closeout | - | 准备发布并生成版本说明 | 代码根因还没定位 |
+| `external_practice_absorption` | 多来源外部实践的来源审查、独立决策、ADK change、验证、pilot、发布复审和退役治理 | optional-skill-required | research-intake | `external-practice-absorption` | `adk-external-practice-absorption` | adk-requirements-triage, adk-repo-prompt-analysis, adk-verification-before-completion | adk-requirements-triage | - | 吸收 Gitee GitHub GitLab 的 Agent 工程实践 | 直接实现已经批准的普通功能 |
 | `skill_governance` | skill 组合、触发优先级、fallback、弃用和 profile 归属治理 | optional-skill-required | core, team-core | `skill-curation-delivery` | `adk-skill-composition-governance` | adk-repo-drift-remediation, adk-verification-before-completion | adk-requirements-triage | - | skill、workflow 分类和排序需要治理 | 设备日志里有内核 oops |

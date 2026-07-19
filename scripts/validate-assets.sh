@@ -509,7 +509,9 @@ validate_workflows() {
     [[ -n "$primary_skill" ]] || fail "workflow '$name' missing primary_skill"
     [[ "$command_risk" =~ ^(low|medium|high)$ ]] || fail "workflow '$name' command_risk must be low|medium|high"
     [[ -d "$ROOT_DIR/agents/$primary_agent" ]] || fail "workflow '$name' primary_agent unknown: $primary_agent"
-    [[ -d "$ROOT_DIR/skills/$primary_skill" ]] || fail "workflow '$name' primary_skill unknown: $primary_skill"
+    if [[ ! -d "$ROOT_DIR/skills/$primary_skill" ]] && ! adk_optional_skill_exists "$primary_skill"; then
+      fail "workflow '$name' primary_skill unknown: $primary_skill"
+    fi
 
     for key in profiles triggers agents skills commands verification supporting_skills; do
       count="$(adk_get_manifest_item_list "workflows" "$name" "$key" | awk 'END {print NR+0}')"
@@ -531,12 +533,16 @@ validate_workflows() {
 
     while IFS= read -r item; do
       [[ -z "$item" ]] && continue
-      [[ -d "$ROOT_DIR/skills/$item" ]] || fail "workflow '$name' references unknown skill '$item'"
+      if [[ ! -d "$ROOT_DIR/skills/$item" ]] && ! adk_optional_skill_exists "$item"; then
+        fail "workflow '$name' references unknown skill '$item'"
+      fi
     done < <(adk_get_manifest_item_list "workflows" "$name" "skills")
 
     while IFS= read -r item; do
       [[ -z "$item" ]] && continue
-      [[ -d "$ROOT_DIR/skills/$item" ]] || fail "workflow '$name' references unknown supporting skill '$item'"
+      if [[ ! -d "$ROOT_DIR/skills/$item" ]] && ! adk_optional_skill_exists "$item"; then
+        fail "workflow '$name' references unknown supporting skill '$item'"
+      fi
       adk_get_manifest_item_list "workflows" "$name" "skills" | grep -Fxq "$item" || fail "workflow '$name' supporting skill not listed in skills: $item"
     done < <(adk_get_manifest_item_list "workflows" "$name" "supporting_skills")
 

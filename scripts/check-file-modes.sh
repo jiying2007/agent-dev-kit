@@ -28,6 +28,10 @@ Checks tracked regular files against Git index modes:
   100644 -> not executable
   100755 -> executable
 
+Tracked paths deleted in the live working tree are outside this mode-only gate;
+status, inventory and review gates remain responsible for those deletions.
+An explicit --index-inventory stays strict and treats missing files as failure.
+
 Use --fix to chmod the working tree to match the index.
 Use --index-inventory for a read-only Git index mode export when .git is not mounted.
 USAGE
@@ -76,6 +80,9 @@ while IFS= read -r -d '' record; do
 
   full_path="${ROOT}/${path}"
   if [[ ! -f "${full_path}" ]]; then
+    if [[ -z "${INDEX_INVENTORY}" ]]; then
+      continue
+    fi
     echo "[FAIL] tracked file missing: ${path}" >&2
     missing=$((missing + 1))
     continue

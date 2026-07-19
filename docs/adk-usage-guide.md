@@ -125,7 +125,7 @@ Profile 决定一次使用或导出时启用哪些 Agent 和 Skill。
 | `openspec-driven` | 使用 spec/change/task 结构推进需求、设计和实现 |
 | `large-refactor` | 大范围重构、接口稳定性、简化治理和回归门禁 |
 | `incident-response` | 事故诊断、根因分析、恢复、复盘和安全响应 |
-| `research-intake` | 外部资料、参考仓库、官方文档和候选实践吸收 |
+| `research-intake` | 外部实践候选的只读审查配置；必须显式叠加 `adk-external-practice-absorption` 才形成吸收 workflow 闭包 |
 
 选择原则：
 
@@ -133,12 +133,13 @@ Profile 决定一次使用或导出时启用哪些 Agent 和 Skill。
 - 只有涉及设备链路、板级约束、BSP、驱动、产测或现场维护时才选 `embedded-fullstack`。
 - 准备发布、回滚或版本放行时叠加 `release-hardening`。
 - 需要团队交接或 review 责任明确时选 `team-core`。
-- 外部资料吸收不要直接改 active asset，先用 `research-intake` 做候选评估。
+- 外部资料先用 `research-intake` 做只读候选评估；进入吸收流程时必须显式传入 `--with-optional-skill adk-external-practice-absorption`，不能由 profile 隐式提升。
 
 检查 Profile 闭包：
 
 ```bash
 bash scripts/check-profile-coherence.sh
+bash scripts/devkit.sh workflow-closure --profile research-intake --with-optional-skill adk-external-practice-absorption
 ```
 
 该检查会阻止：
@@ -339,6 +340,7 @@ bash scripts/devkit.sh install rollback --receipt /tmp/adk-target/.adk-install-r
 | `bash scripts/devkit.sh asset-taxonomy` | 检查 skill/workflow 分类、manifest 物理顺序、profile 生命周期顺序和场景路由矩阵 |
 | `bash scripts/devkit.sh official-docs-governance --summary-json` | 检查官方资料 freshness 和提升门禁 |
 | `bash scripts/devkit.sh workflow-closure --profile core` | 检查 workflow 引用是否在 profile 闭包内 |
+| `bash scripts/devkit.sh workflow-closure --profile research-intake --with-optional-skill adk-external-practice-absorption` | 检查外部实践 workflow 只能由显式 optional skill 完成闭包 |
 | `bash scripts/devkit.sh file-modes` | 检查 tracked 文件权限 |
 | `bash scripts/devkit.sh catalog build` | 重新生成资产目录、workflow matrix 和 skill routing matrix |
 | `bash scripts/devkit.sh test` | 执行全量回归入口 |
@@ -434,6 +436,7 @@ fix(catalog): 修复 workflow matrix 生成格式
 | `test-validation-engineer` | 测试策略、验证证据和完成前门禁 | 测试策略、验证证据 | 功能实现、风险豁免 | `adk-test-strategy`、`adk-verification-before-completion` | 完成结论必须与验证命令、退出码和证据路径一致 |
 | `performance-reliability-engineer` | 性能剖析、稳定性和可靠性风险治理 | 性能分析、可靠性风险 | 功能需求裁决、安全签核 | `adk-performance-profiling-embedded`、`adk-fault-injection-recovery` | 性能和可靠性结论必须包含基线、负载条件和对比证据 |
 | `security-compliance-reviewer` | 安全、合规、凭据和供应链风险审查 | 安全审查、供应链风险 | 功能实现、发布执行 | `adk-static-analysis-c-cpp`、`adk-commit-pr-quality-gate` | 高风险项必须修复、降级或显式记录风险接受 |
+| `external-practice-curator` | GitHub、GitLab、Gitee、官方实践、微信公众号和人工候选的只读来源/重复/合规审查 | 审查材料、负结果、独立 owner handoff | 自批候选、实现代码、安装与发布 | `adk-requirements-triage`、`adk-repo-prompt-analysis` | curator 不能同时充当采纳决策 owner，所有输出保持 report-only |
 | `code-review-governor` | 代码审查、反馈闭环和质量放行治理 | 审查分级、放行判断 | 直接修复代码、发布执行 | `adk-code-review-loop`、`adk-commit-pr-quality-gate` | blocker 必须修复或明确风险接受后才能放行 |
 | `bsp-analyst` | BSP 代码分析、架构梳理、历史追溯 | BSP 分析、历史追溯 | 驱动实现、发布放行 | `adk-bsp-analysis`、`adk-bsp-porting-playbook` | BSP 结论必须包含入口、依赖、风险和追溯证据 |
 | `hardware-debugger` | 硬件故障定位、oops 分析和板级调试证据整理 | 硬件故障定位、oops 分析 | 长期架构设计、发布放行 | `adk-hardware-debugging`、`adk-systematic-debugging` | 硬件调试结论必须包含现象、假设、实验和证据 |
@@ -457,7 +460,7 @@ Agent 使用要点：
 | `adk-structured-requirements-questioning` | 用结构化提问消除需求或文档模糊点 | 问题清单、澄清结论 | 与 triage 区分：它更偏提问对齐 |
 | `adk-repo-prompt-analysis` | 逆向分析参考仓 Prompt/系统指令 | prompt 结构、上下文工程模式、采纳建议 | 只做分析和候选，不直接提升 active rule |
 | `adk-skill-deep-analysis` | 从产品视角深度拆解 AI Skill | 八阶段拆解、独特解法、吸收边界 | 不做无审查的直接迁移 |
-| `adk-intake-workflow` | 子仓接入、扫描、分析、决策和治理覆盖 | 接入报告、采纳/观察/拒绝决策 | 禁止只做增量吸收，必须全盘考量 |
+| `adk-external-practice-absorption` | 多来源外部 Agent、Skill、Workflow 和工程实践吸收 | 来源/重复/许可证/安全审查、独立决策、change、验证、pilot、发布复审和退役证据 | optional skill；不得自动安装、复制、自批或绕过独立 owner decision |
 | `adk-lightweight-planning` | 用户明确只要计划、尚未要求写文件或执行 | 轻量计划、行动项、开放问题 | 只读计划，不进入实现流程 |
 | `adk-task-breakdown` | 需求已经可描述，但任务过大或需要并行拆分 | 任务包、owner、读写范围、验证命令 | 依赖需求边界；不用于绕过需求澄清 |
 | `adk-parallel-agent-governance` | 并行子代理任务分片和整合治理 | scope_read/write、must_not_touch、整合验证 | 不用于边界不清或强耦合任务 |

@@ -441,13 +441,13 @@ def _cmd_eval(argv: Sequence[str]) -> int:
     campaign_sub = campaign.add_subparsers(dest="campaign_action", required=True)
     campaign_plan_parser = campaign_sub.add_parser("plan")
     campaign_plan_parser.add_argument(
-        "--contract", default=str(ROOT / "manifests" / "software_m5_eval_contract_rc3.json")
+        "--contract", default=str(ROOT / "manifests" / "software_m5_eval_contract_rc4.json")
     )
     campaign_plan_parser.add_argument("--output")
     campaign_plan_parser.add_argument("--summary-json", action="store_true")
     campaign_run_parser = campaign_sub.add_parser("run")
     campaign_run_parser.add_argument(
-        "--contract", default=str(ROOT / "manifests" / "software_m5_eval_contract_rc3.json")
+        "--contract", default=str(ROOT / "manifests" / "software_m5_eval_contract_rc4.json")
     )
     campaign_run_parser.add_argument("--state-dir", required=True)
     campaign_run_parser.add_argument("--execute", action="store_true")
@@ -457,7 +457,7 @@ def _cmd_eval(argv: Sequence[str]) -> int:
     campaign_run_parser.add_argument("--summary-json", action="store_true")
     campaign_check_parser = campaign_sub.add_parser("check")
     campaign_check_parser.add_argument(
-        "--contract", default=str(ROOT / "manifests" / "software_m5_eval_contract_rc3.json")
+        "--contract", default=str(ROOT / "manifests" / "software_m5_eval_contract_rc4.json")
     )
     campaign_check_parser.add_argument("--state-dir", required=True)
     campaign_check_parser.add_argument("--certify", action="store_true")
@@ -467,7 +467,7 @@ def _cmd_eval(argv: Sequence[str]) -> int:
     campaign_report_parser.add_argument("--input", required=True)
     campaign_report_parser.add_argument("--output")
     certify = sub.add_parser("certify")
-    certify.add_argument("--contract", default=str(ROOT / "manifests" / "software_m5_eval_contract_rc3.json"))
+    certify.add_argument("--contract", default=str(ROOT / "manifests" / "software_m5_eval_contract_rc4.json"))
     certify.add_argument("--state-dir", required=True)
     certify.add_argument("--output")
     certify.add_argument("--summary-json", action="store_true")
