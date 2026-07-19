@@ -12,6 +12,8 @@
 | 2026-07-19 | 旧 `adk-intake-workflow` 仍可继续使用 | 读取 Skill 与 references | 包含直接 clone、手改 registry、旧脚本和未实现入口 | 删除并由新的 optional absorption Skill/Workflow 替代 |
 | 2026-07-19 | 通用 `skill-creator` quick validator 可直接作为 ADK Skill 最终门禁 | 对新 Skill 运行系统 `quick_validate.py` | validator 拒绝 ADK 扩展 frontmatter 中的 version/triggers/non_triggers/inputs/outputs/constraints | 不削弱 ADK 元数据；保留此负结果，使用 ADK strict、metadata、routing 和 optional-install 门禁作为本仓权威验证 |
 | 2026-07-19 | `ruff` 可作为本轮 Python 静态门禁 | `rtk ruff check tools/codex_assets/practice_intake.py tools/codex_assets/reference_repository.py` | 环境未安装 ruff，命令无法启动 | 记录 not-run；改用 AST parse、ShellCheck、定向/全量测试和人工 review，不临时引入依赖 |
+| 2026-07-19 | clean Git worktree 直接 `release build` 等同 exact-commit build | 在提交后增加未跟踪 verification 文件，再比较 worktree build 与 `git archive <commit>` build | worktree build 包含 3 个未跟踪 evidence 文件，file count 590、SHA 与 exact-commit 的 587 files 不同 | 废弃 worktree artifact；只接受不可变 commit archive 的两次一致构建和对应 rehearsal |
+| 2026-07-19 | root full 可在 ADK evidence 未提交且 gitlink/lock 未同步时作为最终 pass | `rtk scripts/check-all.sh --full` | 53/58；三个未同步事实派生出 lock/current/subrepo/evidence/workspace 五项失败 | 保留 pre-sync 负证据；提交 evidence、同步声明后重跑，不弱化门禁 |
 
 ## Evidence Index（命令级）
 
