@@ -4,7 +4,7 @@
   "previous_version": "3.1.0-rc.4",
   "candidate_version": "3.1.0-rc.5",
   "previous_sha256": "50e62c3f3bd3f2433d10b3a27ef4eabb824cf96d0ce8d869360fd4f3c7e5be3a",
-  "candidate_sha256": "8aad1cbed4972d15eb19089606573379590115dec246d787763167a8ccbbce21",
+  "candidate_sha256": "6a82d1142b0b71568bce65acf814af68e82569d7679f9edc8abd96ca8be3c783",
   "previous_manifest_sha256": "7a6e3983a814bf0dc791142482a023d07c92f9941f7ee3a825c58c57293efe6e",
   "candidate_manifest_sha256": "6a9c39de1e5b7212e1adbe39e5820996e023dfc3b4cd51a6989faefa58554a18",
   "previous_installed": 62,
@@ -15,7 +15,7 @@
     "status": "pass",
     "removed": 62,
     "restored": 0,
-    "target": "/tmp/adk-release-rehearsal-_km0y18v/target"
+    "target": "/tmp/adk-release-rehearsal-gtf20bsi/target"
   },
   "fallback_restore": {
     "status": "pass",
@@ -30,5 +30,5 @@
   },
   "restored_assets": 62,
   "remote_publish": "not-in-scope",
-  "report_sha256": "b1945810f9a3630f9597ac44a96540b0e938828f103415eca2905f9bc7a5463a"
+  "report_sha256": "d352b67450b0c5d51bde38b414ddf76fc1aac23008d4d65a6b8371732b8fc268"
 }

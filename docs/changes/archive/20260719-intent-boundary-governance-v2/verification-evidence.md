@@ -1,6 +1,6 @@
 # Verification Evidence：intent-boundary-governance-v2
 
-## T1–T6 Evidence Index
+## T1–T7 Evidence Index
 
 | Command | Exit Code | Result Summary | Evidence Path | Layer | Related Artifact |
 |---|---:|---|---|---|---|
@@ -23,24 +23,36 @@
 | `rtk scripts/check-doc-sync.sh .` | 0 | 根仓 docs/governance 同步 | root command output | Docs | T5 |
 | `rtk scripts/check-adk-target-evidence.sh .` | 0 | checked=29，target evidence pass | root command output | Governance | T5 |
 | Codex source residue scan | 0 | 63 files、63 nested、legacy=0、implicit-true=0、explicit-false=0 | `~/codex` command output | Runtime adapter | T6 |
-| `rtk python3 -m unittest tests.test_check_skills` | 0 | 9/9，legacy/implicit-true/explicit-false/unknown policy 正负例 pass | `~/codex` command output | Test | T6 |
+| `rtk python3 -m unittest tests.test_check_skills` | 0 | 11/11，legacy/implicit-true/explicit-false/unknown policy 与官方 optional fields 正负例 pass | `~/codex` command output | Test | T6 |
+| exact-index `rtk python3 -m unittest tests.test_openai_metadata_contract` | 0 | 精确 Codex 暂存树 5/5，通过且未夹带既存 dirty | `/tmp/codex-index-verify.MzMgsA` command output | Test/Commit | T6/T7 |
 | `rtk bash scripts/check-skills.sh` | 0 | skills=63，errors=0，warnings=0 | `~/codex` command output | Governance | T6 |
 | `rtk bash scripts/backup.sh --target ~/.codex` | 0 | apply 前备份完成 | `/home/leiwenjun/codex/.backups/codex-home/20260719-134739` | Rollback | T6 |
 | Codex build/doctor/plan/dry-run | 0 | managed=712；doctor errors=0；overwrite=53、delete=0；dry-run pass | `~/codex/build/apply-plan.json` | Source-to-live | T6 |
 | Codex apply/routing/live scan | 0 | apply pass；token-lean route pass；live 63/63 nested 且零 legacy/true | command output | Runtime | T6 |
-| `rtk bash scripts/check.sh` | 0 | 99 tests、五 profile smoke、post-apply drift=0，最终 `[DONE] check` | command output | Full runtime | T6 |
+| `rtk bash scripts/check.sh`（最终） | 0 | 101 tests、五 profile smoke、governance/sandbox/routing 与 post-apply drift=0，最终 `[DONE] check` | command output | Full runtime | T6/T7 |
+| Codex final source-to-live plan/dry-run/apply | 0 | copy=0、overwrite=0、delete=0；keep=440，运行态已收敛 | `~/codex/build/apply-plan.json` | Source-to-live | T6/T7 |
+| Codex live metadata residue scan | 0 | files=63、nested=63、legacy=0、implicit-true=0、explicit-false=0 | command output | Runtime | T6/T7 |
+| Codex exact staged-tree check | 0 | skills=61、errors=0、warnings=0；legacy/implicit-true 零命中 | `/tmp/codex-index-verify.MzMgsA` | Commit isolation | T7 |
 | `rtk bash tests/run_all.sh --quick --timing-json .../quick-timing.json` | 0 | quick 18/18 | `quick-timing.json` | Test | T7 |
 | `rtk bash tests/run_all.sh --timing-json .../full-timing.json`（首次） | 1 | 54/55；唯一失败为 change 文档外部仓名 | `negative-results.md` | Test | T7 negative |
 | `rtk bash tests/run_all.sh --timing-json .../full-timing.json`（review fix 后） | 0 | 55/55 | `full-timing.json` | Test | T7 |
-| `rtk bash scripts/devkit.sh security check --summary-json` | 0 | git inventory 727 files，0 failure，0 warning | command output | Security | T7 |
+| `rtk bash scripts/devkit.sh test --timing-json .../full-test-timing.json`（归档门禁修复后） | 0 | 55/55 | `full-test-timing.json` | Test | T7 |
+| `rtk bash scripts/devkit.sh security check --summary-json`（最终） | 0 | git inventory 731 files，0 failure，0 warning | command output | Security | T7 |
 | `rtk bash scripts/devkit.sh benchmark run --iterations 10 ...` | 0 | 7/7 latency budgets 与 memory gate 全通过；I/O 10x p95=930.83ms，peak=276.7KiB | `benchmark.json` | Performance | T7 |
 | `rtk bash scripts/check-performance-budgets.sh --strict --timing-json .../full-timing.json` | 0 | 3 项 full-suite budget pass | `full-timing.json` | Performance | T7 |
-| independent review + re-review | 0 | blocker=0；2 major fixed；0 open minor | `review-findings.md` | Review | T7 |
+| `rtk bash scripts/check-change-governance.sh ...`（首次） | 1 | 定制工件缺等价章节且完成态 checkbox 被误拒绝 | `negative-results.md` | Workflow | T7 negative |
+| `rtk bash tests/test_change_governance.sh`（修复后） | 0 | `[ ]|[x]` 均可验证，标签改名 fail closed | command output | Workflow/Test | T7 |
+| `rtk bash tests/test_workflow.sh`、`tests/test_integration.sh` | 0 | workflow lifecycle pass；integration 8/8 | command output | Workflow/Test | T7 |
+| ADK implementation commits | 0 | `6d56834` contract hard-cut；`109049c` release boundary；`0fe2d4e` completed-checklist archive gate | git history | Commit | T7 |
+| Codex source commit | 0 | `684f7f8` 精确提交 50 metadata、checker 本次 hunks 与 5 tests | Codex git history | Commit | T6/T7 |
+| RC5 exact-commit deterministic build A/B | 0 | commit=`0fe2d4e`；两份 609-file artifact 字节一致，SHA256=`6a82d1142b0b71568bce65acf814af68e82569d7679f9edc8abd96ca8be3c783`，checksum 均通过 | `/tmp/adk-rc5-release.zxGIZu/candidate-e|candidate-f` | Release | T7 |
+| RC4→RC5 `release rehearse`（最终） | 0 | `target-contract-hard-cut`、rollback-before-install、candidate rollback、RC4 62-asset fallback restore 全 pass | `release-rehearsal.json` | Release | T7 |
+| independent review + re-review | 0 | blocker=0；3 major fixed；0 open minor；verdict=pass | `review-findings.md` | Review | T7 |
 
 ## Checkpoint
 
-- completed：T1–T6。
-- current：T7 exact-commit deterministic release build/rehearsal、证据提交与复盘。
-- open：implementation baseline commit、release rehearsal、evidence commit/Hub candidate。
-- retry budget：未有同根因重复失败超过 1 次。
-- stop condition：continue。
+- completed：T1–T7 implementation、verification、commit isolation、deterministic build、release rehearsal，以及 workflow verify/review/archive。
+- current：root adoption status 与 ADK gitlink commit。
+- open：root commit；remote publish/tag/真实双 runtime certification 均不在范围。
+- retry budget：无同根因重复失败超过 2 次；所有负结果均有修复或明确拒绝决策。
+- stop condition：pass after root commit。
