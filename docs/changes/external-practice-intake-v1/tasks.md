@@ -5,8 +5,8 @@
 - [x] T3 实现 `tools.codex_assets.practice_intake` 与唯一 shell wrapper；verify：七类 provider、幂等、redaction、budget、degraded、symlink 与事务行为测试通过
 - [x] T4 增加 curator Agent、optional absorption Skill 与 Workflow，并删除前代 intake skill；verify：manifest sync、catalog、routing/metadata 测试通过
 - [x] T5 硬切根调用方、repository onboarding handoff、文档与门禁，删除旧脚本/manifest/fixtures/tests；verify：active-tree legacy audit 零命中，历史 provenance 不被重写
-- [ ] T6 完成定向、root quick/full、ADK strict/quick/full、安全、性能和非仓库 cwd smoke；verify：Evidence Index 记录真实退出码与报告路径
-- [ ] T7 独立 review 修复闭环、状态一致性、Knowledge Hub reviewing candidate 和复盘；verify：blocker=0、major=0，完成声明与证据一致
+- [x] T6 完成定向、root quick/full、ADK strict/quick/full、安全、性能和非仓库 cwd smoke；verify：Evidence Index 记录真实退出码与报告路径
+- [x] T7 独立 review 修复闭环、状态一致性、Knowledge Hub reviewing candidate 和复盘；verify：blocker=0、major=0，完成声明与证据一致
 
 ## Ownership 与并行冲突检查
 
@@ -30,4 +30,4 @@
 - design：`design.md` 与根 `architecture/external-practice-intake-terminal.md`。
 - task checklist：本文件。
 - execution evidence：`negative-results.md`、后续 `verification-evidence.md`、`review-findings.md`、`verify-report.md`。
-- 当前结论：implementation-complete / verification-in-progress；change governance 已通过并切到 `applied`，不得在 T6/T7 完成前声明终态完成。
+- 收敛结论：`local-terminal-source-pass / external-boundaries-explicit`；T1–T7、独立复审和本地 release rehearsal 已闭环，source-to-live、remote CI/publish、runtime campaign 与 field/M5 certification 仍由独立权限和外部证据门禁控制。

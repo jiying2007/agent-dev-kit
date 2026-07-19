@@ -2,8 +2,8 @@
 
 ## 当前结论
 
-- Review pass：implementation/release source 无未闭环 blocker 或 major。
-- Completion gate：root final integration 尚在执行，因此本文件不单独授权“全部完成”声明。
+- Review pass：implementation/release source 与 root integration 无未闭环 blocker 或 major。
+- Completion gate：本地 source、RC4 release rehearsal、root quick/full、legacy residue 和 Knowledge Hub candidate 均有证据；完成声明仅限本地 source 终态，不扩展为 live/remote/field/M5 certified。
 - Reviewer responsibility：Codex 分离实现阶段与复审阶段执行；最终 owner/合并责任仍为 `leiwenjun`。
 
 ## Findings 与闭环
@@ -29,3 +29,10 @@
 - Breaking change：`adk-intake-workflow` 与旧 OSS/WeChat intake CLI/schema 硬删除，无 alias、wrapper、双写或自动迁移。
 - Rollback：恢复 checksum-verified 完整 RC3 artifact/commit；不得把旧资产重新塞回 RC4。
 - Release boundary：local exact-commit build/rehearsal pass；live apply、remote CI、push/tag/publish 仍需独立授权/证据。
+
+## Completion Gate
+
+- blocker：0。
+- major：0（CR-01–CR-10 全部修复并复验）。
+- minor：1（CR-11，非阻塞维护建议）。
+- 结论：`review-passed / local-terminal-source-pass / external-boundaries-explicit`。
