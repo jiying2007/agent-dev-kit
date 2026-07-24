@@ -72,6 +72,7 @@ done
 
 TESTS=(
   test_validate.sh
+  test_python_launcher.sh
   test_asset_content_quality.sh
   test_format.sh
   test_no_external_repo_refs.sh
@@ -131,6 +132,7 @@ TESTS=(
 
 QUICK_TESTS=(
   test_validate.sh
+  test_python_launcher.sh
   test_runtime_boundary.sh
   test_target_contracts.sh
   test_effect_eval.sh

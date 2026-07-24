@@ -26,7 +26,7 @@ Workflow 是一等资产。生产级 Workflow 必须在 `manifest.json:workflows
 
 阶段流转硬约束：
 - `apply` 仅允许从 `proposed` 进入
-- `verify` 仅允许从 `applied` 进入
+- `verify` 首次仅允许从 `applied` 进入；验证失败进入 `verify-failed`，修复同一变更工件后允许从该状态重试
 - `review` 仅允许从 `verified` 进入
 - `archive` 仅允许从 `review-passed` 进入（`--force` 除外）
 

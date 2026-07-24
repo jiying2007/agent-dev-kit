@@ -8,6 +8,11 @@
 
 当前软件状态是 **M5-ready control-plane candidate / M3 release candidate**，不是已认证 M5：本版本提供可恢复双运行时评测、单写者并发保护、严格环境诊断和本地升级/回滚演练；最终 M5 仍要求 30 天试点、至少一个独立真实软件仓、第二位 operator 和完整 field evidence。
 
+`scripts/devkit.sh` 默认使用 `python3`；可用 `ADK_PYTHON_BIN` 显式选择受审查的
+Python 3.11/3.12。发布和认证验证应设置
+`ADK_REQUIRE_SUPPORTED_PYTHON=1`，或使用受控 Docker local-CI parity；旧 Python
+只允许运行 `doctor` 或产生明确标记的开发期结果，不能升级为发布证据。
+
 ## 1. 定位边界
 
 adk 的核心定位是“平台中立的 Agent 资产编译与交付控制面”。当前主力验证场景是嵌入式全栈开发，但嵌入式能力通过 `embedded-fullstack` profile 和领域技能承载，不把某个运行平台写成 core 前提。ADK 不实现 LLM 推理循环、session scheduler 或生产 Agent runtime。

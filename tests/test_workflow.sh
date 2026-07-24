@@ -51,6 +51,14 @@ if "$ROOT_DIR/scripts/workflow.sh" archive --change "$CHANGE_ID" --root "$CHANGE
   exit 1
 fi
 
+if "$ROOT_DIR/scripts/workflow.sh" verify --change "$CHANGE_ID" --root "$CHANGE_ROOT" >/dev/null 2>&1; then
+  echo "[FAIL] verify should fail before negative evidence is complete" >&2
+  exit 1
+fi
+grep -q '^stage: verify-failed$' "$CHANGE_ROOT/$CHANGE_ID/state.yaml" || {
+  echo "[FAIL] failed verify did not enter retryable verify-failed stage" >&2
+  exit 1
+}
 fill_negative_results "$CHANGE_ID"
 "$ROOT_DIR/scripts/workflow.sh" verify --change "$CHANGE_ID" --root "$CHANGE_ROOT"
 "$ROOT_DIR/scripts/workflow.sh" review --change "$CHANGE_ID" --root "$CHANGE_ROOT" --result pass --blockers 0 --majors 0 --minors 1

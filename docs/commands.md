@@ -2,6 +2,17 @@
 
 统一入口：`bash scripts/devkit.sh <command> [options]`
 
+解释器入口：
+
+- 默认使用 `python3`；若版本低于 3.11，除 `doctor` 外会明确标记结果仅供开发，
+  不能作为 release evidence。
+- 使用 `ADK_PYTHON_BIN=/reviewed/python3.12` 显式选择解释器。
+- 发布、制品或认证前设置 `ADK_REQUIRE_SUPPORTED_PYTHON=1`，旧解释器会在 CLI
+  执行前 fail-fast。
+- 本机没有受支持解释器时，使用
+  `scripts/run-local-ci-parity.sh --python all --mode full`；`doctor` 始终可在
+  旧环境运行以输出结构化诊断。
+
 ADK core 只提供平台中立命令。`manifest.json` 是 3.1 结构化 SSOT，并由 Draft 2020-12 JSON Schema 与语义规则共同校验；direct export 适配必须通过 `tool_targets` 和 versioned target contract 显式声明。需要外部声明式链路承接的运行体系进入 `external_handoff_targets`，不能把平台专属 handoff 或用户目录写入作为默认路径。
 
 ## install
@@ -318,6 +329,8 @@ bash scripts/devkit.sh apply --change my-change
 ## verify
 
 执行验证命令并写入 `verify-report.md`，成功后状态变更为 `verified`。
+失败时状态为 `verify-failed`；修复工件后可对同一 change 重试 `verify`，无需篡改
+`state.yaml` 或重建 change。
 
 ```bash
 bash scripts/devkit.sh verify --change my-change

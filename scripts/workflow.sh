@@ -390,7 +390,16 @@ verify_change() {
     echo "[FAIL] change not found: $change_dir" >&2
     exit 1
   }
-  require_stage "$change_dir" "applied" "verify"
+  local stage
+  stage="$(current_stage "$change_dir")"
+  case "$stage" in
+    applied|verify-failed)
+      ;;
+    *)
+      echo "[FAIL] verify requires stage 'applied' or retry stage 'verify-failed', current: ${stage:-unknown}" >&2
+      exit 1
+      ;;
+  esac
 
   local report="$change_dir/verify-report.md"
   {

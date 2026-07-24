@@ -1,0 +1,4 @@
+stage: review-passed
+owner: leiwenjun
+updated_at: 2026-07-23T15:20:12Z
+notes: CR-001 已修复并通过 stdout-spoof/report-backed 回归；最终 full 失败集合与基线一致
