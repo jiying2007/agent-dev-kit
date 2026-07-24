@@ -54,7 +54,8 @@ constraints:
 6. **OTA 与回滚**：声明升级入口、兼容性、断电场景、双分区/恢复分区、回滚触发和验收证据。
 7. **RMA/现场维护**：定义现场复现信息、最小日志包、恢复步骤、版本判定和不可恢复条件。
 8. **验证证据**：记录命令、退出码、产测报告、boot log、OTA 演练、回滚演练和残留缺口。
-9. **签署结论**：输出 `ready | needs-fix | blocked`，并列出 go/no-go 条件。
+9. **试点测量**：涉及 Agent/自动化生产率结论时，按 `references/pilot-measurement-evidence.md` 记录任务选择、人类基线、分离时间和并发证据。
+10. **签署结论**：输出 `ready | needs-fix | blocked`，并列出 go/no-go 条件。
 
 ## Readiness Matrix
 ```md
