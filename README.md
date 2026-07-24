@@ -97,12 +97,16 @@ bash scripts/devkit.sh security check --summary-json
 bash scripts/devkit.sh eval run --suite deterministic --summary-json
 bash scripts/devkit.sh eval effect --contract manifests/effect_eval_contract.json --summary-json
 bash scripts/devkit.sh eval campaign plan --contract manifests/software_m5_eval_contract_rc4.json --summary-json
+bash scripts/devkit.sh eval repository plan --contract manifests/repository_runtime_eval_contract.json --summary-json
+bash scripts/devkit.sh eval repository certify --contract manifests/repository_runtime_eval_contract.json --report <repository-report.json> --summary-json
 bash scripts/devkit.sh release check --summary-json
 bash scripts/devkit.sh runtime-boundary
 bash scripts/devkit.sh official-docs-governance --summary-json
 bash scripts/devkit.sh harness readiness --root . --summary-json
 bash scripts/devkit.sh test
 ```
+
+`eval repository certify` 对默认 clean-room contract 只返回 `fixture-pass`，不会被 Software M5 当作真实 repository campaign；真实 `pass` 还要求 owner-approved task 与已审查、digest-pinned 的 available adapter。
 
 常用入口：
 

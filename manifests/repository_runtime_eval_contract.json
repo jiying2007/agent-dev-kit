@@ -1,0 +1,168 @@
+{
+  "schema": "adk-repository-runtime-eval-contract/v1",
+  "contract_id": "repository-runtime-evidence-v1",
+  "last_updated": "2026-07-23",
+  "tasks": "tests/fixtures/repository_runtime_eval_tasks.jsonl",
+  "minimum_tasks": 5,
+  "runtimes": [
+    "codex",
+    "claude"
+  ],
+  "conditions": [
+    "baseline",
+    "adk"
+  ],
+  "trials": 3,
+  "runtime_adapters": {
+    "codex": {
+      "adapter_id": "inspect-swe-codex-contract-v1",
+      "status": "contract-only",
+      "version_pin": "review-required-before-execution",
+      "enabled_default": false,
+      "optional_dependency": true,
+      "baseline_isolation": "isolated-home-and-explicit-empty-config",
+      "adk_isolation": "isolated-home-and-reviewed-adk-profile",
+      "baseline_disabled_surfaces": [
+        "project-instructions",
+        "skills",
+        "hooks",
+        "mcp",
+        "plugins"
+      ],
+      "adk_enabled_surfaces": [
+        "project-instructions",
+        "skills"
+      ],
+      "always_disabled_surfaces": [
+        "hooks",
+        "mcp",
+        "plugins"
+      ],
+      "rollback": "disable the optional adapter and retain native ADK report validation"
+    },
+    "claude": {
+      "adapter_id": "inspect-swe-claude-code-contract-v1",
+      "status": "contract-only",
+      "version_pin": "review-required-before-execution",
+      "enabled_default": false,
+      "optional_dependency": true,
+      "baseline_isolation": "claude-safe-mode",
+      "adk_isolation": "isolated-home-and-reviewed-adk-profile",
+      "baseline_disabled_surfaces": [
+        "project-instructions",
+        "skills",
+        "hooks",
+        "mcp",
+        "plugins"
+      ],
+      "adk_enabled_surfaces": [
+        "project-instructions",
+        "skills"
+      ],
+      "always_disabled_surfaces": [
+        "hooks",
+        "mcp",
+        "plugins"
+      ],
+      "rollback": "disable the optional adapter and retain native ADK report validation"
+    }
+  },
+  "execution_policy": {
+    "execution_enabled_default": false,
+    "external_network_default": "deny",
+    "credential_mode": "ephemeral-explicit-only",
+    "raw_trace_storage": false,
+    "owner_approval_required": true,
+    "container_policy": "version-and-digest-pinned-after-license-and-security-review",
+    "deny_paths_required": true
+  },
+  "process_quality": {
+    "source_method": "AgentLens-process-quality-adaptation",
+    "required_fields": [
+      "regression_cycle_count",
+      "blind_retry_count",
+      "final_verification",
+      "phase_order_violation",
+      "repeated_tool_call_without_new_evidence"
+    ],
+    "pass_with_invalid_process": "fail-closed"
+  },
+  "resource_metrics": {
+    "source_method": "token-cost-distribution-adaptation",
+    "required_fields": [
+      "input_tokens",
+      "cached_input_tokens",
+      "output_tokens",
+      "total_tokens",
+      "cost_usd",
+      "elapsed_ms",
+      "attempts",
+      "tool_calls",
+      "timeouts"
+    ],
+    "aggregate_fields": [
+      "p50",
+      "p95",
+      "max",
+      "coefficient_of_variation",
+      "cost_per_success"
+    ],
+    "agent_self_estimate_is_evidence": false
+  },
+  "outcome_policy": {
+    "functional_first": true,
+    "security_oracle_after_functional_pass": true,
+    "llm_judge_only_security_oracle_allowed": false,
+    "verified_change_required": true
+  },
+  "thresholds": {
+    "candidate_success_rate": 1.0,
+    "minimum_success_delta": 0.1,
+    "maximum_invalid_process_rate": 0.0,
+    "maximum_cost_per_success_usd": 0.1,
+    "maximum_token_p95_ratio": 1.25,
+    "required_non_regression_trials": 3
+  },
+  "source_refs": [
+    {
+      "id": "inspect-swe",
+      "url": "https://meridianlabs-ai.github.io/inspect_swe/",
+      "retrieved_at": "2026-07-22",
+      "decision": "adapt-contract-only",
+      "license": "MIT",
+      "notes": "Optional sandboxed runtime adapter reference; no package install or runtime enablement."
+    },
+    {
+      "id": "agentlens",
+      "url": "https://www.microsoft.com/en-us/research/publication/agentlens-revealing-the-lucky-pass-problem-in-swe-agent-evaluation/",
+      "retrieved_at": "2026-07-22",
+      "decision": "adapt-method-only",
+      "license": "paper-method-review-required",
+      "notes": "Use process-quality categories without importing trajectories or implementation."
+    },
+    {
+      "id": "swe-bench-live",
+      "url": "https://github.com/microsoft/SWE-bench-Live",
+      "retrieved_at": "2026-07-22",
+      "decision": "adapt-metadata-only",
+      "license": "task-level-review-required",
+      "notes": "Use freshness, revision, OS/language and repeatability metadata only."
+    },
+    {
+      "id": "secure-code-canaries",
+      "url": "https://github.com/alibaba/sec-code-bench",
+      "retrieved_at": "2026-07-22",
+      "decision": "adapt-clean-room-fixture-only",
+      "license": "Apache-2.0-framework/task-review-required",
+      "notes": "Use functionality-first security evaluation method; do not copy external tasks."
+    },
+    {
+      "id": "secure-vibe-bench",
+      "url": "https://aclanthology.org/2026.acl-long.1107/",
+      "retrieved_at": "2026-07-22",
+      "decision": "adapt-method-only",
+      "license": "paper-and-task-review-required",
+      "notes": "Use combined functional/static/dynamic oracle method without copying dataset content."
+    }
+  ]
+}

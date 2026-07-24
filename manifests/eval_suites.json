@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-07-07",
+  "last_updated": "2026-07-23",
   "source_docs": [
     "openai-agent-evals",
     "openai-agents-tracing",
@@ -353,6 +353,53 @@
         }
       ],
       "minimum_gate": "goal and completion-prompt changes must include at least one failing fixture and one passing fixture before promotion"
+    },
+    {
+      "id": "repository-runtime-outcome-process-resource-eval",
+      "category": "repository-runtime",
+      "owner": "agent-dev-kit",
+      "goal": "Certify repository-level agent outcomes with isolated baseline, functional-first security checks, process quality and resource distributions.",
+      "dataset_path": "tests/fixtures/repository_runtime_eval_tasks.jsonl",
+      "fixtures": [
+        {
+          "id": "repository-baseline-isolation-missing",
+          "input": "baseline result does not prove project instructions, skills, hooks, MCP and plugins are disabled",
+          "expected": "reject-not-comparable"
+        },
+        {
+          "id": "repository-lucky-pass",
+          "input": "tests pass after blind retries or regression cycles without a valid final verification sequence",
+          "expected": "reject-pass-with-invalid-process"
+        },
+        {
+          "id": "repository-functional-first-security",
+          "input": "functional tests pass but the security oracle fails",
+          "expected": "reject"
+        },
+        {
+          "id": "repository-complete-evidence",
+          "input": "frozen revision and container digest, isolated conditions, complete result matrix, redacted trace, process and token/cost evidence",
+          "expected": "certify"
+        }
+      ],
+      "graders": [
+        {
+          "name": "result_matrix_and_provenance",
+          "type": "deterministic",
+          "threshold": 1.0
+        },
+        {
+          "name": "functional_security_process_gate",
+          "type": "deterministic",
+          "threshold": 1.0
+        },
+        {
+          "name": "resource_distribution_gate",
+          "type": "deterministic",
+          "threshold": 1.0
+        }
+      ],
+      "minimum_gate": "external execution remains disabled by default; fixture-only tasks cannot satisfy real-repository M5 certification"
     }
   ]
 }

@@ -31,6 +31,7 @@ from .model import Manifest, ManifestError
 from .quality import benchmark_markdown, run_benchmark, security_check
 from .readiness import readiness_markdown, run_harness_readiness
 from .release import build_release, check_release, publish_release, rehearse_release
+from .repository_evaluation import certify_repository_report, repository_plan
 from .targets import TargetUsageError, check_targets, run_target_smoke
 
 
@@ -437,6 +438,21 @@ def _cmd_eval(argv: Sequence[str]) -> int:
     effect.add_argument("--contract", default=str(ROOT / "manifests" / "effect_eval_contract.json"))
     effect.add_argument("--output")
     effect.add_argument("--summary-json", action="store_true")
+    repository = sub.add_parser("repository")
+    repository_sub = repository.add_subparsers(dest="repository_action", required=True)
+    repository_plan_parser = repository_sub.add_parser("plan")
+    repository_plan_parser.add_argument(
+        "--contract", default=str(ROOT / "manifests" / "repository_runtime_eval_contract.json")
+    )
+    repository_plan_parser.add_argument("--output")
+    repository_plan_parser.add_argument("--summary-json", action="store_true")
+    repository_certify_parser = repository_sub.add_parser("certify")
+    repository_certify_parser.add_argument(
+        "--contract", default=str(ROOT / "manifests" / "repository_runtime_eval_contract.json")
+    )
+    repository_certify_parser.add_argument("--report", required=True)
+    repository_certify_parser.add_argument("--output")
+    repository_certify_parser.add_argument("--summary-json", action="store_true")
     campaign = sub.add_parser("campaign")
     campaign_sub = campaign.add_subparsers(dest="campaign_action", required=True)
     campaign_plan_parser = campaign_sub.add_parser("plan")
@@ -472,6 +488,16 @@ def _cmd_eval(argv: Sequence[str]) -> int:
     certify.add_argument("--output")
     certify.add_argument("--summary-json", action="store_true")
     args = parser.parse_args(argv)
+    if args.action == "repository":
+        if args.repository_action == "plan":
+            value = repository_plan(_manifest(), Path(args.contract))
+        else:
+            value = certify_repository_report(_manifest(), Path(args.contract), Path(args.report))
+        if args.output:
+            _write_json(Path(args.output), value)
+        if args.summary_json or not args.output:
+            _json(value)
+        return 0 if value.get("status") in ("ready", "fixture-pass", "pass") else 1
     if args.action == "effect":
         value = run_effect_eval(_manifest(), Path(args.contract))
         if args.output:

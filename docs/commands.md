@@ -399,7 +399,11 @@ bash scripts/devkit.sh eval campaign run --contract manifests/software_m5_eval_c
 bash scripts/devkit.sh eval campaign run --contract manifests/software_m5_eval_contract_rc5.json --state-dir /tmp/adk-m5-campaign --execute --approve-budget-usd 150 --resume --summary-json
 bash scripts/devkit.sh eval certify --contract manifests/software_m5_eval_contract_rc5.json --state-dir /tmp/adk-m5-campaign --output /tmp/adk-m5-certification.json
 bash scripts/devkit.sh eval campaign report --input /tmp/adk-m5-certification.json --output /tmp/adk-m5-certification.md
+bash scripts/devkit.sh eval repository plan --contract manifests/repository_runtime_eval_contract.json --summary-json
+bash scripts/devkit.sh eval repository certify --contract manifests/repository_runtime_eval_contract.json --report /tmp/repository-runtime-report.json --output /tmp/repository-runtime-certification.json --summary-json
 ```
+
+`eval repository` 只验证平台中立的真实仓库 evidence contract。`plan` 不启动外部 runtime、容器、网络或凭证；`certify` 重算 task/contract digest，并验证完整 result matrix、baseline customization isolation、功能优先安全 oracle、过程质量、redacted trace 与 token/cost 分布。Inspect SWE 等 adapter 保持 optional、disabled-by-default。clean-room task 成功时只返回 `fixture-pass`；只有 task 为 owner-approved real repository、adapter 为 `available` 且 `version_pin` 固定为 SHA-256 digest 时才允许真实 `pass`。`fixture-pass` 不能满足根仓 Software M5 的真实仓库门禁。
 
 `certify` 重新派生 route/safety/status，核验每条 record hash，并要求 success、route、safety、paired bootstrap、P95、token、runtime error 和资源证据门禁全部通过。campaign 通过仍只是软件评测证据，不替代 30 天 field pilot。
 
