@@ -1,0 +1,19 @@
+{
+  "runtime_enabled": false,
+  "fixture_mode": "method-only",
+  "agentic_skill_security": {
+    "taxonomy": "owasp-agentic-skills-top10-2026-crosswalk-v1",
+    "covered_threats": [
+      "AST01",
+      "AST02",
+      "AST03",
+      "AST04",
+      "AST05",
+      "AST06",
+      "AST07",
+      "AST08",
+      "AST09"
+    ]
+  },
+  "expected_failure": "fixture agentic_skill_security must cover AST01-AST10 exactly once"
+}

@@ -1,0 +1,18 @@
+{
+  "runtime_enabled": false,
+  "fixture_mode": "method-only",
+  "skill_maintenance": {
+    "skill_id": "synthetic-skill",
+    "upstream_revision": "fixture-revision",
+    "content_digest": "sha256:not-a-digest",
+    "stable_behavior_diff": "none",
+    "target_local_binding_diff": "none",
+    "use_evidence": "not-measured",
+    "effect_evidence": "not-measured",
+    "last_verified_at": "2026-07-23",
+    "refresh_due_at": "2026-10-23",
+    "retire_due_at": "not-scheduled",
+    "rollback_path": "remove fixture"
+  },
+  "expected_failure": "fixture skill_maintenance content_digest must be a sha256 digest"
+}

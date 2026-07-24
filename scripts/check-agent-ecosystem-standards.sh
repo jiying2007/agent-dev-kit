@@ -13,8 +13,10 @@ Usage:
 Checks method-only Agent ecosystem contracts across existing ADK SSOT manifests:
   - Agent Skills portable format
   - OWASP Agentic Top 10 ASI01-ASI10 coverage
+  - OWASP Agentic Skills Top 10 AST01-AST10 evolving crosswalk
+  - skill maintenance evidence and coding-agent target watch boundaries
   - read-only agent -> validated safe output -> separate write executor
-  - MCP dependency provenance
+  - MCP dependency provenance and 2026 protocol compatibility staging
   - version-pinned OpenTelemetry GenAI adapter with content capture disabled
   - ACP and A2A watch-only boundaries
 USAGE
@@ -40,6 +42,7 @@ done
 
 python3 - "$ROOT_DIR" "$SUMMARY_JSON" <<'PY'
 import json
+import re
 import sys
 from datetime import date
 from pathlib import Path
@@ -49,6 +52,7 @@ root = Path(sys.argv[1])
 summary_json = sys.argv[2] == "1"
 failures = []
 checked = 0
+DIGEST_RE = re.compile(r"sha256:[0-9a-f]{64}")
 
 
 def fail(message):
@@ -94,6 +98,10 @@ expected_sources = {
     "otel-genai-semconv": "adopt-method-only",
     "agent-client-protocol": "observe-method-only",
     "a2a-protocol-1-0": "observe-method-only",
+    "mcp-2026-07-28-rc": "observe-method-only",
+    "owasp-agentic-skills-top10-2026": "observe-method-only",
+    "agent-skills-in-the-wild-2026": "adopt-method-only",
+    "vscode-agent-skills-2026": "observe-method-only",
 }
 source_by_id = {
     item.get("id"): item
@@ -137,6 +145,10 @@ expected_candidates = {
     "otel-genai-trace-adapter": "otel-genai-semconv",
     "acp-protocol-watch": "agent-client-protocol",
     "a2a-protocol-watch": "a2a-protocol-1-0",
+    "mcp-2026-compat-staging": "mcp-2026-07-28-rc",
+    "agentic-skills-security-crosswalk": "owasp-agentic-skills-top10-2026",
+    "skill-maintenance-evidence": "agent-skills-in-the-wild-2026",
+    "vscode-github-copilot-target-watch": "vscode-agent-skills-2026",
 }
 candidate_by_id = {
     item.get("id"): item
@@ -159,6 +171,9 @@ domain_refs = {
 }
 for label, (manifest, source_id) in domain_refs.items():
     check(source_id in manifest.get("external_source_refs", []), f"{label} missing external source_ref: {source_id}")
+for source_id in ("owasp-agentic-skills-top10-2026", "agent-skills-in-the-wild-2026"):
+    check(source_id in skill.get("external_source_refs", []), f"skill_reproducibility_contracts missing external source_ref: {source_id}")
+check("mcp-2026-07-28-rc" in mcp.get("external_source_refs", []), "skill_mcp_dependencies missing MCP 2026 source_ref")
 
 skill_contracts = {
     item.get("id"): item
@@ -186,6 +201,44 @@ field_constraints = portable.get("field_constraints", {})
 check("matches parent directory" in field_constraints.get("name", ""), "portable skill name must match its parent directory")
 check("1-1024" in field_constraints.get("description", ""), "portable skill description constraint must be bounded")
 check(skill.get("quality_gate", {}).get("agent_skills_portable_format_required") is True, "portable skill quality gate must be true")
+
+skill_taxonomy = skill.get("agentic_skill_security_taxonomy", {})
+check(skill_taxonomy.get("id") == "owasp-agentic-skills-top10-2026-crosswalk-v1", "missing Agentic Skills Top 10 crosswalk")
+skill_threats = skill_taxonomy.get("threats", [])
+expected_ast = [f"AST{index:02d}" for index in range(1, 11)]
+skill_threat_ids = [item.get("id") for item in skill_threats if isinstance(item, dict)]
+check(skill_threat_ids == expected_ast, "Agentic Skills crosswalk must contain AST01-AST10 exactly once in order")
+for threat in skill_threats:
+    if not isinstance(threat, dict):
+        fail("Agentic Skills crosswalk threat must be an object")
+        continue
+    threat_id = threat.get("id", "<missing-id>")
+    require_keys(
+        threat,
+        ["id", "name", "local_surfaces", "preventive_controls", "evidence_required", "residual_risk"],
+        f"skill threat {threat_id}",
+    )
+check("not an OWASP certification" in skill_taxonomy.get("coverage_policy", ""), "Agentic Skills crosswalk must reject certification claims")
+
+maintenance = skill_contracts.get("skill-maintenance-evidence-v1", {})
+check(bool(maintenance), "missing contract: skill-maintenance-evidence-v1")
+maintenance_fields = {
+    "skill_id",
+    "upstream_revision",
+    "content_digest",
+    "stable_behavior_diff",
+    "target_local_binding_diff",
+    "use_evidence",
+    "effect_evidence",
+    "last_verified_at",
+    "refresh_due_at",
+    "retire_due_at",
+    "rollback_path",
+}
+check(maintenance_fields <= set(maintenance.get("required_fields", [])), "skill maintenance contract missing required fields")
+check(maintenance.get("unknown_effect_policy") == "explicit-not-measured", "skill maintenance unknown effect policy must be explicit")
+check(skill.get("quality_gate", {}).get("agentic_skill_security_crosswalk_required") is True, "skill security crosswalk gate must be true")
+check(skill.get("quality_gate", {}).get("skill_maintenance_evidence_required_for_external_promotion") is True, "skill maintenance promotion gate must be true")
 
 taxonomy = runtime.get("agentic_security_taxonomy", {})
 check(taxonomy.get("id") == "owasp-agentic-top10-2026-crosswalk-v1", "missing OWASP Agentic Top 10 crosswalk")
@@ -231,6 +284,47 @@ for dependency in mcp.get("dependencies", []):
     label = f"MCP dependency {dependency.get('mcp_server', '<missing-id>')} provenance"
     require_keys(dependency.get("provenance", {}), sorted(provenance_fields), label)
 
+compatibility = mcp.get("protocol_compatibility_policy", {})
+check(compatibility.get("id") == "mcp-protocol-compatibility-staging-v1", "missing MCP protocol compatibility staging policy")
+check(compatibility.get("active_protocol_version") == "2025-11-25", "MCP active protocol version must remain 2025-11-25")
+check("no-token-passthrough" in compatibility.get("active_auth_profile", ""), "MCP active auth profile must forbid token passthrough")
+mcp_candidate_fields = {
+    "protocol_version",
+    "release_status",
+    "capabilities",
+    "extension_ids",
+    "deprecated_features",
+    "auth_profile",
+    "compatibility_test",
+    "rollback",
+    "runtime_enabled",
+    "final_compatibility_claim",
+}
+check(mcp_candidate_fields <= set(compatibility.get("candidate_required_fields", [])), "MCP candidate required fields are incomplete")
+mcp_candidates = compatibility.get("candidates", [])
+check(len(mcp_candidates) == 1, "MCP compatibility staging must contain exactly one release candidate")
+if mcp_candidates:
+    candidate = mcp_candidates[0]
+    require_keys(candidate, sorted(mcp_candidate_fields.difference({"extension_ids"})), "MCP compatibility candidate")
+    check(candidate.get("protocol_version") == "2026-07-28-rc", "MCP candidate protocol version is invalid")
+    check(candidate.get("release_status") == "release-candidate", "MCP candidate must remain a release candidate")
+    check(candidate.get("extension_ids") == [], "MCP candidate extensions must remain empty")
+    check(candidate.get("runtime_enabled") is False, "MCP candidate runtime must remain disabled")
+    check(candidate.get("final_compatibility_claim") is False, "MCP candidate must not claim final compatibility")
+    check(candidate.get("compatibility_test") == "not-run-final-spec-pending", "MCP candidate compatibility test must remain pending")
+    check(candidate.get("auth_profile") == compatibility.get("active_auth_profile"), "MCP candidate auth profile must not weaken the active profile")
+activation = compatibility.get("activation_gate", {})
+check(activation.get("final_spec_retrieved") is False, "MCP final spec gate must remain false before refresh")
+check(activation.get("extensions_enabled_default") is False, "MCP extensions must remain disabled by default")
+for gate in (
+    "breaking_change_diff_required",
+    "schema_fixture_required",
+    "client_server_smoke_required",
+    "auth_security_review_required",
+    "rollback_smoke_required",
+):
+    check(activation.get(gate) is True, f"MCP activation gate is missing: {gate}")
+
 adapters = {
     item.get("id"): item
     for item in trace.get("interoperability_adapters", [])
@@ -265,6 +359,26 @@ check(bool(watch), "missing ACP/A2A watch-only contract")
 check(set(watch.get("source_refs", [])) == {"agent-client-protocol", "a2a-protocol-1-0"}, "watch contract must reference ACP and A2A")
 check(external.get("quality_gate", {}).get("watch_protocols_must_not_enable_runtime") is True, "watch-only runtime gate must be true")
 
+target_watch = external_contracts.get("coding-agent-target-watch-v1", {})
+check(bool(target_watch), "missing coding-agent target watch contract")
+check(target_watch.get("runtime_enabled") is False, "coding-agent target watch runtime must remain disabled")
+check(target_watch.get("direct_target_added") is False, "coding-agent target watch must not add a direct target")
+target_watch_fields = {
+    "target_id",
+    "runtime_enabled",
+    "direct_target_added",
+    "use_case",
+    "runtime_version",
+    "skill_discovery_paths",
+    "export_smoke",
+    "install_smoke",
+    "effect_eval",
+    "security_review",
+    "rollback",
+}
+check(target_watch_fields <= set(target_watch.get("required_fields", [])), "coding-agent target watch required fields are incomplete")
+check(external.get("quality_gate", {}).get("coding_agent_target_watch_must_not_enable_runtime") is True, "coding-agent target watch quality gate must be true")
+
 
 def fixture_errors(data, require_all=False):
     errors = []
@@ -282,10 +396,14 @@ def fixture_errors(data, require_all=False):
     sections = {
         "portable_skill",
         "agentic_security",
+        "agentic_skill_security",
+        "skill_maintenance",
         "safe_output",
         "mcp_provenance",
+        "mcp_protocol_watch",
         "otel_genai_adapter",
         "interoperability_watch",
+        "coding_agent_target_watch",
     }
     if require_all:
         for section in sorted(sections):
@@ -299,6 +417,37 @@ def fixture_errors(data, require_all=False):
         covered = data["agentic_security"].get("covered_threats", [])
         if covered != expected_asi:
             errors.append("fixture agentic_security must cover ASI01-ASI10 exactly once")
+
+    if "agentic_skill_security" in data:
+        covered = data["agentic_skill_security"].get("covered_threats", [])
+        if covered != expected_ast:
+            errors.append("fixture agentic_skill_security must cover AST01-AST10 exactly once")
+
+    if "skill_maintenance" in data:
+        fixture_require(data["skill_maintenance"], sorted(maintenance_fields), "skill_maintenance")
+        value = data["skill_maintenance"]
+        digest = value.get("content_digest")
+        if digest not in (None, "") and (not isinstance(digest, str) or not DIGEST_RE.fullmatch(digest)):
+            errors.append("fixture skill_maintenance content_digest must be a sha256 digest")
+        for field in ("use_evidence", "effect_evidence"):
+            evidence = value.get(field)
+            if evidence not in (None, "") and evidence != "not-measured" and not (
+                isinstance(evidence, str) and evidence.startswith("measured:") and len(evidence) > len("measured:")
+            ):
+                errors.append(f"fixture skill_maintenance {field} must be measured evidence or not-measured")
+        verified_at = value.get("last_verified_at")
+        refresh_due_at = value.get("refresh_due_at")
+        retire_due_at = value.get("retire_due_at")
+        if all(isinstance(item, str) and item for item in (verified_at, refresh_due_at, retire_due_at)):
+            try:
+                verified_date = date.fromisoformat(verified_at)
+                refresh_date = date.fromisoformat(refresh_due_at)
+                retire_date = None if retire_due_at == "not-scheduled" else date.fromisoformat(retire_due_at)
+            except ValueError:
+                errors.append("fixture skill_maintenance lifecycle dates must be ISO dates or not-scheduled")
+            else:
+                if refresh_date < verified_date or (retire_date is not None and retire_date < verified_date):
+                    errors.append("fixture skill_maintenance lifecycle dates must not precede last_verified_at")
 
     if "safe_output" in data:
         value = data["safe_output"]
@@ -318,6 +467,24 @@ def fixture_errors(data, require_all=False):
 
     if "mcp_provenance" in data:
         fixture_require(data["mcp_provenance"], sorted(provenance_fields), "mcp_provenance")
+
+    if "mcp_protocol_watch" in data:
+        value = data["mcp_protocol_watch"]
+        mcp_watch_fields = (
+            mcp_candidate_fields.difference({"protocol_version", "extension_ids"})
+            | {"active_protocol_version", "candidate_protocol_version"}
+        )
+        fixture_require(value, sorted(mcp_watch_fields), "mcp_protocol_watch")
+        if value.get("runtime_enabled") is not False:
+            errors.append("fixture mcp_protocol_watch must keep runtime_enabled=false")
+        if value.get("final_compatibility_claim") is not False:
+            errors.append("fixture mcp_protocol_watch must not claim final compatibility")
+        if value.get("release_status") != "release-candidate":
+            errors.append("fixture mcp_protocol_watch must remain release-candidate")
+        if value.get("extension_ids") != []:
+            errors.append("fixture mcp_protocol_watch extension_ids must remain empty")
+        if value.get("auth_profile") != compatibility.get("active_auth_profile"):
+            errors.append("fixture mcp_protocol_watch must not weaken the active auth profile")
 
     if "otel_genai_adapter" in data:
         value = data["otel_genai_adapter"]
@@ -344,6 +511,14 @@ def fixture_errors(data, require_all=False):
             fixture_require(protocol, ["protocol_id", "protocol_version", "activation_trigger"], f"interoperability_watch protocol {protocol_id}")
             if protocol.get("runtime_enabled") is not False:
                 errors.append(f"fixture interoperability_watch protocol {protocol_id} must keep runtime_enabled=false")
+
+    if "coding_agent_target_watch" in data:
+        value = data["coding_agent_target_watch"]
+        fixture_require(value, sorted(target_watch_fields), "coding_agent_target_watch")
+        if value.get("runtime_enabled") is not False:
+            errors.append("fixture coding_agent_target_watch must keep runtime_enabled=false")
+        if value.get("direct_target_added") is not False:
+            errors.append("fixture coding_agent_target_watch must not add a direct target")
 
     return errors
 

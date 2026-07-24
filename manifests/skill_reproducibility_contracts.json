@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-07-14",
+  "last_updated": "2026-07-23",
   "source_docs": [
     "openai-skills-api-operational-practices",
     "openai-codex-agent-skills",
@@ -8,9 +8,99 @@
   ],
   "external_source_refs": [
     "agent-skills-open-format",
-    "mattpocock-skills-9603c1cc8118d08bc1b3bf34cf714f62178dea3b"
+    "mattpocock-skills-9603c1cc8118d08bc1b3bf34cf714f62178dea3b",
+    "owasp-agentic-skills-top10-2026",
+    "agent-skills-in-the-wild-2026"
   ],
   "reference_boundary": "OpenAI/Codex source docs are citation metadata and governance references only. This manifest promotes platform-neutral ADK skill reproducibility contracts and must not enable Codex skill installs, hosted skill APIs, user-directory writes, or compatibility defaults.",
+  "agentic_skill_security_taxonomy": {
+    "id": "owasp-agentic-skills-top10-2026-crosswalk-v1",
+    "source_ref": "owasp-agentic-skills-top10-2026",
+    "status": "observe-method-only",
+    "coverage_policy": "Static crosswalk is not an OWASP certification and does not authorize runtime installation.",
+    "threats": [
+      {
+        "id": "AST01",
+        "name": "Malicious Skills",
+        "local_surfaces": ["external skill intake", "scripts", "hooks"],
+        "preventive_controls": ["review-required default", "source digest", "deny-path", "manual promotion"],
+        "evidence_required": ["source review", "content digest", "secret and behavior scan"],
+        "residual_risk": "instructions can hide intent that static checks miss"
+      },
+      {
+        "id": "AST02",
+        "name": "Supply Chain Compromise",
+        "local_surfaces": ["source repository", "support files", "dependencies"],
+        "preventive_controls": ["revision pinning", "license review", "dependency audit", "provenance"],
+        "evidence_required": ["upstream revision", "artifact digest", "review expiry"],
+        "residual_risk": "reviewed upstream can be compromised after pin refresh"
+      },
+      {
+        "id": "AST03",
+        "name": "Over-Privileged Skills",
+        "local_surfaces": ["filesystem", "network", "shell", "external writes"],
+        "preventive_controls": ["least privilege", "approval gates", "explicit deny paths", "report-only default"],
+        "evidence_required": ["permission profile", "tool plan", "approval class"],
+        "residual_risk": "runtime permissions can exceed declared instructions"
+      },
+      {
+        "id": "AST04",
+        "name": "Insecure Metadata",
+        "local_surfaces": ["frontmatter", "manifest", "routing descriptions"],
+        "preventive_controls": ["schema validation", "name-directory match", "positive and negative routing cases"],
+        "evidence_required": ["manifest validation", "routing fixture", "provenance metadata"],
+        "residual_risk": "valid metadata can still be misleading"
+      },
+      {
+        "id": "AST05",
+        "name": "Unsafe Deserialization",
+        "local_surfaces": ["YAML", "JSON", "support-file loaders"],
+        "preventive_controls": ["safe parsers", "bounded schemas", "no executable deserialization"],
+        "evidence_required": ["parser contract", "malformed fixture", "execution boundary"],
+        "residual_risk": "downstream runtimes may parse generated assets differently"
+      },
+      {
+        "id": "AST06",
+        "name": "Weak Isolation",
+        "local_surfaces": ["scripts", "subagents", "MCP", "target runtime"],
+        "preventive_controls": ["sandbox", "optional adapter", "network deny", "credential isolation"],
+        "evidence_required": ["runtime boundary", "isolation smoke", "rollback"],
+        "residual_risk": "static conformance does not prove runtime isolation"
+      },
+      {
+        "id": "AST07",
+        "name": "Update Drift",
+        "local_surfaces": ["upstream skill", "local adaptation", "generated target assets"],
+        "preventive_controls": ["revision and digest pin", "freshness date", "stable versus local diff"],
+        "evidence_required": ["last verified", "refresh due", "drift decision"],
+        "residual_risk": "stale pins can retain known defects"
+      },
+      {
+        "id": "AST08",
+        "name": "Poor Scanning",
+        "local_surfaces": ["SKILL.md", "scripts", "references", "assets"],
+        "preventive_controls": ["multi-layer validation", "secret scan", "dependency audit", "negative fixtures"],
+        "evidence_required": ["scan commands", "exit codes", "review findings"],
+        "residual_risk": "semantic instruction attacks may evade scanners"
+      },
+      {
+        "id": "AST09",
+        "name": "No Governance",
+        "local_surfaces": ["catalog", "owner", "promotion", "retirement"],
+        "preventive_controls": ["manifest SSOT", "owner decision", "review cycle", "retire evidence"],
+        "evidence_required": ["owner", "decision", "use and effect evidence", "next review"],
+        "residual_risk": "unused skills can remain discoverable until reviewed"
+      },
+      {
+        "id": "AST10",
+        "name": "Cross-Platform Reuse",
+        "local_surfaces": ["target compiler", "permission mapping", "vendor metadata"],
+        "preventive_controls": ["portable minimum", "target adapter", "conformance fixture", "runtime smoke"],
+        "evidence_required": ["target contract", "export/install smoke", "semantic and effect conformance"],
+        "residual_risk": "shared syntax can conceal different runtime behavior"
+      }
+    ]
+  },
   "contracts": [
     {
       "id": "skill-discoverability-v1",
@@ -239,6 +329,50 @@
         "claim Agent Skills compliance from filename presence alone",
         "replace richer ADK metadata with the portable minimum"
       ]
+    },
+    {
+      "id": "skill-maintenance-evidence-v1",
+      "owner": "agent-dev-kit",
+      "source_refs": [
+        "agent-skills-in-the-wild-2026"
+      ],
+      "applies_to": [
+        "external-derived skills",
+        "reused skills",
+        "promotion candidates",
+        "scheduled refresh and retirement reviews"
+      ],
+      "required_fields": [
+        "skill_id",
+        "upstream_revision",
+        "content_digest",
+        "stable_behavior_diff",
+        "target_local_binding_diff",
+        "use_evidence",
+        "effect_evidence",
+        "last_verified_at",
+        "refresh_due_at",
+        "retire_due_at",
+        "rollback_path"
+      ],
+      "unknown_effect_policy": "explicit-not-measured",
+      "diff_policy": {
+        "stable_behavior": "task semantics, safety constraints, required artifacts and verification contract",
+        "target_local_binding": "paths, commands, permission mapping, runtime metadata and target rendering",
+        "mixed_change": "requires separate review of behavior and target binding"
+      },
+      "lifecycle_policy": {
+        "refresh": "upstream revision, content digest or target behavior changes",
+        "retire": "no valid use case, repeated routing conflict, stale effect evidence or superseded capability",
+        "promote": "requires measured effect evidence and target smoke",
+        "not_measured": "allowed as an explicit blocker, never interpreted as zero usage or pass"
+      },
+      "must_not": [
+        "invent upstream revisions for locally authored skills",
+        "invent use counts or effect evidence",
+        "modify stable behavior when only a target-local binding changed",
+        "keep stale skills indefinitely without refresh or retire decision"
+      ]
     }
   ],
   "quality_gate": {
@@ -249,6 +383,8 @@
     "third_party_skills_default_review_required": true,
     "agent_skills_portable_format_required": true,
     "cross_harness_invocation_must_be_explicit": true,
+    "agentic_skill_security_crosswalk_required": true,
+    "skill_maintenance_evidence_required_for_external_promotion": true,
     "must_not": [
       "duplicate full skill procedures in global prompts",
       "promote unversioned skills into production defaults",

@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-07-18",
+  "last_updated": "2026-07-23",
   "reference_boundary": "External agent, plugin, memory and skill sources are method-only references until a separate supply-chain review targets a specific versioned asset. This manifest does not enable external runtimes, hooks, workers, MCP servers or plugin installs.",
   "local_source_policy": {
     "id": "optional-workspace-reference-clones-v1",
@@ -209,6 +209,58 @@
       "evidence_strength": "medium",
       "decision": "observe-method-only",
       "notes": "Watch Agent Card, task and artifact interoperability at protocol version 1.0.0. Do not add network discovery, remote agents, auth flows or runtime bindings without a concrete use case and separate security review."
+    },
+    {
+      "id": "mcp-2026-07-28-rc",
+      "title": "Model Context Protocol 2026-07-28 release candidate",
+      "url": "https://blog.modelcontextprotocol.io/posts/2026-07-28-release-candidate/",
+      "local_path": "",
+      "retrieved_at": "2026-07-22",
+      "review_status": "reviewed-watch-only-final-pending",
+      "expires_at": "2026-08-22",
+      "license": "official-docs-reference-only",
+      "evidence_strength": "high",
+      "decision": "observe-method-only",
+      "notes": "Stage protocol version, capability, deprecation, auth, compatibility and rollback fields. The final specification is not treated as released on 2026-07-23; Tasks, Apps and extensions remain disabled."
+    },
+    {
+      "id": "owasp-agentic-skills-top10-2026",
+      "title": "OWASP Agentic Skills Top 10",
+      "url": "https://github.com/OWASP/www-project-agentic-skills-top-10",
+      "local_path": "",
+      "retrieved_at": "2026-07-22",
+      "review_status": "reviewed-watch-only-project-evolving",
+      "expires_at": "2026-10-22",
+      "license": "project-license-review-required",
+      "evidence_strength": "medium",
+      "decision": "observe-method-only",
+      "notes": "Use AST01-AST10 as an evolving skill-layer crosswalk. Do not copy the proposed Universal Skill Format, claim OWASP certification or treat roadmap content as a stable standard."
+    },
+    {
+      "id": "agent-skills-in-the-wild-2026",
+      "title": "Agent Skills in the Wild empirical maintenance study",
+      "url": "https://arxiv.org/abs/2607.00911",
+      "local_path": "",
+      "retrieved_at": "2026-07-22",
+      "review_status": "reviewed-method-only",
+      "expires_at": "2026-10-22",
+      "license": "paper-method-review-required",
+      "evidence_strength": "medium",
+      "decision": "adopt-method-only",
+      "notes": "Use the stable-behavior versus target-local-binding maintenance distinction and require explicit use/effect/refresh evidence. Do not copy datasets or infer local usage counts."
+    },
+    {
+      "id": "vscode-agent-skills-2026",
+      "title": "Visual Studio Code Agent Skills",
+      "url": "https://code.visualstudio.com/docs/agent-customization/agent-skills",
+      "local_path": "",
+      "retrieved_at": "2026-07-22",
+      "review_status": "reviewed-watch-only",
+      "expires_at": "2026-09-22",
+      "license": "official-docs-reference-only",
+      "evidence_strength": "high",
+      "decision": "observe-method-only",
+      "notes": "Watch .agents/skills and related discovery behavior as future target evidence. Do not add a direct target or promote vendor-only context: fork into core without a real use case and runtime smoke."
     }
   ],
   "candidate_decisions": [
@@ -490,6 +542,69 @@
         "enable remote agent discovery",
         "claim A2A compatibility",
         "add auth or network flows without a concrete use case"
+      ]
+    },
+    {
+      "id": "mcp-2026-compat-staging",
+      "source_ref": "mcp-2026-07-28-rc",
+      "priority": "P0",
+      "install_scope": "none-method-only",
+      "runtime_enabled": false,
+      "landing_targets": [
+        "skill MCP dependency protocol compatibility policy",
+        "agent ecosystem negative fixtures"
+      ],
+      "must_not": [
+        "claim the final 2026-07-28 specification is released before source refresh",
+        "enable Tasks, Apps or extensions",
+        "weaken current authorization and least-privilege controls"
+      ]
+    },
+    {
+      "id": "agentic-skills-security-crosswalk",
+      "source_ref": "owasp-agentic-skills-top10-2026",
+      "priority": "P1",
+      "install_scope": "none-method-only",
+      "runtime_enabled": false,
+      "landing_targets": [
+        "skill reproducibility security taxonomy",
+        "skill supply-chain review"
+      ],
+      "must_not": [
+        "adopt the proposed Universal Skill Format",
+        "claim OWASP certification",
+        "copy project prose into ADK assets"
+      ]
+    },
+    {
+      "id": "skill-maintenance-evidence",
+      "source_ref": "agent-skills-in-the-wild-2026",
+      "priority": "P1",
+      "install_scope": "none-method-only",
+      "runtime_enabled": false,
+      "landing_targets": [
+        "skill reproducibility contracts",
+        "refresh and retire governance"
+      ],
+      "must_not": [
+        "invent upstream provenance for locally authored skills",
+        "invent use counts or effect evidence",
+        "treat target-local bindings as portable core semantics"
+      ]
+    },
+    {
+      "id": "vscode-github-copilot-target-watch",
+      "source_ref": "vscode-agent-skills-2026",
+      "priority": "P2",
+      "install_scope": "none-method-only",
+      "runtime_enabled": false,
+      "landing_targets": [
+        "coding agent target watch contract"
+      ],
+      "must_not": [
+        "add a direct target without a real use case",
+        "claim runtime compatibility without export/install/effect evidence",
+        "promote vendor-only context fork semantics into core"
       ]
     }
   ],
@@ -927,6 +1042,40 @@
         "enable network discovery or remote agents by default",
         "claim protocol compliance without conformance evidence"
       ]
+    },
+    {
+      "id": "coding-agent-target-watch-v1",
+      "owner": "agent-dev-kit",
+      "source_refs": [
+        "vscode-agent-skills-2026"
+      ],
+      "runtime_enabled": false,
+      "direct_target_added": false,
+      "required_fields": [
+        "target_id",
+        "runtime_enabled",
+        "direct_target_added",
+        "use_case",
+        "runtime_version",
+        "skill_discovery_paths",
+        "export_smoke",
+        "install_smoke",
+        "effect_eval",
+        "security_review",
+        "rollback"
+      ],
+      "quality_gates": [
+        "a concrete repository and operator use case exists",
+        "runtime and discovery behavior are version pinned",
+        "export and install smoke are repeatable",
+        "effect evaluation shows value without safety regression",
+        "vendor-only metadata remains in the target adapter"
+      ],
+      "must_not": [
+        "add a target from documentation presence alone",
+        "claim compatibility from shared directory names",
+        "promote experimental context fork behavior into core"
+      ]
     }
   ],
   "quality_gate": {
@@ -945,6 +1094,7 @@
     "ecosystem_sources_require_freshness": true,
     "watch_protocols_must_not_enable_runtime": true,
     "registry_listing_is_not_trust_certification": true,
-    "external_method_absorption_requires_local_contract": true
+    "external_method_absorption_requires_local_contract": true,
+    "coding_agent_target_watch_must_not_enable_runtime": true
   }
 }

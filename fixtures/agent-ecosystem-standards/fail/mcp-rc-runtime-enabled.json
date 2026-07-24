@@ -1,0 +1,18 @@
+{
+  "runtime_enabled": false,
+  "fixture_mode": "method-only",
+  "mcp_protocol_watch": {
+    "active_protocol_version": "2025-11-25",
+    "candidate_protocol_version": "2026-07-28-rc",
+    "release_status": "release-candidate",
+    "capabilities": ["stateless-core"],
+    "extension_ids": [],
+    "deprecated_features": ["roots"],
+    "auth_profile": "protected-resource-metadata-resource-indicators-least-privilege-no-token-passthrough",
+    "compatibility_test": "not-run-final-spec-pending",
+    "rollback": "retain active contract",
+    "runtime_enabled": true,
+    "final_compatibility_claim": false
+  },
+  "expected_failure": "fixture mcp_protocol_watch must keep runtime_enabled=false"
+}

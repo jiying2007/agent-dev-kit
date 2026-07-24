@@ -1,0 +1,18 @@
+{
+  "runtime_enabled": false,
+  "fixture_mode": "method-only",
+  "coding_agent_target_watch": {
+    "target_id": "vscode-github-copilot",
+    "runtime_enabled": true,
+    "direct_target_added": false,
+    "use_case": "not-established",
+    "runtime_version": "not-pinned",
+    "skill_discovery_paths": [".agents/skills", ".github/skills"],
+    "export_smoke": "not-run",
+    "install_smoke": "not-run",
+    "effect_eval": "not-run",
+    "security_review": "not-run",
+    "rollback": "remove watch entry"
+  },
+  "expected_failure": "fixture coding_agent_target_watch must keep runtime_enabled=false"
+}

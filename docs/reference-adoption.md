@@ -233,3 +233,29 @@
 - 不加入 `AI-Builder-Club/skills` 为 active reference repo。
 - 不复制 Claude plugin、`CLAUDE.md` 结构、crabbox/Daytona runtime、云凭证或第三方模板。
 - 不把外部 skill 文案原样写入 ADK；只保留可由本地门禁验证的方法字段。
+
+## 14. Repository runtime、field evidence 与 Skill 供应链增强（2026-07-23）
+
+借鉴点：
+- Inspect SWE 的 sandbox/runtime adapter、资源预算和 transcript 结构被重构为默认禁用、无外部执行的 repository eval contract。
+- AgentLens 的 lucky-pass 方法进入过程质量门禁；功能结果通过但存在盲目重试、缺失最终验证或无效过程时 fail closed。
+- SWE-bench-Live、SecCodeBench 与 SecureVibeBench 只提供 freshness、分层和 functional-first security canary 方法，fixture 均为 clean-room metadata。
+- token/cost 多 trial 分布、cost-per-success、customization isolation 和完整结果矩阵成为 repository campaign 的认证前提。
+- METR 方法进入 Software M5 field evidence v2：任务预注册与拒绝日志、human baseline、wall/human/agent time、并发峰值和选择偏差复核。
+- MCP 2026-07-28 RC、OWASP Agentic Skills Top 10 与 VS Code/GitHub Copilot target 只建立 watch/staging；Agent Skills 研究的方法进入维护证据 contract。
+
+落地点：
+- `manifests/repository_runtime_eval_contract.json`
+- `src/agent_dev_kit/repository_evaluation.py`
+- `tests/fixtures/repository_runtime_eval_tasks.jsonl`
+- `manifests/skill_mcp_dependencies.json`
+- `manifests/skill_reproducibility_contracts.json`
+- `manifests/external_agent_pattern_contracts.json`
+- `skills/adk-production-field-readiness/references/pilot-measurement-evidence.md`
+- 根工作区 `manifests/software_m5_policy.json` 与 `tools/codex_assets/software_m5.py`
+
+有意排除：
+- 不安装 Inspect/Inspect SWE，不运行外部 benchmark 容器，不复制 benchmark task，也不转发持久凭证。
+- 不用 clean-room fixture、合成 report 或 control-plane 绿灯冒充真实 repository runtime campaign 或 M5 现场认证。
+- MCP 最终规范、真实 client/server smoke 和 freshness diff 完成前不启用 candidate protocol。
+- 不采用 Universal Skill Format，不新增 VS Code/GitHub Copilot direct target，不宣称通过 OWASP 认证。

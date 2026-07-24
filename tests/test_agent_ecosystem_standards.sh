@@ -30,6 +30,10 @@ assert sources["agent-skills-open-format"]["decision"] == "adopt-method-only"
 assert sources["owasp-agentic-top10-2026"]["decision"] == "adopt-method-only"
 assert sources["agent-client-protocol"]["decision"] == "observe-method-only"
 assert sources["a2a-protocol-1-0"]["decision"] == "observe-method-only"
+assert sources["mcp-2026-07-28-rc"]["decision"] == "observe-method-only"
+assert sources["owasp-agentic-skills-top10-2026"]["decision"] == "observe-method-only"
+assert sources["agent-skills-in-the-wild-2026"]["decision"] == "adopt-method-only"
+assert sources["vscode-agent-skills-2026"]["decision"] == "observe-method-only"
 
 runtime = json.loads((root / "manifests/adk_runtime_policy_gates.json").read_text(encoding="utf-8"))
 threats = runtime["agentic_security_taxonomy"]["threats"]
@@ -47,6 +51,26 @@ mcp = json.loads((root / "manifests/skill_mcp_dependencies.json").read_text(enco
 for dependency in mcp["dependencies"]:
     assert dependency["provenance"]["artifact_digest"]
     assert dependency["provenance"]["trust_decision"]
+compatibility = mcp["protocol_compatibility_policy"]
+assert compatibility["active_protocol_version"] == "2025-11-25"
+candidate = compatibility["candidates"][0]
+assert candidate["protocol_version"] == "2026-07-28-rc"
+assert candidate["release_status"] == "release-candidate"
+assert candidate["runtime_enabled"] is False
+assert candidate["final_compatibility_claim"] is False
+assert candidate["extension_ids"] == []
+
+skill = json.loads((root / "manifests/skill_reproducibility_contracts.json").read_text(encoding="utf-8"))
+skill_threats = skill["agentic_skill_security_taxonomy"]["threats"]
+assert [item["id"] for item in skill_threats] == [f"AST{index:02d}" for index in range(1, 11)]
+maintenance = next(item for item in skill["contracts"] if item["id"] == "skill-maintenance-evidence-v1")
+assert "stable_behavior_diff" in maintenance["required_fields"]
+assert "target_local_binding_diff" in maintenance["required_fields"]
+assert maintenance["unknown_effect_policy"] == "explicit-not-measured"
+
+target_watch = next(item for item in external["contracts"] if item["id"] == "coding-agent-target-watch-v1")
+assert target_watch["runtime_enabled"] is False
+assert target_watch["direct_target_added"] is False
 
 trace = json.loads((root / "manifests/trace_eval_contracts.json").read_text(encoding="utf-8"))
 adapter = trace["interoperability_adapters"][0]

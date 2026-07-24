@@ -31,6 +31,36 @@
     "static_coverage_only": true,
     "runtime_certification_claimed": false
   },
+  "agentic_skill_security": {
+    "taxonomy": "owasp-agentic-skills-top10-2026-crosswalk-v1",
+    "covered_threats": [
+      "AST01",
+      "AST02",
+      "AST03",
+      "AST04",
+      "AST05",
+      "AST06",
+      "AST07",
+      "AST08",
+      "AST09",
+      "AST10"
+    ],
+    "static_coverage_only": true,
+    "runtime_certification_claimed": false
+  },
+  "skill_maintenance": {
+    "skill_id": "synthetic-portable-skill",
+    "upstream_revision": "fixture-revision-1",
+    "content_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "stable_behavior_diff": "none",
+    "target_local_binding_diff": "synthetic target path only",
+    "use_evidence": "not-measured",
+    "effect_evidence": "not-measured",
+    "last_verified_at": "2026-07-23",
+    "refresh_due_at": "2026-10-23",
+    "retire_due_at": "not-scheduled",
+    "rollback_path": "remove synthetic binding"
+  },
   "safe_output": {
     "read_only_agent": true,
     "direct_write_allowed": false,
@@ -53,6 +83,46 @@
     "review_status": "synthetic-reviewed",
     "expires_at": "2026-09-12",
     "trust_decision": "fixture-only-never-install"
+  },
+  "mcp_protocol_watch": {
+    "active_protocol_version": "2025-11-25",
+    "candidate_protocol_version": "2026-07-28-rc",
+    "release_status": "release-candidate",
+    "capabilities": [
+      "stateless-core",
+      "extensions",
+      "tasks",
+      "apps",
+      "authorization-hardening",
+      "formal-deprecation",
+      "json-schema-2020-12",
+      "mcp-method-routing",
+      "ttl-ms-caching"
+    ],
+    "extension_ids": [],
+    "deprecated_features": [
+      "roots",
+      "sampling",
+      "logging"
+    ],
+    "auth_profile": "protected-resource-metadata-resource-indicators-least-privilege-no-token-passthrough",
+    "compatibility_test": "not-run-final-spec-pending",
+    "rollback": "retain active 2025-11-25 contract",
+    "runtime_enabled": false,
+    "final_compatibility_claim": false
+  },
+  "coding_agent_target_watch": {
+    "target_id": "vscode-github-copilot",
+    "runtime_enabled": false,
+    "direct_target_added": false,
+    "use_case": "not-established",
+    "runtime_version": "not-pinned",
+    "skill_discovery_paths": [".agents/skills", ".github/skills"],
+    "export_smoke": "not-run",
+    "install_smoke": "not-run",
+    "effect_eval": "not-run",
+    "security_review": "not-run",
+    "rollback": "remove watch entry"
   },
   "otel_genai_adapter": {
     "enabled_default": false,

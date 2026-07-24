@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-07-14",
+  "last_updated": "2026-07-23",
   "source_docs": [
     "openai-apps-sdk-review-tool-hints",
     "openai-codex-customization-skills",
@@ -13,7 +13,8 @@
     "openai-tools-guide"
   ],
   "external_source_refs": [
-    "mcp-registry"
+    "mcp-registry",
+    "mcp-2026-07-28-rc"
   ],
   "reference_boundary": "OpenAI/Codex source docs are citation metadata and governance references only. This manifest promotes platform-neutral ADK tool and MCP dependency contracts and must not enable external MCP servers, write-capable tools, hosted services, user-directory writes, or compatibility defaults.",
   "tool_description_policy": {
@@ -149,6 +150,68 @@
       "make unknown external MCP servers required by default",
       "store bearer tokens in manifests or project config",
       "enable destructive tools with approve mode before dry-run and rollback evidence"
+    ]
+  },
+  "protocol_compatibility_policy": {
+    "id": "mcp-protocol-compatibility-staging-v1",
+    "active_protocol_version": "2025-11-25",
+    "active_status": "supported-current",
+    "active_auth_profile": "protected-resource-metadata-resource-indicators-least-privilege-no-token-passthrough",
+    "candidate_required_fields": [
+      "protocol_version",
+      "release_status",
+      "capabilities",
+      "extension_ids",
+      "deprecated_features",
+      "auth_profile",
+      "compatibility_test",
+      "rollback",
+      "runtime_enabled",
+      "final_compatibility_claim"
+    ],
+    "candidates": [
+      {
+        "protocol_version": "2026-07-28-rc",
+        "source_ref": "mcp-2026-07-28-rc",
+        "release_status": "release-candidate",
+        "capabilities": [
+          "stateless-core",
+          "extensions",
+          "tasks",
+          "apps",
+          "authorization-hardening",
+          "formal-deprecation",
+          "json-schema-2020-12",
+          "mcp-method-routing",
+          "ttl-ms-caching"
+        ],
+        "extension_ids": [],
+        "deprecated_features": [
+          "roots",
+          "sampling",
+          "logging"
+        ],
+        "auth_profile": "protected-resource-metadata-resource-indicators-least-privilege-no-token-passthrough",
+        "compatibility_test": "not-run-final-spec-pending",
+        "rollback": "retain active 2025-11-25 contract and keep candidate capabilities disabled",
+        "runtime_enabled": false,
+        "final_compatibility_claim": false
+      }
+    ],
+    "activation_gate": {
+      "final_spec_retrieved": false,
+      "breaking_change_diff_required": true,
+      "schema_fixture_required": true,
+      "client_server_smoke_required": true,
+      "auth_security_review_required": true,
+      "rollback_smoke_required": true,
+      "extensions_enabled_default": false
+    },
+    "must_not": [
+      "treat a release candidate as the final specification",
+      "enable Tasks, Apps or extensions from source metadata",
+      "weaken audience validation, resource indicators or least privilege",
+      "claim compatibility without a version-pinned client/server smoke"
     ]
   },
   "dependencies": [
