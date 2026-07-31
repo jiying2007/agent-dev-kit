@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-07-23",
+  "last_updated": "2026-07-31",
   "source_docs": [
     "openai-apps-sdk-review-tool-hints",
     "openai-codex-customization-skills",
@@ -14,7 +14,7 @@
   ],
   "external_source_refs": [
     "mcp-registry",
-    "mcp-2026-07-28-rc"
+    "mcp-2026-07-28-final"
   ],
   "reference_boundary": "OpenAI/Codex source docs are citation metadata and governance references only. This manifest promotes platform-neutral ADK tool and MCP dependency contracts and must not enable external MCP servers, write-capable tools, hosted services, user-directory writes, or compatibility defaults.",
   "tool_description_policy": {
@@ -154,26 +154,37 @@
   },
   "protocol_compatibility_policy": {
     "id": "mcp-protocol-compatibility-staging-v1",
-    "active_protocol_version": "2025-11-25",
-    "active_status": "supported-current",
+    "active_protocol_version": "2026-07-28",
+    "active_status": "supported-current-governance-only",
+    "active_scope": "protocol-governance-contract-only",
+    "active_runtime_enabled": false,
+    "active_feature_enablement": {
+      "tasks": false,
+      "apps": false,
+      "extensions": false
+    },
     "active_auth_profile": "protected-resource-metadata-resource-indicators-least-privilege-no-token-passthrough",
     "candidate_required_fields": [
       "protocol_version",
+      "source_ref",
       "release_status",
       "capabilities",
+      "feature_enablement",
       "extension_ids",
       "deprecated_features",
       "auth_profile",
       "compatibility_test",
+      "compatibility_scope",
+      "compatibility_evidence",
       "rollback",
       "runtime_enabled",
       "final_compatibility_claim"
     ],
     "candidates": [
       {
-        "protocol_version": "2026-07-28-rc",
-        "source_ref": "mcp-2026-07-28-rc",
-        "release_status": "release-candidate",
+        "protocol_version": "2026-07-28",
+        "source_ref": "mcp-2026-07-28-final",
+        "release_status": "released",
         "capabilities": [
           "stateless-core",
           "extensions",
@@ -185,6 +196,11 @@
           "mcp-method-routing",
           "ttl-ms-caching"
         ],
+        "feature_enablement": {
+          "tasks": false,
+          "apps": false,
+          "extensions": false
+        },
         "extension_ids": [],
         "deprecated_features": [
           "roots",
@@ -192,23 +208,76 @@
           "logging"
         ],
         "auth_profile": "protected-resource-metadata-resource-indicators-least-privilege-no-token-passthrough",
-        "compatibility_test": "not-run-final-spec-pending",
-        "rollback": "retain active 2025-11-25 contract and keep candidate capabilities disabled",
+        "compatibility_test": "pass-mcp-2026-activation-fixture-2026-07-31",
+        "compatibility_scope": "go-sdk-v1.7.0-pre.3-json-schema-2020-12-stateless-streamable-http-auth-boundary-and-legacy-rollback-on-offline-loopback",
+        "compatibility_evidence": {
+          "sdk_module": "github.com/modelcontextprotocol/go-sdk",
+          "sdk_version": "v1.7.0-pre.3",
+          "sdk_revision": "827f90ba0c13edb546028df42fadc9f1211a4ff2",
+          "sdk_sum": "h1:SEAY9IduDif4iApnZgpFkjFIdo3askSGZVbZIYyTy6I=",
+          "sdk_go_mod_sum": "h1:dL7u98E/zjJTGzEq+j30jQ8K2k1mb6LeAH4inEcSGts=",
+          "runtime_image": "docker.io/library/golang:1.25.1-bookworm@sha256:c423747fbd96fd8f0b1102d947f51f9b266060217478e5f9bf86f145969562ee",
+          "transport": "streamable-http-local-loopback",
+          "network_mode": "offline-container-loopback-only",
+          "test_names": [
+            "TestSchemaCompatibilityFixture",
+            "TestVersionPinnedClientServerSmoke",
+            "TestAuthBoundaryVerification",
+            "TestRollbackSmoke"
+          ],
+          "negative_boundaries": [
+            "missing-required-schema-input",
+            "wrong-schema-input-type",
+            "wrong-schema-output-type",
+            "missing-bearer-token",
+            "issuer-mismatch",
+            "audience-mismatch",
+            "insufficient-scope",
+            "expired-token",
+            "token-passthrough",
+            "modern-application-request-after-legacy-rollback"
+          ],
+          "verified_at": "2026-07-31",
+          "evidence_path": "docs/changes/mcp-2026-activation-readiness-2026-07-31/verify-report.md"
+        },
+        "rollback": "restore the 2025-11-25 governance contract and keep runtime and candidate features disabled",
         "runtime_enabled": false,
-        "final_compatibility_claim": false
+        "final_compatibility_claim": true
       }
     ],
     "activation_gate": {
-      "final_spec_retrieved": false,
+      "final_spec_retrieved": true,
       "breaking_change_diff_required": true,
+      "breaking_change_diff_completed": true,
       "schema_fixture_required": true,
       "client_server_smoke_required": true,
       "auth_security_review_required": true,
       "rollback_smoke_required": true,
+      "schema_fixture_completed": true,
+      "client_server_smoke_completed": true,
+      "auth_security_review_completed": true,
+      "rollback_smoke_completed": true,
+      "technical_readiness_completed": true,
+      "owner_decision_required": true,
+      "owner_decision_schema": "schemas/mcp-protocol-activation-decision.schema.json",
+      "owner_decision_schema_version": "mcp-protocol-activation-decision/v1",
+      "owner_decision_allowed": [
+        "ACTIVATE",
+        "HOLD",
+        "REJECT"
+      ],
+      "owner_decision_completed": true,
+      "owner_decision_id": "mcp-act-2026-07-31-leiwenjun",
+      "owner_decision_path": "docs/changes/mcp-2026-activation-readiness-2026-07-31/owner-activation-decision.json",
+      "activation_allowed": true,
+      "activation_completed": true,
+      "activation_scope": "protocol-governance-contract-only",
+      "activated_at": "2026-07-31",
+      "rollback_target_protocol_version": "2025-11-25",
       "extensions_enabled_default": false
     },
     "must_not": [
-      "treat a release candidate as the final specification",
+      "treat final release metadata as compatibility or activation evidence",
       "enable Tasks, Apps or extensions from source metadata",
       "weaken audience validation, resource indicators or least privilege",
       "claim compatibility without a version-pinned client/server smoke"

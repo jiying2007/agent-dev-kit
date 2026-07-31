@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-07-23",
+  "last_updated": "2026-07-30",
   "reference_boundary": "External agent, plugin, memory and skill sources are method-only references until a separate supply-chain review targets a specific versioned asset. This manifest does not enable external runtimes, hooks, workers, MCP servers or plugin installs.",
   "local_source_policy": {
     "id": "optional-workspace-reference-clones-v1",
@@ -211,17 +211,23 @@
       "notes": "Watch Agent Card, task and artifact interoperability at protocol version 1.0.0. Do not add network discovery, remote agents, auth flows or runtime bindings without a concrete use case and separate security review."
     },
     {
-      "id": "mcp-2026-07-28-rc",
-      "title": "Model Context Protocol 2026-07-28 release candidate",
-      "url": "https://blog.modelcontextprotocol.io/posts/2026-07-28-release-candidate/",
+      "id": "mcp-2026-07-28-final",
+      "title": "Model Context Protocol 2026-07-28 final release",
+      "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/releases/tag/2026-07-28",
       "local_path": "",
-      "retrieved_at": "2026-07-22",
-      "review_status": "reviewed-watch-only-final-pending",
-      "expires_at": "2026-08-22",
-      "license": "official-docs-reference-only",
+      "retrieved_at": "2026-07-30",
+      "review_status": "reviewed-enhance-final-metadata-runtime-disabled",
+      "expires_at": "2026-10-28",
+      "license": "mixed-apache-2.0-mit-cc-by-4.0-boundary-review-required",
       "evidence_strength": "high",
-      "decision": "observe-method-only",
-      "notes": "Stage protocol version, capability, deprecation, auth, compatibility and rollback fields. The final specification is not treated as released on 2026-07-23; Tasks, Apps and extensions remain disabled."
+      "decision": "enhance-metadata-only",
+      "candidate_id": "epc-c6f947d482aa8aa0c78f",
+      "owner": "leiwenjun",
+      "release_tag": "2026-07-28",
+      "revision": "5f5440bb26a62e2cf3440b92da5a667efa03b267",
+      "published_at": "2026-07-28T16:47:49Z",
+      "prerelease": false,
+      "notes": "The 2026-07-30 ENHANCE decision refreshed immutable final release metadata only and did not activate the protocol. A separate schema-valid owner decision on 2026-07-31 later activated only the 2026-07-28 protocol governance contract; runtime, Tasks, Apps and extensions remain disabled."
     },
     {
       "id": "owasp-agentic-skills-top10-2026",
@@ -546,7 +552,7 @@
     },
     {
       "id": "mcp-2026-compat-staging",
-      "source_ref": "mcp-2026-07-28-rc",
+      "source_ref": "mcp-2026-07-28-final",
       "priority": "P0",
       "install_scope": "none-method-only",
       "runtime_enabled": false,
@@ -555,7 +561,7 @@
         "agent ecosystem negative fixtures"
       ],
       "must_not": [
-        "claim the final 2026-07-28 specification is released before source refresh",
+        "treat the released 2026-07-28 metadata as a compatibility or activation claim",
         "enable Tasks, Apps or extensions",
         "weaken current authorization and least-privilege controls"
       ]

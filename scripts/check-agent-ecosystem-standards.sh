@@ -45,6 +45,8 @@ import json
 import re
 import sys
 from datetime import date
+from jsonschema import Draft202012Validator
+from jsonschema.exceptions import SchemaError
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -98,7 +100,7 @@ expected_sources = {
     "otel-genai-semconv": "adopt-method-only",
     "agent-client-protocol": "observe-method-only",
     "a2a-protocol-1-0": "observe-method-only",
-    "mcp-2026-07-28-rc": "observe-method-only",
+    "mcp-2026-07-28-final": "enhance-metadata-only",
     "owasp-agentic-skills-top10-2026": "observe-method-only",
     "agent-skills-in-the-wild-2026": "adopt-method-only",
     "vscode-agent-skills-2026": "observe-method-only",
@@ -145,7 +147,7 @@ expected_candidates = {
     "otel-genai-trace-adapter": "otel-genai-semconv",
     "acp-protocol-watch": "agent-client-protocol",
     "a2a-protocol-watch": "a2a-protocol-1-0",
-    "mcp-2026-compat-staging": "mcp-2026-07-28-rc",
+    "mcp-2026-compat-staging": "mcp-2026-07-28-final",
     "agentic-skills-security-crosswalk": "owasp-agentic-skills-top10-2026",
     "skill-maintenance-evidence": "agent-skills-in-the-wild-2026",
     "vscode-github-copilot-target-watch": "vscode-agent-skills-2026",
@@ -173,7 +175,7 @@ for label, (manifest, source_id) in domain_refs.items():
     check(source_id in manifest.get("external_source_refs", []), f"{label} missing external source_ref: {source_id}")
 for source_id in ("owasp-agentic-skills-top10-2026", "agent-skills-in-the-wild-2026"):
     check(source_id in skill.get("external_source_refs", []), f"skill_reproducibility_contracts missing external source_ref: {source_id}")
-check("mcp-2026-07-28-rc" in mcp.get("external_source_refs", []), "skill_mcp_dependencies missing MCP 2026 source_ref")
+check("mcp-2026-07-28-final" in mcp.get("external_source_refs", []), "skill_mcp_dependencies missing MCP 2026 final source_ref")
 
 skill_contracts = {
     item.get("id"): item
@@ -286,35 +288,102 @@ for dependency in mcp.get("dependencies", []):
 
 compatibility = mcp.get("protocol_compatibility_policy", {})
 check(compatibility.get("id") == "mcp-protocol-compatibility-staging-v1", "missing MCP protocol compatibility staging policy")
-check(compatibility.get("active_protocol_version") == "2025-11-25", "MCP active protocol version must remain 2025-11-25")
+check(compatibility.get("active_protocol_version") == "2026-07-28", "MCP active protocol version must be 2026-07-28")
+check(
+    compatibility.get("active_status") == "supported-current-governance-only",
+    "MCP active status must remain governance-only",
+)
+check(
+    compatibility.get("active_scope") == "protocol-governance-contract-only",
+    "MCP active scope must remain protocol-governance-contract-only",
+)
+check(compatibility.get("active_runtime_enabled") is False, "MCP active runtime must remain disabled")
+check(
+    compatibility.get("active_feature_enablement")
+    == {"tasks": False, "apps": False, "extensions": False},
+    "MCP active feature enablement must remain disabled",
+)
 check("no-token-passthrough" in compatibility.get("active_auth_profile", ""), "MCP active auth profile must forbid token passthrough")
 mcp_candidate_fields = {
     "protocol_version",
+    "source_ref",
     "release_status",
     "capabilities",
+    "feature_enablement",
     "extension_ids",
     "deprecated_features",
     "auth_profile",
     "compatibility_test",
+    "compatibility_scope",
+    "compatibility_evidence",
     "rollback",
     "runtime_enabled",
     "final_compatibility_claim",
 }
 check(mcp_candidate_fields <= set(compatibility.get("candidate_required_fields", [])), "MCP candidate required fields are incomplete")
 mcp_candidates = compatibility.get("candidates", [])
-check(len(mcp_candidates) == 1, "MCP compatibility staging must contain exactly one release candidate")
+check(len(mcp_candidates) == 1, "MCP compatibility staging must contain exactly one final release candidate")
 if mcp_candidates:
     candidate = mcp_candidates[0]
     require_keys(candidate, sorted(mcp_candidate_fields.difference({"extension_ids"})), "MCP compatibility candidate")
-    check(candidate.get("protocol_version") == "2026-07-28-rc", "MCP candidate protocol version is invalid")
-    check(candidate.get("release_status") == "release-candidate", "MCP candidate must remain a release candidate")
+    check(candidate.get("protocol_version") == "2026-07-28", "MCP candidate protocol version is invalid")
+    check(candidate.get("source_ref") == "mcp-2026-07-28-final", "MCP candidate must reference final release provenance")
+    check(candidate.get("release_status") == "released", "MCP candidate must record the released final metadata")
+    feature_enablement = candidate.get("feature_enablement", {})
+    for feature in ("tasks", "apps", "extensions"):
+        check(feature_enablement.get(feature) is False, f"MCP candidate feature must remain disabled: {feature}")
     check(candidate.get("extension_ids") == [], "MCP candidate extensions must remain empty")
     check(candidate.get("runtime_enabled") is False, "MCP candidate runtime must remain disabled")
-    check(candidate.get("final_compatibility_claim") is False, "MCP candidate must not claim final compatibility")
-    check(candidate.get("compatibility_test") == "not-run-final-spec-pending", "MCP candidate compatibility test must remain pending")
+    check(candidate.get("final_compatibility_claim") is True, "MCP candidate must record the scoped final compatibility evidence")
+    check(candidate.get("compatibility_test") == "pass-mcp-2026-activation-fixture-2026-07-31", "MCP candidate compatibility test identity is invalid")
+    check(
+        candidate.get("compatibility_scope")
+        == "go-sdk-v1.7.0-pre.3-json-schema-2020-12-stateless-streamable-http-auth-boundary-and-legacy-rollback-on-offline-loopback",
+        "MCP candidate compatibility scope is invalid",
+    )
+    compatibility_evidence = candidate.get("compatibility_evidence", {})
+    require_keys(
+        compatibility_evidence,
+        [
+            "sdk_module",
+            "sdk_version",
+            "sdk_revision",
+            "sdk_sum",
+            "sdk_go_mod_sum",
+            "runtime_image",
+            "transport",
+            "network_mode",
+            "test_names",
+            "negative_boundaries",
+            "verified_at",
+            "evidence_path",
+        ],
+        "MCP compatibility evidence",
+    )
+    check(compatibility_evidence.get("sdk_module") == "github.com/modelcontextprotocol/go-sdk", "MCP SDK module is not pinned")
+    check(compatibility_evidence.get("sdk_version") == "v1.7.0-pre.3", "MCP SDK version is not pinned")
+    check(compatibility_evidence.get("sdk_revision") == "827f90ba0c13edb546028df42fadc9f1211a4ff2", "MCP SDK revision is not pinned")
+    check(compatibility_evidence.get("sdk_sum") == "h1:SEAY9IduDif4iApnZgpFkjFIdo3askSGZVbZIYyTy6I=", "MCP SDK sum is invalid")
+    check(
+        compatibility_evidence.get("runtime_image")
+        == "docker.io/library/golang:1.25.1-bookworm@sha256:c423747fbd96fd8f0b1102d947f51f9b266060217478e5f9bf86f145969562ee",
+        "MCP activation runtime image is not digest-pinned",
+    )
+    check(compatibility_evidence.get("transport") == "streamable-http-local-loopback", "MCP activation transport scope is invalid")
+    check(compatibility_evidence.get("network_mode") == "offline-container-loopback-only", "MCP activation smoke must be offline")
+    check(
+        compatibility_evidence.get("test_names")
+        == [
+            "TestSchemaCompatibilityFixture",
+            "TestVersionPinnedClientServerSmoke",
+            "TestAuthBoundaryVerification",
+            "TestRollbackSmoke",
+        ],
+        "MCP activation test identity is incomplete",
+    )
     check(candidate.get("auth_profile") == compatibility.get("active_auth_profile"), "MCP candidate auth profile must not weaken the active profile")
 activation = compatibility.get("activation_gate", {})
-check(activation.get("final_spec_retrieved") is False, "MCP final spec gate must remain false before refresh")
+check(activation.get("final_spec_retrieved") is True, "MCP final release metadata must be recorded as retrieved")
 check(activation.get("extensions_enabled_default") is False, "MCP extensions must remain disabled by default")
 for gate in (
     "breaking_change_diff_required",
@@ -324,6 +393,95 @@ for gate in (
     "rollback_smoke_required",
 ):
     check(activation.get(gate) is True, f"MCP activation gate is missing: {gate}")
+check(activation.get("breaking_change_diff_completed") is True, "MCP breaking-change diff must be completed")
+for gate in (
+    "schema_fixture_completed",
+    "client_server_smoke_completed",
+    "auth_security_review_completed",
+    "rollback_smoke_completed",
+):
+    check(activation.get(gate) is True, f"MCP activation evidence must be completed: {gate}")
+check(activation.get("technical_readiness_completed") is True, "MCP technical readiness must be completed")
+check(activation.get("owner_decision_required") is True, "MCP activation must require an independent owner decision")
+check(
+    activation.get("owner_decision_schema") == "schemas/mcp-protocol-activation-decision.schema.json",
+    "MCP owner decision schema path is invalid",
+)
+check(
+    activation.get("owner_decision_schema_version") == "mcp-protocol-activation-decision/v1",
+    "MCP owner decision schema version is invalid",
+)
+check(
+    activation.get("owner_decision_allowed") == ["ACTIVATE", "HOLD", "REJECT"],
+    "MCP owner decision enum is invalid",
+)
+check(activation.get("owner_decision_completed") is True, "MCP owner activation decision must be completed")
+check(
+    activation.get("owner_decision_id") == "mcp-act-2026-07-31-leiwenjun",
+    "MCP owner activation decision id is invalid",
+)
+check(
+    activation.get("owner_decision_path")
+    == "docs/changes/mcp-2026-activation-readiness-2026-07-31/owner-activation-decision.json",
+    "MCP owner activation decision path is invalid",
+)
+check(activation.get("activation_allowed") is True, "MCP governance-contract activation must be allowed")
+check(activation.get("activation_completed") is True, "MCP governance-contract activation must be completed")
+check(
+    activation.get("activation_scope") == "protocol-governance-contract-only",
+    "MCP activation scope must remain governance-only",
+)
+check(activation.get("activated_at") == "2026-07-31", "MCP activation date is invalid")
+check(
+    activation.get("rollback_target_protocol_version") == "2025-11-25",
+    "MCP rollback target must remain 2025-11-25",
+)
+
+activation_decision_schema = load_json("schemas/mcp-protocol-activation-decision.schema.json")
+check(
+    activation_decision_schema.get("$id") == "mcp-protocol-activation-decision/v1",
+    "MCP activation decision schema id is invalid",
+)
+check(
+    activation_decision_schema.get("properties", {}).get("decision", {}).get("enum")
+    == ["ACTIVATE", "HOLD", "REJECT"],
+    "MCP activation decision schema enum is invalid",
+)
+check(
+    activation_decision_schema.get("properties", {}).get("runtime_enabled", {}).get("const") is False,
+    "MCP protocol activation decision must not authorize runtime enablement",
+)
+try:
+    Draft202012Validator.check_schema(activation_decision_schema)
+except SchemaError as exc:
+    fail(f"MCP activation decision schema is invalid: {exc.message}")
+else:
+    activation_decision = load_json(activation.get("owner_decision_path", ""))
+    decision_errors = sorted(
+        Draft202012Validator(
+            activation_decision_schema,
+            format_checker=Draft202012Validator.FORMAT_CHECKER,
+        ).iter_errors(activation_decision),
+        key=lambda item: list(item.absolute_path),
+    )
+    check(
+        not decision_errors,
+        "MCP activation decision record does not satisfy its schema"
+        + (f": {decision_errors[0].message}" if decision_errors else ""),
+    )
+    check(activation_decision.get("decision_id") == activation.get("owner_decision_id"), "MCP decision id mismatch")
+    check(activation_decision.get("candidate_id") == "epc-c6f947d482aa8aa0c78f", "MCP decision candidate id mismatch")
+    check(activation_decision.get("decision") == "ACTIVATE", "MCP owner decision must be ACTIVATE")
+    check(activation_decision.get("owner") == "leiwenjun", "MCP activation owner is invalid")
+    check(
+        activation_decision.get("scope") == compatibility.get("active_scope"),
+        "MCP decision scope must match the active scope",
+    )
+    check(activation_decision.get("runtime_enabled") is False, "MCP decision must keep runtime disabled")
+    check(
+        activation_decision.get("feature_enablement") == compatibility.get("active_feature_enablement"),
+        "MCP decision must keep active features disabled",
+    )
 
 adapters = {
     item.get("id"): item
@@ -479,8 +637,14 @@ def fixture_errors(data, require_all=False):
             errors.append("fixture mcp_protocol_watch must keep runtime_enabled=false")
         if value.get("final_compatibility_claim") is not False:
             errors.append("fixture mcp_protocol_watch must not claim final compatibility")
-        if value.get("release_status") != "release-candidate":
-            errors.append("fixture mcp_protocol_watch must remain release-candidate")
+        if value.get("source_ref") != "mcp-2026-07-28-final":
+            errors.append("fixture mcp_protocol_watch must reference final release provenance")
+        if value.get("release_status") != "released":
+            errors.append("fixture mcp_protocol_watch must record released final metadata")
+        feature_enablement = value.get("feature_enablement", {})
+        for feature in ("tasks", "apps", "extensions"):
+            if feature_enablement.get(feature) is not False:
+                errors.append(f"fixture mcp_protocol_watch feature must remain disabled: {feature}")
         if value.get("extension_ids") != []:
             errors.append("fixture mcp_protocol_watch extension_ids must remain empty")
         if value.get("auth_profile") != compatibility.get("active_auth_profile"):

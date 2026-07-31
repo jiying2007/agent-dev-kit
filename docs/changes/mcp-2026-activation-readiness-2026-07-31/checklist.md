@@ -1,0 +1,22 @@
+# 交付清单：mcp-2026-activation-readiness-2026-07-31
+
+- [x] 目标、非目标、source、许可证、transport 和 credential 边界明确
+- [x] 固定 SDK/version/revision 与 Docker image digest 已确定
+- [x] active、runtime、feature、technical evidence、owner decision 分层设计
+- [x] schema compatibility 正负 fixture 通过
+- [x] version-pinned client/server modern smoke 通过
+- [x] auth missing/issuer/audience/scope/no-passthrough 边界通过
+- [x] rollback 到 `2025-11-25` 且 modern fail-closed 通过
+- [x] offline 执行确认 `--network=none`
+- [x] manifest evidence identity 与四项 completed 更新
+- [x] owner decision 仍独立且 activation/runtime fail-closed
+- [x] ecosystem、strict、full regression 通过或失败已归因
+- [x] Prompt before/after 对比证据
+- [x] Skill Intake 归属与安装范围结论
+- [x] Evidence Index 命令级字段完整（命令/退出码/结果摘要/证据路径/层级/关联工件）
+- [x] blocker/major 均为 0
+- [x] 独立 owner activation decision request 已生成
+- [x] Knowledge Hub validation candidate 已生成
+- [x] final-ready/session coach 已执行
+- [x] ACTIVATE/HOLD/REJECT 后续分支已按 owner 结论收口
+- [x] 收敛结论或阻塞说明

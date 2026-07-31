@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "mcp-protocol-activation-decision/v1",
+  "title": "MCP protocol activation owner decision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "decision_id",
+    "candidate_id",
+    "protocol_version",
+    "decision",
+    "owner",
+    "reviewed_at",
+    "scope",
+    "runtime_enabled",
+    "feature_enablement",
+    "rationale",
+    "evidence_refs",
+    "constraints"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "mcp-protocol-activation-decision/v1"
+    },
+    "decision_id": {
+      "type": "string",
+      "pattern": "^mcp-act-[a-z0-9-]+$"
+    },
+    "candidate_id": {
+      "type": "string",
+      "pattern": "^epc-[0-9a-f]{20}$"
+    },
+    "protocol_version": {
+      "const": "2026-07-28"
+    },
+    "decision": {
+      "type": "string",
+      "enum": [
+        "ACTIVATE",
+        "HOLD",
+        "REJECT"
+      ]
+    },
+    "owner": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "reviewed_at": {
+      "type": "string",
+      "format": "date"
+    },
+    "scope": {
+      "const": "protocol-governance-contract-only"
+    },
+    "runtime_enabled": {
+      "const": false
+    },
+    "feature_enablement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tasks",
+        "apps",
+        "extensions"
+      ],
+      "properties": {
+        "tasks": {
+          "const": false
+        },
+        "apps": {
+          "const": false
+        },
+        "extensions": {
+          "const": false
+        }
+      }
+    },
+    "rationale": {
+      "type": "string",
+      "minLength": 20,
+      "maxLength": 2000
+    },
+    "evidence_refs": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 50,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500
+      }
+    },
+    "constraints": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 20,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500
+      }
+    }
+  }
+}

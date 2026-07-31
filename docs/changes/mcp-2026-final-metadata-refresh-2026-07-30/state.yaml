@@ -1,0 +1,13 @@
+schema_version: 1
+change_id: mcp-2026-final-metadata-refresh-2026-07-30
+phase: review
+status: review-passed
+owner: leiwenjun
+updated_at: 2026-07-30
+next_action: keep runtime disabled; require a new owner decision after schema, client/server, auth and rollback evidence
+blocked_by: []
+activation_blocked_by:
+  - schema_fixture
+  - version_pinned_client_server_smoke
+  - auth_boundary_review
+  - rollback_smoke

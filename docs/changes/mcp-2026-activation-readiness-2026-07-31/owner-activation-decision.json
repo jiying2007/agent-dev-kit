@@ -1,0 +1,31 @@
+{
+  "schema_version": "mcp-protocol-activation-decision/v1",
+  "decision_id": "mcp-act-2026-07-31-leiwenjun",
+  "candidate_id": "epc-c6f947d482aa8aa0c78f",
+  "protocol_version": "2026-07-28",
+  "decision": "ACTIVATE",
+  "owner": "leiwenjun",
+  "reviewed_at": "2026-07-31",
+  "scope": "protocol-governance-contract-only",
+  "runtime_enabled": false,
+  "feature_enablement": {
+    "tasks": false,
+    "apps": false,
+    "extensions": false
+  },
+  "rationale": "接受当前固定版本技术证据及已披露的预发布和单SDK验证风险，同意仅激活协议治理契约，runtime与Tasks、Apps、extensions继续保持关闭。",
+  "evidence_refs": [
+    "docs/changes/mcp-2026-activation-readiness-2026-07-31/verify-report.md",
+    "docs/changes/mcp-2026-activation-readiness-2026-07-31/review-report.md",
+    "docs/changes/mcp-2026-activation-readiness-2026-07-31/breaking-change-diff.md",
+    "docs/changes/mcp-2026-activation-readiness-2026-07-31/negative-results.md",
+    "tests/mcp_2026_activation/mcp_activation_test.go"
+  ],
+  "constraints": [
+    "Only the protocol governance contract is activated",
+    "MCP runtime remains disabled",
+    "Tasks, Apps and extensions remain disabled",
+    "Compatibility evidence remains scoped to the pinned Go SDK and offline loopback",
+    "Runtime or feature enablement requires separate evidence and owner approval"
+  ]
+}

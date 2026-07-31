@@ -116,7 +116,7 @@ for source in sources:
             fail(f"source_ref {sid} local_path must be a safe relative path")
         elif require_local_sources and not (root.parent / local_relative).exists():
             fail(f"source_ref {sid} local_path missing: {local_path}")
-    if source.get("decision") not in {"adopt-method-only", "observe-method-only"}:
+    if source.get("decision") not in {"adopt-method-only", "enhance-metadata-only", "observe-method-only"}:
         fail(f"source_ref {sid} must remain method-only")
 
 candidates = manifest.get("candidate_decisions", [])

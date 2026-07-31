@@ -1,0 +1,33 @@
+schema_version: "1.0"
+change_id: mcp-2026-activation-readiness-2026-07-31
+status: activated
+phase: closeout
+owner: leiwenjun
+implementer: codex-current-session
+active_protocol_version: "2026-07-28"
+candidate_protocol_version: "2026-07-28"
+runtime_enabled: false
+features_enabled:
+  tasks: false
+  apps: false
+  extensions: false
+technical_prerequisites:
+  schema_fixture: pass
+  client_server_smoke: pass
+  auth_boundary: pass
+  rollback_smoke: pass
+owner_decision:
+  required: true
+  completed: true
+  decision: ACTIVATE
+  decision_id: mcp-act-2026-07-31-leiwenjun
+  decision_path: docs/changes/mcp-2026-activation-readiness-2026-07-31/owner-activation-decision.json
+activation_scope: protocol-governance-contract-only
+activation_allowed: true
+activation_completed: true
+rollback_target_protocol_version: "2025-11-25"
+retry_budget_per_stage: 2
+staleness_threshold_days: 1
+last_heartbeat_at: "2026-07-31T09:49:05+08:00"
+stop_condition: completed
+blocked_reason: null

@@ -86,8 +86,9 @@
   },
   "mcp_protocol_watch": {
     "active_protocol_version": "2025-11-25",
-    "candidate_protocol_version": "2026-07-28-rc",
-    "release_status": "release-candidate",
+    "candidate_protocol_version": "2026-07-28",
+    "source_ref": "mcp-2026-07-28-final",
+    "release_status": "released",
     "capabilities": [
       "stateless-core",
       "extensions",
@@ -99,6 +100,11 @@
       "mcp-method-routing",
       "ttl-ms-caching"
     ],
+    "feature_enablement": {
+      "tasks": false,
+      "apps": false,
+      "extensions": false
+    },
     "extension_ids": [],
     "deprecated_features": [
       "roots",
@@ -106,7 +112,11 @@
       "logging"
     ],
     "auth_profile": "protected-resource-metadata-resource-indicators-least-privilege-no-token-passthrough",
-    "compatibility_test": "not-run-final-spec-pending",
+    "compatibility_test": "not-run-required-evidence-pending",
+    "compatibility_scope": "synthetic-watch-fixture-pending",
+    "compatibility_evidence": {
+      "status": "not-run-synthetic-fixture"
+    },
     "rollback": "retain active 2025-11-25 contract",
     "runtime_enabled": false,
     "final_compatibility_claim": false

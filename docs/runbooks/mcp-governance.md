@@ -162,3 +162,48 @@ Cron、heartbeat、standing order、webhook 和类似后台触发机制默认视
 - 高风险工具缺少执行前 policy、guard test 或拒绝样例。
 - MCP/plugin 缺少暴露清单、auth scope、smoke 证据或回滚步骤。
 - 后台触发机制缺少 owner、禁用路径、审批门槛或审计日志。
+
+## 13. Protocol Activation Gate
+
+协议 final 发布、SDK 宣称支持和 ADK runtime 激活是三个独立状态，不能互相推导。候选协议
+进入 active 前至少需要：
+
+1. breaking-change diff；
+2. schema compatibility fixture；
+3. version-pinned client/server smoke；
+4. auth boundary verification；
+5. rollback smoke；
+6. 上述证据完成后的独立 owner activation decision。
+
+MCP `2026-07-28` 当前专用验证入口：
+
+```bash
+rtk scripts/check-mcp-2026-activation.sh --prepare
+rtk scripts/check-mcp-2026-activation.sh --offline
+```
+
+`--prepare` 只准备 `go.sum` 约束的公开 modules；`--offline` 使用固定 Docker image
+digest、Docker `--network=none` 和本地 loopback。通过只证明 manifest 中记录的
+`compatibility_scope`，不能外推为跨 SDK、真实 IdP、反向代理或生产负载认证。
+
+技术证据通过后、owner 决策前必须保持：
+
+- `owner_decision_completed=false`
+- `activation_allowed=false`
+- `runtime_enabled=false`
+
+直到 owner 以新的 decision ID 明确选择 `ACTIVATE`。`HOLD` 保留 technical readiness
+但不激活；`REJECT` 必须撤销 compatibility promotion 并记录原因。Tasks、Apps 和其他
+extensions 无论协议是否激活，都需要独立 feature decision。
+
+当前 `2026-07-28` 已由 decision `mcp-act-2026-07-31-leiwenjun` 激活为
+`protocol-governance-contract-only`。当前仍必须保持：
+
+- `active_runtime_enabled=false`
+- `active_feature_enablement.tasks=false`
+- `active_feature_enablement.apps=false`
+- `active_feature_enablement.extensions=false`
+- rollback target 为 `2025-11-25`
+
+读取 active protocol 的 consumer 必须同时读取 scope、runtime 和 feature flags，不得仅凭
+版本号启用 server、credential、Tasks、Apps 或 extensions。

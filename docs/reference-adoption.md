@@ -259,3 +259,52 @@
 - 不用 clean-room fixture、合成 report 或 control-plane 绿灯冒充真实 repository runtime campaign 或 M5 现场认证。
 - MCP 最终规范、真实 client/server smoke 和 freshness diff 完成前不启用 candidate protocol。
 - 不采用 Universal Skill Format，不新增 VS Code/GitHub Copilot direct target，不宣称通过 OWASP 认证。
+
+## 15. MCP 2026-07-28 final metadata refresh（2026-07-30）
+
+借鉴点：
+- 独立 owner 对 `epc-c6f947d482aa8aa0c78f` 作出 `ENHANCE` 决策，只刷新既有
+  compatibility staging 的 final tag、commit、release 与许可证边界。
+- `final_spec_retrieved=true` 只表示 final source 已取回，不表示 ADK compatibility。
+- Tasks、Apps、extensions 增加独立机器可读 disabled 状态；只要其中任一启用，fixture
+  必须 fail closed。
+
+落地点：
+- `manifests/skill_mcp_dependencies.json`
+- `manifests/external_agent_pattern_contracts.json`
+- `scripts/check-agent-ecosystem-standards.sh`
+- `fixtures/agent-ecosystem-standards/fail/mcp-final-feature-enabled.json`
+- `docs/changes/mcp-2026-final-metadata-refresh-2026-07-30/`
+
+有意排除：
+- active protocol 继续保持 `2025-11-25`。
+- runtime、Tasks、Apps、extensions、final compatibility claim 和 activation 均不启用。
+- schema fixture、version-pinned client/server smoke、auth boundary review 与 rollback smoke
+  完成前，不进入 activation decision。
+- 不复制上游 specification、SDK code 或混合许可证文档。
+
+## 16. MCP 2026-07-28 activation technical readiness（2026-07-31）
+
+借鉴点：
+- final metadata、scoped compatibility evidence、active protocol、runtime 和 feature
+  enablement 分层治理，任一层不得隐式授权下一层。
+- 固定 `go-sdk v1.7.0-pre.3`、SDK revision/module sum 和 Go image digest，在
+  `--network=none` 的 loopback 环境执行真实 schema、client/server、auth 和 rollback
+  行为验证。
+- owner activation decision 使用独立 schema，只允许 `ACTIVATE`、`HOLD`、`REJECT`；
+  实现者不得代签。
+
+落地点：
+- `tests/mcp_2026_activation/`
+- `scripts/check-mcp-2026-activation.sh`
+- `schemas/mcp-protocol-activation-decision.schema.json`
+- `manifests/skill_mcp_dependencies.json`
+- `docs/changes/mcp-2026-activation-readiness-2026-07-31/`
+
+当前边界：
+- 四项 technical prerequisite 已通过，结论只适用于固定 Go SDK 和离线 loopback scope。
+- owner `leiwenjun` 已通过 `mcp-act-2026-07-31-leiwenjun` 选择 `ACTIVATE`；
+  active protocol governance contract 为 `2026-07-28`。
+- runtime 仍关闭，rollback target 保留为 `2025-11-25`。
+- Tasks、Apps、extensions 不属于本次 activation 授权。
+- SDK 仍为 pre-release；真实 IdP、proxy、跨 SDK、性能和长稳需要后续独立 evidence。
