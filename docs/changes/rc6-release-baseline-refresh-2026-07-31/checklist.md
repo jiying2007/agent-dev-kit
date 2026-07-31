@@ -6,6 +6,6 @@
 - [x] 收敛结论或阻塞说明
 - [x] RC6 version identities synchronized
 - [x] Python 3.11/3.12 supported-environment gates pass
-- [ ] Exact-commit artifacts reproducible
-- [ ] RC5 to RC6 rehearsal pass
+- [x] Exact-commit artifacts reproducible
+- [x] RC5 to RC6 rehearsal pass
 - [ ] Root full gate pass

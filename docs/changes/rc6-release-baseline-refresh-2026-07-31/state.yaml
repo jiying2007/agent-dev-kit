@@ -1,19 +1,21 @@
 schema: adk-change-state/v1
 change_id: rc6-release-baseline-refresh-2026-07-31
-stage: build
-status: in-progress
+stage: verified
+status: adk-release-baseline-pass-root-pending
 owner: leiwenjun
 implementer: Codex
 updated_at: 2026-07-31T17:10:00+08:00
 goal_statement: "为 RC5 后映射资产建立真实 RC6 release baseline，并关闭根仓 current-status consistency 门禁"
 heartbeat:
-  last_action: "Python 3.11/3.12 full parity 均 57/57，dependency audit 通过"
-  next_action: "提交 release source，并从 exact commit 双构建 RC6 artifact"
+  last_action: "RC6 exact artifact 双构建一致，RC5 到 RC6 rehearsal 与 rollback 通过"
+  next_action: "提交 evidence 并更新根仓 release policy/status/gitlink"
   evidence_delta:
     - "same-version rehearsal 被现有实现明确拒绝"
     - "本机已有 Python 3.11/3.12 local-CI images"
     - "两套支持环境首轮均 56/57；唯一失败已平台中立化修复"
     - "修复后两套支持环境均 57/57，security/performance/wheel/audit pass"
+    - "RC6 artifact 720 files，SHA256 4cd728126b7242150665315a22706811c12de4de9f136eaef17b0e3ecbe63b15"
+    - "RC5 到 RC6 in-place rehearsal pass，rollback restored=39"
   blockers: []
 retry_budget: 2
 staleness_threshold_minutes: 45
@@ -23,8 +25,4 @@ completion_claim:
   claimant: Codex
   verifier: adk-verification-before-completion
   open_items:
-    - version-sync
-    - supported-python-validation
-    - exact-artifact
-    - release-rehearsal
     - root-full-gate

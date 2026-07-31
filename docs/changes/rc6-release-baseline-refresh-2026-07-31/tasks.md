@@ -2,9 +2,9 @@
 
 - [x] T1 建立 RC6 版本、migration 和 M5 campaign contract；verify：strict、release check、Software M5 ready tests。
 - [x] T2 在 Python 3.11/3.12 local-CI 环境完成全回归和安全门禁；verify：两套支持环境结果均 pass。
-- [ ] T3 提交 release source，并从 exact commit 双构建一致 artifact；verify：`cmp`、SHA256、checksum、source file count。
-- [ ] T4 执行 RC5 到 RC6 rehearsal；verify：升级、candidate rollback、RC5 managed hash restore 全 pass。
-- [ ] T5 固化 ADK evidence commit；verify：release source 到 evidence commit 的 mapped path diff 为空。
+- [x] T3 提交 release source，并从 exact commit 双构建一致 artifact；verify：`cmp`、SHA256、checksum、source file count。
+- [x] T4 执行 RC5 到 RC6 rehearsal；verify：升级、candidate rollback、RC5 managed hash restore 全 pass。
+- [x] T5 固化 ADK evidence commit；verify：release source 到 evidence commit 的 mapped path diff 为空。
 - [ ] T6 更新根仓 policy/evidence/current-status/scorecard/ledger/gitlink；verify：current-status consistency pass。
 - [ ] T7 运行根仓 full gate、final-ready、提交和推送；verify：full 60/60、两个远端 HEAD 与本地一致。
 
