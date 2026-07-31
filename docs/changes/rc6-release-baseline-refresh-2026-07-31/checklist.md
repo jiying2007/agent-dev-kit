@@ -8,4 +8,4 @@
 - [x] Python 3.11/3.12 supported-environment gates pass
 - [x] Exact-commit artifacts reproducible
 - [x] RC5 to RC6 rehearsal pass
-- [ ] Root full gate pass
+- [x] Root full gate pass

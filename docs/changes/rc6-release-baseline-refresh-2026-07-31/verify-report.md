@@ -19,6 +19,7 @@
 | `rtk scripts/run-local-ci-parity.sh --python all --mode full`（修复后） | 0 | Python 3.11/3.12 均 57/57；audit 无已知漏洞 | command output | Test/Release | T2 |
 | exact commit 双 `release build` + `cmp` + checksum | 0 | 720 source files；两份 artifact SHA256 均为 `4cd728126b7242150665315a22706811c12de4de9f136eaef17b0e3ecbe63b15` | `/tmp/adk-rc6-release.3ERZOJ/` | Release Artifact | T3 |
 | RC5→RC6 `release rehearse` | 0 | 39→39 原位升级；rollback removed/restored=39；RC5 hashes 恢复 | `release-rehearsal.json` | Release Runtime | T4 |
+| `rtk scripts/check-all.sh --full` | 0 | 根仓 60/60，`check-current-status-consistency` 与全部聚合门禁通过 | root command output | Project/Release | T6 |
 
 ## Completion Claim Audit
 
@@ -35,4 +36,4 @@
 
 ## Gate Result
 
-ADK source/release evidence：`pass`。根仓 policy、current-status 和 full gate 在后续串行阶段闭环。
+ADK source/release evidence与根仓 policy/current-status/full gate：`pass`。source-to-live 保持 `required-pending-owner-authorization`。

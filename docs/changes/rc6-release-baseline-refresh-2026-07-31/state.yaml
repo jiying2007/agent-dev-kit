@@ -1,14 +1,14 @@
 schema: adk-change-state/v1
 change_id: rc6-release-baseline-refresh-2026-07-31
-stage: verified
-status: adk-release-baseline-pass-root-pending
+stage: review-passed
+status: local-release-baseline-pass-live-pending-authorization
 owner: leiwenjun
 implementer: Codex
 updated_at: 2026-07-31T17:10:00+08:00
 goal_statement: "为 RC5 后映射资产建立真实 RC6 release baseline，并关闭根仓 current-status consistency 门禁"
 heartbeat:
-  last_action: "RC6 exact artifact 双构建一致，RC5 到 RC6 rehearsal 与 rollback 通过"
-  next_action: "提交 evidence 并更新根仓 release policy/status/gitlink"
+  last_action: "根仓 full 60/60，current-status consistency 与 RC6 release baseline 全部通过"
+  next_action: "运行 final-ready，提交并推送 ADK 与根仓"
   evidence_delta:
     - "same-version rehearsal 被现有实现明确拒绝"
     - "本机已有 Python 3.11/3.12 local-CI images"
@@ -16,13 +16,16 @@ heartbeat:
     - "修复后两套支持环境均 57/57，security/performance/wheel/audit pass"
     - "RC6 artifact 720 files，SHA256 4cd728126b7242150665315a22706811c12de4de9f136eaef17b0e3ecbe63b15"
     - "RC5 到 RC6 in-place rehearsal pass，rollback restored=39"
+    - "llm_agent full 60/60，fail=0"
   blockers: []
 retry_budget: 2
 staleness_threshold_minutes: 45
 stop_condition: pass
 completion_claim:
-  status: in-progress
+  status: local-release-baseline-verified
   claimant: Codex
   verifier: adk-verification-before-completion
   open_items:
-    - root-full-gate
+    - source-to-live-owner-authorization
+    - remote-ci-attestation
+    - runtime-and-field-certification
