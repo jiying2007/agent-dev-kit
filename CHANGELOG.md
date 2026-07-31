@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+## v3.1.0-rc.6 (2026-07-31)
+
+### 新增
+- MCP `2026-07-28` protocol governance contract 经固定 Go SDK 的 schema、client/server、auth 和 rollback 证据后激活；runtime 与 Tasks、Apps、extensions 继续关闭。
+- 嵌入式远程调试增加分层连通性、设备失联熔断、artifact/mutation gate 和 HIL 分阶段扩大合同。
+- 目标架构报告支持由机器 SSOT 管理连续 G11+ 项目级优化条目。
+
+### 发布边界
+- RC6 通过 RC5 到 RC6 本地 artifact 升级/回滚演练建立新 release baseline。
+- Codex source-to-live 未自动执行，保持独立 owner 授权门禁。
+
 ## v3.1.0-rc.5 (2026-07-19)
 
 ### 新增

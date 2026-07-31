@@ -404,13 +404,13 @@ bash scripts/devkit.sh eval report --input /tmp/adk-eval.json --output /tmp/adk-
 
 `eval effect` 使用输入/标签分离并锁定 hash 的 24 例 source/test 数据集，分别覆盖 12 个 OOD 与 12 个 adversarial case，评分 route、safety、trace、outcome，并禁用 `routing.intents` 做组件消融。它不把标签传入 matcher/runtime prompt，但标签仍对源码 reviewer 可见，因此不是密码学意义的 blind trial，也不替代 runtime/field evidence。
 
-软件 M5 campaign 使用 `manifests/software_m5_eval_contract_rc5.json`。正式契约包含 60 个任务、Codex/Claude、baseline/ADK、3 trials、显式模型、最多一次错误重试和 `$150` 硬预算；逐任务结果原子落盘，恢复时拒绝 manifest/contract/task/plan/runtime 版本漂移。RC5 新增意图/工作项确定性回归，但双 runtime campaign 仍需单独执行，不能由本地 fixture 替代。
+软件 M5 campaign 使用 `manifests/software_m5_eval_contract_rc6.json`。正式契约包含 60 个任务、Codex/Claude、baseline/ADK、3 trials、显式模型、最多一次错误重试和 `$150` 硬预算；逐任务结果原子落盘，恢复时拒绝 manifest/contract/task/plan/runtime 版本漂移。RC6 保留 RC5 的意图/工作项确定性回归并纳入后续治理资产，但双 runtime campaign 仍需单独执行，不能由本地 fixture 替代。
 
 ```bash
-bash scripts/devkit.sh eval campaign plan --contract manifests/software_m5_eval_contract_rc5.json --summary-json
-bash scripts/devkit.sh eval campaign run --contract manifests/software_m5_eval_contract_rc5.json --state-dir /tmp/adk-m5-campaign --execute --approve-budget-usd 150 --summary-json
-bash scripts/devkit.sh eval campaign run --contract manifests/software_m5_eval_contract_rc5.json --state-dir /tmp/adk-m5-campaign --execute --approve-budget-usd 150 --resume --summary-json
-bash scripts/devkit.sh eval certify --contract manifests/software_m5_eval_contract_rc5.json --state-dir /tmp/adk-m5-campaign --output /tmp/adk-m5-certification.json
+bash scripts/devkit.sh eval campaign plan --contract manifests/software_m5_eval_contract_rc6.json --summary-json
+bash scripts/devkit.sh eval campaign run --contract manifests/software_m5_eval_contract_rc6.json --state-dir /tmp/adk-m5-campaign --execute --approve-budget-usd 150 --summary-json
+bash scripts/devkit.sh eval campaign run --contract manifests/software_m5_eval_contract_rc6.json --state-dir /tmp/adk-m5-campaign --execute --approve-budget-usd 150 --resume --summary-json
+bash scripts/devkit.sh eval certify --contract manifests/software_m5_eval_contract_rc6.json --state-dir /tmp/adk-m5-campaign --output /tmp/adk-m5-certification.json
 bash scripts/devkit.sh eval campaign report --input /tmp/adk-m5-certification.json --output /tmp/adk-m5-certification.md
 bash scripts/devkit.sh eval repository plan --contract manifests/repository_runtime_eval_contract.json --summary-json
 bash scripts/devkit.sh eval repository certify --contract manifests/repository_runtime_eval_contract.json --report /tmp/repository-runtime-report.json --output /tmp/repository-runtime-certification.json --summary-json
@@ -435,9 +435,9 @@ bash scripts/devkit.sh security check --summary-json
 
 ```bash
 bash scripts/devkit.sh release check
-bash scripts/devkit.sh release build --version 3.1.0-rc.5 --out dist --summary-json
-bash scripts/devkit.sh release rehearse --previous-artifact /tmp/agent-dev-kit-3.1.0-rc.4.tar.gz --candidate-artifact dist/agent-dev-kit-3.1.0-rc.5.tar.gz --output /tmp/adk-release-rehearsal.json
-bash scripts/devkit.sh release publish --version 3.1.0-rc.5 --backend github --artifact dist/agent-dev-kit-3.1.0-rc.5.tar.gz --dry-run
+bash scripts/devkit.sh release build --version 3.1.0-rc.6 --out dist --summary-json
+bash scripts/devkit.sh release rehearse --previous-artifact /tmp/agent-dev-kit-3.1.0-rc.5.tar.gz --candidate-artifact dist/agent-dev-kit-3.1.0-rc.6.tar.gz --output /tmp/adk-release-rehearsal.json
+bash scripts/devkit.sh release publish --version 3.1.0-rc.6 --backend github --artifact dist/agent-dev-kit-3.1.0-rc.6.tar.gz --dry-run
 ```
 
 `release rehearse` 只接受 checksum 匹配且 candidate 版本更高的本地 artifact；它在临时 target 安装上一版、升级候选版、核验 receipt，再回滚并比较上一版受管资产 hash。rc.1 legacy bundle 或缺少当前必填 target contract 字段的上一版会在 release-only migration boundary 建立受管 receipt，再执行 rollback-before-install；active loader 仍 fail closed。candidate 回滚后，从保留的上一版 artifact 重装并逐文件比对 managed hashes，证明 fallback anchor 可用。build 在归档前校验 SPDX 2.3 SBOM 的 package/relationship 完整性并把 SBOM SHA256 写入 release manifest；GitHub release workflow 使用 SHA-pinned `actions/attest` 为 tarball 生成 provenance。该命令不创建 tag、不上传制品、不调用远端 backend。rehearsal、runtime smoke、timing 和 campaign state 属于 checkout 内的验证证据，不进入 source distribution，避免制品 SHA 与其自身验证报告形成循环依赖。
