@@ -97,15 +97,15 @@ constraints:
 
 ## Commands
 ```bash
-# 自动匹配任务文本
-bash scripts/devkit.sh match --text "<用户请求>"
+# Codex runtime：从受信 inventory 选择 primary/supporting
+rtk bash ~/codex/scripts/skill-search.sh --query "<用户请求>" --profile token-lean --limit 5 --summary-json
 
-# 检查指定 skill 是否适合
-bash scripts/devkit.sh match --skill <skill-name> --text "<用户请求>"
+# Codex runtime：验证声明式 workflow/recipe 路由
+rtk bash -lc 'cd ~/codex && python3 -m unittest tests.test_agent_routing_eval'
 
-# 检查 profile 与 routing 是否一致
-bash scripts/check-profile-coherence.sh
-bash ../scripts/check-runtime-routing.sh ..
+# ADK 源仓维护：检查 profile 与 routing 是否一致
+rtk bash scripts/check-profile-coherence.sh
+rtk bash scripts/devkit.sh validate --strict
 ```
 
 ## Failure Handling
