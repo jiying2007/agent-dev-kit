@@ -1,0 +1,8 @@
+schema_version: 1
+change_id: official-model-catalog-freshness-2026-07-30
+phase: verify
+status: verified
+owner: agent-dev-kit
+updated_at: 2026-07-30
+next_action: owner review; keep source watch-only until the next freshness review
+blocked_by: []

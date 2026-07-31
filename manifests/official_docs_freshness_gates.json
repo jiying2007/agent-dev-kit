@@ -667,14 +667,17 @@
     },
     {
       "id": "openai-latest-model-gpt-5-5",
-      "title": "Models: current OpenAI model catalog and latest-model guidance",
+      "title": "Models: current OpenAI model catalog and model guidance",
       "url": "https://developers.openai.com/api/docs/models",
-      "retrieved_at": "2026-06-27",
-      "expires_at": "2026-07-27",
+      "retrieved_at": "2026-07-30",
+      "expires_at": "2026-10-28",
       "review_status": "watch",
       "adoption_scope": "P2",
       "owner": "agent-dev-kit",
-      "decision": "Watch as a volatile source for model-selection and latest-model claims; do not hardcode durable adk defaults from this page without freshness review.",
+      "freshness_decision": "update",
+      "legacy_id_note": "The stable source ID retains the model family visible at initial registration; current model claims must come from the retrieved page, not the ID.",
+      "verified_claim": "As reviewed on 2026-07-30, the official model catalog and model guidance recommend the GPT-5.6 family; this volatile claim expires with this record.",
+      "decision": "Update the volatile model-catalog evidence after official review. Keep it watch-only and do not hardcode durable ADK defaults without workload eval, owner review, and a current source check.",
       "required_checks": [
         "check-official-docs-governance",
         "model freshness review before promotion"
