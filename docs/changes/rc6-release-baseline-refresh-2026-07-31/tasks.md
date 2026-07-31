@@ -6,7 +6,7 @@
 - [x] T4 执行 RC5 到 RC6 rehearsal；verify：升级、candidate rollback、RC5 managed hash restore 全 pass。
 - [x] T5 固化 ADK evidence commit；verify：release source 到 evidence commit 的 mapped path diff 为空。
 - [x] T6 更新根仓 policy/evidence/current-status/scorecard/ledger/gitlink；verify：current-status consistency pass。
-- [ ] T7 运行根仓 full gate、final-ready、提交和推送；verify：full 60/60、两个远端 HEAD 与本地一致。
+- [x] T7 运行根仓 full gate、final-ready、提交和推送；verify：full 60/60、两个远端 HEAD 与本地一致。
 
 ## Ownership 与并行冲突检查
 

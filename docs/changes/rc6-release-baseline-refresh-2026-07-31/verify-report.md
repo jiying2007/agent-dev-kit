@@ -37,3 +37,10 @@
 ## Gate Result
 
 ADK source/release evidence与根仓 policy/current-status/full gate：`pass`。source-to-live 保持 `required-pending-owner-authorization`。
+
+## Final Closeout
+
+- root full：60/60 pass。
+- final-ready：pass。
+- publication scope：仅 source commit push；无 tag、remote release 或 artifact upload。
+- residual boundary：source-to-live、runtime campaign、field certification 继续独立授权与取证。

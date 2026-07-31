@@ -1,14 +1,14 @@
 schema: adk-change-state/v1
 change_id: rc6-release-baseline-refresh-2026-07-31
 stage: review-passed
-status: local-release-baseline-pass-live-pending-authorization
+status: complete
 owner: leiwenjun
 implementer: Codex
 updated_at: 2026-07-31T17:10:00+08:00
 goal_statement: "为 RC5 后映射资产建立真实 RC6 release baseline，并关闭根仓 current-status consistency 门禁"
 heartbeat:
   last_action: "根仓 full 60/60，current-status consistency 与 RC6 release baseline 全部通过"
-  next_action: "运行 final-ready，提交并推送 ADK 与根仓"
+  next_action: "等待独立 source-to-live 授权；不自动执行 live apply"
   evidence_delta:
     - "same-version rehearsal 被现有实现明确拒绝"
     - "本机已有 Python 3.11/3.12 local-CI images"
@@ -22,7 +22,7 @@ retry_budget: 2
 staleness_threshold_minutes: 45
 stop_condition: pass
 completion_claim:
-  status: local-release-baseline-verified
+  status: complete
   claimant: Codex
   verifier: adk-verification-before-completion
   open_items:
