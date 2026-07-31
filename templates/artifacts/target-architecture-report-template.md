@@ -139,7 +139,7 @@ handoff_to:
 
 ## Comprehensive Optimization Backlog
 
-Machine-readable SSOT / 机器可读 SSOT: `[manifest 或 schema 路径]`。报告中的 ID、优先级、优化领域和验证入口必须与 SSOT 保持一致；设计状态和实现状态必须分开记录。
+Machine-readable SSOT / 机器可读 SSOT: `[manifest 或 schema 路径]`。报告中的 ID、优先级、优化领域和验证入口必须与 SSOT 保持一致；设计状态和实现状态必须分开记录。G1-G10 是跨项目基线，项目级扩展项使用连续的 G11+ ID，并由 SSOT 与门禁共同约束，不修改历史报告来伪造一致性。
 
 | ID | Priority | Optimization Area | Terminal Outcome | Implementation Target | Verification |
 |---|---|---|---|---|---|
@@ -153,6 +153,7 @@ Machine-readable SSOT / 机器可读 SSOT: `[manifest 或 schema 路径]`。报�
 | G8 | P1 | Asset experience | [低 token 入口能找到正确 runbook、skill 和验证命令] | [AGENTS/docs/catalog] | `[验证命令]` |
 | G9 | P2 | Knowledge retention | [高价值结论生成脱敏 candidate，promotion 需 owner review] | [knowledge candidate/status evidence] | `[验证命令]` |
 | G10 | P2 | Release and rollback clarity | [source-to-live、knowledge promotion、cleanup 有独立审批和回滚边界] | [delivery/promotion/removal plan] | `[验证命令]` |
+| G11+ | P0/P1/P2 | [项目级扩展领域] | [可验证的终态结果] | [实现目标与阻塞条件] | `[验证命令]` |
 
 ## Verification Gates
 
@@ -201,7 +202,7 @@ Machine-readable SSOT / 机器可读 SSOT: `[manifest 或 schema 路径]`。报�
 - [ ] 问题地图包含 severity、evidence 和 action
 - [ ] Structured Requirements Review 明确目标、交付物、范围、质量维度、长期资产和执行约束
 - [ ] 实施任务覆盖 P0/P1/P2 或说明为什么不适用
-- [ ] Comprehensive Optimization Backlog 有机器可读 SSOT，且报告与 SSOT 的 G1-G10、优先级、优化领域和验证入口一致
+- [ ] Comprehensive Optimization Backlog 有机器可读 SSOT，保留 G1-G10 基线，且报告与 SSOT 的所有连续扩展项、优先级、优化领域和验证入口一致
 - [ ] 设计状态和实现状态分开记录，未实现项不得借由设计完成被标记为 done
 - [ ] Evidence Index 至少包含一个通过证据和一个负结果或 before-fix 证据
 - [ ] Goal Closure State 字段完整

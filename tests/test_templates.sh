@@ -154,6 +154,8 @@ test_target_architecture_report_requirements_and_optimization_fields() {
     grep -q "Quality Dimensions" "$template" &&
     grep -q "## Comprehensive Optimization Backlog" "$template" &&
     grep -q "Machine-readable SSOT" "$template" &&
+    grep -q "G11+" "$template" &&
+    grep -q "项目级扩展项" "$template" &&
     grep -q "Goal and scope control" "$template" &&
     grep -q "Governance correctness" "$template" &&
     grep -q "Performance and token cost" "$template" &&
