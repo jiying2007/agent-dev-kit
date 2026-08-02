@@ -89,6 +89,7 @@ TESTS=(
   test_repository_runtime_evidence.sh
   test_token_budget.sh
   test_token_context_governance.sh
+  test_task_cost.sh
   test_official_docs_governance.sh
   test_intent_boundary_governance.sh
   test_agent_ecosystem_standards.sh

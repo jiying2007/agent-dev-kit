@@ -33,6 +33,7 @@ from .readiness import readiness_markdown, run_harness_readiness
 from .release import build_release, check_release, publish_release, rehearse_release
 from .repository_evaluation import certify_repository_report, repository_plan
 from .targets import TargetUsageError, check_targets, run_target_smoke
+from .task_cost import TASK_TYPES as TASK_COST_TYPES, classify_task_cost, validate_skill_usage
 
 
 def _discover_root() -> Path:
@@ -93,6 +94,7 @@ PUBLIC_COMMANDS = [
     ("goal", "检查 ADK 目标契约"),
     ("capability", "检查 ADK 能力健康"),
     ("harness", "检查目标仓 Harness readiness"),
+    ("task-cost", "生成确定性任务成本与执行预算 receipt"),
 ] + [(name, "治理兼容入口") for name in LEGACY_COMMANDS]
 
 
@@ -678,6 +680,42 @@ def _cmd_harness(argv: Sequence[str]) -> int:
     return 0
 
 
+def _cmd_task_cost(argv: Sequence[str]) -> int:
+    parser = argparse.ArgumentParser(prog="devkit.sh task-cost")
+    parser.add_argument("--task", required=True)
+    parser.add_argument("--task-type", choices=sorted(TASK_COST_TYPES), default="general")
+    parser.add_argument("--risk-level", choices=("low", "medium", "high"), default="low")
+    parser.add_argument("--changed-files", type=int, default=0)
+    parser.add_argument("--project-facts", action="store_true")
+    parser.add_argument("--long-task", action="store_true")
+    parser.add_argument("--shared-contract", action="store_true")
+    parser.add_argument("--external-write", action="store_true")
+    parser.add_argument("--destructive", action="store_true")
+    parser.add_argument("--skill", action="append", default=[])
+    parser.add_argument("--output")
+    parser.add_argument("--summary-json", action="store_true")
+    args = parser.parse_args(argv)
+    receipt = classify_task_cost(
+        args.task,
+        task_type=args.task_type,
+        risk_level=args.risk_level,
+        changed_files=args.changed_files,
+        project_facts=args.project_facts,
+        long_task=args.long_task,
+        shared_contract=args.shared_contract,
+        external_write=args.external_write,
+        destructive=args.destructive,
+    )
+    receipt["skill_usage"] = validate_skill_usage(receipt, args.skill)
+    if args.output:
+        _write_json(Path(args.output), receipt)
+    if args.summary_json:
+        _json(receipt)
+    elif not args.output:
+        print(json.dumps(receipt, ensure_ascii=False, indent=2))
+    return 0 if receipt["skill_usage"]["status"] == "pass" else 2
+
+
 def main(argv: Optional[Sequence[str]] = None) -> int:
     argv = list(sys.argv[1:] if argv is None else argv)
     if not argv or argv[0] in ("help", "-h", "--help"):
@@ -717,6 +755,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             return _cmd_capability(rest)
         if command == "harness":
             return _cmd_harness(rest)
+        if command == "task-cost":
+            return _cmd_task_cost(rest)
         if command == "test":
             return subprocess.call(["bash", str(ROOT / "tests" / "run_all.sh")] + rest, cwd=str(ROOT))
         if command in ("propose", "apply", "verify", "review", "archive"):

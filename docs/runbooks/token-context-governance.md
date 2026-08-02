@@ -13,6 +13,17 @@
 | L2 | 测试失败、接口变化、根因未明 | 局部原文窗口、调用方、关键 diff、错误栈 |
 | L3 | 高风险任务或交付争议 | 完整原文、完整日志、完整 diff |
 
+## Task Cost 路由
+
+读取 Skill 或 Hub 前先按 `templates/context/task-cost-profile.md` 判定 `task_cost`：
+
+- `micro`：一行文档、局部机械修改、明确的小测试；不加载 skill、不查 Hub，直接定向验证。
+- `standard`：单模块常规改动；最多一个 primary skill，只有项目事实相关时做 Hub 预检。
+- `complex`：跨文件、根因未明、共享契约或长任务；一个 primary skill，small Hub 预检，计划与阶段验证。
+- `high-risk`：安全、权限、迁移、生产、发布；L2/L3 原文、完整 gate、审批和回滚，Token 预算不得弱化证据。
+
+判级先于关键词匹配；零命中允许 micro/standard 直接执行。supporting skill 只补充主流程，不重复加载相邻工作流。
+
 ## 变换层边界
 
 原始材料不随摘要改写或销毁。上下文优化只改变“本轮发送给模型的内容”，完整日志、diff、文章、命令输出或审查证据必须通过 `raw_evidence` 可回读。若摘要与原文冲突，以原文和可复跑命令为准。

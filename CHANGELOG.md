@@ -2,6 +2,21 @@
 
 ## Unreleased
 
+## v3.1.0-rc.7 (2026-08-02)
+
+### 新增
+- 增加 task-cost profile 与 CLI receipt，用有界字段表达任务复杂度、上下文预算、验证强度和归档候选要求。
+- Knowledge Hub 上下文查询增加显式项目路由、分层 receipt、review SLA packet 与有界 capture summary。
+
+### 改进
+- Token 预算门禁区分 soft/hard limit，并为 AGENTS、Skill、Workflow 与 manifest 提供可解释余量。
+- 根工作区门禁区分 `working-tree` 与 `release-clean`，开发态绑定同轮 fingerprint，发布态继续要求 ADK clean state。
+- Codex 资产交付增加 plan v3 precondition、按需 workflow activation、成本投影和 already-applied no-op 收敛。
+
+### 发布边界
+- RC7 使用 checksum-bound RC6 artifact 执行本地升级、候选回滚和 RC6 hash 恢复演练。
+- 本轮授权 source commit 与 push；不创建 tag、远端 Release，不提升 Knowledge Hub active 状态。
+
 ## v3.1.0-rc.6 (2026-07-31)
 
 ### 新增

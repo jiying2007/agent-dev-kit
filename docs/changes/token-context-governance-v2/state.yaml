@@ -1,0 +1,4 @@
+stage: verified
+owner: leiwenjun
+updated_at: 2026-08-01T00:00:00Z
+notes: R1-R9 implemented; working-tree full gate and source-to-live verified; release-clean remains a separate future gate

@@ -6,6 +6,8 @@ ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 SUMMARY_JSON=0
 MAX_SKILL_LINES=140
 MAX_DOC_LINES=560
+MAX_AGENTS_BYTES=3500
+SOFT_AGENTS_BYTES=2975
 
 usage() {
   cat <<USAGE
@@ -19,6 +21,7 @@ Checks active adk assets for token-budget regressions:
   - full regression runner defaults to compact bounded output.
   - context compression assets preserve raw evidence and fallback rules.
   - context budget profiles declare mode, risk, read tier and raw fallback.
+  - root AGENTS and task-cost routing contracts stay bounded.
 USAGE
 }
 
@@ -58,6 +61,7 @@ done
 }
 
 failures=()
+warnings=()
 skill_files=0
 doc_files=0
 max_skill_lines=0
@@ -67,6 +71,14 @@ max_doc_file="-"
 summary_scripts=0
 compact_test_runner=0
 context_governance_assets=0
+agents_bytes="$(wc -c <"$ROOT_DIR/AGENTS.md" | tr -d ' ')"
+if [[ "$agents_bytes" -gt "$MAX_AGENTS_BYTES" ]]; then
+  failures+=("root AGENTS token budget exceeded: bytes=${agents_bytes} limit=${MAX_AGENTS_BYTES}")
+fi
+if [[ "$agents_bytes" -gt "$SOFT_AGENTS_BYTES" ]]; then
+  warnings+=("root AGENTS above 85% soft budget: bytes=${agents_bytes} soft=${SOFT_AGENTS_BYTES}")
+fi
+agents_estimated_tokens=$(((agents_bytes + 3) / 4))
 
 record_failure() {
   failures+=("$1")
@@ -174,6 +186,7 @@ for asset in \
   "$ROOT_DIR/templates/context/tool-output-summary.md" \
   "$ROOT_DIR/templates/context/raw-evidence-index.md" \
   "$ROOT_DIR/templates/context/context-budget-profile.md" \
+  "$ROOT_DIR/templates/context/task-cost-profile.md" \
   "$ROOT_DIR/templates/context/project-map.md" \
   "$ROOT_DIR/templates/context/memory-search-result.md" \
 	  "$ROOT_DIR/templates/context/low-token-profile.md" \
@@ -201,6 +214,12 @@ require_context_text "$ROOT_DIR/templates/context/context-budget-profile.md" 'bu
 require_context_text "$ROOT_DIR/templates/context/context-budget-profile.md" 'compress_allowed:' 'compress_allowed field'
 require_context_text "$ROOT_DIR/templates/context/context-budget-profile.md" 'raw_required:' 'raw_required field'
 require_context_text "$ROOT_DIR/templates/context/context-budget-profile.md" 'audit' 'audit mode'
+require_context_text "$ROOT_DIR/templates/context/task-cost-profile.md" 'task_cost:' 'task cost field'
+require_context_text "$ROOT_DIR/templates/context/task-cost-profile.md" 'micro' 'micro task tier'
+require_context_text "$ROOT_DIR/templates/context/task-cost-profile.md" 'high-risk' 'high-risk task tier'
+require_context_text "$ROOT_DIR/templates/context/task-cost-profile.md" 'primary_skill_budget:' 'primary skill budget'
+require_context_text "$ROOT_DIR/templates/context/task-cost-profile.md" 'hub_preflight:' 'Hub preflight policy'
+require_context_text "$ROOT_DIR/templates/context/task-cost-profile.md" 'verification_tier:' 'verification tier'
 require_context_text "$ROOT_DIR/templates/context/project-map.md" 'Generated / Do Not Read Fully' 'generated exclusion section'
 require_context_text "$ROOT_DIR/templates/context/project-map.md" 'High-Risk Raw-Read Areas' 'high-risk raw-read section'
 require_context_text "$ROOT_DIR/templates/context/project-map.md" 'Last Verified' 'last verified section'
@@ -246,10 +265,18 @@ status="pass"
 if [[ "${#failures[@]}" -gt 0 ]]; then
   status="fail"
 fi
+budget_status="within-soft-limit"
+[[ "${#warnings[@]}" -eq 0 ]] || budget_status="warning"
+[[ "${#failures[@]}" -eq 0 ]] || budget_status="hard-limit-failed"
 
 if [[ "$SUMMARY_JSON" -eq 1 ]]; then
-  printf '{"status":"%s","skill_files":%s,"max_skill_lines":%s,"max_skill_file":"%s","doc_files":%s,"max_doc_lines":%s,"max_doc_file":"%s","summary_scripts":%s,"compact_test_runner":%s,"context_governance_assets":%s,"failures":%s}\n' \
+  printf '{"status":"%s","budget_status":"%s","estimate_method":"utf8-bytes-ceil-div-4","agents_bytes":%s,"agents_soft_limit":%s,"agents_limit":%s,"agents_estimated_tokens":%s,"skill_files":%s,"max_skill_lines":%s,"max_skill_file":"%s","doc_files":%s,"max_doc_lines":%s,"max_doc_file":"%s","summary_scripts":%s,"compact_test_runner":%s,"context_governance_assets":%s,"warnings":%s,"failures":%s}\n' \
     "$status" \
+    "$budget_status" \
+    "$agents_bytes" \
+    "$SOFT_AGENTS_BYTES" \
+    "$MAX_AGENTS_BYTES" \
+    "$agents_estimated_tokens" \
     "$skill_files" \
     "$max_skill_lines" \
     "$max_skill_file" \
@@ -259,8 +286,13 @@ if [[ "$SUMMARY_JSON" -eq 1 ]]; then
     "$summary_scripts" \
     "$compact_test_runner" \
     "$context_governance_assets" \
+    "${#warnings[@]}" \
     "${#failures[@]}"
 else
+  echo "[INFO] agents_bytes=${agents_bytes} soft=${SOFT_AGENTS_BYTES} hard=${MAX_AGENTS_BYTES} estimated_tokens=${agents_estimated_tokens} budget_status=${budget_status}"
+  if [[ "${#warnings[@]}" -gt 0 ]]; then
+    printf '[WARN] %s\n' "${warnings[@]}" >&2
+  fi
   echo "[INFO] skill_files=${skill_files} max_skill_lines=${max_skill_lines} max_skill_file=${max_skill_file} limit=${MAX_SKILL_LINES}"
   echo "[INFO] doc_files=${doc_files} max_doc_lines=${max_doc_lines} max_doc_file=${max_doc_file} limit=${MAX_DOC_LINES}"
   echo "[INFO] summary_json_scripts=${summary_scripts}"

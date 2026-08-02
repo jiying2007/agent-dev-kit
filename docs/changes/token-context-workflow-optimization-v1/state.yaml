@@ -1,0 +1,4 @@
+stage: review-passed
+owner: leiwenjun
+updated_at: 2026-08-01T09:03:04Z
+notes: 4 findings closed; root strict clean-state follow-up remains post-commit

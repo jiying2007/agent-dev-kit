@@ -25,6 +25,18 @@ grep -q '"context_governance_assets":' "$OUT_FILE" || {
   echo "[FAIL] token budget summary missing context_governance_assets" >&2
   exit 1
 }
+grep -q '"agents_bytes":' "$OUT_FILE" || {
+  echo "[FAIL] token budget summary missing agents_bytes" >&2
+  exit 1
+}
+grep -q '"budget_status":"within-soft-limit"' "$OUT_FILE" || {
+  echo "[FAIL] token budget summary missing soft-limit status" >&2
+  exit 1
+}
+grep -q '"agents_estimated_tokens":' "$OUT_FILE" || {
+  echo "[FAIL] token budget summary missing token estimate" >&2
+  exit 1
+}
 
 if "$ROOT_DIR/scripts/check-token-budget.sh" --max-skill-lines 1 >/tmp/adk_token_budget_fail.out 2>&1; then
   echo "[FAIL] tiny skill line budget should fail" >&2

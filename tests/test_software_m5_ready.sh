@@ -51,17 +51,18 @@ from agent_dev_kit.release import _extract_release, _prerelease_is_newer, check_
 root = Path(os.sys.argv[1])
 temp_root = Path(os.sys.argv[2])
 manifest = Manifest.load(root)
-assert manifest.version == "3.1.0-rc.6", manifest.version
+assert manifest.version == "3.1.0-rc.7", manifest.version
 assert check_release(manifest)["status"] == "pass"
 assert _prerelease_is_newer("3.0.0", "3.1.0-rc.1")
 assert _prerelease_is_newer("3.1.0-rc.1", "3.1.0-rc.2")
 assert _prerelease_is_newer("3.1.0-rc.3", "3.1.0-rc.4")
 assert _prerelease_is_newer("3.1.0-rc.4", "3.1.0-rc.5")
 assert _prerelease_is_newer("3.1.0-rc.5", "3.1.0-rc.6")
-assert _prerelease_is_newer("3.1.0-rc.6", "3.1.0")
-assert not _prerelease_is_newer("3.1.0", "3.1.0-rc.6")
+assert _prerelease_is_newer("3.1.0-rc.6", "3.1.0-rc.7")
+assert _prerelease_is_newer("3.1.0-rc.7", "3.1.0")
+assert not _prerelease_is_newer("3.1.0", "3.1.0-rc.7")
 
-contract_path = root / "manifests/software_m5_eval_contract_rc6.json"
+contract_path = root / "manifests/software_m5_eval_contract_rc7.json"
 contract, tasks_path, tasks = load_campaign_contract(manifest, contract_path)
 assert len(tasks) == 60
 assert len({task["id"] for task in tasks}) == 60
@@ -548,7 +549,7 @@ else:
 
 doctor_cli = json.loads((temp_root / "doctor.json").read_text(encoding="utf-8"))
 assert doctor_cli["schema_version"] == 1
-assert doctor_cli["manifest_version"] == "3.1.0-rc.6"
+assert doctor_cli["manifest_version"] == "3.1.0-rc.7"
 support = doctor_cli["environment_support"]
 environment_supported = support["python_supported"] and all(
     support["dependencies_supported"].values()
