@@ -20,3 +20,8 @@
 | `rtk scripts/devkit.sh release check --summary-json`（首轮） | 1 | `.version-lock` 与 rc.7 不一致 | command output | ADK/Release | version identity |
 | `rtk scripts/check-change-governance.sh docs/changes/rc7-token-context-release-baseline-2026-08-02`（首轮） | 1 | proposal 固定章节缺失 | command output | ADK/Workflow | proposal |
 | `rtk scripts/run-local-ci-parity.sh --python all --mode full`（source `e03898f`） | 130 | Python 3.11 后段由 docs/CLI alignment 阻断后主动终止 | command output | ADK/Test | T4 negative |
+| `rtk scripts/run-local-ci-parity.sh --python all --mode full`（source `60c9a9e`） | 0 | Python 3.11.15/3.12.13 各 58/58，dependency audit 无已知漏洞 | `verify-report.md` | ADK/Test | T4 |
+| `rtk cmp out-a/...tar.gz out-b/...tar.gz` | 0 | 两次构建字节一致，SHA256 `a46d26d7…48e0` | `verify-report.md` | ADK/Release | T5 |
+| `rtk sha256sum -c agent-dev-kit-3.1.0-rc.7.tar.gz.sha256`（A/B） | 0 | 两份 checksum 均为 OK | `verify-report.md` | ADK/Release | T5 |
+| `rtk scripts/devkit.sh release rehearse --previous-artifact ...rc.6... --candidate-artifact ...rc.7...` | 0 | upgrade/rollback pass，39 项移除并恢复；远端发布不在范围 | `release-rehearsal.json` | ADK/Release | T6 |
+| `rtk git diff --quiet 60c9a9e -- agents skills optional-skills workflows templates` | 0 | release source 到 evidence 工作树的 mapped asset diff 为空 | `verify-report.md` | ADK/Release | T7 |

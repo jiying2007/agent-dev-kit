@@ -2,11 +2,11 @@
 
 - [x] T1 冻结 RC7 版本决策、范围、提交边界、阶段门禁与回退锚点。
 - [x] T2 同步 RC7 版本、migration、campaign contract、测试与 changelog。
-- [ ] T3 提交并推送 Hub/Codex 任务范围变更。
-- [ ] T4 提交 ADK release source，并运行 Python 3.11/3.12 full parity。
-- [ ] T5 从 exact source commit 双构建 artifact，验证字节与 checksum 一致。
-- [ ] T6 执行 RC6→RC7→rollback rehearsal，验证 RC6 managed hashes 恢复。
-- [ ] T7 提交 ADK evidence 并验证 source→evidence mapped path diff 为空。
+- [x] T3 提交并推送 Hub/Codex 任务范围变更。
+- [x] T4 提交 ADK release source，并运行 Python 3.11/3.12 full parity。
+- [x] T5 从 exact source commit 双构建 artifact，验证字节与 checksum 一致。
+- [x] T6 执行 RC6→RC7→rollback rehearsal，验证 RC6 managed hashes 恢复。
+- [x] T7 固化 ADK evidence，并验证 source→evidence mapped path diff 为空。
 - [ ] T8 同步根仓 release evidence，运行 release-clean full，提交并推送。
 - [ ] T9 复核四仓 upstream、残留 dirty、无 tag/Release/active promotion。
 
