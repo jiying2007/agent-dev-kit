@@ -129,6 +129,17 @@ bash scripts/devkit.sh token-budget
 bash scripts/devkit.sh token-budget --summary-json
 ```
 
+## task-cost
+
+根据显式任务类型、风险、变更文件数、项目事实、长任务、shared contract 与外部写入信号生成确定性执行预算 receipt。输出包含 `micro | standard | complex | high-risk` 成本级别、上下文预算、计划/验证强度、归档候选要求和 Skill 使用校验；它不读取凭证，不执行任务，也不把成本估计升级为发布授权。
+
+```bash
+bash scripts/devkit.sh task-cost --task "优化上下文门禁" --task-type implementation --risk-level medium --changed-files 8 --project-facts --summary-json
+bash scripts/devkit.sh task-cost --task "发布候选" --task-type release --risk-level high --long-task --shared-contract --external-write --skill adk-release-versioning --output /tmp/adk-task-cost.json
+```
+
+`--destructive` 会强制提升为 `high-risk`。声明的 Skill 与成本合同不匹配时返回非零；`--output` 只写调用方指定的 JSON 路径。
+
 ## codify-governance
 
 检查交付后可复用模式沉淀门禁。该命令确认 AAR、完成前验证和 Codify Decision 模板都包含 reusable pattern、do-not-promote、owner review、rollback 和 verification evidence 字段。

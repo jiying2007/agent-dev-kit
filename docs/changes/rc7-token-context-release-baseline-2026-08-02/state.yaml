@@ -7,13 +7,14 @@ implementer: Codex
 updated_at: 2026-08-02T00:00:00+08:00
 goal_statement: "为 Token 与上下文治理建立真实 RC7 release baseline，并通过根仓 release-clean 门禁"
 heartbeat:
-  last_action: "RC7 版本、migration、campaign contract、测试与 changelog 已同步，定向门禁通过"
-  next_action: "提交 Hub/Codex 后固化 ADK release source commit"
+  last_action: "首个 source commit full parity 发现 task-cost CLI 文档缺口，已补齐并废弃旧 artifact"
+  next_action: "创建新的 RC7 release source commit并从头运行 full parity/双构建"
   evidence_delta:
     - "root release-clean smoke 10/12；两个失败均由未提交 ADK clean-state 派生"
     - "Python 3.11/3.12 quick parity 各 20/20，routing 30/30，audit clean"
     - "四仓 fetch 后均为 0 behind / 0 ahead"
     - "RC7 strict、release check、Software M5 contract、task-cost 与 change governance 定向门禁通过"
+    - "source e03898f 的 artifact 38c6a14b…cf59 已废弃，不进入 release evidence"
   blockers: []
 retry_budget: 2
 staleness_threshold_minutes: 45
