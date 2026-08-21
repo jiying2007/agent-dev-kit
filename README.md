@@ -105,6 +105,7 @@ bash scripts/devkit.sh eval campaign plan --contract manifests/software_m5_eval_
 bash scripts/devkit.sh eval repository plan --contract manifests/repository_runtime_eval_contract.json --summary-json
 bash scripts/devkit.sh eval repository certify --contract manifests/repository_runtime_eval_contract.json --report <repository-report.json> --summary-json
 bash scripts/devkit.sh release check --summary-json
+bash scripts/devkit.sh release runtime-build --profile team-core --out dist --summary-json
 bash scripts/devkit.sh runtime-boundary
 bash scripts/devkit.sh official-docs-governance --summary-json
 bash scripts/devkit.sh harness readiness --root . --summary-json
@@ -119,6 +120,7 @@ bash scripts/devkit.sh test
 - `docs/usage.md`：常用工作流。
 - `docs/adk-usage-guide.md`：面向使用者的 ADK 概念、profile、工作流、资产变更和提交门禁指南。
 - `docs/runbooks/workspace-maintenance-guide.md`：维护与发布前检查。
+- `docs/runbooks/codex-team-runtime-distribution.md`：私有 ADK Release 到团队 Codex 的精简分发链。
 - `docs/runbooks/mcp-governance.md`：MCP、plugin、automation 外部能力准入。
 - `docs/reference/openai-developers-reference.md`：OpenAI 官方资料采纳记录，作为 provenance/reference，不作为 core 运行时绑定。
 

@@ -14,7 +14,7 @@ import tarfile
 import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, List, Mapping, Optional, Tuple
+from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 from .compiler import export_assets
 from .installer import (
@@ -132,6 +132,158 @@ def _write_deterministic_archive(source: Path, archive: Path) -> None:
     finally:
         tar_path.unlink(missing_ok=True)
         archive_temp.unlink(missing_ok=True)
+
+
+def _skill_version(skill_root: Path) -> str:
+    skill_file = skill_root / "SKILL.md"
+    if not skill_file.is_file():
+        raise ManifestError("runtime bundle skill is missing SKILL.md: {}".format(skill_root))
+    match = re.search(
+        r"(?m)^version:\s*[\"']?([0-9]+\.[0-9]+\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?)[\"']?\s*$",
+        skill_file.read_text(encoding="utf-8"),
+    )
+    if match is None:
+        raise ManifestError("runtime bundle skill has no semantic version: {}".format(skill_root))
+    return match.group(1)
+
+
+def _copy_runtime_skill(source: Path, destination: Path) -> int:
+    members = [source] + sorted(source.rglob("*"))
+    unsafe = [path for path in members if path.is_symlink() or not (path.is_dir() or path.is_file())]
+    if unsafe:
+        raise ManifestError(
+            "runtime bundle does not allow links or special files: {}".format(
+                ", ".join(path.as_posix() for path in unsafe[:5])
+            )
+        )
+    shutil.copytree(str(source), str(destination), symlinks=False)
+    return sum(1 for path in destination.rglob("*") if path.is_file())
+
+
+def _write_runtime_checksums(package_root: Path) -> Path:
+    checksum = package_root / "checksums.sha256"
+    lines = []
+    for path in sorted(package_root.rglob("*")):
+        if path.is_file() and path != checksum:
+            lines.append("{}  {}".format(sha256_file(path), path.relative_to(package_root).as_posix()))
+    checksum.write_text("\n".join(lines) + "\n", encoding="ascii")
+    return checksum
+
+
+def build_runtime_bundle(
+    manifest: Manifest,
+    output: Path,
+    profile: str,
+    version: Optional[str] = None,
+    optional_skills: Sequence[str] = (),
+) -> Dict[str, Any]:
+    """Build a deterministic, implementation-free Skill bundle for external runtimes."""
+
+    version = version or manifest.version
+    if version != manifest.version:
+        raise ManifestError("runtime bundle version does not match manifest: {} != {}".format(version, manifest.version))
+    failures = manifest.validate(strict=True)
+    if failures:
+        raise ManifestError("runtime bundle validation failed: {}".format("; ".join(failures)))
+    resolution = manifest.resolve_profiles([profile], optional_skills=optional_skills)
+    if not resolution.skills:
+        raise ManifestError("runtime bundle profile resolves to zero skills: {}".format(profile))
+
+    output = output.resolve()
+    output.mkdir(parents=True, exist_ok=True)
+    staging = Path(tempfile.mkdtemp(prefix="adk-runtime-bundle-"))
+    package_root = staging / "package"
+    package_root.mkdir()
+    try:
+        assets: List[Dict[str, Any]] = []
+        file_count = 0
+        for asset in resolution.skills:
+            skill_version = _skill_version(asset.path)
+            relative = Path("skills") / asset.name / skill_version
+            destination = package_root / relative
+            file_count += _copy_runtime_skill(asset.path, destination)
+            digest = sha256_tree(destination)
+            if digest != asset.digest:
+                raise ManifestError("runtime bundle skill digest changed during copy: {}".format(asset.name))
+            record = manifest.asset_record(asset)
+            assets.append(
+                {
+                    "kind": "skill",
+                    "name": asset.name,
+                    "version": skill_version,
+                    "path": relative.as_posix(),
+                    "sha256": digest,
+                    "source_path": str(record.get("path", "")),
+                    "optional": asset.optional,
+                }
+            )
+
+        bundle_manifest = {
+            "schema": "adk-runtime-bundle/v1",
+            "adk_version": version,
+            "manifest_sha256": manifest.digest,
+            "profile": profile,
+            "resolved_profiles": list(resolution.profiles),
+            "optional_skills": sorted(optional_skills),
+            "asset_kinds": ["skill"],
+            "assets": assets,
+            "source_distribution": False,
+            "reproducible": True,
+        }
+        (package_root / "bundle-manifest.json").write_text(
+            json.dumps(bundle_manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        )
+        shutil.copy2(str(manifest.root / "LICENSE"), str(package_root / "LICENSE"))
+        sbom = {
+            "spdxVersion": "SPDX-2.3",
+            "dataLicense": "CC0-1.0",
+            "SPDXID": "SPDXRef-DOCUMENT",
+            "name": "adk-runtime-{}-{}".format(profile, version),
+            "documentNamespace": "https://agent-dev-kit.local/runtime/{}/{}".format(version, profile),
+            "creationInfo": {
+                "created": "1970-01-01T00:00:00Z",
+                "creators": ["Tool: agent-dev-kit-{}".format(version)],
+            },
+            "documentDescribes": ["SPDXRef-Skill-{}".format(item["name"]) for item in assets],
+            "packages": [
+                {
+                    "name": item["name"],
+                    "SPDXID": "SPDXRef-Skill-{}".format(item["name"]),
+                    "versionInfo": item["version"],
+                    "downloadLocation": "NOASSERTION",
+                    "licenseConcluded": "NOASSERTION",
+                    "licenseDeclared": "NOASSERTION",
+                    "filesAnalyzed": False,
+                    "checksums": [{"algorithm": "SHA256", "checksumValue": item["sha256"]}],
+                }
+                for item in assets
+            ],
+            "relationships": [],
+        }
+        (package_root / "sbom.spdx.json").write_text(
+            json.dumps(sbom, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        )
+        _write_runtime_checksums(package_root)
+
+        archive = output / "adk-runtime-{}-{}.tar.gz".format(profile, version)
+        _write_deterministic_archive(package_root, archive)
+        digest = sha256_file(archive)
+        checksum = output / (archive.name + ".sha256")
+        checksum.write_text("{}  {}\n".format(digest, archive.name), encoding="ascii")
+        return {
+            "schema": "adk-runtime-bundle-result/v1",
+            "status": "pass",
+            "version": version,
+            "profile": profile,
+            "artifact": str(archive),
+            "sha256": digest,
+            "checksum": str(checksum),
+            "skills": len(assets),
+            "files": file_count,
+            "source_distribution": False,
+        }
+    finally:
+        shutil.rmtree(str(staging), ignore_errors=True)
 
 
 def _copy_source_distribution(manifest: Manifest, destination: Path) -> int:

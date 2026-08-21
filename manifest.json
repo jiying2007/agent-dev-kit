@@ -1294,6 +1294,17 @@
       ]
     },
     {
+      "name": "adk-cross-team-handoff",
+      "path": "skills/adk-cross-team-handoff/SKILL.md",
+      "quality_tier": "p2",
+      "category": "release_closure",
+      "lifecycle_order": 90,
+      "stage_order": 50,
+      "activation_mode": "supporting",
+      "pattern": "generator",
+      "depends_on": []
+    },
+    {
       "name": "adk-branch-closeout",
       "path": "skills/adk-branch-closeout/SKILL.md",
       "quality_tier": "p0",
@@ -1514,6 +1525,7 @@
       "include_skills": [
         "adk-chinese-commit-conventions",
         "adk-chinese-code-review",
+        "adk-cross-team-handoff",
         "adk-memory-curator",
         "adk-archive-governance",
         "adk-knowledge-archive",
@@ -2084,16 +2096,6 @@
       "stage_order": 70,
       "activation_mode": "primary",
       "pattern": "reviewer"
-    },
-    {
-      "name": "adk-cross-team-handoff",
-      "path": "optional-skills/adk-cross-team-handoff/SKILL.md",
-      "quality_tier": "p2",
-      "category": "release_closure",
-      "lifecycle_order": 90,
-      "stage_order": 50,
-      "activation_mode": "supporting",
-      "pattern": "generator"
     },
     {
       "name": "adk-incident-rca-report",

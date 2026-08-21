@@ -12,7 +12,7 @@
 ## 推荐 Skill 组合
 
 - `adk-task-breakdown`
-- `adk-cross-team-handoff`（optional）
+- `adk-cross-team-handoff`（由 `team-core` 默认启用）
 - `adk-verification-before-completion`
 
 ## 命令模板

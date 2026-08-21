@@ -30,7 +30,7 @@ from .matcher import main as matcher_main
 from .model import Manifest, ManifestError
 from .quality import benchmark_markdown, run_benchmark, security_check
 from .readiness import readiness_markdown, run_harness_readiness
-from .release import build_release, check_release, publish_release, rehearse_release
+from .release import build_release, build_runtime_bundle, check_release, publish_release, rehearse_release
 from .repository_evaluation import certify_repository_report, repository_plan
 from .targets import TargetUsageError, check_targets, run_target_smoke
 from .task_cost import TASK_TYPES as TASK_COST_TYPES, classify_task_cost, validate_skill_usage
@@ -593,6 +593,12 @@ def _cmd_release(argv: Sequence[str]) -> int:
     build.add_argument("--version")
     build.add_argument("--out", default="dist")
     build.add_argument("--summary-json", action="store_true")
+    runtime_build = sub.add_parser("runtime-build")
+    runtime_build.add_argument("--version")
+    runtime_build.add_argument("--profile", default="team-core")
+    runtime_build.add_argument("--with-optional-skill", action="append", default=[])
+    runtime_build.add_argument("--out", default="dist")
+    runtime_build.add_argument("--summary-json", action="store_true")
     publish = sub.add_parser("publish")
     publish.add_argument("--version", required=True)
     publish.add_argument("--backend")
@@ -610,6 +616,14 @@ def _cmd_release(argv: Sequence[str]) -> int:
         result = check_release(_manifest())
     elif args.action == "build":
         result = build_release(_manifest(), Path(args.out), args.version)
+    elif args.action == "runtime-build":
+        result = build_runtime_bundle(
+            _manifest(),
+            Path(args.out),
+            args.profile,
+            args.version,
+            args.with_optional_skill,
+        )
     elif args.action == "rehearse":
         result = rehearse_release(
             Path(args.previous_artifact).resolve(),

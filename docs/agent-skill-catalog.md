@@ -110,7 +110,7 @@
 | 50 | 92 | `implementation` | supporting | tool-wrapper | `adk-fetch-url-content` | URL 正文提取——从网页提取结构化内容 | "获取网页内容" | `optional-skills/adk-data-fetch/adk-fetch-url-content/SKILL.md` |
 | 70 | 90 | `verification` | primary | playbook | `adk-test-flakiness-triage` | 定位测试波动根因并给出稳定化方案 | "测试波动" | `optional-skills/adk-test-flakiness-triage/SKILL.md` |
 | 80 | 70 | `review_quality` | primary | reviewer | `adk-security-supply-chain` | 第三方技能、脚本与参考资产引入前的安全和供应链审查 | "供应链审查" | `optional-skills/adk-security-supply-chain/SKILL.md` |
-| 90 | 50 | `release_closure` | supporting | generator | `adk-cross-team-handoff` | 跨团队交接时统一目标、边界和验收责任 | "团队交接" | `optional-skills/adk-cross-team-handoff/SKILL.md` |
+| 90 | 50 | `release_closure` | supporting | generator | `adk-cross-team-handoff` | 跨团队交接时统一目标、边界和验收责任；由 team-core 默认启用 | "团队交接" | `skills/adk-cross-team-handoff/SKILL.md` |
 | 90 | 80 | `release_closure` | fallback | generator | `adk-incident-rca-report` | 线上事故复盘与根因分析闭环 | "线上事故" | `optional-skills/adk-incident-rca-report/SKILL.md` |
 | 100 | 40 | `governance` | primary | governance | `adk-skill-composition-governance` | 治理技能组合、触发优先级、fallback 与弃用关系 | "技能组合" | `optional-skills/adk-skill-composition-governance/SKILL.md` |
 

@@ -85,6 +85,7 @@ TESTS=(
   test_target_contracts.sh
   test_effect_eval.sh
   test_product_maturity_v3.sh
+  test_runtime_bundle.sh
   test_software_m5_ready.sh
   test_repository_runtime_evidence.sh
   test_token_budget.sh
@@ -137,6 +138,7 @@ QUICK_TESTS=(
   test_runtime_boundary.sh
   test_target_contracts.sh
   test_effect_eval.sh
+  test_runtime_bundle.sh
   test_software_m5_ready.sh
   test_repository_runtime_evidence.sh
   test_token_budget.sh
