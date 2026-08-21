@@ -1,7 +1,7 @@
 ---
 name: adk-code-review-loop
 description: 独立代码审查与反馈修复闭环，覆盖发现分级、真实性核验、修复验证和复审
-version: 1.4.0
+version: 1.4.1
 last_updated: 2026-08-21
 triggers:
   - "独立代码审查"
@@ -71,49 +71,33 @@ constraints:
 16. **CI/PR 发布核验**：若要发布 SCM comment，必须按 `manifests/pr_review_governance_contracts.json` 验证 schema-backed findings、untrusted PR 隔离和 inline anchoring。
 17. **Review 改进闭环**：重复 review 失败模式只能作为 trace-feedback-eval-handoff 候选进入 AAR，不得直接改 durable guidance。
 
-## Review Report Template
-```md
-- Review Scope:
-- Review Target: staged | working-tree | whole-branch
-- Snapshot ID:
-  - head:
-  - index_or_diff:
-- Working Tree Overlay:
-  - target_paths_with_unstaged_changes:
-  - latest_worktree_reviewed: true | false
-- Reviewer Independence: independent | author-self-review
-- Requirement Baseline:
-- Domain Model Baseline:
-- Verification Baseline:
-- Mechanical Gate: pass | fail | not-run
-- Review Mode: task-level | whole-diff | whole-branch
-- Spec Verdict:
-- Quality Verdict:
-- Semantic Review: no-finding | findings-open | needs-context
-- Findings:
-  | ID | Severity | File | Evidence | Required Action | Status |
-  |---|---|---|---|---|---|
-- Cannot Verify From Diff:
-- False Positives:
-- Out-of-scope Suggestions:
-- CI/PR Review Boundary:
-  - trusted_trigger:
-  - protected_secret_exposure:
-  - structured_output_valid:
-  - inline_anchor_valid:
-- Fix Plan:
-- Re-review Result:
-- Final Verdict: pass | needs-fix
-- Final Readiness: true | false
-```
-
-补充样例、命令和合理化拦截见 `references/review-feedback-fixtures.md`。
+完整报告模板、命令与样例见 `references/review-evidence-template.md` 和 `references/review-feedback-fixtures.md`。
 
 ## Failure Handling
 - review 反馈不清楚时，先重写为可验证命题；仍不清楚则标记 question。
 - 发现与需求无关时，记录为 out-of-scope，不混入本次修复。
 - 修复后验证失败时，切换到 `adk-systematic-debugging` 定位。
 - 若 review 要求改 shared contract/schema，先回到 `adk-requirements-triage` 和 `adk-task-breakdown`。
+
+## Commands
+```bash
+rtk git rev-parse HEAD
+rtk git status --short
+rtk git diff --check
+<project-lint-cmd> && <project-test-cmd>
+```
+
+## Evidence Template
+```md
+- Review Target: staged | working-tree | whole-branch
+- Snapshot ID: <head + index_or_diff identity>
+- Working Tree Overlay: <none | paths>
+- latest_worktree_reviewed: true | false
+- Reviewer Independence: independent | author-self-review
+- Mechanical Gate: pass | fail | not-run
+- Spec Verdict / Quality Verdict:
+- Final Verdict: pass | needs-fix
+```
 
 ## Quality Gate
 - 每个 blocker/major 必须有状态：fixed、accepted-risk、not-applicable。

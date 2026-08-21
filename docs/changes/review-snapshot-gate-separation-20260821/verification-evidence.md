@@ -7,6 +7,7 @@
 | `rtk tests/run_all.sh --fail-fast` | 1 | `test_validate` 被相同既有 source_ref 到期项阻断 | Workflow |
 | `rtk bash scripts/check-skills.sh`（下游） | 0 | 64 skills，0 errors，0 warnings | Skill |
 | `rtk bash scripts/check.sh --no-build --plan build/apply-plan.json`（下游） | 0 | 162 tests 和 5 profiles smoke 通过，live 无 drift | Workflow |
+| `rtk bash tests/test_asset_content_quality.sh` | 0 | `adk-code-review-loop` 标准 Commands/Evidence Template 章节通过 | Skill |
 
 ## Gate decision
 

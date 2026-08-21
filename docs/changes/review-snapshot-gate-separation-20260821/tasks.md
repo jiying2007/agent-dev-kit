@@ -7,3 +7,4 @@
 - [x] 运行 quick validation；SOP 新增断言通过，完整脚本被既有过期 source_ref 阻断。
 - [x] 尝试共享 skill 完整回归，并记录同一基线阻断。
 - [x] 导入下游 SSOT，并通过定向 apply plan、post-apply check 与多 profile smoke。
+- [x] 补齐 `Commands` 与 `Evidence Template` 标准章节并升级 Skill patch 版本，关闭 asset content quality 门禁。
