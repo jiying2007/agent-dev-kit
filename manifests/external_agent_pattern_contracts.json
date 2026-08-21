@@ -150,39 +150,39 @@
       "title": "GitHub Agentic Workflows safe outputs",
       "url": "https://github.github.com/gh-aw/reference/safe-outputs/",
       "local_path": "",
-      "retrieved_at": "2026-07-14",
+      "retrieved_at": "2026-08-21",
       "review_status": "reviewed",
-      "expires_at": "2026-08-13",
+      "expires_at": "2026-09-20",
       "license": "MIT",
       "evidence_strength": "high",
       "decision": "adopt-method-only",
-      "notes": "Use read-only agent, schema-backed output and separate permission-controlled executor architecture with operation caps and kill switch. gh-aw is rapidly evolving; do not import workflows or enable GitHub writes."
+      "notes": "Use read-only agent, schema-backed output and separate permission-controlled executor architecture with operation caps and kill switch. Current safe-outputs may auto-inject conservative create-issue behavior when outputs are omitted, so local policies require explicit output boundaries. Do not import workflows or enable GitHub writes."
     },
     {
       "id": "mcp-registry",
       "title": "Model Context Protocol Registry",
       "url": "https://github.com/modelcontextprotocol/registry",
       "local_path": "",
-      "retrieved_at": "2026-07-14",
+      "retrieved_at": "2026-08-21",
       "review_status": "reviewed",
-      "expires_at": "2026-08-13",
+      "expires_at": "2026-09-20",
       "license": "Apache-2.0-current/MIT-historical-review-required",
       "evidence_strength": "high",
       "decision": "adopt-method-only",
-      "notes": "Use namespace ownership, version, artifact digest, review and freshness as MCP dependency provenance fields. A registry listing is discovery metadata, not trust certification or install approval."
+      "notes": "Use namespace ownership, version, artifact digest, review and freshness as MCP dependency provenance fields. The registry validates namespace ownership for publishing, but a listing remains discovery metadata rather than trust certification or install approval."
     },
     {
       "id": "otel-genai-semconv",
       "title": "OpenTelemetry semantic conventions for generative AI systems",
       "url": "https://github.com/open-telemetry/semantic-conventions-genai",
       "local_path": "",
-      "retrieved_at": "2026-07-14",
+      "retrieved_at": "2026-08-21",
       "review_status": "reviewed",
-      "expires_at": "2026-08-13",
+      "expires_at": "2026-09-20",
       "license": "Apache-2.0",
       "evidence_strength": "medium",
       "decision": "adopt-method-only",
-      "notes": "Use an optional version-pinned field mapping adapter for trace summaries. Conventions remain fast-moving; prompt, completion, tool arguments and tool results stay disabled by default."
+      "notes": "Use an optional version-pinned field mapping adapter for trace summaries. The active GenAI repository covers spans, metrics, events, MCP and provider conventions while its Schema URL remains unsettled; prompt, completion, tool arguments and tool results stay disabled by default."
     },
     {
       "id": "agent-client-protocol",
