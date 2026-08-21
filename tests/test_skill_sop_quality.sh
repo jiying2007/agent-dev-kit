@@ -41,6 +41,12 @@ require_text "docs/skill-format-guide.md" "Description 触发质量"
 require_text "CONTEXT.md" "Sub-agent"
 require_text "skills/adk-parallel-agent-governance/SKILL.md" "templates/planning/worker-contract.md"
 require_text "skills/adk-after-action-review/SKILL.md" "templates/memory/memory-candidate.md"
+require_text "skills/adk-code-review-loop/SKILL.md" "Snapshot ID:"
+require_text "skills/adk-code-review-loop/SKILL.md" "Working Tree Overlay:"
+require_text "skills/adk-code-review-loop/SKILL.md" "Reviewer Independence: independent"
+require_text "skills/adk-code-review-loop/SKILL.md" "Mechanical Gate: pass"
+require_text "skills/adk-code-review-loop/SKILL.md" "不得把机械门禁通过表述为语义审查通过"
+require_text "skills/adk-code-review-loop/SKILL.md" "latest_worktree_reviewed"
 require_text "docs/runbooks/memory-governance.md" "不得保存完整聊天记录"
 
 "$ROOT_DIR/scripts/validate-assets.sh" --strict >/dev/null
