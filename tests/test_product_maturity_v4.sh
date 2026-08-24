@@ -28,7 +28,7 @@ if rg -q -- '--target codex' "$ROOT_DIR/.github/workflows/release.yml"; then
 fi
 
 if bash "$ROOT_DIR/scripts/devkit.sh" release publish --version "$VERSION" \
-  >"${TMPDIR:-/tmp}/adk-v3-publish.out" 2>"${TMPDIR:-/tmp}/adk-v3-publish.err"; then
+  >"${TMPDIR:-/tmp}/adk-v4-publish.out" 2>"${TMPDIR:-/tmp}/adk-v4-publish.err"; then
   echo "[FAIL] publish without backend unexpectedly succeeded" >&2
   exit 1
 fi
@@ -163,14 +163,14 @@ failures = Manifest(root, invalid, root / "manifest.json").validate(strict=True)
 assert any("must be an array of strings" in item for item in failures), failures
 
 patch_version = copy.deepcopy(manifest.data)
-patch_version["version"] = "3.1.1"
+patch_version["version"] = "4.0.1"
 failures = Manifest(root, patch_version, root / "manifest.json").validate(strict=True)
 assert not any("version must" in item for item in failures), failures
 
 wrong_major = copy.deepcopy(manifest.data)
-wrong_major["version"] = "4.0.0"
+wrong_major["version"] = "3.1.0"
 failures = Manifest(root, wrong_major, root / "manifest.json").validate(strict=True)
-assert any("major 3" in item for item in failures), failures
+assert any("major 4" in item for item in failures), failures
 
 slow = {"iterations": 1, "median_ms": 999.0, "p95_ms": 999.0, "min_ms": 999.0, "max_ms": 999.0}
 with mock.patch("agent_dev_kit.quality._measure", return_value=slow):
@@ -451,7 +451,7 @@ for required in \
   source/OWNERS \
   source/src/agent_dev_kit/cli.py \
   source/scripts/devkit.sh \
-  source/tests/test_product_maturity_v3.sh \
+  source/tests/test_product_maturity_v4.sh \
   sbom.spdx.json; do
   rg -qx -- "$required" "$TMP_DIR/release-files.txt" || {
     echo "[FAIL] release source distribution missing: $required" >&2
@@ -608,4 +608,4 @@ if bash "$ROOT_DIR/scripts/devkit.sh" eval compare \
   exit 1
 fi
 
-echo "[PASS] ADK v3 product maturity contracts hold"
+echo "[PASS] ADK v4 product maturity contracts hold"

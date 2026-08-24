@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+## v4.0.0 (2026-08-24)
+
+### Breaking
+- Goal、Token、progress、checkpoint、retry、evidence 与 delivery gate 统一由唯一 Runtime Control Engine 决策。
+- 删除独立 token monitor / execution guard 实现、CLI、schema 和兼容路径。
+- Codex runtime 通过 pinned ADK package 使用 Engine；不保留 fallback、alias、dual-read 或 dual-write。
+
 ## v3.1.0-rc.7 (2026-08-02)
 
 ### 新增

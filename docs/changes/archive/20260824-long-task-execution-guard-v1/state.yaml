@@ -1,0 +1,4 @@
+stage: review-passed
+owner: leiwenjun
+updated_at: 2026-08-24T03:00:45Z
+notes: superseded by runtime-control-v1; no active compatibility retained

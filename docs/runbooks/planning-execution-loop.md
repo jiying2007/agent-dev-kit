@@ -39,6 +39,11 @@
 - 进入完成声明前，先生成 `completion_claim`，再由 `adk-verification-before-completion` 独立核对证据。
 - retry budget 用尽、heartbeat 过期或连续无信息增量时，必须 replan、split、blocked 或 abort，不能继续盲目推进。
 
+结构化长任务统一生成 `runtime_control.event/v1`，由 `agent_dev_kit.runtime_control` 唯一 Engine
+折叠成 state/decision。runtime adapter 只采集 Goal、usage snapshot、progress、heartbeat、retry、
+checkpoint、evidence 和 delivery artifact，不得复制 policy 或自行判断动作。Codex 用户入口由
+其 runtime adapter 提供；ADK 不再暴露第二套 token/execution CLI。
+
 ## Spec-Driven Execution Gate
 
 流程强度按项目类型、行为变化、影响面和风险决定：小且无行为变化的任务可走轻量验证；跨模块、架构、核心系统、生产路径或安全边界变更必须进入标准或严格 spec gate。正式产品或高风险变更不得从“直接实现”开始。至少按以下阶段推进：

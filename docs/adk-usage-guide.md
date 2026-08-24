@@ -410,7 +410,7 @@ fix(catalog): 修复 workflow matrix 生成格式
 
 资产或 manifest 变更：`bash scripts/check-profile-coherence.sh`、`bash scripts/devkit.sh asset-taxonomy`、`bash scripts/devkit.sh catalog build`、`bash tests/run_all.sh`。
 
-发布或推送前：`bash tests/run_all.sh`；本机 Codex 运行态收口再执行 `rtk bash ~/codex/scripts/final-ready.sh`。
+发布或推送前：`bash tests/run_all.sh`；本机 Codex 运行态收口再执行 `rtk bash ~/codex/scripts/runtime-control.sh gate --event final`。
 
 ## 16. 维护原则
 

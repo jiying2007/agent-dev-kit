@@ -84,14 +84,16 @@ TESTS=(
   test_runtime_boundary.sh
   test_target_contracts.sh
   test_effect_eval.sh
-  test_product_maturity_v3.sh
+  test_product_maturity_v4.sh
   test_runtime_bundle.sh
   test_software_m5_ready.sh
   test_repository_runtime_evidence.sh
   test_token_budget.sh
   test_token_context_governance.sh
   test_task_cost.sh
+  test_runtime_control.sh
   test_official_docs_governance.sh
+  test_official_docs_timezone.sh
   test_intent_boundary_governance.sh
   test_agent_ecosystem_standards.sh
   test_runtime_capabilities.sh
@@ -112,6 +114,7 @@ TESTS=(
   test_embedded_workflow_pilots.sh
   test_embedded_test_matrix_example.sh
   test_workflow.sh
+  test_workflow_verify_fail_closed.sh
   test_openspec_bridge.sh
   test_catalog.sh
   test_skill_trigger_matrix.sh
@@ -142,10 +145,13 @@ QUICK_TESTS=(
   test_software_m5_ready.sh
   test_repository_runtime_evidence.sh
   test_token_budget.sh
+  test_runtime_control.sh
   test_intent_boundary_governance.sh
+  test_official_docs_timezone.sh
   test_agent_ecosystem_standards.sh
   test_workflow_contract.sh
   test_workflow_closure.sh
+  test_workflow_verify_fail_closed.sh
   test_goal_contracts.sh
   test_capability_health.sh
   test_harness_readiness.sh

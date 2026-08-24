@@ -101,6 +101,17 @@
 
 用户可以用显式要求退出低 token profile；进入高风险任务、需要审查证据、发生歧义或需要教学解释时，也应按 `restore_condition` 自动恢复正常表达。
 
+## 运行中 Token 监测
+
+静态 `token-budget` 负责资产体积，`task-cost` 负责执行前预算；运行期 Goal、Token、context、
+progress 和完成门禁统一进入 `runtime_control.event/v1`。usage 只允许累计 snapshot，cached input
+是 input 子集，total 必须等于 input + output。唯一 Engine 同时判断 checkpoint、compact、stop、
+replan 和 pass，任何 runtime adapter 或阶段 gate 都不得复制阈值和动作优先级。
+
+事件只能包含计数、稳定 ID、时间、hash 和低敏 model 标签。prompt、objective、messages、content、
+raw input/output 不得进入 journal/state。Engine 是 pure reducer/decision；副作用继续由 runtime
+按 approval/sandbox 边界执行。
+
 ## 可压缩对象
 
 - 只读命令：`git diff`、`git status`、`git log`、`rg`、目录清单。
@@ -177,4 +188,5 @@ scripts/check-token-budget.sh
 scripts/check-context-experience-patterns.sh
 scripts/validate-assets.sh --strict
 tests/test_token_budget.sh
+tests/test_runtime_control.sh
 ```

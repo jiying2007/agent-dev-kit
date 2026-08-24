@@ -237,8 +237,8 @@ class Manifest:
             expected_schema_version = None
         if expected_schema_version and self.data.get("schema_version") != expected_schema_version:
             failures.append("schema_version must be {}".format(expected_schema_version))
-        if not re.fullmatch(r"3\.[0-9]+\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?", self.version):
-            failures.append("version must be a semantic version with major 3")
+        if not re.fullmatch(r"4\.[0-9]+\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?", self.version):
+            failures.append("version must be a semantic version with major 4")
 
         product = self.data.get("product")
         expected_product = {
@@ -247,7 +247,7 @@ class Manifest:
             "evidence_model": "source-test-runtime-field",
         }
         if product != expected_product:
-            failures.append("product contract does not match the v3 asset-platform boundary")
+            failures.append("product contract does not match the v4 asset-platform boundary")
 
         try:
             agents = self._record_index("agents")
@@ -336,7 +336,7 @@ class Manifest:
                     value = config.get(field)
                     if not isinstance(value, str) or not value or Path(value).is_absolute() or ".." in Path(value).parts:
                         failures.append("target {} has unsafe {}".format(name, field))
-                if self.data.get("schema_version") == "3.1.0":
+                if self.data.get("schema_version") == "4.0.0":
                     supported = config.get("supported_asset_kinds")
                     if not isinstance(supported, list) or not supported or not all(
                         item in ("agent", "skill") for item in supported
@@ -344,7 +344,7 @@ class Manifest:
                         failures.append("target {} has invalid supported_asset_kinds".format(name))
 
         if strict:
-            if self.data.get("schema_version") == "3.1.0":
+            if self.data.get("schema_version") == "4.0.0":
                 try:
                     from .targets import load_target_contract
 

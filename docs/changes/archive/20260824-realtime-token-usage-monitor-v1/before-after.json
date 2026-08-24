@@ -1,0 +1,19 @@
+{
+  "schema_version": "adk-before-after/v1",
+  "change_id": "realtime-token-usage-monitor-v1",
+  "before": {
+    "command": "devkit.sh token monitor --budget-tokens 1000",
+    "exit_code": 2,
+    "signal": "unknown command: token"
+  },
+  "after": {
+    "input_schema": "token_usage_event/v1",
+    "event_output_schema": "token_monitor.event/v1",
+    "summary_schema": "token_monitor.summary/v1",
+    "statuses": ["ok", "warn", "critical", "exhausted"],
+    "recommended_actions": ["continue", "checkpoint", "compact", "stop"],
+    "targeted_tests": 8,
+    "targeted_status": "pass"
+  },
+  "sensitive_data_review": "counts-and-bounded-identifiers-only; no prompt/messages/content/raw input/output"
+}

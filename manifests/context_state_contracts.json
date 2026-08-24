@@ -55,7 +55,7 @@
       "verification": [
         "check-official-docs-governance",
         "check-token-budget",
-        "session-coach when available"
+        "runtime-control snapshot when available"
       ]
     },
     {

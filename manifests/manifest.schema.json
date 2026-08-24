@@ -36,7 +36,7 @@
   "properties": {
     "version": {
       "type": "string",
-      "pattern": "^3\\.[0-9]+\\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?$"
+      "pattern": "^4\\.[0-9]+\\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?$"
     },
     "locale": {"type": "string", "minLength": 2},
     "platforms": {
@@ -146,7 +146,7 @@
     },
     "routing": {"$ref": "#/$defs/routing"},
     "dependencies": {"$ref": "#/$defs/dependencies"},
-    "schema_version": {"const": "3.1.0"},
+    "schema_version": {"const": "4.0.0"},
     "product": {
       "type": "object",
       "required": ["kind", "runtime_boundary", "evidence_model"],
