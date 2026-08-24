@@ -258,7 +258,7 @@ execution_layer_markers = {
 for rel, markers in execution_layer_markers.items():
     require_file_contains(rel, markers, f"execution-layer contract {rel}")
 
-today = dt.date.today()
+today = dt.datetime.now(dt.timezone.utc).date()
 allowed_domains = set(official.get("review_policy", {}).get("allowed_domains", []))
 adoption_review_policy = official.get("adoption_review_policy", {})
 require_keys(
@@ -1705,6 +1705,8 @@ status = "pass" if not failures else "fail"
 if summary_json:
     print(json.dumps({
         "status": status,
+        "evaluated_at": today.isoformat(),
+        "date_basis": "utc",
         "official_sources": len(sources),
         "eval_suites": len(evals.get("suites", [])),
         "trace_contracts": len(trace_contracts),
