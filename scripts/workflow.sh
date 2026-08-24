@@ -157,8 +157,8 @@ write_state() {
 }
 
 run_verify_checks() {
-  "$ROOT_DIR/scripts/validate-assets.sh" --strict
-  "$ROOT_DIR/scripts/check-format.sh"
+  "$ROOT_DIR/scripts/validate-assets.sh" --strict &&
+    "$ROOT_DIR/scripts/check-format.sh"
 }
 
 artifact_field_value() {
