@@ -551,9 +551,47 @@ PY
 bash "$ROOT_DIR/scripts/devkit.sh" install rollback \
   --receipt "$IOFAIL_TARGET/.adk-install-receipt.json" >/dev/null
 
-bash "$ROOT_DIR/scripts/devkit.sh" release build --version "$VERSION" --out "$TMP_DIR/release-a" >/dev/null
-bash "$ROOT_DIR/scripts/devkit.sh" release build --version "$VERSION" --out "$TMP_DIR/release-b" >/dev/null
+release_source_args=()
+if [[ ! -e "$ROOT_DIR/.git" ]] || [[ -n "$(git -C "$ROOT_DIR" status --porcelain=v1 --untracked-files=all -- .github agents contexts docs manifests optional-skills scripts schemas skills src templates tests tools workflows .version-lock .adk/harness-readiness.json AGENTS.md CONTEXT.md LICENSE NAVIGATION.md OWNERS README.md manifest.json manifest.yaml pyproject.toml)" ]]; then
+  release_source_args+=(--allow-unbound-snapshot)
+fi
+bash "$ROOT_DIR/scripts/devkit.sh" release build --version "$VERSION" --out "$TMP_DIR/release-a" "${release_source_args[@]}" >/dev/null
+bash "$ROOT_DIR/scripts/devkit.sh" release build --version "$VERSION" --out "$TMP_DIR/release-b" "${release_source_args[@]}" >/dev/null
 cmp "$TMP_DIR/release-a/agent-dev-kit-$VERSION.tar.gz" "$TMP_DIR/release-b/agent-dev-kit-$VERSION.tar.gz"
+if [[ "${#release_source_args[@]}" -gt 0 ]]; then
+  if bash "$ROOT_DIR/scripts/devkit.sh" release publish \
+    --version "$VERSION" --backend github \
+    --artifact "$TMP_DIR/release-a/agent-dev-kit-$VERSION.tar.gz" --dry-run \
+    >"$TMP_DIR/unbound-publish.out" 2>&1; then
+    echo "[FAIL] unbound snapshot was accepted for publish" >&2
+    exit 1
+  fi
+  rg -q --fixed-strings "release artifact is not bound to a clean Git commit/tree" "$TMP_DIR/unbound-publish.out"
+fi
+python3 - "$TMP_DIR/release-a/agent-dev-kit-$VERSION.tar.gz" "${#release_source_args[@]}" <<'PY'
+import json
+import sys
+import tarfile
+
+archive, unbound = sys.argv[1:]
+with tarfile.open(archive, "r:gz") as handle:
+    member = next(
+        item for item in handle.getmembers()
+        if item.name == "release-manifest.json" or item.name.endswith("/release-manifest.json")
+    )
+    value = json.load(handle.extractfile(member))
+expected_eligible = unbound == "0"
+assert value["release_eligible"] is expected_eligible, value
+assert value["reproducible"] is expected_eligible, value
+assert value["source_provenance"]["release_eligible"] is expected_eligible, value
+assert len(value["source_provenance"]["source_distribution_sha256"]) == 64, value
+if expected_eligible:
+    assert value["source_provenance"]["kind"] == "git-clean-commit", value
+    assert len(value["source_provenance"]["commit"]) == 40, value
+    assert len(value["source_provenance"]["tree"]) == 40, value
+else:
+    assert value["source_provenance"]["kind"] in {"unbound-snapshot", "git-working-tree-snapshot"}, value
+PY
 tar -tzf "$TMP_DIR/release-a/agent-dev-kit-$VERSION.tar.gz" >"$TMP_DIR/release-files.txt"
 for required in \
   source/.adk/harness-readiness.json \

@@ -46,12 +46,18 @@ from agent_dev_kit.installer import RECEIPT_NAME, apply_plan, create_plan, rollb
 from agent_dev_kit.locking import TargetLock, clear_target_lock, target_lock_status
 from agent_dev_kit.matcher import match_text
 from agent_dev_kit.model import Manifest, ManifestError
-from agent_dev_kit.release import _extract_release, _prerelease_is_newer, check_release
+from agent_dev_kit.release import (
+    _extract_release,
+    _prerelease_is_newer,
+    _previous_release_migration,
+    _release_source_identity,
+    check_release,
+)
 
 root = Path(os.sys.argv[1])
 temp_root = Path(os.sys.argv[2])
 manifest = Manifest.load(root)
-assert manifest.version == "5.0.0-rc.1", manifest.version
+assert manifest.version == "5.0.0-rc.2", manifest.version
 assert check_release(manifest)["status"] == "pass"
 assert _prerelease_is_newer("3.0.0", "3.1.0-rc.1")
 assert _prerelease_is_newer("3.1.0-rc.1", "3.1.0-rc.2")
@@ -62,10 +68,52 @@ assert _prerelease_is_newer("3.1.0-rc.6", "3.1.0-rc.7")
 assert _prerelease_is_newer("3.1.0-rc.7", "3.1.0")
 assert not _prerelease_is_newer("3.1.0", "3.1.0-rc.7")
 assert _prerelease_is_newer("3.1.0-rc.7", "4.0.0")
-assert _prerelease_is_newer("4.0.0", "5.0.0-rc.1")
+assert _prerelease_is_newer("4.0.0", "5.0.0-rc.2")
+assert _previous_release_migration(ManifestError("target_contract_missing: claude-code")) == "legacy-bundle-v2"
+assert _previous_release_migration(ManifestError("target_contract_incompatible: claude-code")) == "target-contract-hard-cut"
+assert _previous_release_migration(ManifestError("target_contract_invalid: target identity mismatch for claude-code")) == "target-contract-hard-cut"
+assert _previous_release_migration(ManifestError("unrelated")) is None
 
-contract_path = root / "manifests/software_m5_eval_contract_rc7.json"
+with tempfile.TemporaryDirectory() as source_identity_temp:
+    source_identity_root = Path(source_identity_temp)
+    subprocess.run(["git", "-C", str(source_identity_root), "init", "-q"], check=True)
+    subprocess.run(["git", "-C", str(source_identity_root), "config", "user.email", "test@example.invalid"], check=True)
+    subprocess.run(["git", "-C", str(source_identity_root), "config", "user.name", "Test"], check=True)
+    (source_identity_root / "README.md").write_text("clean\n", encoding="utf-8")
+    subprocess.run(["git", "-C", str(source_identity_root), "add", "README.md"], check=True)
+    subprocess.run(["git", "-C", str(source_identity_root), "commit", "-q", "-m", "baseline"], check=True)
+    clean_identity = _release_source_identity(source_identity_root, False)
+    assert clean_identity["kind"] == "git-clean-commit", clean_identity
+    assert clean_identity["release_eligible"] is True, clean_identity
+    assert clean_identity["dirty"] is False, clean_identity
+    (source_identity_root / "README.md").write_text("dirty\n", encoding="utf-8")
+    try:
+        _release_source_identity(source_identity_root, False)
+    except ManifestError as exc:
+        assert "clean source distribution worktree" in str(exc), exc
+    else:
+        raise AssertionError("dirty release source was accepted")
+    dirty_identity = _release_source_identity(source_identity_root, True)
+    assert dirty_identity["kind"] == "git-working-tree-snapshot", dirty_identity
+    assert dirty_identity["release_eligible"] is False, dirty_identity
+
+with tempfile.TemporaryDirectory() as unbound_identity_temp:
+    unbound_root = Path(unbound_identity_temp)
+    try:
+        _release_source_identity(unbound_root, False)
+    except ManifestError as exc:
+        assert "native Git checkout" in str(exc), exc
+    else:
+        raise AssertionError("unbound release source was accepted")
+    unbound_identity = _release_source_identity(unbound_root, True)
+    assert unbound_identity["kind"] == "unbound-snapshot", unbound_identity
+    assert unbound_identity["release_eligible"] is False, unbound_identity
+
+contract_path = root / "manifests/software_m5_eval_contract_v5.json"
 contract, tasks_path, tasks = load_campaign_contract(manifest, contract_path)
+assert contract["campaign_id"] == "software-m5-5.0.0-rc.2", contract
+legacy_contract = json.loads((root / "manifests/software_m5_eval_contract_rc7.json").read_text(encoding="utf-8"))
+assert legacy_contract["campaign_id"] == "software-m5-3.1.0-rc.7", legacy_contract
 assert len(tasks) == 60
 assert len({task["id"] for task in tasks}) == 60
 assert contract["trials"] == 3
@@ -551,7 +599,7 @@ else:
 
 doctor_cli = json.loads((temp_root / "doctor.json").read_text(encoding="utf-8"))
 assert doctor_cli["schema_version"] == 1
-assert doctor_cli["manifest_version"] == "5.0.0-rc.1"
+assert doctor_cli["manifest_version"] == "5.0.0-rc.2"
 support = doctor_cli["environment_support"]
 environment_supported = support["python_supported"] and all(
     support["dependencies_supported"].values()

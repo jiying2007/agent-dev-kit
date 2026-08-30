@@ -29,6 +29,17 @@ from .installer import (
 from .model import Manifest, ManifestError, sha256_file, sha256_tree
 
 
+SOURCE_DISTRIBUTION_DIRECTORIES = (
+    ".github", "agents", "contexts", "docs", "manifests", "optional-skills",
+    "scripts", "schemas", "skills", "src", "templates", "tests", "tools", "workflows",
+)
+SOURCE_DISTRIBUTION_FILES = (
+    ".version-lock", ".adk/harness-readiness.json", "AGENTS.md", "CONTEXT.md",
+    "LICENSE", "NAVIGATION.md", "OWNERS", "README.md", "manifest.json", "manifest.yaml",
+    "pyproject.toml",
+)
+
+
 def _report_digest(value: Mapping[str, Any]) -> str:
     return hashlib.sha256(
         json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
@@ -287,35 +298,6 @@ def build_runtime_bundle(
 
 
 def _copy_source_distribution(manifest: Manifest, destination: Path) -> int:
-    directories = (
-        ".github",
-        "agents",
-        "contexts",
-        "docs",
-        "manifests",
-        "optional-skills",
-        "scripts",
-        "schemas",
-        "skills",
-        "src",
-        "templates",
-        "tests",
-        "tools",
-        "workflows",
-    )
-    files = (
-        ".version-lock",
-        ".adk/harness-readiness.json",
-        "AGENTS.md",
-        "CONTEXT.md",
-        "LICENSE",
-        "NAVIGATION.md",
-        "OWNERS",
-        "README.md",
-        "manifest.json",
-        "manifest.yaml",
-        "pyproject.toml",
-    )
     destination.mkdir(parents=True, exist_ok=True)
     ignored = shutil.ignore_patterns(
         "__pycache__",
@@ -332,7 +314,7 @@ def _copy_source_distribution(manifest: Manifest, destination: Path) -> int:
         "software-m5-campaign-plan.json",
         "software-m5-campaign-state",
     )
-    for relative in directories:
+    for relative in SOURCE_DISTRIBUTION_DIRECTORIES:
         source = manifest.root / relative
         if source.is_dir():
             symlinks = [path for path in source.rglob("*") if path.is_symlink()]
@@ -348,13 +330,63 @@ def _copy_source_distribution(manifest: Manifest, destination: Path) -> int:
                 symlinks=False,
                 ignore=ignored,
             )
-    for relative in files:
+    for relative in SOURCE_DISTRIBUTION_FILES:
         source = manifest.root / relative
         if source.is_file():
             target = destination / relative
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(str(source), str(target))
     return sum(1 for path in destination.rglob("*") if path.is_file() or path.is_symlink())
+
+
+def _release_source_identity(root: Path, allow_unbound_snapshot: bool) -> Dict[str, Any]:
+    root = root.resolve()
+    git_dir = root / ".git"
+    if not git_dir.exists():
+        if not allow_unbound_snapshot:
+            raise ManifestError(
+                "release build requires a native Git checkout; use --allow-unbound-snapshot only for non-release validation"
+            )
+        return {
+            "kind": "unbound-snapshot",
+            "release_eligible": False,
+            "commit": None,
+            "tree": None,
+            "dirty": None,
+        }
+
+    def git(*args: str) -> subprocess.CompletedProcess[str]:
+        return subprocess.run(
+            ["git", "-C", str(root), *args],
+            check=False,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+
+    top = git("rev-parse", "--show-toplevel")
+    if top.returncode != 0 or Path(top.stdout.strip()).resolve() != root:
+        raise ManifestError("release build root is not the native Git repository root")
+    commit_result = git("rev-parse", "HEAD")
+    tree_result = git("rev-parse", "HEAD^{tree}")
+    if commit_result.returncode != 0 or tree_result.returncode != 0:
+        raise ManifestError("release build cannot resolve source commit/tree identity")
+    status = git(
+        "status", "--porcelain=v1", "--untracked-files=all", "--",
+        *SOURCE_DISTRIBUTION_DIRECTORIES, *SOURCE_DISTRIBUTION_FILES,
+    )
+    if status.returncode != 0:
+        raise ManifestError("release build cannot inspect source worktree state")
+    dirty = bool(status.stdout.strip())
+    if dirty and not allow_unbound_snapshot:
+        raise ManifestError("release build requires a clean source distribution worktree")
+    return {
+        "kind": "git-clean-commit" if not dirty else "git-working-tree-snapshot",
+        "release_eligible": not dirty,
+        "commit": commit_result.stdout.strip(),
+        "tree": tree_result.stdout.strip(),
+        "dirty": dirty,
+    }
 
 
 def _validate_sbom(sbom: Mapping[str, Any]) -> None:
@@ -402,13 +434,19 @@ def _validate_sbom(sbom: Mapping[str, Any]) -> None:
         raise ManifestError("release SBOM validation failed: {}".format("; ".join(sorted(set(failures)))))
 
 
-def build_release(manifest: Manifest, output: Path, version: Optional[str] = None) -> Dict[str, Any]:
+def build_release(
+    manifest: Manifest,
+    output: Path,
+    version: Optional[str] = None,
+    allow_unbound_snapshot: bool = False,
+) -> Dict[str, Any]:
     version = version or manifest.version
     if version != manifest.version:
         raise ManifestError("release version does not match manifest: {} != {}".format(version, manifest.version))
     gate = check_release(manifest)
     if gate["status"] != "pass":
         raise ManifestError("release check failed: {}".format("; ".join(gate["failures"])))
+    source_identity = _release_source_identity(manifest.root, allow_unbound_snapshot)
 
     output = output.resolve()
     output.mkdir(parents=True, exist_ok=True)
@@ -433,6 +471,7 @@ def build_release(manifest: Manifest, output: Path, version: Optional[str] = Non
             target_results.append({"target": target, "agents": result["agents"], "skills": result["skills"]})
 
         source_file_count = _copy_source_distribution(manifest, package_root / "source")
+        source_distribution_sha256 = sha256_tree(package_root / "source")
 
         handoff = {
             "schema_version": 1,
@@ -506,14 +545,19 @@ def build_release(manifest: Manifest, output: Path, version: Optional[str] = Non
         )
         sbom_digest = sha256_file(sbom_path)
         release_manifest = {
-            "schema_version": 1,
+            "schema_version": 2,
             "version": version,
             "manifest_sha256": manifest.digest,
             "direct_targets": target_results,
             "external_targets": sorted(manifest.external_targets()),
             "source_distribution": True,
             "source_file_count": source_file_count,
-            "reproducible": True,
+            "reproducible": source_identity["release_eligible"],
+            "release_eligible": source_identity["release_eligible"],
+            "source_provenance": {
+                **source_identity,
+                "source_distribution_sha256": source_distribution_sha256,
+            },
             "sbom": {
                 "path": "sbom.spdx.json",
                 "sha256": sbom_digest,
@@ -546,6 +590,11 @@ def build_release(manifest: Manifest, output: Path, version: Optional[str] = Non
             "external_targets": sorted(manifest.external_targets()),
             "source_distribution": True,
             "source_file_count": source_file_count,
+            "release_eligible": source_identity["release_eligible"],
+            "source_provenance": {
+                **source_identity,
+                "source_distribution_sha256": source_distribution_sha256,
+            },
         }
         return result
     finally:
@@ -577,6 +626,7 @@ def publish_release(
     actual_digest = sha256_file(artifact)
     if checksum_fields[0].lower() != actual_digest:
         raise ManifestError("release checksum does not match artifact")
+    _assert_publishable_release_artifact(artifact)
     gh = shutil.which("gh")
     if gh is None:
         raise ManifestError("GitHub CLI is required for the github release backend")
@@ -617,6 +667,26 @@ def _verify_artifact_checksum(artifact: Path) -> str:
     if fields[0].lower() != digest:
         raise ManifestError("release checksum does not match artifact")
     return digest
+
+
+def _assert_publishable_release_artifact(artifact: Path) -> Mapping[str, Any]:
+    workspace = Path(tempfile.mkdtemp(prefix="adk-release-publish-check-"))
+    try:
+        release_root = _extract_release(artifact.resolve(), workspace / "artifact")
+        _, release_manifest = _release_source_root(release_root)
+        provenance = release_manifest.get("source_provenance")
+        if (
+            release_manifest.get("schema_version") != 2
+            or release_manifest.get("release_eligible") is not True
+            or release_manifest.get("reproducible") is not True
+            or not isinstance(provenance, dict)
+            or provenance.get("kind") != "git-clean-commit"
+            or provenance.get("dirty") is not False
+        ):
+            raise ManifestError("release artifact is not bound to a clean Git commit/tree")
+        return release_manifest
+    finally:
+        shutil.rmtree(str(workspace), ignore_errors=True)
 
 
 def _extract_release(artifact: Path, destination: Path, member_limit: int = 5000) -> Path:
@@ -672,7 +742,7 @@ def _release_source_root(
         release_manifest = json.loads(release_manifest_path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
         raise ManifestError("release archive has an invalid release manifest") from exc
-    if not isinstance(release_manifest, dict) or release_manifest.get("schema_version") != 1:
+    if not isinstance(release_manifest, dict) or release_manifest.get("schema_version") not in {1, 2}:
         raise ManifestError("release archive has an unsupported release manifest")
     top_manifest = Manifest.load(release_root)
     source_manifest = Manifest.load(source_root)
@@ -807,6 +877,15 @@ def _install_legacy_release_bundle(
     }
 
 
+def _previous_release_migration(error: ManifestError) -> Optional[str]:
+    message = str(error)
+    if "target_contract_missing" in message:
+        return "legacy-bundle-v2"
+    if "target_contract_incompatible" in message or "target_contract_invalid" in message:
+        return "target-contract-hard-cut"
+    return None
+
+
 def rehearse_release(previous_artifact: Path, candidate_artifact: Path) -> Dict[str, Any]:
     previous_digest = _verify_artifact_checksum(previous_artifact)
     candidate_digest = _verify_artifact_checksum(candidate_artifact)
@@ -819,6 +898,24 @@ def rehearse_release(previous_artifact: Path, candidate_artifact: Path) -> Dict[
             enforce_current_contract=False,
         )
         candidate_manifest, candidate_release_manifest = _release_source_root(candidate_root)
+        if (
+            candidate_release_manifest.get("schema_version") != 2
+            or candidate_release_manifest.get("release_eligible") is not True
+            or candidate_release_manifest.get("reproducible") is not True
+        ):
+            raise ManifestError("candidate release is not bound to a clean Git commit/tree")
+        candidate_provenance = candidate_release_manifest.get("source_provenance")
+        if (
+            not isinstance(candidate_provenance, dict)
+            or candidate_provenance.get("kind") != "git-clean-commit"
+            or candidate_provenance.get("dirty") is not False
+            or not re.fullmatch(r"[0-9a-f]{40}", str(candidate_provenance.get("commit", "")))
+            or not re.fullmatch(r"[0-9a-f]{40}", str(candidate_provenance.get("tree", "")))
+            or not re.fullmatch(
+                r"[0-9a-f]{64}", str(candidate_provenance.get("source_distribution_sha256", ""))
+            )
+        ):
+            raise ManifestError("candidate release source provenance is incomplete")
         if not _prerelease_is_newer(previous_manifest.version, candidate_manifest.version):
             raise ManifestError("candidate release must be newer than previous release")
 
@@ -834,12 +931,8 @@ def rehearse_release(previous_artifact: Path, candidate_artifact: Path) -> Dict[
                 "copy",
             )
         except ManifestError as exc:
-            message = str(exc)
-            if "target_contract_missing" in message:
-                previous_migration = "legacy-bundle-v2"
-            elif "target_contract_incompatible" in message:
-                previous_migration = "target-contract-hard-cut"
-            else:
+            previous_migration = _previous_release_migration(exc)
+            if previous_migration is None:
                 raise
             previous_apply = _install_legacy_release_bundle(
                 previous_root,

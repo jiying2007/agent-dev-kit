@@ -2,11 +2,22 @@
 
 ## Current Verdict
 
-- implementation status：`applied / local-candidate-verified`
+- implementation status：`applied / provenance-remediation-in-progress`
 - completion verdict：`NEEDS-FIX`
 - release readiness：`false`
 - field readiness：`not-verified`
-- evidence snapshot：`5.0.0-rc.1` 当前 working tree；未 commit/stage，不构成 release-clean evidence
+- evidence snapshot：`5.0.0-rc.2` 当前 working tree；提交前门禁通过，仍不构成 release-clean evidence
+
+## Post-review Remediation
+
+- 全面复审证明原 rehearsal previous artifact `1241d345...` 混入 5.x working-tree 内容；原 pass 已失效。
+- 历史正式 4.0 artifact `4c1e9b3c...` 当前不可用；M5 policy v2 将 release continuity fail-closed 为 not-ready。
+- release build 现要求 clean Git commit/tree；测试快照必须显式 opt-in 且 `release_eligible=false`，publish/rehearse 拒绝该制品。
+- exact `792a4cb` 4.0 source transition 已通过 `target-contract-hard-cut` 的 rollback-before-install/fallback restore，但只作 diagnostic source-transition evidence。
+- Codex smoke 与 Claude owner attestation v2 绑定 manifest、ADK commit、bundle、runtime binary/version 和 review_after；5.x campaign 使用独立 contract identity。
+- release-grade harden full suite 强制 Python 3.11+；旧 Python fail-fast。
+- remediation source snapshot `1f1aca4e...` 已在 Python 3.11.15、3.12.13 各完成 68/68 full、routing 30/30、wheel 和 dependency audit。
+- `rc.2` 版本身份已同步；clean commit、双 Python full receipt、release-eligible artifact 与根仓证据绑定待提交后生成。
 
 ## Requirement Status
 
@@ -72,5 +83,5 @@
 - test：ADK 68/68 pass；root terminal gate 53/55，两个 release/M5 integrity gate 按预期 fail-closed。
 - smoke：static targets pass；Claude execute smoke 无 receipt 后终止，native target 仍 not-run。
 - security：typed privacy/permission negative tests pass；最终全量安全门禁待 release closeout。
-- release：candidate build/check pass；未完成 4.0.0→5.0.0-rc.1 checksum-bound rehearsal、tag、发布或 source-to-live。
+- release：历史 `rc.1` candidate build/check pass；`rc.2` clean candidate、正式 4.0.0 checksum-bound continuity、tag、发布和 source-to-live 尚未完成。
 - completion_allowed：`false`。

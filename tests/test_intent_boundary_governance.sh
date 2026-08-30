@@ -189,7 +189,8 @@ with tempfile.TemporaryDirectory(prefix="adk-legacy-target-") as temp:
 
 release_source = (root / "src/agent_dev_kit/release.py").read_text(encoding="utf-8")
 assert "enforce_current_contract=False" in release_source
-assert 'previous_migration = "target-contract-hard-cut"' in release_source
+assert 'return "target-contract-hard-cut"' in release_source
+assert "_previous_release_migration(exc)" in release_source
 PY
 
 "$ROOT_DIR/scripts/check-official-docs-governance.sh" >/dev/null

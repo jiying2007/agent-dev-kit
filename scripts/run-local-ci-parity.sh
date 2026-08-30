@@ -9,11 +9,15 @@ PYTHON_SELECTION="all"
 MODE="full"
 PREPARE=0
 DRY_RUN=0
+CHECK_RECEIPT=0
+VERBOSE_SUCCESS=0
+RECEIPT=""
 
 usage() {
   cat <<'USAGE'
 Usage:
   scripts/run-local-ci-parity.sh [--python 3.11|3.12|all] [--mode quick|full] [--prepare] [--dry-run]
+      [--receipt <path>] [--check-receipt] [--verbose-success]
 
 Runs a local Docker parity matrix for the declared GitHub CI Python versions.
 
@@ -48,6 +52,18 @@ while [[ $# -gt 0 ]]; do
       DRY_RUN=1
       shift
       ;;
+    --receipt)
+      RECEIPT="${2:-}"
+      shift 2
+      ;;
+    --check-receipt)
+      CHECK_RECEIPT=1
+      shift
+      ;;
+    --verbose-success)
+      VERBOSE_SUCCESS=1
+      shift
+      ;;
     -h|--help)
       usage
       exit 0
@@ -67,6 +83,10 @@ case "$PYTHON_SELECTION" in
     exit 2
     ;;
 esac
+
+if [[ -z "$RECEIPT" ]]; then
+  RECEIPT="$ROOT_DIR/.cache/local-ci/${MODE}-parity-receipt.json"
+fi
 case "$MODE" in
   quick|full) ;;
   *)
@@ -144,6 +164,7 @@ tar \
   --directory "$ROOT_DIR" \
   --exclude=.git \
   --exclude=.ruff_cache \
+  --exclude=.cache \
   --exclude=build \
   --exclude=dist \
   --exclude='*.egg-info' \
@@ -153,12 +174,20 @@ tar \
   .
 tar --directory "$SNAPSHOT_SOURCE" --no-same-owner --extract --file "$SNAPSHOT_TAR"
 chmod -R u=rwX,go=rX "$SNAPSHOT_SOURCE"
-snapshot_sha256="$(sha256sum "$SNAPSHOT_TAR" | awk '{print $1}')"
+snapshot_archive_sha256="$(sha256sum "$SNAPSHOT_TAR" | awk '{print $1}')"
+snapshot_sha256="$(
+  PYTHONPATH="$ROOT_DIR/src" python3 -c \
+    'from pathlib import Path; from agent_dev_kit.model import sha256_tree; import sys; print(sha256_tree(Path(sys.argv[1])))' \
+    "$SNAPSHOT_SOURCE"
+)"
 mode_inventory_sha256="$(sha256sum "$MODE_INVENTORY" | awk '{print $1}')"
 echo "source_snapshot_sha256=$snapshot_sha256"
+echo "source_transport_tar_sha256=$snapshot_archive_sha256"
 echo "file_mode_inventory_sha256=$mode_inventory_sha256"
 
 failures=0
+python_images=()
+receipt_records=()
 for version in "${versions[@]}"; do
   base_image="$(base_image_for "$version")"
   tool_image="$(tool_image_for "$version")"
@@ -195,8 +224,14 @@ for version in "${versions[@]}"; do
     continue
   fi
   echo "tool_image_id[$version]=$image_id"
+  python_images+=("$version=$image_id")
+
+  if [[ "$CHECK_RECEIPT" -eq 1 ]]; then
+    continue
+  fi
 
   echo "[INFO] local CI gates start: python=$version mode=$MODE image=$tool_image"
+  gate_log="$SNAPSHOT_DIR/gates-$version.log"
   if ! docker run --rm \
     --read-only \
     --network none \
@@ -211,13 +246,32 @@ for version in "${versions[@]}"; do
     --env "ADK_LOCAL_CI_MODE=$MODE" \
     --env "ADK_LOCAL_CI_PHASE=gates" \
     --env "ADK_FILE_MODE_INVENTORY=/inventory/file-modes.z" \
-    "$tool_image"; then
+    "$tool_image" >"$gate_log" 2>&1; then
     echo "[FAIL] local CI gates failed: python=$version mode=$MODE" >&2
+    tail -n 120 "$gate_log" >&2
     failures=$((failures + 1))
     continue
   fi
+  [[ "$VERBOSE_SUCCESS" -eq 0 ]] || cat "$gate_log"
+
+  test_summary="$(rg '\[SUMMARY\] tests=' "$gate_log" | tail -n 1)"
+  test_total="$(sed -E 's/.*tests=([0-9]+).*/\1/' <<<"$test_summary")"
+  test_passed="$(sed -E 's/.*pass=([0-9]+).*/\1/' <<<"$test_summary")"
+  routing_summary="$(rg '"suite":"deterministic-routing"' "$gate_log" | tail -n 1)"
+  routing_total="$(sed -E 's/.*"total":([0-9]+),"passed":([0-9]+).*/\1/' <<<"$routing_summary")"
+  routing_passed="$(sed -E 's/.*"total":([0-9]+),"passed":([0-9]+).*/\2/' <<<"$routing_summary")"
+  runtime_version="$(rg '\[PASS\] local CI parity python=' "$gate_log" | tail -n 1 | sed -E 's/.*python=([^ ]+).*/\1/')"
+  wheel_sha256="$(rg -o 'sha256=[0-9a-f]{64}' "$gate_log" | tail -n 1 | cut -d= -f2)"
+  if [[ -z "$test_summary" || -z "$routing_summary" || -z "$runtime_version" || -z "$wheel_sha256" ]]; then
+    echo "[FAIL] local CI success log is missing bounded summary fields: python=$version" >&2
+    failures=$((failures + 1))
+    continue
+  fi
+  gate_log_sha256="$(sha256sum "$gate_log" | awk '{print $1}')"
+  echo "[PASS] local CI gates python=$runtime_version mode=$MODE tests=$test_passed/$test_total routing=$routing_passed/$routing_total wheel=$wheel_sha256 log_sha256=$gate_log_sha256"
 
   echo "[INFO] local CI dependency audit start: python=$version image=$tool_image"
+  audit_log="$SNAPSHOT_DIR/audit-$version.log"
   if ! docker run --rm \
     --read-only \
     --network bridge \
@@ -230,15 +284,55 @@ for version in "${versions[@]}"; do
     --mount "type=bind,src=$SNAPSHOT_SOURCE,dst=/source,readonly" \
     --env "ADK_LOCAL_CI_MODE=$MODE" \
     --env "ADK_LOCAL_CI_PHASE=audit" \
-    "$tool_image"; then
+    "$tool_image" >"$audit_log" 2>&1; then
     echo "[FAIL] local CI dependency audit failed: python=$version" >&2
+    tail -n 120 "$audit_log" >&2
     failures=$((failures + 1))
+    continue
   fi
+  [[ "$VERBOSE_SUCCESS" -eq 0 ]] || cat "$audit_log"
+  audit_log_sha256="$(sha256sum "$audit_log" | awk '{print $1}')"
+  echo "[PASS] local CI audit python=$runtime_version log_sha256=$audit_log_sha256"
+  receipt_records+=("$version|$runtime_version|$image_id|$gate_log_sha256|$audit_log_sha256|$wheel_sha256|$test_total|$test_passed|$routing_total|$routing_passed")
 done
 
 if [[ "$failures" -gt 0 ]]; then
   echo "[FAIL] local CI parity failures=$failures" >&2
   exit 1
 fi
+
+receipt_args=(
+  --root "$ROOT_DIR"
+  check
+  --receipt "$RECEIPT"
+  --mode "$MODE"
+  --source-snapshot-sha256 "$snapshot_sha256"
+  --file-mode-inventory-sha256 "$mode_inventory_sha256"
+  --definition-sha256 "$definition_sha256"
+  --summary-json
+)
+if [[ "$CHECK_RECEIPT" -eq 1 ]]; then
+  for item in "${python_images[@]}"; do
+    receipt_args+=(--python-image "$item")
+  done
+  PYTHONPATH="$ROOT_DIR/src" python3 -m agent_dev_kit.local_ci_receipt "${receipt_args[@]}"
+  echo "[PASS] local CI parity receipt matches current snapshot versions=${#versions[@]} mode=$MODE"
+  exit 0
+fi
+
+write_args=(
+  --root "$ROOT_DIR"
+  write
+  --receipt "$RECEIPT"
+  --mode "$MODE"
+  --source-snapshot-sha256 "$snapshot_sha256"
+  --file-mode-inventory-sha256 "$mode_inventory_sha256"
+  --definition-sha256 "$definition_sha256"
+  --summary-json
+)
+for item in "${receipt_records[@]}"; do
+  write_args+=(--record "$item")
+done
+PYTHONPATH="$ROOT_DIR/src" python3 -m agent_dev_kit.local_ci_receipt "${write_args[@]}"
 
 echo "[PASS] local CI parity matrix versions=${#versions[@]} mode=$MODE"

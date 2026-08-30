@@ -592,6 +592,7 @@ def _cmd_release(argv: Sequence[str]) -> int:
     build = sub.add_parser("build")
     build.add_argument("--version")
     build.add_argument("--out", default="dist")
+    build.add_argument("--allow-unbound-snapshot", action="store_true")
     build.add_argument("--summary-json", action="store_true")
     runtime_build = sub.add_parser("runtime-build")
     runtime_build.add_argument("--version")
@@ -615,7 +616,9 @@ def _cmd_release(argv: Sequence[str]) -> int:
     if args.action == "check":
         result = check_release(_manifest())
     elif args.action == "build":
-        result = build_release(_manifest(), Path(args.out), args.version)
+        result = build_release(
+            _manifest(), Path(args.out), args.version, args.allow_unbound_snapshot
+        )
     elif args.action == "runtime-build":
         result = build_runtime_bundle(
             _manifest(),

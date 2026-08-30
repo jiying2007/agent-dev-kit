@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## v5.0.0-rc.2 (2026-08-30)
+
+### 发布候选加固
+- 发布制品默认绑定 clean Git commit、tree 与 source distribution digest；dirty 或非 Git 快照只能显式构建为不可发布制品。
+- 本地 CI parity 使用稳定 source snapshot、双 Python 全量回归 receipt 和摘要输出，避免重复验证与无效日志消耗。
+- 精确区分 legacy bundle 迁移和不兼容 target contract hard cut，保留 fail-closed 边界。
+
+### 候选边界
+- `rc.2` 替代 `rc.1` 作为当前候选身份；不改写 `rc.1` 历史，也不代表 tag、远端 Release、source-to-live 或 Software M5 field certification 已完成。
+
 ## v5.0.0-rc.1 (2026-08-30)
 
 ### 破坏性变化

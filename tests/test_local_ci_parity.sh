@@ -6,6 +6,8 @@ RUNNER="$ROOT_DIR/scripts/run-local-ci-parity.sh"
 DOCKERFILE="$ROOT_DIR/tools/local-ci/Dockerfile"
 ENTRYPOINT="$ROOT_DIR/tools/local-ci/entrypoint.sh"
 WAIVER="$ROOT_DIR/docs/changes/adk-terminal-contract-hardening/ci-waiver.json"
+TMP_DIR="$(mktemp -d)"
+trap 'rm -rf "$TMP_DIR"' EXIT
 
 for required in "$RUNNER" "$DOCKERFILE" "$ENTRYPOINT" "$WAIVER" "$ROOT_DIR/docs/runbooks/local-ci-parity.md"; do
   [[ -f "$required" ]] || {
@@ -73,10 +75,17 @@ for token in \
     exit 1
   }
 done
+for token in '--check-receipt' '--verbose-success' 'local_ci_receipt' 'tail -n 120' '>"$gate_log" 2>&1'; do
+  rg -Fq -- "$token" "$RUNNER" || {
+    echo "[FAIL] local CI runner omitted bounded output or receipt contract: $token" >&2
+    exit 1
+  }
+done
 
 for token in \
   'mktemp -d' \
   'source_snapshot_sha256=' \
+  'source_transport_tar_sha256=' \
   'file_mode_inventory_sha256=' \
   'sha256sum "$SNAPSHOT_TAR"' \
   'sha256sum "$MODE_INVENTORY"' \
@@ -148,5 +157,29 @@ assert waiver["transport"]["source_mount"] == "host-snapshot-read-only", waiver
 assert waiver["transport"]["credentials"] == "not-mounted", waiver
 assert waiver["alternative_evidence"]["status"] in {"pending", "pass", "fail"}, waiver
 PY
+
+receipt="$TMP_DIR/full-receipt.json"
+PYTHONPATH="$ROOT_DIR/src" python3 -m agent_dev_kit.local_ci_receipt --root "$ROOT_DIR" write \
+  --receipt "$receipt" --mode full \
+  --source-snapshot-sha256 "$(printf 'a%.0s' {1..64})" \
+  --file-mode-inventory-sha256 "$(printf 'b%.0s' {1..64})" \
+  --definition-sha256 "$(printf 'c%.0s' {1..64})" \
+  --record "3.11|3.11.15|sha256:image|$(printf 'd%.0s' {1..64})|$(printf 'e%.0s' {1..64})|$(printf 'f%.0s' {1..64})|68|68|30|30" \
+  --summary-json >/dev/null
+PYTHONPATH="$ROOT_DIR/src" python3 -m agent_dev_kit.local_ci_receipt --root "$ROOT_DIR" check \
+  --receipt "$receipt" --mode full \
+  --source-snapshot-sha256 "$(printf 'a%.0s' {1..64})" \
+  --file-mode-inventory-sha256 "$(printf 'b%.0s' {1..64})" \
+  --definition-sha256 "$(printf 'c%.0s' {1..64})" \
+  --python-image "3.11=sha256:image" --summary-json >/dev/null
+if PYTHONPATH="$ROOT_DIR/src" python3 -m agent_dev_kit.local_ci_receipt --root "$ROOT_DIR" check \
+  --receipt "$receipt" --mode full \
+  --source-snapshot-sha256 "$(printf '9%.0s' {1..64})" \
+  --file-mode-inventory-sha256 "$(printf 'b%.0s' {1..64})" \
+  --definition-sha256 "$(printf 'c%.0s' {1..64})" \
+  --python-image "3.11=sha256:image" --summary-json >/dev/null 2>&1; then
+  echo "[FAIL] local CI receipt accepted a drifted source snapshot" >&2
+  exit 1
+fi
 
 echo "Local CI parity contract tests passed"

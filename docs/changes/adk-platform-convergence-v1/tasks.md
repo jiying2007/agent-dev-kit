@@ -11,7 +11,7 @@
 - [ ] T8 Agent/Skill/Profile 价值合同（R8）：contract/receipt-driven measurement API 已完成；canonical usage 仍 not-measured，无真实 runtime/field receipt
 - [ ] T9 维护性与 Evidence Graph（R9）：Graph 与三类 evidence metric evaluator 已完成；当前 reviewed churn/owner/inactive source 均 unavailable
 - [ ] T10 双 runtime/独立仓/双 operator/30 天 field（R10）：真实外部证据未完成
-- [ ] T11 交叉审查、全量验证和最终状态对账：`5.0.0-rc.1`、ADK 68/68、双 Python quick 29/29、wheel/audit 和本地 candidate build/check 已通过；checksum-bound rehearsal、root M5 和 R6/R10 仍未收口
+- [ ] T11 交叉审查、全量验证和最终状态对账：provenance/runtime/campaign/harden 缺口已修复；正式 4.0 artifact continuity、最终 clean candidate commit/build、R6/R10 仍未收口
 
 ## Ownership 与并行冲突检查
 - 写入范围（scope_write）：T1 独占主 manifest/schema/matcher；T3 独占 runtime_control；T4 独占 official docs；

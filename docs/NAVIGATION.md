@@ -5,7 +5,7 @@
 | Usage | `usage.md` | 通用使用入口 |
 | Usage Guide | `adk-usage-guide.md` | 完整使用路径、资产修改、CI 边界和提交门禁 |
 | Commands | `commands.md` | CLI 命令说明 |
-| Current Migration | `migrations/5.0.0-rc.1.md` | 平台控制面与证据合同破坏式迁移 |
+| Current Migration | `migrations/5.0.0-rc.2.md` | 候选溯源、验证 receipt 与升级边界加固 |
 | Runtime Control Migration History | `migrations/4.0.0.md` | Runtime Control V1 单轨切换历史 |
 | Target Migration History | `migrations/3.1.0-rc.2.md` | rc.1 到 rc.2 原生路径、plan/receipt 与回滚迁移 |
 | Profiles | `profile-guide.md` | Profile 选择 |

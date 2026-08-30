@@ -2,7 +2,7 @@
 
 `agent-dev-kit`（adk）是通用 Agent/Skill/Profile/Workflow 资产包。它把参考资料、官方文档和工程经验压实为可验证、可回滚、可迭代的 ADK 资产；资产可以导出到显式声明的 tool target，但 core 不绑定任何单一运行时。
 
-当前版本：`5.0.0-rc.1`（本地候选；尚未 tag、发布或刷新到 live）。
+当前版本：`5.0.0-rc.2`（本地候选；尚未 tag、发布或刷新到 live）。
 
 发布支持基线为 Python 3.11+，运行依赖固定为 `PyYAML==6.0.3` 与 `jsonschema==4.26.0`。Python 3.8/3.9 已退出本项目支持范围；源码在旧解释器上偶然可运行不构成发布兼容承诺。
 
@@ -101,7 +101,7 @@ bash scripts/devkit.sh benchmark run --iterations 5 --summary-json
 bash scripts/devkit.sh security check --summary-json
 bash scripts/devkit.sh eval run --suite deterministic --summary-json
 bash scripts/devkit.sh eval effect --contract manifests/effect_eval_contract.json --summary-json
-bash scripts/devkit.sh eval campaign plan --contract manifests/software_m5_eval_contract_rc7.json --summary-json
+bash scripts/devkit.sh eval campaign plan --contract manifests/software_m5_eval_contract_v5.json --summary-json
 bash scripts/devkit.sh eval repository plan --contract manifests/repository_runtime_eval_contract.json --summary-json
 bash scripts/devkit.sh eval repository certify --contract manifests/repository_runtime_eval_contract.json --report <repository-report.json> --summary-json
 bash scripts/devkit.sh release check --summary-json
