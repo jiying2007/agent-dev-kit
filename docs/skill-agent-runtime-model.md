@@ -58,7 +58,7 @@ Agent 的 manifest 条目必须声明 `description`、`quality_tier`、`owns`、
 
 长背景、示例、领域知识、检查清单和历史决策进入 `references/`。入口文件必须保持短小，严格门禁下不超过 140 行。
 
-每个 live Skill 还必须在 `manifest.json:skills` 或 `manifest.json:optional_skills` 中声明 `category`、`lifecycle_order`、`stage_order`、`activation_mode` 和 `pattern`。`lifecycle_order` 定义大类阶段，`stage_order` 定义同一阶段内的执行/呈现顺序。场景级 primary/supporting/fallback 关系不由 `SKILL.md` 自行声明，统一以 `manifest.json:skill_routing_matrix` 为准；optional skill 被作为 primary 使用时，相关 routing entry 必须声明 `availability: optional-skill-required`。
+每个 live Skill 还必须在 `manifest.json:skills` 或 `manifest.json:optional_skills` 中声明 `category`、`lifecycle_order`、`stage_order`、`activation_mode` 和 `pattern`。`lifecycle_order` 定义大类阶段，`stage_order` 定义同一阶段内的执行/呈现顺序。场景级 primary/supporting/fallback 关系不由 `SKILL.md` 自行声明，统一以 `manifest.json:routing` 为准；`skill_routing_matrix` 仅通过 `routing_intent` 引用该 IR 并补充 workflow/profile/example 展示元数据。optional skill 被作为 primary 使用时，相关 routing intent 必须声明 `availability: optional-skill-required`。
 
 ## Description 触发质量
 

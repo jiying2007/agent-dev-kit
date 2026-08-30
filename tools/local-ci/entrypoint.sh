@@ -70,5 +70,17 @@ bash scripts/devkit.sh security check
 bash scripts/devkit.sh eval run --suite deterministic --summary-json
 bash scripts/devkit.sh release check
 python -m pip wheel --disable-pip-version-check --no-build-isolation --no-deps --wheel-dir /work/dist .
+python -m venv --system-site-packages /work/wheel-venv
+/work/wheel-venv/bin/python -m pip install \
+  --disable-pip-version-check --no-index --no-deps /work/dist/agent_dev_kit-*.whl
+cd /work
+env -u PYTHONPATH /work/wheel-venv/bin/python -c \
+  'from agent_dev_kit.trace_summary import load_trace_summary_schema; assert load_trace_summary_schema()["$id"].endswith("adk-workflow-trace-summary-v2.schema.json")'
+env -u PYTHONPATH /work/wheel-venv/bin/python -c \
+  'from agent_dev_kit.evidence_graph import _validate_schema; _validate_schema({"invalid": True}, None)' \
+  >/work/wheel-evidence-schema.out 2>/work/wheel-evidence-schema.err && {
+    echo "[FAIL] installed-wheel evidence graph validator accepted invalid input" >&2
+    exit 1
+  }
 
 echo "[PASS] local CI parity python=$(python -c 'import platform; print(platform.python_version())') mode=$MODE"

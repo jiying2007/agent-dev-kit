@@ -2,6 +2,21 @@
 
 ## Unreleased
 
+## v5.0.0-rc.1 (2026-08-30)
+
+### 破坏性变化
+- core Profile 收敛为平台中立资产；嵌入式能力仅由显式 Profile 承载。
+- target contract 升级到 v2；routing、Workflow IR、Runtime Control 和运行证据合同切换到新版本，不提供隐式旧格式回退。
+
+### 新增
+- 增加 Workflow IR v2、Trace Summary v2、Evidence Graph、Run Evidence Composition 与 Effect Comparator。
+- 增加 receipt 驱动的 Agent Value 生命周期，显式记录覆盖率、信任级别和评估窗口。
+- 增加 native target conformance receipt、privacy reference 和显式 per-run trace emitter。
+
+### 候选边界
+- 本版本是本地 release candidate，不代表已完成双运行时 campaign、30 天 field pilot、tag、发布或 source-to-live。
+- manifest 数据格式继续使用 `schema_version: 4.0.0`；产品发布版本和 manifest schema 版本独立演进。
+
 ## v4.0.0 (2026-08-24)
 
 ### Breaking

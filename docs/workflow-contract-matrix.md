@@ -1,13 +1,13 @@
 # Workflow Contract Matrix
 
-- generated_at: 2026-07-19T03:12:39Z
+- generated_at: 2026-08-29T18:12:43Z
 - source: manifest.yaml
 
 ## Workflow Matrix
 
 | Order | Type | Workflow | Profiles | Command Risk | Primary Agent | Primary Skill | Supporting Skills | Entry Conditions | Exit Evidence | Verification |
 |---:|---|---|---|---|---|---|---|---|---|---|
-| 10 | `feature-delivery` | `feature-delivery` | core, embedded-fullstack | low | `requirements-analyst` | `adk-requirements-triage` | adk-task-breakdown, adk-interface-contract-design, adk-unit-test-embedded, adk-verification-before-completion, adk-code-review-loop | 用户目标包含新功能、增强或可验收行为变化, 需求可以通过目标、非目标和验收标准表达 | 需求和任务拆解闭环, 实现范围与验收标准一致, 目标测试和完成前验证通过 | rtk bash tests/test_validate.sh, rtk bash tests/test_workflow_closure.sh |
+| 10 | `feature-delivery` | `feature-delivery` | core, embedded-fullstack | low | `requirements-analyst` | `adk-requirements-triage` | adk-task-breakdown, adk-interface-contract-design, adk-test-strategy, adk-verification-before-completion, adk-code-review-loop | 用户目标包含新功能、增强或可验收行为变化, 需求可以通过目标、非目标和验收标准表达 | 需求和任务拆解闭环, 实现范围与验收标准一致, 目标测试和完成前验证通过 | rtk bash tests/test_validate.sh, rtk bash tests/test_workflow_closure.sh |
 | 20 | `bugfix-delivery` | `bugfix-delivery` | embedded-fullstack | low | `application-engineer` | `adk-systematic-debugging` | adk-task-breakdown, adk-verification-before-completion, adk-code-review-loop | 观察行为与预期行为不一致, 需要先复现、定位根因，再实施修复 | 根因陈述, 修复摘要, 复现路径或负结果说明, 定向回归验证 | rtk bash tests/test_workflow.sh, rtk bash tests/test_integration.sh |
 | 60 | `release-hardening` | `release-hardening` | release-hardening | medium | `build-release-engineer` | `adk-release-versioning` | adk-test-strategy, adk-code-review-loop, adk-branch-closeout, adk-verification-before-completion, adk-commit-pr-quality-gate | 变更准备进入发布、打包、交付或现场放行阶段, 需要版本、回滚、安全、性能或放行证据 | 版本与制品信息, 回滚路径, 发布前验证结果, commit/PR 或放行门禁结论 | rtk bash tests/test_validate.sh, rtk bash tests/test_profile_coherence.sh |
 | 80 | `research-intake` | `external-practice-absorption` | research-intake | low | `external-practice-curator` | `adk-external-practice-absorption` | adk-requirements-triage, adk-repo-prompt-analysis, adk-skill-deep-analysis, adk-task-breakdown, adk-verification-before-completion, adk-code-review-loop | 存在外部实践 candidate、来源 URL 或受治理 metadata evidence, 目标是评估、吸收、合并、增强、观察或拒绝外部实践 | 来源、重复、许可证/版权、安全和架构审查, 独立 owner decision 或 needs-more-evidence 结论, 批准项的 change、验证、pilot、发布复审与退役证据 | rtk bash tests/test_optional_skills.sh, rtk bash tests/test_workflow_closure.sh, rtk bash tests/test_skill_trigger_matrix.sh |

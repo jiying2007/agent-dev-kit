@@ -46,7 +46,7 @@ failure_handling:
 ## Ownership
 - Primary agent: `requirements-analyst`
 - Primary skill: `adk-requirements-triage`
-- Supporting skills: `adk-task-breakdown`, `adk-interface-contract-design`, `adk-unit-test-embedded`, `adk-verification-before-completion`, `adk-code-review-loop`
+- Supporting skills: `adk-task-breakdown`, `adk-interface-contract-design`, `adk-test-strategy`, `adk-verification-before-completion`, `adk-code-review-loop`
 
 ## Stage Contract
 1. `propose`: 明确目标、非目标、验收标准和影响面。

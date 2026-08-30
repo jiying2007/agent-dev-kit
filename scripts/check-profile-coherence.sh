@@ -16,6 +16,7 @@ Checks:
   - profile direct includes must not contain duplicate entries
   - profile references must point to manifest-declared agents/skills
   - every resolved profile must include each resolved Agent's default_skills
+  - core must remain platform-neutral; embedded-only Agent/Skill assets belong to embedded-fullstack
   - default_profile must exist
 USAGE
 }
@@ -151,6 +152,48 @@ check_default_skill_closure() {
   return "$failed"
 }
 
+check_platform_neutral_core() {
+  local item failed=0
+  local forbidden_agents=(driver-engineer bsp-analyst hardware-debugger)
+  local forbidden_skills=(
+    adk-driver-implementation
+    adk-driver-bringup-checklist
+    adk-register-map-design
+    adk-bsp-analysis
+    adk-bsp-porting-playbook
+    adk-rtos-task-design
+    adk-interrupt-dma-patterns
+    adk-cmake-cross-build
+    adk-unit-test-embedded
+    adk-static-analysis-c-cpp
+    adk-integration-hil-sil
+    adk-production-field-readiness
+  )
+
+  for item in "${forbidden_agents[@]}"; do
+    if adk_resolve_profile_items core include_agents | grep -Fxq "$item"; then
+      echo "[FAIL] platform-neutral core contains embedded-only agent: ${item}" >&2
+      failed=1
+    fi
+    if ! adk_resolve_profile_items embedded-fullstack include_agents | grep -Fxq "$item"; then
+      echo "[FAIL] embedded-fullstack is missing embedded agent: ${item}" >&2
+      failed=1
+    fi
+  done
+
+  for item in "${forbidden_skills[@]}"; do
+    if adk_resolve_profile_items core include_skills | grep -Fxq "$item"; then
+      echo "[FAIL] platform-neutral core contains embedded-only skill: ${item}" >&2
+      failed=1
+    fi
+    if ! adk_resolve_profile_items embedded-fullstack include_skills | grep -Fxq "$item"; then
+      echo "[FAIL] embedded-fullstack is missing embedded skill: ${item}" >&2
+      failed=1
+    fi
+  done
+  return "$failed"
+}
+
 # === Profile 冲突检测 ===
 check_profile_conflicts() {
   local manifest="$1"
@@ -181,6 +224,7 @@ check_profile_conflicts() {
 
 
 failed=0
+check_platform_neutral_core || failed=1
 default_profile="$(awk '/^default_profile:/ {print $2; exit}' "$ADK_MANIFEST")"
 if [[ -z "$default_profile" ]] || ! adk_profile_exists "$default_profile"; then
   echo "[FAIL] default_profile is missing or unknown: ${default_profile:-<empty>}" >&2

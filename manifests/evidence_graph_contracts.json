@@ -1,0 +1,68 @@
+{
+  "schema_version": "adk-evidence-graph-contract/v1",
+  "graph_schema_version": "adk-evidence-graph/v1",
+  "graph_schema_path": "schemas/evidence-graph-v1.schema.json",
+  "last_updated": "2026-08-30",
+  "boundary": "Evidence graphs store sanitized identities, hashes and lifecycle links only. They do not store prompts, messages, raw logs, credentials, tool payloads or runtime state.",
+  "allowed_graph_kinds": ["partial", "release-evidence"],
+  "allowed_node_types": [
+    "source",
+    "decision",
+    "asset",
+    "bundle",
+    "runtime",
+    "trace",
+    "outcome",
+    "release",
+    "rollback",
+    "retirement"
+  ],
+  "allowed_evidence_layers": ["source", "test", "runtime", "field"],
+  "node_layer_map": {
+    "source": ["source"],
+    "decision": ["source"],
+    "asset": ["source"],
+    "bundle": ["test"],
+    "runtime": ["runtime"],
+    "trace": ["runtime"],
+    "outcome": ["runtime", "field"],
+    "release": ["runtime", "field"],
+    "rollback": ["runtime", "field"],
+    "retirement": ["source", "runtime", "field"]
+  },
+  "allowed_sensitivity": ["public", "team-internal", "restricted-metadata"],
+  "allowed_retention": ["keep-current", "keep-provenance", "expire", "supersede", "retire"],
+  "allowed_edges": [
+    {"from": "source", "to": "decision", "relation": "informs"},
+    {"from": "decision", "to": "asset", "relation": "authorizes"},
+    {"from": "asset", "to": "bundle", "relation": "compiled-into"},
+    {"from": "bundle", "to": "runtime", "relation": "loaded-by"},
+    {"from": "runtime", "to": "trace", "relation": "emits"},
+    {"from": "trace", "to": "outcome", "relation": "evaluated-as"},
+    {"from": "outcome", "to": "release", "relation": "supports"},
+    {"from": "release", "to": "rollback", "relation": "rehearsed-with"},
+    {"from": "asset", "to": "retirement", "relation": "retired-by"},
+    {"from": "release", "to": "retirement", "relation": "superseded-by"}
+  ],
+  "required_outcome_metrics": [
+    "task_success",
+    "first_pass_success",
+    "human_interventions",
+    "elapsed_ms",
+    "input_tokens",
+    "output_tokens",
+    "tool_calls",
+    "wrong_skill",
+    "abstained"
+  ],
+  "must_not": [
+    "infer owner identity from Git, path, memory or chat",
+    "store raw prompts, messages, logs, credentials or tool payloads",
+    "accept dangling edges, duplicate IDs, cycles or invalid hashes",
+    "accept unbound or missing evidence references",
+    "reuse one untyped evidence file as multiple lifecycle node claims",
+    "accept future verification timestamps or incoherent retention state",
+    "promote source/test evidence to runtime/field without a runtime/field node",
+    "treat graph completeness as owner approval or release authorization"
+  ]
+}

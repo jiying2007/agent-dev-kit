@@ -76,6 +76,7 @@ from agent_dev_kit.evaluation import SAFETY_POLICY, _catalog_prompt
 from agent_dev_kit.model import Manifest, ManifestError
 from agent_dev_kit.quality import run_benchmark, security_check
 from agent_dev_kit.release import _copy_source_distribution, _write_deterministic_archive
+from agent_dev_kit.runtime_control.engine import TASK_MODES as RUNTIME_CONTROL_TASK_MODES
 
 root = Path(sys.argv[1])
 manifest = Manifest.load(root)
@@ -124,6 +125,105 @@ invalid_routing = copy.deepcopy(manifest.data)
 invalid_routing["routing"]["intents"][0]["supporting_skills"] = "adk-context-engineering"
 assert_schema_failure(invalid_routing, "schema routing/intents/0/supporting_skills")
 
+invalid_routing_ir = copy.deepcopy(manifest.data)
+invalid_routing_ir["routing"]["ir_version"] = "routing-ir/v1"
+assert_schema_failure(invalid_routing_ir, "schema routing/ir_version")
+
+invalid_task_mode_permission = copy.deepcopy(manifest.data)
+invalid_task_mode_permission["routing"]["task_modes"][0]["mutation_permission"] = "implicit-write"
+assert_schema_failure(
+    invalid_task_mode_permission,
+    "schema routing/task_modes/0/mutation_permission",
+)
+
+unsafe_readonly_permission = copy.deepcopy(manifest.data)
+unsafe_readonly_permission["routing"]["task_modes"][0]["mutation_permission"] = "workspace-write"
+assert_schema_failure(unsafe_readonly_permission, "schema routing/task_modes/0")
+
+missing_review_task_mode = copy.deepcopy(manifest.data)
+missing_review_task_mode["routing"]["task_modes"] = [
+    item for item in missing_review_task_mode["routing"]["task_modes"]
+    if item["task_mode"] != "review"
+]
+assert_schema_failure(missing_review_task_mode, "schema routing/task_modes")
+
+duplicate_debugging_task_mode = copy.deepcopy(manifest.data)
+duplicate_debugging_task_mode["routing"]["task_modes"][-1] = copy.deepcopy(
+    duplicate_debugging_task_mode["routing"]["task_modes"][3]
+)
+duplicate_debugging_task_mode["routing"]["task_modes"][-1]["intent_zh"] = "诊断调试"
+assert_schema_failure(duplicate_debugging_task_mode, "schema routing/task_modes")
+
+unsafe_intent_permission = copy.deepcopy(manifest.data)
+debugging_intent = next(
+    item for item in unsafe_intent_permission["routing"]["intents"]
+    if item["intent"] == "systematic_debugging"
+)
+debugging_intent["mutation_permission"] = "workspace-write"
+debugging_index = unsafe_intent_permission["routing"]["intents"].index(debugging_intent)
+assert_schema_failure(
+    unsafe_intent_permission,
+    "schema routing/intents/{}".format(debugging_index),
+)
+
+artifact_modes = manifest.data["routing"]["artifact_mode_mapping"]
+assert artifact_modes == {
+    "needs-triage": None,
+    "readonly": "readonly",
+    "implementation": "implementation",
+    "debugging": "readonly",
+    "review": "readonly",
+    "release": "release",
+}, artifact_modes
+assert {value for value in artifact_modes.values() if value is not None} == RUNTIME_CONTROL_TASK_MODES
+
+invalid_artifact_mapping = copy.deepcopy(manifest.data)
+invalid_artifact_mapping["routing"]["artifact_mode_mapping"]["debugging"] = "debugging"
+assert_schema_failure(invalid_artifact_mapping, "schema routing/artifact_mode_mapping/debugging")
+
+invalid_negated_intent = copy.deepcopy(manifest.data)
+planning_intent = next(
+    item for item in invalid_negated_intent["routing"]["intents"]
+    if item["intent"] == "planning_execution"
+)
+planning_intent["negated_intents"][0]["all_of"] = []
+planning_index = invalid_negated_intent["routing"]["intents"].index(planning_intent)
+assert_schema_failure(
+    invalid_negated_intent,
+    "schema routing/intents/{}/negated_intents/0/all_of".format(planning_index),
+)
+
+invalid_phrase_class = copy.deepcopy(manifest.data)
+planning_intent = next(
+    item for item in invalid_phrase_class["routing"]["intents"]
+    if item["intent"] == "planning_execution"
+)
+planning_intent["negated_intents"][0]["all_of"][0]["phrase_class"] = "full_sentence_alias"
+planning_index = invalid_phrase_class["routing"]["intents"].index(planning_intent)
+assert_schema_failure(
+    invalid_phrase_class,
+    "schema routing/intents/{}/negated_intents/0/all_of/0/phrase_class".format(planning_index),
+)
+
+missing_required_negation_phrase = copy.deepcopy(manifest.data)
+missing_required_negation_phrase["routing"]["negation_phrase_classes"]["direct_prohibition"].remove("请勿")
+assert_schema_failure(
+    missing_required_negation_phrase,
+    "schema routing/negation_phrase_classes/direct_prohibition",
+)
+
+legacy_flat_negation_markers = copy.deepcopy(manifest.data)
+legacy_flat_negation_markers["routing"]["negation_markers"] = ["不"]
+assert_schema_failure(legacy_flat_negation_markers, "schema routing")
+
+legacy_parallel_routing_ssot = copy.deepcopy(manifest.data)
+legacy_parallel_routing_ssot["skill_routing_matrix"][0]["primary_skill"] = "adk-runtime-router"
+assert_schema_failure(legacy_parallel_routing_ssot, "schema skill_routing_matrix/0")
+
+conflicting_routing_projection = copy.deepcopy(manifest.data)
+conflicting_routing_projection["skill_routing_matrix"][0]["routing_intent"] = "requirements_triage"
+assert_schema_failure(conflicting_routing_projection, "schema skill_routing_matrix/0")
+
 invalid_reference = copy.deepcopy(manifest.data)
 invalid_reference["reference_sources"]["anthropic-official"]["runtime_enablement"] = "false"
 assert_schema_failure(
@@ -154,7 +254,7 @@ with tempfile.TemporaryDirectory() as temp:
 
 prompt = _catalog_prompt(manifest, "adk")
 assert "adk-embedded-debug-transport" in prompt
-assert "连接边界治理" in prompt
+assert "连接边界" in prompt
 assert "memory/archive" in SAFETY_POLICY
 
 invalid = copy.deepcopy(manifest.data)
@@ -167,10 +267,20 @@ patch_version["version"] = "4.0.1"
 failures = Manifest(root, patch_version, root / "manifest.json").validate(strict=True)
 assert not any("version must" in item for item in failures), failures
 
+next_major = copy.deepcopy(manifest.data)
+next_major["version"] = "5.0.0-rc.1"
+failures = Manifest(root, next_major, root / "manifest.json").validate(strict=True)
+assert not any("version must" in item for item in failures), failures
+
 wrong_major = copy.deepcopy(manifest.data)
 wrong_major["version"] = "3.1.0"
 failures = Manifest(root, wrong_major, root / "manifest.json").validate(strict=True)
-assert any("major 4" in item for item in failures), failures
+assert any("supported major 4 or 5" in item for item in failures), failures
+
+future_major = copy.deepcopy(manifest.data)
+future_major["version"] = "6.0.0"
+failures = Manifest(root, future_major, root / "manifest.json").validate(strict=True)
+assert any("supported major 4 or 5" in item for item in failures), failures
 
 slow = {"iterations": 1, "median_ms": 999.0, "p95_ms": 999.0, "min_ms": 999.0, "max_ms": 999.0}
 with mock.patch("agent_dev_kit.quality._measure", return_value=slow):
@@ -451,6 +561,19 @@ for required in \
   source/OWNERS \
   source/src/agent_dev_kit/cli.py \
   source/scripts/devkit.sh \
+  source/schemas/adk-workflow-trace-summary-v2.schema.json \
+  source/schemas/agent-value-contracts-v1.schema.json \
+  source/schemas/asset-invocation-receipt-v1.schema.json \
+  source/schemas/asset-value-measurement-v1.schema.json \
+  source/schemas/evidence-graph-v1.schema.json \
+  source/schemas/evidence-node-claim-v1.schema.json \
+  source/schemas/effect-comparison-v1.schema.json \
+  source/schemas/native-target-conformance-receipt-v1.schema.json \
+  source/schemas/runtime-control-decision-v2.schema.json \
+  source/schemas/runtime-control-goal-intake-v1.schema.json \
+  source/schemas/runtime-control-policy-v2.schema.json \
+  source/schemas/run-evidence-composition-v1.schema.json \
+  source/schemas/workflow-ir-v2.schema.json \
   source/tests/test_product_maturity_v4.sh \
   sbom.spdx.json; do
   rg -qx -- "$required" "$TMP_DIR/release-files.txt" || {
@@ -475,6 +598,15 @@ with tarfile.open(sys.argv[1], "r:gz") as archive:
     assert archive.getmember("source/manifest.json").mode == 0o644
 PY
 tar -xOf "$TMP_DIR/release-a/agent-dev-kit-$VERSION.tar.gz" sbom.spdx.json >"$TMP_DIR/sbom.json"
+cmp \
+  "$ROOT_DIR/schemas/evidence-graph-v1.schema.json" \
+  "$ROOT_DIR/src/agent_dev_kit/schema_resources/evidence-graph-v1.schema.json"
+cmp \
+  "$ROOT_DIR/schemas/evidence-node-claim-v1.schema.json" \
+  "$ROOT_DIR/src/agent_dev_kit/schema_resources/evidence-node-claim-v1.schema.json"
+cmp \
+  "$ROOT_DIR/schemas/adk-workflow-trace-summary-v2.schema.json" \
+  "$ROOT_DIR/src/agent_dev_kit/schema_resources/adk-workflow-trace-summary-v2.schema.json"
 python3 - "$TMP_DIR/sbom.json" <<'PY'
 import json
 import sys

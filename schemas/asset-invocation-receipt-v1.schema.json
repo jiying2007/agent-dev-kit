@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-dev-kit.local/schemas/asset-invocation-receipt-v1.schema.json",
+  "title": "ADK Asset Invocation Receipt V1",
+  "description": "Measured, privacy-bounded Agent/Skill/Profile invocation outcome. It is a signal, not retirement authorization.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "receipt_id",
+    "invocation_ref",
+    "source_trace_ref",
+    "manifest_ref",
+    "asset_bundle_sha256",
+    "runtime_target",
+    "evidence_layer",
+    "observed_at",
+    "measurement_status",
+    "asset_id",
+    "asset_kind",
+    "routing",
+    "outcome",
+    "human_interventions",
+    "retirement_signal",
+    "evidence_refs",
+    "privacy_status",
+    "raw_content_stored"
+  ],
+  "properties": {
+    "schema_version": {"const": "adk-asset-invocation-receipt/v1"},
+    "receipt_id": {"$ref": "#/$defs/opaqueRef"},
+    "invocation_ref": {"$ref": "#/$defs/opaqueRef"},
+    "source_trace_ref": {"$ref": "#/$defs/opaqueRef"},
+    "manifest_ref": {"$ref": "#/$defs/opaqueRef"},
+    "asset_bundle_sha256": {"$ref": "#/$defs/sha256"},
+    "runtime_target": {"$ref": "#/$defs/assetIdentifier"},
+    "evidence_layer": {"enum": ["test", "runtime", "field"]},
+    "authority_attestation": {"$ref": "#/$defs/authorityAttestation"},
+    "observed_at": {"type": "string", "format": "date-time"},
+    "measurement_status": {"const": "measured"},
+    "asset_id": {"$ref": "#/$defs/assetIdentifier"},
+    "asset_kind": {"enum": ["agent", "skill", "profile"]},
+    "routing": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["routed", "abstained", "wrong_route"],
+      "properties": {
+        "routed": {"type": "boolean"},
+        "abstained": {"type": "boolean"},
+        "wrong_route": {"type": "boolean"}
+      }
+    },
+    "outcome": {
+      "enum": ["succeeded", "failed", "partial", "blocked", "cancelled", "abstained"]
+    },
+    "human_interventions": {"type": "integer", "minimum": 0},
+    "first_pass": {"type": "boolean"},
+    "abstain_correct": {"type": "boolean"},
+    "time_to_trustworthy_change_ms": {"type": "integer", "minimum": 0},
+    "escaped_defect": {"type": "boolean"},
+    "rollback": {"type": "boolean"},
+    "retirement_signal": {
+      "enum": ["retain", "consolidate-candidate", "retire-candidate", "insufficient-evidence"]
+    },
+    "evidence_refs": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/opaqueRef"}
+    },
+    "privacy_status": {"enum": ["sanitized", "redacted", "no-sensitive-content"]},
+    "raw_content_stored": {"const": false}
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"routing": {"properties": {"abstained": {"const": true}}}}
+      },
+      "then": {"required": ["abstain_correct"]},
+      "else": {"not": {"required": ["abstain_correct"]}}
+    },
+    {
+      "if": {
+        "properties": {"routing": {"properties": {"abstained": {"const": true}}}}
+      },
+      "then": {
+        "not": {
+          "anyOf": [
+            {"required": ["first_pass"]},
+            {"required": ["time_to_trustworthy_change_ms"]},
+            {"required": ["escaped_defect"]},
+            {"required": ["rollback"]}
+          ]
+        }
+      }
+    },
+    {
+      "if": {"properties": {"first_pass": {"const": true}}, "required": ["first_pass"]},
+      "then": {"properties": {"outcome": {"const": "succeeded"}}}
+    },
+    {
+      "if": {"properties": {"evidence_layer": {"const": "field"}}, "required": ["evidence_layer"]},
+      "else": {"not": {"required": ["escaped_defect"]}}
+    },
+    {
+      "if": {"properties": {"evidence_layer": {"const": "test"}}, "required": ["evidence_layer"]},
+      "then": {
+        "allOf": [
+          {"not": {"required": ["rollback"]}},
+          {"not": {"required": ["authority_attestation"]}}
+        ]
+      },
+      "else": {"required": ["authority_attestation"]}
+    }
+  ],
+  "$defs": {
+    "opaqueRef": {"type": "string", "pattern": "^ref:[0-9a-f]{64}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "assetIdentifier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "authorityAttestation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authority_id",
+        "body_sha256",
+        "manifest_ref",
+        "asset_bundle_sha256",
+        "evidence_layer",
+        "runtime_target",
+        "source_trace_ref"
+      ],
+      "properties": {
+        "authority_id": {"$ref": "#/$defs/assetIdentifier"},
+        "body_sha256": {"$ref": "#/$defs/sha256"},
+        "manifest_ref": {"$ref": "#/$defs/opaqueRef"},
+        "asset_bundle_sha256": {"$ref": "#/$defs/sha256"},
+        "evidence_layer": {"enum": ["runtime", "field"]},
+        "runtime_target": {"$ref": "#/$defs/assetIdentifier"},
+        "source_trace_ref": {"$ref": "#/$defs/opaqueRef"}
+      }
+    }
+  }
+}

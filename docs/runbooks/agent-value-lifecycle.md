@@ -1,0 +1,137 @@
+# Agent/Skill/Profile Value Lifecycle Runbook
+
+本 runbook 用于验证 Agent role contract，并从显式提供、受验证的 Agent/Skill/Profile invocation receipt
+派生 measurement。`emit_measurements` API 已可用，但不会自动采集、不会自动持久化 receipt/measurement，也不会据此
+宣称全局 runtime usage 已被测量；没有有效输入时，全局状态仍为 `not-measured`。
+
+## 权威边界
+
+- `manifest.json` 是 Agent、core/optional Skill、Profile 身份和组成的唯一 SSOT。
+- `manifests/agent_value_contracts.json` 只引用 `agent_id` 并声明 role/value contract；不得复制 Agent 描述、路径、
+  default Skill，或创建 Skill/Profile 身份清单。
+- `schemas/asset-invocation-receipt-v1.schema.json` 是 receipt 结构合同。
+- `schemas/asset-value-measurement-v1.schema.json` 是 measured/not-measured 聚合输出合同。
+- `src/agent_dev_kit/agent_value.py` 每次从当前 manifest 解析身份，执行跨文件语义检查，并提供显式输入驱动的
+  `emit_measurements` API；它不是 runtime collector 或持久化服务。
+
+## Agent 合同门禁
+
+每个 manifest Agent 必须且只能有一个合同，包含：
+
+- role inputs/outputs
+- permission envelope 与 tool capability
+- decision authority 与升级边界
+- manifest 内有效 handoff 和 required payload
+- required evidence、assumption scope、eval suite
+
+权限采用 `read-only < diagnostic < code-write < build-release` ceiling，并同时检查 effect/tool allowlist。
+合同不能通过只改 permission 名称或 capability 列表提升 manifest 权限。
+
+## Receipt 语义
+
+一个可用于派生 measurement 的 receipt 必须来自真实观测，且满足：
+
+- `measurement_status=measured`
+- `asset_id` 可在当前 manifest 对应 kind 中解析
+- `routed` 与 `abstained` 恰好一个为 true
+- `wrong_route=true` 只能出现在 routed invocation
+- abstained routing 与 abstained outcome 一致
+- `human_interventions` 是非负整数
+- `receipt_id` 绑定 canonical receipt body；该 hash 只证明内容完整性，不证明来源 authority
+- `receipt_id`、`invocation_ref`、`source_trace_ref` 和 `evidence_refs[]` 均为 `ref:<sha256>` opaque reference
+- `observed_at` 不得晚于验证时钟
+- test receipt 只接受结构/完整性校验，measurement 标记为 `source_verification=structural-only`
+- runtime/field receipt 必须由 Python composition root 注入 `evidence_verifier`；默认无 verifier 时 fail-closed
+- canonical `evidence_authority_policy` 默认 `disabled/backend=not-configured/authorities=[]`；此时即使任意 verifier
+  返回 `True` 也必须拒绝 runtime/field receipt
+- 受管 authority attestation 必须绑定 canonical payload digest、当前 `manifest_ref`、asset bundle、evidence layer、
+  runtime target 和 source trace；authority ID、layer、target 必须落在启用的 registry scope 内
+- receipt 必须落入调用方固定的 aggregation window/as-of，并满足 `max_age_days`
+- retirement signal 只是 `retain`、`consolidate-candidate`、`retire-candidate` 或
+  `insufficient-evidence` 证据信号，不授权删除或禁用
+- `raw_content_stored=false`，不含 prompt、message、credential、raw log、tool payload 或 operator identity
+
+不得创建伪造 receipt 来填补 usage 空白，也不得把 test fixture 重标为 runtime/field。调用方可以把真实观测形成显式、
+脱敏 receipt，再交给 validator/emitter；本模块不会自行保存输入或输出。没有有效 receipt 输入时，正确状态就是：
+
+```json
+{"status":"not-measured","runtime_enabled":false,"usage_evidence":"none-claimed"}
+```
+
+## 验证命令
+
+验证合同、live manifest，并查看空输入的 `not-measured` measurement：
+
+```bash
+rtk bash -lc 'PYTHONPATH=src python3 -m agent_dev_kit.agent_value \
+  --manifest-root . --emit-measurements --summary-json'
+```
+
+CLI 没有 trust verifier、固定 aggregation window/as-of 注入点，因此只适合验证 `evidence_layer=test` 的
+structural receipt，不执行非空 measurement 聚合：
+
+```bash
+rtk bash -lc 'PYTHONPATH=src python3 -m agent_dev_kit.agent_value \
+  --manifest-root . --receipt path/to/receipt.json --summary-json'
+```
+
+runtime/field receipt 必须由受审查的 Python composition root 注入 verifier；不要通过 CLI 绕过：
+
+```python
+from agent_dev_kit.agent_value import emit_measurements, load_contract
+from agent_dev_kit.model import Manifest
+
+manifest = Manifest.load(adk_root)
+contract = load_contract(adk_root / "manifests" / "agent_value_contracts.json")
+# canonical contract 默认关闭 authority registry；部署 composition root 必须先取得
+# owner-reviewed、managed、enabled 的 contract input，不能在调用点临时伪造 authority。
+measurement = emit_measurements(
+    validated_receipts,
+    manifest,
+    reviewed_managed_contract,
+    evidence_verifier=verify_runtime_or_field_evidence,
+    aggregation_window={"from": window_from, "through": window_through},
+    as_of=fixed_as_of,
+)
+```
+
+`evidence_verifier(receipt, registered_authority)` 必须核对 composition root 信任的 trace/evidence store、authority
+backend 与权限边界，并只在来源确实可信时返回严格 `True`。opaque ref、content hash、临时 lambda 或未注册 authority
+本身不能替代这个裁决。
+
+回归：
+
+```bash
+rtk bash tests/test_agent_value.sh
+rtk bash tests/test_runtime_boundary.sh
+rtk bash scripts/devkit.sh validate --strict
+rtk bash tests/run_all.sh --quick --fail-fast
+```
+
+## 质量与退役判断
+
+质量判断优先使用 task success、first-pass success、wrong-route、abstain precision、人工介入、可信变更时间、
+escaped defect 和 rollback 等 outcome 指标。Agent/Skill/Profile 数量、invocation/PR/report 数量及 Token 总量
+只能用于容量和成本诊断，不能证明资产质量。
+
+每个可选 KPI 同时报告 applicable/observed sample size 与 coverage。first-pass、可信变更时间、escaped defect、
+rollback 未达到完整覆盖时保持 `not-measured/incomplete-coverage`，不能用部分样本生成 measured value。顶层
+`evidence_scope` 区分 `test-only/runtime-verified/field-verified/mixed`。v1 没有外部固定、版本化的 production authority
+registry，因此 `quality_evidence_eligible` 对所有 scope 固定为 false，并始终输出 ineligibility reason、
+`owner_review_required=true`、`lifecycle_authority=none-evidence-only`。
+
+未来若要支持 production quality evidence，必须新增独立、版本化、owner-reviewed managed registry change；不得通过
+input contract、临时 registry copy 或 callback/lambda 把 `production` 改为 true。
+
+合并或退役至少需要多个真实 measured invocation、代表性的成功与失败、wrong-route/abstain 分析、替代/删除
+影响和 owner review。单条 receipt、测试 fixture 或静态 contract 都不能证明退役合理。
+
+## 失败处理与回滚
+
+- coverage 失败：先检查 manifest 是否新增/删除 Agent，再补或移除对应引用合同；不要复制 manifest 元数据。
+- identity 失败：确认 receipt 的 kind 与当前 manifest 一致；历史资产必须走受治理的 supersession/retention 路径。
+- permission/handoff 失败：以 manifest ceiling 为准；需要扩大权限或关系时必须走独立 owner-reviewed manifest 变更。
+- privacy 失败：拒绝 receipt，回到 emitter 侧做字段删除或脱敏，不在 validator 中放宽 schema。
+- trust 失败：runtime/field receipt 没有 verifier、verifier 拒绝或异常时保持 fail-closed；不能降级为 test 后继续宣称 runtime usage。
+- measurement 缺字段：保留对应 KPI 的 `not-measured` 原因，不补零、不用数量或 Token proxy 替代。
+- 回滚：删除本能力新增文件并从 `tests/run_all.sh` 移除 `test_agent_value.sh`；不会影响 runtime 或 target。

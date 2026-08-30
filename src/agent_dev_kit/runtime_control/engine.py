@@ -7,13 +7,19 @@ import json
 import math
 import re
 from datetime import datetime, timezone
-from typing import Any, Dict, Iterable, Mapping, Optional
+from typing import Any, Callable, Dict, Iterable, Mapping, Optional
+
+from ..model import ManifestError
+from ..privacy_ref import validate_no_secrets
 
 
 EVENT_SCHEMA = "runtime_control.event/v1"
 STATE_SCHEMA = "runtime_control.state/v1"
 DECISION_SCHEMA = "runtime_control.decision/v1"
 POLICY_SCHEMA = "runtime_control.policy/v1"
+DECISION_SCHEMA_V2 = "runtime_control.decision/v2"
+POLICY_SCHEMA_V2 = "runtime_control.policy/v2"
+GOAL_INTAKE_SCHEMA = "runtime_control.goal-intake/v1"
 
 EVENT_TYPES = {
     "goal.started",
@@ -30,6 +36,29 @@ EVENT_TYPES = {
 }
 ARTIFACT_TYPES = {"repo", "build", "plan", "dry-run", "live", "review"}
 GATE_EVENTS = {"steady", "final", "commit", "apply", "release"}
+TASK_MODES = {"readonly", "implementation", "release"}
+GOAL_TASK_MODES = {"readonly", "implementation", "debugging", "review", "release"}
+GOAL_TASK_ARTIFACT_MODES = {
+    "readonly": "readonly",
+    "implementation": "implementation",
+    "debugging": "readonly",
+    "review": "readonly",
+    "release": "release",
+}
+TASK_MODE_ARTIFACT_FLOORS = {
+    "implementation": {
+        "final": {"repo", "build"},
+        "commit": {"repo", "build", "review"},
+        "apply": {"repo", "build", "plan", "dry-run"},
+    },
+    "release": {
+        "final": {"repo", "build"},
+        "commit": {"repo", "build", "review"},
+        "apply": {"repo", "build", "plan", "dry-run"},
+        "release": {"repo", "build", "live", "review"},
+    },
+}
+READONLY_IMPLEMENTATION_ARTIFACTS = {"repo", "build", "plan", "dry-run", "live"}
 SENSITIVE_FIELDS = {"prompt", "messages", "content", "text", "raw_input", "raw_output", "objective"}
 IDENTIFIER = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$")
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
@@ -43,6 +72,10 @@ class RuntimeControlError(ValueError):
 def _identifier(value: Any, field: str) -> str:
     if not isinstance(value, str) or not IDENTIFIER.fullmatch(value):
         raise RuntimeControlError("{} must be a bounded stable identifier".format(field))
+    try:
+        validate_no_secrets(value, field)
+    except ManifestError as exc:
+        raise RuntimeControlError(str(exc)) from exc
     return value
 
 
@@ -81,14 +114,29 @@ def _iso(value: datetime) -> str:
 
 
 def _reject_sensitive(value: Any) -> None:
+    try:
+        validate_no_secrets(value, "runtime control input")
+    except ManifestError as exc:
+        raise RuntimeControlError(str(exc)) from exc
     if isinstance(value, dict):
         if set(value) & SENSITIVE_FIELDS:
             raise RuntimeControlError("runtime control input contains a forbidden sensitive field")
         for nested in value.values():
-            _reject_sensitive(nested)
+            _reject_sensitive_fields(nested)
     elif isinstance(value, list):
         for nested in value:
-            _reject_sensitive(nested)
+            _reject_sensitive_fields(nested)
+
+
+def _reject_sensitive_fields(value: Any) -> None:
+    if isinstance(value, dict):
+        if set(value) & SENSITIVE_FIELDS:
+            raise RuntimeControlError("runtime control input contains a forbidden sensitive field")
+        for nested in value.values():
+            _reject_sensitive_fields(nested)
+    elif isinstance(value, list):
+        for nested in value:
+            _reject_sensitive_fields(nested)
 
 
 def _ids(value: Any, field: str, *, non_empty: bool = False) -> list[str]:
@@ -113,10 +161,119 @@ def _fingerprint(value: Mapping[str, Any]) -> str:
     return hashlib.sha256(raw).hexdigest()
 
 
+def goal_intake_attestation_sha256(
+    task_mode: str,
+    artifact_mode: str,
+    provenance: Mapping[str, Any],
+    *,
+    goal_id: str,
+    request_sha256: str,
+    routing_decision_sha256: str,
+    authority_id: str,
+) -> str:
+    """Return the canonical digest callers must bind into a goal intake."""
+    return _fingerprint({
+        "schema_version": GOAL_INTAKE_SCHEMA,
+        "task_mode": task_mode,
+        "artifact_mode": artifact_mode,
+        "goal_id": goal_id,
+        "request_sha256": request_sha256,
+        "routing_decision_sha256": routing_decision_sha256,
+        "authority_id": authority_id,
+        "provenance": provenance,
+    })
+
+
+def _validate_goal_intake(
+    value: Any,
+    *,
+    event_at: datetime,
+    expected_kind: str,
+    expected_goal_id: str,
+) -> Dict[str, Any]:
+    if not isinstance(value, dict) or set(value) != {
+        "schema_version", "task_mode", "artifact_mode", "goal_id", "request_sha256",
+        "routing_decision_sha256", "authority_id", "attestation_sha256", "provenance"
+    }:
+        raise RuntimeControlError("goal intake fields are invalid")
+    if value.get("schema_version") != GOAL_INTAKE_SCHEMA:
+        raise RuntimeControlError("unsupported goal intake schema")
+    task_mode = value.get("task_mode")
+    artifact_mode = value.get("artifact_mode")
+    if task_mode not in GOAL_TASK_MODES:
+        raise RuntimeControlError("unsupported goal intake task_mode")
+    if artifact_mode not in TASK_MODES:
+        raise RuntimeControlError("unsupported goal intake artifact_mode")
+    if GOAL_TASK_ARTIFACT_MODES[task_mode] != artifact_mode:
+        raise RuntimeControlError("goal intake task_mode and artifact_mode are inconsistent")
+    goal_id = _identifier(value.get("goal_id"), "goal.intake.goal_id")
+    if goal_id != expected_goal_id:
+        raise RuntimeControlError("goal intake goal_id does not match its goal event")
+    request_sha256 = _sha256(value.get("request_sha256"), "goal.intake.request_sha256")
+    routing_decision_sha256 = _sha256(
+        value.get("routing_decision_sha256"), "goal.intake.routing_decision_sha256"
+    )
+    authority_id = _identifier(value.get("authority_id"), "goal.intake.authority_id")
+    provenance = value.get("provenance")
+    if not isinstance(provenance, dict) or set(provenance) != {
+        "kind", "source_id", "source_version", "decision_id", "issued_at"
+    }:
+        raise RuntimeControlError("goal intake provenance fields are invalid")
+    if provenance.get("kind") != expected_kind:
+        raise RuntimeControlError(
+            "goal intake provenance kind must be {}".format(expected_kind)
+        )
+    normalized_provenance = {
+        "kind": expected_kind,
+        "source_id": _identifier(provenance.get("source_id"), "goal.intake.provenance.source_id"),
+        "source_version": _identifier(
+            provenance.get("source_version"), "goal.intake.provenance.source_version"
+        ),
+        "decision_id": _identifier(
+            provenance.get("decision_id"), "goal.intake.provenance.decision_id"
+        ),
+        "issued_at": _iso(
+            _timestamp(provenance.get("issued_at"), "goal.intake.provenance.issued_at")
+        ),
+    }
+    if _timestamp(normalized_provenance["issued_at"], "goal.intake.provenance.issued_at") > event_at:
+        raise RuntimeControlError("goal intake provenance cannot be issued after its event")
+    expected_digest = goal_intake_attestation_sha256(
+        str(task_mode), str(artifact_mode), normalized_provenance,
+        goal_id=goal_id,
+        request_sha256=request_sha256,
+        routing_decision_sha256=routing_decision_sha256,
+        authority_id=authority_id,
+    )
+    if value.get("attestation_sha256") != expected_digest:
+        raise RuntimeControlError("goal intake attestation digest mismatch")
+    return {
+        "schema_version": GOAL_INTAKE_SCHEMA,
+        "task_mode": task_mode,
+        "artifact_mode": artifact_mode,
+        "goal_id": goal_id,
+        "request_sha256": request_sha256,
+        "routing_decision_sha256": routing_decision_sha256,
+        "authority_id": authority_id,
+        "attestation_sha256": expected_digest,
+        "provenance": normalized_provenance,
+    }
+
+
 def validate_policy(value: Mapping[str, Any]) -> Dict[str, Any]:
-    if not isinstance(value, dict) or value.get("schema_version") != POLICY_SCHEMA:
+    if not isinstance(value, dict) or value.get("schema_version") not in {
+        POLICY_SCHEMA, POLICY_SCHEMA_V2
+    }:
         raise RuntimeControlError("unsupported runtime control policy schema")
-    if set(value) != {"schema_version", "token", "context", "progress", "gate_policy", "retention"}:
+    _reject_sensitive(value)
+    policy_schema = value["schema_version"]
+    policy_specific_field = "gate_policy" if policy_schema == POLICY_SCHEMA else "artifact_applicability"
+    expected_fields = {
+        "schema_version", "token", "context", "progress", policy_specific_field, "retention"
+    }
+    if policy_schema == POLICY_SCHEMA_V2:
+        expected_fields.add("mode_authority_policy")
+    if set(value) != expected_fields:
         raise RuntimeControlError("runtime control policy fields are invalid")
 
     token = value.get("token")
@@ -144,16 +301,99 @@ def validate_policy(value: Mapping[str, Any]) -> Dict[str, Any]:
     _integer(progress.get("retry_limit"), "progress.retry_limit", positive=True)
     _integer(progress.get("no_progress_limit"), "progress.no_progress_limit", positive=True)
 
-    gate_policy = value.get("gate_policy")
-    if not isinstance(gate_policy, dict) or set(gate_policy) != GATE_EVENTS:
-        raise RuntimeControlError("gate_policy must define every canonical gate event")
     normalized_gates: Dict[str, list[str]] = {}
-    for gate, required in gate_policy.items():
-        items = _ids(required, "gate_policy." + gate)
-        unknown = set(items) - ARTIFACT_TYPES
-        if unknown:
-            raise RuntimeControlError("gate_policy references unknown artifact types")
-        normalized_gates[gate] = items
+    normalized_applicability: Dict[str, Dict[str, Optional[list[str]]]] = {}
+    normalized_authority_policy: Optional[Dict[str, Any]] = None
+    if policy_schema == POLICY_SCHEMA:
+        gate_policy = value.get("gate_policy")
+        if not isinstance(gate_policy, dict) or set(gate_policy) != GATE_EVENTS:
+            raise RuntimeControlError("gate_policy must define every canonical gate event")
+        for gate, required in gate_policy.items():
+            items = _ids(required, "gate_policy." + gate)
+            unknown = set(items) - ARTIFACT_TYPES
+            if unknown:
+                raise RuntimeControlError("gate_policy references unknown artifact types")
+            normalized_gates[gate] = items
+    else:
+        applicability = value.get("artifact_applicability")
+        if not isinstance(applicability, dict) or set(applicability) != TASK_MODES:
+            raise RuntimeControlError("artifact_applicability must define every canonical task mode")
+        for task_mode, gate_matrix in applicability.items():
+            if not isinstance(gate_matrix, dict) or set(gate_matrix) != GATE_EVENTS:
+                raise RuntimeControlError(
+                    "artifact_applicability.{} must define every canonical gate event".format(task_mode)
+                )
+            normalized_matrix: Dict[str, Optional[list[str]]] = {}
+            for gate, required in gate_matrix.items():
+                if required is None:
+                    normalized_matrix[gate] = None
+                    continue
+                items = _ids(required, "artifact_applicability.{}.{}".format(task_mode, gate))
+                if set(items) - ARTIFACT_TYPES:
+                    raise RuntimeControlError("artifact_applicability references unknown artifact types")
+                normalized_matrix[gate] = items
+            normalized_applicability[task_mode] = normalized_matrix
+
+        readonly = normalized_applicability["readonly"]
+        if (
+            readonly["steady"] != []
+            or readonly["commit"] is not None
+            or readonly["apply"] is not None
+            or readonly["release"] is not None
+        ):
+            raise RuntimeControlError("readonly task mode may only use steady and final gates")
+        if readonly["final"] is None:
+            raise RuntimeControlError("readonly.final must be applicable")
+        if set(readonly["final"] or []) & READONLY_IMPLEMENTATION_ARTIFACTS:
+            raise RuntimeControlError("readonly.final cannot require implementation artifacts")
+
+        implementation = normalized_applicability["implementation"]
+        if implementation["steady"] != [] or implementation["release"] is not None:
+            raise RuntimeControlError("implementation task mode cannot use the release gate")
+        for gate, floor in TASK_MODE_ARTIFACT_FLOORS["implementation"].items():
+            required = implementation[gate]
+            if required is None or not floor <= set(required):
+                raise RuntimeControlError(
+                    "implementation.{} must retain fail-closed artifact requirements".format(gate)
+                )
+
+        release = normalized_applicability["release"]
+        if release["steady"] != []:
+            raise RuntimeControlError("release.steady must not require artifacts")
+        for gate, floor in TASK_MODE_ARTIFACT_FLOORS["release"].items():
+            required = release[gate]
+            if required is None or not floor <= set(required):
+                raise RuntimeControlError(
+                    "release.{} must retain fail-closed artifact requirements".format(gate)
+                )
+
+        authority_policy = value.get("mode_authority_policy")
+        if not isinstance(authority_policy, dict) or set(authority_policy) != {
+            "managed", "trusted_mode_authorities", "verification_backend"
+        }:
+            raise RuntimeControlError("mode_authority_policy fields are invalid")
+        if authority_policy.get("managed") is not True:
+            raise RuntimeControlError("mode authority policy must be managed")
+        trusted_mode_authorities = _ids(
+            authority_policy.get("trusted_mode_authorities"),
+            "mode_authority_policy.trusted_mode_authorities",
+        )
+        verification_backend = authority_policy.get("verification_backend")
+        if verification_backend not in {"not-configured", "managed-authority-registry"}:
+            raise RuntimeControlError("unsupported mode authority verification backend")
+        if trusted_mode_authorities and verification_backend == "not-configured":
+            raise RuntimeControlError(
+                "trusted mode authorities require a configured verification backend"
+            )
+        if not trusted_mode_authorities and verification_backend != "not-configured":
+            raise RuntimeControlError(
+                "mode authority backend cannot be configured without trusted authorities"
+            )
+        normalized_authority_policy = {
+            "managed": True,
+            "trusted_mode_authorities": trusted_mode_authorities,
+            "verification_backend": verification_backend,
+        }
 
     retention = value.get("retention")
     if not isinstance(retention, dict) or set(retention) != {"journal_days", "raw_content_stored"}:
@@ -162,8 +402,8 @@ def validate_policy(value: Mapping[str, Any]) -> Dict[str, Any]:
     if retention.get("raw_content_stored") is not False:
         raise RuntimeControlError("runtime control must not store raw content")
 
-    return {
-        "schema_version": POLICY_SCHEMA,
+    normalized = {
+        "schema_version": policy_schema,
         "token": {
             "checkpoint_ratio": checkpoint_ratio,
             "compact_ratio": compact_ratio,
@@ -171,9 +411,14 @@ def validate_policy(value: Mapping[str, Any]) -> Dict[str, Any]:
         },
         "context": {"compact_ratio": context_ratio},
         "progress": dict(progress),
-        "gate_policy": normalized_gates,
         "retention": dict(retention),
     }
+    if policy_schema == POLICY_SCHEMA:
+        normalized["gate_policy"] = normalized_gates
+    else:
+        normalized["artifact_applicability"] = normalized_applicability
+        normalized["mode_authority_policy"] = normalized_authority_policy
+    return normalized
 
 
 def _validate_event(value: Any) -> Dict[str, Any]:
@@ -216,6 +461,14 @@ def _initial_state(thread_id: str) -> Dict[str, Any]:
             "success_criteria": [],
             "required_evidence": [],
             "open_items_count": 0,
+            "task_mode": None,
+            "artifact_mode": None,
+            "request_sha256": None,
+            "routing_decision_sha256": None,
+            "mode_authority_id": None,
+            "intake_attestation_sha256": None,
+            "intake_provenance": None,
+            "intake_revision": 0,
         },
         "usage": {
             "observed_at": None,
@@ -246,14 +499,22 @@ def _initial_state(thread_id: str) -> Dict[str, Any]:
 
 
 def _reset_goal_state(state: Dict[str, Any], payload: Mapping[str, Any], at: datetime) -> None:
-    required = {
+    base_required = {
         "goal_id", "token_budget", "time_budget_seconds", "usage_baseline_tokens",
         "success_criteria", "required_evidence", "open_items_count",
     }
-    if set(payload) != required:
+    payload_fields = frozenset(payload)
+    if payload_fields not in {frozenset(base_required), frozenset(base_required | {"intake"})}:
         raise RuntimeControlError("goal.started payload fields are invalid")
+    goal_id = _identifier(payload.get("goal_id"), "goal.goal_id")
+    intake = None
+    if "intake" in payload:
+        intake = _validate_goal_intake(
+            payload.get("intake"), event_at=at, expected_kind="routing-decision",
+            expected_goal_id=goal_id,
+        )
     state["goal"] = {
-        "goal_id": _identifier(payload.get("goal_id"), "goal.goal_id"),
+        "goal_id": goal_id,
         "status": "active",
         "started_at": _iso(at),
         "completed_at": None,
@@ -269,6 +530,14 @@ def _reset_goal_state(state: Dict[str, Any], payload: Mapping[str, Any], at: dat
             payload.get("required_evidence"), "goal.required_evidence", non_empty=True
         ),
         "open_items_count": _integer(payload.get("open_items_count"), "goal.open_items_count"),
+        "task_mode": intake["task_mode"] if intake else None,
+        "artifact_mode": intake["artifact_mode"] if intake else None,
+        "request_sha256": intake["request_sha256"] if intake else None,
+        "routing_decision_sha256": intake["routing_decision_sha256"] if intake else None,
+        "mode_authority_id": intake["authority_id"] if intake else None,
+        "intake_attestation_sha256": intake["attestation_sha256"] if intake else None,
+        "intake_provenance": intake["provenance"] if intake else None,
+        "intake_revision": 1 if intake else 0,
     }
     state["progress"] = {
         "revision": 0,
@@ -315,9 +584,35 @@ def reduce_events(events: Iterable[Mapping[str, Any]]) -> Dict[str, Any]:
                 raise RuntimeControlError("cannot start a second active goal")
             _reset_goal_state(state, payload, at)
         elif kind == "goal.updated":
-            allowed = {"open_items_count", "token_budget", "time_budget_seconds"}
+            allowed = {
+                "open_items_count", "token_budget", "time_budget_seconds",
+                "intake", "mode_change_reason",
+            }
             if goal["status"] != "active" or not payload or not set(payload) <= allowed:
                 raise RuntimeControlError("goal.updated requires one active goal and canonical budget fields")
+            has_intake = "intake" in payload
+            has_reason = "mode_change_reason" in payload
+            if has_intake != has_reason:
+                raise RuntimeControlError(
+                    "goal.updated mode changes require intake and mode_change_reason"
+                )
+            if has_intake:
+                if payload.get("mode_change_reason") != "replan":
+                    raise RuntimeControlError("goal mode may change only through an explicit replan")
+                intake = _validate_goal_intake(
+                    payload.get("intake"), event_at=at, expected_kind="goal-replan",
+                    expected_goal_id=str(goal["goal_id"]),
+                )
+                if intake["attestation_sha256"] == goal.get("intake_attestation_sha256"):
+                    raise RuntimeControlError("goal replan must carry a new intake attestation")
+                goal["task_mode"] = intake["task_mode"]
+                goal["artifact_mode"] = intake["artifact_mode"]
+                goal["request_sha256"] = intake["request_sha256"]
+                goal["routing_decision_sha256"] = intake["routing_decision_sha256"]
+                goal["mode_authority_id"] = intake["authority_id"]
+                goal["intake_attestation_sha256"] = intake["attestation_sha256"]
+                goal["intake_provenance"] = intake["provenance"]
+                goal["intake_revision"] = int(goal.get("intake_revision") or 0) + 1
             if "open_items_count" in payload:
                 goal["open_items_count"] = _integer(
                     payload.get("open_items_count"), "goal.open_items_count"
@@ -448,6 +743,10 @@ def evaluate(
     policy: Mapping[str, Any],
     *,
     gate_event: str = "steady",
+    task_mode: Optional[str] = None,
+    mode_authority_verifier: Optional[
+        Callable[[Mapping[str, Any], Mapping[str, Any]], bool]
+    ] = None,
     as_of: Optional[datetime] = None,
 ) -> Dict[str, Any]:
     normalized_policy = validate_policy(policy)
@@ -455,12 +754,70 @@ def evaluate(
         raise RuntimeControlError("unsupported runtime control state schema")
     if gate_event not in GATE_EVENTS:
         raise RuntimeControlError("unsupported gate_event")
+    goal = state.get("goal") or {}
+    policy_schema = normalized_policy["schema_version"]
+    if policy_schema == POLICY_SCHEMA:
+        if task_mode is not None and task_mode != "implementation":
+            raise RuntimeControlError(
+                "runtime_control.policy/v1 supports only legacy implementation behavior"
+            )
+        normalized_task_mode = "implementation"
+        normalized_artifact_mode = "implementation"
+        effective_artifact_mode = "implementation"
+        mode_authority_managed = True
+    else:
+        if task_mode is not None:
+            raise RuntimeControlError(
+                "runtime_control.policy/v2 task mode is state-bound and cannot be overridden"
+            )
+        provenance = goal.get("intake_provenance")
+        if not isinstance(provenance, dict) or provenance.get("kind") not in {
+            "routing-decision", "goal-replan"
+        }:
+            raise RuntimeControlError("runtime_control.policy/v2 requires an attested goal intake")
+        last_event_at = state.get("last_event_at")
+        if not last_event_at:
+            raise RuntimeControlError("runtime control state is missing its event provenance")
+        bound_intake = _validate_goal_intake(
+            {
+                "schema_version": GOAL_INTAKE_SCHEMA,
+                "task_mode": goal.get("task_mode"),
+                "artifact_mode": goal.get("artifact_mode"),
+                "goal_id": goal.get("goal_id"),
+                "request_sha256": goal.get("request_sha256"),
+                "routing_decision_sha256": goal.get("routing_decision_sha256"),
+                "authority_id": goal.get("mode_authority_id"),
+                "attestation_sha256": goal.get("intake_attestation_sha256"),
+                "provenance": provenance,
+            },
+            event_at=_timestamp(last_event_at, "state.last_event_at"),
+            expected_kind=str(provenance["kind"]),
+            expected_goal_id=str(goal.get("goal_id")),
+        )
+        normalized_task_mode = str(bound_intake["task_mode"])
+        normalized_artifact_mode = str(bound_intake["artifact_mode"])
+        authority_policy = normalized_policy["mode_authority_policy"]
+        authority_registered = (
+            authority_policy["verification_backend"] == "managed-authority-registry"
+            and bound_intake["authority_id"]
+            in authority_policy["trusted_mode_authorities"]
+        )
+        mode_authority_managed = False
+        if authority_registered and mode_authority_verifier is not None:
+            try:
+                mode_authority_managed = mode_authority_verifier(
+                    bound_intake, authority_policy
+                ) is True
+            except Exception:
+                mode_authority_managed = False
+        effective_artifact_mode = normalized_artifact_mode
+        if not mode_authority_managed and normalized_artifact_mode == "readonly":
+            effective_artifact_mode = "implementation"
     now = as_of or datetime.now(UTC)
     if now.tzinfo is None:
         raise RuntimeControlError("as_of must include timezone")
     now = now.astimezone(UTC)
 
-    goal = state.get("goal") or {}
     usage = state.get("usage") or {}
     progress = state.get("progress") or {}
     retry = state.get("retry") or {}
@@ -473,7 +830,13 @@ def evaluate(
     evidence_present = set(evidence)
     missing_evidence = sorted(required_evidence - evidence_present)
     checkpoint_missing = sorted(set(checkpoint.get("evidence_ids") or []) - evidence_present)
-    required_artifacts = normalized_policy["gate_policy"][gate_event]
+    if policy_schema == POLICY_SCHEMA:
+        gate_applicable = True
+        required_artifacts = normalized_policy["gate_policy"][gate_event]
+    else:
+        configured_artifacts = normalized_policy["artifact_applicability"][effective_artifact_mode][gate_event]
+        gate_applicable = configured_artifacts is not None
+        required_artifacts = configured_artifacts or []
     missing_artifacts = sorted(item for item in required_artifacts if item not in artifacts)
     artifact_evidence_missing = sorted(
         item for item in required_artifacts if item in artifacts and artifacts[item] not in evidence_present
@@ -500,6 +863,8 @@ def evaluate(
 
     completion_valid = True
     if goal.get("status") == "completed":
+        if not gate_applicable:
+            reasons.append("gate-not-applicable")
         if int(goal.get("open_items_count") or 0) != 0:
             reasons.append("open-items-remain")
         if not checkpoint.get("verified"):
@@ -561,8 +926,10 @@ def evaluate(
     else:
         action = "continue"
 
-    gate_allowed = gate_event == "steady"
-    if gate_event == "apply":
+    gate_allowed = gate_event == "steady" and gate_applicable
+    if not gate_applicable:
+        gate_allowed = False
+    elif gate_event == "apply":
         gate_allowed = (
             goal.get("status") in {"active", "completed"}
             and action in {"continue", "pass"}
@@ -573,6 +940,8 @@ def evaluate(
         gate_allowed = goal.get("status") == "completed" and completion_valid
 
     if gate_event != "steady" and not gate_allowed:
+        if not gate_applicable:
+            reasons.append("gate-not-applicable")
         if missing_artifacts or artifact_evidence_missing:
             reasons.append("required-artifact-missing")
         if gate_event != "apply" and goal.get("status") != "completed":
@@ -583,15 +952,17 @@ def evaluate(
         action = "pass"
 
     reasons = list(dict.fromkeys(reasons))
-    completion_allowed = goal.get("status") == "completed" and completion_valid
+    completion_allowed = (
+        goal.get("status") == "completed" and completion_valid and gate_applicable
+    )
     status = "pass" if gate_allowed and gate_event != "steady" else (
         "pass" if completion_allowed else (
         "active" if action == "continue" else (
             "attention" if action in {"checkpoint", "compact"} else "fail"
         )
     ))
-    return {
-        "schema_version": DECISION_SCHEMA,
+    decision = {
+        "schema_version": DECISION_SCHEMA if policy_schema == POLICY_SCHEMA else DECISION_SCHEMA_V2,
         "status": status,
         "gate_event": gate_event,
         "recommended_action": action,
@@ -622,3 +993,16 @@ def evaluate(
         "artifact_evidence_missing": artifact_evidence_missing,
         "reasons": reasons,
     }
+    if policy_schema == POLICY_SCHEMA_V2:
+        decision.update({
+            "task_mode": normalized_task_mode,
+            "artifact_mode": normalized_artifact_mode,
+            "effective_artifact_mode": effective_artifact_mode,
+            "mode_authority_id": goal.get("mode_authority_id"),
+            "mode_authority_managed": mode_authority_managed,
+            "intake_attestation_sha256": goal.get("intake_attestation_sha256"),
+            "intake_provenance": goal.get("intake_provenance"),
+            "gate_applicable": gate_applicable,
+            "required_artifacts": list(required_artifacts),
+        })
+    return decision

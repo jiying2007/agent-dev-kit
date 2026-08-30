@@ -1,0 +1,299 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-dev-kit.local/schemas/agent-value-contracts-v1.schema.json",
+  "title": "ADK Agent Value Contracts V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "last_updated",
+    "identity_source",
+    "boundary",
+    "receipt_contract",
+    "emitter",
+    "evidence_authority_policy",
+    "permission_profiles",
+    "agent_contracts",
+    "asset_lifecycle",
+    "quality_kpi_policy",
+    "must_not"
+  ],
+  "properties": {
+    "schema_version": {"const": "adk-agent-value-contracts/v1"},
+    "last_updated": {"type": "string", "format": "date"},
+    "identity_source": {"const": "manifest.json"},
+    "boundary": {"$ref": "#/$defs/nonEmptyString"},
+    "receipt_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_path", "schema_version", "measurement_schema_path", "measurement_schema_version", "required_measurement_status", "max_age_days", "evidence_ref_format", "opaque_ref_fields"],
+      "properties": {
+        "schema_path": {"const": "schemas/asset-invocation-receipt-v1.schema.json"},
+        "schema_version": {"const": "adk-asset-invocation-receipt/v1"},
+        "measurement_schema_path": {"const": "schemas/asset-value-measurement-v1.schema.json"},
+        "measurement_schema_version": {"const": "adk-asset-value-measurement/v1"},
+        "required_measurement_status": {"const": "measured"},
+        "max_age_days": {"type": "integer", "minimum": 1, "maximum": 365},
+        "evidence_ref_format": {"const": "ref:<sha256>"},
+        "opaque_ref_fields": {
+          "type": "array",
+          "prefixItems": [{"const": "receipt_id"}, {"const": "invocation_ref"}, {"const": "source_trace_ref"}, {"const": "manifest_ref"}, {"const": "evidence_refs[]"}],
+          "items": false,
+          "minItems": 5,
+          "maxItems": 5
+        }
+      }
+    },
+    "emitter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "runtime_enabled", "usage_evidence", "activation_requirement", "input_mode", "measured_transition", "missing_metric_policy", "evidence_layer_policy", "api_status", "api", "automatic_runtime_integration"],
+      "properties": {
+        "status": {"const": "not-measured"},
+        "runtime_enabled": {"const": false},
+        "usage_evidence": {"const": "none-claimed"},
+        "activation_requirement": {"$ref": "#/$defs/nonEmptyString"},
+        "input_mode": {"const": "explicit-validated-receipts-only"},
+        "measured_transition": {"const": "at-least-one-valid-receipt"},
+        "missing_metric_policy": {"const": "explicit-not-measured-never-zero"},
+        "evidence_layer_policy": {"const": "never-mix-test-runtime-field"},
+        "api_status": {"const": "available"},
+        "api": {"const": "emit_measurements"},
+        "automatic_runtime_integration": {"const": false}
+      }
+    },
+    "evidence_authority_policy": {"$ref": "#/$defs/evidenceAuthorityPolicy"},
+    "permission_profiles": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["read-only", "diagnostic", "code-write", "build-release"],
+      "properties": {
+        "read-only": {"$ref": "#/$defs/permissionProfile"},
+        "diagnostic": {"$ref": "#/$defs/permissionProfile"},
+        "code-write": {"$ref": "#/$defs/permissionProfile"},
+        "build-release": {"$ref": "#/$defs/permissionProfile"}
+      }
+    },
+    "agent_contracts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/agentContract"}
+    },
+    "asset_lifecycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "applies_to",
+        "identity_resolution",
+        "retirement_signals",
+        "retirement_authority",
+        "minimum_retirement_evidence"
+      ],
+      "properties": {
+        "applies_to": {
+          "type": "array",
+          "prefixItems": [
+            {"const": "agent"},
+            {"const": "skill"},
+            {"const": "profile"}
+          ],
+          "items": false,
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "identity_resolution": {"const": "resolve-current-manifest-at-validation-time"},
+        "retirement_signals": {
+          "type": "array",
+          "prefixItems": [
+            {"const": "retain"},
+            {"const": "consolidate-candidate"},
+            {"const": "retire-candidate"},
+            {"const": "insufficient-evidence"}
+          ],
+          "items": false,
+          "minItems": 4,
+          "maxItems": 4
+        },
+        "retirement_authority": {"const": "signal-only-owner-decision-required"},
+        "minimum_retirement_evidence": {"$ref": "#/$defs/nonEmptyStrings"}
+      }
+    },
+    "quality_kpi_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["quality_kpis", "diagnostic_only", "decision_rule"],
+      "properties": {
+        "quality_kpis": {"$ref": "#/$defs/nonEmptyStrings"},
+        "diagnostic_only": {"$ref": "#/$defs/nonEmptyStrings"},
+        "decision_rule": {"$ref": "#/$defs/nonEmptyString"}
+      }
+    },
+    "must_not": {"$ref": "#/$defs/nonEmptyStrings"}
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "nonEmptyString": {"type": "string", "minLength": 1},
+    "nonEmptyStrings": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/nonEmptyString"}
+    },
+    "permissionProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rank", "allowed_effects", "allowed_tool_capabilities"],
+      "properties": {
+        "rank": {"type": "integer", "minimum": 0, "maximum": 3},
+        "allowed_effects": {"$ref": "#/$defs/nonEmptyStrings"},
+        "allowed_tool_capabilities": {"$ref": "#/$defs/nonEmptyStrings"}
+      }
+    },
+    "evidenceAuthorityPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["managed", "status", "backend", "authorities"],
+      "properties": {
+        "managed": {"const": true},
+        "status": {"enum": ["disabled", "enabled"]},
+        "backend": {"type": "string", "minLength": 1},
+        "authorities": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/evidenceAuthority"}
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"status": {"const": "disabled"}}},
+          "then": {
+            "properties": {
+              "backend": {"const": "not-configured"},
+              "authorities": {"maxItems": 0}
+            }
+          },
+          "else": {
+            "properties": {
+              "backend": {"not": {"const": "not-configured"}},
+              "authorities": {"minItems": 1}
+            }
+          }
+        }
+      ]
+    },
+    "evidenceAuthority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["authority_id", "backend", "allowed_layers", "runtime_targets", "production"],
+      "properties": {
+        "authority_id": {"$ref": "#/$defs/identifier"},
+        "backend": {"$ref": "#/$defs/nonEmptyString"},
+        "allowed_layers": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"enum": ["runtime", "field"]}
+        },
+        "runtime_targets": {"$ref": "#/$defs/nonEmptyStrings"},
+        "production": {"const": false}
+      }
+    },
+    "agentContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "agent_id",
+        "role_contract",
+        "permission_envelope",
+        "decision_authority",
+        "handoff",
+        "required_evidence",
+        "assumption_scope",
+        "eval_suite"
+      ],
+      "properties": {
+        "agent_id": {"$ref": "#/$defs/identifier"},
+        "role_contract": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["inputs", "outputs"],
+          "properties": {
+            "inputs": {"$ref": "#/$defs/nonEmptyStrings"},
+            "outputs": {"$ref": "#/$defs/nonEmptyStrings"}
+          }
+        },
+        "permission_envelope": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["permission_profile", "allowed_effects", "tool_capabilities"],
+          "properties": {
+            "permission_profile": {"enum": ["read-only", "diagnostic", "code-write", "build-release"]},
+            "allowed_effects": {"$ref": "#/$defs/nonEmptyStrings"},
+            "tool_capabilities": {"$ref": "#/$defs/nonEmptyStrings"}
+          }
+        },
+        "decision_authority": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "owned_domains_source",
+            "non_owned_domains_source",
+            "may_recommend_outside_owned_domains",
+            "must_escalate"
+          ],
+          "properties": {
+            "owned_domains_source": {"const": "manifest.agents[].owns"},
+            "non_owned_domains_source": {"const": "manifest.agents[].does_not_own"},
+            "may_recommend_outside_owned_domains": {"const": false},
+            "must_escalate": {"$ref": "#/$defs/nonEmptyStrings"}
+          }
+        },
+        "handoff": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["allowed_targets", "required_payload"],
+          "properties": {
+            "allowed_targets": {"$ref": "#/$defs/nonEmptyStrings"},
+            "required_payload": {"$ref": "#/$defs/nonEmptyStrings"}
+          }
+        },
+        "required_evidence": {"$ref": "#/$defs/nonEmptyStrings"},
+        "assumption_scope": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["allowed", "must_not_assume"],
+          "properties": {
+            "allowed": {"$ref": "#/$defs/nonEmptyStrings"},
+            "must_not_assume": {"$ref": "#/$defs/nonEmptyStrings"}
+          }
+        },
+        "eval_suite": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["suite_id", "required_case_types"],
+          "properties": {
+            "suite_id": {"$ref": "#/$defs/identifier"},
+            "required_case_types": {
+              "type": "array",
+              "prefixItems": [
+                {"const": "role-positive"},
+                {"const": "authority-negative"},
+                {"const": "permission-negative"},
+                {"const": "handoff"},
+                {"const": "evidence-gap"}
+              ],
+              "items": false,
+              "minItems": 5,
+              "maxItems": 5
+            }
+          }
+        }
+      }
+    }
+  }
+}

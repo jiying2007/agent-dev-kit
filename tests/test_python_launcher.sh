@@ -40,6 +40,33 @@ if ADK_REQUIRE_SUPPORTED_PYTHON=invalid \
 fi
 rg -q --fixed-strings -- "ADK_REQUIRE_SUPPORTED_PYTHON must be 0 or 1" "$TMP_DIR/invalid.out"
 
+auto_bin="$TMP_DIR/auto-bin"
+mkdir -p "$auto_bin"
+cat >"$auto_bin/python3.12" <<'SH'
+#!/usr/bin/env bash
+set -euo pipefail
+if [[ "${1:-}" == "-c" ]]; then
+  echo "3.12.9 1"
+  exit 0
+fi
+echo "auto-selected-python3.12"
+SH
+cat >"$auto_bin/python3.11" <<'SH'
+#!/usr/bin/env bash
+echo "[FAIL] python3.11 fixture selected before python3.12" >&2
+exit 98
+SH
+cat >"$auto_bin/python3" <<'SH'
+#!/usr/bin/env bash
+echo "[FAIL] python3 fixture selected before python3.12" >&2
+exit 97
+SH
+chmod +x "$auto_bin/python3.12" "$auto_bin/python3.11" "$auto_bin/python3"
+
+env -u ADK_PYTHON_BIN PATH="$auto_bin:$PATH" \
+  bash "$ROOT_DIR/scripts/devkit.sh" help >"$TMP_DIR/auto.out" 2>"$TMP_DIR/auto.err"
+rg -q --fixed-strings -- "auto-selected-python3.12" "$TMP_DIR/auto.out"
+
 ADK_PYTHON_BIN=python3 bash "$ROOT_DIR/scripts/devkit.sh" help >"$TMP_DIR/help.out" 2>"$TMP_DIR/help.err"
 rg -q --fixed-strings -- "Commands:" "$TMP_DIR/help.out"
 

@@ -1,5 +1,5 @@
 {
-  "schema": "adk-target-contract/v1",
+  "schema": "adk-target-contract/v2",
   "target": "hermes-agent",
   "status": "experimental",
   "source": {
@@ -27,5 +27,41 @@
   },
   "permission_profiles": {},
   "support_directories": ["references", "scripts", "assets", "templates", "examples"],
-  "smoke_stages": ["discovery", "load", "trigger"]
+  "smoke_stages": ["discovery", "load", "trigger"],
+  "adapter": {
+    "adapter_id": "hermes-agent-direct-target",
+    "runtime_boundary": "ADK renders and statically validates skill assets only; Hermes Agent owns all native runtime and session behavior.",
+    "capabilities": {
+      "discovery": "declared-static",
+      "load": "declared-static",
+      "trigger": "declared-static",
+      "permission": "unsupported",
+      "resume": "unknown",
+      "cancel": "unknown",
+      "rollback": "declared-static",
+      "trace": "unknown"
+    },
+    "conformance": {
+      "level": "static",
+      "certification": "not-certified",
+      "native_runtime_smoke": "not-run",
+      "runtime_binary": null,
+      "runtime_binary_sha256": null,
+      "runtime_version": null,
+      "runtime_version_pin": null,
+      "last_verified_at": null,
+      "evidence": []
+    },
+    "conformance_trust_policy": {
+      "enabled": false,
+      "trusted_authorities": [],
+      "verification_backend": "not-configured"
+    },
+    "failure_semantics": [
+      "agent asset selection fails before writing because Hermes Agent supports skill assets only",
+      "skill export success must not be treated as native runtime capability evidence",
+      "ADK receipt rollback does not claim runtime session rollback"
+    ],
+    "trace_contract": "adk-workflow-trace-summary-v1"
+  }
 }

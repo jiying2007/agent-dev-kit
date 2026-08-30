@@ -96,10 +96,15 @@ TESTS=(
   test_official_docs_timezone.sh
   test_intent_boundary_governance.sh
   test_agent_ecosystem_standards.sh
+  test_agent_value.sh
+  test_trace_summary.sh
+  test_run_evidence.sh
+  test_effect_comparator.sh
   test_runtime_capabilities.sh
   test_tool_skill_evidence_contracts.sh
   test_asset_taxonomy.sh
   test_workflow_contract.sh
+  test_workflow_ir.sh
   test_workflow_closure.sh
   test_goal_contracts.sh
   test_capability_health.sh
@@ -108,6 +113,7 @@ TESTS=(
   test_performance_budgets.sh
   test_change_governance.sh
   test_evidence_index.sh
+  test_evidence_graph.sh
   test_fallback_sunset_matrix.sh
   test_pilot_readiness.sh
   test_embedded_production_field_pilot.sh
@@ -149,16 +155,21 @@ QUICK_TESTS=(
   test_intent_boundary_governance.sh
   test_official_docs_timezone.sh
   test_agent_ecosystem_standards.sh
+  test_agent_value.sh
+  test_trace_summary.sh
+  test_run_evidence.sh
+  test_effect_comparator.sh
   test_workflow_contract.sh
+  test_workflow_ir.sh
   test_workflow_closure.sh
   test_workflow_verify_fail_closed.sh
   test_goal_contracts.sh
+  test_evidence_graph.sh
   test_capability_health.sh
   test_harness_readiness.sh
   test_local_ci_parity.sh
   test_performance_budgets.sh
   test_skill_trigger_matrix.sh
-  test_match_effectiveness.sh
   test_scripts_smoke.sh
 )
 

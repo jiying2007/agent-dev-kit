@@ -1,0 +1,536 @@
+{
+  "schema_version": "adk-agent-value-contracts/v1",
+  "last_updated": "2026-08-30",
+  "identity_source": "manifest.json",
+  "boundary": "This contract references current manifest identities and defines value-governance semantics only. The explicit emit_measurements API may derive scoped measurements from validated receipt inputs, but it does not collect or automatically persist receipts or measurements, claim global runtime usage, enable a runtime, grant permissions, or authorize consolidation, promotion, or retirement. Test receipts are structural-only evidence. Runtime and field receipts require an enabled managed authority registry, a scope-bound authority attestation, and an injected external verifier; the canonical policy is disabled and has no configured authorities. V1 accepts only non-production authority entries and always reports quality evidence as ineligible; production authority requires a separate versioned managed-registry change.",
+  "receipt_contract": {
+    "schema_path": "schemas/asset-invocation-receipt-v1.schema.json",
+    "schema_version": "adk-asset-invocation-receipt/v1",
+    "measurement_schema_path": "schemas/asset-value-measurement-v1.schema.json",
+    "measurement_schema_version": "adk-asset-value-measurement/v1",
+    "required_measurement_status": "measured",
+    "max_age_days": 30,
+    "evidence_ref_format": "ref:<sha256>",
+    "opaque_ref_fields": ["receipt_id", "invocation_ref", "source_trace_ref", "manifest_ref", "evidence_refs[]"]
+  },
+  "emitter": {
+    "status": "not-measured",
+    "runtime_enabled": false,
+    "usage_evidence": "none-claimed",
+    "activation_requirement": "A reviewed runtime adapter must emit measured, schema-valid, sanitized receipts with durable evidence references.",
+    "input_mode": "explicit-validated-receipts-only",
+    "measured_transition": "at-least-one-valid-receipt",
+    "missing_metric_policy": "explicit-not-measured-never-zero",
+    "evidence_layer_policy": "never-mix-test-runtime-field",
+    "api_status": "available",
+    "api": "emit_measurements",
+    "automatic_runtime_integration": false
+  },
+  "evidence_authority_policy": {
+    "managed": true,
+    "status": "disabled",
+    "backend": "not-configured",
+    "authorities": []
+  },
+  "permission_profiles": {
+    "read-only": {
+      "rank": 0,
+      "allowed_effects": ["read-only"],
+      "allowed_tool_capabilities": ["repository-read", "static-analysis"]
+    },
+    "diagnostic": {
+      "rank": 1,
+      "allowed_effects": ["read-only", "diagnostic-execution"],
+      "allowed_tool_capabilities": [
+        "repository-read",
+        "static-analysis",
+        "diagnostic-command",
+        "runtime-observation"
+      ]
+    },
+    "code-write": {
+      "rank": 2,
+      "allowed_effects": ["read-only", "diagnostic-execution", "workspace-write"],
+      "allowed_tool_capabilities": [
+        "repository-read",
+        "static-analysis",
+        "diagnostic-command",
+        "runtime-observation",
+        "workspace-edit",
+        "test-execution"
+      ]
+    },
+    "build-release": {
+      "rank": 3,
+      "allowed_effects": [
+        "read-only",
+        "diagnostic-execution",
+        "workspace-write",
+        "build-artifact-write",
+        "release-preparation"
+      ],
+      "allowed_tool_capabilities": [
+        "repository-read",
+        "static-analysis",
+        "diagnostic-command",
+        "runtime-observation",
+        "workspace-edit",
+        "test-execution",
+        "build-execution",
+        "artifact-packaging",
+        "rollback-preparation"
+      ]
+    }
+  },
+  "agent_contracts": [
+    {
+      "agent_id": "requirements-analyst",
+      "role_contract": {
+        "inputs": ["problem-statement", "explicit-constraints", "stakeholder-evidence"],
+        "outputs": ["scope-boundary", "acceptance-criteria", "requirement-risk-register"]
+      },
+      "permission_envelope": {
+        "permission_profile": "read-only",
+        "allowed_effects": ["read-only"],
+        "tool_capabilities": ["repository-read", "static-analysis"]
+      },
+      "decision_authority": {
+        "owned_domains_source": "manifest.agents[].owns",
+        "non_owned_domains_source": "manifest.agents[].does_not_own",
+        "may_recommend_outside_owned_domains": false,
+        "must_escalate": ["implementation-choice", "release-decision", "risk-acceptance"]
+      },
+      "handoff": {
+        "allowed_targets": ["architecture-planner", "test-validation-engineer", "code-review-governor"],
+        "required_payload": ["scope-boundary", "acceptance-criteria", "open-questions"]
+      },
+      "required_evidence": ["source-context", "requirement-to-acceptance-trace", "explicit-non-goals"],
+      "assumption_scope": {
+        "allowed": ["facts-observed-in-authoritative-input", "explicit-user-constraints"],
+        "must_not_assume": ["unstated-product-goals", "implementation-authority", "release-authority"]
+      },
+      "eval_suite": {
+        "suite_id": "requirements-analyst-value-v1",
+        "required_case_types": ["role-positive", "authority-negative", "permission-negative", "handoff", "evidence-gap"]
+      }
+    },
+    {
+      "agent_id": "architecture-planner",
+      "role_contract": {
+        "inputs": ["validated-requirements", "current-architecture-evidence", "constraints-and-risks"],
+        "outputs": ["architecture-options", "interface-boundaries", "decision-record-candidate"]
+      },
+      "permission_envelope": {
+        "permission_profile": "read-only",
+        "allowed_effects": ["read-only"],
+        "tool_capabilities": ["repository-read", "static-analysis"]
+      },
+      "decision_authority": {
+        "owned_domains_source": "manifest.agents[].owns",
+        "non_owned_domains_source": "manifest.agents[].does_not_own",
+        "may_recommend_outside_owned_domains": false,
+        "must_escalate": ["scope-change", "direct-implementation", "release-signoff"]
+      },
+      "handoff": {
+        "allowed_targets": ["component-engineer", "driver-engineer", "code-review-governor"],
+        "required_payload": ["selected-option", "interface-contract", "risks-and-fallback"]
+      },
+      "required_evidence": ["current-state-evidence", "option-tradeoff", "compatibility-impact"],
+      "assumption_scope": {
+        "allowed": ["documented-system-invariants", "validated-requirements"],
+        "must_not_assume": ["unverified-runtime-capability", "implementation-completion", "owner-approval"]
+      },
+      "eval_suite": {
+        "suite_id": "architecture-planner-value-v1",
+        "required_case_types": ["role-positive", "authority-negative", "permission-negative", "handoff", "evidence-gap"]
+      }
+    },
+    {
+      "agent_id": "driver-engineer",
+      "role_contract": {
+        "inputs": ["driver-requirements", "hardware-contract", "bringup-evidence"],
+        "outputs": ["driver-change", "bringup-result", "hardware-risk-handoff"]
+      },
+      "permission_envelope": {
+        "permission_profile": "code-write",
+        "allowed_effects": ["read-only", "diagnostic-execution", "workspace-write"],
+        "tool_capabilities": ["repository-read", "static-analysis", "diagnostic-command", "runtime-observation", "workspace-edit", "test-execution"]
+      },
+      "decision_authority": {
+        "owned_domains_source": "manifest.agents[].owns",
+        "non_owned_domains_source": "manifest.agents[].does_not_own",
+        "may_recommend_outside_owned_domains": false,
+        "must_escalate": ["product-scope-change", "unsafe-hardware-state", "release-signoff"]
+      },
+      "handoff": {
+        "allowed_targets": ["test-validation-engineer", "code-review-governor"],
+        "required_payload": ["change-summary", "bringup-evidence", "known-limitations"]
+      },
+      "required_evidence": ["hardware-source-reference", "deterministic-test-result", "failure-path-result"],
+      "assumption_scope": {
+        "allowed": ["verified-register-contract", "observed-board-state"],
+        "must_not_assume": ["undocumented-silicon-behavior", "test-pass", "release-approval"]
+      },
+      "eval_suite": {
+        "suite_id": "driver-engineer-value-v1",
+        "required_case_types": ["role-positive", "authority-negative", "permission-negative", "handoff", "evidence-gap"]
+      }
+    },
+    {
+      "agent_id": "component-engineer",
+      "role_contract": {
+        "inputs": ["component-contract", "dependency-boundaries", "acceptance-criteria"],
+        "outputs": ["component-change", "api-compatibility-result", "integration-handoff"]
+      },
+      "permission_envelope": {
+        "permission_profile": "code-write",
+        "allowed_effects": ["read-only", "diagnostic-execution", "workspace-write"],
+        "tool_capabilities": ["repository-read", "static-analysis", "diagnostic-command", "runtime-observation", "workspace-edit", "test-execution"]
+      },
+      "decision_authority": {
+        "owned_domains_source": "manifest.agents[].owns",
+        "non_owned_domains_source": "manifest.agents[].does_not_own",
+        "may_recommend_outside_owned_domains": false,
+        "must_escalate": ["requirement-redefinition", "public-api-break", "release-strategy"]
+      },
+      "handoff": {
+        "allowed_targets": ["test-validation-engineer", "code-review-governor"],
+        "required_payload": ["change-summary", "contract-diff", "validation-result"]
+      },
+      "required_evidence": ["call-site-analysis", "behavioral-test-result", "compatibility-assessment"],
+      "assumption_scope": {
+        "allowed": ["declared-component-contract", "current-call-site-evidence"],
+        "must_not_assume": ["downstream-compatibility", "implicit-requirement-change", "release-approval"]
+      },
+      "eval_suite": {
+        "suite_id": "component-engineer-value-v1",
+        "required_case_types": ["role-positive", "authority-negative", "permission-negative", "handoff", "evidence-gap"]
+      }
+    },
+    {
+      "agent_id": "application-engineer",
+      "role_contract": {
+        "inputs": ["application-requirements", "interface-contracts", "user-workflow-evidence"],
+        "outputs": ["application-change", "behavior-validation", "operator-handoff"]
+      },
+      "permission_envelope": {
+        "permission_profile": "code-write",
+        "allowed_effects": ["read-only", "diagnostic-execution", "workspace-write"],
+        "tool_capabilities": ["repository-read", "static-analysis", "diagnostic-command", "runtime-observation", "workspace-edit", "test-execution"]
+      },
+      "decision_authority": {
+        "owned_domains_source": "manifest.agents[].owns",
+        "non_owned_domains_source": "manifest.agents[].does_not_own",
+        "may_recommend_outside_owned_domains": false,
+        "must_escalate": ["architecture-decision", "external-side-effect", "release-signoff"]
+      },
+      "handoff": {
+        "allowed_targets": ["test-validation-engineer", "code-review-governor"],
+        "required_payload": ["change-summary", "user-visible-impact", "validation-result"]
+      },
+      "required_evidence": ["interface-conformance", "behavioral-test-result", "error-path-result"],
+      "assumption_scope": {
+        "allowed": ["validated-interface-contract", "observed-user-workflow"],
+        "must_not_assume": ["architecture-approval", "external-write-authority", "release-approval"]
+      },
+      "eval_suite": {
+        "suite_id": "application-engineer-value-v1",
+        "required_case_types": ["role-positive", "authority-negative", "permission-negative", "handoff", "evidence-gap"]
+      }
+    },
+    {
+      "agent_id": "build-release-engineer",
+      "role_contract": {
+        "inputs": ["approved-change-set", "release-policy", "rollback-contract"],
+        "outputs": ["build-artifacts", "release-readiness-result", "rollback-evidence"]
+      },
+      "permission_envelope": {
+        "permission_profile": "build-release",
+        "allowed_effects": ["read-only", "diagnostic-execution", "workspace-write", "build-artifact-write", "release-preparation"],
+        "tool_capabilities": ["repository-read", "static-analysis", "diagnostic-command", "runtime-observation", "workspace-edit", "test-execution", "build-execution", "artifact-packaging", "rollback-preparation"]
+      },
+      "decision_authority": {
+        "owned_domains_source": "manifest.agents[].owns",
+        "non_owned_domains_source": "manifest.agents[].does_not_own",
+        "may_recommend_outside_owned_domains": false,
+        "must_escalate": ["requirement-change", "security-waiver", "external-publish-authorization"]
+      },
+      "handoff": {
+        "allowed_targets": ["security-compliance-reviewer", "performance-reliability-engineer"],
+        "required_payload": ["artifact-digests", "release-gate-result", "rollback-result"]
+      },
+      "required_evidence": ["reproducible-build-result", "artifact-provenance", "rollback-rehearsal"],
+      "assumption_scope": {
+        "allowed": ["approved-release-policy", "verified-change-set"],
+        "must_not_assume": ["security-waiver", "external-publish-authority", "field-readiness"]
+      },
+      "eval_suite": {
+        "suite_id": "build-release-engineer-value-v1",
+        "required_case_types": ["role-positive", "authority-negative", "permission-negative", "handoff", "evidence-gap"]
+      }
+    },
+    {
+      "agent_id": "test-validation-engineer",
+      "role_contract": {
+        "inputs": ["acceptance-criteria", "change-evidence", "risk-register"],
+        "outputs": ["test-strategy", "verification-result", "evidence-gap-report"]
+      },
+      "permission_envelope": {
+        "permission_profile": "read-only",
+        "allowed_effects": ["read-only"],
+        "tool_capabilities": ["repository-read", "static-analysis"]
+      },
+      "decision_authority": {
+        "owned_domains_source": "manifest.agents[].owns",
+        "non_owned_domains_source": "manifest.agents[].does_not_own",
+        "may_recommend_outside_owned_domains": false,
+        "must_escalate": ["implementation-change", "risk-waiver", "release-execution"]
+      },
+      "handoff": {
+        "allowed_targets": ["code-review-governor", "build-release-engineer"],
+        "required_payload": ["verification-result", "coverage-boundary", "remaining-risks"]
+      },
+      "required_evidence": ["acceptance-trace", "fresh-command-output", "negative-path-result"],
+      "assumption_scope": {
+        "allowed": ["declared-acceptance-criteria", "fresh-observed-results"],
+        "must_not_assume": ["untested-behavior", "risk-acceptance", "release-authorization"]
+      },
+      "eval_suite": {
+        "suite_id": "test-validation-engineer-value-v1",
+        "required_case_types": ["role-positive", "authority-negative", "permission-negative", "handoff", "evidence-gap"]
+      }
+    },
+    {
+      "agent_id": "performance-reliability-engineer",
+      "role_contract": {
+        "inputs": ["performance-objective", "runtime-observation", "failure-evidence"],
+        "outputs": ["performance-analysis", "reliability-risk", "optimization-evidence"]
+      },
+      "permission_envelope": {
+        "permission_profile": "diagnostic",
+        "allowed_effects": ["read-only", "diagnostic-execution"],
+        "tool_capabilities": ["repository-read", "static-analysis", "diagnostic-command", "runtime-observation"]
+      },
+      "decision_authority": {
+        "owned_domains_source": "manifest.agents[].owns",
+        "non_owned_domains_source": "manifest.agents[].does_not_own",
+        "may_recommend_outside_owned_domains": false,
+        "must_escalate": ["feature-tradeoff", "security-signoff", "release-authorization"]
+      },
+      "handoff": {
+        "allowed_targets": ["build-release-engineer", "code-review-governor"],
+        "required_payload": ["measurement-method", "baseline-comparison", "reliability-risks"]
+      },
+      "required_evidence": ["measurement-environment", "baseline-and-candidate-result", "repeatability-boundary"],
+      "assumption_scope": {
+        "allowed": ["measured-runtime-state", "declared-performance-objective"],
+        "must_not_assume": ["unmeasured-bottleneck", "field-reliability", "release-readiness"]
+      },
+      "eval_suite": {
+        "suite_id": "performance-reliability-engineer-value-v1",
+        "required_case_types": ["role-positive", "authority-negative", "permission-negative", "handoff", "evidence-gap"]
+      }
+    },
+    {
+      "agent_id": "security-compliance-reviewer",
+      "role_contract": {
+        "inputs": ["change-boundary", "supply-chain-evidence", "data-flow-contract"],
+        "outputs": ["security-findings", "compliance-gaps", "risk-escalation"]
+      },
+      "permission_envelope": {
+        "permission_profile": "read-only",
+        "allowed_effects": ["read-only"],
+        "tool_capabilities": ["repository-read", "static-analysis"]
+      },
+      "decision_authority": {
+        "owned_domains_source": "manifest.agents[].owns",
+        "non_owned_domains_source": "manifest.agents[].does_not_own",
+        "may_recommend_outside_owned_domains": false,
+        "must_escalate": ["functional-implementation", "risk-acceptance", "release-execution"]
+      },
+      "handoff": {
+        "allowed_targets": ["build-release-engineer", "code-review-governor"],
+        "required_payload": ["finding-severity", "supporting-evidence", "required-remediation"]
+      },
+      "required_evidence": ["threat-boundary", "dependency-provenance", "sensitive-data-review"],
+      "assumption_scope": {
+        "allowed": ["verified-data-flow", "declared-trust-boundary"],
+        "must_not_assume": ["credential-safety", "risk-waiver", "release-authorization"]
+      },
+      "eval_suite": {
+        "suite_id": "security-compliance-reviewer-value-v1",
+        "required_case_types": ["role-positive", "authority-negative", "permission-negative", "handoff", "evidence-gap"]
+      }
+    },
+    {
+      "agent_id": "code-review-governor",
+      "role_contract": {
+        "inputs": ["change-diff", "requirements-and-design", "verification-evidence"],
+        "outputs": ["review-findings", "finding-verification", "quality-disposition"]
+      },
+      "permission_envelope": {
+        "permission_profile": "read-only",
+        "allowed_effects": ["read-only"],
+        "tool_capabilities": ["repository-read", "static-analysis"]
+      },
+      "decision_authority": {
+        "owned_domains_source": "manifest.agents[].owns",
+        "non_owned_domains_source": "manifest.agents[].does_not_own",
+        "may_recommend_outside_owned_domains": false,
+        "must_escalate": ["direct-code-fix", "requirement-redefinition", "release-execution"]
+      },
+      "handoff": {
+        "allowed_targets": ["requirements-analyst", "test-validation-engineer"],
+        "required_payload": ["verified-findings", "severity-rationale", "remaining-risks"]
+      },
+      "required_evidence": ["diff-location", "reproduction-or-proof", "verification-result"],
+      "assumption_scope": {
+        "allowed": ["observed-diff", "provided-requirements-and-evidence"],
+        "must_not_assume": ["finding-truth-without-proof", "fix-completion", "release-authorization"]
+      },
+      "eval_suite": {
+        "suite_id": "code-review-governor-value-v1",
+        "required_case_types": ["role-positive", "authority-negative", "permission-negative", "handoff", "evidence-gap"]
+      }
+    },
+    {
+      "agent_id": "bsp-analyst",
+      "role_contract": {
+        "inputs": ["bsp-source-tree", "platform-contract", "history-evidence"],
+        "outputs": ["bsp-architecture-map", "dependency-analysis", "implementation-handoff"]
+      },
+      "permission_envelope": {
+        "permission_profile": "read-only",
+        "allowed_effects": ["read-only"],
+        "tool_capabilities": ["repository-read", "static-analysis"]
+      },
+      "decision_authority": {
+        "owned_domains_source": "manifest.agents[].owns",
+        "non_owned_domains_source": "manifest.agents[].does_not_own",
+        "may_recommend_outside_owned_domains": false,
+        "must_escalate": ["driver-implementation", "architecture-change", "release-signoff"]
+      },
+      "handoff": {
+        "allowed_targets": ["driver-engineer", "architecture-planner"],
+        "required_payload": ["source-map", "historical-evidence", "open-hardware-risks"]
+      },
+      "required_evidence": ["source-location", "dependency-trace", "history-provenance"],
+      "assumption_scope": {
+        "allowed": ["observed-bsp-source", "verified-version-history"],
+        "must_not_assume": ["hardware-behavior", "implementation-authority", "release-readiness"]
+      },
+      "eval_suite": {
+        "suite_id": "bsp-analyst-value-v1",
+        "required_case_types": ["role-positive", "authority-negative", "permission-negative", "handoff", "evidence-gap"]
+      }
+    },
+    {
+      "agent_id": "external-practice-curator",
+      "role_contract": {
+        "inputs": ["external-source-metadata", "candidate-practice", "adoption-boundary"],
+        "outputs": ["provenance-review", "candidate-deduplication", "adoption-decision-material"]
+      },
+      "permission_envelope": {
+        "permission_profile": "read-only",
+        "allowed_effects": ["read-only"],
+        "tool_capabilities": ["repository-read", "static-analysis"]
+      },
+      "decision_authority": {
+        "owned_domains_source": "manifest.agents[].owns",
+        "non_owned_domains_source": "manifest.agents[].does_not_own",
+        "may_recommend_outside_owned_domains": false,
+        "must_escalate": ["candidate-approval", "code-implementation", "installation-or-release"]
+      },
+      "handoff": {
+        "allowed_targets": ["requirements-analyst", "architecture-planner", "security-compliance-reviewer", "test-validation-engineer", "code-review-governor"],
+        "required_payload": ["source-provenance", "license-and-security-boundary", "candidate-recommendation"]
+      },
+      "required_evidence": ["source-revision", "retrieval-date", "license-and-security-review"],
+      "assumption_scope": {
+        "allowed": ["verified-source-metadata", "explicit-adoption-criteria"],
+        "must_not_assume": ["source-trust", "candidate-approval", "runtime-compatibility"]
+      },
+      "eval_suite": {
+        "suite_id": "external-practice-curator-value-v1",
+        "required_case_types": ["role-positive", "authority-negative", "permission-negative", "handoff", "evidence-gap"]
+      }
+    },
+    {
+      "agent_id": "hardware-debugger",
+      "role_contract": {
+        "inputs": ["hardware-symptom", "diagnostic-access-boundary", "runtime-evidence"],
+        "outputs": ["fault-hypotheses", "diagnostic-result", "repair-handoff"]
+      },
+      "permission_envelope": {
+        "permission_profile": "diagnostic",
+        "allowed_effects": ["read-only", "diagnostic-execution"],
+        "tool_capabilities": ["repository-read", "static-analysis", "diagnostic-command", "runtime-observation"]
+      },
+      "decision_authority": {
+        "owned_domains_source": "manifest.agents[].owns",
+        "non_owned_domains_source": "manifest.agents[].does_not_own",
+        "may_recommend_outside_owned_domains": false,
+        "must_escalate": ["unsafe-device-operation", "long-term-architecture", "release-signoff"]
+      },
+      "handoff": {
+        "allowed_targets": ["driver-engineer", "test-validation-engineer"],
+        "required_payload": ["reproduction-boundary", "diagnostic-evidence", "remaining-hypotheses"]
+      },
+      "required_evidence": ["device-state", "single-variable-experiment", "failure-or-recovery-result"],
+      "assumption_scope": {
+        "allowed": ["observed-device-state", "verified-diagnostic-output"],
+        "must_not_assume": ["root-cause-without-evidence", "safe-destructive-action", "release-readiness"]
+      },
+      "eval_suite": {
+        "suite_id": "hardware-debugger-value-v1",
+        "required_case_types": ["role-positive", "authority-negative", "permission-negative", "handoff", "evidence-gap"]
+      }
+    }
+  ],
+  "asset_lifecycle": {
+    "applies_to": ["agent", "skill", "profile"],
+    "identity_resolution": "resolve-current-manifest-at-validation-time",
+    "retirement_signals": ["retain", "consolidate-candidate", "retire-candidate", "insufficient-evidence"],
+    "retirement_authority": "signal-only-owner-decision-required",
+    "minimum_retirement_evidence": [
+      "multiple-measured-invocations",
+      "representative-success-and-failure",
+      "wrong-route-and-abstain-analysis",
+      "replacement-or-removal-impact",
+      "owner-review"
+    ]
+  },
+  "quality_kpi_policy": {
+    "quality_kpis": [
+      "task-success-rate",
+      "first-pass-success-rate",
+      "wrong-route-rate",
+      "abstain-precision",
+      "human-interventions-per-task",
+      "time-to-trustworthy-change",
+      "escaped-defect-rate",
+      "rollback-rate"
+    ],
+    "diagnostic_only": [
+      "agent-count",
+      "skill-count",
+      "profile-count",
+      "invocation-count",
+      "pr-count",
+      "report-count",
+      "input-tokens",
+      "output-tokens",
+      "total-tokens"
+    ],
+    "decision_rule": "Consolidation or retirement requires measured outcome evidence and owner review; volume and token diagnostics cannot prove quality."
+  },
+  "must_not": [
+    "copy Agent Skill or Profile identity metadata from manifest into a parallel catalog",
+    "treat invocation count asset count pull request count report count or token volume as a quality KPI",
+    "emit or persist synthetic usage as runtime or field evidence",
+    "enable production authority or quality evidence eligibility through an input contract callback or temporary registry",
+    "store prompts messages raw logs credentials tool payloads or operator identity",
+    "treat a retirement signal as deletion disablement or owner approval",
+    "grant permission beyond the current manifest permission profile"
+  ]
+}

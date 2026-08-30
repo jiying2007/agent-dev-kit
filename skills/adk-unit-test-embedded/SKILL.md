@@ -1,8 +1,8 @@
 ---
 name: adk-unit-test-embedded
 description: 嵌入式单元测试策略与样例
-version: 1.0.0
-last_updated: 2026-05-06
+version: 1.1.0
+last_updated: 2026-08-30
 triggers:
   - "单元测试"
   - "写测试"
@@ -25,6 +25,7 @@ constraints:
 ## Prerequisites
 - 明确模块输入输出、依赖替身（mock/stub）策略。
 - 定义最小覆盖目标（关键路径与错误路径）。
+- 需要跨板级、SIL/HIL、boot、OTA 或现场层次时使用 `references/embedded-tdd-matrix.md`。
 
 ## Workflow
 1. 提炼可测单元：隔离外设依赖与全局状态。

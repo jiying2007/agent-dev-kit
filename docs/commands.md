@@ -4,8 +4,9 @@
 
 解释器入口：
 
-- 默认使用 `python3`；若版本低于 3.11，除 `doctor` 外会明确标记结果仅供开发，
-  不能作为 release evidence。
+- 未设置 `ADK_PYTHON_BIN` 时按 `python3.12 -> python3.11 -> python3` 选择；这会
+  优先复用已安装的受审查解释器。若最终版本低于 3.11，除 `doctor` 外会明确
+  标记结果仅供开发，不能作为 release evidence。
 - 使用 `ADK_PYTHON_BIN=/reviewed/python3.12` 显式选择解释器。
 - 发布、制品或认证前设置 `ADK_REQUIRE_SUPPORTED_PYTHON=1`，旧解释器会在 CLI
   执行前 fail-fast。
@@ -446,10 +447,10 @@ bash scripts/devkit.sh security check --summary-json
 
 ```bash
 bash scripts/devkit.sh release check
-bash scripts/devkit.sh release build --version 4.0.0 --out dist --summary-json
-bash scripts/devkit.sh release runtime-build --version 4.0.0 --profile team-core --out dist --summary-json
-bash scripts/devkit.sh release rehearse --previous-artifact /tmp/agent-dev-kit-3.1.0-rc.7.tar.gz --candidate-artifact dist/agent-dev-kit-4.0.0.tar.gz --output /tmp/adk-release-rehearsal.json
-bash scripts/devkit.sh release publish --version 4.0.0 --backend github --artifact dist/agent-dev-kit-4.0.0.tar.gz --dry-run
+bash scripts/devkit.sh release build --version 5.0.0-rc.1 --out dist --summary-json
+bash scripts/devkit.sh release runtime-build --version 5.0.0-rc.1 --profile team-core --out dist --summary-json
+bash scripts/devkit.sh release rehearse --previous-artifact /tmp/agent-dev-kit-4.0.0.tar.gz --candidate-artifact dist/agent-dev-kit-5.0.0-rc.1.tar.gz --output /tmp/adk-release-rehearsal.json
+bash scripts/devkit.sh release publish --version 5.0.0-rc.1 --backend github --artifact dist/agent-dev-kit-5.0.0-rc.1.tar.gz --dry-run
 ```
 
 `release rehearse` 只接受 checksum 匹配且 candidate 版本更高的本地 artifact；它在临时 target 安装上一版、升级候选版、核验 receipt，再回滚并比较上一版受管资产 hash。rc.1 legacy bundle 或缺少当前必填 target contract 字段的上一版会在 release-only migration boundary 建立受管 receipt，再执行 rollback-before-install；active loader 仍 fail closed。candidate 回滚后，从保留的上一版 artifact 重装并逐文件比对 managed hashes，证明 fallback anchor 可用。build 在归档前校验 SPDX 2.3 SBOM 的 package/relationship 完整性并把 SBOM SHA256 写入 release manifest；GitHub release workflow 使用 SHA-pinned `actions/attest` 为 tarball 生成 provenance。该命令不创建 tag、不上传制品、不调用远端 backend。rehearsal、runtime smoke、timing 和 campaign state 属于 checkout 内的验证证据，不进入 source distribution，避免制品 SHA 与其自身验证报告形成循环依赖。

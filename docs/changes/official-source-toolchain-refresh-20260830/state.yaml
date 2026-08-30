@@ -1,0 +1,16 @@
+schema_version: 1
+change_id: official-source-toolchain-refresh-20260830
+goal_statement: "逐条复核 28 条 OpenAI 官方来源并改善 Python 3.11/3.12 入口证据"
+current_stage: complete
+last_completed_checkpoint: S4-closeout
+completion_claim: pass
+claimant: source-toolchain-subagent
+verifier: parent-agent-and-deterministic-gates
+required_evidence:
+  - source-review.md
+  - verification-evidence.md
+open_items: []
+retry_budget: 2
+staleness_threshold: 45m
+heartbeat: "S1-S4 completed; strict and Python 3.11/3.12 quick parity passed"
+stop_condition: pass

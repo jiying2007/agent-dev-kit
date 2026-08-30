@@ -16,10 +16,47 @@ import sys
 
 east = json.loads(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8"))
 west = json.loads(pathlib.Path(sys.argv[2]).read_text(encoding="utf-8"))
-expected = dt.datetime.now(dt.timezone.utc).date().isoformat()
+governance_tz = dt.timezone(dt.timedelta(hours=8))
+expected = dt.datetime.now(governance_tz).date().isoformat()
+expected_basis = "fixed_utc_offset:+08:00;label=Asia/Hong_Kong"
 assert east["evaluated_at"] == expected, east
 assert west["evaluated_at"] == expected, west
-assert east["date_basis"] == west["date_basis"] == "utc", (east, west)
+assert east["date_basis"] == west["date_basis"] == expected_basis, (east, west)
 PY
 
-echo "[PASS] official docs freshness uses one UTC date across host timezones"
+fixture_root="$TMP_DIR/future-root"
+mkdir -p "$fixture_root"
+cp -R \
+  "$ROOT_DIR/scripts" \
+  "$ROOT_DIR/manifests" \
+  "$ROOT_DIR/docs" \
+  "$ROOT_DIR/workflows" \
+  "$ROOT_DIR/skills" \
+  "$ROOT_DIR/optional-skills" \
+  "$ROOT_DIR/agents" \
+  "$fixture_root/"
+
+python3 - "$fixture_root/manifests/official_docs_freshness_gates.json" <<'PY'
+import datetime as dt
+import json
+import pathlib
+import sys
+
+path = pathlib.Path(sys.argv[1])
+data = json.loads(path.read_text(encoding="utf-8"))
+governance_tz = dt.timezone(dt.timedelta(hours=8))
+future = dt.datetime.now(governance_tz).date() + dt.timedelta(days=1)
+source = data["sources"][0]
+source["retrieved_at"] = future.isoformat()
+source["expires_at"] = (future + dt.timedelta(days=90)).isoformat()
+path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+PY
+
+if TZ=UTC "$fixture_root/scripts/check-official-docs-governance.sh" \
+  >"$TMP_DIR/future.out" 2>"$TMP_DIR/future.err"; then
+  echo "[FAIL] governance-relative future retrieved_at unexpectedly passed" >&2
+  exit 1
+fi
+rg -q --fixed-strings -- "has future retrieved_at" "$TMP_DIR/future.err"
+
+echo "[PASS] official docs freshness uses declared +08:00 date across host timezones and rejects future dates"

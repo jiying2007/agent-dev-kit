@@ -1,0 +1,229 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-dev-kit.local/schemas/adk-workflow-trace-summary-v2.schema.json",
+  "title": "ADK Workflow Trace Summary V2",
+  "description": "A privacy-bounded, platform-neutral summary contract. It never contains raw prompts, messages, tool arguments, tool results, or tool payloads.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "run_id",
+    "task_id",
+    "asset_bundle_sha256",
+    "runtime_target",
+    "runtime_version",
+    "model_version",
+    "goal",
+    "goal_ref",
+    "primary_skill",
+    "prompt_version",
+    "orchestration_mode",
+    "tool_calls",
+    "tools_used",
+    "handoffs",
+    "guardrails",
+    "verification",
+    "token_usage",
+    "cost",
+    "elapsed_ms",
+    "outcome",
+    "first_pass_success",
+    "human_interventions",
+    "wrong_skill",
+    "abstained",
+    "privacy_status",
+    "raw_content_stored",
+    "blockers",
+    "failure_pattern",
+    "next_goal",
+    "next_goal_ref"
+  ],
+  "properties": {
+    "schema_version": {"const": "adk-workflow-trace-summary/v2"},
+    "run_id": {"$ref": "#/$defs/identifier"},
+    "task_id": {"$ref": "#/$defs/identifier"},
+    "asset_bundle_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "runtime_target": {"$ref": "#/$defs/identifier"},
+    "runtime_version": {"$ref": "#/$defs/identifier"},
+    "model_version": {"$ref": "#/$defs/identifier"},
+    "goal": {"const": "not-applicable"},
+    "goal_ref": {"$ref": "#/$defs/opaqueRef"},
+    "primary_skill": {"$ref": "#/$defs/identifier"},
+    "prompt_version": {"$ref": "#/$defs/identifier"},
+    "orchestration_mode": {
+      "enum": ["single-agent", "subagents", "external-runtime", "not-available"]
+    },
+    "tool_calls": {"type": "integer", "minimum": 0},
+    "tools_used": {
+      "type": "array",
+      "maxItems": 128,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "call_count", "outcome"],
+        "properties": {
+          "name": {"$ref": "#/$defs/identifier"},
+          "call_count": {"type": "integer", "minimum": 1},
+          "outcome": {
+            "enum": ["succeeded", "partial", "failed", "blocked", "cancelled", "not-available"]
+          }
+        }
+      }
+    },
+    "handoffs": {
+      "type": "array",
+      "maxItems": 64,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["target", "outcome"],
+        "properties": {
+          "target": {"$ref": "#/$defs/identifier"},
+          "outcome": {"enum": ["succeeded", "failed", "blocked", "cancelled"]}
+        }
+      }
+    },
+    "guardrails": {
+      "type": "array",
+      "maxItems": 128,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "status"],
+        "properties": {
+          "name": {"$ref": "#/$defs/identifier"},
+          "status": {"enum": ["passed", "failed", "not-applicable"]}
+        }
+      }
+    },
+    "verification": {
+      "type": "array",
+      "maxItems": 128,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "status", "evidence_ref"],
+        "properties": {
+          "name": {"$ref": "#/$defs/identifier"},
+          "status": {"enum": ["passed", "failed", "not-run", "not-applicable"]},
+          "evidence_ref": {
+            "oneOf": [
+              {"$ref": "#/$defs/opaqueRef"},
+              {"type": "null"}
+            ]
+          }
+        }
+      }
+    },
+    "token_usage": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["input", "cached_input", "output"],
+          "properties": {
+            "input": {"type": "integer", "minimum": 0},
+            "cached_input": {"type": "integer", "minimum": 0},
+            "output": {"type": "integer", "minimum": 0}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "reason"],
+          "properties": {
+            "status": {"const": "not-available"},
+            "reason": {"$ref": "#/$defs/identifier"}
+          }
+        }
+      ]
+    },
+    "cost": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "amount", "currency"],
+          "properties": {
+            "status": {"const": "available"},
+            "amount": {"type": "number", "minimum": 0},
+            "currency": {"type": "string", "pattern": "^[A-Z]{3}$"}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "reason"],
+          "properties": {
+            "status": {"const": "not-available"},
+            "reason": {"$ref": "#/$defs/identifier"}
+          }
+        }
+      ]
+    },
+    "elapsed_ms": {"type": "integer", "minimum": 0},
+    "outcome": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "category"],
+          "properties": {
+            "status": {"enum": ["succeeded", "failed", "blocked", "cancelled", "abstained"]},
+            "category": {
+              "enum": [
+                "completed",
+                "validation-failure",
+                "runtime-failure",
+                "permission-blocked",
+                "external-blocked",
+                "cancelled",
+                "no-match"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "reason"],
+          "properties": {
+            "status": {"const": "not-available"},
+            "reason": {"$ref": "#/$defs/identifier"}
+          }
+        }
+      ]
+    },
+    "first_pass_success": {"type": "boolean"},
+    "human_interventions": {"type": "integer", "minimum": 0},
+    "wrong_skill": {"type": "boolean"},
+    "abstained": {"type": "boolean"},
+    "privacy_status": {"enum": ["sanitized", "redacted", "no-sensitive-content"]},
+    "raw_content_stored": {"const": false},
+    "blockers": {
+      "type": "array",
+      "maxItems": 64,
+      "items": {"$ref": "#/$defs/identifier"}
+    },
+    "failure_pattern": {"$ref": "#/$defs/identifier"},
+    "next_goal": {"type": "null"},
+    "next_goal_ref": {
+      "oneOf": [
+        {"$ref": "#/$defs/opaqueRef"},
+        {"type": "null"}
+      ]
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[a-z0-9][a-z0-9._:/-]*$"
+    },
+    "opaqueRef": {"type": "string", "pattern": "^ref:[0-9a-f]{64}$"}
+  }
+}

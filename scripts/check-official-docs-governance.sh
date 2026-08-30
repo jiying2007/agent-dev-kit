@@ -55,6 +55,7 @@ done
 python3 - "$ROOT_DIR" "$SUMMARY_JSON" <<'PY'
 import datetime as dt
 import json
+import re
 import sys
 from pathlib import Path
 from urllib.parse import urlparse
@@ -258,8 +259,33 @@ execution_layer_markers = {
 for rel, markers in execution_layer_markers.items():
     require_file_contains(rel, markers, f"execution-layer contract {rel}")
 
-today = dt.datetime.now(dt.timezone.utc).date()
-allowed_domains = set(official.get("review_policy", {}).get("allowed_domains", []))
+review_policy = official.get("review_policy", {})
+date_basis = review_policy.get("date_basis", {})
+require_keys(date_basis, ["kind", "label", "utc_offset"], "official docs date_basis")
+date_basis_label = date_basis.get("label")
+date_basis_offset = date_basis.get("utc_offset")
+offset_match = re.fullmatch(r"([+-])(\d{2}):(\d{2})", str(date_basis_offset))
+if date_basis.get("kind") != "fixed_utc_offset":
+    fail("official docs date_basis kind must be fixed_utc_offset")
+if date_basis_label != "Asia/Hong_Kong":
+    fail("official docs date_basis label must be Asia/Hong_Kong")
+if offset_match is None:
+    fail("official docs date_basis utc_offset must use signed HH:MM")
+    governance_timezone = dt.timezone.utc
+else:
+    offset_hours = int(offset_match.group(2))
+    offset_minutes = int(offset_match.group(3))
+    if offset_hours > 23 or offset_minutes > 59:
+        fail("official docs date_basis utc_offset is out of range")
+        governance_timezone = dt.timezone.utc
+    else:
+        offset_delta = dt.timedelta(hours=offset_hours, minutes=offset_minutes)
+        if offset_match.group(1) == "-":
+            offset_delta = -offset_delta
+        governance_timezone = dt.timezone(offset_delta)
+today = dt.datetime.now(governance_timezone).date()
+date_basis_summary = f"fixed_utc_offset:{date_basis_offset};label={date_basis_label}"
+allowed_domains = set(review_policy.get("allowed_domains", []))
 adoption_review_policy = official.get("adoption_review_policy", {})
 require_keys(
     adoption_review_policy,
@@ -1706,7 +1732,7 @@ if summary_json:
     print(json.dumps({
         "status": status,
         "evaluated_at": today.isoformat(),
-        "date_basis": "utc",
+        "date_basis": date_basis_summary,
         "official_sources": len(sources),
         "eval_suites": len(evals.get("suites", [])),
         "trace_contracts": len(trace_contracts),

@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-dev-kit.local/schemas/evidence-node-claim-v1.schema.json",
+  "title": "ADK Evidence Node Claim V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "node_id", "node_type", "evidence_layer", "subject_ref", "generated_at", "raw_content_stored"],
+  "properties": {
+    "schema_version": {"const": "adk-evidence-node-claim/v1"},
+    "node_id": {"$ref": "#/$defs/identifier"},
+    "node_type": {"enum": ["source", "decision", "asset", "bundle", "runtime", "trace", "outcome", "release", "rollback", "retirement"]},
+    "evidence_layer": {"enum": ["source", "test", "runtime", "field"]},
+    "subject_ref": {"$ref": "#/$defs/evidenceRef"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "raw_content_stored": {"const": false}
+  },
+  "$defs": {
+    "identifier": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._:/-]{0,127}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "opaqueRef": {"type": "string", "pattern": "^ref:[0-9a-f]{64}$"},
+    "evidenceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref", "path", "sha256"],
+      "properties": {
+        "ref": {"$ref": "#/$defs/opaqueRef"},
+        "path": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._/-]{0,511}$"},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

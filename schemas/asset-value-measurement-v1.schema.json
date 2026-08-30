@@ -1,0 +1,243 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-dev-kit.local/schemas/asset-value-measurement-v1.schema.json",
+  "title": "ADK Asset Value Measurement V1",
+  "description": "Deterministic Agent/Skill/Profile measurements derived only from validated invocation receipts.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "measurement_status",
+    "manifest_ref",
+    "privacy_status",
+    "raw_content_stored",
+    "asset_measurements"
+  ],
+  "properties": {
+    "schema_version": {"const": "adk-asset-value-measurement/v1"},
+    "measurement_status": {"enum": ["measured", "not-measured"]},
+    "reason": {"enum": ["no-valid-receipts"]},
+    "manifest_ref": {"$ref": "#/$defs/opaqueRef"},
+    "privacy_status": {"const": "opaque-refs-only"},
+    "raw_content_stored": {"const": false},
+    "source_receipt_count": {"type": "integer", "minimum": 1},
+    "aggregation_window": {"$ref": "#/$defs/observationWindow"},
+    "as_of": {"type": "string", "format": "date-time"},
+    "evidence_scope": {"enum": ["test-only", "runtime-verified", "field-verified", "mixed"]},
+    "quality_evidence_eligible": {"const": false},
+    "quality_ineligibility_reason": {
+      "enum": ["test-only-evidence", "mixed-evidence-scope", "non-production-authority"]
+    },
+    "owner_review_required": {"const": true},
+    "lifecycle_authority": {"const": "none-evidence-only"},
+    "asset_measurements": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/assetMeasurement"}
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"measurement_status": {"const": "measured"}}},
+      "then": {
+        "required": ["source_receipt_count", "aggregation_window", "as_of", "evidence_scope", "quality_evidence_eligible", "owner_review_required", "lifecycle_authority"],
+        "properties": {"asset_measurements": {"minItems": 1}}
+      },
+      "else": {
+        "required": ["reason"],
+        "properties": {"asset_measurements": {"maxItems": 0}},
+        "not": {
+          "anyOf": [
+            {"required": ["source_receipt_count"]},
+            {"required": ["aggregation_window"]},
+            {"required": ["as_of"]},
+            {"required": ["evidence_scope"]},
+            {"required": ["quality_evidence_eligible"]},
+            {"required": ["quality_ineligibility_reason"]},
+            {"required": ["owner_review_required"]},
+            {"required": ["lifecycle_authority"]}
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"measurement_status": {"const": "measured"}, "quality_evidence_eligible": {"const": false}},
+        "required": ["measurement_status", "quality_evidence_eligible"]
+      },
+      "then": {"required": ["quality_ineligibility_reason"]}
+    },
+    {
+      "if": {
+        "properties": {"quality_evidence_eligible": {"const": true}},
+        "required": ["quality_evidence_eligible"]
+      },
+      "then": {"not": {"required": ["quality_ineligibility_reason"]}}
+    }
+  ],
+  "$defs": {
+    "opaqueRef": {"type": "string", "pattern": "^ref:[0-9a-f]{64}$"},
+    "observationWindow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["from", "through"],
+      "properties": {
+        "from": {"type": "string", "format": "date-time"},
+        "through": {"type": "string", "format": "date-time"}
+      }
+    },
+    "assetIdentifier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "metricMeasured": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "value", "sample_size", "applicable_sample_size", "observed_sample_size", "coverage", "unit"],
+      "properties": {
+        "status": {"const": "measured"},
+        "value": {"type": "number", "minimum": 0},
+        "sample_size": {"type": "integer", "minimum": 1},
+        "applicable_sample_size": {"type": "integer", "minimum": 1},
+        "observed_sample_size": {"type": "integer", "minimum": 1},
+        "coverage": {"const": 1.0},
+        "unit": {"enum": ["ratio", "count-per-task", "milliseconds"]}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"unit": {"const": "ratio"}}},
+          "then": {"properties": {"value": {"maximum": 1}}}
+        }
+      ]
+    },
+    "metricNotMeasured": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "reason", "applicable_sample_size", "observed_sample_size", "coverage"],
+      "properties": {
+        "status": {"const": "not-measured"},
+        "reason": {"enum": ["no-applicable-receipts", "field-not-observed", "incomplete-coverage"]},
+        "applicable_sample_size": {"type": "integer", "minimum": 0},
+        "observed_sample_size": {"type": "integer", "minimum": 0},
+        "coverage": {"type": ["number", "null"], "minimum": 0, "maximum": 1}
+      }
+    },
+    "metricResult": {
+      "oneOf": [
+        {"$ref": "#/$defs/metricMeasured"},
+        {"$ref": "#/$defs/metricNotMeasured"}
+      ]
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "task-success-rate",
+        "first-pass-success-rate",
+        "wrong-route-rate",
+        "abstain-precision",
+        "human-interventions-per-task",
+        "time-to-trustworthy-change",
+        "escaped-defect-rate",
+        "rollback-rate"
+      ],
+      "properties": {
+        "task-success-rate": {"$ref": "#/$defs/metricResult"},
+        "first-pass-success-rate": {"$ref": "#/$defs/metricResult"},
+        "wrong-route-rate": {"$ref": "#/$defs/metricResult"},
+        "abstain-precision": {"$ref": "#/$defs/metricResult"},
+        "human-interventions-per-task": {"$ref": "#/$defs/metricResult"},
+        "time-to-trustworthy-change": {"$ref": "#/$defs/metricResult"},
+        "escaped-defect-rate": {"$ref": "#/$defs/metricResult"},
+        "rollback-rate": {"$ref": "#/$defs/metricResult"}
+      }
+    },
+    "assetMeasurement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "asset_id",
+        "asset_kind",
+        "evidence_layer",
+        "source_verification",
+        "measurement_status",
+        "receipt_refs",
+        "invocation_refs",
+        "source_trace_refs",
+        "asset_bundle_sha256s",
+        "runtime_targets",
+        "authority_ids",
+        "production_authority",
+        "evidence_refs",
+        "metrics",
+        "retirement_signals",
+        "retirement_authority",
+        "observation_window"
+      ],
+      "properties": {
+        "asset_id": {"$ref": "#/$defs/assetIdentifier"},
+        "asset_kind": {"enum": ["agent", "skill", "profile"]},
+        "evidence_layer": {"enum": ["test", "runtime", "field"]},
+        "source_verification": {"enum": ["structural-only", "managed-authority-verified"]},
+        "measurement_status": {"const": "measured"},
+        "receipt_refs": {"$ref": "#/$defs/opaqueRefs"},
+        "invocation_refs": {"$ref": "#/$defs/opaqueRefs"},
+        "source_trace_refs": {"$ref": "#/$defs/opaqueRefs"},
+        "asset_bundle_sha256s": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        },
+        "runtime_targets": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/assetIdentifier"}
+        },
+        "authority_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/assetIdentifier"}
+        },
+        "production_authority": {"type": "boolean"},
+        "evidence_refs": {"$ref": "#/$defs/opaqueRefs"},
+        "metrics": {"$ref": "#/$defs/metrics"},
+        "retirement_signals": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"enum": ["retain", "consolidate-candidate", "retire-candidate", "insufficient-evidence"]}
+        },
+        "retirement_authority": {"const": "signal-only-owner-decision-required"},
+        "observation_window": {"$ref": "#/$defs/observationWindow"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"evidence_layer": {"const": "test"}}},
+          "then": {
+            "properties": {
+              "source_verification": {"const": "structural-only"},
+              "authority_ids": {"maxItems": 0},
+              "production_authority": {"const": false}
+            }
+          },
+          "else": {
+            "properties": {
+              "source_verification": {"const": "managed-authority-verified"},
+              "authority_ids": {"minItems": 1}
+            }
+          }
+        }
+      ]
+    },
+    "opaqueRefs": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/opaqueRef"}
+    }
+  }
+}

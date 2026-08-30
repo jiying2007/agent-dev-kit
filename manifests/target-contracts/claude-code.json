@@ -1,5 +1,5 @@
 {
-  "schema": "adk-target-contract/v1",
+  "schema": "adk-target-contract/v2",
   "target": "claude-code",
   "status": "experimental",
   "source": {
@@ -39,5 +39,41 @@
     "diagnostic": {"tools": "Read, Grep, Glob, Bash"}
   },
   "support_directories": ["references", "scripts", "assets", "templates", "examples"],
-  "smoke_stages": ["discovery", "load", "trigger", "permission"]
+  "smoke_stages": ["discovery", "load", "trigger", "permission"],
+  "adapter": {
+    "adapter_id": "claude-code-direct-target",
+    "runtime_boundary": "ADK renders and statically validates assets; Claude Code owns native discovery, load, trigger, permission, resume, cancel and trace behavior.",
+    "capabilities": {
+      "discovery": "declared-static",
+      "load": "declared-static",
+      "trigger": "declared-static",
+      "permission": "declared-static",
+      "resume": "unknown",
+      "cancel": "unknown",
+      "rollback": "declared-static",
+      "trace": "unknown"
+    },
+    "conformance": {
+      "level": "static",
+      "certification": "not-certified",
+      "native_runtime_smoke": "not-run",
+      "runtime_binary": null,
+      "runtime_binary_sha256": null,
+      "runtime_version": null,
+      "runtime_version_pin": null,
+      "last_verified_at": null,
+      "evidence": []
+    },
+    "conformance_trust_policy": {
+      "enabled": false,
+      "trusted_authorities": [],
+      "verification_backend": "not-configured"
+    },
+    "failure_semantics": [
+      "export success must not be treated as native runtime capability evidence",
+      "native runtime failures preserve the static bundle and target-owned diagnostics",
+      "ADK receipt rollback does not claim runtime session rollback"
+    ],
+    "trace_contract": "adk-workflow-trace-summary-v1"
+  }
 }

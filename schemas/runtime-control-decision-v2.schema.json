@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-dev-kit.local/schemas/runtime-control-decision-v2.schema.json",
+  "title": "Runtime Control Decision V2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "status",
+    "gate_event",
+    "recommended_action",
+    "completion_allowed",
+    "advisory_only",
+    "evaluated_at",
+    "thread_id",
+    "goal_id",
+    "goal_status",
+    "gate_allowed",
+    "goal_tokens",
+    "token_budget",
+    "token_ratio",
+    "context_ratio",
+    "time_elapsed_seconds",
+    "heartbeat_age_seconds",
+    "retry_remaining",
+    "no_progress_remaining",
+    "missing_evidence",
+    "checkpoint_evidence_missing",
+    "missing_artifacts",
+    "artifact_evidence_missing",
+    "reasons",
+    "task_mode",
+    "artifact_mode",
+    "effective_artifact_mode",
+    "mode_authority_id",
+    "mode_authority_managed",
+    "intake_attestation_sha256",
+    "intake_provenance",
+    "gate_applicable",
+    "required_artifacts"
+  ],
+  "properties": {
+    "schema_version": {"const": "runtime_control.decision/v2"},
+    "status": {"enum": ["pass", "active", "attention", "fail"]},
+    "gate_event": {"enum": ["steady", "final", "commit", "apply", "release"]},
+    "recommended_action": {
+      "enum": ["continue", "checkpoint", "compact", "replan", "stop", "blocked", "pass"]
+    },
+    "completion_allowed": {"type": "boolean"},
+    "advisory_only": {"type": "boolean"},
+    "evaluated_at": {"type": "string", "format": "date-time"},
+    "thread_id": {"type": ["string", "null"]},
+    "goal_id": {"type": ["string", "null"]},
+    "goal_status": {"enum": ["idle", "active", "completed", "aborted", null]},
+    "gate_allowed": {"type": "boolean"},
+    "goal_tokens": {"type": "integer", "minimum": 0},
+    "token_budget": {"type": ["integer", "null"], "minimum": 1},
+    "token_ratio": {"type": ["number", "null"], "minimum": 0},
+    "context_ratio": {"type": "number", "minimum": 0},
+    "time_elapsed_seconds": {"type": "number", "minimum": 0},
+    "heartbeat_age_seconds": {"type": ["number", "null"], "minimum": 0},
+    "retry_remaining": {"type": "integer", "minimum": 0},
+    "no_progress_remaining": {"type": "integer", "minimum": 0},
+    "missing_evidence": {"$ref": "#/$defs/identifierList"},
+    "checkpoint_evidence_missing": {"$ref": "#/$defs/identifierList"},
+    "missing_artifacts": {"$ref": "#/$defs/artifactList"},
+    "artifact_evidence_missing": {"$ref": "#/$defs/artifactList"},
+    "reasons": {"$ref": "#/$defs/identifierList"},
+    "task_mode": {"enum": ["readonly", "implementation", "debugging", "review", "release"]},
+    "artifact_mode": {"enum": ["readonly", "implementation", "release"]},
+    "effective_artifact_mode": {"enum": ["readonly", "implementation", "release"]},
+    "mode_authority_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "mode_authority_managed": {"type": "boolean"},
+    "intake_attestation_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "intake_provenance": {"$ref": "#/$defs/intakeProvenance"},
+    "gate_applicable": {"type": "boolean"},
+    "required_artifacts": {"$ref": "#/$defs/artifactList"}
+  },
+  "$defs": {
+    "identifierList": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1, "maxLength": 128}
+    },
+    "artifactList": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"enum": ["repo", "build", "plan", "dry-run", "live", "review"]}
+    },
+    "intakeProvenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "source_id", "source_version", "decision_id", "issued_at"],
+      "properties": {
+        "kind": {"enum": ["routing-decision", "goal-replan"]},
+        "source_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+        "source_version": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+        "decision_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+        "issued_at": {"type": "string", "format": "date-time"}
+      }
+    }
+  }
+}

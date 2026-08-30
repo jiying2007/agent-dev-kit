@@ -234,15 +234,18 @@ check_profile_skill_order() {
 }
 
 check_skill_routing_matrix() {
-  local scenario primary workflow availability profiles_count positive_count negative_count ref
+  local scenario routing_intent primary workflow availability profiles_count positive_count negative_count ref
   local scenario_count=0
   while IFS= read -r scenario; do
     [[ -z "$scenario" ]] && continue
     scenario_count=$((scenario_count + 1))
     [[ "$scenario" =~ ^[a-z0-9_]+$ ]] || fail "routing scenario name must be snake_case: $scenario"
-    primary="$(adk_get_manifest_item_value "skill_routing_matrix" "$scenario" "primary_skill")"
-    [[ -n "$primary" ]] || fail "routing scenario '$scenario' missing primary_skill"
-    availability="$(adk_get_manifest_item_value "skill_routing_matrix" "$scenario" "availability")"
+    routing_intent="$(adk_get_manifest_item_value "skill_routing_matrix" "$scenario" "routing_intent")"
+    [[ -n "$routing_intent" ]] || fail "routing scenario '$scenario' missing routing_intent"
+    adk_routing_intent_exists "$routing_intent" || fail "routing scenario '$scenario' references unknown routing intent: $routing_intent"
+    primary="$(adk_get_routing_intent_value "$routing_intent" "primary_skill")"
+    [[ -n "$primary" ]] || fail "routing intent '$routing_intent' missing primary_skill"
+    availability="$(adk_get_routing_intent_value "$routing_intent" "availability")"
     require_primary_skill_ready "routing scenario '$scenario'" "$primary" "$availability"
     workflow="$(adk_get_manifest_item_value "skill_routing_matrix" "$scenario" "workflow")"
     [[ -n "$workflow" ]] || fail "routing scenario '$scenario' missing workflow"
@@ -264,7 +267,7 @@ check_skill_routing_matrix() {
       while IFS= read -r ref; do
         [[ -z "$ref" ]] && continue
         skill_ref_exists "$ref" || fail "routing scenario '$scenario' $key unknown skill: $ref"
-      done < <(adk_get_manifest_item_list "skill_routing_matrix" "$scenario" "$key")
+      done < <(adk_get_routing_intent_list "$routing_intent" "$key")
     done
   done < <(adk_list_manifest_names "skill_routing_matrix")
 
@@ -272,54 +275,20 @@ check_skill_routing_matrix() {
 }
 
 check_routing_intents() {
-  local line intent primary availability
-  while IFS=$'\t' read -r intent primary availability; do
+  local intent primary availability ref key
+  while IFS= read -r intent; do
     [[ -z "$intent" ]] && continue
+    primary="$(adk_get_routing_intent_value "$intent" "primary_skill")"
+    availability="$(adk_get_routing_intent_value "$intent" "availability")"
     [[ -n "$primary" ]] || fail "routing intent '$intent' missing primary_skill"
     require_primary_skill_ready "routing intent '$intent'" "$primary" "$availability"
-  done < <(
-    awk '
-      function trim(value) {
-        sub(/^[[:space:]]+/, "", value)
-        sub(/[[:space:]]+$/, "", value)
-        gsub(/^"|"$/, "", value)
-        return value
-      }
-      function emit() {
-        if (intent != "") {
-          print intent "\t" primary "\t" availability
-        }
-      }
-      /^routing:/ {in_routing=1; intent=""; primary=""; availability=""; next}
-      in_routing && /^[^ ]/ {emit(); exit}
-      in_routing && /^[[:space:]]+-[[:space:]]+intent:/ {
-        emit()
-        val=$0
-        sub(/^[[:space:]]+-[[:space:]]+intent:[[:space:]]*/, "", val)
-        intent=trim(val)
-        primary=""
-        availability=""
-        next
-      }
-      in_routing && /^[[:space:]]+availability:/ {
-        val=$0
-        sub(/^[[:space:]]+availability:[[:space:]]*/, "", val)
-        availability=trim(val)
-        next
-      }
-      in_routing && /^[[:space:]]+primary_skill:/ {
-        val=$0
-        sub(/^[[:space:]]+primary_skill:[[:space:]]*/, "", val)
-        primary=trim(val)
-        next
-      }
-      END {
-        if (in_routing) {
-          emit()
-        }
-      }
-    ' "$ADK_MANIFEST"
-  )
+    for key in supporting_skills fallback_skills mutually_exclusive; do
+      while IFS= read -r ref; do
+        [[ -z "$ref" ]] && continue
+        skill_ref_exists "$ref" || fail "routing intent '$intent' $key unknown skill: $ref"
+      done < <(adk_get_routing_intent_list "$intent" "$key")
+    done
+  done < <(adk_list_routing_intent_names)
 }
 
 adk_require_manifest

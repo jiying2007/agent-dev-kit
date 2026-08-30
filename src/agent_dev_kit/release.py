@@ -295,6 +295,7 @@ def _copy_source_distribution(manifest: Manifest, destination: Path) -> int:
         "manifests",
         "optional-skills",
         "scripts",
+        "schemas",
         "skills",
         "src",
         "templates",

@@ -1,8 +1,8 @@
 ---
 name: adk-test-strategy
-description: 嵌入式全栈测试策略与 TDD 分级，覆盖板级、启动链、BSP、OS/runtime、驱动、组件、设备应用、上位机工具、量产和现场维护的验证证据
-version: 1.0.0
-last_updated: 2026-05-18
+description: 平台中立的软件测试策略与 TDD 分级，按行为、风险和现有测试入口生成可复跑的验证矩阵与证据
+version: 2.0.0
+last_updated: 2026-08-30
 triggers:
   - "测试策略"
   - "TDD"
@@ -27,7 +27,7 @@ constraints:
 # adk-test-strategy
 
 ## Goal
-- 为嵌入式全栈项目提供优先级明确的测试策略，覆盖芯片/板级、启动链、BSP、OS/runtime、驱动、组件、设备应用、Linux 用户态、上位机、量产、现场维护和交付工具链。
+- 为通用软件项目提供优先级明确的测试策略，覆盖库、服务、应用、CLI、配置、数据、构建和交付链路。
 - 根据风险选择 Level 0 到 Level 2 的测试纪律，避免所有任务机械套用重 TDD。
 - 将验证结论落到可复跑命令和 Evidence Index，而不是口头确认。
 
@@ -44,11 +44,11 @@ constraints:
 | Level 1 回归测试 | bugfix、局部行为变化、脚本调整 | 先复现或补回归用例，再跑相关测试 |
 | Level 2 TDD | 新功能、共享逻辑、公共接口、高风险修复 | 先红灯，再最小实现，再绿灯和重构 |
 
-## Embedded Full-stack Guidance
-- 优先确认是否能在 host unit、SIL、仿真或交叉编译阶段提前暴露问题。
-- 涉及寄存器、DMA、中断、时序、boot/rootfs、烧录、OTA、产测或硬件 errata 时，自动化测试不足必须记录 HIL、boot log、波形、寄存器读回、产测报告或手工验证证据。
-- 嵌入式 TDD 矩阵模板：`references/embedded-tdd-matrix.md`。
-- Linux 用户态、设备侧应用、上位机、产测诊断工具、烧录工具和现场维护脚本的语言测试属于嵌入式交付链路的一部分；通用 Web/互联网后端测试不纳入默认目标。
+## Domain-specific Guidance
+- 本 Skill 只定义平台中立的 Level 0/1/2、red/green、回归和 Evidence Index 合同。
+- 嵌入式项目在 `embedded-fullstack` Profile 下组合 `adk-unit-test-embedded`、`adk-integration-hil-sil`
+  和 `adk-production-field-readiness`；板级、SIL/HIL、boot、OTA、产测矩阵不得进入 core 默认上下文。
+- Web、服务端、桌面、移动端或数据项目应复用目标仓已有测试入口，不从 ADK core 引入特定框架。
 
 ## Workflow
 1. **识别行为面**：确认改动是否影响功能、接口、性能、安全、配置或发布产物。

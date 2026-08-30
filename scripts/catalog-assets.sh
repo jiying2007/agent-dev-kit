@@ -217,6 +217,23 @@ join_manifest_list() {
   '
 }
 
+join_routing_intent_list() {
+  local intent="$1"
+  local key="$2"
+  adk_get_routing_intent_list "$intent" "$key" | awk '
+    BEGIN {sep=""}
+    NF {
+      printf "%s%s", sep, $0
+      sep=", "
+    }
+    END {
+      if (sep == "") {
+        printf "-"
+      }
+    }
+  '
+}
+
 emit_workflows_table() {
   echo "## Workflows"
   echo
@@ -264,18 +281,27 @@ emit_skill_routing_matrix() {
   echo
   echo "| Scenario | Description | Availability | Profiles | Workflow | Primary | Supporting | Fallback | Mutually Exclusive | Positive Example | Negative Example |"
   echo "|---|---|---|---|---|---|---|---|---|---|---|"
-  local name desc availability profiles workflow primary supporting fallback mutex positive negative
+  local name routing_intent desc availability profiles workflow primary supporting fallback mutex positive negative
   while IFS= read -r name; do
     [[ -z "$name" ]] && continue
+    routing_intent="$(adk_get_manifest_item_value "skill_routing_matrix" "$name" "routing_intent")"
+    [[ -n "$routing_intent" ]] || {
+      echo "[FAIL] routing scenario '$name' missing routing_intent" >&2
+      return 1
+    }
+    adk_routing_intent_exists "$routing_intent" || {
+      echo "[FAIL] routing scenario '$name' references unknown routing intent: $routing_intent" >&2
+      return 1
+    }
     desc="$(adk_get_manifest_item_value "skill_routing_matrix" "$name" "description")"
-    availability="$(adk_get_manifest_item_value "skill_routing_matrix" "$name" "availability")"
+    availability="$(adk_get_routing_intent_value "$routing_intent" "availability")"
     [[ -n "$availability" ]] || availability="profile-resolved"
     profiles="$(join_manifest_list "skill_routing_matrix" "$name" "profiles")"
     workflow="$(adk_get_manifest_item_value "skill_routing_matrix" "$name" "workflow")"
-    primary="$(adk_get_manifest_item_value "skill_routing_matrix" "$name" "primary_skill")"
-    supporting="$(join_manifest_list "skill_routing_matrix" "$name" "supporting_skills")"
-    fallback="$(join_manifest_list "skill_routing_matrix" "$name" "fallback_skills")"
-    mutex="$(join_manifest_list "skill_routing_matrix" "$name" "mutually_exclusive")"
+    primary="$(adk_get_routing_intent_value "$routing_intent" "primary_skill")"
+    supporting="$(join_routing_intent_list "$routing_intent" "supporting_skills")"
+    fallback="$(join_routing_intent_list "$routing_intent" "fallback_skills")"
+    mutex="$(join_routing_intent_list "$routing_intent" "mutually_exclusive")"
     positive="$(front_list_first_manifest_item "skill_routing_matrix" "$name" "positive_examples")"
     negative="$(front_list_first_manifest_item "skill_routing_matrix" "$name" "negative_examples")"
     echo "| \`$name\` | $desc | $availability | $profiles | \`$workflow\` | \`$primary\` | $supporting | $fallback | $mutex | $positive | $negative |"
@@ -307,7 +333,7 @@ write_skill_routing_matrix_doc() {
     echo "# Skill Routing Matrix"
     echo
     echo "- generated_at: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
-    echo "- source: manifest.yaml:skill_routing_matrix"
+    echo "- source: manifest.yaml:routing (runtime SSOT) + skill_routing_matrix (projection metadata)"
     echo
     emit_skill_routing_matrix
   } > "$ROUTING_MATRIX_OUT_PATH"

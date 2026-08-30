@@ -2,14 +2,14 @@
 
 `agent-dev-kit`（adk）是通用 Agent/Skill/Profile/Workflow 资产包。它把参考资料、官方文档和工程经验压实为可验证、可回滚、可迭代的 ADK 资产；资产可以导出到显式声明的 tool target，但 core 不绑定任何单一运行时。
 
-当前版本：`4.0.0`。
+当前版本：`5.0.0-rc.1`（本地候选；尚未 tag、发布或刷新到 live）。
 
 发布支持基线为 Python 3.11+，运行依赖固定为 `PyYAML==6.0.3` 与 `jsonschema==4.26.0`。Python 3.8/3.9 已退出本项目支持范围；源码在旧解释器上偶然可运行不构成发布兼容承诺。
 
-当前软件状态是 **M5-ready control-plane candidate / M3 release candidate**，不是已认证 M5：本版本提供可恢复双运行时评测、单写者并发保护、严格环境诊断和本地升级/回滚演练；最终 M5 仍要求 30 天试点、至少一个独立真实软件仓、第二位 operator 和完整 field evidence。
+当前软件状态是 **M5-ready control-plane candidate / M3 release candidate**，不是已认证 M5：本版本提供平台中立路由 IR、Runtime Control V2、可组合运行证据、receipt 驱动的 Agent Value 评估和可恢复双运行时评测；最终 M5 仍要求 30 天试点、至少一个独立真实软件仓、第二位 operator 和完整 field evidence。
 
-`scripts/devkit.sh` 默认使用 `python3`；可用 `ADK_PYTHON_BIN` 显式选择受审查的
-Python 3.11/3.12。发布和认证验证应设置
+`scripts/devkit.sh` 未设置 override 时按 `python3.12 -> python3.11 -> python3`
+确定性选择解释器；可用 `ADK_PYTHON_BIN` 显式覆盖。发布和认证验证应设置
 `ADK_REQUIRE_SUPPORTED_PYTHON=1`，或使用受控 Docker local-CI parity；旧 Python
 只允许运行 `doctor` 或产生明确标记的开发期结果，不能升级为发布证据。
 

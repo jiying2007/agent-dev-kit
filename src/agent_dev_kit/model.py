@@ -237,8 +237,8 @@ class Manifest:
             expected_schema_version = None
         if expected_schema_version and self.data.get("schema_version") != expected_schema_version:
             failures.append("schema_version must be {}".format(expected_schema_version))
-        if not re.fullmatch(r"4\.[0-9]+\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?", self.version):
-            failures.append("version must be a semantic version with major 4")
+        if not re.fullmatch(r"[45]\.[0-9]+\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?", self.version):
+            failures.append("version must be a semantic version with supported major 4 or 5")
 
         product = self.data.get("product")
         expected_product = {

@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-dev-kit.local/schemas/runtime-control-goal-intake-v1.schema.json",
+  "title": "Runtime Control Goal Intake V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "task_mode",
+    "artifact_mode",
+    "goal_id",
+    "request_sha256",
+    "routing_decision_sha256",
+    "authority_id",
+    "attestation_sha256",
+    "provenance"
+  ],
+  "properties": {
+    "schema_version": {"const": "runtime_control.goal-intake/v1"},
+    "task_mode": {"enum": ["readonly", "implementation", "debugging", "review", "release"]},
+    "artifact_mode": {"enum": ["readonly", "implementation", "release"]},
+    "goal_id": {"$ref": "#/$defs/identifier"},
+    "request_sha256": {"$ref": "#/$defs/sha256"},
+    "routing_decision_sha256": {"$ref": "#/$defs/sha256"},
+    "authority_id": {"$ref": "#/$defs/identifier"},
+    "attestation_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "provenance": {"$ref": "#/$defs/provenance"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"task_mode": {"enum": ["readonly", "debugging", "review"]}}},
+      "then": {"properties": {"artifact_mode": {"const": "readonly"}}}
+    },
+    {
+      "if": {"properties": {"task_mode": {"const": "implementation"}}},
+      "then": {"properties": {"artifact_mode": {"const": "implementation"}}}
+    },
+    {
+      "if": {"properties": {"task_mode": {"const": "release"}}},
+      "then": {"properties": {"artifact_mode": {"const": "release"}}}
+    }
+  ],
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "source_id", "source_version", "decision_id", "issued_at"],
+      "properties": {
+        "kind": {"enum": ["routing-decision", "goal-replan"]},
+        "source_id": {"$ref": "#/$defs/identifier"},
+        "source_version": {"$ref": "#/$defs/identifier"},
+        "decision_id": {"$ref": "#/$defs/identifier"},
+        "issued_at": {"type": "string", "format": "date-time"}
+      }
+    }
+  }
+}

@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://agent-dev-kit.local/schemas/manifest-3.1.0.json",
-  "title": "agent-dev-kit manifest 3.1",
+  "$id": "https://agent-dev-kit.local/schemas/manifest-4.0.0.json",
+  "title": "agent-dev-kit manifest schema 4.0",
   "type": "object",
   "required": [
     "version",
@@ -36,7 +36,7 @@
   "properties": {
     "version": {
       "type": "string",
-      "pattern": "^4\\.[0-9]+\\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?$"
+      "pattern": "^[45]\\.[0-9]+\\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?$"
     },
     "locale": {"type": "string", "minLength": 2},
     "platforms": {
@@ -361,16 +361,319 @@
         "intent_zh": {"type": "string", "minLength": 1},
         "primary_skill": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
         "supporting_skills": {"$ref": "#/$defs/assetNameArray"},
-        "availability": {"enum": ["optional-skill-required"]}
+        "fallback_skills": {"$ref": "#/$defs/assetNameArray"},
+        "mutually_exclusive": {"$ref": "#/$defs/assetNameArray"},
+        "availability": {"enum": ["optional-skill-required"]},
+        "task_mode": {"$ref": "#/$defs/taskModeName"},
+        "mutation_permission": {"$ref": "#/$defs/mutationPermission"},
+        "risk": {"enum": ["low", "medium", "high", "unknown"]},
+        "profile_availability": {
+          "enum": ["fallback-profile", "optional-skill-required", "explicit-profile-required"]
+        },
+        "required_evidence": {"$ref": "#/$defs/stringArray"},
+        "negated_intents": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/negatedIntent"},
+          "uniqueItems": true
+        }
+      },
+      "dependentRequired": {
+        "task_mode": ["mutation_permission"],
+        "mutation_permission": ["task_mode"]
+      },
+      "allOf": [
+        {
+          "if": {
+            "anyOf": [
+              {"required": ["task_mode"]},
+              {"required": ["mutation_permission"]}
+            ]
+          },
+          "then": {"$ref": "#/$defs/taskModePermissionPair"}
+        }
+      ],
+      "additionalProperties": false
+    },
+    "taskModeName": {
+      "enum": ["needs-triage", "readonly", "implementation", "debugging", "review", "release"]
+    },
+    "mutationPermission": {
+      "enum": ["deny", "workspace-write", "explicit-authorization-required"]
+    },
+    "taskModePermissionPair": {
+      "oneOf": [
+        {
+          "properties": {
+            "task_mode": {"const": "needs-triage"},
+            "mutation_permission": {"const": "deny"}
+          },
+          "required": ["task_mode", "mutation_permission"]
+        },
+        {
+          "properties": {
+            "task_mode": {"const": "readonly"},
+            "mutation_permission": {"const": "deny"}
+          },
+          "required": ["task_mode", "mutation_permission"]
+        },
+        {
+          "properties": {
+            "task_mode": {"const": "implementation"},
+            "mutation_permission": {"const": "workspace-write"}
+          },
+          "required": ["task_mode", "mutation_permission"]
+        },
+        {
+          "properties": {
+            "task_mode": {"const": "debugging"},
+            "mutation_permission": {"const": "deny"}
+          },
+          "required": ["task_mode", "mutation_permission"]
+        },
+        {
+          "properties": {
+            "task_mode": {"const": "review"},
+            "mutation_permission": {"const": "deny"}
+          },
+          "required": ["task_mode", "mutation_permission"]
+        },
+        {
+          "properties": {
+            "task_mode": {"const": "release"},
+            "mutation_permission": {"const": "explicit-authorization-required"}
+          },
+          "required": ["task_mode", "mutation_permission"]
+        }
+      ]
+    },
+    "routingDefaults": {
+      "type": "object",
+      "required": [
+        "task_mode",
+        "mutation_permission",
+        "risk",
+        "profile_availability",
+        "required_evidence"
+      ],
+      "properties": {
+        "task_mode": {"const": "needs-triage"},
+        "mutation_permission": {"const": "deny"},
+        "risk": {"const": "unknown"},
+        "profile_availability": {"const": "fallback-profile"},
+        "required_evidence": {"$ref": "#/$defs/stringArray"}
+      },
+      "additionalProperties": false
+    },
+    "taskMode": {
+      "type": "object",
+      "required": ["task_mode", "intent_zh", "priority", "mutation_permission"],
+      "properties": {
+        "task_mode": {"$ref": "#/$defs/taskModeName"},
+        "intent_zh": {"type": "string", "minLength": 1},
+        "priority": {"type": "integer", "minimum": 0, "maximum": 1000},
+        "mutation_permission": {"$ref": "#/$defs/mutationPermission"}
+      },
+      "allOf": [
+        {"$ref": "#/$defs/taskModePermissionPair"}
+      ],
+      "additionalProperties": false
+    },
+    "artifactModeMapping": {
+      "type": "object",
+      "required": ["needs-triage", "readonly", "implementation", "debugging", "review", "release"],
+      "properties": {
+        "needs-triage": {"type": "null"},
+        "readonly": {"const": "readonly"},
+        "implementation": {"const": "implementation"},
+        "debugging": {"const": "readonly"},
+        "review": {"const": "readonly"},
+        "release": {"const": "release"}
+      },
+      "additionalProperties": false
+    },
+    "negatedIntent": {
+      "type": "object",
+      "required": ["name", "all_of"],
+      "properties": {
+        "name": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_]*$"},
+        "all_of": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/negatedIntentCondition"},
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "negatedIntentCondition": {
+      "type": "object",
+      "required": ["phrase_class", "polarity"],
+      "properties": {
+        "phrase_class": {
+          "enum": ["readonly_scope", "generic_execution", "planning_action", "debugging_action", "release_action"]
+        },
+        "polarity": {"enum": ["positive", "negated"]}
+      },
+      "additionalProperties": false
+    },
+    "routingPhraseClasses": {
+      "type": "object",
+      "required": ["readonly_scope", "generic_execution", "planning_action", "debugging_action", "release_action"],
+      "properties": {
+        "readonly_scope": {"$ref": "#/$defs/stringArray"},
+        "generic_execution": {"$ref": "#/$defs/stringArray"},
+        "planning_action": {"$ref": "#/$defs/stringArray"},
+        "debugging_action": {"$ref": "#/$defs/stringArray"},
+        "release_action": {"$ref": "#/$defs/stringArray"}
+      },
+      "additionalProperties": false
+    },
+    "negationPhraseClasses": {
+      "type": "object",
+      "required": [
+        "direct_prohibition",
+        "not_required",
+        "execution_denial",
+        "contrastive_prohibition",
+        "generic_negation"
+      ],
+      "properties": {
+        "direct_prohibition": {
+          "type": "array",
+          "minItems": 3,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1},
+          "allOf": [
+            {"contains": {"const": "别"}},
+            {"contains": {"const": "不要"}},
+            {"contains": {"const": "请勿"}}
+          ]
+        },
+        "not_required": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1},
+          "allOf": [
+            {"contains": {"const": "不需要"}},
+            {"contains": {"const": "无需"}}
+          ]
+        },
+        "execution_denial": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1},
+          "allOf": [
+            {"contains": {"const": "不执行"}},
+            {"contains": {"const": "不做"}}
+          ]
+        },
+        "contrastive_prohibition": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1},
+          "contains": {"const": "不过别"}
+        },
+        "generic_negation": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1},
+          "contains": {"const": "不"}
+        }
+      },
+      "additionalProperties": false
+    },
+    "routingAbstain": {
+      "type": "object",
+      "required": ["enabled", "decision", "reason", "mutation_permission"],
+      "properties": {
+        "enabled": {"const": true},
+        "decision": {"const": "abstain"},
+        "reason": {"const": "needs-triage"},
+        "mutation_permission": {"const": "deny"}
       },
       "additionalProperties": false
     },
     "routing": {
       "type": "object",
-      "required": ["enabled", "fallback_profile", "intents"],
+      "required": [
+        "enabled",
+        "ir_version",
+        "fallback_profile",
+        "defaults",
+        "phrase_classes",
+        "negation_phrase_classes",
+        "task_modes",
+        "artifact_mode_mapping",
+        "abstain",
+        "intents"
+      ],
       "properties": {
         "enabled": {"const": true},
+        "ir_version": {"const": "routing-ir/v2"},
         "fallback_profile": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "defaults": {"$ref": "#/$defs/routingDefaults"},
+        "phrase_classes": {"$ref": "#/$defs/routingPhraseClasses"},
+        "negation_phrase_classes": {"$ref": "#/$defs/negationPhraseClasses"},
+        "task_modes": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 5,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/taskMode"},
+          "allOf": [
+            {
+              "contains": {
+                "type": "object",
+                "properties": {"task_mode": {"const": "readonly"}},
+                "required": ["task_mode"]
+              },
+              "minContains": 1,
+              "maxContains": 1
+            },
+            {
+              "contains": {
+                "type": "object",
+                "properties": {"task_mode": {"const": "implementation"}},
+                "required": ["task_mode"]
+              },
+              "minContains": 1,
+              "maxContains": 1
+            },
+            {
+              "contains": {
+                "type": "object",
+                "properties": {"task_mode": {"const": "debugging"}},
+                "required": ["task_mode"]
+              },
+              "minContains": 1,
+              "maxContains": 1
+            },
+            {
+              "contains": {
+                "type": "object",
+                "properties": {"task_mode": {"const": "review"}},
+                "required": ["task_mode"]
+              },
+              "minContains": 1,
+              "maxContains": 1
+            },
+            {
+              "contains": {
+                "type": "object",
+                "properties": {"task_mode": {"const": "release"}},
+                "required": ["task_mode"]
+              },
+              "minContains": 1,
+              "maxContains": 1
+            }
+          ]
+        },
+        "artifact_mode_mapping": {"$ref": "#/$defs/artifactModeMapping"},
+        "abstain": {"$ref": "#/$defs/routingAbstain"},
         "intents": {
           "type": "array",
           "minItems": 1,
@@ -393,10 +696,7 @@
       "required": [
         "name",
         "description",
-        "primary_skill",
-        "supporting_skills",
-        "fallback_skills",
-        "mutually_exclusive",
+        "routing_intent",
         "workflow",
         "profiles",
         "positive_examples",
@@ -405,17 +705,34 @@
       "properties": {
         "name": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_]*$"},
         "description": {"type": "string", "minLength": 1},
-        "primary_skill": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
-        "supporting_skills": {"$ref": "#/$defs/assetNameArray"},
-        "fallback_skills": {"$ref": "#/$defs/assetNameArray"},
-        "mutually_exclusive": {"$ref": "#/$defs/assetNameArray"},
+        "routing_intent": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_]*$"},
         "workflow": {"type": "string", "minLength": 1},
         "profiles": {"$ref": "#/$defs/assetNameArray"},
         "positive_examples": {"$ref": "#/$defs/stringArray"},
-        "negative_examples": {"$ref": "#/$defs/stringArray"},
-        "availability": {"enum": ["optional-skill-required"]}
+        "negative_examples": {"$ref": "#/$defs/stringArray"}
       },
+      "allOf": [
+        {"$ref": "#/$defs/skillRoutingProjectionRef"}
+      ],
       "additionalProperties": false
+    },
+    "skillRoutingProjectionRef": {
+      "oneOf": [
+        {"properties": {"name": {"const": "runtime_routing"}, "routing_intent": {"const": "runtime_router"}}, "required": ["name", "routing_intent"]},
+        {"properties": {"name": {"const": "unclear_requirement"}, "routing_intent": {"const": "requirements_triage"}}, "required": ["name", "routing_intent"]},
+        {"properties": {"name": {"const": "planning_only"}, "routing_intent": {"const": "plan_lite"}}, "required": ["name", "routing_intent"]},
+        {"properties": {"name": {"const": "task_breakdown"}, "routing_intent": {"const": "task_breakdown"}}, "required": ["name", "routing_intent"]},
+        {"properties": {"name": {"const": "long_execution"}, "routing_intent": {"const": "planning_execution"}}, "required": ["name", "routing_intent"]},
+        {"properties": {"name": {"const": "unknown_root_cause_bug"}, "routing_intent": {"const": "systematic_debugging"}}, "required": ["name", "routing_intent"]},
+        {"properties": {"name": {"const": "embedded_log_analysis"}, "routing_intent": {"const": "embedded_remote_debug_log_triage"}}, "required": ["name", "routing_intent"]},
+        {"properties": {"name": {"const": "embedded_core_dump"}, "routing_intent": {"const": "offline_core_dump_triage"}}, "required": ["name", "routing_intent"]},
+        {"properties": {"name": {"const": "embedded_debug_transport"}, "routing_intent": {"const": "embedded_debug_transport"}}, "required": ["name", "routing_intent"]},
+        {"properties": {"name": {"const": "completion_gate"}, "routing_intent": {"const": "verification_before_completion"}}, "required": ["name", "routing_intent"]},
+        {"properties": {"name": {"const": "commit_pr_gate"}, "routing_intent": {"const": "commit_pr_quality_gate"}}, "required": ["name", "routing_intent"]},
+        {"properties": {"name": {"const": "release_versioning"}, "routing_intent": {"const": "release_versioning"}}, "required": ["name", "routing_intent"]},
+        {"properties": {"name": {"const": "external_practice_absorption"}, "routing_intent": {"const": "external_practice_absorption"}}, "required": ["name", "routing_intent"]},
+        {"properties": {"name": {"const": "skill_governance"}, "routing_intent": {"const": "skill_composition_governance"}}, "required": ["name", "routing_intent"]}
+      ]
     },
     "asset": {
       "type": "object",

@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-dev-kit.local/schemas/run-evidence-composition-v1.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "trace_ref", "trace_summary", "observed_at", "receipts", "measurement", "aggregation_window", "as_of", "raw_content_stored"],
+  "properties": {
+    "schema_version": {"const": "adk-run-evidence-composition/v1"},
+    "trace_ref": {"type": "string", "pattern": "^ref:[0-9a-f]{64}$"},
+    "trace_summary": {"type": "object"},
+    "observed_at": {"type": "string", "format": "date-time"},
+    "receipts": {"type": "array", "uniqueItems": true, "items": {"type": "object"}},
+    "measurement": {"type": ["object", "null"]},
+    "aggregation_window": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["from", "through"],
+          "properties": {
+            "from": {"type": "string", "format": "date-time"},
+            "through": {"type": "string", "format": "date-time"}
+          }
+        }
+      ]
+    },
+    "as_of": {"type": ["string", "null"], "format": "date-time"},
+    "raw_content_stored": {"const": false}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"receipts": {"maxItems": 0}}},
+      "then": {
+        "properties": {
+          "measurement": {"type": "null"},
+          "aggregation_window": {"type": "null"},
+          "as_of": {"type": "null"}
+        }
+      },
+      "else": {
+        "properties": {
+          "measurement": {"type": "object"},
+          "aggregation_window": {"type": "object"},
+          "as_of": {"type": "string", "format": "date-time"}
+        }
+      }
+    }
+  ]
+}

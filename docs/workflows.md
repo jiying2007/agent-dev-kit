@@ -2,6 +2,20 @@
 
 ## 核心流程（默认）
 
+Workflow 同时具有两种投影：
+
+- `manifest.json` 与 `workflows/<name>/WORKFLOW.md` 保存身份、触发、角色、工件和人类可读阶段合同。
+- `manifests/workflow_ir_policy.json` 与 typed compiler 将上述事实编译为 `adk-workflow-ir/v2`，显式展开
+  side effect、approval、retry、timeout/cancel、idempotency、checkpoint、rollback、evidence 和 transition。
+
+IR 只定义并验证执行语义，不执行模型、工具、scheduler、durable worker 或外部写入。任何目标 runtime
+必须通过独立 adapter/target contract 消费 IR，并保留权限、取消、失败和 rollback 证据。
+
+```bash
+rtk bash scripts/check-workflow-ir.sh --summary-json
+rtk bash tests/test_workflow_ir.sh
+```
+
 Workflow 是一等资产。生产级 Workflow 必须在 `manifest.json:workflows` 中登记，并提供 `workflows/<name>/WORKFLOW.md` 作为可审查契约。manifest 负责导出索引、profile 闭包和主/辅 Agent/Skill 关系；`WORKFLOW.md` 负责阶段、工件、失败处理和质量门禁说明。
 
 当前默认 Workflow：
@@ -57,7 +71,7 @@ Workflow manifest 必须声明 `command_risk`，取值为 `low`、`medium` 或 `
 
 ## 场景建议
 
-说明：下列 `Skill` 列表是人工 runbook 摘要，按 `Primary -> Supporting` 排列；第一个为主技能，其余只补充检查项，不抢占入口。场景级 SSOT 是 `manifest.json:skill_routing_matrix` 和 `docs/reference/skill-routing-matrix.md`；若本节与 routing matrix 不一致，以 routing matrix 为准。若场景需要多个可选技能，必须先确认 profile/安装范围，再执行匹配。
+说明：下列 `Skill` 列表是人工 runbook 摘要，按 `Primary -> Supporting` 排列；第一个为主技能，其余只补充检查项，不抢占入口。场景级运行 SSOT 是 `manifest.json:routing`；`skill_routing_matrix` 和 `docs/reference/skill-routing-matrix.md` 是由 routing intent 引用约束的投影。若本节与 routing IR 不一致，以 routing IR 为准。若场景需要多个可选技能，必须先确认 profile/安装范围，再执行匹配。
 
 ### 场景 A：新功能迭代
 

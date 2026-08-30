@@ -392,6 +392,100 @@ adk_resolve_profile_items_all() {
 
 # --- Routing table functions ---
 
+adk_list_routing_intent_names() {
+  awk '
+    /^routing:/ {in_routing=1; next}
+    in_routing && /^[^ ]/ {exit}
+    in_routing && /^    - intent:/ {
+      value=$0
+      sub(/^    - intent:[[:space:]]*/, "", value)
+      gsub(/^"|"$/, "", value)
+      print value
+    }
+  ' "$ADK_MANIFEST"
+}
+
+adk_routing_intent_exists() {
+  local intent="$1"
+  adk_list_routing_intent_names | grep -Fxq "$intent"
+}
+
+adk_get_routing_intent_value() {
+  local intent="$1"
+  local key="$2"
+  awk -v intent="$intent" -v key="$key" '
+    function trim(value) {
+      sub(/^[[:space:]]+/, "", value)
+      sub(/[[:space:]]+$/, "", value)
+      gsub(/^"|"$/, "", value)
+      return value
+    }
+    /^routing:/ {in_routing=1; next}
+    in_routing && /^[^ ]/ {exit}
+    in_routing && /^    - intent:/ {
+      value=$0
+      sub(/^    - intent:[[:space:]]*/, "", value)
+      current=trim(value)
+      next
+    }
+    in_routing && current == intent && $0 ~ "^      " key ":" {
+      value=$0
+      sub("^      " key ":[[:space:]]*", "", value)
+      print trim(value)
+      exit
+    }
+  ' "$ADK_MANIFEST"
+}
+
+adk_get_routing_intent_list() {
+  local intent="$1"
+  local key="$2"
+  awk -v intent="$intent" -v key="$key" '
+    function trim(value) {
+      sub(/^[[:space:]]+/, "", value)
+      sub(/[[:space:]]+$/, "", value)
+      gsub(/^"|"$/, "", value)
+      return value
+    }
+    function emit_inline(value, items, i, item) {
+      gsub(/[\[\]]/, "", value)
+      split(value, items, ",")
+      for (i in items) {
+        item=trim(items[i])
+        if (item != "") {
+          print item
+        }
+      }
+    }
+    /^routing:/ {in_routing=1; current=""; in_list=0; next}
+    in_routing && /^[^ ]/ {exit}
+    in_routing && /^    - intent:/ {
+      if (current == intent && in_list) {exit}
+      value=$0
+      sub(/^    - intent:[[:space:]]*/, "", value)
+      current=trim(value)
+      in_list=0
+      next
+    }
+    in_routing && current == intent {
+      if ($0 ~ "^      " key ":[[:space:]]*\\[") {
+        value=$0
+        sub("^      " key ":[[:space:]]*", "", value)
+        emit_inline(value)
+        exit
+      }
+      if ($0 ~ "^      " key ":[[:space:]]*$") {in_list=1; next}
+      if (in_list && $0 ~ /^        - /) {
+        value=$0
+        sub(/^        - /, "", value)
+        print trim(value)
+        next
+      }
+      if (in_list && $0 ~ /^      [a-zA-Z0-9_-]+:/) {exit}
+    }
+  ' "$ADK_MANIFEST"
+}
+
 adk_list_routing_intents() {
   # Output: intent_zh<TAB>primary_skill for each routing entry
   awk '

@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-dev-kit.local/schemas/effect-comparison-v1.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "campaign_id", "task_population", "window", "baseline", "candidate", "deltas", "evidence_scope", "quality_evidence_eligible", "owner_review_required", "lifecycle_authority", "raw_content_stored"],
+  "properties": {
+    "schema_version": {"const": "adk-effect-comparison/v1"},
+    "campaign_id": {"$ref": "#/$defs/identifier"},
+    "task_population": {
+      "type": "object", "additionalProperties": false,
+      "required": ["count", "digest", "coverage"],
+      "properties": {
+        "count": {"type": "integer", "minimum": 1},
+        "digest": {"$ref": "#/$defs/sha256"},
+        "coverage": {"const": "complete"}
+      }
+    },
+    "window": {
+      "type": "object", "additionalProperties": false,
+      "required": ["from", "through", "as_of"],
+      "properties": {
+        "from": {"type": "string", "format": "date-time"},
+        "through": {"type": "string", "format": "date-time"},
+        "as_of": {"type": "string", "format": "date-time"}
+      }
+    },
+    "baseline": {"$ref": "#/$defs/condition"},
+    "candidate": {"$ref": "#/$defs/condition"},
+    "deltas": {
+      "type": "object", "additionalProperties": false,
+      "required": ["task-success-rate", "first-pass-success-rate", "human-interventions-per-task", "latency-per-task-ms", "cost-per-task", "token-usage-per-task", "wrong-skill-rate", "abstain-rate"],
+      "properties": {
+        "task-success-rate": {"$ref": "#/$defs/delta"},
+        "first-pass-success-rate": {"$ref": "#/$defs/delta"},
+        "human-interventions-per-task": {"$ref": "#/$defs/delta"},
+        "latency-per-task-ms": {"$ref": "#/$defs/delta"},
+        "cost-per-task": {"$ref": "#/$defs/delta"},
+        "token-usage-per-task": {"$ref": "#/$defs/delta"},
+        "wrong-skill-rate": {"$ref": "#/$defs/delta"},
+        "abstain-rate": {"$ref": "#/$defs/delta"}
+      }
+    },
+    "evidence_scope": {"const": "test-only"},
+    "quality_evidence_eligible": {"const": false},
+    "owner_review_required": {"const": true},
+    "lifecycle_authority": {"const": "none-evidence-only"},
+    "raw_content_stored": {"const": false}
+  },
+  "$defs": {
+    "identifier": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._:/-]{0,127}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "metricMeasured": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status", "value", "sample_size", "applicable_sample_size", "observed_sample_size", "coverage", "unit"],
+      "properties": {
+        "status": {"const": "measured"}, "value": {"type": "number"},
+        "sample_size": {"type": "integer", "minimum": 1},
+        "applicable_sample_size": {"type": "integer", "minimum": 1},
+        "observed_sample_size": {"type": "integer", "minimum": 1},
+        "coverage": {"const": 1.0},
+        "unit": {"enum": ["ratio", "count-per-task", "milliseconds", "currency-amount", "tokens"]}
+      }
+    },
+    "metricUnavailable": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status", "reason", "applicable_sample_size", "observed_sample_size", "coverage"],
+      "properties": {
+        "status": {"const": "not-measured"}, "reason": {"enum": ["incomplete-coverage", "no-applicable-runs"]},
+        "applicable_sample_size": {"type": "integer", "minimum": 0},
+        "observed_sample_size": {"type": "integer", "minimum": 0},
+        "coverage": {"type": ["number", "null"], "minimum": 0, "maximum": 1}
+      }
+    },
+    "metric": {"oneOf": [{"$ref": "#/$defs/metricMeasured"}, {"$ref": "#/$defs/metricUnavailable"}]},
+    "metrics": {
+      "type": "object", "additionalProperties": false,
+      "required": ["task-success-rate", "first-pass-success-rate", "human-interventions-per-task", "latency-per-task-ms", "cost-per-task", "token-usage-per-task", "wrong-skill-rate", "abstain-rate"],
+      "properties": {
+        "task-success-rate": {"$ref": "#/$defs/metric"}, "first-pass-success-rate": {"$ref": "#/$defs/metric"},
+        "human-interventions-per-task": {"$ref": "#/$defs/metric"}, "latency-per-task-ms": {"$ref": "#/$defs/metric"},
+        "cost-per-task": {"$ref": "#/$defs/metric"}, "token-usage-per-task": {"$ref": "#/$defs/metric"},
+        "wrong-skill-rate": {"$ref": "#/$defs/metric"}, "abstain-rate": {"$ref": "#/$defs/metric"}
+      }
+    },
+    "condition": {
+      "type": "object", "additionalProperties": false,
+      "required": ["condition", "task_count", "asset_bundle_sha256", "runtime_target", "runtime_version", "model_version", "cost_currency", "prompt_versions", "run_evidence_refs", "observation_window", "metrics"],
+      "properties": {
+        "condition": {"enum": ["baseline", "candidate"]}, "task_count": {"type": "integer", "minimum": 1},
+        "asset_bundle_sha256": {"$ref": "#/$defs/sha256"}, "runtime_target": {"$ref": "#/$defs/identifier"},
+        "runtime_version": {"$ref": "#/$defs/identifier"}, "model_version": {"$ref": "#/$defs/identifier"},
+        "cost_currency": {"type": ["string", "null"], "pattern": "^[A-Z]{3}$"},
+        "prompt_versions": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/identifier"}},
+        "run_evidence_refs": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^ref:[0-9a-f]{64}$"}},
+        "observation_window": {
+          "type": "object", "additionalProperties": false, "required": ["from", "through"],
+          "properties": {"from": {"type": "string", "format": "date-time"}, "through": {"type": "string", "format": "date-time"}}
+        },
+        "metrics": {"$ref": "#/$defs/metrics"}
+      }
+    },
+    "delta": {
+      "oneOf": [
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["status", "candidate_minus_baseline", "direction", "unit"],
+          "properties": {
+            "status": {"const": "measured"}, "candidate_minus_baseline": {"type": "number"},
+            "direction": {"enum": ["higher", "lower", "diagnostic"]},
+            "unit": {"enum": ["ratio", "count-per-task", "milliseconds", "currency-amount", "tokens"]}
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["status", "reason", "direction"],
+          "properties": {
+            "status": {"const": "not-comparable"}, "reason": {"const": "incomplete-condition-coverage"},
+            "direction": {"enum": ["higher", "lower", "diagnostic"]}
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "version": "4.0.0",
+  "version": "5.0.0-rc.1",
   "locale": "zh-CN",
   "platforms": [
     "linux-embedded",
@@ -1397,7 +1397,6 @@
       "include_agents": [
         "requirements-analyst",
         "architecture-planner",
-        "driver-engineer",
         "component-engineer",
         "test-validation-engineer",
         "code-review-governor"
@@ -1416,15 +1415,11 @@
         "adk-interface-contract-design",
         "adk-adr-writer",
         "adk-component-api-stability",
-        "adk-driver-implementation",
-        "adk-driver-bringup-checklist",
         "adk-systematic-debugging",
         "adk-test-strategy",
-        "adk-unit-test-embedded",
         "adk-verification-before-completion",
         "adk-code-review-loop",
         "adk-repo-drift-remediation",
-        "adk-static-analysis-c-cpp",
         "adk-commit-pr-quality-gate",
         "adk-branch-closeout",
         "adk-after-action-review"
@@ -1490,6 +1485,7 @@
       ],
       "extends": "core",
       "include_agents": [
+        "driver-engineer",
         "bsp-analyst",
         "hardware-debugger",
         "application-engineer"
@@ -1497,6 +1493,8 @@
       "include_skills": [
         "adk-register-map-design",
         "adk-bsp-analysis",
+        "adk-driver-implementation",
+        "adk-driver-bringup-checklist",
         "adk-bsp-porting-playbook",
         "adk-rtos-task-design",
         "adk-interrupt-dma-patterns",
@@ -1506,9 +1504,11 @@
         "adk-embedded-remote-debug-log-triage",
         "adk-hardware-debugging",
         "adk-performance-profiling-embedded",
+        "adk-unit-test-embedded",
         "adk-integration-hil-sil",
         "adk-embedded-diagnostic-harness",
         "adk-fault-injection-recovery",
+        "adk-static-analysis-c-cpp",
         "adk-release-versioning",
         "adk-production-field-readiness",
         "adk-embedded-release-orchestration"
@@ -1623,7 +1623,7 @@
       "supporting_skills": [
         "adk-task-breakdown",
         "adk-interface-contract-design",
-        "adk-unit-test-embedded",
+        "adk-test-strategy",
         "adk-verification-before-completion",
         "adk-code-review-loop"
       ],
@@ -1645,7 +1645,7 @@
         "adk-requirements-triage",
         "adk-task-breakdown",
         "adk-interface-contract-design",
-        "adk-unit-test-embedded",
+        "adk-test-strategy",
         "adk-verification-before-completion",
         "adk-code-review-loop"
       ],
@@ -2130,12 +2130,7 @@
     {
       "name": "runtime_routing",
       "description": "任务开始前选择 profile、primary skill 和 supporting skill",
-      "primary_skill": "adk-runtime-router",
-      "supporting_skills": [],
-      "fallback_skills": [
-        "adk-requirements-triage"
-      ],
-      "mutually_exclusive": [],
+      "routing_intent": "runtime_router",
       "workflow": "runtime-routing",
       "profiles": [
         "core",
@@ -2152,15 +2147,7 @@
     {
       "name": "unclear_requirement",
       "description": "需求、边界、验收或优先级不清，需要先收敛",
-      "primary_skill": "adk-requirements-triage",
-      "supporting_skills": [
-        "adk-structured-requirements-questioning"
-      ],
-      "fallback_skills": [],
-      "mutually_exclusive": [
-        "adk-lightweight-planning",
-        "adk-planning-execution-loop"
-      ],
+      "routing_intent": "requirements_triage",
       "workflow": "feature-delivery",
       "profiles": [
         "core",
@@ -2177,14 +2164,7 @@
     {
       "name": "planning_only",
       "description": "用户明确要求只读计划，不创建、不修改、不删除文件",
-      "primary_skill": "adk-lightweight-planning",
-      "supporting_skills": [],
-      "fallback_skills": [
-        "adk-requirements-triage"
-      ],
-      "mutually_exclusive": [
-        "adk-planning-execution-loop"
-      ],
+      "routing_intent": "plan_lite",
       "workflow": "-",
       "profiles": [
         "core"
@@ -2200,14 +2180,7 @@
     {
       "name": "task_breakdown",
       "description": "需求已明确但任务过大，需要拆成可执行任务包",
-      "primary_skill": "adk-task-breakdown",
-      "supporting_skills": [
-        "adk-requirements-triage"
-      ],
-      "fallback_skills": [
-        "adk-lightweight-planning"
-      ],
-      "mutually_exclusive": [],
+      "routing_intent": "task_breakdown",
       "workflow": "feature-delivery",
       "profiles": [
         "core",
@@ -2224,18 +2197,7 @@
     {
       "name": "long_execution",
       "description": "长任务需要计划审查、检查点、恢复和完成前闭环",
-      "availability": "optional-skill-required",
-      "primary_skill": "adk-planning-execution-loop",
-      "supporting_skills": [
-        "adk-task-breakdown",
-        "adk-verification-before-completion"
-      ],
-      "fallback_skills": [
-        "adk-lightweight-planning"
-      ],
-      "mutually_exclusive": [
-        "adk-lightweight-planning"
-      ],
+      "routing_intent": "planning_execution",
       "workflow": "feature-delivery",
       "profiles": [
         "core",
@@ -2252,15 +2214,7 @@
     {
       "name": "unknown_root_cause_bug",
       "description": "行为异常但根因未明，需要系统化定位再修复",
-      "primary_skill": "adk-systematic-debugging",
-      "supporting_skills": [
-        "adk-test-strategy",
-        "adk-verification-before-completion"
-      ],
-      "fallback_skills": [],
-      "mutually_exclusive": [
-        "adk-lightweight-planning"
-      ],
+      "routing_intent": "systematic_debugging",
       "workflow": "bugfix-delivery",
       "profiles": [
         "core",
@@ -2277,16 +2231,7 @@
     {
       "name": "embedded_log_analysis",
       "description": "嵌入式串口、boot、dmesg、ADB/logcat、OTA 或现场日志分析",
-      "primary_skill": "adk-embedded-remote-debug-log-triage",
-      "supporting_skills": [
-        "adk-systematic-debugging",
-        "adk-embedded-debug-transport",
-        "adk-offline-core-dump-triage"
-      ],
-      "fallback_skills": [
-        "adk-systematic-debugging"
-      ],
-      "mutually_exclusive": [],
+      "routing_intent": "embedded_remote_debug_log_triage",
       "workflow": "bugfix-delivery",
       "profiles": [
         "embedded-fullstack",
@@ -2303,15 +2248,7 @@
     {
       "name": "embedded_core_dump",
       "description": "嵌入式 Linux core dump、BuildID、符号和 backtrace 离线分析",
-      "primary_skill": "adk-offline-core-dump-triage",
-      "supporting_skills": [
-        "adk-systematic-debugging",
-        "adk-embedded-remote-debug-log-triage"
-      ],
-      "fallback_skills": [
-        "adk-systematic-debugging"
-      ],
-      "mutually_exclusive": [],
+      "routing_intent": "offline_core_dump_triage",
       "workflow": "bugfix-delivery",
       "profiles": [
         "embedded-fullstack",
@@ -2328,14 +2265,7 @@
     {
       "name": "embedded_debug_transport",
       "description": "ADB、SSH、串口、GDB remote、调试探针或厂商 CLI 的连接边界治理",
-      "primary_skill": "adk-embedded-debug-transport",
-      "supporting_skills": [
-        "adk-systematic-debugging"
-      ],
-      "fallback_skills": [
-        "adk-embedded-remote-debug-log-triage"
-      ],
-      "mutually_exclusive": [],
+      "routing_intent": "embedded_debug_transport",
       "workflow": "bugfix-delivery",
       "profiles": [
         "embedded-fullstack"
@@ -2351,12 +2281,7 @@
     {
       "name": "completion_gate",
       "description": "完成前核对声明、验证证据、风险和回退边界",
-      "primary_skill": "adk-verification-before-completion",
-      "supporting_skills": [
-        "adk-test-strategy"
-      ],
-      "fallback_skills": [],
-      "mutually_exclusive": [],
+      "routing_intent": "verification_before_completion",
       "workflow": "adk-delivery-gate",
       "profiles": [
         "core",
@@ -2373,13 +2298,7 @@
     {
       "name": "commit_pr_gate",
       "description": "提交或 PR 前质量门禁、格式、评审和证据检查",
-      "primary_skill": "adk-commit-pr-quality-gate",
-      "supporting_skills": [
-        "adk-verification-before-completion",
-        "adk-code-review-loop"
-      ],
-      "fallback_skills": [],
-      "mutually_exclusive": [],
+      "routing_intent": "commit_pr_quality_gate",
       "workflow": "adk-delivery-gate",
       "profiles": [
         "core",
@@ -2396,15 +2315,7 @@
     {
       "name": "release_versioning",
       "description": "发布、版本、制品、回滚和放行证据收口",
-      "primary_skill": "adk-release-versioning",
-      "supporting_skills": [
-        "adk-commit-pr-quality-gate",
-        "adk-verification-before-completion"
-      ],
-      "fallback_skills": [
-        "adk-branch-closeout"
-      ],
-      "mutually_exclusive": [],
+      "routing_intent": "release_versioning",
       "workflow": "release-hardening",
       "profiles": [
         "release-hardening",
@@ -2421,17 +2332,7 @@
     {
       "name": "external_practice_absorption",
       "description": "多来源外部实践的来源审查、独立决策、ADK change、验证、pilot、发布复审和退役治理",
-      "availability": "optional-skill-required",
-      "primary_skill": "adk-external-practice-absorption",
-      "supporting_skills": [
-        "adk-requirements-triage",
-        "adk-repo-prompt-analysis",
-        "adk-verification-before-completion"
-      ],
-      "fallback_skills": [
-        "adk-requirements-triage"
-      ],
-      "mutually_exclusive": [],
+      "routing_intent": "external_practice_absorption",
       "workflow": "external-practice-absorption",
       "profiles": [
         "research-intake"
@@ -2447,16 +2348,7 @@
     {
       "name": "skill_governance",
       "description": "skill 组合、触发优先级、fallback、弃用和 profile 归属治理",
-      "availability": "optional-skill-required",
-      "primary_skill": "adk-skill-composition-governance",
-      "supporting_skills": [
-        "adk-repo-drift-remediation",
-        "adk-verification-before-completion"
-      ],
-      "fallback_skills": [
-        "adk-requirements-triage"
-      ],
-      "mutually_exclusive": [],
+      "routing_intent": "skill_composition_governance",
       "workflow": "skill-curation-delivery",
       "profiles": [
         "core",
@@ -2473,13 +2365,131 @@
   ],
   "routing": {
     "enabled": true,
+    "ir_version": "routing-ir/v2",
     "fallback_profile": "core",
+    "defaults": {
+      "task_mode": "needs-triage",
+      "mutation_permission": "deny",
+      "risk": "unknown",
+      "profile_availability": "fallback-profile",
+      "required_evidence": []
+    },
+    "phrase_classes": {
+      "readonly_scope": [
+        "只读分析",
+        "只读评估",
+        "架构评估",
+        "评估架构",
+        "解释现状",
+      "说明现状"
+      ,
+      "只分析"
+    ],
+    "generic_execution": [
+      "执行",
+      "实施",
+      "推进",
+      "落地"
+    ],
+      "planning_action": [
+        "执行计划",
+        "推进计划",
+        "落实计划",
+        "实施计划"
+      ],
+      "debugging_action": [
+        "调试",
+        "排查根因",
+        "定位根因",
+        "问题排查"
+      ],
+      "release_action": [
+        "发布",
+        "发版",
+        "上线",
+        "部署"
+      ]
+    },
+    "negation_phrase_classes": {
+      "direct_prohibition": [
+        "别",
+        "不要",
+        "请勿"
+      ],
+      "not_required": [
+        "不需要",
+        "无需",
+        "不用"
+      ],
+      "execution_denial": [
+        "不执行",
+        "不做"
+      ],
+      "contrastive_prohibition": [
+        "不过别",
+        "但是别",
+        "但别"
+      ],
+      "generic_negation": [
+        "不是",
+        "不"
+      ]
+    },
+    "task_modes": [
+      {
+        "task_mode": "readonly",
+        "intent_zh": "只读/只做只读分析/仅做只读分析/只做架构评估/仅做架构评估/只需要解释现状/仅解释现状/只说明现状/仅说明现状/不要修改/不修改/不执行/无需执行/只分析",
+        "priority": 100,
+        "mutation_permission": "deny"
+      },
+      {
+        "task_mode": "release",
+        "intent_zh": "执行发布/执行发版/正式发布/准备发布/发布上线/部署上线",
+        "priority": 80,
+        "mutation_permission": "explicit-authorization-required"
+      },
+      {
+        "task_mode": "implementation",
+        "intent_zh": "实现/修改代码/修复/落地/开发功能/写代码/执行计划/分阶段执行",
+        "priority": 60,
+        "mutation_permission": "workspace-write"
+      },
+      {
+        "task_mode": "debugging",
+        "intent_zh": "调试/排查根因/问题排查/定位根因/根因未明/根因不明",
+        "priority": 50,
+        "mutation_permission": "deny"
+      },
+      {
+        "task_mode": "review",
+        "intent_zh": "代码审查/审查代码/review代码/只做review/架构评估",
+        "priority": 40,
+        "mutation_permission": "deny"
+      }
+    ],
+    "artifact_mode_mapping": {
+      "needs-triage": null,
+      "readonly": "readonly",
+      "implementation": "implementation",
+      "debugging": "readonly",
+      "review": "readonly",
+      "release": "release"
+    },
+    "abstain": {
+      "enabled": true,
+      "decision": "abstain",
+      "reason": "needs-triage",
+      "mutation_permission": "deny"
+    },
     "intents": [
       {
         "intent": "runtime_router",
         "intent_zh": "技能路由/选择技能/任务分流/adk路由/adk-first/判断使用哪个技能/运行时路由/开始任务前",
         "primary_skill": "adk-runtime-router",
-        "supporting_skills": []
+        "supporting_skills": [],
+        "fallback_skills": [
+          "adk-requirements-triage"
+        ]
       },
       {
         "intent": "token_context_governance",
@@ -2494,7 +2504,11 @@
         "intent": "requirements_triage",
         "intent_zh": "需求不清楚/需要澄清/需求模糊/需求不明确/新功能/实现新功能/验收标准/目标边界",
         "primary_skill": "adk-requirements-triage",
-        "supporting_skills": []
+        "supporting_skills": [],
+        "mutually_exclusive": [
+          "adk-lightweight-planning",
+          "adk-planning-execution-loop"
+        ]
       },
       {
         "intent": "task_breakdown",
@@ -2502,13 +2516,72 @@
         "primary_skill": "adk-task-breakdown",
         "supporting_skills": [
           "adk-requirements-triage"
+        ],
+        "fallback_skills": [
+          "adk-lightweight-planning"
         ]
       },
       {
         "intent": "plan_lite",
         "intent_zh": "给我一个计划/制定计划/实现计划/只要计划/先给计划/create plan/plan only/轻量计划",
         "primary_skill": "adk-lightweight-planning",
-        "supporting_skills": []
+        "supporting_skills": [],
+        "fallback_skills": [
+          "adk-requirements-triage"
+        ],
+        "mutually_exclusive": [
+          "adk-planning-execution-loop"
+        ]
+      },
+      {
+        "intent": "planning_execution",
+        "intent_zh": "执行计划/多阶段任务/计划审查/长任务/分阶段执行/恢复摘要/中途改范围/失败阶段回退",
+        "primary_skill": "adk-planning-execution-loop",
+        "supporting_skills": [
+          "adk-verification-before-completion"
+        ],
+        "fallback_skills": [
+          "adk-lightweight-planning"
+        ],
+        "mutually_exclusive": [
+          "adk-lightweight-planning"
+        ],
+        "availability": "optional-skill-required",
+        "task_mode": "implementation",
+        "mutation_permission": "workspace-write",
+        "risk": "medium",
+        "profile_availability": "optional-skill-required",
+        "required_evidence": [
+          "approved plan and scoped mutation boundary"
+        ],
+        "negated_intents": [
+        {
+          "name": "readonly_without_execution",
+            "all_of": [
+              {
+                "phrase_class": "readonly_scope",
+                "polarity": "positive"
+              },
+              {
+                "phrase_class": "planning_action",
+                "polarity": "negated"
+            }
+          ]
+        },
+        {
+          "name": "readonly_with_generic_execution_denial",
+          "all_of": [
+            {
+              "phrase_class": "readonly_scope",
+              "polarity": "positive"
+            },
+            {
+              "phrase_class": "generic_execution",
+              "polarity": "negated"
+            }
+          ]
+        }
+        ]
       },
       {
         "intent": "context_compress_handoff",
@@ -2568,6 +2641,9 @@
         "primary_skill": "adk-embedded-debug-transport",
         "supporting_skills": [
           "adk-systematic-debugging"
+        ],
+        "fallback_skills": [
+          "adk-embedded-remote-debug-log-triage"
         ]
       },
       {
@@ -2579,13 +2655,54 @@
           "adk-offline-core-dump-triage",
           "adk-embedded-diagnostic-harness",
           "adk-token-context-governance"
+        ],
+        "fallback_skills": [
+          "adk-systematic-debugging"
         ]
       },
       {
         "intent": "systematic_debugging",
         "intent_zh": "调试/调试问题/排查根因/问题排查/定位根因/真实问题排查/根因未明",
         "primary_skill": "adk-systematic-debugging",
-        "supporting_skills": []
+        "supporting_skills": [],
+        "mutually_exclusive": [
+          "adk-lightweight-planning"
+        ],
+        "task_mode": "debugging",
+        "mutation_permission": "deny",
+        "risk": "medium",
+        "profile_availability": "fallback-profile",
+        "required_evidence": [
+          "reproduction evidence before root-cause claim"
+        ],
+        "negated_intents": [
+        {
+          "name": "architecture_assessment_without_debugging",
+            "all_of": [
+              {
+                "phrase_class": "readonly_scope",
+                "polarity": "positive"
+              },
+              {
+                "phrase_class": "debugging_action",
+                "polarity": "negated"
+            }
+          ]
+        },
+        {
+          "name": "readonly_with_generic_execution_denial",
+          "all_of": [
+            {
+              "phrase_class": "readonly_scope",
+              "polarity": "positive"
+            },
+            {
+              "phrase_class": "generic_execution",
+              "polarity": "negated"
+            }
+          ]
+        }
+        ]
       },
       {
         "intent": "verification_before_completion",
@@ -2652,6 +2769,9 @@
           "adk-requirements-triage",
           "adk-repo-prompt-analysis",
           "adk-verification-before-completion"
+        ],
+        "fallback_skills": [
+          "adk-requirements-triage"
         ]
       },
       {
@@ -2662,6 +2782,9 @@
         "supporting_skills": [
           "adk-repo-drift-remediation",
           "adk-verification-before-completion"
+        ],
+        "fallback_skills": [
+          "adk-requirements-triage"
         ]
       },
       {
@@ -2758,6 +2881,9 @@
         "primary_skill": "adk-offline-core-dump-triage",
         "supporting_skills": [
           "adk-systematic-debugging"
+        ],
+        "fallback_skills": [
+          "adk-systematic-debugging"
         ]
       },
       {
@@ -2827,6 +2953,44 @@
         "primary_skill": "adk-release-versioning",
         "supporting_skills": [
           "adk-commit-pr-quality-gate"
+        ],
+        "fallback_skills": [
+          "adk-branch-closeout"
+        ],
+        "task_mode": "release",
+        "mutation_permission": "explicit-authorization-required",
+        "risk": "high",
+        "profile_availability": "fallback-profile",
+        "required_evidence": [
+          "release scope, rollback anchor, and explicit authorization"
+        ],
+        "negated_intents": [
+        {
+          "name": "readonly_release_explanation",
+            "all_of": [
+              {
+                "phrase_class": "readonly_scope",
+                "polarity": "positive"
+              },
+              {
+                "phrase_class": "release_action",
+                "polarity": "negated"
+            }
+          ]
+        },
+        {
+          "name": "readonly_with_generic_execution_denial",
+          "all_of": [
+            {
+              "phrase_class": "readonly_scope",
+              "polarity": "positive"
+            },
+            {
+              "phrase_class": "generic_execution",
+              "polarity": "negated"
+            }
+          ]
+        }
         ]
       }
     ]

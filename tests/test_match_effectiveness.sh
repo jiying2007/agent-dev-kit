@@ -170,12 +170,167 @@ test_routing_performance() {
     [[ "$output" == *"match=true"* && "$output" == *"source=routing"* && "$output" == *"skill=adk-performance-profiling-embedded"* ]]
 }
 
+test_routing_planning_execution_positive() {
+    local output
+    output=$("$MATCH_SCRIPT" --text "长任务，需要执行计划并分阶段执行" 2>&1) || true
+    [[ "$output" == *"match=true"* &&
+       "$output" == *"source=routing"* &&
+       "$output" == *"skill=adk-planning-execution-loop"* &&
+       "$output" == *"task_mode=implementation"* &&
+       "$output" == *"mutation_permission=workspace-write"* &&
+       "$output" == *"artifact_mode=implementation"* ]]
+}
+
+test_routing_debugging_contrastive_positive() {
+    local output
+    output=$("$MATCH_SCRIPT" --text "根因未明，需要调试并定位根因" 2>&1) || true
+    [[ "$output" == *"match=true"* &&
+       "$output" == *"skill=adk-systematic-debugging"* &&
+       "$output" == *"task_mode=debugging"* &&
+       "$output" == *"mutation_permission=deny"* &&
+       "$output" == *"artifact_mode=readonly"* ]]
+}
+
+test_routing_debugging_intent_caps_implementation_signal() {
+    local output
+    output=$("$MATCH_SCRIPT" --text "根因未明，需要调试并修复" 2>&1) || true
+    [[ "$output" == *"match=true"* &&
+       "$output" == *"skill=adk-systematic-debugging"* &&
+       "$output" == *"task_mode=debugging"* &&
+       "$output" == *"mutation_permission=deny"* &&
+       "$output" == *"artifact_mode=readonly"* ]]
+}
+
+test_negated_non_trigger_does_not_veto_debugging() {
+    local output
+    output=$("$MATCH_SCRIPT" --text "这不是纯文档或命名修改；根因未明，请调试并定位根因" 2>&1) || true
+    [[ "$output" == *"match=true"* &&
+       "$output" == *"skill=adk-systematic-debugging"* &&
+       "$output" == *"task_mode=debugging"* &&
+       "$output" == *"mutation_permission=deny"* ]]
+}
+
+test_routing_release_contrastive_positive() {
+    local output
+    output=$("$MATCH_SCRIPT" --text "准备发布并执行发布前检查" 2>&1) || true
+    [[ "$output" == *"match=true"* &&
+       "$output" == *"skill=adk-release-versioning"* &&
+       "$output" == *"task_mode=release"* &&
+       "$output" == *"mutation_permission=explicit-authorization-required"* &&
+       "$output" == *"artifact_mode=release"* ]]
+}
+
+test_review_maps_to_readonly_artifacts() {
+    local output
+    output=$("$MATCH_SCRIPT" --text "代码审查" 2>&1) || true
+    [[ "$output" == *"match=true"* &&
+       "$output" == *"task_mode=review"* &&
+       "$output" == *"mutation_permission=deny"* &&
+       "$output" == *"artifact_mode=readonly"* ]]
+}
+
 # --- 负向测试用例 (should NOT match) ---
+
+assert_readonly_abstain() {
+    local text="$1"
+    local negated_intent="$2"
+    local output rc=0
+    output=$("$MATCH_SCRIPT" --text "$text" 2>&1) || rc=$?
+    [[ $rc -ne 0 &&
+       "$output" == *"match=false"* &&
+       "$output" == *"decision=abstain"* &&
+       "$output" == *"reason=needs-triage"* &&
+       "$output" == *"task_mode=readonly"* &&
+       "$output" == *"mutation_permission=deny"* &&
+       "$output" == *"artifact_mode=readonly"* &&
+       "$output" == *"negated_intents="*"$negated_intent"* ]]
+}
+
+test_negative_readonly_long_task() {
+    assert_readonly_abstain \
+        "长任务但只做只读分析且无需执行计划" \
+        "planning_execution"
+}
+
+test_negative_architecture_without_debugging() {
+    assert_readonly_abstain \
+        "根因不明但不要调试只做架构评估" \
+        "systematic_debugging"
+}
+
+test_negative_release_explanation_only() {
+    assert_readonly_abstain \
+        "准备发布但只需要解释现状不执行发布" \
+        "release_versioning"
+}
+
+test_negation_phrase_classes_metamorphic_planning() {
+    local marker
+    assert_readonly_abstain \
+        "长任务，只分析，不需要执行计划" \
+        "planning_execution" || return 1
+    for marker in "无需" "别" "不要" "请勿" "不过别"; do
+        assert_readonly_abstain \
+            "长任务，只读分析，${marker}执行计划" \
+            "planning_execution" || return 1
+    done
+}
+
+test_negation_phrase_classes_metamorphic_debugging() {
+    local marker
+    for marker in "不需要" "无需" "别" "不要" "请勿" "不过别"; do
+        assert_readonly_abstain \
+            "根因不明，只做架构评估，${marker}调试" \
+            "systematic_debugging" || return 1
+    done
+}
+
+test_negation_phrase_classes_metamorphic_release() {
+    local marker
+    assert_readonly_abstain \
+        "准备发布，不过请勿执行，只说明现状" \
+        "release_versioning" || return 1
+    for marker in "不需要" "无需" "别" "不要" "不过别"; do
+        assert_readonly_abstain \
+            "准备发布，只说明现状，${marker}发布" \
+            "release_versioning" || return 1
+    done
+}
+
+test_multiturn_latest_turn_release_to_readonly() {
+    local turn1 turn2 turn2_rc=0
+    turn1=$("$MATCH_SCRIPT" --text "准备发布" 2>&1) || return 1
+    turn2=$("$MATCH_SCRIPT" --text "只说明现状不执行" 2>&1) || turn2_rc=$?
+    [[ "$turn1" == *"match=true"* &&
+       "$turn1" == *"skill=adk-release-versioning"* &&
+       "$turn1" == *"task_mode=release"* &&
+       "$turn1" == *"mutation_permission=explicit-authorization-required"* &&
+       $turn2_rc -ne 0 &&
+       "$turn2" == *"decision=abstain"* &&
+       "$turn2" == *"task_mode=readonly"* &&
+       "$turn2" == *"mutation_permission=deny"* ]]
+}
+
+test_multiturn_latest_turn_readonly_to_implementation() {
+    local turn1 turn1_rc=0 turn2
+    turn1=$("$MATCH_SCRIPT" --text "仅做架构评估" 2>&1) || turn1_rc=$?
+    turn2=$("$MATCH_SCRIPT" --text "现在明确授权实现新功能并修改代码" 2>&1) || return 1
+    [[ $turn1_rc -ne 0 &&
+       "$turn1" == *"decision=abstain"* &&
+       "$turn1" == *"task_mode=readonly"* &&
+       "$turn1" == *"mutation_permission=deny"* &&
+       "$turn2" == *"match=true"* &&
+       "$turn2" == *"task_mode=implementation"* &&
+       "$turn2" == *"mutation_permission=workspace-write"* &&
+       "$turn2" != *"task_mode=readonly"* ]]
+}
 
 test_negative_unrelated_xyz() {
     local output rc=0
     output=$("$MATCH_SCRIPT" --text "完全无关的文本xyz" 2>&1) || rc=$?
-    [[ "$output" == *"match=false"* && $rc -ne 0 ]]
+    [[ "$output" == *"match=false"* && "$output" == *"decision=abstain"* &&
+       "$output" == *"reason=needs-triage"* && "$output" == *"artifact_mode=not-applicable"* &&
+       $rc -ne 0 ]]
 }
 
 test_negative_weather() {
@@ -218,9 +373,23 @@ run_test "启动链 -> adk-bsp-porting-playbook" test_routing_boot_chain
 run_test "量产现场 -> adk-production-field-readiness" test_routing_production_field
 run_test "production-field pilot id -> adk-production-field-readiness" test_routing_production_field_pilot_id
 run_test "性能分析 -> adk-performance-profiling-embedded" test_routing_performance
+run_test "长任务执行计划 -> adk-planning-execution-loop" test_routing_planning_execution_positive
+run_test "调试正向对照 -> adk-systematic-debugging" test_routing_debugging_contrastive_positive
+run_test "调试 intent 限制实现权限" test_routing_debugging_intent_caps_implementation_signal
+run_test "否定 non-trigger 不得压制调试" test_negated_non_trigger_does_not_veto_debugging
+run_test "发布正向对照 -> adk-release-versioning" test_routing_release_contrastive_positive
+run_test "review mode -> readonly artifact mode" test_review_maps_to_readonly_artifacts
 
 echo ""
 echo "--- Negative cases (should not match) ---"
+run_test "只读长任务且无需执行 -> abstain" test_negative_readonly_long_task
+run_test "架构评估且不要调试 -> abstain" test_negative_architecture_without_debugging
+run_test "只解释发布现状且不执行 -> abstain" test_negative_release_explanation_only
+run_test "规划动作否定 phrase classes 变形 -> abstain" test_negation_phrase_classes_metamorphic_planning
+run_test "调试动作否定 phrase classes 变形 -> abstain" test_negation_phrase_classes_metamorphic_debugging
+run_test "发布动作否定 phrase classes 变形 -> abstain" test_negation_phrase_classes_metamorphic_release
+run_test "多轮 release -> readonly 以最新 turn 为准" test_multiturn_latest_turn_release_to_readonly
+run_test "多轮 readonly -> implementation 以最新 turn 为准" test_multiturn_latest_turn_readonly_to_implementation
 run_test "完全无关的文本xyz -> no match" test_negative_unrelated_xyz
 run_test "今天天气很好 -> no match" test_negative_weather
 run_test "abc123 -> no match" test_negative_abc
@@ -230,6 +399,7 @@ echo "================================="
 echo "Total: $TESTS_TOTAL, Passed: $TESTS_PASSED, Failed: $TESTS_FAILED"
 
 if [[ $TESTS_FAILED -eq 0 ]]; then
+    PYTHONPATH="$ROOT_DIR/src" python3 "$ROOT_DIR/tests/test_routing_ir_contract.py"
     echo -e "${GREEN}All match effectiveness tests passed${NC}"
     exit 0
 else

@@ -1,0 +1,160 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-dev-kit.local/schemas/runtime-control-policy-v2.schema.json",
+  "title": "Runtime Control Policy V2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "token",
+    "context",
+    "progress",
+    "artifact_applicability",
+    "mode_authority_policy",
+    "retention"
+  ],
+  "properties": {
+    "schema_version": {"const": "runtime_control.policy/v2"},
+    "token": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["checkpoint_ratio", "compact_ratio", "stop_ratio"],
+      "properties": {
+        "checkpoint_ratio": {"type": "number", "exclusiveMinimum": 0},
+        "compact_ratio": {"type": "number", "exclusiveMinimum": 0},
+        "stop_ratio": {"type": "number", "exclusiveMinimum": 0}
+      }
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["compact_ratio"],
+      "properties": {
+        "compact_ratio": {"type": "number", "exclusiveMinimum": 0, "maximum": 1}
+      }
+    },
+    "progress": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["staleness_seconds", "retry_limit", "no_progress_limit"],
+      "properties": {
+        "staleness_seconds": {"type": "integer", "minimum": 1},
+        "retry_limit": {"type": "integer", "minimum": 1},
+        "no_progress_limit": {"type": "integer", "minimum": 1}
+      }
+    },
+    "artifact_applicability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["readonly", "implementation", "release"],
+      "properties": {
+        "readonly": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["steady", "final", "commit", "apply", "release"],
+          "properties": {
+            "steady": {"type": "array", "maxItems": 0},
+            "final": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {"const": "review"}
+            },
+            "commit": {"type": "null"},
+            "apply": {"type": "null"},
+            "release": {"type": "null"}
+          }
+        },
+        "implementation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["steady", "final", "commit", "apply", "release"],
+          "properties": {
+            "steady": {"type": "array", "maxItems": 0},
+            "final": {"$ref": "#/$defs/repoBuildArtifacts"},
+            "commit": {"$ref": "#/$defs/repoBuildReviewArtifacts"},
+            "apply": {"$ref": "#/$defs/applyArtifacts"},
+            "release": {"type": "null"}
+          }
+        },
+        "release": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["steady", "final", "commit", "apply", "release"],
+          "properties": {
+            "steady": {"type": "array", "maxItems": 0},
+            "final": {"$ref": "#/$defs/repoBuildArtifacts"},
+            "commit": {"$ref": "#/$defs/repoBuildReviewArtifacts"},
+            "apply": {"$ref": "#/$defs/applyArtifacts"},
+            "release": {"$ref": "#/$defs/releaseArtifacts"}
+          }
+        }
+      }
+    },
+    "mode_authority_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["managed", "trusted_mode_authorities", "verification_backend"],
+      "properties": {
+        "managed": {"const": true},
+        "trusted_mode_authorities": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"}
+        },
+        "verification_backend": {"enum": ["not-configured", "managed-authority-registry"]}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"trusted_mode_authorities": {"maxItems": 0}}},
+          "then": {"properties": {"verification_backend": {"const": "not-configured"}}}
+        },
+        {
+          "if": {"properties": {"trusted_mode_authorities": {"minItems": 1}}},
+          "then": {"properties": {"verification_backend": {"const": "managed-authority-registry"}}}
+        }
+      ]
+    },
+    "retention": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["journal_days", "raw_content_stored"],
+      "properties": {
+        "journal_days": {"type": "integer", "minimum": 1},
+        "raw_content_stored": {"const": false}
+      }
+    }
+  },
+  "$defs": {
+    "artifactList": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"enum": ["repo", "build", "plan", "dry-run", "live", "review"]}
+    },
+    "repoBuildArtifacts": {
+      "allOf": [
+        {"$ref": "#/$defs/artifactList"},
+        {"contains": {"const": "repo"}},
+        {"contains": {"const": "build"}}
+      ]
+    },
+    "repoBuildReviewArtifacts": {
+      "allOf": [
+        {"$ref": "#/$defs/repoBuildArtifacts"},
+        {"contains": {"const": "review"}}
+      ]
+    },
+    "applyArtifacts": {
+      "allOf": [
+        {"$ref": "#/$defs/repoBuildArtifacts"},
+        {"contains": {"const": "plan"}},
+        {"contains": {"const": "dry-run"}}
+      ]
+    },
+    "releaseArtifacts": {
+      "allOf": [
+        {"$ref": "#/$defs/repoBuildReviewArtifacts"},
+        {"contains": {"const": "live"}}
+      ]
+    }
+  }
+}

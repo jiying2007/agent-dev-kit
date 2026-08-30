@@ -102,4 +102,4 @@ Historical role-style assets are removed from live source, not aliased:
 
 每个 live Skill 和 Optional Skill 必须在 `manifest.json` 声明 `category`、`lifecycle_order`、`stage_order`、`activation_mode` 和 `pattern`。`lifecycle_order` 用于跨类别生命周期排序，`stage_order` 用于同一类别内的流程排序。每个 Workflow 必须声明 `workflow_type`、`lifecycle_order`、`entry_conditions` 和 `exit_evidence`。Profile 的 `include_skills` 必须按生命周期和阶段顺序排列。
 
-场景级入口以 `manifest.json:skill_routing_matrix` 为准：一个场景只能有一个 `primary_skill`，`supporting_skills` 不得抢占入口，`fallback_skills` 必须指向已声明的 Skill 或 Optional Skill。默认 catalog 生成会同步更新 `docs/reference/skill-routing-matrix.md`。
+场景级运行语义以 `manifest.json:routing` 为唯一 SSOT：一个 intent 只能有一个 `primary_skill`，`supporting_skills` 不得抢占入口，`fallback_skills` 必须指向已声明的 Skill 或 Optional Skill。`skill_routing_matrix` 只保留 `routing_intent` 引用与场景展示元数据；默认 catalog 从 routing IR 派生并同步更新 `docs/reference/skill-routing-matrix.md`，schema 禁止矩阵重复声明 primary/supporting/fallback/mutex/availability。
