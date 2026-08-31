@@ -10,13 +10,13 @@ status: evidence-ready
 
 - primary: `adk-branch-closeout`
 - supporting: `adk-verification-before-completion`, `adk-commit-pr-quality-gate`
-- fallback: 仅当远端 PR 工具或组织流程必须使用迁移期流程时显式使用
+- internal fallback: 远端 PR 工具不可用时只输出人工步骤，不执行未授权远端操作
 
 ## 验证证据
 
 ### 原始任务输入
 
-用户要求补齐 Superpowers finishing-a-development-branch 的分支收尾决策能力，同时遵守本地验证、PR/远端操作人工确认和回滚记录。
+用户要求 ADK 原生覆盖分支收尾决策能力，同时遵守本地验证、PR/远端操作人工确认和回滚记录。
 
 ### Runner
 

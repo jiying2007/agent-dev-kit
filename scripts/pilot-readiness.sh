@@ -3,7 +3,6 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PILOT_INDEX="${ROOT}/docs/pilots/index.tsv"
-FALLBACK_MATRIX="${ROOT}/docs/reference/fallback-sunset-matrix.tsv"
 SUMMARY_JSON=0
 PILOT_FILTER=""
 
@@ -16,7 +15,6 @@ Checks pilot evidence readiness:
   - pilot evidence files exist and mirror indexed status
   - planned pilots keep pending evidence explicit
   - evidence-ready/regression-ready pilots include verification evidence
-  - fallback sunset matrix links are reported for each pilot
 
 Options:
   --pilot <pilot_id>  Check one pilot.
@@ -66,36 +64,11 @@ require_heading() {
   rg -q "^${heading}$" "${file}" || fail "pilot file missing heading '${heading}': ${file#$ROOT/}"
 }
 
-linked_fallbacks_for_file() {
-  local evidence_file="$1"
-  awk -F '\t' -v file="${evidence_file}" '
-    NR == 1 {next}
-    {
-      split($9, refs, ",")
-      for (i in refs) {
-        if (refs[i] == file) {
-          if (out != "") out = out ","
-          out = out $1
-        }
-      }
-    }
-    END {
-      if (out == "") print "-"
-      else print out
-    }
-  ' "${FALLBACK_MATRIX}"
-}
-
 [[ -f "${PILOT_INDEX}" ]] || fail "pilot index missing: ${PILOT_INDEX}"
-[[ -f "${FALLBACK_MATRIX}" ]] || fail "fallback matrix missing: ${FALLBACK_MATRIX}"
 
 expected_pilot_header=$'pilot_id\tstatus\tcapability\tprimary_skill\tfallback_used\tevidence_file\tverification\tworkflow_readiness\tartifact_readiness\tdevice_readiness\treadiness_note'
 actual_pilot_header="$(head -n 1 "${PILOT_INDEX}")"
 [[ "${actual_pilot_header}" == "${expected_pilot_header}" ]] || fail "pilot index header mismatch"
-
-expected_fallback_header=$'fallback_skill\tadk_equivalent\tstatus\towner\treview_by\tlive_requirement\tnext_step\tmatch_text\tpilot_refs'
-actual_fallback_header="$(head -n 1 "${FALLBACK_MATRIX}")"
-[[ "${actual_fallback_header}" == "${expected_fallback_header}" ]] || fail "fallback matrix header mismatch"
 
 valid_pilot_statuses=" planned evidence-ready regression-ready rejected "
 valid_readiness_values=" pass partial pending needs-fix simulated-pass not-applicable "
@@ -150,8 +123,7 @@ while IFS=$'\t' read -r pilot_id status capability primary_skill fallback_used e
     device_simulated_pass=$((device_simulated_pass + 1))
   fi
 
-  linked_fallbacks="$(linked_fallbacks_for_file "${evidence_file}")"
-  log "[PILOT] ${pilot_id} status=${status} readiness=${readiness} workflow=${workflow_readiness} artifact=${artifact_readiness} device=${device_readiness} linked_fallbacks=${linked_fallbacks} evidence=${evidence_file} verification=${verification}"
+  log "[PILOT] ${pilot_id} status=${status} readiness=${readiness} workflow=${workflow_readiness} artifact=${artifact_readiness} device=${device_readiness} fallback_used=${fallback_used} evidence=${evidence_file} verification=${verification}"
 done < <(tail -n +2 "${PILOT_INDEX}")
 
 if [[ -n "${PILOT_FILTER}" && "${found}" -eq 0 ]]; then

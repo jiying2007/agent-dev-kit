@@ -10,13 +10,13 @@ status: evidence-ready
 
 - primary: `adk-parallel-agent-governance`
 - supporting: `adk-worktree-governance`, `adk-task-breakdown`, `adk-verification-before-completion`
-- fallback: 平台子代理行为不稳定或必须使用旧流程对照时显式使用
+- internal fallback: 平台子代理行为不稳定时降级为串行任务包执行
 
 ## 验证证据
 
 ### 原始任务输入
 
-用户要求把子任务审查、`scope_write`、`must_not_touch` 和最终整合验证脚本化，以降低对 Superpowers `subagent-driven-development` 的默认依赖。
+用户要求把子任务审查、`scope_write`、`must_not_touch` 和最终整合验证脚本化，形成 ADK 原生并行治理闭环。
 
 ### Runner
 
@@ -42,7 +42,7 @@ rtk bash scripts/run-embedded-workflow-pilots.sh --pilot parallel-governance --o
 
 ### Fallback Decision
 
-`subagent-driven-development` 可从 `active-fallback` 降为 `explicit-fallback`：adk 已有可复跑的任务拆分、scope 审查和整合验证证据；真实平台子代理不稳定或用户点名时才使用 Superpowers 对照流程。
+只允许在 ADK 内部降级为串行执行：现有任务拆分、scope 审查和整合验证证据保持有效，外部参考流程不作为运行 fallback。
 
 ### 残留缺口
 

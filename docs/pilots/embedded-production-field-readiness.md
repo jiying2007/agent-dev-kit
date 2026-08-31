@@ -107,7 +107,7 @@ status: evidence-ready
 |---|---|---|
 | Pilot status | `evidence-ready` | 已有真实工程输入、可复跑命令、正负路径证据和制品清单 |
 | Device production readiness | `simulated-pass` | 模拟设备 flash/readback/boot/HIL/OTA/rollback/field-package 闭环通过；真实硬件放行仍需补证据 |
-| Fallback decision | `no fallback` | 该场景由 adk 原生 `adk-production-field-readiness` 承接，Superpowers 无需介入 |
+| Fallback decision | `no external fallback` | 该场景由 ADK 原生 `adk-production-field-readiness` 承接 |
 
 ### 残留缺口
 

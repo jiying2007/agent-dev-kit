@@ -67,6 +67,12 @@ test_routing_code_review_loop() {
     [[ "$output" == *"match=true"* && "$output" == *"skill=adk-code-review-loop"* ]]
 }
 
+test_routing_external_name_review_intent() {
+    local output
+    output=$("$MATCH_SCRIPT" --text "Superpowers receiving-code-review：review 反馈核验，冻结 HEAD 和工作树叠加后判断是真实缺陷还是误报" 2>&1) || true
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-code-review-loop"* && "$output" != *"skill=adk-worktree-governance"* ]]
+}
+
 test_routing_parallel_agent_governance() {
     local output
     output=$("$MATCH_SCRIPT" --text "多 agent 并行施工需要明确 scope_write" 2>&1) || true
@@ -356,6 +362,7 @@ run_test "需求不清楚 -> adk-requirements-triage" test_routing_needs_triage
 run_test "新功能自然语言 -> adk-requirements-triage" test_routing_feature_triage_natural_language
 run_test "测试矩阵 -> adk-test-strategy" test_routing_test_strategy
 run_test "review 反馈闭环 -> adk-code-review-loop" test_routing_code_review_loop
+run_test "外部 Skill 名称只保留 review 意图 -> adk-code-review-loop" test_routing_external_name_review_intent
 run_test "多 agent 并行 -> adk-parallel-agent-governance" test_routing_parallel_agent_governance
 run_test "子代理驱动开发 -> adk-parallel-agent-governance" test_routing_parallel_agent_over_driver_phrase
 run_test "worktree 隔离 -> adk-worktree-governance" test_routing_worktree_governance

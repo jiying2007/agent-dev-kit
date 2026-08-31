@@ -375,7 +375,7 @@ run_verification() {
   cat > "$PILOT_DIR/scope-summary.md" <<'EOF'
 scope:
 - embedded full-stack skill and pilot evidence closeout
-- fallback sunset matrix verification
+- native ADK routing and pilot evidence verification
 non_scope:
 - real hardware production readiness declaration
 EOF
@@ -384,7 +384,6 @@ EOF
 |---|---:|---|
 | rtk bash tests/run_all.sh | 0 | pass |
 | rtk bash scripts/pilot-readiness.sh --summary-json | 0 | 9/9 evidence-ready |
-| rtk bash scripts/check-fallback-sunset.sh --summary-json | 0 | replacement score passes threshold |
 EOF
   cat > "$PILOT_DIR/negative-results.md" <<'EOF'
 missing-evidence: reject completion claim when verification command is absent
@@ -411,7 +410,7 @@ residual_risk:
 EOF
 
   run_step required "scope-summary" "completion scope and non-scope are explicit" "$PILOT_DIR" rg -q "non_scope" scope-summary.md
-  run_step required "verification-index" "command-level verification index is present" "$PILOT_DIR" rg -q "check-fallback-sunset" verification-index.md
+  run_step required "verification-index" "command-level verification index is present" "$PILOT_DIR" rg -q "pilot-readiness" verification-index.md
   run_step expect-fail "missing-evidence-negative-path" "missing evidence blocks completion claims" "$PILOT_DIR" bash -c "rg -q '^missing-evidence:' negative-results.md && exit 1"
   run_step required "runtime-config-audit" "runtime config audit requirement is recorded" "$PILOT_DIR" rg -q "runtime health" runtime-config-audit.md
   run_step required "breaking-change" "breaking change and rollback decision are explicit" "$PILOT_DIR" rg -q "breaking_change: no" breaking-change.md
@@ -471,7 +470,6 @@ EOF
 | Command | Exit Code | Result |
 |---|---:|---|
 | rtk bash tests/run_all.sh | 0 | pass |
-| rtk bash scripts/check-fallback-sunset.sh --summary-json | 0 | pass |
 | rtk scripts/check-adk-harden-readiness.sh . --require-pilot --skip-full-suite | 0 | pass |
 EOF
   cat > "$PILOT_DIR/risk-rollback.md" <<'EOF'

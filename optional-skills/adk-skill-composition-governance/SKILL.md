@@ -1,15 +1,15 @@
 ---
 name: adk-skill-composition-governance
 description: 治理技能组合、触发优先级、fallback 与弃用关系
-version: 1.1.0
-last_updated: 2026-07-07
+version: 1.1.1
+last_updated: 2026-08-31
 triggers:
   - "技能组合"
   - "触发冲突"
   - "技能治理"
   - "创建 skill"
   - "skill 生命周期"
-  - "fallback 下线"
+  - "内部降级治理"
   - "弃用治理"
 non_triggers:
   - 单个 skill 文案微调且不影响触发规则
@@ -54,7 +54,7 @@ constraints:
 - 一个场景一个 primary；supporting 不抢占触发。
 - fallback 必须在目标 profile 或可选安装范围内可用。
 - deprecated skill 必须有替代方案，禁止无替代删除。
-- candidate-sunset / sunset 必须有 ready pilot 和路由回归证据。
+- 运行能力退役必须有 ready pilot、路由回归和 required/forbidden footprint 证据。
 
 adk 原生 skill 创作和弃用生命周期模板：`references/adk-skill-lifecycle.md`。
 
@@ -72,7 +72,8 @@ bash scripts/devkit.sh match --skill <skill> --text "<task text>"
 bash ../scripts/check-runtime-routing.sh ..
 rg -n "triggers:" skills/*/SKILL.md optional-skills/*/SKILL.md
 bash scripts/check_profile_coherence.sh
-bash scripts/check-fallback-sunset.sh --summary-json
+bash tests/test_skill_trigger_matrix.sh
+bash scripts/pilot-readiness.sh --summary-json
 ```
 
 ## Evidence Template

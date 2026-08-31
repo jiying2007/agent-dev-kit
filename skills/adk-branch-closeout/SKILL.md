@@ -1,8 +1,8 @@
 ---
 name: adk-branch-closeout
 description: 开发分支收尾治理，验证完成后选择本地合并、创建 PR、保留或丢弃并执行清理
-version: 1.0.0
-last_updated: 2026-05-18
+version: 1.0.1
+last_updated: 2026-08-31
 triggers:
   - "分支收尾"
   - "开发完成"
@@ -27,7 +27,7 @@ constraints:
 # adk-branch-closeout
 
 ## Goal
-- 在开发完成后提供结构化收尾流程，补齐 Superpowers `finishing-a-development-branch` 的 adk 等价能力。
+- 在开发完成后提供 ADK 原生结构化收尾流程，覆盖验证、集成决策、远端授权和回滚边界。
 - 先验证，再给选项，最后按用户选择执行合并、PR、保留或丢弃。
 - 确保清理动作可审计、可回退，不误删用户工作。
 

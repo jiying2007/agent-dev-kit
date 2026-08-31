@@ -10,13 +10,13 @@ status: evidence-ready
 
 - primary: `adk-code-review-loop`
 - supporting: `adk-commit-pr-quality-gate`, `adk-verification-before-completion`
-- fallback: 仅当需要迁移期对照时显式使用
+- internal fallback: 审查工具不可用时输出可转交的只读审查包
 
 ## 验证证据
 
 ### 原始任务输入
 
-用户要求补齐 Superpowers 的 code review / receiving review 闭环能力，并让误报、越界建议和复审有可审计证据。
+用户要求 ADK 原生覆盖 code review / receiving review 闭环，并让误报、越界建议和复审有可审计证据。
 
 ### Runner
 

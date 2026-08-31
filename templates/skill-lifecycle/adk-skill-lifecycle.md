@@ -59,5 +59,6 @@ Pipeline and Inversion skills must not rely only on prose such as "do not procee
 ## Validation
 
 - `bash scripts/devkit.sh validate --strict`
-- `bash scripts/check-fallback-sunset.sh`
+- `bash tests/test_skill_trigger_matrix.sh`
+- `bash scripts/pilot-readiness.sh --summary-json`
 - `bash tests/run_all.sh`

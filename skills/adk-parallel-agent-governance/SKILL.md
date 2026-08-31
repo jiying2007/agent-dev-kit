@@ -1,8 +1,8 @@
 ---
 name: adk-parallel-agent-governance
 description: 并行子代理治理，定义任务分片、scope_write、冲突矩阵、等待和整合验证
-version: 1.4.0
-last_updated: 2026-07-19
+version: 1.4.1
+last_updated: 2026-08-31
 triggers:
   - "并行 agent"
   - "多 agent"
@@ -29,7 +29,7 @@ constraints:
 
 ## Goal
 - 将并行子代理从临时调度变成可审计、可整合、可验证的 adk 原生流程。
-- 降低对 Superpowers `dispatching-parallel-agents` 和 `subagent-driven-development` 的默认依赖。
+- 用 ADK 原生任务包、冲突矩阵和复审契约治理并行 Agent，不依赖外部运行兼容流程。
 - 通过明确 ownership 和冲突矩阵防止并行写入造成返工。
 
 ## Prerequisites

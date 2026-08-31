@@ -10,13 +10,13 @@ status: evidence-ready
 
 - primary: `adk-systematic-debugging`
 - supporting: `adk-test-strategy`, `adk-verification-before-completion`
-- fallback: 仅当 adk 无法形成根因链路时显式使用
+- internal fallback: 无法形成根因链路时保持 needs-evidence，不切换外部流程
 
 ## 验证证据
 
 ### 原始任务输入
 
-用户要求补齐 Superpowers systematic-debugging 的根因链路能力，尤其避免先猜修复。
+用户要求 ADK 原生形成 systematic debugging 根因链路，尤其避免先猜修复。
 
 ### Runner
 

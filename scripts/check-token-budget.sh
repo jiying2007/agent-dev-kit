@@ -166,8 +166,7 @@ for script in \
   "$ROOT_DIR/scripts/convert-assets.sh" \
   "$ROOT_DIR/scripts/check-runtime-boundary.sh" \
   "$ROOT_DIR/scripts/check-workflow-closure.sh" \
-  "$ROOT_DIR/scripts/pilot-readiness.sh" \
-  "$ROOT_DIR/scripts/check-fallback-sunset.sh"; do
+  "$ROOT_DIR/scripts/pilot-readiness.sh"; do
   summary_scripts=$((summary_scripts + 1))
   if ! rg -q -- '--summary-json' "$script"; then
     record_failure "summary-json missing: ${script#$ROOT_DIR/}"

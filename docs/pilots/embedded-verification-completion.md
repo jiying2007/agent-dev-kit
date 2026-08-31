@@ -10,13 +10,13 @@ status: evidence-ready
 
 - primary: `adk-verification-before-completion`
 - supporting: `adk-commit-pr-quality-gate`, `adk-release-versioning`
-- fallback: 仅当用户显式要求对照 Superpowers completion 流程时使用
+- internal fallback: 缺少必要证据时固定为 needs-fix，不调用外部完成流程
 
 ## 验证证据
 
 ### 原始任务输入
 
-用户要求把 adk 推进到可替代 Superpowers 的生产门禁状态。该 pilot 聚焦完成前证据闭环，不声明任何真实硬件已经 production-ready。
+用户要求把 ADK 推进到原生生产门禁状态。该 pilot 聚焦完成前证据闭环，不声明任何真实硬件已经 production-ready。
 
 ### Runner
 

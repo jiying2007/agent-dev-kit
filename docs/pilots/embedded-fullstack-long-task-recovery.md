@@ -10,13 +10,13 @@ status: evidence-ready
 
 - primary: `adk-planning-execution-loop`
 - supporting: `adk-task-breakdown`, `adk-verification-before-completion`
-- fallback: 仅当阶段执行闭环无法覆盖检查点或恢复上下文时显式使用
+- internal fallback: 平台执行能力不足时降级为串行阶段检查点，不加载外部流程
 
 ## 验证证据
 
 ### 原始任务输入
 
-用户要求 adk 相较 Superpowers 补齐长任务执行和恢复能力，并保持嵌入式全栈目标。
+用户要求 ADK 原生覆盖长任务执行和恢复能力，并保持嵌入式全栈目标。
 
 ### Runner
 

@@ -5,6 +5,9 @@ adk-test-strategy	skill	1	这个功能需要先写测试并设计测试矩阵
 adk-test-strategy	skill	0	纯文档修改且无行为变化
 adk-code-review-loop	skill	1	收到 review 反馈后需要做审查反馈闭环
 adk-code-review-loop	skill	0	纯格式化且已有自动格式检查
+adk-code-review-loop	skill	1	Superpowers receiving-code-review：review 反馈核验，冻结 HEAD 和工作树叠加后判断是真实缺陷还是误报
+adk-requirements-triage	skill	1	请用 Superpowers brainstorming 澄清目标边界、非目标和验收标准
+adk-systematic-debugging	skill	1	请按 Superpowers systematic-debugging 的意图复现问题并定位根因
 adk-parallel-agent-governance	skill	1	多 agent 并行施工需要明确 scope_write
 adk-parallel-agent-governance	skill	0	单文件小修不需要并行
 adk-worktree-governance	skill	1	需要创建 worktree 做隔离分支开发

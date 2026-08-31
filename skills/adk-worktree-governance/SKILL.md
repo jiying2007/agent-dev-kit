@@ -1,8 +1,8 @@
 ---
 name: adk-worktree-governance
 description: git worktree 隔离开发治理，规范创建准入、目录、基线验证、同步、清理和禁止操作
-version: 1.2.0
-last_updated: 2026-07-07
+version: 1.2.1
+last_updated: 2026-08-31
 triggers:
   - "worktree"
   - "工作树"
@@ -28,7 +28,7 @@ constraints:
 
 ## Goal
 - 在确实需要隔离开发时，提供 adk 原生 worktree 治理流程。
-- 替代默认依赖 Superpowers `using-git-worktrees` 的部分场景。
+- 用 ADK 原生边界覆盖 worktree 创建、验证、清理和 provenance 场景。
 - 保护当前工作区的未提交改动，降低多分支并行冲突。
 
 ## Prerequisites

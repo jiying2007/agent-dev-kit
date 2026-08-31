@@ -218,7 +218,7 @@ Workflow manifest 必须声明 `command_risk`，取值为 `low`、`medium` 或 `
 
 - Agent：`requirements-analyst -> architecture-planner -> code-review-governor`
 - Skill：`adk-runtime-router + adk-skill-composition-governance + adk-verification-before-completion`
-- 命令：`catalog -> match -> check-runtime-routing -> check-fallback-sunset`
+- 命令：`catalog -> match -> check-runtime-routing -> pilot-readiness`
 - 关键纪律：一个场景只能有一个主 skill，辅助 skill 不抢占入口；fallback 下线必须有结构化矩阵和 pilot 证据
 - Runbook：`docs/runbooks/runtime-routing.md`
 

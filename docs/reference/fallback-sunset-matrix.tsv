@@ -1,15 +1,2 @@
-fallback_skill	adk_equivalent	status	owner	review_by	live_requirement	next_step	match_text	pilot_refs
-using-superpowers	adk-runtime-router	explicit-fallback	adk-maintainer	2026-06-15	core-live-required	扩充真实任务触发语料	开始任务前判断使用哪个技能	docs/pilots/embedded-fullstack-discovery.md
-brainstorming	adk-requirements-triage+adk-structured-requirements-questioning	candidate-sunset	adk-maintainer	2026-06-15	core-live-required	观察一轮 live 使用，若无 Superpowers fallback 需求则推进 sunset	嵌入式全栈 boot 到量产现场维护需求目标边界和验收标准不清楚	docs/pilots/embedded-fullstack-discovery.md
-writing-plans	adk-task-breakdown+adk-planning-execution-loop	candidate-sunset	adk-maintainer	2026-06-15	core-live-required	观察一轮 live 长任务计划使用，若无 Superpowers fallback 需求则推进 sunset	任务太大需要拆解计划	docs/pilots/embedded-fullstack-long-task-recovery.md
-executing-plans	adk-planning-execution-loop	candidate-sunset	adk-maintainer	2026-06-15	optional-live-allowed	观察一轮 live 阶段执行使用，若无 Superpowers fallback 需求则推进 sunset	执行计划分阶段执行	docs/pilots/embedded-fullstack-long-task-recovery.md
-test-driven-development	adk-test-strategy+adk-unit-test-embedded	explicit-fallback	adk-maintainer	2026-06-15	core-live-required	接入真实 C/C++/ctest/交叉编译/HIL 项目入口后评估 candidate-sunset	这个功能需要先写测试	docs/pilots/embedded-tdd-test-strategy.md
-systematic-debugging	adk-systematic-debugging	candidate-sunset	adk-maintainer	2026-06-15	core-live-required	观察一轮 live 调试使用，若无 Superpowers fallback 需求则推进 sunset	真实问题排查并定位根因	docs/pilots/embedded-bugfix-systematic-debugging.md
-requesting-code-review	adk-code-review-loop+adk-commit-pr-quality-gate	explicit-fallback	adk-maintainer	2026-06-15	core-live-required	绑定真实 diff/reviewer 反馈后评估 candidate-sunset	独立代码审查并输出 review 闭环	docs/pilots/embedded-review-code-review-loop.md
-receiving-code-review	adk-code-review-loop	explicit-fallback	adk-maintainer	2026-06-15	core-live-required	绑定真实误报/越界反馈后评估 candidate-sunset	收到 review 反馈需要修复	docs/pilots/embedded-review-code-review-loop.md
-verification-before-completion	adk-verification-before-completion	candidate-sunset	adk-maintainer	2026-06-15	core-live-required	观察一轮 live completion 使用，若无 Superpowers fallback 需求则推进 sunset	完成前验证所有证据	docs/pilots/embedded-verification-completion.md
-dispatching-parallel-agents	adk-parallel-agent-governance	explicit-fallback	adk-maintainer	2026-06-15	core-live-required	绑定真实多 agent 写入场景后评估 candidate-sunset	多 agent 并行施工需要冲突矩阵	docs/pilots/embedded-parallel-worktree-governance.md
-subagent-driven-development	adk-parallel-agent-governance+adk-code-review-loop	explicit-fallback	adk-maintainer	2026-06-15	core-live-required	绑定真实多 agent 写入和复审场景后评估 candidate-sunset	子代理驱动开发并复审	docs/pilots/embedded-parallel-worktree-governance.md
-using-git-worktrees	adk-worktree-governance	explicit-fallback	adk-maintainer	2026-06-15	core-live-required	补真实 worktree 创建清理和 PR 场景	创建 worktree 隔离分支开发	docs/pilots/embedded-parallel-worktree-governance.md
-finishing-a-development-branch	adk-branch-closeout	explicit-fallback	adk-maintainer	2026-06-15	core-live-required	绑定真实分支 closeout 和人工 PR 决策后评估 candidate-sunset	开发完成准备创建 PR	docs/pilots/embedded-branch-closeout.md
-writing-skills	skill-creator+adk-skill-composition-governance	candidate-sunset	adk-maintainer	2026-06-15	optional-live-allowed	观察一轮 live skill 生命周期使用，若无 Superpowers fallback 需求则推进 sunset	创建新的 skill 并治理触发冲突	docs/pilots/embedded-fullstack-skill-lifecycle.md
+schema_version	status	compatibility_enabled	replacement
+2	retired	false	ADK-native-routing-and-runtime-footprint

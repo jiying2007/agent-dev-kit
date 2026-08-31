@@ -1,8 +1,8 @@
 ---
 name: adk-code-review-loop
 description: 独立代码审查与反馈修复闭环，覆盖发现分级、真实性核验、修复验证和复审
-version: 1.4.1
-last_updated: 2026-08-21
+version: 1.4.2
+last_updated: 2026-08-31
 triggers:
   - "独立代码审查"
   - "code review loop"
@@ -11,6 +11,8 @@ triggers:
   - "复审"
   - "收到 review"
   - "修复 review"
+  - "review 反馈"
+  - "反馈真实性核验"
 non_triggers:
   - 纯格式化且已有自动格式检查
   - 提交前只需要校验 commit message

@@ -2797,7 +2797,7 @@
       },
       {
         "intent": "code_review_loop",
-        "intent_zh": "独立代码审查/code review loop/review闭环/审查反馈/收到review/修复review/复审",
+        "intent_zh": "独立代码审查/code review loop/review闭环/review反馈/review反馈核验/审查反馈/收到review/修复review/复审",
         "primary_skill": "adk-code-review-loop",
         "supporting_skills": [
           "adk-commit-pr-quality-gate"

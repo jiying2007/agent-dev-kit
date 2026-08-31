@@ -1,8 +1,8 @@
 ---
 name: adk-runtime-router
-description: adk-first 运行时技能路由入口，统一判定 primary/supporting/fallback 与跳过条件
-version: 1.1.0
-last_updated: 2026-07-07
+description: ADK 原生运行时技能路由入口，统一判定 primary、supporting、内部降级与跳过条件
+version: 2.0.0
+last_updated: 2026-08-31
 triggers:
   - "技能路由"
   - "选择技能"
@@ -19,10 +19,11 @@ non_triggers:
 inputs:
   - 用户请求、仓库规则、任务类型、风险等级、可用 skill 清单
 outputs:
-  - primary skill、supporting skills、fallback 条件、跳过理由与下一步动作
+  - primary skill、supporting skills、内部降级条件、跳过理由与下一步动作
 constraints:
-  - 已有 adk 等价能力时不得优先调用 Superpowers fallback
-  - 任何 fallback 必须说明触发原因和退出条件
+  - 只能从受信 ADK inventory 或项目已声明 workflow 中选择运行能力
+  - 外部参考仓不得作为 runtime fallback、安装源或隐式依赖
+  - 任何内部降级必须说明触发原因和退出条件
   - 不得用“任务很简单”作为跳过路由的理由
   - 大型 skill/tool 目录必须先读 namespace summary，再按意图延迟加载完整正文或 schema
 ---
@@ -32,7 +33,7 @@ constraints:
 ## Goal
 - 在任务开始前统一完成 adk-first 路由判断，避免多个 skill 抢占入口或无纪律 fallback。
 - 将用户请求映射到一个 primary skill、若干 supporting skills 和明确的验证路径。
-- 对 Superpowers 兼容能力设置显式 fallback 条件，而不是默认启用。
+- 外部参考实践只参与 intake 和设计证据，不进入运行时路由。
 
 ## Prerequisites
 - 已读取当前仓库 `AGENTS.md`、项目级规则和用户最新指令。
@@ -41,9 +42,9 @@ constraints:
 
 ## 路由分层
 
-| 任务类型 | Primary Skill | Supporting Skills | Fallback 条件 |
+| 任务类型 | Primary Skill | Supporting Skills | 内部降级条件 |
 |---|---|---|---|
-| 需求不清、边界不明 | `adk-requirements-triage` | `adk-task-breakdown` | 用户明确要求 Superpowers brainstorming |
+| 需求不清、边界不明 | `adk-requirements-triage` | `adk-task-breakdown` | 信息不足时保持 triage，不切换外部兼容流程 |
 | 测试策略、TDD、回归 | `adk-test-strategy` | `adk-unit-test-embedded` | 项目已有专用测试 workflow |
 | 多模块拆分、并行判断 | `adk-task-breakdown` | `adk-parallel-agent-governance` | 平台子代理不可用时降级串行 |
 | worktree 隔离 | `adk-worktree-governance` | `adk-task-breakdown` | 用户要求手动管理分支 |
@@ -61,9 +62,9 @@ constraints:
 4. **选择 primary skill**：每个任务只能有一个 primary skill；其他 skill 只能补充检查项。
 5. **声明 supporting skills**：列出辅助 skill 的用途，避免辅助 skill 抢占入口。
 6. **路由裁决分层**：将 recall、reasoning、ranking、feedback 分开；LLM 只产出候选理解，执行裁决必须来自确定性规则、结构化校验或 owner approval。
-7. **检查 fallback**：只有 adk 缺失等价能力、用户明确点名、迁移期对照验证或平台约束时才 fallback。
-8. **输出路由裁决**：写明 primary/supporting/fallback/skip reason/verification path。
-9. **生成 Tool / Skill Evidence Plan**：中高风险任务记录 required/recommended skills、required artifacts、tool fallback、skipped skills、fallback evidence 和 evidence paths；工具不可用时必须记录降级原因，不能把 fallback 当成已验证成功。
+7. **检查内部降级**：ADK Skill 不可用时只能降级到项目已声明 workflow、内联检查项或 no-skill，并记录缺口；不得加载外部参考仓 Skill。
+8. **输出路由裁决**：写明 primary/supporting/internal fallback/skip reason/verification path。
+9. **生成 Tool / Skill Evidence Plan**：中高风险任务记录 required/recommended skills、required artifacts、tool fallback、skipped skills、fallback evidence 和 evidence paths；工具不可用时必须记录降级原因，不能把降级当成已验证成功。
 10. **进入执行 skill**：加载 primary skill，并按其 workflow 推进。
 11. **完成前复核**：若产生改动，最终必须经过 `adk-verification-before-completion`。
 
@@ -110,7 +111,7 @@ rtk bash scripts/devkit.sh validate --strict
 
 ## Failure Handling
 - 若多个 primary skill 同时命中，暂停并按“更靠前流程优先”裁决：triage/debug > task-breakdown > implementation > verification > release。
-- 若 adk 与 Superpowers 都可处理，优先 adk；只有 fallback 条件成立才调用 Superpowers。
+- 若用户点名外部 Skill 或参考仓，只保留其任务意图并映射到 ADK 原生能力；没有安全等价能力时输出 no-skill/needs-input，不调用外部运行资产。
 - 若路由表无法覆盖自然语言请求，记录触发语料缺口，并补充 `skill_trigger_cases.tsv`。
 - 若 supporting skill 未安装，降级为内联检查项，不得阻塞低风险任务。
 
@@ -118,7 +119,8 @@ rtk bash scripts/devkit.sh validate --strict
 - 输出必须包含 primary skill、supporting skills、fallback 与验证路径。
 - 中高风险任务必须包含 Tool / Skill Evidence Plan；若有 skipped skills 或工具降级，必须记录 skipped reason 与 fallback evidence。
 - 使用大型 skill/tool 目录时，必须先给出 namespace summary，再加载 deferred surface，并记录 loaded_tools 与 schema_review。
-- fallback 必须有明确原因，不能只写“更熟悉”或“更方便”。
+- 内部降级必须有明确原因，不能只写“更熟悉”或“更方便”。
+- active Skill、workflow、profile 与 handoff 不得声明外部参考仓为 runtime fallback。
 - 不得同时声明两个 primary skill。
 - 修改 skill、manifest、workflow 或 routing 后必须运行匹配测试与严格校验。
 - 修改路由规则、阈值或分类器后必须补 benchmark case、负向边界、阈值标定和回归集证据。
@@ -129,6 +131,6 @@ rtk bash scripts/devkit.sh validate --strict
 | 借口 | 现实 | 正确做法 |
 |------|------|---------|
 | "这只是小任务，不需要路由" | 小任务也需要确认是否只读、是否改文件、是否要验证 | 输出轻量路由裁决，可简短但不可省略关键判断 |
-| "Superpowers 更完整，直接用它" | adk-first 的目标是默认主链，Superpowers 只是 fallback | 先检查 adk 等价能力，再说明 fallback 条件 |
+| "用户点名了外部 Skill，直接加载" | 点名不扩展运行资产信任边界 | 保留任务意图，映射 ADK 原生能力；无等价能力则明确 no-skill/needs-input |
 | "多个 skill 都有用，一起上" | 多入口会导致职责混乱和过重流程 | 只选一个 primary，其余作为 supporting |
 | "自然语言没命中就算了" | 漏匹配会持续削弱 adk 默认地位 | 补 triggers、routing intent 和回归测试 |

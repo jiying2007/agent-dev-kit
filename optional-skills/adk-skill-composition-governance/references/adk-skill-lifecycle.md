@@ -77,5 +77,6 @@ Do not embed one Skill inside another Skill as an implicit dependency. Use Agent
 ## Validation
 
 - `bash scripts/devkit.sh validate --strict`
-- `bash scripts/check-fallback-sunset.sh`
+- `bash tests/test_skill_trigger_matrix.sh`
+- `bash scripts/pilot-readiness.sh --summary-json`
 - `bash tests/run_all.sh`
