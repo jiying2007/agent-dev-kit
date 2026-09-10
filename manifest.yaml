@@ -685,6 +685,16 @@ skills:
     activation_mode: primary
     pattern: playbook
     depends_on: []
+  - name: adk-planning-execution-loop
+    path: skills/adk-planning-execution-loop/SKILL.md
+    quality_tier: p0
+    category: planning
+    lifecycle_order: 30
+    stage_order: 25
+    activation_mode: primary
+    pattern: pipeline
+    depends_on:
+      - adk-task-breakdown
   - name: adk-driver-implementation
     path: skills/adk-driver-implementation/SKILL.md
     quality_tier: p1
@@ -1606,14 +1616,6 @@ optional_skills:
     category: intake
     lifecycle_order: 20
     stage_order: 50
-    activation_mode: primary
-    pattern: pipeline
-  - name: adk-planning-execution-loop
-    path: optional-skills/adk-planning-execution-loop/SKILL.md
-    quality_tier: p2
-    category: planning
-    lifecycle_order: 30
-    stage_order: 60
     activation_mode: primary
     pattern: pipeline
   - name: adk-data-fetch
