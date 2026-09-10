@@ -14,7 +14,7 @@ Usage:
 Options:
   --strict        启用严格校验与治理门禁
   --quick         快速预检，跳过跨 profile / workflow 深度校验
-  --summary-json  输出低 token JSON 摘要
+  --summary-json  输出低 token compact JSON 摘要
   -h, --help
 USAGE
 }
@@ -52,10 +52,15 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-"$PYTHON_BIN" -m agent_dev_kit.validation_contract "${VALIDATOR_ARGS[@]}"
+if [[ "$SUMMARY_JSON" -eq 1 ]]; then
+  "$PYTHON_BIN" -m agent_dev_kit.validation_contract "${VALIDATOR_ARGS[@]}" \
+    | "$PYTHON_BIN" -c 'import json,sys; print(json.dumps(json.load(sys.stdin), ensure_ascii=False, sort_keys=True, separators=(",", ":")))'
+else
+  "$PYTHON_BIN" -m agent_dev_kit.validation_contract "${VALIDATOR_ARGS[@]}"
+fi
 
-# Keep the legacy shell entrypoint as a thin orchestration shim only. Structured
-# Manifest validation lives in Python and manifest.json is the sole SSOT.
+# Keep this legacy shell filename only as a stable command shim. Structured
+# Manifest validation lives in typed Python and manifest.json is the sole SSOT.
 if [[ "$STRICT" -eq 1 && "$QUICK" -eq 0 ]]; then
   "$ROOT_DIR/scripts/check-runtime-boundary.sh" >/dev/null
   "$ROOT_DIR/scripts/check-official-docs-governance.sh" >/dev/null
