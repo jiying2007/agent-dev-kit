@@ -9,6 +9,11 @@ from typing import Any
 
 import yaml
 
+# These fields were introduced for the typed control-plane and have no legacy
+# YAML consumer. Keeping the omission list explicit prevents manifest.yaml from
+# silently becoming a second SSOT while legacy shell consumers are migrated.
+_COMPATIBILITY_OMISSIONS = frozenset({"schema_version", "product"})
+
 
 def _first_difference(left: Any, right: Any, path: str = "$") -> str | None:
     if type(left) is not type(right):
@@ -38,6 +43,10 @@ def _first_difference(left: Any, right: Any, path: str = "$") -> str | None:
     return None
 
 
+def _compatibility_projection(canonical: dict[str, Any]) -> dict[str, Any]:
+    return {key: value for key, value in canonical.items() if key not in _COMPATIBILITY_OMISSIONS}
+
+
 @dataclass(frozen=True)
 class ManifestContract:
     root: Path
@@ -53,10 +62,20 @@ class ManifestContract:
             raise ValueError("manifest.json version must be a non-empty string")
         return value
 
+    @property
+    def compatibility_omissions(self) -> tuple[str, ...]:
+        return tuple(sorted(_COMPATIBILITY_OMISSIONS))
+
     def verify(self) -> None:
-        difference = _first_difference(self.canonical, self.compatibility)
+        expected = _compatibility_projection(self.canonical)
+        difference = _first_difference(expected, self.compatibility)
         if difference:
-            raise ValueError(f"manifest.yaml compatibility mirror differs semantically: {difference}")
+            raise ValueError(f"manifest.yaml compatibility projection differs semantically: {difference}")
+        forbidden = sorted(set(self.compatibility) & _COMPATIBILITY_OMISSIONS)
+        if forbidden:
+            raise ValueError(
+                "manifest.yaml unexpectedly owns canonical-only metadata: " + ", ".join(forbidden)
+            )
 
 
 def load_contract(root: Path) -> ManifestContract:
@@ -87,7 +106,7 @@ def canonical_manifest(root: Path) -> dict[str, Any]:
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Verify manifest.json SSOT and manifest.yaml compatibility mirror")
+    parser = argparse.ArgumentParser(description="Verify manifest.json SSOT and manifest.yaml compatibility projection")
     parser.add_argument("--root", default=".")
     parser.add_argument("--summary-json", action="store_true")
     args = parser.parse_args(argv)
@@ -95,14 +114,15 @@ def main(argv: list[str] | None = None) -> int:
         contract = load_contract(Path(args.root))
         contract.verify()
         result = {
-            "schema": "adk-manifest-contract/v1",
+            "schema": "adk-manifest-contract/v2",
             "status": "pass",
             "version": contract.version,
             "canonical": "manifest.json",
-            "compatibility_mirror": "manifest.yaml",
+            "compatibility_projection": "manifest.yaml",
+            "canonical_only_fields": list(contract.compatibility_omissions),
         }
     except (OSError, ValueError, json.JSONDecodeError, yaml.YAMLError) as exc:
-        result = {"schema": "adk-manifest-contract/v1", "status": "fail", "error": str(exc)}
+        result = {"schema": "adk-manifest-contract/v2", "status": "fail", "error": str(exc)}
         if args.summary_json:
             print(json.dumps(result, ensure_ascii=False, sort_keys=True))
         else:
@@ -112,7 +132,9 @@ def main(argv: list[str] | None = None) -> int:
     if args.summary_json:
         print(json.dumps(result, ensure_ascii=False, sort_keys=True))
     else:
-        print(f"[PASS] manifest.json SSOT matches manifest.yaml compatibility mirror ({contract.version})")
+        print(
+            f"[PASS] manifest.json SSOT matches manifest.yaml compatibility projection ({contract.version})"
+        )
     return 0
 
 
