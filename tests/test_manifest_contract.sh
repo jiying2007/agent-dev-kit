@@ -5,7 +5,10 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TMP="$(mktemp)"
 trap 'rm -f "$TMP"' EXIT
 
-python3 -m agent_dev_kit.manifest_contract --root "$ROOT" --summary-json >"$TMP"
+if ! python3 -m agent_dev_kit.manifest_contract --root "$ROOT" --summary-json >"$TMP"; then
+  cat "$TMP" >&2
+  exit 1
+fi
 python3 - "$TMP" <<'PY'
 import json
 import sys
