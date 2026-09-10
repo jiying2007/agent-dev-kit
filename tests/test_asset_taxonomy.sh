@@ -9,6 +9,24 @@ ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 TMP_DIR="$(mktemp -d)"
 trap 'rm -rf "$TMP_DIR"' EXIT
 
+# The taxonomy validator is a canonical JSON consumer. A compatibility YAML
+# projection must not be required for this gate to execute or pass.
+mkdir -p "$TMP_DIR/json-only"
+cp "$ROOT_DIR/manifest.json" "$TMP_DIR/json-only/manifest.json"
+python3 -m agent_dev_kit.asset_taxonomy_contract \
+  --root "$TMP_DIR/json-only" \
+  --summary-json >"$TMP_DIR/json-only-result.json"
+python3 - "$TMP_DIR/json-only-result.json" <<'PY'
+import json
+import sys
+with open(sys.argv[1], encoding="utf-8") as handle:
+    data = json.load(handle)
+assert data["status"] == "pass", data
+assert data["source"] == "manifest.json", data
+assert data["skills"] > 0, data
+assert data["routing_scenarios"] > 0, data
+PY
+
 CATALOG_OUT="$TMP_DIR/catalog.md"
 "$ROOT_DIR/scripts/catalog-assets.sh" build --out "$CATALOG_OUT"
 
