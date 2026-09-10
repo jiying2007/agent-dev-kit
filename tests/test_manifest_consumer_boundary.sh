@@ -3,63 +3,34 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-# Typed product code may mention manifest.yaml as a packaged compatibility
-# artifact, but only the manifest compatibility contract may actually import a
-# YAML parser. This separates provenance/packaging references from structured
-# data consumption.
-python3 - "$ROOT/src/agent_dev_kit" <<'PY'
-import ast
-import sys
-from pathlib import Path
-
-root = Path(sys.argv[1])
-allowed = {
-    Path("manifest_contract.py"),
-    Path("domain/manifest.py"),
+[[ ! -e "$ROOT/manifest.yaml" ]] || {
+  echo "[FAIL] legacy manifest.yaml must not exist" >&2
+  exit 1
 }
-offenders = []
-for path in sorted(root.rglob("*.py")):
-    tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
-    imports_yaml = False
-    for node in ast.walk(tree):
-        if isinstance(node, ast.Import):
-            imports_yaml = imports_yaml or any(alias.name == "yaml" or alias.name.startswith("yaml.") for alias in node.names)
-        elif isinstance(node, ast.ImportFrom):
-            module = node.module or ""
-            imports_yaml = imports_yaml or module == "yaml" or module.startswith("yaml.")
-    relative = path.relative_to(root)
-    if imports_yaml and relative not in allowed:
-        offenders.append(str(relative))
-if offenders:
-    raise SystemExit("typed product modules import YAML outside compatibility boundary: " + ", ".join(offenders))
-PY
 
-# release.py may still package the compatibility projection, but it must not
-# parse it or use it as release identity.
-python3 - "$ROOT/src/agent_dev_kit/release.py" <<'PY'
-import ast
-import sys
-from pathlib import Path
+grep -q 'ADK_MANIFEST=.*manifest.json' "$ROOT/scripts/lib-manifest.sh" || {
+  echo "[FAIL] shell Manifest adapter is not bound to manifest.json" >&2
+  exit 1
+}
+if grep -q 'manifest.yaml' "$ROOT/scripts/lib-manifest.sh"; then
+  echo "[FAIL] shell Manifest adapter still references manifest.yaml" >&2
+  exit 1
+fi
 
-path = Path(sys.argv[1])
-tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
-yaml_import = False
-for node in ast.walk(tree):
-    if isinstance(node, ast.Import):
-        yaml_import = yaml_import or any(alias.name == "yaml" or alias.name.startswith("yaml.") for alias in node.names)
-    elif isinstance(node, ast.ImportFrom):
-        module = node.module or ""
-        yaml_import = yaml_import or module == "yaml" or module.startswith("yaml.")
-assert not yaml_import, "release.py must not parse YAML"
-assert "manifest.yaml" in path.read_text(encoding="utf-8"), "release source distribution should preserve compatibility artifact until retirement"
-PY
+# Prove the stable shell API now reads canonical JSON for mapping, list and
+# routing queries without requiring a compatibility projection.
+# shellcheck source=../scripts/lib-manifest.sh
+source "$ROOT/scripts/lib-manifest.sh"
+adk_require_manifest
+adk_profile_exists core
+[[ "$(adk_get_manifest_item_value agents requirements-analyst path)" == "agents/requirements-analyst/AGENTS.md" ]]
+adk_list_routing_intent_names | grep -q .
 
-# The migrated taxonomy contract must stay JSON-only even if the compatibility
-# projection is absent.
+# The migrated taxonomy contract must also work in an isolated JSON-only root.
 TMP_DIR="$(mktemp -d)"
 trap 'rm -rf "$TMP_DIR"' EXIT
 cp "$ROOT/manifest.json" "$TMP_DIR/manifest.json"
 python3 -m agent_dev_kit.asset_taxonomy_contract --root "$TMP_DIR" --summary-json \
   | python3 -c 'import json,sys; d=json.load(sys.stdin); assert d["status"]=="pass" and d["source"]=="manifest.json"'
 
-echo "[PASS] typed manifest consumers stay on canonical JSON"
+echo "[PASS] Manifest consumers use canonical JSON without a compatibility mirror"

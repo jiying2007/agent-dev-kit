@@ -3,7 +3,6 @@
 > 文档状态：受机器门禁约束的领域上下文投影
 > 产品版本：5.0.0-rc.2
 > 结构化单一事实源：`manifest.json`
-> YAML 兼容镜像：`manifest.yaml`
 
 ---
 
@@ -34,12 +33,11 @@ Sub-agent 是运行时创建的短生命周期执行实例，只处理边界明�
 Profile 是 Agent 与 Skill 的可安装组合，面向具体工作场景。
 
 - 结构化单一事实源：`manifest.json:profiles`
-- YAML 兼容镜像：`manifest.yaml:profiles`
 - 当前主要 Profile：`core`、`personal-core`、`embedded-fullstack`、`team-core`、`release-hardening`、`openspec-driven`、`large-refactor`、`incident-response`、`research-intake`
 
 ### 1.5 Manifest
 
-`manifest.json` 是 Agent、Skill、Profile、Workflow、Target、Routing 与治理元数据的结构化单一事实源。`manifest.yaml` 只作为兼容镜像存在，必须由同步门禁证明语义一致；任何文档、catalog 或兼容格式都不能反向覆盖 `manifest.json`。
+`manifest.json` 是 Agent、Skill、Profile、Workflow、Target、Routing 与治理元数据的唯一结构化事实源。ADK 不再维护 Manifest 的 YAML 镜像；catalog、文档和其它视图只能从 canonical JSON 单向生成，不能成为反向写入来源。
 
 ### 1.6 Workflow
 
@@ -135,18 +133,18 @@ Routing 的机器事实位于 `manifest.json:routing`，当前 IR 为 `routing-i
 
 ## 7. 结构化 SSOT 与派生物
 
-| 信息 | 单一事实源 | 派生/兼容投影 |
+| 信息 | 单一事实源 | 派生投影 |
 |---|---|---|
-| 产品版本与资产索引 | `manifest.json` | `manifest.yaml`、README、catalog |
+| 产品版本与资产索引 | `manifest.json` | README、catalog |
 | Agent | `manifest.json:agents` + `agents/` | target bundle |
 | Skill | `manifest.json:skills/optional_skills` + Skill 文件 | catalog/target bundle |
-| Profile | `manifest.json:profiles` | YAML/catalog |
+| Profile | `manifest.json:profiles` | catalog |
 | Workflow | `manifest.json:workflows` + `workflows/` | Workflow 文档投影 |
 | Routing | `manifest.json:routing` | routing matrix/catalog/tests |
 | Target | `manifest.json:tool_targets` + target contracts | export/install plan |
 | Release identity | exact commit/tree + manifest/release receipt | release notes |
 
-任何派生文件与 SSOT 不一致时必须 fail closed；不得靠人工解释覆盖机器事实。
+派生文件与 SSOT 不一致时必须 fail closed；不得靠人工解释覆盖机器事实。Manifest 不允许第二结构化镜像。
 
 ---
 
@@ -171,7 +169,7 @@ rtk tests/run_all.sh
 
 ## 10. 版本与发布
 
-版本身份必须至少绑定：SemVer、exact commit、tree、manifest digest 与验证/发布 receipt。`manifest.json` 是版本 SSOT；其它文件只做受门禁约束的投影。手工 workflow dispatch 产生的候选不得自动获得正式 release 身份。
+版本身份必须至少绑定：SemVer、exact commit、tree、manifest digest 与验证/发布 receipt。`manifest.json` 是版本 SSOT；其它文件只做受门禁约束的只读投影。手工 workflow dispatch 产生的候选不得自动获得正式 release 身份。
 
 ---
 
@@ -187,7 +185,7 @@ rtk tests/run_all.sh
 ## 12. 使用规范
 
 1. 先读 `AGENTS.md` 与目标目录局部规则。
-2. 所有结构化资产修改以 `manifest.json` 为准，`manifest.yaml` 只做兼容同步。
+2. 所有结构化资产修改只编辑 `manifest.json`；不得新增平行 Manifest 镜像。
 3. 行为变化必须增加确定性测试和相邻负例。
 4. 只读任务不得因为“长任务”“发布”“调试”等词汇自动扩大 mutation permission。
 5. 没有 fresh evidence 不声明可发布、可安装、可合并或生产可用。
