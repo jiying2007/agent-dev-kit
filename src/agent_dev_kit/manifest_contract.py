@@ -10,6 +10,34 @@ from typing import Any
 import yaml
 
 
+def _first_difference(left: Any, right: Any, path: str = "$") -> str | None:
+    if type(left) is not type(right):
+        return f"{path}: type {type(left).__name__} != {type(right).__name__}"
+    if isinstance(left, dict):
+        left_keys = set(left)
+        right_keys = set(right)
+        if left_keys != right_keys:
+            missing = sorted(left_keys - right_keys)
+            extra = sorted(right_keys - left_keys)
+            return f"{path}: key drift missing_in_yaml={missing} extra_in_yaml={extra}"
+        for key in left:
+            diff = _first_difference(left[key], right[key], f"{path}.{key}")
+            if diff:
+                return diff
+        return None
+    if isinstance(left, list):
+        if len(left) != len(right):
+            return f"{path}: length {len(left)} != {len(right)}"
+        for index, (left_item, right_item) in enumerate(zip(left, right, strict=True)):
+            diff = _first_difference(left_item, right_item, f"{path}[{index}]")
+            if diff:
+                return diff
+        return None
+    if left != right:
+        return f"{path}: {left!r} != {right!r}"
+    return None
+
+
 @dataclass(frozen=True)
 class ManifestContract:
     root: Path
@@ -26,8 +54,9 @@ class ManifestContract:
         return value
 
     def verify(self) -> None:
-        if self.canonical != self.compatibility:
-            raise ValueError("manifest.yaml compatibility mirror differs semantically from manifest.json")
+        difference = _first_difference(self.canonical, self.compatibility)
+        if difference:
+            raise ValueError(f"manifest.yaml compatibility mirror differs semantically: {difference}")
 
 
 def load_contract(root: Path) -> ManifestContract:
