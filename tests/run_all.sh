@@ -72,6 +72,7 @@ done
 
 TESTS=(
   test_validate.sh
+  test_manifest_contract.sh
   test_python_launcher.sh
   test_asset_content_quality.sh
   test_format.sh
@@ -143,6 +144,7 @@ TESTS=(
 
 QUICK_TESTS=(
   test_validate.sh
+  test_manifest_contract.sh
   test_python_launcher.sh
   test_runtime_boundary.sh
   test_target_contracts.sh
