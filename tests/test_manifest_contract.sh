@@ -14,10 +14,12 @@ import json
 import sys
 with open(sys.argv[1], encoding="utf-8") as handle:
     data = json.load(handle)
+assert data["schema"] == "adk-manifest-contract/v2", data
 assert data["status"] == "pass", data
 assert data["canonical"] == "manifest.json", data
-assert data["compatibility_mirror"] == "manifest.yaml", data
+assert data["compatibility_projection"] == "manifest.yaml", data
+assert data["canonical_only_fields"] == ["product", "schema_version"], data
 assert data["version"] == "5.0.0-rc.2", data
 PY
 
-echo "[PASS] manifest SSOT compatibility contract"
+echo "[PASS] manifest SSOT compatibility projection contract"
