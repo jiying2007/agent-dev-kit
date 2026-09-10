@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Canonical Manifest access for shell compatibility shims.  All structured
-# reads go through manifest.json; manifest.yaml no longer exists.
+# Canonical Manifest access for shell compatibility shims. All structured
+# reads go through the single JSON SSOT.
 # shellcheck disable=SC2034
 ADK_LIB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck disable=SC2034
@@ -22,6 +22,7 @@ adk_require_manifest() {
   }
 }
 
+adk_get_manifest_value() { _adk_manifest_query top-value "$1"; }
 adk_list_tool_names() { _adk_manifest_query section-entry-names tool_targets; }
 adk_tool_exists() { adk_list_tool_names | grep -Fxq "$1"; }
 adk_list_section_entry_names() { _adk_manifest_query section-entry-names "$1"; }
