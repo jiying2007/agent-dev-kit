@@ -1,100 +1,46 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# 测试CONTEXT.md完整性
-
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+CONTEXT="$ROOT_DIR/CONTEXT.md"
+MANIFEST_JSON="$ROOT_DIR/manifest.json"
+MANIFEST_YAML="$ROOT_DIR/manifest.yaml"
 
-# 颜色定义
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-NC='\033[0m'
-
-# 测试计数
-TESTS_TOTAL=0
-TESTS_PASSED=0
-TESTS_FAILED=0
-
-# 测试函数
-run_test() {
-    local test_name="$1"
-    local test_func="$2"
-    
-    TESTS_TOTAL=$((TESTS_TOTAL + 1))
-    echo -n "Testing $test_name... "
-    
-    if $test_func; then
-        echo -e "${GREEN}PASS${NC}"
-        TESTS_PASSED=$((TESTS_PASSED + 1))
-    else
-        echo -e "${RED}FAIL${NC}"
-        TESTS_FAILED=$((TESTS_FAILED + 1))
-    fi
+fail() {
+  echo "[FAIL] $*" >&2
+  exit 1
 }
 
-# 测试1: 检查CONTEXT.md存在
-test_context_exists() {
-    [[ -f "$ROOT_DIR/CONTEXT.md" ]]
-}
+[[ -f "$CONTEXT" ]] || fail "CONTEXT.md missing"
+[[ -f "$MANIFEST_JSON" ]] || fail "manifest.json missing"
+[[ -f "$MANIFEST_YAML" ]] || fail "manifest.yaml compatibility mirror missing"
 
-# 测试2: 检查CONTEXT.md包含核心概念
-test_context_core_concepts() {
-    local content
-    content=$(cat "$ROOT_DIR/CONTEXT.md")
-    [[ "$content" == *"Agent"* && "$content" == *"Skill"* && "$content" == *"Profile"* ]]
-}
+manifest_version="$(python3 - "$MANIFEST_JSON" <<'PY'
+import json
+import sys
+with open(sys.argv[1], encoding="utf-8") as handle:
+    print(json.load(handle)["version"])
+PY
+)"
 
-# 测试3: 检查CONTEXT.md包含Workflow概念
-test_context_workflow() {
-    grep -q "Workflow" "$ROOT_DIR/CONTEXT.md"
-}
+# 结构存在性之外，必须验证会影响 Agent 行为的关键语义。
+grep -Fq "产品版本：${manifest_version}" "$CONTEXT" || fail "CONTEXT version drift: expected ${manifest_version}"
+grep -Fq '结构化单一事实源：`manifest.json`' "$CONTEXT" || fail "CONTEXT must declare manifest.json as structured SSOT"
+grep -Fq '`manifest.yaml` 只作为兼容镜像' "$CONTEXT" || fail "CONTEXT must classify manifest.yaml as compatibility mirror"
+grep -Fq 'ADK 不实现通用 LLM 推理循环或 session scheduler' "$CONTEXT" || fail "CONTEXT runtime boundary missing"
+grep -Fq 'routing-ir/v2' "$CONTEXT" || fail "CONTEXT routing IR version missing"
+grep -Fq 'Session 临时状态不是长期知识' "$CONTEXT" || fail "CONTEXT session/knowledge boundary missing"
+grep -Fq '历史变更文档允许出现被移除的外部仓' "$CONTEXT" || fail "CONTEXT provenance boundary missing"
 
-# 测试4: 检查CONTEXT.md包含Artifact概念
-test_context_artifact() {
-    grep -q "Artifact" "$ROOT_DIR/CONTEXT.md"
-}
-
-# 测试5: 检查CONTEXT.md包含Gate概念
-test_context_gate() {
-    grep -q "Gate" "$ROOT_DIR/CONTEXT.md"
-}
-
-# 测试6: 检查CONTEXT.md包含术语表
-test_context_glossary() {
-    grep -q "术语表" "$ROOT_DIR/CONTEXT.md"
-}
-
-# 测试7: 检查CONTEXT.md包含概念关系
-test_context_relationships() {
-    grep -q "概念关系" "$ROOT_DIR/CONTEXT.md"
-}
-
-# 测试8: 检查CONTEXT.md包含使用规范
-test_context_usage() {
-    grep -q "使用规范" "$ROOT_DIR/CONTEXT.md"
-}
-
-# 运行所有测试
-echo "Running CONTEXT.md tests..."
-echo "======================================"
-
-run_test "CONTEXT.md exists" test_context_exists
-run_test "Core concepts defined" test_context_core_concepts
-run_test "Workflow concept" test_context_workflow
-run_test "Artifact concept" test_context_artifact
-run_test "Gate concept" test_context_gate
-run_test "Glossary section" test_context_glossary
-run_test "Relationships section" test_context_relationships
-run_test "Usage guidelines" test_context_usage
-
-echo "======================================"
-echo "Total: $TESTS_TOTAL, Passed: $TESTS_PASSED, Failed: $TESTS_FAILED"
-
-if [[ $TESTS_FAILED -eq 0 ]]; then
-    echo -e "${GREEN}All CONTEXT.md tests passed${NC}"
-    exit 0
-else
-    echo -e "${RED}Some CONTEXT.md tests failed${NC}"
-    exit 1
+# 防止旧 SSOT 文案再次回流。
+if grep -Eq '单一事实源[^\n]*manifest\.yaml|位置:[[:space:]]*`manifest\.yaml`' "$CONTEXT"; then
+  fail "CONTEXT contains legacy manifest.yaml SSOT wording"
 fi
+
+# 核心概念仍需可导航。
+for term in Agent Skill Profile Workflow Artifact Gate Evidence Receipt Routing; do
+  grep -Fq "$term" "$CONTEXT" || fail "CONTEXT missing core term: $term"
+done
+
+echo "[PASS] CONTEXT.md semantic contract matches manifest.json and current runtime boundary"
