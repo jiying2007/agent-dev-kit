@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Check the v2 YAML compatibility mirror against the v3 JSON SSOT."""
+"""Legacy entrypoint that now enforces the single-manifest boundary.
+
+The historical filename is retained temporarily because release.py still invokes
+it.  It no longer synchronizes or parses a YAML mirror; it fails if that mirror
+reappears.
+"""
 
 import argparse
 import json
@@ -13,39 +18,27 @@ def main() -> int:
     parser.add_argument("--yaml", default="manifest.yaml")
     args = parser.parse_args()
 
-    try:
-        import yaml
-    except ImportError:
-        print("[FAIL] PyYAML is required while manifest.yaml compatibility exists", file=sys.stderr)
-        return 1
-
     json_path = Path(args.json)
-    yaml_path = Path(args.yaml)
-    canonical = json.loads(json_path.read_text(encoding="utf-8"))
-    mirror = yaml.safe_load(yaml_path.read_text(encoding="utf-8"))
-    if not isinstance(canonical, dict) or not isinstance(mirror, dict):
-        print("[FAIL] manifest roots must be objects", file=sys.stderr)
+    legacy_path = Path(args.yaml)
+    if legacy_path.exists():
+        print(f"[FAIL] legacy Manifest projection must be removed: {legacy_path}", file=sys.stderr)
+        return 1
+    try:
+        canonical = json.loads(json_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        print(f"[FAIL] cannot read canonical manifest.json: {exc}", file=sys.stderr)
+        return 1
+    if not isinstance(canonical, dict):
+        print("[FAIL] manifest.json root must be an object", file=sys.stderr)
+        return 1
+    if not isinstance(canonical.get("version"), str) or not canonical["version"]:
+        print("[FAIL] manifest.json version must be a non-empty string", file=sys.stderr)
+        return 1
+    if "schema_version" not in canonical or not isinstance(canonical.get("product"), dict):
+        print("[FAIL] manifest.json canonical metadata is incomplete", file=sys.stderr)
         return 1
 
-    mirror["schema_version"] = canonical.get("schema_version")
-    mirror["product"] = canonical.get("product")
-    if mirror != canonical:
-        canonical_keys = set(canonical)
-        mirror_keys = set(mirror)
-        differing = sorted(
-            key for key in canonical_keys.intersection(mirror_keys) if canonical.get(key) != mirror.get(key)
-        )
-        print(
-            "[FAIL] manifest.yaml compatibility mirror drifted: missing={} extra={} differing={}".format(
-                sorted(canonical_keys.difference(mirror_keys)),
-                sorted(mirror_keys.difference(canonical_keys)),
-                differing,
-            ),
-            file=sys.stderr,
-        )
-        return 1
-
-    print("[PASS] manifest.json and manifest.yaml are semantically aligned")
+    print("[PASS] manifest.json is the sole structured Manifest SSOT")
     return 0
 
 

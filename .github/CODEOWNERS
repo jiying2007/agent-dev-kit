@@ -1,0 +1,9 @@
+# Critical control-plane and release contracts require explicit owner review.
+/manifest.json @jiying2007
+/manifest.yaml @jiying2007
+/manifests/ @jiying2007
+/.github/workflows/ @jiying2007
+/src/agent_dev_kit/ @jiying2007
+/scripts/devkit.sh @jiying2007
+/scripts/release-*.sh @jiying2007
+/tests/run_all.sh @jiying2007

@@ -4,27 +4,44 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-# 允许工具目标名，不拦截 manifest/scripts 中的 target 标识。
-# 约束仓库说明与 Agent/Skill 资产不出现外部仓库导向信息。
-# 排除 reference 目录、治理文档和 skills 文档，因为这些是参考文档
-PATTERN='agency-agents-zh|superpowers-zh|superpowers|OpenSpec|auto-research|platform-skill-spec|prompts/'
+# 只约束已经退役、不得进入 active product surface 的外部仓身份。
+# OpenSpec 是显式受治理的 bridge/reference source；prompts/ 是通用目录名，二者都不是
+# “退役外部运行依赖”。历史 change/reference/details 也属于 provenance，不参与该门禁。
+PATTERN='agency-agents-zh|superpowers-zh|superpowers|auto-research|platform-skill-spec'
 
-# 检查 docs 目录（排除 reference 子目录和治理文档）
-DOCS_EXCL_REFERENCE=$(find "$ROOT_DIR/docs" -type f -name "*.md" \
-  ! -path "*/reference/*" \
-  ! -name "reference-adoption-matrix.md" \
-  ! -name "workspace-governance.md" \
-  ! -name "doc-code-consistency-audit-*.md")
+SCAN_PATHS=(
+  "$ROOT_DIR/README.md"
+  "$ROOT_DIR/AGENTS.md"
+)
 
-if rg -n "$PATTERN" \
-  "$ROOT_DIR/README.md" \
-  "$ROOT_DIR/AGENTS.md" \
-  $DOCS_EXCL_REFERENCE \
-  "$ROOT_DIR/agents" \
-  >/tmp/adk_ext_repo_refs.txt 2>/dev/null; then
-  cat /tmp/adk_ext_repo_refs.txt >&2
-  echo "[FAIL] external repository references found in docs/assets" >&2
+while IFS= read -r path; do
+  SCAN_PATHS+=("$path")
+done < <(
+  find \
+    "$ROOT_DIR/agents" \
+    "$ROOT_DIR/skills" \
+    "$ROOT_DIR/optional-skills" \
+    "$ROOT_DIR/workflows" \
+    -type f \( -name 'AGENTS.md' -o -name 'SKILL.md' -o -name 'WORKFLOW.md' \) \
+    -print | sort
+)
+
+for path in \
+  "$ROOT_DIR/docs/commands.md" \
+  "$ROOT_DIR/docs/usage.md" \
+  "$ROOT_DIR/docs/agent-operating-rules.md" \
+  "$ROOT_DIR/docs/skill-agent-runtime-model.md" \
+  "$ROOT_DIR/docs/workflows.md"; do
+  [[ -f "$path" ]] && SCAN_PATHS+=("$path")
+done
+
+TMP_RESULT="$(mktemp)"
+trap 'rm -f "$TMP_RESULT"' EXIT
+
+if rg -n "$PATTERN" "${SCAN_PATHS[@]}" >"$TMP_RESULT" 2>/dev/null; then
+  sed -n '1,120p' "$TMP_RESULT" >&2
+  echo "[FAIL] retired external repository reference found in active product surface" >&2
   exit 1
 fi
 
-echo "[PASS] no external repository references in docs/assets"
+echo "[PASS] active product surface has no retired external repository references"

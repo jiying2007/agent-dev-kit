@@ -4,7 +4,7 @@
 
 当前版本：`5.0.0-rc.2`（本地候选；尚未 tag、发布或刷新到 live）。
 
-发布支持基线为 Python 3.11+，运行依赖固定为 `PyYAML==6.0.3` 与 `jsonschema==4.26.0`。Python 3.8/3.9 已退出本项目支持范围；源码在旧解释器上偶然可运行不构成发布兼容承诺。
+发布支持基线为 Python 3.11+，运行依赖固定为 `PyYAML==6.0.3` 与 `jsonschema==4.26.0`。PyYAML 用于仍以 YAML 表达的 workflow/target 等独立合同，不再用于 Manifest 镜像。Python 3.8/3.9 已退出本项目支持范围；源码在旧解释器上偶然可运行不构成发布兼容承诺。
 
 当前软件状态是 **M5-ready control-plane candidate / M3 release candidate**，不是已认证 M5：本版本提供平台中立路由 IR、Runtime Control V2、可组合运行证据、receipt 驱动的 Agent Value 评估和可恢复双运行时评测；最终 M5 仍要求 30 天试点、至少一个独立真实软件仓、第二位 operator 和完整 field evidence。
 
@@ -57,7 +57,6 @@ adk 不负责：
 | 类型 | 入口 |
 |---|---|
 | Manifest SSOT | `manifest.json` + `manifests/manifest.schema.json` |
-| YAML compatibility mirror | `manifest.yaml`（受语义同步门禁约束） |
 | Agents | `agents/<name>/AGENTS.md` |
 | Core skills | `skills/<name>/SKILL.md` |
 | Optional skills | `optional-skills/<name>/SKILL.md` |
@@ -65,6 +64,8 @@ adk 不负责：
 | Governance manifests | `manifests/*.json` |
 | Runbooks | `docs/runbooks/` |
 | Tests | `tests/run_all.sh` |
+
+`manifest.json` 是唯一结构化 Manifest；不维护 YAML 镜像或其它平行 SSOT。需要人类可读视图时由 catalog/docs 从 canonical JSON 生成。
 
 当前 direct tool targets 在 `manifest.json:tool_targets` 声明：
 

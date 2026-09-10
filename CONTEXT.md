@@ -1,337 +1,193 @@
 # CONTEXT.md — agent-dev-kit 领域语言定义
 
-> 最后更新: 2026-05-16
-> 版本: 2.9.0
+> 文档状态：受机器门禁约束的领域上下文投影
+> 产品版本：5.0.0-rc.2
+> 结构化单一事实源：`manifest.json`
 
 ---
 
 ## 1. 核心概念
 
-### 1.1 Agent (代理)
-- **定义**: 运行时执行主体，负责读取上下文、选择 Skill、调用工具、推进任务并对结果负责
-- **位置**: `agents/<name>/AGENTS.md`
-- **示例**: requirements-analyst, architecture-planner, driver-engineer
+### 1.1 Agent
 
-### 1.2 Skill (技能)
-- **定义**: 可复用、可版本化的岗位 SOP，定义某类任务应该怎么做、输入输出、完成标准、失败收口和验证要求
-- **位置**: `skills/<name>/SKILL.md` 或 `optional-skills/<name>/SKILL.md`
-- **分类**:
-  - **Core Skills**: 核心技能，必须具备可执行流程与验收证据模板
-  - **Optional Skills**: 可选技能，仅在明确请求时安装
+Agent 是面向稳定职责边界的执行角色。Agent 负责在授权范围内读取上下文、选择或组合 Skill、调用工具、产生证据并把结果交接给下一个职责主体。
 
-### 1.3 Sub-agent (子代理)
-- **定义**: 由主 Agent 派生的短生命周期执行实例，只处理边界明确、可独立验证的子任务
-- **契约**: 必须通过 `templates/planning/worker-contract.md` 或等价任务包声明 `scope_read`、`scope_write`、`must_not_touch`、`verification_commands` 和回传 schema
-- **边界**: Sub-agent 不是 Skill；它可以使用 Skill，但不能把临时任务细节沉淀为长期方法论
+- 结构化索引：`manifest.json:agents`
+- 人类可读资产：`agents/<name>/AGENTS.md`
+- Agent 不等于运行时 session；ADK 不实现通用 LLM 推理循环或 session scheduler。
 
-### 1.4 Profile (配置文件)
-- **定义**: 预定义的 Agent/Skill 组合，用于特定场景
-- **位置**: `manifest.yaml` 中的 `profiles` 部分
-- **示例**: core, embedded-fullstack, release-hardening
+### 1.2 Skill
 
-### 1.5 Manifest (清单)
-- **定义**: 单一事实源，定义所有 Agent/Skill/Profile 的元数据和依赖关系
-- **位置**: `manifest.yaml`
-- **作用**: 驱动安装、验证、转换等所有操作
+Skill 是可复用、可版本化的方法与岗位 SOP，定义触发、非触发、输入、输出、约束、工作流、质量门禁和失败收口。
 
-### 1.6 MCP / Tool (能力接口)
-- **定义**: 外部系统和确定性能力接口，例如 Git、文档、设备、浏览器或 API 连接
-- **边界**: MCP/tool 只说明“能连什么、风险是什么”，不承担 Skill 的执行方法论职责
+- Core Skill：`skills/<name>/SKILL.md`
+- Optional Skill：`optional-skills/<name>/SKILL.md`
+- 结构化索引：`manifest.json:skills` / `manifest.json:optional_skills`
 
----
+### 1.3 Sub-agent
 
-## 2. 领域术语
+Sub-agent 是运行时创建的短生命周期执行实例，只处理边界明确、可独立验证的子任务。ADK 只定义 worker contract、权限和交接要求，不拥有具体运行时的 sub-agent scheduler。
 
-### 2.1 嵌入式系统开发
-- **BSP**: Board Support Package，板级支持包
-- **RTOS**: Real-Time Operating System，实时操作系统
-- **MCU**: Microcontroller Unit，微控制器
-- **HIL**: Hardware-in-the-Loop，硬件在环
-- **SIL**: Software-in-the-Loop，软件在环
-- **DMA**: Direct Memory Access，直接内存访问
-- **ISR**: Interrupt Service Routine，中断服务程序
+### 1.4 Profile
 
-### 2.2 质量门禁
-- **Artifact**: 工件，开发过程中产生的文档、代码、测试等
-- **Gate**: 门禁，质量检查点
-- **Evidence**: 证据，验证结果的记录
-- **Verification**: 验证，确认实现符合要求
-- **Validation**: 确认，确认需求正确
+Profile 是 Agent 与 Skill 的可安装组合，面向具体工作场景。
 
-### 2.3 工作流
-- **Propose**: 提议，创建变更提案
-- **Apply**: 应用，实施变更
-- **Verify**: 验证，检查变更结果
-- **Review**: 评审，人工审核
-- **Archive**: 归档，保存变更记录
+- 结构化单一事实源：`manifest.json:profiles`
+- 当前主要 Profile：`core`、`personal-core`、`embedded-fullstack`、`team-core`、`release-hardening`、`openspec-driven`、`large-refactor`、`incident-response`、`research-intake`
+
+### 1.5 Manifest
+
+`manifest.json` 是 Agent、Skill、Profile、Workflow、Target、Routing 与治理元数据的唯一结构化事实源。ADK 不再维护 Manifest 的 YAML 镜像；catalog、文档和其它视图只能从 canonical JSON 单向生成，不能成为反向写入来源。
+
+### 1.6 Workflow
+
+Workflow 是任务阶段与证据边界的可验证合同。ADK 定义流程、入口/出口、批准、回滚和 evidence contract；真正的模型推理、session 生命周期和 durable scheduler 仍由外部 runtime 拥有。
+
+### 1.7 Artifact / Gate
+
+Artifact 是任务过程中产生、可被后续阶段消费或审计的结构化产物；Gate 是对 Artifact、Evidence、权限和状态执行的 fail-closed 判定。Gate 只能证明其声明的证据等级，不能把 source/test 结果升级成 runtime/field 事实。
+
+### 1.8 MCP / Tool / Target Adapter
+
+- Tool/MCP：外部确定性能力接口，必须声明 transport、权限、读写/破坏性边界、数据分类和失败语义。
+- Tool Target：ADK 资产可以编译/导出的运行时目标。
+- Target Adapter：负责静态转换、安装计划和边界验证，不把“导出成功”冒充“原生运行时已验证”。
+
+### 1.9 Evidence / Receipt
+
+Evidence 是可验证事实；Receipt 是某次确定性执行产生的机器可读证明。二者必须绑定 source identity、命令/动作、结果、时间、新鲜度与环境，历史报告不得覆盖更新的失败或 stale 状态。
 
 ---
 
-## 3. 质量等级
+## 2. 产品边界
 
-### 3.1 Quality Tiers
-- **P0**: 核心主干资产，必须具备可执行流程与验收证据模板
-- **P1**: 稳定扩展资产，必须具备命令、样例和质量门禁
-- **P2**: 可选场景资产，必须具备边界说明和最小验证路径
+ADK 的定位是平台中立的 Agent 资产编译、安装、评测和发布控制面。
 
-### 3.2 质量评分
-- **A+ (优秀)**: 95-100 分
-- **A (良好)**: 85-94 分
-- **A- (中上)**: 75-84 分
-- **B+ (中等)**: 65-74 分
-- **B (及格)**: 55-64 分
-- **C (需改进)**: 45-54 分
-- **D (不达标)**: <45 分
+ADK 负责：
 
----
+1. Agent/Skill/Profile/Workflow/Target 的结构化建模。
+2. Routing IR、上下文治理与权限边界。
+3. 编译、导出、安装计划、回滚和静态 target validation。
+4. Evidence、Run Evidence、Effect Comparator、campaign 与 release contract。
+5. 官方资料 freshness、供应链和发布门禁。
 
-## 4. 工具目标
+ADK 不负责：
 
-### 4.1 支持的工具
-- **Tool target**: ADK 显式声明的运行时适配目标
-- **Claude Code**: Anthropic 的 AI 编程助手
-- **Hermes Agent**: 开源 AI Agent 框架
-- **OpenCode**: 开源 AI 编程助手
-
-### 4.2 安装模式
-- **Copy**: 复制文件到目标目录（默认）
-- **Symlink**: 创建符号链接到目标目录
+1. 通用 LLM inference loop。
+2. 生产 session scheduler、issue polling 或 workspace lifecycle daemon。
+3. 默认写入任意用户 runtime 目录。
+4. 未经 owner review 自动启用 MCP、Hook、Plugin 或 Automation。
+5. 用 fixture、静态导出或 owner attestation 冒充 native runtime / field evidence。
 
 ---
 
-## 5. 核心流程
+## 3. Routing 与任务模式
 
-### 5.1 需求分析流程
-1. 需求收集 (adk-requirements-triage)
-2. 架构设计 (adk-adr-writer)
-3. 任务分解 (adk-task-breakdown)
+Routing 的机器事实位于 `manifest.json:routing`，当前 IR 为 `routing-ir/v2`。核心字段包括：
 
-### 5.2 开发流程
-1. 接口设计 (adk-interface-contract-design)
-2. 寄存器映射 (adk-register-map-design)
-3. 驱动开发 (adk-driver-bringup-checklist)
-4. BSP 移植 (adk-bsp-porting-playbook)
+- `task_mode`
+- `intent`
+- `negated_intents`
+- `mutation_permission`
+- `risk`
+- `profile_availability`
+- `required_evidence`
+- `abstain`
 
-### 5.3 验证流程
-1. 单元测试 (adk-unit-test-embedded)
-2. 集成测试 (adk-integration-hil-sil)
-3. 性能分析 (adk-performance-profiling-embedded)
-4. 静态分析 (adk-static-analysis-c-cpp)
-
-### 5.4 发布流程
-1. 版本管理 (adk-release-versioning)
-2. 提交门禁 (adk-commit-pr-quality-gate)
-3. 文档审查 (adk-structured-requirements-questioning)
+只读、实现、调试、评审和发布必须先由 task mode 决定 mutation permission。LLM 分类结果本身不得直接成为写入或发布授权。
 
 ---
 
-## 6. 命名约定
+## 4. Context 与 Knowledge
 
-### 6.1 文件命名
-- **Agent 目录**: `agents/<kebab-case-name>/`
-- **Skill 目录**: `skills/<kebab-case-name>/` 或 `optional-skills/<kebab-case-name>/`
-- **脚本文件**: `scripts/<kebab-case-name>.sh`
-- **文档文件**: `docs/<kebab-case-name>.md`
-
-### 6.2 内部命名
-- **Agent ID**: `<kebab-case-name>`
-- **Skill ID**: `<kebab-case-name>`
-- **Profile ID**: `<kebab-case-name>`
+知识层保持 L0-L4：toolchain、general-tech、domain、project、session。上下文采用渐进加载：稳定规则优先，阶段性 Skill 按需加载，历史证据只在必要时检索。Session 临时状态不是长期知识，也不应进入版本化产品事实。
 
 ---
 
-## 7. 依赖关系
+## 5. 嵌入式领域边界
 
-### 7.1 Skill 依赖
-- 依赖关系在 `manifest.yaml` 的 `depends_on` 字段中定义
-- 依赖必须是有向无环图 (DAG)
-- 安装时自动解析依赖链
+嵌入式能力通过 `embedded-fullstack` profile 承载，包括 SoC/MCU/MPU、Boot/BSP、Linux/RTOS/bare-metal、驱动/DMA/中断、协议栈、HIL/SIL、产测、OTA、RMA 与现场恢复。嵌入式经验不能被提升为通用 `core` invariant。
 
-### 7.2 Profile 依赖
-- Profile 可以继承其他 Profile
-- 继承关系在 `manifest.yaml` 的 `extends` 字段中定义
-- 冲突关系在 `conflicts_with` 字段中定义
+常用术语：BSP、RTOS、MCU、HIL、SIL、DMA、ISR、OTA、RMA。
+
+---
+
+## 6. 质量与证据等级
+
+### Quality Tier
+
+- P0：核心主干资产，必须具备可执行流程与验收证据。
+- P1：稳定扩展资产，必须具备命令、样例和质量门禁。
+- P2：可选场景资产，必须具备边界说明和最小验证路径。
+
+### 证据层
+
+- source：源码/manifest/contract 事实。
+- test：确定性测试和静态验证。
+- runtime：真实目标运行时 discovery/load/trigger/rollback 等证据。
+- field：真实仓、真实操作者、真实周期和现场结果。
+
+高层证据不能由低层证据自动推导。
+
+---
+
+## 7. 结构化 SSOT 与派生物
+
+| 信息 | 单一事实源 | 派生投影 |
+|---|---|---|
+| 产品版本与资产索引 | `manifest.json` | README、catalog |
+| Agent | `manifest.json:agents` + `agents/` | target bundle |
+| Skill | `manifest.json:skills/optional_skills` + Skill 文件 | catalog/target bundle |
+| Profile | `manifest.json:profiles` | catalog |
+| Workflow | `manifest.json:workflows` + `workflows/` | Workflow 文档投影 |
+| Routing | `manifest.json:routing` | routing matrix/catalog/tests |
+| Target | `manifest.json:tool_targets` + target contracts | export/install plan |
+| Release identity | exact commit/tree + manifest/release receipt | release notes |
+
+派生文件与 SSOT 不一致时必须 fail closed；不得靠人工解释覆盖机器事实。Manifest 不允许第二结构化镜像。
 
 ---
 
 ## 8. 验证要求
 
-### 8.1 必须验证项
-- 所有测试必须通过: `bash tests/run_all.sh`
-- 健康检查必须通过: `bash scripts/health-check.sh check-all`
-- 质量门禁必须通过: `bash scripts/quality-gate-check.sh check-all`
+最小开发验证：
 
-### 8.2 验证证据
-- 每个验证步骤必须生成证据文件
-- 证据文件位置: `docs/changes/<change-name>/verify-report.md`
-- 证据必须包含: 命令、输出、结果、时间戳
+```bash
+rtk scripts/devkit.sh validate --strict
+rtk tests/run_all.sh
+```
 
----
-
-## 9. 文档要求
-
-### 9.1 必须文档
-- **README.md**: 项目介绍和快速开始
-- **CONTEXT.md**: 领域语言定义（本文件）
-- **manifest.yaml**: 资产清单和配置
-- **CHANGELOG.md**: 版本变更记录
-
-### 9.2 Skill 文档
-每个 SKILL.md 必须包含:
-- **Frontmatter**: name, description, triggers, non_triggers, inputs, outputs, constraints
-- **Body**: Goal, Prerequisites, Workflow, Quality Gate, Failure Handling
-- **入口长度**: 严格门禁下不超过 140 行，长背景和示例进入 `references/`
-- **Description**: 必须能表达触发场景和产出，不能使用占位或泛化描述
-
-### 9.3 分层文档
-- Skill / Agent / Sub-agent / Workflow / MCP 的职责边界见 `docs/skill-agent-runtime-model.md`
-- 并行 worker 任务契约模板见 `templates/planning/worker-contract.md`
+发布/认证验证必须使用 Python 3.11+，并补 security、release check、target contract、rollback/rehearsal 与相应 runtime/field evidence。工具未安装、凭据缺失或外部数据不可得时必须标记 unavailable/blocked，不能记录为 pass。
 
 ---
 
-## 10. 版本管理
+## 9. 文档与变更治理
 
-### 10.1 版本格式
-- 使用语义化版本: `MAJOR.MINOR.PATCH`
-- **MAJOR**: 不兼容的 API 修改
-- **MINOR**: 向下兼容的功能性新增
-- **PATCH**: 向下兼容的问题修正
+非平凡实现、长任务、失败恢复或 Gate 变更应使用 `docs/changes/<id>/` 保存 requirements、design、tasks、negative-results 与 verification evidence。历史变更文档允许出现被移除的外部仓、旧路径或负结果，这类 provenance 不得被误判为 active runtime dependency。
 
-### 10.2 版本来源
-- **单一事实源**: `manifest.yaml` 中的 `version` 字段
-- **其他文件**: 从 manifest.yaml 派生或同步
+---
+
+## 10. 版本与发布
+
+版本身份必须至少绑定：SemVer、exact commit、tree、manifest digest 与验证/发布 receipt。`manifest.json` 是版本 SSOT；其它文件只做受门禁约束的只读投影。手工 workflow dispatch 产生的候选不得自动获得正式 release 身份。
 
 ---
 
 ## 11. 安全要求
 
-### 11.1 代码安全
-- 禁止硬编码密钥和密码
-- 使用环境变量或配置文件管理敏感信息
-- 定期进行安全扫描
-
-### 11.2 操作安全
-- 破坏性操作必须有 `--force` 门控
-- 删除操作前必须创建备份
-- 重要操作必须有审计日志
+- 禁止硬编码密钥、token 和客户敏感数据。
+- 默认最小权限；破坏性动作必须显式授权并有回滚。
+- 外部 source / MCP / Plugin / Hook / Automation 默认不进入 active runtime。
+- 依赖与 GitHub Actions 使用版本锁定/不可变 SHA，并保留供应链审计证据。
 
 ---
 
-## 12. 性能要求
+## 12. 使用规范
 
-### 12.1 响应时间
-- 安装操作: <30 秒
-- 验证操作: <10 秒
-- 匹配操作: <1 秒
-
-### 12.2 资源使用
-- 内存使用: <100MB
-- 磁盘空间: <50MB（不含依赖）
-
----
-
-## 13. 监控要求
-
-### 13.1 必须监控项
-- 安装成功率
-- 验证通过率
-- 脚本执行时间
-- 错误率
-
-### 13.2 告警条件
-- 安装失败率 >5%
-- 验证失败率 >10%
-- 脚本执行时间 >30 秒
-- 错误率 >1%
-
----
-
-## 14. 维护要求
-
-### 14.1 定期维护
-- 每周: 检查依赖更新
-- 每月: 安全扫描
-- 每季: 性能优化
-
-### 14.2 文档更新
-- 代码变更必须同步更新文档
-- 新功能必须添加使用示例
-- 废弃功能必须标记并提供迁移路径
-
----
-
-## 15. 贡献指南
-
-### 15.1 代码贡献
-1. Fork 项目
-2. 创建功能分支
-3. 提交变更
-4. 创建 Pull Request
-5. 通过代码审查
-6. 合并到主分支
-
-### 15.2 文档贡献
-1. 修复错误
-2. 添加示例
-3. 改进说明
-4. 翻译内容
-
----
-
-## 16. 许可证
-
-- **许可证**: MIT License
-- **Copyright**: 2026 agent-dev-kit contributors
-
----
-
-## 17. 术语表
-
-| 术语 | 定义 | 单一事实源 |
-|------|------|------------|
-| Agent | 面向固定职责的执行角色，负责分析、实现、验证或评审中的一个边界 | `agents/<name>/AGENTS.md` |
-| Skill | 可复用能力单元，定义触发条件、输入输出、流程、命令和质量门禁 | `skills/<name>/SKILL.md` |
-| Optional Skill | 默认不安装的扩展能力，只在 profile 或用户明确选择时启用 | `optional-skills/<name>/SKILL.md` |
-| Profile | Agent 与 Skill 的可安装组合，面向具体工作场景 | `manifest.yaml` |
-| Workflow | 从需求、设计、实现、验证到归档的阶段化执行链路 | `docs/workflows.md` |
-| Artifact | 工作流阶段产物，如 proposal、design、tasks、verify-report、review-report | `templates/artifacts/` |
-| Gate | 阶段入口或出口的质量检查，必须有命令或证据支撑 | `scripts/` 与 `tests/` |
-| Evidence | 验证证据，记录命令、退出码、摘要和证据路径 | `docs/changes/<change>/` |
-
----
-
-## 18. 概念关系
-
-1. `manifest.yaml` 是 Agent、Skill、Optional Skill 与 Profile 的结构化索引。
-2. Profile 选择一组 Agent 和 Skill；安装、转换和 handoff 都从 Profile 解析资产。
-3. Workflow 定义执行顺序；Skill 提供单步方法；Agent 承担角色职责。
-4. Artifact 是 Workflow 的可审计输出；Gate 检查 Artifact 与 Evidence 是否满足进入下一阶段的条件。
-5. `agent-dev-kit` 的生产链路是先生成通用 ADK 资产，再交给显式 tool target 的适配层处理。
-
----
-
-## 19. 使用规范
-
-1. 新增或修改 Agent/Skill 必须同步 `manifest.yaml`，并运行 `rtk agent-dev-kit/scripts/devkit.sh validate --strict`。
-2. 修改路由、触发词或 profile 时，必须运行 `rtk agent-dev-kit/tests/test_skill_trigger_matrix.sh` 与 `rtk agent-dev-kit/tests/test_match_effectiveness.sh`。
-3. 修改运行时边界时，必须运行 `rtk agent-dev-kit/scripts/devkit.sh runtime-boundary`。
-4. 声明完成前必须运行与改动范围匹配的验证；无验证证据不得声明可发布、可安装或可合并。
-5. 不直接把 `agent-dev-kit` 产物复制到未声明运行目录；必须先经过 tool target、manifest 和 rollback 治理链路。
-
----
-
-## 20. 联系方式
-
-- **问题反馈**: GitHub Issues
-- **功能建议**: GitHub Discussions
-- **安全漏洞**: 安全邮箱
-
----
-
-## 21. 致谢
-
-感谢所有贡献者和用户的支持！
-
----
-
-*本文档定义了 agent-dev-kit 的领域语言和核心概念，是理解项目的基础。*
+1. 先读 `AGENTS.md` 与目标目录局部规则。
+2. 所有结构化资产修改只编辑 `manifest.json`；不得新增平行 Manifest 镜像。
+3. 行为变化必须增加确定性测试和相邻负例。
+4. 只读任务不得因为“长任务”“发布”“调试”等词汇自动扩大 mutation permission。
+5. 没有 fresh evidence 不声明可发布、可安装、可合并或生产可用。
+6. 不直接把 ADK 资产写入未声明 runtime；必须经过 target/source-to-live 与 rollback 治理。
+7. 不把 cache、session state、raw prompt、raw log 当长期产品事实。

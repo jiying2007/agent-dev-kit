@@ -61,7 +61,7 @@ source "$SCRIPT_DIR/lib-manifest.sh"
 adk_require_manifest
 
 if [[ -z "$PROFILE" ]]; then
-  PROFILE="$(awk '/^default_profile:/ {print $2; exit}' "$ADK_MANIFEST")"
+  PROFILE="$(adk_get_manifest_value default_profile)"
 fi
 
 adk_profile_exists "$PROFILE" || {

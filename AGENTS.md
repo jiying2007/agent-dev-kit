@@ -12,7 +12,7 @@
 
 ## 2. 结构与 SSOT
 
-- `manifest.json`：产品边界、target、profile、agent、skill、workflow 与 MCP 的 SSOT；`manifest.yaml` 是受门禁约束的兼容镜像。
+- `manifest.json`：产品边界、target、profile、agent、skill、workflow 与 MCP 的唯一结构化 Manifest SSOT；禁止新增平行 Manifest 镜像。
 - `agents/`、`skills/`：core 资产；`optional-skills/`：仅显式请求时安装/导出；`src/agent_dev_kit/`：typed core；`scripts/devkit.sh`：稳定入口；`docs/changes/`：可审查变更证据；`tests/`：回归。
 - ID 和文件名用 kebab-case。`SKILL.md` 必须含 `name/description/triggers/non_triggers/inputs/outputs/constraints`，正文只保留触发、流程、输出契约，长背景放 `references/`。
 - 参考仓只作治理输入；生产资产必须由 manifest 和 handoff fragment 声明。能力必须明确属于 `core` 或 `optional-skills`，不得保留重复 skill/profile。
