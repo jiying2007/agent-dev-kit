@@ -176,19 +176,6 @@ def _cmd_validate(argv: Sequence[str]) -> int:
             for failure in failures:
                 print("[FAIL] {}".format(failure), file=sys.stderr)
         return 1
-    mirror_check = subprocess.run(
-        [sys.executable, str(ROOT / "tools" / "check_manifest_sync.py")],
-        cwd=str(ROOT),
-        check=False,
-        text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    )
-    if mirror_check.returncode != 0:
-        message = mirror_check.stderr.strip() or mirror_check.stdout.strip()
-        if message:
-            print(message, file=sys.stderr)
-        return mirror_check.returncode
     legacy_args = list(argv)
     completed = subprocess.run(
         ["bash", str(ROOT / "scripts" / "validate-assets.sh")] + legacy_args,

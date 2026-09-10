@@ -86,7 +86,7 @@ TESTS=(
   test_runtime_boundary.sh
   test_target_contracts.sh
   test_effect_eval.sh
-  test_product_maturity_v4.sh
+  test_product_maturity_v5.sh
   test_runtime_bundle.sh
   test_software_m5_ready.sh
   test_repository_runtime_evidence.sh

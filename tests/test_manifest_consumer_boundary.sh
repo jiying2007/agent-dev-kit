@@ -9,6 +9,16 @@ export PYTHONPATH="$ROOT/src${PYTHONPATH:+:$PYTHONPATH}"
   exit 1
 }
 
+for retired in \
+  "$ROOT/tools/check_manifest_sync.py" \
+  "$ROOT/tools/migrate_manifest_v2.py" \
+  "$ROOT/tests/test_product_maturity_v4.sh"; do
+  [[ ! -e "$retired" ]] || {
+    echo "[FAIL] retired Manifest compatibility surface still exists: ${retired#$ROOT/}" >&2
+    exit 1
+  }
+done
+
 grep -q 'ADK_MANIFEST=.*manifest.json' "$ROOT/scripts/lib-manifest.sh" || {
   echo "[FAIL] shell Manifest adapter is not bound to manifest.json" >&2
   exit 1
@@ -17,9 +27,10 @@ grep -q 'ADK_MANIFEST=.*manifest.json' "$ROOT/scripts/lib-manifest.sh" || {
 for active in \
   "$ROOT/scripts/lib-manifest.sh" \
   "$ROOT/scripts/catalog-assets.sh" \
-  "$ROOT/scripts/health-check.sh"; do
-  if grep -q 'manifest.yaml' "$active"; then
-    echo "[FAIL] active Manifest consumer still references manifest.yaml: ${active#$ROOT/}" >&2
+  "$ROOT/scripts/health-check.sh" \
+  "$ROOT/src/agent_dev_kit/release.py"; do
+  if grep -q 'manifest.yaml\|check_manifest_sync' "$active"; then
+    echo "[FAIL] active Manifest consumer still references retired compatibility surface: ${active#$ROOT/}" >&2
     exit 1
   fi
 done
@@ -44,4 +55,4 @@ python3 -m agent_dev_kit.asset_taxonomy_contract --root "$TMP_DIR" --summary-jso
 python3 -m agent_dev_kit.health_contract --root "$ROOT" --summary-json \
   | python3 -c 'import json,sys; d=json.load(sys.stdin); assert d["status"]=="pass", d'
 
-echo "[PASS] active Manifest consumers are JSON-only and canonical"
+echo "[PASS] active Manifest consumers are JSON-only with zero legacy execution surface"
