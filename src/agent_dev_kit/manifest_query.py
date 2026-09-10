@@ -69,6 +69,9 @@ def _routing_intent(data: dict[str, Any], name: str) -> dict[str, Any] | None:
 
 
 def run(data: dict[str, Any], command: str, args: list[str]) -> None:
+    if command == "top-value" and len(args) == 1:
+        _emit_scalar(data.get(args[0]))
+        return
     if command == "section-entry-names" and len(args) == 1:
         value = data.get(args[0])
         if isinstance(value, dict):
