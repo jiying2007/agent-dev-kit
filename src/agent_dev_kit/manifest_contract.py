@@ -3,110 +3,32 @@ from __future__ import annotations
 import argparse
 import json
 import sys
-from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
 
 import yaml
 
-# These fields were introduced for the typed control-plane and have no legacy
-# YAML consumer. Keeping the omission list explicit prevents manifest.yaml from
-# silently becoming a second SSOT while legacy shell consumers are migrated.
-_COMPATIBILITY_OMISSIONS = frozenset({"schema_version", "product"})
+from agent_dev_kit.domain.manifest import (
+    CANONICAL_ONLY_KEYS,
+    ManifestContract,
+    canonical_manifest,
+    load_canonical_manifest,
+    load_contract,
+)
 
-
-def _first_difference(left: Any, right: Any, path: str = "$") -> str | None:
-    if type(left) is not type(right):
-        return f"{path}: type {type(left).__name__} != {type(right).__name__}"
-    if isinstance(left, dict):
-        left_keys = set(left)
-        right_keys = set(right)
-        if left_keys != right_keys:
-            missing = sorted(left_keys - right_keys)
-            extra = sorted(right_keys - left_keys)
-            return f"{path}: key drift missing_in_yaml={missing} extra_in_yaml={extra}"
-        for key in left:
-            diff = _first_difference(left[key], right[key], f"{path}.{key}")
-            if diff:
-                return diff
-        return None
-    if isinstance(left, list):
-        if len(left) != len(right):
-            return f"{path}: length {len(left)} != {len(right)}"
-        for index, (left_item, right_item) in enumerate(zip(left, right, strict=True)):
-            diff = _first_difference(left_item, right_item, f"{path}[{index}]")
-            if diff:
-                return diff
-        return None
-    if left != right:
-        return f"{path}: {left!r} != {right!r}"
-    return None
-
-
-def _compatibility_projection(canonical: dict[str, Any]) -> dict[str, Any]:
-    return {key: value for key, value in canonical.items() if key not in _COMPATIBILITY_OMISSIONS}
-
-
-@dataclass(frozen=True)
-class ManifestContract:
-    root: Path
-    canonical_path: Path
-    compatibility_path: Path
-    canonical: dict[str, Any]
-    compatibility: dict[str, Any]
-
-    @property
-    def version(self) -> str:
-        value = self.canonical.get("version")
-        if not isinstance(value, str) or not value:
-            raise ValueError("manifest.json version must be a non-empty string")
-        return value
-
-    @property
-    def compatibility_omissions(self) -> tuple[str, ...]:
-        return tuple(sorted(_COMPATIBILITY_OMISSIONS))
-
-    def verify(self) -> None:
-        expected = _compatibility_projection(self.canonical)
-        difference = _first_difference(expected, self.compatibility)
-        if difference:
-            raise ValueError(f"manifest.yaml compatibility projection differs semantically: {difference}")
-        forbidden = sorted(set(self.compatibility) & _COMPATIBILITY_OMISSIONS)
-        if forbidden:
-            raise ValueError(
-                "manifest.yaml unexpectedly owns canonical-only metadata: " + ", ".join(forbidden)
-            )
-
-
-def load_contract(root: Path) -> ManifestContract:
-    root = root.resolve()
-    canonical_path = root / "manifest.json"
-    compatibility_path = root / "manifest.yaml"
-    with canonical_path.open(encoding="utf-8") as handle:
-        canonical = json.load(handle)
-    with compatibility_path.open(encoding="utf-8") as handle:
-        compatibility = yaml.safe_load(handle)
-    if not isinstance(canonical, dict):
-        raise ValueError("manifest.json root must be an object")
-    if not isinstance(compatibility, dict):
-        raise ValueError("manifest.yaml root must be a mapping")
-    return ManifestContract(
-        root=root,
-        canonical_path=canonical_path,
-        compatibility_path=compatibility_path,
-        canonical=canonical,
-        compatibility=compatibility,
-    )
-
-
-def canonical_manifest(root: Path) -> dict[str, Any]:
-    contract = load_contract(root)
-    contract.verify()
-    return contract.canonical
+__all__ = [
+    "CANONICAL_ONLY_KEYS",
+    "ManifestContract",
+    "canonical_manifest",
+    "load_canonical_manifest",
+    "load_contract",
+    "main",
+]
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Verify manifest.json SSOT and manifest.yaml compatibility projection")
+    parser = argparse.ArgumentParser(
+        description="Verify manifest.json SSOT and manifest.yaml compatibility projection"
+    )
     parser.add_argument("--root", default=".")
     parser.add_argument("--summary-json", action="store_true")
     args = parser.parse_args(argv)
