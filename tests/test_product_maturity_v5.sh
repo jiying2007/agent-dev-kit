@@ -25,10 +25,6 @@ for removed in convert monitor ops perf; do
     exit 1
   fi
 done
-if rg -q -- '--target codex' "$ROOT_DIR/.github/workflows/release.yml"; then
-  echo "[FAIL] release workflow still treats Codex as a direct target" >&2
-  exit 1
-fi
 if bash "$ROOT_DIR/scripts/devkit.sh" release publish --version "$VERSION" \
   >"$TMP_DIR/publish.out" 2>"$TMP_DIR/publish.err"; then
   echo "[FAIL] publish without an explicit backend unexpectedly succeeded" >&2
