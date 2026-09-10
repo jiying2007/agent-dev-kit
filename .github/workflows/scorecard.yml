@@ -1,13 +1,9 @@
-name: OpenSSF Scorecard
+name: OpenSSF Scorecard Diagnostic
 
 on:
-  branch_protection_rule:
   schedule:
     - cron: '17 3 * * 1'
-  push:
-    branches:
-      - main
-      - master
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -25,12 +21,14 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Run OpenSSF Scorecard
+      - name: Run OpenSSF Scorecard as diagnostic
         uses: ossf/scorecard-action@4eaacf0543bb3f2c246792bd56e8cdeffafb205a # v2.4.3
         with:
           results_file: results.sarif
           results_format: sarif
-          publish_results: true
+          # Private repositories cannot publish public Scorecard results. This
+          # workflow is diagnostic only and is intentionally not a main/PR gate.
+          publish_results: false
 
       - name: Upload Scorecard artifact
         if: always()
@@ -38,7 +36,8 @@ jobs:
         with:
           name: scorecard-results
           path: results.sarif
-          retention-days: 5
+          if-no-files-found: warn
+          retention-days: 14
 
       - name: Upload Scorecard SARIF
         if: success()
