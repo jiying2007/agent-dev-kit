@@ -5,13 +5,13 @@ import json
 import re
 import sys
 from pathlib import Path
-from typing import Any, Iterable, Mapping
+from typing import Any, Mapping
 
 import yaml
 
 from .model import Manifest, ManifestError, ensure_within
 
-_Kebab = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+_KEBAB = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 _PLACEHOLDER = re.compile(r"TODO|TBD|FIXME|待补充|描述待定|示例|占位", re.IGNORECASE)
 _WORKFLOW_COMMAND = re.compile(r"^rtk\s+bash\s+((?:scripts|tests)/\S+)")
 _AGENT_HEADINGS = (
@@ -29,15 +29,21 @@ _SKILL_KEYS = ("name", "description", "triggers", "non_triggers", "inputs", "out
 
 def _records(data: Mapping[str, Any], key: str) -> list[Mapping[str, Any]]:
     value = data.get(key, [])
-    if not isinstance(value, list):
-        return []
-    return [item for item in value if isinstance(item, dict)]
+    if isinstance(value, list):
+        return [item for item in value if isinstance(item, dict)]
+    if isinstance(value, dict):
+        return [dict(item, name=name) if isinstance(item, dict) else {"name": name} for name, item in value.items()]
+    return []
 
 
 def _strings(value: Any) -> list[str]:
     if not isinstance(value, list):
         return []
     return [item for item in value if isinstance(item, str) and item]
+
+
+def _nonempty_list(value: Any) -> bool:
+    return isinstance(value, list) and bool(value)
 
 
 def _frontmatter(path: Path) -> Mapping[str, Any]:
@@ -53,28 +59,29 @@ def _frontmatter(path: Path) -> Mapping[str, Any]:
     return value
 
 
-def _validate_description(label: str, value: Any, failures: list[str]) -> None:
+def _description(label: str, value: Any, failures: list[str]) -> None:
     if not isinstance(value, str) or not value.strip():
         failures.append(f"{label} description is empty")
         return
-    if len(value.strip()) < 8:
+    value = value.strip()
+    if len(value) < 8:
         failures.append(f"{label} description too short for discovery")
     if _PLACEHOLDER.search(value):
         failures.append(f"{label} description contains placeholder text")
 
 
-def _validate_agent_files(manifest: Manifest, strict: bool, failures: list[str]) -> None:
-    disk = {path.name for path in (manifest.root / "agents").iterdir() if path.is_dir()}
+def _validate_agents(manifest: Manifest, strict: bool, failures: list[str]) -> None:
+    root = manifest.root / "agents"
+    disk = {path.name for path in root.iterdir() if path.is_dir()}
     records = {str(item.get("name", "")): item for item in _records(manifest.data, "agents")}
-    if disk != set(records):
-        missing = sorted(disk - set(records))
-        extra = sorted(set(records) - disk)
-        if missing:
-            failures.append("manifest missing agents: " + ", ".join(missing))
-        if extra:
-            failures.append("manifest agents missing on disk: " + ", ".join(extra))
+    missing = sorted(disk - set(records))
+    extra = sorted(set(records) - disk)
+    if missing:
+        failures.append("manifest missing agents: " + ", ".join(missing))
+    if extra:
+        failures.append("manifest agents missing on disk: " + ", ".join(extra))
     for name, record in records.items():
-        if not _Kebab.fullmatch(name):
+        if not _KEBAB.fullmatch(name):
             failures.append(f"invalid agent name: {name}")
             continue
         raw_path = record.get("path")
@@ -83,28 +90,29 @@ def _validate_agent_files(manifest: Manifest, strict: bool, failures: list[str])
         path = manifest.root / raw_path
         if not path.is_file():
             continue
-        text = path.read_text(encoding="utf-8")
+        lines = path.read_text(encoding="utf-8").splitlines()
         for heading in _AGENT_HEADINGS:
-            if heading not in text.splitlines():
+            if heading not in lines:
                 failures.append(f"agent '{name}' missing heading '{heading}'")
         if strict:
-            _validate_description(f"agent '{name}'", record.get("description"), failures)
+            _description(f"agent '{name}'", record.get("description"), failures)
             for key in ("owns", "does_not_own", "handoff_to", "default_skills"):
                 if not _strings(record.get(key)):
                     failures.append(f"agent '{name}' manifest list '{key}' is empty")
 
 
-def _validate_skill_files(manifest: Manifest, strict: bool, failures: list[str]) -> None:
-    core_names = {str(item.get("name", "")) for item in _records(manifest.data, "skills")}
-    optional_names = {str(item.get("name", "")) for item in _records(manifest.data, "optional_skills")}
-    if core_names & optional_names:
-        failures.append("optional skills duplicate core skills: " + ", ".join(sorted(core_names & optional_names)))
+def _validate_skills(manifest: Manifest, strict: bool, failures: list[str]) -> None:
+    core = {str(item.get("name", "")) for item in _records(manifest.data, "skills")}
+    optional = {str(item.get("name", "")) for item in _records(manifest.data, "optional_skills")}
+    overlap = sorted(core & optional)
+    if overlap:
+        failures.append("optional skills duplicate core skills: " + ", ".join(overlap))
 
     descriptions: dict[str, str] = {}
     for section, label in (("skills", "skill"), ("optional_skills", "optional skill")):
         for record in _records(manifest.data, section):
             name = str(record.get("name", ""))
-            if not _Kebab.fullmatch(name):
+            if not _KEBAB.fullmatch(name):
                 failures.append(f"invalid {label} name: {name}")
                 continue
             raw_path = record.get("path")
@@ -123,23 +131,26 @@ def _validate_skill_files(manifest: Manifest, strict: bool, failures: list[str])
                     failures.append(f"{label} '{name}' frontmatter key '{key}' missing")
             if frontmatter.get("name") != name:
                 failures.append(f"{label} '{name}' frontmatter name mismatch: {frontmatter.get('name')}")
-            for key in ("triggers", "non_triggers", "inputs", "outputs", "constraints"):
+            for key in ("triggers", "non_triggers", "constraints"):
                 if not _strings(frontmatter.get(key)):
                     failures.append(f"{label} '{name}' frontmatter list '{key}' is empty")
-            text_lines = path.read_text(encoding="utf-8").splitlines()
+            for key in ("inputs", "outputs"):
+                if not _nonempty_list(frontmatter.get(key)):
+                    failures.append(f"{label} '{name}' frontmatter list '{key}' is empty")
+            lines = path.read_text(encoding="utf-8").splitlines()
             for heading in _SKILL_HEADINGS:
-                if heading not in text_lines:
+                if heading not in lines:
                     failures.append(f"{label} '{name}' missing heading '{heading}'")
             if strict:
-                description = frontmatter.get("description")
-                _validate_description(f"{label} '{name}'", description, failures)
-                if isinstance(description, str):
-                    previous = descriptions.get(description)
+                desc = frontmatter.get("description")
+                _description(f"{label} '{name}'", desc, failures)
+                if isinstance(desc, str):
+                    previous = descriptions.get(desc)
                     if previous is not None:
                         failures.append(f"duplicate skill description in {previous} and {name}")
-                    descriptions[description] = name
-                if len(text_lines) > 140:
-                    failures.append(f"skill entry exceeds 140 lines: {raw_path} ({len(text_lines)})")
+                    descriptions[desc] = name
+                if len(lines) > 140:
+                    failures.append(f"skill entry exceeds 140 lines: {raw_path} ({len(lines)})")
 
 
 def _validate_quality_tiers(manifest: Manifest, strict: bool, failures: list[str]) -> None:
@@ -149,7 +160,7 @@ def _validate_quality_tiers(manifest: Manifest, strict: bool, failures: list[str
         return
     names = set(tiers)
     for name, raw in tiers.items():
-        if not _Kebab.fullmatch(str(name)):
+        if not _KEBAB.fullmatch(str(name)):
             failures.append(f"invalid quality tier name: {name}")
         if strict and (not isinstance(raw, dict) or not isinstance(raw.get("description"), str) or not raw["description"]):
             failures.append(f"quality tier '{name}' missing description in strict mode")
@@ -163,7 +174,7 @@ def _validate_quality_tiers(manifest: Manifest, strict: bool, failures: list[str
                 failures.append(f"{label} '{name}' has unknown quality_tier '{tier}'")
 
 
-def _validate_reference_and_targets(manifest: Manifest, strict: bool, failures: list[str]) -> None:
+def _validate_references_and_targets(manifest: Manifest, strict: bool, failures: list[str]) -> None:
     references = manifest.data.get("reference_sources")
     if not isinstance(references, dict) or not references:
         failures.append("manifest has no reference_sources")
@@ -181,8 +192,7 @@ def _validate_reference_and_targets(manifest: Manifest, strict: bool, failures: 
             if isinstance(governance, str) and not (manifest.root / governance).is_file():
                 failures.append(f"reference source '{name}' governance manifest missing: {governance}")
 
-    direct = manifest.direct_targets()
-    for name, raw in direct.items():
+    for name, raw in manifest.direct_targets().items():
         for key in ("display_name", "default_root", "agents_dir", "skills_dir"):
             if not raw.get(key):
                 failures.append(f"tool target '{name}' missing key: {key}")
@@ -193,31 +203,32 @@ def _validate_reference_and_targets(manifest: Manifest, strict: bool, failures: 
     codex = external.get("codex")
     if not isinstance(codex, dict):
         failures.append("Codex must be declared as an external handoff target")
-    else:
-        if codex.get("handoff_mode") != "source-to-live":
-            failures.append("Codex external handoff must use source-to-live mode")
-        if codex.get("direct_tool_target") is not False:
-            failures.append("Codex external handoff must not be a direct tool target")
-        chain = codex.get("handoff_chain")
-        if not isinstance(chain, str) or "~/codex" not in chain or "~/.codex" not in chain:
-            failures.append("Codex external handoff must document ~/codex -> ~/.codex")
-        guards = set(_strings(codex.get("must_not")))
-        for required in ("direct-write-live-home", "direct-convert-target", "implicit-tool-target"):
-            if required not in guards:
-                failures.append(f"Codex external handoff missing must_not guard: {required}")
+        return
+    if codex.get("handoff_mode") != "source-to-live":
+        failures.append("Codex external handoff must use source-to-live mode")
+    if codex.get("direct_tool_target") is not False:
+        failures.append("Codex external handoff must not be a direct tool target")
+    chain = codex.get("handoff_chain")
+    if not isinstance(chain, str) or "~/codex" not in chain or "~/.codex" not in chain:
+        failures.append("Codex external handoff must document ~/codex -> ~/.codex")
+    guards = set(_strings(codex.get("must_not")))
+    for required in ("direct-write-live-home", "direct-convert-target", "implicit-tool-target"):
+        if required not in guards:
+            failures.append(f"Codex external handoff missing must_not guard: {required}")
 
 
 def _validate_context_layers(manifest: Manifest, failures: list[str]) -> None:
     for key in ("context_layers", "embedded_context_layers"):
         for ref in _strings(manifest.data.get(key)):
-            if ref.startswith(("skills/", "docs/", "knowledge/", "rules/", "templates/", "workflows/")):
-                try:
-                    path = ensure_within(manifest.root / ref, manifest.root, "context path")
-                except ManifestError as exc:
-                    failures.append(str(exc))
-                    continue
-                if not path.exists():
-                    failures.append(f"manifest references missing path: {ref}")
+            if not ref.startswith(("skills/", "docs/", "knowledge/", "rules/", "templates/", "workflows/")):
+                continue
+            try:
+                path = ensure_within(manifest.root / ref, manifest.root, "context path")
+            except ManifestError as exc:
+                failures.append(str(exc))
+                continue
+            if not path.exists():
+                failures.append(f"manifest references missing path: {ref}")
 
 
 def _validate_workflows(manifest: Manifest, strict: bool, failures: list[str]) -> None:
@@ -229,7 +240,7 @@ def _validate_workflows(manifest: Manifest, strict: bool, failures: list[str]) -
     profiles = manifest.data.get("profiles") if isinstance(manifest.data.get("profiles"), dict) else {}
     for workflow in _records(manifest.data, "workflows"):
         name = str(workflow.get("name", ""))
-        if not _Kebab.fullmatch(name):
+        if not _KEBAB.fullmatch(name):
             failures.append(f"invalid workflow name: {name}")
             continue
         path = workflow.get("path")
@@ -253,8 +264,7 @@ def _validate_workflows(manifest: Manifest, strict: bool, failures: list[str]) -
             match = _WORKFLOW_COMMAND.match(command)
             if match is None:
                 failures.append(f"workflow '{name}' command must use a checked rtk bash scripts|tests path: {command}")
-                continue
-            if not (manifest.root / match.group(1)).is_file():
+            elif not (manifest.root / match.group(1)).is_file():
                 failures.append(f"workflow '{name}' command references missing script: {match.group(1)}")
 
 
@@ -278,23 +288,22 @@ def _validate_mcp_and_change_sets(manifest: Manifest, strict: bool, failures: li
             value = item.get(key)
             if not isinstance(value, str) or not (manifest.root / value).is_dir():
                 failures.append(f"change set '{name}' {key} missing: {value}")
-        if not _strings(item.get("required_files")):
+        if not _nonempty_list(item.get("required_files")):
             failures.append(f"change set '{name}' required_files is empty")
 
 
 def validate_assets(root: Path, *, strict: bool, quick: bool) -> dict[str, Any]:
     manifest = Manifest.load(root)
     failures = manifest.validate(strict=strict and not quick)
-    data = manifest.data
     _validate_quality_tiers(manifest, strict, failures)
-    _validate_reference_and_targets(manifest, strict, failures)
-    _validate_agent_files(manifest, strict, failures)
-    _validate_skill_files(manifest, strict, failures)
+    _validate_references_and_targets(manifest, strict, failures)
+    _validate_agents(manifest, strict, failures)
+    _validate_skills(manifest, strict, failures)
     _validate_context_layers(manifest, failures)
     _validate_workflows(manifest, strict and not quick, failures)
     _validate_mcp_and_change_sets(manifest, strict and not quick, failures)
     if not quick:
-        profiles = data.get("profiles")
+        profiles = manifest.data.get("profiles")
         if isinstance(profiles, dict):
             for name in profiles:
                 try:
@@ -306,7 +315,8 @@ def validate_assets(root: Path, *, strict: bool, quick: bool) -> dict[str, Any]:
                     failures.append(f"profile '{name}' resolves to zero agents")
                 if not resolution.skills:
                     failures.append(f"profile '{name}' resolves to zero skills")
-    result = {
+    data = manifest.data
+    return {
         "schema": "adk-asset-validation/v2",
         "status": "fail" if failures else "pass",
         "strict": strict,
@@ -321,7 +331,6 @@ def validate_assets(root: Path, *, strict: bool, quick: bool) -> dict[str, Any]:
             "change_sets": len(_records(data, "change_sets")),
         },
     }
-    return result
 
 
 def main(argv: list[str] | None = None) -> int:
