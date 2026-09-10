@@ -162,8 +162,8 @@ check_workflows() {
 }
 
 # lifecycle_order/stage_order 是语义排序 SSOT；数组物理位置只是序列化细节。
-# 这里拒绝重复语义排序键，但不再要求人工维护 JSON/YAML 数组的物理顺序，
-# 防止“字段语义正确、仅插入位置不同”造成无价值红灯。
+# Skill 的 lifecycle+stage 组合承担确定性显示/组合顺序，因此要求唯一；Workflow
+# lifecycle_order 表达阶段而非唯一序号，多个 workflow 可以合法共享同一阶段。
 check_manifest_section_order() {
   local section="$1"
   local label="$2"
@@ -184,10 +184,12 @@ check_manifest_section_order() {
     is_numeric "$order" || fail "$label '$name' lifecycle_order must be numeric: $order"
     is_numeric "$stage" || fail "$label '$name' stage_order must be numeric: $stage"
     sort=$((order * 1000 + stage))
-    if [[ -n "${seen[$sort]:-}" ]]; then
-      fail "$section duplicate semantic sort key $sort: '${seen[$sort]}' and '$name'"
+    if [[ "$workflow" -eq 0 ]]; then
+      if [[ -n "${seen[$sort]:-}" ]]; then
+        fail "$section duplicate semantic sort key $sort: '${seen[$sort]}' and '$name'"
+      fi
+      seen[$sort]="$name"
     fi
-    seen[$sort]="$name"
   done < <(adk_list_manifest_names "$section")
 }
 
