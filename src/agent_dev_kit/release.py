@@ -9,7 +9,6 @@ import os
 import re
 import shutil
 import subprocess
-import sys
 import tarfile
 import tempfile
 from datetime import datetime, timezone
@@ -35,7 +34,7 @@ SOURCE_DISTRIBUTION_DIRECTORIES = (
 )
 SOURCE_DISTRIBUTION_FILES = (
     ".version-lock", ".adk/harness-readiness.json", "AGENTS.md", "CONTEXT.md",
-    "LICENSE", "NAVIGATION.md", "OWNERS", "README.md", "manifest.json", "manifest.yaml",
+    "LICENSE", "NAVIGATION.md", "OWNERS", "README.md", "manifest.json",
     "pyproject.toml",
 )
 
@@ -66,21 +65,6 @@ def check_release(manifest: Manifest) -> Dict[str, Any]:
             path.read_text(encoding="utf-8") if path.is_file() else "",
         ):
             failures.append("release version is not synchronized in {}".format(label))
-
-    try:
-        mirror_check = subprocess.run(
-            [sys.executable, str(manifest.root / "tools" / "check_manifest_sync.py")],
-            cwd=str(manifest.root),
-            check=False,
-            text=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            timeout=30,
-        )
-    except (OSError, subprocess.TimeoutExpired):
-        mirror_check = None
-    if mirror_check is None or mirror_check.returncode != 0:
-        failures.append("manifest JSON/YAML mirror is not synchronized")
 
     workflow = manifest.root / ".github" / "workflows" / "release.yml"
     if not workflow.is_file():
