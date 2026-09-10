@@ -60,6 +60,8 @@ require_text "skills/adk-interface-contract-design/SKILL.md" "owner × state × 
 require_text "skills/adk-test-strategy/SKILL.md" "Validation Resource Matrix:"
 require_text "skills/adk-planning-execution-loop/SKILL.md" "logical_task_open"
 require_text "skills/adk-planning-execution-loop/SKILL.md" "连续两轮新 blocker/major finding class"
+require_text "fixtures/lifecycle-review-convergence/fail/design-change-without-replan.md" "must return to contract design and replan"
+require_text "fixtures/lifecycle-review-convergence/pass/synchronous-not-applicable.md" "not forced into a lifecycle contract"
 require_text "docs/runbooks/memory-governance.md" "不得保存完整聊天记录"
 
 "$ROOT_DIR/scripts/validate-assets.sh" --strict >/dev/null
