@@ -45,13 +45,17 @@ Profile 是 Agent 与 Skill 的可安装组合，面向具体工作场景。
 
 Workflow 是任务阶段与证据边界的可验证合同。ADK 定义流程、入口/出口、批准、回滚和 evidence contract；真正的模型推理、session 生命周期和 durable scheduler 仍由外部 runtime 拥有。
 
-### 1.7 MCP / Tool / Target Adapter
+### 1.7 Artifact / Gate
+
+Artifact 是任务过程中产生、可被后续阶段消费或审计的结构化产物；Gate 是对 Artifact、Evidence、权限和状态执行的 fail-closed 判定。Gate 只能证明其声明的证据等级，不能把 source/test 结果升级成 runtime/field 事实。
+
+### 1.8 MCP / Tool / Target Adapter
 
 - Tool/MCP：外部确定性能力接口，必须声明 transport、权限、读写/破坏性边界、数据分类和失败语义。
 - Tool Target：ADK 资产可以编译/导出的运行时目标。
 - Target Adapter：负责静态转换、安装计划和边界验证，不把“导出成功”冒充“原生运行时已验证”。
 
-### 1.8 Evidence / Receipt
+### 1.9 Evidence / Receipt
 
 Evidence 是可验证事实；Receipt 是某次确定性执行产生的机器可读证明。二者必须绑定 source identity、命令/动作、结果、时间、新鲜度与环境，历史报告不得覆盖更新的失败或 stale 状态。
 
