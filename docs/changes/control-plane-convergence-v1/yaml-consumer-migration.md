@@ -1,21 +1,25 @@
-# YAML Consumer Migration
+# Manifest Consumer Migration
 
-## Goal
+## Final state
 
-`manifest.json` is the only complete structured SSOT. `manifest.yaml` is a temporary legacy compatibility projection and must not acquire new product consumers.
+`manifest.json` is the only structured Manifest SSOT. The persistent `manifest.yaml` compatibility projection has been removed and must not be recreated.
 
-## Policy
+## Active consumer policy
 
-- New typed Python product code reads `manifest.json` through `agent_dev_kit.domain.manifest`.
-- Only the manifest compatibility contract/facade may parse `manifest.yaml` in typed code.
-- Existing shell consumers may continue through `scripts/lib-manifest.sh` while they are migrated incrementally.
-- A migrated gate must prove it works with `manifest.json` present and `manifest.yaml` absent.
-- Compatibility projection omissions are explicit and bounded to `product` and `schema_version`; expanding the omission set requires a reviewed contract change.
+- Typed product code reads `manifest.json` through `agent_dev_kit.model` / `agent_dev_kit.domain.manifest`.
+- Shell entry points may remain for command compatibility, but structured Manifest reads must flow through the JSON query adapter or typed contracts.
+- Asset validation, taxonomy, profile coherence, catalog generation and repository health checks are canonical JSON consumers.
+- Generated catalog/reference documents are one-way projections and must identify `manifest.json` as their source.
+- General YAML support remains valid for independent formats such as Skill frontmatter, Workflow or Target contracts; this policy only retires the duplicate Manifest representation.
 
-## First migrated consumer
+## Regression boundary
 
-`asset-taxonomy` now executes through `agent_dev_kit.domain.asset_taxonomy`; the shell entry point is a compatibility shim. Its regression creates a JSON-only temporary root to prove the validator has no YAML dependency.
+`tests/test_manifest_consumer_boundary.sh` requires the legacy mirror to be absent and checks active Manifest entry points for accidental `manifest.yaml` dependencies. The taxonomy contract is also exercised against a JSON-only temporary root.
 
-## Exit condition
+## Historical evidence
 
-The compatibility projection can be deleted only after no active shell/product consumer requires `scripts/lib-manifest.sh` for structured manifest reads and all generated human projections are produced from canonical JSON.
+Old migration/change records may mention `manifest.yaml` when describing prior behavior or its removal. Those references are provenance only and must never be interpreted as an active runtime, release or configuration source.
+
+## Exit status
+
+The persistent Manifest compatibility projection is retired. Remaining work is limited to deleting obsolete one-shot migration/tombstone utilities and any historical naming that no longer describes current behavior; none of those may be required by the active product path.
