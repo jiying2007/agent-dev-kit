@@ -161,14 +161,16 @@ check_workflows() {
   done < <(adk_list_manifest_names "workflows")
 }
 
+# lifecycle_order/stage_order 是语义排序 SSOT；数组物理位置只是序列化细节。
+# 这里拒绝重复语义排序键，但不再要求人工维护 JSON/YAML 数组的物理顺序，
+# 防止“字段语义正确、仅插入位置不同”造成无价值红灯。
 check_manifest_section_order() {
   local section="$1"
   local label="$2"
   local workflow="${3:-0}"
-  local name order stage sort previous previous_name
+  local name order stage sort
+  declare -A seen=()
 
-  previous=-1
-  previous_name=""
   while IFS= read -r name; do
     [[ -z "$name" ]] && continue
     order="$(adk_get_manifest_item_value "$section" "$name" "lifecycle_order")"
@@ -182,11 +184,10 @@ check_manifest_section_order() {
     is_numeric "$order" || fail "$label '$name' lifecycle_order must be numeric: $order"
     is_numeric "$stage" || fail "$label '$name' stage_order must be numeric: $stage"
     sort=$((order * 1000 + stage))
-    if [[ "$sort" -lt "$previous" ]]; then
-      fail "$section manifest order drift: '$previous_name'($previous) before '$name'($sort)"
+    if [[ -n "${seen[$sort]:-}" ]]; then
+      fail "$section duplicate semantic sort key $sort: '${seen[$sort]}' and '$name'"
     fi
-    previous="$sort"
-    previous_name="$name"
+    seen[$sort]="$name"
   done < <(adk_list_manifest_names "$section")
 }
 
@@ -234,7 +235,7 @@ check_profile_skill_order() {
 }
 
 check_skill_routing_matrix() {
-  local scenario routing_intent primary workflow availability profiles_count positive_count negative_count ref
+  local scenario routing_intent primary workflow availability profiles_count positive_count negative_count ref key
   local scenario_count=0
   while IFS= read -r scenario; do
     [[ -z "$scenario" ]] && continue
