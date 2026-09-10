@@ -1,0 +1,4 @@
+stage: verified
+owner: adk-team
+updated_at: 2026-09-04
+notes: runtime cleanup applied; lock and release evidence deferred to clean lifecycle integration
