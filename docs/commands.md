@@ -14,7 +14,7 @@
   `scripts/run-local-ci-parity.sh --python all --mode full`；`doctor` 始终可在
   旧环境运行以输出结构化诊断。
 
-ADK core 只提供平台中立命令。`manifest.json` 是 3.1 结构化 SSOT，并由 Draft 2020-12 JSON Schema 与语义规则共同校验；direct export 适配必须通过 `tool_targets` 和 versioned target contract 显式声明。需要外部声明式链路承接的运行体系进入 `external_handoff_targets`，不能把平台专属 handoff 或用户目录写入作为默认路径。
+ADK core 只提供平台中立命令。`manifest.json` 是唯一结构化 Manifest SSOT，并由 4.0 Draft 2020-12 JSON Schema 与语义规则共同校验；direct export 适配必须通过 `tool_targets` 和 versioned target contract 显式声明。需要外部声明式链路承接的运行体系进入 `external_handoff_targets`，不能把平台专属 handoff 或用户目录写入作为默认路径。
 
 ## install
 
@@ -49,11 +49,7 @@ bash scripts/devkit.sh validate --quick
 bash scripts/devkit.sh validate --strict --summary-json
 ```
 
-从 2.x YAML 生成新的 3.0 JSON 时使用一次性迁移器；默认拒绝覆盖已有输出，复核后才可显式传 `--force`：
-
-```bash
-python3 tools/migrate_manifest_v2.py --source manifest.yaml --output /tmp/manifest-v3.json
-```
+当前 active surface 只接受 canonical `manifest.json`。历史 Manifest 镜像与一次性迁移工具已退出当前维护入口；历史迁移事实仅保留在版本化 change/archive 证据中。
 
 ## doctor
 
@@ -434,7 +430,7 @@ bash scripts/devkit.sh eval repository certify --contract manifests/repository_r
 
 ## security
 
-执行阻断式安全检查：敏感文件名、疑似凭证内容、仓库外 symlink、world-writable 文件、未固定 SHA 的 GitHub Action 和未固定 digest 的 container action 都会失败。扫描范围包含 tracked 文件与未被 ignore 的 untracked 文件。CI 另用固定版本 Ruff、pip-audit 和 OpenSSF Scorecard；这些是可替换的外部门禁，不进入 core runtime。
+执行阻断式安全检查：敏感文件名、疑似凭证内容、仓库外 symlink、world-writable 文件、未固定 SHA 的 GitHub Action 和未固定 digest 的 container action 都会失败。扫描范围包含 tracked 文件与未被 ignore 的 untracked 文件。CI 另用固定版本 Ruff 与 `pip-audit --strict` 执行静态分析和依赖审计；这些外部工具不进入 core runtime。
 
 ```bash
 bash scripts/devkit.sh security check
