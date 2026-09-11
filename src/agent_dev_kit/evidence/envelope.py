@@ -5,7 +5,7 @@ import hashlib
 import json
 from typing import Any
 
-from jsonschema import Draft202012Validator
+from jsonschema import Draft202012Validator, FormatChecker
 
 from agent_dev_kit.contracts.schema_loader import packaged_schema_bytes
 
@@ -58,7 +58,8 @@ def bind_evidence_envelope(payload: dict[str, Any]) -> dict[str, Any]:
 
 def validate_evidence_envelope(payload: dict[str, Any]) -> dict[str, Any]:
     failures: list[str] = []
-    for error in sorted(Draft202012Validator(_schema()).iter_errors(payload), key=lambda item: list(item.path)):
+    validator = Draft202012Validator(_schema(), format_checker=FormatChecker())
+    for error in sorted(validator.iter_errors(payload), key=lambda item: list(item.path)):
         location = "/".join(str(part) for part in error.path) or "<root>"
         failures.append(f"schema {location}: {error.message}")
     failures.extend(_privacy_failures(payload))
