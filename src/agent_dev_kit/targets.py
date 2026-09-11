@@ -23,10 +23,10 @@ from .model import (
     sha256_bytes,
 )
 from .target_contracts import (
-    CONTRACT_SCHEMA,
-    TargetContract,
-    TargetUsageError,
-    load_target_contract,
+    CONTRACT_SCHEMA as CONTRACT_SCHEMA,
+    TargetContract as TargetContract,
+    TargetUsageError as TargetUsageError,
+    load_target_contract as load_target_contract,
 )
 
 
