@@ -12,15 +12,17 @@ import tempfile
 from pathlib import Path
 
 from agent_dev_kit.distribution import validate_release_artifact, validate_release_manifest
+from agent_dev_kit.model import canonical_json_bytes
 
 version = "5.0.0-rc.2"
-source_manifest = b'{"version":"5.0.0-rc.2"}\n'
+source_manifest_value = {"version": version}
+source_manifest = json.dumps(source_manifest_value, indent=2).encode() + b"\n"
 sbom = b'{"spdxVersion":"SPDX-2.3"}\n'
 sha = lambda value: hashlib.sha256(value).hexdigest()
 release_manifest = {
     "schema_version": 2,
     "version": version,
-    "manifest_sha256": sha(source_manifest),
+    "manifest_sha256": sha(canonical_json_bytes(source_manifest_value)),
     "direct_targets": [{"target": "claude-code", "agents": 1, "skills": 1}],
     "external_targets": ["external-runtime"],
     "source_distribution": True,
