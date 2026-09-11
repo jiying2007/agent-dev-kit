@@ -102,17 +102,6 @@
       "additionalProperties": false
     }
   },
-  "allOf": [
-    {
-      "properties": {
-        "source_provenance": {
-          "properties": {
-            "release_eligible": {"const": {"$data": "1/release_eligible"}}
-          }
-        }
-      }
-    }
-  ],
   "$defs": {
     "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
   },
