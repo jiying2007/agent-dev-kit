@@ -120,6 +120,18 @@
       "schema_path": "schemas/release-manifest-v2.schema.json",
       "surface_path": null,
       "evidence_class": "release"
+    },
+    {
+      "id": "promotion-evidence",
+      "version": "1",
+      "owner": "distribution",
+      "producer": "agent_dev_kit.distribution.promotion_evidence",
+      "consumers": ["cross-repo-governance"],
+      "stability": "rc",
+      "compatibility": "strict",
+      "schema_path": "schemas/promotion-evidence-v1.schema.json",
+      "surface_path": null,
+      "evidence_class": "release"
     }
   ]
 }
