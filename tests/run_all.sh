@@ -91,6 +91,7 @@ TESTS=(
   test_effect_eval.sh
   test_product_maturity_v5.sh
   test_runtime_bundle.sh
+  test_release_manifest_contract.sh
   test_software_m5_ready.sh
   test_repository_runtime_evidence.sh
   test_token_budget.sh
@@ -159,6 +160,7 @@ QUICK_TESTS=(
   test_target_adapter_spi.sh
   test_effect_eval.sh
   test_runtime_bundle.sh
+  test_release_manifest_contract.sh
   test_software_m5_ready.sh
   test_repository_runtime_evidence.sh
   test_token_budget.sh
