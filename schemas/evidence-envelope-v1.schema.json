@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-dev-kit.local/schemas/evidence-envelope-v1.json",
+  "title": "ADK unified evidence envelope",
+  "type": "object",
+  "required": ["schema", "artifact_id", "producer", "source", "evidence_class", "subjects", "claims", "inputs", "outputs", "verdict", "freshness", "privacy", "provenance"],
+  "properties": {
+    "schema": {"const": "adk-evidence-envelope/v1"},
+    "artifact_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "producer": {
+      "type": "object",
+      "required": ["component", "version"],
+      "properties": {
+        "component": {"type": "string", "minLength": 1, "maxLength": 128},
+        "version": {"type": "string", "minLength": 1, "maxLength": 128}
+      },
+      "additionalProperties": false
+    },
+    "source": {
+      "type": "object",
+      "required": ["commit", "tree"],
+      "properties": {
+        "commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "tree": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "policy_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"}
+      },
+      "additionalProperties": false
+    },
+    "evidence_class": {"enum": ["source", "test", "runtime", "field", "release"]},
+    "run": {
+      "type": ["object", "null"],
+      "properties": {
+        "run_id": {"type": "string", "minLength": 1, "maxLength": 128},
+        "environment": {"type": "string", "minLength": 1, "maxLength": 128},
+        "toolchain": {"type": ["string", "null"], "maxLength": 256}
+      },
+      "required": ["run_id", "environment"],
+      "additionalProperties": false
+    },
+    "subjects": {"$ref": "#/$defs/refArray"},
+    "claims": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "statement", "status"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+          "statement": {"type": "string", "minLength": 1, "maxLength": 512},
+          "status": {"enum": ["supported", "rejected", "blocked", "unavailable", "not-measured"]}
+        },
+        "additionalProperties": false
+      }
+    },
+    "inputs": {"$ref": "#/$defs/refArray"},
+    "outputs": {"$ref": "#/$defs/refArray"},
+    "verdict": {"enum": ["pass", "fail", "blocked", "unavailable", "not-measured"]},
+    "freshness": {
+      "type": "object",
+      "required": ["generated_at"],
+      "properties": {
+        "generated_at": {"type": "string", "format": "date-time"},
+        "expires_at": {"type": ["string", "null"], "format": "date-time"}
+      },
+      "additionalProperties": false
+    },
+    "privacy": {
+      "type": "object",
+      "required": ["raw_content_stored", "sensitivity", "forbidden_payloads"],
+      "properties": {
+        "raw_content_stored": {"const": false},
+        "sensitivity": {"enum": ["public", "internal", "restricted"]},
+        "forbidden_payloads": {
+          "type": "array",
+          "uniqueItems": true,
+          "contains": {"const": "prompt"},
+          "allOf": [
+            {"contains": {"const": "messages"}},
+            {"contains": {"const": "raw-log"}},
+            {"contains": {"const": "tool-payload"}}
+          ],
+          "items": {"enum": ["prompt", "messages", "raw-log", "tool-payload"]}
+        }
+      },
+      "additionalProperties": false
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["refs", "content_sha256"],
+      "properties": {
+        "refs": {"$ref": "#/$defs/refArray"},
+        "content_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "$defs": {
+    "refArray": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1, "maxLength": 512}
+    }
+  },
+  "additionalProperties": false
+}

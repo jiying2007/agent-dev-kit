@@ -1,0 +1,125 @@
+{
+  "schema": "adk-contract-registry/v1",
+  "contracts": [
+    {
+      "id": "routing-intent",
+      "version": "2",
+      "owner": "routing",
+      "producer": "agent_dev_kit.matcher",
+      "consumers": ["runtime-control", "profiles"],
+      "stability": "rc",
+      "compatibility": "hard-cut",
+      "surface_path": "manifest.json",
+      "schema_path": "manifests/manifest.schema.json",
+      "evidence_class": "test"
+    },
+    {
+      "id": "workflow-ir",
+      "version": "2",
+      "owner": "workflow",
+      "producer": "agent_dev_kit.workflow_ir",
+      "consumers": ["runtime-control", "workflow-closure"],
+      "stability": "rc",
+      "compatibility": "hard-cut",
+      "surface_path": "manifests/workflow_ir_policy.json",
+      "schema_path": null,
+      "evidence_class": "test"
+    },
+    {
+      "id": "runtime-control-decision",
+      "version": "2",
+      "owner": "runtime-control",
+      "producer": "agent_dev_kit.runtime_control",
+      "consumers": ["workflow", "run-evidence"],
+      "stability": "rc",
+      "compatibility": "strict",
+      "schema_path": "schemas/runtime-control-decision-v2.schema.json",
+      "surface_path": null,
+      "evidence_class": "runtime"
+    },
+    {
+      "id": "evidence-graph",
+      "version": "1",
+      "owner": "evidence",
+      "producer": "agent_dev_kit.evidence_graph",
+      "consumers": ["run-evidence", "evaluation"],
+      "stability": "rc",
+      "compatibility": "strict",
+      "schema_path": "schemas/evidence-graph-v1.schema.json",
+      "surface_path": "manifests/evidence_graph_contracts.json",
+      "evidence_class": "test"
+    },
+    {
+      "id": "workflow-trace-summary",
+      "version": "2",
+      "owner": "evidence",
+      "producer": "agent_dev_kit.trace_summary",
+      "consumers": ["run-evidence", "agent-value"],
+      "stability": "rc",
+      "compatibility": "strict",
+      "schema_path": "schemas/adk-workflow-trace-summary-v2.schema.json",
+      "surface_path": "manifests/trace_eval_contracts.json",
+      "evidence_class": "runtime"
+    },
+    {
+      "id": "target-contract",
+      "version": "2",
+      "owner": "targets",
+      "producer": "agent_dev_kit.targets",
+      "consumers": ["installer", "export", "native-conformance"],
+      "stability": "rc",
+      "compatibility": "hard-cut",
+      "schema_path": "manifests/target-contract.schema.json",
+      "surface_path": null,
+      "evidence_class": "runtime"
+    },
+    {
+      "id": "native-target-conformance-receipt",
+      "version": "1",
+      "owner": "targets",
+      "producer": "agent_dev_kit.targets",
+      "consumers": ["target-contract", "release"],
+      "stability": "rc",
+      "compatibility": "strict",
+      "schema_path": "schemas/native-target-conformance-receipt-v1.schema.json",
+      "surface_path": null,
+      "evidence_class": "runtime"
+    },
+    {
+      "id": "agent-value",
+      "version": "1",
+      "owner": "evaluation",
+      "producer": "agent_dev_kit.agent_value",
+      "consumers": ["effect-comparator", "readiness"],
+      "stability": "rc",
+      "compatibility": "strict",
+      "schema_path": "schemas/agent-value-contracts-v1.schema.json",
+      "surface_path": "manifests/agent_value_contracts.json",
+      "evidence_class": "runtime"
+    },
+    {
+      "id": "evidence-envelope",
+      "version": "1",
+      "owner": "evidence",
+      "producer": "agent_dev_kit.evidence.envelope",
+      "consumers": ["run-evidence", "evaluation", "release", "cross-repo-governance"],
+      "stability": "experimental",
+      "compatibility": "strict",
+      "schema_path": "schemas/evidence-envelope-v1.schema.json",
+      "surface_path": null,
+      "evidence_class": "source"
+    },
+    {
+      "id": "release-manifest",
+      "version": "2",
+      "owner": "distribution",
+      "producer": "agent_dev_kit.release",
+      "consumers": ["release", "provenance", "cross-repo-governance"],
+      "stability": "rc",
+      "compatibility": "strict",
+      "schema_path": "schemas/release-manifest-v2.schema.json",
+      "surface_path": null,
+      "evidence_class": "release"
+    }
+  ]
+}

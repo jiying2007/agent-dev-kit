@@ -73,6 +73,8 @@ done
 TESTS=(
   test_validate.sh
   test_manifest_contract.sh
+  test_contract_registry.sh
+  test_schema_resource_sync.sh
   test_manifest_consumer_boundary.sh
   test_python_launcher.sh
   test_asset_content_quality.sh
@@ -85,9 +87,11 @@ TESTS=(
   test_convert.sh
   test_runtime_boundary.sh
   test_target_contracts.sh
+  test_target_adapter_spi.sh
   test_effect_eval.sh
   test_product_maturity_v5.sh
   test_runtime_bundle.sh
+  test_release_manifest_contract.sh
   test_software_m5_ready.sh
   test_repository_runtime_evidence.sh
   test_token_budget.sh
@@ -101,6 +105,7 @@ TESTS=(
   test_agent_value.sh
   test_trace_summary.sh
   test_run_evidence.sh
+  test_evidence_envelope.sh
   test_effect_comparator.sh
   test_runtime_capabilities.sh
   test_tool_skill_evidence_contracts.sh
@@ -146,12 +151,16 @@ TESTS=(
 QUICK_TESTS=(
   test_validate.sh
   test_manifest_contract.sh
+  test_contract_registry.sh
+  test_schema_resource_sync.sh
   test_manifest_consumer_boundary.sh
   test_python_launcher.sh
   test_runtime_boundary.sh
   test_target_contracts.sh
+  test_target_adapter_spi.sh
   test_effect_eval.sh
   test_runtime_bundle.sh
+  test_release_manifest_contract.sh
   test_software_m5_ready.sh
   test_repository_runtime_evidence.sh
   test_token_budget.sh
@@ -162,6 +171,7 @@ QUICK_TESTS=(
   test_agent_value.sh
   test_trace_summary.sh
   test_run_evidence.sh
+  test_evidence_envelope.sh
   test_effect_comparator.sh
   test_workflow_contract.sh
   test_workflow_ir.sh
@@ -270,7 +280,7 @@ run_test() {
 
   if [[ "$VERBOSE" -eq 1 ]]; then
     echo "=== RUN ${name} ==="
-    if ADK_TEST_SUITE_DIR="$TMP_DIR" ADK_TEST_SUITE_MODE="$SUITE_MODE" "$path"; then
+    if ADK_TEST_SUITE_DIR="$TMP_DIR" ADK_TEST_SUITE_MODE="$SUITE_MODE" bash "$path"; then
       end_ns="$(date +%s%N)"
       elapsed_ms=$(( (end_ns - start_ns) / 1000000 ))
       echo "[PASS] ${name}"
@@ -281,7 +291,7 @@ run_test() {
       return 0
     fi
   else
-    if ADK_TEST_SUITE_DIR="$TMP_DIR" ADK_TEST_SUITE_MODE="$SUITE_MODE" "$path" >"$stdout_file" 2>"$stderr_file"; then
+    if ADK_TEST_SUITE_DIR="$TMP_DIR" ADK_TEST_SUITE_MODE="$SUITE_MODE" bash "$path" >"$stdout_file" 2>"$stderr_file"; then
       end_ns="$(date +%s%N)"
       elapsed_ms=$(( (end_ns - start_ns) / 1000000 ))
       echo "[PASS] ${name}"

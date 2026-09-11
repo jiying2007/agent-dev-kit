@@ -50,8 +50,17 @@ jobs:
           bash scripts/check-format.sh
           shellcheck -S error -x -P scripts scripts/*.sh tests/*.sh
 
-      - name: Validate direct target contracts
-        run: python -m agent_dev_kit.cli target check --all --level static --summary-json
+      - name: Validate contract registry and packaged schemas
+        run: |
+          bash tests/test_contract_registry.sh
+          bash tests/test_schema_resource_sync.sh
+          bash tests/test_evidence_envelope.sh
+          bash tests/test_release_manifest_contract.sh
+
+      - name: Validate direct target contracts and adapter SPI
+        run: |
+          python -m agent_dev_kit.cli target check --all --level static --summary-json
+          bash tests/test_target_adapter_spi.sh
 
   regression:
     name: regression-py${{ matrix.python-version }}
@@ -115,6 +124,12 @@ jobs:
           bash scripts/devkit.sh security check
           bash scripts/devkit.sh eval run --suite deterministic
 
+      - name: Build and validate candidate release identity
+        run: |
+          rm -rf /tmp/adk-release
+          bash scripts/devkit.sh release build --out /tmp/adk-release
+          python -m agent_dev_kit.distribution.release_contract /tmp/adk-release/agent-dev-kit-*.tar.gz
+
       - name: Build wheel independently of regression result
         run: python -m pip wheel --no-deps --wheel-dir dist .
 
@@ -146,6 +161,11 @@ jobs:
 
       - name: Run critical Python static analysis
         run: ruff check src tools tests/fixtures/fake_target_runtime.py
+
+      - name: Run focused kernel quality analysis
+        run: |
+          python -m compileall -q src/agent_dev_kit/contracts src/agent_dev_kit/evidence src/agent_dev_kit/target_adapters src/agent_dev_kit/distribution
+          ruff check src/agent_dev_kit/contracts src/agent_dev_kit/evidence src/agent_dev_kit/target_adapters src/agent_dev_kit/distribution --select E4,E7,E9,F,B,UP,SIM,I
 
       - name: Audit declared project dependencies
         run: pip-audit --strict --progress-spinner off .
