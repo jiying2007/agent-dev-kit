@@ -87,6 +87,7 @@ TESTS=(
   test_convert.sh
   test_runtime_boundary.sh
   test_target_contracts.sh
+  test_target_adapter_spi.sh
   test_effect_eval.sh
   test_product_maturity_v5.sh
   test_runtime_bundle.sh
@@ -155,6 +156,7 @@ QUICK_TESTS=(
   test_python_launcher.sh
   test_runtime_boundary.sh
   test_target_contracts.sh
+  test_target_adapter_spi.sh
   test_effect_eval.sh
   test_runtime_bundle.sh
   test_software_m5_ready.sh
