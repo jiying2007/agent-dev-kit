@@ -20,7 +20,13 @@ classifiers = [
 ]
 
 [project.optional-dependencies]
-quality = ["ruff==0.15.21", "pip-audit==2.10.1", "mypy==2.3.1"]
+quality = [
+  "ruff==0.15.21",
+  "pip-audit==2.10.1",
+  "mypy==2.3.1",
+  "types-jsonschema==4.26.0.20260518",
+  "types-PyYAML==6.0.12.20260906",
+]
 
 [project.urls]
 Repository = "https://github.com/jiying2007/agent-dev-kit"
