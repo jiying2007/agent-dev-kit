@@ -144,7 +144,7 @@ bash tests/run_all.sh
 |---|---|
 | 文档说明 | `bash scripts/devkit.sh validate --strict` |
 | Agent/Skill/Profile/Manifest | `bash scripts/devkit.sh validate --strict` + `bash tests/run_all.sh --fail-fast` |
-| install/export/release 脚本 | `bash tests/test_product_maturity_v3.sh` + `bash tests/test_software_m5_ready.sh` + `bash tests/run_all.sh` |
+| install/export/release 脚本 | `bash tests/test_product_maturity_v5.sh` + `bash tests/test_software_m5_ready.sh` + `bash tests/run_all.sh` |
 | MCP/plugin/hook/automation 契约 | `bash scripts/devkit.sh official-docs-governance --summary-json` + 相关契约测试 |
 | 发布前放行 | `bash scripts/devkit.sh security check` + `bash scripts/devkit.sh release check` + 本地 release rehearsal + `bash scripts/devkit.sh test` + rollback 说明 |
 
