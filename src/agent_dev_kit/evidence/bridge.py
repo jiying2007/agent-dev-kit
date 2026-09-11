@@ -1,15 +1,16 @@
 """Reference-only adapters from existing ADK evidence artifacts to Evidence Envelope v1.
 
-The bridge never embeds the source artifact. It validates the artifact's privacy
+The bridge never embeds the source artifact. It validates the artifact privacy
 boundary, binds a canonical content digest, and emits only identities/opaque
 references plus normalized claims. Existing artifact schemas remain unchanged.
 """
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from dataclasses import dataclass
 from datetime import datetime, timezone
-from typing import Any, Literal, Mapping
+from typing import Any, Literal
 
 from agent_dev_kit.model import canonical_json_bytes, sha256_bytes
 from agent_dev_kit.privacy_ref import validate_no_secrets
@@ -18,6 +19,8 @@ from .envelope import bind_evidence_envelope
 
 EvidenceClass = Literal["source", "test", "runtime", "field", "release"]
 Sensitivity = Literal["public", "internal", "restricted"]
+EnvelopeVerdict = Literal["pass", "fail", "blocked", "unavailable", "not-measured"]
+ClaimStatus = Literal["supported", "rejected", "blocked", "unavailable", "not-measured"]
 
 _TRACE_SCHEMA = "adk-workflow-trace-summary/v2"
 _RUN_SCHEMA = "adk-run-evidence-composition/v1"
@@ -63,15 +66,15 @@ def _refs(*values: str | None) -> list[str]:
     return sorted({value for value in values if isinstance(value, str) and value})
 
 
-def _outcome_verdict(status: object) -> str:
+def _outcome_verdict(status: object) -> EnvelopeVerdict:
     if status == "succeeded":
         return "pass"
     if status in {"failed", "cancelled"}:
         return "fail"
     if status == "blocked":
         return "blocked"
-    if status in {"not-available", "abstained", None}:
-        return "not-measured"
+    if status == "not-available":
+        return "unavailable"
     return "not-measured"
 
 
@@ -98,6 +101,10 @@ def _privacy(context: EvidenceBridgeContext) -> dict[str, object]:
     }
 
 
+def _claim(claim_id: str, statement: str, status: ClaimStatus) -> dict[str, str]:
+    return {"id": claim_id, "statement": statement, "status": status}
+
+
 def _envelope(
     *,
     kind: str,
@@ -106,7 +113,7 @@ def _envelope(
     subjects: list[str],
     inputs: list[str],
     claims: list[dict[str, str]],
-    verdict: str,
+    verdict: EnvelopeVerdict,
 ) -> dict[str, Any]:
     validate_no_secrets(artifact, f"{kind} evidence bridge input")
     if artifact.get("raw_content_stored") is not False:
@@ -167,11 +174,11 @@ def envelope_trace_summary(
         subjects=subjects,
         inputs=sorted(set(evidence_refs)),
         claims=[
-            {
-                "id": "trace-outcome-recorded",
-                "statement": f"workflow trace records outcome {status or 'not-available'}",
-                "status": "supported" if status is not None else "not-measured",
-            }
+            _claim(
+                "trace-outcome-recorded",
+                f"workflow trace records outcome {status or 'not-available'}",
+                "supported" if status is not None else "not-measured",
+            )
         ],
         verdict=_outcome_verdict(status),
     )
@@ -201,25 +208,26 @@ def envelope_run_evidence(
                 if isinstance(receipt_id, str) and receipt_id:
                     receipt_refs.append(receipt_id)
     trace_ref = composition.get("trace_ref")
-    inputs = sorted(set([*receipt_refs, *(_refs(trace_ref if isinstance(trace_ref, str) else None))]))
+    trace_ref_text = trace_ref if isinstance(trace_ref, str) else None
+    inputs = sorted(set([*receipt_refs, *_refs(trace_ref_text)]))
     measured = composition.get("measurement") is not None
     return _envelope(
         kind="run-evidence",
         artifact=composition,
         context=context,
-        subjects=_refs(trace_ref if isinstance(trace_ref, str) else None),
+        subjects=_refs(trace_ref_text),
         inputs=inputs,
         claims=[
-            {
-                "id": "test-evidence-composed",
-                "statement": "test-layer trace and asset evidence are linked without runtime or field authority",
-                "status": "supported",
-            },
-            {
-                "id": "asset-measurement-present",
-                "statement": "asset value measurement is present in the test composition",
-                "status": "supported" if measured else "not-measured",
-            },
+            _claim(
+                "test-evidence-composed",
+                "test-layer trace and asset evidence are linked without runtime or field authority",
+                "supported",
+            ),
+            _claim(
+                "asset-measurement-present",
+                "asset value measurement is present in the test composition",
+                "supported" if measured else "not-measured",
+            ),
         ],
         verdict=_outcome_verdict(status),
     )
@@ -241,11 +249,13 @@ def envelope_agent_value_receipt(
     receipt_id = receipt.get("receipt_id")
     if not isinstance(receipt_id, str) or not receipt_id:
         raise ValueError("agent value receipt is missing receipt_id")
+    source_trace_ref = receipt.get("source_trace_ref")
+    manifest_ref = receipt.get("manifest_ref")
     inputs = [
         *_strings(receipt.get("evidence_refs")),
         *_refs(
-            receipt.get("source_trace_ref") if isinstance(receipt.get("source_trace_ref"), str) else None,
-            receipt.get("manifest_ref") if isinstance(receipt.get("manifest_ref"), str) else None,
+            source_trace_ref if isinstance(source_trace_ref, str) else None,
+            manifest_ref if isinstance(manifest_ref, str) else None,
         ),
     ]
     outcome = receipt.get("outcome")
@@ -260,11 +270,11 @@ def envelope_agent_value_receipt(
         ),
         inputs=sorted(set(inputs)),
         claims=[
-            {
-                "id": "asset-invocation-measured",
-                "statement": f"asset invocation receipt records {layer} evidence",
-                "status": "supported",
-            }
+            _claim(
+                "asset-invocation-measured",
+                f"asset invocation receipt records {layer} evidence",
+                "supported",
+            )
         ],
         verdict=_outcome_verdict(outcome),
     )
