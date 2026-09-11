@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any, Literal
 
 from agent_dev_kit.model import canonical_json_bytes, sha256_bytes
@@ -45,7 +45,7 @@ class EvidenceBridgeContext:
 def _iso(value: datetime, label: str) -> str:
     if value.tzinfo is None:
         raise ValueError(f"{label} must be timezone-aware")
-    return value.astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
+    return value.astimezone(UTC).isoformat().replace("+00:00", "Z")
 
 
 def _artifact_digest(value: Mapping[str, Any]) -> str:
