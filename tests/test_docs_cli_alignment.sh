@@ -47,7 +47,6 @@ active_docs = (
     "docs/adk-usage-guide.md",
     "docs/agent-operating-rules.md",
     "docs/runbooks/workspace-maintenance-guide.md",
-    "docs/runbooks/codex-team-runtime-distribution.md",
     "docs/runbooks/mcp-governance.md",
 )
 retired_tokens = (
