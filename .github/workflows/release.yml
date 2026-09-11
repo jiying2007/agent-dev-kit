@@ -20,6 +20,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+        with:
+          persist-credentials: false
 
       - name: Set up Python
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
@@ -47,6 +49,9 @@ jobs:
       - name: Build reproducible release
         run: bash scripts/devkit.sh release build --out dist
 
+      - name: Validate release manifest, SBOM and source identities
+        run: python -m agent_dev_kit.distribution.release_contract dist/*.tar.gz | tee dist/release-contract.json
+
       - name: Attest release provenance
         uses: actions/attest@a1948c3f048ba23858d222213b7c278aabede763 # v4.1.1
         with:
@@ -59,3 +64,4 @@ jobs:
           path: |
             dist/*.tar.gz
             dist/*.sha256
+            dist/release-contract.json
