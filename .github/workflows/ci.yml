@@ -55,6 +55,7 @@ jobs:
           bash tests/test_contract_registry.sh
           bash tests/test_schema_resource_sync.sh
           bash tests/test_evidence_envelope.sh
+          bash tests/test_evidence_bridge.sh
           bash tests/test_release_manifest_contract.sh
 
       - name: Validate direct target contracts and adapter SPI
@@ -166,6 +167,14 @@ jobs:
         run: |
           python -m compileall -q src/agent_dev_kit/contracts src/agent_dev_kit/evidence src/agent_dev_kit/target_adapters src/agent_dev_kit/distribution
           ruff check src/agent_dev_kit/contracts src/agent_dev_kit/evidence src/agent_dev_kit/target_adapters src/agent_dev_kit/distribution --select E4,E7,E9,F,B,UP,SIM,I
+
+      - name: Run focused strict type analysis
+        run: >-
+          mypy
+          src/agent_dev_kit/contracts
+          src/agent_dev_kit/evidence
+          src/agent_dev_kit/target_adapters
+          src/agent_dev_kit/distribution
 
       - name: Audit declared project dependencies
         run: pip-audit --strict --progress-spinner off .

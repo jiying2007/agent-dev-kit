@@ -15,7 +15,10 @@ _FORBIDDEN_KEYS = {"prompt", "prompts", "messages", "raw_log", "raw-log", "raw_l
 
 
 def _schema() -> dict[str, Any]:
-    return json.loads(packaged_schema_bytes(_SCHEMA_NAME).decode("utf-8"))
+    value = json.loads(packaged_schema_bytes(_SCHEMA_NAME).decode("utf-8"))
+    if not isinstance(value, dict):
+        raise ValueError("evidence envelope schema root must be an object")
+    return value
 
 
 def _canonical_bytes(value: Any) -> bytes:

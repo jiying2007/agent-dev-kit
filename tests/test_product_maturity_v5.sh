@@ -36,6 +36,7 @@ import copy
 import json
 import sys
 import tempfile
+import tomllib
 from pathlib import Path
 from types import SimpleNamespace
 from unittest import mock
@@ -53,11 +54,25 @@ assert manifest.source.name == "manifest.json"
 assert not (root / "manifest.yaml").exists()
 
 pyproject = (root / "pyproject.toml").read_text(encoding="utf-8")
-assert 'requires-python = ">=3.11"' in pyproject, pyproject
-assert 'dependencies = ["PyYAML==6.0.3", "jsonschema==4.26.0"]' in pyproject, pyproject
-assert 'quality = ["ruff==0.15.21", "pip-audit==2.10.1"]' in pyproject, pyproject
+pyproject_data = tomllib.loads(pyproject)
+assert pyproject_data["project"]["requires-python"] == ">=3.11", pyproject_data
+assert pyproject_data["project"]["dependencies"] == ["PyYAML==6.0.3", "jsonschema==4.26.0"], pyproject_data
+assert pyproject_data["project"]["optional-dependencies"]["quality"] == [
+    "ruff==0.15.21",
+    "pip-audit==2.10.1",
+    "mypy==2.3.1",
+    "types-jsonschema==4.26.0.20260518",
+    "types-PyYAML==6.0.12.20260906",
+], pyproject_data
+assert pyproject_data["tool"]["mypy"] == {
+    "python_version": "3.11",
+    "strict": True,
+    "warn_unreachable": True,
+    "show_error_codes": True,
+}, pyproject_data
 ci = (root / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
 assert "python-version: ['3.11', '3.12']" in ci, ci
+assert "Run focused strict type analysis" in ci, ci
 
 assert manifest.data["install"] == {
     "default_mode": "copy",
