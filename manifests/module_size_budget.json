@@ -32,11 +32,6 @@
       "baseline_bytes": 39450,
       "target_max_bytes": 30000,
       "split_hint": "separate contract validation, receipts, and measurement aggregation"
-    },
-    "src/agent_dev_kit/targets.py": {
-      "baseline_bytes": 34821,
-      "target_max_bytes": 30000,
-      "split_hint": "separate target selection/rendering from target contract validation"
     }
   }
 }
