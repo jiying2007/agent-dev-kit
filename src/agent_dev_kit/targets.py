@@ -26,6 +26,9 @@ from .target_contracts import (
     CONTRACT_SCHEMA as CONTRACT_SCHEMA,
     TargetContract as TargetContract,
     TargetUsageError as TargetUsageError,
+    _authority_digest as _authority_digest,
+    _native_contract_digest as _native_contract_digest,
+    _validate_native_conformance_evidence as _validate_native_conformance_evidence,
     load_target_contract as load_target_contract,
 )
 
