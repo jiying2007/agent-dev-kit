@@ -11,8 +11,9 @@ import argparse
 import hashlib
 import json
 import tarfile
+from collections.abc import Mapping, Sequence
 from pathlib import Path, PurePosixPath
-from typing import Any, Mapping, Sequence
+from typing import Any
 
 from jsonschema import Draft202012Validator
 
@@ -24,6 +25,11 @@ _MAX_JSON_BYTES = 8 * 1024 * 1024
 
 def _sha256(value: bytes) -> str:
     return hashlib.sha256(value).hexdigest()
+
+
+def _sha256_file(path: Path) -> str:
+    with path.open("rb") as stream:
+        return hashlib.file_digest(stream, "sha256").hexdigest()
 
 
 def _format_error(error: Any) -> str:
@@ -39,9 +45,8 @@ def validate_release_manifest(value: Mapping[str, Any]) -> dict[str, Any]:
     failures = sorted(_format_error(item) for item in validator.iter_errors(dict(value)))
 
     provenance = value.get("source_provenance")
-    if isinstance(provenance, Mapping):
-        if value.get("release_eligible") != provenance.get("release_eligible"):
-            failures.append("release_eligible must match source_provenance.release_eligible")
+    if isinstance(provenance, Mapping) and value.get("release_eligible") != provenance.get("release_eligible"):
+        failures.append("release_eligible must match source_provenance.release_eligible")
     if value.get("reproducible") != value.get("release_eligible"):
         failures.append("reproducible must match release_eligible")
 
@@ -132,7 +137,7 @@ def validate_release_artifact(artifact: Path) -> dict[str, Any]:
         "status": "pass",
         "version": version,
         "artifact": artifact.name,
-        "artifact_sha256": _sha256(artifact.read_bytes()),
+        "artifact_sha256": _sha256_file(artifact),
         "release_manifest_sha256": _sha256(release_bytes),
         "manifest_sha256": source_manifest_sha,
         "sbom_sha256": sbom_sha,
@@ -151,7 +156,12 @@ def _main(argv: Sequence[str] | None = None) -> int:
     except (OSError, tarfile.TarError, ValueError) as exc:
         print(json.dumps({"schema": "adk-release-artifact-contract/v1", "status": "fail", "error": str(exc)}))
         return 1
-    print(json.dumps({"schema": "adk-release-artifact-contract-set/v1", "status": "pass", "artifacts": results}, sort_keys=True))
+    print(
+        json.dumps(
+            {"schema": "adk-release-artifact-contract-set/v1", "status": "pass", "artifacts": results},
+            sort_keys=True,
+        )
+    )
     return 0
 
 
