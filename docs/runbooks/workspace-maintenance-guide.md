@@ -19,8 +19,7 @@ adk 不直接替代具体运行时的全局策略文件，也不默认写任何�
 | 路径 | 职责 | 维护要求 |
 |---|---|---|
 | `AGENTS.md` | 本仓协作规则和安全边界 | 规则变化后跑相关门禁 |
-| `manifest.json` | Agent/Skill/Profile/tool target/workflow 结构化单一事实源 | 修改后跑 schema、mirror、strict validate 和 profile/workflow 检查 |
-| `manifest.yaml` | 旧 shell parser 兼容镜像 | 不独立修改；与 JSON 语义漂移会阻断 validate |
+| `manifest.json` | Agent/Skill/Profile/tool target/workflow 唯一结构化 Manifest SSOT | 修改后跑 schema、strict validate 和 profile/workflow 检查 |
 | `agents/` | 角色 Agent 定义 | 保持职责单一，不写平台专属安装路径 |
 | `skills/` | core skills | 入口短读，长证据放 references 或 docs |
 | `optional-skills/` | 可选 skills | 默认不进入 core profile |
@@ -29,10 +28,12 @@ adk 不直接替代具体运行时的全局策略文件，也不默认写任何�
 | `docs/` | 命令说明、runbook、参考资料、变更工件 | 文档必须与脚本入口一致 |
 | `tests/` | 回归、smoke 和治理测试 | 共享行为变化必须补测试 |
 
+`manifest.json` 是唯一结构化 Manifest。Catalog、matrix 与其它派生视图只能由 canonical source 单向生成，不维护平行镜像。
+
 ## 3. 日常维护循环
 
 1. 明确本次变更范围、非目标和验收命令。
-2. 修改 `manifest.json`、agents、skills、docs 或 scripts，并同步生成兼容镜像。
+2. 修改 `manifest.json`、agents、skills、docs 或 scripts；需要的人类可读视图由 canonical source 单向生成。
 3. 先跑定向检查。
 4. 再跑共享门禁。
 5. 记录验证证据、风险和回滚方式。
@@ -60,7 +61,7 @@ bash tests/run_all.sh --fail-fast
 | Agent/Skill 内容 | `bash scripts/devkit.sh validate --strict` + `bash tests/run_all.sh --fail-fast` | 覆盖 frontmatter、触发和质量规则 |
 | Profile/manifest | `bash scripts/devkit.sh validate --strict` + `bash scripts/devkit.sh workflow-closure --profile core` | 防止未知引用和 profile 闭包漂移 |
 | 目标/功能/性能契约 | `bash scripts/devkit.sh goal check --summary-json` + `bash scripts/devkit.sh capability health --summary-json` + `bash scripts/devkit.sh benchmark run --summary-json` | 防止目标、能力和预算只停留在文档声明 |
-| install/export/release 脚本 | `bash tests/test_product_maturity_v4.sh` + `bash tests/run_all.sh` | 防止交付路径回归 |
+| install/export/release 脚本 | `bash tests/test_product_maturity_v5.sh` + `bash tests/test_software_m5_ready.sh` + `bash tests/run_all.sh` | 防止交付路径回归 |
 | MCP/plugin/hook/automation 契约 | `bash scripts/devkit.sh official-docs-governance --summary-json` + 安全审查 | 默认 report-only |
 | 发布前 | `bash scripts/devkit.sh security check` + `bash scripts/devkit.sh release check` + `bash scripts/devkit.sh test` | 必须带 rollback note |
 
