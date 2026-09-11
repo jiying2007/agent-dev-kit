@@ -55,6 +55,7 @@ jobs:
           bash tests/test_contract_registry.sh
           bash tests/test_schema_resource_sync.sh
           bash tests/test_evidence_envelope.sh
+          bash tests/test_evidence_bridge.sh
           bash tests/test_release_manifest_contract.sh
 
       - name: Validate direct target contracts and adapter SPI
