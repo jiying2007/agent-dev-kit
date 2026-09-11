@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-dev-kit.local/schemas/promotion-evidence-v1.schema.json",
+  "title": "Agent Dev Kit Promotion Evidence v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "issued_at",
+    "source",
+    "contracts",
+    "ci",
+    "release",
+    "provenance"
+  ],
+  "properties": {
+    "schema": {"const": "adk-promotion-evidence/v1"},
+    "issued_at": {"type": "string", "format": "date-time"},
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository", "version", "commit", "tree", "manifest_blob", "manifest_sha256", "ref", "event", "workflow", "workflow_ref", "workflow_sha", "run_id", "run_attempt"],
+      "properties": {
+        "repository": {"type": "string", "minLength": 1},
+        "version": {"type": "string", "minLength": 1},
+        "commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "tree": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "manifest_blob": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "ref": {"type": "string", "minLength": 1},
+        "event": {"type": "string", "minLength": 1},
+        "workflow": {"type": "string", "minLength": 1},
+        "workflow_ref": {"type": "string", "minLength": 1},
+        "workflow_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "run_id": {"type": "integer", "minimum": 1},
+        "run_attempt": {"type": "integer", "minimum": 1}
+      }
+    },
+    "contracts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contract_registry_sha256", "schema_set_sha256", "release_manifest_sha256"],
+      "properties": {
+        "contract_registry_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "schema_set_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "release_manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "ci": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contract_matrix", "regression_matrix", "static_security", "deterministic_eval_package"],
+      "properties": {
+        "contract_matrix": {"$ref": "#/$defs/matrixResult"},
+        "regression_matrix": {"$ref": "#/$defs/matrixResult"},
+        "static_security": {"const": "success"},
+        "deterministic_eval_package": {"const": "success"}
+      }
+    },
+    "release": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifact_sha256", "release_eligible"],
+      "properties": {
+        "artifact_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "release_eligible": {"type": "boolean"}
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["subject", "format"],
+      "properties": {
+        "subject": {"const": "promotion-evidence.json"},
+        "format": {"const": "sigstore-bundle/v1"}
+      }
+    }
+  },
+  "$defs": {
+    "matrixResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "python"],
+      "properties": {
+        "status": {"const": "success"},
+        "python": {"type": "array", "const": ["3.11", "3.12"]}
+      }
+    }
+  }
+}
