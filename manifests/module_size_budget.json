@@ -1,0 +1,47 @@
+{
+  "schema": "adk-module-size-budget/v1",
+  "default_max_bytes": 30000,
+  "policy": "no-new-oversize-and-legacy-monotonic-shrink",
+  "exceptions": {
+    "src/agent_dev_kit/runtime_control/engine.py": {
+      "baseline_bytes": 47619,
+      "target_max_bytes": 30000,
+      "split_hint": "extract validation/canonicalization primitives and reducer helpers"
+    },
+    "src/agent_dev_kit/release.py": {
+      "baseline_bytes": 45209,
+      "target_max_bytes": 30000,
+      "split_hint": "move release identity/archive/SBOM helpers into distribution bounded contexts"
+    },
+    "src/agent_dev_kit/evaluation.py": {
+      "baseline_bytes": 42933,
+      "target_max_bytes": 30000,
+      "split_hint": "extract evaluation models and deterministic measurement helpers"
+    },
+    "src/agent_dev_kit/readiness.py": {
+      "baseline_bytes": 42811,
+      "target_max_bytes": 30000,
+      "split_hint": "separate readiness evidence collection from policy decisions"
+    },
+    "src/agent_dev_kit/campaign.py": {
+      "baseline_bytes": 41952,
+      "target_max_bytes": 30000,
+      "split_hint": "separate campaign planning, evidence ingestion, and verdict logic"
+    },
+    "src/agent_dev_kit/agent_value.py": {
+      "baseline_bytes": 39450,
+      "target_max_bytes": 30000,
+      "split_hint": "separate contract validation, receipts, and measurement aggregation"
+    },
+    "src/agent_dev_kit/targets.py": {
+      "baseline_bytes": 34821,
+      "target_max_bytes": 30000,
+      "split_hint": "separate target selection/rendering from target contract validation"
+    },
+    "src/agent_dev_kit/cli.py": {
+      "baseline_bytes": 32564,
+      "target_max_bytes": 30000,
+      "split_hint": "move command handlers into bounded command modules while preserving entrypoint"
+    }
+  }
+}
