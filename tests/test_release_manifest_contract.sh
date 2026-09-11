@@ -22,7 +22,7 @@ release_manifest = {
     "version": version,
     "manifest_sha256": sha(source_manifest),
     "direct_targets": [{"target": "claude-code", "agents": 1, "skills": 1}],
-    "external_targets": ["codex"],
+    "external_targets": ["external-runtime"],
     "source_distribution": True,
     "source_file_count": 2,
     "reproducible": False,
