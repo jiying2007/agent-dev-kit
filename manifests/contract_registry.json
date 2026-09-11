@@ -9,8 +9,8 @@
       "consumers": ["runtime-control", "profiles"],
       "stability": "rc",
       "compatibility": "hard-cut",
-      "surface_path": "manifests/intent_boundary_contracts.json",
-      "schema_path": null,
+      "surface_path": "manifest.json",
+      "schema_path": "manifests/manifest.schema.json",
       "evidence_class": "test"
     },
     {
