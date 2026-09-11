@@ -18,6 +18,7 @@ from typing import Any
 from jsonschema import Draft202012Validator
 
 from agent_dev_kit.contracts.schema_loader import packaged_schema_bytes
+from agent_dev_kit.model import canonical_json_bytes
 
 _SCHEMA_NAME = "release-manifest-v2.schema.json"
 _MAX_JSON_BYTES = 8 * 1024 * 1024
@@ -81,6 +82,16 @@ def _read_regular_member(archive: tarfile.TarFile, name: str) -> bytes:
     return value
 
 
+def _canonical_manifest_sha256(raw: bytes) -> str:
+    try:
+        value = json.loads(raw.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ValueError("manifest.json is not valid UTF-8 JSON") from exc
+    if not isinstance(value, dict):
+        raise ValueError("manifest.json root must be an object")
+    return _sha256(canonical_json_bytes(value))
+
+
 def validate_release_artifact(artifact: Path) -> dict[str, Any]:
     """Validate manifest, SBOM and source-manifest identities inside an archive."""
 
@@ -112,7 +123,7 @@ def validate_release_artifact(artifact: Path) -> dict[str, Any]:
             raise ValueError("release SBOM digest does not match release manifest")
 
         source_manifest_bytes = _read_regular_member(archive, "manifest.json")
-        source_manifest_sha = _sha256(source_manifest_bytes)
+        source_manifest_sha = _canonical_manifest_sha256(source_manifest_bytes)
         if source_manifest_sha != release_manifest["manifest_sha256"]:
             raise ValueError("release manifest source manifest digest does not match archive")
 
