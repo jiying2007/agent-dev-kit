@@ -30,8 +30,14 @@
           "evidence_class": {"enum": ["source", "test", "runtime", "field", "release"]}
         },
         "anyOf": [
-          {"required": ["schema_path"]},
-          {"required": ["surface_path"]}
+          {
+            "required": ["schema_path"],
+            "properties": {"schema_path": {"type": "string", "minLength": 1}}
+          },
+          {
+            "required": ["surface_path"],
+            "properties": {"surface_path": {"type": "string", "minLength": 1}}
+          }
         ],
         "additionalProperties": false
       }
