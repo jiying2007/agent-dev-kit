@@ -106,6 +106,7 @@ TESTS=(
   test_trace_summary.sh
   test_run_evidence.sh
   test_evidence_envelope.sh
+  test_evidence_bridge.sh
   test_effect_comparator.sh
   test_runtime_capabilities.sh
   test_tool_skill_evidence_contracts.sh
@@ -172,6 +173,7 @@ QUICK_TESTS=(
   test_trace_summary.sh
   test_run_evidence.sh
   test_evidence_envelope.sh
+  test_evidence_bridge.sh
   test_effect_comparator.sh
   test_workflow_contract.sh
   test_workflow_ir.sh
