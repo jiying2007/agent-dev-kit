@@ -14,7 +14,6 @@ from pathlib import Path
 from agent_dev_kit.distribution import validate_release_artifact, validate_release_manifest
 
 version = "5.0.0-rc.2"
-root = f"agent-dev-kit-{version}"
 source_manifest = b'{"version":"5.0.0-rc.2"}\n'
 sbom = b'{"spdxVersion":"SPDX-2.3"}\n'
 sha = lambda value: hashlib.sha256(value).hexdigest()
@@ -47,12 +46,12 @@ assert validation["status"] == "fail"
 assert any("release_eligible must match" in item for item in validation["failures"])
 
 with tempfile.TemporaryDirectory() as temp:
-    artifact = Path(temp) / f"{root}.tar.gz"
+    artifact = Path(temp) / f"agent-dev-kit-{version}.tar.gz"
     with tarfile.open(artifact, "w:gz") as archive:
         for name, payload in (
-            (f"{root}/manifest.json", source_manifest),
-            (f"{root}/sbom.spdx.json", sbom),
-            (f"{root}/release-manifest.json", json.dumps(release_manifest).encode()),
+            ("manifest.json", source_manifest),
+            ("sbom.spdx.json", sbom),
+            ("release-manifest.json", json.dumps(release_manifest).encode()),
         ):
             info = tarfile.TarInfo(name)
             info.size = len(payload)
