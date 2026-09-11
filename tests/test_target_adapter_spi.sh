@@ -10,7 +10,7 @@ import json
 import sys
 from pathlib import Path
 
-from agent_dev_kit.targets import (
+from agent_dev_kit.target_adapters import (
     CONFORMANCE_CAPABILITIES,
     AdapterContext,
     AdapterOperation,
