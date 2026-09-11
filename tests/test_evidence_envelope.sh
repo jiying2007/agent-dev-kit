@@ -40,6 +40,12 @@ leaky["claims"] = [{"id": "claim-1", "statement": "bad", "status": "supported", 
 result = validate_evidence_envelope(leaky)
 assert result["status"] == "fail", result
 assert any("forbidden raw payload key" in failure for failure in result["failures"]), result
+
+bad_time = dict(base)
+bad_time["freshness"] = {"generated_at": "not-a-timestamp", "expires_at": None}
+result = validate_evidence_envelope(bad_time)
+assert result["status"] == "fail", result
+assert any("freshness/generated_at" in failure and "date-time" in failure for failure in result["failures"]), result
 PY
 
-echo '[PASS] evidence envelope is content-addressed, privacy-safe and tamper-evident'
+echo '[PASS] evidence envelope is content-addressed, privacy-safe, RFC3339-valid and tamper-evident'
