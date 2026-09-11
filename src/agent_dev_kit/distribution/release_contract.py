@@ -1,6 +1,6 @@
 """Validation for the existing release-manifest schema v2.
 
-The release builder remains responsible for assembly.  This module is the
+The release builder remains responsible for assembly. This module is the
 bounded contract verifier used after assembly and before provenance attestation.
 It never extracts archive members to disk.
 """
@@ -60,7 +60,7 @@ def validate_release_manifest(value: Mapping[str, Any]) -> dict[str, Any]:
 
 def _safe_regular_member(archive: tarfile.TarFile, name: str) -> tarfile.TarInfo:
     path = PurePosixPath(name)
-    if path.is_absolute() or ".." in path.parts or len(path.parts) < 2:
+    if path.is_absolute() or ".." in path.parts or not path.parts:
         raise ValueError(f"unsafe release archive member path: {name}")
     matches = [member for member in archive.getmembers() if member.name == name]
     if len(matches) != 1 or not matches[0].isreg():
@@ -89,19 +89,7 @@ def validate_release_artifact(artifact: Path) -> dict[str, Any]:
         raise ValueError(f"release artifact does not exist: {artifact}")
 
     with tarfile.open(artifact, mode="r:gz") as archive:
-        manifest_members = [
-            member
-            for member in archive.getmembers()
-            if member.isreg() and member.name.endswith("/release-manifest.json")
-        ]
-        if len(manifest_members) != 1:
-            raise ValueError("release archive must contain exactly one release-manifest.json")
-        release_member = manifest_members[0]
-        release_path = PurePosixPath(release_member.name)
-        if release_path.is_absolute() or ".." in release_path.parts or len(release_path.parts) != 2:
-            raise ValueError("release-manifest.json must be directly below the package root")
-        package_root = release_path.parts[0]
-        release_bytes = _read_regular_member(archive, release_member.name)
+        release_bytes = _read_regular_member(archive, "release-manifest.json")
         try:
             release_manifest = json.loads(release_bytes.decode("utf-8"))
         except (UnicodeDecodeError, json.JSONDecodeError) as exc:
@@ -114,20 +102,16 @@ def validate_release_artifact(artifact: Path) -> dict[str, Any]:
             raise ValueError("release manifest validation failed: " + "; ".join(validation["failures"]))
 
         version = str(release_manifest["version"])
-        expected_root = f"agent-dev-kit-{version}"
-        if package_root != expected_root:
-            raise ValueError(f"release package root mismatch: {package_root} != {expected_root}")
-        if artifact.name != f"{expected_root}.tar.gz":
+        if artifact.name != f"agent-dev-kit-{version}.tar.gz":
             raise ValueError("release artifact filename does not match manifest version")
 
-        sbom_name = f"{package_root}/{release_manifest['sbom']['path']}"
+        sbom_name = str(release_manifest["sbom"]["path"])
         sbom_bytes = _read_regular_member(archive, sbom_name)
         sbom_sha = _sha256(sbom_bytes)
         if sbom_sha != release_manifest["sbom"]["sha256"]:
             raise ValueError("release SBOM digest does not match release manifest")
 
-        source_manifest_name = f"{package_root}/manifest.json"
-        source_manifest_bytes = _read_regular_member(archive, source_manifest_name)
+        source_manifest_bytes = _read_regular_member(archive, "manifest.json")
         source_manifest_sha = _sha256(source_manifest_bytes)
         if source_manifest_sha != release_manifest["manifest_sha256"]:
             raise ValueError("release manifest source manifest digest does not match archive")
