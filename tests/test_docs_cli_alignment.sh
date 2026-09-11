@@ -54,6 +54,7 @@ retired_tokens = (
     "tests/test_product_maturity_v4.sh",
     "manifest.yaml",
     ".github/workflows/scorecard.yml",
+    "OpenSSF Scorecard",
 )
 path_pattern = re.compile(r"(?<![A-Za-z0-9_./-])((?:scripts|tests)/[A-Za-z0-9_./-]+\.sh)\b")
 
