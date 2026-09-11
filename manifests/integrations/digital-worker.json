@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "contract_version": "1.0",
+  "status": "candidate",
+  "consumer": "digital-worker",
+  "provider": "agent-dev-kit",
+  "role": "agent-asset-control-plane",
+  "consumer_owns": [
+    "expert_identity",
+    "domain_workflow",
+    "gate_semantics",
+    "action_policy",
+    "engineering_task_package",
+    "verification_and_review"
+  ],
+  "provider_owns": [
+    "agent_assets",
+    "skills",
+    "profiles",
+    "workflow_assets",
+    "target_export",
+    "asset_validation",
+    "asset_release_and_rollback"
+  ],
+  "profiles": {
+    "required": ["embedded-fullstack"],
+    "optional": ["team-core", "incident-response", "release-hardening"]
+  },
+  "identity": {
+    "required": ["provider_commit", "adk_version", "profile_set", "asset_bundle_hash"],
+    "runtime_target_identity_is_separate": true
+  },
+  "runtime_boundary": {
+    "digital_worker_must_not_own_runtime_specific_exporters": true,
+    "provider_neutral_core_required": true,
+    "live_runtime_write_requires_declared_target_chain": true
+  },
+  "delivery": {
+    "direct_live_home_write": false,
+    "plan_before_apply": true,
+    "receipt_required": true,
+    "rollback_required": true
+  },
+  "skill_ownership_rule": "domain role semantics may remain in digital-worker; reusable implementation skills belong in ADK or are wrapped by reference",
+  "production_claim": "candidate-only; real runtime evidence remains required"
+}
