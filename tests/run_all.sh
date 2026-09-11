@@ -73,6 +73,8 @@ done
 TESTS=(
   test_validate.sh
   test_manifest_contract.sh
+  test_contract_registry.sh
+  test_schema_resource_sync.sh
   test_manifest_consumer_boundary.sh
   test_python_launcher.sh
   test_asset_content_quality.sh
@@ -101,6 +103,7 @@ TESTS=(
   test_agent_value.sh
   test_trace_summary.sh
   test_run_evidence.sh
+  test_evidence_envelope.sh
   test_effect_comparator.sh
   test_runtime_capabilities.sh
   test_tool_skill_evidence_contracts.sh
@@ -146,6 +149,8 @@ TESTS=(
 QUICK_TESTS=(
   test_validate.sh
   test_manifest_contract.sh
+  test_contract_registry.sh
+  test_schema_resource_sync.sh
   test_manifest_consumer_boundary.sh
   test_python_launcher.sh
   test_runtime_boundary.sh
@@ -162,6 +167,7 @@ QUICK_TESTS=(
   test_agent_value.sh
   test_trace_summary.sh
   test_run_evidence.sh
+  test_evidence_envelope.sh
   test_effect_comparator.sh
   test_workflow_contract.sh
   test_workflow_ir.sh
