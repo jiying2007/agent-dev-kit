@@ -108,6 +108,18 @@
       "schema_path": "schemas/evidence-envelope-v1.schema.json",
       "surface_path": null,
       "evidence_class": "source"
+    },
+    {
+      "id": "release-manifest",
+      "version": "2",
+      "owner": "distribution",
+      "producer": "agent_dev_kit.release",
+      "consumers": ["release", "provenance", "cross-repo-governance"],
+      "stability": "rc",
+      "compatibility": "strict",
+      "schema_path": "schemas/release-manifest-v2.schema.json",
+      "surface_path": null,
+      "evidence_class": "release"
     }
   ]
 }
