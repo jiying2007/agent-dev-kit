@@ -37,11 +37,6 @@
       "baseline_bytes": 34821,
       "target_max_bytes": 30000,
       "split_hint": "separate target selection/rendering from target contract validation"
-    },
-    "src/agent_dev_kit/cli.py": {
-      "baseline_bytes": 32564,
-      "target_max_bytes": 30000,
-      "split_hint": "move command handlers into bounded command modules while preserving entrypoint"
     }
   }
 }
