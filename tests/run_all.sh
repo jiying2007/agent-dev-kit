@@ -276,7 +276,7 @@ run_test() {
 
   if [[ "$VERBOSE" -eq 1 ]]; then
     echo "=== RUN ${name} ==="
-    if ADK_TEST_SUITE_DIR="$TMP_DIR" ADK_TEST_SUITE_MODE="$SUITE_MODE" "$path"; then
+    if ADK_TEST_SUITE_DIR="$TMP_DIR" ADK_TEST_SUITE_MODE="$SUITE_MODE" bash "$path"; then
       end_ns="$(date +%s%N)"
       elapsed_ms=$(( (end_ns - start_ns) / 1000000 ))
       echo "[PASS] ${name}"
@@ -287,7 +287,7 @@ run_test() {
       return 0
     fi
   else
-    if ADK_TEST_SUITE_DIR="$TMP_DIR" ADK_TEST_SUITE_MODE="$SUITE_MODE" "$path" >"$stdout_file" 2>"$stderr_file"; then
+    if ADK_TEST_SUITE_DIR="$TMP_DIR" ADK_TEST_SUITE_MODE="$SUITE_MODE" bash "$path" >"$stdout_file" 2>"$stderr_file"; then
       end_ns="$(date +%s%N)"
       elapsed_ms=$(( (end_ns - start_ns) / 1000000 ))
       echo "[PASS] ${name}"
