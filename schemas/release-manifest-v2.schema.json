@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-dev-kit.local/schemas/release-manifest-v2.json",
+  "title": "agent-dev-kit release manifest v2",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "version",
+    "manifest_sha256",
+    "direct_targets",
+    "external_targets",
+    "source_distribution",
+    "source_file_count",
+    "reproducible",
+    "release_eligible",
+    "source_provenance",
+    "sbom"
+  ],
+  "properties": {
+    "schema_version": {"const": 2},
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?$"
+    },
+    "manifest_sha256": {"$ref": "#/$defs/sha256"},
+    "direct_targets": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "required": ["target", "agents", "skills"],
+        "properties": {
+          "target": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+          "agents": {"type": "integer", "minimum": 0},
+          "skills": {"type": "integer", "minimum": 0}
+        },
+        "additionalProperties": false
+      }
+    },
+    "external_targets": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"}
+    },
+    "source_distribution": {"const": true},
+    "source_file_count": {"type": "integer", "minimum": 1},
+    "reproducible": {"type": "boolean"},
+    "release_eligible": {"type": "boolean"},
+    "source_provenance": {
+      "type": "object",
+      "required": [
+        "kind",
+        "release_eligible",
+        "commit",
+        "tree",
+        "dirty",
+        "source_distribution_sha256"
+      ],
+      "properties": {
+        "kind": {
+          "enum": ["git-clean-commit", "git-working-tree-snapshot", "unbound-snapshot"]
+        },
+        "release_eligible": {"type": "boolean"},
+        "commit": {
+          "oneOf": [
+            {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+            {"type": "null"}
+          ]
+        },
+        "tree": {
+          "oneOf": [
+            {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+            {"type": "null"}
+          ]
+        },
+        "dirty": {"type": ["boolean", "null"]},
+        "source_distribution_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"release_eligible": {"const": true}}},
+          "then": {
+            "properties": {
+              "kind": {"const": "git-clean-commit"},
+              "commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+              "tree": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+              "dirty": {"const": false}
+            }
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "sbom": {
+      "type": "object",
+      "required": ["path", "sha256", "validated"],
+      "properties": {
+        "path": {"const": "sbom.spdx.json"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "validated": {"const": true}
+      },
+      "additionalProperties": false
+    }
+  },
+  "allOf": [
+    {
+      "properties": {
+        "source_provenance": {
+          "properties": {
+            "release_eligible": {"const": {"$data": "1/release_eligible"}}
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}
