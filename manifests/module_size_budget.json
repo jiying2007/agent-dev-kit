@@ -8,11 +8,6 @@
       "target_max_bytes": 30000,
       "split_hint": "extract validation/canonicalization primitives and reducer helpers"
     },
-    "src/agent_dev_kit/release.py": {
-      "baseline_bytes": 45209,
-      "target_max_bytes": 30000,
-      "split_hint": "move release identity/archive/SBOM helpers into distribution bounded contexts"
-    },
     "src/agent_dev_kit/evaluation.py": {
       "baseline_bytes": 42933,
       "target_max_bytes": 30000,
