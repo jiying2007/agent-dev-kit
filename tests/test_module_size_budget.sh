@@ -15,7 +15,7 @@ assert policy.get("policy") == "no-new-oversize-and-legacy-monotonic-shrink", po
 default_max = policy.get("default_max_bytes")
 assert isinstance(default_max, int) and not isinstance(default_max, bool) and 1 <= default_max <= 30000, policy
 exceptions = policy.get("exceptions")
-assert isinstance(exceptions, dict) and exceptions, policy
+assert isinstance(exceptions, dict), policy
 
 failures = []
 seen = set()
@@ -59,7 +59,10 @@ print(json.dumps({
     "status": "pass",
     "default_max_bytes": default_max,
     "legacy_exception_count": len(exceptions),
-    "largest_baseline_bytes": max(item["baseline_bytes"] for item in exceptions.values()),
+    "largest_baseline_bytes": max(
+        (item["baseline_bytes"] for item in exceptions.values()),
+        default=0,
+    ),
 }, sort_keys=True))
 PY
 
