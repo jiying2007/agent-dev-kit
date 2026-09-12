@@ -7,11 +7,6 @@
       "baseline_bytes": 47619,
       "target_max_bytes": 30000,
       "split_hint": "extract validation/canonicalization primitives and reducer helpers"
-    },
-    "src/agent_dev_kit/campaign.py": {
-      "baseline_bytes": 41952,
-      "target_max_bytes": 30000,
-      "split_hint": "separate campaign planning, evidence ingestion, and verdict logic"
     }
   }
 }
