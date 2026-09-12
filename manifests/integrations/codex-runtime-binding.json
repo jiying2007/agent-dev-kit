@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "contract_version": "1.0",
+  "status": "candidate",
+  "consumer": "jiying2007/codex",
+  "provider": "jiying2007/agent-dev-kit",
+  "role": "codex-runtime-binding",
+  "runtime_target": "codex-cli",
+  "provider_owns": [
+    "reusable_agent_assets",
+    "reusable_skills",
+    "asset_profiles",
+    "workflow_assets",
+    "target_export_contract",
+    "asset_validation",
+    "asset_release_and_rollback"
+  ],
+  "consumer_owns": [
+    "codex_runtime_profiles",
+    "codex_host_mapping",
+    "codex_config_rendering",
+    "build_plan_dry_run_apply",
+    "codex_mcp_and_sandbox_binding",
+    "live_drift_detection",
+    "runtime_execution_receipt"
+  ],
+  "consumer_must_not_own": [
+    "domain_gate_semantics",
+    "domain_verification_pass",
+    "knowledge_lifecycle",
+    "reusable_agent_asset_source_of_truth",
+    "cross_runtime_effectiveness_evaluation"
+  ],
+  "identity": {
+    "required": [
+      "provider_repository",
+      "provider_commit",
+      "release_version",
+      "asset_profile",
+      "asset_bundle_hash",
+      "runtime_target"
+    ],
+    "canonical_provider_repository": "jiying2007/agent-dev-kit",
+    "exact_provider_commit_required": true,
+    "asset_profile_required": "embedded-fullstack",
+    "runtime_profile_is_separate_from_asset_profile": true
+  },
+  "delivery": {
+    "direct_live_home_write": false,
+    "plan_before_apply": true,
+    "dry_run_before_apply": true,
+    "receipt_required": true,
+    "rollback_required": true
+  },
+  "readiness": {
+    "state": "BLOCKED_ASSET_BUNDLE_IDENTITY",
+    "reason": "No provider-produced embedded-fullstack Codex target asset_bundle_hash is proven in this contract yet.",
+    "must_not_substitute": [
+      "git_blob_sha",
+      "consumer_build_lock_hash",
+      "short_commit_sha",
+      "tag_without_exact_commit"
+    ],
+    "exit_condition": "Provider emits a reproducible Codex target bundle for embedded-fullstack with exact provider commit, release version, asset profile and asset_bundle_hash, and the consumer verifies the same identity before apply."
+  },
+  "production_claim": "candidate-only; real Codex target bundle and runtime evidence remain required"
+}
