@@ -188,9 +188,13 @@ with tempfile.TemporaryDirectory(prefix="adk-legacy-target-") as temp:
         raise AssertionError("legacy target contract did not fail with a governed migration error")
 
 release_source = (root / "src/agent_dev_kit/release.py").read_text(encoding="utf-8")
-assert "enforce_current_contract=False" in release_source
-assert 'return "target-contract-hard-cut"' in release_source
-assert "_previous_release_migration(exc)" in release_source
+release_support_source = (
+    root / "src/agent_dev_kit/distribution/release_support.py"
+).read_text(encoding="utf-8")
+release_boundary_source = release_source + release_support_source
+assert "enforce_current_contract=False" in release_boundary_source
+assert 'return "target-contract-hard-cut"' in release_boundary_source
+assert "_previous_release_migration(exc)" in release_boundary_source
 PY
 
 "$ROOT_DIR/scripts/check-official-docs-governance.sh" >/dev/null
