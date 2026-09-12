@@ -8,11 +8,6 @@
       "target_max_bytes": 30000,
       "split_hint": "extract validation/canonicalization primitives and reducer helpers"
     },
-    "src/agent_dev_kit/readiness.py": {
-      "baseline_bytes": 42811,
-      "target_max_bytes": 30000,
-      "split_hint": "separate readiness evidence collection from policy decisions"
-    },
     "src/agent_dev_kit/campaign.py": {
       "baseline_bytes": 41952,
       "target_max_bytes": 30000,
