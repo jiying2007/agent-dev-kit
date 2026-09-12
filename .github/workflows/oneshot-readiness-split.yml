@@ -1,0 +1,81 @@
+name: oneshot-readiness-split
+on:
+  push:
+    branches: [codex/readiness-support-split-20260912]
+permissions:
+  contents: write
+jobs:
+  split:
+    if: ${{ github.actor != 'github-actions[bot]' }}
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - run: |
+          sudo apt-get update
+          sudo apt-get install -y ripgrep
+          python -m pip install '.[quality]'
+      - name: Extract readiness evidence primitives
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          source_path = Path('src/agent_dev_kit/readiness.py')
+          support_path = Path('src/agent_dev_kit/readiness_support.py')
+          budget_path = Path('manifests/module_size_budget.json')
+          source = source_path.read_text(encoding='utf-8')
+
+          start_marker = 'EXPECTED_DIMENSIONS = ('
+          end_marker = 'def _finish_dimension('
+          start = source.index(start_marker)
+          end = source.index(end_marker)
+          moved = source[start:end].rstrip() + '\n'
+          updated = source[:start] + source[end:]
+
+          import_anchor = 'from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple\n\n'
+          compatibility = '''from .readiness_support import (\n    EXPECTED_DIMENSIONS as EXPECTED_DIMENSIONS,\n    NON_MATERIAL_PARTS as NON_MATERIAL_PARTS,\n    REPOSITORY_OWNER_PATHS as REPOSITORY_OWNER_PATHS,\n    SECRET_REFERENCE as SECRET_REFERENCE,\n    STATUS_PRIORITY as STATUS_PRIORITY,\n    VALID_STATUSES as VALID_STATUSES,\n    ReadinessContractError as ReadinessContractError,\n    RepositoryIndex as RepositoryIndex,\n    _blocker as _blocker,\n    _deduplicate as _deduplicate,\n    _dimension_contracts as _dimension_contracts,\n    _load_metadata as _load_metadata,\n    _material_evidence as _material_evidence,\n    _metadata_for_dimension as _metadata_for_dimension,\n    _valid_verified_at as _valid_verified_at,\n    _verified_at_issue as _verified_at_issue,\n    load_readiness_contract as load_readiness_contract,\n)\n\n'''
+          if import_anchor not in updated:
+              raise SystemExit('readiness import anchor missing')
+          updated = updated.replace(import_anchor, import_anchor + compatibility, 1)
+          source_path.write_text(updated, encoding='utf-8')
+
+          header = '''"""Bounded repository evidence collection for Harness readiness."""\n\nfrom __future__ import annotations\n\nimport json\nimport os\nimport re\nfrom datetime import date, datetime, timedelta\nfrom pathlib import Path\nfrom typing import Any, Dict, Iterable, List, Mapping, Optional, Tuple\n\n\n'''
+          support_path.write_text(header + moved, encoding='utf-8')
+
+          budget = json.loads(budget_path.read_text(encoding='utf-8'))
+          removed = budget['exceptions'].pop('src/agent_dev_kit/readiness.py', None)
+          if removed is None:
+              raise SystemExit('readiness exception missing')
+          if len(budget['exceptions']) != 2:
+              raise SystemExit(f"unexpected exception count: {len(budget['exceptions'])}")
+          budget_path.write_text(json.dumps(budget, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+          PY
+          ruff check src/agent_dev_kit/readiness.py src/agent_dev_kit/readiness_support.py --fix
+          ruff check src/agent_dev_kit/readiness.py src/agent_dev_kit/readiness_support.py
+          python -m py_compile src/agent_dev_kit/readiness.py src/agent_dev_kit/readiness_support.py
+          echo "readiness.py bytes=$(wc -c < src/agent_dev_kit/readiness.py)"
+          echo "readiness_support.py bytes=$(wc -c < src/agent_dev_kit/readiness_support.py)"
+          test $(wc -c < src/agent_dev_kit/readiness.py) -lt 30000
+          test $(wc -c < src/agent_dev_kit/readiness_support.py) -lt 30000
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          budget=json.loads(Path('manifests/module_size_budget.json').read_text())
+          assert len(budget['exceptions']) == 2, budget
+          assert 'src/agent_dev_kit/readiness.py' not in budget['exceptions'], budget
+          PY
+          bash tests/test_harness_readiness.sh
+          bash tests/test_module_size_budget.sh
+      - name: Commit generated split and remove one-shot workflow
+        run: |
+          rm .github/workflows/oneshot-readiness-split.yml
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add src/agent_dev_kit/readiness.py src/agent_dev_kit/readiness_support.py manifests/module_size_budget.json .github/workflows/oneshot-readiness-split.yml
+          git commit -m 'refactor(readiness): extract evidence collection support'
+          git push origin HEAD:codex/readiness-support-split-20260912
