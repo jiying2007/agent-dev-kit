@@ -288,7 +288,7 @@ def _assert_publishable_release_artifact(artifact: Path) -> Mapping[str, Any]:
 def _extract_release(artifact: Path, destination: Path, member_limit: int = 5000) -> Path:
     destination.mkdir(parents=True, exist_ok=False)
     roots = set()
-    members = []
+    members: list[tarfile.TarInfo] = []
     names = set()
     total_size = 0
     destination_root = destination.resolve()
@@ -365,8 +365,8 @@ def _prerelease_is_newer(previous: str, candidate: str) -> bool:
     candidate_core = tuple(int(value) for value in candidate_match.groups()[:3])
     if previous_core != candidate_core:
         return candidate_core > previous_core
-    previous_pre = previous_match.group(4)
-    candidate_pre = candidate_match.group(4)
+    previous_pre: str | None = previous_match.group(4)
+    candidate_pre: str | None = candidate_match.group(4)
     if previous_pre is None or candidate_pre is None:
         return previous_pre is not None and candidate_pre is None
     previous_parts = previous_pre.split(".")
