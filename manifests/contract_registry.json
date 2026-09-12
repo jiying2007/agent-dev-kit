@@ -132,6 +132,42 @@
       "schema_path": "schemas/promotion-evidence-v1.schema.json",
       "surface_path": null,
       "evidence_class": "release"
+    },
+    {
+      "id": "agent-platform-primitives",
+      "version": "1",
+      "owner": "platform",
+      "producer": "agent_dev_kit.platform_vnext",
+      "consumers": ["profiles", "targets", "evaluation", "governance"],
+      "stability": "experimental",
+      "compatibility": "strict",
+      "schema_path": null,
+      "surface_path": "manifests/agent_platform_contracts.json",
+      "evidence_class": "test"
+    },
+    {
+      "id": "agent-trace",
+      "version": "1",
+      "owner": "evidence",
+      "producer": "agent_dev_kit.platform_vnext",
+      "consumers": ["evaluation", "agent-value", "improvement-loop"],
+      "stability": "experimental",
+      "compatibility": "strict",
+      "schema_path": "schemas/adk-agent-trace-v1.schema.json",
+      "surface_path": null,
+      "evidence_class": "runtime"
+    },
+    {
+      "id": "independent-verifier-receipt",
+      "version": "1",
+      "owner": "verification",
+      "producer": "agent_dev_kit.platform_vnext",
+      "consumers": ["review", "release", "improvement-loop"],
+      "stability": "experimental",
+      "compatibility": "strict",
+      "schema_path": "schemas/independent-verifier-receipt-v1.schema.json",
+      "surface_path": null,
+      "evidence_class": "runtime"
     }
   ]
 }
