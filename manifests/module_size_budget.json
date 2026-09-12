@@ -2,11 +2,5 @@
   "schema": "adk-module-size-budget/v1",
   "default_max_bytes": 30000,
   "policy": "no-new-oversize-and-legacy-monotonic-shrink",
-  "exceptions": {
-    "src/agent_dev_kit/runtime_control/engine.py": {
-      "baseline_bytes": 47619,
-      "target_max_bytes": 30000,
-      "split_hint": "extract validation/canonicalization primitives and reducer helpers"
-    }
-  }
+  "exceptions": {}
 }
