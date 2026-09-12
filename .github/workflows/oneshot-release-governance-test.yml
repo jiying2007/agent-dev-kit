@@ -1,0 +1,36 @@
+name: oneshot-release-governance-test
+on:
+  push:
+    branches: [codex/release-support-split-20260912]
+permissions:
+  contents: write
+jobs:
+  fix:
+    if: ${{ github.actor != 'github-actions[bot]' }}
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('tests/test_intent_boundary_governance.sh')
+          s=p.read_text()
+          old='''release_source = (root / "src/agent_dev_kit/release.py").read_text(encoding="utf-8")\nassert "enforce_current_contract=False" in release_source\nassert 'return "target-contract-hard-cut"' in release_source\nassert "_previous_release_migration(exc)" in release_source'''
+          new='''release_source = (root / "src/agent_dev_kit/release.py").read_text(encoding="utf-8")\nrelease_support_source = (\n    root / "src/agent_dev_kit/distribution/release_support.py"\n).read_text(encoding="utf-8")\nrelease_boundary_source = release_source + release_support_source\nassert "enforce_current_contract=False" in release_boundary_source\nassert 'return "target-contract-hard-cut"' in release_boundary_source\nassert "_previous_release_migration(exc)" in release_boundary_source'''
+          if old not in s: raise SystemExit('source-boundary assertion block missing')
+          p.write_text(s.replace(old,new,1))
+          PY
+          bash tests/test_intent_boundary_governance.sh
+          bash tests/test_module_size_budget.sh
+      - run: |
+          rm .github/workflows/oneshot-release-governance-test.yml
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add tests/test_intent_boundary_governance.sh .github/workflows/oneshot-release-governance-test.yml
+          git commit -m 'test(release): follow bounded source contract'
+          git push origin HEAD:codex/release-support-split-20260912
