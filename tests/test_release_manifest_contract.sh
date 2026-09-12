@@ -14,7 +14,7 @@ from pathlib import Path
 from agent_dev_kit.distribution import validate_release_artifact, validate_release_manifest
 from agent_dev_kit.model import canonical_json_bytes
 
-version = "5.0.0-rc.2"
+version = "5.1.0"
 source_manifest_value = {"version": version}
 source_manifest = json.dumps(source_manifest_value, indent=2).encode() + b"\n"
 sbom = b'{"spdxVersion":"SPDX-2.3"}\n'

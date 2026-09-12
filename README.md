@@ -2,11 +2,11 @@
 
 `agent-dev-kit`（adk）是通用 Agent/Skill/Profile/Workflow 资产包。它把参考资料、官方文档和工程经验压实为可验证、可回滚、可迭代的 ADK 资产；资产可以导出到显式声明的 tool target，但 core 不绑定任何单一运行时。
 
-当前版本：`5.0.0-rc.2`（本地候选；尚未 tag、发布或刷新到 live）。
+当前版本：`5.1.0`（本地候选；尚未 tag、发布或刷新到 live）。
 
 发布支持基线为 Python 3.11+，运行依赖固定为 `PyYAML==6.0.3` 与 `jsonschema==4.26.0`。PyYAML 用于仍以 YAML 表达的 workflow/target 等独立合同，不再用于 Manifest 镜像。Python 3.8/3.9 已退出本项目支持范围；源码在旧解释器上偶然可运行不构成发布兼容承诺。
 
-当前软件状态是 **M5-ready control-plane candidate / M3 release candidate**，不是已认证 M5：本版本提供平台中立路由 IR、Runtime Control V2、可组合运行证据、receipt 驱动的 Agent Value 评估和可恢复双运行时评测；最终 M5 仍要求 30 天试点、至少一个独立真实软件仓、第二位 operator 和完整 field evidence。
+当前组件发布状态是 **5.1.0 release-train candidate**。产品级成熟度与 ADK 组件发布成熟度分离管理；运行时一致性按 `static / smoke / native / certified` 独立记录。ADK 不再把产品 M3/M5 用作组件版本状态，也不会因为 direct target 仍为 experimental 就伪造 runtime-certified。
 
 `scripts/devkit.sh` 未设置 override 时按 `python3.12 -> python3.11 -> python3`
 确定性选择解释器；可用 `ADK_PYTHON_BIN` 显式覆盖。发布和认证验证应设置

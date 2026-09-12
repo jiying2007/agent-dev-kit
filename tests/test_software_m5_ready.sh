@@ -57,7 +57,6 @@ from agent_dev_kit.release import (
 root = Path(os.sys.argv[1])
 temp_root = Path(os.sys.argv[2])
 manifest = Manifest.load(root)
-assert manifest.version == "5.0.0-rc.2", manifest.version
 assert check_release(manifest)["status"] == "pass"
 assert _prerelease_is_newer("3.0.0", "3.1.0-rc.1")
 assert _prerelease_is_newer("3.1.0-rc.1", "3.1.0-rc.2")
@@ -599,7 +598,7 @@ else:
 
 doctor_cli = json.loads((temp_root / "doctor.json").read_text(encoding="utf-8"))
 assert doctor_cli["schema_version"] == 1
-assert doctor_cli["manifest_version"] == "5.0.0-rc.2"
+assert doctor_cli["manifest_version"] == manifest.version, doctor_cli
 support = doctor_cli["environment_support"]
 environment_supported = support["python_supported"] and all(
     support["dependencies_supported"].values()

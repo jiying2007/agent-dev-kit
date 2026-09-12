@@ -2,6 +2,25 @@
 
 ## Unreleased
 
+## v5.1.0 (2026-09-12)
+
+### Agent Platform vNext
+- 收敛 Agent Platform vNext 的平台中立 primitives、Runtime Adapter/Control、Workflow IR、Trace/Eval 与 runtime bundle identity 证据链。
+- 强化 direct target、external handoff 与 runtime certification 边界；不把 experimental target 误报为 native/certified。
+- MCP 官方资料 freshness 统一由 canonical source 治理，避免平行时间戳和过期状态漂移。
+
+### 治理与供应链
+- 增加 Dependabot、CodeQL、dependency review，并保持 Actions SHA pin、最小权限、OIDC/Cosign promotion evidence 与 release provenance attestation。
+- Branch GC 升级为 fail-closed exact-head 治理：merged PR head 与显式 reviewed ancestor 都必须在 DELETE 前重新验证；历史 CLI support 分支已由 exact-SHA ancestry proof 退役。
+- 版本管理器迁移到 canonical `manifest.json`，并强制 `manifest.json`、`pyproject.toml`、`__version__`、`.version-lock` 与 README 发布身份同步。
+
+### 成熟度语义
+- 产品成熟度、ADK 组件发布成熟度和 runtime conformance 分离管理；不再用产品 M3/M5 术语表达组件版本状态。
+
+### 发布边界
+- `5.1.0` source candidate 只有在 exact-main fresh CI、signed promotion evidence、`v5.1.0` exact tag、tag-triggered release workflow 与 GitHub Release 均形成证据后才视为远端发布完成。
+
+
 ## v5.0.0-rc.2 (2026-08-30)
 
 ### 发布候选加固
