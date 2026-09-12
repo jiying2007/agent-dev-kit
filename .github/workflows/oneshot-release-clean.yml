@@ -1,0 +1,31 @@
+name: oneshot-release-clean
+on:
+  push:
+    branches: [codex/release-support-split-20260912]
+permissions:
+  contents: write
+jobs:
+  clean:
+    if: ${{ github.actor != 'github-actions[bot]' }}
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - run: |
+          python -m pip install ruff==0.15.21
+          ruff check --fix src/agent_dev_kit/release.py
+          ruff check src/agent_dev_kit/release.py src/agent_dev_kit/distribution/release_support.py
+          python -m py_compile src/agent_dev_kit/release.py src/agent_dev_kit/distribution/release_support.py
+          test $(wc -c < src/agent_dev_kit/release.py) -lt 30000
+          test $(wc -c < src/agent_dev_kit/distribution/release_support.py) -lt 30000
+      - run: |
+          rm .github/workflows/oneshot-release-clean.yml
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add src/agent_dev_kit/release.py .github/workflows/oneshot-release-clean.yml
+          git commit -m 'style(release): clean split imports'
+          git push origin HEAD:codex/release-support-split-20260912
