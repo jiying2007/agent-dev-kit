@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Fail-closed cleanup for stale branch heads that exactly match merged PR heads."""
+"""Fail-closed cleanup for merged branch heads and explicitly retired ancestor heads."""
 
 from __future__ import annotations
 
 import argparse
 import json
 import os
+import re
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -15,6 +16,10 @@ from typing import Any
 
 
 SCHEMA = "adk-branch-gc-report/v1"
+RETIRED_SCHEMA = "adk-branch-gc-retired/v1"
+ROOT = Path(__file__).resolve().parents[2]
+DEFAULT_RETIRED_REGISTRY = ROOT / "manifests/branch_gc_retired.json"
+SHA_RE = re.compile(r"^[0-9a-f]{40}$")
 
 
 class BranchGCError(RuntimeError):
@@ -22,20 +27,49 @@ class BranchGCError(RuntimeError):
 
 
 @dataclass(frozen=True)
+class RetiredEntry:
+    branch: str
+    sha: str
+    proof: str
+    reviewed_against_main: str
+    reason: str
+
+    def as_candidate(self) -> "Candidate":
+        return Candidate(
+            branch=self.branch,
+            sha=self.sha,
+            basis="explicit-retired-ancestor",
+            proof=self.proof,
+            reviewed_against_main=self.reviewed_against_main,
+            reason=self.reason,
+        )
+
+
+@dataclass(frozen=True)
 class Candidate:
     branch: str
     sha: str
-    pr_number: int
-    merged_at: str
+    basis: str
+    pr_number: int | None = None
+    merged_at: str | None = None
+    proof: str | None = None
+    reviewed_against_main: str | None = None
+    reason: str | None = None
 
     def as_dict(self) -> dict[str, Any]:
-        return {
+        result: dict[str, Any] = {
             "branch": self.branch,
             "sha": self.sha,
-            "basis": "exact-merged-pr",
-            "merged_pr": self.pr_number,
-            "merged_at": self.merged_at,
+            "basis": self.basis,
         }
+        if self.basis == "exact-merged-pr":
+            result["merged_pr"] = self.pr_number
+            result["merged_at"] = self.merged_at
+        elif self.basis == "explicit-retired-ancestor":
+            result["proof"] = self.proof
+            result["reviewed_against_main"] = self.reviewed_against_main
+            result["reason"] = self.reason
+        return result
 
 
 class GitHubClient:
@@ -136,6 +170,18 @@ class GitHubClient:
             raise BranchGCError(f"invalid pull response: {number}")
         return value
 
+    def compare(self, base_sha: str, head_sha: str) -> dict[str, Any]:
+        value = self.request(
+            "GET",
+            "/compare/"
+            + urllib.parse.quote(base_sha, safe="")
+            + "..."
+            + urllib.parse.quote(head_sha, safe=""),
+        )
+        if not isinstance(value, dict):
+            raise BranchGCError(f"invalid compare response: {base_sha}...{head_sha}")
+        return value
+
     def delete_branch(self, branch: str) -> None:
         self.request(
             "DELETE",
@@ -143,12 +189,66 @@ class GitHubClient:
         )
 
 
+def valid_sha(value: Any) -> bool:
+    return isinstance(value, str) and bool(SHA_RE.fullmatch(value))
+
+
 def branch_sha(branch: dict[str, Any]) -> str:
     commit = branch.get("commit")
     sha = commit.get("sha") if isinstance(commit, dict) else None
-    if not isinstance(sha, str) or len(sha) != 40:
+    if not valid_sha(sha):
         raise BranchGCError("branch SHA is missing or invalid")
     return sha
+
+
+def load_retired_registry(path: Path) -> dict[str, RetiredEntry]:
+    if not path.is_file():
+        raise BranchGCError(f"retired registry is missing: {path}")
+    try:
+        raw = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise BranchGCError(f"retired registry is unreadable: {path}: {exc}") from exc
+
+    if not isinstance(raw, dict) or raw.get("schema") != RETIRED_SCHEMA:
+        raise BranchGCError("retired registry schema is invalid")
+    items = raw.get("entries")
+    if not isinstance(items, list):
+        raise BranchGCError("retired registry entries must be a list")
+
+    result: dict[str, RetiredEntry] = {}
+    for index, item in enumerate(items):
+        if not isinstance(item, dict):
+            raise BranchGCError(f"retired registry entry {index} is not an object")
+        branch = item.get("branch")
+        sha = item.get("sha")
+        proof = item.get("proof")
+        reviewed = item.get("reviewed_against_main")
+        reason = item.get("reason")
+        disposition = item.get("disposition")
+        if not isinstance(branch, str) or not branch or branch in {"main", "master"}:
+            raise BranchGCError(f"retired registry entry {index} has invalid branch")
+        if not valid_sha(sha):
+            raise BranchGCError(f"retired registry entry {index} has invalid sha")
+        if proof != "ancestor-of-main":
+            raise BranchGCError(f"retired registry entry {index} has unsupported proof")
+        if not valid_sha(reviewed):
+            raise BranchGCError(
+                f"retired registry entry {index} has invalid reviewed_against_main"
+            )
+        if not isinstance(reason, str) or not reason.strip():
+            raise BranchGCError(f"retired registry entry {index} has invalid reason")
+        if disposition != "delete":
+            raise BranchGCError(f"retired registry entry {index} must use disposition=delete")
+        if branch in result:
+            raise BranchGCError(f"retired registry has duplicate branch: {branch}")
+        result[branch] = RetiredEntry(
+            branch=branch,
+            sha=sha,
+            proof=proof,
+            reviewed_against_main=reviewed,
+            reason=reason.strip(),
+        )
+    return result
 
 
 def open_pr_numbers(client: GitHubClient, branch: str) -> list[int]:
@@ -183,10 +283,22 @@ def exact_merged_pr(
             and head.get("sha") == sha
             and base_obj.get("ref") == base
         ):
-            matches.append(Candidate(branch, sha, number, merged_at))
+            matches.append(
+                Candidate(
+                    branch=branch,
+                    sha=sha,
+                    basis="exact-merged-pr",
+                    pr_number=number,
+                    merged_at=merged_at,
+                )
+            )
     if not matches:
         return None
-    return sorted(matches, key=lambda item: (item.merged_at, item.pr_number), reverse=True)[0]
+    return sorted(
+        matches,
+        key=lambda item: (item.merged_at or "", item.pr_number or 0),
+        reverse=True,
+    )[0]
 
 
 def exact_pr_identity(
@@ -194,6 +306,8 @@ def exact_pr_identity(
     candidate: Candidate,
     base: str,
 ) -> bool:
+    if candidate.pr_number is None or candidate.merged_at is None:
+        return False
     pr = client.pull(candidate.pr_number)
     head = pr.get("head")
     base_obj = pr.get("base")
@@ -207,9 +321,34 @@ def exact_pr_identity(
     )
 
 
+def commit_is_ancestor(client: GitHubClient, ancestor: str, descendant: str) -> bool:
+    if ancestor == descendant:
+        return True
+    comparison = client.compare(ancestor, descendant)
+    merge_base = comparison.get("merge_base_commit")
+    status = comparison.get("status")
+    return bool(
+        isinstance(merge_base, dict)
+        and merge_base.get("sha") == ancestor
+        and status in {"ahead", "identical"}
+    )
+
+
+def ancestor_retirement_valid(
+    client: GitHubClient,
+    entry: RetiredEntry,
+    base_sha: str,
+) -> bool:
+    return bool(
+        commit_is_ancestor(client, entry.sha, entry.reviewed_against_main)
+        and commit_is_ancestor(client, entry.reviewed_against_main, base_sha)
+    )
+
+
 def evaluate(
     client: GitHubClient,
     base: str,
+    retired: dict[str, RetiredEntry],
 ) -> tuple[str, list[Candidate], list[dict[str, Any]], int]:
     base_branch = client.get_branch(base)
     base_sha = branch_sha(base_branch)
@@ -243,12 +382,38 @@ def evaluate(
             continue
 
         candidate = exact_merged_pr(client, name, sha, base)
-        if candidate is None:
+        if candidate is not None:
+            candidates.append(candidate)
+            continue
+
+        retired_entry = retired.get(name)
+        if retired_entry is None:
             skipped.append(
                 {"branch": name, "sha": sha, "reason": "no-exact-merged-pr"}
             )
             continue
-        candidates.append(candidate)
+        if sha != retired_entry.sha:
+            skipped.append(
+                {
+                    "branch": name,
+                    "sha": sha,
+                    "reason": "retired-sha-mismatch",
+                    "expected_sha": retired_entry.sha,
+                }
+            )
+            continue
+        if not ancestor_retirement_valid(client, retired_entry, base_sha):
+            skipped.append(
+                {
+                    "branch": name,
+                    "sha": sha,
+                    "reason": "retired-proof-invalid",
+                    "proof": retired_entry.proof,
+                    "reviewed_against_main": retired_entry.reviewed_against_main,
+                }
+            )
+            continue
+        candidates.append(retired_entry.as_candidate())
 
     return base_sha, candidates, skipped, scanned
 
@@ -257,6 +422,7 @@ def revalidate_and_delete(
     client: GitHubClient,
     candidate: Candidate,
     base: str,
+    retired: dict[str, RetiredEntry],
 ) -> tuple[bool, str | None]:
     try:
         current = client.get_branch(candidate.branch)
@@ -270,8 +436,22 @@ def revalidate_and_delete(
         return False, "sha-changed"
     if open_pr_numbers(client, candidate.branch):
         return False, "open-pr"
-    if not exact_pr_identity(client, candidate, base):
-        return False, "merged-pr-identity-changed"
+
+    if candidate.basis == "exact-merged-pr":
+        if not exact_pr_identity(client, candidate, base):
+            return False, "merged-pr-identity-changed"
+    elif candidate.basis == "explicit-retired-ancestor":
+        entry = retired.get(candidate.branch)
+        if entry is None or entry.as_candidate() != candidate:
+            return False, "retired-registry-changed"
+        try:
+            current_base_sha = branch_sha(client.get_branch(base))
+            if not ancestor_retirement_valid(client, entry, current_base_sha):
+                return False, "ancestor-proof-changed"
+        except BranchGCError:
+            return False, "base-unavailable"
+    else:
+        return False, "unsupported-candidate-basis"
 
     client.delete_branch(candidate.branch)
     return True, None
@@ -319,12 +499,20 @@ def write_report(path: Path, report: dict[str, Any]) -> None:
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Delete only branch heads that still exactly match merged PR heads."
+        description=(
+            "Delete only exact merged-PR branch heads or explicitly retired "
+            "exact-SHA ancestor heads."
+        )
     )
     parser.add_argument("--repo", default=os.environ.get("GITHUB_REPOSITORY", ""))
     parser.add_argument("--base", default="main")
     parser.add_argument("--mode", choices=("dry-run", "apply"), required=True)
     parser.add_argument("--report", required=True)
+    parser.add_argument(
+        "--retired-registry",
+        default=str(DEFAULT_RETIRED_REGISTRY),
+        help="Path to the exact-SHA retired branch registry.",
+    )
     args = parser.parse_args()
 
     report_path = Path(args.report)
@@ -337,11 +525,12 @@ def main() -> int:
 
     try:
         client = GitHubClient(args.repo, os.environ.get("GH_TOKEN", ""))
-        base_sha, candidates, skipped, scanned = evaluate(client, args.base)
+        retired = load_retired_registry(Path(args.retired_registry))
+        base_sha, candidates, skipped, scanned = evaluate(client, args.base, retired)
 
         if args.mode == "apply":
             for candidate in candidates:
-                ok, reason = revalidate_and_delete(client, candidate, args.base)
+                ok, reason = revalidate_and_delete(client, candidate, args.base, retired)
                 if ok:
                     deleted.append(candidate.as_dict())
                 else:

@@ -1,0 +1,13 @@
+{
+  "schema": "adk-branch-gc-retired/v1",
+  "entries": [
+    {
+      "branch": "codex/cli-support-modularization-v1",
+      "sha": "fc2d786c6c2c4efe50dc10ca6e0eec167c25a57a",
+      "disposition": "delete",
+      "proof": "ancestor-of-main",
+      "reviewed_against_main": "b15e28daec9caad7e29c17e39f323cdf307b3dae",
+      "reason": "Terminal CLI support branch is an exact historical ancestor of the reviewed main identity and has no content outside main."
+    }
+  ]
+}
