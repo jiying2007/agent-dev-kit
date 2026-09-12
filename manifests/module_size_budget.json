@@ -8,11 +8,6 @@
       "target_max_bytes": 30000,
       "split_hint": "extract validation/canonicalization primitives and reducer helpers"
     },
-    "src/agent_dev_kit/evaluation.py": {
-      "baseline_bytes": 42933,
-      "target_max_bytes": 30000,
-      "split_hint": "extract evaluation models and deterministic measurement helpers"
-    },
     "src/agent_dev_kit/readiness.py": {
       "baseline_bytes": 42811,
       "target_max_bytes": 30000,
