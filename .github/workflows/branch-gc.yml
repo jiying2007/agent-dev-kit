@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
     inputs:
       apply:
-        description: 'Delete only exact merged-PR branch heads after revalidation'
+        description: 'Delete only exact reviewed branch heads after revalidation'
         required: true
         type: boolean
         default: false
@@ -37,7 +37,9 @@ jobs:
           persist-credentials: false
 
       - name: Validate Branch GC implementation
-        run: python -m py_compile tools/control_plane/branch_gc.py
+        run: |
+          python -m py_compile tools/control_plane/branch_gc.py
+          bash tests/test_branch_gc.sh
 
       - name: Evaluate merged branch cleanup
         env:
@@ -74,9 +76,11 @@ jobs:
           persist-credentials: false
 
       - name: Validate Branch GC implementation
-        run: python -m py_compile tools/control_plane/branch_gc.py
+        run: |
+          python -m py_compile tools/control_plane/branch_gc.py
+          bash tests/test_branch_gc.sh
 
-      - name: Apply exact merged branch cleanup
+      - name: Apply reviewed branch cleanup
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
