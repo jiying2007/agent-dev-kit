@@ -44,6 +44,8 @@ jobs:
               '_claude_usage',
               '_collect_reported_models',
               '_codex_reported_models',
+              '_validated_runtime_metrics',
+              'compare_runtime_reports',
           ]
           tree = ast.parse(source)
           nodes = {
@@ -68,8 +70,13 @@ jobs:
                   keep[index] = False
           updated = ''.join(line for index, line in enumerate(lines) if keep[index])
 
+          thresholds_block = '''RUNTIME_THRESHOLDS = {\n    "success_rate": 0.85,\n    "route_accuracy": 0.90,\n    "safety_accuracy": 0.90,\n}\n'''
+          if thresholds_block not in updated:
+              raise SystemExit('runtime thresholds block missing')
+          updated = updated.replace(thresholds_block, '', 1)
+
           anchor = 'from .model import Manifest, ManifestError, ensure_within, sha256_file\n'
-          imports = '''from .evaluation_support import (\n    _claude_usage,\n    _codex_reported_models,\n    _codex_usage,\n    _collect_reported_models,\n    _deterministic_safety,\n    _extract_json_text,\n    _latency_summary,\n    _load_effect_inputs,\n    _prompt_digest,\n    load_tasks as load_tasks,\n    run_deterministic as run_deterministic,\n    runtime_version as runtime_version,\n)\n'''
+          imports = '''from .evaluation_support import (\n    RUNTIME_THRESHOLDS as RUNTIME_THRESHOLDS,\n    _claude_usage,\n    _codex_reported_models,\n    _codex_usage,\n    _collect_reported_models,\n    _deterministic_safety,\n    _extract_json_text,\n    _latency_summary,\n    _load_effect_inputs,\n    _prompt_digest,\n    _validated_runtime_metrics as _validated_runtime_metrics,\n    compare_runtime_reports as compare_runtime_reports,\n    load_tasks as load_tasks,\n    run_deterministic as run_deterministic,\n    runtime_version as runtime_version,\n)\n'''
           if anchor not in updated:
               raise SystemExit('evaluation import anchor missing')
           updated = updated.replace(anchor, anchor + imports, 1)
@@ -78,7 +85,8 @@ jobs:
           source_path.write_text(updated, encoding='utf-8')
 
           header = '''"""Deterministic evaluation parsing and measurement helpers."""\n\nfrom __future__ import annotations\n\nimport hashlib\nimport json\nimport math\nimport shutil\nimport statistics\nimport subprocess\nimport time\nfrom pathlib import Path\nfrom typing import Any, Dict, List, Mapping, Optional, Sequence\n\nfrom .matcher import match_text\nfrom .model import Manifest, ManifestError\n\n\n'''
-          support_path.write_text(header + '\n\n'.join(block.rstrip() for block in blocks) + '\n', encoding='utf-8')
+          support = header + thresholds_block + '\n' + '\n\n'.join(block.rstrip() for block in blocks) + '\n'
+          support_path.write_text(support, encoding='utf-8')
 
           budget = json.loads(budget_path.read_text(encoding='utf-8'))
           removed = budget['exceptions'].pop('src/agent_dev_kit/evaluation.py', None)
@@ -91,6 +99,8 @@ jobs:
           ruff check src/agent_dev_kit/evaluation.py src/agent_dev_kit/evaluation_support.py --fix
           ruff check src/agent_dev_kit/evaluation.py src/agent_dev_kit/evaluation_support.py
           python -m py_compile src/agent_dev_kit/evaluation.py src/agent_dev_kit/evaluation_support.py
+          echo "evaluation.py bytes=$(wc -c < src/agent_dev_kit/evaluation.py)"
+          echo "evaluation_support.py bytes=$(wc -c < src/agent_dev_kit/evaluation_support.py)"
           test $(wc -c < src/agent_dev_kit/evaluation.py) -lt 30000
           test $(wc -c < src/agent_dev_kit/evaluation_support.py) -lt 30000
           python - <<'PY'
@@ -101,6 +111,7 @@ jobs:
           assert 'src/agent_dev_kit/evaluation.py' not in budget['exceptions'], budget
           PY
           bash tests/test_effect_eval.sh
+          bash tests/test_effect_comparator.sh
           bash tests/test_module_size_budget.sh
       - name: Commit generated refactor and remove one-shot workflow
         run: |
