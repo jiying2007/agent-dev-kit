@@ -2,18 +2,15 @@
 
 from __future__ import annotations
 
-import gzip
-import hashlib
 import json
 import os
 import re
 import shutil
 import subprocess
-import tarfile
 import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
+from typing import Any, Dict, List, Optional, Sequence
 
 from .compiler import export_assets
 from .installer import (
@@ -27,11 +24,10 @@ from .installer import (
 )
 from .model import Manifest, ManifestError, sha256_file, sha256_tree
 from .distribution.release_support import (
-    SOURCE_DISTRIBUTION_DIRECTORIES, SOURCE_DISTRIBUTION_FILES,
     _assert_publishable_release_artifact, _copy_runtime_skill, _copy_source_distribution,
     _extract_release, _managed_hashes, _prerelease_is_newer, _previous_release_migration,
     _release_source_identity, _release_source_root, _report_digest, _skill_version,
-    _tar_filter, _validate_sbom, _verify_artifact_checksum,
+    _validate_sbom, _verify_artifact_checksum,
     _write_deterministic_archive, _write_runtime_checksums,
 )
 
