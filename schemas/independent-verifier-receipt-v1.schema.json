@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-dev-kit.local/schemas/independent-verifier-receipt-v1.json",
+  "title": "ADK fresh-context independent verifier receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "receipt_id", "builder_context_id", "verifier_context_id", "verifier_write_capability", "evidence_opened", "verification_target_sha256", "verdict", "verified_at"],
+  "properties": {
+    "schema": {"const": "adk-independent-verifier-receipt/v1"},
+    "receipt_id": {"$ref": "#/$defs/id"},
+    "builder_context_id": {"$ref": "#/$defs/id"},
+    "verifier_context_id": {"$ref": "#/$defs/id"},
+    "verifier_write_capability": {"const": false},
+    "evidence_opened": {"const": true},
+    "verification_target_sha256": {"$ref": "#/$defs/sha256"},
+    "verdict": {"enum": ["pass", "fail", "blocked"]},
+    "verified_at": {"type": "string", "format": "date-time"},
+    "evidence_digests": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/sha256"}}
+  },
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

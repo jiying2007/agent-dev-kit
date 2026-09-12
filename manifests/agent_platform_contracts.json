@@ -1,0 +1,206 @@
+{
+  "schema": "adk-agent-platform-contracts/v1",
+  "last_updated": "2026-09-12",
+  "design_goal": "Converge Agent/Skill/Profile/Workflow runtime integration on a small set of measurable primitives instead of growing parallel control planes.",
+  "maturity_semantics": {
+    "product_qualification": {
+      "authority": "consumer-product-control-plane",
+      "scope": "cross-repository product qualification including runtime and field evidence",
+      "must_not": [
+        "infer product qualification from ADK component status",
+        "duplicate consumer M5 state inside the ADK release contract"
+      ]
+    },
+    "component_release_maturity": {
+      "schema": "adk-component-release-maturity/v1",
+      "current": "release-candidate",
+      "allowed": ["development", "release-candidate", "stable"],
+      "authority": "agent-dev-kit-release-evidence"
+    },
+    "runtime_conformance_ladder": [
+      "static-compatible",
+      "export-verified",
+      "installed",
+      "native-discovered",
+      "native-triggered",
+      "behavior-evaluated",
+      "runtime-certified"
+    ]
+  },
+  "capability_resolver": {
+    "policy_id": "profile-runtime-context-resolver-v1",
+    "inputs": [
+      "profile presets",
+      "target supported asset kinds",
+      "permission profile",
+      "project capabilities",
+      "session capabilities"
+    ],
+    "output_schema": "adk-effective-profile/v1",
+    "profile_is_preset_not_parallel_ssot": true,
+    "fail_closed_on_unknown_profile": true
+  },
+  "portable_skill": {
+    "open_standard": "Agent Skills",
+    "projection_policy": "portable output keeps only standard top-level fields; ADK-only metadata remains internal or namespaced under metadata",
+    "standard_top_level_fields": [
+      "name",
+      "description",
+      "license",
+      "compatibility",
+      "metadata",
+      "allowed-tools"
+    ],
+    "internal_extension_fields": [
+      "version",
+      "last_updated",
+      "triggers",
+      "non_triggers",
+      "inputs",
+      "outputs",
+      "constraints"
+    ],
+    "progressive_disclosure": ["advertise", "load-skill", "load-resource", "run-script"],
+    "max_loaded_skill_lines": 500,
+    "max_loaded_skill_tokens": 5000
+  },
+  "runtime_conformance": {
+    "schema": "adk-native-conformance-plan/v1",
+    "ladder": [
+      "static-compatible",
+      "export-verified",
+      "installed",
+      "native-discovered",
+      "native-triggered",
+      "behavior-evaluated",
+      "runtime-certified"
+    ],
+    "ordered_stages": [
+      "render",
+      "install",
+      "discovery",
+      "load",
+      "positive-trigger",
+      "negative-trigger",
+      "permission",
+      "tool-invocation",
+      "handoff",
+      "cancel",
+      "resume",
+      "trace",
+      "rollback"
+    ],
+    "certification_requires_all_stages": true,
+    "fixture_success_is_not_native_evidence": true,
+    "unmeasured_status": "not-certified"
+  },
+  "agent_trace": {
+    "schema": "adk-agent-trace/v1",
+    "schema_path": "schemas/adk-agent-trace-v1.schema.json",
+    "span_kinds": [
+      "run",
+      "agent",
+      "skill",
+      "generation",
+      "tool",
+      "mcp",
+      "handoff",
+      "guardrail",
+      "approval",
+      "checkpoint",
+      "verification",
+      "review"
+    ],
+    "raw_prompt_capture_default": false,
+    "secret_capture_allowed": false
+  },
+  "independent_verifier": {
+    "schema": "adk-independent-verifier-receipt/v1",
+    "schema_path": "schemas/independent-verifier-receipt-v1.schema.json",
+    "requirements": [
+      "builder_context_id differs from verifier_context_id",
+      "verifier has no write capability",
+      "verifier explicitly opened evidence",
+      "verification target identity is pinned"
+    ]
+  },
+  "loop_policy": {
+    "schema": "adk-loop-policy/v1",
+    "defaults": {
+      "max_iterations": 12,
+      "max_wall_time_seconds": 14400,
+      "max_cost_usd": 50.0,
+      "max_tokens": 1000000,
+      "no_progress_limit": 2,
+      "fresh_context": true,
+      "evaluator": "fresh-read-only-verifier",
+      "stop_condition": "evaluator-pass-or-budget-stop",
+      "approval_escape": "hold-owner",
+      "checkpoint_policy": "before-side-effect-and-each-iteration"
+    },
+    "default_fail": true,
+    "no_progress_requires_hypothesis_change": true
+  },
+  "hook_lifecycle_ir": {
+    "schema": "adk-hook-lifecycle-ir/v1",
+    "events": {
+      "before_tool": {"codex": "PreToolUse"},
+      "approval_request": {"codex": "PermissionRequest"},
+      "after_tool": {"codex": "PostToolUse"},
+      "before_compaction": {"codex": "PreCompact"},
+      "before_stop": {"codex": "Stop"}
+    },
+    "allowed_effects": ["observe", "validate", "deny", "annotate"],
+    "forbidden_effects": ["hidden-workflow-orchestration", "implicit-external-write", "secret-persistence"],
+    "defaults": {
+      "max_latency_ms": 1000,
+      "idempotent": true,
+      "concurrency_mode": "parallel-safe-or-explicit-serialization"
+    }
+  },
+  "asset_usage": {
+    "schema": "adk-asset-usage-report/v1",
+    "metrics": [
+      "advertised_count",
+      "activated_count",
+      "activation_rate",
+      "false_positive",
+      "false_negative",
+      "context_tokens",
+      "resource_reads",
+      "script_runs",
+      "tool_calls",
+      "completion_rate",
+      "quality_delta",
+      "latency_delta",
+      "cost_delta"
+    ],
+    "decisions": ["keep", "merge", "split", "demote-to-reference", "archive"],
+    "min_advertisements_for_prune": 20,
+    "min_completion_rate": 0.8,
+    "min_quality_delta": 0.0,
+    "auto_archive_allowed": false,
+    "unmeasured_policy": "not-measured"
+  },
+  "aci_benchmark": {
+    "schema": "adk-aci-benchmark/v1",
+    "metrics": [
+      "context_amplification_ratio",
+      "irrelevant_output_ratio",
+      "tool_recovery_rate",
+      "empty_result_ambiguity_rate",
+      "syntax_error_prevention_rate",
+      "search_precision",
+      "repeated_call_rate"
+    ],
+    "thresholds": {
+      "context_amplification_ratio": {"max": 4.0},
+      "irrelevant_output_ratio": {"max": 0.35},
+      "tool_recovery_rate": {"min": 0.9},
+      "empty_result_ambiguity_rate": {"max": 0.05},
+      "syntax_error_prevention_rate": {"min": 0.8},
+      "search_precision": {"min": 0.7},
+      "repeated_call_rate": {"max": 0.25}
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-dev-kit.local/schemas/adk-agent-trace-v1.json",
+  "title": "ADK unified agent trace",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "trace_id", "runtime", "started_at", "result", "spans"],
+  "properties": {
+    "schema": {"const": "adk-agent-trace/v1"},
+    "trace_id": {"$ref": "#/$defs/id"},
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version", "requested_model", "actual_served_model"],
+      "properties": {
+        "name": {"$ref": "#/$defs/id"},
+        "version": {"type": "string", "minLength": 1, "maxLength": 128},
+        "requested_model": {"type": ["string", "null"], "maxLength": 128},
+        "actual_served_model": {"type": ["string", "null"], "maxLength": 128}
+      }
+    },
+    "started_at": {"type": "string", "format": "date-time"},
+    "completed_at": {"type": ["string", "null"], "format": "date-time"},
+    "result": {"enum": ["pass", "fail", "cancelled", "blocked"]},
+    "privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["raw_prompts_stored", "secrets_stored", "sanitized"],
+      "properties": {
+        "raw_prompts_stored": {"const": false},
+        "secrets_stored": {"const": false},
+        "sanitized": {"const": true}
+      }
+    },
+    "spans": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/span"}}
+  },
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "span": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["span_id", "kind", "started_at", "duration_ms", "result", "input_context_bytes", "output_tokens", "side_effect_class", "approval"],
+      "properties": {
+        "span_id": {"$ref": "#/$defs/id"},
+        "parent_span_id": {"anyOf": [{"$ref": "#/$defs/id"}, {"type": "null"}]},
+        "kind": {"enum": ["run", "agent", "skill", "generation", "tool", "mcp", "handoff", "guardrail", "approval", "checkpoint", "verification", "review"]},
+        "name": {"type": ["string", "null"], "maxLength": 256},
+        "agent": {"type": ["string", "null"], "maxLength": 128},
+        "skill": {"type": ["string", "null"], "maxLength": 128},
+        "tool_schema_digest": {"anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "started_at": {"type": "string", "format": "date-time"},
+        "duration_ms": {"type": "number", "minimum": 0},
+        "input_context_bytes": {"type": "integer", "minimum": 0},
+        "output_tokens": {"type": "integer", "minimum": 0},
+        "side_effect_class": {"enum": ["read-only", "workspace-write", "external-write", "decision-only", "none"]},
+        "approval": {"enum": ["none", "prompted", "approved", "denied", "not-applicable"]},
+        "result": {"enum": ["pass", "fail", "cancelled", "blocked"]},
+        "evidence_digest": {"anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]}
+      }
+    }
+  }
+}
