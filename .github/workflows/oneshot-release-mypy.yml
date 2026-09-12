@@ -1,0 +1,38 @@
+name: oneshot-release-mypy
+on:
+  push:
+    branches: [codex/release-support-split-20260912]
+permissions:
+  contents: write
+jobs:
+  typing:
+    if: ${{ github.actor != 'github-actions[bot]' }}
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('src/agent_dev_kit/distribution/release_support.py')
+          s=p.read_text()
+          s=s.replace('    members = []\n', '    members: list[tarfile.TarInfo] = []\n', 1)
+          s=s.replace('    previous_pre = previous_match.group(4)\n    candidate_pre = candidate_match.group(4)\n', '    previous_pre: str | None = previous_match.group(4)\n    candidate_pre: str | None = candidate_match.group(4)\n', 1)
+          p.write_text(s)
+          PY
+          python -m pip install '.[quality]'
+          ruff check src/agent_dev_kit/release.py src/agent_dev_kit/distribution/release_support.py
+          ruff check src/agent_dev_kit/distribution/release_support.py --select E4,E7,E9,F,B,UP,SIM,I
+          mypy src/agent_dev_kit/distribution
+          python -m py_compile src/agent_dev_kit/release.py src/agent_dev_kit/distribution/release_support.py
+      - run: |
+          rm .github/workflows/oneshot-release-mypy.yml
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add src/agent_dev_kit/distribution/release_support.py .github/workflows/oneshot-release-mypy.yml
+          git commit -m 'fix(release): narrow support helper types'
+          git push origin HEAD:codex/release-support-split-20260912
