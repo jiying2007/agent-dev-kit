@@ -1,0 +1,73 @@
+name: oneshot-release-split
+on:
+  push:
+    branches: [codex/release-support-split-20260912]
+permissions:
+  contents: write
+jobs:
+  split:
+    if: ${{ github.actor != 'github-actions[bot]' }}
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+        with:
+          persist-credentials: true
+          fetch-depth: 1
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Mechanically extract release support bounded context
+        run: |
+          python - <<'PY'
+          from __future__ import annotations
+          import ast, json
+          from pathlib import Path
+          path = Path('src/agent_dev_kit/release.py')
+          text = path.read_text(encoding='utf-8')
+          tree = ast.parse(text)
+          lines = text.splitlines(keepends=True)
+          selected = {'_report_digest','_tar_filter','_write_deterministic_archive','_skill_version','_copy_runtime_skill','_write_runtime_checksums','_copy_source_distribution','_release_source_identity','_validate_sbom','_verify_artifact_checksum','_assert_publishable_release_artifact','_extract_release','_release_source_root','_prerelease_is_newer','_managed_hashes','_previous_release_migration'}
+          funcs={n.name:n for n in tree.body if isinstance(n,ast.FunctionDef)}
+          missing=selected-funcs.keys()
+          if missing: raise SystemExit(f'missing {sorted(missing)}')
+          blocks=[]; spans=[]
+          for name in selected:
+              n=funcs[name]; blocks.append((n.lineno-1,''.join(lines[n.lineno-1:n.end_lineno]))); spans.append((n.lineno-1,n.end_lineno))
+          for s,e in sorted(spans,reverse=True): del lines[s:e]
+          remaining=''.join(lines)
+          const_names={'SOURCE_DISTRIBUTION_DIRECTORIES','SOURCE_DISTRIBUTION_FILES'}
+          orig=text.splitlines(keepends=True); const_blocks=[]
+          for n in tree.body:
+              if isinstance(n,ast.Assign):
+                  names=[t.id for t in n.targets if isinstance(t,ast.Name)]
+                  if const_names.intersection(names): const_blocks.append(''.join(orig[n.lineno-1:n.end_lineno]))
+          rt=ast.parse(remaining); rl=remaining.splitlines(keepends=True); csp=[]
+          for n in rt.body:
+              if isinstance(n,ast.Assign):
+                  names=[t.id for t in n.targets if isinstance(t,ast.Name)]
+                  if const_names.intersection(names): csp.append((n.lineno-1,n.end_lineno))
+          for s,e in sorted(csp,reverse=True): del rl[s:e]
+          remaining=''.join(rl)
+          support='''"""Deterministic release artifact, source-identity, and validation helpers."""\n\nfrom __future__ import annotations\n\nimport gzip\nimport hashlib\nimport json\nimport os\nimport re\nimport shutil\nimport subprocess\nimport tarfile\nimport tempfile\nfrom pathlib import Path\nfrom typing import Any, Dict, List, Mapping, Optional, Tuple\n\nfrom ..installer import RECEIPT_NAME\nfrom ..model import Manifest, ManifestError, sha256_file, sha256_tree\n\n'''
+          support+='\n'.join(const_blocks)+'\n\n'+'\n\n'.join(b for _,b in sorted(blocks))
+          sp=Path('src/agent_dev_kit/distribution/release_support.py'); sp.write_text(support,encoding='utf-8')
+          marker='from .model import Manifest, ManifestError, sha256_file, sha256_tree\n'
+          imp='''from .distribution.release_support import (\n    SOURCE_DISTRIBUTION_DIRECTORIES, SOURCE_DISTRIBUTION_FILES,\n    _assert_publishable_release_artifact, _copy_runtime_skill, _copy_source_distribution,\n    _extract_release, _managed_hashes, _prerelease_is_newer, _previous_release_migration,\n    _release_source_identity, _release_source_root, _report_digest, _skill_version,\n    _tar_filter, _validate_sbom, _verify_artifact_checksum,\n    _write_deterministic_archive, _write_runtime_checksums,\n)\n'''
+          if marker not in remaining: raise SystemExit('import marker missing')
+          remaining=remaining.replace(marker,marker+imp,1); path.write_text(remaining,encoding='utf-8')
+          bp=Path('manifests/module_size_budget.json'); budget=json.loads(bp.read_text()); budget['exceptions'].pop('src/agent_dev_kit/release.py'); bp.write_text(json.dumps(budget,indent=2)+'\n')
+          sizes={str(p):p.stat().st_size for p in (path,sp)}; print(sizes)
+          if max(sizes.values())>=30000: raise SystemExit(sizes)
+          if len(budget['exceptions'])!=4: raise SystemExit('exception count')
+          for req in ('def build_release(','def build_runtime_bundle(','def publish_release(','def rehearse_release('):
+              if req not in remaining: raise SystemExit(req)
+          PY
+          python -m py_compile src/agent_dev_kit/release.py src/agent_dev_kit/distribution/release_support.py
+      - name: Remove one-shot workflow and commit generated refactor
+        run: |
+          rm .github/workflows/oneshot-release-split.yml
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add src/agent_dev_kit/release.py src/agent_dev_kit/distribution/release_support.py manifests/module_size_budget.json .github/workflows/oneshot-release-split.yml
+          git commit -m 'refactor(release): extract release support helpers'
+          git push origin HEAD:codex/release-support-split-20260912
