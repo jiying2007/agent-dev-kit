@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-07-31",
+  "last_updated": "2026-09-12",
   "source_docs": [
     "openai-apps-sdk-review-tool-hints",
     "openai-codex-customization-skills",
@@ -35,6 +35,8 @@
       "mcp-registry"
     ],
     "required_fields": [
+      "review_source_ref",
+      "review_source_mode",
       "source_url",
       "registry_namespace",
       "namespace_verification",
@@ -45,6 +47,26 @@
       "expires_at",
       "trust_decision"
     ],
+    "freshness_authority": {
+      "mode": "canonical-source-ref",
+      "registries": [
+        "manifests/official_docs_freshness_gates.json#sources",
+        "manifests/external_agent_pattern_contracts.json#source_refs"
+      ],
+      "source_id_collision_action": "fail",
+      "missing_source_action": "fail",
+      "expired_source_action": "fail",
+      "compatibility_snapshot_fields": [
+        "source_url",
+        "retrieved_at",
+        "review_status",
+        "expires_at"
+      ],
+      "compatibility_snapshots_authoritative": false,
+      "snapshot_mismatch_action": "fail",
+      "template_mode": "template-reference",
+      "template_mode_requires_deny_trust": true
+    },
     "trust_model": {
       "registry_listing": "discovery metadata only",
       "namespace_ownership": "publisher identity evidence, not artifact safety proof",
@@ -53,14 +75,17 @@
     },
     "quality_gates": [
       "every MCP dependency records provenance before enablement",
+      "review_source_ref is the only freshness authority; local date fields are compatibility snapshots only",
+      "compatibility freshness snapshots must equal the canonical source registry for current dependencies",
       "mutable latest references are forbidden for executable artifacts",
-      "review_status and expires_at must be current at promotion time",
+      "canonical review_status and expires_at must be current at promotion time",
       "registry namespace verification cannot replace artifact or runtime review"
     ],
     "must_not": [
       "auto-install a registry entry",
       "treat registry presence as trust certification",
       "enable an executable MCP package without a version and digest",
+      "treat compatibility freshness snapshots as an independent authority",
       "store registry or provider credentials in the manifest"
     ]
   },
@@ -321,14 +346,16 @@
       "dry_run": "Not applicable; read-only.",
       "fallback": "Use official OpenAI-domain web lookup only when the MCP source is unavailable.",
       "provenance": {
-        "source_url": "https://developers.openai.com/resources/docs-mcp",
+        "review_source_ref": "openai-docs-mcp-quickstart",
+        "review_source_mode": "canonical-current",
+        "source_url": "https://developers.openai.com/learn/docs-mcp#quickstart",
         "registry_namespace": "not-applicable:first-party-official-service",
         "namespace_verification": "official-domain-reviewed",
         "package_version": "provider-managed-remote-service",
         "artifact_digest": "not-applicable:remote-read-only-service",
-        "retrieved_at": "2026-07-14",
-        "review_status": "reviewed-read-only",
-        "expires_at": "2026-08-13",
+        "retrieved_at": "2026-08-24",
+        "review_status": "adopted",
+        "expires_at": "2026-11-22",
         "trust_decision": "allowed-read-only-optional"
       }
     },
@@ -361,6 +388,8 @@
       "dry_run": "Required for write-capable tools.",
       "fallback": "Keep report-only until security and runtime-boundary review passes.",
       "provenance": {
+        "review_source_ref": "mcp-registry",
+        "review_source_mode": "template-reference",
         "source_url": "declare-before-enable",
         "registry_namespace": "declare-before-enable",
         "namespace_verification": "declare-before-enable",

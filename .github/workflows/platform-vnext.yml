@@ -21,6 +21,10 @@ jobs:
       - name: Install runtime dependencies
         run: python -m pip install --disable-pip-version-check .
       - name: Compile vNext modules
-        run: python -m py_compile src/agent_dev_kit/platform_vnext.py src/agent_dev_kit/platform_vnext_cli.py
+        run: python -m py_compile src/agent_dev_kit/platform_vnext.py src/agent_dev_kit/platform_vnext_cli.py tools/control_plane/mcp_freshness_ssot.py
       - name: Validate Agent Platform vNext primitives
         run: bash tests/test_platform_vnext.sh
+      - name: Inspect MCP freshness authority
+        run: python tools/control_plane/mcp_freshness_ssot.py --as-of 2026-09-12 --summary-json
+      - name: Validate MCP freshness single source of truth
+        run: bash tests/test_mcp_freshness_ssot.sh
