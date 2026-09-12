@@ -1,0 +1,77 @@
+name: Branch GC One Shot
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/branch-gc-one-shot.yml
+
+permissions:
+  contents: write
+  pull-requests: read
+
+concurrency:
+  group: branch-gc-one-shot
+  cancel-in-progress: false
+
+jobs:
+  gc:
+    runs-on: ubuntu-latest
+    env:
+      TARGET_BRANCH: feat/runtime-bundle-identity
+      MERGED_PR: "24"
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Validate deletion contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "${GITHUB_REF}" == "refs/heads/main" ]]
+          [[ "${TARGET_BRANCH}" != "main" ]]
+          [[ "${TARGET_BRANCH}" != "master" ]]
+
+          pr_json="$(gh api "repos/${GITHUB_REPOSITORY}/pulls/${MERGED_PR}")"
+          pr_state="$(jq -r '.state' <<<"${pr_json}")"
+          pr_merged_at="$(jq -r '.merged_at // empty' <<<"${pr_json}")"
+          pr_head="$(jq -r '.head.ref' <<<"${pr_json}")"
+          pr_merged="$(jq -r '.merged' <<<"${pr_json}")"
+
+          [[ "${pr_state}" == "closed" ]]
+          [[ "${pr_merged}" == "true" ]]
+          [[ -n "${pr_merged_at}" ]]
+          [[ "${pr_head}" == "${TARGET_BRANCH}" ]]
+
+          open_count="$(gh api --method GET "repos/${GITHUB_REPOSITORY}/pulls" \
+            -f state=open \
+            -f head="${GITHUB_REPOSITORY_OWNER}:${TARGET_BRANCH}" \
+            --jq 'length')"
+          [[ "${open_count}" == "0" ]]
+
+          encoded_branch="${TARGET_BRANCH//\//%2F}"
+          branch_json="$(gh api "repos/${GITHUB_REPOSITORY}/branches/${encoded_branch}")"
+          protected="$(jq -r '.protected' <<<"${branch_json}")"
+          [[ "${protected}" == "false" ]]
+
+          echo "Validated merged, unprotected branch with no open PR: ${TARGET_BRANCH}"
+
+      - name: Delete merged branch ref
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh api --method DELETE "repos/${GITHUB_REPOSITORY}/git/refs/heads/${TARGET_BRANCH}"
+
+      - name: Verify branch absent
+        shell: bash
+        run: |
+          set -euo pipefail
+          encoded_branch="${TARGET_BRANCH//\//%2F}"
+          if gh api "repos/${GITHUB_REPOSITORY}/branches/${encoded_branch}" >/tmp/branch.json 2>/tmp/branch.err; then
+            echo "Branch still exists: ${TARGET_BRANCH}" >&2
+            cat /tmp/branch.json >&2
+            exit 1
+          fi
+          if ! grep -q 'HTTP 404' /tmp/branch.err && ! grep -q 'Not Found' /tmp/branch.err; then
+            cat /tmp/branch.err >&2
+            exit 1
+          fi
+          echo "Branch deleted: ${TARGET_BRANCH}"
