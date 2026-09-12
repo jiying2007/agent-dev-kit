@@ -27,11 +27,6 @@
       "baseline_bytes": 41952,
       "target_max_bytes": 30000,
       "split_hint": "separate campaign planning, evidence ingestion, and verdict logic"
-    },
-    "src/agent_dev_kit/agent_value.py": {
-      "baseline_bytes": 39450,
-      "target_max_bytes": 30000,
-      "split_hint": "separate contract validation, receipts, and measurement aggregation"
     }
   }
 }
