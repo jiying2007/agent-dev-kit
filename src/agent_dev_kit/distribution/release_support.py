@@ -11,8 +11,9 @@ import shutil
 import subprocess
 import tarfile
 import tempfile
+from collections.abc import Mapping
 from pathlib import Path
-from typing import Any, Dict, List, Mapping, Optional, Tuple
+from typing import Any
 
 from ..installer import RECEIPT_NAME
 from ..model import Manifest, ManifestError, sha256_file, sha256_tree
@@ -63,9 +64,12 @@ def _write_deterministic_archive(source: Path, archive: Path) -> None:
         with tarfile.open(str(tar_path), mode="w", format=tarfile.PAX_FORMAT) as tar:
             for child in sorted(source.rglob("*")):
                 tar.add(str(child), arcname=child.relative_to(source).as_posix(), recursive=False, filter=_tar_filter)
-        with tar_path.open("rb") as raw, archive_temp.open("wb") as output:
-            with gzip.GzipFile(filename="", mode="wb", fileobj=output, mtime=0) as compressed:
-                shutil.copyfileobj(raw, compressed)
+        with (
+            tar_path.open("rb") as raw,
+            archive_temp.open("wb") as output,
+            gzip.GzipFile(filename="", mode="wb", fileobj=output, mtime=0) as compressed,
+        ):
+            shutil.copyfileobj(raw, compressed)
         archive_temp.chmod(0o644)
         os.replace(str(archive_temp), str(archive))
     finally:
@@ -76,13 +80,13 @@ def _write_deterministic_archive(source: Path, archive: Path) -> None:
 def _skill_version(skill_root: Path) -> str:
     skill_file = skill_root / "SKILL.md"
     if not skill_file.is_file():
-        raise ManifestError("runtime bundle skill is missing SKILL.md: {}".format(skill_root))
+        raise ManifestError(f"runtime bundle skill is missing SKILL.md: {skill_root}")
     match = re.search(
         r"(?m)^version:\s*[\"']?([0-9]+\.[0-9]+\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?)[\"']?\s*$",
         skill_file.read_text(encoding="utf-8"),
     )
     if match is None:
-        raise ManifestError("runtime bundle skill has no semantic version: {}".format(skill_root))
+        raise ManifestError(f"runtime bundle skill has no semantic version: {skill_root}")
     return match.group(1)
 
 
@@ -104,7 +108,7 @@ def _write_runtime_checksums(package_root: Path) -> Path:
     lines = []
     for path in sorted(package_root.rglob("*")):
         if path.is_file() and path != checksum:
-            lines.append("{}  {}".format(sha256_file(path), path.relative_to(package_root).as_posix()))
+            lines.append(f"{sha256_file(path)}  {path.relative_to(package_root).as_posix()}")
     checksum.write_text("\n".join(lines) + "\n", encoding="ascii")
     return checksum
 
@@ -151,7 +155,7 @@ def _copy_source_distribution(manifest: Manifest, destination: Path) -> int:
     return sum(1 for path in destination.rglob("*") if path.is_file() or path.is_symlink())
 
 
-def _release_source_identity(root: Path, allow_unbound_snapshot: bool) -> Dict[str, Any]:
+def _release_source_identity(root: Path, allow_unbound_snapshot: bool) -> dict[str, Any]:
     root = root.resolve()
     git_dir = root / ".git"
     if not git_dir.exists():
@@ -172,8 +176,7 @@ def _release_source_identity(root: Path, allow_unbound_snapshot: bool) -> Dict[s
             ["git", "-C", str(root), *args],
             check=False,
             text=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
+            capture_output=True,
         )
 
     top = git("rev-parse", "--show-toplevel")
@@ -202,7 +205,7 @@ def _release_source_identity(root: Path, allow_unbound_snapshot: bool) -> Dict[s
 
 
 def _validate_sbom(sbom: Mapping[str, Any]) -> None:
-    failures: List[str] = []
+    failures: list[str] = []
     if sbom.get("spdxVersion") != "SPDX-2.3":
         failures.append("spdxVersion must be SPDX-2.3")
     packages = sbom.get("packages")
@@ -232,9 +235,9 @@ def _validate_sbom(sbom: Mapping[str, Any]) -> None:
         ("jsonschema", "SPDXRef-Package-jsonschema"),
     ):
         if name not in names:
-            failures.append("runtime dependency missing from SBOM: {}".format(name))
+            failures.append(f"runtime dependency missing from SBOM: {name}")
         if package_id not in dependency_ids:
-            failures.append("runtime dependency relationship missing from SBOM: {}".format(name))
+            failures.append(f"runtime dependency relationship missing from SBOM: {name}")
     known_ids = set(package_ids)
     for item in relationships:
         if not isinstance(item, dict):
@@ -249,10 +252,10 @@ def _validate_sbom(sbom: Mapping[str, Any]) -> None:
 def _verify_artifact_checksum(artifact: Path) -> str:
     artifact = artifact.resolve()
     if not artifact.is_file():
-        raise ManifestError("release artifact is missing: {}".format(artifact))
+        raise ManifestError(f"release artifact is missing: {artifact}")
     checksum = artifact.with_name(artifact.name + ".sha256")
     if not checksum.is_file():
-        raise ManifestError("release checksum is missing: {}".format(checksum))
+        raise ManifestError(f"release checksum is missing: {checksum}")
     fields = checksum.read_text(encoding="ascii").strip().split()
     if len(fields) != 2 or fields[1].lstrip("*") != artifact.name:
         raise ManifestError("release checksum file has an invalid format")
@@ -326,7 +329,7 @@ def _release_source_root(
     release_root: Path,
     *,
     enforce_current_contract: bool = True,
-) -> Tuple[Manifest, Mapping[str, Any]]:
+) -> tuple[Manifest, Mapping[str, Any]]:
     source_root = release_root / "source"
     release_manifest_path = release_root / "release-manifest.json"
     if not source_root.is_dir() or not (source_root / "manifest.json").is_file():
@@ -368,7 +371,7 @@ def _prerelease_is_newer(previous: str, candidate: str) -> bool:
         return previous_pre is not None and candidate_pre is None
     previous_parts = previous_pre.split(".")
     candidate_parts = candidate_pre.split(".")
-    for previous_part, candidate_part in zip(previous_parts, candidate_parts):
+    for previous_part, candidate_part in zip(previous_parts, candidate_parts, strict=False):
         if previous_part == candidate_part:
             continue
         previous_numeric = previous_part.isdigit()
@@ -381,7 +384,7 @@ def _prerelease_is_newer(previous: str, candidate: str) -> bool:
     return len(candidate_parts) > len(previous_parts)
 
 
-def _managed_hashes(target: Path) -> Dict[str, str]:
+def _managed_hashes(target: Path) -> dict[str, str]:
     receipt_path = target / RECEIPT_NAME
     try:
         receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
@@ -390,7 +393,7 @@ def _managed_hashes(target: Path) -> Dict[str, str]:
     installed = receipt.get("installed")
     if not isinstance(installed, list) or not installed:
         raise ManifestError("release rehearsal receipt has no installed assets")
-    hashes: Dict[str, str] = {}
+    hashes: dict[str, str] = {}
     for item in installed:
         if not isinstance(item, dict) or not isinstance(item.get("destination"), str):
             raise ManifestError("release rehearsal receipt contains an invalid asset")
@@ -408,7 +411,7 @@ def _managed_hashes(target: Path) -> Dict[str, str]:
     return hashes
 
 
-def _previous_release_migration(error: ManifestError) -> Optional[str]:
+def _previous_release_migration(error: ManifestError) -> str | None:
     message = str(error)
     if "target_contract_missing" in message:
         return "legacy-bundle-v2"
