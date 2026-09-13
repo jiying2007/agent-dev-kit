@@ -167,8 +167,8 @@ jobs:
 
       - name: Run focused kernel quality analysis
         run: |
-          python -m compileall -q src/agent_dev_kit/contracts src/agent_dev_kit/evidence src/agent_dev_kit/target_adapters src/agent_dev_kit/distribution
-          ruff check src/agent_dev_kit/contracts src/agent_dev_kit/evidence src/agent_dev_kit/target_adapters src/agent_dev_kit/distribution --select E4,E7,E9,F,B,UP,SIM,I
+          python -m compileall -q src/agent_dev_kit/contracts src/agent_dev_kit/evidence src/agent_dev_kit/target_adapters src/agent_dev_kit/distribution src/agent_dev_kit/execution_policy
+          ruff check src/agent_dev_kit/contracts src/agent_dev_kit/evidence src/agent_dev_kit/target_adapters src/agent_dev_kit/distribution src/agent_dev_kit/execution_policy --select E4,E7,E9,F,B,UP,SIM,I
 
       - name: Run focused strict type analysis
         run: >-
@@ -177,6 +177,7 @@ jobs:
           src/agent_dev_kit/evidence
           src/agent_dev_kit/target_adapters
           src/agent_dev_kit/distribution
+          src/agent_dev_kit/execution_policy
 
       - name: Audit declared project dependencies
         run: pip-audit --strict --progress-spinner off .
