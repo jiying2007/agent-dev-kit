@@ -12,8 +12,6 @@
       "src/agent_dev_kit/campaign_support.py",
       "src/agent_dev_kit/cli_support.py",
       "src/agent_dev_kit/distribution/release_support.py",
-      "src/agent_dev_kit/evaluation_support.py",
-      "src/agent_dev_kit/readiness_support.py",
       "src/agent_dev_kit/runtime_control/engine_support.py"
     ],
     "design_metrics": [
@@ -22,6 +20,7 @@
       "import-fan-out",
       "public-api-surface",
       "responsibility-count"
-    ]
+    ],
+    "transitional_support_max_count": 4
   }
 }

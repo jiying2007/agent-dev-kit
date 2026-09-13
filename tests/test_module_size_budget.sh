@@ -71,6 +71,13 @@ else:
     allowed_support_set = set(allowed_support)
     if len(allowed_support_set) != len(allowed_support):
         failures.append("transitional_support_modules contains duplicates")
+    support_max_count = architecture.get("transitional_support_max_count")
+    if not isinstance(support_max_count, int) or isinstance(support_max_count, bool) or support_max_count < 0:
+        failures.append("transitional_support_max_count must be a non-negative integer")
+    elif len(allowed_support_set) > support_max_count:
+        failures.append(
+            f"transitional support debt exceeded ratchet: count={len(allowed_support_set)} max={support_max_count}"
+        )
 
     actual_support = {
         path.relative_to(root).as_posix()

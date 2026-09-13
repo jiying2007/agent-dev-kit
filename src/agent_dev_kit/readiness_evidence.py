@@ -9,7 +9,6 @@ from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Tuple
 
-
 EXPECTED_DIMENSIONS = (
     "context_legibility",
     "spec_and_execution_contract",
