@@ -44,7 +44,10 @@ jobs:
               for path in root.rglob('*.py'):
                   if 'release_support' in path.read_text(encoding='utf-8'):
                       refs.add(path.as_posix())
-          expected = {'src/agent_dev_kit/release.py'}
+          expected = {
+              'src/agent_dev_kit/release.py',
+              'scripts/verify-runtime-bundle-identity.py',
+          }
           if refs != expected:
               raise SystemExit(f'unexpected release_support Python references: {sorted(refs)}')
           PY
@@ -64,6 +67,13 @@ jobs:
               text.replace('from .distribution.release_support import (', 'from .distribution.release_artifacts import ('),
               encoding='utf-8',
           )
+
+          verifier = Path('scripts/verify-runtime-bundle-identity.py')
+          text = verifier.read_text(encoding='utf-8')
+          old_import = 'from agent_dev_kit.distribution.release_support import _release_source_identity'
+          new_import = 'from agent_dev_kit.distribution.release_artifacts import _release_source_identity'
+          assert old_import in text
+          verifier.write_text(text.replace(old_import, new_import), encoding='utf-8')
 
           artifacts = Path('src/agent_dev_kit/distribution/release_artifacts.py')
           text = artifacts.read_text(encoding='utf-8')
@@ -91,7 +101,7 @@ jobs:
       - name: Verify release ownership and prepare clean candidate
         run: |
           set -euo pipefail
-          TARGETS=(src/agent_dev_kit/release.py src/agent_dev_kit/distribution/release_artifacts.py)
+          TARGETS=(src/agent_dev_kit/release.py src/agent_dev_kit/distribution/release_artifacts.py scripts/verify-runtime-bundle-identity.py)
           ! test -e src/agent_dev_kit/distribution/release_support.py
           test -f src/agent_dev_kit/distribution/release_artifacts.py
           ! rg -n 'release_support' src tests scripts manifests/module_size_budget.json || {
@@ -134,7 +144,7 @@ jobs:
           printf '%s\n' "${changed[@]}"
           for path in "${changed[@]}"; do
             case "$path" in
-              manifests/module_size_budget.json|src/agent_dev_kit/release.py|src/agent_dev_kit/distribution/release_support.py|src/agent_dev_kit/distribution/release_artifacts.py) ;;
+              manifests/module_size_budget.json|src/agent_dev_kit/release.py|src/agent_dev_kit/distribution/release_support.py|src/agent_dev_kit/distribution/release_artifacts.py|scripts/verify-runtime-bundle-identity.py) ;;
               *)
                 echo "[FAIL] release convergence escaped bounded scope: $path" >&2
                 exit 1
@@ -144,7 +154,7 @@ jobs:
 
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add manifests/module_size_budget.json src/agent_dev_kit/release.py src/agent_dev_kit/distribution/release_support.py src/agent_dev_kit/distribution/release_artifacts.py
+          git add manifests/module_size_budget.json src/agent_dev_kit/release.py src/agent_dev_kit/distribution/release_support.py src/agent_dev_kit/distribution/release_artifacts.py scripts/verify-runtime-bundle-identity.py
           git commit -m 'refactor(release): retire transitional support module'
           test -z "$(git status --porcelain)"
 
