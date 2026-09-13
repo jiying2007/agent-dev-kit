@@ -11,10 +11,10 @@ import time
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence
 
-from .matcher import match_text
-from .model import Manifest, ManifestError, ensure_within, sha256_file
-from .evaluation_support import (
+from .evaluation_runtime import (
     RUNTIME_THRESHOLDS as RUNTIME_THRESHOLDS,
+)
+from .evaluation_runtime import (
     _claude_usage,
     _codex_reported_models,
     _codex_usage,
@@ -24,13 +24,24 @@ from .evaluation_support import (
     _latency_summary,
     _load_effect_inputs,
     _prompt_digest,
+)
+from .evaluation_runtime import (
     _validated_runtime_metrics as _validated_runtime_metrics,
+)
+from .evaluation_runtime import (
     compare_runtime_reports as compare_runtime_reports,
+)
+from .evaluation_runtime import (
     load_tasks as load_tasks,
+)
+from .evaluation_runtime import (
     run_deterministic as run_deterministic,
+)
+from .evaluation_runtime import (
     runtime_version as runtime_version,
 )
-
+from .matcher import match_text
+from .model import Manifest, ManifestError, ensure_within, sha256_file
 
 OUTPUT_SCHEMA = {
     "type": "object",

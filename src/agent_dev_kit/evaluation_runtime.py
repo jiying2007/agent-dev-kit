@@ -15,7 +15,6 @@ from typing import Any, Dict, List, Mapping, Optional, Sequence
 from .matcher import match_text
 from .model import Manifest, ManifestError
 
-
 RUNTIME_THRESHOLDS = {
     "success_rate": 0.85,
     "route_accuracy": 0.90,
