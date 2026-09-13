@@ -75,6 +75,13 @@ jobs:
           assert old_import in text
           verifier.write_text(text.replace(old_import, new_import), encoding='utf-8')
 
+          governance = Path('tests/test_intent_boundary_governance.sh')
+          text = governance.read_text(encoding='utf-8')
+          old_block = '''release_support_source = (\n    root / "src/agent_dev_kit/distribution/release_support.py"\n).read_text(encoding="utf-8")\nrelease_boundary_source = release_source + release_support_source'''
+          new_block = '''release_artifacts_source = (\n    root / "src/agent_dev_kit/distribution/release_artifacts.py"\n).read_text(encoding="utf-8")\nrelease_boundary_source = release_source + release_artifacts_source'''
+          assert old_block in text
+          governance.write_text(text.replace(old_block, new_block), encoding='utf-8')
+
           artifacts = Path('src/agent_dev_kit/distribution/release_artifacts.py')
           text = artifacts.read_text(encoding='utf-8')
           old_doc = '"""Deterministic release artifact, source-identity, and validation helpers."""'
@@ -112,6 +119,7 @@ jobs:
           python -m compileall -q "${TARGETS[@]}"
           ruff check "${TARGETS[@]}" --select E4,E7,E9,F,B,SIM,I
           bash tests/test_module_size_budget.sh
+          bash tests/test_intent_boundary_governance.sh
 
           PYTHONPATH=src python - <<'PY'
           from agent_dev_kit import release
@@ -144,7 +152,7 @@ jobs:
           printf '%s\n' "${changed[@]}"
           for path in "${changed[@]}"; do
             case "$path" in
-              manifests/module_size_budget.json|src/agent_dev_kit/release.py|src/agent_dev_kit/distribution/release_support.py|src/agent_dev_kit/distribution/release_artifacts.py|scripts/verify-runtime-bundle-identity.py) ;;
+              manifests/module_size_budget.json|src/agent_dev_kit/release.py|src/agent_dev_kit/distribution/release_support.py|src/agent_dev_kit/distribution/release_artifacts.py|scripts/verify-runtime-bundle-identity.py|tests/test_intent_boundary_governance.sh) ;;
               *)
                 echo "[FAIL] release convergence escaped bounded scope: $path" >&2
                 exit 1
@@ -154,7 +162,7 @@ jobs:
 
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add manifests/module_size_budget.json src/agent_dev_kit/release.py src/agent_dev_kit/distribution/release_support.py src/agent_dev_kit/distribution/release_artifacts.py scripts/verify-runtime-bundle-identity.py
+          git add manifests/module_size_budget.json src/agent_dev_kit/release.py src/agent_dev_kit/distribution/release_support.py src/agent_dev_kit/distribution/release_artifacts.py scripts/verify-runtime-bundle-identity.py tests/test_intent_boundary_governance.sh
           git commit -m 'refactor(release): retire transitional support module'
           test -z "$(git status --porcelain)"
 
