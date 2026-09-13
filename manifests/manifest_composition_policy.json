@@ -1,0 +1,53 @@
+{
+  "schema": "adk-manifest-composition-policy/v1",
+  "canonical_source": "manifest.json",
+  "runtime_consumer_mode": "canonical-json-only",
+  "authoring_mode": "single-canonical-json",
+  "digest_semantics": "canonical-output-json",
+  "composition_generator": null,
+  "future_split_contract": {
+    "mode": "deterministic-build-time-only",
+    "canonical_output": "manifest.json",
+    "runtime_fragment_loading": false,
+    "parallel_ssot_allowed": false,
+    "generated_output_must_validate_before_consume": true,
+    "generated_output_must_preserve_manifest_digest_semantics": true
+  },
+  "prohibited_runtime_composition_keys": [
+    "$include",
+    "include",
+    "includes",
+    "fragments",
+    "imports"
+  ],
+  "section_owners": {
+    "version": "identity",
+    "locale": "identity",
+    "platforms": "identity",
+    "reference_sources": "reference-governance",
+    "external_handoff_targets": "handoff-boundary",
+    "tool_targets": "target-adapters",
+    "quality_tiers": "quality-taxonomy",
+    "asset_taxonomy": "quality-taxonomy",
+    "knowledge_layers": "knowledge-context",
+    "context_layers": "knowledge-context",
+    "embedded_context_layers": "knowledge-context",
+    "knowledge_types": "knowledge-context",
+    "knowledge_maturity": "knowledge-context",
+    "agents": "asset-catalog",
+    "skills": "asset-catalog",
+    "default_profile": "profile-resolution",
+    "profiles": "profile-resolution",
+    "workflows": "workflow-contracts",
+    "mcp_servers": "target-adapters",
+    "skill_invocation": "routing-policy",
+    "change_sets": "workflow-contracts",
+    "optional_skills": "asset-catalog",
+    "install": "installation",
+    "skill_routing_matrix": "routing-policy",
+    "routing": "routing-policy",
+    "dependencies": "dependency-governance",
+    "schema_version": "identity",
+    "product": "identity"
+  }
+}
