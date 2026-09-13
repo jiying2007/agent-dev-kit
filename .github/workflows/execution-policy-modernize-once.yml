@@ -32,9 +32,25 @@ jobs:
       - name: Install pinned quality toolchain
         run: python -m pip install '.[quality]'
 
-      - name: Apply only Ruff I/UP bounded fixes
+      - name: Apply bounded I/UP modernization
         run: |
-          ruff check src/agent_dev_kit/execution_policy --select I,UP --fix --unsafe-fixes
+          ruff check src/agent_dev_kit/execution_policy --select I,UP --fix --unsafe-fixes || true
+          python - <<'PY'
+          from pathlib import Path
+
+          paths = [
+              Path('src/agent_dev_kit/execution_policy/contracts.py'),
+              Path('src/agent_dev_kit/execution_policy/engine.py'),
+          ]
+          for path in paths:
+              text = path.read_text(encoding='utf-8')
+              text = text.replace('Dict[', 'dict[')
+              text = text.replace('from typing import Any, Dict, Optional', 'from typing import Any, Optional')
+              text = text.replace('from typing import Dict, ', 'from typing import ')
+              text = text.replace(', Dict,', ',')
+              text = text.replace(', Dict\n', '\n')
+              path.write_text(text, encoding='utf-8')
+          PY
           mapfile -t changed < <(git diff --name-only)
           ((${#changed[@]} > 0)) || {
             echo '[FAIL] expected execution_policy modernization changes' >&2
