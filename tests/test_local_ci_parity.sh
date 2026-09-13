@@ -5,11 +5,12 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 RUNNER="$ROOT_DIR/scripts/run-local-ci-parity.sh"
 DOCKERFILE="$ROOT_DIR/tools/local-ci/Dockerfile"
 ENTRYPOINT="$ROOT_DIR/tools/local-ci/entrypoint.sh"
+HOSTED_CI="$ROOT_DIR/.github/workflows/ci.yml"
 WAIVER="$ROOT_DIR/docs/changes/adk-terminal-contract-hardening/ci-waiver.json"
 TMP_DIR="$(mktemp -d)"
 trap 'rm -rf "$TMP_DIR"' EXIT
 
-for required in "$RUNNER" "$DOCKERFILE" "$ENTRYPOINT" "$WAIVER" "$ROOT_DIR/docs/runbooks/local-ci-parity.md"; do
+for required in "$RUNNER" "$DOCKERFILE" "$ENTRYPOINT" "$HOSTED_CI" "$WAIVER" "$ROOT_DIR/docs/runbooks/local-ci-parity.md"; do
   [[ -f "$required" ]] || {
     echo "[FAIL] local CI parity contract file is missing: $required" >&2
     exit 1
@@ -122,9 +123,44 @@ for token in \
   'PyYAML==${PYYAML_VERSION}' \
   'jsonschema==${JSONSCHEMA_VERSION}' \
   'ruff==${RUFF_VERSION}' \
-  'pip-audit==${PIP_AUDIT_VERSION}'; do
+  'pip-audit==${PIP_AUDIT_VERSION}' \
+  'mypy==${MYPY_VERSION}' \
+  'types-jsonschema==${TYPES_JSONSCHEMA_VERSION}' \
+  'types-PyYAML==${TYPES_PYYAML_VERSION}'; do
   rg -Fq -- "$token" "$DOCKERFILE" || {
     echo "[FAIL] local CI image omitted pinned dependency: $token" >&2
+    exit 1
+  }
+done
+
+for kernel_path in \
+  'src/agent_dev_kit/contracts' \
+  'src/agent_dev_kit/evidence' \
+  'src/agent_dev_kit/target_adapters' \
+  'src/agent_dev_kit/distribution' \
+  'src/agent_dev_kit/execution_policy'; do
+  rg -Fq -- "$kernel_path" "$HOSTED_CI" || {
+    echo "[FAIL] hosted focused kernel omitted: $kernel_path" >&2
+    exit 1
+  }
+  rg -Fq -- "$kernel_path" "$ENTRYPOINT" || {
+    echo "[FAIL] local focused kernel omitted: $kernel_path" >&2
+    exit 1
+  }
+done
+for quality_token in \
+  'python -m compileall -q' \
+  'CORE_KERNEL_PATHS=(' \
+  'EXECUTION_POLICY_PATH=src/agent_dev_kit/execution_policy' \
+  '--select E4,E7,E9,F,B,UP,SIM,I' \
+  '--select E4,E7,E9,F,B,SIM' \
+  'mypy'; do
+  rg -Fq -- "$quality_token" "$HOSTED_CI" || {
+    echo "[FAIL] hosted focused quality gate omitted: $quality_token" >&2
+    exit 1
+  }
+  rg -Fq -- "$quality_token" "$ENTRYPOINT" || {
+    echo "[FAIL] local focused quality gate omitted: $quality_token" >&2
     exit 1
   }
 done

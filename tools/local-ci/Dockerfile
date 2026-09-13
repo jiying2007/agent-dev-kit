@@ -10,6 +10,9 @@ ARG PYYAML_VERSION=6.0.3
 ARG JSONSCHEMA_VERSION=4.26.0
 ARG RUFF_VERSION=0.15.21
 ARG PIP_AUDIT_VERSION=2.10.1
+ARG MYPY_VERSION=2.3.1
+ARG TYPES_JSONSCHEMA_VERSION=4.26.0.20260518
+ARG TYPES_PYYAML_VERSION=6.0.12.20260906
 
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
@@ -26,7 +29,10 @@ RUN python -m pip install --no-cache-dir \
         "PyYAML==${PYYAML_VERSION}" \
         "jsonschema==${JSONSCHEMA_VERSION}" \
         "ruff==${RUFF_VERSION}" \
-        "pip-audit==${PIP_AUDIT_VERSION}"
+        "pip-audit==${PIP_AUDIT_VERSION}" \
+        "mypy==${MYPY_VERSION}" \
+        "types-jsonschema==${TYPES_JSONSCHEMA_VERSION}" \
+        "types-PyYAML==${TYPES_PYYAML_VERSION}"
 
 RUN groupadd --gid 65532 adk-ci \
     && useradd --uid 65532 --gid 65532 --home-dir /work/home --shell /usr/sbin/nologin --no-create-home adk-ci
