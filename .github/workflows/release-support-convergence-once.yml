@@ -1,0 +1,159 @@
+name: release-support-convergence-once
+
+on:
+  push:
+    branches:
+      - codex/release-support-convergence
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-support-convergence-once
+  cancel-in-progress: false
+
+jobs:
+  converge:
+    if: ${{ github.actor != 'github-actions[bot]' }}
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: codex/release-support-convergence
+          fetch-depth: 1
+          persist-credentials: true
+
+      - name: Install bounded migration dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ripgrep
+          python -m pip install '.[quality]'
+
+      - name: Prove release support import boundary
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          refs = set()
+          for root_name in ('src', 'tests', 'scripts'):
+              root = Path(root_name)
+              if not root.exists():
+                  continue
+              for path in root.rglob('*.py'):
+                  if 'release_support' in path.read_text(encoding='utf-8'):
+                      refs.add(path.as_posix())
+          expected = {'src/agent_dev_kit/release.py'}
+          if refs != expected:
+              raise SystemExit(f'unexpected release_support Python references: {sorted(refs)}')
+          PY
+
+      - name: Move release artifact implementation into owned bounded context
+        run: |
+          set -euo pipefail
+          mv src/agent_dev_kit/distribution/release_support.py src/agent_dev_kit/distribution/release_artifacts.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          owner = Path('src/agent_dev_kit/release.py')
+          text = owner.read_text(encoding='utf-8')
+          assert 'from .distribution.release_support import (' in text
+          owner.write_text(
+              text.replace('from .distribution.release_support import (', 'from .distribution.release_artifacts import ('),
+              encoding='utf-8',
+          )
+
+          artifacts = Path('src/agent_dev_kit/distribution/release_artifacts.py')
+          text = artifacts.read_text(encoding='utf-8')
+          old_doc = '"""Deterministic release artifact, source-identity, and validation helpers."""'
+          assert text.startswith(old_doc)
+          text = text.replace(
+              old_doc,
+              '"""Release artifact domain: deterministic archives, source identity, SBOM, and validation."""',
+              1,
+          )
+          artifacts.write_text(text, encoding='utf-8')
+
+          policy_path = Path('manifests/module_size_budget.json')
+          policy = json.loads(policy_path.read_text(encoding='utf-8'))
+          architecture = policy['architecture_policy']
+          retired = 'src/agent_dev_kit/distribution/release_support.py'
+          current = architecture['transitional_support_modules']
+          assert retired in current, current
+          architecture['transitional_support_modules'] = [item for item in current if item != retired]
+          assert architecture.get('transitional_support_max_count') == 2, architecture
+          architecture['transitional_support_max_count'] = 1
+          policy_path.write_text(json.dumps(policy, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+          PY
+
+      - name: Verify release ownership and prepare clean candidate
+        run: |
+          set -euo pipefail
+          TARGETS=(src/agent_dev_kit/release.py src/agent_dev_kit/distribution/release_artifacts.py)
+          ! test -e src/agent_dev_kit/distribution/release_support.py
+          test -f src/agent_dev_kit/distribution/release_artifacts.py
+          ! rg -n 'release_support' src tests scripts manifests/module_size_budget.json || {
+            echo '[FAIL] retired release_support reference remains' >&2
+            exit 1
+          }
+          ruff check "${TARGETS[@]}" --select I --fix
+          python -m compileall -q "${TARGETS[@]}"
+          ruff check "${TARGETS[@]}" --select E4,E7,E9,F,B,SIM,I
+          bash tests/test_module_size_budget.sh
+
+          PYTHONPATH=src python - <<'PY'
+          from agent_dev_kit import release
+          from agent_dev_kit.distribution import release_artifacts
+
+          names = (
+              '_assert_publishable_release_artifact',
+              '_copy_runtime_skill',
+              '_copy_source_distribution',
+              '_extract_release',
+              '_managed_hashes',
+              '_prerelease_is_newer',
+              '_previous_release_migration',
+              '_release_source_identity',
+              '_release_source_root',
+              '_report_digest',
+              '_skill_version',
+              '_validate_sbom',
+              '_verify_artifact_checksum',
+              '_write_deterministic_archive',
+              '_write_runtime_checksums',
+          )
+          for name in names:
+              if getattr(release, name) is not getattr(release_artifacts, name):
+                  raise SystemExit(f'release helper identity changed: {name}')
+          print('[PASS] release helper identities preserved')
+          PY
+
+          mapfile -t changed < <(git status --short | sed -E 's/^.. //' | sort)
+          printf '%s\n' "${changed[@]}"
+          for path in "${changed[@]}"; do
+            case "$path" in
+              manifests/module_size_budget.json|src/agent_dev_kit/release.py|src/agent_dev_kit/distribution/release_support.py|src/agent_dev_kit/distribution/release_artifacts.py) ;;
+              *)
+                echo "[FAIL] release convergence escaped bounded scope: $path" >&2
+                exit 1
+                ;;
+            esac
+          done
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add manifests/module_size_budget.json src/agent_dev_kit/release.py src/agent_dev_kit/distribution/release_support.py src/agent_dev_kit/distribution/release_artifacts.py
+          git commit -m 'refactor(release): retire transitional support module'
+          test -z "$(git status --porcelain)"
+
+      - name: Verify clean candidate behavior
+        run: |
+          set -euo pipefail
+          test -z "$(git status --porcelain)"
+          bash tests/run_all.sh --quick --timing-json /tmp/release-support-tests.json
+          test -z "$(git status --porcelain)"
+
+      - name: Publish verified candidate
+        run: git push origin HEAD:codex/release-support-convergence
