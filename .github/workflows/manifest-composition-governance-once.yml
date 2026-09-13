@@ -1,0 +1,64 @@
+name: manifest-composition-governance-once
+
+on:
+  push:
+    branches:
+      - codex/manifest-composition-governance
+
+permissions:
+  contents: write
+
+concurrency:
+  group: manifest-composition-governance-once
+  cancel-in-progress: false
+
+jobs:
+  integrate:
+    if: ${{ github.actor != 'github-actions[bot]' }}
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: codex/manifest-composition-governance
+          fetch-depth: 1
+          persist-credentials: true
+
+      - name: Install bounded validation dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ripgrep shellcheck
+          python -m pip install .
+
+      - name: Integrate composition contract into regression suites
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('tests/run_all.sh')
+          text = path.read_text(encoding='utf-8')
+          anchor = '  test_manifest_consumer_boundary.sh\n'
+          assert text.count(anchor) == 2, text.count(anchor)
+          replacement = anchor + '  test_manifest_composition_contract.sh\n'
+          path.write_text(text.replace(anchor, replacement), encoding='utf-8')
+          PY
+          chmod 755 tests/test_manifest_composition_contract.sh
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add tests/run_all.sh tests/test_manifest_composition_contract.sh
+          git commit -m 'test(manifest): gate canonical composition contract'
+          test -z "$(git status --porcelain)"
+
+      - name: Verify canonical manifest composition contract
+        run: |
+          set -euo pipefail
+          bash tests/test_manifest_composition_contract.sh
+          bash tests/test_manifest_consumer_boundary.sh
+          bash tests/test_file_modes.sh
+          bash tests/run_all.sh --quick --timing-json /tmp/manifest-composition-tests.json
+          test -z "$(git status --porcelain)"
+
+      - name: Publish verified candidate
+        run: git push origin HEAD:codex/manifest-composition-governance
