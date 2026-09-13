@@ -9,6 +9,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 BINDING = ROOT / "manifests/integrations/codex-runtime-binding.json"
 RETIRED_BUNDLE = ROOT / "manifests/integrations/codex-target-bundle.json"
+WORKFLOW = ROOT / ".github/workflows/codex-consumer-contract.yml"
 
 EXPECTED_BASELINE = {
     "version": "5.1.0",
@@ -31,6 +32,7 @@ def git(*args: str) -> str:
 
 def main() -> None:
     require(BINDING.is_file(), "missing Codex runtime binding")
+    require(WORKFLOW.is_file(), "missing Codex consumer workflow")
     require(not RETIRED_BUNDLE.exists(), "retired Codex target-bundle candidate must not exist")
     binding = json.loads(BINDING.read_text(encoding="utf-8"))
     require(set(binding) == {
@@ -68,6 +70,13 @@ def main() -> None:
         "6ba03db87bd49010738fe353035b35e35fe7dccd",
     ):
         require(token not in text, f"retired Codex bundle compatibility token returned: {token}")
+    workflow = WORKFLOW.read_text(encoding="utf-8")
+    require("codex-target-bundle.json" not in workflow, "retired Codex target-bundle trigger returned")
+    require("runs-on: ubuntu-24.04" in workflow and "ubuntu-latest" not in workflow, "Codex consumer runner must be pinned")
+    for lineno, line in enumerate(workflow.splitlines(), 1):
+        match = re.search(r"\buses:\s*[^\s@]+@([^\s#]+)", line)
+        if match:
+            require(re.fullmatch(r"[0-9a-f]{40}", match.group(1)) is not None, f"workflow action must be SHA-pinned at line {lineno}")
     baseline = binding["release_baseline"]
     require(re.fullmatch(r"[0-9a-f]{40}", baseline["commit"]) is not None, "release commit must be exact")
     require(re.fullmatch(r"[0-9a-f]{40}", baseline["tree"]) is not None, "release tree must be exact")
