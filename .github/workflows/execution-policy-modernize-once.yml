@@ -38,24 +38,28 @@ jobs:
           python - <<'PY'
           from pathlib import Path
 
-          replacements = {
-              Path('src/agent_dev_kit/execution_policy/contracts.py'): (
-                  ('Dict[', 'dict['),
-                  ('from datetime import UTC, datetime, timezone', 'from datetime import UTC, datetime'),
-                  ('from typing import Any, Dict, Optional', 'from typing import Any'),
-                  ('from typing import Any, Optional', 'from typing import Any'),
-              ),
-              Path('src/agent_dev_kit/execution_policy/engine.py'): (
-                  ('Dict[', 'dict['),
-                  ('from typing import Any, Dict, Optional', 'from typing import Any'),
-                  ('from typing import Any, Optional', 'from typing import Any'),
-              ),
-          }
-          for path, edits in replacements.items():
-              text = path.read_text(encoding='utf-8')
-              for old, new in edits:
-                  text = text.replace(old, new)
-              path.write_text(text, encoding='utf-8')
+          contracts = Path('src/agent_dev_kit/execution_policy/contracts.py')
+          text = contracts.read_text(encoding='utf-8')
+          for old, new in (
+              ('Dict[', 'dict['),
+              ('from datetime import UTC, datetime, timezone', 'from datetime import UTC, datetime'),
+              ('from typing import Any, Dict, Optional', 'from typing import Any'),
+              ('from typing import Any, Optional', 'from typing import Any'),
+          ):
+              text = text.replace(old, new)
+          contracts.write_text(text, encoding='utf-8')
+
+          engine = Path('src/agent_dev_kit/execution_policy/engine.py')
+          text = engine.read_text(encoding='utf-8')
+          for old, new in (
+              ('Dict[', 'dict['),
+              ('from datetime import datetime', 'from datetime import UTC, datetime'),
+              ('from typing import Any, Dict, Optional', 'from typing import Any'),
+              ('from typing import Any, Optional', 'from typing import Any'),
+              ('    UTC,\n', ''),
+          ):
+              text = text.replace(old, new)
+          engine.write_text(text, encoding='utf-8')
           PY
           mapfile -t changed < <(git diff --name-only)
           ((${#changed[@]} > 0)) || {
