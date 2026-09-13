@@ -6,12 +6,12 @@ import hashlib
 import json
 import math
 import re
-from datetime import datetime, timezone
-from typing import Any, Dict, Mapping, Optional
+from collections.abc import Mapping
+from datetime import UTC, datetime
+from typing import Any
 
 from ..model import ManifestError
 from ..privacy_ref import validate_no_secrets
-
 
 EVENT_SCHEMA = "runtime_control.event/v1"
 STATE_SCHEMA = "runtime_control.state/v1"
@@ -62,7 +62,7 @@ READONLY_IMPLEMENTATION_ARTIFACTS = {"repo", "build", "plan", "dry-run", "live"}
 SENSITIVE_FIELDS = {"prompt", "messages", "content", "text", "raw_input", "raw_output", "objective"}
 IDENTIFIER = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$")
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
-UTC = timezone.utc
+UTC = UTC
 
 
 class RuntimeControlError(ValueError):
@@ -71,7 +71,7 @@ class RuntimeControlError(ValueError):
 
 def _identifier(value: Any, field: str) -> str:
     if not isinstance(value, str) or not IDENTIFIER.fullmatch(value):
-        raise RuntimeControlError("{} must be a bounded stable identifier".format(field))
+        raise RuntimeControlError(f"{field} must be a bounded stable identifier")
     try:
         validate_no_secrets(value, field)
     except ManifestError as exc:
@@ -83,29 +83,29 @@ def _integer(value: Any, field: str, *, positive: bool = False) -> int:
     minimum = 1 if positive else 0
     if isinstance(value, bool) or not isinstance(value, int) or value < minimum:
         label = "positive" if positive else "non-negative"
-        raise RuntimeControlError("{} must be a {} integer".format(field, label))
+        raise RuntimeControlError(f"{field} must be a {label} integer")
     return value
 
 
 def _number(value: Any, field: str) -> float:
     if isinstance(value, bool) or not isinstance(value, (int, float)):
-        raise RuntimeControlError("{} must be numeric".format(field))
+        raise RuntimeControlError(f"{field} must be numeric")
     result = float(value)
     if not math.isfinite(result):
-        raise RuntimeControlError("{} must be finite".format(field))
+        raise RuntimeControlError(f"{field} must be finite")
     return result
 
 
 def _timestamp(value: Any, field: str) -> datetime:
     if not isinstance(value, str) or len(value) > 40:
-        raise RuntimeControlError("{} must be an RFC3339 timestamp".format(field))
+        raise RuntimeControlError(f"{field} must be an RFC3339 timestamp")
     normalized = value[:-1] + "+00:00" if value.endswith("Z") else value
     try:
         parsed = datetime.fromisoformat(normalized)
     except ValueError as exc:
-        raise RuntimeControlError("{} must be an RFC3339 timestamp".format(field)) from exc
+        raise RuntimeControlError(f"{field} must be an RFC3339 timestamp") from exc
     if parsed.tzinfo is None:
-        raise RuntimeControlError("{} must include a timezone".format(field))
+        raise RuntimeControlError(f"{field} must include a timezone")
     return parsed.astimezone(UTC)
 
 
@@ -141,18 +141,18 @@ def _reject_sensitive_fields(value: Any) -> None:
 
 def _ids(value: Any, field: str, *, non_empty: bool = False) -> list[str]:
     if not isinstance(value, list):
-        raise RuntimeControlError("{} must be a list".format(field))
+        raise RuntimeControlError(f"{field} must be a list")
     result = [_identifier(item, field) for item in value]
     if len(result) != len(set(result)):
-        raise RuntimeControlError("{} must not contain duplicates".format(field))
+        raise RuntimeControlError(f"{field} must not contain duplicates")
     if non_empty and not result:
-        raise RuntimeControlError("{} must not be empty".format(field))
+        raise RuntimeControlError(f"{field} must not be empty")
     return result
 
 
 def _sha256(value: Any, field: str) -> str:
     if not isinstance(value, str) or not HEX64.fullmatch(value):
-        raise RuntimeControlError("{} must be a SHA-256 digest".format(field))
+        raise RuntimeControlError(f"{field} must be a SHA-256 digest")
     return value
 
 
@@ -190,7 +190,7 @@ def _validate_goal_intake(
     event_at: datetime,
     expected_kind: str,
     expected_goal_id: str,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     if not isinstance(value, dict) or set(value) != {
         "schema_version", "task_mode", "artifact_mode", "goal_id", "request_sha256",
         "routing_decision_sha256", "authority_id", "attestation_sha256", "provenance"
@@ -221,7 +221,7 @@ def _validate_goal_intake(
         raise RuntimeControlError("goal intake provenance fields are invalid")
     if provenance.get("kind") != expected_kind:
         raise RuntimeControlError(
-            "goal intake provenance kind must be {}".format(expected_kind)
+            f"goal intake provenance kind must be {expected_kind}"
         )
     normalized_provenance = {
         "kind": expected_kind,
@@ -260,7 +260,7 @@ def _validate_goal_intake(
     }
 
 
-def validate_policy(value: Mapping[str, Any]) -> Dict[str, Any]:
+def validate_policy(value: Mapping[str, Any]) -> dict[str, Any]:
     if not isinstance(value, dict) or value.get("schema_version") not in {
         POLICY_SCHEMA, POLICY_SCHEMA_V2
     }:
@@ -301,9 +301,9 @@ def validate_policy(value: Mapping[str, Any]) -> Dict[str, Any]:
     _integer(progress.get("retry_limit"), "progress.retry_limit", positive=True)
     _integer(progress.get("no_progress_limit"), "progress.no_progress_limit", positive=True)
 
-    normalized_gates: Dict[str, list[str]] = {}
-    normalized_applicability: Dict[str, Dict[str, Optional[list[str]]]] = {}
-    normalized_authority_policy: Optional[Dict[str, Any]] = None
+    normalized_gates: dict[str, list[str]] = {}
+    normalized_applicability: dict[str, dict[str, list[str] | None]] = {}
+    normalized_authority_policy: dict[str, Any] | None = None
     if policy_schema == POLICY_SCHEMA:
         gate_policy = value.get("gate_policy")
         if not isinstance(gate_policy, dict) or set(gate_policy) != GATE_EVENTS:
@@ -321,14 +321,14 @@ def validate_policy(value: Mapping[str, Any]) -> Dict[str, Any]:
         for task_mode, gate_matrix in applicability.items():
             if not isinstance(gate_matrix, dict) or set(gate_matrix) != GATE_EVENTS:
                 raise RuntimeControlError(
-                    "artifact_applicability.{} must define every canonical gate event".format(task_mode)
+                    f"artifact_applicability.{task_mode} must define every canonical gate event"
                 )
-            normalized_matrix: Dict[str, Optional[list[str]]] = {}
+            normalized_matrix: dict[str, list[str] | None] = {}
             for gate, required in gate_matrix.items():
                 if required is None:
                     normalized_matrix[gate] = None
                     continue
-                items = _ids(required, "artifact_applicability.{}.{}".format(task_mode, gate))
+                items = _ids(required, f"artifact_applicability.{task_mode}.{gate}")
                 if set(items) - ARTIFACT_TYPES:
                     raise RuntimeControlError("artifact_applicability references unknown artifact types")
                 normalized_matrix[gate] = items
@@ -354,7 +354,7 @@ def validate_policy(value: Mapping[str, Any]) -> Dict[str, Any]:
             required = implementation[gate]
             if required is None or not floor <= set(required):
                 raise RuntimeControlError(
-                    "implementation.{} must retain fail-closed artifact requirements".format(gate)
+                    f"implementation.{gate} must retain fail-closed artifact requirements"
                 )
 
         release = normalized_applicability["release"]
@@ -364,7 +364,7 @@ def validate_policy(value: Mapping[str, Any]) -> Dict[str, Any]:
             required = release[gate]
             if required is None or not floor <= set(required):
                 raise RuntimeControlError(
-                    "release.{} must retain fail-closed artifact requirements".format(gate)
+                    f"release.{gate} must retain fail-closed artifact requirements"
                 )
 
         authority_policy = value.get("mode_authority_policy")
@@ -421,7 +421,7 @@ def validate_policy(value: Mapping[str, Any]) -> Dict[str, Any]:
     return normalized
 
 
-def _validate_event(value: Any) -> Dict[str, Any]:
+def _validate_event(value: Any) -> dict[str, Any]:
     if not isinstance(value, dict):
         raise RuntimeControlError("runtime control event must be an object")
     _reject_sensitive(value)
