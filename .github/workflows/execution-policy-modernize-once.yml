@@ -32,9 +32,9 @@ jobs:
       - name: Install pinned quality toolchain
         run: python -m pip install '.[quality]'
 
-      - name: Apply only Ruff I/UP safe fixes
+      - name: Apply only Ruff I/UP bounded fixes
         run: |
-          ruff check src/agent_dev_kit/execution_policy --select I,UP --fix
+          ruff check src/agent_dev_kit/execution_policy --select I,UP --fix --unsafe-fixes
           mapfile -t changed < <(git diff --name-only)
           ((${#changed[@]} > 0)) || {
             echo '[FAIL] expected execution_policy modernization changes' >&2
