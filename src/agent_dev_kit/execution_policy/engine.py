@@ -5,7 +5,7 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Any, Callable, Dict, Iterable, Mapping, Optional
 
-from .engine_support import (
+from .contracts import (
     ARTIFACT_TYPES,
     DECISION_SCHEMA as DECISION_SCHEMA,
     DECISION_SCHEMA_V2 as DECISION_SCHEMA_V2,

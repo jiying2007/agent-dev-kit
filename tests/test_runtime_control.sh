@@ -11,8 +11,8 @@ root = Path(sys.argv[1]).resolve()
 
 import agent_dev_kit.execution_policy as preferred
 import agent_dev_kit.runtime_control as compatibility
+from agent_dev_kit.execution_policy import contracts as preferred_contracts
 from agent_dev_kit.execution_policy import engine as preferred_engine
-from agent_dev_kit.execution_policy import engine_support as preferred_support
 from agent_dev_kit.runtime_control import engine as compatibility_engine
 from agent_dev_kit.runtime_control import engine_support as compatibility_support
 
@@ -32,7 +32,7 @@ for name in (
     "POLICY_SCHEMA",
     "POLICY_SCHEMA_V2",
 ):
-    assert getattr(preferred_support, name) is getattr(compatibility_support, name), name
+    assert getattr(preferred_contracts, name) is getattr(compatibility_support, name), name
 
 assert preferred.POLICY_SCHEMA == compatibility.POLICY_SCHEMA
 assert preferred.POLICY_SCHEMA_V2 == compatibility.POLICY_SCHEMA_V2
@@ -40,31 +40,33 @@ assert preferred.DECISION_SCHEMA == compatibility.DECISION_SCHEMA
 assert preferred.DECISION_SCHEMA_V2 == compatibility.DECISION_SCHEMA_V2
 
 preferred_engine_path = Path(preferred_engine.__file__).resolve()
-preferred_support_path = Path(preferred_support.__file__).resolve()
+preferred_contracts_path = Path(preferred_contracts.__file__).resolve()
 compatibility_engine_path = Path(compatibility_engine.__file__).resolve()
 compatibility_support_path = Path(compatibility_support.__file__).resolve()
 
 assert preferred_engine_path == root / "src/agent_dev_kit/execution_policy/engine.py"
-assert preferred_support_path == root / "src/agent_dev_kit/execution_policy/engine_support.py"
+assert preferred_contracts_path == root / "src/agent_dev_kit/execution_policy/contracts.py"
 assert compatibility_engine_path == root / "src/agent_dev_kit/runtime_control/engine.py"
 assert compatibility_support_path == root / "src/agent_dev_kit/runtime_control/engine_support.py"
+assert not (root / "src/agent_dev_kit/execution_policy/engine_support.py").exists()
 
 canonical_engine = preferred_engine_path.read_text(encoding="utf-8")
-canonical_support = preferred_support_path.read_text(encoding="utf-8")
+canonical_contracts = preferred_contracts_path.read_text(encoding="utf-8")
 legacy_engine = compatibility_engine_path.read_text(encoding="utf-8")
 legacy_support = compatibility_support_path.read_text(encoding="utf-8")
 preferred_init = (root / "src/agent_dev_kit/execution_policy/__init__.py").read_text(encoding="utf-8")
 
+assert "from .contracts import" in canonical_engine
 assert "..runtime_control" not in canonical_engine
-assert "..runtime_control" not in canonical_support
+assert "..runtime_control" not in canonical_contracts
 assert "..runtime_control" not in preferred_init
 assert "..execution_policy.engine import *" in legacy_engine
-assert "..execution_policy.engine_support import *" in legacy_support
+assert "..execution_policy.contracts import *" in legacy_support
 assert len(legacy_engine.encode("utf-8")) < 2048
 assert len(legacy_support.encode("utf-8")) < 2048
 
 print(
-    "[PASS] execution_policy owns the canonical 5.x implementation; "
+    "[PASS] execution_policy owns the canonical 5.x engine/contracts; "
     "runtime_control is a thin object-identical compatibility facade"
 )
 PY
