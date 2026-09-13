@@ -1,4 +1,4 @@
-"""Shared support primitives for the public ADK CLI entrypoint."""
+"""CLI runtime substrate: environment, compatibility bridge, and stable output I/O."""
 
 from __future__ import annotations
 
