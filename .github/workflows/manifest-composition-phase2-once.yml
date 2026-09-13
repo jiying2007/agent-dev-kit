@@ -1,0 +1,45 @@
+name: manifest-composition-phase2-once
+
+on:
+  push:
+    branches:
+      - codex/manifest-composition-phase2
+
+permissions:
+  contents: read
+
+concurrency:
+  group: manifest-composition-phase2-once
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: codex/manifest-composition-phase2
+          persist-credentials: false
+
+      - name: Install validation dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ripgrep shellcheck
+          python -m pip install '.[quality]'
+
+      - name: Validate strict contracts kernel quality
+        run: |
+          set -euo pipefail
+          python -m compileall -q src/agent_dev_kit/contracts
+          ruff check src/agent_dev_kit/contracts --select E4,E7,E9,F,B,UP,SIM,I
+          mypy src/agent_dev_kit/contracts
+
+      - name: Validate composition invariants and regression
+        run: |
+          set -euo pipefail
+          bash tests/test_manifest_composition_contract.sh
+          bash tests/test_manifest_consumer_boundary.sh
+          bash tests/test_file_modes.sh
+          bash tests/run_all.sh --quick --timing-json /tmp/manifest-composition-phase2.json
+          test -z "$(git status --porcelain)"
