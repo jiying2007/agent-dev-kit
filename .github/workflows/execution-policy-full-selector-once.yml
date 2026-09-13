@@ -1,0 +1,86 @@
+name: execution-policy-full-selector-once
+
+on:
+  push:
+    branches:
+      - codex/execution-policy-modernization
+
+permissions:
+  contents: write
+
+concurrency:
+  group: execution-policy-full-selector-once
+  cancel-in-progress: false
+
+jobs:
+  promote-selector:
+    if: ${{ github.actor != 'github-actions[bot]' }}
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: codex/execution-policy-modernization
+          fetch-depth: 1
+          persist-credentials: true
+
+      - name: Promote execution policy to full Ruff selector
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          hosted = Path('.github/workflows/ci.yml')
+          local = Path('tools/local-ci/entrypoint.sh')
+          parity = Path('tests/test_local_ci_parity.sh')
+
+          staged = 'ruff check "$EXECUTION_POLICY_PATH" --select E4,E7,E9,F,B,SIM'
+          full = 'ruff check "$EXECUTION_POLICY_PATH" --select E4,E7,E9,F,B,UP,SIM,I'
+          for path in (hosted, local):
+              text = path.read_text(encoding='utf-8')
+              assert text.count(staged) == 1, (path, text.count(staged))
+              assert full not in text, path
+              path.write_text(text.replace(staged, full), encoding='utf-8')
+
+          text = parity.read_text(encoding='utf-8')
+          old = "  '--select E4,E7,E9,F,B,UP,SIM,I' \\\n  '--select E4,E7,E9,F,B,SIM' \\\n  'mypy'; do"
+          new = "  '--select E4,E7,E9,F,B,UP,SIM,I' \\\n  'ruff check \"$EXECUTION_POLICY_PATH\" --select E4,E7,E9,F,B,UP,SIM,I' \\\n  'mypy'; do"
+          assert old in text
+          text = text.replace(old, new)
+          parity.write_text(text, encoding='utf-8')
+          PY
+
+          if rg -Fq -- '--select E4,E7,E9,F,B,SIM' .github/workflows/ci.yml tools/local-ci/entrypoint.sh; then
+            echo '[FAIL] staged execution-policy selector remains' >&2
+            exit 1
+          fi
+          bash tests/test_local_ci_parity.sh
+
+          mapfile -t changed < <(git diff --name-only)
+          expected=(
+            .github/workflows/ci.yml
+            tests/test_local_ci_parity.sh
+            tools/local-ci/entrypoint.sh
+          )
+          [[ "$(printf '%s\n' "${changed[@]}" | sort)" == "$(printf '%s\n' "${expected[@]}" | sort)" ]] || {
+            printf '[FAIL] selector promotion diff escaped bounded scope:\n%s\n' "${changed[*]}" >&2
+            exit 1
+          }
+
+      - name: Self-delete and commit selector promotion
+        run: |
+          git rm .github/workflows/execution-policy-full-selector-once.yml
+          mapfile -t changed < <(git diff --name-only)
+          for path in "${changed[@]}"; do
+            case "$path" in
+              .github/workflows/execution-policy-full-selector-once.yml|.github/workflows/ci.yml|tests/test_local_ci_parity.sh|tools/local-ci/entrypoint.sh) ;;
+              *)
+                echo "[FAIL] final selector diff escaped bounded scope: $path" >&2
+                exit 1
+                ;;
+            esac
+          done
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add .github/workflows/ci.yml tests/test_local_ci_parity.sh tools/local-ci/entrypoint.sh
+          git commit -m 'ci(execution-policy): require full kernel Ruff selector'
+          git push origin HEAD:codex/execution-policy-modernization
