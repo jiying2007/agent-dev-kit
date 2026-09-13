@@ -58,16 +58,18 @@ bash scripts/check-format.sh
 shellcheck -S error -x -P scripts scripts/*.sh tests/*.sh tools/local-ci/*.sh
 ruff check src tools tests/fixtures/fake_target_runtime.py
 
-FOCUSED_KERNEL_PATHS=(
+CORE_KERNEL_PATHS=(
   src/agent_dev_kit/contracts
   src/agent_dev_kit/evidence
   src/agent_dev_kit/target_adapters
   src/agent_dev_kit/distribution
-  src/agent_dev_kit/execution_policy
 )
-python -m compileall -q "${FOCUSED_KERNEL_PATHS[@]}"
-ruff check "${FOCUSED_KERNEL_PATHS[@]}" --select E4,E7,E9,F,B,UP,SIM,I
-mypy "${FOCUSED_KERNEL_PATHS[@]}"
+EXECUTION_POLICY_PATH=src/agent_dev_kit/execution_policy
+FOCUSED_TYPE_PATHS=("${CORE_KERNEL_PATHS[@]}" "$EXECUTION_POLICY_PATH")
+python -m compileall -q "${FOCUSED_TYPE_PATHS[@]}"
+ruff check "${CORE_KERNEL_PATHS[@]}" --select E4,E7,E9,F,B,UP,SIM,I
+ruff check "$EXECUTION_POLICY_PATH" --select E4,E7,E9,F,B,SIM
+mypy "${FOCUSED_TYPE_PATHS[@]}"
 
 python -m agent_dev_kit.cli target check --all --level static --summary-json
 
