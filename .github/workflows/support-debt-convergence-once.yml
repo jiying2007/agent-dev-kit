@@ -25,7 +25,10 @@ jobs:
           persist-credentials: true
 
       - name: Install bounded migration dependencies
-        run: python -m pip install '.[quality]'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ripgrep
+          python -m pip install '.[quality]'
 
       - name: Prove support import boundary
         run: |
