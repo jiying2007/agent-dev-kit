@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import Optional, Sequence
 
 from .campaign import campaign_markdown, campaign_plan, check_campaign, run_campaign
-from .cli_support import (
+from .cli_runtime import (
     DEFAULT_TASKS,
     LEGACY_COMMANDS,
     ROOT,
@@ -42,7 +42,8 @@ from .readiness import readiness_markdown, run_harness_readiness
 from .release import build_release, build_runtime_bundle, check_release, publish_release, rehearse_release
 from .repository_evaluation import certify_repository_report, repository_plan
 from .targets import TargetUsageError, check_targets, run_target_smoke
-from .task_cost import TASK_TYPES as TASK_COST_TYPES, classify_task_cost, validate_skill_usage
+from .task_cost import TASK_TYPES as TASK_COST_TYPES
+from .task_cost import classify_task_cost, validate_skill_usage
 
 
 def _cmd_validate(argv: Sequence[str]) -> int:
