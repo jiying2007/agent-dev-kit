@@ -1,21 +1,30 @@
 {
-  "schema_version": 1,
-  "contract_version": "1.0",
-  "status": "candidate",
+  "schema": "adk-codex-runtime-binding/v2",
+  "contract_version": "2.0",
+  "status": "active",
   "consumer": "jiying2007/codex",
   "provider": "jiying2007/agent-dev-kit",
-  "role": "codex-runtime-binding",
+  "role": "exact-source-set-handoff",
   "runtime_target": "codex-cli",
+  "asset_profile": "embedded-fullstack",
+  "release_baseline": {
+    "version": "5.1.0",
+    "tag": "v5.1.0",
+    "commit": "59cbd5cb40ca7077ee5407636bfc617e295ec7e5",
+    "tree": "16d3c99d4dac8c41c09509b82c536a11cc058ca9",
+    "manifest_blob": "bc349b0dc003c553059cdddbc368ae8ea6ffda89",
+    "release_artifact_sha256": "d4684fe5888203b4a25e7dda9ab51b83fb900cae2d09adb6e5179a775748c965"
+  },
   "provider_owns": [
     "reusable_agent_assets",
     "reusable_skills",
     "asset_profiles",
     "workflow_assets",
-    "target_export_contract",
     "asset_validation",
     "asset_release_and_rollback"
   ],
   "consumer_owns": [
+    "exact_source_selection",
     "codex_runtime_profiles",
     "codex_host_mapping",
     "codex_config_rendering",
@@ -24,44 +33,32 @@
     "live_drift_detection",
     "runtime_execution_receipt"
   ],
-  "consumer_must_not_own": [
-    "domain_gate_semantics",
-    "domain_verification_pass",
-    "knowledge_lifecycle",
-    "reusable_agent_asset_source_of_truth",
-    "cross_runtime_effectiveness_evaluation"
-  ],
-  "identity": {
-    "required": [
-      "provider_repository",
-      "provider_commit",
-      "release_version",
-      "asset_profile",
-      "asset_bundle_hash",
-      "runtime_target"
-    ],
+  "identity_contract": {
     "canonical_provider_repository": "jiying2007/agent-dev-kit",
-    "exact_provider_commit_required": true,
-    "asset_profile_required": "embedded-fullstack",
+    "release_baseline_is_immutable": true,
+    "consumer_must_bind_exact_release_commit": true,
+    "consumer_must_bind_exact_source_blob_per_vendored_asset": true,
+    "consumer_must_preserve_asset_profile": true,
     "runtime_profile_is_separate_from_asset_profile": true
   },
   "delivery": {
+    "mode": "exact-source-set",
+    "provider_produces_monolithic_codex_bundle": false,
+    "consumer_assembles_runtime_distribution": true,
     "direct_live_home_write": false,
     "plan_before_apply": true,
     "dry_run_before_apply": true,
     "receipt_required": true,
     "rollback_required": true
   },
-  "readiness": {
-    "state": "BLOCKED_ASSET_BUNDLE_IDENTITY",
-    "reason": "No provider-produced embedded-fullstack Codex target asset_bundle_hash is proven in this contract yet.",
-    "must_not_substitute": [
-      "git_blob_sha",
-      "consumer_build_lock_hash",
-      "short_commit_sha",
-      "tag_without_exact_commit"
-    ],
-    "exit_condition": "Provider emits a reproducible Codex target bundle for embedded-fullstack with exact provider commit, release version, asset profile and asset_bundle_hash, and the consumer verifies the same identity before apply."
-  },
-  "production_claim": "candidate-only; real Codex target bundle and runtime evidence remain required"
+  "must_not": [
+    "monolithic_bundle_digest_as_required_identity",
+    "consumer_lock_as_provider_identity",
+    "legacy_nested_repository_identity",
+    "short_commit_sha",
+    "unpeeled_release_tag",
+    "domain_gate_claim_from_runtime_success",
+    "domain_verification_claim_from_runtime_success"
+  ],
+  "maturity_boundary": "source handoff contract only; runtime/domain/product qualification remains independently governed"
 }
