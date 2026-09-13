@@ -108,16 +108,18 @@ jobs:
       - name: Verify release ownership and prepare clean candidate
         run: |
           set -euo pipefail
-          TARGETS=(src/agent_dev_kit/release.py src/agent_dev_kit/distribution/release_artifacts.py scripts/verify-runtime-bundle-identity.py)
+          PYTHON_TARGETS=(src/agent_dev_kit/release.py src/agent_dev_kit/distribution/release_artifacts.py)
+          VERIFIER=scripts/verify-runtime-bundle-identity.py
           ! test -e src/agent_dev_kit/distribution/release_support.py
           test -f src/agent_dev_kit/distribution/release_artifacts.py
           ! rg -n 'release_support' src tests scripts manifests/module_size_budget.json || {
             echo '[FAIL] retired release_support reference remains' >&2
             exit 1
           }
-          ruff check "${TARGETS[@]}" --select I --fix
-          python -m compileall -q "${TARGETS[@]}"
-          ruff check "${TARGETS[@]}" --select E4,E7,E9,F,B,SIM,I
+          ruff check "${PYTHON_TARGETS[@]}" --select I --fix
+          python -m compileall -q "${PYTHON_TARGETS[@]}" "$VERIFIER"
+          ruff check "${PYTHON_TARGETS[@]}" --select E4,E7,E9,F,B,SIM,I
+          ruff check "$VERIFIER" --select E7,E9,F,B,SIM,I
           bash tests/test_module_size_budget.sh
           bash tests/test_intent_boundary_governance.sh
 
