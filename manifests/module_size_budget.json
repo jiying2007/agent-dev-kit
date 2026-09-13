@@ -2,5 +2,26 @@
   "schema": "adk-module-size-budget/v1",
   "default_max_bytes": 30000,
   "policy": "no-new-oversize-and-legacy-monotonic-shrink",
-  "exceptions": {}
+  "exceptions": {},
+  "architecture_policy": {
+    "preferred_execution_namespace": "execution_policy",
+    "compatibility_execution_namespace": "runtime_control",
+    "compatibility_sunset": "future-major-only",
+    "no_new_support_modules": true,
+    "transitional_support_modules": [
+      "src/agent_dev_kit/campaign_support.py",
+      "src/agent_dev_kit/cli_support.py",
+      "src/agent_dev_kit/distribution/release_support.py",
+      "src/agent_dev_kit/evaluation_support.py",
+      "src/agent_dev_kit/readiness_support.py",
+      "src/agent_dev_kit/runtime_control/engine_support.py"
+    ],
+    "design_metrics": [
+      "bounded-context",
+      "dependency-direction",
+      "import-fan-out",
+      "public-api-surface",
+      "responsibility-count"
+    ]
+  }
 }
