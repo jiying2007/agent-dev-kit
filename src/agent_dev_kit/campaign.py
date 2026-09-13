@@ -7,14 +7,16 @@ import random
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
-from .campaign_support import (
+from .campaign_model import (
     CONTRACT_SCHEMA as CONTRACT_SCHEMA,
+)
+from .campaign_model import (
     MODEL_ID_RE as MODEL_ID_RE,
+)
+from .campaign_model import (
     PLAN_SCHEMA,
     RESULT_SCHEMA,
-    TASK_ID_RE as TASK_ID_RE,
     _attempt_from_report,
-    _canonical as _canonical,
     _digest,
     _expected_result_entries,
     _load_json_object,
@@ -22,15 +24,24 @@ from .campaign_support import (
     _runtime_entry,
     _utc_now,
     _validate_plan_integrity,
-    _validated_existing_state as _validated_existing_state_support,
     _write_json_atomic,
-    campaign_markdown as campaign_markdown,
     load_campaign_contract,
+)
+from .campaign_model import (
+    TASK_ID_RE as TASK_ID_RE,
+)
+from .campaign_model import (
+    _canonical as _canonical,
+)
+from .campaign_model import (
+    _validated_existing_state as _validated_existing_state_support,
+)
+from .campaign_model import (
+    campaign_markdown as campaign_markdown,
 )
 from .evaluation import run_runtime, runtime_plan
 from .locking import TargetLock
 from .model import Manifest, ManifestError, sha256_file
-
 
 REPORT_SCHEMA = "adk-runtime-eval-campaign-report/v1"
 

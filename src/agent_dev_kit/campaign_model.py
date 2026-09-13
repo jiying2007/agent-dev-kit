@@ -1,4 +1,4 @@
-"""Deterministic campaign contract, state, and result-entry helpers."""
+"""Deterministic campaign domain model, persistence, and evidence projection."""
 
 from __future__ import annotations
 
@@ -13,7 +13,6 @@ from typing import Any, Callable, Dict, List, Mapping, Sequence, Tuple
 
 from .evaluation import BASELINE_CATEGORIES, load_tasks
 from .model import Manifest, ManifestError, ensure_within
-
 
 CONTRACT_SCHEMA = "adk-runtime-eval-campaign/v1"
 PLAN_SCHEMA = "adk-runtime-eval-campaign-plan/v1"
