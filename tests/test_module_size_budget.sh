@@ -51,6 +51,62 @@ unknown = sorted(set(exceptions) - seen)
 for rel in unknown:
     failures.append(f"exception path is missing or not a Python module: {rel}")
 
+architecture = policy.get("architecture_policy")
+if not isinstance(architecture, dict):
+    failures.append("missing architecture_policy")
+else:
+    if architecture.get("preferred_execution_namespace") != "execution_policy":
+        failures.append("preferred execution namespace must be execution_policy")
+    if architecture.get("compatibility_execution_namespace") != "runtime_control":
+        failures.append("runtime_control must remain the 5.x compatibility namespace")
+    if architecture.get("compatibility_sunset") != "future-major-only":
+        failures.append("execution namespace compatibility may only sunset in a future major")
+    if architecture.get("no_new_support_modules") is not True:
+        failures.append("no_new_support_modules must stay enabled")
+
+    allowed_support = architecture.get("transitional_support_modules")
+    if not isinstance(allowed_support, list) or not all(isinstance(item, str) and item for item in allowed_support):
+        failures.append("transitional_support_modules must be a non-empty string list")
+        allowed_support = []
+    allowed_support_set = set(allowed_support)
+    if len(allowed_support_set) != len(allowed_support):
+        failures.append("transitional_support_modules contains duplicates")
+
+    actual_support = {
+        path.relative_to(root).as_posix()
+        for path in source_root.rglob("*_support.py")
+    }
+    unexpected_support = sorted(actual_support - allowed_support_set)
+    if unexpected_support:
+        failures.append(
+            "new *_support.py modules are forbidden; split by owned bounded context instead: "
+            + ", ".join(unexpected_support)
+        )
+    missing_support = sorted(allowed_support_set - actual_support)
+    if missing_support:
+        failures.append(
+            "retired transitional support modules must also be removed from the policy: "
+            + ", ".join(missing_support)
+        )
+
+    preferred = source_root / architecture.get("preferred_execution_namespace", "") / "__init__.py"
+    compatibility = source_root / architecture.get("compatibility_execution_namespace", "") / "__init__.py"
+    if not preferred.is_file():
+        failures.append("missing preferred execution_policy package")
+    if not compatibility.is_file():
+        failures.append("missing runtime_control compatibility package")
+
+    metrics = architecture.get("design_metrics")
+    expected_metrics = {
+        "bounded-context",
+        "dependency-direction",
+        "import-fan-out",
+        "public-api-surface",
+        "responsibility-count",
+    }
+    if not isinstance(metrics, list) or set(metrics) != expected_metrics:
+        failures.append("architecture design_metrics must define the reviewed second-stage metrics")
+
 if failures:
     raise SystemExit("\n".join(failures))
 
@@ -59,6 +115,8 @@ print(json.dumps({
     "status": "pass",
     "default_max_bytes": default_max,
     "legacy_exception_count": len(exceptions),
+    "support_module_count": len(list(source_root.rglob("*_support.py"))),
+    "preferred_execution_namespace": architecture["preferred_execution_namespace"],
     "largest_baseline_bytes": max(
         (item["baseline_bytes"] for item in exceptions.values()),
         default=0,
@@ -66,4 +124,4 @@ print(json.dumps({
 }, sort_keys=True))
 PY
 
-echo '[PASS] module size debt is frozen and must shrink monotonically'
+echo '[PASS] module size and bounded-context architecture policy pass'
