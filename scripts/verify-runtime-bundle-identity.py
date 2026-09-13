@@ -14,7 +14,7 @@ from typing import Any, Sequence
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from agent_dev_kit.distribution.release_support import _release_source_identity
+from agent_dev_kit.distribution.release_artifacts import _release_source_identity
 from agent_dev_kit.model import Manifest, ManifestError
 from agent_dev_kit.release import build_runtime_bundle
 

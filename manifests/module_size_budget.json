@@ -9,7 +9,6 @@
     "compatibility_sunset": "future-major-only",
     "no_new_support_modules": true,
     "transitional_support_modules": [
-      "src/agent_dev_kit/distribution/release_support.py",
       "src/agent_dev_kit/runtime_control/engine_support.py"
     ],
     "design_metrics": [
@@ -19,6 +18,6 @@
       "public-api-surface",
       "responsibility-count"
     ],
-    "transitional_support_max_count": 2
+    "transitional_support_max_count": 1
   }
 }

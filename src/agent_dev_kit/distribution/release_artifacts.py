@@ -1,4 +1,4 @@
-"""Deterministic release artifact, source-identity, and validation helpers."""
+"""Release artifact domain: deterministic archives, source identity, SBOM, and validation."""
 
 from __future__ import annotations
 
