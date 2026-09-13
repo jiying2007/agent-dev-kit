@@ -176,7 +176,7 @@ jobs:
           EXECUTION_POLICY_PATH=src/agent_dev_kit/execution_policy
           python -m compileall -q "${CORE_KERNEL_PATHS[@]}" "$EXECUTION_POLICY_PATH"
           ruff check "${CORE_KERNEL_PATHS[@]}" --select E4,E7,E9,F,B,UP,SIM,I
-          ruff check "$EXECUTION_POLICY_PATH" --select E4,E7,E9,F,B,SIM
+          ruff check "$EXECUTION_POLICY_PATH" --select E4,E7,E9,F,B,UP,SIM,I
 
       - name: Run focused strict type analysis
         run: >-

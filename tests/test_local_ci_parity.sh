@@ -153,7 +153,7 @@ for quality_token in \
   'CORE_KERNEL_PATHS=(' \
   'EXECUTION_POLICY_PATH=src/agent_dev_kit/execution_policy' \
   '--select E4,E7,E9,F,B,UP,SIM,I' \
-  '--select E4,E7,E9,F,B,SIM' \
+  'ruff check "$EXECUTION_POLICY_PATH" --select E4,E7,E9,F,B,UP,SIM,I' \
   'mypy'; do
   rg -Fq -- "$quality_token" "$HOSTED_CI" || {
     echo "[FAIL] hosted focused quality gate omitted: $quality_token" >&2
@@ -164,6 +164,11 @@ for quality_token in \
     exit 1
   }
 done
+
+if rg -Fq -- '--select E4,E7,E9,F,B,SIM' "$HOSTED_CI" "$ENTRYPOINT"; then
+  echo "[FAIL] staged execution-policy Ruff selector remains" >&2
+  exit 1
+fi
 
 python3 - "$WAIVER" <<'PY'
 import datetime as dt

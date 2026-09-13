@@ -2,21 +2,14 @@
 
 from __future__ import annotations
 
-from datetime import datetime
-from typing import Any, Callable, Dict, Iterable, Mapping, Optional
+from collections.abc import Callable, Iterable, Mapping
+from datetime import UTC, datetime
+from typing import Any
 
 from .contracts import (
     ARTIFACT_TYPES,
-    DECISION_SCHEMA as DECISION_SCHEMA,
-    DECISION_SCHEMA_V2 as DECISION_SCHEMA_V2,
-    EVENT_SCHEMA as EVENT_SCHEMA,
     GATE_EVENTS,
     GOAL_INTAKE_SCHEMA,
-    POLICY_SCHEMA as POLICY_SCHEMA,
-    POLICY_SCHEMA_V2 as POLICY_SCHEMA_V2,
-    STATE_SCHEMA as STATE_SCHEMA,
-    UTC,
-    RuntimeControlError as RuntimeControlError,
     _identifier,
     _ids,
     _integer,
@@ -26,12 +19,37 @@ from .contracts import (
     _timestamp,
     _validate_event,
     _validate_goal_intake,
+)
+from .contracts import (
+    DECISION_SCHEMA as DECISION_SCHEMA,
+)
+from .contracts import (
+    DECISION_SCHEMA_V2 as DECISION_SCHEMA_V2,
+)
+from .contracts import (
+    EVENT_SCHEMA as EVENT_SCHEMA,
+)
+from .contracts import (
+    POLICY_SCHEMA as POLICY_SCHEMA,
+)
+from .contracts import (
+    POLICY_SCHEMA_V2 as POLICY_SCHEMA_V2,
+)
+from .contracts import (
+    STATE_SCHEMA as STATE_SCHEMA,
+)
+from .contracts import (
+    RuntimeControlError as RuntimeControlError,
+)
+from .contracts import (
     goal_intake_attestation_sha256 as goal_intake_attestation_sha256,
+)
+from .contracts import (
     validate_policy as validate_policy,
 )
 
 
-def _initial_state(thread_id: str) -> Dict[str, Any]:
+def _initial_state(thread_id: str) -> dict[str, Any]:
     return {
         "schema_version": STATE_SCHEMA,
         "identity": {"thread_id": thread_id, "cwd_hash": None, "model": None},
@@ -83,7 +101,7 @@ def _initial_state(thread_id: str) -> Dict[str, Any]:
     }
 
 
-def _reset_goal_state(state: Dict[str, Any], payload: Mapping[str, Any], at: datetime) -> None:
+def _reset_goal_state(state: dict[str, Any], payload: Mapping[str, Any], at: datetime) -> None:
     base_required = {
         "goal_id", "token_budget", "time_budget_seconds", "usage_baseline_tokens",
         "success_criteria", "required_evidence", "open_items_count",
@@ -137,10 +155,10 @@ def _reset_goal_state(state: Dict[str, Any], payload: Mapping[str, Any], at: dat
     state["artifacts"] = {}
 
 
-def reduce_events(events: Iterable[Mapping[str, Any]]) -> Dict[str, Any]:
-    state: Optional[Dict[str, Any]] = None
-    seen: Dict[str, str] = {}
-    last_at: Optional[datetime] = None
+def reduce_events(events: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
+    state: dict[str, Any] | None = None
+    seen: dict[str, str] = {}
+    last_at: datetime | None = None
 
     for raw in events:
         event = _validate_event(raw)
@@ -328,12 +346,10 @@ def evaluate(
     policy: Mapping[str, Any],
     *,
     gate_event: str = "steady",
-    task_mode: Optional[str] = None,
-    mode_authority_verifier: Optional[
-        Callable[[Mapping[str, Any], Mapping[str, Any]], bool]
-    ] = None,
-    as_of: Optional[datetime] = None,
-) -> Dict[str, Any]:
+    task_mode: str | None = None,
+    mode_authority_verifier: Callable[[Mapping[str, Any], Mapping[str, Any]], bool] | None = None,
+    as_of: datetime | None = None,
+) -> dict[str, Any]:
     normalized_policy = validate_policy(policy)
     if not isinstance(state, dict) or state.get("schema_version") != STATE_SCHEMA:
         raise RuntimeControlError("unsupported runtime control state schema")
