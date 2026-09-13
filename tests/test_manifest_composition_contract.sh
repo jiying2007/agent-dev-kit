@@ -11,7 +11,7 @@ import re
 import sys
 from pathlib import Path
 
-from agent_dev_kit.manifest_composition import (
+from agent_dev_kit.contracts.manifest_composition import (
     ManifestCompositionError,
     compose_owned_sections,
     partition_by_owner,
@@ -36,7 +36,7 @@ assert policy.get("composition_generator") is None, policy
 
 reference = policy.get("reference_composer")
 assert reference == {
-    "module": "agent_dev_kit.manifest_composition",
+    "module": "agent_dev_kit.contracts.manifest_composition",
     "partition_function": "partition_by_owner",
     "compose_function": "compose_owned_sections",
     "mode": "pure-in-memory-only",
