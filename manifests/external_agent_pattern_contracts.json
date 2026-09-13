@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-07-30",
+  "last_updated": "2026-09-13",
   "reference_boundary": "External agent, plugin, memory and skill sources are method-only references until a separate supply-chain review targets a specific versioned asset. This manifest does not enable external runtimes, hooks, workers, MCP servers or plugin installs.",
   "local_source_policy": {
     "id": "optional-workspace-reference-clones-v1",
@@ -124,13 +124,13 @@
       "title": "Agent Skills specification and reference repository",
       "url": "https://agentskills.io/specification",
       "local_path": "",
-      "retrieved_at": "2026-07-14",
+      "retrieved_at": "2026-09-13",
       "review_status": "reviewed",
-      "expires_at": "2026-09-12",
+      "expires_at": "2026-11-12",
       "license": "Apache-2.0-code/CC-BY-4.0-docs",
       "evidence_strength": "high",
       "decision": "adopt-method-only",
-      "notes": "Use the portable SKILL.md directory contract, required name/description metadata and progressive disclosure model. Do not install reference implementations or replace existing ADK target rendering."
+      "notes": "2026-09-13 re-review confirmed the current Agent Skills specification still requires SKILL.md with name/description metadata, parent-directory name alignment, optional support directories, and progressive disclosure. Keep method-only adoption; do not install reference implementations or replace existing ADK target rendering."
     },
     {
       "id": "owasp-agentic-top10-2026",
@@ -189,26 +189,26 @@
       "title": "Agent Client Protocol",
       "url": "https://github.com/agentclientprotocol/agent-client-protocol",
       "local_path": "",
-      "retrieved_at": "2026-07-14",
+      "retrieved_at": "2026-09-13",
       "review_status": "reviewed-watch-only",
-      "expires_at": "2026-09-12",
+      "expires_at": "2026-11-12",
       "license": "Apache-2.0",
       "evidence_strength": "medium",
       "decision": "observe-method-only",
-      "notes": "Watch editor-to-agent JSON-RPC interoperability and protocol v1 evolution. ADK has no transport runtime requirement, so no binding, dependency or compatibility claim is enabled."
+      "notes": "2026-09-13 re-review found the current ACP release line has advanced to 1.7.0 while the v1 JSON-RPC schema remains active; authentication, elicitation, and session surfaces continue to evolve. Keep watch-only: ADK has no transport runtime requirement, dependency, binding, or compatibility claim."
     },
     {
       "id": "a2a-protocol-1-0",
       "title": "Agent2Agent Protocol 1.0",
       "url": "https://a2a-protocol.org/latest/specification/",
       "local_path": "",
-      "retrieved_at": "2026-07-14",
+      "retrieved_at": "2026-09-13",
       "review_status": "reviewed-watch-only",
-      "expires_at": "2026-09-12",
+      "expires_at": "2026-11-12",
       "license": "Apache-2.0",
       "evidence_strength": "medium",
       "decision": "observe-method-only",
-      "notes": "Watch Agent Card, task and artifact interoperability at protocol version 1.0.0. Do not add network discovery, remote agents, auth flows or runtime bindings without a concrete use case and separate security review."
+      "notes": "2026-09-13 re-review confirmed the official A2A specification still lists 1.0.0 as the latest released version. Continue watching Agent Card, task/artifact interoperability, and conformance maturity; do not add discovery, auth, network, remote-agent, or runtime bindings without a concrete use case and separate security review."
     },
     {
       "id": "mcp-2026-07-28-final",
