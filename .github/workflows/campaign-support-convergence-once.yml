@@ -1,0 +1,144 @@
+name: campaign-support-convergence-once
+
+on:
+  push:
+    branches:
+      - codex/campaign-support-convergence
+
+permissions:
+  contents: write
+
+concurrency:
+  group: campaign-support-convergence-once
+  cancel-in-progress: false
+
+jobs:
+  converge:
+    if: ${{ github.actor != 'github-actions[bot]' }}
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: codex/campaign-support-convergence
+          fetch-depth: 1
+          persist-credentials: true
+
+      - name: Install bounded migration dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ripgrep
+          python -m pip install '.[quality]'
+
+      - name: Prove campaign support import boundary
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          refs = set()
+          for root_name in ('src', 'tests', 'scripts'):
+              root = Path(root_name)
+              if not root.exists():
+                  continue
+              for path in root.rglob('*.py'):
+                  if 'campaign_support' in path.read_text(encoding='utf-8'):
+                      refs.add(path.as_posix())
+          expected = {'src/agent_dev_kit/campaign.py'}
+          if refs != expected:
+              raise SystemExit(f'unexpected campaign_support Python references: {sorted(refs)}')
+          PY
+
+      - name: Move campaign model into owned bounded context
+        run: |
+          set -euo pipefail
+          mv src/agent_dev_kit/campaign_support.py src/agent_dev_kit/campaign_model.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          owner = Path('src/agent_dev_kit/campaign.py')
+          text = owner.read_text(encoding='utf-8')
+          assert 'from .campaign_support import (' in text
+          owner.write_text(text.replace('from .campaign_support import (', 'from .campaign_model import ('), encoding='utf-8')
+
+          model = Path('src/agent_dev_kit/campaign_model.py')
+          text = model.read_text(encoding='utf-8')
+          old_doc = '"""Deterministic campaign contract, state, and result-entry helpers."""'
+          assert text.startswith(old_doc)
+          text = text.replace(old_doc, '"""Deterministic campaign domain model, persistence, and evidence projection."""', 1)
+          model.write_text(text, encoding='utf-8')
+
+          policy_path = Path('manifests/module_size_budget.json')
+          policy = json.loads(policy_path.read_text(encoding='utf-8'))
+          architecture = policy['architecture_policy']
+          retired = 'src/agent_dev_kit/campaign_support.py'
+          current = architecture['transitional_support_modules']
+          assert retired in current, current
+          architecture['transitional_support_modules'] = [item for item in current if item != retired]
+          assert architecture.get('transitional_support_max_count') == 4, architecture
+          architecture['transitional_support_max_count'] = 3
+          policy_path.write_text(json.dumps(policy, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+          PY
+
+      - name: Verify campaign seam and prepare clean candidate
+        run: |
+          set -euo pipefail
+          TARGETS=(src/agent_dev_kit/campaign.py src/agent_dev_kit/campaign_model.py)
+          ! test -e src/agent_dev_kit/campaign_support.py
+          test -f src/agent_dev_kit/campaign_model.py
+          ! rg -n 'campaign_support' src tests scripts manifests/module_size_budget.json || {
+            echo '[FAIL] retired campaign_support reference remains' >&2
+            exit 1
+          }
+          ruff check "${TARGETS[@]}" --select I --fix
+          python -m compileall -q "${TARGETS[@]}"
+          ruff check "${TARGETS[@]}" --select E4,E7,E9,F,B,SIM,I
+          bash tests/test_module_size_budget.sh
+
+          PYTHONPATH=src python - <<'PY'
+          from agent_dev_kit import campaign
+          from agent_dev_kit import campaign_model
+
+          if campaign._load_json_object is not campaign_model._load_json_object:
+              raise SystemExit('campaign._load_json_object object identity changed')
+
+          original = campaign._load_json_object
+          def sentinel(path, label):
+              return {'sentinel': f'{path}:{label}'}
+          campaign._load_json_object = sentinel
+          try:
+              if campaign_model._contract_json_loader() is not sentinel:
+                  raise SystemExit('historical campaign._load_json_object monkeypatch seam broke')
+          finally:
+              campaign._load_json_object = original
+          print('[PASS] historical campaign monkeypatch seam preserved')
+          PY
+
+          mapfile -t changed < <(git status --short | sed -E 's/^.. //' | sort)
+          printf '%s\n' "${changed[@]}"
+          for path in "${changed[@]}"; do
+            case "$path" in
+              manifests/module_size_budget.json|src/agent_dev_kit/campaign.py|src/agent_dev_kit/campaign_support.py|src/agent_dev_kit/campaign_model.py) ;;
+              *)
+                echo "[FAIL] campaign convergence escaped bounded scope: $path" >&2
+                exit 1
+                ;;
+            esac
+          done
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add manifests/module_size_budget.json src/agent_dev_kit/campaign.py src/agent_dev_kit/campaign_support.py src/agent_dev_kit/campaign_model.py
+          git commit -m 'refactor(campaign): retire transitional support module'
+          test -z "$(git status --porcelain)"
+
+      - name: Verify clean candidate behavior
+        run: |
+          set -euo pipefail
+          test -z "$(git status --porcelain)"
+          bash tests/run_all.sh --quick --timing-json /tmp/campaign-support-tests.json
+          test -z "$(git status --porcelain)"
+
+      - name: Publish verified candidate
+        run: git push origin HEAD:codex/campaign-support-convergence
