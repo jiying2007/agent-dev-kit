@@ -1,10 +1,19 @@
 {
-  "schema_version": 1,
-  "contract_version": "1.0",
-  "status": "candidate",
-  "consumer": "digital-worker",
-  "provider": "agent-dev-kit",
+  "schema": "adk-digital-worker-integration/v2",
+  "contract_version": "2.0",
+  "status": "active",
+  "consumer": "jiying2007/digital-worker",
+  "provider": "jiying2007/agent-dev-kit",
   "role": "agent-asset-control-plane",
+  "asset_profile": "embedded-fullstack",
+  "release_baseline": {
+    "version": "5.1.0",
+    "tag": "v5.1.0",
+    "commit": "59cbd5cb40ca7077ee5407636bfc617e295ec7e5",
+    "tree": "16d3c99d4dac8c41c09509b82c536a11cc058ca9",
+    "manifest_blob": "bc349b0dc003c553059cdddbc368ae8ea6ffda89",
+    "release_artifact_sha256": "d4684fe5888203b4a25e7dda9ab51b83fb900cae2d09adb6e5179a775748c965"
+  },
   "consumer_owns": [
     "expert_identity",
     "domain_workflow",
@@ -14,33 +23,40 @@
     "verification_and_review"
   ],
   "provider_owns": [
-    "agent_assets",
-    "skills",
-    "profiles",
+    "reusable_agent_assets",
+    "reusable_skills",
+    "asset_profiles",
     "workflow_assets",
-    "target_export",
     "asset_validation",
     "asset_release_and_rollback"
   ],
-  "profiles": {
-    "required": ["embedded-fullstack"],
-    "optional": ["team-core", "incident-response", "release-hardening"]
-  },
-  "identity": {
-    "required": ["provider_commit", "adk_version", "profile_set", "asset_bundle_hash"],
-    "runtime_target_identity_is_separate": true
-  },
-  "runtime_boundary": {
-    "digital_worker_must_not_own_runtime_specific_exporters": true,
-    "provider_neutral_core_required": true,
-    "live_runtime_write_requires_declared_target_chain": true
+  "identity_contract": {
+    "canonical_provider_repository": "jiying2007/agent-dev-kit",
+    "release_baseline_is_immutable": true,
+    "consumer_must_bind_exact_release_commit": true,
+    "consumer_records_refs_not_asset_copies": true,
+    "runtime_binding_owns_exact_source_selection": true,
+    "runtime_profile_is_separate_from_asset_profile": true,
+    "monolithic_runtime_bundle_is_not_required_identity": true
   },
   "delivery": {
+    "mode": "exact-source-set-reference",
+    "provider_produces_monolithic_runtime_bundle": false,
+    "runtime_binding_selects_exact_source_set": true,
+    "runtime_binding_assembles_runtime_distribution": true,
     "direct_live_home_write": false,
     "plan_before_apply": true,
     "receipt_required": true,
     "rollback_required": true
   },
+  "must_not": [
+    "asset_bundle_hash_as_required_identity",
+    "consumer_lock_as_provider_identity",
+    "runtime_specific_exporter_in_digital_worker",
+    "runtime_profile_as_asset_profile",
+    "domain_gate_claim_from_runtime_success",
+    "domain_verification_claim_from_runtime_success"
+  ],
   "skill_ownership_rule": "domain role semantics may remain in digital-worker; reusable implementation skills belong in ADK or are wrapped by reference",
-  "production_claim": "candidate-only; real runtime evidence remains required"
+  "maturity_boundary": "agent-asset handoff contract only; runtime/domain/product qualification remains independently governed"
 }
