@@ -5,6 +5,15 @@
   "authoring_mode": "single-canonical-json",
   "digest_semantics": "canonical-output-json",
   "composition_generator": null,
+  "reference_composer": {
+    "module": "agent_dev_kit.manifest_composition",
+    "partition_function": "partition_by_owner",
+    "compose_function": "compose_owned_sections",
+    "mode": "pure-in-memory-only",
+    "file_io": false,
+    "runtime_enabled": false,
+    "extension_owner": "extension-governance"
+  },
   "future_split_contract": {
     "mode": "deterministic-build-time-only",
     "canonical_output": "manifest.json",
