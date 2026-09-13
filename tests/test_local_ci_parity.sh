@@ -148,7 +148,13 @@ for kernel_path in \
     exit 1
   }
 done
-for quality_token in 'python -m compileall -q' '--select E4,E7,E9,F,B,UP,SIM,I' 'mypy'; do
+for quality_token in \
+  'python -m compileall -q' \
+  'CORE_KERNEL_PATHS=(' \
+  'EXECUTION_POLICY_PATH=src/agent_dev_kit/execution_policy' \
+  '--select E4,E7,E9,F,B,UP,SIM,I' \
+  '--select E4,E7,E9,F,B,SIM' \
+  'mypy'; do
   rg -Fq -- "$quality_token" "$HOSTED_CI" || {
     echo "[FAIL] hosted focused quality gate omitted: $quality_token" >&2
     exit 1
