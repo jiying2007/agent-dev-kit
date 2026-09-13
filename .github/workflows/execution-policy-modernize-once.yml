@@ -85,7 +85,7 @@ jobs:
       - name: Self-delete and commit bounded modernization
         run: |
           git rm .github/workflows/execution-policy-modernize-once.yml
-          mapfile -t changed < <(git diff --name-only)
+          mapfile -t changed < <(git diff --name-only HEAD)
           for path in "${changed[@]}"; do
             case "$path" in
               .github/workflows/execution-policy-modernize-once.yml|src/agent_dev_kit/execution_policy/*.py) ;;
@@ -97,6 +97,6 @@ jobs:
           done
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add src/agent_dev_kit/execution_policy .github/workflows/execution-policy-modernize-once.yml
+          git add src/agent_dev_kit/execution_policy
           git commit -m 'style(execution-policy): modernize canonical kernel'
           git push origin HEAD:codex/execution-policy-modernization
