@@ -7,8 +7,9 @@ can be composed deterministically before any physical split is introduced.
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from copy import deepcopy
-from typing import Any, Mapping
+from typing import Any
 
 
 class ManifestCompositionError(ValueError):
@@ -20,9 +21,9 @@ def _validated_owners(section_owners: Mapping[str, str]) -> dict[str, str]:
     if not owners:
         raise ManifestCompositionError("section ownership must not be empty")
     for section, owner in owners.items():
-        if not isinstance(section, str) or not section:
+        if not section:
             raise ManifestCompositionError("section ownership contains an invalid section name")
-        if not isinstance(owner, str) or not owner:
+        if not owner:
             raise ManifestCompositionError(f"section {section} has an invalid owner")
     return owners
 
@@ -69,7 +70,7 @@ def compose_owned_sections(
     composed: dict[str, Any] = {}
     seen: dict[str, str] = {}
     for owner, sections in partitions.items():
-        if not isinstance(owner, str) or not owner:
+        if not owner:
             raise ManifestCompositionError("partition contains an invalid owner")
         for section, value in sections.items():
             if section in seen:
