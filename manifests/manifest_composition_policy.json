@@ -6,7 +6,7 @@
   "digest_semantics": "canonical-output-json",
   "composition_generator": null,
   "reference_composer": {
-    "module": "agent_dev_kit.manifest_composition",
+    "module": "agent_dev_kit.contracts.manifest_composition",
     "partition_function": "partition_by_owner",
     "compose_function": "compose_owned_sections",
     "mode": "pure-in-memory-only",
