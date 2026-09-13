@@ -38,17 +38,23 @@ jobs:
           python - <<'PY'
           from pathlib import Path
 
-          paths = [
-              Path('src/agent_dev_kit/execution_policy/contracts.py'),
-              Path('src/agent_dev_kit/execution_policy/engine.py'),
-          ]
-          for path in paths:
+          replacements = {
+              Path('src/agent_dev_kit/execution_policy/contracts.py'): (
+                  ('Dict[', 'dict['),
+                  ('from datetime import UTC, datetime, timezone', 'from datetime import UTC, datetime'),
+                  ('from typing import Any, Dict, Optional', 'from typing import Any'),
+                  ('from typing import Any, Optional', 'from typing import Any'),
+              ),
+              Path('src/agent_dev_kit/execution_policy/engine.py'): (
+                  ('Dict[', 'dict['),
+                  ('from typing import Any, Dict, Optional', 'from typing import Any'),
+                  ('from typing import Any, Optional', 'from typing import Any'),
+              ),
+          }
+          for path, edits in replacements.items():
               text = path.read_text(encoding='utf-8')
-              text = text.replace('Dict[', 'dict[')
-              text = text.replace('from typing import Any, Dict, Optional', 'from typing import Any, Optional')
-              text = text.replace('from typing import Dict, ', 'from typing import ')
-              text = text.replace(', Dict,', ',')
-              text = text.replace(', Dict\n', '\n')
+              for old, new in edits:
+                  text = text.replace(old, new)
               path.write_text(text, encoding='utf-8')
           PY
           mapfile -t changed < <(git diff --name-only)
