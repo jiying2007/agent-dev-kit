@@ -87,13 +87,20 @@ jobs:
       - name: Verify bounded migration
         run: |
           set -euo pipefail
+          TARGETS=(
+            src/agent_dev_kit/evaluation.py
+            src/agent_dev_kit/evaluation_runtime.py
+            src/agent_dev_kit/readiness.py
+            src/agent_dev_kit/readiness_evidence.py
+          )
           ! test -e src/agent_dev_kit/evaluation_support.py
           ! test -e src/agent_dev_kit/readiness_support.py
           test -f src/agent_dev_kit/evaluation_runtime.py
           test -f src/agent_dev_kit/readiness_evidence.py
           ! rg -n 'evaluation_support|readiness_support' src tests manifests/module_size_budget.json
-          python -m compileall -q src/agent_dev_kit/evaluation.py src/agent_dev_kit/evaluation_runtime.py src/agent_dev_kit/readiness.py src/agent_dev_kit/readiness_evidence.py
-          ruff check src/agent_dev_kit/evaluation.py src/agent_dev_kit/evaluation_runtime.py src/agent_dev_kit/readiness.py src/agent_dev_kit/readiness_evidence.py --select E4,E7,E9,F,B,SIM,I
+          ruff check "${TARGETS[@]}" --select I --fix
+          python -m compileall -q "${TARGETS[@]}"
+          ruff check "${TARGETS[@]}" --select E4,E7,E9,F,B,SIM,I
           bash tests/test_module_size_budget.sh
           bash tests/run_all.sh --quick --timing-json /tmp/support-debt-tests.json
 
