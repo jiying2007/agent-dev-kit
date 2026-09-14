@@ -19,18 +19,23 @@ module = importlib.util.module_from_spec(spec)
 sys.modules[spec.name] = module
 spec.loader.exec_module(module)
 
-main_sha = "b15e28daec9caad7e29c17e39f323cdf307b3dae"
-retired_sha = "fc2d786c6c2c4efe50dc10ca6e0eec167c25a57a"
+legacy_sha = "fc2d786c6c2c4efe50dc10ca6e0eec167c25a57a"
+legacy_main_sha = "b15e28daec9caad7e29c17e39f323cdf307b3dae"
+retired_sha = "3e8e15e873c43ccc5548ad6a2567a3aae6f35963"
+main_sha = "ecf53500ede2b407ca9ff39d605ea603135672d0"
 active_sha = "1" * 40
 changed_sha = "2" * 40
 
 registry = module.load_retired_registry(root / "manifests/branch_gc_retired.json")
-assert len(registry) == 1
-retired_branch = next(iter(registry))
-entry = registry[retired_branch]
-assert entry.sha == retired_sha
+legacy_entry = next(item for item in registry.values() if item.sha == legacy_sha)
+assert legacy_entry.proof == "ancestor-of-main"
+assert legacy_entry.reviewed_against_main == legacy_main_sha
+
+entry = next(item for item in registry.values() if item.sha == retired_sha)
 assert entry.proof == "ancestor-of-main"
 assert entry.reviewed_against_main == main_sha
+retired_branch = entry.branch
+subject_registry = {retired_branch: entry}
 
 
 class FakeClient:
@@ -99,7 +104,7 @@ class FakeClient:
 
 
 client = FakeClient()
-base_sha, candidates, skipped, scanned = module.evaluate(client, "main", registry)
+base_sha, candidates, skipped, scanned = module.evaluate(client, "main", subject_registry)
 assert base_sha == main_sha
 assert scanned == 2
 assert len(candidates) == 1
@@ -114,13 +119,13 @@ assert any(
     for item in skipped
 )
 
-ok, reason = module.revalidate_and_delete(client, candidate, "main", registry)
+ok, reason = module.revalidate_and_delete(client, candidate, "main", subject_registry)
 assert ok is True
 assert reason is None
 assert client.deleted == [retired_branch]
 
 changed = FakeClient(retired_branch_sha=changed_sha)
-_, changed_candidates, changed_skipped, _ = module.evaluate(changed, "main", registry)
+_, changed_candidates, changed_skipped, _ = module.evaluate(changed, "main", subject_registry)
 assert changed_candidates == []
 assert any(
     item["branch"] == retired_branch
@@ -130,7 +135,7 @@ assert any(
 )
 
 with_open_pr = FakeClient(open_retired_pr=True)
-_, open_candidates, open_skipped, _ = module.evaluate(with_open_pr, "main", registry)
+_, open_candidates, open_skipped, _ = module.evaluate(with_open_pr, "main", subject_registry)
 assert open_candidates == []
 assert any(
     item["branch"] == retired_branch and item["reason"] == "open-pr"

@@ -8,6 +8,14 @@
       "proof": "ancestor-of-main",
       "reviewed_against_main": "b15e28daec9caad7e29c17e39f323cdf307b3dae",
       "reason": "Terminal CLI support branch is an exact historical ancestor of the reviewed main identity and has no content outside main."
+    },
+    {
+      "branch": "codex/execution-policy-ownership",
+      "sha": "3e8e15e873c43ccc5548ad6a2567a3aae6f35963",
+      "disposition": "delete",
+      "proof": "ancestor-of-main",
+      "reviewed_against_main": "ecf53500ede2b407ca9ff39d605ea603135672d0",
+      "reason": "Execution-policy ownership work is fully contained in the qualified main identity; the remote head is an exact historical ancestor with no content outside main."
     }
   ]
 }
