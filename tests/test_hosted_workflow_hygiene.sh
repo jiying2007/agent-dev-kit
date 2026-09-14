@@ -20,6 +20,12 @@ assert len(consumer_files) == 1, consumer_files
 # Every hosted job must also have a bounded timeout so runner or third-party action
 # hangs fail closed instead of consuming unbounded hosted capacity. External actions
 # must use immutable full commit SHAs; repository-local actions remain allowed.
+expected_write_permissions = {
+    "branch-gc.yml": ["contents"],
+    "ci.yml": ["id-token"],
+    "release.yml": ["artifact-metadata", "attestations", "id-token"],
+    "security-codeql.yml": ["security-events"],
+}
 for path in workflow_files:
     text = path.read_text(encoding="utf-8")
     checkout_count = text.count("uses: actions/checkout@")
@@ -57,6 +63,15 @@ for path in workflow_files:
             action,
             "external actions must be pinned to a full 40-hex commit SHA",
         )
+
+    write_permissions = sorted(
+        re.findall(r"(?m)^\s+([a-z0-9-]+):\s+write\s*$", text)
+    )
+    assert write_permissions == expected_write_permissions.get(path.name, []), (
+        path.name,
+        write_permissions,
+        "workflow write permissions must match the reviewed allowlist",
+    )
 
 # Core CI has one canonical push branch. Do not reintroduce historical branch aliases
 # that no longer exist in repository metadata.
