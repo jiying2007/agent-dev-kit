@@ -6,6 +6,7 @@ import json
 import os
 import subprocess
 import tempfile
+from collections.abc import Mapping
 from pathlib import Path
 from typing import Any, Sequence
 
@@ -73,6 +74,28 @@ PUBLIC_COMMANDS = [
     ("harness", "检查目标仓 Harness readiness"),
     ("task-cost", "生成确定性任务成本与执行预算 receipt"),
 ] + [(name, "治理兼容入口") for name in LEGACY_COMMANDS]
+
+
+def _manifest_split_readiness_inputs(policy: Mapping[str, Any]) -> tuple[str | None, bool, bool]:
+    gate = policy.get("migration_gate")
+    if not isinstance(gate, Mapping):
+        return None, False, False
+
+    change_stage = None
+    change_id = gate.get("change_id")
+    if isinstance(change_id, str):
+        state_path = ROOT / "docs" / "changes" / change_id / "state.yaml"
+        if state_path.is_file():
+            for line in state_path.read_text(encoding="utf-8").splitlines():
+                if line.startswith("stage:"):
+                    change_stage = line.split(":", 1)[1].strip() or None
+                    break
+
+    authoring_root = gate.get("authoring_root")
+    generator_path = gate.get("generator_path")
+    authoring_root_present = isinstance(authoring_root, str) and (ROOT / authoring_root).exists()
+    generator_path_present = isinstance(generator_path, str) and (ROOT / generator_path).is_file()
+    return change_stage, authoring_root_present, generator_path_present
 
 
 def _manifest() -> Manifest:
