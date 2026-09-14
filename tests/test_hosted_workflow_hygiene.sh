@@ -4,6 +4,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 python3 - "$ROOT_DIR" <<'PY'
+import importlib.util
 from pathlib import Path
 import re
 import sys
@@ -170,6 +171,79 @@ assert "if-no-files-found: error" in release, "release artifact upload must fail
 dependency_review = (workflow_dir / "security-dependency-review.yml").read_text(encoding="utf-8")
 assert "pull_request:" in dependency_review, "dependency review must remain PR-only"
 assert "cancel-in-progress: true" in dependency_review, "PR-only dependency review may cancel superseded runs"
+
+# Native GitHub governance is an external control-plane boundary. Keep its verifier
+# replayable offline and its hosted evidence workflow manual-only until admin state is
+# actually compliant; current non-compliance must not poison every PR/main build.
+governance_path = root / "tools/control_plane/github_governance.py"
+spec = importlib.util.spec_from_file_location("adk_github_governance", governance_path)
+assert spec is not None and spec.loader is not None
+module = importlib.util.module_from_spec(spec)
+sys.modules[spec.name] = module
+spec.loader.exec_module(module)
+
+required = module.DEFAULT_REQUIRED_CHECKS
+passing_repo = {
+    "full_name": "example/agent-dev-kit",
+    "default_branch": "main",
+    "allow_squash_merge": True,
+    "allow_merge_commit": False,
+    "allow_rebase_merge": False,
+    "delete_branch_on_merge": True,
+}
+passing_branch = {"name": "main", "protected": True}
+passing_ruleset = {
+    "id": 1,
+    "name": "main-governance",
+    "target": "branch",
+    "enforcement": "active",
+    "conditions": {"ref_name": {"include": ["~DEFAULT_BRANCH"], "exclude": []}},
+    "bypass_actors": [],
+    "rules": [
+        {"type": "pull_request", "parameters": {}},
+        {
+            "type": "required_status_checks",
+            "parameters": {
+                "required_status_checks": [
+                    {"context": context, "integration_id": None}
+                    for context in required
+                ]
+            },
+        },
+        {"type": "non_fast_forward"},
+        {"type": "deletion"},
+    ],
+}
+passing = module.evaluate_state(
+    passing_repo,
+    passing_branch,
+    [passing_ruleset],
+    branch_name="main",
+)
+assert passing["compliant"] is True, passing
+assert passing["missing_status_checks"] == [], passing
+
+failing_repo = dict(passing_repo)
+failing_repo["allow_merge_commit"] = True
+failing = module.evaluate_state(
+    failing_repo,
+    {"name": "main", "protected": False},
+    [],
+    branch_name="main",
+)
+assert failing["compliant"] is False, failing
+assert "contract-py3.11" in failing["missing_status_checks"], failing
+assert "repository merge methods are not squash-only" in failing["violations"], failing
+assert failing["remediation"], failing
+
+governance_workflow = (workflow_dir / "github-governance-control-plane.yml").read_text(encoding="utf-8")
+trigger_block = governance_workflow.split("permissions:", 1)[0]
+assert "workflow_dispatch:" in trigger_block, "governance evidence must remain manually triggered"
+assert "pull_request:" not in trigger_block and "push:" not in trigger_block, "known external blocker must not poison core CI"
+assert "GH_TOKEN: ${{ github.token }}" in governance_workflow, "governance verifier must use ephemeral GitHub token"
+assert "--out \"$RUNNER_TEMP/github-governance-report.json\"" in governance_workflow, "governance evidence report path missing"
+assert "if: always()" in governance_workflow, "governance report must upload even when verification fails"
+assert "if-no-files-found: error" in governance_workflow, "governance evidence upload must fail closed"
 PY
 
 echo "[PASS] hosted workflow hygiene"
