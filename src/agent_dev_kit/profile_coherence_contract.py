@@ -69,6 +69,24 @@ def _collect_direct(
     return result
 
 
+def _inheritance_depth(
+    profiles: Mapping[str, Mapping[str, Any]],
+    name: str,
+    visiting: set[str] | None = None,
+) -> int:
+    visiting = set() if visiting is None else set(visiting)
+    if name in visiting:
+        raise ValueError(f"profile inheritance cycle at {name}")
+    raw = profiles.get(name)
+    if raw is None:
+        raise ValueError(f"unknown profile: {name}")
+    visiting.add(name)
+    parents = _parents(raw)
+    if not parents:
+        return 0
+    return 1 + max(_inheritance_depth(profiles, parent, visiting) for parent in parents)
+
+
 def _duplicates(values: list[str]) -> list[str]:
     seen: set[str] = set()
     duplicates: set[str] = set()
@@ -79,11 +97,83 @@ def _duplicates(values: list[str]) -> list[str]:
     return sorted(duplicates)
 
 
+def _profile_inventory(
+    manifest: Manifest,
+    profiles: Mapping[str, Mapping[str, Any]],
+    name: str,
+) -> dict[str, Any]:
+    raw = profiles[name]
+    resolution = manifest.resolve_profiles([name])
+    direct_agents = sorted(set(_strings(raw.get("include_agents"))))
+    direct_skills = sorted(set(_strings(raw.get("include_skills"))))
+    resolved_agents = sorted({item.name for item in resolution.agents})
+    resolved_skills = sorted({item.name for item in resolution.skills})
+    return {
+        "parents": sorted(_parents(raw)),
+        "inheritance_depth": _inheritance_depth(profiles, name),
+        "direct_agents": direct_agents,
+        "inherited_agents": sorted(set(resolved_agents) - set(direct_agents)),
+        "resolved_agents": resolved_agents,
+        "direct_skills": direct_skills,
+        "inherited_skills": sorted(set(resolved_skills) - set(direct_skills)),
+        "resolved_skills": resolved_skills,
+    }
+
+
+def _observability(
+    inventory: Mapping[str, Mapping[str, Any]],
+) -> tuple[dict[str, int], dict[str, dict[str, Any]]]:
+    resolved_agents = {
+        item
+        for record in inventory.values()
+        for item in _strings(record.get("resolved_agents"))
+    }
+    resolved_skills = {
+        item
+        for record in inventory.values()
+        for item in _strings(record.get("resolved_skills"))
+    }
+    stats = {
+        "profiles": len(inventory),
+        "resolved_agent_references": sum(
+            len(_strings(record.get("resolved_agents"))) for record in inventory.values()
+        ),
+        "resolved_skill_references": sum(
+            len(_strings(record.get("resolved_skills"))) for record in inventory.values()
+        ),
+        "unique_resolved_agents": len(resolved_agents),
+        "unique_resolved_skills": len(resolved_skills),
+        "max_inheritance_depth": max(
+            (int(record.get("inheritance_depth", 0)) for record in inventory.values()),
+            default=0,
+        ),
+    }
+
+    core = inventory.get("core", {})
+    core_agents = set(_strings(core.get("resolved_agents")))
+    core_skills = set(_strings(core.get("resolved_skills")))
+    standalone_overlap: dict[str, dict[str, Any]] = {}
+    for name in sorted(inventory):
+        record = inventory[name]
+        if name == "core" or _strings(record.get("parents")):
+            continue
+        agents = sorted(core_agents & set(_strings(record.get("resolved_agents"))))
+        skills = sorted(core_skills & set(_strings(record.get("resolved_skills"))))
+        standalone_overlap[name] = {
+            "agents": agents,
+            "skills": skills,
+            "agent_count": len(agents),
+            "skill_count": len(skills),
+        }
+    return stats, standalone_overlap
+
+
 def validate_profile_coherence(root: Path) -> dict[str, Any]:
     manifest = Manifest.load(root)
     profiles = _profiles(manifest)
     failures: list[str] = []
     warnings: list[str] = []
+    inventory: dict[str, dict[str, Any]] = {}
 
     default_profile = manifest.data.get("default_profile")
     if not isinstance(default_profile, str) or default_profile not in profiles:
@@ -129,7 +219,8 @@ def validate_profile_coherence(root: Path) -> dict[str, Any]:
 
         try:
             resolution = manifest.resolve_profiles([name])
-        except ManifestError as exc:
+            inventory[name] = _profile_inventory(manifest, profiles, name)
+        except (ManifestError, ValueError) as exc:
             failures.append(str(exc))
             continue
         resolved_agents = {item.name for item in resolution.agents}
@@ -166,12 +257,16 @@ def validate_profile_coherence(root: Path) -> dict[str, Any]:
         except ManifestError as exc:
             failures.append(str(exc))
 
+    stats, standalone_overlap = _observability(inventory)
     return {
         "schema": "adk-profile-coherence/v2",
         "status": "fail" if failures else "pass",
         "source": "manifest.json",
         "default_profile": default_profile,
         "profiles": len(profiles),
+        "profile_inventory": {name: inventory[name] for name in sorted(inventory)},
+        "capability_stats": stats,
+        "standalone_core_overlap": standalone_overlap,
         "failures": failures,
         "warnings": warnings,
     }
