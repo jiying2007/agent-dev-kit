@@ -44,6 +44,12 @@ for path in workflow_files:
         timeout_values,
     )
 
+# Core CI has one canonical push branch. Do not reintroduce historical branch aliases
+# that no longer exist in repository metadata.
+ci = (workflow_dir / "ci.yml").read_text(encoding="utf-8")
+assert "  push:\n    branches:\n      - main\n  pull_request:\n" in ci, "core CI must push-trigger only on main"
+assert "\n      - master\n" not in ci, "stale master push trigger must not return"
+
 # Superseded-run cancellation is safe only for PR validation. Non-PR runs must be
 # isolated by run_id so fresh-main, scheduled, and manual evidence cannot cancel.
 pr_cancellable = {
