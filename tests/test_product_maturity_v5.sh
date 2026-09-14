@@ -58,7 +58,7 @@ pyproject_data = tomllib.loads(pyproject)
 assert pyproject_data["project"]["requires-python"] == ">=3.11", pyproject_data
 assert pyproject_data["project"]["dependencies"] == ["PyYAML==6.0.3", "jsonschema==4.26.0"], pyproject_data
 assert pyproject_data["project"]["optional-dependencies"]["quality"] == [
-    "ruff==0.16.6",
+    "ruff==0.16.7",
     "pip-audit==2.10.1",
     "mypy==2.3.1",
     "types-jsonschema==4.26.0.20260518",
