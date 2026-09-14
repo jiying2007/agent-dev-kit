@@ -1,0 +1,48 @@
+name: github-governance-control-plane
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: github-governance-control-plane-${{ github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    name: github-governance
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Validate trusted main dispatch
+        run: |
+          if [[ "$GITHUB_REF" != "refs/heads/main" ]]; then
+            echo "::error::governance verification must run from main"
+            exit 1
+          fi
+
+      - name: Checkout trusted main
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          persist-credentials: false
+
+      - name: Evaluate native GitHub governance
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: >-
+          python tools/control_plane/github_governance.py
+          --repo "$GITHUB_REPOSITORY"
+          --branch main
+          --out "$RUNNER_TEMP/github-governance-report.json"
+
+      - name: Upload governance evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: adk-github-governance-${{ github.sha }}
+          path: ${{ runner.temp }}/github-governance-report.json
+          if-no-files-found: error
+          retention-days: 90
