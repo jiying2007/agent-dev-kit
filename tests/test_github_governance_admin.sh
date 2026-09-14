@@ -165,6 +165,19 @@ assert "--apply refuses to run inside GitHub Actions" in source
 assert "Administration write" in source
 assert "unsafe local checkout for --apply" in source
 assert "local_checkout" in source
+
+governance_workflow = (
+    root / ".github/workflows/github-governance-control-plane.yml"
+).read_text(encoding="utf-8")
+assert "  workflow_dispatch:\n" in governance_workflow
+assert "  issue_comment:\n    types: [created]\n" in governance_workflow
+assert "github.event.issue.number == 33" in governance_workflow
+assert "github.event.comment.body == '/adk-governance-verify'" in governance_workflow
+assert "github.event.comment.author_association == 'OWNER'" in governance_workflow
+assert "github.event_name == 'workflow_dispatch'" in governance_workflow
+assert "permissions:\n  contents: read\n" in governance_workflow
+assert "issues: write" not in governance_workflow
+assert "pull_request_target:" not in governance_workflow
 PY
 
 echo "[PASS] GitHub governance admin remediation"

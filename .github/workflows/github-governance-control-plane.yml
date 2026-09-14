@@ -2,6 +2,8 @@ name: github-governance-control-plane
 
 on:
   workflow_dispatch:
+  issue_comment:
+    types: [created]
 
 permissions:
   contents: read
@@ -12,11 +14,12 @@ concurrency:
 
 jobs:
   verify:
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.event_name == 'issue_comment' && github.event.issue.number == 33 && github.event.comment.body == '/adk-governance-verify' && github.event.comment.author_association == 'OWNER') }}
     name: github-governance
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
-      - name: Validate trusted main dispatch
+      - name: Validate trusted main trigger
         run: |
           if [[ "$GITHUB_REF" != "refs/heads/main" ]]; then
             echo "::error::governance verification must run from main"
