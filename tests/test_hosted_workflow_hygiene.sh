@@ -114,6 +114,11 @@ ci = (workflow_dir / "ci.yml").read_text(encoding="utf-8")
 assert "  push:\n    branches:\n      - main\n  pull_request:\n" in ci, "core CI must push-trigger only on main"
 assert "\n      - master\n" not in ci, "stale master push trigger must not return"
 
+# The OIDC-capable promotion job is privileged and must only run for a main push.
+promotion = ci.split("\n  promotion-evidence:\n", 1)[1]
+assert "if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}" in promotion, "promotion evidence must stay confined to main pushes"
+assert "id-token: write" in promotion, "promotion OIDC permission must remain explicit"
+
 # Build artifacts are release-like evidence and must fail closed when absent; regression
 # timing remains diagnostic best-effort evidence and intentionally stays non-blocking.
 wheel_upload = ci.split("      - name: Upload candidate wheel\n", 1)[1].split("\n  static-security:\n", 1)[0]
@@ -143,6 +148,9 @@ for path in (consumer_files[0], workflow_dir / "digital-worker-contract.yml"):
 
 branch_gc = (workflow_dir / "branch-gc.yml").read_text(encoding="utf-8")
 assert "cancel-in-progress: false" in branch_gc, "branch-gc write/cleanup evidence must stay non-cancellable"
+branch_gc_apply = branch_gc.split("\n  apply:\n", 1)[1]
+assert "if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || (github.event_name == 'workflow_dispatch' && inputs.apply && github.ref == 'refs/heads/main')" in branch_gc_apply, "branch-gc write apply must stay confined to main"
+assert "contents: write" in branch_gc_apply, "branch-gc write permission must remain explicit"
 
 release = (workflow_dir / "release.yml").read_text(encoding="utf-8")
 assert "concurrency:" not in release, "release serialization semantics must remain unchanged"
@@ -151,6 +159,7 @@ assert "- name: Validate tag-bound release identity" in release, "release ref gu
 assert 'if [[ "$GITHUB_REF_TYPE" != "tag" || "$GITHUB_REF_NAME" != v* ]]; then' in release, "release must fail closed off tag refs"
 assert 'EXPECTED_TAG="v${SOURCE_VERSION}"' in release, "release must derive expected tag from source version"
 assert 'if [[ "$GITHUB_REF_NAME" != "$EXPECTED_TAG" ]]; then' in release, "release tag must match source version"
+assert release.index("- name: Validate tag-bound release identity") < release.index("- name: Install CI dependencies"), "release identity guard must run before build/install work"
 assert "- name: Validate complete release artifact bundle" in release, "release bundle completeness guard missing"
 assert "archives=(dist/*.tar.gz)" in release, "release bundle must require one archive"
 assert "checksums=(dist/*.tar.gz.sha256)" in release, "release bundle must require one matching checksum"
