@@ -143,6 +143,7 @@ jobs:
         with:
           name: agent-dev-kit-wheel
           path: dist/*.whl
+          if-no-files-found: error
           retention-days: 14
 
   static-security:
