@@ -4,9 +4,11 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 OUT_FILE="$(mktemp)"
-trap 'rm -f "$OUT_FILE"' EXIT
+ROLE_OUT_FILE="$(mktemp)"
+trap 'rm -f "$OUT_FILE" "$ROLE_OUT_FILE"' EXIT
 
 "$ROOT_DIR/scripts/check-token-budget.sh"
+"$ROOT_DIR/scripts/check-role-context-budget.sh"
 
 "$ROOT_DIR/scripts/check-token-budget.sh" --summary-json >"$OUT_FILE"
 grep -q '"status":"pass"' "$OUT_FILE" || {
@@ -38,8 +40,33 @@ grep -q '"agents_estimated_tokens":' "$OUT_FILE" || {
   exit 1
 }
 
+"$ROOT_DIR/scripts/check-role-context-budget.sh" --summary-json >"$ROLE_OUT_FILE"
+grep -q '"status":"pass"' "$ROLE_OUT_FILE" || {
+  echo "[FAIL] role context budget summary did not pass" >&2
+  cat "$ROLE_OUT_FILE" >&2
+  exit 1
+}
+grep -q '"role_agent_files":13' "$ROLE_OUT_FILE" || {
+  echo "[FAIL] role context budget did not cover all 13 roles" >&2
+  exit 1
+}
+for field in role_agents_bytes role_agents_limit role_agents_estimated_tokens max_role_agent_bytes max_role_agent_limit max_role_agent_file; do
+  grep -q "\"${field}\":" "$ROLE_OUT_FILE" || {
+    echo "[FAIL] role context budget summary missing ${field}" >&2
+    exit 1
+  }
+done
+
 if "$ROOT_DIR/scripts/check-token-budget.sh" --max-skill-lines 1 >/tmp/adk_token_budget_fail.out 2>&1; then
   echo "[FAIL] tiny skill line budget should fail" >&2
+  exit 1
+fi
+if "$ROOT_DIR/scripts/check-role-context-budget.sh" --max-role-agent-bytes 1 >/tmp/adk_role_context_file_fail.out 2>&1; then
+  echo "[FAIL] tiny per-role context budget should fail" >&2
+  exit 1
+fi
+if "$ROOT_DIR/scripts/check-role-context-budget.sh" --max-role-agents-bytes 1 >/tmp/adk_role_context_total_fail.out 2>&1; then
+  echo "[FAIL] tiny aggregate role context budget should fail" >&2
   exit 1
 fi
 
