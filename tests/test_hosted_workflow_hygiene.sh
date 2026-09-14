@@ -16,6 +16,7 @@ assert workflow_files, "no hosted workflows found"
 consumer_files = sorted(workflow_dir.glob("*-consumer-contract.yml"))
 assert len(consumer_files) == 1, consumer_files
 
+# Every hosted workflow starts from an explicit read-only contents permission.
 # Every checkout is read-only by construction: no persisted git credential may remain.
 # Every hosted job must also have a bounded timeout so runner or third-party action
 # hangs fail closed instead of consuming unbounded hosted capacity. External actions
@@ -28,6 +29,10 @@ expected_write_permissions = {
 }
 for path in workflow_files:
     text = path.read_text(encoding="utf-8")
+    assert "permissions:\n  contents: read\n" in text, (
+        path.name,
+        "hosted workflows must declare a read-only root contents permission",
+    )
     checkout_count = text.count("uses: actions/checkout@")
     credential_count = text.count("persist-credentials: false")
     assert credential_count == checkout_count, (
