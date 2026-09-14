@@ -121,6 +121,7 @@ TESTS=(
   test_capability_health.sh
   test_harness_readiness.sh
   test_local_ci_parity.sh
+  test_hosted_workflow_hygiene.sh
   test_performance_budgets.sh
   test_change_governance.sh
   test_evidence_index.sh
@@ -190,6 +191,7 @@ QUICK_TESTS=(
   test_capability_health.sh
   test_harness_readiness.sh
   test_local_ci_parity.sh
+  test_hosted_workflow_hygiene.sh
   test_performance_budgets.sh
   test_skill_trigger_matrix.sh
   test_scripts_smoke.sh
