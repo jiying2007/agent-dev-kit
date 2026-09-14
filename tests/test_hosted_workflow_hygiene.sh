@@ -246,4 +246,5 @@ assert "if: always()" in governance_workflow, "governance report must upload eve
 assert "if-no-files-found: error" in governance_workflow, "governance evidence upload must fail closed"
 PY
 
+bash "$ROOT_DIR/tests/test_github_governance_admin.sh"
 echo "[PASS] hosted workflow hygiene"
