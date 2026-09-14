@@ -32,13 +32,14 @@ jobs:
           ref: main
           persist-credentials: false
 
-      - name: Evaluate native GitHub governance
+      - name: Evaluate native GitHub ruleset governance
         env:
           GH_TOKEN: ${{ github.token }}
         run: >-
           python tools/control_plane/github_governance.py
           --repo "$GITHUB_REPOSITORY"
           --branch main
+          --scope hosted-ruleset
           --out "$RUNNER_TEMP/github-governance-report.json"
 
       - name: Upload governance evidence
