@@ -18,7 +18,8 @@ assert len(consumer_files) == 1, consumer_files
 
 # Every checkout is read-only by construction: no persisted git credential may remain.
 # Every hosted job must also have a bounded timeout so runner or third-party action
-# hangs fail closed instead of consuming unbounded hosted capacity.
+# hangs fail closed instead of consuming unbounded hosted capacity. External actions
+# must use immutable full commit SHAs; repository-local actions remain allowed.
 for path in workflow_files:
     text = path.read_text(encoding="utf-8")
     checkout_count = text.count("uses: actions/checkout@")
@@ -43,6 +44,19 @@ for path in workflow_files:
         path.name,
         timeout_values,
     )
+
+    action_uses = re.findall(r"(?m)^\s*uses:\s*([^\s#]+)", text)
+    for action in action_uses:
+        action = action.strip("'\"")
+        if action.startswith("./"):
+            continue
+        assert "@" in action, (path.name, action)
+        ref = action.rsplit("@", 1)[1]
+        assert re.fullmatch(r"[0-9a-f]{40}", ref), (
+            path.name,
+            action,
+            "external actions must be pinned to a full 40-hex commit SHA",
+        )
 
 # Core CI has one canonical push branch. Do not reintroduce historical branch aliases
 # that no longer exist in repository metadata.
