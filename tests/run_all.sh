@@ -78,6 +78,7 @@ TESTS=(
   test_manifest_consumer_boundary.sh
   test_manifest_composition_contract.sh
   test_manifest_composition_cli.sh
+  test_manifest_split_readiness.sh
   test_python_launcher.sh
   test_asset_content_quality.sh
   test_format.sh
@@ -159,6 +160,7 @@ QUICK_TESTS=(
   test_manifest_consumer_boundary.sh
   test_manifest_composition_contract.sh
   test_manifest_composition_cli.sh
+  test_manifest_split_readiness.sh
   test_python_launcher.sh
   test_runtime_boundary.sh
   test_target_contracts.sh

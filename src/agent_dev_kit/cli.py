@@ -18,12 +18,16 @@ from .cli_runtime import (
     _help,
     _json,
     _manifest,
+    _manifest_split_readiness_inputs,
     _run_legacy,
     _write_json,
     _write_text,
 )
 from .compiler import export_assets
-from .contracts.manifest_composition import composition_check
+from .contracts.manifest_composition import (
+    composition_check,
+    split_migration_readiness,
+)
 from .doctor import run_doctor
 from .evaluation import (
     compare_runtime_reports,
@@ -52,12 +56,33 @@ def _cmd_manifest(argv: Sequence[str]) -> int:
     sub = parser.add_subparsers(dest="action", required=True)
     check = sub.add_parser("composition-check")
     check.add_argument("--summary-json", action="store_true")
+    readiness = sub.add_parser("split-readiness")
+    readiness.add_argument("--summary-json", action="store_true")
     args = parser.parse_args(argv)
 
     manifest = _manifest()
     policy = json.loads(
         (ROOT / "manifests" / "manifest_composition_policy.json").read_text(encoding="utf-8")
     )
+
+    if args.action == "split-readiness":
+        change_stage, authoring_root_present, generator_path_present = (
+            _manifest_split_readiness_inputs(policy)
+        )
+        result = split_migration_readiness(
+            policy,
+            change_stage=change_stage,
+            authoring_root_present=authoring_root_present,
+            generator_path_present=generator_path_present,
+        )
+        if args.summary_json:
+            _json(result)
+        else:
+            print(json.dumps(result, ensure_ascii=False, indent=2))
+        if result["status"] == "invalid":
+            return 1
+        return 0 if result["status"] == "ready" else 2
+
     result = composition_check(
         manifest.data,
         policy,

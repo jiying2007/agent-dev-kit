@@ -57,6 +57,31 @@ assert future == {
     "generated_output_must_preserve_manifest_digest_semantics": True,
 }, future
 
+migration_gate = policy.get("migration_gate")
+assert migration_gate == {
+    "state": "blocked",
+    "change_id": "manifest-build-time-split",
+    "required_change_stage": "review-passed",
+    "authoring_root": "manifests/manifest-sections",
+    "generator_path": "tools/compose_manifest.py",
+    "target_authoring_mode": "deterministic-build-time",
+    "required_evidence": [
+        "change-governance-pass",
+        "executable-rollback-plan",
+        "deterministic-double-generation",
+        "strict-generated-output-validation",
+        "canonical-digest-equivalence",
+        "canonical-consumer-boundary-pass",
+    ],
+    "activation_invariants": {
+        "canonical_output": "manifest.json",
+        "runtime_fragment_loading": False,
+        "parallel_ssot_allowed": False,
+        "generated_output_must_validate_before_consume": True,
+        "generated_output_must_preserve_manifest_digest_semantics": True,
+    },
+}, migration_gate
+
 prohibited = policy.get("prohibited_runtime_composition_keys")
 assert prohibited == ["$include", "include", "includes", "fragments", "imports"], prohibited
 for key in prohibited:
@@ -194,9 +219,9 @@ expect_composition_failure(
 # Runtime and release consumers still bind directly to manifest.json.
 for retired_or_future in (
     root / "manifest.yaml",
-    root / "manifests" / "manifest-sections",
+    root / migration_gate["authoring_root"],
     root / "manifests" / "manifest-fragments",
-    root / "tools" / "compose_manifest.py",
+    root / migration_gate["generator_path"],
 ):
     assert not retired_or_future.exists(), (
         "file-backed manifest composition requires a deliberate contract migration first: "
