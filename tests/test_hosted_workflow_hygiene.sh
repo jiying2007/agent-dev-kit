@@ -75,7 +75,13 @@ assert "cancel-in-progress: false" in branch_gc, "branch-gc write/cleanup eviden
 
 release = (workflow_dir / "release.yml").read_text(encoding="utf-8")
 assert "concurrency:" not in release, "release serialization semantics must remain unchanged"
+assert "  workflow_dispatch:\n" in release, "tag-bound manual release entrypoint must remain available"
+assert "- name: Validate tag-bound release identity" in release, "release ref guard missing"
+assert 'if [[ "$GITHUB_REF_TYPE" != "tag" || "$GITHUB_REF_NAME" != v* ]]; then' in release, "release must fail closed off tag refs"
+assert 'EXPECTED_TAG="v${SOURCE_VERSION}"' in release, "release must derive expected tag from source version"
+assert 'if [[ "$GITHUB_REF_NAME" != "$EXPECTED_TAG" ]]; then' in release, "release tag must match source version"
 
+# Dependency review remains a PR-only supply-chain gate.
 dependency_review = (workflow_dir / "security-dependency-review.yml").read_text(encoding="utf-8")
 assert "pull_request:" in dependency_review, "dependency review must remain PR-only"
 assert "cancel-in-progress: true" in dependency_review, "PR-only dependency review may cancel superseded runs"

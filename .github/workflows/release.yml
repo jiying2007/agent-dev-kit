@@ -29,6 +29,26 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Validate tag-bound release identity
+        run: |
+          if [[ "$GITHUB_REF_TYPE" != "tag" || "$GITHUB_REF_NAME" != v* ]]; then
+            echo "::error::release workflow must run from a v* tag ref"
+            exit 1
+          fi
+          SOURCE_VERSION="$(python - <<'PY'
+          import json
+          from pathlib import Path
+
+          manifest = json.loads(Path("manifest.json").read_text(encoding="utf-8"))
+          print(manifest["version"])
+          PY
+          )"
+          EXPECTED_TAG="v${SOURCE_VERSION}"
+          if [[ "$GITHUB_REF_NAME" != "$EXPECTED_TAG" ]]; then
+            echo "::error::release tag $GITHUB_REF_NAME does not match source version $EXPECTED_TAG"
+            exit 1
+          fi
+
       - name: Install CI dependencies
         run: |
           sudo apt-get update
