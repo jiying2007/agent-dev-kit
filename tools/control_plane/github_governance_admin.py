@@ -4,8 +4,10 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import subprocess
 import sys
 import urllib.error
+import urllib.parse
 import urllib.request
 from pathlib import Path
 from typing import Any
@@ -240,6 +242,87 @@ def fetch_state(
     return repository, branch_state, details
 
 
+def _run_git(*args: str) -> str:
+    try:
+        result = subprocess.run(
+            ["git", *args],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+    except FileNotFoundError as exc:
+        raise AdminError("git is required for --apply checkout verification") from exc
+    if result.returncode != 0:
+        detail = result.stderr.strip() or result.stdout.strip() or f"exit {result.returncode}"
+        raise AdminError(f"git {' '.join(args)} failed: {detail}")
+    return result.stdout.strip()
+
+
+def inspect_local_checkout() -> dict[str, Any]:
+    return {
+        "toplevel": _run_git("rev-parse", "--show-toplevel"),
+        "branch": _run_git("branch", "--show-current"),
+        "head_sha": _run_git("rev-parse", "HEAD"),
+        "status": _run_git("status", "--porcelain"),
+        "origin": _run_git("remote", "get-url", "origin"),
+    }
+
+
+def _repo_from_github_remote(remote: str) -> str | None:
+    value = remote.strip()
+    ssh_prefix = "git@github.com:"
+    if value.startswith(ssh_prefix):
+        path = value[len(ssh_prefix) :]
+    else:
+        parsed = urllib.parse.urlparse(value)
+        if parsed.hostname != "github.com":
+            return None
+        path = parsed.path.lstrip("/")
+    if path.endswith(".git"):
+        path = path[:-4]
+    return path or None
+
+
+def validate_local_checkout(
+    repo: str,
+    branch: str,
+    branch_state: dict[str, Any],
+    local: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    observed = dict(local or inspect_local_checkout())
+    remote_sha = branch_state.get("commit", {}).get("sha")
+    if not isinstance(remote_sha, str) or not remote_sha:
+        raise AdminError("live GitHub branch state has no commit SHA")
+
+    problems: list[str] = []
+    local_branch = str(observed.get("branch") or "")
+    local_head = str(observed.get("head_sha") or "")
+    status = str(observed.get("status") or "")
+    origin = str(observed.get("origin") or "")
+    origin_repo = _repo_from_github_remote(origin)
+
+    if local_branch != branch:
+        problems.append(f"local branch is {local_branch!r}, expected {branch!r}")
+    if local_head != remote_sha:
+        problems.append(f"local HEAD {local_head!r} does not match live {branch} {remote_sha!r}")
+    if status:
+        problems.append("local working tree is not clean")
+    if origin_repo is None or origin_repo.lower() != repo.lower():
+        problems.append(f"origin {origin!r} does not identify repository {repo!r}")
+    if problems:
+        raise AdminError("unsafe local checkout for --apply: " + "; ".join(problems))
+
+    return {
+        "toplevel": observed.get("toplevel"),
+        "branch": local_branch,
+        "head_sha": local_head,
+        "remote_branch_sha": remote_sha,
+        "origin": origin,
+        "repository": origin_repo,
+        "worktree_clean": True,
+    }
+
+
 def apply_plan(
     client: AdminClient,
     repo: str,
@@ -326,6 +409,7 @@ def main(argv: list[str] | None = None) -> int:
         _render(plan, args.out)
         return 0 if not plan["repository_changes"] and plan["ruleset"]["action"] == "none" else 1
 
+    checkout = validate_local_checkout(args.repo, args.branch, branch_state)
     operations = apply_plan(client, args.repo, plan)
     repository, branch_state, rulesets = fetch_state(client, args.repo, args.branch)
     verification = evaluate_state(
@@ -339,6 +423,7 @@ def main(argv: list[str] | None = None) -> int:
         "schema_version": 1,
         "mode": "apply",
         "repository": args.repo,
+        "local_checkout": checkout,
         "operations": operations,
         "verification": verification,
     }

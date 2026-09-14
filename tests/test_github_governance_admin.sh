@@ -83,6 +83,54 @@ update_plan = admin.build_plan(
 assert update_plan["ruleset"]["action"] == "update", update_plan
 assert update_plan["ruleset"]["id"] == 42, update_plan
 
+branch_state = {
+    "name": "main",
+    "protected": False,
+    "commit": {"sha": "a" * 40},
+}
+clean_checkout = {
+    "toplevel": "/tmp/agent-dev-kit",
+    "branch": "main",
+    "head_sha": "a" * 40,
+    "status": "",
+    "origin": "git@github.com:example/agent-dev-kit.git",
+}
+checkout = admin.validate_local_checkout(
+    "example/agent-dev-kit",
+    "main",
+    branch_state,
+    clean_checkout,
+)
+assert checkout["worktree_clean"] is True, checkout
+assert checkout["repository"] == "example/agent-dev-kit", checkout
+assert checkout["remote_branch_sha"] == "a" * 40, checkout
+
+unsafe_cases = [
+    ({**clean_checkout, "branch": "topic"}, "local branch"),
+    ({**clean_checkout, "head_sha": "b" * 40}, "does not match live main"),
+    ({**clean_checkout, "status": " M README.md"}, "working tree is not clean"),
+    (
+        {**clean_checkout, "origin": "https://github.com/example/other.git"},
+        "does not identify repository",
+    ),
+]
+for unsafe_checkout, expected_fragment in unsafe_cases:
+    try:
+        admin.validate_local_checkout(
+            "example/agent-dev-kit",
+            "main",
+            branch_state,
+            unsafe_checkout,
+        )
+    except admin.AdminError as exc:
+        assert expected_fragment in str(exc), (expected_fragment, exc)
+    else:
+        raise AssertionError((unsafe_checkout, expected_fragment))
+
+assert admin._repo_from_github_remote("https://github.com/example/agent-dev-kit.git") == "example/agent-dev-kit"
+assert admin._repo_from_github_remote("ssh://git@github.com/example/agent-dev-kit.git") == "example/agent-dev-kit"
+assert admin._repo_from_github_remote("https://example.com/example/agent-dev-kit.git") is None
+
 class FakeClient:
     def __init__(self) -> None:
         self.calls = []
@@ -115,6 +163,8 @@ source = admin_path.read_text(encoding="utf-8")
 assert "ADK_GITHUB_ADMIN_TOKEN" in source
 assert "--apply refuses to run inside GitHub Actions" in source
 assert "Administration write" in source
+assert "unsafe local checkout for --apply" in source
+assert "local_checkout" in source
 PY
 
 echo "[PASS] GitHub governance admin remediation"
