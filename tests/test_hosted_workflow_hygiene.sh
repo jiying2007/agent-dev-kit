@@ -5,6 +5,7 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 python3 - "$ROOT_DIR" <<'PY'
 from pathlib import Path
+import re
 import sys
 
 root = Path(sys.argv[1])
@@ -16,6 +17,8 @@ consumer_files = sorted(workflow_dir.glob("*-consumer-contract.yml"))
 assert len(consumer_files) == 1, consumer_files
 
 # Every checkout is read-only by construction: no persisted git credential may remain.
+# Every hosted job must also have a bounded timeout so runner or third-party action
+# hangs fail closed instead of consuming unbounded hosted capacity.
 for path in workflow_files:
     text = path.read_text(encoding="utf-8")
     checkout_count = text.count("uses: actions/checkout@")
@@ -24,6 +27,21 @@ for path in workflow_files:
         path.name,
         checkout_count,
         credential_count,
+    )
+
+    job_count = text.count("runs-on:")
+    timeout_values = [
+        int(value)
+        for value in re.findall(r"(?m)^\s+timeout-minutes:\s+(\d+)\s*$", text)
+    ]
+    assert len(timeout_values) == job_count, (
+        path.name,
+        job_count,
+        timeout_values,
+    )
+    assert all(5 <= value <= 45 for value in timeout_values), (
+        path.name,
+        timeout_values,
     )
 
 # Superseded-run cancellation is safe only for PR validation. Non-PR runs must be
