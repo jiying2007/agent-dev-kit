@@ -15,9 +15,72 @@ grep -q '"context_governance_assets":11' "$OUT_FILE" || {
   echo "[FAIL] token context governance assets not counted" >&2
   exit 1
 }
-
 grep -q '"failures":0' "$OUT_FILE" || {
   echo "[FAIL] token context governance fixture gate reported failures" >&2
+  exit 1
+}
+
+python3 - "$ROOT_DIR/manifests/token_context_policy.json" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+path = Path(sys.argv[1])
+data = json.loads(path.read_text(encoding="utf-8"))
+assert data["schema"] == "adk-token-context-policy/v1", data
+assert data["status"] == "active", data
+assert data["scope"] == "all-profiles-all-workflows", data
+assert data["default_mode"] == "balanced", data
+assert set(data["modes"]) == {"fast", "balanced", "precision", "audit"}, data
+assert data["modes"]["audit"]["default_read_tiers"] == ["L3"], data
+assert data["modes"]["audit"]["compress_readonly"] is False, data
+invariants = data["invariants"]
+for key in (
+    "progressive_disclosure",
+    "deferred_tool_skill_loading",
+    "stable_context_prefix_first",
+    "dynamic_context_last",
+    "bounded_summary_first",
+    "full_evidence_retained",
+    "raw_evidence_required",
+    "high_risk_raw_read",
+    "mutation_review_never_replaced_by_compression",
+):
+    assert invariants[key] is True, (key, data)
+assert invariants["high_risk_mode"] == "audit", data
+assert invariants["usage_fields"] == [
+    "input_tokens",
+    "output_tokens",
+    "cached_tokens",
+    "total_tokens",
+], data
+overlay = data["low_token_overlay"]
+assert overlay["asset_profile"] is False, data
+assert overlay["mode"] == "fast", data
+assert "high-risk" in overlay["restore_on"], data
+assert "low-confidence" in overlay["restore_on"], data
+PY
+
+for file in \
+  "$ROOT_DIR/AGENTS.md" \
+  "$ROOT_DIR/skills/adk-token-context-governance/SKILL.md" \
+  "$ROOT_DIR/templates/context/low-token-profile.md"; do
+  grep -q 'balanced' "$file" || {
+    echo "[FAIL] balanced baseline missing from ${file#$ROOT_DIR/}" >&2
+    exit 1
+  }
+done
+
+grep -Eq 'Low Token.*runtime overlay|Low Token.*runtime.*overlay' "$ROOT_DIR/AGENTS.md" || {
+  echo "[FAIL] root AGENTS must define Low Token as runtime overlay" >&2
+  exit 1
+}
+grep -q 'not.*manifest asset profile' "$ROOT_DIR/templates/context/low-token-profile.md" || {
+  echo "[FAIL] low-token template must not masquerade as an asset profile" >&2
+  exit 1
+}
+grep -q 'cached_tokens' "$ROOT_DIR/skills/adk-token-context-governance/SKILL.md" || {
+  echo "[FAIL] token governance must account for cached tokens" >&2
   exit 1
 }
 
@@ -27,7 +90,7 @@ grep -q '"failures":0' "$OUT_FILE" || {
 
 "$ROOT_DIR/scripts/skill-match.sh" \
   --skill adk-token-context-governance \
-  --text "需要上下文预算，按审计模式读取原文证据" >/dev/null
+  --text "token lean 模式下按预算读取，低置信度时恢复原文" >/dev/null
 
 if "$ROOT_DIR/scripts/skill-match.sh" \
   --skill adk-token-context-governance \

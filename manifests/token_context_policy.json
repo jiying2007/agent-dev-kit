@@ -1,0 +1,64 @@
+{
+  "schema": "adk-token-context-policy/v1",
+  "status": "active",
+  "scope": "all-profiles-all-workflows",
+  "default_mode": "balanced",
+  "modes": {
+    "fast": {
+      "default_read_tiers": ["L0", "L1"],
+      "compress_readonly": true,
+      "raw_fallback_required": true
+    },
+    "balanced": {
+      "default_read_tiers": ["L1", "L2"],
+      "compress_readonly": true,
+      "raw_fallback_required": true
+    },
+    "precision": {
+      "default_read_tiers": ["L2"],
+      "compress_readonly": true,
+      "raw_fallback_required": true
+    },
+    "audit": {
+      "default_read_tiers": ["L3"],
+      "compress_readonly": false,
+      "raw_fallback_required": true
+    }
+  },
+  "invariants": {
+    "progressive_disclosure": true,
+    "deferred_tool_skill_loading": true,
+    "stable_context_prefix_first": true,
+    "dynamic_context_last": true,
+    "bounded_summary_first": true,
+    "full_evidence_retained": true,
+    "raw_evidence_required": true,
+    "high_risk_mode": "audit",
+    "high_risk_raw_read": true,
+    "mutation_review_never_replaced_by_compression": true,
+    "usage_accounting_required_when_supported": true,
+    "usage_fields": [
+      "input_tokens",
+      "output_tokens",
+      "cached_tokens",
+      "total_tokens"
+    ]
+  },
+  "low_token_overlay": {
+    "asset_profile": false,
+    "mode": "fast",
+    "template": "templates/context/low-token-profile.md",
+    "restore_on": [
+      "high-risk",
+      "low-confidence",
+      "missing-raw-evidence",
+      "safety-exception",
+      "user-disable"
+    ]
+  },
+  "evidence_budget": {
+    "failure_output_bounded_by_default": true,
+    "full_logs_retained_out_of_context": true,
+    "summaries_require_raw_pointer": true
+  }
+}
