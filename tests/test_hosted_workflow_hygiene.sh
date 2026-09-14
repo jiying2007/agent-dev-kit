@@ -64,6 +64,13 @@ ci = (workflow_dir / "ci.yml").read_text(encoding="utf-8")
 assert "  push:\n    branches:\n      - main\n  pull_request:\n" in ci, "core CI must push-trigger only on main"
 assert "\n      - master\n" not in ci, "stale master push trigger must not return"
 
+# Build artifacts are release-like evidence and must fail closed when absent; regression
+# timing remains diagnostic best-effort evidence and intentionally stays non-blocking.
+wheel_upload = ci.split("      - name: Upload candidate wheel\n", 1)[1].split("\n  static-security:\n", 1)[0]
+assert "if-no-files-found: error" in wheel_upload, "candidate wheel upload must fail closed"
+timing_upload = ci.split("      - name: Upload timing evidence\n", 1)[1].split("\n  deterministic-eval-package:\n", 1)[0]
+assert "if-no-files-found: ignore" in timing_upload, "regression timing upload must remain best-effort"
+
 # Superseded-run cancellation is safe only for PR validation. Non-PR runs must be
 # isolated by run_id so fresh-main, scheduled, and manual evidence cannot cancel.
 pr_cancellable = {
