@@ -99,4 +99,41 @@ if "$ROOT_DIR/scripts/skill-match.sh" \
   exit 1
 fi
 
+ROUTER="$ROOT_DIR/skills/adk-runtime-router/SKILL.md"
+ROUTER_REF="$ROOT_DIR/skills/adk-runtime-router/references/runtime-routing-details.md"
+[[ -s "$ROUTER_REF" ]] || {
+  echo "[FAIL] runtime-router progressive-disclosure reference missing" >&2
+  exit 1
+}
+router_bytes="$(wc -c <"$ROUTER" | tr -d ' ')"
+[[ "$router_bytes" -le 5600 ]] || {
+  echo "[FAIL] runtime-router entry exceeds 5600-byte ratchet: $router_bytes" >&2
+  exit 1
+}
+search_path='~/co'
+search_path+='dex/scripts/skill-search.sh'
+for marker in \
+  '## Prerequisites' '## Workflow' '## Commands' '## Quality Gate' \
+  'skill-catalog-lazy-loading-v1' 'namespace_summary' 'deferred_surface' \
+  'loaded_tools' 'schema_review' 'code_intelligence_provider_contract' \
+  'Tool / Skill Evidence Plan' 'primary' 'supporting' 'fallback' 'verification' \
+  'Skipped Skills' 'Fallback Evidence' 'L1' 'L2' 'L3' 'raw' "$search_path"; do
+  grep -Fq -- "$marker" "$ROUTER" || {
+    echo "[FAIL] runtime-router entry lost required marker: $marker" >&2
+    exit 1
+  }
+done
+for marker in 'Task Routing' 'Tool Routing' 'Rationalization Guard' 'no match' 'ambiguous' 'retrieval failed' 'Best Tool for Task'; do
+  grep -Fq -- "$marker" "$ROUTER_REF" || {
+    echo "[FAIL] runtime-router reference lost required detail: $marker" >&2
+    exit 1
+  }
+done
+forbidden='--profile token-'
+forbidden+='lean'
+if grep -Fq -- "$forbidden" "$ROUTER" "$ROUTER_REF"; then
+  echo "[FAIL] retired low-context selector returned to runtime-router" >&2
+  exit 1
+fi
+
 echo "[PASS] token context governance"

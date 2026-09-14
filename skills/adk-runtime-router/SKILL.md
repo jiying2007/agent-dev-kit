@@ -1,8 +1,8 @@
 ---
 name: adk-runtime-router
 description: ADK 原生运行时技能路由入口，统一判定 primary、supporting、内部降级与跳过条件
-version: 2.0.0
-last_updated: 2026-08-31
+version: 2.1.0
+last_updated: 2026-09-14
 triggers:
   - "技能路由"
   - "选择技能"
@@ -31,106 +31,69 @@ constraints:
 # adk-runtime-router
 
 ## Goal
-- 在任务开始前统一完成 adk-first 路由判断，避免多个 skill 抢占入口或无纪律 fallback。
-- 将用户请求映射到一个 primary skill、若干 supporting skills 和明确的验证路径。
-- 外部参考实践只参与 intake 和设计证据，不进入运行时路由。
+- 任务开始前完成 adk-first 路由，只保留一个 primary skill。
+- 默认使用 progressive disclosure：先读轻量入口和 namespace summary，仅对命中候选加载正文、reference 或 schema。
+- 外部资料只用于 intake/design 证据，不进入 runtime fallback。
 
 ## Prerequisites
-- 已读取当前仓库 `AGENTS.md`、项目级规则和用户最新指令。
-- 已确认任务是否只读、是否会修改文件、是否涉及公共契约或运行态资产。
-- 可访问当前安装的 adk skill 元数据或 `manifest.yaml` routing 表。
-
-## 路由分层
-
-| 任务类型 | Primary Skill | Supporting Skills | 内部降级条件 |
-|---|---|---|---|
-| 需求不清、边界不明 | `adk-requirements-triage` | `adk-task-breakdown` | 信息不足时保持 triage，不切换外部兼容流程 |
-| 测试策略、TDD、回归 | `adk-test-strategy` | `adk-unit-test-embedded` | 项目已有专用测试 workflow |
-| 多模块拆分、并行判断 | `adk-task-breakdown` | `adk-parallel-agent-governance` | 平台子代理不可用时降级串行 |
-| worktree 隔离 | `adk-worktree-governance` | `adk-task-breakdown` | 用户要求手动管理分支 |
-| 根因未明 bug / 测试失败 | `adk-systematic-debugging` | `adk-verification-before-completion` | adk 调试流程缺少领域覆盖 |
-| 代码审查或 review 反馈 | `adk-code-review-loop` | `adk-commit-pr-quality-gate` | 需要外部审查系统专用流程 |
-| 完成/提交/PR 前 | `adk-verification-before-completion` | `adk-commit-pr-quality-gate` | 仅用户点名时 fallback |
-| 分支收尾 | `adk-branch-closeout` | `adk-verification-before-completion` | 远端权限或 PR 工具不可用时输出手动步骤 |
-| 发布、版本、回退 | `adk-release-versioning` | `adk-commit-pr-quality-gate` | 需要非 adk 发布系统专用流程 |
-| 多 skill 冲突 | `adk-runtime-router` | `adk-skill-composition-governance` | governance skill 未安装时在 AGENTS 中显式裁决 |
+- 已读取当前仓库 `AGENTS.md`、项目规则和用户最新指令。
+- 已确认 scope、任务模式、风险等级，以及是否修改公共契约、CI 或发布链。
+- 可访问 ADK inventory / workflow；不确定时先 triage，不先执行 mutation。
 
 ## Workflow
-1. **识别任务模式**：判定只读分析、实现、debug、review、release、并行/worktree、会话收口。
-2. **判定风险等级**：检查是否涉及 shared contract、schema、根配置、CI、依赖、运行态目录或发布链路。
-3. **执行 tool-search 渐进披露门禁**：按 `skill-catalog-lazy-loading-v1` 先比较 `namespace_summary`、`initial_surface`、trigger 和 boundary；只为命中候选加载 `deferred_surface`，并记录 `loaded_tools` / `schema_review` / 相邻 skill 拒绝理由。
-4. **选择 primary skill**：每个任务只能有一个 primary skill；其他 skill 只能补充检查项。
-5. **声明 supporting skills**：列出辅助 skill 的用途，避免辅助 skill 抢占入口。
-6. **路由裁决分层**：将 recall、reasoning、ranking、feedback 分开；LLM 只产出候选理解，执行裁决必须来自确定性规则、结构化校验或 owner approval。
-7. **检查内部降级**：ADK Skill 不可用时只能降级到项目已声明 workflow、内联检查项或 no-skill，并记录缺口；不得加载外部参考仓 Skill。
-8. **输出路由裁决**：写明 primary/supporting/internal fallback/skip reason/verification path。
-9. **生成 Tool / Skill Evidence Plan**：中高风险任务记录 required/recommended skills、required artifacts、tool fallback、skipped skills、fallback evidence 和 evidence paths；工具不可用时必须记录降级原因，不能把降级当成已验证成功。
-10. **进入执行 skill**：加载 primary skill，并按其 workflow 推进。
-11. **完成前复核**：若产生改动，最终必须经过 `adk-verification-before-completion`。
+1. **Intent Triage**：识别 readonly / implementation / debugging / review / release / parallel / closeout；边界不清先 `adk-requirements-triage`。
+2. **Risk Gate**：shared contract、schema、根配置、CI、依赖、运行态目录或发布链按中高风险处理。
+3. **Progressive Disclosure**：执行 `skill-catalog-lazy-loading-v1`。先比较 `namespace_summary`、trigger、boundary；只为候选加载 `deferred_surface`，并记录 `loaded_tools` 与 `schema_review`。
+4. **Route**：只选一个 primary skill；supporting skills 只能补充检查项。recall / reasoning / ranking / feedback 分层，执行裁决来自确定性规则、结构化校验或 owner approval。
+5. **Evidence Plan**：中高风险必须生成 `Tool / Skill Evidence Plan`，包含 `primary`、`supporting`、`fallback`、`verification`，以及 required/recommended skills、artifacts 与 evidence paths。
+6. **Tool Evidence**：涉及 Code Intelligence 时遵守 `code_intelligence_provider_contract`；记录 provider/tool/query/repo_ref/hit_summary/decision impact。Tool Search 记录 namespace/query/loaded_tools/schema_review。
+7. **Degrade Fail-Closed**：出现 `no match`、`ambiguous`、`retrieval failed` 或工具不可用时，记录原因和 fallback evidence；不得把降级写成成功验证。
+8. **Evidence Depth**：低风险可 L1 摘要；需要定位时升 L2；高风险、低置信度、安全例外或缺 raw evidence 时升 L3/raw，不用压缩替代原始证据。
+9. **Execute + Verify**：加载 primary skill 推进；产生改动时最终经过 `adk-verification-before-completion`。
+
+详细 Task Routing、Tool Routing、fallback/rationalization 规则仅在路由冲突、证据降级或需要解释边界时读取 `references/runtime-routing-details.md`，不要默认加载。
 
 ## Route Decision Template
 ```md
-- Task Mode: readonly | implementation | debugging | review | release | parallel | closeout
-- Risk Level: low | medium | high
+- Task Mode / Risk Level:
 - Primary Skill:
 - Supporting Skills:
-- Fallback:
-  - enabled: yes/no
-  - reason:
-  - exit_condition:
+- Fallback: enabled / reason / exit_condition
 - Skip Reasons:
 - Tool / Skill Evidence Plan:
-  - Tool Search Contract: skill-catalog-lazy-loading-v1 | not-applicable
-  - Namespace Summary:
-  - Deferred Surface:
-  - Loaded Tools:
-  - Schema Review:
-  - Required Skills:
-  - Recommended Skills:
-  - Required Artifacts:
-  - Skipped Skills:
-  - Tool Fallback:
-  - Fallback Evidence:
-  - Evidence Paths:
+  - primary / supporting / fallback / verification:
+  - namespace_summary / deferred_surface:
+  - loaded_tools / schema_review:
+  - required/recommended skills:
+  - Required Artifacts / Skipped Skills:
+  - Fallback Evidence / Evidence Paths:
 - Verification Path:
 - Next Action:
 ```
 
 ## Commands
 ```bash
-# Codex runtime：从受信 inventory 选择 primary/supporting
-rtk bash ~/codex/scripts/skill-search.sh --query "<用户请求>" --profile token-lean --limit 5 --summary-json
+# Codex runtime：按需检索受信 inventory；不绑定专用低 token profile
+rtk bash ~/codex/scripts/skill-search.sh --query "<用户请求>" --limit 5 --summary-json
 
-# Codex runtime：验证声明式 workflow/recipe 路由
+# Codex runtime：验证声明式 routing
 rtk bash -lc 'cd ~/codex && python3 -m unittest tests.test_agent_routing_eval'
 
-# ADK 源仓维护：检查 profile 与 routing 是否一致
+# ADK 源仓维护
 rtk bash scripts/check-profile-coherence.sh
 rtk bash scripts/devkit.sh validate --strict
 ```
 
 ## Failure Handling
-- 若多个 primary skill 同时命中，暂停并按“更靠前流程优先”裁决：triage/debug > task-breakdown > implementation > verification > release。
-- 若用户点名外部 Skill 或参考仓，只保留其任务意图并映射到 ADK 原生能力；没有安全等价能力时输出 no-skill/needs-input，不调用外部运行资产。
-- 若路由表无法覆盖自然语言请求，记录触发语料缺口，并补充 `skill_trigger_cases.tsv`。
-- 若 supporting skill 未安装，降级为内联检查项，不得阻塞低风险任务。
+- 多个 primary 同时命中：按 triage/debug > task-breakdown > implementation > verification > release 裁决；必要时读 reference。
+- 用户点名外部 Skill：保留任务意图并映射 ADK 原生能力；无安全等价能力时输出 no-skill/needs-input。
+- supporting skill 缺失：低风险降为内联检查项；中高风险记录 evidence gap。
+- 自然语言漏匹配：补 trigger/routing intent 与回归语料，不静默跳过。
 
 ## Quality Gate
-- 输出必须包含 primary skill、supporting skills、fallback 与验证路径。
-- 中高风险任务必须包含 Tool / Skill Evidence Plan；若有 skipped skills 或工具降级，必须记录 skipped reason 与 fallback evidence。
-- 使用大型 skill/tool 目录时，必须先给出 namespace summary，再加载 deferred surface，并记录 loaded_tools 与 schema_review。
-- 内部降级必须有明确原因，不能只写“更熟悉”或“更方便”。
-- active Skill、workflow、profile 与 handoff 不得声明外部参考仓为 runtime fallback。
-- 不得同时声明两个 primary skill。
-- 修改 skill、manifest、workflow 或 routing 后必须运行匹配测试与严格校验。
-- 修改路由规则、阈值或分类器后必须补 benchmark case、负向边界、阈值标定和回归集证据。
-- 触发失败样例必须进入回归语料，防止同类请求再次漏匹配。
-
-## 合理化借口拦截
-
-| 借口 | 现实 | 正确做法 |
-|------|------|---------|
-| "这只是小任务，不需要路由" | 小任务也需要确认是否只读、是否改文件、是否要验证 | 输出轻量路由裁决，可简短但不可省略关键判断 |
-| "用户点名了外部 Skill，直接加载" | 点名不扩展运行资产信任边界 | 保留任务意图，映射 ADK 原生能力；无等价能力则明确 no-skill/needs-input |
-| "多个 skill 都有用，一起上" | 多入口会导致职责混乱和过重流程 | 只选一个 primary，其余作为 supporting |
-| "自然语言没命中就算了" | 漏匹配会持续削弱 adk 默认地位 | 补 triggers、routing intent 和回归测试 |
+- 必须给出 primary、supporting、fallback、verification；不得有两个 primary。
+- 中高风险必须有 Tool / Skill Evidence Plan；降级、skipped skill、tool failure 必须有可追溯 evidence。
+- 大型目录先 `namespace_summary`，再按需 `deferred_surface`；记录 `loaded_tools` / `schema_review`。
+- 高风险或低置信度必须保留 L3/raw evidence；summary 不能替代原始证据。
+- active Skill/workflow/profile/handoff 不得声明外部参考仓为 runtime fallback。
+- 修改 skill、manifest、workflow、routing、阈值或分类器后必须运行匹配、负向边界和严格校验。
