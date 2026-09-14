@@ -64,4 +64,6 @@ grep -q '| `external-practice-absorption` | research-intake | low | `external-pr
   exit 1
 }
 
+bash "$ROOT_DIR/tests/test_hosted_workflow_hygiene.sh" >/dev/null
+
 echo "[PASS] workflow contract"
