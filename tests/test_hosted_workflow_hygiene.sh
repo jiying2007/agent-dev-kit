@@ -33,6 +33,18 @@ for path in workflow_files:
         path.name,
         "hosted workflows must declare a read-only root contents permission",
     )
+    assert "pull_request_target:" not in text, (
+        path.name,
+        "pull_request_target is not allowed in hosted workflows",
+    )
+    assert not re.search(r"(?m)^\s*permissions:\s*(?:read-all|write-all)\s*$", text), (
+        path.name,
+        "permission shorthands bypass the reviewed explicit permission map",
+    )
+    assert not re.search(r"(?m)^\s*permissions:\s*\{", text), (
+        path.name,
+        "inline permission maps are not allowed; use reviewed block mappings",
+    )
     checkout_count = text.count("uses: actions/checkout@")
     credential_count = text.count("persist-credentials: false")
     assert credential_count == checkout_count, (
