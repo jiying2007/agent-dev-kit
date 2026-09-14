@@ -23,6 +23,7 @@ from .cli_runtime import (
     _write_text,
 )
 from .compiler import export_assets
+from .contracts.manifest_composition import composition_check
 from .doctor import run_doctor
 from .evaluation import (
     compare_runtime_reports,
@@ -36,7 +37,7 @@ from .evaluation import (
 from .installer import apply_plan, create_plan, rollback, write_plan
 from .locking import clear_target_lock, target_lock_status
 from .matcher import main as matcher_main
-from .model import ManifestError
+from .model import ManifestError, canonical_json_bytes, sha256_bytes
 from .quality import benchmark_markdown, run_benchmark, security_check
 from .readiness import readiness_markdown, run_harness_readiness
 from .release import build_release, build_runtime_bundle, check_release, publish_release, rehearse_release
@@ -44,6 +45,31 @@ from .repository_evaluation import certify_repository_report, repository_plan
 from .targets import TargetUsageError, check_targets, run_target_smoke
 from .task_cost import TASK_TYPES as TASK_COST_TYPES
 from .task_cost import classify_task_cost, validate_skill_usage
+
+
+def _cmd_manifest(argv: Sequence[str]) -> int:
+    parser = argparse.ArgumentParser(prog="devkit.sh manifest")
+    sub = parser.add_subparsers(dest="action", required=True)
+    check = sub.add_parser("composition-check")
+    check.add_argument("--summary-json", action="store_true")
+    args = parser.parse_args(argv)
+
+    manifest = _manifest()
+    policy = json.loads(
+        (ROOT / "manifests" / "manifest_composition_policy.json").read_text(encoding="utf-8")
+    )
+    result = composition_check(
+        manifest.data,
+        policy,
+        source_digest=manifest.digest,
+        source_is_canonical=manifest.source == (ROOT / "manifest.json").resolve(),
+        digest=lambda value: sha256_bytes(canonical_json_bytes(value)),
+    )
+    if args.summary_json:
+        _json(result)
+    else:
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+    return 0 if result["status"] == "pass" else 1
 
 
 def _cmd_validate(argv: Sequence[str]) -> int:
@@ -614,6 +640,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     try:
         if command in LEGACY_COMMANDS:
             return _run_legacy(command, rest)
+        if command == "manifest":
+            return _cmd_manifest(rest)
         if command == "validate":
             return _cmd_validate(rest)
         if command == "doctor":

@@ -51,6 +51,18 @@ bash scripts/devkit.sh validate --strict --summary-json
 
 当前 active surface 只接受 canonical `manifest.json`。历史 Manifest 镜像与一次性迁移工具已退出当前维护入口；历史迁移事实仅保留在版本化 change/archive 证据中。
 
+
+## manifest
+
+只读检查 canonical `manifest.json` 的 bounded-context composition 治理契约。`composition-check` 不写文件、不启用 runtime fragment loading、不创建第二 SSOT，也不把 reference composer 升级为 runtime generator；它只读取当前 canonical manifest 与 composition policy，并验证 owner partition -> deterministic compose 后语义与 canonical digest 完全一致。
+
+```bash
+bash scripts/devkit.sh manifest composition-check
+bash scripts/devkit.sh manifest composition-check --summary-json
+```
+
+成功报告包含 canonical source、source/round-trip digest、owner domain count，以及 `runtime_enabled=false`、`writes=false`、`parallel_ssot_allowed=false`、`runtime_fragment_loading=false` 和 `composition_generator=null`。任何 policy、owner、canonical source、round-trip 语义或 digest 漂移都会 fail closed 并返回非零；该命令不接受 fragment path、`--write` 或生成输出参数。
+
 ## doctor
 
 只读检查 manifest、Python 3.11+、固定 PyYAML/jsonschema 版本、runtime 安装与认证、CLI 版本、target 可写性和 writer lock 状态。输出只包含状态，不读取或打印凭证值；解释器或依赖不在发布支持基线时返回失败。

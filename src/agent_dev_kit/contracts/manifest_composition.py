@@ -7,7 +7,7 @@ can be composed deterministically before any physical split is introduced.
 
 from __future__ import annotations
 
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
 from copy import deepcopy
 from typing import Any
 
@@ -89,3 +89,119 @@ def compose_owned_sections(
     if missing:
         raise ManifestCompositionError(f"composition is missing owned sections: {sorted(missing)}")
     return composed
+
+
+
+def composition_check(
+    manifest: Mapping[str, Any],
+    policy: Mapping[str, Any],
+    *,
+    source_digest: str,
+    source_is_canonical: bool,
+    digest: Callable[[Mapping[str, Any]], str],
+) -> dict[str, Any]:
+    """Return a read-only fail-closed composition governance report."""
+
+    failures: list[str] = []
+    if policy.get("canonical_source") != "manifest.json":
+        failures.append("canonical_source must remain manifest.json")
+    if policy.get("runtime_consumer_mode") != "canonical-json-only":
+        failures.append("runtime_consumer_mode must remain canonical-json-only")
+    if policy.get("authoring_mode") != "single-canonical-json":
+        failures.append("authoring_mode must remain single-canonical-json")
+    if policy.get("composition_generator") is not None:
+        failures.append("composition_generator must remain null before physical split")
+
+    expected_reference: dict[str, Any] = {
+        "module": "agent_dev_kit.contracts.manifest_composition",
+        "partition_function": "partition_by_owner",
+        "compose_function": "compose_owned_sections",
+        "mode": "pure-in-memory-only",
+        "file_io": False,
+        "runtime_enabled": False,
+        "extension_owner": "extension-governance",
+    }
+    if policy.get("reference_composer") != expected_reference:
+        failures.append(
+            "reference_composer must remain pure-in-memory with file_io=false and runtime_enabled=false"
+        )
+
+    expected_operational: dict[str, Any] = {
+        "command": "manifest composition-check",
+        "mode": "read-only-gate",
+        "writes": False,
+        "runtime_enabled": False,
+    }
+    if policy.get("operational_check") != expected_operational:
+        failures.append(
+            "operational_check must remain read-only with writes=false and runtime_enabled=false"
+        )
+
+    future_raw = policy.get("future_split_contract")
+    future: Mapping[str, Any]
+    if isinstance(future_raw, Mapping):
+        future = future_raw
+    else:
+        failures.append("future_split_contract must be an object")
+        future = {}
+    if future.get("canonical_output") != "manifest.json":
+        failures.append("future canonical output must remain manifest.json")
+    if future.get("runtime_fragment_loading") is not False:
+        failures.append("runtime_fragment_loading must remain false")
+    if future.get("parallel_ssot_allowed") is not False:
+        failures.append("parallel_ssot_allowed must remain false")
+
+    owners_raw = policy.get("section_owners")
+    owners: dict[str, str] = {}
+    if isinstance(owners_raw, Mapping):
+        for section, owner in owners_raw.items():
+            if isinstance(section, str) and isinstance(owner, str):
+                owners[section] = owner
+            else:
+                failures.append("section_owners must map strings to strings")
+                owners = {}
+                break
+    if not owners:
+        failures.append("section_owners must be a non-empty object")
+
+    if not source_is_canonical:
+        failures.append("Manifest.load must remain bound to canonical manifest.json")
+
+    round_trip_digest = ""
+    if owners:
+        try:
+            partitions = partition_by_owner(
+                manifest,
+                owners,
+                extension_owner=str(expected_reference["extension_owner"]),
+            )
+            recomposed = compose_owned_sections(
+                partitions,
+                owners,
+                extension_owner=str(expected_reference["extension_owner"]),
+            )
+            round_trip_digest = digest(recomposed)
+            if recomposed != manifest:
+                failures.append("round-trip composition changed manifest semantics")
+            if round_trip_digest != source_digest:
+                failures.append("round-trip composition changed canonical manifest digest")
+        except ManifestCompositionError as exc:
+            failures.append(str(exc))
+
+    result: dict[str, Any] = {
+        "schema": "adk-manifest-composition-check/v1",
+        "status": "fail" if failures else "pass",
+        "canonical_source": policy.get("canonical_source"),
+        "source_digest": source_digest,
+        "round_trip_digest": round_trip_digest,
+        "owner_domain_count": len(set(owners.values())) if owners else 0,
+        "reference_composer_mode": expected_reference["mode"],
+        "runtime_enabled": expected_reference["runtime_enabled"],
+        "writes": expected_operational["writes"],
+        "parallel_ssot_allowed": future.get("parallel_ssot_allowed"),
+        "runtime_fragment_loading": future.get("runtime_fragment_loading"),
+        "composition_generator": policy.get("composition_generator"),
+    }
+    if failures:
+        result["failures"] = failures
+    return result
