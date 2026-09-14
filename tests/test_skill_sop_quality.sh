@@ -25,6 +25,7 @@ require_file "templates/planning/worker-contract.md"
 require_file "docs/runbooks/memory-governance.md"
 require_file "templates/memory/after-action-review.md"
 require_file "templates/memory/memory-candidate.md"
+require_file "skills/adk-code-review-loop/references/review-governance-details.md"
 
 require_text "docs/skill-agent-runtime-model.md" "Skill"
 require_text "docs/skill-agent-runtime-model.md" "Agent"
@@ -54,6 +55,7 @@ require_text "skills/adk-code-review-loop/SKILL.md" "设计变更分流"
 require_text "skills/adk-code-review-loop/SKILL.md" "Review Round / Mode:"
 require_text "skills/adk-code-review-loop/SKILL.md" "New Finding Class Count"
 require_text "skills/adk-code-review-loop/SKILL.md" "连续两轮出现新的 blocker 或 major finding class"
+require_text "skills/adk-code-review-loop/SKILL.md" "references/review-governance-details.md"
 require_text "skills/adk-verification-before-completion/SKILL.md" "Lifecycle Operation Evidence:"
 require_text "skills/adk-verification-before-completion/SKILL.md" "Review Convergence Evidence:"
 require_text "skills/adk-interface-contract-design/SKILL.md" "owner × state × event × resource × termination × invariant"
@@ -63,6 +65,9 @@ require_text "skills/adk-planning-execution-loop/SKILL.md" "连续两轮新 bloc
 require_text "fixtures/lifecycle-review-convergence/fail/design-change-without-replan.md" "must return to contract design and replan"
 require_text "fixtures/lifecycle-review-convergence/pass/synchronous-not-applicable.md" "not forced into a lifecycle contract"
 require_text "docs/runbooks/memory-governance.md" "不得保存完整聊天记录"
+
+review_entry_bytes="$(wc -c <"$ROOT_DIR/skills/adk-code-review-loop/SKILL.md" | tr -d ' ')"
+[[ "$review_entry_bytes" -le 7200 ]] || fail "adk-code-review-loop entry exceeds progressive-disclosure byte ratchet: bytes=$review_entry_bytes limit=7200"
 
 "$ROOT_DIR/scripts/validate-assets.sh" --strict >/dev/null
 "$ROOT_DIR/scripts/check-memory-governance.sh" >/dev/null
