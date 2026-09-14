@@ -55,6 +55,7 @@ LEGACY_COMMANDS = {
 
 PUBLIC_COMMANDS = [
     ("validate", "校验 v3 manifest 与资产结构"),
+    ("manifest", "只读检查 canonical manifest composition 等价性"),
     ("doctor", "只读检查运行环境与 M5-ready 前置条件"),
     ("catalog", "生成或检索 Agent/Skill 目录"),
     ("match", "匹配 Skill 路由"),
