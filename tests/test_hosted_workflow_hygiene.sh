@@ -45,6 +45,24 @@ for path in workflow_files:
         path.name,
         "inline permission maps are not allowed; use reviewed block mappings",
     )
+    # Hosted CI stays secretless and fail-closed: keyless OIDC/GITHUB_TOKEN replace
+    # repository secrets, while explicit failure masking cannot weaken qualification.
+    assert not re.search(r"\$\{\{\s*secrets\.", text), (
+        path.name,
+        "hosted workflows must not depend on repository secrets",
+    )
+    assert "continue-on-error:" not in text, (
+        path.name,
+        "hosted qualification steps must not suppress failures",
+    )
+    assert not re.search(r"\|\|\s*true\b", text), (
+        path.name,
+        "shell failure masking with '|| true' is not allowed",
+    )
+    assert not re.search(r"(?m)^\s*set\s+\+e(?:\s|$)", text), (
+        path.name,
+        "shell error handling must remain fail-closed",
+    )
     checkout_count = text.count("uses: actions/checkout@")
     credential_count = text.count("persist-credentials: false")
     assert credential_count == checkout_count, (
