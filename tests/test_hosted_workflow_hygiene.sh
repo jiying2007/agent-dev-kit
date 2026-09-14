@@ -94,6 +94,11 @@ assert "- name: Validate tag-bound release identity" in release, "release ref gu
 assert 'if [[ "$GITHUB_REF_TYPE" != "tag" || "$GITHUB_REF_NAME" != v* ]]; then' in release, "release must fail closed off tag refs"
 assert 'EXPECTED_TAG="v${SOURCE_VERSION}"' in release, "release must derive expected tag from source version"
 assert 'if [[ "$GITHUB_REF_NAME" != "$EXPECTED_TAG" ]]; then' in release, "release tag must match source version"
+assert "- name: Validate complete release artifact bundle" in release, "release bundle completeness guard missing"
+assert "archives=(dist/*.tar.gz)" in release, "release bundle must require one archive"
+assert "checksums=(dist/*.tar.gz.sha256)" in release, "release bundle must require one matching checksum"
+assert "sha256sum --check" in release, "release sidecar checksum must be verified"
+assert "if-no-files-found: error" in release, "release artifact upload must fail closed when files are missing"
 
 # Dependency review remains a PR-only supply-chain gate.
 dependency_review = (workflow_dir / "security-dependency-review.yml").read_text(encoding="utf-8")
