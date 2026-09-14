@@ -73,6 +73,27 @@ jobs:
       - name: Validate release manifest, SBOM and source identities
         run: python -m agent_dev_kit.distribution.release_contract dist/*.tar.gz | tee dist/release-contract.json
 
+      - name: Validate complete release artifact bundle
+        run: |
+          shopt -s nullglob
+          archives=(dist/*.tar.gz)
+          checksums=(dist/*.tar.gz.sha256)
+          if (( ${#archives[@]} != 1 )); then
+            echo "::error::expected exactly one release archive, found ${#archives[@]}"
+            exit 1
+          fi
+          if (( ${#checksums[@]} != 1 )); then
+            echo "::error::expected exactly one release checksum, found ${#checksums[@]}"
+            exit 1
+          fi
+          archive="${archives[0]}"
+          checksum="${archive}.sha256"
+          if [[ "${checksums[0]}" != "$checksum" || ! -s "$archive" || ! -s "$checksum" || ! -s dist/release-contract.json ]]; then
+            echo "::error::release artifact bundle is incomplete or empty"
+            exit 1
+          fi
+          (cd dist && sha256sum --check "$(basename "$checksum")")
+
       - name: Attest release provenance
         uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
         with:
@@ -86,3 +107,4 @@ jobs:
             dist/*.tar.gz
             dist/*.sha256
             dist/release-contract.json
+          if-no-files-found: error
