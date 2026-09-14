@@ -34,6 +34,7 @@ assert status_checks["strict_required_status_checks_policy"] is False
 failing_repo = {
     "full_name": "example/agent-dev-kit",
     "default_branch": "main",
+    "private": False,
     "allow_squash_merge": True,
     "allow_merge_commit": True,
     "allow_rebase_merge": True,
@@ -71,6 +72,26 @@ assert compliant_plan["repository_changes"] == {}, compliant_plan
 assert compliant_plan["ruleset"]["action"] == "none", compliant_plan
 assert compliant_plan["current_governance"]["compliant"] is True, compliant_plan
 
+hosted_repo = {
+    **compliant_repo,
+    "allow_squash_merge": None,
+    "allow_merge_commit": None,
+    "allow_rebase_merge": None,
+    "delete_branch_on_merge": None,
+}
+hosted = admin.evaluate_state(
+    hosted_repo,
+    {"name": "main", "protected": True},
+    [managed],
+    branch_name="main",
+    scope="hosted-ruleset",
+)
+assert hosted["scope"] == "hosted-ruleset", hosted
+assert hosted["compliant"] is True, hosted
+assert hosted["full_compliant"] is None, hosted
+assert hosted["repository_settings_observable"] is False, hosted
+assert hosted["checks"]["ruleset_squash_only"] is True, hosted
+
 drifted = json.loads(json.dumps(managed))
 drifted["rules"][0]["parameters"]["allowed_merge_methods"] = ["merge", "squash"]
 update_plan = admin.build_plan(
@@ -82,6 +103,16 @@ update_plan = admin.build_plan(
 )
 assert update_plan["ruleset"]["action"] == "update", update_plan
 assert update_plan["ruleset"]["id"] == 42, update_plan
+
+hosted_drift = admin.evaluate_state(
+    hosted_repo,
+    {"name": "main", "protected": True},
+    [drifted],
+    branch_name="main",
+    scope="hosted-ruleset",
+)
+assert hosted_drift["compliant"] is False, hosted_drift
+assert "active ruleset does not restrict merge methods to squash" in hosted_drift["violations"], hosted_drift
 
 branch_state = {
     "name": "main",
@@ -178,6 +209,7 @@ assert "github.event_name == 'workflow_dispatch'" in governance_workflow
 assert "permissions:\n  contents: read\n" in governance_workflow
 assert "issues: write" not in governance_workflow
 assert "pull_request_target:" not in governance_workflow
+assert "--scope hosted-ruleset" in governance_workflow
 PY
 
 echo "[PASS] GitHub governance admin remediation"
