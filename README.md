@@ -136,5 +136,6 @@ bash scripts/devkit.sh release check --summary-json
 - `docs/runbooks/codex-team-runtime-distribution.md`：ADK → Codex 分发链。
 - `docs/runbooks/mcp-governance.md`：MCP/plugin/automation 准入。
 - `docs/architecture/interoperability-boundaries.md`：协议与 runtime adapter 边界。
+- `docs/architecture/canonical-change-authority.md`：ADK Canonical Change Contract 的唯一权威与兼容边界决策。
 
 核心规则保持不变：**没有命令级、可重放的证据，不把状态升级为完成、发布、认证或生产可用。**
