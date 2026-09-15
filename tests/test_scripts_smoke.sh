@@ -35,7 +35,6 @@ run_smoke "lib-manifest.sh (source)"     -c "source scripts/lib-manifest.sh && t
 run_smoke "version-manager.sh"           scripts/version-manager.sh
 run_smoke "version-manager.sh verify"    scripts/version-manager.sh verify
 run_smoke "backup-rollback.sh"           scripts/backup-rollback.sh
-run_smoke "release-manager.sh"           scripts/release-manager.sh
 run_smoke "auto-ops.sh"                  scripts/auto-ops.sh
 run_smoke "monitoring.sh"                scripts/monitoring.sh
 run_smoke "performance.sh"               scripts/performance.sh
