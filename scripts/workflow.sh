@@ -282,6 +282,14 @@ propose() {
 - design 决策：
 - tasks 追溯关系：
 
+## Canonical Change Contract
+
+ADK change workspace 是唯一权威变更契约。每一行必须把需求、变更语义、验收、任务、验证与证据目标连成闭环；Operation 仅允许 `ADDED` / `MODIFIED` / `REMOVED`。
+
+| Requirement ID | Requirement | Operation | Target | Affected Surface | Acceptance ID | Acceptance Criterion | Task ID | Verification ID | Evidence Target |
+|---|---|---|---|---|---|---|---|---|---|
+| REQ-001 | TBD requirement | MODIFIED | TBD target | TBD surface | ACC-001 | TBD acceptance criterion | TASK-001 | VERIFY-001 | Evidence Index |
+
 ## 安装范围与依赖边界
 - 安装范围（global-ready/project-bound）：
 - 依赖边界（脚本/数据/上下文）：
@@ -323,7 +331,7 @@ DESIGN
 # 执行任务：$CHANGE_ID
 
 - [ ] 需求确认与边界冻结
-- [ ] 实施改动并补充测试
+- [ ] TASK-001: TBD implementation task
 - [ ] 本地验证（lint/test/build/smoke）
 - [ ] 代码评审与分级闭环（blocker/major/minor）
 - [ ] 文档同步与收尾
@@ -348,6 +356,7 @@ TASKS
 - [ ] 回退方案可执行
 - [ ] 验证证据可追溯
 - [ ] Evidence Index 命令级字段完整（命令/退出码/结果摘要/证据路径/层级/关联工件）
+- [ ] Canonical Change Contract 追溯关系完整
 - [ ] 评审结果为 pass（无 blocker/major 未闭环）
 - [ ] Prompt before/after 对比证据
 - [ ] Skill Intake 归属与安装范围结论
@@ -412,6 +421,12 @@ verify_change() {
     echo "  - scripts/check-format.sh"
     echo "  - scripts/check-change-governance.sh <change_dir>"
     echo "- 工件检查：proposal/design/tasks/checklist/negative-results"
+    echo
+    echo "## Verification Traceability"
+    while IFS= read -r verification_id; do
+      [[ -n "$verification_id" ]] || continue
+      echo "- $verification_id: workflow verification gate + Evidence Index"
+    done < <(rg -o 'VERIFY-[0-9]{3,}' "$change_dir/proposal.md" | sort -u)
     echo
   } > "$report"
 
@@ -523,11 +538,35 @@ archive_change() {
     exit 1
   fi
 
+  local source_stage="$stage"
+  local repository_head
+  repository_head="$(git -C "$ROOT_DIR" rev-parse HEAD 2>/dev/null || printf 'unavailable')"
+
+  write_state "$change_dir" "archived"
+  cat > "$change_dir/provenance.md" <<PROVENANCE
+# Change Provenance: $CHANGE_ID
+
+- schema: adk-change-provenance/v1
+- authority: ADK Canonical Change Contract
+- change_id: $CHANGE_ID
+- contract_source: proposal.md#Canonical-Change-Contract
+- source_stage: ${source_stage:-unknown}
+- final_stage: archived
+- archived_at: $(date -u +%Y-%m-%dT%H:%M:%SZ)
+- archived_by: $OWNER
+- force_archive: $FORCE
+- repository_head: $repository_head
+- verification_evidence: verify-report.md + negative-results.md#Evidence-Index
+- review_evidence: review-report.md
+- promotion_authority: adk-promotion-evidence/v1 (exact-head repository promotion evidence remains separate and authoritative)
+PROVENANCE
+
   local archive_root="$CHANGE_ROOT/archive"
   local archive_dir="$archive_root/$(date +%Y%m%d)-$CHANGE_ID"
   mkdir -p "$archive_root"
   mv "$change_dir" "$archive_dir"
   echo "[OK] archived: $archive_dir"
+  echo "[INFO] provenance: $archive_dir/provenance.md"
 }
 
 case "$ACTION" in
