@@ -20,6 +20,8 @@ ADK 原生 `docs/changes/<change-id>/` workflow 是唯一 canonical change autho
 4. 依赖方向只能是 `adapter → ADK core`，core 永不依赖 compatibility adapter。
 5. Git 保存 implementation truth；Canonical Change Contract 保存 semantic truth；Evidence/Promotion 保存 verification/release truth，三者通过稳定 ID 与 commit/evidence identity 关联，不互相复制。
 6. Change archive 必须产生 provenance；仓库级晋级继续使用独立的 `adk-promotion-evidence/v1` exact-head 证据。
+7. Canonical authority 迁移必须是 surgical migration（外科式迁移）：不得通过重新序列化、全文件格式化或生成镜像制造与目标语义无关的 manifest/config diff；迁移脚手架必须在最终 tree 中自删除。
+8. 已退役的兼容 surface，其永久 regression gate 使用 isolation（隔离）语义，不继续以 bridge（桥接）命名暗示仍受支持的双向兼容能力。
 
 ## Rejected alternatives
 
