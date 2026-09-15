@@ -46,8 +46,6 @@ for path in workflow_files:
         path.name,
         "inline permission maps are not allowed; use reviewed block mappings",
     )
-    # Hosted CI stays secretless and fail-closed: keyless OIDC/GITHUB_TOKEN replace
-    # repository secrets, while explicit failure masking cannot weaken qualification.
     assert not re.search(r"\$\{\{\s*secrets\.", text), (
         path.name,
         "hosted workflows must not depend on repository secrets",
@@ -109,26 +107,19 @@ for path in workflow_files:
         "workflow write permissions must match the reviewed allowlist",
     )
 
-# Core CI has one canonical push branch. Do not reintroduce historical branch aliases
-# that no longer exist in repository metadata.
 ci = (workflow_dir / "ci.yml").read_text(encoding="utf-8")
 assert "  push:\n    branches:\n      - main\n  pull_request:\n" in ci, "core CI must push-trigger only on main"
 assert "\n      - master\n" not in ci, "stale master push trigger must not return"
 
-# The OIDC-capable promotion job is privileged and must only run for a main push.
 promotion = ci.split("\n  promotion-evidence:\n", 1)[1]
 assert "if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}" in promotion, "promotion evidence must stay confined to main pushes"
 assert "id-token: write" in promotion, "promotion OIDC permission must remain explicit"
 
-# Build artifacts are release-like evidence and must fail closed when absent; regression
-# timing remains diagnostic best-effort evidence and intentionally stays non-blocking.
 wheel_upload = ci.split("      - name: Upload candidate wheel\n", 1)[1].split("\n  static-security:\n", 1)[0]
 assert "if-no-files-found: error" in wheel_upload, "candidate wheel upload must fail closed"
 timing_upload = ci.split("      - name: Upload timing evidence\n", 1)[1].split("\n  deterministic-eval-package:\n", 1)[0]
 assert "if-no-files-found: ignore" in timing_upload, "regression timing upload must remain best-effort"
 
-# Superseded-run cancellation is safe only for PR validation. Non-PR runs must be
-# isolated by run_id so fresh-main, scheduled, and manual evidence cannot cancel.
 pr_cancellable = {
     workflow_dir / "ci.yml": "agent-dev-kit-ci-v2",
     workflow_dir / "security-codeql.yml": "security-codeql",
@@ -167,14 +158,10 @@ assert "checksums=(dist/*.tar.gz.sha256)" in release, "release bundle must requi
 assert "sha256sum --check" in release, "release sidecar checksum must be verified"
 assert "if-no-files-found: error" in release, "release artifact upload must fail closed when files are missing"
 
-# Dependency review remains a PR-only supply-chain gate.
 dependency_review = (workflow_dir / "security-dependency-review.yml").read_text(encoding="utf-8")
 assert "pull_request:" in dependency_review, "dependency review must remain PR-only"
 assert "cancel-in-progress: true" in dependency_review, "PR-only dependency review may cancel superseded runs"
 
-# Native GitHub governance is an external control-plane boundary. Keep its verifier
-# replayable offline and its hosted evidence workflow manual-only until admin state is
-# actually compliant; current non-compliance must not poison every PR/main build.
 governance_path = root / "tools/control_plane/github_governance.py"
 spec = importlib.util.spec_from_file_location("adk_github_governance", governance_path)
 assert spec is not None and spec.loader is not None
@@ -200,14 +187,21 @@ passing_ruleset = {
     "conditions": {"ref_name": {"include": ["~DEFAULT_BRANCH"], "exclude": []}},
     "bypass_actors": [],
     "rules": [
-        {"type": "pull_request", "parameters": {}},
+        {
+            "type": "pull_request",
+            "parameters": {
+                "allowed_merge_methods": ["squash"],
+                "required_approving_review_count": 0,
+            },
+        },
         {
             "type": "required_status_checks",
             "parameters": {
                 "required_status_checks": [
                     {"context": context, "integration_id": None}
                     for context in required
-                ]
+                ],
+                "strict_required_status_checks_policy": True,
             },
         },
         {"type": "non_fast_forward"},
@@ -222,6 +216,9 @@ passing = module.evaluate_state(
 )
 assert passing["compliant"] is True, passing
 assert passing["missing_status_checks"] == [], passing
+assert passing["checks"]["solo_zero_required_approvals"] is True, passing
+assert passing["checks"]["no_ruleset_bypass"] is True, passing
+assert passing["checks"]["strict_required_status_checks"] is True, passing
 
 failing_repo = dict(passing_repo)
 failing_repo["allow_merge_commit"] = True

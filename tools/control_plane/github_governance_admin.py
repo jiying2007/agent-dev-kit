@@ -103,7 +103,7 @@ def desired_ruleset_payload(
                         {"context": context}
                         for context in required_checks
                     ],
-                    "strict_required_status_checks_policy": False,
+                    "strict_required_status_checks_policy": True,
                 },
             },
             {"type": "non_fast_forward"},
