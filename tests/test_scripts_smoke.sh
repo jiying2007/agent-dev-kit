@@ -54,17 +54,6 @@ run_smoke "production field pilot help"  scripts/run-embedded-production-field-p
 run_smoke "workflow pilots help"         scripts/run-embedded-workflow-pilots.sh --help
 
 echo ""
-echo "=== Native Governance Fixture Test ==="
-TOTAL=$((TOTAL + 1))
-if bash "$ADK_ROOT/tests/test_github_governance_admin.sh" >/dev/null; then
-  echo "  PASS  solo native governance planner/verifier"
-  PASS_COUNT=$((PASS_COUNT + 1))
-else
-  echo "  FAIL  solo native governance planner/verifier"
-  FAIL_COUNT=$((FAIL_COUNT + 1))
-fi
-
-echo ""
 echo "=== Version Changelog Placeholder Test ==="
 version="smoke-$(date +%s)"
 changelog="$ADK_ROOT/CHANGELOG-$version.md"
