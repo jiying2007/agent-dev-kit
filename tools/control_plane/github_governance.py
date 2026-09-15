@@ -85,7 +85,14 @@ def _ruleset_evidence(
     rulesets: list[dict[str, Any]],
     branch: str,
     default_branch: str,
-) -> tuple[list[dict[str, Any]], set[str], set[str], list[list[str]]]:
+) -> tuple[
+    list[dict[str, Any]],
+    set[str],
+    set[str],
+    list[list[str]],
+    list[int | None],
+    list[bool | None],
+]:
     applicable = [
         ruleset
         for ruleset in rulesets
@@ -94,6 +101,8 @@ def _ruleset_evidence(
     rule_types: set[str] = set()
     required_contexts: set[str] = set()
     pull_request_merge_methods: list[list[str]] = []
+    approval_counts: list[int | None] = []
+    strict_status_policies: list[bool | None] = []
     for ruleset in applicable:
         for rule in ruleset.get("rules", []):
             if not isinstance(rule, dict):
@@ -116,12 +125,23 @@ def _ruleset_evidence(
                     )
                 else:
                     pull_request_merge_methods.append([])
+                count = parameters.get("required_approving_review_count")
+                approval_counts.append(count if isinstance(count, int) and not isinstance(count, bool) else None)
             if rule_type == "required_status_checks":
+                strict = parameters.get("strict_required_status_checks_policy")
+                strict_status_policies.append(strict if isinstance(strict, bool) else None)
                 for check in parameters.get("required_status_checks", []):
                     context = check.get("context") if isinstance(check, dict) else None
                     if isinstance(context, str):
                         required_contexts.add(context)
-    return applicable, rule_types, required_contexts, pull_request_merge_methods
+    return (
+        applicable,
+        rule_types,
+        required_contexts,
+        pull_request_merge_methods,
+        approval_counts,
+        strict_status_policies,
+    )
 
 
 def _repository_merge_settings(repository: dict[str, Any]) -> dict[str, Any]:
@@ -146,13 +166,26 @@ def evaluate_state(
         raise GovernanceError(f"unsupported governance evidence scope: {scope!r}")
 
     default_branch = str(repository.get("default_branch") or "main")
-    applicable, rule_types, required_contexts, pull_request_merge_methods = (
-        _ruleset_evidence(rulesets, branch_name, default_branch)
-    )
+    (
+        applicable,
+        rule_types,
+        required_contexts,
+        pull_request_merge_methods,
+        approval_counts,
+        strict_status_policies,
+    ) = _ruleset_evidence(rulesets, branch_name, default_branch)
     missing_contexts = sorted(set(required_checks) - required_contexts)
     ruleset_squash_only = bool(pull_request_merge_methods) and all(
         methods == ["squash"] for methods in pull_request_merge_methods
     )
+    solo_zero_approvals = bool(approval_counts) and all(count == 0 for count in approval_counts)
+    strict_required_checks = bool(strict_status_policies) and all(
+        policy is True for policy in strict_status_policies
+    )
+    no_ruleset_bypass = bool(applicable) and all(
+        not ruleset.get("bypass_actors", []) for ruleset in applicable
+    )
+
     merge_settings = _repository_merge_settings(repository)
     repository_settings_observable = all(
         value is not None for value in merge_settings.values()
@@ -168,7 +201,10 @@ def evaluate_state(
         "main_protected": bool(branch.get("protected")),
         "active_branch_ruleset": bool(applicable),
         "pull_request_required": "pull_request" in rule_types,
+        "solo_zero_required_approvals": solo_zero_approvals,
+        "no_ruleset_bypass": no_ruleset_bypass,
         "required_status_checks_present": "required_status_checks" in rule_types,
+        "strict_required_status_checks": strict_required_checks,
         "all_required_checks_enforced": not missing_contexts,
         "force_push_blocked": "non_fast_forward" in rule_types,
         "branch_deletion_blocked": "deletion" in rule_types,
@@ -196,9 +232,18 @@ def evaluate_state(
     if not base_checks["pull_request_required"]:
         violations.append("active ruleset does not require pull requests")
         remediation.append("add a pull_request rule")
+    if not base_checks["solo_zero_required_approvals"]:
+        violations.append("active ruleset does not preserve zero required approvals for the solo-maintainer model")
+        remediation.append("set pull_request.required_approving_review_count to 0")
+    if not base_checks["no_ruleset_bypass"]:
+        violations.append("active ruleset declares bypass actors")
+        remediation.append("remove every ruleset bypass actor")
     if not base_checks["required_status_checks_present"]:
         violations.append("active ruleset does not require status checks")
         remediation.append("add a required_status_checks rule")
+    if not base_checks["strict_required_status_checks"]:
+        violations.append("required status checks do not require an up-to-date branch")
+        remediation.append("enable strict_required_status_checks_policy")
     if missing_contexts:
         violations.append(
             "required status checks missing: " + ", ".join(missing_contexts)
@@ -235,7 +280,7 @@ def evaluate_state(
         full_compliant = None
 
     return {
-        "schema_version": 2,
+        "schema_version": 3,
         "scope": scope,
         "repository": repository.get("full_name"),
         "branch": branch_name,
@@ -249,6 +294,8 @@ def evaluate_state(
         "required_status_checks": list(required_checks),
         "observed_status_checks": sorted(required_contexts),
         "missing_status_checks": missing_contexts,
+        "observed_required_approval_counts": approval_counts,
+        "observed_strict_required_status_checks_policies": strict_status_policies,
         "active_rulesets": [
             {
                 "id": ruleset.get("id"),
