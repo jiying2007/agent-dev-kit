@@ -70,7 +70,7 @@ MCP、A2A、OpenTelemetry GenAI 等外部标准只能通过 versioned adapter bo
 
 ## 4. Profiles
 
-核心 profile 包括：`core`、`personal-core`、`embedded-fullstack`、`team-core`、`release-hardening`、`openspec-driven`、`large-refactor`、`incident-response`、`research-intake`。
+核心 profile 包括：`core`、`personal-core`、`embedded-fullstack`、`team-core`、`release-hardening`、`large-refactor`、`incident-response`、`research-intake`。
 
 嵌入式 profile 覆盖 SoC/MCU/RTOS/Linux、Boot/BSP/驱动、协议栈、设备应用、产测/HIL、OTA/回滚、量产/RMA/现场恢复等工程链路。
 
