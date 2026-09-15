@@ -24,12 +24,13 @@ desired = admin.desired_ruleset_payload("main", admin.DEFAULT_RULESET_NAME, requ
 rule_types = [rule["type"] for rule in desired["rules"]]
 assert rule_types == ["pull_request", "required_status_checks", "non_fast_forward", "deletion"]
 assert desired["conditions"]["ref_name"]["include"] == ["refs/heads/main"]
+assert desired["bypass_actors"] == []
 pull_request = desired["rules"][0]["parameters"]
 assert pull_request["allowed_merge_methods"] == ["squash"]
 assert pull_request["required_approving_review_count"] == 0
 status_checks = desired["rules"][1]["parameters"]
 assert [item["context"] for item in status_checks["required_status_checks"]] == list(required)
-assert status_checks["strict_required_status_checks_policy"] is False
+assert status_checks["strict_required_status_checks_policy"] is True
 
 failing_repo = {
     "full_name": "example/agent-dev-kit",
@@ -93,6 +94,10 @@ compliant_plan = admin.build_plan(
 assert compliant_plan["repository_changes"] == {}, compliant_plan
 assert compliant_plan["ruleset"]["action"] == "none", compliant_plan
 assert compliant_plan["current_governance"]["compliant"] is True, compliant_plan
+assert compliant_plan["current_governance"]["schema_version"] == 3
+assert compliant_plan["current_governance"]["checks"]["solo_zero_required_approvals"] is True
+assert compliant_plan["current_governance"]["checks"]["no_ruleset_bypass"] is True
+assert compliant_plan["current_governance"]["checks"]["strict_required_status_checks"] is True
 
 hosted_repo = {
     **compliant_repo,
@@ -113,7 +118,56 @@ assert hosted["compliant"] is True, hosted
 assert hosted["full_compliant"] is None, hosted
 assert hosted["repository_settings_observable"] is False, hosted
 assert hosted["checks"]["ruleset_squash_only"] is True, hosted
+assert hosted["observed_required_approval_counts"] == [0], hosted
+assert hosted["observed_strict_required_status_checks_policies"] == [True], hosted
 
+# Every solo-maintainer native-governance compensating control is fail-closed.
+negative_cases = []
+strict_drift = json.loads(json.dumps(managed))
+strict_drift["rules"][1]["parameters"]["strict_required_status_checks_policy"] = False
+negative_cases.append(
+    (
+        strict_drift,
+        "strict_required_status_checks",
+        "required status checks do not require an up-to-date branch",
+    )
+)
+approval_drift = json.loads(json.dumps(managed))
+approval_drift["rules"][0]["parameters"]["required_approving_review_count"] = 1
+negative_cases.append(
+    (
+        approval_drift,
+        "solo_zero_required_approvals",
+        "active ruleset does not preserve zero required approvals",
+    )
+)
+bypass_drift = json.loads(json.dumps(managed))
+bypass_drift["bypass_actors"] = [{"actor_id": 1, "actor_type": "RepositoryRole", "bypass_mode": "always"}]
+negative_cases.append(
+    (bypass_drift, "no_ruleset_bypass", "active ruleset declares bypass actors")
+)
+for drift, failed_check, violation in negative_cases:
+    report = admin.evaluate_state(
+        hosted_repo,
+        {"name": "main", "protected": True},
+        [drift],
+        branch_name="main",
+        scope="hosted-ruleset",
+    )
+    assert report["compliant"] is False, report
+    assert report["checks"][failed_check] is False, report
+    assert any(violation in item for item in report["violations"]), report
+    plan = admin.build_plan(
+        compliant_repo,
+        {"name": "main", "protected": True},
+        [drift],
+        branch="main",
+        ruleset_name=admin.DEFAULT_RULESET_NAME,
+    )
+    assert plan["ruleset"]["action"] == "update", plan
+    assert plan["ruleset"]["id"] == 42, plan
+
+# Existing merge-method drift remains fail-closed.
 drifted = json.loads(json.dumps(managed))
 drifted["rules"][0]["parameters"]["allowed_merge_methods"] = ["merge", "squash"]
 update_plan = admin.build_plan(
@@ -125,7 +179,6 @@ update_plan = admin.build_plan(
 )
 assert update_plan["ruleset"]["action"] == "update", update_plan
 assert update_plan["ruleset"]["id"] == 42, update_plan
-
 hosted_drift = admin.evaluate_state(
     hosted_repo,
     {"name": "main", "protected": True},
