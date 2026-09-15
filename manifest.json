@@ -2375,15 +2375,16 @@
         "架构评估",
         "评估架构",
         "解释现状",
-        "说明现状",
-        "只分析"
-      ],
-      "generic_execution": [
-        "执行",
-        "实施",
-        "推进",
-        "落地"
-      ],
+      "说明现状"
+      ,
+      "只分析"
+    ],
+    "generic_execution": [
+      "执行",
+      "实施",
+      "推进",
+      "落地"
+    ],
       "planning_action": [
         "执行计划",
         "推进计划",
@@ -2548,8 +2549,8 @@
           "approved plan and scoped mutation boundary"
         ],
         "negated_intents": [
-          {
-            "name": "readonly_without_execution",
+        {
+          "name": "readonly_without_execution",
             "all_of": [
               {
                 "phrase_class": "readonly_scope",
@@ -2558,22 +2559,22 @@
               {
                 "phrase_class": "planning_action",
                 "polarity": "negated"
-              }
-            ]
-          },
-          {
-            "name": "readonly_with_generic_execution_denial",
-            "all_of": [
-              {
-                "phrase_class": "readonly_scope",
-                "polarity": "positive"
-              },
-              {
-                "phrase_class": "generic_execution",
-                "polarity": "negated"
-              }
-            ]
-          }
+            }
+          ]
+        },
+        {
+          "name": "readonly_with_generic_execution_denial",
+          "all_of": [
+            {
+              "phrase_class": "readonly_scope",
+              "polarity": "positive"
+            },
+            {
+              "phrase_class": "generic_execution",
+              "polarity": "negated"
+            }
+          ]
+        }
         ]
       },
       {
@@ -2669,8 +2670,8 @@
           "reproduction evidence before root-cause claim"
         ],
         "negated_intents": [
-          {
-            "name": "architecture_assessment_without_debugging",
+        {
+          "name": "architecture_assessment_without_debugging",
             "all_of": [
               {
                 "phrase_class": "readonly_scope",
@@ -2679,22 +2680,22 @@
               {
                 "phrase_class": "debugging_action",
                 "polarity": "negated"
-              }
-            ]
-          },
-          {
-            "name": "readonly_with_generic_execution_denial",
-            "all_of": [
-              {
-                "phrase_class": "readonly_scope",
-                "polarity": "positive"
-              },
-              {
-                "phrase_class": "generic_execution",
-                "polarity": "negated"
-              }
-            ]
-          }
+            }
+          ]
+        },
+        {
+          "name": "readonly_with_generic_execution_denial",
+          "all_of": [
+            {
+              "phrase_class": "readonly_scope",
+              "polarity": "positive"
+            },
+            {
+              "phrase_class": "generic_execution",
+              "polarity": "negated"
+            }
+          ]
+        }
         ]
       },
       {
@@ -2958,8 +2959,8 @@
           "release scope, rollback anchor, and explicit authorization"
         ],
         "negated_intents": [
-          {
-            "name": "readonly_release_explanation",
+        {
+          "name": "readonly_release_explanation",
             "all_of": [
               {
                 "phrase_class": "readonly_scope",
@@ -2968,22 +2969,22 @@
               {
                 "phrase_class": "release_action",
                 "polarity": "negated"
-              }
-            ]
-          },
-          {
-            "name": "readonly_with_generic_execution_denial",
-            "all_of": [
-              {
-                "phrase_class": "readonly_scope",
-                "polarity": "positive"
-              },
-              {
-                "phrase_class": "generic_execution",
-                "polarity": "negated"
-              }
-            ]
-          }
+            }
+          ]
+        },
+        {
+          "name": "readonly_with_generic_execution_denial",
+          "all_of": [
+            {
+              "phrase_class": "readonly_scope",
+              "polarity": "positive"
+            },
+            {
+              "phrase_class": "generic_execution",
+              "polarity": "negated"
+            }
+          ]
+        }
         ]
       }
     ]
