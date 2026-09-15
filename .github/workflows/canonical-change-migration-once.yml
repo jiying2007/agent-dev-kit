@@ -1,0 +1,74 @@
+name: Canonical Change Migration Once
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.head.ref == 'codex/canonical-change-contract'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact PR head branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - name: Remove OpenSpec profile residue
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path('manifest.json')
+          manifest = json.loads(path.read_text(encoding='utf-8'))
+          profiles = manifest.get('profiles', {})
+          removed = profiles.pop('openspec-driven', None)
+          if removed is None:
+              raise SystemExit('openspec-driven profile residue not found; refusing ambiguous migration')
+
+          change_sets = manifest.get('change_sets', [])
+          if len(change_sets) != 1 or change_sets[0].get('name') != 'adk-change-governance':
+              raise SystemExit('unexpected change_sets shape; refusing migration')
+          change_sets[0]['description'] = (
+              'agent-dev-kit 原生 Canonical Change Contract、阶段门禁、证据与 provenance 规范'
+          )
+
+          path.write_text(
+              json.dumps(manifest, ensure_ascii=False, indent=2) + '\n',
+              encoding='utf-8',
+          )
+          PY
+
+          test -z "$(python - <<'PY'
+          import json
+          from pathlib import Path
+          manifest = json.loads(Path('manifest.json').read_text(encoding='utf-8'))
+          print('\n'.join(name for name in manifest.get('profiles', {}) if 'openspec' in name.lower()))
+          PY
+          )"
+
+      - name: Delete one-shot migration workflow
+        shell: bash
+        run: rm -f .github/workflows/canonical-change-migration-once.yml
+
+      - name: Commit migration result to exact PR branch
+        shell: bash
+        env:
+          HEAD_BRANCH: ${{ github.event.pull_request.head.ref }}
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add manifest.json .github/workflows/canonical-change-migration-once.yml
+          git diff --cached --check
+          git commit -m 'chore(governance): finalize canonical change migration'
+          git push origin "HEAD:${HEAD_BRANCH}"
