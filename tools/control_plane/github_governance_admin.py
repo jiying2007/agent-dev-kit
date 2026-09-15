@@ -175,6 +175,21 @@ def _find_managed_ruleset(
     return matches[0] if matches else None
 
 
+def _require_observable_repository_settings(repository: dict[str, Any]) -> None:
+    missing = [
+        key
+        for key in desired_repository_settings()
+        if not isinstance(repository.get(key), bool)
+    ]
+    if missing:
+        raise AdminError(
+            "repository administration settings are not observable: "
+            + ", ".join(sorted(missing))
+            + "; set ADK_GITHUB_ADMIN_TOKEN with repository Administration read/write "
+            "before planning or applying governance"
+        )
+
+
 def build_plan(
     repository: dict[str, Any],
     branch_state: dict[str, Any],
@@ -184,6 +199,7 @@ def build_plan(
     ruleset_name: str,
     required_checks: tuple[str, ...] = DEFAULT_REQUIRED_CHECKS,
 ) -> dict[str, Any]:
+    _require_observable_repository_settings(repository)
     desired_settings = desired_repository_settings()
     repository_changes = {
         key: {"current": repository.get(key), "desired": value}
@@ -386,7 +402,7 @@ def main(argv: list[str] | None = None) -> int:
         parser.error("--repo or GITHUB_REPOSITORY is required")
 
     required_checks = tuple(args.required_checks or DEFAULT_REQUIRED_CHECKS)
-    token = os.environ.get("ADK_GITHUB_ADMIN_TOKEN") if args.apply else None
+    token = os.environ.get("ADK_GITHUB_ADMIN_TOKEN")
     if args.apply:
         if os.environ.get("GITHUB_ACTIONS", "").lower() == "true":
             raise AdminError("--apply refuses to run inside GitHub Actions")
