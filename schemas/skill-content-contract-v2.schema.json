@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "adk-skill-content-contract/v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "identity_source", "coverage", "policy", "derivation", "overrides"],
+  "properties": {
+    "schema_version": {"const": "adk-skill-content-contract/v2"},
+    "identity_source": {"const": "manifest.json"},
+    "coverage": {"const": "all-manifest-core-and-optional-skills"},
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["primary_invariant", "effect_ceiling_semantics", "production_behavior_without_authority"],
+      "properties": {
+        "primary_invariant": {"const": "exactly-one-primary-after-eligibility-filter"},
+        "effect_ceiling_semantics": {"const": "upper-bound-not-authorization"},
+        "production_behavior_without_authority": {"const": "not-measured"}
+      }
+    },
+    "derivation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["capability_class_by_pattern", "effect_ceiling_by_category", "runtime_role_resolution", "selection_group_resolution", "eval_obligations"],
+      "properties": {
+        "capability_class_by_pattern": {"type": "object", "additionalProperties": {"enum": ["task", "workflow", "support", "guardrail", "tool", "knowledge", "meta"]}},
+        "effect_ceiling_by_category": {"type": "object", "additionalProperties": {"enum": ["read-only", "diagnostic-execution", "workspace-write", "build-artifact-write", "release-preparation", "external-read"]}},
+        "runtime_role_resolution": {"const": "override-else-support-knowledge-supporting-guardrail-governance-else-manifest-activation"},
+        "selection_group_resolution": {"const": "override-else-manifest-category"},
+        "eval_obligations": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["trigger", "behavior", "authority_for"],
+          "properties": {
+            "trigger": {"const": true},
+            "behavior": {"const": true},
+            "authority_for": {"type": "array", "uniqueItems": true, "items": {"enum": ["workflow", "guardrail", "tool", "meta"]}}
+          }
+        }
+      }
+    },
+    "overrides": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "capability_class": {"enum": ["task", "workflow", "support", "guardrail", "tool", "knowledge", "meta"]},
+          "runtime_role": {"enum": ["primary", "supporting", "governance", "fallback"]},
+          "selection_group": {"type": "string", "minLength": 1},
+          "effect_ceiling": {"enum": ["read-only", "diagnostic-execution", "workspace-write", "build-artifact-write", "release-preparation", "external-read"]}
+        }
+      }
+    }
+  }
+}

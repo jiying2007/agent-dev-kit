@@ -65,6 +65,7 @@ if [[ "$STRICT" -eq 1 && "$QUICK" -eq 0 ]]; then
   "$ROOT_DIR/scripts/check-runtime-boundary.sh" >/dev/null
   "$ROOT_DIR/scripts/check-official-docs-governance.sh" >/dev/null
   "$ROOT_DIR/scripts/check-agent-ecosystem-standards.sh" >/dev/null
+  "$PYTHON_BIN" "$ROOT_DIR/scripts/check-content-architecture-vnext.py" >/dev/null
   default_profile="$($PYTHON_BIN -c 'import json,sys; print(json.load(open(sys.argv[1], encoding="utf-8"))["default_profile"])' "$ROOT_DIR/manifest.json")"
   "$ROOT_DIR/scripts/check-workflow-closure.sh" --profile "$default_profile" >/dev/null
 fi

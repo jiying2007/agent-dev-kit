@@ -15,15 +15,17 @@ _KEBAB = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 _PLACEHOLDER = re.compile(r"TODO|TBD|FIXME|待补充|描述待定|示例|占位", re.IGNORECASE)
 _WORKFLOW_COMMAND = re.compile(r"^rtk\s+bash\s+((?:scripts|tests)/\S+)")
 _AGENT_HEADINGS = (
-    "## 角色定位",
-    "## 适用输入",
-    "## 核心决策规则",
-    "## 执行流程",
-    "## 必跑验证",
-    "## 阻塞与升级",
-    "## 输出契约",
+    "## Mission",
+    "## Owns",
+    "## Does Not Own",
+    "## Decision Authority",
+    "## Permission Boundary",
+    "## Default Capabilities",
+    "## Handoff / Escalation",
+    "## Stop Conditions",
+    "## Input Contract",
+    "## Output Contract",
 )
-_SKILL_HEADINGS = ("## Goal", "## Workflow", "## Quality Gate")
 _SKILL_KEYS = ("name", "description", "triggers", "non_triggers", "inputs", "outputs", "constraints")
 
 
@@ -138,9 +140,6 @@ def _validate_skills(manifest: Manifest, strict: bool, failures: list[str]) -> N
                 if not _nonempty_list(frontmatter.get(key)):
                     failures.append(f"{label} '{name}' frontmatter list '{key}' is empty")
             lines = path.read_text(encoding="utf-8").splitlines()
-            for heading in _SKILL_HEADINGS:
-                if heading not in lines:
-                    failures.append(f"{label} '{name}' missing heading '{heading}'")
             if strict:
                 desc = frontmatter.get("description")
                 _description(f"{label} '{name}'", desc, failures)
