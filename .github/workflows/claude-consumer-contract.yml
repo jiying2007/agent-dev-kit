@@ -1,0 +1,43 @@
+name: Claude Consumer Contract
+
+on:
+  pull_request:
+    paths:
+      - 'manifests/integrations/claude-runtime-binding.json'
+      - '.github/contracts/claude_consumer_contract.py'
+      - '.github/workflows/claude-consumer-contract.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'manifests/integrations/claude-runtime-binding.json'
+      - '.github/contracts/claude_consumer_contract.py'
+      - '.github/workflows/claude-consumer-contract.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: claude-consumer-contract-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+          fetch-tags: true
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Validate Claude consumer contract
+        run: python .github/contracts/claude_consumer_contract.py
+      - name: Validate binding JSON
+        run: python -m json.tool manifests/integrations/claude-runtime-binding.json >/dev/null
