@@ -54,6 +54,28 @@ assert set(failing_plan["repository_changes"]) == {
 }, failing_plan
 assert failing_plan["current_governance"]["compliant"] is False
 
+unobservable_repo = {
+    **failing_repo,
+    "allow_squash_merge": None,
+    "allow_merge_commit": None,
+    "allow_rebase_merge": None,
+    "delete_branch_on_merge": None,
+}
+try:
+    admin.build_plan(
+        unobservable_repo,
+        {"name": "main", "protected": False},
+        [],
+        branch="main",
+        ruleset_name=admin.DEFAULT_RULESET_NAME,
+    )
+except admin.AdminError as exc:
+    text = str(exc)
+    assert "repository administration settings are not observable" in text, text
+    assert "ADK_GITHUB_ADMIN_TOKEN" in text, text
+else:
+    raise AssertionError("planning must fail closed when repository settings are hidden")
+
 compliant_repo = {
     **failing_repo,
     "allow_merge_commit": False,
@@ -192,6 +214,8 @@ assert fake_update.calls[0][0:2] == (
 
 source = admin_path.read_text(encoding="utf-8")
 assert "ADK_GITHUB_ADMIN_TOKEN" in source
+assert 'token = os.environ.get("ADK_GITHUB_ADMIN_TOKEN")' in source
+assert "repository administration settings are not observable" in source
 assert "--apply refuses to run inside GitHub Actions" in source
 assert "Administration write" in source
 assert "unsafe local checkout for --apply" in source
