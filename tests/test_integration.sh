@@ -16,6 +16,19 @@ TESTS_TOTAL=0
 TESTS_PASSED=0
 TESTS_FAILED=0
 
+fill_canonical_contract() {
+    local change_dir="$1"
+    local change_id
+    change_id="$(basename "$change_dir")"
+    sed -i \
+        -e "s/TBD requirement/$change_id requirement/" \
+        -e "s/TBD target/$change_id target/" \
+        -e "s/TBD surface/$change_id affected surface/" \
+        -e "s/TBD acceptance criterion/$change_id acceptance criterion/" \
+        "$change_dir/proposal.md"
+    sed -i "s/TBD implementation task/implement $change_id/" "$change_dir/tasks.md"
+}
+
 fill_negative_results() {
     local change_dir="$1"
     local change_id
@@ -66,6 +79,7 @@ test_full_workflow() {
     [[ "$output" == *"OK"* ]] || return 1
     
     # Verify
+    fill_canonical_contract "$tmp_dir/changes/integration-test"
     fill_negative_results "$tmp_dir/changes/integration-test"
     output=$("$ROOT_DIR/scripts/workflow.sh" verify --change integration-test --root "$tmp_dir/changes" 2>&1)
     [[ "$output" == *"OK"* ]] || return 1
@@ -151,6 +165,7 @@ test_verify_report_generation() {
     "$ROOT_DIR/scripts/workflow.sh" apply --change verify-test --root "$tmp_dir/changes" >/dev/null 2>&1
     
     # Verify
+    fill_canonical_contract "$tmp_dir/changes/verify-test"
     fill_negative_results "$tmp_dir/changes/verify-test"
     "$ROOT_DIR/scripts/workflow.sh" verify --change verify-test --root "$tmp_dir/changes" >/dev/null 2>&1
     
@@ -168,6 +183,7 @@ test_review_report_generation() {
     # Propose, Apply, Verify
     "$ROOT_DIR/scripts/workflow.sh" propose --change review-test --title "Review Test" --root "$tmp_dir/changes" >/dev/null 2>&1
     "$ROOT_DIR/scripts/workflow.sh" apply --change review-test --root "$tmp_dir/changes" >/dev/null 2>&1
+    fill_canonical_contract "$tmp_dir/changes/review-test"
     fill_negative_results "$tmp_dir/changes/review-test"
     "$ROOT_DIR/scripts/workflow.sh" verify --change review-test --root "$tmp_dir/changes" >/dev/null 2>&1
     
@@ -188,6 +204,7 @@ test_archive_functionality() {
     # 完整流程
     "$ROOT_DIR/scripts/workflow.sh" propose --change archive-test --title "Archive Test" --root "$tmp_dir/changes" >/dev/null 2>&1
     "$ROOT_DIR/scripts/workflow.sh" apply --change archive-test --root "$tmp_dir/changes" >/dev/null 2>&1
+    fill_canonical_contract "$tmp_dir/changes/archive-test"
     fill_negative_results "$tmp_dir/changes/archive-test"
     "$ROOT_DIR/scripts/workflow.sh" verify --change archive-test --root "$tmp_dir/changes" >/dev/null 2>&1
     "$ROOT_DIR/scripts/workflow.sh" review --change archive-test --result pass --blockers 0 --majors 0 --minors 0 --root "$tmp_dir/changes" >/dev/null 2>&1
@@ -199,6 +216,7 @@ test_archive_functionality() {
     local archived
     archived=$(find "$tmp_dir/changes/archive" -type d -name "*archive-test" | head -1)
     [[ -n "$archived" ]] || return 1
+    [[ -f "$archived/provenance.md" ]] || return 1
     
     rm -rf "$tmp_dir"
     return 0

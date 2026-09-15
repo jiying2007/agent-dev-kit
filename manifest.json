@@ -1545,15 +1545,6 @@
         "adk-engineering-growth-review"
       ]
     },
-    "openspec-driven": {
-      "description": "Spec 驱动开发配置（需求/设计/任务链路）",
-      "trigger_examples": [
-        "Spec 驱动开发",
-        "需求分析与设计",
-        "任务拆解"
-      ],
-      "extends": "core"
-    },
     "large-refactor": {
       "description": "大型重构配置（API 稳定性 + 代码简化）",
       "trigger_examples": [
@@ -2018,7 +2009,7 @@
   "change_sets": [
     {
       "name": "adk-change-governance",
-      "description": "agent-dev-kit 变更工件、阶段门禁与证据索引规范",
+      "description": "agent-dev-kit 原生 Canonical Change Contract、阶段门禁、证据与 provenance 规范",
       "root": "docs/changes",
       "archive_root": "docs/changes/archive",
       "commands": [

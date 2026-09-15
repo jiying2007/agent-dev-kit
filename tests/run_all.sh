@@ -133,7 +133,7 @@ TESTS=(
   test_embedded_test_matrix_example.sh
   test_workflow.sh
   test_workflow_verify_fail_closed.sh
-  test_openspec_bridge.sh
+  test_openspec_isolation.sh
   test_catalog.sh
   test_skill_trigger_matrix.sh
   test_boundary_conditions_match.sh

@@ -70,7 +70,7 @@ MCP、A2A、OpenTelemetry GenAI 等外部标准只能通过 versioned adapter bo
 
 ## 4. Profiles
 
-核心 profile 包括：`core`、`personal-core`、`embedded-fullstack`、`team-core`、`release-hardening`、`openspec-driven`、`large-refactor`、`incident-response`、`research-intake`。
+核心 profile 包括：`core`、`personal-core`、`embedded-fullstack`、`team-core`、`release-hardening`、`large-refactor`、`incident-response`、`research-intake`。
 
 嵌入式 profile 覆盖 SoC/MCU/RTOS/Linux、Boot/BSP/驱动、协议栈、设备应用、产测/HIL、OTA/回滚、量产/RMA/现场恢复等工程链路。
 
@@ -136,5 +136,6 @@ bash scripts/devkit.sh release check --summary-json
 - `docs/runbooks/codex-team-runtime-distribution.md`：ADK → Codex 分发链。
 - `docs/runbooks/mcp-governance.md`：MCP/plugin/automation 准入。
 - `docs/architecture/interoperability-boundaries.md`：协议与 runtime adapter 边界。
+- `docs/architecture/canonical-change-authority.md`：ADK Canonical Change Contract 的唯一权威与兼容边界决策。
 
 核心规则保持不变：**没有命令级、可重放的证据，不把状态升级为完成、发布、认证或生产可用。**
