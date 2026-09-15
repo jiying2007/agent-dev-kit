@@ -58,4 +58,12 @@ if [[ "${PYTHON_SUPPORTED}" != "1" && "${COMMAND}" != "doctor" ]]; then
   echo "[WARN] set ADK_REQUIRE_SUPPORTED_PYTHON=1 for fail-fast release validation" >&2
 fi
 
+# Match is a public runtime surface, so enforce Skill Content v2 implicit-primary
+# eligibility here without rewriting the stable matcher kernel. All other CLI
+# commands continue through the canonical command dispatcher.
+if [[ "${COMMAND}" == "match" ]]; then
+  shift
+  exec "${PYTHON_BIN}" -m agent_dev_kit.matcher_vnext "$@"
+fi
+
 exec "${PYTHON_BIN}" -m agent_dev_kit.cli "$@"

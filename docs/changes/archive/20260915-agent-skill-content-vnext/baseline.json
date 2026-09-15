@@ -1,0 +1,27 @@
+{
+  "schema_version": "adk-content-architecture-baseline/v1",
+  "captured_from": "d55c84b5b0ce86e8432d08e8c0d33f95bfb32725",
+  "captured_at": "2026-09-15",
+  "identity_source": "manifest.json",
+  "agent_count": 13,
+  "core_skill_count": 57,
+  "optional_skill_count": 8,
+  "known_hotspots": [
+    {"agent_id": "bsp-analyst", "default_skill": "adk-bsp-analysis", "debt": "procedure-duplication"},
+    {"agent_id": "code-review-governor", "default_skill": "adk-code-review-loop", "debt": "review-sop-duplication"},
+    {"agent_id": "driver-engineer", "default_skill": "adk-driver-implementation", "debt": "domain-handbook-in-agent"},
+    {"agent_id": "application-engineer", "default_skill": "adk-systematic-debugging", "debt": "reusable-methods-in-agent"}
+  ],
+  "legacy_content_gate": {
+    "all_agents_required_headings": ["核心决策规则", "执行流程", "必跑验证", "阻塞与升级", "输出契约", "场景输入样例", "输出样例"],
+    "all_skills_required_headings": ["Prerequisites", "Workflow", "Quality Gate"],
+    "status": "scheduled-for-retirement"
+  },
+  "vnext_ratchets": {
+    "p0_agent_max_bytes": 5000,
+    "p1_agent_max_bytes": 4500,
+    "agent_forbidden_procedure_headings": ["执行流程", "必跑验证", "工具箱", "反模式", "场景输入样例", "输出样例"],
+    "manifest_identity_must_remain_single_source": true,
+    "production_behavior_evidence_without_authority": "not-measured"
+  }
+}

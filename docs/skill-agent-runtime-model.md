@@ -2,127 +2,136 @@
 
 ## 目标
 
-本文件定义 `agent-dev-kit` 中 Skill、Agent、Sub-agent、Workflow、MCP/tool 的职责边界，防止方法论、运行角色、外部工具和并行调度混写导致资产漂移。
+本文件定义 `agent-dev-kit` 的内容与运行时职责边界，防止角色、方法、编排、工具、知识和门禁互相复制。`manifest.json` 始终是 identity/product-boundary SSOT；本文件只定义内容架构，不建立第二份资产目录。
 
-## 分层定义
+## 七层模型
 
-| 对象 | 生命周期 | 主要职责 | 资产位置 |
-|------|----------|----------|----------|
-| Automation | 确定性运行单元 | 执行规则明确、输入输出稳定、无需运行时推理的重复动作 | 脚本、CI job、cron job 或受控命令 |
-| CLI/script | 操作入口或包装层 | 暴露命令、参数和机器可读输出，不定义任务方法论 | `scripts/`、tool wrapper、受控二进制 |
-| Skill | 长期版本化资产 | 定义某类任务应该怎么做、输入输出、Done criteria、失败收口和验证要求 | `skills/<name>/SKILL.md` 或 `optional-skills/<name>/SKILL.md` |
-| Agent | 运行时执行主体 | 读取上下文、选择 Skill、调用工具、推进任务并对结果负责 | `agents/<name>/AGENTS.md` |
-| Sub-agent | 短生命周期执行实例 | 在主 Agent 拆分后处理边界明确的子任务，回传结构化结果 | 由运行时调度，任务契约由模板约束 |
-| Workflow | 跨阶段状态机 | 定义 propose/apply/verify/review/archive 等阶段、状态和门禁 | `workflows/<name>/WORKFLOW.md`、`scripts/workflow.sh`、`docs/workflows.md` |
-| MCP/tool | 外部能力接口 | 提供 Git、文档、设备、API、浏览器等能力连接，不定义任务方法论 | `manifest.json`、运行时配置和边界检查脚本 |
+| 对象 | 回答的问题 | 主要职责 | 资产位置 |
+|---|---|---|---|
+| Agent | 谁负责？ | role、ownership、decision authority、permission、handoff、stop condition | `agents/<name>/AGENTS.md` |
+| Skill | 会做什么、怎么做？ | 可复用 capability、procedure、I/O、failure、evidence | `skills/` / `optional-skills/` |
+| Workflow | 多个能力怎样组合？ | state、transition、checkpoint、abort/resume、completion | `workflows/` |
+| Tool / Automation | 真正执行什么？ | 确定性动作、机器输入输出、副作用 | `scripts/`、CLI、受控 tool |
+| Guardrail | 什么不能做？ | schema、policy、runtime gate、approval、isolation | `schemas/`、`manifests/`、validator/runtime |
+| Reference | 需要知道什么？ | 领域知识、方法细节、命令/模式、历史依据 | `references/`、`knowledge/` |
+| Eval | 如何证明做对？ | routing、behavior、authority、permission、trajectory evidence | `tests/`、fixtures、受管 runtime receipts |
 
-## 写入边界
+`Sub-agent` 是短生命周期执行实例，不是新的内容层；它必须使用 typed handoff/task contract 承接上述角色与能力。`MCP/tool` 只提供外部能力接口，不定义任务方法论，也不自动授予权限。
 
-- Skill 只写稳定方法、触发边界、输入输出、执行步骤、质量门禁和失败收口。
-- Agent 只写角色责任、决策边界、协作方式和默认工具策略。
-- Sub-agent 任务必须通过任务契约传递，不把临时任务细节沉淀到长期 Skill。
-- MCP/tool 只声明能力和风险边界，不承担流程编排职责。
-- Workflow 只管理阶段状态和门禁，不重复 Skill 的领域步骤。
-- CLI/script 只作为确定性执行入口或包装层，不替代 Skill SOP、MCP/tool policy 或 Workflow 状态机。
-- 默认选择最低充分抽象层：确定性重复任务用 Automation，预定义多步骤用 Workflow，需要上下文感知和运行时决策时才升级为 Agent。
-- Agent/runtime 身份必须在任务契约中显式声明；workspace、消息入口、目录位置或启动方式都不能单独等同于执行 Agent。
-- 只有任务类型长期稳定分化，且上下文、权限、工具面或交付责任确需隔离时，才拆新 Agent；否则优先用 Skill、Workflow 或 worker contract 约束。
-- Intent/router 只能做候选选择和证据排序，不能绕过 Skill、Workflow、tool policy 或 owner approval 直接授予执行权限。
+## 核心不变量
 
-## Agent 入口规范
+- Agent 不复制默认 Skill 的 SOP；Agent 只保留稳定、低变化、适合常驻 context 的角色语义。
+- Skill 不复制 Workflow 的跨阶段状态机；Workflow 不复制 Skill 的领域步骤。
+- Tool/Automation 不决定任务目标；它只执行显式输入定义的动作。
+- Guardrail 的 machine-enforceable 规则不得只停留在 prompt。
+- Reference 默认按需加载，不因“以后可能有用”进入 always-loaded context。
+- Eval 不以文档存在或 token 下降替代真实 task/authority evidence。
 
-`AGENTS.md` 是运行角色契约，不是领域知识库。每个 Agent 必须至少包含：
+## Agent vNext 入口规范
 
-- `角色定位`：职责、核心关注和非职责范围。
-- `适用输入`：可处理的输入材料和上下文边界。
-- `核心决策规则`：必须遵守的判断规则。
-- `执行流程`：推进任务的阶段化动作。
-- `必跑验证`：该角色放行前必须执行或要求的检查。
-- `阻塞与升级`：何时暂停、转交或要求人工确认。
-- `输出契约`：结论字段、证据和交付格式。
+`AGENTS.md` 是 thin role contract，不是岗位百科、调试手册或 SOP。每个 live Agent 的正文应围绕：
 
-Agent 的 manifest 条目必须声明 `description`、`quality_tier`、`owns`、`does_not_own`、`handoff_to`、`default_skills` 和 `quality_gate`。描述用于 discovery，必须与角色职责一致，不能使用占位或泛化描述；`handoff_to` 和 `default_skills` 必须引用已登记资产。Agent 不直接复制 Skill 的 SOP；当流程稳定可复用时沉淀为 Skill，当跨阶段状态需要持久化时沉淀为 Workflow。
+- `Mission`
+- `Owns`
+- `Does Not Own`
+- `Decision Authority`
+- `Permission Boundary`
+- `Default Capabilities`
+- `Handoff / Escalation`
+- `Stop Conditions`
+- `Input Contract`
+- `Output Contract`
 
-## Skill 入口规范
+Agent 不应默认包含：执行流程、必跑命令、工具箱、通用工程知识、长 checklist、完整 pass/needs-fix 示例或默认 Skill 已经定义的 procedure。角色专属 judgement 可以保留，但复用方法应移动到 Skill/reference。
 
-`SKILL.md` 是岗位 SOP 的入口，不是长篇知识库。默认只保留：
+Agent 的 identity、path、quality tier、`owns`、`does_not_own`、`handoff_to`、`default_skills` 与 permission profile 以 `manifest.json` 为准。机器化 permission、decision authority、handoff 与 eval 语义继续由既有 `manifests/agent_value_contracts.json` 承载；禁止再创建平行 Agent behavior identity/authority catalog。
 
-- frontmatter: `name`、`description`、`triggers`、`non_triggers`、`inputs`、`outputs`、`constraints`
-- `Goal`
-- `Prerequisites`
-- `Workflow`
-- `Commands`
-- `Evidence Template`
-- `Failure Handling`
-- `Quality Gate`
+新增 Agent 只有在至少存在一个独立边界时才合理：decision authority、permission envelope、ownership、可独立委托 specialist 责任或不同 handoff/escalation semantics。否则优先新增/复用 Skill 或 Workflow。
 
-长背景、示例、领域知识、检查清单和历史决策进入 `references/`。入口文件必须保持短小，严格门禁下不超过 140 行。
+## Skill vNext 入口规范
 
-每个 live Skill 还必须在 `manifest.json:skills` 或 `manifest.json:optional_skills` 中声明 `category`、`lifecycle_order`、`stage_order`、`activation_mode` 和 `pattern`。`lifecycle_order` 定义大类阶段，`stage_order` 定义同一阶段内的执行/呈现顺序。场景级 primary/supporting/fallback 关系不由 `SKILL.md` 自行声明，统一以 `manifest.json:routing` 为准；`skill_routing_matrix` 仅通过 `routing_intent` 引用该 IR 并补充 workflow/profile/example 展示元数据。optional skill 被作为 primary 使用时，相关 routing intent 必须声明 `availability: optional-skill-required`。
+`SKILL.md` 是被激活后读取的 capability instruction。Discovery 第一层保持轻量，至少包含 `name` 与能表达 **what + when + boundary** 的 `description`；ADK 可继续保留 `triggers`、`non_triggers`、`inputs`、`outputs`、`constraints` 作为 authoring 辅助，但复杂 runtime policy 不塞入 portable metadata。
+
+机器化 Skill 语义由 `manifests/skill_content_contracts_v2.json` 从 `manifest.json` 派生：
+
+- `capability_class`: `task | workflow | support | guardrail | tool | knowledge | meta`
+- `runtime_role`: `primary | supporting | governance | fallback`
+- `selection_group`
+- `effect_ceiling`
+- eval obligations
+
+`capability_class` 与 `runtime_role` 正交。Tool、guardrail、meta 也可以是直接用户任务入口；只要它被 `routing.intents[].primary_skill` 明确选择，就必须解析为 `runtime_role=primary`。真正的 support/knowledge 资产不能因普通 trigger 命中而隐式晋升为 primary。
+
+`effect_ceiling` 只是能力副作用上限，不是授权。真正执行仍必须同时满足 Agent permission、tool/runtime policy 与必要 approval；ceiling 只能收紧现有 mutation permission，不能授予更强权限。
+
+Skill body 不强迫使用一套固定 headings。按 capability class 选择最小充分结构：
+
+- task：Goal / Use When / Prerequisites / Workflow / Failure / Output-Evidence。
+- workflow：Goal / State Model / Entry / Transition / Stop-Replan / Completion。
+- guardrail：Protected Boundary / Policy / Trip Conditions / Enforcement / Exceptions / Evidence。
+- tool：Tool Contract / Input Validation / Execution / Exit-Failure / Security。
+- support/knowledge：只保留支持 primary 所需的最小 instructions/reference pointers，默认不得争抢 implicit primary。
+
+重复、确定性步骤进入 `scripts/`；长背景、命令百科、历史案例进入 `references/`；资产模板进入 `assets/`。主入口只保留触发后立即需要的信息。
 
 ## Description 触发质量
 
-`description` 是运行时 discovery 的第一层入口，必须能让 Agent 判断何时使用该 Skill。新增或大改 Skill 时必须满足：
+`description` 是 discovery 的第一层入口。新增或大改 Skill 必须：
 
-- 描述具体场景和任务结果，不能只写泛化能力名。
-- 与 `triggers`、`non_triggers`、`manifest.json` routing 语义一致。
-- 能和相邻 Skill 区分，避免多个 Skill 同时成为 primary。
-- 不使用 `TODO`、`TBD`、`待补充`、`示例技能` 等占位内容。
-- 涉及高风险操作时体现边界，例如发布、外部系统、生产设备、凭据或运行态资产。
+- 说明做什么、何时使用以及至少一个关键近邻边界。
+- 与 `triggers/non_triggers`、manifest routing 和 Skill v2 runtime role 一致。
+- 能与相邻 Skill 区分，避免多个 primary 同时命中。
+- 高风险场景描述行为边界，但不得用 description 承诺权限。
+- 通过 positive、near-miss negative、abstain/collision fixture 验证；只改文案不等于完成。
 
-## 并行执行契约
+## Routing 与 progressive disclosure
 
-主 Agent 派生 Sub-agent 前，必须把执行规则作为任务契约分发，而不是只给一句自然语言目标。任务契约至少包含：
+`manifest.json:routing` 继续是 reviewed intent routing IR。`src/agent_dev_kit/matcher.py` 保持稳定匹配 kernel；公共 `scripts/skill-match.sh` 与 `scripts/devkit.sh match` 通过 `matcher_vnext` 叠加 Skill v2 eligibility，而不是把新策略复制进 matcher kernel。
 
-- `agent_identity`
-- `runtime_identity`
-- `primary_skill`
-- `supporting_skills`
-- `scope_read`
-- `scope_write`
-- `must_not_touch`
-- `done_criteria`
-- `verification_commands`
-- `report_schema`
-- `conflict_policy`
+运行时规则：
 
-标准模板见 `templates/planning/worker-contract.md`。
+- 显式 routing intent 的 primary 必须与 Skill v2 `runtime_role=primary` 一致；冲突由 CI fail-closed。
+- 隐式 trigger fallback 只允许 `runtime_role=primary`。
+- `--skill` 显式加载可以读取 supporting/governance Skill；runtime role 不等于访问权限。
+- effect ceiling 只收紧 mutation permission。
+- CI 与 runtime 共用 `resolve_skill_content()`，避免两套 derivation。
 
-OpenAI Agents SDK 文档中的 handoff/ownership 语义在 adk 中落地为本地 contract，而不是直接绑定 SDK。`manifests/subagent_contracts.json` 是默认审计入口，必须声明 owner、`scope_read`、`scope_write`、`must_not_touch`、handoff condition、reply owner、stop condition 和 report schema。最终回复归属默认保留在主 Agent，子代理只交付结构化结果和验证证据。
+在候选确定后只能有一个 primary，supporting/governance capability 按需加载。`adk-runtime-router` 负责 intent/risk/evidence planning；它不能绕过 permission、owner approval 或 tool guardrail。大 catalog 默认先暴露 namespace/description summary，命中后再读取 `SKILL.md`，再按需进入 references/scripts/assets 或 L3/raw evidence。
+
+## Handoff / Sub-agent
+
+跨 Agent、parent→Sub-agent、review→implementation、verification→release 的 handoff 统一使用 `schemas/agent-handoff-v1.schema.json`。至少传递 objective、facts/assumptions、scope、evidence refs、permission envelope、stop conditions、context policy 与 expected output。
+
+Handoff 必须 summary-first；raw output 默认只传 opaque/path pointer；接收方权限不得因为 handoff 自动扩大。现有 `templates/planning/worker-contract.md` 可继续作为 worker task package，但不能创建与全局 handoff 冲突的权限语义。
+
+## Guardrail 分层
+
+- G0：prompt guidance。
+- G1：schema/static validator。
+- G2：runtime/tool guardrail。
+- G3：explicit owner/human approval。
+- G4：sandbox/worktree/runtime isolation。
+
+越高 side-effect/risk 的动作越不能只依赖 G0。Prompt 说明是行为提示，不是安全边界。
+
+## Eval 分层
+
+- E0：schema、identity parity、reference integrity。
+- E1：routing、trigger、near-miss collision、abstain。
+- E2：task behavior、failure handling、evidence completeness。
+- E3：authority、permission、handoff negative。
+- E4：完整 trajectory。
+
+仓库没有受管 production runtime authority/receipt 时，E2–E4 的生产测量必须保持 `not-measured`，不得用结构测试伪造 production success。Token/context 指标是 efficiency evidence，不是 quality KPI。
+
+长期 content ratchet 由注册的 `manifests/content_architecture_policy.json` 承载；change package 只保存某次迁移的历史证据，因此归档后不会成为运行时依赖。
 
 ## Workflow 入口规范
 
-Workflow 是一等资产，必须同时出现在 `manifest.json:workflows` 和 `workflows/<name>/WORKFLOW.md`。manifest 负责索引与导出闭包；`WORKFLOW.md` 负责阶段契约和人工可审查说明。
-
-每个 Workflow 必须声明：
-
-- `path`、`primary_agent`、`primary_skill` 和 `supporting_skills`。
-- `workflow_type`、`lifecycle_order`、`entry_conditions` 和 `exit_evidence`。
-- `triggers`、`agents`、`skills`、`commands` 和 `verification`。
-- `WORKFLOW.md` frontmatter 中的 `profiles`、`stages`、`artifacts`、`failure_handling`。
-- 固定章节：`Goal`、`Scope`、`Ownership`、`Stage Contract`、`Artifact Contract`、`Commands`、`Failure Handling`、`Quality Gate`。
-
-Workflow 不重复领域 Skill 的细节；它只定义阶段、工件、门禁、失败回路、审批点和验证闭包。
+Workflow 是一等资产，管理阶段、state、artifact、checkpoint、approval、failure loop 与 completion gate；领域 procedure 留给 Skill。Manifest 继续索引 Workflow 的 profile、primary agent/skill、supporting skills、entry conditions 与 exit evidence。
 
 ## 外部 Skill 引入
 
-第三方 Skill 不直接进入生产资产链路。默认流程是：
+第三方 Skill 不直接进入生产资产链路。外部 Agent/Skill/Plugin/MCP 实践默认只作为 method/provenance evidence：先做来源、版本、许可证、安全、重复能力与权限审查；需要采纳时重写为 ADK 原生资产并经过 manifest、validator、eval、pilot/owner gate。安装成功、registry listing 或社区热度都不等于生产批准。
 
-1. 作为候选资产进入参考或 intake 记录。
-2. 做安全、许可证、触发边界、重复能力和运行时权限检查。
-3. 需要采纳时转写为 adk 原生 `skills/` 或 `optional-skills/`。
-4. 通过 `manifest.json`、验证脚本和测试门禁后，才允许进入显式 tool target 适配链路。
-
-安装成功不等于采纳完成；生产资产以 `manifest.json` 和验证证据为准。
-
-## 临时文章吸收
-
-公众号文章、教程摘录和趋势榜单只作为 intake 输入。允许吸收的是可复用执行规则、边界条件、完成标准、验证命令和失败收口；不得吸收的是原文表达、工具热度、未经审查的安装命令、领域专用代码和平台宣传。
-
-若候选内容与现有 Skill/Agent/Workflow 重叠，默认 `MERGE` 到已有资产；只有证明现有入口无法表达新职责，才允许新增资产。新增资产必须同时说明触发边界、非触发条件、依赖边界和回退方式。
-
-外部 AGENTS、CLAUDE、GEMINI 或平台配置分享必须先拆层：项目事实进入项目地图或 README 类工件，Agent/Skill 可移植规则进入对应治理文档，runtime connector、MCP、hook、provider、API key、平台协作命令和安装片段保持 report-only，直到供应链和运行态权限审查完成。
-
-同一份 Skill 在不同宿主 runtime 下可能因 discovery timing、项目规则优先级、memory/context injection、sub-agent delegation、sandbox/approval、hook 和工具权限不同而表现不同。跨平台吸收只能记录触发边界、字段兼容矩阵和验证规则，不能继承平台私有 API、字段语义或默认权限。
-
-Agent 能执行任务不等于允许自治运行。定时、事件、webhook、消息机器人、自动发送、自动发布和后台循环属于 Workflow/runtime 入口，必须先声明 owner、触发条件、输入输出、审批点、dry-run、日志、禁用路径和回滚方式。
+跨宿主 runtime 只迁移可证明的 method/contract，不继承平台私有 API、默认权限、hook、memory 注入或自动化副作用。

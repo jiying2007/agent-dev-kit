@@ -1,0 +1,36 @@
+{
+  "schema_version": "adk-content-architecture-policy/v1",
+  "identity_source": "manifest.json",
+  "baseline_source_commit": "d55c84b5b0ce86e8432d08e8c0d33f95bfb32725",
+  "identity_baseline": {
+    "agent_count": 13,
+    "core_skill_count": 57,
+    "optional_skill_count": 8
+  },
+  "agent_thin_contract": {
+    "p0_max_bytes": 5000,
+    "p1_max_bytes": 4500,
+    "required_headings": [
+      "## Mission",
+      "## Owns",
+      "## Does Not Own",
+      "## Decision Authority",
+      "## Permission Boundary",
+      "## Default Capabilities",
+      "## Handoff / Escalation",
+      "## Stop Conditions",
+      "## Input Contract",
+      "## Output Contract"
+    ],
+    "forbidden_procedure_headings": [
+      "执行流程",
+      "必跑验证",
+      "工具箱",
+      "反模式",
+      "场景输入样例",
+      "输出样例"
+    ],
+    "forbid_shell_code_fences": true
+  },
+  "production_behavior_without_authority": "not-measured"
+}

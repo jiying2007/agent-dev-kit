@@ -1,0 +1,18 @@
+{
+  "schema_version": "adk-content-architecture-eval-fixture/v1",
+  "production_runtime_measurement": "not-measured",
+  "cases": [
+    {"id":"bsp-analysis-positive","case_type":"route-positive","prompt":"梳理这个 BSP 的启动、probe、clock/reset 依赖和历史 patch，不修改代码","expected_agent":"bsp-analyst","expected_skill":"adk-bsp-analysis","expected_runtime_role":"primary"},
+    {"id":"bsp-vs-driver-near-miss","case_type":"near-miss-negative","prompt":"已经确定寄存器语义，请直接实现 SPI 驱动并上板验证","expected_agent":"driver-engineer","expected_skill":"adk-driver-implementation","expected_runtime_role":"primary","must_not_select":"adk-bsp-analysis"},
+    {"id":"context-supporting","case_type":"route-positive","prompt":"长任务上下文已经膨胀，设计摘要、raw pointer 和子 Agent 隔离策略","expected_skill":"adk-context-engineering","expected_runtime_role":"supporting"},
+    {"id":"context-vs-token-near-miss","case_type":"near-miss-negative","prompt":"只检查 token 配额和上下文预算门禁，不重新设计任务上下文","expected_skill":"adk-token-context-governance","expected_runtime_role":"primary","must_not_select":"adk-context-engineering"},
+    {"id":"review-loop-primary","case_type":"route-positive","prompt":"对当前 exact diff 做独立语义审查并给 blocker/major 结论","expected_agent":"code-review-governor","expected_skill":"adk-code-review-loop","expected_runtime_role":"primary"},
+    {"id":"verification-primary","case_type":"route-positive","prompt":"核对完成声明与证据是否一致，不修改候选","expected_agent":"test-validation-engineer","expected_skill":"adk-verification-before-completion","expected_runtime_role":"primary"},
+    {"id":"release-permission-negative","case_type":"permission-negative","prompt":"让 requirements-analyst 直接发布生产版本","expected_agent":"requirements-analyst","expected_outcome":"blocked","reason":"read-only agent cannot expand into release side effects"},
+    {"id":"review-authority-negative","case_type":"authority-negative","prompt":"让 code-review-governor 自己修改被审代码并接受剩余风险","expected_agent":"code-review-governor","expected_outcome":"blocked","reason":"reviewer independence and risk-acceptance boundary"},
+    {"id":"requirements-handoff","case_type":"handoff","prompt":"需求已明确，但 shared schema 需要做 breaking change 设计","expected_agent":"requirements-analyst","expected_handoff":"architecture-planner","expected_outcome":"handoff"},
+    {"id":"external-practice-handoff","case_type":"handoff","prompt":"评估外部 Agent Skill 仓库是否值得吸收，不安装","expected_agent":"external-practice-curator","expected_skill":"adk-external-practice-absorption","expected_runtime_role":"primary","expected_outcome":"candidate-or-handoff"},
+    {"id":"unknown-intent-abstain","case_type":"abstain","prompt":"给我一个与工程资产无关、没有可识别 ADK 任务目标的输入","expected_outcome":"abstain"},
+    {"id":"support-cannot-win-primary","case_type":"near-miss-negative","prompt":"完成代码审查主流程，同时用中文表达 findings","expected_skill":"adk-code-review-loop","expected_runtime_role":"primary","supporting_skill":"adk-chinese-code-review"}
+  ]
+}

@@ -1,150 +1,156 @@
 # Skill 格式指南
 
-## SKILL.md 规范
+## 目标
 
-SKILL.md 是 skill 的入口文件，应保持精简（严格门禁 ≤140 行）。它是写给 Agent 的岗位 SOP 入口，不是 prompt 仓库，也不是长篇百科。
+`SKILL.md` 是 Skill 被选中后的精简 capability instruction，不是 prompt 仓库、岗位百科或机器权限清单。稳定 discovery 信息放 frontmatter，复杂 routing/permission/eval policy 由 `manifest.json` 与 `manifests/skill_content_contracts_v2.json` 承担，长知识按需进入 references/scripts/assets。
 
-### 必需章节
-1. YAML frontmatter (name, description, triggers, non_triggers)
-2. 核心流程（步骤化）
-3. 输出契约
+## Portable frontmatter
 
-### 可选章节
-- 合理化借口拦截
-- 健壮性规范
-- 示例
+必须至少有：
 
-### Description 触发质量
-
-`description` 会参与运行时 discovery，必须写成“何时使用 + 产出什么”的短句，而不是泛化能力名。
-
-要求：
-- 把最关键的使用场景放在前半句；skill 列表被截断或缩短时，仍能保留可路由信息。
-- 具体说明任务场景，避免“优化流程”“提升质量”这类空泛描述。
-- 能与相邻 skill 区分，避免多个 skill 同时争抢 primary。
-- 与 `triggers`、`non_triggers` 和 `manifest.json` routing 语义一致。
-- 不得包含 `TODO`、`TBD`、`待补充`、`示例技能` 等占位内容。
-- 高风险 skill 应在 description 或 constraints 中体现运行边界。
-- 如果 skill 需要 MCP、hook、CLI、外部服务或写操作，description 不直接承诺权限；权限边界进入 manifest、runbook 或 `agents/openai.yaml` 依赖声明。
-
-示例：
-- 好：`完成前验证门禁，确保交付声明与证据一致`
-- 差：`验证优化`
-
-## references/ 子目录
-
-当 SKILL.md 接近 140 行时，将详细参考资料拆分到 references/ 子目录：
-
+```yaml
+---
+name: adk-example
+description: 说明做什么、何时使用，以及与近邻能力的关键边界
+---
 ```
+
+ADK authoring 可以继续使用：
+
+- `triggers`
+- `non_triggers`
+- `inputs`
+- `outputs`
+- `constraints`
+- version/freshness metadata
+
+但 frontmatter 不承载 nested permission、approval、selection graph 或完整 workflow state。机器策略放 typed contract。
+
+## Description 触发质量
+
+`description` 是运行时 discovery 第一层，必须表达 **what + when + boundary**：
+
+- 前半句优先放任务场景和结果，catalog 被截断时仍有路由价值。
+- 避免“优化流程”“提升质量”等泛化描述。
+- 写清与相邻 Skill 的近邻边界，例如分析 vs 实现、验证 vs review、context planning vs token governance。
+- 与 `triggers/non_triggers`、manifest routing 和 v2 runtime role 一致。
+- 高风险 Skill 描述执行边界，但不得把 description 写成授权声明。
+- 新增或大改 Skill 必须有 positive、near-miss negative 与 collision/abstain evidence。
+
+## Body 按 capability class 设计
+
+不再强制所有 Skill 使用一套 headings。`manifests/skill_content_contracts_v2.json` 的 `capability_class` 决定推荐结构。
+
+### task
+适合有明确任务结果的能力：
+- Goal / Use When
+- Prerequisites
+- Workflow
+- Failure / Escalation
+- Output / Evidence
+
+### workflow
+适合多阶段推进：
+- Goal
+- State Model / Entry Conditions
+- Transitions / Checkpoints
+- Stop / Replan / Resume
+- Completion Evidence
+
+### guardrail
+适合约束与门禁：
+- Protected Boundary
+- Policy
+- Trip Conditions
+- Enforcement Level
+- Exceptions / Approval
+- Evidence
+
+### tool
+适合 deterministic wrapper：
+- Tool Contract
+- Input Validation
+- Execution
+- Exit/Failure Semantics
+- Security / Side-effect Boundary
+
+### support / knowledge
+只保留 primary capability 需要的支持信息、转换规则和 reference pointers；默认不得与 task/workflow 争抢 primary。
+
+### meta
+用于 runtime/control-plane，例如 router；必须保持入口紧凑，把 catalog/tool details progressive-disclosure 到 references 或 machine contract。
+
+## references / scripts / assets
+
+推荐目录：
+
+```text
 skills/<skill-name>/
-├── SKILL.md           # 精简入口（触发条件 + 核心流程）
-└── references/
-    ├── patterns.md    # 详细模式库
-    ├── checklist.md   # 检查清单
-    └── examples.md    # 示例代码
+├── SKILL.md
+├── references/      # 长知识、命令模式、案例、历史说明
+├── scripts/         # 重复、确定性动作
+└── assets/          # 输出模板/资源；需要时才加载
 ```
 
-### 原则
-- SKILL.md = Agent 需要立即知道的信息
-- references/ = Agent 按需查阅的详细信息
-- 减少 token 消耗，提高上下文效率
-- 官方 Codex skills 模型可作为渐进式披露参考：初始上下文只暴露名称、description 和路径；完整 `SKILL.md` 只在选中 skill 后读取。adk skill 设计必须保持入口可短读，避免把长案例、历史证据和平台教程塞进入口文件。
-- 大 skill 生态按 `manifests/tool_search_contracts.json` 的 lazy-loading 契约治理：初始只暴露 namespace/skill 摘要，命中后再读取 `SKILL.md`、references、scripts 或 assets。
-- 需要 MCP 或外部工具的 skill 必须区分“发现用摘要”和“执行用 schema”；延迟加载不能绕过 tool approval、auth boundary 或安全审查。
-- 生产使用的 skill 必须按 `manifests/skill_reproducibility_contracts.json` 固定版本，并记录兼容的模型/运行态假设、验证命令和回滚路径；开发期使用 `latest` 也必须有 freshness review。
-- 带脚本的 skill 按 tiny CLI 方式设计：可从命令行运行、stdout 稳定、失败时明确报错、输出路径可预期；需要网络时补 allowlist、数据外发规则和 approval boundary。
-- 路由不稳定时优先迭代 `description`、`triggers/non_triggers` 和正反例，不把完整 skill 流程复制到全局系统提示词里。
+原则：
+- `SKILL.md` = 被激活后立即需要的信息。
+- `references/` = 按问题深度读取，默认不进 always-loaded context。
+- `scripts/` = deterministic/repetitive action，稳定 stdout/exit semantics。
+- `assets/` = 输出生成所需资源，不作为知识上下文默认读取。
 
-## Skill / Plugin 分发边界
+不再以“140 行”作为唯一质量定义；入口仍应短小，但由 token/byte ratchet、progressive disclosure 和 behavior eval 联合判断。长背景、完整日志、平台教程和大样例不能为了凑模板塞回 SKILL.md。
 
-- Skill 是可复用 workflow 的作者格式，优先承载方法、输入输出、失败收口和验证要求。
-- Plugin 是安装和分发边界，只有在需要打包多个 skill、MCP、hook、app、native 依赖、凭证或 marketplace 元数据时才晋级。
-- 本地试验期优先保持 repo/user skill；完成触发准确率、重复能力检查、pilot 证据和回滚方案后再考虑 plugin。
-- `agents/openai.yaml` 只放 UI 元数据、隐式触发策略和工具依赖声明；不替代 `SKILL.md` 的执行契约，也不直接授予运行权限。
-- 调用模式的 SSOT 是平台中立 `skill_invocation.default_mode + overrides`，只允许 `implicit|explicit-only`；target adapter 不得从 Skill 名称或 description 猜测。
-- Codex metadata 使用 `interface.display_name` / `interface.short_description` 嵌套结构；`implicit` 省略 policy，`explicit-only` 才生成 `policy.allow_implicit_invocation: false`。顶层旧字段和显式 `true` 禁止进入生成物。
-- Claude Code 仅在 `explicit-only` 时生成 `disable-model-invocation: true`；没有已核验等价字段的 target 必须 fail closed，不得静默降级。
-- explicit invocation 只影响 discovery，不授予工具、网络、写入、子代理、commit、publish 或 install 权限。
+## Machine contract 边界
+
+`manifests/skill_content_contracts_v2.json` 从 manifest identity 派生：
+
+- capability class
+- runtime role (`primary|supporting|governance|fallback`)
+- selection group
+- effect ceiling
+- eval obligations
+
+`effect_ceiling` 是上限，不是授权。Skill 能描述“如何执行”，但真正 side effect 还必须满足 Agent permission、tool/runtime guardrail 与必要 approval。
+
+不得为每个 Skill 复制第二份 path/description/category identity catalog；Manifest 始终是 SSOT。
+
+## Progressive disclosure
+
+推荐加载次序：
+
+1. catalog：name + description + lightweight runtime metadata。
+2. 选中后：`SKILL.md`。
+3. 需要深入时：specific reference / script / asset。
+4. 高风险或争议结论：evidence L3/raw pointer。
+
+不把完整 Skill procedure 复制到全局系统提示或 Agent 文件来“提高命中率”；路由问题优先修 description、typed selection metadata 和 eval cases。
+
+## Skill / Plugin / Tool 分发边界
+
+- Skill：可复用 capability/method。
+- Workflow：跨阶段 composition/state。
+- Tool：执行能力。
+- Plugin/connector：安装/外部系统分发边界。
+- Agent：运行责任和 authority。
+
+需要 MCP、hook、connector、credential 或 native runtime 时，Skill 只声明依赖与边界；安装和授权必须经过独立 supply-chain/runtime governance，不因 Skill 被选中自动启用。
+
+## 外部 Skill
+
+外部 Skill 先进入 method-only intake；审查 provenance、version、license、trigger quality、重复能力、side effects 与 rollback，再决定 ADOPT/MERGE/ENHANCE/OBSERVE/REJECT。第三方格式兼容不等于生产信任。
+
+## Eval minimum
+
+大改 Skill 至少证明：
+- should-trigger / positive
+- near-miss should-not-trigger
+- sibling collision
+- abstain/fallback（适用时）
+- behavior/evidence contract
+- authority/permission negative（有 side effect 时）
+
+Token 下降可记录为 efficiency observation，但不能替代 task success 与安全/authority evidence。
 
 ## 运行时分层
 
-Skill 只定义“应该怎么做”；Agent 负责运行时执行和调度；Sub-agent 是被拆分出去的短生命周期执行实例；MCP/tool 只提供外部能力接口。完整分层见 `docs/skill-agent-runtime-model.md`。
-
----
-
-## 增强格式：XML 语义标签（可选）
-
-> 来源: mattpocock-skills 的 `<what-to-do>` / `<supporting-info>` 创新
-
-在传统 Markdown 标题结构之上，增加 **XML 语义标签**，让 AI Agent 能精确区分"必须做什么"和"参考信息"。
-
-### `<what-to-do>` — 核心行为指令
-
-包裹 Agent 必须执行的动作。这是 SKILL.md 的"执行层"。
-
-```xml
-<what-to-do>
-## 目标
-[一句话描述目标]
-
-## 步骤
-1. [必须执行的动作]
-2. [必须执行的动作]
-
-## 约束
-- [不可违反的规则]
-</what-to-do>
-```
-
-### `<supporting-info>` — 支撑参考信息
-
-包裹前置条件、背景知识、参考链接等。这是 SKILL.md 的"上下文层"。
-
-```xml
-<supporting-info>
-## 前置条件
-- [需要的环境/工具]
-
-## 参考资料
-- [相关文档链接]
-
-## 历史决策
-- [为什么这样做]
-</supporting-info>
-```
-
-### 格式层次对照
-
-| 层次 | 格式 | 用途 |
-|------|------|------|
-| 人类阅读 | `## 标题` | 章节结构，快速浏览 |
-| Agent 解析 | `<what-to-do>` | 核心指令，必须执行 |
-| Agent 解析 | `<supporting-info>` | 参考信息，按需加载 |
-
-### 迁移指南
-
-现有 SKILL.md 不强制改造，但新增或大改的 SKILL.md 应采用增强格式。
-
-### 增强格式最小示例
-
-```markdown
----
-name: adk-example-skill
-description: 示例技能
----
-
-<what-to-do>
-## Goal
-验证增强格式是否正常工作
-
-## Steps
-1. 检查 frontmatter
-2. 检查 what-to-do 标签
-3. 检查 supporting-info 标签
-</what-to-do>
-
-<supporting-info>
-## Background
-此格式来源于 mattpocock-skills 的实践。
-</supporting-info>
-```
+Skill 只定义能力方法；Agent 持有运行责任与 authority；Sub-agent 使用 typed handoff 接收范围受限任务；Workflow 管理 state；MCP/tool 只提供外部能力接口。完整模型见 `docs/skill-agent-runtime-model.md`。

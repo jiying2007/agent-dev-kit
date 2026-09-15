@@ -230,6 +230,7 @@ test_review_maps_to_readonly_artifacts() {
     local output
     output=$("$MATCH_SCRIPT" --text "代码审查" 2>&1) || true
     [[ "$output" == *"match=true"* &&
+       "$output" == *"skill=adk-code-review-loop"* &&
        "$output" == *"task_mode=review"* &&
        "$output" == *"mutation_permission=deny"* &&
        "$output" == *"artifact_mode=readonly"* ]]
@@ -326,8 +327,9 @@ test_multiturn_latest_turn_readonly_to_implementation() {
        "$turn1" == *"task_mode=readonly"* &&
        "$turn1" == *"mutation_permission=deny"* &&
        "$turn2" == *"match=true"* &&
+       "$turn2" == *"skill=adk-requirements-triage"* &&
        "$turn2" == *"task_mode=implementation"* &&
-       "$turn2" == *"mutation_permission=workspace-write"* &&
+       "$turn2" == *"mutation_permission=deny"* &&
        "$turn2" != *"task_mode=readonly"* ]]
 }
 
@@ -385,7 +387,7 @@ run_test "调试正向对照 -> adk-systematic-debugging" test_routing_debugging
 run_test "调试 intent 限制实现权限" test_routing_debugging_intent_caps_implementation_signal
 run_test "否定 non-trigger 不得压制调试" test_negated_non_trigger_does_not_veto_debugging
 run_test "发布正向对照 -> adk-release-versioning" test_routing_release_contrastive_positive
-run_test "review mode -> readonly artifact mode" test_review_maps_to_readonly_artifacts
+run_test "review mode -> readonly artifact mode + selection-group primary" test_review_maps_to_readonly_artifacts
 
 echo ""
 echo "--- Negative cases (should not match) ---"
@@ -396,7 +398,7 @@ run_test "规划动作否定 phrase classes 变形 -> abstain" test_negation_phr
 run_test "调试动作否定 phrase classes 变形 -> abstain" test_negation_phrase_classes_metamorphic_debugging
 run_test "发布动作否定 phrase classes 变形 -> abstain" test_negation_phrase_classes_metamorphic_release
 run_test "多轮 release -> readonly 以最新 turn 为准" test_multiturn_latest_turn_release_to_readonly
-run_test "多轮 readonly -> implementation 以最新 turn 为准" test_multiturn_latest_turn_readonly_to_implementation
+run_test "多轮 readonly -> implementation mode 仍受 Skill effect ceiling 限制" test_multiturn_latest_turn_readonly_to_implementation
 run_test "完全无关的文本xyz -> no match" test_negative_unrelated_xyz
 run_test "今天天气很好 -> no match" test_negative_weather
 run_test "abc123 -> no match" test_negative_abc

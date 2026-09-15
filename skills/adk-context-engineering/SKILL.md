@@ -1,104 +1,89 @@
 ---
 name: adk-context-engineering
-description: 上下文工程——优化 Agent 上下文设置
-version: 1.0.0
-last_updated: 2026-05-06
+description: 规划和裁剪 Agent 任务上下文，决定稳定规则、动态证据、按需 references、摘要与 raw pointer 的加载边界。用于上下文膨胀、跨阶段/跨会话恢复、并行 Agent 隔离、信息缺失或错误上下文导致理解偏差的场景；不用于替代任务规划、代码实现或 token 治理门禁。
+version: 2.0.0
+last_updated: 2026-09-15
 triggers:
-  - "上下文不够"
-  - "AI 理解错了"
-  - "设置项目上下文"
-  - "构建上下文"
-  - "context 构建"
+  - 上下文工程
+  - 上下文膨胀
+  - 跨会话恢复
+  - Agent 理解偏差
+  - 并行上下文隔离
+  - context planning
 non_triggers:
-  - "写代码"
-  - "测试运行"
+  - 直接写代码
+  - 单纯运行测试
+  - 只做 token 配额治理
 inputs:
-  - 项目结构和规范
+  - 当前任务目标和阶段
+  - 稳定规则与动态证据来源
+  - 可用 Skill/reference/tool surface
 outputs:
-  - 上下文配置文件、状态工件、压缩策略
+  - 上下文加载计划
+  - 摘要与 raw pointer 策略
+  - 缺失/噪音/隔离风险
 constraints:
-  - 上下文文件应精简
-  - 避免信息过载
-  - 长任务状态必须外化到文件，不能只保存在会话里
+  - progressive disclosure 优先
+  - 稳定身份规则与动态证据分离
+  - 不因压缩丢失高风险原始证据的可追溯 pointer
+  - 不把临时 references 固化为长期事实
 ---
 
-# 上下文工程
+# adk-context-engineering
 
 ## Goal
-- 优化 Agent 上下文设置，提高 AI 输出质量和效率。
+为当前任务生成最小充分、可恢复、可追溯的 context policy，而不是把所有可用信息一次性装入模型。
+
+## Use When
+- 当前上下文过大、互相冲突或含大量无关历史。
+- 长任务需要 checkpoint / resume / handoff。
+- 并行 Agent 需要共享 contract 与私有工作上下文隔离。
+- 模型因缺失关键事实、加载错误 reference 或过度压缩而反复误解任务。
+
+若任务只是“执行既有计划”“写代码”“跑测试”，且没有 context 边界问题，本 Skill 只作为 supporting capability，不抢 primary。
 
 ## Prerequisites
-- 确认项目结构和规范文档可访问。
-- 获取最小上下文：项目类型、Agent 工具。
+- 明确当前 objective、phase、risk level 与候选 primary Skill。
+- 知道哪些输入是 authoritative facts，哪些只是假设、历史摘要或按需 reference。
 
-## 5 级上下文层次
-
-1. **Rules**: 全局规则（AGENTS.md）
-2. **Specs**: 需求规格（SPEC.md）
-3. **Source**: 源代码（相关文件）
-4. **Errors**: 错误信息（日志/输出）
-5. **History**: 历史上下文（之前的对话）
-
-## 状态外化工件
-
-长任务或跨会话任务应建立轻量 planning 工件，作为后续会话的唯一恢复入口。
-
-| 工件 | 用途 | 更新时机 |
-|---|---|---|
-| `PROJECT.md` | 项目目标、边界、关键约束 | 项目或目标变化时 |
-| `REQUIREMENTS.md` | 可验证需求、非目标、验收条件 | 需求澄清后 |
-| `STATE.md` | 当前阶段、已完成、阻塞、风险 | 每个 checkpoint 后 |
-| `PLAN.md` | 阶段计划、依赖、验证命令 | 计划重审后 |
-| `SUMMARY.md` | 压缩摘要、恢复提示、下一步 | 会话收口前 |
-
-本仓默认优先使用现有 `docs/changes/<change-id>/` 或项目约定目录；不得为了临时调研把 references 内容固化为长期事实。
-
-## 上下文优化策略
-
-| 策略 | 说明 | 效果 |
-|------|------|------|
-| 渐进式披露 | 先给概要，按需深入 | 减少 token 消耗 |
-| 结构化输入 | 用表格/列表代替段落 | 提高解析准确度 |
-| 关键信息前置 | 最重要的信息放前面 | 确保不被截断 |
-| 去除噪音 | 删除无关信息 | 提高信噪比 |
-| 自适应压缩 | 阶段结束后把决策、证据、风险写入摘要 | 降低上下文腐烂 |
-| 上下文隔离 | 并行 agent 只携带自身任务包和共享 contract | 降低互相污染 |
+## Context Policy
+1. **Stable core**：只保留长期稳定的 role/rules/contract；优先 cache-friendly 内容。
+2. **Task state**：目标、当前阶段、done/open/blocker、candidate identity。
+3. **Evidence**：先摘要与 evidence ref；高风险/争议结论保留 L3/raw pointer，不默认复制全文。
+4. **On-demand capability**：只有触发后才加载 Skill body、reference、tool schema。
+5. **Handoff isolation**：子任务只接收 objective、必要 facts/contract、scope、evidence refs；不默认继承完整聊天历史。
 
 ## Workflow
-1. 分析项目结构和规范
-2. 识别 Agent 需要的上下文层次
-3. 判断是否需要状态外化：跨阶段、跨会话、多人/多 agent、验证链较长时必须外化
-4. 按优先级组织上下文（关键信息前置）
-5. 应用渐进式披露和自适应压缩减少 token 消耗
-6. 验证 Agent 输出质量，并记录缺失上下文和错误理解样例
+1. 识别当前决策真正需要的事实、contract 和 evidence。
+2. 将信息标记为 `always | phase | on-demand | raw-pointer | exclude`。
+3. 删除重复、过期、低价值动态输出；冲突信息保留来源与 freshness，不静默覆盖。
+4. 为长任务写 summary-first checkpoint；raw output 仅保留 opaque/path pointer 和 retention decision。
+5. 并行/跨 Agent 时使用 `schemas/agent-handoff-v1.schema.json`，限制 scope 与 permission，不传播无关 history。
+6. 验证恢复能力：新执行者只读取摘要和 refs 应能知道目标、已确认事实、未决问题和下一步；若不能，补缺失信息而不是扩大所有上下文。
+
+## Failure / Abstain
+- 权威来源不明确：输出 `needs-evidence`，不要用历史摘要替代事实。
+- 压缩会让 blocker、permission、candidate identity 或原始证据不可追溯：保留 pointer 并拒绝继续压缩。
+- 问题实质是 routing/token-policy：分别交给 `adk-runtime-router` / `adk-token-context-governance`。
 
 ## Quality Gate
-- 上下文文件格式正确
-- Agent 输出质量有明显提升
-- 无信息过载
-- 长任务恢复摘要能让新会话直接继续
-- 并行任务的共享 contract 和私有上下文边界明确
+- 关键信息均有 provenance 或明确 assumption 标记。
+- dynamic/raw 内容不进入 always-loaded core。
+- handoff 不扩大权限，不复制无关完整历史。
+- 恢复摘要包含 objective、state、blockers、evidence refs、next action。
+- “质量提升”必须由具体误解/缺失样例或 eval 证明，不接受主观描述。
 
 ## Evidence Template
 ```md
-- 上下文层次: <levels used>
-- 状态工件: <PROJECT/REQUIREMENTS/STATE/PLAN/SUMMARY paths or none>
-- Agent 输出质量: pass / needs-fix
-- Token 消耗变化: before N -> after M
-- 错误理解样例: <before/after>
+- Objective / Phase:
+- Context decisions:
+  - always:
+  - phase:
+  - on-demand:
+  - raw-pointer:
+  - excluded:
+- Missing / conflicting evidence:
+- Handoff boundary:
+- Recovery check: pass | needs-evidence
+- Efficiency observation: <optional; not a quality KPI>
 ```
-
-## 合理化借口拦截
-
-| 借口 | 现实 | 正确做法 |
-|------|------|---------|
-| "上下文已经够了" | Agent 输出质量下降是信号 | 检查并补充缺失上下文 |
-| "全给 Agent 看就好" | 信息过载会降低质量 | 用渐进式披露 |
-
-## 健壮性规范
-
-- **输入验证**: 检查上下文文件格式正确
-- **重试策略**: Agent 输出不佳时补充上下文重试
-- **超时控制**: 上下文准备不超过 10 分钟
-- **异常隔离**: 单个上下文文件缺失不影响整体
-- **日志记录**: 记录提供了哪些上下文

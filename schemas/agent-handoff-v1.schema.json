@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "adk-agent-handoff/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "objective", "source_agent", "target_agent", "facts", "assumptions", "open_questions",
+    "scope_read", "scope_write", "must_not_touch", "artifacts", "evidence_refs", "permission_envelope",
+    "stop_conditions", "approval_required", "context_policy", "expected_output", "return_schema"
+  ],
+  "properties": {
+    "schema_version": {"const": "adk-agent-handoff/v1"},
+    "objective": {"type": "string", "minLength": 1},
+    "source_agent": {"type": "string", "minLength": 1},
+    "target_agent": {"type": "string", "minLength": 1},
+    "facts": {"type": "array", "items": {"type": "string"}},
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "open_questions": {"type": "array", "items": {"type": "string"}},
+    "scope_read": {"type": "array", "items": {"type": "string"}},
+    "scope_write": {"type": "array", "items": {"type": "string"}},
+    "must_not_touch": {"type": "array", "items": {"type": "string"}},
+    "artifacts": {"type": "array", "items": {"type": "string"}},
+    "evidence_refs": {"type": "array", "items": {"type": "string", "pattern": "^(ref:|file:|artifact:)"}},
+    "permission_envelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["permission_profile", "allowed_effects", "may_expand_source_permission"],
+      "properties": {
+        "permission_profile": {"enum": ["read-only", "diagnostic", "code-write", "build-release"]},
+        "allowed_effects": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "may_expand_source_permission": {"const": false}
+      }
+    },
+    "stop_conditions": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "approval_required": {"type": "boolean"},
+    "context_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["summary_first", "raw_output_mode", "summary_token_budget", "redaction_status"],
+      "properties": {
+        "summary_first": {"const": true},
+        "raw_output_mode": {"enum": ["opaque-pointer", "not-retained"]},
+        "summary_token_budget": {"type": "integer", "minimum": 1, "maximum": 4000},
+        "redaction_status": {"enum": ["not-required", "completed", "blocked"]}
+      }
+    },
+    "expected_output": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "return_schema": {"type": "string", "minLength": 1}
+  }
+}
