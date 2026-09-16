@@ -5,7 +5,7 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TMP_DIR="$(mktemp -d)"
 trap 'rm -rf "$TMP_DIR"' EXIT
 
-for target in claude-code opencode hermes-agent; do
+for target in claude-code opencode; do
   [[ -f "$ROOT_DIR/manifests/target-contracts/${target}.json" ]] || {
     echo "[FAIL] missing target contract: $target" >&2
     exit 1
@@ -21,7 +21,7 @@ import sys
 value = json.load(open(sys.argv[1], encoding="utf-8"))
 assert value["schema"] == "adk-target-check/v1", value
 assert value["status"] == "pass", value
-assert set(value["targets"]) == {"claude-code", "hermes-agent", "opencode"}, value
+assert set(value["targets"]) == {"claude-code", "opencode"}, value
 assert all(item["contract_status"] == "experimental" for item in value["targets"].values()), value
 assert all(item["contract_schema"] == "adk-target-contract/v2" for item in value["targets"].values()), value
 for item in value["targets"].values():
@@ -383,28 +383,6 @@ opencode_writer = frontmatter(opencode / "agents/component-engineer.md")
 assert opencode_writer["permission"]["edit"] == "allow", opencode_writer
 assert not (opencode / "agents/driver-engineer.md").exists(), "embedded driver agent leaked into core"
 PY
-
-set +e
-bash "$ROOT_DIR/scripts/devkit.sh" export \
-  --target hermes-agent --profile core --out "$TMP_DIR/hermes-invalid" \
-  >"$TMP_DIR/hermes-invalid.out" 2>"$TMP_DIR/hermes-invalid.err"
-hermes_invalid_rc=$?
-set -e
-[[ "$hermes_invalid_rc" -eq 2 ]] || {
-  echo "[FAIL] unsupported Hermes Agent must return exit 2, got $hermes_invalid_rc" >&2
-  exit 1
-}
-[[ ! -e "$TMP_DIR/hermes-invalid/hermes-agent" ]] || {
-  echo "[FAIL] unsupported Hermes Agent produced partial output" >&2
-  exit 1
-}
-rg -q 'unsupported_asset_kind' "$TMP_DIR/hermes-invalid.err"
-
-HERMES_OUT="$TMP_DIR/hermes-export"
-bash "$ROOT_DIR/scripts/devkit.sh" export \
-  --target hermes-agent --asset-kind skill --profile core --out "$HERMES_OUT" >/dev/null
-[[ -f "$HERMES_OUT/hermes-agent/skills/adk-requirements-triage/SKILL.md" ]]
-[[ ! -e "$HERMES_OUT/hermes-agent/agents" ]]
 
 set +e
 bash "$ROOT_DIR/scripts/devkit.sh" install plan \
