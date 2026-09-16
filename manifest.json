@@ -1,5 +1,5 @@
 {
-  "version": "5.1.0",
+  "version": "5.1.1",
   "locale": "zh-CN",
   "platforms": [
     "linux-embedded",
@@ -1028,7 +1028,12 @@
       "pattern": "playbook",
       "depends_on": [
         "adk-systematic-debugging",
+        "adk-offline-core-dump-triage",
+        "adk-embedded-diagnostic-harness",
         "adk-token-context-governance"
+      ],
+      "fallback_skills": [
+        "adk-systematic-debugging"
       ]
     },
     {
