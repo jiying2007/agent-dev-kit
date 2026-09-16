@@ -54,6 +54,18 @@ run_smoke "production field pilot help"  scripts/run-embedded-production-field-p
 run_smoke "workflow pilots help"         scripts/run-embedded-workflow-pilots.sh --help
 
 echo ""
+echo "=== Version Identity Strict Test ==="
+TOTAL=$((TOTAL + 1))
+if bash "$ADK_ROOT/scripts/version-manager.sh" verify >/tmp/adk-version-identity.out 2>&1; then
+  echo "  PASS  version identity verify returned zero"
+  PASS_COUNT=$((PASS_COUNT + 1))
+else
+  echo "  FAIL  version identity verify must return zero"
+  tail -n 20 /tmp/adk-version-identity.out >&2 || true
+  FAIL_COUNT=$((FAIL_COUNT + 1))
+fi
+
+echo ""
 echo "=== Version Changelog Placeholder Test ==="
 version="smoke-$(date +%s)"
 changelog="$ADK_ROOT/CHANGELOG-$version.md"
