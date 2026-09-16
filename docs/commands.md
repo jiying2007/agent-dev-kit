@@ -28,9 +28,9 @@ bash scripts/devkit.sh install rollback --receipt /tmp/adk-live/.adk-install-rec
 
 常用参数：
 
-- `--tool claude-code|hermes-agent|opencode`
+- `--tool claude-code|opencode`
 - `--mode copy`（target contract 为防止越界与语义漂移而拒绝 symlink）
-- `--asset-kind agent|skill`（Hermes Agent 不受支持并 fail closed）
+- `--asset-kind agent|skill`
 - `--profile <name>`
 - `--extra-profile <name>`
 - `--with-optional-skill <name>`
@@ -83,7 +83,6 @@ bash scripts/devkit.sh doctor --target /tmp/adk-live --summary-json
 
 ```bash
 bash scripts/devkit.sh export --target claude-code --profile core --out dist --clean --lock-timeout 30
-bash scripts/devkit.sh export --target hermes-agent --profile core --extra-profile release-hardening --out dist --clean
 bash scripts/devkit.sh export --target opencode --profile team-core --with-optional-skill adk-test-flakiness-triage --out dist --dry-run --summary-json
 ```
 
@@ -101,7 +100,7 @@ bash scripts/devkit.sh target check --target claude-code --level static --summar
 bash scripts/devkit.sh target smoke --target claude-code --stage discovery --profile core --asset-kind skill --runtime-command /path/to/read-only-runtime-smoke
 ```
 
-当前 `claude-code`、`opencode`、`hermes-agent` 均为 `experimental`。真实 runtime smoke 至少分 discovery、load、trigger、permission 四阶段；本地结果记录 `started_at`、`duration_ms`、runtime command SHA256、exit code 和 stdout/stderr digest，runtime/version 与可复核证据摘要必须由外部 campaign 一并留存。
+当前 `claude-code`、`opencode` 均为 `experimental`。真实 runtime smoke 至少分 discovery、load、trigger、permission 四阶段；本地结果记录 `started_at`、`duration_ms`、runtime command SHA256、exit code 和 stdout/stderr digest，runtime/version 与可复核证据摘要必须由外部 campaign 一并留存。
 
 ## lock
 

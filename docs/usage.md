@@ -75,13 +75,12 @@ export 用于生成 target 格式的确定性交付目录：
 
 ```bash
 bash scripts/devkit.sh export --target claude-code --profile embedded-fullstack --out dist --clean
-bash scripts/devkit.sh export --target hermes-agent --profile core --extra-profile release-hardening --out dist --clean
 bash scripts/devkit.sh export --target opencode --profile team-core --with-optional-skill adk-security-supply-chain --out dist --clean
 ```
 
 参数说明：
 
-- `--tool`：`claude-code|hermes-agent|opencode`。
+- `--tool`：`claude-code|opencode`。
 - `--target`：导出目标，取值来自 `manifest.json:tool_targets`。
 - `--mode`：仅支持 `copy`；`symlink` 返回 `unsupported_install_mode` 且不生成 plan。
 - `--profile`：主 profile，默认 `core`。
