@@ -15,7 +15,11 @@ workflow_files = sorted(workflow_dir.glob("*.yml"))
 assert workflow_files, "no hosted workflows found"
 
 consumer_files = sorted(workflow_dir.glob("*-consumer-contract.yml"))
-assert len(consumer_files) == 1, consumer_files
+expected_consumer_workflows = {
+    "claude-consumer-contract.yml",
+    "codex-consumer-contract.yml",
+}
+assert {path.name for path in consumer_files} == expected_consumer_workflows, consumer_files
 
 # Every hosted workflow starts from an explicit read-only contents permission.
 # Every checkout is read-only by construction: no persisted git credential may remain.
@@ -125,15 +129,16 @@ pr_cancellable = {
     workflow_dir / "security-codeql.yml": "security-codeql",
     workflow_dir / "platform-vnext.yml": "platform-vnext",
     workflow_dir / "digital-worker-contract.yml": "digital-worker-contract",
-    consumer_files[0]: consumer_files[0].stem,
 }
+for path in consumer_files:
+    pr_cancellable[path] = path.stem
 for path, group in pr_cancellable.items():
     text = path.read_text(encoding="utf-8")
     assert "permissions:\n  contents: read\n" in text, path.name
     assert f"group: {group}-${{{{ github.event.pull_request.number || github.run_id }}}}" in text, path.name
     assert "cancel-in-progress: ${{ github.event_name == 'pull_request' }}" in text, path.name
 
-for path in (consumer_files[0], workflow_dir / "digital-worker-contract.yml"):
+for path in [*consumer_files, workflow_dir / "digital-worker-contract.yml"]:
     text = path.read_text(encoding="utf-8")
     assert "fetch-depth: 0" in text, path.name
     assert "fetch-tags: true" in text, path.name
