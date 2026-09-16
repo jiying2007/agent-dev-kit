@@ -55,6 +55,8 @@ retired_tokens = (
     "manifest.yaml",
     ".github/workflows/scorecard.yml",
     "OpenSSF Scorecard",
+    "hermes-agent",
+    "Hermes Agent",
 )
 path_pattern = re.compile(r"(?<![A-Za-z0-9_./-])((?:scripts|tests)/[A-Za-z0-9_./-]+\.sh)\b")
 
