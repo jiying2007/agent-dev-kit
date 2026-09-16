@@ -15,11 +15,16 @@ workflow_files = sorted(workflow_dir.glob("*.yml"))
 assert workflow_files, "no hosted workflows found"
 
 consumer_files = sorted(workflow_dir.glob("*-consumer-contract.yml"))
+consumer_validators = sorted((root / ".github/contracts").glob("*_consumer_contract.py"))
+assert consumer_validators, "no consumer contract validators found"
 expected_consumer_workflows = {
-    "claude-consumer-contract.yml",
-    "codex-consumer-contract.yml",
+    f"{path.stem.removesuffix('_consumer_contract').replace('_', '-')}-consumer-contract.yml"
+    for path in consumer_validators
 }
-assert {path.name for path in consumer_files} == expected_consumer_workflows, consumer_files
+assert {path.name for path in consumer_files} == expected_consumer_workflows, (
+    consumer_files,
+    consumer_validators,
+)
 
 # Every hosted workflow starts from an explicit read-only contents permission.
 # Every checkout is read-only by construction: no persisted git credential may remain.
