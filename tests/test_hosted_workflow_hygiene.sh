@@ -34,6 +34,7 @@ assert {path.name for path in consumer_files} == expected_consumer_workflows, (
 expected_write_permissions = {
     "branch-gc.yml": ["contents"],
     "ci.yml": ["id-token"],
+    "release-tag-promotion.yml": ["artifact-metadata", "attestations", "contents", "id-token"],
     "release.yml": ["artifact-metadata", "attestations", "id-token"],
     "security-codeql.yml": ["security-events"],
 }
@@ -157,16 +158,37 @@ assert "contents: write" in branch_gc_apply, "branch-gc write permission must re
 release = (workflow_dir / "release.yml").read_text(encoding="utf-8")
 assert "concurrency:" not in release, "release serialization semantics must remain unchanged"
 assert "  workflow_dispatch:\n" in release, "tag-bound manual release entrypoint must remain available"
+assert "  workflow_call:\n" in release, "reviewed exact-tag reusable release entrypoint must be declared"
+assert "release_tag:" in release and "release_commit:" in release, "reusable release must require exact tag and commit inputs"
+assert "ref: ${{ inputs.release_commit || github.ref }}" in release, "reusable release checkout must bind exact requested commit"
 assert "- name: Validate tag-bound release identity" in release, "release ref guard missing"
-assert 'if [[ "$GITHUB_REF_TYPE" != "tag" || "$GITHUB_REF_NAME" != v* ]]; then' in release, "release must fail closed off tag refs"
+assert 'if [[ "$GITHUB_REF_TYPE" != "tag" || "$GITHUB_REF_NAME" != v* ]]; then' in release, "ordinary release must still fail closed off tag refs"
+assert 'git fetch --force --no-tags origin "refs/tags/${CALLED_RELEASE_TAG}:refs/tags/${CALLED_RELEASE_TAG}"' in release, "reusable release must fetch the exact declared tag"
+assert 'if [[ "$TAG_COMMIT" != "$CALLED_RELEASE_COMMIT" ]]; then' in release, "reusable release tag must peel to the exact declared commit"
 assert 'EXPECTED_TAG="v${SOURCE_VERSION}"' in release, "release must derive expected tag from source version"
-assert 'if [[ "$GITHUB_REF_NAME" != "$EXPECTED_TAG" ]]; then' in release, "release tag must match source version"
+assert 'if [[ "$RELEASE_TAG" != "$EXPECTED_TAG" ]]; then' in release, "release tag must match source version"
+assert "bash scripts/version-manager.sh verify" in release, "release must verify synchronized version identity before build work"
 assert release.index("- name: Validate tag-bound release identity") < release.index("- name: Install CI dependencies"), "release identity guard must run before build/install work"
 assert "- name: Validate complete release artifact bundle" in release, "release bundle completeness guard missing"
 assert "archives=(dist/*.tar.gz)" in release, "release bundle must require one archive"
 assert "checksums=(dist/*.tar.gz.sha256)" in release, "release bundle must require one matching checksum"
 assert "sha256sum --check" in release, "release sidecar checksum must be verified"
 assert "if-no-files-found: error" in release, "release artifact upload must fail closed when files are missing"
+
+release_tag_promotion = (workflow_dir / "release-tag-promotion.yml").read_text(encoding="utf-8")
+assert "  workflow_run:\n" in release_tag_promotion, "release tag promotion must be completion-triggered"
+assert "      - agent-dev-kit-ci\n" in release_tag_promotion, "release tag promotion must depend on canonical main CI"
+assert "github.event.workflow_run.conclusion == 'success'" in release_tag_promotion, "release tag promotion requires successful CI"
+assert "github.event.workflow_run.event == 'push'" in release_tag_promotion, "release tag promotion requires a push CI run"
+assert "github.event.workflow_run.head_branch == 'main'" in release_tag_promotion, "release tag promotion must stay confined to main"
+assert "cancel-in-progress: false" in release_tag_promotion, "release tag promotion must be non-cancellable"
+assert "contents: write" in release_tag_promotion, "tag creation permission must remain explicit and reviewed"
+assert "git ls-remote origin refs/heads/main" in release_tag_promotion, "tag promotion must re-check exact current main"
+assert "bash scripts/version-manager.sh verify" in release_tag_promotion, "tag promotion must verify synchronized version identity"
+assert 'payload={"ref": f"refs/tags/{tag}", "sha": head_sha}' in release_tag_promotion, "tag promotion must create an exact immutable version ref"
+assert 'promotion_status = "version-already-released"' in release_tag_promotion, "existing version tags must never move"
+assert "uses: ./.github/workflows/release.yml" in release_tag_promotion, "tag promotion must reuse the canonical release workflow"
+assert "needs.promote-tag.outputs.release_needed == 'true'" in release_tag_promotion, "canonical release must run only for an exact newly promoted or retryable tag"
 
 dependency_review = (workflow_dir / "security-dependency-review.yml").read_text(encoding="utf-8")
 assert "pull_request:" in dependency_review, "dependency review must remain PR-only"
