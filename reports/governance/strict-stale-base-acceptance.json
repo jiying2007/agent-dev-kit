@@ -1,6 +1,6 @@
 {
   "schema": "adk-governance-strict-stale-base-acceptance/v1",
-  "status": "qualified-candidate",
+  "status": "pass",
   "repository": "jiying2007/agent-dev-kit",
   "ruleset_id": 23394761,
   "baseline_main": "dd28796d229afa17e3213fd8cd1cfb858316cd0a",
@@ -23,7 +23,7 @@
     "stale_expected_head_merge_rejected": true,
     "refreshed_on_latest_main": true,
     "refreshed_exact_head_qualified": true,
-    "final_expected_head_merge_succeeded": false
+    "final_expected_head_merge_succeeded": true
   },
   "evidence": {
     "initial_head": "ea0b5e826b68339b40ab181baa6b5b6631762491",
@@ -50,8 +50,14 @@
       35053956622,
       35053956629
     ],
-    "final_candidate_head": null,
-    "final_candidate_ci_runs": [],
-    "final_main": null
+    "final_candidate_head": "5b19e8be200fb9edd79380d06f7d21141d72deb6",
+    "final_candidate_ci_runs": [
+      35054255074,
+      35054255083,
+      35054255070,
+      35054255080,
+      35054255130
+    ],
+    "acceptance_merge_main": "d8d75a229762b18eaf0db3af0467a6addccda569"
   }
 }
