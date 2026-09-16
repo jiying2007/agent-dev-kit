@@ -1,0 +1,57 @@
+{
+  "schema": "adk-governance-strict-stale-base-acceptance/v1",
+  "status": "qualified-candidate",
+  "repository": "jiying2007/agent-dev-kit",
+  "ruleset_id": 23394761,
+  "baseline_main": "dd28796d229afa17e3213fd8cd1cfb858316cd0a",
+  "strict_required_status_checks_policy": true,
+  "required_status_checks": [
+    "contract-py3.11",
+    "contract-py3.12",
+    "regression-py3.11",
+    "regression-py3.12",
+    "deterministic-eval-package",
+    "static-security",
+    "codeql-python",
+    "dependency-review",
+    "branch-gc-dry-run",
+    "platform-vnext"
+  ],
+  "acceptance": {
+    "initial_exact_head_qualified": true,
+    "base_advanced_after_initial_qualification": true,
+    "stale_expected_head_merge_rejected": true,
+    "refreshed_on_latest_main": true,
+    "refreshed_exact_head_qualified": true,
+    "final_expected_head_merge_succeeded": false
+  },
+  "evidence": {
+    "initial_head": "ea0b5e826b68339b40ab181baa6b5b6631762491",
+    "initial_base": "dd28796d229afa17e3213fd8cd1cfb858316cd0a",
+    "initial_ci_runs": [
+      35053493172,
+      35053493227,
+      35053493270,
+      35053493208,
+      35053493444
+    ],
+    "advanced_main": "1452678f6c76245909a112cf9bb8f9dd80e0d255",
+    "stale_merge_error": {
+      "http_status": 405,
+      "message": "Repository rule violations found",
+      "detail": "10 of 10 required status checks are expected."
+    },
+    "refreshed_parent_main": "1452678f6c76245909a112cf9bb8f9dd80e0d255",
+    "refreshed_head": "e65ae3dddd8eec9e03149c39982932f9c81cf1a4",
+    "refreshed_ci_runs": [
+      35053956609,
+      35053956672,
+      35053956733,
+      35053956622,
+      35053956629
+    ],
+    "final_candidate_head": null,
+    "final_candidate_ci_runs": [],
+    "final_main": null
+  }
+}
