@@ -82,7 +82,10 @@ checks = {
         rf'(?m)^__version__\s*=\s*["\']{re.escape(version)}["\']\s*$',
     ),
     ".version-lock": (root / ".version-lock", rf'(?m)^version:\s*{re.escape(version)}\s*$'),
-    "README.md": (root / "README.md", rf'(?m)^当前版本：`{re.escape(version)}`'),
+    "README.md": (
+        root / "README.md",
+        rf'(?m)^`manifest\.json` 当前 source version 为 `{re.escape(version)}`。',
+    ),
     "CONTEXT.md": (root / "CONTEXT.md", rf'(?m)^> 产品版本：{re.escape(version)}\s*$'),
 }
 failures: list[str] = []
@@ -155,7 +158,7 @@ replace_once(
 )
 replace_once(
     root / "README.md",
-    r'^(当前版本：`)[^`]+(`.*)$',
+    r'^(`manifest\.json` 当前 source version 为 `)[^`]+(`。.*)$',
     rf'\g<1>{target}\g<2>',
     "README.md",
 )
