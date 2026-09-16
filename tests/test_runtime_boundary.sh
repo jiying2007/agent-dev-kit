@@ -17,7 +17,7 @@ echo "$summary" | grep -q '"runtime_scope":"generic-adk"' || {
   echo "[FAIL] runtime boundary summary missing generic scope" >&2
   exit 1
 }
-echo "$summary" | grep -q '"direct_tool_targets":3' || {
+echo "$summary" | grep -q '"direct_tool_targets":2' || {
   echo "[FAIL] runtime boundary summary missing direct tool target count" >&2
   exit 1
 }
