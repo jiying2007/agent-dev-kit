@@ -1028,12 +1028,7 @@
       "pattern": "playbook",
       "depends_on": [
         "adk-systematic-debugging",
-        "adk-offline-core-dump-triage",
-        "adk-embedded-diagnostic-harness",
         "adk-token-context-governance"
-      ],
-      "fallback_skills": [
-        "adk-systematic-debugging"
       ]
     },
     {
