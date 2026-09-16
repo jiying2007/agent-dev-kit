@@ -5,6 +5,16 @@ on:
     tags:
       - 'v*'
   workflow_dispatch:
+  workflow_call:
+    inputs:
+      release_tag:
+        description: Exact immutable release tag already present in the repository
+        required: true
+        type: string
+      release_commit:
+        description: Exact commit SHA that the release tag must peel to
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -22,6 +32,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          ref: ${{ inputs.release_commit || github.ref }}
+          fetch-depth: 0
           persist-credentials: false
 
       - name: Set up Python
@@ -30,11 +42,51 @@ jobs:
           python-version: '3.12'
 
       - name: Validate tag-bound release identity
+        env:
+          CALLED_RELEASE_TAG: ${{ inputs.release_tag || '' }}
+          CALLED_RELEASE_COMMIT: ${{ inputs.release_commit || '' }}
         run: |
-          if [[ "$GITHUB_REF_TYPE" != "tag" || "$GITHUB_REF_NAME" != v* ]]; then
-            echo "::error::release workflow must run from a v* tag ref"
-            exit 1
+          set -euo pipefail
+          HEAD_SHA="$(git rev-parse HEAD)"
+          RELEASE_TAG=""
+
+          if [[ -n "$CALLED_RELEASE_TAG" || -n "$CALLED_RELEASE_COMMIT" ]]; then
+            if [[ -z "$CALLED_RELEASE_TAG" || -z "$CALLED_RELEASE_COMMIT" ]]; then
+              echo "::error::reusable release requires both release_tag and release_commit"
+              exit 1
+            fi
+            if [[ ! "$CALLED_RELEASE_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+([+-][0-9A-Za-z.-]+)?$ ]]; then
+              echo "::error::reusable release_tag is not a v-prefixed SemVer"
+              exit 1
+            fi
+            if [[ ! "$CALLED_RELEASE_COMMIT" =~ ^[0-9a-f]{40}$ ]]; then
+              echo "::error::reusable release_commit must be a full Git SHA"
+              exit 1
+            fi
+            if [[ "$HEAD_SHA" != "$CALLED_RELEASE_COMMIT" ]]; then
+              echo "::error::checked out source does not match reusable release_commit"
+              exit 1
+            fi
+            git fetch --force --no-tags origin "refs/tags/${CALLED_RELEASE_TAG}:refs/tags/${CALLED_RELEASE_TAG}"
+            TAG_COMMIT="$(git rev-parse "${CALLED_RELEASE_TAG}^{}")"
+            if [[ "$TAG_COMMIT" != "$CALLED_RELEASE_COMMIT" ]]; then
+              echo "::error::release tag does not peel to reusable release_commit"
+              exit 1
+            fi
+            RELEASE_TAG="$CALLED_RELEASE_TAG"
+          else
+            if [[ "$GITHUB_REF_TYPE" != "tag" || "$GITHUB_REF_NAME" != v* ]]; then
+              echo "::error::release workflow must run from a v* tag ref or a trusted reusable exact-tag call"
+              exit 1
+            fi
+            TAG_COMMIT="$(git rev-parse "${GITHUB_REF_NAME}^{}")"
+            if [[ "$TAG_COMMIT" != "$HEAD_SHA" ]]; then
+              echo "::error::checked out source does not match the triggering release tag"
+              exit 1
+            fi
+            RELEASE_TAG="$GITHUB_REF_NAME"
           fi
+
           SOURCE_VERSION="$(python - <<'PY'
           import json
           from pathlib import Path
@@ -44,10 +96,11 @@ jobs:
           PY
           )"
           EXPECTED_TAG="v${SOURCE_VERSION}"
-          if [[ "$GITHUB_REF_NAME" != "$EXPECTED_TAG" ]]; then
-            echo "::error::release tag $GITHUB_REF_NAME does not match source version $EXPECTED_TAG"
+          if [[ "$RELEASE_TAG" != "$EXPECTED_TAG" ]]; then
+            echo "::error::release tag $RELEASE_TAG does not match source version $EXPECTED_TAG"
             exit 1
           fi
+          bash scripts/version-manager.sh verify
 
       - name: Install CI dependencies
         run: |
