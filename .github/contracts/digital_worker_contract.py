@@ -12,12 +12,12 @@ CODEX_BINDING = ROOT / "manifests/integrations/codex-runtime-binding.json"
 WORKFLOW = ROOT / ".github/workflows/digital-worker-contract.yml"
 
 EXPECTED_BASELINE = {
-    "version": "5.1.0",
-    "tag": "v5.1.0",
-    "commit": "59cbd5cb40ca7077ee5407636bfc617e295ec7e5",
-    "tree": "16d3c99d4dac8c41c09509b82c536a11cc058ca9",
-    "manifest_blob": "bc349b0dc003c553059cdddbc368ae8ea6ffda89",
-    "release_artifact_sha256": "d4684fe5888203b4a25e7dda9ab51b83fb900cae2d09adb6e5179a775748c965",
+    "version": "5.1.1",
+    "tag": "v5.1.1",
+    "commit": "e36dfec69f21806431b07daddc4bd78412179e62",
+    "tree": "9c37468930231bdfa7f230e38ed1b85e0dc0f5f5",
+    "manifest_blob": "4715a03db12ac28d2978356306381c028c75af76",
+    "release_artifact_sha256": "1924d79034a216f04dde0d08826dd5b87c597f090721335c1cec16e9bc88cbc1",
 }
 
 
