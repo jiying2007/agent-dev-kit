@@ -63,20 +63,6 @@
         "~/.claude"
       ]
     },
-    "hermes-agent": {
-      "display_name": "Hermes Agent",
-      "status": "experimental",
-      "contract": "manifests/target-contracts/hermes-agent.json",
-      "supported_asset_kinds": [
-        "skill"
-      ],
-      "default_root": "~/.hermes",
-      "agents_dir": "agents",
-      "skills_dir": "skills",
-      "detect": [
-        "~/.hermes"
-      ]
-    },
     "opencode": {
       "display_name": "OpenCode",
       "status": "experimental",
