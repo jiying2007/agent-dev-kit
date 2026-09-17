@@ -114,11 +114,23 @@
       "version": "2",
       "owner": "routing",
       "producer": "agent_dev_kit.matcher_vnext",
-      "consumers": ["runtime-router", "validation", "evaluation"],
+      "consumers": ["runtime-router", "validation", "evaluation", "phase-context"],
       "stability": "experimental",
       "compatibility": "strict",
       "schema_path": "schemas/skill-content-contract-v2.schema.json",
       "surface_path": "manifests/skill_content_contracts_v2.json",
+      "evidence_class": "test"
+    },
+    {
+      "id": "phase-context",
+      "version": "1",
+      "owner": "routing",
+      "producer": "agent_dev_kit.phase_context",
+      "consumers": ["workflow", "runtime-router", "validation"],
+      "stability": "experimental",
+      "compatibility": "strict",
+      "schema_path": "schemas/phase-context-contract-v1.schema.json",
+      "surface_path": "manifests/phase_context_contract.json",
       "evidence_class": "test"
     },
     {
