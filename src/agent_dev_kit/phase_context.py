@@ -20,6 +20,7 @@ from jsonschema.exceptions import SchemaError
 
 from .matcher_vnext import resolve_skill_content
 from .model import Manifest, ManifestError, ensure_within
+from .skill_relationships import resolve_delivery_lifecycle as _resolve_delivery_lifecycle
 
 _CONTRACT = "manifests/phase_context_contract.json"
 _CONTRACT_SCHEMA = "schemas/phase-context-contract-v1.schema.json"
