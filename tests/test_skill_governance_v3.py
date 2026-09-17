@@ -109,15 +109,15 @@ class SkillGovernanceV3Tests(unittest.TestCase):
         self.assertEqual(result.get("effect_scope"), "workspace", result)
         self.assertEqual(result.get("effect_operation"), "write", result)
         self.assertEqual(result.get("live_device_authorization"), "explicit-required", result)
-        self.assertIn("live-device:register-write", result.get("escalation_effects", ()))
-        self.assertIn("target-identity", result.get("live_device_authorization_requirements", ()))
+        self.assertIn("live-device:register-write", str(result.get("escalation_effects", "")))
+        self.assertIn("target-identity", str(result.get("live_device_authorization_requirements", "")))
 
     def test_bsp_porting_exposes_flash_and_storage_escalation(self) -> None:
         result = match_text(self.manifest, "BSP移植")
         self.assertTrue(result.get("match"), result)
         self.assertEqual(result.get("skill"), "adk-bsp-porting-playbook", result)
         self.assertEqual(result.get("live_device_authorization"), "explicit-required", result)
-        effects = set(result.get("escalation_effects", ()))
+        effects = set(str(result.get("escalation_effects", "")).split(","))
         self.assertIn("live-device:flash", effects)
         self.assertIn("live-device:storage-write", effects)
 
