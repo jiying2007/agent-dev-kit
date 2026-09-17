@@ -40,7 +40,7 @@ constraints:
 1. **冻结目标 identity**：记录 board revision、设备 identity、SoC/MCU、固件/内核版本和本轮 stage。
 2. **上电与只读检查**：电源、时钟、复位、pinmux、设备存在性和只读寄存器状态。
 3. **最小闭环**：I2C/SPI/UART/CAN/USB/Ethernet 先完成无破坏性的最小收发。
-4. **设备写升级门禁**：只有目标问题确实需要寄存器写、reset、模式切换或其他 live-device mutation 时，先记录目标地址/操作、预期状态、显式授权、rollback/recovery 和 readback/行为验证；缺任一项则保持只读。
+4. **设备写升级门禁**：只有目标问题确实需要寄存器写、reset、模式切换或其他 live-device mutation 时，先记录目标地址/操作、预期状态、显式授权、rollback/recovery 和 readback/行为验证；缺任一项则保持只读，并 handoff 到受控 live-device operator，而不是在本 Skill 给出可执行写命令。
 5. **初始化与资源路径**：验证 probe/init、设备节点、资源申请、错误退出和生命周期。
 6. **中断/DMA 验证**：先轮询最小闭环，再逐步开启 IRQ、DMA、cache/coherency 和低功耗路径。
 7. **异常分支**：覆盖超时、CRC、设备不存在、总线错误、IRQ 丢失/DMA 错误和恢复路径。
@@ -48,7 +48,7 @@ constraints:
 
 ## Commands
 ```bash
-# 默认只读诊断
+# 这里只保留只读诊断命令；任何寄存器写/reset/模式切换均由受控 live-device operator 执行。
 devmem2 <phys_addr>
 dmesg | tail -n 200
 ls -la /dev/<device>*
@@ -56,10 +56,6 @@ cat /sys/class/<class>/<device>/uevent
 cat /proc/interrupts
 i2cdetect -y <bus>
 <driver-selftest-cmd> --smoke
-
-# live-device 写示例：只有完成显式授权门禁后才能执行
-# devmem2 <phys_addr> w <value>
-# <vendor-cli> reset-or-mode-write ...
 ```
 
 ## Evidence Template
