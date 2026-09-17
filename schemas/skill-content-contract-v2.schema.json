@@ -11,22 +11,72 @@
     "policy": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["primary_invariant", "effect_ceiling_semantics", "production_behavior_without_authority"],
+      "required": [
+        "primary_invariant",
+        "effect_ceiling_semantics",
+        "side_effect_escalation_semantics",
+        "live_device_authorization_contract",
+        "production_behavior_without_authority"
+      ],
       "properties": {
         "primary_invariant": {"const": "exactly-one-primary-after-eligibility-filter"},
         "effect_ceiling_semantics": {"const": "upper-bound-not-authorization"},
+        "side_effect_escalation_semantics": {"const": "live-device-and-release-target-effects-require-separate-explicit-authorization"},
+        "live_device_authorization_contract": {
+          "type": "array",
+          "minItems": 4,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "target-identity",
+              "explicit-authorization",
+              "rollback-or-recovery",
+              "post-write-verification"
+            ]
+          },
+          "allOf": [
+            {"contains": {"const": "target-identity"}},
+            {"contains": {"const": "explicit-authorization"}},
+            {"contains": {"const": "rollback-or-recovery"}},
+            {"contains": {"const": "post-write-verification"}}
+          ]
+        },
         "production_behavior_without_authority": {"const": "not-measured"}
       }
     },
     "derivation": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["capability_class_by_pattern", "effect_ceiling_by_category", "runtime_role_resolution", "selection_group_resolution", "eval_obligations"],
+      "required": [
+        "capability_class_by_pattern",
+        "effect_ceiling_by_category",
+        "effect_scope_by_ceiling",
+        "effect_operation_by_ceiling",
+        "runtime_role_resolution",
+        "selection_group_resolution",
+        "implicit_trigger_policy_resolution",
+        "eval_obligations"
+      ],
       "properties": {
-        "capability_class_by_pattern": {"type": "object", "additionalProperties": {"enum": ["task", "workflow", "support", "guardrail", "tool", "knowledge", "meta"]}},
-        "effect_ceiling_by_category": {"type": "object", "additionalProperties": {"enum": ["read-only", "diagnostic-execution", "workspace-write", "build-artifact-write", "release-preparation", "external-read"]}},
+        "capability_class_by_pattern": {
+          "type": "object",
+          "additionalProperties": {"enum": ["task", "workflow", "support", "guardrail", "tool", "knowledge", "meta"]}
+        },
+        "effect_ceiling_by_category": {
+          "type": "object",
+          "additionalProperties": {"enum": ["read-only", "diagnostic-execution", "workspace-write", "build-artifact-write", "release-preparation", "external-read"]}
+        },
+        "effect_scope_by_ceiling": {
+          "type": "object",
+          "additionalProperties": {"enum": ["none", "workspace", "build", "host-system", "live-device", "external-service", "release-target"]}
+        },
+        "effect_operation_by_ceiling": {
+          "type": "object",
+          "additionalProperties": {"enum": ["read", "diagnostic", "write", "prepare", "register-write", "diagnostic-write", "flash", "storage-write", "publish"]}
+        },
         "runtime_role_resolution": {"const": "override-else-support-knowledge-supporting-guardrail-governance-else-manifest-activation"},
         "selection_group_resolution": {"const": "override-else-manifest-category"},
+        "implicit_trigger_policy_resolution": {"const": "override-else-primary-eligible-supporting-promote-same-group-else-explicit-only"},
         "eval_obligations": {
           "type": "object",
           "additionalProperties": false,
@@ -48,7 +98,23 @@
           "capability_class": {"enum": ["task", "workflow", "support", "guardrail", "tool", "knowledge", "meta"]},
           "runtime_role": {"enum": ["primary", "supporting", "governance", "fallback"]},
           "selection_group": {"type": "string", "minLength": 1},
-          "effect_ceiling": {"enum": ["read-only", "diagnostic-execution", "workspace-write", "build-artifact-write", "release-preparation", "external-read"]}
+          "effect_ceiling": {"enum": ["read-only", "diagnostic-execution", "workspace-write", "build-artifact-write", "release-preparation", "external-read"]},
+          "effect_scope": {"enum": ["none", "workspace", "build", "host-system", "live-device", "external-service", "release-target"]},
+          "effect_operation": {"enum": ["read", "diagnostic", "write", "prepare", "register-write", "diagnostic-write", "flash", "storage-write", "publish"]},
+          "implicit_trigger_policy": {"enum": ["eligible", "promote-same-group", "explicit-only"]},
+          "escalation_effects": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "enum": [
+                "live-device:register-write",
+                "live-device:diagnostic-write",
+                "live-device:flash",
+                "live-device:storage-write",
+                "release-target:publish"
+              ]
+            }
+          }
         }
       }
     }

@@ -91,5 +91,8 @@ verification_entry_bytes="$(wc -c <"$ROOT_DIR/$verification_skill" | tr -d ' ')"
 
 "$ROOT_DIR/scripts/validate-assets.sh" --strict >/dev/null
 "$ROOT_DIR/scripts/check-memory-governance.sh" >/dev/null
+"$ROOT_DIR/tests/test_skill_dependencies.sh" >/dev/null
+PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}" \
+  python3 -m unittest tests.test_skill_governance_v3 -v
 
-echo "[PASS] skill SOP quality"
+echo "[PASS] skill SOP quality + terminal governance v3"

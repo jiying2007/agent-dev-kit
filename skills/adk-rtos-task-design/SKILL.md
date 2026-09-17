@@ -1,95 +1,85 @@
 ---
 name: adk-rtos-task-design
-description: RTOS 任务模型与优先级设计
-version: 1.0.0
-last_updated: 2026-05-06
+description: RTOS 任务、优先级、共享资源和实时性验证设计
+version: 2.0.0
+last_updated: 2026-09-17
 triggers:
   - "RTOS任务"
   - "任务设计"
   - "实时任务"
+  - "调度分析"
 non_triggers:
   - 无 RTOS 的裸机项目
+  - 只需要普通线程划分且无实时约束
 inputs:
-  - 任务列表、实时性指标
+  - 任务周期、deadline、WCET/测量样本、中断负载、共享资源、栈与队列约束
 outputs:
-  - 任务划分与调度策略
+  - 任务模型、优先级依据、response-time/trace 证据、共享资源策略、残留风险
 constraints:
-  - 必须说明优先级与栈大小依据
+  - 不使用固定经验阈值替代目标系统 deadline/latency budget
+  - 必须区分测量值、估算值和未知值
+  - 必须说明优先级、栈大小和共享资源策略依据
 ---
 
 # adk-rtos-task-design
 
 ## Goal
-- 构建可解释、可验证的 RTOS 任务调度模型。
+- 建立可解释、可计算、可测量的 RTOS 调度模型。
+- 用目标系统的 deadline、WCET、blocking 和 ISR interference 判断可调度性，而不是套用通用固定阈值。
 
 ## Prerequisites
-- 收集任务周期、截止时间、共享资源与中断负载。
-- 明确是否存在硬实时路径。
+- 锁定 RTOS/MCU/clock/tick 或 tickless 配置与调度策略。
+- 列出任务周期或最小到达间隔、deadline、优先级候选、共享资源和 ISR 来源。
+- WCET 不可获得时必须标记 `estimated` 或 `unknown`，不得伪装成已验证值。
 
 ## Workflow
-1. 任务分解：按功能与实时性划分任务边界。
-2. 优先级分配：依据 deadline 和关键性设定优先级。
-3. 栈与队列规划：给出栈大小估算和队列容量依据。
-4. 竞争治理：定义互斥、优先级反转与死锁防护策略。
-5. 调度验证：通过 trace 验证时延和抖动是否满足目标。
+1. **任务模型**：为每个 task/ISR 记录 period 或 sporadic arrival、deadline、WCET、priority、stack、blocking resource。
+2. **优先级策略**：选择 Rate Monotonic、Deadline Monotonic、固定业务关键级或平台既有策略，并写出适用前提。
+3. **响应时间分析**：对硬/准实时路径计算或保守估计 `R = C + B + interference`；多轮迭代至收敛或超过 deadline。
+4. **ISR interference**：把高优先级 ISR、critical section、scheduler lock、关中断区间纳入预算，不能只分析 task-to-task 抢占。
+5. **共享资源**：明确 PIP/PCP/lock-order/message-passing/lock-free 方案以及最坏 blocking time。
+6. **栈与队列**：结合静态估算、stack high-water mark、burst/backpressure 样本给出容量依据。
+7. **运行验证**：用 trace/周期统计核对 response time、jitter、deadline miss、queue high-water、stack high-water 和 CPU load。
+8. **降级与恢复**：出现 deadline miss 时先识别 `C/B/interference` 主因，再调整优先级、临界区、任务划分或负载；禁止只“提高优先级”。
+
+## Analysis Notes
+- `RMA` 在本 Skill 中指 Rate Monotonic Analysis，不与 Direct Memory Access (`DMA`) 混用。
+- Deadline Monotonic 只在适用固定优先级模型下使用；混合关键级、SMP 或动态优先级需记录模型限制。
+- 对无法静态证明的路径，保留 `needs-runtime-evidence`，以目标板 trace/HIL 证据闭环。
 
 ## Commands
 ```bash
-<rtos-trace-cmd> --duration 60
-rg -n "xTaskCreate|thread_create|mutex|semaphore" <src_path>
-rg -n "priority|PRIO" <src_path>
-rg -n "deadlock|DEADLOCK|lock_order" <src_path>
+<rtos-trace-cmd> --duration <representative-window>
+rg -n "xTaskCreate|thread_create|osThread|mutex|semaphore|critical|irq" <src_path>
+rg -n "priority|PRIO|stack|queue|tickless|watchdog" <src_path>
+<stack-high-water-command>
+<deadline-or-latency-report-command>
 ```
-
-## 任务优先级设计
-| 原则 | 说明 |
-|------|------|
-| Rate Monotonic | 周期越短优先级越高 |
-| Deadline Monotonic | 截止时间越近优先级越高 |
-| 关键性提升 | 安全关键任务可覆盖 deadline 排序 |
-| 中断与任务分离 | ISR 仅做信号量/队列通知，不在 ISR 中处理逻辑 |
-
-## 资源竞争与死锁预防
-| 策略 | 说明 |
-|------|------|
-| 优先级继承 (PIP) | 低优先级任务持有锁时继承高优先级 |
-| 优先级天花板 (PCP) | 锁创建时设定天花板优先级 |
-| 锁序协议 | 全局统一锁获取顺序，禁止嵌套反转 |
-| 无锁设计 | 用 ring buffer + 原子操作替代互斥锁 |
-| 超时机制 | mutex 获取必须带超时，避免无限阻塞 |
-
-## 合理化借口拦截
-
-| 借口 | 现实 | 正确做法 |
-|------|------|---------|
-| "任务少不需要优先级分析" | 即使 2 个任务也可能死锁 | 用 RMA/DMA 方法论分配优先级 |
-| "互斥锁够用了" | 优先级反转会让高优先级任务饿死 | 引入 PIP 或 PCP 协议 |
-| "死锁概率很低" | 死锁一旦发生系统完全挂死 | 必须有锁序或超时保护 |
 
 ## Evidence Template
 ```md
-- Task List + Priority:
-- Stack/Queue Sizing Basis:
+- Runtime Identity: RTOS / MCU / clock / tick-mode / scheduler
+- Task Model:
+  | Task/ISR | Period/Arrival | Deadline | WCET(status) | Priority | Stack | Blocking Resource |
+- Priority Policy + Preconditions:
+- Response-Time Analysis: C / B / interference / R / deadline
+- ISR Interference Budget:
 - Shared Resource Policy:
-- Worst-case Latency:
-- Verification Result:
+- Stack High-Water / Queue High-Water:
+- Runtime Trace: response-time / jitter / misses / CPU load
+- Unknowns / Model Limits:
+- Verification Result: pass | needs-runtime-evidence | needs-fix
 ```
 
 ## Failure Handling
-- 若关键任务 deadline 未达标，先降噪并重排优先级。
-- 若出现优先级反转，优先引入优先级继承或协议修正。
+- response time 超 deadline：定位 WCET、blocking、ISR interference 或 overload 主因后 replan。
+- stack/queue high-water 接近配置上限：补 burst 场景与安全余量依据，不直接拍脑袋扩容。
+- trace 与静态模型冲突：以可重复运行证据为准修正模型，并保留差异原因。
+- 无目标板或 trace 能力时：最多输出 `needs-runtime-evidence`，不得声称硬实时目标已满足。
 
 ## Quality Gate
-- 每个任务必须有优先级与栈大小依据。
-- 必须给出关键路径 worst-case latency 数据。
-- 需包含至少一个竞争场景的防护方案。
-
----
-
-## 健壮性规范
-
-- **输入验证**: 执行前校验所有必要输入是否存在且格式正确
-- **重试策略**: 外部命令失败时最多重试 3 次，指数退避（1s, 2s, 4s）
-- **超时控制**: 单步操作超时 30 秒，整体流程超时 300 秒
-- **异常隔离**: 单个步骤失败不阻塞其他独立步骤
-- **日志记录**: 关键操作记录命令、退出码、耗时
+- 每条关键实时路径必须有 deadline/latency budget 和 WCET 状态。
+- 硬/准实时任务必须给 response-time 或等价可调度性证据。
+- 必须纳入至少一个 ISR interference 与一个共享资源 blocking 场景。
+- 每个任务必须有优先级与 stack sizing 依据；关键队列必须有 burst/backpressure 依据。
+- 结论中的数值必须来自目标约束、测量或显式估算，不得使用无来源固定经验阈值。

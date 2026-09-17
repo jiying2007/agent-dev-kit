@@ -1,8 +1,8 @@
 ---
 name: adk-bsp-porting-playbook
-description: BSP 移植流程与风险控制
-version: 1.0.0
-last_updated: 2026-05-06
+description: BSP 移植流程与风险控制；源码/构建与真实设备刷写权限分离
+version: 2.0.0
+last_updated: 2026-09-17
 triggers:
   - "BSP移植"
   - "板级移植"
@@ -14,113 +14,91 @@ triggers:
 non_triggers:
   - 仅业务代码改动
 inputs:
-  - 旧平台信息、新平台约束
+  - 旧平台信息、新平台约束、runtime 类型、目标板 identity
 outputs:
-  - 移植步骤与验证矩阵
+  - 移植步骤、验证矩阵、刷写授权 handoff、回退证据
 constraints:
   - 先最小可启动，再扩展外设
+  - workspace/build 权限不得推导真实设备 flash/storage-write 权限
+  - 真实刷写必须有 target identity、explicit authorization、recovery 和 post-write verification
 ---
 
 # adk-bsp-porting-playbook
 
 ## Goal
-- 在可控风险下完成 BSP 迁移，并保留回退路径。
-- 确保新平台最小启动链路完整，外设分阶段验证上线。
+- 在可控风险下完成 Linux/RTOS/bare-metal BSP 迁移，并保留最后已知可恢复锚点。
+- 把源码适配、构建产物和真实设备写入分成不同授权域。
 
 ## Prerequisites
-- 明确旧/新平台差异（CPU 架构、时钟树、内存映射、外设基地址）。
-- 准备交叉编译工具链（arm-none-eabi-gcc / aarch64-linux-gnu-gcc）。
-- 获取目标板原理图、芯片手册、参考 BSP 源码。
-- 约定迁移范围与阶段里程碑。
+- 明确 runtime：`linux-embedded | mcu-rtos | mcu-baremetal`，以及 SoC/MCU、board revision、boot chain 和存储介质。
+- 获取原理图、芯片手册、参考 BSP、目标 toolchain 和当前 last-known-good artifact。
+- 约定迁移范围、阶段里程碑、目标设备 identity 和恢复入口。
 
 ## Workflow
-1. **平台差异矩阵**：逐项比对 CPU 架构、时钟配置、内存映射、中断控制器、外设 IP 差异。
-2. **设备树 / 配置适配**：修改 DTS/DTSI 文件，适配新的 SoC 节点、时钟源、引脚复用。
-   ```bash
-   # 设备树编译与检查
-   dtc -I dts -O dtb -o new_board.dtb new_board.dts
-   dtc -I dtb -O dts new_board.dtb | grep -A5 "serial@"
-   ```
-3. **交叉编译链路搭建**：配置 Makefile / CMake toolchain 文件，指定交叉编译器与 sysroot。
-   ```bash
-   # Linux 内核交叉编译
-   export ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-
-   make defconfig O=../build/new_board
-   make -j$(nproc) O=../build/new_board
-   # U-Boot 交叉编译
-   make CROSS_COMPILE=aarch64-linux-gnu- <board>_defconfig
-   make CROSS_COMPILE=aarch64-linux-gnu- -j$(nproc)
-   ```
-4. **最小可启动验证**：仅启用串口控制台、基础存储，确认 boot → kernel → shell 链路。
-5. **外设分阶段接入**：按关键业务优先级逐步上线（网络 → 显示 → 音频 → 传感器）。
-6. **回归验证**：启动时间、稳定性、关键功能与功耗指标。
-7. **发布前收口**：输出遗留风险与后续补齐计划。
+1. **冻结平台 identity**：记录 old/new platform、runtime、board/device identity、source commit 和 last-known-good artifact/hash。
+2. **差异矩阵**：比较 CPU/core、clock/reset、memory map、interrupt、DMA/cache、pinmux、storage/boot media 和 peripheral IP。
+3. **启动链建模**：
+   - Linux：ROM/SPL/U-Boot(or equivalent) → kernel → DT → rootfs/userspace。
+   - RTOS：ROM/bootloader → vector/startup → BSP/HAL → scheduler/application。
+   - bare-metal：ROM/bootloader → startup/linker → clocks/memory → application loop。
+4. **源码/配置适配**：只在 workspace 域修改 DTS/config/startup/linker/HAL/board files，并保留最小 diff。
+5. **构建闭环**：锁 toolchain、构建入口、artifact identity/hash；构建超时按项目基线，不使用固定 30s/300s 通用阈值。
+6. **设备写升级门禁**：若需要 flash/storage-write，生成 handoff payload：target identity、artifact hash、目标 region/partition、explicit authorization、recovery、post-write verification。缺任一项固定 blocked；本 Skill 不提供可直接复制执行的设备写命令。
+7. **最小可启动验证**：抓取完整 boot evidence，确认目标 stage 到 console/shell/application heartbeat；失败则停止扩外设。
+8. **外设分阶段接入**：按依赖和业务优先级逐项开启，每一步保留可回退配置。
+9. **回归与发布交接**：验证启动、稳定性、关键功能、功耗/实时性；真实量产放行交给 production-field readiness。
 
 ## Commands
 ```bash
-# 交叉编译
+# Linux host/build 示例
 export ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-
-make defconfig O=../build && make -j$(nproc) O=../build
-
-# 设备树编译
+make defconfig O=../build/new_board
+make -j$(nproc) O=../build/new_board
 dtc -I dts -O dtb -o output.dtb input.dts
+file <bootloader-or-kernel-artifact>
+sha256sum <artifact>
 
-# 烧录验证
-fastboot flash boot boot.img
-# 或
-dd if=boot.img of=/dev/mmcblk0p1 bs=4M conv=fsync
+# RTOS / bare-metal host/build 示例
+<toolchain> --version
+<build-command>
+file <elf-or-bin>
+sha256sum <elf-or-bin>
 
-# 启动日志抓取
-minicom -D /dev/ttyUSB0 -b 115200 -C boot.log
-# 或
-screen /dev/ttyUSB0 115200
-
-# 硬件验证清单
-cat /proc/cpuinfo
-cat /proc/meminfo
-cat /proc/interrupts
-ls /dev/i2c-* /dev/spi-* /dev/ttyS*
+# live-device mutation 只生成 operator handoff，不在本 Skill 输出刷写命令。
 ```
 
 ## Evidence Template
 ```md
-- Platform Diff Matrix (old vs new):
-  - CPU/Arch: ____
-  - Clock Tree: ____
-  - Memory Map: ____
-  - Peripheral IPs: ____
-- Device Tree Adaptation: [link to dts diff]
-- Cross-compile Config: [toolchain version, sysroot path]
-- Boot Log: [link to boot.log]
-- Bring-up Milestones:
-  - [ ] 最小启动（串口控制台）
-  - [ ] 存储可用
-  - [ ] 网络可用
-  - [ ] 外设全部上线
-- Device Enablement Status: [table: device | status | notes]
-- Regression Result: [启动时间/稳定性/功耗]
-- Rollback Plan: [回退步骤与触发条件]
+- Runtime: linux | rtos | bare-metal
+- Target Identity: board_rev / device_id / SoC-or-MCU
+- Platform Diff Matrix:
+- Boot Chain:
+- Source / Config Adaptation:
+- Toolchain / Build Artifacts + Hashes:
+- Last-known-good Rollback Anchor:
+- Live-device Handoff:
+  - required: yes | no
+  - operation: flash | storage-write | none
+  - target_identity:
+  - artifact_sha256:
+  - target_partition_or_region:
+  - explicit_authorization:
+  - recovery_path:
+  - post_write_verification:
+- Boot Evidence:
+- Device Enablement Status:
+- Regression Result:
+- Gate Result: pass | needs-fix | blocked
 ```
 
 ## Failure Handling
-- 内核无法启动时，回退到上一个可启动配置并做二分定位（git bisect 或 config bisect）。
-- 设备树编译报错时，先检查 `#include` 路径与节点引用完整性。
-- 外设接入引入系统不稳定时，按模块回滚并隔离问题（逐个 disable 外设节点）。
-- 交叉编译链接失败时，检查 sysroot 中库文件架构是否匹配（`file libxxx.so`）。
+- 构建或配置失败先在 host/build 域收敛，不升级到设备写操作。
+- 设备写 handoff 前 identity/region/recovery 任一不明确时固定 `blocked`。
+- 受控 operator 返回写入/启动失败时停止后续 mutation，执行预先声明的 recovery/rollback，再做二分定位。
+- 外设接入引入不稳定时回到最后已知可启动配置并隔离问题。
 
 ## Quality Gate
-- 必须先达到"最小可启动"再进入功能扩展阶段。
-- 每个里程碑必须包含验证结果与阻塞项。
-- 必须提供已验证回退路径（含恢复命令）。
-- 设备树变更必须通过 `dtc` 编译无 error/warning。
-- 交叉编译产出必须通过 `file` 命令验证架构正确性。
-
----
-
-## 健壮性规范
-
-- **输入验证**: 执行前校验所有必要输入是否存在且格式正确
-- **重试策略**: 外部命令失败时最多重试 3 次，指数退避（1s, 2s, 4s）
-- **超时控制**: 单步操作超时 30 秒，整体流程超时 300 秒
-- **异常隔离**: 单个步骤失败不阻塞其他独立步骤
-- **日志记录**: 关键操作记录命令、退出码、耗时
+- 必须先达到最小可启动证据，再进入外设扩展。
+- 每个里程碑有 artifact identity、验证结果和阻塞项。
+- live-device flash/storage-write 不能由源码修改、构建成功或 release-preparation 权限推导。
+- 回退路径必须在设备写入 handoff 前定义；生产/现场放行必须由独立 readiness gate 签署。
