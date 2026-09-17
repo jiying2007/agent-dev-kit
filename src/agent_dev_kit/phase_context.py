@@ -25,9 +25,7 @@ _CONTRACT = "manifests/phase_context_contract.json"
 _CONTRACT_SCHEMA = "schemas/phase-context-contract-v1.schema.json"
 _SCHEMA = "adk-phase-context-contract/v1"
 _RESOLUTION_SCHEMA = "adk-phase-context-resolution/v1"
-_LIFECYCLE_RESOLUTION_SCHEMA = "adk-delivery-lifecycle-resolution/v1"
 _ROLE_ORDER = {"primary": 0, "supporting": 1, "governance": 2, "fallback": 3}
-_EXPECTED_LIFECYCLE_STAGES = ("review", "completion", "commit-pr", "closeout")
 
 
 @lru_cache(maxsize=8)
@@ -69,6 +67,8 @@ def _load_contract(
         raise ManifestError("Phase context identity_source must be manifest.json")
     if value.get("skill_semantics_source") != "manifests/skill_content_contracts_v2.json":
         raise ManifestError("Phase context skill semantics must come from Skill Content v2")
+    if value.get("relationship_semantics_source") != "manifests/skill_relationship_contracts_v1.json":
+        raise ManifestError("Phase context relationship semantics must come from Skill Relationship v1")
     if value.get("legacy_manifest_context_policy") != (
         "compatibility-only-not-authoritative-for-skill-role-selection"
     ):
@@ -236,60 +236,8 @@ def resolve_phase_context(manifest: Manifest, domain: str, phase: str) -> Dict[s
 
 
 def resolve_delivery_lifecycle(manifest: Manifest) -> Dict[str, Any]:
-    contract, contract_digest = _contract(manifest)
-    lifecycle = contract.get("delivery_lifecycle")
-    if not isinstance(lifecycle, dict):
-        raise ManifestError("Phase context delivery_lifecycle is missing")
-    if lifecycle.get("legacy_manifest_dependency_policy") != (
-        "compatibility-only-not-authoritative-for-delivery-sequencing"
-    ):
-        raise ManifestError("Legacy manifest dependency edges must be non-authoritative for delivery sequencing")
-    requirements = lifecycle.get("pre_review_requirements")
-    if requirements != ["verification-evidence"]:
-        raise ManifestError("Delivery lifecycle must require verification evidence before review")
-    steps = lifecycle.get("steps")
-    if not isinstance(steps, list) or len(steps) != len(_EXPECTED_LIFECYCLE_STAGES):
-        raise ManifestError("Delivery lifecycle must define exactly four terminal stages")
-
-    entries = _skill_entries(manifest)
-    resolved_steps: list[Dict[str, Any]] = []
-    last_order = -1
-    actual_stages: list[str] = []
-    for raw in steps:
-        if not isinstance(raw, dict):
-            raise ManifestError("Delivery lifecycle step must be an object")
-        order = raw.get("order")
-        stage = raw.get("stage")
-        skill = raw.get("skill")
-        expected_role = raw.get("expected_runtime_role")
-        if not isinstance(order, int) or not isinstance(stage, str) or not isinstance(skill, str) or not isinstance(expected_role, str):
-            raise ManifestError("Delivery lifecycle step is malformed")
-        if order <= last_order:
-            raise ManifestError("Delivery lifecycle order must be strictly increasing")
-        last_order = order
-        actual_stages.append(stage)
-        item = _resolved_skill(manifest, entries, skill)
-        if item["runtime_role"] != expected_role:
-            raise ManifestError(
-                f"Delivery lifecycle role drift: {skill} expected={expected_role} actual={item['runtime_role']}"
-            )
-        resolved_steps.append({"order": order, "stage": stage, **item})
-
-    if tuple(actual_stages) != _EXPECTED_LIFECYCLE_STAGES:
-        raise ManifestError(
-            "Delivery lifecycle stage order must be review -> completion -> commit-pr -> closeout"
-        )
-
-    return {
-        "schema": _LIFECYCLE_RESOLUTION_SCHEMA,
-        "status": "pass",
-        "contract_path": _CONTRACT,
-        "contract_sha256": contract_digest,
-        "pre_review_requirements": requirements,
-        "legacy_manifest_dependencies_authoritative": False,
-        "steps": resolved_steps,
-    }
-
+    """Compatibility facade; sequencing authority lives in Skill Relationship v1."""
+    return _resolve_delivery_lifecycle(manifest)
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
     parser = argparse.ArgumentParser(prog="phase-context")
