@@ -1,0 +1,109 @@
+{
+  "schema_version": "adk-skill-relationship-contract/v1",
+  "identity_source": "manifest.json",
+  "skill_semantics_source": "manifests/skill_content_contracts_v2.json",
+  "legacy_depends_on_policy": "compatibility-only-context-prerequisite-not-delivery-sequencing",
+  "legacy_projection": {
+    "relationship_type": "context-prerequisite",
+    "authoritative_for_delivery_sequencing": false
+  },
+  "relationship_types": {
+    "context-prerequisite": {
+      "semantics": "context-may-be-needed-before-consuming-skill",
+      "sequencing_authority": false
+    },
+    "evidence-prerequisite": {
+      "semantics": "evidence-from-source-is-required-or-applicable-before-target-verdict",
+      "sequencing_authority": false
+    },
+    "handoff": {
+      "semantics": "source-hands-control-or-evidence-to-target",
+      "sequencing_authority": false
+    },
+    "delivery-precedence": {
+      "semantics": "source-must-complete-before-target-in-terminal-delivery-lifecycle",
+      "sequencing_authority": true
+    }
+  },
+  "relationships": [
+    {
+      "from": "adk-test-strategy",
+      "to": "adk-code-review-loop",
+      "type": "evidence-prerequisite",
+      "requirement": "when-applicable"
+    },
+    {
+      "from": "adk-artifact-gating",
+      "to": "adk-code-review-loop",
+      "type": "evidence-prerequisite",
+      "requirement": "when-applicable"
+    },
+    {
+      "from": "adk-code-review-loop",
+      "to": "adk-verification-before-completion",
+      "type": "handoff",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-code-review-loop",
+      "to": "adk-verification-before-completion",
+      "type": "delivery-precedence",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-verification-before-completion",
+      "to": "adk-commit-pr-quality-gate",
+      "type": "handoff",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-verification-before-completion",
+      "to": "adk-commit-pr-quality-gate",
+      "type": "delivery-precedence",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-commit-pr-quality-gate",
+      "to": "adk-branch-closeout",
+      "type": "handoff",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-commit-pr-quality-gate",
+      "to": "adk-branch-closeout",
+      "type": "delivery-precedence",
+      "requirement": "required"
+    }
+  ],
+  "delivery_lifecycle": {
+    "pre_review_requirements": [
+      "verification-evidence"
+    ],
+    "steps": [
+      {
+        "order": 10,
+        "stage": "review",
+        "skill": "adk-code-review-loop",
+        "expected_runtime_role": "primary"
+      },
+      {
+        "order": 20,
+        "stage": "completion",
+        "skill": "adk-verification-before-completion",
+        "expected_runtime_role": "primary"
+      },
+      {
+        "order": 30,
+        "stage": "commit-pr",
+        "skill": "adk-commit-pr-quality-gate",
+        "expected_runtime_role": "primary"
+      },
+      {
+        "order": 40,
+        "stage": "closeout",
+        "skill": "adk-branch-closeout",
+        "expected_runtime_role": "primary"
+      }
+    ]
+  }
+}
