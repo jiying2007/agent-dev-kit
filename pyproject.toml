@@ -34,6 +34,7 @@ Issues = "https://github.com/jiying2007/agent-dev-kit/issues"
 
 [project.scripts]
 adk = "agent_dev_kit.cli:main"
+adk-phase-context = "agent_dev_kit.phase_context:main"
 
 [tool.ruff]
 target-version = "py311"
