@@ -39,7 +39,7 @@
       "verify": {
         "selectors": [
           {"kind": "skill", "skill": "adk-test-strategy", "expected_runtime_role": "primary"},
-          {"kind": "skill", "skill": "adk-artifact-gating", "expected_runtime_role": "primary"}
+          {"kind": "skill", "skill": "adk-artifact-gating", "expected_runtime_role": "governance"}
         ],
         "resources": []
       },
@@ -59,6 +59,7 @@
       },
       "driver-development": {
         "selectors": [
+          {"kind": "skill", "skill": "adk-driver-implementation", "expected_runtime_role": "primary"},
           {"kind": "selection-group", "selection_group": "driver-development", "include_runtime_roles": ["primary"], "primary_cardinality": "exactly-one"},
           {"kind": "selection-group", "selection_group": "interrupt-dma", "include_runtime_roles": ["primary"], "primary_cardinality": "exactly-one"}
         ],
