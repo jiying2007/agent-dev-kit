@@ -37,12 +37,24 @@ class PhaseContextContractTests(unittest.TestCase):
             ["adk-code-review-loop"],
         )
 
-    def test_verify_phase_does_not_use_completion_gate_as_test_execution(self) -> None:
+    def test_verify_phase_separates_test_execution_from_completion_gate(self) -> None:
         result = resolve_phase_context(self.manifest, "general", "verify")
-        names = [item["name"] for item in result["skills"]]
-        self.assertIn("adk-test-strategy", names)
-        self.assertIn("adk-artifact-gating", names)
-        self.assertNotIn("adk-verification-before-completion", names)
+        rows = {item["name"]: item for item in result["skills"]}
+        self.assertEqual(rows["adk-test-strategy"]["runtime_role"], "primary")
+        self.assertEqual(rows["adk-artifact-gating"]["runtime_role"], "governance")
+        self.assertNotIn("adk-verification-before-completion", rows)
+
+    def test_driver_phase_contains_implementation_bringup_and_interrupt_dma(self) -> None:
+        result = resolve_phase_context(self.manifest, "embedded", "driver-development")
+        names = {item["name"] for item in result["skills"]}
+        self.assertTrue(
+            {
+                "adk-driver-implementation",
+                "adk-driver-bringup-checklist",
+                "adk-interrupt-dma-patterns",
+            }.issubset(names),
+            names,
+        )
 
     def test_delivery_lifecycle_is_review_then_completion_then_commit_then_closeout(self) -> None:
         result = resolve_delivery_lifecycle(self.manifest)
@@ -100,6 +112,14 @@ class PhaseContextContractTests(unittest.TestCase):
         with patch("agent_dev_kit.phase_context._contract", return_value=(mutated, digest)):
             with self.assertRaisesRegex(ManifestError, "review -> completion"):
                 resolve_delivery_lifecycle(self.manifest)
+
+    def test_phase_resource_cannot_escape_repository_root(self) -> None:
+        contract, digest = _contract(self.manifest)
+        mutated = json.loads(json.dumps(contract))
+        mutated["domains"]["general"]["review"]["resources"] = ["../../outside"]
+        with patch("agent_dev_kit.phase_context._contract", return_value=(mutated, digest)):
+            with self.assertRaisesRegex(ManifestError, "escapes allowed root"):
+                resolve_phase_context(self.manifest, "general", "review")
 
     def test_contract_schema_rejects_unknown_top_level_field(self) -> None:
         contract_path = ROOT / "manifests" / "phase_context_contract.json"
