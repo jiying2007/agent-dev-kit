@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "adk-phase-context-contract/v1",
+  "$id": "https://agent-dev-kit.local/schemas/phase-context-contract-v1.schema.json",
   "type": "object",
   "additionalProperties": false,
   "required": ["schema_version", "identity_source", "skill_semantics_source", "legacy_manifest_context_policy", "delivery_lifecycle", "domains"],
