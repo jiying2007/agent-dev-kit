@@ -1,119 +1,89 @@
 ---
 name: adk-interrupt-dma-patterns
-description: 中断与 DMA 协作模式设计
-version: 1.0.0
-last_updated: 2026-05-06
+description: 中断、DMA、缓存一致性与缓冲所有权模式设计
+version: 2.0.0
+last_updated: 2026-09-17
 triggers:
   - "中断处理"
   - "DMA处理"
   - "中断DMA"
+  - "缓存一致性"
+  - "DMA丢数据"
 non_triggers:
-  - 轮询足够且低频场景
+  - 轮询已经满足已量化 latency/CPU budget 的场景
 inputs:
-  - 外设速率、缓冲策略
+  - 外设速率与 burst、latency/jitter budget、buffer ownership、DMA/cache 特性、错误恢复约束
 outputs:
-  - ISR/DMA 模式建议
+  - IRQ/DMA 模式、ownership 状态机、cache policy、预算证据和恢复路径
 constraints:
-  - 禁止在 ISR 做重计算
+  - 不使用固定数据速率或固定 ISR 百分比作为跨平台判据
+  - ISR/DMA callback 必须有明确时间预算、ownership 和错误恢复
+  - non-coherent DMA 必须显式处理 cache clean/invalidate 或平台等价机制
 ---
 
 # adk-interrupt-dma-patterns
 
 ## Goal
-- 设计低抖动、可恢复的 ISR + DMA 协作方案。
-- 确保中断响应时延满足实时性要求，DMA 传输可靠无丢帧。
-
+- 在 Linux、RTOS 与 bare-metal 平台上建立可验证的 IRQ + DMA 数据通路。
+- 用目标系统的吞吐、latency、jitter、CPU、buffer 和 cache 约束选择模式，而不是使用通用经验阈值。
 
 ## Prerequisites
-- 明确数据速率、缓冲深度、丢包容忍度和中断预算。
-- 确认 DMA 通道与缓存一致性要求。
-- 获取目标芯片中断控制器文档（NVIC/GIC）与 DMA 控制器手册。
-
+- 锁定 CPU/SoC/MCU、DMA controller、cache/coherency model、bus 与外设速率。
+- 明确 sustained/burst rate、允许丢包、latency/jitter budget、buffer depth 和 backpressure 策略。
+- 明确 DMA memory ownership 在 CPU/device 之间如何转移。
 
 ## Workflow
-1. **中断优先级配置**：按实时性需求分配优先级。
-   ```c
-   /* STM32 NVIC 优先级配置示例 */
-   HAL_NVIC_SetPriority(TIM1_UP_IRQn, 0, 0);   /* 最高：控制环 */
-   HAL_NVIC_SetPriority(DMA1_Stream5_IRQn, 1, 0); /* 高：数据采集 */
-   HAL_NVIC_SetPriority(USART1_IRQn, 2, 0);     /* 中：通信 */
-   HAL_NVIC_SetPriority(I2C1_EV_IRQn, 3, 0);    /* 低：传感器 */
-   
-   /* Linux 中断亲和性设置 */
-   echo 1 > /proc/irq/<irq_num>/smp_affinity  /* 绑定 CPU0 */
-   echo <priority> > /proc/irq/<irq_num>/priority  /* RT 优先级 */
-   ```
-2. **模式选择**：中断驱动、DMA、混合模式按负载对比。
-   | 模式 | 适用场景 | CPU 占用 | 延迟 |
-   |------|---------|---------|------|
-   | 纯中断 | 低速率 (<10KB/s) | 中 | 低 |
-   | 纯 DMA | 高速率、CPU 不介入 | 低 | 中 |
-   | 中断+DMA | 混合负载 | 低 | 低 |
-3. **缓冲设计**：单缓冲/双缓冲/ring buffer 取舍。
-   ```c
-   /* 双缓冲 DMA 配置（STM32 HAL） */
-   HAL_DMA_Start_IT(&hdma_memtomem_dma1_stream0,
-                    (uint32_t)src_buf, (uint32_t)dst_buf, TRANSFER_SIZE);
-   /* Ring Buffer 示例 */
-   #define RING_SIZE  256
-   static volatile uint8_t ring_buf[RING_SIZE];
-   static volatile uint32_t ring_head = 0, ring_tail = 0;
-   ```
-4. **ISR 约束**：仅做标记与唤醒，不做复杂逻辑。
-   ```c
-   /* ISR 最小化示例 */
-   void DMA1_Stream5_IRQHandler(void) {
-       if (__HAL_DMA_GET_FLAG(&hdma, DMA_FLAG_TCIF0_4)) {
-           __HAL_DMA_CLEAR_FLAG(&hdma, DMA_FLAG_TCIF0_4);
-           g_dma_complete = 1;                    /* 标记 */
-           osSignalSet(task_id, SIG_DMA_DONE);   /* 唤醒任务 */
-       }
-   }
-   ```
-5. **DMA 通道管理与冲突检测**。
-   ```bash
-   # Linux DMA 通道状态
-   cat /sys/class/dma/dma0chan*/in_use
-   # 检查 DMA 中断
-   cat /proc/interrupts | grep dma
-   # RTOS DMA 通道分配检查
-   rg -n "DMA.*Channel\|dma.*ch" src/ include/
-   ```
-6. **并发问题诊断**：竞态、优先级反转、缓存一致性。
-   ```bash
-   # Linux: 检查中断延迟
+1. **预算建模**：记录 event rate、burst、latency/jitter budget、CPU budget、buffer drain/fill rate。
+2. **模式选择**：比较 polling / IRQ / DMA / IRQ+DMA，按目标约束和实测数据决策，不按固定速率分界。
+3. **Ownership 状态机**：定义 `free -> cpu-owned -> device-owned -> completed -> cpu-owned` 或平台等价状态，并规定每次 transition 的唯一 owner。
+4. **ISR/callback 边界**：只执行 bounded work；记录 WCET/最大观测时间和允许预算，复杂处理下沉 task/thread/bottom-half。
+5. **Cache/coherency**：区分 coherent/non-coherent；non-coherent 路径明确 clean/invalidate、barrier、mapping/sync API 和方向。
+6. **Buffer/backpressure**：设计 single/double/ring/descriptor queue，覆盖 overrun、underrun、wrap、partial transfer 和 producer/consumer 失速。
+7. **DMA completion/error**：处理 complete/error/timeout/cancel/reset/late completion，确保 descriptor/channel/buffer 只释放一次。
+8. **并发验证**：检查 IRQ masking、nested interrupt、priority inversion、memory ordering、multi-core ownership 和 teardown race。
+9. **压力验证**：在代表性 burst/并发/错误注入下采集 throughput、latency、jitter、CPU、IRQ rate、drop/error count 和 recovery time。
 
-> 详细内容已移至 `references/details.md`。
+## Platform Mapping
+| Platform | Typical primitives | Required evidence |
+|---|---|---|
+| Linux | dma_map/sync/coherent API, threaded IRQ, NAPI/tasklet/workqueue | mapping direction, lifetime, cache/coherency, teardown |
+| RTOS | vendor DMA HAL, ISR notification, queue/event | ISR budget, ownership, cache maintenance, task wake latency |
+| Bare-metal | DMA registers/descriptors, IRQ flags, barriers | register sequence, ownership, cache/barrier, timeout/reset |
 
-## Quality Gate
-- 必须说明 ISR 时间预算与 DMA 回调策略。
-- 必须覆盖至少一个错误恢复路径。
-- 压测结果需包含吞吐与时延双指标。
-- ISR 执行时间必须 < 中断周期的 50%。
-- DMA 缓冲区必须有溢出/欠载检测机制。
-
----
-
-
-## Failure Handling
-- IRQ 丢失或风暴时，先降速并确认中断屏蔽策略（检查 NVIC 优先级分组）。
-- DMA 异常频发时，退回中断最小路径定位根因（检查 DMA 传输完成标志）。
-- 优先级反转时，引入优先级继承或调整任务/中断优先级分配。
-- 缓存一致性问题导致 DMA 数据错乱，改用 `dma_alloc_coherent` 或手动 cache flush。
-
-
-## Evidence Template
-
-```md
-status: pass | needs-fix | BLOCKED
-commands:
-- <command + exit code>
-evidence:
-- <path or output summary>
-risks:
-- <remaining risk or none>
+## Commands
+```bash
+cat /proc/interrupts
+rg -n "dma_map|dma_unmap|dma_sync|dma_alloc_coherent|request_irq|free_irq" <linux-src>
+rg -n "DMA|cache.*clean|cache.*invalidate|barrier|ring|descriptor" <rtos-or-baremetal-src>
+<irq-latency-trace-command>
+<dma-throughput-and-error-counter-command>
 ```
 
-## References
-- 详细背景、命令、模板、示例和扩展检查项保存在 `references/details.md`。
-- 入口文件只保留触发和执行所需的最小上下文，避免默认加载过多 token。
+## Evidence Template
+```md
+- Platform / DMA / Cache Identity:
+- Workload: sustained / burst / event rate
+- Budget: latency / jitter / CPU / drop tolerance
+- Mode Decision: polling | IRQ | DMA | IRQ+DMA + evidence
+- Buffer Ownership State Machine:
+- Cache / Memory Ordering Policy:
+- ISR/Callback WCET: observed/estimated + budget
+- Throughput / Latency / Jitter / CPU:
+- Overrun/Underrun/Error/Timeout Evidence:
+- Cancel/Reset/Teardown Evidence:
+- Result: pass | needs-runtime-evidence | needs-fix
+```
+
+## Failure Handling
+- IRQ storm/loss：先冻结事件率、mask/unmask 顺序和 pending/ack 证据，再调整优先级或合并策略。
+- DMA 数据错乱：先核 ownership、mapping direction、cache maintenance、barrier 和 descriptor lifetime。
+- overrun/underrun：核 producer/consumer rate、burst、buffer depth 与 backpressure，不只扩大 buffer。
+- teardown race：停止新提交，等待/取消 in-flight descriptor，并证明 late completion 不会二次释放。
+
+## Quality Gate
+- 必须有目标系统 latency/jitter/throughput 或 CPU budget，不能以固定 `<N KB/s` 判定模式。
+- ISR/callback 必须给 bounded-work 证据，并以目标 budget 判定，不使用固定百分比门槛。
+- 必须定义 CPU/device buffer ownership 与 DMA descriptor/channel lifecycle。
+- non-coherent 平台必须有 cache maintenance 与 memory-order evidence；coherent 平台必须说明依据。
+- 至少覆盖正常完成、错误/超时和 cancel/reset/teardown 三类路径。
+- 压测必须同时报告吞吐、时延/抖动和 error/drop/recovery 指标。
