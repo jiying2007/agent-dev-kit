@@ -60,6 +60,7 @@ PUBLIC_COMMANDS = [
     ("doctor", "只读检查运行环境与 M5-ready 前置条件"),
     ("catalog", "生成或检索 Agent/Skill 目录"),
     ("match", "匹配 Skill 路由"),
+    ("phase-context", "解析语义 phase context 与 delivery lifecycle"),
     ("export", "确定性导出 direct target 资产"),
     ("target", "检查或执行 direct target contract smoke"),
     ("install", "plan/apply/rollback 安装事务"),
