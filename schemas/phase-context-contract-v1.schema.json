@@ -3,12 +3,13 @@
   "$id": "adk-phase-context-contract/v1",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "identity_source", "skill_semantics_source", "legacy_manifest_context_policy", "domains"],
+  "required": ["schema_version", "identity_source", "skill_semantics_source", "legacy_manifest_context_policy", "delivery_lifecycle", "domains"],
   "properties": {
     "schema_version": {"const": "adk-phase-context-contract/v1"},
     "identity_source": {"const": "manifest.json"},
     "skill_semantics_source": {"const": "manifests/skill_content_contracts_v2.json"},
     "legacy_manifest_context_policy": {"const": "compatibility-only-not-authoritative-for-skill-role-selection"},
+    "delivery_lifecycle": {"$ref": "#/$defs/deliveryLifecycle"},
     "domains": {
       "type": "object",
       "minProperties": 1,
@@ -21,6 +22,32 @@
   },
   "$defs": {
     "runtimeRole": {"enum": ["primary", "supporting", "governance", "fallback"]},
+    "deliveryLifecycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["legacy_manifest_dependency_policy", "pre_review_requirements", "steps"],
+      "properties": {
+        "legacy_manifest_dependency_policy": {"const": "compatibility-only-not-authoritative-for-delivery-sequencing"},
+        "pre_review_requirements": {"const": ["verification-evidence"]},
+        "steps": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {"$ref": "#/$defs/lifecycleStep"}
+        }
+      }
+    },
+    "lifecycleStep": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["order", "stage", "skill", "expected_runtime_role"],
+      "properties": {
+        "order": {"type": "integer", "minimum": 1},
+        "stage": {"enum": ["review", "completion", "commit-pr", "closeout"]},
+        "skill": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "expected_runtime_role": {"$ref": "#/$defs/runtimeRole"}
+      }
+    },
     "phase": {
       "type": "object",
       "additionalProperties": false,
