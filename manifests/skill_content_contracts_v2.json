@@ -5,6 +5,13 @@
   "policy": {
     "primary_invariant": "exactly-one-primary-after-eligibility-filter",
     "effect_ceiling_semantics": "upper-bound-not-authorization",
+    "side_effect_escalation_semantics": "live-device-and-release-target-effects-require-separate-explicit-authorization",
+    "live_device_authorization_contract": [
+      "target-identity",
+      "explicit-authorization",
+      "rollback-or-recovery",
+      "post-write-verification"
+    ],
     "production_behavior_without_authority": "not-measured"
   },
   "derivation": {
@@ -29,8 +36,25 @@
       "release_closure": "release-preparation",
       "governance": "read-only"
     },
+    "effect_scope_by_ceiling": {
+      "read-only": "none",
+      "diagnostic-execution": "host-system",
+      "workspace-write": "workspace",
+      "build-artifact-write": "build",
+      "release-preparation": "release-target",
+      "external-read": "external-service"
+    },
+    "effect_operation_by_ceiling": {
+      "read-only": "read",
+      "diagnostic-execution": "diagnostic",
+      "workspace-write": "write",
+      "build-artifact-write": "write",
+      "release-preparation": "prepare",
+      "external-read": "read"
+    },
     "runtime_role_resolution": "override-else-support-knowledge-supporting-guardrail-governance-else-manifest-activation",
     "selection_group_resolution": "override-else-manifest-category",
+    "implicit_trigger_policy_resolution": "override-else-primary-eligible-supporting-promote-same-group-else-explicit-only",
     "eval_obligations": {
       "trigger": true,
       "behavior": true,
@@ -41,6 +65,7 @@
     "adk-runtime-router": {"capability_class":"meta","runtime_role":"primary","selection_group":"runtime-routing"},
     "adk-context-engineering": {"capability_class":"support","runtime_role":"supporting","selection_group":"context-policy"},
     "adk-token-context-governance": {"capability_class":"guardrail","runtime_role":"primary","selection_group":"context-policy"},
+    "adk-requirements-triage": {"selection_group":"requirements-intake"},
     "adk-structured-requirements-questioning": {"capability_class":"support","runtime_role":"supporting","selection_group":"requirements-intake"},
     "adk-lightweight-planning": {"capability_class":"workflow","runtime_role":"primary","selection_group":"planning"},
     "adk-parallel-agent-governance": {"capability_class":"workflow","runtime_role":"primary","selection_group":"parallel-governance"},
@@ -50,7 +75,8 @@
     "adk-component-api-stability": {"capability_class":"guardrail","runtime_role":"primary","selection_group":"api-stability"},
     "adk-bsp-analysis": {"selection_group":"bsp-analysis","effect_ceiling":"read-only"},
     "adk-planning-execution-loop": {"capability_class":"workflow","runtime_role":"primary","selection_group":"execution-governance","effect_ceiling":"workspace-write"},
-    "adk-driver-bringup-checklist": {"capability_class":"task","runtime_role":"primary","selection_group":"driver-development","effect_ceiling":"workspace-write"},
+    "adk-driver-bringup-checklist": {"capability_class":"task","runtime_role":"primary","selection_group":"driver-development","effect_ceiling":"workspace-write","escalation_effects":["live-device:register-write","live-device:diagnostic-write"]},
+    "adk-bsp-porting-playbook": {"capability_class":"task","runtime_role":"primary","selection_group":"bsp-porting","effect_ceiling":"workspace-write","escalation_effects":["live-device:flash","live-device:storage-write"]},
     "adk-interrupt-dma-patterns": {"capability_class":"task","runtime_role":"primary","selection_group":"interrupt-dma"},
     "adk-cmake-cross-build": {"capability_class":"tool","runtime_role":"primary","selection_group":"build","effect_ceiling":"build-artifact-write"},
     "adk-code-simplification": {"capability_class":"task","runtime_role":"primary","selection_group":"refactor","effect_ceiling":"workspace-write"},
@@ -64,21 +90,23 @@
     "adk-chinese-code-review": {"capability_class":"support","runtime_role":"supporting","selection_group":"code-review"},
     "adk-code-review-loop": {"capability_class":"workflow","runtime_role":"primary","selection_group":"code-review"},
     "adk-static-analysis-c-cpp": {"capability_class":"tool","runtime_role":"primary","selection_group":"static-analysis","effect_ceiling":"diagnostic-execution"},
-    "adk-commit-pr-quality-gate": {"capability_class":"guardrail","runtime_role":"primary","selection_group":"commit-pr-gate"},
+    "adk-commit-pr-quality-gate": {"capability_class":"guardrail","runtime_role":"primary","selection_group":"commit-quality"},
     "adk-production-field-readiness": {"capability_class":"guardrail","runtime_role":"primary","selection_group":"field-readiness","effect_ceiling":"read-only"},
-    "adk-cross-team-handoff": {"capability_class":"support","runtime_role":"supporting","selection_group":"handoff","effect_ceiling":"read-only"},
+    "adk-embedded-release-orchestration": {"capability_class":"workflow","runtime_role":"primary","selection_group":"embedded-release","effect_ceiling":"release-preparation","escalation_effects":["release-target:publish","live-device:flash"]},
+    "adk-embedded-storage-layout-migration": {"capability_class":"workflow","runtime_role":"primary","selection_group":"storage-migration","effect_ceiling":"release-preparation","escalation_effects":["live-device:storage-write","live-device:flash"]},
+    "adk-cross-team-handoff": {"capability_class":"support","runtime_role":"supporting","selection_group":"handoff","effect_ceiling":"read-only","implicit_trigger_policy":"explicit-only"},
     "adk-after-action-review": {"capability_class":"workflow","runtime_role":"primary","selection_group":"after-action-review","effect_ceiling":"read-only"},
     "adk-memory-curator": {"capability_class":"task","runtime_role":"primary","selection_group":"memory-governance"},
     "adk-archive-governance": {"capability_class":"guardrail","runtime_role":"primary","selection_group":"archive-governance"},
     "adk-knowledge-archive": {"capability_class":"task","runtime_role":"primary","selection_group":"knowledge-archive","effect_ceiling":"workspace-write"},
     "adk-engineering-growth-review": {"capability_class":"task","runtime_role":"primary","selection_group":"engineering-review"},
     "adk-external-practice-absorption": {"capability_class":"workflow","runtime_role":"primary","selection_group":"external-practice","effect_ceiling":"external-read"},
-    "adk-data-fetch": {"capability_class":"tool","runtime_role":"supporting","selection_group":"data-fetch","effect_ceiling":"external-read"},
-    "adk-email-imap-fetch": {"capability_class":"tool","runtime_role":"supporting","selection_group":"data-fetch","effect_ceiling":"external-read"},
-    "adk-fetch-url-content": {"capability_class":"tool","runtime_role":"supporting","selection_group":"data-fetch","effect_ceiling":"external-read"},
+    "adk-data-fetch": {"capability_class":"tool","runtime_role":"supporting","selection_group":"data-fetch","effect_ceiling":"external-read","implicit_trigger_policy":"explicit-only"},
+    "adk-email-imap-fetch": {"capability_class":"tool","runtime_role":"supporting","selection_group":"data-fetch","effect_ceiling":"external-read","implicit_trigger_policy":"explicit-only"},
+    "adk-fetch-url-content": {"capability_class":"tool","runtime_role":"supporting","selection_group":"data-fetch","effect_ceiling":"external-read","implicit_trigger_policy":"explicit-only"},
     "adk-test-flakiness-triage": {"capability_class":"task","runtime_role":"primary","selection_group":"test-flakiness","effect_ceiling":"diagnostic-execution"},
     "adk-security-supply-chain": {"capability_class":"guardrail","runtime_role":"primary","selection_group":"supply-chain-security","effect_ceiling":"read-only"},
-    "adk-incident-rca-report": {"capability_class":"support","runtime_role":"fallback","selection_group":"incident-report","effect_ceiling":"read-only"},
+    "adk-incident-rca-report": {"capability_class":"support","runtime_role":"fallback","selection_group":"incident-report","effect_ceiling":"read-only","implicit_trigger_policy":"explicit-only"},
     "adk-skill-composition-governance": {"capability_class":"meta","runtime_role":"primary","selection_group":"skill-governance","effect_ceiling":"read-only"},
     "adk-branch-closeout": {"capability_class":"workflow","runtime_role":"primary","selection_group":"branch-closeout","effect_ceiling":"release-preparation"}
   }
