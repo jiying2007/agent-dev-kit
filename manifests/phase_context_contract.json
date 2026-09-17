@@ -3,6 +3,16 @@
   "identity_source": "manifest.json",
   "skill_semantics_source": "manifests/skill_content_contracts_v2.json",
   "legacy_manifest_context_policy": "compatibility-only-not-authoritative-for-skill-role-selection",
+  "delivery_lifecycle": {
+    "legacy_manifest_dependency_policy": "compatibility-only-not-authoritative-for-delivery-sequencing",
+    "pre_review_requirements": ["verification-evidence"],
+    "steps": [
+      {"order": 10, "stage": "review", "skill": "adk-code-review-loop", "expected_runtime_role": "primary"},
+      {"order": 20, "stage": "completion", "skill": "adk-verification-before-completion", "expected_runtime_role": "primary"},
+      {"order": 30, "stage": "commit-pr", "skill": "adk-commit-pr-quality-gate", "expected_runtime_role": "primary"},
+      {"order": 40, "stage": "closeout", "skill": "adk-branch-closeout", "expected_runtime_role": "primary"}
+    ]
+  },
   "domains": {
     "general": {
       "route": {
@@ -28,7 +38,8 @@
       },
       "verify": {
         "selectors": [
-          {"kind": "selection-group", "selection_group": "completion-verification", "include_runtime_roles": ["primary"], "primary_cardinality": "exactly-one"}
+          {"kind": "skill", "skill": "adk-test-strategy", "expected_runtime_role": "primary"},
+          {"kind": "skill", "skill": "adk-artifact-gating", "expected_runtime_role": "primary"}
         ],
         "resources": []
       },
@@ -55,8 +66,8 @@
       },
       "debugging": {
         "selectors": [
-          {"kind": "skill", "skill": "adk-embedded-remote-debug-log-triage", "expected_runtime_role": "primary"},
-          {"kind": "skill", "skill": "adk-systematic-debugging", "expected_runtime_role": "primary"}
+          {"kind": "skill", "skill": "adk-systematic-debugging", "expected_runtime_role": "primary"},
+          {"kind": "skill", "skill": "adk-embedded-remote-debug-log-triage", "expected_runtime_role": "primary"}
         ],
         "resources": ["knowledge/L2-domain/oops-patterns/"]
       }
