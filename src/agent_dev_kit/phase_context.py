@@ -16,9 +16,10 @@ from pathlib import Path
 from typing import Any, Dict, Mapping, Optional, Sequence
 
 from jsonschema import Draft202012Validator
+from jsonschema.exceptions import SchemaError
 
 from .matcher_vnext import resolve_skill_content
-from .model import Manifest, ManifestError
+from .model import Manifest, ManifestError, ensure_within
 
 _CONTRACT = "manifests/phase_context_contract.json"
 _CONTRACT_SCHEMA = "schemas/phase-context-contract-v1.schema.json"
@@ -48,6 +49,10 @@ def _load_contract(
         raise ManifestError(f"Phase context contract or schema is invalid: {exc}") from exc
     if not isinstance(value, dict) or not isinstance(schema, dict):
         raise ManifestError("Phase context contract and schema must be JSON objects")
+    try:
+        Draft202012Validator.check_schema(schema)
+    except SchemaError as exc:
+        raise ManifestError(f"Phase context schema is not valid Draft 2020-12: {exc.message}") from exc
     errors = sorted(
         Draft202012Validator(schema).iter_errors(value),
         key=lambda item: tuple(str(part) for part in item.absolute_path),
@@ -210,7 +215,7 @@ def resolve_phase_context(manifest: Manifest, domain: str, phase: str) -> Dict[s
     for value in resources:
         if not isinstance(value, str) or not value:
             raise ManifestError(f"Phase resource must be a non-empty path: {domain}/{phase}")
-        path = manifest.root / value
+        path = ensure_within(manifest.root / value, manifest.root, "phase resource")
         if not path.exists():
             raise ManifestError(f"Phase resource does not exist: {value}")
         resource_rows.append(value)
@@ -306,7 +311,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                 raise ManifestError("--domain and --phase are required unless --lifecycle is used")
             result = resolve_phase_context(manifest, args.domain, args.phase)
     except ManifestError as exc:
-        print(json.dumps({"schema": _RESOLUTION_SCHEMA, "status": "blocked", "error": str(exc)}, sort_keys=True))
+        failure_schema = _LIFECYCLE_RESOLUTION_SCHEMA if args.lifecycle else _RESOLUTION_SCHEMA
+        print(json.dumps({"schema": failure_schema, "status": "blocked", "error": str(exc)}, sort_keys=True))
         return 2
     if args.summary_json:
         print(json.dumps(result, ensure_ascii=False, sort_keys=True))
