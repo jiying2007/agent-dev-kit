@@ -56,7 +56,7 @@
       "debugging": {
         "selectors": [
           {"kind": "skill", "skill": "adk-embedded-remote-debug-log-triage", "expected_runtime_role": "primary"},
-          {"kind": "selection-group", "selection_group": "debugging", "include_runtime_roles": ["primary"], "primary_cardinality": "exactly-one"}
+          {"kind": "skill", "skill": "adk-systematic-debugging", "expected_runtime_role": "primary"}
         ],
         "resources": ["knowledge/L2-domain/oops-patterns/"]
       }
