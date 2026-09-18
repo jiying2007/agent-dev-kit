@@ -1,0 +1,338 @@
+{
+  "schema_version": "adk-skill-relationship-contract/v2",
+  "identity_source": "manifest.json",
+  "skill_semantics_source": "manifests/skill_content_contracts_v2.json",
+  "relationship_types": {
+    "context-prerequisite": {
+      "semantics": "context-may-be-needed-before-consuming-skill",
+      "sequencing_authority": false
+    },
+    "evidence-prerequisite": {
+      "semantics": "evidence-from-source-is-required-or-applicable-before-target-verdict",
+      "sequencing_authority": false
+    },
+    "handoff": {
+      "semantics": "source-hands-control-or-evidence-to-target",
+      "sequencing_authority": false
+    },
+    "delivery-precedence": {
+      "semantics": "source-must-complete-before-target-in-terminal-delivery-lifecycle",
+      "sequencing_authority": true
+    }
+  },
+  "relationships": [
+    {
+      "from": "adk-verification-before-completion",
+      "to": "adk-after-action-review",
+      "type": "context-prerequisite",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-verification-before-completion",
+      "to": "adk-archive-governance",
+      "type": "context-prerequisite",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-verification-before-completion",
+      "to": "adk-branch-closeout",
+      "type": "context-prerequisite",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-driver-bringup-checklist",
+      "to": "adk-bsp-porting-playbook",
+      "type": "context-prerequisite",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-verification-before-completion",
+      "to": "adk-commit-pr-quality-gate",
+      "type": "context-prerequisite",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-interface-contract-design",
+      "to": "adk-component-api-stability",
+      "type": "context-prerequisite",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-token-context-governance",
+      "to": "adk-context-compress-handoff",
+      "type": "context-prerequisite",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-register-map-design",
+      "to": "adk-driver-bringup-checklist",
+      "type": "context-prerequisite",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-systematic-debugging",
+      "to": "adk-embedded-debug-transport",
+      "type": "context-prerequisite",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-integration-hil-sil",
+      "to": "adk-embedded-diagnostic-harness",
+      "type": "context-prerequisite",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-test-strategy",
+      "to": "adk-embedded-diagnostic-harness",
+      "type": "context-prerequisite",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-production-field-readiness",
+      "to": "adk-embedded-release-orchestration",
+      "type": "context-prerequisite",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-release-versioning",
+      "to": "adk-embedded-release-orchestration",
+      "type": "context-prerequisite",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-systematic-debugging",
+      "to": "adk-embedded-remote-debug-log-triage",
+      "type": "context-prerequisite",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-token-context-governance",
+      "to": "adk-embedded-remote-debug-log-triage",
+      "type": "context-prerequisite",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-embedded-release-orchestration",
+      "to": "adk-embedded-storage-layout-migration",
+      "type": "context-prerequisite",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-production-field-readiness",
+      "to": "adk-embedded-storage-layout-migration",
+      "type": "context-prerequisite",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-after-action-review",
+      "to": "adk-engineering-growth-review",
+      "type": "context-prerequisite",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-token-context-governance",
+      "to": "adk-engineering-growth-review",
+      "type": "context-prerequisite",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-integration-hil-sil",
+      "to": "adk-fault-injection-recovery",
+      "type": "context-prerequisite",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-unit-test-embedded",
+      "to": "adk-integration-hil-sil",
+      "type": "context-prerequisite",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-requirements-triage",
+      "to": "adk-interface-contract-design",
+      "type": "context-prerequisite",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-archive-governance",
+      "to": "adk-knowledge-archive",
+      "type": "context-prerequisite",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-after-action-review",
+      "to": "adk-memory-curator",
+      "type": "context-prerequisite",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-token-context-governance",
+      "to": "adk-memory-curator",
+      "type": "context-prerequisite",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-systematic-debugging",
+      "to": "adk-offline-core-dump-triage",
+      "type": "context-prerequisite",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-task-breakdown",
+      "to": "adk-parallel-agent-governance",
+      "type": "context-prerequisite",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-systematic-debugging",
+      "to": "adk-performance-profiling-embedded",
+      "type": "context-prerequisite",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-task-breakdown",
+      "to": "adk-planning-execution-loop",
+      "type": "context-prerequisite",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-integration-hil-sil",
+      "to": "adk-production-field-readiness",
+      "type": "context-prerequisite",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-release-versioning",
+      "to": "adk-production-field-readiness",
+      "type": "context-prerequisite",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-interface-contract-design",
+      "to": "adk-protocol-stack-integration",
+      "type": "context-prerequisite",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-interface-contract-design",
+      "to": "adk-register-map-design",
+      "type": "context-prerequisite",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-commit-pr-quality-gate",
+      "to": "adk-release-versioning",
+      "type": "context-prerequisite",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-verification-before-completion",
+      "to": "adk-repo-drift-remediation",
+      "type": "context-prerequisite",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-requirements-triage",
+      "to": "adk-task-breakdown",
+      "type": "context-prerequisite",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-runtime-router",
+      "to": "adk-test-strategy",
+      "type": "context-prerequisite",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-context-engineering",
+      "to": "adk-token-context-governance",
+      "type": "context-prerequisite",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-task-breakdown",
+      "to": "adk-worktree-governance",
+      "type": "context-prerequisite",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-commit-pr-quality-gate",
+      "to": "adk-branch-closeout",
+      "type": "delivery-precedence",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-verification-before-completion",
+      "to": "adk-commit-pr-quality-gate",
+      "type": "delivery-precedence",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-code-review-loop",
+      "to": "adk-verification-before-completion",
+      "type": "delivery-precedence",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-artifact-gating",
+      "to": "adk-code-review-loop",
+      "type": "evidence-prerequisite",
+      "requirement": "when-applicable"
+    },
+    {
+      "from": "adk-test-strategy",
+      "to": "adk-code-review-loop",
+      "type": "evidence-prerequisite",
+      "requirement": "when-applicable"
+    },
+    {
+      "from": "adk-commit-pr-quality-gate",
+      "to": "adk-branch-closeout",
+      "type": "handoff",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-verification-before-completion",
+      "to": "adk-commit-pr-quality-gate",
+      "type": "handoff",
+      "requirement": "required"
+    },
+    {
+      "from": "adk-code-review-loop",
+      "to": "adk-verification-before-completion",
+      "type": "handoff",
+      "requirement": "required"
+    }
+  ],
+  "delivery_lifecycle": {
+    "pre_review_requirements": [
+      "verification-evidence"
+    ],
+    "steps": [
+      {
+        "order": 10,
+        "stage": "review",
+        "skill": "adk-code-review-loop",
+        "expected_runtime_role": "primary"
+      },
+      {
+        "order": 20,
+        "stage": "completion",
+        "skill": "adk-verification-before-completion",
+        "expected_runtime_role": "primary"
+      },
+      {
+        "order": 30,
+        "stage": "commit-pr",
+        "skill": "adk-commit-pr-quality-gate",
+        "expected_runtime_role": "primary"
+      },
+      {
+        "order": 40,
+        "stage": "closeout",
+        "skill": "adk-branch-closeout",
+        "expected_runtime_role": "primary"
+      }
+    ]
+  }
+}
