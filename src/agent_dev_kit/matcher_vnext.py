@@ -364,7 +364,7 @@ def match_text(
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
-    parser = argparse.ArgumentParser(prog="skill-match.sh")
+    parser = argparse.ArgumentParser(prog="devkit.sh match")
     parser.add_argument("--text", required=True)
     parser.add_argument("--skill")
     parser.add_argument("--scope", choices=("auto", "skill", "optional-skill"), default="auto")

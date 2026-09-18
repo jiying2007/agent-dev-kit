@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### Match CLI hard-cut
+- Removed the standalone `scripts/skill-match.sh` wrapper; all matcher calls now route through the unified `adk match` command.
+- Matcher root discovery and argparse identity no longer depend on the retired shell path.
+- Match regression and token-context governance tests now exercise the same public CLI surface used by operators.
+
 ### Agent Platform stable surface
 - Public Platform operations move to the unified `adk platform` command and stable `agent_dev_kit.agent_platform` implementation.
 - Retired `platform_vnext.py`, `platform_vnext_cli.py`, `platform-vnext.sh` and `test_platform_vnext.sh` are physically removed.

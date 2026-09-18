@@ -13,7 +13,7 @@ CASES_FILE="$SCRIPT_DIR/fixtures/skill_trigger_cases.tsv"
 tail -n +2 "$CASES_FILE" | while IFS=$'\t' read -r skill scope expected input_text; do
   [[ -n "$skill" ]] || continue
 
-  if "$ROOT_DIR/scripts/skill-match.sh" --skill "$skill" --scope "$scope" --text "$input_text" >/tmp/adk_skill-match.txt 2>&1; then
+  if bash "$ROOT_DIR/scripts/devkit.sh" match --skill "$skill" --scope "$scope" --text "$input_text" >/tmp/adk_skill-match.txt 2>&1; then
     actual=1
   else
     actual=0
