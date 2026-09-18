@@ -26,6 +26,7 @@ _CONTRACT = "manifests/phase_context_contract.json"
 _CONTRACT_SCHEMA = "schemas/phase-context-contract-v1.schema.json"
 _SCHEMA = "adk-phase-context-contract/v1"
 _RESOLUTION_SCHEMA = "adk-phase-context-resolution/v1"
+_LIFECYCLE_RESOLUTION_SCHEMA = "adk-delivery-lifecycle-resolution/v1"
 _ROLE_ORDER = {"primary": 0, "supporting": 1, "governance": 2, "fallback": 3}
 
 
