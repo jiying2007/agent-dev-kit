@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-dev-kit.local/schemas/phase-context-contract-v2.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "identity_source",
+    "skill_semantics_source",
+    "relationship_semantics_source",
+    "domains"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "adk-phase-context-contract/v2"
+    },
+    "identity_source": {
+      "const": "manifest.json"
+    },
+    "skill_semantics_source": {
+      "const": "manifests/skill_content_contracts_v2.json"
+    },
+    "domains": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": {
+          "$ref": "#/$defs/phase"
+        }
+      }
+    },
+    "relationship_semantics_source": {
+      "const": "manifests/skill_relationship_contracts_v2.json"
+    }
+  },
+  "$defs": {
+    "runtimeRole": {
+      "enum": [
+        "primary",
+        "supporting",
+        "governance",
+        "fallback"
+      ]
+    },
+    "phase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "selectors",
+        "resources"
+      ],
+      "properties": {
+        "selectors": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/selector"
+          }
+        },
+        "resources": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "selector": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "skill",
+            "expected_runtime_role"
+          ],
+          "properties": {
+            "kind": {
+              "const": "skill"
+            },
+            "skill": {
+              "type": "string",
+              "pattern": "^[a-z0-9][a-z0-9-]*$"
+            },
+            "expected_runtime_role": {
+              "$ref": "#/$defs/runtimeRole"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "selection_group",
+            "include_runtime_roles",
+            "primary_cardinality"
+          ],
+          "properties": {
+            "kind": {
+              "const": "selection-group"
+            },
+            "selection_group": {
+              "type": "string",
+              "minLength": 1
+            },
+            "include_runtime_roles": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "$ref": "#/$defs/runtimeRole"
+              }
+            },
+            "primary_cardinality": {
+              "enum": [
+                "exactly-one",
+                "zero-or-one",
+                "not-required"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  }
+}
