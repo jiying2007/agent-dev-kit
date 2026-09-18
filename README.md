@@ -53,7 +53,7 @@ ADK 不负责：
 
 ### Execution policy 命名迁移
 
-`agent_dev_kit.execution_policy` 是新的推荐公共命名，准确表达“ADK 提供执行策略/门禁决策，但不是 runtime”。`agent_dev_kit.runtime_control` 在 5.x 保持兼容，并与新命名导出同一组对象；移除旧命名只能发生在未来 major version，并必须有独立迁移公告与 consumer evidence。
+`agent_dev_kit.execution_policy` 是唯一公共执行策略命名空间，准确表达“ADK 提供执行策略/门禁决策，但不是 runtime”。6.0 起不再提供 `agent_dev_kit.runtime_control` Python 兼容别名；协议 schema 中已有的 `runtime_control.*` identity 保持版本化、不可静默改写。
 
 ## 3. Runtime / protocol adapter 边界
 
