@@ -17,7 +17,7 @@ from typing import Any, Dict, Mapping, Optional, Sequence
 from jsonschema import Draft202012Validator
 from jsonschema.exceptions import SchemaError
 
-from .matcher_vnext import resolve_skill_content
+from .matcher import resolve_skill_content
 from .model import Manifest, ManifestError
 
 _CONTRACT = "manifests/skill_relationship_contracts_v2.json"
