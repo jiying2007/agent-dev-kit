@@ -58,28 +58,6 @@ PUBLIC_COMMANDS = [
 ]
 
 
-def _manifest_split_readiness_inputs(policy: Mapping[str, Any]) -> tuple[str | None, bool, bool]:
-    gate = policy.get("migration_gate")
-    if not isinstance(gate, Mapping):
-        return None, False, False
-
-    change_stage = None
-    change_id = gate.get("change_id")
-    if isinstance(change_id, str):
-        state_path = ROOT / "docs" / "changes" / change_id / "state.yaml"
-        if state_path.is_file():
-            for line in state_path.read_text(encoding="utf-8").splitlines():
-                if line.startswith("stage:"):
-                    change_stage = line.split(":", 1)[1].strip() or None
-                    break
-
-    authoring_root = gate.get("authoring_root")
-    generator_path = gate.get("generator_path")
-    authoring_root_present = isinstance(authoring_root, str) and (ROOT / authoring_root).exists()
-    generator_path_present = isinstance(generator_path, str) and (ROOT / generator_path).is_file()
-    return change_stage, authoring_root_present, generator_path_present
-
-
 def _manifest() -> Manifest:
     if not (ROOT / "manifest.json").is_file():
         raise ManifestError("ADK asset root not found; run inside a checkout or set ADK_ROOT")
