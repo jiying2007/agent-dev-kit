@@ -1,0 +1,174 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-dev-kit.local/schemas/skill-relationship-contract-v2.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "identity_source",
+    "skill_semantics_source",
+    "relationship_types",
+    "relationships",
+    "delivery_lifecycle"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "adk-skill-relationship-contract/v2"
+    },
+    "identity_source": {
+      "const": "manifest.json"
+    },
+    "skill_semantics_source": {
+      "const": "manifests/skill_content_contracts_v2.json"
+    },
+    "relationship_types": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "context-prerequisite",
+        "evidence-prerequisite",
+        "handoff",
+        "delivery-precedence"
+      ],
+      "properties": {
+        "context-prerequisite": {
+          "$ref": "#/$defs/typeDefinition"
+        },
+        "evidence-prerequisite": {
+          "$ref": "#/$defs/typeDefinition"
+        },
+        "handoff": {
+          "$ref": "#/$defs/typeDefinition"
+        },
+        "delivery-precedence": {
+          "$ref": "#/$defs/typeDefinition"
+        }
+      }
+    },
+    "relationships": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/relationship"
+      }
+    },
+    "delivery_lifecycle": {
+      "$ref": "#/$defs/deliveryLifecycle"
+    }
+  },
+  "$defs": {
+    "typeDefinition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "semantics",
+        "sequencing_authority"
+      ],
+      "properties": {
+        "semantics": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sequencing_authority": {
+          "type": "boolean"
+        }
+      }
+    },
+    "relationship": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "from",
+        "to",
+        "type",
+        "requirement"
+      ],
+      "properties": {
+        "from": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$"
+        },
+        "to": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$"
+        },
+        "type": {
+          "enum": [
+            "context-prerequisite",
+            "evidence-prerequisite",
+            "handoff",
+            "delivery-precedence"
+          ]
+        },
+        "requirement": {
+          "enum": [
+            "required",
+            "when-applicable"
+          ]
+        }
+      }
+    },
+    "runtimeRole": {
+      "enum": [
+        "primary",
+        "supporting",
+        "governance",
+        "fallback"
+      ]
+    },
+    "deliveryLifecycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pre_review_requirements",
+        "steps"
+      ],
+      "properties": {
+        "pre_review_requirements": {
+          "const": [
+            "verification-evidence"
+          ]
+        },
+        "steps": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "$ref": "#/$defs/lifecycleStep"
+          }
+        }
+      }
+    },
+    "lifecycleStep": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "order",
+        "stage",
+        "skill",
+        "expected_runtime_role"
+      ],
+      "properties": {
+        "order": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "stage": {
+          "enum": [
+            "review",
+            "completion",
+            "commit-pr",
+            "closeout"
+          ]
+        },
+        "skill": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$"
+        },
+        "expected_runtime_role": {
+          "$ref": "#/$defs/runtimeRole"
+        }
+      }
+    }
+  }
+}
