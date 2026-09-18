@@ -277,24 +277,6 @@
         "docs/hardware-interaction-rules.md"
       ]
     },
-    "L2-phase-triggered": {
-      "description": "嵌入式阶段触发层",
-      "triggers": {
-        "bsp-analysis": [
-          "skills/adk-bsp-porting-playbook/",
-          "knowledge/L2-domain/datasheets/"
-        ],
-        "driver-development": [
-          "skills/adk-driver-bringup-checklist/",
-          "skills/adk-interrupt-dma-patterns/"
-        ],
-        "debugging": [
-          "skills/adk-embedded-remote-debug-log-triage/",
-          "skills/adk-systematic-debugging/",
-          "knowledge/L2-domain/oops-patterns/"
-        ]
-      }
-    },
     "L3-on-demand": {
       "description": "嵌入式按需查询层",
       "sources": [
