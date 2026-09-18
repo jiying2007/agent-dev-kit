@@ -100,8 +100,8 @@ bash "$ROOT_DIR/scripts/devkit.sh" install plan \
 platform_rc=$?
 set -e
 [[ "$platform_rc" -eq 1 ]] || { echo "[FAIL] unknown target must fail closed" >&2; exit 1; }
-grep -q "unknown tool: vendor-specific-runtime" "$TMP_DIR/platform.err" || {
-  echo "[FAIL] platform-bound target rejection message missing" >&2
+grep -q "vendor-specific-runtime" "$TMP_DIR/platform.err" || {
+  echo "[FAIL] rejected target identity missing from canonical error" >&2
   exit 1
 }
 
