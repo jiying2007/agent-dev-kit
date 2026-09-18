@@ -97,6 +97,19 @@ bash scripts/devkit.sh target smoke --target claude-code --stage discovery --pro
 
 当前 `claude-code`、`opencode` 均为 `experimental`。真实 runtime smoke 至少分 discovery、load、trigger、permission 四阶段；本地结果记录 `started_at`、`duration_ms`、runtime command SHA256、exit code 和 stdout/stderr digest，runtime/version 与可复核证据摘要必须由外部 campaign 一并留存。
 
+## platform
+
+统一 Agent Platform primitives 的只读/验证入口；公共调用只通过 `adk platform`（仓内为 `scripts/devkit.sh platform`），不再维护独立 platform shell CLI。该命令覆盖 effective profile、portable Skill audit、trace/verifier contract、loop decision、asset usage、ACI、hook IR 与 target conformance。
+
+```bash
+bash scripts/devkit.sh platform maturity
+bash scripts/devkit.sh platform resolve --profile core --target claude-code --project-capability embedded --session-capability review
+bash scripts/devkit.sh platform portable-skills
+bash scripts/devkit.sh platform target-conformance --target claude-code --profile core
+```
+
+target conformance 的 caller-supplied smoke 只能形成 `behavior-evaluated` 证据，不能自动升级为 trusted native runtime certification；独立 verifier 也必须保持 builder/verifier context 分离且无写权限。
+
 ## lock
 
 查看 export/install/rollback/campaign 使用的 target writer lock。工具不会自动清理 stale lock；人工清理必须先读取状态，再提交完全匹配的 lock ID。
