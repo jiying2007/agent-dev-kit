@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### Governance shim hard-cut
+- Removed the retired `check-asset-taxonomy.sh` compatibility shim; taxonomy validation now calls the canonical typed Python contract directly.
+- Removed the executable fallback-sunset tombstone; retirement is retained as static provenance/evidence only.
+- Removed deprecated `quality-gates.sh`; `check-change-governance.sh` remains the maintained change-governance gate.
+
 ### Export zero-compat follow-up
 - `scripts/convert-assets.sh` is removed. `adk export` via the unified CLI is the sole maintained export surface.
 - The retired wrapper can no longer advertise or route the removed `hermes-agent` target.
