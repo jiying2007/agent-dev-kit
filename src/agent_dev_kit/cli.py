@@ -13,13 +13,11 @@ from typing import Optional, Sequence
 from .campaign import campaign_markdown, campaign_plan, check_campaign, run_campaign
 from .cli_runtime import (
     DEFAULT_TASKS,
-    LEGACY_COMMANDS,
     ROOT,
     _help,
     _json,
     _manifest,
     _manifest_split_readiness_inputs,
-    _run_legacy,
     _write_json,
     _write_text,
 )
@@ -40,7 +38,9 @@ from .evaluation import (
 )
 from .installer import apply_plan, create_plan, rollback, write_plan
 from .locking import clear_target_lock, target_lock_status
-from .matcher import main as matcher_main
+from .matcher_vnext import main as matcher_main
+from .phase_context import main as phase_context_main
+from .skill_relationships import main as skill_relationships_main
 from .model import ManifestError, canonical_json_bytes, sha256_bytes
 from .quality import benchmark_markdown, run_benchmark, security_check
 from .readiness import readiness_markdown, run_harness_readiness
@@ -663,8 +663,6 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         return 0
     command, rest = argv[0], argv[1:]
     try:
-        if command in LEGACY_COMMANDS:
-            return _run_legacy(command, rest)
         if command == "manifest":
             return _cmd_manifest(rest)
         if command == "validate":
@@ -675,6 +673,10 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             return _cmd_catalog(rest)
         if command == "match":
             return _cmd_match(rest)
+        if command == "phase-context":
+            return phase_context_main(rest)
+        if command == "skill-relationships":
+            return skill_relationships_main(rest)
         if command == "export":
             return _cmd_export(rest)
         if command == "target":
