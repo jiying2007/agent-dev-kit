@@ -58,7 +58,7 @@ bash scripts/devkit.sh <command> [options]
 
 ```bash
 bash scripts/devkit.sh validate --strict
-bash scripts/devkit.sh runtime-boundary
+bash scripts/check-runtime-boundary.sh
 bash scripts/devkit.sh target check --all --level static --summary-json
 bash scripts/devkit.sh security check --summary-json
 bash tests/run_all.sh
@@ -93,7 +93,7 @@ bash tests/run_all.sh
 
 ```bash
 bash scripts/check-profile-coherence.sh
-bash scripts/devkit.sh workflow-closure --profile core
+bash scripts/check-workflow-closure.sh --profile core
 ```
 
 ## 5. Agent、Skill、Workflow、Profile 的关系
@@ -260,7 +260,7 @@ bash scripts/devkit.sh eval effect --contract manifests/effect_eval_contract.jso
 
 ```bash
 bash scripts/devkit.sh release check --summary-json
-bash scripts/devkit.sh release build --version 5.0.0-rc.2 --out dist --summary-json
+bash scripts/devkit.sh release build --version 6.0.0 --out dist --summary-json
 bash scripts/devkit.sh release runtime-build --profile team-core --out dist --summary-json
 ```
 
