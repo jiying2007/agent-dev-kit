@@ -54,6 +54,7 @@ retired_tokens = (
     "tests/test_product_maturity_v4.sh",
     "manifest.yaml",
     "scripts/install-assets.sh",
+    "scripts/convert-assets.sh",
     ".github/workflows/scorecard.yml",
     "OpenSSF Scorecard",
     "hermes-agent",
