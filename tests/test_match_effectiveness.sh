@@ -5,7 +5,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-MATCH_SCRIPT="$ROOT_DIR/scripts/skill-match.sh"
+match_cli() { bash "$ROOT_DIR/scripts/devkit.sh" match "$@"; }
 
 # 颜色定义
 RED='\033[0;31m'
@@ -39,146 +39,146 @@ run_test() {
 
 test_routing_needs_triage() {
     local output
-    output=$("$MATCH_SCRIPT" --text "需求不清楚" 2>&1) || true
+    output=$(match_cli --text "需求不清楚" 2>&1) || true
     [[ "$output" == *"match=true"* && "$output" == *"source=routing"* && "$output" == *"skill=adk-requirements-triage"* ]]
 }
 
 test_routing_runtime_router() {
     local output
-    output=$("$MATCH_SCRIPT" --text "开始任务前判断使用哪个技能" 2>&1) || true
+    output=$(match_cli --text "开始任务前判断使用哪个技能" 2>&1) || true
     [[ "$output" == *"match=true"* && "$output" == *"source=routing"* && "$output" == *"skill=adk-runtime-router"* ]]
 }
 
 test_routing_feature_triage_natural_language() {
     local output
-    output=$("$MATCH_SCRIPT" --text "帮我实现一个新功能，需要先明确目标、边界和验收标准" 2>&1) || true
+    output=$(match_cli --text "帮我实现一个新功能，需要先明确目标、边界和验收标准" 2>&1) || true
     [[ "$output" == *"match=true"* && "$output" == *"skill=adk-requirements-triage"* ]]
 }
 
 test_routing_test_strategy() {
     local output
-    output=$("$MATCH_SCRIPT" --text "这个功能需要先写测试并设计测试矩阵" 2>&1) || true
+    output=$(match_cli --text "这个功能需要先写测试并设计测试矩阵" 2>&1) || true
     [[ "$output" == *"match=true"* && "$output" == *"skill=adk-test-strategy"* ]]
 }
 
 test_routing_code_review_loop() {
     local output
-    output=$("$MATCH_SCRIPT" --text "收到 review 反馈后需要做审查反馈闭环" 2>&1) || true
+    output=$(match_cli --text "收到 review 反馈后需要做审查反馈闭环" 2>&1) || true
     [[ "$output" == *"match=true"* && "$output" == *"skill=adk-code-review-loop"* ]]
 }
 
 test_routing_external_name_review_intent() {
     local output
-    output=$("$MATCH_SCRIPT" --text "Superpowers receiving-code-review：review 反馈核验，冻结 HEAD 和工作树叠加后判断是真实缺陷还是误报" 2>&1) || true
+    output=$(match_cli --text "Superpowers receiving-code-review：review 反馈核验，冻结 HEAD 和工作树叠加后判断是真实缺陷还是误报" 2>&1) || true
     [[ "$output" == *"match=true"* && "$output" == *"skill=adk-code-review-loop"* && "$output" != *"skill=adk-worktree-governance"* ]]
 }
 
 test_routing_parallel_agent_governance() {
     local output
-    output=$("$MATCH_SCRIPT" --text "多 agent 并行施工需要明确 scope_write" 2>&1) || true
+    output=$(match_cli --text "多 agent 并行施工需要明确 scope_write" 2>&1) || true
     [[ "$output" == *"match=true"* && "$output" == *"skill=adk-parallel-agent-governance"* ]]
 }
 
 test_routing_parallel_agent_over_driver_phrase() {
     local output
-    output=$("$MATCH_SCRIPT" --text "子代理驱动开发并复审" 2>&1) || true
+    output=$(match_cli --text "子代理驱动开发并复审" 2>&1) || true
     [[ "$output" == *"match=true"* && "$output" == *"skill=adk-parallel-agent-governance"* ]]
 }
 
 test_routing_worktree_governance() {
     local output
-    output=$("$MATCH_SCRIPT" --text "需要创建 worktree 做隔离分支开发" 2>&1) || true
+    output=$(match_cli --text "需要创建 worktree 做隔离分支开发" 2>&1) || true
     [[ "$output" == *"match=true"* && "$output" == *"skill=adk-worktree-governance"* ]]
 }
 
 test_routing_branch_closeout() {
     local output
-    output=$("$MATCH_SCRIPT" --text "开发完成后准备创建 PR 并做分支收尾" 2>&1) || true
+    output=$(match_cli --text "开发完成后准备创建 PR 并做分支收尾" 2>&1) || true
     [[ "$output" == *"match=true"* && "$output" == *"skill=adk-branch-closeout"* ]]
 }
 
 test_routing_task_breakdown() {
     local output
-    output=$("$MATCH_SCRIPT" --text "任务太大" 2>&1) || true
+    output=$(match_cli --text "任务太大" 2>&1) || true
     [[ "$output" == *"match=true"* && "$output" == *"source=routing"* && "$output" == *"skill=adk-task-breakdown"* ]]
 }
 
 test_routing_unit_test() {
     local output
-    output=$("$MATCH_SCRIPT" --text "写单元测试" 2>&1) || true
+    output=$(match_cli --text "写单元测试" 2>&1) || true
     [[ "$output" == *"match=true"* && "$output" == *"source=routing"* && "$output" == *"skill=adk-unit-test-embedded"* ]]
 }
 
 test_routing_debugging() {
     local output
-    output=$("$MATCH_SCRIPT" --text "调试问题" 2>&1) || true
+    output=$(match_cli --text "调试问题" 2>&1) || true
     [[ "$output" == *"match=true"* && "$output" == *"source=routing"* && "$output" == *"skill=adk-systematic-debugging"* ]]
 }
 
 test_routing_debugging_natural_language() {
     local output
-    output=$("$MATCH_SCRIPT" --text "真实问题排查需要定位根因再修复" 2>&1) || true
+    output=$(match_cli --text "真实问题排查需要定位根因再修复" 2>&1) || true
     [[ "$output" == *"match=true"* && "$output" == *"skill=adk-systematic-debugging"* ]]
 }
 
 test_routing_commit_pr() {
     local output
-    output=$("$MATCH_SCRIPT" --text "提交代码" 2>&1) || true
+    output=$(match_cli --text "提交代码" 2>&1) || true
     [[ "$output" == *"match=true"* && "$output" == *"source=routing"* && "$output" == *"skill=adk-commit-pr-quality-gate"* ]]
 }
 
 test_routing_register_map() {
     local output
-    output=$("$MATCH_SCRIPT" --text "设计寄存器" 2>&1) || true
+    output=$(match_cli --text "设计寄存器" 2>&1) || true
     # 路由表 intent_zh 为"设计寄存器映射"，输入"设计寄存器"通过 skill_trigger 匹配
     [[ "$output" == *"match=true"* && "$output" == *"skill=adk-register-map-design"* ]]
 }
 
 test_routing_driver() {
     local output
-    output=$("$MATCH_SCRIPT" --text "写驱动" 2>&1) || true
+    output=$(match_cli --text "写驱动" 2>&1) || true
     [[ "$output" == *"match=true"* && "$output" == *"source=routing"* && "$output" == *"skill=adk-driver-bringup-checklist"* ]]
 }
 
 test_routing_release() {
     local output
-    output=$("$MATCH_SCRIPT" --text "准备发布" 2>&1) || true
+    output=$(match_cli --text "准备发布" 2>&1) || true
     [[ "$output" == *"match=true"* && "$output" == *"source=routing"* && "$output" == *"skill=adk-release-versioning"* ]]
 }
 
 test_routing_bsp() {
     local output
-    output=$("$MATCH_SCRIPT" --text "BSP移植" 2>&1) || true
+    output=$(match_cli --text "BSP移植" 2>&1) || true
     [[ "$output" == *"match=true"* && "$output" == *"source=routing"* && "$output" == *"skill=adk-bsp-porting-playbook"* ]]
 }
 
 test_routing_boot_chain() {
     local output
-    output=$("$MATCH_SCRIPT" --text "启动链 bring-up BootROM SPL U-Boot kernel rootfs" 2>&1) || true
+    output=$(match_cli --text "启动链 bring-up BootROM SPL U-Boot kernel rootfs" 2>&1) || true
     [[ "$output" == *"match=true"* && "$output" == *"skill=adk-bsp-porting-playbook"* ]]
 }
 
 test_routing_production_field() {
     local output
-    output=$("$MATCH_SCRIPT" --text "量产产测诊断烧录 OTA升级 回滚 现场维护" 2>&1) || true
+    output=$(match_cli --text "量产产测诊断烧录 OTA升级 回滚 现场维护" 2>&1) || true
     [[ "$output" == *"match=true"* && "$output" == *"skill=adk-production-field-readiness"* ]]
 }
 
 test_routing_production_field_pilot_id() {
     local output
-    output=$("$MATCH_SCRIPT" --text "embedded-production-field-readiness，模拟设备自动推进" 2>&1) || true
+    output=$(match_cli --text "embedded-production-field-readiness，模拟设备自动推进" 2>&1) || true
     [[ "$output" == *"match=true"* && "$output" == *"skill=adk-production-field-readiness"* ]]
 }
 
 test_routing_performance() {
     local output
-    output=$("$MATCH_SCRIPT" --text "性能分析" 2>&1) || true
+    output=$(match_cli --text "性能分析" 2>&1) || true
     [[ "$output" == *"match=true"* && "$output" == *"source=routing"* && "$output" == *"skill=adk-performance-profiling-embedded"* ]]
 }
 
 test_routing_planning_execution_positive() {
     local output
-    output=$("$MATCH_SCRIPT" --text "长任务，需要执行计划并分阶段执行" 2>&1) || true
+    output=$(match_cli --text "长任务，需要执行计划并分阶段执行" 2>&1) || true
     [[ "$output" == *"match=true"* &&
        "$output" == *"source=routing"* &&
        "$output" == *"skill=adk-planning-execution-loop"* &&
@@ -189,7 +189,7 @@ test_routing_planning_execution_positive() {
 
 test_routing_debugging_contrastive_positive() {
     local output
-    output=$("$MATCH_SCRIPT" --text "根因未明，需要调试并定位根因" 2>&1) || true
+    output=$(match_cli --text "根因未明，需要调试并定位根因" 2>&1) || true
     [[ "$output" == *"match=true"* &&
        "$output" == *"skill=adk-systematic-debugging"* &&
        "$output" == *"task_mode=debugging"* &&
@@ -199,7 +199,7 @@ test_routing_debugging_contrastive_positive() {
 
 test_routing_debugging_intent_caps_implementation_signal() {
     local output
-    output=$("$MATCH_SCRIPT" --text "根因未明，需要调试并修复" 2>&1) || true
+    output=$(match_cli --text "根因未明，需要调试并修复" 2>&1) || true
     [[ "$output" == *"match=true"* &&
        "$output" == *"skill=adk-systematic-debugging"* &&
        "$output" == *"task_mode=debugging"* &&
@@ -209,7 +209,7 @@ test_routing_debugging_intent_caps_implementation_signal() {
 
 test_negated_non_trigger_does_not_veto_debugging() {
     local output
-    output=$("$MATCH_SCRIPT" --text "这不是纯文档或命名修改；根因未明，请调试并定位根因" 2>&1) || true
+    output=$(match_cli --text "这不是纯文档或命名修改；根因未明，请调试并定位根因" 2>&1) || true
     [[ "$output" == *"match=true"* &&
        "$output" == *"skill=adk-systematic-debugging"* &&
        "$output" == *"task_mode=debugging"* &&
@@ -218,7 +218,7 @@ test_negated_non_trigger_does_not_veto_debugging() {
 
 test_routing_release_contrastive_positive() {
     local output
-    output=$("$MATCH_SCRIPT" --text "准备发布并执行发布前检查" 2>&1) || true
+    output=$(match_cli --text "准备发布并执行发布前检查" 2>&1) || true
     [[ "$output" == *"match=true"* &&
        "$output" == *"skill=adk-release-versioning"* &&
        "$output" == *"task_mode=release"* &&
@@ -228,7 +228,7 @@ test_routing_release_contrastive_positive() {
 
 test_review_maps_to_readonly_artifacts() {
     local output
-    output=$("$MATCH_SCRIPT" --text "代码审查" 2>&1) || true
+    output=$(match_cli --text "代码审查" 2>&1) || true
     [[ "$output" == *"match=true"* &&
        "$output" == *"skill=adk-code-review-loop"* &&
        "$output" == *"task_mode=review"* &&
@@ -242,7 +242,7 @@ assert_readonly_abstain() {
     local text="$1"
     local negated_intent="$2"
     local output rc=0
-    output=$("$MATCH_SCRIPT" --text "$text" 2>&1) || rc=$?
+    output=$(match_cli --text "$text" 2>&1) || rc=$?
     [[ $rc -ne 0 &&
        "$output" == *"match=false"* &&
        "$output" == *"decision=abstain"* &&
@@ -306,8 +306,8 @@ test_negation_phrase_classes_metamorphic_release() {
 
 test_multiturn_latest_turn_release_to_readonly() {
     local turn1 turn2 turn2_rc=0
-    turn1=$("$MATCH_SCRIPT" --text "准备发布" 2>&1) || return 1
-    turn2=$("$MATCH_SCRIPT" --text "只说明现状不执行" 2>&1) || turn2_rc=$?
+    turn1=$(match_cli --text "准备发布" 2>&1) || return 1
+    turn2=$(match_cli --text "只说明现状不执行" 2>&1) || turn2_rc=$?
     [[ "$turn1" == *"match=true"* &&
        "$turn1" == *"skill=adk-release-versioning"* &&
        "$turn1" == *"task_mode=release"* &&
@@ -320,8 +320,8 @@ test_multiturn_latest_turn_release_to_readonly() {
 
 test_multiturn_latest_turn_readonly_to_implementation() {
     local turn1 turn1_rc=0 turn2
-    turn1=$("$MATCH_SCRIPT" --text "仅做架构评估" 2>&1) || turn1_rc=$?
-    turn2=$("$MATCH_SCRIPT" --text "现在明确授权实现新功能并修改代码" 2>&1) || return 1
+    turn1=$(match_cli --text "仅做架构评估" 2>&1) || turn1_rc=$?
+    turn2=$(match_cli --text "现在明确授权实现新功能并修改代码" 2>&1) || return 1
     [[ $turn1_rc -ne 0 &&
        "$turn1" == *"decision=abstain"* &&
        "$turn1" == *"task_mode=readonly"* &&
@@ -335,7 +335,7 @@ test_multiturn_latest_turn_readonly_to_implementation() {
 
 test_negative_unrelated_xyz() {
     local output rc=0
-    output=$("$MATCH_SCRIPT" --text "完全无关的文本xyz" 2>&1) || rc=$?
+    output=$(match_cli --text "完全无关的文本xyz" 2>&1) || rc=$?
     [[ "$output" == *"match=false"* && "$output" == *"decision=abstain"* &&
        "$output" == *"reason=needs-triage"* && "$output" == *"artifact_mode=not-applicable"* &&
        $rc -ne 0 ]]
@@ -343,13 +343,13 @@ test_negative_unrelated_xyz() {
 
 test_negative_weather() {
     local output rc=0
-    output=$("$MATCH_SCRIPT" --text "今天天气很好" 2>&1) || rc=$?
+    output=$(match_cli --text "今天天气很好" 2>&1) || rc=$?
     [[ "$output" == *"match=false"* && $rc -ne 0 ]]
 }
 
 test_negative_abc() {
     local output rc=0
-    output=$("$MATCH_SCRIPT" --text "abc123" 2>&1) || rc=$?
+    output=$(match_cli --text "abc123" 2>&1) || rc=$?
     [[ "$output" == *"match=false"* && $rc -ne 0 ]]
 }
 
