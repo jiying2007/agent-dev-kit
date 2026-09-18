@@ -22,42 +22,15 @@ class SkillGovernanceV3Tests(unittest.TestCase):
             cls.entries.extend(item for item in values if isinstance(item, dict))
         cls.by_name = {str(item["name"]): item for item in cls.entries}
 
-    def test_legacy_dependency_graph_is_valid_acyclic_and_nonsequencing(self) -> None:
-        names = set(self.by_name)
-        graph: dict[str, tuple[str, ...]] = {}
+    def test_manifest_has_no_legacy_dependency_metadata(self) -> None:
         for name, item in self.by_name.items():
-            deps = item.get("depends_on", [])
-            self.assertIsInstance(deps, list, name)
-            self.assertEqual(len(deps), len(set(deps)), f"duplicate depends_on for {name}")
-            missing = [dep for dep in deps if dep not in names]
-            self.assertEqual(missing, [], f"dangling depends_on for {name}: {missing}")
-            self.assertNotIn(name, deps, f"self dependency for {name}")
-            graph[name] = tuple(str(dep) for dep in deps)
-
-        visiting: set[str] = set()
-        visited: set[str] = set()
-
-        def walk(node: str, chain: tuple[str, ...]) -> None:
-            if node in visited:
-                return
-            if node in visiting:
-                raise AssertionError("legacy context dependency cycle: " + " -> ".join(chain + (node,)))
-            visiting.add(node)
-            for dep in graph[node]:
-                walk(dep, chain + (node,))
-            visiting.remove(node)
-            visited.add(node)
-
-        for name in sorted(graph):
-            walk(name, ())
-
-        self.assertNotIn(
-            "adk-verification-before-completion",
-            graph["adk-code-review-loop"],
-            "review must not retain the historical inverted completion dependency",
-        )
+            self.assertNotIn("depends_on", item, name)
         relationships = resolve_skill_relationships(self.manifest)
-        self.assertFalse(relationships["legacy_depends_on_authoritative_for_delivery_sequencing"])
+        self.assertEqual(relationships["schema"], "adk-skill-relationship-resolution/v2")
+        self.assertGreater(relationships["relationship_count"], 0)
+        self.assertTrue(
+            any(row["type"] == "context-prerequisite" for row in relationships["typed_relationships"])
+        )
 
     def test_routing_primaries_resolve_to_primary_runtime_role(self) -> None:
         routing = self.manifest.data.get("routing")
