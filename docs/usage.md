@@ -14,7 +14,7 @@
 bash scripts/devkit.sh validate --strict
 bash scripts/devkit.sh validate --quick
 bash scripts/check-runtime-boundary.sh
-bash scripts/check-asset-taxonomy.sh
+PYTHONPATH=src python3 -m agent_dev_kit.asset_taxonomy_contract --root . --summary-json
 bash scripts/check-official-docs-governance.sh --summary-json
 bash scripts/devkit.sh test
 ```
