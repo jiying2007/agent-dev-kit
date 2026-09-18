@@ -17,7 +17,7 @@ from typing import Any, Dict, Mapping, Optional, Sequence
 from jsonschema import Draft202012Validator
 from jsonschema.exceptions import SchemaError
 
-from .matcher_vnext import resolve_skill_content
+from .matcher import resolve_skill_content
 from .model import Manifest, ManifestError, ensure_within
 from .skill_relationships import resolve_delivery_lifecycle as _resolve_delivery_lifecycle
 
