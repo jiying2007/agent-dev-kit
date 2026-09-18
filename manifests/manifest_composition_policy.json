@@ -1,5 +1,5 @@
 {
-  "schema": "adk-manifest-composition-policy/v1",
+  "schema": "adk-manifest-composition-policy/v2",
   "canonical_source": "manifest.json",
   "runtime_consumer_mode": "canonical-json-only",
   "authoring_mode": "single-canonical-json",
@@ -19,37 +19,6 @@
     "mode": "read-only-gate",
     "writes": false,
     "runtime_enabled": false
-  },
-  "future_split_contract": {
-    "mode": "deterministic-build-time-only",
-    "canonical_output": "manifest.json",
-    "runtime_fragment_loading": false,
-    "parallel_ssot_allowed": false,
-    "generated_output_must_validate_before_consume": true,
-    "generated_output_must_preserve_manifest_digest_semantics": true
-  },
-  "migration_gate": {
-    "state": "blocked",
-    "change_id": "manifest-build-time-split",
-    "required_change_stage": "review-passed",
-    "authoring_root": "manifests/manifest-sections",
-    "generator_path": "tools/compose_manifest.py",
-    "target_authoring_mode": "deterministic-build-time",
-    "required_evidence": [
-      "change-governance-pass",
-      "executable-rollback-plan",
-      "deterministic-double-generation",
-      "strict-generated-output-validation",
-      "canonical-digest-equivalence",
-      "canonical-consumer-boundary-pass"
-    ],
-    "activation_invariants": {
-      "canonical_output": "manifest.json",
-      "runtime_fragment_loading": false,
-      "parallel_ssot_allowed": false,
-      "generated_output_must_validate_before_consume": true,
-      "generated_output_must_preserve_manifest_digest_semantics": true
-    }
   },
   "prohibited_runtime_composition_keys": [
     "$include",
