@@ -21,14 +21,10 @@ from .contracts import (
     _validate_goal_intake,
 )
 from .contracts import (
-)
-from .contracts import (
     DECISION_SCHEMA_V2 as DECISION_SCHEMA_V2,
 )
 from .contracts import (
     EVENT_SCHEMA as EVENT_SCHEMA,
-)
-from .contracts import (
 )
 from .contracts import (
     POLICY_SCHEMA_V2 as POLICY_SCHEMA_V2,
