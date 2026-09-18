@@ -649,9 +649,11 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         if command == "match":
             return _cmd_match(rest)
         if command == "phase-context":
-            return phase_context_main(rest)
+            phase_args = rest if "--root" in rest else ["--root", str(ROOT), *rest]
+            return phase_context_main(phase_args)
         if command == "skill-relationships":
-            return skill_relationships_main(rest)
+            relationship_args = rest if "--root" in rest else ["--root", str(ROOT), *rest]
+            return skill_relationships_main(relationship_args)
         if command == "export":
             return _cmd_export(rest)
         if command == "target":
