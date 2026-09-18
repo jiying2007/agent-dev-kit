@@ -5,20 +5,9 @@
   "exceptions": {},
   "architecture_policy": {
     "preferred_execution_namespace": "execution_policy",
-    "compatibility_execution_namespace": "runtime_control",
-    "compatibility_sunset": "future-major-only",
     "no_new_support_modules": true,
     "transitional_support_modules": [],
     "transitional_support_max_count": 0,
-    "compatibility_support_facades": [
-      {
-        "path": "src/agent_dev_kit/runtime_control/engine_support.py",
-        "canonical_owner": "src/agent_dev_kit/execution_policy/contracts.py",
-        "namespace": "runtime_control",
-        "sunset": "future-major-only",
-        "mode": "re-export-only"
-      }
-    ],
     "design_metrics": [
       "bounded-context",
       "dependency-direction",
