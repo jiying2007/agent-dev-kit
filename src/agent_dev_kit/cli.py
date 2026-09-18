@@ -35,6 +35,7 @@ from .evaluation import (
 from .installer import apply_plan, create_plan, rollback, write_plan
 from .locking import clear_target_lock, target_lock_status
 from .matcher_vnext import main as matcher_main
+from .agent_platform_cli import main as platform_main
 from .phase_context import main as phase_context_main
 from .skill_relationships import main as skill_relationships_main
 from .model import ManifestError, canonical_json_bytes, sha256_bytes
@@ -654,6 +655,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         if command == "skill-relationships":
             relationship_args = rest if "--root" in rest else ["--root", str(ROOT), *rest]
             return skill_relationships_main(relationship_args)
+        if command == "platform":
+            return platform_main(rest)
         if command == "export":
             return _cmd_export(rest)
         if command == "target":
