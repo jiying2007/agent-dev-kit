@@ -34,7 +34,7 @@ from .evaluation import (
 )
 from .installer import apply_plan, create_plan, rollback, write_plan
 from .locking import clear_target_lock, target_lock_status
-from .matcher_vnext import main as matcher_main
+from .matcher import main as matcher_main
 from .agent_platform_cli import main as platform_main
 from .phase_context import main as phase_context_main
 from .skill_relationships import main as skill_relationships_main
