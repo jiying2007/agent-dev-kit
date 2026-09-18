@@ -4,7 +4,7 @@ import unittest
 from pathlib import Path
 from typing import Any
 
-from agent_dev_kit.matcher_vnext import match_text, resolve_skill_content
+from agent_dev_kit.matcher import match_text, resolve_skill_content
 from agent_dev_kit.model import Manifest
 from agent_dev_kit.skill_relationships import resolve_skill_relationships
 
