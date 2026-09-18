@@ -25,10 +25,16 @@ class PhaseContextContractTests(unittest.TestCase):
         cls.manifest = Manifest.load(ROOT)
         cls.entries = _skill_entries(cls.manifest)
 
+    def test_manifest_has_no_phase_to_skill_path_mirror(self) -> None:
+        for section in ("context_layers", "embedded_context_layers"):
+            value = self.manifest.data.get(section)
+            self.assertIsInstance(value, dict)
+            self.assertNotIn("L2-phase-triggered", value)
+
     def test_review_phase_resolves_primary_plus_language_overlay(self) -> None:
         result = resolve_phase_context(self.manifest, "general", "review")
+        self.assertEqual(result["schema"], "adk-phase-context-resolution/v2")
         self.assertEqual(result["status"], "pass")
-        self.assertFalse(result["legacy_manifest_context_paths_authoritative"])
         rows = {item["name"]: item for item in result["skills"]}
         self.assertEqual(rows["adk-code-review-loop"]["runtime_role"], "primary")
         self.assertEqual(rows["adk-chinese-code-review"]["runtime_role"], "supporting")
@@ -58,10 +64,13 @@ class PhaseContextContractTests(unittest.TestCase):
 
     def test_delivery_lifecycle_is_review_then_completion_then_commit_then_closeout(self) -> None:
         result = resolve_delivery_lifecycle(self.manifest)
+        self.assertEqual(result["schema"], "adk-delivery-lifecycle-resolution/v2")
         self.assertEqual(result["status"], "pass")
-        self.assertFalse(result["legacy_manifest_dependencies_authoritative"])
         self.assertEqual(result["pre_review_requirements"], ["verification-evidence"])
-        self.assertEqual(result["relationship_semantics_source"], "manifests/skill_relationship_contracts_v1.json")
+        self.assertEqual(
+            result["relationship_semantics_source"],
+            "manifests/skill_relationship_contracts_v2.json",
+        )
         self.assertEqual(
             [(item["stage"], item["name"]) for item in result["steps"]],
             [
@@ -114,8 +123,8 @@ class PhaseContextContractTests(unittest.TestCase):
                 resolve_phase_context(self.manifest, "general", "review")
 
     def test_contract_schema_rejects_unknown_top_level_field(self) -> None:
-        contract_path = ROOT / "manifests" / "phase_context_contract.json"
-        schema_path = ROOT / "schemas" / "phase-context-contract-v1.schema.json"
+        contract_path = ROOT / "manifests" / "phase_context_contract_v2.json"
+        schema_path = ROOT / "schemas" / "phase-context-contract-v2.schema.json"
         contract = json.loads(contract_path.read_text(encoding="utf-8"))
         contract["unexpected_authority"] = True
         with tempfile.TemporaryDirectory() as temp:
