@@ -42,6 +42,7 @@ from types import SimpleNamespace
 from unittest import mock
 
 from agent_dev_kit import compiler, release
+from agent_dev_kit.distribution.release_artifacts import SOURCE_DISTRIBUTION_DIRECTORIES, SOURCE_DISTRIBUTION_FILES
 from agent_dev_kit.compiler import export_assets
 from agent_dev_kit.model import Manifest, ManifestError
 from agent_dev_kit.quality import run_benchmark, security_check
@@ -130,7 +131,13 @@ with tempfile.TemporaryDirectory() as temp:
 
 with tempfile.TemporaryDirectory() as temp:
     fake_root = Path(temp) / "source"
-    (fake_root / "src" / "agent_dev_kit").mkdir(parents=True)
+    for relative in SOURCE_DISTRIBUTION_DIRECTORIES:
+        (fake_root / relative).mkdir(parents=True, exist_ok=True)
+    for relative in SOURCE_DISTRIBUTION_FILES:
+        source_file = fake_root / relative
+        source_file.parent.mkdir(parents=True, exist_ok=True)
+        source_file.write_text("fixture\n", encoding="utf-8")
+    (fake_root / "src" / "agent_dev_kit").mkdir(parents=True, exist_ok=True)
     (fake_root / "src" / "agent_dev_kit" / "core.py").write_text("VALUE = 1\n", encoding="utf-8")
     (fake_root / "src" / "agent_dev_kit.egg-info").mkdir()
     (fake_root / "src" / "agent_dev_kit.egg-info" / "PKG-INFO").write_text("residue\n", encoding="utf-8")
