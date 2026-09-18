@@ -49,17 +49,17 @@ PY
 # Runtime consumption ratchet: a supporting Skill may still be loaded by an
 # explicit request, but an implicit trigger must not promote it to task primary.
 # Use an actual v2 trigger from the rewritten Skill, not the retired v1 wording.
-explicit_context="$($ROOT_DIR/scripts/skill-match.sh --skill adk-context-engineering --text '上下文工程')"
+explicit_context="$(bash "$ROOT_DIR/scripts/devkit.sh" match --skill adk-context-engineering --text '上下文工程')"
 [[ "$explicit_context" == *"match=true"* ]] || fail "explicit supporting Skill load must remain available"
 
-implicit_context="$($ROOT_DIR/scripts/skill-match.sh --text '上下文工程' 2>&1 || true)"
+implicit_context="$(bash "$ROOT_DIR/scripts/devkit.sh" match --text '上下文工程' 2>&1 || true)"
 if [[ "$implicit_context" == *"source=skill_trigger skill=adk-context-engineering"* ]]; then
   fail "supporting Skill was implicitly promoted to primary"
 fi
 
 # A real primary fallback remains eligible; the v2 adapter must not disable
 # normal trigger discovery while filtering support/governance surfaces.
-primary_fallback="$($ROOT_DIR/scripts/skill-match.sh --text '设计寄存器')"
+primary_fallback="$(bash "$ROOT_DIR/scripts/devkit.sh" match --text '设计寄存器')"
 [[ "$primary_fallback" == *"match=true"* && "$primary_fallback" == *"skill=adk-register-map-design"* ]] \
   || fail "primary fallback trigger was rejected by Skill v2 eligibility"
 
