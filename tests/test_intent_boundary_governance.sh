@@ -192,9 +192,14 @@ release_artifacts_source = (
     root / "src/agent_dev_kit/distribution/release_artifacts.py"
 ).read_text(encoding="utf-8")
 release_boundary_source = release_source + release_artifacts_source
-assert "enforce_current_contract=False" in release_boundary_source
-assert 'return "target-contract-hard-cut"' in release_boundary_source
-assert "_previous_release_migration(exc)" in release_boundary_source
+for retired_release_compatibility in (
+    "enforce_current_contract=False",
+    'return "target-contract-hard-cut"',
+    "_previous_release_migration(exc)",
+    "_install_legacy_release_bundle",
+    "legacy-bundle-v2",
+):
+    assert retired_release_compatibility not in release_boundary_source, retired_release_compatibility
 PY
 
 "$ROOT_DIR/scripts/check-official-docs-governance.sh" >/dev/null
