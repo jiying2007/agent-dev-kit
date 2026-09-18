@@ -1,4 +1,4 @@
-"""Public ADK 3.x command-line interface."""
+"""Public ADK command-line interface."""
 
 from __future__ import annotations
 
@@ -17,7 +17,6 @@ from .cli_runtime import (
     _help,
     _json,
     _manifest,
-    _manifest_split_readiness_inputs,
     _write_json,
     _write_text,
 )
@@ -88,9 +87,9 @@ def _cmd_validate(argv: Sequence[str]) -> int:
             for failure in failures:
                 print("[FAIL] {}".format(failure), file=sys.stderr)
         return 1
-    legacy_args = list(argv)
+    validation_args = list(argv)
     completed = subprocess.run(
-        ["bash", str(ROOT / "scripts" / "validate-assets.sh")] + legacy_args,
+        ["bash", str(ROOT / "scripts" / "validate-assets.sh")] + validation_args,
         cwd=str(ROOT),
         check=False,
     )
