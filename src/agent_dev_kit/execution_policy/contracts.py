@@ -1,4 +1,4 @@
-"""Validation and contract primitives for the runtime-control engine."""
+"""Validation and contract primitives for the execution-policy engine."""
 
 from __future__ import annotations
 
