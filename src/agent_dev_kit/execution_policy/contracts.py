@@ -15,8 +15,6 @@ from ..privacy_ref import validate_no_secrets
 
 EVENT_SCHEMA = "runtime_control.event/v1"
 STATE_SCHEMA = "runtime_control.state/v1"
-DECISION_SCHEMA = "runtime_control.decision/v1"
-POLICY_SCHEMA = "runtime_control.policy/v1"
 DECISION_SCHEMA_V2 = "runtime_control.decision/v2"
 POLICY_SCHEMA_V2 = "runtime_control.policy/v2"
 GOAL_INTAKE_SCHEMA = "runtime_control.goal-intake/v1"
@@ -261,18 +259,18 @@ def _validate_goal_intake(
 
 
 def validate_policy(value: Mapping[str, Any]) -> dict[str, Any]:
-    if not isinstance(value, dict) or value.get("schema_version") not in {
-        POLICY_SCHEMA, POLICY_SCHEMA_V2
-    }:
+    if not isinstance(value, dict) or value.get("schema_version") != POLICY_SCHEMA_V2:
         raise RuntimeControlError("unsupported runtime control policy schema")
     _reject_sensitive(value)
-    policy_schema = value["schema_version"]
-    policy_specific_field = "gate_policy" if policy_schema == POLICY_SCHEMA else "artifact_applicability"
     expected_fields = {
-        "schema_version", "token", "context", "progress", policy_specific_field, "retention"
+        "schema_version",
+        "token",
+        "context",
+        "progress",
+        "artifact_applicability",
+        "mode_authority_policy",
+        "retention",
     }
-    if policy_schema == POLICY_SCHEMA_V2:
-        expected_fields.add("mode_authority_policy")
     if set(value) != expected_fields:
         raise RuntimeControlError("runtime control policy fields are invalid")
 
@@ -301,99 +299,86 @@ def validate_policy(value: Mapping[str, Any]) -> dict[str, Any]:
     _integer(progress.get("retry_limit"), "progress.retry_limit", positive=True)
     _integer(progress.get("no_progress_limit"), "progress.no_progress_limit", positive=True)
 
-    normalized_gates: dict[str, list[str]] = {}
+    applicability = value.get("artifact_applicability")
+    if not isinstance(applicability, dict) or set(applicability) != TASK_MODES:
+        raise RuntimeControlError("artifact_applicability must define every canonical task mode")
     normalized_applicability: dict[str, dict[str, list[str] | None]] = {}
-    normalized_authority_policy: dict[str, Any] | None = None
-    if policy_schema == POLICY_SCHEMA:
-        gate_policy = value.get("gate_policy")
-        if not isinstance(gate_policy, dict) or set(gate_policy) != GATE_EVENTS:
-            raise RuntimeControlError("gate_policy must define every canonical gate event")
-        for gate, required in gate_policy.items():
-            items = _ids(required, "gate_policy." + gate)
-            unknown = set(items) - ARTIFACT_TYPES
-            if unknown:
-                raise RuntimeControlError("gate_policy references unknown artifact types")
-            normalized_gates[gate] = items
-    else:
-        applicability = value.get("artifact_applicability")
-        if not isinstance(applicability, dict) or set(applicability) != TASK_MODES:
-            raise RuntimeControlError("artifact_applicability must define every canonical task mode")
-        for task_mode, gate_matrix in applicability.items():
-            if not isinstance(gate_matrix, dict) or set(gate_matrix) != GATE_EVENTS:
-                raise RuntimeControlError(
-                    f"artifact_applicability.{task_mode} must define every canonical gate event"
-                )
-            normalized_matrix: dict[str, list[str] | None] = {}
-            for gate, required in gate_matrix.items():
-                if required is None:
-                    normalized_matrix[gate] = None
-                    continue
-                items = _ids(required, f"artifact_applicability.{task_mode}.{gate}")
-                if set(items) - ARTIFACT_TYPES:
-                    raise RuntimeControlError("artifact_applicability references unknown artifact types")
-                normalized_matrix[gate] = items
-            normalized_applicability[task_mode] = normalized_matrix
+    for task_mode, gate_matrix in applicability.items():
+        if not isinstance(gate_matrix, dict) or set(gate_matrix) != GATE_EVENTS:
+            raise RuntimeControlError(
+                f"artifact_applicability.{task_mode} must define every canonical gate event"
+            )
+        normalized_matrix: dict[str, list[str] | None] = {}
+        for gate, required in gate_matrix.items():
+            if required is None:
+                normalized_matrix[gate] = None
+                continue
+            items = _ids(required, f"artifact_applicability.{task_mode}.{gate}")
+            if set(items) - ARTIFACT_TYPES:
+                raise RuntimeControlError("artifact_applicability references unknown artifact types")
+            normalized_matrix[gate] = items
+        normalized_applicability[task_mode] = normalized_matrix
 
-        readonly = normalized_applicability["readonly"]
-        if (
-            readonly["steady"] != []
-            or readonly["commit"] is not None
-            or readonly["apply"] is not None
-            or readonly["release"] is not None
-        ):
-            raise RuntimeControlError("readonly task mode may only use steady and final gates")
-        if readonly["final"] is None:
-            raise RuntimeControlError("readonly.final must be applicable")
-        if set(readonly["final"] or []) & READONLY_IMPLEMENTATION_ARTIFACTS:
-            raise RuntimeControlError("readonly.final cannot require implementation artifacts")
+    readonly = normalized_applicability["readonly"]
+    if (
+        readonly["steady"] != []
+        or readonly["commit"] is not None
+        or readonly["apply"] is not None
+        or readonly["release"] is not None
+    ):
+        raise RuntimeControlError("readonly task mode may only use steady and final gates")
+    if readonly["final"] is None:
+        raise RuntimeControlError("readonly.final must be applicable")
+    if set(readonly["final"] or []) & READONLY_IMPLEMENTATION_ARTIFACTS:
+        raise RuntimeControlError("readonly.final cannot require implementation artifacts")
 
-        implementation = normalized_applicability["implementation"]
-        if implementation["steady"] != [] or implementation["release"] is not None:
-            raise RuntimeControlError("implementation task mode cannot use the release gate")
-        for gate, floor in TASK_MODE_ARTIFACT_FLOORS["implementation"].items():
-            required = implementation[gate]
-            if required is None or not floor <= set(required):
-                raise RuntimeControlError(
-                    f"implementation.{gate} must retain fail-closed artifact requirements"
-                )
+    implementation = normalized_applicability["implementation"]
+    if implementation["steady"] != [] or implementation["release"] is not None:
+        raise RuntimeControlError("implementation task mode cannot use the release gate")
+    for gate, floor in TASK_MODE_ARTIFACT_FLOORS["implementation"].items():
+        required = implementation[gate]
+        if required is None or not floor <= set(required):
+            raise RuntimeControlError(
+                f"implementation.{gate} must retain fail-closed artifact requirements"
+            )
 
-        release = normalized_applicability["release"]
-        if release["steady"] != []:
-            raise RuntimeControlError("release.steady must not require artifacts")
-        for gate, floor in TASK_MODE_ARTIFACT_FLOORS["release"].items():
-            required = release[gate]
-            if required is None or not floor <= set(required):
-                raise RuntimeControlError(
-                    f"release.{gate} must retain fail-closed artifact requirements"
-                )
+    release = normalized_applicability["release"]
+    if release["steady"] != []:
+        raise RuntimeControlError("release.steady must not require artifacts")
+    for gate, floor in TASK_MODE_ARTIFACT_FLOORS["release"].items():
+        required = release[gate]
+        if required is None or not floor <= set(required):
+            raise RuntimeControlError(
+                f"release.{gate} must retain fail-closed artifact requirements"
+            )
 
-        authority_policy = value.get("mode_authority_policy")
-        if not isinstance(authority_policy, dict) or set(authority_policy) != {
-            "managed", "trusted_mode_authorities", "verification_backend"
-        }:
-            raise RuntimeControlError("mode_authority_policy fields are invalid")
-        if authority_policy.get("managed") is not True:
-            raise RuntimeControlError("mode authority policy must be managed")
-        trusted_mode_authorities = _ids(
-            authority_policy.get("trusted_mode_authorities"),
-            "mode_authority_policy.trusted_mode_authorities",
+    authority_policy = value.get("mode_authority_policy")
+    if not isinstance(authority_policy, dict) or set(authority_policy) != {
+        "managed", "trusted_mode_authorities", "verification_backend"
+    }:
+        raise RuntimeControlError("mode_authority_policy fields are invalid")
+    if authority_policy.get("managed") is not True:
+        raise RuntimeControlError("mode authority policy must be managed")
+    trusted_mode_authorities = _ids(
+        authority_policy.get("trusted_mode_authorities"),
+        "mode_authority_policy.trusted_mode_authorities",
+    )
+    verification_backend = authority_policy.get("verification_backend")
+    if verification_backend not in {"not-configured", "managed-authority-registry"}:
+        raise RuntimeControlError("unsupported mode authority verification backend")
+    if trusted_mode_authorities and verification_backend == "not-configured":
+        raise RuntimeControlError(
+            "trusted mode authorities require a configured verification backend"
         )
-        verification_backend = authority_policy.get("verification_backend")
-        if verification_backend not in {"not-configured", "managed-authority-registry"}:
-            raise RuntimeControlError("unsupported mode authority verification backend")
-        if trusted_mode_authorities and verification_backend == "not-configured":
-            raise RuntimeControlError(
-                "trusted mode authorities require a configured verification backend"
-            )
-        if not trusted_mode_authorities and verification_backend != "not-configured":
-            raise RuntimeControlError(
-                "mode authority backend cannot be configured without trusted authorities"
-            )
-        normalized_authority_policy = {
-            "managed": True,
-            "trusted_mode_authorities": trusted_mode_authorities,
-            "verification_backend": verification_backend,
-        }
+    if not trusted_mode_authorities and verification_backend != "not-configured":
+        raise RuntimeControlError(
+            "mode authority backend cannot be configured without trusted authorities"
+        )
+    normalized_authority_policy = {
+        "managed": True,
+        "trusted_mode_authorities": trusted_mode_authorities,
+        "verification_backend": verification_backend,
+    }
 
     retention = value.get("retention")
     if not isinstance(retention, dict) or set(retention) != {"journal_days", "raw_content_stored"}:
@@ -402,8 +387,8 @@ def validate_policy(value: Mapping[str, Any]) -> dict[str, Any]:
     if retention.get("raw_content_stored") is not False:
         raise RuntimeControlError("runtime control must not store raw content")
 
-    normalized = {
-        "schema_version": policy_schema,
+    return {
+        "schema_version": POLICY_SCHEMA_V2,
         "token": {
             "checkpoint_ratio": checkpoint_ratio,
             "compact_ratio": compact_ratio,
@@ -411,14 +396,10 @@ def validate_policy(value: Mapping[str, Any]) -> dict[str, Any]:
         },
         "context": {"compact_ratio": context_ratio},
         "progress": dict(progress),
+        "artifact_applicability": normalized_applicability,
+        "mode_authority_policy": normalized_authority_policy,
         "retention": dict(retention),
     }
-    if policy_schema == POLICY_SCHEMA:
-        normalized["gate_policy"] = normalized_gates
-    else:
-        normalized["artifact_applicability"] = normalized_applicability
-        normalized["mode_authority_policy"] = normalized_authority_policy
-    return normalized
 
 
 def _validate_event(value: Any) -> dict[str, Any]:
