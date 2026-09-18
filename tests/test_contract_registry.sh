@@ -20,7 +20,7 @@ assert result["failures"] == [], result
 
 registry = json.loads((root / "manifests" / "contract_registry.json").read_text(encoding="utf-8"))
 routing = next(item for item in registry["contracts"] if item["id"] == "routing-intent")
-assert routing["producer"] == "agent_dev_kit.matcher_vnext", routing
+assert routing["producer"] == "agent_dev_kit.matcher", routing
 
 phase = next(item for item in registry["contracts"] if item["id"] == "phase-context")
 assert phase["version"] == "2", phase
@@ -74,5 +74,6 @@ python3 -m unittest tests.test_phase_context tests.test_skill_relationships -v
 match_out="$("$ROOT/scripts/devkit.sh" match --text "代码审查")"
 [[ "$match_out" == *"skill=adk-code-review-loop"* ]]
 [[ "$match_out" == *"selection_group=code-review"* ]]
+[[ "$match_out" == *"runtime_role=primary"* ]]
 
 echo '[PASS] v2 semantic contracts + single canonical ADK CLI are fail-closed'
