@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Canonical Manifest access for shell compatibility shims. All structured
-# reads go through the single JSON SSOT.
+# Canonical Manifest access for repository governance launchers. All structured
+# reads go through the single JSON SSOT; this library does not emulate retired
+# manifest formats or command aliases.
 # shellcheck disable=SC2034
 ADK_LIB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck disable=SC2034
