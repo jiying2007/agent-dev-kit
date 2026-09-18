@@ -247,7 +247,7 @@ class Manifest:
             "evidence_model": "source-test-runtime-field",
         }
         if product != expected_product:
-            failures.append("product contract does not match the v4 asset-platform boundary")
+            failures.append("product contract does not match the asset-platform boundary")
 
         try:
             agents = self._record_index("agents")
