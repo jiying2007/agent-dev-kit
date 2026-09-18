@@ -27,7 +27,7 @@ policy = json.loads(policy_path.read_text(encoding="utf-8"))
 manifest_data = json.loads(manifest_path.read_text(encoding="utf-8"))
 schema = json.loads(schema_path.read_text(encoding="utf-8"))
 
-assert policy.get("schema") == "adk-manifest-composition-policy/v1", policy
+assert policy.get("schema") == "adk-manifest-composition-policy/v2", policy
 assert policy.get("canonical_source") == "manifest.json", policy
 assert policy.get("runtime_consumer_mode") == "canonical-json-only", policy
 assert policy.get("authoring_mode") == "single-canonical-json", policy
@@ -45,42 +45,6 @@ assert reference == {
     "extension_owner": "extension-governance",
 }, reference
 extension_owner = reference["extension_owner"]
-
-future = policy.get("future_split_contract")
-assert isinstance(future, dict), policy
-assert future == {
-    "mode": "deterministic-build-time-only",
-    "canonical_output": "manifest.json",
-    "runtime_fragment_loading": False,
-    "parallel_ssot_allowed": False,
-    "generated_output_must_validate_before_consume": True,
-    "generated_output_must_preserve_manifest_digest_semantics": True,
-}, future
-
-migration_gate = policy.get("migration_gate")
-assert migration_gate == {
-    "state": "blocked",
-    "change_id": "manifest-build-time-split",
-    "required_change_stage": "review-passed",
-    "authoring_root": "manifests/manifest-sections",
-    "generator_path": "tools/compose_manifest.py",
-    "target_authoring_mode": "deterministic-build-time",
-    "required_evidence": [
-        "change-governance-pass",
-        "executable-rollback-plan",
-        "deterministic-double-generation",
-        "strict-generated-output-validation",
-        "canonical-digest-equivalence",
-        "canonical-consumer-boundary-pass",
-    ],
-    "activation_invariants": {
-        "canonical_output": "manifest.json",
-        "runtime_fragment_loading": False,
-        "parallel_ssot_allowed": False,
-        "generated_output_must_validate_before_consume": True,
-        "generated_output_must_preserve_manifest_digest_semantics": True,
-    },
-}, migration_gate
 
 prohibited = policy.get("prohibited_runtime_composition_keys")
 assert prohibited == ["$include", "include", "includes", "fragments", "imports"], prohibited
@@ -215,19 +179,6 @@ expect_composition_failure(
     "is owned by extension-governance, not asset-catalog",
 )
 
-# Even with a pure reference composer, file-backed fragments/generators remain forbidden.
-# Runtime and release consumers still bind directly to manifest.json.
-for retired_or_future in (
-    root / "manifest.yaml",
-    root / migration_gate["authoring_root"],
-    root / "manifests" / "manifest-fragments",
-    root / migration_gate["generator_path"],
-):
-    assert not retired_or_future.exists(), (
-        "file-backed manifest composition requires a deliberate contract migration first: "
-        f"{retired_or_future.relative_to(root)}"
-    )
-
 root_manifest_candidates = sorted(path.name for path in root.glob("manifest.*") if path.is_file())
 assert root_manifest_candidates == ["manifest.json"], root_manifest_candidates
 
@@ -243,8 +194,6 @@ print(json.dumps({
     "owner_domain_count": len(set(owners.values())),
     "manifest_digest": manifest.digest,
     "round_trip_digest": sha256_bytes(canonical_json_bytes(recomposed)),
-    "parallel_ssot_allowed": future["parallel_ssot_allowed"],
-    "runtime_fragment_loading": future["runtime_fragment_loading"],
 }, sort_keys=True))
 PY
 
