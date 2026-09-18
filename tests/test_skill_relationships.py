@@ -4,6 +4,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+
 from agent_dev_kit.model import Manifest, ManifestError
 from agent_dev_kit.phase_context import resolve_delivery_lifecycle as phase_delivery_lifecycle
 from agent_dev_kit.skill_relationships import (
@@ -25,14 +26,24 @@ class SkillRelationshipContractTests(unittest.TestCase):
         cls.manifest = Manifest.load(ROOT)
         cls.entries = _entries(cls.manifest)
 
-    def test_typed_relationships_are_delivery_authority(self) -> None:
+    def test_manifest_has_no_parallel_dependency_graph(self) -> None:
+        for section in ("skills", "optional_skills"):
+            for item in self.manifest.data.get(section, []):
+                self.assertNotIn("depends_on", item, item.get("name"))
+
+    def test_typed_relationships_are_the_only_relationship_authority(self) -> None:
         result = resolve_skill_relationships(self.manifest)
+        self.assertEqual(result["schema"], "adk-skill-relationship-resolution/v2")
         self.assertEqual(result["status"], "pass")
-        self.assertFalse(result["legacy_depends_on_authoritative_for_delivery_sequencing"])
+        self.assertEqual(result["relationship_count"], len(result["typed_relationships"]))
         typed = {
             (row["from"], row["to"], row["type"], row["requirement"])
             for row in result["typed_relationships"]
         }
+        self.assertIn(
+            ("adk-requirements-triage", "adk-task-breakdown", "context-prerequisite", "required"),
+            typed,
+        )
         self.assertIn(
             (
                 "adk-code-review-loop",
@@ -61,6 +72,29 @@ class SkillRelationshipContractTests(unittest.TestCase):
             typed,
         )
 
+    def test_context_prerequisite_graph_is_acyclic(self) -> None:
+        result = resolve_skill_relationships(self.manifest)
+        graph = {name: [] for name in self.entries}
+        for row in result["typed_relationships"]:
+            if row["type"] == "context-prerequisite":
+                graph[row["from"]].append(row["to"])
+        visiting: set[str] = set()
+        visited: set[str] = set()
+
+        def walk(node: str) -> None:
+            if node in visited:
+                return
+            if node in visiting:
+                raise AssertionError(f"context-prerequisite cycle at {node}")
+            visiting.add(node)
+            for nxt in graph[node]:
+                walk(nxt)
+            visiting.remove(node)
+            visited.add(node)
+
+        for node in graph:
+            walk(node)
+
     def test_terminal_lifecycle_has_single_typed_authority(self) -> None:
         direct = resolve_delivery_lifecycle(self.manifest)
         facade = phase_delivery_lifecycle(self.manifest)
@@ -71,13 +105,8 @@ class SkillRelationshipContractTests(unittest.TestCase):
         )
         self.assertEqual(
             direct["relationship_semantics_source"],
-            "manifests/skill_relationship_contracts_v1.json",
+            "manifests/skill_relationship_contracts_v2.json",
         )
-        self.assertFalse(direct["legacy_manifest_dependencies_authoritative"])
-
-    def test_historical_inverted_review_dependency_is_removed(self) -> None:
-        review = self.entries["adk-code-review-loop"]
-        self.assertNotIn("adk-verification-before-completion", review.get("depends_on", []))
 
     def test_unknown_typed_endpoint_fails_closed(self) -> None:
         contract, _ = _contract(self.manifest)
@@ -119,8 +148,8 @@ class SkillRelationshipContractTests(unittest.TestCase):
             _resolve_delivery_lifecycle(self.manifest, mutated, self.entries, explicit)
 
     def test_only_delivery_precedence_can_claim_sequencing_authority(self) -> None:
-        contract_path = ROOT / "manifests" / "skill_relationship_contracts_v1.json"
-        schema_path = ROOT / "schemas" / "skill-relationship-contract-v1.schema.json"
+        contract_path = ROOT / "manifests" / "skill_relationship_contracts_v2.json"
+        schema_path = ROOT / "schemas" / "skill-relationship-contract-v2.schema.json"
         contract = json.loads(contract_path.read_text(encoding="utf-8"))
         contract["relationship_types"]["handoff"]["sequencing_authority"] = True
         with tempfile.TemporaryDirectory() as temp:
