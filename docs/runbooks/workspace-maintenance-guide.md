@@ -42,9 +42,9 @@ adk 不直接替代具体运行时的全局策略文件，也不默认写任何�
 
 ```bash
 bash scripts/devkit.sh validate --strict
-bash scripts/devkit.sh runtime-boundary
-bash scripts/devkit.sh official-docs-governance --summary-json
-bash scripts/devkit.sh workflow-closure --profile core
+bash scripts/check-runtime-boundary.sh
+bash scripts/check-official-docs-governance.sh --summary-json
+bash scripts/check-workflow-closure.sh --profile core
 bash scripts/devkit.sh goal check --summary-json
 bash scripts/devkit.sh capability health --summary-json
 bash scripts/devkit.sh benchmark run --iterations 5 --summary-json
@@ -59,10 +59,10 @@ bash tests/run_all.sh --fail-fast
 |---|---|---|
 | README、usage、commands、runbook | `bash scripts/devkit.sh validate --strict` + 相关文档测试 | 防止文档与 CLI 漂移 |
 | Agent/Skill 内容 | `bash scripts/devkit.sh validate --strict` + `bash tests/run_all.sh --fail-fast` | 覆盖 frontmatter、触发和质量规则 |
-| Profile/manifest | `bash scripts/devkit.sh validate --strict` + `bash scripts/devkit.sh workflow-closure --profile core` | 防止未知引用和 profile 闭包漂移 |
+| Profile/manifest | `bash scripts/devkit.sh validate --strict` + `bash scripts/check-workflow-closure.sh --profile core` | 防止未知引用和 profile 闭包漂移 |
 | 目标/功能/性能契约 | `bash scripts/devkit.sh goal check --summary-json` + `bash scripts/devkit.sh capability health --summary-json` + `bash scripts/devkit.sh benchmark run --summary-json` | 防止目标、能力和预算只停留在文档声明 |
 | install/export/release 脚本 | `bash tests/test_product_maturity_v5.sh` + `bash tests/test_software_m5_ready.sh` + `bash tests/run_all.sh` | 防止交付路径回归 |
-| MCP/plugin/hook/automation 契约 | `bash scripts/devkit.sh official-docs-governance --summary-json` + 安全审查 | 默认 report-only |
+| MCP/plugin/hook/automation 契约 | `bash scripts/check-official-docs-governance.sh --summary-json` + 安全审查 | 默认 report-only |
 | 发布前 | `bash scripts/devkit.sh security check` + `bash scripts/devkit.sh release check` + `bash scripts/devkit.sh test` | 必须带 rollback note |
 
 ## 5. Runtime Boundary
@@ -78,8 +78,8 @@ bash tests/run_all.sh --fail-fast
 检查命令：
 
 ```bash
-bash scripts/devkit.sh runtime-boundary
-bash scripts/devkit.sh runtime-boundary --summary-json
+bash scripts/check-runtime-boundary.sh
+bash scripts/check-runtime-boundary.sh --summary-json
 ```
 
 如果确需新增 target：
