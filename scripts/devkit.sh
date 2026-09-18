@@ -58,21 +58,4 @@ if [[ "${PYTHON_SUPPORTED}" != "1" && "${COMMAND}" != "doctor" ]]; then
   echo "[WARN] set ADK_REQUIRE_SUPPORTED_PYTHON=1 for fail-fast release validation" >&2
 fi
 
-# Public runtime surfaces that resolve Skill semantics must go through their
-# governed adapters rather than reading manifest paths as authority.
-case "${COMMAND}" in
-  match)
-    shift
-    exec "${PYTHON_BIN}" -m agent_dev_kit.matcher_vnext "$@"
-    ;;
-  phase-context)
-    shift
-    exec "${PYTHON_BIN}" -m agent_dev_kit.phase_context --root "${ROOT_DIR}" "$@"
-    ;;
-  skill-relationships)
-    shift
-    exec "${PYTHON_BIN}" -m agent_dev_kit.skill_relationships --root "${ROOT_DIR}" "$@"
-    ;;
-esac
-
 exec "${PYTHON_BIN}" -m agent_dev_kit.cli "$@"
