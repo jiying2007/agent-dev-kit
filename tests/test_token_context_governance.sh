@@ -84,15 +84,15 @@ grep -q 'cached_tokens' "$ROOT_DIR/skills/adk-token-context-governance/SKILL.md"
   exit 1
 }
 
-"$ROOT_DIR/scripts/skill-match.sh" \
+bash "$ROOT_DIR/scripts/devkit.sh" match \
   --skill adk-token-context-governance \
   --text "日志太长，需要压缩输出并保留 raw_evidence 后按需回退原文" >/dev/null
 
-"$ROOT_DIR/scripts/skill-match.sh" \
+bash "$ROOT_DIR/scripts/devkit.sh" match \
   --skill adk-token-context-governance \
   --text "token lean 模式下按预算读取，低置信度时恢复原文" >/dev/null
 
-if "$ROOT_DIR/scripts/skill-match.sh" \
+if bash "$ROOT_DIR/scripts/devkit.sh" match \
   --skill adk-token-context-governance \
   --text "高风险审计要求直接看原文" >/tmp/adk_token_context_negative.out 2>&1; then
   echo "[FAIL] high-risk raw-read request should not trigger compression governance" >&2
