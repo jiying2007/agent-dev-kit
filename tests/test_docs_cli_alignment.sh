@@ -56,6 +56,8 @@ retired_tokens = (
     "scripts/install-assets.sh",
     "scripts/convert-assets.sh",
     "scripts/quality-gates.sh",
+    "scripts/check-asset-taxonomy.sh",
+    "scripts/check-asset-taxonomy.sh",
     "scripts/check-fallback-sunset.sh",
     "bin/agent-dev-kit",
     ".github/workflows/scorecard.yml",
