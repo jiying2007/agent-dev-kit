@@ -69,6 +69,7 @@ max_skill_file="-"
 max_doc_lines=0
 max_doc_file="-"
 summary_scripts=0
+[[ ! -e "$ROOT_DIR/scripts/convert-assets.sh" ]] || record_failure "retired export wrapper returned: scripts/convert-assets.sh"
 compact_test_runner=0
 context_governance_assets=0
 agents_bytes="$(wc -c <"$ROOT_DIR/AGENTS.md" | tr -d ' ')"
@@ -163,7 +164,6 @@ done < <(
 
 for script in \
   "$ROOT_DIR/scripts/validate-assets.sh" \
-  "$ROOT_DIR/scripts/convert-assets.sh" \
   "$ROOT_DIR/scripts/check-runtime-boundary.sh" \
   "$ROOT_DIR/scripts/check-workflow-closure.sh" \
   "$ROOT_DIR/scripts/pilot-readiness.sh"; do

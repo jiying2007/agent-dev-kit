@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Export zero-compat follow-up
+- `scripts/convert-assets.sh` is removed. `adk export` via the unified CLI is the sole maintained export surface.
+- The retired wrapper can no longer advertise or route the removed `hermes-agent` target.
+
 ### Installer zero-compat follow-up
 - Transactional install/rollback accepts only `adk-install-receipt/v3`; receipt v1/v2 compatibility parsing and rollback branches are removed.
 - `scripts/install-assets.sh` is removed. `adk install plan/apply/rollback` via the unified CLI is the sole maintained install surface.

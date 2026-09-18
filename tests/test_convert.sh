@@ -6,7 +6,7 @@ ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 TMP_DIR="$(mktemp -d)"
 trap 'rm -rf "$TMP_DIR"' EXIT
 
-"$ROOT_DIR/scripts/convert-assets.sh" \
+bash "$ROOT_DIR/scripts/devkit.sh" export \
   --target claude-code \
   --profile core \
   --with-optional-skill adk-incident-rca-report \
@@ -22,4 +22,9 @@ grep -q 'target: claude-code$' "$TMP_DIR/claude-code/agents/requirements-analyst
   exit 1
 }
 
-echo "[PASS] convert"
+[[ ! -e "$ROOT_DIR/scripts/convert-assets.sh" ]] || {
+  echo "[FAIL] retired convert-assets.sh compatibility wrapper returned" >&2
+  exit 1
+}
+
+echo "[PASS] canonical export CLI"
