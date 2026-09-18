@@ -49,7 +49,6 @@ from agent_dev_kit.model import Manifest, ManifestError
 from agent_dev_kit.release import (
     _extract_release,
     _prerelease_is_newer,
-    _previous_release_migration,
     _release_source_identity,
     check_release,
 )
@@ -68,10 +67,6 @@ assert _prerelease_is_newer("3.1.0-rc.7", "3.1.0")
 assert not _prerelease_is_newer("3.1.0", "3.1.0-rc.7")
 assert _prerelease_is_newer("3.1.0-rc.7", "4.0.0")
 assert _prerelease_is_newer("4.0.0", "5.0.0-rc.2")
-assert _previous_release_migration(ManifestError("target_contract_missing: claude-code")) == "legacy-bundle-v2"
-assert _previous_release_migration(ManifestError("target_contract_incompatible: claude-code")) == "target-contract-hard-cut"
-assert _previous_release_migration(ManifestError("target_contract_invalid: target identity mismatch for claude-code")) == "target-contract-hard-cut"
-assert _previous_release_migration(ManifestError("unrelated")) is None
 
 with tempfile.TemporaryDirectory() as source_identity_temp:
     source_identity_root = Path(source_identity_temp)
@@ -108,11 +103,11 @@ with tempfile.TemporaryDirectory() as unbound_identity_temp:
     assert unbound_identity["kind"] == "unbound-snapshot", unbound_identity
     assert unbound_identity["release_eligible"] is False, unbound_identity
 
-contract_path = root / "manifests/software_m5_eval_contract_v5.json"
+contract_path = root / "manifests/software_m5_eval_contract.json"
 contract, tasks_path, tasks = load_campaign_contract(manifest, contract_path)
-assert contract["campaign_id"] == "software-m5-5.0.0-rc.2", contract
-legacy_contract = json.loads((root / "manifests/software_m5_eval_contract_rc7.json").read_text(encoding="utf-8"))
-assert legacy_contract["campaign_id"] == "software-m5-3.1.0-rc.7", legacy_contract
+assert contract["campaign_id"] == f"software-m5-{manifest.version}", contract
+contract_variants = sorted((root / "manifests").glob("software_m5_eval_contract_*.json"))
+assert contract_variants == [], [path.name for path in contract_variants]
 assert len(tasks) == 60
 assert len({task["id"] for task in tasks}) == 60
 assert contract["trials"] == 3

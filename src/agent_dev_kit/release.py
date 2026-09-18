@@ -8,7 +8,6 @@ import re
 import shutil
 import subprocess
 import tempfile
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence
 
@@ -20,7 +19,6 @@ from .distribution.release_artifacts import (
     _extract_release,
     _managed_hashes,
     _prerelease_is_newer,
-    _previous_release_migration,
     _release_source_identity,
     _release_source_root,
     _report_digest,
@@ -31,9 +29,7 @@ from .distribution.release_artifacts import (
     _write_runtime_checksums,
 )
 from .installer import (
-    PREVIOUS_RECEIPT_SCHEMA,
     RECEIPT_NAME,
-    _receipt_digest,
     apply_plan,
     create_plan,
     rollback,
@@ -438,83 +434,6 @@ def publish_release(
         raise ManifestError("github release failed: {}".format(completed.stderr.strip()))
     return {"status": "pass", "backend": backend, "version": version, "output": completed.stdout.strip()}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-def _install_legacy_release_bundle(
-    release_root: Path,
-    manifest: Manifest,
-    target: Path,
-    migration: str = "legacy-bundle-v2",
-) -> Dict[str, Any]:
-    """Stage a pre-contract release as a digest-protected v2 rollback fixture."""
-
-    bundle = release_root / "bundles" / "claude-code"
-    if not bundle.is_dir() or bundle.is_symlink():
-        raise ManifestError("legacy release does not contain a safe Claude Code bundle")
-    files = sorted(path for path in bundle.rglob("*") if path.is_file() or path.is_symlink())
-    if not files or any(path.is_symlink() for path in files):
-        raise ManifestError("legacy release bundle is empty or contains symlinks")
-    target.mkdir(parents=True, exist_ok=True)
-    receipt_id = "legacy-{}".format(manifest.version.replace("/", "-"))
-    backup_root = target / ".adk-backups" / receipt_id
-    backup_root.mkdir(parents=True, exist_ok=False)
-    installed: List[Dict[str, Any]] = []
-    for source in files:
-        relative = source.relative_to(bundle).as_posix()
-        destination = target / relative
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(str(source), str(destination))
-        kind = relative.split("/", 1)[0].rstrip("s")
-        name = source.stem
-        installed.append(
-            {
-                "kind": kind,
-                "name": name,
-                "destination": relative,
-                "source_sha256": sha256_file(source),
-                "installed_sha256": sha256_tree(destination),
-                "backup": None,
-                "backup_sha256": None,
-            }
-        )
-    receipt = {
-        "schema": PREVIOUS_RECEIPT_SCHEMA,
-        "receipt_id": receipt_id,
-        "created_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
-        "plan_id": "legacy-bundle-migration",
-        "manifest_version": manifest.version,
-        "manifest_sha256": manifest.digest,
-        "tool": "claude-code",
-        "target": str(target),
-        "backup_root": backup_root.relative_to(target).as_posix(),
-        "previous_receipt": None,
-        "previous_receipt_sha256": None,
-        "installed": installed,
-    }
-    receipt["receipt_sha256"] = _receipt_digest(receipt)
-    receipt_path = target / RECEIPT_NAME
-    receipt_path.write_text(json.dumps(receipt, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    return {
-        "status": "pass",
-        "installed": len(installed),
-        "receipt": str(receipt_path),
-        "migration": migration,
-    }
-
-
-
-
 def rehearse_release(previous_artifact: Path, candidate_artifact: Path) -> Dict[str, Any]:
     previous_digest = _verify_artifact_checksum(previous_artifact)
     candidate_digest = _verify_artifact_checksum(candidate_artifact)
@@ -522,10 +441,7 @@ def rehearse_release(previous_artifact: Path, candidate_artifact: Path) -> Dict[
     try:
         previous_root = _extract_release(previous_artifact.resolve(), workspace / "previous")
         candidate_root = _extract_release(candidate_artifact.resolve(), workspace / "candidate")
-        previous_manifest, previous_release_manifest = _release_source_root(
-            previous_root,
-            enforce_current_contract=False,
-        )
+        previous_manifest, previous_release_manifest = _release_source_root(previous_root)
         candidate_manifest, candidate_release_manifest = _release_source_root(candidate_root)
         if (
             candidate_release_manifest.get("schema_version") != 2
@@ -550,40 +466,19 @@ def rehearse_release(previous_artifact: Path, candidate_artifact: Path) -> Dict[
 
         target = workspace / "target"
         previous_plan_path = workspace / "previous-plan.json"
-        try:
-            previous_plan = create_plan(
-                previous_manifest,
-                "claude-code",
-                str(target),
-                [previous_manifest.default_profile],
-                [],
-                "copy",
-            )
-        except ManifestError as exc:
-            previous_migration = _previous_release_migration(exc)
-            if previous_migration is None:
-                raise
-            previous_apply = _install_legacy_release_bundle(
-                previous_root,
-                previous_manifest,
-                target,
-                migration=previous_migration,
-            )
-        else:
-            if previous_plan["status"] != "ready":
-                raise ManifestError("previous release install plan is not ready")
-            write_plan(previous_plan, previous_plan_path)
-            previous_apply = apply_plan(previous_manifest, previous_plan_path)
+        previous_plan = create_plan(
+            previous_manifest,
+            "claude-code",
+            str(target),
+            [previous_manifest.default_profile],
+            [],
+            "copy",
+        )
+        if previous_plan["status"] != "ready":
+            raise ManifestError("previous release install plan is not ready")
+        write_plan(previous_plan, previous_plan_path)
+        previous_apply = apply_plan(previous_manifest, previous_plan_path)
         previous_hashes = _managed_hashes(target)
-
-        migration_mode = "in-place-replacement"
-        legacy_rollback: Optional[Dict[str, Any]] = None
-        previous_migration = previous_apply.get("migration")
-        if previous_migration in ("legacy-bundle-v2", "target-contract-hard-cut"):
-            migration_mode = "rollback-before-install"
-            legacy_rollback = rollback(target / RECEIPT_NAME)
-            if (target / RECEIPT_NAME).exists():
-                raise ManifestError("legacy receipt remained after migration rollback")
 
         candidate_plan_path = workspace / "candidate-plan.json"
         candidate_plan = create_plan(
@@ -603,37 +498,14 @@ def rehearse_release(previous_artifact: Path, candidate_artifact: Path) -> Dict[
             raise ManifestError("candidate receipt version does not match release")
 
         rollback_result = rollback(target / RECEIPT_NAME)
-        fallback_restore: Optional[Dict[str, Any]] = None
-        if migration_mode == "in-place-replacement":
-            restored_receipt = json.loads((target / RECEIPT_NAME).read_text(encoding="utf-8"))
-            restored_hashes = _managed_hashes(target)
-            if restored_receipt.get("manifest_version") != previous_manifest.version:
-                raise ManifestError("rollback did not restore the previous receipt")
-            if restored_hashes != previous_hashes:
-                raise ManifestError("rollback did not restore the previous managed asset hashes")
-        else:
-            if (target / RECEIPT_NAME).exists():
-                raise ManifestError("candidate receipt remained after rollback")
-            fallback_apply = _install_legacy_release_bundle(
-                previous_root,
-                previous_manifest,
-                target,
-                migration=str(previous_migration),
-            )
-            restored_hashes = _managed_hashes(target)
-            if restored_hashes != previous_hashes:
-                raise ManifestError("previous legacy artifact reinstall did not restore managed hashes")
-            fallback_cleanup = rollback(target / RECEIPT_NAME)
-            if (target / RECEIPT_NAME).exists():
-                raise ManifestError("fallback receipt remained after rehearsal cleanup")
-            fallback_restore = {
-                "status": "pass",
-                "strategy": "reinstall-previous-artifact",
-                "installed": fallback_apply["installed"],
-                "cleanup_removed": fallback_cleanup["removed"],
-            }
+        restored_receipt = json.loads((target / RECEIPT_NAME).read_text(encoding="utf-8"))
+        restored_hashes = _managed_hashes(target)
+        if restored_receipt.get("manifest_version") != previous_manifest.version:
+            raise ManifestError("rollback did not restore the previous receipt")
+        if restored_hashes != previous_hashes:
+            raise ManifestError("rollback did not restore the previous managed asset hashes")
         result = {
-            "schema_version": 2,
+            "schema_version": 3,
             "status": "pass",
             "previous_version": previous_manifest.version,
             "candidate_version": candidate_manifest.version,
@@ -643,10 +515,6 @@ def rehearse_release(previous_artifact: Path, candidate_artifact: Path) -> Dict[
             "candidate_manifest_sha256": candidate_release_manifest["manifest_sha256"],
             "previous_installed": previous_apply["installed"],
             "candidate_installed": candidate_apply["installed"],
-            "migration_mode": migration_mode,
-            "previous_install_migration": previous_migration,
-            "legacy_rollback": legacy_rollback,
-            "fallback_restore": fallback_restore,
             "rollback": {
                 "status": rollback_result["status"],
                 "removed": rollback_result["removed"],

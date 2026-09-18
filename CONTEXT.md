@@ -33,7 +33,7 @@ Sub-agent 是运行时创建的短生命周期执行实例，只处理边界明�
 Profile 是 Agent 与 Skill 的可安装组合，面向具体工作场景。
 
 - 结构化单一事实源：`manifest.json:profiles`
-- 当前主要 Profile：`core`、`personal-core`、`embedded-fullstack`、`team-core`、`release-hardening`、`openspec-driven`、`large-refactor`、`incident-response`、`research-intake`
+- 当前主要 Profile：`core`、`personal-core`、`embedded-fullstack`、`team-core`、`release-hardening`、`large-refactor`、`incident-response`、`research-intake`
 
 ### 1.5 Manifest
 
