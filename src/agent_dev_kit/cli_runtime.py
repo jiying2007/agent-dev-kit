@@ -35,6 +35,7 @@ PUBLIC_COMMANDS = [
     ("match", "按 Skill Content v2 语义匹配 Skill 路由"),
     ("phase-context", "解析语义 phase context"),
     ("skill-relationships", "解析 typed Skill relationships 与 delivery lifecycle"),
+    ("platform", "检查 Agent Platform primitives、evidence 与 target conformance"),
     ("export", "确定性导出 direct target 资产"),
     ("target", "检查或执行 direct target contract smoke"),
     ("install", "plan/apply/rollback 安装事务"),
