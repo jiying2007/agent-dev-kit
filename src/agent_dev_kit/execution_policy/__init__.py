@@ -1,8 +1,6 @@
-"""Preferred public namespace for ADK execution-policy decisions.
+"""Canonical public namespace for ADK execution-policy decisions.
 
-ADK is not a runtime. The canonical implementation lives in this package.
-The historical :mod:`agent_dev_kit.runtime_control` namespace remains a 5.x
-compatibility facade and re-exports these exact objects.
+ADK provides policy and gate decisions; it is not an agent runtime.
 """
 
 from .engine import (
