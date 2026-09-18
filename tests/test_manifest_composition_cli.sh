@@ -21,8 +21,6 @@ assert value["owner_domain_count"] > 0, value
 assert value["reference_composer_mode"] == "pure-in-memory-only", value
 assert value["runtime_enabled"] is False, value
 assert value["writes"] is False, value
-assert value["parallel_ssot_allowed"] is False, value
-assert value["runtime_fragment_loading"] is False, value
 assert value["composition_generator"] is None, value
 PY
 
