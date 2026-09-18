@@ -38,122 +38,76 @@
       "type": "string",
       "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?$"
     },
-    "locale": {
-      "type": "string",
-      "minLength": 2
-    },
+    "locale": {"type": "string", "minLength": 2},
     "platforms": {
       "type": "array",
       "minItems": 1,
       "uniqueItems": true,
-      "items": {
-        "type": "string",
-        "minLength": 1
-      }
+      "items": {"type": "string", "minLength": 1}
     },
     "reference_sources": {
       "type": "object",
       "minProperties": 1,
-      "propertyNames": {
-        "pattern": "^[a-z0-9][a-z0-9-]*$"
-      },
-      "additionalProperties": {
-        "$ref": "#/$defs/referenceSource"
-      }
+      "propertyNames": {"pattern": "^[a-z0-9][a-z0-9-]*$"},
+      "additionalProperties": {"$ref": "#/$defs/referenceSource"}
     },
     "external_handoff_targets": {
       "type": "object",
       "minProperties": 1,
-      "propertyNames": {
-        "pattern": "^[a-z0-9][a-z0-9-]*$"
-      },
-      "additionalProperties": {
-        "$ref": "#/$defs/externalHandoffTarget"
-      }
+      "propertyNames": {"pattern": "^[a-z0-9][a-z0-9-]*$"},
+      "additionalProperties": {"$ref": "#/$defs/externalHandoffTarget"}
     },
     "tool_targets": {
       "type": "object",
       "minProperties": 1,
-      "additionalProperties": {
-        "$ref": "#/$defs/directTarget"
-      }
+      "additionalProperties": {"$ref": "#/$defs/directTarget"}
     },
     "quality_tiers": {
       "type": "object",
       "minProperties": 1,
-      "propertyNames": {
-        "pattern": "^p[0-9]+$"
-      },
-      "additionalProperties": {
-        "$ref": "#/$defs/qualityTier"
-      }
+      "propertyNames": {"pattern": "^p[0-9]+$"},
+      "additionalProperties": {"$ref": "#/$defs/qualityTier"}
     },
-    "asset_taxonomy": {
-      "$ref": "#/$defs/assetTaxonomy"
-    },
+    "asset_taxonomy": {"$ref": "#/$defs/assetTaxonomy"},
     "knowledge_layers": {
       "type": "object",
       "minProperties": 1,
-      "propertyNames": {
-        "pattern": "^L[0-9]+$"
-      },
-      "additionalProperties": {
-        "$ref": "#/$defs/knowledgeLayer"
-      }
+      "propertyNames": {"pattern": "^L[0-9]+$"},
+      "additionalProperties": {"$ref": "#/$defs/knowledgeLayer"}
     },
     "context_layers": {
       "type": "object",
       "minProperties": 1,
-      "propertyNames": {
-        "pattern": "^L[0-9]+-[a-z0-9-]+$"
-      },
-      "additionalProperties": {
-        "$ref": "#/$defs/contextLayer"
-      }
+      "propertyNames": {"pattern": "^L[0-9]+-[a-z0-9-]+$"},
+      "additionalProperties": {"$ref": "#/$defs/contextLayer"}
     },
     "embedded_context_layers": {
       "type": "object",
       "minProperties": 1,
-      "propertyNames": {
-        "pattern": "^L[0-9]+-[a-z0-9-]+$"
-      },
-      "additionalProperties": {
-        "$ref": "#/$defs/contextLayer"
-      }
+      "propertyNames": {"pattern": "^L[0-9]+-[a-z0-9-]+$"},
+      "additionalProperties": {"$ref": "#/$defs/contextLayer"}
     },
     "knowledge_types": {
       "type": "object",
       "minProperties": 1,
-      "propertyNames": {
-        "pattern": "^[a-z][a-z0-9-]*$"
-      },
-      "additionalProperties": {
-        "$ref": "#/$defs/knowledgeDescriptor"
-      }
+      "propertyNames": {"pattern": "^[a-z][a-z0-9-]*$"},
+      "additionalProperties": {"$ref": "#/$defs/knowledgeDescriptor"}
     },
     "knowledge_maturity": {
       "type": "object",
       "minProperties": 1,
-      "propertyNames": {
-        "pattern": "^[a-z][a-z0-9-]*$"
-      },
-      "additionalProperties": {
-        "$ref": "#/$defs/knowledgeDescriptor"
-      }
+      "propertyNames": {"pattern": "^[a-z][a-z0-9-]*$"},
+      "additionalProperties": {"$ref": "#/$defs/knowledgeDescriptor"}
     },
     "agents": {
       "type": "array",
       "minItems": 1,
-      "items": {
-        "$ref": "#/$defs/agent"
-      }
+      "items": {"$ref": "#/$defs/agent"}
     },
     "skills": {
       "type": "array",
       "minItems": 1,
-      "items": {
-        "$ref": "#/$defs/asset"
-      }
+      "items": {"$ref": "#/$defs/asset"}
     },
     "default_profile": {
       "type": "string",
@@ -162,74 +116,44 @@
     "profiles": {
       "type": "object",
       "minProperties": 1,
-      "additionalProperties": {
-        "$ref": "#/$defs/profile"
-      }
+      "additionalProperties": {"$ref": "#/$defs/profile"}
     },
     "workflows": {
       "type": "array",
       "minItems": 1,
-      "items": {
-        "$ref": "#/$defs/asset"
-      }
+      "items": {"$ref": "#/$defs/asset"}
     },
     "mcp_servers": {
       "type": "array",
       "maxItems": 0,
       "items": false
     },
-    "skill_invocation": {
-      "$ref": "#/$defs/skillInvocation"
-    },
+    "skill_invocation": {"$ref": "#/$defs/skillInvocation"},
     "change_sets": {
       "type": "array",
       "minItems": 1,
-      "items": {
-        "$ref": "#/$defs/changeSet"
-      }
+      "items": {"$ref": "#/$defs/changeSet"}
     },
     "optional_skills": {
       "type": "array",
-      "items": {
-        "$ref": "#/$defs/asset"
-      }
+      "items": {"$ref": "#/$defs/asset"}
     },
-    "install": {
-      "$ref": "#/$defs/install"
-    },
+    "install": {"$ref": "#/$defs/install"},
     "skill_routing_matrix": {
       "type": "array",
       "minItems": 1,
-      "items": {
-        "$ref": "#/$defs/skillRouting"
-      }
+      "items": {"$ref": "#/$defs/skillRouting"}
     },
-    "routing": {
-      "$ref": "#/$defs/routing"
-    },
-    "dependencies": {
-      "$ref": "#/$defs/dependencies"
-    },
-    "schema_version": {
-      "const": "4.0.0"
-    },
+    "routing": {"$ref": "#/$defs/routing"},
+    "dependencies": {"$ref": "#/$defs/dependencies"},
+    "schema_version": {"const": "4.0.0"},
     "product": {
       "type": "object",
-      "required": [
-        "kind",
-        "runtime_boundary",
-        "evidence_model"
-      ],
+      "required": ["kind", "runtime_boundary", "evidence_model"],
       "properties": {
-        "kind": {
-          "const": "agent-asset-platform"
-        },
-        "runtime_boundary": {
-          "const": "no-llm-runner"
-        },
-        "evidence_model": {
-          "const": "source-test-runtime-field"
-        }
+        "kind": {"const": "agent-asset-platform"},
+        "runtime_boundary": {"const": "no-llm-runner"},
+        "evidence_model": {"const": "source-test-runtime-field"}
       },
       "additionalProperties": false
     }
@@ -240,18 +164,12 @@
   "$defs": {
     "stringArray": {
       "type": "array",
-      "items": {
-        "type": "string",
-        "minLength": 1
-      },
+      "items": {"type": "string", "minLength": 1},
       "uniqueItems": true
     },
     "assetNameArray": {
       "type": "array",
-      "items": {
-        "type": "string",
-        "pattern": "^[a-z0-9][a-z0-9-]*$"
-      },
+      "items": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
       "uniqueItems": true
     },
     "referenceSource": {
@@ -264,21 +182,10 @@
         "governance_manifest"
       ],
       "properties": {
-        "display_name": {
-          "type": "string",
-          "minLength": 1
-        },
-        "source_type": {
-          "type": "string",
-          "minLength": 1
-        },
-        "boundary": {
-          "type": "string",
-          "minLength": 1
-        },
-        "runtime_enablement": {
-          "const": false
-        },
+        "display_name": {"type": "string", "minLength": 1},
+        "source_type": {"type": "string", "minLength": 1},
+        "boundary": {"type": "string", "minLength": 1},
+        "runtime_enablement": {"const": false},
         "governance_manifest": {
           "type": "string",
           "pattern": "^manifests/[a-z0-9_.-]+\\.json$"
@@ -300,173 +207,84 @@
         "must_not"
       ],
       "properties": {
-        "display_name": {
-          "type": "string",
-          "minLength": 1
-        },
-        "runtime": {
-          "type": "string",
-          "minLength": 1
-        },
-        "handoff_mode": {
-          "const": "source-to-live"
-        },
-        "direct_tool_target": {
-          "const": false
-        },
-        "handoff_chain": {
-          "type": "string",
-          "minLength": 1
-        },
-        "owner_review_required": {
-          "const": true
-        },
-        "default_enabled": {
-          "const": false
-        },
-        "notes": {
-          "type": "string",
-          "minLength": 1
-        },
-        "must_not": {
-          "$ref": "#/$defs/stringArray"
-        }
+        "display_name": {"type": "string", "minLength": 1},
+        "runtime": {"type": "string", "minLength": 1},
+        "handoff_mode": {"const": "source-to-live"},
+        "direct_tool_target": {"const": false},
+        "handoff_chain": {"type": "string", "minLength": 1},
+        "owner_review_required": {"const": true},
+        "default_enabled": {"const": false},
+        "notes": {"type": "string", "minLength": 1},
+        "must_not": {"$ref": "#/$defs/stringArray"}
       },
       "additionalProperties": false
     },
     "qualityTier": {
       "type": "object",
-      "required": [
-        "description"
-      ],
+      "required": ["description"],
       "properties": {
-        "description": {
-          "type": "string",
-          "minLength": 1
-        }
+        "description": {"type": "string", "minLength": 1}
       },
       "additionalProperties": false
     },
     "skillInvocation": {
       "type": "object",
-      "required": [
-        "default_mode",
-        "overrides"
-      ],
+      "required": ["default_mode", "overrides"],
       "properties": {
-        "default_mode": {
-          "enum": [
-            "implicit",
-            "explicit-only"
-          ]
-        },
+        "default_mode": {"enum": ["implicit", "explicit-only"]},
         "overrides": {
           "type": "object",
-          "propertyNames": {
-            "pattern": "^[a-z0-9][a-z0-9-]*$"
-          },
-          "additionalProperties": {
-            "enum": [
-              "implicit",
-              "explicit-only"
-            ]
-          }
+          "propertyNames": {"pattern": "^[a-z0-9][a-z0-9-]*$"},
+          "additionalProperties": {"enum": ["implicit", "explicit-only"]}
         }
       },
       "additionalProperties": false
     },
     "taxonomyEntry": {
       "type": "object",
-      "required": [
-        "name",
-        "lifecycle_order",
-        "description"
-      ],
+      "required": ["name", "lifecycle_order", "description"],
       "properties": {
-        "name": {
-          "type": "string",
-          "pattern": "^[a-z0-9][a-z0-9_-]*$"
-        },
-        "lifecycle_order": {
-          "type": "integer",
-          "minimum": 0
-        },
-        "description": {
-          "type": "string",
-          "minLength": 1
-        }
+        "name": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_-]*$"},
+        "lifecycle_order": {"type": "integer", "minimum": 0},
+        "description": {"type": "string", "minLength": 1}
       },
       "additionalProperties": false
     },
     "assetTaxonomy": {
       "type": "object",
-      "required": [
-        "skill_categories",
-        "workflow_types",
-        "skill_patterns",
-        "activation_modes"
-      ],
+      "required": ["skill_categories", "workflow_types", "skill_patterns", "activation_modes"],
       "properties": {
         "skill_categories": {
           "type": "array",
           "minItems": 1,
-          "items": {
-            "$ref": "#/$defs/taxonomyEntry"
-          }
+          "items": {"$ref": "#/$defs/taxonomyEntry"}
         },
         "workflow_types": {
           "type": "array",
           "minItems": 1,
-          "items": {
-            "$ref": "#/$defs/taxonomyEntry"
-          }
+          "items": {"$ref": "#/$defs/taxonomyEntry"}
         },
-        "skill_patterns": {
-          "$ref": "#/$defs/stringArray"
-        },
-        "activation_modes": {
-          "$ref": "#/$defs/stringArray"
-        }
+        "skill_patterns": {"$ref": "#/$defs/stringArray"},
+        "activation_modes": {"$ref": "#/$defs/stringArray"}
       },
       "additionalProperties": false
     },
     "knowledgeLayer": {
       "type": "object",
-      "required": [
-        "name",
-        "description",
-        "location"
-      ],
+      "required": ["name", "description", "location"],
       "properties": {
-        "name": {
-          "type": "string",
-          "pattern": "^[a-z0-9][a-z0-9-]*$"
-        },
-        "description": {
-          "type": "string",
-          "minLength": 1
-        },
-        "location": {
-          "type": "string",
-          "minLength": 1
-        }
+        "name": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "description": {"type": "string", "minLength": 1},
+        "location": {"type": "string", "minLength": 1}
       },
       "additionalProperties": false
     },
     "knowledgeDescriptor": {
       "type": "object",
-      "required": [
-        "description"
-      ],
+      "required": ["description"],
       "properties": {
-        "description": {
-          "type": "string",
-          "minLength": 1
-        },
-        "location": {
-          "type": "string",
-          "minLength": 1
-        }
+        "description": {"type": "string", "minLength": 1},
+        "location": {"type": "string", "minLength": 1}
       },
       "additionalProperties": false
     },
@@ -474,40 +292,20 @@
       "oneOf": [
         {
           "type": "object",
-          "required": [
-            "description",
-            "max_tokens",
-            "files"
-          ],
+          "required": ["description", "max_tokens", "files"],
           "properties": {
-            "description": {
-              "type": "string",
-              "minLength": 1
-            },
-            "max_tokens": {
-              "type": "integer",
-              "minimum": 1
-            },
-            "files": {
-              "$ref": "#/$defs/stringArray"
-            }
+            "description": {"type": "string", "minLength": 1},
+            "max_tokens": {"type": "integer", "minimum": 1},
+            "files": {"$ref": "#/$defs/stringArray"}
           },
           "additionalProperties": false
         },
         {
           "type": "object",
-          "required": [
-            "description",
-            "sources"
-          ],
+          "required": ["description", "sources"],
           "properties": {
-            "description": {
-              "type": "string",
-              "minLength": 1
-            },
-            "sources": {
-              "$ref": "#/$defs/stringArray"
-            }
+            "description": {"type": "string", "minLength": 1},
+            "sources": {"$ref": "#/$defs/stringArray"}
           },
           "additionalProperties": false
         }
@@ -515,272 +313,123 @@
     },
     "changeSet": {
       "type": "object",
-      "required": [
-        "name",
-        "description",
-        "root",
-        "archive_root",
-        "commands",
-        "required_files"
-      ],
+      "required": ["name", "description", "root", "archive_root", "commands", "required_files"],
       "properties": {
-        "name": {
-          "type": "string",
-          "pattern": "^[a-z0-9][a-z0-9-]*$"
-        },
-        "description": {
-          "type": "string",
-          "minLength": 1
-        },
-        "root": {
-          "type": "string",
-          "minLength": 1
-        },
-        "archive_root": {
-          "type": "string",
-          "minLength": 1
-        },
+        "name": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "description": {"type": "string", "minLength": 1},
+        "root": {"type": "string", "minLength": 1},
+        "archive_root": {"type": "string", "minLength": 1},
         "commands": {
           "type": "array",
           "minItems": 1,
-          "items": {
-            "type": "string",
-            "pattern": "^rtk "
-          },
+          "items": {"type": "string", "pattern": "^rtk "},
           "uniqueItems": true
         },
-        "required_files": {
-          "$ref": "#/$defs/stringArray"
-        }
+        "required_files": {"$ref": "#/$defs/stringArray"}
       },
       "additionalProperties": false
     },
     "install": {
       "type": "object",
-      "required": [
-        "default_mode",
-        "supported_modes",
-        "backup_before_install",
-        "lock_version"
-      ],
+      "required": ["default_mode", "supported_modes", "backup_before_install", "lock_version"],
       "properties": {
-        "default_mode": {
-          "const": "copy"
-        },
-        "supported_modes": {
-          "const": [
-            "copy"
-          ]
-        },
-        "backup_before_install": {
-          "type": "boolean"
-        },
-        "lock_version": {
-          "type": "boolean"
-        }
+        "default_mode": {"const": "copy"},
+        "supported_modes": {"const": ["copy"]},
+        "backup_before_install": {"type": "boolean"},
+        "lock_version": {"type": "boolean"}
       },
       "additionalProperties": false
     },
     "routingIntent": {
       "type": "object",
-      "required": [
-        "intent",
-        "intent_zh",
-        "primary_skill",
-        "supporting_skills"
-      ],
+      "required": ["intent", "intent_zh", "primary_skill", "supporting_skills"],
       "properties": {
-        "intent": {
-          "type": "string",
-          "pattern": "^[a-z0-9][a-z0-9_]*$"
-        },
-        "intent_zh": {
-          "type": "string",
-          "minLength": 1
-        },
-        "primary_skill": {
-          "type": "string",
-          "pattern": "^[a-z0-9][a-z0-9-]*$"
-        },
-        "supporting_skills": {
-          "$ref": "#/$defs/assetNameArray"
-        },
-        "fallback_skills": {
-          "$ref": "#/$defs/assetNameArray"
-        },
-        "mutually_exclusive": {
-          "$ref": "#/$defs/assetNameArray"
-        },
-        "availability": {
-          "enum": [
-            "optional-skill-required"
-          ]
-        },
-        "task_mode": {
-          "$ref": "#/$defs/taskModeName"
-        },
-        "mutation_permission": {
-          "$ref": "#/$defs/mutationPermission"
-        },
-        "risk": {
-          "enum": [
-            "low",
-            "medium",
-            "high",
-            "unknown"
-          ]
-        },
+        "intent": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_]*$"},
+        "intent_zh": {"type": "string", "minLength": 1},
+        "primary_skill": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "supporting_skills": {"$ref": "#/$defs/assetNameArray"},
+        "fallback_skills": {"$ref": "#/$defs/assetNameArray"},
+        "mutually_exclusive": {"$ref": "#/$defs/assetNameArray"},
+        "availability": {"enum": ["optional-skill-required"]},
+        "task_mode": {"$ref": "#/$defs/taskModeName"},
+        "mutation_permission": {"$ref": "#/$defs/mutationPermission"},
+        "risk": {"enum": ["low", "medium", "high", "unknown"]},
         "profile_availability": {
-          "enum": [
-            "fallback-profile",
-            "optional-skill-required",
-            "explicit-profile-required"
-          ]
+          "enum": ["fallback-profile", "optional-skill-required", "explicit-profile-required"]
         },
-        "required_evidence": {
-          "$ref": "#/$defs/stringArray"
-        },
+        "required_evidence": {"$ref": "#/$defs/stringArray"},
         "negated_intents": {
           "type": "array",
-          "items": {
-            "$ref": "#/$defs/negatedIntent"
-          },
+          "items": {"$ref": "#/$defs/negatedIntent"},
           "uniqueItems": true
         }
       },
       "dependentRequired": {
-        "task_mode": [
-          "mutation_permission"
-        ],
-        "mutation_permission": [
-          "task_mode"
-        ]
+        "task_mode": ["mutation_permission"],
+        "mutation_permission": ["task_mode"]
       },
       "allOf": [
         {
           "if": {
             "anyOf": [
-              {
-                "required": [
-                  "task_mode"
-                ]
-              },
-              {
-                "required": [
-                  "mutation_permission"
-                ]
-              }
+              {"required": ["task_mode"]},
+              {"required": ["mutation_permission"]}
             ]
           },
-          "then": {
-            "$ref": "#/$defs/taskModePermissionPair"
-          }
+          "then": {"$ref": "#/$defs/taskModePermissionPair"}
         }
       ],
       "additionalProperties": false
     },
     "taskModeName": {
-      "enum": [
-        "needs-triage",
-        "readonly",
-        "implementation",
-        "debugging",
-        "review",
-        "release"
-      ]
+      "enum": ["needs-triage", "readonly", "implementation", "debugging", "review", "release"]
     },
     "mutationPermission": {
-      "enum": [
-        "deny",
-        "workspace-write",
-        "explicit-authorization-required"
-      ]
+      "enum": ["deny", "workspace-write", "explicit-authorization-required"]
     },
     "taskModePermissionPair": {
       "oneOf": [
         {
           "properties": {
-            "task_mode": {
-              "const": "needs-triage"
-            },
-            "mutation_permission": {
-              "const": "deny"
-            }
+            "task_mode": {"const": "needs-triage"},
+            "mutation_permission": {"const": "deny"}
           },
-          "required": [
-            "task_mode",
-            "mutation_permission"
-          ]
+          "required": ["task_mode", "mutation_permission"]
         },
         {
           "properties": {
-            "task_mode": {
-              "const": "readonly"
-            },
-            "mutation_permission": {
-              "const": "deny"
-            }
+            "task_mode": {"const": "readonly"},
+            "mutation_permission": {"const": "deny"}
           },
-          "required": [
-            "task_mode",
-            "mutation_permission"
-          ]
+          "required": ["task_mode", "mutation_permission"]
         },
         {
           "properties": {
-            "task_mode": {
-              "const": "implementation"
-            },
-            "mutation_permission": {
-              "const": "workspace-write"
-            }
+            "task_mode": {"const": "implementation"},
+            "mutation_permission": {"const": "workspace-write"}
           },
-          "required": [
-            "task_mode",
-            "mutation_permission"
-          ]
+          "required": ["task_mode", "mutation_permission"]
         },
         {
           "properties": {
-            "task_mode": {
-              "const": "debugging"
-            },
-            "mutation_permission": {
-              "const": "deny"
-            }
+            "task_mode": {"const": "debugging"},
+            "mutation_permission": {"const": "deny"}
           },
-          "required": [
-            "task_mode",
-            "mutation_permission"
-          ]
+          "required": ["task_mode", "mutation_permission"]
         },
         {
           "properties": {
-            "task_mode": {
-              "const": "review"
-            },
-            "mutation_permission": {
-              "const": "deny"
-            }
+            "task_mode": {"const": "review"},
+            "mutation_permission": {"const": "deny"}
           },
-          "required": [
-            "task_mode",
-            "mutation_permission"
-          ]
+          "required": ["task_mode", "mutation_permission"]
         },
         {
           "properties": {
-            "task_mode": {
-              "const": "release"
-            },
-            "mutation_permission": {
-              "const": "explicit-authorization-required"
-            }
+            "task_mode": {"const": "release"},
+            "mutation_permission": {"const": "explicit-authorization-required"}
           },
-          "required": [
-            "task_mode",
-            "mutation_permission"
-          ]
+          "required": ["task_mode", "mutation_permission"]
         }
       ]
     },
@@ -794,105 +443,50 @@
         "required_evidence"
       ],
       "properties": {
-        "task_mode": {
-          "const": "needs-triage"
-        },
-        "mutation_permission": {
-          "const": "deny"
-        },
-        "risk": {
-          "const": "unknown"
-        },
-        "profile_availability": {
-          "const": "fallback-profile"
-        },
-        "required_evidence": {
-          "$ref": "#/$defs/stringArray"
-        }
+        "task_mode": {"const": "needs-triage"},
+        "mutation_permission": {"const": "deny"},
+        "risk": {"const": "unknown"},
+        "profile_availability": {"const": "fallback-profile"},
+        "required_evidence": {"$ref": "#/$defs/stringArray"}
       },
       "additionalProperties": false
     },
     "taskMode": {
       "type": "object",
-      "required": [
-        "task_mode",
-        "intent_zh",
-        "priority",
-        "mutation_permission"
-      ],
+      "required": ["task_mode", "intent_zh", "priority", "mutation_permission"],
       "properties": {
-        "task_mode": {
-          "$ref": "#/$defs/taskModeName"
-        },
-        "intent_zh": {
-          "type": "string",
-          "minLength": 1
-        },
-        "priority": {
-          "type": "integer",
-          "minimum": 0,
-          "maximum": 1000
-        },
-        "mutation_permission": {
-          "$ref": "#/$defs/mutationPermission"
-        }
+        "task_mode": {"$ref": "#/$defs/taskModeName"},
+        "intent_zh": {"type": "string", "minLength": 1},
+        "priority": {"type": "integer", "minimum": 0, "maximum": 1000},
+        "mutation_permission": {"$ref": "#/$defs/mutationPermission"}
       },
       "allOf": [
-        {
-          "$ref": "#/$defs/taskModePermissionPair"
-        }
+        {"$ref": "#/$defs/taskModePermissionPair"}
       ],
       "additionalProperties": false
     },
     "artifactModeMapping": {
       "type": "object",
-      "required": [
-        "needs-triage",
-        "readonly",
-        "implementation",
-        "debugging",
-        "review",
-        "release"
-      ],
+      "required": ["needs-triage", "readonly", "implementation", "debugging", "review", "release"],
       "properties": {
-        "needs-triage": {
-          "type": "null"
-        },
-        "readonly": {
-          "const": "readonly"
-        },
-        "implementation": {
-          "const": "implementation"
-        },
-        "debugging": {
-          "const": "readonly"
-        },
-        "review": {
-          "const": "readonly"
-        },
-        "release": {
-          "const": "release"
-        }
+        "needs-triage": {"type": "null"},
+        "readonly": {"const": "readonly"},
+        "implementation": {"const": "implementation"},
+        "debugging": {"const": "readonly"},
+        "review": {"const": "readonly"},
+        "release": {"const": "release"}
       },
       "additionalProperties": false
     },
     "negatedIntent": {
       "type": "object",
-      "required": [
-        "name",
-        "all_of"
-      ],
+      "required": ["name", "all_of"],
       "properties": {
-        "name": {
-          "type": "string",
-          "pattern": "^[a-z0-9][a-z0-9_]*$"
-        },
+        "name": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_]*$"},
         "all_of": {
           "type": "array",
           "minItems": 1,
-          "items": {
-            "$ref": "#/$defs/negatedIntentCondition"
-          },
+          "items": {"$ref": "#/$defs/negatedIntentCondition"},
           "uniqueItems": true
         }
       },
@@ -900,54 +494,24 @@
     },
     "negatedIntentCondition": {
       "type": "object",
-      "required": [
-        "phrase_class",
-        "polarity"
-      ],
+      "required": ["phrase_class", "polarity"],
       "properties": {
         "phrase_class": {
-          "enum": [
-            "readonly_scope",
-            "generic_execution",
-            "planning_action",
-            "debugging_action",
-            "release_action"
-          ]
+          "enum": ["readonly_scope", "generic_execution", "planning_action", "debugging_action", "release_action"]
         },
-        "polarity": {
-          "enum": [
-            "positive",
-            "negated"
-          ]
-        }
+        "polarity": {"enum": ["positive", "negated"]}
       },
       "additionalProperties": false
     },
     "routingPhraseClasses": {
       "type": "object",
-      "required": [
-        "readonly_scope",
-        "generic_execution",
-        "planning_action",
-        "debugging_action",
-        "release_action"
-      ],
+      "required": ["readonly_scope", "generic_execution", "planning_action", "debugging_action", "release_action"],
       "properties": {
-        "readonly_scope": {
-          "$ref": "#/$defs/stringArray"
-        },
-        "generic_execution": {
-          "$ref": "#/$defs/stringArray"
-        },
-        "planning_action": {
-          "$ref": "#/$defs/stringArray"
-        },
-        "debugging_action": {
-          "$ref": "#/$defs/stringArray"
-        },
-        "release_action": {
-          "$ref": "#/$defs/stringArray"
-        }
+        "readonly_scope": {"$ref": "#/$defs/stringArray"},
+        "generic_execution": {"$ref": "#/$defs/stringArray"},
+        "planning_action": {"$ref": "#/$defs/stringArray"},
+        "debugging_action": {"$ref": "#/$defs/stringArray"},
+        "release_action": {"$ref": "#/$defs/stringArray"}
       },
       "additionalProperties": false
     },
@@ -965,118 +529,58 @@
           "type": "array",
           "minItems": 3,
           "uniqueItems": true,
-          "items": {
-            "type": "string",
-            "minLength": 1
-          },
+          "items": {"type": "string", "minLength": 1},
           "allOf": [
-            {
-              "contains": {
-                "const": "别"
-              }
-            },
-            {
-              "contains": {
-                "const": "不要"
-              }
-            },
-            {
-              "contains": {
-                "const": "请勿"
-              }
-            }
+            {"contains": {"const": "别"}},
+            {"contains": {"const": "不要"}},
+            {"contains": {"const": "请勿"}}
           ]
         },
         "not_required": {
           "type": "array",
           "minItems": 2,
           "uniqueItems": true,
-          "items": {
-            "type": "string",
-            "minLength": 1
-          },
+          "items": {"type": "string", "minLength": 1},
           "allOf": [
-            {
-              "contains": {
-                "const": "不需要"
-              }
-            },
-            {
-              "contains": {
-                "const": "无需"
-              }
-            }
+            {"contains": {"const": "不需要"}},
+            {"contains": {"const": "无需"}}
           ]
         },
         "execution_denial": {
           "type": "array",
           "minItems": 2,
           "uniqueItems": true,
-          "items": {
-            "type": "string",
-            "minLength": 1
-          },
+          "items": {"type": "string", "minLength": 1},
           "allOf": [
-            {
-              "contains": {
-                "const": "不执行"
-              }
-            },
-            {
-              "contains": {
-                "const": "不做"
-              }
-            }
+            {"contains": {"const": "不执行"}},
+            {"contains": {"const": "不做"}}
           ]
         },
         "contrastive_prohibition": {
           "type": "array",
           "minItems": 1,
           "uniqueItems": true,
-          "items": {
-            "type": "string",
-            "minLength": 1
-          },
-          "contains": {
-            "const": "不过别"
-          }
+          "items": {"type": "string", "minLength": 1},
+          "contains": {"const": "不过别"}
         },
         "generic_negation": {
           "type": "array",
           "minItems": 1,
           "uniqueItems": true,
-          "items": {
-            "type": "string",
-            "minLength": 1
-          },
-          "contains": {
-            "const": "不"
-          }
+          "items": {"type": "string", "minLength": 1},
+          "contains": {"const": "不"}
         }
       },
       "additionalProperties": false
     },
     "routingAbstain": {
       "type": "object",
-      "required": [
-        "enabled",
-        "decision",
-        "reason",
-        "mutation_permission"
-      ],
+      "required": ["enabled", "decision", "reason", "mutation_permission"],
       "properties": {
-        "enabled": {
-          "const": true
-        },
-        "decision": {
-          "const": "abstain"
-        },
-        "reason": {
-          "const": "needs-triage"
-        },
-        "mutation_permission": {
-          "const": "deny"
-        }
+        "enabled": {"const": true},
+        "decision": {"const": "abstain"},
+        "reason": {"const": "needs-triage"},
+        "mutation_permission": {"const": "deny"}
       },
       "additionalProperties": false
     },
@@ -1095,45 +599,24 @@
         "intents"
       ],
       "properties": {
-        "enabled": {
-          "const": true
-        },
-        "ir_version": {
-          "const": "routing-ir/v2"
-        },
-        "fallback_profile": {
-          "type": "string",
-          "pattern": "^[a-z0-9][a-z0-9-]*$"
-        },
-        "defaults": {
-          "$ref": "#/$defs/routingDefaults"
-        },
-        "phrase_classes": {
-          "$ref": "#/$defs/routingPhraseClasses"
-        },
-        "negation_phrase_classes": {
-          "$ref": "#/$defs/negationPhraseClasses"
-        },
+        "enabled": {"const": true},
+        "ir_version": {"const": "routing-ir/v2"},
+        "fallback_profile": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "defaults": {"$ref": "#/$defs/routingDefaults"},
+        "phrase_classes": {"$ref": "#/$defs/routingPhraseClasses"},
+        "negation_phrase_classes": {"$ref": "#/$defs/negationPhraseClasses"},
         "task_modes": {
           "type": "array",
           "minItems": 5,
           "maxItems": 5,
           "uniqueItems": true,
-          "items": {
-            "$ref": "#/$defs/taskMode"
-          },
+          "items": {"$ref": "#/$defs/taskMode"},
           "allOf": [
             {
               "contains": {
                 "type": "object",
-                "properties": {
-                  "task_mode": {
-                    "const": "readonly"
-                  }
-                },
-                "required": [
-                  "task_mode"
-                ]
+                "properties": {"task_mode": {"const": "readonly"}},
+                "required": ["task_mode"]
               },
               "minContains": 1,
               "maxContains": 1
@@ -1141,14 +624,8 @@
             {
               "contains": {
                 "type": "object",
-                "properties": {
-                  "task_mode": {
-                    "const": "implementation"
-                  }
-                },
-                "required": [
-                  "task_mode"
-                ]
+                "properties": {"task_mode": {"const": "implementation"}},
+                "required": ["task_mode"]
               },
               "minContains": 1,
               "maxContains": 1
@@ -1156,14 +633,8 @@
             {
               "contains": {
                 "type": "object",
-                "properties": {
-                  "task_mode": {
-                    "const": "debugging"
-                  }
-                },
-                "required": [
-                  "task_mode"
-                ]
+                "properties": {"task_mode": {"const": "debugging"}},
+                "required": ["task_mode"]
               },
               "minContains": 1,
               "maxContains": 1
@@ -1171,14 +642,8 @@
             {
               "contains": {
                 "type": "object",
-                "properties": {
-                  "task_mode": {
-                    "const": "review"
-                  }
-                },
-                "required": [
-                  "task_mode"
-                ]
+                "properties": {"task_mode": {"const": "review"}},
+                "required": ["task_mode"]
               },
               "minContains": 1,
               "maxContains": 1
@@ -1186,49 +651,30 @@
             {
               "contains": {
                 "type": "object",
-                "properties": {
-                  "task_mode": {
-                    "const": "release"
-                  }
-                },
-                "required": [
-                  "task_mode"
-                ]
+                "properties": {"task_mode": {"const": "release"}},
+                "required": ["task_mode"]
               },
               "minContains": 1,
               "maxContains": 1
             }
           ]
         },
-        "artifact_mode_mapping": {
-          "$ref": "#/$defs/artifactModeMapping"
-        },
-        "abstain": {
-          "$ref": "#/$defs/routingAbstain"
-        },
+        "artifact_mode_mapping": {"$ref": "#/$defs/artifactModeMapping"},
+        "abstain": {"$ref": "#/$defs/routingAbstain"},
         "intents": {
           "type": "array",
           "minItems": 1,
-          "items": {
-            "$ref": "#/$defs/routingIntent"
-          }
+          "items": {"$ref": "#/$defs/routingIntent"}
         }
       },
       "additionalProperties": false
     },
     "dependencies": {
       "type": "object",
-      "required": [
-        "required",
-        "optional"
-      ],
+      "required": ["required", "optional"],
       "properties": {
-        "required": {
-          "$ref": "#/$defs/stringArray"
-        },
-        "optional": {
-          "$ref": "#/$defs/stringArray"
-        }
+        "required": {"$ref": "#/$defs/stringArray"},
+        "optional": {"$ref": "#/$defs/stringArray"}
       },
       "additionalProperties": false
     },
@@ -1244,279 +690,55 @@
         "negative_examples"
       ],
       "properties": {
-        "name": {
-          "type": "string",
-          "pattern": "^[a-z0-9][a-z0-9_]*$"
-        },
-        "description": {
-          "type": "string",
-          "minLength": 1
-        },
-        "routing_intent": {
-          "type": "string",
-          "pattern": "^[a-z0-9][a-z0-9_]*$"
-        },
-        "workflow": {
-          "type": "string",
-          "minLength": 1
-        },
-        "profiles": {
-          "$ref": "#/$defs/assetNameArray"
-        },
-        "positive_examples": {
-          "$ref": "#/$defs/stringArray"
-        },
-        "negative_examples": {
-          "$ref": "#/$defs/stringArray"
-        }
+        "name": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_]*$"},
+        "description": {"type": "string", "minLength": 1},
+        "routing_intent": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_]*$"},
+        "workflow": {"type": "string", "minLength": 1},
+        "profiles": {"$ref": "#/$defs/assetNameArray"},
+        "positive_examples": {"$ref": "#/$defs/stringArray"},
+        "negative_examples": {"$ref": "#/$defs/stringArray"}
       },
       "allOf": [
-        {
-          "$ref": "#/$defs/skillRoutingProjectionRef"
-        }
+        {"$ref": "#/$defs/skillRoutingProjectionRef"}
       ],
       "additionalProperties": false
     },
     "skillRoutingProjectionRef": {
       "oneOf": [
-        {
-          "properties": {
-            "name": {
-              "const": "runtime_routing"
-            },
-            "routing_intent": {
-              "const": "runtime_router"
-            }
-          },
-          "required": [
-            "name",
-            "routing_intent"
-          ]
-        },
-        {
-          "properties": {
-            "name": {
-              "const": "unclear_requirement"
-            },
-            "routing_intent": {
-              "const": "requirements_triage"
-            }
-          },
-          "required": [
-            "name",
-            "routing_intent"
-          ]
-        },
-        {
-          "properties": {
-            "name": {
-              "const": "planning_only"
-            },
-            "routing_intent": {
-              "const": "plan_lite"
-            }
-          },
-          "required": [
-            "name",
-            "routing_intent"
-          ]
-        },
-        {
-          "properties": {
-            "name": {
-              "const": "task_breakdown"
-            },
-            "routing_intent": {
-              "const": "task_breakdown"
-            }
-          },
-          "required": [
-            "name",
-            "routing_intent"
-          ]
-        },
-        {
-          "properties": {
-            "name": {
-              "const": "long_execution"
-            },
-            "routing_intent": {
-              "const": "planning_execution"
-            }
-          },
-          "required": [
-            "name",
-            "routing_intent"
-          ]
-        },
-        {
-          "properties": {
-            "name": {
-              "const": "unknown_root_cause_bug"
-            },
-            "routing_intent": {
-              "const": "systematic_debugging"
-            }
-          },
-          "required": [
-            "name",
-            "routing_intent"
-          ]
-        },
-        {
-          "properties": {
-            "name": {
-              "const": "embedded_log_analysis"
-            },
-            "routing_intent": {
-              "const": "embedded_remote_debug_log_triage"
-            }
-          },
-          "required": [
-            "name",
-            "routing_intent"
-          ]
-        },
-        {
-          "properties": {
-            "name": {
-              "const": "embedded_core_dump"
-            },
-            "routing_intent": {
-              "const": "offline_core_dump_triage"
-            }
-          },
-          "required": [
-            "name",
-            "routing_intent"
-          ]
-        },
-        {
-          "properties": {
-            "name": {
-              "const": "embedded_debug_transport"
-            },
-            "routing_intent": {
-              "const": "embedded_debug_transport"
-            }
-          },
-          "required": [
-            "name",
-            "routing_intent"
-          ]
-        },
-        {
-          "properties": {
-            "name": {
-              "const": "completion_gate"
-            },
-            "routing_intent": {
-              "const": "verification_before_completion"
-            }
-          },
-          "required": [
-            "name",
-            "routing_intent"
-          ]
-        },
-        {
-          "properties": {
-            "name": {
-              "const": "commit_pr_gate"
-            },
-            "routing_intent": {
-              "const": "commit_pr_quality_gate"
-            }
-          },
-          "required": [
-            "name",
-            "routing_intent"
-          ]
-        },
-        {
-          "properties": {
-            "name": {
-              "const": "release_versioning"
-            },
-            "routing_intent": {
-              "const": "release_versioning"
-            }
-          },
-          "required": [
-            "name",
-            "routing_intent"
-          ]
-        },
-        {
-          "properties": {
-            "name": {
-              "const": "external_practice_absorption"
-            },
-            "routing_intent": {
-              "const": "external_practice_absorption"
-            }
-          },
-          "required": [
-            "name",
-            "routing_intent"
-          ]
-        },
-        {
-          "properties": {
-            "name": {
-              "const": "skill_governance"
-            },
-            "routing_intent": {
-              "const": "skill_composition_governance"
-            }
-          },
-          "required": [
-            "name",
-            "routing_intent"
-          ]
-        }
+        {"properties": {"name": {"const": "runtime_routing"}, "routing_intent": {"const": "runtime_router"}}, "required": ["name", "routing_intent"]},
+        {"properties": {"name": {"const": "unclear_requirement"}, "routing_intent": {"const": "requirements_triage"}}, "required": ["name", "routing_intent"]},
+        {"properties": {"name": {"const": "planning_only"}, "routing_intent": {"const": "plan_lite"}}, "required": ["name", "routing_intent"]},
+        {"properties": {"name": {"const": "task_breakdown"}, "routing_intent": {"const": "task_breakdown"}}, "required": ["name", "routing_intent"]},
+        {"properties": {"name": {"const": "long_execution"}, "routing_intent": {"const": "planning_execution"}}, "required": ["name", "routing_intent"]},
+        {"properties": {"name": {"const": "unknown_root_cause_bug"}, "routing_intent": {"const": "systematic_debugging"}}, "required": ["name", "routing_intent"]},
+        {"properties": {"name": {"const": "embedded_log_analysis"}, "routing_intent": {"const": "embedded_remote_debug_log_triage"}}, "required": ["name", "routing_intent"]},
+        {"properties": {"name": {"const": "embedded_core_dump"}, "routing_intent": {"const": "offline_core_dump_triage"}}, "required": ["name", "routing_intent"]},
+        {"properties": {"name": {"const": "embedded_debug_transport"}, "routing_intent": {"const": "embedded_debug_transport"}}, "required": ["name", "routing_intent"]},
+        {"properties": {"name": {"const": "completion_gate"}, "routing_intent": {"const": "verification_before_completion"}}, "required": ["name", "routing_intent"]},
+        {"properties": {"name": {"const": "commit_pr_gate"}, "routing_intent": {"const": "commit_pr_quality_gate"}}, "required": ["name", "routing_intent"]},
+        {"properties": {"name": {"const": "release_versioning"}, "routing_intent": {"const": "release_versioning"}}, "required": ["name", "routing_intent"]},
+        {"properties": {"name": {"const": "external_practice_absorption"}, "routing_intent": {"const": "external_practice_absorption"}}, "required": ["name", "routing_intent"]},
+        {"properties": {"name": {"const": "skill_governance"}, "routing_intent": {"const": "skill_composition_governance"}}, "required": ["name", "routing_intent"]}
       ]
     },
     "asset": {
       "type": "object",
-      "required": [
-        "name",
-        "path"
-      ],
+      "required": ["name", "path"],
       "properties": {
-        "name": {
-          "type": "string",
-          "pattern": "^[a-z0-9][a-z0-9-]*$"
-        },
-        "path": {
-          "type": "string",
-          "minLength": 1
-        },
-        "description": {
-          "type": "string",
-          "minLength": 1
-        }
+        "name": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "path": {"type": "string", "minLength": 1},
+        "description": {"type": "string", "minLength": 1}
       }
     },
     "agent": {
       "allOf": [
-        {
-          "$ref": "#/$defs/asset"
-        },
+        {"$ref": "#/$defs/asset"},
         {
           "type": "object",
-          "required": [
-            "description",
-            "permission_profile"
-          ],
+          "required": ["description", "permission_profile"],
           "properties": {
             "permission_profile": {
-              "enum": [
-                "read-only",
-                "code-write",
-                "build-release",
-                "diagnostic"
-              ]
+              "enum": ["read-only", "code-write", "build-release", "diagnostic"]
             }
           }
         }
@@ -1524,36 +746,19 @@
     },
     "profile": {
       "type": "object",
-      "required": [
-        "description",
-        "trigger_examples"
-      ],
+      "required": ["description", "trigger_examples"],
       "properties": {
-        "description": {
-          "type": "string"
-        },
-        "trigger_examples": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "extends": {
-          "type": "string",
-          "pattern": "^[a-z0-9][a-z0-9-]*$"
-        },
+        "description": {"type": "string"},
+        "trigger_examples": {"type": "array", "items": {"type": "string"}},
+        "extends": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
         "include_agents": {
           "type": "array",
-          "items": {
-            "type": "string"
-          },
+          "items": {"type": "string"},
           "uniqueItems": true
         },
         "include_skills": {
           "type": "array",
-          "items": {
-            "type": "string"
-          },
+          "items": {"type": "string"},
           "uniqueItems": true
         }
       },
@@ -1572,16 +777,8 @@
         "detect"
       ],
       "properties": {
-        "display_name": {
-          "type": "string",
-          "minLength": 1
-        },
-        "status": {
-          "enum": [
-            "experimental",
-            "stable"
-          ]
-        },
+        "display_name": {"type": "string", "minLength": 1},
+        "status": {"enum": ["experimental", "stable"]},
         "contract": {
           "type": "string",
           "pattern": "^manifests/target-contracts/[a-z0-9-]+\\.json$"
@@ -1590,17 +787,9 @@
           "type": "array",
           "minItems": 1,
           "uniqueItems": true,
-          "items": {
-            "enum": [
-              "agent",
-              "skill"
-            ]
-          }
+          "items": {"enum": ["agent", "skill"]}
         },
-        "default_root": {
-          "type": "string",
-          "minLength": 1
-        },
+        "default_root": {"type": "string", "minLength": 1},
         "agents_dir": {
           "type": "string",
           "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
@@ -1612,10 +801,7 @@
         "detect": {
           "type": "array",
           "minItems": 1,
-          "items": {
-            "type": "string",
-            "minLength": 1
-          }
+          "items": {"type": "string", "minLength": 1}
         }
       },
       "additionalProperties": false
