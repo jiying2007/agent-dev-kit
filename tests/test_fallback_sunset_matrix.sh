@@ -2,17 +2,28 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-output=""
-rc=0
-output="$("${ROOT}/scripts/check-fallback-sunset.sh" --summary-json 2>&1)" || rc=$?
 
-[[ "${rc}" -eq 3 ]] || {
-  echo "[FAIL] retired compatibility gate must fail closed with exit 3" >&2
-  exit 1
-}
-[[ "${output}" == *'"status":"removed"'* && "${output}" == *'"compatibility_enabled":false'* ]] || {
-  echo "[FAIL] retired compatibility gate output mismatch: ${output}" >&2
+[[ ! -e "$ROOT/scripts/check-fallback-sunset.sh" ]] || {
+  echo "[FAIL] retired fallback tombstone script returned" >&2
   exit 1
 }
 
-echo "[PASS] external runtime fallback compatibility remains retired"
+python3 - "$ROOT/docs/reference/fallback-sunset-matrix.tsv" "$ROOT/docs/reference/fallback-sunset-matrix.md" <<'PY'
+import csv
+import sys
+from pathlib import Path
+
+tsv = Path(sys.argv[1])
+md = Path(sys.argv[2])
+rows = list(csv.DictReader(tsv.read_text(encoding="utf-8").splitlines(), delimiter="\t"))
+assert len(rows) == 1, rows
+row = rows[0]
+assert row["status"] == "retired", row
+assert row["compatibility_enabled"] == "false", row
+assert row["replacement"] == "ADK-native-routing-and-runtime-footprint", row
+text = md.read_text(encoding="utf-8")
+assert "已于 2026-08-31 退役" in text
+assert "不再提供 Superpowers runtime fallback" in text
+PY
+
+echo "[PASS] fallback remains retired without an executable tombstone"
