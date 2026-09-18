@@ -1,14 +1,12 @@
-"""CLI runtime substrate: environment, compatibility bridge, and stable output I/O."""
+"""CLI runtime substrate: environment selection and stable output I/O."""
 
 from __future__ import annotations
 
 import json
 import os
-import subprocess
 import tempfile
-from collections.abc import Mapping
 from pathlib import Path
-from typing import Any, Sequence
+from typing import Any
 
 from .model import Manifest, ManifestError
 
