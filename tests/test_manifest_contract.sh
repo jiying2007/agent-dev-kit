@@ -28,6 +28,29 @@ assert re.fullmatch(r"[0-9a-f]{64}", data["canonical_sha256"]), data
 with open(sys.argv[2], encoding="utf-8") as handle:
     manifest = json.load(handle)
 assert data["version"] == manifest["version"], data
+assert all("depends_on" not in item for section in ("skills", "optional_skills") for item in manifest.get(section, []))
+assert "L2-phase-triggered" not in manifest["context_layers"]
+assert "L2-phase-triggered" not in manifest["embedded_context_layers"]
+PY
+
+python3 - "$ROOT/manifests/manifest.schema.json" "$ROOT/manifest.json" <<'PY'
+import copy
+import json
+import sys
+from jsonschema import Draft202012Validator
+
+schema=json.load(open(sys.argv[1], encoding="utf-8"))
+manifest=json.load(open(sys.argv[2], encoding="utf-8"))
+Draft202012Validator.check_schema(schema)
+Draft202012Validator(schema).validate(manifest)
+
+probe=copy.deepcopy(manifest)
+probe["context_layers"]["L2-phase-triggered"]={
+    "description":"retired phase path mirror",
+    "triggers":{"review":["skills/adk-code-review-loop/"]},
+}
+errors=list(Draft202012Validator(schema).iter_errors(probe))
+assert errors, "manifest schema accepted retired phase trigger mirror"
 PY
 
 echo "[PASS] single Manifest SSOT contract"

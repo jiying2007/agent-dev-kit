@@ -5,7 +5,7 @@
       "id": "routing-intent",
       "version": "2",
       "owner": "routing",
-      "producer": "agent_dev_kit.matcher",
+      "producer": "agent_dev_kit.matcher_vnext",
       "consumers": [
         "runtime-control",
         "profiles",
@@ -36,7 +36,7 @@
       "id": "runtime-control-decision",
       "version": "2",
       "owner": "runtime-control",
-      "producer": "agent_dev_kit.runtime_control",
+      "producer": "agent_dev_kit.execution_policy",
       "consumers": [
         "workflow",
         "run-evidence"
@@ -160,7 +160,7 @@
     },
     {
       "id": "skill-relationships",
-      "version": "1",
+      "version": "2",
       "owner": "governance",
       "producer": "agent_dev_kit.skill_relationships",
       "consumers": [
@@ -169,14 +169,14 @@
         "validation"
       ],
       "stability": "experimental",
-      "compatibility": "strict",
-      "schema_path": "schemas/skill-relationship-contract-v1.schema.json",
-      "surface_path": "manifests/skill_relationship_contracts_v1.json",
+      "compatibility": "hard-cut",
+      "schema_path": "schemas/skill-relationship-contract-v2.schema.json",
+      "surface_path": "manifests/skill_relationship_contracts_v2.json",
       "evidence_class": "test"
     },
     {
       "id": "phase-context",
-      "version": "1",
+      "version": "2",
       "owner": "routing",
       "producer": "agent_dev_kit.phase_context",
       "consumers": [
@@ -185,9 +185,9 @@
         "validation"
       ],
       "stability": "experimental",
-      "compatibility": "strict",
-      "schema_path": "schemas/phase-context-contract-v1.schema.json",
-      "surface_path": "manifests/phase_context_contract.json",
+      "compatibility": "hard-cut",
+      "schema_path": "schemas/phase-context-contract-v2.schema.json",
+      "surface_path": "manifests/phase_context_contract_v2.json",
       "evidence_class": "test"
     },
     {

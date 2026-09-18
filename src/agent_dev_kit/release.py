@@ -44,7 +44,7 @@ from .model import Manifest, ManifestError, sha256_file, sha256_tree
 
 def check_release(manifest: Manifest) -> Dict[str, Any]:
     failures = manifest.validate(strict=True)
-    supported_adapters = {"claude-code", "hermes-agent", "opencode"}
+    supported_adapters = {"claude-code", "opencode"}
     unsupported = sorted(set(manifest.direct_targets()).difference(supported_adapters))
     if unsupported:
         failures.append("missing compiler adapters: {}".format(", ".join(unsupported)))

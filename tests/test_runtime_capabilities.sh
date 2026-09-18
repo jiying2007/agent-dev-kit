@@ -6,7 +6,6 @@ ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 "$ROOT_DIR/scripts/check-runtime-capabilities.sh" >/dev/null
 "$ROOT_DIR/scripts/check-runtime-capabilities.sh" --summary-json | rg -q '"status":"pass"'
-"$ROOT_DIR/scripts/devkit.sh" runtime-capabilities --summary-json | rg -q '"failures":0'
 
 for fixture in "$ROOT_DIR"/fixtures/runtime-capabilities/pass/*.json; do
   "$ROOT_DIR/scripts/check-runtime-capabilities.sh" --fixture "$fixture" >/dev/null

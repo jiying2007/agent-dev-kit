@@ -51,21 +51,16 @@ bash scripts/devkit.sh validate --strict --summary-json
 
 当前 active surface 只接受 canonical `manifest.json`。历史 Manifest 镜像与一次性迁移工具已退出当前维护入口；历史迁移事实仅保留在版本化 change/archive 证据中。
 
-
 ## manifest
 
-只读检查 canonical `manifest.json` 的 bounded-context composition 治理契约。`composition-check` 不写文件、不启用 runtime fragment loading、不创建第二 SSOT，也不把 reference composer 升级为 runtime generator；它只读取当前 canonical manifest 与 composition policy，并验证 owner partition -> deterministic compose 后语义与 canonical digest 完全一致。
+只读检查 canonical `manifest.json` 的 bounded-context composition 治理契约。该命令不写文件、不启用 runtime fragment loading、不创建第二 SSOT；它只读取当前 canonical manifest 与 composition policy，并验证 owner partition -> deterministic compose 后语义与 canonical digest 完全一致。
 
 ```bash
 bash scripts/devkit.sh manifest composition-check
 bash scripts/devkit.sh manifest composition-check --summary-json
-bash scripts/devkit.sh manifest split-readiness
-bash scripts/devkit.sh manifest split-readiness --summary-json
 ```
 
-成功报告包含 canonical source、source/round-trip digest、owner domain count，以及 `runtime_enabled=false`、`writes=false`、`parallel_ssot_allowed=false`、`runtime_fragment_loading=false` 和 `composition_generator=null`。任何 policy、owner、canonical source、round-trip 语义或 digest 漂移都会 fail closed 并返回非零；该命令不接受 fragment path、`--write` 或生成输出参数。
-
-`split-readiness` 是物理拆分前的只读迁移门禁。当前 contract 故意返回 `status=blocked` / exit 2：只有 deliberate change `manifest-build-time-split` 达到 `review-passed`、显式声明 build-time generator/authoring mode，并具备 change-governance、可执行回退、双次确定性生成、严格 generated-output 校验、canonical digest 等价与 consumer-boundary 证据后，后续 contract migration 才有资格解除 blocker。本命令本身不会创建 `manifest-sections`、generator 或任何 runtime fragment loader。
+成功报告包含 canonical source、source/round-trip digest、owner domain count，以及 `runtime_enabled=false`、`writes=false` 和 `composition_generator=null`。任何 policy、owner、canonical source、round-trip 语义或 digest 漂移都会 fail closed 并返回非零。物理 manifest split、fragment loader 和 build-time composition generator 不属于当前产品契约；若未来重新引入，必须作为新的 versioned contract 独立设计，而不是复活隐藏兼容入口。
 
 ## doctor
 
@@ -113,34 +108,6 @@ bash scripts/devkit.sh lock clear --target /tmp/adk-live --expected-lock-id <loc
 
 `lock clear` 会拒绝本机仍存活的 owner；本机已退出的 owner 可按精确 lock ID 清理，远端或无法判活的 owner 必须达到 stale 阈值后才允许清理。工具仍要求先审阅 `lock status`，不能把 clear 当作 writer 抢占机制。
 
-## runtime-boundary
-
-检查 active runtime surface 是否保持通用 ADK 边界。
-
-```bash
-bash scripts/devkit.sh runtime-boundary
-bash scripts/devkit.sh runtime-boundary --summary-json
-```
-
-该门禁检查：
-
-- core 不声明平台专属默认 target。
-- direct `tool_targets` 与 `external_handoff_targets` 不重名、不共用 runtime 语义。
-- Codex 支持只能以 non-direct source-to-live handoff 表达，不能隐式进入 direct export target。
-- `reference_sources` 只能表示 citation/provenance/governance，不能表示 runtime enablement。
-- active 脚本和测试不暴露平台专属 handoff 命令。
-- 已下线兼容脚本不会作为 active path 回流。
-- 平台名只允许出现在 reference metadata、archive 或负向门禁中。
-
-## token-budget
-
-检查 active Skill 入口、active docs、高信号治理脚本、全量测试输出策略和上下文资产是否符合低 token 预算。
-
-```bash
-bash scripts/devkit.sh token-budget
-bash scripts/devkit.sh token-budget --summary-json
-```
-
 ## task-cost
 
 根据显式任务类型、风险、变更文件数、项目事实、长任务、shared contract 与外部写入信号生成确定性执行预算 receipt。输出包含 `micro | standard | complex | high-risk` 成本级别、上下文预算、计划/验证强度、归档候选要求和 Skill 使用校验；它不读取凭证，不执行任务，也不把成本估计升级为发布授权。
@@ -151,82 +118,6 @@ bash scripts/devkit.sh task-cost --task "发布候选" --task-type release --ris
 ```
 
 `--destructive` 会强制提升为 `high-risk`。声明的 Skill 与成本合同不匹配时返回非零；`--output` 只写调用方指定的 JSON 路径。
-
-## codify-governance
-
-检查交付后可复用模式沉淀门禁。该命令确认 AAR、完成前验证和 Codify Decision 模板都包含 reusable pattern、do-not-promote、owner review、rollback 和 verification evidence 字段。
-
-```bash
-bash scripts/devkit.sh codify-governance
-```
-
-## knowledge-compile
-
-检查知识编译三层模型。该命令确认 knowledge compile runbook、note 模板和 token context skill 同步声明 `raw_sources`、`maintained_wiki`、`schema`、`ingest/query/lint` 与 raw fallback 边界。
-
-```bash
-bash scripts/devkit.sh knowledge-compile
-```
-
-## reuse-before-rebuild
-
-检查新增资产前的复用优先门禁。该命令确认 upstream intake、skill curation、reuse decision 模板和 fixture 都要求先做 `existing_asset_search`，再选择 `use-as-is`、`adapt-existing`、`build-fresh` 或 `reference-only`。
-
-```bash
-bash scripts/devkit.sh reuse-before-rebuild
-```
-
-## context-experience
-
-检查渐进记忆检索与低 token profile。该命令确认 `search_index -> timeline_context -> observation_details` 只读披露流程、memory search result 模板、low-token profile 模板和安全例外保持一致。
-
-```bash
-bash scripts/devkit.sh context-experience
-```
-
-## official-docs-governance
-
-校验官方参考来源、freshness、promotion gate 和平台中立 ADK 契约。该命令治理的是 `reference_sources` 和 promoted contracts，不表示 ADK 绑定任何来源平台 runtime。
-
-```bash
-bash scripts/devkit.sh official-docs-governance
-bash scripts/devkit.sh official-docs-governance --summary-json
-```
-
-## runtime-capabilities
-
-校验官方或参考来源实践转化后的运行态能力门禁。该命令聚焦可执行检查，而不是资料登记本身：
-
-- permission profile lint baseline：禁止混用旧 sandbox 配置，要求 deny-read、glob depth、domain deny-wins、Unix socket allowlist 和危险网络默认禁用。
-- MCP runtime contract lint：要求 tool allowlist/denylist、timeout、approval mode、OAuth/callback/scope、凭证边界、dry-run/fallback。
-- subagent job evidence schema：要求 worker job、CSV fan-out、parent integration decision 和 nested subagent 默认禁用。
-- terminology lint baseline：用声明的 runtime surface glossary 对齐 agent、skill、plugin、automation、worktree、MCP server、permission profile 等术语。
-
-```bash
-bash scripts/devkit.sh runtime-capabilities
-bash scripts/devkit.sh runtime-capabilities --summary-json
-bash scripts/devkit.sh runtime-capabilities --fixture fixtures/runtime-capabilities/pass/permission-safe-profile.json
-```
-
-## harness-loop-engineering
-
-检查外部 harness/loop engineering 合同门禁。该命令确认 repo-task eval、CI gate、durable loop、coding agent loop、trace observability 和 guardrail handoff 只作为 method-only 证据吸收，不启用外部 runtime、hook、daemon 或自动写操作。
-
-新增或调整合同 fixture 时，先按 `templates/governance/contract-fixture.md` 填写 source mapping、positive fixture、negative fixture 和 rollback path，再按 `docs/runbooks/contract-fixture-authoring.md` 更新 manifest 与 checker。
-
-```bash
-bash scripts/devkit.sh harness-loop-engineering
-bash scripts/devkit.sh harness-loop-engineering --summary-json
-```
-
-## workflow-closure
-
-检查 workflow 引用的 agent/skill 是否都在目标 profile 闭包内。
-
-```bash
-bash scripts/devkit.sh workflow-closure --profile core
-bash scripts/devkit.sh workflow-closure --profile personal-core --extra-profile release-hardening --summary-json
-```
 
 ## goal
 
@@ -266,33 +157,6 @@ bash scripts/devkit.sh harness readiness --root /path/to/repo --as-of 2026-07-18
 
 维度、扫描预算与脱敏合同见 `manifests/harness_readiness_contracts.json`，吸收决策见 `docs/harness-engineering-analysis.md`。
 
-## file-modes
-
-检查 tracked 文件权限是否匹配 Git index。规则是 `100644` 不可执行，`100755` 可执行；文档、README、manifest、skill、template 默认不应带 executable bit。
-
-```bash
-bash scripts/devkit.sh file-modes
-bash scripts/devkit.sh file-modes --fix
-```
-
-该检查已纳入 `bash scripts/devkit.sh test`。
-
-## asset-taxonomy
-
-检查 Skill/Optional Skill 分类元数据、Workflow 类型与入口/退出证据、Profile include 顺序和 `skill_routing_matrix` 引用完整性。
-
-```bash
-bash scripts/devkit.sh asset-taxonomy
-```
-
-该检查会阻止：
-
-- skill 缺少 `category`、`lifecycle_order`、`stage_order`、`activation_mode` 或 `pattern`。
-- workflow 缺少 `workflow_type`、`lifecycle_order`、`entry_conditions` 或 `exit_evidence`。
-- manifest 中 `skills`、`optional_skills` 或 `workflows` 的物理顺序偏离生命周期或阶段顺序。
-- profile 的 `include_skills` 顺序偏离生命周期或阶段顺序。
-- routing matrix 引用不存在的 skill、workflow 或 profile。
-
 ## catalog
 
 生成或检索 Agent/Skill/Workflow/Profile 目录索引。
@@ -314,23 +178,23 @@ bash scripts/devkit.sh match --skill adk-requirements-triage --text "收到模�
 bash scripts/devkit.sh match --skill adk-incident-rca-report --scope optional-skill --text "出现线上故障且需要复盘闭环"
 ```
 
-## bridge
+## phase-context
 
-执行 spec 工件与 agent-dev-kit 的变更工件桥接。用于把外部 spec change 目录导入到 `docs/changes/<change-id>/`，或反向导出。
+Resolve phase context from semantic selectors in `manifests/phase_context_contract_v2.json`. Phase selection is role-aware and does not read Skill directory paths from `manifest.json`.
 
 ```bash
-bash scripts/devkit.sh bridge import --change add-dark-mode --openspec-root /repo/openspec
-bash scripts/devkit.sh bridge import --change add-dark-mode --from-archive --openspec-root /repo/openspec
-bash scripts/devkit.sh bridge export --change add-dark-mode --openspec-root /repo/openspec
-bash scripts/devkit.sh bridge export --change add-dark-mode --archive-date 2026-05-02 --openspec-root /repo/openspec
+bash scripts/devkit.sh phase-context --domain general --phase review --summary-json
+bash scripts/devkit.sh phase-context --domain embedded --phase driver-development --summary-json
+bash scripts/devkit.sh phase-context --lifecycle --summary-json
 ```
 
-## evidence
+## skill-relationships
 
-追加命令级 Evidence Index 记录。
+Resolve typed Skill relationships from `manifests/skill_relationship_contracts_v2.json`. Context prerequisites, evidence prerequisites, handoffs, and delivery precedence are explicit typed edges; `manifest.json` carries no parallel `depends_on` graph.
 
 ```bash
-bash scripts/devkit.sh evidence append --file docs/changes/my-change/negative-results.md --command "bash tests/run_all.sh" --exit-code 0 --summary "all tests passed" --evidence-path docs/changes/my-change/verify-report.md --layer Workflow --artifact verify-report
+bash scripts/devkit.sh skill-relationships --summary-json
+bash scripts/devkit.sh skill-relationships --lifecycle --summary-json
 ```
 
 ## propose
@@ -383,22 +247,6 @@ bash scripts/devkit.sh archive --change my-change
 bash scripts/devkit.sh test
 bash scripts/devkit.sh test --verbose
 bash scripts/devkit.sh test --fail-fast
-```
-
-## health
-
-检查仓库结构、依赖、配置、测试和质量门禁的健康状态。
-
-```bash
-bash scripts/devkit.sh health
-```
-
-## backup
-
-执行备份、恢复、列表和回滚相关操作。真实恢复或覆盖前必须确认目标路径、备份内容和回滚影响。
-
-```bash
-bash scripts/devkit.sh backup list
 ```
 
 ## benchmark
@@ -458,10 +306,10 @@ bash scripts/devkit.sh security check --summary-json
 
 ```bash
 bash scripts/devkit.sh release check
-bash scripts/devkit.sh release build --version 5.0.0-rc.2 --out dist --summary-json
-bash scripts/devkit.sh release runtime-build --version 5.0.0-rc.2 --profile team-core --out dist --summary-json
-bash scripts/devkit.sh release rehearse --previous-artifact /tmp/agent-dev-kit-4.0.0.tar.gz --candidate-artifact dist/agent-dev-kit-5.0.0-rc.2.tar.gz --output /tmp/adk-release-rehearsal.json
-bash scripts/devkit.sh release publish --version 5.0.0-rc.2 --backend github --artifact dist/agent-dev-kit-5.0.0-rc.2.tar.gz --dry-run
+bash scripts/devkit.sh release build --version 6.0.0 --out dist --summary-json
+bash scripts/devkit.sh release runtime-build --version 6.0.0 --profile team-core --out dist --summary-json
+bash scripts/devkit.sh release rehearse --previous-artifact /tmp/agent-dev-kit-4.0.0.tar.gz --candidate-artifact dist/agent-dev-kit-6.0.0.tar.gz --output /tmp/adk-release-rehearsal.json
+bash scripts/devkit.sh release publish --version 6.0.0 --backend github --artifact dist/agent-dev-kit-6.0.0.tar.gz --dry-run
 ```
 
 `release build` 默认要求 source distribution 对应 clean Git commit，并把 commit、tree、dirty 状态和 source distribution digest 写入制品。只有隔离测试快照可显式使用 `--allow-unbound-snapshot`；该制品会标记 `release_eligible=false`，不得进入 rehearsal、publish 或 Software M5 release evidence。
@@ -469,12 +317,3 @@ bash scripts/devkit.sh release publish --version 5.0.0-rc.2 --backend github --a
 `release rehearse` 只接受 checksum 匹配且 candidate 版本更高的本地 artifact；它在临时 target 安装上一版、升级候选版、核验 receipt，再回滚并比较上一版受管资产 hash。rc.1 legacy bundle 或缺少当前必填 target contract 字段的上一版会在 release-only migration boundary 建立受管 receipt，再执行 rollback-before-install；active loader 仍 fail closed。candidate 回滚后，从保留的上一版 artifact 重装并逐文件比对 managed hashes，证明 fallback anchor 可用。build 在归档前校验 SPDX 2.3 SBOM 的 package/relationship 完整性并把 SBOM SHA256 写入 release manifest；GitHub release workflow 使用 SHA-pinned `actions/attest` 为 tarball 生成 provenance。该命令不创建 tag、不上传制品、不调用远端 backend。rehearsal、runtime smoke、timing 和 campaign state 属于 checkout 内的验证证据，不进入 source distribution，避免制品 SHA 与其自身验证报告形成循环依赖。
 
 `release runtime-build` 按显式 Profile 构建 `adk-runtime-bundle/v1`，只包含版本化 Skill support tree、bundle manifest、逐文件 checksum、许可证和 SPDX SBOM。它是供外部 handoff target 导入的 platform-neutral Runtime Bundle，不是 Codex direct export；制品不包含 ADK Python 实现、测试、内部 change evidence 或 source distribution，也不会写任何运行目录。
-
-## version
-
-执行版本查看、锁定、升级、对比或 changelog 生成。
-
-```bash
-bash scripts/devkit.sh version show
-bash scripts/devkit.sh version changelog --version 3.0.0
-```

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "agent-dev-kit"
-version = "5.2.0"
+version = "6.0.0"
 description = "Platform-neutral agent asset compiler, distributor, and evaluator"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -34,8 +34,6 @@ Issues = "https://github.com/jiying2007/agent-dev-kit/issues"
 
 [project.scripts]
 adk = "agent_dev_kit.cli:main"
-adk-phase-context = "agent_dev_kit.phase_context:main"
-adk-skill-relationships = "agent_dev_kit.skill_relationships:main"
 
 [tool.ruff]
 target-version = "py311"

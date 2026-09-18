@@ -1,14 +1,12 @@
-"""CLI runtime substrate: environment, compatibility bridge, and stable output I/O."""
+"""CLI runtime substrate: environment selection and stable output I/O."""
 
 from __future__ import annotations
 
 import json
 import os
-import subprocess
 import tempfile
-from collections.abc import Mapping
 from pathlib import Path
-from typing import Any, Sequence
+from typing import Any
 
 from .model import Manifest, ManifestError
 
@@ -28,38 +26,15 @@ ROOT = _discover_root()
 DEFAULT_TASKS = ROOT / "tests" / "fixtures" / "product_eval_tasks.jsonl"
 
 
-LEGACY_COMMANDS = {
-    "runtime-boundary": ["scripts/check-runtime-boundary.sh"],
-    "token-budget": ["scripts/check-token-budget.sh"],
-    "codify-governance": ["scripts/check-codify-governance.sh"],
-    "knowledge-compile": ["scripts/check-knowledge-compile-model.sh"],
-    "reuse-before-rebuild": ["scripts/check-reuse-before-rebuild.sh"],
-    "context-experience": ["scripts/check-context-experience-patterns.sh"],
-    "official-docs-governance": ["scripts/check-official-docs-governance.sh"],
-    "runtime-capabilities": ["scripts/check-runtime-capabilities.sh"],
-    "harness-loop-engineering": ["scripts/check-harness-loop-engineering-contracts.sh"],
-    "workflow-closure": ["scripts/check-workflow-closure.sh"],
-    "asset-taxonomy": ["scripts/check-asset-taxonomy.sh"],
-    "file-modes": ["scripts/check-file-modes.sh", str(ROOT)],
-    "propose": ["scripts/workflow.sh", "propose"],
-    "apply": ["scripts/workflow.sh", "apply"],
-    "verify": ["scripts/workflow.sh", "verify"],
-    "review": ["scripts/workflow.sh", "review"],
-    "archive": ["scripts/workflow.sh", "archive"],
-    "bridge": ["scripts/openspec-bridge.sh"],
-    "evidence": ["scripts/evidence-index.sh"],
-    "health": ["scripts/health-check.sh"],
-    "backup": ["scripts/backup-rollback.sh"],
-    "version": ["scripts/version-manager.sh"],
-}
-
 
 PUBLIC_COMMANDS = [
-    ("validate", "校验 v3 manifest 与资产结构"),
-    ("manifest", "只读检查 canonical manifest composition 等价性"),
+    ("validate", "校验 canonical manifest 与资产结构"),
+    ("manifest", "只读检查 canonical manifest composition"),
     ("doctor", "只读检查运行环境与 M5-ready 前置条件"),
     ("catalog", "生成或检索 Agent/Skill 目录"),
-    ("match", "匹配 Skill 路由"),
+    ("match", "按 Skill Content v2 语义匹配 Skill 路由"),
+    ("phase-context", "解析语义 phase context"),
+    ("skill-relationships", "解析 typed Skill relationships 与 delivery lifecycle"),
     ("export", "确定性导出 direct target 资产"),
     ("target", "检查或执行 direct target contract smoke"),
     ("install", "plan/apply/rollback 安装事务"),
@@ -73,29 +48,12 @@ PUBLIC_COMMANDS = [
     ("capability", "检查 ADK 能力健康"),
     ("harness", "检查目标仓 Harness readiness"),
     ("task-cost", "生成确定性任务成本与执行预算 receipt"),
-] + [(name, "治理兼容入口") for name in LEGACY_COMMANDS]
-
-
-def _manifest_split_readiness_inputs(policy: Mapping[str, Any]) -> tuple[str | None, bool, bool]:
-    gate = policy.get("migration_gate")
-    if not isinstance(gate, Mapping):
-        return None, False, False
-
-    change_stage = None
-    change_id = gate.get("change_id")
-    if isinstance(change_id, str):
-        state_path = ROOT / "docs" / "changes" / change_id / "state.yaml"
-        if state_path.is_file():
-            for line in state_path.read_text(encoding="utf-8").splitlines():
-                if line.startswith("stage:"):
-                    change_stage = line.split(":", 1)[1].strip() or None
-                    break
-
-    authoring_root = gate.get("authoring_root")
-    generator_path = gate.get("generator_path")
-    authoring_root_present = isinstance(authoring_root, str) and (ROOT / authoring_root).exists()
-    generator_path_present = isinstance(generator_path, str) and (ROOT / generator_path).is_file()
-    return change_stage, authoring_root_present, generator_path_present
+    ("propose", "创建或推进变更提案"),
+    ("apply", "应用已批准变更"),
+    ("verify", "验证变更与证据"),
+    ("review", "执行变更审查"),
+    ("archive", "归档已闭环变更"),
+]
 
 
 def _manifest() -> Manifest:
@@ -153,9 +111,3 @@ def _help() -> None:
     print("Commands:")
     for name, description in PUBLIC_COMMANDS:
         print("  {:24s} {}".format(name, description))
-
-
-def _run_legacy(command: str, argv: Sequence[str]) -> int:
-    parts = LEGACY_COMMANDS[command]
-    script = ROOT / parts[0]
-    return subprocess.call(["bash", str(script)] + parts[1:] + list(argv), cwd=str(ROOT))

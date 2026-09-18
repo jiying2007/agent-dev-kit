@@ -1,9 +1,8 @@
 """Semantic phase-context and delivery-lifecycle resolution.
 
-Phase loading must not decide Skill runtime roles from hard-coded directory
-paths. Asset identity comes from manifest.json; Skill semantics come from the
-Skill Content v2 contract. Legacy manifest context paths and dependency edges
-remain compatibility/documentation data only and are not sequencing authority.
+Phase loading resolves semantic selectors from the Phase Context v2 contract.
+Manifest asset identity and Skill Content v2 semantics are authoritative; no
+parallel phase-to-path mirror exists in the manifest.
 """
 
 from __future__ import annotations
@@ -22,11 +21,11 @@ from .matcher_vnext import resolve_skill_content
 from .model import Manifest, ManifestError, ensure_within
 from .skill_relationships import resolve_delivery_lifecycle as _resolve_delivery_lifecycle
 
-_CONTRACT = "manifests/phase_context_contract.json"
-_CONTRACT_SCHEMA = "schemas/phase-context-contract-v1.schema.json"
-_SCHEMA = "adk-phase-context-contract/v1"
-_RESOLUTION_SCHEMA = "adk-phase-context-resolution/v1"
-_LIFECYCLE_RESOLUTION_SCHEMA = "adk-delivery-lifecycle-resolution/v1"
+_CONTRACT = "manifests/phase_context_contract_v2.json"
+_CONTRACT_SCHEMA = "schemas/phase-context-contract-v2.schema.json"
+_SCHEMA = "adk-phase-context-contract/v2"
+_RESOLUTION_SCHEMA = "adk-phase-context-resolution/v2"
+_LIFECYCLE_RESOLUTION_SCHEMA = "adk-delivery-lifecycle-resolution/v2"
 _ROLE_ORDER = {"primary": 0, "supporting": 1, "governance": 2, "fallback": 3}
 
 
@@ -69,12 +68,8 @@ def _load_contract(
         raise ManifestError("Phase context identity_source must be manifest.json")
     if value.get("skill_semantics_source") != "manifests/skill_content_contracts_v2.json":
         raise ManifestError("Phase context skill semantics must come from Skill Content v2")
-    if value.get("relationship_semantics_source") != "manifests/skill_relationship_contracts_v1.json":
-        raise ManifestError("Phase context relationship semantics must come from Skill Relationship v1")
-    if value.get("legacy_manifest_context_policy") != (
-        "compatibility-only-not-authoritative-for-skill-role-selection"
-    ):
-        raise ManifestError("Legacy manifest context paths must be non-authoritative")
+    if value.get("relationship_semantics_source") != "manifests/skill_relationship_contracts_v2.json":
+        raise ManifestError("Phase context relationship semantics must come from Skill Relationship v2")
     return value
 
 
@@ -231,14 +226,13 @@ def resolve_phase_context(manifest: Manifest, domain: str, phase: str) -> Dict[s
         "contract_sha256": contract_digest,
         "identity_source": "manifest.json",
         "skill_semantics_source": "manifests/skill_content_contracts_v2.json",
-        "legacy_manifest_context_paths_authoritative": False,
         "skills": resolved,
         "resources": resource_rows,
     }
 
 
 def resolve_delivery_lifecycle(manifest: Manifest) -> Dict[str, Any]:
-    """Compatibility facade; sequencing authority lives in Skill Relationship v1."""
+    """Delegate lifecycle sequencing to Skill Relationship v2."""
     return _resolve_delivery_lifecycle(manifest)
 
 def main(argv: Optional[Sequence[str]] = None) -> int:

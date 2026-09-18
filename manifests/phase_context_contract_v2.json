@@ -1,8 +1,7 @@
 {
-  "schema_version": "adk-phase-context-contract/v1",
+  "schema_version": "adk-phase-context-contract/v2",
   "identity_source": "manifest.json",
   "skill_semantics_source": "manifests/skill_content_contracts_v2.json",
-  "legacy_manifest_context_policy": "compatibility-only-not-authoritative-for-skill-role-selection",
   "domains": {
     "general": {
       "route": {
@@ -151,5 +150,5 @@
       }
     }
   },
-  "relationship_semantics_source": "manifests/skill_relationship_contracts_v1.json"
+  "relationship_semantics_source": "manifests/skill_relationship_contracts_v2.json"
 }

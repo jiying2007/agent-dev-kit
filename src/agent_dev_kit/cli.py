@@ -1,4 +1,4 @@
-"""Public ADK 3.x command-line interface."""
+"""Public ADK command-line interface."""
 
 from __future__ import annotations
 
@@ -13,21 +13,15 @@ from typing import Optional, Sequence
 from .campaign import campaign_markdown, campaign_plan, check_campaign, run_campaign
 from .cli_runtime import (
     DEFAULT_TASKS,
-    LEGACY_COMMANDS,
     ROOT,
     _help,
     _json,
     _manifest,
-    _manifest_split_readiness_inputs,
-    _run_legacy,
     _write_json,
     _write_text,
 )
 from .compiler import export_assets
-from .contracts.manifest_composition import (
-    composition_check,
-    split_migration_readiness,
-)
+from .contracts.manifest_composition import composition_check
 from .doctor import run_doctor
 from .evaluation import (
     compare_runtime_reports,
@@ -40,7 +34,9 @@ from .evaluation import (
 )
 from .installer import apply_plan, create_plan, rollback, write_plan
 from .locking import clear_target_lock, target_lock_status
-from .matcher import main as matcher_main
+from .matcher_vnext import main as matcher_main
+from .phase_context import main as phase_context_main
+from .skill_relationships import main as skill_relationships_main
 from .model import ManifestError, canonical_json_bytes, sha256_bytes
 from .quality import benchmark_markdown, run_benchmark, security_check
 from .readiness import readiness_markdown, run_harness_readiness
@@ -56,33 +52,12 @@ def _cmd_manifest(argv: Sequence[str]) -> int:
     sub = parser.add_subparsers(dest="action", required=True)
     check = sub.add_parser("composition-check")
     check.add_argument("--summary-json", action="store_true")
-    readiness = sub.add_parser("split-readiness")
-    readiness.add_argument("--summary-json", action="store_true")
     args = parser.parse_args(argv)
 
     manifest = _manifest()
     policy = json.loads(
         (ROOT / "manifests" / "manifest_composition_policy.json").read_text(encoding="utf-8")
     )
-
-    if args.action == "split-readiness":
-        change_stage, authoring_root_present, generator_path_present = (
-            _manifest_split_readiness_inputs(policy)
-        )
-        result = split_migration_readiness(
-            policy,
-            change_stage=change_stage,
-            authoring_root_present=authoring_root_present,
-            generator_path_present=generator_path_present,
-        )
-        if args.summary_json:
-            _json(result)
-        else:
-            print(json.dumps(result, ensure_ascii=False, indent=2))
-        if result["status"] == "invalid":
-            return 1
-        return 0 if result["status"] == "ready" else 2
-
     result = composition_check(
         manifest.data,
         policy,
@@ -112,9 +87,9 @@ def _cmd_validate(argv: Sequence[str]) -> int:
             for failure in failures:
                 print("[FAIL] {}".format(failure), file=sys.stderr)
         return 1
-    legacy_args = list(argv)
+    validation_args = list(argv)
     completed = subprocess.run(
-        ["bash", str(ROOT / "scripts" / "validate-assets.sh")] + legacy_args,
+        ["bash", str(ROOT / "scripts" / "validate-assets.sh")] + validation_args,
         cwd=str(ROOT),
         check=False,
     )
@@ -663,8 +638,6 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         return 0
     command, rest = argv[0], argv[1:]
     try:
-        if command in LEGACY_COMMANDS:
-            return _run_legacy(command, rest)
         if command == "manifest":
             return _cmd_manifest(rest)
         if command == "validate":
@@ -675,6 +648,12 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             return _cmd_catalog(rest)
         if command == "match":
             return _cmd_match(rest)
+        if command == "phase-context":
+            phase_args = rest if "--root" in rest else ["--root", str(ROOT), *rest]
+            return phase_context_main(phase_args)
+        if command == "skill-relationships":
+            relationship_args = rest if "--root" in rest else ["--root", str(ROOT), *rest]
+            return skill_relationships_main(relationship_args)
         if command == "export":
             return _cmd_export(rest)
         if command == "target":

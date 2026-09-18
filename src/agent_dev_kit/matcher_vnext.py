@@ -24,7 +24,7 @@ from .matcher import (
     _resolved_policy,
     _routing_ir,
     _routing_markers,
-    format_result,
+    format_result as kernel_format_result,
     match_text as kernel_match_text,
 )
 from .model import Manifest, ManifestError
@@ -60,6 +60,30 @@ _ALLOWED_ESCALATION_EFFECTS = {
     "release-target:publish",
 }
 _ALLOWED_IMPLICIT_POLICIES = {"eligible", "promote-same-group", "explicit-only"}
+
+
+
+def format_result(result: Mapping[str, Any]) -> str:
+    """Render the stable matcher line plus canonical Skill Content v2 semantics."""
+    base = kernel_format_result(result)
+    if result.get("match") is not True:
+        return base
+    extras = []
+    for key in (
+        "runtime_role",
+        "selection_group",
+        "effect_ceiling",
+        "effect_scope",
+        "effect_operation",
+        "live_device_authorization",
+    ):
+        value = result.get(key)
+        if value is not None:
+            extras.append(f"{key}={value}")
+    escalation = result.get("escalation_effects")
+    if isinstance(escalation, list) and escalation:
+        extras.append("escalation_effects=" + ",".join(str(item) for item in escalation))
+    return base + ((" " + " ".join(extras)) if extras else "")
 
 
 @lru_cache(maxsize=8)

@@ -1,5 +1,5 @@
 {
-  "version": "5.2.0",
+  "version": "6.0.0",
   "locale": "zh-CN",
   "platforms": [
     "linux-embedded",
@@ -257,29 +257,6 @@
         "docs/workflows.md"
       ]
     },
-    "L2-phase-triggered": {
-      "description": "阶段触发层（按阶段加载）",
-      "triggers": {
-        "route": [
-          "skills/adk-runtime-router/"
-        ],
-        "propose": [
-          "skills/adk-runtime-router/",
-          "skills/adk-requirements-triage/",
-          "skills/adk-adr-writer/"
-        ],
-        "apply": [
-          "skills/adk-code-simplification/",
-          "skills/adk-unit-test-embedded/"
-        ],
-        "verify": [
-          "skills/adk-verification-before-completion/"
-        ],
-        "review": [
-          "skills/adk-chinese-code-review/"
-        ]
-      }
-    },
     "L3-on-demand": {
       "description": "按需查询层（按需加载）",
       "sources": [
@@ -299,24 +276,6 @@
         "docs/embedded-constraints.md",
         "docs/hardware-interaction-rules.md"
       ]
-    },
-    "L2-phase-triggered": {
-      "description": "嵌入式阶段触发层",
-      "triggers": {
-        "bsp-analysis": [
-          "skills/adk-bsp-porting-playbook/",
-          "knowledge/L2-domain/datasheets/"
-        ],
-        "driver-development": [
-          "skills/adk-driver-bringup-checklist/",
-          "skills/adk-interrupt-dma-patterns/"
-        ],
-        "debugging": [
-          "skills/adk-embedded-remote-debug-log-triage/",
-          "skills/adk-systematic-debugging/",
-          "knowledge/L2-domain/oops-patterns/"
-        ]
-      }
     },
     "L3-on-demand": {
       "description": "嵌入式按需查询层",
@@ -691,8 +650,7 @@
       "lifecycle_order": 10,
       "stage_order": 10,
       "activation_mode": "primary",
-      "pattern": "governance",
-      "depends_on": []
+      "pattern": "governance"
     },
     {
       "name": "adk-context-engineering",
@@ -702,8 +660,7 @@
       "lifecycle_order": 10,
       "stage_order": 20,
       "activation_mode": "primary",
-      "pattern": "governance",
-      "depends_on": []
+      "pattern": "governance"
     },
     {
       "name": "adk-token-context-governance",
@@ -713,10 +670,7 @@
       "lifecycle_order": 10,
       "stage_order": 30,
       "activation_mode": "primary",
-      "pattern": "governance",
-      "depends_on": [
-        "adk-context-engineering"
-      ]
+      "pattern": "governance"
     },
     {
       "name": "adk-requirements-triage",
@@ -726,8 +680,7 @@
       "lifecycle_order": 20,
       "stage_order": 10,
       "activation_mode": "primary",
-      "pattern": "playbook",
-      "depends_on": []
+      "pattern": "playbook"
     },
     {
       "name": "adk-structured-requirements-questioning",
@@ -737,8 +690,7 @@
       "lifecycle_order": 20,
       "stage_order": 20,
       "activation_mode": "primary",
-      "pattern": "inversion",
-      "depends_on": []
+      "pattern": "inversion"
     },
     {
       "name": "adk-repo-prompt-analysis",
@@ -748,8 +700,7 @@
       "lifecycle_order": 20,
       "stage_order": 30,
       "activation_mode": "primary",
-      "pattern": "reviewer",
-      "depends_on": []
+      "pattern": "reviewer"
     },
     {
       "name": "adk-skill-deep-analysis",
@@ -759,8 +710,7 @@
       "lifecycle_order": 20,
       "stage_order": 40,
       "activation_mode": "primary",
-      "pattern": "reviewer",
-      "depends_on": []
+      "pattern": "reviewer"
     },
     {
       "name": "adk-lightweight-planning",
@@ -770,8 +720,7 @@
       "lifecycle_order": 30,
       "stage_order": 10,
       "activation_mode": "primary",
-      "pattern": "playbook",
-      "depends_on": []
+      "pattern": "playbook"
     },
     {
       "name": "adk-task-breakdown",
@@ -781,10 +730,7 @@
       "lifecycle_order": 30,
       "stage_order": 20,
       "activation_mode": "primary",
-      "pattern": "playbook",
-      "depends_on": [
-        "adk-requirements-triage"
-      ]
+      "pattern": "playbook"
     },
     {
       "name": "adk-parallel-agent-governance",
@@ -794,10 +740,7 @@
       "lifecycle_order": 30,
       "stage_order": 30,
       "activation_mode": "primary",
-      "pattern": "governance",
-      "depends_on": [
-        "adk-task-breakdown"
-      ]
+      "pattern": "governance"
     },
     {
       "name": "adk-worktree-governance",
@@ -807,10 +750,7 @@
       "lifecycle_order": 30,
       "stage_order": 40,
       "activation_mode": "primary",
-      "pattern": "governance",
-      "depends_on": [
-        "adk-task-breakdown"
-      ]
+      "pattern": "governance"
     },
     {
       "name": "adk-context-compress-handoff",
@@ -820,10 +760,7 @@
       "lifecycle_order": 30,
       "stage_order": 50,
       "activation_mode": "primary",
-      "pattern": "generator",
-      "depends_on": [
-        "adk-token-context-governance"
-      ]
+      "pattern": "generator"
     },
     {
       "name": "adk-interface-contract-design",
@@ -833,10 +770,7 @@
       "lifecycle_order": 40,
       "stage_order": 10,
       "activation_mode": "primary",
-      "pattern": "generator",
-      "depends_on": [
-        "adk-requirements-triage"
-      ]
+      "pattern": "generator"
     },
     {
       "name": "adk-adr-writer",
@@ -846,8 +780,7 @@
       "lifecycle_order": 40,
       "stage_order": 20,
       "activation_mode": "primary",
-      "pattern": "generator",
-      "depends_on": []
+      "pattern": "generator"
     },
     {
       "name": "adk-component-api-stability",
@@ -857,10 +790,7 @@
       "lifecycle_order": 40,
       "stage_order": 30,
       "activation_mode": "primary",
-      "pattern": "reviewer",
-      "depends_on": [
-        "adk-interface-contract-design"
-      ]
+      "pattern": "reviewer"
     },
     {
       "name": "adk-register-map-design",
@@ -870,10 +800,7 @@
       "lifecycle_order": 40,
       "stage_order": 40,
       "activation_mode": "primary",
-      "pattern": "generator",
-      "depends_on": [
-        "adk-interface-contract-design"
-      ]
+      "pattern": "generator"
     },
     {
       "name": "adk-bsp-analysis",
@@ -883,8 +810,7 @@
       "lifecycle_order": 40,
       "stage_order": 50,
       "activation_mode": "primary",
-      "pattern": "playbook",
-      "depends_on": []
+      "pattern": "playbook"
     },
     {
       "name": "adk-planning-execution-loop",
@@ -894,10 +820,7 @@
       "lifecycle_order": 30,
       "stage_order": 25,
       "activation_mode": "primary",
-      "pattern": "pipeline",
-      "depends_on": [
-        "adk-task-breakdown"
-      ]
+      "pattern": "pipeline"
     },
     {
       "name": "adk-driver-implementation",
@@ -907,8 +830,7 @@
       "lifecycle_order": 50,
       "stage_order": 10,
       "activation_mode": "primary",
-      "pattern": "playbook",
-      "depends_on": []
+      "pattern": "playbook"
     },
     {
       "name": "adk-driver-bringup-checklist",
@@ -918,10 +840,7 @@
       "lifecycle_order": 50,
       "stage_order": 20,
       "activation_mode": "primary",
-      "pattern": "playbook",
-      "depends_on": [
-        "adk-register-map-design"
-      ]
+      "pattern": "playbook"
     },
     {
       "name": "adk-bsp-porting-playbook",
@@ -931,10 +850,7 @@
       "lifecycle_order": 50,
       "stage_order": 30,
       "activation_mode": "primary",
-      "pattern": "playbook",
-      "depends_on": [
-        "adk-driver-bringup-checklist"
-      ]
+      "pattern": "playbook"
     },
     {
       "name": "adk-rtos-task-design",
@@ -944,8 +860,7 @@
       "lifecycle_order": 50,
       "stage_order": 40,
       "activation_mode": "primary",
-      "pattern": "playbook",
-      "depends_on": []
+      "pattern": "playbook"
     },
     {
       "name": "adk-interrupt-dma-patterns",
@@ -955,8 +870,7 @@
       "lifecycle_order": 50,
       "stage_order": 50,
       "activation_mode": "primary",
-      "pattern": "playbook",
-      "depends_on": []
+      "pattern": "playbook"
     },
     {
       "name": "adk-protocol-stack-integration",
@@ -966,10 +880,7 @@
       "lifecycle_order": 50,
       "stage_order": 60,
       "activation_mode": "primary",
-      "pattern": "playbook",
-      "depends_on": [
-        "adk-interface-contract-design"
-      ]
+      "pattern": "playbook"
     },
     {
       "name": "adk-cmake-cross-build",
@@ -979,8 +890,7 @@
       "lifecycle_order": 50,
       "stage_order": 70,
       "activation_mode": "primary",
-      "pattern": "tool-wrapper",
-      "depends_on": []
+      "pattern": "tool-wrapper"
     },
     {
       "name": "adk-code-simplification",
@@ -990,8 +900,7 @@
       "lifecycle_order": 50,
       "stage_order": 80,
       "activation_mode": "primary",
-      "pattern": "reviewer",
-      "depends_on": []
+      "pattern": "reviewer"
     },
     {
       "name": "adk-systematic-debugging",
@@ -1001,8 +910,7 @@
       "lifecycle_order": 60,
       "stage_order": 10,
       "activation_mode": "primary",
-      "pattern": "playbook",
-      "depends_on": []
+      "pattern": "playbook"
     },
     {
       "name": "adk-embedded-debug-transport",
@@ -1012,10 +920,7 @@
       "lifecycle_order": 60,
       "stage_order": 20,
       "activation_mode": "primary",
-      "pattern": "tool-wrapper",
-      "depends_on": [
-        "adk-systematic-debugging"
-      ]
+      "pattern": "tool-wrapper"
     },
     {
       "name": "adk-embedded-remote-debug-log-triage",
@@ -1025,11 +930,7 @@
       "lifecycle_order": 60,
       "stage_order": 30,
       "activation_mode": "primary",
-      "pattern": "playbook",
-      "depends_on": [
-        "adk-systematic-debugging",
-        "adk-token-context-governance"
-      ]
+      "pattern": "playbook"
     },
     {
       "name": "adk-offline-core-dump-triage",
@@ -1039,10 +940,7 @@
       "lifecycle_order": 60,
       "stage_order": 40,
       "activation_mode": "primary",
-      "pattern": "playbook",
-      "depends_on": [
-        "adk-systematic-debugging"
-      ]
+      "pattern": "playbook"
     },
     {
       "name": "adk-hardware-debugging",
@@ -1052,8 +950,7 @@
       "lifecycle_order": 60,
       "stage_order": 50,
       "activation_mode": "primary",
-      "pattern": "playbook",
-      "depends_on": []
+      "pattern": "playbook"
     },
     {
       "name": "adk-performance-profiling-embedded",
@@ -1063,10 +960,7 @@
       "lifecycle_order": 60,
       "stage_order": 60,
       "activation_mode": "primary",
-      "pattern": "tool-wrapper",
-      "depends_on": [
-        "adk-systematic-debugging"
-      ]
+      "pattern": "tool-wrapper"
     },
     {
       "name": "adk-test-strategy",
@@ -1076,10 +970,7 @@
       "lifecycle_order": 70,
       "stage_order": 10,
       "activation_mode": "primary",
-      "pattern": "playbook",
-      "depends_on": [
-        "adk-runtime-router"
-      ]
+      "pattern": "playbook"
     },
     {
       "name": "adk-unit-test-embedded",
@@ -1089,8 +980,7 @@
       "lifecycle_order": 70,
       "stage_order": 20,
       "activation_mode": "primary",
-      "pattern": "generator",
-      "depends_on": []
+      "pattern": "generator"
     },
     {
       "name": "adk-integration-hil-sil",
@@ -1100,10 +990,7 @@
       "lifecycle_order": 70,
       "stage_order": 30,
       "activation_mode": "primary",
-      "pattern": "playbook",
-      "depends_on": [
-        "adk-unit-test-embedded"
-      ]
+      "pattern": "playbook"
     },
     {
       "name": "adk-embedded-diagnostic-harness",
@@ -1113,11 +1000,7 @@
       "lifecycle_order": 70,
       "stage_order": 40,
       "activation_mode": "primary",
-      "pattern": "tool-wrapper",
-      "depends_on": [
-        "adk-test-strategy",
-        "adk-integration-hil-sil"
-      ]
+      "pattern": "tool-wrapper"
     },
     {
       "name": "adk-fault-injection-recovery",
@@ -1127,10 +1010,7 @@
       "lifecycle_order": 70,
       "stage_order": 50,
       "activation_mode": "primary",
-      "pattern": "playbook",
-      "depends_on": [
-        "adk-integration-hil-sil"
-      ]
+      "pattern": "playbook"
     },
     {
       "name": "adk-artifact-gating",
@@ -1140,8 +1020,7 @@
       "lifecycle_order": 70,
       "stage_order": 60,
       "activation_mode": "primary",
-      "pattern": "reviewer",
-      "depends_on": []
+      "pattern": "reviewer"
     },
     {
       "name": "adk-pilot-framework",
@@ -1151,8 +1030,7 @@
       "lifecycle_order": 70,
       "stage_order": 70,
       "activation_mode": "primary",
-      "pattern": "pipeline",
-      "depends_on": []
+      "pattern": "pipeline"
     },
     {
       "name": "adk-verification-before-completion",
@@ -1162,8 +1040,7 @@
       "lifecycle_order": 70,
       "stage_order": 80,
       "activation_mode": "primary",
-      "pattern": "reviewer",
-      "depends_on": []
+      "pattern": "reviewer"
     },
     {
       "name": "adk-chinese-commit-conventions",
@@ -1173,8 +1050,7 @@
       "lifecycle_order": 80,
       "stage_order": 10,
       "activation_mode": "supporting",
-      "pattern": "reviewer",
-      "depends_on": []
+      "pattern": "reviewer"
     },
     {
       "name": "adk-chinese-code-review",
@@ -1184,8 +1060,7 @@
       "lifecycle_order": 80,
       "stage_order": 20,
       "activation_mode": "supporting",
-      "pattern": "reviewer",
-      "depends_on": []
+      "pattern": "reviewer"
     },
     {
       "name": "adk-code-review-loop",
@@ -1195,8 +1070,7 @@
       "lifecycle_order": 80,
       "stage_order": 30,
       "activation_mode": "primary",
-      "pattern": "reviewer",
-      "depends_on": []
+      "pattern": "reviewer"
     },
     {
       "name": "adk-repo-drift-remediation",
@@ -1206,10 +1080,7 @@
       "lifecycle_order": 80,
       "stage_order": 40,
       "activation_mode": "primary",
-      "pattern": "reviewer",
-      "depends_on": [
-        "adk-verification-before-completion"
-      ]
+      "pattern": "reviewer"
     },
     {
       "name": "adk-static-analysis-c-cpp",
@@ -1219,8 +1090,7 @@
       "lifecycle_order": 80,
       "stage_order": 50,
       "activation_mode": "primary",
-      "pattern": "reviewer",
-      "depends_on": []
+      "pattern": "reviewer"
     },
     {
       "name": "adk-commit-pr-quality-gate",
@@ -1230,10 +1100,7 @@
       "lifecycle_order": 80,
       "stage_order": 60,
       "activation_mode": "primary",
-      "pattern": "reviewer",
-      "depends_on": [
-        "adk-verification-before-completion"
-      ]
+      "pattern": "reviewer"
     },
     {
       "name": "adk-release-versioning",
@@ -1243,10 +1110,7 @@
       "lifecycle_order": 90,
       "stage_order": 10,
       "activation_mode": "primary",
-      "pattern": "generator",
-      "depends_on": [
-        "adk-commit-pr-quality-gate"
-      ]
+      "pattern": "generator"
     },
     {
       "name": "adk-production-field-readiness",
@@ -1256,11 +1120,7 @@
       "lifecycle_order": 90,
       "stage_order": 20,
       "activation_mode": "primary",
-      "pattern": "reviewer",
-      "depends_on": [
-        "adk-release-versioning",
-        "adk-integration-hil-sil"
-      ]
+      "pattern": "reviewer"
     },
     {
       "name": "adk-embedded-release-orchestration",
@@ -1270,11 +1130,7 @@
       "lifecycle_order": 90,
       "stage_order": 30,
       "activation_mode": "primary",
-      "pattern": "pipeline",
-      "depends_on": [
-        "adk-release-versioning",
-        "adk-production-field-readiness"
-      ]
+      "pattern": "pipeline"
     },
     {
       "name": "adk-embedded-storage-layout-migration",
@@ -1284,11 +1140,7 @@
       "lifecycle_order": 90,
       "stage_order": 40,
       "activation_mode": "primary",
-      "pattern": "pipeline",
-      "depends_on": [
-        "adk-embedded-release-orchestration",
-        "adk-production-field-readiness"
-      ]
+      "pattern": "pipeline"
     },
     {
       "name": "adk-cross-team-handoff",
@@ -1298,8 +1150,7 @@
       "lifecycle_order": 90,
       "stage_order": 50,
       "activation_mode": "supporting",
-      "pattern": "generator",
-      "depends_on": []
+      "pattern": "generator"
     },
     {
       "name": "adk-branch-closeout",
@@ -1309,10 +1160,7 @@
       "lifecycle_order": 90,
       "stage_order": 60,
       "activation_mode": "primary",
-      "pattern": "governance",
-      "depends_on": [
-        "adk-verification-before-completion"
-      ]
+      "pattern": "governance"
     },
     {
       "name": "adk-after-action-review",
@@ -1322,10 +1170,7 @@
       "lifecycle_order": 90,
       "stage_order": 70,
       "activation_mode": "primary",
-      "pattern": "reviewer",
-      "depends_on": [
-        "adk-verification-before-completion"
-      ]
+      "pattern": "reviewer"
     },
     {
       "name": "adk-memory-curator",
@@ -1335,11 +1180,7 @@
       "lifecycle_order": 100,
       "stage_order": 10,
       "activation_mode": "primary",
-      "pattern": "governance",
-      "depends_on": [
-        "adk-after-action-review",
-        "adk-token-context-governance"
-      ]
+      "pattern": "governance"
     },
     {
       "name": "adk-archive-governance",
@@ -1349,10 +1190,7 @@
       "lifecycle_order": 100,
       "stage_order": 20,
       "activation_mode": "primary",
-      "pattern": "governance",
-      "depends_on": [
-        "adk-verification-before-completion"
-      ]
+      "pattern": "governance"
     },
     {
       "name": "adk-knowledge-archive",
@@ -1362,10 +1200,7 @@
       "lifecycle_order": 100,
       "stage_order": 30,
       "activation_mode": "primary",
-      "pattern": "generator",
-      "depends_on": [
-        "adk-archive-governance"
-      ]
+      "pattern": "generator"
     },
     {
       "name": "adk-engineering-growth-review",
@@ -1375,11 +1210,7 @@
       "lifecycle_order": 100,
       "stage_order": 50,
       "activation_mode": "primary",
-      "pattern": "reviewer",
-      "depends_on": [
-        "adk-after-action-review",
-        "adk-token-context-governance"
-      ]
+      "pattern": "reviewer"
     }
   ],
   "default_profile": "core",

@@ -11,7 +11,7 @@ ADK 不再在 README 中维护“候选 / 已发布 / live”之类可漂移的�
 - **Runtime conformance**：以 target/runtime receipt 与证据级别 `static / smoke / native / certified` 为权威。
 - **Product qualification**：由消费方/产品仓的 qualification 与 field evidence 独立决定，不由 ADK 组件版本继承。
 
-`manifest.json` 当前 source version 为 `5.2.0`。已发布组件请以 GitHub Releases 和 release contract 为准；`main` 可以在某个不可变 Release 之后继续前进，因此 **current main != latest immutable release** 是允许且预期的状态。
+`manifest.json` 当前 source version 为 `6.0.0`。已发布组件请以 GitHub Releases 和 release contract 为准；`main` 可以在某个不可变 Release 之后继续前进，因此 **current main != latest immutable release** 是允许且预期的状态。
 
 发布支持基线为 Python 3.11+。运行依赖固定为 `PyYAML==6.0.3` 与 `jsonschema==4.26.0`；质量依赖在 `pyproject.toml:[project.optional-dependencies].quality` 中锁定。
 
@@ -53,7 +53,7 @@ ADK 不负责：
 
 ### Execution policy 命名迁移
 
-`agent_dev_kit.execution_policy` 是新的推荐公共命名，准确表达“ADK 提供执行策略/门禁决策，但不是 runtime”。`agent_dev_kit.runtime_control` 在 5.x 保持兼容，并与新命名导出同一组对象；移除旧命名只能发生在未来 major version，并必须有独立迁移公告与 consumer evidence。
+`agent_dev_kit.execution_policy` 是唯一公共执行策略命名空间，准确表达“ADK 提供执行策略/门禁决策，但不是 runtime”。6.0 起不再提供 `agent_dev_kit.runtime_control` Python 兼容别名；协议 schema 中已有的 `runtime_control.*` identity 保持版本化、不可静默改写。
 
 ## 3. Runtime / protocol adapter 边界
 
@@ -83,7 +83,7 @@ bash scripts/devkit.sh doctor --require-runtime codex --summary-json
 bash scripts/devkit.sh eval run --suite deterministic --summary-json
 bash scripts/devkit.sh security check --summary-json
 bash scripts/devkit.sh release check --summary-json
-bash scripts/devkit.sh runtime-boundary
+bash scripts/check-runtime-boundary.sh
 bash tests/run_all.sh --quick
 ```
 
@@ -102,8 +102,8 @@ adk validate --strict
 
 ```bash
 bash scripts/devkit.sh validate --strict
-bash scripts/devkit.sh runtime-boundary
-bash scripts/devkit.sh official-docs-governance --summary-json
+bash scripts/check-runtime-boundary.sh
+bash scripts/check-official-docs-governance.sh --summary-json
 bash tests/run_all.sh
 ```
 

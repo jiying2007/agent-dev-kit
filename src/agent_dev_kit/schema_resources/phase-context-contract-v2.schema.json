@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://agent-dev-kit.local/schemas/phase-context-contract-v1.schema.json",
+  "$id": "https://agent-dev-kit.local/schemas/phase-context-contract-v2.schema.json",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -8,21 +8,17 @@
     "identity_source",
     "skill_semantics_source",
     "relationship_semantics_source",
-    "legacy_manifest_context_policy",
     "domains"
   ],
   "properties": {
     "schema_version": {
-      "const": "adk-phase-context-contract/v1"
+      "const": "adk-phase-context-contract/v2"
     },
     "identity_source": {
       "const": "manifest.json"
     },
     "skill_semantics_source": {
       "const": "manifests/skill_content_contracts_v2.json"
-    },
-    "legacy_manifest_context_policy": {
-      "const": "compatibility-only-not-authoritative-for-skill-role-selection"
     },
     "domains": {
       "type": "object",
@@ -36,7 +32,7 @@
       }
     },
     "relationship_semantics_source": {
-      "const": "manifests/skill_relationship_contracts_v1.json"
+      "const": "manifests/skill_relationship_contracts_v2.json"
     }
   },
   "$defs": {

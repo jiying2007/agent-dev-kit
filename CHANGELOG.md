@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+## v6.0.0 (2026-09-18)
+
+### Breaking compatibility cleanup
+- `adk` is the single installed CLI. `match`, `phase-context` and `skill-relationships` all resolve through one Python command surface; compatibility console scripts and legacy command aliases are removed.
+- Skill relationships are fully typed in `skill_relationship_contracts_v2.json`; `manifest.json` no longer carries `depends_on`.
+- Phase context is fully semantic in `phase_context_contract_v2.json`; manifest phase-to-Skill path mirrors are removed.
+- `agent_dev_kit.execution_policy` is the only Python execution-policy namespace; the 5.x `agent_dev_kit.runtime_control` facade is removed. Existing versioned wire-schema identities remain unchanged.
+- Abandoned manifest physical-split readiness scaffolding is removed. The active manifest contract remains one canonical `manifest.json` with read-only in-memory composition checks.
+
+### Governance
+- Contract registry binds routing to `matcher_vnext`, phase/relationship contracts to v2 hard cuts, and execution decisions to `execution_policy`.
+- Regression tests now reject reintroduction of legacy dependency metadata, phase path mirrors, retired Python aliases, and multiple installed ADK command surfaces.
+
 ## v5.1.0 (2026-09-12)
 
 ### Agent Platform vNext

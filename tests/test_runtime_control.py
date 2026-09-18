@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from jsonschema import Draft202012Validator
-from agent_dev_kit.runtime_control import (
+from agent_dev_kit.execution_policy import (
     RuntimeControlError,
     evaluate,
     goal_intake_attestation_sha256,
@@ -21,16 +21,37 @@ AS_OF = datetime.fromisoformat("2026-08-24T01:12:00+00:00")
 
 def policy() -> dict:
     return {
-        "schema_version": "runtime_control.policy/v1",
+        "schema_version": "runtime_control.policy/v2",
         "token": {"checkpoint_ratio": 0.7, "compact_ratio": 0.9, "stop_ratio": 1.0},
         "context": {"compact_ratio": 0.5},
         "progress": {"staleness_seconds": 900, "retry_limit": 2, "no_progress_limit": 3},
-        "gate_policy": {
-            "steady": [],
-            "final": ["repo", "build"],
-            "commit": ["repo", "build", "review"],
-            "apply": ["repo", "build", "plan", "dry-run"],
-            "release": ["repo", "build", "live", "review"],
+        "artifact_applicability": {
+            "readonly": {
+                "steady": [],
+                "final": [],
+                "commit": None,
+                "apply": None,
+                "release": None,
+            },
+            "implementation": {
+                "steady": [],
+                "final": ["repo", "build"],
+                "commit": ["repo", "build", "review"],
+                "apply": ["repo", "build", "plan", "dry-run"],
+                "release": None,
+            },
+            "release": {
+                "steady": [],
+                "final": ["repo", "build"],
+                "commit": ["repo", "build", "review"],
+                "apply": ["repo", "build", "plan", "dry-run"],
+                "release": ["repo", "build", "live", "review"],
+            },
+        },
+        "mode_authority_policy": {
+            "managed": True,
+            "trusted_mode_authorities": [],
+            "verification_backend": "not-configured",
         },
         "retention": {"journal_days": 14, "raw_content_stored": False},
     }
@@ -38,31 +59,6 @@ def policy() -> dict:
 
 def policy_v2(*, trusted_authority: bool = True) -> dict:
     value = policy()
-    value["schema_version"] = "runtime_control.policy/v2"
-    value.pop("gate_policy")
-    value["artifact_applicability"] = {
-        "readonly": {
-            "steady": [],
-            "final": [],
-            "commit": None,
-            "apply": None,
-            "release": None,
-        },
-        "implementation": {
-            "steady": [],
-            "final": ["repo", "build"],
-            "commit": ["repo", "build", "review"],
-            "apply": ["repo", "build", "plan", "dry-run"],
-            "release": None,
-        },
-        "release": {
-            "steady": [],
-            "final": ["repo", "build"],
-            "commit": ["repo", "build", "review"],
-            "apply": ["repo", "build", "plan", "dry-run"],
-            "release": ["repo", "build", "live", "review"],
-        },
-    }
     value["mode_authority_policy"] = {
         "managed": True,
         "trusted_mode_authorities": ["routing-authority"] if trusted_authority else [],
@@ -142,6 +138,7 @@ def goal_started(index: int = 1) -> dict:
         "success_criteria": ["tests", "review"],
         "required_evidence": ["tests", "review"],
         "open_items_count": 2,
+        "intake": goal_intake("implementation", "implementation"),
     })
 
 
@@ -530,14 +527,25 @@ class RuntimeControlTest(unittest.TestCase):
         self.assertIn("required-artifact-missing", release["reasons"])
 
     def test_task_mode_and_gate_applicability_are_fail_closed(self) -> None:
-        legacy_state = reduce_events(completed_events_without_artifacts())
-        with self.assertRaisesRegex(RuntimeControlError, "attested goal intake"):
-            evaluate(legacy_state, policy_v2(), gate_event="final", as_of=AS_OF)
+        implementation_state = reduce_events(completed_events_without_artifacts())
+        with self.assertRaisesRegex(RuntimeControlError, "state-bound"):
+            evaluate(
+                implementation_state,
+                policy(),
+                gate_event="final",
+                task_mode="readonly",
+                as_of=AS_OF,
+            )
+
         state = reduce_events(completed_events_without_artifacts("readonly", "readonly"))
         with self.assertRaisesRegex(RuntimeControlError, "state-bound"):
-            evaluate(state, policy_v2(), gate_event="final", task_mode="implementation", as_of=AS_OF)
-        with self.assertRaisesRegex(RuntimeControlError, "supports only legacy implementation"):
-            evaluate(legacy_state, policy(), gate_event="final", task_mode="readonly", as_of=AS_OF)
+            evaluate(
+                state,
+                policy_v2(),
+                gate_event="final",
+                task_mode="implementation",
+                as_of=AS_OF,
+            )
 
         decision = evaluate(
             state,
@@ -677,19 +685,28 @@ class RuntimeControlTest(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeControlError, "provenance kind must be goal-replan"):
             reduce_events(invalid_replan)
 
-    def test_v1_compatibility_and_v2_json_schemas(self) -> None:
-        state = reduce_events(completed_events_without_artifacts())
-        legacy = evaluate(state, policy(), gate_event="final", as_of=AS_OF)
-        explicit_legacy = evaluate(
-            state,
-            policy(),
-            gate_event="final",
-            task_mode="implementation",
-            as_of=AS_OF,
-        )
-        self.assertEqual(legacy, explicit_legacy)
-        self.assertEqual("runtime_control.decision/v1", legacy["schema_version"])
-        self.assertNotIn("task_mode", legacy)
+    def test_v1_policy_is_rejected_and_v2_json_schemas_validate(self) -> None:
+        old_policy = {
+            "schema_version": "runtime_control.policy/v1",
+            "token": {"checkpoint_ratio": 0.7, "compact_ratio": 0.9, "stop_ratio": 1.0},
+            "context": {"compact_ratio": 0.5},
+            "progress": {"staleness_seconds": 900, "retry_limit": 2, "no_progress_limit": 3},
+            "gate_policy": {
+                "steady": [],
+                "final": ["repo", "build"],
+                "commit": ["repo", "build", "review"],
+                "apply": ["repo", "build", "plan", "dry-run"],
+                "release": ["repo", "build", "live", "review"],
+            },
+            "retention": {"journal_days": 14, "raw_content_stored": False},
+        }
+        with self.assertRaisesRegex(RuntimeControlError, "unsupported runtime control policy schema"):
+            evaluate(
+                reduce_events(completed_events_without_artifacts()),
+                old_policy,
+                gate_event="final",
+                as_of=AS_OF,
+            )
 
         schema_dir = Path(__file__).resolve().parents[1] / "schemas"
         policy_schema = json.loads((schema_dir / "runtime-control-policy-v2.schema.json").read_text())
@@ -707,8 +724,10 @@ class RuntimeControlTest(unittest.TestCase):
             reduce_events(completed_events_without_artifacts("readonly", "readonly")),
             policy_v2(),
             gate_event="final",
+            mode_authority_verifier=managed_mode_verifier,
             as_of=AS_OF,
         )
+        self.assertEqual("runtime_control.decision/v2", readonly["schema_version"])
         Draft202012Validator(decision_schema).validate(readonly)
 
 

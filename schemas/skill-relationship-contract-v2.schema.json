@@ -1,46 +1,25 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://agent-dev-kit.local/schemas/skill-relationship-contract-v1.schema.json",
+  "$id": "https://agent-dev-kit.local/schemas/skill-relationship-contract-v2.schema.json",
   "type": "object",
   "additionalProperties": false,
   "required": [
     "schema_version",
     "identity_source",
     "skill_semantics_source",
-    "legacy_depends_on_policy",
-    "legacy_projection",
     "relationship_types",
     "relationships",
     "delivery_lifecycle"
   ],
   "properties": {
     "schema_version": {
-      "const": "adk-skill-relationship-contract/v1"
+      "const": "adk-skill-relationship-contract/v2"
     },
     "identity_source": {
       "const": "manifest.json"
     },
     "skill_semantics_source": {
       "const": "manifests/skill_content_contracts_v2.json"
-    },
-    "legacy_depends_on_policy": {
-      "const": "compatibility-only-context-prerequisite-not-delivery-sequencing"
-    },
-    "legacy_projection": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "relationship_type",
-        "authoritative_for_delivery_sequencing"
-      ],
-      "properties": {
-        "relationship_type": {
-          "const": "context-prerequisite"
-        },
-        "authoritative_for_delivery_sequencing": {
-          "const": false
-        }
-      }
     },
     "relationship_types": {
       "type": "object",
