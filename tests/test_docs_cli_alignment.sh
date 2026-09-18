@@ -55,6 +55,11 @@ retired_tokens = (
     "manifest.yaml",
     "scripts/install-assets.sh",
     "scripts/convert-assets.sh",
+    "scripts/quality-gates.sh",
+    "scripts/check-asset-taxonomy.sh",
+    "scripts/check-asset-taxonomy.sh",
+    "scripts/check-fallback-sunset.sh",
+    "bin/agent-dev-kit",
     ".github/workflows/scorecard.yml",
     "OpenSSF Scorecard",
     "hermes-agent",
@@ -62,7 +67,19 @@ retired_tokens = (
 )
 path_pattern = re.compile(r"(?<![A-Za-z0-9_./-])((?:scripts|tests)/[A-Za-z0-9_./-]+\.sh)\b")
 
+retired_paths = (
+    "scripts/install-assets.sh",
+    "scripts/convert-assets.sh",
+    "scripts/quality-gates.sh",
+    "scripts/check-fallback-sunset.sh",
+    "bin/agent-dev-kit",
+    "src/agent_dev_kit/runtime_control",
+)
+
 failures: list[str] = []
+for relative in retired_paths:
+    if (root / relative).exists():
+        failures.append(f"retired compatibility surface returned: {relative}")
 for relative in active_docs:
     path = root / relative
     if not path.is_file():

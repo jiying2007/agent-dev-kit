@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### Shell zero-compat follow-up
+- Remove the deprecated `quality-gates.sh` delegate, removed fallback-sunset executable tombstone, and repository-only `bin/agent-dev-kit` alias.
+- Removed the retired asset-taxonomy shell shim; taxonomy validation now calls the canonical typed Python contract directly. Remaining shell governance launchers describe their JSON manifest query path as current ownership rather than compatibility shims.
+- Active-doc regression centrally rejects retired compatibility paths from returning.
+
 ### Export zero-compat follow-up
 - `scripts/convert-assets.sh` is removed. `adk export` via the unified CLI is the sole maintained export surface.
 - The retired wrapper can no longer advertise or route the removed `hermes-agent` target.

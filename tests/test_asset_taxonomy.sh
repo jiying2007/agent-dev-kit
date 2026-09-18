@@ -4,13 +4,13 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-"$ROOT_DIR/scripts/check-asset-taxonomy.sh"
+PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}" python3 -m agent_dev_kit.asset_taxonomy_contract --root "$ROOT_DIR"
 
 TMP_DIR="$(mktemp -d)"
 trap 'rm -rf "$TMP_DIR"' EXIT
 
-# The taxonomy validator is a canonical JSON consumer. A compatibility YAML
-# projection must not be required for this gate to execute or pass.
+# The taxonomy validator is a canonical JSON consumer. No shell compatibility
+# shim or YAML projection is part of the active gate.
 mkdir -p "$TMP_DIR/json-only"
 cp "$ROOT_DIR/manifest.json" "$TMP_DIR/json-only/manifest.json"
 python3 -m agent_dev_kit.asset_taxonomy_contract \
@@ -50,4 +50,6 @@ grep -q '| `long_execution` | 长任务需要计划审查、检查点、恢复�
   exit 1
 }
 
-echo "[PASS] asset taxonomy"
+[[ ! -e "$ROOT_DIR/scripts/check-asset-taxonomy.sh" ]] || { echo "[FAIL] retired taxonomy shim returned" >&2; exit 1; }
+
+echo "[PASS] canonical asset taxonomy contract"
