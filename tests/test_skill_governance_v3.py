@@ -6,6 +6,7 @@ from typing import Any
 
 from agent_dev_kit.matcher_vnext import match_text, resolve_skill_content
 from agent_dev_kit.model import Manifest
+from agent_dev_kit.skill_relationships import resolve_skill_relationships
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -21,7 +22,7 @@ class SkillGovernanceV3Tests(unittest.TestCase):
             cls.entries.extend(item for item in values if isinstance(item, dict))
         cls.by_name = {str(item["name"]): item for item in cls.entries}
 
-    def test_dependency_graph_is_valid_acyclic_and_forward_only(self) -> None:
+    def test_legacy_dependency_graph_is_valid_acyclic_and_nonsequencing(self) -> None:
         names = set(self.by_name)
         graph: dict[str, tuple[str, ...]] = {}
         for name, item in self.by_name.items():
@@ -31,15 +32,6 @@ class SkillGovernanceV3Tests(unittest.TestCase):
             missing = [dep for dep in deps if dep not in names]
             self.assertEqual(missing, [], f"dangling depends_on for {name}: {missing}")
             self.assertNotIn(name, deps, f"self dependency for {name}")
-            current_order = (int(item["lifecycle_order"]), int(item["stage_order"]))
-            for dep in deps:
-                dependency = self.by_name[str(dep)]
-                dep_order = (int(dependency["lifecycle_order"]), int(dependency["stage_order"]))
-                self.assertLess(
-                    dep_order,
-                    current_order,
-                    f"dependency must precede consumer: {dep} {dep_order} !< {name} {current_order}",
-                )
             graph[name] = tuple(str(dep) for dep in deps)
 
         visiting: set[str] = set()
@@ -49,7 +41,7 @@ class SkillGovernanceV3Tests(unittest.TestCase):
             if node in visited:
                 return
             if node in visiting:
-                raise AssertionError("skill dependency cycle: " + " -> ".join(chain + (node,)))
+                raise AssertionError("legacy context dependency cycle: " + " -> ".join(chain + (node,)))
             visiting.add(node)
             for dep in graph[node]:
                 walk(dep, chain + (node,))
@@ -58,6 +50,14 @@ class SkillGovernanceV3Tests(unittest.TestCase):
 
         for name in sorted(graph):
             walk(name, ())
+
+        self.assertNotIn(
+            "adk-verification-before-completion",
+            graph["adk-code-review-loop"],
+            "review must not retain the historical inverted completion dependency",
+        )
+        relationships = resolve_skill_relationships(self.manifest)
+        self.assertFalse(relationships["legacy_depends_on_authoritative_for_delivery_sequencing"])
 
     def test_routing_primaries_resolve_to_primary_runtime_role(self) -> None:
         routing = self.manifest.data.get("routing")

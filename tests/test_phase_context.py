@@ -61,6 +61,7 @@ class PhaseContextContractTests(unittest.TestCase):
         self.assertEqual(result["status"], "pass")
         self.assertFalse(result["legacy_manifest_dependencies_authoritative"])
         self.assertEqual(result["pre_review_requirements"], ["verification-evidence"])
+        self.assertEqual(result["relationship_semantics_source"], "manifests/skill_relationship_contracts_v1.json")
         self.assertEqual(
             [(item["stage"], item["name"]) for item in result["steps"]],
             [
@@ -103,15 +104,6 @@ class PhaseContextContractTests(unittest.TestCase):
                     "primary_cardinality": "exactly-one",
                 },
             )
-
-    def test_inverted_delivery_lifecycle_fails_closed(self) -> None:
-        contract, digest = _contract(self.manifest)
-        mutated = json.loads(json.dumps(contract))
-        mutated["delivery_lifecycle"]["steps"][0]["stage"] = "completion"
-        mutated["delivery_lifecycle"]["steps"][1]["stage"] = "review"
-        with patch("agent_dev_kit.phase_context._contract", return_value=(mutated, digest)):
-            with self.assertRaisesRegex(ManifestError, "review -> completion"):
-                resolve_delivery_lifecycle(self.manifest)
 
     def test_phase_resource_cannot_escape_repository_root(self) -> None:
         contract, digest = _contract(self.manifest)

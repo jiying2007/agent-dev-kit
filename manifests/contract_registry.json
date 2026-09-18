@@ -6,7 +6,11 @@
       "version": "2",
       "owner": "routing",
       "producer": "agent_dev_kit.matcher",
-      "consumers": ["runtime-control", "profiles", "skill-content"],
+      "consumers": [
+        "runtime-control",
+        "profiles",
+        "skill-content"
+      ],
       "stability": "rc",
       "compatibility": "hard-cut",
       "surface_path": "manifest.json",
@@ -18,7 +22,10 @@
       "version": "2",
       "owner": "workflow",
       "producer": "agent_dev_kit.workflow_ir",
-      "consumers": ["runtime-control", "workflow-closure"],
+      "consumers": [
+        "runtime-control",
+        "workflow-closure"
+      ],
       "stability": "rc",
       "compatibility": "hard-cut",
       "surface_path": "manifests/workflow_ir_policy.json",
@@ -30,7 +37,10 @@
       "version": "2",
       "owner": "runtime-control",
       "producer": "agent_dev_kit.runtime_control",
-      "consumers": ["workflow", "run-evidence"],
+      "consumers": [
+        "workflow",
+        "run-evidence"
+      ],
       "stability": "rc",
       "compatibility": "strict",
       "schema_path": "schemas/runtime-control-decision-v2.schema.json",
@@ -42,7 +52,10 @@
       "version": "1",
       "owner": "evidence",
       "producer": "agent_dev_kit.evidence_graph",
-      "consumers": ["run-evidence", "evaluation"],
+      "consumers": [
+        "run-evidence",
+        "evaluation"
+      ],
       "stability": "rc",
       "compatibility": "strict",
       "schema_path": "schemas/evidence-graph-v1.schema.json",
@@ -54,7 +67,10 @@
       "version": "2",
       "owner": "evidence",
       "producer": "agent_dev_kit.trace_summary",
-      "consumers": ["run-evidence", "agent-value"],
+      "consumers": [
+        "run-evidence",
+        "agent-value"
+      ],
       "stability": "rc",
       "compatibility": "strict",
       "schema_path": "schemas/adk-workflow-trace-summary-v2.schema.json",
@@ -66,7 +82,11 @@
       "version": "2",
       "owner": "targets",
       "producer": "agent_dev_kit.targets",
-      "consumers": ["installer", "export", "native-conformance"],
+      "consumers": [
+        "installer",
+        "export",
+        "native-conformance"
+      ],
       "stability": "rc",
       "compatibility": "hard-cut",
       "schema_path": "manifests/target-contract.schema.json",
@@ -78,7 +98,10 @@
       "version": "1",
       "owner": "targets",
       "producer": "agent_dev_kit.targets",
-      "consumers": ["target-contract", "release"],
+      "consumers": [
+        "target-contract",
+        "release"
+      ],
       "stability": "rc",
       "compatibility": "strict",
       "schema_path": "schemas/native-target-conformance-receipt-v1.schema.json",
@@ -90,7 +113,11 @@
       "version": "1",
       "owner": "evaluation",
       "producer": "agent_dev_kit.agent_value",
-      "consumers": ["effect-comparator", "readiness", "content-architecture"],
+      "consumers": [
+        "effect-comparator",
+        "readiness",
+        "content-architecture"
+      ],
       "stability": "rc",
       "compatibility": "strict",
       "schema_path": "schemas/agent-value-contracts-v1.schema.json",
@@ -102,7 +129,11 @@
       "version": "1",
       "owner": "governance",
       "producer": "content-architecture-vnext",
-      "consumers": ["validation", "skill-content", "evaluation"],
+      "consumers": [
+        "validation",
+        "skill-content",
+        "evaluation"
+      ],
       "stability": "experimental",
       "compatibility": "strict",
       "schema_path": "schemas/content-architecture-policy-v1.schema.json",
@@ -114,7 +145,13 @@
       "version": "2",
       "owner": "routing",
       "producer": "agent_dev_kit.matcher_vnext",
-      "consumers": ["runtime-router", "validation", "evaluation", "phase-context"],
+      "consumers": [
+        "runtime-router",
+        "validation",
+        "evaluation",
+        "phase-context",
+        "skill-relationships"
+      ],
       "stability": "experimental",
       "compatibility": "strict",
       "schema_path": "schemas/skill-content-contract-v2.schema.json",
@@ -122,11 +159,31 @@
       "evidence_class": "test"
     },
     {
+      "id": "skill-relationships",
+      "version": "1",
+      "owner": "governance",
+      "producer": "agent_dev_kit.skill_relationships",
+      "consumers": [
+        "phase-context",
+        "workflow",
+        "validation"
+      ],
+      "stability": "experimental",
+      "compatibility": "strict",
+      "schema_path": "schemas/skill-relationship-contract-v1.schema.json",
+      "surface_path": "manifests/skill_relationship_contracts_v1.json",
+      "evidence_class": "test"
+    },
+    {
       "id": "phase-context",
       "version": "1",
       "owner": "routing",
       "producer": "agent_dev_kit.phase_context",
-      "consumers": ["workflow", "runtime-router", "validation"],
+      "consumers": [
+        "workflow",
+        "runtime-router",
+        "validation"
+      ],
       "stability": "experimental",
       "compatibility": "strict",
       "schema_path": "schemas/phase-context-contract-v1.schema.json",
@@ -138,7 +195,12 @@
       "version": "1",
       "owner": "governance",
       "producer": "content-architecture-vnext",
-      "consumers": ["agents", "subagents", "workflows", "evaluation"],
+      "consumers": [
+        "agents",
+        "subagents",
+        "workflows",
+        "evaluation"
+      ],
       "stability": "experimental",
       "compatibility": "strict",
       "schema_path": "schemas/agent-handoff-v1.schema.json",
@@ -150,7 +212,12 @@
       "version": "1",
       "owner": "evidence",
       "producer": "agent_dev_kit.evidence.envelope",
-      "consumers": ["run-evidence", "evaluation", "release", "cross-repo-governance"],
+      "consumers": [
+        "run-evidence",
+        "evaluation",
+        "release",
+        "cross-repo-governance"
+      ],
       "stability": "experimental",
       "compatibility": "strict",
       "schema_path": "schemas/evidence-envelope-v1.schema.json",
@@ -162,7 +229,11 @@
       "version": "2",
       "owner": "distribution",
       "producer": "agent_dev_kit.release",
-      "consumers": ["release", "provenance", "cross-repo-governance"],
+      "consumers": [
+        "release",
+        "provenance",
+        "cross-repo-governance"
+      ],
       "stability": "rc",
       "compatibility": "strict",
       "schema_path": "schemas/release-manifest-v2.schema.json",
@@ -174,7 +245,9 @@
       "version": "1",
       "owner": "distribution",
       "producer": "agent_dev_kit.distribution.promotion_evidence",
-      "consumers": ["cross-repo-governance"],
+      "consumers": [
+        "cross-repo-governance"
+      ],
       "stability": "rc",
       "compatibility": "strict",
       "schema_path": "schemas/promotion-evidence-v1.schema.json",
@@ -186,7 +259,12 @@
       "version": "1",
       "owner": "platform",
       "producer": "agent_dev_kit.platform_vnext",
-      "consumers": ["profiles", "targets", "evaluation", "governance"],
+      "consumers": [
+        "profiles",
+        "targets",
+        "evaluation",
+        "governance"
+      ],
       "stability": "experimental",
       "compatibility": "strict",
       "schema_path": null,
@@ -198,7 +276,11 @@
       "version": "1",
       "owner": "evidence",
       "producer": "agent_dev_kit.platform_vnext",
-      "consumers": ["evaluation", "agent-value", "improvement-loop"],
+      "consumers": [
+        "evaluation",
+        "agent-value",
+        "improvement-loop"
+      ],
       "stability": "experimental",
       "compatibility": "strict",
       "schema_path": "schemas/adk-agent-trace-v1.schema.json",
@@ -210,7 +292,11 @@
       "version": "1",
       "owner": "verification",
       "producer": "agent_dev_kit.platform_vnext",
-      "consumers": ["review", "release", "improvement-loop"],
+      "consumers": [
+        "review",
+        "release",
+        "improvement-loop"
+      ],
       "stability": "experimental",
       "compatibility": "strict",
       "schema_path": "schemas/independent-verifier-receipt-v1.schema.json",
