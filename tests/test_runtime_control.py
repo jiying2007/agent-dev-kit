@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from jsonschema import Draft202012Validator
-from agent_dev_kit.runtime_control import (
+from agent_dev_kit.execution_policy import (
     RuntimeControlError,
     evaluate,
     goal_intake_attestation_sha256,
