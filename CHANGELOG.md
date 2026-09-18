@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### Agent Platform stable surface
+- Public Platform operations move to the unified `adk platform` command and stable `agent_dev_kit.agent_platform` implementation.
+- Retired `platform_vnext.py`, `platform_vnext_cli.py`, `platform-vnext.sh` and `test_platform_vnext.sh` are physically removed.
+- Contract registry producers now bind to the stable module identity. The GitHub workflow/check display name remains unchanged until repository protection rules can be inspected safely.
+
 ### Shell zero-compat follow-up
 - Remove the deprecated `quality-gates.sh` delegate, removed fallback-sunset executable tombstone, and repository-only `bin/agent-dev-kit` alias.
 - Removed the retired asset-taxonomy shell shim; taxonomy validation now calls the canonical typed Python contract directly. Remaining shell governance launchers describe their JSON manifest query path as current ownership rather than compatibility shims.
