@@ -1,8 +1,8 @@
-"""Typed Skill relationship and terminal delivery lifecycle resolution.
+"""Typed Skill relationships and terminal delivery lifecycle resolution.
 
-Legacy manifest `depends_on` edges are compatibility-only context hints. They
-must never be interpreted as delivery sequencing. Typed relationships and the
-terminal lifecycle are governed by the Skill Relationship v1 contract.
+All Skill relationships are explicit typed edges in Skill Relationship v2.
+Manifest asset identity remains authoritative, but manifest metadata carries no
+parallel dependency graph.
 """
 
 from __future__ import annotations
@@ -20,11 +20,11 @@ from jsonschema.exceptions import SchemaError
 from .matcher_vnext import resolve_skill_content
 from .model import Manifest, ManifestError
 
-_CONTRACT = "manifests/skill_relationship_contracts_v1.json"
-_CONTRACT_SCHEMA = "schemas/skill-relationship-contract-v1.schema.json"
-_SCHEMA = "adk-skill-relationship-contract/v1"
-_RESOLUTION_SCHEMA = "adk-skill-relationship-resolution/v1"
-_LIFECYCLE_SCHEMA = "adk-delivery-lifecycle-resolution/v1"
+_CONTRACT = "manifests/skill_relationship_contracts_v2.json"
+_CONTRACT_SCHEMA = "schemas/skill-relationship-contract-v2.schema.json"
+_SCHEMA = "adk-skill-relationship-contract/v2"
+_RESOLUTION_SCHEMA = "adk-skill-relationship-resolution/v2"
+_LIFECYCLE_SCHEMA = "adk-delivery-lifecycle-resolution/v2"
 _EXPECTED_STAGES = ("review", "completion", "commit-pr", "closeout")
 _ALLOWED_TYPES = {
     "context-prerequisite",
@@ -77,17 +77,6 @@ def _load_contract(
         raise ManifestError("Skill relationship identity_source must be manifest.json")
     if value.get("skill_semantics_source") != "manifests/skill_content_contracts_v2.json":
         raise ManifestError("Skill relationship semantics must come from Skill Content v2")
-    if value.get("legacy_depends_on_policy") != (
-        "compatibility-only-context-prerequisite-not-delivery-sequencing"
-    ):
-        raise ManifestError("Legacy depends_on policy must deny delivery sequencing authority")
-    legacy = value.get("legacy_projection")
-    if not isinstance(legacy, dict):
-        raise ManifestError("Skill relationship legacy_projection is missing")
-    if legacy.get("relationship_type") != "context-prerequisite":
-        raise ManifestError("Legacy depends_on must project only to context-prerequisite")
-    if legacy.get("authoritative_for_delivery_sequencing") is not False:
-        raise ManifestError("Legacy depends_on must not authorize delivery sequencing")
     types = value.get("relationship_types")
     if not isinstance(types, dict) or set(types) != _ALLOWED_TYPES:
         raise ManifestError("Skill relationship types must be the canonical four-type set")
@@ -155,37 +144,6 @@ def _assert_acyclic(graph: Mapping[str, Sequence[str]], label: str) -> None:
 
     for node in sorted(graph):
         walk(node, ())
-
-
-def _legacy_projection(
-    entries: Mapping[str, Mapping[str, Any]]
-) -> list[Dict[str, Any]]:
-    names = set(entries)
-    graph: Dict[str, list[str]] = {name: [] for name in names}
-    rows: list[Dict[str, Any]] = []
-    for consumer, item in entries.items():
-        deps = item.get("depends_on", [])
-        if not isinstance(deps, list):
-            raise ManifestError(f"legacy depends_on must be an array: {consumer}")
-        if len(deps) != len(set(str(dep) for dep in deps)):
-            raise ManifestError(f"duplicate legacy depends_on: {consumer}")
-        for raw in deps:
-            if not isinstance(raw, str) or raw not in names:
-                raise ManifestError(f"dangling legacy depends_on: {consumer} -> {raw}")
-            if raw == consumer:
-                raise ManifestError(f"self legacy depends_on: {consumer}")
-            graph[consumer].append(raw)
-            rows.append(
-                {
-                    "from": raw,
-                    "to": consumer,
-                    "type": "context-prerequisite",
-                    "source": "manifest.depends_on",
-                    "authoritative_for_delivery_sequencing": False,
-                }
-            )
-    _assert_acyclic(graph, "legacy context prerequisite")
-    return sorted(rows, key=lambda row: (row["to"], row["from"]))
 
 
 def _explicit_relationships(
@@ -315,7 +273,6 @@ def _resolve_delivery_lifecycle(
         "schema": _LIFECYCLE_SCHEMA,
         "status": "pass",
         "pre_review_requirements": requirements,
-        "legacy_manifest_dependencies_authoritative": False,
         "relationship_semantics_source": _CONTRACT,
         "steps": resolved,
     }
@@ -324,9 +281,8 @@ def _resolve_delivery_lifecycle(
 def resolve_skill_relationships(manifest: Manifest) -> Dict[str, Any]:
     contract, digest = _contract(manifest)
     entries = _entries(manifest)
-    legacy = _legacy_projection(entries)
-    explicit = _explicit_relationships(contract, entries)
-    lifecycle = _resolve_delivery_lifecycle(manifest, contract, entries, explicit)
+    relationships = _explicit_relationships(contract, entries)
+    lifecycle = _resolve_delivery_lifecycle(manifest, contract, entries, relationships)
     return {
         "schema": _RESOLUTION_SCHEMA,
         "status": "pass",
@@ -334,10 +290,8 @@ def resolve_skill_relationships(manifest: Manifest) -> Dict[str, Any]:
         "contract_sha256": digest,
         "identity_source": "manifest.json",
         "skill_semantics_source": "manifests/skill_content_contracts_v2.json",
-        "legacy_depends_on_authoritative_for_delivery_sequencing": False,
-        "legacy_projection_count": len(legacy),
-        "legacy_relationships": legacy,
-        "typed_relationships": explicit,
+        "relationship_count": len(relationships),
+        "typed_relationships": relationships,
         "delivery_lifecycle": lifecycle,
     }
 
@@ -374,7 +328,6 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     else:
         for item in result["typed_relationships"]:
             print(f"{item['type']}\t{item['requirement']}\t{item['from']}\t{item['to']}")
-        print(f"legacy-context-prerequisites\t{result['legacy_projection_count']}")
     return 0
 
 
