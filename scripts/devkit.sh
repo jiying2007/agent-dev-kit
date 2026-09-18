@@ -69,6 +69,10 @@ case "${COMMAND}" in
     shift
     exec "${PYTHON_BIN}" -m agent_dev_kit.phase_context --root "${ROOT_DIR}" "$@"
     ;;
+  skill-relationships)
+    shift
+    exec "${PYTHON_BIN}" -m agent_dev_kit.skill_relationships --root "${ROOT_DIR}" "$@"
+    ;;
 esac
 
 exec "${PYTHON_BIN}" -m agent_dev_kit.cli "$@"
