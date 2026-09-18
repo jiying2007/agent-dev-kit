@@ -566,13 +566,13 @@ def _discover_root() -> Path:
         return Path(configured).expanduser().resolve()
     current = Path(__file__).resolve()
     for candidate in [Path.cwd()] + list(current.parents):
-        if (candidate / "manifest.json").is_file() and (candidate / "scripts/skill-match.sh").is_file():
+        if (candidate / "manifest.json").is_file() and (candidate / "scripts/devkit.sh").is_file():
             return candidate.resolve()
     raise ManifestError("ADK asset root not found")
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
-    parser = argparse.ArgumentParser(prog="skill-match.sh")
+    parser = argparse.ArgumentParser(prog="devkit.sh match")
     parser.add_argument("--text", required=True)
     parser.add_argument("--skill")
     parser.add_argument("--scope", choices=("auto", "skill", "optional-skill"), default="auto")
