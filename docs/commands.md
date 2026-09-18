@@ -53,18 +53,14 @@ bash scripts/devkit.sh validate --strict --summary-json
 
 ## manifest
 
-只读检查 canonical `manifest.json` 的 bounded-context composition 治理契约。`composition-check` 不写文件、不启用 runtime fragment loading、不创建第二 SSOT，也不把 reference composer 升级为 runtime generator；它只读取当前 canonical manifest 与 composition policy，并验证 owner partition -> deterministic compose 后语义与 canonical digest 完全一致。
+只读检查 canonical `manifest.json` 的 bounded-context composition 治理契约。该命令不写文件、不启用 runtime fragment loading、不创建第二 SSOT；它只读取当前 canonical manifest 与 composition policy，并验证 owner partition -> deterministic compose 后语义与 canonical digest 完全一致。
 
 ```bash
 bash scripts/devkit.sh manifest composition-check
 bash scripts/devkit.sh manifest composition-check --summary-json
-bash scripts/devkit.sh manifest split-readiness
-bash scripts/devkit.sh manifest split-readiness --summary-json
 ```
 
-成功报告包含 canonical source、source/round-trip digest、owner domain count，以及 `runtime_enabled=false`、`writes=false`、`parallel_ssot_allowed=false`、`runtime_fragment_loading=false` 和 `composition_generator=null`。任何 policy、owner、canonical source、round-trip 语义或 digest 漂移都会 fail closed 并返回非零；该命令不接受 fragment path、`--write` 或生成输出参数。
-
-`split-readiness` 是物理拆分前的只读迁移门禁。当前 contract 故意返回 `status=blocked` / exit 2：只有 deliberate change `manifest-build-time-split` 达到 `review-passed`、显式声明 build-time generator/authoring mode，并具备 change-governance、可执行回退、双次确定性生成、严格 generated-output 校验、canonical digest 等价与 consumer-boundary 证据后，后续 contract migration 才有资格解除 blocker。本命令本身不会创建 `manifest-sections`、generator 或任何 runtime fragment loader。
+成功报告包含 canonical source、source/round-trip digest、owner domain count，以及 `runtime_enabled=false`、`writes=false` 和 `composition_generator=null`。任何 policy、owner、canonical source、round-trip 语义或 digest 漂移都会 fail closed 并返回非零。物理 manifest split、fragment loader 和 build-time composition generator 不属于当前产品契约；若未来重新引入，必须作为新的 versioned contract 独立设计，而不是复活隐藏兼容入口。
 
 ## doctor
 
