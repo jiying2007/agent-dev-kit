@@ -35,7 +35,7 @@ import sys
 from pathlib import Path
 root = Path(sys.argv[1])
 sys.path.insert(0, str(root / "src"))
-from agent_dev_kit.matcher_vnext import resolve_skill_content
+from agent_dev_kit.matcher import resolve_skill_content
 from agent_dev_kit.model import Manifest
 manifest = Manifest.load(root)
 for intent in manifest.data.get("routing", {}).get("intents", []):
