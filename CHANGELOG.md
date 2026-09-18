@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Installer zero-compat follow-up
+- Transactional install/rollback accepts only `adk-install-receipt/v3`; receipt v1/v2 compatibility parsing and rollback branches are removed.
+- `scripts/install-assets.sh` is removed. `adk install plan/apply/rollback` via the unified CLI is the sole maintained install surface.
+
 ### Zero-compat hard-cut follow-up
 - Release rehearsal now accepts only the current strict source contract and release-manifest v2; the executable pre-contract bundle migration path and release-manifest v1 acceptance are removed.
 - Software M5 evaluation uses one canonical `manifests/software_m5_eval_contract.json` bound to the current ADK source version; active rc2-rc7/v5 snapshot copies are removed.
