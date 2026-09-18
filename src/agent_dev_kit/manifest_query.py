@@ -161,7 +161,7 @@ def run(data: dict[str, Any], command: str, args: list[str]) -> None:
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Query canonical manifest.json for shell compatibility shims")
+    parser = argparse.ArgumentParser(description="Query canonical manifest.json for repository governance launchers")
     parser.add_argument("--root", default=".")
     parser.add_argument("command")
     parser.add_argument("args", nargs="*")
