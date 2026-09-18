@@ -4,10 +4,8 @@ ADK provides policy and gate decisions; it is not an agent runtime.
 """
 
 from .engine import (
-    DECISION_SCHEMA,
     DECISION_SCHEMA_V2,
     EVENT_SCHEMA,
-    POLICY_SCHEMA,
     POLICY_SCHEMA_V2,
     STATE_SCHEMA,
     RuntimeControlError,
@@ -18,10 +16,8 @@ from .engine import (
 )
 
 __all__ = [
-    "DECISION_SCHEMA",
     "DECISION_SCHEMA_V2",
     "EVENT_SCHEMA",
-    "POLICY_SCHEMA",
     "POLICY_SCHEMA_V2",
     "STATE_SCHEMA",
     "RuntimeControlError",
