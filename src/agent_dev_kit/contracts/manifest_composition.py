@@ -92,88 +92,6 @@ def compose_owned_sections(
 
 
 
-def _expected_migration_gate() -> dict[str, Any]:
-    return {
-        "state": "blocked",
-        "change_id": "manifest-build-time-split",
-        "required_change_stage": "review-passed",
-        "authoring_root": "manifests/manifest-sections",
-        "generator_path": "tools/compose_manifest.py",
-        "target_authoring_mode": "deterministic-build-time",
-        "required_evidence": [
-            "change-governance-pass",
-            "executable-rollback-plan",
-            "deterministic-double-generation",
-            "strict-generated-output-validation",
-            "canonical-digest-equivalence",
-            "canonical-consumer-boundary-pass",
-        ],
-        "activation_invariants": {
-            "canonical_output": "manifest.json",
-            "runtime_fragment_loading": False,
-            "parallel_ssot_allowed": False,
-            "generated_output_must_validate_before_consume": True,
-            "generated_output_must_preserve_manifest_digest_semantics": True,
-        },
-    }
-
-
-def split_migration_readiness(
-    policy: Mapping[str, Any],
-    *,
-    change_stage: str | None,
-    authoring_root_present: bool,
-    generator_path_present: bool,
-) -> dict[str, Any]:
-    """Report whether the current contract authorizes a physical manifest split."""
-
-    expected = _expected_migration_gate()
-    gate = policy.get("migration_gate")
-    if gate != expected:
-        return {
-            "schema": "adk-manifest-split-readiness/v1",
-            "status": "invalid",
-            "failures": ["migration_gate contract drift; deliberate contract migration is required"],
-        }
-
-    blockers = ["manifest split migration authorization is blocked by current contract"]
-    if change_stage != expected["required_change_stage"]:
-        blockers.append(
-            f"migration change {expected['change_id']} must reach {expected['required_change_stage']}"
-        )
-    if policy.get("authoring_mode") != expected["target_authoring_mode"]:
-        blockers.append(
-            f"authoring_mode must migrate to {expected['target_authoring_mode']} before physical split"
-        )
-    if policy.get("composition_generator") != expected["generator_path"]:
-        blockers.append("composition_generator must be explicitly declared before physical split")
-    if not authoring_root_present:
-        blockers.append(f"authoring root is absent: {expected['authoring_root']}")
-    else:
-        blockers.append("physical authoring root is present while migration authorization is blocked")
-    if not generator_path_present:
-        blockers.append(f"generator path is absent: {expected['generator_path']}")
-    else:
-        blockers.append("generator path is present while migration authorization is blocked")
-
-    return {
-        "schema": "adk-manifest-split-readiness/v1",
-        "status": "blocked",
-        "authorization_state": expected["state"],
-        "change_id": expected["change_id"],
-        "change_stage": change_stage,
-        "required_change_stage": expected["required_change_stage"],
-        "authoring_root": expected["authoring_root"],
-        "authoring_root_present": authoring_root_present,
-        "generator_path": expected["generator_path"],
-        "generator_path_present": generator_path_present,
-        "target_authoring_mode": expected["target_authoring_mode"],
-        "required_evidence": list(expected["required_evidence"]),
-        "activation_invariants": dict(expected["activation_invariants"]),
-        "blockers": blockers,
-    }
-
-
 def composition_check(
     manifest: Mapping[str, Any],
     policy: Mapping[str, Any],
@@ -218,23 +136,6 @@ def composition_check(
         failures.append(
             "operational_check must remain read-only with writes=false and runtime_enabled=false"
         )
-
-    future_raw = policy.get("future_split_contract")
-    future: Mapping[str, Any]
-    if isinstance(future_raw, Mapping):
-        future = future_raw
-    else:
-        failures.append("future_split_contract must be an object")
-        future = {}
-    if future.get("canonical_output") != "manifest.json":
-        failures.append("future canonical output must remain manifest.json")
-    if future.get("runtime_fragment_loading") is not False:
-        failures.append("runtime_fragment_loading must remain false")
-    if future.get("parallel_ssot_allowed") is not False:
-        failures.append("parallel_ssot_allowed must remain false")
-
-    if policy.get("migration_gate") != _expected_migration_gate():
-        failures.append("migration_gate must remain blocked until deliberate contract migration")
 
     owners_raw = policy.get("section_owners")
     owners: dict[str, str] = {}
@@ -283,8 +184,6 @@ def composition_check(
         "reference_composer_mode": expected_reference["mode"],
         "runtime_enabled": expected_reference["runtime_enabled"],
         "writes": expected_operational["writes"],
-        "parallel_ssot_allowed": future.get("parallel_ssot_allowed"),
-        "runtime_fragment_loading": future.get("runtime_fragment_loading"),
         "composition_generator": policy.get("composition_generator"),
     }
     if failures:
