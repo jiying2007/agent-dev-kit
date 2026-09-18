@@ -1,4 +1,4 @@
-"""Canonical event reducer and decision engine for runtime control."""
+"""Canonical event reducer and decision engine for ADK execution policy."""
 
 from __future__ import annotations
 
