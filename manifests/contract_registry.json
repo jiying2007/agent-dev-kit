@@ -258,7 +258,7 @@
       "id": "agent-platform-primitives",
       "version": "1",
       "owner": "platform",
-      "producer": "agent_dev_kit.platform_vnext",
+      "producer": "agent_dev_kit.agent_platform",
       "consumers": [
         "profiles",
         "targets",
@@ -275,7 +275,7 @@
       "id": "agent-trace",
       "version": "1",
       "owner": "evidence",
-      "producer": "agent_dev_kit.platform_vnext",
+      "producer": "agent_dev_kit.agent_platform",
       "consumers": [
         "evaluation",
         "agent-value",
@@ -291,7 +291,7 @@
       "id": "independent-verifier-receipt",
       "version": "1",
       "owner": "verification",
-      "producer": "agent_dev_kit.platform_vnext",
+      "producer": "agent_dev_kit.agent_platform",
       "consumers": [
         "review",
         "release",
