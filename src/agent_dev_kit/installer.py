@@ -25,8 +25,6 @@ from .targets import RenderedBundle, TargetUsageError, render_selection
 
 
 PLAN_SCHEMA = "adk-install-plan/v2"
-LEGACY_RECEIPT_SCHEMA = "adk-install-receipt/v1"
-PREVIOUS_RECEIPT_SCHEMA = "adk-install-receipt/v2"
 RECEIPT_SCHEMA = "adk-install-receipt/v3"
 RECEIPT_NAME = ".adk-install-receipt.json"
 
@@ -70,13 +68,13 @@ def _read_receipt(path: Path, label: str) -> Mapping[str, Any]:
         raise ManifestError("{} is invalid JSON: {}".format(label, path)) from exc
     if not isinstance(data, dict):
         raise ManifestError("{} must be a JSON object".format(label))
-    schema = data.get("schema")
-    if schema not in (LEGACY_RECEIPT_SCHEMA, PREVIOUS_RECEIPT_SCHEMA, RECEIPT_SCHEMA):
-        raise ManifestError("unsupported {} schema".format(label))
-    if schema in (PREVIOUS_RECEIPT_SCHEMA, RECEIPT_SCHEMA):
-        stored_digest = data.get("receipt_sha256")
-        if not isinstance(stored_digest, str) or stored_digest != _receipt_digest(data):
-            raise ManifestError("{} digest does not match content".format(label))
+    if data.get("schema") != RECEIPT_SCHEMA:
+        raise ManifestError(
+            "unsupported {} schema: expected {}".format(label, RECEIPT_SCHEMA)
+        )
+    stored_digest = data.get("receipt_sha256")
+    if not isinstance(stored_digest, str) or stored_digest != _receipt_digest(data):
+        raise ManifestError("{} digest does not match content".format(label))
     return data
 
 
@@ -116,10 +114,6 @@ def create_plan(
             raise ManifestError("existing install receipt target does not match its location")
         if existing_receipt.get("tool") != tool:
             raise ManifestError("existing install receipt tool does not match requested target")
-        if existing_receipt.get("schema") != RECEIPT_SCHEMA:
-            raise TargetUsageError(
-                "legacy_receipt_requires_rollback: rollback the active v1/v2 receipt before creating a v2 plan"
-            )
         active_receipt_sha256 = sha256_file(receipt_path)
         for item in existing_receipt.get("installed", []):
             if not isinstance(item, dict) or not item.get("destination"):
@@ -456,7 +450,6 @@ def rollback(receipt_path: Path, lock_timeout_seconds: float = 0.0) -> Dict[str,
 
 def _rollback_locked(receipt_path: Path) -> Dict[str, Any]:
     receipt = _read_receipt(receipt_path, "rollback receipt")
-    receipt_schema = receipt.get("schema")
     target = _expand_target(str(receipt.get("target", "")))
     resolved_receipt = ensure_within(receipt_path, target, "receipt path")
     expected_receipt = (target / RECEIPT_NAME).resolve(strict=False)
@@ -484,11 +477,10 @@ def _rollback_locked(receipt_path: Path) -> Dict[str, Any]:
             backup = ensure_within(target / str(backup_value), target, "rollback backup")
             if not backup.exists() and not backup.is_symlink():
                 raise ManifestError("rollback backup missing: {}".format(backup))
-            if receipt_schema in (PREVIOUS_RECEIPT_SCHEMA, RECEIPT_SCHEMA):
-                backup_sha256 = item.get("backup_sha256")
-                if not isinstance(backup_sha256, str) or sha256_tree(backup) != backup_sha256:
-                    raise ManifestError("rollback backup changed; refusing rollback: {}".format(backup))
-        elif receipt_schema in (PREVIOUS_RECEIPT_SCHEMA, RECEIPT_SCHEMA) and item.get("backup_sha256") is not None:
+            backup_sha256 = item.get("backup_sha256")
+            if not isinstance(backup_sha256, str) or sha256_tree(backup) != backup_sha256:
+                raise ManifestError("rollback backup changed; refusing rollback: {}".format(backup))
+        elif item.get("backup_sha256") is not None:
             raise ManifestError("rollback receipt has a backup digest without a backup")
 
     previous_receipt_value = receipt.get("previous_receipt")
@@ -497,11 +489,10 @@ def _rollback_locked(receipt_path: Path) -> Dict[str, Any]:
         previous_receipt = ensure_within(target / str(previous_receipt_value), target, "previous receipt")
         if not previous_receipt.is_file() or previous_receipt.is_symlink():
             raise ManifestError("previous install receipt is missing")
-        if receipt_schema in (PREVIOUS_RECEIPT_SCHEMA, RECEIPT_SCHEMA):
-            previous_receipt_sha256 = receipt.get("previous_receipt_sha256")
-            if not isinstance(previous_receipt_sha256, str) or sha256_file(previous_receipt) != previous_receipt_sha256:
-                raise ManifestError("previous install receipt changed; refusing rollback")
-    elif receipt_schema in (PREVIOUS_RECEIPT_SCHEMA, RECEIPT_SCHEMA) and receipt.get("previous_receipt_sha256") is not None:
+        previous_receipt_sha256 = receipt.get("previous_receipt_sha256")
+        if not isinstance(previous_receipt_sha256, str) or sha256_file(previous_receipt) != previous_receipt_sha256:
+            raise ManifestError("previous install receipt changed; refusing rollback")
+    elif receipt.get("previous_receipt_sha256") is not None:
         raise ManifestError("rollback receipt has a previous receipt digest without a previous receipt")
 
     receipt_id = str(receipt.get("receipt_id", ""))

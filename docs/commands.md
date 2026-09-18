@@ -18,7 +18,7 @@ ADK core 只提供平台中立命令。`manifest.json` 是唯一结构化 Manife
 
 ## install
 
-通过可审查 plan、原子 apply 和 receipt rollback 安装 Agent/Skill。`apply` 只接受 UUID/timestamp/TTL 合法、未过期、manifest/contract digest 未漂移、active receipt SHA256 未变化且无冲突的 `adk-install-plan/v2`；未托管目标冲突会在 plan 阶段阻断。新安装写入 `adk-install-receipt/v3`，记录 target contract digest、逐文件 rendered/source SHA256、mode、asset kind、备份和前序 receipt 完整性；`v1/v2` receipt 仅用于兼容回滚，旧 `v1` plan 明确拒绝。
+通过可审查 plan、原子 apply 和 receipt rollback 安装 Agent/Skill。`apply` 只接受 UUID/timestamp/TTL 合法、未过期、manifest/contract digest 未漂移、active receipt SHA256 未变化且无冲突的 `adk-install-plan/v2`；未托管目标冲突会在 plan 阶段阻断。安装与回滚只接受 `adk-install-receipt/v3`，记录 target contract digest、逐文件 rendered/source SHA256、mode、asset kind、备份和前序 receipt 完整性；v1/v2 receipt 与旧 plan 均 fail closed，不提供兼容迁移入口。
 
 ```bash
 bash scripts/devkit.sh install plan --tool claude-code --target /tmp/adk-live --mode copy --profile core --asset-kind skill --output /tmp/adk-plan.json
@@ -314,6 +314,6 @@ bash scripts/devkit.sh release publish --version 6.0.0 --backend github --artifa
 
 `release build` 默认要求 source distribution 对应 clean Git commit，并把 commit、tree、dirty 状态和 source distribution digest 写入制品。只有隔离测试快照可显式使用 `--allow-unbound-snapshot`；该制品会标记 `release_eligible=false`，不得进入 rehearsal、publish 或 Software M5 release evidence。
 
-`release rehearse` 只接受 checksum 匹配且 candidate 版本更高的本地 artifact；它在临时 target 安装上一版、升级候选版、核验 receipt，再回滚并比较上一版受管资产 hash。rc.1 legacy bundle 或缺少当前必填 target contract 字段的上一版会在 release-only migration boundary 建立受管 receipt，再执行 rollback-before-install；active loader 仍 fail closed。candidate 回滚后，从保留的上一版 artifact 重装并逐文件比对 managed hashes，证明 fallback anchor 可用。build 在归档前校验 SPDX 2.3 SBOM 的 package/relationship 完整性并把 SBOM SHA256 写入 release manifest；GitHub release workflow 使用 SHA-pinned `actions/attest` 为 tarball 生成 provenance。该命令不创建 tag、不上传制品、不调用远端 backend。rehearsal、runtime smoke、timing 和 campaign state 属于 checkout 内的验证证据，不进入 source distribution，避免制品 SHA 与其自身验证报告形成循环依赖。
+`release rehearse` 只接受 checksum 匹配、满足当前 strict source/release contract 且 candidate 版本更高的本地 artifact；它在临时 target 安装上一版、升级候选版、核验 receipt，再回滚并比较上一版受管资产 hash。pre-contract/legacy bundle 与缺少当前必填 target contract 字段的 artifact 会直接 fail closed，不提供 release-only migration boundary。candidate 回滚后直接恢复并逐文件比对上一版 managed hashes，证明 rollback anchor 可用。build 在归档前校验 SPDX 2.3 SBOM 的 package/relationship 完整性并把 SBOM SHA256 写入 release manifest；GitHub release workflow 使用 SHA-pinned `actions/attest` 为 tarball 生成 provenance。该命令不创建 tag、不上传制品、不调用远端 backend。rehearsal、runtime smoke、timing 和 campaign state 属于 checkout 内的验证证据，不进入 source distribution，避免制品 SHA 与其自身验证报告形成循环依赖。
 
 `release runtime-build` 按显式 Profile 构建 `adk-runtime-bundle/v1`，只包含版本化 Skill support tree、bundle manifest、逐文件 checksum、许可证和 SPDX SBOM。它是供外部 handoff target 导入的 platform-neutral Runtime Bundle，不是 Codex direct export；制品不包含 ADK Python 实现、测试、内部 change evidence 或 source distribution，也不会写任何运行目录。
