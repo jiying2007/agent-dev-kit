@@ -1,4 +1,4 @@
-"""CLI for converged Agent Platform vNext primitives."""
+"""CLI adapter for stable Agent Platform primitives."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Mapping, Optional, Sequence
 
 from .model import Manifest
-from .platform_vnext import (
+from .agent_platform import (
     aci_benchmark,
     asset_usage_report,
     hooks_report,
@@ -39,7 +39,7 @@ def _emit(value: Mapping[str, object], output: Optional[str]) -> int:
 
 
 def _parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(prog="platform-vnext.sh")
+    parser = argparse.ArgumentParser(prog="devkit.sh platform")
     sub = parser.add_subparsers(dest="action", required=True)
 
     maturity = sub.add_parser("maturity")

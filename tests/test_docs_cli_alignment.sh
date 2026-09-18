@@ -55,6 +55,7 @@ retired_tokens = (
     "manifest.yaml",
     "scripts/install-assets.sh",
     "scripts/convert-assets.sh",
+    "scripts/platform-vnext.sh",
     "scripts/quality-gates.sh",
     "scripts/check-asset-taxonomy.sh",
     "scripts/check-asset-taxonomy.sh",
@@ -70,6 +71,7 @@ path_pattern = re.compile(r"(?<![A-Za-z0-9_./-])((?:scripts|tests)/[A-Za-z0-9_./
 retired_paths = (
     "scripts/install-assets.sh",
     "scripts/convert-assets.sh",
+    "scripts/platform-vnext.sh",
     "scripts/quality-gates.sh",
     "scripts/check-fallback-sunset.sh",
     "bin/agent-dev-kit",

@@ -10,7 +10,7 @@ export PYTHONPATH="$ROOT/src${PYTHONPATH:+:$PYTHONPATH}"
 run_json() {
   local out="$1"
   shift
-  "$ROOT/scripts/platform-vnext.sh" "$@" >"$out"
+  bash "$ROOT/scripts/devkit.sh" platform "$@" >"$out"
 }
 
 run_json "$TMP/maturity.json" maturity
@@ -98,7 +98,7 @@ v=json.load(open(sys.argv[1], encoding='utf-8'))
 v['verifier_context_id']=v['builder_context_id']
 json.dump(v, open(sys.argv[2], 'w', encoding='utf-8'))
 PY
-if "$ROOT/scripts/platform-vnext.sh" verifier-validate --input "$TMP/verifier-bad.json" >/dev/null; then
+if bash "$ROOT/scripts/devkit.sh" platform verifier-validate --input "$TMP/verifier-bad.json" >/dev/null; then
   echo '[FAIL] same-context verifier unexpectedly passed' >&2
   exit 1
 fi
@@ -172,4 +172,6 @@ assert v['native_runtime_certified'] is False
 assert len(v['results'])==13
 PY
 
-echo '[PASS] converged Agent Platform vNext primitives and fail-closed evidence semantics'
+[[ ! -e "$ROOT/scripts/platform-vnext.sh" ]] || { echo '[FAIL] retired platform-vnext.sh returned' >&2; exit 1; }
+
+echo '[PASS] stable Agent Platform primitives and fail-closed evidence semantics'

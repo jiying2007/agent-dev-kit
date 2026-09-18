@@ -1,4 +1,4 @@
-"""Converged vNext Agent Platform primitives.
+"""Stable Agent Platform primitives.
 
 This module stays control-plane only: it derives effective assets, validates
 portable/evidence contracts, and evaluates caller-supplied runtime smokes. A
