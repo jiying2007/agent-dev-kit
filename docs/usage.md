@@ -13,9 +13,9 @@
 ```bash
 bash scripts/devkit.sh validate --strict
 bash scripts/devkit.sh validate --quick
-bash scripts/devkit.sh runtime-boundary
-bash scripts/devkit.sh asset-taxonomy
-bash scripts/devkit.sh official-docs-governance --summary-json
+bash scripts/check-runtime-boundary.sh
+bash scripts/check-asset-taxonomy.sh
+bash scripts/check-official-docs-governance.sh --summary-json
 bash scripts/devkit.sh test
 ```
 
@@ -128,7 +128,7 @@ bash scripts/devkit.sh archive --change can-fd-bringup
 命令级 Evidence Index：
 
 ```bash
-bash scripts/devkit.sh evidence append --file docs/changes/can-fd-bringup/negative-results.md --command "bash tests/run_all.sh" --exit-code 0 --summary "all tests passed" --evidence-path docs/changes/can-fd-bringup/verify-report.md --layer Workflow --artifact verify-report
+bash scripts/evidence-index.sh append --file docs/changes/can-fd-bringup/negative-results.md --command "bash tests/run_all.sh" --exit-code 0 --summary "all tests passed" --evidence-path docs/changes/can-fd-bringup/verify-report.md --layer Workflow --artifact verify-report
 ```
 
 注意事项：
@@ -143,14 +143,14 @@ bash scripts/devkit.sh evidence append --file docs/changes/can-fd-bringup/negati
 常用维护入口：
 
 ```bash
-bash scripts/devkit.sh health
-bash scripts/devkit.sh backup list
+bash scripts/health-check.sh
+bash scripts/backup-rollback.sh list
 bash scripts/devkit.sh benchmark run --iterations 5 --summary-json
 bash scripts/devkit.sh security check --summary-json
 bash scripts/devkit.sh eval run --suite deterministic --summary-json
 bash scripts/devkit.sh release check
 bash scripts/devkit.sh release build --out dist
-bash scripts/devkit.sh version show
+bash scripts/version-manager.sh current
 ```
 
 团队仓库接入或季度复核时，可先生成 Harness readiness 基线：
@@ -169,8 +169,8 @@ bash scripts/devkit.sh harness readiness --root /path/to/team-repo --as-of 2026-
 
 ```bash
 bash scripts/devkit.sh validate --strict
-bash scripts/devkit.sh runtime-boundary
-bash scripts/devkit.sh official-docs-governance --summary-json
+bash scripts/check-runtime-boundary.sh
+bash scripts/check-official-docs-governance.sh --summary-json
 bash scripts/devkit.sh security check --summary-json
 bash scripts/devkit.sh release check --summary-json
 bash scripts/devkit.sh test
