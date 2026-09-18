@@ -83,7 +83,7 @@ bash scripts/devkit.sh doctor --require-runtime codex --summary-json
 bash scripts/devkit.sh eval run --suite deterministic --summary-json
 bash scripts/devkit.sh security check --summary-json
 bash scripts/devkit.sh release check --summary-json
-bash scripts/devkit.sh runtime-boundary
+bash scripts/check-runtime-boundary.sh
 bash tests/run_all.sh --quick
 ```
 
@@ -102,8 +102,8 @@ adk validate --strict
 
 ```bash
 bash scripts/devkit.sh validate --strict
-bash scripts/devkit.sh runtime-boundary
-bash scripts/devkit.sh official-docs-governance --summary-json
+bash scripts/check-runtime-boundary.sh
+bash scripts/check-official-docs-governance.sh --summary-json
 bash tests/run_all.sh
 ```
 
