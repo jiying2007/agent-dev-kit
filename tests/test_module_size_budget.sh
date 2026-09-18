@@ -59,10 +59,6 @@ if not isinstance(architecture, dict):
 else:
     if architecture.get("preferred_execution_namespace") != "execution_policy":
         failures.append("preferred execution namespace must be execution_policy")
-    if architecture.get("compatibility_execution_namespace") != "runtime_control":
-        failures.append("runtime_control must remain the 5.x compatibility namespace")
-    if architecture.get("compatibility_sunset") != "future-major-only":
-        failures.append("execution namespace compatibility may only sunset in a future major")
     if architecture.get("no_new_support_modules") is not True:
         failures.append("no_new_support_modules must stay enabled")
 
@@ -85,92 +81,17 @@ else:
             + ", ".join(sorted(transitional_support_set))
         )
 
-    compatibility_facades = architecture.get("compatibility_support_facades")
-    if not isinstance(compatibility_facades, list) or not compatibility_facades:
-        failures.append("compatibility_support_facades must explicitly register retained compatibility seams")
-        compatibility_facades = []
-
-    expected_facade = {
-        "path": "src/agent_dev_kit/runtime_control/engine_support.py",
-        "canonical_owner": "src/agent_dev_kit/execution_policy/contracts.py",
-        "namespace": "runtime_control",
-        "sunset": "future-major-only",
-        "mode": "re-export-only",
-    }
-    if compatibility_facades != [expected_facade]:
-        failures.append("compatibility_support_facades must exactly describe the retained 5.x engine_support seam")
-
-    compatibility_support_set = set()
-    for entry in compatibility_facades:
-        if not isinstance(entry, dict):
-            failures.append("compatibility_support_facades entries must be objects")
-            continue
-        path_value = entry.get("path")
-        owner_value = entry.get("canonical_owner")
-        if not isinstance(path_value, str) or not path_value:
-            failures.append("compatibility facade path must be a non-empty string")
-            continue
-        compatibility_support_set.add(path_value)
-        if entry.get("namespace") != architecture.get("compatibility_execution_namespace"):
-            failures.append(f"compatibility facade namespace mismatch: {path_value}")
-        if entry.get("sunset") != architecture.get("compatibility_sunset"):
-            failures.append(f"compatibility facade sunset mismatch: {path_value}")
-        if entry.get("mode") != "re-export-only":
-            failures.append(f"compatibility facade must remain re-export-only: {path_value}")
-        facade_path = root / path_value
-        owner_path = root / owner_value if isinstance(owner_value, str) else None
-        if not facade_path.is_file():
-            failures.append(f"registered compatibility facade is missing: {path_value}")
-            continue
-        if owner_path is None or not owner_path.is_file():
-            failures.append(f"compatibility facade canonical owner is missing: {owner_value}")
-        if facade_path.stat().st_size > 512:
-            failures.append(f"compatibility facade grew beyond re-export budget: {path_value}")
-
-        try:
-            tree = ast.parse(facade_path.read_text(encoding="utf-8"), filename=path_value)
-        except SyntaxError as exc:
-            failures.append(f"compatibility facade is not valid Python: {path_value}: {exc}")
-            continue
-        if not ast.get_docstring(tree):
-            failures.append(f"compatibility facade must document its compatibility role: {path_value}")
-        executable = [
-            node
-            for node in tree.body
-            if not (
-                isinstance(node, ast.Expr)
-                and isinstance(node.value, ast.Constant)
-                and isinstance(node.value.value, str)
-            )
-        ]
-        if len(executable) != 1 or not isinstance(executable[0], ast.ImportFrom):
-            failures.append(f"compatibility facade may contain only one re-export import: {path_value}")
-        else:
-            statement = executable[0]
-            if (
-                statement.level != 2
-                or statement.module != "execution_policy.contracts"
-                or len(statement.names) != 1
-                or statement.names[0].name != "*"
-                or statement.names[0].asname is not None
-            ):
-                failures.append(f"compatibility facade must only re-export execution_policy.contracts: {path_value}")
-
-    if transitional_support_set & compatibility_support_set:
-        failures.append("support modules cannot be both transitional debt and compatibility facades")
-
     actual_support = {
         path.relative_to(root).as_posix()
         for path in source_root.rglob("*_support.py")
     }
-    governed_support = transitional_support_set | compatibility_support_set
-    unexpected_support = sorted(actual_support - governed_support)
+    unexpected_support = sorted(actual_support - transitional_support_set)
     if unexpected_support:
         failures.append(
             "new *_support.py modules are forbidden; split by owned bounded context instead: "
             + ", ".join(unexpected_support)
         )
-    missing_support = sorted(governed_support - actual_support)
+    missing_support = sorted(transitional_support_set - actual_support)
     if missing_support:
         failures.append(
             "retired governed support modules must also be removed from policy: "
@@ -178,11 +99,11 @@ else:
         )
 
     preferred = source_root / architecture.get("preferred_execution_namespace", "") / "__init__.py"
-    compatibility = source_root / architecture.get("compatibility_execution_namespace", "") / "__init__.py"
+    retired = source_root / "runtime_control"
     if not preferred.is_file():
         failures.append("missing preferred execution_policy package")
-    if not compatibility.is_file():
-        failures.append("missing runtime_control compatibility package")
+    if retired.exists():
+        failures.append("retired runtime_control compatibility package must not exist")
 
     metrics = architecture.get("design_metrics")
     expected_metrics = {
@@ -205,8 +126,6 @@ print(json.dumps({
     "legacy_exception_count": len(exceptions),
     "support_module_count": len(list(source_root.rglob("*_support.py"))),
     "transitional_support_debt_count": len(architecture["transitional_support_modules"]),
-    "compatibility_support_facade_count": len(architecture["compatibility_support_facades"]),
-    "compatibility_sunset": architecture["compatibility_sunset"],
     "preferred_execution_namespace": architecture["preferred_execution_namespace"],
     "largest_baseline_bytes": max(
         (item["baseline_bytes"] for item in exceptions.values()),
