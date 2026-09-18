@@ -21,7 +21,6 @@ from .contracts import (
     _validate_goal_intake,
 )
 from .contracts import (
-    DECISION_SCHEMA as DECISION_SCHEMA,
 )
 from .contracts import (
     DECISION_SCHEMA_V2 as DECISION_SCHEMA_V2,
@@ -30,7 +29,6 @@ from .contracts import (
     EVENT_SCHEMA as EVENT_SCHEMA,
 )
 from .contracts import (
-    POLICY_SCHEMA as POLICY_SCHEMA,
 )
 from .contracts import (
     POLICY_SCHEMA_V2 as POLICY_SCHEMA_V2,
@@ -356,64 +354,53 @@ def evaluate(
     if gate_event not in GATE_EVENTS:
         raise RuntimeControlError("unsupported gate_event")
     goal = state.get("goal") or {}
-    policy_schema = normalized_policy["schema_version"]
-    if policy_schema == POLICY_SCHEMA:
-        if task_mode is not None and task_mode != "implementation":
-            raise RuntimeControlError(
-                "runtime_control.policy/v1 supports only legacy implementation behavior"
-            )
-        normalized_task_mode = "implementation"
-        normalized_artifact_mode = "implementation"
+    if task_mode is not None:
+        raise RuntimeControlError(
+            "runtime_control.policy/v2 task mode is state-bound and cannot be overridden"
+        )
+    provenance = goal.get("intake_provenance")
+    if not isinstance(provenance, dict) or provenance.get("kind") not in {
+        "routing-decision", "goal-replan"
+    }:
+        raise RuntimeControlError("runtime_control.policy/v2 requires an attested goal intake")
+    last_event_at = state.get("last_event_at")
+    if not last_event_at:
+        raise RuntimeControlError("runtime control state is missing its event provenance")
+    bound_intake = _validate_goal_intake(
+        {
+            "schema_version": GOAL_INTAKE_SCHEMA,
+            "task_mode": goal.get("task_mode"),
+            "artifact_mode": goal.get("artifact_mode"),
+            "goal_id": goal.get("goal_id"),
+            "request_sha256": goal.get("request_sha256"),
+            "routing_decision_sha256": goal.get("routing_decision_sha256"),
+            "authority_id": goal.get("mode_authority_id"),
+            "attestation_sha256": goal.get("intake_attestation_sha256"),
+            "provenance": provenance,
+        },
+        event_at=_timestamp(last_event_at, "state.last_event_at"),
+        expected_kind=str(provenance["kind"]),
+        expected_goal_id=str(goal.get("goal_id")),
+    )
+    normalized_task_mode = str(bound_intake["task_mode"])
+    normalized_artifact_mode = str(bound_intake["artifact_mode"])
+    authority_policy = normalized_policy["mode_authority_policy"]
+    authority_registered = (
+        authority_policy["verification_backend"] == "managed-authority-registry"
+        and bound_intake["authority_id"]
+        in authority_policy["trusted_mode_authorities"]
+    )
+    mode_authority_managed = False
+    if authority_registered and mode_authority_verifier is not None:
+        try:
+            mode_authority_managed = mode_authority_verifier(
+                bound_intake, authority_policy
+            ) is True
+        except Exception:
+            mode_authority_managed = False
+    effective_artifact_mode = normalized_artifact_mode
+    if not mode_authority_managed and normalized_artifact_mode == "readonly":
         effective_artifact_mode = "implementation"
-        mode_authority_managed = True
-    else:
-        if task_mode is not None:
-            raise RuntimeControlError(
-                "runtime_control.policy/v2 task mode is state-bound and cannot be overridden"
-            )
-        provenance = goal.get("intake_provenance")
-        if not isinstance(provenance, dict) or provenance.get("kind") not in {
-            "routing-decision", "goal-replan"
-        }:
-            raise RuntimeControlError("runtime_control.policy/v2 requires an attested goal intake")
-        last_event_at = state.get("last_event_at")
-        if not last_event_at:
-            raise RuntimeControlError("runtime control state is missing its event provenance")
-        bound_intake = _validate_goal_intake(
-            {
-                "schema_version": GOAL_INTAKE_SCHEMA,
-                "task_mode": goal.get("task_mode"),
-                "artifact_mode": goal.get("artifact_mode"),
-                "goal_id": goal.get("goal_id"),
-                "request_sha256": goal.get("request_sha256"),
-                "routing_decision_sha256": goal.get("routing_decision_sha256"),
-                "authority_id": goal.get("mode_authority_id"),
-                "attestation_sha256": goal.get("intake_attestation_sha256"),
-                "provenance": provenance,
-            },
-            event_at=_timestamp(last_event_at, "state.last_event_at"),
-            expected_kind=str(provenance["kind"]),
-            expected_goal_id=str(goal.get("goal_id")),
-        )
-        normalized_task_mode = str(bound_intake["task_mode"])
-        normalized_artifact_mode = str(bound_intake["artifact_mode"])
-        authority_policy = normalized_policy["mode_authority_policy"]
-        authority_registered = (
-            authority_policy["verification_backend"] == "managed-authority-registry"
-            and bound_intake["authority_id"]
-            in authority_policy["trusted_mode_authorities"]
-        )
-        mode_authority_managed = False
-        if authority_registered and mode_authority_verifier is not None:
-            try:
-                mode_authority_managed = mode_authority_verifier(
-                    bound_intake, authority_policy
-                ) is True
-            except Exception:
-                mode_authority_managed = False
-        effective_artifact_mode = normalized_artifact_mode
-        if not mode_authority_managed and normalized_artifact_mode == "readonly":
-            effective_artifact_mode = "implementation"
     now = as_of or datetime.now(UTC)
     if now.tzinfo is None:
         raise RuntimeControlError("as_of must include timezone")
@@ -431,13 +418,9 @@ def evaluate(
     evidence_present = set(evidence)
     missing_evidence = sorted(required_evidence - evidence_present)
     checkpoint_missing = sorted(set(checkpoint.get("evidence_ids") or []) - evidence_present)
-    if policy_schema == POLICY_SCHEMA:
-        gate_applicable = True
-        required_artifacts = normalized_policy["gate_policy"][gate_event]
-    else:
-        configured_artifacts = normalized_policy["artifact_applicability"][effective_artifact_mode][gate_event]
-        gate_applicable = configured_artifacts is not None
-        required_artifacts = configured_artifacts or []
+    configured_artifacts = normalized_policy["artifact_applicability"][effective_artifact_mode][gate_event]
+    gate_applicable = configured_artifacts is not None
+    required_artifacts = configured_artifacts or []
     missing_artifacts = sorted(item for item in required_artifacts if item not in artifacts)
     artifact_evidence_missing = sorted(
         item for item in required_artifacts if item in artifacts and artifacts[item] not in evidence_present
@@ -563,7 +546,7 @@ def evaluate(
         )
     ))
     decision = {
-        "schema_version": DECISION_SCHEMA if policy_schema == POLICY_SCHEMA else DECISION_SCHEMA_V2,
+        "schema_version": DECISION_SCHEMA_V2,
         "status": status,
         "gate_event": gate_event,
         "recommended_action": action,
@@ -594,16 +577,15 @@ def evaluate(
         "artifact_evidence_missing": artifact_evidence_missing,
         "reasons": reasons,
     }
-    if policy_schema == POLICY_SCHEMA_V2:
-        decision.update({
-            "task_mode": normalized_task_mode,
-            "artifact_mode": normalized_artifact_mode,
-            "effective_artifact_mode": effective_artifact_mode,
-            "mode_authority_id": goal.get("mode_authority_id"),
-            "mode_authority_managed": mode_authority_managed,
-            "intake_attestation_sha256": goal.get("intake_attestation_sha256"),
-            "intake_provenance": goal.get("intake_provenance"),
-            "gate_applicable": gate_applicable,
-            "required_artifacts": list(required_artifacts),
-        })
+    decision.update({
+        "task_mode": normalized_task_mode,
+        "artifact_mode": normalized_artifact_mode,
+        "effective_artifact_mode": effective_artifact_mode,
+        "mode_authority_id": goal.get("mode_authority_id"),
+        "mode_authority_managed": mode_authority_managed,
+        "intake_attestation_sha256": goal.get("intake_attestation_sha256"),
+        "intake_provenance": goal.get("intake_provenance"),
+        "gate_applicable": gate_applicable,
+        "required_artifacts": list(required_artifacts),
+    })
     return decision
