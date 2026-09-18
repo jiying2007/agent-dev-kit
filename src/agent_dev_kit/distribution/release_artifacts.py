@@ -19,13 +19,13 @@ from ..installer import RECEIPT_NAME
 from ..model import Manifest, ManifestError, sha256_file, sha256_tree
 
 SOURCE_DISTRIBUTION_DIRECTORIES = (
-    ".github", "agents", "contexts", "docs", "manifests", "optional-skills",
+    ".github", "agents", "docs", "manifests", "optional-skills",
     "scripts", "schemas", "skills", "src", "templates", "tests", "tools", "workflows",
 )
 
 SOURCE_DISTRIBUTION_FILES = (
     ".version-lock", ".adk/harness-readiness.json", "AGENTS.md", "CONTEXT.md",
-    "LICENSE", "NAVIGATION.md", "OWNERS", "README.md", "manifest.json",
+    "LICENSE", "OWNERS", "README.md", "manifest.json",
     "pyproject.toml",
 )
 
@@ -132,26 +132,28 @@ def _copy_source_distribution(manifest: Manifest, destination: Path) -> int:
     )
     for relative in SOURCE_DISTRIBUTION_DIRECTORIES:
         source = manifest.root / relative
-        if source.is_dir():
-            symlinks = [path for path in source.rglob("*") if path.is_symlink()]
-            if symlinks:
-                raise ManifestError(
-                    "release source distribution does not allow symlinks: {}".format(
-                        ", ".join(path.relative_to(manifest.root).as_posix() for path in symlinks[:5])
-                    )
+        if not source.is_dir():
+            raise ManifestError(f"release source directory is missing: {relative}")
+        symlinks = [path for path in source.rglob("*") if path.is_symlink()]
+        if symlinks:
+            raise ManifestError(
+                "release source distribution does not allow symlinks: {}".format(
+                    ", ".join(path.relative_to(manifest.root).as_posix() for path in symlinks[:5])
                 )
-            shutil.copytree(
-                str(source),
-                str(destination / relative),
-                symlinks=False,
-                ignore=ignored,
             )
+        shutil.copytree(
+            str(source),
+            str(destination / relative),
+            symlinks=False,
+            ignore=ignored,
+        )
     for relative in SOURCE_DISTRIBUTION_FILES:
         source = manifest.root / relative
-        if source.is_file():
-            target = destination / relative
-            target.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(str(source), str(target))
+        if not source.is_file():
+            raise ManifestError(f"release source file is missing: {relative}")
+        target = destination / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(str(source), str(target))
     return sum(1 for path in destination.rglob("*") if path.is_file() or path.is_symlink())
 
 
@@ -325,11 +327,7 @@ def _extract_release(artifact: Path, destination: Path, member_limit: int = 5000
     raise ManifestError("release archive does not contain a supported ADK root layout")
 
 
-def _release_source_root(
-    release_root: Path,
-    *,
-    enforce_current_contract: bool = True,
-) -> tuple[Manifest, Mapping[str, Any]]:
+def _release_source_root(release_root: Path) -> tuple[Manifest, Mapping[str, Any]]:
     source_root = release_root / "source"
     release_manifest_path = release_root / "release-manifest.json"
     if not source_root.is_dir() or not (source_root / "manifest.json").is_file():
@@ -338,8 +336,8 @@ def _release_source_root(
         release_manifest = json.loads(release_manifest_path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
         raise ManifestError("release archive has an invalid release manifest") from exc
-    if not isinstance(release_manifest, dict) or release_manifest.get("schema_version") not in {1, 2}:
-        raise ManifestError("release archive has an unsupported release manifest")
+    if not isinstance(release_manifest, dict) or release_manifest.get("schema_version") != 2:
+        raise ManifestError("release archive requires release manifest schema_version=2")
     top_manifest = Manifest.load(release_root)
     source_manifest = Manifest.load(source_root)
     if top_manifest.digest != source_manifest.digest:
@@ -348,10 +346,9 @@ def _release_source_root(
         raise ManifestError("release manifest digest does not match source manifest")
     if release_manifest.get("version") != source_manifest.version:
         raise ManifestError("release manifest version does not match source manifest")
-    if enforce_current_contract:
-        failures = source_manifest.validate(strict=True)
-        if failures:
-            raise ManifestError("release source manifest is invalid: {}".format("; ".join(failures)))
+    failures = source_manifest.validate(strict=True)
+    if failures:
+        raise ManifestError("release source manifest is invalid: {}".format("; ".join(failures)))
     return source_manifest, release_manifest
 
 
@@ -410,11 +407,3 @@ def _managed_hashes(target: Path) -> dict[str, str]:
         hashes[destination] = sha256_tree(path)
     return hashes
 
-
-def _previous_release_migration(error: ManifestError) -> str | None:
-    message = str(error)
-    if "target_contract_missing" in message:
-        return "legacy-bundle-v2"
-    if "target_contract_incompatible" in message or "target_contract_invalid" in message:
-        return "target-contract-hard-cut"
-    return None
