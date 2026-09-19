@@ -2,6 +2,7 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+[[ ! -e "$ROOT_DIR/tests/test_product_maturity_v5.sh" ]] || { echo "[FAIL] retired product maturity v5 test name returned" >&2; exit 1; }
 VERSION="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1], encoding="utf-8"))["version"])' "$ROOT_DIR/manifest.json")"
 TMP_DIR="$(mktemp -d)"
 cleanup() {
@@ -224,4 +225,4 @@ assert report["status"] == "pass", report
 assert report["total"] == 30 and report["passed"] == 30, report
 PY
 
-echo "[PASS] ADK v5 product maturity contracts hold"
+echo "[PASS] ADK product maturity contracts hold"

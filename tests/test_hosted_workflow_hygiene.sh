@@ -121,6 +121,10 @@ ci = (workflow_dir / "ci.yml").read_text(encoding="utf-8")
 assert "  push:\n    branches:\n      - main\n  pull_request:\n" in ci, "core CI must push-trigger only on main"
 assert "\n      - master\n" not in ci, "stale master push trigger must not return"
 
+platform = (workflow_dir / "platform.yml").read_text(encoding="utf-8")
+assert platform.startswith("name: platform\n"), "Platform workflow display identity must stay stable"
+assert "\n  platform-vnext:\n    name: platform-vnext\n" in platform, "ruleset-required platform-vnext check context must stay explicit"
+
 promotion = ci.split("\n  promotion-evidence:\n", 1)[1]
 assert "if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}" in promotion, "promotion evidence must stay confined to main pushes"
 assert "id-token: write" in promotion, "promotion OIDC permission must remain explicit"
@@ -133,7 +137,7 @@ assert "if-no-files-found: ignore" in timing_upload, "regression timing upload m
 pr_cancellable = {
     workflow_dir / "ci.yml": "agent-dev-kit-ci-v2",
     workflow_dir / "security-codeql.yml": "security-codeql",
-    workflow_dir / "platform-vnext.yml": "platform-vnext",
+    workflow_dir / "platform.yml": "platform",
     workflow_dir / "digital-worker-contract.yml": "digital-worker-contract",
 }
 for path in consumer_files:

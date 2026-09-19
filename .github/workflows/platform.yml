@@ -1,4 +1,4 @@
-name: platform-vnext
+name: platform
 
 on:
   pull_request:
@@ -9,11 +9,12 @@ permissions:
   contents: read
 
 concurrency:
-  group: platform-vnext-${{ github.event.pull_request.number || github.run_id }}
+  group: platform-${{ github.event.pull_request.number || github.run_id }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   platform-vnext:
+    name: platform-vnext
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:

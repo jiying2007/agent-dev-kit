@@ -11,7 +11,7 @@ from agent_dev_kit.skill_relationships import resolve_skill_relationships
 ROOT = Path(__file__).resolve().parents[1]
 
 
-class SkillGovernanceV3Tests(unittest.TestCase):
+class SkillGovernanceTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.manifest = Manifest.load(ROOT)

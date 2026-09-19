@@ -7,7 +7,7 @@ ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 if [[ -f "${ADK_TEST_SUITE_DIR:-/nonexistent}/validate-summary.json" ]]; then
   summary="$(<"${ADK_TEST_SUITE_DIR}/validate-summary.json")"
 else
-  summary="$("$ROOT_DIR/scripts/validate-assets.sh" --strict --summary-json)"
+  summary="$(bash "$ROOT_DIR/scripts/devkit.sh" validate --strict --summary-json)"
 fi
 echo "$summary" | grep -q '"workflows":7' || {
   echo "[FAIL] validate summary did not report seven workflows" >&2

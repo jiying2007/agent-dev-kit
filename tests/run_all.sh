@@ -92,7 +92,7 @@ TESTS=(
   test_target_contracts.sh
   test_target_adapter_spi.sh
   test_effect_eval.sh
-  test_product_maturity_v5.sh
+  test_product_maturity.sh
   test_runtime_bundle.sh
   test_release_manifest_contract.sh
   test_software_m5_ready.sh
@@ -145,6 +145,7 @@ TESTS=(
   test_profile_coherence_enhanced.sh
   test_match_effectiveness.sh
   test_skill_content.sh
+  test_skill_governance.sh
   test_skill_sop_quality.sh
   test_memory_governance.sh
   test_capability_uplift.sh
@@ -194,6 +195,7 @@ QUICK_TESTS=(
   test_hosted_workflow_hygiene.sh
   test_performance_budgets.sh
   test_skill_trigger_matrix.sh
+  test_skill_governance.sh
   test_scripts_smoke.sh
 )
 
