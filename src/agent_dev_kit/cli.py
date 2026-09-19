@@ -46,6 +46,7 @@ from .repository_evaluation import certify_repository_report, repository_plan
 from .targets import TargetUsageError, check_targets, run_target_smoke
 from .task_cost import TASK_TYPES as TASK_COST_TYPES
 from .task_cost import classify_task_cost, validate_skill_usage
+from .validation_contract import validate_repository
 
 
 def _cmd_manifest(argv: Sequence[str]) -> int:
@@ -79,23 +80,21 @@ def _cmd_validate(argv: Sequence[str]) -> int:
     parser.add_argument("--quick", action="store_true")
     parser.add_argument("--summary-json", action="store_true")
     args = parser.parse_args(argv)
-    manifest = _manifest()
-    failures = manifest.validate(strict=args.strict and not args.quick)
-    if failures:
-        if args.summary_json:
-            _json({"schema_version": 1, "status": "fail", "failures": failures})
-        else:
-            for failure in failures:
-                print("[FAIL] {}".format(failure), file=sys.stderr)
-        return 1
-    validation_args = list(argv)
-    completed = subprocess.run(
-        ["bash", str(ROOT / "scripts" / "validate-assets.sh")] + validation_args,
-        cwd=str(ROOT),
-        check=False,
-    )
-    return completed.returncode
 
+    result = validate_repository(ROOT, strict=args.strict, quick=args.quick)
+    if args.summary_json:
+        _json(result)
+    elif result["status"] == "pass":
+        print(
+            "Validation passed. strict={} quick={}".format(
+                int(args.strict),
+                int(args.quick),
+            )
+        )
+    else:
+        for failure in result.get("failures", []):
+            print("[FAIL] {}".format(failure), file=sys.stderr)
+    return 0 if result["status"] == "pass" else 1
 
 def _cmd_doctor(argv: Sequence[str]) -> int:
     parser = argparse.ArgumentParser(prog="devkit.sh doctor")

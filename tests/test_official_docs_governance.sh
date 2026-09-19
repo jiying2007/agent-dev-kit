@@ -6,7 +6,7 @@ ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 "$ROOT_DIR/scripts/check-official-docs-governance.sh" >/dev/null
 "$ROOT_DIR/scripts/check-official-docs-governance.sh" --summary-json | rg -q '"status":"pass"'
-"$ROOT_DIR/scripts/validate-assets.sh" --strict >/dev/null
+bash "$ROOT_DIR/scripts/devkit.sh" validate --strict >/dev/null
 
 python3 - "$ROOT_DIR" <<'PY'
 import json

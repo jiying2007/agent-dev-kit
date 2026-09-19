@@ -89,7 +89,7 @@ review_entry_bytes="$(wc -c <"$ROOT_DIR/skills/adk-code-review-loop/SKILL.md" | 
 verification_entry_bytes="$(wc -c <"$ROOT_DIR/$verification_skill" | tr -d ' ')"
 [[ "$verification_entry_bytes" -le 9500 ]] || fail "adk-verification-before-completion entry exceeds progressive-disclosure byte ratchet: bytes=$verification_entry_bytes limit=9500"
 
-"$ROOT_DIR/scripts/validate-assets.sh" --strict >/dev/null
+bash "$ROOT_DIR/scripts/devkit.sh" validate --strict >/dev/null
 "$ROOT_DIR/scripts/check-memory-governance.sh" >/dev/null
 "$ROOT_DIR/tests/test_skill_dependencies.sh" >/dev/null
 PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}" \
