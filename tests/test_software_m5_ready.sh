@@ -46,9 +46,9 @@ from agent_dev_kit.installer import RECEIPT_NAME, apply_plan, create_plan, rollb
 from agent_dev_kit.locking import TargetLock, clear_target_lock, target_lock_status
 from agent_dev_kit.matcher import match_text
 from agent_dev_kit.model import Manifest, ManifestError
+from agent_dev_kit.versioning import compare_versions, version_is_newer
 from agent_dev_kit.release import (
     _extract_release,
-    _prerelease_is_newer,
     _release_source_identity,
     check_release,
 )
@@ -57,16 +57,19 @@ root = Path(os.sys.argv[1])
 temp_root = Path(os.sys.argv[2])
 manifest = Manifest.load(root)
 assert check_release(manifest)["status"] == "pass"
-assert _prerelease_is_newer("3.0.0", "3.1.0-rc.1")
-assert _prerelease_is_newer("3.1.0-rc.1", "3.1.0-rc.2")
-assert _prerelease_is_newer("3.1.0-rc.3", "3.1.0-rc.4")
-assert _prerelease_is_newer("3.1.0-rc.4", "3.1.0-rc.5")
-assert _prerelease_is_newer("3.1.0-rc.5", "3.1.0-rc.6")
-assert _prerelease_is_newer("3.1.0-rc.6", "3.1.0-rc.7")
-assert _prerelease_is_newer("3.1.0-rc.7", "3.1.0")
-assert not _prerelease_is_newer("3.1.0", "3.1.0-rc.7")
-assert _prerelease_is_newer("3.1.0-rc.7", "4.0.0")
-assert _prerelease_is_newer("4.0.0", "5.0.0-rc.2")
+assert version_is_newer("3.0.0", "3.1.0-rc.1")
+assert version_is_newer("3.1.0-rc.1", "3.1.0-rc.2")
+assert version_is_newer("3.1.0-rc.3", "3.1.0-rc.4")
+assert version_is_newer("3.1.0-rc.4", "3.1.0-rc.5")
+assert version_is_newer("3.1.0-rc.5", "3.1.0-rc.6")
+assert version_is_newer("3.1.0-rc.6", "3.1.0-rc.7")
+assert version_is_newer("3.1.0-rc.7", "3.1.0")
+assert not version_is_newer("3.1.0", "3.1.0-rc.7")
+assert version_is_newer("3.1.0-rc.7", "4.0.0")
+assert version_is_newer("4.0.0", "5.0.0-rc.2")
+assert compare_versions("7.0.0+build.1", "7.0.0+build.2") == 0
+assert version_is_newer("7.0.0", "7.0.1")
+assert not version_is_newer("7.0.1", "7.0.1")
 
 with tempfile.TemporaryDirectory() as source_identity_temp:
     source_identity_root = Path(source_identity_temp)
