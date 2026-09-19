@@ -88,6 +88,7 @@ retired_paths = (
     "scripts/check-fallback-sunset.sh",
     "bin/agent-dev-kit",
     "src/agent_dev_kit/runtime_control",
+    ".github/workflows/platform-vnext.yml",
     "tests/test_product_maturity_v5.sh",
     "tests/test_skill_governance_v3.sh",
     "tests/test_skill_governance_v3.py",
