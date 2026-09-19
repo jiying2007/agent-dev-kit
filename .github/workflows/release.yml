@@ -5,6 +5,15 @@ on:
     tags:
       - 'v*'
   workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Exact immutable release tag already present in the repository
+        required: true
+        type: string
+      release_commit:
+        description: Exact commit SHA that the release tag must peel to
+        required: true
+        type: string
   workflow_call:
     inputs:
       release_tag:
@@ -100,13 +109,15 @@ jobs:
             echo "::error::release tag $RELEASE_TAG does not match source version $EXPECTED_TAG"
             exit 1
           fi
-          bash scripts/version-manager.sh verify
 
       - name: Install CI dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y ripgrep shellcheck
           python -m pip install '.[quality]'
+
+      - name: Validate synchronized source version identity
+        run: bash scripts/version-manager.sh verify
 
       - name: Validate and smoke
         run: |
@@ -200,3 +211,24 @@ jobs:
               --title "$RELEASE_TAG" \
               --generate-notes
           fi
+
+          release_endpoint="repos/$GITHUB_REPOSITORY/releases/tags/$RELEASE_TAG"
+          if [[ "$(gh api -H 'X-GitHub-Api-Version: 2026-03-10' "$release_endpoint" --jq '.immutable')" != "true" ]]; then
+            echo "::error::published GitHub Release is not immutable"
+            exit 1
+          fi
+          remote_names="$(gh api -H 'X-GitHub-Api-Version: 2026-03-10' "$release_endpoint" --jq '.assets[].name' | sort)"
+          if [[ "$remote_names" != "$expected_names" ]]; then
+            echo "::error::published GitHub Release asset set changed after publication"
+            exit 1
+          fi
+          for local_asset in "$archive" "$checksum" "$contract"; do
+            asset_name="$(basename "$local_asset")"
+            local_digest="sha256:$(sha256sum "$local_asset" | awk '{print $1}')"
+            remote_digest="$(gh api -H 'X-GitHub-Api-Version: 2026-03-10' "$release_endpoint" --jq ".assets[] | select(.name == \"$asset_name\") | .digest")"
+            if [[ "$remote_digest" != "$local_digest" ]]; then
+              echo "::error::remote release digest mismatch for $asset_name"
+              exit 1
+            fi
+          done
+          echo "GitHub Release immutable asset digests verified: $RELEASE_TAG"

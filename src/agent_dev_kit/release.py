@@ -12,7 +12,12 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence
 
 from .compiler import export_assets
-from .versioning import validate_version, version_identity_failures, version_is_newer
+from .versioning import (
+    VersioningError,
+    validate_version,
+    version_identity_failures,
+    version_is_newer,
+)
 from .distribution.release_artifacts import (
     _assert_publishable_release_artifact,
     _copy_runtime_skill,
@@ -378,7 +383,10 @@ def publish_release(
     repository: Optional[str] = None,
     dry_run: bool = False,
 ) -> Dict[str, Any]:
-    validate_version(version)
+    try:
+        validate_version(version)
+    except VersioningError as exc:
+        raise ManifestError(str(exc)) from exc
     if backend != "github":
         raise ManifestError("release backend is not configured; use --backend github")
     if artifact is None or not artifact.is_file():
@@ -448,7 +456,11 @@ def rehearse_release(previous_artifact: Path, candidate_artifact: Path) -> Dict[
             )
         ):
             raise ManifestError("candidate release source provenance is incomplete")
-        if not version_is_newer(previous_manifest.version, candidate_manifest.version):
+        try:
+            candidate_is_newer = version_is_newer(previous_manifest.version, candidate_manifest.version)
+        except VersioningError as exc:
+            raise ManifestError(str(exc)) from exc
+        if not candidate_is_newer:
             raise ManifestError("candidate release must be newer than previous release")
 
         target = workspace / "target"

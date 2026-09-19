@@ -34,7 +34,7 @@ assert {path.name for path in consumer_files} == expected_consumer_workflows, (
 expected_write_permissions = {
     "branch-gc.yml": ["contents"],
     "ci.yml": ["id-token"],
-    "release-tag-promotion.yml": ["artifact-metadata", "attestations", "contents", "contents", "id-token"],
+    "release-tag-promotion.yml": ["artifact-metadata", "artifact-metadata", "attestations", "attestations", "contents", "contents", "contents", "id-token", "id-token"],
     "release.yml": ["artifact-metadata", "attestations", "contents", "id-token"],
     "security-codeql.yml": ["security-events"],
 }
@@ -168,6 +168,8 @@ assert "contents: write" in branch_gc_apply, "branch-gc write permission must re
 release = (workflow_dir / "release.yml").read_text(encoding="utf-8")
 assert "concurrency:" not in release, "release serialization semantics must remain unchanged"
 assert "  workflow_dispatch:\n" in release, "tag-bound manual release entrypoint must remain available"
+dispatch_block = release.split("\n  workflow_dispatch:\n", 1)[1].split("\n  workflow_call:\n", 1)[0]
+assert "release_tag:" in dispatch_block and "release_commit:" in dispatch_block, "manual repair dispatch must require exact tag and commit"
 assert "  workflow_call:\n" in release, "reviewed exact-tag reusable release entrypoint must be declared"
 assert "release_tag:" in release and "release_commit:" in release, "reusable release must require exact tag and commit inputs"
 assert "ref: ${{ inputs.release_commit || github.ref }}" in release, "reusable release checkout must bind exact requested commit"
@@ -178,7 +180,10 @@ assert 'if [[ "$TAG_COMMIT" != "$CALLED_RELEASE_COMMIT" ]]; then' in release, "r
 assert 'EXPECTED_TAG="v${SOURCE_VERSION}"' in release, "release must derive expected tag from source version"
 assert 'if [[ "$RELEASE_TAG" != "$EXPECTED_TAG" ]]; then' in release, "release tag must match source version"
 assert "bash scripts/version-manager.sh verify" in release, "release must verify synchronized version identity before build work"
+bootstrap_block = release.split("- name: Validate tag-bound release identity", 1)[1].split("- name: Install CI dependencies", 1)[0]
+assert "version-manager.sh verify" not in bootstrap_block, "tag-bound bootstrap must remain stdlib-only before dependency install"
 assert release.index("- name: Validate tag-bound release identity") < release.index("- name: Install CI dependencies"), "release identity guard must run before build/install work"
+assert release.index("- name: Install CI dependencies") < release.index("- name: Validate synchronized source version identity") < release.index("- name: Validate and smoke"), "full version projection verification must run after dependencies and before smoke"
 assert "- name: Validate complete release artifact bundle" in release, "release bundle completeness guard missing"
 assert "archives=(dist/*.tar.gz)" in release, "release bundle must require one archive"
 assert "checksums=(dist/*.tar.gz.sha256)" in release, "release bundle must require one matching checksum"
@@ -188,6 +193,9 @@ assert "- name: Publish GitHub Release" in release, "validated release bundle mu
 assert 'gh release create "$RELEASE_TAG"' in release, "GitHub Release creation command missing"
 assert 'gh release download "$RELEASE_TAG"' in release, "existing GitHub Release retry must download assets for verification"
 assert 'cmp "$archive"' in release and 'cmp "$checksum"' in release and 'cmp "$contract"' in release, "existing release assets must be byte-compared"
+assert "published GitHub Release is not immutable" in release, "release workflow must fail closed if repository immutability is disabled"
+assert "remote release digest mismatch for $asset_name" in release, "release workflow must verify remote GitHub asset digests"
+assert "GitHub Release immutable asset digests verified" in release, "release workflow must record final immutable remote digest verification"
 
 release_tag_promotion = (workflow_dir / "release-tag-promotion.yml").read_text(encoding="utf-8")
 assert "  workflow_run:\n" in release_tag_promotion, "release tag promotion must be completion-triggered"
@@ -207,6 +215,15 @@ assert 'promotion_status = "version-already-released"' not in release_tag_promot
 assert 'if: ${{ always() }}' in release_tag_promotion, "tag-conflict evidence must still upload on promotion failure"
 assert "uses: ./.github/workflows/release.yml" in release_tag_promotion, "tag promotion must reuse the canonical release workflow"
 assert "needs.promote-tag.outputs.release_needed == 'true'" in release_tag_promotion, "canonical release must run only for an exact newly promoted or retryable tag"
+assert "  discover-orphaned-releases:\n" in release_tag_promotion, "promotion must audit immutable v7 release continuity"
+assert "RELEASE_REPAIR_BASELINE: 7.0.0" in release_tag_promotion, "self-heal baseline must start at the immutable v7 release contract"
+assert 'release.get("immutable") is not True' in release_tag_promotion, "existing v7 releases must remain immutable"
+assert "actual_assets != expected_assets" in release_tag_promotion, "existing v7 release asset sets must be audited"
+assert "source version mismatch" in release_tag_promotion, "orphan discovery must bind tag to source version"
+assert "release tag must be annotated" in release_tag_promotion, "v7 release tags must remain annotated"
+assert "  repair-orphaned-release:\n" in release_tag_promotion, "tagged-but-unreleased versions must have an automatic repair path"
+assert "fromJSON(needs.discover-orphaned-releases.outputs.repairs)" in release_tag_promotion, "repair matrix must come from audited exact-tag evidence"
+assert release_tag_promotion.count("uses: ./.github/workflows/release.yml") == 2, "current release and orphan repair must share the canonical release workflow"
 
 dependency_review = (workflow_dir / "security-dependency-review.yml").read_text(encoding="utf-8")
 assert "pull_request:" in dependency_review, "dependency review must remain PR-only"
