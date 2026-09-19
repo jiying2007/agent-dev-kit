@@ -1,7 +1,7 @@
 # Skill Routing Matrix
 
 - generated_at: 2026-08-29T18:12:44Z
-- source: manifest.yaml:routing (runtime SSOT) + skill_routing_matrix (projection metadata)
+- source: manifest.json:routing + skill_routing_matrix
 
 ## Skill Routing Matrix
 
