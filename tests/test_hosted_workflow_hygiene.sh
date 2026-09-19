@@ -194,7 +194,7 @@ assert 'gh release create "$RELEASE_TAG"' in release, "GitHub Release creation c
 assert 'gh release download "$RELEASE_TAG"' in release, "existing GitHub Release retry must download assets for verification"
 assert 'cmp "$archive"' in release and 'cmp "$checksum"' in release and 'cmp "$contract"' in release, "existing release assets must be byte-compared"
 assert "published GitHub Release is not immutable" in release, "release workflow must fail closed if repository immutability is disabled"
-assert ".assets[] | select(.name == $name) | .digest" in release, "release workflow must verify remote GitHub asset digests"
+assert "select(.name == \\"$asset_name\\") | .digest" in release, "release workflow must verify remote GitHub asset digests"
 assert "GitHub Release immutable asset digests verified" in release, "release workflow must record final immutable remote digest verification"
 
 release_tag_promotion = (workflow_dir / "release-tag-promotion.yml").read_text(encoding="utf-8")
