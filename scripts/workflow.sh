@@ -157,7 +157,7 @@ write_state() {
 }
 
 run_verify_checks() {
-  "$ROOT_DIR/scripts/validate-assets.sh" --strict &&
+  bash "$ROOT_DIR/scripts/devkit.sh" validate --strict &&
     "$ROOT_DIR/scripts/check-format.sh"
 }
 
@@ -284,7 +284,7 @@ propose() {
 
 ## Canonical Change Contract
 
-ADK change workspace 是唯一权威变更契约。每一行必须把需求、变更语义、验收、任务、验证与证据目标连成闭环；Operation 仅允许 `ADDED` / `MODIFIED` / `REMOVED`。
+ADK change workspace 是唯一权威变更契约。每一行必须把需求、变更语义、验收、任务、验证与证据目标连成闭环；Operation 仅允许 \`ADDED\` / \`MODIFIED\` / \`REMOVED\`。
 
 | Requirement ID | Requirement | Operation | Target | Affected Surface | Acceptance ID | Acceptance Criterion | Task ID | Verification ID | Evidence Target |
 |---|---|---|---|---|---|---|---|---|---|
@@ -417,7 +417,7 @@ verify_change() {
     echo "- 时间：$(date -u +%Y-%m-%dT%H:%M:%SZ)"
     echo "- 执行人：$OWNER"
     echo "- 验证命令："
-    echo "  - scripts/validate-assets.sh --strict"
+    echo "  - scripts/devkit.sh validate --strict"
     echo "  - scripts/check-format.sh"
     echo "  - scripts/check-change-governance.sh <change_dir>"
     echo "- 工件检查：proposal/design/tasks/checklist/negative-results"
