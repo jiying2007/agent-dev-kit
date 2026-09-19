@@ -61,120 +61,18 @@ PY
 }
 
 verify_version() {
-    python3 - "$ROOT_DIR" <<'PY'
-from __future__ import annotations
-
-import json
-import re
-import sys
-from pathlib import Path
-
-root = Path(sys.argv[1])
-manifest = json.loads((root / "manifest.json").read_text(encoding="utf-8"))
-version = manifest.get("version")
-if not isinstance(version, str) or not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?", version):
-    raise SystemExit("manifest.json version is missing or is not SemVer")
-
-checks = {
-    "pyproject.toml": (root / "pyproject.toml", rf'(?m)^version\s*=\s*["\']{re.escape(version)}["\']\s*$'),
-    "src/agent_dev_kit/__init__.py": (
-        root / "src" / "agent_dev_kit" / "__init__.py",
-        rf'(?m)^__version__\s*=\s*["\']{re.escape(version)}["\']\s*$',
-    ),
-    ".version-lock": (root / ".version-lock", rf'(?m)^version:\s*{re.escape(version)}\s*$'),
-    "README.md": (
-        root / "README.md",
-        rf'(?m)^`manifest\.json` 当前 source version 为 `{re.escape(version)}`。',
-    ),
-    "CONTEXT.md": (root / "CONTEXT.md", rf'(?m)^> 产品版本：{re.escape(version)}\s*$'),
-}
-failures: list[str] = []
-for label, (path, pattern) in checks.items():
-    if not path.is_file():
-        failures.append(f"missing {label}")
-        continue
-    if re.search(pattern, path.read_text(encoding="utf-8")) is None:
-        failures.append(f"version mismatch in {label}")
-
-if failures:
-    for failure in failures:
-        print(f"[FAIL] {failure}", file=sys.stderr)
-    raise SystemExit(1)
-print(f"version identity verified: {version}")
-PY
+    PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}" \
+        python3 -m agent_dev_kit.versioning verify-identity --root "$ROOT_DIR"
 }
 
 sync_version() {
     local target_version="$1"
     local actor="${ADK_VERSION_LOCKED_BY:-$(whoami)}"
-
-    python3 - "$ROOT_DIR" "$target_version" "$actor" <<'PY'
-from __future__ import annotations
-
-import json
-import re
-import sys
-from datetime import datetime, timezone
-from pathlib import Path
-
-root = Path(sys.argv[1])
-target = sys.argv[2]
-actor = sys.argv[3].strip()
-if not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?", target):
-    raise SystemExit(f"invalid semantic version: {target}")
-if not actor or "\n" in actor or "\r" in actor:
-    raise SystemExit("version lock actor is invalid")
-
-
-def replace_once(path: Path, pattern: str, replacement: str, label: str) -> None:
-    text = path.read_text(encoding="utf-8")
-    updated, count = re.subn(pattern, replacement, text, count=1, flags=re.MULTILINE)
-    if count != 1:
-        raise SystemExit(f"unable to update {label}: expected exactly one version field")
-    path.write_text(updated, encoding="utf-8")
-
-manifest_path = root / "manifest.json"
-manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-current = manifest.get("version")
-if not isinstance(current, str) or not current:
-    raise SystemExit("manifest.json version is missing or invalid")
-replace_once(
-    manifest_path,
-    r'^(\s*"version"\s*:\s*")[^"]+("\s*,\s*)$',
-    rf'\g<1>{target}\g<2>',
-    "manifest.json",
-)
-replace_once(
-    root / "pyproject.toml",
-    r'^(version\s*=\s*")[^"]+("\s*)$',
-    rf'\g<1>{target}\g<2>',
-    "pyproject.toml",
-)
-replace_once(
-    root / "src" / "agent_dev_kit" / "__init__.py",
-    r'^(__version__\s*=\s*")[^"]+("\s*)$',
-    rf'\g<1>{target}\g<2>',
-    "src/agent_dev_kit/__init__.py",
-)
-replace_once(
-    root / "README.md",
-    r'^(`manifest\.json` 当前 source version 为 `)[^`]+(`。.*)$',
-    rf'\g<1>{target}\g<2>',
-    "README.md",
-)
-replace_once(
-    root / "CONTEXT.md",
-    r'^(> 产品版本：).+$',
-    rf'\g<1>{target}',
-    "CONTEXT.md",
-)
-locked_at = datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
-(root / ".version-lock").write_text(
-    f"version: {target}\nlocked_at: {locked_at}\nlocked_by: {actor}\n",
-    encoding="utf-8",
-)
-print(f"version synchronized: {current} -> {target}")
-PY
+    PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}" \
+        python3 -m agent_dev_kit.versioning sync-identity \
+        --root "$ROOT_DIR" \
+        --target "$target_version" \
+        --actor "$actor"
 }
 
 show_current_version() {
