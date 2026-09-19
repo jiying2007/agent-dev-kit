@@ -1,7 +1,7 @@
 ---
 name: adk-release-versioning
 description: 版本策略、变更说明与发布基线
-version: 1.3.0
+version: 1.4.0
 last_updated: 2026-09-19
 triggers:
   - "版本发布"
@@ -54,6 +54,7 @@ constraints:
    - 只把 source/PR 合并到受保护的 `main`；不要手工移动、覆盖或复用已有版本 tag。
    - `main` fresh CI 成功后，由 `release-tag-promotion` 对 exact main SHA 创建 annotated version tag，并调用 canonical release workflow。
    - canonical release 必须从 exact tag 构建、校验、attest，并发布 GitHub Release；已有同 tag Release 只能在资产 byte-identical 时视为幂等成功。
+   - v7+ exact annotated tag 若因 package 阶段失败而缺少 Release，后续 successful-main promotion 会审计 immutable/asset/source identity 并通过 canonical release 自动补发；禁止移动旧 tag。
 8. **发布签署**：输出 go/no-go 结论与残留风险，并记录 tag、commit、GitHub Release 与 artifact digest。
 
 
@@ -72,6 +73,7 @@ constraints:
 - Changelog 为空时，检查 commit message 是否符合规范。
 - Tag 创建失败时，检查同名 tag 是否已存在；若已指向不同 commit，必须提升 SemVer，禁止覆盖旧 tag。
 - GitHub Release 已存在时，只有远端 assets 与本轮 validated bundle byte-identical 才允许幂等通过。
+- Tag 已存在但 Release 缺失时，不删除或重建 tag；由 self-heal audit 绑定 exact tag/commit 后补发。
 
 
 ## Evidence Template
