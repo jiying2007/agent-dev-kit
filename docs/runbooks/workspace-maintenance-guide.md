@@ -61,7 +61,7 @@ bash tests/run_all.sh --fail-fast
 | Agent/Skill 内容 | `bash scripts/devkit.sh validate --strict` + `bash tests/run_all.sh --fail-fast` | 覆盖 frontmatter、触发和质量规则 |
 | Profile/manifest | `bash scripts/devkit.sh validate --strict` + `bash scripts/check-workflow-closure.sh --profile core` | 防止未知引用和 profile 闭包漂移 |
 | 目标/功能/性能契约 | `bash scripts/devkit.sh goal check --summary-json` + `bash scripts/devkit.sh capability health --summary-json` + `bash scripts/devkit.sh benchmark run --summary-json` | 防止目标、能力和预算只停留在文档声明 |
-| install/export/release 脚本 | `bash tests/test_product_maturity_v5.sh` + `bash tests/test_software_m5_ready.sh` + `bash tests/run_all.sh` | 防止交付路径回归 |
+| install/export/release 脚本 | `bash tests/test_product_maturity.sh` + `bash tests/test_software_m5_ready.sh` + `bash tests/run_all.sh` | 防止交付路径回归 |
 | MCP/plugin/hook/automation 契约 | `bash scripts/check-official-docs-governance.sh --summary-json` + 安全审查 | 默认 report-only |
 | 发布前 | `bash scripts/devkit.sh security check` + `bash scripts/devkit.sh release check` + `bash scripts/devkit.sh test` | 必须带 rollback note |
 
