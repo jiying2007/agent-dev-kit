@@ -1,6 +1,5 @@
 # Skill Routing Matrix
 
-- generated_at: 2026-08-29T18:12:44Z
 - source: manifest.json:routing + skill_routing_matrix
 
 ## Skill Routing Matrix
