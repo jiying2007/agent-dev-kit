@@ -60,6 +60,24 @@
 | 40 | 30 | `design` | primary | reviewer | `adk-component-api-stability` | 组件 API 稳定性治理 | API稳定性 | `skills/adk-component-api-stability/SKILL.md` |
 | 40 | 40 | `design` | primary | generator | `adk-register-map-design` | 定义寄存器映射与位域文档 | 设计寄存器 | `skills/adk-register-map-design/SKILL.md` |
 
+| 40 | 50 | `design` | primary | playbook | `adk-bsp-analysis` | 分析现有嵌入式 BSP 源码、启动/探测路径、clock/reset/pinctrl/IRQ/DMA 依赖、硬件参考和 patch 历史，形成证据化架构理解与迁移风险。用于 BSP 代码梳理、厂商实现追踪、SoC/board 差异和历史 workaround 分析；不用于直接实现新驱动或 live 板级故障隔离。 | BSP 分析 | `skills/adk-bsp-analysis/SKILL.md` |
+| 50 | 10 | `implementation` | primary | playbook | `adk-driver-implementation` | Linux、RTOS 与 bare-metal 驱动实现、验证和资源生命周期收口 | 驱动开发 | `skills/adk-driver-implementation/SKILL.md` |
+| 50 | 20 | `implementation` | primary | playbook | `adk-driver-bringup-checklist` | 驱动 bring-up 标准检查清单；默认只读诊断，寄存器或设备写操作必须经过 live-device 显式授权门禁 | 驱动开发 | `skills/adk-driver-bringup-checklist/SKILL.md` |
+| 50 | 30 | `implementation` | primary | playbook | `adk-bsp-porting-playbook` | BSP 移植流程与风险控制；源码/构建与真实设备刷写权限分离 | BSP移植 | `skills/adk-bsp-porting-playbook/SKILL.md` |
+| 50 | 40 | `implementation` | primary | playbook | `adk-rtos-task-design` | RTOS 任务、优先级、共享资源和实时性验证设计 | RTOS任务 | `skills/adk-rtos-task-design/SKILL.md` |
+| 50 | 50 | `implementation` | primary | playbook | `adk-interrupt-dma-patterns` | 中断、DMA、缓存一致性与缓冲所有权模式设计 | 中断处理 | `skills/adk-interrupt-dma-patterns/SKILL.md` |
+| 50 | 60 | `implementation` | primary | playbook | `adk-protocol-stack-integration` | 协议栈接入与状态机整合 | 协议栈 | `skills/adk-protocol-stack-integration/SKILL.md` |
+| 50 | 70 | `implementation` | primary | tool-wrapper | `adk-cmake-cross-build` | CMake 交叉编译与多目标构建 | CMake | `skills/adk-cmake-cross-build/SKILL.md` |
+| 50 | 80 | `implementation` | primary | reviewer | `adk-code-simplification` | 代码简化——在不改变行为的前提下提高清晰度 | 代码太复杂 | `skills/adk-code-simplification/SKILL.md` |
+| 60 | 10 | `debugging` | primary | playbook | `adk-systematic-debugging` | 系统化调试流程，面向根因未明的问题定位与修复验证 | 调试 | `skills/adk-systematic-debugging/SKILL.md` |
+| 60 | 20 | `debugging` | primary | tool-wrapper | `adk-embedded-debug-transport` | 嵌入式设备调试通道治理，覆盖 ADB/logcat、SSH、串口控制台、GDB remote、硬件调试探针和厂商 CLI 的连接边界、命令风险、证据采集和回滚锚点 | 调试通道 | `skills/adk-embedded-debug-transport/SKILL.md` |
+| 60 | 30 | `debugging` | primary | playbook | `adk-embedded-remote-debug-log-triage` | 嵌入式设备端远程调试、分层连通性与日志取证，覆盖 SSH、ADB/logcat、串口、GDB remote、调试探针、设备 IP/失联恢复、远程部署前置证据、boot/dmesg/应用/OTA/prog 日志、core 线索和 HIL 分阶段门禁 | 远程调试 | `skills/adk-embedded-remote-debug-log-triage/SKILL.md` |
+| 60 | 40 | `debugging` | primary | playbook | `adk-offline-core-dump-triage` | 嵌入式 Linux 离线 core dump 取证，先校验 core/binary/BuildID/符号/GDB 依赖，再给可信 backtrace、根因边界和下一步探针 | core dump | `skills/adk-offline-core-dump-triage/SKILL.md` |
+| 60 | 50 | `debugging` | primary | playbook | `adk-hardware-debugging` | 硬件问题调试、oops 分析 | 硬件调试 | `skills/adk-hardware-debugging/SKILL.md` |
+| 60 | 60 | `debugging` | primary | tool-wrapper | `adk-performance-profiling-embedded` | 嵌入式性能剖析与优化路径 | 性能分析 | `skills/adk-performance-profiling-embedded/SKILL.md` |
+| 70 | 10 | `verification` | primary | playbook | `adk-test-strategy` | 平台中立的软件测试策略与 TDD 分级，按行为、风险和现有测试入口生成可复跑的验证矩阵与证据 | 测试策略 | `skills/adk-test-strategy/SKILL.md` |
+| 70 | 20 | `verification` | primary | generator | `adk-unit-test-embedded` | 嵌入式单元测试策略与样例 | 单元测试 | `skills/adk-unit-test-embedded/SKILL.md` |
+
 ## Optional Skills
 
 | Order | Stage | Category | Activation | Pattern | Name | Description | First Trigger | Path |
