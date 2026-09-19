@@ -93,6 +93,6 @@ bash "$ROOT_DIR/scripts/devkit.sh" validate --strict >/dev/null
 "$ROOT_DIR/scripts/check-memory-governance.sh" >/dev/null
 "$ROOT_DIR/tests/test_skill_dependencies.sh" >/dev/null
 PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}" \
-  python3 -m unittest tests.test_skill_governance_v3 -v
+  python3 -m unittest tests.test_skill_governance -v
 
-echo "[PASS] skill SOP quality + terminal governance v3"
+echo "[PASS] skill SOP quality + terminal governance"
