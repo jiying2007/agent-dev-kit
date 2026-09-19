@@ -10,7 +10,7 @@ fail() {
 }
 
 # Keep the anti-template ratchet, but stop forcing every Agent and Skill into the
-# same SOP headings. vNext validates role-specific Agent contracts and
+# same SOP headings. Skill Content v2 validates role-specific Agent contracts and
 # class-derived Skill policy instead.
 BANNED_PATTERNS=(
   "明确上下文和约束"
@@ -25,9 +25,9 @@ for pattern in "${BANNED_PATTERNS[@]}"; do
   fi
 done
 
-python3 "$ROOT_DIR/scripts/check-content-architecture-vnext.py"
+python3 "$ROOT_DIR/scripts/check-content-architecture.py"
 
-# Every explicit routing primary must resolve as v2 primary. Capability class is
+# Every explicit routing primary must resolve as Skill Content v2 primary. Capability class is
 # orthogonal: task/workflow/tool/guardrail/meta can all be direct user-task
 # surfaces, while support/knowledge assets cannot silently become primary.
 python3 - "$ROOT_DIR" <<'PY'
@@ -35,7 +35,7 @@ import sys
 from pathlib import Path
 root = Path(sys.argv[1])
 sys.path.insert(0, str(root / "src"))
-from agent_dev_kit.matcher_vnext import resolve_skill_content
+from agent_dev_kit.matcher import resolve_skill_content
 from agent_dev_kit.model import Manifest
 manifest = Manifest.load(root)
 for intent in manifest.data.get("routing", {}).get("intents", []):
@@ -57,10 +57,10 @@ if [[ "$implicit_context" == *"source=skill_trigger skill=adk-context-engineerin
   fail "supporting Skill was implicitly promoted to primary"
 fi
 
-# A real primary fallback remains eligible; the v2 adapter must not disable
+# A real primary fallback remains eligible; the canonical matcher must not disable
 # normal trigger discovery while filtering support/governance surfaces.
 primary_fallback="$(bash "$ROOT_DIR/scripts/devkit.sh" match --text '设计寄存器')"
 [[ "$primary_fallback" == *"match=true"* && "$primary_fallback" == *"skill=adk-register-map-design"* ]] \
   || fail "primary fallback trigger was rejected by Skill v2 eligibility"
 
-echo "[PASS] asset content quality vNext"
+echo "[PASS] asset content quality with canonical matcher"

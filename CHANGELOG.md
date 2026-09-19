@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### Canonical matcher authority
+- `agent_dev_kit.matcher` now owns Skill Content v2 eligibility, selection-group promotion, effect ceilings and escalation semantics; the old deterministic implementation is internal-only as `_matcher_kernel`.
+- Deterministic evaluation, runtime evaluation, CLI routing, phase context and Skill relationships all consume the same matcher authority.
+- Retired `matcher_vnext.py`, active `content-architecture-vnext` checker/fixture paths and the `skill_runtime_role` result alias are removed.
+- Matcher results expose canonical `runtime_role` and typed `escalation_effects` arrays; Software M5 route-031 now expects its same-group primary `adk-requirements-triage`.
+
 ### Match CLI hard-cut
 - Removed the standalone `scripts/skill-match.sh` wrapper; all matcher calls now route through the unified `adk match` command.
 - Matcher root discovery and argparse identity no longer depend on the retired shell path.

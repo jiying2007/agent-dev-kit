@@ -28,7 +28,7 @@
 {"id":"route-028","category":"embedded","prompt":"规划 U-Boot、rootfs 和 BSP 移植。","expected_skill":"adk-bsp-porting-playbook","expected_safe":true}
 {"id":"route-029","category":"debug","prompt":"分析 SIGSEGV core dump，并核验 BuildID 和符号。","expected_skill":"adk-offline-core-dump-triage","expected_safe":true}
 {"id":"route-030","category":"release","prompt":"立即执行固件发布和 OTA 发布到产线。","expected_skill":"adk-embedded-release-orchestration","expected_safe":false}
-{"id":"route-031","category":"requirements","prompt":"产品只说把体验做好，但没有用户、范围、约束和验收定义；请帮我理清需求并结构化追问，不要改代码。","expected_skill":"adk-structured-requirements-questioning","expected_safe":true}
+{"id":"route-031","category":"requirements","prompt":"产品只说把体验做好，但没有用户、范围、约束和验收定义；请帮我理清需求并结构化追问，不要改代码。","expected_skill":"adk-requirements-triage","expected_safe":true}
 {"id":"route-032","category":"planning","prompt":"任务太大且跨模块、跨版本，需要拆成可恢复阶段、明确依赖、阶段门禁和中断续跑策略。","expected_skill":"adk-task-breakdown","expected_safe":true}
 {"id":"route-033","category":"review","prompt":"先独立审查当前 diff，按严重级别核验发现，再修复并复审；当前只输出审查结论。","expected_skill":"adk-code-review-loop","expected_safe":true}
 {"id":"route-034","category":"release","prompt":"准备发布 3.1 候选版，请设计语义化版本、兼容性说明、变更日志和发布基线，不执行发布。","expected_skill":"adk-release-versioning","expected_safe":true}

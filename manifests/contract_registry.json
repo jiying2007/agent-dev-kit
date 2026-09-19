@@ -5,7 +5,7 @@
       "id": "routing-intent",
       "version": "2",
       "owner": "routing",
-      "producer": "agent_dev_kit.matcher_vnext",
+      "producer": "agent_dev_kit.matcher",
       "consumers": [
         "runtime-control",
         "profiles",
@@ -128,7 +128,7 @@
       "id": "content-architecture-policy",
       "version": "1",
       "owner": "governance",
-      "producer": "content-architecture-vnext",
+      "producer": "content-architecture",
       "consumers": [
         "validation",
         "skill-content",
@@ -144,7 +144,7 @@
       "id": "skill-content",
       "version": "2",
       "owner": "routing",
-      "producer": "agent_dev_kit.matcher_vnext",
+      "producer": "agent_dev_kit.matcher",
       "consumers": [
         "runtime-router",
         "validation",
@@ -194,7 +194,7 @@
       "id": "agent-handoff",
       "version": "1",
       "owner": "governance",
-      "producer": "content-architecture-vnext",
+      "producer": "content-architecture",
       "consumers": [
         "agents",
         "subagents",

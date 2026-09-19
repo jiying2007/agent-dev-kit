@@ -11,7 +11,7 @@ from jsonschema import Draft202012Validator
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from agent_dev_kit.matcher_vnext import resolve_skill_content  # noqa: E402
+from agent_dev_kit.matcher import resolve_skill_content  # noqa: E402
 from agent_dev_kit.model import Manifest, ManifestError  # noqa: E402
 
 SUMMARY = "--summary-json" in sys.argv[1:]
@@ -225,10 +225,10 @@ check("```bash" not in bsp_agent, "BSP Agent must not regain BSP command procedu
 check((ROOT / "skills/adk-bsp-analysis/references/bsp-analysis-details.md").is_file(), "missing BSP on-demand reference")
 
 # E1/E3 fixture is structural in CI; production runtime behavior remains explicit not-measured.
-eval_fixture = load_json("tests/fixtures/content-architecture-vnext/routing-authority-cases.json")
+eval_fixture = load_json("tests/fixtures/content-architecture/routing-authority-cases.json")
 case_types = {case.get("case_type") for case in eval_fixture.get("cases", []) if isinstance(case, dict)}
 for required in ("route-positive", "near-miss-negative", "authority-negative", "permission-negative", "handoff", "abstain"):
-    check(required in case_types, "missing vNext eval case type: %s" % required)
+    check(required in case_types, "missing Skill Content v2 eval case type: %s" % required)
 for case in eval_fixture.get("cases", []):
     if not isinstance(case, dict):
         continue
@@ -258,6 +258,6 @@ else:
         for item in failures:
             print("[FAIL] %s" % item, file=sys.stderr)
     else:
-        print("[PASS] Agent/Skill content architecture vNext checks=%s agents=%s skills=%s+%s" % (checks, len(agent_by_id), len(core_skills), len(optional_skills)))
+        print("[PASS] Agent/Skill content architecture checks=%s agents=%s skills=%s+%s" % (checks, len(agent_by_id), len(core_skills), len(optional_skills)))
 
 sys.exit(0 if not failures else 1)

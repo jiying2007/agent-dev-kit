@@ -4,7 +4,7 @@ import unittest
 from pathlib import Path
 from typing import Any
 
-from agent_dev_kit.matcher_vnext import match_text, resolve_skill_content
+from agent_dev_kit.matcher import match_text, resolve_skill_content
 from agent_dev_kit.model import Manifest
 from agent_dev_kit.skill_relationships import resolve_skill_relationships
 
@@ -67,6 +67,8 @@ class SkillGovernanceV3Tests(unittest.TestCase):
         self.assertTrue(result.get("match"), result)
         self.assertEqual(result.get("skill"), "adk-requirements-triage", result)
         self.assertEqual(result.get("selection_group"), "requirements-intake", result)
+        self.assertEqual(result.get("runtime_role"), "primary", result)
+        self.assertNotIn("skill_runtime_role", result)
         self.assertTrue(result.get("selection_group_promoted"), result)
 
     def test_review_routing_uses_review_loop_not_language_overlay(self) -> None:
@@ -82,7 +84,8 @@ class SkillGovernanceV3Tests(unittest.TestCase):
         self.assertEqual(result.get("effect_scope"), "workspace", result)
         self.assertEqual(result.get("effect_operation"), "write", result)
         self.assertEqual(result.get("live_device_authorization"), "explicit-required", result)
-        self.assertIn("live-device:register-write", str(result.get("escalation_effects", "")))
+        self.assertIsInstance(result.get("escalation_effects"), list, result)
+        self.assertIn("live-device:register-write", result["escalation_effects"])
         self.assertIn("target-identity", str(result.get("live_device_authorization_requirements", "")))
 
     def test_bsp_porting_exposes_flash_and_storage_escalation(self) -> None:
@@ -90,7 +93,8 @@ class SkillGovernanceV3Tests(unittest.TestCase):
         self.assertTrue(result.get("match"), result)
         self.assertEqual(result.get("skill"), "adk-bsp-porting-playbook", result)
         self.assertEqual(result.get("live_device_authorization"), "explicit-required", result)
-        effects = set(str(result.get("escalation_effects", "")).split(","))
+        self.assertIsInstance(result.get("escalation_effects"), list, result)
+        effects = set(result["escalation_effects"])
         self.assertIn("live-device:flash", effects)
         self.assertIn("live-device:storage-write", effects)
 
