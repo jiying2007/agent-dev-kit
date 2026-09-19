@@ -1,7 +1,7 @@
 # Agent and Skill Catalog
 
 - generated_at: 2026-08-29T18:12:36Z
-- source: manifest.yaml
+- source: manifest.json
 
 ## Agents
 
