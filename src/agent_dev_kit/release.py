@@ -12,7 +12,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence
 
 from .compiler import export_assets
-from .versioning import version_is_newer
+from .versioning import validate_version, version_identity_failures, version_is_newer
 from .distribution.release_artifacts import (
     _assert_publishable_release_artifact,
     _copy_runtime_skill,
@@ -45,19 +45,7 @@ def check_release(manifest: Manifest) -> Dict[str, Any]:
     if unsupported:
         failures.append("missing compiler adapters: {}".format(", ".join(unsupported)))
 
-    version_sources = {
-        ".version-lock": (manifest.root / ".version-lock", "version"),
-        "pyproject.toml": (manifest.root / "pyproject.toml", "version"),
-        "src/agent_dev_kit/__init__.py": (manifest.root / "src" / "agent_dev_kit" / "__init__.py", "__version__"),
-    }
-    for label, (path, field) in version_sources.items():
-        if not path.is_file() or not re.search(
-            r"(?m)^{}\s*[:=]\s*[\"']?{}[\"']?\s*$".format(
-                re.escape(field), re.escape(manifest.version)
-            ),
-            path.read_text(encoding="utf-8") if path.is_file() else "",
-        ):
-            failures.append("release version is not synchronized in {}".format(label))
+    failures.extend(version_identity_failures(manifest.root))
 
     workflow = manifest.root / ".github" / "workflows" / "release.yml"
     if not workflow.is_file():
@@ -390,8 +378,7 @@ def publish_release(
     repository: Optional[str] = None,
     dry_run: bool = False,
 ) -> Dict[str, Any]:
-    if not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?", version):
-        raise ManifestError("release version must be a semantic version")
+    validate_version(version)
     if backend != "github":
         raise ManifestError("release backend is not configured; use --backend github")
     if artifact is None or not artifact.is_file():

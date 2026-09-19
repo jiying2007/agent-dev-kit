@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## v7.0.2 (2026-09-19)
+
+### Complete version identity projections
+- Move version verify/sync into typed `agent_dev_kit.versioning` and make the shell version manager a thin wrapper.
+- Include the Software M5 campaign ID in synchronized source identity so the documented upgrade path cannot leave the repository in a guaranteed-failing state.
+- Tighten canonical SemVer validation, align release checks with the same identity authority, and keep current documentation neutral to repository visibility.
+
+
 ## v7.0.1 (2026-09-19)
 
 ### Pre-merge release identity
