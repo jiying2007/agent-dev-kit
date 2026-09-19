@@ -214,3 +214,184 @@ jobs:
     with:
       release_tag: ${{ needs.promote-tag.outputs.release_tag }}
       release_commit: ${{ needs.promote-tag.outputs.release_commit }}
+
+
+  discover-orphaned-releases:
+    needs:
+      - promote-tag
+      - release
+    if: ${{ needs.release.result == 'success' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    outputs:
+      repairs: ${{ steps.discover.outputs.repairs }}
+      repair_count: ${{ steps.discover.outputs.repair_count }}
+    steps:
+      - name: Checkout exact successful main source with release tags
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          fetch-depth: 0
+          fetch-tags: true
+          persist-credentials: false
+
+      - name: Audit immutable v7 releases and discover tagged gaps
+        id: discover
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_REPAIR_BASELINE: 7.0.0
+          EVIDENCE_PATH: ${{ runner.temp }}/release-self-heal-plan.json
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python - <<'PY'
+          from __future__ import annotations
+
+          import json
+          import os
+          import subprocess
+          import urllib.error
+          import urllib.parse
+          import urllib.request
+          from pathlib import Path
+
+          from agent_dev_kit.versioning import VersioningError, compare_versions
+
+          repository = os.environ["GITHUB_REPOSITORY"]
+          api_root = os.environ["GITHUB_API_URL"].rstrip("/") + f"/repos/{repository}"
+          token = os.environ["GH_TOKEN"]
+          baseline = os.environ["RELEASE_REPAIR_BASELINE"]
+          evidence_path = Path(os.environ["EVIDENCE_PATH"])
+          output_path = Path(os.environ["GITHUB_OUTPUT"])
+          headers = {
+              "Accept": "application/vnd.github+json",
+              "Authorization": f"Bearer {token}",
+              "X-GitHub-Api-Version": "2026-03-10",
+              "User-Agent": "agent-dev-kit-release-integrity",
+          }
+
+          def git(*args: str) -> str:
+              return subprocess.check_output(["git", *args], text=True).strip()
+
+          def release_for(tag: str):
+              encoded = urllib.parse.quote(tag, safe="")
+              req = urllib.request.Request(
+                  f"{api_root}/releases/tags/{encoded}",
+                  headers=headers,
+                  method="GET",
+              )
+              try:
+                  with urllib.request.urlopen(req, timeout=30) as response:
+                      return json.loads(response.read().decode("utf-8"))
+              except urllib.error.HTTPError as exc:
+                  if exc.code == 404:
+                      return None
+                  body = exc.read().decode("utf-8", errors="replace")
+                  raise RuntimeError(
+                      f"GitHub release lookup failed for {tag}: HTTP {exc.code}: {body[:500]}"
+                  ) from exc
+
+          repairs: list[dict[str, str]] = []
+          audited: list[dict[str, object]] = []
+          failures: list[str] = []
+
+          for tag in git("tag", "--list", "v*", "--sort=version:refname").splitlines():
+              if not tag.startswith("v"):
+                  continue
+              version = tag[1:]
+              try:
+                  if compare_versions(version, baseline) < 0:
+                      continue
+              except VersioningError:
+                  continue
+
+              object_type = git("cat-file", "-t", tag)
+              if object_type != "tag":
+                  failures.append(f"{tag}: release tag must be annotated, got {object_type}")
+                  continue
+              commit = git("rev-parse", f"{tag}^{{}}")
+              source_manifest = json.loads(git("show", f"{commit}:manifest.json"))
+              if source_manifest.get("version") != version:
+                  failures.append(
+                      f"{tag}: source version mismatch at {commit}: {source_manifest.get('version')}"
+                  )
+                  continue
+
+              release = release_for(tag)
+              if release is None:
+                  repairs.append({"release_tag": tag, "release_commit": commit})
+                  audited.append({"tag": tag, "commit": commit, "release": "missing"})
+                  continue
+
+              expected_assets = {
+                  f"agent-dev-kit-{version}.tar.gz",
+                  f"agent-dev-kit-{version}.tar.gz.sha256",
+                  "release-contract.json",
+              }
+              actual_assets = {
+                  str(asset.get("name"))
+                  for asset in release.get("assets", [])
+                  if isinstance(asset, dict)
+              }
+              if release.get("immutable") is not True:
+                  failures.append(f"{tag}: GitHub Release is not immutable")
+              if actual_assets != expected_assets:
+                  failures.append(
+                      f"{tag}: release assets mismatch: expected={sorted(expected_assets)} "
+                      f"actual={sorted(actual_assets)}"
+                  )
+              audited.append(
+                  {
+                      "tag": tag,
+                      "commit": commit,
+                      "release": "present",
+                      "immutable": release.get("immutable"),
+                      "assets": sorted(actual_assets),
+                  }
+              )
+
+          evidence = {
+              "schema": "adk-release-self-heal-plan/v1",
+              "baseline": baseline,
+              "audited": audited,
+              "repairs": repairs,
+              "failures": failures,
+          }
+          evidence_path.write_text(
+              json.dumps(evidence, ensure_ascii=False, indent=2) + "\n",
+              encoding="utf-8",
+          )
+          with output_path.open("a", encoding="utf-8") as handle:
+              handle.write("repairs=" + json.dumps(repairs, separators=(",", ":")) + "\n")
+              handle.write(f"repair_count={len(repairs)}\n")
+          print(json.dumps(evidence, ensure_ascii=False, separators=(",", ":")))
+          if failures:
+              raise SystemExit("release integrity audit failed: " + "; ".join(failures))
+          PY
+
+      - name: Upload release self-heal evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: adk-release-self-heal-${{ github.event.workflow_run.head_sha }}
+          path: ${{ runner.temp }}/release-self-heal-plan.json
+          if-no-files-found: error
+          retention-days: 90
+
+  repair-orphaned-release:
+    needs: discover-orphaned-releases
+    if: ${{ needs.discover-orphaned-releases.outputs.repair_count != '0' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        repair: ${{ fromJSON(needs.discover-orphaned-releases.outputs.repairs) }}
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+      artifact-metadata: write
+    uses: ./.github/workflows/release.yml
+    with:
+      release_tag: ${{ matrix.repair.release_tag }}
+      release_commit: ${{ matrix.repair.release_commit }}
