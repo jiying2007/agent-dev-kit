@@ -46,7 +46,12 @@ from agent_dev_kit.installer import RECEIPT_NAME, apply_plan, create_plan, rollb
 from agent_dev_kit.locking import TargetLock, clear_target_lock, target_lock_status
 from agent_dev_kit.matcher import match_text
 from agent_dev_kit.model import Manifest, ManifestError
-from agent_dev_kit.versioning import compare_versions, version_is_newer
+from agent_dev_kit.versioning import (
+    compare_versions,
+    sync_version_identity,
+    version_identity_failures,
+    version_is_newer,
+)
 from agent_dev_kit.release import (
     _extract_release,
     _release_source_identity,
@@ -70,6 +75,70 @@ assert version_is_newer("4.0.0", "5.0.0-rc.2")
 assert compare_versions("7.0.0+build.1", "7.0.0+build.2") == 0
 assert version_is_newer("7.0.0", "7.0.1")
 assert not version_is_newer("7.0.1", "7.0.1")
+
+for invalid_version in ("01.0.0", "1.00.0", "1.0.0-01", "1.0.0-alpha..1"):
+    try:
+        compare_versions(invalid_version, "1.0.0")
+    except ManifestError:
+        pass
+    else:
+        raise AssertionError(f"invalid SemVer was accepted: {invalid_version}")
+
+with tempfile.TemporaryDirectory() as version_identity_temp:
+    version_root = Path(version_identity_temp)
+    (version_root / "src" / "agent_dev_kit").mkdir(parents=True)
+    (version_root / "manifests").mkdir(parents=True)
+    (version_root / "manifest.json").write_text(
+        '{\n  "version": "7.0.1",\n  "locale": "zh-CN"\n}\n',
+        encoding="utf-8",
+    )
+    (version_root / "pyproject.toml").write_text(
+        '[project]\nversion = "7.0.1"\n',
+        encoding="utf-8",
+    )
+    (version_root / "src" / "agent_dev_kit" / "__init__.py").write_text(
+        '__version__ = "7.0.1"\n',
+        encoding="utf-8",
+    )
+    (version_root / ".version-lock").write_text(
+        "version: 7.0.1\nlocked_at: 2026-09-19T00:00:00Z\nlocked_by: Test\n",
+        encoding="utf-8",
+    )
+    tick = chr(96)
+    (version_root / "README.md").write_text(
+        f"{tick}manifest.json{tick} 当前 source version 为 {tick}7.0.1{tick}。test\n",
+        encoding="utf-8",
+    )
+    (version_root / "CONTEXT.md").write_text(
+        "> 产品版本：7.0.1\n",
+        encoding="utf-8",
+    )
+    campaign_path = version_root / "manifests" / "software_m5_eval_contract.json"
+    campaign_path.write_text(
+        '{\n  "schema": "adk-runtime-eval-campaign/v1",\n'
+        '  "campaign_id": "software-m5-7.0.1",\n'
+        '  "tasks": "tasks.jsonl"\n}\n',
+        encoding="utf-8",
+    )
+    assert version_identity_failures(version_root) == []
+    campaign_path.write_text(
+        campaign_path.read_text(encoding="utf-8").replace("software-m5-7.0.1", "software-m5-7.0.0"),
+        encoding="utf-8",
+    )
+    assert version_identity_failures(version_root) == [
+        "version mismatch in manifests/software_m5_eval_contract.json"
+    ]
+    current_version, target_version = sync_version_identity(
+        version_root,
+        "7.0.2",
+        "Test",
+        locked_at="2026-09-19T00:00:00Z",
+    )
+    assert (current_version, target_version) == ("7.0.1", "7.0.2")
+    assert version_identity_failures(version_root) == []
+    assert "software-m5-7.0.2" in campaign_path.read_text(encoding="utf-8")
+    assert "version: 7.0.2" in (version_root / ".version-lock").read_text(encoding="utf-8")
+
 
 with tempfile.TemporaryDirectory() as source_identity_temp:
     source_identity_root = Path(source_identity_temp)
