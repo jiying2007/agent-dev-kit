@@ -151,6 +151,19 @@ for retired_target in ("Hermes Agent", "hermes-agent"):
     if retired_target in knowledge:
         failures.append(f"retired runtime target in knowledge layer: {retired_target}")
 
+commands = active_text.get("docs/commands.md", "")
+canonical_m5_contract = "manifests/software_m5_eval_contract.json"
+if canonical_m5_contract not in commands:
+    failures.append(f"active command docs missing canonical M5 contract: {canonical_m5_contract}")
+if re.search(r"software_m5_eval_contract_v[0-9]+\\.json", commands):
+    failures.append("active command docs reference version-suffixed M5 contract")
+if re.search(r"--version\\s+[0-9]+\\.[0-9]+\\.[0-9]+", commands):
+    failures.append("active release command docs hard-code a SemVer")
+if re.search(r"agent-dev-kit-[0-9]+\\.[0-9]+\\.[0-9]+\\.tar\\.gz", commands):
+    failures.append("active release command docs hard-code a versioned artifact name")
+if 'VERSION="$(bash scripts/version-manager.sh current | tail -n1)"' not in commands:
+    failures.append("active release command docs do not derive the canonical source version")
+
 workspace = active_text.get("docs/workspace-governance.md", "")
 if "## 3. 面向运行体系的联动策略" in workspace:
     current_runtime_section = workspace.split("## 3. 面向运行体系的联动策略", 1)[1].split("\n## ", 1)[0]
