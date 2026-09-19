@@ -34,7 +34,7 @@
         },
         {
           "evidence_id": "strict-validate",
-          "path": "scripts/validate-assets.sh"
+          "path": "src/agent_dev_kit/validation_contract.py"
         },
         {
           "evidence_id": "workflow-closure",
