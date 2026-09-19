@@ -110,7 +110,7 @@ Skill 更新不是文案改写，必须走候选验证：
 
 抽样吸收步骤：
 
-1. 先查 `subrepos/adoption-matrix.md` 和 `manifests/subrepo_lifecycle.json`，确认该来源是否已吸收、移除、watch 或 archive-only。
+1. 先查 `<root-workspace>/subrepos/adoption-matrix.md` 和 `<root-workspace>/manifests/subrepo_lifecycle.json`，确认该来源是否已吸收、移除、watch 或 archive-only。
 2. 用 `reuse-before-rebuild` 判断是否能增强现有 skill/runbook/manifest；能合并时不得新增 skill。
 3. 对每个候选机制记录 `source repo`、`source commit`、`snapshot mode`、`dirty classification`、`sampled capability`、`local existing asset`、`decision`、`target asset`、`forbidden action` 和 `verification`。
 4. 只有发现 ADK 未覆盖的新契约，才允许修改 ADK 资产；否则写入 `no-new-absorption` 或 `archive-only`。

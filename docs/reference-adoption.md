@@ -252,7 +252,7 @@
 - `manifests/skill_reproducibility_contracts.json`
 - `manifests/external_agent_pattern_contracts.json`
 - `skills/adk-production-field-readiness/references/pilot-measurement-evidence.md`
-- 根工作区 `manifests/software_m5_policy.json` 与 `tools/codex_assets/software_m5.py`
+- 根工作区 `<root-workspace>/manifests/software_m5_policy.json` 与 `<root-workspace>/tools/codex_assets/software_m5.py`
 
 有意排除：
 - 不安装 Inspect/Inspect SWE，不运行外部 benchmark 容器，不复制 benchmark task，也不转发持久凭证。

@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## v7.0.4 (2026-09-19)
+
+### Canonical command documentation
+- Restore Software M5 commands to the single active `manifests/software_m5_eval_contract.json` contract and remove the nonexistent version-suffixed path.
+- Make release examples derive the canonical source version at execution time instead of embedding a historical SemVer/artifact name.
+- Ratchet active command documentation against version-suffixed M5 contracts and hard-coded release versions so future SemVer upgrades cannot silently stale the operator surface.
+
+
 ## v7.0.3 (2026-09-19)
 
 ### Release bootstrap and self-healing

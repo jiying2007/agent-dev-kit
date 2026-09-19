@@ -77,7 +77,7 @@ retired_tokens = (
     ".github/workflows/scorecard.yml",
     "OpenSSF Scorecard",
 )
-path_pattern = re.compile(r"(?<![A-Za-z0-9_./-])((?:scripts|tests)/[A-Za-z0-9_./-]+\.(?:sh|py))\b")
+path_pattern = re.compile(r"(?<![A-Za-z0-9_./-])((?:(?:scripts|tests)/[A-Za-z0-9_./-]+\.(?:sh|py)|manifests/[A-Za-z0-9_./-]+\.json))\b")
 
 retired_paths = (
     "scripts/install-assets.sh",
@@ -150,6 +150,35 @@ knowledge = active_text.get("docs/workflows/knowledge-layer.md", "")
 for retired_target in ("Hermes Agent", "hermes-agent"):
     if retired_target in knowledge:
         failures.append(f"retired runtime target in knowledge layer: {retired_target}")
+
+commands = active_text.get("docs/commands.md", "")
+canonical_m5_contract = "manifests/software_m5_eval_contract.json"
+if canonical_m5_contract not in commands:
+    failures.append(f"active command docs missing canonical M5 contract: {canonical_m5_contract}")
+retired_command_patterns = (
+    (
+        re.compile(r"software_m5_eval_contract_v[0-9]+\.json"),
+        "manifests/software_m5_eval_contract_v5.json",
+        "reference version-suffixed M5 contract",
+    ),
+    (
+        re.compile(r"--version\s+[0-9]+\.[0-9]+\.[0-9]+"),
+        "--version 7.0.3",
+        "hard-code a SemVer",
+    ),
+    (
+        re.compile(r"agent-dev-kit-[0-9]+\.[0-9]+\.[0-9]+\.tar\.gz"),
+        "agent-dev-kit-7.0.3.tar.gz",
+        "hard-code a versioned artifact name",
+    ),
+)
+for pattern, sentinel, label in retired_command_patterns:
+    if pattern.search(sentinel) is None:
+        failures.append(f"retired command pattern does not match sentinel: {label}")
+    if pattern.search(commands):
+        failures.append(f"active command docs {label}")
+if 'VERSION="$(bash scripts/version-manager.sh current | tail -n1)"' not in commands:
+    failures.append("active release command docs do not derive the canonical source version")
 
 workspace = active_text.get("docs/workspace-governance.md", "")
 if "## 3. 面向运行体系的联动策略" in workspace:
