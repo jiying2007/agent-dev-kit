@@ -1,7 +1,7 @@
 # CONTEXT.md — agent-dev-kit 领域语言定义
 
 > 文档状态：受机器门禁约束的领域上下文投影
-> 产品版本：7.0.0
+> 产品版本：7.0.1
 > 结构化单一事实源：`manifest.json`
 
 ---
@@ -170,6 +170,8 @@ rtk tests/run_all.sh
 ## 10. 版本与发布
 
 版本身份必须至少绑定：SemVer、exact commit、tree、manifest digest 与验证/发布 receipt。`manifest.json` 是版本 SSOT；其它文件只做受门禁约束的只读投影。手工 workflow dispatch 产生的候选不得自动获得正式 release 身份。
+
+受保护 `main` 采用 auto-promotion 发布模型：PR 在合并前必须让 source SemVer 相对 exact base 严格前移；successful-main CI 后自动创建 exact-SHA annotated tag 和 GitHub Release。同版本旧 tag 指向不同 commit 是 blocker，不能等合并后再作为正常状态处理。
 
 ---
 
