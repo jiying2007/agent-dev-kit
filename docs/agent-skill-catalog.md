@@ -78,6 +78,24 @@
 | 70 | 10 | `verification` | primary | playbook | `adk-test-strategy` | 平台中立的软件测试策略与 TDD 分级，按行为、风险和现有测试入口生成可复跑的验证矩阵与证据 | 测试策略 | `skills/adk-test-strategy/SKILL.md` |
 | 70 | 20 | `verification` | primary | generator | `adk-unit-test-embedded` | 嵌入式单元测试策略与样例 | 单元测试 | `skills/adk-unit-test-embedded/SKILL.md` |
 
+| 70 | 30 | `verification` | primary | playbook | `adk-integration-hil-sil` | HIL/SIL 集成验证编排 | 集成测试 | `skills/adk-integration-hil-sil/SKILL.md` |
+| 70 | 40 | `verification` | primary | tool-wrapper | `adk-embedded-diagnostic-harness` | 嵌入式诊断 harness 治理，覆盖 prog_tool、diag 命令、strict/env 套件、返回码语义、HIL/SIL 证据和产测 CLI 验证 | 诊断 harness | `skills/adk-embedded-diagnostic-harness/SKILL.md` |
+| 70 | 50 | `verification` | primary | playbook | `adk-fault-injection-recovery` | 故障注入与恢复策略验证 | 故障注入 | `skills/adk-fault-injection-recovery/SKILL.md` |
+| 70 | 60 | `verification` | primary | reviewer | `adk-artifact-gating` | 跨仓库 Artifact 门禁协议——统一标签、状态机与交接规范 | artifact 门禁 | `skills/adk-artifact-gating/SKILL.md` |
+| 70 | 70 | `verification` | primary | pipeline | `adk-pilot-framework` | 跨仓库 Pilot 试跑框架——场景定义、证据收集与门禁验收 | 试跑 | `skills/adk-pilot-framework/SKILL.md` |
+| 70 | 80 | `verification` | primary | reviewer | `adk-verification-before-completion` | 完成前验证门禁，确保交付声明与证据一致 | 准备完成 | `skills/adk-verification-before-completion/SKILL.md` |
+| 80 | 10 | `review_quality` | supporting | reviewer | `adk-chinese-commit-conventions` | 中文 Git 提交规范——适配国内开发团队 | 中文提交 | `skills/adk-chinese-commit-conventions/SKILL.md` |
+| 80 | 20 | `review_quality` | supporting | reviewer | `adk-chinese-code-review` | 中文代码审查规范——适配国内团队沟通风格 | 代码审查 | `skills/adk-chinese-code-review/SKILL.md` |
+| 80 | 30 | `review_quality` | primary | reviewer | `adk-code-review-loop` | 独立代码审查与反馈修复闭环，覆盖发现分级、真实性核验、修复验证和复审 | 独立代码审查 | `skills/adk-code-review-loop/SKILL.md` |
+| 80 | 40 | `review_quality` | primary | reviewer | `adk-repo-drift-remediation` | 仓库漂移治理，面向全仓偏离、冗余、残留、边界不清、文档代码不一致和提交前质量收口 | 仓库漂移 | `skills/adk-repo-drift-remediation/SKILL.md` |
+| 80 | 50 | `review_quality` | primary | reviewer | `adk-static-analysis-c-cpp` | C/C++ 静态分析与缺陷治理 | 静态分析 | `skills/adk-static-analysis-c-cpp/SKILL.md` |
+| 80 | 60 | `review_quality` | primary | reviewer | `adk-commit-pr-quality-gate` | 提交与 PR 质量门禁检查 | 提交代码 | `skills/adk-commit-pr-quality-gate/SKILL.md` |
+| 90 | 10 | `release_closure` | primary | generator | `adk-release-versioning` | 版本策略、变更说明与发布基线 | 版本发布 | `skills/adk-release-versioning/SKILL.md` |
+| 90 | 20 | `release_closure` | primary | reviewer | `adk-production-field-readiness` | 嵌入式量产、产测、烧录、诊断、OTA、回滚与现场维护 readiness | 量产 | `skills/adk-production-field-readiness/SKILL.md` |
+| 90 | 30 | `release_closure` | primary | pipeline | `adk-embedded-release-orchestration` | 嵌入式全栈发布编排；release preparation、真实 publish 与 live-device flash 分权治理 | 嵌入式发布编排 | `skills/adk-embedded-release-orchestration/SKILL.md` |
+| 90 | 40 | `release_closure` | primary | pipeline | `adk-embedded-storage-layout-migration` | 嵌入式存储布局和文件系统迁移治理；默认只做 host/dry-run 与证据门禁，真实设备写入必须独立授权 | UBIFS | `skills/adk-embedded-storage-layout-migration/SKILL.md` |
+| 90 | 50 | `release_closure` | supporting | generator | `adk-cross-team-handoff` | 跨团队交接时统一目标、边界和验收责任；由 team-core 默认启用 | 团队交接 | `skills/adk-cross-team-handoff/SKILL.md` |
+
 ## Optional Skills
 
 | Order | Stage | Category | Activation | Pattern | Name | Description | First Trigger | Path |
