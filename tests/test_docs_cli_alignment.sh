@@ -33,29 +33,34 @@ fi
 python3 - "$ROOT_DIR" <<'PY'
 from __future__ import annotations
 
+import json
 import re
 import sys
 from pathlib import Path
 
 root = Path(sys.argv[1]).resolve()
-active_docs = (
-    "README.md",
-    "AGENTS.md",
-    "CONTEXT.md",
-    "docs/commands.md",
-    "docs/usage.md",
-    "docs/adk-usage-guide.md",
-    "docs/agent-operating-rules.md",
-    "docs/runbooks/workspace-maintenance-guide.md",
-    "docs/runbooks/mcp-governance.md",
-    "docs/runbooks/compatibility-matrix.md",
+
+active_docs: set[str] = {"README.md", "AGENTS.md", "CONTEXT.md"}
+active_docs.update(
+    path.relative_to(root).as_posix()
+    for path in (root / "docs").glob("*.md")
 )
+for directory in ("runbooks", "architecture", "reference", "specs", "workflows"):
+    active_docs.update(
+        path.relative_to(root).as_posix()
+        for path in (root / "docs" / directory).rglob("*.md")
+    )
+
+historical_marker = "<!-- adk-doc-lifecycle: historical -->"
 retired_tokens = (
     "tests/test_product_maturity_v3.sh",
     "tests/test_product_maturity_v4.sh",
     "tests/test_product_maturity_v5.sh",
     "tests/test_skill_governance_v3.sh",
     "tests/test_skill_governance_v3.py",
+    "tests/test_runtime_control.sh",
+    "tests/test_runtime_control.py",
+    "RuntimeControlError",
     "manifest.yaml",
     "scripts/install-assets.sh",
     "scripts/convert-assets.sh",
@@ -70,10 +75,8 @@ retired_tokens = (
     "bin/agent-dev-kit",
     ".github/workflows/scorecard.yml",
     "OpenSSF Scorecard",
-    "hermes-agent",
-    "Hermes Agent",
 )
-path_pattern = re.compile(r"(?<![A-Za-z0-9_./-])((?:scripts|tests)/[A-Za-z0-9_./-]+\.sh)\b")
+path_pattern = re.compile(r"(?<![A-Za-z0-9_./-])((?:scripts|tests)/[A-Za-z0-9_./-]+\.(?:sh|py))\b")
 
 retired_paths = (
     "scripts/install-assets.sh",
@@ -92,18 +95,25 @@ retired_paths = (
     "tests/test_product_maturity_v5.sh",
     "tests/test_skill_governance_v3.sh",
     "tests/test_skill_governance_v3.py",
+    "tests/test_runtime_control.sh",
+    "tests/test_runtime_control.py",
 )
 
 failures: list[str] = []
 for relative in retired_paths:
     if (root / relative).exists():
         failures.append(f"retired compatibility surface returned: {relative}")
-for relative in active_docs:
+
+active_text: dict[str, str] = {}
+for relative in sorted(active_docs):
     path = root / relative
     if not path.is_file():
         failures.append(f"active doc missing: {relative}")
         continue
     text = path.read_text(encoding="utf-8")
+    if historical_marker in "\n".join(text.splitlines()[:20]):
+        continue
+    active_text[relative] = text
     for token in retired_tokens:
         if token in text:
             failures.append(f"retired active-doc token: {relative}: {token}")
@@ -111,10 +121,43 @@ for relative in active_docs:
         if not (root / referenced).is_file():
             failures.append(f"dead active-doc command reference: {relative}: {referenced}")
 
+manifest = json.loads((root / "manifest.json").read_text(encoding="utf-8"))
+expected_targets = [
+    str(value.get("display_name"))
+    for section in ("tool_targets", "external_handoff_targets")
+    for value in (manifest.get(section) or {}).values()
+    if isinstance(value, dict) and value.get("display_name")
+]
+for relative in (
+    "docs/runbooks/runtime-routing.md",
+    "docs/runbooks/compatibility-matrix.md",
+):
+    text = active_text.get(relative, "")
+    for display_name in expected_targets:
+        if display_name not in text:
+            failures.append(f"runtime target missing from active doc: {relative}: {display_name}")
+    for retired_target in ("Hermes Agent", "hermes-agent"):
+        if retired_target in text:
+            failures.append(f"retired runtime target in active doc: {relative}: {retired_target}")
+
+knowledge = active_text.get("docs/workflows/knowledge-layer.md", "")
+for retired_target in ("Hermes Agent", "hermes-agent"):
+    if retired_target in knowledge:
+        failures.append(f"retired runtime target in knowledge layer: {retired_target}")
+
+workspace = active_text.get("docs/workspace-governance.md", "")
+if "## 3. 面向运行体系的联动策略" in workspace:
+    current_runtime_section = workspace.split("## 3. 面向运行体系的联动策略", 1)[1].split("\n## ", 1)[0]
+    for retired_target in ("Hermes Agent", "hermes-agent"):
+        if retired_target in current_runtime_section:
+            failures.append(f"retired runtime target in current workspace strategy: {retired_target}")
+
 if failures:
     for failure in failures:
         print(f"[FAIL] {failure}", file=sys.stderr)
     raise SystemExit(1)
+
+print(f"active_docs_checked={len(active_text)}")
 PY
 
 echo "docs/commands.md covers all devkit.sh help commands"
