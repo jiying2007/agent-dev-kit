@@ -59,7 +59,6 @@
 | 40 | 20 | `design` | primary | generator | `adk-adr-writer` | 产出 Architecture Decision Record 并固化技术决策 | 写ADR | `skills/adk-adr-writer/SKILL.md` |
 | 40 | 30 | `design` | primary | reviewer | `adk-component-api-stability` | 组件 API 稳定性治理 | API稳定性 | `skills/adk-component-api-stability/SKILL.md` |
 | 40 | 40 | `design` | primary | generator | `adk-register-map-design` | 定义寄存器映射与位域文档 | 设计寄存器 | `skills/adk-register-map-design/SKILL.md` |
-
 | 40 | 50 | `design` | primary | playbook | `adk-bsp-analysis` | 分析现有嵌入式 BSP 源码、启动/探测路径、clock/reset/pinctrl/IRQ/DMA 依赖、硬件参考和 patch 历史，形成证据化架构理解与迁移风险。用于 BSP 代码梳理、厂商实现追踪、SoC/board 差异和历史 workaround 分析；不用于直接实现新驱动或 live 板级故障隔离。 | BSP 分析 | `skills/adk-bsp-analysis/SKILL.md` |
 | 50 | 10 | `implementation` | primary | playbook | `adk-driver-implementation` | Linux、RTOS 与 bare-metal 驱动实现、验证和资源生命周期收口 | 驱动开发 | `skills/adk-driver-implementation/SKILL.md` |
 | 50 | 20 | `implementation` | primary | playbook | `adk-driver-bringup-checklist` | 驱动 bring-up 标准检查清单；默认只读诊断，寄存器或设备写操作必须经过 live-device 显式授权门禁 | 驱动开发 | `skills/adk-driver-bringup-checklist/SKILL.md` |
@@ -77,7 +76,6 @@
 | 60 | 60 | `debugging` | primary | tool-wrapper | `adk-performance-profiling-embedded` | 嵌入式性能剖析与优化路径 | 性能分析 | `skills/adk-performance-profiling-embedded/SKILL.md` |
 | 70 | 10 | `verification` | primary | playbook | `adk-test-strategy` | 平台中立的软件测试策略与 TDD 分级，按行为、风险和现有测试入口生成可复跑的验证矩阵与证据 | 测试策略 | `skills/adk-test-strategy/SKILL.md` |
 | 70 | 20 | `verification` | primary | generator | `adk-unit-test-embedded` | 嵌入式单元测试策略与样例 | 单元测试 | `skills/adk-unit-test-embedded/SKILL.md` |
-
 | 70 | 30 | `verification` | primary | playbook | `adk-integration-hil-sil` | HIL/SIL 集成验证编排 | 集成测试 | `skills/adk-integration-hil-sil/SKILL.md` |
 | 70 | 40 | `verification` | primary | tool-wrapper | `adk-embedded-diagnostic-harness` | 嵌入式诊断 harness 治理，覆盖 prog_tool、diag 命令、strict/env 套件、返回码语义、HIL/SIL 证据和产测 CLI 验证 | 诊断 harness | `skills/adk-embedded-diagnostic-harness/SKILL.md` |
 | 70 | 50 | `verification` | primary | playbook | `adk-fault-injection-recovery` | 故障注入与恢复策略验证 | 故障注入 | `skills/adk-fault-injection-recovery/SKILL.md` |
@@ -95,7 +93,6 @@
 | 90 | 30 | `release_closure` | primary | pipeline | `adk-embedded-release-orchestration` | 嵌入式全栈发布编排；release preparation、真实 publish 与 live-device flash 分权治理 | 嵌入式发布编排 | `skills/adk-embedded-release-orchestration/SKILL.md` |
 | 90 | 40 | `release_closure` | primary | pipeline | `adk-embedded-storage-layout-migration` | 嵌入式存储布局和文件系统迁移治理；默认只做 host/dry-run 与证据门禁，真实设备写入必须独立授权 | UBIFS | `skills/adk-embedded-storage-layout-migration/SKILL.md` |
 | 90 | 50 | `release_closure` | supporting | generator | `adk-cross-team-handoff` | 跨团队交接时统一目标、边界和验收责任；由 team-core 默认启用 | 团队交接 | `skills/adk-cross-team-handoff/SKILL.md` |
-
 | 90 | 60 | `release_closure` | primary | governance | `adk-branch-closeout` | 开发分支收尾治理，验证完成后选择本地合并、创建 PR、保留或丢弃并执行清理 | 分支收尾 | `skills/adk-branch-closeout/SKILL.md` |
 | 90 | 70 | `release_closure` | primary | reviewer | `adk-after-action-review` | 任务复盘与经验记忆候选治理，提取 lessons、风险分级和写入路由 | 任务复盘 | `skills/adk-after-action-review/SKILL.md` |
 | 100 | 10 | `governance` | primary | governance | `adk-memory-curator` | 记忆整理与候选治理，审计 memories、AGENTS、归档、session 总结和决策记录，生成可审查 memory candidate | 记忆整理 | `skills/adk-memory-curator/SKILL.md` |
