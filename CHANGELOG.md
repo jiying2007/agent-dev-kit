@@ -7,6 +7,7 @@
 - Renamed Skill Governance coverage to `test_skill_governance*`, restored it to both quick and full regression suites, and ratcheted the retired v3 entrypoints.
 - Removed the no-op `quality-gate-check.sh --strict` compatibility flag; retired use now fails closed instead of being silently accepted.
 - Runtime compatibility runbook now derives its target claims from the canonical manifest, removes the retired Hermes target claim and dead verification commands, and is covered by active-doc regression.
+- Platform workflow file/display identity is stabilized as `platform`; the job context `platform-vnext` remains intentionally frozen because the active `main` ruleset requires that exact status context.
 
 ### ExecutionPolicy Python naming hard-cut
 - Renamed the public execution-policy exception from `RuntimeControlError` to `ExecutionPolicyError`; no Python alias is retained.
