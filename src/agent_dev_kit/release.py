@@ -12,7 +12,12 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence
 
 from .compiler import export_assets
-from .versioning import VersioningError, validate_version, version_identity_failures, version_is_newer
+from .versioning import (
+    VersioningError,
+    validate_version,
+    version_identity_failures,
+    version_is_newer,
+)
 from .distribution.release_artifacts import (
     _assert_publishable_release_artifact,
     _copy_runtime_skill,
