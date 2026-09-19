@@ -12,7 +12,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence
 
 from .compiler import export_assets
-from .versioning import version_identity_failures, version_is_newer
+from .versioning import validate_version, version_identity_failures, version_is_newer
 from .distribution.release_artifacts import (
     _assert_publishable_release_artifact,
     _copy_runtime_skill,
@@ -378,8 +378,7 @@ def publish_release(
     repository: Optional[str] = None,
     dry_run: bool = False,
 ) -> Dict[str, Any]:
-    if not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?", version):
-        raise ManifestError("release version must be a semantic version")
+    validate_version(version)
     if backend != "github":
         raise ManifestError("release backend is not configured; use --backend github")
     if artifact is None or not artifact.is_file():
