@@ -2,8 +2,6 @@
 
 - source: manifest.json:routing + skill_routing_matrix
 
-## Skill Routing Matrix
-
 | Scenario | Description | Availability | Profiles | Workflow | Primary | Supporting | Fallback | Mutually Exclusive | Positive Example | Negative Example |
 |---|---|---|---|---|---|---|---|---|---|---|
 | `runtime_routing` | 任务开始前选择 profile、primary skill 和 supporting skill | profile-resolved | core, embedded-fullstack | `runtime-routing` | `adk-runtime-router` | - | adk-requirements-triage | - | 判断这个任务应该使用哪个技能 | 只要计划，不要修改文件 |
