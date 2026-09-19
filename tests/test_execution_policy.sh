@@ -17,6 +17,9 @@ assert Path(engine.__file__).resolve() == root / "src/agent_dev_kit/execution_po
 assert Path(contracts.__file__).resolve() == root / "src/agent_dev_kit/execution_policy/contracts.py"
 assert not (root / "src/agent_dev_kit/runtime_control").exists()
 assert not (root / "src/agent_dev_kit/execution_policy/engine_support.py").exists()
+assert not hasattr(policy, "Runtime" + "ControlError")
+assert not (root / "tests" / ("test_" + "runtime_control.py")).exists()
+assert not (root / "tests" / ("test_" + "runtime_control.sh")).exists()
 for name in ("evaluate", "reduce_events", "validate_policy", "ExecutionPolicyError"):
     assert getattr(policy, name) is getattr(engine, name), name
 
