@@ -17,7 +17,6 @@ from typing import Any
 
 from ..installer import RECEIPT_NAME
 from ..model import Manifest, ManifestError, sha256_file, sha256_tree
-from ..versioning import version_is_newer
 
 SOURCE_DISTRIBUTION_DIRECTORIES = (
     ".github", "agents", "docs", "manifests", "optional-skills",
