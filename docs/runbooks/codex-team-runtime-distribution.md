@@ -2,11 +2,11 @@
 
 ## Goal
 
-从私有 `agent-dev-kit` 源仓向团队 Codex 用户交付可审查 Skill，同时不发布 ADK Python 实现、测试和内部 change evidence。
+从 `agent-dev-kit` 源仓向团队 Codex 用户交付可审查 Skill，同时不把 ADK Python 实现、测试和内部 change evidence 纳入团队运行时 Bundle。源仓 visibility/access policy 由仓库设置决定，本 runbook 不作私有性假设。
 
 ## Repositories
 
-- 私有生产源：`agent-dev-kit`。
+- ADK 源仓：`agent-dev-kit`（visibility/access policy 由仓库设置治理，不在本文写死）。
 - 团队发行仓：`ssh://git@192.168.1.4:10022/embedded/aicode/team-codex-assets.git`。
 - 成员运行态：`~/.codex`，不进入 Git。
 
@@ -33,7 +33,7 @@ rtk bash ./scripts/team-assets.sh doctor --scope all
 rtk bash ./tests/run_all.sh
 ```
 
-只有 owner review、两仓验证和 diff 审查通过后，才允许另行授权 commit/push。私有 ADK CI 可以自动生成候选 Bundle，但外部 Git 写入保持独立审批。
+只有 owner review、两仓验证和 diff 审查通过后，才允许另行授权 commit/push。ADK CI 可以自动生成候选 Bundle，但外部 Git 写入保持独立审批。
 
 ## Member flow
 
