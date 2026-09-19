@@ -33,7 +33,7 @@ from .contracts import (
     STATE_SCHEMA as STATE_SCHEMA,
 )
 from .contracts import (
-    RuntimeControlError as RuntimeControlError,
+    ExecutionPolicyError as ExecutionPolicyError,
 )
 from .contracts import (
     goal_intake_attestation_sha256 as goal_intake_attestation_sha256,
@@ -102,7 +102,7 @@ def _reset_goal_state(state: dict[str, Any], payload: Mapping[str, Any], at: dat
     }
     payload_fields = frozenset(payload)
     if payload_fields not in {frozenset(base_required), frozenset(base_required | {"intake"})}:
-        raise RuntimeControlError("goal.started payload fields are invalid")
+        raise ExecutionPolicyError("goal.started payload fields are invalid")
     goal_id = _identifier(payload.get("goal_id"), "goal.goal_id")
     intake = None
     if "intake" in payload:
@@ -159,18 +159,18 @@ def reduce_events(events: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
         event_id = event["event_id"]
         if event_id in seen:
             if seen[event_id] != event["fingerprint"]:
-                raise RuntimeControlError("duplicate event_id has a different payload")
+                raise ExecutionPolicyError("duplicate event_id has a different payload")
             continue
         seen[event_id] = event["fingerprint"]
         at = event["observed_at"]
         if last_at is not None and at < last_at:
-            raise RuntimeControlError("runtime control events must be time ordered")
+            raise ExecutionPolicyError("runtime control events must be time ordered")
         last_at = at
 
         if state is None:
             state = _initial_state(event["thread_id"])
         if event["thread_id"] != state["identity"]["thread_id"]:
-            raise RuntimeControlError("one state cannot mix thread_id values")
+            raise ExecutionPolicyError("one state cannot mix thread_id values")
 
         kind = event["event_type"]
         payload = event["payload"]
@@ -178,7 +178,7 @@ def reduce_events(events: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
 
         if kind == "goal.started":
             if goal["status"] == "active":
-                raise RuntimeControlError("cannot start a second active goal")
+                raise ExecutionPolicyError("cannot start a second active goal")
             _reset_goal_state(state, payload, at)
         elif kind == "goal.updated":
             allowed = {
@@ -186,22 +186,22 @@ def reduce_events(events: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
                 "intake", "mode_change_reason",
             }
             if goal["status"] != "active" or not payload or not set(payload) <= allowed:
-                raise RuntimeControlError("goal.updated requires one active goal and canonical budget fields")
+                raise ExecutionPolicyError("goal.updated requires one active goal and canonical budget fields")
             has_intake = "intake" in payload
             has_reason = "mode_change_reason" in payload
             if has_intake != has_reason:
-                raise RuntimeControlError(
+                raise ExecutionPolicyError(
                     "goal.updated mode changes require intake and mode_change_reason"
                 )
             if has_intake:
                 if payload.get("mode_change_reason") != "replan":
-                    raise RuntimeControlError("goal mode may change only through an explicit replan")
+                    raise ExecutionPolicyError("goal mode may change only through an explicit replan")
                 intake = _validate_goal_intake(
                     payload.get("intake"), event_at=at, expected_kind="goal-replan",
                     expected_goal_id=str(goal["goal_id"]),
                 )
                 if intake["attestation_sha256"] == goal.get("intake_attestation_sha256"):
-                    raise RuntimeControlError("goal replan must carry a new intake attestation")
+                    raise ExecutionPolicyError("goal replan must carry a new intake attestation")
                 goal["task_mode"] = intake["task_mode"]
                 goal["artifact_mode"] = intake["artifact_mode"]
                 goal["request_sha256"] = intake["request_sha256"]
@@ -222,14 +222,14 @@ def reduce_events(events: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
                 )
         elif kind == "goal.completed":
             if goal["status"] != "active" or payload:
-                raise RuntimeControlError("goal.completed requires one active goal and empty payload")
+                raise ExecutionPolicyError("goal.completed requires one active goal and empty payload")
             goal["status"] = "completed"
             goal["completed_at"] = _iso(at)
             state["progress"]["last_progress_at"] = _iso(at)
             state["progress"]["heartbeat_at"] = _iso(at)
         elif kind == "goal.aborted":
             if goal["status"] != "active" or payload:
-                raise RuntimeControlError("goal.aborted requires one active goal and empty payload")
+                raise ExecutionPolicyError("goal.aborted requires one active goal and empty payload")
             goal["status"] = "aborted"
             goal["completed_at"] = _iso(at)
         elif kind == "usage.snapshot":
@@ -239,28 +239,28 @@ def reduce_events(events: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
                 "last_delta_tokens", "rate_per_minute",
             }
             if set(payload) != required:
-                raise RuntimeControlError("usage.snapshot payload fields are invalid")
+                raise ExecutionPolicyError("usage.snapshot payload fields are invalid")
             total = _integer(payload.get("total_tokens"), "usage.total_tokens")
             previous = int(state["usage"]["total_tokens"])
             if total < previous:
-                raise RuntimeControlError("usage snapshot must be monotonic")
+                raise ExecutionPolicyError("usage snapshot must be monotonic")
             input_tokens = _integer(payload.get("input_tokens"), "usage.input_tokens")
             cached = _integer(payload.get("cached_input_tokens"), "usage.cached_input_tokens")
             if cached > input_tokens:
-                raise RuntimeControlError("cached_input_tokens must not exceed input_tokens")
+                raise ExecutionPolicyError("cached_input_tokens must not exceed input_tokens")
             output_tokens = _integer(payload.get("output_tokens"), "usage.output_tokens")
             reasoning_tokens = _integer(payload.get("reasoning_tokens"), "usage.reasoning_tokens")
             if reasoning_tokens > output_tokens:
-                raise RuntimeControlError("reasoning_tokens must not exceed output_tokens")
+                raise ExecutionPolicyError("reasoning_tokens must not exceed output_tokens")
             if total != input_tokens + output_tokens:
-                raise RuntimeControlError("total_tokens must equal input_tokens + output_tokens")
+                raise ExecutionPolicyError("total_tokens must equal input_tokens + output_tokens")
             context_window = _integer(payload.get("context_window"), "usage.context_window", positive=True)
             last_input_tokens = _integer(payload.get("last_input_tokens"), "usage.last_input_tokens")
             if last_input_tokens > context_window:
-                raise RuntimeControlError("last_input_tokens must not exceed context_window")
+                raise ExecutionPolicyError("last_input_tokens must not exceed context_window")
             for field in ("input_tokens", "cached_input_tokens", "output_tokens", "reasoning_tokens"):
                 if int(payload.get(field) or 0) < int(state["usage"].get(field) or 0):
-                    raise RuntimeControlError("usage snapshot cumulative fields must be monotonic")
+                    raise ExecutionPolicyError("usage snapshot cumulative fields must be monotonic")
             state["identity"]["cwd_hash"] = _sha256(payload.get("cwd_hash"), "usage.cwd_hash")
             state["identity"]["model"] = _identifier(payload.get("model"), "usage.model")
             state["usage"] = {
@@ -277,15 +277,15 @@ def reduce_events(events: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
             }
         elif kind == "progress.advanced":
             if goal["status"] != "active" or set(payload) != {"revision"}:
-                raise RuntimeControlError("progress.advanced requires active goal and revision")
+                raise ExecutionPolicyError("progress.advanced requires active goal and revision")
             revision = _integer(payload.get("revision"), "progress.revision", positive=True)
             if revision <= state["progress"]["revision"]:
-                raise RuntimeControlError("progress revision must increase")
+                raise ExecutionPolicyError("progress revision must increase")
             state["progress"]["revision"] = revision
             state["progress"]["last_progress_at"] = _iso(at)
         elif kind == "heartbeat.recorded":
             if goal["status"] != "active" or payload:
-                raise RuntimeControlError("heartbeat.recorded requires active goal and empty payload")
+                raise ExecutionPolicyError("heartbeat.recorded requires active goal and empty payload")
             progress = state["progress"]
             if progress["last_heartbeat_revision"] == progress["revision"]:
                 progress["no_progress_heartbeats"] += 1
@@ -295,43 +295,43 @@ def reduce_events(events: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
             progress["heartbeat_at"] = _iso(at)
         elif kind == "retry.recorded":
             if goal["status"] != "active" or set(payload) != {"reason_id"}:
-                raise RuntimeControlError("retry.recorded requires active goal and reason_id")
+                raise ExecutionPolicyError("retry.recorded requires active goal and reason_id")
             _identifier(payload.get("reason_id"), "retry.reason_id")
             state["retry"]["used"] += 1
         elif kind == "evidence.added":
             if goal["status"] not in {"active", "completed"} or set(payload) != {"evidence_id", "sha256"}:
-                raise RuntimeControlError("evidence.added payload fields are invalid")
+                raise ExecutionPolicyError("evidence.added payload fields are invalid")
             evidence_id = _identifier(payload.get("evidence_id"), "evidence.evidence_id")
             digest = _sha256(payload.get("sha256"), "evidence.sha256")
             existing = state["evidence"].get(evidence_id)
             if existing is not None and existing != digest:
-                raise RuntimeControlError("evidence_id cannot change digest")
+                raise ExecutionPolicyError("evidence_id cannot change digest")
             state["evidence"][evidence_id] = digest
         elif kind == "checkpoint.verified":
             required = {"revision", "evidence_ids"}
             if goal["status"] not in {"active", "completed"} or set(payload) != required:
-                raise RuntimeControlError("checkpoint.verified payload fields are invalid")
+                raise ExecutionPolicyError("checkpoint.verified payload fields are invalid")
             revision = _integer(payload.get("revision"), "checkpoint.revision")
             if revision > state["progress"]["revision"]:
-                raise RuntimeControlError("checkpoint revision cannot exceed progress revision")
+                raise ExecutionPolicyError("checkpoint revision cannot exceed progress revision")
             evidence_ids = _ids(payload.get("evidence_ids"), "checkpoint.evidence_ids", non_empty=True)
             state["checkpoint"] = {"revision": revision, "verified": True, "evidence_ids": evidence_ids}
         elif kind == "artifact.verified":
             if set(payload) != {"artifact_type", "evidence_id"}:
-                raise RuntimeControlError("artifact.verified payload fields are invalid")
+                raise ExecutionPolicyError("artifact.verified payload fields are invalid")
             artifact_type = payload.get("artifact_type")
             if artifact_type not in ARTIFACT_TYPES:
-                raise RuntimeControlError("unknown artifact_type")
+                raise ExecutionPolicyError("unknown artifact_type")
             evidence_id = _identifier(payload.get("evidence_id"), "artifact.evidence_id")
             state["artifacts"][artifact_type] = evidence_id
         else:  # pragma: no cover
-            raise RuntimeControlError("unhandled runtime control event")
+            raise ExecutionPolicyError("unhandled runtime control event")
 
         state["events_applied"] += 1
         state["last_event_at"] = _iso(at)
 
     if state is None:
-        raise RuntimeControlError("runtime control requires at least one event")
+        raise ExecutionPolicyError("runtime control requires at least one event")
     return state
 
 
@@ -346,22 +346,22 @@ def evaluate(
 ) -> dict[str, Any]:
     normalized_policy = validate_policy(policy)
     if not isinstance(state, dict) or state.get("schema_version") != STATE_SCHEMA:
-        raise RuntimeControlError("unsupported runtime control state schema")
+        raise ExecutionPolicyError("unsupported runtime control state schema")
     if gate_event not in GATE_EVENTS:
-        raise RuntimeControlError("unsupported gate_event")
+        raise ExecutionPolicyError("unsupported gate_event")
     goal = state.get("goal") or {}
     if task_mode is not None:
-        raise RuntimeControlError(
+        raise ExecutionPolicyError(
             "runtime_control.policy/v2 task mode is state-bound and cannot be overridden"
         )
     provenance = goal.get("intake_provenance")
     if not isinstance(provenance, dict) or provenance.get("kind") not in {
         "routing-decision", "goal-replan"
     }:
-        raise RuntimeControlError("runtime_control.policy/v2 requires an attested goal intake")
+        raise ExecutionPolicyError("runtime_control.policy/v2 requires an attested goal intake")
     last_event_at = state.get("last_event_at")
     if not last_event_at:
-        raise RuntimeControlError("runtime control state is missing its event provenance")
+        raise ExecutionPolicyError("runtime control state is missing its event provenance")
     bound_intake = _validate_goal_intake(
         {
             "schema_version": GOAL_INTAKE_SCHEMA,
@@ -399,7 +399,7 @@ def evaluate(
         effective_artifact_mode = "implementation"
     now = as_of or datetime.now(UTC)
     if now.tzinfo is None:
-        raise RuntimeControlError("as_of must include timezone")
+        raise ExecutionPolicyError("as_of must include timezone")
     now = now.astimezone(UTC)
 
     usage = state.get("usage") or {}
@@ -426,7 +426,7 @@ def evaluate(
     baseline_tokens = int(goal.get("usage_baseline_tokens") or 0)
     goal_tokens = max(total_tokens - baseline_tokens, 0)
     if usage.get("observed_at") and total_tokens < baseline_tokens:
-        raise RuntimeControlError("goal usage baseline cannot exceed current usage snapshot")
+        raise ExecutionPolicyError("goal usage baseline cannot exceed current usage snapshot")
     token_budget = goal.get("token_budget")
     token_ratio = (goal_tokens / token_budget) if token_budget else None
     context_window = int(usage.get("context_window") or 0)
@@ -439,7 +439,7 @@ def evaluate(
     heartbeat_at = _timestamp(progress["heartbeat_at"], "progress.heartbeat_at") if progress.get("heartbeat_at") else None
     heartbeat_age = (now - heartbeat_at).total_seconds() if heartbeat_at else None
     if heartbeat_age is not None and heartbeat_age < 0:
-        raise RuntimeControlError("heartbeat cannot be in the future")
+        raise ExecutionPolicyError("heartbeat cannot be in the future")
 
     completion_valid = True
     if goal.get("status") == "completed":
