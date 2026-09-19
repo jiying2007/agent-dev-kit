@@ -155,12 +155,28 @@ commands = active_text.get("docs/commands.md", "")
 canonical_m5_contract = "manifests/software_m5_eval_contract.json"
 if canonical_m5_contract not in commands:
     failures.append(f"active command docs missing canonical M5 contract: {canonical_m5_contract}")
-if re.search(r"software_m5_eval_contract_v[0-9]+\\.json", commands):
-    failures.append("active command docs reference version-suffixed M5 contract")
-if re.search(r"--version\\s+[0-9]+\\.[0-9]+\\.[0-9]+", commands):
-    failures.append("active release command docs hard-code a SemVer")
-if re.search(r"agent-dev-kit-[0-9]+\\.[0-9]+\\.[0-9]+\\.tar\\.gz", commands):
-    failures.append("active release command docs hard-code a versioned artifact name")
+retired_command_patterns = (
+    (
+        re.compile(r"software_m5_eval_contract_v[0-9]+\.json"),
+        "manifests/software_m5_eval_contract_v5.json",
+        "reference version-suffixed M5 contract",
+    ),
+    (
+        re.compile(r"--version\s+[0-9]+\.[0-9]+\.[0-9]+"),
+        "--version 7.0.3",
+        "hard-code a SemVer",
+    ),
+    (
+        re.compile(r"agent-dev-kit-[0-9]+\.[0-9]+\.[0-9]+\.tar\.gz"),
+        "agent-dev-kit-7.0.3.tar.gz",
+        "hard-code a versioned artifact name",
+    ),
+)
+for pattern, sentinel, label in retired_command_patterns:
+    if pattern.search(sentinel) is None:
+        failures.append(f"retired command pattern does not match sentinel: {label}")
+    if pattern.search(commands):
+        failures.append(f"active command docs {label}")
 if 'VERSION="$(bash scripts/version-manager.sh current | tail -n1)"' not in commands:
     failures.append("active release command docs do not derive the canonical source version")
 
