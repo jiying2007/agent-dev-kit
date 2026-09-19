@@ -7,6 +7,7 @@ import sys
 from datetime import UTC, datetime
 from pathlib import Path
 
+
 class VersioningError(ValueError):
     """Version/source-identity validation failed before package dependencies are available."""
 
