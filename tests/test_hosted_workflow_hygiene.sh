@@ -34,7 +34,7 @@ assert {path.name for path in consumer_files} == expected_consumer_workflows, (
 expected_write_permissions = {
     "branch-gc.yml": ["contents"],
     "ci.yml": ["id-token"],
-    "release-tag-promotion.yml": ["artifact-metadata", "attestations", "contents", "id-token"],
+    "release-tag-promotion.yml": ["artifact-metadata", "attestations", "contents", "contents", "id-token"],
     "release.yml": ["artifact-metadata", "attestations", "contents", "id-token"],
     "security-codeql.yml": ["security-events"],
 }
