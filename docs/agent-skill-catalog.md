@@ -96,6 +96,13 @@
 | 90 | 40 | `release_closure` | primary | pipeline | `adk-embedded-storage-layout-migration` | 嵌入式存储布局和文件系统迁移治理；默认只做 host/dry-run 与证据门禁，真实设备写入必须独立授权 | UBIFS | `skills/adk-embedded-storage-layout-migration/SKILL.md` |
 | 90 | 50 | `release_closure` | supporting | generator | `adk-cross-team-handoff` | 跨团队交接时统一目标、边界和验收责任；由 team-core 默认启用 | 团队交接 | `skills/adk-cross-team-handoff/SKILL.md` |
 
+| 90 | 60 | `release_closure` | primary | governance | `adk-branch-closeout` | 开发分支收尾治理，验证完成后选择本地合并、创建 PR、保留或丢弃并执行清理 | 分支收尾 | `skills/adk-branch-closeout/SKILL.md` |
+| 90 | 70 | `release_closure` | primary | reviewer | `adk-after-action-review` | 任务复盘与经验记忆候选治理，提取 lessons、风险分级和写入路由 | 任务复盘 | `skills/adk-after-action-review/SKILL.md` |
+| 100 | 10 | `governance` | primary | governance | `adk-memory-curator` | 记忆整理与候选治理，审计 memories、AGENTS、归档、session 总结和决策记录，生成可审查 memory candidate | 记忆整理 | `skills/adk-memory-curator/SKILL.md` |
+| 100 | 20 | `governance` | primary | governance | `adk-archive-governance` | docs/archive 归档治理，覆盖 meta、topic registry、文件名、hash、superseded、敏感材料和归档门禁修复 | 归档治理 | `skills/adk-archive-governance/SKILL.md` |
+| 100 | 30 | `governance` | primary | generator | `adk-knowledge-archive` | 知识归档与长期沉淀，将高价值总结、研究、排障、决策和会话材料写成脱敏、可检索、可治理的归档候选 | 知识归档 | `skills/adk-knowledge-archive/SKILL.md` |
+| 100 | 50 | `governance` | primary | reviewer | `adk-engineering-growth-review` | 本地工程成长复盘与学习建议，宽读本地 Codex 历史、归档、日报和项目证据，识别长期趋势、重复问题和训练计划 | 开发者成长复盘 | `skills/adk-engineering-growth-review/SKILL.md` |
+
 ## Optional Skills
 
 | Order | Stage | Category | Activation | Pattern | Name | Description | First Trigger | Path |
