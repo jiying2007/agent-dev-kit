@@ -14,7 +14,7 @@
 
 ```bash
 rtk bash scripts/devkit.sh validate --strict
-rtk bash tests/run_all.sh --fail-fast
+rtk bash ./tests/run_all.sh --fail-fast
 rtk bash scripts/devkit.sh release runtime-build \
   --profile team-core \
   --out dist \
@@ -24,13 +24,13 @@ rtk bash scripts/devkit.sh release runtime-build \
 在团队发行仓中执行：
 
 ```bash
-rtk bash scripts/team-assets.sh bundle plan \
+rtk bash ./scripts/team-assets.sh bundle plan \
   --artifact /reviewed/adk-runtime-team-core-<version>.tar.gz \
   --output .cache/bundle-import-plan.json
-rtk bash scripts/team-assets.sh bundle apply --plan .cache/bundle-import-plan.json
-rtk bash scripts/team-assets.sh build
-rtk bash scripts/team-assets.sh doctor --scope all
-rtk bash tests/run_all.sh
+rtk bash ./scripts/team-assets.sh bundle apply --plan .cache/bundle-import-plan.json
+rtk bash ./scripts/team-assets.sh build
+rtk bash ./scripts/team-assets.sh doctor --scope all
+rtk bash ./tests/run_all.sh
 ```
 
 只有 owner review、两仓验证和 diff 审查通过后，才允许另行授权 commit/push。私有 ADK CI 可以自动生成候选 Bundle，但外部 Git 写入保持独立审批。
@@ -40,7 +40,7 @@ rtk bash tests/run_all.sh
 ```bash
 rtk git clone ssh://git@192.168.1.4:10022/embedded/aicode/team-codex-assets.git ~/codex
 cd ~/codex
-rtk bash scripts/team-assets.sh setup
+rtk bash ./scripts/team-assets.sh setup
 ```
 
 `setup` 内部完成 build、plan、apply 和最终检查，用于首次安装以及团队仓拉取新版本后的同步安装；无变化时返回 `unchanged`。安装后新开 Codex session，确认 Skill discovery 与自然语言触发。成员只需团队仓只读权限；不需要访问私有 ADK 源仓，也不需要操作 receipt 或 rollback。

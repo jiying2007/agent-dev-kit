@@ -45,7 +45,7 @@
 
 落地点：
 - `scripts/workflow.sh`（`proposal/design/tasks/checklist/negative-results/review-report`）
-- `scripts/openspec_bridge.sh`（openspec `changes/` 与 adk `docs/changes/` 双向桥接）
+- `docs/runbooks/openspec-bridge.md`（openspec `changes/` 与 adk `docs/changes/` 双向桥接）
 - `docs/workflows.md`、`docs/changes/README.md`
 - `docs/runbooks/openspec-bridge.md`
 
@@ -64,7 +64,7 @@
 落地点：
 - `skills/adk-artifact-gating/SKILL.md`
 - `docs/runbooks/artifact-gated-delivery.md`
-- `manifest.yaml`（核心 skill + workflow 门禁）
+- `manifest.json`（核心 skill + workflow 门禁）
 
 结论：`agent-dev-kit` 保留“规则思想”，但全部转换为本仓库可执行脚本、模板和测试门禁，确保离线独立可用。
 
@@ -81,7 +81,7 @@
 - `docs/skill-agent-runtime-model.md`
 - `docs/skill-format-guide.md`
 - `templates/planning/worker-contract.md`
-- `scripts/validate-assets.sh`
+- `scripts/devkit.sh`
 - `tests/test_skill_sop_quality.sh`
 - `skills/adk-parallel-agent-governance/SKILL.md`
 
@@ -168,7 +168,7 @@
 落地点：
 - `skills/adk-lightweight-planning/SKILL.md`
 - `skills/adk-engineering-growth-review/SKILL.md`
-- `manifest.yaml` routing：`plan_lite`、`developer_growth_review`
+- `manifest.json` routing：`plan_lite`、`developer_growth_review`
 - `manifests/structured_output_contracts.json`
 - `tests/fixtures/skill_trigger_cases.tsv`
 
@@ -192,7 +192,7 @@
 - `skills/adk-archive-governance/SKILL.md`
 - `skills/adk-knowledge-archive/SKILL.md`
 - `skills/adk-repo-drift-remediation/SKILL.md`
-- `manifest.yaml` routing：`embedded_diagnostic_harness`、`embedded_release_orchestration`、`context_compress_handoff`、`memory_curator`、`archive_governance`、`knowledge_archive`、`repo_drift_remediation`
+- `manifest.json` routing：`embedded_diagnostic_harness`、`embedded_release_orchestration`、`context_compress_handoff`、`memory_curator`、`archive_governance`、`knowledge_archive`、`repo_drift_remediation`
 - `manifests/structured_output_contracts.json`
 - `tests/fixtures/skill_trigger_cases.tsv`
 

@@ -21,13 +21,13 @@
 **解决方案**：
 ```bash
 # 1. 运行详细验证
-bash scripts/validate-assets.sh --strict
+bash scripts/devkit.sh validate --strict
 
 # 2. 检查格式
 bash scripts/check-format.sh
 
 # 3. 检查必需文件
-ls -la manifest.json manifest.yaml CONTEXT.md README.md
+ls -la manifest.json CONTEXT.md README.md
 ```
 
 #### 问题：GitHub Actions 报 `command not found`
@@ -46,7 +46,7 @@ scripts/<name>.sh: line N: rtk: command not found
 rg -n '(^|[;&|({[:space:]])rtk[[:space:]]+' scripts tests .github
 
 # 2. 用普通 runner 视角复现
-PATH=/usr/bin:/bin bash scripts/validate-assets.sh --strict
+PATH=/usr/bin:/bin bash scripts/devkit.sh validate --strict
 PATH=/usr/bin:/bin bash scripts/check-format.sh
 PATH=/usr/bin:/bin bash tests/run_all.sh
 ```

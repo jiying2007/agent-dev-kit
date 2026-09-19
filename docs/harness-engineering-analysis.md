@@ -108,7 +108,7 @@ bash scripts/devkit.sh verify --change <id>
 bash scripts/devkit.sh review --change <id> --result pass --blockers 0 --majors 0 --minors 0
 ```
 
-`docs/changes/` 是唯一 canonical change workspace。根 `changes/` 和 `scripts/quality-gates.sh` 只保留兼容迁移说明/包装层，不再定义另一套工件结构。
+`docs/changes/` 是唯一 canonical change workspace。已退役的并行 change/quality-gate 包装面不再保留可执行入口，也不定义第二套工件结构。
 
 ## 6. 仍需真实证据的事项
 

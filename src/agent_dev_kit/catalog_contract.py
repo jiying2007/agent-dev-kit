@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import argparse
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Mapping
 
@@ -133,8 +132,7 @@ def _profiles(manifest: Manifest) -> list[str]:
 
 
 def catalog_markdown(manifest: Manifest) -> str:
-    stamp = datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
-    lines = ["# Agent and Skill Catalog", "", f"- generated_at: {stamp}", "- source: manifest.json", ""]
+    lines = ["# Agent and Skill Catalog", "", "- source: manifest.json", ""]
     lines += _agents(manifest)
     lines += _skills(manifest, "skills", "Skills")
     lines += _skills(manifest, "optional_skills", "Optional Skills")
@@ -145,15 +143,13 @@ def catalog_markdown(manifest: Manifest) -> str:
 
 
 def workflow_matrix_markdown(manifest: Manifest) -> str:
-    stamp = datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
     workflow_lines = _workflows(manifest)
     matrix_index = workflow_lines.index("## Workflow Matrix")
-    return "\n".join(["# Workflow Contract Matrix", "", f"- generated_at: {stamp}", "- source: manifest.json", ""] + workflow_lines[matrix_index:]).rstrip() + "\n"
+    return "\n".join(["# Workflow Contract Matrix", "", "- source: manifest.json", ""] + workflow_lines[matrix_index:]).rstrip() + "\n"
 
 
 def routing_matrix_markdown(manifest: Manifest) -> str:
-    stamp = datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
-    return "\n".join(["# Skill Routing Matrix", "", f"- generated_at: {stamp}", "- source: manifest.json:routing + skill_routing_matrix", ""] + _routing(manifest)[2:]).rstrip() + "\n"
+    return "\n".join(["# Skill Routing Matrix", "", "- source: manifest.json:routing + skill_routing_matrix", ""] + _routing(manifest)[2:]).rstrip() + "\n"
 
 
 def find_rows(manifest: Manifest, kind: str, keyword: str) -> list[str]:

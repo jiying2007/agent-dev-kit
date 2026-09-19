@@ -1,9 +1,6 @@
 # Skill Routing Matrix
 
-- generated_at: 2026-08-29T18:12:44Z
-- source: manifest.yaml:routing (runtime SSOT) + skill_routing_matrix (projection metadata)
-
-## Skill Routing Matrix
+- source: manifest.json:routing + skill_routing_matrix
 
 | Scenario | Description | Availability | Profiles | Workflow | Primary | Supporting | Fallback | Mutually Exclusive | Positive Example | Negative Example |
 |---|---|---|---|---|---|---|---|---|---|---|

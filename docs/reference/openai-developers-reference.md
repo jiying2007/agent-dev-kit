@@ -204,7 +204,7 @@ This note records the official OpenAI Developers content that is safe to use as 
 ```bash
 scripts/check-official-docs-governance.sh
 scripts/check-runtime-capabilities.sh
-scripts/validate-assets.sh --strict
+bash scripts/devkit.sh validate --strict
 tests/test_official_docs_governance.sh
 tests/test_runtime_capabilities.sh
 ```

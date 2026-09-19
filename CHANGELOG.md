@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### Active documentation and projection authority
+- Active-document governance now discovers maintained root/docs/runbook/architecture/reference/spec/workflow Markdown automatically instead of relying on a small hand-maintained whitelist.
+- Repo-relative `scripts/` and `tests/` references in active docs must resolve to real files; external-project commands use explicit repository/workspace boundaries instead of masquerading as ADK-local paths.
+- Historical provenance has one explicit lifecycle exception; adding a historical marker to any other active document fails closed.
+- Catalog, workflow matrix and routing matrix are deterministic manifest/frontmatter projections with byte-for-byte drift checks; volatile generation timestamps are removed.
+- Current runtime documentation derives active target claims from `manifest.json`; retired Hermes runtime claims and retired validation/matcher/Runtime Control entrypoints are removed from current operational guidance.
+
 ### Stable governance-test naming hard-cut
 - Renamed the active product-maturity gate to `test_product_maturity.sh` and removed the stale v5 identity from its pass contract.
 - Renamed Skill Governance coverage to `test_skill_governance*`, restored it to both quick and full regression suites, and ratcheted the retired v3 entrypoints.

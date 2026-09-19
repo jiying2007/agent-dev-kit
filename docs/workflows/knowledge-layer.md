@@ -23,7 +23,7 @@ knowledge/
 **定义**: AI 编码工具的配置、约定和最佳实践
 
 **内容**:
-- Codex/Claude Code/Hermes Agent/OpenCode 配置参考
+- 运行体系配置参考以 `manifest.json:tool_targets` / `external_handoff_targets` 为唯一目标清单
 - IDE 集成配置
 - 工具链版本和兼容性
 
@@ -32,8 +32,8 @@ knowledge/
 L0-toolchain/
 ├── codex-config.md          # Codex 配置参考，不作为 adk 默认运行时
 ├── runtime-config.md        # 通用运行时配置指南
-├── claude-code-config.md    # Claude Code 配置指南
-├── hermes-agent-config.md   # Hermes Agent 配置指南
+├── direct-target-config.md  # direct tool target 配置指南（从 manifest 派生）
+├── external-handoff.md      # external handoff 配置与 owner-review 边界
 ├── ide-integration.md       # IDE 集成说明
 └── toolchain-compatibility.md  # 工具链兼容性矩阵
 ```

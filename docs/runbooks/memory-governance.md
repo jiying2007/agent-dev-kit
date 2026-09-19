@@ -134,5 +134,5 @@ backend capability matrix 还必须覆盖下列字段，避免把记忆产品或
 
 ```bash
 rtk bash scripts/check-memory-governance.sh
-rtk bash scripts/validate-assets.sh --strict
+rtk bash scripts/devkit.sh validate --strict
 ```

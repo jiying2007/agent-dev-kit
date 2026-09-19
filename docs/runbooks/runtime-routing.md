@@ -12,7 +12,7 @@ ADK routes capabilities through profiles, skills, agents and workflows first. Di
 
 Current support model:
 
-- Claude Code, Hermes Agent and OpenCode are direct `tool_targets`.
+- Claude Code and OpenCode are the current direct `tool_targets`; the canonical set is defined only by `manifest.json`.
 - Codex is an external source-to-live handoff target through `~/codex -> ~/.codex`, not a direct export target.
 - OpenAI/Codex source names in governance files are provenance labels, not ADK runtime bindings.
 

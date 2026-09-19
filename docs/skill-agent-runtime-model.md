@@ -86,7 +86,7 @@ Skill body 不强迫使用一套固定 headings。按 capability class 选择最
 
 ## Routing 与 progressive disclosure
 
-`manifest.json:routing` 继续是 reviewed intent routing IR。`src/agent_dev_kit/matcher.py` 保持稳定匹配 kernel；公共 `scripts/skill-match.sh` 与 `scripts/devkit.sh match` 通过 `matcher_vnext` 叠加 Skill v2 eligibility，而不是把新策略复制进 matcher kernel。
+`manifest.json:routing` 是 reviewed intent routing IR。`agent_dev_kit.matcher` 是唯一 canonical matcher authority，公共路由统一经 `scripts/devkit.sh match`；Skill eligibility、selection-group promotion、effect ceiling 与 escalation 由同一 matcher 语义产生，不再存在并行 matcher facade。
 
 运行时规则：
 

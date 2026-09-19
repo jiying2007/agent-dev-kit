@@ -1,5 +1,9 @@
 # 综合分析：嵌入式 AI 工具实践 + Harness Engineering 对 llm_agent/adk 的优化启示
 
+<!-- adk-doc-lifecycle: historical -->
+
+> 历史分析：已由 `docs/harness-engineering-analysis.md` 的当前实现结论替代；保留原文作为决策 provenance，不作为 active command/target contract。
+
 **分析日期**: 2026-05-13
 **文章来源**:
 1. [AI 是否会取代嵌入式工程师](https://mp.weixin.qq.com/s/42vL5RwXmN7O_gT_QeCh4w) - 嵌入式场景 AI 工具实践
