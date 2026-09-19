@@ -12,6 +12,7 @@ bash "$ROOT_DIR/scripts/devkit.sh" help | rg -q 'doctor'
 bash "$ROOT_DIR/scripts/devkit.sh" help | rg -q 'lock'
 bash "$ROOT_DIR/scripts/devkit.sh" eval campaign --help >/dev/null
 bash "$ROOT_DIR/scripts/devkit.sh" release rehearse --help >/dev/null
+PYTHONPATH="$ROOT_DIR/src" python3 -S -m agent_dev_kit.versioning verify-identity --root "$ROOT_DIR" >/dev/null
 doctor_rc=0
 bash "$ROOT_DIR/scripts/devkit.sh" doctor --summary-json >"$TMP_DIR/doctor.json" || doctor_rc=$?
 [[ "$doctor_rc" -eq 0 || "$doctor_rc" -eq 1 ]] || {
@@ -47,6 +48,7 @@ from agent_dev_kit.locking import TargetLock, clear_target_lock, target_lock_sta
 from agent_dev_kit.matcher import match_text
 from agent_dev_kit.model import Manifest, ManifestError
 from agent_dev_kit.versioning import (
+    VersioningError,
     compare_versions,
     sync_version_identity,
     version_identity_failures,
@@ -79,7 +81,7 @@ assert not version_is_newer("7.0.1", "7.0.1")
 for invalid_version in ("01.0.0", "1.00.0", "1.0.0-01", "1.0.0-alpha..1"):
     try:
         compare_versions(invalid_version, "1.0.0")
-    except ManifestError:
+    except VersioningError:
         pass
     else:
         raise AssertionError(f"invalid SemVer was accepted: {invalid_version}")
