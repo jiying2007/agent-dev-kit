@@ -4,7 +4,7 @@ import argparse
 import json
 import re
 import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 from .model import ManifestError
@@ -19,7 +19,7 @@ def _parse_version(value: str) -> tuple[tuple[int, int, int], tuple[str, ...] | 
     if match is None:
         raise ManifestError(f"invalid semantic version: {value}")
 
-    core_parts = match.groups()[:3]
+    core_parts = (match.group(1), match.group(2), match.group(3))
     if any(len(part) > 1 and part.startswith("0") for part in core_parts):
         raise ManifestError(f"invalid semantic version: {value}")
     core = (int(match.group(1)), int(match.group(2)), int(match.group(3)))
@@ -200,7 +200,7 @@ def sync_version_identity(
         "manifests/software_m5_eval_contract.json",
     )
 
-    lock_time = locked_at or datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+    lock_time = locked_at or datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
     (root / ".version-lock").write_text(
         f"version: {target}\nlocked_at: {lock_time}\nlocked_by: {actor}\n",
         encoding="utf-8",
