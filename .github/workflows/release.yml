@@ -212,12 +212,12 @@ jobs:
               --generate-notes
           fi
 
-          release_json="$(gh api -H 'X-GitHub-Api-Version: 2026-03-10' "repos/$GITHUB_REPOSITORY/releases/tags/$RELEASE_TAG")"
-          if [[ "$(jq -r '.immutable' <<<"$release_json")" != "true" ]]; then
+          release_endpoint="repos/$GITHUB_REPOSITORY/releases/tags/$RELEASE_TAG"
+          if [[ "$(gh api -H 'X-GitHub-Api-Version: 2026-03-10' "$release_endpoint" --jq '.immutable')" != "true" ]]; then
             echo "::error::published GitHub Release is not immutable"
             exit 1
           fi
-          remote_names="$(jq -r '.assets[].name' <<<"$release_json" | sort)"
+          remote_names="$(gh api -H 'X-GitHub-Api-Version: 2026-03-10' "$release_endpoint" --jq '.assets[].name' | sort)"
           if [[ "$remote_names" != "$expected_names" ]]; then
             echo "::error::published GitHub Release asset set changed after publication"
             exit 1
@@ -225,7 +225,7 @@ jobs:
           for local_asset in "$archive" "$checksum" "$contract"; do
             asset_name="$(basename "$local_asset")"
             local_digest="sha256:$(sha256sum "$local_asset" | awk '{print $1}')"
-            remote_digest="$(jq -r --arg name "$asset_name" '.assets[] | select(.name == $name) | .digest' <<<"$release_json")"
+            remote_digest="$(gh api -H 'X-GitHub-Api-Version: 2026-03-10' "$release_endpoint" --jq ".assets[] | select(.name == \"$asset_name\") | .digest")"
             if [[ "$remote_digest" != "$local_digest" ]]; then
               echo "::error::remote release digest mismatch for $asset_name"
               exit 1
