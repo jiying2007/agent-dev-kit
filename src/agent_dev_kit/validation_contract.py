@@ -3,9 +3,10 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import subprocess
 import sys
 from pathlib import Path
-from typing import Any, Mapping
+from typing import Any, Mapping, Sequence
 
 import yaml
 
@@ -330,6 +331,65 @@ def validate_assets(root: Path, *, strict: bool, quick: bool) -> dict[str, Any]:
             "change_sets": len(_records(data, "change_sets")),
         },
     }
+
+
+def _governance_gate_failure(root: Path, command: Sequence[str], label: str) -> str | None:
+    completed = subprocess.run(
+        list(command),
+        cwd=str(root),
+        check=False,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
+    if completed.returncode == 0:
+        return None
+    detail = completed.stderr.strip() or completed.stdout.strip()
+    if detail:
+        return f"{label}: {detail.splitlines()[-1]}"
+    return f"{label}: exit={completed.returncode}"
+
+
+def validate_repository(root: Path, *, strict: bool, quick: bool) -> dict[str, Any]:
+    root = root.resolve()
+    manifest = Manifest.load(root)
+    result = validate_assets(root, strict=strict, quick=quick)
+    failures = [str(item) for item in result.get("failures", [])]
+
+    if strict and not quick:
+        gates = (
+            (["bash", str(root / "scripts" / "check-runtime-boundary.sh")], "runtime-boundary"),
+            (
+                ["bash", str(root / "scripts" / "check-official-docs-governance.sh")],
+                "official-docs-governance",
+            ),
+            (
+                ["bash", str(root / "scripts" / "check-agent-ecosystem-standards.sh")],
+                "agent-ecosystem-standards",
+            ),
+            (
+                [sys.executable, str(root / "scripts" / "check-content-architecture.py")],
+                "content-architecture",
+            ),
+            (
+                [
+                    "bash",
+                    str(root / "scripts" / "check-workflow-closure.sh"),
+                    "--profile",
+                    manifest.default_profile,
+                ],
+                "workflow-closure",
+            ),
+        )
+        for command, label in gates:
+            failure = _governance_gate_failure(root, command, label)
+            if failure:
+                failures.append(failure)
+
+    result = dict(result)
+    result["failures"] = list(dict.fromkeys(failures))
+    result["status"] = "fail" if result["failures"] else "pass"
+    return result
 
 
 def main(argv: list[str] | None = None) -> int:
