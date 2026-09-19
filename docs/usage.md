@@ -34,7 +34,7 @@ bash scripts/devkit.sh test
 CI / runner 复现：
 
 ```bash
-PATH=/usr/bin:/bin bash scripts/validate-assets.sh --strict
+PATH=/usr/bin:/bin bash scripts/devkit.sh validate --strict
 PATH=/usr/bin:/bin bash scripts/check-format.sh
 PATH=/usr/bin:/bin bash tests/run_all.sh
 ```
