@@ -17,6 +17,7 @@ from typing import Any
 
 from ..installer import RECEIPT_NAME
 from ..model import Manifest, ManifestError, sha256_file, sha256_tree
+from ..versioning import version_is_newer
 
 SOURCE_DISTRIBUTION_DIRECTORIES = (
     ".github", "agents", "docs", "manifests", "optional-skills",
@@ -351,34 +352,6 @@ def _release_source_root(release_root: Path) -> tuple[Manifest, Mapping[str, Any
         raise ManifestError("release source manifest is invalid: {}".format("; ".join(failures)))
     return source_manifest, release_manifest
 
-
-def _prerelease_is_newer(previous: str, candidate: str) -> bool:
-    pattern = re.compile(r"^(\d+)\.(\d+)\.(\d+)(?:-([0-9A-Za-z.-]+))?(?:\+[0-9A-Za-z.-]+)?$")
-    previous_match = pattern.fullmatch(previous)
-    candidate_match = pattern.fullmatch(candidate)
-    if previous_match is None or candidate_match is None:
-        raise ManifestError("release rehearsal versions must be semantic versions")
-    previous_core = tuple(int(value) for value in previous_match.groups()[:3])
-    candidate_core = tuple(int(value) for value in candidate_match.groups()[:3])
-    if previous_core != candidate_core:
-        return candidate_core > previous_core
-    previous_pre: str | None = previous_match.group(4)
-    candidate_pre: str | None = candidate_match.group(4)
-    if previous_pre is None or candidate_pre is None:
-        return previous_pre is not None and candidate_pre is None
-    previous_parts = previous_pre.split(".")
-    candidate_parts = candidate_pre.split(".")
-    for previous_part, candidate_part in zip(previous_parts, candidate_parts, strict=False):
-        if previous_part == candidate_part:
-            continue
-        previous_numeric = previous_part.isdigit()
-        candidate_numeric = candidate_part.isdigit()
-        if previous_numeric and candidate_numeric:
-            return int(candidate_part) > int(previous_part)
-        if previous_numeric != candidate_numeric:
-            return not candidate_numeric
-        return candidate_part > previous_part
-    return len(candidate_parts) > len(previous_parts)
 
 
 def _managed_hashes(target: Path) -> dict[str, str]:
