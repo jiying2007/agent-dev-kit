@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## v7.0.1 (2026-09-19)
+
+### Pre-merge release identity
+- Require every pull request merged into protected `main` to advance source SemVer relative to its exact base before the required `contract-py3.11` check can pass.
+- Centralize SemVer precedence in typed `agent_dev_kit.versioning`; release rehearsal and `version-manager compare` consume the same authority.
+- Align documentation with the auto-promotion model: persistent main/release divergence is a release blocker rather than an expected steady state.
+
+
 ## v7.0.0 (2026-09-19)
 
 ### Release identity hardening
