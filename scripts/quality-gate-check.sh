@@ -30,7 +30,6 @@ Commands:
   check-profiles         检查 Profile typed contract
 
 Options:
-  --strict               严格模式
   --verbose              详细输出
   -h, --help             显示帮助
 USAGE
@@ -138,18 +137,14 @@ main() {
   [[ $# -ge 1 ]] || { usage; exit 1; }
   local command="$1"
   shift
-  local strict=false verbose=false
+  local verbose=false
   while [[ $# -gt 0 ]]; do
     case "$1" in
-      --strict) strict=true; shift ;;
       --verbose) verbose=true; shift ;;
       -h|--help) usage; exit 0 ;;
       *) log_error "未知参数: $1"; usage; exit 1 ;;
     esac
   done
-  # --strict remains an accepted compatibility flag, but strictness is delegated
-  # to the typed contracts instead of selecting a second implementation.
-  [[ "$strict" == true && "$verbose" == true ]] && log_info "strict typed contracts enabled"
   case "$command" in
     check-all) check_all "$verbose" ;;
     check-artifacts) check_artifacts "$verbose" ;;
