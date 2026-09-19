@@ -46,6 +46,7 @@ from .repository_evaluation import certify_repository_report, repository_plan
 from .targets import TargetUsageError, check_targets, run_target_smoke
 from .task_cost import TASK_TYPES as TASK_COST_TYPES
 from .task_cost import classify_task_cost, validate_skill_usage
+from .validation_contract import validate_assets
 
 
 def _cmd_manifest(argv: Sequence[str]) -> int:
@@ -73,28 +74,86 @@ def _cmd_manifest(argv: Sequence[str]) -> int:
     return 0 if result["status"] == "pass" else 1
 
 
+def _validation_gate_failure(command: Sequence[str], label: str) -> Optional[str]:
+    completed = subprocess.run(
+        list(command),
+        cwd=str(ROOT),
+        check=False,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
+    if completed.returncode == 0:
+        return None
+    detail = completed.stderr.strip() or completed.stdout.strip()
+    if detail:
+        detail = detail.splitlines()[-1]
+        return f"{label}: {detail}"
+    return f"{label}: exit={completed.returncode}"
+
+
 def _cmd_validate(argv: Sequence[str]) -> int:
     parser = argparse.ArgumentParser(prog="devkit.sh validate")
     parser.add_argument("--strict", action="store_true")
     parser.add_argument("--quick", action="store_true")
     parser.add_argument("--summary-json", action="store_true")
     args = parser.parse_args(argv)
+
     manifest = _manifest()
-    failures = manifest.validate(strict=args.strict and not args.quick)
-    if failures:
-        if args.summary_json:
-            _json({"schema_version": 1, "status": "fail", "failures": failures})
-        else:
-            for failure in failures:
-                print("[FAIL] {}".format(failure), file=sys.stderr)
-        return 1
-    validation_args = list(argv)
-    completed = subprocess.run(
-        ["bash", str(ROOT / "scripts" / "validate-assets.sh")] + validation_args,
-        cwd=str(ROOT),
-        check=False,
-    )
-    return completed.returncode
+    strict_contract = args.strict and not args.quick
+    failures = list(manifest.validate(strict=strict_contract))
+
+    result = validate_assets(ROOT, strict=args.strict, quick=args.quick)
+    failures.extend(str(item) for item in result.get("failures", []))
+
+    if strict_contract:
+        gates = (
+            (["bash", str(ROOT / "scripts" / "check-runtime-boundary.sh")], "runtime-boundary"),
+            (
+                ["bash", str(ROOT / "scripts" / "check-official-docs-governance.sh")],
+                "official-docs-governance",
+            ),
+            (
+                ["bash", str(ROOT / "scripts" / "check-agent-ecosystem-standards.sh")],
+                "agent-ecosystem-standards",
+            ),
+            (
+                [sys.executable, str(ROOT / "scripts" / "check-content-architecture.py")],
+                "content-architecture",
+            ),
+            (
+                [
+                    "bash",
+                    str(ROOT / "scripts" / "check-workflow-closure.sh"),
+                    "--profile",
+                    manifest.default_profile,
+                ],
+                "workflow-closure",
+            ),
+        )
+        for command, label in gates:
+            failure = _validation_gate_failure(command, label)
+            if failure:
+                failures.append(failure)
+
+    deduplicated = list(dict.fromkeys(failures))
+    result = dict(result)
+    result["status"] = "fail" if deduplicated else "pass"
+    result["failures"] = deduplicated
+
+    if args.summary_json:
+        _json(result)
+    elif deduplicated:
+        for failure in deduplicated:
+            print("[FAIL] {}".format(failure), file=sys.stderr)
+    else:
+        print(
+            "Validation passed. strict={} quick={}".format(
+                int(args.strict),
+                int(args.quick),
+            )
+        )
+    return 0 if not deduplicated else 1
 
 
 def _cmd_doctor(argv: Sequence[str]) -> int:
