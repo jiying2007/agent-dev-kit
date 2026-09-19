@@ -288,13 +288,13 @@ bash scripts/devkit.sh eval report --input /tmp/adk-eval.json --output /tmp/adk-
 
 `eval effect` 使用输入/标签分离并锁定 hash 的 24 例 source/test 数据集，分别覆盖 12 个 OOD 与 12 个 adversarial case，评分 route、safety、trace、outcome，并禁用 `routing.intents` 做组件消融。它不把标签传入 matcher/runtime prompt，但标签仍对源码 reviewer 可见，因此不是密码学意义的 blind trial，也不替代 runtime/field evidence。
 
-5.x Software M5 campaign 使用 `manifests/software_m5_eval_contract_v5.json`。正式契约保留 RC7 的 60 个任务、Codex/Claude、baseline/ADK、3 trials、模型、最多一次错误重试和 `$150` 硬预算，但使用独立 5.x campaign identity；RC7 合同只作 append-only provenance，不接收 5.x state/result。
+当前 Software M5 campaign 的唯一 active contract 是 `manifests/software_m5_eval_contract.json`，其 `campaign_id` 与 canonical source version 同步。历史 campaign 只保留在 change/provenance evidence 中，不再维护 version-suffixed active contract 路径。
 
 ```bash
-bash scripts/devkit.sh eval campaign plan --contract manifests/software_m5_eval_contract_v5.json --summary-json
-bash scripts/devkit.sh eval campaign run --contract manifests/software_m5_eval_contract_v5.json --state-dir /tmp/adk-m5-campaign --execute --approve-budget-usd 150 --summary-json
-bash scripts/devkit.sh eval campaign run --contract manifests/software_m5_eval_contract_v5.json --state-dir /tmp/adk-m5-campaign --execute --approve-budget-usd 150 --resume --summary-json
-bash scripts/devkit.sh eval certify --contract manifests/software_m5_eval_contract_v5.json --state-dir /tmp/adk-m5-campaign --output /tmp/adk-m5-certification.json
+bash scripts/devkit.sh eval campaign plan --contract manifests/software_m5_eval_contract.json --summary-json
+bash scripts/devkit.sh eval campaign run --contract manifests/software_m5_eval_contract.json --state-dir /tmp/adk-m5-campaign --execute --approve-budget-usd 150 --summary-json
+bash scripts/devkit.sh eval campaign run --contract manifests/software_m5_eval_contract.json --state-dir /tmp/adk-m5-campaign --execute --approve-budget-usd 150 --resume --summary-json
+bash scripts/devkit.sh eval certify --contract manifests/software_m5_eval_contract.json --state-dir /tmp/adk-m5-campaign --output /tmp/adk-m5-certification.json
 bash scripts/devkit.sh eval campaign report --input /tmp/adk-m5-certification.json --output /tmp/adk-m5-certification.md
 bash scripts/devkit.sh eval repository plan --contract manifests/repository_runtime_eval_contract.json --summary-json
 bash scripts/devkit.sh eval repository certify --contract manifests/repository_runtime_eval_contract.json --report /tmp/repository-runtime-report.json --output /tmp/repository-runtime-certification.json --summary-json
@@ -318,11 +318,12 @@ bash scripts/devkit.sh security check --summary-json
 执行发布检查、可复现制品构建、本地升级/回滚演练和显式 backend 发布。`publish` 不配置 backend、制品或 checksum 时必须失败；发布前会重新计算 SHA256 并核对制品名与版本，当前只支持 GitHub CLI backend。
 
 ```bash
+VERSION="$(bash scripts/version-manager.sh current | tail -n1)"
 bash scripts/devkit.sh release check
-bash scripts/devkit.sh release build --version 6.0.0 --out dist --summary-json
-bash scripts/devkit.sh release runtime-build --version 6.0.0 --profile team-core --out dist --summary-json
-bash scripts/devkit.sh release rehearse --previous-artifact /tmp/agent-dev-kit-4.0.0.tar.gz --candidate-artifact dist/agent-dev-kit-6.0.0.tar.gz --output /tmp/adk-release-rehearsal.json
-bash scripts/devkit.sh release publish --version 6.0.0 --backend github --artifact dist/agent-dev-kit-6.0.0.tar.gz --dry-run
+bash scripts/devkit.sh release build --version "$VERSION" --out dist --summary-json
+bash scripts/devkit.sh release runtime-build --version "$VERSION" --profile team-core --out dist --summary-json
+bash scripts/devkit.sh release rehearse --previous-artifact /tmp/agent-dev-kit-previous.tar.gz --candidate-artifact "dist/agent-dev-kit-$VERSION.tar.gz" --output /tmp/adk-release-rehearsal.json
+bash scripts/devkit.sh release publish --version "$VERSION" --backend github --artifact "dist/agent-dev-kit-$VERSION.tar.gz" --dry-run
 ```
 
 `release build` 默认要求 source distribution 对应 clean Git commit，并把 commit、tree、dirty 状态和 source distribution digest 写入制品。只有隔离测试快照可显式使用 `--allow-unbound-snapshot`；该制品会标记 `release_eligible=false`，不得进入 rehearsal、publish 或 Software M5 release evidence。
