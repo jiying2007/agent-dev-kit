@@ -17,7 +17,7 @@ def _parse_version(value: str) -> tuple[tuple[int, int, int], tuple[str, ...] | 
     match = _SEMVER_PATTERN.fullmatch(value)
     if match is None:
         raise ManifestError(f"invalid semantic version: {value}")
-    core = tuple(int(part) for part in match.groups()[:3])
+    core = (int(match.group(1)), int(match.group(2)), int(match.group(3)))
     prerelease = match.group(4)
     return core, tuple(prerelease.split(".")) if prerelease is not None else None
 
