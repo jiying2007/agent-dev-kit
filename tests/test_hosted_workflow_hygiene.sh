@@ -121,6 +121,12 @@ ci = (workflow_dir / "ci.yml").read_text(encoding="utf-8")
 assert "  push:\n    branches:\n      - main\n  pull_request:\n" in ci, "core CI must push-trigger only on main"
 assert "\n      - master\n" not in ci, "stale master push trigger must not return"
 
+assert "- name: Validate PR source version advance" in ci, "PR CI must enforce source SemVer advance before merge"
+assert "github.event.pull_request.base.sha" in ci, "version advance gate must bind the exact PR base SHA"
+assert "matrix.python-version == '3.11'" in ci, "version advance gate must stay on required contract-py3.11"
+assert "python -m agent_dev_kit.versioning require-advance" in ci, "PR version gate must use canonical typed SemVer authority"
+assert "fetch-depth: 0" in ci.split("\n  regression:\n", 1)[0], "contract checkout must include the exact PR base commit"
+
 platform = (workflow_dir / "platform.yml").read_text(encoding="utf-8")
 assert platform.startswith("name: platform\n"), "Platform workflow display identity must stay stable"
 assert "\n  platform-vnext:\n    name: platform-vnext\n" in platform, "ruleset-required platform-vnext check context must stay explicit"
