@@ -24,4 +24,34 @@ echo "$summary" | grep -q '"change_sets":1' || {
 
 [[ ! -e "$ROOT_DIR/scripts/validate-assets.sh" ]] || { echo "[FAIL] retired validate-assets.sh returned" >&2; exit 1; }
 
+PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}" python3 - "$ROOT_DIR" <<'PY'
+import contextlib
+import io
+import json
+import sys
+
+import agent_dev_kit.cli as cli
+
+root = sys.argv[1]
+assert str(cli.ROOT) == root, (cli.ROOT, root)
+
+original = cli._validation_gate_failure
+try:
+    cli._validation_gate_failure = (
+        lambda command, label: "forced-runtime-boundary-failure"
+        if label == "runtime-boundary"
+        else None
+    )
+    stream = io.StringIO()
+    with contextlib.redirect_stdout(stream):
+        rc = cli._cmd_validate(["--strict", "--summary-json"])
+finally:
+    cli._validation_gate_failure = original
+
+payload = json.loads(stream.getvalue())
+assert rc == 1, rc
+assert payload["status"] == "fail", payload
+assert "forced-runtime-boundary-failure" in payload["failures"], payload
+PY
+
 echo "[PASS] validate"
