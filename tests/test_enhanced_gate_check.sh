@@ -47,7 +47,7 @@ test_script_executable() {
 test_help_output() {
     local output
     output=$("$ROOT_DIR/scripts/quality-gate-check.sh" check-all --help 2>&1 || true)
-    [[ "$output" == *"质量门禁检查脚本"* ]]
+    [[ "$output" == *"质量门禁检查脚本"* ]] && [[ "$output" != *"--strict"* ]]
 }
 
 # 测试4: 检查所有质量门禁
@@ -55,6 +55,15 @@ test_check_all() {
     local output
     output=$("$ROOT_DIR/scripts/quality-gate-check.sh" check-all 2>&1 || true)
     [[ "$output" == *"所有质量门禁检查通过"* ]]
+}
+
+# 测试5: 退役 strict 兼容参数必须 fail closed
+test_retired_strict_rejected() {
+    local output
+    if output=$("$ROOT_DIR/scripts/quality-gate-check.sh" check-all --strict 2>&1); then
+        return 1
+    fi
+    [[ "$output" == *"未知参数: --strict"* ]]
 }
 
 # 运行所有测试
@@ -65,6 +74,7 @@ run_test "script exists" test_script_exists
 run_test "script executable" test_script_executable
 run_test "help output" test_help_output
 run_test "check all" test_check_all
+run_test "retired strict rejected" test_retired_strict_rejected
 
 echo "======================================"
 echo "Total: $TESTS_TOTAL, Passed: $TESTS_PASSED, Failed: $TESTS_FAILED"
