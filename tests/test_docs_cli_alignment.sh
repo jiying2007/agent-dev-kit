@@ -52,6 +52,7 @@ for directory in ("runbooks", "architecture", "reference", "specs", "workflows")
     )
 
 historical_marker = "<!-- adk-doc-lifecycle: historical -->"
+historical_docs = {"docs/comprehensive-analysis-embedded-harness.md"}
 retired_tokens = (
     "tests/test_product_maturity_v3.sh",
     "tests/test_product_maturity_v4.sh",
@@ -111,8 +112,13 @@ for relative in sorted(active_docs):
         failures.append(f"active doc missing: {relative}")
         continue
     text = path.read_text(encoding="utf-8")
-    if historical_marker in "\n".join(text.splitlines()[:20]):
+    has_historical_marker = historical_marker in "\n".join(text.splitlines()[:20])
+    if relative in historical_docs:
+        if not has_historical_marker:
+            failures.append(f"historical doc missing lifecycle marker: {relative}")
         continue
+    if has_historical_marker:
+        failures.append(f"unexpected historical lifecycle marker on active doc: {relative}")
     active_text[relative] = text
     for token in retired_tokens:
         if token in text:
