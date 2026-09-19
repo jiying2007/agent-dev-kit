@@ -48,7 +48,7 @@
 ### Agent Platform stable surface
 - Public Platform operations move to the unified `adk platform` command and stable `agent_dev_kit.agent_platform` implementation.
 - Retired `platform_vnext.py`, `platform_vnext_cli.py`, `platform-vnext.sh` and `test_platform_vnext.sh` are physically removed.
-- Contract registry producers now bind to the stable module identity. The GitHub workflow/check display name remains unchanged until repository protection rules can be inspected safely.
+- Contract registry producers bind to the stable module identity. The workflow file/display identity is `platform`; only the job/check context `platform-vnext` remains frozen because the active `main` ruleset requires that exact status context.
 
 ### Shell zero-compat follow-up
 - Remove the deprecated `quality-gates.sh` delegate, removed fallback-sunset executable tombstone, and repository-only `bin/agent-dev-kit` alias.
