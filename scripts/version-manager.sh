@@ -226,13 +226,8 @@ upgrade_version() {
 compare_versions() {
     local version1="$1"
     local version2="$2"
-    if [[ "$version1" == "$version2" ]]; then
-        echo "$version1 == $version2"
-    elif [[ "$(printf '%s\n%s\n' "$version1" "$version2" | sort -V | head -n1)" == "$version1" ]]; then
-        echo "$version1 < $version2"
-    else
-        echo "$version1 > $version2"
-    fi
+    PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}" \
+        python3 -m agent_dev_kit.versioning compare --previous "$version1" --candidate "$version2"
 }
 
 format_recent_changes() {

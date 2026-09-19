@@ -1,7 +1,7 @@
 ---
 name: adk-release-versioning
 description: 版本策略、变更说明与发布基线
-version: 1.2.0
+version: 1.3.0
 last_updated: 2026-09-19
 triggers:
   - "版本发布"
@@ -50,6 +50,7 @@ constraints:
 6. **回退预案**：可回滚版本、触发条件、验证命令。
 7. **Promotion 发布**：
    - 先用版本管理器同步并验证 source identity。
+   - PR 合并前必须先前移 source SemVer；required `contract-py3.11` 会把 head 与 exact base 比较，未前移直接拒绝。
    - 只把 source/PR 合并到受保护的 `main`；不要手工移动、覆盖或复用已有版本 tag。
    - `main` fresh CI 成功后，由 `release-tag-promotion` 对 exact main SHA 创建 annotated version tag，并调用 canonical release workflow。
    - canonical release 必须从 exact tag 构建、校验、attest，并发布 GitHub Release；已有同 tag Release 只能在资产 byte-identical 时视为幂等成功。
@@ -61,7 +62,7 @@ constraints:
 - 阶段式迁移必须给出阶段结论与回退锚点。
 - 必须附完整迁移与回退步骤。
 - 必须明确发布门禁结论与签署条件。
-- 正式 Tag 必须为 annotated tag，并由 successful-main promotion 自动创建；禁止手工移动或复用已存在版本 tag。
+- PR 合并前 source SemVer 必须严格高于 exact base；正式 Tag 必须为 annotated tag，并由 successful-main promotion 自动创建。
 - Changelog 必须覆盖自上次发布以来的所有变更。
 
 

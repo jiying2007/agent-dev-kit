@@ -28,6 +28,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
@@ -41,6 +42,16 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y ripgrep shellcheck
           python -m pip install .
+
+      - name: Validate PR source version advance
+        if: ${{ github.event_name == 'pull_request' && matrix.python-version == '3.11' }}
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          git show "${BASE_SHA}:manifest.json" > "$RUNNER_TEMP/base-manifest.json"
+          python -m agent_dev_kit.versioning require-advance \
+            --previous-manifest "$RUNNER_TEMP/base-manifest.json" \
+            --candidate-manifest manifest.json
 
       - name: Validate manifest and assets
         run: bash scripts/devkit.sh validate --strict
@@ -176,6 +187,7 @@ jobs:
             src/agent_dev_kit/evidence
             src/agent_dev_kit/target_adapters
             src/agent_dev_kit/distribution
+            src/agent_dev_kit/versioning.py
           )
           EXECUTION_POLICY_PATH=src/agent_dev_kit/execution_policy
           python -m compileall -q "${CORE_KERNEL_PATHS[@]}" "$EXECUTION_POLICY_PATH"
@@ -190,6 +202,7 @@ jobs:
           src/agent_dev_kit/target_adapters
           src/agent_dev_kit/distribution
           src/agent_dev_kit/execution_policy
+          src/agent_dev_kit/versioning.py
 
       - name: Audit declared project dependencies
         run: pip-audit --strict --progress-spinner off .
