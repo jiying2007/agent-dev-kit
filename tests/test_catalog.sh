@@ -77,4 +77,54 @@ echo "$FIND_WORKFLOW_OUTPUT" | grep -q 'adk-delivery-gate' || {
   exit 1
 }
 
+PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}" python3 - "$ROOT_DIR" <<'PY'
+from __future__ import annotations
+
+import difflib
+import re
+import sys
+from pathlib import Path
+
+from agent_dev_kit.catalog_contract import (
+    catalog_markdown,
+    routing_matrix_markdown,
+    workflow_matrix_markdown,
+)
+from agent_dev_kit.model import Manifest
+
+root = Path(sys.argv[1]).resolve()
+manifest = Manifest.load(root)
+
+def normalize(text: str) -> str:
+    return re.sub(r"(?m)^- generated_at: .*?$", "- generated_at: <normalized>", text)
+
+projections = (
+    ("docs/agent-skill-catalog.md", catalog_markdown),
+    ("docs/workflow-contract-matrix.md", workflow_matrix_markdown),
+    ("docs/reference/skill-routing-matrix.md", routing_matrix_markdown),
+)
+failures = 0
+for relative, render in projections:
+    actual = normalize((root / relative).read_text(encoding="utf-8"))
+    expected = normalize(render(manifest))
+    if actual == expected:
+        continue
+    failures += 1
+    print(f"[FAIL] generated projection drift: {relative}", file=sys.stderr)
+    diff = list(
+        difflib.unified_diff(
+            actual.splitlines(),
+            expected.splitlines(),
+            fromfile=f"{relative}:committed",
+            tofile=f"{relative}:generated",
+            lineterm="",
+        )
+    )
+    for line in diff[:120]:
+        print(line, file=sys.stderr)
+
+if failures:
+    raise SystemExit(1)
+PY
+
 echo "[PASS] catalog"
