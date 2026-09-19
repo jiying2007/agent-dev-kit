@@ -107,15 +107,14 @@
 
 | Order | Stage | Category | Activation | Pattern | Name | Description | First Trigger | Path |
 |---:|---:|---|---|---|---|---|---|---|
-| 20 | 50 | `intake` | primary | pipeline | `adk-external-practice-absorption` | 统一评估 GitHub、GitLab、Gitee、OpenAI/Codex 官方、Anthropic/Claude 官方、微信公众号和人工证据中的外部 Agent、Skill、Workflow 与工程实践，并把批准项闭环到 ADK change、验证、pilot、发布复审和退役。用于“吸收外部实践”“评估参考实现”“从官方或社区沉淀 Agent/Skill/Workflow”“Gitee/GitLab/GitHub 实践研究”等请求；不用于普通功能开发、单纯浏览网页或未经 owner 决策的自动安装/复制。 | "吸收外部实践" | `optional-skills/adk-external-practice-absorption/SKILL.md` |
-| 30 | 60 | `planning` | primary | pipeline | `adk-planning-execution-loop` | 长任务计划审查、分阶段执行、恢复与收口闭环 | "执行计划" | `optional-skills/adk-planning-execution-loop/SKILL.md` |
-| 50 | 90 | `implementation` | supporting | tool-wrapper | `adk-data-fetch` | 数据获取技能组合——包含邮件获取与网页正文提取 | "获取数据" | `optional-skills/adk-data-fetch/SKILL.md` |
-| 50 | 91 | `implementation` | supporting | tool-wrapper | `adk-email-imap-fetch` | IMAP 邮件获取——从邮箱获取邮件列表和内容 | "获取邮件" | `optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md` |
-| 50 | 92 | `implementation` | supporting | tool-wrapper | `adk-fetch-url-content` | URL 正文提取——从网页提取结构化内容 | "获取网页内容" | `optional-skills/adk-data-fetch/adk-fetch-url-content/SKILL.md` |
-| 70 | 90 | `verification` | primary | playbook | `adk-test-flakiness-triage` | 定位测试波动根因并给出稳定化方案 | "测试波动" | `optional-skills/adk-test-flakiness-triage/SKILL.md` |
-| 80 | 70 | `review_quality` | primary | reviewer | `adk-security-supply-chain` | 第三方技能、脚本与参考资产引入前的安全和供应链审查 | "供应链审查" | `optional-skills/adk-security-supply-chain/SKILL.md` |
-| 90 | 80 | `release_closure` | fallback | generator | `adk-incident-rca-report` | 线上事故复盘与根因分析闭环 | "线上事故" | `optional-skills/adk-incident-rca-report/SKILL.md` |
-| 100 | 40 | `governance` | primary | governance | `adk-skill-composition-governance` | 治理技能组合、触发优先级、fallback 与弃用关系 | "技能组合" | `optional-skills/adk-skill-composition-governance/SKILL.md` |
+| 20 | 50 | `intake` | primary | pipeline | `adk-external-practice-absorption` | 统一评估 GitHub、GitLab、Gitee、OpenAI/Codex 官方、Anthropic/Claude 官方、微信公众号和人工证据中的外部 Agent、Skill、Workflow 与工程实践，并把批准项闭环到 ADK change、验证、pilot、发布复审和退役。用于“吸收外部实践”“评估参考实现”“从官方或社区沉淀 Agent/Skill/Workflow”“Gitee/GitLab/GitHub 实践研究”等请求；不用于普通功能开发、单纯浏览网页或未经 owner 决策的自动安装/复制。 | 吸收外部实践 | `optional-skills/adk-external-practice-absorption/SKILL.md` |
+| 50 | 90 | `implementation` | supporting | tool-wrapper | `adk-data-fetch` | 数据获取技能组合——包含邮件获取与网页正文提取 | 获取数据 | `optional-skills/adk-data-fetch/SKILL.md` |
+| 50 | 91 | `implementation` | supporting | tool-wrapper | `adk-email-imap-fetch` | IMAP 邮件获取——从邮箱获取邮件列表和内容 | 获取邮件 | `optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md` |
+| 50 | 92 | `implementation` | supporting | tool-wrapper | `adk-fetch-url-content` | URL 正文提取——从网页提取结构化内容 | 获取网页内容 | `optional-skills/adk-data-fetch/adk-fetch-url-content/SKILL.md` |
+| 70 | 90 | `verification` | primary | playbook | `adk-test-flakiness-triage` | 定位测试波动根因并给出稳定化方案 | 测试波动 | `optional-skills/adk-test-flakiness-triage/SKILL.md` |
+| 80 | 70 | `review_quality` | primary | reviewer | `adk-security-supply-chain` | 第三方技能、脚本与参考资产引入前的安全和供应链审查 | 供应链审查 | `optional-skills/adk-security-supply-chain/SKILL.md` |
+| 90 | 80 | `release_closure` | fallback | generator | `adk-incident-rca-report` | 线上事故复盘与根因分析闭环 | 线上事故 | `optional-skills/adk-incident-rca-report/SKILL.md` |
+| 100 | 40 | `governance` | primary | governance | `adk-skill-composition-governance` | 治理技能组合、触发优先级、fallback 与弃用关系 | 技能组合 | `optional-skills/adk-skill-composition-governance/SKILL.md` |
 
 ## Workflows
 
