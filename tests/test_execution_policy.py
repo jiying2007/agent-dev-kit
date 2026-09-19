@@ -8,7 +8,7 @@ from pathlib import Path
 
 from jsonschema import Draft202012Validator
 from agent_dev_kit.execution_policy import (
-    RuntimeControlError,
+    ExecutionPolicyError,
     evaluate,
     goal_intake_attestation_sha256,
     reduce_events,
@@ -202,7 +202,7 @@ def completed_events_without_artifacts(
     return events
 
 
-class RuntimeControlTest(unittest.TestCase):
+class ExecutionPolicyTest(unittest.TestCase):
     def test_active_actions_use_one_priority_chain(self) -> None:
         cases = [
             (500, 100, "continue"),
@@ -221,7 +221,7 @@ class RuntimeControlTest(unittest.TestCase):
         self.assertEqual(4, state["events_applied"])
         changed = copy.deepcopy(events[-1])
         changed["payload"]["total_tokens"] += 1
-        with self.assertRaises(RuntimeControlError):
+        with self.assertRaises(ExecutionPolicyError):
             reduce_events(events + [changed])
 
     def test_retry_stale_and_no_progress_replan(self) -> None:
@@ -314,14 +314,14 @@ class RuntimeControlTest(unittest.TestCase):
     def test_raw_content_unknown_fields_and_delta_usage_are_rejected(self) -> None:
         bad = goal_started()
         bad["payload"]["objective"] = "raw goal text"
-        with self.assertRaises(RuntimeControlError):
+        with self.assertRaises(ExecutionPolicyError):
             reduce_events([bad])
         delta = event(1, "usage.delta", {})
-        with self.assertRaises(RuntimeControlError):
+        with self.assertRaises(ExecutionPolicyError):
             reduce_events([delta])
         invalid_policy = policy()
         invalid_policy["token"]["checkpoint_ratio"] = 0.95
-        with self.assertRaises(RuntimeControlError):
+        with self.assertRaises(ExecutionPolicyError):
             evaluate(reduce_events(active_events()), invalid_policy, as_of=AS_OF)
 
     def test_secret_like_values_never_enter_event_policy_or_goal_state(self) -> None:
@@ -338,14 +338,14 @@ class RuntimeControlTest(unittest.TestCase):
                 "readonly", "readonly", authority_id=secret_value
             )
             with self.subTest(surface="event", secret=secret_value), self.assertRaisesRegex(
-                RuntimeControlError, "secret-like content"
+                ExecutionPolicyError, "secret-like content"
             ):
                 reduce_events([secret_event])
 
             secret_policy = policy_v2()
             secret_policy["mode_authority_policy"]["trusted_mode_authorities"] = [secret_value]
             with self.subTest(surface="policy", secret=secret_value), self.assertRaisesRegex(
-                RuntimeControlError, "secret-like content"
+                ExecutionPolicyError, "secret-like content"
             ):
                 evaluate(reduce_events(active_events_v2("readonly", "readonly")), secret_policy, as_of=AS_OF)
 
@@ -415,7 +415,7 @@ class RuntimeControlTest(unittest.TestCase):
 
         missing_policy = policy_v2()
         missing_policy.pop("mode_authority_policy")
-        with self.assertRaisesRegex(RuntimeControlError, "policy fields are invalid"):
+        with self.assertRaisesRegex(ExecutionPolicyError, "policy fields are invalid"):
             evaluate(reduce_events(events), missing_policy, gate_event="final", as_of=AS_OF)
 
     def test_readonly_final_still_requires_a_completed_goal(self) -> None:
@@ -428,7 +428,7 @@ class RuntimeControlTest(unittest.TestCase):
         self.assertFalse(active["gate_allowed"])
         self.assertIn("goal-not-completed", active["reasons"])
 
-        with self.assertRaisesRegex(RuntimeControlError, "attested goal intake"):
+        with self.assertRaisesRegex(ExecutionPolicyError, "attested goal intake"):
             evaluate(
                 reduce_events([usage(1, 100)]),
                 policy_v2(),
@@ -528,7 +528,7 @@ class RuntimeControlTest(unittest.TestCase):
 
     def test_task_mode_and_gate_applicability_are_fail_closed(self) -> None:
         implementation_state = reduce_events(completed_events_without_artifacts())
-        with self.assertRaisesRegex(RuntimeControlError, "state-bound"):
+        with self.assertRaisesRegex(ExecutionPolicyError, "state-bound"):
             evaluate(
                 implementation_state,
                 policy(),
@@ -538,7 +538,7 @@ class RuntimeControlTest(unittest.TestCase):
             )
 
         state = reduce_events(completed_events_without_artifacts("readonly", "readonly"))
-        with self.assertRaisesRegex(RuntimeControlError, "state-bound"):
+        with self.assertRaisesRegex(ExecutionPolicyError, "state-bound"):
             evaluate(
                 state,
                 policy_v2(),
@@ -561,7 +561,7 @@ class RuntimeControlTest(unittest.TestCase):
     def test_v2_policy_rejects_weakened_or_sensitive_applicability(self) -> None:
         weakened = policy_v2()
         weakened["artifact_applicability"]["implementation"]["final"] = ["repo"]
-        with self.assertRaisesRegex(RuntimeControlError, "fail-closed artifact requirements"):
+        with self.assertRaisesRegex(ExecutionPolicyError, "fail-closed artifact requirements"):
             evaluate(
                 reduce_events(active_events()),
                 weakened,
@@ -570,7 +570,7 @@ class RuntimeControlTest(unittest.TestCase):
 
         readonly_implementation_artifact = policy_v2()
         readonly_implementation_artifact["artifact_applicability"]["readonly"]["final"] = ["repo"]
-        with self.assertRaisesRegex(RuntimeControlError, "cannot require implementation artifacts"):
+        with self.assertRaisesRegex(ExecutionPolicyError, "cannot require implementation artifacts"):
             evaluate(
                 reduce_events(active_events_v2("readonly", "readonly")),
                 readonly_implementation_artifact,
@@ -579,7 +579,7 @@ class RuntimeControlTest(unittest.TestCase):
 
         sensitive = policy_v2()
         sensitive["artifact_applicability"]["readonly"]["content"] = "raw task text"
-        with self.assertRaisesRegex(RuntimeControlError, "forbidden sensitive field"):
+        with self.assertRaisesRegex(ExecutionPolicyError, "forbidden sensitive field"):
             evaluate(
                 reduce_events(active_events_v2("readonly", "readonly")),
                 sensitive,
@@ -588,7 +588,7 @@ class RuntimeControlTest(unittest.TestCase):
 
         trusted_without_backend = policy_v2()
         trusted_without_backend["mode_authority_policy"]["verification_backend"] = "not-configured"
-        with self.assertRaisesRegex(RuntimeControlError, "require a configured"):
+        with self.assertRaisesRegex(ExecutionPolicyError, "require a configured"):
             evaluate(
                 reduce_events(active_events_v2("readonly", "readonly")),
                 trusted_without_backend,
@@ -599,7 +599,7 @@ class RuntimeControlTest(unittest.TestCase):
         backend_without_registry["mode_authority_policy"]["verification_backend"] = (
             "managed-authority-registry"
         )
-        with self.assertRaisesRegex(RuntimeControlError, "without trusted authorities"):
+        with self.assertRaisesRegex(ExecutionPolicyError, "without trusted authorities"):
             evaluate(
                 reduce_events(active_events_v2("readonly", "readonly")),
                 backend_without_registry,
@@ -609,39 +609,39 @@ class RuntimeControlTest(unittest.TestCase):
     def test_goal_intake_attestation_and_mapping_are_fail_closed(self) -> None:
         tampered = goal_started_v2("readonly", "readonly")
         tampered["payload"]["intake"]["task_mode"] = "implementation"
-        with self.assertRaisesRegex(RuntimeControlError, "inconsistent|digest mismatch"):
+        with self.assertRaisesRegex(ExecutionPolicyError, "inconsistent|digest mismatch"):
             reduce_events([tampered])
 
         request_tampered = goal_started_v2("readonly", "readonly")
         request_tampered["payload"]["intake"]["request_sha256"] = "f" * 64
-        with self.assertRaisesRegex(RuntimeControlError, "digest mismatch"):
+        with self.assertRaisesRegex(ExecutionPolicyError, "digest mismatch"):
             reduce_events([request_tampered])
 
         routing_tampered = goal_started_v2("readonly", "readonly")
         routing_tampered["payload"]["intake"]["routing_decision_sha256"] = "f" * 64
-        with self.assertRaisesRegex(RuntimeControlError, "digest mismatch"):
+        with self.assertRaisesRegex(ExecutionPolicyError, "digest mismatch"):
             reduce_events([routing_tampered])
 
         wrong_goal = goal_started()
         wrong_goal["payload"]["intake"] = goal_intake(
             "readonly", "readonly", goal_id="goal-other"
         )
-        with self.assertRaisesRegex(RuntimeControlError, "goal_id does not match"):
+        with self.assertRaisesRegex(ExecutionPolicyError, "goal_id does not match"):
             reduce_events([wrong_goal])
 
         inconsistent = goal_started()
         inconsistent["payload"]["intake"] = goal_intake("review", "implementation")
-        with self.assertRaisesRegex(RuntimeControlError, "inconsistent"):
+        with self.assertRaisesRegex(ExecutionPolicyError, "inconsistent"):
             reduce_events([inconsistent])
 
         state = reduce_events(active_events_v2("review", "readonly"))
         state["goal"]["task_mode"] = "implementation"
-        with self.assertRaisesRegex(RuntimeControlError, "inconsistent|digest mismatch"):
+        with self.assertRaisesRegex(ExecutionPolicyError, "inconsistent|digest mismatch"):
             evaluate(state, policy_v2(), as_of=AS_OF)
 
         ungoverned = goal_started_v2("readonly", "readonly")
         ungoverned["payload"]["task_mode"] = "implementation"
-        with self.assertRaisesRegex(RuntimeControlError, "payload fields are invalid"):
+        with self.assertRaisesRegex(ExecutionPolicyError, "payload fields are invalid"):
             reduce_events([ungoverned])
 
     def test_goal_mode_changes_only_through_attested_replan(self) -> None:
@@ -671,7 +671,7 @@ class RuntimeControlTest(unittest.TestCase):
 
         missing_reason = active_events_v2("review", "readonly")[:-1]
         missing_reason.append(event(4, "goal.updated", {"intake": replanned_intake}, minute=3))
-        with self.assertRaisesRegex(RuntimeControlError, "require intake and mode_change_reason"):
+        with self.assertRaisesRegex(ExecutionPolicyError, "require intake and mode_change_reason"):
             reduce_events(missing_reason)
 
         wrong_kind = goal_intake(
@@ -682,7 +682,7 @@ class RuntimeControlTest(unittest.TestCase):
             "intake": wrong_kind,
             "mode_change_reason": "replan",
         }, minute=3))
-        with self.assertRaisesRegex(RuntimeControlError, "provenance kind must be goal-replan"):
+        with self.assertRaisesRegex(ExecutionPolicyError, "provenance kind must be goal-replan"):
             reduce_events(invalid_replan)
 
     def test_v1_policy_is_rejected_and_v2_json_schemas_validate(self) -> None:
@@ -700,7 +700,7 @@ class RuntimeControlTest(unittest.TestCase):
             },
             "retention": {"journal_days": 14, "raw_content_stored": False},
         }
-        with self.assertRaisesRegex(RuntimeControlError, "unsupported runtime control policy schema"):
+        with self.assertRaisesRegex(ExecutionPolicyError, "unsupported runtime control policy schema"):
             evaluate(
                 reduce_events(completed_events_without_artifacts()),
                 old_policy,

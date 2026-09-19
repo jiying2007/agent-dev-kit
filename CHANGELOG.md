@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### ExecutionPolicy Python naming hard-cut
+- Renamed the public execution-policy exception from `RuntimeControlError` to `ExecutionPolicyError`; no Python alias is retained.
+- Renamed execution-policy regression entrypoints to `test_execution_policy*` while preserving all frozen `runtime_control.*` wire/schema identities.
+- Added negative regression coverage so the retired Python symbol and test entrypoints cannot return.
+
 ### Validation CLI hard-cut
 - Removed the legacy `scripts/validate-assets.sh` shim; `adk validate` now owns typed validation and strict governance orchestration directly.
 - Strict summary JSON and process exit status now derive from the same aggregated failure set, preventing a pass JSON from preceding a later governance-gate failure.
