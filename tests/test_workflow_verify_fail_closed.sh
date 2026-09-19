@@ -7,7 +7,16 @@ trap 'rm -rf "$TMP_DIR"' EXIT
 
 mkdir -p "$TMP_DIR/scripts" "$TMP_DIR/changes/fail-closed"
 cp "$ROOT_DIR/scripts/workflow.sh" "$TMP_DIR/scripts/workflow.sh"
-printf '%s\n' '#!/usr/bin/env bash' 'echo "[FAIL] injected strict failure" >&2' 'exit 23' >"$TMP_DIR/scripts/validate-assets.sh"
+cat >"$TMP_DIR/scripts/devkit.sh" <<'DEVKIT'
+#!/usr/bin/env bash
+set -euo pipefail
+if [[ "${1:-}" == "validate" && "${2:-}" == "--strict" ]]; then
+  echo "[FAIL] injected strict failure" >&2
+  exit 23
+fi
+echo "[FAIL] unexpected devkit fixture invocation: $*" >&2
+exit 2
+DEVKIT
 printf '%s\n' '#!/usr/bin/env bash' 'echo "[PASS] format must not run after strict failure"' >"$TMP_DIR/scripts/check-format.sh"
 printf '%s\n' '#!/usr/bin/env bash' 'echo "[PASS] change fixture"' >"$TMP_DIR/scripts/check-change-governance.sh"
 printf '%s\n' 'stage: applied' 'owner: fixture' 'updated_at: 2026-08-24T00:00:00Z' >"$TMP_DIR/changes/fail-closed/state.yaml"
