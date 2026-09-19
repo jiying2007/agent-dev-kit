@@ -186,7 +186,7 @@ raw input/output 不得进入 journal/state。Engine 是 pure reducer/decision�
 ```bash
 scripts/check-token-budget.sh
 scripts/check-context-experience-patterns.sh
-scripts/validate-assets.sh --strict
+scripts/devkit.sh validate --strict
 tests/test_token_budget.sh
-tests/test_runtime_control.sh
+tests/test_execution_policy.sh
 ```
