@@ -81,7 +81,6 @@ PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}" python3 - "$ROOT_DIR" <<'P
 from __future__ import annotations
 
 import difflib
-import re
 import sys
 from pathlib import Path
 
@@ -95,9 +94,6 @@ from agent_dev_kit.model import Manifest
 root = Path(sys.argv[1]).resolve()
 manifest = Manifest.load(root)
 
-def normalize(text: str) -> str:
-    return re.sub(r"(?m)^- generated_at: .*?$", "- generated_at: <normalized>", text)
-
 projections = (
     ("docs/agent-skill-catalog.md", catalog_markdown),
     ("docs/workflow-contract-matrix.md", workflow_matrix_markdown),
@@ -105,8 +101,8 @@ projections = (
 )
 failures = 0
 for relative, render in projections:
-    actual = normalize((root / relative).read_text(encoding="utf-8"))
-    expected = normalize(render(manifest))
+    actual = (root / relative).read_text(encoding="utf-8")
+    expected = render(manifest)
     if actual == expected:
         continue
     failures += 1
