@@ -26,16 +26,16 @@ The current coverage baseline is the six-scenario adk self-pilot:
 - team handoff
 - upstream intake
 
-The canonical report is `reports/codex-pilot-report.md`. This runbook exists as
+The canonical report is `~/codex/reports/codex-pilot-report.md`. This runbook exists as
 the stable adoption-matrix evidence target; detailed historical evidence remains
 in reports.
 
 ## Verification
 
 ```bash
-rtk bash scripts/check-codex-pilot.sh . evidence
-rtk bash scripts/check-codex-pilot-coverage.sh .
-rtk bash scripts/check-evidence-bundle.sh .
+rtk bash ~/codex/scripts/check-codex-pilot.sh ~/codex evidence
+rtk bash ~/codex/scripts/check-codex-pilot-coverage.sh ~/codex
+rtk bash ~/codex/scripts/check-evidence-bundle.sh ~/codex
 ```
 
 Promotion is blocked when a completed pilot lacks command-level evidence or when
