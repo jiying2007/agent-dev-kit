@@ -100,7 +100,7 @@ TESTS=(
   test_token_budget.sh
   test_token_context_governance.sh
   test_task_cost.sh
-  test_runtime_control.sh
+  test_execution_policy.sh
   test_official_docs_governance.sh
   test_official_docs_timezone.sh
   test_intent_boundary_governance.sh
@@ -172,7 +172,7 @@ QUICK_TESTS=(
   test_software_m5_ready.sh
   test_repository_runtime_evidence.sh
   test_token_budget.sh
-  test_runtime_control.sh
+  test_execution_policy.sh
   test_intent_boundary_governance.sh
   test_official_docs_timezone.sh
   test_agent_ecosystem_standards.sh
