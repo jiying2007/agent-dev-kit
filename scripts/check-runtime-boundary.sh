@@ -132,6 +132,7 @@ done < <(
     -g '!check-runtime-capabilities.sh' \
     -g '!test_runtime_boundary.sh' \
     -g '!test_software_m5_ready.sh' \
+    -g '!software_m5_eval_contract_small.json' \
     -g '!software_m5_eval_tasks*.jsonl' || true
 )
 
