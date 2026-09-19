@@ -50,3 +50,4 @@ bash scripts/devkit.sh archive --change <change-id>
 - 正式发布只合入受保护 `main`；successful-main CI 后由 `release-tag-promotion` 创建 exact-SHA annotated SemVer tag，再调用 canonical release workflow。
 - 同版本 tag 若已指向不同 commit 必须 fail closed 并提升 SemVer，禁止移动或覆盖旧 tag。
 - canonical release 必须发布 GitHub Release，并让远端 assets 与本轮 validated archive/checksum/release-contract 保持 byte-identical；重跑不得静默覆盖。
+- 若 exact annotated v7+ tag 已创建但 GitHub Release 缺失，successful-main promotion 必须在当前版本成功发布后审计并自动重放 canonical release；修复只读取旧 tag/commit，不移动 tag。
