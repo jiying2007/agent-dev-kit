@@ -38,16 +38,16 @@ rtk bash scripts/run-embedded-production-field-pilot.sh --mcu-root <firmware-rel
 在 MCU release tool 工作区执行：
 
 ```bash
-rtk bash scripts/firmware-release.sh --help
-rtk bash scripts/firmware-release.sh profile mm32spin023c
-rtk bash scripts/setup-nas-mount.sh --check
+rtk bash ./scripts/firmware-release.sh --help
+rtk bash ./scripts/firmware-release.sh profile mm32spin023c
+rtk bash ./scripts/setup-nas-mount.sh --check
 ```
 
 使用临时 boot/app 样本或历史已脱敏固件，在 `/tmp/adk-pilot/<target>` 生成 package：
 
 ```bash
-rtk bash scripts/firmware-release.sh package-external --profile mm32spin023c --repo /tmp/adk-pilot/mm32 --boot /tmp/adk-pilot/mm32/boot.hex --app /tmp/adk-pilot/mm32/app_v0.0.9.hex --version 0.0.9 --output-dir /tmp/adk-pilot/mm32/out
-rtk bash scripts/firmware-release.sh check-package /tmp/adk-pilot/mm32/out/mm32spin023c_firmware_bundle
+rtk bash ./scripts/firmware-release.sh package-external --profile mm32spin023c --repo /tmp/adk-pilot/mm32 --boot /tmp/adk-pilot/mm32/boot.hex --app /tmp/adk-pilot/mm32/app_v0.0.9.hex --version 0.0.9 --output-dir /tmp/adk-pilot/mm32/out
+rtk bash ./scripts/firmware-release.sh check-package /tmp/adk-pilot/mm32/out/mm32spin023c_firmware_bundle
 ```
 
 烧录、readback 和发布只跑 dry-run：
@@ -57,7 +57,7 @@ rtk python3 /tmp/adk-pilot/mm32/out/mm32spin023c_firmware_bundle/burn_firmware.p
 rtk python3 /tmp/adk-pilot/mm32/out/mm32spin023c_firmware_bundle/erase_and_burn.py --dry-run
 rtk python3 /tmp/adk-pilot/mm32/out/mm32spin023c_firmware_bundle/erase_and_burn.py --force-erase --role production-full --dry-run
 rtk python3 /tmp/adk-pilot/mm32/out/mm32spin023c_firmware_bundle/readback_verify.py --dry-run
-rtk bash scripts/firmware-release.sh publish-nas --release-root /tmp/adk-pilot/mm32/nas-release --batch-id adk-pilot --timestamp 20260519-105700 --item mm32spin023c=/tmp/adk-pilot/mm32/out/mm32spin023c_firmware_bundle --dry-run --json
+rtk bash ./scripts/firmware-release.sh publish-nas --release-root /tmp/adk-pilot/mm32/nas-release --batch-id adk-pilot --timestamp 20260519-105700 --item mm32spin023c=/tmp/adk-pilot/mm32/out/mm32spin023c_firmware_bundle --dry-run --json
 ```
 
 ## Phase 2：SoC / Vehicle OTA Evidence
