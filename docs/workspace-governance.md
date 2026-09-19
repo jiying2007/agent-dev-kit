@@ -20,17 +20,17 @@
 
 | 用户意图 | 触发关键词 | 执行动作 | 涉及脚本/技能 |
 |----------|-----------|---------|--------------|
-| 接入新仓库 | 接入、新增子仓、add repo、onboard、纳入治理 | 加载 `repo-onboarding` 技能，执行克隆→注册→深度分析→生成报告→更新治理文件 | `scripts/new-repo-onboard.sh` + AI 深度分析 |
-| 全面检查 | 检查、check、验证、门禁、健康检查 | 运行一键检查，汇总所有门禁结果 | `scripts/check-all.sh` / `scripts/devkit.sh check` |
-| 同步子仓 | 同步、sync、拉取更新、fetch | 拉取所有 enabled 子仓最新代码 | `scripts/sync-subrepos.sh` |
-| 差异扫描 | 差异、diff、变更、最近变化 | 扫描子仓近 N 天变更 | `scripts/diff-scan.sh` |
-| 深度分析 | 深度分析、拆解、analyze、prompt分析、skill拆解 | 加载 `adk-repo-prompt-analysis` + `adk-skill-deep-analysis` 技能，执行四阶段 Prompt 逆向 + 八阶段 Skill 深度拆解 | `scripts/analyze-repo.sh` |
-| 生成周报 | 周报、weekly report、本周汇总 | 自动生成本周变更周报 | `scripts/generate-weekly-report.sh` |
-| 清理报告 | 清理、归档、cleanup、prune | 归档过期报告 | `scripts/cleanup-reports.sh` |
-| 版本发布 | 发布、release、tag、版本 | 执行发布流程 | `scripts/version-manager.sh` |
-| 健康检查 | 健康、health、状态 | 检查工作区整体健康状态 | `scripts/health-check.sh` |
-| 安装 hook | hook、pre-commit、提交检查 | 安装 git pre-commit hook | `scripts/install-pre-commit-hook.sh` |
-| 一键流水线 | 流水线、pipeline、一键更新、全量更新 | 执行 7 步闭环: 同步→差异→分级→分析→采纳→模式检测→报告 | `scripts/pipeline-subrepo-update.sh` |
+| 接入新仓库 | 接入、新增子仓、add repo、onboard、纳入治理 | 加载 `repo-onboarding` 技能，执行克隆→注册→深度分析→生成报告→更新治理文件 | `../scripts/new-repo-onboard.sh` + AI 深度分析 |
+| 全面检查 | 检查、check、验证、门禁、健康检查 | 运行一键检查，汇总所有门禁结果 | `../scripts/check-all.sh` / `scripts/devkit.sh check` |
+| 同步子仓 | 同步、sync、拉取更新、fetch | 拉取所有 enabled 子仓最新代码 | `../scripts/sync-subrepos.sh` |
+| 差异扫描 | 差异、diff、变更、最近变化 | 扫描子仓近 N 天变更 | `../scripts/diff-scan.sh` |
+| 深度分析 | 深度分析、拆解、analyze、prompt分析、skill拆解 | 加载 `adk-repo-prompt-analysis` + `adk-skill-deep-analysis` 技能，执行四阶段 Prompt 逆向 + 八阶段 Skill 深度拆解 | `../scripts/analyze-repo.sh` |
+| 生成周报 | 周报、weekly report、本周汇总 | 自动生成本周变更周报 | `../scripts/generate-weekly-report.sh` |
+| 清理报告 | 清理、归档、cleanup、prune | 归档过期报告 | `../scripts/cleanup-reports.sh` |
+| 版本发布 | 发布、release、tag、版本 | 执行发布流程 | `../scripts/version-manager.sh` |
+| 健康检查 | 健康、health、状态 | 检查工作区整体健康状态 | `../scripts/health-check.sh` |
+| 安装 hook | hook、pre-commit、提交检查 | 安装 git pre-commit hook | `../scripts/install-pre-commit-hook.sh` |
+| 一键流水线 | 流水线、pipeline、一键更新、全量更新 | 执行 7 步闭环: 同步→差异→分级→分析→采纳→模式检测→报告 | `../scripts/pipeline-subrepo-update.sh` |
 | 优化 adk | 优化、改进、升级 adk、enhance | 加载 `project-release-hardening` 技能，执行优化→验证→发布 | `agent-dev-kit/scripts/devkit.sh` |
 
 **执行原则：**
@@ -94,7 +94,7 @@
 
 ## 3. 面向运行体系的联动策略
 
-`adk` 后续面向多运行体系实用化。基本顺序是“先在 `agent-dev-kit` 完成资产化与验证、再通过 direct `tool_targets` 或 `external_handoff_targets` 交付给具体运行体系、由目标运行体系完成自身 build/apply/smoke、最后把真实运行结果回灌 adk”。Claude Code、Hermes Agent、OpenCode 当前是 direct tool target；Codex 当前是 `~/codex -> ~/.codex` external handoff/source-to-live target；OpenAI/Codex 文档和参考仓只能作为 `reference_sources` 或治理证据，不能成为 ADK core 的隐式前提。
+`adk` 后续面向多运行体系实用化。基本顺序是“先在 `agent-dev-kit` 完成资产化与验证、再通过 direct `tool_targets` 或 `external_handoff_targets` 交付给具体运行体系、由目标运行体系完成自身 build/apply/smoke、最后把真实运行结果回灌 adk”。当前 direct/external target 集合只以 `agent-dev-kit/manifest.json` 为准，不在本工作区文档维护平行名单；OpenAI/Codex 文档和参考仓只能作为 `reference_sources` 或治理证据，不能成为 ADK core 的隐式前提。
 
 1. `llm_agent`：拉取参考源，产生候选改进项。
 2. `agent-dev-kit`：实现标准资产、门禁脚本和可交付导出物。
@@ -120,7 +120,7 @@
 
 1. 更新 `subrepos/registry.csv`（子仓 SSOT）。
 2. 在 `subrepos/adoption-matrix.md` 记录“优点采纳/缺点摒弃”。
-3. 执行 `scripts/check-agents-coverage.sh` 校验治理覆盖。
+3. 执行 `../scripts/check-agents-coverage.sh` 校验治理覆盖。
 
 ### D3-D4：adk 压实实施
 
@@ -134,7 +134,7 @@
 
 ### D8-D10：开启增量追踪（满足门禁后）
 
-1. 开门后执行 `scripts/sync-subrepos.sh` 与 `scripts/diff-scan.sh`。
+1. 开门后执行 `../scripts/sync-subrepos.sh` 与 `../scripts/diff-scan.sh`。
 2. 对新增候选继续走“采纳优点 + 摒弃缺点 + adk 压实”闭环。
 
 ### D11-D14：回灌与收口
@@ -169,15 +169,15 @@
 
 - 子仓清单：`subrepos/registry.csv`
 - 候选评估：`subrepos/adoption-matrix.md`
-- 同步脚本：`scripts/sync-subrepos.sh`
-- 差异扫描：`scripts/diff-scan.sh`
-- 覆盖校验：`scripts/check-agents-coverage.sh`
+- 同步脚本：`../scripts/sync-subrepos.sh`
+- 差异扫描：`../scripts/diff-scan.sh`
+- 覆盖校验：`../scripts/check-agents-coverage.sh`
 - 压实校验：`../scripts/check-adk-harden-readiness.sh`
-- 一键门禁：`scripts/check-all.sh`（`--quick` 跳过耗时项，`--verbose` 显示详细输出）
+- 一键门禁：`../scripts/check-all.sh`（`--quick` 跳过耗时项，`--verbose` 显示详细输出）
 - 统一入口：`scripts/devkit.sh`（`check`/`onboard`/`sync`/`diff`/`health`/`weekly-report`/`cleanup`）
 - 周报模板：`reports/weekly-change-report.template.md`
 - codex 实战模板：`reports/codex-pilot-report.template.md`
-- 新仓库接入脚本：`scripts/new-repo-onboard.sh`
+- 新仓库接入脚本：`../scripts/new-repo-onboard.sh`
 - 新仓库接入 Runbook：`docs/runbooks/new-repo-onboarding.md`
 - CI/CD 配置：`.gitlab-ci.yml`
 - Runner 设置：`docs/setup-gitlab-runner.md`
