@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+## v7.0.3 (2026-09-19)
+
+### Release bootstrap and self-healing
+- Keep source-version/bootstrap verification stdlib-only so exact-tag identity checks cannot depend on package dependencies that have not been installed yet.
+- Move full synchronized version projection verification after CI dependency installation while preserving tag->commit and source-version guards before install/build work.
+- Add exact-tag/manual repair inputs and automatic v7+ tagged-but-unreleased discovery; successful main promotion audits annotated tags, source versions, immutable Releases and exact asset sets, then reuses the canonical release workflow to repair missing Releases without moving tags.
+- Preserve the failed v7.0.2 annotated tag at its exact source commit and allow the new self-heal path to publish its missing immutable Release from that source.
+
+
 ## v7.0.2 (2026-09-19)
 
 ### Complete version identity projections
