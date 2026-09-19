@@ -52,6 +52,9 @@ active_docs = (
 retired_tokens = (
     "tests/test_product_maturity_v3.sh",
     "tests/test_product_maturity_v4.sh",
+    "tests/test_product_maturity_v5.sh",
+    "tests/test_skill_governance_v3.sh",
+    "tests/test_skill_governance_v3.py",
     "manifest.yaml",
     "scripts/install-assets.sh",
     "scripts/convert-assets.sh",
@@ -84,6 +87,9 @@ retired_paths = (
     "scripts/check-fallback-sunset.sh",
     "bin/agent-dev-kit",
     "src/agent_dev_kit/runtime_control",
+    "tests/test_product_maturity_v5.sh",
+    "tests/test_skill_governance_v3.sh",
+    "tests/test_skill_governance_v3.py",
 )
 
 failures: list[str] = []
