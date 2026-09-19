@@ -130,11 +130,8 @@ done < <(
     -g '!check-runtime-boundary.sh' \
     -g '!check-official-docs-governance.sh' \
     -g '!check-runtime-capabilities.sh' \
-    -g '!validate-assets.sh' \
     -g '!test_runtime_boundary.sh' \
-    -g '!test_product_maturity_v4.sh' \
     -g '!test_software_m5_ready.sh' \
-    -g '!software_m5_eval_contract_small.json' \
     -g '!software_m5_eval_tasks*.jsonl' || true
 )
 
