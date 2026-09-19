@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### Validation CLI hard-cut
+- Removed the legacy `scripts/validate-assets.sh` shim; `adk validate` now owns typed validation and strict governance orchestration directly.
+- Strict summary JSON and process exit status now derive from the same aggregated failure set, preventing a pass JSON from preceding a later governance-gate failure.
+- Validation tests, usage guidance and token-budget governance now target the unified CLI and reject reintroduction of the retired shim.
+
 ### Canonical matcher authority
 - `agent_dev_kit.matcher` now owns Skill Content v2 eligibility, selection-group promotion, effect ceilings and escalation semantics; the old deterministic implementation is internal-only as `_matcher_kernel`.
 - Deterministic evaluation, runtime evaluation, CLI routing, phase context and Skill relationships all consume the same matcher authority.
