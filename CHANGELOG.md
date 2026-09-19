@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## v7.0.0 (2026-09-19)
+
+### Release identity hardening
+- Promote post-`v6.0.0` breaking cleanup under a new major SemVer identity instead of reusing the immutable 6.0.0 tag.
+- Release promotion now fails closed when the source version tag already points to a different commit, creates annotated tags for new versions, and publishes a GitHub Release from the exact validated artifact bundle.
+- Existing immutable tags, including `v6.0.0`, are never moved or rewritten.
+
+
 ### Active documentation and projection authority
 - Active-document governance now discovers maintained root/docs/runbook/architecture/reference/spec/workflow Markdown automatically instead of relying on a small hand-maintained whitelist.
 - Repo-relative `scripts/` and `tests/` references in active docs must resolve to real files; external-project commands use explicit repository/workspace boundaries instead of masquerading as ADK-local paths.
