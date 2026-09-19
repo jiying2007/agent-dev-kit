@@ -42,6 +42,11 @@ def _parse_version(value: str) -> tuple[tuple[int, int, int], tuple[str, ...] | 
     return core, prerelease
 
 
+def validate_version(value: str) -> str:
+    _parse_version(value)
+    return value
+
+
 def compare_versions(left: str, right: str) -> int:
     """Return -1, 0, or 1 using SemVer precedence; build metadata is ignored."""
     left_core, left_pre = _parse_version(left)
