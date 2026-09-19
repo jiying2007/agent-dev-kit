@@ -31,14 +31,15 @@ import json
 import sys
 
 import agent_dev_kit.cli as cli
+import agent_dev_kit.validation_contract as validation_contract
 
 root = sys.argv[1]
 assert str(cli.ROOT) == root, (cli.ROOT, root)
 
-original = cli._validation_gate_failure
+original = validation_contract._governance_gate_failure
 try:
-    cli._validation_gate_failure = (
-        lambda command, label: "forced-runtime-boundary-failure"
+    validation_contract._governance_gate_failure = (
+        lambda root, command, label: "forced-runtime-boundary-failure"
         if label == "runtime-boundary"
         else None
     )
@@ -46,7 +47,7 @@ try:
     with contextlib.redirect_stdout(stream):
         rc = cli._cmd_validate(["--strict", "--summary-json"])
 finally:
-    cli._validation_gate_failure = original
+    validation_contract._governance_gate_failure = original
 
 payload = json.loads(stream.getvalue())
 assert rc == 1, rc
