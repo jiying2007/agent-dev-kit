@@ -7,7 +7,9 @@ import sys
 from datetime import UTC, datetime
 from pathlib import Path
 
-from .model import ManifestError
+class VersioningError(ValueError):
+    """Version/source-identity validation failed before package dependencies are available."""
+
 
 _SEMVER_PATTERN = re.compile(
     r"^(\d+)\.(\d+)\.(\d+)(?:-([0-9A-Za-z.-]+))?(?:\+([0-9A-Za-z.-]+))?$"
@@ -17,11 +19,11 @@ _SEMVER_PATTERN = re.compile(
 def _parse_version(value: str) -> tuple[tuple[int, int, int], tuple[str, ...] | None]:
     match = _SEMVER_PATTERN.fullmatch(value)
     if match is None:
-        raise ManifestError(f"invalid semantic version: {value}")
+        raise VersioningError(f"invalid semantic version: {value}")
 
     core_parts = (match.group(1), match.group(2), match.group(3))
     if any(len(part) > 1 and part.startswith("0") for part in core_parts):
-        raise ManifestError(f"invalid semantic version: {value}")
+        raise VersioningError(f"invalid semantic version: {value}")
     core = (int(match.group(1)), int(match.group(2)), int(match.group(3)))
 
     prerelease_raw = match.group(4)
@@ -32,12 +34,12 @@ def _parse_version(value: str) -> tuple[tuple[int, int, int], tuple[str, ...] | 
             not part or (part.isdigit() and len(part) > 1 and part.startswith("0"))
             for part in prerelease_parts
         ):
-            raise ManifestError(f"invalid semantic version: {value}")
+            raise VersioningError(f"invalid semantic version: {value}")
         prerelease = prerelease_parts
 
     build_raw = match.group(5)
     if build_raw is not None and any(not part for part in build_raw.split(".")):
-        raise ManifestError(f"invalid semantic version: {value}")
+        raise VersioningError(f"invalid semantic version: {value}")
 
     return core, prerelease
 
@@ -82,10 +84,10 @@ def _manifest_version(path: Path) -> str:
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
-        raise ManifestError(f"unable to read version manifest: {path}") from exc
+        raise VersioningError(f"unable to read version manifest: {path}") from exc
     version = data.get("version") if isinstance(data, dict) else None
     if not isinstance(version, str) or not version:
-        raise ManifestError(f"manifest version is missing or invalid: {path}")
+        raise VersioningError(f"manifest version is missing or invalid: {path}")
     _parse_version(version)
     return version
 
@@ -94,10 +96,10 @@ def _replace_once(path: Path, pattern: str, replacement: str, label: str) -> Non
     try:
         text = path.read_text(encoding="utf-8")
     except OSError as exc:
-        raise ManifestError(f"missing version projection: {label}") from exc
+        raise VersioningError(f"missing version projection: {label}") from exc
     updated, count = re.subn(pattern, replacement, text, count=1, flags=re.MULTILINE)
     if count != 1:
-        raise ManifestError(f"unable to update {label}: expected exactly one version field")
+        raise VersioningError(f"unable to update {label}: expected exactly one version field")
     path.write_text(updated, encoding="utf-8")
 
 
@@ -105,7 +107,7 @@ def version_identity_failures(root: Path) -> list[str]:
     root = root.resolve()
     try:
         version = _manifest_version(root / "manifest.json")
-    except ManifestError as exc:
+    except VersioningError as exc:
         return [str(exc)]
 
     checks = {
@@ -160,7 +162,7 @@ def sync_version_identity(
     _parse_version(target)
     actor = actor.strip()
     if not actor or "\n" in actor or "\r" in actor:
-        raise ManifestError("version lock actor is invalid")
+        raise VersioningError("version lock actor is invalid")
 
     current = _manifest_version(root / "manifest.json")
     _replace_once(
@@ -207,7 +209,7 @@ def sync_version_identity(
     )
     failures = version_identity_failures(root)
     if failures:
-        raise ManifestError("version identity synchronization failed: " + "; ".join(failures))
+        raise VersioningError("version identity synchronization failed: " + "; ".join(failures))
     return current, target
 
 
@@ -267,7 +269,7 @@ def main(argv: list[str] | None = None) -> int:
         current, target = sync_version_identity(Path(args.root), args.target, args.actor)
         print(f"version synchronized: {current} -> {target}")
         return 0
-    except ManifestError as exc:
+    except VersioningError as exc:
         print(f"[FAIL] {exc}", file=sys.stderr)
         return 1
 
