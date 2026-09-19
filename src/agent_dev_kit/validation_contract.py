@@ -400,7 +400,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--summary-json", action="store_true")
     args = parser.parse_args(argv)
     try:
-        result = validate_assets(Path(args.root).resolve(), strict=args.strict, quick=args.quick)
+        result = validate_repository(Path(args.root).resolve(), strict=args.strict, quick=args.quick)
     except (OSError, ManifestError, ValueError, json.JSONDecodeError) as exc:
         result = {"schema": "adk-asset-validation/v2", "status": "fail", "failures": [str(exc)]}
     if args.summary_json:
