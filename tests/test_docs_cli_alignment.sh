@@ -77,7 +77,7 @@ retired_tokens = (
     ".github/workflows/scorecard.yml",
     "OpenSSF Scorecard",
 )
-path_pattern = re.compile(r"(?<![A-Za-z0-9_./-])((?:scripts|tests)/[A-Za-z0-9_./-]+\.(?:sh|py))\b")
+path_pattern = re.compile(r"(?<![A-Za-z0-9_./-])((?:(?:scripts|tests)/[A-Za-z0-9_./-]+\.(?:sh|py)|manifests/[A-Za-z0-9_./-]+\.json))\b")
 
 retired_paths = (
     "scripts/install-assets.sh",
