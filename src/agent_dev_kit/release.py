@@ -12,13 +12,13 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence
 
 from .compiler import export_assets
+from .versioning import version_is_newer
 from .distribution.release_artifacts import (
     _assert_publishable_release_artifact,
     _copy_runtime_skill,
     _copy_source_distribution,
     _extract_release,
     _managed_hashes,
-    _prerelease_is_newer,
     _release_source_identity,
     _release_source_root,
     _report_digest,
@@ -461,7 +461,7 @@ def rehearse_release(previous_artifact: Path, candidate_artifact: Path) -> Dict[
             )
         ):
             raise ManifestError("candidate release source provenance is incomplete")
-        if not _prerelease_is_newer(previous_manifest.version, candidate_manifest.version):
+        if not version_is_newer(previous_manifest.version, candidate_manifest.version):
             raise ManifestError("candidate release must be newer than previous release")
 
         target = workspace / "target"
