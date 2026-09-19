@@ -43,8 +43,12 @@ assert "scripts/devkit.sh release check" in workflow, "release workflow bypasses
 assert "scripts/devkit.sh release build --out dist" in workflow, "release workflow bypasses canonical release build"
 assert "release-manager.sh" not in workflow, "release workflow references retired shell release manager"
 assert "manifest.yaml" not in workflow, "release workflow references retired YAML manifest"
+assert "- name: Publish GitHub Release" in workflow, "release workflow does not publish a GitHub Release"
+assert 'gh release create "$RELEASE_TAG"' in workflow, "release workflow missing GitHub Release creation"
+assert 'gh release download "$RELEASE_TAG"' in workflow, "release retry does not verify existing GitHub Release assets"
+assert 'cmp "$archive"' in workflow and 'cmp "$checksum"' in workflow and 'cmp "$contract"' in workflow, "release retry must compare all validated assets"
 
-version = "6.0.0"
+version = "7.0.0"
 source_manifest_value = {"version": version}
 source_manifest = json.dumps(source_manifest_value, indent=2).encode() + b"\n"
 sbom = b'{"spdxVersion":"SPDX-2.3"}\n'

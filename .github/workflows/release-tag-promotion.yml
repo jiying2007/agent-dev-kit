@@ -85,11 +85,11 @@ jobs:
           headers = {
               "Accept": "application/vnd.github+json",
               "Authorization": f"Bearer {token}",
-              "X-GitHub-Api-Version": "2022-11-28",
+              "X-GitHub-Api-Version": "2026-03-10",
               "User-Agent": "agent-dev-kit-release-tag-promotion",
           }
 
-          def request(path: str, *, method: str = "GET", payload: dict[str, str] | None = None):
+          def request(path: str, *, method: str = "GET", payload: dict[str, object] | None = None):
               data = None
               if payload is not None:
                   data = json.dumps(payload, separators=(",", ":")).encode("utf-8")
@@ -120,19 +120,34 @@ jobs:
                   current = tag_object["object"]
               raise RuntimeError("tag peel depth exceeded")
 
+          conflict = False
           status, existing = request(f"/git/ref/tags/{tag}")
           if status == 404:
+              status, tag_object = request(
+                  "/git/tags",
+                  method="POST",
+                  payload={
+                      "tag": tag,
+                      "message": f"release: {tag}",
+                      "object": head_sha,
+                      "type": "commit",
+                  },
+              )
+              if status != 201 or not isinstance(tag_object, dict) or not isinstance(tag_object.get("sha"), str):
+                  raise RuntimeError("annotated tag object creation did not return HTTP 201")
               status, created = request(
                   "/git/refs",
                   method="POST",
-                  payload={"ref": f"refs/tags/{tag}", "sha": head_sha},
+                  payload={"ref": f"refs/tags/{tag}", "sha": tag_object["sha"]},
               )
-              if status != 201 or not isinstance(created, dict):
-                  raise RuntimeError("tag creation did not return HTTP 201")
+              if status != 201 or not isinstance(created, dict) or not isinstance(created.get("object"), dict):
+                  raise RuntimeError("annotated tag ref creation did not return HTTP 201")
+              if created["object"].get("type") != "tag":
+                  raise RuntimeError("created release ref is not an annotated tag")
               target_sha = peel(created["object"])
               if target_sha != head_sha:
                   raise RuntimeError("created release tag does not resolve to exact main SHA")
-              promotion_status = "created"
+              promotion_status = "created-annotated"
               release_needed = True
           else:
               if not isinstance(existing, dict) or not isinstance(existing.get("object"), dict):
@@ -142,8 +157,9 @@ jobs:
                   promotion_status = "existing-exact"
                   release_needed = True
               else:
-                  promotion_status = "version-already-released"
+                  promotion_status = "source-version-tag-conflict"
                   release_needed = False
+                  conflict = True
 
           evidence = {
               "schema": "adk-release-tag-promotion/v1",
@@ -160,6 +176,8 @@ jobs:
                   "current_main_identity_required": True,
                   "version_identity_must_verify": True,
                   "existing_version_tag_must_not_move": True,
+                  "existing_version_tag_must_match_current_main": True,
+                  "new_version_tags_must_be_annotated": True,
               },
           }
           evidence_path.write_text(json.dumps(evidence, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
@@ -168,9 +186,15 @@ jobs:
               handle.write(f"release_commit={head_sha}\n")
               handle.write(f"release_needed={'true' if release_needed else 'false'}\n")
           print(json.dumps(evidence, ensure_ascii=False, separators=(",", ":")))
+          if conflict:
+              raise RuntimeError(
+                  f"source version {version} already has immutable tag {tag} at {target_sha}; "
+                  f"current main is {head_sha}; bump SemVer instead of reusing the version"
+              )
           PY
 
       - name: Upload tag promotion evidence
+        if: ${{ always() }}
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: adk-release-tag-promotion-${{ github.event.workflow_run.head_sha }}
@@ -182,7 +206,7 @@ jobs:
     needs: promote-tag
     if: ${{ needs.promote-tag.outputs.release_needed == 'true' }}
     permissions:
-      contents: read
+      contents: write
       id-token: write
       attestations: write
       artifact-metadata: write

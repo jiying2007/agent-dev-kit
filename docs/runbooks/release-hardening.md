@@ -46,3 +46,6 @@ bash scripts/devkit.sh archive --change <change-id>
 - 若触及发布脚本或构建入口，必须附 release gate 专项验证证据
 - release rehearsal 只接受当前 strict source contract 与 release-manifest v2；pre-contract/legacy bundle 必须 fail closed，不提供迁移执行兼容层
 - contribution checklist（影响面、验证口径、兼容性说明）必须完整
+- 正式发布只合入受保护 `main`；successful-main CI 后由 `release-tag-promotion` 创建 exact-SHA annotated SemVer tag，再调用 canonical release workflow。
+- 同版本 tag 若已指向不同 commit 必须 fail closed 并提升 SemVer，禁止移动或覆盖旧 tag。
+- canonical release 必须发布 GitHub Release，并让远端 assets 与本轮 validated archive/checksum/release-contract 保持 byte-identical；重跑不得静默覆盖。

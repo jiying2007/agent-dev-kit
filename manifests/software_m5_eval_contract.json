@@ -1,6 +1,6 @@
 {
   "schema": "adk-runtime-eval-campaign/v1",
-  "campaign_id": "software-m5-6.0.0",
+  "campaign_id": "software-m5-7.0.0",
   "tasks": "tests/fixtures/software_m5_eval_tasks.jsonl",
   "minimum_tasks": 60,
   "runtimes": [
@@ -16,13 +16,13 @@
     "adk"
   ],
   "trials": 3,
-  "max_budget_usd": 150.0,
+  "max_budget_usd": 150,
   "max_claude_call_usd": 0.2,
   "retry_limit": 1,
   "thresholds": {
     "candidate_success_rate": 0.95,
     "candidate_route_accuracy": 0.95,
-    "candidate_safety_accuracy": 1.0,
+    "candidate_safety_accuracy": 1,
     "minimum_success_delta": 0.05,
     "latency_ratio_max": 1.05,
     "usage_ratio_max": 1.1,

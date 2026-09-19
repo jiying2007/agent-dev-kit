@@ -34,8 +34,8 @@ assert {path.name for path in consumer_files} == expected_consumer_workflows, (
 expected_write_permissions = {
     "branch-gc.yml": ["contents"],
     "ci.yml": ["id-token"],
-    "release-tag-promotion.yml": ["artifact-metadata", "attestations", "contents", "id-token"],
-    "release.yml": ["artifact-metadata", "attestations", "id-token"],
+    "release-tag-promotion.yml": ["artifact-metadata", "attestations", "contents", "contents", "id-token"],
+    "release.yml": ["artifact-metadata", "attestations", "contents", "id-token"],
     "security-codeql.yml": ["security-events"],
 }
 for path in workflow_files:
@@ -178,6 +178,10 @@ assert "archives=(dist/*.tar.gz)" in release, "release bundle must require one a
 assert "checksums=(dist/*.tar.gz.sha256)" in release, "release bundle must require one matching checksum"
 assert "sha256sum --check" in release, "release sidecar checksum must be verified"
 assert "if-no-files-found: error" in release, "release artifact upload must fail closed when files are missing"
+assert "- name: Publish GitHub Release" in release, "validated release bundle must be published to GitHub Releases"
+assert 'gh release create "$RELEASE_TAG"' in release, "GitHub Release creation command missing"
+assert 'gh release download "$RELEASE_TAG"' in release, "existing GitHub Release retry must download assets for verification"
+assert 'cmp "$archive"' in release and 'cmp "$checksum"' in release and 'cmp "$contract"' in release, "existing release assets must be byte-compared"
 
 release_tag_promotion = (workflow_dir / "release-tag-promotion.yml").read_text(encoding="utf-8")
 assert "  workflow_run:\n" in release_tag_promotion, "release tag promotion must be completion-triggered"
@@ -189,8 +193,12 @@ assert "cancel-in-progress: false" in release_tag_promotion, "release tag promot
 assert "contents: write" in release_tag_promotion, "tag creation permission must remain explicit and reviewed"
 assert "git ls-remote origin refs/heads/main" in release_tag_promotion, "tag promotion must re-check exact current main"
 assert "bash scripts/version-manager.sh verify" in release_tag_promotion, "tag promotion must verify synchronized version identity"
-assert 'payload={"ref": f"refs/tags/{tag}", "sha": head_sha}' in release_tag_promotion, "tag promotion must create an exact immutable version ref"
-assert 'promotion_status = "version-already-released"' in release_tag_promotion, "existing version tags must never move"
+assert 'request(\n                  "/git/tags",' in release_tag_promotion, "tag promotion must create an annotated tag object"
+assert 'payload={"ref": f"refs/tags/{tag}", "sha": tag_object["sha"]}' in release_tag_promotion, "tag promotion must point the version ref at the annotated tag object"
+assert 'promotion_status = "created-annotated"' in release_tag_promotion, "new version tags must be recorded as annotated promotions"
+assert 'promotion_status = "source-version-tag-conflict"' in release_tag_promotion, "mismatched existing version tags must fail closed"
+assert 'promotion_status = "version-already-released"' not in release_tag_promotion, "version/tag conflicts must not be converted into successful skips"
+assert 'if: ${{ always() }}' in release_tag_promotion, "tag-conflict evidence must still upload on promotion failure"
 assert "uses: ./.github/workflows/release.yml" in release_tag_promotion, "tag promotion must reuse the canonical release workflow"
 assert "needs.promote-tag.outputs.release_needed == 'true'" in release_tag_promotion, "canonical release must run only for an exact newly promoted or retryable tag"
 

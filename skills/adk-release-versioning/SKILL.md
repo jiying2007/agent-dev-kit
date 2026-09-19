@@ -1,8 +1,8 @@
 ---
 name: adk-release-versioning
 description: 版本策略、变更说明与发布基线
-version: 1.1.0
-last_updated: 2026-05-06
+version: 1.2.0
+last_updated: 2026-09-19
 triggers:
   - "版本发布"
   - "版本管理"
@@ -48,12 +48,12 @@ constraints:
 4. **发布清单**：制品、依赖、配置变更、迁移步骤。
 5. **阶段矩阵**：给出里程碑阶段、退出条件、验证证据与回退锚点。
 6. **回退预案**：可回滚版本、触发条件、验证命令。
-7. **打 Tag 并发布**：
-   ```bash
-   git tag -a v1.2.0 -m "release: v1.2.0"
-   git push origin v1.2.0
-   ```
-8. **发布签署**：输出 go/no-go 结论与残留风险。
+7. **Promotion 发布**：
+   - 先用版本管理器同步并验证 source identity。
+   - 只把 source/PR 合并到受保护的 `main`；不要手工移动、覆盖或复用已有版本 tag。
+   - `main` fresh CI 成功后，由 `release-tag-promotion` 对 exact main SHA 创建 annotated version tag，并调用 canonical release workflow。
+   - canonical release 必须从 exact tag 构建、校验、attest，并发布 GitHub Release；已有同 tag Release 只能在资产 byte-identical 时视为幂等成功。
+8. **发布签署**：输出 go/no-go 结论与残留风险，并记录 tag、commit、GitHub Release 与 artifact digest。
 
 
 ## Quality Gate
@@ -61,7 +61,7 @@ constraints:
 - 阶段式迁移必须给出阶段结论与回退锚点。
 - 必须附完整迁移与回退步骤。
 - 必须明确发布门禁结论与签署条件。
-- Tag 必须为 annotated tag（`-a` 参数）。
+- 正式 Tag 必须为 annotated tag，并由 successful-main promotion 自动创建；禁止手工移动或复用已存在版本 tag。
 - Changelog 必须覆盖自上次发布以来的所有变更。
 
 
@@ -69,7 +69,8 @@ constraints:
 - 版本号与变更类型不匹配时，停止切版并重审。
 - 缺失回退路径时，结论必须为 `needs-fix`。
 - Changelog 为空时，检查 commit message 是否符合规范。
-- Tag 创建失败时，检查是否已存在同名 tag。
+- Tag 创建失败时，检查同名 tag 是否已存在；若已指向不同 commit，必须提升 SemVer，禁止覆盖旧 tag。
+- GitHub Release 已存在时，只有远端 assets 与本轮 validated bundle byte-identical 才允许幂等通过。
 
 
 ## Evidence Template

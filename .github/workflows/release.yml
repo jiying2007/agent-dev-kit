@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     permissions:
-      contents: read
+      contents: write
       id-token: write
       attestations: write
       artifact-metadata: write
@@ -161,3 +161,42 @@ jobs:
             dist/*.sha256
             dist/release-contract.json
           if-no-files-found: error
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ inputs.release_tag || github.ref_name }}
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          archives=(dist/*.tar.gz)
+          checksums=(dist/*.tar.gz.sha256)
+          if (( ${#archives[@]} != 1 || ${#checksums[@]} != 1 )); then
+            echo "::error::validated release bundle is no longer singular"
+            exit 1
+          fi
+          archive="${archives[0]}"
+          checksum="${checksums[0]}"
+          contract="dist/release-contract.json"
+          expected_names="$(printf '%s\n' "$(basename "$archive")" "$(basename "$checksum")" "$(basename "$contract")" | sort)"
+
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            actual_names="$(gh release view "$RELEASE_TAG" --json assets --jq '.assets[].name' | sort)"
+            if [[ "$actual_names" != "$expected_names" ]]; then
+              echo "::error::existing GitHub Release assets do not match the validated bundle"
+              printf 'expected:\n%s\nactual:\n%s\n' "$expected_names" "$actual_names" >&2
+              exit 1
+            fi
+            existing_dir="$(mktemp -d)"
+            trap 'rm -rf "$existing_dir"' EXIT
+            gh release download "$RELEASE_TAG" --dir "$existing_dir"
+            cmp "$archive" "$existing_dir/$(basename "$archive")"
+            cmp "$checksum" "$existing_dir/$(basename "$checksum")"
+            cmp "$contract" "$existing_dir/$(basename "$contract")"
+            echo "GitHub Release already exists with byte-identical validated assets: $RELEASE_TAG"
+          else
+            gh release create "$RELEASE_TAG" "$archive" "$checksum" "$contract" \
+              --verify-tag \
+              --title "$RELEASE_TAG" \
+              --generate-notes
+          fi
