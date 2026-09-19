@@ -48,6 +48,7 @@ active_docs = (
     "docs/agent-operating-rules.md",
     "docs/runbooks/workspace-maintenance-guide.md",
     "docs/runbooks/mcp-governance.md",
+    "docs/runbooks/compatibility-matrix.md",
 )
 retired_tokens = (
     "tests/test_product_maturity_v3.sh",
