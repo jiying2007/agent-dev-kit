@@ -7,7 +7,7 @@ TMP_DIR="$(mktemp -d)"
 trap 'rm -rf "$TMP_DIR"' EXIT
 
 CATALOG_OUT="$TMP_DIR/catalog.md"
-"$ROOT_DIR/scripts/catalog-assets.sh" build --out "$CATALOG_OUT"
+bash "$ROOT_DIR/scripts/devkit.sh" catalog build --out "$CATALOG_OUT"
 
 [[ -f "$CATALOG_OUT" ]] || {
   echo "[FAIL] catalog file not generated" >&2
@@ -59,19 +59,19 @@ grep -q '| `feature-delivery` | core, embedded-fullstack | low | `requirements-a
   exit 1
 }
 
-FIND_AGENT_OUTPUT="$("$ROOT_DIR/scripts/catalog-assets.sh" find --type agent --keyword 硬件)"
+FIND_AGENT_OUTPUT="$(bash "$ROOT_DIR/scripts/devkit.sh" catalog find --type agent --keyword 硬件)"
 echo "$FIND_AGENT_OUTPUT" | grep -q 'hardware-debugger' || {
   echo "[FAIL] find command missing expected agent" >&2
   exit 1
 }
 
-FIND_OUTPUT="$("$ROOT_DIR/scripts/catalog-assets.sh" find --type skill --keyword bring-up)"
+FIND_OUTPUT="$(bash "$ROOT_DIR/scripts/devkit.sh" catalog find --type skill --keyword bring-up)"
 echo "$FIND_OUTPUT" | grep -q 'adk-driver-bringup-checklist' || {
   echo "[FAIL] find command missing expected skill" >&2
   exit 1
 }
 
-FIND_WORKFLOW_OUTPUT="$("$ROOT_DIR/scripts/catalog-assets.sh" find --type workflow --keyword 交付门禁)"
+FIND_WORKFLOW_OUTPUT="$(bash "$ROOT_DIR/scripts/devkit.sh" catalog find --type workflow --keyword 交付门禁)"
 echo "$FIND_WORKFLOW_OUTPUT" | grep -q 'adk-delivery-gate' || {
   echo "[FAIL] find command missing expected workflow" >&2
   exit 1
