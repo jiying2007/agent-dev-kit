@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+## v7.0.5 (2026-09-21)
+
+### Canonical catalog command authority
+- Route `adk catalog` directly to `agent_dev_kit.catalog_contract` instead of bouncing through a shell wrapper.
+- Migrate catalog regression coverage to the canonical CLI, retire `scripts/catalog-assets.sh`, and ratchet the removed compatibility surface against reintroduction.
+
+
 ## v7.0.4 (2026-09-19)
 
 ### Canonical command documentation
