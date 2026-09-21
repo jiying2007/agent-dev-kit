@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Optional, Sequence
 
 from .campaign import campaign_markdown, campaign_plan, check_campaign, run_campaign
+from .catalog_contract import main as catalog_main
 from .cli_runtime import (
     DEFAULT_TASKS,
     ROOT,
@@ -115,7 +116,7 @@ def _cmd_doctor(argv: Sequence[str]) -> int:
 
 
 def _cmd_catalog(argv: Sequence[str]) -> int:
-    return subprocess.call(["bash", str(ROOT / "scripts" / "catalog-assets.sh")] + list(argv), cwd=str(ROOT))
+    return catalog_main(list(argv))
 
 
 def _cmd_match(argv: Sequence[str]) -> int:
