@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-09-13",
+  "last_updated": "2026-09-21",
   "reference_boundary": "External agent, plugin, memory and skill sources are method-only references until a separate supply-chain review targets a specific versioned asset. This manifest does not enable external runtimes, hooks, workers, MCP servers or plugin installs.",
   "local_source_policy": {
     "id": "optional-workspace-reference-clones-v1",
@@ -150,39 +150,39 @@
       "title": "GitHub Agentic Workflows safe outputs",
       "url": "https://github.github.com/gh-aw/reference/safe-outputs/",
       "local_path": "",
-      "retrieved_at": "2026-08-21",
+      "retrieved_at": "2026-09-21",
       "review_status": "reviewed",
-      "expires_at": "2026-09-20",
+      "expires_at": "2026-10-21",
       "license": "MIT",
       "evidence_strength": "high",
       "decision": "adopt-method-only",
-      "notes": "Use read-only agent, schema-backed output and separate permission-controlled executor architecture with operation caps and kill switch. Current safe-outputs may auto-inject conservative create-issue behavior when outputs are omitted, so local policies require explicit output boundaries. Do not import workflows or enable GitHub writes."
+      "notes": "2026-09-21 re-review confirmed the current safe-outputs contract still separates a read-only agent from structured, permission-controlled executor jobs and keeps operation-level controls. Conservative create-issue behavior is still auto-injected when no non-system safe outputs are configured, so ADK keeps explicit output boundaries and does not import workflows or enable GitHub writes."
     },
     {
       "id": "mcp-registry",
       "title": "Model Context Protocol Registry",
       "url": "https://github.com/modelcontextprotocol/registry",
       "local_path": "",
-      "retrieved_at": "2026-08-21",
+      "retrieved_at": "2026-09-21",
       "review_status": "reviewed",
-      "expires_at": "2026-09-20",
+      "expires_at": "2026-10-21",
       "license": "Apache-2.0-current/MIT-historical-review-required",
       "evidence_strength": "high",
       "decision": "adopt-method-only",
-      "notes": "Use namespace ownership, version, artifact digest, review and freshness as MCP dependency provenance fields. The registry validates namespace ownership for publishing, but a listing remains discovery metadata rather than trust certification or install approval."
+      "notes": "2026-09-21 re-review confirmed the official MCP Registry remains preview metadata infrastructure with namespace/package ownership verification and a standardized discovery API. Keep namespace, version, artifact digest, review and freshness provenance fields, but treat registry presence as discovery metadata rather than trust certification or install approval."
     },
     {
       "id": "otel-genai-semconv",
       "title": "OpenTelemetry semantic conventions for generative AI systems",
       "url": "https://github.com/open-telemetry/semantic-conventions-genai",
       "local_path": "",
-      "retrieved_at": "2026-08-21",
-      "review_status": "reviewed",
-      "expires_at": "2026-09-20",
+      "retrieved_at": "2026-09-21",
+      "review_status": "reviewed-upstream-revision-pinned-schema-url-unavailable",
+      "expires_at": "2026-10-21",
       "license": "Apache-2.0",
       "evidence_strength": "medium",
       "decision": "adopt-method-only",
-      "notes": "Use an optional version-pinned field mapping adapter for trace summaries. The active GenAI repository covers spans, metrics, events, MCP and provider conventions while its Schema URL remains unsettled; prompt, completion, tool arguments and tool results stay disabled by default."
+      "notes": "2026-09-21 re-review confirmed GenAI semantic conventions now live in the dedicated open-telemetry/semantic-conventions-genai repository and remain actively evolving. Upstream README still marks Schema URL as TODO, so ADK must not invent a 1.42.0 GenAI schema URL/version; the disabled mapping adapter is instead pinned to reviewed upstream revision cc07f722069974139dab497d80d145144b19daca, with sensitive content capture disabled."
     },
     {
       "id": "agent-client-protocol",
