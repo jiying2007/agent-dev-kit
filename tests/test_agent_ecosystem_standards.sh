@@ -9,7 +9,7 @@ ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 "$ROOT_DIR/scripts/check-external-agent-patterns.sh" >/dev/null
 "$ROOT_DIR/scripts/check-external-agent-patterns.sh" --help | rg -q -- '--require-local-sources'
 if [[ ! -f "${ADK_TEST_SUITE_DIR:-/nonexistent}/validate-summary.json" ]]; then
-  "$ROOT_DIR/scripts/validate-assets.sh" --strict >/dev/null
+  bash "$ROOT_DIR/scripts/devkit.sh" validate --strict >/dev/null
 fi
 
 python3 - "$ROOT_DIR" <<'PY'
