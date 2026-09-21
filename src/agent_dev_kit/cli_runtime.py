@@ -6,8 +6,9 @@ import json
 import os
 import tempfile
 from pathlib import Path
-from typing import Any
+from typing import Any, Sequence
 
+from .catalog_contract import main as catalog_main
 from .model import Manifest, ManifestError
 
 
@@ -24,6 +25,11 @@ def _discover_root() -> Path:
 
 ROOT = _discover_root()
 DEFAULT_TASKS = ROOT / "tests" / "fixtures" / "product_eval_tasks.jsonl"
+
+
+def run_catalog(argv: Sequence[str]) -> int:
+    """Dispatch catalog operations through the typed catalog contract at the canonical ADK root."""
+    return catalog_main([*list(argv), "--root", str(ROOT)])
 
 
 
