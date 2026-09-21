@@ -1,6 +1,6 @@
 {
   "schema_version": "1.2.0",
-  "last_updated": "2026-08-30",
+  "last_updated": "2026-09-21",
   "source_docs": [
     "openai-agents-tracing",
     "openai-agent-evals",
@@ -317,9 +317,7 @@
         "otel-genai-semconv"
       ],
       "enabled_default": false,
-      "stability": "experimental-version-pinned",
-      "schema_url": "https://opentelemetry.io/schemas/gen-ai/1.42.0",
-      "schema_version": "1.42.0",
+      "stability": "experimental-upstream-revision-pinned",
       "input_contract": "adk-workflow-trace-summary-v1",
       "field_mappings": {
         "primary_skill": "gen_ai.agent.name",
@@ -359,8 +357,9 @@
         "reason": "content fields can contain prompts, secrets, private source, tool payloads or high-cardinality data"
       },
       "required_fields": [
-        "schema_url",
-        "schema_version",
+        "upstream_repository",
+        "upstream_revision",
+        "schema_url_status",
         "stability",
         "enabled_default",
         "field_mappings",
@@ -376,9 +375,13 @@
       "must_not": [
         "enable prompt, completion, system instruction, tool argument or tool result capture by default",
         "export traces to a provider as a side effect of schema conversion",
-        "claim compatibility with unpinned or future semantic-convention versions",
+        "invent a GenAI Schema URL or schema version while upstream leaves Schema URL unresolved",
+        "claim compatibility with an upstream revision other than the reviewed pinned revision",
         "drop native ADK evidence fields that have no stable external mapping"
-      ]
+      ],
+      "upstream_repository": "https://github.com/open-telemetry/semantic-conventions-genai",
+      "upstream_revision": "cc07f722069974139dab497d80d145144b19daca",
+      "schema_url_status": "unavailable-upstream-todo"
     }
   ]
 }
