@@ -78,7 +78,7 @@
         },
         {
           "evidence_id": "catalog-index",
-          "path": "scripts/catalog-assets.sh"
+          "path": "src/agent_dev_kit/catalog_contract.py"
         }
       ],
       "primary_workflows": [

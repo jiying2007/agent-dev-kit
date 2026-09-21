@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+## v7.0.6 (2026-09-21)
+
+### Canonical catalog command authority
+- Route `adk catalog` directly to `agent_dev_kit.catalog_contract` while preserving canonical ADK-root resolution outside the repository cwd.
+- Migrate catalog tests, taxonomy checks, goal evidence and capability health to the canonical CLI/Python authority; retire `scripts/catalog-assets.sh` and ratchet the removed compatibility surface against reintroduction.
+
+
 ## v7.0.5 (2026-09-21)
 
 ### Governance freshness and maintenance closure

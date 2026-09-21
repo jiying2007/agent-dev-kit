@@ -40,7 +40,7 @@
       "agent": "requirements-analyst",
       "skill": "adk-requirements-triage",
       "workflow": "feature-delivery",
-      "script": "scripts/catalog-assets.sh",
+      "script": "scripts/devkit.sh",
       "test": "tests/test_catalog.sh",
       "doc": "docs/agent-skill-catalog.md"
     },
