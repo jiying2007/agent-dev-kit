@@ -116,7 +116,7 @@ def _cmd_doctor(argv: Sequence[str]) -> int:
 
 
 def _cmd_catalog(argv: Sequence[str]) -> int:
-    return catalog_main(list(argv))
+    return catalog_main([*list(argv), "--root", str(ROOT)])
 
 
 def _cmd_match(argv: Sequence[str]) -> int:
