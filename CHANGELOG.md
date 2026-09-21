@@ -9,6 +9,7 @@
 - Remove the last conditional test consumer of the retired `scripts/validate-assets.sh`; standalone ecosystem regression now uses the canonical `scripts/devkit.sh validate --strict` path.
 - Replace the obsolete OpenTelemetry GenAI 1.42.0 schema-URL claim with an exact upstream-revision snapshot while upstream still publishes no GenAI Schema URL.
 - Fold the current Ruff 0.16.8 and CodeQL 4.38.1 patch updates into one versioned maintenance release so Dependabot does not accumulate permanently unmergeable no-version PRs.
+- Make `pyproject.toml` the single authority for exact dependency versions; product-maturity regression now validates the required dependency/tool set and exact-pin shape instead of duplicating every version literal.
 
 ## v7.0.4 (2026-09-19)
 
