@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+## v7.0.7 (2026-09-21)
+
+### CLI dependency boundary
+- Keep `adk catalog` on the typed `catalog_contract` authority while routing it through the existing `cli_runtime` substrate, so the public CLI no longer grows a new domain import for every hard-cut command.
+- Ratchet catalog regression against direct `cli.py -> catalog_contract` coupling; this restores the reviewed consumer maintainability fan-out budget without reintroducing a shell wrapper or compatibility path.
+
+
 ## v7.0.6 (2026-09-21)
 
 ### Canonical catalog command authority
