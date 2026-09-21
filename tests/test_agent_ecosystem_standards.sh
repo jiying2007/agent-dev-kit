@@ -145,7 +145,11 @@ assert target_watch["direct_target_added"] is False
 
 trace = json.loads((root / "manifests/trace_eval_contracts.json").read_text(encoding="utf-8"))
 adapter = trace["interoperability_adapters"][0]
-assert adapter["schema_version"] == "1.42.0"
+assert adapter["upstream_repository"] == "https://github.com/open-telemetry/semantic-conventions-genai"
+assert adapter["upstream_revision"] == "cc07f722069974139dab497d80d145144b19daca"
+assert adapter["schema_url_status"] == "unavailable-upstream-todo"
+assert "schema_url" not in adapter
+assert "schema_version" not in adapter
 assert adapter["content_capture"]["enabled_default"] is False
 assert adapter["content_capture"]["allow_opt_in"] is False
 PY
