@@ -28,7 +28,7 @@ assert data["routing_scenarios"] > 0, data
 PY
 
 CATALOG_OUT="$TMP_DIR/catalog.md"
-"$ROOT_DIR/scripts/catalog-assets.sh" build --out "$CATALOG_OUT"
+bash "$ROOT_DIR/scripts/devkit.sh" catalog build --out "$CATALOG_OUT"
 
 grep -q '^## Skill Routing Matrix$' "$CATALOG_OUT" || {
   echo "[FAIL] catalog missing skill routing matrix" >&2
