@@ -127,7 +127,10 @@
     "direct_target_added": false,
     "use_case": "not-established",
     "runtime_version": "not-pinned",
-    "skill_discovery_paths": [".agents/skills", ".github/skills"],
+    "skill_discovery_paths": [
+      ".agents/skills",
+      ".github/skills"
+    ],
     "export_smoke": "not-run",
     "install_smoke": "not-run",
     "effect_eval": "not-run",
@@ -136,8 +139,9 @@
   },
   "otel_genai_adapter": {
     "enabled_default": false,
-    "schema_url": "https://opentelemetry.io/schemas/gen-ai/1.42.0",
-    "schema_version": "1.42.0",
+    "upstream_repository": "https://github.com/open-telemetry/semantic-conventions-genai",
+    "upstream_revision": "cc07f722069974139dab497d80d145144b19daca",
+    "schema_url_status": "unavailable-upstream-todo",
     "content_capture_enabled": false,
     "deny_fields": [
       "gen_ai.input.messages",
