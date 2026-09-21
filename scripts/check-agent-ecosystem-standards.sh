@@ -17,7 +17,7 @@ Checks method-only Agent ecosystem contracts across existing ADK SSOT manifests:
   - skill maintenance evidence and coding-agent target watch boundaries
   - read-only agent -> validated safe output -> separate write executor
   - MCP dependency provenance and 2026 protocol compatibility staging
-  - version-pinned OpenTelemetry GenAI adapter with content capture disabled
+  - upstream-revision-pinned OpenTelemetry GenAI adapter with content capture disabled
   - ACP and A2A watch-only boundaries
 USAGE
 }
@@ -491,8 +491,17 @@ adapters = {
 otel = adapters.get("otel-genai-trace-summary-v1", {})
 check(bool(otel), "missing OTel GenAI trace adapter")
 check(otel.get("enabled_default") is False, "OTel GenAI adapter must be disabled by default")
-check(otel.get("schema_url") == "https://opentelemetry.io/schemas/gen-ai/1.42.0", "OTel GenAI adapter schema URL must be pinned")
-check(otel.get("schema_version") == "1.42.0", "OTel GenAI adapter schema version must be pinned")
+check(
+    otel.get("upstream_repository") == "https://github.com/open-telemetry/semantic-conventions-genai",
+    "OTel GenAI adapter upstream repository must be canonical",
+)
+check(
+    otel.get("upstream_revision") == "cc07f722069974139dab497d80d145144b19daca",
+    "OTel GenAI adapter upstream revision must match the reviewed snapshot",
+)
+check(otel.get("schema_url_status") == "unavailable-upstream-todo", "OTel GenAI schema URL must remain explicitly unavailable")
+check("schema_url" not in otel, "OTel GenAI adapter must not invent an upstream Schema URL")
+check("schema_version" not in otel, "OTel GenAI adapter must not invent an upstream schema version")
 content_capture = otel.get("content_capture", {})
 check(content_capture.get("enabled_default") is False, "OTel GenAI content capture must be disabled by default")
 check(content_capture.get("allow_opt_in") is False, "OTel GenAI content capture opt-in must remain disabled")
@@ -652,13 +661,23 @@ def fixture_errors(data, require_all=False):
 
     if "otel_genai_adapter" in data:
         value = data["otel_genai_adapter"]
-        fixture_require(value, ["schema_url", "schema_version", "deny_fields", "export_boundary"], "otel_genai_adapter")
+        fixture_require(
+            value,
+            ["upstream_repository", "upstream_revision", "schema_url_status", "deny_fields", "export_boundary"],
+            "otel_genai_adapter",
+        )
         if value.get("enabled_default") is not False:
             errors.append("fixture otel_genai_adapter must be disabled by default")
         if value.get("content_capture_enabled") is not False:
             errors.append("fixture otel_genai_adapter must keep content capture disabled")
-        if value.get("schema_url") != "https://opentelemetry.io/schemas/gen-ai/1.42.0":
-            errors.append("fixture otel_genai_adapter schema URL must be pinned")
+        if value.get("upstream_repository") != "https://github.com/open-telemetry/semantic-conventions-genai":
+            errors.append("fixture otel_genai_adapter upstream repository must be canonical")
+        if value.get("upstream_revision") != "cc07f722069974139dab497d80d145144b19daca":
+            errors.append("fixture otel_genai_adapter upstream revision must match reviewed snapshot")
+        if value.get("schema_url_status") != "unavailable-upstream-todo":
+            errors.append("fixture otel_genai_adapter schema URL must remain unavailable")
+        if "schema_url" in value or "schema_version" in value:
+            errors.append("fixture otel_genai_adapter must not invent schema URL/version")
         if not sensitive_fields <= set(value.get("deny_fields", [])):
             errors.append("fixture otel_genai_adapter deny list is incomplete")
 
