@@ -77,6 +77,12 @@ echo "$FIND_WORKFLOW_OUTPUT" | grep -q 'adk-delivery-gate' || {
   exit 1
 }
 
+OFF_ROOT_OUTPUT="$(cd "$TMP_DIR" && bash "$ROOT_DIR/scripts/devkit.sh" catalog find --type skill --keyword bring-up)"
+echo "$OFF_ROOT_OUTPUT" | grep -q 'adk-driver-bringup-checklist' || {
+  echo "[FAIL] canonical catalog CLI lost ADK root outside repository cwd" >&2
+  exit 1
+}
+
 PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}" python3 - "$ROOT_DIR" <<'PY'
 from __future__ import annotations
 
