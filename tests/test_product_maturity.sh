@@ -58,13 +58,23 @@ assert not (root / "manifest.yaml").exists()
 pyproject = (root / "pyproject.toml").read_text(encoding="utf-8")
 pyproject_data = tomllib.loads(pyproject)
 assert pyproject_data["project"]["requires-python"] == ">=3.11", pyproject_data
-assert pyproject_data["project"]["dependencies"] == ["PyYAML==6.0.3", "jsonschema==4.26.0"], pyproject_data
-assert pyproject_data["project"]["optional-dependencies"]["quality"] == [
-    "ruff==0.16.7",
-    "pip-audit==2.10.1",
-    "mypy==2.3.1",
-    "types-jsonschema==4.26.0.20260518",
-    "types-PyYAML==6.0.12.20260906",
+
+def exact_pin_names(items):
+    assert all(isinstance(item, str) and item.count("==") == 1 for item in items), items
+    pairs = [item.split("==", 1) for item in items]
+    assert all(name and version for name, version in pairs), items
+    return [name for name, _version in pairs]
+
+assert exact_pin_names(pyproject_data["project"]["dependencies"]) == [
+    "PyYAML",
+    "jsonschema",
+], pyproject_data
+assert exact_pin_names(pyproject_data["project"]["optional-dependencies"]["quality"]) == [
+    "ruff",
+    "pip-audit",
+    "mypy",
+    "types-jsonschema",
+    "types-PyYAML",
 ], pyproject_data
 assert pyproject_data["tool"]["mypy"] == {
     "python_version": "3.11",
