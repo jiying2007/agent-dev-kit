@@ -11,10 +11,10 @@ from pathlib import Path
 from typing import Optional, Sequence
 
 from .campaign import campaign_markdown, campaign_plan, check_campaign, run_campaign
-from .catalog_contract import main as catalog_main
 from .cli_runtime import (
     DEFAULT_TASKS,
     ROOT,
+    run_catalog,
     _help,
     _json,
     _manifest,
@@ -116,7 +116,7 @@ def _cmd_doctor(argv: Sequence[str]) -> int:
 
 
 def _cmd_catalog(argv: Sequence[str]) -> int:
-    return catalog_main([*list(argv), "--root", str(ROOT)])
+    return run_catalog(argv)
 
 
 def _cmd_match(argv: Sequence[str]) -> int:
