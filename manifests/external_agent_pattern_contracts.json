@@ -260,13 +260,13 @@
       "title": "Visual Studio Code Agent Skills",
       "url": "https://code.visualstudio.com/docs/agent-customization/agent-skills",
       "local_path": "",
-      "retrieved_at": "2026-07-22",
+      "retrieved_at": "2026-09-21",
       "review_status": "reviewed-watch-only",
-      "expires_at": "2026-09-22",
+      "expires_at": "2026-10-21",
       "license": "official-docs-reference-only",
       "evidence_strength": "high",
       "decision": "observe-method-only",
-      "notes": "Watch .agents/skills and related discovery behavior as future target evidence. Do not add a direct target or promote vendor-only context: fork into core without a real use case and runtime smoke."
+      "notes": "2026-09-21 re-review confirmed VS Code Agent Skills follow the open Agent Skills standard and discover supported project/personal skill locations including .github/skills, .claude/skills and .agents/skills. Keep observe-method-only: portability evidence is useful, but do not add a VS Code direct target or vendor-specific core contract without a concrete use case, runtime smoke and effect evidence."
     }
   ],
   "candidate_decisions": [
