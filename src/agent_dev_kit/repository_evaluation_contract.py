@@ -265,5 +265,3 @@ def repository_plan(manifest: Manifest, contract_path: Path) -> Dict[str, Any]:
     }
     plan["plan_sha256"] = _digest(plan)
     return plan
-
-
