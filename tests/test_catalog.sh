@@ -102,10 +102,26 @@ manifest = Manifest.load(root)
 
 cli_source = (root / "src/agent_dev_kit/cli.py").read_text(encoding="utf-8")
 runtime_source = (root / "src/agent_dev_kit/cli_runtime.py").read_text(encoding="utf-8")
-assert "from .catalog_contract" not in cli_source, "public CLI reintroduced direct catalog dependency"
-assert "run_catalog," in cli_source, "public CLI must consume the runtime catalog port"
-assert "from .catalog_contract import main as catalog_main" in runtime_source
-assert "def run_catalog(" in runtime_source
+evaluation_cli_source = (root / "src/agent_dev_kit/evaluation_cli.py").read_text(encoding="utf-8")
+assert "from .catalog_contract import main as catalog_main" in cli_source
+assert 'return catalog_main([*list(argv), "--root", str(ROOT)])' in cli_source
+assert "from .catalog_contract" not in runtime_source
+assert "def run_catalog(" not in runtime_source
+assert "from .evaluation import" not in cli_source
+assert "from .repository_evaluation import" not in cli_source
+assert "from .evaluation_cli import main as evaluation_cli_main" in cli_source
+assert "from .evaluation import" in evaluation_cli_source
+assert "from .repository_evaluation import" in evaluation_cli_source
+
+import ast
+tree = ast.parse(cli_source)
+imports = set()
+for node in ast.walk(tree):
+    if isinstance(node, ast.Import):
+        imports.update(alias.name.split(".", 1)[0] for alias in node.names)
+    elif isinstance(node, ast.ImportFrom):
+        imports.add(("." * node.level + (node.module or "<package>")) if node.level else node.module.split(".", 1)[0])
+assert len(imports) <= 28, f"public CLI import fan-out exceeded reviewed budget: {len(imports)} > 28"
 
 projections = (
     ("docs/agent-skill-catalog.md", catalog_markdown),
