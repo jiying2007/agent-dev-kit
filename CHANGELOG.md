@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+## v7.0.11 (2026-09-22)
+
+### Canonical Workflow IR authority
+- Retire the unused `scripts/check-workflow-ir.sh` Python-launch wrapper; Workflow IR regression imports the canonical `agent_dev_kit.workflow_ir` authority directly.
+- Ratchet Workflow IR regression and active-doc governance against reintroducing the retired shell entrypoint.
+
+
 ## v7.0.10 (2026-09-22)
 
 ### Canonical release validation authority
