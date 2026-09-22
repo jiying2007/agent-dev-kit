@@ -98,6 +98,50 @@ else:
             + ", ".join(missing_support)
         )
 
+    readiness_orchestrator = source_root / "readiness.py"
+    readiness_tools = source_root / "readiness_tools.py"
+    if not readiness_tools.is_file():
+        failures.append("missing readiness_tools bounded context")
+    else:
+        try:
+            readiness_tree = ast.parse(
+                readiness_orchestrator.read_text(encoding="utf-8"),
+                filename=str(readiness_orchestrator),
+            )
+            readiness_tools_tree = ast.parse(
+                readiness_tools.read_text(encoding="utf-8"),
+                filename=str(readiness_tools),
+            )
+        except (OSError, SyntaxError, UnicodeError) as exc:
+            failures.append(f"cannot parse readiness bounded contexts: {exc}")
+        else:
+            readiness_defs = {
+                node.name for node in readiness_tree.body if isinstance(node, ast.FunctionDef)
+            }
+            tool_defs = {
+                node.name for node in readiness_tools_tree.body if isinstance(node, ast.FunctionDef)
+            }
+            if "_evaluate_tools" in readiness_defs:
+                failures.append("readiness orchestrator must not own tool/permission evaluation")
+            if "_evaluate_tools" not in tool_defs:
+                failures.append("readiness_tools must own tool/permission evaluation")
+            imports_tools = any(
+                isinstance(node, ast.ImportFrom)
+                and node.module == "readiness_tools"
+                and any(alias.name == "_evaluate_tools" for alias in node.names)
+                for node in readiness_tree.body
+            )
+            if not imports_tools:
+                failures.append("readiness orchestrator must depend on readiness_tools authority")
+            reverse_imports = [
+                node
+                for node in ast.walk(readiness_tools_tree)
+                if isinstance(node, ast.ImportFrom)
+                and node.module == "readiness"
+            ]
+            if reverse_imports:
+                failures.append("readiness_tools must not depend on readiness orchestrator")
+
     repository_certification = source_root / "repository_evaluation.py"
     repository_contract = source_root / "repository_evaluation_contract.py"
     if not repository_contract.is_file():
