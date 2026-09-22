@@ -8,7 +8,6 @@ import tempfile
 from pathlib import Path
 from typing import Any, Sequence
 
-from .catalog_contract import main as catalog_main
 from .model import Manifest, ManifestError
 
 
@@ -25,42 +24,6 @@ def _discover_root() -> Path:
 
 ROOT = _discover_root()
 DEFAULT_TASKS = ROOT / "tests" / "fixtures" / "product_eval_tasks.jsonl"
-
-
-def run_catalog(argv: Sequence[str]) -> int:
-    """Dispatch catalog operations through the typed catalog contract at the canonical ADK root."""
-    return catalog_main([*list(argv), "--root", str(ROOT)])
-
-
-
-PUBLIC_COMMANDS = [
-    ("validate", "校验 canonical manifest 与资产结构"),
-    ("manifest", "只读检查 canonical manifest composition"),
-    ("doctor", "只读检查运行环境与 M5-ready 前置条件"),
-    ("catalog", "生成或检索 Agent/Skill 目录"),
-    ("match", "按 Skill Content v2 语义匹配 Skill 路由"),
-    ("phase-context", "解析语义 phase context"),
-    ("skill-relationships", "解析 typed Skill relationships 与 delivery lifecycle"),
-    ("platform", "检查 Agent Platform primitives、evidence 与 target conformance"),
-    ("export", "确定性导出 direct target 资产"),
-    ("target", "检查或执行 direct target contract smoke"),
-    ("install", "plan/apply/rollback 安装事务"),
-    ("lock", "检查或显式清理 target writer lock"),
-    ("benchmark", "运行或展示资产平台性能基准"),
-    ("security", "执行阻断式资产与发布安全检查"),
-    ("eval", "运行确定性或真实运行时评测"),
-    ("release", "检查、构建或发布制品"),
-    ("test", "运行完整回归测试"),
-    ("goal", "检查 ADK 目标契约"),
-    ("capability", "检查 ADK 能力健康"),
-    ("harness", "检查目标仓 Harness readiness"),
-    ("task-cost", "生成确定性任务成本与执行预算 receipt"),
-    ("propose", "创建或推进变更提案"),
-    ("apply", "应用已批准变更"),
-    ("verify", "验证变更与证据"),
-    ("review", "执行变更审查"),
-    ("archive", "归档已闭环变更"),
-]
 
 
 def _manifest() -> Manifest:
