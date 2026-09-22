@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+## v7.0.8 (2026-09-22)
+
+- Split public `adk eval` parsing/orchestration into the dedicated `agent_dev_kit.evaluation_cli` bounded context; evaluation/campaign/repository semantics remain owned by their existing typed modules.
+- Restore `adk catalog` to a direct typed `catalog_contract` boundary and remove the temporary `cli_runtime` coupling used only to stay under the downstream fan-out budget.
+- Hard-cut all stale `software_m5_eval_contract_rc4.json` defaults to the canonical `manifests/software_m5_eval_contract.json`.
+- Add ADK-owned CLI import-fan-out and retired-contract ratchets so consumer maintainability does not become the first place architecture drift is detected.
+
 ## v7.0.7 (2026-09-21)
 
 ### CLI dependency boundary
