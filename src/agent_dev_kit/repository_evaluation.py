@@ -5,7 +5,7 @@ from __future__ import annotations
 import math
 import statistics
 from pathlib import Path
-from typing import Any, Dict, Mapping, Sequence, Tuple
+from typing import Any, Dict, List, Mapping, Sequence, Tuple
 
 from .model import Manifest, ManifestError, sha256_file
 from .repository_evaluation_contract import (
