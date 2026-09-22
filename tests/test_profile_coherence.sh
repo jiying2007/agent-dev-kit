@@ -6,7 +6,9 @@ ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 TMP="$(mktemp)"
 trap 'rm -f "$TMP"' EXIT
 
-bash "$ROOT_DIR/scripts/check-profile-coherence.sh"
+PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}" \
+  python3 -m agent_dev_kit.profile_coherence_contract \
+  --root "$ROOT_DIR"
 
 PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}" \
   python3 -m agent_dev_kit.profile_coherence_contract \
@@ -129,6 +131,11 @@ PY
 }
 [[ -f "$ROOT_DIR/skills/adk-unit-test-embedded/references/embedded-tdd-matrix.md" ]] || {
   echo "[FAIL] embedded TDD matrix missing from embedded-only unit test skill" >&2
+  exit 1
+}
+
+[[ ! -e "$ROOT_DIR/scripts/check-profile-coherence.sh" ]] || {
+  echo "[FAIL] retired profile coherence shell wrapper returned" >&2
   exit 1
 }
 
