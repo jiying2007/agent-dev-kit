@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+## v7.0.14 (2026-09-22)
+
+### Manifest format SSOT
+- Bind format/CRLF/tab checks to canonical `manifest.json` instead of the retired `manifest.yaml` path.
+- Add a regression ratchet that rejects any return of the retired YAML path in the format gate.
+
+
 ## v7.0.13 (2026-09-22)
 
 ### Canonical profile coherence authority
