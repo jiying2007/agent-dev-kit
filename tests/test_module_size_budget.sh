@@ -98,6 +98,56 @@ else:
             + ", ".join(missing_support)
         )
 
+    repository_certification = source_root / "repository_evaluation.py"
+    repository_contract = source_root / "repository_evaluation_contract.py"
+    if not repository_contract.is_file():
+        failures.append("missing repository_evaluation_contract bounded context")
+    else:
+        try:
+            certification_tree = ast.parse(
+                repository_certification.read_text(encoding="utf-8"),
+                filename=str(repository_certification),
+            )
+            contract_tree = ast.parse(
+                repository_contract.read_text(encoding="utf-8"),
+                filename=str(repository_contract),
+            )
+        except (OSError, SyntaxError, UnicodeError) as exc:
+            failures.append(f"cannot parse repository evaluation bounded contexts: {exc}")
+        else:
+            certification_defs = {
+                node.name for node in certification_tree.body if isinstance(node, ast.FunctionDef)
+            }
+            contract_defs = {
+                node.name for node in contract_tree.body if isinstance(node, ast.FunctionDef)
+            }
+            leaked_contract_defs = sorted(
+                {"load_repository_contract", "repository_plan"} & certification_defs
+            )
+            if leaked_contract_defs:
+                failures.append(
+                    "repository certification must not own contract/plan functions: "
+                    + ", ".join(leaked_contract_defs)
+                )
+            missing_contract_defs = sorted(
+                {"load_repository_contract", "repository_plan"} - contract_defs
+            )
+            if missing_contract_defs:
+                failures.append(
+                    "repository contract bounded context is incomplete: "
+                    + ", ".join(missing_contract_defs)
+                )
+            reverse_imports = [
+                node
+                for node in ast.walk(contract_tree)
+                if isinstance(node, ast.ImportFrom)
+                and node.module == "repository_evaluation"
+            ]
+            if reverse_imports:
+                failures.append(
+                    "repository contract must not depend on repository certification"
+                )
+
     preferred = source_root / architecture.get("preferred_execution_namespace", "") / "__init__.py"
     retired = source_root / "runtime_control"
     if not preferred.is_file():

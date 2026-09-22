@@ -18,7 +18,8 @@ from .evaluation import (
     run_runtime,
     runtime_plan,
 )
-from .repository_evaluation import certify_repository_report, repository_plan
+from .repository_evaluation import certify_repository_report
+from .repository_evaluation_contract import repository_plan
 
 DEFAULT_CAMPAIGN_CONTRACT = (ROOT / "manifests" / "software_m5_eval_contract.json").resolve()
 
