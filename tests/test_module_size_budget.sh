@@ -192,6 +192,70 @@ else:
                     "repository contract must not depend on repository certification"
                 )
 
+    execution_policy_root = source_root / "execution_policy"
+    execution_engine = execution_policy_root / "engine.py"
+    execution_reducer = execution_policy_root / "reducer.py"
+    execution_decision = execution_policy_root / "decision.py"
+    execution_public = execution_policy_root / "__init__.py"
+    if execution_engine.exists():
+        failures.append("execution_policy engine monolith must remain retired")
+    if not execution_reducer.is_file() or not execution_decision.is_file():
+        failures.append("execution_policy reducer and decision bounded contexts are required")
+    else:
+        try:
+            reducer_tree = ast.parse(
+                execution_reducer.read_text(encoding="utf-8"),
+                filename=str(execution_reducer),
+            )
+            decision_tree = ast.parse(
+                execution_decision.read_text(encoding="utf-8"),
+                filename=str(execution_decision),
+            )
+            public_tree = ast.parse(
+                execution_public.read_text(encoding="utf-8"),
+                filename=str(execution_public),
+            )
+        except (OSError, SyntaxError, UnicodeError) as exc:
+            failures.append(f"cannot parse execution_policy bounded contexts: {exc}")
+        else:
+            reducer_defs = {
+                node.name for node in reducer_tree.body if isinstance(node, ast.FunctionDef)
+            }
+            decision_defs = {
+                node.name for node in decision_tree.body if isinstance(node, ast.FunctionDef)
+            }
+            if "reduce_events" not in reducer_defs or "evaluate" in reducer_defs:
+                failures.append("execution_policy reducer must exclusively own reduce_events")
+            if "evaluate" not in decision_defs or "reduce_events" in decision_defs:
+                failures.append("execution_policy decision must exclusively own evaluate")
+            cross_imports = []
+            for label, tree, forbidden in (
+                ("reducer", reducer_tree, "decision"),
+                ("decision", decision_tree, "reducer"),
+            ):
+                if any(
+                    isinstance(node, ast.ImportFrom)
+                    and node.level == 1
+                    and node.module == forbidden
+                    for node in ast.walk(tree)
+                ):
+                    cross_imports.append(label)
+            if cross_imports:
+                failures.append(
+                    "execution_policy reducer/decision contexts must remain independent: "
+                    + ", ".join(cross_imports)
+                )
+            public_imports = {
+                (node.module, alias.name)
+                for node in public_tree.body
+                if isinstance(node, ast.ImportFrom) and node.level == 1
+                for alias in node.names
+            }
+            if ("reducer", "reduce_events") not in public_imports:
+                failures.append("execution_policy public API must import reduce_events from reducer")
+            if ("decision", "evaluate") not in public_imports:
+                failures.append("execution_policy public API must import evaluate from decision")
+
     preferred = source_root / architecture.get("preferred_execution_namespace", "") / "__init__.py"
     retired = source_root / "runtime_control"
     if not preferred.is_file():
