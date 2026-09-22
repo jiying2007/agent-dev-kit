@@ -389,6 +389,7 @@ jobs:
       matrix:
         repair: ${{ fromJSON(needs.discover-orphaned-releases.outputs.repairs) }}
     permissions:
+      actions: read
       contents: write
       id-token: write
       attestations: write
