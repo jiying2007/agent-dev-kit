@@ -12,7 +12,7 @@ IR 只定义并验证执行语义，不执行模型、工具、scheduler、durab
 必须通过独立 adapter/target contract 消费 IR，并保留权限、取消、失败和 rollback 证据。
 
 ```bash
-rtk bash scripts/check-workflow-ir.sh --summary-json
+rtk env PYTHONPATH=src python3 -m agent_dev_kit.workflow_ir --root . --summary-json
 rtk bash tests/test_workflow_ir.sh
 ```
 
