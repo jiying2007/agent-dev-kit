@@ -121,9 +121,9 @@ bash scripts/devkit.sh catalog find --type workflow --keyword 发布
 检查路由相关合同：
 
 ```bash
-bash tests/test_routing.sh
-bash tests/test_routing_ir_contract.py
+PYTHONPATH=src python3 tests/test_routing_ir_contract.py
 bash tests/test_skill_trigger_matrix.sh
+bash tests/test_boundary_conditions_match.sh
 ```
 
 调整路由时优先修改 canonical routing 数据，再重新生成相应人类可读矩阵，并用 positive/negative 场景验证 primary、supporting、fallback、abstain 与 permission 边界。
