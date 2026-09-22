@@ -55,4 +55,9 @@ assert payload["status"] == "fail", payload
 assert "forced-runtime-boundary-failure" in payload["failures"], payload
 PY
 
+[[ ! -e "$ROOT_DIR/scripts/release-validate.sh" ]] || {
+  echo "[FAIL] retired release validation wrapper returned" >&2
+  exit 1
+}
+
 echo "[PASS] validate"

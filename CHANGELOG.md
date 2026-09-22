@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+## v7.0.10 (2026-09-22)
+
+### Canonical release validation authority
+- Retire the unused `scripts/release-validate.sh` compatibility bounce; release workflows and operators use the canonical `scripts/devkit.sh validate --strict` path directly.
+- Ratchet validation regression and active-doc governance against reintroducing the retired alias.
+
+
 ## v7.0.9 (2026-09-22)
 
 ### Canonical harness command authority
