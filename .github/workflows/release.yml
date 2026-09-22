@@ -27,8 +27,8 @@ on:
       successful_main_ci_run_id:
         description: Optional successful exact-main agent-dev-kit-ci run eligible for full-regression reuse
         required: false
-        type: string
-        default: ''
+        type: number
+        default: 0
 
 permissions:
   contents: read

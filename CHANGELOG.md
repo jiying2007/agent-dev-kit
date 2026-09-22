@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## v7.0.16 (2026-09-22)
+
+### Reusable release CI-evidence wiring fix
+- Preserve the GitHub workflow-run identifier as a numeric reusable-workflow input instead of coercing the event field through an incompatible string contract.
+- Give both current-release and orphan-repair callers the `actions: read` permission floor required by the canonical reusable release workflow.
+- Keep CI-evidence reuse exclusive to the current successful-main release path; orphan repair still performs full regression.
+
+
 ## v7.0.15 (2026-09-22)
 
 ### Verified-main release regression reuse

@@ -174,6 +174,7 @@ assert "  workflow_call:\n" in release, "reviewed exact-tag reusable release ent
 workflow_call_block = release.split("\n  workflow_call:\n", 1)[1].split("\n\npermissions:", 1)[0]
 assert "release_tag:" in workflow_call_block and "release_commit:" in workflow_call_block, "reusable release must require exact tag and commit inputs"
 assert "successful_main_ci_run_id:" in workflow_call_block, "reusable release must accept bounded successful-main CI evidence"
+assert "type: number" in workflow_call_block and "default: 0" in workflow_call_block, "successful-main CI run ID must preserve GitHub numeric input typing"
 assert "successful_main_ci_run_id:" not in dispatch_block, "manual dispatch must not expose the main-CI reuse input"
 assert "actions: read" in release, "release must have bounded read permission to verify successful-main CI evidence"
 assert "- name: Validate successful main CI reuse" in release, "release must independently verify CI reuse evidence"
@@ -232,6 +233,7 @@ current_release_block = release_tag_promotion.split("\n  release:\n", 1)[1].spli
 repair_release_block = release_tag_promotion.split("\n  repair-orphaned-release:\n", 1)[1]
 assert "actions: read" in current_release_block, "current release must allow bounded workflow-run verification"
 assert "successful_main_ci_run_id: ${{ github.event.workflow_run.id }}" in current_release_block, "current release must forward the exact successful-main CI run"
+assert "actions: read" in repair_release_block, "orphan repair caller must satisfy reusable workflow permission floor"
 assert "successful_main_ci_run_id:" not in repair_release_block, "orphan repair must not reuse unrelated current-main CI evidence"
 assert "needs.promote-tag.outputs.release_needed == 'true'" in release_tag_promotion, "canonical release must run only for an exact newly promoted or retryable tag"
 assert "  discover-orphaned-releases:\n" in release_tag_promotion, "promotion must audit immutable v7 release continuity"
