@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## v7.0.17 (2026-09-22)
+
+### Campaign analysis bounded context
+- Split campaign statistics and result validation from runtime campaign orchestration into `campaign_analysis.py`.
+- Reduce `campaign.py` from 29,973 bytes to about 22 KB instead of raising the 30 KB architecture budget.
+- Keep the extracted analysis module small and dependency-local; no generic support module or public compatibility shim is introduced.
+
+
 ## v7.0.16 (2026-09-22)
 
 ### Reusable release CI-evidence wiring fix
