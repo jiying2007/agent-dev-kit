@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+## v7.0.8 (2026-09-22)
+
+### Evaluation CLI bounded context and coupling ratchet
+- Split Evaluation command parsing and dispatch into `evaluation_cli.py`, removing campaign/evaluation/repository-evaluation domain fan-out from the public CLI through a real bounded-context boundary.
+- Restore Catalog as a direct typed `catalog_contract` dependency instead of placing domain dispatch inside the environment/I/O-only `cli_runtime` substrate.
+- Hard-cut stale `software_m5_eval_contract_rc4.json` CLI defaults; campaign and certify commands now default to the single canonical version-neutral `manifests/software_m5_eval_contract.json`.
+- Make the reviewed Python import fan-out limit an ADK-owned architecture gate so downstream consumers no longer discover this coupling regression first.
+
+
 ## v7.0.7 (2026-09-21)
 
 ### CLI dependency boundary

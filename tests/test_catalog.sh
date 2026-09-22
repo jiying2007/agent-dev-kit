@@ -102,10 +102,10 @@ manifest = Manifest.load(root)
 
 cli_source = (root / "src/agent_dev_kit/cli.py").read_text(encoding="utf-8")
 runtime_source = (root / "src/agent_dev_kit/cli_runtime.py").read_text(encoding="utf-8")
-assert "from .catalog_contract" not in cli_source, "public CLI reintroduced direct catalog dependency"
-assert "run_catalog," in cli_source, "public CLI must consume the runtime catalog port"
-assert "from .catalog_contract import main as catalog_main" in runtime_source
-assert "def run_catalog(" in runtime_source
+assert "from .catalog_contract import main as catalog_main" in cli_source
+assert "return catalog_main([*list(argv), \"--root\", str(ROOT)])" in cli_source
+assert "catalog_contract" not in runtime_source, "CLI runtime substrate must not own catalog domain dependencies"
+assert "run_catalog" not in runtime_source, "CLI runtime substrate must not expose catalog domain dispatch"
 
 projections = (
     ("docs/agent-skill-catalog.md", catalog_markdown),
