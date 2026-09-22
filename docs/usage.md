@@ -58,7 +58,7 @@ ADK active scripts 不直接依赖 `rtk`；本机 Codex 会话只在操作者命
 Profile 继承一致性检查：
 
 ```bash
-bash scripts/check-profile-coherence.sh
+bash PYTHONPATH=src python3 -m agent_dev_kit.profile_coherence_contract --root .
 ```
 
 ## 3. 安装和导出
