@@ -2,6 +2,18 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+# Public/evaluation CLI must use the single canonical Software M5 contract.
+if grep -RFn "software_m5_eval_contract_rc4.json" \
+  "$ROOT_DIR/src/agent_dev_kit/cli.py" \
+  "$ROOT_DIR/src/agent_dev_kit/evaluation_cli.py"; then
+  echo "[FAIL] retired Software M5 rc4 contract re-entered active CLI" >&2
+  exit 1
+fi
+grep -Fq 'software_m5_eval_contract.json' "$ROOT_DIR/src/agent_dev_kit/evaluation_cli.py" || {
+  echo "[FAIL] evaluation CLI missing canonical Software M5 contract" >&2
+  exit 1
+}
 [[ ! -e "$ROOT_DIR/tests/test_product_maturity_v5.sh" ]] || { echo "[FAIL] retired product maturity v5 test name returned" >&2; exit 1; }
 VERSION="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1], encoding="utf-8"))["version"])' "$ROOT_DIR/manifest.json")"
 TMP_DIR="$(mktemp -d)"
