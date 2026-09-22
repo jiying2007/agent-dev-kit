@@ -50,7 +50,7 @@
       "agent": "test-validation-engineer",
       "skill": "adk-verification-before-completion",
       "workflow": "adk-delivery-gate",
-      "script": "scripts/check-harness-readiness.sh",
+      "script": "scripts/devkit.sh",
       "test": "tests/test_harness_readiness.sh",
       "doc": "docs/harness-engineering-analysis.md"
     },
