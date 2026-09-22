@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+## v7.0.19 (2026-09-22)
+
+### Harness tool and permission bounded context
+- Extract MCP configuration, secret-reference, dependency-pin and permission-boundary evaluation into `readiness_tools.py`.
+- Keep Harness orchestration, context/spec/state/verification/recovery/freshness evaluation and report rendering in `readiness.py`.
+- Add a one-way bounded-context ratchet so the orchestrator consumes `readiness_tools` while the tool/permission authority cannot depend back on the orchestrator.
+- Reduce the readiness hotspot from about 28 KB to about 18 KB + 11 KB without raising architecture limits or adding support shims.
+
+
 ## v7.0.18 (2026-09-22)
 
 ### Repository evaluation bounded context
