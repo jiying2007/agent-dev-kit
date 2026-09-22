@@ -92,7 +92,7 @@ bash tests/run_all.sh
 检查 Profile 与 Workflow 闭包：
 
 ```bash
-bash scripts/check-profile-coherence.sh
+PYTHONPATH=src python3 -m agent_dev_kit.profile_coherence_contract --root .
 bash scripts/check-workflow-closure.sh --profile core
 ```
 

@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+## v7.0.13 (2026-09-22)
+
+### Canonical profile coherence authority
+- Retire the `scripts/check-profile-coherence.sh` shell alias and invoke `agent_dev_kit.profile_coherence_contract` directly from tests and usage documentation.
+- Preserve both human-readable and summary-JSON validation paths, and ratchet the retired shell entrypoint against reintroduction.
+
+
 ## v7.0.12 (2026-09-22)
 
 ### Test registry closure
