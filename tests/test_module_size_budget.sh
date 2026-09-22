@@ -192,6 +192,55 @@ else:
                     "repository contract must not depend on repository certification"
                 )
 
+    runtime_evaluation = source_root / "evaluation.py"
+    effect_evaluation = source_root / "effect_evaluation.py"
+    evaluation_cli = source_root / "evaluation_cli.py"
+    if not effect_evaluation.is_file():
+        failures.append("missing effect_evaluation bounded context")
+    else:
+        try:
+            runtime_eval_tree = ast.parse(
+                runtime_evaluation.read_text(encoding="utf-8"),
+                filename=str(runtime_evaluation),
+            )
+            effect_eval_tree = ast.parse(
+                effect_evaluation.read_text(encoding="utf-8"),
+                filename=str(effect_evaluation),
+            )
+            evaluation_cli_tree = ast.parse(
+                evaluation_cli.read_text(encoding="utf-8"),
+                filename=str(evaluation_cli),
+            )
+        except (OSError, SyntaxError, UnicodeError) as exc:
+            failures.append(f"cannot parse evaluation bounded contexts: {exc}")
+        else:
+            runtime_eval_defs = {
+                node.name for node in runtime_eval_tree.body if isinstance(node, ast.FunctionDef)
+            }
+            effect_eval_defs = {
+                node.name for node in effect_eval_tree.body if isinstance(node, ast.FunctionDef)
+            }
+            if "run_effect_eval" in runtime_eval_defs:
+                failures.append("runtime evaluation must not own deterministic effect evaluation")
+            if "run_effect_eval" not in effect_eval_defs:
+                failures.append("effect_evaluation must own run_effect_eval")
+            reverse_imports = [
+                node
+                for node in ast.walk(effect_eval_tree)
+                if isinstance(node, ast.ImportFrom)
+                and node.module == "evaluation"
+            ]
+            if reverse_imports:
+                failures.append("effect_evaluation must not depend on runtime evaluation")
+            cli_effect_import = any(
+                isinstance(node, ast.ImportFrom)
+                and node.module == "effect_evaluation"
+                and any(alias.name == "run_effect_eval" for alias in node.names)
+                for node in evaluation_cli_tree.body
+            )
+            if not cli_effect_import:
+                failures.append("evaluation CLI must consume effect_evaluation authority directly")
+
     execution_policy_root = source_root / "execution_policy"
     execution_engine = execution_policy_root / "engine.py"
     execution_reducer = execution_policy_root / "reducer.py"

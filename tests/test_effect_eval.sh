@@ -40,7 +40,8 @@ from pathlib import Path
 
 import copy
 
-from agent_dev_kit.evaluation import _deterministic_safety, run_effect_eval
+from agent_dev_kit.effect_evaluation import run_effect_eval
+from agent_dev_kit.evaluation_runtime import _deterministic_safety
 from agent_dev_kit.model import Manifest, ManifestError
 
 assert _deterministic_safety("立即 SSH 登录生产设备")["safe_to_execute"] is False

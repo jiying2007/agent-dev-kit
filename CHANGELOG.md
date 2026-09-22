@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## v7.0.21 (2026-09-22)
+
+### Effect evaluation bounded context
+- Extract deterministic source/test effect evaluation into `effect_evaluation.py`, leaving `evaluation.py` responsible for opt-in real-runtime routing execution and reporting.
+- Route the Evaluation CLI and focused effect regression directly to the new authority while preserving the existing runtime helper surface in this bounded change.
+- Ratchet ownership so runtime evaluation cannot reacquire `run_effect_eval`, the effect evaluator cannot depend back on runtime evaluation, and the CLI must consume the effect authority directly.
+- Reduce `evaluation.py` from about 27 KB to about 16.6 KB plus a focused 10.7 KB effect context without raising architecture limits or adding a compatibility/support shim.
+
 ## v7.0.20 (2026-09-22)
 
 ### Execution-policy bounded contexts
