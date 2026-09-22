@@ -5,13 +5,12 @@ from __future__ import annotations
 from .campaign_analysis import (
     _nearest_rank,
     _paired_bootstrap_lower,
-    _rate,
     _validate_result,
     _wilson,
 )
 
 from pathlib import Path
-from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
+from typing import Any, Dict, List, Mapping, Sequence, Tuple
 
 from .campaign_model import (
     CONTRACT_SCHEMA as CONTRACT_SCHEMA,
