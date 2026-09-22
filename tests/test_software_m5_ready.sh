@@ -40,6 +40,7 @@ from agent_dev_kit.campaign import (
     load_campaign_contract,
     run_campaign,
 )
+from agent_dev_kit.evaluation_cli import DEFAULT_CAMPAIGN_CONTRACT
 from agent_dev_kit.doctor import run_doctor
 from agent_dev_kit import campaign, evaluation, installer
 from agent_dev_kit.evaluation import _claude_usage, run_deterministic
@@ -63,6 +64,18 @@ from agent_dev_kit.release import (
 root = Path(os.sys.argv[1])
 temp_root = Path(os.sys.argv[2])
 manifest = Manifest.load(root)
+assert DEFAULT_CAMPAIGN_CONTRACT == (root / "manifests/software_m5_eval_contract.json").resolve()
+assert DEFAULT_CAMPAIGN_CONTRACT.is_file()
+cli_source = (root / "src/agent_dev_kit/cli.py").read_text(encoding="utf-8")
+runtime_source = (root / "src/agent_dev_kit/cli_runtime.py").read_text(encoding="utf-8")
+eval_cli_source = (root / "src/agent_dev_kit/evaluation_cli.py").read_text(encoding="utf-8")
+for retired in ("software_m5_eval_contract_rc4.json", "software_m5_eval_contract_v5.json"):
+    assert retired not in cli_source
+    assert retired not in eval_cli_source
+assert "from .evaluation_cli import main as evaluation_main" in cli_source
+for direct_domain in ("from .campaign import", "from .evaluation import", "from .repository_evaluation import"):
+    assert direct_domain not in cli_source, direct_domain
+assert "catalog_contract" not in runtime_source
 assert check_release(manifest)["status"] == "pass"
 assert version_is_newer("3.0.0", "3.1.0-rc.1")
 assert version_is_newer("3.1.0-rc.1", "3.1.0-rc.2")

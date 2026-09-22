@@ -116,6 +116,42 @@ else:
     if not isinstance(metrics, list) or set(metrics) != expected_metrics:
         failures.append("architecture design_metrics must define the reviewed second-stage metrics")
 
+    max_import_fan_out = architecture.get("max_import_fan_out")
+    if (
+        not isinstance(max_import_fan_out, int)
+        or isinstance(max_import_fan_out, bool)
+        or not 1 <= max_import_fan_out <= 35
+    ):
+        failures.append("max_import_fan_out must be an integer between 1 and 35")
+        max_import_fan_out = 0
+
+    observed_import_fan_out = 0
+    import_fan_out_hotspot = ""
+    for path in sorted(source_root.rglob("*.py")):
+        try:
+            tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+        except (OSError, SyntaxError, UnicodeError) as exc:
+            failures.append(f"cannot parse Python import graph: {path.relative_to(root)}: {exc}")
+            continue
+        imports = set()
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Import):
+                imports.update(alias.name.split(".", 1)[0] for alias in node.names)
+            elif isinstance(node, ast.ImportFrom):
+                if node.level:
+                    imports.add("." * node.level + (node.module or "<package>"))
+                elif node.module:
+                    imports.add(node.module.split(".", 1)[0])
+        fan_out = len(imports)
+        if fan_out > observed_import_fan_out:
+            observed_import_fan_out = fan_out
+            import_fan_out_hotspot = path.relative_to(root).as_posix()
+        if max_import_fan_out and fan_out > max_import_fan_out:
+            failures.append(
+                f"Python import fan-out exceeds reviewed budget: "
+                f"{path.relative_to(root).as_posix()} observed={fan_out} max={max_import_fan_out}"
+            )
+
 if failures:
     raise SystemExit("\n".join(failures))
 
@@ -127,6 +163,9 @@ print(json.dumps({
     "support_module_count": len(list(source_root.rglob("*_support.py"))),
     "transitional_support_debt_count": len(architecture["transitional_support_modules"]),
     "preferred_execution_namespace": architecture["preferred_execution_namespace"],
+    "max_import_fan_out": architecture["max_import_fan_out"],
+    "observed_max_import_fan_out": observed_import_fan_out,
+    "import_fan_out_hotspot": import_fan_out_hotspot,
     "largest_baseline_bytes": max(
         (item["baseline_bytes"] for item in exceptions.values()),
         default=0,
