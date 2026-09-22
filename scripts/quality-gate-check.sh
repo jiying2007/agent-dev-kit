@@ -108,7 +108,7 @@ check_profiles() {
   local verbose="$1"
   log_info "检查Profile配置..."
   local output
-  if ! output="$(bash "$ROOT_DIR/scripts/check-profile-coherence.sh" 2>&1)"; then
+  if ! output="$(PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}" "${ADK_PYTHON_BIN:-python3}" -m agent_dev_kit.profile_coherence_contract --root "$ROOT_DIR" 2>&1)"; then
     printf '%s\n' "$output" >&2
     log_error "Profile typed contract 失败"
     return 1

@@ -92,7 +92,7 @@ Historical role-style assets are removed from live source, not aliased:
 ## Validation Expectations
 
 - `rtk bash scripts/devkit.sh validate --strict`
-- `rtk bash scripts/check-profile-coherence.sh`
+- `rtk bash env PYTHONPATH=src python3 -m agent_dev_kit.profile_coherence_contract --root .`
 - `rtk bash scripts/devkit.sh asset-taxonomy`
 - `rtk bash tests/test_catalog.sh`
 - `rtk bash tests/test_workflow_contract.sh`

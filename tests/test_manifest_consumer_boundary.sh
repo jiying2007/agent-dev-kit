@@ -26,7 +26,7 @@ grep -q 'ADK_MANIFEST=.*manifest.json' "$ROOT/scripts/lib-manifest.sh" || {
 
 for active in \
   "$ROOT/scripts/lib-manifest.sh" \
-  "$ROOT/scripts/catalog-assets.sh" \
+  "$ROOT/src/agent_dev_kit/catalog_contract.py" \
   "$ROOT/scripts/health-check.sh" \
   "$ROOT/src/agent_dev_kit/release.py"; do
   if grep -q 'manifest.yaml\|check_manifest_sync' "$active"; then
