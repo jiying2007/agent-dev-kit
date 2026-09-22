@@ -41,6 +41,10 @@ assert "NAVIGATION.md" not in SOURCE_DISTRIBUTION_FILES
 workflow = (root / ".github/workflows/release.yml").read_text(encoding="utf-8")
 assert "scripts/devkit.sh release check" in workflow, "release workflow bypasses canonical release check"
 assert "scripts/devkit.sh release build --out dist" in workflow, "release workflow bypasses canonical release build"
+assert "successful_main_ci_run_id:" in workflow, "release workflow missing successful-main CI reuse contract"
+assert "- name: Validate successful main CI reuse" in workflow, "release workflow missing independent CI reuse verification"
+assert "bash tests/run_all.sh --quick" in workflow, "trusted main release path missing quick regression smoke"
+assert "bash tests/run_all.sh" in workflow, "untrusted release path missing full regression"
 assert "release-manager.sh" not in workflow, "release workflow references retired shell release manager"
 assert "manifest.yaml" not in workflow, "release workflow references retired YAML manifest"
 assert "- name: Publish GitHub Release" in workflow, "release workflow does not publish a GitHub Release"

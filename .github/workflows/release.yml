@@ -24,6 +24,11 @@ on:
         description: Exact commit SHA that the release tag must peel to
         required: true
         type: string
+      successful_main_ci_run_id:
+        description: Optional successful exact-main agent-dev-kit-ci run eligible for full-regression reuse
+        required: false
+        type: string
+        default: ''
 
 permissions:
   contents: read
@@ -33,6 +38,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     permissions:
+      actions: read
       contents: write
       id-token: write
       attestations: write
@@ -110,6 +116,73 @@ jobs:
             exit 1
           fi
 
+      - name: Validate successful main CI reuse
+        id: ci-reuse
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REQUESTED_MAIN_CI_RUN_ID: ${{ inputs.successful_main_ci_run_id || '' }}
+          CALLED_RELEASE_COMMIT: ${{ inputs.release_commit || '' }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from __future__ import annotations
+
+          import json
+          import os
+          import urllib.request
+          from pathlib import Path
+
+          run_id = os.environ.get("REQUESTED_MAIN_CI_RUN_ID", "").strip()
+          release_commit = os.environ.get("CALLED_RELEASE_COMMIT", "").strip()
+          output_path = Path(os.environ["GITHUB_OUTPUT"])
+          verified = False
+
+          if run_id:
+              if not run_id.isdigit():
+                  raise SystemExit("successful_main_ci_run_id must be numeric")
+              if not release_commit:
+                  raise SystemExit("successful_main_ci_run_id requires reusable release_commit")
+
+              repository = os.environ["GITHUB_REPOSITORY"]
+              api_root = os.environ["GITHUB_API_URL"].rstrip("/")
+              request = urllib.request.Request(
+                  f"{api_root}/repos/{repository}/actions/runs/{run_id}",
+                  headers={
+                      "Accept": "application/vnd.github+json",
+                      "Authorization": f"Bearer {os.environ['GH_TOKEN']}",
+                      "X-GitHub-Api-Version": "2026-03-10",
+                      "User-Agent": "agent-dev-kit-release-ci-reuse",
+                  },
+              )
+              with urllib.request.urlopen(request, timeout=30) as response:
+                  workflow_run = json.loads(response.read().decode("utf-8"))
+
+              expected = {
+                  "name": "agent-dev-kit-ci",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "event": "push",
+                  "head_branch": "main",
+                  "head_sha": release_commit,
+                  "path": ".github/workflows/ci.yml",
+              }
+              mismatches = {
+                  key: {"expected": value, "actual": workflow_run.get(key)}
+                  for key, value in expected.items()
+                  if workflow_run.get(key) != value
+              }
+              if mismatches:
+                  raise SystemExit(
+                      "successful main CI reuse evidence mismatch: "
+                      + json.dumps(mismatches, sort_keys=True, separators=(",", ":"))
+                  )
+              verified = True
+
+          with output_path.open("a", encoding="utf-8") as handle:
+              handle.write(f"verified_main_ci_reuse={'true' if verified else 'false'}\n")
+          print(json.dumps({"verified_main_ci_reuse": verified, "run_id": run_id or None}))
+          PY
+
       - name: Install CI dependencies
         run: |
           sudo apt-get update
@@ -120,6 +193,8 @@ jobs:
         run: bash scripts/version-manager.sh verify
 
       - name: Validate and smoke
+        env:
+          VERIFIED_MAIN_CI_REUSE: ${{ steps.ci-reuse.outputs.verified_main_ci_reuse }}
         run: |
           bash scripts/devkit.sh validate --strict
           bash scripts/check-format.sh
@@ -127,7 +202,12 @@ jobs:
           ruff check src tools tests/fixtures/fake_target_runtime.py
           pip-audit --strict --progress-spinner off .
           python -m agent_dev_kit.cli target check --all --level static --summary-json
-          bash tests/run_all.sh
+          if [[ "$VERIFIED_MAIN_CI_REUSE" == "true" ]]; then
+            echo "Reusing exact successful main full-regression evidence; running bounded release smoke."
+            bash tests/run_all.sh --quick
+          else
+            bash tests/run_all.sh
+          fi
           bash scripts/devkit.sh security check
           bash scripts/devkit.sh release check
 

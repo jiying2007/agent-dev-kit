@@ -171,7 +171,17 @@ assert "  workflow_dispatch:\n" in release, "tag-bound manual release entrypoint
 dispatch_block = release.split("\n  workflow_dispatch:\n", 1)[1].split("\n  workflow_call:\n", 1)[0]
 assert "release_tag:" in dispatch_block and "release_commit:" in dispatch_block, "manual repair dispatch must require exact tag and commit"
 assert "  workflow_call:\n" in release, "reviewed exact-tag reusable release entrypoint must be declared"
-assert "release_tag:" in release and "release_commit:" in release, "reusable release must require exact tag and commit inputs"
+workflow_call_block = release.split("\n  workflow_call:\n", 1)[1].split("\n\npermissions:", 1)[0]
+assert "release_tag:" in workflow_call_block and "release_commit:" in workflow_call_block, "reusable release must require exact tag and commit inputs"
+assert "successful_main_ci_run_id:" in workflow_call_block, "reusable release must accept bounded successful-main CI evidence"
+assert "successful_main_ci_run_id:" not in dispatch_block, "manual dispatch must not expose the main-CI reuse input"
+assert "actions: read" in release, "release must have bounded read permission to verify successful-main CI evidence"
+assert "- name: Validate successful main CI reuse" in release, "release must independently verify CI reuse evidence"
+assert '"name": "agent-dev-kit-ci"' in release, "release reuse must bind canonical CI workflow name"
+assert '"status": "completed"' in release and '"conclusion": "success"' in release, "release reuse must require completed successful CI"
+assert '"event": "push"' in release and '"head_branch": "main"' in release, "release reuse must require push-to-main CI"
+assert '"head_sha": release_commit' in release, "release reuse must bind CI head SHA to release commit"
+assert '"path": ".github/workflows/ci.yml"' in release, "release reuse must bind canonical CI workflow path"
 assert "ref: ${{ inputs.release_commit || github.ref }}" in release, "reusable release checkout must bind exact requested commit"
 assert "- name: Validate tag-bound release identity" in release, "release ref guard missing"
 assert 'if [[ "$GITHUB_REF_TYPE" != "tag" || "$GITHUB_REF_NAME" != v* ]]; then' in release, "ordinary release must still fail closed off tag refs"
@@ -184,6 +194,10 @@ bootstrap_block = release.split("- name: Validate tag-bound release identity", 1
 assert "version-manager.sh verify" not in bootstrap_block, "tag-bound bootstrap must remain stdlib-only before dependency install"
 assert release.index("- name: Validate tag-bound release identity") < release.index("- name: Install CI dependencies"), "release identity guard must run before build/install work"
 assert release.index("- name: Install CI dependencies") < release.index("- name: Validate synchronized source version identity") < release.index("- name: Validate and smoke"), "full version projection verification must run after dependencies and before smoke"
+smoke_block = release.split("- name: Validate and smoke", 1)[1].split("- name: Build reproducible release", 1)[0]
+assert 'VERIFIED_MAIN_CI_REUSE: ${{ steps.ci-reuse.outputs.verified_main_ci_reuse }}' in smoke_block, "release smoke must consume verified CI reuse output"
+assert 'bash tests/run_all.sh --quick' in smoke_block, "verified main CI reuse must retain bounded regression smoke"
+assert 'bash tests/run_all.sh' in smoke_block, "unverified release paths must retain full regression"
 assert "- name: Validate complete release artifact bundle" in release, "release bundle completeness guard missing"
 assert "archives=(dist/*.tar.gz)" in release, "release bundle must require one archive"
 assert "checksums=(dist/*.tar.gz.sha256)" in release, "release bundle must require one matching checksum"
@@ -214,6 +228,11 @@ assert 'promotion_status = "source-version-tag-conflict"' in release_tag_promoti
 assert 'promotion_status = "version-already-released"' not in release_tag_promotion, "version/tag conflicts must not be converted into successful skips"
 assert 'if: ${{ always() }}' in release_tag_promotion, "tag-conflict evidence must still upload on promotion failure"
 assert "uses: ./.github/workflows/release.yml" in release_tag_promotion, "tag promotion must reuse the canonical release workflow"
+current_release_block = release_tag_promotion.split("\n  release:\n", 1)[1].split("\n\n  discover-orphaned-releases:", 1)[0]
+repair_release_block = release_tag_promotion.split("\n  repair-orphaned-release:\n", 1)[1]
+assert "actions: read" in current_release_block, "current release must allow bounded workflow-run verification"
+assert "successful_main_ci_run_id: ${{ github.event.workflow_run.id }}" in current_release_block, "current release must forward the exact successful-main CI run"
+assert "successful_main_ci_run_id:" not in repair_release_block, "orphan repair must not reuse unrelated current-main CI evidence"
 assert "needs.promote-tag.outputs.release_needed == 'true'" in release_tag_promotion, "canonical release must run only for an exact newly promoted or retryable tag"
 assert "  discover-orphaned-releases:\n" in release_tag_promotion, "promotion must audit immutable v7 release continuity"
 assert "RELEASE_REPAIR_BASELINE: 7.0.0" in release_tag_promotion, "self-heal baseline must start at the immutable v7 release contract"
