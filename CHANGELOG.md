@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## v7.0.15 (2026-09-22)
+
+### Verified-main release regression reuse
+- Let the canonical release workflow independently verify an exact successful push-to-main `agent-dev-kit-ci` run before reusing its full-regression result.
+- Keep strict validation, static/security/release checks in the release job, run the quick regression smoke only on that verified path, and retain the full regression suite for direct tags, manual dispatch, and orphan-release repair.
+- Pass the triggering successful-main CI run ID only from the current release-tag-promotion path; historical repair remains fail-closed and fully revalidated.
+
+
 ## v7.0.14 (2026-09-22)
 
 ### Manifest format SSOT
