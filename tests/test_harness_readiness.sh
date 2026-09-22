@@ -307,4 +307,9 @@ assert len(result["blockers"]) == contract["scan"]["max_blockers_per_dimension"]
 assert result["blockers"][-1]["code"] == "blockers_truncated", result
 PY
 
+[[ ! -e "$ROOT_DIR/scripts/check-harness-readiness.sh" ]] || {
+  echo "[FAIL] retired Harness readiness wrapper returned" >&2
+  exit 1
+}
+
 echo "[PASS] Harness readiness deterministic report, gate, negative fixture, and redaction"

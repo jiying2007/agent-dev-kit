@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+## v7.0.9 (2026-09-22)
+
+### Canonical harness command authority
+- Retire the pure `scripts/check-harness-readiness.sh` bounce and keep `scripts/devkit.sh harness readiness` as the only public Harness readiness command path.
+- Move capability-health evidence to the canonical CLI, keep Harness behavior tests on the canonical entrypoint, and ratchet the retired wrapper against reintroduction.
+
+
 ## v7.0.8 (2026-09-22)
 
 ### Evaluation CLI bounded context and coupling ratchet
