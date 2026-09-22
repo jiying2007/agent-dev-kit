@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## v7.0.12 (2026-09-22)
+
+### Test registry closure
+- Remove three unowned retired shell tests that targeted superseded manifest/skill-governance semantics.
+- Register current GitHub-governance and typed skill-relationship tests in the full regression suite.
+- Add a machine gate requiring every `tests/test_*.sh` file to be owned by the regression runner or a dedicated GitHub workflow.
+
+
 ## v7.0.11 (2026-09-22)
 
 ### Canonical Workflow IR authority

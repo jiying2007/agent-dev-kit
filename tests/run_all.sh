@@ -78,6 +78,7 @@ TESTS=(
   test_manifest_consumer_boundary.sh
   test_manifest_composition_contract.sh
   test_manifest_composition_cli.sh
+  test_test_registry.sh
 
   test_python_launcher.sh
   test_asset_content_quality.sh
@@ -122,6 +123,7 @@ TESTS=(
   test_harness_readiness.sh
   test_local_ci_parity.sh
   test_hosted_workflow_hygiene.sh
+  test_github_governance_admin.sh
   test_performance_budgets.sh
   test_change_governance.sh
   test_evidence_index.sh
@@ -146,6 +148,7 @@ TESTS=(
   test_match_effectiveness.sh
   test_skill_content.sh
   test_skill_governance.sh
+  test_skill_dependencies.sh
   test_skill_sop_quality.sh
   test_memory_governance.sh
   test_capability_uplift.sh
@@ -162,6 +165,7 @@ QUICK_TESTS=(
   test_manifest_consumer_boundary.sh
   test_manifest_composition_contract.sh
   test_manifest_composition_cli.sh
+  test_test_registry.sh
 
   test_python_launcher.sh
   test_runtime_boundary.sh
