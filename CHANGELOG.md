@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## v7.0.20 (2026-09-22)
+
+### Execution-policy bounded contexts
+- Split deterministic event-state reduction into `execution_policy/reducer.py` and gate/policy evaluation into `execution_policy/decision.py`.
+- Keep the canonical `agent_dev_kit.execution_policy` public API unchanged while hard-cutting the internal `engine.py` monolith instead of retaining a compatibility shim.
+- Add an architecture ratchet that enforces exclusive reducer/decision ownership, forbids cross-import coupling, and requires the public namespace to compose both authorities directly.
+- Preserve runtime-control schemas and decision semantics while creating room for future tracing, termination and evidence-policy evolution without regrowing a single hotspot.
+
+
+
 ## v7.0.19 (2026-09-22)
 
 ### Harness tool and permission bounded context
