@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+## v7.0.18 (2026-09-22)
+
+### Repository evaluation bounded context
+- Split repository contract/task loading and deterministic plan generation into `repository_evaluation_contract.py`.
+- Keep result validation, metrics and certification in `repository_evaluation.py`, with a one-way certification-to-contract dependency.
+- Migrate Evaluation CLI directly to both typed authorities and ratchet the architecture boundary against contract/plan logic flowing back into certification.
+- Reduce the repository-evaluation hotspot from about 28 KB to two bounded contexts of about 15 KB and 13 KB without raising architecture limits or adding compatibility shims.
+
+
 ## v7.0.17 (2026-09-22)
 
 ### Campaign analysis bounded context
