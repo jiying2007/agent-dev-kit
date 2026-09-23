@@ -42,7 +42,7 @@ from agent_dev_kit.campaign import (
 )
 from agent_dev_kit.evaluation_cli import DEFAULT_CAMPAIGN_CONTRACT
 from agent_dev_kit.doctor import run_doctor
-from agent_dev_kit import campaign, evaluation, evaluation_runtime, installer
+from agent_dev_kit import campaign, evaluation, evaluation_cli, evaluation_runtime, installer
 from agent_dev_kit.evaluation_runtime import _claude_usage, run_deterministic
 from agent_dev_kit.installer import RECEIPT_NAME, apply_plan, create_plan, rollback, write_plan
 from agent_dev_kit.locking import TargetLock, clear_target_lock, target_lock_status
@@ -66,6 +66,22 @@ temp_root = Path(os.sys.argv[2])
 manifest = Manifest.load(root)
 assert DEFAULT_CAMPAIGN_CONTRACT == (root / "manifests/software_m5_eval_contract.json").resolve()
 assert DEFAULT_CAMPAIGN_CONTRACT.is_file()
+for cli_business_export in (
+    "campaign_markdown",
+    "campaign_plan",
+    "check_campaign",
+    "run_campaign",
+    "run_effect_eval",
+    "eval_markdown",
+    "run_runtime",
+    "runtime_plan",
+    "compare_runtime_reports",
+    "load_tasks",
+    "run_deterministic",
+    "certify_repository_report",
+    "repository_plan",
+):
+    assert not hasattr(evaluation_cli, cli_business_export), cli_business_export
 for retired_runtime_export in (
     "RUNTIME_THRESHOLDS",
     "_claude_usage",
