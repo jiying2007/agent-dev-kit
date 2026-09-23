@@ -228,5 +228,3 @@ def validate_plan(manifest: Manifest, plan: Mapping[str, Any]) -> Tuple[Path, Re
     if seen != set(expected):
         raise ManifestError("install plan does not contain the complete rendered file set")
     return target, bundle
-
-
