@@ -10,7 +10,8 @@ from typing import Optional, Sequence
 
 from .cli_runtime import _json, _manifest, _write_json
 from .compiler import export_assets
-from .installer import apply_plan, create_plan, rollback, write_plan
+from .installation_plan import create_plan, write_plan
+from .installation_transaction import apply_plan, rollback
 from .locking import clear_target_lock, target_lock_status
 from .release import (
     build_release,

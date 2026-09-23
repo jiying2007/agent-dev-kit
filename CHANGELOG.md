@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## v7.0.29 (2026-09-23)
+
+### Installation bounded-context hard cut
+- Replace the 27 KB `installer.py` monolith with explicit `installation_contract`, `installation_plan` and `installation_transaction` bounded contexts.
+- Keep receipt/path/time contract primitives independent; make plan construction/validation depend only on the contract; make apply/rollback depend on the validated plan and contract.
+- Bind `delivery_cli` directly to plan and transaction authorities and physically retire `installer.py` instead of keeping a re-export shim.
+- Add focused and AST architecture ratchets for owner completeness, dependency direction and monolith retirement.
+- Preserve install plan v2, receipt v3, locking, rollback, backup/recovery and CLI semantics; no compatibility alias is retained.
+
+
 ## v7.0.28 (2026-09-23)
 
 ### Delivery CLI bounded context
