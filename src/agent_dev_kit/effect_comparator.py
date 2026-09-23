@@ -11,7 +11,7 @@ from typing import Any, Mapping, Optional, Sequence, Tuple
 
 from jsonschema import Draft202012Validator, FormatChecker
 
-from .agent_value import load_contract
+from .agent_value_contracts import load_contract
 from .model import Manifest, ManifestError, canonical_json_bytes, sha256_bytes
 from .privacy_ref import opaque_ref_for_sha256, validate_identifier, validate_no_secrets
 from .run_evidence import validate_run_evidence
