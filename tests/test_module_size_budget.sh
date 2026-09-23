@@ -606,6 +606,106 @@ else:
             + "; ".join(agent_value_import_leaks)
         )
 
+    agent_value_contracts = source_root / "agent_value_contracts.py"
+    agent_value_receipts = source_root / "agent_value_receipts.py"
+    if not agent_value_receipts.is_file():
+        failures.append("missing agent_value_receipts bounded context")
+    else:
+        try:
+            value_contract_tree = ast.parse(
+                agent_value_contracts.read_text(encoding="utf-8"),
+                filename=str(agent_value_contracts),
+            )
+            value_receipt_tree = ast.parse(
+                agent_value_receipts.read_text(encoding="utf-8"),
+                filename=str(agent_value_receipts),
+            )
+        except (OSError, SyntaxError, UnicodeError) as exc:
+            failures.append(f"cannot parse Agent Value bounded contexts: {exc}")
+        else:
+            contract_defs = {
+                node.name for node in value_contract_tree.body if isinstance(node, ast.FunctionDef)
+            }
+            receipt_defs = {
+                node.name for node in value_receipt_tree.body if isinstance(node, ast.FunctionDef)
+            }
+            if "validate_receipt" in contract_defs:
+                failures.append("agent_value_contracts must not own receipt validation")
+            if "validate_receipt" not in receipt_defs:
+                failures.append("agent_value_receipts must own validate_receipt")
+            receipt_module_boundary = any(
+                isinstance(node, ast.ImportFrom)
+                and node.level == 1
+                and node.module is None
+                and any(
+                    alias.name == "agent_value_contracts" and alias.asname == "value_contracts"
+                    for alias in node.names
+                )
+                for node in value_receipt_tree.body
+            )
+            if not receipt_module_boundary:
+                failures.append(
+                    "agent_value_receipts must consume contract policy through private module boundary"
+                )
+            named_contract_imports = [
+                alias.name
+                for node in value_receipt_tree.body
+                if isinstance(node, ast.ImportFrom)
+                and node.level == 1
+                and node.module == "agent_value_contracts"
+                for alias in node.names
+            ]
+            if named_contract_imports:
+                failures.append(
+                    "agent_value_receipts must not re-export contract authority: "
+                    + ", ".join(sorted(named_contract_imports))
+                )
+            reverse_imports = [
+                node
+                for node in ast.walk(value_contract_tree)
+                if isinstance(node, ast.ImportFrom)
+                and node.module == "agent_value_receipts"
+            ]
+            if reverse_imports:
+                failures.append(
+                    "agent_value_contracts must not depend on receipt validation"
+                )
+
+    retired_receipt_contract_exports = {
+        "RECEIPT_SCHEMA_VERSION",
+        "EvidenceVerifier",
+        "validate_receipt",
+    }
+    receipt_contract_import_leaks = []
+    for python_path in sorted(source_root.rglob("*.py")):
+        try:
+            module_tree = ast.parse(
+                python_path.read_text(encoding="utf-8"),
+                filename=str(python_path),
+            )
+        except (OSError, SyntaxError, UnicodeError) as exc:
+            failures.append(f"cannot parse receipt consumer {python_path}: {exc}")
+            continue
+        for node in ast.walk(module_tree):
+            if not isinstance(node, ast.ImportFrom):
+                continue
+            if node.module not in {"agent_value_contracts", "agent_dev_kit.agent_value_contracts"}:
+                continue
+            leaked = sorted(
+                alias.name
+                for alias in node.names
+                if alias.name in retired_receipt_contract_exports
+            )
+            if leaked:
+                receipt_contract_import_leaks.append(
+                    f"{python_path.relative_to(root).as_posix()}:{','.join(leaked)}"
+                )
+    if receipt_contract_import_leaks:
+        failures.append(
+            "receipt consumers must import agent_value_receipts directly: "
+            + "; ".join(receipt_contract_import_leaks)
+        )
+
     execution_policy_root = source_root / "execution_policy"
     execution_engine = execution_policy_root / "engine.py"
     execution_reducer = execution_policy_root / "reducer.py"
