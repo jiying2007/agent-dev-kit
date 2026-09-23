@@ -10,6 +10,16 @@ trap 'rm -f "$TMP"' EXIT
   exit 1
 }
 
+python3 - <<'PY'
+from agent_dev_kit import manifest_contract
+from agent_dev_kit.domain import manifest as manifest_domain
+
+for name in ("ManifestContract", "canonical_manifest", "load_canonical_manifest", "load_contract"):
+    assert hasattr(manifest_domain, name), name
+    assert not hasattr(manifest_contract, name), name
+assert hasattr(manifest_contract, "main")
+PY
+
 if ! python3 -m agent_dev_kit.manifest_contract --root "$ROOT" --summary-json >"$TMP"; then
   cat "$TMP" >&2
   exit 1
