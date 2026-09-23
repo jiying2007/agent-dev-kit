@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+## v7.0.26 (2026-09-23)
+
+### Agent Platform CLI authority hard cut
+- Remove named Agent Platform primitive imports from `agent_platform_cli.py`; keep `agent_platform.py` as the sole Python authority for platform maturity, profile resolution, evidence validation, loop policy, usage/ACI and target-conformance operations.
+- Keep `devkit.sh platform ...` behavior unchanged by consuming the platform authority through a private `platform_domain` module boundary.
+- Add focused negative assertions and an AST architecture ratchet preventing business primitives from reappearing in the CLI module namespace.
+- Preserve platform contracts, runtime permissions, evidence semantics and CLI output schemas; no compatibility alias is retained.
+
+
 ## v7.0.25 (2026-09-23)
 
 ### Manifest contract CLI authority hard cut

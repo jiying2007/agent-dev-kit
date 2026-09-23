@@ -9,21 +9,7 @@ from pathlib import Path
 from typing import Mapping, Optional, Sequence
 
 from .model import Manifest
-from .agent_platform import (
-    aci_benchmark,
-    asset_usage_report,
-    hooks_report,
-    load_contract,
-    loop_decision,
-    maturity_report,
-    portable_skill_audit,
-    resolve_effective_profile,
-    run_target_conformance,
-    target_conformance_plan,
-    validate_independent_verifier,
-    validate_trace,
-    write_json,
-)
+from . import agent_platform as platform_domain
 
 
 def _root() -> Path:
@@ -33,7 +19,7 @@ def _root() -> Path:
 
 def _emit(value: Mapping[str, object], output: Optional[str]) -> int:
     if output:
-        write_json(Path(output), value)
+        platform_domain.write_json(Path(output), value)
     print(json.dumps(value, ensure_ascii=False, separators=(",", ":")))
     return 0 if value.get("status") in {"pass", "ready", "not-measured"} else 1
 
@@ -99,12 +85,12 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     args = _parser().parse_args(argv)
     root = _root()
     manifest = Manifest.load(root)
-    contract = load_contract(root)
+    contract = platform_domain.load_contract(root)
 
     if args.action == "maturity":
-        value = maturity_report(manifest, contract)
+        value = platform_domain.maturity_report(manifest, contract)
     elif args.action == "resolve":
-        value = resolve_effective_profile(
+        value = platform_domain.resolve_effective_profile(
             manifest,
             contract,
             profiles=args.profile or [manifest.default_profile],
@@ -115,13 +101,13 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             session_capabilities=args.session_capability,
         )
     elif args.action == "portable-skills":
-        value = portable_skill_audit(manifest, contract)
+        value = platform_domain.portable_skill_audit(manifest, contract)
     elif args.action == "trace-validate":
-        value = validate_trace(root, Path(args.input).resolve())
+        value = platform_domain.validate_trace(root, Path(args.input).resolve())
     elif args.action == "verifier-validate":
-        value = validate_independent_verifier(root, Path(args.input).resolve())
+        value = platform_domain.validate_independent_verifier(root, Path(args.input).resolve())
     elif args.action == "loop-decision":
-        value = loop_decision(
+        value = platform_domain.loop_decision(
             contract,
             iterations=args.iterations,
             wall_time_seconds=args.wall_time_seconds,
@@ -133,12 +119,12 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         )
     elif args.action == "asset-usage":
         telemetry = Path(args.telemetry).resolve() if args.telemetry else None
-        value = asset_usage_report(manifest, contract, telemetry)
+        value = platform_domain.asset_usage_report(manifest, contract, telemetry)
     elif args.action == "aci":
-        value = aci_benchmark(contract, Path(args.metrics).resolve())
+        value = platform_domain.aci_benchmark(contract, Path(args.metrics).resolve())
     elif args.action == "target-conformance":
         if args.commands:
-            value = run_target_conformance(
+            value = platform_domain.run_target_conformance(
                 manifest,
                 contract,
                 args.target,
@@ -147,9 +133,9 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                 args.timeout_seconds,
             )
         else:
-            value = target_conformance_plan(manifest, contract, args.target, args.profile)
+            value = platform_domain.target_conformance_plan(manifest, contract, args.target, args.profile)
     else:
-        value = hooks_report(contract)
+        value = platform_domain.hooks_report(contract)
     return _emit(value, getattr(args, "output", None))
 
 

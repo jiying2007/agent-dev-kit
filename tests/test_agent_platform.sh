@@ -7,6 +7,29 @@ trap 'rm -rf "$TMP"' EXIT
 export ADK_ROOT="$ROOT"
 export PYTHONPATH="$ROOT/src${PYTHONPATH:+:$PYTHONPATH}"
 
+python3 - <<'PY'
+from agent_dev_kit import agent_platform, agent_platform_cli
+
+for name in (
+    "aci_benchmark",
+    "asset_usage_report",
+    "hooks_report",
+    "load_contract",
+    "loop_decision",
+    "maturity_report",
+    "portable_skill_audit",
+    "resolve_effective_profile",
+    "run_target_conformance",
+    "target_conformance_plan",
+    "validate_independent_verifier",
+    "validate_trace",
+    "write_json",
+):
+    assert hasattr(agent_platform, name), name
+    assert not hasattr(agent_platform_cli, name), name
+assert hasattr(agent_platform_cli, "main")
+PY
+
 run_json() {
   local out="$1"
   shift

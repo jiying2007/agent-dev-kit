@@ -308,6 +308,54 @@ else:
             + "; ".join(evaluation_runtime_import_leaks)
         )
 
+    agent_platform_authority = source_root / "agent_platform.py"
+    agent_platform_cli = source_root / "agent_platform_cli.py"
+    try:
+        platform_authority_tree = ast.parse(
+            agent_platform_authority.read_text(encoding="utf-8"),
+            filename=str(agent_platform_authority),
+        )
+        platform_cli_tree = ast.parse(
+            agent_platform_cli.read_text(encoding="utf-8"),
+            filename=str(agent_platform_cli),
+        )
+    except (OSError, SyntaxError, UnicodeError) as exc:
+        failures.append(f"cannot parse Agent Platform authority boundary: {exc}")
+    else:
+        platform_authority_defs = {
+            node.name
+            for node in platform_authority_tree.body
+            if isinstance(node, ast.FunctionDef)
+        }
+        named_platform_imports = [
+            alias.name
+            for node in platform_cli_tree.body
+            if isinstance(node, ast.ImportFrom)
+            and node.level == 1
+            and node.module == "agent_platform"
+            for alias in node.names
+            if alias.name in platform_authority_defs
+        ]
+        if named_platform_imports:
+            failures.append(
+                "agent_platform_cli must not re-export platform authority: "
+                + ", ".join(sorted(named_platform_imports))
+            )
+        platform_module_boundary = any(
+            isinstance(node, ast.ImportFrom)
+            and node.level == 1
+            and node.module is None
+            and any(
+                alias.name == "agent_platform" and alias.asname == "platform_domain"
+                for alias in node.names
+            )
+            for node in platform_cli_tree.body
+        )
+        if not platform_module_boundary:
+            failures.append(
+                "agent_platform_cli must consume agent_platform through private module boundary"
+            )
+
     retired_manifest_cli_exports = {
         "ManifestContract",
         "canonical_manifest",
