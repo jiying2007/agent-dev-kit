@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## v7.0.25 (2026-09-23)
+
+### Manifest contract CLI authority hard cut
+- Remove `ManifestContract`, `canonical_manifest`, `load_canonical_manifest` and `load_contract` re-exports from the `manifest_contract.py` CLI namespace.
+- Keep `agent_dev_kit.domain.manifest` as the sole Python authority for manifest loading and the canonical manifest contract.
+- Keep `python -m agent_dev_kit.manifest_contract` as the stable CLI verification entrypoint.
+- Add focused and architecture ratchets preventing Python consumers from importing domain authority through the CLI module.
+- Preserve manifest.json SSOT validation and CLI output semantics; no compatibility alias is retained.
+
+
 ## v7.0.24 (2026-09-23)
 
 ### Evaluation runtime authority hard cut
