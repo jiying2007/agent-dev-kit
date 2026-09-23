@@ -8,7 +8,7 @@ export ADK_ROOT="$ROOT"
 export PYTHONPATH="$ROOT/src${PYTHONPATH:+:$PYTHONPATH}"
 
 python3 - <<'PY'
-from agent_dev_kit import agent_platform, agent_platform_cli
+from agent_dev_kit import agent_platform, agent_platform_cli, agent_platform_conformance
 
 for name in (
     "aci_benchmark",
@@ -19,8 +19,6 @@ for name in (
     "maturity_report",
     "portable_skill_audit",
     "resolve_effective_profile",
-    "run_target_conformance",
-    "target_conformance_plan",
     "validate_independent_verifier",
     "validate_trace",
     "write_json",
@@ -28,6 +26,10 @@ for name in (
     assert hasattr(agent_platform, name), name
     assert not hasattr(agent_platform_cli, name), name
 assert hasattr(agent_platform_cli, "main")
+for name in ("target_conformance_plan", "run_target_conformance"):
+    assert hasattr(agent_platform_conformance, name), name
+    assert not hasattr(agent_platform, name), name
+    assert not hasattr(agent_platform_cli, name), name
 PY
 
 run_json() {
