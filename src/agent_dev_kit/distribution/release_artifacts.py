@@ -15,7 +15,7 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
 
-from ..installer import RECEIPT_NAME
+from ..installation_contract import RECEIPT_NAME
 from ..model import Manifest, ManifestError, sha256_file, sha256_tree
 
 SOURCE_DISTRIBUTION_DIRECTORIES = (
