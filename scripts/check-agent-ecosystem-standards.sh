@@ -491,6 +491,11 @@ adapters = {
 otel = adapters.get("otel-genai-trace-summary-v1", {})
 check(bool(otel), "missing OTel GenAI trace adapter")
 check(otel.get("enabled_default") is False, "OTel GenAI adapter must be disabled by default")
+check(otel.get("input_contract") == "adk-workflow-trace-summary-v2", "OTel GenAI adapter must consume canonical trace-summary v2")
+check("goal_ref" in otel.get("native_only_fields", []), "OTel GenAI adapter must preserve goal_ref natively")
+check("next_goal_ref" in otel.get("native_only_fields", []), "OTel GenAI adapter must preserve next_goal_ref natively")
+check("goal" not in otel.get("native_only_fields", []), "OTel GenAI adapter must not retain retired goal sentinel")
+check("next_goal" not in otel.get("native_only_fields", []), "OTel GenAI adapter must not retain retired next_goal sentinel")
 check(
     otel.get("upstream_repository") == "https://github.com/open-telemetry/semantic-conventions-genai",
     "OTel GenAI adapter upstream repository must be canonical",
