@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 from . import agent_value_contracts as value_contracts
+from . import agent_value_receipts as value_receipts
 from .model import Manifest, ManifestError
 from .privacy_ref import opaque_ref_for_sha256, validate_no_secrets
 
@@ -137,7 +138,7 @@ def emit_measurements(
     groups: Dict[Tuple[str, str, str], List[Mapping[str, Any]]] = defaultdict(list)
     validation_reports: Dict[str, Mapping[str, Any]] = {}
     for item in receipts:
-        validation_report = value_contracts.validate_receipt(
+        validation_report = value_receipts.validate_receipt(
             item,
             manifest,
             contract,
@@ -316,7 +317,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             for path in args.receipt
         ]
         if receipts:
-            report["receipts"] = [value_contracts.validate_receipt(item, manifest, contract) for item in receipts]
+            report["receipts"] = [value_receipts.validate_receipt(item, manifest, contract) for item in receipts]
         if args.emit_measurements:
             if receipts:
                 raise ManifestError(

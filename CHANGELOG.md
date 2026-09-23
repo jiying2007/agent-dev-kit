@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## v7.0.30 (2026-09-23)
+
+### Agent Value receipt bounded context
+- Extract privacy-bounded invocation receipt validation into `agent_value_receipts.py`, leaving `agent_value_contracts.py` focused on static Agent Value contract and policy semantics.
+- Move `RECEIPT_SCHEMA_VERSION`, `EvidenceVerifier` and `validate_receipt` to the receipt authority without retaining compatibility aliases.
+- Route Agent Value orchestration and run-evidence validation directly to the receipt bounded context while keeping contract loading/validation on `agent_value_contracts`.
+- Enforce one-way receipt-to-contract dependency through a private module boundary and add focused plus AST ratchets preventing authority leakage in either direction.
+- Preserve receipt schema, freshness, privacy, evidence-authority and retirement-signal semantics; no runtime or measurement behavior changes.
+
+
 ## v7.0.29 (2026-09-23)
 
 ### Installation bounded-context hard cut
