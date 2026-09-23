@@ -10,6 +10,7 @@ from typing import Mapping, Optional, Sequence
 
 from .model import Manifest
 from . import agent_platform as platform_domain
+from . import agent_platform_conformance as conformance_domain
 
 
 def _root() -> Path:
@@ -124,7 +125,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         value = platform_domain.aci_benchmark(contract, Path(args.metrics).resolve())
     elif args.action == "target-conformance":
         if args.commands:
-            value = platform_domain.run_target_conformance(
+            value = conformance_domain.run_target_conformance(
                 manifest,
                 contract,
                 args.target,
@@ -133,7 +134,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                 args.timeout_seconds,
             )
         else:
-            value = platform_domain.target_conformance_plan(manifest, contract, args.target, args.profile)
+            value = conformance_domain.target_conformance_plan(manifest, contract, args.target, args.profile)
     else:
         value = platform_domain.hooks_report(contract)
     return _emit(value, getattr(args, "output", None))
