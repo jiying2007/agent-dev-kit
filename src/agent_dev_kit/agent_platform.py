@@ -1,8 +1,9 @@
-"""Stable Agent Platform primitives.
+"""Stable Agent Platform policy and evidence primitives.
 
-This module stays control-plane only: it derives effective assets, validates
-portable/evidence contracts, and evaluates caller-supplied runtime smokes. A
-caller smoke never becomes trusted native-runtime certification.
+This module stays control-plane only: it derives effective assets and validates
+portable/evidence contracts. Caller-supplied target runtime conformance is owned
+by :mod:`agent_dev_kit.agent_platform_conformance` and never becomes trusted
+native-runtime certification.
 """
 
 from __future__ import annotations
