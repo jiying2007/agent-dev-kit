@@ -10,17 +10,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
-from .agent_value_contracts import (
-    CONTRACT_SCHEMA_VERSION as CONTRACT_SCHEMA_VERSION,
-    EvidenceVerifier as EvidenceVerifier,
-    MEASUREMENT_SCHEMA_VERSION as MEASUREMENT_SCHEMA_VERSION,
-    RECEIPT_SCHEMA_VERSION as RECEIPT_SCHEMA_VERSION,
-    _load_json as _load_json,
-    _validate_schema as _validate_schema,
-    load_contract as load_contract,
-    validate_contract as validate_contract,
-    validate_receipt as validate_receipt,
-)
+from . import agent_value_contracts as value_contracts
 from .model import Manifest, ManifestError
 from .privacy_ref import opaque_ref_for_sha256, validate_no_secrets
 
@@ -103,18 +93,18 @@ def emit_measurements(
     manifest: Manifest,
     contract: Mapping[str, Any],
     schema_path: Optional[Path] = None,
-    evidence_verifier: Optional[EvidenceVerifier] = None,
+    evidence_verifier: Optional[value_contracts.EvidenceVerifier] = None,
     aggregation_window: Optional[Mapping[str, datetime]] = None,
     as_of: Optional[datetime] = None,
 ) -> Dict[str, Any]:
     """Emit deterministic value measurements from validated receipt inputs only."""
 
-    validate_contract(contract, manifest)
+    value_contracts.validate_contract(contract, manifest)
     schema_path = schema_path or manifest.root / str(
         contract["receipt_contract"]["measurement_schema_path"]
     )
     base: Dict[str, Any] = {
-        "schema_version": MEASUREMENT_SCHEMA_VERSION,
+        "schema_version": value_contracts.MEASUREMENT_SCHEMA_VERSION,
         "measurement_status": "not-measured",
         "reason": "no-valid-receipts",
         "manifest_ref": opaque_ref_for_sha256(manifest.digest),
@@ -123,7 +113,7 @@ def emit_measurements(
         "asset_measurements": [],
     }
     if not receipts:
-        _validate_schema(base, schema_path, "asset value measurement")
+        value_contracts._validate_schema(base, schema_path, "asset value measurement")
         return base
 
     if not isinstance(aggregation_window, Mapping) or set(aggregation_window) != {"from", "through"}:
@@ -147,7 +137,7 @@ def emit_measurements(
     groups: Dict[Tuple[str, str, str], List[Mapping[str, Any]]] = defaultdict(list)
     validation_reports: Dict[str, Mapping[str, Any]] = {}
     for item in receipts:
-        validation_report = validate_receipt(
+        validation_report = value_contracts.validate_receipt(
             item,
             manifest,
             contract,
@@ -298,7 +288,7 @@ def emit_measurements(
     else:
         report["quality_ineligibility_reason"] = "non-production-authority"
     validate_no_secrets(report, "asset value measurement")
-    _validate_schema(report, schema_path, "asset value measurement")
+    value_contracts._validate_schema(report, schema_path, "asset value measurement")
     return report
 
 
@@ -318,15 +308,15 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     contract_path = args.contract or root / "manifests" / "agent_value_contracts.json"
     try:
         manifest = Manifest.load(root)
-        contract = load_contract(contract_path)
-        contract_report = validate_contract(contract, manifest)
+        contract = value_contracts.load_contract(contract_path)
+        contract_report = value_contracts.validate_contract(contract, manifest)
         report: Dict[str, Any] = {"contract": contract_report}
         receipts = [
-            _load_json(path, "asset invocation receipt")
+            value_contracts._load_json(path, "asset invocation receipt")
             for path in args.receipt
         ]
         if receipts:
-            report["receipts"] = [validate_receipt(item, manifest, contract) for item in receipts]
+            report["receipts"] = [value_contracts.validate_receipt(item, manifest, contract) for item in receipts]
         if args.emit_measurements:
             if receipts:
                 raise ManifestError(
