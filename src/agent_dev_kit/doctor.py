@@ -11,7 +11,8 @@ from importlib import metadata
 from pathlib import Path
 from typing import Any, Dict, Optional, Sequence
 
-from .evaluation import runtime_plan, runtime_version
+from .evaluation import runtime_plan
+from .evaluation_runtime import runtime_version
 from .locking import target_lock_status
 from .model import Manifest
 
