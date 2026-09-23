@@ -7,13 +7,13 @@ import json
 from pathlib import Path
 from typing import Sequence
 
-from .campaign import campaign_markdown, campaign_plan, check_campaign, run_campaign
+from . import campaign as campaign_domain
+from . import effect_evaluation as effect_domain
+from . import evaluation as evaluation_domain
+from . import evaluation_runtime as runtime_domain
+from . import repository_evaluation as repository_domain
+from . import repository_evaluation_contract as repository_contract_domain
 from .cli_runtime import DEFAULT_TASKS, ROOT, _json, _manifest, _write_json
-from .effect_evaluation import run_effect_eval
-from .evaluation import eval_markdown, run_runtime, runtime_plan
-from .evaluation_runtime import compare_runtime_reports, load_tasks, run_deterministic
-from .repository_evaluation import certify_repository_report
-from .repository_evaluation_contract import repository_plan
 
 DEFAULT_CAMPAIGN_CONTRACT = (ROOT / "manifests" / "software_m5_eval_contract.json").resolve()
 
@@ -95,16 +95,16 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = parser.parse_args(argv)
     if args.action == "repository":
         if args.repository_action == "plan":
-            value = repository_plan(_manifest(), Path(args.contract))
+            value = repository_contract_domain.repository_plan(_manifest(), Path(args.contract))
         else:
-            value = certify_repository_report(_manifest(), Path(args.contract), Path(args.report))
+            value = repository_domain.certify_repository_report(_manifest(), Path(args.contract), Path(args.report))
         if args.output:
             _write_json(Path(args.output), value)
         if args.summary_json or not args.output:
             _json(value)
         return 0 if value.get("status") in ("ready", "fixture-pass", "pass") else 1
     if args.action == "effect":
-        value = run_effect_eval(_manifest(), Path(args.contract))
+        value = effect_domain.run_effect_eval(_manifest(), Path(args.contract))
         if args.output:
             _write_json(Path(args.output), value)
         if args.summary_json or not args.output:
@@ -113,7 +113,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     if args.action == "campaign":
         if args.campaign_action == "report":
             value = json.loads(Path(args.input).read_text(encoding="utf-8"))
-            text = campaign_markdown(value)
+            text = campaign_domain.campaign_markdown(value)
             if args.output:
                 Path(args.output).write_text(text, encoding="utf-8")
             else:
@@ -121,12 +121,12 @@ def main(argv: Sequence[str] | None = None) -> int:
             return 0
         contract = Path(args.contract).resolve()
         if args.campaign_action == "plan":
-            value = campaign_plan(_manifest(), contract)
+            value = campaign_domain.campaign_plan(_manifest(), contract)
         elif args.campaign_action == "run":
             if args.execute:
                 if args.approve_budget_usd is None:
                     parser.error("--approve-budget-usd is required with campaign run --execute")
-                value = run_campaign(
+                value = campaign_domain.run_campaign(
                     _manifest(),
                     contract,
                     Path(args.state_dir),
@@ -134,9 +134,9 @@ def main(argv: Sequence[str] | None = None) -> int:
                     args.resume,
                 )
             else:
-                value = campaign_plan(_manifest(), contract)
+                value = campaign_domain.campaign_plan(_manifest(), contract)
         else:
-            value = check_campaign(
+            value = campaign_domain.check_campaign(
                 _manifest(), contract, Path(args.state_dir), certify=args.certify
             )
         if getattr(args, "output", None):
@@ -145,7 +145,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             _json(value)
         return 0 if value.get("status") in ("ready", "complete", "pass") else 1
     if args.action == "certify":
-        value = check_campaign(_manifest(), Path(args.contract).resolve(), Path(args.state_dir), certify=True)
+        value = campaign_domain.check_campaign(_manifest(), Path(args.contract).resolve(), Path(args.state_dir), certify=True)
         if args.output:
             _write_json(Path(args.output), value)
         if args.summary_json or not args.output:
@@ -153,7 +153,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 0 if value.get("status") == "pass" else 1
     if args.action == "report":
         value = json.loads(Path(args.input).read_text(encoding="utf-8"))
-        text = eval_markdown(value)
+        text = evaluation_domain.eval_markdown(value)
         if args.output:
             Path(args.output).write_text(text, encoding="utf-8")
         else:
@@ -162,21 +162,21 @@ def main(argv: Sequence[str] | None = None) -> int:
     if args.action == "compare":
         baseline = json.loads(Path(args.baseline).read_text(encoding="utf-8"))
         candidate = json.loads(Path(args.candidate).read_text(encoding="utf-8"))
-        value = compare_runtime_reports(baseline, candidate)
+        value = runtime_domain.compare_runtime_reports(baseline, candidate)
         if args.output:
             _write_json(Path(args.output), value)
         if args.summary_json or not args.output:
             _json(value)
         return 0 if value["status"] == "pass" else 1
-    tasks = load_tasks(Path(args.tasks), args.limit)
+    tasks = runtime_domain.load_tasks(Path(args.tasks), args.limit)
     if args.suite == "deterministic":
-        value = run_deterministic(_manifest(), tasks)
+        value = runtime_domain.run_deterministic(_manifest(), tasks)
     else:
         if args.runtime is None:
             parser.error("--runtime is required for runtime suite")
-        plan = runtime_plan(args.runtime, args.condition, len(tasks))
+        plan = evaluation_domain.runtime_plan(args.runtime, args.condition, len(tasks))
         value = (
-            run_runtime(_manifest(), tasks, args.runtime, args.condition, model=args.model)
+            evaluation_domain.run_runtime(_manifest(), tasks, args.runtime, args.condition, model=args.model)
             if args.execute and plan.get("status") == "planned"
             else plan
         )
