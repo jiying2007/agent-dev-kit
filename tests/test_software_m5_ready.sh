@@ -42,8 +42,8 @@ from agent_dev_kit.campaign import (
 )
 from agent_dev_kit.evaluation_cli import DEFAULT_CAMPAIGN_CONTRACT
 from agent_dev_kit.doctor import run_doctor
-from agent_dev_kit import campaign, evaluation, installer
-from agent_dev_kit.evaluation import _claude_usage, run_deterministic
+from agent_dev_kit import campaign, evaluation, evaluation_runtime, installer
+from agent_dev_kit.evaluation_runtime import _claude_usage, run_deterministic
 from agent_dev_kit.installer import RECEIPT_NAME, apply_plan, create_plan, rollback, write_plan
 from agent_dev_kit.locking import TargetLock, clear_target_lock, target_lock_status
 from agent_dev_kit.matcher import match_text
@@ -66,6 +66,22 @@ temp_root = Path(os.sys.argv[2])
 manifest = Manifest.load(root)
 assert DEFAULT_CAMPAIGN_CONTRACT == (root / "manifests/software_m5_eval_contract.json").resolve()
 assert DEFAULT_CAMPAIGN_CONTRACT.is_file()
+for retired_runtime_export in (
+    "RUNTIME_THRESHOLDS",
+    "_claude_usage",
+    "_codex_reported_models",
+    "_codex_usage",
+    "_collect_reported_models",
+    "_extract_json_text",
+    "_latency_summary",
+    "_validated_runtime_metrics",
+    "compare_runtime_reports",
+    "load_tasks",
+    "run_deterministic",
+    "runtime_version",
+):
+    assert hasattr(evaluation_runtime, retired_runtime_export), retired_runtime_export
+    assert not hasattr(evaluation, retired_runtime_export), retired_runtime_export
 cli_source = (root / "src/agent_dev_kit/cli.py").read_text(encoding="utf-8")
 runtime_source = (root / "src/agent_dev_kit/cli_runtime.py").read_text(encoding="utf-8")
 eval_cli_source = (root / "src/agent_dev_kit/evaluation_cli.py").read_text(encoding="utf-8")
@@ -493,7 +509,7 @@ invalid_tasks.write_text(
     encoding="utf-8",
 )
 try:
-    evaluation.load_tasks(invalid_tasks)
+    evaluation_runtime.load_tasks(invalid_tasks)
 except ManifestError as exc:
     assert "expected_safe must be boolean" in str(exc)
 else:
