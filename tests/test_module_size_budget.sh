@@ -374,6 +374,95 @@ else:
         if not delegates_delivery:
             failures.append("public CLI must delegate through delivery_cli.main")
 
+    retired_installer = source_root / "installer.py"
+    installation_contract = source_root / "installation_contract.py"
+    installation_plan = source_root / "installation_plan.py"
+    installation_transaction = source_root / "installation_transaction.py"
+    if retired_installer.exists():
+        failures.append("installer monolith must remain retired")
+    if not all(path.is_file() for path in (
+        installation_contract,
+        installation_plan,
+        installation_transaction,
+    )):
+        failures.append("installation bounded contexts are incomplete")
+    else:
+        try:
+            install_contract_tree = ast.parse(
+                installation_contract.read_text(encoding="utf-8"),
+                filename=str(installation_contract),
+            )
+            install_plan_tree = ast.parse(
+                installation_plan.read_text(encoding="utf-8"),
+                filename=str(installation_plan),
+            )
+            install_tx_tree = ast.parse(
+                installation_transaction.read_text(encoding="utf-8"),
+                filename=str(installation_transaction),
+            )
+        except (OSError, SyntaxError, UnicodeError) as exc:
+            failures.append(f"cannot parse installation bounded contexts: {exc}")
+        else:
+            contract_defs = {
+                node.name for node in install_contract_tree.body
+                if isinstance(node, ast.FunctionDef)
+            }
+            plan_defs = {
+                node.name for node in install_plan_tree.body
+                if isinstance(node, ast.FunctionDef)
+            }
+            tx_defs = {
+                node.name for node in install_tx_tree.body
+                if isinstance(node, ast.FunctionDef)
+            }
+            if not {"_read_receipt", "_load_receipt", "_receipt_digest"} <= contract_defs:
+                failures.append("installation_contract must own receipt contract primitives")
+            if not {"create_plan", "write_plan", "validate_plan"} <= plan_defs:
+                failures.append("installation_plan must own plan lifecycle")
+            if not {"apply_plan", "rollback"} <= tx_defs:
+                failures.append("installation_transaction must own apply/rollback lifecycle")
+            plan_reverse = [
+                node for node in ast.walk(install_plan_tree)
+                if isinstance(node, ast.ImportFrom)
+                and node.module == "installation_transaction"
+            ]
+            contract_reverse = [
+                node for node in ast.walk(install_contract_tree)
+                if isinstance(node, ast.ImportFrom)
+                and node.module in {"installation_plan", "installation_transaction"}
+            ]
+            if plan_reverse:
+                failures.append("installation_plan must not depend on installation_transaction")
+            if contract_reverse:
+                failures.append("installation_contract must not depend on plan/transaction")
+            tx_imports_plan = any(
+                isinstance(node, ast.ImportFrom)
+                and node.level == 1
+                and node.module is None
+                and any(alias.name == "installation_plan" for alias in node.names)
+                for node in install_tx_tree.body
+            )
+            if not tx_imports_plan:
+                failures.append("installation_transaction must consume installation_plan authority")
+            delivery_plan_import = any(
+                isinstance(node, ast.ImportFrom)
+                and node.level == 1
+                and node.module == "installation_plan"
+                and {alias.name for alias in node.names} >= {"create_plan", "write_plan"}
+                for node in delivery_cli_tree.body
+            )
+            delivery_tx_import = any(
+                isinstance(node, ast.ImportFrom)
+                and node.level == 1
+                and node.module == "installation_transaction"
+                and {alias.name for alias in node.names} >= {"apply_plan", "rollback"}
+                for node in delivery_cli_tree.body
+            )
+            if not delivery_plan_import or not delivery_tx_import:
+                failures.append(
+                    "delivery_cli must consume installation plan/transaction authorities directly"
+                )
+
     agent_platform_authority = source_root / "agent_platform.py"
     agent_platform_cli = source_root / "agent_platform_cli.py"
     try:
