@@ -8,7 +8,7 @@ from pathlib import Path
 from agent_dev_kit.effect_comparator import EffectCampaignInput, compare_effects
 from agent_dev_kit.model import Manifest, ManifestError
 from agent_dev_kit.run_evidence import RunEvidenceObservation, emit_run_evidence
-from agent_dev_kit.agent_value import load_contract
+from agent_dev_kit.agent_value_contracts import load_contract
 from agent_dev_kit.trace_summary import (
     CostFact,
     GuardrailFact,

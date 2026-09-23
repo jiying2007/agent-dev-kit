@@ -5,7 +5,7 @@ import unittest
 from datetime import datetime, timezone
 from pathlib import Path
 
-from agent_dev_kit.agent_value import load_contract
+from agent_dev_kit.agent_value_contracts import load_contract
 from agent_dev_kit.model import Manifest, ManifestError, canonical_json_bytes, sha256_bytes
 from agent_dev_kit.run_evidence import (
     RunEvidenceObservation,

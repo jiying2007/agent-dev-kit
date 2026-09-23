@@ -241,6 +241,43 @@ else:
             if not cli_effect_import:
                 failures.append("evaluation CLI must consume effect_evaluation authority directly")
 
+    retired_agent_value_exports = {
+        "CONTRACT_SCHEMA_VERSION",
+        "RECEIPT_SCHEMA_VERSION",
+        "MEASUREMENT_SCHEMA_VERSION",
+        "EvidenceVerifier",
+        "load_contract",
+        "validate_contract",
+        "validate_receipt",
+    }
+    agent_value_import_leaks = []
+    for python_path in sorted(source_root.rglob("*.py")):
+        try:
+            module_tree = ast.parse(
+                python_path.read_text(encoding="utf-8"),
+                filename=str(python_path),
+            )
+        except (OSError, SyntaxError, UnicodeError) as exc:
+            failures.append(f"cannot parse agent-value consumer {python_path}: {exc}")
+            continue
+        for node in ast.walk(module_tree):
+            if not isinstance(node, ast.ImportFrom):
+                continue
+            if node.module not in {"agent_value", "agent_dev_kit.agent_value"}:
+                continue
+            leaked = sorted(
+                alias.name for alias in node.names if alias.name in retired_agent_value_exports
+            )
+            if leaked:
+                agent_value_import_leaks.append(
+                    f"{python_path.relative_to(root).as_posix()}:{','.join(leaked)}"
+                )
+    if agent_value_import_leaks:
+        failures.append(
+            "agent_value must not re-export contract authority: "
+            + "; ".join(agent_value_import_leaks)
+        )
+
     execution_policy_root = source_root / "execution_policy"
     execution_engine = execution_policy_root / "engine.py"
     execution_reducer = execution_policy_root / "reducer.py"
