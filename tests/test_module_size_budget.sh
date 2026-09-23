@@ -308,6 +308,72 @@ else:
             + "; ".join(evaluation_runtime_import_leaks)
         )
 
+    public_cli = source_root / "cli.py"
+    delivery_cli = source_root / "delivery_cli.py"
+    try:
+        public_cli_tree = ast.parse(
+            public_cli.read_text(encoding="utf-8"),
+            filename=str(public_cli),
+        )
+        delivery_cli_tree = ast.parse(
+            delivery_cli.read_text(encoding="utf-8"),
+            filename=str(delivery_cli),
+        )
+    except (OSError, SyntaxError, UnicodeError) as exc:
+        failures.append(f"cannot parse delivery CLI bounded context: {exc}")
+    else:
+        delivery_handlers = {
+            "_cmd_export",
+            "_cmd_install",
+            "_cmd_target",
+            "_cmd_lock",
+            "_cmd_release",
+        }
+        public_defs = {
+            node.name
+            for node in public_cli_tree.body
+            if isinstance(node, ast.FunctionDef)
+        }
+        delivery_defs = {
+            node.name
+            for node in delivery_cli_tree.body
+            if isinstance(node, ast.FunctionDef)
+        }
+        leaked_handlers = sorted(delivery_handlers & public_defs)
+        if leaked_handlers:
+            failures.append(
+                "public CLI must not own delivery lifecycle handlers: "
+                + ", ".join(leaked_handlers)
+            )
+        missing_handlers = sorted(delivery_handlers - delivery_defs)
+        if missing_handlers:
+            failures.append(
+                "delivery_cli bounded context is incomplete: "
+                + ", ".join(missing_handlers)
+            )
+        forbidden_delivery_imports = {"compiler", "installer", "locking", "release", "targets"}
+        direct_delivery_imports = sorted({
+            node.module
+            for node in public_cli_tree.body
+            if isinstance(node, ast.ImportFrom)
+            and node.level == 1
+            and node.module in forbidden_delivery_imports
+        })
+        if direct_delivery_imports:
+            failures.append(
+                "public CLI must delegate delivery dependencies: "
+                + ", ".join(direct_delivery_imports)
+            )
+        delegates_delivery = any(
+            isinstance(node, ast.ImportFrom)
+            and node.level == 1
+            and node.module == "delivery_cli"
+            and any(alias.name == "main" and alias.asname == "delivery_main" for alias in node.names)
+            for node in public_cli_tree.body
+        )
+        if not delegates_delivery:
+            failures.append("public CLI must delegate through delivery_cli.main")
+
     agent_platform_authority = source_root / "agent_platform.py"
     agent_platform_cli = source_root / "agent_platform_cli.py"
     try:
