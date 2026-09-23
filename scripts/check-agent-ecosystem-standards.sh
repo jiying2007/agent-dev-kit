@@ -488,7 +488,7 @@ adapters = {
     for item in trace.get("interoperability_adapters", [])
     if isinstance(item, dict)
 }
-otel = adapters.get("otel-genai-trace-summary-v1", {})
+otel = adapters.get("otel-genai-trace-summary-v2", {})
 check(bool(otel), "missing OTel GenAI trace adapter")
 check(otel.get("enabled_default") is False, "OTel GenAI adapter must be disabled by default")
 check(otel.get("input_contract") == "adk-workflow-trace-summary-v2", "OTel GenAI adapter must consume canonical trace-summary v2")
