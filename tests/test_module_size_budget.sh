@@ -193,6 +193,7 @@ else:
                 )
 
     runtime_evaluation = source_root / "evaluation.py"
+    evaluation_runtime_authority = source_root / "evaluation_runtime.py"
     effect_evaluation = source_root / "effect_evaluation.py"
     evaluation_cli = source_root / "evaluation_cli.py"
     if not effect_evaluation.is_file():
@@ -202,6 +203,10 @@ else:
             runtime_eval_tree = ast.parse(
                 runtime_evaluation.read_text(encoding="utf-8"),
                 filename=str(runtime_evaluation),
+            )
+            evaluation_runtime_authority_tree = ast.parse(
+                evaluation_runtime_authority.read_text(encoding="utf-8"),
+                filename=str(evaluation_runtime_authority),
             )
             effect_eval_tree = ast.parse(
                 effect_evaluation.read_text(encoding="utf-8"),
@@ -242,19 +247,10 @@ else:
                 failures.append("evaluation CLI must consume effect_evaluation authority directly")
 
     retired_evaluation_runtime_exports = {
-        "RUNTIME_THRESHOLDS",
-        "_claude_usage",
-        "_codex_reported_models",
-        "_codex_usage",
-        "_collect_reported_models",
-        "_extract_json_text",
-        "_latency_summary",
-        "_validated_runtime_metrics",
-        "compare_runtime_reports",
-        "load_tasks",
-        "run_deterministic",
-        "runtime_version",
-    }
+        node.name
+        for node in evaluation_runtime_authority_tree.body
+        if isinstance(node, ast.FunctionDef)
+    } | {"RUNTIME_THRESHOLDS"}
     evaluation_named_runtime_imports = [
         alias.name
         for node in runtime_eval_tree.body
