@@ -10,6 +10,20 @@ TARGET="$TMP_DIR/.claude"
 PLAN="$TMP_DIR/install-plan.json"
 REPLAN="$TMP_DIR/reinstall-plan.json"
 
+python3 - <<'PY'
+import importlib.util
+
+from agent_dev_kit import installation_contract, installation_plan, installation_transaction
+
+assert importlib.util.find_spec("agent_dev_kit.installer") is None
+for name in ("PLAN_SCHEMA", "RECEIPT_SCHEMA", "RECEIPT_NAME"):
+    assert hasattr(installation_contract, name), name
+for name in ("create_plan", "write_plan", "validate_plan"):
+    assert hasattr(installation_plan, name), name
+for name in ("apply_plan", "rollback"):
+    assert hasattr(installation_transaction, name), name
+PY
+
 bash "$ROOT_DIR/scripts/devkit.sh" install plan \
   --tool claude-code \
   --mode copy \
