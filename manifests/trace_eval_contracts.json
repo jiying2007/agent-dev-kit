@@ -266,7 +266,7 @@
   ],
   "interoperability_adapters": [
     {
-      "id": "otel-genai-trace-summary-v1",
+      "id": "otel-genai-trace-summary-v2",
       "owner": "agent-dev-kit",
       "source_refs": [
         "otel-genai-semconv"
