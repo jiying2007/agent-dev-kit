@@ -37,77 +37,35 @@
     "next_goal_ref"
   ],
   "properties": {
-    "schema_version": {
-      "const": "adk-workflow-trace-summary/v2"
-    },
-    "run_id": {
-      "$ref": "#/$defs/identifier"
-    },
-    "task_id": {
-      "$ref": "#/$defs/identifier"
-    },
+    "schema_version": {"const": "adk-workflow-trace-summary/v2"},
+    "run_id": {"$ref": "#/$defs/identifier"},
+    "task_id": {"$ref": "#/$defs/identifier"},
     "asset_bundle_sha256": {
       "type": "string",
       "pattern": "^[0-9a-f]{64}$"
     },
-    "runtime_target": {
-      "$ref": "#/$defs/identifier"
-    },
-    "runtime_version": {
-      "$ref": "#/$defs/identifier"
-    },
-    "model_version": {
-      "$ref": "#/$defs/identifier"
-    },
-    "goal_ref": {
-      "$ref": "#/$defs/opaqueRef"
-    },
-    "primary_skill": {
-      "$ref": "#/$defs/identifier"
-    },
-    "prompt_version": {
-      "$ref": "#/$defs/identifier"
-    },
+    "runtime_target": {"$ref": "#/$defs/identifier"},
+    "runtime_version": {"$ref": "#/$defs/identifier"},
+    "model_version": {"$ref": "#/$defs/identifier"},
+    "goal_ref": {"$ref": "#/$defs/opaqueRef"},
+    "primary_skill": {"$ref": "#/$defs/identifier"},
+    "prompt_version": {"$ref": "#/$defs/identifier"},
     "orchestration_mode": {
-      "enum": [
-        "single-agent",
-        "subagents",
-        "external-runtime",
-        "not-available"
-      ]
+      "enum": ["single-agent", "subagents", "external-runtime", "not-available"]
     },
-    "tool_calls": {
-      "type": "integer",
-      "minimum": 0
-    },
+    "tool_calls": {"type": "integer", "minimum": 0},
     "tools_used": {
       "type": "array",
       "maxItems": 128,
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "name",
-          "call_count",
-          "outcome"
-        ],
+        "required": ["name", "call_count", "outcome"],
         "properties": {
-          "name": {
-            "$ref": "#/$defs/identifier"
-          },
-          "call_count": {
-            "type": "integer",
-            "minimum": 1
-          },
+          "name": {"$ref": "#/$defs/identifier"},
+          "call_count": {"type": "integer", "minimum": 1},
           "outcome": {
-            "enum": [
-              "succeeded",
-              "partial",
-              "failed",
-              "blocked",
-              "cancelled",
-              "not-available"
-            ]
+            "enum": ["succeeded", "partial", "failed", "blocked", "cancelled", "not-available"]
           }
         }
       }
@@ -118,22 +76,10 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "target",
-          "outcome"
-        ],
+        "required": ["target", "outcome"],
         "properties": {
-          "target": {
-            "$ref": "#/$defs/identifier"
-          },
-          "outcome": {
-            "enum": [
-              "succeeded",
-              "failed",
-              "blocked",
-              "cancelled"
-            ]
-          }
+          "target": {"$ref": "#/$defs/identifier"},
+          "outcome": {"enum": ["succeeded", "failed", "blocked", "cancelled"]}
         }
       }
     },
@@ -143,21 +89,10 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "name",
-          "status"
-        ],
+        "required": ["name", "status"],
         "properties": {
-          "name": {
-            "$ref": "#/$defs/identifier"
-          },
-          "status": {
-            "enum": [
-              "passed",
-              "failed",
-              "not-applicable"
-            ]
-          }
+          "name": {"$ref": "#/$defs/identifier"},
+          "status": {"enum": ["passed", "failed", "not-applicable"]}
         }
       }
     },
@@ -167,31 +102,14 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "name",
-          "status",
-          "evidence_ref"
-        ],
+        "required": ["name", "status", "evidence_ref"],
         "properties": {
-          "name": {
-            "$ref": "#/$defs/identifier"
-          },
-          "status": {
-            "enum": [
-              "passed",
-              "failed",
-              "not-run",
-              "not-applicable"
-            ]
-          },
+          "name": {"$ref": "#/$defs/identifier"},
+          "status": {"enum": ["passed", "failed", "not-run", "not-applicable"]},
           "evidence_ref": {
             "oneOf": [
-              {
-                "$ref": "#/$defs/opaqueRef"
-              },
-              {
-                "type": "null"
-              }
+              {"$ref": "#/$defs/opaqueRef"},
+              {"type": "null"}
             ]
           }
         }
@@ -202,40 +120,20 @@
         {
           "type": "object",
           "additionalProperties": false,
-          "required": [
-            "input",
-            "cached_input",
-            "output"
-          ],
+          "required": ["input", "cached_input", "output"],
           "properties": {
-            "input": {
-              "type": "integer",
-              "minimum": 0
-            },
-            "cached_input": {
-              "type": "integer",
-              "minimum": 0
-            },
-            "output": {
-              "type": "integer",
-              "minimum": 0
-            }
+            "input": {"type": "integer", "minimum": 0},
+            "cached_input": {"type": "integer", "minimum": 0},
+            "output": {"type": "integer", "minimum": 0}
           }
         },
         {
           "type": "object",
           "additionalProperties": false,
-          "required": [
-            "status",
-            "reason"
-          ],
+          "required": ["status", "reason"],
           "properties": {
-            "status": {
-              "const": "not-available"
-            },
-            "reason": {
-              "$ref": "#/$defs/identifier"
-            }
+            "status": {"const": "not-available"},
+            "reason": {"$ref": "#/$defs/identifier"}
           }
         }
       ]
@@ -245,66 +143,33 @@
         {
           "type": "object",
           "additionalProperties": false,
-          "required": [
-            "status",
-            "amount",
-            "currency"
-          ],
+          "required": ["status", "amount", "currency"],
           "properties": {
-            "status": {
-              "const": "available"
-            },
-            "amount": {
-              "type": "number",
-              "minimum": 0
-            },
-            "currency": {
-              "type": "string",
-              "pattern": "^[A-Z]{3}$"
-            }
+            "status": {"const": "available"},
+            "amount": {"type": "number", "minimum": 0},
+            "currency": {"type": "string", "pattern": "^[A-Z]{3}$"}
           }
         },
         {
           "type": "object",
           "additionalProperties": false,
-          "required": [
-            "status",
-            "reason"
-          ],
+          "required": ["status", "reason"],
           "properties": {
-            "status": {
-              "const": "not-available"
-            },
-            "reason": {
-              "$ref": "#/$defs/identifier"
-            }
+            "status": {"const": "not-available"},
+            "reason": {"$ref": "#/$defs/identifier"}
           }
         }
       ]
     },
-    "elapsed_ms": {
-      "type": "integer",
-      "minimum": 0
-    },
+    "elapsed_ms": {"type": "integer", "minimum": 0},
     "outcome": {
       "oneOf": [
         {
           "type": "object",
           "additionalProperties": false,
-          "required": [
-            "status",
-            "category"
-          ],
+          "required": ["status", "category"],
           "properties": {
-            "status": {
-              "enum": [
-                "succeeded",
-                "failed",
-                "blocked",
-                "cancelled",
-                "abstained"
-              ]
-            },
+            "status": {"enum": ["succeeded", "failed", "blocked", "cancelled", "abstained"]},
             "category": {
               "enum": [
                 "completed",
@@ -321,62 +186,30 @@
         {
           "type": "object",
           "additionalProperties": false,
-          "required": [
-            "status",
-            "reason"
-          ],
+          "required": ["status", "reason"],
           "properties": {
-            "status": {
-              "const": "not-available"
-            },
-            "reason": {
-              "$ref": "#/$defs/identifier"
-            }
+            "status": {"const": "not-available"},
+            "reason": {"$ref": "#/$defs/identifier"}
           }
         }
       ]
     },
-    "first_pass_success": {
-      "type": "boolean"
-    },
-    "human_interventions": {
-      "type": "integer",
-      "minimum": 0
-    },
-    "wrong_skill": {
-      "type": "boolean"
-    },
-    "abstained": {
-      "type": "boolean"
-    },
-    "privacy_status": {
-      "enum": [
-        "sanitized",
-        "redacted",
-        "no-sensitive-content"
-      ]
-    },
-    "raw_content_stored": {
-      "const": false
-    },
+    "first_pass_success": {"type": "boolean"},
+    "human_interventions": {"type": "integer", "minimum": 0},
+    "wrong_skill": {"type": "boolean"},
+    "abstained": {"type": "boolean"},
+    "privacy_status": {"enum": ["sanitized", "redacted", "no-sensitive-content"]},
+    "raw_content_stored": {"const": false},
     "blockers": {
       "type": "array",
       "maxItems": 64,
-      "items": {
-        "$ref": "#/$defs/identifier"
-      }
+      "items": {"$ref": "#/$defs/identifier"}
     },
-    "failure_pattern": {
-      "$ref": "#/$defs/identifier"
-    },
+    "failure_pattern": {"$ref": "#/$defs/identifier"},
     "next_goal_ref": {
       "oneOf": [
-        {
-          "$ref": "#/$defs/opaqueRef"
-        },
-        {
-          "type": "null"
-        }
+        {"$ref": "#/$defs/opaqueRef"},
+        {"type": "null"}
       ]
     }
   },
@@ -387,9 +220,6 @@
       "maxLength": 128,
       "pattern": "^[a-z0-9][a-z0-9._:/-]*$"
     },
-    "opaqueRef": {
-      "type": "string",
-      "pattern": "^ref:[0-9a-f]{64}$"
-    }
+    "opaqueRef": {"type": "string", "pattern": "^ref:[0-9a-f]{64}$"}
   }
 }
