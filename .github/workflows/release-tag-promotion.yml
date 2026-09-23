@@ -294,6 +294,32 @@ jobs:
                       f"GitHub release lookup failed for {tag}: HTTP {exc.code}: {body[:500]}"
                   ) from exc
 
+          def release_assets(release: object) -> list[dict[str, object]]:
+              if not isinstance(release, dict):
+                  raise RuntimeError("GitHub release response must be an object")
+              release_id = release.get("id")
+              if not isinstance(release_id, int) or isinstance(release_id, bool) or release_id <= 0:
+                  raise RuntimeError("GitHub release response is missing a valid numeric id")
+              req = urllib.request.Request(
+                  f"{api_root}/releases/{release_id}/assets?per_page=100",
+                  headers=headers,
+                  method="GET",
+              )
+              try:
+                  with urllib.request.urlopen(req, timeout=30) as response:
+                      value = json.loads(response.read().decode("utf-8"))
+              except urllib.error.HTTPError as exc:
+                  body = exc.read().decode("utf-8", errors="replace")
+                  raise RuntimeError(
+                      f"GitHub release asset lookup failed for release {release_id}: "
+                      f"HTTP {exc.code}: {body[:500]}"
+                  ) from exc
+              if not isinstance(value, list):
+                  raise RuntimeError(
+                      f"GitHub release asset lookup returned non-list for release {release_id}"
+                  )
+              return [asset for asset in value if isinstance(asset, dict)]
+
           repairs: list[dict[str, str]] = []
           audited: list[dict[str, object]] = []
           failures: list[str] = []
@@ -331,10 +357,10 @@ jobs:
                   f"agent-dev-kit-{version}.tar.gz.sha256",
                   "release-contract.json",
               }
+              assets = release_assets(release)
               actual_assets = {
                   str(asset.get("name"))
-                  for asset in release.get("assets", [])
-                  if isinstance(asset, dict)
+                  for asset in assets
               }
               if release.get("immutable") is not True:
                   failures.append(f"{tag}: GitHub Release is not immutable")
