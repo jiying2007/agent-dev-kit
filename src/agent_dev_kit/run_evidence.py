@@ -11,7 +11,8 @@ from typing import Any, Mapping, Optional, Tuple
 
 from jsonschema import Draft202012Validator, FormatChecker
 
-from .agent_value import emit_measurements, validate_receipt
+from .agent_value import emit_measurements
+from .agent_value_contracts import validate_receipt
 from .model import Manifest, ManifestError, canonical_json_bytes, sha256_bytes
 from .privacy_ref import opaque_ref_for_sha256, validate_no_secrets, validate_opaque_ref
 from .trace_summary import (
