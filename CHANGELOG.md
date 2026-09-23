@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## v7.0.28 (2026-09-23)
+
+### Evaluation CLI authority hard cut
+- Remove named campaign/effect/runtime/repository business imports from `evaluation_cli.py`; keep each bounded context as the sole Python authority for its operations.
+- Keep `devkit.sh eval ...` behavior unchanged by consuming those authorities through private module aliases.
+- Upgrade the existing Evaluation CLI architecture ratchet from a single effect-function import check to full private-module-boundary enforcement.
+- Add runtime negative assertions preventing Evaluation CLI from exposing business APIs.
+- Preserve evaluation schemas, runtime permissions, campaign/repository semantics and CLI output contracts; no compatibility alias is retained.
+
+
 ## v7.0.27 (2026-09-23)
 
 ### Release asset integrity audit hardening
