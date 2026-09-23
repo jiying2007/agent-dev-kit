@@ -11,8 +11,9 @@
   default Skill，或创建 Skill/Profile 身份清单。
 - `schemas/asset-invocation-receipt-v1.schema.json` 是 receipt 结构合同。
 - `schemas/asset-value-measurement-v1.schema.json` 是 measured/not-measured 聚合输出合同。
-- `src/agent_dev_kit/agent_value.py` 每次从当前 manifest 解析身份，执行跨文件语义检查，并提供显式输入驱动的
-  `emit_measurements` API；它不是 runtime collector 或持久化服务。
+- `src/agent_dev_kit/agent_value_contracts.py` 是 Agent Value contract/receipt loading 与语义验证的唯一 Python authority。
+- `src/agent_dev_kit/agent_value.py` 只负责编排 validated contract/receipt 到显式输入驱动的
+  `emit_measurements` 输出及 CLI；它不是 contract facade、runtime collector 或持久化服务。
 
 ## Agent 合同门禁
 
@@ -78,7 +79,8 @@ rtk bash -lc 'PYTHONPATH=src python3 -m agent_dev_kit.agent_value \
 runtime/field receipt 必须由受审查的 Python composition root 注入 verifier；不要通过 CLI 绕过：
 
 ```python
-from agent_dev_kit.agent_value import emit_measurements, load_contract
+from agent_dev_kit.agent_value import emit_measurements
+from agent_dev_kit.agent_value_contracts import load_contract
 from agent_dev_kit.model import Manifest
 
 manifest = Manifest.load(adk_root)
