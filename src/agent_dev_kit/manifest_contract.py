@@ -6,20 +6,7 @@ import re
 import sys
 from pathlib import Path
 
-from agent_dev_kit.domain.manifest import (
-    ManifestContract,
-    canonical_manifest,
-    load_canonical_manifest,
-    load_contract,
-)
-
-__all__ = [
-    "ManifestContract",
-    "canonical_manifest",
-    "load_canonical_manifest",
-    "load_contract",
-    "main",
-]
+from agent_dev_kit.domain import manifest as manifest_domain
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -28,7 +15,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--summary-json", action="store_true")
     args = parser.parse_args(argv)
     try:
-        contract = load_contract(Path(args.root))
+        contract = manifest_domain.load_contract(Path(args.root))
         contract.verify()
         if not re.fullmatch(r"[0-9a-f]{64}", contract.sha256):
             raise ValueError("manifest.json SHA256 identity is invalid")
