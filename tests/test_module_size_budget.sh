@@ -237,14 +237,40 @@ else:
             ]
             if reverse_imports:
                 failures.append("effect_evaluation must not depend on runtime evaluation")
-            cli_effect_import = any(
-                isinstance(node, ast.ImportFrom)
-                and node.module == "effect_evaluation"
-                and any(alias.name == "run_effect_eval" for alias in node.names)
+            expected_cli_modules = {
+                "campaign": "campaign_domain",
+                "effect_evaluation": "effect_domain",
+                "evaluation": "evaluation_domain",
+                "evaluation_runtime": "runtime_domain",
+                "repository_evaluation": "repository_domain",
+                "repository_evaluation_contract": "repository_contract_domain",
+            }
+            cli_module_boundaries = {
+                alias.name: alias.asname
                 for node in evaluation_cli_tree.body
-            )
-            if not cli_effect_import:
-                failures.append("evaluation CLI must consume effect_evaluation authority directly")
+                if isinstance(node, ast.ImportFrom)
+                and node.level == 1
+                and node.module is None
+                for alias in node.names
+                if alias.name in expected_cli_modules
+            }
+            if cli_module_boundaries != expected_cli_modules:
+                failures.append(
+                    "evaluation CLI must consume evaluation authorities through private module boundaries"
+                )
+            named_cli_authority_imports = [
+                f"{node.module}:{alias.name}"
+                for node in evaluation_cli_tree.body
+                if isinstance(node, ast.ImportFrom)
+                and node.level == 1
+                and node.module in expected_cli_modules
+                for alias in node.names
+            ]
+            if named_cli_authority_imports:
+                failures.append(
+                    "evaluation CLI must not re-export evaluation authority: "
+                    + ", ".join(sorted(named_cli_authority_imports))
+                )
 
     retired_evaluation_runtime_exports = {
         node.name
