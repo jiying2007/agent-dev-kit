@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## v7.0.23 (2026-09-23)
+
+### Agent Value contract authority hard cut
+- Remove the legacy `agent_value.py` re-export facade for contract schema identities, contract loading, contract validation and receipt validation.
+- Keep `agent_value.py` focused on measurement emission and CLI orchestration while consuming `agent_value_contracts.py` through a private module boundary.
+- Migrate effect comparison, run-evidence composition and focused tests to import contract operations directly from `agent_value_contracts`.
+- Replace the legacy-export stability test with a negative ratchet and add an architecture scan that forbids contract-authority imports from `agent_value`.
+- Preserve Agent Value schemas, receipt semantics, evidence verification and measurement behavior; no compatibility alias is retained.
+
+
 ## v7.0.22 (2026-09-23)
 
 ### Trace-summary v2 hard cut
