@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## v7.0.22 (2026-09-23)
+
+### Trace-summary v2 hard cut
+- Remove `adk-workflow-trace-summary-v1` as an active trace-summary contract and migrate macro-eval, stored-session and regression-case governance onto the canonical v2 contract.
+- Remove the retired `goal` / `next_goal` compatibility sentinels from the v2 schema, packaged schema and typed emitter; retain only `goal_ref` / `next_goal_ref`.
+- Bind Claude Code and OpenCode target contracts plus the disabled OTel GenAI mapping adapter to `adk-workflow-trace-summary-v2`.
+- Replace legacy official-governance requirements with v2-native field checks and add negative ratchets preventing the v1 contract or sentinel fields from returning.
+- Preserve privacy defaults, disabled hosted export, runtime enablement boundaries, pinned OTel upstream revision and the explicit per-run emitter semantics.
+
+
 ## v7.0.21 (2026-09-22)
 
 ### Effect evaluation bounded context
