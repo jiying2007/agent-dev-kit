@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+## v7.0.27 (2026-09-23)
+
+### Release asset integrity audit hardening
+- Fix immutable-release continuity audit to read release assets from the dedicated `/releases/{id}/assets` endpoint instead of the embedded `release.assets` field.
+- Preserve exact asset-set, immutable release, annotated tag, tag-to-source-version and self-heal checks without weakening release integrity policy.
+- Add hosted-workflow hygiene ratchets that require the dedicated asset endpoint and forbid relying on the embedded assets field.
+- This addresses the observed v7.0.26 case where publication verified all three assets and the dedicated assets endpoint returned them, while the release-by-tag response exposed an empty embedded assets array.
+
+
 ## v7.0.26 (2026-09-23)
 
 ### Agent Platform CLI authority hard cut
