@@ -28,7 +28,7 @@ for item in value["targets"].values():
     adapter = item["adapter"]
     assert adapter["conformance"]["native_runtime_smoke"] == "not-run", adapter
     assert adapter["conformance"]["certification"] == "not-certified", adapter
-    assert adapter["trace_contract"] == "adk-workflow-trace-summary-v1", adapter
+    assert adapter["trace_contract"] == "adk-workflow-trace-summary-v2", adapter
 PY
 
 python3 - "$ROOT_DIR" <<'PY'
