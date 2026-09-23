@@ -241,6 +241,77 @@ else:
             if not cli_effect_import:
                 failures.append("evaluation CLI must consume effect_evaluation authority directly")
 
+    retired_evaluation_runtime_exports = {
+        "RUNTIME_THRESHOLDS",
+        "_claude_usage",
+        "_codex_reported_models",
+        "_codex_usage",
+        "_collect_reported_models",
+        "_extract_json_text",
+        "_latency_summary",
+        "_validated_runtime_metrics",
+        "compare_runtime_reports",
+        "load_tasks",
+        "run_deterministic",
+        "runtime_version",
+    }
+    evaluation_named_runtime_imports = [
+        alias.name
+        for node in runtime_eval_tree.body
+        if isinstance(node, ast.ImportFrom)
+        and node.level == 1
+        and node.module == "evaluation_runtime"
+        for alias in node.names
+        if alias.name in retired_evaluation_runtime_exports
+    ]
+    if evaluation_named_runtime_imports:
+        failures.append(
+            "evaluation must not re-export evaluation_runtime authority: "
+            + ", ".join(sorted(evaluation_named_runtime_imports))
+        )
+    evaluation_module_boundary = any(
+        isinstance(node, ast.ImportFrom)
+        and node.level == 1
+        and node.module is None
+        and any(
+            alias.name == "evaluation_runtime" and alias.asname == "runtime_eval"
+            for alias in node.names
+        )
+        for node in runtime_eval_tree.body
+    )
+    if not evaluation_module_boundary:
+        failures.append("evaluation must consume evaluation_runtime through private module boundary")
+
+    evaluation_runtime_import_leaks = []
+    for python_path in sorted(source_root.rglob("*.py")):
+        try:
+            module_tree = ast.parse(
+                python_path.read_text(encoding="utf-8"),
+                filename=str(python_path),
+            )
+        except (OSError, SyntaxError, UnicodeError) as exc:
+            failures.append(f"cannot parse evaluation consumer {python_path}: {exc}")
+            continue
+        for node in ast.walk(module_tree):
+            if not isinstance(node, ast.ImportFrom):
+                continue
+            if node.module not in {"evaluation", "agent_dev_kit.evaluation"}:
+                continue
+            leaked = sorted(
+                alias.name
+                for alias in node.names
+                if alias.name in retired_evaluation_runtime_exports
+            )
+            if leaked:
+                evaluation_runtime_import_leaks.append(
+                    f"{python_path.relative_to(root).as_posix()}:{','.join(leaked)}"
+                )
+    if evaluation_runtime_import_leaks:
+        failures.append(
+            "evaluation consumers must import runtime authority directly: "
+            + "; ".join(evaluation_runtime_import_leaks)
+        )
+
     retired_agent_value_exports = {
         "CONTRACT_SCHEMA_VERSION",
         "RECEIPT_SCHEMA_VERSION",
