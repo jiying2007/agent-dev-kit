@@ -42,9 +42,11 @@ from agent_dev_kit.campaign import (
 )
 from agent_dev_kit.evaluation_cli import DEFAULT_CAMPAIGN_CONTRACT
 from agent_dev_kit.doctor import run_doctor
-from agent_dev_kit import campaign, evaluation, evaluation_runtime, installer
+from agent_dev_kit import campaign, evaluation, evaluation_runtime, installation_transaction
 from agent_dev_kit.evaluation_runtime import _claude_usage, run_deterministic
-from agent_dev_kit.installer import RECEIPT_NAME, apply_plan, create_plan, rollback, write_plan
+from agent_dev_kit.installation_contract import RECEIPT_NAME
+from agent_dev_kit.installation_plan import create_plan, write_plan
+from agent_dev_kit.installation_transaction import apply_plan, rollback
 from agent_dev_kit.locking import TargetLock, clear_target_lock, target_lock_status
 from agent_dev_kit.matcher import match_text
 from agent_dev_kit.model import Manifest, ManifestError
@@ -453,7 +455,7 @@ apply_failure_plan = create_plan(
     "copy",
 )
 write_plan(apply_failure_plan, apply_failure_path)
-real_installer_replace = installer.os.replace
+real_installer_replace = installation_transaction.os.replace
 deployment_calls = {"count": 0}
 
 def fail_second_deployment(source, destination):
@@ -464,7 +466,7 @@ def fail_second_deployment(source, destination):
             raise OSError("injected install deployment failure")
     return real_installer_replace(source, destination)
 
-with mock.patch.object(installer.os, "replace", side_effect=fail_second_deployment):
+with mock.patch.object(installation_transaction.os, "replace", side_effect=fail_second_deployment):
     try:
         apply_plan(manifest, apply_failure_path)
     except OSError as exc:
