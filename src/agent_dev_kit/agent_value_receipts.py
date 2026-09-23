@@ -7,7 +7,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Callable, Dict, Mapping, Optional
 
-from .agent_value_contracts import _manifest_identity_index, _validate_schema, validate_contract
+from . import agent_value_contracts as value_contracts
 from .model import Manifest, ManifestError, canonical_json_bytes, sha256_bytes
 from .privacy_ref import (
     opaque_ref_for_sha256,
@@ -30,7 +30,7 @@ def validate_receipt(
     evidence_verifier: Optional[EvidenceVerifier] = None,
     as_of: Optional[datetime] = None,
 ) -> Dict[str, Any]:
-    validate_contract(contract, manifest)
+    value_contracts.validate_contract(contract, manifest)
     validate_no_secrets(receipt, "invocation receipt")
     receipt_contract = contract.get("receipt_contract")
     if not isinstance(receipt_contract, dict):
@@ -38,7 +38,7 @@ def validate_receipt(
     if receipt_contract.get("evidence_ref_format") != "ref:<sha256>":
         raise ManifestError("agent value contract must require opaque evidence refs")
     schema_path = schema_path or manifest.root / str(receipt_contract.get("schema_path", ""))
-    _validate_schema(receipt, schema_path, "asset invocation receipt")
+    value_contracts._validate_schema(receipt, schema_path, "asset invocation receipt")
     if receipt.get("schema_version") != RECEIPT_SCHEMA_VERSION:
         raise ManifestError("unsupported asset invocation receipt schema")
     if receipt.get("measurement_status") != "measured":
@@ -139,7 +139,7 @@ def validate_receipt(
             raise ManifestError("runtime/field evidence verifier did not attest the receipt")
         authority_production = authority.get("production") is True
 
-    identities = _manifest_identity_index(manifest)
+    identities = value_contracts._manifest_identity_index(manifest)
     asset_kind = receipt.get("asset_kind")
     asset_id = receipt.get("asset_id")
     if asset_kind not in identities or asset_id not in identities[str(asset_kind)]:
