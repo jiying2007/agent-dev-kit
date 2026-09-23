@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## v7.0.30 (2026-09-23)
+
+### Agent Platform target-conformance bounded context
+- Extract caller-supplied target-conformance planning, stage execution and smoke evaluation from `agent_platform.py` into `agent_platform_conformance.py`.
+- Keep `agent_platform.py` focused on platform policy, profile/evidence validation, usage/ACI and hook lifecycle primitives.
+- Route the platform CLI directly to the conformance authority for target-conformance operations without a compatibility re-export facade.
+- Add focused and architecture ratchets enforcing ownership and one-way dependency direction between policy and conformance execution.
+- Preserve command-map validation, subprocess timeout behavior, evidence hashes, certification semantics and CLI output schemas.
+
+
 ## v7.0.29 (2026-09-23)
 
 ### Installation bounded-context hard cut
