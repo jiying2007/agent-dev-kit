@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## v7.0.24 (2026-09-23)
+
+### Evaluation runtime authority hard cut
+- Remove the legacy `evaluation.py` re-export surface for task loading, deterministic evaluation, runtime version/metrics parsing and report comparison owned by `evaluation_runtime.py`.
+- Keep `evaluation.py` focused on opt-in Codex/Claude runtime orchestration, runtime planning and report rendering while consuming runtime helpers through a private module boundary.
+- Migrate Evaluation CLI, doctor and campaign-model consumers directly to `evaluation_runtime`; keep campaign execution on `evaluation.run_runtime/runtime_plan`.
+- Update Software M5 regression coverage and add architecture ratchets that reject named runtime-helper re-exports or consumers importing them through `evaluation`.
+- Preserve task schemas, deterministic metrics, runtime permissions, budgets, timeouts and execution semantics; no compatibility alias is retained.
+
+
 ## v7.0.23 (2026-09-23)
 
 ### Agent Value contract authority hard cut
