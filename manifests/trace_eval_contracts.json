@@ -1,6 +1,6 @@
 {
-  "schema_version": "1.2.0",
-  "last_updated": "2026-09-21",
+  "schema_version": "1.3.0",
+  "last_updated": "2026-09-23",
   "source_docs": [
     "openai-agents-tracing",
     "openai-agent-evals",
@@ -22,40 +22,121 @@
   "reference_boundary": "OpenAI/Codex source docs are citation metadata and governance references only. This manifest promotes platform-neutral ADK trace and eval evidence contracts and must not enable hosted tracing, stored completions, external runtimes, user-directory writes, or compatibility defaults.",
   "contracts": [
     {
-      "id": "adk-workflow-trace-summary-v1",
+      "id": "adk-workflow-trace-summary-v2",
       "owner": "agent-dev-kit",
-      "applies_to": [
-        "adk-planning-execution-loop",
-        "adk-systematic-debugging",
-        "adk-verification-before-completion",
-        "adk-parallel-agent-governance"
-      ],
+      "status": "strict-contract-emitter-available",
+      "schema_ref": "schemas/adk-workflow-trace-summary-v2.schema.json",
+      "validator": "agent_dev_kit.trace_summary.validate_trace_summary",
+      "emitter_status": "available",
+      "emitter": {
+        "api": "agent_dev_kit.trace_summary.emit_trace_summary_v2",
+        "input_type": "agent_dev_kit.trace_summary.TraceRunFacts",
+        "mode": "explicit-per-run-library-call",
+        "automatic_runtime_integration": false,
+        "persistence": "caller-controlled",
+        "runtime_probing": false,
+        "default_token_usage_status": "not-available",
+        "default_cost_status": "not-available",
+        "default_outcome_status": "not-available"
+      },
       "required_fields": [
+        "schema_version",
         "run_id",
         "task_id",
-        "goal",
-        "primary_skill",
-        "phase",
+        "asset_bundle_sha256",
+        "runtime_target",
+        "runtime_version",
         "model_version",
+        "goal_ref",
+        "primary_skill",
         "prompt_version",
         "orchestration_mode",
-        "model_calls",
         "tool_calls",
         "tools_used",
         "handoffs",
         "guardrails",
         "verification",
+        "token_usage",
+        "cost",
+        "elapsed_ms",
+        "outcome",
+        "first_pass_success",
+        "human_interventions",
+        "wrong_skill",
+        "abstained",
+        "privacy_status",
+        "raw_content_stored",
         "blockers",
         "failure_pattern",
-        "next_goal"
+        "next_goal_ref"
+      ],
+      "cross_field_invariants": [
+        "available token_usage requires cached_input <= input; unavailable token_usage requires a reason",
+        "tool_calls equals the sum of tools_used call_count values",
+        "available outcome.status determines the allowed outcome.category; unavailable outcome requires a reason",
+        "succeeded outcomes contain no failed verification, failed guardrail, blocker or failure pattern",
+        "abstained is true if and only if outcome.status is abstained",
+        "abstained and wrong_skill cannot both be true",
+        "first_pass_success requires outcome.status=succeeded, human_interventions=0, wrong_skill=false and abstained=false"
+      ],
+      "cost_policy": {
+        "available": "non-negative amount and three-letter uppercase currency are required",
+        "unavailable": "status=not-available and a non-empty reason are required",
+        "must_not": "invent a zero amount when runtime pricing evidence is unavailable"
+      },
+      "token_usage_policy": {
+        "available": "non-negative input, cached_input and output are required",
+        "unavailable": "status=not-available and a non-empty reason are required",
+        "must_not": "invent zero token usage when runtime token evidence is unavailable"
+      },
+      "outcome_policy": {
+        "available": "a closed status/category pair is required",
+        "unavailable": "status=not-available and a non-empty reason are required",
+        "must_not": "infer success, failure, blocked, cancelled or abstained without caller-observed evidence"
+      },
+      "privacy_policy": {
+        "raw_content_stored": false,
+        "allowed_statuses": [
+          "sanitized",
+          "redacted",
+          "no-sensitive-content"
+        ],
+        "forbidden_content": [
+          "raw prompt",
+          "input or output messages",
+          "system instructions",
+          "tool payload",
+          "tool arguments",
+          "tool results"
+        ],
+        "unknown_field_policy": "reject",
+        "evidence_ref_format": "ref:<sha256>"
+      },
+      "applies_to": [
+        "adk-planning-execution-loop",
+        "adk-systematic-debugging",
+        "adk-verification-before-completion",
+        "adk-parallel-agent-governance",
+        "direct target trace evidence contracts",
+        "sanitized local evaluation evidence"
       ],
       "evidence_policy": {
         "store_raw_trace": false,
         "store_sanitized_summary": true,
         "pii_redaction": "required",
-        "raw_fallback": "link to local evidence path or platform trace id only when allowed"
+        "unknown_field_policy": "reject"
       },
-      "eval_use": "Feed high-signal pass/fail examples into routing, governance, completion and macro-eval regression suites.",
+      "eval_use": "Associate privacy-bounded caller-observed runtime facts with asset bundles without claiming automatic runtime or native target integration.",
+      "per_run_emission_claimed": true,
+      "per_run_emission_scope": "Each explicit emit_trace_summary_v2 call accepts one TraceRunFacts run_id and returns exactly one validated summary.",
+      "emitter_reason": "A platform-neutral explicit-call emitter is available; runtime adapters must opt in separately.",
+      "runtime_integration_gate": "A target may reference this evidence contract without claiming automatic emission; native per-run emission still requires runtime conformance evidence for the emitter call and retention boundary.",
+      "must_not": [
+        "claim automatic or native runtime trace emission from the explicit-call library API alone",
+        "store raw prompts, messages, tool arguments, tool results or tool payloads",
+        "infer unavailable cost, token, latency or runtime evidence",
+        "treat schema-valid local evidence as native runtime conformance"
+      ],
       "macro_eval_policy": {
         "group_by": [
           "model_version",
@@ -118,132 +199,6 @@
           "enable unattended stored-session monitoring without retention and owner approval"
         ]
       }
-    },
-    {
-      "id": "adk-workflow-trace-summary-v2",
-      "owner": "agent-dev-kit",
-      "status": "strict-contract-emitter-available",
-      "extends": "adk-workflow-trace-summary-v1",
-      "schema_ref": "schemas/adk-workflow-trace-summary-v2.schema.json",
-      "validator": "agent_dev_kit.trace_summary.validate_trace_summary",
-      "emitter_status": "available",
-      "emitter": {
-        "api": "agent_dev_kit.trace_summary.emit_trace_summary_v2",
-        "input_type": "agent_dev_kit.trace_summary.TraceRunFacts",
-        "mode": "explicit-per-run-library-call",
-        "automatic_runtime_integration": false,
-        "persistence": "caller-controlled",
-        "runtime_probing": false,
-        "default_token_usage_status": "not-available",
-        "default_cost_status": "not-available",
-        "default_outcome_status": "not-available"
-      },
-      "required_fields": [
-        "schema_version",
-        "run_id",
-        "task_id",
-        "asset_bundle_sha256",
-        "runtime_target",
-        "runtime_version",
-        "model_version",
-        "goal",
-        "goal_ref",
-        "primary_skill",
-        "prompt_version",
-        "orchestration_mode",
-        "tool_calls",
-        "tools_used",
-        "handoffs",
-        "guardrails",
-        "verification",
-        "token_usage",
-        "cost",
-        "elapsed_ms",
-        "outcome",
-        "first_pass_success",
-        "human_interventions",
-        "wrong_skill",
-        "abstained",
-        "privacy_status",
-        "raw_content_stored",
-        "blockers",
-        "failure_pattern",
-        "next_goal",
-        "next_goal_ref"
-      ],
-      "cross_field_invariants": [
-        "available token_usage requires cached_input <= input; unavailable token_usage requires a reason",
-        "tool_calls equals the sum of tools_used call_count values",
-        "available outcome.status determines the allowed outcome.category; unavailable outcome requires a reason",
-        "succeeded outcomes contain no failed verification, failed guardrail, blocker or failure pattern",
-        "abstained is true if and only if outcome.status is abstained",
-        "abstained and wrong_skill cannot both be true",
-        "first_pass_success requires outcome.status=succeeded, human_interventions=0, wrong_skill=false and abstained=false"
-      ],
-      "deprecated_compatibility_fields": {
-        "goal": "fixed to not-applicable; use goal_ref for an identifier only",
-        "next_goal": "fixed to null; use next_goal_ref for an identifier or null",
-        "reason": "The existing official trace governance gate requires the legacy field names on every trace contract."
-      },
-      "cost_policy": {
-        "available": "non-negative amount and three-letter uppercase currency are required",
-        "unavailable": "status=not-available and a non-empty reason are required",
-        "must_not": "invent a zero amount when runtime pricing evidence is unavailable"
-      },
-      "token_usage_policy": {
-        "available": "non-negative input, cached_input and output are required",
-        "unavailable": "status=not-available and a non-empty reason are required",
-        "must_not": "invent zero token usage when runtime token evidence is unavailable"
-      },
-      "outcome_policy": {
-        "available": "a closed status/category pair is required",
-        "unavailable": "status=not-available and a non-empty reason are required",
-        "must_not": "infer success, failure, blocked, cancelled or abstained without caller-observed evidence"
-      },
-      "privacy_policy": {
-        "raw_content_stored": false,
-        "allowed_statuses": [
-          "sanitized",
-          "redacted",
-          "no-sensitive-content"
-        ],
-        "forbidden_content": [
-          "raw prompt",
-          "input or output messages",
-          "system instructions",
-          "tool payload",
-          "tool arguments",
-          "tool results"
-        ],
-        "unknown_field_policy": "reject",
-        "evidence_ref_format": "ref:<sha256>"
-      },
-      "applies_to": [
-        "workflow runtime adapters after explicit v2 opt-in",
-        "sanitized local evaluation evidence"
-      ],
-      "evidence_policy": {
-        "store_raw_trace": false,
-        "store_sanitized_summary": true,
-        "pii_redaction": "required",
-        "unknown_field_policy": "reject"
-      },
-      "eval_use": "Associate privacy-bounded caller-observed runtime facts with asset bundles without claiming automatic runtime or native target integration.",
-      "per_run_emission_claimed": true,
-      "per_run_emission_scope": "Each explicit emit_trace_summary_v2 call accepts one TraceRunFacts run_id and returns exactly one validated summary.",
-      "emitter_reason": "A platform-neutral explicit-call emitter is available; runtime adapters must opt in separately.",
-      "runtime_integration_gate": "A target may claim automatic per-run emission only after native conformance verifies the emitter call and summary retention boundary.",
-      "compatibility": {
-        "v1_preserved": true,
-        "current_targets_remain_on": "adk-workflow-trace-summary-v1",
-        "migration_boundary": "Consumers opt in to v2 only after their emitter and conformance tests are available."
-      },
-      "must_not": [
-        "claim automatic or native runtime trace emission from the explicit-call library API alone",
-        "store raw prompts, messages, tool arguments, tool results or tool payloads",
-        "infer unavailable cost, token, latency or runtime evidence",
-        "treat schema-valid local evidence as native runtime conformance"
-      ]
     },
     {
       "id": "replayable-run-evidence-bundle-v1",
@@ -311,14 +266,14 @@
   ],
   "interoperability_adapters": [
     {
-      "id": "otel-genai-trace-summary-v1",
+      "id": "otel-genai-trace-summary-v2",
       "owner": "agent-dev-kit",
       "source_refs": [
         "otel-genai-semconv"
       ],
       "enabled_default": false,
       "stability": "experimental-upstream-revision-pinned",
-      "input_contract": "adk-workflow-trace-summary-v1",
+      "input_contract": "adk-workflow-trace-summary-v2",
       "field_mappings": {
         "primary_skill": "gen_ai.agent.name",
         "task_id": "gen_ai.conversation.id",
@@ -332,15 +287,29 @@
         "tool": "execute_tool"
       },
       "native_only_fields": [
-        "goal",
+        "run_id",
+        "asset_bundle_sha256",
+        "runtime_target",
+        "runtime_version",
+        "goal_ref",
         "prompt_version",
-        "phase",
         "orchestration_mode",
+        "handoffs",
         "guardrails",
         "verification",
+        "token_usage",
+        "cost",
+        "elapsed_ms",
+        "outcome",
+        "first_pass_success",
+        "human_interventions",
+        "wrong_skill",
+        "abstained",
+        "privacy_status",
+        "raw_content_stored",
         "blockers",
         "failure_pattern",
-        "next_goal"
+        "next_goal_ref"
       ],
       "content_capture": {
         "enabled_default": false,

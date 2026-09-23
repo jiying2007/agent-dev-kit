@@ -545,7 +545,6 @@ if not trace_contracts:
 required_trace_fields = {
     "run_id",
     "task_id",
-    "goal",
     "primary_skill",
     "model_version",
     "prompt_version",
@@ -557,8 +556,29 @@ required_trace_fields = {
     "verification",
     "blockers",
     "failure_pattern",
-    "next_goal",
 }
+trace_contract_ids = {contract.get("id") for contract in trace_contracts}
+if "adk-workflow-trace-summary-v1" in trace_contract_ids:
+    fail("retired adk-workflow-trace-summary-v1 contract must not return")
+canonical_trace_id = trace.get("canonical_trace_summary_contract", {}).get("id")
+if canonical_trace_id != "adk-workflow-trace-summary-v2":
+    fail("canonical trace summary contract must remain v2")
+canonical_trace = next(
+    (contract for contract in trace_contracts if contract.get("id") == canonical_trace_id),
+    None,
+)
+if not canonical_trace:
+    fail("canonical v2 trace summary contract is missing")
+else:
+    canonical_fields = set(canonical_trace.get("required_fields", []))
+    for field in ("asset_bundle_sha256", "runtime_target", "runtime_version", "goal_ref", "next_goal_ref"):
+        if field not in canonical_fields:
+            fail(f"canonical v2 trace contract missing field: {field}")
+    for retired_field in ("goal", "next_goal"):
+        if retired_field in canonical_fields:
+            fail(f"canonical v2 trace contract contains retired field: {retired_field}")
+    if "deprecated_compatibility_fields" in canonical_trace or "compatibility" in canonical_trace:
+        fail("canonical v2 trace contract must not carry v1 compatibility metadata")
 for contract in trace_contracts:
     fields = set(contract.get("required_fields", []))
     missing = sorted(required_trace_fields - fields)

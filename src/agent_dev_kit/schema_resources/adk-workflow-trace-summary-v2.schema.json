@@ -13,7 +13,6 @@
     "runtime_target",
     "runtime_version",
     "model_version",
-    "goal",
     "goal_ref",
     "primary_skill",
     "prompt_version",
@@ -35,7 +34,6 @@
     "raw_content_stored",
     "blockers",
     "failure_pattern",
-    "next_goal",
     "next_goal_ref"
   ],
   "properties": {
@@ -49,7 +47,6 @@
     "runtime_target": {"$ref": "#/$defs/identifier"},
     "runtime_version": {"$ref": "#/$defs/identifier"},
     "model_version": {"$ref": "#/$defs/identifier"},
-    "goal": {"const": "not-applicable"},
     "goal_ref": {"$ref": "#/$defs/opaqueRef"},
     "primary_skill": {"$ref": "#/$defs/identifier"},
     "prompt_version": {"$ref": "#/$defs/identifier"},
@@ -209,7 +206,6 @@
       "items": {"$ref": "#/$defs/identifier"}
     },
     "failure_pattern": {"$ref": "#/$defs/identifier"},
-    "next_goal": {"type": "null"},
     "next_goal_ref": {
       "oneOf": [
         {"$ref": "#/$defs/opaqueRef"},

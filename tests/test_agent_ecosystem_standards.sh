@@ -145,6 +145,12 @@ assert target_watch["direct_target_added"] is False
 
 trace = json.loads((root / "manifests/trace_eval_contracts.json").read_text(encoding="utf-8"))
 adapter = trace["interoperability_adapters"][0]
+assert adapter["id"] == "otel-genai-trace-summary-v2"
+assert adapter["input_contract"] == "adk-workflow-trace-summary-v2"
+assert "goal_ref" in adapter["native_only_fields"]
+assert "next_goal_ref" in adapter["native_only_fields"]
+assert "goal" not in adapter["native_only_fields"]
+assert "next_goal" not in adapter["native_only_fields"]
 assert adapter["upstream_repository"] == "https://github.com/open-telemetry/semantic-conventions-genai"
 assert adapter["upstream_revision"] == "cc07f722069974139dab497d80d145144b19daca"
 assert adapter["schema_url_status"] == "unavailable-upstream-todo"

@@ -38,7 +38,6 @@ def summary() -> dict:
         "runtime_target": "local-agent-runtime",
         "runtime_version": "2026.08.30",
         "model_version": "gpt-5",
-        "goal": "not-applicable",
         "goal_ref": "ref:" + "1" * 64,
         "primary_skill": "adk-verification-before-completion",
         "prompt_version": "trace-contract-test-v1",
@@ -64,7 +63,6 @@ def summary() -> dict:
         "raw_content_stored": False,
         "blockers": [],
         "failure_pattern": "none",
-        "next_goal": None,
         "next_goal_ref": None,
     }
 
@@ -128,9 +126,13 @@ class TraceSummaryTest(unittest.TestCase):
         )
         self.assertEqual("ref:<sha256>", strict["privacy_policy"]["evidence_ref_format"])
         self.assertEqual(set(self.schema["required"]), set(strict["required_fields"]))
-        legacy = next(item for item in contract["contracts"] if item["id"] == "adk-workflow-trace-summary-v1")
-        self.assertNotIn("asset_bundle_sha256", legacy["required_fields"])
-        self.assertNotIn("estimated_cost", legacy["required_fields"])
+        contract_ids = {item["id"] for item in contract["contracts"]}
+        self.assertNotIn("adk-workflow-trace-summary-v1", contract_ids)
+        self.assertNotIn("extends", strict)
+        self.assertNotIn("deprecated_compatibility_fields", strict)
+        self.assertNotIn("compatibility", strict)
+        self.assertNotIn("goal", strict["required_fields"])
+        self.assertNotIn("next_goal", strict["required_fields"])
 
     def test_typed_emitter_preserves_observed_available_facts(self) -> None:
         emitted = emit_trace_summary_v2(run_facts())
@@ -245,6 +247,14 @@ class TraceSummaryTest(unittest.TestCase):
             with self.subTest(value=value):
                 with self.assertRaises(ManifestError):
                     validate_trace_summary(value, self.schema)
+
+    def test_retired_v1_sentinel_fields_fail_closed(self) -> None:
+        for field, value in (("goal", "not-applicable"), ("next_goal", None)):
+            candidate = summary()
+            candidate[field] = value
+            with self.subTest(field=field):
+                with self.assertRaises(ManifestError):
+                    validate_trace_summary(candidate, self.schema)
 
     def test_cost_shape_types_and_unknown_fields_fail_closed(self) -> None:
         cases = []

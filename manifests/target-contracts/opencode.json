@@ -74,6 +74,6 @@
       "native runtime failures preserve the static bundle and target-owned diagnostics",
       "ADK receipt rollback does not claim runtime session rollback"
     ],
-    "trace_contract": "adk-workflow-trace-summary-v1"
+    "trace_contract": "adk-workflow-trace-summary-v2"
   }
 }
