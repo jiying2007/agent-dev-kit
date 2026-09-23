@@ -488,11 +488,16 @@ else:
                 )
 
     agent_platform_authority = source_root / "agent_platform.py"
+    agent_platform_conformance = source_root / "agent_platform_conformance.py"
     agent_platform_cli = source_root / "agent_platform_cli.py"
     try:
         platform_authority_tree = ast.parse(
             agent_platform_authority.read_text(encoding="utf-8"),
             filename=str(agent_platform_authority),
+        )
+        platform_conformance_tree = ast.parse(
+            agent_platform_conformance.read_text(encoding="utf-8"),
+            filename=str(agent_platform_conformance),
         )
         platform_cli_tree = ast.parse(
             agent_platform_cli.read_text(encoding="utf-8"),
@@ -506,14 +511,43 @@ else:
             for node in platform_authority_tree.body
             if isinstance(node, ast.FunctionDef)
         }
+        platform_conformance_defs = {
+            node.name
+            for node in platform_conformance_tree.body
+            if isinstance(node, ast.FunctionDef)
+        }
+        conformance_owned = {"target_conformance_plan", "_run_stage", "run_target_conformance"}
+        leaked_conformance = sorted(conformance_owned & platform_authority_defs)
+        if leaked_conformance:
+            failures.append(
+                "agent_platform must not own target conformance execution: "
+                + ", ".join(leaked_conformance)
+            )
+        missing_conformance = sorted(conformance_owned - platform_conformance_defs)
+        if missing_conformance:
+            failures.append(
+                "agent_platform_conformance bounded context is incomplete: "
+                + ", ".join(missing_conformance)
+            )
+        reverse_imports = [
+            node
+            for node in ast.walk(platform_authority_tree)
+            if isinstance(node, ast.ImportFrom)
+            and node.level == 1
+            and node.module == "agent_platform_conformance"
+        ]
+        if reverse_imports:
+            failures.append(
+                "agent_platform policy authority must not depend on conformance execution"
+            )
         named_platform_imports = [
             alias.name
             for node in platform_cli_tree.body
             if isinstance(node, ast.ImportFrom)
             and node.level == 1
-            and node.module == "agent_platform"
+            and node.module in {"agent_platform", "agent_platform_conformance"}
             for alias in node.names
-            if alias.name in platform_authority_defs
+            if alias.name in (platform_authority_defs | platform_conformance_defs)
         ]
         if named_platform_imports:
             failures.append(
@@ -530,9 +564,20 @@ else:
             )
             for node in platform_cli_tree.body
         )
-        if not platform_module_boundary:
+        conformance_module_boundary = any(
+            isinstance(node, ast.ImportFrom)
+            and node.level == 1
+            and node.module is None
+            and any(
+                alias.name == "agent_platform_conformance"
+                and alias.asname == "conformance_domain"
+                for alias in node.names
+            )
+            for node in platform_cli_tree.body
+        )
+        if not platform_module_boundary or not conformance_module_boundary:
             failures.append(
-                "agent_platform_cli must consume agent_platform through private module boundary"
+                "agent_platform_cli must consume platform authorities through private module boundaries"
             )
 
     retired_manifest_cli_exports = {
