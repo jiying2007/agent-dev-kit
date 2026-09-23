@@ -33,13 +33,9 @@ from .distribution.release_artifacts import (
     _write_deterministic_archive,
     _write_runtime_checksums,
 )
-from .installer import (
-    RECEIPT_NAME,
-    apply_plan,
-    create_plan,
-    rollback,
-    write_plan,
-)
+from .installation_contract import RECEIPT_NAME
+from .installation_plan import create_plan, write_plan
+from .installation_transaction import apply_plan, rollback
 from .model import Manifest, ManifestError, sha256_file, sha256_tree
 
 
