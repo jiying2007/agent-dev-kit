@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## v7.0.28 (2026-09-23)
+
+### Delivery CLI bounded context
+- Move `export`, `target`, `install`, `lock` and `release` command handlers out of the public `cli.py` router into a dedicated `delivery_cli.py` bounded context.
+- Reduce public CLI coupling by removing direct dependencies on compiler, installer, locking, release and target implementation modules.
+- Preserve all command arguments, output schemas, return codes and target-usage semantics through a single delivery delegation path.
+- Add architecture ratchets requiring delivery handlers to stay out of the public router and preventing delivery implementation imports from leaking back into `cli.py`.
+- Preserve delivery/runtime behavior; this is a structural dependency-direction change with no compatibility shim.
+
+
 ## v7.0.27 (2026-09-23)
 
 ### Release asset integrity audit hardening
