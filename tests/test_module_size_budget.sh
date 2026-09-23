@@ -374,6 +374,30 @@ else:
         if not delegates_delivery:
             failures.append("public CLI must delegate through delivery_cli.main")
 
+    installer_import_leaks = []
+    for python_path in sorted(source_root.rglob("*.py")):
+        try:
+            module_tree = ast.parse(
+                python_path.read_text(encoding="utf-8"),
+                filename=str(python_path),
+            )
+        except (OSError, SyntaxError, UnicodeError) as exc:
+            failures.append(f"cannot parse installer consumer {python_path}: {exc}")
+            continue
+        for node in ast.walk(module_tree):
+            if isinstance(node, ast.ImportFrom) and node.module in {
+                "installer",
+                "agent_dev_kit.installer",
+            }:
+                installer_import_leaks.append(
+                    python_path.relative_to(root).as_posix()
+                )
+    if installer_import_leaks:
+        failures.append(
+            "retired installer imports must not return: "
+            + ", ".join(sorted(set(installer_import_leaks)))
+        )
+
     retired_installer = source_root / "installer.py"
     installation_contract = source_root / "installation_contract.py"
     installation_plan = source_root / "installation_plan.py"
