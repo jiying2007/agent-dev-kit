@@ -308,6 +308,40 @@ else:
             + "; ".join(evaluation_runtime_import_leaks)
         )
 
+    retired_manifest_cli_exports = {
+        "ManifestContract",
+        "canonical_manifest",
+        "load_canonical_manifest",
+        "load_contract",
+    }
+    manifest_cli_import_leaks = []
+    for python_path in sorted(source_root.rglob("*.py")):
+        try:
+            module_tree = ast.parse(
+                python_path.read_text(encoding="utf-8"),
+                filename=str(python_path),
+            )
+        except (OSError, SyntaxError, UnicodeError) as exc:
+            failures.append(f"cannot parse manifest consumer {python_path}: {exc}")
+            continue
+        for node in ast.walk(module_tree):
+            if not isinstance(node, ast.ImportFrom):
+                continue
+            if node.module not in {"manifest_contract", "agent_dev_kit.manifest_contract"}:
+                continue
+            leaked = sorted(
+                alias.name for alias in node.names if alias.name in retired_manifest_cli_exports
+            )
+            if leaked:
+                manifest_cli_import_leaks.append(
+                    f"{python_path.relative_to(root).as_posix()}:{','.join(leaked)}"
+                )
+    if manifest_cli_import_leaks:
+        failures.append(
+            "manifest_contract CLI must not re-export domain authority: "
+            + "; ".join(manifest_cli_import_leaks)
+        )
+
     retired_agent_value_exports = {
         "CONTRACT_SCHEMA_VERSION",
         "RECEIPT_SCHEMA_VERSION",
