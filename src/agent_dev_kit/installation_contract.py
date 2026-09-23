@@ -71,5 +71,3 @@ def _load_receipt(target: Path) -> Optional[Mapping[str, Any]]:
     if path.is_symlink() or not path.is_file():
         raise ManifestError("existing install receipt must be a regular file: {}".format(path))
     return _read_receipt(path, "existing install receipt")
-
-
