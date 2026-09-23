@@ -180,7 +180,6 @@ def emit_trace_summary_v2(facts: TraceRunFacts) -> Mapping[str, Any]:
         "runtime_target": facts.runtime_target,
         "runtime_version": facts.runtime_version,
         "model_version": facts.model_version,
-        "goal": "not-applicable",
         "goal_ref": facts.goal_ref,
         "primary_skill": facts.primary_skill,
         "prompt_version": facts.prompt_version,
@@ -214,7 +213,6 @@ def emit_trace_summary_v2(facts: TraceRunFacts) -> Mapping[str, Any]:
         "raw_content_stored": False,
         "blockers": list(facts.blockers),
         "failure_pattern": facts.failure_pattern,
-        "next_goal": None,
         "next_goal_ref": facts.next_goal_ref,
     }
     return validate_trace_summary(summary)
