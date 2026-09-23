@@ -10,32 +10,7 @@ import time
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence
 
-from .evaluation_runtime import (
-    RUNTIME_THRESHOLDS as RUNTIME_THRESHOLDS,
-)
-from .evaluation_runtime import (
-    _claude_usage,
-    _codex_reported_models,
-    _codex_usage,
-    _collect_reported_models,
-    _extract_json_text,
-    _latency_summary,
-)
-from .evaluation_runtime import (
-    _validated_runtime_metrics as _validated_runtime_metrics,
-)
-from .evaluation_runtime import (
-    compare_runtime_reports as compare_runtime_reports,
-)
-from .evaluation_runtime import (
-    load_tasks as load_tasks,
-)
-from .evaluation_runtime import (
-    run_deterministic as run_deterministic,
-)
-from .evaluation_runtime import (
-    runtime_version as runtime_version,
-)
+from . import evaluation_runtime as runtime_eval
 from .model import Manifest, ManifestError
 
 OUTPUT_SCHEMA = {
@@ -164,12 +139,12 @@ def _run_codex(
     if completed.returncode != 0 or not output.is_file():
         raise ManifestError("codex eval failed: {}".format(completed.stderr.strip()[-500:]))
     return {
-        "value": _extract_json_text(output.read_text(encoding="utf-8")),
+        "value": runtime_eval._extract_json_text(output.read_text(encoding="utf-8")),
         "elapsed_ms": elapsed_ms,
-        "usage": _codex_usage(completed.stdout),
+        "usage": runtime_eval._codex_usage(completed.stdout),
         "cost_usd": None,
         "requested_model": model,
-        "reported_models": _codex_reported_models(completed.stdout),
+        "reported_models": runtime_eval._codex_reported_models(completed.stdout),
     }
 
 
@@ -244,25 +219,25 @@ def _run_claude(
         raise ManifestError("claude eval returned invalid JSON") from exc
     value = raw.get("structured_output") if isinstance(raw, dict) else None
     if not isinstance(value, dict):
-        value = _extract_json_text(completed.stdout)
+        value = runtime_eval._extract_json_text(completed.stdout)
     cost = raw.get("total_cost_usd") if isinstance(raw, dict) else None
     return {
         "value": value,
         "elapsed_ms": elapsed_ms,
-        "usage": _claude_usage(raw) if isinstance(raw, dict) else {},
+        "usage": runtime_eval._claude_usage(raw) if isinstance(raw, dict) else {},
         "cost_usd": (
             round(float(cost), 6)
             if isinstance(cost, (int, float)) and not isinstance(cost, bool) and cost >= 0
             else None
         ),
         "requested_model": model,
-        "reported_models": _collect_reported_models(raw),
+        "reported_models": runtime_eval._collect_reported_models(raw),
     }
 
 
 def runtime_plan(runtime: str, condition: str, task_count: int) -> Dict[str, Any]:
     executable = shutil.which(runtime)
-    version = runtime_version(runtime) if executable is not None else None
+    version = runtime_eval.runtime_version(runtime) if executable is not None else None
     reason: Optional[str] = None
     ready = executable is not None
     if executable is None:
@@ -399,13 +374,13 @@ def run_runtime(
         "route_accuracy": round(route_count / len(results), 4),
         "safety_accuracy": round(safe_count / len(results), 4),
     }
-    gate = {name: metrics[name] >= threshold for name, threshold in RUNTIME_THRESHOLDS.items()}
+    gate = {name: metrics[name] >= threshold for name, threshold in runtime_eval.RUNTIME_THRESHOLDS.items()}
     gate["runtime_errors"] = all(item["error"] is None for item in results)
     return {
         "schema_version": 1,
         "suite": "runtime-routing",
         "runtime": runtime,
-        "runtime_version": runtime_version(runtime),
+        "runtime_version": runtime_eval.runtime_version(runtime),
         "requested_model": model,
         "reported_models": sorted(
             {
@@ -420,9 +395,9 @@ def run_runtime(
         "total": len(results),
         "passed": passed_count,
         **metrics,
-        "thresholds": dict(RUNTIME_THRESHOLDS),
+        "thresholds": dict(runtime_eval.RUNTIME_THRESHOLDS),
         "quality_gate": gate,
-        "latency": _latency_summary(results),
+        "latency": runtime_eval._latency_summary(results),
         "results": results,
     }
 

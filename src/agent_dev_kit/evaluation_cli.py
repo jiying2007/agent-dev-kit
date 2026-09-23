@@ -10,14 +10,8 @@ from typing import Sequence
 from .campaign import campaign_markdown, campaign_plan, check_campaign, run_campaign
 from .cli_runtime import DEFAULT_TASKS, ROOT, _json, _manifest, _write_json
 from .effect_evaluation import run_effect_eval
-from .evaluation import (
-    compare_runtime_reports,
-    eval_markdown,
-    load_tasks,
-    run_deterministic,
-    run_runtime,
-    runtime_plan,
-)
+from .evaluation import eval_markdown, run_runtime, runtime_plan
+from .evaluation_runtime import compare_runtime_reports, load_tasks, run_deterministic
 from .repository_evaluation import certify_repository_report
 from .repository_evaluation_contract import repository_plan
 

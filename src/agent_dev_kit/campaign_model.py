@@ -11,7 +11,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Mapping, Sequence, Tuple
 
-from .evaluation import BASELINE_CATEGORIES, load_tasks
+from .evaluation import BASELINE_CATEGORIES
+from .evaluation_runtime import load_tasks
 from .model import Manifest, ManifestError, ensure_within
 
 CONTRACT_SCHEMA = "adk-runtime-eval-campaign/v1"
