@@ -43,6 +43,7 @@ from types import SimpleNamespace
 from unittest import mock
 
 from agent_dev_kit import compiler, release
+from agent_dev_kit.distribution import release_artifacts
 from agent_dev_kit.distribution.release_artifacts import SOURCE_DISTRIBUTION_DIRECTORIES, SOURCE_DISTRIBUTION_FILES
 from agent_dev_kit.compiler import export_assets
 from agent_dev_kit.model import Manifest, ManifestError
@@ -163,7 +164,7 @@ with tempfile.TemporaryDirectory() as temp:
     (source / "content.txt").write_text("candidate\n", encoding="utf-8")
     archive = Path(temp) / "artifact.tar.gz"
     archive.write_bytes(b"previous-valid-artifact")
-    with mock.patch.object(release.shutil, "copyfileobj", side_effect=OSError("injected archive failure")):
+    with mock.patch.object(release_artifacts.shutil, "copyfileobj", side_effect=OSError("injected archive failure")):
         try:
             _write_deterministic_archive(source, archive)
         except OSError:
@@ -173,7 +174,7 @@ with tempfile.TemporaryDirectory() as temp:
     assert archive.read_bytes() == b"previous-valid-artifact"
 
 try:
-    release._validate_sbom({
+    release_artifacts._validate_sbom({
         "spdxVersion": "SPDX-2.3",
         "documentDescribes": ["SPDXRef-Package-agent-dev-kit"],
         "packages": [],
