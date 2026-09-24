@@ -7,7 +7,8 @@ import json
 from pathlib import Path
 from typing import Sequence
 
-from .campaign import campaign_markdown, campaign_plan, check_campaign, run_campaign
+from .campaign import campaign_plan, check_campaign, run_campaign
+from .campaign_model import campaign_markdown
 from .cli_runtime import DEFAULT_TASKS, ROOT, _json, _manifest, _write_json
 from .effect_evaluation import run_effect_eval
 from .evaluation import eval_markdown, run_runtime, runtime_plan

@@ -12,38 +12,7 @@ from .campaign_analysis import (
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Sequence, Tuple
 
-from .campaign_model import (
-    CONTRACT_SCHEMA as CONTRACT_SCHEMA,
-)
-from .campaign_model import (
-    MODEL_ID_RE as MODEL_ID_RE,
-)
-from .campaign_model import (
-    PLAN_SCHEMA,
-    RESULT_SCHEMA,
-    _attempt_from_report,
-    _digest,
-    _expected_result_entries,
-    _load_json_object,
-    _result_path,
-    _runtime_entry,
-    _utc_now,
-    _validate_plan_integrity,
-    _write_json_atomic,
-    load_campaign_contract,
-)
-from .campaign_model import (
-    TASK_ID_RE as TASK_ID_RE,
-)
-from .campaign_model import (
-    _canonical as _canonical,
-)
-from .campaign_model import (
-    _validated_existing_state as _validated_existing_state_support,
-)
-from .campaign_model import (
-    campaign_markdown as campaign_markdown,
-)
+from . import campaign_model as _campaign_model
 from .evaluation import run_runtime, runtime_plan
 from .locking import TargetLock
 from .model import Manifest, ManifestError, sha256_file
@@ -52,7 +21,7 @@ REPORT_SCHEMA = "adk-runtime-eval-campaign-report/v1"
 
 
 def campaign_plan(manifest: Manifest, contract_path: Path) -> Dict[str, Any]:
-    contract, tasks_path, tasks = load_campaign_contract(manifest, contract_path)
+    contract, tasks_path, tasks = _campaign_model.load_campaign_contract(manifest, contract_path)
     runtime_readiness = [runtime_plan(runtime, "adk", len(tasks)) for runtime in contract["runtimes"]]
     for readiness in runtime_readiness:
         executable = readiness.pop("executable", None)
@@ -69,12 +38,12 @@ def campaign_plan(manifest: Manifest, contract_path: Path) -> Dict[str, Any]:
         if readiness.get("status") != "planned":
             failures.append("{} runtime is not ready: {}".format(readiness["runtime"], readiness.get("reason")))
     plan = {
-        "schema": PLAN_SCHEMA,
+        "schema": _campaign_model.PLAN_SCHEMA,
         "status": "ready" if not failures else "blocked",
         "campaign_id": contract["campaign_id"],
         "manifest_version": manifest.version,
         "manifest_sha256": manifest.digest,
-        "contract_sha256": _digest(contract),
+        "contract_sha256": _campaign_model._digest(contract),
         "tasks": tasks_path.relative_to(manifest.root).as_posix(),
         "tasks_sha256": sha256_file(tasks_path),
         "task_count": len(tasks),
@@ -90,7 +59,7 @@ def campaign_plan(manifest: Manifest, contract_path: Path) -> Dict[str, Any]:
         "permissions": "read-only/no-tools",
         "failures": failures,
     }
-    plan["plan_sha256"] = _digest(plan)
+    plan["plan_sha256"] = _campaign_model._digest(plan)
     return plan
 
 
@@ -100,7 +69,7 @@ def _validated_existing_state(
     plan: Mapping[str, Any],
     tasks: Sequence[Mapping[str, Any]],
 ) -> Tuple[set, float]:
-    return _validated_existing_state_support(
+    return _campaign_model._validated_existing_state(
         state_dir, contract, plan, tasks, _validate_result
     )
 
@@ -112,7 +81,7 @@ def _run_campaign_locked(
     approved_budget_usd: float,
     resume: bool,
 ) -> Dict[str, Any]:
-    contract, _, tasks = load_campaign_contract(manifest, contract_path)
+    contract, _, tasks = _campaign_model.load_campaign_contract(manifest, contract_path)
     current_plan = campaign_plan(manifest, contract_path)
     if approved_budget_usd < float(contract["max_budget_usd"]):
         raise ManifestError("approved budget must cover contract max_budget_usd")
@@ -121,8 +90,8 @@ def _run_campaign_locked(
     state_dir = state_dir.resolve()
     plan_path = state_dir / "campaign-plan.json"
     if plan_path.exists():
-        plan = _load_json_object(plan_path, "campaign plan")
-        _validate_plan_integrity(plan)
+        plan = _campaign_model._load_json_object(plan_path, "campaign plan")
+        _campaign_model._validate_plan_integrity(plan)
         for field in ("campaign_id", "manifest_sha256", "contract_sha256", "tasks_sha256"):
             if plan.get(field) != current_plan.get(field):
                 raise ManifestError("campaign plan changed; use a new state directory")
@@ -134,17 +103,17 @@ def _run_campaign_locked(
         if (state_dir / "results").exists():
             raise ManifestError("campaign results exist without a campaign plan")
         plan = current_plan
-        _write_json_atomic(plan_path, plan)
+        _campaign_model._write_json_atomic(plan_path, plan)
 
     existing_results, spent = _validated_existing_state(state_dir, contract, plan, tasks)
     missing_runtimes = {
         runtime
-        for path, runtime, _, _, _ in _expected_result_entries(state_dir, contract, tasks)
+        for path, runtime, _, _, _ in _campaign_model._expected_result_entries(state_dir, contract, tasks)
         if path not in existing_results
     }
     for runtime in sorted(missing_runtimes):
-        frozen_runtime = _runtime_entry(plan, runtime)
-        current_runtime = _runtime_entry(current_plan, runtime)
+        frozen_runtime = _campaign_model._runtime_entry(plan, runtime)
+        current_runtime = _campaign_model._runtime_entry(current_plan, runtime)
         if current_runtime.get("status") != "planned":
             raise ManifestError(
                 "campaign runtime is not ready for remaining work: {}: {}".format(
@@ -160,7 +129,7 @@ def _run_campaign_locked(
             for trial in range(1, int(contract["trials"]) + 1):
                 for task in tasks:
                     task_id = str(task["id"])
-                    result_path = _result_path(state_dir, runtime, condition, trial, task_id)
+                    result_path = _campaign_model._result_path(state_dir, runtime, condition, trial, task_id)
                     if result_path in existing_results:
                         if not resume:
                             raise ManifestError("campaign result exists; use --resume")
@@ -179,10 +148,10 @@ def _run_campaign_locked(
                             max_claude_call_usd=per_call_budget,
                             model=str(contract["runtime_models"][runtime]),
                         )
-                        attempt = _attempt_from_report(report, attempt_number)
-                        if attempt.get("runtime_version") != _runtime_entry(plan, runtime).get("runtime_version"):
+                        attempt = _campaign_model._attempt_from_report(report, attempt_number)
+                        if attempt.get("runtime_version") != _campaign_model._runtime_entry(plan, runtime).get("runtime_version"):
                             raise ManifestError("campaign runtime version changed during execution: {}".format(runtime))
-                        if attempt.get("requested_model") != _runtime_entry(plan, runtime).get("requested_model"):
+                        if attempt.get("requested_model") != _campaign_model._runtime_entry(plan, runtime).get("requested_model"):
                             raise ManifestError("campaign runtime model changed during execution: {}".format(runtime))
                         attempts.append(attempt)
                         cost = attempt.get("cost_usd")
@@ -205,7 +174,7 @@ def _run_campaign_locked(
                     final = attempts[-1]
                     expected_route = task["category"] if condition == "baseline" else task["expected_skill"]
                     record = {
-                        "schema": RESULT_SCHEMA,
+                        "schema": _campaign_model.RESULT_SCHEMA,
                         "campaign_id": contract["campaign_id"],
                         "manifest_version": manifest.version,
                         "manifest_sha256": manifest.digest,
@@ -213,28 +182,28 @@ def _run_campaign_locked(
                         "contract_sha256": plan["contract_sha256"],
                         "tasks_sha256": plan["tasks_sha256"],
                         "runtime": runtime,
-                        "runtime_version": _runtime_entry(plan, runtime).get("runtime_version"),
-                        "requested_model": _runtime_entry(plan, runtime).get("requested_model"),
+                        "runtime_version": _campaign_model._runtime_entry(plan, runtime).get("runtime_version"),
+                        "requested_model": _campaign_model._runtime_entry(plan, runtime).get("requested_model"),
                         "condition": condition,
                         "trial": trial,
                         "task_id": task_id,
-                        "task_sha256": _digest(task),
+                        "task_sha256": _campaign_model._digest(task),
                         "expected_route": expected_route,
                         "expected_safe": task["expected_safe"],
-                        "recorded_at": _utc_now(),
+                        "recorded_at": _campaign_model._utc_now(),
                         "attempts": attempts,
                         "final": final,
                     }
-                    record["record_sha256"] = _digest(record)
-                    _write_json_atomic(result_path, record)
+                    record["record_sha256"] = _campaign_model._digest(record)
+                    _campaign_model._write_json_atomic(result_path, record)
                     completed_count += 1
     report = check_campaign(manifest, contract_path, state_dir, certify=True)
     report["executed"] = completed_count
     report["resumed"] = skipped_count
     report["spent_usd"] = spent
     report.pop("report_sha256", None)
-    report["report_sha256"] = _digest(report)
-    _write_json_atomic(state_dir / "campaign-report.json", report)
+    report["report_sha256"] = _campaign_model._digest(report)
+    _campaign_model._write_json_atomic(state_dir / "campaign-report.json", report)
     return report
 
 
@@ -259,10 +228,10 @@ def run_campaign(
 def check_campaign(
     manifest: Manifest, contract_path: Path, state_dir: Path, certify: bool = False
 ) -> Dict[str, Any]:
-    contract, _, tasks = load_campaign_contract(manifest, contract_path)
+    contract, _, tasks = _campaign_model.load_campaign_contract(manifest, contract_path)
     state_dir = state_dir.resolve()
-    plan = _load_json_object(state_dir / "campaign-plan.json", "campaign plan")
-    _validate_plan_integrity(plan)
+    plan = _campaign_model._load_json_object(state_dir / "campaign-plan.json", "campaign plan")
+    _campaign_model._validate_plan_integrity(plan)
     expected_plan = campaign_plan(manifest, contract_path)
     for field in ("campaign_id", "manifest_sha256", "contract_sha256", "tasks_sha256", "task_count", "trials"):
         if plan.get(field) != expected_plan.get(field):
@@ -271,7 +240,7 @@ def check_campaign(
     validated: List[Dict[str, Any]] = []
     record_digests: List[str] = []
     failures: List[str] = []
-    entries = _expected_result_entries(state_dir, contract, tasks)
+    entries = _campaign_model._expected_result_entries(state_dir, contract, tasks)
     expected_paths = {entry[0] for entry in entries}
     results_root = state_dir / "results"
     actual_paths = set(results_root.rglob("*.json")) if results_root.is_dir() else set()
@@ -282,7 +251,7 @@ def check_campaign(
             failures.append("missing result: {}".format(path.relative_to(state_dir)))
             continue
         try:
-            record = _load_json_object(path, "campaign result")
+            record = _campaign_model._load_json_object(path, "campaign result")
             validated.append(
                 _validate_result(
                     record,
@@ -432,8 +401,8 @@ def check_campaign(
         "runtime_provenance": [
             {
                 "runtime": runtime,
-                "runtime_version": _runtime_entry(plan, runtime).get("runtime_version"),
-                "requested_model": _runtime_entry(plan, runtime).get("requested_model"),
+                "runtime_version": _campaign_model._runtime_entry(plan, runtime).get("runtime_version"),
+                "requested_model": _campaign_model._runtime_entry(plan, runtime).get("requested_model"),
             }
             for runtime in contract["runtimes"]
         ],
@@ -442,11 +411,11 @@ def check_campaign(
         "validated_results": len(validated),
         "total_cost_usd": round(sum(float(item["total_cost_usd"]) for item in validated), 6),
         "max_budget_usd": float(contract["max_budget_usd"]),
-        "evidence_sha256": _digest(sorted(record_digests)),
+        "evidence_sha256": _campaign_model._digest(sorted(record_digests)),
         "thresholds": thresholds,
         "metrics": metrics,
         "gates": gates,
         "failures": failures,
     }
-    report["report_sha256"] = _digest(report)
+    report["report_sha256"] = _campaign_model._digest(report)
     return report

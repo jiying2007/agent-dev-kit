@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+## v7.0.31 (2026-09-24)
+
+### Campaign model authority hard cut
+- Remove the historical `campaign._load_json_object` monkeypatch compatibility seam and route campaign contract loading directly through `campaign_model`.
+- Stop re-exporting campaign-model schemas, regexes, loaders, helpers and Markdown projection through `campaign.py`; keep `campaign.py` focused on campaign execution/check orchestration.
+- Migrate Evaluation CLI and Software M5 tests to the true model authority and add focused plus AST ratchets preventing the facade from returning.
+- Preserve campaign contracts, execution semantics, budget logic, result validation and report shapes; no runtime evaluation math changes.
+
+
 ## v7.0.30 (2026-09-23)
 
 ### Agent Value receipt bounded context
