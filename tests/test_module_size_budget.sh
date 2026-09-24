@@ -706,6 +706,122 @@ else:
             + "; ".join(receipt_contract_import_leaks)
         )
 
+    campaign_orchestrator = source_root / "campaign.py"
+    campaign_model_authority = source_root / "campaign_model.py"
+    evaluation_cli = source_root / "evaluation_cli.py"
+    try:
+        campaign_tree = ast.parse(
+            campaign_orchestrator.read_text(encoding="utf-8"),
+            filename=str(campaign_orchestrator),
+        )
+        campaign_model_tree = ast.parse(
+            campaign_model_authority.read_text(encoding="utf-8"),
+            filename=str(campaign_model_authority),
+        )
+        evaluation_cli_tree = ast.parse(
+            evaluation_cli.read_text(encoding="utf-8"),
+            filename=str(evaluation_cli),
+        )
+    except (OSError, SyntaxError, UnicodeError) as exc:
+        failures.append(f"cannot parse campaign bounded contexts: {exc}")
+    else:
+        model_defs = {
+            node.name for node in campaign_model_tree.body if isinstance(node, ast.FunctionDef)
+        }
+        for required_owner in ("load_campaign_contract", "campaign_markdown"):
+            if required_owner not in model_defs:
+                failures.append(f"campaign_model must own {required_owner}")
+
+        campaign_model_boundary = any(
+            isinstance(node, ast.ImportFrom)
+            and node.level == 1
+            and node.module is None
+            and any(
+                alias.name == "campaign_model" and alias.asname == "_campaign_model"
+                for alias in node.names
+            )
+            for node in campaign_tree.body
+        )
+        if not campaign_model_boundary:
+            failures.append(
+                "campaign must consume campaign_model through private module boundary"
+            )
+
+        named_model_imports = [
+            alias.name
+            for node in campaign_tree.body
+            if isinstance(node, ast.ImportFrom)
+            and node.level == 1
+            and node.module == "campaign_model"
+            for alias in node.names
+        ]
+        if named_model_imports:
+            failures.append(
+                "campaign must not re-export campaign_model authority: "
+                + ", ".join(sorted(named_model_imports))
+            )
+
+        model_imports_sys = any(
+            isinstance(node, ast.Import)
+            and any(alias.name == "sys" for alias in node.names)
+            for node in campaign_model_tree.body
+        )
+        if "_contract_json_loader" in model_defs or model_imports_sys:
+            failures.append(
+                "campaign_model historical campaign monkeypatch seam must remain retired"
+            )
+
+        cli_campaign_markdown_from_model = any(
+            isinstance(node, ast.ImportFrom)
+            and node.level == 1
+            and node.module == "campaign_model"
+            and any(alias.name == "campaign_markdown" for alias in node.names)
+            for node in evaluation_cli_tree.body
+        )
+        if not cli_campaign_markdown_from_model:
+            failures.append(
+                "evaluation CLI must consume campaign_markdown from campaign_model authority"
+            )
+
+    retired_campaign_model_exports = {
+        "CONTRACT_SCHEMA",
+        "MODEL_ID_RE",
+        "TASK_ID_RE",
+        "_canonical",
+        "_load_json_object",
+        "load_campaign_contract",
+        "campaign_markdown",
+    }
+    campaign_model_import_leaks = []
+    for python_path in sorted(source_root.rglob("*.py")):
+        try:
+            module_tree = ast.parse(
+                python_path.read_text(encoding="utf-8"),
+                filename=str(python_path),
+            )
+        except (OSError, SyntaxError, UnicodeError) as exc:
+            failures.append(f"cannot parse campaign consumer {python_path}: {exc}")
+            continue
+        for node in ast.walk(module_tree):
+            if not isinstance(node, ast.ImportFrom):
+                continue
+            if node.module not in {"campaign", "agent_dev_kit.campaign"}:
+                continue
+            leaked = sorted(
+                alias.name
+                for alias in node.names
+                if alias.name in retired_campaign_model_exports
+            )
+            if leaked:
+                campaign_model_import_leaks.append(
+                    f"{python_path.relative_to(root).as_posix()}:{','.join(leaked)}"
+                )
+    if campaign_model_import_leaks:
+        failures.append(
+            "campaign model consumers must import campaign_model directly: "
+            + "; ".join(campaign_model_import_leaks)
+        )
+
     execution_policy_root = source_root / "execution_policy"
     execution_engine = execution_policy_root / "engine.py"
     execution_reducer = execution_policy_root / "reducer.py"

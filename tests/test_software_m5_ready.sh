@@ -33,16 +33,11 @@ import time
 from pathlib import Path
 from unittest import mock
 
-from agent_dev_kit.campaign import (
-    campaign_markdown,
-    campaign_plan,
-    check_campaign,
-    load_campaign_contract,
-    run_campaign,
-)
+from agent_dev_kit.campaign import campaign_plan, check_campaign, run_campaign
+from agent_dev_kit.campaign_model import campaign_markdown, load_campaign_contract
 from agent_dev_kit.evaluation_cli import DEFAULT_CAMPAIGN_CONTRACT
 from agent_dev_kit.doctor import run_doctor
-from agent_dev_kit import campaign, evaluation, evaluation_runtime, installation_transaction
+from agent_dev_kit import campaign, campaign_model, evaluation, evaluation_runtime, installation_transaction
 from agent_dev_kit.evaluation_runtime import _claude_usage, run_deterministic
 from agent_dev_kit.installation_contract import RECEIPT_NAME
 from agent_dev_kit.installation_plan import create_plan, write_plan
@@ -84,6 +79,19 @@ for retired_runtime_export in (
 ):
     assert hasattr(evaluation_runtime, retired_runtime_export), retired_runtime_export
     assert not hasattr(evaluation, retired_runtime_export), retired_runtime_export
+
+for retired_campaign_model_export in (
+    "CONTRACT_SCHEMA",
+    "MODEL_ID_RE",
+    "TASK_ID_RE",
+    "_canonical",
+    "_load_json_object",
+    "load_campaign_contract",
+    "campaign_markdown",
+):
+    assert hasattr(campaign_model, retired_campaign_model_export), retired_campaign_model_export
+    assert not hasattr(campaign, retired_campaign_model_export), retired_campaign_model_export
+assert not hasattr(campaign_model, "_contract_json_loader")
 cli_source = (root / "src/agent_dev_kit/cli.py").read_text(encoding="utf-8")
 runtime_source = (root / "src/agent_dev_kit/cli_runtime.py").read_text(encoding="utf-8")
 eval_cli_source = (root / "src/agent_dev_kit/evaluation_cli.py").read_text(encoding="utf-8")
@@ -488,7 +496,7 @@ calls = []
 
 invalid_contract = json.loads(small_contract.read_text(encoding="utf-8"))
 invalid_contract["thresholds"]["required_non_regression_trials"] = 2
-with mock.patch.object(campaign, "_load_json_object", return_value=invalid_contract):
+with mock.patch.object(campaign_model, "_load_json_object", return_value=invalid_contract):
     try:
         load_campaign_contract(manifest, small_contract)
     except ManifestError as exc:

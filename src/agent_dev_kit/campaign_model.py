@@ -6,10 +6,9 @@ import hashlib
 import json
 import math
 import re
-import sys
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Mapping, Sequence, Tuple
+from typing import Any, Dict, List, Mapping, Sequence, Tuple
 
 from .evaluation import BASELINE_CATEGORIES
 from .evaluation_runtime import load_tasks
@@ -51,21 +50,11 @@ def _load_json_object(path: Path, label: str) -> Dict[str, Any]:
     return value
 
 
-def _contract_json_loader() -> Callable[[Path, str], Dict[str, Any]]:
-    """Preserve the historical campaign._load_json_object monkeypatch seam."""
-    campaign_module = sys.modules.get(__package__ + ".campaign")
-    if campaign_module is not None:
-        loader = getattr(campaign_module, "_load_json_object", None)
-        if callable(loader):
-            return loader
-    return _load_json_object
-
-
 def load_campaign_contract(
     manifest: Manifest, contract_path: Path
 ) -> Tuple[Dict[str, Any], Path, List[Mapping[str, Any]]]:
     contract_path = ensure_within(contract_path.resolve(), manifest.root, "campaign contract")
-    contract = _contract_json_loader()(contract_path, "campaign contract")
+    contract = _load_json_object(contract_path, "campaign contract")
     if contract.get("schema") != CONTRACT_SCHEMA:
         raise ManifestError("unsupported campaign contract schema")
     campaign_id = contract.get("campaign_id")
