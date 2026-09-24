@@ -761,12 +761,11 @@ else:
                 + ", ".join(sorted(named_model_imports))
             )
 
-        model_imports_sys = any(
-            isinstance(node, ast.Import)
-            and any(alias.name == "sys" for alias in node.names)
-            for node in campaign_model_tree.body
-        )
-        if "_contract_json_loader" in model_defs or model_imports_sys:
+        campaign_model_source = campaign_model_authority.read_text(encoding="utf-8")
+        if (
+            "_contract_json_loader" in model_defs
+            or "campaign._load_json_object" in campaign_model_source
+        ):
             failures.append(
                 "campaign_model historical campaign monkeypatch seam must remain retired"
             )
