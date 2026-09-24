@@ -18,21 +18,7 @@ from .versioning import (
     version_identity_failures,
     version_is_newer,
 )
-from .distribution.release_artifacts import (
-    _assert_publishable_release_artifact,
-    _copy_runtime_skill,
-    _copy_source_distribution,
-    _extract_release,
-    _managed_hashes,
-    _release_source_identity,
-    _release_source_root,
-    _report_digest,
-    _skill_version,
-    _validate_sbom,
-    _verify_artifact_checksum,
-    _write_deterministic_archive,
-    _write_runtime_checksums,
-)
+from .distribution import release_artifacts as _release_artifacts
 from .installation_contract import RECEIPT_NAME
 from .installation_plan import create_plan, write_plan
 from .installation_transaction import apply_plan, rollback
@@ -111,10 +97,10 @@ def build_runtime_bundle(
         assets: List[Dict[str, Any]] = []
         file_count = 0
         for asset in resolution.skills:
-            skill_version = _skill_version(asset.path)
+            skill_version = _release_artifacts._skill_version(asset.path)
             relative = Path("skills") / asset.name / skill_version
             destination = package_root / relative
-            file_count += _copy_runtime_skill(asset.path, destination)
+            file_count += _release_artifacts._copy_runtime_skill(asset.path, destination)
             digest = sha256_tree(destination)
             if digest != asset.digest:
                 raise ManifestError("runtime bundle skill digest changed during copy: {}".format(asset.name))
@@ -176,10 +162,10 @@ def build_runtime_bundle(
         (package_root / "sbom.spdx.json").write_text(
             json.dumps(sbom, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
         )
-        _write_runtime_checksums(package_root)
+        _release_artifacts._write_runtime_checksums(package_root)
 
         archive = output / "adk-runtime-{}-{}.tar.gz".format(profile, version)
-        _write_deterministic_archive(package_root, archive)
+        _release_artifacts._write_deterministic_archive(package_root, archive)
         digest = sha256_file(archive)
         checksum = output / (archive.name + ".sha256")
         checksum.write_text("{}  {}\n".format(digest, archive.name), encoding="ascii")
@@ -217,7 +203,7 @@ def build_release(
     gate = check_release(manifest)
     if gate["status"] != "pass":
         raise ManifestError("release check failed: {}".format("; ".join(gate["failures"])))
-    source_identity = _release_source_identity(manifest.root, allow_unbound_snapshot)
+    source_identity = _release_artifacts._release_source_identity(manifest.root, allow_unbound_snapshot)
 
     output = output.resolve()
     output.mkdir(parents=True, exist_ok=True)
@@ -241,7 +227,7 @@ def build_release(
             )
             target_results.append({"target": target, "agents": result["agents"], "skills": result["skills"]})
 
-        source_file_count = _copy_source_distribution(manifest, package_root / "source")
+        source_file_count = _release_artifacts._copy_source_distribution(manifest, package_root / "source")
         source_distribution_sha256 = sha256_tree(package_root / "source")
 
         handoff = {
@@ -309,7 +295,7 @@ def build_release(
                 },
             ],
         }
-        _validate_sbom(sbom)
+        _release_artifacts._validate_sbom(sbom)
         sbom_path = package_root / "sbom.spdx.json"
         sbom_path.write_text(
             json.dumps(sbom, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
@@ -340,7 +326,7 @@ def build_release(
         )
 
         archive = output / "agent-dev-kit-{}.tar.gz".format(version)
-        _write_deterministic_archive(package_root, archive)
+        _release_artifacts._write_deterministic_archive(package_root, archive)
         digest = sha256_file(archive)
         checksum = output / (archive.name + ".sha256")
         checksum_temp = checksum.with_name("." + checksum.name + ".tmp")
@@ -399,7 +385,7 @@ def publish_release(
     actual_digest = sha256_file(artifact)
     if checksum_fields[0].lower() != actual_digest:
         raise ManifestError("release checksum does not match artifact")
-    _assert_publishable_release_artifact(artifact)
+    _release_artifacts._assert_publishable_release_artifact(artifact)
     gh = shutil.which("gh")
     if gh is None:
         raise ManifestError("GitHub CLI is required for the github release backend")
@@ -426,14 +412,14 @@ def publish_release(
     return {"status": "pass", "backend": backend, "version": version, "output": completed.stdout.strip()}
 
 def rehearse_release(previous_artifact: Path, candidate_artifact: Path) -> Dict[str, Any]:
-    previous_digest = _verify_artifact_checksum(previous_artifact)
-    candidate_digest = _verify_artifact_checksum(candidate_artifact)
+    previous_digest = _release_artifacts._verify_artifact_checksum(previous_artifact)
+    candidate_digest = _release_artifacts._verify_artifact_checksum(candidate_artifact)
     workspace = Path(tempfile.mkdtemp(prefix="adk-release-rehearsal-"))
     try:
-        previous_root = _extract_release(previous_artifact.resolve(), workspace / "previous")
-        candidate_root = _extract_release(candidate_artifact.resolve(), workspace / "candidate")
-        previous_manifest, previous_release_manifest = _release_source_root(previous_root)
-        candidate_manifest, candidate_release_manifest = _release_source_root(candidate_root)
+        previous_root = _release_artifacts._extract_release(previous_artifact.resolve(), workspace / "previous")
+        candidate_root = _release_artifacts._extract_release(candidate_artifact.resolve(), workspace / "candidate")
+        previous_manifest, previous_release_manifest = _release_artifacts._release_source_root(previous_root)
+        candidate_manifest, candidate_release_manifest = _release_artifacts._release_source_root(candidate_root)
         if (
             candidate_release_manifest.get("schema_version") != 2
             or candidate_release_manifest.get("release_eligible") is not True
@@ -473,7 +459,7 @@ def rehearse_release(previous_artifact: Path, candidate_artifact: Path) -> Dict[
             raise ManifestError("previous release install plan is not ready")
         write_plan(previous_plan, previous_plan_path)
         previous_apply = apply_plan(previous_manifest, previous_plan_path)
-        previous_hashes = _managed_hashes(target)
+        previous_hashes = _release_artifacts._managed_hashes(target)
 
         candidate_plan_path = workspace / "candidate-plan.json"
         candidate_plan = create_plan(
@@ -494,7 +480,7 @@ def rehearse_release(previous_artifact: Path, candidate_artifact: Path) -> Dict[
 
         rollback_result = rollback(target / RECEIPT_NAME)
         restored_receipt = json.loads((target / RECEIPT_NAME).read_text(encoding="utf-8"))
-        restored_hashes = _managed_hashes(target)
+        restored_hashes = _release_artifacts._managed_hashes(target)
         if restored_receipt.get("manifest_version") != previous_manifest.version:
             raise ManifestError("rollback did not restore the previous receipt")
         if restored_hashes != previous_hashes:
@@ -518,7 +504,7 @@ def rehearse_release(previous_artifact: Path, candidate_artifact: Path) -> Dict[
             "restored_assets": len(restored_hashes),
             "remote_publish": "not-in-scope",
         }
-        result["report_sha256"] = _report_digest(result)
+        result["report_sha256"] = _release_artifacts._report_digest(result)
         return result
     finally:
         shutil.rmtree(str(workspace), ignore_errors=True)

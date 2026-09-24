@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+## v7.0.32 (2026-09-24)
+
+### Release artifact authority hard cut
+- Route release assembly, publishing and rehearsal through a private module boundary to `distribution.release_artifacts` instead of named private imports.
+- Stop exposing artifact extraction, source-identity and checksum helpers from `agent_dev_kit.release`; migrate Software M5 tests to the true artifact authority.
+- Add focused and AST ratchets preventing release-artifact authority leakage back through the release orchestration module.
+- Preserve release build, runtime-bundle, publish and rehearsal behavior and output contracts; no release artifact format or validation semantics change.
+
+
 ## v7.0.31 (2026-09-24)
 
 ### Campaign model authority hard cut

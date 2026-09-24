@@ -706,6 +706,98 @@ else:
             + "; ".join(receipt_contract_import_leaks)
         )
 
+    release_orchestrator = source_root / "release.py"
+    release_artifact_authority = source_root / "distribution" / "release_artifacts.py"
+    try:
+        release_tree = ast.parse(
+            release_orchestrator.read_text(encoding="utf-8"),
+            filename=str(release_orchestrator),
+        )
+        release_artifact_tree = ast.parse(
+            release_artifact_authority.read_text(encoding="utf-8"),
+            filename=str(release_artifact_authority),
+        )
+    except (OSError, SyntaxError, UnicodeError) as exc:
+        failures.append(f"cannot parse release artifact bounded contexts: {exc}")
+    else:
+        release_artifact_defs = {
+            node.name for node in release_artifact_tree.body if isinstance(node, ast.FunctionDef)
+        }
+        for required_owner in (
+            "_extract_release",
+            "_release_source_identity",
+            "_release_source_root",
+            "_verify_artifact_checksum",
+        ):
+            if required_owner not in release_artifact_defs:
+                failures.append(f"release_artifacts must own {required_owner}")
+
+        release_artifact_boundary = any(
+            isinstance(node, ast.ImportFrom)
+            and node.level == 1
+            and node.module == "distribution"
+            and any(
+                alias.name == "release_artifacts" and alias.asname == "_release_artifacts"
+                for alias in node.names
+            )
+            for node in release_tree.body
+        )
+        if not release_artifact_boundary:
+            failures.append(
+                "release must consume release_artifacts through private module boundary"
+            )
+
+        named_release_artifact_imports = [
+            alias.name
+            for node in release_tree.body
+            if isinstance(node, ast.ImportFrom)
+            and node.level == 1
+            and node.module == "distribution.release_artifacts"
+            for alias in node.names
+        ]
+        if named_release_artifact_imports:
+            failures.append(
+                "release must not re-export release_artifacts authority: "
+                + ", ".join(sorted(named_release_artifact_imports))
+            )
+
+    retired_release_artifact_exports = {
+        "_assert_publishable_release_artifact",
+        "_extract_release",
+        "_release_source_identity",
+        "_release_source_root",
+        "_verify_artifact_checksum",
+    }
+    release_artifact_import_leaks = []
+    for python_path in sorted(source_root.rglob("*.py")):
+        try:
+            module_tree = ast.parse(
+                python_path.read_text(encoding="utf-8"),
+                filename=str(python_path),
+            )
+        except (OSError, SyntaxError, UnicodeError) as exc:
+            failures.append(f"cannot parse release artifact consumer {python_path}: {exc}")
+            continue
+        for node in ast.walk(module_tree):
+            if not isinstance(node, ast.ImportFrom):
+                continue
+            if node.module not in {"release", "agent_dev_kit.release"}:
+                continue
+            leaked = sorted(
+                alias.name
+                for alias in node.names
+                if alias.name in retired_release_artifact_exports
+            )
+            if leaked:
+                release_artifact_import_leaks.append(
+                    f"{python_path.relative_to(root).as_posix()}:{','.join(leaked)}"
+                )
+    if release_artifact_import_leaks:
+        failures.append(
+            "release artifact consumers must import distribution.release_artifacts directly: "
+            + "; ".join(release_artifact_import_leaks)
+        )
+
     campaign_orchestrator = source_root / "campaign.py"
     campaign_model_authority = source_root / "campaign_model.py"
     evaluation_cli = source_root / "evaluation_cli.py"
