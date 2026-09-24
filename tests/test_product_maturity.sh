@@ -47,7 +47,7 @@ from agent_dev_kit.distribution.release_artifacts import SOURCE_DISTRIBUTION_DIR
 from agent_dev_kit.compiler import export_assets
 from agent_dev_kit.model import Manifest, ManifestError
 from agent_dev_kit.quality import run_benchmark, security_check
-from agent_dev_kit.release import _copy_source_distribution, _write_deterministic_archive
+from agent_dev_kit.distribution.release_artifacts import _copy_source_distribution, _write_deterministic_archive
 
 root = Path(sys.argv[1])
 manifest = Manifest.load(root)

@@ -13,7 +13,8 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from agent_dev_kit.model import Manifest, ManifestError
-from agent_dev_kit.release import _copy_runtime_skill, build_runtime_bundle
+from agent_dev_kit.distribution.release_artifacts import _copy_runtime_skill
+from agent_dev_kit.release import build_runtime_bundle
 
 
 class RuntimeBundleTest(unittest.TestCase):

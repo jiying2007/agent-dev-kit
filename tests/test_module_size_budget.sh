@@ -763,10 +763,18 @@ else:
 
     retired_release_artifact_exports = {
         "_assert_publishable_release_artifact",
+        "_copy_runtime_skill",
+        "_copy_source_distribution",
         "_extract_release",
+        "_managed_hashes",
         "_release_source_identity",
         "_release_source_root",
+        "_report_digest",
+        "_skill_version",
+        "_validate_sbom",
         "_verify_artifact_checksum",
+        "_write_deterministic_archive",
+        "_write_runtime_checksums",
     }
     release_artifact_import_leaks = []
     for python_path in sorted(source_root.rglob("*.py")):
