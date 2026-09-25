@@ -210,10 +210,11 @@ def run_campaign(
     ):
         raise ManifestError("native_campaign_runtime_identity_drift")
     version_command = commands_value["version"]
-    version_executable = _runtime_binary(version_command[0])
-    if version_executable != runtime_binary:
-        raise ManifestError("native_campaign_version_command_must_use_runtime_binary")
     for name in ("version", *STAGES):
+        if _runtime_binary(commands_value[name][0]) != runtime_binary:
+            raise ManifestError(
+                f"native_campaign_command_must_use_runtime_binary: {name}"
+            )
         digest = sha256_bytes(canonical_json_bytes(commands_value[name]))
         if digest != plan["command_sha256"][name]:
             raise ManifestError(f"native_campaign_command_drift: {name}")
