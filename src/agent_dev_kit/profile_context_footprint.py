@@ -1,7 +1,8 @@
-"""Deterministic profile-level context footprint accounting.
+"""Deterministic profile-level source context surface accounting.
 
-This module measures source bytes only. Token counts are a documented bytes/4
-heuristic and must not be interpreted as provider tokenizer measurements.
+This module measures repository bytes only. It does not claim which files a
+runtime places in the initial prompt. Token counts are bytes/4 heuristics, not
+provider tokenizer measurements.
 """
 
 from __future__ import annotations
@@ -21,11 +22,27 @@ def _main_file(asset: Asset) -> Path:
     return asset.path / ("AGENTS.md" if asset.kind == "agent" else "SKILL.md")
 
 
-def _regular_file_bytes(path: Path, root: Path) -> int:
+def _regular_file_bytes(path: Path, root: Path) -> bytes:
     if path.is_symlink() or not path.is_file():
         raise ManifestError(f"context_footprint_invalid_file: {path}")
     ensure_within(path, root, "context footprint source")
-    return path.stat().st_size
+    return path.read_bytes()
+
+
+def _entry_parts(path: Path, root: Path) -> tuple[int, int, int]:
+    raw = _regular_file_bytes(path, root)
+    try:
+        text = raw.decode("utf-8")
+    except UnicodeDecodeError as exc:
+        raise ManifestError(f"context_footprint_non_utf8_entry: {path}") from exc
+    metadata_bytes = 0
+    if text.startswith("---\n"):
+        marker = text.find("\n---\n", 4)
+        if marker < 0:
+            raise ManifestError(f"context_footprint_invalid_frontmatter: {path}")
+        metadata_bytes = len(text[: marker + 5].encode("utf-8"))
+    body_bytes = len(raw) - metadata_bytes
+    return len(raw), metadata_bytes, body_bytes
 
 
 def _support_bytes(asset: Asset) -> tuple[int, int]:
@@ -42,24 +59,32 @@ def _support_bytes(asset: Asset) -> tuple[int, int]:
                 raise ManifestError(f"context_footprint_symlink_forbidden: {path}")
             if not path.is_file():
                 continue
-            total += _regular_file_bytes(path, asset.path)
+            total += len(_regular_file_bytes(path, asset.path))
             files += 1
     return total, files
 
 
 def _asset_record(asset: Asset) -> dict[str, Any]:
-    main = _main_file(asset)
-    entry_bytes = _regular_file_bytes(main, asset.path)
+    entry_bytes, metadata_bytes, body_bytes = _entry_parts(_main_file(asset), asset.path)
     support_bytes, support_files = _support_bytes(asset)
     return {
         "kind": asset.kind,
         "name": asset.name,
         "entry_bytes": entry_bytes,
-        "entry_estimated_tokens": (entry_bytes + 3) // 4,
+        "frontmatter_bytes": metadata_bytes,
+        "body_bytes": body_bytes,
         "support_files": support_files,
         "support_bytes": support_bytes,
-        "support_estimated_tokens": (support_bytes + 3) // 4,
         "potential_total_bytes": entry_bytes + support_bytes,
+    }
+
+
+def _surface(bytes_value: int) -> dict[str, Any]:
+    return {
+        "bytes": bytes_value,
+        "estimated_tokens": (bytes_value + 3) // 4,
+        "token_estimate_method": "utf8-bytes-ceil-div-4",
+        "token_estimate_is_provider_measurement": False,
     }
 
 
@@ -68,6 +93,8 @@ def profile_footprint(manifest: Manifest, profile: str) -> dict[str, Any]:
     assets = tuple(list(resolution.agents) + list(resolution.skills))
     records = [_asset_record(asset) for asset in assets]
     entry_bytes = sum(item["entry_bytes"] for item in records)
+    metadata_bytes = sum(item["frontmatter_bytes"] for item in records)
+    body_bytes = sum(item["body_bytes"] for item in records)
     support_bytes = sum(item["support_bytes"] for item in records)
     return {
         "schema": SCHEMA,
@@ -76,40 +103,44 @@ def profile_footprint(manifest: Manifest, profile: str) -> dict[str, Any]:
         "source_version": manifest.version,
         "accounting": {
             "method": "utf8-source-bytes",
-            "token_estimate_method": "utf8-bytes-ceil-div-4",
-            "token_estimate_is_provider_measurement": False,
-            "progressive_disclosure": True,
+            "runtime_initial_context_measured": False,
+            "progressive_disclosure_surfaces_separated": True,
         },
         "assets": {
             "agents": len(resolution.agents),
             "skills": len(resolution.skills),
             "total": len(records),
         },
-        "entry_context": {
-            "bytes": entry_bytes,
-            "estimated_tokens": (entry_bytes + 3) // 4,
-        },
-        "deferred_support": {
+        "frontmatter_surface": _surface(metadata_bytes),
+        "entry_body_surface": _surface(body_bytes),
+        "entry_file_surface": _surface(entry_bytes),
+        "deferred_support_surface": {
+            **_surface(support_bytes),
             "files": sum(item["support_files"] for item in records),
-            "bytes": support_bytes,
-            "estimated_tokens": (support_bytes + 3) // 4,
         },
-        "potential_full_surface": {
-            "bytes": entry_bytes + support_bytes,
-            "estimated_tokens": (entry_bytes + support_bytes + 3) // 4,
-        },
-        "largest_entries": sorted(
+        "potential_full_source_surface": _surface(entry_bytes + support_bytes),
+        "largest_entry_files": sorted(
             records, key=lambda item: (-item["entry_bytes"], item["kind"], item["name"])
         )[:10],
         "largest_deferred_support": sorted(
             records, key=lambda item: (-item["support_bytes"], item["kind"], item["name"])
         )[:10],
+        "limitations": [
+            "source byte surfaces do not prove what a native runtime injects into initial context",
+            "frontmatter is a deterministic metadata proxy, not proof that a runtime loads all metadata",
+            "token estimates use bytes/4 and are not provider tokenizer measurements",
+            "deferred support is a potential on-demand surface, not assumed loaded context",
+        ],
     }
 
 
 def compare_profiles(manifest: Manifest, baseline: str, candidate: str) -> dict[str, Any]:
     left = profile_footprint(manifest, baseline)
     right = profile_footprint(manifest, candidate)
+
+    def delta(surface: str) -> int:
+        return right[surface]["bytes"] - left[surface]["bytes"]
+
     return {
         "schema": "adk-profile-context-comparison/v1",
         "status": "pass",
@@ -117,21 +148,16 @@ def compare_profiles(manifest: Manifest, baseline: str, candidate: str) -> dict[
         "candidate": right,
         "delta": {
             "assets": right["assets"]["total"] - left["assets"]["total"],
-            "entry_bytes": right["entry_context"]["bytes"] - left["entry_context"]["bytes"],
-            "entry_estimated_tokens": (
-                right["entry_context"]["estimated_tokens"] - left["entry_context"]["estimated_tokens"]
-            ),
-            "deferred_support_bytes": (
-                right["deferred_support"]["bytes"] - left["deferred_support"]["bytes"]
-            ),
-            "potential_full_surface_bytes": (
-                right["potential_full_surface"]["bytes"] - left["potential_full_surface"]["bytes"]
-            ),
+            "frontmatter_bytes": delta("frontmatter_surface"),
+            "entry_body_bytes": delta("entry_body_surface"),
+            "entry_file_bytes": delta("entry_file_surface"),
+            "deferred_support_bytes": delta("deferred_support_surface"),
+            "potential_full_source_bytes": delta("potential_full_source_surface"),
         },
         "limitations": [
             "byte accounting is deterministic source evidence, not native runtime loading evidence",
-            "token estimates use bytes/4 and are not provider tokenizer measurements",
-            "deferred support bytes are potential on-demand surface, not assumed initial context",
+            "no delta is an effectiveness or quality score",
+            "runtime token usage must come from runtime evidence when available",
         ],
         "lifecycle_authority": "none-evidence-only",
         "release_authorized": False,
@@ -139,7 +165,7 @@ def compare_profiles(manifest: Manifest, baseline: str, candidate: str) -> dict[
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Measure profile entry and deferred context surfaces")
+    parser = argparse.ArgumentParser(description="Measure profile source context surfaces")
     parser.add_argument("--root", default=".")
     parser.add_argument("--profile", required=True)
     parser.add_argument("--compare")
