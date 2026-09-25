@@ -19,8 +19,8 @@ class TargetSourceProbeTest(unittest.TestCase):
             with self.subTest(target=target):
                 result = probe_target_source(MANIFEST, target, "core")
                 self.assertEqual(result["status"], "pass")
-                self.assertEqual(result["discovery"], "pass")
-                self.assertEqual(result["load"], "pass")
+                self.assertEqual(result["source_discovery"], "pass")
+                self.assertEqual(result["source_load"], "pass")
                 self.assertEqual(result["evidence_level"], "source-layout")
                 self.assertFalse(result["native_runtime_evidence"])
                 self.assertEqual(result["certification"], "not-certified")
