@@ -11,6 +11,7 @@ from typing import Any, Callable, List, Mapping, Optional, Sequence, Tuple
 from jsonschema import Draft202012Validator, FormatChecker
 
 from .model import Manifest, ManifestError, canonical_json_bytes, ensure_within, sha256_bytes
+from .native_trust import build_managed_native_trust_verifier
 from .privacy_ref import validate_no_secrets
 
 
@@ -433,7 +434,14 @@ def load_target_contract(manifest: Manifest, target: str) -> TargetContract:
         )
     contract = TargetContract(target, path, data)
     adapter = contract.adapter
-    _validate_native_conformance_evidence(manifest, target, adapter, data)
+    conformance = adapter.get("conformance", {})
+    trust_verifier = None
+    if isinstance(conformance, dict) and conformance.get("level") == "runtime":
+        trust_policy = adapter.get("conformance_trust_policy")
+        if not isinstance(trust_policy, dict):
+            raise ManifestError("target_contract_untrusted: native trust policy is missing")
+        trust_verifier = build_managed_native_trust_verifier(manifest, target, trust_policy)
+    _validate_native_conformance_evidence(manifest, target, adapter, data, trust_verifier)
     capabilities = adapter.get("capabilities", {})
     for stage in contract.smoke_stages:
         if capabilities.get(stage) == "unsupported":

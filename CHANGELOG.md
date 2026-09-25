@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+## v7.3.0 (2026-09-25)
+
+### Managed native conformance trust
+- Add an owner-reviewed native conformance trust registry and digest-pinned cosign verifier adapter.
+- Bind runtime receipt trust to target policy backend, trusted authority, allowed target, canonical receipt digest, signature bundle digest, certificate identity/issuer, and verifier binary digest.
+- Inject the managed verifier automatically from the production target-contract loader only for runtime conformance; static targets remain unchanged and no authority is enabled by default.
+- Keep missing registry entries, missing cosign, digest drift, signature failure, target/backend mismatch and receipt drift fail-closed.
+
+
 ## v7.2.0 (2026-09-25)
 
 ### Profile context and source-layout observability

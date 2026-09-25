@@ -1,0 +1,6 @@
+{
+  "schema": "adk-native-conformance-trust-registry/v1",
+  "status": "active",
+  "authority_model": "owner-reviewed-managed-registry",
+  "authorities": {}
+}

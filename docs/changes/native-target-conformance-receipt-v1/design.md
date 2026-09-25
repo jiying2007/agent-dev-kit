@@ -53,3 +53,10 @@ claude --setting-sources project --tools "" --permission-mode dontAsk \
 ## 回滚
 
 删除 receipt/trust policy schema 与 loader 分支，并把 target contracts 回退到 static schema 即可；当前没有 runtime-certified target 或 live 安装需要数据迁移。
+
+
+## 7.3.0 后续：受管 verifier 注入
+
+原设计中“production loader 无 verifier 时 fail closed”的安全边界保留，但“不存在 production 注入路径”这一软件缺口由 7.3.0 关闭。loader 仅在 runtime conformance 分支读取 owner-reviewed managed registry，并构造 digest-pinned Sigstore/cosign verifier；static target 不读取 verifier。
+
+registry 默认无 authority。启用 authority、加入具体 receipt/bundle 绑定和切换 target runtime conformance 仍是独立变更。真实 discovery/load/trigger、认证和签名 receipt 未完成时，target 必须继续 static/not-certified。

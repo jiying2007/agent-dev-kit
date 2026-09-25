@@ -11,7 +11,7 @@ ADK 不再在 README 中维护“候选 / 已发布 / live”之类可漂移的�
 - **Runtime conformance**：以 target/runtime receipt 与证据级别 `static / smoke / native / certified` 为权威。
 - **Product qualification**：由消费方/产品仓的 qualification 与 field evidence 独立决定，不由 ADK 组件版本继承。
 
-`manifest.json` 当前 source version 为 `7.2.0`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
+`manifest.json` 当前 source version 为 `7.3.0`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
 
 发布支持基线为 Python 3.11+。运行依赖固定为 `PyYAML==6.0.3` 与 `jsonschema==4.26.0`；质量依赖在 `pyproject.toml:[project.optional-dependencies].quality` 中锁定。
 
@@ -64,7 +64,7 @@ MCP、A2A、OpenTelemetry GenAI 等外部标准只能通过 versioned adapter bo
 - 外部协议版本不得成为 ADK core 的隐式版本号。
 - 协议升级必须有显式 adapter contract、兼容性证据与回滚边界。
 - adapter/runtime receipt 不得提升产品 qualification。
-- 没有真实 discovery/load/trigger 或 native receipt 时，不得声明 runtime-certified。
+- 没有真实 discovery/load/trigger 或 native receipt 时，不得声明 runtime-certified。Runtime receipt 的 production trust 由 `manifests/native_conformance_trust_registry.json` 管理；registry 默认无启用 authority，只有 target policy、authority/target scope、receipt/bundle digest、签名 identity/issuer 与固定 verifier binary 全部匹配时，production loader 才接受 runtime conformance。
 
 详见 `docs/architecture/interoperability-boundaries.md`。
 
