@@ -7,7 +7,7 @@
 ### Native target candidate campaign
 - Add bounded discovery/load/trigger execution that emits the existing strict native target conformance receipt as an untrusted candidate.
 - Bind exact runtime binary/version, deterministic Skill bundle and prospective normalized target-contract identity without touching live runtime directories.
-- Hash and discard raw stage output, fail closed on timeout/non-zero/output floods and require independent command/result evidence.
+- Verify stage-specific semantic stdout canaries in bounded transient memory, bind canary expectations into command identity, then hash/discard raw output; fail closed on timeout/non-zero/output floods or missing/duplicate evidence.
 - Keep candidate success permanently not-certified and promotion-ineligible until a separately managed external signature or CI provenance verifier establishes authority.
 
 
