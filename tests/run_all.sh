@@ -91,9 +91,7 @@ TESTS=(
   test_optional_skills.sh
   test_convert.sh
   test_runtime_boundary.sh
-  test_profile_context_footprint.sh
   test_target_contracts.sh
-  test_target_source_probe.sh
   test_target_adapter_spi.sh
   test_target_source_probe.sh
   test_effect_eval.sh
@@ -174,8 +172,10 @@ QUICK_TESTS=(
 
   test_python_launcher.sh
   test_runtime_boundary.sh
+  test_profile_context_footprint.sh
   test_target_contracts.sh
   test_target_adapter_spi.sh
+  test_target_source_probe.sh
   test_effect_eval.sh
   test_runtime_bundle.sh
   test_release_manifest_contract.sh
