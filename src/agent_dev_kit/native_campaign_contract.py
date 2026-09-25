@@ -27,6 +27,79 @@ MAX_OUTPUT_BYTES = 1024 * 1024
 MAX_VERSION_OUTPUT_BYTES = 64 * 1024
 
 
+
+TARGET_LAYOUT_SCHEMA = "adk-native-campaign-target-layouts/v1"
+MAX_LAYOUT_MANIFEST_BYTES = 256 * 1024
+
+
+def load_native_campaign_target_layouts(manifest: Manifest) -> Mapping[str, Mapping[str, Any]]:
+    path = manifest.root / "manifests" / "native_campaign_target_layouts.json"
+    if path.is_symlink() or not path.is_file():
+        raise ManifestError("native_campaign_target_layouts_missing_or_unsafe")
+    if path.stat().st_size > MAX_LAYOUT_MANIFEST_BYTES:
+        raise ManifestError("native_campaign_target_layouts_exceeds_byte_budget")
+    value = _load_json(path, "native campaign target layouts")
+    if not isinstance(value, dict) or set(value) != {
+        "schema", "status", "reviewed_at", "expires_at", "targets"
+    }:
+        raise ManifestError("native_campaign_target_layouts_invalid_top_level")
+    if value.get("schema") != TARGET_LAYOUT_SCHEMA or value.get("status") != "reviewed":
+        raise ManifestError("native_campaign_target_layouts_invalid_schema_or_status")
+    try:
+        reviewed_at = datetime.fromisoformat(str(value["reviewed_at"]) + "T00:00:00+00:00")
+        expires_at = datetime.fromisoformat(str(value["expires_at"]) + "T00:00:00+00:00")
+    except ValueError as exc:
+        raise ManifestError("native_campaign_target_layouts_invalid_dates") from exc
+    now = datetime.now(timezone.utc)
+    if reviewed_at > now or expires_at <= reviewed_at or (expires_at - reviewed_at).days > 90:
+        raise ManifestError("native_campaign_target_layouts_invalid_freshness")
+    if expires_at.date() < now.date():
+        raise ManifestError("native_campaign_target_layouts_stale")
+
+    targets = value.get("targets")
+    if not isinstance(targets, dict) or set(targets) != set(manifest.direct_targets()):
+        raise ManifestError("native_campaign_target_layouts_must_cover_direct_targets")
+    normalized: dict[str, Mapping[str, Any]] = {}
+    for target, record in sorted(targets.items()):
+        if not isinstance(record, dict) or set(record) != {
+            "project_config_dir", "discovery_scope", "documentation"
+        }:
+            raise ManifestError(f"native_campaign_target_layout_invalid: {target}")
+        config_dir = record.get("project_config_dir")
+        if (
+            not isinstance(config_dir, str)
+            or not config_dir.startswith(".")
+            or "/" in config_dir
+            or "\\" in config_dir
+            or config_dir in (".", "..")
+            or any(ch in config_dir for ch in ("\x00", "\n", "\r"))
+        ):
+            raise ManifestError(f"native_campaign_project_config_dir_invalid: {target}")
+        if record.get("discovery_scope") != "project":
+            raise ManifestError(f"native_campaign_discovery_scope_invalid: {target}")
+        docs = record.get("documentation")
+        if (
+            not isinstance(docs, list)
+            or not docs
+            or len(set(docs)) != len(docs)
+            or not all(isinstance(url, str) and url.startswith("https://") for url in docs)
+        ):
+            raise ManifestError(f"native_campaign_documentation_invalid: {target}")
+        normalized[str(target)] = {
+            "project_config_dir": config_dir,
+            "discovery_scope": "project",
+            "documentation": list(docs),
+        }
+    return normalized
+
+
+def native_campaign_target_layout(manifest: Manifest, target: str) -> Mapping[str, Any]:
+    layouts = load_native_campaign_target_layouts(manifest)
+    try:
+        return layouts[target]
+    except KeyError as exc:
+        raise ManifestError(f"native_campaign_target_layout_missing: {target}") from exc
+
 def _utc_now() -> datetime:
     return datetime.now(timezone.utc).replace(microsecond=0)
 

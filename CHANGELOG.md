@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+## v7.4.1 (2026-09-25)
+
+### Native project discovery correctness
+- Run native campaign stages from an isolated project root instead of the rendered target config directory.
+- Place Claude Code campaign skills under project `.claude/skills/` and OpenCode campaign skills under project `.opencode/skills/`, matching their reviewed native discovery locations.
+- Preserve HOME-based authentication when requested instead of redirecting Claude's user config/credential directory to the temporary campaign bundle.
+- Add a reviewed, freshness-bounded target-layout manifest and cross-target regression that fails if campaign execution drifts back to a non-native temporary layout.
+
+
 ## v7.4.0 (2026-09-25)
 
 ### Native campaign execution and receipt finalization
