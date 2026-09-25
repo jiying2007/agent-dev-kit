@@ -15,6 +15,7 @@ import hashlib
 import json
 import os
 import platform
+import re
 import shutil
 import signal
 import stat
@@ -311,6 +312,18 @@ def prepare_campaign(
     return plan, candidate
 
 
+def _kill_process(process: asyncio.subprocess.Process) -> None:
+    if process.returncode is not None:
+        return
+    if os.name == "posix":
+        try:
+            os.killpg(process.pid, signal.SIGKILL)
+            return
+        except ProcessLookupError:
+            return
+    process.kill()
+
+
 async def _drain(stream: asyncio.StreamReader, process: asyncio.subprocess.Process, limit: int) -> tuple[int, str, bytes]:
     digest = hashlib.sha256()
     total = 0
@@ -321,7 +334,7 @@ async def _drain(stream: asyncio.StreamReader, process: asyncio.subprocess.Proce
             break
         total += len(chunk)
         if total > limit:
-            process.kill()
+            _kill_process(process)
             raise ManifestError("native_campaign_output_budget_exceeded")
         digest.update(chunk)
         captured.extend(chunk)
@@ -357,13 +370,7 @@ async def _execute_async(
         stdout = await stdout_task
         stderr = await stderr_task
     except (asyncio.TimeoutError, ManifestError):
-        if os.name == "posix":
-            try:
-                os.killpg(process.pid, signal.SIGKILL)
-            except ProcessLookupError:
-                pass
-        elif process.returncode is None:
-            process.kill()
+        _kill_process(process)
         await process.wait()
         raise
     return {
@@ -463,7 +470,11 @@ def run_campaign(
         decoded = combined.decode("utf-8", errors="strict")
     except UnicodeDecodeError as exc:
         raise ManifestError("native_campaign_version_output_not_utf8") from exc
-    if version_probe["exit_code"] != 0 or str(plan["runtime"]["version"]) not in decoded:
+    planned_version = str(plan["runtime"]["version"])
+    version_pattern = re.compile(
+        r"(?<![A-Za-z0-9._+:-])" + re.escape(planned_version) + r"(?![A-Za-z0-9._+:-])"
+    )
+    if version_probe["exit_code"] != 0 or version_pattern.search(decoded) is None:
         return {
             "schema": EVIDENCE_SCHEMA,
             "status": "blocked",
