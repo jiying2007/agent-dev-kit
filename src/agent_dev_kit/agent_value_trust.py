@@ -73,15 +73,9 @@ def _safe_identifier(value: Any, label: str) -> str:
     return value
 
 
-def load_agent_value_trust_registry(root: Path) -> Mapping[str, Any]:
-    path = ensure_within(
-        root / "manifests" / "agent_value_trust_registry.json",
-        root,
-        "Agent Value trust registry",
-    )
-    value = _json_object(
-        path, limit=MAX_REGISTRY_BYTES, label="Agent Value trust registry"
-    )
+def validate_agent_value_trust_registry(
+    value: Mapping[str, Any],
+) -> Mapping[str, Any]:
     if set(value) != {"schema", "status", "authority_model", "authorities"}:
         raise ManifestError(
             "agent_value_trust_registry_invalid: top-level fields"
@@ -266,6 +260,18 @@ def load_agent_value_trust_registry(root: Path) -> Mapping[str, Any]:
     return value
 
 
+def load_agent_value_trust_registry(root: Path) -> Mapping[str, Any]:
+    path = ensure_within(
+        root / "manifests" / "agent_value_trust_registry.json",
+        root,
+        "Agent Value trust registry",
+    )
+    value = _json_object(
+        path, limit=MAX_REGISTRY_BYTES, label="Agent Value trust registry"
+    )
+    return validate_agent_value_trust_registry(value)
+
+
 class ManagedAgentValueEvidenceVerifier:
     def __init__(
         self,
@@ -282,7 +288,7 @@ class ManagedAgentValueEvidenceVerifier:
         self._manifest = manifest
         self._contract = contract
         self._policy = policy
-        self._registry = registry
+        self._registry = validate_agent_value_trust_registry(registry)
 
     def __call__(
         self,
