@@ -112,6 +112,7 @@ TESTS=(
   test_intent_boundary_governance.sh
   test_agent_ecosystem_standards.sh
   test_agent_value.sh
+  test_agent_value_trust.sh
   test_trace_summary.sh
   test_run_evidence.sh
   test_evidence_envelope.sh
@@ -193,6 +194,7 @@ QUICK_TESTS=(
   test_official_docs_timezone.sh
   test_agent_ecosystem_standards.sh
   test_agent_value.sh
+  test_agent_value_trust.sh
   test_trace_summary.sh
   test_run_evidence.sh
   test_evidence_envelope.sh
