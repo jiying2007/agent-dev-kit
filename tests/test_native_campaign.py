@@ -60,7 +60,7 @@ class NativeCampaignTest(unittest.TestCase):
         runtime_reports = ROOT / "reports" / "runtime"
         runtime_reports.mkdir(parents=True, exist_ok=True)
         self.receipt_dir = Path(
-            tempfile.mkdtemp(prefix=".native-campaign-test-", dir=runtime_reports)
+            tempfile.mkdtemp(prefix="native-campaign-test-", dir=runtime_reports)
         )
         self.addCleanup(lambda: shutil.rmtree(self.receipt_dir, ignore_errors=True))
         self.receipt = self.receipt_dir / "receipt.json"
