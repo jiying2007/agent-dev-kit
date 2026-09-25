@@ -54,7 +54,6 @@ def _asset_record(asset: Asset) -> dict[str, Any]:
     return {
         "kind": asset.kind,
         "name": asset.name,
-        "entry_path": main.as_posix(),
         "entry_bytes": entry_bytes,
         "entry_estimated_tokens": (entry_bytes + 3) // 4,
         "support_files": support_files,
