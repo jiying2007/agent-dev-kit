@@ -53,5 +53,10 @@
       "entry_file_bytes": 80843,
       "potential_full_source_bytes": 115485
     }
+  },
+  "baseline_source": {
+    "version": "7.1.0",
+    "commit": "70fac05125907e4930ee73f3928799e11bac55de",
+    "note": "Asset source bytes were independently measured from Git blob sizes before the 7.2.0 observability implementation; 7.2.0 changes do not alter profiled Agent/Skill asset content."
   }
 }
