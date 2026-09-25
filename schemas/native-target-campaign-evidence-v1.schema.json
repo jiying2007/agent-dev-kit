@@ -385,7 +385,52 @@
         "privacy": {
           "$ref": "#/$defs/privacy"
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "pass"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "result_sha256",
+              "exit_code",
+              "started_at",
+              "completed_at",
+              "duration_ms",
+              "stdout_bytes",
+              "stdout_sha256",
+              "stderr_bytes",
+              "stderr_sha256",
+              "environment",
+              "privacy"
+            ],
+            "properties": {
+              "exit_code": {
+                "const": 0
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "blocked"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "reason"
+            ]
+          }
+        }
+      ]
     }
   }
 }
