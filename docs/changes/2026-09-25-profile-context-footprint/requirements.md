@@ -1,7 +1,7 @@
 # 7.2.0 context observability requirements
 
-1. Measure resolved profile entry bytes without assuming all support material is initially loaded.
-2. Account for `references/`, `scripts/`, and `assets/` separately as deferred potential context.
+1. Measure resolved profile source bytes without claiming they are native runtime initial context.
+2. Separate frontmatter metadata, entry body, and `references/`/`scripts/`/`assets/` deferred potential surfaces.
 3. Expose profile-to-profile deltas without a quality score.
 4. Clearly label bytes/4 token counts as a heuristic, never a provider tokenizer measurement.
 5. Probe direct-target exported layouts in an isolated temporary root and verify file digests/loadability.
