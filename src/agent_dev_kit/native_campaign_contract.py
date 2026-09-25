@@ -130,6 +130,8 @@ def _validate_commands(value: Any) -> dict[str, list[str]]:
             raise ManifestError(f"native_campaign_command_invalid: {name}")
         if any(any(ch in item for ch in ("\x00", "\n", "\r")) for item in command):
             raise ManifestError(f"native_campaign_command_control_character: {name}")
+        if not Path(command[0]).is_absolute():
+            raise ManifestError(f"native_campaign_command_requires_absolute_runtime: {name}")
         result[name] = list(command)
     stage_digests = {
         sha256_bytes(canonical_json_bytes(result[name]))
