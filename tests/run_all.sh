@@ -87,11 +87,13 @@ TESTS=(
   test_file_modes.sh
   test_install.sh
   test_profile_coherence.sh
+  test_profile_context_footprint.sh
   test_optional_skills.sh
   test_convert.sh
   test_runtime_boundary.sh
   test_target_contracts.sh
   test_target_adapter_spi.sh
+  test_target_source_probe.sh
   test_effect_eval.sh
   test_product_maturity.sh
   test_runtime_bundle.sh
@@ -170,8 +172,10 @@ QUICK_TESTS=(
 
   test_python_launcher.sh
   test_runtime_boundary.sh
+  test_profile_context_footprint.sh
   test_target_contracts.sh
   test_target_adapter_spi.sh
+  test_target_source_probe.sh
   test_effect_eval.sh
   test_runtime_bundle.sh
   test_release_manifest_contract.sh

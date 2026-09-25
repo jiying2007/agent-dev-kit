@@ -1,0 +1,62 @@
+{
+  "schema": "adk-profile-context-ratchets/v1",
+  "status": "active",
+  "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+  "measured_from": "git-blob-bytes",
+  "measured_at": "2026-09-25",
+  "policy": {
+    "fail_on_entry_file_growth": true,
+    "fail_on_potential_full_source_growth": true,
+    "asset_count_is_observability_only": true,
+    "runtime_initial_context_claim": false,
+    "provider_tokenizer_claim": false,
+    "update_requires_reviewed_rationale": true
+  },
+  "profiles": {
+    "core": {
+      "assets": 26,
+      "entry_file_bytes": 123096,
+      "potential_full_source_bytes": 157743
+    },
+    "release-hardening": {
+      "assets": 23,
+      "entry_file_bytes": 104248,
+      "potential_full_source_bytes": 138612
+    },
+    "personal-core": {
+      "assets": 31,
+      "entry_file_bytes": 141992,
+      "potential_full_source_bytes": 181704
+    },
+    "embedded-fullstack": {
+      "assets": 51,
+      "entry_file_bytes": 216132,
+      "potential_full_source_bytes": 269620
+    },
+    "team-core": {
+      "assets": 33,
+      "entry_file_bytes": 146655,
+      "potential_full_source_bytes": 192336
+    },
+    "large-refactor": {
+      "assets": 52,
+      "entry_file_bytes": 218453,
+      "potential_full_source_bytes": 276950
+    },
+    "incident-response": {
+      "assets": 8,
+      "entry_file_bytes": 31017,
+      "potential_full_source_bytes": 34318
+    },
+    "research-intake": {
+      "assets": 20,
+      "entry_file_bytes": 80843,
+      "potential_full_source_bytes": 115485
+    }
+  },
+  "baseline_source": {
+    "version": "7.1.0",
+    "commit": "70fac05125907e4930ee73f3928799e11bac55de",
+    "note": "Asset source bytes were independently measured from Git blob sizes before the 7.2.0 observability implementation; 7.2.0 changes do not alter profiled Agent/Skill asset content."
+  }
+}
