@@ -55,9 +55,7 @@ def commands(*, fail_stage: str | None = None, flood_stage: str | None = None) -
 
 class NativeCampaignTest(unittest.TestCase):
     def setUp(self) -> None:
-        fixtures = ROOT / "tests" / "fixtures"
-        fixtures.mkdir(exist_ok=True)
-        self.temp = Path(tempfile.mkdtemp(prefix=".native-campaign-", dir=fixtures))
+        self.temp = Path(tempfile.mkdtemp(prefix="adk-native-campaign-"))
         self.addCleanup(lambda: shutil.rmtree(self.temp, ignore_errors=True))
         runtime_reports = ROOT / "reports" / "runtime"
         runtime_reports.mkdir(parents=True, exist_ok=True)
@@ -201,6 +199,51 @@ class NativeCampaignTest(unittest.TestCase):
         with self.assertRaisesRegex(ManifestError, "must_use_runtime_binary"):
             self.prepare(not_runtime)
 
+
+    def test_cli_rejects_repository_output_outside_runtime_reports(self) -> None:
+        commands_path = self.temp / "commands.json"
+        commands_path.write_text(json.dumps(commands()), encoding="utf-8")
+        done = subprocess.run(
+            [
+                sys.executable,
+                "-m",
+                "agent_dev_kit.cli",
+                "native-campaign",
+                "--root",
+                str(ROOT),
+                "prepare",
+                "--target",
+                "claude-code",
+                "--runtime-binary",
+                sys.executable,
+                "--runtime-version",
+                VERSION,
+                "--authority-id",
+                "ci-native-conformance",
+                "--execution-authority",
+                "ci-approved",
+                "--verification-backend",
+                "ci-provenance-verifier",
+                "--commands-json",
+                str(commands_path),
+                "--receipt-path",
+                self.receipt_rel,
+                "--plan-out",
+                str(ROOT / "manifests" / "forbidden-plan.json"),
+                "--candidate-contract-out",
+                str(self.temp / "candidate.json"),
+                "--summary-json",
+            ],
+            cwd=ROOT,
+            text=True,
+            capture_output=True,
+            timeout=60,
+        )
+        self.assertEqual(done.returncode, 1, (done.stdout, done.stderr))
+        value = json.loads(done.stdout)
+        self.assertIn("repository_output_must_be_reports_runtime", value["error"])
+        self.assertFalse((ROOT / "manifests" / "forbidden-plan.json").exists())
+
     def test_public_cli_prepare_run_finalize(self) -> None:
         commands_path = self.temp / "commands.json"
         plan_path = self.temp / "plan.json"
@@ -279,7 +322,7 @@ class NativeCampaignTest(unittest.TestCase):
             expected=1,
         )
         self.assertEqual(refused["status"], "fail")
-        self.assertIn("must_not_write_active_contract_directory", refused["error"])
+        self.assertIn("repository_output_must_be_reports_runtime", refused["error"])
         self.assertEqual(self.active.read_bytes(), self.active_before)
 
 
