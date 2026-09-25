@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import shutil
 import platform
 import subprocess
@@ -310,6 +311,10 @@ class NativeCampaignTest(unittest.TestCase):
         self.assertEqual(finalized["status"], "ready-for-signature-and-registry")
         self.assertTrue(self.receipt.is_file())
         self.assertTrue(final_contract_path.is_file())
+        self.assertEqual(
+            hashlib.sha256(self.receipt.read_bytes()).hexdigest(),
+            finalized["receipt_sha256"],
+        )
         self.assertEqual(self.active.read_bytes(), self.active_before)
 
         refused = invoke(
