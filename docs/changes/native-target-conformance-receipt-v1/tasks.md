@@ -12,4 +12,4 @@
 - [ ] T10 在不放宽 user/local settings 边界的前提下解决受限模式认证；完成三个独立 stage 前不得提升 target。
 - [x] T11 修复 CR5：增加默认禁用的 native conformance trust policy，production loader 无 verifier 时拒绝 promotion。
 - [x] T12 增加 self-hashed synthetic receipt 负例；仅显式 synthetic verifier 用于结构单测。
-- [ ] T13 实现并审查外部 signature/CI provenance verifier 的受管注入；完成前端到端 trust 保持 open。
+- [x] T13 外部 signature/CI provenance verifier 的受管注入由 7.3.0 `native_trust.py` + managed registry 完成；真实 native receipt/campaign 仍由 T10 独立约束。
