@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## v7.5.0 (2026-09-25)
+
+### Managed Agent Value evidence trust
+- Add an owner-reviewed Agent Value trust registry with no enabled authorities by default.
+- Add a digest-pinned Sigstore/cosign verifier for runtime/field invocation receipts.
+- Bind verifier decisions to the enabled contract authority, evidence layer, runtime target, canonical receipt digest, signature bundle digest, certificate identity/issuer, and verifier binary digest.
+- Keep the canonical Agent Value contract disabled and non-production; synthetic wiring can prove managed receipt validation and measurement emission but cannot create production quality or lifecycle authority.
+- Add full/quick regression coverage for registry defaults, runtime measurement flow, and scope/digest/bundle/binary/signature fail-closed behavior.
+
+
 ## v7.4.1 (2026-09-25)
 
 ### Native project discovery correctness

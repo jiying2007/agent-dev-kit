@@ -14,6 +14,8 @@
 - `src/agent_dev_kit/agent_value_contracts.py` 是 Agent Value contract/receipt loading 与语义验证的唯一 Python authority。
 - `src/agent_dev_kit/agent_value.py` 只负责编排 validated contract/receipt 到显式输入驱动的
   `emit_measurements` 输出及 CLI；它不是 contract facade、runtime collector 或持久化服务。
+- `manifests/agent_value_trust_registry.json` 是 runtime/field receipt 的受管签名 verifier registry；默认 authorities 为空。
+- `src/agent_dev_kit/agent_value_trust.py` 负责 owner-reviewed registry、receipt/bundle/binary digest 和 Sigstore/cosign identity 验证；它不收集 receipt，也不启用 canonical contract。
 
 ## Agent 合同门禁
 
@@ -76,35 +78,39 @@ rtk bash -lc 'PYTHONPATH=src python3 -m agent_dev_kit.agent_value \
   --manifest-root . --receipt path/to/receipt.json --summary-json'
 ```
 
-runtime/field receipt 必须由受审查的 Python composition root 注入 verifier；不要通过 CLI 绕过：
+runtime/field receipt 必须由受审查的 Python composition root 使用 managed verifier；不要通过 CLI、lambda 或临时 callback 绕过：
 
 ```python
 from agent_dev_kit.agent_value import emit_measurements
 from agent_dev_kit.agent_value_contracts import load_contract
+from agent_dev_kit.agent_value_trust import build_managed_agent_value_evidence_verifier
 from agent_dev_kit.model import Manifest
 
 manifest = Manifest.load(adk_root)
 contract = load_contract(adk_root / "manifests" / "agent_value_contracts.json")
-# canonical contract 默认关闭 authority registry；部署 composition root 必须先取得
-# owner-reviewed、managed、enabled 的 contract input，不能在调用点临时伪造 authority。
+# canonical contract 与 trust registry 默认都关闭 authority。部署 composition root 必须先取得
+# owner-reviewed、managed、enabled 的 contract input，并让 authority/target/layer 与 registry exact 对齐。
+verifier = build_managed_agent_value_evidence_verifier(
+    manifest,
+    reviewed_managed_contract,
+)
 measurement = emit_measurements(
     validated_receipts,
     manifest,
     reviewed_managed_contract,
-    evidence_verifier=verify_runtime_or_field_evidence,
+    evidence_verifier=verifier,
     aggregation_window={"from": window_from, "through": window_through},
     as_of=fixed_as_of,
 )
 ```
 
-`evidence_verifier(receipt, registered_authority)` 必须核对 composition root 信任的 trace/evidence store、authority
-backend 与权限边界，并只在来源确实可信时返回严格 `True`。opaque ref、content hash、临时 lambda 或未注册 authority
-本身不能替代这个裁决。
+`build_managed_agent_value_evidence_verifier` 会把 contract authority 与 repository registry 的 backend、layer、runtime target、canonical receipt digest、Sigstore bundle digest、certificate identity/OIDC issuer 和 digest-pinned `cosign` 绑定。任一不一致都 fail-closed。opaque ref、content hash、临时 lambda 或未注册 authority 本身不能替代这个裁决。
 
 回归：
 
 ```bash
 rtk bash tests/test_agent_value.sh
+rtk bash tests/test_agent_value_trust.sh
 rtk bash tests/test_runtime_boundary.sh
 rtk bash scripts/devkit.sh validate --strict
 rtk bash tests/run_all.sh --quick --fail-fast
@@ -118,12 +124,12 @@ escaped defect 和 rollback 等 outcome 指标。Agent/Skill/Profile 数量、in
 
 每个可选 KPI 同时报告 applicable/observed sample size 与 coverage。first-pass、可信变更时间、escaped defect、
 rollback 未达到完整覆盖时保持 `not-measured/incomplete-coverage`，不能用部分样本生成 measured value。顶层
-`evidence_scope` 区分 `test-only/runtime-verified/field-verified/mixed`。v1 没有外部固定、版本化的 production authority
-registry，因此 `quality_evidence_eligible` 对所有 scope 固定为 false，并始终输出 ineligibility reason、
-`owner_review_required=true`、`lifecycle_authority=none-evidence-only`。
+`evidence_scope` 区分 `test-only/runtime-verified/field-verified/mixed`。7.5.0 已有固定、版本化的 receipt trust registry，
+但 v1 contract 的 authority 仍强制 `production=false`，因此 `quality_evidence_eligible` 对所有 scope 继续固定为 false，
+并始终输出 ineligibility reason、`owner_review_required=true`、`lifecycle_authority=none-evidence-only`。
 
-未来若要支持 production quality evidence，必须新增独立、版本化、owner-reviewed managed registry change；不得通过
-input contract、临时 registry copy 或 callback/lambda 把 `production` 改为 true。
+未来若要支持 production quality evidence，仍必须新增独立 versioned contract/schema change，明确生产 authority 语义；
+不得通过 registry copy、临时 contract 或 callback/lambda 把 `production` 改为 true。
 
 合并或退役至少需要多个真实 measured invocation、代表性的成功与失败、wrong-route/abstain 分析、替代/删除
 影响和 owner review。单条 receipt、测试 fixture 或静态 contract 都不能证明退役合理。
