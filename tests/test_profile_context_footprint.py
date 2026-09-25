@@ -4,6 +4,7 @@ import json
 import subprocess
 import sys
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 
 from agent_dev_kit.model import Manifest
@@ -42,6 +43,16 @@ class ProfileContextFootprintTest(unittest.TestCase):
                 self.assertEqual(result["status"], "pass", result)
                 self.assertFalse(result["runtime_initial_context_claim"])
                 self.assertFalse(result["release_authorized"])
+
+    def test_ratchet_fails_on_source_growth(self) -> None:
+        actual = profile_footprint(MANIFEST, "core")
+        grown = json.loads(json.dumps(actual))
+        grown["entry_file_surface"]["bytes"] += 1
+        grown["potential_full_source_surface"]["bytes"] += 1
+        with patch("agent_dev_kit.profile_context_footprint.profile_footprint", return_value=grown):
+            result = enforce_profile_ratchet(MANIFEST, "core")
+        self.assertEqual(result["status"], "fail")
+        self.assertTrue(any("entry_file_bytes grew" in item for item in result["failures"]))
 
     def test_embedded_delta_is_explicit_not_a_quality_score(self) -> None:
         value = compare_profiles(MANIFEST, "core", "embedded-fullstack")
