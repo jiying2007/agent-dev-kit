@@ -92,6 +92,7 @@ Codex 当前不是 direct `tool_targets` 成员，因此不是 `export --target`
 ```bash
 bash scripts/devkit.sh profile-footprint --profile core --summary-json
 bash scripts/devkit.sh profile-footprint --profile core --compare embedded-fullstack --summary-json
+bash scripts/devkit.sh profile-footprint --profile core --ratchet --summary-json
 ```
 
 ## target-source-probe
