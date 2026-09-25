@@ -235,6 +235,8 @@ def prepare_campaign(
     ):
         raise ManifestError("native_campaign_timeout_invalid")
     receipt_path = _safe_relative_path(receipt_path, "receipt_path")
+    if not receipt_path.startswith("reports/runtime/"):
+        raise ManifestError("native_campaign_receipt_path_must_be_under_reports_runtime")
     runtime_binary = _runtime_binary(str(runtime_binary))
     runtime_name = runtime_binary.name
     if not runtime_name or len(runtime_name) > 128:
