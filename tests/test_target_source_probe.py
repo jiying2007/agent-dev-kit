@@ -27,6 +27,8 @@ class TargetSourceProbeTest(unittest.TestCase):
                 self.assertFalse(result["release_authorized"])
                 self.assertGreater(result["files"], 0)
                 self.assertGreater(result["bytes"], 0)
+                self.assertEqual(len(result["observed_index_sha256"]), 64)
+                self.assertEqual(sum(item["files"] for item in result["by_kind"].values()), result["files"])
 
     def test_cli_and_invalid_target(self) -> None:
         target = sorted(MANIFEST.direct_targets())[0]
