@@ -55,13 +55,23 @@ def load_native_trust_registry(root: Path) -> Mapping[str, Any]:
         "native conformance trust registry",
     )
     value = _json_object(path, limit=MAX_REGISTRY_BYTES, label="native conformance trust registry")
+    if set(value) != {"schema", "status", "authority_model", "authorities"}:
+        raise ManifestError("native_trust_registry_invalid: top-level fields")
     if value.get("schema") != REGISTRY_SCHEMA or value.get("status") != "active":
         raise ManifestError("native_trust_registry_invalid: schema/status")
+    if value.get("authority_model") != "owner-reviewed-managed-registry":
+        raise ManifestError("native_trust_registry_invalid: authority_model")
     authorities = value.get("authorities")
     if not isinstance(authorities, dict):
         raise ManifestError("native_trust_registry_invalid: authorities must be an object")
     for authority_id, authority in authorities.items():
-        if not isinstance(authority_id, str) or not authority_id or not isinstance(authority, dict):
+        if (
+            not isinstance(authority_id, str)
+            or not authority_id
+            or len(authority_id) > 128
+            or any(ch not in "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789._:-" for ch in authority_id)
+            or not isinstance(authority, dict)
+        ):
             raise ManifestError("native_trust_registry_invalid: authority entry")
         required = {
             "enabled",
@@ -82,13 +92,23 @@ def load_native_trust_registry(root: Path) -> Mapping[str, Any]:
             raise ManifestError(f"native_trust_registry_invalid: verifier: {authority_id}")
         if not isinstance(authority["enabled"], bool):
             raise ManifestError(f"native_trust_registry_invalid: enabled: {authority_id}")
-        if not isinstance(authority["allowed_targets"], list) or not all(
-            isinstance(item, str) and item for item in authority["allowed_targets"]
+        if (
+            not isinstance(authority["allowed_targets"], list)
+            or len(authority["allowed_targets"]) > 32
+            or len(set(authority["allowed_targets"])) != len(authority["allowed_targets"])
+            or not all(isinstance(item, str) and item for item in authority["allowed_targets"])
         ):
             raise ManifestError(f"native_trust_registry_invalid: allowed_targets: {authority_id}")
         for field in ("certificate_identity", "certificate_oidc_issuer", "cosign_binary"):
-            if not isinstance(authority[field], str):
+            if not isinstance(authority[field], str) or "\x00" in authority[field] or "\n" in authority[field] or "\r" in authority[field]:
                 raise ManifestError(f"native_trust_registry_invalid: {field}: {authority_id}")
+        if authority["certificate_identity"] and not authority["certificate_identity"].startswith("https://"):
+            raise ManifestError(f"native_trust_registry_invalid: certificate_identity: {authority_id}")
+        if authority["certificate_oidc_issuer"] and not authority["certificate_oidc_issuer"].startswith("https://"):
+            raise ManifestError(f"native_trust_registry_invalid: certificate_oidc_issuer: {authority_id}")
+        binary_value = authority["cosign_binary"]
+        if binary_value and not Path(binary_value).is_absolute() and any(ch not in "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789._-" for ch in binary_value):
+            raise ManifestError(f"native_trust_registry_invalid: cosign_binary: {authority_id}")
         digest = authority["cosign_binary_sha256"]
         if digest is not None and (
             not isinstance(digest, str)
@@ -97,10 +117,10 @@ def load_native_trust_registry(root: Path) -> Mapping[str, Any]:
         ):
             raise ManifestError(f"native_trust_registry_invalid: cosign digest: {authority_id}")
         receipts = authority["receipts"]
-        if not isinstance(receipts, dict):
+        if not isinstance(receipts, dict) or len(receipts) > 256:
             raise ManifestError(f"native_trust_registry_invalid: receipts: {authority_id}")
         for receipt_id, record in receipts.items():
-            if not isinstance(receipt_id, str) or not receipt_id or not isinstance(record, dict):
+            if not isinstance(receipt_id, str) or not receipt_id or len(receipt_id) > 128 or not isinstance(record, dict):
                 raise ManifestError(f"native_trust_registry_invalid: receipt entry: {authority_id}")
             if set(record) != {"receipt_canonical_sha256", "bundle_path", "bundle_sha256"}:
                 raise ManifestError(f"native_trust_registry_invalid: receipt fields: {receipt_id}")
@@ -118,8 +138,17 @@ def load_native_trust_registry(root: Path) -> Mapping[str, Any]:
                 or not bundle_path
                 or Path(bundle_path).is_absolute()
                 or ".." in Path(bundle_path).parts
+                or "\\" in bundle_path
+                or "\x00" in bundle_path
+                or "\n" in bundle_path
+                or "\r" in bundle_path
             ):
                 raise ManifestError(f"native_trust_registry_invalid: bundle_path: {receipt_id}")
+        if authority["enabled"] is True:
+            if not authority["allowed_targets"] or not authority["certificate_identity"] or not authority["certificate_oidc_issuer"]:
+                raise ManifestError(f"native_trust_registry_invalid: enabled authority identity/scope: {authority_id}")
+            if not isinstance(authority["cosign_binary_sha256"], str) or not authority["cosign_binary"]:
+                raise ManifestError(f"native_trust_registry_invalid: enabled authority cosign pin: {authority_id}")
     return value
 
 
