@@ -87,9 +87,11 @@ TESTS=(
   test_file_modes.sh
   test_install.sh
   test_profile_coherence.sh
+  test_profile_context_footprint.sh
   test_optional_skills.sh
   test_convert.sh
   test_runtime_boundary.sh
+  test_profile_context_footprint.sh
   test_target_contracts.sh
   test_target_adapter_spi.sh
   test_effect_eval.sh
