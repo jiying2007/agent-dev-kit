@@ -6,6 +6,7 @@ import argparse
 import copy
 import hashlib
 import json
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Mapping, Sequence
 
@@ -136,7 +137,7 @@ def finalize_campaign(
         },
         contract_digest=contract_digest,
         trusted_authorities=(str(plan["authority"]["authority_id"]),),
-        now=__import__("datetime").datetime.now(__import__("datetime").timezone.utc),
+        now=datetime.now(timezone.utc),
     )
 
     final_contract = copy.deepcopy(candidate_contract)
