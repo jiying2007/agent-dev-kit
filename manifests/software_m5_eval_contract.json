@@ -1,6 +1,6 @@
 {
   "schema": "adk-runtime-eval-campaign/v1",
-  "campaign_id": "software-m5-7.1.0",
+  "campaign_id": "software-m5-7.2.0",
   "tasks": "tests/fixtures/software_m5_eval_tasks.jsonl",
   "minimum_tasks": 60,
   "runtimes": [
