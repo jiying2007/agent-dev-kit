@@ -16,22 +16,44 @@ ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = Manifest.load(ROOT)
 
 
-def commands(path: Path, *, fail_stage: str | None = None, duplicate: bool = False, flood: bool = False) -> Path:
+def commands(
+    path: Path,
+    *,
+    fail_stage: str | None = None,
+    duplicate: bool = False,
+    flood: bool = False,
+    missing_marker_stage: str | None = None,
+) -> Path:
     stages = {}
     for stage in ("discovery", "load", "trigger"):
+        label = "same" if duplicate else stage
         if fail_stage == stage:
             code = "import sys; sys.exit(7)"
+            marker = "never-produced"
         elif flood and stage == "load":
             code = "import sys; sys.stdout.write('x'*200000)"
+            marker = "x"
         else:
-            label = "same" if duplicate else stage
             code = (
                 "import os; assert os.path.isdir(os.environ['ADK_TARGET_ROOT']); "
                 f"print('{label}-canary')"
             )
-        stages[stage] = [sys.executable, "-c", code]
-    path.write_text(json.dumps({"schema": "adk-native-target-campaign-commands/v1", "stages": stages}), encoding="utf-8")
+            marker = f"{label}-canary"
+        if missing_marker_stage == stage:
+            marker = "expected-but-not-produced"
+        stages[stage] = {
+            "argv": [sys.executable, "-c", code],
+            "expect_stdout_contains": [marker],
+        }
+    path.write_text(
+        json.dumps(
+            {"schema": "adk-native-target-campaign-commands/v1", "stages": stages},
+            sort_keys=True,
+        ),
+        encoding="utf-8",
+    )
     return path
+
 
 
 class NativeConformanceCampaignTest(unittest.TestCase):
@@ -146,6 +168,21 @@ class NativeConformanceCampaignTest(unittest.TestCase):
             self.assertEqual(result["stage"], "load")
             self.assertEqual(result["reason"], "runtime-nonzero-exit")
             self.assertFalse(result["receipt_written"])
+            self.assertFalse((temp / "receipt.json").exists())
+
+    def test_missing_semantic_marker_fails_without_raw_output_or_receipt(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            temp = Path(raw)
+            result = self.run_campaign(
+                temp,
+                commands(temp / "commands.json", missing_marker_stage="trigger"),
+            )
+            self.assertEqual(result["status"], "fail")
+            self.assertEqual(result["stage"], "trigger")
+            self.assertEqual(result["reason"], "semantic-marker-missing")
+            self.assertEqual(result["missing_marker_count"], 1)
+            self.assertFalse(result["receipt_written"])
+            self.assertNotIn("trigger-canary", json.dumps(result))
             self.assertFalse((temp / "receipt.json").exists())
 
     def test_output_budget_is_fail_closed_and_raw_output_is_not_returned(self) -> None:
