@@ -4,7 +4,7 @@ This runbook turns native target verification into a reproducible, privacy-safe 
 
 ## 1. Prepare
 
-Create an external commands JSON with exactly four command arrays: `version`, `discovery`, `load`, and `trigger`. Commands are hashed into the plan but their raw arguments are not copied into repository evidence.
+Create an external commands JSON with exactly four command arrays: `version`, `discovery`, `load`, and `trigger`. Every command must start with the same absolute runtime binary path; wrappers and PATH-only executable names are rejected. Commands are hashed into the plan but their raw arguments are not copied into repository evidence.
 
 ```bash
 bash scripts/devkit.sh native-campaign prepare \
