@@ -7,7 +7,7 @@ import unittest
 from pathlib import Path
 
 from agent_dev_kit.model import Manifest
-from agent_dev_kit.profile_context_footprint import compare_profiles, profile_footprint
+from agent_dev_kit.profile_context_footprint import compare_profiles, enforce_profile_ratchet, profile_footprint
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = Manifest.load(ROOT)
@@ -35,6 +35,14 @@ class ProfileContextFootprintTest(unittest.TestCase):
                 self.assertGreater(first["assets"]["total"], 0)
                 self.assertGreater(first["entry_file_surface"]["bytes"], 0)
 
+    def test_all_profile_source_growth_ratchets_hold(self) -> None:
+        for name in sorted(MANIFEST.data["profiles"]):
+            with self.subTest(profile=name):
+                result = enforce_profile_ratchet(MANIFEST, name)
+                self.assertEqual(result["status"], "pass", result)
+                self.assertFalse(result["runtime_initial_context_claim"])
+                self.assertFalse(result["release_authorized"])
+
     def test_embedded_delta_is_explicit_not_a_quality_score(self) -> None:
         value = compare_profiles(MANIFEST, "core", "embedded-fullstack")
         self.assertEqual(value["status"], "pass")
@@ -53,6 +61,14 @@ class ProfileContextFootprintTest(unittest.TestCase):
         self.assertEqual(completed.returncode, 0, completed.stderr)
         cli = json.loads(completed.stdout)
         self.assertEqual(cli, compare_profiles(MANIFEST, "core", "embedded-fullstack"))
+
+        ratchet = subprocess.run(
+            [sys.executable, "-m", "agent_dev_kit.cli", "profile-footprint",
+             "--profile", "core", "--ratchet", "--summary-json"],
+            cwd=ROOT, text=True, capture_output=True, timeout=30,
+        )
+        self.assertEqual(ratchet.returncode, 0, ratchet.stderr)
+        self.assertEqual(json.loads(ratchet.stdout)["status"], "pass")
 
         failed = subprocess.run(
             [sys.executable, "-m", "agent_dev_kit.cli", "profile-footprint",
