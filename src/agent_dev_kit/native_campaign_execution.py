@@ -21,6 +21,7 @@ from .native_campaign_contract import (
     PLAN_SCHEMA,
     STAGES,
     _bundle_identity,
+    native_campaign_target_layout,
     _runtime_binary,
     _sha256_file,
     _timestamp,
@@ -179,6 +180,7 @@ def _blocked_version_evidence(
 def _stage_environment(
     plan: Mapping[str, Any],
     base_env: Mapping[str, str],
+    project_root: Path,
     target_root: Path,
     stage: str,
 ) -> dict[str, str]:
@@ -186,6 +188,7 @@ def _stage_environment(
     env.update(
         {
             "ADK_TARGET": str(plan["target"]),
+            "ADK_TARGET_PROJECT_ROOT": str(project_root),
             "ADK_TARGET_ROOT": str(target_root),
             "ADK_TARGET_SMOKE_STAGE": stage,
         }
@@ -270,8 +273,12 @@ def run_campaign(
         asset_kind="skill",
     )
     stage_records: list[dict[str, Any]] = []
+    target_layout = native_campaign_target_layout(manifest, str(plan["target"]))
     with tempfile.TemporaryDirectory(prefix="adk-native-campaign-") as temporary:
-        target_root = Path(temporary) / str(plan["target"])
+        project_root = Path(temporary) / "project"
+        project_root.mkdir()
+        target_root = project_root / str(target_layout["project_config_dir"])
+        target_root.mkdir()
         _write_bundle(target_root, bundle)
         environment_descriptor = {
             "auth_mode": plan["auth_mode"],
@@ -279,9 +286,12 @@ def run_campaign(
             "target": plan["target"],
             "profile": plan["profile"],
             "asset_kind": "skill",
+            "discovery_scope": target_layout["discovery_scope"],
+            "project_config_dir": target_layout["project_config_dir"],
+            "runtime_cwd": "project-root",
         }
         environment_digest = sha256_bytes(canonical_json_bytes(environment_descriptor))
-        cwd_digest = sha256_bytes(str(target_root.resolve()).encode("utf-8"))
+        cwd_digest = sha256_bytes(str(project_root.resolve()).encode("utf-8"))
         previous_failed = False
         for stage in STAGES:
             if previous_failed:
@@ -294,12 +304,12 @@ def run_campaign(
                     }
                 )
                 continue
-            env = _stage_environment(plan, base_env, target_root, stage)
+            env = _stage_environment(plan, base_env, project_root, target_root, stage)
             started_at = _utc_now()
             try:
                 result = _execute(
                     commands_value[stage],
-                    cwd=target_root,
+                    cwd=project_root,
                     env=env,
                     timeout_seconds=int(plan["timeout_seconds"]),
                     output_limit=MAX_OUTPUT_BYTES,
