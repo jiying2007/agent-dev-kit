@@ -331,3 +331,7 @@ bash scripts/devkit.sh release publish --version "$VERSION" --backend github --a
 `release rehearse` 只接受 checksum 匹配、满足当前 strict source/release contract 且 candidate 版本更高的本地 artifact；它在临时 target 安装上一版、升级候选版、核验 receipt，再回滚并比较上一版受管资产 hash。pre-contract/legacy bundle 与缺少当前必填 target contract 字段的 artifact 会直接 fail closed，不提供 release-only migration boundary。candidate 回滚后直接恢复并逐文件比对上一版 managed hashes，证明 rollback anchor 可用。build 在归档前校验 SPDX 2.3 SBOM 的 package/relationship 完整性并把 SBOM SHA256 写入 release manifest；GitHub release workflow 使用 SHA-pinned `actions/attest` 为 tarball 生成 provenance。该命令不创建 tag、不上传制品、不调用远端 backend。rehearsal、runtime smoke、timing 和 campaign state 属于 checkout 内的验证证据，不进入 source distribution，避免制品 SHA 与其自身验证报告形成循环依赖。
 
 `release runtime-build` 按显式 Profile 构建 `adk-runtime-bundle/v1`，只包含版本化 Skill support tree、bundle manifest、逐文件 checksum、许可证和 SPDX SBOM。它是供外部 handoff target 导入的 platform-neutral Runtime Bundle，不是 Codex direct export；制品不包含 ADK Python 实现、测试、内部 change evidence 或 source distribution，也不会写任何运行目录。
+
+## Repeated test effect comparison
+
+`adk eval compare-trials --input campaign.json --output comparison.json --summary-json` validates complete fixed-plan trials. Exit codes: 0 improved/non-inferior; 1 regressed; 2 inconclusive/invalid. Test-only; no runtime, release or product authority. See `docs/runbooks/effect-trials.md`.

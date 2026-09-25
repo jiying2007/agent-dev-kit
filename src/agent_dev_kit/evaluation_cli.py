@@ -11,6 +11,8 @@ from .campaign import campaign_plan, check_campaign, run_campaign
 from .campaign_model import campaign_markdown
 from .cli_runtime import DEFAULT_TASKS, ROOT, _json, _manifest, _write_json
 from .effect_evaluation import run_effect_eval
+from .effect_trials import compare_effect_trial_file
+from .model import ManifestError
 from .evaluation import eval_markdown, run_runtime, runtime_plan
 from .evaluation_runtime import compare_runtime_reports, load_tasks, run_deterministic
 from .repository_evaluation import certify_repository_report
@@ -40,6 +42,10 @@ def main(argv: Sequence[str] | None = None) -> int:
     compare.add_argument("--candidate", required=True)
     compare.add_argument("--output")
     compare.add_argument("--summary-json", action="store_true")
+    trials = sub.add_parser("compare-trials")
+    trials.add_argument("--input", required=True)
+    trials.add_argument("--output")
+    trials.add_argument("--summary-json", action="store_true")
     effect = sub.add_parser("effect")
     effect.add_argument("--contract", default=str(ROOT / "manifests" / "effect_eval_contract.json"))
     effect.add_argument("--output")
@@ -94,6 +100,22 @@ def main(argv: Sequence[str] | None = None) -> int:
     certify.add_argument("--output")
     certify.add_argument("--summary-json", action="store_true")
     args = parser.parse_args(argv)
+    if args.action == "compare-trials":
+        try:
+            value = compare_effect_trial_file(Path(args.input), _manifest())
+        except (ManifestError, OSError, ValueError, RecursionError):
+            value = {
+                "schema_version": "adk-effect-trial-comparison/v1",
+                "verdict": "invalid", "reason": "invalid-input-or-evidence",
+                "evidence_scope": "test-only", "quality_evidence_eligible": False,
+                "owner_review_required": True, "lifecycle_authority": "none-evidence-only",
+                "release_authorized": False, "raw_content_stored": False,
+            }
+        if args.output:
+            _write_json(Path(args.output), value)
+        if args.summary_json or not args.output:
+            _json(value)
+        return {"improved": 0, "non-inferior": 0, "regressed": 1}.get(value["verdict"], 2)
     if args.action == "repository":
         if args.repository_action == "plan":
             value = repository_plan(_manifest(), Path(args.contract))
