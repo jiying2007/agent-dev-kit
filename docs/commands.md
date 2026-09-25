@@ -116,6 +116,23 @@ bash scripts/devkit.sh target smoke --target claude-code --stage discovery --pro
 
 当前 `claude-code`、`opencode` 均为 `experimental`。真实 runtime smoke 至少分 discovery、load、trigger、permission 四阶段；本地结果记录 `started_at`、`duration_ms`、runtime command SHA256、exit code 和 stdout/stderr digest，runtime/version 与可复核证据摘要必须由外部 campaign 一并留存。
 
+### target native-campaign
+
+将 discovery/load/trigger 三阶段真实执行收集成严格 native receipt **候选**。命令文件是 JSON argv 数组，不经 shell；每阶段有超时和输出字节预算，raw stdout/stderr 只计算 digest 后丢弃。
+
+```bash
+bash scripts/devkit.sh target native-campaign \
+  --target claude-code --profile core \
+  --runtime-binary "$(command -v claude)" --runtime-name claude --runtime-version 2.1.138 \
+  --commands /absolute/native-stage-commands.json \
+  --authority-id owner-reviewed-native-candidate \
+  --execution-authority human-approved \
+  --verification-backend external-signature-verifier \
+  --output /absolute/native-receipt.json --summary-json
+```
+
+PASS 只表示 candidate receipt 结构、身份和三阶段执行均成立；固定输出仍为 `not-certified` / `promotion_eligible=false`，不会写 target contract 或 live HOME。受管 external-signature / CI-provenance verifier 仍是 runtime promotion 的独立门禁。详见 `docs/runbooks/native-target-conformance-campaign.md`。
+
 ## platform
 
 统一 Agent Platform primitives 的只读/验证入口；公共调用只通过 `adk platform`（仓内为 `scripts/devkit.sh platform`），不再维护独立 platform shell CLI。该命令覆盖 effective profile、portable Skill audit、trace/verifier contract、loop decision、asset usage、ACI、hook IR 与 target conformance。
