@@ -253,6 +253,11 @@ def prepare_campaign(
         bundle_digest,
         receipt_path,
     )
+    _validate_schema(
+        candidate,
+        manifest.root / "manifests" / "target-contract.schema.json",
+        "native candidate target contract",
+    )
     commands_value = _validate_commands(dict(commands))
     for command_name in ("version", *STAGES):
         if _runtime_binary(commands_value[command_name][0]) != runtime_binary:
