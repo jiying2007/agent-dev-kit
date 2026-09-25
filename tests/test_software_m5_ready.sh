@@ -52,11 +52,9 @@ from agent_dev_kit.versioning import (
     version_identity_failures,
     version_is_newer,
 )
-from agent_dev_kit.release import (
-    _extract_release,
-    _release_source_identity,
-    check_release,
-)
+from agent_dev_kit.distribution import release_artifacts
+from agent_dev_kit.distribution.release_artifacts import _extract_release, _release_source_identity
+from agent_dev_kit.release import check_release
 
 root = Path(os.sys.argv[1])
 temp_root = Path(os.sys.argv[2])
@@ -92,6 +90,15 @@ for retired_campaign_model_export in (
     assert hasattr(campaign_model, retired_campaign_model_export), retired_campaign_model_export
     assert not hasattr(campaign, retired_campaign_model_export), retired_campaign_model_export
 assert not hasattr(campaign_model, "_contract_json_loader")
+
+for retired_release_artifact_export in (
+    "_extract_release",
+    "_release_source_identity",
+    "_release_source_root",
+    "_verify_artifact_checksum",
+):
+    assert hasattr(release_artifacts, retired_release_artifact_export), retired_release_artifact_export
+    assert not hasattr(__import__("agent_dev_kit.release", fromlist=["check_release"]), retired_release_artifact_export), retired_release_artifact_export
 cli_source = (root / "src/agent_dev_kit/cli.py").read_text(encoding="utf-8")
 runtime_source = (root / "src/agent_dev_kit/cli_runtime.py").read_text(encoding="utf-8")
 eval_cli_source = (root / "src/agent_dev_kit/evaluation_cli.py").read_text(encoding="utf-8")
