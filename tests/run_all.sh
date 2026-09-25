@@ -93,7 +93,9 @@ TESTS=(
   test_runtime_boundary.sh
   test_profile_context_footprint.sh
   test_target_contracts.sh
+  test_target_source_probe.sh
   test_target_adapter_spi.sh
+  test_target_source_probe.sh
   test_effect_eval.sh
   test_product_maturity.sh
   test_runtime_bundle.sh
