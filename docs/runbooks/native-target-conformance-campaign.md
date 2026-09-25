@@ -23,16 +23,25 @@ The commands file is data, not a shell script:
 {
   "schema": "adk-native-target-campaign-commands/v1",
   "stages": {
-    "discovery": ["/absolute/runtime-or-reviewed-wrapper", "..."],
-    "load": ["/absolute/runtime-or-reviewed-wrapper", "..."],
-    "trigger": ["/absolute/runtime-or-reviewed-wrapper", "..."]
+    "discovery": {
+      "argv": ["/absolute/runtime-or-reviewed-wrapper", "..."],
+      "expect_stdout_contains": ["discovery-canary"]
+    },
+    "load": {
+      "argv": ["/absolute/runtime-or-reviewed-wrapper", "..."],
+      "expect_stdout_contains": ["load-canary"]
+    },
+    "trigger": {
+      "argv": ["/absolute/runtime-or-reviewed-wrapper", "..."],
+      "expect_stdout_contains": ["trigger-canary"]
+    }
   }
 }
 ```
 
-All three command arrays must be different. The campaign exports the selected Skill bundle to an isolated temporary target root and exposes that path through `ADK_TARGET_ROOT` plus the current `ADK_TARGET_SMOKE_STAGE`. The stage command is responsible for invoking the native runtime with reviewed permission, persistence, settings-source and provider/auth flags.
+All three stage plans must be different. Each stage declares both an argv array and one or more bounded stdout semantic markers. The collector verifies those markers in bounded transient memory, includes the marker contract in `command_sha256`, then discards raw output. A zero exit without the expected stage canary is a failure. The campaign exports the selected Skill bundle to an isolated temporary target root and exposes that path through `ADK_TARGET_ROOT` plus the current `ADK_TARGET_SMOKE_STAGE`. The stage command is responsible for invoking the native runtime with reviewed permission, persistence, settings-source and provider/auth flags.
 
-The collector records command/result digests, exact runtime binary digest/version pin, deterministic bundle digest, prospective normalized target-contract digest, timestamps, bounded stdout/stderr byte counts and authority metadata. Raw stdout/stderr are hashed and discarded. A timeout, non-zero exit, output flood, repeated stage command/result evidence, unsafe command file, missing runtime or existing receipt path fails closed.
+The collector records semantic-contract-bound command/result digests, exact runtime binary digest/version pin, deterministic bundle digest, prospective normalized target-contract digest, timestamps, bounded stdout/stderr byte counts and authority metadata. Raw stdout/stderr are hashed and discarded. A timeout, non-zero exit, output flood, repeated stage command/result evidence, unsafe command file, missing runtime or existing receipt path fails closed.
 
 ## Authority boundary
 
