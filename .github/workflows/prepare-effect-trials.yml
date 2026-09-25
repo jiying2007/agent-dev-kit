@@ -43,8 +43,8 @@ jobs:
           assert hashlib.sha256(patch).hexdigest() == '83c4d42755390b5f82801353b0ecd17e73244eb5315e4b74d8c96638d53b1987'
           Path('/tmp/effect-trials.patch').write_bytes(patch)
           PY
-          git apply --check /tmp/effect-trials.patch
-          git apply --index /tmp/effect-trials.patch
+          git apply --recount --check /tmp/effect-trials.patch
+          git apply --recount --index /tmp/effect-trials.patch
       - name: Synchronize version through canonical authority and verify
         run: |
           set -euo pipefail
