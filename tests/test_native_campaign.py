@@ -16,6 +16,7 @@ from agent_dev_kit.native_campaign import (
     prepare_campaign,
     run_campaign,
 )
+from agent_dev_kit.native_campaign_contract import load_native_campaign_target_layouts
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = Manifest.load(ROOT)
@@ -23,13 +24,24 @@ VERSION = platform.python_version()
 SENTINEL = "native-campaign-raw-output-sentinel"
 
 
-def stage_command(stage: str, *, fail: bool = False, flood: bool = False) -> list[str]:
+def stage_command(
+    stage: str,
+    *,
+    project_config_dir: str = ".claude",
+    fail: bool = False,
+    flood: bool = False,
+) -> list[str]:
     code = (
         "import os,sys;"
         "from pathlib import Path;"
         "assert 'HOME' not in os.environ;"
         "assert os.environ['ADK_TARGET_SMOKE_STAGE']==sys.argv[1];"
-        "assert Path(os.environ['ADK_TARGET_ROOT']).is_dir();"
+        "project=Path(os.environ['ADK_TARGET_PROJECT_ROOT']).resolve();"
+        "config=Path(os.environ['ADK_TARGET_ROOT']).resolve();"
+        "assert Path.cwd().resolve()==project;"
+        "assert config==project/sys.argv[2];"
+        "assert config.is_dir();"
+        "assert (config/'skills').is_dir();"
     )
     if flood:
         code += "sys.stdout.write('x'*(1024*1024+1));"
@@ -37,15 +49,21 @@ def stage_command(stage: str, *, fail: bool = False, flood: bool = False) -> lis
         code += f"print('{SENTINEL}-'+sys.argv[1]);"
     if fail:
         code += "sys.exit(7);"
-    return [sys.executable, "-c", code, stage]
+    return [sys.executable, "-c", code, stage, project_config_dir]
 
 
-def commands(*, fail_stage: str | None = None, flood_stage: str | None = None) -> dict[str, list[str]]:
+def commands(
+    *,
+    project_config_dir: str = ".claude",
+    fail_stage: str | None = None,
+    flood_stage: str | None = None,
+) -> dict[str, list[str]]:
     return {
         "version": [sys.executable, "--version"],
         **{
             stage: stage_command(
                 stage,
+                project_config_dir=project_config_dir,
                 fail=stage == fail_stage,
                 flood=stage == flood_stage,
             )
@@ -69,10 +87,15 @@ class NativeCampaignTest(unittest.TestCase):
         self.active = ROOT / "manifests" / "target-contracts" / "claude-code.json"
         self.active_before = self.active.read_bytes()
 
-    def prepare(self, command_set: dict[str, list[str]] | None = None, runtime_version: str = VERSION):
+    def prepare(
+        self,
+        command_set: dict[str, list[str]] | None = None,
+        runtime_version: str = VERSION,
+        target: str = "claude-code",
+    ):
         return prepare_campaign(
             MANIFEST,
-            target="claude-code",
+            target=target,
             profile="core",
             runtime_binary=Path(sys.executable),
             runtime_version=runtime_version,
@@ -84,6 +107,27 @@ class NativeCampaignTest(unittest.TestCase):
             commands=command_set or commands(),
             receipt_path=self.receipt_rel,
         )
+
+    def test_target_layout_manifest_covers_direct_targets(self) -> None:
+        layouts = load_native_campaign_target_layouts(MANIFEST)
+        self.assertEqual(set(layouts), set(MANIFEST.direct_targets()))
+        self.assertEqual(layouts["claude-code"]["project_config_dir"], ".claude")
+        self.assertEqual(layouts["opencode"]["project_config_dir"], ".opencode")
+        self.assertTrue(all(item["discovery_scope"] == "project" for item in layouts.values()))
+
+    def test_each_direct_target_runs_from_native_project_config_root(self) -> None:
+        for target, config_dir in (("claude-code", ".claude"), ("opencode", ".opencode")):
+            with self.subTest(target=target):
+                command_set = commands(project_config_dir=config_dir)
+                plan, candidate = self.prepare(command_set, target=target)
+                evidence = run_campaign(
+                    MANIFEST, plan, candidate, command_set, Path(sys.executable)
+                )
+                self.assertEqual(evidence["status"], "complete", evidence)
+                self.assertEqual(
+                    [item["status"] for item in evidence["stages"]],
+                    ["pass", "pass", "pass"],
+                )
 
     def test_api_complete_campaign_finalizes_without_raw_output_or_active_write(self) -> None:
         command_set = commands()
