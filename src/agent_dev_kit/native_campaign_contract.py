@@ -252,6 +252,11 @@ def prepare_campaign(
         receipt_path,
     )
     commands_value = _validate_commands(dict(commands))
+    for command_name in ("version", *STAGES):
+        if _runtime_binary(commands_value[command_name][0]) != runtime_binary:
+            raise ManifestError(
+                f"native_campaign_command_must_use_runtime_binary: {command_name}"
+            )
     command_digests = {
         name: sha256_bytes(canonical_json_bytes(commands_value[name]))
         for name in ("version", *STAGES)
