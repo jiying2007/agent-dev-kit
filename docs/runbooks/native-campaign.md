@@ -25,7 +25,7 @@ bash scripts/devkit.sh native-campaign prepare \
 
 Prepare binds the current static target contract, exact ADK source version, skills-only rendered bundle digest, runtime binary digest/version, trust backend, authority, receipt path and four command digests. It also creates a future runtime target-contract candidate whose normalized contract digest is stable before evidence is added.
 
-The candidate is not an active contract. Do not copy it into `manifests/target-contracts/` yet.
+The candidate is not an active contract. Do not copy it into `manifests/target-contracts/` yet. Campaign CLI outputs that resolve inside the repository are restricted to `reports/runtime/`; plan/candidate/final-contract files should normally stay in an external temporary directory until owner review.
 
 ## 2. Run
 
