@@ -1,0 +1,23 @@
+{
+  "schema": "adk-native-campaign-target-layouts/v1",
+  "status": "reviewed",
+  "reviewed_at": "2026-09-25",
+  "expires_at": "2026-12-24",
+  "targets": {
+    "claude-code": {
+      "project_config_dir": ".claude",
+      "discovery_scope": "project",
+      "documentation": [
+        "https://code.claude.com/docs/en/skills"
+      ]
+    },
+    "opencode": {
+      "project_config_dir": ".opencode",
+      "discovery_scope": "project",
+      "documentation": [
+        "https://opencode.ai/docs/skills",
+        "https://dev.opencode.ai/docs/config/"
+      ]
+    }
+  }
+}
