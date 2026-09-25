@@ -13,6 +13,7 @@ from .compiler import export_assets
 from .installation_plan import create_plan, write_plan
 from .installation_transaction import apply_plan, rollback
 from .locking import clear_target_lock, target_lock_status
+from .native_conformance_campaign import run_native_candidate
 from .release import (
     build_release,
     build_runtime_bundle,
@@ -148,11 +149,29 @@ def _cmd_target(argv: Sequence[str]) -> int:
     smoke.add_argument("--timeout-seconds", type=int, default=120)
     smoke.add_argument("--summary-json", action="store_true")
     smoke.add_argument("--runtime-command", nargs=argparse.REMAINDER, default=[])
+    native = sub.add_parser("native-campaign")
+    native.add_argument("--target", required=True)
+    native.add_argument("--profile")
+    native.add_argument("--runtime-binary", required=True)
+    native.add_argument("--runtime-name", required=True)
+    native.add_argument("--runtime-version", required=True)
+    native.add_argument("--commands", required=True)
+    native.add_argument("--authority-id", required=True)
+    native.add_argument("--execution-authority", choices=("human-approved", "ci-approved"), required=True)
+    native.add_argument(
+        "--verification-backend",
+        choices=("external-signature-verifier", "ci-provenance-verifier"),
+        required=True,
+    )
+    native.add_argument("--output", required=True)
+    native.add_argument("--timeout-seconds", type=int, default=120)
+    native.add_argument("--max-output-bytes", type=int, default=1024 * 1024)
+    native.add_argument("--summary-json", action="store_true")
     args = parser.parse_args(argv)
     manifest = _manifest()
     if args.action == "check":
         result = check_targets(manifest, None if args.all else args.target)
-    else:
+    elif args.action == "smoke":
         result = run_target_smoke(
             manifest,
             args.target,
@@ -161,6 +180,22 @@ def _cmd_target(argv: Sequence[str]) -> int:
             profile=args.profile,
             asset_kind=args.asset_kind,
             timeout_seconds=args.timeout_seconds,
+        )
+    else:
+        result = run_native_candidate(
+            manifest,
+            target=args.target,
+            profile=args.profile or manifest.default_profile,
+            runtime_binary=Path(args.runtime_binary),
+            runtime_name=args.runtime_name,
+            runtime_version=args.runtime_version,
+            commands_path=Path(args.commands),
+            authority_id=args.authority_id,
+            execution_authority=args.execution_authority,
+            verification_backend=args.verification_backend,
+            output=Path(args.output),
+            timeout_seconds=args.timeout_seconds,
+            max_output_bytes=args.max_output_bytes,
         )
     if getattr(args, "summary_json", False):
         _json(result)
