@@ -241,6 +241,7 @@ def run_campaign(
         raise ManifestError("native_campaign_bundle_drift")
 
     base_env = _base_environment(str(plan["auth_mode"]))
+    base_env["PATH"] = str(runtime_binary.parent) + os.pathsep + os.defpath
     version_probe = _execute(
         version_command,
         cwd=manifest.root,
