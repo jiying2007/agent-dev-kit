@@ -46,7 +46,7 @@ def _sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
-def _load_commands(path: Path) -> dict[str, tuple[str, ...]]:
+def _load_commands(path: Path) -> dict[str, dict[str, tuple[str, ...]]]:
     if path.is_symlink() or not path.is_file() or path.stat().st_size > 128 * 1024:
         raise ManifestError("native_campaign_commands_missing_or_unsafe")
     try:
@@ -58,21 +58,45 @@ def _load_commands(path: Path) -> dict[str, tuple[str, ...]]:
     raw = value.get("stages")
     if not isinstance(raw, dict) or set(raw) != set(STAGES):
         raise ManifestError("native_campaign_commands_require_discovery_load_trigger")
-    result: dict[str, tuple[str, ...]] = {}
+    result: dict[str, dict[str, tuple[str, ...]]] = {}
+    command_digests = []
+    marker_sets = []
     for stage in STAGES:
-        command = raw[stage]
+        plan = raw[stage]
+        if not isinstance(plan, dict) or set(plan) != {"argv", "expect_stdout_contains"}:
+            raise ManifestError(f"native_campaign_stage_plan_invalid: {stage}")
+        command = plan["argv"]
+        markers = plan["expect_stdout_contains"]
         if (
             not isinstance(command, list)
             or not 1 <= len(command) <= 64
             or not all(isinstance(item, str) and item and len(item) <= 4096 and "\0" not in item for item in command)
         ):
             raise ManifestError(f"native_campaign_command_invalid: {stage}")
-        result[stage] = tuple(command)
-    digests = [sha256_bytes(canonical_json_bytes(list(result[stage]))) for stage in STAGES]
-    if len(set(digests)) != len(STAGES):
+        if (
+            not isinstance(markers, list)
+            or not 1 <= len(markers) <= 8
+            or not all(isinstance(item, str) and item and len(item.encode("utf-8")) <= 256 and "\0" not in item for item in markers)
+            or len(set(markers)) != len(markers)
+        ):
+            raise ManifestError(f"native_campaign_semantic_markers_invalid: {stage}")
+        result[stage] = {
+            "argv": tuple(command),
+            "expect_stdout_contains": tuple(markers),
+        }
+        command_digests.append(
+            sha256_bytes(
+                canonical_json_bytes(
+                    {"argv": command, "expect_stdout_contains": markers}
+                )
+            )
+        )
+        marker_sets.append(tuple(markers))
+    if len(set(command_digests)) != len(STAGES):
         raise ManifestError("native_campaign_commands_must_be_independent")
+    if len(set(marker_sets)) != len(STAGES):
+        raise ManifestError("native_campaign_semantic_markers_must_be_independent")
     return result
-
 
 def _write_bundle(manifest: Manifest, target: str, profile: str, root: Path) -> tuple[str, int]:
     bundle = render_selection(manifest, target, [profile], asset_kind="skill")
@@ -160,6 +184,7 @@ def _run_bounded(
     assert process.stdout is not None and process.stderr is not None
     digests = [hashlib.sha256(), hashlib.sha256()]
     counts = [0, 0]
+    buffers = [bytearray(), bytearray()]
     overflow = threading.Event()
 
     def drain(index: int, pipe: Any) -> None:
@@ -169,6 +194,9 @@ def _run_bounded(
                 return
             counts[index] += len(chunk)
             digests[index].update(chunk)
+            if len(buffers[index]) <= max_output_bytes:
+                remaining = max_output_bytes + 1 - len(buffers[index])
+                buffers[index].extend(chunk[:remaining])
             if counts[index] > max_output_bytes:
                 overflow.set()
                 _kill_process(process)
@@ -204,8 +232,8 @@ def _run_bounded(
         "stderr_bytes": counts[1],
         "stdout_sha256": digests[0].hexdigest(),
         "stderr_sha256": digests[1].hexdigest(),
+        "_stdout_raw": bytes(buffers[0]),
     }
-
 
 def _receipt_schema(manifest: Manifest) -> Mapping[str, Any]:
     path = manifest.root / "schemas" / "native-target-conformance-receipt-v1.schema.json"
@@ -285,8 +313,16 @@ def run_native_candidate(
         stages = []
         stage_results = []
         for stage in STAGES:
-            command = commands[stage]
-            command_sha256 = sha256_bytes(canonical_json_bytes(list(command)))
+            plan = commands[stage]
+            command = plan["argv"]
+            command_sha256 = sha256_bytes(
+                canonical_json_bytes(
+                    {
+                        "argv": list(command),
+                        "expect_stdout_contains": list(plan["expect_stdout_contains"]),
+                    }
+                )
+            )
             environment_descriptor = {
                 "target": target,
                 "stage": stage,
@@ -335,6 +371,30 @@ def run_native_candidate(
                     "promotion_eligible": False,
                     "receipt_written": False,
                 }
+            missing_markers = [
+                marker
+                for marker in plan["expect_stdout_contains"]
+                if marker.encode("utf-8") not in result["_stdout_raw"]
+            ]
+            if missing_markers:
+                return {
+                    "schema": SCHEMA,
+                    "status": "fail",
+                    "stage": stage,
+                    "reason": "semantic-marker-missing",
+                    "missing_marker_count": len(missing_markers),
+                    "certification": "not-certified",
+                    "promotion_eligible": False,
+                    "receipt_written": False,
+                }
+            stage_results.append(
+                {
+                    "stage": stage,
+                    "duration_ms": result["duration_ms"],
+                    "stdout_bytes": result["stdout_bytes"],
+                    "stderr_bytes": result["stderr_bytes"],
+                }
+            )
             result_sha256 = sha256_bytes(
                 canonical_json_bytes(
                     {
@@ -433,16 +493,7 @@ def run_native_candidate(
         "receipt_path": str(output),
         "receipt_sha256": receipt_sha256,
         "receipt_written": True,
-        "stage_results": [
-            {
-                "stage": item["stage"],
-                "duration_ms": item["duration_ms"],
-                "stdout_bytes": item["stdout_bytes"],
-                "stderr_bytes": item["stderr_bytes"],
-            }
-            for item in stage_results
-        ],
-        "trust_verification": "not-run",
+        "stage_results": stage_results,\n        "trust_verification": "not-run",
         "certification": "not-certified",
         "promotion_eligible": False,
         "lifecycle_authority": "none-evidence-only",
