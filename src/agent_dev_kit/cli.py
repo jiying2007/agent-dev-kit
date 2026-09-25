@@ -24,6 +24,7 @@ from .doctor import run_doctor
 from .delivery_cli import main as delivery_main
 from .evaluation_cli import main as evaluation_main
 from .matcher import main as matcher_main
+from .native_campaign import main as native_campaign_main
 from .agent_platform_cli import main as platform_main
 from .phase_context import main as phase_context_main
 from .profile_context_footprint import main as profile_context_footprint_main
@@ -260,6 +261,9 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         if command == "target-source-probe":
             probe_args = rest if "--root" in rest else ["--root", str(ROOT), *rest]
             return target_source_probe_main(probe_args)
+        if command == "native-campaign":
+            campaign_args = rest if "--root" in rest else ["--root", str(ROOT), *rest]
+            return native_campaign_main(campaign_args)
         if command == "skill-relationships":
             relationship_args = rest if "--root" in rest else ["--root", str(ROOT), *rest]
             return skill_relationships_main(relationship_args)
