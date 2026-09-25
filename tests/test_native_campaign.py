@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import shutil
+import platform
 import subprocess
 import sys
 import tempfile
@@ -17,7 +18,7 @@ from agent_dev_kit.native_campaign import (
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = Manifest.load(ROOT)
-VERSION = f"{sys.version_info.major}.{sys.version_info.minor}"
+VERSION = platform.python_version()
 SENTINEL = "native-campaign-raw-output-sentinel"
 
 
