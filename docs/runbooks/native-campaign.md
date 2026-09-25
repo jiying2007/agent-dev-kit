@@ -39,9 +39,9 @@ bash scripts/devkit.sh native-campaign run \
   --summary-json
 ```
 
-The runner first executes the explicit runtime version probe and requires the planned version string. It then renders one isolated skills bundle and runs independent discovery/load/trigger commands.
+The runner first executes the explicit runtime version probe and requires the planned version string. It then creates one isolated project root, places the rendered bundle under the reviewed native project configuration directory (`.claude/` for Claude Code, `.opencode/` for OpenCode), and runs independent discovery/load/trigger commands with the project root as cwd. The relative `skills/...` layout from the target contract is therefore evaluated through the runtime's real project-level discovery surface.
 
-Default `--auth-mode none` omits HOME. `--auth-mode home` exposes only HOME/XDG cache plus certificate paths; provider tokens and the parent process environment are not inherited automatically. Each stage receives only the ADK target/stage variables.
+Default `--auth-mode none` omits HOME. `--auth-mode home` exposes only HOME/XDG cache plus certificate paths; provider tokens and the parent process environment are not inherited automatically. HOME is preserved separately from the temporary project config root, so project-local skills can be tested without replacing Claude's user config/credential directory. Each stage also receives `ADK_TARGET_PROJECT_ROOT` and `ADK_TARGET_ROOT`; the latter points to the reviewed project config directory.
 
 Raw stdout/stderr and raw commands are never written to evidence. Evidence records byte counts, SHA-256 digests, start/end time, duration, result digest and a non-secret environment projection. Output is bounded and execution is time-limited.
 
@@ -75,3 +75,13 @@ After finalize:
 4. Review and separately promote the target contract from static to runtime.
 
 Skipping any step is forbidden. Source-layout probes, campaign fixtures or unsigned receipts cannot replace native certification.
+
+
+## Project layout authority
+
+`manifests/native_campaign_target_layouts.json` is the reviewed source for native campaign project configuration roots. It is freshness-bounded and must cover every direct target. The current mappings are:
+
+- `claude-code -> .claude`, backed by the Claude Code Skills documentation.
+- `opencode -> .opencode`, backed by the OpenCode Skills and configuration documentation.
+
+This manifest is execution-layout metadata, not a new target contract wire format. Changing it requires source-version review and regression; campaign plan/evidence/receipt v1 schemas remain unchanged.
