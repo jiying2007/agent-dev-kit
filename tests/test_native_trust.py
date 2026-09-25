@@ -11,7 +11,7 @@ import unittest
 from pathlib import Path
 
 from agent_dev_kit.model import Manifest, ManifestError, canonical_json_bytes
-from agent_dev_kit.native_trust import build_managed_native_trust_verifier
+from agent_dev_kit.native_trust import build_managed_native_trust_verifier, load_native_trust_registry
 from agent_dev_kit.target_contracts import (
     _authority_digest,
     _native_contract_digest,
@@ -80,6 +80,12 @@ def registry(
 
 
 class ManagedNativeTrustVerifierTest(unittest.TestCase):
+    def test_repository_registry_enables_no_authority_by_default(self) -> None:
+        value = load_native_trust_registry(ROOT)
+        self.assertEqual(value["schema"], "adk-native-conformance-trust-registry/v1")
+        self.assertEqual(value["status"], "active")
+        self.assertEqual(value["authorities"], {})
+
     def test_managed_verifier_accepts_only_registered_exact_receipt(self) -> None:
         with tempfile.TemporaryDirectory() as temp_name:
             root = Path(temp_name)
