@@ -64,7 +64,7 @@ MCP、A2A、OpenTelemetry GenAI 等外部标准只能通过 versioned adapter bo
 - 外部协议版本不得成为 ADK core 的隐式版本号。
 - 协议升级必须有显式 adapter contract、兼容性证据与回滚边界。
 - adapter/runtime receipt 不得提升产品 qualification。
-- 没有真实 discovery/load/trigger 或 native receipt 时，不得声明 runtime-certified。
+- 没有真实 discovery/load/trigger 或 native receipt 时，不得声明 runtime-certified。Runtime receipt 的 production trust 由 `manifests/native_conformance_trust_registry.json` 管理；registry 默认无启用 authority，只有 target policy、authority/target scope、receipt/bundle digest、签名 identity/issuer 与固定 verifier binary 全部匹配时，production loader 才接受 runtime conformance。
 
 详见 `docs/architecture/interoperability-boundaries.md`。
 
