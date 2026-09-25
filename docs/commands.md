@@ -116,6 +116,32 @@ bash scripts/devkit.sh target smoke --target claude-code --stage discovery --pro
 
 当前 `claude-code`、`opencode` 均为 `experimental`。真实 runtime smoke 至少分 discovery、load、trigger、permission 四阶段；本地结果记录 `started_at`、`duration_ms`、runtime command SHA256、exit code 和 stdout/stderr digest，runtime/version 与可复核证据摘要必须由外部 campaign 一并留存。
 
+## native-campaign
+
+Prepare, execute, and finalize a version-pinned native discovery/load/trigger campaign without promoting the active target contract.
+
+```bash
+bash scripts/devkit.sh native-campaign prepare --target claude-code --profile core \
+  --runtime-binary /absolute/path/to/claude --runtime-version <exact-version> \
+  --authority-id ci-native-conformance --execution-authority ci-approved \
+  --verification-backend ci-provenance-verifier --auth-mode home \
+  --commands-json /absolute/private/commands.json \
+  --receipt-path reports/runtime/claude-native.json \
+  --plan-out /tmp/native-plan.json --candidate-contract-out /tmp/native-contract.json
+
+bash scripts/devkit.sh native-campaign run --plan /tmp/native-plan.json \
+  --candidate-contract /tmp/native-contract.json \
+  --commands-json /absolute/private/commands.json \
+  --runtime-binary /absolute/path/to/claude --evidence-out /tmp/native-evidence.json
+
+bash scripts/devkit.sh native-campaign finalize --plan /tmp/native-plan.json \
+  --candidate-contract /tmp/native-contract.json --evidence /tmp/native-evidence.json \
+  --receipt-out reports/runtime/claude-native.json \
+  --final-contract-out /tmp/native-final-contract.json
+```
+
+All four commands in the private commands JSON must start with the same absolute runtime binary. Raw command arguments and stdout/stderr are not persisted. Any failed/blocked stage prevents finalize. Finalize only produces a signed-receipt candidate and future target contract; signature bundle registration and target promotion remain separate owner-reviewed actions.
+
 ## platform
 
 统一 Agent Platform primitives 的只读/验证入口；公共调用只通过 `adk platform`（仓内为 `scripts/devkit.sh platform`），不再维护独立 platform shell CLI。该命令覆盖 effective profile、portable Skill audit、trace/verifier contract、loop decision、asset usage、ACI、hook IR 与 target conformance。
