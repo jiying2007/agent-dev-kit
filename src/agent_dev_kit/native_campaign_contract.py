@@ -34,6 +34,10 @@ MAX_LAYOUT_MANIFEST_BYTES = 256 * 1024
 
 def load_native_campaign_target_layouts(manifest: Manifest) -> Mapping[str, Mapping[str, Any]]:
     path = manifest.root / "manifests" / "native_campaign_target_layouts.json"
+    if path.is_symlink() or not path.is_file():
+        raise ManifestError("native_campaign_target_layouts_missing_or_unsafe")
+    if path.stat().st_size > MAX_LAYOUT_MANIFEST_BYTES:
+        raise ManifestError("native_campaign_target_layouts_exceeds_byte_budget")
     value = _load_json(path, "native campaign target layouts")
     if not isinstance(value, dict) or set(value) != {
         "schema", "status", "reviewed_at", "expires_at", "targets"
