@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+## v7.2.0 (2026-09-25)
+
+### Profile context and source-layout observability
+- Add deterministic profile-level context footprint accounting that separates always-visible entry bytes from deferred references/scripts/assets.
+- Add profile-to-profile deltas without treating byte or heuristic token counts as quality scores or provider tokenizer measurements.
+- Add isolated direct-target source discovery/load probes over actual exported files and digests; keep native runtime certification explicitly out of scope.
+- Wire both capabilities into the public CLI and quick/full regression suites while preserving existing token/context and target conformance authorities.
+
+
 ## v7.1.0 (2026-09-25)
 
 ### Repeated trial evidence
