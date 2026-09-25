@@ -22,12 +22,13 @@ def extract_array(name: str) -> set[str]:
     match = re.search(rf"(?ms)^{name}=\(\n(.*?)^\)", runner)
     if match is None:
         raise AssertionError(f"missing {name} array in {runner_path.relative_to(root)}")
-    return set(
-        re.findall(
-            r"(?m)^\s*(test_[A-Za-z0-9_.-]+\.sh)\s*$",
-            match.group(1),
-        )
+    ordered = re.findall(
+        r"(?m)^\s*(test_[A-Za-z0-9_.-]+\.sh)\s*$",
+        match.group(1),
     )
+    duplicates = sorted({item for item in ordered if ordered.count(item) > 1})
+    assert not duplicates, f"duplicate tests in {name}: {duplicates}"
+    return set(ordered)
 
 
 full_tests = extract_array("TESTS")
