@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import os
 import stat
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -87,6 +88,55 @@ class NativeConformanceCampaignTest(unittest.TestCase):
             raw_receipt = receipt_path.read_text()
             for value in ("discovery-canary", "load-canary", "trigger-canary"):
                 self.assertNotIn(value, raw_receipt)
+
+    def test_public_cli_emits_candidate_without_certification(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            temp = Path(raw)
+            command_path = commands(temp / "commands.json")
+            output = temp / "cli-receipt.json"
+            done = subprocess.run(
+                [
+                    sys.executable,
+                    "-m",
+                    "agent_dev_kit.cli",
+                    "target",
+                    "native-campaign",
+                    "--target",
+                    "claude-code",
+                    "--profile",
+                    "core",
+                    "--runtime-binary",
+                    sys.executable,
+                    "--runtime-name",
+                    "python3",
+                    "--runtime-version",
+                    "3.11.0",
+                    "--commands",
+                    str(command_path),
+                    "--authority-id",
+                    "ci-native-candidate",
+                    "--execution-authority",
+                    "ci-approved",
+                    "--verification-backend",
+                    "ci-provenance-verifier",
+                    "--output",
+                    str(output),
+                    "--timeout-seconds",
+                    "30",
+                    "--summary-json",
+                ],
+                cwd=ROOT,
+                text=True,
+                capture_output=True,
+                timeout=60,
+            )
+            self.assertEqual(done.returncode, 0, (done.stdout, done.stderr))
+            value = json.loads(done.stdout)
+            self.assertEqual(value["status"], "pass")
+            self.assertEqual(value["trust_verification"], "not-run")
+            self.assertEqual(value["certification"], "not-certified")
+            self.assertFalse(value["promotion_eligible"])
+            self.assertTrue(output.is_file())
 
     def test_nonzero_stage_fails_without_receipt(self) -> None:
         with tempfile.TemporaryDirectory() as raw:
