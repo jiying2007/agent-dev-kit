@@ -85,3 +85,8 @@ Skipping any step is forbidden. Source-layout probes, campaign fixtures or unsig
 - `opencode -> .opencode`, backed by the OpenCode Skills and configuration documentation.
 
 This manifest is execution-layout metadata, not a new target contract wire format. Changing it requires source-version review and regression; campaign plan/evidence/receipt v1 schemas remain unchanged.
+
+
+### Authentication and global-skill caveat
+
+`auth_mode=home` intentionally preserves the user's normal HOME so an authenticated runtime can start. That can also make user-global runtime configuration/skills visible. Project-local placement therefore proves that the campaign bundle is on the native project discovery surface, but does not by itself prove that no global source can shadow or influence a skill. A real certification campaign must use a uniquely identifiable canary/skill identity or equivalent native evidence and must record any global-source collision risk; a project-layout PASS alone is insufficient for native certification.
