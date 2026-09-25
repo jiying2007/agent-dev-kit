@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## v7.4.0 (2026-09-25)
+
+### Native campaign execution and receipt finalization
+- Add typed native campaign plan/evidence contracts and a public prepare/run/finalize CLI.
+- Freeze source contract, skills bundle, runtime binary/version, trust authority/backend and independent stage command digests before execution.
+- Run a bounded version probe plus discovery/load/trigger in one isolated bundle with a minimal environment and no persisted raw command/output content.
+- Emit the existing native conformance receipt only after all stages pass; failed/blocked campaigns cannot finalize.
+- Produce a future runtime target-contract candidate while refusing direct overwrite of the active contract; signature, managed trust registry binding and owner promotion remain separate.
+
+
 ## v7.3.0 (2026-09-25)
 
 ### Managed native conformance trust
