@@ -143,6 +143,23 @@ class NativeCampaignTest(unittest.TestCase):
         self.assertEqual(evidence["status"], "failed", evidence)
         self.assertIn("output_budget_exceeded", evidence["stages"][0]["reason"])
 
+
+    def test_finalize_rejects_evidence_identity_and_stage_command_drift(self) -> None:
+        command_set = commands()
+        plan, candidate = self.prepare(command_set)
+        evidence = run_campaign(MANIFEST, plan, candidate, command_set, Path(sys.executable))
+        self.assertEqual(evidence["status"], "complete", evidence)
+
+        changed_identity = json.loads(json.dumps(evidence))
+        changed_identity["bundle_sha256"] = "0" * 64
+        with self.assertRaisesRegex(ManifestError, "evidence_identity_mismatch"):
+            finalize_campaign(MANIFEST, plan, candidate, changed_identity, self.receipt)
+
+        changed_command = json.loads(json.dumps(evidence))
+        changed_command["stages"][1]["command_sha256"] = "f" * 64
+        with self.assertRaisesRegex(ManifestError, "stage_command_mismatch"):
+            finalize_campaign(MANIFEST, plan, candidate, changed_command, self.receipt)
+
     def test_public_cli_prepare_run_finalize(self) -> None:
         commands_path = self.temp / "commands.json"
         plan_path = self.temp / "plan.json"
@@ -209,6 +226,19 @@ class NativeCampaignTest(unittest.TestCase):
         self.assertEqual(finalized["status"], "ready-for-signature-and-registry")
         self.assertTrue(self.receipt.is_file())
         self.assertTrue(final_contract_path.is_file())
+        self.assertEqual(self.active.read_bytes(), self.active_before)
+
+        refused = invoke(
+            "finalize",
+            "--plan", str(plan_path),
+            "--candidate-contract", str(candidate_path),
+            "--evidence", str(evidence_path),
+            "--receipt-out", str(self.receipt),
+            "--final-contract-out", str(self.active),
+            expected=1,
+        )
+        self.assertEqual(refused["status"], "fail")
+        self.assertIn("must_not_overwrite_active_contract", refused["error"])
         self.assertEqual(self.active.read_bytes(), self.active_before)
 
 
