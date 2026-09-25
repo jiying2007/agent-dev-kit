@@ -452,6 +452,14 @@ def run_native_candidate(
                     "bundle_sha256": bundle_sha256,
                     "contract_sha256": contract_sha256,
                     "verified_at": verified_at,
+                    "stages": [
+                        {
+                            "stage": item["stage"],
+                            "command_sha256": item["command_sha256"],
+                            "result_sha256": item["result_sha256"],
+                        }
+                        for item in stages
+                    ],
                 }
             )
         )[:32],
