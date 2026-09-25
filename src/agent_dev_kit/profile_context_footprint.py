@@ -134,6 +134,47 @@ def profile_footprint(manifest: Manifest, profile: str) -> dict[str, Any]:
     }
 
 
+def enforce_profile_ratchet(manifest: Manifest, profile: str) -> dict[str, Any]:
+    path = manifest.root / "manifests" / "profile_context_ratchets.json"
+    try:
+        policy = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ManifestError("profile_context_ratchet_invalid") from exc
+    if policy.get("schema") != "adk-profile-context-ratchets/v1":
+        raise ManifestError("profile_context_ratchet_schema_invalid")
+    expected = policy.get("profiles", {}).get(profile)
+    if not isinstance(expected, dict):
+        raise ManifestError(f"profile_context_ratchet_missing: {profile}")
+    actual = profile_footprint(manifest, profile)
+    failures = []
+    checks = {
+        "entry_file_bytes": actual["entry_file_surface"]["bytes"],
+        "potential_full_source_bytes": actual["potential_full_source_surface"]["bytes"],
+    }
+    for name, value in checks.items():
+        limit = expected.get(name)
+        if not isinstance(limit, int) or isinstance(limit, bool) or limit < 0:
+            raise ManifestError(f"profile_context_ratchet_limit_invalid: {profile}:{name}")
+        if value > limit:
+            failures.append(f"{name} grew: actual={value} ratchet={limit}")
+    return {
+        "schema": "adk-profile-context-ratchet-result/v1",
+        "status": "fail" if failures else "pass",
+        "profile": profile,
+        "actual": checks,
+        "ratchet": {
+            "entry_file_bytes": expected["entry_file_bytes"],
+            "potential_full_source_bytes": expected["potential_full_source_bytes"],
+        },
+        "asset_count": actual["assets"]["total"],
+        "asset_count_baseline": expected.get("assets"),
+        "failures": failures,
+        "semantics": policy.get("semantics"),
+        "runtime_initial_context_claim": False,
+        "release_authorized": False,
+    }
+
+
 def compare_profiles(manifest: Manifest, baseline: str, candidate: str) -> dict[str, Any]:
     left = profile_footprint(manifest, baseline)
     right = profile_footprint(manifest, candidate)
@@ -169,13 +210,18 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--root", default=".")
     parser.add_argument("--profile", required=True)
     parser.add_argument("--compare")
+    parser.add_argument("--ratchet", action="store_true")
     parser.add_argument("--summary-json", action="store_true")
     args = parser.parse_args(argv)
     try:
         manifest = Manifest.load(Path(args.root).resolve())
+        if args.compare and args.ratchet:
+            raise ManifestError("--compare and --ratchet are mutually exclusive")
         result = (
             compare_profiles(manifest, args.profile, args.compare)
             if args.compare
+            else enforce_profile_ratchet(manifest, args.profile)
+            if args.ratchet
             else profile_footprint(manifest, args.profile)
         )
     except (OSError, ValueError, ManifestError, json.JSONDecodeError) as exc:
