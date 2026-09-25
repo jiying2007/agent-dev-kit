@@ -7,9 +7,9 @@ adk profile-footprint --profile core --summary-json
 adk profile-footprint --profile core --compare embedded-fullstack --summary-json
 ```
 
-The command measures exact UTF-8 source bytes for resolved `AGENTS.md` and `SKILL.md` entry surfaces, and separately totals deferred `references/`, `scripts/`, and `assets/` files. The byte ledger is deterministic. The reported token estimate is only `ceil(bytes/4)`; it is not a provider tokenizer measurement and must not be used as a billing or context-window fact.
+The command measures exact UTF-8 source bytes for resolved assets and separates three surfaces: frontmatter metadata, the remaining AGENTS/SKILL entry body, and deferred `references/`, `scripts/`, and `assets/`. The byte ledger is deterministic. The reported token estimate is only `ceil(bytes/4)`; it is not a provider tokenizer measurement and must not be used as a billing or context-window fact.
 
-Use `entry_context.bytes` when deciding whether a profile's always-visible source surface is growing. Treat `deferred_support.bytes` as a potential on-demand surface rather than assumed initial context. Compare profiles with `--compare` to see marginal asset and byte growth; byte reduction is not itself proof of task-quality improvement.
+None of these surfaces is labelled initial context. A native runtime may load only some metadata, a selected skill body, or additional content according to its own semantics. Use the figures as source-cost observability and compare profiles with `--compare` to see marginal growth; byte reduction is not itself proof of task-quality improvement.
 
 For direct targets, use the isolated source-layout probe:
 
