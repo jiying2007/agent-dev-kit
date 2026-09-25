@@ -15,7 +15,7 @@ from pathlib import Path
 from typing import Any
 
 from .compiler import export_assets
-from .model import Manifest, ManifestError, ensure_within
+from .model import Manifest, ManifestError, canonical_json_bytes, ensure_within, sha256_bytes
 
 SCHEMA = "adk-target-source-probe/v1"
 
@@ -61,7 +61,14 @@ def probe_target_source(manifest: Manifest, target: str, profile: str) -> dict[s
         "source_load": "pass",
         "files": len(observed),
         "bytes": sum(item["bytes"] for item in observed),
-        "observed": observed,
+        "by_kind": {
+            kind: {
+                "files": sum(item["kind"] == kind for item in observed),
+                "bytes": sum(item["bytes"] for item in observed if item["kind"] == kind),
+            }
+            for kind in sorted({item["kind"] for item in observed})
+        },
+        "observed_index_sha256": sha256_bytes(canonical_json_bytes(observed)),
         "evidence_level": "source-layout",
         "native_runtime_evidence": False,
         "certification": "not-certified",
