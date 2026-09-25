@@ -1,6 +1,6 @@
 # 7.3.0 native candidate campaign checkpoint
 
-- [x] bounded three-stage native campaign collector.
+- [x] bounded three-stage native campaign collector with semantic canary verification bound into command identity.
 - [x] exact runtime binary/version, bundle and prospective contract identities.
 - [x] strict native receipt generation with raw output discarded.
 - [x] fail-closed timeout/nonzero/output-budget/duplicate-command paths.
