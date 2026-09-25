@@ -26,6 +26,7 @@ from .evaluation_cli import main as evaluation_main
 from .matcher import main as matcher_main
 from .agent_platform_cli import main as platform_main
 from .phase_context import main as phase_context_main
+from .profile_context_footprint import main as profile_context_footprint_main
 from .skill_relationships import main as skill_relationships_main
 from .model import ManifestError, canonical_json_bytes, sha256_bytes
 from .quality import benchmark_markdown, run_benchmark, security_check
@@ -252,6 +253,9 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         if command == "phase-context":
             phase_args = rest if "--root" in rest else ["--root", str(ROOT), *rest]
             return phase_context_main(phase_args)
+        if command == "profile-footprint":
+            footprint_args = rest if "--root" in rest else ["--root", str(ROOT), *rest]
+            return profile_context_footprint_main(footprint_args)
         if command == "skill-relationships":
             relationship_args = rest if "--root" in rest else ["--root", str(ROOT), *rest]
             return skill_relationships_main(relationship_args)
