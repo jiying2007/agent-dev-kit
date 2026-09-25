@@ -22,13 +22,18 @@ class ProfileContextFootprintTest(unittest.TestCase):
                 second = profile_footprint(MANIFEST, name)
                 self.assertEqual(first, second)
                 self.assertEqual(first["status"], "pass")
-                self.assertFalse(first["accounting"]["token_estimate_is_provider_measurement"])
+                self.assertFalse(first["accounting"]["runtime_initial_context_measured"])
+                self.assertFalse(first["frontmatter_surface"]["token_estimate_is_provider_measurement"])
                 self.assertEqual(
-                    first["potential_full_surface"]["bytes"],
-                    first["entry_context"]["bytes"] + first["deferred_support"]["bytes"],
+                    first["potential_full_source_surface"]["bytes"],
+                    first["entry_file_surface"]["bytes"] + first["deferred_support_surface"]["bytes"],
+                )
+                self.assertEqual(
+                    first["entry_file_surface"]["bytes"],
+                    first["frontmatter_surface"]["bytes"] + first["entry_body_surface"]["bytes"],
                 )
                 self.assertGreater(first["assets"]["total"], 0)
-                self.assertGreater(first["entry_context"]["bytes"], 0)
+                self.assertGreater(first["entry_file_surface"]["bytes"], 0)
 
     def test_embedded_delta_is_explicit_not_a_quality_score(self) -> None:
         value = compare_profiles(MANIFEST, "core", "embedded-fullstack")
@@ -36,7 +41,7 @@ class ProfileContextFootprintTest(unittest.TestCase):
         self.assertEqual(value["lifecycle_authority"], "none-evidence-only")
         self.assertFalse(value["release_authorized"])
         self.assertGreater(value["delta"]["assets"], 0)
-        self.assertGreater(value["delta"]["entry_bytes"], 0)
+        self.assertGreater(value["delta"]["entry_file_bytes"], 0)
         self.assertIn("not native runtime loading evidence", value["limitations"][0])
 
     def test_cli_matches_library_and_unknown_profile_fails(self) -> None:
