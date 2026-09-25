@@ -194,6 +194,35 @@ def finalize_campaign(
     return result, receipt, final_contract
 
 
+def _safe_output_path(manifest: Manifest, value: str, label: str) -> Path:
+    path = Path(value).expanduser()
+    lexical = path if path.is_absolute() else Path.cwd() / path
+    lexical = lexical.absolute()
+    resolved = path.resolve()
+    root = manifest.root.resolve()
+    try:
+        lexical.relative_to(root)
+        lexical_in_root = True
+    except ValueError:
+        lexical_in_root = False
+    try:
+        resolved.relative_to(root)
+        resolved_in_root = True
+    except ValueError:
+        resolved_in_root = False
+    if lexical_in_root and not resolved_in_root:
+        raise ManifestError(f"native_campaign_output_symlink_escape: {label}")
+    if resolved_in_root:
+        runtime_reports = (root / "reports" / "runtime").resolve()
+        try:
+            resolved.relative_to(runtime_reports)
+        except ValueError as exc:
+            raise ManifestError(
+                f"native_campaign_repository_output_must_be_reports_runtime: {label}"
+            ) from exc
+    return resolved
+
+
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Prepare, run and finalize native target campaigns"
@@ -269,16 +298,18 @@ def main(argv: Sequence[str] | None = None) -> int:
                 / "native-target-campaign-plan-v1.schema.json",
                 "native campaign plan",
             )
-            _write_json(Path(args.plan_out), plan)
-            _write_json(Path(args.candidate_contract_out), candidate)
+            plan_out = _safe_output_path(manifest, args.plan_out, "plan-out")
+            candidate_out = _safe_output_path(
+                manifest, args.candidate_contract_out, "candidate-contract-out"
+            )
+            _write_json(plan_out, plan)
+            _write_json(candidate_out, candidate)
             result = {
                 "schema": "adk-native-target-campaign-operation/v1",
                 "status": "ready",
                 "campaign_id": plan["campaign_id"],
-                "plan": str(Path(args.plan_out).resolve()),
-                "candidate_contract": str(
-                    Path(args.candidate_contract_out).resolve()
-                ),
+                "plan": str(plan_out),
+                "candidate_contract": str(candidate_out),
                 "candidate_contract_normalized_sha256": plan[
                     "candidate_contract_normalized_sha256"
                 ],
@@ -315,7 +346,10 @@ def main(argv: Sequence[str] | None = None) -> int:
                 / "native-target-campaign-evidence-v1.schema.json",
                 "native campaign evidence",
             )
-            _write_json(Path(args.evidence_out), result)
+            evidence_out = _safe_output_path(
+                manifest, args.evidence_out, "evidence-out"
+            )
+            _write_json(evidence_out, result)
         else:
             plan = _load_json(Path(args.plan), "native campaign plan")
             candidate = _load_json(
@@ -342,19 +376,12 @@ def main(argv: Sequence[str] | None = None) -> int:
                 / "native-target-campaign-evidence-v1.schema.json",
                 "native campaign evidence",
             )
-            receipt_path = Path(args.receipt_out)
-            active_contract_dir = (
-                manifest.root / "manifests" / "target-contracts"
-            ).resolve()
-            final_contract_out = Path(args.final_contract_out).resolve()
-            try:
-                final_contract_out.relative_to(active_contract_dir)
-            except ValueError:
-                pass
-            else:
-                raise ManifestError(
-                    "native_campaign_finalize_must_not_write_active_contract_directory"
-                )
+            receipt_path = _safe_output_path(
+                manifest, args.receipt_out, "receipt-out"
+            )
+            final_contract_out = _safe_output_path(
+                manifest, args.final_contract_out, "final-contract-out"
+            )
             result, receipt, final_contract = finalize_campaign(
                 manifest,
                 plan,
@@ -363,7 +390,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 receipt_path,
             )
             _write_json(receipt_path, receipt)
-            _write_json(Path(args.final_contract_out), final_contract)
+            _write_json(final_contract_out, final_contract)
 
         if args.summary_json:
             print(json.dumps(result, ensure_ascii=False, sort_keys=True))
