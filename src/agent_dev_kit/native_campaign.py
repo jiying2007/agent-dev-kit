@@ -343,15 +343,17 @@ def main(argv: Sequence[str] | None = None) -> int:
                 "native campaign evidence",
             )
             receipt_path = Path(args.receipt_out)
-            active_contract = (
-                manifest.root
-                / "manifests"
-                / "target-contracts"
-                / f"{plan['target']}.json"
-            )
-            if Path(args.final_contract_out).resolve() == active_contract.resolve():
+            active_contract_dir = (
+                manifest.root / "manifests" / "target-contracts"
+            ).resolve()
+            final_contract_out = Path(args.final_contract_out).resolve()
+            try:
+                final_contract_out.relative_to(active_contract_dir)
+            except ValueError:
+                pass
+            else:
                 raise ManifestError(
-                    "native_campaign_finalize_must_not_overwrite_active_contract"
+                    "native_campaign_finalize_must_not_write_active_contract_directory"
                 )
             result, receipt, final_contract = finalize_campaign(
                 manifest,
