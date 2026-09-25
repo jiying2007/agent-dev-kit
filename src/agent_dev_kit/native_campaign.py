@@ -24,7 +24,7 @@ from .native_campaign_contract import (
     prepare_campaign as prepare_campaign,
 )
 from .native_campaign_execution import run_campaign as run_campaign
-from .target_contracts import _authority_digest, _native_contract_digest
+from .target_contracts import _authority_digest, _native_contract_digest, _validate_native_receipt
 
 
 def finalize_campaign(
@@ -40,6 +40,19 @@ def finalize_campaign(
         raise ManifestError("native_campaign_finalize_requires_complete_campaign")
     if evidence.get("campaign_id") != plan.get("campaign_id"):
         raise ManifestError("native_campaign_finalize_campaign_mismatch")
+    identity_pairs = (
+        ("target", plan["target"]),
+        ("profile", plan["profile"]),
+        ("runtime", plan["runtime"]),
+        ("bundle_sha256", plan["bundle_sha256"]),
+        (
+            "candidate_contract_normalized_sha256",
+            plan["candidate_contract_normalized_sha256"],
+        ),
+    )
+    for field, expected in identity_pairs:
+        if evidence.get(field) != expected:
+            raise ManifestError(f"native_campaign_finalize_evidence_identity_mismatch: {field}")
     from .model import canonical_json_bytes, sha256_bytes
 
     if sha256_bytes(canonical_json_bytes(candidate_contract)) != plan[
@@ -68,6 +81,8 @@ def finalize_campaign(
     for item in stages:
         if item.get("status") != "pass" or item.get("exit_code") != 0:
             raise ManifestError("native_campaign_finalize_stage_not_passed")
+        if item.get("command_sha256") != plan["command_sha256"][item["stage"]]:
+            raise ManifestError("native_campaign_finalize_stage_command_mismatch")
         authority = {
             "execution_authority": plan["authority"]["execution_authority"],
             "authority_id": plan["authority"]["authority_id"],
@@ -111,6 +126,18 @@ def finalize_campaign(
         / "native-target-conformance-receipt-v1.schema.json",
         "native target conformance receipt",
     )
+    _validate_native_receipt(
+        receipt,
+        target=str(plan["target"]),
+        conformance=candidate_contract["adapter"]["conformance"],
+        evidence={
+            "bundle_sha256": plan["bundle_sha256"],
+            "contract_sha256": contract_digest,
+        },
+        contract_digest=contract_digest,
+        trusted_authorities=(str(plan["authority"]["authority_id"]),),
+        now=__import__("datetime").datetime.now(__import__("datetime").timezone.utc),
+    )
 
     final_contract = copy.deepcopy(candidate_contract)
     conformance = final_contract["adapter"]["conformance"]
@@ -142,6 +169,8 @@ def finalize_campaign(
         manifest.root / "manifests" / "target-contract.schema.json",
         "final target contract",
     )
+    if _native_contract_digest(final_contract) != contract_digest:
+        raise ManifestError("native_campaign_finalize_contract_digest_changed")
     result = {
         "schema": FINALIZE_SCHEMA,
         "status": "ready-for-signature-and-registry",
@@ -242,7 +271,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             _write_json(Path(args.plan_out), plan)
             _write_json(Path(args.candidate_contract_out), candidate)
             result = {
-                "schema": PLAN_SCHEMA,
+                "schema": "adk-native-target-campaign-operation/v1",
                 "status": "ready",
                 "campaign_id": plan["campaign_id"],
                 "plan": str(Path(args.plan_out).resolve()),
