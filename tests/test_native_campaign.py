@@ -59,7 +59,13 @@ class NativeCampaignTest(unittest.TestCase):
         fixtures.mkdir(exist_ok=True)
         self.temp = Path(tempfile.mkdtemp(prefix=".native-campaign-", dir=fixtures))
         self.addCleanup(lambda: shutil.rmtree(self.temp, ignore_errors=True))
-        self.receipt = self.temp / "receipt.json"
+        runtime_reports = ROOT / "reports" / "runtime"
+        runtime_reports.mkdir(parents=True, exist_ok=True)
+        self.receipt_dir = Path(
+            tempfile.mkdtemp(prefix=".native-campaign-test-", dir=runtime_reports)
+        )
+        self.addCleanup(lambda: shutil.rmtree(self.receipt_dir, ignore_errors=True))
+        self.receipt = self.receipt_dir / "receipt.json"
         self.receipt_rel = self.receipt.relative_to(ROOT).as_posix()
         self.active = ROOT / "manifests" / "target-contracts" / "claude-code.json"
         self.active_before = self.active.read_bytes()
@@ -161,6 +167,26 @@ class NativeCampaignTest(unittest.TestCase):
             finalize_campaign(MANIFEST, plan, candidate, changed_command, self.receipt)
 
 
+
+    def test_prepare_requires_governed_runtime_report_path(self) -> None:
+        with self.assertRaisesRegex(
+            ManifestError, "receipt_path_must_be_under_reports_runtime"
+        ):
+            prepare_campaign(
+                MANIFEST,
+                target="claude-code",
+                profile="core",
+                runtime_binary=Path(sys.executable),
+                runtime_version=VERSION,
+                authority_id="ci-native-conformance",
+                execution_authority="ci-approved",
+                backend="ci-provenance-verifier",
+                auth_mode="none",
+                timeout_seconds=15,
+                commands=commands(),
+                receipt_path="manifests/target-contracts/claude-code.json",
+            )
+
     def test_prepare_rejects_relative_or_non_runtime_stage_executable(self) -> None:
         relative = commands()
         relative["load"][0] = "python3"
@@ -253,7 +279,7 @@ class NativeCampaignTest(unittest.TestCase):
             expected=1,
         )
         self.assertEqual(refused["status"], "fail")
-        self.assertIn("must_not_overwrite_active_contract", refused["error"])
+        self.assertIn("must_not_write_active_contract_directory", refused["error"])
         self.assertEqual(self.active.read_bytes(), self.active_before)
 
 
