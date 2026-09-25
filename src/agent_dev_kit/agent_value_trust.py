@@ -395,10 +395,10 @@ class ManagedAgentValueEvidenceVerifier:
             if value:
                 verifier_env[key] = value
 
+        stdin_path = Path("/dev/stdin")
+        if not stdin_path.exists():
+            raise ManifestError("agent_value_trust_in_memory_verification_unsupported")
         with tempfile.TemporaryDirectory(prefix="adk-agent-value-trust-") as temporary:
-            signed_blob = Path(temporary) / "receipt.json"
-            signed_blob.write_bytes(canonical)
-            signed_blob.chmod(0o600)
             try:
                 completed = subprocess.run(
                     [
@@ -410,11 +410,11 @@ class ManagedAgentValueEvidenceVerifier:
                         identity,
                         "--certificate-oidc-issuer",
                         issuer,
-                        str(signed_blob),
+                        str(stdin_path),
                     ],
                     cwd=temporary,
                     env=verifier_env,
-                    stdin=subprocess.DEVNULL,
+                    input=canonical,
                     stdout=subprocess.DEVNULL,
                     stderr=subprocess.DEVNULL,
                     check=False,
