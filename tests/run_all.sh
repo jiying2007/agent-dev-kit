@@ -92,7 +92,9 @@ TESTS=(
   test_convert.sh
   test_runtime_boundary.sh
   test_target_contracts.sh
+  test_native_trust.sh
   test_target_adapter_spi.sh
+  test_native_trust.sh
   test_target_source_probe.sh
   test_effect_eval.sh
   test_product_maturity.sh
