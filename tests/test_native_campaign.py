@@ -160,6 +160,21 @@ class NativeCampaignTest(unittest.TestCase):
         with self.assertRaisesRegex(ManifestError, "stage_command_mismatch"):
             finalize_campaign(MANIFEST, plan, candidate, changed_command, self.receipt)
 
+
+    def test_prepare_rejects_relative_or_non_runtime_stage_executable(self) -> None:
+        relative = commands()
+        relative["load"][0] = "python3"
+        with self.assertRaisesRegex(ManifestError, "requires_absolute_runtime"):
+            self.prepare(relative)
+
+        not_runtime = commands()
+        foreign = self.temp / "foreign-runtime"
+        foreign.write_text("#!/bin/sh\nexit 0\n", encoding="utf-8")
+        foreign.chmod(0o755)
+        not_runtime["trigger"][0] = str(foreign)
+        with self.assertRaisesRegex(ManifestError, "must_use_runtime_binary"):
+            self.prepare(not_runtime)
+
     def test_public_cli_prepare_run_finalize(self) -> None:
         commands_path = self.temp / "commands.json"
         plan_path = self.temp / "plan.json"
