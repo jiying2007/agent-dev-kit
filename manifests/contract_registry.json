@@ -302,6 +302,36 @@
       "schema_path": "schemas/independent-verifier-receipt-v1.schema.json",
       "surface_path": null,
       "evidence_class": "runtime"
+    },
+    {
+      "id": "effect-trials",
+      "version": "1",
+      "owner": "evaluation",
+      "producer": "agent_dev_kit.effect_trials",
+      "consumers": [
+        "evaluation-cli",
+        "research-intake"
+      ],
+      "stability": "experimental",
+      "compatibility": "strict",
+      "schema_path": "schemas/effect-trials-v1.schema.json",
+      "surface_path": null,
+      "evidence_class": "test"
+    },
+    {
+      "id": "effect-trial-comparison",
+      "version": "1",
+      "owner": "evaluation",
+      "producer": "agent_dev_kit.effect_trials",
+      "consumers": [
+        "evaluation-cli",
+        "research-intake"
+      ],
+      "stability": "experimental",
+      "compatibility": "strict",
+      "schema_path": "schemas/effect-trial-comparison-v1.schema.json",
+      "surface_path": null,
+      "evidence_class": "test"
     }
   ]
 }

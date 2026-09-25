@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## v7.1.0 (2026-09-25)
+
+### Repeated trial evidence
+- Add bounded `adk eval compare-trials` over the existing single-trial comparator and Run Evidence validator.
+- Bind complete task/trial populations, independent run IDs, control declarations and asset interventions.
+- Report task-clustered paired uncertainty, reliability decomposition, explicit missing metrics and inconclusive outcomes.
+- Preserve test-only evidence scope; declared controls and timestamps are not native attestations or release authority.
+- Add schema/packaging/CLI integration and deterministic negative regressions without an executor or compatibility shim.
+
+
 ## v7.0.32 (2026-09-24)
 
 ### Release artifact authority hard cut
