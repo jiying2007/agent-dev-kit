@@ -118,7 +118,7 @@ bash scripts/devkit.sh target smoke --target claude-code --stage discovery --pro
 
 ### target native-campaign
 
-将 discovery/load/trigger 三阶段真实执行收集成严格 native receipt **候选**。命令文件是 JSON argv 数组，不经 shell；每阶段有超时和输出字节预算，raw stdout/stderr 只计算 digest 后丢弃。
+将 discovery/load/trigger 三阶段真实执行收集成严格 native receipt **候选**。命令文件按阶段声明 JSON argv 与 `expect_stdout_contains` 语义 marker，不经 shell；collector 在有界瞬时 stdout 中验证 marker，并把 marker 合同绑定进 command digest。零退出但未出现预期 canary 仍会失败。每阶段有超时和输出字节预算，raw stdout/stderr 验证/计算 digest 后丢弃。
 
 ```bash
 bash scripts/devkit.sh target native-campaign \
