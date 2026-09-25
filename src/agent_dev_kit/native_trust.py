@@ -237,37 +237,42 @@ class ManagedNativeTrustVerifier:
         if not identity or not issuer:
             raise ManifestError("native_trust_certificate_identity_not_configured")
 
-        descriptor, name = tempfile.mkstemp(prefix="adk-native-receipt-", suffix=".json")
-        try:
-            with os.fdopen(descriptor, "wb") as stream:
-                stream.write(canonical)
-                stream.flush()
-                os.fsync(stream.fileno())
-            completed = subprocess.run(
-                [
-                    str(resolved_binary),
-                    "verify-blob",
-                    "--bundle",
-                    str(bundle),
-                    "--certificate-identity",
-                    identity,
-                    "--certificate-oidc-issuer",
-                    issuer,
-                    name,
-                ],
-                stdin=subprocess.DEVNULL,
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
-                check=False,
-                timeout=30,
-            )
-        except subprocess.TimeoutExpired as exc:
-            raise ManifestError("native_trust_cosign_timeout") from exc
-        finally:
+        verifier_env = {
+            "PATH": os.defpath,
+            "LANG": "C.UTF-8",
+            "LC_ALL": "C.UTF-8",
+        }
+        for key in ("HOME", "XDG_CACHE_HOME", "SSL_CERT_FILE", "SSL_CERT_DIR"):
+            value = os.environ.get(key)
+            if value:
+                verifier_env[key] = value
+        with tempfile.TemporaryDirectory(prefix="adk-native-trust-") as temporary:
+            signed_blob = Path(temporary) / "receipt.json"
+            signed_blob.write_bytes(canonical)
+            signed_blob.chmod(0o600)
             try:
-                os.unlink(name)
-            except OSError:
-                pass
+                completed = subprocess.run(
+                    [
+                        str(resolved_binary),
+                        "verify-blob",
+                        "--bundle",
+                        str(bundle),
+                        "--certificate-identity",
+                        identity,
+                        "--certificate-oidc-issuer",
+                        issuer,
+                        str(signed_blob),
+                    ],
+                    cwd=temporary,
+                    env=verifier_env,
+                    stdin=subprocess.DEVNULL,
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                    check=False,
+                    timeout=30,
+                )
+            except subprocess.TimeoutExpired as exc:
+                raise ManifestError("native_trust_cosign_timeout") from exc
         return completed.returncode == 0
 
 
