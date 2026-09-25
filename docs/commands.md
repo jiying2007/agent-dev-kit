@@ -85,6 +85,24 @@ bash scripts/devkit.sh export --target opencode --profile team-core --with-optio
 
 Codex 当前不是 direct `tool_targets` 成员，因此不是 `export --target` 的合法取值；它由 `external_handoff_targets.codex` 描述为 `~/codex -> ~/.codex` source-to-live 交付链路。
 
+## profile-footprint
+
+量化 resolved profile 的上下文表面，分离始终可见的 AGENTS/SKILL 入口与按需 references/scripts/assets。token 字段仅为 bytes/4 估算，不是 provider tokenizer 实测，也不是质量评分。
+
+```bash
+bash scripts/devkit.sh profile-footprint --profile core --summary-json
+bash scripts/devkit.sh profile-footprint --profile core --compare embedded-fullstack --summary-json
+```
+
+## target-source-probe
+
+在隔离临时目录执行 direct target export，再按 export manifest 重新发现、校验 digest 并加载文本入口。该命令只形成 `source-layout` 证据，明确 `native_runtime_evidence=false`，不能替代 `target smoke` 或 native/certified runtime evidence。
+
+```bash
+bash scripts/devkit.sh target-source-probe --target claude-code --profile core --summary-json
+bash scripts/devkit.sh target-source-probe --target opencode --profile embedded-fullstack --summary-json
+```
+
 ## target
 
 `target check` 对 contract schema、支持的 asset kind、原生路径、frontmatter、permission profile 和全部 resolved assets 执行静态检查。`target smoke` 会先完成同样的静态检查，再把原生树交给调用者显式提供的 runtime command；未提供 runtime command 时返回 `not-run`/exit 2，不能把 static 或 fixture 结果冒充真实运行时认证。
