@@ -8,6 +8,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 
 from agent_dev_kit.model import Manifest, ManifestError
@@ -114,6 +115,30 @@ class NativeCampaignTest(unittest.TestCase):
         self.assertEqual(layouts["claude-code"]["project_config_dir"], ".claude")
         self.assertEqual(layouts["opencode"]["project_config_dir"], ".opencode")
         self.assertTrue(all(item["discovery_scope"] == "project" for item in layouts.values()))
+
+    def test_target_layout_manifest_fails_closed_on_missing_or_unsafe_mapping(self) -> None:
+        source = json.loads(
+            (ROOT / "manifests" / "native_campaign_target_layouts.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        missing = json.loads(json.dumps(source))
+        del missing["targets"]["opencode"]
+        with patch(
+            "agent_dev_kit.native_campaign_contract._load_json",
+            return_value=missing,
+        ):
+            with self.assertRaisesRegex(ManifestError, "must_cover_direct_targets"):
+                load_native_campaign_target_layouts(MANIFEST)
+
+        unsafe = json.loads(json.dumps(source))
+        unsafe["targets"]["claude-code"]["project_config_dir"] = ".claude/../escape"
+        with patch(
+            "agent_dev_kit.native_campaign_contract._load_json",
+            return_value=unsafe,
+        ):
+            with self.assertRaisesRegex(ManifestError, "project_config_dir_invalid"):
+                load_native_campaign_target_layouts(MANIFEST)
 
     def test_each_direct_target_runs_from_native_project_config_root(self) -> None:
         for target, config_dir in (("claude-code", ".claude"), ("opencode", ".opencode")):
