@@ -327,7 +327,7 @@ class ManagedNativeTrustVerifierTest(unittest.TestCase):
             (root / "manifests" / "native_conformance_trust_registry.json").write_text(
                 json.dumps(empty), encoding="utf-8"
             )
-            with self.assertRaisesRegex(ManifestError, "authority_disabled_or_missing"):
+            with self.assertRaisesRegex(ManifestError, "native trust verifier failed"):
                 load_target_contract(manifest, "claude-code")
 
 
