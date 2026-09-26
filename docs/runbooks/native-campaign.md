@@ -80,6 +80,22 @@ After finalize:
 
 Skipping any step is forbidden. Source-layout probes, campaign fixtures or unsigned receipts cannot replace native certification.
 
+## Hosted Claude Code campaign lane (7.9.0)
+
+`.github/workflows/native-claude-conformance.yml` is the reviewed hosted execution lane for the G21 Claude Code campaign. It is deliberately **manual-only** and fail-closed:
+
+- dispatch only from `main` with `confirmation=RUN_REAL_NATIVE`;
+- require an exact `@anthropic-ai/claude-code` package version and an explicit model identifier;
+- require the repository secret `ANTHROPIC_API_KEY`; the secret is written only to a mode-0600 runner-temp file and exposed to Claude Code through a user-level `~/.claude/settings.json` `apiKeyHelper`;
+- install the exact runtime, bind its absolute binary digest/version, and run the canonical semantic-v2 prepare/run/finalize path with `auth_mode=home`;
+- use project-local `.claude/skills` from the reviewed target layout and a uniquely identifiable core Skill canary to reduce global-source collision risk;
+- keylessly sign the **canonical** receipt bytes with GitHub OIDC, verify the Sigstore bundle immediately, build a managed trust-registry candidate, and validate the future target contract through an isolated production-loader copy;
+- upload only the bounded candidate evidence package. Private commands/assertions, provider secret, user settings and key-helper material are not uploaded.
+
+The hosted lane never writes the active trust registry or target contract, never pushes a branch, never opens/merges a PR, and never grants release authority. A successful run therefore means **candidate-owner-review-required**, not `certified`. Owner review and repository promotion remain separate changes, followed by an exact ADK Release and Root promotion before G21 can close.
+
+The workflow uses explicit project Skill invocation for discovery/load checks and a natural-task trigger check. The semantic canaries are independent from the command argv, so exit-zero or prompt echo alone cannot satisfy the campaign.
+
 
 ## Project layout authority
 
