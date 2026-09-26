@@ -37,6 +37,7 @@ expected_write_permissions = {
     "release-tag-promotion.yml": ["artifact-metadata", "artifact-metadata", "attestations", "attestations", "contents", "contents", "contents", "id-token", "id-token"],
     "release.yml": ["artifact-metadata", "attestations", "contents", "id-token"],
     "security-codeql.yml": ["security-events"],
+    "native-claude-conformance.yml": ["id-token"],
 }
 for path in workflow_files:
     text = path.read_text(encoding="utf-8")
@@ -56,9 +57,14 @@ for path in workflow_files:
         path.name,
         "inline permission maps are not allowed; use reviewed block mappings",
     )
-    assert not re.search(r"\$\{\{\s*secrets\.", text), (
+    secret_refs = sorted(set(re.findall(r"\$\{\{\s*secrets\.([A-Z0-9_]+)\s*\}\}", text)))
+    expected_secret_refs = {
+        "native-claude-conformance.yml": ["ANTHROPIC_API_KEY"],
+    }
+    assert secret_refs == expected_secret_refs.get(path.name, []), (
         path.name,
-        "hosted workflows must not depend on repository secrets",
+        secret_refs,
+        "repository secrets are forbidden except for the reviewed real native campaign credential",
     )
     assert "continue-on-error:" not in text, (
         path.name,
