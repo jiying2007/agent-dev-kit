@@ -57,7 +57,7 @@ native["adapter"]["conformance"] = {
     "runtime_version_pin": "2.1.0",
     "last_verified_at": "2026-08-30T00:00:00Z",
     "evidence": [{
-        "receipt_schema": "adk-native-target-conformance-receipt/v1",
+        "receipt_schema": "adk-native-target-conformance-receipt/v2",
         "path": "reports/runtime/claude-native-smoke.json",
         "sha256": "a" * 64,
         "target": "claude-code",
@@ -151,6 +151,9 @@ try:
         stages.append({
             "stage": stage_name,
             "command_sha256": str(index + 1) * 64,
+            "assertion_sha256": ("a", "b", "c")[index] * 64,
+            "assertion_result_sha256": ("d", "e", "f")[index] * 64,
+            "semantic_assertion_status": "pass",
             "result_sha256": str(index + 4) * 64,
             "exit_code": 0,
             "started_at": stamp(started),
@@ -173,7 +176,7 @@ try:
             "authority": authority,
         })
     receipt = {
-        "schema": "adk-native-target-conformance-receipt/v1",
+        "schema": "adk-native-target-conformance-receipt/v2",
         "receipt_id": "claude-native-20260830",
         "target": "claude-code",
         "runtime": {
@@ -266,6 +269,18 @@ try:
         pass
     else:
         raise AssertionError("README plus matching hash was accepted as native evidence")
+
+    missing_semantic = copy.deepcopy(receipt)
+    missing_semantic["stages"][1]["semantic_assertion_status"] = "fail"
+    install_receipt(missing_semantic)
+    try:
+        _validate_native_conformance_evidence(
+            manifest, "claude-code", adapter, contract, trusted_verifier
+        )
+    except ManifestError:
+        pass
+    else:
+        raise AssertionError("native receipt without passed semantic assertion was accepted")
 
     reused = copy.deepcopy(receipt)
     reused["stages"][1]["command_sha256"] = reused["stages"][0]["command_sha256"]

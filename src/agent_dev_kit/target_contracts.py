@@ -198,9 +198,20 @@ def _validate_native_receipt(
         )
     command_digests = [item.get("command_sha256") for item in stages]
     result_digests = [item.get("result_sha256") for item in stages]
-    if len(set(command_digests)) != len(stages) or len(set(result_digests)) != len(stages):
+    assertion_digests = [item.get("assertion_sha256") for item in stages]
+    assertion_result_digests = [item.get("assertion_result_sha256") for item in stages]
+    if any(item.get("semantic_assertion_status") != "pass" for item in stages):
         raise ManifestError(
-            "target_contract_invalid: native stages require independent command and result evidence"
+            "target_contract_invalid: native stages require passed semantic assertions"
+        )
+    if (
+        len(set(command_digests)) != len(stages)
+        or len(set(result_digests)) != len(stages)
+        or len(set(assertion_digests)) != len(stages)
+        or len(set(assertion_result_digests)) != len(stages)
+    ):
+        raise ManifestError(
+            "target_contract_invalid: native stages require independent command, assertion and result evidence"
         )
 
     previous_completed: Optional[datetime] = None
@@ -299,7 +310,7 @@ def _validate_native_conformance_evidence(
     runtime_version = conformance.get("runtime_version")
     contract_digest = _native_contract_digest(contract_data)
     receipt_schema = _json_object(
-        manifest.root / "schemas" / "native-target-conformance-receipt-v1.schema.json",
+        manifest.root / "schemas" / "native-target-conformance-receipt-v2.schema.json",
         "native target conformance receipt schema",
     )
     now = datetime.now(timezone.utc)

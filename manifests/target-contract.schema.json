@@ -147,7 +147,7 @@
                     "type": "object",
                     "required": ["receipt_schema", "path", "sha256", "target", "runtime_version", "bundle_sha256", "contract_sha256", "layer"],
                     "properties": {
-                      "receipt_schema": {"const": "adk-native-target-conformance-receipt/v1"},
+                      "receipt_schema": {"const": "adk-native-target-conformance-receipt/v2"},
                       "path": {
                         "type": "string",
                         "pattern": "^[A-Za-z0-9][A-Za-z0-9._/-]*$"

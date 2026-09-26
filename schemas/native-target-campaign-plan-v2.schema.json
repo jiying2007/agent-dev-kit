@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://agent-dev-kit.local/schemas/native-target-campaign-plan-v1.json",
-  "title": "ADK native target campaign plan",
+  "$id": "https://agent-dev-kit.local/schemas/native-target-campaign-plan-v2.json",
+  "title": "ADK native target campaign plan v2",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -23,13 +23,14 @@
     "timeout_seconds",
     "receipt_path",
     "command_sha256",
+    "assertion_sha256",
     "privacy",
     "lifecycle_authority",
     "release_authorized"
   ],
   "properties": {
     "schema": {
-      "const": "adk-native-target-campaign-plan/v1"
+      "const": "adk-native-target-campaign-plan/v2"
     },
     "status": {
       "const": "ready"
@@ -161,6 +162,26 @@
     },
     "release_authorized": {
       "const": false
+    },
+    "assertion_sha256": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "discovery",
+        "load",
+        "trigger"
+      ],
+      "properties": {
+        "discovery": {
+          "$ref": "#/$defs/sha256"
+        },
+        "load": {
+          "$ref": "#/$defs/sha256"
+        },
+        "trigger": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
     }
   },
   "$defs": {
