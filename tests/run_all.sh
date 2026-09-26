@@ -94,6 +94,7 @@ TESTS=(
   test_target_contracts.sh
   test_target_adapter_spi.sh
   test_native_trust.sh
+  test_sigstore_blob.sh
   test_native_campaign.sh
   test_native_campaign_boundaries.sh
   test_target_source_probe.sh
@@ -180,6 +181,7 @@ QUICK_TESTS=(
   test_target_contracts.sh
   test_target_adapter_spi.sh
   test_native_trust.sh
+  test_sigstore_blob.sh
   test_native_campaign.sh
   test_native_campaign_boundaries.sh
   test_target_source_probe.sh
