@@ -116,6 +116,14 @@ rtk bash scripts/devkit.sh validate --strict
 rtk bash tests/run_all.sh --quick --fail-fast
 ```
 
+### Portable managed evidence package verification (7.7.0)
+
+Cross-repository consumers may need to verify immutable runtime/field receipt bundles without writing evidence into the pinned ADK source tree. Use `build_portable_managed_agent_value_evidence_verifier(..., registry, bundle_root=...)` for that case.
+
+The portable builder changes **only** the filesystem root used to resolve registry `bundle_path` values. It does not relax or replace any trust check: the reviewed enabled contract, registry schema, authority/backend/layer/target scope, canonical receipt digest, signature-bundle digest, certificate identity/OIDC issuer, and digest-pinned cosign binary are still mandatory. `bundle_root` itself must be a real directory and must not be a symlink; each registry path remains safe-relative and is confined beneath that root.
+
+This enables a consumer such as Root to keep a digest-bound evidence package beside its own runtime evidence, reverify signed receipts, and recompute the Agent Value measurement from those receipts while the ADK gitlink remains immutable. A precomputed measurement JSON alone is still not trust evidence.
+
 ## 质量与退役判断
 
 质量判断优先使用 task success、first-pass success、wrong-route、abstain precision、人工介入、可信变更时间、
@@ -124,7 +132,7 @@ escaped defect 和 rollback 等 outcome 指标。Agent/Skill/Profile 数量、in
 
 每个可选 KPI 同时报告 applicable/observed sample size 与 coverage。first-pass、可信变更时间、escaped defect、
 rollback 未达到完整覆盖时保持 `not-measured/incomplete-coverage`，不能用部分样本生成 measured value。顶层
-`evidence_scope` 区分 `test-only/runtime-verified/field-verified/mixed`。7.5.0 已有固定、版本化的 receipt trust registry，
+`evidence_scope` 区分 `test-only/runtime-verified/field-verified/mixed`。7.7.0 保留固定、版本化的 receipt trust registry，并支持 portable bundle-root 复验；
 但 v1 contract 的 authority 仍强制 `production=false`，因此 `quality_evidence_eligible` 对所有 scope 继续固定为 false，
 并始终输出 ineligibility reason、`owner_review_required=true`、`lifecycle_authority=none-evidence-only`。
 
