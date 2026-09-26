@@ -255,6 +255,27 @@ assert "  repair-orphaned-release:\n" in release_tag_promotion, "tagged-but-unre
 assert "fromJSON(needs.discover-orphaned-releases.outputs.repairs)" in release_tag_promotion, "repair matrix must come from audited exact-tag evidence"
 assert release_tag_promotion.count("uses: ./.github/workflows/release.yml") == 2, "current release and orphan repair must share the canonical release workflow"
 
+native_campaign = (workflow_dir / "native-claude-conformance.yml").read_text(encoding="utf-8")
+native_trigger = native_campaign.split("permissions:", 1)[0]
+assert "workflow_dispatch:" in native_trigger, "real native campaign must be explicitly dispatched"
+assert "pull_request:" not in native_trigger and "push:" not in native_trigger and "schedule:" not in native_trigger, "real native campaign must never run automatically from source events"
+assert "RUN_REAL_NATIVE" in native_campaign, "real native campaign requires an explicit confirmation token"
+assert "claude_code_version:" in native_campaign and "model:" in native_campaign, "real native campaign must pin runtime and model inputs"
+assert "@anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}" in native_campaign, "hosted campaign must install the exact requested Claude Code version"
+assert "ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}" in native_campaign, "hosted campaign must use the reviewed GitHub secret name"
+assert '"apiKeyHelper"' in native_campaign, "provider secret must be bridged through the isolated user-level helper"
+assert "--auth-mode home" in native_campaign, "native runner must preserve only the reviewed HOME auth surface"
+assert native_campaign.count("native-campaign prepare") == 1
+assert native_campaign.count("native-campaign run") == 1
+assert native_campaign.count("native-campaign finalize") == 1
+assert "cosign sign-blob" in native_campaign and "cosign verify-blob" in native_campaign, "retained receipt must be signed and immediately verified"
+assert "production-loader.json" in native_campaign, "candidate package must prove production-loader verification"
+assert '"target_promotion_performed": False' in native_campaign
+assert '"registry_promotion_performed": False' in native_campaign
+assert '"release_authorized": False' in native_campaign
+assert "gh pr create" not in native_campaign and "git push" not in native_campaign, "real campaign evidence lane must not mutate repository lifecycle state"
+assert "contents: write" not in native_campaign, "real campaign must not gain repository write authority"
+
 dependency_review = (workflow_dir / "security-dependency-review.yml").read_text(encoding="utf-8")
 assert "pull_request:" in dependency_review, "dependency review must remain PR-only"
 assert "cancel-in-progress: true" in dependency_review, "PR-only dependency review may cancel superseded runs"
