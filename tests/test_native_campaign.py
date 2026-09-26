@@ -199,7 +199,7 @@ class NativeCampaignTest(unittest.TestCase):
     def test_failed_stage_blocks_finalize_and_never_claims_release_authority(self) -> None:
         command_set = commands(fail_stage="load")
         plan, candidate = self.prepare(command_set)
-        evidence = run_campaign(MANIFEST, plan, candidate, command_set, Path(sys.executable))
+        evidence = run_campaign(MANIFEST, plan, candidate, command_set, assertions(), Path(sys.executable))
         self.assertEqual(evidence["status"], "failed", evidence)
         self.assertEqual(
             [item["status"] for item in evidence["stages"]],
@@ -213,7 +213,7 @@ class NativeCampaignTest(unittest.TestCase):
     def test_version_mismatch_is_blocked_before_stages(self) -> None:
         command_set = commands()
         plan, candidate = self.prepare(command_set, runtime_version="999.999")
-        evidence = run_campaign(MANIFEST, plan, candidate, command_set, Path(sys.executable))
+        evidence = run_campaign(MANIFEST, plan, candidate, command_set, assertions(), Path(sys.executable))
         self.assertEqual(evidence["status"], "blocked", evidence)
         self.assertEqual(evidence["reason"], "runtime-version-probe-failed")
         self.assertEqual(evidence["stages"], [])
@@ -269,7 +269,7 @@ class NativeCampaignTest(unittest.TestCase):
     def test_finalize_rejects_evidence_identity_and_stage_command_drift(self) -> None:
         command_set = commands()
         plan, candidate = self.prepare(command_set)
-        evidence = run_campaign(MANIFEST, plan, candidate, command_set, Path(sys.executable))
+        evidence = run_campaign(MANIFEST, plan, candidate, command_set, assertions(), Path(sys.executable))
         self.assertEqual(evidence["status"], "complete", evidence)
 
         changed_identity = json.loads(json.dumps(evidence))
