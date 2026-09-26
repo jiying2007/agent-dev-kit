@@ -188,8 +188,8 @@ class ManagedNativeTrustVerifierTest(unittest.TestCase):
             for source, destination in (
                 (ROOT / "manifests" / "target-contract.schema.json", root / "manifests" / "target-contract.schema.json"),
                 (
-                    ROOT / "schemas" / "native-target-conformance-receipt-v1.schema.json",
-                    root / "schemas" / "native-target-conformance-receipt-v1.schema.json",
+                    ROOT / "schemas" / "native-target-conformance-receipt-v2.schema.json",
+                    root / "schemas" / "native-target-conformance-receipt-v2.schema.json",
                 ),
             ):
                 destination.write_bytes(source.read_bytes())
@@ -239,6 +239,9 @@ class ManagedNativeTrustVerifierTest(unittest.TestCase):
                     {
                         "stage": stage_name,
                         "command_sha256": str(index + 1) * 64,
+                        "assertion_sha256": ("a", "b", "c")[index] * 64,
+                        "assertion_result_sha256": ("d", "e", "f")[index] * 64,
+                        "semantic_assertion_status": "pass",
                         "result_sha256": str(index + 4) * 64,
                         "exit_code": 0,
                         "started_at": started.isoformat().replace("+00:00", "Z"),
@@ -262,7 +265,7 @@ class ManagedNativeTrustVerifierTest(unittest.TestCase):
                     }
                 )
             receipt = {
-                "schema": "adk-native-target-conformance-receipt/v1",
+                "schema": "adk-native-target-conformance-receipt/v2",
                 "receipt_id": "claude-native-managed",
                 "target": "claude-code",
                 "runtime": {
