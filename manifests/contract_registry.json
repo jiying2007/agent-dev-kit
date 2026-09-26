@@ -95,7 +95,7 @@
     },
     {
       "id": "native-target-campaign-plan",
-      "version": "1",
+      "version": "2",
       "owner": "targets",
       "producer": "agent_dev_kit.native_campaign",
       "consumers": [
@@ -103,14 +103,14 @@
         "native-target-conformance-receipt"
       ],
       "stability": "experimental",
-      "compatibility": "strict",
-      "schema_path": "schemas/native-target-campaign-plan-v1.schema.json",
+      "compatibility": "hard-cut",
+      "schema_path": "schemas/native-target-campaign-plan-v2.schema.json",
       "surface_path": null,
       "evidence_class": "runtime"
     },
     {
       "id": "native-target-campaign-evidence",
-      "version": "1",
+      "version": "2",
       "owner": "targets",
       "producer": "agent_dev_kit.native_campaign",
       "consumers": [
@@ -118,14 +118,14 @@
         "native-trust"
       ],
       "stability": "experimental",
-      "compatibility": "strict",
-      "schema_path": "schemas/native-target-campaign-evidence-v1.schema.json",
+      "compatibility": "hard-cut",
+      "schema_path": "schemas/native-target-campaign-evidence-v2.schema.json",
       "surface_path": null,
       "evidence_class": "runtime"
     },
     {
       "id": "native-target-conformance-receipt",
-      "version": "1",
+      "version": "2",
       "owner": "targets",
       "producer": "agent_dev_kit.targets",
       "consumers": [
@@ -133,8 +133,8 @@
         "release"
       ],
       "stability": "rc",
-      "compatibility": "strict",
-      "schema_path": "schemas/native-target-conformance-receipt-v1.schema.json",
+      "compatibility": "hard-cut",
+      "schema_path": "schemas/native-target-conformance-receipt-v2.schema.json",
       "surface_path": null,
       "evidence_class": "runtime"
     },
