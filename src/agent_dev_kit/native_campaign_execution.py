@@ -26,6 +26,7 @@ from .native_campaign_contract import (
     _sha256_file,
     _timestamp,
     _utc_now,
+    _validate_assertions,
     _validate_commands,
 )
 from .target_contracts import _native_contract_digest, load_target_contract
@@ -149,6 +150,40 @@ def _base_environment(auth_mode: str) -> dict[str, str]:
     return env
 
 
+def _semantic_assertion(
+    result: Mapping[str, Any], assertion: Mapping[str, Any]
+) -> tuple[bool, str]:
+    stream = str(assertion["stream"])
+    if stream == "stdout":
+        raw = bytes(result["stdout"])
+    elif stream == "stderr":
+        raw = bytes(result["stderr"])
+    else:
+        raw = bytes(result["stdout"]) + b"\\n" + bytes(result["stderr"])
+    try:
+        decoded = raw.decode("utf-8", errors="strict")
+        decode_status = "utf8"
+    except UnicodeDecodeError:
+        decoded = ""
+        decode_status = "invalid-utf8"
+    needle = str(assertion["contains"])
+    haystack = decoded
+    if assertion["case_sensitive"] is False:
+        needle = needle.casefold()
+        haystack = haystack.casefold()
+    occurrences = haystack.count(needle) if decode_status == "utf8" else 0
+    passed = occurrences > 0
+    summary = {
+        "stream": stream,
+        "case_sensitive": bool(assertion["case_sensitive"]),
+        "decode_status": decode_status,
+        "matched": passed,
+        "occurrences": occurrences,
+        "observed_bytes": len(raw),
+    }
+    return passed, sha256_bytes(canonical_json_bytes(summary))
+
+
 def _blocked_version_evidence(
     plan: Mapping[str, Any],
     version_probe: Mapping[str, Any],
@@ -201,11 +236,13 @@ def run_campaign(
     plan: Mapping[str, Any],
     candidate_contract: Mapping[str, Any],
     commands: Mapping[str, Sequence[str]],
+    assertions: Mapping[str, Mapping[str, Any]],
     runtime_binary: Path,
 ) -> dict[str, Any]:
     if plan.get("schema") != PLAN_SCHEMA or plan.get("status") != "ready":
         raise ManifestError("native_campaign_plan_invalid")
     commands_value = _validate_commands(dict(commands))
+    assertions_value = _validate_assertions(dict(assertions))
     runtime_binary = _runtime_binary(str(runtime_binary))
     if (
         runtime_binary.name != plan["runtime"]["binary"]
@@ -221,6 +258,10 @@ def run_campaign(
         digest = sha256_bytes(canonical_json_bytes(commands_value[name]))
         if digest != plan["command_sha256"][name]:
             raise ManifestError(f"native_campaign_command_drift: {name}")
+    for stage in STAGES:
+        digest = sha256_bytes(canonical_json_bytes(assertions_value[stage]))
+        if digest != plan["assertion_sha256"][stage]:
+            raise ManifestError(f"native_campaign_assertion_drift: {stage}")
     if (
         sha256_bytes(canonical_json_bytes(candidate_contract))
         != plan["candidate_contract_sha256"]
@@ -301,6 +342,8 @@ def run_campaign(
                         "status": "blocked",
                         "reason": "previous-stage-failed",
                         "command_sha256": plan["command_sha256"][stage],
+                        "assertion_sha256": plan["assertion_sha256"][stage],
+                        "semantic_assertion_status": "not-run",
                     }
                 )
                 continue
@@ -315,44 +358,68 @@ def run_campaign(
                     output_limit=MAX_OUTPUT_BYTES,
                 )
                 completed_at = _utc_now()
+                assertion_passed = False
+                assertion_result_sha256 = None
+                semantic_status = "not-run"
+                if result["exit_code"] == 0:
+                    assertion_passed, assertion_result_sha256 = _semantic_assertion(
+                        result, assertions_value[stage]
+                    )
+                    semantic_status = "pass" if assertion_passed else "fail"
+                status = (
+                    "pass"
+                    if result["exit_code"] == 0 and assertion_passed
+                    else "fail"
+                )
                 result_view = {
                     key: value
                     for key, value in result.items()
                     if key not in ("stdout", "stderr")
                 }
-                result_digest = sha256_bytes(canonical_json_bytes(result_view))
-                status = "pass" if result["exit_code"] == 0 else "fail"
-                stage_records.append(
+                result_view.update(
                     {
-                        "stage": stage,
-                        "status": status,
-                        "command_sha256": plan["command_sha256"][stage],
-                        "result_sha256": result_digest,
-                        "exit_code": result["exit_code"],
-                        "started_at": _timestamp(started_at),
-                        "completed_at": _timestamp(completed_at),
-                        "duration_ms": result["duration_ms"],
-                        "stdout_bytes": result["stdout_bytes"],
-                        "stdout_sha256": result["stdout_sha256"],
-                        "stderr_bytes": result["stderr_bytes"],
-                        "stderr_sha256": result["stderr_sha256"],
-                        "environment": {
-                            "platform": platform.system().lower() or "unknown",
-                            "architecture": platform.machine().lower() or "unknown",
-                            "cwd_sha256": cwd_digest,
-                            "environment_sha256": environment_digest,
-                            "runtime_binary_sha256": plan["runtime"][
-                                "binary_sha256"
-                            ],
-                            "bundle_sha256": plan["bundle_sha256"],
-                        },
-                        "privacy": {
-                            "raw_content_stored": False,
-                            "secrets_stored": False,
-                            "sanitized": True,
-                        },
+                        "assertion_sha256": plan["assertion_sha256"][stage],
+                        "semantic_assertion_status": semantic_status,
+                        "assertion_result_sha256": assertion_result_sha256,
                     }
                 )
+                result_digest = sha256_bytes(canonical_json_bytes(result_view))
+                record = {
+                    "stage": stage,
+                    "status": status,
+                    "command_sha256": plan["command_sha256"][stage],
+                    "assertion_sha256": plan["assertion_sha256"][stage],
+                    "semantic_assertion_status": semantic_status,
+                    "result_sha256": result_digest,
+                    "exit_code": result["exit_code"],
+                    "started_at": _timestamp(started_at),
+                    "completed_at": _timestamp(completed_at),
+                    "duration_ms": result["duration_ms"],
+                    "stdout_bytes": result["stdout_bytes"],
+                    "stdout_sha256": result["stdout_sha256"],
+                    "stderr_bytes": result["stderr_bytes"],
+                    "stderr_sha256": result["stderr_sha256"],
+                    "environment": {
+                        "platform": platform.system().lower() or "unknown",
+                        "architecture": platform.machine().lower() or "unknown",
+                        "cwd_sha256": cwd_digest,
+                        "environment_sha256": environment_digest,
+                        "runtime_binary_sha256": plan["runtime"]["binary_sha256"],
+                        "bundle_sha256": plan["bundle_sha256"],
+                    },
+                    "privacy": {
+                        "raw_content_stored": False,
+                        "secrets_stored": False,
+                        "sanitized": True,
+                    },
+                }
+                if assertion_result_sha256 is not None:
+                    record["assertion_result_sha256"] = assertion_result_sha256
+                if result["exit_code"] != 0:
+                    record["reason"] = "runtime-exit-nonzero"
+                elif not assertion_passed:
+                    record["reason"] = "semantic-assertion-failed"
+                stage_records.append(record)
                 previous_failed = status != "pass"
             except (ManifestError, asyncio.TimeoutError) as exc:
                 completed_at = _utc_now()
@@ -362,6 +429,8 @@ def run_campaign(
                         "status": "fail",
                         "reason": str(exc),
                         "command_sha256": plan["command_sha256"][stage],
+                        "assertion_sha256": plan["assertion_sha256"][stage],
+                        "semantic_assertion_status": "not-run",
                         "started_at": _timestamp(started_at),
                         "completed_at": _timestamp(completed_at),
                     }
