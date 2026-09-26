@@ -177,6 +177,11 @@ class NativeCampaignTest(unittest.TestCase):
         evidence = run_campaign(MANIFEST, plan, candidate, command_set, assertions(), Path(sys.executable))
         self.assertEqual(evidence["status"], "complete", evidence)
         self.assertEqual([item["status"] for item in evidence["stages"]], ["pass", "pass", "pass"])
+        self.assertEqual(
+            len({item["assertion_result_sha256"] for item in evidence["stages"]}),
+            3,
+            evidence,
+        )
         self.assertNotIn(SENTINEL, json.dumps(evidence, ensure_ascii=False))
 
         result, receipt, final_contract = finalize_campaign(
