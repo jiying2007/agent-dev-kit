@@ -26,6 +26,7 @@ from .native_campaign_contract import (
     _sha256_file,
     _timestamp,
     _utc_now,
+    _validate_assertion_command_separation,
     _validate_assertions,
     _validate_commands,
 )
@@ -243,6 +244,7 @@ def run_campaign(
         raise ManifestError("native_campaign_plan_invalid")
     commands_value = _validate_commands(dict(commands))
     assertions_value = _validate_assertions(dict(assertions))
+    _validate_assertion_command_separation(commands_value, assertions_value)
     runtime_binary = _runtime_binary(str(runtime_binary))
     if (
         runtime_binary.name != plan["runtime"]["binary"]
