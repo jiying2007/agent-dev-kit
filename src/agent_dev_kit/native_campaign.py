@@ -19,6 +19,7 @@ from .native_campaign_contract import (
     PLAN_SCHEMA,
     STAGES,
     _load_json,
+    _validate_assertions,
     _validate_commands,
     _validate_schema,
     _write_json,
@@ -84,6 +85,12 @@ def finalize_campaign(
             raise ManifestError("native_campaign_finalize_stage_not_passed")
         if item.get("command_sha256") != plan["command_sha256"][item["stage"]]:
             raise ManifestError("native_campaign_finalize_stage_command_mismatch")
+        if (
+            item.get("semantic_assertion_status") != "pass"
+            or item.get("assertion_sha256") != plan["assertion_sha256"][item["stage"]]
+            or not isinstance(item.get("assertion_result_sha256"), str)
+        ):
+            raise ManifestError("native_campaign_finalize_stage_assertion_not_passed")
         authority = {
             "execution_authority": plan["authority"]["execution_authority"],
             "authority_id": plan["authority"]["authority_id"],
@@ -96,6 +103,9 @@ def finalize_campaign(
             {
                 "stage": item["stage"],
                 "command_sha256": item["command_sha256"],
+                "assertion_sha256": item["assertion_sha256"],
+                "assertion_result_sha256": item["assertion_result_sha256"],
+                "semantic_assertion_status": "pass",
                 "result_sha256": item["result_sha256"],
                 "exit_code": 0,
                 "started_at": item["started_at"],
@@ -108,7 +118,7 @@ def finalize_campaign(
         )
     verified_at = max(item["completed_at"] for item in receipt_stages)
     body = {
-        "schema": "adk-native-target-conformance-receipt/v1",
+        "schema": "adk-native-target-conformance-receipt/v2",
         "target": plan["target"],
         "runtime": dict(plan["runtime"]),
         "bundle_sha256": plan["bundle_sha256"],
@@ -124,7 +134,7 @@ def finalize_campaign(
         receipt,
         manifest.root
         / "schemas"
-        / "native-target-conformance-receipt-v1.schema.json",
+        / "native-target-conformance-receipt-v2.schema.json",
         "native target conformance receipt",
     )
     _validate_native_receipt(
@@ -245,6 +255,7 @@ def _parser() -> argparse.ArgumentParser:
     prepare.add_argument("--auth-mode", choices=AUTH_MODES, default="none")
     prepare.add_argument("--timeout-seconds", type=int, default=120)
     prepare.add_argument("--commands-json", required=True)
+    prepare.add_argument("--assertions-json", required=True)
     prepare.add_argument("--receipt-path", required=True)
     prepare.add_argument("--plan-out", required=True)
     prepare.add_argument("--candidate-contract-out", required=True)
@@ -254,6 +265,7 @@ def _parser() -> argparse.ArgumentParser:
     run.add_argument("--plan", required=True)
     run.add_argument("--candidate-contract", required=True)
     run.add_argument("--commands-json", required=True)
+    run.add_argument("--assertions-json", required=True)
     run.add_argument("--runtime-binary", required=True)
     run.add_argument("--evidence-out", required=True)
     run.add_argument("--summary-json", action="store_true")
@@ -277,6 +289,9 @@ def main(argv: Sequence[str] | None = None) -> int:
             commands = _validate_commands(
                 _load_json(Path(args.commands_json), "native campaign commands")
             )
+            assertions = _validate_assertions(
+                _load_json(Path(args.assertions_json), "native campaign assertions")
+            )
             plan, candidate = prepare_campaign(
                 manifest,
                 target=args.target,
@@ -289,13 +304,14 @@ def main(argv: Sequence[str] | None = None) -> int:
                 auth_mode=args.auth_mode,
                 timeout_seconds=args.timeout_seconds,
                 commands=commands,
+                assertions=assertions,
                 receipt_path=args.receipt_path,
             )
             _validate_schema(
                 plan,
                 manifest.root
                 / "schemas"
-                / "native-target-campaign-plan-v1.schema.json",
+                / "native-target-campaign-plan-v2.schema.json",
                 "native campaign plan",
             )
             plan_out = _safe_output_path(manifest, args.plan_out, "plan-out")
@@ -337,13 +353,14 @@ def main(argv: Sequence[str] | None = None) -> int:
                 plan,
                 candidate,
                 commands,
+                assertions,
                 Path(args.runtime_binary),
             )
             _validate_schema(
                 result,
                 manifest.root
                 / "schemas"
-                / "native-target-campaign-evidence-v1.schema.json",
+                / "native-target-campaign-evidence-v2.schema.json",
                 "native campaign evidence",
             )
             evidence_out = _safe_output_path(
