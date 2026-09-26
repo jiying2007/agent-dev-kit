@@ -152,7 +152,9 @@ def _base_environment(auth_mode: str) -> dict[str, str]:
 
 
 def _semantic_assertion(
-    result: Mapping[str, Any], assertion: Mapping[str, Any]
+    stage: str,
+    result: Mapping[str, Any],
+    assertion: Mapping[str, Any],
 ) -> tuple[bool, str]:
     stream = str(assertion["stream"])
     if stream == "stdout":
@@ -175,6 +177,8 @@ def _semantic_assertion(
     occurrences = haystack.count(needle) if decode_status == "utf8" else 0
     passed = occurrences > 0
     summary = {
+        "stage": stage,
+        "assertion_sha256": sha256_bytes(canonical_json_bytes(assertion)),
         "stream": stream,
         "case_sensitive": bool(assertion["case_sensitive"]),
         "decode_status": decode_status,
@@ -365,7 +369,7 @@ def run_campaign(
                 semantic_status = "not-run"
                 if result["exit_code"] == 0:
                     assertion_passed, assertion_result_sha256 = _semantic_assertion(
-                        result, assertions_value[stage]
+                        stage, result, assertions_value[stage]
                     )
                     semantic_status = "pass" if assertion_passed else "fail"
                 status = (
