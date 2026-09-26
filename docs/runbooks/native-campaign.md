@@ -6,7 +6,7 @@ This runbook turns native target verification into a reproducible, privacy-safe 
 
 Create an external commands JSON with exactly four command arrays: `version`, `discovery`, `load`, and `trigger`. Every command must start with the same absolute runtime binary path; wrappers and PATH-only executable names are rejected. Commands are hashed into the plan but their raw arguments are not copied into repository evidence.
 
-Create a separate assertions JSON with exactly `discovery`, `load`, and `trigger`. Each stage must bind an independent semantic assertion with `stream=stdout|stderr|combined`, a bounded `contains` canary, and explicit `case_sensitive`. The assertion body is hashed into the plan; raw assertion text and runtime output are not written into evidence. A stage only passes when the runtime exits 0 **and** its semantic assertion matches.
+Create a separate assertions JSON with exactly `discovery`, `load`, and `trigger`. Each stage must bind an independent semantic assertion with `stream=stdout|stderr|combined`, a bounded `contains` canary, and explicit `case_sensitive`. The assertion body is hashed into the plan; raw assertion text and runtime output are not written into evidence. A stage only passes when the runtime exits 0 **and** its semantic assertion matches. The assertion canary must not appear in that stage's command argv; prepare and run both reject self-fulfilling commands that embed the expected answer.
 
 ```bash
 bash scripts/devkit.sh native-campaign prepare \
