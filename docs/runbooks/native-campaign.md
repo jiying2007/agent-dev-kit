@@ -88,7 +88,7 @@ Skipping any step is forbidden. Source-layout probes, campaign fixtures or unsig
 - `claude-code -> .claude`, backed by the Claude Code Skills documentation.
 - `opencode -> .opencode`, backed by the OpenCode Skills and configuration documentation.
 
-This manifest is execution-layout metadata, not a new target contract wire format. Changing it requires source-version review and regression; campaign plan/evidence/receipt v1 schemas remain unchanged.
+This manifest is execution-layout metadata, not a target-contract wire format. Changing it requires source-version review and regression. Native campaign plan/evidence/receipt are independently versioned; the active certification path is the v2 hard-cut described below.
 
 
 ### Authentication and global-skill caveat
