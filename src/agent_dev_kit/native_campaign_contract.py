@@ -16,15 +16,16 @@ from .model import Manifest, ManifestError, canonical_json_bytes, sha256_bytes
 from .target_contracts import _native_contract_digest, _schema_failures, load_target_contract
 from .targets import render_selection
 
-PLAN_SCHEMA = "adk-native-target-campaign-plan/v1"
-EVIDENCE_SCHEMA = "adk-native-target-campaign-evidence/v1"
-FINALIZE_SCHEMA = "adk-native-target-campaign-finalize/v1"
+PLAN_SCHEMA = "adk-native-target-campaign-plan/v2"
+EVIDENCE_SCHEMA = "adk-native-target-campaign-evidence/v2"
+FINALIZE_SCHEMA = "adk-native-target-campaign-finalize/v2"
 STAGES = ("discovery", "load", "trigger")
 BACKENDS = ("external-signature-verifier", "ci-provenance-verifier")
 AUTH_MODES = ("none", "home")
 MAX_JSON_BYTES = 1024 * 1024
 MAX_OUTPUT_BYTES = 1024 * 1024
 MAX_VERSION_OUTPUT_BYTES = 64 * 1024
+MAX_ASSERTION_PATTERN_BYTES = 1024
 
 
 
@@ -215,6 +216,43 @@ def _validate_commands(value: Any) -> dict[str, list[str]]:
     return result
 
 
+def _validate_assertions(value: Any) -> dict[str, dict[str, Any]]:
+    if not isinstance(value, dict) or set(value) != set(STAGES):
+        raise ManifestError("native_campaign_assertions_require_discovery_load_trigger")
+    result: dict[str, dict[str, Any]] = {}
+    for stage in STAGES:
+        assertion = value[stage]
+        if not isinstance(assertion, dict) or set(assertion) != {
+            "stream", "contains", "case_sensitive"
+        }:
+            raise ManifestError(f"native_campaign_assertion_invalid: {stage}")
+        stream = assertion.get("stream")
+        pattern = assertion.get("contains")
+        case_sensitive = assertion.get("case_sensitive")
+        if stream not in {"stdout", "stderr", "combined"}:
+            raise ManifestError(f"native_campaign_assertion_stream_invalid: {stage}")
+        if (
+            not isinstance(pattern, str)
+            or not pattern
+            or len(pattern.encode("utf-8")) > MAX_ASSERTION_PATTERN_BYTES
+            or any(ch in pattern for ch in ("\\x00", "\\n", "\\r"))
+        ):
+            raise ManifestError(f"native_campaign_assertion_pattern_invalid: {stage}")
+        if not isinstance(case_sensitive, bool):
+            raise ManifestError(f"native_campaign_assertion_case_invalid: {stage}")
+        result[stage] = {
+            "stream": stream,
+            "contains": pattern,
+            "case_sensitive": case_sensitive,
+        }
+    digests = {
+        sha256_bytes(canonical_json_bytes(result[stage])) for stage in STAGES
+    }
+    if len(digests) != len(STAGES):
+        raise ManifestError("native_campaign_stage_assertions_must_be_independent")
+    return result
+
+
 def _bundle_identity(manifest: Manifest, target: str, profile: str) -> tuple[str, int]:
     bundle = render_selection(manifest, target, [profile], asset_kind="skill")
     records = [
@@ -255,7 +293,7 @@ def _candidate_contract(
         "last_verified_at": "1970-01-01T00:00:00Z",
         "evidence": [
             {
-                "receipt_schema": "adk-native-target-conformance-receipt/v1",
+                "receipt_schema": "adk-native-target-conformance-receipt/v2",
                 "path": receipt_path,
                 "sha256": "0" * 64,
                 "target": target,
@@ -289,6 +327,7 @@ def prepare_campaign(
     auth_mode: str,
     timeout_seconds: int,
     commands: Mapping[str, Sequence[str]],
+    assertions: Mapping[str, Mapping[str, Any]],
     receipt_path: str,
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     if not runtime_version or len(runtime_version) > 128:
@@ -343,6 +382,11 @@ def prepare_campaign(
         name: sha256_bytes(canonical_json_bytes(commands_value[name]))
         for name in ("version", *STAGES)
     }
+    assertions_value = _validate_assertions(dict(assertions))
+    assertion_digests = {
+        name: sha256_bytes(canonical_json_bytes(assertions_value[name]))
+        for name in STAGES
+    }
     plan_body = {
         "schema": PLAN_SCHEMA,
         "status": "ready",
@@ -370,6 +414,7 @@ def prepare_campaign(
         "timeout_seconds": timeout_seconds,
         "receipt_path": receipt_path,
         "command_sha256": command_digests,
+        "assertion_sha256": assertion_digests,
         "privacy": {
             "raw_command_stored": False,
             "raw_output_stored": False,
