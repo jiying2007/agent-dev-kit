@@ -22,7 +22,7 @@ from agent_dev_kit.native_campaign_contract import load_native_campaign_target_l
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = Manifest.load(ROOT)
 VERSION = platform.python_version()
-SENTINEL = "native-campaign-raw-output-sentinel"
+SENTINEL = hashlib.sha256(b"semantic:discovery").hexdigest()
 
 
 def stage_command(
@@ -47,7 +47,7 @@ def stage_command(
     if flood:
         code += "sys.stdout.write('x'*(1024*1024+1));"
     else:
-        code += f"print('{SENTINEL}-'+sys.argv[1]);"
+        code += "import hashlib;print(hashlib.sha256(('semantic:'+sys.argv[1]).encode()).hexdigest());"
     if fail:
         code += "sys.exit(7);"
     return [sys.executable, "-c", code, stage, project_config_dir]
@@ -80,7 +80,7 @@ def assertions(*, mismatch_stage: str | None = None) -> dict[str, dict[str, obje
             "contains": (
                 "semantic-assertion-mismatch"
                 if stage == mismatch_stage
-                else f"{SENTINEL}-{stage}"
+                else hashlib.sha256(f"semantic:{stage}".encode()).hexdigest()
             ),
             "case_sensitive": True,
         }
@@ -233,6 +233,22 @@ class NativeCampaignTest(unittest.TestCase):
         )
         self.assertEqual(evidence["status"], "failed", evidence)
         self.assertIn("output_budget_exceeded", evidence["stages"][0]["reason"])
+
+
+    def test_assertion_canary_cannot_be_embedded_in_stage_command(self) -> None:
+        command_set = commands()
+        assertion_set = assertions()
+        exposed = assertion_set["load"]["contains"]
+        command_set["load"] = [
+            sys.executable,
+            "-c",
+            f"print({exposed!r})",
+            "load",
+        ]
+        with self.assertRaisesRegex(
+            ManifestError, "assertion_canary_exposed_in_command"
+        ):
+            self.prepare(command_set, assertion_set=assertion_set)
 
 
     def test_exit_zero_without_semantic_match_fails_closed(self) -> None:
