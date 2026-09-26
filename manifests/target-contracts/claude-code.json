@@ -11,75 +11,35 @@
     "review_status": "reviewed",
     "expires_at": "2026-12-25"
   },
-  "supported_asset_kinds": [
-    "agent",
-    "skill"
-  ],
+  "supported_asset_kinds": ["agent", "skill"],
   "layouts": {
     "agent": "agents/{name}.md",
     "skill": "skills/{name}/SKILL.md"
   },
   "frontmatter": {
     "agent": {
-      "required": [
-        "name",
-        "description",
-        "tools"
-      ],
+      "required": ["name", "description", "tools"],
       "preserve": [],
-      "static": {
-        "permissionMode": "default"
-      }
+      "static": {"permissionMode": "default"}
     },
     "skill": {
-      "required": [
-        "name",
-        "description",
-        "metadata"
-      ],
-      "preserve": [
-        "license",
-        "compatibility"
-      ],
+      "required": ["name", "description", "metadata"],
+      "preserve": ["license", "compatibility"],
       "static": {}
     }
   },
   "skill_invocation": {
-    "supported_modes": [
-      "implicit",
-      "explicit-only"
-    ],
-    "explicit_only_frontmatter": {
-      "disable-model-invocation": true
-    }
+    "supported_modes": ["implicit", "explicit-only"],
+    "explicit_only_frontmatter": {"disable-model-invocation": true}
   },
   "permission_profiles": {
-    "read-only": {
-      "tools": "Read, Grep, Glob"
-    },
-    "code-write": {
-      "tools": "Read, Grep, Glob, Edit, Write, Bash"
-    },
-    "build-release": {
-      "tools": "Read, Grep, Glob, Edit, Write, Bash"
-    },
-    "diagnostic": {
-      "tools": "Read, Grep, Glob, Bash"
-    }
+    "read-only": {"tools": "Read, Grep, Glob"},
+    "code-write": {"tools": "Read, Grep, Glob, Edit, Write, Bash"},
+    "build-release": {"tools": "Read, Grep, Glob, Edit, Write, Bash"},
+    "diagnostic": {"tools": "Read, Grep, Glob, Bash"}
   },
-  "support_directories": [
-    "references",
-    "scripts",
-    "assets",
-    "templates",
-    "examples"
-  ],
-  "smoke_stages": [
-    "discovery",
-    "load",
-    "trigger",
-    "permission"
-  ],
+  "support_directories": ["references", "scripts", "assets", "templates", "examples"],
+  "smoke_stages": ["discovery", "load", "trigger", "permission"],
   "adapter": {
     "adapter_id": "claude-code-direct-target",
     "runtime_boundary": "ADK renders and statically validates assets; Claude Code owns native discovery, load, trigger, permission, resume, cancel and trace behavior.",
