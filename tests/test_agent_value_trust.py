@@ -16,6 +16,7 @@ from agent_dev_kit.agent_value_receipts import validate_receipt
 from agent_dev_kit.agent_value_trust import (
     ManagedAgentValueEvidenceVerifier,
     build_managed_agent_value_evidence_verifier,
+    build_portable_managed_agent_value_evidence_verifier,
     load_agent_value_trust_registry,
 )
 from agent_dev_kit.model import Manifest, ManifestError, canonical_json_bytes, sha256_bytes
@@ -109,7 +110,13 @@ def runtime_receipt(observed_at: datetime) -> dict:
     return value
 
 
-def registry_for(receipt: dict, bundle: Path, binary: Path) -> dict:
+def registry_for(
+    receipt: dict,
+    bundle: Path,
+    binary: Path,
+    *,
+    bundle_root: Path = ROOT,
+) -> dict:
     return {
         "schema": "adk-agent-value-trust-registry/v1",
         "status": "active",
@@ -130,7 +137,7 @@ def registry_for(receipt: dict, bundle: Path, binary: Path) -> dict:
                         "receipt_canonical_sha256": hashlib.sha256(
                             canonical_json_bytes(receipt)
                         ).hexdigest(),
-                        "bundle_path": bundle.relative_to(ROOT).as_posix(),
+                        "bundle_path": bundle.relative_to(bundle_root).as_posix(),
                         "bundle_sha256": file_sha256(bundle),
                     }
                 },
@@ -207,6 +214,58 @@ class AgentValueTrustTest(unittest.TestCase):
         self.assertEqual(asset["metrics"]["wrong-route-rate"]["value"], 0.0)
         self.assertEqual(asset["metrics"]["first-pass-success-rate"]["value"], 1.0)
         self.assertEqual(asset["metrics"]["human-interventions-per-task"]["value"], 0.0)
+
+    def test_portable_bundle_root_recomputes_managed_measurement_without_source_mutation(self) -> None:
+        contract = enabled_contract()
+        observed = datetime.now(timezone.utc).replace(microsecond=0) - timedelta(minutes=2)
+        as_of = observed + timedelta(minutes=1)
+        receipt = runtime_receipt(observed)
+
+        bundle_root = self.external_temp / "portable-evidence"
+        bundle_root.mkdir()
+        bundle = bundle_root / "receipt.sigstore.json"
+        bundle.write_text('{"fixture":"portable-sigstore"}\n', encoding="utf-8")
+        binary = fake_cosign(self.external_temp)
+        registry = registry_for(
+            receipt,
+            bundle,
+            binary,
+            bundle_root=bundle_root,
+        )
+
+        verifier = build_portable_managed_agent_value_evidence_verifier(
+            MANIFEST,
+            contract,
+            registry,
+            bundle_root=bundle_root,
+        )
+        measurement = emit_measurements(
+            [receipt],
+            MANIFEST,
+            contract,
+            evidence_verifier=verifier,
+            aggregation_window={
+                "from": observed - timedelta(seconds=1),
+                "through": observed + timedelta(seconds=1),
+            },
+            as_of=as_of,
+        )
+        self.assertEqual(measurement["measurement_status"], "measured")
+        self.assertEqual(measurement["evidence_scope"], "runtime-verified")
+        self.assertEqual(
+            measurement["asset_measurements"][0]["source_verification"],
+            "managed-authority-verified",
+        )
+        self.assertFalse((ROOT / "receipt.sigstore.json").exists())
+
+        missing_root = self.external_temp / "missing"
+        with self.assertRaisesRegex(ManifestError, "bundle_root_missing_or_unsafe"):
+            build_portable_managed_agent_value_evidence_verifier(
+                MANIFEST,
+                contract,
+                registry,
+                bundle_root=missing_root,
+            )
 
     def test_scope_digest_binary_bundle_and_signature_fail_closed(self) -> None:
         contract = enabled_contract()
