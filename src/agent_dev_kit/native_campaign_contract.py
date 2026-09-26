@@ -235,7 +235,7 @@ def _validate_assertions(value: Any) -> dict[str, dict[str, Any]]:
             not isinstance(pattern, str)
             or not pattern
             or len(pattern.encode("utf-8")) > MAX_ASSERTION_PATTERN_BYTES
-            or any(ch in pattern for ch in ("\\x00", "\\n", "\\r"))
+            or any(ord(ch) < 32 for ch in pattern)
         ):
             raise ManifestError(f"native_campaign_assertion_pattern_invalid: {stage}")
         if not isinstance(case_sensitive, bool):
