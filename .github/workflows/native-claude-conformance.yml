@@ -35,7 +35,6 @@ jobs:
       CONFIRMATION: ${{ inputs.confirmation }}
       CLAUDE_CODE_VERSION: ${{ inputs.claude_code_version }}
       CLAUDE_MODEL: ${{ inputs.model }}
-      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
     steps:
       - name: Validate trusted main and explicit real-campaign confirmation
         shell: bash
@@ -55,10 +54,6 @@ jobs:
           fi
           if [[ -z "$CLAUDE_MODEL" || ! "$CLAUDE_MODEL" =~ ^[A-Za-z0-9._:@/-]+$ ]]; then
             echo "::error::model must be an explicit bounded identifier"
-            exit 1
-          fi
-          if [[ -z "${ANTHROPIC_API_KEY:-}" ]]; then
-            echo "::error::ANTHROPIC_API_KEY repository secret is not configured"
             exit 1
           fi
 
@@ -110,8 +105,14 @@ jobs:
 
       - name: Provision noninteractive user-level API-key helper
         shell: bash
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
           set -euo pipefail
+          if [[ -z "${ANTHROPIC_API_KEY:-}" ]]; then
+            echo "::error::ANTHROPIC_API_KEY repository secret is not configured"
+            exit 1
+          fi
           echo "::add-mask::$ANTHROPIC_API_KEY"
           KEY_FILE="$RUNNER_TEMP/anthropic-api-key"
           HELPER="$RUNNER_TEMP/anthropic-api-key-helper"
