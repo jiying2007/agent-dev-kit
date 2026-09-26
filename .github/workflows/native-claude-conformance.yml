@@ -60,9 +60,16 @@ jobs:
       - name: Checkout exact trusted main
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: main
+          ref: ${{ github.sha }}
           persist-credentials: false
           fetch-depth: 1
+
+      - name: Verify exact dispatched source identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test -z "$(git status --porcelain=v1 --untracked-files=all)"
 
       - name: Set up Python
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
@@ -260,7 +267,7 @@ jobs:
           Path("/tmp/g21-native-receipt-canonical.json").write_bytes(canonical_json_bytes(receipt))
           PY
           cosign sign-blob             --yes             --bundle "$RUNNER_TEMP/g21-native/receipt.sigstore.json"             /tmp/g21-native-receipt-canonical.json
-          cosign verify-blob             --use-signed-timestamps             --bundle "$RUNNER_TEMP/g21-native/receipt.sigstore.json"             --certificate-identity "https://github.com/jiying2007/agent-dev-kit/.github/workflows/native-claude-conformance.yml@refs/heads/main"             --certificate-oidc-issuer "https://token.actions.githubusercontent.com"             /tmp/g21-native-receipt-canonical.json
+          cosign verify-blob             --bundle "$RUNNER_TEMP/g21-native/receipt.sigstore.json"             --certificate-identity "https://github.com/jiying2007/agent-dev-kit/.github/workflows/native-claude-conformance.yml@refs/heads/main"             --certificate-oidc-issuer "https://token.actions.githubusercontent.com"             /tmp/g21-native-receipt-canonical.json
 
       - name: Build managed trust registry candidate and verify production loader
         shell: bash
