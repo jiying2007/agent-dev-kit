@@ -342,7 +342,9 @@ class NativeCampaignTest(unittest.TestCase):
 
     def test_cli_rejects_repository_output_outside_runtime_reports(self) -> None:
         commands_path = self.temp / "commands.json"
+        assertions_path = self.temp / "assertions.json"
         commands_path.write_text(json.dumps(commands()), encoding="utf-8")
+        assertions_path.write_text(json.dumps(assertions()), encoding="utf-8")
         done = subprocess.run(
             [
                 sys.executable,
@@ -366,6 +368,8 @@ class NativeCampaignTest(unittest.TestCase):
                 "ci-provenance-verifier",
                 "--commands-json",
                 str(commands_path),
+                "--assertions-json",
+                str(assertions_path),
                 "--receipt-path",
                 self.receipt_rel,
                 "--plan-out",
