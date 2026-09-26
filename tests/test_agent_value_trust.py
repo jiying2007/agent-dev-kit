@@ -12,7 +12,11 @@ from pathlib import Path
 
 from agent_dev_kit.agent_value import emit_measurements
 from agent_dev_kit.agent_value_contracts import load_contract
-from agent_dev_kit.agent_value_receipts import validate_receipt
+from agent_dev_kit.agent_value_receipts import (
+    ManagedInvocationObservation,
+    prepare_managed_receipt,
+    validate_receipt,
+)
 from agent_dev_kit.agent_value_trust import (
     ManagedAgentValueEvidenceVerifier,
     build_managed_agent_value_evidence_verifier,
@@ -69,45 +73,31 @@ def enabled_contract() -> dict:
 
 def runtime_receipt(observed_at: datetime) -> dict:
     agent_id = str(MANIFEST.data["agents"][0]["name"])
-    manifest_ref = opaque_ref_for_sha256(MANIFEST.digest)
-    source_trace_ref = opaque_ref_for_sha256("2" * 64)
-    payload = {
-        "schema_version": "adk-asset-invocation-receipt/v1",
-        "invocation_ref": opaque_ref_for_sha256("1" * 64),
-        "source_trace_ref": source_trace_ref,
-        "manifest_ref": manifest_ref,
-        "asset_bundle_sha256": "a" * 64,
-        "runtime_target": "claude-code",
-        "evidence_layer": "runtime",
-        "observed_at": observed_at.isoformat().replace("+00:00", "Z"),
-        "measurement_status": "measured",
-        "asset_id": agent_id,
-        "asset_kind": "agent",
-        "routing": {"routed": True, "abstained": False, "wrong_route": False},
-        "outcome": "succeeded",
-        "human_interventions": 0,
-        "first_pass": True,
-        "time_to_trustworthy_change_ms": 250,
-        "retirement_signal": "retain",
-        "evidence_refs": [opaque_ref_for_sha256("3" * 64)],
-        "privacy_status": "sanitized",
-        "raw_content_stored": False,
-    }
-    body_sha = sha256_bytes(canonical_json_bytes(payload))
-    value = dict(payload)
-    value["authority_attestation"] = {
-        "authority_id": "agent-value-ci",
-        "body_sha256": body_sha,
-        "manifest_ref": manifest_ref,
-        "asset_bundle_sha256": payload["asset_bundle_sha256"],
-        "evidence_layer": "runtime",
-        "runtime_target": "claude-code",
-        "source_trace_ref": source_trace_ref,
-    }
-    value["receipt_id"] = opaque_ref_for_sha256(
-        sha256_bytes(canonical_json_bytes(value))
+    return prepare_managed_receipt(
+        ManagedInvocationObservation(
+            invocation_ref=opaque_ref_for_sha256("1" * 64),
+            source_trace_ref=opaque_ref_for_sha256("2" * 64),
+            asset_bundle_sha256="a" * 64,
+            runtime_target="claude-code",
+            evidence_layer="runtime",
+            observed_at=observed_at,
+            asset_id=agent_id,
+            asset_kind="agent",
+            routed=True,
+            abstained=False,
+            wrong_route=False,
+            outcome="succeeded",
+            human_interventions=0,
+            retirement_signal="retain",
+            evidence_refs=(opaque_ref_for_sha256("3" * 64),),
+            privacy_status="sanitized",
+            first_pass=True,
+            time_to_trustworthy_change_ms=250,
+        ),
+        MANIFEST,
+        enabled_contract(),
+        "agent-value-ci",
     )
-    return value
 
 
 def registry_for(
@@ -163,6 +153,40 @@ class AgentValueTrustTest(unittest.TestCase):
         self.assertEqual(registry["authorities"], {})
         with self.assertRaisesRegex(ManifestError, "policy_disabled"):
             build_managed_agent_value_evidence_verifier(MANIFEST, CONTRACT)
+
+    def test_prepared_managed_receipt_is_deterministic_but_not_verified(self) -> None:
+        contract = enabled_contract()
+        observed = datetime.now(timezone.utc).replace(microsecond=0) - timedelta(minutes=2)
+        first = runtime_receipt(observed)
+        second = runtime_receipt(observed)
+        self.assertEqual(first, second)
+        self.assertEqual(first["evidence_layer"], "runtime")
+        self.assertEqual(
+            first["authority_attestation"]["authority_id"], "agent-value-ci"
+        )
+        with self.assertRaisesRegex(ManifestError, "injected evidence verifier"):
+            validate_receipt(first, MANIFEST, contract, as_of=observed + timedelta(minutes=1))
+
+        bad = ManagedInvocationObservation(
+            invocation_ref=opaque_ref_for_sha256("1" * 64),
+            source_trace_ref=opaque_ref_for_sha256("2" * 64),
+            asset_bundle_sha256="a" * 64,
+            runtime_target="opencode",
+            evidence_layer="runtime",
+            observed_at=observed,
+            asset_id=str(MANIFEST.data["agents"][0]["name"]),
+            asset_kind="agent",
+            routed=True,
+            abstained=False,
+            wrong_route=False,
+            outcome="succeeded",
+            human_interventions=0,
+            retirement_signal="retain",
+            evidence_refs=(opaque_ref_for_sha256("3" * 64),),
+            privacy_status="sanitized",
+        )
+        with self.assertRaisesRegex(ManifestError, "outside authority scope"):
+            prepare_managed_receipt(bad, MANIFEST, contract, "agent-value-ci")
 
     def test_managed_runtime_receipt_flows_through_canonical_measurement(self) -> None:
         contract = enabled_contract()

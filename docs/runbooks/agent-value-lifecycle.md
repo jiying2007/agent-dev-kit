@@ -11,7 +11,8 @@
   default Skill，或创建 Skill/Profile 身份清单。
 - `schemas/asset-invocation-receipt-v1.schema.json` 是 receipt 结构合同。
 - `schemas/asset-value-measurement-v1.schema.json` 是 measured/not-measured 聚合输出合同。
-- `src/agent_dev_kit/agent_value_contracts.py` 是 Agent Value contract/receipt loading 与语义验证的唯一 Python authority。
+- `src/agent_dev_kit/agent_value_contracts.py` 是 Agent Value contract/schema policy 的 Python authority。
+- `src/agent_dev_kit/agent_value_receipts.py` 独占 invocation receipt 的 typed preparation、canonical identity 与 receipt 语义验证；prepared receipt 不拥有 signature/trust authority。
 - `src/agent_dev_kit/agent_value.py` 只负责编排 validated contract/receipt 到显式输入驱动的
   `emit_measurements` 输出及 CLI；它不是 contract facade、runtime collector 或持久化服务。
 - `manifests/agent_value_trust_registry.json` 是 runtime/field receipt 的受管签名 verifier registry；默认 authorities 为空。
@@ -55,7 +56,26 @@
 - `raw_content_stored=false`，不含 prompt、message、credential、raw log、tool payload 或 operator identity
 
 不得创建伪造 receipt 来填补 usage 空白，也不得把 test fixture 重标为 runtime/field。调用方可以把真实观测形成显式、
-脱敏 receipt，再交给 validator/emitter；本模块不会自行保存输入或输出。没有有效 receipt 输入时，正确状态就是：
+脱敏 receipt，再交给 validator/emitter；本模块不会自行保存输入或输出。
+
+### Prepared managed receipt construction (7.8.0)
+
+真实 runtime/field adapter 不再需要手工拼 `authority_attestation` 与 `receipt_id`。使用
+`ManagedInvocationObservation` + `prepare_managed_receipt()`，由 receipt authority 根据显式已观测 facts
+确定性生成：
+
+- 当前 manifest 绑定的 `manifest_ref`；
+- canonical payload `body_sha256`；
+- authority/layer/runtime-target/source-trace scope attestation；
+- content-addressed `receipt_id`；
+- schema、asset identity、routing/outcome、time window、retirement signal 与 authority scope 的结构校验。
+
+该 API 的输出只是 **prepared-not-verified receipt**：它不会签名、不会调用 verifier、不会产生
+`managed-authority-verified` 结论，也不会把调用方声明提升成 runtime/field truth。prepared receipt 仍必须交给
+owner-reviewed registry 对应的外部签名流程，并最终通过 `validate_receipt(..., evidence_verifier=...)` 或 portable
+managed verifier 复验后，才可进入 `emit_measurements()`。
+
+没有有效 receipt 输入时，正确状态就是：
 
 ```json
 {"status":"not-measured","runtime_enabled":false,"usage_evidence":"none-claimed"}
@@ -78,7 +98,41 @@ rtk bash -lc 'PYTHONPATH=src python3 -m agent_dev_kit.agent_value \
   --manifest-root . --receipt path/to/receipt.json --summary-json'
 ```
 
-runtime/field receipt 必须由受审查的 Python composition root 使用 managed verifier；不要通过 CLI、lambda 或临时 callback 绕过：
+runtime/field receipt 必须由受审查的 Python composition root 使用 managed verifier；不要通过 CLI、lambda 或临时 callback 绕过。生产 adapter 可先用 typed builder 准备 receipt：
+
+```python
+from agent_dev_kit.agent_value_receipts import (
+    ManagedInvocationObservation,
+    prepare_managed_receipt,
+)
+
+prepared = prepare_managed_receipt(
+    ManagedInvocationObservation(
+        invocation_ref=invocation_ref,
+        source_trace_ref=source_trace_ref,
+        asset_bundle_sha256=asset_bundle_sha256,
+        runtime_target=runtime_target,
+        evidence_layer="runtime",
+        observed_at=observed_at,
+        asset_id=asset_id,
+        asset_kind=asset_kind,
+        routed=routed,
+        abstained=abstained,
+        wrong_route=wrong_route,
+        outcome=outcome,
+        human_interventions=human_interventions,
+        retirement_signal=retirement_signal,
+        evidence_refs=tuple(evidence_refs),
+        privacy_status="sanitized",
+    ),
+    manifest,
+    reviewed_managed_contract,
+    authority_id,
+)
+# prepared is not trusted evidence yet; sign/register/reverify it before aggregation.
+```
+
+验证与聚合继续走 managed verifier：
 
 ```python
 from agent_dev_kit.agent_value import emit_measurements
@@ -132,7 +186,7 @@ escaped defect 和 rollback 等 outcome 指标。Agent/Skill/Profile 数量、in
 
 每个可选 KPI 同时报告 applicable/observed sample size 与 coverage。first-pass、可信变更时间、escaped defect、
 rollback 未达到完整覆盖时保持 `not-measured/incomplete-coverage`，不能用部分样本生成 measured value。顶层
-`evidence_scope` 区分 `test-only/runtime-verified/field-verified/mixed`。7.7.0 保留固定、版本化的 receipt trust registry，并支持 portable bundle-root 复验；
+`evidence_scope` 区分 `test-only/runtime-verified/field-verified/mixed`。7.8.0 在 7.7.0 portable bundle-root 复验基础上增加 typed prepared receipt builder；
 但 v1 contract 的 authority 仍强制 `production=false`，因此 `quality_evidence_eligible` 对所有 scope 继续固定为 false，
 并始终输出 ineligibility reason、`owner_review_required=true`、`lifecycle_authority=none-evidence-only`。
 
