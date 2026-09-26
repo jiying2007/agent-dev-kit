@@ -278,6 +278,8 @@ class ManagedAgentValueEvidenceVerifier:
         manifest: Manifest,
         contract: Mapping[str, Any],
         registry: Mapping[str, Any],
+        *,
+        bundle_root: Path | None = None,
     ) -> None:
         value_contracts.validate_contract(contract, manifest)
         policy = contract.get("evidence_authority_policy")
@@ -289,6 +291,10 @@ class ManagedAgentValueEvidenceVerifier:
         self._contract = contract
         self._policy = policy
         self._registry = validate_agent_value_trust_registry(registry)
+        root = manifest.root if bundle_root is None else Path(bundle_root)
+        if root.is_symlink() or not root.is_dir():
+            raise ManifestError("agent_value_trust_bundle_root_missing_or_unsafe")
+        self._bundle_root = root.resolve()
 
     def __call__(
         self,
@@ -350,8 +356,8 @@ class ManagedAgentValueEvidenceVerifier:
             raise ManifestError("agent_value_trust_receipt_digest_mismatch")
 
         bundle = ensure_within(
-            self._manifest.root / str(record["bundle_path"]),
-            self._manifest.root,
+            self._bundle_root / str(record["bundle_path"]),
+            self._bundle_root,
             "Agent Value signature bundle",
         )
         if bundle.suffix != ".json" or bundle.is_symlink() or not bundle.is_file():
@@ -435,3 +441,26 @@ def build_managed_agent_value_evidence_verifier(
         raise ManifestError("agent_value_trust_policy_disabled")
     registry = load_agent_value_trust_registry(manifest.root)
     return ManagedAgentValueEvidenceVerifier(manifest, contract, registry)
+
+
+def build_portable_managed_agent_value_evidence_verifier(
+    manifest: Manifest,
+    contract: Mapping[str, Any],
+    registry: Mapping[str, Any],
+    *,
+    bundle_root: Path,
+) -> ManagedAgentValueEvidenceVerifier:
+    """Build the same managed verifier against a caller-owned evidence bundle root.
+
+    This does not relax registry, contract, signature, binary, layer, target, or
+    receipt identity checks. It only decouples immutable signature-bundle storage
+    from the ADK source tree so a consumer can verify a digest-bound evidence
+    package without mutating the pinned ADK worktree.
+    """
+
+    return ManagedAgentValueEvidenceVerifier(
+        manifest,
+        contract,
+        registry,
+        bundle_root=bundle_root,
+    )
