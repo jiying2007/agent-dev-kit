@@ -10,15 +10,12 @@ from __future__ import annotations
 
 import hashlib
 import json
-import os
-import shutil
-import subprocess
-import tempfile
 from pathlib import Path
 from typing import Any, Mapping
 
 from . import agent_value_contracts as value_contracts
 from .model import Manifest, ManifestError, canonical_json_bytes, ensure_within
+from .sigstore_blob import verify_sigstore_blob
 
 REGISTRY_SCHEMA = "adk-agent-value-trust-registry/v1"
 MAX_REGISTRY_BYTES = 256 * 1024
@@ -28,13 +25,6 @@ SUPPORTED_POLICY_BACKENDS = frozenset(
 )
 SUPPORTED_VERIFIER = "sigstore-cosign-blob"
 
-
-def _sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as stream:
-        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
 
 
 def _json_object(path: Path, *, limit: int, label: str) -> Mapping[str, Any]:
@@ -360,75 +350,19 @@ class ManagedAgentValueEvidenceVerifier:
             self._bundle_root,
             "Agent Value signature bundle",
         )
-        if bundle.suffix != ".json" or bundle.is_symlink() or not bundle.is_file():
-            raise ManifestError("agent_value_trust_bundle_missing_or_unsafe")
-        if bundle.stat().st_size > MAX_BUNDLE_BYTES:
-            raise ManifestError("agent_value_trust_bundle_exceeds_byte_budget")
-        if _sha256_file(bundle) != record["bundle_sha256"]:
-            raise ManifestError("agent_value_trust_bundle_digest_mismatch")
-
-        binary_name = registry_authority["cosign_binary"]
-        binary = Path(binary_name)
-        if binary.is_absolute():
-            resolved_binary = binary.resolve()
-        else:
-            located = shutil.which(binary_name)
-            if located is None:
-                raise ManifestError("agent_value_trust_cosign_not_found")
-            resolved_binary = Path(located).resolve()
-        if not resolved_binary.is_file():
-            raise ManifestError("agent_value_trust_cosign_not_regular")
         expected_binary_digest = registry_authority["cosign_binary_sha256"]
         if not isinstance(expected_binary_digest, str):
             raise ManifestError("agent_value_trust_cosign_digest_not_configured")
-        if _sha256_file(resolved_binary) != expected_binary_digest:
-            raise ManifestError("agent_value_trust_cosign_digest_mismatch")
-
-        identity = registry_authority["certificate_identity"]
-        issuer = registry_authority["certificate_oidc_issuer"]
-        if not identity or not issuer:
-            raise ManifestError(
-                "agent_value_trust_certificate_identity_not_configured"
-            )
-
-        verifier_env = {
-            "PATH": os.defpath,
-            "LANG": "C.UTF-8",
-            "LC_ALL": "C.UTF-8",
-        }
-        for key in ("HOME", "XDG_CACHE_HOME", "SSL_CERT_FILE", "SSL_CERT_DIR"):
-            value = os.environ.get(key)
-            if value:
-                verifier_env[key] = value
-
-        stdin_path = Path("/dev/stdin")
-        if not stdin_path.exists():
-            raise ManifestError("agent_value_trust_in_memory_verification_unsupported")
-        with tempfile.TemporaryDirectory(prefix="adk-agent-value-trust-") as temporary:
-            try:
-                completed = subprocess.run(
-                    [
-                        str(resolved_binary),
-                        "verify-blob",
-                        "--bundle",
-                        str(bundle),
-                        "--certificate-identity",
-                        identity,
-                        "--certificate-oidc-issuer",
-                        issuer,
-                        str(stdin_path),
-                    ],
-                    cwd=temporary,
-                    env=verifier_env,
-                    input=canonical,
-                    stdout=subprocess.DEVNULL,
-                    stderr=subprocess.DEVNULL,
-                    check=False,
-                    timeout=30,
-                )
-            except subprocess.TimeoutExpired as exc:
-                raise ManifestError("agent_value_trust_cosign_timeout") from exc
-        return completed.returncode == 0
+        return verify_sigstore_blob(
+            canonical,
+            bundle=bundle,
+            expected_bundle_sha256=record["bundle_sha256"],
+            cosign_binary=registry_authority["cosign_binary"],
+            expected_cosign_sha256=expected_binary_digest,
+            certificate_identity=registry_authority["certificate_identity"],
+            certificate_oidc_issuer=registry_authority["certificate_oidc_issuer"],
+            error_prefix="agent_value_trust",
+        )
 
 
 def build_managed_agent_value_evidence_verifier(

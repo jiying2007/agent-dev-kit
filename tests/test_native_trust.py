@@ -31,9 +31,10 @@ def fake_cosign(root: Path, exit_code: int = 0) -> Path:
         "#!/usr/bin/env python3\n"
         "import pathlib,sys\n"
         "args=sys.argv[1:]\n"
+        "blob=sys.stdin.buffer.read()\n"
         "ok=(len(args)==8 and args[0]=='verify-blob' and args[1]=='--bundle' "
         "and args[3]=='--certificate-identity' and args[5]=='--certificate-oidc-issuer' "
-        "and pathlib.Path(args[2]).is_file() and pathlib.Path(args[7]).is_file())\n"
+        "and pathlib.Path(args[2]).is_file() and args[7]=='/dev/stdin' and len(blob)>0)\n"
         f"sys.exit({exit_code} if ok else 97)\n",
         encoding="utf-8",
     )
