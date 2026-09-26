@@ -73,6 +73,21 @@ def commands(
     }
 
 
+def assertions(*, mismatch_stage: str | None = None) -> dict[str, dict[str, object]]:
+    return {
+        stage: {
+            "stream": "stdout",
+            "contains": (
+                "semantic-assertion-mismatch"
+                if stage == mismatch_stage
+                else f"{SENTINEL}-{stage}"
+            ),
+            "case_sensitive": True,
+        }
+        for stage in ("discovery", "load", "trigger")
+    }
+
+
 class NativeCampaignTest(unittest.TestCase):
     def setUp(self) -> None:
         self.temp = Path(tempfile.mkdtemp(prefix="adk-native-campaign-"))
@@ -91,6 +106,7 @@ class NativeCampaignTest(unittest.TestCase):
     def prepare(
         self,
         command_set: dict[str, list[str]] | None = None,
+        assertion_set: dict[str, dict[str, object]] | None = None,
         runtime_version: str = VERSION,
         target: str = "claude-code",
     ):
@@ -106,6 +122,7 @@ class NativeCampaignTest(unittest.TestCase):
             auth_mode="none",
             timeout_seconds=15,
             commands=command_set or commands(),
+            assertions=assertion_set or assertions(),
             receipt_path=self.receipt_rel,
         )
 
@@ -146,7 +163,7 @@ class NativeCampaignTest(unittest.TestCase):
                 command_set = commands(project_config_dir=config_dir)
                 plan, candidate = self.prepare(command_set, target=target)
                 evidence = run_campaign(
-                    MANIFEST, plan, candidate, command_set, Path(sys.executable)
+                    MANIFEST, plan, candidate, command_set, assertions(), Path(sys.executable)
                 )
                 self.assertEqual(evidence["status"], "complete", evidence)
                 self.assertEqual(
@@ -157,7 +174,7 @@ class NativeCampaignTest(unittest.TestCase):
     def test_api_complete_campaign_finalizes_without_raw_output_or_active_write(self) -> None:
         command_set = commands()
         plan, candidate = self.prepare(command_set)
-        evidence = run_campaign(MANIFEST, plan, candidate, command_set, Path(sys.executable))
+        evidence = run_campaign(MANIFEST, plan, candidate, command_set, assertions(), Path(sys.executable))
         self.assertEqual(evidence["status"], "complete", evidence)
         self.assertEqual([item["status"] for item in evidence["stages"]], ["pass", "pass", "pass"])
         self.assertNotIn(SENTINEL, json.dumps(evidence, ensure_ascii=False))
@@ -167,7 +184,7 @@ class NativeCampaignTest(unittest.TestCase):
         )
         self.assertEqual(result["status"], "ready-for-signature-and-registry")
         self.assertFalse(result["release_authorized"])
-        self.assertEqual(receipt["schema"], "adk-native-target-conformance-receipt/v1")
+        self.assertEqual(receipt["schema"], "adk-native-target-conformance-receipt/v2")
         self.assertEqual(
             [item["stage"] for item in receipt["stages"]],
             ["discovery", "load", "trigger"],
@@ -207,15 +224,46 @@ class NativeCampaignTest(unittest.TestCase):
         drifted = commands()
         drifted["load"] = [sys.executable, "-c", "raise SystemExit(0)", "load"]
         with self.assertRaisesRegex(ManifestError, "command_drift"):
-            run_campaign(MANIFEST, plan, candidate, drifted, Path(sys.executable))
+            run_campaign(MANIFEST, plan, candidate, drifted, assertions(), Path(sys.executable))
 
         flood = commands(flood_stage="discovery")
         flood_plan, flood_candidate = self.prepare(flood)
         evidence = run_campaign(
-            MANIFEST, flood_plan, flood_candidate, flood, Path(sys.executable)
+            MANIFEST, flood_plan, flood_candidate, flood, assertions(), Path(sys.executable)
         )
         self.assertEqual(evidence["status"], "failed", evidence)
         self.assertIn("output_budget_exceeded", evidence["stages"][0]["reason"])
+
+
+    def test_exit_zero_without_semantic_match_fails_closed(self) -> None:
+        command_set = commands()
+        assertion_set = assertions(mismatch_stage="load")
+        plan, candidate = self.prepare(command_set, assertion_set=assertion_set)
+        evidence = run_campaign(
+            MANIFEST,
+            plan,
+            candidate,
+            command_set,
+            assertion_set,
+            Path(sys.executable),
+        )
+        self.assertEqual(evidence["status"], "failed", evidence)
+        self.assertEqual(
+            [item["status"] for item in evidence["stages"]],
+            ["pass", "fail", "blocked"],
+        )
+        self.assertEqual(evidence["stages"][1]["exit_code"], 0)
+        self.assertEqual(
+            evidence["stages"][1]["semantic_assertion_status"], "fail"
+        )
+        self.assertEqual(
+            evidence["stages"][1]["reason"], "semantic-assertion-failed"
+        )
+        self.assertEqual(
+            evidence["stages"][2]["semantic_assertion_status"], "not-run"
+        )
+        with self.assertRaisesRegex(ManifestError, "requires_complete_campaign"):
+            finalize_campaign(MANIFEST, plan, candidate, evidence, self.receipt)
 
 
     def test_finalize_rejects_evidence_identity_and_stage_command_drift(self) -> None:
@@ -252,6 +300,7 @@ class NativeCampaignTest(unittest.TestCase):
                 auth_mode="none",
                 timeout_seconds=15,
                 commands=commands(),
+                assertions=assertions(),
                 receipt_path="manifests/target-contracts/claude-code.json",
             )
 
@@ -316,11 +365,13 @@ class NativeCampaignTest(unittest.TestCase):
 
     def test_public_cli_prepare_run_finalize(self) -> None:
         commands_path = self.temp / "commands.json"
+        assertions_path = self.temp / "assertions.json"
         plan_path = self.temp / "plan.json"
         candidate_path = self.temp / "candidate.json"
         evidence_path = self.temp / "evidence.json"
         final_contract_path = self.temp / "final-contract.json"
         commands_path.write_text(json.dumps(commands()), encoding="utf-8")
+        assertions_path.write_text(json.dumps(assertions()), encoding="utf-8")
 
         def invoke(*args: str, expected: int = 0) -> dict:
             done = subprocess.run(
@@ -353,6 +404,7 @@ class NativeCampaignTest(unittest.TestCase):
             "--verification-backend", "ci-provenance-verifier",
             "--auth-mode", "none",
             "--commands-json", str(commands_path),
+            "--assertions-json", str(assertions_path),
             "--receipt-path", self.receipt_rel,
             "--plan-out", str(plan_path),
             "--candidate-contract-out", str(candidate_path),
@@ -364,6 +416,7 @@ class NativeCampaignTest(unittest.TestCase):
             "--plan", str(plan_path),
             "--candidate-contract", str(candidate_path),
             "--commands-json", str(commands_path),
+            "--assertions-json", str(assertions_path),
             "--runtime-binary", sys.executable,
             "--evidence-out", str(evidence_path),
         )
