@@ -253,6 +253,22 @@ def _validate_assertions(value: Any) -> dict[str, dict[str, Any]]:
     return result
 
 
+def _validate_assertion_command_separation(
+    commands: Mapping[str, Sequence[str]],
+    assertions: Mapping[str, Mapping[str, Any]],
+) -> None:
+    for stage in STAGES:
+        needle = str(assertions[stage]["contains"])
+        argv_text = "\\n".join(str(item) for item in commands[stage])
+        if assertions[stage]["case_sensitive"] is False:
+            needle = needle.casefold()
+            argv_text = argv_text.casefold()
+        if needle in argv_text:
+            raise ManifestError(
+                f"native_campaign_assertion_canary_exposed_in_command: {stage}"
+            )
+
+
 def _bundle_identity(manifest: Manifest, target: str, profile: str) -> tuple[str, int]:
     bundle = render_selection(manifest, target, [profile], asset_kind="skill")
     records = [
@@ -387,6 +403,7 @@ def prepare_campaign(
         name: sha256_bytes(canonical_json_bytes(assertions_value[name]))
         for name in STAGES
     }
+    _validate_assertion_command_separation(commands_value, assertions_value)
     plan_body = {
         "schema": PLAN_SCHEMA,
         "status": "ready",
