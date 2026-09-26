@@ -339,13 +339,16 @@ def main(argv: Sequence[str] | None = None) -> int:
             commands = _validate_commands(
                 _load_json(Path(args.commands_json), "native campaign commands")
             )
+            assertions = _validate_assertions(
+                _load_json(Path(args.assertions_json), "native campaign assertions")
+            )
             if not isinstance(plan, dict) or not isinstance(candidate, dict):
                 raise ManifestError("native_campaign_run_inputs_must_be_objects")
             _validate_schema(
                 plan,
                 manifest.root
                 / "schemas"
-                / "native-target-campaign-plan-v1.schema.json",
+                / "native-target-campaign-plan-v2.schema.json",
                 "native campaign plan",
             )
             result = run_campaign(
@@ -383,14 +386,14 @@ def main(argv: Sequence[str] | None = None) -> int:
                 plan,
                 manifest.root
                 / "schemas"
-                / "native-target-campaign-plan-v1.schema.json",
+                / "native-target-campaign-plan-v2.schema.json",
                 "native campaign plan",
             )
             _validate_schema(
                 evidence,
                 manifest.root
                 / "schemas"
-                / "native-target-campaign-evidence-v1.schema.json",
+                / "native-target-campaign-evidence-v2.schema.json",
                 "native campaign evidence",
             )
             receipt_path = _safe_output_path(
