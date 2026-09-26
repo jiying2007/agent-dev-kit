@@ -7,9 +7,9 @@
       "https://code.claude.com/docs/en/sub-agents",
       "https://code.claude.com/docs/en/skills"
     ],
-    "retrieved_at": "2026-07-13",
+    "retrieved_at": "2026-09-26",
     "review_status": "reviewed",
-    "expires_at": "2026-10-11"
+    "expires_at": "2026-12-25"
   },
   "supported_asset_kinds": ["agent", "skill"],
   "layouts": {

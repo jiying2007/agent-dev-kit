@@ -37,6 +37,7 @@ expected_write_permissions = {
     "release-tag-promotion.yml": ["artifact-metadata", "artifact-metadata", "attestations", "attestations", "contents", "contents", "contents", "id-token", "id-token"],
     "release.yml": ["artifact-metadata", "attestations", "contents", "id-token"],
     "security-codeql.yml": ["security-events"],
+    "native-claude-conformance.yml": ["id-token"],
 }
 for path in workflow_files:
     text = path.read_text(encoding="utf-8")
@@ -56,9 +57,14 @@ for path in workflow_files:
         path.name,
         "inline permission maps are not allowed; use reviewed block mappings",
     )
-    assert not re.search(r"\$\{\{\s*secrets\.", text), (
+    secret_refs = sorted(set(re.findall(r"\$\{\{\s*secrets\.([A-Z0-9_]+)\s*\}\}", text)))
+    expected_secret_refs = {
+        "native-claude-conformance.yml": ["ANTHROPIC_API_KEY"],
+    }
+    assert secret_refs == expected_secret_refs.get(path.name, []), (
         path.name,
-        "hosted workflows must not depend on repository secrets",
+        secret_refs,
+        "repository secrets are forbidden except for the reviewed real native campaign credential",
     )
     assert "continue-on-error:" not in text, (
         path.name,
@@ -248,6 +254,27 @@ assert "release tag must be annotated" in release_tag_promotion, "v7 release tag
 assert "  repair-orphaned-release:\n" in release_tag_promotion, "tagged-but-unreleased versions must have an automatic repair path"
 assert "fromJSON(needs.discover-orphaned-releases.outputs.repairs)" in release_tag_promotion, "repair matrix must come from audited exact-tag evidence"
 assert release_tag_promotion.count("uses: ./.github/workflows/release.yml") == 2, "current release and orphan repair must share the canonical release workflow"
+
+native_campaign = (workflow_dir / "native-claude-conformance.yml").read_text(encoding="utf-8")
+native_trigger = native_campaign.split("permissions:", 1)[0]
+assert "workflow_dispatch:" in native_trigger, "real native campaign must be explicitly dispatched"
+assert "pull_request:" not in native_trigger and "push:" not in native_trigger and "schedule:" not in native_trigger, "real native campaign must never run automatically from source events"
+assert "RUN_REAL_NATIVE" in native_campaign, "real native campaign requires an explicit confirmation token"
+assert "claude_code_version:" in native_campaign and "model:" in native_campaign, "real native campaign must pin runtime and model inputs"
+assert "@anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}" in native_campaign, "hosted campaign must install the exact requested Claude Code version"
+assert "ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}" in native_campaign, "hosted campaign must use the reviewed GitHub secret name"
+assert '"apiKeyHelper"' in native_campaign, "provider secret must be bridged through the isolated user-level helper"
+assert "--auth-mode home" in native_campaign, "native runner must preserve only the reviewed HOME auth surface"
+assert native_campaign.count("native-campaign prepare") == 1
+assert native_campaign.count("native-campaign run") == 1
+assert native_campaign.count("native-campaign finalize") == 1
+assert "cosign sign-blob" in native_campaign and "cosign verify-blob" in native_campaign, "retained receipt must be signed and immediately verified"
+assert "production-loader.json" in native_campaign, "candidate package must prove production-loader verification"
+assert '"target_promotion_performed": False' in native_campaign
+assert '"registry_promotion_performed": False' in native_campaign
+assert '"release_authorized": False' in native_campaign
+assert "gh pr create" not in native_campaign and "git push" not in native_campaign, "real campaign evidence lane must not mutate repository lifecycle state"
+assert "contents: write" not in native_campaign, "real campaign must not gain repository write authority"
 
 dependency_review = (workflow_dir / "security-dependency-review.yml").read_text(encoding="utf-8")
 assert "pull_request:" in dependency_review, "dependency review must remain PR-only"
