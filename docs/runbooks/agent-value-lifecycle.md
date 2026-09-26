@@ -11,7 +11,8 @@
   default Skill，或创建 Skill/Profile 身份清单。
 - `schemas/asset-invocation-receipt-v1.schema.json` 是 receipt 结构合同。
 - `schemas/asset-value-measurement-v1.schema.json` 是 measured/not-measured 聚合输出合同。
-- `src/agent_dev_kit/agent_value_contracts.py` 是 Agent Value contract/receipt loading 与语义验证的唯一 Python authority。
+- `src/agent_dev_kit/agent_value_contracts.py` 是 Agent Value contract/schema policy 的 Python authority。
+- `src/agent_dev_kit/agent_value_receipts.py` 独占 invocation receipt 的 typed preparation、canonical identity 与 receipt 语义验证；prepared receipt 不拥有 signature/trust authority。
 - `src/agent_dev_kit/agent_value.py` 只负责编排 validated contract/receipt 到显式输入驱动的
   `emit_measurements` 输出及 CLI；它不是 contract facade、runtime collector 或持久化服务。
 - `manifests/agent_value_trust_registry.json` 是 runtime/field receipt 的受管签名 verifier registry；默认 authorities 为空。
