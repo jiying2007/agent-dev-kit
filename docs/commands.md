@@ -142,7 +142,7 @@ bash scripts/devkit.sh native-campaign finalize --plan /tmp/native-plan.json \
   --final-contract-out /tmp/native-final-contract.json
 ```
 
-All four commands in the private commands JSON must start with the same absolute runtime binary. A separate assertions JSON must provide independent discovery/load/trigger semantic canaries; exit 0 without the expected canary is a failed stage. Raw command arguments, assertion text, and stdout/stderr are not persisted. Any failed/blocked stage prevents finalize. Finalize only produces a signed-receipt candidate and future target contract; signature bundle registration and target promotion remain separate owner-reviewed actions.
+All four commands in the private commands JSON must start with the same absolute runtime binary. A separate assertions JSON must provide independent discovery/load/trigger semantic canaries; exit 0 without the expected canary is a failed stage. A stage command may not contain its own expected canary. Raw command arguments, assertion text, and stdout/stderr are not persisted. Any failed/blocked stage prevents finalize. Finalize only produces a signed-receipt candidate and future target contract; signature bundle registration and target promotion remain separate owner-reviewed actions.
 
 ## platform
 
