@@ -126,12 +126,14 @@ bash scripts/devkit.sh native-campaign prepare --target claude-code --profile co
   --authority-id ci-native-conformance --execution-authority ci-approved \
   --verification-backend ci-provenance-verifier --auth-mode home \
   --commands-json /absolute/private/commands.json \
+  --assertions-json /absolute/private/assertions.json \
   --receipt-path reports/runtime/claude-native.json \
   --plan-out /tmp/native-plan.json --candidate-contract-out /tmp/native-contract.json
 
 bash scripts/devkit.sh native-campaign run --plan /tmp/native-plan.json \
   --candidate-contract /tmp/native-contract.json \
   --commands-json /absolute/private/commands.json \
+  --assertions-json /absolute/private/assertions.json \
   --runtime-binary /absolute/path/to/claude --evidence-out /tmp/native-evidence.json
 
 bash scripts/devkit.sh native-campaign finalize --plan /tmp/native-plan.json \
@@ -140,7 +142,7 @@ bash scripts/devkit.sh native-campaign finalize --plan /tmp/native-plan.json \
   --final-contract-out /tmp/native-final-contract.json
 ```
 
-All four commands in the private commands JSON must start with the same absolute runtime binary. Raw command arguments and stdout/stderr are not persisted. Any failed/blocked stage prevents finalize. Finalize only produces a signed-receipt candidate and future target contract; signature bundle registration and target promotion remain separate owner-reviewed actions.
+All four commands in the private commands JSON must start with the same absolute runtime binary. A separate assertions JSON must provide independent discovery/load/trigger semantic canaries; exit 0 without the expected canary is a failed stage. Raw command arguments, assertion text, and stdout/stderr are not persisted. Any failed/blocked stage prevents finalize. Finalize only produces a signed-receipt candidate and future target contract; signature bundle registration and target promotion remain separate owner-reviewed actions.
 
 ## platform
 
