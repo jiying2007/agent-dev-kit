@@ -5,8 +5,10 @@
 - [x] 补 guardrail fixture，新增路径与样本覆盖测试。
 - [x] `scripts/devkit.sh validate --strict`、`tests/test_skill_sop_quality.sh`、`scripts/devkit.sh release check`。
 - [x] `tests/run_all.sh` 工作树阶段回归 91/92；唯一失败为要求干净提交的 `test_runtime_bundle` 身份门禁。
-- [x] 最终 diff 审查：改动限于一个 Skill、一个按需参考文件、一个已声明的 fixture、治理测试、源码体积棘轮和本 change 文档；无 runtime/profile 变更。
+- [x] 最终 diff 审查：一个 Skill、一个按需参考文件、一个已声明的 fixture、治理测试、源码体积棘轮、source version 投影和本 change 文档；无 profile 或工具权限变更。
 - [x] 干净提交后，`test_runtime_bundle` 的 3 个功能测试与身份门禁均通过。
+- [x] PR #164 的 `contract-py3.11` 发现版本未前移；用 canonical versioning 工具同步 7.12.2。
+- [ ] 版本前移后复跑本地门禁、推送 PR，并等待新一轮 CI。
 
 测试启动环境需令 `python` 指向 Python 3.8，主机默认 `/usr/bin/python` 为 Python 2.7。最终提交若因记录本验收结果而变化，身份门禁须对最终干净提交再次复跑。
 
