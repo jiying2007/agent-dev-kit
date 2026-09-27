@@ -39,4 +39,3 @@ adk eval campaign materialize-effect \
 The campaign contract may select a non-empty unique subset of `codex` and `claude`; existing Software M5 remains a dual-runtime contract. Materialization performs **no provider call**. It validates the frozen campaign plan/result digests, runtime/model identity, task/trial population and observation window, then emits privacy-bounded trace-only Run Evidence into `adk-effect-trials/v1`.
 
 The materialized Run Evidence has no managed Agent Value runtime/field authority. G22 runtime/field receipts, signatures, measurements and owner decisions remain separate governed evidence.
-
