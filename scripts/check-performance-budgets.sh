@@ -76,17 +76,28 @@ extract_values() {
 
 budget_for_mode() {
   local wanted="$1"
-  awk -v wanted="$wanted" '
+  local python_version
+  python_version="$(python3 -c 'import sys; print(".".join(map(str, sys.version_info[:2])))')"
+  awk -v wanted="$wanted" -v python_version="$python_version" '
+    /"budget_id":/ {
+      mode=""
+      scope="default"
+    }
     /"mode":/ {
       mode=$0
       sub(/.*"mode": "/, "", mode)
       sub(/".*/, "", mode)
     }
+    /"python":/ {
+      scope=$0
+      sub(/.*"python": "/, "", scope)
+      sub(/".*/, "", scope)
+    }
     /"max_elapsed_ms":/ {
       value=$0
       sub(/.*"max_elapsed_ms": /, "", value)
       sub(/,.*/, "", value)
-      if (mode == wanted) {
+      if (mode == wanted && (scope == python_version || scope == "default")) {
         print value
         exit
       }

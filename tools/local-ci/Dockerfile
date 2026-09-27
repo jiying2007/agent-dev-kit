@@ -1,6 +1,8 @@
 ARG BASE_IMAGE=python:3.11-slim@sha256:db3ff2e1800a8581e2c48a27c3995339d47bdf046da21c7627accd3d51053a93
 FROM ${BASE_IMAGE}
 
+ARG PYTHON_VERSION=3.11
+
 LABEL org.opencontainers.image.title="agent-dev-kit-local-ci" \
       io.agent-dev-kit.local-ci.contract="v2"
 
@@ -13,8 +15,16 @@ ARG PIP_AUDIT_VERSION=2.10.1
 ARG MYPY_VERSION=2.3.1
 ARG TYPES_JSONSCHEMA_VERSION=4.26.0.20260518
 ARG TYPES_PYYAML_VERSION=6.0.12.20260906
+ARG TOMLI_VERSION=
 
-RUN apt-get update \
+RUN if [ "$PYTHON_VERSION" = "3.8" ]; then \
+        sed -i \
+          -e 's|^deb http://deb.debian.org/debian bullseye main$|deb http://snapshot.debian.org/archive/debian/20240926T000000Z bullseye main|' \
+          -e 's|^deb http://deb.debian.org/debian-security bullseye-security main$|deb http://snapshot.debian.org/archive/debian-security/20240926T000000Z bullseye-security main|' \
+          -e 's|^deb http://deb.debian.org/debian bullseye-updates main$|deb http://snapshot.debian.org/archive/debian/20240926T000000Z bullseye-updates main|' \
+          /etc/apt/sources.list; \
+    fi \
+    && apt-get -o Acquire::Check-Valid-Until=false update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         bash \
         ca-certificates \
@@ -33,6 +43,10 @@ RUN python -m pip install --no-cache-dir \
         "mypy==${MYPY_VERSION}" \
         "types-jsonschema==${TYPES_JSONSCHEMA_VERSION}" \
         "types-PyYAML==${TYPES_PYYAML_VERSION}"
+
+RUN if [ -n "$TOMLI_VERSION" ]; then \
+        python -m pip install --no-cache-dir "tomli==${TOMLI_VERSION}"; \
+    fi
 
 RUN groupadd --gid 65532 adk-ci \
     && useradd --uid 65532 --gid 65532 --home-dir /work/home --shell /usr/sbin/nologin --no-create-home adk-ci

@@ -12,6 +12,7 @@ import subprocess
 import tarfile
 import tempfile
 from collections.abc import Mapping
+from contextlib import ExitStack
 from pathlib import Path
 from typing import Any
 
@@ -64,11 +65,10 @@ def _write_deterministic_archive(source: Path, archive: Path) -> None:
         with tarfile.open(str(tar_path), mode="w", format=tarfile.PAX_FORMAT) as tar:
             for child in sorted(source.rglob("*")):
                 tar.add(str(child), arcname=child.relative_to(source).as_posix(), recursive=False, filter=_tar_filter)
-        with (
-            tar_path.open("rb") as raw,
-            archive_temp.open("wb") as output,
-            gzip.GzipFile(filename="", mode="wb", fileobj=output, mtime=0) as compressed,
-        ):
+        with ExitStack() as stack:
+            raw = stack.enter_context(tar_path.open("rb"))
+            output = stack.enter_context(archive_temp.open("wb"))
+            compressed = stack.enter_context(gzip.GzipFile(filename="", mode="wb", fileobj=output, mtime=0))
             shutil.copyfileobj(raw, compressed)
         archive_temp.chmod(0o644)
         os.replace(str(archive_temp), str(archive))
@@ -378,4 +378,3 @@ def _managed_hashes(target: Path) -> dict[str, str]:
             raise ManifestError("release rehearsal managed asset is missing")
         hashes[destination] = sha256_tree(path)
     return hashes
-

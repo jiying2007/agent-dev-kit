@@ -27,6 +27,7 @@ for token in \
   'release_authority=none' \
   'file_mode_inventory=git-index-bound' \
   'container_user=65532:65532' \
+  'python=3.8' \
   'python=3.11' \
   'python=3.12'; do
   rg -Fq -- "$token" <<<"$plan" || {
@@ -49,6 +50,7 @@ for token in \
   'no-new-privileges' \
   '--tmpfs /work:rw,exec,nosuid,nodev,size=2g,mode=1777' \
   'dst=/source,readonly' \
+  'python:3.8-slim-bullseye@sha256:' \
   'python:3.11-slim@sha256:' \
   'python:3.12-slim@sha256:'; do
   rg -Fq -- "$token" "$RUNNER" || {

@@ -9,9 +9,11 @@ target becomes runtime-conformance-certified only through the existing
 from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
-from dataclasses import dataclass, field
+from dataclasses import field
 from pathlib import Path
 from typing import Any, Literal, Protocol, runtime_checkable
+
+from ..compat import frozen_slots_dataclass
 
 CONFORMANCE_CAPABILITIES = frozenset(
     {
@@ -30,7 +32,7 @@ OperationKind = Literal["read", "write", "execute", "network"]
 AdapterStatus = Literal["pass", "fail", "blocked", "unsupported", "unknown"]
 
 
-@dataclass(frozen=True, slots=True)
+@frozen_slots_dataclass
 class AdapterContext:
     """Immutable execution context supplied by the ADK control plane."""
 
@@ -40,7 +42,7 @@ class AdapterContext:
     metadata: Mapping[str, Any] = field(default_factory=dict)
 
 
-@dataclass(frozen=True, slots=True)
+@frozen_slots_dataclass
 class AdapterOperation:
     """One planned side effect or observation.
 
@@ -54,7 +56,7 @@ class AdapterOperation:
     resource: str | None = None
 
 
-@dataclass(frozen=True, slots=True)
+@frozen_slots_dataclass
 class AdapterPlan:
     """Read-before-write plan returned before installation or mutation."""
 
@@ -63,7 +65,7 @@ class AdapterPlan:
     required_capabilities: frozenset[str] = frozenset()
 
 
-@dataclass(frozen=True, slots=True)
+@frozen_slots_dataclass
 class AdapterResult:
     """Normalized adapter result without making a certification claim."""
 

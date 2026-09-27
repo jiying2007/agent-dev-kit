@@ -62,8 +62,8 @@ assert value['schema'] == 'adk-promotion-evidence/v1'
 assert value['source']['commit'] == head
 assert value['source']['tree'] == tree
 assert value['source']['manifest_blob'] == blob
-assert value['ci']['contract_matrix']['python'] == ['3.11', '3.12']
-assert value['ci']['regression_matrix']['python'] == ['3.11', '3.12']
+assert value['ci']['contract_matrix']['python'] == ['3.8', '3.11', '3.12']
+assert value['ci']['regression_matrix']['python'] == ['3.8', '3.11', '3.12']
 assert value['provenance']['subject'] == 'promotion-evidence.json'
 PY
 

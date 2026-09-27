@@ -17,7 +17,7 @@ cat >"$old_python" <<'SH'
 #!/usr/bin/env bash
 set -euo pipefail
 if [[ "${1:-}" == "-c" ]]; then
-  echo "3.8.10 0"
+  echo "3.7.17 0"
   exit 0
 fi
 echo "[FAIL] old-python fixture reached CLI execution" >&2
@@ -30,7 +30,7 @@ if ADK_PYTHON_BIN="$old_python" ADK_REQUIRE_SUPPORTED_PYTHON=1 \
   echo "[FAIL] strict unsupported Python fixture unexpectedly passed" >&2
   exit 1
 fi
-rg -q --fixed-strings -- "ADK requires Python 3.11+" "$TMP_DIR/old.out"
+rg -q --fixed-strings -- "ADK requires Python 3.8+" "$TMP_DIR/old.out"
 rg -q --fixed-strings -- "scripts/run-local-ci-parity.sh" "$TMP_DIR/old.out"
 
 if ADK_REQUIRE_SUPPORTED_PYTHON=invalid \

@@ -4,7 +4,7 @@ import argparse
 import json
 import re
 import sys
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 
@@ -61,7 +61,7 @@ def compare_versions(left: str, right: str) -> int:
             return 0
         return 1 if left_pre is None else -1
 
-    for left_part, right_part in zip(left_pre, right_pre, strict=False):
+    for left_part, right_part in zip(left_pre, right_pre):
         if left_part == right_part:
             continue
         left_numeric = left_part.isdigit()
@@ -203,7 +203,7 @@ def sync_version_identity(
         "manifests/software_m5_eval_contract.json",
     )
 
-    lock_time = locked_at or datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+    lock_time = locked_at or datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
     (root / ".version-lock").write_text(
         f"version: {target}\nlocked_at: {lock_time}\nlocked_by: {actor}\n",
         encoding="utf-8",

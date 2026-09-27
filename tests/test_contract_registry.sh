@@ -6,7 +6,10 @@ export PYTHONPATH="$ROOT/src${PYTHONPATH:+:$PYTHONPATH}"
 python3 - "$ROOT" <<'PY'
 import json
 import sys
-import tomllib
+try:
+    import tomllib
+except ModuleNotFoundError:
+    import tomli as tomllib
 from pathlib import Path
 
 from jsonschema import Draft202012Validator

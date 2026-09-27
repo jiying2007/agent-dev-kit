@@ -1,20 +1,27 @@
 [build-system]
-requires = ["setuptools>=77"]
+requires = [
+  "setuptools>=75.3.2; python_version < '3.9'",
+  "setuptools>=77; python_version >= '3.9'",
+]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "agent-dev-kit"
-version = "7.12.0"
+version = "7.12.1"
 description = "Platform-neutral agent asset compiler, distributor, and evaluator"
 readme = "README.md"
-requires-python = ">=3.11"
-dependencies = ["PyYAML==6.0.3", "jsonschema==4.26.0"]
-license = "MIT"
-license-files = ["LICENSE"]
+requires-python = ">=3.8"
+dependencies = [
+  "PyYAML==6.0.3",
+  "jsonschema==4.17.3; python_version < '3.10'",
+  "jsonschema==4.26.0; python_version >= '3.10'",
+]
+license = {text = "MIT"}
 keywords = ["agents", "skills", "asset-compiler", "evaluation"]
 classifiers = [
   "Development Status :: 4 - Beta",
   "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
 ]
@@ -22,11 +29,16 @@ classifiers = [
 [project.optional-dependencies]
 quality = [
   "ruff==0.16.8",
-  "pip-audit==2.10.1",
-  "mypy==2.3.1",
-  "types-jsonschema==4.26.0.20260518",
-  "types-PyYAML==6.0.12.20260906",
+  "pip-audit==2.7.3; python_version < '3.10'",
+  "pip-audit==2.10.1; python_version >= '3.10'",
+  "mypy==1.14.1; python_version < '3.10'",
+  "mypy==2.3.1; python_version >= '3.10'",
+  "types-jsonschema==4.17.0.10; python_version < '3.10'",
+  "types-jsonschema==4.26.0.20260518; python_version >= '3.10'",
+  "types-PyYAML==6.0.12.20241230; python_version < '3.10'",
+  "types-PyYAML==6.0.12.20260906; python_version >= '3.10'",
 ]
+test = ["tomli==2.0.1; python_version < '3.11'"]
 
 [project.urls]
 Repository = "https://github.com/jiying2007/agent-dev-kit"
@@ -36,7 +48,7 @@ Issues = "https://github.com/jiying2007/agent-dev-kit/issues"
 adk = "agent_dev_kit.cli:main"
 
 [tool.ruff]
-target-version = "py311"
+target-version = "py38"
 line-length = 120
 
 [tool.ruff.lint]

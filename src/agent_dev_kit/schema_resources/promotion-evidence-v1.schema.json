@@ -83,7 +83,7 @@
       "required": ["status", "python"],
       "properties": {
         "status": {"const": "success"},
-        "python": {"type": "array", "const": ["3.11", "3.12"]}
+        "python": {"type": "array", "const": ["3.8", "3.11", "3.12"]}
       }
     }
   }

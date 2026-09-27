@@ -20,6 +20,8 @@ from jsonschema import Draft202012Validator
 from agent_dev_kit.contracts.schema_loader import packaged_schema_bytes
 from agent_dev_kit.model import canonical_json_bytes
 
+from ..compat import sha256_stream
+
 _SCHEMA_NAME = "release-manifest-v2.schema.json"
 _MAX_JSON_BYTES = 8 * 1024 * 1024
 
@@ -30,7 +32,7 @@ def _sha256(value: bytes) -> str:
 
 def _sha256_file(path: Path) -> str:
     with path.open("rb") as stream:
-        return hashlib.file_digest(stream, "sha256").hexdigest()
+        return sha256_stream(stream)
 
 
 def _format_error(error: Any) -> str:
