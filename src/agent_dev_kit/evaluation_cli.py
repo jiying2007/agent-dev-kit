@@ -176,6 +176,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 Path(args.state_dir),
                 Path(args.effect_plan),
                 args.runtime,
+                campaign_root=campaign_root,
             )
             if args.output:
                 _write_json(Path(args.output), value)
@@ -183,7 +184,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 _json(value)
             return 0
         if args.campaign_action == "plan":
-            value = campaign_plan(_manifest(), contract)
+            value = campaign_plan(_manifest(), contract, campaign_root)
         elif args.campaign_action == "run":
             if args.max_new_results is not None and not args.execute:
                 parser.error("--max-new-results requires campaign run --execute")
@@ -197,12 +198,17 @@ def main(argv: Sequence[str] | None = None) -> int:
                     args.approve_budget_usd,
                     args.resume,
                     args.max_new_results,
+                    campaign_root=campaign_root,
                 )
             else:
-                value = campaign_plan(_manifest(), contract)
+                value = campaign_plan(_manifest(), contract, campaign_root)
         else:
             value = check_campaign(
-                _manifest(), contract, Path(args.state_dir), certify=args.certify
+                _manifest(),
+                contract,
+                Path(args.state_dir),
+                certify=args.certify,
+                campaign_root=campaign_root,
             )
         if getattr(args, "output", None):
             _write_json(Path(args.output), value)
