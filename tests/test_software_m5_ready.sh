@@ -606,6 +606,88 @@ assert all(call[3] == 0.1 for call in calls)
 assert all(call[4] == call[0] + "-fixture-model" for call in calls)
 assert "Runtime Evaluation Campaign" in campaign_markdown(report)
 
+bounded_state = temp_root / "campaign-bounded-state"
+calls.clear()
+with mock.patch("agent_dev_kit.campaign.runtime_plan", side_effect=ready_plan), mock.patch(
+    "agent_dev_kit.campaign.run_runtime", side_effect=fake_runtime
+):
+    try:
+        run_campaign(
+            manifest,
+            small_contract,
+            temp_root / "campaign-invalid-batch",
+            approved_budget_usd=1.0,
+            resume=False,
+            max_new_results=0,
+        )
+    except ManifestError as exc:
+        assert "max_new_results" in str(exc), exc
+    else:
+        raise AssertionError("campaign accepted max_new_results=0")
+    checkpoint_one = run_campaign(
+        manifest,
+        small_contract,
+        bounded_state,
+        approved_budget_usd=1.0,
+        resume=False,
+        max_new_results=3,
+    )
+assert checkpoint_one["schema"] == "adk-runtime-eval-campaign-run/v1", checkpoint_one
+assert checkpoint_one["status"] == "checkpointed", checkpoint_one
+assert checkpoint_one["executed"] == 3, checkpoint_one
+assert checkpoint_one["resumed"] == 0, checkpoint_one
+assert checkpoint_one["validated_results"] == 3, checkpoint_one
+assert checkpoint_one["expected_results"] == 8, checkpoint_one
+assert checkpoint_one["remaining_results"] == 5, checkpoint_one
+assert checkpoint_one["certified"] is False, checkpoint_one
+assert checkpoint_one["release_authorized"] is False, checkpoint_one
+assert len(calls) == 3, calls
+progress_path = bounded_state / "campaign-progress.json"
+assert progress_path.is_file()
+assert json.loads(progress_path.read_text(encoding="utf-8")) == checkpoint_one
+
+calls.clear()
+with mock.patch("agent_dev_kit.campaign.runtime_plan", side_effect=ready_plan), mock.patch(
+    "agent_dev_kit.campaign.run_runtime", side_effect=fake_runtime
+):
+    checkpoint_two = run_campaign(
+        manifest,
+        small_contract,
+        bounded_state,
+        approved_budget_usd=1.0,
+        resume=True,
+        max_new_results=3,
+    )
+assert checkpoint_two["status"] == "checkpointed", checkpoint_two
+assert checkpoint_two["executed"] == 3, checkpoint_two
+assert checkpoint_two["resumed"] == 3, checkpoint_two
+assert checkpoint_two["validated_results"] == 6, checkpoint_two
+assert checkpoint_two["remaining_results"] == 2, checkpoint_two
+assert checkpoint_two["certified"] is False, checkpoint_two
+assert checkpoint_two["release_authorized"] is False, checkpoint_two
+assert len(calls) == 3, calls
+
+calls.clear()
+with mock.patch("agent_dev_kit.campaign.runtime_plan", side_effect=ready_plan), mock.patch(
+    "agent_dev_kit.campaign.run_runtime", side_effect=fake_runtime
+):
+    bounded_final = run_campaign(
+        manifest,
+        small_contract,
+        bounded_state,
+        approved_budget_usd=1.0,
+        resume=True,
+        max_new_results=3,
+    )
+assert bounded_final["status"] == "pass", bounded_final
+assert bounded_final["certified"] is True, bounded_final
+assert bounded_final["executed"] == 2, bounded_final
+assert bounded_final["resumed"] == 6, bounded_final
+assert bounded_final["validated_results"] == 8, bounded_final
+assert bounded_final["total_cost_usd"] == report["total_cost_usd"], bounded_final
+assert bounded_final["metrics"] == report["metrics"], (bounded_final["metrics"], report["metrics"])
+assert len(calls) == 2, calls
+
 calls.clear()
 with mock.patch("agent_dev_kit.campaign.runtime_plan", side_effect=ready_plan), mock.patch(
     "agent_dev_kit.campaign.run_runtime", side_effect=fake_runtime
