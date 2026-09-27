@@ -11,6 +11,7 @@ trap cleanup EXIT
 bash "$ROOT_DIR/scripts/devkit.sh" help | rg -q 'doctor'
 bash "$ROOT_DIR/scripts/devkit.sh" help | rg -q 'lock'
 bash "$ROOT_DIR/scripts/devkit.sh" eval campaign --help >/dev/null
+bash "$ROOT_DIR/scripts/devkit.sh" eval campaign run --help | rg -q -- "--max-new-results"
 bash "$ROOT_DIR/scripts/devkit.sh" release rehearse --help >/dev/null
 PYTHONPATH="$ROOT_DIR/src" python3 -S -m agent_dev_kit.versioning verify-identity --root "$ROOT_DIR" >/dev/null
 doctor_rc=0
