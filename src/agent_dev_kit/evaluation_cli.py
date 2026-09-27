@@ -158,7 +158,17 @@ def main(argv: Sequence[str] | None = None) -> int:
             else:
                 print(text, end="")
             return 0
-        contract = Path(args.contract).resolve()
+        campaign_root = (
+            Path(args.campaign_root).expanduser().resolve()
+            if getattr(args, "campaign_root", None)
+            else None
+        )
+        raw_contract = Path(args.contract).expanduser()
+        contract = (
+            (campaign_root / raw_contract).resolve()
+            if campaign_root is not None and not raw_contract.is_absolute()
+            else raw_contract.resolve()
+        )
         if args.campaign_action == "materialize-effect":
             value = materialize_effect_campaign(
                 _manifest(),
