@@ -15,3 +15,27 @@ primary_metric 和 guardrails 只能使用原 effect comparator 的方向性指�
 输出 any_trial_succeeded_rate 与 all_trials_succeeded_rate，不能混用。缺成本/结果保留 not-comparable/not-measured；基础设施失败使整体invalid，不删除失败trial再算。可靠性结论应结合代表性、置信区间、硬护栏和真实运行验证，不能只看绿色exit。
 
 测试入口：tests/test_effect_trials.sh。tests/test_effect_trials.py 的 document() 可生成不依赖模型凭证的完整合成示例，仅作为数据格式与比较器回归测试，不是产品效果证据。
+
+## Materialize resumable real-runtime campaign state
+
+For long or paid real-runtime execution, reuse the resumable runtime campaign state machine rather than writing an ad-hoc effect executor:
+
+```bash
+adk eval campaign run \
+  --contract <campaign-contract.json> \
+  --state-dir <state-dir> \
+  --execute \
+  --approve-budget-usd <owner-approved-budget>
+
+# After the selected runtime results are complete:
+adk eval campaign materialize-effect \
+  --contract <campaign-contract.json> \
+  --state-dir <state-dir> \
+  --effect-plan <frozen-effect-plan.json> \
+  --runtime claude \
+  --output campaign.json
+```
+
+The campaign contract may select a non-empty unique subset of `codex` and `claude`; existing Software M5 remains a dual-runtime contract. Materialization performs **no provider call**. It validates the frozen campaign plan/result digests, runtime/model identity, task/trial population and observation window, then emits privacy-bounded trace-only Run Evidence into `adk-effect-trials/v1`.
+
+The materialized Run Evidence has no managed Agent Value runtime/field authority. G22 runtime/field receipts, signatures, measurements and owner decisions remain separate governed evidence.

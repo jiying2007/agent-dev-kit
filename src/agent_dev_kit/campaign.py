@@ -27,7 +27,11 @@ def campaign_plan(manifest: Manifest, contract_path: Path) -> Dict[str, Any]:
         executable = readiness.pop("executable", None)
         readiness["executable_name"] = Path(str(executable)).name if executable else None
         readiness["requested_model"] = contract["runtime_models"][readiness["runtime"]]
-    primary_claude_calls = len(tasks) * len(contract["conditions"]) * int(contract["trials"])
+    primary_claude_calls = (
+        len(tasks) * len(contract["conditions"]) * int(contract["trials"])
+        if "claude" in contract["runtimes"]
+        else 0
+    )
     primary_worst_cost = round(primary_claude_calls * float(contract["max_claude_call_usd"]), 2)
     maximum_claude_calls = primary_claude_calls * (int(contract["retry_limit"]) + 1)
     maximum_worst_cost = round(maximum_claude_calls * float(contract["max_claude_call_usd"]), 2)

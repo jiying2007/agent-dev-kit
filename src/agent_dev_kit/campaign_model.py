@@ -84,8 +84,13 @@ def load_campaign_contract(
     runtimes = contract.get("runtimes")
     conditions = contract.get("conditions")
     trials = contract.get("trials")
-    if runtimes != ["codex", "claude"]:
-        raise ManifestError("M5 campaign runtimes must be [codex, claude]")
+    if (
+        not isinstance(runtimes, list)
+        or not runtimes
+        or len(runtimes) != len(set(runtimes))
+        or any(runtime not in ("codex", "claude") for runtime in runtimes)
+    ):
+        raise ManifestError("campaign runtimes must be a non-empty unique subset of [codex, claude]")
     runtime_models = contract.get("runtime_models")
     if not isinstance(runtime_models, dict) or set(runtime_models) != set(runtimes):
         raise ManifestError("campaign runtime_models must name every runtime exactly once")

@@ -10,6 +10,7 @@ from typing import Sequence
 from .campaign import campaign_plan, check_campaign, run_campaign
 from .campaign_model import campaign_markdown
 from .cli_runtime import DEFAULT_TASKS, ROOT, _json, _manifest, _write_json
+from .effect_campaign_materializer import materialize_effect_campaign
 from .effect_evaluation import run_effect_eval
 from .effect_trials import compare_effect_trial_file
 from .model import ManifestError
@@ -91,6 +92,15 @@ def main(argv: Sequence[str] | None = None) -> int:
     campaign_check_parser.add_argument("--certify", action="store_true")
     campaign_check_parser.add_argument("--output")
     campaign_check_parser.add_argument("--summary-json", action="store_true")
+    campaign_materialize_parser = campaign_sub.add_parser("materialize-effect")
+    campaign_materialize_parser.add_argument(
+        "--contract", default=str(DEFAULT_CAMPAIGN_CONTRACT)
+    )
+    campaign_materialize_parser.add_argument("--state-dir", required=True)
+    campaign_materialize_parser.add_argument("--effect-plan", required=True)
+    campaign_materialize_parser.add_argument("--runtime", choices=("codex", "claude"), required=True)
+    campaign_materialize_parser.add_argument("--output")
+    campaign_materialize_parser.add_argument("--summary-json", action="store_true")
     campaign_report_parser = campaign_sub.add_parser("report")
     campaign_report_parser.add_argument("--input", required=True)
     campaign_report_parser.add_argument("--output")
@@ -143,6 +153,19 @@ def main(argv: Sequence[str] | None = None) -> int:
                 print(text, end="")
             return 0
         contract = Path(args.contract).resolve()
+        if args.campaign_action == "materialize-effect":
+            value = materialize_effect_campaign(
+                _manifest(),
+                contract,
+                Path(args.state_dir),
+                Path(args.effect_plan),
+                args.runtime,
+            )
+            if args.output:
+                _write_json(Path(args.output), value)
+            if args.summary_json or not args.output:
+                _json(value)
+            return 0
         if args.campaign_action == "plan":
             value = campaign_plan(_manifest(), contract)
         elif args.campaign_action == "run":
