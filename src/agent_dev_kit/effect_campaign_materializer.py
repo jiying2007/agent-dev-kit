@@ -89,6 +89,7 @@ def _state_plan(
     manifest: Manifest,
     contract: Mapping[str, Any],
     tasks_path: Path,
+    task_count: int,
     state_dir: Path,
 ) -> dict[str, Any]:
     plan = _campaign_model._load_json_object(state_dir / "campaign-plan.json", "campaign plan")
@@ -99,7 +100,7 @@ def _state_plan(
         "manifest_sha256": manifest.digest,
         "contract_sha256": _campaign_model._digest(contract),
         "tasks_sha256": sha256_file(tasks_path),
-        "task_count": len(_campaign_model.load_tasks(tasks_path)),
+        "task_count": task_count,
         "conditions": contract["conditions"],
         "trials": contract["trials"],
     }
@@ -210,14 +211,7 @@ def _run_evidence(
         cost=_cost_fact(str(record["runtime"]), attempts),
         outcome=outcome,
     )
-    contract = _campaign_model.load_contract(
-        manifest.root / "manifests" / "agent_value_contracts.json"
-    ) if hasattr(_campaign_model, "load_contract") else None
-    # emit_run_evidence accepts the Agent Value contract explicitly. Import here
-    # to avoid giving campaign_model ownership of Agent Value semantics.
-    if contract is None:
-        from .agent_value_contracts import load_contract
-        contract = load_contract(manifest.root / "manifests" / "agent_value_contracts.json")
+    contract = load_contract(manifest.root / "manifests" / "agent_value_contracts.json")
     return emit_run_evidence(
         RunEvidenceObservation(trace_facts=facts, observed_at=observed_at),
         manifest,
@@ -248,7 +242,7 @@ def materialize_effect_campaign(
         raise ManifestError("effect materialization requires single-agent orchestration")
 
     state_dir = state_dir.resolve()
-    state_plan = _state_plan(manifest, contract, tasks_path, state_dir)
+    state_plan = _state_plan(manifest, contract, tasks_path, len(tasks), state_dir)
     runtime_entry = _campaign_model._runtime_entry(state_plan, runtime)
     if effect_plan["controls"]["runtime_version"] != _runtime_version_token(
         runtime_entry.get("runtime_version")
