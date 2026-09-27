@@ -249,6 +249,7 @@ def _run_campaign_locked(
             _campaign_model._write_json_atomic(state_dir / "campaign-progress.json", progress)
             return progress
 
+    (state_dir / "campaign-progress.json").unlink(missing_ok=True)
     report = check_campaign(manifest, contract_path, state_dir, certify=True)
     report["executed"] = completed_count
     report["resumed"] = skipped_count
