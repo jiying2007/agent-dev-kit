@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import copy
 import json
+import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -99,7 +101,7 @@ def effect_plan() -> dict[str, object]:
 
 class EffectCampaignMaterializerTest(unittest.TestCase):
     def setUp(self) -> None:
-        self.temp = tempfile.TemporaryDirectory(dir=ROOT / "tests" / "fixtures")
+        self.temp = tempfile.TemporaryDirectory()
         self.root = Path(self.temp.name)
         self.tasks_path = self.root / "tasks.jsonl"
         self.tasks = [
@@ -110,7 +112,7 @@ class EffectCampaignMaterializerTest(unittest.TestCase):
             "".join(json.dumps(item, ensure_ascii=False) + "\n" for item in self.tasks),
             encoding="utf-8",
         )
-        rel = self.tasks_path.relative_to(ROOT).as_posix()
+        rel = self.tasks_path.relative_to(self.root).as_posix()
         self.contract_path = self.root / "contract.json"
         self.contract = contract(rel)
         write_json(self.contract_path, self.contract)
@@ -134,7 +136,7 @@ class EffectCampaignMaterializerTest(unittest.TestCase):
             "manifest_version": MANIFEST.version,
             "manifest_sha256": MANIFEST.digest,
             "contract_sha256": campaign_model._digest(self.contract),
-            "tasks": self.tasks_path.relative_to(ROOT).as_posix(),
+            "tasks": self.tasks_path.relative_to(self.root).as_posix(),
             "tasks_sha256": tasks_sha,
             "task_count": len(self.tasks),
             "runtimes": [{
@@ -219,7 +221,8 @@ class EffectCampaignMaterializerTest(unittest.TestCase):
 
     def test_materializes_single_runtime_state_to_trace_only_effect_trials(self) -> None:
         value = materialize_effect_campaign(
-            MANIFEST, self.contract_path, self.state, self.effect_plan_path, "claude"
+            MANIFEST, self.contract_path, self.state, self.effect_plan_path, "claude",
+                campaign_root=self.root
         )
         self.assertEqual("adk-effect-trials/v1", value["schema_version"])
         self.assertEqual(2, len(value["trials"]))
@@ -238,6 +241,32 @@ class EffectCampaignMaterializerTest(unittest.TestCase):
                     expected_bundle = "a" * 64 if side == "baseline" else "b" * 64
                     self.assertEqual(expected_bundle, run["trace_summary"]["asset_bundle_sha256"])
 
+    def test_external_campaign_root_is_bounded_and_cli_visible(self) -> None:
+        loaded, tasks_path, tasks = campaign_model.load_campaign_contract(
+            MANIFEST, self.contract_path, self.root
+        )
+        self.assertEqual(self.contract["campaign_id"], loaded["campaign_id"])
+        self.assertEqual(self.tasks_path.resolve(), tasks_path.resolve())
+        self.assertEqual(2, len(tasks))
+
+        bad = dict(self.contract)
+        bad["tasks"] = "../escape.jsonl"
+        bad_path = self.root / "bad-contract.json"
+        write_json(bad_path, bad)
+        with self.assertRaises(ManifestError):
+            campaign_model.load_campaign_contract(MANIFEST, bad_path, self.root)
+
+        help_run = subprocess.run(
+            [sys.executable, "-m", "agent_dev_kit.cli", "eval", "campaign", "materialize-effect", "--help"],
+            cwd=ROOT,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            timeout=30,
+        )
+        self.assertEqual(0, help_run.returncode, (help_run.stdout, help_run.stderr))
+        self.assertIn("--campaign-root", help_run.stdout)
+
     def test_tamper_alias_missing_result_and_window_drift_fail_closed(self) -> None:
         path = campaign_model._result_path(self.state, "claude", "baseline", 1, "task-a")
         record = json.loads(path.read_text(encoding="utf-8"))
@@ -245,7 +274,8 @@ class EffectCampaignMaterializerTest(unittest.TestCase):
         write_json(path, record)
         with self.assertRaisesRegex(ManifestError, "digest"):
             materialize_effect_campaign(
-                MANIFEST, self.contract_path, self.state, self.effect_plan_path, "claude"
+                MANIFEST, self.contract_path, self.state, self.effect_plan_path, "claude",
+                campaign_root=self.root
             )
 
         self._write_state()
@@ -254,7 +284,8 @@ class EffectCampaignMaterializerTest(unittest.TestCase):
         write_json(self.effect_plan_path, plan)
         with self.assertRaisesRegex(ManifestError, "revision-bound"):
             materialize_effect_campaign(
-                MANIFEST, self.contract_path, self.state, self.effect_plan_path, "claude"
+                MANIFEST, self.contract_path, self.state, self.effect_plan_path, "claude",
+                campaign_root=self.root
             )
 
         write_json(self.effect_plan_path, effect_plan())
@@ -262,7 +293,8 @@ class EffectCampaignMaterializerTest(unittest.TestCase):
         missing.unlink()
         with self.assertRaisesRegex(ManifestError, "missing"):
             materialize_effect_campaign(
-                MANIFEST, self.contract_path, self.state, self.effect_plan_path, "claude"
+                MANIFEST, self.contract_path, self.state, self.effect_plan_path, "claude",
+                campaign_root=self.root
             )
 
         self._write_state()
@@ -271,7 +303,8 @@ class EffectCampaignMaterializerTest(unittest.TestCase):
         write_json(self.effect_plan_path, plan)
         with self.assertRaisesRegex(ManifestError, "outside"):
             materialize_effect_campaign(
-                MANIFEST, self.contract_path, self.state, self.effect_plan_path, "claude"
+                MANIFEST, self.contract_path, self.state, self.effect_plan_path, "claude",
+                campaign_root=self.root
             )
 
 
