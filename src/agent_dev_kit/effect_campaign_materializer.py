@@ -16,6 +16,7 @@ from jsonschema import Draft202012Validator, FormatChecker
 
 from . import campaign_model as _campaign_model
 from .campaign_analysis import _validate_result
+from .agent_value_contracts import load_contract
 from .contracts.schema_loader import packaged_schema_bytes
 from .evaluation import RUNTIME_ROUTING_PROMPT_VERSION
 from .model import Manifest, ManifestError, canonical_json_bytes, sha256_bytes, sha256_file
