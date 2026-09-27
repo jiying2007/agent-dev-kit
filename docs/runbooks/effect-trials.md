@@ -25,7 +25,8 @@ adk eval campaign run \
   --contract <campaign-contract.json> \
   --state-dir <state-dir> \
   --execute \
-  --approve-budget-usd <owner-approved-budget>
+  --approve-budget-usd <owner-approved-budget> \
+  --max-new-results 20
 
 # After the selected runtime results are complete:
 adk eval campaign materialize-effect \
@@ -36,6 +37,8 @@ adk eval campaign materialize-effect \
   --output campaign.json
 ```
 
-The campaign contract may select a non-empty unique subset of `codex` and `claude`; existing Software M5 remains a dual-runtime contract. Materialization performs **no provider call**. It validates the frozen campaign plan/result digests, runtime/model identity, task/trial population and observation window, then emits privacy-bounded trace-only Run Evidence into `adk-effect-trials/v1`.
+The campaign contract may select a non-empty unique subset of `codex` and `claude`; existing Software M5 remains a dual-runtime contract. For paid/long campaigns, `--max-new-results N` writes at most N new result records and returns `status=checkpointed` with the exact remaining count. A checkpoint is successful execution progress only: it always has `certified=false` and `release_authorized=false`. Re-run the same command with `--resume` and the same state directory/artifact until the campaign is complete. The stale checkpoint receipt is removed only after the complete state reaches the existing certification path.
+
+Materialization performs **no provider call**. It validates the frozen campaign plan/result digests, runtime/model identity, task/trial population and observation window, then emits privacy-bounded trace-only Run Evidence into `adk-effect-trials/v1`.
 
 The materialized Run Evidence has no managed Agent Value runtime/field authority. G22 runtime/field receipts, signatures, measurements and owner decisions remain separate governed evidence.
