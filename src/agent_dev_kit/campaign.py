@@ -84,6 +84,7 @@ def _run_campaign_locked(
     state_dir: Path,
     approved_budget_usd: float,
     resume: bool,
+    max_new_results: int | None = None,
 ) -> Dict[str, Any]:
     contract, _, tasks = _campaign_model.load_campaign_contract(manifest, contract_path)
     current_plan = campaign_plan(manifest, contract_path)
@@ -91,6 +92,13 @@ def _run_campaign_locked(
         raise ManifestError("approved budget must cover contract max_budget_usd")
     if approved_budget_usd > 150:
         raise ManifestError("approved budget exceeds the owner-approved $150 ceiling")
+    if max_new_results is not None and (
+        isinstance(max_new_results, bool)
+        or not isinstance(max_new_results, int)
+        or max_new_results < 1
+        or max_new_results > 1000
+    ):
+        raise ManifestError("max_new_results must be between 1 and 1000")
     state_dir = state_dir.resolve()
     plan_path = state_dir / "campaign-plan.json"
     if plan_path.exists():
@@ -128,9 +136,16 @@ def _run_campaign_locked(
             raise ManifestError("campaign runtime version changed; use a new state directory: {}".format(runtime))
     completed_count = 0
     skipped_count = 0
+    limit_reached = False
     for runtime in contract["runtimes"]:
+        if limit_reached:
+            break
         for condition in contract["conditions"]:
+            if limit_reached:
+                break
             for trial in range(1, int(contract["trials"]) + 1):
+                if limit_reached:
+                    break
                 for task in tasks:
                     task_id = str(task["id"])
                     result_path = _campaign_model._result_path(state_dir, runtime, condition, trial, task_id)
@@ -201,6 +216,39 @@ def _run_campaign_locked(
                     record["record_sha256"] = _campaign_model._digest(record)
                     _campaign_model._write_json_atomic(result_path, record)
                     completed_count += 1
+                    if max_new_results is not None and completed_count >= max_new_results:
+                        limit_reached = True
+                        break
+    if limit_reached:
+        existing_after, spent = _validated_existing_state(state_dir, contract, plan, tasks)
+        expected_results = (
+            len(tasks)
+            * len(contract["runtimes"])
+            * len(contract["conditions"])
+            * int(contract["trials"])
+        )
+        if len(existing_after) < expected_results:
+            progress = {
+                "schema": "adk-runtime-eval-campaign-run/v1",
+                "status": "checkpointed",
+                "campaign_id": contract["campaign_id"],
+                "manifest_version": manifest.version,
+                "manifest_sha256": manifest.digest,
+                "plan_sha256": plan["plan_sha256"],
+                "executed": completed_count,
+                "resumed": skipped_count,
+                "validated_results": len(existing_after),
+                "expected_results": expected_results,
+                "remaining_results": expected_results - len(existing_after),
+                "spent_usd": spent,
+                "max_budget_usd": float(contract["max_budget_usd"]),
+                "certified": False,
+                "release_authorized": False,
+            }
+            progress["progress_sha256"] = _campaign_model._digest(progress)
+            _campaign_model._write_json_atomic(state_dir / "campaign-progress.json", progress)
+            return progress
+
     report = check_campaign(manifest, contract_path, state_dir, certify=True)
     report["executed"] = completed_count
     report["resumed"] = skipped_count
@@ -217,6 +265,7 @@ def run_campaign(
     state_dir: Path,
     approved_budget_usd: float,
     resume: bool,
+    max_new_results: int | None = None,
 ) -> Dict[str, Any]:
     resolved_state = state_dir.resolve()
     with TargetLock(resolved_state, "eval-campaign"):
@@ -226,6 +275,7 @@ def run_campaign(
             resolved_state,
             approved_budget_usd,
             resume,
+            max_new_results,
         )
 
 
