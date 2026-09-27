@@ -120,6 +120,7 @@ TESTS=(
   test_evidence_bridge.sh
   test_effect_comparator.sh
   test_effect_trials.sh
+  test_effect_campaign_materializer.sh
   test_runtime_capabilities.sh
   test_tool_skill_evidence_contracts.sh
   test_asset_taxonomy.sh
