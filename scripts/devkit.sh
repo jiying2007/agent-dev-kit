@@ -41,7 +41,7 @@ elif ! command -v "${PYTHON_BIN}" >/dev/null 2>&1; then
 fi
 
 read -r PYTHON_VERSION PYTHON_SUPPORTED < <(
-  "${PYTHON_BIN}" -c 'import sys; print(".".join(map(str, sys.version_info[:3])), int(sys.version_info >= (3, 11)))'
+  "${PYTHON_BIN}" -c 'import sys; print(".".join(map(str, sys.version_info[:3])), int(sys.version_info >= (3, 8)))'
 ) || {
   echo "[FAIL] unable to inspect ADK Python interpreter: ${PYTHON_BIN}" >&2
   exit 2
@@ -50,8 +50,8 @@ read -r PYTHON_VERSION PYTHON_SUPPORTED < <(
 COMMAND="${1:-help}"
 if [[ "${PYTHON_SUPPORTED}" != "1" && "${COMMAND}" != "doctor" ]]; then
   if [[ "${REQUIRE_SUPPORTED}" == "1" ]]; then
-    echo "[FAIL] ADK requires Python 3.11+; ${PYTHON_SELECTION}-selected ${PYTHON_BIN}=${PYTHON_VERSION}" >&2
-    echo "[INFO] set ADK_PYTHON_BIN to a reviewed Python 3.11/3.12 interpreter or use scripts/run-local-ci-parity.sh" >&2
+    echo "[FAIL] ADK requires Python 3.8+; ${PYTHON_SELECTION}-selected ${PYTHON_BIN}=${PYTHON_VERSION}" >&2
+    echo "[INFO] set ADK_PYTHON_BIN to a reviewed Python 3.8+ interpreter or use scripts/run-local-ci-parity.sh" >&2
     exit 2
   fi
   echo "[WARN] unsupported ADK Python ${PYTHON_VERSION}; ${PYTHON_SELECTION}-selected ${PYTHON_BIN}; result is development-only, not release evidence" >&2

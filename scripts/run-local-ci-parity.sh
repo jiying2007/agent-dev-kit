@@ -16,7 +16,7 @@ RECEIPT=""
 usage() {
   cat <<'USAGE'
 Usage:
-  scripts/run-local-ci-parity.sh [--python 3.11|3.12|all] [--mode quick|full] [--prepare] [--dry-run]
+  scripts/run-local-ci-parity.sh [--python 3.8|3.11|3.12|all] [--mode quick|full] [--prepare] [--dry-run]
       [--receipt <path>] [--check-receipt] [--verbose-success]
 
 Runs a local Docker parity matrix for the declared GitHub CI Python versions.
@@ -77,9 +77,9 @@ while [[ $# -gt 0 ]]; do
 done
 
 case "$PYTHON_SELECTION" in
-  3.11|3.12|all) ;;
+  3.8|3.11|3.12|all) ;;
   *)
-    echo "[FAIL] --python must be 3.11, 3.12, or all" >&2
+    echo "[FAIL] --python must be 3.8, 3.11, 3.12, or all" >&2
     exit 2
     ;;
 esac
@@ -97,6 +97,7 @@ esac
 
 base_image_for() {
   case "$1" in
+    3.8) printf '%s\n' 'python:3.8-slim-bullseye@sha256:104d2d37ef880b95d0109d9a8b5cfb032c0e541ed8bc0a70028f16b72e5830ba' ;;
     3.11) printf '%s\n' 'python:3.11-slim@sha256:db3ff2e1800a8581e2c48a27c3995339d47bdf046da21c7627accd3d51053a93' ;;
     3.12) printf '%s\n' 'python:3.12-slim@sha256:57cd7c3a7a273101a6485ba99423ee568157882804b1124b4dd04266317710de' ;;
   esac
@@ -108,7 +109,7 @@ tool_image_for() {
 
 versions=("$PYTHON_SELECTION")
 if [[ "$PYTHON_SELECTION" == "all" ]]; then
-  versions=(3.11 3.12)
+  versions=(3.8 3.11 3.12)
 fi
 
 echo "transport=docker"
@@ -191,11 +192,25 @@ receipt_records=()
 for version in "${versions[@]}"; do
   base_image="$(base_image_for "$version")"
   tool_image="$(tool_image_for "$version")"
+  build_args=()
+  if [[ "$version" == "3.8" ]]; then
+    build_args=(
+      --build-arg SETUPTOOLS_VERSION=75.3.2
+      --build-arg JSONSCHEMA_VERSION=4.17.3
+      --build-arg PIP_AUDIT_VERSION=2.7.3
+      --build-arg MYPY_VERSION=1.14.1
+      --build-arg TYPES_JSONSCHEMA_VERSION=4.17.0.10
+      --build-arg TYPES_PYYAML_VERSION=6.0.12.20241230
+      --build-arg TOMLI_VERSION=2.0.1
+    )
+  fi
 
   if [[ "$PREPARE" -eq 1 ]]; then
     if ! docker build \
       --pull=false \
       --build-arg "BASE_IMAGE=$base_image" \
+      --build-arg "PYTHON_VERSION=$version" \
+      "${build_args[@]}" \
       --label "io.agent-dev-kit.local-ci.base-image=$base_image" \
       --label "io.agent-dev-kit.local-ci.definition-sha256=$definition_sha256" \
       --label "io.agent-dev-kit.local-ci.python=$version" \

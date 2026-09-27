@@ -18,7 +18,10 @@ assert Path(contracts.__file__).resolve() == root / "src/agent_dev_kit/execution
 assert Path(decision.__file__).resolve() == root / "src/agent_dev_kit/execution_policy/decision.py"
 assert Path(reducer.__file__).resolve() == root / "src/agent_dev_kit/execution_policy/reducer.py"
 assert not (root / "src/agent_dev_kit/execution_policy/engine.py").exists()
-assert not (root / "src/agent_dev_kit/runtime_control").exists()
+retired = root / "src/agent_dev_kit/runtime_control"
+assert not retired.exists() or (
+    retired.is_dir() and not any(entry.name != "__pycache__" for entry in retired.iterdir())
+)
 assert not (root / "src/agent_dev_kit/execution_policy/engine_support.py").exists()
 assert not hasattr(policy, "Runtime" + "ControlError")
 assert not (root / "tests" / ("test_" + "runtime_control.py")).exists()

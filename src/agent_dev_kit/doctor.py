@@ -17,11 +17,13 @@ from .locking import target_lock_status
 from .model import Manifest
 
 
-MINIMUM_PYTHON = (3, 11)
-REQUIRED_DISTRIBUTIONS = {
-    "PyYAML": "6.0.3",
-    "jsonschema": "4.26.0",
-}
+MINIMUM_PYTHON = (3, 8)
+
+def _required_distributions() -> Dict[str, str]:
+    return {
+        "PyYAML": "6.0.3",
+        "jsonschema": "4.17.3" if sys.version_info < (3, 10) else "4.26.0",
+    }
 
 
 def _distribution_version(name: str) -> str:
@@ -57,21 +59,22 @@ def run_doctor(
 ) -> Dict[str, Any]:
     failures = list(manifest.validate(strict=True))
     warnings = []
+    required_distributions = _required_distributions()
     python_supported = sys.version_info >= MINIMUM_PYTHON
     if not python_supported:
-        failures.append("Python 3.11 or newer is required")
+        failures.append("Python 3.8 or newer is required")
     dependency_versions = {
-        name: _distribution_version(name) for name in sorted(REQUIRED_DISTRIBUTIONS)
+        name: _distribution_version(name) for name in sorted(required_distributions)
     }
     dependency_support = {
         name: dependency_versions[name] == expected
-        for name, expected in sorted(REQUIRED_DISTRIBUTIONS.items())
+        for name, expected in sorted(required_distributions.items())
     }
     for name, supported in dependency_support.items():
         if not supported:
             failures.append(
                 "{}=={} is required; found {}".format(
-                    name, REQUIRED_DISTRIBUTIONS[name], dependency_versions[name]
+                    name, required_distributions[name], dependency_versions[name]
                 )
             )
     if importlib.util.find_spec("yaml") is None and dependency_versions["PyYAML"] != "missing":
@@ -113,9 +116,9 @@ def run_doctor(
         "root": str(manifest.root),
         "python": sys.version.split()[0],
         "environment_support": {
-            "python_minimum": "3.11",
+            "python_minimum": "3.8",
             "python_supported": python_supported,
-            "required_distributions": dict(sorted(REQUIRED_DISTRIBUTIONS.items())),
+            "required_distributions": dict(sorted(required_distributions.items())),
             "installed_distributions": dependency_versions,
             "dependencies_supported": dependency_support,
         },

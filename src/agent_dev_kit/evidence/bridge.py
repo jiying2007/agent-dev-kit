@@ -8,10 +8,10 @@ references plus normalized claims. Existing artifact schemas remain unchanged.
 from __future__ import annotations
 
 from collections.abc import Mapping
-from dataclasses import dataclass
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from typing import Any, Literal
 
+from agent_dev_kit.compat import frozen_slots_dataclass
 from agent_dev_kit.model import canonical_json_bytes, sha256_bytes
 from agent_dev_kit.privacy_ref import validate_no_secrets
 
@@ -27,7 +27,7 @@ _RUN_SCHEMA = "adk-run-evidence-composition/v1"
 _RECEIPT_SCHEMA = "adk-asset-invocation-receipt/v1"
 
 
-@dataclass(frozen=True, slots=True)
+@frozen_slots_dataclass
 class EvidenceBridgeContext:
     """Explicit source/provenance context unavailable inside legacy artifacts."""
 
@@ -45,7 +45,7 @@ class EvidenceBridgeContext:
 def _iso(value: datetime, label: str) -> str:
     if value.tzinfo is None:
         raise ValueError(f"{label} must be timezone-aware")
-    return value.astimezone(UTC).isoformat().replace("+00:00", "Z")
+    return value.astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
 
 
 def _artifact_digest(value: Mapping[str, Any]) -> str:

@@ -22,7 +22,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.11', '3.12']
+        python-version: ['3.8', '3.11', '3.12']
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -41,7 +41,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y ripgrep shellcheck
-          python -m pip install .
+          python -m pip install '.[test]'
 
       - name: Validate PR source version advance
         if: ${{ github.event_name == 'pull_request' && matrix.python-version == '3.11' }}
@@ -83,7 +83,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.11', '3.12']
+        python-version: ['3.8', '3.11', '3.12']
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -101,7 +101,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y ripgrep shellcheck
-          python -m pip install .
+          python -m pip install '.[test]'
 
       - name: Run full regression suite
         run: bash tests/run_all.sh --timing-json /tmp/adk-tests.json

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import stat
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -17,7 +18,7 @@ def sha256(path: Path) -> str:
 def fake_cosign(root: Path, exit_code: int = 0) -> Path:
     path = root / "cosign"
     path.write_text(
-        "#!/usr/bin/env python3\n"
+        f"#!{sys.executable}\n"
         "import pathlib,sys\n"
         "args=sys.argv[1:]\n"
         "blob=sys.stdin.buffer.read()\n"

@@ -18,7 +18,7 @@ consumer_files = sorted(workflow_dir.glob("*-consumer-contract.yml"))
 consumer_validators = sorted((root / ".github/contracts").glob("*_consumer_contract.py"))
 assert consumer_validators, "no consumer contract validators found"
 expected_consumer_workflows = {
-    f"{path.stem.removesuffix('_consumer_contract').replace('_', '-')}-consumer-contract.yml"
+    f"{path.stem[:-len('_consumer_contract')].replace('_', '-')}-consumer-contract.yml"
     for path in consumer_validators
 }
 assert {path.name for path in consumer_files} == expected_consumer_workflows, (

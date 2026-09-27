@@ -5,6 +5,7 @@ import hashlib
 import json
 import shutil
 import stat
+import sys
 import tempfile
 import unittest
 from datetime import datetime, timedelta, timezone
@@ -38,7 +39,7 @@ def file_sha256(path: Path) -> str:
 def fake_cosign(directory: Path, exit_code: int = 0) -> Path:
     path = directory / "cosign"
     path.write_text(
-        "#!/usr/bin/env python3\n"
+        f"#!{sys.executable}\n"
         "import pathlib,sys\n"
         "a=sys.argv[1:]\n"
         "blob=sys.stdin.buffer.read()\n"

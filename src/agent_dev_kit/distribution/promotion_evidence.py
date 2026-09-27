@@ -14,7 +14,7 @@ import json
 import os
 import subprocess
 from collections.abc import Mapping, Sequence
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -23,8 +23,10 @@ from jsonschema import Draft202012Validator, FormatChecker
 from agent_dev_kit.contracts.schema_loader import packaged_schema_bytes
 from agent_dev_kit.model import canonical_json_bytes
 
+from ..compat import sha256_stream
+
 _SCHEMA_NAME = "promotion-evidence-v1.schema.json"
-_REQUIRED_PYTHON = ["3.11", "3.12"]
+_REQUIRED_PYTHON = ["3.8", "3.11", "3.12"]
 
 
 def _sha256(value: bytes) -> str:
@@ -33,7 +35,7 @@ def _sha256(value: bytes) -> str:
 
 def _sha256_file(path: Path) -> str:
     with path.open("rb") as stream:
-        return hashlib.file_digest(stream, "sha256").hexdigest()
+        return sha256_stream(stream)
 
 
 def _git(*args: str, cwd: Path) -> str:
@@ -141,7 +143,7 @@ def build_promotion_evidence(
 
     evidence: dict[str, Any] = {
         "schema": "adk-promotion-evidence/v1",
-        "issued_at": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
+        "issued_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
         "source": {
             "repository": repository,
             "version": version,

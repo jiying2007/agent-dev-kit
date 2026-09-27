@@ -989,7 +989,10 @@ else:
     retired = source_root / "runtime_control"
     if not preferred.is_file():
         failures.append("missing preferred execution_policy package")
-    if retired.exists():
+    if retired.exists() and (
+        not retired.is_dir()
+        or any(entry.name != "__pycache__" for entry in retired.iterdir())
+    ):
         failures.append("retired runtime_control compatibility package must not exist")
 
     metrics = architecture.get("design_metrics")

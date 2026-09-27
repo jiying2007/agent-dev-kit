@@ -1,6 +1,6 @@
 # 本地 CI Parity Runbook
 
-本入口用于远端 CI 暂时不可用或被 owner 明确豁免时，在本机 Docker 中复现声明的 Python 3.11/3.12 验证矩阵。它是继续开发的替代证据，不是远端 CI 状态、release provenance、Software M5 certification 或 field evidence。
+本入口用于远端 CI 暂时不可用或被 owner 明确豁免时，在本机 Docker 中复现声明的 Python 3.8/3.11/3.12 验证矩阵。它是继续开发的替代证据，不是远端 CI 状态、release provenance、Software M5 certification 或 field evidence。
 
 ## 权限与 transport 边界
 
@@ -8,7 +8,7 @@
 - source：宿主先生成排除 `.git`/build/cache 的 `/tmp` 快照；receipt身份使用解包后的确定性source-tree digest，tar字节hash只作transport诊断，避免目录mtime导致假漂移。Git index mode inventory单独计算SHA256；两者只读挂载，容器不读取 `.git`、不能写回宿主源码。
 - network：验证拆成两个容器 phase；gates phase 强制 `--network none`，只有 dependency audit phase 使用 Docker bridge。`--prepare` 构建本地工具镜像时也需要软件源网络；两者都不传递宿主代理凭证、SSH、GitHub token 或环境 secret。
 - identity：每个工具镜像必须带 contract/base/python/definition labels；runner 按当前 Dockerfile+entrypoint 内容核验 label，输出 immutable image ID，不接受同名旧镜像或被替换的 tag。
-- tools：Docker、Python 3.11/3.12 pinned base image、ripgrep、ShellCheck、Ruff、pip-audit。
+- tools：Docker、Python 3.8/3.11/3.12 pinned base image、ripgrep、ShellCheck、Ruff、pip-audit。
 - deny-path：不挂载宿主 `HOME`、SSH、Git credential、Docker socket、`~/codex` 或 `~/.codex`。
 - external writes：`--prepare` 只写本机 Docker image store；验证容器为临时容器。
 - fallback：Docker 或网络不可用时，保持 `not-verified`，不得把宿主旧 Python 的结果升级为支持矩阵通过。

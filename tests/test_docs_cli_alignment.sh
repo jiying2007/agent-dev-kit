@@ -112,7 +112,15 @@ retired_paths = (
 
 failures: list[str] = []
 for relative in retired_paths:
-    if (root / relative).exists():
+    path = root / relative
+    if relative == "src/agent_dev_kit/runtime_control":
+        returned = path.exists() and (
+            not path.is_dir()
+            or any(entry.name != "__pycache__" for entry in path.iterdir())
+        )
+    else:
+        returned = path.exists()
+    if returned:
         failures.append(f"retired compatibility surface returned: {relative}")
 
 active_text: dict[str, str] = {}

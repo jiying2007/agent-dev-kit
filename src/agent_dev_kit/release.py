@@ -279,7 +279,7 @@ def build_release(
                     "licenseConcluded": "NOASSERTION",
                     "licenseDeclared": "MIT",
                     "filesAnalyzed": False,
-                    "summary": "Declared runtime requirement: jsonschema==4.26.0",
+                    "summary": "Declared runtime requirement: jsonschema==4.17.3 on Python 3.8/3.9; jsonschema==4.26.0 on Python 3.10+",
                 },
             ],
             "relationships": [

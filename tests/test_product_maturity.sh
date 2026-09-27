@@ -37,7 +37,10 @@ import copy
 import json
 import sys
 import tempfile
-import tomllib
+try:
+    import tomllib
+except ModuleNotFoundError:
+    import tomli as tomllib
 from pathlib import Path
 from types import SimpleNamespace
 from unittest import mock
@@ -58,7 +61,7 @@ assert not (root / "manifest.yaml").exists()
 
 pyproject = (root / "pyproject.toml").read_text(encoding="utf-8")
 pyproject_data = tomllib.loads(pyproject)
-assert pyproject_data["project"]["requires-python"] == ">=3.11", pyproject_data
+assert pyproject_data["project"]["requires-python"] == ">=3.8", pyproject_data
 
 def exact_pin_names(items):
     assert all(isinstance(item, str) and item.count("==") == 1 for item in items), items
@@ -66,16 +69,24 @@ def exact_pin_names(items):
     assert all(name and version for name, version in pairs), items
     return [name for name, _version in pairs]
 
-assert exact_pin_names(pyproject_data["project"]["dependencies"]) == [
-    "PyYAML",
-    "jsonschema",
+assert pyproject_data["project"]["dependencies"] == [
+    "PyYAML==6.0.3",
+    "jsonschema==4.17.3; python_version < '3.10'",
+    "jsonschema==4.26.0; python_version >= '3.10'",
 ], pyproject_data
 assert exact_pin_names(pyproject_data["project"]["optional-dependencies"]["quality"]) == [
     "ruff",
     "pip-audit",
+    "pip-audit",
+    "mypy",
     "mypy",
     "types-jsonschema",
+    "types-jsonschema",
     "types-PyYAML",
+    "types-PyYAML",
+], pyproject_data
+assert pyproject_data["project"]["optional-dependencies"]["test"] == [
+    "tomli==2.0.1; python_version < '3.11'",
 ], pyproject_data
 assert pyproject_data["tool"]["mypy"] == {
     "python_version": "3.11",
@@ -84,7 +95,7 @@ assert pyproject_data["tool"]["mypy"] == {
     "show_error_codes": True,
 }, pyproject_data
 ci = (root / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
-assert "python-version: ['3.11', '3.12']" in ci, ci
+assert "python-version: ['3.8', '3.11', '3.12']" in ci, ci
 assert "Run focused strict type analysis" in ci, ci
 
 assert manifest.data["install"] == {

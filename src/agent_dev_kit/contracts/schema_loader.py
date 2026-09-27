@@ -12,7 +12,8 @@ _PACKAGE_RELATIVE = Path("src") / "agent_dev_kit" / "schema_resources"
 def packaged_schema_bytes(name: str) -> bytes:
     if not name.endswith(".schema.json") or "/" in name or "\\" in name:
         raise ValueError(f"invalid packaged schema name: {name}")
-    return resources.files(_PACKAGE).joinpath(name).read_bytes()
+    with resources.open_binary(_PACKAGE, name) as stream:
+        return stream.read()
 
 
 def canonical_schema_bytes(root: Path, name: str) -> bytes:

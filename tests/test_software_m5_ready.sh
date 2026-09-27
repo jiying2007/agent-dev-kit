@@ -804,7 +804,7 @@ environment_supported = support["python_supported"] and all(
 )
 assert doctor_cli["status"] == ("pass" if environment_supported else "fail"), doctor_cli
 if not support["python_supported"]:
-    assert "Python 3.11 or newer is required" in doctor_cli["failures"], doctor_cli
+    assert "Python 3.8 or newer is required" in doctor_cli["failures"], doctor_cli
 assert sentinel not in json.dumps(doctor_cli, ensure_ascii=False)
 PY
 

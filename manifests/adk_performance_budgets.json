@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-07-13",
+  "last_updated": "2026-09-27",
   "scope_model": "local-end-to-end-performance-budgets",
   "boundary": "Budgets cover local source/test evidence only. They do not claim remote runtime, concurrent writer, or field-scale performance certification.",
   "platform_operations": {
@@ -40,6 +40,15 @@
     }
   },
   "budgets": [
+    {
+      "budget_id": "quick-test-loop-py38",
+      "mode": "quick",
+      "python": "3.8",
+      "command": "tests/run_all.sh --quick --timing-json <path>",
+      "max_elapsed_ms": 180000,
+      "slow_threshold_sec": 10,
+      "test": "tests/run_all.sh"
+    },
     {
       "budget_id": "quick-test-loop",
       "mode": "quick",
