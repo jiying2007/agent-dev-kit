@@ -687,6 +687,7 @@ assert bounded_final["validated_results"] == 8, bounded_final
 assert bounded_final["total_cost_usd"] == report["total_cost_usd"], bounded_final
 assert bounded_final["metrics"] == report["metrics"], (bounded_final["metrics"], report["metrics"])
 assert len(calls) == 2, calls
+assert not progress_path.exists()
 
 calls.clear()
 with mock.patch("agent_dev_kit.campaign.runtime_plan", side_effect=ready_plan), mock.patch(
