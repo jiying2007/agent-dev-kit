@@ -216,7 +216,24 @@ def main(argv: Sequence[str] | None = None) -> int:
             _json(value)
         return 0 if value.get("status") in ("ready", "checkpointed", "complete", "pass") else 1
     if args.action == "certify":
-        value = check_campaign(_manifest(), Path(args.contract).resolve(), Path(args.state_dir), certify=True)
+        campaign_root = (
+            Path(args.campaign_root).expanduser().resolve()
+            if args.campaign_root
+            else None
+        )
+        raw_contract = Path(args.contract).expanduser()
+        contract = (
+            (campaign_root / raw_contract).resolve()
+            if campaign_root is not None and not raw_contract.is_absolute()
+            else raw_contract.resolve()
+        )
+        value = check_campaign(
+            _manifest(),
+            contract,
+            Path(args.state_dir),
+            certify=True,
+            campaign_root=campaign_root,
+        )
         if args.output:
             _write_json(Path(args.output), value)
         if args.summary_json or not args.output:
