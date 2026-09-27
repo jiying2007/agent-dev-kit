@@ -82,6 +82,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     campaign_run_parser.add_argument("--execute", action="store_true")
     campaign_run_parser.add_argument("--resume", action="store_true")
     campaign_run_parser.add_argument("--approve-budget-usd", type=float)
+    campaign_run_parser.add_argument("--max-new-results", type=int)
     campaign_run_parser.add_argument("--output")
     campaign_run_parser.add_argument("--summary-json", action="store_true")
     campaign_check_parser = campaign_sub.add_parser("check")
@@ -169,6 +170,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         if args.campaign_action == "plan":
             value = campaign_plan(_manifest(), contract)
         elif args.campaign_action == "run":
+            if args.max_new_results is not None and not args.execute:
+                parser.error("--max-new-results requires campaign run --execute")
             if args.execute:
                 if args.approve_budget_usd is None:
                     parser.error("--approve-budget-usd is required with campaign run --execute")
@@ -178,6 +181,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                     Path(args.state_dir),
                     args.approve_budget_usd,
                     args.resume,
+                    args.max_new_results,
                 )
             else:
                 value = campaign_plan(_manifest(), contract)
@@ -189,7 +193,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             _write_json(Path(args.output), value)
         if getattr(args, "summary_json", False) or not getattr(args, "output", None):
             _json(value)
-        return 0 if value.get("status") in ("ready", "complete", "pass") else 1
+        return 0 if value.get("status") in ("ready", "checkpointed", "complete", "pass") else 1
     if args.action == "certify":
         value = check_campaign(_manifest(), Path(args.contract).resolve(), Path(args.state_dir), certify=True)
         if args.output:
