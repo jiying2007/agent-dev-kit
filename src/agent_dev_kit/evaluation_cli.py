@@ -170,6 +170,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         if args.campaign_action == "plan":
             value = campaign_plan(_manifest(), contract)
         elif args.campaign_action == "run":
+            if args.max_new_results is not None and not args.execute:
+                parser.error("--max-new-results requires campaign run --execute")
             if args.execute:
                 if args.approve_budget_usd is None:
                     parser.error("--approve-budget-usd is required with campaign run --execute")
