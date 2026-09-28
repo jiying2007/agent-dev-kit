@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### 7.13.0 source candidate
+- Allow consumer repositories to own runtime campaign contracts and task sets under an explicit bounded `--campaign-root` while keeping ADK implementation identity pinned to the ADK source.
+- Fail closed when campaign contracts/tasks escape the governed root or when the supplied campaign root is missing, unsafe, or a symlink.
+- Propagate the bounded root through plan, run, check, certify and effect materialization without adding a compatibility alias.
+
 ### 7.12.5 source candidate
 - Remove the retired fallback-sunset tombstone, matrix and dedicated regression after the runtime compatibility path was already hard-cut.
 - Keep current fallback observability and supported Python-version compatibility unchanged; this release is subtraction-only.
