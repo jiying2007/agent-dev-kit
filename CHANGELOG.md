@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### 7.12.4 source candidate
+- Freeze the Agent Value receipt test clock so its fixed fixture remains valid across calendar time.
+- Keep an explicit regression that rejects receipts beyond the production 30-day freshness window.
+- Advance source identity from 7.12.3 to 7.12.4 for the protected PR version gate; the failed 7.12.3 main CI and absent release remain historical evidence.
+
 ### 7.12.3 source candidate
 - Bind runtime evaluation reports to the selected task sequence, exact requested and observed model, manifest identity, and bounded unknown-cost approval.
 - Strengthen external reference identity, evaluation evidence, and governance checks while keeping Python 3.8 contracts and regression coverage.
