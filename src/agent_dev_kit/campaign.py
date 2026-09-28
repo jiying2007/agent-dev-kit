@@ -10,7 +10,7 @@ from .campaign_analysis import (
 )
 
 from pathlib import Path
-from typing import Any, Dict, List, Mapping, Sequence, Tuple
+from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 from . import campaign_model as _campaign_model
 from .evaluation import run_runtime, runtime_plan
@@ -20,8 +20,14 @@ from .model import Manifest, ManifestError, sha256_file
 REPORT_SCHEMA = "adk-runtime-eval-campaign-report/v1"
 
 
-def campaign_plan(manifest: Manifest, contract_path: Path) -> Dict[str, Any]:
-    contract, tasks_path, tasks = _campaign_model.load_campaign_contract(manifest, contract_path)
+def campaign_plan(
+    manifest: Manifest,
+    contract_path: Path,
+    campaign_root: Optional[Path] = None,
+) -> Dict[str, Any]:
+    contract, tasks_path, tasks = _campaign_model.load_campaign_contract(
+        manifest, contract_path, campaign_root
+    )
     runtime_readiness = [runtime_plan(runtime, "adk", len(tasks)) for runtime in contract["runtimes"]]
     for readiness in runtime_readiness:
         executable = readiness.pop("executable", None)
@@ -48,7 +54,7 @@ def campaign_plan(manifest: Manifest, contract_path: Path) -> Dict[str, Any]:
         "manifest_version": manifest.version,
         "manifest_sha256": manifest.digest,
         "contract_sha256": _campaign_model._digest(contract),
-        "tasks": tasks_path.relative_to(manifest.root).as_posix(),
+        "tasks": tasks_path.relative_to((campaign_root or manifest.root).resolve()).as_posix(),
         "tasks_sha256": sha256_file(tasks_path),
         "task_count": len(tasks),
         "runtimes": runtime_readiness,
@@ -85,9 +91,12 @@ def _run_campaign_locked(
     approved_budget_usd: float,
     resume: bool,
     max_new_results: int | None = None,
+    campaign_root: Optional[Path] = None,
 ) -> Dict[str, Any]:
-    contract, _, tasks = _campaign_model.load_campaign_contract(manifest, contract_path)
-    current_plan = campaign_plan(manifest, contract_path)
+    contract, _, tasks = _campaign_model.load_campaign_contract(
+        manifest, contract_path, campaign_root
+    )
+    current_plan = campaign_plan(manifest, contract_path, campaign_root)
     if approved_budget_usd < float(contract["max_budget_usd"]):
         raise ManifestError("approved budget must cover contract max_budget_usd")
     if approved_budget_usd > 150:
@@ -250,7 +259,9 @@ def _run_campaign_locked(
             return progress
 
     (state_dir / "campaign-progress.json").unlink(missing_ok=True)
-    report = check_campaign(manifest, contract_path, state_dir, certify=True)
+    report = check_campaign(
+        manifest, contract_path, state_dir, certify=True, campaign_root=campaign_root
+    )
     report["executed"] = completed_count
     report["resumed"] = skipped_count
     report["spent_usd"] = spent
@@ -267,6 +278,7 @@ def run_campaign(
     approved_budget_usd: float,
     resume: bool,
     max_new_results: int | None = None,
+    campaign_root: Optional[Path] = None,
 ) -> Dict[str, Any]:
     resolved_state = state_dir.resolve()
     with TargetLock(resolved_state, "eval-campaign"):
@@ -277,17 +289,24 @@ def run_campaign(
             approved_budget_usd,
             resume,
             max_new_results,
+            campaign_root,
         )
 
 
 def check_campaign(
-    manifest: Manifest, contract_path: Path, state_dir: Path, certify: bool = False
+    manifest: Manifest,
+    contract_path: Path,
+    state_dir: Path,
+    certify: bool = False,
+    campaign_root: Optional[Path] = None,
 ) -> Dict[str, Any]:
-    contract, _, tasks = _campaign_model.load_campaign_contract(manifest, contract_path)
+    contract, _, tasks = _campaign_model.load_campaign_contract(
+        manifest, contract_path, campaign_root
+    )
     state_dir = state_dir.resolve()
     plan = _campaign_model._load_json_object(state_dir / "campaign-plan.json", "campaign plan")
     _campaign_model._validate_plan_integrity(plan)
-    expected_plan = campaign_plan(manifest, contract_path)
+    expected_plan = campaign_plan(manifest, contract_path, campaign_root)
     for field in ("campaign_id", "manifest_sha256", "contract_sha256", "tasks_sha256", "task_count", "trials"):
         if plan.get(field) != expected_plan.get(field):
             raise ManifestError("campaign plan {} does not match current contract".format(field))

@@ -8,7 +8,7 @@ import math
 import re
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Mapping, Sequence, Tuple
+from typing import Any, Callable, Dict, List, Mapping, Optional, Sequence, Tuple
 
 from .evaluation import BASELINE_CATEGORIES
 from .evaluation_runtime import load_tasks
@@ -51,9 +51,18 @@ def _load_json_object(path: Path, label: str) -> Dict[str, Any]:
 
 
 def load_campaign_contract(
-    manifest: Manifest, contract_path: Path
+    manifest: Manifest,
+    contract_path: Path,
+    campaign_root: Optional[Path] = None,
 ) -> Tuple[Dict[str, Any], Path, List[Mapping[str, Any]]]:
-    contract_path = ensure_within(contract_path.resolve(), manifest.root, "campaign contract")
+    if campaign_root is None:
+        bounded_root = manifest.root
+    else:
+        raw_root = campaign_root.expanduser()
+        if raw_root.is_symlink() or not raw_root.is_dir():
+            raise ManifestError("campaign root is missing or unsafe")
+        bounded_root = raw_root.resolve()
+    contract_path = ensure_within(contract_path.resolve(), bounded_root, "campaign contract")
     contract = _load_json_object(contract_path, "campaign contract")
     if contract.get("schema") != CONTRACT_SCHEMA:
         raise ManifestError("unsupported campaign contract schema")
@@ -63,7 +72,7 @@ def load_campaign_contract(
     tasks_value = contract.get("tasks")
     if not isinstance(tasks_value, str) or not tasks_value:
         raise ManifestError("campaign tasks path is required")
-    tasks_path = ensure_within(manifest.root / tasks_value, manifest.root, "campaign tasks")
+    tasks_path = ensure_within(bounded_root / tasks_value, bounded_root, "campaign tasks")
     tasks = load_tasks(tasks_path)
     task_ids = [str(task.get("id", "")) for task in tasks]
     if any(not TASK_ID_RE.fullmatch(task_id) for task_id in task_ids):

@@ -20,8 +20,11 @@ primary_metric 和 guardrails 只能使用原 effect comparator 的方向性指�
 
 For long or paid real-runtime execution, reuse the resumable runtime campaign state machine rather than writing an ad-hoc effect executor:
 
+When the experiment assets are owned by a consumer repository, keep `campaign-contract.json` and its task JSONL under one explicit governed directory and pass that directory with `--campaign-root`. The ADK manifest/runtime implementation still comes from the pinned ADK checkout; only contract/tasks ownership moves to the bounded consumer root. Relative task paths cannot escape that root.
+
 ```bash
 adk eval campaign run \
+  --campaign-root <governed-campaign-root> \
   --contract <campaign-contract.json> \
   --state-dir <state-dir> \
   --execute \
@@ -30,6 +33,7 @@ adk eval campaign run \
 
 # After the selected runtime results are complete:
 adk eval campaign materialize-effect \
+  --campaign-root <governed-campaign-root> \
   --contract <campaign-contract.json> \
   --state-dir <state-dir> \
   --effect-plan <frozen-effect-plan.json> \
