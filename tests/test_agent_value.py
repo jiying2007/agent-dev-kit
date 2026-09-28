@@ -7,7 +7,7 @@ from pathlib import Path
 
 from agent_dev_kit.agent_value import emit_measurements
 from agent_dev_kit.agent_value_contracts import load_contract, validate_contract
-from agent_dev_kit.agent_value_receipts import validate_receipt
+from agent_dev_kit.agent_value_receipts import validate_receipt as _validate_receipt
 from agent_dev_kit.model import Manifest, ManifestError, canonical_json_bytes, sha256_bytes
 
 
@@ -19,6 +19,12 @@ AGGREGATION_WINDOW = {
     "from": datetime(2026, 8, 29, 11, 0, tzinfo=timezone.utc),
     "through": datetime(2026, 8, 29, 13, 0, tzinfo=timezone.utc),
 }
+
+
+def validate_receipt(*args, **kwargs):
+    # Fixture receipts have fixed 2026 timestamps; keep their evaluation clock
+    # fixed too, so the production freshness gate remains meaningful over time.
+    return _validate_receipt(*args, as_of=AS_OF, **kwargs)
 
 
 def opaque(marker: str) -> str:
@@ -439,6 +445,14 @@ class AgentValueContractTest(unittest.TestCase):
         bind_receipt(stale)
         with self.assertRaises(ManifestError):
             validate_receipt(stale, MANIFEST, CONTRACT)
+
+        with self.assertRaisesRegex(ManifestError, "max_age_days"):
+            _validate_receipt(
+                receipt("core", "profile"),
+                MANIFEST,
+                CONTRACT,
+                as_of=datetime(2026, 9, 28, 12, 1, tzinfo=timezone.utc),
+            )
 
         wrong_manifest = receipt("core", "profile")
         wrong_manifest["manifest_ref"] = opaque("f")
