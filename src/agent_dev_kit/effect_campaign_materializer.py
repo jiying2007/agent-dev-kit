@@ -10,7 +10,7 @@ import json
 import re
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Mapping, Sequence
+from typing import Any, Mapping, Optional, Sequence
 
 from jsonschema import Draft202012Validator, FormatChecker
 
@@ -226,8 +226,11 @@ def materialize_effect_campaign(
     state_dir: Path,
     effect_plan_path: Path,
     runtime: str,
+    campaign_root: Optional[Path] = None,
 ) -> dict[str, Any]:
-    contract, tasks_path, tasks = _campaign_model.load_campaign_contract(manifest, contract_path)
+    contract, tasks_path, tasks = _campaign_model.load_campaign_contract(
+        manifest, contract_path, campaign_root
+    )
     if runtime not in contract["runtimes"]:
         raise ManifestError("selected runtime is not part of the campaign contract")
     if contract["conditions"] != ["baseline", "adk"]:
