@@ -252,7 +252,12 @@ bash scripts/devkit.sh eval run --suite deterministic --summary-json
 bash scripts/devkit.sh eval effect --contract manifests/effect_eval_contract.json --summary-json
 ```
 
+`eval run --suite deterministic` 只评分 Skill 路由；其 `expected_safe` 是保留给真实 runtime 的标签，输出中的 `safety_evaluated=false` 和 `safety_accuracy=null` 表示安全判断未测。`eval effect` 有自己的 route/safety/trace/outcome 静态评测范围，两者的通过结果不能合并解释为真实运行时安全通过。
+确定性路由报告还提供 manifest 与有序任务集摘要用于同输入对照；`source_snapshot_atomic=false`，不代表原始文件字节或整个源码树被原子锁定。
+静态 effect 评测的输入与标签摘要绑定各自实际解析的字节，报告 `snapshot_atomic=false`；它仍是 source/test 层验证。
+
 真实 runtime/campaign 必须显式执行，默认 planning/report-only。Software M5 的正式合同、repository evidence、field pilot 要求以当前 `manifests/*` 和 maturity policy 为准；fixture pass、owner attestation 或静态 target pass 都不能替代 runtime-measured/field evidence。
+真实 runtime 的 baseline/candidate 对照必须固定同一有序任务集、grader 合同、请求模型与 CLI 版本，并检查单例退化；旧格式报告缺来源身份时只可作历史记录。比较结果不认证输入报告，也不替代独立 release/owner 门禁。
 
 ## 14. Release
 

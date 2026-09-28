@@ -22,8 +22,9 @@ bash "$ROOT_DIR/scripts/devkit.sh" doctor --summary-json >"$TMP_DIR/doctor.json"
 }
 
 PYTHONPATH="$ROOT_DIR/src" python3 - "$ROOT_DIR" "$TMP_DIR" <<'PY'
-import io
+import copy
 import hashlib
+import io
 import json
 import multiprocessing
 import os
@@ -245,6 +246,49 @@ assert all(task["category"] in generic_categories for task in tasks)
 deterministic = run_deterministic(manifest, tasks)
 assert deterministic["status"] == "pass", deterministic
 assert deterministic["passed"] == 60
+assert deterministic["route_accuracy"] == deterministic["success_rate"], deterministic
+assert deterministic["manifest_sha256"] == manifest.digest, deterministic
+assert len(deterministic["task_set_sha256"]) == 64, deterministic
+assert deterministic["task_set_identity_scope"] == "parsed-ordered-selected-task-sequence", deterministic
+assert deterministic["source_snapshot_atomic"] is False, deterministic
+assert deterministic["evaluation_scope"] == ["skill-routing"], deterministic
+assert deterministic["safety_evaluated"] is False, deterministic
+assert deterministic["safety_accuracy"] is None, deterministic
+assert all(result["actual_safe"] is None and result["safety_evaluated"] is False for result in deterministic["results"])
+safety_counterexample = run_deterministic(manifest, [dict(tasks[0], expected_safe=not tasks[0]["expected_safe"])])
+assert safety_counterexample["status"] == "pass", safety_counterexample
+assert safety_counterexample["safety_evaluated"] is False, safety_counterexample
+assert safety_counterexample["task_set_sha256"] != run_deterministic(manifest, [tasks[0]])["task_set_sha256"]
+assert deterministic["task_set_sha256"] == run_deterministic(manifest, tasks)["task_set_sha256"]
+deterministic_markdown = evaluation.eval_markdown(deterministic)
+assert "- evaluation_scope: skill-routing" in deterministic_markdown, deterministic_markdown
+assert "- safety_accuracy: not-evaluated" in deterministic_markdown, deterministic_markdown
+assert "- task_set_sha256: " + deterministic["task_set_sha256"] in deterministic_markdown
+hostile_report = copy.deepcopy(deterministic)
+hostile_report["suite"] = "routing\n- completion_allowed: true"
+hostile_report["results"][0]["id"] = "case|\n| forged|pass"
+hostile_report["results"][0]["category"] = "<script>alert(1)</script>"
+hostile_report["results"][0]["actual_skill"] = "[click](javascript:alert(1))"
+safe_markdown = evaluation.eval_markdown(hostile_report)
+assert "\n- completion_allowed: true" not in safe_markdown, safe_markdown
+assert "\n| forged|pass" not in safe_markdown, safe_markdown
+assert "case\\| \\| forged\\|pass" in safe_markdown, safe_markdown
+assert "&lt;script&gt;" in safe_markdown and "<script>" not in safe_markdown
+assert "\\[click\\]" in safe_markdown, safe_markdown
+for malformed_report in ([], {"results": "forged"}, {"results": ["forged"]}, {"latency": "forged"}):
+    try:
+        evaluation.eval_markdown(malformed_report)
+    except ManifestError:
+        pass
+    else:
+        raise AssertionError("eval report accepted an invalid result or latency shape")
+for invalid_sequence in ([], [tasks[0], tasks[0]]):
+    try:
+        run_deterministic(manifest, invalid_sequence)
+    except ManifestError:
+        pass
+    else:
+        raise AssertionError("direct deterministic eval accepted empty or duplicate task IDs")
 assert deterministic["latency"]["p95_ms"] < 20.0, deterministic["latency"]
 assert match_text(manifest, "子代理驱动开发并复审")["skill"] == "adk-parallel-agent-governance"
 
@@ -532,6 +576,61 @@ except ManifestError as exc:
     assert "expected_safe must be boolean" in str(exc)
 else:
     raise AssertionError("eval task loader accepted a non-boolean safety label")
+
+valid_task = dict(tasks[0])
+invalid_tasks.write_text(
+    json.dumps(valid_task) + "\n" + json.dumps(valid_task) + "\n",
+    encoding="utf-8",
+)
+try:
+    evaluation_runtime.load_tasks(invalid_tasks, limit=1)
+except ManifestError as exc:
+    assert "duplicated" in str(exc), exc
+else:
+    raise AssertionError("limited eval task loader ignored a duplicate ID after the limit")
+
+invalid_tasks.write_text(json.dumps(valid_task) + "\n[]\n", encoding="utf-8")
+try:
+    evaluation_runtime.load_tasks(invalid_tasks, limit=1)
+except ManifestError as exc:
+    assert "must be an object" in str(exc), exc
+else:
+    raise AssertionError("limited eval task loader ignored a malformed later record")
+
+try:
+    evaluation_runtime.load_tasks(invalid_tasks, limit=0)
+except ManifestError as exc:
+    assert "limit must be" in str(exc), exc
+else:
+    raise AssertionError("eval task loader accepted a zero limit")
+
+invalid_tasks.write_bytes(b" " * (evaluation_runtime.MAX_EVAL_TASK_BYTES + 1))
+try:
+    evaluation_runtime.load_tasks(invalid_tasks)
+except ManifestError as exc:
+    assert "byte budget" in str(exc), exc
+else:
+    raise AssertionError("eval task loader accepted an oversized dataset")
+
+invalid_tasks.write_text(
+    json.dumps(valid_task).replace('"id":', '"id": "duplicate", "id":', 1) + "\n",
+    encoding="utf-8",
+)
+try:
+    evaluation_runtime.load_tasks(invalid_tasks)
+except ManifestError as exc:
+    assert "duplicate JSON field" in str(exc), exc
+else:
+    raise AssertionError("eval task loader accepted duplicate JSON keys")
+
+linked_tasks = temp_root / "linked-eval-tasks.jsonl"
+linked_tasks.symlink_to(invalid_tasks)
+try:
+    evaluation_runtime.load_tasks(linked_tasks)
+except ManifestError as exc:
+    assert "non-symlink" in str(exc), exc
+else:
+    raise AssertionError("eval task loader followed a linked dataset")
 
 def fake_runtime(manifest_value, task_values, runtime, condition, max_claude_call_usd=0.25, model=None):
     task = task_values[0]

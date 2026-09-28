@@ -14,7 +14,7 @@ cd "$ROOT_DIR"
   exit 1
 }
 
-python - <<'PY'
+python3 - <<'PY'
 import json
 from pathlib import Path
 

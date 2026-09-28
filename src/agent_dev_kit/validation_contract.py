@@ -10,6 +10,7 @@ from typing import Any, Mapping, Sequence
 
 import yaml
 
+from .eval_catalog import audit_eval_catalog
 from .model import Manifest, ManifestError, ensure_within
 
 _KEBAB = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
@@ -355,6 +356,8 @@ def validate_repository(root: Path, *, strict: bool, quick: bool) -> dict[str, A
     manifest = Manifest.load(root)
     result = validate_assets(root, strict=strict, quick=quick)
     failures = [str(item) for item in result.get("failures", [])]
+    eval_catalog = audit_eval_catalog(root)
+    failures.extend("eval-catalog: " + issue for issue in eval_catalog["issues"])
 
     if strict and not quick:
         gates = (
@@ -387,6 +390,15 @@ def validate_repository(root: Path, *, strict: bool, quick: bool) -> dict[str, A
                 failures.append(failure)
 
     result = dict(result)
+    result["eval_catalog"] = {
+        "catalog_valid": eval_catalog["catalog_valid"],
+        "catalog_sha256": eval_catalog["catalog_sha256"],
+        "snapshot_atomic": False,
+        "runtime_eval_executed": False,
+        "suite_count": eval_catalog["suite_count"],
+        "contract_only_suite_count": eval_catalog["contract_only_suite_count"],
+        "dataset_fixture_alignment_scope": eval_catalog["dataset_fixture_alignment_scope"],
+    }
     result["failures"] = list(dict.fromkeys(failures))
     result["status"] = "fail" if result["failures"] else "pass"
     return result

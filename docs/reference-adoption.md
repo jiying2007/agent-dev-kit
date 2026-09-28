@@ -130,7 +130,7 @@
 - `skills/adk-requirements-triage/SKILL.md`
 - `skills/adk-requirements-triage/references/exploratory-requirements-brief.md`
 - `skills/adk-structured-requirements-questioning/SKILL.md`
-- `optional-skills/adk-planning-execution-loop/SKILL.md`
+- `skills/adk-planning-execution-loop/SKILL.md`
 - `skills/adk-context-compress-handoff/SKILL.md`
 - `templates/context/continuity-attestation.md`
 - `docs/runbooks/codex-runtime-method-boundary.md`

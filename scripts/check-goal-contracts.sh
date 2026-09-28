@@ -13,7 +13,7 @@ Usage:
 
 Checks ADK goal contracts:
   - contract JSON is valid and platform-neutral
-  - each profile and workflow reference resolves through manifest.yaml
+  - each profile and workflow reference resolves through manifest.json
   - each required evidence path exists
   - each goal declares success criteria, non-goals, evidence, workflows, budget, and owner
 USAGE

@@ -4,15 +4,18 @@ from __future__ import annotations
 
 import copy
 import json
+import math
 from pathlib import Path
 from typing import Any, Dict, List, Mapping
 
-from .evaluation_runtime import _deterministic_safety, _load_effect_inputs, _prompt_digest
+from .evaluation_runtime import MAX_EFFECT_INPUT_BYTES, _deterministic_safety, _load_effect_inputs, _prompt_digest, _unique_eval_object
 from .matcher import match_text
-from .model import Manifest, ManifestError, ensure_within, sha256_file
+from .model import Manifest, ManifestError, ensure_within, sha256_bytes
 
 EFFECT_CONTRACT_SCHEMA = "adk-effect-eval-contract/v1"
 EFFECT_LABEL_SCHEMA = "adk-effect-eval-labels/v1"
+MAX_EFFECT_LABEL_BYTES = 256 * 1024
+MAX_EFFECT_CONTRACT_BYTES = 256 * 1024
 EFFECT_THRESHOLD_NAMES = (
     "route_accuracy",
     "safety_accuracy",
@@ -22,11 +25,26 @@ EFFECT_THRESHOLD_NAMES = (
 )
 
 
+def _read_bounded(path: Path, limit: int, label: str) -> bytes:
+    if path.is_symlink() or not path.is_file():
+        raise ManifestError("effect eval {} must be a regular non-symlink file".format(label))
+    try:
+        with path.open("rb") as stream:
+            raw = stream.read(limit + 1)
+    except OSError as exc:
+        raise ManifestError("effect eval {} cannot be read".format(label)) from exc
+    if len(raw) > limit:
+        raise ManifestError("effect eval {} exceeds byte budget".format(label))
+    return raw
+
+
 def run_effect_eval(manifest: Manifest, contract_path: Path) -> Dict[str, Any]:
+    if contract_path.is_symlink():
+        raise ManifestError("effect eval contract must not be a symlink")
     contract_path = ensure_within(contract_path.resolve(), manifest.root, "effect eval contract")
     try:
-        contract = json.loads(contract_path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
+        contract = json.loads(_read_bounded(contract_path, MAX_EFFECT_CONTRACT_BYTES, "contract").decode("utf-8"), object_pairs_hook=_unique_eval_object)
+    except (OSError, UnicodeError, json.JSONDecodeError, ManifestError) as exc:
         raise ManifestError("effect eval contract is invalid") from exc
     if not isinstance(contract, dict) or contract.get("schema") != EFFECT_CONTRACT_SCHEMA:
         raise ManifestError("unsupported effect eval contract schema")
@@ -48,16 +66,22 @@ def run_effect_eval(manifest: Manifest, contract_path: Path) -> Dict[str, Any]:
     dataset = contract.get("dataset")
     if not isinstance(dataset, dict):
         raise ManifestError("effect eval dataset contract is missing")
-    inputs_path = ensure_within(manifest.root / str(dataset.get("inputs", "")), manifest.root, "effect inputs")
-    labels_path = ensure_within(manifest.root / str(dataset.get("labels", "")), manifest.root, "effect labels")
-    for path, key in ((inputs_path, "inputs_sha256"), (labels_path, "labels_sha256")):
+    input_source = manifest.root / str(dataset.get("inputs", ""))
+    label_source = manifest.root / str(dataset.get("labels", ""))
+    if input_source.is_symlink() or label_source.is_symlink():
+        raise ManifestError("effect eval dataset path must not be a symlink")
+    inputs_path = ensure_within(input_source, manifest.root, "effect inputs")
+    labels_path = ensure_within(label_source, manifest.root, "effect labels")
+    inputs_raw = _read_bounded(inputs_path, MAX_EFFECT_INPUT_BYTES, "inputs")
+    labels_raw = _read_bounded(labels_path, MAX_EFFECT_LABEL_BYTES, "labels")
+    for raw, key in ((inputs_raw, "inputs_sha256"), (labels_raw, "labels_sha256")):
         expected_digest = dataset.get(key)
-        if not isinstance(expected_digest, str) or sha256_file(path) != expected_digest:
+        if not isinstance(expected_digest, str) or sha256_bytes(raw) != expected_digest:
             raise ManifestError("effect eval {} does not match contract digest".format(key))
-    inputs = _load_effect_inputs(inputs_path)
+    inputs = _load_effect_inputs(inputs_path, inputs_raw)
     try:
-        label_document = json.loads(labels_path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
+        label_document = json.loads(labels_raw.decode("utf-8"), object_pairs_hook=_unique_eval_object)
+    except (UnicodeError, json.JSONDecodeError, ManifestError) as exc:
         raise ManifestError("effect eval labels are invalid") from exc
     if not isinstance(label_document, dict) or label_document.get("schema") != EFFECT_LABEL_SCHEMA:
         raise ManifestError("unsupported effect eval label schema")
@@ -99,7 +123,7 @@ def run_effect_eval(manifest: Manifest, contract_path: Path) -> Dict[str, Any]:
         raise ManifestError("effect eval dataset is below required split counts")
     thresholds = contract.get("thresholds")
     if not isinstance(thresholds, dict) or set(thresholds) != set(EFFECT_THRESHOLD_NAMES) or any(
-        isinstance(value, bool) or not isinstance(value, (int, float)) or value < 0 or value > 1
+        isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value) or value < 0 or value > 1
         for value in thresholds.values()
     ):
         raise ManifestError("effect eval thresholds are invalid")
@@ -189,6 +213,7 @@ def run_effect_eval(manifest: Manifest, contract_path: Path) -> Dict[str, Any]:
         "schema": "adk-effect-eval-report/v1",
         "status": "pass" if all(gate.values()) else "fail",
         "evidence_layer": "source-test",
+        "snapshot_atomic": False,
         "dataset": {
             "inputs": inputs_path.relative_to(manifest.root).as_posix(),
             "labels": labels_path.relative_to(manifest.root).as_posix(),

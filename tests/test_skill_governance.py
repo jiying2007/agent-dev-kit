@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import csv
-import json
 import unittest
 from pathlib import Path
 from typing import Any
@@ -33,18 +31,6 @@ class SkillGovernanceTests(unittest.TestCase):
         self.assertTrue(
             any(row["type"] == "context-prerequisite" for row in relationships["typed_relationships"])
         )
-
-    def test_eval_suite_datasets_exist_and_guardrail_cases_are_balanced(self) -> None:
-        suites = json.loads((ROOT / "manifests/eval_suites.json").read_text(encoding="utf-8"))["suites"]
-        for suite in suites:
-            path = ROOT / suite["dataset_path"]
-            self.assertTrue(path.is_file(), f"{suite['id']} references missing dataset: {path}")
-        guardrail_path = ROOT / "tests/fixtures/guardrail_regression_cases.tsv"
-        with guardrail_path.open(encoding="utf-8", newline="") as stream:
-            rows = list(csv.DictReader(stream, delimiter="\t"))
-        self.assertEqual({row["category"] for row in rows}, {"positive", "negative", "adversarial", "borderline"})
-        self.assertEqual({row["expected"] for row in rows}, {"trigger", "do-not-trigger", "analyze-with-boundary"})
-        self.assertEqual(len({row["case_id"] for row in rows}), len(rows))
 
     def test_routing_primaries_resolve_to_primary_runtime_role(self) -> None:
         routing = self.manifest.data.get("routing")

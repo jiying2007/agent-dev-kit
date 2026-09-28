@@ -423,8 +423,8 @@ run_parallel() {
   init_pilot "$PILOT_ID"
   cat > "$PILOT_DIR/task-packages.tsv" <<'EOF'
 task_id	scope_write	must_not_touch	verify
-driver-doc	docs/driver-bringup.md	manifest.yaml	rtk bash tests/test_templates.sh
-test-runner	scripts/run-embedded-workflow-pilots.sh	manifest.yaml	rtk bash tests/test_embedded_workflow_pilots.sh
+driver-doc	docs/driver-bringup.md	manifest.json	rtk bash tests/test_templates.sh
+test-runner	scripts/run-embedded-workflow-pilots.sh	manifest.json	rtk bash tests/test_embedded_workflow_pilots.sh
 pilot-doc	docs/pilots/embedded-parallel-worktree-governance.md	scripts/run-embedded-workflow-pilots.sh	rtk bash scripts/pilot-readiness.sh --pilot embedded-parallel-worktree-governance
 EOF
   cat > "$PILOT_DIR/conflict-matrix.md" <<'EOF'

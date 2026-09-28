@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 from pathlib import Path
 from typing import Sequence
 
@@ -33,6 +34,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     run.add_argument("--model")
     run.add_argument("--condition", choices=("baseline", "adk"), default="adk")
     run.add_argument("--execute", action="store_true")
+    run.add_argument("--approve-budget-usd", type=float)
+    run.add_argument("--approve-unknown-cost", action="store_true")
+    run.add_argument("--max-new-results", type=int)
     run.add_argument("--output")
     run.add_argument("--summary-json", action="store_true")
     report = sub.add_parser("report")
@@ -224,6 +228,18 @@ def main(argv: Sequence[str] | None = None) -> int:
     else:
         if args.runtime is None:
             parser.error("--runtime is required for runtime suite")
+        if args.execute:
+            if args.max_new_results is None or not 0 < args.max_new_results <= len(tasks):
+                parser.error("runtime --execute requires --max-new-results between 1 and the task count")
+            if not args.model:
+                parser.error("runtime --execute requires --model for comparable reports")
+            if args.runtime == "claude":
+                if (args.approve_budget_usd is None or not math.isfinite(args.approve_budget_usd)
+                        or args.approve_budget_usd < args.max_new_results * 0.25):
+                    parser.error("Claude runtime requires a budget covering 0.25 USD per selected result")
+            elif not args.approve_unknown_cost:
+                parser.error("Codex runtime requires --approve-unknown-cost with a result count cap")
+            tasks = tasks[:args.max_new_results]
         plan = runtime_plan(args.runtime, args.condition, len(tasks))
         value = (
             run_runtime(_manifest(), tasks, args.runtime, args.condition, model=args.model)

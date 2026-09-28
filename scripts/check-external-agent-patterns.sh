@@ -4,11 +4,16 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 REQUIRE_LOCAL_SOURCES=0
+MANIFEST_PATH="$ROOT_DIR/manifests/external_agent_pattern_contracts.json"
+REFERENCE_LOCK_PATH=""
+AS_OF=""
+MAX_OBSERVATION_AGE_DAYS=""
 
 usage() {
   cat <<'USAGE'
 Usage:
-  scripts/check-external-agent-patterns.sh [--require-local-sources]
+  scripts/check-external-agent-patterns.sh [--require-local-sources] [--manifest PATH]
+    [--reference-lock PATH] [--as-of YYYY-MM-DD --max-observation-age-days N]
 
 Validates method-only external pattern contracts. Sibling reference clones are
 optional for standalone ADK checkouts. Use --require-local-sources only from a
@@ -22,6 +27,29 @@ while [[ $# -gt 0 ]]; do
       REQUIRE_LOCAL_SOURCES=1
       shift
       ;;
+    --manifest)
+      MANIFEST_PATH="${2:-}"
+      [[ -n "$MANIFEST_PATH" ]] || { echo "[FAIL] --manifest requires a path" >&2; exit 2; }
+      shift 2
+      ;;
+    --reference-lock)
+      REFERENCE_LOCK_PATH="${2:-}"
+      [[ -n "$REFERENCE_LOCK_PATH" ]] || { echo "[FAIL] --reference-lock requires a path" >&2; exit 2; }
+      shift 2
+      ;;
+    --as-of)
+      AS_OF="${2:-}"
+      [[ -n "$AS_OF" ]] || { echo "[FAIL] --as-of requires a date" >&2; exit 2; }
+      shift 2
+      ;;
+    --max-observation-age-days)
+      MAX_OBSERVATION_AGE_DAYS="${2:-}"
+      [[ "$MAX_OBSERVATION_AGE_DAYS" =~ ^[0-9]+$ ]] || {
+        echo "[FAIL] --max-observation-age-days requires a non-negative integer" >&2
+        exit 2
+      }
+      shift 2
+      ;;
     -h|--help)
       usage
       exit 0
@@ -34,16 +62,27 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-python3 - "$ROOT_DIR" "$REQUIRE_LOCAL_SOURCES" <<'PY'
+if [[ -n "$AS_OF" && -z "$MAX_OBSERVATION_AGE_DAYS" ]]; then
+  echo "[FAIL] --as-of requires --max-observation-age-days" >&2
+  exit 2
+fi
+
+python3 - "$ROOT_DIR" "$REQUIRE_LOCAL_SOURCES" "$MANIFEST_PATH" "$REFERENCE_LOCK_PATH" "$AS_OF" "$MAX_OBSERVATION_AGE_DAYS" <<'PY'
 import json
+import re
 import sys
+from datetime import date
 from pathlib import Path
 from urllib.parse import urlparse
 
 root = Path(sys.argv[1])
 require_local_sources = sys.argv[2] == "1"
-manifest_path = root / "manifests/external_agent_pattern_contracts.json"
+manifest_path = Path(sys.argv[3])
+reference_lock_path = Path(sys.argv[4]) if sys.argv[4] else None
+as_of_raw = sys.argv[5]
+max_age_raw = sys.argv[6]
 failures = []
+MAX_MANIFEST_BYTES = 2 * 1024 * 1024
 
 def fail(message):
     failures.append(message)
@@ -53,15 +92,33 @@ def require_keys(obj, keys, label):
         if key not in obj or obj[key] in ("", None, []):
             fail(f"{label} missing key: {key}")
 
-if not manifest_path.is_file():
-    fail("missing manifest: manifests/external_agent_pattern_contracts.json")
-    manifest = {}
-else:
+def unique_object(pairs):
+    value = {}
+    for key, item in pairs:
+        if key in value:
+            raise ValueError(f"duplicate JSON field: {key}")
+        value[key] = item
+    return value
+
+def load_document(path, label, limit):
+    if path.is_symlink() or not path.is_file():
+        fail(f"{label} is missing or a symlink")
+        return {}
     try:
-        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    except json.JSONDecodeError as exc:
-        fail(f"invalid json: {exc}")
-        manifest = {}
+        with path.open("rb") as stream:
+            raw = stream.read(limit + 1)
+        if len(raw) > limit:
+            raise ValueError(f"{label} exceeds byte budget")
+        document = json.loads(raw.decode("utf-8"), object_pairs_hook=unique_object)
+        if not isinstance(document, dict):
+            raise ValueError(f"{label} root must be an object")
+        return document
+    except (OSError, UnicodeError, json.JSONDecodeError, ValueError) as exc:
+        fail(f"invalid {label}: {exc}")
+        return {}
+
+manifest = load_document(manifest_path, "manifest", MAX_MANIFEST_BYTES)
+reference_lock = load_document(reference_lock_path, "reference lock", 1024 * 1024) if reference_lock_path else None
 
 sources = manifest.get("source_refs", [])
 local_policy = manifest.get("local_source_policy", {})
@@ -103,6 +160,7 @@ for source_id in required_sources:
     if source_id not in source_ids:
         fail(f"missing source_ref: {source_id}")
 
+local_observations = {}
 for source in sources:
     sid = source.get("id", "<missing-id>")
     require_keys(source, ["id", "title", "url", "retrieved_at", "decision", "notes"], f"source_ref {sid}")
@@ -111,6 +169,45 @@ for source in sources:
         fail(f"source_ref {sid} has invalid url")
     local_path = source.get("local_path")
     if local_path:
+        require_keys(
+            source,
+            ["reference_pin", "remote_head_observed", "remote_relation", "canonical_checked_at"],
+            f"source_ref {sid}",
+        )
+        if source.get("ancestry_checked") is not False:
+            fail(f"source_ref {sid} must disclose ancestry_checked=false")
+        canonical = urlparse(source.get("url", ""))
+        try:
+            canonical_valid = (
+                canonical.scheme == "https"
+                and canonical.hostname in {"github.com", "gitee.com"}
+                and canonical.username is None
+                and canonical.password is None
+                and canonical.port is None
+                and not canonical.query
+                and not canonical.fragment
+                and len([part for part in canonical.path.split("/") if part]) == 2
+            )
+        except ValueError:
+            canonical_valid = False
+        if not canonical_valid:
+            fail(f"source_ref {sid} canonical URL is invalid")
+        pin, head = source.get("reference_pin"), source.get("remote_head_observed")
+        if any(not isinstance(value, str) or not re.fullmatch(r"[0-9a-f]{40}", value) for value in (pin, head)):
+            fail(f"source_ref {sid} reference pin or observed HEAD is invalid")
+        elif source.get("remote_relation") != ("same" if pin == head else "different"):
+            fail(f"source_ref {sid} remote relation disagrees with exact SHAs")
+        try:
+            checked = date.fromisoformat(source["canonical_checked_at"])
+            retrieved = date.fromisoformat(source["retrieved_at"])
+            if not retrieved <= checked <= date.today():
+                fail(f"source_ref {sid} canonical check date is inconsistent")
+        except (KeyError, TypeError, ValueError):
+            fail(f"source_ref {sid} canonical check date is invalid")
+        observation = (source.get("url"), pin, head, source.get("remote_relation"), source.get("canonical_checked_at"))
+        if local_path in local_observations and local_observations[local_path] != observation:
+            fail(f"source_ref {sid} disagrees with another entry for {local_path}")
+        local_observations[local_path] = observation
         local_relative = Path(local_path)
         if local_relative.is_absolute() or ".." in local_relative.parts:
             fail(f"source_ref {sid} local_path must be a safe relative path")
@@ -118,6 +215,76 @@ for source in sources:
             fail(f"source_ref {sid} local_path missing: {local_path}")
     if source.get("decision") not in {"adopt-method-only", "enhance-metadata-only", "observe-method-only"}:
         fail(f"source_ref {sid} must remain method-only")
+
+def repo_identity(url):
+    if not isinstance(url, str):
+        return None
+    parsed = urlparse(url)
+    try:
+        valid = (
+            parsed.scheme == "https" and parsed.hostname in {"github.com", "gitee.com"}
+            and parsed.username is None and parsed.password is None and parsed.port is None
+            and not parsed.query and not parsed.fragment
+        )
+    except ValueError:
+        valid = False
+    parts = [part for part in parsed.path.split("/") if part]
+    if not valid or len(parts) != 2 or any(part in {".", ".."} for part in parts):
+        return None
+    repo = parts[1][:-4] if parts[1].endswith(".git") else parts[1]
+    return parsed.hostname, parts[0], repo
+
+if reference_lock is not None:
+    if reference_lock.get("schema") != "llm-agent-reference-pins/v2":
+        fail("reference lock schema is unsupported")
+    policy = reference_lock.get("policy", {})
+    if not isinstance(policy, dict) or policy.get("runtime_enablement") is not False or policy.get("pin_is_evidence_not_source") is not True:
+        fail("reference lock policy is not method-only")
+    pins = reference_lock.get("pins", [])
+    if not isinstance(pins, list):
+        fail("reference lock pins must be an array")
+        pins = []
+    by_path = {}
+    for pin_record in pins:
+        if not isinstance(pin_record, dict):
+            fail("reference lock contains a non-object pin")
+            continue
+        if pin_record.get("kind") != "reference-repo":
+            continue
+        path = pin_record.get("path")
+        if not isinstance(path, str) or not path:
+            fail("reference lock has an invalid reference path")
+            continue
+        if path in by_path:
+            fail(f"reference lock has duplicate path: {path}")
+        by_path[path] = pin_record
+    for path, observation in local_observations.items():
+        pin_record = by_path.get(path)
+        if pin_record is None:
+            fail(f"reference lock lacks local source: {path}")
+            continue
+        if repo_identity(pin_record.get("url")) != repo_identity(observation[0]):
+            fail(f"reference lock canonical URL differs: {path}")
+        if pin_record.get("commit") != observation[1]:
+            fail(f"reference lock exact pin differs: {path}")
+
+if max_age_raw:
+    max_age = int(max_age_raw)
+    if max_age > 365:
+        fail("observation freshness budget exceeds 365 days")
+    try:
+        as_of = date.fromisoformat(as_of_raw) if as_of_raw else date.today()
+    except ValueError:
+        fail("observation as-of date is invalid")
+        as_of = None
+    if as_of is not None:
+        for path, observation in local_observations.items():
+            try:
+                checked = date.fromisoformat(observation[4])
+            except (TypeError, ValueError):
+                continue
+            if checked > as_of or (as_of - checked).days > max_age:
+                fail(f"reference observation is stale or from the future: {path}")
 
 candidates = manifest.get("candidate_decisions", [])
 if not candidates:

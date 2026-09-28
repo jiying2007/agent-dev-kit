@@ -320,20 +320,32 @@ bash scripts/devkit.sh benchmark report --input /tmp/adk-benchmark.json --output
 
 ## eval
 
-运行确定性路由评测，或生成/执行 Codex、Claude 的只读真实运行时评测。真实运行时必须显式传 `--execute`；默认只返回执行计划，不产生模型调用费用。baseline 与 ADK 使用同一审批策略；runtime 质量门禁要求综合成功率不低于 0.85、路由准确率不低于 0.90、安全准确率不低于 0.90，且没有 runtime error。
+运行确定性路由评测，或生成/执行 Codex、Claude 的只读真实运行时评测。确定性路由套件只评分 Skill 匹配，`route_accuracy` 等于本套件的路由成功率；输入中的 `expected_safe` 为真实 runtime 评测标签，此套件不执行安全判定，结果显式给出 `safety_evaluated=false`、`safety_accuracy=null`。真实运行时必须显式传 `--execute`；默认只返回执行计划，不产生模型调用费用。baseline 与 ADK 使用同一审批策略；runtime 质量门禁要求综合成功率不低于 0.85、路由准确率不低于 0.90、安全准确率不低于 0.90，且没有 runtime error。
+
+`manifests/eval_suites.json` 是静态目录，不是评分运行结果。目录审计只接受封闭的 grader/fixture 声明并拒绝重复 JSON 字段；即使 `catalog_valid=true`，`grader_executed=false` 与 `runtime_eval_executed=false` 仍须保留。
 
 ```bash
 bash scripts/devkit.sh eval run --suite deterministic --output /tmp/adk-eval.json --summary-json
 bash scripts/devkit.sh eval effect --contract manifests/effect_eval_contract.json --output /tmp/adk-effect-eval.json --summary-json
 bash scripts/devkit.sh eval run --suite runtime --runtime codex --model gpt-5.5 --condition adk --limit 2 --summary-json
-bash scripts/devkit.sh eval run --suite runtime --runtime claude --condition baseline --limit 2 --execute --output /tmp/adk-claude-eval.json
+bash scripts/devkit.sh eval run --suite runtime --runtime claude --model <exact-model> --condition baseline --limit 2 --execute --max-new-results 2 --approve-budget-usd 0.50 --output /tmp/adk-claude-eval.json
+bash scripts/devkit.sh eval run --suite runtime --runtime codex --model <exact-model> --condition baseline --limit 2 --execute --max-new-results 2 --approve-unknown-cost --output /tmp/adk-codex-eval.json
 bash scripts/devkit.sh eval compare --baseline /tmp/codex-baseline.json --candidate /tmp/codex-adk.json --output /tmp/codex-comparison.json
 bash scripts/devkit.sh eval report --input /tmp/adk-eval.json --output /tmp/adk-eval.md
 ```
 
-`eval compare` 只在 candidate 达到质量门禁、三个指标都不回退且至少一个指标有可测提升时通过。比较结果同时记录 baseline/candidate 的总耗时、中位数和 nearest-rank P95，但延迟是 `observational-not-gating`：单次模型运行的抖动不能替代重复实验或统计显著性分析。缺少 executable 或认证时结果必须是 `not-run`。
+确定性与真实 runtime 评测都会在调用 matcher/模型前冻结已选任务序列，并输出 `task_snapshot_frozen=true`；报告中的任务集摘要、逐例 prompt 摘要和评分读取该内存快照。它仍不代表 manifest、源码树或外部 provider 的原子快照。
+真实执行必须指定精确模型和本次最大结果数。Claude 批准预算按每例最高 0.25 USD 预留；Codex 因该入口没有可靠费用回报，需显式确认未知费用。两个 provider 的 prompt 从 stdin 输入，报告只保留固定错误码和受限路由值。计划做 `eval compare` 时，baseline 与 candidate 两次真实执行应使用同一已审模型 ID。
+
+`eval compare` 先要求两份新格式 runtime 报告具有相同的有序任务集摘要、逐例 prompt 摘要与期望标签、grader 合同、请求模型、逐例实际模型和 CLI 版本；未观测到逐例模型时拒绝比较。历史缺身份报告只能归档阅读，不能直接比较。candidate 达到质量门禁、三个聚合指标都不回退、至少一个有可测提升且没有单例 `pass → fail` 退化时才通过。比较结果列出退化/改善 ID，并记录 baseline/candidate 的总耗时、中位数和 nearest-rank P95；延迟仍为 `observational-not-gating`，单次运行抖动不构成统计显著性。任务/模型字段来自报告本身，未被外部认证，比较通过也不授予发布权限。缺少 executable 或认证时结果必须是 `not-run`。
+
+确定性路由报告的 `manifest_sha256` 与 `task_set_sha256` 分别绑定 canonical manifest 和已解析、按原顺序选中评分的任务序列；`task_set_identity_scope=parsed-ordered-selected-task-sequence`，`source_snapshot_atomic=false`。使用 `--limit` 时仍检查整份有界数据集，但摘要只对应前 N 条评分任务。摘要不等于原始任务文件字节、Skill 资产树或原子源码快照。比较两次结果前必须核对这些身份和评分范围。
 
 `eval effect` 使用输入/标签分离并锁定 hash 的 24 例 source/test 数据集，分别覆盖 12 个 OOD 与 12 个 adversarial case，评分 route、safety、trace、outcome，并禁用 `routing.intents` 做组件消融。它不把标签传入 matcher/runtime prompt，但标签仍对源码 reviewer 可见，因此不是密码学意义的 blind trial，也不替代 runtime/field evidence。
+
+`eval effect` 的输入和标签各读取一次，合同 SHA256 与解析评分使用同一已读取字节；输入限 1 MiB、标签限 256 KiB，符号链接被拒绝。`snapshot_atomic=false` 表示这两次读取及 manifest 并非原子快照。
+
+`eval report` 将输入中的任务 ID、分类和结果值按纯文本转义到 Markdown，避免任务数据插入伪造的表格行或摘要字段。该渲染只保护显示结构，不认证输入报告的来源、评分或完成权限。
 
 当前 Software M5 campaign 的唯一 active contract 是 `manifests/software_m5_eval_contract.json`，其 `campaign_id` 与 canonical source version 同步。历史 campaign 只保留在 change/provenance evidence 中，不再维护 version-suffixed active contract 路径。
 
