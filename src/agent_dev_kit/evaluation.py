@@ -345,7 +345,7 @@ def run_runtime(
                 cost_usd = outcome.get("cost_usd")
                 requested_model = outcome.get("requested_model")
                 reported_models = outcome.get("reported_models", [])
-            except ManifestError as exc:
+            except ManifestError:
                 value = {}
                 passed = False
                 elapsed_ms = 0.0

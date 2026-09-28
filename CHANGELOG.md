@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### 7.12.3 source candidate
+- Bind runtime evaluation reports to the selected task sequence, exact requested and observed model, manifest identity, and bounded unknown-cost approval.
+- Strengthen external reference identity, evaluation evidence, and governance checks while keeping Python 3.8 contracts and regression coverage.
+- Reduce Skill trigger matrix quick-test overhead without dropping the full behavior matrix.
+- Advance source identity from 7.12.2 to 7.12.3 for the protected PR version gate; this entry does not declare a release or product qualification.
+
 ## v7.5.0 (2026-09-25)
 
 ### Managed Agent Value evidence trust

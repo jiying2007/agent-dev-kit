@@ -13,7 +13,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence
 
 from .matcher import match_text
-from .evaluation_safety import _deterministic_safety
+from .evaluation_safety import _deterministic_safety as _deterministic_safety
 from .model import Manifest, ManifestError, canonical_json_bytes, sha256_bytes
 
 RUNTIME_THRESHOLDS = {
