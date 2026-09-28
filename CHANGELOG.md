@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### 7.12.5 source candidate
+- Remove the retired fallback-sunset tombstone, matrix and dedicated regression after the runtime compatibility path was already hard-cut.
+- Keep current fallback observability and supported Python-version compatibility unchanged; this release is subtraction-only.
+- Advance source identity from 7.12.4 to 7.12.5 so protected-main source changes never reuse an immutable release identity.
+
 ### 7.12.4 source candidate
 - Freeze the Agent Value receipt test clock so its fixed fixture remains valid across calendar time.
 - Keep an explicit regression that rejects receipts beyond the production 30-day freshness window.
