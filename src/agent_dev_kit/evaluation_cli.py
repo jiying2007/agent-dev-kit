@@ -76,6 +76,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     campaign_plan_parser.add_argument(
         "--contract", default=str(DEFAULT_CAMPAIGN_CONTRACT)
     )
+    campaign_plan_parser.add_argument("--campaign-root")
     campaign_plan_parser.add_argument("--output")
     campaign_plan_parser.add_argument("--summary-json", action="store_true")
     campaign_run_parser = campaign_sub.add_parser("run")
@@ -87,6 +88,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     campaign_run_parser.add_argument("--resume", action="store_true")
     campaign_run_parser.add_argument("--approve-budget-usd", type=float)
     campaign_run_parser.add_argument("--max-new-results", type=int)
+    campaign_run_parser.add_argument("--campaign-root")
     campaign_run_parser.add_argument("--output")
     campaign_run_parser.add_argument("--summary-json", action="store_true")
     campaign_check_parser = campaign_sub.add_parser("check")
@@ -95,6 +97,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     )
     campaign_check_parser.add_argument("--state-dir", required=True)
     campaign_check_parser.add_argument("--certify", action="store_true")
+    campaign_check_parser.add_argument("--campaign-root")
     campaign_check_parser.add_argument("--output")
     campaign_check_parser.add_argument("--summary-json", action="store_true")
     campaign_materialize_parser = campaign_sub.add_parser("materialize-effect")
@@ -104,6 +107,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     campaign_materialize_parser.add_argument("--state-dir", required=True)
     campaign_materialize_parser.add_argument("--effect-plan", required=True)
     campaign_materialize_parser.add_argument("--runtime", choices=("codex", "claude"), required=True)
+    campaign_materialize_parser.add_argument("--campaign-root")
     campaign_materialize_parser.add_argument("--output")
     campaign_materialize_parser.add_argument("--summary-json", action="store_true")
     campaign_report_parser = campaign_sub.add_parser("report")
@@ -112,6 +116,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     certify = sub.add_parser("certify")
     certify.add_argument("--contract", default=str(DEFAULT_CAMPAIGN_CONTRACT))
     certify.add_argument("--state-dir", required=True)
+    certify.add_argument("--campaign-root")
     certify.add_argument("--output")
     certify.add_argument("--summary-json", action="store_true")
     args = parser.parse_args(argv)
@@ -157,7 +162,17 @@ def main(argv: Sequence[str] | None = None) -> int:
             else:
                 print(text, end="")
             return 0
-        contract = Path(args.contract).resolve()
+        campaign_root = (
+            Path(args.campaign_root).expanduser()
+            if getattr(args, "campaign_root", None)
+            else None
+        )
+        raw_contract = Path(args.contract).expanduser()
+        contract = (
+            (campaign_root / raw_contract).resolve()
+            if campaign_root is not None and not raw_contract.is_absolute()
+            else raw_contract.resolve()
+        )
         if args.campaign_action == "materialize-effect":
             value = materialize_effect_campaign(
                 _manifest(),
@@ -165,6 +180,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 Path(args.state_dir),
                 Path(args.effect_plan),
                 args.runtime,
+                campaign_root=campaign_root,
             )
             if args.output:
                 _write_json(Path(args.output), value)
@@ -172,7 +188,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 _json(value)
             return 0
         if args.campaign_action == "plan":
-            value = campaign_plan(_manifest(), contract)
+            value = campaign_plan(_manifest(), contract, campaign_root)
         elif args.campaign_action == "run":
             if args.max_new_results is not None and not args.execute:
                 parser.error("--max-new-results requires campaign run --execute")
@@ -186,12 +202,17 @@ def main(argv: Sequence[str] | None = None) -> int:
                     args.approve_budget_usd,
                     args.resume,
                     args.max_new_results,
+                    campaign_root=campaign_root,
                 )
             else:
-                value = campaign_plan(_manifest(), contract)
+                value = campaign_plan(_manifest(), contract, campaign_root)
         else:
             value = check_campaign(
-                _manifest(), contract, Path(args.state_dir), certify=args.certify
+                _manifest(),
+                contract,
+                Path(args.state_dir),
+                certify=args.certify,
+                campaign_root=campaign_root,
             )
         if getattr(args, "output", None):
             _write_json(Path(args.output), value)
@@ -199,7 +220,24 @@ def main(argv: Sequence[str] | None = None) -> int:
             _json(value)
         return 0 if value.get("status") in ("ready", "checkpointed", "complete", "pass") else 1
     if args.action == "certify":
-        value = check_campaign(_manifest(), Path(args.contract).resolve(), Path(args.state_dir), certify=True)
+        campaign_root = (
+            Path(args.campaign_root).expanduser()
+            if args.campaign_root
+            else None
+        )
+        raw_contract = Path(args.contract).expanduser()
+        contract = (
+            (campaign_root / raw_contract).resolve()
+            if campaign_root is not None and not raw_contract.is_absolute()
+            else raw_contract.resolve()
+        )
+        value = check_campaign(
+            _manifest(),
+            contract,
+            Path(args.state_dir),
+            certify=True,
+            campaign_root=campaign_root,
+        )
         if args.output:
             _write_json(Path(args.output), value)
         if args.summary_json or not args.output:
