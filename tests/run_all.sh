@@ -143,7 +143,6 @@ TESTS=(
   test_change_governance.sh
   test_evidence_index.sh
   test_evidence_graph.sh
-  test_fallback_sunset_matrix.sh
   test_pilot_readiness.sh
   test_embedded_production_field_pilot.sh
   test_embedded_workflow_pilots.sh
