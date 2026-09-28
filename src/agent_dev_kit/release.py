@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence
 
 from .compiler import export_assets
+from .eval_catalog import audit_eval_catalog
 from .versioning import (
     VersioningError,
     validate_version,
@@ -27,6 +28,8 @@ from .model import Manifest, ManifestError, sha256_file, sha256_tree
 
 def check_release(manifest: Manifest) -> Dict[str, Any]:
     failures = manifest.validate(strict=True)
+    eval_catalog = audit_eval_catalog(manifest.root)
+    failures.extend("eval-catalog: " + issue for issue in eval_catalog["issues"])
     supported_adapters = {"claude-code", "opencode"}
     unsupported = sorted(set(manifest.direct_targets()).difference(supported_adapters))
     if unsupported:
@@ -55,6 +58,14 @@ def check_release(manifest: Manifest) -> Dict[str, Any]:
         "version": manifest.version,
         "direct_targets": sorted(manifest.direct_targets()),
         "external_targets": sorted(manifest.external_targets()),
+        "eval_catalog": {
+            "catalog_valid": eval_catalog["catalog_valid"],
+            "catalog_sha256": eval_catalog["catalog_sha256"],
+            "snapshot_atomic": False,
+            "dataset_fixture_alignment_scope": eval_catalog["dataset_fixture_alignment_scope"],
+            "contract_only_suite_count": eval_catalog["contract_only_suite_count"],
+            "runtime_eval_executed": False,
+        },
         "failures": failures,
     }
 

@@ -1,7 +1,7 @@
 ---
 name: adk-interface-contract-design
 description: 定义模块、API、消息和受控生命周期操作的接口契约
-version: 1.3.1
+version: 1.3.2
 last_updated: 2026-09-27
 triggers:
   - "设计接口"

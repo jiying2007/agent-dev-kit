@@ -24,6 +24,10 @@ Every candidate practice must be classified as one of:
 
 The decision record must include the source, mechanism, local applicability, target ADK asset, duplicate check, conflict check, maintenance cost, verification command and rollback boundary.
 
+For method-only source refs that name a local reference repository, keep the current canonical HTTPS repository URL and exact `reference_pin` beside the read-only `remote_head_observed`, `remote_relation`, `canonical_checked_at` and `ancestry_checked=false`. Preserve an old URL as `historical_url` when ownership or routing changed. `retrieved_at` remains the date of the historical method review; a fresh HEAD observation does not prove that method content was reread, that pin ancestry was checked, or that runtime/install adoption was approved. The checker validates these declared identities offline and never fetches a repository.
+
+Standalone ADK checks keep the parent repository optional. In a governed `llm_agent` workspace, pass `--reference-lock ../manifests/reference_pins.json` to the same checker to compare local method source URLs and exact pins with the Root SSOT. The URL comparison only normalizes an optional `.git` suffix; it does not follow redirects or fetch content. Use `--max-observation-age-days N` (optionally with `--as-of YYYY-MM-DD` for a repeatable review) when current HEAD evidence is required. Without that explicit flag the checker validates dates and declared relationships but does not claim the observation is fresh. This is declaration parity, not a SLSA attestation, remote ancestry check or permission to promote the pin.
+
 ## Promotion Rules
 
 - Prompt Engineering promotes into instruction hierarchy, task framing, examples, refusal/failure handling or eval fixtures.

@@ -35,7 +35,7 @@ cat > "$TMP/release-contract.json" <<JSON
 }
 JSON
 
-python -m agent_dev_kit.distribution.promotion_evidence generate \
+python3 -m agent_dev_kit.distribution.promotion_evidence generate \
   --root "$ROOT" \
   --release-contract "$TMP/release-contract.json" \
   --out "$TMP/promotion-evidence.json" \
@@ -52,9 +52,9 @@ python -m agent_dev_kit.distribution.promotion_evidence generate \
   --static-security-result success \
   --deterministic-result success
 
-python -m agent_dev_kit.distribution.promotion_evidence validate "$TMP/promotion-evidence.json"
+python3 -m agent_dev_kit.distribution.promotion_evidence validate "$TMP/promotion-evidence.json"
 
-python - "$TMP/promotion-evidence.json" "$head_sha" "$tree_sha" "$manifest_blob" <<'PY'
+python3 - "$TMP/promotion-evidence.json" "$head_sha" "$tree_sha" "$manifest_blob" <<'PY'
 import json, sys
 path, head, tree, blob = sys.argv[1:]
 value = json.load(open(path, encoding='utf-8'))
@@ -67,7 +67,7 @@ assert value['ci']['regression_matrix']['python'] == ['3.8', '3.11', '3.12']
 assert value['provenance']['subject'] == 'promotion-evidence.json'
 PY
 
-python - "$TMP/promotion-evidence.json" "$TMP/bad-ci.json" <<'PY'
+python3 - "$TMP/promotion-evidence.json" "$TMP/bad-ci.json" <<'PY'
 import json, sys
 src, dst = sys.argv[1:]
 value = json.load(open(src, encoding='utf-8'))
@@ -79,7 +79,7 @@ if python -m agent_dev_kit.distribution.promotion_evidence validate "$TMP/bad-ci
   exit 1
 fi
 
-python - "$TMP/promotion-evidence.json" "$TMP/bad-ref.json" <<'PY'
+python3 - "$TMP/promotion-evidence.json" "$TMP/bad-ref.json" <<'PY'
 import json, sys
 src, dst = sys.argv[1:]
 value = json.load(open(src, encoding='utf-8'))

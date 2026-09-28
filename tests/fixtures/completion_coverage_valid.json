@@ -1,0 +1,32 @@
+{
+  "schema": "adk-completion-coverage-input/v1",
+  "source_snapshot_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "required_checks": [
+    "build",
+    "test"
+  ],
+  "observations": [
+    {
+      "id": "build",
+      "status": "passed",
+      "command": "rtk scripts/devkit.sh validate --strict",
+      "exit_code": 0,
+      "evidence_ref": "ref:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "verified_at": "2026-09-28T11:30:00Z",
+      "verifier": "independent-reviewer",
+      "source_snapshot_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "id": "test",
+      "status": "passed",
+      "command": "rtk tests/test_eval_catalog.sh",
+      "exit_code": 0,
+      "evidence_ref": "ref:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "verified_at": "2026-09-28T11:40:00Z",
+      "verifier": "independent-reviewer",
+      "source_snapshot_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ],
+  "as_of": "2026-09-28T12:00:00Z",
+  "freshness_seconds": 3600
+}

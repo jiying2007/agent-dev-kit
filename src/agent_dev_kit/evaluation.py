@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+import html
 import json
+import math
 import shutil
 import subprocess
 import tempfile
@@ -119,7 +121,7 @@ def _run_codex(
         "--json",
         "-C",
         str(workspace),
-        system + "\n\nRequest:\n" + prompt,
+        "-",
         ]
     )
     started = time.perf_counter()
@@ -128,6 +130,7 @@ def _run_codex(
             command,
             check=False,
             text=True,
+            input=system + "\n\nRequest:\n" + prompt,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             timeout=RUNTIME_TIMEOUT_SECONDS,
@@ -135,10 +138,10 @@ def _run_codex(
     except subprocess.TimeoutExpired as exc:
         raise ManifestError("codex eval timed out after {} seconds".format(RUNTIME_TIMEOUT_SECONDS)) from exc
     except OSError as exc:
-        raise ManifestError("codex eval could not start: {}".format(exc)) from exc
+        raise ManifestError("codex eval could not start") from exc
     elapsed_ms = round((time.perf_counter() - started) * 1000.0, 3)
     if completed.returncode != 0 or not output.is_file():
-        raise ManifestError("codex eval failed: {}".format(completed.stderr.strip()[-500:]))
+        raise ManifestError("codex eval failed")
     return {
         "value": runtime_eval._extract_json_text(output.read_text(encoding="utf-8")),
         "elapsed_ms": elapsed_ms,
@@ -159,8 +162,11 @@ def _run_claude(
     executable = shutil.which("claude")
     if executable is None:
         raise ManifestError("claude runtime is not installed")
-    if max_cost_usd <= 0 or max_cost_usd > 0.25:
+    if not math.isfinite(max_cost_usd) or max_cost_usd <= 0 or max_cost_usd > 0.25:
         raise ManifestError("Claude call budget must be between 0 and 0.25 USD")
+    system_file = workspace / "claude-system-prompt.txt"
+    system_file.write_text(system, encoding="utf-8")
+    system_file.chmod(0o600)
     command = [executable]
     if model:
         command.extend(["--model", model])
@@ -182,11 +188,10 @@ def _run_claude(
         "json",
         "--json-schema",
         json.dumps(OUTPUT_SCHEMA, separators=(",", ":")),
-        "--system-prompt",
-        system,
+        "--system-prompt-file",
+        str(system_file),
         "--max-budget-usd",
         "{:.2f}".format(max_cost_usd),
-        prompt,
         ]
     )
     started = time.perf_counter()
@@ -196,6 +201,7 @@ def _run_claude(
             cwd=str(workspace),
             check=False,
             text=True,
+            input=prompt,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             timeout=RUNTIME_TIMEOUT_SECONDS,
@@ -203,17 +209,10 @@ def _run_claude(
     except subprocess.TimeoutExpired as exc:
         raise ManifestError("claude eval timed out after {} seconds".format(RUNTIME_TIMEOUT_SECONDS)) from exc
     except OSError as exc:
-        raise ManifestError("claude eval could not start: {}".format(exc)) from exc
+        raise ManifestError("claude eval could not start") from exc
     elapsed_ms = round((time.perf_counter() - started) * 1000.0, 3)
     if completed.returncode != 0:
-        detail = completed.stderr.strip() or completed.stdout.strip()
-        try:
-            parsed_error = json.loads(completed.stdout)
-            if isinstance(parsed_error, dict) and parsed_error.get("result"):
-                detail = str(parsed_error["result"])
-        except json.JSONDecodeError:
-            pass
-        raise ManifestError("claude eval failed: {}".format(detail[-500:]))
+        raise ManifestError("claude eval failed")
     try:
         raw = json.loads(completed.stdout)
     except json.JSONDecodeError as exc:
@@ -221,6 +220,8 @@ def _run_claude(
     value = raw.get("structured_output") if isinstance(raw, dict) else None
     if not isinstance(value, dict):
         value = runtime_eval._extract_json_text(completed.stdout)
+    else:
+        value = runtime_eval._extract_json_text(json.dumps(value))
     cost = raw.get("total_cost_usd") if isinstance(raw, dict) else None
     return {
         "value": value,
@@ -308,13 +309,18 @@ def run_runtime(
         raise ManifestError("runtime must be codex or claude")
     if condition not in ("baseline", "adk"):
         raise ManifestError("condition must be baseline or adk")
+    task_snapshot, task_sha256 = runtime_eval._frozen_tasks(tasks)
     system = _catalog_prompt(manifest, condition)
+    allowed_routes = set(BASELINE_CATEGORIES) if condition == "baseline" else {
+        str(item.get("name")) for item in manifest.data.get("skills", [])
+        if isinstance(item, dict) and item.get("name")
+    }
     results: List[Dict[str, Any]] = []
     with tempfile.TemporaryDirectory(prefix="adk-runtime-eval-") as temp:
         workspace = Path(temp)
         schema_path = workspace / "output.schema.json"
         schema_path.write_text(json.dumps(OUTPUT_SCHEMA, indent=2) + "\n", encoding="utf-8")
-        for task in tasks:
+        for task in task_snapshot:
             error: Optional[str] = None
             try:
                 outcome = (
@@ -331,7 +337,8 @@ def run_runtime(
                 value = outcome["value"]
                 expected_route = task["category"] if condition == "baseline" else task["expected_skill"]
                 route_ok = value.get("primary_skill") == expected_route
-                safe_ok = bool(value.get("safe_to_execute")) == bool(task["expected_safe"])
+                value = runtime_eval._extract_json_text(json.dumps(value))
+                safe_ok = value["safe_to_execute"] is task["expected_safe"]
                 passed = route_ok and safe_ok
                 elapsed_ms = outcome["elapsed_ms"]
                 usage = outcome.get("usage", {})
@@ -346,15 +353,16 @@ def run_runtime(
                 cost_usd = None
                 requested_model = model
                 reported_models = []
-                error = str(exc)
+                error = "runtime-evaluation-error"
             results.append(
                 {
                     "id": task["id"],
+                    "prompt_sha256": runtime_eval._prompt_digest(str(task["prompt"])),
                     "category": task["category"],
                     "status": "pass" if passed else "fail",
                     "expected_skill": task["expected_skill"],
                     "expected_route": task["category"] if condition == "baseline" else task["expected_skill"],
-                    "actual_skill": value.get("primary_skill"),
+                    "actual_skill": value.get("primary_skill") if value.get("primary_skill") in allowed_routes else None,
                     "route_ok": route_ok if error is None else False,
                     "expected_safe": task["expected_safe"],
                     "actual_safe": value.get("safe_to_execute"),
@@ -380,6 +388,13 @@ def run_runtime(
     return {
         "schema_version": 1,
         "suite": "runtime-routing",
+        "manifest_sha256": manifest.digest,
+        "task_set_sha256": task_sha256,
+        "task_set_identity_scope": runtime_eval.EVAL_TASK_IDENTITY_SCOPE,
+        "task_snapshot_frozen": True,
+        "grader_contract": runtime_eval.RUNTIME_GRADER_CONTRACT,
+        "prompt_version": RUNTIME_ROUTING_PROMPT_VERSION,
+        "source_snapshot_atomic": False,
         "runtime": runtime,
         "runtime_version": runtime_eval.runtime_version(runtime),
         "requested_model": model,
@@ -404,26 +419,70 @@ def run_runtime(
 
 
 def eval_markdown(report: Mapping[str, Any]) -> str:
+    if not isinstance(report, Mapping):
+        raise ManifestError("eval report must be an object")
+    results = report.get("results", [])
+    if not isinstance(results, list) or any(not isinstance(item, Mapping) for item in results):
+        raise ManifestError("eval report results must be an array of objects")
+    latency = report.get("latency")
+    if latency is not None and not isinstance(latency, Mapping):
+        raise ManifestError("eval report latency must be an object")
+    latency = latency or {}
+
+    def plain(value: Any) -> str:
+        source = str(value if value is not None else "n/a")
+        normalized = " ".join("".join(char if char.isprintable() else " " for char in source).split())
+        escaped = html.escape(normalized, quote=False)
+        return "".join("\\" + char if char in "\\|`*_[]" else char for char in escaped)
+
+    safety_accuracy = report.get("safety_accuracy")
+    scope = report.get("evaluation_scope")
+    scope_text = (
+        ", ".join(scope)
+        if isinstance(scope, list) and all(isinstance(item, str) for item in scope)
+        else "unspecified"
+    )
     lines = [
         "# ADK Evaluation",
         "",
-        "- suite: {}".format(report.get("suite")),
-        "- status: {}".format(report.get("status")),
-        "- total: {}".format(report.get("total")),
-        "- passed: {}".format(report.get("passed")),
-        "- success_rate: {}".format(report.get("success_rate")),
-        "- route_accuracy: {}".format(report.get("route_accuracy", "n/a")),
-        "- safety_accuracy: {}".format(report.get("safety_accuracy", "n/a")),
-        "- latency_median_ms: {}".format((report.get("latency") or {}).get("median_ms", "n/a")),
-        "- latency_p95_ms: {}".format((report.get("latency") or {}).get("p95_ms", "n/a")),
+        "- suite: {}".format(plain(report.get("suite"))),
+        "- status: {}".format(plain(report.get("status"))),
+        "- total: {}".format(plain(report.get("total"))),
+        "- passed: {}".format(plain(report.get("passed"))),
+        "- success_rate: {}".format(plain(report.get("success_rate"))),
+        "- route_accuracy: {}".format(plain(report.get("route_accuracy"))),
+        "- safety_accuracy: {}".format(
+            plain("not-evaluated" if report.get("safety_evaluated") is False else safety_accuracy)
+        ),
+        "- latency_median_ms: {}".format(plain(latency.get("median_ms"))),
+        "- latency_p95_ms: {}".format(plain(latency.get("p95_ms"))),
         "",
         "| Task | Category | Expected | Actual | Status |",
         "|---|---|---|---|---|",
     ]
-    for item in report.get("results", []):
+    if report.get("safety_evaluated") is False:
+        lines.insert(3, "- safety_evaluated: false")
+        lines.insert(3, "- evaluation_scope: {}".format(plain(scope_text)))
+    if report.get("task_set_sha256"):
+        lines[3:3] = [
+            "- manifest_sha256: {}".format(plain(report.get("manifest_sha256"))),
+            "- task_set_sha256: {}".format(plain(report["task_set_sha256"])),
+            "- task_set_identity_scope: {}".format(plain(report.get("task_set_identity_scope"))),
+            "- task_snapshot_frozen: {}".format(plain(str(report.get("task_snapshot_frozen")).lower())),
+            "- source_snapshot_atomic: {}".format(plain(str(report.get("source_snapshot_atomic")).lower())),
+        ]
+    if report.get("grader_contract"):
+        lines[3:3] = [
+            "- grader_contract: {}".format(plain(report["grader_contract"])),
+            "- prompt_version: {}".format(plain(report.get("prompt_version"))),
+            "- requested_model: {}".format(plain(report.get("requested_model"))),
+            "- runtime_version: {}".format(plain(report.get("runtime_version"))),
+        ]
+    for item in results:
         lines.append(
             "| {} | {} | {} | {} | {} |".format(
-                item.get("id"), item.get("category"), item.get("expected_skill"), item.get("actual_skill"), item.get("status")
+                plain(item.get("id")), plain(item.get("category")), plain(item.get("expected_skill")),
+                plain(item.get("actual_skill")), plain(item.get("status"))
             )
         )
     return "\n".join(lines) + "\n"

@@ -2,6 +2,8 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+export PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}"
 
 VERBOSE=0
 FAIL_FAST=0
@@ -99,6 +101,10 @@ TESTS=(
   test_native_campaign_boundaries.sh
   test_target_source_probe.sh
   test_effect_eval.sh
+  test_completion_coverage.sh
+  test_eval_catalog.sh
+  test_external_reference_binding.sh
+  test_runtime_comparison_contract.sh
   test_product_maturity.sh
   test_runtime_bundle.sh
   test_release_manifest_contract.sh
@@ -187,6 +193,10 @@ QUICK_TESTS=(
   test_native_campaign_boundaries.sh
   test_target_source_probe.sh
   test_effect_eval.sh
+  test_completion_coverage.sh
+  test_eval_catalog.sh
+  test_external_reference_binding.sh
+  test_runtime_comparison_contract.sh
   test_runtime_bundle.sh
   test_release_manifest_contract.sh
   test_software_m5_ready.sh
