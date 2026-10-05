@@ -12,6 +12,7 @@ import yaml
 
 from .eval_catalog import audit_eval_catalog
 from .model import Manifest, ManifestError, ensure_within
+from .versioning import version_identity_failures
 
 _KEBAB = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 _PLACEHOLDER = re.compile(r"TODO|TBD|FIXME|待补充|描述待定|示例|占位", re.IGNORECASE)
@@ -360,6 +361,7 @@ def validate_repository(root: Path, *, strict: bool, quick: bool) -> dict[str, A
     failures.extend("eval-catalog: " + issue for issue in eval_catalog["issues"])
 
     if strict and not quick:
+        failures.extend(version_identity_failures(root))
         gates = (
             (["bash", str(root / "scripts" / "check-runtime-boundary.sh")], "runtime-boundary"),
             (

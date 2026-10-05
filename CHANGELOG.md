@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### 7.14.1 source candidate
+- Fail strict non-quick validation early when existing source-version projections are missing or inconsistent; preserve quick behavior.
+- Accept valid linked Git worktrees in the file-mode gate while rejecting accidental discovery of a parent repository.
+- Isolate negative regression fixtures from source symlinks and user checkout hooks; keep inventory and chmod authorization boundaries unchanged.
+- Advance all source-version projections together; this candidate does not declare signed promotion, deployment, or product qualification.
+
 ### 7.14.0 source candidate
 - Add bounded strict JSON parsing and deterministic tool-effect boundary rehearsals without model or executor calls.
 - Split official-document governance into typed read-only stages and isolate regression Git fixtures across supported Python versions.

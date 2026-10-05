@@ -53,9 +53,17 @@ if [[ -n "${INDEX_INVENTORY}" ]]; then
     echo "[FAIL] file mode index inventory is missing or unsafe: ${INDEX_INVENTORY}" >&2
     exit 2
   fi
-elif [[ ! -d "${ROOT}/.git" ]]; then
-  echo "[FAIL] not a git repository: ${ROOT}" >&2
-  exit 1
+else
+  if ! ROOT="$(cd -- "${ROOT}" && pwd -P)"; then
+    echo "[FAIL] not a git repository root" >&2
+    exit 1
+  fi
+  if ! git_root="$(git -C "${ROOT}" rev-parse --show-toplevel 2>/dev/null)" \
+      || ! git_root="$(cd -- "${git_root}" && pwd -P)" \
+      || [[ "${git_root}" != "${ROOT}" ]]; then
+    echo "[FAIL] not a git repository root: ${ROOT}" >&2
+    exit 1
+  fi
 fi
 
 missing=0
