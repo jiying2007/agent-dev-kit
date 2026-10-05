@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 from pathlib import Path
 from typing import Any, Dict, Mapping, Optional
 
@@ -11,6 +10,7 @@ from jsonschema.exceptions import SchemaError
 
 from .model import Manifest, ManifestError
 from .privacy_ref import validate_identifier
+from .strict_json import StrictJSONError, read as read_json
 
 
 CONTRACT_SCHEMA_VERSION = "adk-agent-value-contracts/v1"
@@ -87,8 +87,8 @@ DIAGNOSTIC_ONLY_METRICS = {
 
 def _load_json(path: Path, label: str) -> Dict[str, Any]:
     try:
-        value = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
+        value = read_json(path)
+    except StrictJSONError as exc:
         raise ManifestError("{} is invalid: {}".format(label, exc)) from exc
     if not isinstance(value, dict):
         raise ManifestError("{} must be an object".format(label))

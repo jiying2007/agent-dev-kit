@@ -324,6 +324,34 @@ class EffectTrialsTest(unittest.TestCase):
             self.assertEqual(code, 2)
             self.assertEqual(json.loads(stream.getvalue())["verdict"], "invalid")
 
+    def test_duplicate_json_keys_are_rejected_at_every_depth(self):
+        samples = (
+            '{"plan":{},"plan":{}}',
+            '{"plan":{"policy":{"minimum_tasks":30,"minimum_tasks":1}}}',
+            '{"trials":[{"candidate":[{"run":{"run_id":"a","run_id":"b"}}]}]}',
+            '{"plan":{},"pl\\u0061n":{}}',
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "duplicate.json"
+            for sample in samples:
+                with self.subTest(sample=sample):
+                    path.write_text(sample, encoding="utf-8")
+                    with self.assertRaisesRegex(ManifestError, "duplicate object keys"):
+                        compare_effect_trial_file(path, MANIFEST)
+
+    def test_duplicate_json_cli_is_invalid_without_echoing_payload(self):
+        from agent_dev_kit.evaluation_cli import main
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "duplicate.json"
+            path.write_text('{"sensitive-marker":"private-value","sensitive-marker":null}')
+            stream = io.StringIO()
+            with contextlib.redirect_stdout(stream):
+                code = main(["compare-trials", "--input", str(path), "--summary-json"])
+            self.assertEqual(code, 2)
+            self.assertEqual(json.loads(stream.getvalue())["verdict"], "invalid")
+            self.assertNotIn("sensitive-marker", stream.getvalue())
+            self.assertNotIn("private-value", stream.getvalue())
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,10 +1,14 @@
 # Repeated effect comparison
 
+工具副作用与 MCP 的确定性演练入口为 `scripts/devkit.sh eval boundaries --summary-json`。覆盖 proposal/approval 绑定、撤权、过期、stale target、重复 operation、未知结果对账和非独占恢复，以及 transport、audience、redirect/private destination 和 caller/handle 绑定。只生成 test-only 结果，不执行工具、DNS、网络或外部写入；不替代真实授权与集成证据。副作用契约见 `skills/adk-interface-contract-design/references/tool-effect-contract.md`。
+
 ```bash
 adk eval compare-trials --input campaign.json --output comparison.json --summary-json
 ```
 
 输入格式为 schemas/effect-trials-v1.schema.json。计划与全部 trial 同文件，每个 trial 的 baseline/candidate 项由已有 Run Evidence 加 plan_ref/controls_ref 组成。使用 UTF-8 canonical JSON（sort_keys、separators=(",",":")）计算 sha256，引用形式为 ref:<digest>；计划引用以完整 plan 对象为输入，控制引用以完整 plan.controls 为输入。
+
+输入文件的每层 JSON 对象必须使用唯一键名，包含 Unicode 转义后相同的键。重复键会作为 invalid 拒绝，不能依赖解析器的后值覆盖规则选择计划或证据。
 
 先在版本控制中冻结计划，再采集全部预期任务和重复运行，不能仅提交成功样本。每条件每 trial 包含相同完整 task_id 集合；run_id 必须全局唯一。唯一允许干预是 plan.bundles 指定的两个资产 bundle，其余摘要身份与控制引用保持固定。模型别名无法证明 revision 时使用 alias-unverified，结果保留统计但结论 inconclusive。
 

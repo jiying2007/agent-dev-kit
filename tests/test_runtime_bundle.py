@@ -7,6 +7,9 @@ import sys
 import tarfile
 import tempfile
 import unittest
+import importlib.util
+import shutil
+import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -58,6 +61,66 @@ class RuntimeBundleTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             with self.assertRaisesRegex(ManifestError, "unknown profile"):
                 build_runtime_bundle(self.manifest, Path(temp), "missing-profile")
+
+    def test_identity_uses_isolated_clean_fixture_and_rejects_dirty_source(self) -> None:
+        spec = importlib.util.spec_from_file_location(
+            "runtime_identity_test", ROOT / "scripts/verify-runtime-bundle-identity.py")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        with tempfile.TemporaryDirectory() as temp:
+            fixture = Path(temp) / "source"
+            fixture.mkdir()
+            # Only ADK product/test surfaces enter this synthetic fixture.
+            allowed = {"src", "scripts", "tests", "schemas", "manifests", "agents", "skills",
+                       "optional-skills", "workflows", "profiles", "templates", "fixtures", "docs"}
+            top_level = {"manifest.json", "pyproject.toml", ".version-lock", ".gitignore",
+                         "README.md", "AGENTS.md", "CHANGELOG.md", "CONTEXT.md", "LICENSE", "OWNERS"}
+            excluded = {".git", ".cache", "__pycache__"}
+            if (ROOT / ".git").exists():
+                names = subprocess.check_output(
+                    ["git", "-C", str(ROOT), "ls-files", "--cached", "--others",
+                     "--exclude-standard", "-z"], text=True).split("\0")
+            else:
+                # Docker parity exports source without Git metadata. Walk only
+                # owned surfaces, pruning caches and links before descending.
+                names = [name for name in top_level if (ROOT / name).is_file()]
+                for surface in sorted(allowed):
+                    directory = ROOT / surface
+                    if not directory.is_dir() or directory.is_symlink():
+                        continue
+                    for current, directories, files in os.walk(directory, followlinks=False):
+                        directories[:] = sorted(
+                            name for name in directories
+                            if not name.startswith(".") and name not in excluded
+                            and not (Path(current) / name).is_symlink())
+                        names.extend(str((Path(current) / name).relative_to(ROOT))
+                                     for name in files if not name.startswith("."))
+            for name in sorted(set(names)):
+                if not name or ("/" in name and name.split("/", 1)[0] not in allowed):
+                    continue
+                if "/" not in name and name not in top_level:
+                    continue
+                if excluded.intersection(Path(name).parts):
+                    continue
+                source = ROOT / name
+                if not source.is_file() or source.is_symlink():
+                    continue
+                target = fixture / name
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(source, target)
+            subprocess.run(["git", "init", "-q", str(fixture)], check=True)
+            subprocess.run(["git", "-C", str(fixture), "add", "."], check=True)
+            subprocess.run(["git", "-C", str(fixture), "-c", "user.name=Fixture",
+                            "-c", "user.email=fixture@example.invalid", "-c", "commit.gpgsign=false",
+                            "commit", "-qm", "synthetic identity fixture"], check=True)
+            manifest = Manifest.load(fixture)
+            receipt = module.verify_runtime_bundle_identity(manifest, "embedded-fullstack")
+            self.assertEqual(receipt["status"], "pass")
+            self.assertTrue(receipt["reproducible"])
+            self.assertEqual(receipt["independent_builds"], 2)
+            (fixture / "README.md").write_text("dirty fixture\n")
+            with self.assertRaisesRegex(ManifestError, "clean"):
+                module.verify_runtime_bundle_identity(manifest, "embedded-fullstack")
 
 
 if __name__ == "__main__":

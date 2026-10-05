@@ -13,6 +13,7 @@ from typing import Any, Dict, Iterable, List, Mapping, MutableSet, Optional, Seq
 
 from jsonschema import Draft202012Validator, FormatChecker
 from jsonschema.exceptions import SchemaError
+from .strict_json import StrictJSONError, read as read_json
 
 
 class ManifestError(ValueError):
@@ -134,8 +135,8 @@ class Manifest:
         if not source.is_file():
             raise ManifestError("manifest not found: {}".format(source))
         try:
-            data = json.loads(source.read_text(encoding="utf-8"))
-        except (OSError, json.JSONDecodeError) as exc:
+            data = read_json(source)
+        except StrictJSONError as exc:
             raise ManifestError("invalid JSON manifest: {}".format(exc)) from exc
         if not isinstance(data, dict):
             raise ManifestError("manifest root must be an object")

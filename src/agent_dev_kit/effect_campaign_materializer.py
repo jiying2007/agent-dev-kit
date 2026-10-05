@@ -22,6 +22,7 @@ from .evaluation import RUNTIME_ROUTING_PROMPT_VERSION
 from .model import Manifest, ManifestError, canonical_json_bytes, sha256_bytes, sha256_file
 from .privacy_ref import opaque_ref_for_sha256
 from .run_evidence import RunEvidenceObservation, emit_run_evidence
+from .strict_json import StrictJSONError, read as read_json
 from .trace_summary import (
     CostFact,
     GuardrailFact,
@@ -66,8 +67,8 @@ def _load_effect_plan(path: Path) -> dict[str, Any]:
     if path.stat().st_size > 1024 * 1024:
         raise ManifestError("effect plan exceeds byte budget")
     try:
-        value = json.loads(path.read_text(encoding="utf-8"))
-    except json.JSONDecodeError as exc:
+        value = read_json(path, max_bytes=1024 * 1024)
+    except StrictJSONError as exc:
         raise ManifestError("effect plan is invalid JSON") from exc
     if not isinstance(value, dict):
         raise ManifestError("effect plan must be an object")

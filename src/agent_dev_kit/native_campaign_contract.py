@@ -15,6 +15,7 @@ from typing import Any, Mapping, Sequence
 from .model import Manifest, ManifestError, canonical_json_bytes, sha256_bytes
 from .target_contracts import _native_contract_digest, _schema_failures, load_target_contract
 from .targets import render_selection
+from .strict_json import StrictJSONError, read as read_json
 
 PLAN_SCHEMA = "adk-native-target-campaign-plan/v2"
 EVIDENCE_SCHEMA = "adk-native-target-campaign-evidence/v2"
@@ -123,8 +124,8 @@ def _load_json(path: Path, label: str) -> Any:
     if path.stat().st_size > MAX_JSON_BYTES:
         raise ManifestError(f"{label} exceeds byte budget")
     try:
-        return json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
+        return read_json(path, max_bytes=MAX_JSON_BYTES)
+    except StrictJSONError as exc:
         raise ManifestError(f"{label} is invalid JSON") from exc
 
 

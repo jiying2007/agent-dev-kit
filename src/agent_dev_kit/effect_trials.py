@@ -19,6 +19,7 @@ from . import effect_comparator as _effects
 from .contracts.schema_loader import packaged_schema_bytes
 from .model import Manifest, ManifestError, canonical_json_bytes, sha256_bytes
 from .privacy_ref import validate_no_secrets
+from .strict_json import StrictJSONError, loads as load_json_bytes
 
 INPUT_SCHEMA = "adk-effect-trials/v1"
 OUTPUT_SCHEMA = "adk-effect-trial-comparison/v1"
@@ -256,7 +257,7 @@ def compare_effect_trial_file(path: Path, manifest: Manifest) -> dict[str, Any]:
     if len(data) > MAX_INPUT_BYTES:
         raise ManifestError("effect trial input exceeds byte budget")
     try:
-        document = json.loads(data)
-    except (ValueError, UnicodeError) as exc:
-        raise ManifestError("invalid effect trial JSON") from exc
+        document = load_json_bytes(data, max_bytes=MAX_INPUT_BYTES)
+    except StrictJSONError as exc:
+        raise ManifestError("invalid effect trial JSON: {}".format(exc)) from exc
     return compare_effect_trials(document, manifest)

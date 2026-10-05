@@ -3,14 +3,14 @@
 from __future__ import annotations
 
 import copy
-import json
 import math
 from pathlib import Path
 from typing import Any, Dict, List, Mapping
 
-from .evaluation_runtime import MAX_EFFECT_INPUT_BYTES, _deterministic_safety, _load_effect_inputs, _prompt_digest, _unique_eval_object
+from .evaluation_runtime import MAX_EFFECT_INPUT_BYTES, _deterministic_safety, _load_effect_inputs, _prompt_digest
 from .matcher import match_text
 from .model import Manifest, ManifestError, ensure_within, sha256_bytes
+from .strict_json import StrictJSONError, loads as load_json_bytes
 
 EFFECT_CONTRACT_SCHEMA = "adk-effect-eval-contract/v1"
 EFFECT_LABEL_SCHEMA = "adk-effect-eval-labels/v1"
@@ -43,8 +43,8 @@ def run_effect_eval(manifest: Manifest, contract_path: Path) -> Dict[str, Any]:
         raise ManifestError("effect eval contract must not be a symlink")
     contract_path = ensure_within(contract_path.resolve(), manifest.root, "effect eval contract")
     try:
-        contract = json.loads(_read_bounded(contract_path, MAX_EFFECT_CONTRACT_BYTES, "contract").decode("utf-8"), object_pairs_hook=_unique_eval_object)
-    except (OSError, UnicodeError, json.JSONDecodeError, ManifestError) as exc:
+        contract = load_json_bytes(_read_bounded(contract_path, MAX_EFFECT_CONTRACT_BYTES, "contract"), max_bytes=MAX_EFFECT_CONTRACT_BYTES)
+    except (OSError, StrictJSONError, ManifestError) as exc:
         raise ManifestError("effect eval contract is invalid") from exc
     if not isinstance(contract, dict) or contract.get("schema") != EFFECT_CONTRACT_SCHEMA:
         raise ManifestError("unsupported effect eval contract schema")
@@ -80,8 +80,8 @@ def run_effect_eval(manifest: Manifest, contract_path: Path) -> Dict[str, Any]:
             raise ManifestError("effect eval {} does not match contract digest".format(key))
     inputs = _load_effect_inputs(inputs_path, inputs_raw)
     try:
-        label_document = json.loads(labels_raw.decode("utf-8"), object_pairs_hook=_unique_eval_object)
-    except (UnicodeError, json.JSONDecodeError, ManifestError) as exc:
+        label_document = load_json_bytes(labels_raw, max_bytes=MAX_EFFECT_LABEL_BYTES)
+    except (StrictJSONError, ManifestError) as exc:
         raise ManifestError("effect eval labels are invalid") from exc
     if not isinstance(label_document, dict) or label_document.get("schema") != EFFECT_LABEL_SCHEMA:
         raise ManifestError("unsupported effect eval label schema")

@@ -15,6 +15,7 @@ from typing import Any, Dict, List, Mapping, Optional, Sequence
 from .matcher import match_text
 from .evaluation_safety import _deterministic_safety as _deterministic_safety
 from .model import Manifest, ManifestError, canonical_json_bytes, sha256_bytes
+from .strict_json import StrictJSONError, loads as load_json_bytes
 
 RUNTIME_THRESHOLDS = {
     "success_rate": 0.85,
@@ -64,8 +65,8 @@ def _load_effect_inputs(path: Path, raw_bytes: Optional[bytes] = None) -> List[D
         if not raw.strip():
             continue
         try:
-            item = json.loads(raw, object_pairs_hook=_unique_eval_object)
-        except (json.JSONDecodeError, ManifestError) as exc:
+            item = load_json_bytes(raw, max_bytes=MAX_EFFECT_INPUT_BYTES)
+        except StrictJSONError as exc:
             raise ManifestError("invalid effect eval input at line {}".format(line_number)) from exc
         if not isinstance(item, dict) or set(item) != {"id", "split", "category", "prompt"}:
             raise ManifestError("effect eval input fields are invalid at line {}".format(line_number))
@@ -126,9 +127,10 @@ def load_tasks(path: Path, limit: Optional[int] = None) -> List[Mapping[str, Any
         if not raw.strip():
             continue
         try:
-            task = json.loads(raw, object_pairs_hook=_unique_eval_object)
-        except json.JSONDecodeError as exc:
-            raise ManifestError("invalid eval task at line {}: {}".format(line_number, exc)) from exc
+            task = load_json_bytes(raw, max_bytes=MAX_EVAL_TASK_BYTES)
+        except StrictJSONError as exc:
+            reason = "duplicate JSON field" if "duplicate object keys" in str(exc) else str(exc)
+            raise ManifestError("invalid eval task at line {}: {}".format(line_number, reason)) from exc
         if not isinstance(task, dict):
             raise ManifestError("eval task line {} must be an object".format(line_number))
         for field in ("id", "category", "prompt", "expected_skill", "expected_safe"):
@@ -173,11 +175,14 @@ def _frozen_tasks(tasks: Sequence[Mapping[str, Any]]) -> tuple[List[Mapping[str,
     _validated_task_ids(tasks)
     try:
         encoded = canonical_json_bytes(list(tasks))
-        snapshot = json.loads(encoded)
     except (TypeError, ValueError) as exc:
         raise ManifestError("eval tasks are not JSON serializable") from exc
     if len(encoded) > MAX_EVAL_TASK_BYTES:
         raise ManifestError("eval task snapshot exceeds byte budget")
+    try:
+        snapshot = load_json_bytes(encoded, max_bytes=MAX_EVAL_TASK_BYTES)
+    except StrictJSONError as exc:
+        raise ManifestError("eval task snapshot is invalid JSON") from exc
     return snapshot, sha256_bytes(encoded)
 
 
