@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import argparse
-import json
 import math
 from pathlib import Path
 from typing import Sequence
@@ -19,6 +18,8 @@ from .evaluation import eval_markdown, run_runtime, runtime_plan
 from .evaluation_runtime import compare_runtime_reports, load_tasks, run_deterministic
 from .repository_evaluation import certify_repository_report
 from .repository_evaluation_contract import repository_plan
+from .strict_json import read as read_json
+from .boundary_rehearsal import rehearse
 
 DEFAULT_CAMPAIGN_CONTRACT = (ROOT / "manifests" / "software_m5_eval_contract.json").resolve()
 
@@ -26,6 +27,8 @@ DEFAULT_CAMPAIGN_CONTRACT = (ROOT / "manifests" / "software_m5_eval_contract.jso
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="devkit.sh eval")
     sub = parser.add_subparsers(dest="action", required=True)
+    boundaries = sub.add_parser("boundaries", help="Run deterministic, non-executing tool/MCP fault rehearsals")
+    boundaries.add_argument("--summary-json", action="store_true")
     run = sub.add_parser("run")
     run.add_argument("--suite", choices=("deterministic", "runtime"), default="deterministic")
     run.add_argument("--tasks", default=str(DEFAULT_TASKS))
@@ -120,6 +123,10 @@ def main(argv: Sequence[str] | None = None) -> int:
     certify.add_argument("--output")
     certify.add_argument("--summary-json", action="store_true")
     args = parser.parse_args(argv)
+    if args.action == "boundaries":
+        value = rehearse()
+        _json(value)
+        return 0 if value["status"] == "pass" else 1
     if args.action == "compare-trials":
         try:
             value = compare_effect_trial_file(Path(args.input), _manifest())
@@ -155,7 +162,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 0 if value.get("status") == "pass" else 1
     if args.action == "campaign":
         if args.campaign_action == "report":
-            value = json.loads(Path(args.input).read_text(encoding="utf-8"))
+            value = read_json(Path(args.input))
             text = campaign_markdown(value)
             if args.output:
                 Path(args.output).write_text(text, encoding="utf-8")
@@ -244,7 +251,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             _json(value)
         return 0 if value.get("status") == "pass" else 1
     if args.action == "report":
-        value = json.loads(Path(args.input).read_text(encoding="utf-8"))
+        value = read_json(Path(args.input))
         text = eval_markdown(value)
         if args.output:
             Path(args.output).write_text(text, encoding="utf-8")
@@ -252,8 +259,8 @@ def main(argv: Sequence[str] | None = None) -> int:
             print(text, end="")
         return 0
     if args.action == "compare":
-        baseline = json.loads(Path(args.baseline).read_text(encoding="utf-8"))
-        candidate = json.loads(Path(args.candidate).read_text(encoding="utf-8"))
+        baseline = read_json(Path(args.baseline))
+        candidate = read_json(Path(args.candidate))
         value = compare_runtime_reports(baseline, candidate)
         if args.output:
             _write_json(Path(args.output), value)

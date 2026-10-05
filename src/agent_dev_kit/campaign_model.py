@@ -13,6 +13,7 @@ from typing import Any, Callable, Dict, List, Mapping, Optional, Sequence, Tuple
 from .evaluation import BASELINE_CATEGORIES
 from .evaluation_runtime import load_tasks
 from .model import Manifest, ManifestError, ensure_within
+from .strict_json import StrictJSONError, read as read_json
 
 CONTRACT_SCHEMA = "adk-runtime-eval-campaign/v1"
 PLAN_SCHEMA = "adk-runtime-eval-campaign-plan/v1"
@@ -42,9 +43,9 @@ def _write_json_atomic(path: Path, value: Any) -> None:
 
 def _load_json_object(path: Path, label: str) -> Dict[str, Any]:
     try:
-        value = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
-        raise ManifestError("invalid {} JSON: {}".format(label, path)) from exc
+        value = read_json(path)
+    except StrictJSONError as exc:
+        raise ManifestError("invalid {} JSON: {}".format(label, exc)) from exc
     if not isinstance(value, dict):
         raise ManifestError("{} JSON root must be an object".format(label))
     return value

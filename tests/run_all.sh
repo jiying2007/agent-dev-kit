@@ -3,7 +3,11 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+INVOKED_FROM="$PWD"
 export PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}"
+# Package imports and tests using Path.cwd() must resolve inside ADK even when
+# this entrypoint is invoked from a consumer repository.
+cd "$ROOT_DIR"
 
 VERBOSE=0
 FAIL_FAST=0
@@ -63,6 +67,10 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
+if [[ -n "$TIMING_JSON" && "$TIMING_JSON" != /* ]]; then
+  TIMING_JSON="$INVOKED_FROM/$TIMING_JSON"
+fi
+
 [[ "$MAX_FAILURE_LINES" =~ ^[0-9]+$ ]] || {
   echo "[FAIL] --max-failure-lines must be numeric" >&2
   exit 1
@@ -75,6 +83,8 @@ done
 TESTS=(
   test_validate.sh
   test_manifest_contract.sh
+  test_strict_json.sh
+  test_boundary_rehearsal.sh
   test_contract_registry.sh
   test_schema_resource_sync.sh
   test_manifest_consumer_boundary.sh
@@ -174,6 +184,8 @@ TESTS=(
 QUICK_TESTS=(
   test_validate.sh
   test_manifest_contract.sh
+  test_strict_json.sh
+  test_boundary_rehearsal.sh
   test_contract_registry.sh
   test_schema_resource_sync.sh
   test_manifest_consumer_boundary.sh

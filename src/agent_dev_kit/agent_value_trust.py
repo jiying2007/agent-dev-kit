@@ -9,13 +9,13 @@ mutation.
 from __future__ import annotations
 
 import hashlib
-import json
 from pathlib import Path
 from typing import Any, Mapping
 
 from . import agent_value_contracts as value_contracts
 from .model import Manifest, ManifestError, canonical_json_bytes, ensure_within
 from .sigstore_blob import verify_sigstore_blob
+from .strict_json import StrictJSONError, read as read_json
 
 REGISTRY_SCHEMA = "adk-agent-value-trust-registry/v1"
 MAX_REGISTRY_BYTES = 256 * 1024
@@ -33,8 +33,8 @@ def _json_object(path: Path, *, limit: int, label: str) -> Mapping[str, Any]:
     if path.stat().st_size > limit:
         raise ManifestError(f"{label} exceeds byte budget: {path}")
     try:
-        value = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
+        value = read_json(path, max_bytes=limit)
+    except StrictJSONError as exc:
         raise ManifestError(f"{label} is invalid JSON: {path}") from exc
     if not isinstance(value, dict):
         raise ManifestError(f"{label} must be a JSON object: {path}")
