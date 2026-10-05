@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### 7.14.0 source candidate
+- Add bounded strict JSON parsing and deterministic tool-effect boundary rehearsals without model or executor calls.
+- Split official-document governance into typed read-only stages and isolate regression Git fixtures across supported Python versions.
+- Advance source identity before protected-main integration; this candidate does not declare promotion, runtime deployment, or product qualification.
+
 ### 7.13.0 source candidate
 - Allow consumer repositories to own runtime campaign contracts and task sets under an explicit bounded `--campaign-root` while keeping ADK implementation identity pinned to the ADK source.
 - Fail closed when campaign contracts/tasks escape the governed root or when the supplied campaign root is missing, unsafe, or a symlink.
