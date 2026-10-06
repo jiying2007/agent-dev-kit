@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import json
+import math
 import os
 import shutil
 import socket
@@ -13,6 +13,8 @@ from pathlib import Path
 from typing import Any, Dict, Optional
 
 from .model import ManifestError
+from .atomic_io import encode_json_document, write_text_atomic
+from .strict_json import StrictJSONError, read as read_json
 
 
 LOCK_SCHEMA = "adk-target-lock/v1"
@@ -29,6 +31,8 @@ def _parse_time(value: str) -> float:
         parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
     except (TypeError, ValueError) as exc:
         raise ManifestError("target lock has an invalid created_at") from exc
+    if parsed.tzinfo is None or parsed.utcoffset() is None:
+        raise ManifestError("target lock created_at must include a timezone")
     return parsed.timestamp()
 
 
@@ -45,18 +49,26 @@ def _read_metadata(lock_path: Path) -> Dict[str, Any]:
     if not metadata_path.is_file() or metadata_path.is_symlink():
         raise ManifestError("target lock metadata is missing or unsafe: {}".format(metadata_path))
     try:
-        value = json.loads(metadata_path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
+        value = read_json(metadata_path, regular_only=True)
+    except (OSError, StrictJSONError) as exc:
         raise ManifestError("target lock metadata is invalid: {}".format(metadata_path)) from exc
     if not isinstance(value, dict) or value.get("schema") != LOCK_SCHEMA:
         raise ManifestError("unsupported target lock metadata")
     for field in ("lock_id", "target", "operation", "host", "pid", "created_at"):
         if field not in value:
             raise ManifestError("target lock metadata is missing {}".format(field))
+    for field in ("lock_id", "target", "operation", "host", "created_at"):
+        if not isinstance(value[field], str) or not value[field]:
+            raise ManifestError("target lock metadata has invalid {}".format(field))
+    if isinstance(value["pid"], bool) or not isinstance(value["pid"], int) or value["pid"] <= 0:
+        raise ManifestError("target lock metadata has invalid pid")
+    _parse_time(value["created_at"])
     return value
 
 
 def target_lock_status(target: Path, stale_seconds: int = DEFAULT_STALE_SECONDS) -> Dict[str, Any]:
+    if isinstance(stale_seconds, bool) or not isinstance(stale_seconds, int) or stale_seconds < 0:
+        raise ManifestError("target lock stale seconds must be a non-negative integer")
     target = target.expanduser().resolve()
     lock_path = lock_path_for(target)
     if not lock_path.exists() and not lock_path.is_symlink():
@@ -73,9 +85,17 @@ def target_lock_status(target: Path, stale_seconds: int = DEFAULT_STALE_SECONDS)
     owner_alive: Optional[bool] = None
     if metadata.get("host") == socket.gethostname():
         try:
-            os.kill(int(metadata["pid"]), 0)
-        except (OSError, ValueError):
+            os.kill(metadata["pid"], 0)
+        except ProcessLookupError:
             owner_alive = False
+        except PermissionError:
+            # EPERM proves the process exists; lack of signal permission is
+            # never evidence that a live owner's lock may be cleared.
+            owner_alive = True
+        except (OverflowError, ValueError) as exc:
+            raise ManifestError("target lock pid is outside the platform range") from exc
+        except OSError:
+            owner_alive = None
         else:
             owner_alive = True
     return {
@@ -106,6 +126,8 @@ def clear_target_lock(target: Path, expected_lock_id: str) -> Dict[str, Any]:
         raise ManifestError("target lock ID does not match; refusing clear")
     if status.get("owner_alive") is True:
         raise ManifestError("target lock owner is still active; refusing clear")
+    if status.get("owner_alive") is None and status.get("host") == socket.gethostname():
+        raise ManifestError("local target lock owner state is unknown; refusing clear")
     if status.get("owner_alive") is None and status.get("stale") is not True:
         raise ManifestError("remote target lock is not stale; refusing clear")
     metadata = _read_metadata(lock_path)
@@ -124,9 +146,10 @@ class TargetLock:
     """Fail-closed target lock with optional bounded waiting."""
 
     def __init__(self, target: Path, operation: str, timeout_seconds: float = 0.0) -> None:
-        if not operation or len(operation) > 80:
+        if not isinstance(operation, str) or not operation or len(operation) > 80:
             raise ManifestError("target lock operation must be 1-80 characters")
-        if timeout_seconds < 0 or timeout_seconds > 300:
+        if (isinstance(timeout_seconds, bool) or not isinstance(timeout_seconds, (int, float))
+                or timeout_seconds < 0 or timeout_seconds > 300 or not math.isfinite(timeout_seconds)):
             raise ManifestError("target lock timeout must be between 0 and 300 seconds")
         self.target = target.expanduser().resolve()
         self.operation = operation
@@ -164,10 +187,9 @@ class TargetLock:
             "created_at": _utc_now(),
         }
         metadata_path = self.path / LOCK_METADATA
-        temp_path = self.path / (LOCK_METADATA + ".tmp")
         try:
-            temp_path.write_text(json.dumps(metadata, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-            os.replace(str(temp_path), str(metadata_path))
+            text = encode_json_document(metadata, "target lock metadata")
+            write_text_atomic(text, metadata_path)
         except Exception:
             shutil.rmtree(str(self.path), ignore_errors=True)
             raise
