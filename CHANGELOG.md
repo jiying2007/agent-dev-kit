@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### 8.0.1 source candidate
+- Publish install plans and receipts through exclusively created random temporary files in the destination directory; flush/fsync/close before replacement and clean only the newly created temporary file.
+- Preserve preexisting predictable `.tmp` files, links and FIFOs, reject unsafe output leaves, and keep existing JSON budgets and installation rollback behavior.
+- Publish these documents with private POSIX permissions (0600); parent-directory control, concurrent same-user writers and crash recovery remain caller responsibilities.
+- Advance source projections together; source tests do not establish signed publication, consumer adoption, model gains or product qualification.
+
 ### 8.0.0 source candidate
 - Breaking: maintenance cleanup/optimization is report-only; unreviewed `--apply` returns blocked with exit 2. Consumers must migrate to `adk-maintenance-plan/v1`, `status=planned`, `applied=false`; no automatic deletion or chmod is available.
 - Inventory only `.cache` and `dist`, preserve protected directories, bound entries and nesting, and traverse opened directory descriptors without following replacement symlinks. Unsupported safe-descriptor platforms fail closed.

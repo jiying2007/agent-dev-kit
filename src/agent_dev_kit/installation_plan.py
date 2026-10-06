@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import os
 import re
 import uuid
 from datetime import timedelta
@@ -114,11 +113,7 @@ def create_plan(
 
 def write_plan(plan: Mapping[str, Any], output: Path) -> None:
     text = install_contract._encode_document(plan, "install plan")
-    output = output.resolve()
-    output.parent.mkdir(parents=True, exist_ok=True)
-    temp = output.with_name(output.name + ".tmp")
-    temp.write_text(text, encoding="utf-8")
-    os.replace(str(temp), str(output))
+    install_contract._write_document(text, output)
 
 
 def validate_plan(manifest: Manifest, plan: Mapping[str, Any]) -> Tuple[Path, RenderedBundle]:
