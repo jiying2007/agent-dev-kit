@@ -84,6 +84,7 @@ TESTS=(
   test_validate.sh
   test_manifest_contract.sh
   test_strict_json.sh
+  test_contract_hardening.sh
   test_boundary_rehearsal.sh
   test_contract_registry.sh
   test_schema_resource_sync.sh
@@ -185,6 +186,7 @@ QUICK_TESTS=(
   test_validate.sh
   test_manifest_contract.sh
   test_strict_json.sh
+  test_contract_hardening.sh
   test_boundary_rehearsal.sh
   test_contract_registry.sh
   test_schema_resource_sync.sh

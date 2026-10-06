@@ -46,6 +46,25 @@ record_failure() {
   failures+=("$1")
 }
 
+if ! command -v rg >/dev/null 2>&1; then
+  echo '[FAIL] ripgrep is required for runtime boundary verification' >&2
+  exit 2
+fi
+
+scan_forbidden() {
+  local label="$1"
+  shift
+  local output status=0 hit
+  output="$(rg "$@")" || status=$?
+  if [[ "$status" -gt 1 ]]; then
+    record_failure "$label scan failed (exit=$status)"
+    return 0
+  fi
+  while IFS= read -r hit; do
+    [[ -z "$hit" ]] || record_failure "$label: $hit"
+  done <<< "$output"
+}
+
 if adk_tool_exists "codex"; then
   record_failure "manifest tool_targets must not include codex"
 fi
@@ -107,24 +126,17 @@ for stale in \
   fi
 done
 
-while IFS= read -r hit; do
-  [[ -z "$hit" ]] && continue
-  record_failure "source-branded active command residue: $hit"
-done < <(
-  rg -n 'check-openai-developers-governance|check-openai-runtime-capabilities|openai-governance|openai-runtime-capabilities|test_openai_developers_governance|test_openai_runtime_capabilities|fixtures/openai-runtime-capabilities' \
+scan_forbidden "source-branded active command residue" \
+  -n 'check-openai-developers-governance|check-openai-runtime-capabilities|openai-governance|openai-runtime-capabilities|test_openai_developers_governance|test_openai_runtime_capabilities|fixtures/openai-runtime-capabilities' \
     "$ROOT_DIR/scripts" \
     "$ROOT_DIR/tests" \
     "$ROOT_DIR/docs" \
     "$ROOT_DIR/README.md" \
     "$ROOT_DIR/manifests" \
-    -g '!check-runtime-boundary.sh' || true
-)
+    -g '!check-runtime-boundary.sh'
 
-while IFS= read -r hit; do
-  [[ -z "$hit" ]] && continue
-  record_failure "Codex-bound residue in active runtime surface: $hit"
-done < <(
-  rg -n 'codex|Codex|\.codex|~/codex' \
+scan_forbidden "Codex-bound residue in active runtime surface" \
+  -n 'codex|Codex|\.codex|~/codex' \
     "$ROOT_DIR/scripts" \
     "$ROOT_DIR/tests" \
     -g '!check-runtime-boundary.sh' \
@@ -134,8 +146,7 @@ done < <(
     -g '!test_runtime_comparison_contract.py' \
     -g '!test_software_m5_ready.sh' \
     -g '!software_m5_eval_contract_small.json' \
-    -g '!software_m5_eval_tasks*.jsonl' || true
-)
+    -g '!software_m5_eval_tasks*.jsonl'
 
 if [[ "${#failures[@]}" -gt 0 ]]; then
   if [[ "$SUMMARY_JSON" -eq 1 ]]; then

@@ -20,13 +20,13 @@ Commands:
   daily                  每日运维
   weekly                 每周运维
   monthly                每月运维
-  cleanup                清理临时文件
-  optimize               优化性能
+  cleanup                生成只读维护计划
+  optimize               生成只读维护计划
   security               安全检查
 
 Options:
   --dry-run              report-only 兼容别名（默认行为）
-  --apply                执行写入、清理、备份或报告生成动作
+  --apply                未受审的维护写入将拒绝；默认仅报告
   --force                强制执行；必须与 --apply 同时使用
   --summary-json         输出低 token JSON 摘要
   -h, --help             显示帮助
@@ -34,8 +34,8 @@ Options:
 Examples:
   ./scripts/auto-ops.sh daily
   ./scripts/auto-ops.sh weekly --summary-json
-  ./scripts/auto-ops.sh cleanup --apply
-  ./scripts/auto-ops.sh optimize --apply
+  ./scripts/auto-ops.sh cleanup --summary-json
+  ./scripts/auto-ops.sh optimize --summary-json
 USAGE
 }
 
@@ -221,57 +221,21 @@ monthly_ops() {
 }
 
 cleanup_temp_files() {
-    log_info "清理临时文件"
-    
-    # 清理临时目录
-    find "$ROOT_DIR" -name "*.tmp" -type f -mtime +7 -delete 2>/dev/null || true
-    find "$ROOT_DIR" -name "*.log" -type f -mtime +30 -delete 2>/dev/null || true
-    find "$ROOT_DIR" -name "*.bak" -type f -mtime +7 -delete 2>/dev/null || true
-    
-    # 清理构建目录
-    if [[ -d "$ROOT_DIR/dist" ]]; then
-        rm -rf "$ROOT_DIR/dist"
-        log_info "清理构建目录"
-    fi
-    
-    log_success "临时文件清理完成"
+    log_info 'report-only maintenance; source, backups and verification receipts preserved'
+    PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}" \
+        python3 -m agent_dev_kit.maintenance_plan --root "$ROOT_DIR" --level basic
 }
 
 cleanup_old_backups() {
-    log_info "清理旧备份"
-    
-    local backup_dir="$ROOT_DIR/.backups"
-    if [[ -d "$backup_dir" ]]; then
-        # 保留最近30天的备份
-        find "$backup_dir" -name "backup-*.tar.gz" -type f -mtime +30 -delete 2>/dev/null || true
-        log_success "旧备份清理完成"
-    else
-        log_info "无备份目录"
-    fi
+    log_info 'report-only maintenance; source, backups and verification receipts preserved'
+    PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}" \
+        python3 -m agent_dev_kit.maintenance_plan --root "$ROOT_DIR" --level basic
 }
 
 optimize_performance() {
-    log_info "优化性能"
-    
-    # 1. 优化脚本权限
-    log_info "优化脚本权限"
-    find "$ROOT_DIR/scripts" -name "*.sh" -type f -exec chmod +x {} \;
-    find "$ROOT_DIR/tests" -name "*.sh" -type f -exec chmod +x {} \;
-    
-    # 2. 清理缓存
-    log_info "清理缓存"
-    if [[ -d "$ROOT_DIR/.cache" ]]; then
-        rm -rf "$ROOT_DIR/.cache"
-    fi
-    
-    # 3. 优化文档
-    log_info "优化文档"
-    if [[ -d "$ROOT_DIR/docs" ]]; then
-        # 压缩大文件 - 已禁用: gzip 会在原始文件旁产生不需要的 .gz 副本
-        : # no-op placeholder
-    fi
-    
-    log_success "性能优化完成"
+    log_info 'report-only maintenance; source, backups and verification receipts preserved'
+    PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}" \
+        python3 -m agent_dev_kit.maintenance_plan --root "$ROOT_DIR" --level basic
 }
 
 security_check() {
@@ -400,6 +364,23 @@ main() {
     if [[ "$force" == "true" && "$APPLY" -ne 1 ]]; then
         log_error "--force 必须与 --apply 同时使用"
         exit 1
+    fi
+
+    if [[ "$APPLY" -eq 1 ]]; then
+        if [[ "$SUMMARY_JSON" -eq 1 ]]; then
+            printf '%s\n' '{"schema":"adk-maintenance-plan/v1","status":"blocked","read_only":true,"applied":false,"execution_supported":false,"reason":"reviewed-bounded-execution-contract-required"}'
+            exit 2
+        fi
+        log_error '运维执行需要独立受审的有界动作契约；当前仅支持 report-only'
+        exit 2
+    fi
+
+    if [[ "$command" == "cleanup" || "$command" == "optimize" ]]; then
+        plan_args=(--root "$ROOT_DIR" --level basic)
+        [[ "$SUMMARY_JSON" -eq 0 ]] || plan_args+=(--summary-json)
+        PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}" \
+            python3 -m agent_dev_kit.maintenance_plan "${plan_args[@]}"
+        exit $?
     fi
 
     if [[ "$SUMMARY_JSON" -eq 1 ]]; then

@@ -2,17 +2,28 @@
 
 from __future__ import annotations
 
-import json
 import os
+import json
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Mapping, Optional
 
 from .model import ManifestError, canonical_json_bytes, sha256_bytes
+from .strict_json import StrictJSONError, loads as load_strict_json, read as read_strict_json
 
 PLAN_SCHEMA = "adk-install-plan/v2"
 RECEIPT_SCHEMA = "adk-install-receipt/v3"
 RECEIPT_NAME = ".adk-install-receipt.json"
+
+
+def _encode_document(data: Mapping[str, Any], label: str) -> str:
+    """A producer may emit only documents its bounded reader can consume."""
+    try:
+        text = json.dumps(data, ensure_ascii=False, indent=2) + "\n"
+        load_strict_json(text)
+    except (StrictJSONError, ValueError, TypeError, RecursionError) as exc:
+        raise ManifestError("{} exceeds the strict JSON output contract".format(label)) from exc
+    return text
 
 
 def _utc_now() -> datetime:
@@ -49,8 +60,10 @@ def _read_receipt(path: Path, label: str) -> Mapping[str, Any]:
     if path.is_symlink():
         raise ManifestError("{} must not be a symlink: {}".format(label, path))
     try:
-        data = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
+        if not path.is_file():
+            raise StrictJSONError("receipt must be a regular file")
+        data = read_strict_json(path, regular_only=True)
+    except StrictJSONError as exc:
         raise ManifestError("{} is invalid JSON: {}".format(label, path)) from exc
     if not isinstance(data, dict):
         raise ManifestError("{} must be a JSON object".format(label))
