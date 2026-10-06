@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### 8.0.2 source candidate
+- Share bounded object JSON encoding and random exclusive temporary publication across installation, campaign persistence and target lock metadata; publish public release checksums with explicit 0644 permissions.
+- Reject unreadable campaign output before filesystem mutation and read campaign/lock documents through strict regular-file descriptors.
+- Reject non-finite or malformed lock waiting parameters and metadata, and treat signal-permission denial as evidence of a live owner instead of permitting lock clearance.
+- Preserve normal schemas, lock ownership, private document permissions and rollback boundaries; source validation does not establish release, runtime adoption or model/product qualification.
+
 ### 8.0.1 source candidate
 - Publish install plans and receipts through exclusively created random temporary files in the destination directory; flush/fsync/close before replacement and clean only the newly created temporary file.
 - Preserve preexisting predictable `.tmp` files, links and FIFOs, reject unsafe output leaves, and keep existing JSON budgets and installation rollback behavior.

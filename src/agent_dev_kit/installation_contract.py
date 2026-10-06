@@ -3,14 +3,13 @@
 from __future__ import annotations
 
 import os
-import json
-import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Mapping, Optional
 
 from .model import ManifestError, canonical_json_bytes, sha256_bytes
-from .strict_json import StrictJSONError, loads as load_strict_json, read as read_strict_json
+from .strict_json import StrictJSONError, read as read_strict_json
+from .atomic_io import encode_json_document, write_text_atomic
 
 PLAN_SCHEMA = "adk-install-plan/v2"
 RECEIPT_SCHEMA = "adk-install-receipt/v3"
@@ -19,12 +18,7 @@ RECEIPT_NAME = ".adk-install-receipt.json"
 
 def _encode_document(data: Mapping[str, Any], label: str) -> str:
     """A producer may emit only documents its bounded reader can consume."""
-    try:
-        text = json.dumps(data, ensure_ascii=False, indent=2) + "\n"
-        load_strict_json(text)
-    except (StrictJSONError, ValueError, TypeError, RecursionError) as exc:
-        raise ManifestError("{} exceeds the strict JSON output contract".format(label)) from exc
-    return text
+    return encode_json_document(data, label)
 
 
 def _write_document(text: str, output: Path) -> None:
@@ -34,27 +28,7 @@ def _write_document(text: str, output: Path) -> None:
     publication, not a lock against same-user writers or a crash journal.
     Published documents retain the temporary file's private permissions.
     """
-    output = Path(os.path.abspath(os.fspath(output)))
-    if output.is_symlink() or (output.exists() and not output.is_file()):
-        raise ManifestError("document output must be a regular file")
-    output.parent.mkdir(parents=True, exist_ok=True)
-    temporary = None
-    try:
-        with tempfile.NamedTemporaryFile(
-            mode="w", encoding="utf-8", newline="\n", prefix="." + output.name + ".",
-            suffix=".tmp", dir=str(output.parent), delete=False,
-        ) as stream:
-            temporary = Path(stream.name)
-            stream.write(text)
-            stream.flush()
-            os.fsync(stream.fileno())
-        os.replace(str(temporary), str(output))
-    finally:
-        if temporary is not None:
-            try:
-                temporary.unlink()
-            except FileNotFoundError:
-                pass
+    write_text_atomic(text, output)
 
 
 def _utc_now() -> datetime:

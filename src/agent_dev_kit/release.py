@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import json
-import os
 import re
 import shutil
 import subprocess
@@ -24,6 +23,7 @@ from .installation_contract import RECEIPT_NAME
 from .installation_plan import create_plan, write_plan
 from .installation_transaction import apply_plan, rollback
 from .model import Manifest, ManifestError, sha256_file, sha256_tree
+from .atomic_io import write_text_atomic
 
 
 def check_release(manifest: Manifest) -> Dict[str, Any]:
@@ -179,7 +179,7 @@ def build_runtime_bundle(
         _release_artifacts._write_deterministic_archive(package_root, archive)
         digest = sha256_file(archive)
         checksum = output / (archive.name + ".sha256")
-        checksum.write_text("{}  {}\n".format(digest, archive.name), encoding="ascii")
+        write_text_atomic("{}  {}\n".format(digest, archive.name), checksum, mode=0o644)
         return {
             "schema": "adk-runtime-bundle-result/v1",
             "status": "pass",
@@ -340,13 +340,7 @@ def build_release(
         _release_artifacts._write_deterministic_archive(package_root, archive)
         digest = sha256_file(archive)
         checksum = output / (archive.name + ".sha256")
-        checksum_temp = checksum.with_name("." + checksum.name + ".tmp")
-        try:
-            checksum_temp.write_text("{}  {}\n".format(digest, archive.name), encoding="ascii")
-            checksum_temp.chmod(0o644)
-            os.replace(str(checksum_temp), str(checksum))
-        finally:
-            checksum_temp.unlink(missing_ok=True)
+        write_text_atomic("{}  {}\n".format(digest, archive.name), checksum, mode=0o644)
         result = {
             "schema_version": 1,
             "status": "pass",

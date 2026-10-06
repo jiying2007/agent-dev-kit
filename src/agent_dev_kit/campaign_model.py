@@ -14,6 +14,7 @@ from .evaluation import BASELINE_CATEGORIES
 from .evaluation_runtime import load_tasks
 from .model import Manifest, ManifestError, ensure_within
 from .strict_json import StrictJSONError, read as read_json
+from .atomic_io import encode_json_document, write_text_atomic
 
 CONTRACT_SCHEMA = "adk-runtime-eval-campaign/v1"
 PLAN_SCHEMA = "adk-runtime-eval-campaign-plan/v1"
@@ -35,15 +36,13 @@ def _digest(value: Any) -> str:
 
 
 def _write_json_atomic(path: Path, value: Any) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temp = path.with_name(path.name + ".tmp")
-    temp.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    temp.replace(path)
+    text = encode_json_document(value, "campaign document")
+    write_text_atomic(text, path)
 
 
 def _load_json_object(path: Path, label: str) -> Dict[str, Any]:
     try:
-        value = read_json(path)
+        value = read_json(path, regular_only=True)
     except StrictJSONError as exc:
         raise ManifestError("invalid {} JSON: {}".format(label, exc)) from exc
     if not isinstance(value, dict):

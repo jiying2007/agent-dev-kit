@@ -1,0 +1,5 @@
+# 负结果与复审修复
+
+首17路径冻结复审NEEDS_FIX：本机unknown probe仍能按remote stale清锁，runtime bundle checksum同类链接输出遗漏。已增加本机unknown无条件拒clear，保留真正remote stale+expectedID；source/runtime两条checksum共享安全writer，增加恶意leaf与正常0644回归。
+
+首snapshot077b5184/indexc7ce7539完整矩阵在复审修复后过期，主线程只停止自己启动的runner669132及其唯一container023ba8af82e5，未清理用户工作区或无关容器。旧矩阵不计本包PASS、不复用receipt；修复后新stage/freeze完整重跑。Archive和checksum不是一项跨文件原子事务，failure可留candidate archive，不能宣称整体断电恢复。

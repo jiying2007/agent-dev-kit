@@ -9,14 +9,196 @@ from unittest.mock import Mock, patch
 from types import SimpleNamespace
 
 from agent_dev_kit import installation_contract as contract
+from agent_dev_kit import atomic_io
 from agent_dev_kit.installation_transaction import apply_plan, rollback
 from agent_dev_kit.installation_transaction import _apply_validated_plan
 from agent_dev_kit.installation_plan import create_plan as install_create_plan, write_plan
 from agent_dev_kit.maintenance_plan import create_plan
 from agent_dev_kit.model import Manifest, ManifestError
 from agent_dev_kit.strict_json import DEFAULT_MAX_BYTES, StrictJSONError, read as read_json
+from agent_dev_kit.campaign_model import _write_json_atomic, _load_json_object
+from agent_dev_kit.locking import TargetLock, target_lock_status, clear_target_lock, LOCK_METADATA
+from agent_dev_kit.release import build_release, build_runtime_bundle
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+class PersistentDocumentTest(unittest.TestCase):
+    def test_runtime_bundle_checksum_link_rejected_and_public_mode_preserved(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            manifest = Manifest.load(ROOT)
+            outside = root / "outside"
+            outside.write_bytes(b"SENTINEL")
+            checksum = root / ("adk-runtime-core-" + manifest.version + ".tar.gz.sha256")
+            checksum.symlink_to(outside)
+            with self.assertRaises(ManifestError):
+                build_runtime_bundle(manifest, root, "core")
+            self.assertTrue(checksum.is_symlink())
+            self.assertEqual(b"SENTINEL", outside.read_bytes())
+            checksum.unlink()
+            result = build_runtime_bundle(manifest, root, "core")
+            self.assertEqual("pass", result["status"])
+            self.assertEqual(result["sha256"] + "  " + Path(result["artifact"]).name + "\n",
+                             checksum.read_text())
+            if os.name == "posix":
+                self.assertEqual(0o644, checksum.stat().st_mode & 0o777)
+
+    def test_campaign_preserves_fixed_temporary_and_strict_readback(self):
+        for kind in ("regular", "symlink", "fifo"):
+            if kind == "fifo" and not hasattr(os, "mkfifo"):
+                continue
+            with self.subTest(kind=kind), tempfile.TemporaryDirectory() as temp:
+                root = Path(temp)
+                output = root / "record.json"
+                fixed = root / "record.json.tmp"
+                outside = root / "outside"
+                outside.write_bytes(b"SENTINEL")
+                if kind == "symlink":
+                    fixed.symlink_to(outside)
+                elif kind == "fifo":
+                    os.mkfifo(fixed)
+                else:
+                    fixed.write_bytes(b"KEEP")
+                identity = fixed.lstat()
+                _write_json_atomic(output, {"value": "published"})
+                self.assertEqual({"value": "published"}, _load_json_object(output, "fixture"))
+                self.assertFalse(output.is_symlink())
+                self.assertEqual(b"SENTINEL", outside.read_bytes())
+                self.assertEqual(identity.st_ino, fixed.lstat().st_ino)
+                if kind == "regular":
+                    self.assertEqual(b"KEEP", fixed.read_bytes())
+
+    def test_campaign_invalid_output_rejected_before_mutation(self):
+        nested = {"value": 0}
+        for _ in range(65):
+            nested = {"value": nested}
+        for value in ({"value": float("nan")}, {"value": "x" * DEFAULT_MAX_BYTES}, nested, []):
+            with self.subTest(value_type=type(value).__name__), tempfile.TemporaryDirectory() as temp:
+                output = Path(temp) / "not-created/record.json"
+                with self.assertRaises(ManifestError):
+                    _write_json_atomic(output, value)
+                self.assertFalse(output.parent.exists())
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            outside = root / "outside.json"
+            outside.write_text('{}')
+            linked = root / "linked.json"
+            linked.symlink_to(outside)
+            with self.assertRaises(ManifestError):
+                _load_json_object(linked, "fixture")
+
+    def test_campaign_failed_publication_preserves_old_record(self):
+        with tempfile.TemporaryDirectory() as temp:
+            output = Path(temp) / "record.json"
+            output.write_bytes(b"OLD")
+            with patch.object(atomic_io.os, "replace", side_effect=OSError("failure")):
+                with self.assertRaises(OSError):
+                    _write_json_atomic(output, {"value": "new"})
+            self.assertEqual(b"OLD", output.read_bytes())
+            self.assertEqual([], list(output.parent.glob(".record.json.*.tmp")))
+
+    def test_release_checksum_fixed_link_preserved_with_real_archive(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            output = root / "release"
+            output.mkdir()
+            manifest = Manifest.load(ROOT)
+            outside = root / "outside"
+            outside.write_bytes(b"SENTINEL")
+            fixed = output / (".agent-dev-kit-" + manifest.version + ".tar.gz.sha256.tmp")
+            fixed.symlink_to(outside)
+            result = build_release(manifest, output, allow_unbound_snapshot=True)
+            checksum = Path(result["checksum"])
+            self.assertEqual("pass", result["status"])
+            self.assertFalse(checksum.is_symlink())
+            self.assertEqual(result["sha256"] + "  " + Path(result["artifact"]).name + "\n",
+                             checksum.read_text())
+            self.assertEqual(b"SENTINEL", outside.read_bytes())
+            self.assertTrue(fixed.is_symlink())
+            if os.name == "posix":
+                self.assertEqual(0o644, checksum.stat().st_mode & 0o777)
+
+
+class TargetLockContractTest(unittest.TestCase):
+    def test_local_unknown_owner_never_cleared_but_remote_stale_contract_preserved(self):
+        with tempfile.TemporaryDirectory() as temp:
+            lock = TargetLock(Path(temp) / "target", "fixture")
+            lock.acquire()
+            path = lock.path / LOCK_METADATA
+            original = path.read_bytes()
+            data = json.loads(original)
+            path.write_text(json.dumps(dict(data, created_at="2000-01-01T00:00:00Z")))
+            try:
+                with patch("agent_dev_kit.locking.os.kill", side_effect=OSError("unknown probe")):
+                    status = target_lock_status(lock.target)
+                    self.assertIsNone(status["owner_alive"])
+                    self.assertTrue(status["stale"])
+                    with self.assertRaises(ManifestError):
+                        clear_target_lock(lock.target, lock.lock_id)
+                self.assertTrue(lock.path.exists())
+                path.write_text(json.dumps(dict(data, host="remote.invalid", created_at="2000-01-01T00:00:00Z")))
+                self.assertEqual("cleared", clear_target_lock(lock.target, lock.lock_id)["status"])
+                self.assertFalse(lock.path.exists())
+                lock.acquired = False
+            finally:
+                if lock.path.exists():
+                    path.write_bytes(original)
+                    lock.release()
+
+    def test_invalid_timeout_rejected_before_filesystem_mutation(self):
+        for value in (float("nan"), float("inf"), -1, 301, True, "1", None, 10 ** 1000):
+            with self.subTest(value_type=type(value).__name__), tempfile.TemporaryDirectory() as temp:
+                target = Path(temp) / "not-created/target"
+                with self.assertRaises(ManifestError):
+                    TargetLock(target, "fixture", value)
+                self.assertFalse(target.parent.exists())
+
+    def test_strict_metadata_invalid_pid_and_timezone_fail_closed(self):
+        with tempfile.TemporaryDirectory() as temp:
+            lock = TargetLock(Path(temp) / "target", "fixture")
+            lock.acquire()
+            path = lock.path / LOCK_METADATA
+            original = path.read_bytes()
+            data = json.loads(original)
+            try:
+                for pid in (None, True, "1", 0, -1, 10 ** 100):
+                    changed = dict(data, pid=pid)
+                    path.write_text(json.dumps(changed))
+                    with self.assertRaises(ManifestError):
+                        target_lock_status(lock.target)
+                for raw in ('{"pid":1,' + original.decode()[1:], '{"extra":NaN,' + original.decode()[1:]):
+                    path.write_text(raw)
+                    with self.assertRaises(ManifestError):
+                        target_lock_status(lock.target)
+                path.write_text(json.dumps(dict(data, created_at="2026-10-06T00:00:00")))
+                with self.assertRaises(ManifestError):
+                    target_lock_status(lock.target)
+            finally:
+                path.write_bytes(original)
+                lock.release()
+
+    def test_permission_error_keeps_owner_active_and_refuses_clear(self):
+        with tempfile.TemporaryDirectory() as temp:
+            lock = TargetLock(Path(temp) / "target", "fixture")
+            lock.acquire()
+            try:
+                with patch("agent_dev_kit.locking.os.kill", side_effect=PermissionError("fixture")):
+                    self.assertTrue(target_lock_status(lock.target)["owner_alive"])
+                    with self.assertRaises(ManifestError):
+                        clear_target_lock(lock.target, lock.lock_id)
+                self.assertTrue(lock.path.exists())
+            finally:
+                lock.release()
+
+    def test_lock_metadata_publication_failure_leaves_no_lock(self):
+        with tempfile.TemporaryDirectory() as temp:
+            lock = TargetLock(Path(temp) / "target", "fixture")
+            with patch.object(atomic_io.os, "fsync", side_effect=OSError("fixture")):
+                with self.assertRaises(OSError):
+                    lock.acquire()
+            self.assertFalse(lock.path.exists())
+            self.assertFalse(lock.acquired)
 
 
 class InstallationJSONTest(unittest.TestCase):
@@ -77,7 +259,7 @@ class InstallationJSONTest(unittest.TestCase):
                 fixed = root / "plan.json.tmp"
                 fixed.write_bytes(b"KEEP")
                 if fault == "write":
-                    injection = patch.object(contract.tempfile, "NamedTemporaryFile", side_effect=failed_write)
+                    injection = patch.object(atomic_io.tempfile, "NamedTemporaryFile", side_effect=failed_write)
                 else:
                     injection = patch.object(contract.os, fault, side_effect=OSError("publication failure"))
                 with injection, self.assertRaises(OSError):
