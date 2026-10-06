@@ -11,6 +11,7 @@ import importlib.util
 import shutil
 import subprocess
 from pathlib import Path
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
@@ -18,6 +19,32 @@ sys.path.insert(0, str(ROOT / "src"))
 from agent_dev_kit.model import Manifest, ManifestError
 from agent_dev_kit.distribution.release_artifacts import _copy_runtime_skill
 from agent_dev_kit.release import build_runtime_bundle
+
+
+def _init_fixture_repository(fixture: Path) -> None:
+    # A fixture must neither target the caller's repository nor inherit hooks,
+    # signing/configuration or detached maintenance writers during cleanup.
+    env = {key: value for key, value in os.environ.items() if not key.startswith("GIT_")}
+    env.update(GIT_CONFIG_NOSYSTEM="1", GIT_CONFIG_GLOBAL=os.devnull,
+               GIT_CONFIG_SYSTEM=os.devnull)
+    config = {"gc.auto": "0", "maintenance.auto": "false", "gc.autoDetach": "false",
+              "maintenance.autoDetach": "false", "core.hooksPath": os.devnull,
+              "commit.gpgsign": "false", "user.name": "Fixture",
+              "user.email": "fixture@example.invalid"}
+    command = ["git", "-C", str(fixture)]
+    for key, value in config.items():
+        command.extend(["-c", key + "=" + value])
+
+    def run(*args: str) -> None:
+        subprocess.run(command + list(args), env=env, check=True)
+
+    with tempfile.TemporaryDirectory(prefix="adk-git-template-", dir=str(fixture.parent)) as template:
+        run("init", "-q", "--template=" + template)
+    # Persist protection for later identity probes of this synthetic source.
+    for key, value in config.items():
+        run("config", "--local", key, value)
+    run("add", ".")
+    run("commit", "-qm", "synthetic identity fixture")
 
 
 class RuntimeBundleTest(unittest.TestCase):
@@ -61,6 +88,60 @@ class RuntimeBundleTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             with self.assertRaisesRegex(ManifestError, "unknown profile"):
                 build_runtime_bundle(self.manifest, Path(temp), "missing-profile")
+
+    def test_fixture_git_ignores_hostile_config_environment_and_templates(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            base = Path(temp)
+            fixture = base / "source"
+            fixture.mkdir()
+            (fixture / "README.md").write_text("fixture\n", encoding="utf-8")
+            hooks = base / "hooks"
+            hooks.mkdir()
+            marker = base / "hook-ran"
+            hook = hooks / "pre-commit"
+            hook.write_text('#!/bin/sh\nprintf ran > "' + str(marker) + '"\nexit 1\n',
+                            encoding="utf-8")
+            hook.chmod(0o755)
+            template = base / "template"
+            (template / "hooks").mkdir(parents=True)
+            shutil.copy2(hook, template / "hooks/pre-commit")
+            global_config = base / "global-config"
+            global_config.write_text(
+                '[core]\n hooksPath = "' + str(hooks) + '"\n'
+                '[maintenance]\n auto = true\n autoDetach = true\n'
+                '[gc]\n auto = 1\n autoDetach = true\n', encoding="utf-8")
+            foreign = base / "foreign"
+            foreign.mkdir()
+            (foreign / "README.md").write_text("foreign\n", encoding="utf-8")
+            _init_fixture_repository(foreign)
+            before = subprocess.check_output(["git", "-C", str(foreign), "rev-parse", "HEAD"])
+            hostile = {
+                "GIT_CONFIG_GLOBAL": str(global_config),
+                "GIT_CONFIG_SYSTEM": str(global_config),
+                "GIT_CONFIG_COUNT": "1",
+                "GIT_CONFIG_KEY_0": "core.hooksPath",
+                "GIT_CONFIG_VALUE_0": str(hooks),
+                "GIT_CONFIG_PARAMETERS": "'core.hooksPath=" + str(hooks) + "'",
+                "GIT_TEMPLATE_DIR": str(template),
+                "GIT_DIR": str(foreign / ".git"),
+                "GIT_WORK_TREE": str(foreign),
+                "GIT_INDEX_FILE": str(base / "foreign-index"),
+                "GIT_AUTHOR_DATE": "invalid-fixture-date",
+            }
+            with patch.dict(os.environ, hostile):
+                _init_fixture_repository(fixture)
+            self.assertFalse(marker.exists(), "external hook executed")
+            self.assertFalse((fixture / ".git/hooks/pre-commit").exists())
+            self.assertFalse((base / "foreign-index").exists())
+            self.assertEqual(before, subprocess.check_output(
+                ["git", "-C", str(foreign), "rev-parse", "HEAD"]))
+            self.assertEqual(b"1\n", subprocess.check_output(
+                ["git", "-C", str(fixture), "rev-list", "--count", "HEAD"]))
+            for key, value in (("gc.auto", "0"), ("maintenance.auto", "false"),
+                               ("gc.autoDetach", "false"), ("maintenance.autoDetach", "false")):
+                self.assertEqual(value, subprocess.check_output(
+                    ["git", "-C", str(fixture), "config", "--local", "--get", key],
+                    text=True).strip())
 
     def test_identity_uses_isolated_clean_fixture_and_rejects_dirty_source(self) -> None:
         spec = importlib.util.spec_from_file_location(
@@ -108,11 +189,7 @@ class RuntimeBundleTest(unittest.TestCase):
                 target = fixture / name
                 target.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(source, target)
-            subprocess.run(["git", "init", "-q", str(fixture)], check=True)
-            subprocess.run(["git", "-C", str(fixture), "add", "."], check=True)
-            subprocess.run(["git", "-C", str(fixture), "-c", "user.name=Fixture",
-                            "-c", "user.email=fixture@example.invalid", "-c", "commit.gpgsign=false",
-                            "commit", "-qm", "synthetic identity fixture"], check=True)
+            _init_fixture_repository(fixture)
             manifest = Manifest.load(fixture)
             receipt = module.verify_runtime_bundle_identity(manifest, "embedded-fullstack")
             self.assertEqual(receipt["status"], "pass")
