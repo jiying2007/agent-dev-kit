@@ -1,16 +1,17 @@
 import json
+from contextlib import contextmanager
 import os
 from pathlib import Path
 import subprocess
 import tempfile
 import unittest
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 from types import SimpleNamespace
 
 from agent_dev_kit import installation_contract as contract
-from agent_dev_kit.installation_transaction import apply_plan
+from agent_dev_kit.installation_transaction import apply_plan, rollback
 from agent_dev_kit.installation_transaction import _apply_validated_plan
-from agent_dev_kit.installation_plan import write_plan
+from agent_dev_kit.installation_plan import create_plan as install_create_plan, write_plan
 from agent_dev_kit.maintenance_plan import create_plan
 from agent_dev_kit.model import Manifest, ManifestError
 from agent_dev_kit.strict_json import DEFAULT_MAX_BYTES, StrictJSONError, read as read_json
@@ -19,6 +20,129 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class InstallationJSONTest(unittest.TestCase):
+    def test_plan_preserves_preexisting_predictable_temporary_paths(self):
+        for kind in ("regular", "symlink", "fifo"):
+            if kind == "fifo" and not hasattr(os, "mkfifo"):
+                continue
+            with self.subTest(kind=kind), tempfile.TemporaryDirectory() as temp:
+                root = Path(temp)
+                output = root / "plan.json"
+                previous = root / "plan.json.tmp"
+                outside = root / "outside"
+                outside.write_bytes(b"SENTINEL")
+                if kind == "symlink":
+                    previous.symlink_to(outside)
+                elif kind == "fifo":
+                    os.mkfifo(previous)
+                else:
+                    previous.write_bytes(b"KEEP")
+                identity = previous.lstat()
+                write_plan({"value": "published"}, output)
+                self.assertFalse(output.is_symlink())
+                self.assertEqual({"value": "published"}, read_json(output, regular_only=True))
+                self.assertEqual(b"SENTINEL", outside.read_bytes())
+                self.assertEqual((identity.st_ino, identity.st_mode),
+                                 (previous.lstat().st_ino, previous.lstat().st_mode))
+                if kind == "regular":
+                    self.assertEqual(b"KEEP", previous.read_bytes())
+                if os.name == "posix":
+                    self.assertEqual(0o600, output.stat().st_mode & 0o777)
+                self.assertEqual([], list(root.glob(".plan.json.*.tmp")))
+
+    def test_plan_rejects_output_link_without_overwriting_target(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            outside = root / "outside"
+            outside.write_bytes(b"SENTINEL")
+            output = root / "plan.json"
+            output.symlink_to(outside)
+            with self.assertRaises(ManifestError):
+                write_plan({"value": "blocked"}, output)
+            self.assertTrue(output.is_symlink())
+            self.assertEqual(b"SENTINEL", outside.read_bytes())
+
+    def test_plan_write_sync_and_publication_failures_preserve_old_document(self):
+        original_temporary = tempfile.NamedTemporaryFile
+
+        @contextmanager
+        def failed_write(*args, **kwargs):
+            with original_temporary(*args, **kwargs) as stream:
+                yield SimpleNamespace(name=stream.name, write=Mock(side_effect=OSError("write failure")))
+
+        for fault in ("write", "fsync", "replace"):
+            with self.subTest(fault=fault), tempfile.TemporaryDirectory() as temp:
+                root = Path(temp)
+                output = root / "plan.json"
+                output.write_bytes(b"OLD")
+                fixed = root / "plan.json.tmp"
+                fixed.write_bytes(b"KEEP")
+                if fault == "write":
+                    injection = patch.object(contract.tempfile, "NamedTemporaryFile", side_effect=failed_write)
+                else:
+                    injection = patch.object(contract.os, fault, side_effect=OSError("publication failure"))
+                with injection, self.assertRaises(OSError):
+                    write_plan({"value": "new"}, output)
+                self.assertEqual(b"OLD", output.read_bytes())
+                self.assertEqual(b"KEEP", fixed.read_bytes())
+                self.assertEqual([], list(root.glob(".plan.json.*.tmp")))
+
+    def test_receipt_preserves_predictable_link_and_remains_readable_and_reversible(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            target = root / "target"
+            target.mkdir()
+            outside = root / "outside"
+            outside.write_bytes(b"SENTINEL")
+            fixed = target / (contract.RECEIPT_NAME + ".tmp")
+            fixed.symlink_to(outside)
+            manifest = Manifest.load(ROOT)
+            plan = install_create_plan(manifest, "claude-code", str(target), ("core",), (), "copy",
+                                       asset_kind="agent")
+            plan_path = root / "plan.json"
+            write_plan(plan, plan_path)
+            result = apply_plan(manifest, plan_path)
+            self.assertEqual("pass", result["status"])
+            self.assertEqual(5, result["installed"])
+            receipt_path = target / contract.RECEIPT_NAME
+            self.assertFalse(receipt_path.is_symlink())
+            contract._read_receipt(receipt_path, "fixture")
+            self.assertEqual(b"SENTINEL", outside.read_bytes())
+            self.assertTrue(fixed.is_symlink())
+            self.assertEqual("pass", rollback(receipt_path)["status"])
+            self.assertTrue(fixed.is_symlink())
+            self.assertEqual(b"SENTINEL", outside.read_bytes())
+
+    def test_receipt_publication_failure_restores_assets_and_previous_receipt(self):
+        for fault in ("fsync", "replace"):
+            with self.subTest(fault=fault), tempfile.TemporaryDirectory() as temp:
+                root = Path(temp)
+                target = root / "target"
+                manifest = Manifest.load(ROOT)
+                plan_path = root / "plan.json"
+                def plan_install():
+                    write_plan(install_create_plan(manifest, "claude-code", str(target), ("core",), (),
+                                                  "copy", asset_kind="agent"), plan_path)
+                plan_install()
+                apply_plan(manifest, plan_path)
+                receipt_path = target / contract.RECEIPT_NAME
+                previous = receipt_path.read_bytes()
+                assets = {path: path.read_bytes() for path in (target / "agents").glob("*.md")}
+                fixed = target / (contract.RECEIPT_NAME + ".tmp")
+                fixed.write_bytes(b"KEEP")
+                plan_install()
+                original_writer = contract._write_document
+                def fail_receipt(text, output):
+                    with patch.object(contract.os, fault, side_effect=OSError("receipt publication failure")):
+                        return original_writer(text, output)
+                with patch.object(contract, "_write_document", side_effect=fail_receipt):
+                    with self.assertRaises(OSError):
+                        apply_plan(manifest, plan_path)
+                self.assertEqual(previous, receipt_path.read_bytes())
+                self.assertEqual(assets, {path: path.read_bytes() for path in (target / "agents").glob("*.md")})
+                self.assertEqual(b"KEEP", fixed.read_bytes())
+                self.assertEqual([], list(target.glob("." + contract.RECEIPT_NAME + ".*.tmp")))
+                contract._read_receipt(receipt_path, "previous fixture")
+
     def test_document_producer_readback_and_write_rejection(self):
         data = {"schema": contract.RECEIPT_SCHEMA, "receipt_id": "fixture", "installed": [],
                 "padding": "", "receipt_sha256": "0" * 64}

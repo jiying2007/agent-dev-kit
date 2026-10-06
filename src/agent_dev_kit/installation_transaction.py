@@ -84,7 +84,6 @@ def _apply_validated_plan(
     moved_backups: List[Dict[str, str]] = []
     previous_receipt: Optional[str] = None
     previous_receipt_sha256: Optional[str] = None
-    temp_receipt = target / (install_contract.RECEIPT_NAME + ".tmp")
     try:
         receipt_path = target / install_contract.RECEIPT_NAME
         if receipt_path.is_file():
@@ -131,8 +130,7 @@ def _apply_validated_plan(
                        previous_receipt_sha256=previous_receipt_sha256)
         receipt["receipt_sha256"] = install_contract._receipt_digest(receipt)
         text = install_contract._encode_document(receipt, "install receipt")
-        temp_receipt.write_text(text, encoding="utf-8")
-        os.replace(str(temp_receipt), str(receipt_path))
+        install_contract._write_document(text, receipt_path)
         return {
             "schema": "adk-install-result/v2",
             "status": "pass",
@@ -157,7 +155,6 @@ def _apply_validated_plan(
                     shutil.move(str(backup), str(destination))
             recovery_complete = True
         finally:
-            temp_receipt.unlink(missing_ok=True)
             if recovery_complete:
                 shutil.rmtree(str(backup_root), ignore_errors=True)
         raise
