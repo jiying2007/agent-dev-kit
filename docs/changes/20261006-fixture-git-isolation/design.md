@@ -6,4 +6,4 @@
 
 参考：Git官方配置文档说明 maintenance.auto 控制命令后自动维护，autoDetach 控制后台运行；GIT_CONFIG_*及GIT_DIR可以改变子进程读取的配置和目标仓库。https://git-scm.com/docs/git-config 与 https://git-scm.com/docs/git 。原失败现场只证明TemporaryDirectory退出时.git目录非空，没有具体writer。
 
-风险与回滚：helper只用于测试。回滚本change的单个测试文件及文档即可；无runtime或源版本迁移。禁止忽略cleanup异常、重试删除或杀其他进程。默认Git版本与runner不同，托管矩阵仍需真实结果。
+风险与回滚：helper只用于测试；版本投影同步7.14.2满足protected-main require-advance，campaign ID按既有版本契约前移，不添加qualification evidence。回滚本change的测试与版本投影即可；无runtime行为迁移。禁止忽略cleanup异常、重试删除或杀其他进程。默认Git版本与runner不同，托管矩阵仍需真实结果。

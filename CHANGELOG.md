@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### 7.14.2 source candidate
+- Isolate runtime-bundle test Git environments, hooks, templates and automatic maintenance; retain reproducible builds and dirty-source rejection.
+- Restore deterministic hostile-input regression coverage without ignoring temporary-directory cleanup failures.
+- Advance source-version projections before protected-main integration; the original cleanup writer remains unproven, and this entry does not declare release or deployment.
+
 ### 7.14.1 source candidate
 - Fail strict non-quick validation early when existing source-version projections are missing or inconsistent; preserve quick behavior.
 - Accept valid linked Git worktrees in the file-mode gate while rejecting accidental discovery of a parent repository.
