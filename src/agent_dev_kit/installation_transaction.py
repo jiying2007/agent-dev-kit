@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 import os
 import shutil
 from pathlib import Path
@@ -13,11 +12,14 @@ from . import installation_plan
 from .locking import TargetLock
 from .model import Manifest, ManifestError, ensure_within, sha256_file, sha256_tree
 from .targets import RenderedBundle
+from .strict_json import StrictJSONError, read as read_strict_json
 
 def apply_plan(manifest: Manifest, plan_path: Path, lock_timeout_seconds: float = 0.0) -> Dict[str, Any]:
     try:
-        plan = json.loads(plan_path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
+        if plan_path.is_symlink() or not plan_path.is_file():
+            raise StrictJSONError("install plan must be a regular file")
+        plan = read_strict_json(plan_path, regular_only=True)
+    except StrictJSONError as exc:
         raise ManifestError("install plan is invalid JSON: {}".format(plan_path)) from exc
     if not isinstance(plan, dict):
         raise ManifestError("install plan must be a JSON object")
@@ -36,17 +38,46 @@ def _apply_validated_plan(
     target: Path,
     bundle: RenderedBundle,
 ) -> Dict[str, Any]:
-    target.mkdir(parents=True, exist_ok=True)
     run_id = install_contract._utc_now().strftime("%Y%m%dT%H%M%SZ") + "-" + str(plan["plan_id"])[:8]
     backup_root = ensure_within(target / ".adk-backups" / run_id, target, "backup root")
     staging_root = ensure_within(target / ".adk-staging" / run_id, target, "staging root")
+    rendered_files = {item.destination: item for item in bundle.files}
+    # Conservative replacement preview: backup paths/digests are longer than
+    # nulls for new assets. Reject before creating transaction directories or
+    # moving assets, then check the actual document again before publication.
+    preview = []
+    for operation in plan["operations"]:
+        rendered = rendered_files[str(operation["destination"])]
+        preview.append({
+            "kind": rendered.kind, "name": rendered.name, "source": rendered.source,
+            "destination": rendered.destination, "source_sha256": operation["source_sha256"],
+            "rendered_sha256": rendered.sha256, "installed_sha256": "0" * 64,
+            "file_mode": format(rendered.mode, "04o"),
+            "backup": (backup_root / rendered.destination).relative_to(target).as_posix(),
+            "backup_sha256": "0" * 64,
+        })
+    receipt = {
+        "schema": install_contract.RECEIPT_SCHEMA,
+        "receipt_id": run_id,
+        "created_at": install_contract._iso(install_contract._utc_now()),
+        "plan_id": plan["plan_id"], "manifest_version": manifest.version,
+        "manifest_sha256": manifest.digest, "contract_sha256": bundle.contract.digest,
+        "tool": plan["tool"], "target": str(target),
+        "profiles": list(bundle.resolution.profiles), "optional_skills": list(bundle.optional_skills),
+        "asset_kind": bundle.asset_kind,
+        "backup_root": backup_root.relative_to(target).as_posix(),
+        "previous_receipt": (backup_root / install_contract.RECEIPT_NAME).relative_to(target).as_posix(),
+        "previous_receipt_sha256": "0" * 64, "installed": preview,
+        "receipt_sha256": "0" * 64,
+    }
+    install_contract._encode_document(receipt, "install receipt preview")
+    target.mkdir(parents=True, exist_ok=True)
     backup_root.mkdir(parents=True, exist_ok=False)
     try:
         staging_root.mkdir(parents=True, exist_ok=False)
     except Exception:
         shutil.rmtree(str(backup_root), ignore_errors=True)
         raise
-    rendered_files = {item.destination: item for item in bundle.files}
 
     installed: List[Dict[str, Any]] = []
     deployed: List[str] = []
@@ -96,26 +127,11 @@ def _apply_validated_plan(
                 }
             )
 
-        receipt = {
-            "schema": install_contract.RECEIPT_SCHEMA,
-            "receipt_id": run_id,
-            "created_at": install_contract._iso(install_contract._utc_now()),
-            "plan_id": plan["plan_id"],
-            "manifest_version": manifest.version,
-            "manifest_sha256": manifest.digest,
-            "contract_sha256": bundle.contract.digest,
-            "tool": plan["tool"],
-            "target": str(target),
-            "profiles": list(bundle.resolution.profiles),
-            "optional_skills": list(bundle.optional_skills),
-            "asset_kind": bundle.asset_kind,
-            "backup_root": backup_root.relative_to(target).as_posix(),
-            "previous_receipt": previous_receipt,
-            "previous_receipt_sha256": previous_receipt_sha256,
-            "installed": installed,
-        }
+        receipt.update(installed=installed, previous_receipt=previous_receipt,
+                       previous_receipt_sha256=previous_receipt_sha256)
         receipt["receipt_sha256"] = install_contract._receipt_digest(receipt)
-        temp_receipt.write_text(json.dumps(receipt, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        text = install_contract._encode_document(receipt, "install receipt")
+        temp_receipt.write_text(text, encoding="utf-8")
         os.replace(str(temp_receipt), str(receipt_path))
         return {
             "schema": "adk-install-result/v2",

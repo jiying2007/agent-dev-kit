@@ -3,6 +3,8 @@ from __future__ import annotations
 
 import json
 import math
+import os
+import stat
 from pathlib import Path
 from typing import Any, Sequence
 
@@ -77,12 +79,26 @@ def loads(data: str | bytes, *, max_bytes: int = DEFAULT_MAX_BYTES,
 
 
 def read(path: Path, *, max_bytes: int = DEFAULT_MAX_BYTES,
-         max_depth: int = DEFAULT_MAX_DEPTH) -> Any:
+         max_depth: int = DEFAULT_MAX_DEPTH, regular_only: bool = False) -> Any:
     if isinstance(max_bytes, bool) or not isinstance(max_bytes, int) or max_bytes < 1:
         raise StrictJSONError("JSON byte budget must be a positive integer")
     try:
-        with path.open("rb") as stream:
-            data = stream.read(max_bytes + 1)
+        if regular_only:
+            # Bind the leaf check to the opened descriptor. NONBLOCK avoids a
+            # replaced FIFO hanging before fstat; NOFOLLOW rejects leaf links.
+            if not hasattr(os, "O_NOFOLLOW") or not hasattr(os, "O_NONBLOCK"):
+                raise StrictJSONError("safe regular-file JSON reading is unavailable")
+            descriptor = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+            try:
+                if not stat.S_ISREG(os.fstat(descriptor).st_mode):
+                    raise StrictJSONError("JSON input must be a regular file")
+                with os.fdopen(descriptor, "rb", closefd=False) as stream:
+                    data = stream.read(max_bytes + 1)
+            finally:
+                os.close(descriptor)
+        else:
+            with path.open("rb") as stream:
+                data = stream.read(max_bytes + 1)
     except OSError as exc:
         raise StrictJSONError("JSON input cannot be read") from exc
     return loads(data, max_bytes=max_bytes, max_depth=max_depth)

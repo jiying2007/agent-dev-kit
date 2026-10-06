@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### 8.0.0 source candidate
+- Breaking: maintenance cleanup/optimization is report-only; unreviewed `--apply` returns blocked with exit 2. Consumers must migrate to `adk-maintenance-plan/v1`, `status=planned`, `applied=false`; no automatic deletion or chmod is available.
+- Inventory only `.cache` and `dist`, preserve protected directories, bound entries and nesting, and traverse opened directory descriptors without following replacement symlinks. Unsupported safe-descriptor platforms fail closed.
+- Parse installation plans/receipts using bounded strict JSON and descriptor-checked regular-file input; reject duplicate keys, non-finite numbers, excess bytes/depth and leaf link/FIFO replacement before target locking or writes.
+- Apply the same JSON budget to produced plans/receipts; conservatively preflight receipt size before asset writes and check actual output before publication so success never emits an unreadable receipt.
+- Fail runtime-boundary scans on scanner errors and make performance report `written` reflect actual output. These local contracts do not establish model gains, release qualification or live adoption.
+
 ### 7.14.2 source candidate
 - Isolate runtime-bundle test Git environments, hooks, templates and automatic maintenance; retain reproducible builds and dirty-source rejection.
 - Restore deterministic hostile-input regression coverage without ignoring temporary-directory cleanup failures.

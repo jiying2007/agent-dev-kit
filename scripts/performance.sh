@@ -31,7 +31,7 @@ Options:
   --include-quality      benchmark 包含质量门禁计时
   --include-io           benchmark 包含 I/O 写入测试
   --io-dir <path>        benchmark I/O 测试目录，默认 /tmp
-  --apply                执行清理动作；默认只报告将要执行的动作
+  --apply                未受审的维护执行将拒绝；仅支持只读计划
   -h, --help             显示帮助
 
 Examples:
@@ -160,66 +160,11 @@ analyze_performance() {
 
 optimize_performance() {
     local level="$1"
-    case "$level" in
-        basic|medium|advanced) ;;
-        *)
-            log_error "未知优化级别: $level"
-            exit 1
-            ;;
-    esac
-
-    if [[ "$SUMMARY_JSON" -eq 1 ]]; then
-        printf '{"schema_version":1,"status":"pass","command":"optimize","level":%s,"apply":%s}\n' \
-            "$(json_string "$level")" "${APPLY:-0}"
-        return 0
-    fi
-
-    log_info "优化性能 (级别: $level)"
-
-    if [[ "${APPLY:-0}" -ne 1 ]]; then
-        echo "=== 性能优化 dry-run ==="
-        echo "- 将清理受控临时文件: *.tmp"
-        echo "- 将清理 7 天前日志: *.log"
-        echo "- 将规范 scripts/tests 下 shell 脚本可执行位"
-        echo "- medium/advanced 级别还会清理 .cache、旧备份或 dist"
-        echo "[INFO] 添加 --apply 后才会执行清理"
-        return 0
-    fi
-    
-    case "$level" in
-        basic)
-            log_info "基础优化"
-            # 清理临时文件
-            find "$ROOT_DIR" -name "*.tmp" -type f -delete 2>/dev/null || true
-            find "$ROOT_DIR" -name "*.log" -type f -mtime +7 -delete 2>/dev/null || true
-            # 优化权限
-            find "$ROOT_DIR/scripts" -name "*.sh" -type f -exec chmod +x {} \;
-            find "$ROOT_DIR/tests" -name "*.sh" -type f -exec chmod +x {} \;
-            ;;
-        medium)
-            log_info "中等优化"
-            # 基础优化
-            optimize_performance "basic"
-            # 清理缓存
-            rm -rf "$ROOT_DIR/.cache" 2>/dev/null || true
-            # 压缩大文件
-            find "$ROOT_DIR/docs" -name "*.md" -type f -size +100k -exec gzip -k {} \; 2>/dev/null || true
-            ;;
-        advanced)
-            log_info "高级优化"
-            # 中等优化
-            optimize_performance "medium"
-            # 清理旧备份
-            find "$ROOT_DIR/.backups" -name "backup-*.tar.gz" -type f -mtime +30 -delete 2>/dev/null || true
-            # 清理构建目录
-            rm -rf "$ROOT_DIR/dist" 2>/dev/null || true
-            # 优化文档
-            # Removed: destructive sed that strips blank lines from .md files breaks markdown rendering
-            # find "$ROOT_DIR/docs" -name "*.md" -type f -exec sed -i 's/^[[:space:]]*$//' {} \; 2>/dev/null || true
-            ;;
-    esac
-    
-    log_success "性能优化完成"
+    local args=(--root "$ROOT_DIR" --level "$level")
+    [[ "$SUMMARY_JSON" -eq 0 ]] || args+=(--summary-json)
+    [[ "${APPLY:-0}" -eq 0 ]] || args+=(--apply)
+    PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}" \
+        python3 -m agent_dev_kit.maintenance_plan "${args[@]}"
 }
 
 run_benchmark() {
@@ -348,18 +293,16 @@ $(top_files | awk -F '\t' '{print $1 "\t" $2}')
 EOF
 )"
 
-    if [[ "$SUMMARY_JSON" -eq 1 ]]; then
-        printf '{"schema_version":1,"status":"pass","command":"report","written":%s,"out":%s}\n' \
-            "$([[ -n "$OUT" ]] && printf 1 || printf 0)" "$(json_string "${OUT:-stdout}")"
-        return 0
-    fi
-
     if [[ -n "$OUT" ]]; then
         mkdir -p "$(dirname "$OUT")"
         printf '%s\n' "$report" >"$OUT"
-        log_success "性能报告已生成: $OUT"
-    else
+        [[ "$SUMMARY_JSON" -eq 1 ]] || log_success "性能报告已生成: $OUT"
+    elif [[ "$SUMMARY_JSON" -eq 0 ]]; then
         printf '%s\n' "$report"
+    fi
+    if [[ "$SUMMARY_JSON" -eq 1 ]]; then
+        printf '{"schema_version":1,"status":"pass","command":"report","written":%s,"out":%s}\n' \
+            "$([[ -n "$OUT" ]] && printf 1 || printf 0)" "$(json_string "${OUT:-stdout}")"
     fi
 }
 
