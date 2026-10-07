@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### 8.0.4 source candidate
+- Inspect one bounded regular-file archive snapshot; bind contract parsing, extraction and artifact SHA to the same bytes instead of reopening a mutable path.
+- Bound compressed/decoded bytes, member count/size/name and hidden header read requests; account for skipped payload and gzip padding/concatenated streams, and verify CRC at EOF.
+- Inspect required JSON members once without unbounded getmembers inventory; retain schema, order-independent valid members and existing digest semantics.
+- Preflight actual release extraction before destination creation and strictly decode its release manifest; retain prior path/type/duplicate/root checks. Resource budgets do not replace OS CPU/memory limits or establish runtime/model/product qualification.
+
 ### 8.0.3 source candidate
 - Reject duplicate keys, non-finite values, excess JSON bytes/depth and unsafe file leaves in target contracts and promotion evidence; preserve strict archive manifest decoding under the existing 8 MiB bound.
 - Hash and decode native target receipts from one bounded regular-file descriptor read, preserving original paths so root checks cannot erase leaf symlinks.

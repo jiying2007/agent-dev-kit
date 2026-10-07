@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import gzip
 import hashlib
+import io
 import json
 import os
 import re
@@ -18,6 +19,9 @@ from typing import Any
 
 from ..installation_contract import RECEIPT_NAME
 from ..model import Manifest, ManifestError, sha256_file, sha256_tree
+from ..strict_json import read as read_strict_json
+from ..strict_json import read_bytes as read_bounded_bytes
+from .archive_io import ArchiveInputError, inspect_archive_snapshot, load_archive_snapshot
 
 SOURCE_DISTRIBUTION_DIRECTORIES = (
     ".github", "agents", "docs", "manifests", "optional-skills",
@@ -252,25 +256,31 @@ def _validate_sbom(sbom: Mapping[str, Any]) -> None:
 
 
 def _verify_artifact_checksum(artifact: Path) -> str:
-    artifact = artifact.resolve()
-    if not artifact.is_file():
-        raise ManifestError(f"release artifact is missing: {artifact}")
+    return _verified_archive_snapshot(artifact)[1]
+
+
+def _verified_archive_snapshot(artifact: Path) -> tuple[bytes, str]:
+    try:
+        raw, _ = load_archive_snapshot(artifact, require_json=False)
+    except ArchiveInputError as exc:
+        raise ManifestError(str(exc)) from exc
     checksum = artifact.with_name(artifact.name + ".sha256")
-    if not checksum.is_file():
-        raise ManifestError(f"release checksum is missing: {checksum}")
-    fields = checksum.read_text(encoding="ascii").strip().split()
+    try:
+        fields = read_bounded_bytes(checksum, max_bytes=8192, regular_only=True).decode("ascii").strip().split()
+    except (OSError, ValueError) as exc:
+        raise ManifestError("release checksum must be bounded regular ASCII input") from exc
     if len(fields) != 2 or fields[1].lstrip("*") != artifact.name:
         raise ManifestError("release checksum file has an invalid format")
-    digest = sha256_file(artifact)
+    digest = hashlib.sha256(raw).hexdigest()
     if fields[0].lower() != digest:
         raise ManifestError("release checksum does not match artifact")
-    return digest
+    return raw, digest
 
 
-def _assert_publishable_release_artifact(artifact: Path) -> Mapping[str, Any]:
+def _assert_publishable_release_artifact(artifact: Path, *, raw_snapshot: bytes | None = None) -> Mapping[str, Any]:
     workspace = Path(tempfile.mkdtemp(prefix="adk-release-publish-check-"))
     try:
-        release_root = _extract_release(artifact.resolve(), workspace / "artifact")
+        release_root = _extract_release(artifact, workspace / "artifact", raw_snapshot=raw_snapshot)
         _, release_manifest = _release_source_root(release_root)
         provenance = release_manifest.get("source_provenance")
         if (
@@ -287,14 +297,23 @@ def _assert_publishable_release_artifact(artifact: Path) -> Mapping[str, Any]:
         shutil.rmtree(str(workspace), ignore_errors=True)
 
 
-def _extract_release(artifact: Path, destination: Path, member_limit: int = 5000) -> Path:
+def _extract_release(artifact: Path, destination: Path, member_limit: int = 5000,
+                     *, raw_snapshot: bytes | None = None) -> Path:
+    try:
+        if raw_snapshot is None:
+            raw, _ = load_archive_snapshot(artifact, require_json=False)
+        else:
+            inspect_archive_snapshot(raw_snapshot, require_json=False)
+            raw = raw_snapshot
+    except ArchiveInputError as exc:
+        raise ManifestError(str(exc)) from exc
     destination.mkdir(parents=True, exist_ok=False)
     roots = set()
     members: list[tarfile.TarInfo] = []
     names = set()
     total_size = 0
     destination_root = destination.resolve()
-    with tarfile.open(str(artifact), mode="r:gz") as archive:
+    with tarfile.open(fileobj=io.BytesIO(raw), mode="r:gz") as archive:
         for member in archive:
             if len(members) >= member_limit:
                 raise ManifestError("release archive exceeds member limit")
@@ -333,8 +352,8 @@ def _release_source_root(release_root: Path) -> tuple[Manifest, Mapping[str, Any
     if not source_root.is_dir() or not (source_root / "manifest.json").is_file():
         raise ManifestError("release archive does not contain its source distribution")
     try:
-        release_manifest = json.loads(release_manifest_path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
+        release_manifest = read_strict_json(release_manifest_path, max_bytes=8 * 1024 * 1024, regular_only=True)
+    except (OSError, ValueError) as exc:
         raise ManifestError("release archive has an invalid release manifest") from exc
     if not isinstance(release_manifest, dict) or release_manifest.get("schema_version") != 2:
         raise ManifestError("release archive requires release manifest schema_version=2")
