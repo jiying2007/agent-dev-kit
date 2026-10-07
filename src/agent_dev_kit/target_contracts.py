@@ -13,6 +13,7 @@ from jsonschema import Draft202012Validator, FormatChecker
 from .model import Manifest, ManifestError, canonical_json_bytes, ensure_within, sha256_bytes
 from .native_trust import build_managed_native_trust_verifier
 from .privacy_ref import validate_no_secrets
+from .strict_json import StrictJSONError, loads as load_strict_json, read_bytes as read_strict_bytes
 
 
 CONTRACT_SCHEMA = "adk-target-contract/v2"
@@ -75,15 +76,20 @@ class TargetContract:
 
 
 def _json_object(path: Path, label: str) -> Mapping[str, Any]:
+    return _json_object_bytes(path, label)[0]
+
+
+def _json_object_bytes(path: Path, label: str) -> Tuple[Mapping[str, Any], bytes]:
     if path.is_symlink():
         raise ManifestError("{} must not be a symlink: {}".format(label, path))
     try:
-        value = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
+        raw = read_strict_bytes(path, regular_only=True)
+        value = load_strict_json(raw)
+    except (OSError, StrictJSONError) as exc:
         raise ManifestError("{} is invalid JSON: {}".format(label, path)) from exc
     if not isinstance(value, dict):
         raise ManifestError("{} must be a JSON object: {}".format(label, path))
-    return value
+    return value, raw
 
 
 def _schema_failures(value: Mapping[str, Any], schema: Mapping[str, Any]) -> List[str]:
@@ -325,17 +331,18 @@ def _validate_native_conformance_evidence(
         raw_path = item.get("path")
         if not isinstance(raw_path, str) or not raw_path:
             raise ManifestError("target_contract_invalid: native evidence path is missing")
-        path = ensure_within(manifest.root / raw_path, manifest.root, "native target evidence")
+        path = manifest.root / raw_path
+        ensure_within(path, manifest.root, "native target evidence")
         if path.suffix != ".json" or path.is_symlink() or not path.is_file():
             raise ManifestError(
                 "target_contract_invalid: native evidence is missing or unsafe for {}".format(target)
             )
-        actual = sha256_bytes(path.read_bytes())
+        receipt, raw = _json_object_bytes(path, "native target conformance receipt")
+        actual = sha256_bytes(raw)
         if item.get("sha256") != actual:
             raise ManifestError(
                 "target_contract_invalid: native evidence digest mismatch for {}".format(target)
             )
-        receipt = _json_object(path, "native target conformance receipt")
         validate_no_secrets(receipt, "native target conformance receipt")
         failures = _schema_failures(receipt, receipt_schema)
         if failures:
@@ -387,7 +394,8 @@ def load_target_contract(manifest: Manifest, target: str) -> TargetContract:
     raw_path = config.get("contract")
     if not isinstance(raw_path, str) or not raw_path:
         raise ManifestError("target_contract_missing: target={}".format(target))
-    path = ensure_within(manifest.root / raw_path, manifest.root, "target contract")
+    path = manifest.root / raw_path
+    ensure_within(path, manifest.root, "target contract")
     if not path.is_file():
         raise ManifestError("target_contract_missing: target={} path={}".format(target, raw_path))
     schema_path = manifest.root / "manifests" / "target-contract.schema.json"

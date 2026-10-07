@@ -11,7 +11,7 @@ ADK 不再在 README 中维护“候选 / 已发布 / live”之类可漂移的�
 - **Runtime conformance**：以 target/runtime receipt 与证据级别 `static / smoke / native / certified` 为权威。
 - **Product qualification**：由消费方/产品仓的 qualification 与 field evidence 独立决定，不由 ADK 组件版本继承。
 
-`manifest.json` 当前 source version 为 `8.0.2`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
+`manifest.json` 当前 source version 为 `8.0.3`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
 
 8.0.0 维护 CLI 迁移：`performance.sh optimize`、`auto-ops.sh cleanup/optimize` 仅输出有界只读计划，JSON 使用 `adk-maintenance-plan/v1` 与 `status=planned`；维护 `--apply` 返回 blocked、exit 2，不再自动删除文件或修改权限。调用方必须移除维护 `--apply` 并按 `applied=false` 处理报告；见 [维护迁移说明](docs/changes/20261006-comprehensive-contracts/design.md)。
 
