@@ -22,6 +22,7 @@ from .model import (
     ensure_within,
     sha256_bytes,
 )
+from .safe_yaml import safe_load
 from .target_contracts import (
     CONTRACT_SCHEMA as CONTRACT_SCHEMA,
     TargetContract as TargetContract,
@@ -87,7 +88,7 @@ def _split_frontmatter(text: str, source: Path) -> Tuple[Mapping[str, Any], str]
     if end is None:
         raise ManifestError("asset_frontmatter_invalid: missing closing delimiter: {}".format(source))
     try:
-        metadata = yaml.safe_load("\n".join(lines[1:end])) or {}
+        metadata = safe_load("\n".join(lines[1:end])) or {}
     except yaml.YAMLError as exc:
         raise ManifestError("asset_frontmatter_invalid: {}: {}".format(source, exc)) from exc
     if not isinstance(metadata, dict):

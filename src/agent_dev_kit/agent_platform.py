@@ -17,10 +17,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Set, Tuple
 
-import yaml
 from jsonschema import Draft202012Validator, FormatChecker
 
 from .model import Manifest, ManifestError, canonical_json_bytes, sha256_bytes
+from .safe_yaml import safe_load
 from .target_contracts import load_target_contract
 from .targets import render_selection
 
@@ -160,7 +160,7 @@ def _frontmatter(path: Path) -> Mapping[str, Any]:
     end = next((index for index in range(1, len(lines)) if lines[index].strip() == "---"), None)
     if end is None:
         raise ManifestError(f"portable skill source has unterminated frontmatter: {path}")
-    value = yaml.safe_load("\n".join(lines[1:end])) or {}
+    value = safe_load("\n".join(lines[1:end])) or {}
     if not isinstance(value, dict):
         raise ManifestError(f"portable skill frontmatter must be an object: {path}")
     return value

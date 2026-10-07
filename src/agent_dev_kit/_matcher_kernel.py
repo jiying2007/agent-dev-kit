@@ -11,6 +11,7 @@ from typing import Any, Dict, Iterable, Mapping, Optional, Sequence, Tuple
 import yaml
 
 from .model import Manifest, ManifestError
+from .safe_yaml import safe_load
 
 
 def _phrase_matches(text: str, phrase_set: str) -> Sequence[Tuple[str, int, int]]:
@@ -112,7 +113,7 @@ def _frontmatter_cached(path_value: str, mtime_ns: int, size: int) -> Mapping[st
     except ValueError as exc:
         raise ManifestError("skill frontmatter is not terminated: {}".format(path)) from exc
     try:
-        value = yaml.safe_load("\n".join(lines[1:end]))
+        value = safe_load("\n".join(lines[1:end]))
     except yaml.YAMLError as exc:
         raise ManifestError("skill frontmatter is invalid: {}".format(path)) from exc
     if not isinstance(value, dict):

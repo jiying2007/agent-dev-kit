@@ -4,9 +4,8 @@ import argparse
 from pathlib import Path
 from typing import Any, Mapping
 
-import yaml
-
 from .model import Manifest
+from .safe_yaml import safe_load
 
 
 def _records(manifest: Manifest, section: str) -> list[Mapping[str, Any]]:
@@ -42,7 +41,7 @@ def _skill_frontmatter(root: Path, record: Mapping[str, Any]) -> Mapping[str, An
     end = text.find("\n---\n", 4)
     if end < 0:
         return {}
-    value = yaml.safe_load(text[4:end])
+    value = safe_load(text[4:end])
     return value if isinstance(value, dict) else {}
 
 

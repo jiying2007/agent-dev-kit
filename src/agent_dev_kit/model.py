@@ -20,19 +20,22 @@ class ManifestError(ValueError):
     """Raised when the manifest or a referenced asset is invalid."""
 
 
-@lru_cache(maxsize=8)
 def _validated_schema_bundle(source: str, raw: bytes) -> Tuple[Mapping[str, Any], Draft202012Validator]:
-    """Parse and meta-validate immutable schema bytes once per process.
-
-    The raw bytes are part of the cache key, so an on-disk schema change cannot
-    reuse a validator compiled for older content.  The small bound prevents
-    untrusted schema churn from growing the process cache without limit.
-    """
-
     try:
-        value = json.loads(raw.decode("utf-8"))
+        return _compiled_schema_bundle(raw)
     except (UnicodeDecodeError, json.JSONDecodeError) as exc:
         raise ManifestError("manifest schema is invalid JSON: {}".format(source)) from exc
+
+
+@lru_cache(maxsize=8)
+def _compiled_schema_bundle(raw: bytes) -> Tuple[Mapping[str, Any], Draft202012Validator]:
+    """Compile identical schema bytes once, independent of fixture location.
+
+    Neither validation nor reference resolution uses the physical filename;
+    changed bytes still get a new validator, and invalid inputs are not cached.
+    The wrapper retains source-specific JSON error diagnostics.
+    """
+    value = json.loads(raw.decode("utf-8"))
     if not isinstance(value, dict):
         raise ManifestError("manifest schema must be a JSON object")
     try:
@@ -127,6 +130,8 @@ class Manifest:
         self.root = root.resolve()
         self.data = dict(data)
         self.source = source.resolve()
+        self._schema_success_key: Optional[Tuple[bytes, bytes]] = None
+        self._schema_success_validator: Optional[Draft202012Validator] = None
 
     @classmethod
     def load(cls, root: Path, source: Optional[Path] = None) -> "Manifest":
@@ -217,6 +222,17 @@ class Manifest:
             _, validator = self._manifest_schema_bundle()
         except ManifestError as exc:
             return [str(exc)]
+        # Only unchanged JSON data and an unchanged schema can reuse success.
+        # Re-read the schema bundle each time; filesystem validation is separate.
+        key: Optional[Tuple[bytes, bytes]] = None
+        try:
+            data_bytes = canonical_json_bytes(self.data)
+            if json.loads(data_bytes) == self.data:
+                key = (data_bytes, canonical_json_bytes(validator.schema))
+        except (TypeError, ValueError, RecursionError):
+            pass
+        if key is not None and key == self._schema_success_key and validator is self._schema_success_validator:
+            return []
         failures: List[str] = []
         for error in sorted(
             validator.iter_errors(self.data),
@@ -224,6 +240,8 @@ class Manifest:
         ):
             location = "/".join(str(item) for item in error.absolute_path) or "<root>"
             failures.append("schema {}: {}".format(location, error.message))
+        self._schema_success_key = key if not failures else None
+        self._schema_success_validator = validator if not failures and key is not None else None
         return failures
 
     def validate(self, strict: bool = False) -> List[str]:

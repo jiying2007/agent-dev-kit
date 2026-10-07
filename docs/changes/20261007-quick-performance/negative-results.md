@@ -1,0 +1,10 @@
+# 负结果
+
+固定3.11 baseline：56/56PASS但140556ms>120000ms。monitor只读采集结构化timing；不保存原始任务日志为长期知识。
+首次剖析nonroot65532直接bind读host0600文件时拒绝，未得到完整validate结果；源文件非root属主剖析后成功，只用于调用热点，不当性能证书。
+第一批候选c71c295/ea25fb8在quick前置ruff失败：agent_platform未使用yaml import、_validate_loaded_assets未使用root变量。已移除；该失败不作为quick耗时改善证据，必须重新实测。
+第一批清理后候选516c2625/962b1c62：56/56PASS，138084ms>120000ms；同环境单次观测比baseline少2472ms，不能推统计显著收益或性能闭环。按已测重复schema和CLI导入热点扩展第二批，并保持原测试集合和门槛。
+第二批aac21d0a/9fd5d9c8：56/56PASS但123026ms>120000ms。差异17330ms仍不能认定预算通过；进一步移除纯task-cost/合法goal/capability和未知命令处理为catch冗余而导入的model。ManifestError与JSONDecodeError本来都是ValueError子类，错误类别与返回码保留；新增冷进程域依赖隔离负例。
+第三批e7cd3b75/4f1be727：56/56PASS但121118ms>120000ms；未为1.118秒差额直接重跑赌通过。继续去重相同schema在不同fixture路径的meta编译，错误诊断保留物理来源；下一实测尚待。
+第四批ae239607/e0e057ca：56/56PASS但120234ms>120000ms。source-only旧复审不能覆盖后续变化，保留失败并重审最终冻结。
+第五批b4c8a604/360eb6c7：56/56PASS但121219ms>120000ms；波动不作为源码回归或收益证明，不调整门槛。第六批落实显式invalid-identity前置阻塞及两项分支负例。

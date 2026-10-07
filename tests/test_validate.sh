@@ -65,7 +65,8 @@ with tempfile.TemporaryDirectory(prefix="adk-strict-version-") as temp:
     fixture = Path(temp) / "source"
     shutil.copytree(root, fixture, symlinks=True, ignore=shutil.ignore_patterns(
         ".git", ".cache", ".ruff_cache", ".mypy_cache", "__pycache__", "build", "dist", "*.egg-info"))
-    environment = dict(os.environ, ADK_PYTHON_BIN=sys.executable)
+    environment = dict(os.environ, ADK_PYTHON_BIN=sys.executable, ADK_ROOT=str(fixture))
+    environment["PYTHONPATH"] = str(fixture / "src") + os.pathsep + os.environ.get("PYTHONPATH", "")
 
     def fixture_projection(name):
         projection = fixture / name
@@ -101,7 +102,7 @@ with tempfile.TemporaryDirectory(prefix="adk-strict-version-") as temp:
 
     def consume(*arguments):
         completed = subprocess.run(
-            ["bash", str(fixture / "scripts/devkit.sh"), "validate", *arguments, "--summary-json"],
+            [sys.executable, "-m", "agent_dev_kit.cli", "validate", *arguments, "--summary-json"],
             cwd=temp, env=environment, capture_output=True, text=True, check=False,
         )
         return completed.returncode, json.loads(completed.stdout)

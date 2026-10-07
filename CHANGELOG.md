@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### 8.0.5 source candidate
+- Reuse one Manifest per validation call and reuse schema success only for unchanged data/schema/validator identity; observe nested mutations, schema drift and filesystem changes.
+- Compile identical schema bytes once per process with a bounded cache, independent of fixture location, preserving source-specific error diagnostics.
+- Load CLI domains on demand and use only safe YAML constructors, with corpus equivalence and pure-parser compatibility checks.
+- Block downstream strict governance on invalid version identity without claiming PASS; valid identity still executes every governance check, with separate asset and governance results.
+- Preserve all quick tests and existing timing limits. Source performance evidence does not establish runtime or product qualification.
+
 ### 8.0.4 source candidate
 - Inspect one bounded regular-file archive snapshot; bind contract parsing, extraction and artifact SHA to the same bytes instead of reopening a mutable path.
 - Bound compressed/decoded bytes, member count/size/name and hidden header read requests; account for skipped payload and gzip padding/concatenated streams, and verify CRC at EOF.
