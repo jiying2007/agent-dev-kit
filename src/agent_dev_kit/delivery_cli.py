@@ -243,8 +243,8 @@ def _cmd_release(argv: Sequence[str]) -> int:
         )
     elif args.action == "rehearse":
         result = rehearse_release(
-            Path(args.previous_artifact).resolve(),
-            Path(args.candidate_artifact).resolve(),
+            Path(args.previous_artifact).expanduser(),
+            Path(args.candidate_artifact).expanduser(),
         )
         if args.output:
             _write_json(Path(args.output), result)
@@ -252,7 +252,7 @@ def _cmd_release(argv: Sequence[str]) -> int:
         result = publish_release(
             args.version,
             args.backend,
-            Path(args.artifact).resolve() if args.artifact else None,
+            Path(args.artifact).expanduser() if args.artifact else None,
             args.repository,
             args.dry_run,
         )

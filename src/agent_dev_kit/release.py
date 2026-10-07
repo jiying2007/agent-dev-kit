@@ -381,16 +381,9 @@ def publish_release(
     expected_name = "agent-dev-kit-{}.tar.gz".format(version)
     if artifact.name != expected_name:
         raise ManifestError("release artifact name does not match version: {}".format(artifact.name))
+    raw, actual_digest = _release_artifacts._verified_archive_snapshot(artifact)
     checksum = artifact.with_name(artifact.name + ".sha256")
-    if not checksum.is_file():
-        raise ManifestError("release checksum is missing: {}".format(checksum))
-    checksum_fields = checksum.read_text(encoding="ascii").strip().split()
-    if len(checksum_fields) != 2 or checksum_fields[1].lstrip("*") != artifact.name:
-        raise ManifestError("release checksum file has an invalid format")
-    actual_digest = sha256_file(artifact)
-    if checksum_fields[0].lower() != actual_digest:
-        raise ManifestError("release checksum does not match artifact")
-    _release_artifacts._assert_publishable_release_artifact(artifact)
+    _release_artifacts._assert_publishable_release_artifact(artifact, raw_snapshot=raw)
     gh = shutil.which("gh")
     if gh is None:
         raise ManifestError("GitHub CLI is required for the github release backend")
@@ -400,14 +393,21 @@ def publish_release(
     if dry_run:
         return {"status": "planned", "backend": backend, "command": command}
     try:
-        completed = subprocess.run(
-            command,
-            check=False,
-            text=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            timeout=300,
-        )
+        # Upload the already-verified bytes, never reopen a replaceable input.
+        with tempfile.TemporaryDirectory(prefix="adk-release-upload-") as temp:
+            upload = Path(temp) / artifact.name
+            upload.write_bytes(raw)
+            upload_checksum = upload.with_name(upload.name + ".sha256")
+            upload_checksum.write_text("{}  {}\n".format(actual_digest, upload.name), encoding="ascii")
+            command[4:6] = [str(upload), str(upload_checksum)]
+            completed = subprocess.run(
+                command,
+                check=False,
+                text=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                timeout=300,
+            )
     except subprocess.TimeoutExpired as exc:
         raise ManifestError("github release timed out after 300 seconds") from exc
     except OSError as exc:
@@ -417,12 +417,12 @@ def publish_release(
     return {"status": "pass", "backend": backend, "version": version, "output": completed.stdout.strip()}
 
 def rehearse_release(previous_artifact: Path, candidate_artifact: Path) -> Dict[str, Any]:
-    previous_digest = _release_artifacts._verify_artifact_checksum(previous_artifact)
-    candidate_digest = _release_artifacts._verify_artifact_checksum(candidate_artifact)
+    previous_raw, previous_digest = _release_artifacts._verified_archive_snapshot(previous_artifact)
+    candidate_raw, candidate_digest = _release_artifacts._verified_archive_snapshot(candidate_artifact)
     workspace = Path(tempfile.mkdtemp(prefix="adk-release-rehearsal-"))
     try:
-        previous_root = _release_artifacts._extract_release(previous_artifact.resolve(), workspace / "previous")
-        candidate_root = _release_artifacts._extract_release(candidate_artifact.resolve(), workspace / "candidate")
+        previous_root = _release_artifacts._extract_release(previous_artifact, workspace / "previous", raw_snapshot=previous_raw)
+        candidate_root = _release_artifacts._extract_release(candidate_artifact, workspace / "candidate", raw_snapshot=candidate_raw)
         previous_manifest, previous_release_manifest = _release_artifacts._release_source_root(previous_root)
         candidate_manifest, candidate_release_manifest = _release_artifacts._release_source_root(candidate_root)
         if (
