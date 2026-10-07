@@ -354,7 +354,7 @@ else:
         forbidden_delivery_imports = {"compiler", "installer", "locking", "release", "targets"}
         direct_delivery_imports = sorted({
             node.module
-            for node in public_cli_tree.body
+            for node in ast.walk(public_cli_tree)
             if isinstance(node, ast.ImportFrom)
             and node.level == 1
             and node.module in forbidden_delivery_imports
@@ -369,7 +369,7 @@ else:
             and node.level == 1
             and node.module == "delivery_cli"
             and any(alias.name == "main" and alias.asname == "delivery_main" for alias in node.names)
-            for node in public_cli_tree.body
+            for node in ast.walk(public_cli_tree)
         )
         if not delegates_delivery:
             failures.append("public CLI must delegate through delivery_cli.main")

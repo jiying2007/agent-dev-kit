@@ -6,9 +6,10 @@ import json
 import os
 import tempfile
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from .model import Manifest, ManifestError
+if TYPE_CHECKING:
+    from .model import Manifest
 
 
 def _discover_root() -> Path:
@@ -58,6 +59,8 @@ PUBLIC_COMMANDS = [
 
 
 def _manifest() -> Manifest:
+    from .model import Manifest, ManifestError
+
     if not (ROOT / "manifest.json").is_file():
         raise ManifestError("ADK asset root not found; run inside a checkout or set ADK_ROOT")
     return Manifest.load(ROOT)

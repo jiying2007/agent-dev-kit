@@ -12,6 +12,7 @@ import yaml
 
 from .eval_catalog import audit_eval_catalog
 from .model import Manifest, ManifestError, ensure_within
+from .safe_yaml import safe_load
 from .versioning import version_identity_failures
 
 _KEBAB = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
@@ -58,7 +59,7 @@ def _frontmatter(path: Path) -> Mapping[str, Any]:
     end = text.find("\n---\n", 4)
     if end < 0:
         raise ValueError("unterminated frontmatter")
-    value = yaml.safe_load(text[4:end])
+    value = safe_load(text[4:end])
     if not isinstance(value, dict):
         raise ValueError("frontmatter must be a mapping")
     return value
@@ -295,7 +296,10 @@ def _validate_mcp_and_change_sets(manifest: Manifest, strict: bool, failures: li
 
 
 def validate_assets(root: Path, *, strict: bool, quick: bool) -> dict[str, Any]:
-    manifest = Manifest.load(root)
+    return _validate_loaded_assets(Manifest.load(root), strict=strict, quick=quick)
+
+
+def _validate_loaded_assets(manifest: Manifest, *, strict: bool, quick: bool) -> dict[str, Any]:
     failures = manifest.validate(strict=strict and not quick)
     _validate_quality_tiers(manifest, strict, failures)
     _validate_references_and_targets(manifest, strict, failures)
@@ -355,13 +359,17 @@ def _governance_gate_failure(root: Path, command: Sequence[str], label: str) -> 
 def validate_repository(root: Path, *, strict: bool, quick: bool) -> dict[str, Any]:
     root = root.resolve()
     manifest = Manifest.load(root)
-    result = validate_assets(root, strict=strict, quick=quick)
+    result = _validate_loaded_assets(manifest, strict=strict, quick=quick)
     failures = [str(item) for item in result.get("failures", [])]
     eval_catalog = audit_eval_catalog(root)
     failures.extend("eval-catalog: " + issue for issue in eval_catalog["issues"])
 
-    if strict and not quick:
-        failures.extend(version_identity_failures(root))
+    governance = {"status": "not-run", "checked": 0, "reason": "quick-or-nonstrict"}
+    identity_failures = version_identity_failures(root) if strict and not quick else []
+    failures.extend(identity_failures)
+    if identity_failures:
+        governance = {"status": "blocked", "checked": 0, "reason": "invalid-version-identity"}
+    if strict and not quick and not identity_failures:
         gates = (
             (["bash", str(root / "scripts" / "check-runtime-boundary.sh")], "runtime-boundary"),
             (
@@ -386,12 +394,16 @@ def validate_repository(root: Path, *, strict: bool, quick: bool) -> dict[str, A
                 "workflow-closure",
             ),
         )
+        governance_failed = False
         for command, label in gates:
             failure = _governance_gate_failure(root, command, label)
             if failure:
                 failures.append(failure)
+                governance_failed = True
+        governance = {"status": "fail" if governance_failed else "pass", "checked": len(gates), "reason": "completed"}
 
     result = dict(result)
+    result["governance_checks"] = governance
     result["eval_catalog"] = {
         "catalog_valid": eval_catalog["catalog_valid"],
         "catalog_sha256": eval_catalog["catalog_sha256"],

@@ -10,7 +10,6 @@ from datetime import date
 from pathlib import Path
 from typing import Optional, Sequence
 
-from .catalog_contract import main as catalog_main
 from .cli_runtime import (
     ROOT,
     _help,
@@ -19,26 +18,12 @@ from .cli_runtime import (
     _write_json,
     _write_text,
 )
-from .contracts.manifest_composition import composition_check
-from .doctor import run_doctor
-from .delivery_cli import main as delivery_main
-from .evaluation_cli import main as evaluation_main
-from .matcher import main as matcher_main
-from .native_campaign import main as native_campaign_main
-from .agent_platform_cli import main as platform_main
-from .phase_context import main as phase_context_main
-from .profile_context_footprint import main as profile_context_footprint_main
-from .target_source_probe import main as target_source_probe_main
-from .skill_relationships import main as skill_relationships_main
-from .model import ManifestError, canonical_json_bytes, sha256_bytes
-from .quality import benchmark_markdown, run_benchmark, security_check
-from .readiness import readiness_markdown, run_harness_readiness
-from .task_cost import TASK_TYPES as TASK_COST_TYPES
-from .task_cost import classify_task_cost, validate_skill_usage
-from .validation_contract import validate_repository
 
 
 def _cmd_manifest(argv: Sequence[str]) -> int:
+    from .contracts.manifest_composition import composition_check
+    from .model import canonical_json_bytes, sha256_bytes
+
     parser = argparse.ArgumentParser(prog="devkit.sh manifest")
     sub = parser.add_subparsers(dest="action", required=True)
     check = sub.add_parser("composition-check")
@@ -64,6 +49,8 @@ def _cmd_manifest(argv: Sequence[str]) -> int:
 
 
 def _cmd_validate(argv: Sequence[str]) -> int:
+    from .validation_contract import validate_repository
+
     parser = argparse.ArgumentParser(prog="devkit.sh validate")
     parser.add_argument("--strict", action="store_true")
     parser.add_argument("--quick", action="store_true")
@@ -86,6 +73,8 @@ def _cmd_validate(argv: Sequence[str]) -> int:
     return 0 if result["status"] == "pass" else 1
 
 def _cmd_doctor(argv: Sequence[str]) -> int:
+    from .doctor import run_doctor
+
     parser = argparse.ArgumentParser(prog="devkit.sh doctor")
     parser.add_argument("--require-runtime", action="append", choices=("codex", "claude"), default=[])
     parser.add_argument("--target")
@@ -104,14 +93,20 @@ def _cmd_doctor(argv: Sequence[str]) -> int:
 
 
 def _cmd_catalog(argv: Sequence[str]) -> int:
+    from .catalog_contract import main as catalog_main
+
     return catalog_main([*list(argv), "--root", str(ROOT)])
 
 
 def _cmd_match(argv: Sequence[str]) -> int:
+    from .matcher import main as matcher_main
+
     return matcher_main(argv)
 
 
 def _cmd_benchmark(argv: Sequence[str]) -> int:
+    from .quality import benchmark_markdown, run_benchmark
+
     parser = argparse.ArgumentParser(prog="devkit.sh benchmark")
     sub = parser.add_subparsers(dest="action", required=True)
     run = sub.add_parser("run")
@@ -139,6 +134,8 @@ def _cmd_benchmark(argv: Sequence[str]) -> int:
 
 
 def _cmd_security(argv: Sequence[str]) -> int:
+    from .quality import security_check
+
     parser = argparse.ArgumentParser(prog="devkit.sh security")
     parser.add_argument("action", choices=("check",))
     parser.add_argument("--summary-json", action="store_true")
@@ -153,17 +150,23 @@ def _cmd_security(argv: Sequence[str]) -> int:
 
 def _cmd_goal(argv: Sequence[str]) -> int:
     if not argv or argv[0] != "check":
+        from .model import ManifestError
+
         raise ManifestError("usage: devkit.sh goal check [--summary-json]")
     return subprocess.call(["bash", str(ROOT / "scripts" / "check-goal-contracts.sh")] + list(argv[1:]), cwd=str(ROOT))
 
 
 def _cmd_capability(argv: Sequence[str]) -> int:
     if not argv or argv[0] != "health":
+        from .model import ManifestError
+
         raise ManifestError("usage: devkit.sh capability health [--summary-json]")
     return subprocess.call(["bash", str(ROOT / "scripts" / "check-capability-health.sh")] + list(argv[1:]), cwd=str(ROOT))
 
 
 def _cmd_harness(argv: Sequence[str]) -> int:
+    from .readiness import readiness_markdown, run_harness_readiness
+
     parser = argparse.ArgumentParser(prog="devkit.sh harness")
     sub = parser.add_subparsers(dest="action", required=True)
     readiness = sub.add_parser("readiness")
@@ -200,6 +203,9 @@ def _cmd_harness(argv: Sequence[str]) -> int:
 
 
 def _cmd_task_cost(argv: Sequence[str]) -> int:
+    from .task_cost import TASK_TYPES as TASK_COST_TYPES
+    from .task_cost import classify_task_cost, validate_skill_usage
+
     parser = argparse.ArgumentParser(prog="devkit.sh task-cost")
     parser.add_argument("--task", required=True)
     parser.add_argument("--task-type", choices=sorted(TASK_COST_TYPES), default="general")
@@ -253,29 +259,45 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         if command == "match":
             return _cmd_match(rest)
         if command == "phase-context":
+            from .phase_context import main as phase_context_main
+
             phase_args = rest if "--root" in rest else ["--root", str(ROOT), *rest]
             return phase_context_main(phase_args)
         if command == "profile-footprint":
+            from .profile_context_footprint import main as profile_context_footprint_main
+
             footprint_args = rest if "--root" in rest else ["--root", str(ROOT), *rest]
             return profile_context_footprint_main(footprint_args)
         if command == "target-source-probe":
+            from .target_source_probe import main as target_source_probe_main
+
             probe_args = rest if "--root" in rest else ["--root", str(ROOT), *rest]
             return target_source_probe_main(probe_args)
         if command == "native-campaign":
+            from .native_campaign import main as native_campaign_main
+
             campaign_args = rest if "--root" in rest else ["--root", str(ROOT), *rest]
             return native_campaign_main(campaign_args)
         if command == "skill-relationships":
+            from .skill_relationships import main as skill_relationships_main
+
             relationship_args = rest if "--root" in rest else ["--root", str(ROOT), *rest]
             return skill_relationships_main(relationship_args)
         if command == "platform":
+            from .agent_platform_cli import main as platform_main
+
             return platform_main(rest)
         if command in ("export", "target", "install", "lock", "release"):
+            from .delivery_cli import main as delivery_main
+
             return delivery_main([command, *rest])
         if command == "benchmark":
             return _cmd_benchmark(rest)
         if command == "security":
             return _cmd_security(rest)
         if command == "eval":
+            from .evaluation_cli import main as evaluation_main
+
             return evaluation_main(rest)
         if command == "goal":
             return _cmd_goal(rest)
@@ -292,7 +314,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         print("[FAIL] unknown command: {}".format(command), file=sys.stderr)
         _help()
         return 2
-    except (ManifestError, OSError, ValueError, json.JSONDecodeError) as exc:
+    except (OSError, ValueError) as exc:
         print("[FAIL] {}".format(exc), file=sys.stderr)
         return 1
 

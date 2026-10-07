@@ -12,6 +12,7 @@ from typing import Any, Dict, Mapping, Optional, Sequence
 import yaml
 
 from .model import Manifest, ManifestError
+from .safe_yaml import safe_load
 
 
 POLICY_SCHEMA = "adk-workflow-ir-policy/v1"
@@ -163,7 +164,7 @@ def _frontmatter(path: Path) -> Dict[str, Any]:
     except ValueError as exc:
         raise ManifestError("workflow frontmatter is not terminated: {}".format(path)) from exc
     try:
-        value = yaml.safe_load("\n".join(lines[1:end]))
+        value = safe_load("\n".join(lines[1:end]))
     except yaml.YAMLError as exc:
         raise ManifestError("workflow frontmatter is invalid: {}".format(path)) from exc
     if not isinstance(value, dict) or set(value) != WORKFLOW_FRONTMATTER_FIELDS:
