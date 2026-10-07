@@ -336,7 +336,18 @@ def _extract_release(artifact: Path, destination: Path, member_limit: int = 5000
                 raise ManifestError("release archive escapes extraction root") from exc
             members.append(member)
         for member in members:
-            archive.extract(member, path=str(destination), set_attrs=True)
+            target = destination / member.name
+            if member.isdir():
+                target.mkdir(parents=True, exist_ok=True)
+                continue
+            target.parent.mkdir(parents=True, exist_ok=True)
+            source = archive.extractfile(member)
+            if source is None:
+                raise ManifestError("release archive member has no regular payload")
+            with source, target.open("xb") as output:
+                shutil.copyfileobj(source, output, length=64 * 1024)
+            # Release files retain executable bits but never acquire special bits.
+            target.chmod(member.mode & 0o777)
     if "manifest.json" in names:
         return destination
     if len(roots) == 1:

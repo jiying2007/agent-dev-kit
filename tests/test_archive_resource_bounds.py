@@ -266,6 +266,30 @@ class ArchiveResourceTests(unittest.TestCase):
             output = release_artifacts._extract_release(self.path, self.root / "extracted")
         self.assertEqual(self.members[0][1], (output / "manifest.json").read_bytes())
 
+    def test_explicit_extraction_preserves_payload_and_safe_permissions(self):
+        with tarfile.open(self.path, "w:gz") as archive:
+            script = tarfile.TarInfo("bin/runner.sh")
+            script.mode = 0o6755
+            payload = b"#!/bin/sh\nexit 0\n"
+            script.size = len(payload)
+            archive.addfile(script, io.BytesIO(payload))
+            for name, content in self.members:
+                member = tarfile.TarInfo(name)
+                member.size = len(content)
+                archive.addfile(member, io.BytesIO(content))
+        with mock.patch.object(tarfile.TarFile, "extract", side_effect=AssertionError("generic extraction")):
+            output = release_artifacts._extract_release(self.path, self.root / "explicit")
+        target = output / "bin/runner.sh"
+        self.assertEqual(payload, target.read_bytes())
+        self.assertEqual(0o755, target.stat().st_mode & 0o7777)
+
+    def test_extraction_rejects_path_traversal_before_writing_members(self):
+        self.write_archive(self.members + [("../escaped", b"unsafe")])
+        with self.assertRaisesRegex(ManifestError, "unsafe path"):
+            release_artifacts._extract_release(self.path, self.root / "traversal")
+        self.assertFalse((self.root / "escaped").exists())
+        self.assertFalse((self.root / "traversal/manifest.json").exists())
+
     def test_extraction_budget_failure_precedes_destination_creation(self):
         target = self.root / "not-created"
         with mock.patch.object(archive_io, "MAX_MEMBERS", 1):
