@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### 8.0.3 source candidate
+- Reject duplicate keys, non-finite values, excess JSON bytes/depth and unsafe file leaves in target contracts and promotion evidence; preserve strict archive manifest decoding under the existing 8 MiB bound.
+- Hash and decode native target receipts from one bounded regular-file descriptor read, preserving original paths so root checks cannot erase leaf symlinks.
+- Publish promotion evidence atomically with explicit public 0644 permissions and unchanged sorted JSON bytes; retain previous output on failure.
+- Preserve schemas, signature identities and qualification boundaries; local tests do not establish signed release, live adoption or model gains.
+
 ### 8.0.2 source candidate
 - Share bounded object JSON encoding and random exclusive temporary publication across installation, campaign persistence and target lock metadata; publish public release checksums with explicit 0644 permissions.
 - Reject unreadable campaign output before filesystem mutation and read campaign/lock documents through strict regular-file descriptors.

@@ -21,6 +21,8 @@ from agent_dev_kit.contracts.schema_loader import packaged_schema_bytes
 from agent_dev_kit.model import canonical_json_bytes
 
 from ..compat import sha256_stream
+from ..strict_json import StrictJSONError
+from ..strict_json import loads as load_strict_json
 
 _SCHEMA_NAME = "release-manifest-v2.schema.json"
 _MAX_JSON_BYTES = 8 * 1024 * 1024
@@ -86,8 +88,8 @@ def _read_regular_member(archive: tarfile.TarFile, name: str) -> bytes:
 
 def _canonical_manifest_sha256(raw: bytes) -> str:
     try:
-        value = json.loads(raw.decode("utf-8"))
-    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        value = load_strict_json(raw, max_bytes=_MAX_JSON_BYTES)
+    except StrictJSONError as exc:
         raise ValueError("manifest.json is not valid UTF-8 JSON") from exc
     if not isinstance(value, dict):
         raise ValueError("manifest.json root must be an object")
@@ -104,8 +106,8 @@ def validate_release_artifact(artifact: Path) -> dict[str, Any]:
     with tarfile.open(artifact, mode="r:gz") as archive:
         release_bytes = _read_regular_member(archive, "release-manifest.json")
         try:
-            release_manifest = json.loads(release_bytes.decode("utf-8"))
-        except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+            release_manifest = load_strict_json(release_bytes, max_bytes=_MAX_JSON_BYTES)
+        except StrictJSONError as exc:
             raise ValueError("release-manifest.json is not valid UTF-8 JSON") from exc
         if not isinstance(release_manifest, dict):
             raise ValueError("release-manifest.json root must be an object")

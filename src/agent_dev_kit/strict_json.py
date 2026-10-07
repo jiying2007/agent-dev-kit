@@ -78,8 +78,9 @@ def loads(data: str | bytes, *, max_bytes: int = DEFAULT_MAX_BYTES,
         raise StrictJSONError("invalid JSON input") from exc
 
 
-def read(path: Path, *, max_bytes: int = DEFAULT_MAX_BYTES,
-         max_depth: int = DEFAULT_MAX_DEPTH, regular_only: bool = False) -> Any:
+def read_bytes(path: Path, *, max_bytes: int = DEFAULT_MAX_BYTES,
+               regular_only: bool = False) -> bytes:
+    """Read bounded bytes once so callers can hash the exact parsed payload."""
     if isinstance(max_bytes, bool) or not isinstance(max_bytes, int) or max_bytes < 1:
         raise StrictJSONError("JSON byte budget must be a positive integer")
     try:
@@ -101,4 +102,12 @@ def read(path: Path, *, max_bytes: int = DEFAULT_MAX_BYTES,
                 data = stream.read(max_bytes + 1)
     except OSError as exc:
         raise StrictJSONError("JSON input cannot be read") from exc
+    if len(data) > max_bytes:
+        raise StrictJSONError("JSON exceeds byte budget")
+    return data
+
+
+def read(path: Path, *, max_bytes: int = DEFAULT_MAX_BYTES,
+         max_depth: int = DEFAULT_MAX_DEPTH, regular_only: bool = False) -> Any:
+    data = read_bytes(path, max_bytes=max_bytes, regular_only=regular_only)
     return loads(data, max_bytes=max_bytes, max_depth=max_depth)

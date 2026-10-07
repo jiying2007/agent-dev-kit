@@ -23,7 +23,10 @@ from jsonschema import Draft202012Validator, FormatChecker
 from agent_dev_kit.contracts.schema_loader import packaged_schema_bytes
 from agent_dev_kit.model import canonical_json_bytes
 
+from ..atomic_io import write_text_atomic
 from ..compat import sha256_stream
+from ..strict_json import loads as load_strict_json
+from ..strict_json import read as read_strict_json
 
 _SCHEMA_NAME = "promotion-evidence-v1.schema.json"
 _REQUIRED_PYTHON = ["3.8", "3.11", "3.12"]
@@ -59,7 +62,7 @@ def _schema_set_sha256(root: Path) -> str:
 
 
 def _load_release_contract(path: Path) -> Mapping[str, Any]:
-    value = json.loads(path.read_text(encoding="utf-8"))
+    value = read_strict_json(path, regular_only=True)
     if not isinstance(value, Mapping) or value.get("schema") != "adk-release-artifact-contract-set/v1":
         raise ValueError("release contract must be adk-release-artifact-contract-set/v1")
     artifacts = value.get("artifacts")
@@ -117,7 +120,7 @@ def build_promotion_evidence(
 ) -> dict[str, Any]:
     root = root.resolve()
     manifest_path = root / "manifest.json"
-    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest = read_strict_json(manifest_path, regular_only=True)
     if not isinstance(manifest, Mapping):
         raise ValueError("manifest.json root must be an object")
 
@@ -212,7 +215,7 @@ def _main(argv: Sequence[str] | None = None) -> int:
     args = parser.parse_args(argv)
     try:
         if args.command == "validate":
-            value = json.loads(args.path.read_text(encoding="utf-8"))
+            value = read_strict_json(args.path, regular_only=True)
             if not isinstance(value, Mapping):
                 raise ValueError("promotion evidence root must be an object")
             result = validate_promotion_evidence(value)
@@ -235,8 +238,9 @@ def _main(argv: Sequence[str] | None = None) -> int:
             static_security_result=args.static_security_result,
             deterministic_result=args.deterministic_result,
         )
-        args.out.parent.mkdir(parents=True, exist_ok=True)
-        args.out.write_text(json.dumps(evidence, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        text = json.dumps(evidence, indent=2, sort_keys=True) + "\n"
+        load_strict_json(text)
+        write_text_atomic(text, args.out, mode=0o644)
         print(json.dumps({"schema": "adk-promotion-evidence-generation/v1", "status": "pass", "out": str(args.out)}))
         return 0
     except (OSError, ValueError, subprocess.CalledProcessError, json.JSONDecodeError) as exc:
