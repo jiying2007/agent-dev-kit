@@ -79,7 +79,7 @@ jobs:
           cache-dependency-path: pyproject.toml
 
       - name: Set up Node
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: '22'
 
@@ -415,7 +415,7 @@ jobs:
           PY
 
       - name: Upload candidate native conformance package
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: g21-claude-native-candidate-${{ github.sha }}
           path: ${{ runner.temp }}/g21-native
