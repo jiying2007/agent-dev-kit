@@ -14,4 +14,3 @@
 | [Anthropic long-running harnesses](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) | 结构化功能清单、逐项推进、进度与恢复工件 | retain：runtime-neutral 长任务接力；不吸收厂商 runtime |
 
 关联来源为既有 manifest 采纳及 docs/reference-adoption-matrix.md 的历史 decision；本次复核不重写历史行、不产生第二事实源。生产 gate 仍按当前日期拒绝过期来源；90 天延续来自既有 review_policy，不放宽门槛。
-
