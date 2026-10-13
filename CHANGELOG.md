@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### 8.0.6 source candidate
+- Re-review existing OpenCode, OWASP taxonomy and five Anthropic official sources against current documents before renewing their 90-day freshness declarations.
+- Describe Claude skill description metadata as recommended upstream while retaining ADK's stronger local portability requirements.
+- Record the unavailable OWASP guide download and the official taxonomy-only review basis; retain static target, method-only adoption and independent runtime/field/owner qualification boundaries.
+- Advance synchronized source version and campaign identity; source verification does not establish signed release, root adoption or model qualification.
+
 ### 8.0.5 source candidate
 - Reuse one Manifest per validation call and reuse schema success only for unchanged data/schema/validator identity; observe nested mutations, schema drift and filesystem changes.
 - Compile identical schema bytes once per process with a bounded cache, independent of fixture location, preserving source-specific error diagnostics.

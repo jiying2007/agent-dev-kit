@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-09-28",
+  "last_updated": "2026-10-13",
   "reference_boundary": "External agent, plugin, memory and skill sources are method-only references until a separate supply-chain review targets a specific versioned asset. This manifest does not enable external runtimes, hooks, workers, MCP servers or plugin installs.",
   "local_source_policy": {
     "id": "optional-workspace-reference-clones-v1",
@@ -166,13 +166,13 @@
       "title": "OWASP Top 10 for Agentic Applications 2026",
       "url": "https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/",
       "local_path": "",
-      "retrieved_at": "2026-07-14",
+      "retrieved_at": "2026-10-13",
       "review_status": "reviewed",
-      "expires_at": "2026-10-12",
+      "expires_at": "2027-01-11",
       "license": "CC-BY-SA-4.0",
       "evidence_strength": "high",
       "decision": "adopt-method-only",
-      "notes": "Use ASI01-ASI10 as a security coverage taxonomy and map each category to local controls/evidence. Do not copy the guide text or claim OWASP certification."
+      "notes": "2026-10-13 re-review read the official resource page and the project's 2025-12-09 launch article, which enumerates ASI01-ASI10 and supports the existing local coverage taxonomy. The linked guide download timed out; no claim of a fresh full-guide review is made. Retain method-only local controls/evidence mapping, do not copy guide text or claim OWASP certification. Review detail: docs/changes/official-source-refresh-20261013/source-review.md."
     },
     {
       "id": "github-gh-aw-safe-outputs",
