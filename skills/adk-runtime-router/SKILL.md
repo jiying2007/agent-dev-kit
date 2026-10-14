@@ -72,16 +72,13 @@ constraints:
 ```
 
 ## Commands
+- 只使用当前目标已验证的 inventory、manifest 与 health adapter，不假定固定 HOME 路径或 shell wrapper。
+- Codex 特有命令见 `docs/runbooks/codex-team-runtime-distribution.md`，不进入通用 Skill。
+- ADK 源仓内可执行：
+
 ```bash
-# Codex runtime：按需检索受信 inventory；不绑定专用低 token profile
-rtk bash ~/codex/scripts/skill-search.sh --query "<用户请求>" --limit 5 --summary-json
-
-# Codex runtime：验证声明式 routing
-rtk bash -lc 'cd ~/codex && python3 -m unittest tests.test_agent_routing_eval'
-
-# ADK 源仓维护
-rtk bash scripts/check-profile-coherence.sh
-rtk bash scripts/devkit.sh validate --strict
+bash scripts/check-profile-coherence.sh
+bash scripts/devkit.sh validate --strict
 ```
 
 ## Failure Handling
