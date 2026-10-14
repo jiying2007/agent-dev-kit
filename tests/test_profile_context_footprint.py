@@ -47,8 +47,11 @@ class ProfileContextFootprintTest(unittest.TestCase):
     def test_ratchet_fails_on_source_growth(self) -> None:
         actual = profile_footprint(MANIFEST, "core")
         grown = json.loads(json.dumps(actual))
-        grown["entry_file_surface"]["bytes"] += 1
-        grown["potential_full_source_surface"]["bytes"] += 1
+        limit = json.loads((ROOT / "manifests/profile_context_ratchets.json").read_text())["profiles"]["core"]["entry_file_bytes"]
+        delta = limit + 1 - actual["entry_file_surface"]["bytes"]
+        self.assertGreater(delta, 0)
+        grown["entry_file_surface"]["bytes"] += delta
+        grown["potential_full_source_surface"]["bytes"] += delta
         with patch("agent_dev_kit.profile_context_footprint.profile_footprint", return_value=grown):
             result = enforce_profile_ratchet(MANIFEST, "core")
         self.assertEqual(result["status"], "fail")
