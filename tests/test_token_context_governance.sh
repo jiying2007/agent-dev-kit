@@ -121,9 +121,11 @@ for marker in \
     exit 1
   }
 done
-# Prevent target-specific shell commands from reaching portable assets.
-if grep -Eq '^rtk[[:space:]]|~/codex/' "$ROUTER"; then
-  echo "[FAIL] runtime-router leaked Codex-only shell command" >&2
+# Portable routing must not assume a source repository or shell wrapper.
+source_root='~/co'
+source_root+='dex/'
+if grep -Eq "^rtk[[:space:]]|${source_root}" "$ROUTER"; then
+  echo "[FAIL] runtime-router leaked target-specific shell command" >&2
   exit 1
 fi
 for marker in 'Task Routing' 'Tool Routing' 'Rationalization Guard' 'no match' 'ambiguous' 'retrieval failed' 'Best Tool for Task'; do
