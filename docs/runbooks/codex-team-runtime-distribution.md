@@ -59,3 +59,15 @@ rtk bash ./scripts/team-assets.sh setup
 2. 成员安装失败：由维护者诊断；底层 receipt/rollback 作为维护能力保留，不作为成员日常操作。
 3. 发行回退：恢复上一版团队仓 commit/release，成员重新执行 `setup`。
 4. target drift 时 rollback fail closed；先审查成员本地修改，再决定保留或显式覆盖。
+
+## Codex-only on-demand router diagnostics
+
+These commands apply **only** after the trusted Codex team source repository
+has been installed at the declared source path and `rtk` is available. They are
+not instructions for Claude Code/OpenCode runtime-bundled Skills. If the
+source/requisites are absent, report unavailable rather than invent a fallback.
+
+```bash
+rtk bash ~/codex/scripts/skill-search.sh --query "<user request>" --limit 5 --summary-json
+rtk bash -lc 'cd ~/codex && python3 -m unittest tests.test_agent_routing_eval'
+```

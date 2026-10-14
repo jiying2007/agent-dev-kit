@@ -110,19 +110,22 @@ router_bytes="$(wc -c <"$ROUTER" | tr -d ' ')"
   echo "[FAIL] runtime-router entry exceeds 5600-byte ratchet: $router_bytes" >&2
   exit 1
 }
-search_path='~/co'
-search_path+='dex/scripts/skill-search.sh'
 for marker in \
   '## Prerequisites' '## Workflow' '## Commands' '## Quality Gate' \
   'skill-catalog-lazy-loading-v1' 'namespace_summary' 'deferred_surface' \
   'loaded_tools' 'schema_review' 'code_intelligence_provider_contract' \
   'Tool / Skill Evidence Plan' 'primary' 'supporting' 'fallback' 'verification' \
-  'Skipped Skills' 'Fallback Evidence' 'L1' 'L2' 'L3' 'raw' "$search_path"; do
+  'Skipped Skills' 'Fallback Evidence' 'L1' 'L2' 'L3' 'raw'; do
   grep -Fq -- "$marker" "$ROUTER" || {
     echo "[FAIL] runtime-router entry lost required marker: $marker" >&2
     exit 1
   }
 done
+# Prevent target-specific shell commands from reaching portable assets.
+if grep -Eq '^rtk[[:space:]]|~/codex/' "$ROUTER"; then
+  echo "[FAIL] runtime-router leaked Codex-only shell command" >&2
+  exit 1
+fi
 for marker in 'Task Routing' 'Tool Routing' 'Rationalization Guard' 'no match' 'ambiguous' 'retrieval failed' 'Best Tool for Task'; do
   grep -Fq -- "$marker" "$ROUTER_REF" || {
     echo "[FAIL] runtime-router reference lost required detail: $marker" >&2
