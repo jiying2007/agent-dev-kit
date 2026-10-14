@@ -104,10 +104,14 @@ def _apply_validated_plan(
             if destination.exists() or destination.is_symlink():
                 backup = ensure_within(backup_root / rendered.destination, backup_root, "install backup")
                 backup.parent.mkdir(parents=True, exist_ok=True)
-                shutil.move(str(destination), str(backup))
                 backup_relative = backup.relative_to(target).as_posix()
-                backup_sha256 = sha256_tree(backup)
+                # Fail atomically on cross-filesystem targets instead of letting
+                # shutil.move perform a partially completed copy/delete.
+                os.replace(str(destination), str(backup))
+                # Register the successfully moved asset BEFORE the next I/O:
+                # digest reads may fail and must not orphan the only copy.
                 moved_backups.append({"destination": rendered.destination, "backup": backup_relative})
+                backup_sha256 = sha256_tree(backup)
             destination.parent.mkdir(parents=True, exist_ok=True)
             os.replace(str(staged), str(destination))
             deployed.append(rendered.destination)
@@ -151,8 +155,9 @@ def _apply_validated_plan(
                 destination = target / item["destination"]
                 backup = target / item["backup"]
                 destination.parent.mkdir(parents=True, exist_ok=True)
-                if backup.exists() or backup.is_symlink():
-                    shutil.move(str(backup), str(destination))
+                if not (backup.exists() or backup.is_symlink()):
+                    raise ManifestError("install recovery backup missing: {}".format(backup))
+                os.replace(str(backup), str(destination))
             recovery_complete = True
         finally:
             if recovery_complete:
@@ -239,14 +244,14 @@ def _rollback_locked(receipt_path: Path) -> Dict[str, Any]:
                 rollback_staging / str(item["destination"]), rollback_staging, "staged installed asset"
             )
             staged.parent.mkdir(parents=True, exist_ok=True)
-            shutil.move(str(destination), str(staged))
+            os.replace(str(destination), str(staged))
             staged_installed.append({"destination": destination, "staged": staged})
             removed += 1
             backup_value = item.get("backup")
             if backup_value:
                 backup = ensure_within(target / str(backup_value), target, "rollback backup")
                 destination.parent.mkdir(parents=True, exist_ok=True)
-                shutil.move(str(backup), str(destination))
+                os.replace(str(backup), str(destination))
                 restored_backups.append({"destination": destination, "backup": backup})
                 restored += 1
         if previous_receipt is not None:
@@ -262,16 +267,26 @@ def _rollback_locked(receipt_path: Path) -> Dict[str, Any]:
                     break
                 current = current.parent
     except Exception:
-        for moved in reversed(restored_backups):
-            moved["backup"].parent.mkdir(parents=True, exist_ok=True)
-            if moved["destination"].exists() or moved["destination"].is_symlink():
-                shutil.move(str(moved["destination"]), str(moved["backup"]))
-        for moved in reversed(staged_installed):
-            moved["destination"].parent.mkdir(parents=True, exist_ok=True)
-            if moved["staged"].exists() or moved["staged"].is_symlink():
-                shutil.move(str(moved["staged"]), str(moved["destination"]))
+        recovery_complete = False
+        try:
+            for moved in reversed(restored_backups):
+                moved["backup"].parent.mkdir(parents=True, exist_ok=True)
+                if not (moved["destination"].exists() or moved["destination"].is_symlink()):
+                    raise ManifestError("rollback compensation source missing: {}".format(moved["destination"]))
+                os.replace(str(moved["destination"]), str(moved["backup"]))
+            for moved in reversed(staged_installed):
+                moved["destination"].parent.mkdir(parents=True, exist_ok=True)
+                if not (moved["staged"].exists() or moved["staged"].is_symlink()):
+                    raise ManifestError("rollback compensation staged asset missing: {}".format(moved["staged"]))
+                os.replace(str(moved["staged"]), str(moved["destination"]))
+            recovery_complete = True
+        finally:
+            # A second failure MUST retain the staged installed assets; deleting
+            # them would destroy the only remaining recoverable copy.
+            if recovery_complete:
+                shutil.rmtree(str(rollback_staging), ignore_errors=True)
         raise
-    finally:
+    else:
         shutil.rmtree(str(rollback_staging), ignore_errors=True)
 
     backup_root_value = receipt.get("backup_root")

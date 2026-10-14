@@ -9,6 +9,7 @@ from unittest.mock import Mock, patch
 from types import SimpleNamespace
 
 from agent_dev_kit import installation_contract as contract
+from agent_dev_kit import installation_transaction as transaction
 from agent_dev_kit import atomic_io
 from agent_dev_kit.installation_transaction import apply_plan, rollback
 from agent_dev_kit.installation_transaction import _apply_validated_plan
@@ -324,6 +325,68 @@ class InstallationJSONTest(unittest.TestCase):
                 self.assertEqual(b"KEEP", fixed.read_bytes())
                 self.assertEqual([], list(target.glob("." + contract.RECEIPT_NAME + ".*.tmp")))
                 contract._read_receipt(receipt_path, "previous fixture")
+
+    def test_backup_digest_failure_restores_asset_and_receipt(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            target = root / "target"
+            manifest = Manifest.load(ROOT)
+            plan_path = root / "plan.json"
+            def install():
+                write_plan(install_create_plan(manifest, "claude-code", str(target), ("core",), (),
+                                               "copy", asset_kind="agent"), plan_path)
+                return apply_plan(manifest, plan_path)
+            install()
+            receipt_path = target / contract.RECEIPT_NAME
+            old_receipt = receipt_path.read_bytes()
+            assets = {path: path.read_bytes() for path in (target / "agents").glob("*.md")}
+            real_sha256_tree = transaction.sha256_tree
+            def fail_backup_digest(path):
+                if ".adk-backups" in Path(path).parts:
+                    raise OSError("simulated backup digest failure")
+                return real_sha256_tree(path)
+            write_plan(install_create_plan(manifest, "claude-code", str(target), ("core",), (),
+                                           "copy", asset_kind="agent"), plan_path)
+            with patch.object(transaction, "sha256_tree", side_effect=fail_backup_digest):
+                with self.assertRaisesRegex(OSError, "backup digest failure"):
+                    apply_plan(manifest, plan_path)
+            self.assertEqual(old_receipt, receipt_path.read_bytes())
+            self.assertEqual(assets, {path: path.read_bytes() for path in (target / "agents").glob("*.md")})
+            self.assertEqual([], list((target / ".adk-backups").rglob("*.md")))
+            self.assertEqual("pass", rollback(receipt_path)["status"])
+
+    def test_rollback_second_compensation_failure_retains_staged_assets(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            target = root / "target"
+            manifest = Manifest.load(ROOT)
+            plan_path = root / "plan.json"
+            def install():
+                write_plan(install_create_plan(manifest, "claude-code", str(target), ("core",), (),
+                                               "copy", asset_kind="agent"), plan_path)
+                return apply_plan(manifest, plan_path)
+            install()
+            install()
+            receipt_path = target / contract.RECEIPT_NAME
+            receipt = contract._read_receipt(receipt_path, "fixture")
+            real_replace = os.replace
+            def fault(src, dst):
+                if Path(dst) == receipt_path:
+                    raise OSError("simulated receipt publication failure")
+                if ".adk-rollback-staging" in Path(src).parts:
+                    raise OSError("simulated second compensation failure")
+                return real_replace(src, dst)
+            with patch.object(transaction.os, "replace", side_effect=fault):
+                with self.assertRaisesRegex(OSError, "second compensation failure"):
+                    rollback(receipt_path)
+            staged = target / ".adk-rollback-staging" / str(receipt["receipt_id"])
+            self.assertTrue(staged.is_dir())
+            self.assertEqual(len(receipt["installed"]), len(list(staged.rglob("*.md"))))
+            self.assertEqual(receipt["receipt_sha256"], contract._read_receipt(receipt_path, "fixture")["receipt_sha256"])
+            for item in receipt["installed"]:
+                self.assertTrue((staged / item["destination"]).is_file())
+            # Unresolved transactions must retain their recovery material, not
+            # silently clear staging and thereby pretend that rollback succeeded.
 
     def test_document_producer_readback_and_write_rejection(self):
         data = {"schema": contract.RECEIPT_SCHEMA, "receipt_id": "fixture", "installed": [],
