@@ -41,3 +41,8 @@ fail-closed guard intentionally requires supervised recovery, even if the
 leftover directory is empty. Do not delete a marker until its backing data and
 receipt have been independently verified. `.adk-backups` remains valid for
 completed installs and is not itself an incomplete-operation marker.
+
+Managed install paths must not contain symlink aliases, even if the link resolves
+inside the same target. A plan created before a file/directory is replaced by
+a symlink is rejected at apply and rollback. Resolve that drift under operator
+review; never chmod or overwrite a different file through an aliased path.

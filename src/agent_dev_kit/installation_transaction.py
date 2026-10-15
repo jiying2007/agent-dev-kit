@@ -10,7 +10,7 @@ from typing import Any, Dict, List, Mapping, Optional, Set
 from . import installation_contract as install_contract
 from . import installation_plan
 from .locking import TargetLock
-from .model import Manifest, ManifestError, ensure_within, sha256_file, sha256_tree
+from .model import Manifest, ManifestError, sha256_file, sha256_tree
 from .targets import RenderedBundle
 from .strict_json import StrictJSONError, read as read_strict_json
 
@@ -59,8 +59,8 @@ def _apply_validated_plan(
     bundle: RenderedBundle,
 ) -> Dict[str, Any]:
     run_id = install_contract._utc_now().strftime("%Y%m%dT%H%M%SZ") + "-" + str(plan["plan_id"])[:8]
-    backup_root = ensure_within(target / ".adk-backups" / run_id, target, "backup root")
-    staging_root = ensure_within(target / ".adk-staging" / run_id, target, "staging root")
+    backup_root = install_contract._regular_install_path(target / ".adk-backups" / run_id, target, "backup root")
+    staging_root = install_contract._regular_install_path(target / ".adk-staging" / run_id, target, "staging root")
     rendered_files = {item.destination: item for item in bundle.files}
     # Conservative replacement preview: backup paths/digests are longer than
     # nulls for new assets. Reject before creating transaction directories or
@@ -114,8 +114,8 @@ def _apply_validated_plan(
             previous_receipt_sha256 = sha256_file(previous)
         for operation in plan["operations"]:
             rendered = rendered_files[str(operation["destination"])]
-            destination = ensure_within(target / rendered.destination, target, "install destination")
-            staged = ensure_within(staging_root / rendered.destination, staging_root, "staged install file")
+            destination = install_contract._regular_install_path(target / rendered.destination, target, "install destination")
+            staged = install_contract._regular_install_path(staging_root / rendered.destination, staging_root, "staged install file")
             staged.parent.mkdir(parents=True, exist_ok=True)
             staged.write_bytes(rendered.content)
             staged.chmod(rendered.mode)
@@ -123,7 +123,7 @@ def _apply_validated_plan(
             backup_relative: Optional[str] = None
             backup_sha256: Optional[str] = None
             if destination.exists() or destination.is_symlink():
-                backup = ensure_within(backup_root / rendered.destination, backup_root, "install backup")
+                backup = install_contract._regular_install_path(backup_root / rendered.destination, backup_root, "install backup")
                 backup.parent.mkdir(parents=True, exist_ok=True)
                 backup_relative = backup.relative_to(target).as_posix()
                 # Fail atomically on cross-filesystem targets instead of letting
@@ -207,7 +207,7 @@ def rollback(receipt_path: Path, lock_timeout_seconds: float = 0.0) -> Dict[str,
 def _rollback_locked(receipt_path: Path) -> Dict[str, Any]:
     receipt = install_contract._read_receipt(receipt_path, "rollback receipt")
     target = install_contract._expand_target(str(receipt.get("target", "")))
-    resolved_receipt = ensure_within(receipt_path, target, "receipt path")
+    resolved_receipt = install_contract._regular_install_path(receipt_path, target, "receipt path")
     expected_receipt = (target / install_contract.RECEIPT_NAME).resolve(strict=False)
     if resolved_receipt != expected_receipt:
         raise ManifestError("rollback receipt must be the active target receipt")
@@ -223,14 +223,14 @@ def _rollback_locked(receipt_path: Path) -> Dict[str, Any]:
         if relative in seen:
             raise ManifestError("rollback receipt contains duplicate destinations")
         seen.add(relative)
-        destination = ensure_within(target / relative, target, "rollback destination")
+        destination = install_contract._regular_install_path(target / relative, target, "rollback destination")
         if not destination.exists() and not destination.is_symlink():
             raise ManifestError("installed asset is missing; refusing rollback: {}".format(destination))
         if sha256_tree(destination) != item.get("installed_sha256"):
             raise ManifestError("installed asset changed; refusing rollback: {}".format(destination))
         backup_value = item.get("backup")
         if backup_value:
-            backup = ensure_within(target / str(backup_value), target, "rollback backup")
+            backup = install_contract._regular_install_path(target / str(backup_value), target, "rollback backup")
             if not backup.exists() and not backup.is_symlink():
                 raise ManifestError("rollback backup missing: {}".format(backup))
             backup_sha256 = item.get("backup_sha256")
@@ -242,7 +242,7 @@ def _rollback_locked(receipt_path: Path) -> Dict[str, Any]:
     previous_receipt_value = receipt.get("previous_receipt")
     previous_receipt: Optional[Path] = None
     if previous_receipt_value:
-        previous_receipt = ensure_within(target / str(previous_receipt_value), target, "previous receipt")
+        previous_receipt = install_contract._regular_install_path(target / str(previous_receipt_value), target, "previous receipt")
         if not previous_receipt.is_file() or previous_receipt.is_symlink():
             raise ManifestError("previous install receipt is missing")
         previous_receipt_sha256 = receipt.get("previous_receipt_sha256")
@@ -254,7 +254,7 @@ def _rollback_locked(receipt_path: Path) -> Dict[str, Any]:
     receipt_id = str(receipt.get("receipt_id", ""))
     if not receipt_id:
         raise ManifestError("rollback receipt is missing receipt_id")
-    rollback_staging = ensure_within(
+    rollback_staging = install_contract._regular_install_path(
         target / ".adk-rollback-staging" / receipt_id,
         target,
         "rollback staging",
@@ -266,8 +266,8 @@ def _rollback_locked(receipt_path: Path) -> Dict[str, Any]:
     restored_backups: List[Dict[str, Path]] = []
     try:
         for item in reversed(installed):
-            destination = ensure_within(target / str(item["destination"]), target, "rollback destination")
-            staged = ensure_within(
+            destination = install_contract._regular_install_path(target / str(item["destination"]), target, "rollback destination")
+            staged = install_contract._regular_install_path(
                 rollback_staging / str(item["destination"]), rollback_staging, "staged installed asset"
             )
             staged.parent.mkdir(parents=True, exist_ok=True)
@@ -276,7 +276,7 @@ def _rollback_locked(receipt_path: Path) -> Dict[str, Any]:
             removed += 1
             backup_value = item.get("backup")
             if backup_value:
-                backup = ensure_within(target / str(backup_value), target, "rollback backup")
+                backup = install_contract._regular_install_path(target / str(backup_value), target, "rollback backup")
                 destination.parent.mkdir(parents=True, exist_ok=True)
                 os.replace(str(backup), str(destination))
                 restored_backups.append({"destination": destination, "backup": backup})
@@ -318,6 +318,6 @@ def _rollback_locked(receipt_path: Path) -> Dict[str, Any]:
 
     backup_root_value = receipt.get("backup_root")
     if backup_root_value:
-        backup_root = ensure_within(target / str(backup_root_value), target, "backup root")
+        backup_root = install_contract._regular_install_path(target / str(backup_root_value), target, "backup root")
         shutil.rmtree(str(backup_root), ignore_errors=True)
     return {"status": "pass", "removed": removed, "restored": restored, "target": str(target)}
