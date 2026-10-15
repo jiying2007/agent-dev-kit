@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Set, Tuple
 
 from . import installation_contract as install_contract
+from .installation_inventory import verify_receipt_inventory
 from .model import Manifest, ManifestError, sha256_file, sha256_tree
 from .targets import RenderedBundle, TargetUsageError, render_selection
 
@@ -35,6 +36,7 @@ def create_plan(
     active_receipt_sha256: Optional[str] = None
     managed: Dict[str, Mapping[str, Any]] = {}
     if existing_receipt:
+        verify_receipt_inventory(manifest, existing_receipt)
         if existing_receipt.get("target") != str(target):
             raise ManifestError("existing install receipt target does not match its location")
         if existing_receipt.get("tool") != tool:
@@ -178,6 +180,7 @@ def validate_plan(manifest: Manifest, plan: Mapping[str, Any]) -> Tuple[Path, Re
             raise ManifestError("active install receipt appeared after plan creation")
     else:
         current_receipt = install_contract._read_receipt(receipt_path, "active install receipt")
+        verify_receipt_inventory(manifest, current_receipt)
         if current_receipt.get("target") != str(target) or current_receipt.get("tool") != tool:
             raise ManifestError("active install receipt identity changed after plan creation")
         if sha256_file(receipt_path) != active_receipt_sha256:
