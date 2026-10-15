@@ -15,7 +15,7 @@ from agent_dev_kit.installation_transaction import apply_plan, rollback
 from agent_dev_kit.installation_transaction import _apply_validated_plan
 from agent_dev_kit.installation_plan import create_plan as install_create_plan, write_plan
 from agent_dev_kit.maintenance_plan import create_plan
-from agent_dev_kit.model import Manifest, ManifestError
+from agent_dev_kit.model import Manifest, ManifestError, sha256_file
 from agent_dev_kit.strict_json import DEFAULT_MAX_BYTES, StrictJSONError, read as read_json
 from agent_dev_kit.campaign_model import _write_json_atomic, _load_json_object
 from agent_dev_kit.locking import TargetLock, target_lock_status, clear_target_lock, LOCK_METADATA
@@ -325,6 +325,79 @@ class InstallationJSONTest(unittest.TestCase):
                 self.assertEqual(b"KEEP", fixed.read_bytes())
                 self.assertEqual([], list(target.glob("." + contract.RECEIPT_NAME + ".*.tmp")))
                 contract._read_receipt(receipt_path, "previous fixture")
+
+    def test_plan_cannot_forge_replacement_of_unmanaged_file(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            target = root / "target"
+            manifest = Manifest.load(ROOT)
+            value = install_create_plan(manifest, "claude-code", str(target), ("core",), (),
+                                        "copy", asset_kind="agent")
+            self.assertEqual("ready", value["status"])
+            operation = value["operations"][0]
+            destination = target / operation["destination"]
+            destination.parent.mkdir(parents=True)
+            destination.write_bytes(b"UNMANAGED-SENTINEL")
+            operation["action"] = "replace-managed"
+            operation["destination_sha256"] = sha256_file(destination)
+            plan_path = root / "forged-plan.json"
+            write_plan(value, plan_path)
+            with self.assertRaisesRegex(ManifestError, "unmanaged destination"):
+                apply_plan(manifest, plan_path)
+            self.assertEqual(b"UNMANAGED-SENTINEL", destination.read_bytes())
+            self.assertFalse((target / contract.RECEIPT_NAME).exists())
+            self.assertFalse((target / ".adk-staging").exists())
+
+    def test_plan_cannot_rehash_managed_drift_to_overwrite_active_receipt(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            target = root / "target"
+            manifest = Manifest.load(ROOT)
+            plan_path = root / "plan.json"
+            value = install_create_plan(manifest, "claude-code", str(target), ("core",), (),
+                                        "copy", asset_kind="agent")
+            write_plan(value, plan_path)
+            self.assertEqual("pass", apply_plan(manifest, plan_path)["status"])
+            receipt_path = target / contract.RECEIPT_NAME
+            receipt_before = receipt_path.read_bytes()
+            replan = install_create_plan(manifest, "claude-code", str(target), ("core",), (),
+                                         "copy", asset_kind="agent")
+            self.assertEqual("ready", replan["status"])
+            operation = replan["operations"][0]
+            destination = target / operation["destination"]
+            destination.write_bytes(b"DRIFTED-MANAGED-SENTINEL")
+            operation["destination_sha256"] = sha256_file(destination)
+            write_plan(replan, plan_path)
+            with self.assertRaisesRegex(ManifestError, "active receipt"):
+                apply_plan(manifest, plan_path)
+            self.assertEqual(b"DRIFTED-MANAGED-SENTINEL", destination.read_bytes())
+            self.assertEqual(receipt_before, receipt_path.read_bytes())
+            self.assertFalse((target / ".adk-staging").exists())
+
+    def test_plan_cannot_reclassify_missing_managed_file_as_create(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            target = root / "target"
+            manifest = Manifest.load(ROOT)
+            plan_path = root / "plan.json"
+            value = install_create_plan(manifest, "claude-code", str(target), ("core",), (),
+                                        "copy", asset_kind="agent")
+            write_plan(value, plan_path)
+            self.assertEqual("pass", apply_plan(manifest, plan_path)["status"])
+            receipt_path = target / contract.RECEIPT_NAME
+            receipt_before = receipt_path.read_bytes()
+            replan = install_create_plan(manifest, "claude-code", str(target), ("core",), (),
+                                         "copy", asset_kind="agent")
+            operation = replan["operations"][0]
+            destination = target / operation["destination"]
+            destination.unlink()
+            operation["action"] = "create"
+            operation["destination_sha256"] = None
+            write_plan(replan, plan_path)
+            with self.assertRaisesRegex(ManifestError, "active managed asset"):
+                apply_plan(manifest, plan_path)
+            self.assertFalse(destination.exists())
+            self.assertEqual(receipt_before, receipt_path.read_bytes())
 
     def test_managed_update_rejects_internal_file_symlink_alias(self):
         with tempfile.TemporaryDirectory() as temp:
