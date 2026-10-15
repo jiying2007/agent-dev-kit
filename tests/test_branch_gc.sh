@@ -19,6 +19,9 @@ module = importlib.util.module_from_spec(spec)
 sys.modules[spec.name] = module
 spec.loader.exec_module(module)
 
+orphan_branch = "fix/install-rollback-recovery-safety-8.0.7"
+orphan_sha = "97cf0167e837c2095d9ec6a9431f5aa8c20a812b"
+orphan_reviewed = "e4bb5ed698d31c1739e47a1d48726498933bd347"
 legacy_sha = "fc2d786c6c2c4efe50dc10ca6e0eec167c25a57a"
 legacy_main_sha = "b15e28daec9caad7e29c17e39f323cdf307b3dae"
 retired_sha = "3e8e15e873c43ccc5548ad6a2567a3aae6f35963"
@@ -27,6 +30,12 @@ active_sha = "1" * 40
 changed_sha = "2" * 40
 
 registry = module.load_retired_registry(root / "manifests/branch_gc_retired.json")
+orphan = registry[orphan_branch]
+assert orphan.sha == orphan_sha
+assert orphan.reviewed_against_main == orphan_reviewed
+assert orphan.proof == "ancestor-of-main"
+assert orphan.as_candidate().basis == "explicit-retired-ancestor"
+
 legacy_entry = next(item for item in registry.values() if item.sha == legacy_sha)
 assert legacy_entry.proof == "ancestor-of-main"
 assert legacy_entry.reviewed_against_main == legacy_main_sha

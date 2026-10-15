@@ -1,3 +1,3 @@
-version: 8.0.9
-locked_at: 2026-10-15T08:00:00+08:00
-locked_by: reviewed-security-dependency-maintenance
+version: 8.0.10
+locked_at: 2026-10-15T09:00:00+08:00
+locked_by: exact-ancestor-retirement
