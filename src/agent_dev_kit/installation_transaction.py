@@ -246,7 +246,7 @@ def _rollback_locked(receipt_path: Path) -> Dict[str, Any]:
         relative = item["destination"]
         segments = relative.split("/")
         if (
-            not relative or "\\\\" in relative or any(seg in ("", ".", "..") for seg in segments)
+            not relative or "\\" in relative or any(seg in ("", ".", "..") for seg in segments)
             or segments[0] in (".adk-backups", ".adk-staging", ".adk-rollback-staging", install_contract.RECEIPT_NAME)
         ):
             raise ManifestError("rollback destination is not a canonical managed asset path: {}".format(relative))
