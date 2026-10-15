@@ -12,6 +12,7 @@ REPLAN="$TMP_DIR/reinstall-plan.json"
 
 python3 - <<'PY'
 import importlib.util
+import inspect
 
 from agent_dev_kit import installation_contract, installation_plan, installation_transaction
 
@@ -22,6 +23,9 @@ for name in ("create_plan", "write_plan", "validate_plan"):
     assert hasattr(installation_plan, name), name
 for name in ("apply_plan", "rollback"):
     assert hasattr(installation_transaction, name), name
+parameter = inspect.signature(installation_transaction.rollback).parameters["manifest"]
+assert parameter.kind is inspect.Parameter.KEYWORD_ONLY
+assert parameter.default is inspect.Signature.empty
 PY
 
 bash "$ROOT_DIR/scripts/devkit.sh" install plan \
