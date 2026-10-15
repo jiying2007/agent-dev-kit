@@ -16,6 +16,14 @@
       "proof": "ancestor-of-main",
       "reviewed_against_main": "ecf53500ede2b407ca9ff39d605ea603135672d0",
       "reason": "Execution-policy ownership work is fully contained in the qualified main identity; the remote head is an exact historical ancestor with no content outside main."
+    },
+    {
+      "branch": "fix/install-rollback-recovery-safety-8.0.7",
+      "sha": "97cf0167e837c2095d9ec6a9431f5aa8c20a812b",
+      "disposition": "delete",
+      "proof": "ancestor-of-main",
+      "reviewed_against_main": "e4bb5ed698d31c1739e47a1d48726498933bd347",
+      "reason": "Unused repair staging ref points to an exact historical ancestor of reviewed main; its implementation is already merged as #185 and the branch has no open PR."
     }
   ]
 }
