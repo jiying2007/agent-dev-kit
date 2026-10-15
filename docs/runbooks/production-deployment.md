@@ -46,3 +46,11 @@ Managed install paths must not contain symlink aliases, even if the link resolve
 inside the same target. A plan created before a file/directory is replaced by
 a symlink is rejected at apply and rollback. Resolve that drift under operator
 review; never chmod or overwrite a different file through an aliased path.
+
+Before applying a reviewed installation plan, the executor re-binds every
+`replace-managed` operation to the active receipt's exact installed digest.
+Editing a plan's `destination_sha256` does not waive managed-file drift.
+Existing unmanaged files cannot be promoted to `replace-managed`, and missing
+managed files cannot be reclassified as `create`. Investigate the discrepancy,
+then use a fresh plan or a supervised rollback; do not edit the plan to bypass
+the active receipt.

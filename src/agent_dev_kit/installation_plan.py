@@ -172,6 +172,7 @@ def validate_plan(manifest: Manifest, plan: Mapping[str, Any]) -> Tuple[Path, Re
         raise ManifestError("install plan active_receipt_sha256 is invalid")
     receipt_path = target / install_contract.RECEIPT_NAME
     receipt_exists = receipt_path.exists() or receipt_path.is_symlink()
+    managed_current: Dict[str, Mapping[str, Any]] = {}
     if active_receipt_sha256 is None:
         if receipt_exists:
             raise ManifestError("active install receipt appeared after plan creation")
@@ -182,10 +183,26 @@ def validate_plan(manifest: Manifest, plan: Mapping[str, Any]) -> Tuple[Path, Re
         if sha256_file(receipt_path) != active_receipt_sha256:
             raise ManifestError("active install receipt changed after plan creation")
 
+        # Plan operations are untrusted inputs. Bind replacement authority to
+        # the ACTIVE receipt, not to an editable destination_sha256 field.
+        installed_current = current_receipt.get("installed")
+        if not isinstance(installed_current, list):
+            raise ManifestError("active install receipt has invalid installed assets")
+        for item in installed_current:
+            if not isinstance(item, dict) or not isinstance(item.get("destination"), str) or not item["destination"]:
+                raise ManifestError("active install receipt has an invalid managed destination")
+            relative = item["destination"]
+            install_contract._regular_install_path(target / relative, target, "active managed destination")
+            if relative in managed_current:
+                raise ManifestError("active install receipt has duplicate destinations")
+            managed_current[relative] = item
+
     bundle = render_selection(manifest, tool, profiles, optional_skills, asset_kind)
     if plan.get("contract_sha256") != bundle.contract.digest:
         raise ManifestError("target contract changed after install plan creation")
     expected = {item.destination: item for item in bundle.files}
+    if set(managed_current).difference(expected):
+        raise ManifestError("active install receipt has assets outside requested selection; rollback first")
     seen: Set[str] = set()
     for operation in operations:
         if not isinstance(operation, dict):
@@ -213,9 +230,17 @@ def validate_plan(manifest: Manifest, plan: Mapping[str, Any]) -> Tuple[Path, Re
             raise ManifestError("install source missing or unsafe: {}".format(source))
         if sha256_file(source) != operation.get("source_sha256"):
             raise ManifestError("install source changed: {}".format(source))
-        if operation.get("action") == "create" and (destination.exists() or destination.is_symlink()):
-            raise ManifestError("destination appeared after plan creation: {}".format(destination))
+        if operation.get("action") == "create":
+            if relative in managed_current:
+                raise ManifestError("install plan reclassifies an active managed asset as create: {}".format(relative))
+            if destination.exists() or destination.is_symlink():
+                raise ManifestError("destination appeared after plan creation: {}".format(destination))
         if operation.get("action") == "replace-managed":
+            managed_item = managed_current.get(relative)
+            if managed_item is None:
+                raise ManifestError("install plan cannot replace an unmanaged destination: {}".format(relative))
+            if operation.get("destination_sha256") != managed_item.get("installed_sha256"):
+                raise ManifestError("install plan destination digest disagrees with active receipt: {}".format(relative))
             if not destination.exists() and not destination.is_symlink():
                 raise ManifestError("managed destination disappeared after plan creation: {}".format(destination))
             if sha256_tree(destination) != operation.get("destination_sha256"):
