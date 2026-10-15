@@ -119,7 +119,7 @@ def _cmd_install(argv: Sequence[str]) -> int:
         manifest = _manifest()
         result = apply_plan(manifest, Path(args.plan).resolve(), args.lock_timeout)
     else:
-        result = rollback(Path(args.receipt).resolve(), args.lock_timeout)
+        result = rollback(Path(args.receipt).resolve(), args.lock_timeout, manifest=_manifest())
     if args.summary_json:
         _json(result)
     else:

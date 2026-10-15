@@ -494,14 +494,14 @@ assert backup_file.is_file(), backup_file
 backup_content = backup_file.read_bytes()
 backup_file.write_bytes(backup_content + b"tamper")
 try:
-    rollback(receipt)
+    rollback(receipt, manifest=manifest)
 except ManifestError as exc:
     assert "backup changed" in str(exc)
 else:
     raise AssertionError("rollback accepted a tampered backup")
 backup_file.write_bytes(backup_content)
-rollback(receipt)
-rollback(receipt)
+rollback(receipt, manifest=manifest)
+rollback(receipt, manifest=manifest)
 assert target_lock_status(install_target)["status"] == "unlocked"
 
 apply_failure_target = temp_root / "apply-failure"
