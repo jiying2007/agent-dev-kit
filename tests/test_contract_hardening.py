@@ -400,6 +400,92 @@ class InstallationJSONTest(unittest.TestCase):
             self.assertFalse(destination.exists())
             self.assertEqual(receipt_before, receipt_path.read_bytes())
 
+    def test_rollback_refuses_rehashed_receipt_that_deletes_unmanaged_directory(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            target = root / "target"
+            manifest = Manifest.load(ROOT)
+            plan_path = root / "plan.json"
+            write_plan(install_create_plan(manifest, "claude-code", str(target), ("core",), (),
+                                           "copy", asset_kind="agent"), plan_path)
+            self.assertEqual("pass", apply_plan(manifest, plan_path)["status"])
+            managed = target / "agents" / "requirements-analyst.md"
+            managed_before = managed.read_bytes()
+            unrelated = target / "private-unmanaged"
+            unrelated.mkdir()
+            secret = unrelated / "do-not-delete.txt"
+            secret.write_bytes(b"UNMANAGED-SENTINEL")
+            receipt_path = target / contract.RECEIPT_NAME
+            receipt = json.loads(receipt_path.read_text())
+            receipt["backup_root"] = unrelated.relative_to(target).as_posix()
+            receipt["receipt_sha256"] = contract._receipt_digest(receipt)
+            receipt_path.write_text(json.dumps(receipt) + "\n")
+            changed_receipt = receipt_path.read_bytes()
+            with self.assertRaisesRegex(ManifestError, "backup root does not match receipt identity"):
+                rollback(receipt_path)
+            self.assertEqual(managed_before, managed.read_bytes())
+            self.assertEqual(b"UNMANAGED-SENTINEL", secret.read_bytes())
+            self.assertEqual(changed_receipt, receipt_path.read_bytes())
+            self.assertEqual([], list((target / ".adk-rollback-staging").iterdir()) if (target / ".adk-rollback-staging").exists() else [])
+
+    def test_rollback_refuses_rehashed_unmanaged_backup_or_previous_receipt(self):
+        for attack in ("backup", "previous-receipt"):
+            with self.subTest(attack=attack), tempfile.TemporaryDirectory() as temp:
+                root = Path(temp)
+                target = root / "target"
+                manifest = Manifest.load(ROOT)
+                plan_path = root / "plan.json"
+                def apply():
+                    write_plan(install_create_plan(manifest, "claude-code", str(target), ("core",), (),
+                                                   "copy", asset_kind="agent"), plan_path)
+                    self.assertEqual("pass", apply_plan(manifest, plan_path)["status"])
+                apply()
+                apply()
+                receipt_path = target / contract.RECEIPT_NAME
+                receipt = json.loads(receipt_path.read_text())
+                managed = target / "agents" / "requirements-analyst.md"
+                managed_before = managed.read_bytes()
+                if attack == "backup":
+                    item = next(a for a in receipt["installed"] if a["backup"])
+                    original = target / item["backup"]
+                    unmanaged = target / "other-unmanaged-backup.md"
+                    unmanaged.write_bytes(original.read_bytes())
+                    item["backup"] = unmanaged.relative_to(target).as_posix()
+                    expected_error = "rollback backup path does not match managed asset identity"
+                else:
+                    original = target / receipt["previous_receipt"]
+                    unmanaged = target / "other-unmanaged-receipt.json"
+                    unmanaged.write_bytes(original.read_bytes())
+                    receipt["previous_receipt"] = unmanaged.relative_to(target).as_posix()
+                    expected_error = "rollback previous receipt path does not match run identity"
+                receipt["receipt_sha256"] = contract._receipt_digest(receipt)
+                receipt_path.write_text(json.dumps(receipt) + "\n")
+                changed_receipt = receipt_path.read_bytes()
+                with self.assertRaisesRegex(ManifestError, expected_error):
+                    rollback(receipt_path)
+                self.assertEqual(managed_before, managed.read_bytes())
+                self.assertEqual(original.read_bytes(), unmanaged.read_bytes())
+                self.assertEqual(changed_receipt, receipt_path.read_bytes())
+
+    def test_rollback_refuses_rehashed_noncanonical_run_id(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            target = root / "target"
+            manifest = Manifest.load(ROOT)
+            plan_path = root / "plan.json"
+            write_plan(install_create_plan(manifest, "claude-code", str(target), ("core",), (),
+                                           "copy", asset_kind="agent"), plan_path)
+            self.assertEqual("pass", apply_plan(manifest, plan_path)["status"])
+            receipt_path = target / contract.RECEIPT_NAME
+            receipt = json.loads(receipt_path.read_text())
+            receipt["receipt_id"] = "."
+            receipt["backup_root"] = ".adk-backups/."
+            receipt["receipt_sha256"] = contract._receipt_digest(receipt)
+            receipt_path.write_text(json.dumps(receipt) + "\n")
+            with self.assertRaisesRegex(ManifestError, "canonical install run identifier"):
+                rollback(receipt_path)
+            self.assertTrue((target / "agents" / "requirements-analyst.md").is_file())
+
     def test_managed_update_rejects_internal_file_symlink_alias(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import re
 import shutil
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Set
@@ -193,6 +194,28 @@ def _apply_validated_plan(
             shutil.rmtree(str(staging_root), ignore_errors=True)
 
 
+_RECEIPT_RUN_ID = re.compile(r"^[0-9]{8}T[0-9]{6}Z-[0-9a-f]{8}$")
+
+
+def _rollback_backup_root(receipt: Mapping[str, Any], target: Path) -> Path:
+    """Bind destructive rollback cleanup to the directory created by apply.
+
+    A receipt SHA-256 proves content consistency, not that its path fields
+    authorize deletion of an arbitrary directory inside the install target.
+    Validate identity before staging/moving any managed files.
+    """
+    receipt_id = receipt.get("receipt_id")
+    if not isinstance(receipt_id, str) or _RECEIPT_RUN_ID.fullmatch(receipt_id) is None:
+        raise ManifestError("rollback receipt_id is not a canonical install run identifier")
+    relative = ".adk-backups/" + receipt_id
+    if receipt.get("backup_root") != relative:
+        raise ManifestError("rollback backup root does not match receipt identity")
+    root = install_contract._regular_install_path(target / relative, target, "rollback backup root")
+    if not root.is_dir():
+        raise ManifestError("rollback backup root is missing or invalid: {}".format(root))
+    return root
+
+
 def rollback(receipt_path: Path, lock_timeout_seconds: float = 0.0) -> Dict[str, Any]:
     initial = install_contract._read_receipt(receipt_path, "rollback receipt")
     target_value = initial.get("target")
@@ -211,15 +234,22 @@ def _rollback_locked(receipt_path: Path) -> Dict[str, Any]:
     expected_receipt = (target / install_contract.RECEIPT_NAME).resolve(strict=False)
     if resolved_receipt != expected_receipt:
         raise ManifestError("rollback receipt must be the active target receipt")
+    backup_root = _rollback_backup_root(receipt, target)
     installed = receipt.get("installed")
     if not isinstance(installed, list) or not installed:
         raise ManifestError("rollback receipt contains no installed assets")
 
     seen: Set[str] = set()
     for item in installed:
-        if not isinstance(item, dict) or not item.get("destination"):
+        if not isinstance(item, dict) or not isinstance(item.get("destination"), str):
             raise ManifestError("rollback receipt contains an invalid asset")
-        relative = str(item["destination"])
+        relative = item["destination"]
+        segments = relative.split("/")
+        if (
+            not relative or "\\" in relative or any(seg in ("", ".", "..") for seg in segments)
+            or segments[0] in (".adk-backups", ".adk-staging", ".adk-rollback-staging", install_contract.RECEIPT_NAME)
+        ):
+            raise ManifestError("rollback destination is not a canonical managed asset path: {}".format(relative))
         if relative in seen:
             raise ManifestError("rollback receipt contains duplicate destinations")
         seen.add(relative)
@@ -229,8 +259,11 @@ def _rollback_locked(receipt_path: Path) -> Dict[str, Any]:
         if sha256_tree(destination) != item.get("installed_sha256"):
             raise ManifestError("installed asset changed; refusing rollback: {}".format(destination))
         backup_value = item.get("backup")
-        if backup_value:
-            backup = install_contract._regular_install_path(target / str(backup_value), target, "rollback backup")
+        if backup_value is not None:
+            expected_backup = (backup_root / relative).relative_to(target).as_posix()
+            if backup_value != expected_backup:
+                raise ManifestError("rollback backup path does not match managed asset identity: {}".format(relative))
+            backup = install_contract._regular_install_path(target / backup_value, target, "rollback backup")
             if not backup.exists() and not backup.is_symlink():
                 raise ManifestError("rollback backup missing: {}".format(backup))
             backup_sha256 = item.get("backup_sha256")
@@ -241,8 +274,11 @@ def _rollback_locked(receipt_path: Path) -> Dict[str, Any]:
 
     previous_receipt_value = receipt.get("previous_receipt")
     previous_receipt: Optional[Path] = None
-    if previous_receipt_value:
-        previous_receipt = install_contract._regular_install_path(target / str(previous_receipt_value), target, "previous receipt")
+    if previous_receipt_value is not None:
+        expected_previous = (backup_root / install_contract.RECEIPT_NAME).relative_to(target).as_posix()
+        if previous_receipt_value != expected_previous:
+            raise ManifestError("rollback previous receipt path does not match run identity")
+        previous_receipt = install_contract._regular_install_path(target / previous_receipt_value, target, "previous receipt")
         if not previous_receipt.is_file() or previous_receipt.is_symlink():
             raise ManifestError("previous install receipt is missing")
         previous_receipt_sha256 = receipt.get("previous_receipt_sha256")
@@ -251,9 +287,7 @@ def _rollback_locked(receipt_path: Path) -> Dict[str, Any]:
     elif receipt.get("previous_receipt_sha256") is not None:
         raise ManifestError("rollback receipt has a previous receipt digest without a previous receipt")
 
-    receipt_id = str(receipt.get("receipt_id", ""))
-    if not receipt_id:
-        raise ManifestError("rollback receipt is missing receipt_id")
+    receipt_id = backup_root.name
     rollback_staging = install_contract._regular_install_path(
         target / ".adk-rollback-staging" / receipt_id,
         target,
@@ -316,8 +350,5 @@ def _rollback_locked(receipt_path: Path) -> Dict[str, Any]:
     else:
         shutil.rmtree(str(rollback_staging), ignore_errors=True)
 
-    backup_root_value = receipt.get("backup_root")
-    if backup_root_value:
-        backup_root = install_contract._regular_install_path(target / str(backup_root_value), target, "backup root")
-        shutil.rmtree(str(backup_root), ignore_errors=True)
+    shutil.rmtree(str(backup_root), ignore_errors=True)
     return {"status": "pass", "removed": removed, "restored": restored, "target": str(target)}

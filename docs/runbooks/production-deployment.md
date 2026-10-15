@@ -54,3 +54,15 @@ Existing unmanaged files cannot be promoted to `replace-managed`, and missing
 managed files cannot be reclassified as `create`. Investigate the discrepancy,
 then use a fresh plan or a supervised rollback; do not edit the plan to bypass
 the active receipt.
+
+## Rollback receipt path authority (8.0.14)
+
+The stored SHA-256 on a local receipt is a content-integrity checksum, **not** a
+signature or an independent capability to delete files. Before any rollback
+mutation, the executor verifies the canonical run identifier and binds
+`backup_root` to exactly `.adk-backups/<receipt-id>`; each per-asset backup
+must be the corresponding path beneath that root. The previous-receipt
+reference must also be the canonical receipt inside the same run-specific
+backup directory. Reject edited or misplaced paths even when their bytes and
+receipt SHA-256 match. Reconcile under supervised recovery; never edit a
+receipt's backup paths to force a rollback or delete preserved evidence.
