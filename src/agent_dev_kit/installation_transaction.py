@@ -10,9 +10,10 @@ from typing import Any, Dict, List, Mapping, Optional, Set
 
 from . import installation_contract as install_contract
 from . import installation_plan
+from .installation_inventory import verify_receipt_inventory
 from .locking import TargetLock
 from .model import Manifest, ManifestError, sha256_file, sha256_tree
-from .targets import RenderedBundle, render_selection
+from .targets import RenderedBundle
 from .strict_json import StrictJSONError, read as read_strict_json
 
 
@@ -216,58 +217,30 @@ def _rollback_backup_root(receipt: Mapping[str, Any], target: Path) -> Path:
     return root
 
 
-def _verify_rollback_inventory(manifest: Manifest, receipt: Mapping[str, Any]) -> None:
-    """Authorize rollback files from trusted rendered assets, not mutable receipt paths.
-
-    A receipt SHA-256 proves only that its local JSON has been consistently
-    rewritten. It cannot authorize deletion of file paths named in that JSON.
-    Operators must use the exact source version that produced the receipt.
-    """
-    if receipt.get("manifest_version") != manifest.version or receipt.get("manifest_sha256") != manifest.digest:
-        raise ManifestError("rollback receipt does not match the trusted ADK manifest identity")
-    tool = receipt.get("tool")
-    profiles = receipt.get("profiles")
-    optional_skills = receipt.get("optional_skills")
-    asset_kind = receipt.get("asset_kind")
-    if (
-        not isinstance(tool, str) or not tool
-        or not isinstance(profiles, list) or not profiles
-        or any(not isinstance(p, str) for p in profiles)
-        or not isinstance(optional_skills, list)
-        or any(not isinstance(p, str) for p in optional_skills)
-        or asset_kind not in (None, "agent", "skill")
-    ):
-        raise ManifestError("rollback receipt has invalid asset selection")
-    bundle = render_selection(manifest, tool, profiles, optional_skills, asset_kind)
-    if (
-        receipt.get("contract_sha256") != bundle.contract.digest
-        or receipt.get("profiles") != list(bundle.resolution.profiles)
-        or receipt.get("optional_skills") != list(bundle.optional_skills)
-    ):
-        raise ManifestError("rollback receipt target selection differs from trusted ADK renderer")
-    expected = {item.destination: item for item in bundle.files}
-    installed = receipt.get("installed")
-    if not isinstance(installed, list) or len(installed) != len(expected):
-        raise ManifestError("rollback receipt inventory does not match trusted rendered assets")
-    seen: Set[str] = set()
-    for item in installed:
-        if not isinstance(item, dict):
-            raise ManifestError("rollback receipt contains an invalid installed asset")
-        destination = item.get("destination")
-        if not isinstance(destination, str) or destination in seen or destination not in expected:
-            raise ManifestError("rollback receipt contains an unauthorized or duplicate destination")
-        seen.add(destination)
-        rendered = expected[destination]
-        if (
-            item.get("kind") != rendered.kind
-            or item.get("name") != rendered.name
-            or item.get("source") != rendered.source
-            or item.get("source_sha256") != sha256_file(manifest.root / rendered.source)
-            or item.get("rendered_sha256") != rendered.sha256
-            or item.get("installed_sha256") != rendered.sha256
-            or item.get("file_mode") != format(rendered.mode, "04o")
-        ):
-            raise ManifestError("rollback receipt asset differs from trusted renderer: {}".format(destination))
+def _verify_backup_inventory(receipt: Mapping[str, Any], backup_root: Path) -> None:
+    """Reject omitted/extra backup files before destructive directory cleanup."""
+    expected: Set[str] = {
+        str(item["destination"]) for item in receipt["installed"] if item.get("backup") is not None
+    }
+    if receipt.get("previous_receipt") is not None:
+        expected.add(install_contract.RECEIPT_NAME)
+    actual: Set[str] = set()
+    limit = max(32, len(expected) * 8 + 16)
+    for count, candidate in enumerate(backup_root.rglob("*"), 1):
+        if count > limit:
+            raise ManifestError("rollback backup inventory exceeds entry budget")
+        relative = candidate.relative_to(backup_root).as_posix()
+        if candidate.is_symlink():
+            raise ManifestError("rollback backup inventory contains a symlink")
+        if candidate.is_file():
+            actual.add(relative)
+        elif candidate.is_dir():
+            if not any(path.startswith(relative + "/") for path in expected):
+                raise ManifestError("rollback backup inventory contains an unlisted directory")
+        else:
+            raise ManifestError("rollback backup inventory contains a non-regular entry")
+    if actual != expected:
+        raise ManifestError("rollback backup inventory differs from receipt references")
 
 
 def rollback(receipt_path: Path, lock_timeout_seconds: float = 0.0, *, manifest: Manifest) -> Dict[str, Any]:
@@ -278,18 +251,20 @@ def rollback(receipt_path: Path, lock_timeout_seconds: float = 0.0, *, manifest:
     target = install_contract._expand_target(target_value)
     with TargetLock(target, "install-rollback", lock_timeout_seconds):
         _refuse_incomplete_transactions(target)
-        return _rollback_locked(receipt_path, manifest)
+        return _rollback_locked(receipt_path, manifest, locked_target=target)
 
 
-def _rollback_locked(receipt_path: Path, manifest: Manifest) -> Dict[str, Any]:
+def _rollback_locked(receipt_path: Path, manifest: Manifest, *, locked_target: Path) -> Dict[str, Any]:
     receipt = install_contract._read_receipt(receipt_path, "rollback receipt")
     target = install_contract._expand_target(str(receipt.get("target", "")))
+    if target != locked_target:
+        raise ManifestError("rollback receipt target changed after acquiring target lock")
     resolved_receipt = install_contract._regular_install_path(receipt_path, target, "receipt path")
     expected_receipt = (target / install_contract.RECEIPT_NAME).resolve(strict=False)
     if resolved_receipt != expected_receipt:
         raise ManifestError("rollback receipt must be the active target receipt")
     backup_root = _rollback_backup_root(receipt, target)
-    _verify_rollback_inventory(manifest, receipt)
+    verify_receipt_inventory(manifest, receipt)
     installed = receipt.get("installed")
     if not isinstance(installed, list) or not installed:
         raise ManifestError("rollback receipt contains no installed assets")
@@ -342,6 +317,7 @@ def _rollback_locked(receipt_path: Path, manifest: Manifest) -> Dict[str, Any]:
     elif receipt.get("previous_receipt_sha256") is not None:
         raise ManifestError("rollback receipt has a previous receipt digest without a previous receipt")
 
+    _verify_backup_inventory(receipt, backup_root)
     receipt_id = backup_root.name
     rollback_staging = install_contract._regular_install_path(
         target / ".adk-rollback-staging" / receipt_id,
