@@ -1,3 +1,3 @@
-version: 8.0.10
-locked_at: 2026-10-15T09:00:00+08:00
-locked_by: exact-ancestor-retirement
+version: 8.0.11
+locked_at: 2026-10-15T10:35:00+08:00
+locked_by: incomplete-transaction-recovery-gate

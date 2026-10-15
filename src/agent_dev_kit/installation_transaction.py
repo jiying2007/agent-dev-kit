@@ -14,6 +14,25 @@ from .model import Manifest, ManifestError, ensure_within, sha256_file, sha256_t
 from .targets import RenderedBundle
 from .strict_json import StrictJSONError, read as read_strict_json
 
+
+def _refuse_incomplete_transactions(target: Path) -> None:
+    """Fail closed if a previous interrupted apply/rollback retained evidence.
+
+    Successful transactions remove their run-specific staging directories. A
+    retained directory is recovery material, even when all of its staged files
+    were moved before the failure; do not overwrite the still-active receipt.
+    """
+    for name in (".adk-staging", ".adk-rollback-staging"):
+        staging = target / name
+        if staging.is_symlink():
+            raise ManifestError("install recovery staging is a symlink: {}".format(staging))
+        if not staging.exists():
+            continue
+        if not staging.is_dir() or any(staging.iterdir()):
+            raise ManifestError(
+                "unresolved ADK transaction staging; preserve for recovery: {}".format(staging)
+            )
+
 def apply_plan(manifest: Manifest, plan_path: Path, lock_timeout_seconds: float = 0.0) -> Dict[str, Any]:
     try:
         if plan_path.is_symlink() or not plan_path.is_file():
@@ -28,6 +47,7 @@ def apply_plan(manifest: Manifest, plan_path: Path, lock_timeout_seconds: float 
         raise ManifestError("install plan target must be a non-empty string")
     target = install_contract._expand_target(target_value)
     with TargetLock(target, "install-apply", lock_timeout_seconds):
+        _refuse_incomplete_transactions(target)
         validated_target, bundle = installation_plan.validate_plan(manifest, plan)
         return _apply_validated_plan(manifest, plan, validated_target, bundle)
 
@@ -84,6 +104,7 @@ def _apply_validated_plan(
     moved_backups: List[Dict[str, str]] = []
     previous_receipt: Optional[str] = None
     previous_receipt_sha256: Optional[str] = None
+    preserve_staging = False
     try:
         receipt_path = target / install_contract.RECEIPT_NAME
         if receipt_path.is_file():
@@ -162,9 +183,14 @@ def _apply_validated_plan(
         finally:
             if recovery_complete:
                 shutil.rmtree(str(backup_root), ignore_errors=True)
+            else:
+                # The only recoverable snapshot may be in backups/staging.
+                # A retained run directory also blocks later apply/rollback.
+                preserve_staging = True
         raise
     finally:
-        shutil.rmtree(str(staging_root), ignore_errors=True)
+        if not preserve_staging:
+            shutil.rmtree(str(staging_root), ignore_errors=True)
 
 
 def rollback(receipt_path: Path, lock_timeout_seconds: float = 0.0) -> Dict[str, Any]:
@@ -174,6 +200,7 @@ def rollback(receipt_path: Path, lock_timeout_seconds: float = 0.0) -> Dict[str,
         raise ManifestError("rollback receipt target must be a non-empty string")
     target = install_contract._expand_target(target_value)
     with TargetLock(target, "install-rollback", lock_timeout_seconds):
+        _refuse_incomplete_transactions(target)
         return _rollback_locked(receipt_path)
 
 

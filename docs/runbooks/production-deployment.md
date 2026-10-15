@@ -34,3 +34,10 @@ hashes to the preserved receipt/backup and restore missing assets explicitly.
 A successful command exit or verified manual repair is required before
 claiming the target is healthy. Atomic rename protection in one operation
 does not imply power-loss-safe multi-file transactions.
+
+The runtime now refuses another install **and** rollback while an unfinished
+`.adk-staging/<run-id>` or `.adk-rollback-staging/<receipt-id>` exists. This
+fail-closed guard intentionally requires supervised recovery, even if the
+leftover directory is empty. Do not delete a marker until its backing data and
+receipt have been independently verified. `.adk-backups` remains valid for
+completed installs and is not itself an incomplete-operation marker.
