@@ -387,6 +387,56 @@ class InstallationJSONTest(unittest.TestCase):
                 self.assertTrue((staged / item["destination"]).is_file())
             # Unresolved transactions must retain their recovery material, not
             # silently clear staging and thereby pretend that rollback succeeded.
+            with self.assertRaisesRegex(ManifestError, "unresolved ADK transaction"):
+                install()
+            with self.assertRaisesRegex(ManifestError, "unresolved ADK transaction"):
+                rollback(receipt_path)
+            self.assertEqual(len(receipt["installed"]), len(list(staged.rglob("*.md"))))
+
+    def test_failed_install_compensation_preserves_staging_and_blocks_new_mutations(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            target = root / "target"
+            manifest = Manifest.load(ROOT)
+            plan_path = root / "plan.json"
+            def install():
+                write_plan(install_create_plan(manifest, "claude-code", str(target), ("core",), (),
+                                               "copy", asset_kind="agent"), plan_path)
+                return apply_plan(manifest, plan_path)
+            install()
+            receipt_path = target / contract.RECEIPT_NAME
+            original_receipt = receipt_path.read_bytes()
+            real_replace = os.replace
+            real_hash = transaction.sha256_tree
+            def failing_digest(path):
+                if ".adk-backups" in Path(path).parts:
+                    raise OSError("simulated digest read failure")
+                return real_hash(path)
+            def failing_restore(src, dst):
+                if ".adk-backups" in Path(src).parts:
+                    raise OSError("simulated restoration failure")
+                return real_replace(src, dst)
+            write_plan(install_create_plan(manifest, "claude-code", str(target), ("core",), (),
+                                           "copy", asset_kind="agent"), plan_path)
+            with patch.object(transaction, "sha256_tree", side_effect=failing_digest), \
+                 patch.object(transaction.os, "replace", side_effect=failing_restore):
+                with self.assertRaisesRegex(OSError, "restoration failure"):
+                    apply_plan(manifest, plan_path)
+            staging_runs = list((target / ".adk-staging").iterdir())
+            self.assertEqual(1, len(staging_runs))
+            self.assertTrue(staging_runs[0].is_dir())
+            backup_runs = [
+                run for run in (target / ".adk-backups").iterdir()
+                if list(run.rglob("*.md"))
+            ]
+            self.assertEqual(1, len(backup_runs))
+            self.assertEqual(original_receipt, receipt_path.read_bytes())
+            with self.assertRaisesRegex(ManifestError, "unresolved ADK transaction"):
+                apply_plan(manifest, plan_path)
+            with self.assertRaisesRegex(ManifestError, "unresolved ADK transaction"):
+                rollback(receipt_path)
+            self.assertEqual(original_receipt, receipt_path.read_bytes())
+            self.assertTrue(list(backup_runs[0].rglob("*.md")))
 
     def test_document_producer_readback_and_write_rejection(self):
         data = {"schema": contract.RECEIPT_SCHEMA, "receipt_id": "fixture", "installed": [],
