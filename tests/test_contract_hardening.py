@@ -291,7 +291,7 @@ class InstallationJSONTest(unittest.TestCase):
             contract._read_receipt(receipt_path, "fixture")
             self.assertEqual(b"SENTINEL", outside.read_bytes())
             self.assertTrue(fixed.is_symlink())
-            self.assertEqual("pass", rollback(receipt_path)["status"])
+            self.assertEqual("pass", rollback(receipt_path, manifest=manifest)["status"])
             self.assertTrue(fixed.is_symlink())
             self.assertEqual(b"SENTINEL", outside.read_bytes())
 
@@ -400,6 +400,77 @@ class InstallationJSONTest(unittest.TestCase):
             self.assertFalse(destination.exists())
             self.assertEqual(receipt_before, receipt_path.read_bytes())
 
+    def test_rollback_rejects_rehashed_unmanaged_inventory_even_with_valid_backup_root(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            target = root / "target"
+            manifest = Manifest.load(ROOT)
+            plan_path = root / "plan.json"
+            write_plan(install_create_plan(manifest, "claude-code", str(target), ("core",), (),
+                                           "copy", asset_kind="agent"), plan_path)
+            self.assertEqual("pass", apply_plan(manifest, plan_path)["status"])
+            receipt_path = target / contract.RECEIPT_NAME
+            receipt = json.loads(receipt_path.read_text())
+            unrelated = target / "personal" / "private.txt"
+            unrelated.parent.mkdir()
+            unrelated.write_bytes(b"UNMANAGED-SENTINEL")
+            injected = dict(receipt["installed"][0])
+            injected["destination"] = unrelated.relative_to(target).as_posix()
+            injected["installed_sha256"] = sha256_file(unrelated)
+            injected["rendered_sha256"] = injected["installed_sha256"]
+            injected["backup"] = None
+            injected["backup_sha256"] = None
+            receipt["installed"].append(injected)
+            receipt["receipt_sha256"] = contract._receipt_digest(receipt)
+            receipt_path.write_text(json.dumps(receipt) + "\n")
+            before = receipt_path.read_bytes()
+            with self.assertRaisesRegex(ManifestError, "inventory does not match trusted rendered assets"):
+                rollback(receipt_path, manifest=manifest)
+            self.assertEqual(b"UNMANAGED-SENTINEL", unrelated.read_bytes())
+            self.assertEqual(before, receipt_path.read_bytes())
+            self.assertFalse((target / ".adk-rollback-staging").exists())
+
+    def test_rollback_rejects_asset_path_substitution_and_manifest_version_drift(self):
+        for mutation, error in (("destination", "unauthorized"), ("manifest", "manifest identity")):
+            with self.subTest(mutation=mutation), tempfile.TemporaryDirectory() as temp:
+                root = Path(temp)
+                target = root / "target"
+                manifest = Manifest.load(ROOT)
+                plan_path = root / "plan.json"
+                write_plan(install_create_plan(manifest, "claude-code", str(target), ("core",), (),
+                                               "copy", asset_kind="agent"), plan_path)
+                self.assertEqual("pass", apply_plan(manifest, plan_path)["status"])
+                receipt_path = target / contract.RECEIPT_NAME
+                receipt = json.loads(receipt_path.read_text())
+                managed = target / receipt["installed"][0]["destination"]
+                old_bytes = managed.read_bytes()
+                unrelated = target / "private-duplicate.md"
+                unrelated.write_bytes(old_bytes)
+                if mutation == "destination":
+                    receipt["installed"][0]["destination"] = unrelated.relative_to(target).as_posix()
+                else:
+                    receipt["manifest_version"] = "0.0.0"
+                receipt["receipt_sha256"] = contract._receipt_digest(receipt)
+                receipt_path.write_text(json.dumps(receipt) + "\n")
+                with self.assertRaisesRegex(ManifestError, error):
+                    rollback(receipt_path, manifest=manifest)
+                self.assertEqual(old_bytes, managed.read_bytes())
+                self.assertEqual(old_bytes, unrelated.read_bytes())
+
+    def test_rollback_requires_explicit_trusted_manifest(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            target = root / "target"
+            manifest = Manifest.load(ROOT)
+            plan_path = root / "plan.json"
+            write_plan(install_create_plan(manifest, "claude-code", str(target), ("core",), (),
+                                           "copy", asset_kind="agent"), plan_path)
+            self.assertEqual("pass", apply_plan(manifest, plan_path)["status"])
+            receipt_path = target / contract.RECEIPT_NAME
+            with self.assertRaises(TypeError):
+                rollback(receipt_path)
+            self.assertEqual("pass", rollback(receipt_path, manifest=manifest)["status"])
+
     def test_rollback_refuses_rehashed_receipt_that_deletes_unmanaged_directory(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
@@ -422,7 +493,7 @@ class InstallationJSONTest(unittest.TestCase):
             receipt_path.write_text(json.dumps(receipt) + "\n")
             changed_receipt = receipt_path.read_bytes()
             with self.assertRaisesRegex(ManifestError, "backup root does not match receipt identity"):
-                rollback(receipt_path)
+                rollback(receipt_path, manifest=manifest)
             self.assertEqual(managed_before, managed.read_bytes())
             self.assertEqual(b"UNMANAGED-SENTINEL", secret.read_bytes())
             self.assertEqual(changed_receipt, receipt_path.read_bytes())
@@ -462,7 +533,7 @@ class InstallationJSONTest(unittest.TestCase):
                 receipt_path.write_text(json.dumps(receipt) + "\n")
                 changed_receipt = receipt_path.read_bytes()
                 with self.assertRaisesRegex(ManifestError, expected_error):
-                    rollback(receipt_path)
+                    rollback(receipt_path, manifest=manifest)
                 self.assertEqual(managed_before, managed.read_bytes())
                 self.assertEqual(original.read_bytes(), unmanaged.read_bytes())
                 self.assertEqual(changed_receipt, receipt_path.read_bytes())
@@ -483,7 +554,7 @@ class InstallationJSONTest(unittest.TestCase):
             receipt["receipt_sha256"] = contract._receipt_digest(receipt)
             receipt_path.write_text(json.dumps(receipt) + "\n")
             with self.assertRaisesRegex(ManifestError, "canonical install run identifier"):
-                rollback(receipt_path)
+                rollback(receipt_path, manifest=manifest)
             self.assertTrue((target / "agents" / "requirements-analyst.md").is_file())
 
     def test_managed_update_rejects_internal_file_symlink_alias(self):
@@ -521,7 +592,7 @@ class InstallationJSONTest(unittest.TestCase):
                     "copy", asset_kind="agent"
                 )
             with self.assertRaisesRegex(ManifestError, "symlink aliases"):
-                rollback(target / contract.RECEIPT_NAME)
+                rollback(target / contract.RECEIPT_NAME, manifest=manifest)
             self.assertEqual(original_bytes, unmanaged.read_bytes())
             self.assertEqual(0o600, unmanaged.stat().st_mode & 0o777)
             self.assertTrue(managed.is_symlink())
@@ -553,7 +624,7 @@ class InstallationJSONTest(unittest.TestCase):
             with self.assertRaisesRegex(ManifestError, "symlink aliases"):
                 apply_plan(manifest, plan_path)
             with self.assertRaisesRegex(ManifestError, "symlink aliases"):
-                rollback(receipt)
+                rollback(receipt, manifest=manifest)
             self.assertEqual(before, {p.name: p.read_bytes() for p in elsewhere.iterdir()})
             self.assertEqual(receipt_before, receipt.read_bytes())
 
@@ -584,7 +655,7 @@ class InstallationJSONTest(unittest.TestCase):
             self.assertEqual(old_receipt, receipt_path.read_bytes())
             self.assertEqual(assets, {path: path.read_bytes() for path in (target / "agents").glob("*.md")})
             self.assertEqual([], list((target / ".adk-backups").rglob("*.md")))
-            self.assertEqual("pass", rollback(receipt_path)["status"])
+            self.assertEqual("pass", rollback(receipt_path, manifest=manifest)["status"])
 
     def test_rollback_second_compensation_failure_retains_staged_assets(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -609,7 +680,7 @@ class InstallationJSONTest(unittest.TestCase):
                 return real_replace(src, dst)
             with patch.object(transaction.os, "replace", side_effect=fault):
                 with self.assertRaisesRegex(OSError, "second compensation failure"):
-                    rollback(receipt_path)
+                    rollback(receipt_path, manifest=manifest)
             staged = target / ".adk-rollback-staging" / str(receipt["receipt_id"])
             self.assertTrue(staged.is_dir())
             self.assertEqual(len(receipt["installed"]), len(list(staged.rglob("*.md"))))
@@ -621,7 +692,7 @@ class InstallationJSONTest(unittest.TestCase):
             with self.assertRaisesRegex(ManifestError, "unresolved ADK transaction"):
                 install()
             with self.assertRaisesRegex(ManifestError, "unresolved ADK transaction"):
-                rollback(receipt_path)
+                rollback(receipt_path, manifest=manifest)
             self.assertEqual(len(receipt["installed"]), len(list(staged.rglob("*.md"))))
 
     def test_failed_install_compensation_preserves_staging_and_blocks_new_mutations(self):
@@ -665,7 +736,7 @@ class InstallationJSONTest(unittest.TestCase):
             with self.assertRaisesRegex(ManifestError, "unresolved ADK transaction"):
                 apply_plan(manifest, plan_path)
             with self.assertRaisesRegex(ManifestError, "unresolved ADK transaction"):
-                rollback(receipt_path)
+                rollback(receipt_path, manifest=manifest)
             self.assertEqual(original_receipt, receipt_path.read_bytes())
             self.assertTrue(list(backup_runs[0].rglob("*.md")))
 

@@ -66,3 +66,19 @@ reference must also be the canonical receipt inside the same run-specific
 backup directory. Reject edited or misplaced paths even when their bytes and
 receipt SHA-256 match. Reconcile under supervised recovery; never edit a
 receipt's backup paths to force a rollback or delete preserved evidence.
+
+## Trusted rollback inventory (8.0.15)
+
+The local receipt's SHA-256 alone is not an authorization for file deletion.
+Rollback now requires the **trusted ADK Manifest used to install** and
+reconstructs the exact target/profile/optional-skill/asset-kind rendered file
+set. The receipt must match that Manifest's version/digest and its installed
+asset set, metadata, original source hashes, rendered hashes, file modes, and
+on-disk content before any file is moved. Rehashed receipt entries that name
+non-managed files do **not** gain deletion rights.
+
+Run `install rollback` from the exact ADK source/version that produced the
+active receipt; newer installations must be rolled back one version at a time.
+For a source-identity mismatch, stop and use reviewed, byte-preserving manual
+recovery with the original pinned ADK source. Library callers must pass
+`manifest=trusted_manifest`; there is no receipt-only rollback fallback.
