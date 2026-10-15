@@ -82,3 +82,19 @@ active receipt; newer installations must be rolled back one version at a time.
 For a source-identity mismatch, stop and use reviewed, byte-preserving manual
 recovery with the original pinned ADK source. Library callers must pass
 `manifest=trusted_manifest`; there is no receipt-only rollback fallback.
+
+## Shared receipt and backup authority (8.0.16)
+
+Install planning, install apply, and rollback must validate the entire active
+receipt against a trusted same-version Manifest and rendered asset selection.
+A recomputed local SHA-256 cannot grant unmanaged-file replacement rights. An
+installed older version must be rolled back using its original trusted source
+before switching versions; editing a receipt to force migration is forbidden.
+
+Before any rollback file mutation, a bounded traversal verifies that the
+transaction backup tree contains exactly the referenced regular asset backups,
+optional previous receipt, and necessary parent directories. Omitted backup
+references and unexpected files/directories, symlinks or special entries block
+destructive cleanup. Preserve unknown recovery data for supervised review.
+This validation does not protect against same-UID concurrent filesystem races
+or power loss; use isolated targets and byte-preserving recovery procedures.
