@@ -372,7 +372,8 @@ class InstallationJSONTest(unittest.TestCase):
                 apply_plan(manifest, plan_path)
             self.assertEqual(b"DRIFTED-MANAGED-SENTINEL", destination.read_bytes())
             self.assertEqual(receipt_before, receipt_path.read_bytes())
-            self.assertFalse((target / ".adk-staging").exists())
+            # A successful earlier apply leaves the empty staging parent.
+            self.assertEqual([], list((target / ".adk-staging").iterdir()))
 
     def test_plan_cannot_reclassify_missing_managed_file_as_create(self):
         with tempfile.TemporaryDirectory() as temp:
