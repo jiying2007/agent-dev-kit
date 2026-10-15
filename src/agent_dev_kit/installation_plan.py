@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Set, Tuple
 
 from . import installation_contract as install_contract
-from .model import Manifest, ManifestError, ensure_within, sha256_file, sha256_tree
+from .model import Manifest, ManifestError, sha256_file, sha256_tree
 from .targets import RenderedBundle, TargetUsageError, render_selection
 
 def create_plan(
@@ -44,7 +44,7 @@ def create_plan(
             if not isinstance(item, dict) or not item.get("destination"):
                 raise ManifestError("existing install receipt contains an invalid asset")
             relative = str(item["destination"])
-            ensure_within(target / relative, target, "managed destination")
+            install_contract._regular_install_path(target / relative, target, "managed destination")
             if relative in managed:
                 raise ManifestError("existing install receipt contains duplicate destinations")
             managed[relative] = item
@@ -52,7 +52,7 @@ def create_plan(
     operations: List[Dict[str, Any]] = []
     conflicts: List[Dict[str, str]] = []
     for rendered in bundle.files:
-        destination = ensure_within(target / rendered.destination, target, "install destination")
+        destination = install_contract._regular_install_path(target / rendered.destination, target, "install destination")
         relative = destination.relative_to(target).as_posix()
         action = "create"
         destination_sha256: Optional[str] = None
@@ -207,8 +207,8 @@ def validate_plan(manifest: Manifest, plan: Mapping[str, Any]) -> Tuple[Path, Re
             raise ManifestError("install operation has invalid mode: {}".format(operation.get("mode")))
         if operation.get("action") not in ("create", "replace-managed"):
             raise ManifestError("install operation has invalid action: {}".format(operation.get("action")))
-        source = ensure_within(manifest.root / rendered.source, manifest.root, "install source")
-        destination = ensure_within(target / relative, target, "install destination")
+        source = install_contract._regular_install_path(manifest.root / rendered.source, manifest.root, "install source")
+        destination = install_contract._regular_install_path(target / relative, target, "install destination")
         if not source.is_file() or source.is_symlink():
             raise ManifestError("install source missing or unsafe: {}".format(source))
         if sha256_file(source) != operation.get("source_sha256"):

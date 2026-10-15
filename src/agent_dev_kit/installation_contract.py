@@ -7,13 +7,38 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Mapping, Optional
 
-from .model import ManifestError, canonical_json_bytes, sha256_bytes
+from .model import ManifestError, canonical_json_bytes, sha256_bytes, ensure_within
 from .strict_json import StrictJSONError, read as read_strict_json
 from .atomic_io import encode_json_document, write_text_atomic
 
 PLAN_SCHEMA = "adk-install-plan/v2"
 RECEIPT_SCHEMA = "adk-install-receipt/v3"
 RECEIPT_NAME = ".adk-install-receipt.json"
+
+
+def _regular_install_path(path: Path, root: Path, label: str) -> Path:
+    """Keep managed install source/destination identity free of symlink aliases.
+
+    Resolving a leaf or directory symlink before testing is_symlink() loses the
+    alias. This helper checks each original component first, then applies the
+    existing canonical root-containment policy. It supports Python 3.8.
+    """
+    resolved_root = root.resolve()
+    candidate = Path(path)
+    if ".." in candidate.parts:
+        raise ManifestError("{} must not traverse parent directories: {}".format(label, candidate))
+    if not candidate.is_absolute():
+        candidate = resolved_root / candidate
+    try:
+        relative = candidate.relative_to(resolved_root)
+    except ValueError as exc:
+        raise ManifestError("{} escapes allowed root: {}".format(label, candidate)) from exc
+    current = resolved_root
+    for part in relative.parts:
+        current = current / part
+        if current.is_symlink():
+            raise ManifestError("{} must not use symlink aliases: {}".format(label, current))
+    return ensure_within(candidate, resolved_root, label)
 
 
 def _encode_document(data: Mapping[str, Any], label: str) -> str:

@@ -326,6 +326,77 @@ class InstallationJSONTest(unittest.TestCase):
                 self.assertEqual([], list(target.glob("." + contract.RECEIPT_NAME + ".*.tmp")))
                 contract._read_receipt(receipt_path, "previous fixture")
 
+    def test_managed_update_rejects_internal_file_symlink_alias(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            target = root / "target"
+            manifest = Manifest.load(ROOT)
+            plan_path = root / "plan.json"
+            def plan():
+                value = install_create_plan(
+                    manifest, "claude-code", str(target), ("core",), (),
+                    "copy", asset_kind="agent"
+                )
+                write_plan(value, plan_path)
+                return value
+            plan()
+            self.assertEqual("pass", apply_plan(manifest, plan_path)["status"])
+            original_receipt = (target / contract.RECEIPT_NAME).read_bytes()
+            next_plan = plan()
+            self.assertEqual("ready", next_plan["status"])
+            managed = target / "agents" / "requirements-analyst.md"
+            unmanaged = target / "unmanaged-duplicate.md"
+            unmanaged.write_bytes(managed.read_bytes())
+            unmanaged.chmod(0o600)
+            original_bytes = unmanaged.read_bytes()
+            managed.unlink()
+            managed.symlink_to(unmanaged)
+            # Before this fix, apply returned PASS and chmod'd unmanaged
+            # 0600 -> 0644 while the active receipt named a different file.
+            with self.assertRaisesRegex(ManifestError, "symlink aliases"):
+                apply_plan(manifest, plan_path)
+            with self.assertRaisesRegex(ManifestError, "symlink aliases"):
+                install_create_plan(
+                    manifest, "claude-code", str(target), ("core",), (),
+                    "copy", asset_kind="agent"
+                )
+            with self.assertRaisesRegex(ManifestError, "symlink aliases"):
+                rollback(target / contract.RECEIPT_NAME)
+            self.assertEqual(original_bytes, unmanaged.read_bytes())
+            self.assertEqual(0o600, unmanaged.stat().st_mode & 0o777)
+            self.assertTrue(managed.is_symlink())
+            self.assertEqual(original_receipt, (target / contract.RECEIPT_NAME).read_bytes())
+
+    def test_managed_update_rejects_internal_directory_symlink_alias(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            target = root / "target"
+            manifest = Manifest.load(ROOT)
+            plan_path = root / "plan.json"
+            def plan():
+                value = install_create_plan(
+                    manifest, "claude-code", str(target), ("core",), (),
+                    "copy", asset_kind="agent"
+                )
+                write_plan(value, plan_path)
+                return value
+            plan()
+            self.assertEqual("pass", apply_plan(manifest, plan_path)["status"])
+            receipt = target / contract.RECEIPT_NAME
+            receipt_before = receipt.read_bytes()
+            plan()
+            managed_dir = target / "agents"
+            elsewhere = target / "aliased-agents"
+            managed_dir.rename(elsewhere)
+            managed_dir.symlink_to(elsewhere, target_is_directory=True)
+            before = {p.name: p.read_bytes() for p in elsewhere.iterdir()}
+            with self.assertRaisesRegex(ManifestError, "symlink aliases"):
+                apply_plan(manifest, plan_path)
+            with self.assertRaisesRegex(ManifestError, "symlink aliases"):
+                rollback(receipt)
+            self.assertEqual(before, {p.name: p.read_bytes() for p in elsewhere.iterdir()})
+            self.assertEqual(receipt_before, receipt.read_bytes())
+
     def test_backup_digest_failure_restores_asset_and_receipt(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
