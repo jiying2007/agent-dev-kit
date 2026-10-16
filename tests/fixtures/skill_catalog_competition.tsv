@@ -1,0 +1,21 @@
+case_id	kind	expected_skill	competitor	input
+R001	primary	adk-external-practice-absorption	-	请评估参考实现，并吸收外部实践中的设计方法
+R002	primary	adk-skill-composition-governance	-	请治理技能组合中的触发冲突和分类排序
+R003	primary	adk-embedded-release-orchestration	-	请设计嵌入式发布编排与 SD 升级包生成方案
+R004	primary	adk-bsp-porting-playbook	-	请评估 BSP 移植、Bootloader 与 rootfs 启动链
+R005	primary	adk-embedded-remote-debug-log-triage	-	请分析设备串口日志与 dmesg 故障
+R006	primary	adk-repo-drift-remediation	-	请做全仓漂移和文档代码不一致检查
+R007	primary	adk-systematic-debugging	-	排查根因未明的问题，先定位根因
+R008	primary	adk-interface-contract-design	-	请设计接口和接口契约，不进行真实设备操作
+R009	collision	adk-runtime-router	adk-requirements-triage	开始任务前先做技能路由与任务分流，再核对验收标准
+R010	collision	adk-requirements-triage	adk-runtime-router	明确目标边界和验收标准，再考虑技能路由
+R011	collision	adk-test-strategy	adk-unit-test-embedded	先写测试和测试矩阵，再编写测试用例
+R012	collision	adk-archive-governance	adk-knowledge-archive	归档检查及归档元数据修复，同时把研究笔记归档
+R013	negated	-	adk-runtime-router	不要技能路由
+R014	negated	-	adk-archive-governance	无需归档检查
+R015	negated	-	adk-performance-profiling-embedded	不需要性能分析
+R016	negated	-	adk-branch-closeout	请勿创建PR
+R017	abstain	-	-	今天午饭吃什么
+R018	abstain	-	-	请用一句话问候大家
+R019	abstain	-	-	介绍一下适合猫咪玩的毛线球
+R020	abstain	-	-	周末是否适合去爬山

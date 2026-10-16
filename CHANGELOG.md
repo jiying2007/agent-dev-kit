@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### 8.0.19 source candidate
+- Add deterministic whole-catalog Skill competition, near-neighbor, local negation and abstention replay to the existing production matcher test path; no new route authority.
+- Preserve source-only versus actual model behavior qualification: tests establish deterministic routing checks, not task success or Token savings.
+- Keep Python 3.8 compatibility and existing one-primary, Skill Content v2, effect and release gates unchanged.
+
 ### 8.0.6 source candidate
 - Re-review existing OpenCode, OWASP taxonomy and five Anthropic official sources against current documents before renewing their 90-day freshness declarations.
 - Describe Claude skill description metadata as recommended upstream while retaining ADK's stronger local portability requirements.
