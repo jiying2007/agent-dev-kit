@@ -24,7 +24,7 @@
 ## Spec 链路检查
 - requirements 基线：同目录 requirements.md。
 - design 决策：同目录 design.md，沿用已受控的唯一权威。
-- tasks 追溯：同目录 tasks.md；机器成功与人工独立复核分开记录。
+- tasks 追溯：同目录 tasks.md；机器成功与真实 Owner 语义裁决分开记录，审查独立性如实标记。
 
 ## Canonical Change Contract
 
@@ -44,7 +44,7 @@
 
 ## 收敛模式与退出条件
 - Source software: protected PR #199, main 6fa8b40977e83569a775297371759b126406adcd, hosted CI、不可变 Release 均已验证。
-- Change governance: 文本/证据结构补齐，独立 Human Reviewer **尚无 GitHub review 记录**；在真实审核前保持 active、不得 archive 或声称 full review PASS。
+- Change governance: 原 PR 的 GitHub reviews 为空是来源事实，不构成“必须第二人审批”的新规则。真实 Owner 语义结论尚未记录，需保留 active、不得 archive 或声称 full review PASS。
 - 外部效果：继续由原 G21/G22/LTA 路径单独提供，不在本包提升资格。
 
 ## 备选方案与取舍
