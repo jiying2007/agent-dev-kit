@@ -32,6 +32,38 @@ def _cases() -> list[tuple[int, str, str, bool, str]]:
     return parsed
 
 
+
+CATALOG_CASES = ROOT / "tests/fixtures/skill_catalog_competition.tsv"
+
+
+def _catalog_cases() -> list[tuple[int, str, str, str, str, str]]:
+    lines = CATALOG_CASES.read_text(encoding="utf-8").splitlines()
+    if not lines or lines[0] != "case_id\tkind\texpected_skill\tcompetitor\tinput":
+        raise AssertionError("Skill catalog competition header is invalid")
+    cases: list[tuple[int, str, str, str, str, str]] = []
+    identifiers: set[str] = set()
+    for line_number, line in enumerate(lines[1:], start=2):
+        fields = line.split("\t", 4)
+        if len(fields) != 5:
+            raise AssertionError("Skill catalog competition line {} has invalid columns".format(line_number))
+        identifier, kind, expected, competitor, prompt = fields
+        if (
+            not identifier or identifier in identifiers
+            or kind not in ("primary", "collision", "negated", "abstain")
+            or not expected or not competitor or not prompt.strip()
+        ):
+            raise AssertionError("Skill catalog competition line {} has invalid values".format(line_number))
+        if kind in ("negated", "abstain") and expected != "-":
+            raise AssertionError("Abstention cases must not name a primary Skill")
+        if kind in ("collision", "negated") and competitor == "-":
+            raise AssertionError("Competition and negation cases require a competitor")
+        identifiers.add(identifier)
+        cases.append((line_number, identifier, kind, expected, competitor, prompt))
+    if len(cases) < 20 or {item[2] for item in cases} != {"primary", "collision", "negated", "abstain"}:
+        raise AssertionError("Skill catalog competition coverage has regressed")
+    return cases
+
+
 class SkillTriggerMatrixTests(unittest.TestCase):
     def test_all_cases_match_once_loaded_manifest(self) -> None:
         manifest = Manifest.load(ROOT)
@@ -49,6 +81,32 @@ class SkillTriggerMatrixTests(unittest.TestCase):
         )
         self.assertEqual(completed.returncode, 0, completed.stderr or completed.stdout)
 
+
+
+    def test_catalog_auto_selection_and_abstention(self) -> None:
+        manifest = Manifest.load(ROOT)
+        for line, identifier, kind, expected, competitor, prompt in _catalog_cases():
+            with self.subTest(line=line, case=identifier, kind=kind):
+                # Use the production public matcher across the *whole* catalog;
+                # never substitute per-Skill scoring or a fixture-only selector.
+                result = match_text(manifest, prompt, scope="auto")
+                if expected == "-":
+                    self.assertIs(result.get("match"), False, result)
+                    self.assertEqual(result.get("decision"), "abstain", result)
+                    self.assertEqual(result.get("mutation_permission"), "deny", result)
+                else:
+                    self.assertIs(result.get("match"), True, result)
+                    self.assertEqual(result.get("skill"), expected, result)
+                    self.assertEqual(result.get("runtime_role"), "primary", result)
+                if competitor != "-":
+                    self.assertNotEqual(result.get("skill"), competitor, result)
+                    explicit = match_text(manifest, prompt, skill=competitor, scope="skill")
+                    if kind == "collision":
+                        # The losing Skill really could have matched, so this
+                        # proves automatic selection rather than a trivial hit.
+                        self.assertIs(explicit.get("match"), True, explicit)
+                    elif kind == "negated":
+                        self.assertIs(explicit.get("match"), False, explicit)
 
 if __name__ == "__main__":
     unittest.main()
