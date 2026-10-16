@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import stat
 from pathlib import Path
 from typing import Any, Mapping, Set
@@ -65,6 +66,18 @@ def verify_receipt_inventory(manifest: Manifest, receipt: Mapping[str, Any]) -> 
     return bundle
 
 
+def _mode_matches(actual_mode: int, declared_mode: int, os_family: str) -> bool:
+    """Respect only the permission bits that the host filesystem can express.
+
+    Windows os.chmod() supports the read-only attribute but ignores Unix
+    group/other/execute bits. On POSIX the whole st_mode permission mask is
+    enforceable, so retain exact-match security there.
+    """
+    if os_family == "nt":
+        return bool(actual_mode & stat.S_IWRITE) == bool(declared_mode & stat.S_IWRITE)
+    return stat.S_IMODE(actual_mode) == declared_mode
+
+
 def verify_managed_file_mode(path: Path, declared_mode: str, label: str) -> None:
     """Compare the on-disk regular file mode, not only the content SHA-256.
 
@@ -79,5 +92,5 @@ def verify_managed_file_mode(path: Path, declared_mode: str, label: str) -> None
     actual = path.lstat().st_mode
     if not stat.S_ISREG(actual):
         raise ManifestError("{} is not a regular managed file: {}".format(label, path))
-    if stat.S_IMODE(actual) != int(declared_mode, 8):
+    if not _mode_matches(actual, int(declared_mode, 8), os.name):
         raise ManifestError("{} permission mode drifted: {}".format(label, path))
