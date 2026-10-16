@@ -1,0 +1,17 @@
+# 既有 matcher 的 20 条目录级候选竞争、否定与弃权回放 — Checklist
+
+- [x] 关键场景覆盖
+- [x] 风险项评估完成
+- [x] 回退方案可执行
+- [x] 验证证据可追溯
+- [x] Evidence Index 命令级字段完整（命令/退出码/结果摘要/证据路径/层级/关联工件）
+- [x] Canonical Change Contract 追溯关系完整
+- [ ] 评审结果为 pass（无 blocker/major 未闭环）
+- [ ] Prompt before/after 对比证据
+- [x] Skill Intake 归属与安装范围结论
+- [x] 收敛结论或阻塞说明
+
+## Gate classification
+- 机械/结构：源码及发布链有真实成功收据。
+- 人工独立 reviewer：NOT-RUN，GitHub PR #197 无独立 review；不得冒充 reviewer。
+- Model/Native/Field：NOT-MEASURED，G21/G22/LTA 分离。
