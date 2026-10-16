@@ -187,6 +187,24 @@ class ReceiptAuthorityTest(unittest.TestCase):
                 backup.chmod(original)
             self.assertEqual("pass", rollback(receipt_path, manifest=manifest)["status"])
 
+    def test_cross_platform_mode_semantics_do_not_break_windows(self):
+        """Windows reports read-only state, not exact Unix mode bits."""
+        import stat
+        from agent_dev_kit.installation_inventory import _mode_matches
+
+        regular = stat.S_IFREG
+        # Writable 0666 from a Windows filesystem satisfies a 0644 source
+        # because chmod cannot apply group/other and execute bits there.
+        self.assertTrue(_mode_matches(regular | 0o666, 0o644, "nt"))
+        self.assertTrue(_mode_matches(regular | 0o777, 0o755, "nt"))
+        self.assertTrue(_mode_matches(regular | 0o444, 0o444, "nt"))
+        # A change to read-only is still detected when writable was promised.
+        self.assertFalse(_mode_matches(regular | 0o444, 0o644, "nt"))
+        self.assertFalse(_mode_matches(regular | 0o666, 0o444, "nt"))
+        # POSIX must not inherit the Windows relaxation.
+        self.assertFalse(_mode_matches(regular | 0o666, 0o644, "posix"))
+        self.assertTrue(_mode_matches(regular | 0o644, 0o644, "posix"))
+
 
 if __name__ == "__main__":
     unittest.main()
