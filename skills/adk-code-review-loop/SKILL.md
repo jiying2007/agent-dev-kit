@@ -1,8 +1,8 @@
 ---
 name: adk-code-review-loop
 description: 独立代码审查与反馈修复闭环，覆盖发现分级、真实性核验、修复验证和复审
-version: 1.7.0
-last_updated: 2026-09-14
+version: 1.7.1
+last_updated: 2026-10-16
 triggers:
   - "独立代码审查"
   - "code review loop"
@@ -56,6 +56,8 @@ constraints:
 10. **收敛判定**：记录 review round、finding classes、New Finding Class Count、reopened count、clean rounds、independence 和 replan reason。
 11. **独立性裁决**：优先 fresh independent review；高风险共享逻辑最终由 owner 或独立 reviewer 确认。
 12. **门禁交接**：交给 `adk-commit-pr-quality-gate` 或 `adk-verification-before-completion`；重复模式只能经 trace-feedback-eval-handoff/AAR 提升为 durable rule。
+
+E2/E3 的审查需从冻结的需求/设计/验证合同挑选最关键前提，给出至少一个可复现的证伪思路或既有反例证据；作者结论不得直接作为事实。重点检验“新增设计是否能减法替代”，不能只凭 CI 绿色或 review 自我评分判为有效。独立性不足时如实标记 `author-self-review`，不得伪造独立评审。
 
 连续两轮出现新的 blocker 或 major finding class，任一 finding 为 `design-change`，或同一逻辑任务 `author-self-review` 超过两轮时，必须停止局部补丁循环并 `replan`。
 

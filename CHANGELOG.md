@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### 8.0.20 source candidate
+- Derive risk-conservative E0/E1/E2/E3 execution effort from the existing public matcher route and Skill v2 effect boundaries, never granting additional mutation or device/release authority.
+- Keep E1 constrained to explicitly labeled low-risk local workspace changes and the existing minimal valid requirements/design/tasks contract.
+- Strengthen debugging/review with bounded counterexample checks, interface design with conditional domain/deep-module criteria, and embedded benchmarking with workload validity, A/B/A/B and measured uncertainty.
+- Add deterministic Python 3.8-compatible policy/falsification/benchmark contract tests; do not claim real model, cost or field improvements without trials.
+
 ### 8.0.19 source candidate
 - Add deterministic whole-catalog Skill competition, near-neighbor, local negation and abstention replay to the existing production matcher test path; no new route authority.
 - Preserve source-only versus actual model behavior qualification: tests establish deterministic routing checks, not task success or Token savings.

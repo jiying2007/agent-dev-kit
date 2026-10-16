@@ -76,6 +76,7 @@ def format_result(result: Mapping[str, Any]) -> str:
         "effect_scope",
         "effect_operation",
         "live_device_authorization",
+        "execution_effort",
     ):
         value = result.get(key)
         if value is not None:
@@ -205,6 +206,30 @@ def resolve_skill_content(manifest: Manifest, skill_id: str) -> Dict[str, Any]:
     }
 
 
+def _derive_effort(result: Mapping[str, Any], metadata: Mapping[str, Any]) -> Dict[str, str]:
+    """Advisory effort from the canonical route; never an authorization grant.
+
+    Low-risk/E1 requires an *explicitly classified* low-risk implementation
+    route with workspace permission. Unknown risk defaults to E2. Risk or
+    device/publish escalation always takes precedence over read-only wording.
+    """
+    effects = metadata.get("escalation_effects", ())
+    mode = result.get("task_mode")
+    risk = result.get("risk", "unknown")
+    if risk == "high" or mode == "release" or effects:
+        return {"execution_effort": "E3", "effort_basis": "high-risk-or-escalation"}
+    if mode == "readonly":
+        return {"execution_effort": "E0", "effort_basis": "explicit-readonly"}
+    if (
+        risk == "low"
+        and mode == "implementation"
+        and metadata.get("effect_ceiling") == "workspace-write"
+        and result.get("mutation_permission") == "workspace-write"
+    ):
+        return {"execution_effort": "E1", "effort_basis": "explicit-low-risk-workspace"}
+    return {"execution_effort": "E2", "effort_basis": "conservative-default"}
+
+
 def _apply_contract(result: Mapping[str, Any], metadata: Mapping[str, Any]) -> Dict[str, Any]:
     constrained = dict(result)
     constrained["runtime_role"] = metadata["runtime_role"]
@@ -233,6 +258,7 @@ def _apply_contract(result: Mapping[str, Any], metadata: Mapping[str, Any]) -> D
     # device or publish authority by itself.
     if metadata["effect_ceiling"] in _READONLY_CEILINGS:
         constrained["mutation_permission"] = "deny"
+    constrained.update(_derive_effort(constrained, metadata))
     return constrained
 
 

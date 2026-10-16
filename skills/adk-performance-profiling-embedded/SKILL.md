@@ -1,8 +1,8 @@
 ---
 name: adk-performance-profiling-embedded
 description: 嵌入式性能剖析与优化路径
-version: 1.0.0
-last_updated: 2026-05-06
+version: 1.1.0
+last_updated: 2026-10-16
 triggers:
   - "性能分析"
   - "性能优化"
@@ -27,11 +27,12 @@ constraints:
 - 准备稳定可重复的基准场景。
 
 ## Workflow
-1. 建立基线：采集未优化版本指标。
-2. 瓶颈分析：CPU 热点、I/O 阻塞、锁竞争、内存抖动。
-3. 优化实验：单变量改动并控制环境变量。
-4. 对比评估：量化收益与副作用。
-5. 稳定性复验：长稳测试确认无回归。
+1. 固定真实性：确认真实负载确实执行（请求/帧/任务计数与有效输出）；无活动则 `run-validity=invalid`，不得报性能增益。
+2. 冻结可比条件：代码 SHA、构建选项、输入哈希、CPU 频率、设备与固件、温度、供电、并发及预热条件。
+3. 采集基线与候选：按预先声明的样本预算做 A/B/A/B 交替测量，避免时序、热漂移或缓存偏差；不接受单次最佳值比较。
+4. 瓶颈定位：CPU、I/O、内存、锁、功耗与实时尾时延；同时记录 p50/p95/p99、误差范围和异常样本原因。
+5. 保留负结果：样本不足、环境漂移、真实负载未运行、输出不等价或显著回归时标为 invalid/no-gain，不能挑选有利数据。
+6. 验证副作用与回滚：同时检查功能、热稳定、能耗/内存峰值和实时任务期限，按目标预算执行稳定性复验。
 
 ## Commands
 ```bash
@@ -42,7 +43,7 @@ valgrind --tool=callgrind --callgrind-out-file=callgrind.out <binary>
 callgrind_annotate callgrind.out
 valgrind --tool=massif --pages-as-heap=yes <binary>
 ms_print massif.out.<pid>
-<benchmark-cmd> --scenario <name> --repeat 5
+<benchmark-cmd> --scenario <name> --repeat <declared-sample-count>
 ```
 
 ## 火焰图生成
@@ -66,16 +67,20 @@ perf script | stackcollapse-perf.pl | flamegraph.pl > flamegraph.svg
 | 借口 | 现实 | 正确做法 |
 |------|------|---------|
 | "看起来没问题了" | 未经量化对比无法确认优化效果 | 必须提供前后同口径数据 |
-| "Valgrind 太慢不实用" | 生产环境的内存泄漏代价更高 | CI 中用 -O0 跑 memcheck |
+| "Valgrind 太慢不实用" | 目标设备可能无法运行 Valgrind | 选择宿主 memcheck/ASan 或板端内存计数；不得把不同编译优化等级当作同口径性能对照 |
 | "火焰图看不懂" | 火焰图是最直观的热点可视化 | 先看宽峰（占比高的函数） |
 
 ## Evidence Template
 ```md
-- Baseline Metrics:
+- Source/Build/Device/Input Hashes and Real Workload Counts:
+- run-validity: valid | invalid | not-run
+- Warmup/Sample Budget and Alternating A/B/A/B Order:
+- Baseline Metrics and p50/p95/p99 Distribution:
 - Bottleneck Location:
 - Optimization Change:
-- Before/After Delta:
-- Side Effects:
+- Before/After Delta / Uncertainty:
+- Side Effects (power, memory, thermal, deadlines):
+- Rollback and Reproduction Commands:
 ```
 
 ## Failure Handling
@@ -83,7 +88,7 @@ perf script | stackcollapse-perf.pl | flamegraph.pl > flamegraph.svg
 - 优化带来副作用超阈值时立即回退并重新评估。
 
 ## Quality Gate
-- 必须提供优化前后同口径对比数据。
+- 必须提供优化前后同口径对比数据，含真实负载活动、输入输出等价性、环境/构建身份和 run-validity。
 - 必须说明收益与副作用是否可接受。
 - 必须给出可执行回退方案。
 
@@ -92,7 +97,7 @@ perf script | stackcollapse-perf.pl | flamegraph.pl > flamegraph.svg
 ## 健壮性规范
 
 - **输入验证**: 执行前校验所有必要输入是否存在且格式正确
-- **重试策略**: 外部命令失败时最多重试 3 次，指数退避（1s, 2s, 4s）
-- **超时控制**: 单步操作超时 30 秒，整体流程超时 300 秒
+- **重试策略**: 失败先分类，测量无效不以同样条件盲目重试；需要重测时使用任务约定的预算与退避。
+- **超时控制**: 根据目标设备/负载的声明预算设置单步和总体上限；不可把示例常数当硬件通用阈值
 - **异常隔离**: 单个步骤失败不阻塞其他独立步骤
 - **日志记录**: 关键操作记录命令、退出码、耗时

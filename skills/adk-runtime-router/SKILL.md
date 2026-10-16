@@ -1,8 +1,8 @@
 ---
 name: adk-runtime-router
 description: ADK 原生运行时技能路由入口，统一判定 primary、supporting、内部降级与跳过条件
-version: 2.1.0
-last_updated: 2026-09-14
+version: 2.1.1
+last_updated: 2026-10-16
 triggers:
   - "技能路由"
   - "选择技能"
@@ -42,7 +42,7 @@ constraints:
 
 ## Workflow
 1. **Intent Triage**：识别 readonly / implementation / debugging / review / release / parallel / closeout；边界不清先 `adk-requirements-triage`。
-2. **Risk Gate**：shared contract、schema、根配置、CI、依赖、运行态目录或发布链按中高风险处理。
+2. **Risk Gate**：shared contract、schema、根配置、CI、依赖、运行态目录或发布链按中高风险处理。 E0/E1/E2/E3 为投入深度建议，不是权限；风险未知默认 E2，设备写入/签名/发布升级 E3；E1 必须有明确低风险、workspace-only 和现有 R2 合法任务记录。
 3. **Progressive Disclosure**：执行 `skill-catalog-lazy-loading-v1`。先比较 `namespace_summary`、trigger、boundary；只为候选加载 `deferred_surface`，并记录 `loaded_tools` 与 `schema_review`。
 4. **Route**：只选一个 primary skill；supporting skills 只能补充检查项。recall / reasoning / ranking / feedback 分层，执行裁决来自确定性规则、结构化校验或 owner approval。
 5. **Evidence Plan**：中高风险必须生成 `Tool / Skill Evidence Plan`，包含 `primary`、`supporting`、`fallback`、`verification`，以及 required/recommended skills、artifacts 与 evidence paths。
@@ -55,7 +55,7 @@ constraints:
 
 ## Route Decision Template
 ```md
-- Task Mode / Risk Level:
+- Task Mode / Risk Level / Execution Effort (E0–E3) / Escalation Basis:
 - Primary Skill:
 - Supporting Skills:
 - Fallback: enabled / reason / exit_condition
@@ -90,6 +90,7 @@ bash scripts/devkit.sh validate --strict
 ## Quality Gate
 - 必须给出 primary、supporting、fallback、verification；不得有两个 primary。
 - 中高风险必须有 Tool / Skill Evidence Plan；降级、skipped skill、tool failure 必须有可追溯 evidence。
+- 不能用 effort level 降低已有 side-effect authorization、R2、Review 或真实发布 Gate；无匹配仍 abstain。
 - 大型目录先 `namespace_summary`，再按需 `deferred_surface`；记录 `loaded_tools` / `schema_review`。
 - 高风险或低置信度必须保留 L3/raw evidence；summary 不能替代原始证据。
 - active Skill/workflow/profile/handoff 不得声明外部参考仓为 runtime fallback。
