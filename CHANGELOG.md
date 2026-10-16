@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### 8.0.24 source candidate
+- Enforce full Python 3.8/3.11/3.12 contract and regression matrix success through the existing `deterministic-eval-package` required ruleset check. Skipped or failed matrix legs cannot leave the merge gate green.
+- Keep the existing official Python 3.8+ support range; do not need a new ruleset context, duplicate test run, or a shadow authority. The package job now runs after the supported-version matrix, with `always()` preserving an explicit failed status.
+- Add mutation regression for missing matrix dependencies, missing fail-closed `always()` and weakened Python 3.8 coverage; no runtime conformance or Agent effect improvement is claimed.
+
 ### 8.0.23 source candidate
 - Align three historical Skill change packages with the existing solo-maintainer Owner-or-independent-reviewer semantic review policy. Empty original GitHub PR review arrays are observations, not invented mandatory second-human approval failures.
 - Preserve actual human Owner Spec/Quality verdict and risk disposition as pending; source CI/Release and G21/G22/LTA external results never substitute for approval.
