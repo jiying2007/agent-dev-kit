@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### 8.0.23 source candidate
+- Align three historical Skill change packages with the existing solo-maintainer Owner-or-independent-reviewer semantic review policy. Empty original GitHub PR review arrays are observations, not invented mandatory second-human approval failures.
+- Preserve actual human Owner Spec/Quality verdict and risk disposition as pending; source CI/Release and G21/G22/LTA external results never substitute for approval.
+- Extend the existing change-governance regression for the Owner/reviewer alternative, without adding any Skill, matcher, authority, external dependency or runtime behavior.
+
+
 ### 8.0.22 source candidate
 - Reconcile canonical change governance records for the three already released 8.0.19/8.0.20/8.0.21 selective Skill improvements: proper requirement/delta/acceptance/task/verification mapping, checklist and real GitHub CI/Release evidence.
 - Mark actual source verification separately from missing independent human review; keep review-passed/archive disallowed without true reviewer evidence and keep G21/G22/LTA unchanged.

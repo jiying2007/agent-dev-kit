@@ -87,6 +87,10 @@ for campaign in \
   active="$ROOT_DIR/docs/changes/$campaign"
   if [[ -d "$active" ]]; then
     bash "$ROOT_DIR/scripts/check-change-governance.sh" "$active"
+    grep -Fq '真实 Owner 或独立 Reviewer' "$active/tasks.md" || {
+      echo "[FAIL] Owner/reviewer solo-maintainer alternative missing: $campaign" >&2
+      exit 1
+    }
   else
     mapfile -t archived < <(
       find "$ROOT_DIR/docs/changes/archive" -maxdepth 1 -type d -name "*-$campaign" -print | sort

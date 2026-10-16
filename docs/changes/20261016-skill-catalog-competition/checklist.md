@@ -13,5 +13,5 @@
 
 ## Gate classification
 - 机械/结构：源码及发布链有真实成功收据。
-- 人工独立 reviewer：NOT-RUN，GitHub PR #197 无独立 review；不得冒充 reviewer。
+- 真实 Owner 语义结论：NOT-RUN，GitHub PR #197 reviews 为空（来源事实）；单人维护可真实签署 Owner verdict，不得冒充其他 reviewer。
 - Model/Native/Field：NOT-MEASURED，G21/G22/LTA 分离。
