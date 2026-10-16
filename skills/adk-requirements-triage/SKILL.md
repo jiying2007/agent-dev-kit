@@ -1,6 +1,6 @@
 ---
 name: adk-requirements-triage
-description: 将需求转为可实现、可验证的工程条目
+description: 需求不清时澄清目标边界和验收；已明确任务无需重复访谈
 version: 1.3.0
 last_updated: 2026-07-11
 triggers:
@@ -33,7 +33,7 @@ constraints:
 # adk-requirements-triage
 
 ## Goal
-- 将模糊需求收敛为可实现、可验证、可拆分的执行包。
+- 将模糊需求收敛为可验收任务。
 
 ## Prerequisites
 - 确认需求来源、owner、时间窗口和关键依赖方。

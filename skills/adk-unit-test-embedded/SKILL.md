@@ -1,6 +1,6 @@
 ---
 name: adk-unit-test-embedded
-description: 嵌入式单元测试策略与样例
+description: MCU/RTOS 单元测试断言与替身；非跨模块测试策略
 version: 1.1.0
 last_updated: 2026-08-30
 triggers:
@@ -20,7 +20,7 @@ constraints:
 # adk-unit-test-embedded
 
 ## Goal
-- 为嵌入式模块建立高价值、低维护成本的单元测试。
+- 建立嵌入式模块单测。
 
 ## Prerequisites
 - 明确模块输入输出、依赖替身（mock/stub）策略。

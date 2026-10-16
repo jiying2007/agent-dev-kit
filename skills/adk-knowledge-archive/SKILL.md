@@ -1,6 +1,6 @@
 ---
 name: adk-knowledge-archive
-description: 知识归档与长期沉淀，将高价值总结、研究、排障、决策和会话材料写成脱敏、可检索、可治理的归档候选
+description: 新建研究、排障和决策的脱敏归档候选；不处理已有归档的元数据修复
 version: 1.0.0
 last_updated: 2026-05-31
 triggers:
