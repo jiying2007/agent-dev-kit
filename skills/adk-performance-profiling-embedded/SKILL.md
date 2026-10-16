@@ -1,8 +1,8 @@
 ---
 name: adk-performance-profiling-embedded
 description: 嵌入式性能剖析与优化路径
-version: 1.0.0
-last_updated: 2026-05-06
+version: 1.1.0
+last_updated: 2026-10-16
 triggers:
   - "性能分析"
   - "性能优化"
@@ -27,11 +27,11 @@ constraints:
 - 准备稳定可重复的基准场景。
 
 ## Workflow
-1. 建立基线：采集未优化版本指标。
-2. 瓶颈分析：CPU 热点、I/O 阻塞、锁竞争、内存抖动。
-3. 优化实验：单变量改动并控制环境变量。
-4. 对比评估：量化收益与副作用。
-5. 稳定性复验：长稳测试确认无回归。
+1. 核实**真实负载**计数和正确输出，无活动记 `run-validity=invalid`。
+2. 锁定源码/编译/输入哈希、频率/温度/供电/预热与样本预算。
+3. 交替 A/B/A/B 采样，比较 p50/p95/p99、波动和环境漂移。
+4. 检查热点/内存/功耗、功能等价及热稳定；无效样本记 no-gain。
+5. 超预算须回滚，长稳复验须用真实场景。
 
 ## Commands
 ```bash
@@ -42,20 +42,16 @@ valgrind --tool=callgrind --callgrind-out-file=callgrind.out <binary>
 callgrind_annotate callgrind.out
 valgrind --tool=massif --pages-as-heap=yes <binary>
 ms_print massif.out.<pid>
-<benchmark-cmd> --scenario <name> --repeat 5
+<benchmark-cmd> --scenario <name> --repeat <declared-sample-count>
 ```
 
-## 火焰图生成
-```bash
-perf script | stackcollapse-perf.pl | flamegraph.pl > flamegraph.svg
-# 嵌入式场景：从 DWT/ETM trace 导出
-<trace-decode-cmd> --input etm_trace.bin | stackcollapse-perf.pl | flamegraph.pl > mcu_flame.svg
-```
+## 火焰图
+按目标 trace 能力选择 perf 或 DWT/ETM，生成热点归因报告。
 
 ## 瓶颈定位清单
 | 瓶颈类型 | 诊断信号 | 工具 |
 |----------|----------|------|
-| CPU 热点 | 函数采样占比 >20% | perf record + flame graph |
+| CPU 热点 | perf 采样热点 | perf record + flame graph |
 | 内存泄漏 | 堆持续增长 | valgrind --tool=memcheck |
 | I/O 阻塞 | 线程长时间 wait | strace -T / perf trace |
 | 锁竞争 | mutex wait 时间长 | perf lock / lockstat |
@@ -66,16 +62,17 @@ perf script | stackcollapse-perf.pl | flamegraph.pl > flamegraph.svg
 | 借口 | 现实 | 正确做法 |
 |------|------|---------|
 | "看起来没问题了" | 未经量化对比无法确认优化效果 | 必须提供前后同口径数据 |
-| "Valgrind 太慢不实用" | 生产环境的内存泄漏代价更高 | CI 中用 -O0 跑 memcheck |
-| "火焰图看不懂" | 火焰图是最直观的热点可视化 | 先看宽峰（占比高的函数） |
+| "Valgrind 太慢不实用" | 目标设备可能无法运行 Valgrind | 选择宿主 memcheck/ASan 或板端内存计数；不得把不同编译优化等级当作同口径性能对照 |
+| "火焰图看不懂" | 归因不等于整体收益 | 先用采样计数复核热点 |
 
 ## Evidence Template
 ```md
-- Baseline Metrics:
-- Bottleneck Location:
-- Optimization Change:
-- Before/After Delta:
-- Side Effects:
+- Source / Build / Device / Input Hash:
+- Workload Counts / run-validity: valid | invalid | not-run
+- A/B/A/B Order and Sample Count:
+- p50/p95/p99 Before/After and Uncertainty:
+- Functional and Thermal Side Effects:
+- Rollback / Reproduction:
 ```
 
 ## Failure Handling
@@ -83,7 +80,7 @@ perf script | stackcollapse-perf.pl | flamegraph.pl > flamegraph.svg
 - 优化带来副作用超阈值时立即回退并重新评估。
 
 ## Quality Gate
-- 必须提供优化前后同口径对比数据。
+- 必须提供优化前后同口径对比数据，含真实负载活动、输入输出等价性、环境/构建身份和 run-validity。
 - 必须说明收益与副作用是否可接受。
 - 必须给出可执行回退方案。
 
@@ -91,8 +88,7 @@ perf script | stackcollapse-perf.pl | flamegraph.pl > flamegraph.svg
 
 ## 健壮性规范
 
-- **输入验证**: 执行前校验所有必要输入是否存在且格式正确
-- **重试策略**: 外部命令失败时最多重试 3 次，指数退避（1s, 2s, 4s）
-- **超时控制**: 单步操作超时 30 秒，整体流程超时 300 秒
+- **输入验证**：校验输入与数据口径
+- **重试/超时**：按目标场景预算；无效测量不重复刷分。
 - **异常隔离**: 单个步骤失败不阻塞其他独立步骤
 - **日志记录**: 关键操作记录命令、退出码、耗时

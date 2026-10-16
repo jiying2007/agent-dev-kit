@@ -4,7 +4,7 @@ import unittest
 from pathlib import Path
 from typing import Any
 
-from agent_dev_kit.matcher import match_text, resolve_skill_content
+from agent_dev_kit.matcher import _derive_effort, match_text, resolve_skill_content
 from agent_dev_kit.model import Manifest
 from agent_dev_kit.skill_relationships import resolve_skill_relationships
 
@@ -142,6 +142,66 @@ class SkillGovernanceTests(unittest.TestCase):
         for token in ("linux-kernel", "rtos", "bare-metal", "Live-device Handoff", "explicit authorization"):
             self.assertIn(token, text)
 
+
+    def test_effort_is_a_conservative_route_projection_not_a_permission(self) -> None:
+        readonly = match_text(self.manifest, "只做架构评估，设计接口")
+        self.assertEqual(readonly.get("execution_effort"), "E0", readonly)
+        self.assertEqual(readonly.get("mutation_permission"), "deny", readonly)
+
+        medium = match_text(self.manifest, "定位根因")
+        self.assertEqual(medium.get("execution_effort"), "E2", medium)
+
+        driver = match_text(self.manifest, "驱动开发")
+        self.assertEqual(driver.get("execution_effort"), "E3", driver)
+        self.assertEqual(driver.get("live_device_authorization"), "explicit-required", driver)
+
+        release = match_text(self.manifest, "准备发布")
+        self.assertEqual(release.get("execution_effort"), "E3", release)
+        self.assertNotEqual(release.get("mutation_permission"), "workspace-write", release)
+
+    def test_e1_requires_explicit_low_risk_and_workspace_boundary(self) -> None:
+        metadata = {"effect_ceiling": "workspace-write", "escalation_effects": ()}
+        basic = {
+            "task_mode": "implementation",
+            "risk": "low",
+            "mutation_permission": "workspace-write",
+        }
+        self.assertEqual(_derive_effort(basic, metadata)["execution_effort"], "E1")
+        for changed in (
+            {**basic, "risk": "unknown"},
+            {**basic, "mutation_permission": "deny"},
+            {**basic, "task_mode": "needs-triage"},
+        ):
+            self.assertEqual(_derive_effort(changed, metadata)["execution_effort"], "E2")
+        high = {**basic, "risk": "high"}
+        self.assertEqual(_derive_effort(high, metadata)["execution_effort"], "E3")
+        self.assertEqual(
+            _derive_effort(basic, {**metadata, "escalation_effects": ("live-device:flash",)})["execution_effort"],
+            "E3",
+        )
+        self.assertEqual(
+            _derive_effort(
+                {**basic, "task_mode": "readonly"},
+                {**metadata, "escalation_effects": ("release-target:publish",)},
+            )["execution_effort"],
+            "E3",
+        )
+
+    def test_profiling_requires_valid_comparable_alternating_ab(self) -> None:
+        text = (ROOT / "skills/adk-performance-profiling-embedded/SKILL.md").read_text(encoding="utf-8")
+        for item in ("A/B/A/B", "run-validity", "p95", "热稳定", "真实负载", "回滚"):
+            self.assertIn(item, text)
+        self.assertNotIn("整体流程超时 300 秒", text)
+        self.assertNotIn("CI 中用 -O0 跑 memcheck", text)
+
+    def test_high_risk_falsification_and_legal_e1_change_contract(self) -> None:
+        for name in ("adk-systematic-debugging", "adk-code-review-loop"):
+            text = (ROOT / "skills" / name / "SKILL.md").read_text(encoding="utf-8")
+            self.assertIn("E2/E3", text, name)
+            self.assertIn("证伪", text, name)
+        rules = (ROOT / "docs/agent-operating-rules.md").read_text(encoding="utf-8")
+        for required in ("E0", "E1", "E2", "E3", "requirements.md", "design.md", "tasks.md"):
+            self.assertIn(required, rules)
 
 if __name__ == "__main__":
     unittest.main()

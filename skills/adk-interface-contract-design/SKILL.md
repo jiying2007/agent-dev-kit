@@ -36,27 +36,7 @@ constraints:
 
 
 ## Workflow
-1. **定义接口清单**：请求、响应、错误码、幂等语义。
-   ```c
-   /* 嵌入式接口契约示例 */
-   typedef struct {
-       uint32_t magic;        /* 0xCAFEBABE */
-       uint16_t version;      /* 接口版本 */
-       uint16_t cmd;          /* 命令码 */
-       uint32_t payload_len;  /* 负载长度 */
-       uint8_t  payload[];    /* 柔性数组 */
-   } __attribute__((packed)) iface_msg_t;
-
-   /* 错误码定义 */
-   typedef enum {
-       IFACE_OK          =  0,
-       IFACE_ERR_PARAM   = -1,  /* 参数非法 */
-       IFACE_ERR_TIMEOUT = -2,  /* 超时 */
-       IFACE_ERR_BUSY    = -3,  /* 忙 */
-       IFACE_ERR_NOMEM   = -4,  /* 内存不足 */
-       IFACE_ERR_PROTO   = -5,  /* 协议错误 */
-   } iface_err_t;
-   ```
+1. **接口清单**：请求、响应、错误码、幂等与异常的最小契约；C 示例按需读取 `references/details.md`。
 2. **版本协商机制**：接口版本兼容性自动检测。
    ```c
    /* 版本协商 */
@@ -95,6 +75,7 @@ constraints:
 
 ## Quality Gate
 - 契约必须包含输入/输出/错误码/超时语义。
+- 词义冲突时用反例固定术语；深模块应隐藏可变复杂度，不建重复词汇/ADR。
 - 机器消费契约必须包含 strict schema、required fields、enum 和 refusal/parse-failure handling。
 - 必须给出版本兼容与迁移方案。
 - 必须附至少 3 条验证用例（正常/边界/异常）。

@@ -1,8 +1,8 @@
 ---
 name: adk-runtime-router
 description: ADK 原生运行时技能路由入口，统一判定 primary、supporting、内部降级与跳过条件
-version: 2.1.0
-last_updated: 2026-09-14
+version: 2.1.1
+last_updated: 2026-10-16
 triggers:
   - "技能路由"
   - "选择技能"
@@ -42,20 +42,20 @@ constraints:
 
 ## Workflow
 1. **Intent Triage**：识别 readonly / implementation / debugging / review / release / parallel / closeout；边界不清先 `adk-requirements-triage`。
-2. **Risk Gate**：shared contract、schema、根配置、CI、依赖、运行态目录或发布链按中高风险处理。
+2. **Risk Gate**：共享合同、CI、依赖和发布按中高风险。E0–E3 只控制投入；未知 E2，设备/发布 E3，E1 不豁免 R2。
 3. **Progressive Disclosure**：执行 `skill-catalog-lazy-loading-v1`。先比较 `namespace_summary`、trigger、boundary；只为候选加载 `deferred_surface`，并记录 `loaded_tools` 与 `schema_review`。
 4. **Route**：只选一个 primary skill；supporting skills 只能补充检查项。recall / reasoning / ranking / feedback 分层，执行裁决来自确定性规则、结构化校验或 owner approval。
 5. **Evidence Plan**：中高风险必须生成 `Tool / Skill Evidence Plan`，包含 `primary`、`supporting`、`fallback`、`verification`，以及 required/recommended skills、artifacts 与 evidence paths。
-6. **Tool Evidence**：涉及 Code Intelligence 时遵守 `code_intelligence_provider_contract`；记录 provider/tool/query/repo_ref/hit_summary/decision impact。Tool Search 记录 namespace/query/loaded_tools/schema_review。
+6. **Tool Evidence**：依 `code_intelligence_provider_contract` 留存 provider/query/repo_ref/decision；Tool Search 留存 namespace/loaded_tools/schema_review。
 7. **Degrade Fail-Closed**：出现 `no match`、`ambiguous`、`retrieval failed` 或工具不可用时，记录原因和 fallback evidence；不得把降级写成成功验证。
-8. **Evidence Depth**：低风险可 L1 摘要；需要定位时升 L2；高风险、低置信度、安全例外或缺 raw evidence 时升 L3/raw，不用压缩替代原始证据。
+8. **Evidence Depth**：按风险 L1/L2/L3；高风险保留 raw evidence。
 9. **Execute + Verify**：加载 primary skill 推进；产生改动时最终经过 `adk-verification-before-completion`。
 
-详细 Task Routing、Tool Routing、fallback/rationalization 规则仅在路由冲突、证据降级或需要解释边界时读取 `references/runtime-routing-details.md`，不要默认加载。
+冲突/降级时再读 `references/runtime-routing-details.md`。
 
 ## Route Decision Template
 ```md
-- Task Mode / Risk Level:
+- Task Mode / Risk Level / Execution Effort (E0–E3) / Escalation Basis:
 - Primary Skill:
 - Supporting Skills:
 - Fallback: enabled / reason / exit_condition
@@ -90,6 +90,7 @@ bash scripts/devkit.sh validate --strict
 ## Quality Gate
 - 必须给出 primary、supporting、fallback、verification；不得有两个 primary。
 - 中高风险必须有 Tool / Skill Evidence Plan；降级、skipped skill、tool failure 必须有可追溯 evidence。
+- Effort 不改变授权、R2、Review/Release；无匹配 abstain。
 - 大型目录先 `namespace_summary`，再按需 `deferred_surface`；记录 `loaded_tools` / `schema_review`。
 - 高风险或低置信度必须保留 L3/raw evidence；summary 不能替代原始证据。
 - active Skill/workflow/profile/handoff 不得声明外部参考仓为 runtime fallback。
