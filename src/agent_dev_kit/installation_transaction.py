@@ -10,7 +10,7 @@ from typing import Any, Dict, List, Mapping, Optional, Set
 
 from . import installation_contract as install_contract
 from . import installation_plan
-from .installation_inventory import verify_receipt_inventory
+from .installation_inventory import verify_managed_file_mode, verify_receipt_inventory
 from .locking import TargetLock
 from .model import Manifest, ManifestError, sha256_file, sha256_tree
 from .targets import RenderedBundle
@@ -288,6 +288,7 @@ def _rollback_locked(receipt_path: Path, manifest: Manifest, *, locked_target: P
             raise ManifestError("installed asset is missing; refusing rollback: {}".format(destination))
         if sha256_tree(destination) != item.get("installed_sha256"):
             raise ManifestError("installed asset changed; refusing rollback: {}".format(destination))
+        verify_managed_file_mode(destination, item.get("file_mode"), "rollback installed asset")
         backup_value = item.get("backup")
         if backup_value is not None:
             expected_backup = (backup_root / relative).relative_to(target).as_posix()
@@ -299,6 +300,7 @@ def _rollback_locked(receipt_path: Path, manifest: Manifest, *, locked_target: P
             backup_sha256 = item.get("backup_sha256")
             if not isinstance(backup_sha256, str) or sha256_tree(backup) != backup_sha256:
                 raise ManifestError("rollback backup changed; refusing rollback: {}".format(backup))
+            verify_managed_file_mode(backup, item.get("file_mode"), "rollback managed backup")
         elif item.get("backup_sha256") is not None:
             raise ManifestError("rollback receipt has a backup digest without a backup")
 
