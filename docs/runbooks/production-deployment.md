@@ -112,3 +112,16 @@ After inspecting unexpected permission changes, restore the trusted mode or
 use a supervised recovery process; never edit the receipt's hashes or mode
 to force an operation. This deliberately does not claim protection from
 same-user concurrent mutation after validation or filesystem-level faults.
+
+
+## Platform-aware file permissions (8.0.18)
+
+POSIX deployment targets continue to compare the full actual permission
+mode (including executable, group, other and special bits) against the
+trusted renderer-bound receipt. On native Windows, Python's `chmod()`
+interface can only set the read-only flag; the verifier therefore compares
+the effective writable/read-only bit, while retaining the normal regular-file
+and content-SHA checks. This is not an NTFS ACL/security descriptor audit,
+and Windows must not be reported as passing full POSIX permission governance.
+Portable unit tests exercise Windows read-only and POSIX strict modes without
+claiming an actual Windows host deployment has been certified.
