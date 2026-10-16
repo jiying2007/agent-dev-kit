@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Set, Tuple
 
 from . import installation_contract as install_contract
-from .installation_inventory import verify_receipt_inventory
+from .installation_inventory import verify_managed_file_mode, verify_receipt_inventory
 from .model import Manifest, ManifestError, sha256_file, sha256_tree
 from .targets import RenderedBundle, TargetUsageError, render_selection
 
@@ -66,8 +66,14 @@ def create_plan(
                 conflicts.append({"destination": relative, "reason": "managed destination drifted"})
                 action = "conflict"
             else:
-                action = "replace-managed"
-                destination_sha256 = sha256_tree(destination)
+                try:
+                    verify_managed_file_mode(destination, managed[relative].get("file_mode"), "managed destination")
+                except ManifestError:
+                    conflicts.append({"destination": relative, "reason": "managed destination permission drifted"})
+                    action = "conflict"
+                else:
+                    action = "replace-managed"
+                    destination_sha256 = sha256_tree(destination)
         operations.append(
             {
                 "kind": rendered.kind,
@@ -248,6 +254,7 @@ def validate_plan(manifest: Manifest, plan: Mapping[str, Any]) -> Tuple[Path, Re
                 raise ManifestError("managed destination disappeared after plan creation: {}".format(destination))
             if sha256_tree(destination) != operation.get("destination_sha256"):
                 raise ManifestError("managed destination changed after plan creation: {}".format(destination))
+            verify_managed_file_mode(destination, managed_item.get("file_mode"), "managed destination")
     if seen != set(expected):
         raise ManifestError("install plan does not contain the complete rendered file set")
     return target, bundle
