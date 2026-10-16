@@ -78,4 +78,25 @@ if bash "$ROOT_DIR/scripts/check-change-governance.sh" "$CHANGE_DIR" >/dev/null 
   exit 1
 fi
 
+# Ratchet historical selective Skill campaigns through the canonical native change
+# validator. The paths may later move to archive only after genuine review.
+for campaign in \
+  20261016-skill-catalog-competition \
+  20261016-effort-evidence-v1 \
+  20261016-skill-description-discovery; do
+  active="$ROOT_DIR/docs/changes/$campaign"
+  if [[ -d "$active" ]]; then
+    bash "$ROOT_DIR/scripts/check-change-governance.sh" "$active"
+  else
+    mapfile -t archived < <(
+      find "$ROOT_DIR/docs/changes/archive" -maxdepth 1 -type d -name "*-$campaign" -print | sort
+    )
+    [[ "${#archived[@]}" -eq 1 ]] || {
+      echo "[FAIL] missing or ambiguous archived campaign: $campaign" >&2
+      exit 1
+    }
+    bash "$ROOT_DIR/scripts/check-change-governance.sh" "${archived[0]}"
+  fi
+done
+
 echo "[PASS] change governance"

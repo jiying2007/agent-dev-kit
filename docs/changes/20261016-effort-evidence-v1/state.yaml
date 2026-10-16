@@ -1,4 +1,4 @@
-stage: implementing
+stage: verified
 owner: repo-maintainer
-updated_at: 2026-10-16T19:00:00+08:00
-notes: E1 remains intentionally conservative, runtime/field A/B not measured
+updated_at: 2026-10-16T21:26:00+08:00
+notes: historical source and main CI verified; canonical evidence backfill; independent GitHub PR review absent, review/archival not authorized

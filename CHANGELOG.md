@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### 8.0.22 source candidate
+- Reconcile canonical change governance records for the three already released 8.0.19/8.0.20/8.0.21 selective Skill improvements: proper requirement/delta/acceptance/task/verification mapping, checklist and real GitHub CI/Release evidence.
+- Mark actual source verification separately from missing independent human review; keep review-passed/archive disallowed without true reviewer evidence and keep G21/G22/LTA unchanged.
+- Make the existing change-governance regression check these three durable packages without adding a new gate, alternate lifecycle or external dependency; retain source identity and Root exact-promotion policies.
+
+
 ### 8.0.21 source candidate
 - Clarify eight near-neighbor Skill descriptions for native name/description discovery; preserve existing triggers, non_triggers, runtime router and Skill Content v2 authority.
 - Add deterministic source-level description vocabulary/exclusion preflight to the existing trigger matrix; no new matcher or paid model calls.
