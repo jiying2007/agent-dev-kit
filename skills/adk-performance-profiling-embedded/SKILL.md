@@ -27,12 +27,11 @@ constraints:
 - 准备稳定可重复的基准场景。
 
 ## Workflow
-1. 固定真实性：确认真实负载确实执行（请求/帧/任务计数与有效输出）；无活动则 `run-validity=invalid`，不得报性能增益。
-2. 冻结可比条件：代码 SHA、构建选项、输入哈希、CPU 频率、设备与固件、温度、供电、并发及预热条件。
-3. 采集基线与候选：按预先声明的样本预算做 A/B/A/B 交替测量，避免时序、热漂移或缓存偏差；不接受单次最佳值比较。
-4. 瓶颈定位：CPU、I/O、内存、锁、功耗与实时尾时延；同时记录 p50/p95/p99、误差范围和异常样本原因。
-5. 保留负结果：样本不足、环境漂移、真实负载未运行、输出不等价或显著回归时标为 invalid/no-gain，不能挑选有利数据。
-6. 验证副作用与回滚：同时检查功能、热稳定、能耗/内存峰值和实时任务期限，按目标预算执行稳定性复验。
+1. 核实**真实负载**计数和正确输出，无活动记 `run-validity=invalid`。
+2. 锁定源码/编译/输入哈希、频率/温度/供电/预热与样本预算。
+3. 交替 A/B/A/B 采样，比较 p50/p95/p99、波动和环境漂移。
+4. 检查热点/内存/功耗、功能等价及热稳定；无效样本记 no-gain。
+5. 超预算须回滚，长稳复验须用真实场景。
 
 ## Commands
 ```bash
@@ -46,17 +45,13 @@ ms_print massif.out.<pid>
 <benchmark-cmd> --scenario <name> --repeat <declared-sample-count>
 ```
 
-## 火焰图生成
-```bash
-perf script | stackcollapse-perf.pl | flamegraph.pl > flamegraph.svg
-# 嵌入式场景：从 DWT/ETM trace 导出
-<trace-decode-cmd> --input etm_trace.bin | stackcollapse-perf.pl | flamegraph.pl > mcu_flame.svg
-```
+## 火焰图
+按目标 trace 能力选择 perf 或 DWT/ETM，生成热点归因报告。
 
 ## 瓶颈定位清单
 | 瓶颈类型 | 诊断信号 | 工具 |
 |----------|----------|------|
-| CPU 热点 | 函数采样占比 >20% | perf record + flame graph |
+| CPU 热点 | perf 采样热点 | perf record + flame graph |
 | 内存泄漏 | 堆持续增长 | valgrind --tool=memcheck |
 | I/O 阻塞 | 线程长时间 wait | strace -T / perf trace |
 | 锁竞争 | mutex wait 时间长 | perf lock / lockstat |
@@ -68,19 +63,16 @@ perf script | stackcollapse-perf.pl | flamegraph.pl > flamegraph.svg
 |------|------|---------|
 | "看起来没问题了" | 未经量化对比无法确认优化效果 | 必须提供前后同口径数据 |
 | "Valgrind 太慢不实用" | 目标设备可能无法运行 Valgrind | 选择宿主 memcheck/ASan 或板端内存计数；不得把不同编译优化等级当作同口径性能对照 |
-| "火焰图看不懂" | 火焰图是最直观的热点可视化 | 先看宽峰（占比高的函数） |
+| "火焰图看不懂" | 归因不等于整体收益 | 先用采样计数复核热点 |
 
 ## Evidence Template
 ```md
-- Source/Build/Device/Input Hashes and Real Workload Counts:
-- run-validity: valid | invalid | not-run
-- Warmup/Sample Budget and Alternating A/B/A/B Order:
-- Baseline Metrics and p50/p95/p99 Distribution:
-- Bottleneck Location:
-- Optimization Change:
-- Before/After Delta / Uncertainty:
-- Side Effects (power, memory, thermal, deadlines):
-- Rollback and Reproduction Commands:
+- Source / Build / Device / Input Hash:
+- Workload Counts / run-validity: valid | invalid | not-run
+- A/B/A/B Order and Sample Count:
+- p50/p95/p99 Before/After and Uncertainty:
+- Functional and Thermal Side Effects:
+- Rollback / Reproduction:
 ```
 
 ## Failure Handling
@@ -96,8 +88,7 @@ perf script | stackcollapse-perf.pl | flamegraph.pl > flamegraph.svg
 
 ## 健壮性规范
 
-- **输入验证**: 执行前校验所有必要输入是否存在且格式正确
-- **重试策略**: 失败先分类，测量无效不以同样条件盲目重试；需要重测时使用任务约定的预算与退避。
-- **超时控制**: 根据目标设备/负载的声明预算设置单步和总体上限；不可把示例常数当硬件通用阈值
+- **输入验证**：校验输入与数据口径
+- **重试/超时**：按目标场景预算；无效测量不重复刷分。
 - **异常隔离**: 单个步骤失败不阻塞其他独立步骤
 - **日志记录**: 关键操作记录命令、退出码、耗时

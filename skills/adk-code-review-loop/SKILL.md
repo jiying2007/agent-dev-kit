@@ -23,7 +23,7 @@ outputs:
 constraints:
   - 不得盲目接受 review 结论
   - blocker 和 major 未闭环不得给 pass
-  - 审查者发现问题不等于修复者可以扩大范围
+  - 发现问题不授权扩大修复范围
   - 不得把机械门禁通过表述为语义审查通过或最终可交付
   - staged 文件存在 unstaged overlay 时不得声称最新修复已被审查
 ---
@@ -31,9 +31,9 @@ constraints:
 # adk-code-review-loop
 
 ## Goal
-- 将代码审查从一次性意见列表变成可验证闭环。
-- 区分真实缺陷、误报、超范围建议与仅凭 diff 无法验证的问题。
-- 保持机械门禁、语义审查、最终 readiness 三类结论相互独立。
+- 审查必须能复现、能闭环。
+- 区分缺陷、误报、越界建议与无法验证项。
+- 机械、语义及 readiness 分别裁决。
 
 ## Prerequisites
 - 有明确 diff/文件清单、目标与非目标、相关测试结果。
@@ -41,7 +41,7 @@ constraints:
 - staged 目标存在 unstaged overlay 时，明确该 working tree 内容不在本轮审查范围。
 - 标记 Reviewer Independence：`independent` 或 `author-self-review`；自审不得冒充独立审查。
 - 受控生命周期操作需有 Requirement Baseline；不适用时显式标记 `not_applicable`。
-- CI/AI review 若要写 SCM comment，需有结构化 findings、trusted-trigger/secret 隔离和发布边界。
+- AI/CI 写 SCM comment 需结构化 finding 与触发/secret 隔离。
 
 ## Workflow
 1. **冻结快照**：记录 Review Target、HEAD、index/diff 指纹、目标文件和 Working Tree Overlay。
@@ -57,7 +57,7 @@ constraints:
 11. **独立性裁决**：优先 fresh independent review；高风险共享逻辑最终由 owner 或独立 reviewer 确认。
 12. **门禁交接**：交给 `adk-commit-pr-quality-gate` 或 `adk-verification-before-completion`；重复模式只能经 trace-feedback-eval-handoff/AAR 提升为 durable rule。
 
-E2/E3 的审查需从冻结的需求/设计/验证合同挑选最关键前提，给出至少一个可复现的证伪思路或既有反例证据；作者结论不得直接作为事实。重点检验“新增设计是否能减法替代”，不能只凭 CI 绿色或 review 自我评分判为有效。独立性不足时如实标记 `author-self-review`，不得伪造独立评审。
+E2/E3 应对冻结合同的关键前提提出可复现证伪；优先减法，CI 绿不等于真实有效；自审须标 `author-self-review`。
 
 连续两轮出现新的 blocker 或 major finding class，任一 finding 为 `design-change`，或同一逻辑任务 `author-self-review` 超过两轮时，必须停止局部补丁循环并 `replan`。
 
