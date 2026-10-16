@@ -1,6 +1,6 @@
 ---
 name: adk-performance-profiling-embedded
-description: 嵌入式性能剖析与优化路径
+description: 嵌入式性能分析：有指标时测真实负载并交替 A/B；无指标不启用
 version: 1.1.0
 last_updated: 2026-10-16
 triggers:
@@ -20,11 +20,11 @@ constraints:
 # adk-performance-profiling-embedded
 
 ## Goal
-- 用数据定位瓶颈并输出可回滚的优化方案。
+- 量化瓶颈。
 
 ## Prerequisites
 - 锁定 KPI（时延、吞吐、CPU、内存、功耗）。
-- 准备稳定可重复的基准场景。
+- 固定基准场景。
 
 ## Workflow
 1. 核实**真实负载**计数和正确输出，无活动记 `run-validity=invalid`。

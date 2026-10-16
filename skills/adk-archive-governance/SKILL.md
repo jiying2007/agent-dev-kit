@@ -1,6 +1,6 @@
 ---
 name: adk-archive-governance
-description: docs/archive 归档治理，覆盖 meta、topic registry、文件名、hash、superseded、敏感材料和归档门禁修复
+description: 检查并修复 docs/archive 元数据、topic、hash 与安全问题；不负责新建知识笔记
 version: 1.0.0
 last_updated: 2026-05-31
 triggers:

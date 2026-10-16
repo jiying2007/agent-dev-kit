@@ -1,6 +1,6 @@
 ---
 name: adk-release-versioning
-description: 版本策略、变更说明与发布基线
+description: 版本号、Changelog 和发布基线规划；不执行真实发布
 version: 1.4.0
 last_updated: 2026-09-19
 triggers:
@@ -22,7 +22,7 @@ constraints:
 # adk-release-versioning
 
 ## Goal
-- 统一版本语义与发布清单，降低升级和回退风险。
+- 核对版本与回退证据。
 
 
 ## Prerequisites

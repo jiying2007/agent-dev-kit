@@ -6,6 +6,7 @@ import subprocess
 import unittest
 from pathlib import Path
 
+from agent_dev_kit._matcher_kernel import _frontmatter
 from agent_dev_kit.matcher import match_text
 from agent_dev_kit.model import Manifest
 
@@ -107,6 +108,31 @@ class SkillTriggerMatrixTests(unittest.TestCase):
                         self.assertIs(explicit.get("match"), True, explicit)
                     elif kind == "negated":
                         self.assertIs(explicit.get("match"), False, explicit)
+
+
+    def test_portable_description_discovery_boundaries(self) -> None:
+        """Only source metadata preflight; never native host routing evidence."""
+        manifest = Manifest.load(ROOT)
+        entries = {
+            item["name"]: item["path"]
+            for section in ("skills", "optional_skills")
+            for item in manifest.data[section]
+        }
+        pairs = (("adk-requirements-triage","adk-lightweight-planning",("需求不清","验收"),"已明确","需求不清"),("adk-unit-test-embedded","adk-test-strategy",("单元测试","断言"),"非","断言"),("adk-performance-profiling-embedded","adk-code-simplification",("性能分析","真实负载"),"无指标","真实负载"),("adk-archive-governance","adk-knowledge-archive",("检查","元数据"),"不负责","检查"),("adk-knowledge-archive","adk-archive-governance",("新建","归档候选"),"不处理","新建"),("adk-task-breakdown","adk-lightweight-planning",("拆解","并行边界"),"无需","并行边界"),("adk-commit-pr-quality-gate","adk-code-review-loop",("提交 PR","测试证据"),"不能替代","测试证据"),("adk-release-versioning","adk-embedded-release-orchestration",("版本号","发布基线"),"不执行","Changelog"))
+        for owner, neighbor, signals, exclusion, distinct_signal in pairs:
+            with self.subTest(owner=owner, neighbor=neighbor):
+                own = _frontmatter(ROOT / entries[owner])
+                other = _frontmatter(ROOT / entries[neighbor])
+                self.assertEqual(own["name"], owner)
+                self.assertEqual(other["name"], neighbor)
+                description = own["description"]
+                self.assertIsInstance(description, str)
+                self.assertGreater(len(description.strip()), 10)
+                self.assertLessEqual(len(description), 1024)
+                for signal in signals:
+                    self.assertIn(signal, description, (owner, signal))
+                self.assertIn(exclusion, description, owner)
+                self.assertNotIn(distinct_signal, other["description"], (owner, neighbor))
 
 if __name__ == "__main__":
     unittest.main()

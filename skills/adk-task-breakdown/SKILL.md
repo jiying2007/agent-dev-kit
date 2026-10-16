@@ -1,6 +1,6 @@
 ---
 name: adk-task-breakdown
-description: 将需求拆解为可并行执行的任务包
+description: 复杂任务拆解及并行边界；单点小修无需拆包
 version: 1.4.1
 last_updated: 2026-09-27
 triggers:
@@ -24,7 +24,7 @@ constraints:
 # adk-task-breakdown
 
 ## Goal
-- 把复杂需求拆成边界清晰、可独立验收的任务包。
+- 拆分可独立验收的复杂任务。
 
 ## Prerequisites
 - 已有需求包和至少一个可执行验收标准。

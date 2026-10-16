@@ -1,6 +1,6 @@
 ---
 name: adk-commit-pr-quality-gate
-description: 提交与 PR 质量门禁检查
+description: 提交 PR 前核对测试证据与质量门禁；不能替代独立代码审查
 version: 1.1.0
 last_updated: 2026-07-07
 triggers:
@@ -22,10 +22,10 @@ constraints:
 # adk-commit-pr-quality-gate
 
 ## Goal
-- 在提交与合并前做统一门禁裁决，确保“结论与证据一致”。
+- 核对提交证据、结论与范围。
 
 ## Prerequisites
-- 汇总改动范围、验证命令结果、评审分级信息。
+- 汇总改动、验证及评审分级。
 - 明确本次改动是否涉及 breaking change 与迁移影响。
 - 若包含配置文件改动，先给出配置摘要（变更键、行为影响、回退方式）。
 
