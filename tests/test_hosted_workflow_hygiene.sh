@@ -151,7 +151,7 @@ def supported_python_gate(candidate: str) -> bool:
     except ValueError:
         return False
     return all((
-        "python-version: ['3.8', '3.11', '3.12']" in before,
+        before.count("python-version: ['3.8', '3.11', '3.12']") == 2,
         '    name: deterministic-eval-package\n    if: ${{ always() }}\n    needs: [contract, regression]' in package,
         'CONTRACT_MATRIX_RESULT: ${{ needs.contract.result }}' in package,
         'REGRESSION_MATRIX_RESULT: ${{ needs.regression.result }}' in package,
