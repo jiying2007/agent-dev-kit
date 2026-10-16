@@ -1,7 +1,7 @@
 # 既有 matcher 的 20 条目录级候选竞争、否定与弃权回放 — Verify Report
 
 ## Identity and history
-- Status: **source verified, independent review pending**.
+- Status: **source verified, real Owner semantic review pending**.
 - Original PR: https://github.com/jiying2007/agent-dev-kit/pull/197
 - Exact final PR head: `180fa29f7e1827a81953129164d946b04495199e`
 - Squash merged main commit: `d0c7a9baac8a1942be79a027b1d6feff81079b39`
@@ -13,8 +13,8 @@
 
 ## Verification Traceability
 - VERIFY-001: Original exact-head hosted PR CI and protected fresh-main CI succeeded, validating the deterministic tests and existing source/quality ratchets.
-- VERIFY-002: Source Release and Root integration relationship recorded. GitHub PR reviews queried: no independent review exists. Cross-host G21 and real A/B/C G22 remain NOT MEASURED.
+- VERIFY-002: Source Release and Root integration relationship recorded. Original GitHub PR reviews were empty; this does not require a second human. Owner semantic review has no recorded verdict; cross-host G21 and real A/B/C G22 remain NOT MEASURED.
 
 ## Review boundary
-- Author self-audit is not an independent reviewer verdict. This report does not authorize canonical `review --result pass` or `archive`; those require an actual recorded human review.
+- If reviewer independence is `author-self-review`, label it honestly; do not present it as independent. Under solo-maintainer policy no second person is automatically required. This report does not authorize canonical `review --result pass` or `archive` until a real human Owner records separate Spec/Quality conclusions and risk disposition.
 - No real model, field, Product M5 or native target qualification is inferred from this source verification.
