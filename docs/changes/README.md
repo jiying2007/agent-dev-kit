@@ -41,6 +41,12 @@ bash scripts/devkit.sh archive --change <id>
 
 归档后的 change 位于 `docs/changes/archive/<YYYYMMDD-change-id>/`，必须携带 `provenance.md`；archive 是不可变历史与来源绑定，不只是目录移动。仓库级发布/晋级仍以 `adk-promotion-evidence/v1` 的 exact-head 证据为权威，不在 change workspace 复制 CI 真相。
 
+## Review independence and solo-maintainer boundary
+
+`review-passed` is a semantic lifecycle conclusion, not a synonym for green CI, a merged PR or an AI-written receipt. Record the frozen snapshot, separate Spec/Quality verdicts, findings, risk disposition and real human Owner confirmation; mark `Reviewer Independence` truthfully as `independent` or `author-self-review`. In an approved solo-maintainer model, a second human PR approval is **not automatically required**; the existing Owner-or-independent-reviewer alternative for high-risk shared logic still applies. An empty GitHub PR reviews array is an observable fact, not a proof of violating mandatory two-person approval.
+
+Do not call `workflow review --result pass`, `archive` or `--force` to promote CI/source success into absent Owner approval. Existing canonical change lifecycle remains authoritative; unresolved review stays active. G21 native, G22 effect and LTA-04 field qualifications never inherit this review status.
+
 ## External interoperability boundary
 
 ADK core 不保留 OpenSpec profile、CLI、bridge、目录结构或双向同步契约。外部规范工具的有价值语义应先转换为 ADK Canonical Change Contract。
