@@ -98,3 +98,17 @@ references and unexpected files/directories, symlinks or special entries block
 destructive cleanup. Preserve unknown recovery data for supervised review.
 This validation does not protect against same-UID concurrent filesystem races
 or power loss; use isolated targets and byte-preserving recovery procedures.
+
+
+## Installed file mode authority (8.0.17)
+
+A managed file's content SHA-256 does not include POSIX permission bits.
+Planning a replacement now reports a conflict if the actual regular file's
+mode differs from the trusted renderer-bound install receipt. Apply
+revalidates the mode under the target lock, and rollback refuses both an
+installed asset or its previous managed backup if either has permission
+drift. No destructive file move is performed before all modes are checked.
+After inspecting unexpected permission changes, restore the trusted mode or
+use a supervised recovery process; never edit the receipt's hashes or mode
+to force an operation. This deliberately does not claim protection from
+same-user concurrent mutation after validation or filesystem-level faults.
