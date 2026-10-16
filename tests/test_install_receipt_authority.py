@@ -125,6 +125,68 @@ class ReceiptAuthorityTest(unittest.TestCase):
                 transaction._rollback_locked(receipt_path, manifest, locked_target=root / "other")
             self.assertEqual(frozen, receipt_path.read_bytes())
 
+    def test_managed_permission_drift_is_not_hidden_by_content_hash(self):
+        from agent_dev_kit.model import sha256_tree
+        from agent_dev_kit.installation_plan import validate_plan
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            target = root / "target"
+            manifest = Manifest.load(ROOT)
+            receipt_path = self.install(manifest, root, target)
+            receipt = json.loads(receipt_path.read_text())
+            record = receipt["installed"][0]
+            destination = target / record["destination"]
+            original = int(record["file_mode"], 8)
+            self.assertEqual(destination.stat().st_mode & 0o7777, original)
+            plan = create_plan(manifest, "claude-code", str(target), ("core",), (),
+                               "copy", asset_kind="agent")
+            old_hash = sha256_tree(destination)
+            altered = original ^ 0o022
+            destination.chmod(altered)
+            self.assertEqual(old_hash, sha256_tree(destination))
+            try:
+                review_plan = create_plan(manifest, "claude-code", str(target), ("core",), (),
+                                          "copy", asset_kind="agent")
+                self.assertEqual(review_plan["status"], "needs-review")
+                self.assertTrue(any(
+                    conflict["destination"] == record["destination"]
+                    and "permission" in conflict["reason"]
+                    for conflict in review_plan["conflicts"]
+                ))
+                with self.assertRaisesRegex(ManifestError, "permission mode drifted"):
+                    validate_plan(manifest, plan)
+                with self.assertRaisesRegex(ManifestError, "permission mode drifted"):
+                    rollback(receipt_path, manifest=manifest)
+                self.assertEqual(old_hash, sha256_tree(destination))
+                self.assertTrue(receipt_path.exists())
+            finally:
+                destination.chmod(original)
+            self.assertEqual("pass", rollback(receipt_path, manifest=manifest)["status"])
+
+    def test_modified_backup_permissions_block_restore_without_data_loss(self):
+        from agent_dev_kit.model import sha256_tree
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            target = root / "target"
+            manifest = Manifest.load(ROOT)
+            self.install(manifest, root, target)
+            receipt_path = self.install(manifest, root, target)
+            receipt = json.loads(receipt_path.read_text())
+            record = next(item for item in receipt["installed"] if item["backup"])
+            backup = target / record["backup"]
+            original = int(record["file_mode"], 8)
+            before = sha256_tree(backup)
+            backup.chmod(original ^ 0o022)
+            self.assertEqual(before, sha256_tree(backup))
+            try:
+                with self.assertRaisesRegex(ManifestError, "permission mode drifted"):
+                    rollback(receipt_path, manifest=manifest)
+                self.assertEqual(before, sha256_tree(backup))
+                self.assertTrue(receipt_path.exists())
+            finally:
+                backup.chmod(original)
+            self.assertEqual("pass", rollback(receipt_path, manifest=manifest)["status"])
+
 
 if __name__ == "__main__":
     unittest.main()

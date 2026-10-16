@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import stat
+from pathlib import Path
 from typing import Any, Mapping, Set
 
 from .model import Manifest, ManifestError, sha256_file
@@ -61,3 +63,21 @@ def verify_receipt_inventory(manifest: Manifest, receipt: Mapping[str, Any]) -> 
         ):
             raise ManifestError("rollback receipt asset differs from trusted renderer: {}".format(destination))
     return bundle
+
+
+def verify_managed_file_mode(path: Path, declared_mode: str, label: str) -> None:
+    """Compare the on-disk regular file mode, not only the content SHA-256.
+
+    sha256_tree intentionally hashes file bytes, excluding POSIX permission
+    metadata. Only trusted renderer-bound receipt modes may reach this helper.
+    A changed mode can make a trusted managed asset writable or executable.
+    """
+    if not isinstance(declared_mode, str) or len(declared_mode) != 4 or any(
+        digit not in "01234567" for digit in declared_mode
+    ):
+        raise ManifestError("{} has an invalid trusted mode".format(label))
+    actual = path.lstat().st_mode
+    if not stat.S_ISREG(actual):
+        raise ManifestError("{} is not a regular managed file: {}".format(label, path))
+    if stat.S_IMODE(actual) != int(declared_mode, 8):
+        raise ManifestError("{} permission mode drifted: {}".format(label, path))
