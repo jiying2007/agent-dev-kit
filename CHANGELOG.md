@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### 8.0.21 source candidate
+- Clarify eight near-neighbor Skill descriptions for native name/description discovery; preserve existing triggers, non_triggers, runtime router and Skill Content v2 authority.
+- Add deterministic source-level description vocabulary/exclusion preflight to the existing trigger matrix; no new matcher or paid model calls.
+- Reduce every changed SKILL.md UTF-8 entry size rather than loosening profile context ratchets; distinguish CI/static metadata evidence from authenticated native host and real effect measurements.
+
 ### 8.0.20 source candidate
 - Derive risk-conservative E0/E1/E2/E3 execution effort from the existing public matcher route and Skill v2 effect boundaries, never granting additional mutation or device/release authority.
 - Keep E1 constrained to explicitly labeled low-risk local workspace changes and the existing minimal valid requirements/design/tasks contract.

@@ -1,0 +1,4 @@
+stage: implementing
+owner: repo-maintainer
+updated_at: 2026-10-16T20:03:00+08:00
+notes: source-only tests; native/model effectiveness not-measured
