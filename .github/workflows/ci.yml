@@ -117,9 +117,24 @@ jobs:
 
   deterministic-eval-package:
     name: deterministic-eval-package
+    if: ${{ always() }}
+    needs: [contract, regression]
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
+      - name: Require complete supported-Python matrix before the required gate can pass
+        shell: bash
+        env:
+          CONTRACT_MATRIX_RESULT: ${{ needs.contract.result }}
+          REGRESSION_MATRIX_RESULT: ${{ needs.regression.result }}
+        run: |
+          set -euo pipefail
+          if [[ "$CONTRACT_MATRIX_RESULT" != "success" || "$REGRESSION_MATRIX_RESULT" != "success" ]]; then
+            echo "[FAIL] supported Python 3.8/3.11/3.12 contract or regression matrix failed or was skipped" >&2
+            exit 1
+          fi
+          echo '[PASS] all supported-Python contract/regression matrix jobs passed'
+
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -146,7 +161,7 @@ jobs:
           bash scripts/devkit.sh release build --out /tmp/adk-release
           python -m agent_dev_kit.distribution.release_contract /tmp/adk-release/agent-dev-kit-*.tar.gz
 
-      - name: Build wheel independently of regression result
+      - name: Build wheel after supported-Python qualification
         run: python -m pip wheel --no-deps --wheel-dir dist .
 
       - name: Upload candidate wheel

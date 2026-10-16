@@ -141,6 +141,33 @@ promotion = ci.split("\n  promotion-evidence:\n", 1)[1]
 assert "if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}" in promotion, "promotion evidence must stay confined to main pushes"
 assert "id-token: write" in promotion, "promotion OIDC permission must remain explicit"
 
+# The native ruleset already requires deterministic-eval-package. This single
+# check MUST aggregate *all* supported Python versions; otherwise a Python 3.8
+# contract/regression failure could be merged while 3.11/3.12 stay green.
+def supported_python_gate(candidate: str) -> bool:
+    try:
+        before, remainder = candidate.split('\n  deterministic-eval-package:\n', 1)
+        package, _ = remainder.split('\n  static-security:\n', 1)
+    except ValueError:
+        return False
+    return all((
+        before.count("python-version: ['3.8', '3.11', '3.12']") == 2,
+        '    name: deterministic-eval-package\n    if: ${{ always() }}\n    needs: [contract, regression]' in package,
+        'CONTRACT_MATRIX_RESULT: ${{ needs.contract.result }}' in package,
+        'REGRESSION_MATRIX_RESULT: ${{ needs.regression.result }}' in package,
+        '"$CONTRACT_MATRIX_RESULT" != "success" || "$REGRESSION_MATRIX_RESULT" != "success"' in package,
+        'exit 1' in package,
+    ))
+
+assert supported_python_gate(ci), 'required check must depend on all supported Python contract and regression jobs'
+for bad in (
+    ci.replace('needs: [contract, regression]', 'needs: [contract]'),
+    ci.replace('    if: ${{ always() }}\n    needs: [contract, regression]', '    needs: [contract, regression]'),
+    ci.replace('"$CONTRACT_MATRIX_RESULT" != "success" || "$REGRESSION_MATRIX_RESULT" != "success"', '"$CONTRACT_MATRIX_RESULT" != "success"'),
+    ci.replace("python-version: ['3.8', '3.11', '3.12']", "python-version: ['3.11', '3.12']", 1),
+):
+    assert not supported_python_gate(bad), 'supported Python gate accepted a mutation that weakens 3.8 coverage'
+
 wheel_upload = ci.split("      - name: Upload candidate wheel\n", 1)[1].split("\n  static-security:\n", 1)[0]
 assert "if-no-files-found: error" in wheel_upload, "candidate wheel upload must fail closed"
 timing_upload = ci.split("      - name: Upload timing evidence\n", 1)[1].split("\n  deterministic-eval-package:\n", 1)[0]
