@@ -72,7 +72,7 @@ def verify_managed_file_mode(path: Path, declared_mode: str, label: str) -> None
     metadata. Only trusted renderer-bound receipt modes may reach this helper.
     A changed mode can make a trusted managed asset writable or executable.
     """
-    if not isinstance(declared_mode, str) or len(declared_mode) != 4 or declared_mode[0] != "0" or any(
+    if not isinstance(declared_mode, str) or len(declared_mode) != 4 or any(
         digit not in "01234567" for digit in declared_mode
     ):
         raise ManifestError("{} has an invalid trusted mode".format(label))
