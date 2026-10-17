@@ -6,6 +6,7 @@ import json
 import math
 from dataclasses import dataclass
 from importlib import resources
+from functools import lru_cache
 from pathlib import Path
 from typing import Any, Mapping, Optional, Tuple, Union
 
@@ -243,8 +244,18 @@ def load_trace_summary_schema(path: Optional[Path] = None) -> Mapping[str, Any]:
     return value
 
 
-def _schema_failures(value: Any, schema: Mapping[str, Any]) -> Tuple[str, ...]:
-    validator = Draft202012Validator(schema, format_checker=FormatChecker())
+@lru_cache(maxsize=1)
+def _default_trace_validator() -> Draft202012Validator:
+    # Only the version-pinned packaged schema is stable enough to cache.
+    # Caller-supplied schemas remain independently validated on every use.
+    return Draft202012Validator(load_trace_summary_schema(), format_checker=FormatChecker())
+
+
+def _schema_failures(value: Any, schema: Optional[Mapping[str, Any]]) -> Tuple[str, ...]:
+    validator = (
+        _default_trace_validator() if schema is None
+        else Draft202012Validator(schema, format_checker=FormatChecker())
+    )
     failures = []
     for error in sorted(
         validator.iter_errors(value),
@@ -266,8 +277,7 @@ def validate_trace_summary(
     """
 
     validate_no_secrets(value, "trace summary")
-    active_schema = schema if schema is not None else load_trace_summary_schema()
-    failures = _schema_failures(value, active_schema)
+    failures = _schema_failures(value, schema)
     if failures:
         raise ManifestError("trace_summary_invalid: {}".format("; ".join(failures)))
     if not isinstance(value, dict):
