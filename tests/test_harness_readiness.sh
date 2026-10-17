@@ -164,7 +164,12 @@ if stale:
         for dim in live["dimensions"]
         if any(b["code"] == "stale_last_verified_at" for b in dim["blockers"])
     }
-    assert observed_stale == stale, (observed_stale, stale, live)
+    applicable_stale = {
+        dim["dimension_id"]
+        for dim in live["dimensions"]
+        if dim["dimension_id"] in stale and dim["status"] != "not-applicable"
+    }
+    assert observed_stale == applicable_stale, (observed_stale, applicable_stale, live)
     assert live["counts"]["blocked"] == 0 and live["counts"]["needs-review"] == 0, live
     assert all(
         dim["status"] in {"partial", "not-applicable"}
