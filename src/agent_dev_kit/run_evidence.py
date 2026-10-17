@@ -6,6 +6,7 @@ import json
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from importlib import resources
+from functools import lru_cache
 from pathlib import Path
 from typing import Any, Mapping, Optional, Tuple
 
@@ -141,11 +142,20 @@ def _receipt(
     return receipt
 
 
+@lru_cache(maxsize=1)
+def _default_composition_validator() -> Draft202012Validator:
+    # Cache only the pinned packaged schema. Explicit paths must reload so
+    # fixture changes or custom policy cannot inherit a stale validator.
+    return Draft202012Validator(load_run_evidence_schema(), format_checker=FormatChecker())
+
+
 def _validate_wrapper_schema(value: Mapping[str, Any], schema_path: Optional[Path]) -> None:
+    validator = (
+        _default_composition_validator() if schema_path is None
+        else Draft202012Validator(load_run_evidence_schema(schema_path), format_checker=FormatChecker())
+    )
     errors = sorted(
-        Draft202012Validator(
-            load_run_evidence_schema(schema_path), format_checker=FormatChecker()
-        ).iter_errors(value),
+        validator.iter_errors(value),
         key=lambda item: tuple(str(part) for part in item.absolute_path),
     )
     if errors:

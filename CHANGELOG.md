@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### 8.0.25 source candidate
+- Reuse the compiled, version-pinned packaged Trace Summary v2 and Run Evidence Composition v1 validators within one Python process. Explicit caller-provided schemas and custom schema file paths are never cached.
+- Keep public schema loaders returning independent JSON dictionaries; preserve privacy, authorization, native/field evidence and guardrail validation.
+- Add custom schema mutation/reload regression (isolated local Python 3.13 source run: 35/35 tests in 5.94 seconds versus 34/34 in 22.14 seconds before this change; not a real runtime effect claim).
+- CI must independently verify Python 3.8/3.11/3.12 and immutable exact-main Release evidence.
+- Separate deterministic Harness readiness self-checks from live Owner freshness: the real 90-day attestation expired on 2026-10-17 and must remain partial/exit-2 until a human Owner re-verifies; do not fake a refreshed timestamp or downgrade production gates.
+
 ### 8.0.24 source candidate
 - Enforce full Python 3.8/3.11/3.12 contract and regression matrix success through the existing `deterministic-eval-package` required ruleset check. Skipped or failed matrix legs cannot leave the merge gate green.
 - Keep the existing official Python 3.8+ support range; do not need a new ruleset context, duplicate test run, or a shadow authority. The package job now runs after the supported-version matrix, with `always()` preserving an explicit failed status.

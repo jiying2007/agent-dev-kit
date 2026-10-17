@@ -112,23 +112,73 @@ done
 rg -q '命中条目时必须显式声明' "$ROOT_DIR/docs/agent-operating-rules.md"
 rg -q 'Reflect 阶段按提名条件扫描' "$ROOT_DIR/docs/agent-operating-rules.md"
 
+# Deterministic software regression uses report-only historical evaluation.
+# It must not pretend an expired human Owner re-verification was renewed.
+SELF_AS_OF="$(python3 - "$ROOT_DIR/.adk/harness-readiness.json" <<'PYDATE'
+import json
+import sys
+with open(sys.argv[1], encoding="utf-8") as stream:
+    metadata = json.load(stream)
+print(max(item["last_verified_at"] for item in metadata["dimensions"].values()))
+PYDATE
+)"
 bash "$ROOT_DIR/scripts/devkit.sh" harness readiness \
-  --root "$ROOT_DIR" --gate --summary-json >"$TMP_DIR/self.json"
+  --root "$ROOT_DIR" --as-of "$SELF_AS_OF" --summary-json >"$TMP_DIR/self-historical.json"
 
-python3 - "$TMP_DIR/self.json" <<'PY'
+# Independently check the genuine current-date Gate, never a time-travel PASS.
+SELF_LIVE_RC=0
+bash "$ROOT_DIR/scripts/devkit.sh" harness readiness \
+  --root "$ROOT_DIR" --gate --summary-json >"$TMP_DIR/self-live.json" || SELF_LIVE_RC=$?
+
+python3 - "$TMP_DIR/self-historical.json" "$TMP_DIR/self-live.json" \
+  "$SELF_LIVE_RC" "$ROOT_DIR/.adk/harness-readiness.json" \
+  "$ROOT_DIR/manifests/harness_readiness_contracts.json" <<'PY'
+import datetime as dt
 import json
 import sys
 
-report = json.load(open(sys.argv[1], encoding="utf-8"))
-assert report["overall_status"] == "pass", report
-assert report["counts"] == {
-    "pass": 6,
-    "partial": 0,
-    "needs-review": 0,
-    "blocked": 0,
-    "not-applicable": 1,
-}, report
-assert report["field_evidence_status"] == "not-verified", report
+historical, live = [json.load(open(p, encoding="utf-8")) for p in sys.argv[1:3]]
+live_rc = int(sys.argv[3])
+metadata = json.load(open(sys.argv[4], encoding="utf-8"))
+contract = json.load(open(sys.argv[5], encoding="utf-8"))
+assert historical["overall_status"] == "pass", historical
+assert historical["counts"] == {
+    "pass": 6, "partial": 0, "needs-review": 0,
+    "blocked": 0, "not-applicable": 1,
+}, historical
+assert historical["field_evidence_status"] == "not-verified", historical
+
+max_age = contract["verification"]["max_age_days"]
+today = dt.date.today()
+stale = {
+    dimension
+    for dimension, item in metadata["dimensions"].items()
+    if (today - dt.date.fromisoformat(item["last_verified_at"])).days > max_age
+}
+if stale:
+    # A real owner renewal is external evidence; never auto-pass or rewrite it.
+    assert live_rc == 2, (live_rc, live)
+    assert live["overall_status"] == "partial", live
+    observed_stale = {
+        dim["dimension_id"]
+        for dim in live["dimensions"]
+        if any(b["code"] == "stale_last_verified_at" for b in dim["blockers"])
+    }
+    applicable_stale = {
+        dim["dimension_id"]
+        for dim in live["dimensions"]
+        if dim["dimension_id"] in stale and dim["status"] != "not-applicable"
+    }
+    assert observed_stale == applicable_stale, (observed_stale, applicable_stale, live)
+    assert live["counts"]["blocked"] == 0 and live["counts"]["needs-review"] == 0, live
+    assert all(
+        dim["status"] in {"partial", "not-applicable"}
+        for dim in live["dimensions"]
+    ), live
+else:
+    assert live_rc == 0 and live["overall_status"] == "pass", (live_rc, live)
+    assert live["counts"] == historical["counts"], live
+assert live["field_evidence_status"] == "not-verified", live
 PY
 
 python3 - "$TMP_DIR/gap.json" <<'PY'
