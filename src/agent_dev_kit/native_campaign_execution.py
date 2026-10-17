@@ -50,6 +50,7 @@ async def _drain(
     stream: asyncio.StreamReader,
     process: asyncio.subprocess.Process,
     limit: int,
+    shared_total: list[int],
 ) -> tuple[int, str, bytes]:
     digest = hashlib.sha256()
     total = 0
@@ -59,7 +60,11 @@ async def _drain(
         if not chunk:
             break
         total += len(chunk)
-        if total > limit:
+        # The budget covers stdout and stderr together. Both readers run on
+        # the same event loop, so updating this counter is atomic until the
+        # next await. Per-stream caps alone would admit twice the budget.
+        shared_total[0] += len(chunk)
+        if shared_total[0] > limit:
             _kill_process(process)
             raise ManifestError("native_campaign_output_budget_exceeded")
         digest.update(chunk)
@@ -90,8 +95,9 @@ async def _execute_async(
     assert process.stdout is not None and process.stderr is not None
     started = time.monotonic()
     try:
-        stdout_task = asyncio.create_task(_drain(process.stdout, process, output_limit))
-        stderr_task = asyncio.create_task(_drain(process.stderr, process, output_limit))
+        shared_total = [0]
+        stdout_task = asyncio.create_task(_drain(process.stdout, process, output_limit, shared_total))
+        stderr_task = asyncio.create_task(_drain(process.stderr, process, output_limit, shared_total))
         await asyncio.wait_for(process.wait(), timeout=timeout_seconds)
         stdout = await stdout_task
         stderr = await stderr_task

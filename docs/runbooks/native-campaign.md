@@ -49,6 +49,8 @@ Default `--auth-mode none` omits HOME. `--auth-mode home` exposes only HOME/XDG 
 
 Raw stdout/stderr, raw commands, and raw assertion text are never written to evidence. Evidence records byte counts, SHA-256 digests, assertion identity/result digests, semantic PASS/FAIL, start/end time, duration, result digest and a non-secret environment projection. Output is bounded and execution is time-limited.
 
+The runner enforces **one shared output-byte budget for stdout and stderr combined** on every invocation, including the runtime version probe. Splitting output across two streams must not double the permitted capture. Going over the aggregate cap fails closed with `native_campaign_output_budget_exceeded`; retained evidence still excludes raw output.
+
 Any stage failure blocks subsequent stages. A failed or blocked campaign returns non-zero and cannot be finalized.
 
 ## 3. Finalize
