@@ -130,9 +130,11 @@ def _load_json(path: Path, label: str) -> Any:
 
 
 def _write_json(path: Path, value: Any) -> None:
-    path = path.resolve()
-    if path.exists() and path.is_symlink():
+    # Resolve only after validating the caller's original leaf path.
+    # Resolving first would hide an existing symlink to a managed file.
+    if path.is_symlink():
         raise ManifestError(f"output path must not be a symlink: {path}")
+    path = path.resolve()
     path.parent.mkdir(parents=True, exist_ok=True)
     payload = json.dumps(value, ensure_ascii=False, sort_keys=True, indent=2) + "\n"
     if len(payload.encode("utf-8")) > MAX_JSON_BYTES:

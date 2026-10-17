@@ -222,6 +222,14 @@ def _safe_output_path(manifest: Manifest, value: str, label: str) -> Path:
         resolved_in_root = False
     if lexical_in_root and not resolved_in_root:
         raise ManifestError(f"native_campaign_output_symlink_escape: {label}")
+    if lexical_in_root:
+        # Do not follow an in-repository symlink to a different managed
+        # output leaf or subtree, even if the resolved target stays in root.
+        component = lexical
+        while component != root:
+            if component.is_symlink():
+                raise ManifestError(f"native_campaign_output_symlink_path: {label}")
+            component = component.parent
     if resolved_in_root:
         runtime_reports = (root / "reports" / "runtime").resolve()
         try:

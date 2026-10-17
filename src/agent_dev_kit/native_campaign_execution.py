@@ -168,7 +168,7 @@ def _semantic_assertion(
     elif stream == "stderr":
         raw = bytes(result["stderr"])
     else:
-        raw = bytes(result["stdout"]) + b"\\n" + bytes(result["stderr"])
+        raw = bytes(result["stdout"]) + b"\n" + bytes(result["stderr"])
     try:
         decoded = raw.decode("utf-8", errors="strict")
         decode_status = "utf8"
