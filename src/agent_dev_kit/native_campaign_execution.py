@@ -35,15 +35,16 @@ from .targets import _write_bundle, render_selection
 
 
 def _kill_process(process: asyncio.subprocess.Process) -> None:
-    if process.returncode is not None:
-        return
+    # An exited launcher can leave a grandchild in its session still holding
+    # stdout/stderr open. Kill the original process group even after the direct
+    # child has exited; otherwise pipe drains can outlive the execution budget.
     if os.name == "posix":
         try:
             os.killpg(process.pid, signal.SIGKILL)
-            return
         except ProcessLookupError:
-            return
-    process.kill()
+            pass
+    elif process.returncode is None:
+        process.kill()
 
 
 async def _drain(
@@ -94,16 +95,27 @@ async def _execute_async(
     )
     assert process.stdout is not None and process.stderr is not None
     started = time.monotonic()
+    shared_total = [0]
+    stdout_task = asyncio.create_task(_drain(process.stdout, process, output_limit, shared_total))
+    stderr_task = asyncio.create_task(_drain(process.stderr, process, output_limit, shared_total))
+    wait_task = asyncio.create_task(process.wait())
+    tasks = (wait_task, stdout_task, stderr_task)
     try:
-        shared_total = [0]
-        stdout_task = asyncio.create_task(_drain(process.stdout, process, output_limit, shared_total))
-        stderr_task = asyncio.create_task(_drain(process.stderr, process, output_limit, shared_total))
-        await asyncio.wait_for(process.wait(), timeout=timeout_seconds)
-        stdout = await stdout_task
-        stderr = await stderr_task
-    except (asyncio.TimeoutError, ManifestError):
+        # The deadline covers process exit AND both pipe drains. A launcher can
+        # exit early while a grandchild still owns the inherited pipe fds.
+        _, stdout, stderr = await asyncio.wait_for(
+            asyncio.gather(*tasks), timeout=timeout_seconds
+        )
+    except BaseException:
+        # Preserve timeout/output-budget/cancellation failures while ensuring
+        # no background reader survives the return of this invocation.
         _kill_process(process)
-        await process.wait()
+        for task in tasks:
+            if not task.done():
+                task.cancel()
+        await asyncio.gather(*tasks, return_exceptions=True)
+        if process.returncode is None:
+            await asyncio.wait_for(process.wait(), timeout=5)
         raise
     return {
         "exit_code": int(process.returncode or 0),

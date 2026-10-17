@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import asyncio
 import hashlib
+import os
 import json
 import platform
 import shutil
@@ -114,6 +116,28 @@ class NativeCampaignOutputBudgetTest(unittest.TestCase):
                     env={},
                     timeout_seconds=10,
                     output_limit=16,
+                )
+
+
+    @unittest.skipUnless(os.name == "posix", "requires a native POSIX process group")
+    def test_exited_launcher_cannot_escape_pipe_drain_deadline(self) -> None:
+        # The direct launcher exits quickly, but its grandchild keeps both
+        # pipes open for three seconds. The one-second execution deadline
+        # must cover the drains, not just the direct child's process.wait().
+        launcher = (
+            "import subprocess,sys;"
+            "subprocess.Popen([sys.executable,'-c','import time;time.sleep(3)'],"
+            "stdin=subprocess.DEVNULL,stdout=sys.stdout,stderr=sys.stderr);"
+            "print('launcher-exited',flush=True)"
+        )
+        with tempfile.TemporaryDirectory(prefix="native-grandchild-deadline-") as temp:
+            with self.assertRaises(asyncio.TimeoutError):
+                _execute(
+                    [sys.executable, "-c", launcher],
+                    cwd=Path(temp),
+                    env={},
+                    timeout_seconds=1,
+                    output_limit=4096,
                 )
 
 
