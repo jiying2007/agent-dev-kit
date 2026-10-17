@@ -14,10 +14,14 @@ from pathlib import Path
 from agent_dev_kit.agent_value_contracts import load_contract
 from agent_dev_kit.effect_trials import compare_effect_trials, compare_effect_trial_file
 from agent_dev_kit.model import Manifest, ManifestError, canonical_json_bytes, sha256_bytes
-from agent_dev_kit.run_evidence import RunEvidenceObservation, emit_run_evidence
+from agent_dev_kit.run_evidence import (
+    RunEvidenceObservation, emit_run_evidence, validate_run_evidence,
+    load_run_evidence_schema, _default_composition_validator,
+)
 from agent_dev_kit.trace_summary import (
     CostFact, GuardrailFact, MetricUnavailable, OutcomeFact,
     TokenUsageFact, TraceRunFacts, VerificationFact,
+    load_trace_summary_schema, validate_trace_summary, _default_trace_validator,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -103,6 +107,32 @@ class EffectTrialsTest(unittest.TestCase):
 
     def compare(self):
         return compare_effect_trials(self.data, MANIFEST)
+
+    def test_packaged_schema_cache_never_caches_custom_policy(self):
+        # Immutable packaged schemas may share a compiled validator, but the
+        # public schema loader still returns a new mutable document.
+        self.assertIs(_default_trace_validator(), _default_trace_validator())
+        self.assertIs(_default_composition_validator(), _default_composition_validator())
+        run = self.data["trials"][0]["baseline"][0]["run"]
+        trace = run["trace_summary"]
+        validate_trace_summary(trace)
+        altered_trace_schema = load_trace_summary_schema()
+        altered_trace_schema["required"] = list(altered_trace_schema["required"]) + ["custom_missing_key"]
+        with self.assertRaises(ManifestError):
+            validate_trace_summary(trace, altered_trace_schema)
+        validate_trace_summary(trace)
+
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "custom-run-schema.json"
+            original = load_run_evidence_schema()
+            modified = copy.deepcopy(original)
+            modified["required"] = list(modified["required"]) + ["custom_missing_key"]
+            path.write_text(json.dumps(modified), encoding="utf-8")
+            with self.assertRaises(ManifestError):
+                validate_run_evidence(run, MANIFEST, CONTRACT, schema_path=path)
+            path.write_text(json.dumps(original), encoding="utf-8")
+            validate_run_evidence(run, MANIFEST, CONTRACT, schema_path=path)
+        validate_run_evidence(run, MANIFEST, CONTRACT)
 
     def test_repeats_are_not_independent_tasks(self):
         value = self.compare()
