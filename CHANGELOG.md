@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### 8.0.28 source candidate
+- Apply one timeout across the launcher exit and both asynchronous output drains; an exited process with a pipe-holding grandchild cannot produce a late PASS after the declared deadline.
+- On timeout, output overflow or cancellation, terminate the POSIX process group even when the launcher has already exited; cancel and join pending readers with bounded parent reaping.
+- Add a real subprocess/grandchild negative regression and a maintained runtime runbook. Keep signed native G21, real model effect G22, Harness Owner review and Root LTA-04 independently blocked until authentic evidence exists.
+- Preserve Python 3.8+ compatibility; legacy interpreter retirement remains separately reviewed in issue #208.
+
+
 ### 8.0.27 source candidate
 - Correct native semantic `stream=combined` joining to use an actual LF between stdout and stderr. Add a negative regression distinguishing LF from a literal backslash-n sequence.
 - Reject existing output leaf symlinks before resolving paths, and reject in-repository symlink path components even when their targets remain under the managed root. Add no-clobber regressions; retain separate runtime, signature, and product qualification boundaries.
