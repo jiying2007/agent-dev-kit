@@ -51,6 +51,8 @@ Raw stdout/stderr, raw commands, and raw assertion text are never written to evi
 
 The runner enforces **one shared output-byte budget for stdout and stderr combined** on every invocation, including the runtime version probe. Splitting output across two streams must not double the permitted capture. Going over the aggregate cap fails closed with `native_campaign_output_budget_exceeded`; retained evidence still excludes raw output.
 
+For `stream=combined`, semantic assertions evaluate `stdout + LF + stderr`, never a literal backslash-`n` separator. Native campaign JSON output paths reject an existing symlink leaf; inside the repository, they also reject any symlink component below the canonical root (even when the link points to another in-repository path). These checks supplement, but do not replace, trusted execution-environment isolation.
+
 Any stage failure blocks subsequent stages. A failed or blocked campaign returns non-zero and cannot be finalized.
 
 ## 3. Finalize

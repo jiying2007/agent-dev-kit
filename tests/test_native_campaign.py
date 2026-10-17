@@ -13,12 +13,13 @@ from pathlib import Path
 
 from agent_dev_kit.model import Manifest, ManifestError
 from agent_dev_kit.native_campaign import (
+    _safe_output_path,
     finalize_campaign,
     prepare_campaign,
     run_campaign,
 )
-from agent_dev_kit.native_campaign_contract import load_native_campaign_target_layouts
-from agent_dev_kit.native_campaign_execution import _execute
+from agent_dev_kit.native_campaign_contract import _write_json, load_native_campaign_target_layouts
+from agent_dev_kit.native_campaign_execution import _execute, _semantic_assertion
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = Manifest.load(ROOT)
@@ -116,6 +117,34 @@ class NativeCampaignOutputBudgetTest(unittest.TestCase):
                 )
 
 
+
+class NativeCampaignBoundaryTest(unittest.TestCase):
+    def test_combined_assertion_uses_lf_separator_not_literal_backslash_n(self) -> None:
+        result = {"stdout": b"alpha", "stderr": b"beta"}
+        common = {"stream": "combined", "case_sensitive": True}
+        matched, _ = _semantic_assertion(
+            "discovery", result, {**common, "contains": "alpha\nbeta"}
+        )
+        self.assertTrue(matched)
+        mistaken_match, _ = _semantic_assertion(
+            "discovery", result, {**common, "contains": r"alpha\nbeta"}
+        )
+        self.assertFalse(mistaken_match)
+
+    def test_json_writer_does_not_resolve_leaf_symlink_before_rejecting(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="native-output-link-") as temp:
+            target = Path(temp) / "target.json"
+            alias = Path(temp) / "alias.json"
+            target.write_text("original\n", encoding="utf-8")
+            try:
+                alias.symlink_to(target)
+            except (OSError, NotImplementedError):
+                self.skipTest("symlink creation is unavailable")
+            with self.assertRaisesRegex(ManifestError, "output path must not be a symlink"):
+                _write_json(alias, {"status": "should-not-write"})
+            self.assertEqual(target.read_text(encoding="utf-8"), "original\n")
+
+
 class NativeCampaignTest(unittest.TestCase):
     def setUp(self) -> None:
         self.temp = Path(tempfile.mkdtemp(prefix="adk-native-campaign-"))
@@ -130,6 +159,24 @@ class NativeCampaignTest(unittest.TestCase):
         self.receipt_rel = self.receipt.relative_to(ROOT).as_posix()
         self.active = ROOT / "manifests" / "target-contracts" / "claude-code.json"
         self.active_before = self.active.read_bytes()
+
+    def test_repository_output_rejects_same_root_symlink_aliases(self) -> None:
+        target_dir = self.receipt_dir / "real"
+        target_dir.mkdir()
+        leaf = target_dir / "target.json"
+        leaf.write_text("untouched\n", encoding="utf-8")
+        direct_link = self.receipt_dir / "linked.json"
+        parent_link = self.receipt_dir / "linked-dir"
+        try:
+            direct_link.symlink_to(leaf)
+            parent_link.symlink_to(target_dir, target_is_directory=True)
+        except (OSError, NotImplementedError):
+            self.skipTest("symlink creation is unavailable")
+        for path in (direct_link, parent_link / "candidate.json"):
+            with self.subTest(path=path):
+                with self.assertRaisesRegex(ManifestError, "native_campaign_output_symlink_path"):
+                    _safe_output_path(MANIFEST, str(path), "test-out")
+        self.assertEqual(leaf.read_text(encoding="utf-8"), "untouched\n")
 
     def prepare(
         self,

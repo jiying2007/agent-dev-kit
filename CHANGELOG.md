@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### 8.0.27 source candidate
+- Correct native semantic `stream=combined` joining to use an actual LF between stdout and stderr. Add a negative regression distinguishing LF from a literal backslash-n sequence.
+- Reject existing output leaf symlinks before resolving paths, and reject in-repository symlink path components even when their targets remain under the managed root. Add no-clobber regressions; retain separate runtime, signature, and product qualification boundaries.
+- Keep existing Python 3.8+ declared compatibility for this patch; legacy interpreter retirement needs an independently reviewed consumer impact plan, not an unannounced breaking change.
+
 ### 8.0.25 source candidate
 - Reuse the compiled, version-pinned packaged Trace Summary v2 and Run Evidence Composition v1 validators within one Python process. Explicit caller-provided schemas and custom schema file paths are never cached.
 - Keep public schema loaders returning independent JSON dictionaries; preserve privacy, authorization, native/field evidence and guardrail validation.
