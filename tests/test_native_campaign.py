@@ -18,6 +18,7 @@ from agent_dev_kit.native_campaign import (
     run_campaign,
 )
 from agent_dev_kit.native_campaign_contract import load_native_campaign_target_layouts
+from agent_dev_kit.native_campaign_execution import _execute
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = Manifest.load(ROOT)
@@ -86,6 +87,33 @@ def assertions(*, mismatch_stage: str | None = None) -> dict[str, dict[str, obje
         }
         for stage in ("discovery", "load", "trigger")
     }
+
+
+class NativeCampaignOutputBudgetTest(unittest.TestCase):
+    def test_combined_streams_at_exact_budget_pass(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="native-dual-stream-") as temp:
+            result = _execute(
+                [sys.executable, "-c", "import sys;sys.stdout.write('A'*8);sys.stderr.write('B'*8)"],
+                cwd=Path(temp),
+                env={},
+                timeout_seconds=10,
+                output_limit=16,
+            )
+        self.assertEqual(result["exit_code"], 0)
+        self.assertEqual(result["stdout_bytes"] + result["stderr_bytes"], 16)
+
+    def test_combined_streams_exceed_one_shared_budget(self) -> None:
+        # Each individual stream is below the budget. Their sum must still
+        # fail closed so real native-runtime output cannot consume 2x policy.
+        with tempfile.TemporaryDirectory(prefix="native-dual-stream-") as temp:
+            with self.assertRaisesRegex(ManifestError, "native_campaign_output_budget_exceeded"):
+                _execute(
+                    [sys.executable, "-c", "import sys;sys.stdout.write('A'*9);sys.stderr.write('B'*8)"],
+                    cwd=Path(temp),
+                    env={},
+                    timeout_seconds=10,
+                    output_limit=16,
+                )
 
 
 class NativeCampaignTest(unittest.TestCase):
