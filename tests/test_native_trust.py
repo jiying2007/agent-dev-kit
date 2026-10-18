@@ -82,6 +82,42 @@ def registry(
 
 
 class ManagedNativeTrustVerifierTest(unittest.TestCase):
+    def test_registry_rejects_non_scalar_and_duplicate_target_ids(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="adk-native-target-type-") as temporary:
+            root = Path(temporary)
+            directory = root / "manifests"
+            directory.mkdir()
+            target = directory / "native_conformance_trust_registry.json"
+            authority = {
+                "enabled": False,
+                "policy_backend": "external-signature-verifier",
+                "verifier": "sigstore-cosign-blob",
+                "allowed_targets": ["claude-code"],
+                "certificate_identity": "",
+                "certificate_oidc_issuer": "",
+                "cosign_binary": "",
+                "cosign_binary_sha256": None,
+                "receipts": {},
+            }
+            for invalid in (
+                [["claude-code"]],
+                [{"target": "claude-code"}],
+                ["claude-code", "claude-code"],
+                ["claude-code\ninvalid"],
+                ["x" * 129],
+            ):
+                with self.subTest(invalid=invalid):
+                    authority["allowed_targets"] = invalid
+                    document = {
+                        "schema": "adk-native-conformance-trust-registry/v1",
+                        "status": "active",
+                        "authority_model": "owner-reviewed-managed-registry",
+                        "authorities": {"ci-native-conformance": authority},
+                    }
+                    target.write_text(json.dumps(document) + "\n", encoding="utf-8")
+                    with self.assertRaisesRegex(ManifestError, "allowed_targets"):
+                        load_native_trust_registry(root)
+
     def test_repository_registry_enables_no_authority_by_default(self) -> None:
         value = load_native_trust_registry(ROOT)
         self.assertEqual(value["schema"], "adk-native-conformance-trust-registry/v1")

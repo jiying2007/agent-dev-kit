@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### 8.0.30 source candidate
+- Reject unhashable, malformed and duplicated native target or Agent Value trust registry scope identifiers through stable managed ManifestError paths; maintain fail-closed validation before set-based deduplication.
+- Add negative regressions for nested arrays/objects, invalid target identifiers, and duplicate scopes. Trust registries remain empty/disabled by default; real G21/G22 evidence and Owner qualification stay independently pending.
+- Retain the Python 3.8+ support contract, interpreter-specific dependency pins, multi-Python CI and versioned release requirements; do not run or authorize paid model campaigns.
+
+
 ### 8.0.29 source candidate
 - Parse the native G21 authority registry with the existing bounded strict JSON decoder, rejecting duplicate nested keys and nonfinite values instead of accepting last-key-wins JSON.
 - Bind both native and Agent Value trust registry leaves to regular-file-only descriptor reads; reject in-repository manifest-directory symlink aliases before canonical path resolution.

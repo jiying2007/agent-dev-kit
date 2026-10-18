@@ -23,6 +23,7 @@ from agent_dev_kit.agent_value_trust import (
     build_managed_agent_value_evidence_verifier,
     build_portable_managed_agent_value_evidence_verifier,
     load_agent_value_trust_registry,
+    validate_agent_value_trust_registry,
 )
 from agent_dev_kit.model import Manifest, ManifestError, canonical_json_bytes, sha256_bytes
 from agent_dev_kit.privacy_ref import opaque_ref_for_sha256
@@ -138,6 +139,38 @@ def registry_for(
 
 
 class AgentValueTrustTest(unittest.TestCase):
+    def test_registry_rejects_unhashable_and_duplicate_scopes(self) -> None:
+        authority = {
+            "enabled": False,
+            "policy_backend": "external-signature-verifier",
+            "verifier": "sigstore-cosign-blob",
+            "allowed_layers": ["runtime"],
+            "runtime_targets": ["claude-code"],
+            "certificate_identity": "",
+            "certificate_oidc_issuer": "",
+            "cosign_binary": "",
+            "cosign_binary_sha256": None,
+            "receipts": {},
+        }
+        registry = {
+            "schema": "adk-agent-value-trust-registry/v1",
+            "status": "active",
+            "authority_model": "owner-reviewed-managed-registry",
+            "authorities": {"agent-value-ci": authority},
+        }
+        for field, invalid in (
+            ("allowed_layers", [["runtime"]]),
+            ("allowed_layers", ["runtime", "runtime"]),
+            ("runtime_targets", [["claude-code"]]),
+            ("runtime_targets", [{"target": "claude-code"}]),
+            ("runtime_targets", ["claude-code", "claude-code"]),
+        ):
+            with self.subTest(field=field, invalid=invalid):
+                authority[field] = invalid
+                with self.assertRaisesRegex(ManifestError, field):
+                    validate_agent_value_trust_registry(registry)
+                authority[field] = ["runtime"] if field == "allowed_layers" else ["claude-code"]
+
     def setUp(self) -> None:
         fixtures = ROOT / "tests" / "fixtures"
         fixtures.mkdir(exist_ok=True)
