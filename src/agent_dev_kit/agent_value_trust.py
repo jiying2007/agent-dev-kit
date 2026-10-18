@@ -118,11 +118,14 @@ def validate_agent_value_trust_registry(
             )
 
         layers = authority["allowed_layers"]
+        # Validate membership before set(): nested, unhashable JSON values
+        # must be rejected through the managed ManifestError boundary.
         if (
             not isinstance(layers, list)
             or not layers
-            or len(layers) != len(set(layers))
+            or len(layers) > 2
             or any(layer not in ("runtime", "field") for layer in layers)
+            or len(layers) != len(set(layers))
         ):
             raise ManifestError(
                 f"agent_value_trust_registry_invalid: allowed_layers: {authority_id}"
@@ -132,13 +135,16 @@ def validate_agent_value_trust_registry(
             not isinstance(targets, list)
             or not targets
             or len(targets) > 32
-            or len(targets) != len(set(targets))
         ):
             raise ManifestError(
                 f"agent_value_trust_registry_invalid: runtime_targets: {authority_id}"
             )
         for target in targets:
             _safe_identifier(target, "runtime_target")
+        if len(targets) != len(set(targets)):
+            raise ManifestError(
+                f"agent_value_trust_registry_invalid: runtime_targets: {authority_id}"
+            )
 
         for field in (
             "certificate_identity",

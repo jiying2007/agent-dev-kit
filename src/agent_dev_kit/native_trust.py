@@ -87,12 +87,25 @@ def load_native_trust_registry(root: Path) -> Mapping[str, Any]:
             raise ManifestError(f"native_trust_registry_invalid: verifier: {authority_id}")
         if not isinstance(authority["enabled"], bool):
             raise ManifestError(f"native_trust_registry_invalid: enabled: {authority_id}")
+        targets = authority["allowed_targets"]
+        # Validate the scalar identity before deduplication: malformed nested
+        # JSON arrays/objects are not hashable and must fail as ManifestError.
         if (
-            not isinstance(authority["allowed_targets"], list)
-            or len(authority["allowed_targets"]) > 32
-            or len(set(authority["allowed_targets"])) != len(authority["allowed_targets"])
-            or not all(isinstance(item, str) and item for item in authority["allowed_targets"])
+            not isinstance(targets, list)
+            or len(targets) > 32
+            or any(
+                not isinstance(item, str)
+                or not item
+                or len(item) > 128
+                or any(
+                    ch not in "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789._:-"
+                    for ch in item
+                )
+                for item in targets
+            )
         ):
+            raise ManifestError(f"native_trust_registry_invalid: allowed_targets: {authority_id}")
+        if len(set(targets)) != len(targets):
             raise ManifestError(f"native_trust_registry_invalid: allowed_targets: {authority_id}")
         for field in ("certificate_identity", "certificate_oidc_issuer", "cosign_binary"):
             if not isinstance(authority[field], str) or "\x00" in authority[field] or "\n" in authority[field] or "\r" in authority[field]:
