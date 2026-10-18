@@ -2,6 +2,7 @@
 set -euo pipefail
 
 python3 -m unittest discover -s tests -p test_archive_resource_bounds.py
+python3 -m unittest discover -s tests -p test_release_ci_authority.py
 
 python3 - <<'PY'
 from __future__ import annotations
