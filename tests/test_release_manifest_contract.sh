@@ -43,6 +43,12 @@ assert "NAVIGATION.md" not in SOURCE_DISTRIBUTION_FILES
 workflow = (root / ".github/workflows/release.yml").read_text(encoding="utf-8")
 assert "scripts/devkit.sh release check" in workflow, "release workflow bypasses canonical release check"
 assert "scripts/devkit.sh release build --out dist" in workflow, "release workflow bypasses canonical release build"
+trigger_section = workflow.split("\non:\n", 1)[1].split("\npermissions:", 1)[0]
+assert trigger_section.startswith("  workflow_call:\n"), "canonical publisher must be reusable-call only"
+assert "  push:" not in trigger_section and "  workflow_dispatch:" not in trigger_section
+assert "github.event_name == 'workflow_run'" in workflow and "github.ref == 'refs/heads/main'" in workflow
+assert 'git merge-base --is-ancestor "$CALLED_RELEASE_COMMIT" refs/remotes/origin/main' in workflow
+assert "orphan repair cannot borrow another commit's CI evidence" in workflow
 assert "successful_main_ci_run_id:" in workflow, "release workflow missing successful-main CI reuse contract"
 assert "- name: Validate successful main CI reuse" in workflow, "release workflow missing independent CI reuse verification"
 assert "bash tests/run_all.sh --quick" in workflow, "trusted main release path missing quick regression smoke"
