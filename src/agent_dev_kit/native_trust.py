@@ -9,12 +9,12 @@ to a digest-pinned cosign binary without a shell.
 from __future__ import annotations
 
 import hashlib
-import json
 from pathlib import Path
 from typing import Any, Mapping
 
 from .model import Manifest, ManifestError, canonical_json_bytes, ensure_within
 from .sigstore_blob import verify_sigstore_blob
+from .strict_json import StrictJSONError, read as read_json
 
 REGISTRY_SCHEMA = "adk-native-conformance-trust-registry/v1"
 MAX_REGISTRY_BYTES = 256 * 1024
@@ -30,17 +30,22 @@ def _json_object(path: Path, *, limit: int, label: str) -> Mapping[str, Any]:
     if path.stat().st_size > limit:
         raise ManifestError(f"{label} exceeds byte budget: {path}")
     try:
-        value = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
-        raise ManifestError(f"{label} is invalid JSON: {path}") from exc
+        value = read_json(path, max_bytes=limit, regular_only=True)
+    except StrictJSONError as exc:
+        raise ManifestError(f"{label} is invalid or unsafe JSON: {path}") from exc
     if not isinstance(value, dict):
         raise ManifestError(f"{label} must be a JSON object: {path}")
     return value
 
 
 def load_native_trust_registry(root: Path) -> Mapping[str, Any]:
+    candidate = root / "manifests" / "native_conformance_trust_registry.json"
+    # ensure_within resolves aliases. Reject parent/leaf symlinks before
+    # normalization so a managed registry cannot silently change identity.
+    if candidate.parent.is_symlink() or candidate.is_symlink():
+        raise ManifestError("native conformance trust registry symlink path is unsafe")
     path = ensure_within(
-        root / "manifests" / "native_conformance_trust_registry.json",
+        candidate,
         root,
         "native conformance trust registry",
     )

@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### 8.0.29 source candidate
+- Parse the native G21 authority registry with the existing bounded strict JSON decoder, rejecting duplicate nested keys and nonfinite values instead of accepting last-key-wins JSON.
+- Bind both native and Agent Value trust registry leaves to regular-file-only descriptor reads; reject in-repository manifest-directory symlink aliases before canonical path resolution.
+- Add filesystem and ambiguous registry negative tests without activating any authority or changing the G21/G22 real runtime evidence requirement.
+- Preserve the existing Python 3.8+ compatibility contract, exact CI/signature/release governance, and separate Product M5 and human Owner qualifications.
+
+
 ### 8.0.28 source candidate
 - Apply one timeout across the launcher exit and both asynchronous output drains; an exited process with a pipe-holding grandchild cannot produce a late PASS after the declared deadline.
 - On timeout, output overflow or cancellation, terminate the POSIX process group even when the launcher has already exited; cancel and join pending readers with bounded parent reaping.

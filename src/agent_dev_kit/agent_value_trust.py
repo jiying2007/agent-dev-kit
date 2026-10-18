@@ -33,7 +33,7 @@ def _json_object(path: Path, *, limit: int, label: str) -> Mapping[str, Any]:
     if path.stat().st_size > limit:
         raise ManifestError(f"{label} exceeds byte budget: {path}")
     try:
-        value = read_json(path, max_bytes=limit)
+        value = read_json(path, max_bytes=limit, regular_only=True)
     except StrictJSONError as exc:
         raise ManifestError(f"{label} is invalid JSON: {path}") from exc
     if not isinstance(value, dict):
@@ -251,8 +251,11 @@ def validate_agent_value_trust_registry(
 
 
 def load_agent_value_trust_registry(root: Path) -> Mapping[str, Any]:
+    candidate = root / "manifests" / "agent_value_trust_registry.json"
+    if candidate.parent.is_symlink() or candidate.is_symlink():
+        raise ManifestError("Agent Value trust registry symlink path is unsafe")
     path = ensure_within(
-        root / "manifests" / "agent_value_trust_registry.json",
+        candidate,
         root,
         "Agent Value trust registry",
     )
