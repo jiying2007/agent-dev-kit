@@ -167,7 +167,11 @@ class AgentValueTrustTest(unittest.TestCase):
         ):
             with self.subTest(field=field, invalid=invalid):
                 authority[field] = invalid
-                with self.assertRaisesRegex(ManifestError, field):
+                expected_error = (
+                    "runtime_target" if field == "runtime_targets" and isinstance(invalid[0], (list, dict))
+                    else field
+                )
+                with self.assertRaisesRegex(ManifestError, expected_error):
                     validate_agent_value_trust_registry(registry)
                 authority[field] = ["runtime"] if field == "allowed_layers" else ["claude-code"]
 
