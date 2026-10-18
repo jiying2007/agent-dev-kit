@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### 8.0.31 source candidate
+- Restrict privileged component publication to successful protected-main workflow-run callers; retire direct tag-push and manual branch-dispatch entrypoints.
+- Require exact version tag, protected-main Git ancestry and successful same-SHA push/main CI for both current release and historical orphan repair. Repair cannot borrow another commit's CI evidence.
+- Preserve immutable release asset/digest verification, automatic repair, Python 3.8+ support, and separation from Product M5, G21/G22, LTA-04 and human Owner review.
+
 ### 8.0.30 source candidate
 - Reject unhashable, malformed and duplicated native target or Agent Value trust registry scope identifiers through stable managed ManifestError paths; maintain fail-closed validation before set-based deduplication.
 - Add negative regressions for nested arrays/objects, invalid target identifiers, and duplicate scopes. Trust registries remain empty/disabled by default; real G21/G22 evidence and Owner qualification stay independently pending.

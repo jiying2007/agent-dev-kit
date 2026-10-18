@@ -200,15 +200,20 @@ assert "contents: write" in branch_gc_apply, "branch-gc write permission must re
 
 release = (workflow_dir / "release.yml").read_text(encoding="utf-8")
 assert "concurrency:" not in release, "release serialization semantics must remain unchanged"
-assert "  workflow_dispatch:\n" in release, "tag-bound manual release entrypoint must remain available"
-dispatch_block = release.split("\n  workflow_dispatch:\n", 1)[1].split("\n  workflow_call:\n", 1)[0]
-assert "release_tag:" in dispatch_block and "release_commit:" in dispatch_block, "manual repair dispatch must require exact tag and commit"
-assert "  workflow_call:\n" in release, "reviewed exact-tag reusable release entrypoint must be declared"
-workflow_call_block = release.split("\n  workflow_call:\n", 1)[1].split("\n\npermissions:", 1)[0]
-assert "release_tag:" in workflow_call_block and "release_commit:" in workflow_call_block, "reusable release must require exact tag and commit inputs"
-assert "successful_main_ci_run_id:" in workflow_call_block, "reusable release must accept bounded successful-main CI evidence"
-assert "type: number" in workflow_call_block and "default: 0" in workflow_call_block, "successful-main CI run ID must preserve GitHub numeric input typing"
-assert "successful_main_ci_run_id:" not in dispatch_block, "manual dispatch must not expose the main-CI reuse input"
+release_triggers = release.split("\non:\n", 1)[1].split("\npermissions:", 1)[0]
+assert release_triggers.startswith("  workflow_call:\n"), "component publishing must use trusted reusable invocation"
+assert "  push:" not in release_triggers and "  workflow_dispatch:" not in release_triggers, "unreviewed refs cannot publish"
+workflow_call_block = release.split("\n  workflow_call:\n", 1)[1].split("\npermissions:", 1)[0]
+assert "release_tag:" in workflow_call_block and "release_commit:" in workflow_call_block
+assert "successful_main_ci_run_id:" in workflow_call_block
+assert "type: number" in workflow_call_block and "default: 0" in workflow_call_block
+assert "github.event_name == 'workflow_run'" in release and "github.ref == 'refs/heads/main'" in release
+assert "github.event.workflow_run.conclusion == 'success'" in release
+assert "github.event.workflow_run.event == 'push'" in release
+assert "github.event.workflow_run.head_branch == 'main'" in release
+assert 'git merge-base --is-ancestor "$CALLED_RELEASE_COMMIT" refs/remotes/origin/main' in release
+assert "head_sha={release_commit}&branch=main&event=push&status=success" in release
+assert "orphan repair cannot borrow another commit's CI evidence" in release
 assert "actions: read" in release, "release must have bounded read permission to verify successful-main CI evidence"
 assert "- name: Validate successful main CI reuse" in release, "release must independently verify CI reuse evidence"
 assert '"name": "agent-dev-kit-ci"' in release, "release reuse must bind canonical CI workflow name"
@@ -216,10 +221,10 @@ assert '"status": "completed"' in release and '"conclusion": "success"' in relea
 assert '"event": "push"' in release and '"head_branch": "main"' in release, "release reuse must require push-to-main CI"
 assert '"head_sha": release_commit' in release, "release reuse must bind CI head SHA to release commit"
 assert '"path": ".github/workflows/ci.yml"' in release, "release reuse must bind canonical CI workflow path"
-assert "ref: ${{ inputs.release_commit || github.ref }}" in release, "reusable release checkout must bind exact requested commit"
+assert "ref: ${{ inputs.release_commit }}" in release, "checkout must bind exact requested commit"
 assert "- name: Validate tag-bound release identity" in release, "release ref guard missing"
-assert 'if [[ "$GITHUB_REF_TYPE" != "tag" || "$GITHUB_REF_NAME" != v* ]]; then' in release, "ordinary release must still fail closed off tag refs"
-assert 'git fetch --force --no-tags origin "refs/tags/${CALLED_RELEASE_TAG}:refs/tags/${CALLED_RELEASE_TAG}"' in release, "reusable release must fetch the exact declared tag"
+assert 'if [[ "$GITHUB_EVENT_NAME" != "workflow_run" || "$GITHUB_REF" != "refs/heads/main" ]]; then' in release, "non-main caller must fail closed"
+assert 'git fetch --force --no-tags origin "refs/tags/$CALLED_RELEASE_TAG:refs/tags/$CALLED_RELEASE_TAG"' in release, "reusable release must fetch exact tag"
 assert 'if [[ "$TAG_COMMIT" != "$CALLED_RELEASE_COMMIT" ]]; then' in release, "reusable release tag must peel to the exact declared commit"
 assert 'EXPECTED_TAG="v${SOURCE_VERSION}"' in release, "release must derive expected tag from source version"
 assert 'if [[ "$RELEASE_TAG" != "$EXPECTED_TAG" ]]; then' in release, "release tag must match source version"
