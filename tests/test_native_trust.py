@@ -88,6 +88,54 @@ class ManagedNativeTrustVerifierTest(unittest.TestCase):
         self.assertEqual(value["status"], "active")
         self.assertEqual(value["authorities"], {})
 
+    def test_native_registry_rejects_duplicate_keys_nonfinite_and_alias_paths(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="adk-native-registry-hardening-") as temporary:
+            root = Path(temporary)
+            directory = root / "manifests"
+            directory.mkdir()
+            target = directory / "native_conformance_trust_registry.json"
+            valid = {"schema": "adk-native-conformance-trust-registry/v1",
+                     "status": "active", "authority_model": "owner-reviewed-managed-registry",
+                     "authorities": {}}
+            target.write_text(json.dumps(valid) + "\n", encoding="utf-8")
+            self.assertEqual(load_native_trust_registry(root)["authorities"], {})
+
+            cases = [
+                ('{"schema":"adk-native-conformance-trust-registry/v1",'
+                 '"status":"active","authority_model":"owner-reviewed-managed-registry",'
+                 '"authorities":{"one":{},"one":{}}}', "invalid or unsafe JSON"),
+                ('{"schema":"adk-native-conformance-trust-registry/v1",'
+                 '"status":"active","authority_model":"owner-reviewed-managed-registry",'
+                 '"authorities":{"weight":NaN}}', "invalid or unsafe JSON"),
+            ]
+            for raw, error in cases:
+                with self.subTest(raw=raw[:35]):
+                    target.write_text(raw, encoding="utf-8")
+                    with self.assertRaisesRegex(ManifestError, error):
+                        load_native_trust_registry(root)
+
+            with target.open("wb") as stream:
+                stream.truncate(256 * 1024 + 1)
+            with self.assertRaisesRegex(ManifestError, "byte budget"):
+                load_native_trust_registry(root)
+
+            target.write_text(json.dumps(valid) + "\n", encoding="utf-8")
+            alias = directory / "original.json"
+            target.rename(alias)
+            try:
+                target.symlink_to(alias.name)
+            except (OSError, NotImplementedError):
+                self.skipTest("symlinks unavailable")
+            with self.assertRaisesRegex(ManifestError, "symlink"):
+                load_native_trust_registry(root)
+            target.unlink()
+            alias.rename(target)
+            real_dir = root / "real-manifests"
+            directory.rename(real_dir)
+            directory.symlink_to(real_dir.name, target_is_directory=True)
+            with self.assertRaisesRegex(ManifestError, "symlink"):
+                load_native_trust_registry(root)
+
     def test_managed_verifier_accepts_only_registered_exact_receipt(self) -> None:
         with tempfile.TemporaryDirectory() as temp_name:
             root = Path(temp_name)

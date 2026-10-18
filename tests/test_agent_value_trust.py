@@ -155,6 +155,32 @@ class AgentValueTrustTest(unittest.TestCase):
         with self.assertRaisesRegex(ManifestError, "policy_disabled"):
             build_managed_agent_value_evidence_verifier(MANIFEST, CONTRACT)
 
+    def test_registry_rejects_parent_symlink_and_replaced_nonregular_leaf(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="adk-value-registry-hardening-") as temporary:
+            root = Path(temporary)
+            directory = root / "manifests"
+            directory.mkdir()
+            target = directory / "agent_value_trust_registry.json"
+            valid = {"schema": "adk-agent-value-trust-registry/v1",
+                     "status": "active", "authority_model": "owner-reviewed-managed-registry",
+                     "authorities": {}}
+            target.write_text(json.dumps(valid) + "\n", encoding="utf-8")
+            self.assertEqual(load_agent_value_trust_registry(root)["authorities"], {})
+            target.write_text('{"schema":"adk-agent-value-trust-registry/v1",'
+                              '"status":"active","authority_model":"owner-reviewed-managed-registry",'
+                              '"authorities":{"one":{},"one":{}}}', encoding="utf-8")
+            with self.assertRaisesRegex(ManifestError, "invalid JSON"):
+                load_agent_value_trust_registry(root)
+            target.write_text(json.dumps(valid) + "\n", encoding="utf-8")
+            real_dir = root / "real-manifests"
+            directory.rename(real_dir)
+            try:
+                directory.symlink_to(real_dir.name, target_is_directory=True)
+            except (OSError, NotImplementedError):
+                self.skipTest("symlinks unavailable")
+            with self.assertRaisesRegex(ManifestError, "symlink"):
+                load_agent_value_trust_registry(root)
+
     def test_prepared_managed_receipt_is_deterministic_but_not_verified(self) -> None:
         contract = enabled_contract()
         observed = datetime.now(timezone.utc).replace(microsecond=0) - timedelta(minutes=2)
