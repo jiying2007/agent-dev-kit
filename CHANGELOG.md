@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### 8.0.32 source candidate
+- Qualify the reviewed Dependabot Ruff 0.17.1 developer-tool pin, retaining the existing Python 3.8+ compatibility policy and all required cross-version CI jobs.
+- Synchronize the single canonical SemVer source identity across manifest, package metadata, SDK, README, context, Software M5 campaign identity and version lock rather than bypassing the protected main version-advance gate.
+- Preserve existing release provenance, immutable GitHub Release, historical Product M5 separation, and real G21/G22/LTA/Owner qualification boundaries. No paid inference or runtime campaign is started by this update.
+
 ### 8.0.31 source candidate
 - Restrict privileged component publication to successful protected-main workflow-run callers; retire direct tag-push and manual branch-dispatch entrypoints.
 - Require exact version tag, protected-main Git ancestry and successful same-SHA push/main CI for both current release and historical orphan repair. Repair cannot borrow another commit's CI evidence.
