@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### 8.0.33 source candidate
+- Update github/codeql-action init/analyze to reviewed full-commit SHA 6f2ac81f5cd81fe351a197ba0b00d91d03cd2aee (v4.39.0) from Dependabot's grouped workflow-actions PR.
+- Preserve protected-main SemVer advancement, Python 3.8/3.11/3.12 full CI matrix, CodeQL extended queries, immutable component release and Root exact-source promotion requirements.
+- No G21/G22/LTA-04, Harness Owner, Agent Value or Product M5 real qualification is implied by this workflow-only dependency maintenance.
+
 ### 8.0.32 source candidate
 - Qualify the reviewed Dependabot Ruff 0.17.1 developer-tool pin, retaining the existing Python 3.8+ compatibility policy and all required cross-version CI jobs.
 - Synchronize the single canonical SemVer source identity across manifest, package metadata, SDK, README, context, Software M5 campaign identity and version lock rather than bypassing the protected main version-advance gate.
