@@ -1,0 +1,644 @@
+diff --git a/.version-lock b/.version-lock
+index e842e6472aed0d52b7289bfafba8837a67fdc838..e37095685b538700c451648f6be6a11cbbbe8f47 100644
+--- a/.version-lock
++++ b/.version-lock
+@@ -1,3 +1,3 @@
+-version: 8.0.19
+-locked_at: 2026-10-16T18:45:00+08:00
+-locked_by: skill-catalog-evaluation
++version: 8.0.20
++locked_at: 2026-10-16T19:00:00+08:00
++locked_by: effort-evidence-policy
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index 24b475cdcda8839151361fab844141f975119b29..453bdafad61e1d1090654d6238cec70645d7cfb4 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -2,6 +2,12 @@
+ 
+ ## Unreleased
+ 
++### 8.0.20 source candidate
++- Derive risk-conservative E0/E1/E2/E3 execution effort from the existing public matcher route and Skill v2 effect boundaries, never granting additional mutation or device/release authority.
++- Keep E1 constrained to explicitly labeled low-risk local workspace changes and the existing minimal valid requirements/design/tasks contract.
++- Strengthen debugging/review with bounded counterexample checks, interface design with conditional domain/deep-module criteria, and embedded benchmarking with workload validity, A/B/A/B and measured uncertainty.
++- Add deterministic Python 3.8-compatible policy/falsification/benchmark contract tests; do not claim real model, cost or field improvements without trials.
++
+ ### 8.0.19 source candidate
+ - Add deterministic whole-catalog Skill competition, near-neighbor, local negation and abstention replay to the existing production matcher test path; no new route authority.
+ - Preserve source-only versus actual model behavior qualification: tests establish deterministic routing checks, not task success or Token savings.
+diff --git a/CONTEXT.md b/CONTEXT.md
+index 9bb3eacd46ae626c563756f06bda23e33d239b0f..fe1a302ed06927a2e761e87b3185cfc5a48330ee 100644
+--- a/CONTEXT.md
++++ b/CONTEXT.md
+@@ -1,7 +1,7 @@
+ # CONTEXT.md — agent-dev-kit 领域语言定义
+ 
+ > 文档状态：受机器门禁约束的领域上下文投影
+-> 产品版本：8.0.19
++> 产品版本：8.0.20
+ > 结构化单一事实源：`manifest.json`
+ 
+ ---
+diff --git a/README.md b/README.md
+index 89d7171013d210fa0d0557d21f5647b858da504e..6803dc16798371864acb22f5981b273e459fb71a 100644
+--- a/README.md
++++ b/README.md
+@@ -11,7 +11,7 @@ ADK 不再在 README 中维护“候选 / 已发布 / live”之类可漂移的
+ - **Runtime conformance**：以 target/runtime receipt 与证据级别 `static / smoke / native / certified` 为权威。
+ - **Product qualification**：由消费方/产品仓的 qualification 与 field evidence 独立决定，不由 ADK 组件版本继承。
+ 
+-`manifest.json` 当前 source version 为 `8.0.19`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
++`manifest.json` 当前 source version 为 `8.0.20`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
+ 
+ 8.0.0 维护 CLI 迁移：`performance.sh optimize`、`auto-ops.sh cleanup/optimize` 仅输出有界只读计划，JSON 使用 `adk-maintenance-plan/v1` 与 `status=planned`；维护 `--apply` 返回 blocked、exit 2，不再自动删除文件或修改权限。调用方必须移除维护 `--apply` 并按 `applied=false` 处理报告；见 [维护迁移说明](docs/changes/20261006-comprehensive-contracts/design.md)。
+ 
+diff --git a/docs/agent-operating-rules.md b/docs/agent-operating-rules.md
+index 36108b2b3f8a0adb70507f66d6acb4f0b80e2990..a8a4d4b3936de827c670196ab899c14fea488b25 100644
+--- a/docs/agent-operating-rules.md
++++ b/docs/agent-operating-rules.md
+@@ -72,6 +72,15 @@
+ - **R8.2** 没有用户授权不执行删除。
+ - **R8.3** 检索必须考虑动态 import、反射和测试替身无法完整覆盖的边界。
+ 
++## 执行投入层级（现有 Routing IR 的保守投影）
++
++- **E0 只读**：明确只读任务；可定向查询、解释和引用证据，不允许写入。若同时触发安全/设备/发布高风险条件，E3 风险下限优先。
++- **E1 轻量**：仅明确评估为 low risk、workspace-only 的局部实现。仍使用唯一 `docs/changes/<id>/` 变更合同；`requirements.md` 可缩至目标/非目标/验收，`design.md` 可缩至边界/影响/回滚，`tasks.md` 可缩至单个带 verify 的任务。三个文件仍存在；绝不省掉 R2 阶段门、基本 diff/test 或安全验证。当前未被路由显式判低风险的任务**不得自动使用 E1**。
++- **E2 标准**：中风险或未知风险默认；按现有需求、设计、测试和 Spec/Quality 双维审查推进，必要时进行关键假设证伪。
++- **E3 严格**：高风险、live-device、Flash/OTA、签名/权限、存储迁移、真实发布或明确升级效果的动作；独立证伪/负向测试/回滚/来源证据不可省。真实设备写入与发布仍需独立授权。
++- 该等级是执行深度建议，不是 permission/approval/canonical change 的新事实来源。生产 matcher 可返回 `execution_effort` 与 `effort_basis`；`mutation_permission`、effect ceiling、live-device/release authorization 仍独立 fail-closed。匹配失败或风险不明不得用 E0/E1 绕过。
++- 相同目标应优先删减冗余状态、适配器和 Agent 轮次，而不是新增平行 Skill 或 Gate；只有固定源码/模型/预算下的真实 A/B 证据能证明效率收益。
++
+ ## 八阶段生命周期框架
+ 
+ > 来源：VibeFlow 子仓深度分析（2026-05-12）。权威设计记录同时见 `knowledge/L3-project/architecture-decisions/adr-001-8-phase-lifecycle.md` 和 `docs/workflows/lifecycle.md`。
+diff --git a/docs/analysis/execution-effort-evidence-v1.md b/docs/analysis/execution-effort-evidence-v1.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..f7003dcbe8760b7d5e2cf2b8c91d6e350af37b85
+--- /dev/null
++++ b/docs/analysis/execution-effort-evidence-v1.md
+@@ -0,0 +1,22 @@
++# Execution Effort and Evidence Quality v1
++
++Status: source candidate — operational A/B not measured
++Canonical source: production `matcher.py` projects E0–E3 from *existing* Routing IR, risk and Skill Content v2 effect metadata.
++
++## Invariants
++
++1. High-risk route, release mode and declared live-device/publish escalation always recommend E3, even when readonly is requested.
++2. Explicit read-only without high-risk escalations recommends E0 but always denies mutation.
++3. E1 requires an already-reviewed low-risk implementation route, workspace-write ceiling and actual workspace-write permission. No default unknown-risk promotion or relaxed R2.
++4. Unknown risk and remaining tasks default E2; abstain means no capability selected and never grants writes.
++5. The effort hint does not authorize side effects or change the canonical change/approval/release authorities. Human escalation may increase effort; it must not bypass existing approval.
++6. Performance claims require run-validity, equivalent inputs/outputs, alternated A/B and full distribution evidence. A green test is not model or hardware efficiency evidence.
++7. Risk-based independent falsification is a bounded E2/E3 review item, not compulsory extra agent calls.
++
++## Boundaries and observed evidence
++
++`tests/test_skill_governance.py` checks the E0/E2/E3 route projection, synthetic E1 guards, escalation precedence and evidence wording. This is deterministic source-level proof only. Agent runtime/task outcomes, real Token/time reduction, board performance and cross-host SKILL.md description discovery are not measured. Do not record invented percentage gains.
++
++Only promote after exact-head PR CI, fresh-main CI, immutable release, Root exact pin and independent rollout evidence. For uncontrolled environments use `not-measured` instead of `pass`.
++
++Method sources (no copy/runtime dependency): Addy agent-skills `aeac41d4`; Matt Pocock skills `49dd158d`; pstack `f713f142`. Independent external-practice acceptance remains in Root, not ADK.
+diff --git a/docs/changes/20261016-effort-evidence-v1/design.md b/docs/changes/20261016-effort-evidence-v1/design.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..30657e726074be65f69dcf0ea75a4fddc65b67ba
+--- /dev/null
++++ b/docs/changes/20261016-effort-evidence-v1/design.md
+@@ -0,0 +1,7 @@
++# Design
++
++Use a pure `_derive_effort` in the existing `matcher.py` v2 adapter, invoked *after* the permission ceiling. It reads existing `risk`, `task_mode`, `effect_ceiling`, `escalation_effects`, and resolved permission; it adds output hints `execution_effort`, `effort_basis`. It does not write the route, bypass policy or add a sidecar authority.
++
++Order: release/high risk/escalation E3; explicit readonly E0; explicit low-risk implementation + workspace-write + authorized permission E1; otherwise E2. Abstain remains mutation deny and no selected Skill. Acknowledged gap: existing production routes do not label low-risk implementation, so E1 is intentionally not guessed at runtime.
++
++Update only existing compact Skill entrypoints, preserving the common Skill metadata and deferred references. Measure source-only tests; do not infer model changes. Rollback: revert exact PR; no data migration or compat facade.
+diff --git a/docs/changes/20261016-effort-evidence-v1/negative-results.md b/docs/changes/20261016-effort-evidence-v1/negative-results.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..f2a8b82396f2089bdcfbdf1c5f8594322f07e0b5
+--- /dev/null
++++ b/docs/changes/20261016-effort-evidence-v1/negative-results.md
+@@ -0,0 +1,6 @@
++# Negative results
++
++- REJECTED: unclassified small task automatically gets E1; low-effort cannot infer low-risk from few lines of code.
++- REJECTED: more Skill Packs, compulsory independent agents and parallel routing SSOT.
++- REJECTED: hard-coded 30s/300s target benchmarks or Valgrind -O0 performance comparisons.
++- NOT MEASURED: runtime correctness changes, real device CPU/latency/energy and aggregate Token, wall time or human rework.
+diff --git a/docs/changes/20261016-effort-evidence-v1/proposal.md b/docs/changes/20261016-effort-evidence-v1/proposal.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..51576188b40baf112a76620403239e8a4c246dc6
+--- /dev/null
++++ b/docs/changes/20261016-effort-evidence-v1/proposal.md
+@@ -0,0 +1,11 @@
++# Effort and Evidence Quality — Proposal
++
++## Canonical Change Contract
++
++| Requirement | Delta | Affected Surface | Acceptance | Task | Verification | Evidence |
++|---|---|---|---|---|---|---|
++| REQ-001 | MODIFIED | public matcher + existing routing/Skill v2 projection | ACC-001: risk E3 floor and E1 fail-closed | TASK-001 | VERIFY-001 | hosted source tests |
++| REQ-002 | MODIFIED | existing router, review/debug/design/profiling Skills | ACC-002: no new Skill/runtime/Gate; reproducible counterevidence | TASK-002 | VERIFY-002 | skill governance tests |
++| REQ-003 | MODIFIED | existing R2 rules | ACC-003: E1 has legal minimal existing task records | TASK-003 | VERIFY-002 | docs and gate review |
++
++No duplicated requirements, release lifecycle, model runtime, paid inference or external Skill Pack installation.
+diff --git a/docs/changes/20261016-effort-evidence-v1/requirements.md b/docs/changes/20261016-effort-evidence-v1/requirements.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..c508cc9b351bdb71816dbf0a8c6d67fda1e3a979
+--- /dev/null
++++ b/docs/changes/20261016-effort-evidence-v1/requirements.md
+@@ -0,0 +1,8 @@
++# Requirements
++
++REQ-001: Route-derived E0–E3 advisory level must be deterministic, risk-conservative, not an authorization change.
++REQ-002: Unknown risk does not gain E1; release/high-risk/live-device/Flash/storage escalation cannot be downgraded.
++REQ-003: Maintain the R2 canonical requirements/design/tasks files while minimizing E1 content only when explicitly approved.
++REQ-004: Add bounded falsification and alternating reproducible performance evidence to existing Skills; no universal additional Agent calls.
++Acceptance: deterministic Python 3.8/3.11/3.12 regression and exact-head CI.
++Non-goals: automatic E1 for unknown risk, measured Token/task-performance gains, equipment flash, third-party plugin installs.
+diff --git a/docs/changes/20261016-effort-evidence-v1/state.yaml b/docs/changes/20261016-effort-evidence-v1/state.yaml
+new file mode 100644
+index 0000000000000000000000000000000000000000..b642d1186af8e4d5550c899af0782c4d2e7456eb
+--- /dev/null
++++ b/docs/changes/20261016-effort-evidence-v1/state.yaml
+@@ -0,0 +1,4 @@
++stage: implementing
++owner: repo-maintainer
++updated_at: 2026-10-16T19:00:00+08:00
++notes: E1 remains intentionally conservative, runtime/field A/B not measured
+diff --git a/docs/changes/20261016-effort-evidence-v1/tasks.md b/docs/changes/20261016-effort-evidence-v1/tasks.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..3ec03f55a1ef4be952f89d7972ea2c21cafbdcae
+--- /dev/null
++++ b/docs/changes/20261016-effort-evidence-v1/tasks.md
+@@ -0,0 +1,6 @@
++# Tasks
++
++- [x] TASK-001: implement additive effort projection with safety floors. Verify: `bash tests/test_skill_governance.sh`.
++- [x] TASK-002: improve existing Skills for independent counterexample and A/B/A/B measurement. Verify: `bash tests/test_skill_governance.sh` and `bash tests/test_skill_content.sh`.
++- [x] TASK-003: clarify minimal R2 E1 record and qualification boundaries without second workflow. Verify: `bash scripts/devkit.sh validate --strict`.
++- [ ] TASK-004: exact-head hosted CI, review, protected merge, fresh-main CI, release and Root pin. Verify: actual GitHub Actions receipt.
+diff --git a/manifest.json b/manifest.json
+index 08c767a30b0febdf87159c29bc058601e49eace1..246f223b99286bf2a6da04b6c42bcdf7f880c3bf 100644
+--- a/manifest.json
++++ b/manifest.json
+@@ -1,5 +1,5 @@
+ {
+-  "version": "8.0.19",
++  "version": "8.0.20",
+   "locale": "zh-CN",
+   "platforms": [
+     "linux-embedded",
+diff --git a/manifests/software_m5_eval_contract.json b/manifests/software_m5_eval_contract.json
+index 32615f51a5145a39958f0f0e708eb555a6def8ea..8b6afff2bd54f70d9a5f1c911eb9d71bba5e7d49 100644
+--- a/manifests/software_m5_eval_contract.json
++++ b/manifests/software_m5_eval_contract.json
+@@ -1,6 +1,6 @@
+ {
+   "schema": "adk-runtime-eval-campaign/v1",
+-  "campaign_id": "software-m5-8.0.19",
++  "campaign_id": "software-m5-8.0.20",
+   "tasks": "tests/fixtures/software_m5_eval_tasks.jsonl",
+   "minimum_tasks": 60,
+   "runtimes": [
+diff --git a/pyproject.toml b/pyproject.toml
+index 4292d7b5db254da47c458ee6d40bc498ab26c892..4882a035e831db0e2c3b14945dff48ec47891035 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -7,7 +7,7 @@ build-backend = "setuptools.build_meta"
+ 
+ [project]
+ name = "agent-dev-kit"
+-version = "8.0.19"
++version = "8.0.20"
+ description = "Platform-neutral agent asset compiler, distributor, and evaluator"
+ readme = "README.md"
+ requires-python = ">=3.8"
+diff --git a/skills/adk-code-review-loop/SKILL.md b/skills/adk-code-review-loop/SKILL.md
+index 8b536410b3cb0e656e2d032f071022c37a43b00c..4176ed0db67bd3a9c6b96ce59c506927a7ad5daa 100644
+--- a/skills/adk-code-review-loop/SKILL.md
++++ b/skills/adk-code-review-loop/SKILL.md
+@@ -1,8 +1,8 @@
+ ---
+ name: adk-code-review-loop
+ description: 独立代码审查与反馈修复闭环，覆盖发现分级、真实性核验、修复验证和复审
+-version: 1.7.0
+-last_updated: 2026-09-14
++version: 1.7.1
++last_updated: 2026-10-16
+ triggers:
+   - "独立代码审查"
+   - "code review loop"
+@@ -23,7 +23,7 @@ outputs:
+ constraints:
+   - 不得盲目接受 review 结论
+   - blocker 和 major 未闭环不得给 pass
+-  - 审查者发现问题不等于修复者可以扩大范围
++  - 发现问题不授权扩大修复范围
+   - 不得把机械门禁通过表述为语义审查通过或最终可交付
+   - staged 文件存在 unstaged overlay 时不得声称最新修复已被审查
+ ---
+@@ -31,9 +31,9 @@ constraints:
+ # adk-code-review-loop
+ 
+ ## Goal
+-- 将代码审查从一次性意见列表变成可验证闭环。
+-- 区分真实缺陷、误报、超范围建议与仅凭 diff 无法验证的问题。
+-- 保持机械门禁、语义审查、最终 readiness 三类结论相互独立。
++- 审查必须能复现、能闭环。
++- 区分缺陷、误报、越界建议与无法验证项。
++- 机械、语义及 readiness 分别裁决。
+ 
+ ## Prerequisites
+ - 有明确 diff/文件清单、目标与非目标、相关测试结果。
+@@ -41,7 +41,7 @@ constraints:
+ - staged 目标存在 unstaged overlay 时，明确该 working tree 内容不在本轮审查范围。
+ - 标记 Reviewer Independence：`independent` 或 `author-self-review`；自审不得冒充独立审查。
+ - 受控生命周期操作需有 Requirement Baseline；不适用时显式标记 `not_applicable`。
+-- CI/AI review 若要写 SCM comment，需有结构化 findings、trusted-trigger/secret 隔离和发布边界。
++- AI/CI 写 SCM comment 需结构化 finding 与触发/secret 隔离。
+ 
+ ## Workflow
+ 1. **冻结快照**：记录 Review Target、HEAD、index/diff 指纹、目标文件和 Working Tree Overlay。
+@@ -57,6 +57,8 @@ constraints:
+ 11. **独立性裁决**：优先 fresh independent review；高风险共享逻辑最终由 owner 或独立 reviewer 确认。
+ 12. **门禁交接**：交给 `adk-commit-pr-quality-gate` 或 `adk-verification-before-completion`；重复模式只能经 trace-feedback-eval-handoff/AAR 提升为 durable rule。
+ 
++E2/E3 应对冻结合同的关键前提提出可复现证伪；优先减法，CI 绿不等于真实有效；自审须标 `author-self-review`。
++
+ 连续两轮出现新的 blocker 或 major finding class，任一 finding 为 `design-change`，或同一逻辑任务 `author-self-review` 超过两轮时，必须停止局部补丁循环并 `replan`。
+ 
+ 完整分级表、18-step 解释、收敛例外、CI/PR 发布边界见 `references/review-governance-details.md`；完整报告见 `references/review-evidence-template.md`；反馈样例见 `references/review-feedback-fixtures.md`。
+diff --git a/skills/adk-interface-contract-design/SKILL.md b/skills/adk-interface-contract-design/SKILL.md
+index 2dcc8f9d3986330635ec6be01991d2ab659d1be2..1dbda6cde2e808484d02e1c2bcdb2259dba90011 100644
+--- a/skills/adk-interface-contract-design/SKILL.md
++++ b/skills/adk-interface-contract-design/SKILL.md
+@@ -36,27 +36,7 @@ constraints:
+ 
+ 
+ ## Workflow
+-1. **定义接口清单**：请求、响应、错误码、幂等语义。
+-   ```c
+-   /* 嵌入式接口契约示例 */
+-   typedef struct {
+-       uint32_t magic;        /* 0xCAFEBABE */
+-       uint16_t version;      /* 接口版本 */
+-       uint16_t cmd;          /* 命令码 */
+-       uint32_t payload_len;  /* 负载长度 */
+-       uint8_t  payload[];    /* 柔性数组 */
+-   } __attribute__((packed)) iface_msg_t;
+-
+-   /* 错误码定义 */
+-   typedef enum {
+-       IFACE_OK          =  0,
+-       IFACE_ERR_PARAM   = -1,  /* 参数非法 */
+-       IFACE_ERR_TIMEOUT = -2,  /* 超时 */
+-       IFACE_ERR_BUSY    = -3,  /* 忙 */
+-       IFACE_ERR_NOMEM   = -4,  /* 内存不足 */
+-       IFACE_ERR_PROTO   = -5,  /* 协议错误 */
+-   } iface_err_t;
+-   ```
++1. **接口清单**：请求、响应、错误码、幂等与异常的最小契约；C 示例按需读取 `references/details.md`。
+ 2. **版本协商机制**：接口版本兼容性自动检测。
+    ```c
+    /* 版本协商 */
+@@ -95,6 +75,7 @@ constraints:
+ 
+ ## Quality Gate
+ - 契约必须包含输入/输出/错误码/超时语义。
++- 词义冲突时用反例固定术语；深模块应隐藏可变复杂度，不建重复词汇/ADR。
+ - 机器消费契约必须包含 strict schema、required fields、enum 和 refusal/parse-failure handling。
+ - 必须给出版本兼容与迁移方案。
+ - 必须附至少 3 条验证用例（正常/边界/异常）。
+diff --git a/skills/adk-performance-profiling-embedded/SKILL.md b/skills/adk-performance-profiling-embedded/SKILL.md
+index 0776db67c612e78d85cb1342b96f0d4301928b4f..3b3f34f3f78685fc7c61e8ccbeeef984fc27cb47 100644
+--- a/skills/adk-performance-profiling-embedded/SKILL.md
++++ b/skills/adk-performance-profiling-embedded/SKILL.md
+@@ -1,8 +1,8 @@
+ ---
+ name: adk-performance-profiling-embedded
+ description: 嵌入式性能剖析与优化路径
+-version: 1.0.0
+-last_updated: 2026-05-06
++version: 1.1.0
++last_updated: 2026-10-16
+ triggers:
+   - "性能分析"
+   - "性能优化"
+@@ -27,11 +27,11 @@ constraints:
+ - 准备稳定可重复的基准场景。
+ 
+ ## Workflow
+-1. 建立基线：采集未优化版本指标。
+-2. 瓶颈分析：CPU 热点、I/O 阻塞、锁竞争、内存抖动。
+-3. 优化实验：单变量改动并控制环境变量。
+-4. 对比评估：量化收益与副作用。
+-5. 稳定性复验：长稳测试确认无回归。
++1. 核实**真实负载**计数和正确输出，无活动记 `run-validity=invalid`。
++2. 锁定源码/编译/输入哈希、频率/温度/供电/预热与样本预算。
++3. 交替 A/B/A/B 采样，比较 p50/p95/p99、波动和环境漂移。
++4. 检查热点/内存/功耗、功能等价及热稳定；无效样本记 no-gain。
++5. 超预算须回滚，长稳复验须用真实场景。
+ 
+ ## Commands
+ ```bash
+@@ -42,20 +42,16 @@ valgrind --tool=callgrind --callgrind-out-file=callgrind.out <binary>
+ callgrind_annotate callgrind.out
+ valgrind --tool=massif --pages-as-heap=yes <binary>
+ ms_print massif.out.<pid>
+-<benchmark-cmd> --scenario <name> --repeat 5
++<benchmark-cmd> --scenario <name> --repeat <declared-sample-count>
+ ```
+ 
+-## 火焰图生成
+-```bash
+-perf script | stackcollapse-perf.pl | flamegraph.pl > flamegraph.svg
+-# 嵌入式场景：从 DWT/ETM trace 导出
+-<trace-decode-cmd> --input etm_trace.bin | stackcollapse-perf.pl | flamegraph.pl > mcu_flame.svg
+-```
++## 火焰图
++按目标 trace 能力选择 perf 或 DWT/ETM，生成热点归因报告。
+ 
+ ## 瓶颈定位清单
+ | 瓶颈类型 | 诊断信号 | 工具 |
+ |----------|----------|------|
+-| CPU 热点 | 函数采样占比 >20% | perf record + flame graph |
++| CPU 热点 | perf 采样热点 | perf record + flame graph |
+ | 内存泄漏 | 堆持续增长 | valgrind --tool=memcheck |
+ | I/O 阻塞 | 线程长时间 wait | strace -T / perf trace |
+ | 锁竞争 | mutex wait 时间长 | perf lock / lockstat |
+@@ -66,16 +62,17 @@ perf script | stackcollapse-perf.pl | flamegraph.pl > flamegraph.svg
+ | 借口 | 现实 | 正确做法 |
+ |------|------|---------|
+ | "看起来没问题了" | 未经量化对比无法确认优化效果 | 必须提供前后同口径数据 |
+-| "Valgrind 太慢不实用" | 生产环境的内存泄漏代价更高 | CI 中用 -O0 跑 memcheck |
+-| "火焰图看不懂" | 火焰图是最直观的热点可视化 | 先看宽峰（占比高的函数） |
++| "Valgrind 太慢不实用" | 目标设备可能无法运行 Valgrind | 选择宿主 memcheck/ASan 或板端内存计数；不得把不同编译优化等级当作同口径性能对照 |
++| "火焰图看不懂" | 归因不等于整体收益 | 先用采样计数复核热点 |
+ 
+ ## Evidence Template
+ ```md
+-- Baseline Metrics:
+-- Bottleneck Location:
+-- Optimization Change:
+-- Before/After Delta:
+-- Side Effects:
++- Source / Build / Device / Input Hash:
++- Workload Counts / run-validity: valid | invalid | not-run
++- A/B/A/B Order and Sample Count:
++- p50/p95/p99 Before/After and Uncertainty:
++- Functional and Thermal Side Effects:
++- Rollback / Reproduction:
+ ```
+ 
+ ## Failure Handling
+@@ -83,7 +80,7 @@ perf script | stackcollapse-perf.pl | flamegraph.pl > flamegraph.svg
+ - 优化带来副作用超阈值时立即回退并重新评估。
+ 
+ ## Quality Gate
+-- 必须提供优化前后同口径对比数据。
++- 必须提供优化前后同口径对比数据，含真实负载活动、输入输出等价性、环境/构建身份和 run-validity。
+ - 必须说明收益与副作用是否可接受。
+ - 必须给出可执行回退方案。
+ 
+@@ -91,8 +88,7 @@ perf script | stackcollapse-perf.pl | flamegraph.pl > flamegraph.svg
+ 
+ ## 健壮性规范
+ 
+-- **输入验证**: 执行前校验所有必要输入是否存在且格式正确
+-- **重试策略**: 外部命令失败时最多重试 3 次，指数退避（1s, 2s, 4s）
+-- **超时控制**: 单步操作超时 30 秒，整体流程超时 300 秒
++- **输入验证**：校验输入与数据口径
++- **重试/超时**：按目标场景预算；无效测量不重复刷分。
+ - **异常隔离**: 单个步骤失败不阻塞其他独立步骤
+ - **日志记录**: 关键操作记录命令、退出码、耗时
+diff --git a/skills/adk-runtime-router/SKILL.md b/skills/adk-runtime-router/SKILL.md
+index 68f668305431b40ac1cc53e863adfcffd0770960..5d3d2002e56207492b05ea71ab1935a72ef65f31 100644
+--- a/skills/adk-runtime-router/SKILL.md
++++ b/skills/adk-runtime-router/SKILL.md
+@@ -1,8 +1,8 @@
+ ---
+ name: adk-runtime-router
+ description: ADK 原生运行时技能路由入口，统一判定 primary、supporting、内部降级与跳过条件
+-version: 2.1.0
+-last_updated: 2026-09-14
++version: 2.1.1
++last_updated: 2026-10-16
+ triggers:
+   - "技能路由"
+   - "选择技能"
+@@ -42,20 +42,20 @@ constraints:
+ 
+ ## Workflow
+ 1. **Intent Triage**：识别 readonly / implementation / debugging / review / release / parallel / closeout；边界不清先 `adk-requirements-triage`。
+-2. **Risk Gate**：shared contract、schema、根配置、CI、依赖、运行态目录或发布链按中高风险处理。
++2. **Risk Gate**：共享合同、CI、依赖和发布按中高风险。E0–E3 只控制投入；未知 E2，设备/发布 E3，E1 不豁免 R2。
+ 3. **Progressive Disclosure**：执行 `skill-catalog-lazy-loading-v1`。先比较 `namespace_summary`、trigger、boundary；只为候选加载 `deferred_surface`，并记录 `loaded_tools` 与 `schema_review`。
+ 4. **Route**：只选一个 primary skill；supporting skills 只能补充检查项。recall / reasoning / ranking / feedback 分层，执行裁决来自确定性规则、结构化校验或 owner approval。
+ 5. **Evidence Plan**：中高风险必须生成 `Tool / Skill Evidence Plan`，包含 `primary`、`supporting`、`fallback`、`verification`，以及 required/recommended skills、artifacts 与 evidence paths。
+-6. **Tool Evidence**：涉及 Code Intelligence 时遵守 `code_intelligence_provider_contract`；记录 provider/tool/query/repo_ref/hit_summary/decision impact。Tool Search 记录 namespace/query/loaded_tools/schema_review。
++6. **Tool Evidence**：依 `code_intelligence_provider_contract` 留存 provider/query/repo_ref/decision；Tool Search 留存 namespace/loaded_tools/schema_review。
+ 7. **Degrade Fail-Closed**：出现 `no match`、`ambiguous`、`retrieval failed` 或工具不可用时，记录原因和 fallback evidence；不得把降级写成成功验证。
+-8. **Evidence Depth**：低风险可 L1 摘要；需要定位时升 L2；高风险、低置信度、安全例外或缺 raw evidence 时升 L3/raw，不用压缩替代原始证据。
++8. **Evidence Depth**：按风险 L1/L2/L3；高风险保留 raw evidence。
+ 9. **Execute + Verify**：加载 primary skill 推进；产生改动时最终经过 `adk-verification-before-completion`。
+ 
+-详细 Task Routing、Tool Routing、fallback/rationalization 规则仅在路由冲突、证据降级或需要解释边界时读取 `references/runtime-routing-details.md`，不要默认加载。
++冲突/降级时再读 `references/runtime-routing-details.md`。
+ 
+ ## Route Decision Template
+ ```md
+-- Task Mode / Risk Level:
++- Task Mode / Risk Level / Execution Effort (E0–E3) / Escalation Basis:
+ - Primary Skill:
+ - Supporting Skills:
+ - Fallback: enabled / reason / exit_condition
+@@ -90,6 +90,7 @@ bash scripts/devkit.sh validate --strict
+ ## Quality Gate
+ - 必须给出 primary、supporting、fallback、verification；不得有两个 primary。
+ - 中高风险必须有 Tool / Skill Evidence Plan；降级、skipped skill、tool failure 必须有可追溯 evidence。
++- Effort 不改变授权、R2、Review/Release；无匹配 abstain。
+ - 大型目录先 `namespace_summary`，再按需 `deferred_surface`；记录 `loaded_tools` / `schema_review`。
+ - 高风险或低置信度必须保留 L3/raw evidence；summary 不能替代原始证据。
+ - active Skill/workflow/profile/handoff 不得声明外部参考仓为 runtime fallback。
+diff --git a/skills/adk-systematic-debugging/SKILL.md b/skills/adk-systematic-debugging/SKILL.md
+index d13c705ebe59b311c36c7fc5385a6b2b2a47e871..01dca885b55705f7a1d85ce52c4afc099b76eadb 100644
+--- a/skills/adk-systematic-debugging/SKILL.md
++++ b/skills/adk-systematic-debugging/SKILL.md
+@@ -1,8 +1,8 @@
+ ---
+ name: adk-systematic-debugging
+ description: 系统化调试流程，面向根因未明的问题定位与修复验证
+-version: 1.1.0
+-last_updated: 2026-05-20
++version: 1.1.1
++last_updated: 2026-10-16
+ triggers:
+   - "调试"
+   - "排查问题"
+@@ -44,17 +44,19 @@ constraints:
+ - 假设矩阵：用于多根因并存场景，按概率、影响和验证成本排序。
+ 
+ ## Workflow
+-1. **固定问题边界**：明确现象、影响范围、触发条件与不受影响范围。
+-2. **收集基线证据**：复现一次，记录完整日志、时间线和环境信息。
+-3. **构建假设矩阵**：按概率和影响排序，先验证高价值假设。
+-4. **5-Why 分析**：对最可能的假设做 5 层追问，形成因果链。
++1. **边界**：现象、影响及触发条件。
++2. **基线**：记录可复现输入、日志与环境。
++3. **假设**：按影响和证伪成本排序。
++4. **因果**：有证据才逐层追问。
+ 5. **单变量实验**：每轮只变更一个变量，记录命令、输入、结果。
+ 6. **二分法定位**：若假设矩阵穷尽仍未定位，切换到二分法。
+-7. **负结果留痕**：对被证伪假设记录"为何不成立"，避免重复试错。
+-8. **最小失败范围**：把失败定位到最小可复现输入、模块、文件、测试或设备阶段。
++7. **负结果**：记录反例与不可重复路径。
++8. **收缩**：定位最小复现单元。
+ 9. **Repair Note**：修复前记录要保留的通过项、要重跑的最小失败项、回退锚点和风险。
+ 10. **根因收敛与复验**：给出根因证据链，执行修复前后对比验证。
+-11. **失败升级策略**：同类实验连续失败时，回到假设矩阵重排优先级。
++11. **升级**：无信息增量则回到假设。
++
++E2/E3 选一项关键前提，以冻结输入和复现命令证伪；复用有效反例，连续两轮无新信息则重审，不强制加 Agent。
+ 
+ ## Repair, Not Blind Retry
+ 
+diff --git a/src/agent_dev_kit/__init__.py b/src/agent_dev_kit/__init__.py
+index b282dccee9ebc430e471db96b9d8843a2b8f1a5f..dfb88c35673905a38474e8b9566fb8c27ef0b01e 100644
+--- a/src/agent_dev_kit/__init__.py
++++ b/src/agent_dev_kit/__init__.py
+@@ -1,3 +1,3 @@
+ """agent-dev-kit structured control plane."""
+ 
+-__version__ = "8.0.19"
++__version__ = "8.0.20"
+diff --git a/src/agent_dev_kit/matcher.py b/src/agent_dev_kit/matcher.py
+index 232513e1138cda23b4d31a00225e354b7308068d..c40096780b97cf304efecd3ac5e916410c59237f 100644
+--- a/src/agent_dev_kit/matcher.py
++++ b/src/agent_dev_kit/matcher.py
+@@ -76,6 +76,7 @@ def format_result(result: Mapping[str, Any]) -> str:
+         "effect_scope",
+         "effect_operation",
+         "live_device_authorization",
++        "execution_effort",
+     ):
+         value = result.get(key)
+         if value is not None:
+@@ -205,6 +206,30 @@ def resolve_skill_content(manifest: Manifest, skill_id: str) -> Dict[str, Any]:
+     }
+ 
+ 
++def _derive_effort(result: Mapping[str, Any], metadata: Mapping[str, Any]) -> Dict[str, str]:
++    """Advisory effort from the canonical route; never an authorization grant.
++
++    Low-risk/E1 requires an *explicitly classified* low-risk implementation
++    route with workspace permission. Unknown risk defaults to E2. Risk or
++    device/publish escalation always takes precedence over read-only wording.
++    """
++    effects = metadata.get("escalation_effects", ())
++    mode = result.get("task_mode")
++    risk = result.get("risk", "unknown")
++    if risk == "high" or mode == "release" or effects:
++        return {"execution_effort": "E3", "effort_basis": "high-risk-or-escalation"}
++    if mode == "readonly":
++        return {"execution_effort": "E0", "effort_basis": "explicit-readonly"}
++    if (
++        risk == "low"
++        and mode == "implementation"
++        and metadata.get("effect_ceiling") == "workspace-write"
++        and result.get("mutation_permission") == "workspace-write"
++    ):
++        return {"execution_effort": "E1", "effort_basis": "explicit-low-risk-workspace"}
++    return {"execution_effort": "E2", "effort_basis": "conservative-default"}
++
++
+ def _apply_contract(result: Mapping[str, Any], metadata: Mapping[str, Any]) -> Dict[str, Any]:
+     constrained = dict(result)
+     constrained["runtime_role"] = metadata["runtime_role"]
+@@ -233,6 +258,7 @@ def _apply_contract(result: Mapping[str, Any], metadata: Mapping[str, Any]) -> D
+     # device or publish authority by itself.
+     if metadata["effect_ceiling"] in _READONLY_CEILINGS:
+         constrained["mutation_permission"] = "deny"
++    constrained.update(_derive_effort(constrained, metadata))
+     return constrained
+ 
+ 
+diff --git a/tests/test_skill_governance.py b/tests/test_skill_governance.py
+index 807f435ae7caa04d001a85c458fc462d4f50c69c..5e84c12f606c144204b6517438df629f72fc00ff 100644
+--- a/tests/test_skill_governance.py
++++ b/tests/test_skill_governance.py
+@@ -4,7 +4,7 @@ import unittest
+ from pathlib import Path
+ from typing import Any
+ 
+-from agent_dev_kit.matcher import match_text, resolve_skill_content
++from agent_dev_kit.matcher import _derive_effort, match_text, resolve_skill_content
+ from agent_dev_kit.model import Manifest
+ from agent_dev_kit.skill_relationships import resolve_skill_relationships
+ 
+@@ -143,5 +143,65 @@ class SkillGovernanceTests(unittest.TestCase):
+             self.assertIn(token, text)
+ 
+ 
++    def test_effort_is_a_conservative_route_projection_not_a_permission(self) -> None:
++        readonly = match_text(self.manifest, "只做架构评估，设计接口")
++        self.assertEqual(readonly.get("execution_effort"), "E0", readonly)
++        self.assertEqual(readonly.get("mutation_permission"), "deny", readonly)
++
++        medium = match_text(self.manifest, "定位根因")
++        self.assertEqual(medium.get("execution_effort"), "E2", medium)
++
++        driver = match_text(self.manifest, "驱动开发")
++        self.assertEqual(driver.get("execution_effort"), "E3", driver)
++        self.assertEqual(driver.get("live_device_authorization"), "explicit-required", driver)
++
++        release = match_text(self.manifest, "准备发布")
++        self.assertEqual(release.get("execution_effort"), "E3", release)
++        self.assertNotEqual(release.get("mutation_permission"), "workspace-write", release)
++
++    def test_e1_requires_explicit_low_risk_and_workspace_boundary(self) -> None:
++        metadata = {"effect_ceiling": "workspace-write", "escalation_effects": ()}
++        basic = {
++            "task_mode": "implementation",
++            "risk": "low",
++            "mutation_permission": "workspace-write",
++        }
++        self.assertEqual(_derive_effort(basic, metadata)["execution_effort"], "E1")
++        for changed in (
++            {**basic, "risk": "unknown"},
++            {**basic, "mutation_permission": "deny"},
++            {**basic, "task_mode": "needs-triage"},
++        ):
++            self.assertEqual(_derive_effort(changed, metadata)["execution_effort"], "E2")
++        high = {**basic, "risk": "high"}
++        self.assertEqual(_derive_effort(high, metadata)["execution_effort"], "E3")
++        self.assertEqual(
++            _derive_effort(basic, {**metadata, "escalation_effects": ("live-device:flash",)})["execution_effort"],
++            "E3",
++        )
++        self.assertEqual(
++            _derive_effort(
++                {**basic, "task_mode": "readonly"},
++                {**metadata, "escalation_effects": ("release-target:publish",)},
++            )["execution_effort"],
++            "E3",
++        )
++
++    def test_profiling_requires_valid_comparable_alternating_ab(self) -> None:
++        text = (ROOT / "skills/adk-performance-profiling-embedded/SKILL.md").read_text(encoding="utf-8")
++        for item in ("A/B/A/B", "run-validity", "p95", "热稳定", "真实负载", "回滚"):
++            self.assertIn(item, text)
++        self.assertNotIn("整体流程超时 300 秒", text)
++        self.assertNotIn("CI 中用 -O0 跑 memcheck", text)
++
++    def test_high_risk_falsification_and_legal_e1_change_contract(self) -> None:
++        for name in ("adk-systematic-debugging", "adk-code-review-loop"):
++            text = (ROOT / "skills" / name / "SKILL.md").read_text(encoding="utf-8")
++            self.assertIn("E2/E3", text, name)
++            self.assertIn("证伪", text, name)
++        rules = (ROOT / "docs/agent-operating-rules.md").read_text(encoding="utf-8")
++        for required in ("E0", "E1", "E2", "E3", "requirements.md", "design.md", "tasks.md"):
++            self.assertIn(required, rules)
++
+ if __name__ == "__main__":
+     unittest.main()

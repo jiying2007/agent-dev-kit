@@ -46,6 +46,7 @@ from .readiness_evidence import (
 from .readiness_evidence import (
     _metadata_for_dimension as _metadata_for_dimension,
 )
+from .readiness_evidence import _review_metadata
 from .readiness_evidence import (
     _valid_verified_at as _valid_verified_at,
 )
@@ -72,6 +73,7 @@ def _finish_dimension(
     blocker_limit: int,
     verification_policy: Optional[Mapping[str, Any]] = None,
     as_of: Optional[date] = None,
+    review: Optional[Mapping[str, Any]] = None,
 ) -> Dict[str, Any]:
     if raw_status not in VALID_STATUSES:
         raise ReadinessContractError("invalid readiness status: {}".format(raw_status))
@@ -84,13 +86,18 @@ def _finish_dimension(
     )
     all_blockers = list(blockers)
     status = raw_status
-    if raw_status != "not-applicable":
+    if raw_status != "not-applicable" or review is not None:
         all_blockers.extend(metadata_errors)
         all_blockers.extend(metadata_blockers)
         if metadata_errors and STATUS_PRIORITY[status] < STATUS_PRIORITY["needs-review"]:
             status = "needs-review"
-        elif metadata_blockers and status == "pass":
+        elif metadata_blockers and status in ("pass", "not-applicable"):
             status = "partial"
+    if review is not None and review.get("status") != "pass":
+        all_blockers.append(_blocker("invalid_delegated_review",
+                                     "已委派的复审缺少有效来源、双维结论、身份或一致日期", metadata_path))
+        if STATUS_PRIORITY[status] < STATUS_PRIORITY["needs-review"]:
+            status = "needs-review"
     if len(all_blockers) > blocker_limit:
         omitted = len(all_blockers) - blocker_limit + 1
         all_blockers = all_blockers[: blocker_limit - 1] + [
@@ -104,6 +111,7 @@ def _finish_dimension(
         "evidence_refs": _deduplicate(list(evidence) + metadata_evidence, evidence_limit),
         "last_verified_at": verified_at,
         "owner": owner,
+        "review": dict(review) if review is not None else {"status": "not-recorded"},
         "blockers": all_blockers,
         "next_action": contract_item["next_action"],
     }
@@ -337,6 +345,8 @@ def run_harness_readiness(
         "recovery_and_rollback": _evaluate_recovery(index),
         "freshness_and_entropy_control": _evaluate_freshness(index),
     }
+    review_sources = {path for _, evidence, _ in raw.values() for path in evidence if path != metadata_path}
+    reviews = _review_metadata(index, metadata, review_sources)
     dimensions = []
     for dimension_id in EXPECTED_DIMENSIONS:
         status, evidence, blockers = raw[dimension_id]
@@ -353,6 +363,7 @@ def run_harness_readiness(
                 blocker_limit,
                 verification_policy=contract["verification"],
                 as_of=effective_as_of,
+                review=reviews.get(dimension_id),
             )
         )
     overall = _overall_status(dimensions)
@@ -419,6 +430,10 @@ def readiness_markdown(report: Mapping[str, Any]) -> str:
                 "- status: `{}`".format(item["status"]),
                 "- owner: `{}`".format(item["owner"]),
                 "- last_verified_at: `{}`".format(item["last_verified_at"]),
+                "- review_status: `{}`".format(item["review"]["status"]),
+                "- reviewer: `{}`".format(item["review"].get("reviewer", {}).get("id", "not-recorded")),
+                "- reviewer_kind: `{}`".format(item["review"].get("reviewer", {}).get("kind", "not-recorded")),
+                "- review_scope: `{}`".format(item["review"].get("scope", "not-recorded")),
                 "- next_action: {}".format(item["next_action"]),
                 "",
                 "### Evidence",

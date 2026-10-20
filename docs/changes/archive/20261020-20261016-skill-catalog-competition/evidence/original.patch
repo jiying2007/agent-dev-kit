@@ -1,0 +1,306 @@
+diff --git a/.version-lock b/.version-lock
+index 54cfb49118e37e969b8ac95ad08564f111d0d1d8..e842e6472aed0d52b7289bfafba8837a67fdc838 100644
+--- a/.version-lock
++++ b/.version-lock
+@@ -1,3 +1,3 @@
+-version: 8.0.18
+-locked_at: 2026-10-16T16:07:13+08:00
+-locked_by: portable-posix-windows-mode-verification
+\ No newline at end of file
++version: 8.0.19
++locked_at: 2026-10-16T18:45:00+08:00
++locked_by: skill-catalog-evaluation
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index 07085f04a20f07cd9b15812bd1397e8cc6d39cab..24b475cdcda8839151361fab844141f975119b29 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -2,6 +2,11 @@
+ 
+ ## Unreleased
+ 
++### 8.0.19 source candidate
++- Add deterministic whole-catalog Skill competition, near-neighbor, local negation and abstention replay to the existing production matcher test path; no new route authority.
++- Preserve source-only versus actual model behavior qualification: tests establish deterministic routing checks, not task success or Token savings.
++- Keep Python 3.8 compatibility and existing one-primary, Skill Content v2, effect and release gates unchanged.
++
+ ### 8.0.6 source candidate
+ - Re-review existing OpenCode, OWASP taxonomy and five Anthropic official sources against current documents before renewing their 90-day freshness declarations.
+ - Describe Claude skill description metadata as recommended upstream while retaining ADK's stronger local portability requirements.
+diff --git a/CONTEXT.md b/CONTEXT.md
+index 1b21b93a3bc1b442b7386430128fec485651bb1b..9bb3eacd46ae626c563756f06bda23e33d239b0f 100644
+--- a/CONTEXT.md
++++ b/CONTEXT.md
+@@ -1,7 +1,7 @@
+ # CONTEXT.md — agent-dev-kit 领域语言定义
+ 
+ > 文档状态：受机器门禁约束的领域上下文投影
+-> 产品版本：8.0.18
++> 产品版本：8.0.19
+ > 结构化单一事实源：`manifest.json`
+ 
+ ---
+diff --git a/README.md b/README.md
+index e806a0601e24f709a9b4c3dd23e5b3cf8b3e95db..89d7171013d210fa0d0557d21f5647b858da504e 100644
+--- a/README.md
++++ b/README.md
+@@ -11,7 +11,7 @@ ADK 不再在 README 中维护“候选 / 已发布 / live”之类可漂移的
+ - **Runtime conformance**：以 target/runtime receipt 与证据级别 `static / smoke / native / certified` 为权威。
+ - **Product qualification**：由消费方/产品仓的 qualification 与 field evidence 独立决定，不由 ADK 组件版本继承。
+ 
+-`manifest.json` 当前 source version 为 `8.0.18`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
++`manifest.json` 当前 source version 为 `8.0.19`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
+ 
+ 8.0.0 维护 CLI 迁移：`performance.sh optimize`、`auto-ops.sh cleanup/optimize` 仅输出有界只读计划，JSON 使用 `adk-maintenance-plan/v1` 与 `status=planned`；维护 `--apply` 返回 blocked、exit 2，不再自动删除文件或修改权限。调用方必须移除维护 `--apply` 并按 `applied=false` 处理报告；见 [维护迁移说明](docs/changes/20261006-comprehensive-contracts/design.md)。
+ 
+diff --git a/docs/analysis/skill-catalog-competition-v1.md b/docs/analysis/skill-catalog-competition-v1.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..0456731a4bfa6868b6dc7c5a597cf54587ba1551
+--- /dev/null
++++ b/docs/analysis/skill-catalog-competition-v1.md
+@@ -0,0 +1,24 @@
++# Skill Catalog 竞争评估 v1
++
++Status: source-candidate / deterministic-only
++Baseline: ADK 8.0.18 @ `2fe242e9e309e4111c8639e511e53f6a585a1ed7`
++Candidate: ADK 8.0.19 (以最终 PR exact-head 为准)
++
++## Decision
++
++借鉴 Addy Osmani 的 skill activation/catalog-level eval 方法，只增强 ADK 原生 `match_text()` 评估入口；不引入 Addy/Matt/pstack 的 Skill 文件、模型依赖、安装脚本、额外路由器或生命周期。
++
++## Evidence boundary
++
++- Existing single-Skill trigger matrix: `tests/fixtures/skill_trigger_cases.tsv`.
++- New whole-catalog competition replay: `tests/fixtures/skill_catalog_competition.tsv`.
++- Both run through `tests/test_skill_trigger_matrix.py` and existing `tests/test_skill_trigger_matrix.sh`, hence the established CI regression list.
++- A collision case explicitly proves the losing Skill also matches *when named*, but the only authoritative implicit decision is the production matcher winner.
++- Negation cases reject a named Skill and require global abstention; unknown requests must fail closed with denied mutation.
++- Corpus is a hand-reviewed deterministic fixture, not a measured production request distribution. No rank probability, LLM success rate, runtime Token reduction, or field performance has been established.
++
++## Admission and removal
++
++Future routing/description changes must not regress the selected winner, abstention or competitor signal without a separately reviewed fixture change; source SHA and test outcome are the evidence identity. Add representative consented real wording only after sanitization and labeling. Compare source-fixed A/B/C behavior under the same model and budget before claiming an agent-level improvement. If no measurable quality benefit emerges, retain the small regression suite but do not expand orchestration or add Skill assets.
++
++Upstream sources are *method-only* reference evidence: `addyosmani/agent-skills@aeac41d4`, `mattpocock/skills@49dd158d`, `cursor/plugins@f713f142`. No upstream source copied or executed. Source, license and independent acceptance remain governed by Root `docs/absorption-governance.md`.
+diff --git a/docs/changes/20261016-skill-catalog-competition/design.md b/docs/changes/20261016-skill-catalog-competition/design.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..9e2345c1d7f683d67cdad18bccbd8c063158e2ee
+--- /dev/null
++++ b/docs/changes/20261016-skill-catalog-competition/design.md
+@@ -0,0 +1,5 @@
++# Design
++
++The existing `test_skill_trigger_matrix.sh` invokes a single Python unittest module. Extend that module with a second fixture parser and a public `match_text(manifest, prompt, scope="auto")` replay. A real collision also invokes the same matcher in explicit skill scope to establish positive overlap. Negated and abstain requests must never authorize mutation. Do not alter the production matcher or add a new CI job.
++
++Risks: hand-curated examples can overfit simple lexical triggers; mitigated by disclosing evidence level and requiring source-fixed real behavior evaluation before any stronger conclusion. Rollback: revert this one candidate commit; no schema or state migration.
+diff --git a/docs/changes/20261016-skill-catalog-competition/negative-results.md b/docs/changes/20261016-skill-catalog-competition/negative-results.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..e047d322be13a4566f399975172a82b6e3a17952
+--- /dev/null
++++ b/docs/changes/20261016-skill-catalog-competition/negative-results.md
+@@ -0,0 +1,5 @@
++# Negative results and non-adoptions
++
++- NOT ADOPTED: duplicate Skill Pack installs, new router, second Skill lifecycle or mandatory hosted LLM calls.
++- NOT MEASURED: live agent quality, cross-host description discovery, Token, latency, field success and human rework.
++- SOURCE ONLY: only deterministic routing expectations are covered before hosted CI; a green fixture is not evidence of model behavior.
+diff --git a/docs/changes/20261016-skill-catalog-competition/proposal.md b/docs/changes/20261016-skill-catalog-competition/proposal.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..e2cdc781f81ac92d508e050036cc5eabe5ff71f7
+--- /dev/null
++++ b/docs/changes/20261016-skill-catalog-competition/proposal.md
+@@ -0,0 +1,11 @@
++# Skill Catalog Competition — Proposal
++
++## Canonical Change Contract
++
++| Requirement | Delta | Affected Surface | Acceptance | Task | Verification | Evidence |
++|---|---|---|---|---|---|---|
++| REQ-001 | ADDED | `tests/fixtures/skill_catalog_competition.tsv` | ACC-001: catalog winner and abstention cases are deterministic | TASK-001 | VERIFY-001 | hosted regression / PR |
++| REQ-002 | MODIFIED | `tests/test_skill_trigger_matrix.py` | ACC-002: real competitor is positive when explicitly selected | TASK-002 | VERIFY-001 | hosted regression / PR |
++| REQ-003 | ADDED | `docs/analysis/skill-catalog-competition-v1.md` | ACC-003: source-only evidence is not called model behavior proof | TASK-003 | VERIFY-002 | diff review / PR |
++
++Canonical identity and lifecycle continue to use the existing change, matcher, CI and release authorities. This change does not install third-party Skill Packs.
+diff --git a/docs/changes/20261016-skill-catalog-competition/requirements.md b/docs/changes/20261016-skill-catalog-competition/requirements.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..5ff7d4678a45e2cc56e5957113f184c9ef6fa07c
+--- /dev/null
++++ b/docs/changes/20261016-skill-catalog-competition/requirements.md
+@@ -0,0 +1,8 @@
++# Requirements
++
++REQ-001: Test all-catalog primary selection, close-neighbor collisions, local negation and safe abstention using existing matcher and deterministic, public-safe request strings.
++REQ-002: No duplicated ranking engine; a losing explicit Skill must genuinely trigger in at least one collision.
++REQ-003: Keep current Skill v2 runtime roles, authorization, one-primary and Python 3.8 contracts.
++REQ-004: Track deterministic tests separately from runtime model/task behavior; no invented gain.
++
++Non-goals: model inference benchmarks, real user request claims, third-party runtime installation, effort policy rollout.
+diff --git a/docs/changes/20261016-skill-catalog-competition/state.yaml b/docs/changes/20261016-skill-catalog-competition/state.yaml
+new file mode 100644
+index 0000000000000000000000000000000000000000..c57556a8b8b04bc770e974bf468370a3daa7ce3e
+--- /dev/null
++++ b/docs/changes/20261016-skill-catalog-competition/state.yaml
+@@ -0,0 +1,4 @@
++stage: implementing
++owner: repo-maintainer
++updated_at: 2026-10-16T18:45:00+08:00
++notes: hosted verification pending; no runtime model claims
+diff --git a/docs/changes/20261016-skill-catalog-competition/tasks.md b/docs/changes/20261016-skill-catalog-competition/tasks.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..6176326414cf80e9126b92d71c74b22846af1655
+--- /dev/null
++++ b/docs/changes/20261016-skill-catalog-competition/tasks.md
+@@ -0,0 +1,6 @@
++# Tasks
++
++- [x] TASK-001: add bounded multilingual catalog fixture with 20 labeled cases. Verify: `bash tests/test_skill_trigger_matrix.sh`.
++- [x] TASK-002: run the same public matcher for global winner, explicit collision and deny/abstain. Verify: `bash tests/test_skill_trigger_matrix.sh`.
++- [x] TASK-003: document the evidence boundary and narrow upstream adoption. Verify: `bash scripts/devkit.sh validate --strict`.
++- [ ] TASK-004: require exact-head hosted CI, independent review, merge, fresh-main CI and immutable release evidence. Verify: GitHub Actions success receipts; do not mark complete without them.
+diff --git a/manifest.json b/manifest.json
+index 81cc64f2b72802232842ba8c8088cec46ba869ef..08c767a30b0febdf87159c29bc058601e49eace1 100644
+--- a/manifest.json
++++ b/manifest.json
+@@ -1,5 +1,5 @@
+ {
+-  "version": "8.0.18",
++  "version": "8.0.19",
+   "locale": "zh-CN",
+   "platforms": [
+     "linux-embedded",
+diff --git a/manifests/software_m5_eval_contract.json b/manifests/software_m5_eval_contract.json
+index 8233cca2935641e493a69deb9b7470508fd17483..32615f51a5145a39958f0f0e708eb555a6def8ea 100644
+--- a/manifests/software_m5_eval_contract.json
++++ b/manifests/software_m5_eval_contract.json
+@@ -1,6 +1,6 @@
+ {
+   "schema": "adk-runtime-eval-campaign/v1",
+-  "campaign_id": "software-m5-8.0.18",
++  "campaign_id": "software-m5-8.0.19",
+   "tasks": "tests/fixtures/software_m5_eval_tasks.jsonl",
+   "minimum_tasks": 60,
+   "runtimes": [
+diff --git a/pyproject.toml b/pyproject.toml
+index c70d294299afa6ada6ac2ac8550e06a04950258a..4292d7b5db254da47c458ee6d40bc498ab26c892 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -7,7 +7,7 @@ build-backend = "setuptools.build_meta"
+ 
+ [project]
+ name = "agent-dev-kit"
+-version = "8.0.18"
++version = "8.0.19"
+ description = "Platform-neutral agent asset compiler, distributor, and evaluator"
+ readme = "README.md"
+ requires-python = ">=3.8"
+diff --git a/src/agent_dev_kit/__init__.py b/src/agent_dev_kit/__init__.py
+index 4b43c5a36e3168c44869f5c13305894df961fc5f..b282dccee9ebc430e471db96b9d8843a2b8f1a5f 100644
+--- a/src/agent_dev_kit/__init__.py
++++ b/src/agent_dev_kit/__init__.py
+@@ -1,3 +1,3 @@
+ """agent-dev-kit structured control plane."""
+ 
+-__version__ = "8.0.18"
++__version__ = "8.0.19"
+diff --git a/tests/fixtures/skill_catalog_competition.tsv b/tests/fixtures/skill_catalog_competition.tsv
+new file mode 100644
+index 0000000000000000000000000000000000000000..05d19cc8bb08826fd80bfae1be0c0f9f4348a698
+--- /dev/null
++++ b/tests/fixtures/skill_catalog_competition.tsv
+@@ -0,0 +1,21 @@
++case_id	kind	expected_skill	competitor	input
++R001	primary	adk-external-practice-absorption	-	请评估参考实现，并吸收外部实践中的设计方法
++R002	primary	adk-skill-composition-governance	-	请治理技能组合中的触发冲突和分类排序
++R003	primary	adk-embedded-release-orchestration	-	请设计嵌入式发布编排与 SD 升级包生成方案
++R004	primary	adk-bsp-porting-playbook	-	请评估 BSP 移植、Bootloader 与 rootfs 启动链
++R005	primary	adk-embedded-remote-debug-log-triage	-	请分析设备串口日志与 dmesg 故障
++R006	primary	adk-repo-drift-remediation	-	请做全仓漂移和文档代码不一致检查
++R007	primary	adk-systematic-debugging	-	排查根因未明的问题，先定位根因
++R008	primary	adk-interface-contract-design	-	请设计接口和接口契约，不进行真实设备操作
++R009	collision	adk-runtime-router	adk-requirements-triage	开始任务前先做技能路由与任务分流，再核对验收标准
++R010	collision	adk-requirements-triage	adk-runtime-router	明确目标边界和验收标准，再考虑技能路由
++R011	collision	adk-test-strategy	adk-unit-test-embedded	先写测试和测试矩阵，再编写测试用例
++R012	collision	adk-archive-governance	adk-knowledge-archive	归档检查及归档元数据修复，同时把研究笔记归档
++R013	negated	-	adk-runtime-router	不要技能路由
++R014	negated	-	adk-archive-governance	无需归档检查
++R015	negated	-	adk-performance-profiling-embedded	不需要性能分析
++R016	negated	-	adk-branch-closeout	请勿创建PR
++R017	abstain	-	-	今天午饭吃什么
++R018	abstain	-	-	请用一句话问候大家
++R019	abstain	-	-	介绍一下适合猫咪玩的毛线球
++R020	abstain	-	-	周末是否适合去爬山
+diff --git a/tests/test_skill_trigger_matrix.py b/tests/test_skill_trigger_matrix.py
+index 54d8fc41442ac530804d29d47729b70c40ce7b4b..509acc26ad5d36057da7e215000ef5dbda70cf62 100644
+--- a/tests/test_skill_trigger_matrix.py
++++ b/tests/test_skill_trigger_matrix.py
+@@ -32,6 +32,38 @@ def _cases() -> list[tuple[int, str, str, bool, str]]:
+     return parsed
+ 
+ 
++
++CATALOG_CASES = ROOT / "tests/fixtures/skill_catalog_competition.tsv"
++
++
++def _catalog_cases() -> list[tuple[int, str, str, str, str, str]]:
++    lines = CATALOG_CASES.read_text(encoding="utf-8").splitlines()
++    if not lines or lines[0] != "case_id\tkind\texpected_skill\tcompetitor\tinput":
++        raise AssertionError("Skill catalog competition header is invalid")
++    cases: list[tuple[int, str, str, str, str, str]] = []
++    identifiers: set[str] = set()
++    for line_number, line in enumerate(lines[1:], start=2):
++        fields = line.split("\t", 4)
++        if len(fields) != 5:
++            raise AssertionError("Skill catalog competition line {} has invalid columns".format(line_number))
++        identifier, kind, expected, competitor, prompt = fields
++        if (
++            not identifier or identifier in identifiers
++            or kind not in ("primary", "collision", "negated", "abstain")
++            or not expected or not competitor or not prompt.strip()
++        ):
++            raise AssertionError("Skill catalog competition line {} has invalid values".format(line_number))
++        if kind in ("negated", "abstain") and expected != "-":
++            raise AssertionError("Abstention cases must not name a primary Skill")
++        if kind in ("collision", "negated") and competitor == "-":
++            raise AssertionError("Competition and negation cases require a competitor")
++        identifiers.add(identifier)
++        cases.append((line_number, identifier, kind, expected, competitor, prompt))
++    if len(cases) < 20 or {item[2] for item in cases} != {"primary", "collision", "negated", "abstain"}:
++        raise AssertionError("Skill catalog competition coverage has regressed")
++    return cases
++
++
+ class SkillTriggerMatrixTests(unittest.TestCase):
+     def test_all_cases_match_once_loaded_manifest(self) -> None:
+         manifest = Manifest.load(ROOT)
+@@ -50,5 +82,31 @@ class SkillTriggerMatrixTests(unittest.TestCase):
+         self.assertEqual(completed.returncode, 0, completed.stderr or completed.stdout)
+ 
+ 
++
++    def test_catalog_auto_selection_and_abstention(self) -> None:
++        manifest = Manifest.load(ROOT)
++        for line, identifier, kind, expected, competitor, prompt in _catalog_cases():
++            with self.subTest(line=line, case=identifier, kind=kind):
++                # Use the production public matcher across the *whole* catalog;
++                # never substitute per-Skill scoring or a fixture-only selector.
++                result = match_text(manifest, prompt, scope="auto")
++                if expected == "-":
++                    self.assertIs(result.get("match"), False, result)
++                    self.assertEqual(result.get("decision"), "abstain", result)
++                    self.assertEqual(result.get("mutation_permission"), "deny", result)
++                else:
++                    self.assertIs(result.get("match"), True, result)
++                    self.assertEqual(result.get("skill"), expected, result)
++                    self.assertEqual(result.get("runtime_role"), "primary", result)
++                if competitor != "-":
++                    self.assertNotEqual(result.get("skill"), competitor, result)
++                    explicit = match_text(manifest, prompt, skill=competitor, scope="skill")
++                    if kind == "collision":
++                        # The losing Skill really could have matched, so this
++                        # proves automatic selection rather than a trivial hit.
++                        self.assertIs(explicit.get("match"), True, explicit)
++                    elif kind == "negated":
++                        self.assertIs(explicit.get("match"), False, explicit)
++
+ if __name__ == "__main__":
+     unittest.main()

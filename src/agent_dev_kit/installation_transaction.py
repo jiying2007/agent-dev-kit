@@ -2,10 +2,14 @@
 
 from __future__ import annotations
 
+import gzip
+import io
 import os
 import re
 import shutil
-from pathlib import Path
+import tarfile
+import tempfile
+from pathlib import Path, PurePosixPath
 from typing import Any, Dict, List, Mapping, Optional, Set
 
 from . import installation_contract as install_contract
@@ -14,7 +18,124 @@ from .installation_inventory import verify_managed_file_mode, verify_receipt_inv
 from .locking import TargetLock
 from .model import Manifest, ManifestError, sha256_file, sha256_tree
 from .targets import RenderedBundle
-from .strict_json import StrictJSONError, read as read_strict_json
+from .strict_json import StrictJSONError, read as read_strict_json, read_bytes
+
+
+def _archive_members(archive: tarfile.TarFile, target_name: str) -> List[tarfile.TarInfo]:
+    """Inspect the entire inventory before any selected target is moved."""
+    members: List[tarfile.TarInfo] = []
+    identities: Set[str] = set()
+    total = 0
+    for member in archive:
+        name = member.name.rstrip("/") if member.isdir() else member.name
+        relative = PurePosixPath(name)
+        if (not name or len(name) > 1024 or "\\" in name or "\x00" in name
+                or not relative.parts or relative.is_absolute() or relative.as_posix() != name
+                or any(part in (".", "..") for part in relative.parts)
+                or relative.parts[0] != target_name or name in identities
+                or not (member.isdir() or member.isfile()) or member.issparse()
+                or member.size < 0 or (member.isdir() and member.size != 0)):
+            raise ManifestError("restore archive has unsafe, duplicate, or wrong-target members")
+        identities.add(name)
+        members.append(member)
+        total += member.size
+        if len(members) > 32768 or total > 256 * 1024 * 1024:
+            raise ManifestError("restore archive inventory exceeds its budget")
+    if not any(item.name.rstrip("/") == target_name and item.isdir() for item in members):
+        raise ManifestError("restore archive must contain its selected top-level directory")
+    return members
+
+
+def _extract_archive(archive: tarfile.TarFile, members: List[tarfile.TarInfo], payload: Path) -> None:
+    """Copy only validated regular bytes; never execute tar extraction semantics."""
+    payload.mkdir(mode=0o700)
+    directories = []
+    for member in members:
+        relative = PurePosixPath(member.name.rstrip("/"))
+        destination = payload.joinpath(*relative.parts[1:])
+        if member.isdir():
+            destination.mkdir(parents=True, exist_ok=True)
+            directories.append((destination, member.mode & 0o777))
+            continue
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        stream = archive.extractfile(member)
+        if stream is None:
+            raise ManifestError("restore archive member has no regular content")
+        with stream, destination.open("xb") as output:
+            remaining = member.size
+            while remaining:
+                block = stream.read(min(remaining, 1024 * 1024))
+                if not block:
+                    raise ManifestError("restore archive member is truncated")
+                output.write(block)
+                remaining -= len(block)
+        destination.chmod(member.mode & 0o777)
+    # Set restrictive directory modes only after all descendant writes finish.
+    for directory, mode in sorted(directories, key=lambda item: len(item[0].parts), reverse=True):
+        directory.chmod(mode)
+
+
+def restore_archive(archive_path: Path, target: Path, *, overwrite: bool = False) -> Dict[str, str]:
+    """Restore an ordinary directory archive with validation and compensation.
+
+    The public legacy backup script uses this same typed transaction authority.
+    A failed run retains sibling staging for diagnosis; subsequent restores
+    refuse to overwrite unresolved recovery material.
+    """
+    target = target.expanduser().absolute()
+    archive_path = archive_path.expanduser().absolute()
+    for path in (target, archive_path):
+        if ".." in path.parts or any(part.is_symlink() for part in (path,) + tuple(path.parents)):
+            raise ManifestError("archive restore paths must be canonical and free of symlinks")
+    if target == Path(target.anchor) or not target.parent.is_dir():
+        raise ManifestError("archive restore requires a non-root target with an existing parent")
+    prefix = "." + target.name + ".adk-archive-restore-"
+    with TargetLock(target, "archive-restore"):
+        if any(path.name.startswith(prefix) for path in target.parent.iterdir()):
+            raise ManifestError("unresolved archive restore staging; preserve it for recovery")
+        if target.exists() and (not target.is_dir() or not overwrite):
+            raise ManifestError("archive restore requires a directory target and --force for overwrite")
+        try:
+            raw = read_bytes(archive_path, max_bytes=128 * 1024 * 1024, regular_only=True)
+            # Consume gzip through EOF to verify its checksum, even after tar's
+            # end marker. Bound expanded bytes and spill to disk, not memory.
+            with tempfile.TemporaryFile() as expanded:
+                with gzip.GzipFile(fileobj=io.BytesIO(raw)) as compressed:
+                    total = 0
+                    while True:
+                        block = compressed.read(1024 * 1024)
+                        if not block:
+                            break
+                        total += len(block)
+                        if total > 272 * 1024 * 1024:
+                            raise ManifestError("restore archive expanded stream exceeds its budget")
+                        expanded.write(block)
+                expanded.seek(0)
+                with tarfile.open(fileobj=expanded, mode="r:") as archive:
+                    members = _archive_members(archive, target.name)
+                    staging = Path(tempfile.mkdtemp(prefix=prefix, dir=str(target.parent)))
+                    payload, previous = staging / "payload", staging / "previous"
+                    moved_previous = False
+                    try:
+                        _extract_archive(archive, members, payload)
+                        if target.exists():
+                            os.replace(str(target), str(previous))
+                            moved_previous = True
+                        try:
+                            os.replace(str(payload), str(target))
+                        except Exception:
+                            if moved_previous:
+                                os.replace(str(previous), str(target))
+                            raise
+                    except Exception as exc:
+                        raise ManifestError("archive restore failed; recovery staging retained: {}".format(staging)) from exc
+                    try:
+                        shutil.rmtree(str(staging))
+                    except OSError as exc:
+                        raise ManifestError("target restored; cleanup failed, staging retained: {}".format(staging)) from exc
+        except (OSError, EOFError, tarfile.TarError, StrictJSONError) as exc:
+            raise ManifestError("archive restore rejected unreadable or corrupt archive; target was not deleted") from exc
+    return {"status": "pass", "target": str(target), "archive": str(archive_path)}
 
 
 def _refuse_incomplete_transactions(target: Path) -> None:

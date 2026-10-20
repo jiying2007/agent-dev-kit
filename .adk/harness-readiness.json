@@ -3,31 +3,59 @@
   "dimensions": {
     "context_legibility": {
       "owner": "leiwenjun",
-      "last_verified_at": "2026-07-18"
+      "last_verified_at": "2026-10-20",
+      "review_evidence": {
+        "path": ".adk/reviews/harness-source-20261020.json",
+        "sha256": "1780be18d6c1cd893c8764aa39465afb8c437218e24a0e00769247265302d20c"
+      }
     },
     "spec_and_execution_contract": {
       "owner": "leiwenjun",
-      "last_verified_at": "2026-07-18"
+      "last_verified_at": "2026-10-20",
+      "review_evidence": {
+        "path": ".adk/reviews/harness-source-20261020.json",
+        "sha256": "1780be18d6c1cd893c8764aa39465afb8c437218e24a0e00769247265302d20c"
+      }
     },
     "tool_and_permission_boundary": {
       "owner": "leiwenjun",
-      "last_verified_at": "2026-07-18"
+      "last_verified_at": "2026-10-20",
+      "review_evidence": {
+        "path": ".adk/reviews/harness-source-20261020.json",
+        "sha256": "1780be18d6c1cd893c8764aa39465afb8c437218e24a0e00769247265302d20c"
+      }
     },
     "state_and_knowledge_continuity": {
       "owner": "leiwenjun",
-      "last_verified_at": "2026-07-18"
+      "last_verified_at": "2026-10-20",
+      "review_evidence": {
+        "path": ".adk/reviews/harness-source-20261020.json",
+        "sha256": "1780be18d6c1cd893c8764aa39465afb8c437218e24a0e00769247265302d20c"
+      }
     },
     "verification_review_and_eval": {
       "owner": "leiwenjun",
-      "last_verified_at": "2026-07-18"
+      "last_verified_at": "2026-10-20",
+      "review_evidence": {
+        "path": ".adk/reviews/harness-source-20261020.json",
+        "sha256": "1780be18d6c1cd893c8764aa39465afb8c437218e24a0e00769247265302d20c"
+      }
     },
     "recovery_and_rollback": {
       "owner": "leiwenjun",
-      "last_verified_at": "2026-07-18"
+      "last_verified_at": "2026-10-20",
+      "review_evidence": {
+        "path": ".adk/reviews/harness-source-20261020.json",
+        "sha256": "1780be18d6c1cd893c8764aa39465afb8c437218e24a0e00769247265302d20c"
+      }
     },
     "freshness_and_entropy_control": {
       "owner": "leiwenjun",
-      "last_verified_at": "2026-07-18"
+      "last_verified_at": "2026-10-20",
+      "review_evidence": {
+        "path": ".adk/reviews/harness-source-20261020.json",
+        "sha256": "1780be18d6c1cd893c8764aa39465afb8c437218e24a0e00769247265302d20c"
+      }
     }
   }
 }

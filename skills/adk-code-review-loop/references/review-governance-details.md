@@ -67,7 +67,7 @@ AI/CI review 默认只是风险扫描，写入 SCM 属于独立的发布动作�
 - fork/public PR 默认不得暴露 protected secrets；缺 trusted-trigger 决策时只允许只读分析。
 - inline comment 必须能验证到目标 commit/diff 的合法位置；无法锚定时降级为 summary finding。
 - 发布前记录 `trusted_trigger`、`protected_secret_exposure`、`structured_output_valid`、`inline_anchor_valid`。
-- 机器 comment 不替代人类/owner 对高风险、业务语义或责任边界的最终裁决。
+- 机器 comment 本身不提供最终裁决。Owner 显式委派自动审核时，独立 AI 可在授权范围内根据真实来源与证据作出最终 Spec/Quality 裁决；审核记录必须标识 AI、委派来源、独立性、实际时间和输入摘要，不能写成真人审批。
 
 ## Snapshot and Evidence Details
 

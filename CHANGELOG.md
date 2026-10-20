@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### 8.0.36 source candidate
+- Consume explicitly delegated independent AI review through one bounded, source/policy/validator-bound evidence contract in the existing review/archive and Harness flows; retain separate Spec and Quality verdicts and truthful AI identity.
+- Require actual seven-dimension review evidence for this opted-in repository, preserve structural/freshness checks and N/A applicability, and invalidate review when the underlying evidence changes.
+- Complete the three frozen historical source reviews using the canonical lifecycle while preserving original diffs, verification history and review limitations.
+- Repair the public directory-backup restore with complete archive validation, private staging, target locking, atomic replacement and failure compensation; preserve original recovery material and executable negative cases.
+- Preserve protected CI, supported Python versions, immutable releases and exact Root promotion. Delegated review does not create Native execution, effect measurements, longitudinal observations or Product M5 authority.
+
 ### 8.0.35 source candidate
 - Preserve bounded, sanitized native campaign failure diagnostics after an actual failed run so hosted evidence remains available after the runner is removed.
 - Separate diagnostic collection from conformance signing and promotion; retain failed/skipped stage outcomes and exact source identity without creating runtime, Owner or release authority.

@@ -1,0 +1,2 @@
+# Retained original Git patches preserve exact context/trailing bytes as evidence.
+docs/changes/**/evidence/original.patch -whitespace

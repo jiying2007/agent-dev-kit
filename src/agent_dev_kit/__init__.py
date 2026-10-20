@@ -1,3 +1,3 @@
 """agent-dev-kit structured control plane."""
 
-__version__ = "8.0.35"
+__version__ = "8.0.36"
