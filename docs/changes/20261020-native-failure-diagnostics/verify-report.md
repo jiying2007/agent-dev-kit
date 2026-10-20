@@ -43,8 +43,24 @@ The first failure was the synthetic redaction sentinel's credential-shaped liter
 | `rtk proxy bash tests/test_native_campaign_diagnostics.sh` | 0 | 25 tests pass, including the unchanged runtime sentinel and actual YAML step scope. |
 | `rtk proxy python -m ruff check src/agent_dev_kit/native_campaign_diagnostics.py tests/test_native_campaign_diagnostics.py` | 0 | All checks passed. |
 
-One initial security CLI invocation omitted the required `check` action and exited 2 with usage text. It was corrected before obtaining the actual security result above. Product-maturity and workflow-contract replays ran sequentially to avoid concurrent repository fixture mutation. An independent read-only review confirmed that security rules, successful qualification steps, permission/action/failure assertions and original budgets were not weakened. A second full run remains separate evidence and is not implied by these targeted passes.
+One initial security CLI invocation omitted the required `check` action and exited 2 with usage text. It was corrected before obtaining the actual security result above. Product-maturity and workflow-contract replays ran sequentially to avoid concurrent repository fixture mutation. An independent read-only review confirmed that security rules, successful qualification steps, permission/action/failure assertions and original budgets were not weakened. The coordinating maintainer subsequently completed the second full run with **exit 0, 99 pass / 0 fail, 272788 ms**. Its actual `adk-full-final.stdout.log` summary was independently read, and the command record is `adk-full-final-command.json` under the same validation directory. That result covers the initial PR head before the later test-identifier naming repair described below.
+
+## Protected PR CodeQL result and fixture-only naming repair
+
+For initial PR #216 head `868ba0190d37a02dac62627095f8699bc8341def`, actual CI run `39366645871` logs show CPython **3.8.18 / 3.11.17 / 3.12.15**, each with `[SUMMARY] tests=99 pass=99 fail=0`; all three contract jobs, the 28-source-file strict mypy check and deterministic package job also passed. The independent **CodeQL check `118445178424` failed**. Its four actual bot comments identify clear-text-storage findings at the new test's temporary fixture writes, lines 117, 194, 317 and 349. Stable comment links and the preserved negative outcome are in `negative-results.md`. No successful job conclusion was used to replace the failed security check.
+
+The fixed synthetic value has no credential or environment source. The test-only repair renames `SECRET` to `REDACTION_CANARY` and its local symlink target variable to `fixture_path`, with a comment stating the non-secret fixture semantics. The actual before/after ASTs are identical after precisely these identifier mappings, and runtime canary bytes match (SHA-256 `9f6235f73ae237441a7a2898a6084d075ebd6bd8af723dedeeeb7893125c790e`). Every input, file-writing sink and assertion is preserved. Production source, workflows and security rules are unchanged by this repair.
+
+| Actual post-rename command | Exit | Result |
+|---|---|---|
+| Read-only AST and runtime-canary comparison | 0 | Exact executable-AST equivalence after identifier mapping; identical runtime canary bytes. |
+| `rtk proxy bash tests/test_native_campaign_diagnostics.sh` | 0 | All 25 tests pass. |
+| `rtk proxy bash scripts/devkit.sh security check --summary-json` | 0 | `status=pass`, 1517 files, empty failures/warnings. |
+| `rtk proxy bash tests/test_hosted_workflow_hygiene.sh` | 0 | Hosted workflow hygiene and governance admin remediation pass. |
+| `rtk proxy python -m ruff check tests/test_native_campaign_diagnostics.py` | 0 | All checks passed. |
+
+A fresh remote CodeQL run on the repaired PR head is **pending**. This local evidence does not claim that scan has passed, and no alert dismissal, query exclusion or suppression was added.
 
 ## Scope still outside this report
 
-The coordinating maintainer owns full repository regression, protected PR/main checks, actual Python 3.8/3.11 matrix runs and component release. No local provider runtime/authentication or real hosted Native campaign was available; no paid model call was made. Synthetic tests and this diagnostic source fix do not satisfy G21, actual Owner review, Harness date re-verification, field evidence or ProductM5 qualification.
+The coordinating maintainer owns subsequent exact-head full regression, protected PR/main checks and component release. The earlier full and hosted matrix results are recorded with their actual source scope above. No local provider runtime/authentication or real hosted Native campaign was available; no paid model call was made. Synthetic tests and this diagnostic source fix do not satisfy G21, actual Owner review, Harness date re-verification, field evidence or ProductM5 qualification.

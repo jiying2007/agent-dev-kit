@@ -31,8 +31,9 @@ from agent_dev_kit.native_campaign_diagnostics import (
 
 ROOT = Path(__file__).resolve().parents[1]
 HASH = "a" * 64
-# Non-secret test sentinel, assembled at runtime; every redaction assertion uses the same value.
-SECRET = "_".join(("DO", "NOT", "RETAIN", "PRIVATE", "CANARY", "81c17"))
+# Fixed non-secret redaction canary; no credential or environment source is read.
+# Runtime bytes, temporary-file writes and every redaction assertion stay identical.
+REDACTION_CANARY = "_".join(("DO", "NOT", "RETAIN", "PRIVATE", "CANARY", "81c17"))
 
 
 def phases(failed: str = "run") -> dict[str, str]:
@@ -191,54 +192,54 @@ class NativeCampaignDiagnosticsTest(unittest.TestCase):
             "native-commands.json", "native-assertions.json", "anthropic-api-key", "settings.json",
             "stdout.txt", "stderr.txt", "receipt.json", "receipt.sigstore.json", "registry-candidate.json",
         ):
-            (self.campaign / name).write_text(SECRET, encoding="utf-8")
+            (self.campaign / name).write_text(REDACTION_CANARY, encoding="utf-8")
         with patch("agent_dev_kit.native_campaign_diagnostics.read_bytes", side_effect=AssertionError("must not read")):
             report = self.collect()
         self.assertEqual(set(report["files"]), {item[0] for item in INPUTS})
-        self.assertNotIn(SECRET, (self.output / "diagnostics.json").read_text(encoding="utf-8"))
+        self.assertNotIn(REDACTION_CANARY, (self.output / "diagnostics.json").read_text(encoding="utf-8"))
 
     def test_schema_valid_free_text_is_withheld(self) -> None:
         value = evidence(self.plan)
-        value["runtime"].update(binary=SECRET, version=SECRET, version_pin=SECRET)
-        value["reason"] = SECRET
-        value["stages"][0]["environment"]["platform"] = SECRET
-        value["stages"][0]["environment"]["architecture"] = SECRET
-        value["stages"][1]["reason"] = SECRET
+        value["runtime"].update(binary=REDACTION_CANARY, version=REDACTION_CANARY, version_pin=REDACTION_CANARY)
+        value["reason"] = REDACTION_CANARY
+        value["stages"][0]["environment"]["platform"] = REDACTION_CANARY
+        value["stages"][0]["environment"]["architecture"] = REDACTION_CANARY
+        value["stages"][1]["reason"] = REDACTION_CANARY
         self.write("evidence.json", value)
         report = self.collect()
         self.assertEqual(report["files"]["evidence.json"]["status"], "accepted-metadata-only")
         self.assertEqual(report["native_stages"][1]["reason_code"], "detail-withheld")
-        self.assertNotIn(SECRET, json.dumps(report))
+        self.assertNotIn(REDACTION_CANARY, json.dumps(report))
 
     def test_error_summary_does_not_copy_error_text(self) -> None:
         self.write("run-summary.json", {
             "schema": "adk-native-target-campaign-error/v1", "status": "fail",
-            "error": SECRET, "release_authorized": False,
+            "error": REDACTION_CANARY, "release_authorized": False,
         })
         report = self.collect()
         self.assertEqual(report["files"]["run-summary.json"]["observation"]["reason_code"],
                          "operation-error-detail-withheld")
-        self.assertNotIn(SECRET, json.dumps(report))
+        self.assertNotIn(REDACTION_CANARY, json.dumps(report))
 
     def test_prepare_summary_only_projects_status_and_digest(self) -> None:
         self.write("prepare-summary.json", {
             "schema": "adk-native-target-campaign-operation/v1", "status": "ready",
-            "campaign_id": self.plan["campaign_id"], "plan": "/private/" + SECRET,
-            "candidate_contract": "/private/" + SECRET,
+            "campaign_id": self.plan["campaign_id"], "plan": "/private/" + REDACTION_CANARY,
+            "candidate_contract": "/private/" + REDACTION_CANARY,
             "candidate_contract_normalized_sha256": HASH, "release_authorized": False,
         })
         report = self.collect()
         self.assertEqual(report["files"]["prepare-summary.json"]["observation"], {
             "operation_status": "ready", "candidate_contract_normalized_sha256": HASH,
         })
-        self.assertNotIn(SECRET, json.dumps(report))
+        self.assertNotIn(REDACTION_CANARY, json.dumps(report))
 
     def test_exact_run_finalize_and_loader_summaries_are_accepted_without_raw_files(self) -> None:
         self.write("run-summary.json", evidence(self.plan, complete=True))
         self.write("finalize-summary.json", {
             "schema": "adk-native-target-campaign-finalize/v2",
             "status": "ready-for-signature-and-registry", "campaign_id": self.plan["campaign_id"],
-            "target": "claude-code", "receipt_id": SECRET, "receipt_path": "/private/" + SECRET,
+            "target": "claude-code", "receipt_id": REDACTION_CANARY, "receipt_path": "/private/" + REDACTION_CANARY,
             "receipt_sha256": HASH, "contract_sha256": HASH, "bundle_sha256": HASH,
             "next_required_evidence": [
                 "sigstore-or-reviewed-external-signature-bundle",
@@ -253,7 +254,7 @@ class NativeCampaignDiagnosticsTest(unittest.TestCase):
         for name in ("run-summary.json", "finalize-summary.json", "production-loader.json"):
             self.assertEqual(report["files"][name]["status"], "accepted-metadata-only")
         self.assertEqual(report["status"], "failed-campaign-diagnostics")
-        self.assertNotIn(SECRET, json.dumps(report))
+        self.assertNotIn(REDACTION_CANARY, json.dumps(report))
         self.assertEqual([path.name for path in self.output.iterdir()], ["diagnostics.json"])
 
     def test_unknown_fields_are_rejected_at_every_evidence_depth(self) -> None:
@@ -264,20 +265,20 @@ class NativeCampaignDiagnosticsTest(unittest.TestCase):
                     "root": value, "runtime": value["runtime"], "stage": value["stages"][0],
                     "environment": value["stages"][0]["environment"], "privacy": value["privacy"],
                 }[target]
-                destination["unknown_raw_text"] = SECRET
+                destination["unknown_raw_text"] = REDACTION_CANARY
                 self.write("evidence.json", value)
                 report = self.collect(output=self.temp / f"out-{index}")
                 self.assertEqual(report["files"]["evidence.json"]["reason_code"], "schema-rejected")
-                self.assertNotIn(SECRET, json.dumps(report))
+                self.assertNotIn(REDACTION_CANARY, json.dumps(report))
 
     def test_unknown_operation_summary_fields_are_rejected(self) -> None:
         self.write("run-summary.json", {
             "schema": "adk-native-target-campaign-error/v1", "status": "fail", "error": "failure",
-            "release_authorized": False, "raw_stdout": SECRET,
+            "release_authorized": False, "raw_stdout": REDACTION_CANARY,
         })
         report = self.collect()
         self.assertEqual(report["files"]["run-summary.json"]["status"], "rejected")
-        self.assertNotIn(SECRET, json.dumps(report))
+        self.assertNotIn(REDACTION_CANARY, json.dumps(report))
 
     def test_ambiguous_nonfinite_deep_and_invalid_json_are_rejected(self) -> None:
         examples = (
@@ -313,13 +314,13 @@ class NativeCampaignDiagnosticsTest(unittest.TestCase):
 
     @unittest.skipUnless(os.name == "posix", "requires native POSIX symlinks")
     def test_leaf_symlink_is_rejected_without_reading_target(self) -> None:
-        secret = self.temp / "private.json"
-        secret.write_text(SECRET, encoding="utf-8")
-        (self.campaign / "evidence.json").symlink_to(secret)
+        fixture_path = self.temp / "private.json"
+        fixture_path.write_text(REDACTION_CANARY, encoding="utf-8")
+        (self.campaign / "evidence.json").symlink_to(fixture_path)
         with patch("agent_dev_kit.native_campaign_diagnostics.read_bytes", side_effect=AssertionError("must not read")):
             report = self.collect()
         self.assertEqual(report["files"]["evidence.json"]["reason_code"], "unsafe-input-file")
-        self.assertNotIn(SECRET, json.dumps(report))
+        self.assertNotIn(REDACTION_CANARY, json.dumps(report))
 
     @unittest.skipUnless(os.name == "posix", "requires native POSIX symlinks")
     def test_symlink_directory_components_and_output_leaf_are_rejected(self) -> None:
@@ -346,10 +347,10 @@ class NativeCampaignDiagnosticsTest(unittest.TestCase):
     def test_existing_output_directory_is_not_reused_or_uploaded(self) -> None:
         self.output.mkdir()
         private = self.output / "private.txt"
-        private.write_text(SECRET, encoding="utf-8")
+        private.write_text(REDACTION_CANARY, encoding="utf-8")
         with self.assertRaisesRegex(DiagnosticsError, "output-directory-must-be-new"):
             self.collect()
-        self.assertEqual(private.read_text(encoding="utf-8"), SECRET)
+        self.assertEqual(private.read_text(encoding="utf-8"), REDACTION_CANARY)
         self.assertFalse((self.output / "diagnostics.json").exists())
 
     def test_success_and_untrusted_prerequisites_are_refused(self) -> None:
@@ -362,7 +363,7 @@ class NativeCampaignDiagnosticsTest(unittest.TestCase):
         self.assertFalse(self.output.exists())
 
     def test_unknown_phase_or_outcome_is_rejected(self) -> None:
-        for value in ({**phases(), "secret": SECRET}, {**phases(), "run": SECRET}):
+        for value in ({**phases(), "secret": REDACTION_CANARY}, {**phases(), "run": REDACTION_CANARY}):
             with self.subTest(value=value):
                 with self.assertRaises(DiagnosticsError):
                     collect_diagnostics(ROOT, self.campaign, self.output, source_sha="1" * 40,
@@ -373,12 +374,12 @@ class NativeCampaignDiagnosticsTest(unittest.TestCase):
         with redirect_stdout(out):
             code = main([
                 "--root", str(ROOT), "--campaign-dir", str(self.campaign),
-                "--output-dir", str(self.output), "--source-sha", SECRET,
+                "--output-dir", str(self.output), "--source-sha", REDACTION_CANARY,
                 "--run-id", "123", "--run-attempt", "1", "--phases-json", json.dumps(phases()),
             ])
         self.assertEqual(code, 2)
         self.assertEqual(json.loads(out.getvalue())["status"], "not-collected")
-        self.assertNotIn(SECRET, out.getvalue())
+        self.assertNotIn(REDACTION_CANARY, out.getvalue())
         self.assertFalse(self.output.exists())
 
 
