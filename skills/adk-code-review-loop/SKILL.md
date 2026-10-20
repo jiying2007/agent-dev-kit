@@ -1,8 +1,8 @@
 ---
 name: adk-code-review-loop
 description: 独立代码审查与反馈修复闭环，覆盖发现分级、真实性核验、修复验证和复审
-version: 1.7.1
-last_updated: 2026-10-16
+version: 1.7.2
+last_updated: 2026-10-20
 triggers:
   - "独立代码审查"
   - "code review loop"
@@ -105,6 +105,6 @@ rtk git diff --check
 - 受控生命周期操作缺 owner/state/event baseline，或 `design-change` 未回设计阶段时，spec-compliance 固定不通过。
 - `targeted-finding-review` 不得替代 whole-diff 或适用的 whole-lifecycle review。
 - reviewer 只读：不得修改工作树、切分支、执行破坏性操作，也不得被要求忽略发现或预设严重级别。
-- AI review 只作第一轮风险扫描；高风险、业务语义或 owner 责任由人类 reviewer/owner 最终确认。
+- Owner 显式委派时，独立 AI 可完成授权范围的 Spec/Quality 最终裁决；须记录 AI 身份、委派来源、快照与证据，不冒充人类。未委派的高风险或责任裁决仍交 owner。
 - 机器发布 review comment 前必须有 schema-backed findings；不能从自由文本直接生成 SCM 写 payload；untrusted PR/fork/public PR 默认不接收 protected secrets，缺 trusted-trigger 决策时只允许只读分析；inline comment 位置无法验证时，必须降级为 summary finding。
-- 重复 review 模式提升为规则前，必须有 sanitized trace、eval candidate、validation result 和 human approval。
+- 重复 review 模式升为规则须有 sanitized trace、eval candidate、validation result 及 owner 或其明确委派的独立审核证据。

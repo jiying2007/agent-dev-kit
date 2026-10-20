@@ -9,6 +9,8 @@ from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Tuple
 
+from .strict_json import StrictJSONError, loads as load_strict_json
+
 EXPECTED_DIMENSIONS = (
     "context_legibility",
     "spec_and_execution_contract",
@@ -256,8 +258,8 @@ def _load_metadata(index: RepositoryIndex, contract: Mapping[str, Any]) -> Tuple
             ]
         return {}, []
     try:
-        value = json.loads(content)
-    except json.JSONDecodeError:
+        value = load_strict_json(content, max_bytes=index.max_file_bytes)
+    except StrictJSONError:
         return {}, [_blocker("invalid_readiness_metadata", "readiness metadata 不是有效 JSON", relative)]
     if (
         not isinstance(value, dict)
@@ -272,6 +274,61 @@ def _load_metadata(index: RepositoryIndex, contract: Mapping[str, Any]) -> Tuple
             )
         ]
     return value, []
+
+
+def _review_metadata(index: RepositoryIndex, metadata: Mapping[str, Any],
+                     required_sources: Iterable[str] = ()) -> Dict[str, Dict[str, Any]]:
+    """Consume opted-in review evidence once, retaining the responsible owner."""
+    from .review_evidence import POLICY_PATH, ReviewEvidenceError, validate_review
+
+    policy = index.root / POLICY_PATH
+    required = policy.exists() or policy.is_symlink()
+    dimensions = metadata.get("dimensions", {})
+    results: Dict[str, Dict[str, Any]] = {}
+    cache: Dict[Tuple[str, str], Dict[str, Any]] = {}
+    for dimension_id in EXPECTED_DIMENSIONS:
+        raw = dimensions.get(dimension_id, {}) if isinstance(dimensions, dict) else {}
+        reference = raw.get("review_evidence") if isinstance(raw, dict) else None
+        if not required and reference is None:
+            continue
+        result: Dict[str, Any] = {"status": "invalid", "reason": "invalid_or_missing_delegated_review"}
+        try:
+            if (not isinstance(reference, dict) or set(reference) != {"path", "sha256"}
+                    or not isinstance(reference.get("path"), str)
+                    or not isinstance(reference.get("sha256"), str)
+                    or re.fullmatch(r"[0-9a-f]{64}", reference["sha256"]) is None):
+                raise ReviewEvidenceError("Harness review reference is invalid")
+            pointer = Path(reference["path"])
+            if (pointer.is_absolute() or pointer.as_posix() != reference["path"]
+                    or ".." in pointer.parts):
+                raise ReviewEvidenceError("Harness review reference must be canonical and repository-relative")
+            key = (reference["path"], reference["sha256"])
+            if key not in cache:
+                cache[key] = {}
+                checked = validate_review(index.root, pointer,
+                                          expected_subject="harness-readiness", expected_scope="harness-source")
+                if checked["record_sha256"] != reference["sha256"]:
+                    raise ReviewEvidenceError("Harness review record digest does not match")
+                bound_sources = {ref["path"] for ref in checked["sources"] if ref["base"] == "repository"}
+                if not set(required_sources) <= bound_sources:
+                    raise ReviewEvidenceError("Harness review does not cover the actual scan evidence")
+                cache[key] = checked
+            checked = cache[key]
+            if not checked:
+                raise ReviewEvidenceError("Harness review was already rejected")
+            reviewed_date = checked["reviewed_at"].split("T", 1)[0]
+            if (not isinstance(raw.get("last_verified_at"), str)
+                    or _parsed_verified_date(raw["last_verified_at"]) != date.fromisoformat(reviewed_date)
+                    or raw.get("owner") != checked["owner"]):
+                raise ReviewEvidenceError("Harness review date or owner differs from metadata")
+            result = {"status": "pass", "reviewer": checked["reviewer"],
+                      "scope": checked["scope"], "reviewed_at": checked["reviewed_at"],
+                      "record": reference, "human_review_performed": False,
+                      "field_evidence_verified": False}
+        except (OSError, ValueError):
+            pass
+        results[dimension_id] = result
+    return results
 
 
 def _metadata_for_dimension(

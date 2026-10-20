@@ -3,6 +3,7 @@ set -euo pipefail
 
 # 加载公共日志库
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 source "${SCRIPT_DIR}/lib-logging.sh"
 
 # ============================================================================
@@ -81,16 +82,18 @@ restore_backup() {
         return 1
     fi
     
-    if [[ -d "$target" && "$force" != "true" ]]; then
-        log_warning "目标目录已存在: $target"
-        if [[ "${force:-}" != "true" ]]; then
-            echo "[FAIL] --force required for overwrite" >&2
-            exit 1
-        fi
-    fi
-    
-    [[ -d "$target" ]] && rm -rf "$target"
-    tar -xzf "$backup_file" -C "$(dirname "$target")"
+    PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}" \
+        python3 - "$backup_file" "$target" "$force" <<'PY'
+import sys
+from pathlib import Path
+from agent_dev_kit.installation_transaction import restore_archive
+from agent_dev_kit.model import ManifestError
+
+try:
+    restore_archive(Path(sys.argv[1]), Path(sys.argv[2]), overwrite=sys.argv[3] == "true")
+except ManifestError as exc:
+    raise SystemExit("[FAIL] " + str(exc)) from exc
+PY
     log_success "备份恢复成功: $backup_file"
     return 0
 }

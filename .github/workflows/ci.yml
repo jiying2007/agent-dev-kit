@@ -204,6 +204,7 @@ jobs:
             src/agent_dev_kit/distribution
             src/agent_dev_kit/versioning.py
             src/agent_dev_kit/native_campaign_diagnostics.py
+            src/agent_dev_kit/review_evidence.py
           )
           EXECUTION_POLICY_PATH=src/agent_dev_kit/execution_policy
           python -m compileall -q "${CORE_KERNEL_PATHS[@]}" "$EXECUTION_POLICY_PATH"
@@ -227,6 +228,7 @@ jobs:
           src/agent_dev_kit/delivery_cli.py
           src/agent_dev_kit/release.py
           src/agent_dev_kit/native_campaign_diagnostics.py
+          src/agent_dev_kit/review_evidence.py
 
       - name: Audit declared project dependencies
         run: pip-audit --strict --progress-spinner off .

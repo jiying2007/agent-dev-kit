@@ -1,0 +1,16 @@
+{
+  "schema": "adk-review-policy/v1",
+  "mode": "owner-delegated-ai",
+  "owner": "leiwenjun",
+  "allowed_scopes": [
+    "source-change",
+    "harness-source",
+    "effect-value-review",
+    "longitudinal-review"
+  ],
+  "authorization": {
+    "path": ".adk/review-authorization.md",
+    "sha256": "1594e628184cb0e4ad6c669bf5ce39dcb1f333d03d0798bebb080856e703cda5",
+    "granted_at": "2026-10-20T06:43:29Z"
+  }
+}

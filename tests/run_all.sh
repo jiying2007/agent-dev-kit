@@ -148,6 +148,8 @@ TESTS=(
   test_goal_contracts.sh
   test_capability_health.sh
   test_harness_readiness.sh
+  test_review_evidence.sh
+  test_archive_restore.sh
   test_local_ci_parity.sh
   test_hosted_workflow_hygiene.sh
   test_github_governance_admin.sh
@@ -236,6 +238,8 @@ QUICK_TESTS=(
   test_evidence_graph.sh
   test_capability_health.sh
   test_harness_readiness.sh
+  test_review_evidence.sh
+  test_archive_restore.sh
   test_local_ci_parity.sh
   test_hosted_workflow_hygiene.sh
   test_performance_budgets.sh

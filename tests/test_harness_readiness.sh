@@ -113,7 +113,7 @@ rg -q '命中条目时必须显式声明' "$ROOT_DIR/docs/agent-operating-rules.
 rg -q 'Reflect 阶段按提名条件扫描' "$ROOT_DIR/docs/agent-operating-rules.md"
 
 # Deterministic software regression uses report-only historical evaluation.
-# It must not pretend an expired human Owner re-verification was renewed.
+# It must not pretend an expired source review was renewed.
 SELF_AS_OF="$(python3 - "$ROOT_DIR/.adk/harness-readiness.json" <<'PYDATE'
 import json
 import sys
@@ -156,7 +156,7 @@ stale = {
     if (today - dt.date.fromisoformat(item["last_verified_at"])).days > max_age
 }
 if stale:
-    # A real owner renewal is external evidence; never auto-pass or rewrite it.
+    # Renewal requires actual scoped review evidence; never auto-pass or backdate it.
     assert live_rc == 2, (live_rc, live)
     assert live["overall_status"] == "partial", live
     observed_stale = {

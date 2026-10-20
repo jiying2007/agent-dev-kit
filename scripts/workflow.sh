@@ -17,6 +17,7 @@ Options:
   --majors <n>           # review 可选，默认 0
   --minors <n>           # review 可选，默认 0
   --owner <owner>
+  --review-evidence <path> # canonical review-evidence.json for delegated review
   --root <change-root>   # 默认 docs/changes
   --notes <text>
   --force                # archive 时忽略状态校验（高风险）
@@ -47,6 +48,9 @@ RESULT=""
 BLOCKERS=0
 MAJORS=0
 MINORS=0
+REVIEW_EVIDENCE=""
+DELEGATED_REVIEWER_ID=""
+DELEGATED_RECORD_SHA256=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -76,6 +80,11 @@ while [[ $# -gt 0 ]]; do
       ;;
     --owner)
       OWNER="$2"
+      shift 2
+      ;;
+    --review-evidence)
+      [[ $# -ge 2 && -n "$2" ]] || { echo "[FAIL] --review-evidence requires a path" >&2; exit 1; }
+      REVIEW_EVIDENCE="$2"
       shift 2
       ;;
     --root)
@@ -441,6 +450,49 @@ verify_change() {
   fi
 }
 
+validate_delegated_review() {
+  local change_dir="$1"
+  local repository_root
+  repository_root="$(git -C "$change_dir" rev-parse --show-toplevel 2>/dev/null || true)"
+  # A standalone external change workspace does not inherit this tool's own
+  # repository policy. Its state never grants qualification to this repository.
+  if [[ -z "$repository_root" ]]; then
+    if [[ -z "$REVIEW_EVIDENCE" && ! -e "$change_dir/review-evidence.json" && ! -L "$change_dir/review-evidence.json" ]]; then
+      return 0
+    fi
+    echo "[FAIL] delegated review requires an exact repository workspace" >&2
+    return 1
+  fi
+  local policy="$repository_root/.adk/review-policy.json"
+  if [[ ! -e "$policy" && ! -L "$policy" && -z "$REVIEW_EVIDENCE" && ! -e "$change_dir/review-evidence.json" && ! -L "$change_dir/review-evidence.json" ]]; then
+    return 0
+  fi
+  local record="${REVIEW_EVIDENCE:-$change_dir/review-evidence.json}"
+  local review_summary
+  review_summary="$(PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}" \
+    python3 - "$repository_root" "$record" "$change_dir" "$CHANGE_ID" "$OWNER" \
+      "$ACTION" "$BLOCKERS" "$MAJORS" "$MINORS" <<'PY'
+import sys
+from pathlib import Path
+from agent_dev_kit.review_evidence import validate_review
+
+root, record, change = map(Path, sys.argv[1:4])
+if record.absolute() != (change / "review-evidence.json").absolute():
+    raise SystemExit("[FAIL] delegated evidence must be the change's canonical review-evidence.json")
+review = validate_review(root, record, expected_subject=sys.argv[4], expected_scope="source-change")
+if sys.argv[6] == "review":
+    for severity, value in zip(("blocker", "major", "minor"), sys.argv[7:10]):
+        actual = sum(item["severity"] == severity and item["disposition"] == "open"
+                     for item in review["findings"])
+        if int(value) != actual:
+            raise SystemExit("[FAIL] CLI finding counts must match validated open findings")
+print(review["reviewer"]["id"], review["record_sha256"])
+PY
+  )" || return 1
+  read -r DELEGATED_REVIEWER_ID DELEGATED_RECORD_SHA256 <<< "$review_summary"
+  echo "[PASS] delegated source review evidence is valid"
+}
+
 review_change() {
   ensure_change_id
   local change_dir="$CHANGE_ROOT/$CHANGE_ID"
@@ -468,6 +520,11 @@ review_change() {
   ensure_non_negative_int "$MAJORS" "--majors"
   ensure_non_negative_int "$MINORS" "--minors"
 
+  # Validate a positive delegated verdict before overwriting any report/state.
+  if [[ "$RESULT" == "pass" ]]; then
+    validate_delegated_review "$change_dir" || return 1
+  fi
+
   if ! validate_artifact_consistency "$change_dir" "$RESULT"; then
     write_state "$change_dir" "review-failed"
     exit 1
@@ -481,6 +538,13 @@ review_change() {
     echo "- 执行人：$OWNER"
     echo "- 结果：$RESULT"
     echo "- 分级统计：blocker=$BLOCKERS major=$MAJORS minor=$MINORS"
+    if [[ -n "$DELEGATED_RECORD_SHA256" ]]; then
+      echo "- Delegated review evidence: review-evidence.json"
+      echo "- Reviewer Kind: ai; authority: owner-delegated; not human approval"
+      echo "- Reviewer Identity: $DELEGATED_REVIEWER_ID"
+      echo "- Spec Verdict / Quality Verdict: see validated review-evidence.json"
+      echo "- Source, findings, evidence and limitations: review-evidence.json + review-findings.md"
+    fi
     echo
     echo "## 必改项（blocker/major）"
     if [[ "$BLOCKERS" -eq 0 && "$MAJORS" -eq 0 ]]; then
@@ -538,9 +602,21 @@ archive_change() {
     exit 1
   fi
 
+  # Archived lifecycle state cannot preserve a review invalidated after review.
+  validate_delegated_review "$change_dir" || return 1
+
+  local archive_root="$CHANGE_ROOT/archive"
+  local archive_dir="$archive_root/$(date +%Y%m%d)-$CHANGE_ID"
+  if [[ -e "$archive_dir" || -L "$archive_dir" ]]; then
+    echo "[FAIL] archive destination already exists: $archive_dir" >&2
+    return 1
+  fi
+
   local source_stage="$stage"
   local repository_head
-  repository_head="$(git -C "$ROOT_DIR" rev-parse HEAD 2>/dev/null || printf 'unavailable')"
+  local archived_review_verdict="not-verified"
+  [[ -z "$DELEGATED_RECORD_SHA256" ]] || archived_review_verdict="pass"
+  repository_head="$(git -C "$change_dir" rev-parse HEAD 2>/dev/null || printf 'unavailable')"
 
   write_state "$change_dir" "archived"
   cat > "$change_dir/provenance.md" <<PROVENANCE
@@ -558,11 +634,12 @@ archive_change() {
 - repository_head: $repository_head
 - verification_evidence: verify-report.md + negative-results.md#Evidence-Index
 - review_evidence: review-report.md
+- reviewer_id: ${DELEGATED_REVIEWER_ID:-not-recorded}
+- review_verdict: $archived_review_verdict
+- review_record_sha256: ${DELEGATED_RECORD_SHA256:-not-recorded}
 - promotion_authority: adk-promotion-evidence/v1 (exact-head repository promotion evidence remains separate and authoritative)
 PROVENANCE
 
-  local archive_root="$CHANGE_ROOT/archive"
-  local archive_dir="$archive_root/$(date +%Y%m%d)-$CHANGE_ID"
   mkdir -p "$archive_root"
   mv "$change_dir" "$archive_dir"
   echo "[OK] archived: $archive_dir"

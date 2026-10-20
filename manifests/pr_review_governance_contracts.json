@@ -37,7 +37,7 @@
         "safety_strategy": "drop-sudo-or-unprivileged-user",
         "permissions": [
           "contents:read",
-          "pull-requests:write only after schema validation and owner review"
+          "pull-requests:write only after schema validation and (owner review or explicitly delegated independent review)"
         ],
         "secret_policy": "LLM provider credentials must come from protected CI secrets and must not be exposed to untrusted PR code.",
         "output_policy": "final message and JSON findings may be archived; raw prompts and secrets must not be uploaded."

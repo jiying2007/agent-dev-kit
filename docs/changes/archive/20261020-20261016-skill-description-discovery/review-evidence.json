@@ -1,0 +1,94 @@
+{
+  "schema": "adk-review-evidence/v1",
+  "subject_id": "20261016-skill-description-discovery",
+  "scope": "source-change",
+  "owner": "leiwenjun",
+  "author_id": "ai/root",
+  "reviewer": {
+    "id": "ai/root/external_methods",
+    "kind": "ai",
+    "independence": "independent"
+  },
+  "reviewed_at": "2026-10-20T07:29:47Z",
+  "evidence_completed_at": "2026-10-20T07:29:42.809312Z",
+  "verdicts": {
+    "spec": "pass",
+    "quality": "pass"
+  },
+  "findings": [],
+  "limitations": [
+    "Independent AI source review only; not a human review, platform identity authentication, model effectiveness measurement or release authority.",
+    "The exact historical base-to-merge patch and original records are preserved; author_id names the coordinating implementation and record-assembly agent, not a claim that it impersonates the original Git author.",
+    "Native execution, effect measurements and field observations remain unverified by this review."
+  ],
+  "policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+  "validator_sha256": {
+    "src/agent_dev_kit/review_evidence.py": "73d85e864a3da125bf94808f19616f52150751a94ccc729ac66f66d2576b8808",
+    "src/agent_dev_kit/strict_json.py": "e11233b8d02d7fb95a8f2f93bfff065a1db84c4ef0820fef6d817600abe8ec98",
+    "src/agent_dev_kit/readiness_evidence.py": "ef980657486084eea8ab8a03ab357a76a3ed43691aca8d6909b06642764c808b"
+  },
+  "target": {
+    "base_commit": "61ff6079dc1d994ac33fbd07a0f069d80b39341d",
+    "head_commit": "6fa8b40977e83569a775297371759b126406adcd",
+    "original_patch_sha256": "8f2cf5749b057db7b490403b190d6b20c765d2597b4cc17a717d0e17ce293c69"
+  },
+  "sources": [
+    {
+      "base": "record",
+      "path": "evidence/original.patch",
+      "sha256": "8f2cf5749b057db7b490403b190d6b20c765d2597b4cc17a717d0e17ce293c69"
+    },
+    {
+      "base": "record",
+      "path": "proposal.md",
+      "sha256": "293b9326ab38634935714ce9b2c1327f4a11c01129e84125d77cbca825dd40c3"
+    },
+    {
+      "base": "record",
+      "path": "design.md",
+      "sha256": "fa43251d7dc221bd13871649c70da9d079948d6fef91f2bbf188b6ede9cfb0c9"
+    },
+    {
+      "base": "record",
+      "path": "tasks.md",
+      "sha256": "70ecce30653a257bec47d201776ebf8050f9a60027556d2e86180d22fcc0e0fa"
+    },
+    {
+      "base": "record",
+      "path": "checklist.md",
+      "sha256": "9f81a09de96c7c9c27c82a2d2da9f57e32f3aaca34ed3dee9c03daaef1393030"
+    }
+  ],
+  "evidence": [
+    {
+      "base": "record",
+      "path": "review-findings.md",
+      "sha256": "0707836014e05ef08ccced87a7522b80323e38fc6cf0170755091b941134e5e6"
+    },
+    {
+      "base": "record",
+      "path": "verify-report.md",
+      "sha256": "f9d9a055ead906e9247a152b2e39ad52d44dbd225b21685680c596422acb55af"
+    },
+    {
+      "base": "record",
+      "path": "negative-results.md",
+      "sha256": "d9b87eff61f16e80ce60e4586603db985f0a93080d994fbcc08f7fc787c7cfd4"
+    },
+    {
+      "base": "record",
+      "path": "evidence/historical-state.yaml",
+      "sha256": "617f99903f43281f4e1dae33280b282f3cd3b6f84a11b1b11d74a042121ae13b"
+    },
+    {
+      "base": "record",
+      "path": "evidence/historical-tasks.md",
+      "sha256": "ca74dcf705af6538e917f58fe2fd074eee28678f2ae867432a9616892fbea072"
+    },
+    {
+      "base": "record",
+      "path": "evidence/historical-checklist.md",
+      "sha256": "b9875cd7f364b2cf806f899c56302b4b45150b7f84b26045ecbc5388683b1a35"
+    }
+  ]
+}
