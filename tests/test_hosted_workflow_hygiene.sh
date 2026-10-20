@@ -8,6 +8,7 @@ import importlib.util
 from pathlib import Path
 import re
 import sys
+import yaml
 
 root = Path(sys.argv[1])
 workflow_dir = root / ".github/workflows"
@@ -39,6 +40,84 @@ expected_write_permissions = {
     "security-codeql.yml": ["security-events"],
     "native-claude-conformance.yml": ["id-token"],
 }
+
+
+class UniqueMappingLoader(yaml.SafeLoader):
+    def construct_mapping(self, node, deep=False):
+        self.flatten_mapping(node)
+        keys = set()
+        for key_node, _ in node.value:
+            key = self.construct_object(key_node, deep=deep)
+            if key in keys:
+                raise yaml.constructor.ConstructorError(
+                    "workflow mapping", node.start_mark, "duplicate key", key_node.start_mark
+                )
+            keys.add(key)
+        return super().construct_mapping(node, deep=deep)
+
+
+def bounded_hosted_timeouts(candidate):
+    # Parse actual scopes: a step timeout is not another job timeout. Reject
+    # duplicate keys and non-integer/expression budgets instead of skipping them.
+    try:
+        document = yaml.load(candidate, Loader=UniqueMappingLoader)
+    except (yaml.YAMLError, TypeError):
+        return False
+    if not isinstance(document, dict) or not isinstance(document.get("jobs"), dict):
+        return False
+    if not document["jobs"]:
+        return False
+    for job in document["jobs"].values():
+        if not isinstance(job, dict):
+            return False
+        if "runs-on" not in job:
+            # Reusable calls delegate to the bounded runner jobs in their workflow.
+            if "uses" not in job or "timeout-minutes" in job or "steps" in job:
+                return False
+            continue
+        budget = job.get("timeout-minutes")
+        if type(budget) is not int or not 5 <= budget <= 45:
+            return False
+        steps = job.get("steps", [])
+        if not isinstance(steps, list):
+            return False
+        for step in steps:
+            if not isinstance(step, dict):
+                return False
+            if "timeout-minutes" in step:
+                step_budget = step["timeout-minutes"]
+                if type(step_budget) is not int or not 1 <= step_budget <= budget:
+                    return False
+    return True
+
+
+timeout_fixture = """jobs:
+  first:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - run: echo fixture
+        timeout-minutes: 2
+  second:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - run: echo fixture
+        timeout-minutes: 3
+"""
+assert bounded_hosted_timeouts(timeout_fixture), "bounded job and step timeouts must coexist"
+for value in ("0", "4", "46", "true", "45.0", '"45"', "${{ inputs.timeout }}"):
+    assert not bounded_hosted_timeouts(timeout_fixture.replace("timeout-minutes: 45", "timeout-minutes: " + value)), value
+for value in ("0", "-1", "46", "true", "2.0", '"2"', "${{ inputs.timeout }}"):
+    assert not bounded_hosted_timeouts(timeout_fixture.replace("timeout-minutes: 2", "timeout-minutes: " + value)), value
+for bad in (
+    timeout_fixture.replace("    timeout-minutes: 45\n", "", 1),
+    timeout_fixture.replace("    timeout-minutes: 45\n", "    timeout-minutes: 45\n    timeout-minutes: 40\n", 1),
+    timeout_fixture.replace("        timeout-minutes: 3", "        timeout-minutes: 6"),
+    timeout_fixture.replace("        timeout-minutes: 3", "        timeout-minutes: 3\n        timeout-minutes: 2"),
+):
+    assert not bounded_hosted_timeouts(bad), "missing, duplicate or over-job timeout was accepted"
+
 for path in workflow_files:
     text = path.read_text(encoding="utf-8")
     assert "permissions:\n  contents: read\n" in text, (
@@ -86,19 +165,9 @@ for path in workflow_files:
         credential_count,
     )
 
-    job_count = text.count("runs-on:")
-    timeout_values = [
-        int(value)
-        for value in re.findall(r"(?m)^\s+timeout-minutes:\s+(\d+)\s*$", text)
-    ]
-    assert len(timeout_values) == job_count, (
+    assert bounded_hosted_timeouts(text), (
         path.name,
-        job_count,
-        timeout_values,
-    )
-    assert all(5 <= value <= 45 for value in timeout_values), (
-        path.name,
-        timeout_values,
+        "each runner job requires an integer 5-45 minute timeout; step limits must be positive integers within that job budget",
     )
 
     action_uses = re.findall(r"(?m)^\s*uses:\s*([^\s#]+)", text)

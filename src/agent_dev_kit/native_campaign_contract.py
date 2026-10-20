@@ -298,7 +298,7 @@ def _candidate_contract(
     bundle_sha256: str,
     receipt_path: str,
 ) -> tuple[dict[str, Any], str]:
-    contract = copy.deepcopy(load_target_contract(manifest, target).data)
+    contract = copy.deepcopy(dict(load_target_contract(manifest, target).data))
     for capability in ("discovery", "load", "trigger"):
         contract["adapter"]["capabilities"][capability] = "native-verified"
     contract["adapter"]["conformance"] = {

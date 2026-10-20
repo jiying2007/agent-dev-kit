@@ -110,6 +110,7 @@ TESTS=(
   test_sigstore_blob.sh
   test_native_campaign.sh
   test_native_campaign_boundaries.sh
+  test_native_campaign_diagnostics.sh
   test_target_source_probe.sh
   test_effect_eval.sh
   test_completion_coverage.sh
@@ -204,6 +205,7 @@ QUICK_TESTS=(
   test_sigstore_blob.sh
   test_native_campaign.sh
   test_native_campaign_boundaries.sh
+  test_native_campaign_diagnostics.sh
   test_target_source_probe.sh
   test_effect_eval.sh
   test_completion_coverage.sh
