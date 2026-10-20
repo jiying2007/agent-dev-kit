@@ -218,6 +218,13 @@ jobs:
           src/agent_dev_kit/distribution
           src/agent_dev_kit/execution_policy
           src/agent_dev_kit/versioning.py
+          src/agent_dev_kit/installation_inventory.py
+          src/agent_dev_kit/installation_plan.py
+          src/agent_dev_kit/installation_transaction.py
+          src/agent_dev_kit/targets.py
+          src/agent_dev_kit/target_contracts.py
+          src/agent_dev_kit/delivery_cli.py
+          src/agent_dev_kit/release.py
 
       - name: Audit declared project dependencies
         run: pip-audit --strict --progress-spinner off .

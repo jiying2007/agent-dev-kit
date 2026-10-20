@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### 8.0.34 source candidate
+- Separate trusted installed-source and candidate-source authority for cross-version installation plans, application and rollback; retain receipt, rendered inventory, path and backup integrity checks.
+- Restore release rehearsal's complete previous-install, candidate-upgrade and rollback path, including the required manifest binding and previous file modes.
+- Allow historical inventory reconstruction after target documentation contracts expire while retaining current freshness requirements for new installation, export and release operations.
+- Add deterministic different-version CLI/release lifecycle and expiry regressions; align usage and command documentation with the existing Python 3.8+ support policy.
+- Preserve signed native target trust, real Owner/effect/field evidence requirements and the distinction between software regression, component release and Product M5 qualification.
+
 ### 8.0.33 source candidate
 - Update github/codeql-action init/analyze to reviewed full-commit SHA 6f2ac81f5cd81fe351a197ba0b00d91d03cd2aee (v4.39.0) from Dependabot's grouped workflow-actions PR.
 - Preserve protected-main SemVer advancement, Python 3.8/3.11/3.12 full CI matrix, CodeQL extended queries, immutable component release and Root exact-source promotion requirements.

@@ -5,7 +5,7 @@
 解释器入口：
 
 - 未设置 `ADK_PYTHON_BIN` 时按 `python3.12 -> python3.11 -> python3` 选择；这会
-  优先复用已安装的受审查解释器。若最终版本低于 3.11，除 `doctor` 外会明确
+  优先复用已安装的受审查解释器。若最终版本低于 3.8，除 `doctor` 外会明确
   标记结果仅供开发，不能作为 release evidence。
 - 使用 `ADK_PYTHON_BIN=/reviewed/python3.12` 显式选择解释器。
 - 发布、制品或认证前设置 `ADK_REQUIRE_SUPPORTED_PYTHON=1`，旧解释器会在 CLI
@@ -26,6 +26,20 @@ bash scripts/devkit.sh install apply --plan /tmp/adk-plan.json --lock-timeout 30
 bash scripts/devkit.sh install rollback --receipt /tmp/adk-live/.adk-install-receipt.json --lock-timeout 30 --summary-json
 ```
 
+跨版本 A → B 时，在候选 B 的源码环境执行，并给 plan/apply/rollback 显式提供受审查的精确 A 源码：
+
+```bash
+bash scripts/devkit.sh install plan --tool claude-code --target /tmp/adk-live --profile core --asset-kind skill --previous-source /reviewed/adk-a --output /tmp/adk-upgrade-plan.json
+bash scripts/devkit.sh install apply --plan /tmp/adk-upgrade-plan.json --previous-source /reviewed/adk-a
+bash scripts/devkit.sh install rollback --receipt /tmp/adk-live/.adk-install-receipt.json --previous-source /reviewed/adk-a
+```
+
+`--previous-source` 只验证旧状态；当前运行源码验证候选/当前安装。缺失或不匹配的旧来源会拒绝跨版本操作。源码路径不从可编辑 plan/receipt 推断或自动下载。回滚将旧文件字节、权限及原 receipt 恢复；要继续回滚已恢复的 A，可通过 `ADK_ROOT=/reviewed/adk-a adk install rollback --receipt /tmp/adk-live/.adk-install-receipt.json` 让已安装的新版 CLI 选择精确 A 资产来源，并在必要时提供 A 的前序源码。同版本操作可省略参数，现有 plan v2 / receipt v3 不需重写。
+
+旧源码仍须满足当前 manifest/target 合同，并可由当前受信 renderer 重现；不会动态执行旧源码的 Python。更早且渲染语义不兼容的版本仍 fail closed，应保留现场并采用对应版本的受审查恢复流程，不支持任意历史版本透明迁移。
+
+历史 receipt 库存重现不要求旧 target 文档在今天仍未到期，但保留 contract 内容、日期结构/最大窗口、native 信任及逐文件来源/渲染/权限验证；它不使用 receipt.created_at 作可信时间，也不产生新的发布/认证资格。新 plan/apply 的候选渲染、export 和 target check 仍检查当前 freshness。
+
 常用参数：
 
 - `--tool claude-code|opencode`
@@ -37,6 +51,7 @@ bash scripts/devkit.sh install rollback --receipt /tmp/adk-live/.adk-install-rec
 - `--target <path>`
 - `--output <plan.json>`
 - `--ttl-minutes <n>`
+- `plan/apply/rollback --previous-source <directory>`：产生前序 receipt 的受审查精确源码。
 - `apply/rollback --lock-timeout <seconds>`：等待同一 target 的 active writer，最大 300 秒。
 
 ## validate
@@ -64,7 +79,7 @@ bash scripts/devkit.sh manifest composition-check --summary-json
 
 ## doctor
 
-只读检查 manifest、Python 3.11+、固定 PyYAML/jsonschema 版本、runtime 安装与认证、CLI 版本、target 可写性和 writer lock 状态。输出只包含状态，不读取或打印凭证值；解释器或依赖不在发布支持基线时返回失败。
+只读检查 manifest、Python 3.8+、固定 PyYAML/jsonschema 版本、runtime 安装与认证、CLI 版本、target 可写性和 writer lock 状态。Python 3.8/3.9 对应 `jsonschema==4.17.3`，Python 3.10+ 对应 `jsonschema==4.26.0`。输出只包含状态，不读取或打印凭证值；解释器或依赖不在发布支持基线时返回失败。
 
 ```bash
 bash scripts/devkit.sh doctor --summary-json
@@ -387,7 +402,7 @@ bash scripts/devkit.sh release publish --version "$VERSION" --backend github --a
 
 `release build` 默认要求 source distribution 对应 clean Git commit，并把 commit、tree、dirty 状态和 source distribution digest 写入制品。只有隔离测试快照可显式使用 `--allow-unbound-snapshot`；该制品会标记 `release_eligible=false`，不得进入 rehearsal、publish 或 Software M5 release evidence。
 
-`release rehearse` 只接受 checksum 匹配、满足当前 strict source/release contract 且 candidate 版本更高的本地 artifact；它在临时 target 安装上一版、升级候选版、核验 receipt，再回滚并比较上一版受管资产 hash。pre-contract/legacy bundle 与缺少当前必填 target contract 字段的 artifact 会直接 fail closed，不提供 release-only migration boundary。candidate 回滚后直接恢复并逐文件比对上一版 managed hashes，证明 rollback anchor 可用。build 在归档前校验 SPDX 2.3 SBOM 的 package/relationship 完整性并把 SBOM SHA256 写入 release manifest；GitHub release workflow 使用 SHA-pinned `actions/attest` 为 tarball 生成 provenance。该命令不创建 tag、不上传制品、不调用远端 backend。rehearsal、runtime smoke、timing 和 campaign state 属于 checkout 内的验证证据，不进入 source distribution，避免制品 SHA 与其自身验证报告形成循环依赖。
+`release rehearse` 只接受 checksum 匹配、满足当前 strict source/release contract 且 candidate 版本更高的本地 artifact；它在临时 target 安装上一版、升级候选版、核验 receipt，再回滚并比较上一版受管资产 hash、权限 mode 与原 receipt 字节。升级与恢复分别使用 artifact 中已验证的 candidate/previous 源码。pre-contract/legacy bundle 与缺少当前必填 target contract 字段的 artifact 会直接 fail closed，不提供 release-only migration boundary；演练中的两次新安装仍要求当下 target freshness。build 在归档前校验 SPDX 2.3 SBOM 的 package/relationship 完整性并把 SBOM SHA256 写入 release manifest；GitHub release workflow 使用 SHA-pinned `actions/attest` 为 tarball 生成 provenance。该命令不创建 tag、不上传制品、不调用远端 backend。rehearsal、runtime smoke、timing 和 campaign state 属于 checkout 内的验证证据，不进入 source distribution，避免制品 SHA 与其自身验证报告形成循环依赖。
 
 `release runtime-build` 按显式 Profile 构建 `adk-runtime-bundle/v1`，只包含版本化 Skill support tree、bundle manifest、逐文件 checksum、许可证和 SPDX SBOM。它是供外部 handoff target 导入的 platform-neutral Runtime Bundle，不是 Codex direct export；制品不包含 ADK Python 实现、测试、内部 change evidence 或 source distribution，也不会写任何运行目录。
 

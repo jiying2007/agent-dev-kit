@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import re
 import shutil
+import stat
 import subprocess
 import tempfile
 from pathlib import Path
@@ -465,6 +466,9 @@ def rehearse_release(previous_artifact: Path, candidate_artifact: Path) -> Dict[
         write_plan(previous_plan, previous_plan_path)
         previous_apply = apply_plan(previous_manifest, previous_plan_path)
         previous_hashes = _release_artifacts._managed_hashes(target)
+        previous_modes = {name: stat.S_IMODE((target / name).stat().st_mode) for name in previous_hashes}
+        previous_receipt_bytes = (target / RECEIPT_NAME).read_bytes()
+        previous_receipt_mode = stat.S_IMODE((target / RECEIPT_NAME).stat().st_mode)
 
         candidate_plan_path = workspace / "candidate-plan.json"
         candidate_plan = create_plan(
@@ -474,22 +478,30 @@ def rehearse_release(previous_artifact: Path, candidate_artifact: Path) -> Dict[
             [candidate_manifest.default_profile],
             [],
             "copy",
+            previous_manifest=previous_manifest,
         )
         if candidate_plan["status"] != "ready":
             raise ManifestError("candidate release upgrade plan is not ready")
         write_plan(candidate_plan, candidate_plan_path)
-        candidate_apply = apply_plan(candidate_manifest, candidate_plan_path)
+        candidate_apply = apply_plan(
+            candidate_manifest, candidate_plan_path, previous_manifest=previous_manifest
+        )
         candidate_receipt = json.loads((target / RECEIPT_NAME).read_text(encoding="utf-8"))
         if candidate_receipt.get("manifest_version") != candidate_manifest.version:
             raise ManifestError("candidate receipt version does not match release")
 
-        rollback_result = rollback(target / RECEIPT_NAME)
-        restored_receipt = json.loads((target / RECEIPT_NAME).read_text(encoding="utf-8"))
+        rollback_result = rollback(
+            target / RECEIPT_NAME, manifest=candidate_manifest, previous_manifest=previous_manifest
+        )
+        restored_receipt_bytes = (target / RECEIPT_NAME).read_bytes()
         restored_hashes = _release_artifacts._managed_hashes(target)
-        if restored_receipt.get("manifest_version") != previous_manifest.version:
+        restored_modes = {name: stat.S_IMODE((target / name).stat().st_mode) for name in restored_hashes}
+        if restored_receipt_bytes != previous_receipt_bytes:
             raise ManifestError("rollback did not restore the previous receipt")
         if restored_hashes != previous_hashes:
             raise ManifestError("rollback did not restore the previous managed asset hashes")
+        if restored_modes != previous_modes or stat.S_IMODE((target / RECEIPT_NAME).stat().st_mode) != previous_receipt_mode:
+            raise ManifestError("rollback did not restore the previous managed permission modes")
         result = {
             "schema_version": 3,
             "status": "pass",

@@ -128,4 +128,6 @@ grep -q "vendor-specific-runtime" "$TMP_DIR/platform.err" || {
   exit 1
 }
 
-echo "[PASS] canonical transactional installer only accepts receipt v3"
+python3 "$ROOT_DIR/tests/test_install_upgrade.py" InstallUpgradeTest
+
+echo "[PASS] canonical transactional installer preserves source authority across version upgrades"
