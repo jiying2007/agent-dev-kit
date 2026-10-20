@@ -22,6 +22,8 @@ def create_plan(
     mode: str,
     ttl_minutes: int = 60,
     asset_kind: Optional[str] = None,
+    *,
+    previous_manifest: Optional[Manifest] = None,
 ) -> Dict[str, Any]:
     if mode != "copy":
         if mode == "symlink":
@@ -36,7 +38,7 @@ def create_plan(
     active_receipt_sha256: Optional[str] = None
     managed: Dict[str, Mapping[str, Any]] = {}
     if existing_receipt:
-        verify_receipt_inventory(manifest, existing_receipt)
+        verify_receipt_inventory(previous_manifest or manifest, existing_receipt)
         if existing_receipt.get("target") != str(target):
             raise ManifestError("existing install receipt target does not match its location")
         if existing_receipt.get("tool") != tool:
@@ -124,7 +126,12 @@ def write_plan(plan: Mapping[str, Any], output: Path) -> None:
     install_contract._write_document(text, output)
 
 
-def validate_plan(manifest: Manifest, plan: Mapping[str, Any]) -> Tuple[Path, RenderedBundle]:
+def validate_plan(
+    manifest: Manifest,
+    plan: Mapping[str, Any],
+    *,
+    previous_manifest: Optional[Manifest] = None,
+) -> Tuple[Path, RenderedBundle]:
     if plan.get("schema") != install_contract.PLAN_SCHEMA:
         raise ManifestError(
             "unsupported install plan schema: {}; regenerate with install plan".format(
@@ -186,7 +193,7 @@ def validate_plan(manifest: Manifest, plan: Mapping[str, Any]) -> Tuple[Path, Re
             raise ManifestError("active install receipt appeared after plan creation")
     else:
         current_receipt = install_contract._read_receipt(receipt_path, "active install receipt")
-        verify_receipt_inventory(manifest, current_receipt)
+        verify_receipt_inventory(previous_manifest or manifest, current_receipt)
         if current_receipt.get("target") != str(target) or current_receipt.get("tool") != tool:
             raise ManifestError("active install receipt identity changed after plan creation")
         if sha256_file(receipt_path) != active_receipt_sha256:

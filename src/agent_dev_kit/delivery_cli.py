@@ -13,6 +13,7 @@ from .compiler import export_assets
 from .installation_plan import create_plan, write_plan
 from .installation_transaction import apply_plan, rollback
 from .locking import clear_target_lock, target_lock_status
+from .model import Manifest
 from .release import (
     build_release,
     build_runtime_bundle,
@@ -88,7 +89,13 @@ def _cmd_install(argv: Sequence[str]) -> int:
     undo.add_argument("--receipt", required=True)
     undo.add_argument("--lock-timeout", type=float, default=0.0)
     undo.add_argument("--summary-json", action="store_true")
+    for command in (plan, apply, undo):
+        command.add_argument(
+            "--previous-source",
+            help="reviewed exact source directory for the previous installed receipt",
+        )
     args = parser.parse_args(argv)
+    previous_manifest = Manifest.load(Path(args.previous_source)) if args.previous_source else None
     if args.action == "plan":
         manifest = _manifest()
         profiles = [args.profile or manifest.default_profile] + args.extra_profile
@@ -101,6 +108,7 @@ def _cmd_install(argv: Sequence[str]) -> int:
             args.mode,
             args.ttl_minutes,
             args.asset_kind,
+            previous_manifest=previous_manifest,
         )
         write_plan(result, Path(args.output))
         if args.summary_json:
@@ -117,9 +125,14 @@ def _cmd_install(argv: Sequence[str]) -> int:
         return 0 if result["status"] == "ready" else 2
     if args.action == "apply":
         manifest = _manifest()
-        result = apply_plan(manifest, Path(args.plan).resolve(), args.lock_timeout)
+        result = apply_plan(
+            manifest, Path(args.plan).resolve(), args.lock_timeout, previous_manifest=previous_manifest
+        )
     else:
-        result = rollback(Path(args.receipt).resolve(), args.lock_timeout, manifest=_manifest())
+        result = rollback(
+            Path(args.receipt).resolve(), args.lock_timeout, manifest=_manifest(),
+            previous_manifest=previous_manifest,
+        )
     if args.summary_json:
         _json(result)
     else:

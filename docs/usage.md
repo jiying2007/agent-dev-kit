@@ -4,7 +4,7 @@
 
 完整使用指南见 `docs/adk-usage-guide.md`；本文保留为常用命令速查。
 
-发布支持环境为 Python 3.11+，固定运行依赖为 `PyYAML==6.0.3` 与 `jsonschema==4.26.0`。发布前安装 `.[quality]` 并执行 Ruff 与 pip-audit；工具缺失或审计源不可用时不得声称质量门禁通过。
+发布支持环境为 Python 3.8+，固定运行依赖为 `PyYAML==6.0.3`；Python 3.8/3.9 使用 `jsonschema==4.17.3`，Python 3.10+ 使用 `jsonschema==4.26.0`。发布前安装 `.[quality]` 并执行 Ruff 与 pip-audit；工具缺失或审计源不可用时不得声称质量门禁通过。
 
 升级现有自定义 manifest 时，先执行 `bash scripts/devkit.sh validate --strict`。关键 nested object 已改为 typed schema，旧的未知扩展字段、字符串冒充数组/布尔值以及缺失必填项会 fail closed；应按 `manifests/manifest.schema.json` 迁移。确需保留的产品级扩展元数据应移动到顶层 `x-<name>` namespace，不能通过放宽核心 schema 保留未声明行为。
 
@@ -70,6 +70,12 @@ bash scripts/devkit.sh install plan --tool claude-code --target /tmp/adk-claude-
 bash scripts/devkit.sh install apply --plan /tmp/adk-plan.json
 bash scripts/devkit.sh install rollback --receipt /tmp/adk-claude-target/.adk-install-receipt.json
 ```
+
+跨版本升级时，在候选源码下执行 plan/apply，并为两步显式传入 `--previous-source /reviewed/previous-adk-source`；该目录必须是产生当前 receipt 的已审查精确源码。回滚升级也在候选源码下执行，并用相同参数验证将恢复的旧 receipt 与备份。首次安装或同版本重装可省略此参数。保留候选与旧版源码，直到不再需要对应回滚。
+
+旧源码仍需满足当前 manifest/target 合同，并可由当前受信 renderer 重现；该参数不会动态执行旧源码中的 Python，也不提供任意历史版本迁移。恢复 A 后若需继续回滚 A，可用已安装的新版 `adk` 命令并设置 `ADK_ROOT=/reviewed/adk-a` 选择 A 资产来源；必要时再提供 A 的前序来源。
+
+历史库存恢复保留 manifest/contract、逐文件内容和 mode 校验；target 文档自然到期不会使已安装资产失去恢复依据。新安装、导出和 target 检查仍要求当前文档未到期，恢复不续期文档或改变 runtime/native 资格。
 
 export 用于生成 target 格式的确定性交付目录：
 

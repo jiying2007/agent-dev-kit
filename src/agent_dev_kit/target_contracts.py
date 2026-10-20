@@ -390,6 +390,20 @@ def _validate_native_conformance_evidence(
 
 
 def load_target_contract(manifest: Manifest, target: str) -> TargetContract:
+    return _load_target_contract(manifest, target, historical=False)
+
+
+def _load_historical_target_contract(manifest: Manifest, target: str) -> TargetContract:
+    """Reproduce trusted installed assets without renewing target freshness.
+
+    Receipt timestamps are mutable, so they cannot establish a trusted clock.
+    Recovery retains all structural and native trust checks and only separates
+    natural source expiry from admission of a new install/export operation.
+    """
+    return _load_target_contract(manifest, target, historical=True)
+
+
+def _load_target_contract(manifest: Manifest, target: str, *, historical: bool) -> TargetContract:
     config = manifest.target(target)
     raw_path = config.get("contract")
     if not isinstance(raw_path, str) or not raw_path:
@@ -425,7 +439,7 @@ def load_target_contract(manifest: Manifest, target: str) -> TargetContract:
                 MAX_SOURCE_AGE_DAYS, target
             )
         )
-    if expires_at < date.today():
+    if not historical and expires_at < date.today():
         raise ManifestError(
             "target_contract_stale: target={} expires_at={}".format(target, expires_at.isoformat())
         )

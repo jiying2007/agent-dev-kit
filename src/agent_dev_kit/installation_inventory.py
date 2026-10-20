@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Any, Mapping, Set
 
 from .model import Manifest, ManifestError, sha256_file
-from .targets import RenderedBundle, render_selection
+from .targets import RenderedBundle, _render_historical_selection
 
 
 def verify_receipt_inventory(manifest: Manifest, receipt: Mapping[str, Any]) -> RenderedBundle:
@@ -17,6 +17,7 @@ def verify_receipt_inventory(manifest: Manifest, receipt: Mapping[str, Any]) -> 
     A receipt SHA-256 proves only that its local JSON has been consistently
     rewritten. It cannot authorize deletion of file paths named in that JSON.
     Operators must use the exact source version that produced the receipt.
+    Historical reproduction does not renew target freshness or native status.
     """
     if receipt.get("manifest_version") != manifest.version or receipt.get("manifest_sha256") != manifest.digest:
         raise ManifestError("rollback receipt does not match the trusted ADK manifest identity")
@@ -33,7 +34,7 @@ def verify_receipt_inventory(manifest: Manifest, receipt: Mapping[str, Any]) -> 
         or asset_kind not in (None, "agent", "skill")
     ):
         raise ManifestError("rollback receipt has invalid asset selection")
-    bundle = render_selection(manifest, tool, profiles, optional_skills, asset_kind)
+    bundle = _render_historical_selection(manifest, tool, profiles, optional_skills, asset_kind)
     if (
         receipt.get("contract_sha256") != bundle.contract.digest
         or receipt.get("profiles") != list(bundle.resolution.profiles)
@@ -78,7 +79,7 @@ def _mode_matches(actual_mode: int, declared_mode: int, os_family: str) -> bool:
     return stat.S_IMODE(actual_mode) == declared_mode
 
 
-def verify_managed_file_mode(path: Path, declared_mode: str, label: str) -> None:
+def verify_managed_file_mode(path: Path, declared_mode: object, label: str) -> None:
     """Compare the on-disk regular file mode, not only the content SHA-256.
 
     sha256_tree intentionally hashes file bytes, excluding POSIX permission

@@ -28,6 +28,7 @@ from .target_contracts import (
     TargetContract as TargetContract,
     TargetUsageError as TargetUsageError,
     _authority_digest as _authority_digest,
+    _load_historical_target_contract,
     _native_contract_digest as _native_contract_digest,
     _validate_native_conformance_evidence as _validate_native_conformance_evidence,
     load_target_contract as load_target_contract,
@@ -245,7 +246,32 @@ def render_selection(
 ) -> RenderedBundle:
     if asset_kind is not None and asset_kind not in ASSET_KINDS:
         raise TargetUsageError("unknown_asset_kind: {}".format(asset_kind))
-    contract = load_target_contract(manifest, target)
+    return _render_selection(
+        manifest, load_target_contract(manifest, target), profiles, optional_skills, asset_kind
+    )
+
+
+def _render_historical_selection(
+    manifest: Manifest,
+    target: str,
+    profiles: Sequence[str],
+    optional_skills: Sequence[str],
+    asset_kind: Optional[str],
+) -> RenderedBundle:
+    """Internal receipt inventory reproduction; never current target admission."""
+    return _render_selection(
+        manifest, _load_historical_target_contract(manifest, target), profiles, optional_skills, asset_kind
+    )
+
+
+def _render_selection(
+    manifest: Manifest,
+    contract: TargetContract,
+    profiles: Sequence[str],
+    optional_skills: Sequence[str],
+    asset_kind: Optional[str],
+) -> RenderedBundle:
+    target = contract.name
     resolution = manifest.resolve_profiles(profiles, optional_skills)
     assets = tuple(list(resolution.agents) + list(resolution.skills))
     if asset_kind is not None:

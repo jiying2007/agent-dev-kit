@@ -112,3 +112,5 @@ with tempfile.TemporaryDirectory() as temp:
 
 print("[PASS] canonical Python release control plane and release manifest identities are fail-closed")
 PY
+
+python3 tests/test_install_upgrade.py ReleaseUpgradeRehearsalTest
