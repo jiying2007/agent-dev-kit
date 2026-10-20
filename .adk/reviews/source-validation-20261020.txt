@@ -1,0 +1,52 @@
+COMMAND: bash tests/test_review_evidence.sh
+...........................................
+----------------------------------------------------------------------
+Ran 43 tests in 1.749s
+
+OK
+EXIT: 0
+
+COMMAND: bash tests/test_archive_restore.sh
+........
+----------------------------------------------------------------------
+Ran 8 tests in 0.629s
+
+OK
+EXIT: 0
+
+COMMAND: bash tests/test_skill_sop_quality.sh
+test_bsp_porting_exposes_flash_and_storage_escalation (tests.test_skill_governance.SkillGovernanceTests.test_bsp_porting_exposes_flash_and_storage_escalation) ... ok
+test_driver_bringup_exposes_live_device_escalation_without_granting_it (tests.test_skill_governance.SkillGovernanceTests.test_driver_bringup_exposes_live_device_escalation_without_granting_it) ... ok
+test_driver_implementation_declares_runtime_model_and_live_device_handoff (tests.test_skill_governance.SkillGovernanceTests.test_driver_implementation_declares_runtime_model_and_live_device_handoff) ... ok
+test_e1_requires_explicit_low_risk_and_workspace_boundary (tests.test_skill_governance.SkillGovernanceTests.test_e1_requires_explicit_low_risk_and_workspace_boundary) ... ok
+test_effort_is_a_conservative_route_projection_not_a_permission (tests.test_skill_governance.SkillGovernanceTests.test_effort_is_a_conservative_route_projection_not_a_permission) ... ok
+test_embedded_skills_do_not_embed_unauthorized_live_mutation_commands (tests.test_skill_governance.SkillGovernanceTests.test_embedded_skills_do_not_embed_unauthorized_live_mutation_commands) ... ok
+test_field_readiness_stays_read_only (tests.test_skill_governance.SkillGovernanceTests.test_field_readiness_stays_read_only) ... ok
+test_high_risk_falsification_and_legal_e1_change_contract (tests.test_skill_governance.SkillGovernanceTests.test_high_risk_falsification_and_legal_e1_change_contract) ... ok
+test_manifest_has_no_legacy_dependency_metadata (tests.test_skill_governance.SkillGovernanceTests.test_manifest_has_no_legacy_dependency_metadata) ... ok
+test_profiling_requires_valid_comparable_alternating_ab (tests.test_skill_governance.SkillGovernanceTests.test_profiling_requires_valid_comparable_alternating_ab) ... ok
+test_realtime_skills_use_target_budgets_not_fixed_thresholds (tests.test_skill_governance.SkillGovernanceTests.test_realtime_skills_use_target_budgets_not_fixed_thresholds) ... ok
+test_release_orchestration_requires_separate_publish_and_device_authority (tests.test_skill_governance.SkillGovernanceTests.test_release_orchestration_requires_separate_publish_and_device_authority) ... ok
+test_requirements_supporting_trigger_promotes_only_to_requirements_primary (tests.test_skill_governance.SkillGovernanceTests.test_requirements_supporting_trigger_promotes_only_to_requirements_primary) ... ok
+test_review_routing_uses_review_loop_not_language_overlay (tests.test_skill_governance.SkillGovernanceTests.test_review_routing_uses_review_loop_not_language_overlay) ... ok
+test_routing_primaries_resolve_to_primary_runtime_role (tests.test_skill_governance.SkillGovernanceTests.test_routing_primaries_resolve_to_primary_runtime_role) ... ok
+test_supporting_implicit_promotion_has_exactly_one_same_group_primary (tests.test_skill_governance.SkillGovernanceTests.test_supporting_implicit_promotion_has_exactly_one_same_group_primary) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 0.207s
+
+OK
+[PASS] skill SOP quality + terminal governance
+EXIT: 0
+
+COMMAND: bash tests/test_change_governance.sh
+[OK] proposed: /tmp/tmp.jBBhjGxW4b/changes/governance-smoke
+[PASS] change governance checks passed: /tmp/tmp.jBBhjGxW4b/changes/governance-smoke
+[PASS] change governance checks passed: /tmp/tmp.jBBhjGxW4b/changes/governance-smoke
+[PASS] change governance checks passed: /workspace/scratch/77add259d49b/agent-dev-kit/docs/changes/archive/20261020-20261016-skill-catalog-competition
+[PASS] change governance checks passed: /workspace/scratch/77add259d49b/agent-dev-kit/docs/changes/archive/20261020-20261016-effort-evidence-v1
+[PASS] change governance checks passed: /workspace/scratch/77add259d49b/agent-dev-kit/docs/changes/archive/20261020-20261016-skill-description-discovery
+[PASS] change governance
+EXIT: 0
+
+COMPLETED_AT: 2026-10-20T12:01:13.160921Z

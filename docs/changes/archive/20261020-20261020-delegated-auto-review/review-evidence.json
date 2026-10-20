@@ -1,0 +1,79 @@
+{
+  "schema": "adk-review-evidence/v1",
+  "subject_id": "20261020-delegated-auto-review",
+  "scope": "source-change",
+  "owner": "leiwenjun",
+  "author_id": "ai/root",
+  "reviewer": {
+    "id": "ai/root/external_methods",
+    "kind": "ai",
+    "independence": "independent"
+  },
+  "reviewed_at": "2026-10-20T12:06:41Z",
+  "evidence_completed_at": "2026-10-20T12:01:13.160921Z",
+  "verdicts": {
+    "spec": "pass",
+    "quality": "pass"
+  },
+  "findings": [],
+  "limitations": [
+    "Independent AI source review under the actual owner delegation; no human review or platform identity authentication is asserted.",
+    "The frozen original source and full Git patch are reviewed. Subsequent protected CI, immutable component release and exact Root promotion remain separate mandatory delivery evidence.",
+    "No Native provider execution, signed G22 observation, LTA field event, or Product M5 release authorization is created by this source review."
+  ],
+  "policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+  "validator_sha256": {
+    "src/agent_dev_kit/review_evidence.py": "73d85e864a3da125bf94808f19616f52150751a94ccc729ac66f66d2576b8808",
+    "src/agent_dev_kit/strict_json.py": "e11233b8d02d7fb95a8f2f93bfff065a1db84c4ef0820fef6d817600abe8ec98",
+    "src/agent_dev_kit/readiness_evidence.py": "ef980657486084eea8ab8a03ab357a76a3ed43691aca8d6909b06642764c808b"
+  },
+  "target": {
+    "base_commit": "a17e7e61a01845cc1b1165c9f9137b689bb2e1de",
+    "head_commit": "56b8aaffb5395a8fb080bf298857ed8573c06380",
+    "original_patch_sha256": "8b56e9f4340f2cb8d26239c87f2eef47cffba89cc1df9b121f3ccebde0954b97"
+  },
+  "sources": [
+    {
+      "base": "record",
+      "path": "evidence/original.patch",
+      "sha256": "8b56e9f4340f2cb8d26239c87f2eef47cffba89cc1df9b121f3ccebde0954b97"
+    },
+    {
+      "base": "record",
+      "path": "proposal.md",
+      "sha256": "c882d6b7a8fa47d6de051e1f53b7ad585b17d188a514512b7d5852c1e336155b"
+    },
+    {
+      "base": "record",
+      "path": "design.md",
+      "sha256": "4b9c6fd1e90219b5a382f0031f89f6225962ae75c1287b680a337bb0ea0be114"
+    },
+    {
+      "base": "record",
+      "path": "requirements.md",
+      "sha256": "07dbed35bbcbfdc4ca563ce1ef6980d5f185bd800e646e0f017fde7f56955a1b"
+    }
+  ],
+  "evidence": [
+    {
+      "base": "record",
+      "path": "review-findings.md",
+      "sha256": "530355e16a3070b339ecc4228a77af5b672df4edced8c24e4d1457bc37050034"
+    },
+    {
+      "base": "record",
+      "path": "negative-results.md",
+      "sha256": "afa76afc5a75447fa2d71a17094d13c9f083a73dee5fe58e6a6769399218ef1e"
+    },
+    {
+      "base": "record",
+      "path": "verify-report.md",
+      "sha256": "2216bc2a762cabdbdad06cda0254d8b948a71476d7f5a8bc7a05a970bc2ab576"
+    },
+    {
+      "base": "repository",
+      "path": ".adk/reviews/source-validation-20261020.txt",
+      "sha256": "27b4913a046fa16360e12d2273aa75f5aba36a2c505fbd246a171a65505b4bd4"
+    }
+  ]
+}
