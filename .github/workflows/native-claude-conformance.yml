@@ -65,6 +65,7 @@ jobs:
           fetch-depth: 1
 
       - name: Verify exact dispatched source identity
+        id: source_identity
         shell: bash
         run: |
           set -euo pipefail
@@ -72,6 +73,7 @@ jobs:
           test -z "$(git status --porcelain=v1 --untracked-files=all)"
 
       - name: Set up Python
+        id: python
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: '3.12'
@@ -79,11 +81,13 @@ jobs:
           cache-dependency-path: pyproject.toml
 
       - name: Set up Node
+        id: node
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: '22'
 
       - name: Install Cosign
+        id: cosign
         uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
         with:
           cosign-release: v3.1.3
@@ -111,6 +115,7 @@ jobs:
           } >> "$GITHUB_OUTPUT"
 
       - name: Provision noninteractive user-level API-key helper
+        id: credentials
         shell: bash
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -145,6 +150,7 @@ jobs:
           chmod 600 "$HOME/.claude/settings.json"
 
       - name: Authenticate Claude Code noninteractively
+        id: authenticate
         shell: bash
         env:
           RUNTIME_BIN: ${{ steps.runtime.outputs.runtime_bin }}
@@ -226,6 +232,7 @@ jobs:
           } >> "$GITHUB_OUTPUT"
 
       - name: Prepare semantic-v2 native campaign
+        id: prepare
         shell: bash
         env:
           RUNTIME_BIN: ${{ steps.runtime.outputs.runtime_bin }}
@@ -238,6 +245,7 @@ jobs:
           bash scripts/devkit.sh native-campaign prepare             --target claude-code             --profile core             --runtime-binary "$RUNTIME_BIN"             --runtime-version "$RUNTIME_VERSION"             --authority-id github-oidc-native-conformance             --execution-authority human-approved             --verification-backend ci-provenance-verifier             --auth-mode home             --timeout-seconds 180             --commands-json "$COMMANDS"             --assertions-json "$ASSERTIONS"             --receipt-path reports/runtime/claude-native-g21.json             --plan-out "$RUNNER_TEMP/g21-native/plan.json"             --candidate-contract-out "$RUNNER_TEMP/g21-native/candidate-contract.json"             --summary-json             > "$RUNNER_TEMP/g21-native/prepare-summary.json"
 
       - name: Run semantic-v2 native campaign
+        id: campaign_run
         shell: bash
         env:
           RUNTIME_BIN: ${{ steps.runtime.outputs.runtime_bin }}
@@ -248,12 +256,14 @@ jobs:
           bash scripts/devkit.sh native-campaign run             --plan "$RUNNER_TEMP/g21-native/plan.json"             --candidate-contract "$RUNNER_TEMP/g21-native/candidate-contract.json"             --commands-json "$COMMANDS"             --assertions-json "$ASSERTIONS"             --runtime-binary "$RUNTIME_BIN"             --evidence-out "$RUNNER_TEMP/g21-native/evidence.json"             --summary-json             > "$RUNNER_TEMP/g21-native/run-summary.json"
 
       - name: Finalize unsigned native receipt candidate
+        id: finalize
         shell: bash
         run: |
           set -euo pipefail
           bash scripts/devkit.sh native-campaign finalize             --plan "$RUNNER_TEMP/g21-native/plan.json"             --candidate-contract "$RUNNER_TEMP/g21-native/candidate-contract.json"             --evidence "$RUNNER_TEMP/g21-native/evidence.json"             --receipt-out reports/runtime/claude-native-g21.json             --final-contract-out "$RUNNER_TEMP/g21-native/final-contract.json"             --summary-json             > "$RUNNER_TEMP/g21-native/finalize-summary.json"
 
       - name: Sign exact canonical native receipt with GitHub OIDC
+        id: sign
         shell: bash
         env:
           COSIGN_YES: 'true'
@@ -270,6 +280,7 @@ jobs:
           cosign verify-blob             --bundle "$RUNNER_TEMP/g21-native/receipt.sigstore.json"             --certificate-identity "https://github.com/jiying2007/agent-dev-kit/.github/workflows/native-claude-conformance.yml@refs/heads/main"             --certificate-oidc-issuer "https://token.actions.githubusercontent.com"             /tmp/g21-native-receipt-canonical.json
 
       - name: Build managed trust registry candidate and verify production loader
+        id: loader
         shell: bash
         run: |
           set -euo pipefail
@@ -376,6 +387,7 @@ jobs:
           PY
 
       - name: Package retained candidate evidence
+        id: package
         shell: bash
         run: |
           set -euo pipefail
@@ -415,9 +427,39 @@ jobs:
           PY
 
       - name: Upload candidate native conformance package
+        id: candidate_upload
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: g21-claude-native-candidate-${{ github.sha }}
           path: ${{ runner.temp }}/g21-native
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Collect bounded failed-campaign diagnostics
+        id: failure_diagnostics
+        if: ${{ failure() && steps.source_identity.outcome == 'success' && steps.python.outcome == 'success' && steps.runtime.outcome == 'success' }}
+        timeout-minutes: 2
+        shell: bash
+        env:
+          PHASES_JSON: >-
+            {"source":"${{ steps.source_identity.outcome }}","python":"${{ steps.python.outcome }}","node":"${{ steps.node.outcome }}","cosign":"${{ steps.cosign.outcome }}","runtime":"${{ steps.runtime.outcome }}","credentials":"${{ steps.credentials.outcome }}","authenticate":"${{ steps.authenticate.outcome }}","inputs":"${{ steps.inputs.outcome }}","prepare":"${{ steps.prepare.outcome }}","run":"${{ steps.campaign_run.outcome }}","finalize":"${{ steps.finalize.outcome }}","sign":"${{ steps.sign.outcome }}","loader":"${{ steps.loader.outcome }}","package":"${{ steps.package.outcome }}","upload":"${{ steps.candidate_upload.outcome }}"}
+        run: |
+          set -euo pipefail
+          python -m agent_dev_kit.native_campaign_diagnostics \
+            --root "$GITHUB_WORKSPACE" \
+            --campaign-dir "$RUNNER_TEMP/g21-native" \
+            --output-dir "$RUNNER_TEMP/g21-native-diagnostics" \
+            --source-sha "$GITHUB_SHA" \
+            --run-id "$GITHUB_RUN_ID" \
+            --run-attempt "$GITHUB_RUN_ATTEMPT" \
+            --phases-json "$PHASES_JSON"
+
+      - name: Upload failed-campaign diagnostics only
+        if: ${{ failure() && steps.failure_diagnostics.outcome == 'success' }}
+        timeout-minutes: 2
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: g21-claude-native-failed-diagnostics-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/g21-native-diagnostics/diagnostics.json
           if-no-files-found: error
           retention-days: 90

@@ -100,6 +100,16 @@ The hosted lane never writes the active trust registry or target contract, never
 
 The workflow uses explicit project Skill invocation for discovery/load checks and a natural-task trigger check. The semantic canaries are independent from the command argv, so exit-zero or prompt echo alone cannot satisfy the campaign.
 
+### Retained failure diagnostics
+
+After exact-source verification, Python setup and runtime installation succeed, a later workflow failure can upload `g21-claude-native-failed-diagnostics-SHA-RUN-ATTEMPT`. The original failing step and job remain failed. The collector and uploader each have a two-minute limit; neither retries a provider call or continues finalization, signing or promotion. Earlier bootstrap failures remain in the ordinary job logs because the trusted diagnostic runtime is not ready.
+
+The failure artifact contains only `diagnostics.json`, with schema `adk-native-hosted-campaign-diagnostics/v1` and status `failed-campaign-diagnostics`. It records the exact source and workflow run identity, last successful phase, failed phases, explicit not-run phases, and available validated Native observations. A phase that attempted execution without an accepted observation file is `evidence-unavailable`. A later signing failure may retain three passing observations while the overall artifact and workflow remain failed.
+
+The collector inspects only six fixed JSON filenames: `plan.json`, `evidence.json`, `prepare-summary.json`, `run-summary.json`, `finalize-summary.json` and `production-loader.json`. Each is limited to 1 MiB and must be a regular file under a path without symlink components. Ambiguous or malformed JSON, excessive nesting, unknown schema fields and unsafe files produce fixed rejection codes. Accepted files contribute only bounded numeric fields, SHA-256 digests and known status/reason enums. Free-form error messages, runtime identifiers, environment text and paths are withheld, including when the input schema permits those strings. The artifact is limited to 64 KiB and is written into a new private directory.
+
+No raw input file, command, assertion, stdout/stderr, credential, auth helper, user setting, receipt, signature or registry candidate is copied into failure diagnostics. The collector does not enumerate runner-temporary files. It creates no Native qualification evidence and always reports `lifecycle_authority=none-diagnostics-only`, `release_authorized=false` and no target or registry promotion. A successful collection means that diagnostic metadata was retained; it cannot close G21 or replace a real successful campaign, signed receipt, production-loader verification and Owner review.
+
 
 ## Project layout authority
 

@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### 8.0.35 source candidate
+- Preserve bounded, sanitized native campaign failure diagnostics after an actual failed run so hosted evidence remains available after the runner is removed.
+- Separate diagnostic collection from conformance signing and promotion; retain failed/skipped stage outcomes and exact source identity without creating runtime, Owner or release authority.
+- Cover absent, malformed, oversized and unsafe diagnostic inputs with deterministic regressions; upload only explicitly allowlisted diagnostic artifacts.
+- Keep the Python 3.8/3.11/3.12 support matrix, immutable component release, exact Root promotion and all real Native, effect, field and human review requirements.
+
 ### 8.0.34 source candidate
 - Separate trusted installed-source and candidate-source authority for cross-version installation plans, application and rollback; retain receipt, rendered inventory, path and backup integrity checks.
 - Restore release rehearsal's complete previous-install, candidate-upgrade and rollback path, including the required manifest binding and previous file modes.
