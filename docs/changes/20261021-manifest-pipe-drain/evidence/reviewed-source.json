@@ -1,0 +1,100 @@
+{
+  "reviewed_file_list_sha256": "569b96b478cb4bed1ae28541a219a5a32a9eaf0be0ffeb3b97d2f5e10a3436e9",
+  "files": [
+    {
+      "path": ".version-lock",
+      "bytes": 67,
+      "sha256": "2cb24d3626bc600d991589dcab486ac8437a1098b96ad1015204e43b9866cb08"
+    },
+    {
+      "path": "CONTEXT.md",
+      "bytes": 8642,
+      "sha256": "145aec42f91599fde0523a0a0f0dee45ced1bef0d81185b8b3d7ef96c94c21f5"
+    },
+    {
+      "path": "README.md",
+      "bytes": 8353,
+      "sha256": "3330061fa5f2192485547d573e008626ac4cef80571ac7a8137a8f63cfcd3f02"
+    },
+    {
+      "path": "docs/changes/20261021-manifest-pipe-drain/design.md",
+      "bytes": 1561,
+      "sha256": "a000295f5e0c98257c39b3cdffd79aa2b8322846376c87e561adddc13ba6f4f9"
+    },
+    {
+      "path": "docs/changes/20261021-manifest-pipe-drain/negative-results.md",
+      "bytes": 2467,
+      "sha256": "8a754b59eb5b348c2a6df57efbc77f52eb1da6bce5d27f457b9121e0dcbcbd24"
+    },
+    {
+      "path": "docs/changes/20261021-manifest-pipe-drain/requirements.md",
+      "bytes": 1529,
+      "sha256": "f51bc4cd884d096d714aa96224784deb299f0df1419056159e33dd5a8289ff2a"
+    },
+    {
+      "path": "docs/changes/20261021-manifest-pipe-drain/tasks.md",
+      "bytes": 515,
+      "sha256": "cc3f2f7709edc7b70bd30ebc7e10fa8710b26ee55c04f0c1fabe54f5da4f31f1"
+    },
+    {
+      "path": "manifest.json",
+      "bytes": 87959,
+      "sha256": "4d461230023fb139a7f15e8d86370f715bfb43784a2bcabbbfc1f4226b4a5499"
+    },
+    {
+      "path": "manifests/software_m5_eval_contract.json",
+      "bytes": 705,
+      "sha256": "00f2d70bf0d65176e3e5fa76f4ae0c62d69c3aee4962bea7ad21f9870b6f8ad9"
+    },
+    {
+      "path": "pyproject.toml",
+      "bytes": 1902,
+      "sha256": "f2a65ddaac4d582100c25d2963de4e30576d01303dfae2e438dab8daca21b260"
+    },
+    {
+      "path": "scripts/check-capability-health.sh",
+      "bytes": 4168,
+      "sha256": "2f53febdd3cfb6cea23ad1ff7bbdf87ce23ffa948853454e6ef228f542e98735"
+    },
+    {
+      "path": "scripts/check-goal-contracts.sh",
+      "bytes": 3538,
+      "sha256": "6320184ffce09865f82e370311fa2cd823afd283f24838ec5256020b69b938f1"
+    },
+    {
+      "path": "scripts/check-runtime-boundary.sh",
+      "bytes": 6014,
+      "sha256": "c11a8a8a868f3b12c728141bc42994e9c4baa343eafba226cd13bfd543f2c41f"
+    },
+    {
+      "path": "scripts/lib-manifest.sh",
+      "bytes": 4483,
+      "sha256": "d61c270e28a9a4813816e54c245925df17fbd10e6ddaa762e80d6253b884bf15"
+    },
+    {
+      "path": "src/agent_dev_kit/__init__.py",
+      "bytes": 70,
+      "sha256": "3eaae50d207c18749ae0aca1d3fec28793ed1a41dda8b3fb480ed90885c20a52"
+    },
+    {
+      "path": "tests/test_manifest_consumer_boundary.sh",
+      "bytes": 2241,
+      "sha256": "52b81e9db66fca421aba92076aa8f618abd6a3a32d71f832940c6e03a58dbfee"
+    },
+    {
+      "path": "tests/test_manifest_contract.sh",
+      "bytes": 2450,
+      "sha256": "537ef09b32c4d43584ed463cc84ae80a94703384a1a9179dfa129008819f77a0"
+    },
+    {
+      "path": "tests/test_manifest_stream_consumers.py",
+      "bytes": 9010,
+      "sha256": "1436f01c38ce5140644355b14d4e888b499838d35c934ec62865c95a35a5a638"
+    },
+    {
+      "path": "tests/test_runtime_boundary.sh",
+      "bytes": 3203,
+      "sha256": "54eb46bed5be8eafd0a508bc1380ab9fe4f3334ee479c7e23c9195b01c7f0733"
+    }
+  ]
+}

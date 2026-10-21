@@ -42,7 +42,7 @@ source "$ROOT/scripts/lib-manifest.sh"
 adk_require_manifest
 adk_profile_exists core
 [[ "$(adk_get_manifest_item_value agents requirements-analyst path)" == "agents/requirements-analyst/AGENTS.md" ]]
-adk_list_routing_intent_names | grep -q .
+adk_list_routing_intent_names | grep . >/dev/null
 
 # Taxonomy remains valid with only the canonical Manifest available.
 TMP_DIR="$(mktemp -d)"

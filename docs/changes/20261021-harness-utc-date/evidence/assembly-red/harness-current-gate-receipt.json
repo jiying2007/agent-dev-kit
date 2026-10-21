@@ -1,0 +1,32 @@
+{
+  "started_at": "2026-10-21T02:01:32.274089+00:00",
+  "completed_at": "2026-10-21T02:01:32.717226+00:00",
+  "elapsed_seconds": 0.443,
+  "argv": [
+    "/workspace/scratch/77add259d49b/tooling/rtk",
+    "proxy",
+    "bash",
+    "scripts/devkit.sh",
+    "harness",
+    "readiness",
+    "--root",
+    ".",
+    "--gate",
+    "--summary-json"
+  ],
+  "cwd": "/workspace/scratch/77add259d49b/llm_agent/agent-dev-kit",
+  "exit_code": 2,
+  "timed_out": false,
+  "allow_network": false,
+  "venv": "/workspace/scratch/77add259d49b/adk-venv",
+  "outputs": {
+    "stdout.log": {
+      "bytes": 6196,
+      "sha256": "f0223ba69e1522b2394cbf162560230f020278dac8e79e28d110c716bc01377f"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  }
+}

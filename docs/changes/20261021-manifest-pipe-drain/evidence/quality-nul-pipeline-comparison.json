@@ -1,0 +1,129 @@
+{
+  "reviewer": "ai/root/native_evidence_audit",
+  "started_at": "2026-10-21T01:32:57.868762+00:00",
+  "completed_at": "2026-10-21T01:32:58.375918+00:00",
+  "scope": "same canonical Manifest producer with original guards, one NUL in the early prefix, and >1MiB unmatched tail; original vs -a grep comparison, no source mutation",
+  "full_manifest_schema": "pass",
+  "original_guards": [
+    "direct-write-live-home",
+    "direct-convert-target",
+    "implicit-tool-target",
+    "enable-hooks-plugins-mcp-without-owner-review"
+  ],
+  "nul_guard_index": 4,
+  "nul_byte_offset_zero_based": 129,
+  "producer_expected_output_bytes": 1071240,
+  "producer_expected_output_sha256": "26eaaf38fbb08e0c85ae606a80d33ef7af897b55de17d8ba3a6cf950375d1bb8",
+  "prefix_before_first_512_bytes_has_nul": true,
+  "source_before": {
+    "scripts/lib-manifest.sh": "d61c270e28a9a4813816e54c245925df17fbd10e6ddaa762e80d6253b884bf15",
+    "scripts/check-runtime-boundary.sh": "c11a8a8a868f3b12c728141bc42994e9c4baa343eafba226cd13bfd543f2c41f",
+    "src/agent_dev_kit/__init__.py": "3eaae50d207c18749ae0aca1d3fec28793ed1a41dda8b3fb480ed90885c20a52",
+    "src/agent_dev_kit/manifest_query.py": "48cfba9672d9eb1d07450925ba062dcf432b8c58e3218863abf0504fd8abc8c6",
+    "manifests/manifest.schema.json": "40dc00c249104ea16314857a3af0b0ffbaa0b65d0f225999f408f510c9628fc0",
+    "manifest.json": "4d461230023fb139a7f15e8d86370f715bfb43784a2bcabbbfc1f4226b4a5499"
+  },
+  "source_after": {
+    "scripts/lib-manifest.sh": "d61c270e28a9a4813816e54c245925df17fbd10e6ddaa762e80d6253b884bf15",
+    "scripts/check-runtime-boundary.sh": "c11a8a8a868f3b12c728141bc42994e9c4baa343eafba226cd13bfd543f2c41f",
+    "src/agent_dev_kit/__init__.py": "3eaae50d207c18749ae0aca1d3fec28793ed1a41dda8b3fb480ed90885c20a52",
+    "src/agent_dev_kit/manifest_query.py": "48cfba9672d9eb1d07450925ba062dcf432b8c58e3218863abf0504fd8abc8c6",
+    "manifests/manifest.schema.json": "40dc00c249104ea16314857a3af0b0ffbaa0b65d0f225999f408f510c9628fc0",
+    "manifest.json": "4d461230023fb139a7f15e8d86370f715bfb43784a2bcabbbfc1f4226b4a5499"
+  },
+  "source_unchanged": true,
+  "cases": [
+    {
+      "mode": "unbuffered",
+      "grep_flag": "-Fx",
+      "command": [
+        "/workspace/scratch/77add259d49b/tooling/rtk",
+        "proxy",
+        "bash",
+        "-o",
+        "pipefail",
+        "-c",
+        "source scripts/lib-manifest.sh; set +e; adk_get_external_handoff_target_list codex must_not | grep \"$1\" -- direct-write-live-home >/dev/null; outcome=( \"$?\" \"${PIPESTATUS[@]}\" ); printf \"%s\\n\" \"${outcome[@]}\"",
+        "nul-pipeline-probe",
+        "-Fx"
+      ],
+      "pipeline_producer_consumer_statuses": [
+        0,
+        0,
+        0
+      ],
+      "capture_exit_code": 0,
+      "stdout": "0\n0\n0\n",
+      "stderr": ""
+    },
+    {
+      "mode": "unbuffered",
+      "grep_flag": "-aFx",
+      "command": [
+        "/workspace/scratch/77add259d49b/tooling/rtk",
+        "proxy",
+        "bash",
+        "-o",
+        "pipefail",
+        "-c",
+        "source scripts/lib-manifest.sh; set +e; adk_get_external_handoff_target_list codex must_not | grep \"$1\" -- direct-write-live-home >/dev/null; outcome=( \"$?\" \"${PIPESTATUS[@]}\" ); printf \"%s\\n\" \"${outcome[@]}\"",
+        "nul-pipeline-probe",
+        "-aFx"
+      ],
+      "pipeline_producer_consumer_statuses": [
+        0,
+        0,
+        0
+      ],
+      "capture_exit_code": 0,
+      "stdout": "0\n0\n0\n",
+      "stderr": ""
+    },
+    {
+      "mode": "buffered",
+      "grep_flag": "-Fx",
+      "command": [
+        "/workspace/scratch/77add259d49b/tooling/rtk",
+        "proxy",
+        "bash",
+        "-o",
+        "pipefail",
+        "-c",
+        "source scripts/lib-manifest.sh; set +e; adk_get_external_handoff_target_list codex must_not | grep \"$1\" -- direct-write-live-home >/dev/null; outcome=( \"$?\" \"${PIPESTATUS[@]}\" ); printf \"%s\\n\" \"${outcome[@]}\"",
+        "nul-pipeline-probe",
+        "-Fx"
+      ],
+      "pipeline_producer_consumer_statuses": [
+        0,
+        0,
+        0
+      ],
+      "capture_exit_code": 0,
+      "stdout": "0\n0\n0\n",
+      "stderr": ""
+    },
+    {
+      "mode": "buffered",
+      "grep_flag": "-aFx",
+      "command": [
+        "/workspace/scratch/77add259d49b/tooling/rtk",
+        "proxy",
+        "bash",
+        "-o",
+        "pipefail",
+        "-c",
+        "source scripts/lib-manifest.sh; set +e; adk_get_external_handoff_target_list codex must_not | grep \"$1\" -- direct-write-live-home >/dev/null; outcome=( \"$?\" \"${PIPESTATUS[@]}\" ); printf \"%s\\n\" \"${outcome[@]}\"",
+        "nul-pipeline-probe",
+        "-aFx"
+      ],
+      "pipeline_producer_consumer_statuses": [
+        0,
+        0,
+        0
+      ],
+      "capture_exit_code": 0,
+      "stdout": "0\n0\n0\n",
+      "stderr": ""
+    }
+  ]
+}

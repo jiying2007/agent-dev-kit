@@ -1,0 +1,25 @@
+{
+  "reviewer": "ai/root/native_evidence_audit",
+  "started_at": "2026-10-21T01:30:34.839829+00:00",
+  "completed_at": "2026-10-21T01:30:36.144370+00:00",
+  "scope": "actual unchanged runtime boundary checker and query on schema-valid manifest with one NUL-bearing unrelated guard plus bounded tail; not qualification evidence",
+  "full_manifest_schema": "pass",
+  "guard_count": 2053,
+  "source_sha256": {
+    "scripts/lib-manifest.sh": "d61c270e28a9a4813816e54c245925df17fbd10e6ddaa762e80d6253b884bf15",
+    "scripts/check-runtime-boundary.sh": "c11a8a8a868f3b12c728141bc42994e9c4baa343eafba226cd13bfd543f2c41f",
+    "src/agent_dev_kit/__init__.py": "3eaae50d207c18749ae0aca1d3fec28793ed1a41dda8b3fb480ed90885c20a52",
+    "src/agent_dev_kit/manifest_query.py": "48cfba9672d9eb1d07450925ba062dcf432b8c58e3218863abf0504fd8abc8c6",
+    "README.md": "3330061fa5f2192485547d573e008626ac4cef80571ac7a8137a8f63cfcd3f02"
+  },
+  "command": [
+    "/workspace/scratch/77add259d49b/tooling/rtk",
+    "proxy",
+    "bash",
+    "scripts/check-runtime-boundary.sh",
+    "--summary-json"
+  ],
+  "exit_code": 0,
+  "stdout": "{\"schema_version\":1,\"status\":\"pass\",\"failures\":0,\"runtime_scope\":\"generic-adk\",\"direct_tool_targets\":2,\"external_handoff_targets\":1,\"codex_direct_tool_target\":false,\"codex_handoff_mode\":\"source-to-live\"}\n",
+  "stderr": ""
+}

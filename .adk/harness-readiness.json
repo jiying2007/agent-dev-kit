@@ -3,58 +3,58 @@
   "dimensions": {
     "context_legibility": {
       "owner": "leiwenjun",
-      "last_verified_at": "2026-10-20",
+      "last_verified_at": "2026-10-21",
       "review_evidence": {
-        "path": ".adk/reviews/harness-source-20261020.json",
-        "sha256": "1780be18d6c1cd893c8764aa39465afb8c437218e24a0e00769247265302d20c"
+        "path": ".adk/reviews/harness-source-20261021.json",
+        "sha256": "cf140e4be5f0508f5ee2f731aebaebc8fff1c17a83cd0e889e535de427cde1dc"
       }
     },
     "spec_and_execution_contract": {
       "owner": "leiwenjun",
-      "last_verified_at": "2026-10-20",
+      "last_verified_at": "2026-10-21",
       "review_evidence": {
-        "path": ".adk/reviews/harness-source-20261020.json",
-        "sha256": "1780be18d6c1cd893c8764aa39465afb8c437218e24a0e00769247265302d20c"
+        "path": ".adk/reviews/harness-source-20261021.json",
+        "sha256": "cf140e4be5f0508f5ee2f731aebaebc8fff1c17a83cd0e889e535de427cde1dc"
       }
     },
     "tool_and_permission_boundary": {
       "owner": "leiwenjun",
-      "last_verified_at": "2026-10-20",
+      "last_verified_at": "2026-10-21",
       "review_evidence": {
-        "path": ".adk/reviews/harness-source-20261020.json",
-        "sha256": "1780be18d6c1cd893c8764aa39465afb8c437218e24a0e00769247265302d20c"
+        "path": ".adk/reviews/harness-source-20261021.json",
+        "sha256": "cf140e4be5f0508f5ee2f731aebaebc8fff1c17a83cd0e889e535de427cde1dc"
       }
     },
     "state_and_knowledge_continuity": {
       "owner": "leiwenjun",
-      "last_verified_at": "2026-10-20",
+      "last_verified_at": "2026-10-21",
       "review_evidence": {
-        "path": ".adk/reviews/harness-source-20261020.json",
-        "sha256": "1780be18d6c1cd893c8764aa39465afb8c437218e24a0e00769247265302d20c"
+        "path": ".adk/reviews/harness-source-20261021.json",
+        "sha256": "cf140e4be5f0508f5ee2f731aebaebc8fff1c17a83cd0e889e535de427cde1dc"
       }
     },
     "verification_review_and_eval": {
       "owner": "leiwenjun",
-      "last_verified_at": "2026-10-20",
+      "last_verified_at": "2026-10-21",
       "review_evidence": {
-        "path": ".adk/reviews/harness-source-20261020.json",
-        "sha256": "1780be18d6c1cd893c8764aa39465afb8c437218e24a0e00769247265302d20c"
+        "path": ".adk/reviews/harness-source-20261021.json",
+        "sha256": "cf140e4be5f0508f5ee2f731aebaebc8fff1c17a83cd0e889e535de427cde1dc"
       }
     },
     "recovery_and_rollback": {
       "owner": "leiwenjun",
-      "last_verified_at": "2026-10-20",
+      "last_verified_at": "2026-10-21",
       "review_evidence": {
-        "path": ".adk/reviews/harness-source-20261020.json",
-        "sha256": "1780be18d6c1cd893c8764aa39465afb8c437218e24a0e00769247265302d20c"
+        "path": ".adk/reviews/harness-source-20261021.json",
+        "sha256": "cf140e4be5f0508f5ee2f731aebaebc8fff1c17a83cd0e889e535de427cde1dc"
       }
     },
     "freshness_and_entropy_control": {
       "owner": "leiwenjun",
-      "last_verified_at": "2026-10-20",
+      "last_verified_at": "2026-10-21",
       "review_evidence": {
-        "path": ".adk/reviews/harness-source-20261020.json",
-        "sha256": "1780be18d6c1cd893c8764aa39465afb8c437218e24a0e00769247265302d20c"
+        "path": ".adk/reviews/harness-source-20261021.json",
+        "sha256": "cf140e4be5f0508f5ee2f731aebaebc8fff1c17a83cd0e889e535de427cde1dc"
       }
     }
   }

@@ -8,7 +8,7 @@ import os
 import shutil
 import tempfile
 import unittest
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from unittest.mock import patch
 
@@ -328,6 +328,25 @@ class ReviewEvidenceTests(ReviewEvidenceFixture):
         self.assertFalse(checked["field_evidence_verified"])
 
 
+class ReadinessUtcDateTests(unittest.TestCase):
+    def test_default_evaluation_day_is_utc_across_local_midnight(self):
+        root = SOURCE_ROOT / "fixtures/harness-readiness/pass/team-repo"
+        for utc_now, local_day in (
+            (datetime(2026, 10, 21, 0, 30, tzinfo=timezone.utc), date(2026, 10, 20)),
+            (datetime(2026, 10, 20, 23, 30, tzinfo=timezone.utc), date(2026, 10, 21)),
+        ):
+            with self.subTest(utc=utc_now, local=local_day), \
+                 patch("agent_dev_kit.readiness.datetime", create=True, wraps=datetime) as clock, \
+                 patch("agent_dev_kit.readiness.date", wraps=date) as host_date:
+                clock.now.return_value = utc_now
+                host_date.today.return_value = local_day
+                report = run_harness_readiness(
+                    root, contract_path=SOURCE_ROOT / "manifests/harness_readiness_contracts.json",
+                    mode="gate",
+                )
+                self.assertEqual(utc_now.date().isoformat(), report["as_of"])
+
+
 class HarnessDelegatedReviewTests(ReviewEvidenceFixture):
     def setUp(self):
         super().setUp()
@@ -377,6 +396,16 @@ class HarnessDelegatedReviewTests(ReviewEvidenceFixture):
         self.assertEqual(report["field_evidence_status"], "not-verified")
         self.assertTrue(all(dim["review"]["reviewer"]["kind"] == "ai" for dim in report["dimensions"]))
         self.assertTrue(all(dim["owner"] == "leiwenjun" for dim in report["dimensions"]))
+
+    def test_utc_review_is_not_future_when_host_calendar_is_previous_day(self):
+        with patch("agent_dev_kit.readiness.datetime", create=True, wraps=datetime) as clock, \
+             patch("agent_dev_kit.readiness.date", wraps=date) as host_date:
+            clock.now.return_value = self.now
+            host_date.today.return_value = self.now.date() - timedelta(days=1)
+            report = self.run_harness()
+        self.assertEqual(self.now.date().isoformat(), report["as_of"])
+        self.assertEqual("pass", report["overall_status"], report)
+        self.assertEqual("not-verified", report["field_evidence_status"])
 
     def test_ai_receipt_cannot_be_treated_as_legacy_review_without_policy(self):
         self.policy_path.unlink()

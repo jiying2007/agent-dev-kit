@@ -25,7 +25,8 @@ adk_require_manifest() {
 
 adk_get_manifest_value() { _adk_manifest_query top-value "$1"; }
 adk_list_tool_names() { _adk_manifest_query section-entry-names tool_targets; }
-adk_tool_exists() { adk_list_tool_names | grep -Fxq "$1"; }
+# Drain Manifest streams: grep -q can close early and fail Python under pipefail.
+adk_tool_exists() { adk_list_tool_names | grep -Fx -- "$1" >/dev/null; }
 adk_list_section_entry_names() { _adk_manifest_query section-entry-names "$1"; }
 adk_get_section_entry_value() { _adk_manifest_query section-entry-value "$1" "$2" "$3"; }
 adk_get_section_entry_list() { _adk_manifest_query section-entry-list "$1" "$2" "$3"; }
@@ -34,7 +35,7 @@ adk_list_reference_source_names() { adk_list_section_entry_names reference_sourc
 adk_get_reference_source_value() { adk_get_section_entry_value reference_sources "$1" "$2"; }
 
 adk_list_external_handoff_target_names() { adk_list_section_entry_names external_handoff_targets; }
-adk_external_handoff_target_exists() { adk_list_external_handoff_target_names | grep -Fxq "$1"; }
+adk_external_handoff_target_exists() { adk_list_external_handoff_target_names | grep -Fx -- "$1" >/dev/null; }
 adk_get_external_handoff_target_value() { adk_get_section_entry_value external_handoff_targets "$1" "$2"; }
 adk_get_external_handoff_target_list() { adk_get_section_entry_list external_handoff_targets "$1" "$2"; }
 
@@ -42,7 +43,7 @@ adk_get_tool_value() { adk_get_section_entry_value tool_targets "$1" "$2"; }
 adk_get_tool_list() { adk_get_section_entry_list tool_targets "$1" "$2"; }
 
 adk_list_profile_names() { _adk_manifest_query profile-names; }
-adk_profile_exists() { adk_list_profile_names | grep -Fxq "$1"; }
+adk_profile_exists() { adk_list_profile_names | grep -Fx -- "$1" >/dev/null; }
 adk_get_profile_value() { _adk_manifest_query profile-value "$1" "$2"; }
 adk_get_profile_list() { _adk_manifest_query profile-list "$1" "$2"; }
 
@@ -79,7 +80,7 @@ adk_get_manifest_item_value() { _adk_manifest_query manifest-item-value "$1" "$2
 adk_get_manifest_item_list() { _adk_manifest_query manifest-item-list "$1" "$2" "$3"; }
 
 adk_list_optional_skill_names() { adk_list_manifest_names optional_skills; }
-adk_optional_skill_exists() { adk_list_optional_skill_names | grep -Fxq "$1"; }
+adk_optional_skill_exists() { adk_list_optional_skill_names | grep -Fx -- "$1" >/dev/null; }
 adk_get_optional_skill_path() { adk_get_manifest_item_value optional_skills "$1" path; }
 
 adk_to_lower() { printf '%s' "$1" | tr '[:upper:]' '[:lower:]'; }
@@ -102,7 +103,7 @@ adk_resolve_profile_items_all() {
 }
 
 adk_list_routing_intent_names() { _adk_manifest_query routing-intent-names; }
-adk_routing_intent_exists() { adk_list_routing_intent_names | grep -Fxq "$1"; }
+adk_routing_intent_exists() { adk_list_routing_intent_names | grep -Fx -- "$1" >/dev/null; }
 adk_get_routing_intent_value() { _adk_manifest_query routing-intent-value "$1" "$2"; }
 adk_get_routing_intent_list() { _adk_manifest_query routing-intent-list "$1" "$2"; }
 adk_list_routing_intents() { _adk_manifest_query routing-intents; }

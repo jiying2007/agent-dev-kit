@@ -1,0 +1,3 @@
+Traceback (most recent call last):
+  File "<stdin>", line 39, in <module>
+AssertionError: ('{"schema_version":1,"status":"fail","failures":3}\n', '[FAIL] [Errno 32] Broken pipe\n[FAIL] [Errno 32] Broken pipe\n[FAIL] [Errno 32] Broken pipe\n')

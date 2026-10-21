@@ -1,0 +1,28 @@
+{
+  "started_at": "2026-10-21T01:21:59.886152+00:00",
+  "completed_at": "2026-10-21T01:26:21.659948+00:00",
+  "elapsed_seconds": 261.774,
+  "argv": [
+    "/workspace/scratch/77add259d49b/tooling/rtk",
+    "proxy",
+    "bash",
+    "tests/run_all.sh",
+    "--timing-json",
+    "/workspace/scratch/77add259d49b/oct21-evidence/adk-full-timing.json"
+  ],
+  "cwd": "/workspace/scratch/77add259d49b/llm_agent/agent-dev-kit",
+  "exit_code": -15,
+  "timed_out": false,
+  "allow_network": false,
+  "venv": "/workspace/scratch/77add259d49b/adk-venv",
+  "outputs": {
+    "stdout.log": {
+      "bytes": 1221,
+      "sha256": "a33764c60c1a692fe956e98971483a4ef106bf41742b07f13a1c53a68b4a8ae1"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  }
+}

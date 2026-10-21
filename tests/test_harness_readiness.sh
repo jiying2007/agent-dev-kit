@@ -40,7 +40,7 @@ import sys
 path = sys.argv[1]
 metadata = json.load(open(path, encoding="utf-8"))
 for item in metadata["dimensions"].values():
-    item["last_verified_at"] = dt.date.today().isoformat()
+    item["last_verified_at"] = dt.datetime.now(dt.timezone.utc).date().isoformat()
 with open(path, "w", encoding="utf-8") as stream:
     json.dump(metadata, stream, ensure_ascii=False, indent=2)
     stream.write("\n")
@@ -149,7 +149,7 @@ assert historical["counts"] == {
 assert historical["field_evidence_status"] == "not-verified", historical
 
 max_age = contract["verification"]["max_age_days"]
-today = dt.date.today()
+today = dt.datetime.now(dt.timezone.utc).date()
 stale = {
     dimension
     for dimension, item in metadata["dimensions"].items()
