@@ -1,0 +1,31 @@
+{
+  "started_at": "2026-10-21T01:38:53.969715+00:00",
+  "completed_at": "2026-10-21T01:38:54.287942+00:00",
+  "elapsed_seconds": 0.318,
+  "argv": [
+    "/workspace/scratch/77add259d49b/tooling/rtk",
+    "proxy",
+    "env",
+    "PYTHONPATH=src",
+    "python3",
+    "tests/test_review_evidence.py",
+    "ReadinessUtcDateTests",
+    "HarnessDelegatedReviewTests.test_utc_review_is_not_future_when_host_calendar_is_previous_day",
+    "-v"
+  ],
+  "cwd": "/workspace/scratch/77add259d49b/llm_agent/agent-dev-kit",
+  "exit_code": 1,
+  "timed_out": false,
+  "allow_network": false,
+  "venv": "/workspace/scratch/77add259d49b/adk-venv",
+  "outputs": {
+    "stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr.log": {
+      "bytes": 3217,
+      "sha256": "8e8134883a907a3486f59d53bbe32c20a9e8dcddbb8534826b7d2a66813dbd38"
+    }
+  }
+}

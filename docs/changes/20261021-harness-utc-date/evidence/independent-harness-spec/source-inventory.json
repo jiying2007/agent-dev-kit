@@ -1,0 +1,374 @@
+{
+  "schema": "independent-harness-source-inventory/v1",
+  "root": "/workspace/scratch/77add259d49b/llm_agent/agent-dev-kit",
+  "head": "42ae95d146ceb441ff91ea33dbbed581c33de305",
+  "branch": "fix/manifest-pipe-drain-20261021",
+  "review_target": "working-tree",
+  "source_manifest_sha256": "ae0a3b4907e00b666f8d875358d07693a9fb757b45a99172314676f3c2ed0092",
+  "source_manifest_encoding": "UTF-8 JSON array sorted by path; object keys sorted; ensure_ascii=false; compact separators; no trailing newline",
+  "source_count": 60,
+  "sources": [
+    {
+      "path": ".github/CODEOWNERS",
+      "bytes": 315,
+      "sha256": "80c4105be9d42c79f5057726fbb9971aa0a638ee17f47f31377c04085b1095cc"
+    },
+    {
+      "path": ".github/workflows/branch-gc.yml",
+      "bytes": 3169,
+      "sha256": "9c88b4fc19147008351bef181a275fb371b986567eadaa2892b5292b8322e47d"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "bytes": 11696,
+      "sha256": "8c0b509ca8e46ddf9e67d9aed00d5bd28da73bf831de9a35601a4f625381e910"
+    },
+    {
+      "path": ".github/workflows/claude-consumer-contract.yml",
+      "bytes": 1412,
+      "sha256": "2abc7885d7ab3476776ef4cbcbc022d008734ceb3e714381cc994ebdc543526b"
+    },
+    {
+      "path": ".github/workflows/codex-consumer-contract.yml",
+      "bytes": 1410,
+      "sha256": "f1e9e882dd0ee2995ac10d5ffa57ca97451b3ff9143f1019c617830ea2d4bbb9"
+    },
+    {
+      "path": ".github/workflows/digital-worker-contract.yml",
+      "bytes": 1519,
+      "sha256": "3575ad868bebbc6120e39a37f0786d249ec1a4887bcc1a775378c0bc1ac02eee"
+    },
+    {
+      "path": "AGENTS.md",
+      "bytes": 2914,
+      "sha256": "61a06f86a6b5382855fab70a3098f878e9f7d3e0af653a86fbd199d8d5d13167"
+    },
+    {
+      "path": "OWNERS",
+      "bytes": 236,
+      "sha256": "04214b6ee2937ef8c786f998ee890a0cecacb7dd318bab99a13db844f850a95e"
+    },
+    {
+      "path": "README.md",
+      "bytes": 8353,
+      "sha256": "3330061fa5f2192485547d573e008626ac4cef80571ac7a8137a8f63cfcd3f02"
+    },
+    {
+      "path": "docs/agent-operating-rules.md",
+      "bytes": 9483,
+      "sha256": "9eb0f82be4ec98662524ed13773dbcd86c0c073c609e622d76341342e1a6f2ac"
+    },
+    {
+      "path": "docs/architecture/canonical-change-authority.md",
+      "bytes": 2731,
+      "sha256": "8c55aac803a078e6490fd7ffac9a70df27a1dfbd6740ab16c479de4c12cf39f6"
+    },
+    {
+      "path": "docs/changes/2026-09-25-agent-value-trust/negative-results.md",
+      "bytes": 856,
+      "sha256": "da7aa6c51295be56368b90594b7eb6469bf0a43b3888d7a482839bb22c0970c0"
+    },
+    {
+      "path": "docs/changes/2026-09-25-agent-value-trust/requirements.md",
+      "bytes": 972,
+      "sha256": "429e4296ec368df67542c7b536c478c2ac2f16adedad9dfddc1b53383cc343ad"
+    },
+    {
+      "path": "docs/changes/2026-09-25-agent-value-trust/tasks.md",
+      "bytes": 891,
+      "sha256": "ccee418ae0bd170f1c579bf0cb48af9be1dff833629c95705f5deca431e1d499"
+    },
+    {
+      "path": "docs/changes/2026-09-25-effect-trials/design.md",
+      "bytes": 1718,
+      "sha256": "a23b59b2cab96879196748bd082347a8d00a756598460ad3f83f97c7a50e976f"
+    },
+    {
+      "path": "docs/changes/2026-09-25-effect-trials/negative-results.md",
+      "bytes": 449,
+      "sha256": "045d0b30fd4e15dabfa0436d3b34403bb3bd5b6b8916ef4cb708a2e6523cdf73"
+    },
+    {
+      "path": "docs/changes/2026-09-25-effect-trials/requirements.md",
+      "bytes": 1034,
+      "sha256": "f4a2bffa3a90d0955a2b9e50d5e3201a30f667edb30a1709985bab2f856ed281"
+    },
+    {
+      "path": "docs/changes/2026-09-25-effect-trials/tasks.md",
+      "bytes": 1064,
+      "sha256": "802ca9c194d39060eb931af0f3e8042d5f1e62acc9249abeaead6b5ede8615b9"
+    },
+    {
+      "path": "docs/changes/2026-09-25-native-campaign-finalize/negative-results.md",
+      "bytes": 597,
+      "sha256": "d5d436b9ddf56b37c22f200b2f84a7fd09d3e964b8d91c4051649eb51b207673"
+    },
+    {
+      "path": "docs/changes/2026-09-25-native-campaign-finalize/requirements.md",
+      "bytes": 924,
+      "sha256": "45da7af9938c1c826ca203ab5439d55aac9def3a4da218a30a5252d531d3d0a7"
+    },
+    {
+      "path": "docs/changes/2026-09-25-native-campaign-finalize/tasks.md",
+      "bytes": 765,
+      "sha256": "b94ecc55058d993aa5ceb2da12020ffc181b68de7b4924c591f7a5567ccaee09"
+    },
+    {
+      "path": "docs/changes/2026-09-25-native-campaign-project-layout/negative-results.md",
+      "bytes": 565,
+      "sha256": "9426f86cc945edfaa63590e140c0ec458762beea4e09bf0a0886badb15151338"
+    },
+    {
+      "path": "docs/changes/2026-09-25-native-campaign-project-layout/tasks.md",
+      "bytes": 874,
+      "sha256": "2f3fca0914f53aabe3713f3d0094fb6bacb3e3d1e0df867db134d71835d3e2ce"
+    },
+    {
+      "path": "docs/changes/adk-platform-convergence-v1/state.yaml",
+      "bytes": 65,
+      "sha256": "f95699e68437bafa0199a5564af18cbc7e3f78de290f4b01dc17737d0b68156e"
+    },
+    {
+      "path": "docs/changes/adk-self-readiness-ownership/state.yaml",
+      "bytes": 1159,
+      "sha256": "d590a0ae6b1b666cc1d6d64ab7b1e8fd5f128979993595eea8489783138f46d1"
+    },
+    {
+      "path": "docs/changes/adk-terminal-contract-hardening/state.yaml",
+      "bytes": 2220,
+      "sha256": "87b107bda25456141bae1a3b035c7e2c30616afd8baf86d333216a87f0754f5f"
+    },
+    {
+      "path": "docs/changes/adk-v3-1-rc2-target-conformance/state.yaml",
+      "bytes": 1939,
+      "sha256": "ed9597562535265d61322e9558727acf963193e121570d1a7bafe5136d4299d6"
+    },
+    {
+      "path": "docs/changes/adk-v3-1-software-m5-ready/state.yaml",
+      "bytes": 67,
+      "sha256": "fa314d45b209d8bea753377d18848cb02793d62c660dd69e906b7d8ee96e1134"
+    },
+    {
+      "path": "docs/changes/agent-ecosystem-standards-hardening/state.yaml",
+      "bytes": 177,
+      "sha256": "37ff7e9a84d590999e31b86493ee82de2a313e5efded23bba90a3c885977bee5"
+    },
+    {
+      "path": "docs/runbooks/README.md",
+      "bytes": 1002,
+      "sha256": "0888aa2b94f929760040517deaf9a47b517648b0694209d48309956fbe83273d"
+    },
+    {
+      "path": "docs/runbooks/agent-value-lifecycle.md",
+      "bytes": 12268,
+      "sha256": "84e629c1c040b265d6a64369c5b39d6af2e999576af4429939738ff00b5a4c37"
+    },
+    {
+      "path": "docs/runbooks/artifact-gated-delivery.md",
+      "bytes": 1464,
+      "sha256": "f83375f1392b20006f29e43ce5b0807530ad850969e6ee67e3b861a78fa98dd6"
+    },
+    {
+      "path": "docs/runbooks/bugfix-delivery.md",
+      "bytes": 1338,
+      "sha256": "f7ef75ace0052ecbde911b06e3b45a1d22045ba24257c642736f72f6f28ff623"
+    },
+    {
+      "path": "docs/runbooks/codex-pilot-evidence.md",
+      "bytes": 1179,
+      "sha256": "5ff92fab93baf7403b838a67f359e29016a6ce19563eb98006cca6c842ae298c"
+    },
+    {
+      "path": "docs/runbooks/codex-runtime-method-boundary.md",
+      "bytes": 1828,
+      "sha256": "43bf36ec8a1a9a12bf30bb29b7a9f2bdbfd9a00f849ad700a85fb1cd440dde18"
+    },
+    {
+      "path": "docs/runbooks/knowledge-compile-model.md",
+      "bytes": 4430,
+      "sha256": "cd4eab2335cf8f492d53e9d580229416d4909e04c76e5bb1de21fe66173693f5"
+    },
+    {
+      "path": "docs/runbooks/mcp-governance.md",
+      "bytes": 11849,
+      "sha256": "327eb7994249992885ecf50234becf87ecdfb05c1df394027e4b21f236ef2082"
+    },
+    {
+      "path": "docs/runbooks/memory-governance.md",
+      "bytes": 11497,
+      "sha256": "9cb1e6aba2073bde64278c8cbd1f64e06ad8057b589d3365c8242770978181ab"
+    },
+    {
+      "path": "manifests/context_state_contracts.json",
+      "bytes": 5881,
+      "sha256": "fe8076296b8cf214aee52a5ad32dabff5d383555e76f6d3d3e542e2e6617fb91"
+    },
+    {
+      "path": "manifests/harness_readiness_contracts.json",
+      "bytes": 4523,
+      "sha256": "e12c527dcfcfc61030b9a344f9d7fa3efeb828c364f5707285bdded69fcd8358"
+    },
+    {
+      "path": "manifests/token_context_policy.json",
+      "bytes": 1703,
+      "sha256": "799b0388c82c6cb6925caf0c2cd6e44685eeca5277a9b5128a9cec50551e158f"
+    },
+    {
+      "path": "scripts/backup-rollback.sh",
+      "bytes": 5946,
+      "sha256": "b8fbb6466bba0d47e414e9db5d41d821d7d753b0087cbb624af987ee61d10d41"
+    },
+    {
+      "path": "scripts/check-format.sh",
+      "bytes": 1682,
+      "sha256": "5810e3880f2af51cf7b39f5e1c2caa49012c89ddfc7fc6224e74adf707249227"
+    },
+    {
+      "path": "scripts/workflow.sh",
+      "bytes": 19515,
+      "sha256": "a230f7fc396e9a1f243ef925db2987bcccd2208fc14c1387bf6aea20439dea83"
+    },
+    {
+      "path": "skills/adk-code-review-loop/SKILL.md",
+      "bytes": 7182,
+      "sha256": "c89e4f72da3f8c7c4cc5ea8fc5c1e2c3af1219f2ca751d290442043eeb681972"
+    },
+    {
+      "path": "src/agent_dev_kit/installation_transaction.py",
+      "bytes": 28808,
+      "sha256": "a300ff54043feebc43237a31ba2350ae522b512339095c7158071a84ace36777"
+    },
+    {
+      "path": "src/agent_dev_kit/official_docs_governance.py",
+      "bytes": 1292,
+      "sha256": "99e523d1afd4a3f8e1f53aca2b7aa77dbb0828d269d6ce76b1e3d8b9feea72e8"
+    },
+    {
+      "path": "src/agent_dev_kit/official_docs_sources.py",
+      "bytes": 16577,
+      "sha256": "36f9759939685e5db9f873008a723b50de429498c839f89b828e9a7ffb652afd"
+    },
+    {
+      "path": "src/agent_dev_kit/readiness.py",
+      "bytes": 19424,
+      "sha256": "83a2949102955281f13a94e2f871d36e170cbfe76d053032ce5c114dc065ed29"
+    },
+    {
+      "path": "src/agent_dev_kit/readiness_tools.py",
+      "bytes": 10831,
+      "sha256": "5d361c7bd0fbbc2ce923071d3b5afcefb5998a8047d49e54be70f19ca49c554c"
+    },
+    {
+      "path": "tests/lib/bash-test-helpers.sh",
+      "bytes": 2448,
+      "sha256": "90a6fa1c00f18ffaa9394fc548cbf5739e8eeda8b827832eef516961164d263d"
+    },
+    {
+      "path": "tests/mcp_2026_activation/mcp_activation_test.go",
+      "bytes": 19342,
+      "sha256": "560fa3a6e299dca198b7417dec72bc77998aa736587a83c795cb579abd686324"
+    },
+    {
+      "path": "tests/run_all.sh",
+      "bytes": 10452,
+      "sha256": "f7328fd18b81713f6053924099bd81fde92cc4a2ac2ddab7710feab9fc1d8fd1"
+    },
+    {
+      "path": "tests/test_agent_ecosystem_standards.sh",
+      "bytes": 8932,
+      "sha256": "9341118fc2187764597d0445caddfa5930fbc95fb0eeed6665d29ef9b4a3844e"
+    },
+    {
+      "path": "tests/test_agent_platform.sh",
+      "bytes": 6779,
+      "sha256": "a7136691eeed9ff7a64a3c98fb2508d3dac82ca35c09ea9d1ab4d3b16a244a02"
+    },
+    {
+      "path": "tests/test_archive_restore.py",
+      "bytes": 8840,
+      "sha256": "f91711f7ea7808b73f7b8fcb87d05d293be63fd8a825c4c2d6ca99b9b1e0006b"
+    },
+    {
+      "path": "tests/test_catalog.sh",
+      "bytes": 4832,
+      "sha256": "122fce83231fbd4af11789da15933c1fbf63b25aee218fdd306c8889c1382798"
+    },
+    {
+      "path": "tests/test_eval_catalog.py",
+      "bytes": 8806,
+      "sha256": "dd0f1d497a0125284ce674690315b6854bebc30257f1ed6ce1f4f552897ff8c7"
+    },
+    {
+      "path": "tests/test_eval_catalog.sh",
+      "bytes": 440,
+      "sha256": "fbb79f7fdcf60b5dde639d2c03e6ba09dc178efe43d98274ca8e410f5aec9946"
+    },
+    {
+      "path": "tests/test_mcp_freshness_ssot.sh",
+      "bytes": 3283,
+      "sha256": "9ccac15a620e20f9d5eacb1e1e50f47c191e3ce5bb07015f3f6b91def51c44af"
+    }
+  ],
+  "supplemental_sources": [
+    {
+      "path": ".adk/review-policy.json",
+      "bytes": 411,
+      "sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24"
+    },
+    {
+      "path": ".adk/review-authorization.md",
+      "bytes": 1504,
+      "sha256": "1594e628184cb0e4ad6c669bf5ce39dcb1f333d03d0798bebb080856e703cda5"
+    },
+    {
+      "path": "src/agent_dev_kit/review_evidence.py",
+      "bytes": 14820,
+      "sha256": "73d85e864a3da125bf94808f19616f52150751a94ccc729ac66f66d2576b8808"
+    },
+    {
+      "path": "src/agent_dev_kit/strict_json.py",
+      "bytes": 4297,
+      "sha256": "e11233b8d02d7fb95a8f2f93bfff065a1db84c4ef0820fef6d817600abe8ec98"
+    },
+    {
+      "path": "src/agent_dev_kit/readiness_evidence.py",
+      "bytes": 19215,
+      "sha256": "ef980657486084eea8ab8a03ab357a76a3ed43691aca8d6909b06642764c808b"
+    },
+    {
+      "path": "tests/test_review_evidence.py",
+      "bytes": 27736,
+      "sha256": "6abd885ab9d1b6ac141a206277660620ac2594092f8722ef1d05ddc24c61fb40"
+    },
+    {
+      "path": "tests/test_harness_readiness.sh",
+      "bytes": 15107,
+      "sha256": "03ac2275476fcdc5f1fcacbd4375098a706cdd75fb7cbfa9a5e48c82403da300"
+    },
+    {
+      "path": "docs/changes/20261021-harness-utc-date/requirements.md",
+      "bytes": 987,
+      "sha256": "0a12e1bb5ddf4174b728323de404cb4f1720c288e2e8d93f0f7673c9ddc5b39e"
+    },
+    {
+      "path": "docs/changes/20261021-harness-utc-date/design.md",
+      "bytes": 1018,
+      "sha256": "f0003bc1344415e302a8969b035dfc412db72cbd39b3ada0d5a9beaa0a7236d7"
+    },
+    {
+      "path": "docs/changes/20261021-harness-utc-date/tasks.md",
+      "bytes": 553,
+      "sha256": "dc8d11a937885de2928f6cfd04c7664e62cf990baa4c0b247ccf0c7e3b519e9e"
+    },
+    {
+      "path": "docs/changes/20261021-harness-utc-date/negative-results.md",
+      "bytes": 2181,
+      "sha256": "759a5ab2a99b24eee5a3328fad422976c7b6a41e3de95f4a087a1302559003a9"
+    }
+  ],
+  "utc_increment_diff": {
+    "command": "git diff --no-ext-diff --no-textconv --binary --full-index 42ae95d146ceb441ff91ea33dbbed581c33de305 -- src/agent_dev_kit/readiness.py tests/test_review_evidence.py tests/test_harness_readiness.sh",
+    "bytes": 4864,
+    "sha256": "a58d0b762544ee5d40f69aa249aff8d0c8818a992a452e45b5412b61626e40c9"
+  }
+}

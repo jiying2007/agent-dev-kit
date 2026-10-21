@@ -1,0 +1,13 @@
+test_capability_optional_skill_fallback_drains_output (test_manifest_stream_consumers.ManifestStreamConsumerTests.test_capability_optional_skill_fallback_drains_output) ... ok
+test_early_matches_drain_large_real_producer_output (test_manifest_stream_consumers.ManifestStreamConsumerTests.test_early_matches_drain_large_real_producer_output) ... ok
+test_empty_collections_remain_absent (test_manifest_stream_consumers.ManifestStreamConsumerTests.test_empty_collections_remain_absent) ... ok
+test_exact_literal_and_option_like_names (test_manifest_stream_consumers.ManifestStreamConsumerTests.test_exact_literal_and_option_like_names) ... ok
+test_goal_and_capability_checks_accept_large_collections (test_manifest_stream_consumers.ManifestStreamConsumerTests.test_goal_and_capability_checks_accept_large_collections) ... ok
+test_goal_and_capability_checks_reject_unknown_references (test_manifest_stream_consumers.ManifestStreamConsumerTests.test_goal_and_capability_checks_reject_unknown_references) ... ok
+test_invalid_json_is_not_success (test_manifest_stream_consumers.ManifestStreamConsumerTests.test_invalid_json_is_not_success) ... ok
+test_matching_output_cannot_hide_producer_failure (test_manifest_stream_consumers.ManifestStreamConsumerTests.test_matching_output_cannot_hide_producer_failure) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 20.927s
+
+OK

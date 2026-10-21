@@ -1,0 +1,1939 @@
+{
+  "schema": "independent-final-integration-review/v1",
+  "reviewer": {
+    "id": "ai/root/native_evidence_audit",
+    "kind": "ai",
+    "independence": "independent"
+  },
+  "author_id": "ai/root",
+  "reviewed_at": "2026-10-21T02:07:28Z",
+  "scope": "Frozen Manifest stream and Harness UTC source/test changes, new canonical review record and metadata pointer, retained evidence, and current delivery reports",
+  "verdicts": {
+    "spec": "pass",
+    "quality": "pass"
+  },
+  "open_source_blockers": 0,
+  "open_source_majors": 0,
+  "repository_write_performed": false,
+  "test_suites_executed": false,
+  "repeated_full_source_review": false,
+  "canonical_review_validation_performed": true,
+  "findings": [
+    {
+      "id": "integration-review-time-clarity-001",
+      "severity": "minor",
+      "status": "accepted-for-delivery-report-update",
+      "source_blocking": false,
+      "path": "docs/changes/20261021-manifest-pipe-drain/review-report.md",
+      "detail": "The table records the first Quality PASS at 01:31:23.422755Z. Add the separately observed NUL boundary run at 01:32:57.868762Z–01:32:58.375918Z and final supplementary confirmation at 01:33:32Z. The author accepted this wording clarification for the later delivery-only report update. Do not modify frozen original receipts."
+    }
+  ],
+  "assessment": [
+    "The complete tracked diff and new-file inventory stay within the intended stream fix, its regression tests, the UTC default-day fix/tests, version 8.0.37 identity projections, new review metadata and retained delivery evidence.",
+    "The existing shared validator accepted the new 62-source/2-evidence record. All seven metadata pointers bind its actual record SHA, owner and UTC review date. The expanded source manifest independently recomputes to the declared digest.",
+    "The prior assembly record is still rejected by the unchanged validator. Lowercasing only its two finding IDs produces an object exactly equal to the current record; reviewer identities, times, findings, sources and verdicts were not changed to bypass the gate.",
+    "Both independent review channels retain their actual identities and completion times. The aggregate adopts the genuinely completed Quality result after it was read; the author remains distinct from both reviewers.",
+    "All three retained Harness Quality artifacts and all eleven retained stream Quality artifacts checked here match their original scratch bytes. The previously failed 99/101 full run remains exit 1 and its retained stdout/stderr match its receipt.",
+    "The actual new current-date Gate is PASS with six applicable dimensions and one N/A, with field evidence still not-verified. The following Harness script is also an actual exit 0. These author runs were inspected, not reexecuted by this reviewer.",
+    "The historical nineteen-file stream review manifest recomputes correctly. Only its tasks.md has subsequently changed as delivery bookkeeping; the other eighteen files still match. That old manifest must remain historical, while this review records the currently observed task/report inventory.",
+    "The previous sixty-source review digest keeps its original scope. The current canonical record adds the two already reviewed UTC regression files, without implying that the original sixty-file list contained them."
+  ],
+  "count_correction": {
+    "raw_required_source_count": 44,
+    "review_evidence_test_count": 45,
+    "note": "The reviewer's earlier conversational summary accidentally said 45 raw required sources. The immutable observation contains 44, the aggregate already records 44, and all 44 are covered. The number 45 belongs to the executed test suite; no frozen artifact required correction."
+  },
+  "delivery_boundary": {
+    "full_suite_status_at_observation": "pending-not-assessed",
+    "actual_observed_full_receipt_present": false,
+    "prior_full_result": "99/101, exit 1; retained unchanged",
+    "full_suite_not_rerun_by_reviewer": true,
+    "later_delivery_only_report_updates": "Must be attributed to their later actual results; they are outside the frozen product/test/record/metadata identity checked here.",
+    "native_provider_execution": "not-performed",
+    "field_evidence_status": "not-verified",
+    "g22_lta_product_m5_qualification": "not-granted",
+    "protected_ci_release_root_promotion": "separate actual gates"
+  },
+  "inspection_note": "An initial read-only summary script used the absent compatibility-summary key completion_ready and exited with KeyError. The inspection was corrected to use the actual status/qualification_ready schema; no product command, test result or file was affected.",
+  "observation": {
+    "schema": "independent-final-integration-observation/v1",
+    "started_at": "2026-10-21T02:06:06.027360+00:00",
+    "completed_at": "2026-10-21T02:06:06.087655+00:00",
+    "head": "42ae95d146ceb441ff91ea33dbbed581c33de305",
+    "branch": "fix/manifest-pipe-drain-20261021",
+    "diff": {
+      "bytes": 21195,
+      "sha256": "fb2ce91720b69b0cda79f8efef22884904dacce6f68a596f49aafccd31bea3fe"
+    },
+    "modified_tracked_count": 18,
+    "new_file_count": 67,
+    "file_inventory": [
+      {
+        "path": ".adk/harness-readiness.json",
+        "bytes": 2091,
+        "sha256": "ccc647e507b7072f873c5bf987fc1bcf111c397b8c8b7678ba71c9660f153baa",
+        "git_state": "modified-tracked"
+      },
+      {
+        "path": ".adk/reviews/harness-source-20261021.json",
+        "bytes": 14378,
+        "sha256": "cf140e4be5f0508f5ee2f731aebaebc8fff1c17a83cd0e889e535de427cde1dc",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": ".adk/reviews/harness-source-findings-20261021.md",
+        "bytes": 5147,
+        "sha256": "77b9c50129bf50593112e4e596dbe4637cc73d27bb9ac13b7911ae75aafe3ec7",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": ".version-lock",
+        "bytes": 67,
+        "sha256": "2cb24d3626bc600d991589dcab486ac8437a1098b96ad1015204e43b9866cb08",
+        "git_state": "modified-tracked"
+      },
+      {
+        "path": "CONTEXT.md",
+        "bytes": 8642,
+        "sha256": "145aec42f91599fde0523a0a0f0dee45ced1bef0d81185b8b3d7ef96c94c21f5",
+        "git_state": "modified-tracked"
+      },
+      {
+        "path": "README.md",
+        "bytes": 8353,
+        "sha256": "3330061fa5f2192485547d573e008626ac4cef80571ac7a8137a8f63cfcd3f02",
+        "git_state": "modified-tracked"
+      },
+      {
+        "path": "docs/changes/20261021-harness-utc-date/design.md",
+        "bytes": 1018,
+        "sha256": "f0003bc1344415e302a8969b035dfc412db72cbd39b3ada0d5a9beaa0a7236d7",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-harness-utc-date/evidence/adk-full-final-receipt.json",
+        "bytes": 826,
+        "sha256": "7f25c2759dfe80df74f13157549676f4f0950517c812fe02440c15a99299b05a",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-harness-utc-date/evidence/adk-full-final-stderr.txt",
+        "bytes": 14588,
+        "sha256": "572a04c2fdd490efd964bb7d4683384ab63dff5559e67750cc7b436dfa9e17f6",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-harness-utc-date/evidence/adk-full-final-stdout.txt",
+        "bytes": 3062,
+        "sha256": "0687f9c5e44ce97121ea6b98815ac2e1ccc7bdd4cae7001ec890b101f94e3aa5",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-harness-utc-date/evidence/archive-compatibility.json",
+        "bytes": 29978,
+        "sha256": "39e89ab93d33b80e7904433204f9affabe23775832c3e42a6f3b588aef8f3b6c",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-harness-utc-date/evidence/assembly-red/assembly-red-review-record.txt",
+        "bytes": 14378,
+        "sha256": "f6a0fc1e8ac275803698a084f80be3e37eee0e30ddadbb6064b77ce0b108fbf5",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-harness-utc-date/evidence/assembly-red/harness-current-gate-receipt.json",
+        "bytes": 811,
+        "sha256": "5d1e54a00bd638c6087b839d40b640c5279d4d25dac780639b02b309c7ade999",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-harness-utc-date/evidence/assembly-red/harness-current-gate-stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-harness-utc-date/evidence/assembly-red/harness-current-gate-stdout.txt",
+        "bytes": 6196,
+        "sha256": "f0223ba69e1522b2394cbf162560230f020278dac8e79e28d110c716bc01377f",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-harness-utc-date/evidence/assembly-red/harness-renewal-targeted-receipt.json",
+        "bytes": 734,
+        "sha256": "51f4fd39d13931a7162bb779f5896c5b0ee4e86ca8797c55c8445e920bd96104",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-harness-utc-date/evidence/assembly-red/harness-renewal-targeted-stderr.txt",
+        "bytes": 6553,
+        "sha256": "d9b94b90347bdb30a1b0c6ea0e29833ba31f625da8b8211e2edcd29f081374f1",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-harness-utc-date/evidence/assembly-red/harness-renewal-targeted-stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-harness-utc-date/evidence/harness-quality/observation.json",
+        "bytes": 50230,
+        "sha256": "57c6789fa551bcacfec217146f8a995a64bcc31b237f00b476f77c845f0bbfac",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-harness-utc-date/evidence/harness-spec/aggregate-review.json",
+        "bytes": 7491,
+        "sha256": "6f1f495dcf8dcdfaa9146e4a5316819fb714cf022435449d47af4aceaf601bc0",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-harness-utc-date/evidence/harness-spec/spec-review.json",
+        "bytes": 8981,
+        "sha256": "eed0470879b69b5727e86c865df21bf0b8fa3c08752fff807ccef7d4839f7f94",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-harness-utc-date/evidence/independent-harness-quality/observation.json",
+        "bytes": 50230,
+        "sha256": "57c6789fa551bcacfec217146f8a995a64bcc31b237f00b476f77c845f0bbfac",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-harness-utc-date/evidence/independent-harness-quality/quality-result.json",
+        "bytes": 9701,
+        "sha256": "2af211af0452593e85fb9550042b70c1daa496d1acfe901394bc9d81cc778d83",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-harness-utc-date/evidence/independent-harness-quality/source-manifest.json",
+        "bytes": 9858,
+        "sha256": "0a85c884f400c5c6f0c515b693782974997d7b5da5a361111c691aa577458e1c",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-harness-utc-date/evidence/independent-harness-spec/aggregate-review.json",
+        "bytes": 7491,
+        "sha256": "6f1f495dcf8dcdfaa9146e4a5316819fb714cf022435449d47af4aceaf601bc0",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-harness-utc-date/evidence/independent-harness-spec/source-inventory.json",
+        "bytes": 13290,
+        "sha256": "12ba287cb4a42f65f862f977f54eec393aa8f7b9f26ff2e3185481c7253ce3bc",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-harness-utc-date/evidence/independent-harness-spec/spec-review.json",
+        "bytes": 8981,
+        "sha256": "eed0470879b69b5727e86c865df21bf0b8fa3c08752fff807ccef7d4839f7f94",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-harness-utc-date/evidence/utc-regression-red-receipt.json",
+        "bytes": 907,
+        "sha256": "5e27d5576473a852d0bc74f93539fceb2fd0c747ea93a27a962b2d60cc8b352b",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-harness-utc-date/evidence/utc-regression-red-stderr.txt",
+        "bytes": 3217,
+        "sha256": "8e8134883a907a3486f59d53bbe32c20a9e8dcddbb8534826b7d2a66813dbd38",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-harness-utc-date/evidence/utc-regression-red-stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-harness-utc-date/evidence/utc-review-regression-green-receipt.json",
+        "bytes": 731,
+        "sha256": "e1bb5dddb3f0f76c26f643f2c34b05b31d1b5242b4019ca725a4ef69f074cf27",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-harness-utc-date/evidence/utc-review-regression-green-stderr.txt",
+        "bytes": 144,
+        "sha256": "8edd80b94ee595b41bdc860f5534a88718773a4030f96be293d43894ed4e92a2",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-harness-utc-date/evidence/utc-review-regression-green-stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-harness-utc-date/negative-results.md",
+        "bytes": 2815,
+        "sha256": "b5ffffb80410d870a65eb0b48b824567eb95b4ce4c8c9c74641274933a9597aa",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-harness-utc-date/requirements.md",
+        "bytes": 987,
+        "sha256": "0a12e1bb5ddf4174b728323de404cb4f1720c288e2e8d93f0f7673c9ddc5b39e",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-harness-utc-date/review-report.md",
+        "bytes": 1254,
+        "sha256": "c32fc42eadf87c47eb8b4e42162b24740c07cc60656762e0b7a9d6299ff14dca",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-harness-utc-date/tasks.md",
+        "bytes": 553,
+        "sha256": "dc8d11a937885de2928f6cfd04c7664e62cf990baa4c0b247ccf0c7e3b519e9e",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-manifest-pipe-drain/design.md",
+        "bytes": 1561,
+        "sha256": "a000295f5e0c98257c39b3cdffd79aa2b8322846376c87e561adddc13ba6f4f9",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-manifest-pipe-drain/evidence/adk-full-receipt.json",
+        "bytes": 819,
+        "sha256": "33543400d099264cc86c2ba0f74a4e11db8d256238acc8c90a8ae7271b34fc28",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-manifest-pipe-drain/evidence/adk-full-stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-manifest-pipe-drain/evidence/adk-full-stdout.txt",
+        "bytes": 1221,
+        "sha256": "a33764c60c1a692fe956e98971483a4ef106bf41742b07f13a1c53a68b4a8ae1",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-manifest-pipe-drain/evidence/adk-regression-green-receipt.json",
+        "bytes": 787,
+        "sha256": "040e8825a5f781a52cfcb8a8e827e160e11f2b1ec1ad155ed67c32acdb8cc6b8",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-manifest-pipe-drain/evidence/adk-regression-green-stderr.txt",
+        "bytes": 1407,
+        "sha256": "9c693004ac43e776b7e240b72ffb8146ad8e443d1e7fdbd9ba619fa1dd08955e",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-manifest-pipe-drain/evidence/adk-regression-green-stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-manifest-pipe-drain/evidence/adk-regression-red-receipt.json",
+        "bytes": 788,
+        "sha256": "f4f0a809247b69a8ad8883a8916a015f4ab742f9383b085842b9f7d73c0ed650",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-manifest-pipe-drain/evidence/adk-regression-red-stderr.txt",
+        "bytes": 18742,
+        "sha256": "8f3533f3bf69dc45507d651824903b37df67d261e587732fc1c5a9c33878dc4e",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-manifest-pipe-drain/evidence/adk-regression-red-stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-manifest-pipe-drain/evidence/handoff-regression-green-receipt.json",
+        "bytes": 731,
+        "sha256": "35a038769d5f957e941cf26d58d381b0f00d98234555c1aabbbb6f5a635d0577",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-manifest-pipe-drain/evidence/handoff-regression-green-stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-manifest-pipe-drain/evidence/handoff-regression-green-stdout.txt",
+        "bytes": 97,
+        "sha256": "e9c4efd39b4a214b8548cf31e453b4ae45a21ad86a921b77e808a3b2cdacb8a6",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-manifest-pipe-drain/evidence/handoff-regression-red-receipt.json",
+        "bytes": 733,
+        "sha256": "488e3d3e5f6c54bd13e9dea4d3e49659d0775fe7af8b7fd5fe082f764d102494",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-manifest-pipe-drain/evidence/handoff-regression-red-stderr.txt",
+        "bytes": 243,
+        "sha256": "de32110033d3d8f0cd214b6fe78a173a2895cfac95d0cede9104610716675c0a",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-manifest-pipe-drain/evidence/handoff-regression-red-stdout.txt",
+        "bytes": 30,
+        "sha256": "b82833bb87c376d5caf7af680e0fa364f5384dd98e1bb497108eaa29094d31ce",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-manifest-pipe-drain/evidence/pipeline-baseline-receipt.json",
+        "bytes": 6282,
+        "sha256": "da254748375637f61a1709217a82ff2983cc58afb8c4d0041a44d1900b0a0cd6",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-manifest-pipe-drain/evidence/quality-binary-handoff-probe.json",
+        "bytes": 1356,
+        "sha256": "90381a7a4f970739268fa7497a61d6f26ddde40602bd4d6680c2712ecc8bb8d9",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-manifest-pipe-drain/evidence/quality-manifest-consumer-boundary.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-manifest-pipe-drain/evidence/quality-manifest-consumer-boundary.stdout.txt",
+        "bytes": 82,
+        "sha256": "2dec74370e8464f7cfeb544eee90f64d513bf4c2ec1d085d21d61499d09162e7",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-manifest-pipe-drain/evidence/quality-manifest-contract.stderr.txt",
+        "bytes": 218,
+        "sha256": "c237a0f703fddeae63a68f8087e02e41efbe199b0000fb88a813ab3341e341bc",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-manifest-pipe-drain/evidence/quality-manifest-contract.stdout.txt",
+        "bytes": 37,
+        "sha256": "d0ba97965c5c81616d06ec41d6e1fce32a7a0b8d33b2c2c28b6dea5a2a151aee",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-manifest-pipe-drain/evidence/quality-nul-pipeline-comparison.json",
+        "bytes": 4812,
+        "sha256": "80869119e9a79ebbea05b6699e55eca2e1ebbde997ca8d9074323e6ac3073fa8",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-manifest-pipe-drain/evidence/quality-receipt.json",
+        "bytes": 6734,
+        "sha256": "a7311ed093dd9f01e7f437cf2b4566f208eb96fb551e5c26ef1f4f0e96a966d4",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-manifest-pipe-drain/evidence/quality-runtime-boundary.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-manifest-pipe-drain/evidence/quality-runtime-boundary.stdout.txt",
+        "bytes": 97,
+        "sha256": "e9c4efd39b4a214b8548cf31e453b4ae45a21ad86a921b77e808a3b2cdacb8a6",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-manifest-pipe-drain/evidence/quality-syntax-final-receipt.json",
+        "bytes": 3204,
+        "sha256": "7ecff79752adf28a3f49e47fef69e5588d914534e9fcbb1b0f0bfd4899f297b7",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-manifest-pipe-drain/evidence/quality-syntax-receipt.json",
+        "bytes": 1040,
+        "sha256": "e6abf1ff3847e812306a6d42573e9e621a3d5f51b1a85ce65e545fa818734c68",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-manifest-pipe-drain/evidence/reviewed-source.json",
+        "bytes": 3287,
+        "sha256": "18889f9dea1848f81b2b3bd52f443c0a4cf479a829707e8d9388e8aac6b19354",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-manifest-pipe-drain/negative-results.md",
+        "bytes": 2467,
+        "sha256": "8a754b59eb5b348c2a6df57efbc77f52eb1da6bce5d27f457b9121e0dcbcbd24",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-manifest-pipe-drain/requirements.md",
+        "bytes": 1529,
+        "sha256": "f51bc4cd884d096d714aa96224784deb299f0df1419056159e33dd5a8289ff2a",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-manifest-pipe-drain/review-report.md",
+        "bytes": 2945,
+        "sha256": "cbb222ad602e004a41256130e59e4f8c3589129d5261a6bed2d384b778869a5d",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "docs/changes/20261021-manifest-pipe-drain/tasks.md",
+        "bytes": 550,
+        "sha256": "8173eeb27c68555bdc441b78a2e595c69d3b7467ae03496d98b526d82400b0c0",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "manifest.json",
+        "bytes": 87959,
+        "sha256": "4d461230023fb139a7f15e8d86370f715bfb43784a2bcabbbfc1f4226b4a5499",
+        "git_state": "modified-tracked"
+      },
+      {
+        "path": "manifests/software_m5_eval_contract.json",
+        "bytes": 705,
+        "sha256": "00f2d70bf0d65176e3e5fa76f4ae0c62d69c3aee4962bea7ad21f9870b6f8ad9",
+        "git_state": "modified-tracked"
+      },
+      {
+        "path": "pyproject.toml",
+        "bytes": 1902,
+        "sha256": "f2a65ddaac4d582100c25d2963de4e30576d01303dfae2e438dab8daca21b260",
+        "git_state": "modified-tracked"
+      },
+      {
+        "path": "scripts/check-capability-health.sh",
+        "bytes": 4168,
+        "sha256": "2f53febdd3cfb6cea23ad1ff7bbdf87ce23ffa948853454e6ef228f542e98735",
+        "git_state": "modified-tracked"
+      },
+      {
+        "path": "scripts/check-goal-contracts.sh",
+        "bytes": 3538,
+        "sha256": "6320184ffce09865f82e370311fa2cd823afd283f24838ec5256020b69b938f1",
+        "git_state": "modified-tracked"
+      },
+      {
+        "path": "scripts/check-runtime-boundary.sh",
+        "bytes": 6014,
+        "sha256": "c11a8a8a868f3b12c728141bc42994e9c4baa343eafba226cd13bfd543f2c41f",
+        "git_state": "modified-tracked"
+      },
+      {
+        "path": "scripts/lib-manifest.sh",
+        "bytes": 4483,
+        "sha256": "d61c270e28a9a4813816e54c245925df17fbd10e6ddaa762e80d6253b884bf15",
+        "git_state": "modified-tracked"
+      },
+      {
+        "path": "src/agent_dev_kit/__init__.py",
+        "bytes": 70,
+        "sha256": "3eaae50d207c18749ae0aca1d3fec28793ed1a41dda8b3fb480ed90885c20a52",
+        "git_state": "modified-tracked"
+      },
+      {
+        "path": "src/agent_dev_kit/readiness.py",
+        "bytes": 19424,
+        "sha256": "83a2949102955281f13a94e2f871d36e170cbfe76d053032ce5c114dc065ed29",
+        "git_state": "modified-tracked"
+      },
+      {
+        "path": "tests/test_harness_readiness.sh",
+        "bytes": 15107,
+        "sha256": "03ac2275476fcdc5f1fcacbd4375098a706cdd75fb7cbfa9a5e48c82403da300",
+        "git_state": "modified-tracked"
+      },
+      {
+        "path": "tests/test_manifest_consumer_boundary.sh",
+        "bytes": 2241,
+        "sha256": "52b81e9db66fca421aba92076aa8f618abd6a3a32d71f832940c6e03a58dbfee",
+        "git_state": "modified-tracked"
+      },
+      {
+        "path": "tests/test_manifest_contract.sh",
+        "bytes": 2450,
+        "sha256": "537ef09b32c4d43584ed463cc84ae80a94703384a1a9179dfa129008819f77a0",
+        "git_state": "modified-tracked"
+      },
+      {
+        "path": "tests/test_manifest_stream_consumers.py",
+        "bytes": 9010,
+        "sha256": "1436f01c38ce5140644355b14d4e888b499838d35c934ec62865c95a35a5a638",
+        "git_state": "untracked-new"
+      },
+      {
+        "path": "tests/test_review_evidence.py",
+        "bytes": 27736,
+        "sha256": "6abd885ab9d1b6ac141a206277660620ac2594092f8722ef1d05ddc24c61fb40",
+        "git_state": "modified-tracked"
+      },
+      {
+        "path": "tests/test_runtime_boundary.sh",
+        "bytes": 3203,
+        "sha256": "54eb46bed5be8eafd0a508bc1380ab9fe4f3334ee479c7e23c9195b01c7f0733",
+        "git_state": "modified-tracked"
+      }
+    ],
+    "canonical_record": {
+      "path": "/workspace/scratch/77add259d49b/llm_agent/agent-dev-kit/.adk/reviews/harness-source-20261021.json",
+      "bytes": 14378,
+      "sha256": "cf140e4be5f0508f5ee2f731aebaebc8fff1c17a83cd0e889e535de427cde1dc"
+    },
+    "canonical_validation": {
+      "status": "pass",
+      "record_sha256": "cf140e4be5f0508f5ee2f731aebaebc8fff1c17a83cd0e889e535de427cde1dc",
+      "review_policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+      "review_scope": "harness-source"
+    },
+    "source_count": 62,
+    "evidence_count": 2,
+    "source_manifest_sha256": "983cbca1e3d88df34052c8a5fd6ba48403373e81b588bb8893469042a775e613",
+    "metadata": {
+      "path": "/workspace/scratch/77add259d49b/llm_agent/agent-dev-kit/.adk/harness-readiness.json",
+      "bytes": 2091,
+      "sha256": "ccc647e507b7072f873c5bf987fc1bcf111c397b8c8b7678ba71c9660f153baa"
+    },
+    "pointers": [
+      {
+        "dimension_id": "context_legibility",
+        "correct": true
+      },
+      {
+        "dimension_id": "spec_and_execution_contract",
+        "correct": true
+      },
+      {
+        "dimension_id": "tool_and_permission_boundary",
+        "correct": true
+      },
+      {
+        "dimension_id": "state_and_knowledge_continuity",
+        "correct": true
+      },
+      {
+        "dimension_id": "verification_review_and_eval",
+        "correct": true
+      },
+      {
+        "dimension_id": "recovery_and_rollback",
+        "correct": true
+      },
+      {
+        "dimension_id": "freshness_and_entropy_control",
+        "correct": true
+      }
+    ],
+    "assembly_red_validation": {
+      "rejected": true,
+      "reason": "review finding identity is invalid or repeated"
+    },
+    "assembly_to_current_only_lowercase_ids": true,
+    "validator_fingerprints": {
+      "src/agent_dev_kit/review_evidence.py": "73d85e864a3da125bf94808f19616f52150751a94ccc729ac66f66d2576b8808",
+      "src/agent_dev_kit/strict_json.py": "e11233b8d02d7fb95a8f2f93bfff065a1db84c4ef0820fef6d817600abe8ec98",
+      "src/agent_dev_kit/readiness_evidence.py": "ef980657486084eea8ab8a03ab357a76a3ed43691aca8d6909b06642764c808b"
+    },
+    "prior_record_matches_git_head": true,
+    "retained_quality_artifacts": [
+      {
+        "source": {
+          "path": "/workspace/scratch/77add259d49b/oct21-evidence/independent-harness-quality/quality-result.json",
+          "bytes": 9701,
+          "sha256": "2af211af0452593e85fb9550042b70c1daa496d1acfe901394bc9d81cc778d83"
+        },
+        "retained": {
+          "path": "/workspace/scratch/77add259d49b/llm_agent/agent-dev-kit/docs/changes/20261021-harness-utc-date/evidence/independent-harness-quality/quality-result.json",
+          "bytes": 9701,
+          "sha256": "2af211af0452593e85fb9550042b70c1daa496d1acfe901394bc9d81cc778d83"
+        },
+        "same_bytes": true
+      },
+      {
+        "source": {
+          "path": "/workspace/scratch/77add259d49b/oct21-evidence/independent-harness-quality/source-manifest.json",
+          "bytes": 9858,
+          "sha256": "0a85c884f400c5c6f0c515b693782974997d7b5da5a361111c691aa577458e1c"
+        },
+        "retained": {
+          "path": "/workspace/scratch/77add259d49b/llm_agent/agent-dev-kit/docs/changes/20261021-harness-utc-date/evidence/independent-harness-quality/source-manifest.json",
+          "bytes": 9858,
+          "sha256": "0a85c884f400c5c6f0c515b693782974997d7b5da5a361111c691aa577458e1c"
+        },
+        "same_bytes": true
+      },
+      {
+        "source": {
+          "path": "/workspace/scratch/77add259d49b/oct21-evidence/independent-harness-quality/observation.json",
+          "bytes": 50230,
+          "sha256": "57c6789fa551bcacfec217146f8a995a64bcc31b237f00b476f77c845f0bbfac"
+        },
+        "retained": {
+          "path": "/workspace/scratch/77add259d49b/llm_agent/agent-dev-kit/docs/changes/20261021-harness-utc-date/evidence/independent-harness-quality/observation.json",
+          "bytes": 50230,
+          "sha256": "57c6789fa551bcacfec217146f8a995a64bcc31b237f00b476f77c845f0bbfac"
+        },
+        "same_bytes": true
+      }
+    ],
+    "runs": [
+      {
+        "name": "harness-current-gate-green",
+        "receipt": {
+          "started_at": "2026-10-21T02:02:46.202721+00:00",
+          "completed_at": "2026-10-21T02:02:46.518556+00:00",
+          "elapsed_seconds": 0.316,
+          "argv": [
+            "/workspace/scratch/77add259d49b/tooling/rtk",
+            "proxy",
+            "bash",
+            "scripts/devkit.sh",
+            "harness",
+            "readiness",
+            "--root",
+            ".",
+            "--gate",
+            "--summary-json"
+          ],
+          "cwd": "/workspace/scratch/77add259d49b/llm_agent/agent-dev-kit",
+          "exit_code": 0,
+          "timed_out": false,
+          "allow_network": false,
+          "venv": "/workspace/scratch/77add259d49b/adk-venv",
+          "outputs": {
+            "stdout.log": {
+              "bytes": 7059,
+              "sha256": "3b4eba97d9a23983712957ddf67184c16ac2072be1cba88b7911c11985c687f2"
+            },
+            "stderr.log": {
+              "bytes": 0,
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            }
+          }
+        },
+        "receipt_file": {
+          "path": "/workspace/scratch/77add259d49b/oct21-evidence/harness-current-gate-green/receipt.json",
+          "bytes": 811,
+          "sha256": "1247336948fbf9dd6339e30f8005c52e0732b2cfc480595dd39eaa6b07b45058"
+        },
+        "outputs": [
+          {
+            "path": "/workspace/scratch/77add259d49b/oct21-evidence/harness-current-gate-green/stdout.log",
+            "bytes": 7059,
+            "sha256": "3b4eba97d9a23983712957ddf67184c16ac2072be1cba88b7911c11985c687f2",
+            "match": true
+          },
+          {
+            "path": "/workspace/scratch/77add259d49b/oct21-evidence/harness-current-gate-green/stderr.log",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "match": true
+          }
+        ],
+        "report_summary": {
+          "as_of": "2026-10-21",
+          "mode": "gate",
+          "overall_status": "pass",
+          "counts": {
+            "pass": 6,
+            "partial": 0,
+            "needs-review": 0,
+            "blocked": 0,
+            "not-applicable": 1
+          },
+          "field_evidence_status": "not-verified"
+        },
+        "all_dimension_reviews_current": true
+      },
+      {
+        "name": "harness-renewal-green",
+        "receipt": {
+          "started_at": "2026-10-21T02:02:46.195415+00:00",
+          "completed_at": "2026-10-21T02:02:48.119734+00:00",
+          "elapsed_seconds": 1.924,
+          "argv": [
+            "/workspace/scratch/77add259d49b/tooling/rtk",
+            "proxy",
+            "bash",
+            "tests/test_harness_readiness.sh"
+          ],
+          "cwd": "/workspace/scratch/77add259d49b/llm_agent/agent-dev-kit",
+          "exit_code": 0,
+          "timed_out": false,
+          "allow_network": false,
+          "venv": "/workspace/scratch/77add259d49b/adk-venv",
+          "outputs": {
+            "stdout.log": {
+              "bytes": 85,
+              "sha256": "541bbcdf60243118b961085d906ae6765c09b1981f97d4aff730fd69ab9a1837"
+            },
+            "stderr.log": {
+              "bytes": 0,
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            }
+          }
+        },
+        "receipt_file": {
+          "path": "/workspace/scratch/77add259d49b/oct21-evidence/harness-renewal-green/receipt.json",
+          "bytes": 732,
+          "sha256": "e00e97f1ff781e14b4245f0a9ca68931140bbe449d01ea572a9dd76ca93ecfb3"
+        },
+        "outputs": [
+          {
+            "path": "/workspace/scratch/77add259d49b/oct21-evidence/harness-renewal-green/stdout.log",
+            "bytes": 85,
+            "sha256": "541bbcdf60243118b961085d906ae6765c09b1981f97d4aff730fd69ab9a1837",
+            "match": true
+          },
+          {
+            "path": "/workspace/scratch/77add259d49b/oct21-evidence/harness-renewal-green/stderr.log",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "match": true
+          }
+        ],
+        "stdout": "[PASS] Harness readiness deterministic report, gate, negative fixture, and redaction\n"
+      }
+    ],
+    "full_suite": {
+      "path": "/workspace/scratch/77add259d49b/oct21-evidence/adk-full-utc-reviewed",
+      "receipt_present": false,
+      "result_claim": "pending-not-assessed"
+    },
+    "critical_before": [
+      {
+        "path": ".adk/harness-readiness.json",
+        "bytes": 2091,
+        "sha256": "ccc647e507b7072f873c5bf987fc1bcf111c397b8c8b7678ba71c9660f153baa",
+        "mode": "0o644"
+      },
+      {
+        "path": ".adk/review-authorization.md",
+        "bytes": 1504,
+        "sha256": "1594e628184cb0e4ad6c669bf5ce39dcb1f333d03d0798bebb080856e703cda5",
+        "mode": "0o644"
+      },
+      {
+        "path": ".adk/review-policy.json",
+        "bytes": 411,
+        "sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+        "mode": "0o644"
+      },
+      {
+        "path": ".adk/reviews/harness-source-20261020.json",
+        "bytes": 13431,
+        "sha256": "1780be18d6c1cd893c8764aa39465afb8c437218e24a0e00769247265302d20c",
+        "mode": "0o644"
+      },
+      {
+        "path": ".adk/reviews/harness-source-20261021.json",
+        "bytes": 14378,
+        "sha256": "cf140e4be5f0508f5ee2f731aebaebc8fff1c17a83cd0e889e535de427cde1dc",
+        "mode": "0o644"
+      },
+      {
+        "path": ".adk/reviews/harness-source-findings-20261021.md",
+        "bytes": 5147,
+        "sha256": "77b9c50129bf50593112e4e596dbe4637cc73d27bb9ac13b7911ae75aafe3ec7",
+        "mode": "0o644"
+      },
+      {
+        "path": ".github/CODEOWNERS",
+        "bytes": 315,
+        "sha256": "80c4105be9d42c79f5057726fbb9971aa0a638ee17f47f31377c04085b1095cc",
+        "mode": "0o644"
+      },
+      {
+        "path": ".github/workflows/branch-gc.yml",
+        "bytes": 3169,
+        "sha256": "9c88b4fc19147008351bef181a275fb371b986567eadaa2892b5292b8322e47d",
+        "mode": "0o644"
+      },
+      {
+        "path": ".github/workflows/ci.yml",
+        "bytes": 11696,
+        "sha256": "8c0b509ca8e46ddf9e67d9aed00d5bd28da73bf831de9a35601a4f625381e910",
+        "mode": "0o644"
+      },
+      {
+        "path": ".github/workflows/claude-consumer-contract.yml",
+        "bytes": 1412,
+        "sha256": "2abc7885d7ab3476776ef4cbcbc022d008734ceb3e714381cc994ebdc543526b",
+        "mode": "0o644"
+      },
+      {
+        "path": ".github/workflows/codex-consumer-contract.yml",
+        "bytes": 1410,
+        "sha256": "f1e9e882dd0ee2995ac10d5ffa57ca97451b3ff9143f1019c617830ea2d4bbb9",
+        "mode": "0o644"
+      },
+      {
+        "path": ".github/workflows/digital-worker-contract.yml",
+        "bytes": 1519,
+        "sha256": "3575ad868bebbc6120e39a37f0786d249ec1a4887bcc1a775378c0bc1ac02eee",
+        "mode": "0o644"
+      },
+      {
+        "path": ".version-lock",
+        "bytes": 67,
+        "sha256": "2cb24d3626bc600d991589dcab486ac8437a1098b96ad1015204e43b9866cb08",
+        "mode": "0o644"
+      },
+      {
+        "path": "AGENTS.md",
+        "bytes": 2914,
+        "sha256": "61a06f86a6b5382855fab70a3098f878e9f7d3e0af653a86fbd199d8d5d13167",
+        "mode": "0o644"
+      },
+      {
+        "path": "CONTEXT.md",
+        "bytes": 8642,
+        "sha256": "145aec42f91599fde0523a0a0f0dee45ced1bef0d81185b8b3d7ef96c94c21f5",
+        "mode": "0o644"
+      },
+      {
+        "path": "OWNERS",
+        "bytes": 236,
+        "sha256": "04214b6ee2937ef8c786f998ee890a0cecacb7dd318bab99a13db844f850a95e",
+        "mode": "0o644"
+      },
+      {
+        "path": "README.md",
+        "bytes": 8353,
+        "sha256": "3330061fa5f2192485547d573e008626ac4cef80571ac7a8137a8f63cfcd3f02",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/agent-operating-rules.md",
+        "bytes": 9483,
+        "sha256": "9eb0f82be4ec98662524ed13773dbcd86c0c073c609e622d76341342e1a6f2ac",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/architecture/canonical-change-authority.md",
+        "bytes": 2731,
+        "sha256": "8c55aac803a078e6490fd7ffac9a70df27a1dfbd6740ab16c479de4c12cf39f6",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/changes/2026-09-25-agent-value-trust/negative-results.md",
+        "bytes": 856,
+        "sha256": "da7aa6c51295be56368b90594b7eb6469bf0a43b3888d7a482839bb22c0970c0",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/changes/2026-09-25-agent-value-trust/requirements.md",
+        "bytes": 972,
+        "sha256": "429e4296ec368df67542c7b536c478c2ac2f16adedad9dfddc1b53383cc343ad",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/changes/2026-09-25-agent-value-trust/tasks.md",
+        "bytes": 891,
+        "sha256": "ccee418ae0bd170f1c579bf0cb48af9be1dff833629c95705f5deca431e1d499",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/changes/2026-09-25-effect-trials/design.md",
+        "bytes": 1718,
+        "sha256": "a23b59b2cab96879196748bd082347a8d00a756598460ad3f83f97c7a50e976f",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/changes/2026-09-25-effect-trials/negative-results.md",
+        "bytes": 449,
+        "sha256": "045d0b30fd4e15dabfa0436d3b34403bb3bd5b6b8916ef4cb708a2e6523cdf73",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/changes/2026-09-25-effect-trials/requirements.md",
+        "bytes": 1034,
+        "sha256": "f4a2bffa3a90d0955a2b9e50d5e3201a30f667edb30a1709985bab2f856ed281",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/changes/2026-09-25-effect-trials/tasks.md",
+        "bytes": 1064,
+        "sha256": "802ca9c194d39060eb931af0f3e8042d5f1e62acc9249abeaead6b5ede8615b9",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/changes/2026-09-25-native-campaign-finalize/negative-results.md",
+        "bytes": 597,
+        "sha256": "d5d436b9ddf56b37c22f200b2f84a7fd09d3e964b8d91c4051649eb51b207673",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/changes/2026-09-25-native-campaign-finalize/requirements.md",
+        "bytes": 924,
+        "sha256": "45da7af9938c1c826ca203ab5439d55aac9def3a4da218a30a5252d531d3d0a7",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/changes/2026-09-25-native-campaign-finalize/tasks.md",
+        "bytes": 765,
+        "sha256": "b94ecc55058d993aa5ceb2da12020ffc181b68de7b4924c591f7a5567ccaee09",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/changes/2026-09-25-native-campaign-project-layout/negative-results.md",
+        "bytes": 565,
+        "sha256": "9426f86cc945edfaa63590e140c0ec458762beea4e09bf0a0886badb15151338",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/changes/2026-09-25-native-campaign-project-layout/tasks.md",
+        "bytes": 874,
+        "sha256": "2f3fca0914f53aabe3713f3d0094fb6bacb3e3d1e0df867db134d71835d3e2ce",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/changes/adk-platform-convergence-v1/state.yaml",
+        "bytes": 65,
+        "sha256": "f95699e68437bafa0199a5564af18cbc7e3f78de290f4b01dc17737d0b68156e",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/changes/adk-self-readiness-ownership/state.yaml",
+        "bytes": 1159,
+        "sha256": "d590a0ae6b1b666cc1d6d64ab7b1e8fd5f128979993595eea8489783138f46d1",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/changes/adk-terminal-contract-hardening/state.yaml",
+        "bytes": 2220,
+        "sha256": "87b107bda25456141bae1a3b035c7e2c30616afd8baf86d333216a87f0754f5f",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/changes/adk-v3-1-rc2-target-conformance/state.yaml",
+        "bytes": 1939,
+        "sha256": "ed9597562535265d61322e9558727acf963193e121570d1a7bafe5136d4299d6",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/changes/adk-v3-1-software-m5-ready/state.yaml",
+        "bytes": 67,
+        "sha256": "fa314d45b209d8bea753377d18848cb02793d62c660dd69e906b7d8ee96e1134",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/changes/agent-ecosystem-standards-hardening/state.yaml",
+        "bytes": 177,
+        "sha256": "37ff7e9a84d590999e31b86493ee82de2a313e5efded23bba90a3c885977bee5",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/runbooks/README.md",
+        "bytes": 1002,
+        "sha256": "0888aa2b94f929760040517deaf9a47b517648b0694209d48309956fbe83273d",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/runbooks/agent-value-lifecycle.md",
+        "bytes": 12268,
+        "sha256": "84e629c1c040b265d6a64369c5b39d6af2e999576af4429939738ff00b5a4c37",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/runbooks/artifact-gated-delivery.md",
+        "bytes": 1464,
+        "sha256": "f83375f1392b20006f29e43ce5b0807530ad850969e6ee67e3b861a78fa98dd6",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/runbooks/bugfix-delivery.md",
+        "bytes": 1338,
+        "sha256": "f7ef75ace0052ecbde911b06e3b45a1d22045ba24257c642736f72f6f28ff623",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/runbooks/codex-pilot-evidence.md",
+        "bytes": 1179,
+        "sha256": "5ff92fab93baf7403b838a67f359e29016a6ce19563eb98006cca6c842ae298c",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/runbooks/codex-runtime-method-boundary.md",
+        "bytes": 1828,
+        "sha256": "43bf36ec8a1a9a12bf30bb29b7a9f2bdbfd9a00f849ad700a85fb1cd440dde18",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/runbooks/knowledge-compile-model.md",
+        "bytes": 4430,
+        "sha256": "cd4eab2335cf8f492d53e9d580229416d4909e04c76e5bb1de21fe66173693f5",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/runbooks/mcp-governance.md",
+        "bytes": 11849,
+        "sha256": "327eb7994249992885ecf50234becf87ecdfb05c1df394027e4b21f236ef2082",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/runbooks/memory-governance.md",
+        "bytes": 11497,
+        "sha256": "9cb1e6aba2073bde64278c8cbd1f64e06ad8057b589d3365c8242770978181ab",
+        "mode": "0o644"
+      },
+      {
+        "path": "manifest.json",
+        "bytes": 87959,
+        "sha256": "4d461230023fb139a7f15e8d86370f715bfb43784a2bcabbbfc1f4226b4a5499",
+        "mode": "0o644"
+      },
+      {
+        "path": "manifests/context_state_contracts.json",
+        "bytes": 5881,
+        "sha256": "fe8076296b8cf214aee52a5ad32dabff5d383555e76f6d3d3e542e2e6617fb91",
+        "mode": "0o644"
+      },
+      {
+        "path": "manifests/harness_readiness_contracts.json",
+        "bytes": 4523,
+        "sha256": "e12c527dcfcfc61030b9a344f9d7fa3efeb828c364f5707285bdded69fcd8358",
+        "mode": "0o644"
+      },
+      {
+        "path": "manifests/software_m5_eval_contract.json",
+        "bytes": 705,
+        "sha256": "00f2d70bf0d65176e3e5fa76f4ae0c62d69c3aee4962bea7ad21f9870b6f8ad9",
+        "mode": "0o644"
+      },
+      {
+        "path": "manifests/token_context_policy.json",
+        "bytes": 1703,
+        "sha256": "799b0388c82c6cb6925caf0c2cd6e44685eeca5277a9b5128a9cec50551e158f",
+        "mode": "0o644"
+      },
+      {
+        "path": "pyproject.toml",
+        "bytes": 1902,
+        "sha256": "f2a65ddaac4d582100c25d2963de4e30576d01303dfae2e438dab8daca21b260",
+        "mode": "0o644"
+      },
+      {
+        "path": "scripts/backup-rollback.sh",
+        "bytes": 5946,
+        "sha256": "b8fbb6466bba0d47e414e9db5d41d821d7d753b0087cbb624af987ee61d10d41",
+        "mode": "0o755"
+      },
+      {
+        "path": "scripts/check-capability-health.sh",
+        "bytes": 4168,
+        "sha256": "2f53febdd3cfb6cea23ad1ff7bbdf87ce23ffa948853454e6ef228f542e98735",
+        "mode": "0o755"
+      },
+      {
+        "path": "scripts/check-format.sh",
+        "bytes": 1682,
+        "sha256": "5810e3880f2af51cf7b39f5e1c2caa49012c89ddfc7fc6224e74adf707249227",
+        "mode": "0o755"
+      },
+      {
+        "path": "scripts/check-goal-contracts.sh",
+        "bytes": 3538,
+        "sha256": "6320184ffce09865f82e370311fa2cd823afd283f24838ec5256020b69b938f1",
+        "mode": "0o755"
+      },
+      {
+        "path": "scripts/check-runtime-boundary.sh",
+        "bytes": 6014,
+        "sha256": "c11a8a8a868f3b12c728141bc42994e9c4baa343eafba226cd13bfd543f2c41f",
+        "mode": "0o755"
+      },
+      {
+        "path": "scripts/lib-manifest.sh",
+        "bytes": 4483,
+        "sha256": "d61c270e28a9a4813816e54c245925df17fbd10e6ddaa762e80d6253b884bf15",
+        "mode": "0o755"
+      },
+      {
+        "path": "scripts/workflow.sh",
+        "bytes": 19515,
+        "sha256": "a230f7fc396e9a1f243ef925db2987bcccd2208fc14c1387bf6aea20439dea83",
+        "mode": "0o755"
+      },
+      {
+        "path": "skills/adk-code-review-loop/SKILL.md",
+        "bytes": 7182,
+        "sha256": "c89e4f72da3f8c7c4cc5ea8fc5c1e2c3af1219f2ca751d290442043eeb681972",
+        "mode": "0o644"
+      },
+      {
+        "path": "src/agent_dev_kit/__init__.py",
+        "bytes": 70,
+        "sha256": "3eaae50d207c18749ae0aca1d3fec28793ed1a41dda8b3fb480ed90885c20a52",
+        "mode": "0o644"
+      },
+      {
+        "path": "src/agent_dev_kit/installation_transaction.py",
+        "bytes": 28808,
+        "sha256": "a300ff54043feebc43237a31ba2350ae522b512339095c7158071a84ace36777",
+        "mode": "0o644"
+      },
+      {
+        "path": "src/agent_dev_kit/official_docs_governance.py",
+        "bytes": 1292,
+        "sha256": "99e523d1afd4a3f8e1f53aca2b7aa77dbb0828d269d6ce76b1e3d8b9feea72e8",
+        "mode": "0o644"
+      },
+      {
+        "path": "src/agent_dev_kit/official_docs_sources.py",
+        "bytes": 16577,
+        "sha256": "36f9759939685e5db9f873008a723b50de429498c839f89b828e9a7ffb652afd",
+        "mode": "0o644"
+      },
+      {
+        "path": "src/agent_dev_kit/readiness.py",
+        "bytes": 19424,
+        "sha256": "83a2949102955281f13a94e2f871d36e170cbfe76d053032ce5c114dc065ed29",
+        "mode": "0o644"
+      },
+      {
+        "path": "src/agent_dev_kit/readiness_evidence.py",
+        "bytes": 19215,
+        "sha256": "ef980657486084eea8ab8a03ab357a76a3ed43691aca8d6909b06642764c808b",
+        "mode": "0o644"
+      },
+      {
+        "path": "src/agent_dev_kit/readiness_tools.py",
+        "bytes": 10831,
+        "sha256": "5d361c7bd0fbbc2ce923071d3b5afcefb5998a8047d49e54be70f19ca49c554c",
+        "mode": "0o644"
+      },
+      {
+        "path": "src/agent_dev_kit/review_evidence.py",
+        "bytes": 14820,
+        "sha256": "73d85e864a3da125bf94808f19616f52150751a94ccc729ac66f66d2576b8808",
+        "mode": "0o644"
+      },
+      {
+        "path": "src/agent_dev_kit/strict_json.py",
+        "bytes": 4297,
+        "sha256": "e11233b8d02d7fb95a8f2f93bfff065a1db84c4ef0820fef6d817600abe8ec98",
+        "mode": "0o644"
+      },
+      {
+        "path": "tests/lib/bash-test-helpers.sh",
+        "bytes": 2448,
+        "sha256": "90a6fa1c00f18ffaa9394fc548cbf5739e8eeda8b827832eef516961164d263d",
+        "mode": "0o755"
+      },
+      {
+        "path": "tests/mcp_2026_activation/mcp_activation_test.go",
+        "bytes": 19342,
+        "sha256": "560fa3a6e299dca198b7417dec72bc77998aa736587a83c795cb579abd686324",
+        "mode": "0o644"
+      },
+      {
+        "path": "tests/run_all.sh",
+        "bytes": 10452,
+        "sha256": "f7328fd18b81713f6053924099bd81fde92cc4a2ac2ddab7710feab9fc1d8fd1",
+        "mode": "0o755"
+      },
+      {
+        "path": "tests/test_agent_ecosystem_standards.sh",
+        "bytes": 8932,
+        "sha256": "9341118fc2187764597d0445caddfa5930fbc95fb0eeed6665d29ef9b4a3844e",
+        "mode": "0o755"
+      },
+      {
+        "path": "tests/test_agent_platform.sh",
+        "bytes": 6779,
+        "sha256": "a7136691eeed9ff7a64a3c98fb2508d3dac82ca35c09ea9d1ab4d3b16a244a02",
+        "mode": "0o644"
+      },
+      {
+        "path": "tests/test_archive_restore.py",
+        "bytes": 8840,
+        "sha256": "f91711f7ea7808b73f7b8fcb87d05d293be63fd8a825c4c2d6ca99b9b1e0006b",
+        "mode": "0o644"
+      },
+      {
+        "path": "tests/test_catalog.sh",
+        "bytes": 4832,
+        "sha256": "122fce83231fbd4af11789da15933c1fbf63b25aee218fdd306c8889c1382798",
+        "mode": "0o755"
+      },
+      {
+        "path": "tests/test_eval_catalog.py",
+        "bytes": 8806,
+        "sha256": "dd0f1d497a0125284ce674690315b6854bebc30257f1ed6ce1f4f552897ff8c7",
+        "mode": "0o644"
+      },
+      {
+        "path": "tests/test_eval_catalog.sh",
+        "bytes": 440,
+        "sha256": "fbb79f7fdcf60b5dde639d2c03e6ba09dc178efe43d98274ca8e410f5aec9946",
+        "mode": "0o755"
+      },
+      {
+        "path": "tests/test_harness_readiness.sh",
+        "bytes": 15107,
+        "sha256": "03ac2275476fcdc5f1fcacbd4375098a706cdd75fb7cbfa9a5e48c82403da300",
+        "mode": "0o755"
+      },
+      {
+        "path": "tests/test_manifest_consumer_boundary.sh",
+        "bytes": 2241,
+        "sha256": "52b81e9db66fca421aba92076aa8f618abd6a3a32d71f832940c6e03a58dbfee",
+        "mode": "0o755"
+      },
+      {
+        "path": "tests/test_manifest_contract.sh",
+        "bytes": 2450,
+        "sha256": "537ef09b32c4d43584ed463cc84ae80a94703384a1a9179dfa129008819f77a0",
+        "mode": "0o755"
+      },
+      {
+        "path": "tests/test_manifest_stream_consumers.py",
+        "bytes": 9010,
+        "sha256": "1436f01c38ce5140644355b14d4e888b499838d35c934ec62865c95a35a5a638",
+        "mode": "0o644"
+      },
+      {
+        "path": "tests/test_mcp_freshness_ssot.sh",
+        "bytes": 3283,
+        "sha256": "9ccac15a620e20f9d5eacb1e1e50f47c191e3ce5bb07015f3f6b91def51c44af",
+        "mode": "0o644"
+      },
+      {
+        "path": "tests/test_review_evidence.py",
+        "bytes": 27736,
+        "sha256": "6abd885ab9d1b6ac141a206277660620ac2594092f8722ef1d05ddc24c61fb40",
+        "mode": "0o644"
+      },
+      {
+        "path": "tests/test_runtime_boundary.sh",
+        "bytes": 3203,
+        "sha256": "54eb46bed5be8eafd0a508bc1380ab9fe4f3334ee479c7e23c9195b01c7f0733",
+        "mode": "0o755"
+      }
+    ],
+    "critical_after": [
+      {
+        "path": ".adk/harness-readiness.json",
+        "bytes": 2091,
+        "sha256": "ccc647e507b7072f873c5bf987fc1bcf111c397b8c8b7678ba71c9660f153baa",
+        "mode": "0o644"
+      },
+      {
+        "path": ".adk/review-authorization.md",
+        "bytes": 1504,
+        "sha256": "1594e628184cb0e4ad6c669bf5ce39dcb1f333d03d0798bebb080856e703cda5",
+        "mode": "0o644"
+      },
+      {
+        "path": ".adk/review-policy.json",
+        "bytes": 411,
+        "sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+        "mode": "0o644"
+      },
+      {
+        "path": ".adk/reviews/harness-source-20261020.json",
+        "bytes": 13431,
+        "sha256": "1780be18d6c1cd893c8764aa39465afb8c437218e24a0e00769247265302d20c",
+        "mode": "0o644"
+      },
+      {
+        "path": ".adk/reviews/harness-source-20261021.json",
+        "bytes": 14378,
+        "sha256": "cf140e4be5f0508f5ee2f731aebaebc8fff1c17a83cd0e889e535de427cde1dc",
+        "mode": "0o644"
+      },
+      {
+        "path": ".adk/reviews/harness-source-findings-20261021.md",
+        "bytes": 5147,
+        "sha256": "77b9c50129bf50593112e4e596dbe4637cc73d27bb9ac13b7911ae75aafe3ec7",
+        "mode": "0o644"
+      },
+      {
+        "path": ".github/CODEOWNERS",
+        "bytes": 315,
+        "sha256": "80c4105be9d42c79f5057726fbb9971aa0a638ee17f47f31377c04085b1095cc",
+        "mode": "0o644"
+      },
+      {
+        "path": ".github/workflows/branch-gc.yml",
+        "bytes": 3169,
+        "sha256": "9c88b4fc19147008351bef181a275fb371b986567eadaa2892b5292b8322e47d",
+        "mode": "0o644"
+      },
+      {
+        "path": ".github/workflows/ci.yml",
+        "bytes": 11696,
+        "sha256": "8c0b509ca8e46ddf9e67d9aed00d5bd28da73bf831de9a35601a4f625381e910",
+        "mode": "0o644"
+      },
+      {
+        "path": ".github/workflows/claude-consumer-contract.yml",
+        "bytes": 1412,
+        "sha256": "2abc7885d7ab3476776ef4cbcbc022d008734ceb3e714381cc994ebdc543526b",
+        "mode": "0o644"
+      },
+      {
+        "path": ".github/workflows/codex-consumer-contract.yml",
+        "bytes": 1410,
+        "sha256": "f1e9e882dd0ee2995ac10d5ffa57ca97451b3ff9143f1019c617830ea2d4bbb9",
+        "mode": "0o644"
+      },
+      {
+        "path": ".github/workflows/digital-worker-contract.yml",
+        "bytes": 1519,
+        "sha256": "3575ad868bebbc6120e39a37f0786d249ec1a4887bcc1a775378c0bc1ac02eee",
+        "mode": "0o644"
+      },
+      {
+        "path": ".version-lock",
+        "bytes": 67,
+        "sha256": "2cb24d3626bc600d991589dcab486ac8437a1098b96ad1015204e43b9866cb08",
+        "mode": "0o644"
+      },
+      {
+        "path": "AGENTS.md",
+        "bytes": 2914,
+        "sha256": "61a06f86a6b5382855fab70a3098f878e9f7d3e0af653a86fbd199d8d5d13167",
+        "mode": "0o644"
+      },
+      {
+        "path": "CONTEXT.md",
+        "bytes": 8642,
+        "sha256": "145aec42f91599fde0523a0a0f0dee45ced1bef0d81185b8b3d7ef96c94c21f5",
+        "mode": "0o644"
+      },
+      {
+        "path": "OWNERS",
+        "bytes": 236,
+        "sha256": "04214b6ee2937ef8c786f998ee890a0cecacb7dd318bab99a13db844f850a95e",
+        "mode": "0o644"
+      },
+      {
+        "path": "README.md",
+        "bytes": 8353,
+        "sha256": "3330061fa5f2192485547d573e008626ac4cef80571ac7a8137a8f63cfcd3f02",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/agent-operating-rules.md",
+        "bytes": 9483,
+        "sha256": "9eb0f82be4ec98662524ed13773dbcd86c0c073c609e622d76341342e1a6f2ac",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/architecture/canonical-change-authority.md",
+        "bytes": 2731,
+        "sha256": "8c55aac803a078e6490fd7ffac9a70df27a1dfbd6740ab16c479de4c12cf39f6",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/changes/2026-09-25-agent-value-trust/negative-results.md",
+        "bytes": 856,
+        "sha256": "da7aa6c51295be56368b90594b7eb6469bf0a43b3888d7a482839bb22c0970c0",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/changes/2026-09-25-agent-value-trust/requirements.md",
+        "bytes": 972,
+        "sha256": "429e4296ec368df67542c7b536c478c2ac2f16adedad9dfddc1b53383cc343ad",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/changes/2026-09-25-agent-value-trust/tasks.md",
+        "bytes": 891,
+        "sha256": "ccee418ae0bd170f1c579bf0cb48af9be1dff833629c95705f5deca431e1d499",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/changes/2026-09-25-effect-trials/design.md",
+        "bytes": 1718,
+        "sha256": "a23b59b2cab96879196748bd082347a8d00a756598460ad3f83f97c7a50e976f",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/changes/2026-09-25-effect-trials/negative-results.md",
+        "bytes": 449,
+        "sha256": "045d0b30fd4e15dabfa0436d3b34403bb3bd5b6b8916ef4cb708a2e6523cdf73",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/changes/2026-09-25-effect-trials/requirements.md",
+        "bytes": 1034,
+        "sha256": "f4a2bffa3a90d0955a2b9e50d5e3201a30f667edb30a1709985bab2f856ed281",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/changes/2026-09-25-effect-trials/tasks.md",
+        "bytes": 1064,
+        "sha256": "802ca9c194d39060eb931af0f3e8042d5f1e62acc9249abeaead6b5ede8615b9",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/changes/2026-09-25-native-campaign-finalize/negative-results.md",
+        "bytes": 597,
+        "sha256": "d5d436b9ddf56b37c22f200b2f84a7fd09d3e964b8d91c4051649eb51b207673",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/changes/2026-09-25-native-campaign-finalize/requirements.md",
+        "bytes": 924,
+        "sha256": "45da7af9938c1c826ca203ab5439d55aac9def3a4da218a30a5252d531d3d0a7",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/changes/2026-09-25-native-campaign-finalize/tasks.md",
+        "bytes": 765,
+        "sha256": "b94ecc55058d993aa5ceb2da12020ffc181b68de7b4924c591f7a5567ccaee09",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/changes/2026-09-25-native-campaign-project-layout/negative-results.md",
+        "bytes": 565,
+        "sha256": "9426f86cc945edfaa63590e140c0ec458762beea4e09bf0a0886badb15151338",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/changes/2026-09-25-native-campaign-project-layout/tasks.md",
+        "bytes": 874,
+        "sha256": "2f3fca0914f53aabe3713f3d0094fb6bacb3e3d1e0df867db134d71835d3e2ce",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/changes/adk-platform-convergence-v1/state.yaml",
+        "bytes": 65,
+        "sha256": "f95699e68437bafa0199a5564af18cbc7e3f78de290f4b01dc17737d0b68156e",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/changes/adk-self-readiness-ownership/state.yaml",
+        "bytes": 1159,
+        "sha256": "d590a0ae6b1b666cc1d6d64ab7b1e8fd5f128979993595eea8489783138f46d1",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/changes/adk-terminal-contract-hardening/state.yaml",
+        "bytes": 2220,
+        "sha256": "87b107bda25456141bae1a3b035c7e2c30616afd8baf86d333216a87f0754f5f",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/changes/adk-v3-1-rc2-target-conformance/state.yaml",
+        "bytes": 1939,
+        "sha256": "ed9597562535265d61322e9558727acf963193e121570d1a7bafe5136d4299d6",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/changes/adk-v3-1-software-m5-ready/state.yaml",
+        "bytes": 67,
+        "sha256": "fa314d45b209d8bea753377d18848cb02793d62c660dd69e906b7d8ee96e1134",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/changes/agent-ecosystem-standards-hardening/state.yaml",
+        "bytes": 177,
+        "sha256": "37ff7e9a84d590999e31b86493ee82de2a313e5efded23bba90a3c885977bee5",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/runbooks/README.md",
+        "bytes": 1002,
+        "sha256": "0888aa2b94f929760040517deaf9a47b517648b0694209d48309956fbe83273d",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/runbooks/agent-value-lifecycle.md",
+        "bytes": 12268,
+        "sha256": "84e629c1c040b265d6a64369c5b39d6af2e999576af4429939738ff00b5a4c37",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/runbooks/artifact-gated-delivery.md",
+        "bytes": 1464,
+        "sha256": "f83375f1392b20006f29e43ce5b0807530ad850969e6ee67e3b861a78fa98dd6",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/runbooks/bugfix-delivery.md",
+        "bytes": 1338,
+        "sha256": "f7ef75ace0052ecbde911b06e3b45a1d22045ba24257c642736f72f6f28ff623",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/runbooks/codex-pilot-evidence.md",
+        "bytes": 1179,
+        "sha256": "5ff92fab93baf7403b838a67f359e29016a6ce19563eb98006cca6c842ae298c",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/runbooks/codex-runtime-method-boundary.md",
+        "bytes": 1828,
+        "sha256": "43bf36ec8a1a9a12bf30bb29b7a9f2bdbfd9a00f849ad700a85fb1cd440dde18",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/runbooks/knowledge-compile-model.md",
+        "bytes": 4430,
+        "sha256": "cd4eab2335cf8f492d53e9d580229416d4909e04c76e5bb1de21fe66173693f5",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/runbooks/mcp-governance.md",
+        "bytes": 11849,
+        "sha256": "327eb7994249992885ecf50234becf87ecdfb05c1df394027e4b21f236ef2082",
+        "mode": "0o644"
+      },
+      {
+        "path": "docs/runbooks/memory-governance.md",
+        "bytes": 11497,
+        "sha256": "9cb1e6aba2073bde64278c8cbd1f64e06ad8057b589d3365c8242770978181ab",
+        "mode": "0o644"
+      },
+      {
+        "path": "manifest.json",
+        "bytes": 87959,
+        "sha256": "4d461230023fb139a7f15e8d86370f715bfb43784a2bcabbbfc1f4226b4a5499",
+        "mode": "0o644"
+      },
+      {
+        "path": "manifests/context_state_contracts.json",
+        "bytes": 5881,
+        "sha256": "fe8076296b8cf214aee52a5ad32dabff5d383555e76f6d3d3e542e2e6617fb91",
+        "mode": "0o644"
+      },
+      {
+        "path": "manifests/harness_readiness_contracts.json",
+        "bytes": 4523,
+        "sha256": "e12c527dcfcfc61030b9a344f9d7fa3efeb828c364f5707285bdded69fcd8358",
+        "mode": "0o644"
+      },
+      {
+        "path": "manifests/software_m5_eval_contract.json",
+        "bytes": 705,
+        "sha256": "00f2d70bf0d65176e3e5fa76f4ae0c62d69c3aee4962bea7ad21f9870b6f8ad9",
+        "mode": "0o644"
+      },
+      {
+        "path": "manifests/token_context_policy.json",
+        "bytes": 1703,
+        "sha256": "799b0388c82c6cb6925caf0c2cd6e44685eeca5277a9b5128a9cec50551e158f",
+        "mode": "0o644"
+      },
+      {
+        "path": "pyproject.toml",
+        "bytes": 1902,
+        "sha256": "f2a65ddaac4d582100c25d2963de4e30576d01303dfae2e438dab8daca21b260",
+        "mode": "0o644"
+      },
+      {
+        "path": "scripts/backup-rollback.sh",
+        "bytes": 5946,
+        "sha256": "b8fbb6466bba0d47e414e9db5d41d821d7d753b0087cbb624af987ee61d10d41",
+        "mode": "0o755"
+      },
+      {
+        "path": "scripts/check-capability-health.sh",
+        "bytes": 4168,
+        "sha256": "2f53febdd3cfb6cea23ad1ff7bbdf87ce23ffa948853454e6ef228f542e98735",
+        "mode": "0o755"
+      },
+      {
+        "path": "scripts/check-format.sh",
+        "bytes": 1682,
+        "sha256": "5810e3880f2af51cf7b39f5e1c2caa49012c89ddfc7fc6224e74adf707249227",
+        "mode": "0o755"
+      },
+      {
+        "path": "scripts/check-goal-contracts.sh",
+        "bytes": 3538,
+        "sha256": "6320184ffce09865f82e370311fa2cd823afd283f24838ec5256020b69b938f1",
+        "mode": "0o755"
+      },
+      {
+        "path": "scripts/check-runtime-boundary.sh",
+        "bytes": 6014,
+        "sha256": "c11a8a8a868f3b12c728141bc42994e9c4baa343eafba226cd13bfd543f2c41f",
+        "mode": "0o755"
+      },
+      {
+        "path": "scripts/lib-manifest.sh",
+        "bytes": 4483,
+        "sha256": "d61c270e28a9a4813816e54c245925df17fbd10e6ddaa762e80d6253b884bf15",
+        "mode": "0o755"
+      },
+      {
+        "path": "scripts/workflow.sh",
+        "bytes": 19515,
+        "sha256": "a230f7fc396e9a1f243ef925db2987bcccd2208fc14c1387bf6aea20439dea83",
+        "mode": "0o755"
+      },
+      {
+        "path": "skills/adk-code-review-loop/SKILL.md",
+        "bytes": 7182,
+        "sha256": "c89e4f72da3f8c7c4cc5ea8fc5c1e2c3af1219f2ca751d290442043eeb681972",
+        "mode": "0o644"
+      },
+      {
+        "path": "src/agent_dev_kit/__init__.py",
+        "bytes": 70,
+        "sha256": "3eaae50d207c18749ae0aca1d3fec28793ed1a41dda8b3fb480ed90885c20a52",
+        "mode": "0o644"
+      },
+      {
+        "path": "src/agent_dev_kit/installation_transaction.py",
+        "bytes": 28808,
+        "sha256": "a300ff54043feebc43237a31ba2350ae522b512339095c7158071a84ace36777",
+        "mode": "0o644"
+      },
+      {
+        "path": "src/agent_dev_kit/official_docs_governance.py",
+        "bytes": 1292,
+        "sha256": "99e523d1afd4a3f8e1f53aca2b7aa77dbb0828d269d6ce76b1e3d8b9feea72e8",
+        "mode": "0o644"
+      },
+      {
+        "path": "src/agent_dev_kit/official_docs_sources.py",
+        "bytes": 16577,
+        "sha256": "36f9759939685e5db9f873008a723b50de429498c839f89b828e9a7ffb652afd",
+        "mode": "0o644"
+      },
+      {
+        "path": "src/agent_dev_kit/readiness.py",
+        "bytes": 19424,
+        "sha256": "83a2949102955281f13a94e2f871d36e170cbfe76d053032ce5c114dc065ed29",
+        "mode": "0o644"
+      },
+      {
+        "path": "src/agent_dev_kit/readiness_evidence.py",
+        "bytes": 19215,
+        "sha256": "ef980657486084eea8ab8a03ab357a76a3ed43691aca8d6909b06642764c808b",
+        "mode": "0o644"
+      },
+      {
+        "path": "src/agent_dev_kit/readiness_tools.py",
+        "bytes": 10831,
+        "sha256": "5d361c7bd0fbbc2ce923071d3b5afcefb5998a8047d49e54be70f19ca49c554c",
+        "mode": "0o644"
+      },
+      {
+        "path": "src/agent_dev_kit/review_evidence.py",
+        "bytes": 14820,
+        "sha256": "73d85e864a3da125bf94808f19616f52150751a94ccc729ac66f66d2576b8808",
+        "mode": "0o644"
+      },
+      {
+        "path": "src/agent_dev_kit/strict_json.py",
+        "bytes": 4297,
+        "sha256": "e11233b8d02d7fb95a8f2f93bfff065a1db84c4ef0820fef6d817600abe8ec98",
+        "mode": "0o644"
+      },
+      {
+        "path": "tests/lib/bash-test-helpers.sh",
+        "bytes": 2448,
+        "sha256": "90a6fa1c00f18ffaa9394fc548cbf5739e8eeda8b827832eef516961164d263d",
+        "mode": "0o755"
+      },
+      {
+        "path": "tests/mcp_2026_activation/mcp_activation_test.go",
+        "bytes": 19342,
+        "sha256": "560fa3a6e299dca198b7417dec72bc77998aa736587a83c795cb579abd686324",
+        "mode": "0o644"
+      },
+      {
+        "path": "tests/run_all.sh",
+        "bytes": 10452,
+        "sha256": "f7328fd18b81713f6053924099bd81fde92cc4a2ac2ddab7710feab9fc1d8fd1",
+        "mode": "0o755"
+      },
+      {
+        "path": "tests/test_agent_ecosystem_standards.sh",
+        "bytes": 8932,
+        "sha256": "9341118fc2187764597d0445caddfa5930fbc95fb0eeed6665d29ef9b4a3844e",
+        "mode": "0o755"
+      },
+      {
+        "path": "tests/test_agent_platform.sh",
+        "bytes": 6779,
+        "sha256": "a7136691eeed9ff7a64a3c98fb2508d3dac82ca35c09ea9d1ab4d3b16a244a02",
+        "mode": "0o644"
+      },
+      {
+        "path": "tests/test_archive_restore.py",
+        "bytes": 8840,
+        "sha256": "f91711f7ea7808b73f7b8fcb87d05d293be63fd8a825c4c2d6ca99b9b1e0006b",
+        "mode": "0o644"
+      },
+      {
+        "path": "tests/test_catalog.sh",
+        "bytes": 4832,
+        "sha256": "122fce83231fbd4af11789da15933c1fbf63b25aee218fdd306c8889c1382798",
+        "mode": "0o755"
+      },
+      {
+        "path": "tests/test_eval_catalog.py",
+        "bytes": 8806,
+        "sha256": "dd0f1d497a0125284ce674690315b6854bebc30257f1ed6ce1f4f552897ff8c7",
+        "mode": "0o644"
+      },
+      {
+        "path": "tests/test_eval_catalog.sh",
+        "bytes": 440,
+        "sha256": "fbb79f7fdcf60b5dde639d2c03e6ba09dc178efe43d98274ca8e410f5aec9946",
+        "mode": "0o755"
+      },
+      {
+        "path": "tests/test_harness_readiness.sh",
+        "bytes": 15107,
+        "sha256": "03ac2275476fcdc5f1fcacbd4375098a706cdd75fb7cbfa9a5e48c82403da300",
+        "mode": "0o755"
+      },
+      {
+        "path": "tests/test_manifest_consumer_boundary.sh",
+        "bytes": 2241,
+        "sha256": "52b81e9db66fca421aba92076aa8f618abd6a3a32d71f832940c6e03a58dbfee",
+        "mode": "0o755"
+      },
+      {
+        "path": "tests/test_manifest_contract.sh",
+        "bytes": 2450,
+        "sha256": "537ef09b32c4d43584ed463cc84ae80a94703384a1a9179dfa129008819f77a0",
+        "mode": "0o755"
+      },
+      {
+        "path": "tests/test_manifest_stream_consumers.py",
+        "bytes": 9010,
+        "sha256": "1436f01c38ce5140644355b14d4e888b499838d35c934ec62865c95a35a5a638",
+        "mode": "0o644"
+      },
+      {
+        "path": "tests/test_mcp_freshness_ssot.sh",
+        "bytes": 3283,
+        "sha256": "9ccac15a620e20f9d5eacb1e1e50f47c191e3ce5bb07015f3f6b91def51c44af",
+        "mode": "0o644"
+      },
+      {
+        "path": "tests/test_review_evidence.py",
+        "bytes": 27736,
+        "sha256": "6abd885ab9d1b6ac141a206277660620ac2594092f8722ef1d05ddc24c61fb40",
+        "mode": "0o644"
+      },
+      {
+        "path": "tests/test_runtime_boundary.sh",
+        "bytes": 3203,
+        "sha256": "54eb46bed5be8eafd0a508bc1380ab9fe4f3334ee479c7e23c9195b01c7f0733",
+        "mode": "0o755"
+      }
+    ],
+    "critical_unchanged": true
+  },
+  "evidence_cross_checks": {
+    "pipe_source_manifest": {
+      "computed": "569b96b478cb4bed1ae28541a219a5a32a9eaf0be0ffeb3b97d2f5e10a3436e9",
+      "declared": "569b96b478cb4bed1ae28541a219a5a32a9eaf0be0ffeb3b97d2f5e10a3436e9",
+      "current_drift": [
+        "docs/changes/20261021-manifest-pipe-drain/tasks.md"
+      ]
+    },
+    "quality_artifact_copies": [
+      {
+        "retained": "docs/changes/20261021-manifest-pipe-drain/evidence/quality-binary-handoff-probe.json",
+        "original": "/workspace/scratch/77add259d49b/oct21-evidence/independent-quality-final/binary-handoff-probe.json",
+        "original_exists": true,
+        "same_bytes": true
+      },
+      {
+        "retained": "docs/changes/20261021-manifest-pipe-drain/evidence/quality-manifest-consumer-boundary.stderr.txt",
+        "original": "/workspace/scratch/77add259d49b/oct21-evidence/independent-quality-final/manifest-consumer-boundary.stderr.log",
+        "original_exists": true,
+        "same_bytes": true
+      },
+      {
+        "retained": "docs/changes/20261021-manifest-pipe-drain/evidence/quality-manifest-consumer-boundary.stdout.txt",
+        "original": "/workspace/scratch/77add259d49b/oct21-evidence/independent-quality-final/manifest-consumer-boundary.stdout.log",
+        "original_exists": true,
+        "same_bytes": true
+      },
+      {
+        "retained": "docs/changes/20261021-manifest-pipe-drain/evidence/quality-manifest-contract.stderr.txt",
+        "original": "/workspace/scratch/77add259d49b/oct21-evidence/independent-quality-final/manifest-contract.stderr.log",
+        "original_exists": true,
+        "same_bytes": true
+      },
+      {
+        "retained": "docs/changes/20261021-manifest-pipe-drain/evidence/quality-manifest-contract.stdout.txt",
+        "original": "/workspace/scratch/77add259d49b/oct21-evidence/independent-quality-final/manifest-contract.stdout.log",
+        "original_exists": true,
+        "same_bytes": true
+      },
+      {
+        "retained": "docs/changes/20261021-manifest-pipe-drain/evidence/quality-nul-pipeline-comparison.json",
+        "original": "/workspace/scratch/77add259d49b/oct21-evidence/independent-quality-final/nul-pipeline-comparison.json",
+        "original_exists": true,
+        "same_bytes": true
+      },
+      {
+        "retained": "docs/changes/20261021-manifest-pipe-drain/evidence/quality-receipt.json",
+        "original": "/workspace/scratch/77add259d49b/oct21-evidence/independent-quality-final/receipt.json",
+        "original_exists": true,
+        "same_bytes": true
+      },
+      {
+        "retained": "docs/changes/20261021-manifest-pipe-drain/evidence/quality-runtime-boundary.stderr.txt",
+        "original": "/workspace/scratch/77add259d49b/oct21-evidence/independent-quality-final/runtime-boundary.stderr.log",
+        "original_exists": true,
+        "same_bytes": true
+      },
+      {
+        "retained": "docs/changes/20261021-manifest-pipe-drain/evidence/quality-runtime-boundary.stdout.txt",
+        "original": "/workspace/scratch/77add259d49b/oct21-evidence/independent-quality-final/runtime-boundary.stdout.log",
+        "original_exists": true,
+        "same_bytes": true
+      },
+      {
+        "retained": "docs/changes/20261021-manifest-pipe-drain/evidence/quality-syntax-final-receipt.json",
+        "original": "/workspace/scratch/77add259d49b/oct21-evidence/independent-quality-final/syntax-final-receipt.json",
+        "original_exists": true,
+        "same_bytes": true
+      },
+      {
+        "retained": "docs/changes/20261021-manifest-pipe-drain/evidence/quality-syntax-receipt.json",
+        "original": "/workspace/scratch/77add259d49b/oct21-evidence/independent-quality-final/syntax-receipt.json",
+        "original_exists": true,
+        "same_bytes": true
+      }
+    ],
+    "prior_full": {
+      "exit_code": 1,
+      "summary_lines": [
+        "[SUMMARY] tests=101 pass=99 fail=2"
+      ],
+      "stdout_matches_receipt": true,
+      "stderr_matches_receipt": true
+    },
+    "archive_compatibility": {
+      "adk_all_five_pass": true,
+      "adk_record_count": 5,
+      "root_three_consumer_status": "ready",
+      "root_keys": [
+        "command",
+        "command_exit",
+        "id",
+        "issue_url",
+        "next_actions",
+        "qualification_ready",
+        "remaining_evidence",
+        "required_in_current_scope",
+        "result",
+        "scan_status",
+        "status",
+        "title"
+      ],
+      "authority_unchanged": true
+    },
+    "aggregate_quality_copy_matches": true
+  }
+}

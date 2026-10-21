@@ -1,0 +1,122 @@
+{
+  "started_at": "2026-10-21T01:21:00.098757+00:00",
+  "scope": "synthetic query protocol fixture; not historical reconstruction or qualification evidence",
+  "source_head": "42ae95d146ceb441ff91ea33dbbed581c33de305",
+  "source_sha256": {
+    "scripts/lib-manifest.sh": "b519b007522b7f43aa5ee1a7e6a64252801a50291fcb79ce5bed50ef47bd4059",
+    "scripts/check-goal-contracts.sh": "8b00453d3a6d6b2147a01085a6b3af93bd1a4c82b355d8ef6da08c85953acf6e",
+    "scripts/check-capability-health.sh": "ed2f2b79873d4fa455c66d8ce8ff06294f937aabf510b2c770c4085b227170fa",
+    "src/agent_dev_kit/manifest_query.py": "48cfba9672d9eb1d07450925ba062dcf432b8c58e3218863abf0504fd8abc8c6",
+    "tests/test_manifest_stream_consumers.py": "1436f01c38ce5140644355b14d4e888b499838d35c934ec62865c95a35a5a638"
+  },
+  "pipe_capacity": 65536,
+  "profile_output_bytes": 1085596,
+  "profile_count": 2059,
+  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "bash": "GNU bash, version 5.2.21(1)-release (x86_64-pc-linux-gnu)",
+  "grep": "grep (GNU grep) 3.11",
+  "PYTHONUNBUFFERED": "1",
+  "cases": {
+    "original_quiet_match": {
+      "shell_exit": 0,
+      "pipeline_and_stage_statuses": [
+        2,
+        2,
+        0
+      ],
+      "stderr": "[FAIL] [Errno 32] Broken pipe\n",
+      "argv": [
+        "bash",
+        "-o",
+        "pipefail",
+        "-c",
+        "python3 -m agent_dev_kit.manifest_query --root \"$1\" profile-names | grep -Fxq -- probe-match; outcome=( \"$?\" \"${PIPESTATUS[@]}\" ); printf \"%s\\n\" \"${outcome[@]}\"",
+        "probe",
+        "/tmp/adk-manifest-stream-1128r06p",
+        "import os,sys,fcntl,subprocess; capacity=fcntl.fcntl(0,fcntl.F_GETPIPE_SZ); data=bytearray(); exec(\"while not data.endswith(bytes([10])):\\n chunk=os.read(0,1)\\n if not chunk: break\\n data.extend(chunk)\"); os.close(0); result=subprocess.run([\"grep\",\"-Fxq\",\"--\",\"probe-match\"],input=bytes(data),check=False); print(\"controlled_reader_capacity=\"+str(capacity)+\" grep_rc=\"+str(result.returncode),file=sys.stderr); sys.exit(result.returncode)"
+      ],
+      "cwd": "/tmp/adk-manifest-stream-1128r06p"
+    },
+    "controlled_early_close": {
+      "shell_exit": 0,
+      "pipeline_and_stage_statuses": [
+        2,
+        2,
+        0
+      ],
+      "stderr": "[FAIL] [Errno 32] Broken pipe\ncontrolled_reader_capacity=65536 grep_rc=0\n",
+      "argv": [
+        "bash",
+        "-o",
+        "pipefail",
+        "-c",
+        "python3 -m agent_dev_kit.manifest_query --root \"$1\" profile-names | python3 -c \"$2\"; outcome=( \"$?\" \"${PIPESTATUS[@]}\" ); printf \"%s\\n\" \"${outcome[@]}\"",
+        "probe",
+        "/tmp/adk-manifest-stream-1128r06p",
+        "import os,sys,fcntl,subprocess; capacity=fcntl.fcntl(0,fcntl.F_GETPIPE_SZ); data=bytearray(); exec(\"while not data.endswith(bytes([10])):\\n chunk=os.read(0,1)\\n if not chunk: break\\n data.extend(chunk)\"); os.close(0); result=subprocess.run([\"grep\",\"-Fxq\",\"--\",\"probe-match\"],input=bytes(data),check=False); print(\"controlled_reader_capacity=\"+str(capacity)+\" grep_rc=\"+str(result.returncode),file=sys.stderr); sys.exit(result.returncode)"
+      ],
+      "cwd": "/tmp/adk-manifest-stream-1128r06p"
+    },
+    "drained_match": {
+      "shell_exit": 0,
+      "pipeline_and_stage_statuses": [
+        0,
+        0,
+        0
+      ],
+      "stderr": "",
+      "argv": [
+        "bash",
+        "-o",
+        "pipefail",
+        "-c",
+        "python3 -m agent_dev_kit.manifest_query --root \"$1\" profile-names | grep -Fx -- probe-match >/dev/null; outcome=( \"$?\" \"${PIPESTATUS[@]}\" ); printf \"%s\\n\" \"${outcome[@]}\"",
+        "probe",
+        "/tmp/adk-manifest-stream-1128r06p",
+        "import os,sys,fcntl,subprocess; capacity=fcntl.fcntl(0,fcntl.F_GETPIPE_SZ); data=bytearray(); exec(\"while not data.endswith(bytes([10])):\\n chunk=os.read(0,1)\\n if not chunk: break\\n data.extend(chunk)\"); os.close(0); result=subprocess.run([\"grep\",\"-Fxq\",\"--\",\"probe-match\"],input=bytes(data),check=False); print(\"controlled_reader_capacity=\"+str(capacity)+\" grep_rc=\"+str(result.returncode),file=sys.stderr); sys.exit(result.returncode)"
+      ],
+      "cwd": "/tmp/adk-manifest-stream-1128r06p"
+    },
+    "drained_missing": {
+      "shell_exit": 0,
+      "pipeline_and_stage_statuses": [
+        1,
+        0,
+        1
+      ],
+      "stderr": "",
+      "argv": [
+        "bash",
+        "-o",
+        "pipefail",
+        "-c",
+        "python3 -m agent_dev_kit.manifest_query --root \"$1\" profile-names | grep -Fx -- missing-name >/dev/null; outcome=( \"$?\" \"${PIPESTATUS[@]}\" ); printf \"%s\\n\" \"${outcome[@]}\"",
+        "probe",
+        "/tmp/adk-manifest-stream-1128r06p",
+        "import os,sys,fcntl,subprocess; capacity=fcntl.fcntl(0,fcntl.F_GETPIPE_SZ); data=bytearray(); exec(\"while not data.endswith(bytes([10])):\\n chunk=os.read(0,1)\\n if not chunk: break\\n data.extend(chunk)\"); os.close(0); result=subprocess.run([\"grep\",\"-Fxq\",\"--\",\"probe-match\"],input=bytes(data),check=False); print(\"controlled_reader_capacity=\"+str(capacity)+\" grep_rc=\"+str(result.returncode),file=sys.stderr); sys.exit(result.returncode)"
+      ],
+      "cwd": "/tmp/adk-manifest-stream-1128r06p"
+    },
+    "drained_failed_producer": {
+      "shell_exit": 0,
+      "pipeline_and_stage_statuses": [
+        23,
+        23,
+        0
+      ],
+      "stderr": "",
+      "argv": [
+        "bash",
+        "-o",
+        "pipefail",
+        "-c",
+        "(printf \"%s\\n\" probe-match; exit 23) | grep -Fx -- probe-match >/dev/null; outcome=( \"$?\" \"${PIPESTATUS[@]}\" ); printf \"%s\\n\" \"${outcome[@]}\"",
+        "probe",
+        "/tmp/adk-manifest-stream-1128r06p",
+        "import os,sys,fcntl,subprocess; capacity=fcntl.fcntl(0,fcntl.F_GETPIPE_SZ); data=bytearray(); exec(\"while not data.endswith(bytes([10])):\\n chunk=os.read(0,1)\\n if not chunk: break\\n data.extend(chunk)\"); os.close(0); result=subprocess.run([\"grep\",\"-Fxq\",\"--\",\"probe-match\"],input=bytes(data),check=False); print(\"controlled_reader_capacity=\"+str(capacity)+\" grep_rc=\"+str(result.returncode),file=sys.stderr); sys.exit(result.returncode)"
+      ],
+      "cwd": "/tmp/adk-manifest-stream-1128r06p"
+    }
+  },
+  "completed_at": "2026-10-21T01:21:00.829569+00:00"
+}

@@ -65,3 +65,4 @@ PY
 
 echo "[PASS] single Manifest SSOT contract"
 python3 -m unittest discover -s "$ROOT/tests" -p test_manifest_validation_reuse.py
+python3 -m unittest discover -s "$ROOT/tests" -p test_manifest_stream_consumers.py

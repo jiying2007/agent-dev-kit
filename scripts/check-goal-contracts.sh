@@ -103,7 +103,7 @@ done
 
 for workflow in $(extract_values workflow); do
   checked=$((checked + 1))
-  adk_list_manifest_names workflows | grep -Fxq "$workflow" || record_failure "unknown workflow: $workflow"
+  adk_list_manifest_names workflows | grep -Fx -- "$workflow" >/dev/null || record_failure "unknown workflow: $workflow"
 done
 
 while IFS= read -r path; do

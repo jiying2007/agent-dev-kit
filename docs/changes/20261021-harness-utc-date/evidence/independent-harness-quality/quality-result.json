@@ -1,0 +1,192 @@
+{
+  "schema": "independent-harness-quality-review/v1",
+  "reviewer": {
+    "id": "ai/root/native_evidence_audit",
+    "kind": "ai",
+    "independence": "independent",
+    "repository_write_performed": false
+  },
+  "author_id": "ai/root",
+  "subject_id": "harness-readiness",
+  "scope": "harness-source",
+  "reviewed_at": "2026-10-21T01:55:04Z",
+  "evidence_completed_at": "2026-10-21T01:54:53.063014+00:00",
+  "verdicts": {
+    "quality": "pass"
+  },
+  "open_blocker_count": 0,
+  "open_major_count": 0,
+  "source_count": 60,
+  "source_manifest_sha256": "ae0a3b4907e00b666f8d875358d07693a9fb757b45a99172314676f3c2ed0092",
+  "source_manifest_encoding": "UTF-8 JSON array sorted by path; each item path/bytes/sha256; sort_keys=true; separators=(comma,colon); no trailing newline",
+  "source_manifest_file": "source-manifest.json",
+  "observation_file": "observation.json",
+  "policy": {
+    "path": ".adk/review-policy.json",
+    "bytes": 411,
+    "sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24"
+  },
+  "authorization": {
+    "path": ".adk/review-authorization.md",
+    "bytes": 1504,
+    "sha256": "1594e628184cb0e4ad6c669bf5ce39dcb1f333d03d0798bebb080856e703cda5"
+  },
+  "validator_fingerprints": {
+    "src/agent_dev_kit/review_evidence.py": "73d85e864a3da125bf94808f19616f52150751a94ccc729ac66f66d2576b8808",
+    "src/agent_dev_kit/strict_json.py": "e11233b8d02d7fb95a8f2f93bfff065a1db84c4ef0820fef6d817600abe8ec98",
+    "src/agent_dev_kit/readiness_evidence.py": "ef980657486084eea8ab8a03ab357a76a3ed43691aca8d6909b06642764c808b"
+  },
+  "validator_fingerprints_unchanged_from_prior_record": true,
+  "changed_prior_source_bindings": [
+    {
+      "path": "README.md",
+      "bytes": 8353,
+      "sha256": "3330061fa5f2192485547d573e008626ac4cef80571ac7a8137a8f63cfcd3f02"
+    },
+    {
+      "path": "src/agent_dev_kit/readiness.py",
+      "bytes": 19424,
+      "sha256": "83a2949102955281f13a94e2f871d36e170cbfe76d053032ce5c114dc065ed29"
+    }
+  ],
+  "source_unchanged_during_observation": true,
+  "review_method": "All 60 current bound files were read for source semantics, including the complete evaluator, tool-boundary evaluator, archive restore implementation, lifecycle workflow, governance/runbooks, CI and representative test source. Hashes were independently read before and after the final read-only observation.",
+  "dimensions": [
+    {
+      "dimension_id": "context_legibility",
+      "quality": "pass",
+      "reason": "Root instructions, operating rules, owner files and README provide consistent entry points, authority boundaries and source/runtime separation. The current README version change has been read and requires a new digest binding."
+    },
+    {
+      "dimension_id": "spec_and_execution_contract",
+      "quality": "pass",
+      "reason": "Current contract and selected requirements/design/tasks/negative-results distinguish implementation, externally authenticated runtime execution, receipt finalization and later release/promotion. Missing real evidence remains explicit."
+    },
+    {
+      "dimension_id": "tool_and_permission_boundary",
+      "quality": "not-applicable",
+      "reason": "The actual repository index has no applicable project MCP configuration. The reviewed evaluator retains structured permission, credential and pinning rejection paths if such configuration is present; no external tool/runtime activation is inferred."
+    },
+    {
+      "dimension_id": "state_and_knowledge_continuity",
+      "quality": "pass",
+      "reason": "Canonical change state, review/provenance lifecycle, raw-source fallback and knowledge/memory candidate rules preserve declared scope and historical facts. Existing old state records are not rewritten as new results."
+    },
+    {
+      "dimension_id": "verification_review_and_eval",
+      "quality": "pass",
+      "reason": "Current source has executable bounded regression entry points, CI matrices and an independent review consumer. Invalid, missing or stale review evidence remains fail-closed. Test fixtures explicitly avoid runtime/product qualification claims."
+    },
+    {
+      "dimension_id": "recovery_and_rollback",
+      "quality": "pass",
+      "reason": "The complete restore implementation validates bounded archives before replacing the target, rejects traversal/links/special files, requires explicit overwrite, compensates failed commit and retains staging if recovery fails. The real-filesystem regression source covers positive restoration and negative preservation paths."
+    },
+    {
+      "dimension_id": "freshness_and_entropy_control",
+      "quality": "pass",
+      "reason": "Ownership and review freshness remain required. The real production entry now samples a single UTC date and passes it to every dimension; explicit gate time travel stays rejected and future/stale date rules are unchanged."
+    }
+  ],
+  "utc_increment": {
+    "quality": "pass",
+    "implementation": {
+      "path": "src/agent_dev_kit/readiness.py",
+      "bytes": 19424,
+      "sha256": "83a2949102955281f13a94e2f871d36e170cbfe76d053032ce5c114dc065ed29"
+    },
+    "tests": [
+      {
+        "path": "tests/test_harness_readiness.sh",
+        "bytes": 15107,
+        "sha256": "03ac2275476fcdc5f1fcacbd4375098a706cdd75fb7cbfa9a5e48c82403da300"
+      },
+      {
+        "path": "tests/test_review_evidence.py",
+        "bytes": 27736,
+        "sha256": "6abd885ab9d1b6ac141a206277660620ac2594092f8722ef1d05ddc24c61fb40"
+      }
+    ],
+    "reasoning": "The two-line production change replaces local date.today() only at the public readiness entry with datetime.now(timezone.utc).date(). Existing explicit effective_as_of propagation reaches every freshness check. Both UTC/local date directions and a delegated-gate regression are covered; the two shell fixture/expectation clocks now use UTC as well. Shared validator bytes and historical source-change fingerprints are preserved.",
+    "python_3_8_grammar": "pass",
+    "python_3_8_execution": "not-run"
+  },
+  "observed_test_evidence": {
+    "executor_id": "ai/root",
+    "independently_reexecuted_by_this_reviewer": false,
+    "independently_read_and_hashed_by_this_reviewer": true,
+    "command": [
+      "/workspace/scratch/77add259d49b/tooling/rtk",
+      "proxy",
+      "bash",
+      "tests/test_review_evidence.sh"
+    ],
+    "started_at": "2026-10-21T01:39:22.979323+00:00",
+    "completed_at": "2026-10-21T01:39:24.702218+00:00",
+    "exit_code": 0,
+    "tests_passed": 45,
+    "files": [
+      {
+        "path": "/workspace/scratch/77add259d49b/oct21-evidence/utc-review-regression-green/receipt.json",
+        "bytes": 731,
+        "sha256": "e1bb5dddb3f0f76c26f643f2c34b05b31d1b5242b4019ca725a4ef69f074cf27"
+      },
+      {
+        "path": "/workspace/scratch/77add259d49b/oct21-evidence/utc-review-regression-green/stderr.log",
+        "bytes": 144,
+        "sha256": "8edd80b94ee595b41bdc860f5534a88718773a4030f96be293d43894ed4e92a2"
+      },
+      {
+        "path": "/workspace/scratch/77add259d49b/oct21-evidence/utc-review-regression-green/stdout.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ]
+  },
+  "canonical_gate_before_new_record": {
+    "overall_status": "needs-review",
+    "counts": {
+      "pass": 0,
+      "partial": 0,
+      "needs-review": 7,
+      "blocked": 0,
+      "not-applicable": 0
+    },
+    "as_of": "2026-10-21",
+    "old_record_validation": {
+      "status": "rejected",
+      "reason": "review source or evidence digest does not match"
+    },
+    "explanation": "The existing October 20 record is correctly invalidated by current README and readiness.py bytes. This source Quality decision does not claim that the old record or current canonical gate passes. A new real review record and matching metadata pointer must be published by the author, then validated."
+  },
+  "findings": [
+    {
+      "id": "UTC-READINESS-DAY-001",
+      "severity": "major",
+      "disposition": "fixed",
+      "summary": "UTC review dates were incorrectly compared with the host local calendar; the production entry now supplies one canonical UTC day."
+    },
+    {
+      "id": "UTC-HARNESS-TEST-DAY-001",
+      "severity": "minor",
+      "disposition": "fixed",
+      "summary": "The current-pass fixture and 90-day stale expectation used a local calendar; both now follow the production UTC rule."
+    },
+    {
+      "id": "HARNESS-SOURCE-BINDING-20261021",
+      "severity": "informational",
+      "disposition": "expected-rejection-pending-new-record",
+      "summary": "Old digest rejection is expected and must be resolved by a new genuinely reviewed record. No old receipt, authorization date, validator rule or historical evidence was modified."
+    }
+  ],
+  "limitations": [
+    "This is an independent AI source Quality review, not a human or platform-authenticated identity attestation.",
+    "Six PASS and one not-applicable are the source assessment and actual raw structural scan; canonical gate status remained needs-review at capture because the new record was not yet issued.",
+    "The existing full-suite 99/101 failure remains a real failure. No full-suite pass or later CI/release/promotion is claimed here.",
+    "The 45-test result is an actual author execution whose original receipt and logs were read and hashed; this reviewer did not rerun that suite.",
+    "Python 3.8 compatibility was checked by grammar parsing; execution in Python 3.8 is not claimed.",
+    "No Native/provider campaign, paid call, real G22 measurement, LTA field event or Product M5 qualification was performed or granted.",
+    "field_evidence_status remains not-verified."
+  ],
+  "canonical_review_record_issued": false
+}

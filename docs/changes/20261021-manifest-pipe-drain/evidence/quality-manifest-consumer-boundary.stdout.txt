@@ -1,0 +1,1 @@
+[PASS] active Manifest consumers are JSON-only with zero legacy execution surface

@@ -98,7 +98,7 @@ else
   [[ "$codex_chain" == *"~/codex"* && "$codex_chain" == *"~/.codex"* ]] || record_failure "codex external handoff must document ~/codex -> ~/.codex chain"
 
   for guard in direct-write-live-home direct-convert-target implicit-tool-target; do
-    if ! adk_get_external_handoff_target_list "codex" "must_not" | grep -Fxq "$guard"; then
+    if ! adk_get_external_handoff_target_list "codex" "must_not" | grep -Fx -- "$guard" >/dev/null; then
       record_failure "codex external handoff missing must_not guard: $guard"
     fi
   done

@@ -114,19 +114,19 @@ done
 
 for agent in $(extract_values agent); do
   checked=$((checked + 1))
-  adk_list_manifest_names agents | grep -Fxq "$agent" || record_failure "unknown agent: $agent"
+  adk_list_manifest_names agents | grep -Fx -- "$agent" >/dev/null || record_failure "unknown agent: $agent"
 done
 
 for skill in $(extract_values skill); do
   checked=$((checked + 1))
-  if ! adk_list_manifest_names skills | grep -Fxq "$skill" && ! adk_list_optional_skill_names | grep -Fxq "$skill"; then
+  if ! adk_list_manifest_names skills | grep -Fx -- "$skill" >/dev/null && ! adk_list_optional_skill_names | grep -Fx -- "$skill" >/dev/null; then
     record_failure "unknown skill: $skill"
   fi
 done
 
 for workflow in $(extract_values workflow); do
   checked=$((checked + 1))
-  adk_list_manifest_names workflows | grep -Fxq "$workflow" || record_failure "unknown workflow: $workflow"
+  adk_list_manifest_names workflows | grep -Fx -- "$workflow" >/dev/null || record_failure "unknown workflow: $workflow"
 done
 
 while IFS= read -r script; do

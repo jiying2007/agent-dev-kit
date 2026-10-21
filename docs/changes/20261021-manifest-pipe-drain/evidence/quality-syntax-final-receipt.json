@@ -1,0 +1,106 @@
+{
+  "reviewer": "ai/root/native_evidence_audit",
+  "started_at": "2026-10-21T01:30:34.792777+00:00",
+  "completed_at": "2026-10-21T01:30:34.843340+00:00",
+  "scope": "Each Bash source parsed in separate invocation plus Python 3.8 grammar; not execution on Python 3.8",
+  "supersedes_bash_coverage": "syntax-receipt.json multi-argument bash -n invocation parsed only its first script; these seven explicit invocations provide actual coverage",
+  "python_actual": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "python_grammar": "3.8",
+  "source_sha256": {
+    "scripts/lib-manifest.sh": "d61c270e28a9a4813816e54c245925df17fbd10e6ddaa762e80d6253b884bf15",
+    "scripts/check-goal-contracts.sh": "6320184ffce09865f82e370311fa2cd823afd283f24838ec5256020b69b938f1",
+    "scripts/check-capability-health.sh": "2f53febdd3cfb6cea23ad1ff7bbdf87ce23ffa948853454e6ef228f542e98735",
+    "scripts/check-runtime-boundary.sh": "c11a8a8a868f3b12c728141bc42994e9c4baa343eafba226cd13bfd543f2c41f",
+    "tests/test_manifest_contract.sh": "537ef09b32c4d43584ed463cc84ae80a94703384a1a9179dfa129008819f77a0",
+    "tests/test_manifest_consumer_boundary.sh": "52b81e9db66fca421aba92076aa8f618abd6a3a32d71f832940c6e03a58dbfee",
+    "tests/test_runtime_boundary.sh": "54eb46bed5be8eafd0a508bc1380ab9fe4f3334ee479c7e23c9195b01c7f0733",
+    "tests/test_manifest_stream_consumers.py": "1436f01c38ce5140644355b14d4e888b499838d35c934ec62865c95a35a5a638"
+  },
+  "runs": [
+    {
+      "command": [
+        "/workspace/scratch/77add259d49b/tooling/rtk",
+        "proxy",
+        "bash",
+        "-n",
+        "scripts/lib-manifest.sh"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/workspace/scratch/77add259d49b/tooling/rtk",
+        "proxy",
+        "bash",
+        "-n",
+        "scripts/check-goal-contracts.sh"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/workspace/scratch/77add259d49b/tooling/rtk",
+        "proxy",
+        "bash",
+        "-n",
+        "scripts/check-capability-health.sh"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/workspace/scratch/77add259d49b/tooling/rtk",
+        "proxy",
+        "bash",
+        "-n",
+        "scripts/check-runtime-boundary.sh"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/workspace/scratch/77add259d49b/tooling/rtk",
+        "proxy",
+        "bash",
+        "-n",
+        "tests/test_manifest_contract.sh"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/workspace/scratch/77add259d49b/tooling/rtk",
+        "proxy",
+        "bash",
+        "-n",
+        "tests/test_manifest_consumer_boundary.sh"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/workspace/scratch/77add259d49b/tooling/rtk",
+        "proxy",
+        "bash",
+        "-n",
+        "tests/test_runtime_boundary.sh"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "status": "pass"
+}

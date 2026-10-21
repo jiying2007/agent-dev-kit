@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from datetime import date
+from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
@@ -333,7 +333,7 @@ def run_harness_readiness(
     contracts = _dimension_contracts(contract)
     metadata_path = str(contract["metadata_path"])
     metadata, metadata_errors = _load_metadata(index, contract)
-    effective_as_of = as_of or date.today()
+    effective_as_of = as_of or datetime.now(timezone.utc).date()
     evidence_limit = int(contract["scan"]["max_evidence_per_dimension"])
     blocker_limit = int(contract["scan"]["max_blockers_per_dimension"])
     raw = {
