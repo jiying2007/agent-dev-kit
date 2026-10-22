@@ -1,0 +1,190 @@
+{
+  "schema": "independent-harness-source-review/v1",
+  "subject_id": "harness-readiness",
+  "scope": "harness-source",
+  "reviewer": {
+    "id": "ai/root/adk_harness_requalification_v2",
+    "actual_agent": "/root/adk_harness_requalification_v2",
+    "kind": "ai",
+    "independence": "independent"
+  },
+  "author_id": "ai/root",
+  "owner": "leiwenjun",
+  "reviewed_at": "2026-10-22T00:07:48Z",
+  "review_target": "working-tree",
+  "source_version": "8.0.38",
+  "base_head": "19a89bab07c42f4fe506bafe5b8c8e64e1e1baf3",
+  "source_count": 57,
+  "required_source_count": 44,
+  "source_manifest_sha256": "3ed8a66d93a5eb39b7163e93a1dcee8e50f7512811cf0e704756f4e5c953acf6",
+  "source_manifest_encoding": "UTF-8 JSON array sorted by path; each item path/bytes/sha256; object keys sorted; compact separators; ensure_ascii=false; no trailing newline",
+  "source_review_completed": true,
+  "verdicts": {
+    "spec": "pass",
+    "quality": "pass"
+  },
+  "review_method": "The identified independent reviewer personally read all 57 bound current source files, including every one of the 44 raw scan references, the evaluator and contract, all seven dimension requirements, current Native output change requirements/design, and the complete Harness/delegated-review regression files. This review does not copy the previous semantic verdict or treat a date/hash refresh as review.",
+  "source_drift_after_review": [],
+  "dimensions": [
+    {
+      "dimension_id": "context_legibility",
+      "applicability": "applicable",
+      "source_result": "pass",
+      "verdicts": {
+        "spec": "pass",
+        "quality": "pass"
+      },
+      "reason": "The 38-line root AGENTS index routes detailed R1-R8 and lifecycle rules to docs/agent-operating-rules.md. README separates source, immutable release, runtime conformance and product qualification, retains executable verification commands, and accurately labels 8.0.38 as the current source version. The current README was read in full and the sole prior-source mismatch is the 8.0.37 to 8.0.38 source version line."
+    },
+    {
+      "dimension_id": "spec_and_execution_contract",
+      "applicability": "applicable",
+      "source_result": "pass",
+      "verdicts": {
+        "spec": "pass",
+        "quality": "pass"
+      },
+      "reason": "All 12 raw requirements/design/task/negative-result sources contain explicit acceptance and excluded external evidence. The current Native output requirements/design specify lexical link rejection, no writes on rejected prepare, unchanged regular-file behavior and run preflight before execution, with separate implementation/review roles. Presence of historical tasks is source-process evidence, not a fresh implementation or field pass."
+    },
+    {
+      "dimension_id": "tool_and_permission_boundary",
+      "applicability": "not-applicable",
+      "source_result": "not-applicable",
+      "verdicts": {
+        "spec": "pass",
+        "quality": "pass"
+      },
+      "reason": "The actual bounded repository scan contains no material mcp.json or .mcp.json configuration, so the contract returns not-applicable. The reviewer checked the evaluator's config discovery, pinned dependency, credential redaction, structured permission and bounded error paths plus the MCP governance runbook. This verdict approves the applicability decision and source governance only; it does not enable or certify any live connector."
+    },
+    {
+      "dimension_id": "state_and_knowledge_continuity",
+      "applicability": "applicable",
+      "source_result": "pass",
+      "verdicts": {
+        "spec": "pass",
+        "quality": "pass"
+      },
+      "reason": "The six scanned dated state files preserve owners, pending remote/runtime/field work and historical observations. The six scanned runbooks and additionally read memory/context contracts distinguish reusable governed candidates, raw evidence, historical state and source-to-live handoff. Their historical completion strings are not adopted as current release or product qualification. Missing authentic invocation or field evidence remains not-measured/not-verified."
+    },
+    {
+      "dimension_id": "verification_review_and_eval",
+      "applicability": "applicable",
+      "source_result": "pass",
+      "verdicts": {
+        "spec": "pass",
+        "quality": "pass"
+      },
+      "reason": "Read the full five scanned test files and five CI workflows. CI declares Python 3.8/3.11/3.12 contract/regression matrices and the required deterministic gate fails when either matrix is not successful. The independent 45-test delegated-review run passed and explicitly exercises identity/scope/time/source/policy drift, all-seven-dimension binding, UTC date handling and lifecycle refusal before mutation. A full supported matrix and current full regression remain separate deliverables."
+    },
+    {
+      "dimension_id": "recovery_and_rollback",
+      "applicability": "applicable",
+      "source_result": "pass",
+      "verdicts": {
+        "spec": "pass",
+        "quality": "pass"
+      },
+      "reason": "The named repository backup/restore/rollback entry is present and read in full: backup checks the explicit target, rollback backs up current state first, and restore delegates to the existing installation transaction authority rather than extracting directly into an active target. Governance/runbooks require explicit boundaries and rollback evidence. This is review of the scoped recovery source and procedure; no live restore was performed or certified."
+    },
+    {
+      "dimension_id": "freshness_and_entropy_control",
+      "applicability": "applicable",
+      "source_result": "pass",
+      "verdicts": {
+        "spec": "pass",
+        "quality": "pass"
+      },
+      "reason": "Read both ownership files and all five scanned format/catalog/freshness checks. They retain source-derived catalog drift checks, bounded malformed/dataset/symlink negative cases and canonical freshness authority checks. The current scan is complete and has no read errors. Actual UTC review time is used with the unchanged 90-day/zero-future-tolerance policy; reference citation dates are not silently renewed."
+    }
+  ],
+  "findings": [],
+  "open_source_findings": {
+    "blocker": 0,
+    "major": 0,
+    "minor": 0
+  },
+  "authorization": {
+    "policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+    "authorization_sha256": "1594e628184cb0e4ad6c669bf5ce39dcb1f333d03d0798bebb080856e703cda5",
+    "validator_sha256": {
+      "src/agent_dev_kit/review_evidence.py": "73d85e864a3da125bf94808f19616f52150751a94ccc729ac66f66d2576b8808",
+      "src/agent_dev_kit/strict_json.py": "e11233b8d02d7fb95a8f2f93bfff065a1db84c4ef0820fef6d817600abe8ec98",
+      "src/agent_dev_kit/readiness_evidence.py": "ef980657486084eea8ab8a03ab357a76a3ed43691aca8d6909b06642764c808b"
+    },
+    "human_review_performed": false
+  },
+  "prior_record": {
+    "path": ".adk/reviews/harness-source-20261021.json",
+    "sha256": "cf140e4be5f0508f5ee2f731aebaebc8fff1c17a83cd0e889e535de427cde1dc",
+    "preserved_unchanged": true,
+    "current_validation": "rejected",
+    "reason": "Current README source digest differs; the previous record is not made valid by this new review."
+  },
+  "executions": [
+    {
+      "label": "Independent canonical delegated-review regression",
+      "receipt": {
+        "started_at": "2026-10-22T00:05:38.263224+00:00",
+        "completed_at": "2026-10-22T00:05:39.381845+00:00",
+        "elapsed_seconds": 1.119,
+        "argv": [
+          "bash",
+          "tests/test_review_evidence.sh"
+        ],
+        "cwd": "/workspace/scratch/77add259d49b/llm_agent/agent-dev-kit",
+        "exit_code": 0,
+        "timed_out": false,
+        "allow_network": false,
+        "venv": "/workspace/scratch/77add259d49b/adk-venv",
+        "outputs": {
+          "stdout.log": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "stderr.log": {
+            "bytes": 144,
+            "sha256": "c9c352e37de285398233204400f9297bf175d0a454ba17e8c76ff3681e449f21"
+          }
+        }
+      },
+      "stdout_utf8": "",
+      "stderr_utf8": ".............................................\n----------------------------------------------------------------------\nRan 45 tests in 0.970s\n\nOK\n",
+      "raw_stream_verification": {
+        "stdout.log": {
+          "matches": true,
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stderr.log": {
+          "matches": true,
+          "bytes": 144,
+          "sha256": "c9c352e37de285398233204400f9297bf175d0a454ba17e8c76ff3681e449f21"
+        }
+      },
+      "tests": 45,
+      "result": "pass"
+    }
+  ],
+  "pending_delivery": {
+    "new_record_validation": "not-yet-run",
+    "current_date_gate_after_publication": "not-yet-run",
+    "harness_regression_after_publication": "not-yet-run",
+    "full_regression": "coordinator-owned; no new full result claimed"
+  },
+  "limitations": [
+    "Source readiness only: six applicable dimensions pass and the tool dimension is not-applicable. No human review, provider execution, Native runtime certification, G22 effect measurement, LTA field observation or Product M5 qualification is supplied.",
+    "The prepublication actual current-date CLI gate returned exit 2 and all seven delegated reviews invalid; its original receipt and streams remain in oct22-harness-review/before-current-gate. This is not relabeled as success.",
+    "The 45 passing tests are actual independent execution of existing deterministic synthetic fixtures. They test validators and workflow behavior, and cannot substitute for genuine external measurements or runtime receipts.",
+    "Review covers the listed 57 source bytes and the scoped seven-dimension assessment, not every ADK implementation file. Native output implementation has its own independent source reviews and is not recertified here.",
+    "Dated historical state files and contract citation metadata, including expired external-reference dates, remain historical material. This review does not revalidate external sites or renew their references.",
+    "Source digests establish content binding, not authenticated platform or human identity. The reviewer is explicitly identified as an AI agent independent from source implementation.",
+    "The current full suite, protected PR checks, fresh-main CI, immutable release and exact downstream promotion must be separately observed after the new review is published.",
+    "Only review evidence files and Harness metadata are authorized outputs of this reviewer; production code, tests, validator, policy and prior review bytes remain untouched."
+  ],
+  "authority": {
+    "human_review_performed": false,
+    "field_evidence_verified": false,
+    "provider_execution_performed": false,
+    "product_release_authorized": false
+  }
+}
