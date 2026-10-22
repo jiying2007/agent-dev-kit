@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import asyncio
+import contextlib
 import hashlib
+import io
 import os
 import json
 import platform
@@ -17,6 +19,7 @@ from agent_dev_kit.model import Manifest, ManifestError
 from agent_dev_kit.native_campaign import (
     _safe_output_path,
     finalize_campaign,
+    main as native_campaign_main,
     prepare_campaign,
     run_campaign,
 )
@@ -486,6 +489,108 @@ class NativeCampaignTest(unittest.TestCase):
         value = json.loads(done.stdout)
         self.assertIn("repository_output_must_be_reports_runtime", value["error"])
         self.assertFalse((ROOT / "manifests" / "forbidden-plan.json").exists())
+
+    def prepare_cli(self, plan_path: Path, candidate_path: Path) -> subprocess.CompletedProcess:
+        commands_path = self.temp / "commands.json"
+        assertions_path = self.temp / "assertions.json"
+        commands_path.write_text(json.dumps(commands()), encoding="utf-8")
+        assertions_path.write_text(json.dumps(assertions()), encoding="utf-8")
+        return subprocess.run(
+            [
+                sys.executable, "-m", "agent_dev_kit.cli", "native-campaign",
+                "--root", str(ROOT), "prepare", "--target", "claude-code",
+                "--runtime-binary", sys.executable, "--runtime-version", VERSION,
+                "--authority-id", "ci-native-conformance",
+                "--execution-authority", "ci-approved",
+                "--verification-backend", "ci-provenance-verifier",
+                "--commands-json", str(commands_path),
+                "--assertions-json", str(assertions_path),
+                "--receipt-path", self.receipt_rel,
+                "--plan-out", str(plan_path),
+                "--candidate-contract-out", str(candidate_path), "--summary-json",
+            ],
+            cwd=ROOT, text=True, capture_output=True, timeout=60,
+        )
+
+    def test_cli_prepare_rejects_external_output_leaf_symlinks(self) -> None:
+        for linked_output in ("plan", "candidate"):
+            for target_exists in (True, False):
+                with self.subTest(linked_output=linked_output, target_exists=target_exists):
+                    case = self.temp / f"{linked_output}-{target_exists}"
+                    case.mkdir()
+                    target = case / "target.json"
+                    alias = case / "alias.json"
+                    companion = case / "companion.json"
+                    if target_exists:
+                        target.write_bytes(b"original-target\n")
+                    try:
+                        alias.symlink_to(target)
+                    except (OSError, NotImplementedError):
+                        self.skipTest("symlink creation is unavailable")
+                    plan, candidate = (
+                        (alias, companion) if linked_output == "plan" else (companion, alias)
+                    )
+                    done = self.prepare_cli(plan, candidate)
+                    self.assertEqual(done.returncode, 1, (done.stdout, done.stderr))
+                    self.assertIn("native_campaign_output_symlink_path", json.loads(done.stdout)["error"])
+                    self.assertTrue(alias.is_symlink())
+                    self.assertEqual(os.readlink(alias), str(target))
+                    if target_exists:
+                        self.assertEqual(target.read_bytes(), b"original-target\n")
+                    else:
+                        self.assertFalse(target.exists())
+                    self.assertFalse(companion.exists())
+
+    def test_cli_prepare_preserves_regular_external_output_support(self) -> None:
+        plan, candidate = self.temp / "plan.json", self.temp / "candidate.json"
+        plan.write_bytes(b"old-plan\n")
+        candidate.write_bytes(b"old-candidate\n")
+        done = self.prepare_cli(plan, candidate)
+        self.assertEqual(done.returncode, 0, (done.stdout, done.stderr))
+        self.assertEqual(json.loads(done.stdout)["status"], "ready")
+        self.assertEqual(json.loads(plan.read_text())["schema"], "adk-native-target-campaign-plan/v2")
+        self.assertEqual(json.loads(candidate.read_text())["target"], "claude-code")
+
+    def test_run_rejects_external_output_leaf_before_campaign(self) -> None:
+        plan, candidate = self.prepare()
+        inputs = {
+            "plan": plan, "candidate": candidate,
+            "commands": commands(), "assertions": assertions(),
+        }
+        for name, value in inputs.items():
+            (self.temp / f"{name}.json").write_text(json.dumps(value), encoding="utf-8")
+        for target_exists in (True, False):
+            with self.subTest(target_exists=target_exists):
+                target = self.temp / f"run-target-{target_exists}.json"
+                alias = self.temp / f"run-alias-{target_exists}.json"
+                if target_exists:
+                    target.write_bytes(b"original-evidence\n")
+                try:
+                    alias.symlink_to(target)
+                except (OSError, NotImplementedError):
+                    self.skipTest("symlink creation is unavailable")
+                output = io.StringIO()
+                with patch(
+                    "agent_dev_kit.native_campaign.run_campaign",
+                    side_effect=ManifestError("fixture-runner-must-not-be-called"),
+                ) as runner, contextlib.redirect_stdout(output):
+                    code = native_campaign_main([
+                        "--root", str(ROOT), "run",
+                        "--plan", str(self.temp / "plan.json"),
+                        "--candidate-contract", str(self.temp / "candidate.json"),
+                        "--commands-json", str(self.temp / "commands.json"),
+                        "--assertions-json", str(self.temp / "assertions.json"),
+                        "--runtime-binary", sys.executable,
+                        "--evidence-out", str(alias), "--summary-json",
+                    ])
+                self.assertEqual(code, 1)
+                runner.assert_not_called()
+                self.assertIn("native_campaign_output_symlink_path", json.loads(output.getvalue())["error"])
+                self.assertTrue(alias.is_symlink())
+                if target_exists:
+                    self.assertEqual(target.read_bytes(), b"original-evidence\n")
+                else:
+                    self.assertFalse(target.exists())
 
     def test_public_cli_prepare_run_finalize(self) -> None:
         commands_path = self.temp / "commands.json"

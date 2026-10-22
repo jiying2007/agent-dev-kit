@@ -208,6 +208,8 @@ def _safe_output_path(manifest: Manifest, value: str, label: str) -> Path:
     path = Path(value).expanduser()
     lexical = path if path.is_absolute() else Path.cwd() / path
     lexical = lexical.absolute()
+    if lexical.is_symlink():
+        raise ManifestError(f"native_campaign_output_symlink_path: {label}")
     resolved = path.resolve()
     root = manifest.root.resolve()
     try:
@@ -359,6 +361,9 @@ def main(argv: Sequence[str] | None = None) -> int:
                 / "native-target-campaign-plan-v2.schema.json",
                 "native campaign plan",
             )
+            evidence_out = _safe_output_path(
+                manifest, args.evidence_out, "evidence-out"
+            )
             result = run_campaign(
                 manifest,
                 plan,
@@ -373,9 +378,6 @@ def main(argv: Sequence[str] | None = None) -> int:
                 / "schemas"
                 / "native-target-campaign-evidence-v2.schema.json",
                 "native campaign evidence",
-            )
-            evidence_out = _safe_output_path(
-                manifest, args.evidence_out, "evidence-out"
             )
             _write_json(evidence_out, result)
         else:

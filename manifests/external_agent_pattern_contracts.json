@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-10-13",
+  "last_updated": "2026-10-22",
   "reference_boundary": "External agent, plugin, memory and skill sources are method-only references until a separate supply-chain review targets a specific versioned asset. This manifest does not enable external runtimes, hooks, workers, MCP servers or plugin installs.",
   "local_source_policy": {
     "id": "optional-workspace-reference-clones-v1",
@@ -179,39 +179,39 @@
       "title": "GitHub Agentic Workflows safe outputs",
       "url": "https://github.github.com/gh-aw/reference/safe-outputs/",
       "local_path": "",
-      "retrieved_at": "2026-09-21",
+      "retrieved_at": "2026-10-22",
       "review_status": "reviewed",
-      "expires_at": "2026-10-21",
+      "expires_at": "2026-11-21",
       "license": "MIT",
       "evidence_strength": "high",
       "decision": "adopt-method-only",
-      "notes": "2026-09-21 re-review confirmed the current safe-outputs contract still separates a read-only agent from structured, permission-controlled executor jobs and keeps operation-level controls. Conservative create-issue behavior is still auto-injected when no non-system safe outputs are configured, so ADK keeps explicit output boundaries and does not import workflows or enable GitHub writes."
+      "notes": "2026-10-22 re-review at upstream revision 6570872aadc523ea5c18236766883dd096a27ad4 confirmed the default read-only agent can submit structured requests to separate permission-controlled safe-output jobs. Default create-issue is added when no non-system outputs are configured unless explicitly disabled. Adopt the separation and validation method only; direct-write modes exist upstream, and this review does not enable workflows or GitHub writes."
     },
     {
       "id": "mcp-registry",
       "title": "Model Context Protocol Registry",
       "url": "https://github.com/modelcontextprotocol/registry",
       "local_path": "",
-      "retrieved_at": "2026-09-21",
+      "retrieved_at": "2026-10-22",
       "review_status": "reviewed",
-      "expires_at": "2026-10-21",
-      "license": "Apache-2.0-current/MIT-historical-review-required",
+      "expires_at": "2026-11-21",
+      "license": "Apache-2.0-current/MIT-unrelicensed-historical/CC-BY-4.0-non-spec-docs-review-required",
       "evidence_strength": "high",
       "decision": "adopt-method-only",
-      "notes": "2026-09-21 re-review confirmed the official MCP Registry remains preview metadata infrastructure with namespace/package ownership verification and a standardized discovery API. Keep namespace, version, artifact digest, review and freshness provenance fields, but treat registry presence as discovery metadata rather than trust certification or install approval."
+      "notes": "2026-10-22 re-review at upstream revision 11b7b0e274d518b6f449c5ee3518a6151d9848b9 confirmed Registry remains preview discovery metadata with namespace and package ownership checks. Upstream distinguishes new/relicensed code and specifications, unrelicensed historical contributions and non-specification documentation licensing. Keep namespace, version, artifact digest, review and freshness provenance fields; registry listing or ownership verification does not establish code trust or install approval."
     },
     {
       "id": "otel-genai-semconv",
       "title": "OpenTelemetry semantic conventions for generative AI systems",
       "url": "https://github.com/open-telemetry/semantic-conventions-genai",
       "local_path": "",
-      "retrieved_at": "2026-09-21",
+      "retrieved_at": "2026-10-22",
       "review_status": "reviewed-upstream-revision-pinned-schema-url-unavailable",
-      "expires_at": "2026-10-21",
+      "expires_at": "2026-11-21",
       "license": "Apache-2.0",
       "evidence_strength": "medium",
       "decision": "adopt-method-only",
-      "notes": "2026-09-21 re-review confirmed GenAI semantic conventions now live in the dedicated open-telemetry/semantic-conventions-genai repository and remain actively evolving. Upstream README still marks Schema URL as TODO, so ADK must not invent a 1.42.0 GenAI schema URL/version; the disabled mapping adapter is instead pinned to reviewed upstream revision cc07f722069974139dab497d80d145144b19daca, with sensitive content capture disabled."
+      "notes": "2026-10-22 re-review observed upstream revision 9ffc7e00c639be7712e544e3e54331e885dccf84; README still leaves Schema URL unresolved. Preserve the disabled mapping adapter at its separately reviewed revision cc07f722069974139dab497d80d145144b19daca with sensitive capture disabled. This source observation neither upgrades that adapter nor asserts a stable GenAI schema version or URL."
     },
     {
       "id": "agent-client-protocol",
@@ -289,13 +289,13 @@
       "title": "Visual Studio Code Agent Skills",
       "url": "https://code.visualstudio.com/docs/agent-customization/agent-skills",
       "local_path": "",
-      "retrieved_at": "2026-09-21",
+      "retrieved_at": "2026-10-22",
       "review_status": "reviewed-watch-only",
-      "expires_at": "2026-10-21",
+      "expires_at": "2026-11-21",
       "license": "official-docs-reference-only",
       "evidence_strength": "high",
       "decision": "observe-method-only",
-      "notes": "2026-09-21 re-review confirmed VS Code Agent Skills follow the open Agent Skills standard and discover supported project/personal skill locations including .github/skills, .claude/skills and .agents/skills. Keep observe-method-only: portability evidence is useful, but do not add a VS Code direct target or vendor-specific core contract without a concrete use case, runtime smoke and effect evidence."
+      "notes": "2026-10-22 re-review of official docs and vscode-docs revision 1c060e1f92c085e818550a3138e94893e0c51132 confirmed project skill paths including .github/skills, .claude/skills and .agents/skills. Discovery alone does not guarantee invocation, and settings differ by harness; chat.agentSkillsLocations is deprecated and Local-only. Keep observe-method-only until a specific use case, runtime smoke and effect evidence justify a separate target decision."
     }
   ],
   "candidate_decisions": [

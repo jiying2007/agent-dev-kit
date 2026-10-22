@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### 8.0.38 source candidate
+- Reject existing and dangling external Native campaign output leaf symlinks before path resolution, preserving original targets and companion outputs on rejection.
+- Validate the run evidence output before invoking the runtime campaign so invalid output paths cannot consume execution resources first.
+- Add real prepare CLI no-clobber regressions and a run preflight execution guard; preserve normal external regular outputs and existing repository confinement.
+- Retain Python 3.8+ support, protected source/release promotion and the independent real Native, effect, field and Product M5 qualification requirements.
+
 ### 8.0.36 source candidate
 - Consume explicitly delegated independent AI review through one bounded, source/policy/validator-bound evidence contract in the existing review/archive and Harness flows; retain separate Spec and Quality verdicts and truthful AI identity.
 - Require actual seven-dimension review evidence for this opted-in repository, preserve structural/freshness checks and N/A applicability, and invalidate review when the underlying evidence changes.
