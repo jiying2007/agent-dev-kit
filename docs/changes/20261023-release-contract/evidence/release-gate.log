@@ -1,0 +1,23 @@
+......................
+----------------------------------------------------------------------
+Ran 22 tests in 0.197s
+
+OK
+....
+----------------------------------------------------------------------
+Ran 4 tests in 0.061s
+
+OK
+{"verified_main_ci_reuse": true, "run_id": "1234"}
+{"verified_main_ci_reuse": false, "run_id": null}
+.............
+----------------------------------------------------------------------
+Ran 13 tests in 36.970s
+
+OK
+[PASS] canonical Python release control plane and release manifest identities are fail-closed
+.
+----------------------------------------------------------------------
+Ran 1 test in 28.815s
+
+OK

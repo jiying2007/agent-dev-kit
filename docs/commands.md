@@ -98,6 +98,8 @@ bash scripts/devkit.sh export --target opencode --profile team-core --with-optio
 
 `--target` 的取值必须来自 `manifest.json:tool_targets`。新增 direct target 前先补 manifest、转换语义、拒绝条件、回滚路径和 runtime-boundary 验证。
 
+输出根目录、目标目录和祖先路径必须是明确的普通目录路径；符号链接和包含 `..` 的路径会在清理前被拒绝。导出复用 writer lock，在锁内及 staging 完成后重查目录身份，再替换目标目录；`--clean` 不会授权通过链接删除其他目录。
+
 Codex 当前不是 direct `tool_targets` 成员，因此不是 `export --target` 的合法取值；它由 `external_handoff_targets.codex` 描述为 `~/codex -> ~/.codex` source-to-live 交付链路。
 
 ## profile-footprint
@@ -158,6 +160,8 @@ bash scripts/devkit.sh native-campaign finalize --plan /tmp/native-plan.json \
 ```
 
 All four commands in the private commands JSON must start with the same absolute runtime binary. A separate assertions JSON must provide independent discovery/load/trigger semantic canaries; exit 0 without the expected canary is a failed stage. A stage command may not contain its own expected canary. Raw command arguments, assertion text, and stdout/stderr are not persisted. Any failed/blocked stage prevents finalize. Finalize only produces a signed-receipt candidate and future target contract; signature bundle registration and target promotion remain separate owner-reviewed actions.
+
+All output paths are checked together before reading campaign inputs or starting a runtime stage. Outputs must be distinct regular-file paths: directories, FIFOs, symlink components, `..`, overlapping parent/child paths, hard-link aliases and input/output aliases are rejected. Multi-output commands encode and stage every document before publishing; a late publication failure restores earlier outputs, and a failed restoration retains its backup with an explicit recovery path. This is failure compensation, not a crash-atomic multi-file transaction; callers still control the parent directories and coordinate concurrent writers.
 
 ## platform
 
@@ -389,7 +393,7 @@ bash scripts/devkit.sh security check --summary-json
 
 ## release
 
-执行发布检查、可复现制品构建、本地升级/回滚演练和显式 backend 发布。`publish` 不配置 backend、制品或 checksum 时必须失败；发布前会重新计算 SHA256 并核对制品名与版本，当前只支持 GitHub CLI backend。
+执行发布检查、可复现制品构建、本地升级/回滚演练和显式 backend 发布。`publish` 不配置 backend、制品或 checksum 时必须失败；发布前通过 canonical artifact verifier 核对版本、完整 source 清单、摘要和 source manifest，当前只支持 GitHub CLI backend。公开 publish 与正式 workflow 使用同一组三资产：tarball、sha256 和 release-contract JSON；实际上传使用已经验证的同一份捕获字节，dry-run 只返回计划。
 
 ```bash
 VERSION="$(bash scripts/version-manager.sh current | tail -n1)"
@@ -400,7 +404,7 @@ bash scripts/devkit.sh release rehearse --previous-artifact /tmp/agent-dev-kit-p
 bash scripts/devkit.sh release publish --version "$VERSION" --backend github --artifact "dist/agent-dev-kit-$VERSION.tar.gz" --dry-run
 ```
 
-`release build` 默认要求 source distribution 对应 clean Git commit，并把 commit、tree、dirty 状态和 source distribution digest 写入制品。只有隔离测试快照可显式使用 `--allow-unbound-snapshot`；该制品会标记 `release_eligible=false`，不得进入 rehearsal、publish 或 Software M5 release evidence。
+`release build` 默认要求 source distribution 对应 clean Git commit，并把 commit、tree、dirty 状态和 source distribution digest 写入制品。合格构建从已固定 Git tree 的原始 blob 生成源码快照，验证、导出与源码打包共同读取该快照；ignored 文件、index 隐藏的工作树修改和 Git archive attributes 不会改写发布输入。只有隔离测试快照可显式使用 `--allow-unbound-snapshot`；该制品会标记 `release_eligible=false`，不得进入 rehearsal、publish 或 Software M5 release evidence。
 
 `release rehearse` 只接受 checksum 匹配、满足当前 strict source/release contract 且 candidate 版本更高的本地 artifact；它在临时 target 安装上一版、升级候选版、核验 receipt，再回滚并比较上一版受管资产 hash、权限 mode 与原 receipt 字节。升级与恢复分别使用 artifact 中已验证的 candidate/previous 源码。pre-contract/legacy bundle 与缺少当前必填 target contract 字段的 artifact 会直接 fail closed，不提供 release-only migration boundary；演练中的两次新安装仍要求当下 target freshness。build 在归档前校验 SPDX 2.3 SBOM 的 package/relationship 完整性并把 SBOM SHA256 写入 release manifest；GitHub release workflow 使用 SHA-pinned `actions/attest` 为 tarball 生成 provenance。该命令不创建 tag、不上传制品、不调用远端 backend。rehearsal、runtime smoke、timing 和 campaign state 属于 checkout 内的验证证据，不进入 source distribution，避免制品 SHA 与其自身验证报告形成循环依赖。
 

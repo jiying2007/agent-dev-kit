@@ -2,12 +2,13 @@
 from __future__ import annotations
 
 import gzip
+import hashlib
 import io
 import os
 import tarfile
 import zlib
-from pathlib import Path
-from typing import Protocol
+from pathlib import Path, PurePosixPath
+from typing import Any, Protocol
 
 from ..strict_json import StrictJSONError
 from ..strict_json import read_bytes as read_bounded_bytes
@@ -90,7 +91,9 @@ class _ForwardTarReader(io.RawIOBase):
         return self.position
 
 
-def load_archive_snapshot(artifact: Path, *, require_json: bool = True) -> tuple[bytes, dict[str, bytes]]:
+def load_archive_snapshot(
+    artifact: Path, *, require_json: bool = True, source_inventory: dict[str, Any] | None = None,
+) -> tuple[bytes, dict[str, bytes]]:
     """Inspect one bounded regular-file snapshot; never extract to the filesystem.
 
     These byte/record limits do not replace OS CPU/memory limits. Callers own
@@ -101,14 +104,19 @@ def load_archive_snapshot(artifact: Path, *, require_json: bool = True) -> tuple
         raw = read_bounded_bytes(artifact, max_bytes=MAX_COMPRESSED_BYTES, regular_only=True)
     except (StrictJSONError, OSError, ValueError) as exc:
         raise ArchiveInputError("release artifact must be a bounded regular file") from exc
-    return raw, inspect_archive_snapshot(raw, require_json=require_json)
+    return raw, inspect_archive_snapshot(raw, require_json=require_json, source_inventory=source_inventory)
 
 
-def inspect_archive_snapshot(raw: bytes, *, require_json: bool = True) -> dict[str, bytes]:
+def inspect_archive_snapshot(
+    raw: bytes, *, require_json: bool = True, source_inventory: dict[str, Any] | None = None,
+) -> dict[str, bytes]:
     """Preflight already-captured bytes without reopening a path."""
     if not isinstance(raw, bytes) or len(raw) > MAX_COMPRESSED_BYTES:
         raise ArchiveInputError("release artifact exceeds compressed byte budget")
     payloads: dict[str, bytes] = {}
+    names: dict[str, bool] = {}
+    parents: set[str] = set()
+    source_digests: dict[str, bytes] = {}
     try:
         with gzip.GzipFile(fileobj=io.BytesIO(raw), mode="rb") as compressed, _ForwardTarReader(compressed) as reader:
             with tarfile.TarFile(fileobj=reader, mode="r") as archive:
@@ -132,24 +140,60 @@ def inspect_archive_snapshot(raw: bytes, *, require_json: bool = True) -> dict[s
                         raise ArchiveInputError("release archive exceeds member name budget")
                     if member.size < 0 or member.size > MAX_MEMBER_BYTES:
                         raise ArchiveInputError("release archive exceeds member byte budget")
-                    if member.name not in _JSON_NAMES:
-                        continue
-                    if member.name in payloads or not member.isreg() or member.issparse():
+                    if member.name in _JSON_NAMES and (
+                        member.name in payloads or not member.isreg() or member.issparse()
+                    ):
                         raise ArchiveInputError("release JSON member must be one regular file")
-                    if member.size > MAX_JSON_BYTES:
+                    name = member.name.rstrip("/") if member.isdir() else member.name
+                    path = PurePosixPath(name)
+                    if (not name or path.is_absolute() or ".." in path.parts or "\\" in name
+                            or path.as_posix() != name or name == "."):
+                        raise ArchiveInputError("release archive contains an unsafe path")
+                    if member.issparse() or not (member.isdir() or member.isreg()):
+                        raise ArchiveInputError("release archive contains an unsupported member")
+                    if name in names:
+                        raise ArchiveInputError("release archive contains a duplicate member")
+                    ancestors = [parent.as_posix() for parent in path.parents if parent != PurePosixPath(".")]
+                    if any(parent in names and not names[parent] for parent in ancestors) or (
+                        not member.isdir() and name in parents
+                    ):
+                        raise ArchiveInputError("release archive contains conflicting member paths")
+                    names[name] = member.isdir()
+                    parents.update(ancestors)
+                    if member.isdir():
+                        if member.size:
+                            raise ArchiveInputError("release directory member has a payload")
+                        continue
+                    source_member = source_inventory is not None and name.startswith("source/")
+                    capture_json = name in _JSON_NAMES or (source_member and name == "source/manifest.json")
+                    if not (source_member or capture_json):
+                        continue
+                    if capture_json and member.size > MAX_JSON_BYTES:
                         raise ArchiveInputError("release JSON member exceeds byte budget")
                     source = archive.extractfile(member)
                     if source is None:
-                        raise ArchiveInputError("release JSON member cannot be read")
+                        raise ArchiveInputError("release regular member cannot be read")
                     reader.payload_mode = True
                     try:
                         with source:
-                            data = source.read(MAX_JSON_BYTES + 1)
+                            if capture_json:
+                                data = source.read(MAX_JSON_BYTES + 1)
+                                size = len(data)
+                                digest = hashlib.sha256(data).digest()
+                                payloads[name] = data
+                            else:
+                                hasher = hashlib.sha256()
+                                size = 0
+                                for chunk in iter(lambda: source.read(_CHUNK_BYTES), b""):
+                                    size += len(chunk)
+                                    hasher.update(chunk)
+                                digest = hasher.digest()
                     finally:
                         reader.payload_mode = False
-                    if len(data) != member.size:
-                        raise ArchiveInputError("release JSON member is truncated")
-                    payloads[member.name] = data
+                    if size != member.size:
+                        raise ArchiveInputError("release regular member is truncated")
+                    if source_member:
+                        source_digests[name[len("source/"):]] = digest
             # Tar EOF may precede gzip EOF. Account for padding/concatenated
             # streams and validate gzip CRC rather than trusting a prefix.
             reader.skipping = True
@@ -159,6 +203,11 @@ def inspect_archive_snapshot(raw: bytes, *, require_json: bool = True) -> dict[s
         raise
     except (OSError, EOFError, tarfile.TarError, ValueError, OverflowError, RecursionError, zlib.error) as exc:
         raise ArchiveInputError("invalid release archive stream") from exc
-    if require_json and set(payloads) != _JSON_NAMES:
+    if require_json and not _JSON_NAMES.issubset(payloads):
         raise ArchiveInputError("release archive is missing required JSON members")
+    if source_inventory is not None:
+        tree_digest = hashlib.sha256()
+        for name in sorted(source_digests, key=PurePosixPath):
+            tree_digest.update(name.encode("utf-8") + b"\0" + source_digests[name])
+        source_inventory.update(file_count=len(source_digests), sha256=tree_digest.hexdigest())
     return payloads

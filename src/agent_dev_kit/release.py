@@ -209,21 +209,21 @@ def build_release(
     version: Optional[str] = None,
     allow_unbound_snapshot: bool = False,
 ) -> Dict[str, Any]:
-    version = version or manifest.version
-    if version != manifest.version:
-        raise ManifestError("release version does not match manifest: {} != {}".format(version, manifest.version))
-    gate = check_release(manifest)
-    if gate["status"] != "pass":
-        raise ManifestError("release check failed: {}".format("; ".join(gate["failures"])))
     source_identity = _release_artifacts._release_source_identity(manifest.root, allow_unbound_snapshot)
-
-    output = output.resolve()
-    output.mkdir(parents=True, exist_ok=True)
     staging = Path(tempfile.mkdtemp(prefix="adk-release-"))
-    package_root = staging / "agent-dev-kit-{}".format(version)
-    bundles = package_root / "bundles"
-    bundles.mkdir(parents=True)
     try:
+        manifest = _release_artifacts._release_source_manifest(manifest, source_identity, staging / "frozen-source")
+        version = version or manifest.version
+        if version != manifest.version:
+            raise ManifestError("release version does not match manifest: {} != {}".format(version, manifest.version))
+        gate = check_release(manifest)
+        if gate["status"] != "pass":
+            raise ManifestError("release check failed: {}".format("; ".join(gate["failures"])))
+        output = output.resolve()
+        output.mkdir(parents=True, exist_ok=True)
+        package_root = staging / "agent-dev-kit-{}".format(version)
+        bundles = package_root / "bundles"
+        bundles.mkdir(parents=True)
         target_results: List[Dict[str, Any]] = []
         for target in sorted(manifest.direct_targets()):
             target_config = manifest.target(target)
@@ -384,15 +384,22 @@ def publish_release(
         raise ManifestError("release artifact name does not match version: {}".format(artifact.name))
     raw, actual_digest = _release_artifacts._verified_archive_snapshot(artifact)
     checksum = artifact.with_name(artifact.name + ".sha256")
-    _release_artifacts._assert_publishable_release_artifact(artifact, raw_snapshot=raw)
+    artifact_contract = _release_artifacts._assert_publishable_release_artifact(artifact, raw_snapshot=raw)
+    contract_bytes = (json.dumps(
+        {"schema": "adk-release-artifact-contract-set/v1", "status": "pass", "artifacts": [artifact_contract]},
+        sort_keys=True,
+    ) + "\n").encode("utf-8")
+    contract_path = artifact.parent / "release-contract.json"
     gh = shutil.which("gh")
     if gh is None:
         raise ManifestError("GitHub CLI is required for the github release backend")
-    command = [gh, "release", "create", "v{}".format(version), str(artifact), str(checksum), "--verify-tag"]
+    command = [gh, "release", "create", "v{}".format(version), str(artifact), str(checksum),
+               str(contract_path), "--verify-tag"]
     if repository:
         command.extend(["--repo", repository])
     if dry_run:
-        return {"status": "planned", "backend": backend, "command": command}
+        return {"status": "planned", "backend": backend, "command": command,
+                "generated_assets": [contract_path.name]}
     try:
         # Upload the already-verified bytes, never reopen a replaceable input.
         with tempfile.TemporaryDirectory(prefix="adk-release-upload-") as temp:
@@ -400,7 +407,9 @@ def publish_release(
             upload.write_bytes(raw)
             upload_checksum = upload.with_name(upload.name + ".sha256")
             upload_checksum.write_text("{}  {}\n".format(actual_digest, upload.name), encoding="ascii")
-            command[4:6] = [str(upload), str(upload_checksum)]
+            upload_contract = Path(temp) / contract_path.name
+            upload_contract.write_bytes(contract_bytes)
+            command[4:7] = [str(upload), str(upload_checksum), str(upload_contract)]
             completed = subprocess.run(
                 command,
                 check=False,

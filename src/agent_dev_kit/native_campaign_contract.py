@@ -7,11 +7,11 @@ import hashlib
 import json
 import os
 import shutil
-import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Mapping, Sequence
 
+from .atomic_io import write_texts_atomic
 from .model import Manifest, ManifestError, canonical_json_bytes, sha256_bytes
 from .target_contracts import _native_contract_digest, _schema_failures, load_target_contract
 from .targets import render_selection
@@ -130,27 +130,19 @@ def _load_json(path: Path, label: str) -> Any:
 
 
 def _write_json(path: Path, value: Any) -> None:
-    # Resolve only after validating the caller's original leaf path.
-    # Resolving first would hide an existing symlink to a managed file.
-    if path.is_symlink():
-        raise ManifestError(f"output path must not be a symlink: {path}")
-    path = path.resolve()
-    path.parent.mkdir(parents=True, exist_ok=True)
-    payload = json.dumps(value, ensure_ascii=False, sort_keys=True, indent=2) + "\n"
-    if len(payload.encode("utf-8")) > MAX_JSON_BYTES:
-        raise ManifestError("output exceeds byte budget")
-    descriptor, temporary = tempfile.mkstemp(prefix=path.name + ".", suffix=".tmp", dir=path.parent)
-    try:
-        with os.fdopen(descriptor, "w", encoding="utf-8") as stream:
-            stream.write(payload)
-            stream.flush()
-            os.fsync(stream.fileno())
-        os.replace(temporary, path)
-    finally:
-        try:
-            os.unlink(temporary)
-        except OSError:
-            pass
+    _write_jsons(((path, value),))
+
+
+def _write_jsons(documents: Sequence[tuple[Path, Any]]) -> None:
+    encoded = []
+    for path, value in documents:
+        if path.is_symlink():
+            raise ManifestError(f"output path must not be a symlink: {path}")
+        payload = json.dumps(value, ensure_ascii=False, sort_keys=True, indent=2) + "\n"
+        if len(payload.encode("utf-8")) > MAX_JSON_BYTES:
+            raise ManifestError("output exceeds byte budget")
+        encoded.append((path, payload))
+    write_texts_atomic(encoded)
 
 
 def _validate_schema(value: Mapping[str, Any], schema_path: Path, label: str) -> None:

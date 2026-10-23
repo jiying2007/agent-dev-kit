@@ -22,6 +22,8 @@ from ..model import Manifest, ManifestError, sha256_file, sha256_tree
 from ..strict_json import read as read_strict_json
 from ..strict_json import read_bytes as read_bounded_bytes
 from .archive_io import ArchiveInputError, inspect_archive_snapshot, load_archive_snapshot
+from .archive_io import MAX_DECODED_BYTES, MAX_MEMBER_BYTES, MAX_MEMBERS
+from .release_contract import validate_release_artifact
 
 SOURCE_DISTRIBUTION_DIRECTORIES = (
     ".github", "agents", "docs", "manifests", "optional-skills",
@@ -179,7 +181,7 @@ def _release_source_identity(root: Path, allow_unbound_snapshot: bool) -> dict[s
 
     def git(*args: str) -> subprocess.CompletedProcess[str]:
         return subprocess.run(
-            ["git", "-C", str(root), *args],
+            ["git", "--no-replace-objects", "-C", str(root), *args],
             check=False,
             text=True,
             capture_output=True,
@@ -189,7 +191,7 @@ def _release_source_identity(root: Path, allow_unbound_snapshot: bool) -> dict[s
     if top.returncode != 0 or Path(top.stdout.strip()).resolve() != root:
         raise ManifestError("release build root is not the native Git repository root")
     commit_result = git("rev-parse", "HEAD")
-    tree_result = git("rev-parse", "HEAD^{tree}")
+    tree_result = git("rev-parse", commit_result.stdout.strip() + "^{tree}")
     if commit_result.returncode != 0 or tree_result.returncode != 0:
         raise ManifestError("release build cannot resolve source commit/tree identity")
     status = git(
@@ -208,6 +210,80 @@ def _release_source_identity(root: Path, allow_unbound_snapshot: bool) -> dict[s
         "tree": tree_result.stdout.strip(),
         "dirty": dirty,
     }
+
+
+def _release_source_manifest(manifest: Manifest, identity: Mapping[str, Any], destination: Path) -> Manifest:
+    """Materialize the captured tree's blobs, without worktree or archive attributes."""
+    if identity["release_eligible"] is not True:
+        return manifest
+    tree = str(identity["tree"])
+    if not re.fullmatch(r"[0-9a-f]{40}", tree):
+        raise ManifestError("release source tree identity is invalid")
+    listing = subprocess.run(
+        ["git", "--no-replace-objects", "-C", str(manifest.root), "ls-tree", "--full-tree", "-r", "-z", tree, "--",
+         *SOURCE_DISTRIBUTION_DIRECTORIES, *SOURCE_DISTRIBUTION_FILES],
+        check=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=60,
+    )
+    if listing.returncode:
+        raise ManifestError("release build cannot enumerate the frozen Git tree")
+    records = listing.stdout.split(b"\0")
+    if records[-1] != b"" or len(records) - 1 > MAX_MEMBERS:
+        raise ManifestError("release Git tree exceeds its file inventory budget")
+    destination.mkdir(parents=True, exist_ok=False)
+    total = 0
+    with tempfile.TemporaryFile() as errors, subprocess.Popen(
+        ["git", "--no-replace-objects", "-C", str(manifest.root), "cat-file", "--batch"],
+        stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=errors,
+    ) as process:
+        assert process.stdin is not None and process.stdout is not None
+        try:
+            for record in records[:-1]:
+                metadata, raw_path = record.split(b"\t", 1)
+                mode, kind, oid = metadata.split()
+                path = Path(raw_path.decode("utf-8"))
+                if (path.is_absolute() or ".." in path.parts or not path.parts
+                        or path.as_posix().encode("utf-8") != raw_path or b"\\" in raw_path):
+                    raise ManifestError("release Git tree contains an unsafe path")
+                if kind != b"blob" or mode not in (b"100644", b"100755"):
+                    raise ManifestError("release Git tree contains an unsupported source type")
+                if not re.fullmatch(rb"[0-9a-f]{40}", oid):
+                    raise ManifestError("release Git tree contains an invalid blob identity")
+                process.stdin.write(oid + b"\n")
+                process.stdin.flush()
+                header = process.stdout.readline(256).split()
+                if len(header) != 3 or header[:2] != [oid, b"blob"] or not header[2].isdigit():
+                    raise ManifestError("release Git blob cannot be read")
+                size = int(header[2])
+                total += size
+                if size > MAX_MEMBER_BYTES or total > MAX_DECODED_BYTES:
+                    raise ManifestError("release Git blobs exceed source byte budgets")
+                target = destination / path
+                target.parent.mkdir(parents=True, exist_ok=True)
+                remaining = size
+                blob_digest = hashlib.sha1(b"blob " + str(size).encode("ascii") + b"\0")
+                with target.open("xb") as output:
+                    while remaining:
+                        chunk = process.stdout.read(min(64 * 1024, remaining))
+                        if not chunk:
+                            raise ManifestError("release Git blob is truncated")
+                        output.write(chunk)
+                        blob_digest.update(chunk)
+                        remaining -= len(chunk)
+                if process.stdout.read(1) != b"\n":
+                    raise ManifestError("release Git blob has an invalid frame")
+                if blob_digest.hexdigest().encode("ascii") != oid:
+                    raise ManifestError("release Git blob content does not match its object identity")
+                target.chmod(0o755 if mode == b"100755" else 0o644)
+            process.stdin.close()
+            if process.wait(timeout=60):
+                raise ManifestError("release Git blob reader failed")
+        except BaseException as exc:
+            process.kill()
+            process.wait()
+            if isinstance(exc, (OSError, ValueError, subprocess.TimeoutExpired)) and not isinstance(exc, ManifestError):
+                raise ManifestError("release build cannot capture frozen Git source") from exc
+            raise
+    return Manifest.load(destination)
 
 
 def _validate_sbom(sbom: Mapping[str, Any]) -> None:
@@ -278,6 +354,12 @@ def _verified_archive_snapshot(artifact: Path) -> tuple[bytes, str]:
 
 
 def _assert_publishable_release_artifact(artifact: Path, *, raw_snapshot: bytes | None = None) -> Mapping[str, Any]:
+    try:
+        if raw_snapshot is None:
+            raw_snapshot, _ = load_archive_snapshot(artifact)
+        contract = validate_release_artifact(artifact, raw_snapshot=raw_snapshot)
+    except (OSError, ValueError) as exc:
+        raise ManifestError(str(exc)) from exc
     workspace = Path(tempfile.mkdtemp(prefix="adk-release-publish-check-"))
     try:
         release_root = _extract_release(artifact, workspace / "artifact", raw_snapshot=raw_snapshot)
@@ -292,7 +374,7 @@ def _assert_publishable_release_artifact(artifact: Path, *, raw_snapshot: bytes 
             or provenance.get("dirty") is not False
         ):
             raise ManifestError("release artifact is not bound to a clean Git commit/tree")
-        return release_manifest
+        return contract
     finally:
         shutil.rmtree(str(workspace), ignore_errors=True)
 

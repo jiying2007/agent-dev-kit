@@ -8,6 +8,7 @@ import os
 import json
 import platform
 import shutil
+import stat
 import subprocess
 import sys
 import tempfile
@@ -15,6 +16,7 @@ import unittest
 from unittest.mock import patch
 from pathlib import Path
 
+from agent_dev_kit import atomic_io
 from agent_dev_kit.model import Manifest, ManifestError
 from agent_dev_kit.native_campaign import (
     _safe_output_path,
@@ -23,7 +25,12 @@ from agent_dev_kit.native_campaign import (
     prepare_campaign,
     run_campaign,
 )
-from agent_dev_kit.native_campaign_contract import _write_json, load_native_campaign_target_layouts
+from agent_dev_kit.native_campaign_contract import (
+    MAX_JSON_BYTES,
+    _write_json,
+    _write_jsons,
+    load_native_campaign_target_layouts,
+)
 from agent_dev_kit.native_campaign_execution import _execute, _semantic_assertion
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -170,6 +177,15 @@ class NativeCampaignBoundaryTest(unittest.TestCase):
             with self.assertRaisesRegex(ManifestError, "output path must not be a symlink"):
                 _write_json(alias, {"status": "should-not-write"})
             self.assertEqual(target.read_text(encoding="utf-8"), "original\n")
+
+    def test_document_set_is_fully_encoded_before_any_output_is_written(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="native-output-encoding-") as temp:
+            first, second = Path(temp) / "first.json", Path(temp) / "second.json"
+            first.write_bytes(b"original\n")
+            with self.assertRaisesRegex(ManifestError, "output exceeds byte budget"):
+                _write_jsons(((first, {"valid": True}), (second, {"oversized": "x" * MAX_JSON_BYTES})))
+            self.assertEqual(first.read_bytes(), b"original\n")
+            self.assertFalse(second.exists())
 
 
 class NativeCampaignTest(unittest.TestCase):
@@ -490,14 +506,12 @@ class NativeCampaignTest(unittest.TestCase):
         self.assertIn("repository_output_must_be_reports_runtime", value["error"])
         self.assertFalse((ROOT / "manifests" / "forbidden-plan.json").exists())
 
-    def prepare_cli(self, plan_path: Path, candidate_path: Path) -> subprocess.CompletedProcess:
+    def prepare_cli_args(self, plan_path: Path, candidate_path: Path) -> list[str]:
         commands_path = self.temp / "commands.json"
         assertions_path = self.temp / "assertions.json"
         commands_path.write_text(json.dumps(commands()), encoding="utf-8")
         assertions_path.write_text(json.dumps(assertions()), encoding="utf-8")
-        return subprocess.run(
-            [
-                sys.executable, "-m", "agent_dev_kit.cli", "native-campaign",
+        return [
                 "--root", str(ROOT), "prepare", "--target", "claude-code",
                 "--runtime-binary", sys.executable, "--runtime-version", VERSION,
                 "--authority-id", "ci-native-conformance",
@@ -508,7 +522,12 @@ class NativeCampaignTest(unittest.TestCase):
                 "--receipt-path", self.receipt_rel,
                 "--plan-out", str(plan_path),
                 "--candidate-contract-out", str(candidate_path), "--summary-json",
-            ],
+        ]
+
+    def prepare_cli(self, plan_path: Path, candidate_path: Path) -> subprocess.CompletedProcess:
+        return subprocess.run(
+            [sys.executable, "-m", "agent_dev_kit.cli", "native-campaign",
+             *self.prepare_cli_args(plan_path, candidate_path)],
             cwd=ROOT, text=True, capture_output=True, timeout=60,
         )
 
@@ -550,6 +569,230 @@ class NativeCampaignTest(unittest.TestCase):
         self.assertEqual(json.loads(done.stdout)["status"], "ready")
         self.assertEqual(json.loads(plan.read_text())["schema"], "adk-native-target-campaign-plan/v2")
         self.assertEqual(json.loads(candidate.read_text())["target"], "claude-code")
+
+    def test_prepare_rejects_identical_and_hardlinked_outputs(self) -> None:
+        for hardlink in (False, True):
+            with self.subTest(hardlink=hardlink):
+                plan = self.temp / f"alias-plan-{hardlink}.json"
+                plan.write_bytes(b"original\n")
+                candidate = self.temp / "hardlinked-candidate.json" if hardlink else plan
+                if hardlink:
+                    os.link(plan, candidate)
+                done = self.prepare_cli(plan, candidate)
+                self.assertEqual(done.returncode, 1, (done.stdout, done.stderr))
+                self.assertIn("output_alias", json.loads(done.stdout)["error"])
+                self.assertEqual(plan.read_bytes(), b"original\n")
+                self.assertEqual(candidate.read_bytes(), b"original\n")
+
+    def test_prepare_rejects_input_output_aliases(self) -> None:
+        for hardlink in (False, True):
+            with self.subTest(hardlink=hardlink):
+                commands_path = self.temp / "commands.json"
+                commands_path.write_text(json.dumps(commands()), encoding="utf-8")
+                plan = self.temp / "commands-hardlink.json" if hardlink else commands_path
+                if hardlink:
+                    os.link(commands_path, plan)
+                candidate = self.temp / f"candidate-{hardlink}.json"
+                done = self.prepare_cli(plan, candidate)
+                self.assertEqual(done.returncode, 1, (done.stdout, done.stderr))
+                self.assertIn("input_output_alias", json.loads(done.stdout)["error"])
+                self.assertEqual(json.loads(commands_path.read_text()), commands())
+                self.assertFalse(candidate.exists())
+
+    def test_prepare_rejects_overlapping_output_paths_before_mkdir(self) -> None:
+        parent = self.temp / "new-output"
+        done = self.prepare_cli(parent, parent / "candidate.json")
+        self.assertEqual(done.returncode, 1, (done.stdout, done.stderr))
+        self.assertIn("output_alias", json.loads(done.stdout)["error"])
+        self.assertFalse(parent.exists())
+
+    def test_prepare_rejects_invalid_second_output_before_first_write(self) -> None:
+        invalid = self.temp / "candidate-directory"
+        invalid.mkdir()
+        plan = self.temp / "existing-plan.json"
+        plan.write_bytes(b"old-plan\n")
+        done = self.prepare_cli(plan, invalid)
+        self.assertEqual(done.returncode, 1, (done.stdout, done.stderr))
+        self.assertIn("regular_file", json.loads(done.stdout)["error"])
+        self.assertEqual(plan.read_bytes(), b"old-plan\n")
+        self.assertTrue(invalid.is_dir())
+
+    def test_prepare_rejects_external_ancestor_link(self) -> None:
+        directory = self.temp / "real-output"
+        directory.mkdir()
+        alias = self.temp / "output-alias"
+        alias.symlink_to(directory, target_is_directory=True)
+        companion = self.temp / "companion.json"
+        done = self.prepare_cli(companion, alias / "candidate.json")
+        self.assertEqual(done.returncode, 1, (done.stdout, done.stderr))
+        self.assertIn("output_symlink_path", json.loads(done.stdout)["error"])
+        self.assertEqual(list(directory.iterdir()), [])
+        self.assertFalse(companion.exists())
+
+    def test_prepare_late_publication_failure_restores_both_original_outputs(self) -> None:
+        for existing in (False, True):
+            with self.subTest(existing=existing):
+                plan = self.temp / f"late-plan-{existing}.json"
+                candidate = self.temp / f"late-candidate-{existing}.json"
+                if existing:
+                    plan.write_bytes(b"old-plan\n")
+                    plan.chmod(0o640)
+                    candidate.write_bytes(b"old-candidate\n")
+                    candidate.chmod(0o644)
+                argv = self.prepare_cli_args(plan, candidate)
+                replace = atomic_io.os.replace
+                failed = False
+
+                def fail_second(source, destination):
+                    nonlocal failed
+                    if Path(destination) == candidate and not failed:
+                        failed = True
+                        raise OSError("injected second-output publication failure")
+                    return replace(source, destination)
+
+                output = io.StringIO()
+                with patch.object(atomic_io.os, "replace", side_effect=fail_second), contextlib.redirect_stdout(output):
+                    code = native_campaign_main(argv)
+                self.assertEqual(code, 1, output.getvalue())
+                self.assertTrue(failed)
+                if existing:
+                    self.assertEqual(plan.read_bytes(), b"old-plan\n")
+                    self.assertEqual(candidate.read_bytes(), b"old-candidate\n")
+                    self.assertEqual(stat.S_IMODE(plan.stat().st_mode), 0o640)
+                    self.assertEqual(stat.S_IMODE(candidate.stat().st_mode), 0o644)
+                else:
+                    self.assertFalse(plan.exists())
+                    self.assertFalse(candidate.exists())
+
+    def test_prepare_stages_all_outputs_before_publication(self) -> None:
+        plan = self.temp / "staging-plan.json"
+        candidate = self.temp / "staging-candidate.json"
+        plan.write_bytes(b"old-plan\n")
+        candidate.write_bytes(b"old-candidate\n")
+        argv = self.prepare_cli_args(plan, candidate)
+        stage = atomic_io.write_text_atomic
+        count = 0
+
+        def fail_second_stage(text, output, mode=None):
+            nonlocal count
+            count += 1
+            if count == 2:
+                raise OSError("injected second staging failure")
+            return stage(text, output, mode)
+
+        output = io.StringIO()
+        with patch.object(atomic_io, "write_text_atomic", side_effect=fail_second_stage), contextlib.redirect_stdout(output):
+            code = native_campaign_main(argv)
+        self.assertEqual(code, 1, output.getvalue())
+        self.assertIn("second staging failure", json.loads(output.getvalue())["error"])
+        self.assertEqual(plan.read_bytes(), b"old-plan\n")
+        self.assertEqual(candidate.read_bytes(), b"old-candidate\n")
+        self.assertEqual(list(self.temp.glob(".*.stage")), [])
+        self.assertEqual(list(self.temp.glob(".*.previous")), [])
+
+    def test_prepare_recovery_failure_retains_original_material_and_reports_path(self) -> None:
+        plan = self.temp / "recovery-plan.json"
+        candidate = self.temp / "recovery-candidate.json"
+        plan.write_bytes(b"recover-this-original-plan\n")
+        candidate.write_bytes(b"original-candidate\n")
+        argv = self.prepare_cli_args(plan, candidate)
+        replace = atomic_io.os.replace
+        failed = False
+
+        def fail_publish_and_recovery(source, destination):
+            nonlocal failed
+            if Path(destination) == candidate and not failed:
+                failed = True
+                raise OSError("injected second publication failure")
+            if Path(destination) == plan and failed:
+                raise OSError("injected first output recovery failure")
+            return replace(source, destination)
+
+        output = io.StringIO()
+        with patch.object(atomic_io.os, "replace", side_effect=fail_publish_and_recovery), contextlib.redirect_stdout(output):
+            code = native_campaign_main(argv)
+        self.assertEqual(code, 1, output.getvalue())
+        error = json.loads(output.getvalue())["error"]
+        self.assertIn("recovery failed", error)
+        originals = [path for path in self.temp.iterdir()
+                     if path.is_file() and path.read_bytes() == b"recover-this-original-plan\n"]
+        self.assertTrue(originals, "failed recovery must leave the original bytes recoverable")
+        self.assertTrue(any(str(path) in error for path in originals), error)
+        self.assertEqual(candidate.read_bytes(), b"original-candidate\n")
+
+    @unittest.skipUnless(hasattr(os, "mkfifo"), "requires FIFO support")
+    def test_run_rejects_directory_and_fifo_before_real_fixture_stages(self) -> None:
+        marker = self.temp / "stage-ran.txt"
+        command_set = commands()
+        for stage in ("discovery", "load", "trigger"):
+            command_set[stage][2] += f"Path({str(marker)!r}).write_text('executed');"
+        plan, candidate = self.prepare(command_set)
+        for name, value in {"plan": plan, "candidate": candidate,
+                            "commands": command_set, "assertions": assertions()}.items():
+            (self.temp / f"{name}.json").write_text(json.dumps(value), encoding="utf-8")
+        for kind in ("directory", "fifo"):
+            with self.subTest(kind=kind):
+                output = self.temp / kind
+                if kind == "directory":
+                    output.mkdir()
+                else:
+                    os.mkfifo(output)
+                done = subprocess.run(
+                    [sys.executable, "-m", "agent_dev_kit.cli", "native-campaign",
+                     "--root", str(ROOT), "run", "--plan", str(self.temp / "plan.json"),
+                     "--candidate-contract", str(self.temp / "candidate.json"),
+                     "--commands-json", str(self.temp / "commands.json"),
+                     "--assertions-json", str(self.temp / "assertions.json"),
+                     "--runtime-binary", sys.executable, "--evidence-out", str(output),
+                     "--summary-json"],
+                    cwd=ROOT, text=True, capture_output=True, timeout=60,
+                )
+                self.assertEqual(done.returncode, 1, (done.stdout, done.stderr))
+                self.assertIn("regular_file", json.loads(done.stdout)["error"])
+                self.assertFalse(marker.exists(), "invalid destination must stop actual stage commands")
+                if kind == "fifo":
+                    self.assertTrue(stat.S_ISFIFO(output.lstat().st_mode))
+                else:
+                    self.assertTrue(output.is_dir())
+
+    def test_finalize_preflights_aliases_inputs_and_second_output_type(self) -> None:
+        command_set = commands()
+        plan, candidate = self.prepare(command_set)
+        evidence = run_campaign(MANIFEST, plan, candidate, command_set, assertions(), Path(sys.executable))
+        inputs = {"plan": plan, "candidate": candidate, "evidence": evidence}
+        for name, value in inputs.items():
+            (self.temp / f"{name}.json").write_text(json.dumps(value), encoding="utf-8")
+        for kind in ("same-path", "hardlink", "input", "directory"):
+            with self.subTest(kind=kind):
+                self.receipt.write_bytes(b"original-receipt\n")
+                if kind == "same-path":
+                    final = self.receipt
+                elif kind == "hardlink":
+                    final = self.receipt_dir / "final-hardlink.json"
+                    os.link(self.receipt, final)
+                elif kind == "input":
+                    final = self.temp / "candidate.json"
+                else:
+                    final = self.temp / "final-directory"
+                    final.mkdir()
+                output = io.StringIO()
+                with contextlib.redirect_stdout(output):
+                    code = native_campaign_main([
+                        "--root", str(ROOT), "finalize",
+                        "--plan", str(self.temp / "plan.json"),
+                        "--candidate-contract", str(self.temp / "candidate.json"),
+                        "--evidence", str(self.temp / "evidence.json"),
+                        "--receipt-out", str(self.receipt),
+                        "--final-contract-out", str(final), "--summary-json",
+                    ])
+                self.assertEqual(code, 1, output.getvalue())
+                expected = "regular_file" if kind == "directory" else "output_alias"
+                self.assertIn(expected, json.loads(output.getvalue())["error"])
+                self.assertEqual(self.receipt.read_bytes(), b"original-receipt\n")
+                for name, value in inputs.items():
+                    self.assertEqual(json.loads((self.temp / f"{name}.json").read_text()), value)
+                if kind == "hardlink":
+                    final.unlink()
 
     def test_run_rejects_external_output_leaf_before_campaign(self) -> None:
         plan, candidate = self.prepare()

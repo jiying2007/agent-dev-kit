@@ -3,6 +3,7 @@ set -euo pipefail
 
 python3 -m unittest discover -s tests -p test_archive_resource_bounds.py
 python3 -m unittest discover -s tests -p test_release_ci_authority.py
+python3 -m unittest discover -s tests -p test_release_integrity.py
 
 python3 - <<'PY'
 from __future__ import annotations
@@ -73,7 +74,7 @@ release_manifest = {
     "direct_targets": [{"target": "claude-code", "agents": 1, "skills": 1}],
     "external_targets": ["external-runtime"],
     "source_distribution": True,
-    "source_file_count": 2,
+    "source_file_count": 1,
     "reproducible": False,
     "release_eligible": False,
     "source_provenance": {
@@ -82,7 +83,7 @@ release_manifest = {
         "commit": None,
         "tree": None,
         "dirty": None,
-        "source_distribution_sha256": "0" * 64,
+        "source_distribution_sha256": sha(b"manifest.json\0" + hashlib.sha256(source_manifest).digest()),
     },
     "sbom": {"path": "sbom.spdx.json", "sha256": sha(sbom), "validated": True},
 }
@@ -99,6 +100,7 @@ with tempfile.TemporaryDirectory() as temp:
     with tarfile.open(artifact, "w:gz") as archive:
         for name, payload in (
             ("manifest.json", source_manifest),
+            ("source/manifest.json", source_manifest),
             ("sbom.spdx.json", sbom),
             ("release-manifest.json", json.dumps(release_manifest).encode()),
         ):
