@@ -3,6 +3,7 @@
   "implementer": "ai/root/implement_release",
   "base_commit": "bf9ec8164e2c80394ce997f8a8b51515cad4746e",
   "collected_at": "2026-10-23T12:02:06.150661+00:00",
+  "updated_at": "2026-10-23T12:30:03+00:00",
   "status": "pass",
   "findings": [
     "ADK-01",
@@ -16,11 +17,11 @@
     },
     {
       "path": "src/agent_dev_kit/distribution/release_artifacts.py",
-      "sha256": "dd193bf37dcab03f9a562caa481f1a55b367acbf4327f82101abcf5525487a1a"
+      "sha256": "921dd17150b9687e5120a50111ef640ee04499cf59a0115af9d70874ffd0260b"
     },
     {
       "path": "src/agent_dev_kit/distribution/archive_io.py",
-      "sha256": "c2ee8fcb027608cc64c9d93f1e3992bde8adbaf8679d3000bc10e942660a2976"
+      "sha256": "3ce030569ca6b29d8cdc9463cc22057294fb52572ee221e7304caee8381e2c84"
     },
     {
       "path": "src/agent_dev_kit/distribution/release_contract.py",
@@ -115,6 +116,52 @@
     {
       "command": "rtk bypass git diff --check",
       "exit_code": 0
+    }
+  ],
+  "followup_phases": [
+    {
+      "phase": "integrated-focused-quality-rules",
+      "collected_at": "2026-10-23T12:30:03+00:00",
+      "reason": "The initial default Ruff invocation did not include the focused CI rule set; integration identified B023, I001 and UP022 in two implementation files.",
+      "changes": [
+        "Replace the source-reader lambda closure with an explicit bounded read loop.",
+        "Combine and sort archive_io imports.",
+        "Use subprocess.run(capture_output=True), retaining Python 3.8-compatible byte capture."
+      ],
+      "previous_source_file_bindings": [
+        {
+          "path": "src/agent_dev_kit/distribution/release_artifacts.py",
+          "sha256": "dd193bf37dcab03f9a562caa481f1a55b367acbf4327f82101abcf5525487a1a"
+        },
+        {
+          "path": "src/agent_dev_kit/distribution/archive_io.py",
+          "sha256": "c2ee8fcb027608cc64c9d93f1e3992bde8adbaf8679d3000bc10e942660a2976"
+        }
+      ],
+      "checks": [
+        {
+          "command": "rtk bypass <venv>/bin/ruff check src/agent_dev_kit/distribution --select E4,E7,E9,F,B,UP,SIM,I",
+          "exit_code": 0
+        },
+        {
+          "command": "rtk bypass <venv>/bin/mypy src/agent_dev_kit/distribution src/agent_dev_kit/release.py",
+          "exit_code": 0,
+          "source_files": 6
+        },
+        {
+          "command": "rtk bypass env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src <venv>/bin/python -m unittest discover -s tests -p test_archive_resource_bounds.py -v",
+          "exit_code": 0,
+          "tests": 22,
+          "elapsed_seconds": 0.235
+        },
+        {
+          "command": "rtk bypass env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src PATH=<venv>/bin:<system> <venv>/bin/python -m unittest discover -s tests -p test_release_integrity.py -v",
+          "exit_code": 0,
+          "tests": 13,
+          "elapsed_seconds": 33.876
+        }
+      ],
+      "evidence": "focused-quality-followup.log"
     }
   ],
   "notes": [

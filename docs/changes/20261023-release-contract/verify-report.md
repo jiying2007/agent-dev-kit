@@ -18,6 +18,12 @@
 - ruff、distribution mypy、模块预算/架构合同、diff whitespace 检查通过。
 - 原始日志与当前实现/测试逐文件 SHA-256 见 `evidence/`。
 
+## 追加：集成 CI 的 focused 质量规则
+
+集成检查发现先前默认 Ruff 命令未覆盖 CI 的 `E4,E7,E9,F,B,UP,SIM,I` 规则集。本阶段仅改动两份实现文件的三处代码：将 source reader 的闭包迭代改为显式有界读取循环，合并并排序 `archive_io` 导入，使用兼容 Python 3.8 的 `capture_output=True` 捕获 Git 子进程输出。未新增 suppress 或改变行为合同。
+
+实际 focused Ruff 与 `distribution + release.py` 的 mypy（6 个文件）通过；22 项归档资源回归和 13 项发布完整性回归再次通过。本阶段日志见 `evidence/focused-quality-followup.log`，原红绿记录保留，实施 receipt 已追加阶段并更新当前源码 SHA-256。独立审核记录由审核者自行更新。
+
 ## 范围和剩余阶段
 
 未更改发布 schema、CI、信任根或产品资格。没有真实远端发布、模型或设备运行。主 Agent 继续统一执行独立审核、最终版本集成回归、受保护合入和发布读回；这些阶段尚不在本实现记录中标为完成。

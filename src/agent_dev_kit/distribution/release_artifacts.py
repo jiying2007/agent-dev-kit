@@ -21,8 +21,14 @@ from ..installation_contract import RECEIPT_NAME
 from ..model import Manifest, ManifestError, sha256_file, sha256_tree
 from ..strict_json import read as read_strict_json
 from ..strict_json import read_bytes as read_bounded_bytes
-from .archive_io import ArchiveInputError, inspect_archive_snapshot, load_archive_snapshot
-from .archive_io import MAX_DECODED_BYTES, MAX_MEMBER_BYTES, MAX_MEMBERS
+from .archive_io import (
+    MAX_DECODED_BYTES,
+    MAX_MEMBER_BYTES,
+    MAX_MEMBERS,
+    ArchiveInputError,
+    inspect_archive_snapshot,
+    load_archive_snapshot,
+)
 from .release_contract import validate_release_artifact
 
 SOURCE_DISTRIBUTION_DIRECTORIES = (
@@ -222,7 +228,7 @@ def _release_source_manifest(manifest: Manifest, identity: Mapping[str, Any], de
     listing = subprocess.run(
         ["git", "--no-replace-objects", "-C", str(manifest.root), "ls-tree", "--full-tree", "-r", "-z", tree, "--",
          *SOURCE_DISTRIBUTION_DIRECTORIES, *SOURCE_DISTRIBUTION_FILES],
-        check=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=60,
+        check=False, capture_output=True, timeout=60,
     )
     if listing.returncode:
         raise ManifestError("release build cannot enumerate the frozen Git tree")

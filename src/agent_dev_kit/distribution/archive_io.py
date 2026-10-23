@@ -184,7 +184,10 @@ def inspect_archive_snapshot(
                             else:
                                 hasher = hashlib.sha256()
                                 size = 0
-                                for chunk in iter(lambda: source.read(_CHUNK_BYTES), b""):
+                                while True:
+                                    chunk = source.read(_CHUNK_BYTES)
+                                    if not chunk:
+                                        break
                                     size += len(chunk)
                                     hasher.update(chunk)
                                 digest = hasher.digest()

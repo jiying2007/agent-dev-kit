@@ -1,0 +1,124 @@
+{
+  "schema": "adk-independent-primary-source-observations/v1",
+  "recorded_at": "2026-10-23T12:29:31.451399Z",
+  "reviewer_id": "ai/root/architecture_audit",
+  "purpose": "Review expired source metadata and static crosswalk only",
+  "third_party_bodies_copied_into_repository": false,
+  "owasp": {
+    "registered_url": "https://github.com/OWASP/www-project-agentic-skills-top-10",
+    "retrieval_method": "GitHub connector GET commits/main then fetch_file at exact commit",
+    "observed_revision": "d6f7d7d0de314f52a83a85d1828e06ab096e595c",
+    "observed_tree": "422105aa1ef904b33e90246f870e51962dff730a",
+    "commit_date": "2026-08-12T16:27:33Z",
+    "files": [
+      {
+        "path": "README.md",
+        "url": "https://github.com/OWASP/www-project-agentic-skills-top-10/blob/d6f7d7d0de314f52a83a85d1828e06ab096e595c/README.md",
+        "reported_git_blob": "d9ef6e6b26a9516bc2f36b9027f72d8bdff91f56",
+        "returned_utf8_sha256": "e2ca0047ce6ef897df1f873d93454800a8154a3fc5b4a4a7b0b0bea385f120a7",
+        "returned_utf8_bytes": 41430,
+        "returned_bytes_match_git_blob": true
+      },
+      {
+        "path": "LICENSE.md",
+        "url": "https://github.com/OWASP/www-project-agentic-skills-top-10/blob/d6f7d7d0de314f52a83a85d1828e06ab096e595c/LICENSE.md",
+        "reported_git_blob": "a7434ddbaccb6627f84a2326a15775807391cadb",
+        "returned_utf8_sha256": "56c3fa81e4c11690c803806b9ce7d6a63a7fdc84577df9145ebea4582ac4d26b",
+        "returned_utf8_bytes": 638,
+        "returned_bytes_match_git_blob": true
+      },
+      {
+        "path": "top10.md",
+        "url": "https://github.com/OWASP/www-project-agentic-skills-top-10/blob/d6f7d7d0de314f52a83a85d1828e06ab096e595c/top10.md",
+        "reported_git_blob": "2e681e1f09fa443700ecfbfd56c7752e1dcd6cd6",
+        "returned_utf8_sha256": "438909597daf9c33e3b24dfc128982e522038b5f0a9f40bbc7bb7bf6e2b7ec03",
+        "returned_utf8_bytes": 14793,
+        "returned_bytes_match_git_blob": true
+      },
+      {
+        "path": "public-statement.md",
+        "url": "https://github.com/OWASP/www-project-agentic-skills-top-10/blob/d6f7d7d0de314f52a83a85d1828e06ab096e595c/public-statement.md",
+        "reported_git_blob": "f605369a06cc4b7886cf18884ad8d713408d6e25",
+        "returned_utf8_sha256": "c931496a92ce4368a8007ed5b889baec62a592446505bddc64849f314d79d87c",
+        "returned_utf8_bytes": 650,
+        "returned_bytes_match_git_blob": true
+      },
+      {
+        "path": "universal-skill-format.md",
+        "url": "https://github.com/OWASP/www-project-agentic-skills-top-10/blob/d6f7d7d0de314f52a83a85d1828e06ab096e595c/universal-skill-format.md",
+        "reported_git_blob": "3e78864b5c9a9a0d11ed1b413cf0e6d8484fc8f9",
+        "returned_utf8_sha256": "0a95ad6dab5f2d3246777765e3b39606ad1e0a1c56ae6a7bd2c1b3dbc4d5c2e4",
+        "returned_utf8_bytes": 2930,
+        "returned_bytes_match_git_blob": true
+      },
+      {
+        "path": "tab_publication.md",
+        "url": "https://github.com/OWASP/www-project-agentic-skills-top-10/blob/d6f7d7d0de314f52a83a85d1828e06ab096e595c/tab_publication.md",
+        "reported_git_blob": "59aa9ca07c147abc4963068fa827a4f3fde45f30",
+        "returned_utf8_sha256": "5f9d69e9e40e0fa8f6dba34c0682b6d53304ebd33756d10af178db5ab6ea3f04",
+        "returned_utf8_bytes": 619,
+        "returned_bytes_match_git_blob": true
+      },
+      {
+        "path": "ast05.md",
+        "url": "https://github.com/OWASP/www-project-agentic-skills-top-10/blob/d6f7d7d0de314f52a83a85d1828e06ab096e595c/ast05.md",
+        "reported_git_blob": "a18773a6dae8dfaca52c3d40d09cb19cc281cb54",
+        "returned_utf8_sha256": "935125ff7427b4d7543a650cabaf4b7530982090d3f46082e4c4c03bcc495f91",
+        "returned_utf8_bytes": 8007,
+        "returned_bytes_match_git_blob": true
+      }
+    ],
+    "reviewed_scope": [
+      "README source identity, public-review link, risk summary and project status sections",
+      "LICENSE.md complete",
+      "top10.md risk identity table",
+      "ast05.md complete",
+      "universal-skill-format.md purpose and validation headings only",
+      "tab_publication.md complete; linked whitepaper not read",
+      "public-statement.md is an incident template, not a project maturity statement"
+    ],
+    "license_observed": "CC-BY-SA-4.0",
+    "method_decision": "observe-method-only",
+    "finding": "Current AST05 concerns untrusted external instructions; the local crosswalk still calls AST05 Unsafe Deserialization. The pinned AST05 explicitly places unsafe parsing of skill files under AST04.",
+    "limits": [
+      "No independent verification of the project's external incident statistics or platform-format claims",
+      "No assertion that the linked whitepaper is fully reviewed or that the taxonomy is a stable certification standard",
+      "No Universal Skill Format or third-party prose/code imported"
+    ]
+  },
+  "paper": {
+    "registered_url": "https://arxiv.org/abs/2607.00911",
+    "reviewed_urls": [
+      "https://arxiv.org/abs/2607.00911v2",
+      "https://arxiv.org/html/2607.00911v2",
+      "https://arxiv.org/licenses/nonexclusive-distrib/1.0/license.html"
+    ],
+    "version": "arXiv:2607.00911v2",
+    "version_date": "2026-07-06",
+    "title": "From Registry to Repository: How AI Agent Skills Are Written, Adapted, and Maintained",
+    "retrieval_method": "search_service open/click official arXiv abstract, versioned HTML and license",
+    "reviewed_scope": [
+      "abstract and version history",
+      "III methodology",
+      "VI customization and evolution",
+      "VII discussion and implications",
+      "VIII threats to validity",
+      "license declaration and linked license text"
+    ],
+    "license_observed": "arXiv.org perpetual non-exclusive distribution license",
+    "content_digest": null,
+    "digest_limit": "Web rendering was reviewed; raw publisher bytes were not fetched, so no publisher-content SHA256 is claimed.",
+    "method_decision": "adopt-method-only",
+    "supported_method": "Review durable interaction/recovery rules separately from project-specific paths, tools and environment bindings; maintain explicit use, effect and refresh evidence.",
+    "limits": [
+      "Observational public-repository sample, with one registry and adoption/linkage/sampling limitations",
+      "Content snapshot to 2026-03-04 and history snapshot to 2026-05-04, not current ADK use or effectiveness measurements",
+      "An arXiv distribution grant is not a separately verified license for importing paper text, datasets or replication code",
+      "Replication package and third-party Skill bodies were not downloaded or requalified"
+    ]
+  },
+  "transport_limits": [
+    "Direct urllib networking was denied by sandbox; failed attempts preserved in retrieval.json",
+    "Web opening of the GitHub API and pinned blob URLs was unavailable; GitHub connector successfully returned the fixed commit and file contents instead"
+  ]
+}

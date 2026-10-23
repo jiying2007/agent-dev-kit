@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-10-22",
+  "last_updated": "2026-10-23",
   "reference_boundary": "External agent, plugin, memory and skill sources are method-only references until a separate supply-chain review targets a specific versioned asset. This manifest does not enable external runtimes, hooks, workers, MCP servers or plugin installs.",
   "local_source_policy": {
     "id": "optional-workspace-reference-clones-v1",
@@ -263,26 +263,26 @@
       "title": "OWASP Agentic Skills Top 10",
       "url": "https://github.com/OWASP/www-project-agentic-skills-top-10",
       "local_path": "",
-      "retrieved_at": "2026-07-22",
+      "retrieved_at": "2026-10-23",
       "review_status": "reviewed-watch-only-project-evolving",
-      "expires_at": "2026-10-22",
-      "license": "project-license-review-required",
+      "expires_at": "2026-11-22",
+      "license": "CC-BY-SA-4.0",
       "evidence_strength": "medium",
       "decision": "observe-method-only",
-      "notes": "Use AST01-AST10 as an evolving skill-layer crosswalk. Do not copy the proposed Universal Skill Format, claim OWASP certification or treat roadmap content as a stable standard."
+      "notes": "2026-10-23 re-review at upstream revision d6f7d7d0de314f52a83a85d1828e06ab096e595c checked README, the AST01-AST10 table, AST05 and LICENSE.md. AST05 now covers untrusted external instructions; retain safe-parser controls under AST04 in the local crosswalk. The repository also links a V1 whitepaper, whose full contents were not reviewed. Keep the evolving skill-layer crosswalk observe-only; do not import the Universal Skill Format or project prose, claim OWASP certification, or infer runtime security from taxonomy coverage."
     },
     {
       "id": "agent-skills-in-the-wild-2026",
-      "title": "Agent Skills in the Wild empirical maintenance study",
+      "title": "From Registry to Repository: How AI Agent Skills Are Written, Adapted, and Maintained",
       "url": "https://arxiv.org/abs/2607.00911",
       "local_path": "",
-      "retrieved_at": "2026-07-22",
+      "retrieved_at": "2026-10-23",
       "review_status": "reviewed-method-only",
-      "expires_at": "2026-10-22",
-      "license": "paper-method-review-required",
+      "expires_at": "2026-11-22",
+      "license": "arxiv-nonexclusive-distribution;paper-dataset-code-reuse-not-reviewed",
       "evidence_strength": "medium",
       "decision": "adopt-method-only",
-      "notes": "Use the stable-behavior versus target-local-binding maintenance distinction and require explicit use/effect/refresh evidence. Do not copy datasets or infer local usage counts."
+      "notes": "2026-10-23 re-review read arXiv:2607.00911v2 (2026-07-06), including methodology, maintenance findings and validity limits. Continue separating durable interaction/recovery behavior from project-specific tool, path and environment bindings, with explicit use/effect/refresh evidence. This observational public-repository study is not local ADK effectiveness evidence. The arXiv non-exclusive distribution grant does not establish a license for importing paper text, datasets or replication code; no such material was copied and no local usage counts were inferred."
     },
     {
       "id": "vscode-agent-skills-2026",
