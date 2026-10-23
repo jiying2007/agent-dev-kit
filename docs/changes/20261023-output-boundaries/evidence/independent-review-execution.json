@@ -1,0 +1,90 @@
+{
+  "schema": "independent-output-boundary-execution/v1",
+  "reviewer": "ai/root/architecture_audit",
+  "author_id": "ai/root/implement_paths",
+  "started_at": "2026-10-23T12:05:08.724353Z",
+  "completed_at": "2026-10-23T12:05:20.352386Z",
+  "elapsed_seconds": 11.629,
+  "argv": [
+    "/workspace/scratch/694941d81014/tooling/rtk",
+    "bypass",
+    "/workspace/scratch/694941d81014/tooling/venv/bin/python",
+    "-m",
+    "unittest",
+    "-v",
+    "test_install_upgrade.ExportOutputBoundaryTest",
+    "test_native_campaign.NativeCampaignBoundaryTest",
+    "test_native_campaign.NativeCampaignTest.test_prepare_rejects_identical_and_hardlinked_outputs",
+    "test_native_campaign.NativeCampaignTest.test_prepare_rejects_input_output_aliases",
+    "test_native_campaign.NativeCampaignTest.test_prepare_rejects_overlapping_output_paths_before_mkdir",
+    "test_native_campaign.NativeCampaignTest.test_prepare_rejects_invalid_second_output_before_first_write",
+    "test_native_campaign.NativeCampaignTest.test_prepare_rejects_external_ancestor_link",
+    "test_native_campaign.NativeCampaignTest.test_prepare_late_publication_failure_restores_both_original_outputs",
+    "test_native_campaign.NativeCampaignTest.test_prepare_stages_all_outputs_before_publication",
+    "test_native_campaign.NativeCampaignTest.test_prepare_recovery_failure_retains_original_material_and_reports_path",
+    "test_native_campaign.NativeCampaignTest.test_run_rejects_directory_and_fifo_before_real_fixture_stages",
+    "test_native_campaign.NativeCampaignTest.test_finalize_preflights_aliases_inputs_and_second_output_type"
+  ],
+  "cwd": "/workspace/scratch/694941d81014/agent-dev-kit",
+  "exit_code": 0,
+  "stdout_utf8": "",
+  "stderr_utf8": "test_clean_rechecks_target_after_lock_acquisition (test_install_upgrade.ExportOutputBoundaryTest.test_clean_rechecks_target_after_lock_acquisition) ... ok\ntest_clean_rechecks_target_after_staging_before_replace (test_install_upgrade.ExportOutputBoundaryTest.test_clean_rechecks_target_after_staging_before_replace) ... ok\ntest_clean_rejects_output_root_ancestor_link (test_install_upgrade.ExportOutputBoundaryTest.test_clean_rejects_output_root_ancestor_link) ... ok\ntest_clean_rejects_same_root_and_outside_root_target_links (test_install_upgrade.ExportOutputBoundaryTest.test_clean_rejects_same_root_and_outside_root_target_links) ... ok\ntest_regular_export_replaces_and_failed_replacement_restores (test_install_upgrade.ExportOutputBoundaryTest.test_regular_export_replaces_and_failed_replacement_restores) ... ok\ntest_combined_assertion_uses_lf_separator_not_literal_backslash_n (test_native_campaign.NativeCampaignBoundaryTest.test_combined_assertion_uses_lf_separator_not_literal_backslash_n) ... ok\ntest_document_set_is_fully_encoded_before_any_output_is_written (test_native_campaign.NativeCampaignBoundaryTest.test_document_set_is_fully_encoded_before_any_output_is_written) ... ok\ntest_json_writer_does_not_resolve_leaf_symlink_before_rejecting (test_native_campaign.NativeCampaignBoundaryTest.test_json_writer_does_not_resolve_leaf_symlink_before_rejecting) ... ok\ntest_prepare_rejects_identical_and_hardlinked_outputs (test_native_campaign.NativeCampaignTest.test_prepare_rejects_identical_and_hardlinked_outputs) ... ok\ntest_prepare_rejects_input_output_aliases (test_native_campaign.NativeCampaignTest.test_prepare_rejects_input_output_aliases) ... ok\ntest_prepare_rejects_overlapping_output_paths_before_mkdir (test_native_campaign.NativeCampaignTest.test_prepare_rejects_overlapping_output_paths_before_mkdir) ... ok\ntest_prepare_rejects_invalid_second_output_before_first_write (test_native_campaign.NativeCampaignTest.test_prepare_rejects_invalid_second_output_before_first_write) ... ok\ntest_prepare_rejects_external_ancestor_link (test_native_campaign.NativeCampaignTest.test_prepare_rejects_external_ancestor_link) ... ok\ntest_prepare_late_publication_failure_restores_both_original_outputs (test_native_campaign.NativeCampaignTest.test_prepare_late_publication_failure_restores_both_original_outputs) ... ok\ntest_prepare_stages_all_outputs_before_publication (test_native_campaign.NativeCampaignTest.test_prepare_stages_all_outputs_before_publication) ... ok\ntest_prepare_recovery_failure_retains_original_material_and_reports_path (test_native_campaign.NativeCampaignTest.test_prepare_recovery_failure_retains_original_material_and_reports_path) ... ok\ntest_run_rejects_directory_and_fifo_before_real_fixture_stages (test_native_campaign.NativeCampaignTest.test_run_rejects_directory_and_fifo_before_real_fixture_stages) ... ok\ntest_finalize_preflights_aliases_inputs_and_second_output_type (test_native_campaign.NativeCampaignTest.test_finalize_preflights_aliases_inputs_and_second_output_type) ... ok\n\n----------------------------------------------------------------------\nRan 18 tests in 11.148s\n\nOK\n",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_sha256": "baa7592d9f9d8efd9eb3f45bc51cd7df46412a60dc4352a94b839837de108d23",
+  "sources_before": [
+    {
+      "path": "src/agent_dev_kit/atomic_io.py",
+      "sha256": "0a620484ae5954824ca7c93a251df8f8518ee5ec64739d64d9d987f0fb3a1b79"
+    },
+    {
+      "path": "src/agent_dev_kit/compiler.py",
+      "sha256": "27e643dee1bbf7a150e8f6f1e0466e043284d57db15eeca77afd8287aad2cce4"
+    },
+    {
+      "path": "src/agent_dev_kit/native_campaign.py",
+      "sha256": "52d0b5a37828d8d7d5042da62517e2d65047acb6c9474f2e9703df874cde6b81"
+    },
+    {
+      "path": "src/agent_dev_kit/native_campaign_contract.py",
+      "sha256": "63f0dbb11fb4d8b2878dedfe9668db797b9182e9f635feccb0a62ea8c2681d91"
+    },
+    {
+      "path": "tests/test_install_upgrade.py",
+      "sha256": "be8d6aa525a8338201016d2c5cbe0595b85e5091aa793db999935617ff0d1562"
+    },
+    {
+      "path": "tests/test_native_campaign.py",
+      "sha256": "fc188ae2fc5d69c37c1288c2f9a922ea4b00761afddaff0d10a61a4978812076"
+    }
+  ],
+  "sources_after": [
+    {
+      "path": "src/agent_dev_kit/atomic_io.py",
+      "sha256": "0a620484ae5954824ca7c93a251df8f8518ee5ec64739d64d9d987f0fb3a1b79"
+    },
+    {
+      "path": "src/agent_dev_kit/compiler.py",
+      "sha256": "27e643dee1bbf7a150e8f6f1e0466e043284d57db15eeca77afd8287aad2cce4"
+    },
+    {
+      "path": "src/agent_dev_kit/native_campaign.py",
+      "sha256": "52d0b5a37828d8d7d5042da62517e2d65047acb6c9474f2e9703df874cde6b81"
+    },
+    {
+      "path": "src/agent_dev_kit/native_campaign_contract.py",
+      "sha256": "63f0dbb11fb4d8b2878dedfe9668db797b9182e9f635feccb0a62ea8c2681d91"
+    },
+    {
+      "path": "tests/test_install_upgrade.py",
+      "sha256": "be8d6aa525a8338201016d2c5cbe0595b85e5091aa793db999935617ff0d1562"
+    },
+    {
+      "path": "tests/test_native_campaign.py",
+      "sha256": "fc188ae2fc5d69c37c1288c2f9a922ea4b00761afddaff0d10a61a4978812076"
+    }
+  ],
+  "source_drift": false,
+  "limitations": [
+    "Synthetic local fixture validation only; no real Native, signature, field event, human review or product authorization."
+  ]
+}

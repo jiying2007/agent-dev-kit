@@ -1,0 +1,658 @@
+{
+  "schema": "adk-independent-source-refresh-execution/v1",
+  "reviewer_id": "ai/root/architecture_audit",
+  "environment": {
+    "PATH": "/workspace/scratch/694941d81014/tooling/venv/bin:/usr/local/bin:/usr/bin:/bin",
+    "PYTHONPATH": "src",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "checks": [
+    {
+      "argv": [
+        "/workspace/scratch/694941d81014/tooling/rtk",
+        "bypass",
+        "bash",
+        "scripts/check-agent-ecosystem-standards.sh",
+        "--summary-json"
+      ],
+      "cwd": "/workspace/scratch/694941d81014/agent-dev-kit",
+      "started_at": "2026-10-23T12:32:26.568972Z",
+      "completed_at": "2026-10-23T12:32:26.738432Z",
+      "elapsed_seconds": 0.169,
+      "exit_code": 0,
+      "stdout_utf8": "{\"schema_version\":1,\"status\":\"pass\",\"checks\":553,\"sources\":11,\"asi_threats\":10,\"negative_fixtures\":13,\"runtime_enabled\":false}\n",
+      "stderr_utf8": "",
+      "stdout_sha256": "3f6281ebc25d9961495f7826258666284673f86a01041bfde18c84121a6f1e30",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sources_before": [
+        {
+          "path": "docs/changes/20261023-source-review-refresh/design.md",
+          "sha256": "e60fb8818b4d60f38f1db768184d1f06089ff008b8c87d24eb6819de2c3c8d76"
+        },
+        {
+          "path": "docs/changes/20261023-source-review-refresh/requirements.md",
+          "sha256": "0a5d4c401ee480df8c114f016e4fd0c68b27ffe3d8f077e820957f04d4ecf5b2"
+        },
+        {
+          "path": "docs/changes/20261023-source-review-refresh/tasks.md",
+          "sha256": "8175d008e019813ed5d440bfa51bd43a0c2f7a1aa38939cf7ecc7bf79df54e10"
+        },
+        {
+          "path": "manifests/external_agent_pattern_contracts.json",
+          "sha256": "bd226ce213e92842441ab21ec4f2eee8574166492727b66faa9b2019a6d09ae0"
+        },
+        {
+          "path": "manifests/harness_readiness_contracts.json",
+          "sha256": "e12c527dcfcfc61030b9a344f9d7fa3efeb828c364f5707285bdded69fcd8358"
+        },
+        {
+          "path": "manifests/official_docs_freshness_gates.json",
+          "sha256": "9ec9fc63efd71fbc867e69535907928cbe64802f4bfd0ecbffa4a926c1492214"
+        },
+        {
+          "path": "manifests/skill_reproducibility_contracts.json",
+          "sha256": "a65fc8efceb9aea04f7066109c23616bbcf4611e570ef8d0315e9c5ceace8445"
+        },
+        {
+          "path": "scripts/check-agent-ecosystem-standards.sh",
+          "sha256": "6f20d80d1e97e8f7c9f0dd6469bdb86ea576e83044a40ec699539ae0e6e0cded"
+        },
+        {
+          "path": "scripts/check-external-agent-patterns.sh",
+          "sha256": "c87d6289968bd00aeeeff5cdcf3e88bcaa96c25d86463de0eaf28cdb0eabfcd3"
+        },
+        {
+          "path": "src/agent_dev_kit/official_docs_sources.py",
+          "sha256": "36f9759939685e5db9f873008a723b50de429498c839f89b828e9a7ffb652afd"
+        },
+        {
+          "path": "src/agent_dev_kit/validation_contract.py",
+          "sha256": "5fae7240017ae758501abc5c8908ea770139f25529fcf64924462ce447075253"
+        },
+        {
+          "path": "tests/test_agent_ecosystem_standards.sh",
+          "sha256": "9341118fc2187764597d0445caddfa5930fbc95fb0eeed6665d29ef9b4a3844e"
+        },
+        {
+          "path": "tests/test_external_reference_binding.py",
+          "sha256": "267554f85ab918c5718159d04949b4536c95c36f75c9cffba2845be9ab5a4370"
+        }
+      ],
+      "sources_after": [
+        {
+          "path": "docs/changes/20261023-source-review-refresh/design.md",
+          "sha256": "e60fb8818b4d60f38f1db768184d1f06089ff008b8c87d24eb6819de2c3c8d76"
+        },
+        {
+          "path": "docs/changes/20261023-source-review-refresh/requirements.md",
+          "sha256": "0a5d4c401ee480df8c114f016e4fd0c68b27ffe3d8f077e820957f04d4ecf5b2"
+        },
+        {
+          "path": "docs/changes/20261023-source-review-refresh/tasks.md",
+          "sha256": "8175d008e019813ed5d440bfa51bd43a0c2f7a1aa38939cf7ecc7bf79df54e10"
+        },
+        {
+          "path": "manifests/external_agent_pattern_contracts.json",
+          "sha256": "bd226ce213e92842441ab21ec4f2eee8574166492727b66faa9b2019a6d09ae0"
+        },
+        {
+          "path": "manifests/harness_readiness_contracts.json",
+          "sha256": "e12c527dcfcfc61030b9a344f9d7fa3efeb828c364f5707285bdded69fcd8358"
+        },
+        {
+          "path": "manifests/official_docs_freshness_gates.json",
+          "sha256": "9ec9fc63efd71fbc867e69535907928cbe64802f4bfd0ecbffa4a926c1492214"
+        },
+        {
+          "path": "manifests/skill_reproducibility_contracts.json",
+          "sha256": "a65fc8efceb9aea04f7066109c23616bbcf4611e570ef8d0315e9c5ceace8445"
+        },
+        {
+          "path": "scripts/check-agent-ecosystem-standards.sh",
+          "sha256": "6f20d80d1e97e8f7c9f0dd6469bdb86ea576e83044a40ec699539ae0e6e0cded"
+        },
+        {
+          "path": "scripts/check-external-agent-patterns.sh",
+          "sha256": "c87d6289968bd00aeeeff5cdcf3e88bcaa96c25d86463de0eaf28cdb0eabfcd3"
+        },
+        {
+          "path": "src/agent_dev_kit/official_docs_sources.py",
+          "sha256": "36f9759939685e5db9f873008a723b50de429498c839f89b828e9a7ffb652afd"
+        },
+        {
+          "path": "src/agent_dev_kit/validation_contract.py",
+          "sha256": "5fae7240017ae758501abc5c8908ea770139f25529fcf64924462ce447075253"
+        },
+        {
+          "path": "tests/test_agent_ecosystem_standards.sh",
+          "sha256": "9341118fc2187764597d0445caddfa5930fbc95fb0eeed6665d29ef9b4a3844e"
+        },
+        {
+          "path": "tests/test_external_reference_binding.py",
+          "sha256": "267554f85ab918c5718159d04949b4536c95c36f75c9cffba2845be9ab5a4370"
+        }
+      ],
+      "source_drift": false
+    },
+    {
+      "argv": [
+        "/workspace/scratch/694941d81014/tooling/rtk",
+        "bypass",
+        "bash",
+        "tests/test_agent_ecosystem_standards.sh"
+      ],
+      "cwd": "/workspace/scratch/694941d81014/agent-dev-kit",
+      "started_at": "2026-10-23T12:32:26.738942Z",
+      "completed_at": "2026-10-23T12:32:30.980788Z",
+      "elapsed_seconds": 4.242,
+      "exit_code": 0,
+      "stdout_utf8": "[PASS] Agent ecosystem standards test\n",
+      "stderr_utf8": "",
+      "stdout_sha256": "13da2f716b96484be07fe6e2af57f823063543cbaadef649be59ded4e7161436",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sources_before": [
+        {
+          "path": "docs/changes/20261023-source-review-refresh/design.md",
+          "sha256": "e60fb8818b4d60f38f1db768184d1f06089ff008b8c87d24eb6819de2c3c8d76"
+        },
+        {
+          "path": "docs/changes/20261023-source-review-refresh/requirements.md",
+          "sha256": "0a5d4c401ee480df8c114f016e4fd0c68b27ffe3d8f077e820957f04d4ecf5b2"
+        },
+        {
+          "path": "docs/changes/20261023-source-review-refresh/tasks.md",
+          "sha256": "8175d008e019813ed5d440bfa51bd43a0c2f7a1aa38939cf7ecc7bf79df54e10"
+        },
+        {
+          "path": "manifests/external_agent_pattern_contracts.json",
+          "sha256": "bd226ce213e92842441ab21ec4f2eee8574166492727b66faa9b2019a6d09ae0"
+        },
+        {
+          "path": "manifests/harness_readiness_contracts.json",
+          "sha256": "e12c527dcfcfc61030b9a344f9d7fa3efeb828c364f5707285bdded69fcd8358"
+        },
+        {
+          "path": "manifests/official_docs_freshness_gates.json",
+          "sha256": "9ec9fc63efd71fbc867e69535907928cbe64802f4bfd0ecbffa4a926c1492214"
+        },
+        {
+          "path": "manifests/skill_reproducibility_contracts.json",
+          "sha256": "a65fc8efceb9aea04f7066109c23616bbcf4611e570ef8d0315e9c5ceace8445"
+        },
+        {
+          "path": "scripts/check-agent-ecosystem-standards.sh",
+          "sha256": "6f20d80d1e97e8f7c9f0dd6469bdb86ea576e83044a40ec699539ae0e6e0cded"
+        },
+        {
+          "path": "scripts/check-external-agent-patterns.sh",
+          "sha256": "c87d6289968bd00aeeeff5cdcf3e88bcaa96c25d86463de0eaf28cdb0eabfcd3"
+        },
+        {
+          "path": "src/agent_dev_kit/official_docs_sources.py",
+          "sha256": "36f9759939685e5db9f873008a723b50de429498c839f89b828e9a7ffb652afd"
+        },
+        {
+          "path": "src/agent_dev_kit/validation_contract.py",
+          "sha256": "5fae7240017ae758501abc5c8908ea770139f25529fcf64924462ce447075253"
+        },
+        {
+          "path": "tests/test_agent_ecosystem_standards.sh",
+          "sha256": "9341118fc2187764597d0445caddfa5930fbc95fb0eeed6665d29ef9b4a3844e"
+        },
+        {
+          "path": "tests/test_external_reference_binding.py",
+          "sha256": "267554f85ab918c5718159d04949b4536c95c36f75c9cffba2845be9ab5a4370"
+        }
+      ],
+      "sources_after": [
+        {
+          "path": "docs/changes/20261023-source-review-refresh/design.md",
+          "sha256": "e60fb8818b4d60f38f1db768184d1f06089ff008b8c87d24eb6819de2c3c8d76"
+        },
+        {
+          "path": "docs/changes/20261023-source-review-refresh/requirements.md",
+          "sha256": "0a5d4c401ee480df8c114f016e4fd0c68b27ffe3d8f077e820957f04d4ecf5b2"
+        },
+        {
+          "path": "docs/changes/20261023-source-review-refresh/tasks.md",
+          "sha256": "8175d008e019813ed5d440bfa51bd43a0c2f7a1aa38939cf7ecc7bf79df54e10"
+        },
+        {
+          "path": "manifests/external_agent_pattern_contracts.json",
+          "sha256": "bd226ce213e92842441ab21ec4f2eee8574166492727b66faa9b2019a6d09ae0"
+        },
+        {
+          "path": "manifests/harness_readiness_contracts.json",
+          "sha256": "e12c527dcfcfc61030b9a344f9d7fa3efeb828c364f5707285bdded69fcd8358"
+        },
+        {
+          "path": "manifests/official_docs_freshness_gates.json",
+          "sha256": "9ec9fc63efd71fbc867e69535907928cbe64802f4bfd0ecbffa4a926c1492214"
+        },
+        {
+          "path": "manifests/skill_reproducibility_contracts.json",
+          "sha256": "a65fc8efceb9aea04f7066109c23616bbcf4611e570ef8d0315e9c5ceace8445"
+        },
+        {
+          "path": "scripts/check-agent-ecosystem-standards.sh",
+          "sha256": "6f20d80d1e97e8f7c9f0dd6469bdb86ea576e83044a40ec699539ae0e6e0cded"
+        },
+        {
+          "path": "scripts/check-external-agent-patterns.sh",
+          "sha256": "c87d6289968bd00aeeeff5cdcf3e88bcaa96c25d86463de0eaf28cdb0eabfcd3"
+        },
+        {
+          "path": "src/agent_dev_kit/official_docs_sources.py",
+          "sha256": "36f9759939685e5db9f873008a723b50de429498c839f89b828e9a7ffb652afd"
+        },
+        {
+          "path": "src/agent_dev_kit/validation_contract.py",
+          "sha256": "5fae7240017ae758501abc5c8908ea770139f25529fcf64924462ce447075253"
+        },
+        {
+          "path": "tests/test_agent_ecosystem_standards.sh",
+          "sha256": "9341118fc2187764597d0445caddfa5930fbc95fb0eeed6665d29ef9b4a3844e"
+        },
+        {
+          "path": "tests/test_external_reference_binding.py",
+          "sha256": "267554f85ab918c5718159d04949b4536c95c36f75c9cffba2845be9ab5a4370"
+        }
+      ],
+      "source_drift": false
+    },
+    {
+      "argv": [
+        "/workspace/scratch/694941d81014/tooling/rtk",
+        "bypass",
+        "/workspace/scratch/694941d81014/tooling/venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_external_reference_binding.py",
+        "-v"
+      ],
+      "cwd": "/workspace/scratch/694941d81014/agent-dev-kit",
+      "started_at": "2026-10-23T12:32:30.981291Z",
+      "completed_at": "2026-10-23T12:32:32.056871Z",
+      "elapsed_seconds": 1.076,
+      "exit_code": 0,
+      "stdout_utf8": "",
+      "stderr_utf8": "test_current_method_only_reference_bindings_pass (test_external_reference_binding.ExternalReferenceBindingTests.test_current_method_only_reference_bindings_pass) ... ok\ntest_manifest_reader_rejects_duplicate_fields_links_and_oversize (test_external_reference_binding.ExternalReferenceBindingTests.test_manifest_reader_rejects_duplicate_fields_links_and_oversize) ... ok\ntest_missing_or_inconsistent_exact_identity_is_rejected (test_external_reference_binding.ExternalReferenceBindingTests.test_missing_or_inconsistent_exact_identity_is_rejected) ... ok\ntest_observation_freshness_is_explicit_and_bounded (test_external_reference_binding.ExternalReferenceBindingTests.test_observation_freshness_is_explicit_and_bounded) ... ok\ntest_optional_parent_lock_matches_exact_repository_and_pin (test_external_reference_binding.ExternalReferenceBindingTests.test_optional_parent_lock_matches_exact_repository_and_pin) ... ok\ntest_unapproved_host_and_inconsistent_duplicate_source_are_rejected (test_external_reference_binding.ExternalReferenceBindingTests.test_unapproved_host_and_inconsistent_duplicate_source_are_rejected) ... ok\ntest_unreviewed_date_is_rejected (test_external_reference_binding.ExternalReferenceBindingTests.test_unreviewed_date_is_rejected) ... ok\n\n----------------------------------------------------------------------\nRan 7 tests in 0.979s\n\nOK\n",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "4f048faf5f204556d4e958c05ab6b7f249395a09bbdd3cce8f3a58fdf7baf752",
+      "sources_before": [
+        {
+          "path": "docs/changes/20261023-source-review-refresh/design.md",
+          "sha256": "e60fb8818b4d60f38f1db768184d1f06089ff008b8c87d24eb6819de2c3c8d76"
+        },
+        {
+          "path": "docs/changes/20261023-source-review-refresh/requirements.md",
+          "sha256": "0a5d4c401ee480df8c114f016e4fd0c68b27ffe3d8f077e820957f04d4ecf5b2"
+        },
+        {
+          "path": "docs/changes/20261023-source-review-refresh/tasks.md",
+          "sha256": "8175d008e019813ed5d440bfa51bd43a0c2f7a1aa38939cf7ecc7bf79df54e10"
+        },
+        {
+          "path": "manifests/external_agent_pattern_contracts.json",
+          "sha256": "bd226ce213e92842441ab21ec4f2eee8574166492727b66faa9b2019a6d09ae0"
+        },
+        {
+          "path": "manifests/harness_readiness_contracts.json",
+          "sha256": "e12c527dcfcfc61030b9a344f9d7fa3efeb828c364f5707285bdded69fcd8358"
+        },
+        {
+          "path": "manifests/official_docs_freshness_gates.json",
+          "sha256": "9ec9fc63efd71fbc867e69535907928cbe64802f4bfd0ecbffa4a926c1492214"
+        },
+        {
+          "path": "manifests/skill_reproducibility_contracts.json",
+          "sha256": "a65fc8efceb9aea04f7066109c23616bbcf4611e570ef8d0315e9c5ceace8445"
+        },
+        {
+          "path": "scripts/check-agent-ecosystem-standards.sh",
+          "sha256": "6f20d80d1e97e8f7c9f0dd6469bdb86ea576e83044a40ec699539ae0e6e0cded"
+        },
+        {
+          "path": "scripts/check-external-agent-patterns.sh",
+          "sha256": "c87d6289968bd00aeeeff5cdcf3e88bcaa96c25d86463de0eaf28cdb0eabfcd3"
+        },
+        {
+          "path": "src/agent_dev_kit/official_docs_sources.py",
+          "sha256": "36f9759939685e5db9f873008a723b50de429498c839f89b828e9a7ffb652afd"
+        },
+        {
+          "path": "src/agent_dev_kit/validation_contract.py",
+          "sha256": "5fae7240017ae758501abc5c8908ea770139f25529fcf64924462ce447075253"
+        },
+        {
+          "path": "tests/test_agent_ecosystem_standards.sh",
+          "sha256": "9341118fc2187764597d0445caddfa5930fbc95fb0eeed6665d29ef9b4a3844e"
+        },
+        {
+          "path": "tests/test_external_reference_binding.py",
+          "sha256": "267554f85ab918c5718159d04949b4536c95c36f75c9cffba2845be9ab5a4370"
+        }
+      ],
+      "sources_after": [
+        {
+          "path": "docs/changes/20261023-source-review-refresh/design.md",
+          "sha256": "e60fb8818b4d60f38f1db768184d1f06089ff008b8c87d24eb6819de2c3c8d76"
+        },
+        {
+          "path": "docs/changes/20261023-source-review-refresh/requirements.md",
+          "sha256": "0a5d4c401ee480df8c114f016e4fd0c68b27ffe3d8f077e820957f04d4ecf5b2"
+        },
+        {
+          "path": "docs/changes/20261023-source-review-refresh/tasks.md",
+          "sha256": "8175d008e019813ed5d440bfa51bd43a0c2f7a1aa38939cf7ecc7bf79df54e10"
+        },
+        {
+          "path": "manifests/external_agent_pattern_contracts.json",
+          "sha256": "bd226ce213e92842441ab21ec4f2eee8574166492727b66faa9b2019a6d09ae0"
+        },
+        {
+          "path": "manifests/harness_readiness_contracts.json",
+          "sha256": "e12c527dcfcfc61030b9a344f9d7fa3efeb828c364f5707285bdded69fcd8358"
+        },
+        {
+          "path": "manifests/official_docs_freshness_gates.json",
+          "sha256": "9ec9fc63efd71fbc867e69535907928cbe64802f4bfd0ecbffa4a926c1492214"
+        },
+        {
+          "path": "manifests/skill_reproducibility_contracts.json",
+          "sha256": "a65fc8efceb9aea04f7066109c23616bbcf4611e570ef8d0315e9c5ceace8445"
+        },
+        {
+          "path": "scripts/check-agent-ecosystem-standards.sh",
+          "sha256": "6f20d80d1e97e8f7c9f0dd6469bdb86ea576e83044a40ec699539ae0e6e0cded"
+        },
+        {
+          "path": "scripts/check-external-agent-patterns.sh",
+          "sha256": "c87d6289968bd00aeeeff5cdcf3e88bcaa96c25d86463de0eaf28cdb0eabfcd3"
+        },
+        {
+          "path": "src/agent_dev_kit/official_docs_sources.py",
+          "sha256": "36f9759939685e5db9f873008a723b50de429498c839f89b828e9a7ffb652afd"
+        },
+        {
+          "path": "src/agent_dev_kit/validation_contract.py",
+          "sha256": "5fae7240017ae758501abc5c8908ea770139f25529fcf64924462ce447075253"
+        },
+        {
+          "path": "tests/test_agent_ecosystem_standards.sh",
+          "sha256": "9341118fc2187764597d0445caddfa5930fbc95fb0eeed6665d29ef9b4a3844e"
+        },
+        {
+          "path": "tests/test_external_reference_binding.py",
+          "sha256": "267554f85ab918c5718159d04949b4536c95c36f75c9cffba2845be9ab5a4370"
+        }
+      ],
+      "source_drift": false
+    },
+    {
+      "argv": [
+        "/workspace/scratch/694941d81014/tooling/rtk",
+        "bypass",
+        "bash",
+        "scripts/check-official-docs-governance.sh",
+        "--summary-json"
+      ],
+      "cwd": "/workspace/scratch/694941d81014/agent-dev-kit",
+      "started_at": "2026-10-23T12:32:32.057409Z",
+      "completed_at": "2026-10-23T12:32:32.183769Z",
+      "elapsed_seconds": 0.126,
+      "exit_code": 0,
+      "stdout_utf8": "{\"status\":\"pass\",\"evaluated_at\":\"2026-10-23\",\"date_basis\":\"fixed_utc_offset:+08:00;label=Asia/Hong_Kong\",\"official_sources\":69,\"eval_suites\":10,\"trace_contracts\":2,\"mcp_dependencies\":2,\"slash_audits\":3,\"subagent_contracts\":1,\"runtime_policy_layers\":2,\"rules_contracts\":2,\"runtime_api_groups\":7,\"context_state_contracts\":3,\"docs_mcp_tooling_targets\":4,\"sandbox_presets\":3,\"hook_events\":5,\"adk_runner_contracts\":2,\"plugin_contracts\":1,\"marketplace_contracts\":2,\"structured_output_contracts\":10,\"tool_search_contracts\":2,\"automation_contracts\":2,\"worktree_contracts\":1,\"agent_improvement_loops\":2,\"pr_review_contracts\":3,\"skill_reproducibility_contracts\":7,\"model_selection_records\":1,\"data_retention_contracts\":1,\"prompt_cache_contracts\":1,\"codex_surface_terms\":8,\"failures\":0}\n",
+      "stderr_utf8": "",
+      "stdout_sha256": "cbb9803edffebb66546e734f6a0c47252c06219526fa46c0e56dbc8cd2ae516d",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sources_before": [
+        {
+          "path": "docs/changes/20261023-source-review-refresh/design.md",
+          "sha256": "e60fb8818b4d60f38f1db768184d1f06089ff008b8c87d24eb6819de2c3c8d76"
+        },
+        {
+          "path": "docs/changes/20261023-source-review-refresh/requirements.md",
+          "sha256": "0a5d4c401ee480df8c114f016e4fd0c68b27ffe3d8f077e820957f04d4ecf5b2"
+        },
+        {
+          "path": "docs/changes/20261023-source-review-refresh/tasks.md",
+          "sha256": "8175d008e019813ed5d440bfa51bd43a0c2f7a1aa38939cf7ecc7bf79df54e10"
+        },
+        {
+          "path": "manifests/external_agent_pattern_contracts.json",
+          "sha256": "bd226ce213e92842441ab21ec4f2eee8574166492727b66faa9b2019a6d09ae0"
+        },
+        {
+          "path": "manifests/harness_readiness_contracts.json",
+          "sha256": "e12c527dcfcfc61030b9a344f9d7fa3efeb828c364f5707285bdded69fcd8358"
+        },
+        {
+          "path": "manifests/official_docs_freshness_gates.json",
+          "sha256": "9ec9fc63efd71fbc867e69535907928cbe64802f4bfd0ecbffa4a926c1492214"
+        },
+        {
+          "path": "manifests/skill_reproducibility_contracts.json",
+          "sha256": "a65fc8efceb9aea04f7066109c23616bbcf4611e570ef8d0315e9c5ceace8445"
+        },
+        {
+          "path": "scripts/check-agent-ecosystem-standards.sh",
+          "sha256": "6f20d80d1e97e8f7c9f0dd6469bdb86ea576e83044a40ec699539ae0e6e0cded"
+        },
+        {
+          "path": "scripts/check-external-agent-patterns.sh",
+          "sha256": "c87d6289968bd00aeeeff5cdcf3e88bcaa96c25d86463de0eaf28cdb0eabfcd3"
+        },
+        {
+          "path": "src/agent_dev_kit/official_docs_sources.py",
+          "sha256": "36f9759939685e5db9f873008a723b50de429498c839f89b828e9a7ffb652afd"
+        },
+        {
+          "path": "src/agent_dev_kit/validation_contract.py",
+          "sha256": "5fae7240017ae758501abc5c8908ea770139f25529fcf64924462ce447075253"
+        },
+        {
+          "path": "tests/test_agent_ecosystem_standards.sh",
+          "sha256": "9341118fc2187764597d0445caddfa5930fbc95fb0eeed6665d29ef9b4a3844e"
+        },
+        {
+          "path": "tests/test_external_reference_binding.py",
+          "sha256": "267554f85ab918c5718159d04949b4536c95c36f75c9cffba2845be9ab5a4370"
+        }
+      ],
+      "sources_after": [
+        {
+          "path": "docs/changes/20261023-source-review-refresh/design.md",
+          "sha256": "e60fb8818b4d60f38f1db768184d1f06089ff008b8c87d24eb6819de2c3c8d76"
+        },
+        {
+          "path": "docs/changes/20261023-source-review-refresh/requirements.md",
+          "sha256": "0a5d4c401ee480df8c114f016e4fd0c68b27ffe3d8f077e820957f04d4ecf5b2"
+        },
+        {
+          "path": "docs/changes/20261023-source-review-refresh/tasks.md",
+          "sha256": "8175d008e019813ed5d440bfa51bd43a0c2f7a1aa38939cf7ecc7bf79df54e10"
+        },
+        {
+          "path": "manifests/external_agent_pattern_contracts.json",
+          "sha256": "bd226ce213e92842441ab21ec4f2eee8574166492727b66faa9b2019a6d09ae0"
+        },
+        {
+          "path": "manifests/harness_readiness_contracts.json",
+          "sha256": "e12c527dcfcfc61030b9a344f9d7fa3efeb828c364f5707285bdded69fcd8358"
+        },
+        {
+          "path": "manifests/official_docs_freshness_gates.json",
+          "sha256": "9ec9fc63efd71fbc867e69535907928cbe64802f4bfd0ecbffa4a926c1492214"
+        },
+        {
+          "path": "manifests/skill_reproducibility_contracts.json",
+          "sha256": "a65fc8efceb9aea04f7066109c23616bbcf4611e570ef8d0315e9c5ceace8445"
+        },
+        {
+          "path": "scripts/check-agent-ecosystem-standards.sh",
+          "sha256": "6f20d80d1e97e8f7c9f0dd6469bdb86ea576e83044a40ec699539ae0e6e0cded"
+        },
+        {
+          "path": "scripts/check-external-agent-patterns.sh",
+          "sha256": "c87d6289968bd00aeeeff5cdcf3e88bcaa96c25d86463de0eaf28cdb0eabfcd3"
+        },
+        {
+          "path": "src/agent_dev_kit/official_docs_sources.py",
+          "sha256": "36f9759939685e5db9f873008a723b50de429498c839f89b828e9a7ffb652afd"
+        },
+        {
+          "path": "src/agent_dev_kit/validation_contract.py",
+          "sha256": "5fae7240017ae758501abc5c8908ea770139f25529fcf64924462ce447075253"
+        },
+        {
+          "path": "tests/test_agent_ecosystem_standards.sh",
+          "sha256": "9341118fc2187764597d0445caddfa5930fbc95fb0eeed6665d29ef9b4a3844e"
+        },
+        {
+          "path": "tests/test_external_reference_binding.py",
+          "sha256": "267554f85ab918c5718159d04949b4536c95c36f75c9cffba2845be9ab5a4370"
+        }
+      ],
+      "source_drift": false
+    },
+    {
+      "argv": [
+        "/workspace/scratch/694941d81014/tooling/rtk",
+        "bypass",
+        "/workspace/scratch/694941d81014/tooling/venv/bin/python",
+        "-m",
+        "agent_dev_kit.cli",
+        "harness",
+        "readiness",
+        "--root",
+        ".",
+        "--gate",
+        "--summary-json"
+      ],
+      "cwd": "/workspace/scratch/694941d81014/agent-dev-kit",
+      "started_at": "2026-10-23T12:32:32.184334Z",
+      "completed_at": "2026-10-23T12:32:32.442096Z",
+      "elapsed_seconds": 0.258,
+      "exit_code": 0,
+      "stdout_utf8": "{\"schema_version\":\"adk-harness-readiness-report/v1\",\"contract_version\":\"1.0.0\",\"mode\":\"gate\",\"as_of\":\"2026-10-23\",\"target_root\":\"/workspace/scratch/694941d81014/agent-dev-kit\",\"overall_status\":\"pass\",\"counts\":{\"pass\":6,\"partial\":0,\"needs-review\":0,\"blocked\":0,\"not-applicable\":1},\"scan\":{\"files_seen\":1457,\"text_files_read\":15,\"truncated\":false,\"errors\":[]},\"dimensions\":[{\"dimension_id\":\"context_legibility\",\"title\":\"Context legibility\",\"status\":\"pass\",\"evidence_refs\":[\".adk/harness-readiness.json\",\"AGENTS.md\",\"README.md\"],\"last_verified_at\":\"2026-10-23\",\"owner\":\"leiwenjun\",\"review\":{\"status\":\"pass\",\"reviewer\":{\"id\":\"ai/root/architecture_audit\",\"kind\":\"ai\",\"independence\":\"independent\"},\"scope\":\"harness-source\",\"reviewed_at\":\"2026-10-23T12:17:59.467787Z\",\"record\":{\"path\":\".adk/reviews/harness-source-20261023-8.0.39.json\",\"sha256\":\"9ceb000c7ed70bdd3e9fc3be29abde0da62e5ea1d6583c6b37cc88971a72f9f7\"},\"human_review_performed\":false,\"field_evidence_verified\":false},\"blockers\":[],\"next_action\":\"补齐精简的根 AGENTS.md 与 README，并把细节下沉到可索引文档。\"},{\"dimension_id\":\"spec_and_execution_contract\",\"title\":\"Spec and execution contract\",\"status\":\"pass\",\"evidence_refs\":[\".adk/harness-readiness.json\",\"docs/changes/2026-09-25-agent-value-trust/negative-results.md\",\"docs/changes/2026-09-25-agent-value-trust/requirements.md\",\"docs/changes/2026-09-25-agent-value-trust/tasks.md\",\"docs/changes/2026-09-25-effect-trials/design.md\",\"docs/changes/2026-09-25-effect-trials/negative-results.md\",\"docs/changes/2026-09-25-effect-trials/requirements.md\",\"docs/changes/2026-09-25-effect-trials/tasks.md\",\"docs/changes/2026-09-25-native-campaign-finalize/negative-results.md\",\"docs/changes/2026-09-25-native-campaign-finalize/requirements.md\",\"docs/changes/2026-09-25-native-campaign-finalize/tasks.md\",\"docs/changes/2026-09-25-native-campaign-project-layout/negative-results.md\"],\"last_verified_at\":\"2026-10-23\",\"owner\":\"leiwenjun\",\"review\":{\"status\":\"pass\",\"reviewer\":{\"id\":\"ai/root/architecture_audit\",\"kind\":\"ai\",\"independence\":\"independent\"},\"scope\":\"harness-source\",\"reviewed_at\":\"2026-10-23T12:17:59.467787Z\",\"record\":{\"path\":\".adk/reviews/harness-source-20261023-8.0.39.json\",\"sha256\":\"9ceb000c7ed70bdd3e9fc3be29abde0da62e5ea1d6583c6b37cc88971a72f9f7\"},\"human_review_performed\":false,\"field_evidence_verified\":false},\"blockers\":[],\"next_action\":\"为非平凡变更保留 spec、task/plan 与可测试验收证据。\"},{\"dimension_id\":\"tool_and_permission_boundary\",\"title\":\"Tool and permission boundary\",\"status\":\"not-applicable\",\"evidence_refs\":[\".adk/harness-readiness.json\"],\"last_verified_at\":\"2026-10-23\",\"owner\":\"leiwenjun\",\"review\":{\"status\":\"pass\",\"reviewer\":{\"id\":\"ai/root/architecture_audit\",\"kind\":\"ai\",\"independence\":\"independent\"},\"scope\":\"harness-source\",\"reviewed_at\":\"2026-10-23T12:17:59.467787Z\",\"record\":{\"path\":\".adk/reviews/harness-source-20261023-8.0.39.json\",\"sha256\":\"9ceb000c7ed70bdd3e9fc3be29abde0da62e5ea1d6583c6b37cc88971a72f9f7\"},\"human_review_performed\":false,\"field_evidence_verified\":false},\"blockers\":[],\"next_action\":\"固定 MCP 依赖、使用环境凭证，并记录只读、审批、allow/deny 与 fallback 边界。\"},{\"dimension_id\":\"state_and_knowledge_continuity\",\"title\":\"State and knowledge continuity\",\"status\":\"pass\",\"evidence_refs\":[\".adk/harness-readiness.json\",\"docs/changes/adk-platform-convergence-v1/state.yaml\",\"docs/changes/adk-self-readiness-ownership/state.yaml\",\"docs/changes/adk-terminal-contract-hardening/state.yaml\",\"docs/changes/adk-v3-1-rc2-target-conformance/state.yaml\",\"docs/changes/adk-v3-1-software-m5-ready/state.yaml\",\"docs/changes/agent-ecosystem-standards-hardening/state.yaml\",\"docs/runbooks/README.md\",\"docs/runbooks/agent-value-lifecycle.md\",\"docs/runbooks/artifact-gated-delivery.md\",\"docs/runbooks/bugfix-delivery.md\",\"docs/runbooks/codex-pilot-evidence.md\"],\"last_verified_at\":\"2026-10-23\",\"owner\":\"leiwenjun\",\"review\":{\"status\":\"pass\",\"reviewer\":{\"id\":\"ai/root/architecture_audit\",\"kind\":\"ai\",\"independence\":\"independent\"},\"scope\":\"harness-source\",\"reviewed_at\":\"2026-10-23T12:17:59.467787Z\",\"record\":{\"path\":\".adk/reviews/harness-source-20261023-8.0.39.json\",\"sha256\":\"9ceb000c7ed70bdd3e9fc3be29abde0da62e5ea1d6583c6b37cc88971a72f9f7\"},\"human_review_performed\":false,\"field_evidence_verified\":false},\"blockers\":[],\"next_action\":\"持久化变更状态，并把可复用决策写入受治理 decision/runbook/knowledge 工件。\"},{\"dimension_id\":\"verification_review_and_eval\",\"title\":\"Verification, review and evaluation\",\"status\":\"pass\",\"evidence_refs\":[\".adk/harness-readiness.json\",\".github/workflows/branch-gc.yml\",\".github/workflows/ci.yml\",\".github/workflows/claude-consumer-contract.yml\",\".github/workflows/codex-consumer-contract.yml\",\".github/workflows/digital-worker-contract.yml\",\"AGENTS.md\",\"README.md\",\"tests/lib/bash-test-helpers.sh\",\"tests/mcp_2026_activation/mcp_activation_test.go\",\"tests/run_all.sh\",\"tests/test_agent_ecosystem_standards.sh\"],\"last_verified_at\":\"2026-10-23\",\"owner\":\"leiwenjun\",\"review\":{\"status\":\"pass\",\"reviewer\":{\"id\":\"ai/root/architecture_audit\",\"kind\":\"ai\",\"independence\":\"independent\"},\"scope\":\"harness-source\",\"reviewed_at\":\"2026-10-23T12:17:59.467787Z\",\"record\":{\"path\":\".adk/reviews/harness-source-20261023-8.0.39.json\",\"sha256\":\"9ceb000c7ed70bdd3e9fc3be29abde0da62e5ea1d6583c6b37cc88971a72f9f7\"},\"human_review_performed\":false,\"field_evidence_verified\":false},\"blockers\":[],\"next_action\":\"补齐测试、CI 和根文档中的可执行验证命令，并保留 review/eval 证据。\"},{\"dimension_id\":\"recovery_and_rollback\",\"title\":\"Recovery and rollback\",\"status\":\"pass\",\"evidence_refs\":[\".adk/harness-readiness.json\",\"scripts/backup-rollback.sh\"],\"last_verified_at\":\"2026-10-23\",\"owner\":\"leiwenjun\",\"review\":{\"status\":\"pass\",\"reviewer\":{\"id\":\"ai/root/architecture_audit\",\"kind\":\"ai\",\"independence\":\"independent\"},\"scope\":\"harness-source\",\"reviewed_at\":\"2026-10-23T12:17:59.467787Z\",\"record\":{\"path\":\".adk/reviews/harness-source-20261023-8.0.39.json\",\"sha256\":\"9ceb000c7ed70bdd3e9fc3be29abde0da62e5ea1d6583c6b37cc88971a72f9f7\"},\"human_review_performed\":false,\"field_evidence_verified\":false},\"blockers\":[],\"next_action\":\"记录可执行 rollback/recovery/backup 路径及触发条件。\"},{\"dimension_id\":\"freshness_and_entropy_control\",\"title\":\"Freshness and entropy control\",\"status\":\"pass\",\"evidence_refs\":[\".adk/harness-readiness.json\",\".github/CODEOWNERS\",\"OWNERS\",\"scripts/check-format.sh\",\"tests/test_catalog.sh\",\"tests/test_eval_catalog.py\",\"tests/test_eval_catalog.sh\",\"tests/test_mcp_freshness_ssot.sh\"],\"last_verified_at\":\"2026-10-23\",\"owner\":\"leiwenjun\",\"review\":{\"status\":\"pass\",\"reviewer\":{\"id\":\"ai/root/architecture_audit\",\"kind\":\"ai\",\"independence\":\"independent\"},\"scope\":\"harness-source\",\"reviewed_at\":\"2026-10-23T12:17:59.467787Z\",\"record\":{\"path\":\".adk/reviews/harness-source-20261023-8.0.39.json\",\"sha256\":\"9ceb000c7ed70bdd3e9fc3be29abde0da62e5ea1d6583c6b37cc88971a72f9f7\"},\"human_review_performed\":false,\"field_evidence_verified\":false},\"blockers\":[],\"next_action\":\"增加文档/格式/目录新鲜度机械检查和明确 ownership。\"}],\"score\":null,\"field_evidence_status\":\"not-verified\"}\n",
+      "stderr_utf8": "",
+      "stdout_sha256": "5617099e1794643a30551a80b53879cf1ceb004b8dc3aee7ae1c8ec67e937b16",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sources_before": [
+        {
+          "path": "docs/changes/20261023-source-review-refresh/design.md",
+          "sha256": "e60fb8818b4d60f38f1db768184d1f06089ff008b8c87d24eb6819de2c3c8d76"
+        },
+        {
+          "path": "docs/changes/20261023-source-review-refresh/requirements.md",
+          "sha256": "0a5d4c401ee480df8c114f016e4fd0c68b27ffe3d8f077e820957f04d4ecf5b2"
+        },
+        {
+          "path": "docs/changes/20261023-source-review-refresh/tasks.md",
+          "sha256": "8175d008e019813ed5d440bfa51bd43a0c2f7a1aa38939cf7ecc7bf79df54e10"
+        },
+        {
+          "path": "manifests/external_agent_pattern_contracts.json",
+          "sha256": "bd226ce213e92842441ab21ec4f2eee8574166492727b66faa9b2019a6d09ae0"
+        },
+        {
+          "path": "manifests/harness_readiness_contracts.json",
+          "sha256": "e12c527dcfcfc61030b9a344f9d7fa3efeb828c364f5707285bdded69fcd8358"
+        },
+        {
+          "path": "manifests/official_docs_freshness_gates.json",
+          "sha256": "9ec9fc63efd71fbc867e69535907928cbe64802f4bfd0ecbffa4a926c1492214"
+        },
+        {
+          "path": "manifests/skill_reproducibility_contracts.json",
+          "sha256": "a65fc8efceb9aea04f7066109c23616bbcf4611e570ef8d0315e9c5ceace8445"
+        },
+        {
+          "path": "scripts/check-agent-ecosystem-standards.sh",
+          "sha256": "6f20d80d1e97e8f7c9f0dd6469bdb86ea576e83044a40ec699539ae0e6e0cded"
+        },
+        {
+          "path": "scripts/check-external-agent-patterns.sh",
+          "sha256": "c87d6289968bd00aeeeff5cdcf3e88bcaa96c25d86463de0eaf28cdb0eabfcd3"
+        },
+        {
+          "path": "src/agent_dev_kit/official_docs_sources.py",
+          "sha256": "36f9759939685e5db9f873008a723b50de429498c839f89b828e9a7ffb652afd"
+        },
+        {
+          "path": "src/agent_dev_kit/validation_contract.py",
+          "sha256": "5fae7240017ae758501abc5c8908ea770139f25529fcf64924462ce447075253"
+        },
+        {
+          "path": "tests/test_agent_ecosystem_standards.sh",
+          "sha256": "9341118fc2187764597d0445caddfa5930fbc95fb0eeed6665d29ef9b4a3844e"
+        },
+        {
+          "path": "tests/test_external_reference_binding.py",
+          "sha256": "267554f85ab918c5718159d04949b4536c95c36f75c9cffba2845be9ab5a4370"
+        }
+      ],
+      "sources_after": [
+        {
+          "path": "docs/changes/20261023-source-review-refresh/design.md",
+          "sha256": "e60fb8818b4d60f38f1db768184d1f06089ff008b8c87d24eb6819de2c3c8d76"
+        },
+        {
+          "path": "docs/changes/20261023-source-review-refresh/requirements.md",
+          "sha256": "0a5d4c401ee480df8c114f016e4fd0c68b27ffe3d8f077e820957f04d4ecf5b2"
+        },
+        {
+          "path": "docs/changes/20261023-source-review-refresh/tasks.md",
+          "sha256": "8175d008e019813ed5d440bfa51bd43a0c2f7a1aa38939cf7ecc7bf79df54e10"
+        },
+        {
+          "path": "manifests/external_agent_pattern_contracts.json",
+          "sha256": "bd226ce213e92842441ab21ec4f2eee8574166492727b66faa9b2019a6d09ae0"
+        },
+        {
+          "path": "manifests/harness_readiness_contracts.json",
+          "sha256": "e12c527dcfcfc61030b9a344f9d7fa3efeb828c364f5707285bdded69fcd8358"
+        },
+        {
+          "path": "manifests/official_docs_freshness_gates.json",
+          "sha256": "9ec9fc63efd71fbc867e69535907928cbe64802f4bfd0ecbffa4a926c1492214"
+        },
+        {
+          "path": "manifests/skill_reproducibility_contracts.json",
+          "sha256": "a65fc8efceb9aea04f7066109c23616bbcf4611e570ef8d0315e9c5ceace8445"
+        },
+        {
+          "path": "scripts/check-agent-ecosystem-standards.sh",
+          "sha256": "6f20d80d1e97e8f7c9f0dd6469bdb86ea576e83044a40ec699539ae0e6e0cded"
+        },
+        {
+          "path": "scripts/check-external-agent-patterns.sh",
+          "sha256": "c87d6289968bd00aeeeff5cdcf3e88bcaa96c25d86463de0eaf28cdb0eabfcd3"
+        },
+        {
+          "path": "src/agent_dev_kit/official_docs_sources.py",
+          "sha256": "36f9759939685e5db9f873008a723b50de429498c839f89b828e9a7ffb652afd"
+        },
+        {
+          "path": "src/agent_dev_kit/validation_contract.py",
+          "sha256": "5fae7240017ae758501abc5c8908ea770139f25529fcf64924462ce447075253"
+        },
+        {
+          "path": "tests/test_agent_ecosystem_standards.sh",
+          "sha256": "9341118fc2187764597d0445caddfa5930fbc95fb0eeed6665d29ef9b4a3844e"
+        },
+        {
+          "path": "tests/test_external_reference_binding.py",
+          "sha256": "267554f85ab918c5718159d04949b4536c95c36f75c9cffba2845be9ab5a4370"
+        }
+      ],
+      "source_drift": false
+    }
+  ],
+  "all_pass": true
+}

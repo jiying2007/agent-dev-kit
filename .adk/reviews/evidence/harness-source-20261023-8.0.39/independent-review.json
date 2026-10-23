@@ -1,0 +1,406 @@
+{
+  "schema": "independent-harness-source-review/v1",
+  "reviewer_id": "ai/root/architecture_audit",
+  "reviewer_kind": "ai",
+  "author_id": "ai/root",
+  "owner": "leiwenjun",
+  "source_commit": "c06fd629fa9a08f3079e7a606f45e65fcccbfc28",
+  "independence": "Reviewer did not implement the source fixes or current integration documentation; review-only writes are evidence and receipts.",
+  "source_read_completed_at": "2026-10-23T12:17:59.467216Z",
+  "sources_reviewed": 61,
+  "required_scan_sources_reviewed": 44,
+  "verdicts": {
+    "spec": "pass",
+    "quality": "pass"
+  },
+  "dimension_reviews": {
+    "context_legibility": {
+      "status": "pass",
+      "rationale": "The short root AGENTS index links detailed R1-R8/lifecycle rules. README 8.0.39 gives concrete validation commands and keeps Source, Release, Runtime and Product identities separate. Current commands and Native docs describe original-path checks and compensation without claiming crash atomicity."
+    },
+    "spec_and_execution_contract": {
+      "status": "pass",
+      "rationale": "The selected historical requirements/design/tasks/negative results describe executable acceptance and explicit evidence gaps. Both current audit fixes have requirements/design/tasks with concrete no-clobber and release-integrity acceptance; unchecked review/release tasks remain truthful snapshots rather than fabricated lifecycle completion."
+    },
+    "tool_and_permission_boundary": {
+      "status": "not-applicable",
+      "rationale": "The bounded material-file scan found no MCP config. Readiness tools separately enforce structural read-only/approval/credential declarations when MCP exists; policy and documentation retain explicit execution authorization. No external MCP or provider was activated by this review."
+    },
+    "state_and_knowledge_continuity": {
+      "status": "pass",
+      "rationale": "Persistent change state, governed runbooks and context/token contracts retain owner, next actions, raw evidence pointers and separation of historical evidence from active goals. Historical statuses explicitly retain external runtime/field blockers; the source review does not convert those into completed observations."
+    },
+    "verification_review_and_eval": {
+      "status": "pass",
+      "rationale": "Root entrypoints, registered shell/Python tests and pinned CI jobs expose concrete validation. Supported Python matrix aggregation fails on missing or failed legs. Fixtures explicitly label structural/native/field limitations. The reviewer independently ran 45 delegated-review tests and observed the real pre-renewal digest rejection."
+    },
+    "recovery_and_rollback": {
+      "status": "pass",
+      "rationale": "The maintained backup/restore wrapper delegates restoration to the existing installation transaction authority. Runbooks give receipt/source-backed recovery entrypoints. The separately reviewed output fix stages every document before publication and compensates observed late failures, preserving backups on failed recovery; caller parent control remains explicit."
+    },
+    "freshness_and_entropy_control": {
+      "status": "pass",
+      "rationale": "Root OWNERS/CODEOWNERS are explicit. Format/catalog/eval-catalog/MCP freshness checks cover deterministic projection and invalid input cases. The live Harness gate uses current UTC and source/policy/validator binding; explicit historical dates are report-only. Existing external reference expiry metadata is not silently renewed."
+    }
+  },
+  "findings": [
+    {
+      "id": "harness-usage-retired-profile",
+      "severity": "minor",
+      "disposition": "fixed",
+      "reason": "docs/usage.md recommended openspec-driven although it is retired and absent from manifest.json. The coordinator removed the row; the reviewer reread final usage and the canonical authority boundary."
+    },
+    {
+      "id": "harness-usage-shell-command",
+      "severity": "minor",
+      "disposition": "fixed",
+      "reason": "docs/usage.md invoked bash PYTHONPATH=src as a script. The coordinator corrected the environment assignment. The reviewer independently ran the documented profile coherence module successfully."
+    }
+  ],
+  "executions": [
+    {
+      "schema": "independent-harness-review-execution/v1",
+      "mode": "review-regression",
+      "reviewer_id": "ai/root/architecture_audit",
+      "started_at": "2026-10-23T12:09:57.630776Z",
+      "completed_at": "2026-10-23T12:09:59.878406Z",
+      "elapsed_seconds": 2.248,
+      "argv": [
+        "/workspace/scratch/694941d81014/tooling/rtk",
+        "bypass",
+        "bash",
+        "tests/test_review_evidence.sh"
+      ],
+      "cwd": "/workspace/scratch/694941d81014/agent-dev-kit",
+      "exit_code": 0,
+      "stdout_utf8": "",
+      "stderr_utf8": ".............................................\n----------------------------------------------------------------------\nRan 45 tests in 2.114s\n\nOK\n",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "52cccad957e9fd9027fa31fc609e3bdd0a52e351f99b60021957f14112072be0",
+      "sources_before": [
+        {
+          "path": "manifests/harness_readiness_contracts.json",
+          "sha256": "e12c527dcfcfc61030b9a344f9d7fa3efeb828c364f5707285bdded69fcd8358"
+        },
+        {
+          "path": "src/agent_dev_kit/readiness.py",
+          "sha256": "83a2949102955281f13a94e2f871d36e170cbfe76d053032ce5c114dc065ed29"
+        },
+        {
+          "path": "src/agent_dev_kit/readiness_evidence.py",
+          "sha256": "ef980657486084eea8ab8a03ab357a76a3ed43691aca8d6909b06642764c808b"
+        },
+        {
+          "path": "src/agent_dev_kit/readiness_tools.py",
+          "sha256": "5d361c7bd0fbbc2ce923071d3b5afcefb5998a8047d49e54be70f19ca49c554c"
+        },
+        {
+          "path": "src/agent_dev_kit/review_evidence.py",
+          "sha256": "73d85e864a3da125bf94808f19616f52150751a94ccc729ac66f66d2576b8808"
+        },
+        {
+          "path": "src/agent_dev_kit/strict_json.py",
+          "sha256": "e11233b8d02d7fb95a8f2f93bfff065a1db84c4ef0820fef6d817600abe8ec98"
+        },
+        {
+          "path": "tests/test_harness_readiness.sh",
+          "sha256": "03ac2275476fcdc5f1fcacbd4375098a706cdd75fb7cbfa9a5e48c82403da300"
+        },
+        {
+          "path": "tests/test_review_evidence.py",
+          "sha256": "6abd885ab9d1b6ac141a206277660620ac2594092f8722ef1d05ddc24c61fb40"
+        },
+        {
+          "path": "tests/test_review_evidence.sh",
+          "sha256": "fe3377b1b3a0a9db1d68d926704eb1f9148dd1cdab63f78113b6f1fe9c1657b2"
+        },
+        {
+          "path": "tests/test_review_evidence_workflow.py",
+          "sha256": "3a973cbc1b0f11b3e4e4529e5fb9ef158cf84178dbf3e6d03e506db48ba67502"
+        }
+      ],
+      "sources_after": [
+        {
+          "path": "manifests/harness_readiness_contracts.json",
+          "sha256": "e12c527dcfcfc61030b9a344f9d7fa3efeb828c364f5707285bdded69fcd8358"
+        },
+        {
+          "path": "src/agent_dev_kit/readiness.py",
+          "sha256": "83a2949102955281f13a94e2f871d36e170cbfe76d053032ce5c114dc065ed29"
+        },
+        {
+          "path": "src/agent_dev_kit/readiness_evidence.py",
+          "sha256": "ef980657486084eea8ab8a03ab357a76a3ed43691aca8d6909b06642764c808b"
+        },
+        {
+          "path": "src/agent_dev_kit/readiness_tools.py",
+          "sha256": "5d361c7bd0fbbc2ce923071d3b5afcefb5998a8047d49e54be70f19ca49c554c"
+        },
+        {
+          "path": "src/agent_dev_kit/review_evidence.py",
+          "sha256": "73d85e864a3da125bf94808f19616f52150751a94ccc729ac66f66d2576b8808"
+        },
+        {
+          "path": "src/agent_dev_kit/strict_json.py",
+          "sha256": "e11233b8d02d7fb95a8f2f93bfff065a1db84c4ef0820fef6d817600abe8ec98"
+        },
+        {
+          "path": "tests/test_harness_readiness.sh",
+          "sha256": "03ac2275476fcdc5f1fcacbd4375098a706cdd75fb7cbfa9a5e48c82403da300"
+        },
+        {
+          "path": "tests/test_review_evidence.py",
+          "sha256": "6abd885ab9d1b6ac141a206277660620ac2594092f8722ef1d05ddc24c61fb40"
+        },
+        {
+          "path": "tests/test_review_evidence.sh",
+          "sha256": "fe3377b1b3a0a9db1d68d926704eb1f9148dd1cdab63f78113b6f1fe9c1657b2"
+        },
+        {
+          "path": "tests/test_review_evidence_workflow.py",
+          "sha256": "3a973cbc1b0f11b3e4e4529e5fb9ef158cf84178dbf3e6d03e506db48ba67502"
+        }
+      ],
+      "source_drift": false,
+      "limitations": [
+        "Local software/source checks only; no external runtime, provider, human review, signature, field observation or product qualification."
+      ]
+    },
+    {
+      "schema": "independent-harness-review-execution/v1",
+      "mode": "gate-before-renewal",
+      "reviewer_id": "ai/root/architecture_audit",
+      "started_at": "2026-10-23T12:09:57.620610Z",
+      "completed_at": "2026-10-23T12:09:57.866018Z",
+      "elapsed_seconds": 0.248,
+      "argv": [
+        "/workspace/scratch/694941d81014/tooling/rtk",
+        "bypass",
+        "/workspace/scratch/694941d81014/tooling/venv/bin/python",
+        "-m",
+        "agent_dev_kit.cli",
+        "harness",
+        "readiness",
+        "--root",
+        ".",
+        "--gate",
+        "--summary-json"
+      ],
+      "cwd": "/workspace/scratch/694941d81014/agent-dev-kit",
+      "exit_code": 2,
+      "stdout_utf8": "{\"schema_version\":\"adk-harness-readiness-report/v1\",\"contract_version\":\"1.0.0\",\"mode\":\"gate\",\"as_of\":\"2026-10-23\",\"target_root\":\"/workspace/scratch/694941d81014/agent-dev-kit\",\"overall_status\":\"needs-review\",\"counts\":{\"pass\":0,\"partial\":0,\"needs-review\":7,\"blocked\":0,\"not-applicable\":0},\"scan\":{\"files_seen\":1434,\"text_files_read\":15,\"truncated\":false,\"errors\":[]},\"dimensions\":[{\"dimension_id\":\"context_legibility\",\"title\":\"Context legibility\",\"status\":\"needs-review\",\"evidence_refs\":[\".adk/harness-readiness.json\",\"AGENTS.md\",\"README.md\"],\"last_verified_at\":\"2026-10-22\",\"owner\":\"leiwenjun\",\"review\":{\"status\":\"invalid\",\"reason\":\"invalid_or_missing_delegated_review\"},\"blockers\":[{\"code\":\"invalid_delegated_review\",\"message\":\"已委派的复审缺少有效来源、双维结论、身份或一致日期\",\"evidence_ref\":\".adk/harness-readiness.json\"}],\"next_action\":\"补齐精简的根 AGENTS.md 与 README，并把细节下沉到可索引文档。\"},{\"dimension_id\":\"spec_and_execution_contract\",\"title\":\"Spec and execution contract\",\"status\":\"needs-review\",\"evidence_refs\":[\".adk/harness-readiness.json\",\"docs/changes/2026-09-25-agent-value-trust/negative-results.md\",\"docs/changes/2026-09-25-agent-value-trust/requirements.md\",\"docs/changes/2026-09-25-agent-value-trust/tasks.md\",\"docs/changes/2026-09-25-effect-trials/design.md\",\"docs/changes/2026-09-25-effect-trials/negative-results.md\",\"docs/changes/2026-09-25-effect-trials/requirements.md\",\"docs/changes/2026-09-25-effect-trials/tasks.md\",\"docs/changes/2026-09-25-native-campaign-finalize/negative-results.md\",\"docs/changes/2026-09-25-native-campaign-finalize/requirements.md\",\"docs/changes/2026-09-25-native-campaign-finalize/tasks.md\",\"docs/changes/2026-09-25-native-campaign-project-layout/negative-results.md\"],\"last_verified_at\":\"2026-10-22\",\"owner\":\"leiwenjun\",\"review\":{\"status\":\"invalid\",\"reason\":\"invalid_or_missing_delegated_review\"},\"blockers\":[{\"code\":\"invalid_delegated_review\",\"message\":\"已委派的复审缺少有效来源、双维结论、身份或一致日期\",\"evidence_ref\":\".adk/harness-readiness.json\"}],\"next_action\":\"为非平凡变更保留 spec、task/plan 与可测试验收证据。\"},{\"dimension_id\":\"tool_and_permission_boundary\",\"title\":\"Tool and permission boundary\",\"status\":\"needs-review\",\"evidence_refs\":[\".adk/harness-readiness.json\"],\"last_verified_at\":\"2026-10-22\",\"owner\":\"leiwenjun\",\"review\":{\"status\":\"invalid\",\"reason\":\"invalid_or_missing_delegated_review\"},\"blockers\":[{\"code\":\"invalid_delegated_review\",\"message\":\"已委派的复审缺少有效来源、双维结论、身份或一致日期\",\"evidence_ref\":\".adk/harness-readiness.json\"}],\"next_action\":\"固定 MCP 依赖、使用环境凭证，并记录只读、审批、allow/deny 与 fallback 边界。\"},{\"dimension_id\":\"state_and_knowledge_continuity\",\"title\":\"State and knowledge continuity\",\"status\":\"needs-review\",\"evidence_refs\":[\".adk/harness-readiness.json\",\"docs/changes/adk-platform-convergence-v1/state.yaml\",\"docs/changes/adk-self-readiness-ownership/state.yaml\",\"docs/changes/adk-terminal-contract-hardening/state.yaml\",\"docs/changes/adk-v3-1-rc2-target-conformance/state.yaml\",\"docs/changes/adk-v3-1-software-m5-ready/state.yaml\",\"docs/changes/agent-ecosystem-standards-hardening/state.yaml\",\"docs/runbooks/README.md\",\"docs/runbooks/agent-value-lifecycle.md\",\"docs/runbooks/artifact-gated-delivery.md\",\"docs/runbooks/bugfix-delivery.md\",\"docs/runbooks/codex-pilot-evidence.md\"],\"last_verified_at\":\"2026-10-22\",\"owner\":\"leiwenjun\",\"review\":{\"status\":\"invalid\",\"reason\":\"invalid_or_missing_delegated_review\"},\"blockers\":[{\"code\":\"invalid_delegated_review\",\"message\":\"已委派的复审缺少有效来源、双维结论、身份或一致日期\",\"evidence_ref\":\".adk/harness-readiness.json\"}],\"next_action\":\"持久化变更状态，并把可复用决策写入受治理 decision/runbook/knowledge 工件。\"},{\"dimension_id\":\"verification_review_and_eval\",\"title\":\"Verification, review and evaluation\",\"status\":\"needs-review\",\"evidence_refs\":[\".adk/harness-readiness.json\",\".github/workflows/branch-gc.yml\",\".github/workflows/ci.yml\",\".github/workflows/claude-consumer-contract.yml\",\".github/workflows/codex-consumer-contract.yml\",\".github/workflows/digital-worker-contract.yml\",\"AGENTS.md\",\"README.md\",\"tests/lib/bash-test-helpers.sh\",\"tests/mcp_2026_activation/mcp_activation_test.go\",\"tests/run_all.sh\",\"tests/test_agent_ecosystem_standards.sh\"],\"last_verified_at\":\"2026-10-22\",\"owner\":\"leiwenjun\",\"review\":{\"status\":\"invalid\",\"reason\":\"invalid_or_missing_delegated_review\"},\"blockers\":[{\"code\":\"invalid_delegated_review\",\"message\":\"已委派的复审缺少有效来源、双维结论、身份或一致日期\",\"evidence_ref\":\".adk/harness-readiness.json\"}],\"next_action\":\"补齐测试、CI 和根文档中的可执行验证命令，并保留 review/eval 证据。\"},{\"dimension_id\":\"recovery_and_rollback\",\"title\":\"Recovery and rollback\",\"status\":\"needs-review\",\"evidence_refs\":[\".adk/harness-readiness.json\",\"scripts/backup-rollback.sh\"],\"last_verified_at\":\"2026-10-22\",\"owner\":\"leiwenjun\",\"review\":{\"status\":\"invalid\",\"reason\":\"invalid_or_missing_delegated_review\"},\"blockers\":[{\"code\":\"invalid_delegated_review\",\"message\":\"已委派的复审缺少有效来源、双维结论、身份或一致日期\",\"evidence_ref\":\".adk/harness-readiness.json\"}],\"next_action\":\"记录可执行 rollback/recovery/backup 路径及触发条件。\"},{\"dimension_id\":\"freshness_and_entropy_control\",\"title\":\"Freshness and entropy control\",\"status\":\"needs-review\",\"evidence_refs\":[\".adk/harness-readiness.json\",\".github/CODEOWNERS\",\"OWNERS\",\"scripts/check-format.sh\",\"tests/test_catalog.sh\",\"tests/test_eval_catalog.py\",\"tests/test_eval_catalog.sh\",\"tests/test_mcp_freshness_ssot.sh\"],\"last_verified_at\":\"2026-10-22\",\"owner\":\"leiwenjun\",\"review\":{\"status\":\"invalid\",\"reason\":\"invalid_or_missing_delegated_review\"},\"blockers\":[{\"code\":\"invalid_delegated_review\",\"message\":\"已委派的复审缺少有效来源、双维结论、身份或一致日期\",\"evidence_ref\":\".adk/harness-readiness.json\"}],\"next_action\":\"增加文档/格式/目录新鲜度机械检查和明确 ownership。\"}],\"score\":null,\"field_evidence_status\":\"not-verified\"}\n",
+      "stderr_utf8": "",
+      "stdout_sha256": "518995b474826368d246985878edc498d222354dccaf00b84a7ea20d38cb4b95",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sources_before": [
+        {
+          "path": "manifests/harness_readiness_contracts.json",
+          "sha256": "e12c527dcfcfc61030b9a344f9d7fa3efeb828c364f5707285bdded69fcd8358"
+        },
+        {
+          "path": "src/agent_dev_kit/readiness.py",
+          "sha256": "83a2949102955281f13a94e2f871d36e170cbfe76d053032ce5c114dc065ed29"
+        },
+        {
+          "path": "src/agent_dev_kit/readiness_evidence.py",
+          "sha256": "ef980657486084eea8ab8a03ab357a76a3ed43691aca8d6909b06642764c808b"
+        },
+        {
+          "path": "src/agent_dev_kit/readiness_tools.py",
+          "sha256": "5d361c7bd0fbbc2ce923071d3b5afcefb5998a8047d49e54be70f19ca49c554c"
+        },
+        {
+          "path": "src/agent_dev_kit/review_evidence.py",
+          "sha256": "73d85e864a3da125bf94808f19616f52150751a94ccc729ac66f66d2576b8808"
+        },
+        {
+          "path": "src/agent_dev_kit/strict_json.py",
+          "sha256": "e11233b8d02d7fb95a8f2f93bfff065a1db84c4ef0820fef6d817600abe8ec98"
+        },
+        {
+          "path": "tests/test_harness_readiness.sh",
+          "sha256": "03ac2275476fcdc5f1fcacbd4375098a706cdd75fb7cbfa9a5e48c82403da300"
+        },
+        {
+          "path": "tests/test_review_evidence.py",
+          "sha256": "6abd885ab9d1b6ac141a206277660620ac2594092f8722ef1d05ddc24c61fb40"
+        },
+        {
+          "path": "tests/test_review_evidence.sh",
+          "sha256": "fe3377b1b3a0a9db1d68d926704eb1f9148dd1cdab63f78113b6f1fe9c1657b2"
+        },
+        {
+          "path": "tests/test_review_evidence_workflow.py",
+          "sha256": "3a973cbc1b0f11b3e4e4529e5fb9ef158cf84178dbf3e6d03e506db48ba67502"
+        }
+      ],
+      "sources_after": [
+        {
+          "path": "manifests/harness_readiness_contracts.json",
+          "sha256": "e12c527dcfcfc61030b9a344f9d7fa3efeb828c364f5707285bdded69fcd8358"
+        },
+        {
+          "path": "src/agent_dev_kit/readiness.py",
+          "sha256": "83a2949102955281f13a94e2f871d36e170cbfe76d053032ce5c114dc065ed29"
+        },
+        {
+          "path": "src/agent_dev_kit/readiness_evidence.py",
+          "sha256": "ef980657486084eea8ab8a03ab357a76a3ed43691aca8d6909b06642764c808b"
+        },
+        {
+          "path": "src/agent_dev_kit/readiness_tools.py",
+          "sha256": "5d361c7bd0fbbc2ce923071d3b5afcefb5998a8047d49e54be70f19ca49c554c"
+        },
+        {
+          "path": "src/agent_dev_kit/review_evidence.py",
+          "sha256": "73d85e864a3da125bf94808f19616f52150751a94ccc729ac66f66d2576b8808"
+        },
+        {
+          "path": "src/agent_dev_kit/strict_json.py",
+          "sha256": "e11233b8d02d7fb95a8f2f93bfff065a1db84c4ef0820fef6d817600abe8ec98"
+        },
+        {
+          "path": "tests/test_harness_readiness.sh",
+          "sha256": "03ac2275476fcdc5f1fcacbd4375098a706cdd75fb7cbfa9a5e48c82403da300"
+        },
+        {
+          "path": "tests/test_review_evidence.py",
+          "sha256": "6abd885ab9d1b6ac141a206277660620ac2594092f8722ef1d05ddc24c61fb40"
+        },
+        {
+          "path": "tests/test_review_evidence.sh",
+          "sha256": "fe3377b1b3a0a9db1d68d926704eb1f9148dd1cdab63f78113b6f1fe9c1657b2"
+        },
+        {
+          "path": "tests/test_review_evidence_workflow.py",
+          "sha256": "3a973cbc1b0f11b3e4e4529e5fb9ef158cf84178dbf3e6d03e506db48ba67502"
+        }
+      ],
+      "source_drift": false,
+      "limitations": [
+        "Local software/source checks only; no external runtime, provider, human review, signature, field observation or product qualification."
+      ]
+    },
+    {
+      "schema": "independent-harness-review-execution/v1",
+      "mode": "usage-profile-check",
+      "reviewer_id": "ai/root/architecture_audit",
+      "started_at": "2026-10-23T12:11:00.317605Z",
+      "completed_at": "2026-10-23T12:11:00.736577Z",
+      "elapsed_seconds": 0.42,
+      "argv": [
+        "/workspace/scratch/694941d81014/tooling/rtk",
+        "bypass",
+        "/workspace/scratch/694941d81014/tooling/venv/bin/python",
+        "-m",
+        "agent_dev_kit.profile_coherence_contract",
+        "--root",
+        "."
+      ],
+      "cwd": "/workspace/scratch/694941d81014/agent-dev-kit",
+      "exit_code": 0,
+      "stdout_utf8": "[PASS] profile coherence checks passed\n",
+      "stderr_utf8": "",
+      "stdout_sha256": "814d3cecf97c71ca9d07a794f0b790e26c7511e8dbae3325c1f5d22fed8b7954",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sources_before": [
+        {
+          "path": "manifests/harness_readiness_contracts.json",
+          "sha256": "e12c527dcfcfc61030b9a344f9d7fa3efeb828c364f5707285bdded69fcd8358"
+        },
+        {
+          "path": "src/agent_dev_kit/readiness.py",
+          "sha256": "83a2949102955281f13a94e2f871d36e170cbfe76d053032ce5c114dc065ed29"
+        },
+        {
+          "path": "src/agent_dev_kit/readiness_evidence.py",
+          "sha256": "ef980657486084eea8ab8a03ab357a76a3ed43691aca8d6909b06642764c808b"
+        },
+        {
+          "path": "src/agent_dev_kit/readiness_tools.py",
+          "sha256": "5d361c7bd0fbbc2ce923071d3b5afcefb5998a8047d49e54be70f19ca49c554c"
+        },
+        {
+          "path": "src/agent_dev_kit/review_evidence.py",
+          "sha256": "73d85e864a3da125bf94808f19616f52150751a94ccc729ac66f66d2576b8808"
+        },
+        {
+          "path": "src/agent_dev_kit/strict_json.py",
+          "sha256": "e11233b8d02d7fb95a8f2f93bfff065a1db84c4ef0820fef6d817600abe8ec98"
+        },
+        {
+          "path": "tests/test_harness_readiness.sh",
+          "sha256": "03ac2275476fcdc5f1fcacbd4375098a706cdd75fb7cbfa9a5e48c82403da300"
+        },
+        {
+          "path": "tests/test_review_evidence.py",
+          "sha256": "6abd885ab9d1b6ac141a206277660620ac2594092f8722ef1d05ddc24c61fb40"
+        },
+        {
+          "path": "tests/test_review_evidence.sh",
+          "sha256": "fe3377b1b3a0a9db1d68d926704eb1f9148dd1cdab63f78113b6f1fe9c1657b2"
+        },
+        {
+          "path": "tests/test_review_evidence_workflow.py",
+          "sha256": "3a973cbc1b0f11b3e4e4529e5fb9ef158cf84178dbf3e6d03e506db48ba67502"
+        }
+      ],
+      "sources_after": [
+        {
+          "path": "manifests/harness_readiness_contracts.json",
+          "sha256": "e12c527dcfcfc61030b9a344f9d7fa3efeb828c364f5707285bdded69fcd8358"
+        },
+        {
+          "path": "src/agent_dev_kit/readiness.py",
+          "sha256": "83a2949102955281f13a94e2f871d36e170cbfe76d053032ce5c114dc065ed29"
+        },
+        {
+          "path": "src/agent_dev_kit/readiness_evidence.py",
+          "sha256": "ef980657486084eea8ab8a03ab357a76a3ed43691aca8d6909b06642764c808b"
+        },
+        {
+          "path": "src/agent_dev_kit/readiness_tools.py",
+          "sha256": "5d361c7bd0fbbc2ce923071d3b5afcefb5998a8047d49e54be70f19ca49c554c"
+        },
+        {
+          "path": "src/agent_dev_kit/review_evidence.py",
+          "sha256": "73d85e864a3da125bf94808f19616f52150751a94ccc729ac66f66d2576b8808"
+        },
+        {
+          "path": "src/agent_dev_kit/strict_json.py",
+          "sha256": "e11233b8d02d7fb95a8f2f93bfff065a1db84c4ef0820fef6d817600abe8ec98"
+        },
+        {
+          "path": "tests/test_harness_readiness.sh",
+          "sha256": "03ac2275476fcdc5f1fcacbd4375098a706cdd75fb7cbfa9a5e48c82403da300"
+        },
+        {
+          "path": "tests/test_review_evidence.py",
+          "sha256": "6abd885ab9d1b6ac141a206277660620ac2594092f8722ef1d05ddc24c61fb40"
+        },
+        {
+          "path": "tests/test_review_evidence.sh",
+          "sha256": "fe3377b1b3a0a9db1d68d926704eb1f9148dd1cdab63f78113b6f1fe9c1657b2"
+        },
+        {
+          "path": "tests/test_review_evidence_workflow.py",
+          "sha256": "3a973cbc1b0f11b3e4e4529e5fb9ef158cf84178dbf3e6d03e506db48ba67502"
+        }
+      ],
+      "source_drift": false,
+      "limitations": [
+        "Local software/source checks only; no external runtime, provider, human review, signature, field observation or product qualification."
+      ]
+    }
+  ],
+  "limitations": [
+    "Actual owner-delegated independent AI source review by ai/root/architecture_audit. The reviewer personally read all 61 bound sources, covering all 44 current raw scan references, and independently executed the 45-test delegated-review suite. This is not a date-only renewal.",
+    "Six applicable source-readiness dimensions pass. No material MCP configuration was found, so tool_and_permission_boundary remains not-applicable; this does not certify live tool permissions.",
+    "The original October 22 record is preserved byte-for-byte and is invalid for the changed README. The current-date gate before this renewal correctly returned needs-review with exit 2.",
+    "Two active usage-document findings were fixed by the coordinator and reread by the independent reviewer. No unresolved blocker or major was found within this seven-dimension source scope.",
+    "Content digests do not authenticate a declared reviewer identity. This is not human review, provider execution, Native runtime qualification, G22 effect measurement, LTA field observation or Product M5 authorization.",
+    "Historical state and external citation metadata keep their original dates and limits. This review does not renew external references, rerun historical campaigns or execute target-repository production code.",
+    "The source reference set is the bounded current evaluator projection plus selected evaluator, contract, governance and current change-contract sources. It is not an exhaustive semantic code audit of every repository file.",
+    "Full regression, the current-date gate after this publication, protected CI, immutable release and exact downstream promotion are separate delivery observations. This receipt cannot substitute for those facts."
+  ]
+}

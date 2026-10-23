@@ -1,0 +1,110 @@
+{
+  "schema": "adk-independent-release-review-execution/v1",
+  "reviewer": "ai/root/external_methods",
+  "implementation_author": "ai/root/implement_release",
+  "completed_at": "2026-10-23T12:11:05Z",
+  "status": "pass",
+  "working_directory": "agent-dev-kit",
+  "environment": {
+    "python": "/workspace/scratch/694941d81014/tooling/venv/bin/python",
+    "PYTHONPATH": "src",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PATH": "/workspace/scratch/694941d81014/tooling/venv/bin:/usr/local/bin:/usr/bin:/bin",
+    "shell_entry": "/workspace/scratch/694941d81014/tooling/rtk bypass"
+  },
+  "checks": [
+    {
+      "command": "python -m unittest discover -s tests -p test_release_integrity.py -v",
+      "kind": "independent execution of implementation regression",
+      "test_methods": 13,
+      "elapsed_seconds": 46.71,
+      "exit_code": 0,
+      "observed_result": "Ran 13 tests in 46.710s; OK"
+    },
+    {
+      "command": "python docs/changes/20261023-release-contract/evidence/independent-review-probes.py",
+      "kind": "independently designed additional adversarial probes",
+      "test_methods": 7,
+      "elapsed_seconds": 28.62,
+      "exit_code": 0,
+      "observed_result": "Ran 7 tests in 28.620s; OK",
+      "probe_source": "independent-review-probes.py",
+      "probe_sha256": "0edfcd6ae097db4e9673df5f4a342583b16ffb0ef81d633351835b4ecad5b8a0",
+      "cases": [
+        "Commit and tree replacement refs cannot redefine captured Git object authority; both artifacts equal the clean fixture byte-for-byte.",
+        "Hidden manifest version and compiled Skill contents cannot affect build or export.",
+        "Working-tree executable-bit changes with core.filemode=false cannot affect archived Git modes.",
+        "Dry-run preserves an existing local release-contract.json and performs no subprocess publication.",
+        "Public publish uploads the captured archive and regenerated matching checksum after all three local inputs are replaced.",
+        "Uploaded release-contract.json equals actual canonical verifier CLI stdout byte-for-byte.",
+        "Nested source path sort order and a 9 MiB + 57-byte source member produce the filesystem tree digest; only JSON is retained as payload.",
+        "A one-byte source mutation with unchanged count is rejected by source inventory digest.",
+        "File/directory conflicts in both orders, duplicate directories, PAX unsafe path override, and directory payload are rejected.",
+        "A source header declaring MAX_MEMBER_BYTES+1 is rejected before payload reading."
+      ]
+    },
+    {
+      "command": "python -m unittest discover -s tests -p test_archive_resource_bounds.py -v",
+      "kind": "independent execution of affected bounded-reader regression",
+      "test_methods": 22,
+      "elapsed_seconds": 0.16,
+      "exit_code": 0,
+      "observed_result": "Ran 22 tests in 0.160s; OK"
+    },
+    {
+      "command": "python -m unittest discover -s tests -p test_strict_json.py -v",
+      "kind": "independent execution of strict-JSON consumer fixtures",
+      "test_methods": 14,
+      "elapsed_seconds": 0.068,
+      "exit_code": 0,
+      "observed_result": "Ran 14 tests in 0.068s; OK"
+    }
+  ],
+  "total_test_methods": 56,
+  "source_bindings": [
+    {
+      "path": "src/agent_dev_kit/release.py",
+      "sha256": "f6a9f42408222a6e1ebccba6baabe57c1df263ab72a6f0a933e0953f6938b8dd"
+    },
+    {
+      "path": "src/agent_dev_kit/distribution/release_artifacts.py",
+      "sha256": "dd193bf37dcab03f9a562caa481f1a55b367acbf4327f82101abcf5525487a1a"
+    },
+    {
+      "path": "src/agent_dev_kit/distribution/archive_io.py",
+      "sha256": "c2ee8fcb027608cc64c9d93f1e3992bde8adbaf8679d3000bc10e942660a2976"
+    },
+    {
+      "path": "src/agent_dev_kit/distribution/release_contract.py",
+      "sha256": "9c2e8c8753f7c5fcf860d121d5f18900d7c3107b1a777593cb5c188170196126"
+    },
+    {
+      "path": "tests/test_release_integrity.py",
+      "sha256": "455ed1ae136f7ee0b2133e5f9674fef6accc2865d5de7765751ba166727c37b0"
+    },
+    {
+      "path": "tests/test_release_manifest_contract.sh",
+      "sha256": "4b73bb2118363542ba08335a696f5cde74f3db822b5432980ca059a6cbf3758e"
+    },
+    {
+      "path": "tests/test_archive_resource_bounds.py",
+      "sha256": "c5e8ffdf3e2cb421addd683d517e524c684e2c608d04f7e14b598f7b63020e64"
+    },
+    {
+      "path": "tests/test_strict_json.py",
+      "sha256": "a48caf376cad34c8b58fe2e1d1ba9a55285d627e5f93ca42ddbb6c21a850a55c"
+    }
+  ],
+  "observations": [
+    "The reviewer read the nontrivial-code requirements, design, tasks, implementation verification, negative results, release implementation and affected fixture changes.",
+    "The reviewer did not implement or modify the release fix. The additional probe script is review evidence and only mutates temporary fixtures.",
+    "Source bindings equal the implementation-verification source bindings. Commit-level target identity is recorded separately in review-evidence.json after the integrator supplies the real remote implementation commit."
+  ],
+  "limitations": [
+    "Mocked GitHub publication checks local invocation and asset bytes only; no real GitHub release, signature, attestation, paid model evaluation or runtime installation occurred.",
+    "Same-byte deterministic rebuilds were observed in this environment; cross-platform and cross-runtime bit reproducibility were not measured.",
+    "Archive inventory is internal consistency evidence. It does not authenticate source provenance or replace external attestation and exact commit/tag readback.",
+    "The complete implementation commit also includes output-boundary work, which has a separate independent source review. This review's Spec and Quality findings cover ADK-01, ADK-02 and ADK-03.",
+    "The patch does not change workflow assets. No workflow propose/apply/history or field/product qualification is manufactured."
+  ]
+}

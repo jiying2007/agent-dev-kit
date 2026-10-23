@@ -1,0 +1,138 @@
+{
+  "schema": "adk-review-evidence/v1",
+  "subject_id": "20261023-output-boundaries",
+  "scope": "source-change",
+  "owner": "leiwenjun",
+  "author_id": "ai/root/implement_paths",
+  "reviewer": {
+    "id": "ai/root/architecture_audit",
+    "kind": "ai",
+    "independence": "independent"
+  },
+  "reviewed_at": "2026-10-23T12:17:54.743762Z",
+  "evidence_completed_at": "2026-10-23T12:17:54.743746Z",
+  "verdicts": {
+    "spec": "pass",
+    "quality": "pass"
+  },
+  "findings": [],
+  "limitations": [
+    "Independent AI review of the four output-boundary production modules, two changed tests, requirements/design/tasks and existing path/lock dependencies. The reviewer did not implement the fixes and did not modify production source or test expectations.",
+    "The reviewer independently ran 18 targeted behavior tests and replayed the original same-root export-symlink counterexample. The tested six files remain byte-identical to their execution-time digests and to the actual bound head commit.",
+    "The retained original.patch is the complete actual base-to-head Git diff. This scoped verdict does not claim review of unrelated release implementation changes in that combined commit; those require the separate release reviewer.",
+    "Multi-output publication compensates observed failures and retains recovery material if restoration fails. It is not a crash-atomic multi-file transaction; parent control and coordination with concurrent same-user writers remain caller responsibilities.",
+    "An existing unmodified Native executor pipe-drain regression emitted an asyncio resource-cleanup warning in implementer evidence. This scoped output review neither reran that separate warning scenario nor claims to fix it.",
+    "Content digests bind files, not an authenticated reviewer identity. No human review, real Native/provider execution, signature, G22 effect, LTA field event or Product M5 qualification is claimed.",
+    "Full regression, protected CI, immutable release and exact downstream promotion are separate delivery requirements; this source review cannot substitute for them. Historical lifecycle state was not backfilled or changed."
+  ],
+  "policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+  "validator_sha256": {
+    "src/agent_dev_kit/review_evidence.py": "73d85e864a3da125bf94808f19616f52150751a94ccc729ac66f66d2576b8808",
+    "src/agent_dev_kit/strict_json.py": "e11233b8d02d7fb95a8f2f93bfff065a1db84c4ef0820fef6d817600abe8ec98",
+    "src/agent_dev_kit/readiness_evidence.py": "ef980657486084eea8ab8a03ab357a76a3ed43691aca8d6909b06642764c808b"
+  },
+  "target": {
+    "base_commit": "bf9ec8164e2c80394ce997f8a8b51515cad4746e",
+    "head_commit": "c06fd629fa9a08f3079e7a606f45e65fcccbfc28",
+    "original_patch_sha256": "5b601be3fc68a1e93d251127eff8bcfbf11403f5701d3006787dac6d5cf306df"
+  },
+  "sources": [
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/atomic_io.py",
+      "sha256": "0a620484ae5954824ca7c93a251df8f8518ee5ec64739d64d9d987f0fb3a1b79"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/compiler.py",
+      "sha256": "27e643dee1bbf7a150e8f6f1e0466e043284d57db15eeca77afd8287aad2cce4"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/native_campaign.py",
+      "sha256": "52d0b5a37828d8d7d5042da62517e2d65047acb6c9474f2e9703df874cde6b81"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/native_campaign_contract.py",
+      "sha256": "63f0dbb11fb4d8b2878dedfe9668db797b9182e9f635feccb0a62ea8c2681d91"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_install_upgrade.py",
+      "sha256": "be8d6aa525a8338201016d2c5cbe0595b85e5091aa793db999935617ff0d1562"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_native_campaign.py",
+      "sha256": "fc188ae2fc5d69c37c1288c2f9a922ea4b00761afddaff0d10a61a4978812076"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/installation_contract.py",
+      "sha256": "124ecab771eb4171d17e8912ac64dda9ec2aef7f855496c38ccfe632eac47d58"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/locking.py",
+      "sha256": "406d73f550163225a6f269f04fce53758d45cc248c7311aa6c8ff97e89938a35"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261023-output-boundaries/requirements.md",
+      "sha256": "12dbdebd9253534e6277276822e1e779144a778d153ac8f5c9d8c95b1a2330d4"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261023-output-boundaries/design.md",
+      "sha256": "9fb7e932b609f3af6824ac003a2a3b7d5d8eeb65c3fa57ddbb54dd17e4e8d7c3"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261023-output-boundaries/tasks.md",
+      "sha256": "d33944cca8953c24f48c6cd535f6d4ce287c2c25730a113f22e0ffe131929b61"
+    },
+    {
+      "base": "record",
+      "path": "evidence/original.patch",
+      "sha256": "5b601be3fc68a1e93d251127eff8bcfbf11403f5701d3006787dac6d5cf306df"
+    }
+  ],
+  "evidence": [
+    {
+      "base": "record",
+      "path": "review-findings.md",
+      "sha256": "db9dd201ce841887e42fb1f742bb4273a8b2338977bd35348f63612881311b15"
+    },
+    {
+      "base": "record",
+      "path": "verify-report.md",
+      "sha256": "c3906ba691655f883b9b30a6b885262e860b51ada36ef28d59540591792d1104"
+    },
+    {
+      "base": "record",
+      "path": "negative-results.md",
+      "sha256": "37f1676299bd4862371c529d97c7c997236286a27701c049dd89727d630f453b"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-review-execution.json",
+      "sha256": "183e1537440720316e1fb74b28ac319ee1d55e1461dcbf0e3d36064da3f2389c"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-review-git-binding.json",
+      "sha256": "14c52990b6e7eacc62525efddf4744d8d2e99dc8768be6c9846ab95c66220e67"
+    },
+    {
+      "base": "record",
+      "path": "evidence/regression-red.json",
+      "sha256": "0f98b2a923da788d465bfee51b2c4303545aa58ee0db574da5ac6d5a485d76f9"
+    },
+    {
+      "base": "record",
+      "path": "evidence/regression-green.json",
+      "sha256": "b46c6d7cc7364e11d72355b810d35d0cc685dccc961b6d1685a2e1f8605402a4"
+    }
+  ]
+}

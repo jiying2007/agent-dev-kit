@@ -1,0 +1,376 @@
+{
+  "schema": "adk-review-evidence/v1",
+  "subject_id": "harness-readiness",
+  "scope": "harness-source",
+  "owner": "leiwenjun",
+  "author_id": "ai/root",
+  "reviewer": {
+    "id": "ai/root/architecture_audit",
+    "kind": "ai",
+    "independence": "independent"
+  },
+  "reviewed_at": "2026-10-23T12:17:59.467787Z",
+  "evidence_completed_at": "2026-10-23T12:17:59.467778Z",
+  "verdicts": {
+    "spec": "pass",
+    "quality": "pass"
+  },
+  "findings": [
+    {
+      "id": "harness-usage-retired-profile",
+      "severity": "minor",
+      "disposition": "fixed",
+      "reason": "docs/usage.md recommended openspec-driven although it is retired and absent from manifest.json. The coordinator removed the row; the reviewer reread final usage and the canonical authority boundary."
+    },
+    {
+      "id": "harness-usage-shell-command",
+      "severity": "minor",
+      "disposition": "fixed",
+      "reason": "docs/usage.md invoked bash PYTHONPATH=src as a script. The coordinator corrected the environment assignment. The reviewer independently ran the documented profile coherence module successfully."
+    }
+  ],
+  "limitations": [
+    "Actual owner-delegated independent AI source review by ai/root/architecture_audit. The reviewer personally read all 61 bound sources, covering all 44 current raw scan references, and independently executed the 45-test delegated-review suite. This is not a date-only renewal.",
+    "Six applicable source-readiness dimensions pass. No material MCP configuration was found, so tool_and_permission_boundary remains not-applicable; this does not certify live tool permissions.",
+    "The original October 22 record is preserved byte-for-byte and is invalid for the changed README. The current-date gate before this renewal correctly returned needs-review with exit 2.",
+    "Two active usage-document findings were fixed by the coordinator and reread by the independent reviewer. No unresolved blocker or major was found within this seven-dimension source scope.",
+    "Content digests do not authenticate a declared reviewer identity. This is not human review, provider execution, Native runtime qualification, G22 effect measurement, LTA field observation or Product M5 authorization.",
+    "Historical state and external citation metadata keep their original dates and limits. This review does not renew external references, rerun historical campaigns or execute target-repository production code.",
+    "The source reference set is the bounded current evaluator projection plus selected evaluator, contract, governance and current change-contract sources. It is not an exhaustive semantic code audit of every repository file.",
+    "Full regression, the current-date gate after this publication, protected CI, immutable release and exact downstream promotion are separate delivery observations. This receipt cannot substitute for those facts."
+  ],
+  "policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+  "validator_sha256": {
+    "src/agent_dev_kit/review_evidence.py": "73d85e864a3da125bf94808f19616f52150751a94ccc729ac66f66d2576b8808",
+    "src/agent_dev_kit/strict_json.py": "e11233b8d02d7fb95a8f2f93bfff065a1db84c4ef0820fef6d817600abe8ec98",
+    "src/agent_dev_kit/readiness_evidence.py": "ef980657486084eea8ab8a03ab357a76a3ed43691aca8d6909b06642764c808b"
+  },
+  "dimension_ids": [
+    "context_legibility",
+    "spec_and_execution_contract",
+    "tool_and_permission_boundary",
+    "state_and_knowledge_continuity",
+    "verification_review_and_eval",
+    "recovery_and_rollback",
+    "freshness_and_entropy_control"
+  ],
+  "sources": [
+    {
+      "base": "repository",
+      "path": ".github/CODEOWNERS",
+      "sha256": "80c4105be9d42c79f5057726fbb9971aa0a638ee17f47f31377c04085b1095cc"
+    },
+    {
+      "base": "repository",
+      "path": ".github/workflows/branch-gc.yml",
+      "sha256": "9c88b4fc19147008351bef181a275fb371b986567eadaa2892b5292b8322e47d"
+    },
+    {
+      "base": "repository",
+      "path": ".github/workflows/ci.yml",
+      "sha256": "8c0b509ca8e46ddf9e67d9aed00d5bd28da73bf831de9a35601a4f625381e910"
+    },
+    {
+      "base": "repository",
+      "path": ".github/workflows/claude-consumer-contract.yml",
+      "sha256": "2abc7885d7ab3476776ef4cbcbc022d008734ceb3e714381cc994ebdc543526b"
+    },
+    {
+      "base": "repository",
+      "path": ".github/workflows/codex-consumer-contract.yml",
+      "sha256": "f1e9e882dd0ee2995ac10d5ffa57ca97451b3ff9143f1019c617830ea2d4bbb9"
+    },
+    {
+      "base": "repository",
+      "path": ".github/workflows/digital-worker-contract.yml",
+      "sha256": "3575ad868bebbc6120e39a37f0786d249ec1a4887bcc1a775378c0bc1ac02eee"
+    },
+    {
+      "base": "repository",
+      "path": "AGENTS.md",
+      "sha256": "61a06f86a6b5382855fab70a3098f878e9f7d3e0af653a86fbd199d8d5d13167"
+    },
+    {
+      "base": "repository",
+      "path": "CHANGELOG.md",
+      "sha256": "20b26d7f8540b4f3985b2a0fb7902fa3d1d76fe25eb781803c26e8755393b356"
+    },
+    {
+      "base": "repository",
+      "path": "OWNERS",
+      "sha256": "04214b6ee2937ef8c786f998ee890a0cecacb7dd318bab99a13db844f850a95e"
+    },
+    {
+      "base": "repository",
+      "path": "README.md",
+      "sha256": "1b21f3232173a72fad4e2924ebd29c8318a5e35d6740fe250d87066296dddc52"
+    },
+    {
+      "base": "repository",
+      "path": "docs/agent-operating-rules.md",
+      "sha256": "9eb0f82be4ec98662524ed13773dbcd86c0c073c609e622d76341342e1a6f2ac"
+    },
+    {
+      "base": "repository",
+      "path": "docs/architecture/canonical-change-authority.md",
+      "sha256": "8c55aac803a078e6490fd7ffac9a70df27a1dfbd6740ab16c479de4c12cf39f6"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/2026-09-25-agent-value-trust/negative-results.md",
+      "sha256": "da7aa6c51295be56368b90594b7eb6469bf0a43b3888d7a482839bb22c0970c0"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/2026-09-25-agent-value-trust/requirements.md",
+      "sha256": "429e4296ec368df67542c7b536c478c2ac2f16adedad9dfddc1b53383cc343ad"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/2026-09-25-agent-value-trust/tasks.md",
+      "sha256": "ccee418ae0bd170f1c579bf0cb48af9be1dff833629c95705f5deca431e1d499"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/2026-09-25-effect-trials/design.md",
+      "sha256": "a23b59b2cab96879196748bd082347a8d00a756598460ad3f83f97c7a50e976f"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/2026-09-25-effect-trials/negative-results.md",
+      "sha256": "045d0b30fd4e15dabfa0436d3b34403bb3bd5b6b8916ef4cb708a2e6523cdf73"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/2026-09-25-effect-trials/requirements.md",
+      "sha256": "f4a2bffa3a90d0955a2b9e50d5e3201a30f667edb30a1709985bab2f856ed281"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/2026-09-25-effect-trials/tasks.md",
+      "sha256": "802ca9c194d39060eb931af0f3e8042d5f1e62acc9249abeaead6b5ede8615b9"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/2026-09-25-native-campaign-finalize/negative-results.md",
+      "sha256": "d5d436b9ddf56b37c22f200b2f84a7fd09d3e964b8d91c4051649eb51b207673"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/2026-09-25-native-campaign-finalize/requirements.md",
+      "sha256": "45da7af9938c1c826ca203ab5439d55aac9def3a4da218a30a5252d531d3d0a7"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/2026-09-25-native-campaign-finalize/tasks.md",
+      "sha256": "b94ecc55058d993aa5ceb2da12020ffc181b68de7b4924c591f7a5567ccaee09"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/2026-09-25-native-campaign-project-layout/negative-results.md",
+      "sha256": "9426f86cc945edfaa63590e140c0ec458762beea4e09bf0a0886badb15151338"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/2026-09-25-native-campaign-project-layout/tasks.md",
+      "sha256": "2f3fca0914f53aabe3713f3d0094fb6bacb3e3d1e0df867db134d71835d3e2ce"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261023-output-boundaries/design.md",
+      "sha256": "9fb7e932b609f3af6824ac003a2a3b7d5d8eeb65c3fa57ddbb54dd17e4e8d7c3"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261023-output-boundaries/requirements.md",
+      "sha256": "12dbdebd9253534e6277276822e1e779144a778d153ac8f5c9d8c95b1a2330d4"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261023-output-boundaries/tasks.md",
+      "sha256": "d33944cca8953c24f48c6cd535f6d4ce287c2c25730a113f22e0ffe131929b61"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261023-release-contract/design.md",
+      "sha256": "031c9556b21838bad423f3b22182bf25cba6ea2c67e0b68cd67fb7192bdc1f8b"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261023-release-contract/requirements.md",
+      "sha256": "62af6210c96e8d4d388476f07d07f6a08d9c5ee769e0ac0f177806406bd2e237"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261023-release-contract/tasks.md",
+      "sha256": "6ec54c597a177d58b1c5540dda3e852a72f6baa9005d66d9f6e7119c395a24ad"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/adk-platform-convergence-v1/state.yaml",
+      "sha256": "f95699e68437bafa0199a5564af18cbc7e3f78de290f4b01dc17737d0b68156e"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/adk-self-readiness-ownership/state.yaml",
+      "sha256": "d590a0ae6b1b666cc1d6d64ab7b1e8fd5f128979993595eea8489783138f46d1"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/adk-terminal-contract-hardening/state.yaml",
+      "sha256": "87b107bda25456141bae1a3b035c7e2c30616afd8baf86d333216a87f0754f5f"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/adk-v3-1-rc2-target-conformance/state.yaml",
+      "sha256": "ed9597562535265d61322e9558727acf963193e121570d1a7bafe5136d4299d6"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/adk-v3-1-software-m5-ready/state.yaml",
+      "sha256": "fa314d45b209d8bea753377d18848cb02793d62c660dd69e906b7d8ee96e1134"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/agent-ecosystem-standards-hardening/state.yaml",
+      "sha256": "37ff7e9a84d590999e31b86493ee82de2a313e5efded23bba90a3c885977bee5"
+    },
+    {
+      "base": "repository",
+      "path": "docs/commands.md",
+      "sha256": "df23cf7fd58dec7e7b12b16c70eca14aaddc15a0a568afcfeaad3724a835530d"
+    },
+    {
+      "base": "repository",
+      "path": "docs/runbooks/README.md",
+      "sha256": "0888aa2b94f929760040517deaf9a47b517648b0694209d48309956fbe83273d"
+    },
+    {
+      "base": "repository",
+      "path": "docs/runbooks/agent-value-lifecycle.md",
+      "sha256": "84e629c1c040b265d6a64369c5b39d6af2e999576af4429939738ff00b5a4c37"
+    },
+    {
+      "base": "repository",
+      "path": "docs/runbooks/artifact-gated-delivery.md",
+      "sha256": "f83375f1392b20006f29e43ce5b0807530ad850969e6ee67e3b861a78fa98dd6"
+    },
+    {
+      "base": "repository",
+      "path": "docs/runbooks/bugfix-delivery.md",
+      "sha256": "f7ef75ace0052ecbde911b06e3b45a1d22045ba24257c642736f72f6f28ff623"
+    },
+    {
+      "base": "repository",
+      "path": "docs/runbooks/codex-pilot-evidence.md",
+      "sha256": "5ff92fab93baf7403b838a67f359e29016a6ce19563eb98006cca6c842ae298c"
+    },
+    {
+      "base": "repository",
+      "path": "docs/runbooks/codex-runtime-method-boundary.md",
+      "sha256": "43bf36ec8a1a9a12bf30bb29b7a9f2bdbfd9a00f849ad700a85fb1cd440dde18"
+    },
+    {
+      "base": "repository",
+      "path": "docs/runbooks/native-campaign.md",
+      "sha256": "31ce75ccf900c455bd7302a25e34d2573e96cd1dac26085a97a13a7f046772f8"
+    },
+    {
+      "base": "repository",
+      "path": "docs/usage.md",
+      "sha256": "3ece049725e38609706acc556932c4053a075fbf67101a27499a23e4dc57ea88"
+    },
+    {
+      "base": "repository",
+      "path": "manifests/context_state_contracts.json",
+      "sha256": "fe8076296b8cf214aee52a5ad32dabff5d383555e76f6d3d3e542e2e6617fb91"
+    },
+    {
+      "base": "repository",
+      "path": "manifests/harness_readiness_contracts.json",
+      "sha256": "e12c527dcfcfc61030b9a344f9d7fa3efeb828c364f5707285bdded69fcd8358"
+    },
+    {
+      "base": "repository",
+      "path": "manifests/token_context_policy.json",
+      "sha256": "799b0388c82c6cb6925caf0c2cd6e44685eeca5277a9b5128a9cec50551e158f"
+    },
+    {
+      "base": "repository",
+      "path": "scripts/backup-rollback.sh",
+      "sha256": "b8fbb6466bba0d47e414e9db5d41d821d7d753b0087cbb624af987ee61d10d41"
+    },
+    {
+      "base": "repository",
+      "path": "scripts/check-format.sh",
+      "sha256": "5810e3880f2af51cf7b39f5e1c2caa49012c89ddfc7fc6224e74adf707249227"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/readiness.py",
+      "sha256": "83a2949102955281f13a94e2f871d36e170cbfe76d053032ce5c114dc065ed29"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/readiness_tools.py",
+      "sha256": "5d361c7bd0fbbc2ce923071d3b5afcefb5998a8047d49e54be70f19ca49c554c"
+    },
+    {
+      "base": "repository",
+      "path": "tests/lib/bash-test-helpers.sh",
+      "sha256": "90a6fa1c00f18ffaa9394fc548cbf5739e8eeda8b827832eef516961164d263d"
+    },
+    {
+      "base": "repository",
+      "path": "tests/mcp_2026_activation/mcp_activation_test.go",
+      "sha256": "560fa3a6e299dca198b7417dec72bc77998aa736587a83c795cb579abd686324"
+    },
+    {
+      "base": "repository",
+      "path": "tests/run_all.sh",
+      "sha256": "f7328fd18b81713f6053924099bd81fde92cc4a2ac2ddab7710feab9fc1d8fd1"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_agent_ecosystem_standards.sh",
+      "sha256": "9341118fc2187764597d0445caddfa5930fbc95fb0eeed6665d29ef9b4a3844e"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_agent_platform.sh",
+      "sha256": "a7136691eeed9ff7a64a3c98fb2508d3dac82ca35c09ea9d1ab4d3b16a244a02"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_catalog.sh",
+      "sha256": "122fce83231fbd4af11789da15933c1fbf63b25aee218fdd306c8889c1382798"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_eval_catalog.py",
+      "sha256": "dd0f1d497a0125284ce674690315b6854bebc30257f1ed6ce1f4f552897ff8c7"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_eval_catalog.sh",
+      "sha256": "fbb79f7fdcf60b5dde639d2c03e6ba09dc178efe43d98274ca8e410f5aec9946"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_mcp_freshness_ssot.sh",
+      "sha256": "9ccac15a620e20f9d5eacb1e1e50f47c191e3ce5bb07015f3f6b91def51c44af"
+    }
+  ],
+  "evidence": [
+    {
+      "base": "repository",
+      "path": ".adk/reviews/evidence/harness-source-20261023-8.0.39/source-observation.json",
+      "sha256": "3c406c07c5af41b65c6c6732f85ea8983aad7bfd6ccccd6374ea1ae75a737987"
+    },
+    {
+      "base": "repository",
+      "path": ".adk/reviews/evidence/harness-source-20261023-8.0.39/independent-review.json",
+      "sha256": "711a500ae2cdb928e2aaba489ded9eccb6e40834589cccdb00775e0785305e98"
+    }
+  ]
+}
