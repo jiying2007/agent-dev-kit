@@ -8,11 +8,29 @@ import shutil
 import tempfile
 from contextlib import nullcontext
 from pathlib import Path
-from typing import Dict, Optional, Sequence
+from typing import Dict, Optional, Sequence, Tuple
 
+from .installation_contract import _regular_install_path
 from .locking import TargetLock
 from .model import Manifest, ManifestError, ensure_within
 from .targets import render_selection
+
+
+def _export_paths(requested_root: Path, target: str) -> Tuple[Path, Path]:
+    root = _regular_install_path(requested_root, Path(requested_root.anchor), "export output root")
+    destination = _regular_install_path(requested_root / target, root, "export target")
+    for path in (root, destination):
+        if path.exists() and not path.is_dir():
+            raise ManifestError("export path must be a directory: {}".format(path))
+    return root, destination
+
+
+def _path_identity(path: Path) -> Optional[Tuple[int, int]]:
+    try:
+        info = path.lstat()
+    except FileNotFoundError:
+        return None
+    return info.st_dev, info.st_ino
 
 
 def export_assets(
@@ -27,13 +45,18 @@ def export_assets(
     lock_timeout_seconds: float = 0.0,
 ) -> Dict[str, object]:
     bundle = render_selection(manifest, target, profiles, optional_skills, asset_kind)
-    output_root = output_root.resolve()
-    target_root = ensure_within(output_root / target, output_root, "export target")
+    requested_root = output_root.expanduser().absolute()
+    output_root, target_root = _export_paths(requested_root, target)
+    target_identity = _path_identity(target_root)
 
     lock = nullcontext() if dry_run else TargetLock(target_root, "export", lock_timeout_seconds)
     with lock:
+        _export_paths(requested_root, target)
+        if _path_identity(target_root) != target_identity:
+            raise ManifestError("export target changed while acquiring writer lock")
         if not dry_run:
             output_root.mkdir(parents=True, exist_ok=True)
+            output_identity = _path_identity(output_root)
             staging_parent = Path(tempfile.mkdtemp(prefix=".adk-export-", dir=str(output_root)))
             staging_target = staging_parent / target
             preserve_staging = False
@@ -73,6 +96,10 @@ def export_assets(
                 (staging_target / "adk-export-manifest.json").write_text(
                     json.dumps(inventory, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
                 )
+                _export_paths(requested_root, target)
+                if (_path_identity(output_root) != output_identity
+                        or _path_identity(target_root) != target_identity):
+                    raise ManifestError("export path identity changed before publication")
                 backup_target: Optional[Path] = None
                 if target_root.exists() or target_root.is_symlink():
                     if not clean:

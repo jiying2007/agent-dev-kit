@@ -1,0 +1,40 @@
+{
+  "schema": "independent-source-change-git-binding/v1",
+  "observed_at": "2026-10-23T12:17:54.730424Z",
+  "reviewer_id": "ai/root/architecture_audit",
+  "base_commit": "bf9ec8164e2c80394ce997f8a8b51515cad4746e",
+  "head_commit": "c06fd629fa9a08f3079e7a606f45e65fcccbfc28",
+  "base_tree": "4d79fabb0f280b55ae034ad8c01501766c5fe25b",
+  "head_tree": "87293e6c835585d7084077dc57184842548c6180",
+  "ancestry": "base-is-ancestor-of-head",
+  "patch_command": [
+    "/workspace/scratch/694941d81014/tooling/rtk",
+    "bypass",
+    "git",
+    "diff",
+    "--binary",
+    "--full-index",
+    "--no-ext-diff",
+    "bf9ec8164e2c80394ce997f8a8b51515cad4746e",
+    "c06fd629fa9a08f3079e7a606f45e65fcccbfc28",
+    "--"
+  ],
+  "original_patch_sha256": "5b601be3fc68a1e93d251127eff8bcfbf11403f5701d3006787dac6d5cf306df",
+  "original_patch_bytes": 172874,
+  "source_paths_compared_byte_for_byte_to_head": [
+    "src/agent_dev_kit/atomic_io.py",
+    "src/agent_dev_kit/compiler.py",
+    "src/agent_dev_kit/native_campaign.py",
+    "src/agent_dev_kit/native_campaign_contract.py",
+    "tests/test_install_upgrade.py",
+    "tests/test_native_campaign.py",
+    "src/agent_dev_kit/installation_contract.py",
+    "src/agent_dev_kit/locking.py",
+    "docs/changes/20261023-output-boundaries/requirements.md",
+    "docs/changes/20261023-output-boundaries/design.md",
+    "docs/changes/20261023-output-boundaries/tasks.md"
+  ],
+  "independent_execution_sha256": "183e1537440720316e1fb74b28ac319ee1d55e1461dcbf0e3d36064da3f2389c",
+  "source_drift_since_execution": false,
+  "scope": "The retained patch is the complete actual base-to-head Git diff. This reviewer assessed only the output-boundary files and existing path/lock dependencies; the release implementation has its own independent reviewer."
+}

@@ -1,0 +1,733 @@
+diff --git a/docs/changes/20261023-release-contract/evidence/focused-quality-followup.log b/docs/changes/20261023-release-contract/evidence/focused-quality-followup.log
+new file mode 100644
+index 0000000000000000000000000000000000000000..57162279f7c9972ef2bfd575a545bbcfa3b77ca9
+--- /dev/null
++++ b/docs/changes/20261023-release-contract/evidence/focused-quality-followup.log
+@@ -0,0 +1,58 @@
++$ /workspace/scratch/694941d81014/tooling/rtk bypass /workspace/scratch/694941d81014/tooling/venv/bin/ruff check src/agent_dev_kit/distribution --select E4,E7,E9,F,B,UP,SIM,I
++All checks passed!
++exit_code: 0
++
++$ /workspace/scratch/694941d81014/tooling/rtk bypass /workspace/scratch/694941d81014/tooling/venv/bin/mypy src/agent_dev_kit/distribution src/agent_dev_kit/release.py
++Success: no issues found in 6 source files
++exit_code: 0
++
++$ /workspace/scratch/694941d81014/tooling/rtk bypass env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src /workspace/scratch/694941d81014/tooling/venv/bin/python -m unittest discover -s tests -p test_archive_resource_bounds.py -v
++test_bad_crc_and_truncated_gzip_are_rejected_at_eof (test_archive_resource_bounds.ArchiveResourceTests.test_bad_crc_and_truncated_gzip_are_rejected_at_eof) ... ok
++test_compressed_snapshot_is_bounded_before_decompression (test_archive_resource_bounds.ArchiveResourceTests.test_compressed_snapshot_is_bounded_before_decompression) ... ok
++test_decoded_padding_and_concatenated_gzip_count_toward_budget (test_archive_resource_bounds.ArchiveResourceTests.test_decoded_padding_and_concatenated_gzip_count_toward_budget) ... ok
++test_digest_and_extraction_use_exact_snapshot_after_path_replacement (test_archive_resource_bounds.ArchiveResourceTests.test_digest_and_extraction_use_exact_snapshot_after_path_replacement) ... ok
++test_explicit_extraction_preserves_payload_and_safe_permissions (test_archive_resource_bounds.ArchiveResourceTests.test_explicit_extraction_preserves_payload_and_safe_permissions) ... ok
++test_extraction_budget_failure_precedes_destination_creation (test_archive_resource_bounds.ArchiveResourceTests.test_extraction_budget_failure_precedes_destination_creation) ... ok
++test_extraction_rejects_path_traversal_before_writing_members (test_archive_resource_bounds.ArchiveResourceTests.test_extraction_rejects_path_traversal_before_writing_members) ... ok
++test_hidden_header_chain_fails_as_contract_error_before_recursion (test_archive_resource_bounds.ArchiveResourceTests.test_hidden_header_chain_fails_as_contract_error_before_recursion) ... ok
++test_hidden_pax_header_read_is_bounded_before_materialization (test_archive_resource_bounds.ArchiveResourceTests.test_hidden_pax_header_read_is_bounded_before_materialization) ... ok
++test_long_pax_names_remain_compatible_within_budget (test_archive_resource_bounds.ArchiveResourceTests.test_long_pax_names_remain_compatible_within_budget) ... ok
++test_member_cache_does_not_retain_global_pax_maps (test_archive_resource_bounds.ArchiveResourceTests.test_member_cache_does_not_retain_global_pax_maps) ... ok
++test_member_count_is_bounded_even_without_payload (test_archive_resource_bounds.ArchiveResourceTests.test_member_count_is_bounded_even_without_payload) ... ok
++test_member_size_and_name_are_bounded (test_archive_resource_bounds.ArchiveResourceTests.test_member_size_and_name_are_bounded) ... ok
++test_metadata_and_pax_keys_have_separate_budgets (test_archive_resource_bounds.ArchiveResourceTests.test_metadata_and_pax_keys_have_separate_budgets) ... ok
++test_publish_uploads_snapshot_not_replaced_original (test_archive_resource_bounds.ArchiveResourceTests.test_publish_uploads_snapshot_not_replaced_original) ... ok
++test_real_delivery_cli_preserves_leaf_link_rejection (test_archive_resource_bounds.ArchiveResourceTests.test_real_delivery_cli_preserves_leaf_link_rejection) ... ok
++test_real_rehearsal_checksum_input_is_bounded_regular (test_archive_resource_bounds.ArchiveResourceTests.test_real_rehearsal_checksum_input_is_bounded_regular) ... ok
++test_real_rehearsal_hash_and_extraction_share_captured_bytes (test_archive_resource_bounds.ArchiveResourceTests.test_real_rehearsal_hash_and_extraction_share_captured_bytes) ... ok
++test_real_rehearsal_rejects_overbudget_and_unsafe_leaf_before_workspace (test_archive_resource_bounds.ArchiveResourceTests.test_real_rehearsal_rejects_overbudget_and_unsafe_leaf_before_workspace) ... ok
++test_required_members_missing_duplicate_and_special_are_rejected (test_archive_resource_bounds.ArchiveResourceTests.test_required_members_missing_duplicate_and_special_are_rejected) ... ok
++test_snapshot_rejects_leaf_links_fifos_and_directories_without_hanging (test_archive_resource_bounds.ArchiveResourceTests.test_snapshot_rejects_leaf_links_fifos_and_directories_without_hanging) ... ok
++test_valid_order_independence_and_no_getmembers (test_archive_resource_bounds.ArchiveResourceTests.test_valid_order_independence_and_no_getmembers) ... ok
++
++----------------------------------------------------------------------
++Ran 22 tests in 0.235s
++
++OK
++exit_code: 0
++
++$ /workspace/scratch/694941d81014/tooling/rtk bypass env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src PATH=/workspace/scratch/694941d81014/tooling/venv/bin:/usr/local/bin:/usr/bin:/bin /workspace/scratch/694941d81014/tooling/venv/bin/python -m unittest discover -s tests -p test_release_integrity.py -v
++test_dirty_developer_build_remains_explicitly_ineligible (test_release_integrity.ReleaseGitInputTest.test_dirty_developer_build_remains_explicitly_ineligible) ... ok
++test_git_export_attributes_do_not_substitute_or_omit_tracked_blobs (test_release_integrity.ReleaseGitInputTest.test_git_export_attributes_do_not_substitute_or_omit_tracked_blobs) ... ok
++test_hidden_tracked_drift_cannot_change_frozen_release (test_release_integrity.ReleaseGitInputTest.test_hidden_tracked_drift_cannot_change_frozen_release) ... ok
++test_ignored_file_cannot_enter_clean_commit_release (test_release_integrity.ReleaseGitInputTest.test_ignored_file_cannot_enter_clean_commit_release) ... ok
++test_local_replacement_ref_cannot_redefine_a_frozen_blob (test_release_integrity.ReleaseGitInputTest.test_local_replacement_ref_cannot_redefine_a_frozen_blob) ... ok
++test_public_publish_plans_and_uploads_the_complete_verified_snapshot (test_release_integrity.ReleaseGitInputTest.test_public_publish_plans_and_uploads_the_complete_verified_snapshot) ... ok
++test_tracked_symlink_rejected_without_copying_its_target (test_release_integrity.ReleaseGitInputTest.test_tracked_symlink_rejected_without_copying_its_target) ... ok
++test_all_duplicate_unsafe_and_special_members_are_rejected (test_release_integrity.ReleaseInventoryTest.test_all_duplicate_unsafe_and_special_members_are_rejected) ... ok
++test_embedded_source_manifest_must_match_top_level (test_release_integrity.ReleaseInventoryTest.test_embedded_source_manifest_must_match_top_level) ... ok
++test_missing_extra_and_false_source_count_are_rejected (test_release_integrity.ReleaseInventoryTest.test_missing_extra_and_false_source_count_are_rejected) ... ok
++test_real_source_inventory_is_accepted_in_any_member_order (test_release_integrity.ReleaseInventoryTest.test_real_source_inventory_is_accepted_in_any_member_order) ... ok
++test_renamed_public_publish_is_rejected_before_github_discovery (test_release_integrity.ReleaseInventoryTest.test_renamed_public_publish_is_rejected_before_github_discovery) ... ok
++test_source_payload_drift_rejected_after_outer_checksum_is_recomputed (test_release_integrity.ReleaseInventoryTest.test_source_payload_drift_rejected_after_outer_checksum_is_recomputed) ... ok
++
++----------------------------------------------------------------------
++Ran 13 tests in 33.876s
++
++OK
++exit_code: 0
+diff --git a/docs/changes/20261023-release-contract/evidence/implementation-verification.json b/docs/changes/20261023-release-contract/evidence/implementation-verification.json
+index ed6a5d15fc9ce5e17d48df8ec28664409cc2c310..7476f1fca9ecd95b4181a19aaa45b79840cde4b5 100644
+--- a/docs/changes/20261023-release-contract/evidence/implementation-verification.json
++++ b/docs/changes/20261023-release-contract/evidence/implementation-verification.json
+@@ -3,6 +3,7 @@
+   "implementer": "ai/root/implement_release",
+   "base_commit": "bf9ec8164e2c80394ce997f8a8b51515cad4746e",
+   "collected_at": "2026-10-23T12:02:06.150661+00:00",
++  "updated_at": "2026-10-23T12:30:03+00:00",
+   "status": "pass",
+   "findings": [
+     "ADK-01",
+@@ -16,11 +17,11 @@
+     },
+     {
+       "path": "src/agent_dev_kit/distribution/release_artifacts.py",
+-      "sha256": "dd193bf37dcab03f9a562caa481f1a55b367acbf4327f82101abcf5525487a1a"
++      "sha256": "921dd17150b9687e5120a50111ef640ee04499cf59a0115af9d70874ffd0260b"
+     },
+     {
+       "path": "src/agent_dev_kit/distribution/archive_io.py",
+-      "sha256": "c2ee8fcb027608cc64c9d93f1e3992bde8adbaf8679d3000bc10e942660a2976"
++      "sha256": "3ce030569ca6b29d8cdc9463cc22057294fb52572ee221e7304caee8381e2c84"
+     },
+     {
+       "path": "src/agent_dev_kit/distribution/release_contract.py",
+@@ -117,6 +118,52 @@
+       "exit_code": 0
+     }
+   ],
++  "followup_phases": [
++    {
++      "phase": "integrated-focused-quality-rules",
++      "collected_at": "2026-10-23T12:30:03+00:00",
++      "reason": "The initial default Ruff invocation did not include the focused CI rule set; integration identified B023, I001 and UP022 in two implementation files.",
++      "changes": [
++        "Replace the source-reader lambda closure with an explicit bounded read loop.",
++        "Combine and sort archive_io imports.",
++        "Use subprocess.run(capture_output=True), retaining Python 3.8-compatible byte capture."
++      ],
++      "previous_source_file_bindings": [
++        {
++          "path": "src/agent_dev_kit/distribution/release_artifacts.py",
++          "sha256": "dd193bf37dcab03f9a562caa481f1a55b367acbf4327f82101abcf5525487a1a"
++        },
++        {
++          "path": "src/agent_dev_kit/distribution/archive_io.py",
++          "sha256": "c2ee8fcb027608cc64c9d93f1e3992bde8adbaf8679d3000bc10e942660a2976"
++        }
++      ],
++      "checks": [
++        {
++          "command": "rtk bypass <venv>/bin/ruff check src/agent_dev_kit/distribution --select E4,E7,E9,F,B,UP,SIM,I",
++          "exit_code": 0
++        },
++        {
++          "command": "rtk bypass <venv>/bin/mypy src/agent_dev_kit/distribution src/agent_dev_kit/release.py",
++          "exit_code": 0,
++          "source_files": 6
++        },
++        {
++          "command": "rtk bypass env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src <venv>/bin/python -m unittest discover -s tests -p test_archive_resource_bounds.py -v",
++          "exit_code": 0,
++          "tests": 22,
++          "elapsed_seconds": 0.235
++        },
++        {
++          "command": "rtk bypass env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src PATH=<venv>/bin:<system> <venv>/bin/python -m unittest discover -s tests -p test_release_integrity.py -v",
++          "exit_code": 0,
++          "tests": 13,
++          "elapsed_seconds": 33.876
++        }
++      ],
++      "evidence": "focused-quality-followup.log"
++    }
++  ],
+   "notes": [
+     "Existing valid minimal archive fixtures now contain an actual source manifest and matching canonical source digest; resource-bound negative tests retain their failure conditions.",
+     "The full gate preceded a test-only improvement that clears assume-unchanged before the independent skip-worktree case; the final focused run validates that stronger case.",
+diff --git a/docs/changes/20261023-release-contract/verify-report.md b/docs/changes/20261023-release-contract/verify-report.md
+index 1dcf857c6bad36784569c012c9ccecf0642da852..028fe6671700a559e03d7e2f3e17c918cd8e87da 100644
+--- a/docs/changes/20261023-release-contract/verify-report.md
++++ b/docs/changes/20261023-release-contract/verify-report.md
+@@ -18,6 +18,12 @@
+ - ruff、distribution mypy、模块预算/架构合同、diff whitespace 检查通过。
+ - 原始日志与当前实现/测试逐文件 SHA-256 见 `evidence/`。
+ 
++## 追加：集成 CI 的 focused 质量规则
++
++集成检查发现先前默认 Ruff 命令未覆盖 CI 的 `E4,E7,E9,F,B,UP,SIM,I` 规则集。本阶段仅改动两份实现文件的三处代码：将 source reader 的闭包迭代改为显式有界读取循环，合并并排序 `archive_io` 导入，使用兼容 Python 3.8 的 `capture_output=True` 捕获 Git 子进程输出。未新增 suppress 或改变行为合同。
++
++实际 focused Ruff 与 `distribution + release.py` 的 mypy（6 个文件）通过；22 项归档资源回归和 13 项发布完整性回归再次通过。本阶段日志见 `evidence/focused-quality-followup.log`，原红绿记录保留，实施 receipt 已追加阶段并更新当前源码 SHA-256。独立审核记录由审核者自行更新。
++
+ ## 范围和剩余阶段
+ 
+ 未更改发布 schema、CI、信任根或产品资格。没有真实远端发布、模型或设备运行。主 Agent 继续统一执行独立审核、最终版本集成回归、受保护合入和发布读回；这些阶段尚不在本实现记录中标为完成。
+diff --git a/docs/changes/20261023-source-review-refresh/design.md b/docs/changes/20261023-source-review-refresh/design.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..03cdb4178e126a388f3ad9b52eafa73f24b62168
+--- /dev/null
++++ b/docs/changes/20261023-source-review-refresh/design.md
+@@ -0,0 +1,11 @@
++# 最小来源刷新设计
++
++设计者与实际来源复核者为 ai/root/architecture_audit；实施者为 ai/root。精确设计见 evidence/proposed-changes.json，原始检索观察见 evidence/primary-source-observations.json；这些材料在生产 manifest 修改前生成。
++
++仅修改 manifests/external_agent_pattern_contracts.json 的两条 source_ref 及 last_updated，并同步 manifests/skill_reproducibility_contracts.json 的 AST04/AST05 crosswalk 和 last_updated。2026-11-22 是本地保守的 30 天复核期限，不表示上游保证有效。没有修改 expiry gate、schema、运行权限、安装范围或其他来源日期。
++
++OWASP 来源固定到 d6f7d7d0de314f52a83a85d1828e06ab096e595c；AST05 改为 Untrusted External Instructions，原有 safe parser、bounded schema 和 no executable deserialization 控制保留在 AST04。保持 evolving/observe-only，不导入 Universal Skill Format、不复制第三方正文或声明 OWASP 认证。没有审读所链接白皮书全文。
++
++论文读取固定 v2 的方法、维护结论与有效性限制，只增强既有可维护性方法。arXiv 非独占发布许可不等于论文、数据集或复现代码的复用许可；不导入这些材料、不推断本地效果。
++
++两个 manifest 均不属于当前 Harness 61 个绑定 source refs。验证仍实际调用已有 receipt validator 与当前 gate；若摘要相符，不重签或移动 Harness 的真实审核时间。回滚为本提交的 metadata/crosswalk 反向变更，会重新暴露真实过期状态；不得把回退当作来源已有效。
+diff --git a/docs/changes/20261023-source-review-refresh/evidence/before-gates.json b/docs/changes/20261023-source-review-refresh/evidence/before-gates.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..e43fd3640e237c39913ca8abc4b59cb888fbe30b
+--- /dev/null
++++ b/docs/changes/20261023-source-review-refresh/evidence/before-gates.json
+@@ -0,0 +1,40 @@
++{
++  "schema": "adk-independent-source-refresh-validation/v1",
++  "phase": "before implementation",
++  "reviewer_id": "ai/root/architecture_audit",
++  "environment": {
++    "PATH": "/workspace/scratch/694941d81014/tooling/venv/bin:/usr/local/bin:/usr/bin:/bin",
++    "PYTHONPATH": "src",
++    "PYTHONDONTWRITEBYTECODE": "1"
++  },
++  "checks": [
++    {
++      "command": [
++        "/workspace/scratch/694941d81014/tooling/rtk",
++        "bypass",
++        "bash",
++        "scripts/check-agent-ecosystem-standards.sh",
++        "--summary-json"
++      ],
++      "started_at": "2026-10-23T12:29:31.454738Z",
++      "finished_at": "2026-10-23T12:29:31.669709Z",
++      "exit_code": 1,
++      "stdout": "{\"schema_version\":1,\"status\":\"fail\",\"checks\":553,\"failures\":[\"source_ref owasp-agentic-skills-top10-2026 review is expired\",\"source_ref agent-skills-in-the-wild-2026 review is expired\"]}\n",
++      "stderr": "[FAIL] source_ref owasp-agentic-skills-top10-2026 review is expired\n[FAIL] source_ref agent-skills-in-the-wild-2026 review is expired\n"
++    },
++    {
++      "command": [
++        "/workspace/scratch/694941d81014/tooling/rtk",
++        "bypass",
++        "bash",
++        "scripts/check-official-docs-governance.sh",
++        "--summary-json"
++      ],
++      "started_at": "2026-10-23T12:29:31.669729Z",
++      "finished_at": "2026-10-23T12:29:31.811288Z",
++      "exit_code": 0,
++      "stdout": "{\"status\":\"pass\",\"evaluated_at\":\"2026-10-23\",\"date_basis\":\"fixed_utc_offset:+08:00;label=Asia/Hong_Kong\",\"official_sources\":69,\"eval_suites\":10,\"trace_contracts\":2,\"mcp_dependencies\":2,\"slash_audits\":3,\"subagent_contracts\":1,\"runtime_policy_layers\":2,\"rules_contracts\":2,\"runtime_api_groups\":7,\"context_state_contracts\":3,\"docs_mcp_tooling_targets\":4,\"sandbox_presets\":3,\"hook_events\":5,\"adk_runner_contracts\":2,\"plugin_contracts\":1,\"marketplace_contracts\":2,\"structured_output_contracts\":10,\"tool_search_contracts\":2,\"automation_contracts\":2,\"worktree_contracts\":1,\"agent_improvement_loops\":2,\"pr_review_contracts\":3,\"skill_reproducibility_contracts\":7,\"model_selection_records\":1,\"data_retention_contracts\":1,\"prompt_cache_contracts\":1,\"codex_surface_terms\":8,\"failures\":0}\n",
++      "stderr": ""
++    }
++  ]
++}
+diff --git a/docs/changes/20261023-source-review-refresh/evidence/primary-source-observations.json b/docs/changes/20261023-source-review-refresh/evidence/primary-source-observations.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..af544bcd46cbf2afdaf52ad10c3b010544df16f0
+--- /dev/null
++++ b/docs/changes/20261023-source-review-refresh/evidence/primary-source-observations.json
+@@ -0,0 +1,124 @@
++{
++  "schema": "adk-independent-primary-source-observations/v1",
++  "recorded_at": "2026-10-23T12:29:31.451399Z",
++  "reviewer_id": "ai/root/architecture_audit",
++  "purpose": "Review expired source metadata and static crosswalk only",
++  "third_party_bodies_copied_into_repository": false,
++  "owasp": {
++    "registered_url": "https://github.com/OWASP/www-project-agentic-skills-top-10",
++    "retrieval_method": "GitHub connector GET commits/main then fetch_file at exact commit",
++    "observed_revision": "d6f7d7d0de314f52a83a85d1828e06ab096e595c",
++    "observed_tree": "422105aa1ef904b33e90246f870e51962dff730a",
++    "commit_date": "2026-08-12T16:27:33Z",
++    "files": [
++      {
++        "path": "README.md",
++        "url": "https://github.com/OWASP/www-project-agentic-skills-top-10/blob/d6f7d7d0de314f52a83a85d1828e06ab096e595c/README.md",
++        "reported_git_blob": "d9ef6e6b26a9516bc2f36b9027f72d8bdff91f56",
++        "returned_utf8_sha256": "e2ca0047ce6ef897df1f873d93454800a8154a3fc5b4a4a7b0b0bea385f120a7",
++        "returned_utf8_bytes": 41430,
++        "returned_bytes_match_git_blob": true
++      },
++      {
++        "path": "LICENSE.md",
++        "url": "https://github.com/OWASP/www-project-agentic-skills-top-10/blob/d6f7d7d0de314f52a83a85d1828e06ab096e595c/LICENSE.md",
++        "reported_git_blob": "a7434ddbaccb6627f84a2326a15775807391cadb",
++        "returned_utf8_sha256": "56c3fa81e4c11690c803806b9ce7d6a63a7fdc84577df9145ebea4582ac4d26b",
++        "returned_utf8_bytes": 638,
++        "returned_bytes_match_git_blob": true
++      },
++      {
++        "path": "top10.md",
++        "url": "https://github.com/OWASP/www-project-agentic-skills-top-10/blob/d6f7d7d0de314f52a83a85d1828e06ab096e595c/top10.md",
++        "reported_git_blob": "2e681e1f09fa443700ecfbfd56c7752e1dcd6cd6",
++        "returned_utf8_sha256": "438909597daf9c33e3b24dfc128982e522038b5f0a9f40bbc7bb7bf6e2b7ec03",
++        "returned_utf8_bytes": 14793,
++        "returned_bytes_match_git_blob": true
++      },
++      {
++        "path": "public-statement.md",
++        "url": "https://github.com/OWASP/www-project-agentic-skills-top-10/blob/d6f7d7d0de314f52a83a85d1828e06ab096e595c/public-statement.md",
++        "reported_git_blob": "f605369a06cc4b7886cf18884ad8d713408d6e25",
++        "returned_utf8_sha256": "c931496a92ce4368a8007ed5b889baec62a592446505bddc64849f314d79d87c",
++        "returned_utf8_bytes": 650,
++        "returned_bytes_match_git_blob": true
++      },
++      {
++        "path": "universal-skill-format.md",
++        "url": "https://github.com/OWASP/www-project-agentic-skills-top-10/blob/d6f7d7d0de314f52a83a85d1828e06ab096e595c/universal-skill-format.md",
++        "reported_git_blob": "3e78864b5c9a9a0d11ed1b413cf0e6d8484fc8f9",
++        "returned_utf8_sha256": "0a95ad6dab5f2d3246777765e3b39606ad1e0a1c56ae6a7bd2c1b3dbc4d5c2e4",
++        "returned_utf8_bytes": 2930,
++        "returned_bytes_match_git_blob": true
++      },
++      {
++        "path": "tab_publication.md",
++        "url": "https://github.com/OWASP/www-project-agentic-skills-top-10/blob/d6f7d7d0de314f52a83a85d1828e06ab096e595c/tab_publication.md",
++        "reported_git_blob": "59aa9ca07c147abc4963068fa827a4f3fde45f30",
++        "returned_utf8_sha256": "5f9d69e9e40e0fa8f6dba34c0682b6d53304ebd33756d10af178db5ab6ea3f04",
++        "returned_utf8_bytes": 619,
++        "returned_bytes_match_git_blob": true
++      },
++      {
++        "path": "ast05.md",
++        "url": "https://github.com/OWASP/www-project-agentic-skills-top-10/blob/d6f7d7d0de314f52a83a85d1828e06ab096e595c/ast05.md",
++        "reported_git_blob": "a18773a6dae8dfaca52c3d40d09cb19cc281cb54",
++        "returned_utf8_sha256": "935125ff7427b4d7543a650cabaf4b7530982090d3f46082e4c4c03bcc495f91",
++        "returned_utf8_bytes": 8007,
++        "returned_bytes_match_git_blob": true
++      }
++    ],
++    "reviewed_scope": [
++      "README source identity, public-review link, risk summary and project status sections",
++      "LICENSE.md complete",
++      "top10.md risk identity table",
++      "ast05.md complete",
++      "universal-skill-format.md purpose and validation headings only",
++      "tab_publication.md complete; linked whitepaper not read",
++      "public-statement.md is an incident template, not a project maturity statement"
++    ],
++    "license_observed": "CC-BY-SA-4.0",
++    "method_decision": "observe-method-only",
++    "finding": "Current AST05 concerns untrusted external instructions; the local crosswalk still calls AST05 Unsafe Deserialization. The pinned AST05 explicitly places unsafe parsing of skill files under AST04.",
++    "limits": [
++      "No independent verification of the project's external incident statistics or platform-format claims",
++      "No assertion that the linked whitepaper is fully reviewed or that the taxonomy is a stable certification standard",
++      "No Universal Skill Format or third-party prose/code imported"
++    ]
++  },
++  "paper": {
++    "registered_url": "https://arxiv.org/abs/2607.00911",
++    "reviewed_urls": [
++      "https://arxiv.org/abs/2607.00911v2",
++      "https://arxiv.org/html/2607.00911v2",
++      "https://arxiv.org/licenses/nonexclusive-distrib/1.0/license.html"
++    ],
++    "version": "arXiv:2607.00911v2",
++    "version_date": "2026-07-06",
++    "title": "From Registry to Repository: How AI Agent Skills Are Written, Adapted, and Maintained",
++    "retrieval_method": "search_service open/click official arXiv abstract, versioned HTML and license",
++    "reviewed_scope": [
++      "abstract and version history",
++      "III methodology",
++      "VI customization and evolution",
++      "VII discussion and implications",
++      "VIII threats to validity",
++      "license declaration and linked license text"
++    ],
++    "license_observed": "arXiv.org perpetual non-exclusive distribution license",
++    "content_digest": null,
++    "digest_limit": "Web rendering was reviewed; raw publisher bytes were not fetched, so no publisher-content SHA256 is claimed.",
++    "method_decision": "adopt-method-only",
++    "supported_method": "Review durable interaction/recovery rules separately from project-specific paths, tools and environment bindings; maintain explicit use, effect and refresh evidence.",
++    "limits": [
++      "Observational public-repository sample, with one registry and adoption/linkage/sampling limitations",
++      "Content snapshot to 2026-03-04 and history snapshot to 2026-05-04, not current ADK use or effectiveness measurements",
++      "An arXiv distribution grant is not a separately verified license for importing paper text, datasets or replication code",
++      "Replication package and third-party Skill bodies were not downloaded or requalified"
++    ]
++  },
++  "transport_limits": [
++    "Direct urllib networking was denied by sandbox; failed attempts preserved in retrieval.json",
++    "Web opening of the GitHub API and pinned blob URLs was unavailable; GitHub connector successfully returned the fixed commit and file contents instead"
++  ]
++}
+diff --git a/docs/changes/20261023-source-review-refresh/evidence/proposed-changes.json b/docs/changes/20261023-source-review-refresh/evidence/proposed-changes.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..aeea0b7ee34a875ac37dab799c0dc609346f4f6d
+--- /dev/null
++++ b/docs/changes/20261023-source-review-refresh/evidence/proposed-changes.json
+@@ -0,0 +1,212 @@
++{
++  "schema": "adk-source-refresh-design/v1",
++  "designed_at": "2026-10-23T12:29:31.453598Z",
++  "designer_id": "ai/root/architecture_audit",
++  "implementation_owner": "ai/root",
++  "source_contract_modified_by_designer": false,
++  "base_inputs": [
++    {
++      "path": "manifests/external_agent_pattern_contracts.json",
++      "sha256": "566abafb30d8fa68619db8e07b81447363e35dee2e009a9620aed8336e01c990"
++    },
++    {
++      "path": "manifests/skill_reproducibility_contracts.json",
++      "sha256": "17931fb13e4729bf3422364afe57d2930563f786b017e6df43599ad72393f42e"
++    }
++  ],
++  "freshness_window": {
++    "days": 30,
++    "expires_at": "2026-11-22",
++    "basis": "Conservative local review schedule consistent with the nearby 30-day external source renewals; not an upstream validity guarantee. Existing ecosystem gate sets no maximum interval."
++  },
++  "top_level_changes": [
++    {
++      "file": "manifests/external_agent_pattern_contracts.json",
++      "field": "last_updated",
++      "proposed_after": "2026-10-23"
++    },
++    {
++      "file": "manifests/skill_reproducibility_contracts.json",
++      "field": "last_updated",
++      "proposed_after": "2026-10-23"
++    }
++  ],
++  "source_updates": [
++    {
++      "file": "manifests/external_agent_pattern_contracts.json",
++      "source_id": "owasp-agentic-skills-top10-2026",
++      "before": {
++        "id": "owasp-agentic-skills-top10-2026",
++        "title": "OWASP Agentic Skills Top 10",
++        "url": "https://github.com/OWASP/www-project-agentic-skills-top-10",
++        "local_path": "",
++        "retrieved_at": "2026-07-22",
++        "review_status": "reviewed-watch-only-project-evolving",
++        "expires_at": "2026-10-22",
++        "license": "project-license-review-required",
++        "evidence_strength": "medium",
++        "decision": "observe-method-only",
++        "notes": "Use AST01-AST10 as an evolving skill-layer crosswalk. Do not copy the proposed Universal Skill Format, claim OWASP certification or treat roadmap content as a stable standard."
++      },
++      "proposed_after": {
++        "id": "owasp-agentic-skills-top10-2026",
++        "title": "OWASP Agentic Skills Top 10",
++        "url": "https://github.com/OWASP/www-project-agentic-skills-top-10",
++        "local_path": "",
++        "retrieved_at": "2026-10-23",
++        "review_status": "reviewed-watch-only-project-evolving",
++        "expires_at": "2026-11-22",
++        "license": "CC-BY-SA-4.0",
++        "evidence_strength": "medium",
++        "decision": "observe-method-only",
++        "notes": "2026-10-23 re-review at upstream revision d6f7d7d0de314f52a83a85d1828e06ab096e595c checked README, the AST01-AST10 table, AST05 and LICENSE.md. AST05 now covers untrusted external instructions; retain safe-parser controls under AST04 in the local crosswalk. The repository also links a V1 whitepaper, whose full contents were not reviewed. Keep the evolving skill-layer crosswalk observe-only; do not import the Universal Skill Format or project prose, claim OWASP certification, or infer runtime security from taxonomy coverage."
++      }
++    },
++    {
++      "file": "manifests/external_agent_pattern_contracts.json",
++      "source_id": "agent-skills-in-the-wild-2026",
++      "before": {
++        "id": "agent-skills-in-the-wild-2026",
++        "title": "Agent Skills in the Wild empirical maintenance study",
++        "url": "https://arxiv.org/abs/2607.00911",
++        "local_path": "",
++        "retrieved_at": "2026-07-22",
++        "review_status": "reviewed-method-only",
++        "expires_at": "2026-10-22",
++        "license": "paper-method-review-required",
++        "evidence_strength": "medium",
++        "decision": "adopt-method-only",
++        "notes": "Use the stable-behavior versus target-local-binding maintenance distinction and require explicit use/effect/refresh evidence. Do not copy datasets or infer local usage counts."
++      },
++      "proposed_after": {
++        "id": "agent-skills-in-the-wild-2026",
++        "title": "From Registry to Repository: How AI Agent Skills Are Written, Adapted, and Maintained",
++        "url": "https://arxiv.org/abs/2607.00911",
++        "local_path": "",
++        "retrieved_at": "2026-10-23",
++        "review_status": "reviewed-method-only",
++        "expires_at": "2026-11-22",
++        "license": "arxiv-nonexclusive-distribution;paper-dataset-code-reuse-not-reviewed",
++        "evidence_strength": "medium",
++        "decision": "adopt-method-only",
++        "notes": "2026-10-23 re-review read arXiv:2607.00911v2 (2026-07-06), including methodology, maintenance findings and validity limits. Continue separating durable interaction/recovery behavior from project-specific tool, path and environment bindings, with explicit use/effect/refresh evidence. This observational public-repository study is not local ADK effectiveness evidence. The arXiv non-exclusive distribution grant does not establish a license for importing paper text, datasets or replication code; no such material was copied and no local usage counts were inferred."
++      }
++    }
++  ],
++  "crosswalk_updates": [
++    {
++      "file": "manifests/skill_reproducibility_contracts.json",
++      "id": "AST04",
++      "before": {
++        "id": "AST04",
++        "name": "Insecure Metadata",
++        "local_surfaces": [
++          "frontmatter",
++          "manifest",
++          "routing descriptions"
++        ],
++        "preventive_controls": [
++          "schema validation",
++          "name-directory match",
++          "positive and negative routing cases"
++        ],
++        "evidence_required": [
++          "manifest validation",
++          "routing fixture",
++          "provenance metadata"
++        ],
++        "residual_risk": "valid metadata can still be misleading"
++      },
++      "proposed_after": {
++        "id": "AST04",
++        "name": "Insecure Metadata",
++        "local_surfaces": [
++          "frontmatter",
++          "manifest",
++          "routing descriptions",
++          "YAML",
++          "JSON",
++          "support-file loaders"
++        ],
++        "preventive_controls": [
++          "schema validation",
++          "name-directory match",
++          "positive and negative routing cases",
++          "safe parsers",
++          "bounded schemas",
++          "no executable deserialization"
++        ],
++        "evidence_required": [
++          "manifest validation",
++          "routing fixture",
++          "provenance metadata",
++          "parser contract",
++          "malformed fixture",
++          "execution boundary"
++        ],
++        "residual_risk": "Valid metadata can still be misleading, and downstream runtimes may parse generated assets differently."
++      }
++    },
++    {
++      "file": "manifests/skill_reproducibility_contracts.json",
++      "id": "AST05",
++      "before": {
++        "id": "AST05",
++        "name": "Unsafe Deserialization",
++        "local_surfaces": [
++          "YAML",
++          "JSON",
++          "support-file loaders"
++        ],
++        "preventive_controls": [
++          "safe parsers",
++          "bounded schemas",
++          "no executable deserialization"
++        ],
++        "evidence_required": [
++          "parser contract",
++          "malformed fixture",
++          "execution boundary"
++        ],
++        "residual_risk": "downstream runtimes may parse generated assets differently"
++      },
++      "proposed_after": {
++        "id": "AST05",
++        "name": "Untrusted External Instructions",
++        "local_surfaces": [
++          "external documentation",
++          "remote references",
++          "transitive instruction sources"
++        ],
++        "preventive_controls": [
++          "reference source inventory",
++          "revision and digest pinning",
++          "review expiry",
++          "external content treated as untrusted data"
++        ],
++        "evidence_required": [
++          "source URL and revision",
++          "retrieved content digest",
++          "freshness review",
++          "instruction-boundary review"
++        ],
++        "residual_risk": "A pinned skill may load mutable or selectively served external instructions absent from the reviewed package."
++      }
++    }
++  ],
++  "unchanged_authority": [
++    "source IDs and registered URLs",
++    "method-only decisions and evidence strength",
++    "runtime_enabled=false and install_scope=none-method-only",
++    "all other source review dates",
++    "Harness citation dates and unavailable user excerpt",
++    "all existing canonical reviews and lifecycle state"
++  ],
++  "expected_verification": [
++    "affected ecosystem gate and existing ecosystem regression",
++    "external-reference binding regression",
++    "official-docs governance current-date check",
++    "compare full registry diff against the two reviewed sources only",
++    "validate existing Harness source receipt and current Harness gate without changing its timestamps"
++  ]
++}
+diff --git a/docs/changes/20261023-source-review-refresh/requirements.md b/docs/changes/20261023-source-review-refresh/requirements.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..1e2ac03fe47ac6196164bcfc51a55521bece80df
+--- /dev/null
++++ b/docs/changes/20261023-source-review-refresh/requirements.md
+@@ -0,0 +1,7 @@
++# 当前来源复核与静态映射同步
++
++2026-10-23 的严格整合校验发现两条既有 external source review 于 2026-10-22 到期。必须先实际读取已登记的原始来源，再更新真实审查日期、固定版本、许可和适用边界；不能通过放松时效检查或仅延长日期取得通过。
++
++本次范围仅为 OWASP Agentic Skills Top 10 与 arXiv:2607.00911 两项来源，以及实际原文变化要求的 AST04/AST05 静态 crosswalk。原有 source ID、登记 URL、method-only 决策、runtime 禁用和安装范围保持独立。其他有效来源、未取得原文的用户引用和既有 Skill 内容不在重新认证范围。
++
++验收：完整枚举实际生效的到期检查；保存原文版本、读取范围和许可边界；更正 AST05 名称并在 AST04 保留已有 parser 控制；相关治理、回归及当前 Harness 记录继续验证通过。实际发布与产品资格仍分别由既有权威决定。
+diff --git a/docs/changes/20261023-source-review-refresh/tasks.md b/docs/changes/20261023-source-review-refresh/tasks.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..0b3d36a01b981c1d93b2003808b08471b82462da
+--- /dev/null
++++ b/docs/changes/20261023-source-review-refresh/tasks.md
+@@ -0,0 +1,9 @@
++# 实施与验收
++
++- [x] 枚举 11 项 ecosystem refs、69 项 official source 及实际 strict 触发路径；识别只有两条生效 external refs 到期。
++- [x] 实际读取固定 OWASP 源码与许可、论文 v2 相关章节与许可，记录方法边界与未审范围。
++- [x] 按独立设计通过 apply_patch 修改两个 manifest，保留其他 authority 与已有 parser 控制。
++- [ ] 独立核对精确 diff、来源语义、当前治理与回归结果，并绑定真实实施提交。
++- [ ] 与发布和输出修复统一完成完整回归及受保护精确发布。
++
++此清单是实施快照；后续独立审核和整合状态由摘要绑定 review 与精确提交流水线记录，不回填虚构的过去完成状态。
+diff --git a/manifests/external_agent_pattern_contracts.json b/manifests/external_agent_pattern_contracts.json
+index ac35e99cc22dc465ab863e02bd0623c84cfb43df..1f7d60ebb086e6c534e342f26745119d207f7538 100644
+--- a/manifests/external_agent_pattern_contracts.json
++++ b/manifests/external_agent_pattern_contracts.json
+@@ -1,6 +1,6 @@
+ {
+   "schema_version": "1.0.0",
+-  "last_updated": "2026-10-22",
++  "last_updated": "2026-10-23",
+   "reference_boundary": "External agent, plugin, memory and skill sources are method-only references until a separate supply-chain review targets a specific versioned asset. This manifest does not enable external runtimes, hooks, workers, MCP servers or plugin installs.",
+   "local_source_policy": {
+     "id": "optional-workspace-reference-clones-v1",
+@@ -263,26 +263,26 @@
+       "title": "OWASP Agentic Skills Top 10",
+       "url": "https://github.com/OWASP/www-project-agentic-skills-top-10",
+       "local_path": "",
+-      "retrieved_at": "2026-07-22",
++      "retrieved_at": "2026-10-23",
+       "review_status": "reviewed-watch-only-project-evolving",
+-      "expires_at": "2026-10-22",
+-      "license": "project-license-review-required",
++      "expires_at": "2026-11-22",
++      "license": "CC-BY-SA-4.0",
+       "evidence_strength": "medium",
+       "decision": "observe-method-only",
+-      "notes": "Use AST01-AST10 as an evolving skill-layer crosswalk. Do not copy the proposed Universal Skill Format, claim OWASP certification or treat roadmap content as a stable standard."
++      "notes": "2026-10-23 re-review at upstream revision d6f7d7d0de314f52a83a85d1828e06ab096e595c checked README, the AST01-AST10 table, AST05 and LICENSE.md. AST05 now covers untrusted external instructions; retain safe-parser controls under AST04 in the local crosswalk. The repository also links a V1 whitepaper, whose full contents were not reviewed. Keep the evolving skill-layer crosswalk observe-only; do not import the Universal Skill Format or project prose, claim OWASP certification, or infer runtime security from taxonomy coverage."
+     },
+     {
+       "id": "agent-skills-in-the-wild-2026",
+-      "title": "Agent Skills in the Wild empirical maintenance study",
++      "title": "From Registry to Repository: How AI Agent Skills Are Written, Adapted, and Maintained",
+       "url": "https://arxiv.org/abs/2607.00911",
+       "local_path": "",
+-      "retrieved_at": "2026-07-22",
++      "retrieved_at": "2026-10-23",
+       "review_status": "reviewed-method-only",
+-      "expires_at": "2026-10-22",
+-      "license": "paper-method-review-required",
++      "expires_at": "2026-11-22",
++      "license": "arxiv-nonexclusive-distribution;paper-dataset-code-reuse-not-reviewed",
+       "evidence_strength": "medium",
+       "decision": "adopt-method-only",
+-      "notes": "Use the stable-behavior versus target-local-binding maintenance distinction and require explicit use/effect/refresh evidence. Do not copy datasets or infer local usage counts."
++      "notes": "2026-10-23 re-review read arXiv:2607.00911v2 (2026-07-06), including methodology, maintenance findings and validity limits. Continue separating durable interaction/recovery behavior from project-specific tool, path and environment bindings, with explicit use/effect/refresh evidence. This observational public-repository study is not local ADK effectiveness evidence. The arXiv non-exclusive distribution grant does not establish a license for importing paper text, datasets or replication code; no such material was copied and no local usage counts were inferred."
+     },
+     {
+       "id": "vscode-agent-skills-2026",
+diff --git a/manifests/skill_reproducibility_contracts.json b/manifests/skill_reproducibility_contracts.json
+index d5a17a9a12761f99fbc9a6e6aae08ea6487cb740..60138a9120ec2bc8ac643678e413f822500cc67e 100644
+--- a/manifests/skill_reproducibility_contracts.json
++++ b/manifests/skill_reproducibility_contracts.json
+@@ -1,6 +1,6 @@
+ {
+   "schema_version": "1.0.0",
+-  "last_updated": "2026-07-23",
++  "last_updated": "2026-10-23",
+   "source_docs": [
+     "openai-skills-api-operational-practices",
+     "openai-codex-agent-skills",
+@@ -46,18 +46,18 @@
+       {
+         "id": "AST04",
+         "name": "Insecure Metadata",
+-        "local_surfaces": ["frontmatter", "manifest", "routing descriptions"],
+-        "preventive_controls": ["schema validation", "name-directory match", "positive and negative routing cases"],
+-        "evidence_required": ["manifest validation", "routing fixture", "provenance metadata"],
+-        "residual_risk": "valid metadata can still be misleading"
++        "local_surfaces": ["frontmatter", "manifest", "routing descriptions", "YAML", "JSON", "support-file loaders"],
++        "preventive_controls": ["schema validation", "name-directory match", "positive and negative routing cases", "safe parsers", "bounded schemas", "no executable deserialization"],
++        "evidence_required": ["manifest validation", "routing fixture", "provenance metadata", "parser contract", "malformed fixture", "execution boundary"],
++        "residual_risk": "Valid metadata can still be misleading, and downstream runtimes may parse generated assets differently."
+       },
+       {
+         "id": "AST05",
+-        "name": "Unsafe Deserialization",
+-        "local_surfaces": ["YAML", "JSON", "support-file loaders"],
+-        "preventive_controls": ["safe parsers", "bounded schemas", "no executable deserialization"],
+-        "evidence_required": ["parser contract", "malformed fixture", "execution boundary"],
+-        "residual_risk": "downstream runtimes may parse generated assets differently"
++        "name": "Untrusted External Instructions",
++        "local_surfaces": ["external documentation", "remote references", "transitive instruction sources"],
++        "preventive_controls": ["reference source inventory", "revision and digest pinning", "review expiry", "external content treated as untrusted data"],
++        "evidence_required": ["source URL and revision", "retrieved content digest", "freshness review", "instruction-boundary review"],
++        "residual_risk": "A pinned skill may load mutable or selectively served external instructions absent from the reviewed package."
+       },
+       {
+         "id": "AST06",
+diff --git a/src/agent_dev_kit/distribution/archive_io.py b/src/agent_dev_kit/distribution/archive_io.py
+index e68c45ee41629210495c3c503366bbd16606a9d5..f7280712d58b0e9fdbf745ddc3c53b41b11127f5 100644
+--- a/src/agent_dev_kit/distribution/archive_io.py
++++ b/src/agent_dev_kit/distribution/archive_io.py
+@@ -184,7 +184,10 @@ def inspect_archive_snapshot(
+                             else:
+                                 hasher = hashlib.sha256()
+                                 size = 0
+-                                for chunk in iter(lambda: source.read(_CHUNK_BYTES), b""):
++                                while True:
++                                    chunk = source.read(_CHUNK_BYTES)
++                                    if not chunk:
++                                        break
+                                     size += len(chunk)
+                                     hasher.update(chunk)
+                                 digest = hasher.digest()
+diff --git a/src/agent_dev_kit/distribution/release_artifacts.py b/src/agent_dev_kit/distribution/release_artifacts.py
+index e78795c5f95a09ff2266170986fa04be25c3642e..2f643f0ba08564432e879781f72e086853e91725 100644
+--- a/src/agent_dev_kit/distribution/release_artifacts.py
++++ b/src/agent_dev_kit/distribution/release_artifacts.py
+@@ -21,8 +21,14 @@ from ..installation_contract import RECEIPT_NAME
+ from ..model import Manifest, ManifestError, sha256_file, sha256_tree
+ from ..strict_json import read as read_strict_json
+ from ..strict_json import read_bytes as read_bounded_bytes
+-from .archive_io import ArchiveInputError, inspect_archive_snapshot, load_archive_snapshot
+-from .archive_io import MAX_DECODED_BYTES, MAX_MEMBER_BYTES, MAX_MEMBERS
++from .archive_io import (
++    MAX_DECODED_BYTES,
++    MAX_MEMBER_BYTES,
++    MAX_MEMBERS,
++    ArchiveInputError,
++    inspect_archive_snapshot,
++    load_archive_snapshot,
++)
+ from .release_contract import validate_release_artifact
+ 
+ SOURCE_DISTRIBUTION_DIRECTORIES = (
+@@ -222,7 +228,7 @@ def _release_source_manifest(manifest: Manifest, identity: Mapping[str, Any], de
+     listing = subprocess.run(
+         ["git", "--no-replace-objects", "-C", str(manifest.root), "ls-tree", "--full-tree", "-r", "-z", tree, "--",
+          *SOURCE_DISTRIBUTION_DIRECTORIES, *SOURCE_DISTRIBUTION_FILES],
+-        check=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=60,
++        check=False, capture_output=True, timeout=60,
+     )
+     if listing.returncode:
+         raise ManifestError("release build cannot enumerate the frozen Git tree")

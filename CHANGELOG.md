@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### 8.0.39 source candidate
+- Build eligible releases from a fixed Git tree and verified blob bytes, excluding ignored and index-hidden worktree drift while preserving committed file modes and literal source content.
+- Verify the complete bounded source inventory, canonical digest, file count and embedded manifest; route public publish through the same verifier and publish the tarball, checksum and release contract from one captured snapshot.
+- Reject export root/target symlink aliases before cleaning and recheck directory identity under the existing writer lock and before replacement.
+- Preflight every Native campaign output and input/output alias before execution, stage all documents before publication, and compensate late publication failures while retaining recovery backups if restoration fails.
+- Add deterministic public-behavior and recovery regressions; retain Python 3.8+ support, protected source/release promotion and independent real Native, effect, field and Product M5 qualification requirements.
+
 ### 8.0.38 source candidate
 - Reject existing and dangling external Native campaign output leaf symlinks before path resolution, preserving original targets and companion outputs on rejection.
 - Validate the run evidence output before invoking the runtime campaign so invalid output paths cannot consume execution resources first.

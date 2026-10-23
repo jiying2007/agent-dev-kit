@@ -1,0 +1,212 @@
+{
+  "schema": "adk-source-refresh-design/v1",
+  "designed_at": "2026-10-23T12:29:31.453598Z",
+  "designer_id": "ai/root/architecture_audit",
+  "implementation_owner": "ai/root",
+  "source_contract_modified_by_designer": false,
+  "base_inputs": [
+    {
+      "path": "manifests/external_agent_pattern_contracts.json",
+      "sha256": "566abafb30d8fa68619db8e07b81447363e35dee2e009a9620aed8336e01c990"
+    },
+    {
+      "path": "manifests/skill_reproducibility_contracts.json",
+      "sha256": "17931fb13e4729bf3422364afe57d2930563f786b017e6df43599ad72393f42e"
+    }
+  ],
+  "freshness_window": {
+    "days": 30,
+    "expires_at": "2026-11-22",
+    "basis": "Conservative local review schedule consistent with the nearby 30-day external source renewals; not an upstream validity guarantee. Existing ecosystem gate sets no maximum interval."
+  },
+  "top_level_changes": [
+    {
+      "file": "manifests/external_agent_pattern_contracts.json",
+      "field": "last_updated",
+      "proposed_after": "2026-10-23"
+    },
+    {
+      "file": "manifests/skill_reproducibility_contracts.json",
+      "field": "last_updated",
+      "proposed_after": "2026-10-23"
+    }
+  ],
+  "source_updates": [
+    {
+      "file": "manifests/external_agent_pattern_contracts.json",
+      "source_id": "owasp-agentic-skills-top10-2026",
+      "before": {
+        "id": "owasp-agentic-skills-top10-2026",
+        "title": "OWASP Agentic Skills Top 10",
+        "url": "https://github.com/OWASP/www-project-agentic-skills-top-10",
+        "local_path": "",
+        "retrieved_at": "2026-07-22",
+        "review_status": "reviewed-watch-only-project-evolving",
+        "expires_at": "2026-10-22",
+        "license": "project-license-review-required",
+        "evidence_strength": "medium",
+        "decision": "observe-method-only",
+        "notes": "Use AST01-AST10 as an evolving skill-layer crosswalk. Do not copy the proposed Universal Skill Format, claim OWASP certification or treat roadmap content as a stable standard."
+      },
+      "proposed_after": {
+        "id": "owasp-agentic-skills-top10-2026",
+        "title": "OWASP Agentic Skills Top 10",
+        "url": "https://github.com/OWASP/www-project-agentic-skills-top-10",
+        "local_path": "",
+        "retrieved_at": "2026-10-23",
+        "review_status": "reviewed-watch-only-project-evolving",
+        "expires_at": "2026-11-22",
+        "license": "CC-BY-SA-4.0",
+        "evidence_strength": "medium",
+        "decision": "observe-method-only",
+        "notes": "2026-10-23 re-review at upstream revision d6f7d7d0de314f52a83a85d1828e06ab096e595c checked README, the AST01-AST10 table, AST05 and LICENSE.md. AST05 now covers untrusted external instructions; retain safe-parser controls under AST04 in the local crosswalk. The repository also links a V1 whitepaper, whose full contents were not reviewed. Keep the evolving skill-layer crosswalk observe-only; do not import the Universal Skill Format or project prose, claim OWASP certification, or infer runtime security from taxonomy coverage."
+      }
+    },
+    {
+      "file": "manifests/external_agent_pattern_contracts.json",
+      "source_id": "agent-skills-in-the-wild-2026",
+      "before": {
+        "id": "agent-skills-in-the-wild-2026",
+        "title": "Agent Skills in the Wild empirical maintenance study",
+        "url": "https://arxiv.org/abs/2607.00911",
+        "local_path": "",
+        "retrieved_at": "2026-07-22",
+        "review_status": "reviewed-method-only",
+        "expires_at": "2026-10-22",
+        "license": "paper-method-review-required",
+        "evidence_strength": "medium",
+        "decision": "adopt-method-only",
+        "notes": "Use the stable-behavior versus target-local-binding maintenance distinction and require explicit use/effect/refresh evidence. Do not copy datasets or infer local usage counts."
+      },
+      "proposed_after": {
+        "id": "agent-skills-in-the-wild-2026",
+        "title": "From Registry to Repository: How AI Agent Skills Are Written, Adapted, and Maintained",
+        "url": "https://arxiv.org/abs/2607.00911",
+        "local_path": "",
+        "retrieved_at": "2026-10-23",
+        "review_status": "reviewed-method-only",
+        "expires_at": "2026-11-22",
+        "license": "arxiv-nonexclusive-distribution;paper-dataset-code-reuse-not-reviewed",
+        "evidence_strength": "medium",
+        "decision": "adopt-method-only",
+        "notes": "2026-10-23 re-review read arXiv:2607.00911v2 (2026-07-06), including methodology, maintenance findings and validity limits. Continue separating durable interaction/recovery behavior from project-specific tool, path and environment bindings, with explicit use/effect/refresh evidence. This observational public-repository study is not local ADK effectiveness evidence. The arXiv non-exclusive distribution grant does not establish a license for importing paper text, datasets or replication code; no such material was copied and no local usage counts were inferred."
+      }
+    }
+  ],
+  "crosswalk_updates": [
+    {
+      "file": "manifests/skill_reproducibility_contracts.json",
+      "id": "AST04",
+      "before": {
+        "id": "AST04",
+        "name": "Insecure Metadata",
+        "local_surfaces": [
+          "frontmatter",
+          "manifest",
+          "routing descriptions"
+        ],
+        "preventive_controls": [
+          "schema validation",
+          "name-directory match",
+          "positive and negative routing cases"
+        ],
+        "evidence_required": [
+          "manifest validation",
+          "routing fixture",
+          "provenance metadata"
+        ],
+        "residual_risk": "valid metadata can still be misleading"
+      },
+      "proposed_after": {
+        "id": "AST04",
+        "name": "Insecure Metadata",
+        "local_surfaces": [
+          "frontmatter",
+          "manifest",
+          "routing descriptions",
+          "YAML",
+          "JSON",
+          "support-file loaders"
+        ],
+        "preventive_controls": [
+          "schema validation",
+          "name-directory match",
+          "positive and negative routing cases",
+          "safe parsers",
+          "bounded schemas",
+          "no executable deserialization"
+        ],
+        "evidence_required": [
+          "manifest validation",
+          "routing fixture",
+          "provenance metadata",
+          "parser contract",
+          "malformed fixture",
+          "execution boundary"
+        ],
+        "residual_risk": "Valid metadata can still be misleading, and downstream runtimes may parse generated assets differently."
+      }
+    },
+    {
+      "file": "manifests/skill_reproducibility_contracts.json",
+      "id": "AST05",
+      "before": {
+        "id": "AST05",
+        "name": "Unsafe Deserialization",
+        "local_surfaces": [
+          "YAML",
+          "JSON",
+          "support-file loaders"
+        ],
+        "preventive_controls": [
+          "safe parsers",
+          "bounded schemas",
+          "no executable deserialization"
+        ],
+        "evidence_required": [
+          "parser contract",
+          "malformed fixture",
+          "execution boundary"
+        ],
+        "residual_risk": "downstream runtimes may parse generated assets differently"
+      },
+      "proposed_after": {
+        "id": "AST05",
+        "name": "Untrusted External Instructions",
+        "local_surfaces": [
+          "external documentation",
+          "remote references",
+          "transitive instruction sources"
+        ],
+        "preventive_controls": [
+          "reference source inventory",
+          "revision and digest pinning",
+          "review expiry",
+          "external content treated as untrusted data"
+        ],
+        "evidence_required": [
+          "source URL and revision",
+          "retrieved content digest",
+          "freshness review",
+          "instruction-boundary review"
+        ],
+        "residual_risk": "A pinned skill may load mutable or selectively served external instructions absent from the reviewed package."
+      }
+    }
+  ],
+  "unchanged_authority": [
+    "source IDs and registered URLs",
+    "method-only decisions and evidence strength",
+    "runtime_enabled=false and install_scope=none-method-only",
+    "all other source review dates",
+    "Harness citation dates and unavailable user excerpt",
+    "all existing canonical reviews and lifecycle state"
+  ],
+  "expected_verification": [
+    "affected ecosystem gate and existing ecosystem regression",
+    "external-reference binding regression",
+    "official-docs governance current-date check",
+    "compare full registry diff against the two reviewed sources only",
+    "validate existing Harness source receipt and current Harness gate without changing its timestamps"
+  ]
+}

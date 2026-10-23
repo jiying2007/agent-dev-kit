@@ -70,10 +70,11 @@ class StrictJSONTests(unittest.TestCase):
                 "manifest_sha256": _canonical_manifest_sha256(source),
                 "direct_targets": [{"target": "claude-code", "agents": 1, "skills": 1}],
                 "external_targets": ["external-runtime"], "source_distribution": True,
-                "source_file_count": 2, "reproducible": False, "release_eligible": False,
+                "source_file_count": 1, "reproducible": False, "release_eligible": False,
                 "source_provenance": {"kind": "unbound-snapshot", "release_eligible": False,
                                       "commit": None, "tree": None, "dirty": None,
-                                      "source_distribution_sha256": "0" * 64},
+                                      "source_distribution_sha256": hashlib.sha256(
+                                          b"manifest.json\0" + hashlib.sha256(source).digest()).hexdigest()},
                 "sbom": {"path": "sbom.spdx.json", "sha256": hashlib.sha256(sbom).hexdigest(),
                          "validated": True},
             }
@@ -84,7 +85,8 @@ class StrictJSONTests(unittest.TestCase):
                      (source, b'{"extra":NaN,' + release_raw[1:], False))
             for source_raw, raw, valid in cases:
                 with tarfile.open(artifact, "w:gz") as archive:
-                    for name, payload in (("manifest.json", source_raw), ("sbom.spdx.json", sbom),
+                    for name, payload in (("manifest.json", source_raw), ("source/manifest.json", source_raw),
+                                          ("sbom.spdx.json", sbom),
                                           ("release-manifest.json", raw)):
                         info = tarfile.TarInfo(name)
                         info.size = len(payload)

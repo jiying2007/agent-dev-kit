@@ -18,6 +18,7 @@ import unittest
 from unittest.mock import patch
 
 from agent_dev_kit import installation_contract as contract
+from agent_dev_kit import compiler
 from agent_dev_kit import target_contracts
 from agent_dev_kit.compiler import export_assets
 from agent_dev_kit.installation_plan import create_plan, write_plan
@@ -31,6 +32,102 @@ from agent_dev_kit.versioning import sync_version_identity
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = "skills/adk-requirements-triage/scripts/upgrade-fixture.sh"
 ADDED = "skills/adk-requirements-triage/references/candidate-only.txt"
+
+
+class ExportOutputBoundaryTest(unittest.TestCase):
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory(prefix="adk-export-boundary-")
+        self.addCleanup(self.temp.cleanup)
+        self.work = Path(self.temp.name)
+        self.output = self.work / "out"
+        self.output.mkdir()
+        self.manifest = Manifest.load(ROOT)
+
+    def export(self):
+        return export_assets(self.manifest, "claude-code", self.output, ["core"], clean=True)
+
+    def test_clean_rejects_same_root_and_outside_root_target_links(self):
+        for location in (self.output / "notes", self.work / "outside"):
+            with self.subTest(location=location):
+                location.mkdir()
+                marker = location / "KEEP.txt"
+                marker.write_bytes(b"unrelated-original\n")
+                alias = self.output / "claude-code"
+                alias.symlink_to(location, target_is_directory=True)
+                with self.assertRaisesRegex(ManifestError, "symlink aliases"):
+                    self.export()
+                self.assertEqual(marker.read_bytes(), b"unrelated-original\n")
+                self.assertTrue(alias.is_symlink())
+                alias.unlink()
+
+    def test_clean_rejects_output_root_ancestor_link(self):
+        target = self.output / "claude-code"
+        target.mkdir()
+        marker = target / "KEEP.txt"
+        marker.write_bytes(b"original\n")
+        alias = self.work / "alias"
+        alias.symlink_to(self.output, target_is_directory=True)
+        for requested in (alias, alias / "nested"):
+            with self.subTest(requested=requested):
+                with self.assertRaisesRegex(ManifestError, "symlink aliases"):
+                    export_assets(self.manifest, "claude-code", requested, ["core"], clean=True)
+        self.assertEqual(marker.read_bytes(), b"original\n")
+        self.assertFalse((self.output / "nested").exists())
+
+    def test_clean_rechecks_target_after_lock_acquisition(self):
+        notes = self.output / "notes"
+        notes.mkdir()
+        marker = notes / "KEEP.txt"
+        marker.write_bytes(b"keep\n")
+        acquire = compiler.TargetLock.acquire
+
+        def acquire_then_link(lock):
+            result = acquire(lock)
+            (self.output / "claude-code").symlink_to(notes, target_is_directory=True)
+            return result
+
+        with patch.object(compiler.TargetLock, "acquire", new=acquire_then_link):
+            with self.assertRaisesRegex(ManifestError, "symlink aliases"):
+                self.export()
+        self.assertEqual(marker.read_bytes(), b"keep\n")
+        self.assertFalse((self.output / ".claude-code.adk-writer-lock").exists())
+
+    def test_clean_rechecks_target_after_staging_before_replace(self):
+        notes = self.output / "notes"
+        notes.mkdir()
+        marker = notes / "KEEP.txt"
+        marker.write_bytes(b"keep\n")
+        write_text = Path.write_text
+
+        def stage_then_link(path, *args, **kwargs):
+            result = write_text(path, *args, **kwargs)
+            if path.name == "adk-export-manifest.json":
+                (self.output / "claude-code").symlink_to(notes, target_is_directory=True)
+            return result
+
+        with patch.object(Path, "write_text", new=stage_then_link):
+            with self.assertRaisesRegex(ManifestError, "symlink aliases"):
+                self.export()
+        self.assertEqual(marker.read_bytes(), b"keep\n")
+        self.assertEqual(list(self.output.glob(".adk-export-*")), [])
+
+    def test_regular_export_replaces_and_failed_replacement_restores(self):
+        self.assertEqual(self.export()["status"], "pass")
+        marker = self.output / "claude-code" / "KEEP.txt"
+        marker.write_bytes(b"previous-export\n")
+        replace = compiler.os.replace
+
+        def fail_publish(source, destination):
+            if Path(destination) == marker.parent and Path(source).name == "claude-code":
+                raise OSError("injected export publication failure")
+            return replace(source, destination)
+
+        with patch.object(compiler.os, "replace", side_effect=fail_publish):
+            with self.assertRaisesRegex(OSError, "publication failure"):
+                self.export()
+        self.assertEqual(marker.read_bytes(), b"previous-export\n")
+        self.assertEqual(self.export()["status"], "pass")
+        self.assertFalse(marker.exists())
 
 
 class SourceFixture(unittest.TestCase):

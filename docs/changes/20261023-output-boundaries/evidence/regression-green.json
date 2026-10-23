@@ -1,0 +1,147 @@
+{
+  "schema": "adk-output-boundaries-verification/v1",
+  "phase": "green",
+  "source_base": "bf9ec8164e2c80394ce997f8a8b51515cad4746e",
+  "recorded_at_utc": "2026-10-23 12:01:59 UTC",
+  "implementer": "ai/root/implement_paths",
+  "status": "implementation-complete-awaiting-independent-review",
+  "source_files": [
+    {
+      "path": "src/agent_dev_kit/atomic_io.py",
+      "bytes": 7866,
+      "sha256": "0a620484ae5954824ca7c93a251df8f8518ee5ec64739d64d9d987f0fb3a1b79"
+    },
+    {
+      "path": "src/agent_dev_kit/compiler.py",
+      "bytes": 6576,
+      "sha256": "27e643dee1bbf7a150e8f6f1e0466e043284d57db15eeca77afd8287aad2cce4"
+    },
+    {
+      "path": "src/agent_dev_kit/native_campaign.py",
+      "bytes": 18135,
+      "sha256": "52d0b5a37828d8d7d5042da62517e2d65047acb6c9474f2e9703df874cde6b81"
+    },
+    {
+      "path": "src/agent_dev_kit/native_campaign_contract.py",
+      "bytes": 17528,
+      "sha256": "63f0dbb11fb4d8b2878dedfe9668db797b9182e9f635feccb0a62ea8c2681d91"
+    },
+    {
+      "path": "tests/test_install_upgrade.py",
+      "bytes": 20717,
+      "sha256": "be8d6aa525a8338201016d2c5cbe0595b85e5091aa793db999935617ff0d1562"
+    },
+    {
+      "path": "tests/test_native_campaign.py",
+      "bytes": 43193,
+      "sha256": "fc188ae2fc5d69c37c1288c2f9a922ea4b00761afddaff0d10a61a4978812076"
+    }
+  ],
+  "python": "/workspace/scratch/694941d81014/tooling/venv/bin/python",
+  "rtk": "/workspace/scratch/694941d81014/tooling/rtk",
+  "tests_passed": 57,
+  "checks": [
+    {
+      "name": "native-campaign",
+      "command": "rtk bypass env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src tooling/venv/bin/python -m unittest discover -s tests -p test_native_campaign.py -v",
+      "tests": 34,
+      "initial": {
+        "chunk_id": "8ca752",
+        "wall_time_seconds": 1.01145929,
+        "session_id": 99208,
+        "original_token_count": 258,
+        "output": "test_combined_assertion_uses_lf_separator_not_literal_backslash_n (test_native_campaign.NativeCampaignBoundaryTest.test_combined_assertion_uses_lf_separator_not_literal_backslash_n) ... ok\ntest_document_set_is_fully_encoded_before_any_output_is_written (test_native_campaign.NativeCampaignBoundaryTest.test_document_set_is_fully_encoded_before_any_output_is_written) ... ok\ntest_json_writer_does_not_resolve_leaf_symlink_before_rejecting (test_native_campaign.NativeCampaignBoundaryTest.test_json_writer_does_not_resolve_leaf_symlink_before_rejecting) ... ok\ntest_combined_streams_at_exact_budget_pass (test_native_campaign.NativeCampaignOutputBudgetTest.test_combined_streams_at_exact_budget_pass) ... ok\ntest_combined_streams_exceed_one_shared_budget (test_native_campaign.NativeCampaignOutputBudgetTest.test_combined_streams_exceed_one_shared_budget) ... ok\ntest_exited_launcher_cannot_escape_pipe_drain_deadline (test_native_campaign.NativeCampaignOutputBudgetTest.test_exited_launcher_cannot_escape_pipe_drain_deadline) ... "
+      },
+      "completion": {
+        "chunk_id": "66594a",
+        "wall_time_seconds": 0.000033321,
+        "exit_code": 0,
+        "original_token_count": 1869,
+        "output": "ok\ntest_api_complete_campaign_finalizes_without_raw_output_or_active_write (test_native_campaign.NativeCampaignTest.test_api_complete_campaign_finalizes_without_raw_output_or_active_write) ... /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_subprocess.py:125: ResourceWarning: unclosed transport <_UnixSubprocessTransport pid=10 returncode=0 stdout=<_UnixReadPipeTransport fd=7 open> stderr=<_UnixReadPipeTransport fd=9 open>>\n  _warn(f\"unclosed transport {self!r}\", ResourceWarning, source=self)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nException ignored in: <function BaseSubprocessTransport.__del__ at 0x7fc1a3143f60>\nTraceback (most recent call last):\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_subprocess.py\", line 126, in __del__\n    self.close()\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_subprocess.py\", line 104, in close\n    proto.pipe.close()\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/unix_events.py\", line 568, in close\n    self._close(None)\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/unix_events.py\", line 592, in _close\n    self._loop.call_soon(self._call_connection_lost, exc)\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py\", line 799, in call_soon\n    self._check_closed()\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py\", line 545, in _check_closed\n    raise RuntimeError('Event loop is closed')\nRuntimeError: Event loop is closed\n/workspace/scratch/694941d81014/tooling/venv/lib/python3.12/site-packages/yaml/resolver.py:143: ResourceWarning: unclosed file <_io.FileIO name=7 mode='rb' closefd=True>\n  def resolve(self, kind, value, implicit):\nResourceWarning: Enable tracemalloc to get the object allocation traceback\n/workspace/scratch/694941d81014/tooling/venv/lib/python3.12/site-packages/yaml/resolver.py:143: ResourceWarning: unclosed file <_io.FileIO name=9 mode='rb' closefd=True>\n  def resolve(self, kind, value, implicit):\nResourceWarning: Enable tracemalloc to get the object allocation traceback\n/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/unix_events.py:572: ResourceWarning: unclosed transport <_UnixReadPipeTransport closing fd=7 open>\n  _warn(f\"unclosed transport {self!r}\", ResourceWarning, source=self)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\n/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/unix_events.py:572: ResourceWarning: unclosed transport <_UnixReadPipeTransport fd=9 open>\n  _warn(f\"unclosed transport {self!r}\", ResourceWarning, source=self)\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nok\ntest_assertion_canary_cannot_be_embedded_in_stage_command (test_native_campaign.NativeCampaignTest.test_assertion_canary_cannot_be_embedded_in_stage_command) ... ok\ntest_cli_prepare_preserves_regular_external_output_support (test_native_campaign.NativeCampaignTest.test_cli_prepare_preserves_regular_external_output_support) ... ok\ntest_cli_prepare_rejects_external_output_leaf_symlinks (test_native_campaign.NativeCampaignTest.test_cli_prepare_rejects_external_output_leaf_symlinks) ... ok\ntest_cli_rejects_repository_output_outside_runtime_reports (test_native_campaign.NativeCampaignTest.test_cli_rejects_repository_output_outside_runtime_reports) ... ok\ntest_command_drift_and_output_flood_fail_closed (test_native_campaign.NativeCampaignTest.test_command_drift_and_output_flood_fail_closed) ... ok\ntest_each_direct_target_runs_from_native_project_config_root (test_native_campaign.NativeCampaignTest.test_each_direct_target_runs_from_native_project_config_root) ... ok\ntest_exit_zero_without_semantic_match_fails_closed (test_native_campaign.NativeCampaignTest.test_exit_zero_without_semantic_match_fails_closed) ... ok\ntest_failed_stage_blocks_finalize_and_never_claims_release_authority (test_native_campaign.NativeCampaignTest.test_failed_stage_blocks_finalize_and_never_claims_release_authority) ... ok\ntest_finalize_preflights_aliases_inputs_and_second_output_type (test_native_campaign.NativeCampaignTest.test_finalize_preflights_aliases_inputs_and_second_output_type) ... ok\ntest_finalize_rejects_evidence_identity_and_stage_command_drift (test_native_campaign.NativeCampaignTest.test_finalize_rejects_evidence_identity_and_stage_command_drift) ... ok\ntest_prepare_late_publication_failure_restores_both_original_outputs (test_native_campaign.NativeCampaignTest.test_prepare_late_publication_failure_restores_both_original_outputs) ... ok\ntest_prepare_recovery_failure_retains_original_material_and_reports_path (test_native_campaign.NativeCampaignTest.test_prepare_recovery_failure_retains_original_material_and_reports_path) ... ok\ntest_prepare_rejects_external_ancestor_link (test_native_campaign.NativeCampaignTest.test_prepare_rejects_external_ancestor_link) ... ok\ntest_prepare_rejects_identical_and_hardlinked_outputs (test_native_campaign.NativeCampaignTest.test_prepare_rejects_identical_and_hardlinked_outputs) ... ok\ntest_prepare_rejects_input_output_aliases (test_native_campaign.NativeCampaignTest.test_prepare_rejects_input_output_aliases) ... ok\ntest_prepare_rejects_invalid_second_output_before_first_write (test_native_campaign.NativeCampaignTest.test_prepare_rejects_invalid_second_output_before_first_write) ... ok\ntest_prepare_rejects_overlapping_output_paths_before_mkdir (test_native_campaign.NativeCampaignTest.test_prepare_rejects_overlapping_output_paths_before_mkdir) ... ok\ntest_prepare_rejects_relative_or_non_runtime_stage_executable (test_native_campaign.NativeCampaignTest.test_prepare_rejects_relative_or_non_runtime_stage_executable) ... ok\ntest_prepare_requires_governed_runtime_report_path (test_native_campaign.NativeCampaignTest.test_prepare_requires_governed_runtime_report_path) ... ok\ntest_prepare_stages_all_outputs_before_publication (test_native_campaign.NativeCampaignTest.test_prepare_stages_all_outputs_before_publication) ... ok\ntest_public_cli_prepare_run_finalize (test_native_campaign.NativeCampaignTest.test_public_cli_prepare_run_finalize) ... ok\ntest_repository_output_rejects_same_root_symlink_aliases (test_native_campaign.NativeCampaignTest.test_repository_output_rejects_same_root_symlink_aliases) ... ok\ntest_run_rejects_directory_and_fifo_before_real_fixture_stages (test_native_campaign.NativeCampaignTest.test_run_rejects_directory_and_fifo_before_real_fixture_stages) ... ok\ntest_run_rejects_external_output_leaf_before_campaign (test_native_campaign.NativeCampaignTest.test_run_rejects_external_output_leaf_before_campaign) ... ok\ntest_target_layout_manifest_covers_direct_targets (test_native_campaign.NativeCampaignTest.test_target_layout_manifest_covers_direct_targets) ... ok\ntest_target_layout_manifest_fails_closed_on_missing_or_unsafe_mapping (test_native_campaign.NativeCampaignTest.test_target_layout_manifest_fails_closed_on_missing_or_unsafe_mapping) ... ok\ntest_version_mismatch_is_blocked_before_stages (test_native_campaign.NativeCampaignTest.test_version_mismatch_is_blocked_before_stages) ... ok\n\n----------------------------------------------------------------------\nRan 34 tests in 16.003s\n\nOK\n"
+      }
+    },
+    {
+      "name": "install-upgrade-and-export",
+      "command": "rtk bypass env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src tooling/venv/bin/python -m unittest discover -s tests -p test_install_upgrade.py -k InstallUpgradeTest -k ExportOutputBoundaryTest -v",
+      "tests": 12,
+      "initial": {
+        "chunk_id": "918737",
+        "wall_time_seconds": 1.00089495,
+        "session_id": 19270,
+        "original_token_count": 80,
+        "output": "test_clean_rechecks_target_after_lock_acquisition (test_install_upgrade.ExportOutputBoundaryTest.test_clean_rechecks_target_after_lock_acquisition) ... ok\ntest_clean_rechecks_target_after_staging_before_replace (test_install_upgrade.ExportOutputBoundaryTest.test_clean_rechecks_target_after_staging_before_replace) ... "
+      },
+      "completion": {
+        "chunk_id": "90eae0",
+        "wall_time_seconds": 0.000038225,
+        "exit_code": 0,
+        "original_token_count": 482,
+        "output": "ok\ntest_clean_rejects_output_root_ancestor_link (test_install_upgrade.ExportOutputBoundaryTest.test_clean_rejects_output_root_ancestor_link) ... ok\ntest_clean_rejects_same_root_and_outside_root_target_links (test_install_upgrade.ExportOutputBoundaryTest.test_clean_rejects_same_root_and_outside_root_target_links) ... ok\ntest_regular_export_replaces_and_failed_replacement_restores (test_install_upgrade.ExportOutputBoundaryTest.test_regular_export_replaces_and_failed_replacement_restores) ... ok\ntest_api_round_trip_restores_different_bytes_modes_and_original_receipt (test_install_upgrade.InstallUpgradeTest.test_api_round_trip_restores_different_bytes_modes_and_original_receipt) ... ok\ntest_apply_rechecks_candidate_freshness_and_recovery_does_not_rewrite_contract (test_install_upgrade.InstallUpgradeTest.test_apply_rechecks_candidate_freshness_and_recovery_does_not_rewrite_contract) ... ok\ntest_apply_revalidates_explicit_old_source_after_plan (test_install_upgrade.InstallUpgradeTest.test_apply_revalidates_explicit_old_source_after_plan) ... ok\ntest_cli_requires_previous_source_at_plan_apply_and_rollback (test_install_upgrade.InstallUpgradeTest.test_cli_requires_previous_source_at_plan_apply_and_rollback) ... ok\ntest_expired_old_contract_allows_upgrade_and_recovery_but_not_new_admission (test_install_upgrade.InstallUpgradeTest.test_expired_old_contract_allows_upgrade_and_recovery_but_not_new_admission) ... ok\ntest_rehashed_backup_bytes_and_changed_permissions_cannot_authorize_restore (test_install_upgrade.InstallUpgradeTest.test_rehashed_backup_bytes_and_changed_permissions_cannot_authorize_restore) ... ok\ntest_rehashed_previous_receipt_still_requires_trusted_inventory_and_target (test_install_upgrade.InstallUpgradeTest.test_rehashed_previous_receipt_still_requires_trusted_inventory_and_target) ... ok\n\n----------------------------------------------------------------------\nRan 12 tests in 15.698s\n\nOK\n"
+      }
+    },
+    {
+      "name": "install-receipt-authority",
+      "command": "rtk bypass env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src tooling/venv/bin/python -m unittest discover -s tests -p test_install_receipt_authority.py -v",
+      "tests": 8,
+      "initial": {
+        "chunk_id": "81cd0a",
+        "wall_time_seconds": 1.021113032,
+        "session_id": 4101,
+        "original_token_count": 145,
+        "output": "test_apply_revalidates_rehashed_current_receipt (test_install_receipt_authority.ReceiptAuthorityTest.test_apply_revalidates_rehashed_current_receipt) ... ok\ntest_cross_platform_mode_semantics_do_not_break_windows (test_install_receipt_authority.ReceiptAuthorityTest.test_cross_platform_mode_semantics_do_not_break_windows)\nWindows reports read-only state, not exact Unix mode bits. ... ok\ntest_forged_active_receipt_cannot_authorize_unmanaged_replacement (test_install_receipt_authority.ReceiptAuthorityTest.test_forged_active_receipt_cannot_authorize_unmanaged_replacement) ... "
+      },
+      "completion": {
+        "chunk_id": "02b0d0",
+        "wall_time_seconds": 0.000030241,
+        "exit_code": 0,
+        "original_token_count": 243,
+        "output": "ok\ntest_locked_target_must_match_receipt_on_second_read (test_install_receipt_authority.ReceiptAuthorityTest.test_locked_target_must_match_receipt_on_second_read) ... ok\ntest_managed_permission_drift_is_not_hidden_by_content_hash (test_install_receipt_authority.ReceiptAuthorityTest.test_managed_permission_drift_is_not_hidden_by_content_hash) ... ok\ntest_modified_backup_permissions_block_restore_without_data_loss (test_install_receipt_authority.ReceiptAuthorityTest.test_modified_backup_permissions_block_restore_without_data_loss) ... ok\ntest_rollback_omission_and_unlisted_backup_fail_closed (test_install_receipt_authority.ReceiptAuthorityTest.test_rollback_omission_and_unlisted_backup_fail_closed) ... ok\ntest_two_level_rollback_restores_previous_receipt (test_install_receipt_authority.ReceiptAuthorityTest.test_two_level_rollback_restores_previous_receipt) ... ok\n\n----------------------------------------------------------------------\nRan 8 tests in 3.158s\n\nOK\n"
+      }
+    },
+    {
+      "name": "native-boundaries",
+      "command": "rtk bypass env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src tooling/venv/bin/python -m unittest discover -s tests -p test_native_campaign_boundaries.py -v",
+      "tests": 3,
+      "result": {
+        "chunk_id": "c25b3c",
+        "wall_time_seconds": 0.090569191,
+        "exit_code": 0,
+        "original_token_count": 176,
+        "output": "test_bounded_context_modules_stay_under_repository_default_budget (test_native_campaign_boundaries.NativeCampaignBoundaryTest.test_bounded_context_modules_stay_under_repository_default_budget) ... ok\ntest_dependency_direction_is_contract_to_execution_to_orchestration (test_native_campaign_boundaries.NativeCampaignBoundaryTest.test_dependency_direction_is_contract_to_execution_to_orchestration) ... ok\ntest_native_campaign_v2_is_the_only_active_certification_contract (test_native_campaign_boundaries.NativeCampaignBoundaryTest.test_native_campaign_v2_is_the_only_active_certification_contract) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.035s\n\nOK\n"
+      }
+    },
+    {
+      "name": "ruff",
+      "result": {
+        "chunk_id": "9b63da",
+        "wall_time_seconds": 0.068568571,
+        "exit_code": 0,
+        "original_token_count": 5,
+        "output": "All checks passed!\n"
+      }
+    },
+    {
+      "name": "mypy-four-source-files",
+      "result": {
+        "exit_code": 0,
+        "output": "Success: no issues found in 4 source files\n"
+      }
+    },
+    {
+      "name": "git-diff-check-owned-files",
+      "result": {
+        "chunk_id": "8aab7d",
+        "wall_time_seconds": 0.000030944,
+        "exit_code": 0,
+        "original_token_count": 0,
+        "output": ""
+      }
+    }
+  ],
+  "limitations": [
+    "No full repository regression or remote CI was run by this implementer; integration remains owned by root.",
+    "Native exited-launcher pipe-drain test emits existing asyncio ResourceWarning / Event loop is closed despite exit 0; raw output retained and root notified.",
+    "Publication set uses compensating recovery, not crash-atomic multi-file rename. Caller-owned parents and writer discipline remain required.",
+    "No real model, signed runtime receipt, new product qualification, source-to-live apply, or new paid resource."
+  ]
+}

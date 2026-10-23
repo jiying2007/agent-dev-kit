@@ -1,0 +1,6 @@
+test_hidden_tracked_drift_cannot_change_frozen_release (__main__.ReleaseGitInputTest.test_hidden_tracked_drift_cannot_change_frozen_release) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 18.647s
+
+OK

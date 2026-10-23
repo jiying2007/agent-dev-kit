@@ -1,0 +1,24 @@
+{
+  "schema": "adk-independent-review-validation/v1",
+  "reviewer": "ai/root/external_methods",
+  "command": "rtk bypass env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src <venv>/bin/python: agent_dev_kit.review_evidence.validate_review(Path.cwd(), Path('docs/changes/20261023-release-contract/review-evidence.json'), expected_subject='20261023-release-contract', expected_scope='source-change')",
+  "exit_code": 0,
+  "result": {
+    "status": "pass",
+    "record_sha256": "3ff3fc0d1ae51b93342e4821d8ae4fef3ae4c6206ed73f9f384f661a1f96834f",
+    "reviewed_at": "2026-10-23T12:36:45.300153Z",
+    "target": {
+      "base_commit": "bf9ec8164e2c80394ce997f8a8b51515cad4746e",
+      "head_commit": "70094158251f3a11eaceee5d95cb63dfcea1e895",
+      "original_patch_sha256": "6ab20851231b8bbe72d0121f44cd76b61b39a219aedc085a5166183487250ce3"
+    },
+    "verdicts": {
+      "spec": "pass",
+      "quality": "pass"
+    }
+  },
+  "limitations": [
+    "This validator result is retained outside the record's own digest references to avoid a self-reference cycle.",
+    "No additional tests were run after the recorded 25-method focused followup."
+  ]
+}

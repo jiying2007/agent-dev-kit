@@ -1,0 +1,115 @@
+{
+  "schema": "independent-harness-review-execution/v1",
+  "mode": "gate-after-renewal",
+  "reviewer_id": "ai/root/architecture_audit",
+  "started_at": "2026-10-23T12:18:06.217693Z",
+  "completed_at": "2026-10-23T12:18:06.451362Z",
+  "elapsed_seconds": 0.234,
+  "argv": [
+    "/workspace/scratch/694941d81014/tooling/rtk",
+    "bypass",
+    "/workspace/scratch/694941d81014/tooling/venv/bin/python",
+    "-m",
+    "agent_dev_kit.cli",
+    "harness",
+    "readiness",
+    "--root",
+    ".",
+    "--gate",
+    "--summary-json"
+  ],
+  "cwd": "/workspace/scratch/694941d81014/agent-dev-kit",
+  "exit_code": 0,
+  "stdout_utf8": "{\"schema_version\":\"adk-harness-readiness-report/v1\",\"contract_version\":\"1.0.0\",\"mode\":\"gate\",\"as_of\":\"2026-10-23\",\"target_root\":\"/workspace/scratch/694941d81014/agent-dev-kit\",\"overall_status\":\"pass\",\"counts\":{\"pass\":6,\"partial\":0,\"needs-review\":0,\"blocked\":0,\"not-applicable\":1},\"scan\":{\"files_seen\":1442,\"text_files_read\":15,\"truncated\":false,\"errors\":[]},\"dimensions\":[{\"dimension_id\":\"context_legibility\",\"title\":\"Context legibility\",\"status\":\"pass\",\"evidence_refs\":[\".adk/harness-readiness.json\",\"AGENTS.md\",\"README.md\"],\"last_verified_at\":\"2026-10-23\",\"owner\":\"leiwenjun\",\"review\":{\"status\":\"pass\",\"reviewer\":{\"id\":\"ai/root/architecture_audit\",\"kind\":\"ai\",\"independence\":\"independent\"},\"scope\":\"harness-source\",\"reviewed_at\":\"2026-10-23T12:17:59.467787Z\",\"record\":{\"path\":\".adk/reviews/harness-source-20261023-8.0.39.json\",\"sha256\":\"9ceb000c7ed70bdd3e9fc3be29abde0da62e5ea1d6583c6b37cc88971a72f9f7\"},\"human_review_performed\":false,\"field_evidence_verified\":false},\"blockers\":[],\"next_action\":\"补齐精简的根 AGENTS.md 与 README，并把细节下沉到可索引文档。\"},{\"dimension_id\":\"spec_and_execution_contract\",\"title\":\"Spec and execution contract\",\"status\":\"pass\",\"evidence_refs\":[\".adk/harness-readiness.json\",\"docs/changes/2026-09-25-agent-value-trust/negative-results.md\",\"docs/changes/2026-09-25-agent-value-trust/requirements.md\",\"docs/changes/2026-09-25-agent-value-trust/tasks.md\",\"docs/changes/2026-09-25-effect-trials/design.md\",\"docs/changes/2026-09-25-effect-trials/negative-results.md\",\"docs/changes/2026-09-25-effect-trials/requirements.md\",\"docs/changes/2026-09-25-effect-trials/tasks.md\",\"docs/changes/2026-09-25-native-campaign-finalize/negative-results.md\",\"docs/changes/2026-09-25-native-campaign-finalize/requirements.md\",\"docs/changes/2026-09-25-native-campaign-finalize/tasks.md\",\"docs/changes/2026-09-25-native-campaign-project-layout/negative-results.md\"],\"last_verified_at\":\"2026-10-23\",\"owner\":\"leiwenjun\",\"review\":{\"status\":\"pass\",\"reviewer\":{\"id\":\"ai/root/architecture_audit\",\"kind\":\"ai\",\"independence\":\"independent\"},\"scope\":\"harness-source\",\"reviewed_at\":\"2026-10-23T12:17:59.467787Z\",\"record\":{\"path\":\".adk/reviews/harness-source-20261023-8.0.39.json\",\"sha256\":\"9ceb000c7ed70bdd3e9fc3be29abde0da62e5ea1d6583c6b37cc88971a72f9f7\"},\"human_review_performed\":false,\"field_evidence_verified\":false},\"blockers\":[],\"next_action\":\"为非平凡变更保留 spec、task/plan 与可测试验收证据。\"},{\"dimension_id\":\"tool_and_permission_boundary\",\"title\":\"Tool and permission boundary\",\"status\":\"not-applicable\",\"evidence_refs\":[\".adk/harness-readiness.json\"],\"last_verified_at\":\"2026-10-23\",\"owner\":\"leiwenjun\",\"review\":{\"status\":\"pass\",\"reviewer\":{\"id\":\"ai/root/architecture_audit\",\"kind\":\"ai\",\"independence\":\"independent\"},\"scope\":\"harness-source\",\"reviewed_at\":\"2026-10-23T12:17:59.467787Z\",\"record\":{\"path\":\".adk/reviews/harness-source-20261023-8.0.39.json\",\"sha256\":\"9ceb000c7ed70bdd3e9fc3be29abde0da62e5ea1d6583c6b37cc88971a72f9f7\"},\"human_review_performed\":false,\"field_evidence_verified\":false},\"blockers\":[],\"next_action\":\"固定 MCP 依赖、使用环境凭证，并记录只读、审批、allow/deny 与 fallback 边界。\"},{\"dimension_id\":\"state_and_knowledge_continuity\",\"title\":\"State and knowledge continuity\",\"status\":\"pass\",\"evidence_refs\":[\".adk/harness-readiness.json\",\"docs/changes/adk-platform-convergence-v1/state.yaml\",\"docs/changes/adk-self-readiness-ownership/state.yaml\",\"docs/changes/adk-terminal-contract-hardening/state.yaml\",\"docs/changes/adk-v3-1-rc2-target-conformance/state.yaml\",\"docs/changes/adk-v3-1-software-m5-ready/state.yaml\",\"docs/changes/agent-ecosystem-standards-hardening/state.yaml\",\"docs/runbooks/README.md\",\"docs/runbooks/agent-value-lifecycle.md\",\"docs/runbooks/artifact-gated-delivery.md\",\"docs/runbooks/bugfix-delivery.md\",\"docs/runbooks/codex-pilot-evidence.md\"],\"last_verified_at\":\"2026-10-23\",\"owner\":\"leiwenjun\",\"review\":{\"status\":\"pass\",\"reviewer\":{\"id\":\"ai/root/architecture_audit\",\"kind\":\"ai\",\"independence\":\"independent\"},\"scope\":\"harness-source\",\"reviewed_at\":\"2026-10-23T12:17:59.467787Z\",\"record\":{\"path\":\".adk/reviews/harness-source-20261023-8.0.39.json\",\"sha256\":\"9ceb000c7ed70bdd3e9fc3be29abde0da62e5ea1d6583c6b37cc88971a72f9f7\"},\"human_review_performed\":false,\"field_evidence_verified\":false},\"blockers\":[],\"next_action\":\"持久化变更状态，并把可复用决策写入受治理 decision/runbook/knowledge 工件。\"},{\"dimension_id\":\"verification_review_and_eval\",\"title\":\"Verification, review and evaluation\",\"status\":\"pass\",\"evidence_refs\":[\".adk/harness-readiness.json\",\".github/workflows/branch-gc.yml\",\".github/workflows/ci.yml\",\".github/workflows/claude-consumer-contract.yml\",\".github/workflows/codex-consumer-contract.yml\",\".github/workflows/digital-worker-contract.yml\",\"AGENTS.md\",\"README.md\",\"tests/lib/bash-test-helpers.sh\",\"tests/mcp_2026_activation/mcp_activation_test.go\",\"tests/run_all.sh\",\"tests/test_agent_ecosystem_standards.sh\"],\"last_verified_at\":\"2026-10-23\",\"owner\":\"leiwenjun\",\"review\":{\"status\":\"pass\",\"reviewer\":{\"id\":\"ai/root/architecture_audit\",\"kind\":\"ai\",\"independence\":\"independent\"},\"scope\":\"harness-source\",\"reviewed_at\":\"2026-10-23T12:17:59.467787Z\",\"record\":{\"path\":\".adk/reviews/harness-source-20261023-8.0.39.json\",\"sha256\":\"9ceb000c7ed70bdd3e9fc3be29abde0da62e5ea1d6583c6b37cc88971a72f9f7\"},\"human_review_performed\":false,\"field_evidence_verified\":false},\"blockers\":[],\"next_action\":\"补齐测试、CI 和根文档中的可执行验证命令，并保留 review/eval 证据。\"},{\"dimension_id\":\"recovery_and_rollback\",\"title\":\"Recovery and rollback\",\"status\":\"pass\",\"evidence_refs\":[\".adk/harness-readiness.json\",\"scripts/backup-rollback.sh\"],\"last_verified_at\":\"2026-10-23\",\"owner\":\"leiwenjun\",\"review\":{\"status\":\"pass\",\"reviewer\":{\"id\":\"ai/root/architecture_audit\",\"kind\":\"ai\",\"independence\":\"independent\"},\"scope\":\"harness-source\",\"reviewed_at\":\"2026-10-23T12:17:59.467787Z\",\"record\":{\"path\":\".adk/reviews/harness-source-20261023-8.0.39.json\",\"sha256\":\"9ceb000c7ed70bdd3e9fc3be29abde0da62e5ea1d6583c6b37cc88971a72f9f7\"},\"human_review_performed\":false,\"field_evidence_verified\":false},\"blockers\":[],\"next_action\":\"记录可执行 rollback/recovery/backup 路径及触发条件。\"},{\"dimension_id\":\"freshness_and_entropy_control\",\"title\":\"Freshness and entropy control\",\"status\":\"pass\",\"evidence_refs\":[\".adk/harness-readiness.json\",\".github/CODEOWNERS\",\"OWNERS\",\"scripts/check-format.sh\",\"tests/test_catalog.sh\",\"tests/test_eval_catalog.py\",\"tests/test_eval_catalog.sh\",\"tests/test_mcp_freshness_ssot.sh\"],\"last_verified_at\":\"2026-10-23\",\"owner\":\"leiwenjun\",\"review\":{\"status\":\"pass\",\"reviewer\":{\"id\":\"ai/root/architecture_audit\",\"kind\":\"ai\",\"independence\":\"independent\"},\"scope\":\"harness-source\",\"reviewed_at\":\"2026-10-23T12:17:59.467787Z\",\"record\":{\"path\":\".adk/reviews/harness-source-20261023-8.0.39.json\",\"sha256\":\"9ceb000c7ed70bdd3e9fc3be29abde0da62e5ea1d6583c6b37cc88971a72f9f7\"},\"human_review_performed\":false,\"field_evidence_verified\":false},\"blockers\":[],\"next_action\":\"增加文档/格式/目录新鲜度机械检查和明确 ownership。\"}],\"score\":null,\"field_evidence_status\":\"not-verified\"}\n",
+  "stderr_utf8": "",
+  "stdout_sha256": "8c9936074f22a57a14db0703e4e32a6b6a80e0a1ac757dcb036928775329a17e",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "sources_before": [
+    {
+      "path": "manifests/harness_readiness_contracts.json",
+      "sha256": "e12c527dcfcfc61030b9a344f9d7fa3efeb828c364f5707285bdded69fcd8358"
+    },
+    {
+      "path": "src/agent_dev_kit/readiness.py",
+      "sha256": "83a2949102955281f13a94e2f871d36e170cbfe76d053032ce5c114dc065ed29"
+    },
+    {
+      "path": "src/agent_dev_kit/readiness_evidence.py",
+      "sha256": "ef980657486084eea8ab8a03ab357a76a3ed43691aca8d6909b06642764c808b"
+    },
+    {
+      "path": "src/agent_dev_kit/readiness_tools.py",
+      "sha256": "5d361c7bd0fbbc2ce923071d3b5afcefb5998a8047d49e54be70f19ca49c554c"
+    },
+    {
+      "path": "src/agent_dev_kit/review_evidence.py",
+      "sha256": "73d85e864a3da125bf94808f19616f52150751a94ccc729ac66f66d2576b8808"
+    },
+    {
+      "path": "src/agent_dev_kit/strict_json.py",
+      "sha256": "e11233b8d02d7fb95a8f2f93bfff065a1db84c4ef0820fef6d817600abe8ec98"
+    },
+    {
+      "path": "tests/test_harness_readiness.sh",
+      "sha256": "03ac2275476fcdc5f1fcacbd4375098a706cdd75fb7cbfa9a5e48c82403da300"
+    },
+    {
+      "path": "tests/test_review_evidence.py",
+      "sha256": "6abd885ab9d1b6ac141a206277660620ac2594092f8722ef1d05ddc24c61fb40"
+    },
+    {
+      "path": "tests/test_review_evidence.sh",
+      "sha256": "fe3377b1b3a0a9db1d68d926704eb1f9148dd1cdab63f78113b6f1fe9c1657b2"
+    },
+    {
+      "path": "tests/test_review_evidence_workflow.py",
+      "sha256": "3a973cbc1b0f11b3e4e4529e5fb9ef158cf84178dbf3e6d03e506db48ba67502"
+    }
+  ],
+  "sources_after": [
+    {
+      "path": "manifests/harness_readiness_contracts.json",
+      "sha256": "e12c527dcfcfc61030b9a344f9d7fa3efeb828c364f5707285bdded69fcd8358"
+    },
+    {
+      "path": "src/agent_dev_kit/readiness.py",
+      "sha256": "83a2949102955281f13a94e2f871d36e170cbfe76d053032ce5c114dc065ed29"
+    },
+    {
+      "path": "src/agent_dev_kit/readiness_evidence.py",
+      "sha256": "ef980657486084eea8ab8a03ab357a76a3ed43691aca8d6909b06642764c808b"
+    },
+    {
+      "path": "src/agent_dev_kit/readiness_tools.py",
+      "sha256": "5d361c7bd0fbbc2ce923071d3b5afcefb5998a8047d49e54be70f19ca49c554c"
+    },
+    {
+      "path": "src/agent_dev_kit/review_evidence.py",
+      "sha256": "73d85e864a3da125bf94808f19616f52150751a94ccc729ac66f66d2576b8808"
+    },
+    {
+      "path": "src/agent_dev_kit/strict_json.py",
+      "sha256": "e11233b8d02d7fb95a8f2f93bfff065a1db84c4ef0820fef6d817600abe8ec98"
+    },
+    {
+      "path": "tests/test_harness_readiness.sh",
+      "sha256": "03ac2275476fcdc5f1fcacbd4375098a706cdd75fb7cbfa9a5e48c82403da300"
+    },
+    {
+      "path": "tests/test_review_evidence.py",
+      "sha256": "6abd885ab9d1b6ac141a206277660620ac2594092f8722ef1d05ddc24c61fb40"
+    },
+    {
+      "path": "tests/test_review_evidence.sh",
+      "sha256": "fe3377b1b3a0a9db1d68d926704eb1f9148dd1cdab63f78113b6f1fe9c1657b2"
+    },
+    {
+      "path": "tests/test_review_evidence_workflow.py",
+      "sha256": "3a973cbc1b0f11b3e4e4529e5fb9ef158cf84178dbf3e6d03e506db48ba67502"
+    }
+  ],
+  "source_drift": false,
+  "limitations": [
+    "Local software/source checks only; no external runtime, provider, human review, signature, field observation or product qualification."
+  ]
+}

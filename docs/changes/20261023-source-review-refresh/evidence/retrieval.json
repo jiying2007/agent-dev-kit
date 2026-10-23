@@ -1,0 +1,37 @@
+{
+  "schema": "independent-primary-source-capture/v1",
+  "observed_at": "2026-10-23T12:25:28.581798Z",
+  "reviewer": "ai/root/architecture_audit",
+  "owasp_commit": null,
+  "third_party_bodies_committed": false,
+  "captures": [
+    {
+      "name": "owasp-commit.json",
+      "url": "https://api.github.com/repos/OWASP/www-project-agentic-skills-top-10/commits/main",
+      "started_at": "2026-10-23T12:25:28.601303Z",
+      "error": "URLError: <urlopen error [Errno 1] Operation not permitted>",
+      "finished_at": "2026-10-23T12:25:28.610588Z"
+    },
+    {
+      "name": "arxiv-v2-abstract.html",
+      "url": "https://arxiv.org/abs/2607.00911v2",
+      "started_at": "2026-10-23T12:25:28.602627Z",
+      "error": "URLError: <urlopen error [Errno 1] Operation not permitted>",
+      "finished_at": "2026-10-23T12:25:28.610780Z"
+    },
+    {
+      "name": "arxiv-v2.html",
+      "url": "https://arxiv.org/html/2607.00911v2",
+      "started_at": "2026-10-23T12:25:28.604087Z",
+      "error": "URLError: <urlopen error [Errno 1] Operation not permitted>",
+      "finished_at": "2026-10-23T12:25:28.610459Z"
+    },
+    {
+      "name": "arxiv-license.html",
+      "url": "https://arxiv.org/licenses/nonexclusive-distrib/1.0/license.html",
+      "started_at": "2026-10-23T12:25:28.605217Z",
+      "error": "URLError: <urlopen error [Errno 1] Operation not permitted>",
+      "finished_at": "2026-10-23T12:25:28.610926Z"
+    }
+  ]
+}

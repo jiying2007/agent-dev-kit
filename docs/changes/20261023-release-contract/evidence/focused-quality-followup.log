@@ -1,0 +1,58 @@
+$ /workspace/scratch/694941d81014/tooling/rtk bypass /workspace/scratch/694941d81014/tooling/venv/bin/ruff check src/agent_dev_kit/distribution --select E4,E7,E9,F,B,UP,SIM,I
+All checks passed!
+exit_code: 0
+
+$ /workspace/scratch/694941d81014/tooling/rtk bypass /workspace/scratch/694941d81014/tooling/venv/bin/mypy src/agent_dev_kit/distribution src/agent_dev_kit/release.py
+Success: no issues found in 6 source files
+exit_code: 0
+
+$ /workspace/scratch/694941d81014/tooling/rtk bypass env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src /workspace/scratch/694941d81014/tooling/venv/bin/python -m unittest discover -s tests -p test_archive_resource_bounds.py -v
+test_bad_crc_and_truncated_gzip_are_rejected_at_eof (test_archive_resource_bounds.ArchiveResourceTests.test_bad_crc_and_truncated_gzip_are_rejected_at_eof) ... ok
+test_compressed_snapshot_is_bounded_before_decompression (test_archive_resource_bounds.ArchiveResourceTests.test_compressed_snapshot_is_bounded_before_decompression) ... ok
+test_decoded_padding_and_concatenated_gzip_count_toward_budget (test_archive_resource_bounds.ArchiveResourceTests.test_decoded_padding_and_concatenated_gzip_count_toward_budget) ... ok
+test_digest_and_extraction_use_exact_snapshot_after_path_replacement (test_archive_resource_bounds.ArchiveResourceTests.test_digest_and_extraction_use_exact_snapshot_after_path_replacement) ... ok
+test_explicit_extraction_preserves_payload_and_safe_permissions (test_archive_resource_bounds.ArchiveResourceTests.test_explicit_extraction_preserves_payload_and_safe_permissions) ... ok
+test_extraction_budget_failure_precedes_destination_creation (test_archive_resource_bounds.ArchiveResourceTests.test_extraction_budget_failure_precedes_destination_creation) ... ok
+test_extraction_rejects_path_traversal_before_writing_members (test_archive_resource_bounds.ArchiveResourceTests.test_extraction_rejects_path_traversal_before_writing_members) ... ok
+test_hidden_header_chain_fails_as_contract_error_before_recursion (test_archive_resource_bounds.ArchiveResourceTests.test_hidden_header_chain_fails_as_contract_error_before_recursion) ... ok
+test_hidden_pax_header_read_is_bounded_before_materialization (test_archive_resource_bounds.ArchiveResourceTests.test_hidden_pax_header_read_is_bounded_before_materialization) ... ok
+test_long_pax_names_remain_compatible_within_budget (test_archive_resource_bounds.ArchiveResourceTests.test_long_pax_names_remain_compatible_within_budget) ... ok
+test_member_cache_does_not_retain_global_pax_maps (test_archive_resource_bounds.ArchiveResourceTests.test_member_cache_does_not_retain_global_pax_maps) ... ok
+test_member_count_is_bounded_even_without_payload (test_archive_resource_bounds.ArchiveResourceTests.test_member_count_is_bounded_even_without_payload) ... ok
+test_member_size_and_name_are_bounded (test_archive_resource_bounds.ArchiveResourceTests.test_member_size_and_name_are_bounded) ... ok
+test_metadata_and_pax_keys_have_separate_budgets (test_archive_resource_bounds.ArchiveResourceTests.test_metadata_and_pax_keys_have_separate_budgets) ... ok
+test_publish_uploads_snapshot_not_replaced_original (test_archive_resource_bounds.ArchiveResourceTests.test_publish_uploads_snapshot_not_replaced_original) ... ok
+test_real_delivery_cli_preserves_leaf_link_rejection (test_archive_resource_bounds.ArchiveResourceTests.test_real_delivery_cli_preserves_leaf_link_rejection) ... ok
+test_real_rehearsal_checksum_input_is_bounded_regular (test_archive_resource_bounds.ArchiveResourceTests.test_real_rehearsal_checksum_input_is_bounded_regular) ... ok
+test_real_rehearsal_hash_and_extraction_share_captured_bytes (test_archive_resource_bounds.ArchiveResourceTests.test_real_rehearsal_hash_and_extraction_share_captured_bytes) ... ok
+test_real_rehearsal_rejects_overbudget_and_unsafe_leaf_before_workspace (test_archive_resource_bounds.ArchiveResourceTests.test_real_rehearsal_rejects_overbudget_and_unsafe_leaf_before_workspace) ... ok
+test_required_members_missing_duplicate_and_special_are_rejected (test_archive_resource_bounds.ArchiveResourceTests.test_required_members_missing_duplicate_and_special_are_rejected) ... ok
+test_snapshot_rejects_leaf_links_fifos_and_directories_without_hanging (test_archive_resource_bounds.ArchiveResourceTests.test_snapshot_rejects_leaf_links_fifos_and_directories_without_hanging) ... ok
+test_valid_order_independence_and_no_getmembers (test_archive_resource_bounds.ArchiveResourceTests.test_valid_order_independence_and_no_getmembers) ... ok
+
+----------------------------------------------------------------------
+Ran 22 tests in 0.235s
+
+OK
+exit_code: 0
+
+$ /workspace/scratch/694941d81014/tooling/rtk bypass env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src PATH=/workspace/scratch/694941d81014/tooling/venv/bin:/usr/local/bin:/usr/bin:/bin /workspace/scratch/694941d81014/tooling/venv/bin/python -m unittest discover -s tests -p test_release_integrity.py -v
+test_dirty_developer_build_remains_explicitly_ineligible (test_release_integrity.ReleaseGitInputTest.test_dirty_developer_build_remains_explicitly_ineligible) ... ok
+test_git_export_attributes_do_not_substitute_or_omit_tracked_blobs (test_release_integrity.ReleaseGitInputTest.test_git_export_attributes_do_not_substitute_or_omit_tracked_blobs) ... ok
+test_hidden_tracked_drift_cannot_change_frozen_release (test_release_integrity.ReleaseGitInputTest.test_hidden_tracked_drift_cannot_change_frozen_release) ... ok
+test_ignored_file_cannot_enter_clean_commit_release (test_release_integrity.ReleaseGitInputTest.test_ignored_file_cannot_enter_clean_commit_release) ... ok
+test_local_replacement_ref_cannot_redefine_a_frozen_blob (test_release_integrity.ReleaseGitInputTest.test_local_replacement_ref_cannot_redefine_a_frozen_blob) ... ok
+test_public_publish_plans_and_uploads_the_complete_verified_snapshot (test_release_integrity.ReleaseGitInputTest.test_public_publish_plans_and_uploads_the_complete_verified_snapshot) ... ok
+test_tracked_symlink_rejected_without_copying_its_target (test_release_integrity.ReleaseGitInputTest.test_tracked_symlink_rejected_without_copying_its_target) ... ok
+test_all_duplicate_unsafe_and_special_members_are_rejected (test_release_integrity.ReleaseInventoryTest.test_all_duplicate_unsafe_and_special_members_are_rejected) ... ok
+test_embedded_source_manifest_must_match_top_level (test_release_integrity.ReleaseInventoryTest.test_embedded_source_manifest_must_match_top_level) ... ok
+test_missing_extra_and_false_source_count_are_rejected (test_release_integrity.ReleaseInventoryTest.test_missing_extra_and_false_source_count_are_rejected) ... ok
+test_real_source_inventory_is_accepted_in_any_member_order (test_release_integrity.ReleaseInventoryTest.test_real_source_inventory_is_accepted_in_any_member_order) ... ok
+test_renamed_public_publish_is_rejected_before_github_discovery (test_release_integrity.ReleaseInventoryTest.test_renamed_public_publish_is_rejected_before_github_discovery) ... ok
+test_source_payload_drift_rejected_after_outer_checksum_is_recomputed (test_release_integrity.ReleaseInventoryTest.test_source_payload_drift_rejected_after_outer_checksum_is_recomputed) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 33.876s
+
+OK
+exit_code: 0

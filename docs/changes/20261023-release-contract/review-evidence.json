@@ -1,0 +1,138 @@
+{
+  "schema": "adk-review-evidence/v1",
+  "subject_id": "20261023-release-contract",
+  "scope": "source-change",
+  "owner": "leiwenjun",
+  "author_id": "ai/root/implement_release",
+  "reviewer": {
+    "id": "ai/root/external_methods",
+    "kind": "ai",
+    "independence": "independent"
+  },
+  "reviewed_at": "2026-10-23T12:36:45.300153Z",
+  "evidence_completed_at": "2026-10-23T12:36:45.300153Z",
+  "verdicts": {
+    "spec": "pass",
+    "quality": "pass"
+  },
+  "findings": [],
+  "limitations": [
+    "Independent AI source review under actual owner delegation. The reviewer did not implement the release fix; the independent probe script is review evidence. No human review or authenticated reviewer identity is asserted.",
+    "Spec and Quality cover ADK-01/02/03 and the eight identified release implementation/test files. The retained complete diff also contains output-boundary, usage and two source-freshness manifest changes reviewed by ai/root/architecture_audit separately.",
+    "All eight final source files match target commit blobs. The original 56-method execution remains bound to the earlier snapshot; six files are unchanged and two have reviewed changes. Only InventoryReview 3 and archive bounds 22 were independently rerun at final source bytes. Author Ruff, mypy and release-integrity followup results retain author attribution. Same-environment reproducibility was tested initially; cross-platform/runtime bit reproducibility was not measured.",
+    "Mock publication establishes local command and tar/checksum/contract byte consistency only. No real release, attestation, signature, runtime installation, paid model evaluation or field/product qualification was performed.",
+    "Archive source inventory proves internal consistency and does not authenticate source provenance. Exact CI, remote release assets and Root promotion remain separate delivery evidence.",
+    "The integrator provided the real remote implementation head and fetched object. The reviewer verified that object/tree and source bytes locally; independent git ls-remote could not connect to the configured proxy, so independent remote transport authentication is not asserted.",
+    "No workflow asset was changed in this review scope. No workflow propose/apply/history or missing runtime/field observation was manufactured."
+  ],
+  "policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+  "validator_sha256": {
+    "src/agent_dev_kit/review_evidence.py": "73d85e864a3da125bf94808f19616f52150751a94ccc729ac66f66d2576b8808",
+    "src/agent_dev_kit/strict_json.py": "e11233b8d02d7fb95a8f2f93bfff065a1db84c4ef0820fef6d817600abe8ec98",
+    "src/agent_dev_kit/readiness_evidence.py": "ef980657486084eea8ab8a03ab357a76a3ed43691aca8d6909b06642764c808b"
+  },
+  "target": {
+    "base_commit": "bf9ec8164e2c80394ce997f8a8b51515cad4746e",
+    "head_commit": "70094158251f3a11eaceee5d95cb63dfcea1e895",
+    "original_patch_sha256": "6ab20851231b8bbe72d0121f44cd76b61b39a219aedc085a5166183487250ce3"
+  },
+  "sources": [
+    {
+      "base": "record",
+      "path": "evidence/original.patch",
+      "sha256": "6ab20851231b8bbe72d0121f44cd76b61b39a219aedc085a5166183487250ce3"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/release.py",
+      "sha256": "f6a9f42408222a6e1ebccba6baabe57c1df263ab72a6f0a933e0953f6938b8dd"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/distribution/release_artifacts.py",
+      "sha256": "921dd17150b9687e5120a50111ef640ee04499cf59a0115af9d70874ffd0260b"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/distribution/archive_io.py",
+      "sha256": "3ce030569ca6b29d8cdc9463cc22057294fb52572ee221e7304caee8381e2c84"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/distribution/release_contract.py",
+      "sha256": "9c2e8c8753f7c5fcf860d121d5f18900d7c3107b1a777593cb5c188170196126"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_release_integrity.py",
+      "sha256": "455ed1ae136f7ee0b2133e5f9674fef6accc2865d5de7765751ba166727c37b0"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_release_manifest_contract.sh",
+      "sha256": "4b73bb2118363542ba08335a696f5cde74f3db822b5432980ca059a6cbf3758e"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_archive_resource_bounds.py",
+      "sha256": "c5e8ffdf3e2cb421addd683d517e524c684e2c608d04f7e14b598f7b63020e64"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_strict_json.py",
+      "sha256": "a48caf376cad34c8b58fe2e1d1ba9a55285d627e5f93ca42ddbb6c21a850a55c"
+    },
+    {
+      "base": "record",
+      "path": "requirements.md",
+      "sha256": "62af6210c96e8d4d388476f07d07f6a08d9c5ee769e0ac0f177806406bd2e237"
+    },
+    {
+      "base": "record",
+      "path": "design.md",
+      "sha256": "031c9556b21838bad423f3b22182bf25cba6ea2c67e0b68cd67fb7192bdc1f8b"
+    }
+  ],
+  "evidence": [
+    {
+      "base": "record",
+      "path": "review-findings.md",
+      "sha256": "1e538cc0e65b6d05cbcdae3270da331de552920140a23faaafa9c55cf6eb24c6"
+    },
+    {
+      "base": "record",
+      "path": "negative-results.md",
+      "sha256": "3f2232fd2a7ab1771dfa7b646a019e7ef9cb3feec2233f5dec5f2ca4236fe6c6"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-review-execution.json",
+      "sha256": "29ef6f58e05e5a7246ebb16c7ae7ef538edbc7e91cf2dfdf68c1ccdf2d74e729"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-review-probes.py",
+      "sha256": "0edfcd6ae097db4e9673df5f4a342583b16ffb0ef81d633351835b4ecad5b8a0"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-review-git-binding.json",
+      "sha256": "b44f4a0bef78371fb4d7d8c38d7c1e6b9b53c7710b1cc7395391167f29ae1849"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-review-followup.json",
+      "sha256": "5a36892f11bc665d438057c356560c1e5a0eaa31a11eadf5733418e6e92ea532"
+    },
+    {
+      "base": "record",
+      "path": "evidence/implementation-verification.json",
+      "sha256": "74f5aba18bb31f92b5bbb85199d85ef95f6b61526067ff396b4250a539f3a80f"
+    },
+    {
+      "base": "record",
+      "path": "evidence/focused-quality-followup.log",
+      "sha256": "f44194cbb1ea29058807ae8153e33410f698594b91322fd15a6084031ef08ac9"
+    }
+  ]
+}

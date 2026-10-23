@@ -1,0 +1,152 @@
+{
+  "schema": "adk-release-independent-followup/v1",
+  "reviewer": "ai/root/external_methods",
+  "author": "ai/root/implement_release",
+  "completed_at": "2026-10-23T12:35:19.548528Z",
+  "initial_review_head": "c06fd629fa9a08f3079e7a606f45e65fcccbfc28",
+  "final_review_head": "70094158251f3a11eaceee5d95cb63dfcea1e895",
+  "final_review_tree": "5bdab3551e6940e53ce5bdc9d3eedc4de678478d",
+  "verdicts": {
+    "spec": "pass",
+    "quality": "pass"
+  },
+  "sources": [
+    {
+      "path": "src/agent_dev_kit/release.py",
+      "sha256": "f6a9f42408222a6e1ebccba6baabe57c1df263ab72a6f0a933e0953f6938b8dd",
+      "initial_sha256": "f6a9f42408222a6e1ebccba6baabe57c1df263ab72a6f0a933e0953f6938b8dd",
+      "working_tree_matches_target_blob": true,
+      "initial_56_test_execution_bytes_match_target_blob": true
+    },
+    {
+      "path": "src/agent_dev_kit/distribution/release_artifacts.py",
+      "sha256": "921dd17150b9687e5120a50111ef640ee04499cf59a0115af9d70874ffd0260b",
+      "initial_sha256": "dd193bf37dcab03f9a562caa481f1a55b367acbf4327f82101abcf5525487a1a",
+      "working_tree_matches_target_blob": true,
+      "initial_56_test_execution_bytes_match_target_blob": false
+    },
+    {
+      "path": "src/agent_dev_kit/distribution/archive_io.py",
+      "sha256": "3ce030569ca6b29d8cdc9463cc22057294fb52572ee221e7304caee8381e2c84",
+      "initial_sha256": "c2ee8fcb027608cc64c9d93f1e3992bde8adbaf8679d3000bc10e942660a2976",
+      "working_tree_matches_target_blob": true,
+      "initial_56_test_execution_bytes_match_target_blob": false
+    },
+    {
+      "path": "src/agent_dev_kit/distribution/release_contract.py",
+      "sha256": "9c2e8c8753f7c5fcf860d121d5f18900d7c3107b1a777593cb5c188170196126",
+      "initial_sha256": "9c2e8c8753f7c5fcf860d121d5f18900d7c3107b1a777593cb5c188170196126",
+      "working_tree_matches_target_blob": true,
+      "initial_56_test_execution_bytes_match_target_blob": true
+    },
+    {
+      "path": "tests/test_release_integrity.py",
+      "sha256": "455ed1ae136f7ee0b2133e5f9674fef6accc2865d5de7765751ba166727c37b0",
+      "initial_sha256": "455ed1ae136f7ee0b2133e5f9674fef6accc2865d5de7765751ba166727c37b0",
+      "working_tree_matches_target_blob": true,
+      "initial_56_test_execution_bytes_match_target_blob": true
+    },
+    {
+      "path": "tests/test_release_manifest_contract.sh",
+      "sha256": "4b73bb2118363542ba08335a696f5cde74f3db822b5432980ca059a6cbf3758e",
+      "initial_sha256": "4b73bb2118363542ba08335a696f5cde74f3db822b5432980ca059a6cbf3758e",
+      "working_tree_matches_target_blob": true,
+      "initial_56_test_execution_bytes_match_target_blob": true
+    },
+    {
+      "path": "tests/test_archive_resource_bounds.py",
+      "sha256": "c5e8ffdf3e2cb421addd683d517e524c684e2c608d04f7e14b598f7b63020e64",
+      "initial_sha256": "c5e8ffdf3e2cb421addd683d517e524c684e2c608d04f7e14b598f7b63020e64",
+      "working_tree_matches_target_blob": true,
+      "initial_56_test_execution_bytes_match_target_blob": true
+    },
+    {
+      "path": "tests/test_strict_json.py",
+      "sha256": "a48caf376cad34c8b58fe2e1d1ba9a55285d627e5f93ca42ddbb6c21a850a55c",
+      "initial_sha256": "a48caf376cad34c8b58fe2e1d1ba9a55285d627e5f93ca42ddbb6c21a850a55c",
+      "working_tree_matches_target_blob": true,
+      "initial_56_test_execution_bytes_match_target_blob": true
+    }
+  ],
+  "reviewed_changes": [
+    {
+      "path": "src/agent_dev_kit/distribution/archive_io.py",
+      "rule": "B023",
+      "conclusion": "Explicit chunk loop reads the current tar source; per-chunk digest/size accumulation, EOF termination, bounded reader, truncation check and finally restoration retain the reviewed behavior."
+    },
+    {
+      "path": "src/agent_dev_kit/distribution/release_artifacts.py",
+      "rule": "I001",
+      "conclusion": "The same six names are imported from the same module; only grouping and order change."
+    },
+    {
+      "path": "src/agent_dev_kit/distribution/release_artifacts.py",
+      "rule": "UP022",
+      "conclusion": "capture_output=True preserves separate PIPE byte capture, check=False and timeout=60; unchanged bytes parsing and failure branch are inspected."
+    }
+  ],
+  "independent_checks": [
+    {
+      "command": "/workspace/scratch/694941d81014/tooling/rtk bypass env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src PATH=/workspace/scratch/694941d81014/tooling/venv/bin:/usr/local/bin:/usr/bin:/bin /workspace/scratch/694941d81014/tooling/venv/bin/python docs/changes/20261023-release-contract/evidence/independent-review-probes.py InventoryReview -v",
+      "exit_code": 0,
+      "tests": 3,
+      "elapsed_seconds": 0.584,
+      "output": "test_conflicts_duplicate_directories_and_pax_override_are_rejected (__main__.InventoryReview.test_conflicts_duplicate_directories_and_pax_override_are_rejected) ... ok\ntest_nested_sort_and_large_source_streaming (__main__.InventoryReview.test_nested_sort_and_large_source_streaming) ... ok\ntest_oversized_source_header_rejected_before_payload_read (__main__.InventoryReview.test_oversized_source_header_rejected_before_payload_read) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.584s\n\nOK\n"
+    },
+    {
+      "command": "/workspace/scratch/694941d81014/tooling/rtk bypass env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src PATH=/workspace/scratch/694941d81014/tooling/venv/bin:/usr/local/bin:/usr/bin:/bin /workspace/scratch/694941d81014/tooling/venv/bin/python -m unittest discover -s tests -p test_archive_resource_bounds.py -v",
+      "exit_code": 0,
+      "tests": 22,
+      "elapsed_seconds": 0.156,
+      "output": "test_bad_crc_and_truncated_gzip_are_rejected_at_eof (test_archive_resource_bounds.ArchiveResourceTests.test_bad_crc_and_truncated_gzip_are_rejected_at_eof) ... ok\ntest_compressed_snapshot_is_bounded_before_decompression (test_archive_resource_bounds.ArchiveResourceTests.test_compressed_snapshot_is_bounded_before_decompression) ... ok\ntest_decoded_padding_and_concatenated_gzip_count_toward_budget (test_archive_resource_bounds.ArchiveResourceTests.test_decoded_padding_and_concatenated_gzip_count_toward_budget) ... ok\ntest_digest_and_extraction_use_exact_snapshot_after_path_replacement (test_archive_resource_bounds.ArchiveResourceTests.test_digest_and_extraction_use_exact_snapshot_after_path_replacement) ... ok\ntest_explicit_extraction_preserves_payload_and_safe_permissions (test_archive_resource_bounds.ArchiveResourceTests.test_explicit_extraction_preserves_payload_and_safe_permissions) ... ok\ntest_extraction_budget_failure_precedes_destination_creation (test_archive_resource_bounds.ArchiveResourceTests.test_extraction_budget_failure_precedes_destination_creation) ... ok\ntest_extraction_rejects_path_traversal_before_writing_members (test_archive_resource_bounds.ArchiveResourceTests.test_extraction_rejects_path_traversal_before_writing_members) ... ok\ntest_hidden_header_chain_fails_as_contract_error_before_recursion (test_archive_resource_bounds.ArchiveResourceTests.test_hidden_header_chain_fails_as_contract_error_before_recursion) ... ok\ntest_hidden_pax_header_read_is_bounded_before_materialization (test_archive_resource_bounds.ArchiveResourceTests.test_hidden_pax_header_read_is_bounded_before_materialization) ... ok\ntest_long_pax_names_remain_compatible_within_budget (test_archive_resource_bounds.ArchiveResourceTests.test_long_pax_names_remain_compatible_within_budget) ... ok\ntest_member_cache_does_not_retain_global_pax_maps (test_archive_resource_bounds.ArchiveResourceTests.test_member_cache_does_not_retain_global_pax_maps) ... ok\ntest_member_count_is_bounded_even_without_payload (test_archive_resource_bounds.ArchiveResourceTests.test_member_count_is_bounded_even_without_payload) ... ok\ntest_member_size_and_name_are_bounded (test_archive_resource_bounds.ArchiveResourceTests.test_member_size_and_name_are_bounded) ... ok\ntest_metadata_and_pax_keys_have_separate_budgets (test_archive_resource_bounds.ArchiveResourceTests.test_metadata_and_pax_keys_have_separate_budgets) ... ok\ntest_publish_uploads_snapshot_not_replaced_original (test_archive_resource_bounds.ArchiveResourceTests.test_publish_uploads_snapshot_not_replaced_original) ... ok\ntest_real_delivery_cli_preserves_leaf_link_rejection (test_archive_resource_bounds.ArchiveResourceTests.test_real_delivery_cli_preserves_leaf_link_rejection) ... ok\ntest_real_rehearsal_checksum_input_is_bounded_regular (test_archive_resource_bounds.ArchiveResourceTests.test_real_rehearsal_checksum_input_is_bounded_regular) ... ok\ntest_real_rehearsal_hash_and_extraction_share_captured_bytes (test_archive_resource_bounds.ArchiveResourceTests.test_real_rehearsal_hash_and_extraction_share_captured_bytes) ... ok\ntest_real_rehearsal_rejects_overbudget_and_unsafe_leaf_before_workspace (test_archive_resource_bounds.ArchiveResourceTests.test_real_rehearsal_rejects_overbudget_and_unsafe_leaf_before_workspace) ... ok\ntest_required_members_missing_duplicate_and_special_are_rejected (test_archive_resource_bounds.ArchiveResourceTests.test_required_members_missing_duplicate_and_special_are_rejected) ... ok\ntest_snapshot_rejects_leaf_links_fifos_and_directories_without_hanging (test_archive_resource_bounds.ArchiveResourceTests.test_snapshot_rejects_leaf_links_fifos_and_directories_without_hanging) ... ok\ntest_valid_order_independence_and_no_getmembers (test_archive_resource_bounds.ArchiveResourceTests.test_valid_order_independence_and_no_getmembers) ... ok\n\n----------------------------------------------------------------------\nRan 22 tests in 0.156s\n\nOK\n"
+    }
+  ],
+  "author_evidence_read": [
+    {
+      "path": "evidence/implementation-verification.json",
+      "sha256": "74f5aba18bb31f92b5bbb85199d85ef95f6b61526067ff396b4250a539f3a80f"
+    },
+    {
+      "path": "evidence/focused-quality-followup.log",
+      "sha256": "f44194cbb1ea29058807ae8153e33410f698594b91322fd15a6084031ef08ac9"
+    }
+  ],
+  "author_checks_observed": [
+    {
+      "name": "focused Ruff E4,E7,E9,F,B,UP,SIM,I",
+      "exit_code": 0,
+      "independently_rerun": false
+    },
+    {
+      "name": "mypy distribution plus release.py",
+      "source_files": 6,
+      "exit_code": 0,
+      "independently_rerun": false
+    },
+    {
+      "name": "archive resource bounds",
+      "tests": 22,
+      "elapsed_seconds": 0.235,
+      "exit_code": 0,
+      "attribution": "author; separate reviewer execution retained above"
+    },
+    {
+      "name": "release integrity",
+      "tests": 13,
+      "elapsed_seconds": 33.876,
+      "exit_code": 0,
+      "independently_rerun": false
+    }
+  ],
+  "initial_execution_ref": {
+    "path": "evidence/independent-review-execution.json",
+    "sha256": "29ef6f58e05e5a7246ebb16c7ae7ef538edbc7e91cf2dfdf68c1ccdf2d74e729",
+    "tests": 56,
+    "rerun_as_complete_suite": false
+  },
+  "limitations": [
+    "All eight final source files match the target Git blobs. The first 56-method execution belongs to the earlier source snapshot; only the two specified suites were rerun in this followup.",
+    "Two source freshness manifests and other non-release changes in the complete diff are outside this reviewer scope and are reviewed by ai/root/architecture_audit.",
+    "Remote head provenance is supplied by the integrator; this followup verifies local object/tree/blob identity. No live publication, signature, runtime qualification, paid model execution or field performance measurement was performed."
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "schema": "adk-independent-source-refresh-validation/v1",
+  "phase": "before implementation",
+  "reviewer_id": "ai/root/architecture_audit",
+  "environment": {
+    "PATH": "/workspace/scratch/694941d81014/tooling/venv/bin:/usr/local/bin:/usr/bin:/bin",
+    "PYTHONPATH": "src",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "checks": [
+    {
+      "command": [
+        "/workspace/scratch/694941d81014/tooling/rtk",
+        "bypass",
+        "bash",
+        "scripts/check-agent-ecosystem-standards.sh",
+        "--summary-json"
+      ],
+      "started_at": "2026-10-23T12:29:31.454738Z",
+      "finished_at": "2026-10-23T12:29:31.669709Z",
+      "exit_code": 1,
+      "stdout": "{\"schema_version\":1,\"status\":\"fail\",\"checks\":553,\"failures\":[\"source_ref owasp-agentic-skills-top10-2026 review is expired\",\"source_ref agent-skills-in-the-wild-2026 review is expired\"]}\n",
+      "stderr": "[FAIL] source_ref owasp-agentic-skills-top10-2026 review is expired\n[FAIL] source_ref agent-skills-in-the-wild-2026 review is expired\n"
+    },
+    {
+      "command": [
+        "/workspace/scratch/694941d81014/tooling/rtk",
+        "bypass",
+        "bash",
+        "scripts/check-official-docs-governance.sh",
+        "--summary-json"
+      ],
+      "started_at": "2026-10-23T12:29:31.669729Z",
+      "finished_at": "2026-10-23T12:29:31.811288Z",
+      "exit_code": 0,
+      "stdout": "{\"status\":\"pass\",\"evaluated_at\":\"2026-10-23\",\"date_basis\":\"fixed_utc_offset:+08:00;label=Asia/Hong_Kong\",\"official_sources\":69,\"eval_suites\":10,\"trace_contracts\":2,\"mcp_dependencies\":2,\"slash_audits\":3,\"subagent_contracts\":1,\"runtime_policy_layers\":2,\"rules_contracts\":2,\"runtime_api_groups\":7,\"context_state_contracts\":3,\"docs_mcp_tooling_targets\":4,\"sandbox_presets\":3,\"hook_events\":5,\"adk_runner_contracts\":2,\"plugin_contracts\":1,\"marketplace_contracts\":2,\"structured_output_contracts\":10,\"tool_search_contracts\":2,\"automation_contracts\":2,\"worktree_contracts\":1,\"agent_improvement_loops\":2,\"pr_review_contracts\":3,\"skill_reproducibility_contracts\":7,\"model_selection_records\":1,\"data_retention_contracts\":1,\"prompt_cache_contracts\":1,\"codex_surface_terms\":8,\"failures\":0}\n",
+      "stderr": ""
+    }
+  ]
+}

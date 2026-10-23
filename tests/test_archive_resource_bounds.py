@@ -32,14 +32,16 @@ class ArchiveResourceTests(unittest.TestCase):
             "manifest_sha256": hashlib.sha256(canonical_json_bytes({"version": "7.0.0"})).hexdigest(),
             "direct_targets": [{"target": "claude-code", "agents": 1, "skills": 1}],
             "external_targets": ["external-runtime"], "source_distribution": True,
-            "source_file_count": 2, "reproducible": False, "release_eligible": False,
+            "source_file_count": 1, "reproducible": False, "release_eligible": False,
             "source_provenance": {"kind": "unbound-snapshot", "release_eligible": False,
                                   "commit": None, "tree": None, "dirty": None,
-                                  "source_distribution_sha256": "0" * 64},
+                                  "source_distribution_sha256": hashlib.sha256(
+                                      b"manifest.json\0" + hashlib.sha256(source).digest()).hexdigest()},
             "sbom": {"path": "sbom.spdx.json", "sha256": hashlib.sha256(sbom).hexdigest(),
                      "validated": True},
         }
-        self.members = [("manifest.json", source), ("release-manifest.json", json.dumps(release).encode()),
+        self.members = [("manifest.json", source), ("source/manifest.json", source),
+                        ("release-manifest.json", json.dumps(release).encode()),
                         ("sbom.spdx.json", sbom)]
         self.write_archive(self.members)
 
@@ -216,7 +218,8 @@ class ArchiveResourceTests(unittest.TestCase):
             return mock.Mock(returncode=0, stdout="published", stderr="")
 
         with mock.patch.object(release_artifacts, "_verified_archive_snapshot", side_effect=captured), \
-             mock.patch.object(release_artifacts, "_assert_publishable_release_artifact"), \
+             mock.patch.object(release_artifacts, "_assert_publishable_release_artifact",
+                               return_value=release_contract.validate_release_artifact(self.path)), \
              mock.patch.object(release.shutil, "which", return_value="/usr/bin/gh"), \
              mock.patch.object(release.subprocess, "run", side_effect=upload):
             self.assertEqual("pass", release.publish_release("7.0.0", "github", self.path)["status"])
@@ -246,7 +249,7 @@ class ArchiveResourceTests(unittest.TestCase):
             release_contract.validate_release_artifact(self.path)
 
     def test_long_pax_names_remain_compatible_within_budget(self):
-        self.write_archive([("source/" + "a" * 200, b"safe")] + self.members)
+        self.write_archive([("bundles/" + "a" * 200, b"safe")] + self.members)
         self.assertEqual("pass", release_contract.validate_release_artifact(self.path)["status"])
 
     def test_digest_and_extraction_use_exact_snapshot_after_path_replacement(self):

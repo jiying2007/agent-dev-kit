@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-07-23",
+  "last_updated": "2026-10-23",
   "source_docs": [
     "openai-skills-api-operational-practices",
     "openai-codex-agent-skills",
@@ -46,18 +46,18 @@
       {
         "id": "AST04",
         "name": "Insecure Metadata",
-        "local_surfaces": ["frontmatter", "manifest", "routing descriptions"],
-        "preventive_controls": ["schema validation", "name-directory match", "positive and negative routing cases"],
-        "evidence_required": ["manifest validation", "routing fixture", "provenance metadata"],
-        "residual_risk": "valid metadata can still be misleading"
+        "local_surfaces": ["frontmatter", "manifest", "routing descriptions", "YAML", "JSON", "support-file loaders"],
+        "preventive_controls": ["schema validation", "name-directory match", "positive and negative routing cases", "safe parsers", "bounded schemas", "no executable deserialization"],
+        "evidence_required": ["manifest validation", "routing fixture", "provenance metadata", "parser contract", "malformed fixture", "execution boundary"],
+        "residual_risk": "Valid metadata can still be misleading, and downstream runtimes may parse generated assets differently."
       },
       {
         "id": "AST05",
-        "name": "Unsafe Deserialization",
-        "local_surfaces": ["YAML", "JSON", "support-file loaders"],
-        "preventive_controls": ["safe parsers", "bounded schemas", "no executable deserialization"],
-        "evidence_required": ["parser contract", "malformed fixture", "execution boundary"],
-        "residual_risk": "downstream runtimes may parse generated assets differently"
+        "name": "Untrusted External Instructions",
+        "local_surfaces": ["external documentation", "remote references", "transitive instruction sources"],
+        "preventive_controls": ["reference source inventory", "revision and digest pinning", "review expiry", "external content treated as untrusted data"],
+        "evidence_required": ["source URL and revision", "retrieved content digest", "freshness review", "instruction-boundary review"],
+        "residual_risk": "A pinned skill may load mutable or selectively served external instructions absent from the reviewed package."
       },
       {
         "id": "AST06",

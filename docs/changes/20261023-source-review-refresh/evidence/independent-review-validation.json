@@ -1,0 +1,21 @@
+{
+  "schema": "adk-independent-source-review-validation/v1",
+  "evaluated_at": "2026-10-23T12:34:52.963344Z",
+  "status": "pass",
+  "record": "docs/changes/20261023-source-review-refresh/review-evidence.json",
+  "record_sha256": "dd080d0d1553adcf0101cfb0e3b07082a3b2e5823af0fab5225fc8e2fa5f2293",
+  "reviewed_at": "2026-10-23T12:34:13.339261Z",
+  "source_ref_count": 10,
+  "evidence_ref_count": 7,
+  "target": {
+    "base_commit": "c06fd629fa9a08f3079e7a606f45e65fcccbfc28",
+    "head_commit": "70094158251f3a11eaceee5d95cb63dfcea1e895",
+    "original_patch_sha256": "79bb581becd2446a62e744df3a7f7c0cdad8a7b714b1dd4febd268a95f8ab495"
+  },
+  "harness_record_unchanged_and_valid": true,
+  "human_review_performed": false,
+  "field_evidence_verified": false,
+  "provider_execution_performed": false,
+  "product_release_authorized": false,
+  "serializer_validation_note": "Initial draft placed the complete patch under evidence; validator rejected it. The published record binds it under sources with the required record-relative path, and validation now passes."
+}

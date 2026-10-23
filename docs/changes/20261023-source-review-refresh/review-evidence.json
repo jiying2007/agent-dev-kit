@@ -1,0 +1,149 @@
+{
+  "schema": "adk-review-evidence/v1",
+  "subject_id": "20261023-source-review-refresh",
+  "scope": "source-change",
+  "owner": "leiwenjun",
+  "author_id": "ai/root",
+  "reviewer": {
+    "id": "ai/root/architecture_audit",
+    "kind": "ai",
+    "independence": "independent"
+  },
+  "reviewed_at": "2026-10-23T12:34:13.339261Z",
+  "evidence_completed_at": "2026-10-23T12:34:13.339254Z",
+  "verdicts": {
+    "spec": "pass",
+    "quality": "pass"
+  },
+  "findings": [
+    {
+      "id": "source-refresh-expired-references",
+      "severity": "minor",
+      "disposition": "fixed",
+      "reason": "The two active external source reviews expired on 2026-10-22. Real primary-source re-review preceded metadata refresh, and the unchanged current-date gate now passes."
+    },
+    {
+      "id": "source-refresh-ast05-drift",
+      "severity": "minor",
+      "disposition": "fixed",
+      "reason": "Fixed upstream AST05 now concerns untrusted external instructions. The author synchronized that static mapping and preserved every previous parser control under AST04; all ten risk names independently match the pinned upstream table."
+    },
+    {
+      "id": "source-refresh-license-identity",
+      "severity": "minor",
+      "disposition": "fixed",
+      "reason": "The actual OWASP license and formal paper v2 identity/distribution-license limit are now explicit, without importing third-party materials or implying local effect evidence."
+    }
+  ],
+  "limitations": [
+    "Actual owner-delegated independent AI source review by ai/root/architecture_audit; author and implementation owner is ai/root. Reviewer researched the primary sources and proposed the design but did not modify production manifests.",
+    "Scope is two changed manifests and this source-review change contract/evidence. The complete retained c06-to-700941 patch also includes a focused release follow-up, whose correctness is owned by a separate independent review; this verdict does not substitute for it.",
+    "Source review is limited to the actual primary-source sections and fixed GitHub files recorded in primary-source-observations.json. The linked OWASP whitepaper and paper replication package were not reviewed or imported.",
+    "Only the two expired source reviews are renewed. The other 69 official sources passed current-date metadata validation without a new semantic recertification; original source dates and non-authoritative Harness citations remain unchanged.",
+    "The 30-day review interval is a local scheduling decision, not an upstream guarantee. Static taxonomy mapping is not OWASP certification, install approval or proof of runtime enforcement.",
+    "Paper findings are observational and do not establish local ADK use, activation, effect or current ecosystem prevalence. arXiv distribution licensing is not a separately verified import license for paper text, data or code.",
+    "The original 8.0.39 Harness source receipt remains unchanged and validates against current sources. This review does not extend its timestamp or recertify unavailable user-provided material.",
+    "No human review, external provider execution, runtime qualification, field-effect measurement or product release authorization was performed. Full integration, protected CI and publication are separate delivery facts.",
+    "Digest checks bind observed bytes and do not authenticate a claimed reviewer identity. Observations are sequential rather than an atomic repository snapshot; all recorded command source snapshots showed no drift."
+  ],
+  "policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+  "validator_sha256": {
+    "src/agent_dev_kit/review_evidence.py": "73d85e864a3da125bf94808f19616f52150751a94ccc729ac66f66d2576b8808",
+    "src/agent_dev_kit/strict_json.py": "e11233b8d02d7fb95a8f2f93bfff065a1db84c4ef0820fef6d817600abe8ec98",
+    "src/agent_dev_kit/readiness_evidence.py": "ef980657486084eea8ab8a03ab357a76a3ed43691aca8d6909b06642764c808b"
+  },
+  "target": {
+    "base_commit": "c06fd629fa9a08f3079e7a606f45e65fcccbfc28",
+    "head_commit": "70094158251f3a11eaceee5d95cb63dfcea1e895",
+    "original_patch_sha256": "79bb581becd2446a62e744df3a7f7c0cdad8a7b714b1dd4febd268a95f8ab495"
+  },
+  "sources": [
+    {
+      "base": "repository",
+      "path": "manifests/external_agent_pattern_contracts.json",
+      "sha256": "bd226ce213e92842441ab21ec4f2eee8574166492727b66faa9b2019a6d09ae0"
+    },
+    {
+      "base": "repository",
+      "path": "manifests/skill_reproducibility_contracts.json",
+      "sha256": "a65fc8efceb9aea04f7066109c23616bbcf4611e570ef8d0315e9c5ceace8445"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261023-source-review-refresh/requirements.md",
+      "sha256": "0a5d4c401ee480df8c114f016e4fd0c68b27ffe3d8f077e820957f04d4ecf5b2"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261023-source-review-refresh/design.md",
+      "sha256": "e60fb8818b4d60f38f1db768184d1f06089ff008b8c87d24eb6819de2c3c8d76"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261023-source-review-refresh/tasks.md",
+      "sha256": "8175d008e019813ed5d440bfa51bd43a0c2f7a1aa38939cf7ecc7bf79df54e10"
+    },
+    {
+      "base": "repository",
+      "path": "scripts/check-agent-ecosystem-standards.sh",
+      "sha256": "6f20d80d1e97e8f7c9f0dd6469bdb86ea576e83044a40ec699539ae0e6e0cded"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/official_docs_sources.py",
+      "sha256": "36f9759939685e5db9f873008a723b50de429498c839f89b828e9a7ffb652afd"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/validation_contract.py",
+      "sha256": "5fae7240017ae758501abc5c8908ea770139f25529fcf64924462ce447075253"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_agent_ecosystem_standards.sh",
+      "sha256": "9341118fc2187764597d0445caddfa5930fbc95fb0eeed6665d29ef9b4a3844e"
+    },
+    {
+      "base": "record",
+      "path": "evidence/original.patch",
+      "sha256": "79bb581becd2446a62e744df3a7f7c0cdad8a7b714b1dd4febd268a95f8ab495"
+    }
+  ],
+  "evidence": [
+    {
+      "base": "repository",
+      "path": "docs/changes/20261023-source-review-refresh/evidence/independent-review-git-binding.json",
+      "sha256": "fdfcbd988f60f3f1472e162a940d642cbf77bb9c6dfef23d535389244e02cc27"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261023-source-review-refresh/evidence/proposed-changes.json",
+      "sha256": "11ad3837df76a4d2d1e826acfb856c49486248e55abb90ad13a03915cedcd780"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261023-source-review-refresh/evidence/primary-source-observations.json",
+      "sha256": "0d2583fe4898517645320021e5850e2e418a57b46fc252e021f7e33d562c3144"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261023-source-review-refresh/evidence/before-gates.json",
+      "sha256": "378ec46b7fcded58e1e051ff94f47bfd5d708e41cefeab0b8a469e6d7055c929"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261023-source-review-refresh/evidence/independent-review-probes.json",
+      "sha256": "672596701bc578a5a9eb235880146ae22e89c67a8618c9eb31bcbdf54bf6a78e"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261023-source-review-refresh/evidence/independent-review-execution.json",
+      "sha256": "928c1462330a3995128a513d6116193e569cd676432f5392fc4bfd6865185a4d"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261023-source-review-refresh/review-findings.md",
+      "sha256": "c80d8acb18ccffe588ccb7cc40cdf995aa88e7f12213906f88d8196f1e0eba15"
+    }
+  ]
+}

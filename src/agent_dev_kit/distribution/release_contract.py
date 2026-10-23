@@ -22,7 +22,7 @@ from agent_dev_kit.model import canonical_json_bytes
 
 from ..strict_json import StrictJSONError
 from ..strict_json import loads as load_strict_json
-from .archive_io import load_archive_snapshot
+from .archive_io import inspect_archive_snapshot, load_archive_snapshot
 
 _SCHEMA_NAME = "release-manifest-v2.schema.json"
 _MAX_JSON_BYTES = 8 * 1024 * 1024
@@ -68,10 +68,15 @@ def _canonical_manifest_sha256(raw: bytes) -> str:
     return _sha256(canonical_json_bytes(value))
 
 
-def validate_release_artifact(artifact: Path) -> dict[str, Any]:
+def validate_release_artifact(artifact: Path, *, raw_snapshot: bytes | None = None) -> dict[str, Any]:
     """Validate manifest, SBOM and source-manifest identities inside an archive."""
 
-    raw, payloads = load_archive_snapshot(artifact)
+    source_inventory: dict[str, Any] = {}
+    if raw_snapshot is None:
+        raw, payloads = load_archive_snapshot(artifact, source_inventory=source_inventory)
+    else:
+        raw = raw_snapshot
+        payloads = inspect_archive_snapshot(raw, source_inventory=source_inventory)
     release_bytes = payloads["release-manifest.json"]
     try:
         release_manifest = load_strict_json(release_bytes, max_bytes=_MAX_JSON_BYTES)
@@ -94,10 +99,20 @@ def validate_release_artifact(artifact: Path) -> dict[str, Any]:
     if sbom_sha != release_manifest["sbom"]["sha256"]:
         raise ValueError("release SBOM digest does not match release manifest")
 
-    source_manifest_bytes = payloads["manifest.json"]
+    source_manifest_bytes = payloads.get("source/manifest.json")
+    if source_manifest_bytes is None:
+        raise ValueError("release archive is missing its source manifest")
     source_manifest_sha = _canonical_manifest_sha256(source_manifest_bytes)
+    if source_manifest_sha != _canonical_manifest_sha256(payloads["manifest.json"]):
+        raise ValueError("release top-level and source manifests differ")
+    if load_strict_json(source_manifest_bytes, max_bytes=_MAX_JSON_BYTES).get("version") != version:
+        raise ValueError("release source manifest version does not match release version")
     if source_manifest_sha != release_manifest["manifest_sha256"]:
         raise ValueError("release manifest source manifest digest does not match archive")
+    if source_inventory["file_count"] != release_manifest["source_file_count"]:
+        raise ValueError("release source file count does not match archive")
+    if source_inventory["sha256"] != release_manifest["source_provenance"]["source_distribution_sha256"]:
+        raise ValueError("release source distribution digest does not match archive")
 
     return {
         "schema": "adk-release-artifact-contract/v1",

@@ -50,7 +50,6 @@ ADK active scripts 不直接依赖 `rtk`；本机 Codex 会话只在操作者命
 | `embedded-fullstack` | 嵌入式全栈开发配置 |
 | `release-hardening` | 发布前强化 |
 | `team-core` | 团队交付与交接 |
-| `openspec-driven` | Spec 驱动变更 |
 | `large-refactor` | 大型重构 |
 | `incident-response` | 事故响应 |
 | `research-intake` | 参考资料吸收 |
@@ -58,7 +57,7 @@ ADK active scripts 不直接依赖 `rtk`；本机 Codex 会话只在操作者命
 Profile 继承一致性检查：
 
 ```bash
-bash PYTHONPATH=src python3 -m agent_dev_kit.profile_coherence_contract --root .
+PYTHONPATH=src python3 -m agent_dev_kit.profile_coherence_contract --root .
 ```
 
 ## 3. 安装和导出
@@ -92,8 +91,8 @@ bash scripts/devkit.sh export --target opencode --profile team-core --with-optio
 - `--profile`：主 profile，默认 `core`。
 - `--extra-profile`：可选叠加 profile，可重复。
 - `--with-optional-skill`：按需叠加 optional skill，可重复。
-- `--out`：导出输出目录。
-- `--clean`：导出前清理输出目录。
+- `--out`：导出输出根目录；根目录、target 目录及祖先均不得是符号链接，路径不得包含 `..`。
+- `--clean`：在 writer lock 内检查路径身份后替换当前 target 的导出目录，不通过链接清理其他目录。
 - `--output`：安装 plan 输出路径。
 - `--ttl-minutes`：安装 plan 有效期。
 

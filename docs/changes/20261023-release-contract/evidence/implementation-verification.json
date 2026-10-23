@@ -1,0 +1,177 @@
+{
+  "schema": "adk-release-contract-implementation-verification/v1",
+  "implementer": "ai/root/implement_release",
+  "base_commit": "bf9ec8164e2c80394ce997f8a8b51515cad4746e",
+  "collected_at": "2026-10-23T12:02:06.150661+00:00",
+  "updated_at": "2026-10-23T12:30:03+00:00",
+  "status": "pass",
+  "findings": [
+    "ADK-01",
+    "ADK-02",
+    "ADK-03"
+  ],
+  "source_files": [
+    {
+      "path": "src/agent_dev_kit/release.py",
+      "sha256": "f6a9f42408222a6e1ebccba6baabe57c1df263ab72a6f0a933e0953f6938b8dd"
+    },
+    {
+      "path": "src/agent_dev_kit/distribution/release_artifacts.py",
+      "sha256": "921dd17150b9687e5120a50111ef640ee04499cf59a0115af9d70874ffd0260b"
+    },
+    {
+      "path": "src/agent_dev_kit/distribution/archive_io.py",
+      "sha256": "3ce030569ca6b29d8cdc9463cc22057294fb52572ee221e7304caee8381e2c84"
+    },
+    {
+      "path": "src/agent_dev_kit/distribution/release_contract.py",
+      "sha256": "9c2e8c8753f7c5fcf860d121d5f18900d7c3107b1a777593cb5c188170196126"
+    },
+    {
+      "path": "tests/test_release_integrity.py",
+      "sha256": "455ed1ae136f7ee0b2133e5f9674fef6accc2865d5de7765751ba166727c37b0"
+    },
+    {
+      "path": "tests/test_release_manifest_contract.sh",
+      "sha256": "4b73bb2118363542ba08335a696f5cde74f3db822b5432980ca059a6cbf3758e"
+    },
+    {
+      "path": "tests/test_archive_resource_bounds.py",
+      "sha256": "c5e8ffdf3e2cb421addd683d517e524c684e2c608d04f7e14b598f7b63020e64"
+    },
+    {
+      "path": "tests/test_strict_json.py",
+      "sha256": "a48caf376cad34c8b58fe2e1d1ba9a55285d627e5f93ca42ddbb6c21a850a55c"
+    }
+  ],
+  "checks": [
+    {
+      "command": "rtk bypass env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src <venv>/bin/python -m unittest discover -s tests -p test_release_integrity.py -v",
+      "phase": "red-before-implementation",
+      "exit_code": 1,
+      "tests": 12,
+      "failed_subtests": 16,
+      "errors": 1,
+      "elapsed_seconds": 18.062,
+      "evidence": "../negative-results.md"
+    },
+    {
+      "command": "rtk bypass env PATH=<venv>/bin:<system> PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src bash tests/test_release_manifest_contract.sh",
+      "phase": "green",
+      "exit_code": 0,
+      "test_groups": [
+        {
+          "name": "archive-resource-bounds",
+          "tests": 22,
+          "elapsed_seconds": 0.197
+        },
+        {
+          "name": "release-ci-authority",
+          "tests": 4,
+          "elapsed_seconds": 0.061
+        },
+        {
+          "name": "release-integrity",
+          "tests": 13,
+          "elapsed_seconds": 36.97
+        },
+        {
+          "name": "real-cross-version-release-rehearsal",
+          "tests": 1,
+          "elapsed_seconds": 28.815
+        }
+      ],
+      "evidence": "release-gate.log"
+    },
+    {
+      "command": "rtk bypass env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src <venv>/bin/python tests/test_release_integrity.py ReleaseGitInputTest.test_hidden_tracked_drift_cannot_change_frozen_release -v",
+      "phase": "green-final-flag-isolation",
+      "exit_code": 0,
+      "tests": 1,
+      "elapsed_seconds": 18.647,
+      "evidence": "hidden-index-flags.log"
+    },
+    {
+      "command": "rtk bypass env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src <venv>/bin/python -m unittest discover -s tests -p test_strict_json.py -v",
+      "exit_code": 0,
+      "tests": 14,
+      "elapsed_seconds": 0.054
+    },
+    {
+      "command": "rtk bypass <venv>/bin/ruff check src/agent_dev_kit/release.py src/agent_dev_kit/distribution tests/test_release_integrity.py",
+      "exit_code": 0
+    },
+    {
+      "command": "rtk bypass <venv>/bin/mypy src/agent_dev_kit/distribution",
+      "exit_code": 0,
+      "source_files": 5
+    },
+    {
+      "command": "rtk bypass env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src PATH=<venv>/bin:<system> bash tests/test_module_size_budget.sh",
+      "exit_code": 0,
+      "legacy_exception_count": 0,
+      "support_module_count": 0,
+      "observed_max_import_fan_out": 26
+    },
+    {
+      "command": "rtk bypass git diff --check",
+      "exit_code": 0
+    }
+  ],
+  "followup_phases": [
+    {
+      "phase": "integrated-focused-quality-rules",
+      "collected_at": "2026-10-23T12:30:03+00:00",
+      "reason": "The initial default Ruff invocation did not include the focused CI rule set; integration identified B023, I001 and UP022 in two implementation files.",
+      "changes": [
+        "Replace the source-reader lambda closure with an explicit bounded read loop.",
+        "Combine and sort archive_io imports.",
+        "Use subprocess.run(capture_output=True), retaining Python 3.8-compatible byte capture."
+      ],
+      "previous_source_file_bindings": [
+        {
+          "path": "src/agent_dev_kit/distribution/release_artifacts.py",
+          "sha256": "dd193bf37dcab03f9a562caa481f1a55b367acbf4327f82101abcf5525487a1a"
+        },
+        {
+          "path": "src/agent_dev_kit/distribution/archive_io.py",
+          "sha256": "c2ee8fcb027608cc64c9d93f1e3992bde8adbaf8679d3000bc10e942660a2976"
+        }
+      ],
+      "checks": [
+        {
+          "command": "rtk bypass <venv>/bin/ruff check src/agent_dev_kit/distribution --select E4,E7,E9,F,B,UP,SIM,I",
+          "exit_code": 0
+        },
+        {
+          "command": "rtk bypass <venv>/bin/mypy src/agent_dev_kit/distribution src/agent_dev_kit/release.py",
+          "exit_code": 0,
+          "source_files": 6
+        },
+        {
+          "command": "rtk bypass env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src <venv>/bin/python -m unittest discover -s tests -p test_archive_resource_bounds.py -v",
+          "exit_code": 0,
+          "tests": 22,
+          "elapsed_seconds": 0.235
+        },
+        {
+          "command": "rtk bypass env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src PATH=<venv>/bin:<system> <venv>/bin/python -m unittest discover -s tests -p test_release_integrity.py -v",
+          "exit_code": 0,
+          "tests": 13,
+          "elapsed_seconds": 33.876
+        }
+      ],
+      "evidence": "focused-quality-followup.log"
+    }
+  ],
+  "notes": [
+    "Existing valid minimal archive fixtures now contain an actual source manifest and matching canonical source digest; resource-bound negative tests retain their failure conditions.",
+    "The full gate preceded a test-only improvement that clears assume-unchanged before the independent skip-worktree case; the final focused run validates that stronger case.",
+    "Git input tests use temporary native repositories and real build/export operations; public publish upload is captured by a subprocess fixture and never contacts GitHub.",
+    "Source bindings were collected after verification; independent review and final integrated repository gates remain the parent integrator's responsibility.",
+    "The integrator removed only one trailing empty terminal-capture line from each retained log to satisfy repository whitespace checks; command output content and results are unchanged."
+  ],
+  "limitations": [
+    "No remote publication, live runtime, paid model call, fresh signature verification or product qualification was performed."
+  ]
+}

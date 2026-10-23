@@ -10,6 +10,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Mapping, Sequence
 
+from .atomic_io import validate_document_outputs
+from .installation_contract import _regular_install_path
 from .model import Manifest, ManifestError
 from .native_campaign_contract import (
     AUTH_MODES,
@@ -22,7 +24,7 @@ from .native_campaign_contract import (
     _validate_assertions,
     _validate_commands,
     _validate_schema,
-    _write_json,
+    _write_jsons,
     prepare_campaign as prepare_campaign,
 )
 from .native_campaign_execution import run_campaign as run_campaign
@@ -150,7 +152,7 @@ def finalize_campaign(
         now=datetime.now(timezone.utc),
     )
 
-    final_contract = copy.deepcopy(candidate_contract)
+    final_contract = copy.deepcopy(dict(candidate_contract))
     conformance = final_contract["adapter"]["conformance"]
     receipt_payload = (
         json.dumps(
@@ -208,30 +210,18 @@ def _safe_output_path(manifest: Manifest, value: str, label: str) -> Path:
     path = Path(value).expanduser()
     lexical = path if path.is_absolute() else Path.cwd() / path
     lexical = lexical.absolute()
-    if lexical.is_symlink():
-        raise ManifestError(f"native_campaign_output_symlink_path: {label}")
-    resolved = path.resolve()
-    root = manifest.root.resolve()
+    if ".." in lexical.parts:
+        raise ManifestError(f"native_campaign_output_parent_traversal: {label}")
     try:
-        lexical.relative_to(root)
-        lexical_in_root = True
-    except ValueError:
-        lexical_in_root = False
+        resolved = _regular_install_path(lexical, Path(lexical.anchor), "native campaign output")
+    except ManifestError as exc:
+        raise ManifestError(f"native_campaign_output_symlink_path: {label}") from exc
+    root = manifest.root.resolve()
     try:
         resolved.relative_to(root)
         resolved_in_root = True
     except ValueError:
         resolved_in_root = False
-    if lexical_in_root and not resolved_in_root:
-        raise ManifestError(f"native_campaign_output_symlink_escape: {label}")
-    if lexical_in_root:
-        # Do not follow an in-repository symlink to a different managed
-        # output leaf or subtree, even if the resolved target stays in root.
-        component = lexical
-        while component != root:
-            if component.is_symlink():
-                raise ManifestError(f"native_campaign_output_symlink_path: {label}")
-            component = component.parent
     if resolved_in_root:
         runtime_reports = (root / "reports" / "runtime").resolve()
         try:
@@ -241,6 +231,26 @@ def _safe_output_path(manifest: Manifest, value: str, label: str) -> Path:
                 f"native_campaign_repository_output_must_be_reports_runtime: {label}"
             ) from exc
     return resolved
+
+
+def _preflight_outputs(manifest: Manifest, args: argparse.Namespace) -> dict[str, Path]:
+    output_names, input_names = {
+        "prepare": (("plan_out", "candidate_contract_out"),
+                    ("commands_json", "assertions_json", "runtime_binary")),
+        "run": (("evidence_out",),
+                ("plan", "candidate_contract", "commands_json", "assertions_json", "runtime_binary")),
+        "finalize": (("receipt_out", "final_contract_out"),
+                     ("plan", "candidate_contract", "evidence")),
+    }[args.action]
+    outputs = {name: _safe_output_path(manifest, getattr(args, name), name.replace("_", "-"))
+               for name in output_names}
+    validate_document_outputs(list(outputs.values()), [Path(getattr(args, name)) for name in input_names])
+    return outputs
+
+
+def _publish_outputs(manifest: Manifest, args: argparse.Namespace, values: Mapping[str, Any]) -> None:
+    outputs = _preflight_outputs(manifest, args)
+    _write_jsons([(outputs[name], value) for name, value in values.items()])
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -295,6 +305,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = parser.parse_args(list(argv) if argv is not None else None)
     try:
         manifest = Manifest.load(Path(args.root).resolve())
+        outputs = _preflight_outputs(manifest, args)
         if args.action == "prepare":
             commands = _validate_commands(
                 _load_json(Path(args.commands_json), "native campaign commands")
@@ -324,12 +335,9 @@ def main(argv: Sequence[str] | None = None) -> int:
                 / "native-target-campaign-plan-v2.schema.json",
                 "native campaign plan",
             )
-            plan_out = _safe_output_path(manifest, args.plan_out, "plan-out")
-            candidate_out = _safe_output_path(
-                manifest, args.candidate_contract_out, "candidate-contract-out"
-            )
-            _write_json(plan_out, plan)
-            _write_json(candidate_out, candidate)
+            plan_out = outputs["plan_out"]
+            candidate_out = outputs["candidate_contract_out"]
+            _publish_outputs(manifest, args, {"plan_out": plan, "candidate_contract_out": candidate})
             result = {
                 "schema": "adk-native-target-campaign-operation/v1",
                 "status": "ready",
@@ -361,9 +369,6 @@ def main(argv: Sequence[str] | None = None) -> int:
                 / "native-target-campaign-plan-v2.schema.json",
                 "native campaign plan",
             )
-            evidence_out = _safe_output_path(
-                manifest, args.evidence_out, "evidence-out"
-            )
             result = run_campaign(
                 manifest,
                 plan,
@@ -379,7 +384,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 / "native-target-campaign-evidence-v2.schema.json",
                 "native campaign evidence",
             )
-            _write_json(evidence_out, result)
+            _publish_outputs(manifest, args, {"evidence_out": result})
         else:
             plan = _load_json(Path(args.plan), "native campaign plan")
             candidate = _load_json(
@@ -406,12 +411,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 / "native-target-campaign-evidence-v2.schema.json",
                 "native campaign evidence",
             )
-            receipt_path = _safe_output_path(
-                manifest, args.receipt_out, "receipt-out"
-            )
-            final_contract_out = _safe_output_path(
-                manifest, args.final_contract_out, "final-contract-out"
-            )
+            receipt_path = outputs["receipt_out"]
             result, receipt, final_contract = finalize_campaign(
                 manifest,
                 plan,
@@ -419,8 +419,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 evidence,
                 receipt_path,
             )
-            _write_json(receipt_path, receipt)
-            _write_json(final_contract_out, final_contract)
+            _publish_outputs(manifest, args, {"receipt_out": receipt, "final_contract_out": final_contract})
 
         if args.summary_json:
             print(json.dumps(result, ensure_ascii=False, sort_keys=True))
