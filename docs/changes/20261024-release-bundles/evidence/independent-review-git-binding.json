@@ -1,0 +1,110 @@
+{
+  "schema": "independent-review-git-binding/v1",
+  "reviewer": "/root/release_governance_audit",
+  "bound_at": "2026-10-24T16:38:35.645688+00:00",
+  "base_commit": "415590db44e88979185efb850e2339a3f95411ef",
+  "implementation_commit": "3f0f0599de49140ade2225540dd44f2fb42030ad",
+  "implementation_tree": "a49a55acb74e143326073b4e0205886ad7219585",
+  "implementation_parents": [
+    "775352c86a5f67f38b6d3650f8b933e832c7f49c"
+  ],
+  "review_scope": "F1 release bundle validation, bounded rendering, archive trust boundaries and corresponding tests",
+  "excluded_scope": "F2 subprocess/smoke implementation authored by this reviewer; reviewed independently by /root/root_code_audit",
+  "source_files": {
+    "src/agent_dev_kit/compiler.py": {
+      "sha256": "72a981a3ad66bebce77960339eafd55ce3abd75553bef5fa1cfcbcb37471f3c0",
+      "bytes": 6570,
+      "git_blob": "52aeb04a0440e58c4d3f811fdd49ebdc7c78d11e",
+      "matches_commit": true
+    },
+    "src/agent_dev_kit/distribution/archive_io.py": {
+      "sha256": "f693b56de052f33c1fb83b5abc95342f31af95b52795182f116fd78db61a6998",
+      "bytes": 12452,
+      "git_blob": "af1293cb775372f62a932a7930c94a2fee61c3ae",
+      "matches_commit": true
+    },
+    "src/agent_dev_kit/distribution/release_contract.py": {
+      "sha256": "6f322e405555383b6f50206c97e754eedc33edaa3982c358c638797ca6aaba1a",
+      "bytes": 11428,
+      "git_blob": "44497adf88ebca4861a83fed698bc867429e64d2",
+      "matches_commit": true
+    },
+    "src/agent_dev_kit/target_contracts.py": {
+      "sha256": "aea9b0a1fb395d157f61d1860f762ecb80da0bc9365bbeaac46bd96b5892dc26",
+      "bytes": 21633,
+      "git_blob": "fd8dbd50778492fba4f2602331e32a3baf49232d",
+      "matches_commit": true
+    },
+    "src/agent_dev_kit/targets.py": {
+      "sha256": "9b2125d496a2a8a324395fc144ff814ec4d798dc2e82990e4515eab21bf1c6f9",
+      "bytes": 22023,
+      "git_blob": "03d420ed4889d60b216630c49efedfffbecbea3b",
+      "matches_commit": true
+    },
+    "tests/test_release_integrity.py": {
+      "sha256": "c91523591a1eb97f89bf4c56ce110b5ec245b472df06b2d02713b4ad45cd4436",
+      "bytes": 36783,
+      "git_blob": "13a356d18cc3fb46b15594794ea1e2a7944a136d",
+      "matches_commit": true
+    },
+    "tests/test_archive_resource_bounds.py": {
+      "sha256": "202e616077bd3a1614bc4ef284648b46af011295a7796b405d76eafd3e8e8af4",
+      "bytes": 15173,
+      "git_blob": "0f24ba9acf2887f16b1af5cd3f71018a36be0412",
+      "matches_commit": true
+    },
+    "tests/test_strict_json.py": {
+      "sha256": "ede17f3f0e2aa7f262bb0d08aa5072d07edaf62fa9633d2c35a8e5d23c8c6e02",
+      "bytes": 13128,
+      "git_blob": "10390b18cf9660d47f5dd0d6dd3430a2824cca28",
+      "matches_commit": true
+    },
+    "tests/test_release_manifest_contract.sh": {
+      "sha256": "7febce7d578d1dc4911d6161918cab9a913df69695d1dfafe3f8b4451cf79f2c",
+      "bytes": 5322,
+      "git_blob": "ad3e0ded1a9086c024265fb608e5c1ff7fa30eb6",
+      "matches_commit": true
+    },
+    "tests/release_archive_fixture.py": {
+      "sha256": "a512b0259efc35ea964210c61235920c4f32d24f7539b13103744b038c6f00bb",
+      "bytes": 4071,
+      "git_blob": "3f630e9605744875769537b9f6dc084dc5c055d5",
+      "matches_commit": true
+    }
+  },
+  "source_set_sha256": "159eb3966fea67fd48f6409b45c8e1444a65a2fc53496114f3f5d1f779fe3d6e",
+  "active_contract_files": {
+    "docs/changes/20261024-release-bundles/requirements.md": {
+      "sha256": "90127df6e93a16a82f4ca4f20adb280fd144c930051163e17002f9a8c8126f29",
+      "bytes": 1808,
+      "git_blob": "42a4aef959f8b9ce37edf61d2d200cc66bee13e3",
+      "matches_commit": true
+    },
+    "docs/changes/20261024-release-bundles/design.md": {
+      "sha256": "5469d45005c656c4c9ab3ec7ddfd80a855bce805e536924aa0db82e81a99424d",
+      "bytes": 2778,
+      "git_blob": "c0a1bdd2d88611af60278063a645704349ebee58",
+      "matches_commit": true
+    },
+    "docs/commands.md": {
+      "sha256": "db609c3ea4f6ed74fafc4176b25785ca7c2f4ec8737aff98af23be0b09784da4",
+      "bytes": 33125,
+      "git_blob": "8d3f89e7305360414c759cca2493fa3519c9ac30",
+      "matches_commit": true
+    },
+    "CHANGELOG.md": {
+      "sha256": "a6d200849a186d3f8d25ac9fc0be986fc505208ebc4f3e834b5d949a4c910317",
+      "bytes": 74617,
+      "git_blob": "1212345c0524155a9fe42b2a6769869d41e020f3",
+      "matches_commit": true
+    }
+  },
+  "full_original_patch": {
+    "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/original-implementation-415590-to-3f0f059.patch",
+    "sha256": "8caf8c7e7fa8ce68dc981f4aadbee5e2852138e03f8d5caf0ec89a9858616c35",
+    "bytes": 176341,
+    "contains_additional_F2_and_version_changes": true
+  },
+  "all_reviewed_bytes_match_commit": true,
+  "historical_records_rewritten": false
+}

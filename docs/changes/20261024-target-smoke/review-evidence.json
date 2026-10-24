@@ -1,0 +1,138 @@
+{
+  "schema": "adk-review-evidence/v1",
+  "subject_id": "20261024-target-smoke",
+  "scope": "source-change",
+  "owner": "leiwenjun",
+  "author_id": "ai/root/release_governance_audit",
+  "reviewer": {
+    "id": "ai/root/root_code_audit",
+    "kind": "ai",
+    "independence": "independent"
+  },
+  "reviewed_at": "2026-10-24T16:38:37.082674Z",
+  "evidence_completed_at": "2026-10-24T16:37:21.079431Z",
+  "verdicts": {
+    "quality": "pass",
+    "spec": "pass"
+  },
+  "findings": [],
+  "limitations": [
+    "Independent AI source review under existing owner delegation. The reviewer authored no reviewed ADK production/test source. No human review or authenticated identity is asserted.",
+    "The original narrative and observations retain their initial 16:15 UTC review identity. The final semantic delta review and exact 775352 execution were completed at 16:37 UTC; the later binding verifies 15 unchanged production/test blobs at 3f0f059. The final record does not relabel earlier executions.",
+    "F2 covers the shared subprocess owner, Native execution migration and caller-supplied smoke, including interaction with the later target-contract boundary. F1 bundle/rendering semantics and release-specific trust rejection have a separate independent reviewer; the complete retained patch includes both scopes and synchronized version changes.",
+    "Final Linux/POSIX behavior was exercised with real Python 3.8 and 3.12 processes. Original PID-probe and sandbox callback false negatives and their corrections remain in the evidence. No original production test assertions or timing budgets were relaxed.",
+    "Process-group cleanup covers the original session group; newly escaped sessions and non-POSIX platforms were not certified. Bounded best-effort cleanup does not establish an operating-system isolation guarantee.",
+    "The original failed author unittest output is preserved losslessly in red-target-smoke.json, including its trailing space, exact byte count/hash and original Git blob. The wrapper resolves repository whitespace formatting without changing observed failures.",
+    "Full integrated regression, protected supported-Python CI, actual main CI and immutable release are separate delivery gates. No paid provider, live Native runtime, effect, field, G22, LTA or Product M5 qualification is asserted."
+  ],
+  "policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+  "validator_sha256": {
+    "src/agent_dev_kit/review_evidence.py": "73d85e864a3da125bf94808f19616f52150751a94ccc729ac66f66d2576b8808",
+    "src/agent_dev_kit/strict_json.py": "e11233b8d02d7fb95a8f2f93bfff065a1db84c4ef0820fef6d817600abe8ec98",
+    "src/agent_dev_kit/readiness_evidence.py": "ef980657486084eea8ab8a03ab357a76a3ed43691aca8d6909b06642764c808b"
+  },
+  "target": {
+    "base_commit": "415590db44e88979185efb850e2339a3f95411ef",
+    "head_commit": "3f0f0599de49140ade2225540dd44f2fb42030ad",
+    "original_patch_sha256": "8caf8c7e7fa8ce68dc981f4aadbee5e2852138e03f8d5caf0ec89a9858616c35"
+  },
+  "sources": [
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/native_campaign_execution.py",
+      "sha256": "4855a70b34ec92839c0b7f52e750f534b031c7f23e9bdc6311bfd9c26d2fc397"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/native_trust.py",
+      "sha256": "5dff98e9544b2d0f91901ef69efd8096a439be6a230c176fc3ac757f9c398ce1"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/process_execution.py",
+      "sha256": "01e3da0bc9cee08055dafafb178c270f8e6ece2a18de2ad542027a1b252d5b9d"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/target_contracts.py",
+      "sha256": "aea9b0a1fb395d157f61d1860f762ecb80da0bc9365bbeaac46bd96b5892dc26"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/targets.py",
+      "sha256": "9b2125d496a2a8a324395fc144ff814ec4d798dc2e82990e4515eab21bf1c6f9"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_native_campaign.py",
+      "sha256": "fc188ae2fc5d69c37c1288c2f9a922ea4b00761afddaff0d10a61a4978812076"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_native_campaign_boundaries.py",
+      "sha256": "2db0cadb3965b9e9ac3062c31bd567499d45203c321df4c59f2f451853b7724d"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_native_trust.py",
+      "sha256": "ef3305af4529e5544b5ccd21610763aad0c88c3f5effc4f87efbd4364e953d97"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_target_contracts.sh",
+      "sha256": "74b8741210c9c1f173a9068744a66e1ccf39a94ca900341dfa3e141e7299d669"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_target_smoke.py",
+      "sha256": "fb941ffdbd753eefa16d7b8178144543c77895665a0dd8935359bb891e5fa7b9"
+    },
+    {
+      "base": "record",
+      "path": "requirements.md",
+      "sha256": "d67aca13ffd076a1147a5a92d8cdc1c2af24497739cc507bcf6c32ddce19c850"
+    },
+    {
+      "base": "record",
+      "path": "design.md",
+      "sha256": "cd6a75ac6165e105c4496f5a7a769da3df602625e08b9430d67bedf0bd6732d6"
+    },
+    {
+      "base": "record",
+      "path": "evidence/original.patch",
+      "sha256": "8caf8c7e7fa8ce68dc981f4aadbee5e2852138e03f8d5caf0ec89a9858616c35"
+    }
+  ],
+  "evidence": [
+    {
+      "base": "record",
+      "path": "review-findings.md",
+      "sha256": "0bd3b648f56c2fd63917f9c152e1d98226c8034a50fc7da2ac7989ffff3e5313"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-review-observations.json",
+      "sha256": "359699a3a847446cc704f3d8ef4a99e7e2cc1188062bd31a4f3739f30cf6a080"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-review-final.json",
+      "sha256": "ac80cce89a8c487d2cc94d2d5e7605a3b8bcf680b948b3307529fda73d08b207"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-review-git-binding.json",
+      "sha256": "ff979f7067a5f37fcd442489cce2fa608e16d33700ed2fbee239ed609f32da13"
+    },
+    {
+      "base": "record",
+      "path": "negative-results.md",
+      "sha256": "cd0eb225767499cd0ae42b2d17d22a2ec15d933132e7c7d8e9fc9cb5de953cdf"
+    },
+    {
+      "base": "record",
+      "path": "evidence/red-target-smoke.json",
+      "sha256": "8f6e7d0ac83e1afc1d1fc702f4889eb046a3143d49311199fc318532671d2a6f"
+    }
+  ]
+}

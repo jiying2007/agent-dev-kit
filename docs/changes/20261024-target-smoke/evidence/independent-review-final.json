@@ -1,0 +1,137 @@
+{
+  "delta_review": [
+    "Read fa0bf969..775352 exact production diff in targets.py and target_contracts.py, plus release caller and updated command/requirement/design claims",
+    "F2 stdlib process owner and Native execution owner retain exactly the previously reviewed bytes",
+    "run_target_smoke AST source retains sha256 ecf2f92f2d7ab55e3c473b5e607d61ee4fde0dabc933bac9617a502545a514e8",
+    "Support-root containment executes before exists/rglob; default local loader and historical loader retain allow_native_verifier=True",
+    "Only untrusted release reconstruction passes allow_native_verifier=False; runtime conformance raises before managed verifier construction, never silently skips validation",
+    "Real Python 3.8 target shell including original smoke 9, Native 34, new ReleaseInventory 20 and two managed Native positive controls pass on the exact commit",
+    "Independent seven-group process probes pass on actual Python 3.8 and 3.12, without ResourceWarning"
+  ],
+  "evidence_collected_at": "2026-10-24T16:37:21.079431Z",
+  "execution_evidence": {
+    "commands": [
+      {
+        "command": [
+          "bash",
+          "tests/test_target_contracts.sh"
+        ],
+        "elapsed_seconds": 22.422333870999864,
+        "exit_code": 0,
+        "selected_interpreter": "/workspace/scratch/712af632e2a5/apply20261024/review-f2/venv38/bin/python"
+      },
+      {
+        "command": [
+          "bash",
+          "tests/test_native_campaign.sh"
+        ],
+        "elapsed_seconds": 11.446106883995526,
+        "exit_code": 0,
+        "selected_interpreter": "/workspace/scratch/712af632e2a5/apply20261024/review-f2/venv38/bin/python"
+      },
+      {
+        "command": [
+          "/workspace/scratch/712af632e2a5/apply20261024/review-f2/venv38/bin/python",
+          "-m",
+          "unittest",
+          "test_release_integrity.ReleaseInventoryTest",
+          "-v"
+        ],
+        "elapsed_seconds": 2.399064767996606,
+        "exit_code": 0,
+        "selected_interpreter": "/workspace/scratch/712af632e2a5/apply20261024/review-f2/venv38/bin/python"
+      },
+      {
+        "command": [
+          "/workspace/scratch/712af632e2a5/apply20261024/review-f2/venv38/bin/python",
+          "-m",
+          "unittest",
+          "test_native_trust.ManagedNativeTrustVerifierTest.test_production_loader_auto_injects_managed_verifier",
+          "test_native_trust.ManagedNativeTrustVerifierTest.test_managed_verifier_accepts_only_registered_exact_receipt",
+          "-v"
+        ],
+        "elapsed_seconds": 0.3332990679991781,
+        "exit_code": 0,
+        "selected_interpreter": "/workspace/scratch/712af632e2a5/apply20261024/review-f2/venv38/bin/python"
+      },
+      {
+        "command": [
+          "/workspace/scratch/712af632e2a5/apply20261024/review-f2/venv38/bin/python",
+          "/workspace/scratch/712af632e2a5/apply20261024/review-f2/independent_probes.py",
+          "/workspace/scratch/712af632e2a5/apply20261024/review-f2/source-post-f1-775352c86a5f",
+          "/workspace/scratch/712af632e2a5/apply20261024/review-f2/probes-post-f1-py38-775352c86a5f.json"
+        ],
+        "elapsed_seconds": 6.22134258299775,
+        "exit_code": 0,
+        "selected_interpreter": "/workspace/scratch/712af632e2a5/apply20261024/review-f2/venv38/bin/python"
+      },
+      {
+        "command": [
+          "/workspace/scratch/712af632e2a5/audit-venv/bin/python3",
+          "/workspace/scratch/712af632e2a5/apply20261024/review-f2/independent_probes.py",
+          "/workspace/scratch/712af632e2a5/apply20261024/review-f2/source-post-f1-775352c86a5f",
+          "/workspace/scratch/712af632e2a5/apply20261024/review-f2/probes-post-f1-py312-775352c86a5f.json"
+        ],
+        "elapsed_seconds": 6.132430323996232,
+        "exit_code": 0,
+        "selected_interpreter": "/workspace/scratch/712af632e2a5/audit-venv/bin/python3"
+      }
+    ],
+    "path": "executions-post-f1-775352c86a5f.json",
+    "sha256": "c16ba51d55b9c754f0312765e231ddba70f130d3f4f763281e1f5b93f1d1e161"
+  },
+  "limitations": [
+    "This F2 acceptance does not replace the separate independent F1 Spec/Quality verdict",
+    "Only local software behavior and source semantics are verified; no live Native, effect, field, G22, LTA, Product M5, human review or publication claim",
+    "Python 3.8 and 3.12 tested here; complete protected supported-version CI remains a separate gate",
+    "Prior PID-instrumentation and sandbox loop-wakeup false negatives remain preserved and corrected in the original review, not erased",
+    "A later packaging commit must be byte-bound separately; original execution identity and times remain this commit"
+  ],
+  "original_f2_reviewed_at": "2026-10-24T16:15:11.823553+00:00",
+  "original_review_preserved": true,
+  "probe_evidence": [
+    {
+      "interpreter": "3.8.20 (default, Oct  2 2024, 16:34:12) \n[Clang 18.1.8 ]",
+      "passed_groups": 7,
+      "path": "probes-post-f1-py38-775352c86a5f.json",
+      "resource_warnings": [],
+      "sha256": "ea25f30637cf54051d1621eac769d431b3d48b6ea7451f4a44ea2330d9c4e958"
+    },
+    {
+      "interpreter": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+      "passed_groups": 7,
+      "path": "probes-post-f1-py312-775352c86a5f.json",
+      "resource_warnings": [],
+      "sha256": "51220a30a095141b4967555ece563b31dadb2c6f5fd70487b7b6565e34613c25"
+    }
+  ],
+  "reviewed_at": "2026-10-24T16:37:21.079431Z",
+  "reviewer": "ai/root/root_code_audit",
+  "schema": "independent-adk-f2-delta-review/v1",
+  "scope": "F2 source review after F1 shared renderer/contract changes",
+  "source_commit": "775352c86a5f67f38b6d3650f8b933e832c7f49c",
+  "source_file_sha256": {
+    "src/agent_dev_kit/compiler.py": "72a981a3ad66bebce77960339eafd55ce3abd75553bef5fa1cfcbcb37471f3c0",
+    "src/agent_dev_kit/distribution/archive_io.py": "f693b56de052f33c1fb83b5abc95342f31af95b52795182f116fd78db61a6998",
+    "src/agent_dev_kit/distribution/release_contract.py": "6f322e405555383b6f50206c97e754eedc33edaa3982c358c638797ca6aaba1a",
+    "src/agent_dev_kit/native_campaign_execution.py": "4855a70b34ec92839c0b7f52e750f534b031c7f23e9bdc6311bfd9c26d2fc397",
+    "src/agent_dev_kit/native_trust.py": "5dff98e9544b2d0f91901ef69efd8096a439be6a230c176fc3ac757f9c398ce1",
+    "src/agent_dev_kit/process_execution.py": "01e3da0bc9cee08055dafafb178c270f8e6ece2a18de2ad542027a1b252d5b9d",
+    "src/agent_dev_kit/target_contracts.py": "aea9b0a1fb395d157f61d1860f762ecb80da0bc9365bbeaac46bd96b5892dc26",
+    "src/agent_dev_kit/targets.py": "9b2125d496a2a8a324395fc144ff814ec4d798dc2e82990e4515eab21bf1c6f9",
+    "tests/release_archive_fixture.py": "a512b0259efc35ea964210c61235920c4f32d24f7539b13103744b038c6f00bb",
+    "tests/test_native_campaign.py": "fc188ae2fc5d69c37c1288c2f9a922ea4b00761afddaff0d10a61a4978812076",
+    "tests/test_native_campaign_boundaries.py": "2db0cadb3965b9e9ac3062c31bd567499d45203c321df4c59f2f451853b7724d",
+    "tests/test_native_trust.py": "ef3305af4529e5544b5ccd21610763aad0c88c3f5effc4f87efbd4364e953d97",
+    "tests/test_release_integrity.py": "c91523591a1eb97f89bf4c56ce110b5ec245b472df06b2d02713b4ad45cd4436",
+    "tests/test_target_contracts.sh": "74b8741210c9c1f173a9068744a66e1ccf39a94ca900341dfa3e141e7299d669",
+    "tests/test_target_smoke.py": "fb941ffdbd753eefa16d7b8178144543c77895665a0dd8935359bb891e5fa7b9"
+  },
+  "source_stable_during_execution": true,
+  "source_tree": "a2a68683b3bedce2c3f922c5d0169be851a966c1",
+  "unresolved_blocker_or_major": [],
+  "verdicts": {
+    "quality": "pass",
+    "spec": "pass"
+  }
+}

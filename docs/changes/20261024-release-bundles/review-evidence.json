@@ -1,0 +1,158 @@
+{
+  "schema": "adk-review-evidence/v1",
+  "subject_id": "20261024-release-bundles",
+  "scope": "source-change",
+  "owner": "leiwenjun",
+  "author_id": "ai/root/adk_code_audit",
+  "reviewer": {
+    "id": "ai/root/release_governance_audit",
+    "kind": "ai",
+    "independence": "independent"
+  },
+  "reviewed_at": "2026-10-24T16:41:15.508562Z",
+  "evidence_completed_at": "2026-10-24T16:40:35.232937Z",
+  "verdicts": {
+    "spec": "pass",
+    "quality": "pass"
+  },
+  "findings": [
+    {
+      "id": "f1-review-01",
+      "severity": "major",
+      "disposition": "fixed",
+      "reason": "Original independent reviewer finding F1-REVIEW-01, priority P2: Native receipt schema bypasses offline preflight. The original finding at fa0bf9691e24113a0064cbe4c7f6f62ca6e1bb47 remains retained under native-schema-offline-v2-red; the reviewer independently reverified the fix at 775352c86a5f67f38b6d3650f8b933e832c7f49c with native-schema-offline-green and native-schema-python38-final. Exact unchanged sources are bound to 3f0f0599de49140ade2225540dd44f2fb42030ad. Canonical severity major records the substantive fixed issue; the original P2 classification and full effects remain in the independent summary."
+    },
+    {
+      "id": "f1-review-02",
+      "severity": "major",
+      "disposition": "fixed",
+      "reason": "Original independent reviewer finding F1-REVIEW-02, priority P2: Untrusted support directory is traversed before containment. The original finding at fa0bf9691e24113a0064cbe4c7f6f62ca6e1bb47 remains retained under support-containment-red; the reviewer independently reverified the fix at 775352c86a5f67f38b6d3650f8b933e832c7f49c with support-containment-green and support-containment-python38-final. Exact unchanged sources are bound to 3f0f0599de49140ade2225540dd44f2fb42030ad. Canonical severity major records the substantive fixed issue; the original P2 classification and full effects remain in the independent summary."
+    },
+    {
+      "id": "f1-review-03",
+      "severity": "major",
+      "disposition": "fixed",
+      "reason": "Original independent reviewer finding F1-REVIEW-03, priority P2: Archive-managed registry selects a host verifier without independent authority. The original finding at fa0bf9691e24113a0064cbe4c7f6f62ca6e1bb47 remains retained under native-execution-red; the reviewer independently reverified the fix at 775352c86a5f67f38b6d3650f8b933e832c7f49c with native-execution-green and native-execution-python38-final. Exact unchanged sources are bound to 3f0f0599de49140ade2225540dd44f2fb42030ad. Canonical severity major records the substantive fixed issue; the original P2 classification and full effects remain in the independent summary."
+    }
+  ],
+  "limitations": [
+    "This record packages the frozen independent verdict of ai/root/release_governance_audit. The packager/author ai/root/adk_code_audit implemented F1 and supplies no independent verdict. No human review or authenticated reviewer identity is asserted.",
+    "F1 covers release bundle completeness, bounded rendering, archive trust boundaries and corresponding tests and active contract text. F2 subprocess/smoke was implemented by this reviewer and is excluded from this independent verdict; ai/root/root_code_audit owns the separate F2 review. Whole-file targets.py and the retained complete patch also contain F2 and synchronized version changes without extending this verdict scope.",
+    "The initial fa0bf969 findings and all three public-entry RED observations remain retained. The reviewer reverified the fixes with the original probes on Python 3.12 and real Python 3.8.20. Behavioral execution used 775352c8; 10 source/test files and four active documents were independently bound byte-for-byte to final implementation 3f0f0599.",
+    "Review time is the actual final summary verdict at 2026-10-24T16:41:15.508562Z, after the last retained rerun completed at 16:40:35.232937Z. The earlier 16:38:35 Git binding remains unchanged and is not represented as the final evidence completion or review time.",
+    "The original local-native-install-final stderr differs from its recorded bytes/hash. Its original JSON and currently retained raw bytes are preserved without repair and excluded from usable PASS evidence. Only the independently retained unique-label local-native-install-retained-1641 rerun supplies the 26-test Native/install PASS.",
+    "All raw observations, probes, original JSON and patches are retained losslessly in independent-review-observations.json, with per-file byte counts and SHA256. The original format-check failure and F2 failed unittest output remain recoverable without trimming. The supplementary Python 3.8 Inventory and managed-Native controls were executed by ai/root/root_code_audit and remain attributed to that reviewer.",
+    "Archive content consistency is separate from complete-archive signatures and protected publisher source authentication. Runtime-conformance archives remain rejected without independently trusted verifier authority; normal local managed Native defaults are unchanged. Byte/count budgets do not establish operating-system CPU or memory isolation.",
+    "Full integrated ADK/Root regression, exact candidate CI, actual main CI, signatures, tags and immutable publication remain separate delivery gates. No paid provider, live Native runtime, G22, LTA, field, Product M5 qualification, product release or publication authorization is asserted by this record."
+  ],
+  "policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+  "validator_sha256": {
+    "src/agent_dev_kit/review_evidence.py": "73d85e864a3da125bf94808f19616f52150751a94ccc729ac66f66d2576b8808",
+    "src/agent_dev_kit/strict_json.py": "e11233b8d02d7fb95a8f2f93bfff065a1db84c4ef0820fef6d817600abe8ec98",
+    "src/agent_dev_kit/readiness_evidence.py": "ef980657486084eea8ab8a03ab357a76a3ed43691aca8d6909b06642764c808b"
+  },
+  "target": {
+    "base_commit": "415590db44e88979185efb850e2339a3f95411ef",
+    "head_commit": "3f0f0599de49140ade2225540dd44f2fb42030ad",
+    "original_patch_sha256": "8caf8c7e7fa8ce68dc981f4aadbee5e2852138e03f8d5caf0ec89a9858616c35"
+  },
+  "sources": [
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/compiler.py",
+      "sha256": "72a981a3ad66bebce77960339eafd55ce3abd75553bef5fa1cfcbcb37471f3c0"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/distribution/archive_io.py",
+      "sha256": "f693b56de052f33c1fb83b5abc95342f31af95b52795182f116fd78db61a6998"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/distribution/release_contract.py",
+      "sha256": "6f322e405555383b6f50206c97e754eedc33edaa3982c358c638797ca6aaba1a"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/target_contracts.py",
+      "sha256": "aea9b0a1fb395d157f61d1860f762ecb80da0bc9365bbeaac46bd96b5892dc26"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/targets.py",
+      "sha256": "9b2125d496a2a8a324395fc144ff814ec4d798dc2e82990e4515eab21bf1c6f9"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_release_integrity.py",
+      "sha256": "c91523591a1eb97f89bf4c56ce110b5ec245b472df06b2d02713b4ad45cd4436"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_archive_resource_bounds.py",
+      "sha256": "202e616077bd3a1614bc4ef284648b46af011295a7796b405d76eafd3e8e8af4"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_strict_json.py",
+      "sha256": "ede17f3f0e2aa7f262bb0d08aa5072d07edaf62fa9633d2c35a8e5d23c8c6e02"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_release_manifest_contract.sh",
+      "sha256": "7febce7d578d1dc4911d6161918cab9a913df69695d1dfafe3f8b4451cf79f2c"
+    },
+    {
+      "base": "repository",
+      "path": "tests/release_archive_fixture.py",
+      "sha256": "a512b0259efc35ea964210c61235920c4f32d24f7539b13103744b038c6f00bb"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261024-release-bundles/requirements.md",
+      "sha256": "90127df6e93a16a82f4ca4f20adb280fd144c930051163e17002f9a8c8126f29"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261024-release-bundles/design.md",
+      "sha256": "5469d45005c656c4c9ab3ec7ddfd80a855bce805e536924aa0db82e81a99424d"
+    },
+    {
+      "base": "repository",
+      "path": "docs/commands.md",
+      "sha256": "db609c3ea4f6ed74fafc4176b25785ca7c2f4ec8737aff98af23be0b09784da4"
+    },
+    {
+      "base": "repository",
+      "path": "CHANGELOG.md",
+      "sha256": "a6d200849a186d3f8d25ac9fc0be986fc505208ebc4f3e834b5d949a4c910317"
+    },
+    {
+      "base": "record",
+      "path": "evidence/original.patch",
+      "sha256": "8caf8c7e7fa8ce68dc981f4aadbee5e2852138e03f8d5caf0ec89a9858616c35"
+    }
+  ],
+  "evidence": [
+    {
+      "base": "record",
+      "path": "review-findings.md",
+      "sha256": "8e07eafda0d39bd57c7b43036cf0b139788b064ca330855f0f9c8625422258f4"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-review-final.json",
+      "sha256": "25e9aba6569051cac8fd3aeccdfe38d57015ad8d5715827e8f86d2855b4dd2db"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-review-git-binding.json",
+      "sha256": "e375e3f0ea02453701524b70897ae5cf8ced89716feb0a8bb039c40b0620dad1"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-review-observations.json",
+      "sha256": "70b2867ae7d912ee5ed687f3fdbf142a0996c452f00b95899be9b452a7c45f15"
+    }
+  ]
+}
