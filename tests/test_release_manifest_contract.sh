@@ -8,16 +8,18 @@ python3 -m unittest discover -s tests -p test_release_integrity.py
 python3 - <<'PY'
 from __future__ import annotations
 
-import hashlib
 import io
 import json
+import sys
 import tarfile
 import tempfile
 from pathlib import Path
 
 from agent_dev_kit.distribution import validate_release_artifact, validate_release_manifest
 from agent_dev_kit.distribution.release_artifacts import SOURCE_DISTRIBUTION_DIRECTORIES, SOURCE_DISTRIBUTION_FILES
-from agent_dev_kit.model import canonical_json_bytes
+
+sys.path.insert(0, str(Path.cwd() / "tests"))
+from release_archive_fixture import release_fixture
 
 root = Path.cwd()
 assert (root / "manifest.json").is_file(), "canonical manifest.json is missing"
@@ -62,31 +64,8 @@ assert 'gh release create "$RELEASE_TAG"' in workflow, "release workflow missing
 assert 'gh release download "$RELEASE_TAG"' in workflow, "release retry does not verify existing GitHub Release assets"
 assert 'cmp "$archive"' in workflow and 'cmp "$checksum"' in workflow and 'cmp "$contract"' in workflow, "release retry must compare all validated assets"
 
-version = "7.0.0"
-source_manifest_value = {"version": version}
-source_manifest = json.dumps(source_manifest_value, indent=2).encode() + b"\n"
-sbom = b'{"spdxVersion":"SPDX-2.3"}\n'
-sha = lambda value: hashlib.sha256(value).hexdigest()
-release_manifest = {
-    "schema_version": 2,
-    "version": version,
-    "manifest_sha256": sha(canonical_json_bytes(source_manifest_value)),
-    "direct_targets": [{"target": "claude-code", "agents": 1, "skills": 1}],
-    "external_targets": ["external-runtime"],
-    "source_distribution": True,
-    "source_file_count": 1,
-    "reproducible": False,
-    "release_eligible": False,
-    "source_provenance": {
-        "kind": "unbound-snapshot",
-        "release_eligible": False,
-        "commit": None,
-        "tree": None,
-        "dirty": None,
-        "source_distribution_sha256": sha(b"manifest.json\0" + hashlib.sha256(source_manifest).digest()),
-    },
-    "sbom": {"path": "sbom.spdx.json", "sha256": sha(sbom), "validated": True},
-}
+release_manifest, members = release_fixture()
+version = release_manifest["version"]
 assert validate_release_manifest(release_manifest)["status"] == "pass"
 
 mismatch = json.loads(json.dumps(release_manifest))
@@ -98,12 +77,7 @@ assert any("release_eligible must match" in item for item in validation["failure
 with tempfile.TemporaryDirectory() as temp:
     artifact = Path(temp) / f"agent-dev-kit-{version}.tar.gz"
     with tarfile.open(artifact, "w:gz") as archive:
-        for name, payload in (
-            ("manifest.json", source_manifest),
-            ("source/manifest.json", source_manifest),
-            ("sbom.spdx.json", sbom),
-            ("release-manifest.json", json.dumps(release_manifest).encode()),
-        ):
+        for name, payload in members + [("release-manifest.json", json.dumps(release_manifest).encode())]:
             info = tarfile.TarInfo(name)
             info.size = len(payload)
             archive.addfile(info, io.BytesIO(payload))

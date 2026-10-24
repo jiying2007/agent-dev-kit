@@ -93,6 +93,7 @@ class _ForwardTarReader(io.RawIOBase):
 
 def load_archive_snapshot(
     artifact: Path, *, require_json: bool = True, source_inventory: dict[str, Any] | None = None,
+    bundle_inventory: dict[str, tuple[str | None, int]] | None = None,
 ) -> tuple[bytes, dict[str, bytes]]:
     """Inspect one bounded regular-file snapshot; never extract to the filesystem.
 
@@ -104,15 +105,25 @@ def load_archive_snapshot(
         raw = read_bounded_bytes(artifact, max_bytes=MAX_COMPRESSED_BYTES, regular_only=True)
     except (StrictJSONError, OSError, ValueError) as exc:
         raise ArchiveInputError("release artifact must be a bounded regular file") from exc
-    return raw, inspect_archive_snapshot(raw, require_json=require_json, source_inventory=source_inventory)
+    return raw, inspect_archive_snapshot(raw, require_json=require_json, source_inventory=source_inventory,
+                                        bundle_inventory=bundle_inventory)
 
 
 def inspect_archive_snapshot(
     raw: bytes, *, require_json: bool = True, source_inventory: dict[str, Any] | None = None,
+    bundle_inventory: dict[str, tuple[str | None, int]] | None = None,
+    source_directory: Path | None = None,
 ) -> dict[str, bytes]:
-    """Preflight already-captured bytes without reopening a path."""
+    """Inspect captured bytes and optionally copy source into a private new directory.
+
+    The verifier requests source materialization only after a complete first
+    pass has validated this same immutable byte snapshot. No archive code is
+    imported or executed; the bounded reader remains the sole member parser.
+    """
     if not isinstance(raw, bytes) or len(raw) > MAX_COMPRESSED_BYTES:
         raise ArchiveInputError("release artifact exceeds compressed byte budget")
+    if source_directory is not None:
+        source_directory.mkdir(mode=0o700, exist_ok=False)
     payloads: dict[str, bytes] = {}
     names: dict[str, bool] = {}
     parents: set[str] = set()
@@ -160,19 +171,28 @@ def inspect_archive_snapshot(
                         raise ArchiveInputError("release archive contains conflicting member paths")
                     names[name] = member.isdir()
                     parents.update(ancestors)
+                    bundle_member = bundle_inventory is not None and (name == "bundles" or name.startswith("bundles/"))
                     if member.isdir():
                         if member.size:
                             raise ArchiveInputError("release directory member has a payload")
+                        if bundle_member:
+                            assert bundle_inventory is not None
+                            bundle_inventory[name] = (None, member.mode)
                         continue
-                    source_member = source_inventory is not None and name.startswith("source/")
+                    source_member = (source_inventory is not None or source_directory is not None) and name.startswith("source/")
                     capture_json = name in _JSON_NAMES or (source_member and name == "source/manifest.json")
-                    if not (source_member or capture_json):
+                    if not (source_member or capture_json or bundle_member):
                         continue
                     if capture_json and member.size > MAX_JSON_BYTES:
                         raise ArchiveInputError("release JSON member exceeds byte budget")
                     source = archive.extractfile(member)
                     if source is None:
                         raise ArchiveInputError("release regular member cannot be read")
+                    output = None
+                    if source_member and source_directory is not None:
+                        destination = source_directory.joinpath(*path.parts[1:])
+                        destination.parent.mkdir(parents=True, exist_ok=True)
+                        output = destination.open("xb")
                     reader.payload_mode = True
                     try:
                         with source:
@@ -181,6 +201,8 @@ def inspect_archive_snapshot(
                                 size = len(data)
                                 digest = hashlib.sha256(data).digest()
                                 payloads[name] = data
+                                if output is not None:
+                                    output.write(data)
                             else:
                                 hasher = hashlib.sha256()
                                 size = 0
@@ -190,13 +212,21 @@ def inspect_archive_snapshot(
                                         break
                                     size += len(chunk)
                                     hasher.update(chunk)
+                                    if output is not None:
+                                        output.write(chunk)
                                 digest = hasher.digest()
                     finally:
                         reader.payload_mode = False
+                        if output is not None:
+                            output.close()
+                            destination.chmod(0o755 if member.mode & 0o111 else 0o644)
                     if size != member.size:
                         raise ArchiveInputError("release regular member is truncated")
                     if source_member:
                         source_digests[name[len("source/"):]] = digest
+                    if bundle_member:
+                        assert bundle_inventory is not None
+                        bundle_inventory[name] = (digest.hex(), member.mode)
             # Tar EOF may precede gzip EOF. Account for padding/concatenated
             # streams and validate gzip CRC rather than trusting a prefix.
             reader.skipping = True

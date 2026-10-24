@@ -1,0 +1,8 @@
+test_bounded_context_modules_stay_under_repository_default_budget (test_native_campaign_boundaries.NativeCampaignBoundaryTest.test_bounded_context_modules_stay_under_repository_default_budget) ... ok
+test_dependency_direction_is_contract_to_execution_to_orchestration (test_native_campaign_boundaries.NativeCampaignBoundaryTest.test_dependency_direction_is_contract_to_execution_to_orchestration) ... ok
+test_native_campaign_v2_is_the_only_active_certification_contract (test_native_campaign_boundaries.NativeCampaignBoundaryTest.test_native_campaign_v2_is_the_only_active_certification_contract) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.018s
+
+OK

@@ -1,0 +1,2 @@
+{"default_max_bytes": 30000, "import_fan_out_hotspot": "src/agent_dev_kit/cli.py", "largest_baseline_bytes": 0, "legacy_exception_count": 0, "max_import_fan_out": 28, "observed_max_import_fan_out": 26, "preferred_execution_namespace": "execution_policy", "schema": "adk-module-size-budget/v1", "status": "pass", "support_module_count": 0, "transitional_support_debt_count": 0}
+[PASS] module size and bounded-context architecture policy pass

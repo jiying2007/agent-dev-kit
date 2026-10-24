@@ -587,4 +587,7 @@ finally:
     shutil.rmtree(str(temp), ignore_errors=True)
 PY
 
+PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}" python3 -m unittest discover \
+  -s "$ROOT_DIR/tests" -p test_target_smoke.py
+
 echo "[PASS] target contracts"

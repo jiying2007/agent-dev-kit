@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### 8.0.40 source candidate
+- Verify the complete precompiled bundle inventory against trusted rendering of the validated source snapshot, including target/count, file and directory identity, hashes, modes and export manifests; reject missing or self-rehashed altered bundles before publication.
+- Keep release reconstruction offline and resource-bounded, without executing archived Python; retain historical source reconstruction and current-source freshness as separate contracts.
+- Share one bounded subprocess owner across caller-supplied target smoke and Native campaigns, with a combined 1 MiB smoke output budget, a deadline covering inherited pipes, and POSIX process-group cleanup on failure.
+- Add real negative-input, subprocess and recovery regressions, retaining Python 3.8+ support, protected main CI and immutable component publication; no new Native, effect, field or Product M5 qualification is inferred.
+
 ### 8.0.39 source candidate
 - Build eligible releases from a fixed Git tree and verified blob bytes, excluding ignored and index-hidden worktree drift while preserving committed file modes and literal source content.
 - Verify the complete bounded source inventory, canonical digest, file count and embedded manifest; route public publish through the same verifier and publish the tarball, checksum and release contract from one captured snapshot.

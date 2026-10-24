@@ -3,17 +3,15 @@
 from __future__ import annotations
 
 import asyncio
-import hashlib
 import os
 import platform
 import re
-import signal
 import tempfile
-import time
 from pathlib import Path
 from typing import Any, Mapping, Sequence
 
 from .model import Manifest, ManifestError, canonical_json_bytes, sha256_bytes
+from .process_execution import OutputBudgetExceeded, ProcessResult, execute_bounded
 from .native_campaign_contract import (
     EVIDENCE_SCHEMA,
     MAX_OUTPUT_BYTES,
@@ -34,101 +32,6 @@ from .target_contracts import _native_contract_digest, load_target_contract
 from .targets import _write_bundle, render_selection
 
 
-def _kill_process(process: asyncio.subprocess.Process) -> None:
-    # An exited launcher can leave a grandchild in its session still holding
-    # stdout/stderr open. Kill the original process group even after the direct
-    # child has exited; otherwise pipe drains can outlive the execution budget.
-    if os.name == "posix":
-        try:
-            os.killpg(process.pid, signal.SIGKILL)
-        except ProcessLookupError:
-            pass
-    elif process.returncode is None:
-        process.kill()
-
-
-async def _drain(
-    stream: asyncio.StreamReader,
-    process: asyncio.subprocess.Process,
-    limit: int,
-    shared_total: list[int],
-) -> tuple[int, str, bytes]:
-    digest = hashlib.sha256()
-    total = 0
-    captured = bytearray()
-    while True:
-        chunk = await stream.read(65536)
-        if not chunk:
-            break
-        total += len(chunk)
-        # The budget covers stdout and stderr together. Both readers run on
-        # the same event loop, so updating this counter is atomic until the
-        # next await. Per-stream caps alone would admit twice the budget.
-        shared_total[0] += len(chunk)
-        if shared_total[0] > limit:
-            _kill_process(process)
-            raise ManifestError("native_campaign_output_budget_exceeded")
-        digest.update(chunk)
-        captured.extend(chunk)
-    return total, digest.hexdigest(), bytes(captured)
-
-
-async def _execute_async(
-    command: Sequence[str],
-    *,
-    cwd: Path,
-    env: Mapping[str, str],
-    timeout_seconds: int,
-    output_limit: int,
-) -> dict[str, Any]:
-    kwargs: dict[str, Any] = {}
-    if os.name == "posix":
-        kwargs["start_new_session"] = True
-    process = await asyncio.create_subprocess_exec(
-        *command,
-        cwd=str(cwd),
-        env=dict(env),
-        stdin=asyncio.subprocess.DEVNULL,
-        stdout=asyncio.subprocess.PIPE,
-        stderr=asyncio.subprocess.PIPE,
-        **kwargs,
-    )
-    assert process.stdout is not None and process.stderr is not None
-    started = time.monotonic()
-    shared_total = [0]
-    stdout_task = asyncio.create_task(_drain(process.stdout, process, output_limit, shared_total))
-    stderr_task = asyncio.create_task(_drain(process.stderr, process, output_limit, shared_total))
-    wait_task = asyncio.create_task(process.wait())
-    tasks = (wait_task, stdout_task, stderr_task)
-    try:
-        # The deadline covers process exit AND both pipe drains. A launcher can
-        # exit early while a grandchild still owns the inherited pipe fds.
-        _, stdout, stderr = await asyncio.wait_for(
-            asyncio.gather(*tasks), timeout=timeout_seconds
-        )
-    except BaseException:
-        # Preserve timeout/output-budget/cancellation failures while ensuring
-        # no background reader survives the return of this invocation.
-        _kill_process(process)
-        for task in tasks:
-            if not task.done():
-                task.cancel()
-        await asyncio.gather(*tasks, return_exceptions=True)
-        if process.returncode is None:
-            await asyncio.wait_for(process.wait(), timeout=5)
-        raise
-    return {
-        "exit_code": int(process.returncode or 0),
-        "duration_ms": round((time.monotonic() - started) * 1000),
-        "stdout_bytes": stdout[0],
-        "stdout_sha256": stdout[1],
-        "stdout": stdout[2],
-        "stderr_bytes": stderr[0],
-        "stderr_sha256": stderr[1],
-        "stderr": stderr[2],
-    }
-
-
 def _execute(
     command: Sequence[str],
     *,
@@ -136,16 +39,17 @@ def _execute(
     env: Mapping[str, str],
     timeout_seconds: int,
     output_limit: int,
-) -> dict[str, Any]:
-    return asyncio.run(
-        _execute_async(
+) -> ProcessResult:
+    try:
+        return execute_bounded(
             command,
             cwd=cwd,
             env=env,
             timeout_seconds=timeout_seconds,
             output_limit=output_limit,
         )
-    )
+    except OutputBudgetExceeded as exc:
+        raise ManifestError("native_campaign_output_budget_exceeded") from exc
 
 
 def _base_environment(auth_mode: str) -> dict[str, str]:

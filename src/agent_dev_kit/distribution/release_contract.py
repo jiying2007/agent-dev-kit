@@ -2,7 +2,8 @@
 
 The release builder remains responsible for assembly. This module is the
 bounded contract verifier used after assembly and before provenance attestation.
-It never extracts archive members to disk.
+After source verification, a private temporary source copy is rendered by the
+already-loaded compiler; archive Python code is never imported or executed.
 """
 
 from __future__ import annotations
@@ -11,17 +12,22 @@ import argparse
 import hashlib
 import json
 import tarfile
+import tempfile
 from collections.abc import Mapping, Sequence
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import Any
 
 from jsonschema import Draft202012Validator
 
+from agent_dev_kit.compiler import export_manifest
 from agent_dev_kit.contracts.schema_loader import packaged_schema_bytes
-from agent_dev_kit.model import canonical_json_bytes
+from agent_dev_kit.model import Manifest, canonical_json_bytes
+from agent_dev_kit.targets import RenderBudget, _render_historical_selection
 
 from ..strict_json import StrictJSONError
 from ..strict_json import loads as load_strict_json
+from ..strict_json import read as read_strict_json
+from . import archive_io
 from .archive_io import inspect_archive_snapshot, load_archive_snapshot
 
 _SCHEMA_NAME = "release-manifest-v2.schema.json"
@@ -68,15 +74,87 @@ def _canonical_manifest_sha256(raw: bytes) -> str:
     return _sha256(canonical_json_bytes(value))
 
 
+def _offline_render_schema(path: Path) -> None:
+    """Do not allow archived schema data to initiate reference network requests."""
+    schema = read_strict_json(path, regular_only=True)
+    pending = [schema]
+    while pending:
+        value = pending.pop()
+        if isinstance(value, dict):
+            if value is not schema and ("$id" in value or isinstance(value.get("id"), str)):
+                raise ValueError("release bundle source schema has a nested reference scope")
+            for key in ("$ref", "$dynamicRef", "$recursiveRef"):
+                reference = value.get(key)
+                if reference is not None and (not isinstance(reference, str) or not reference.startswith("#")):
+                    raise ValueError("release bundle source schema must use local references")
+            pending.extend(value.values())
+        elif isinstance(value, list):
+            pending.extend(value)
+
+
+def _validate_bundles(
+    raw: bytes,
+    release_manifest: Mapping[str, Any],
+    actual: Mapping[str, tuple[str | None, int]],
+) -> None:
+    """Reproduce bundle bytes from the verified source, never its declared hashes."""
+    expected: dict[str, tuple[str, int]] = {}
+    targets = []
+    budget = RenderBudget(max_bytes=archive_io.MAX_DECODED_BYTES,
+                          max_file_bytes=archive_io.MAX_MEMBER_BYTES,
+                          max_files=archive_io.MAX_MEMBERS,
+                          max_name_bytes=archive_io.MAX_NAME_BYTES)
+    with tempfile.TemporaryDirectory(prefix="adk-release-bundles-") as temporary:
+        source_root = Path(temporary) / "source"
+        inspect_archive_snapshot(raw, source_directory=source_root)
+        for name in ("manifest.schema.json", "target-contract.schema.json"):
+            _offline_render_schema(source_root / "manifests" / name)
+        manifest = Manifest.load(source_root)
+        for target in sorted(manifest.direct_targets()):
+            prefix = "bundles/" + target + "/"
+            budget.check_name(prefix)
+            config = manifest.target(target)
+            kinds = config.get("supported_asset_kinds", [])
+            kind = kinds[0] if isinstance(kinds, list) and len(kinds) == 1 else None
+            bundle = _render_historical_selection(manifest, target, ["embedded-fullstack"], (), kind, budget=budget)
+            for rendered in bundle.files:
+                name = prefix + rendered.destination
+                budget.check_name(name)
+                expected[name] = (rendered.sha256, rendered.mode)
+            inventory = budget.file_buffer()
+            for chunk in json.JSONEncoder(ensure_ascii=False, indent=2).iterencode(export_manifest(manifest, bundle)):
+                inventory.write(chunk)
+            inventory.write("\n")
+            inventory_name = prefix + "adk-export-manifest.json"
+            budget.check_name(inventory_name)
+            expected[inventory_name] = (_sha256(inventory.finish()), 0o644)
+            targets.append({"target": target, "agents": bundle.agent_count, "skills": bundle.skill_count})
+        if sorted(release_manifest["direct_targets"], key=lambda value: value["target"]) != targets:
+            raise ValueError("release bundle target counts differ from source renderer")
+    directories = {
+        parent.as_posix() for name in expected for parent in PurePosixPath(name).parents
+        if parent != PurePosixPath(".")
+    }
+    files = {name: value for name, value in actual.items() if value[0] is not None}
+    if files != expected:
+        raise ValueError("release bundle files, bytes or modes differ from source renderer")
+    if any(name not in directories or value != (None, 0o755)
+           for name, value in actual.items() if value[0] is None):
+        raise ValueError("release bundle directories differ from source renderer")
+
+
 def validate_release_artifact(artifact: Path, *, raw_snapshot: bytes | None = None) -> dict[str, Any]:
-    """Validate manifest, SBOM and source-manifest identities inside an archive."""
+    """Validate archive identities and every bundle against its verified source."""
 
     source_inventory: dict[str, Any] = {}
+    bundle_inventory: dict[str, tuple[str | None, int]] = {}
     if raw_snapshot is None:
-        raw, payloads = load_archive_snapshot(artifact, source_inventory=source_inventory)
+        raw, payloads = load_archive_snapshot(artifact, source_inventory=source_inventory,
+                                             bundle_inventory=bundle_inventory)
     else:
         raw = raw_snapshot
-        payloads = inspect_archive_snapshot(raw, source_inventory=source_inventory)
+        payloads = inspect_archive_snapshot(raw, source_inventory=source_inventory,
+                                            bundle_inventory=bundle_inventory)
     release_bytes = payloads["release-manifest.json"]
     try:
         release_manifest = load_strict_json(release_bytes, max_bytes=_MAX_JSON_BYTES)
@@ -113,6 +191,15 @@ def validate_release_artifact(artifact: Path, *, raw_snapshot: bytes | None = No
         raise ValueError("release source file count does not match archive")
     if source_inventory["sha256"] != release_manifest["source_provenance"]["source_distribution_sha256"]:
         raise ValueError("release source distribution digest does not match archive")
+    try:
+        _validate_bundles(raw, release_manifest, bundle_inventory)
+    except (OSError, ValueError):
+        raise
+    except Exception as exc:
+        # Archive-controlled schemas can raise reference-library exceptions or
+        # recursion errors. Keep these at the public malformed-input boundary,
+        # retaining the original cause for programmatic diagnostics.
+        raise ValueError("release bundle source could not be rendered safely") from exc
 
     return {
         "schema": "adk-release-artifact-contract/v1",

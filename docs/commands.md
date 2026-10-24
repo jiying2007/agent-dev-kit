@@ -133,6 +133,8 @@ bash scripts/devkit.sh target smoke --target claude-code --stage discovery --pro
 
 当前 `claude-code`、`opencode` 均为 `experimental`。真实 runtime smoke 至少分 discovery、load、trigger、permission 四阶段；本地结果记录 `started_at`、`duration_ms`、runtime command SHA256、exit code 和 stdout/stderr digest，runtime/version 与可复核证据摘要必须由外部 campaign 一并留存。
 
+`target smoke` 使用非交互 stdin（DEVNULL），stdout/stderr 合计预算为 1 MiB；超量返回 `runtime_output_budget_exceeded`。总体超时包括直接进程退出及输出管道关闭，失败时终止并回收进程。POSIX 清理创建时隔离的原进程组；主动创建新 session 的后代不在该保证范围。其他平台只保证直接子进程终止。本地 caller-supplied smoke 的资格等级保持不变。
+
 ## native-campaign
 
 Prepare, execute, and finalize a version-pinned native discovery/load/trigger campaign without promoting the active target contract.
@@ -409,6 +411,8 @@ bash scripts/devkit.sh release publish --version "$VERSION" --backend github --a
 `release rehearse` 只接受 checksum 匹配、满足当前 strict source/release contract 且 candidate 版本更高的本地 artifact；它在临时 target 安装上一版、升级候选版、核验 receipt，再回滚并比较上一版受管资产 hash、权限 mode 与原 receipt 字节。升级与恢复分别使用 artifact 中已验证的 candidate/previous 源码。pre-contract/legacy bundle 与缺少当前必填 target contract 字段的 artifact 会直接 fail closed，不提供 release-only migration boundary；演练中的两次新安装仍要求当下 target freshness。build 在归档前校验 SPDX 2.3 SBOM 的 package/relationship 完整性并把 SBOM SHA256 写入 release manifest；GitHub release workflow 使用 SHA-pinned `actions/attest` 为 tarball 生成 provenance。该命令不创建 tag、不上传制品、不调用远端 backend。rehearsal、runtime smoke、timing 和 campaign state 属于 checkout 内的验证证据，不进入 source distribution，避免制品 SHA 与其自身验证报告形成循环依赖。
 
 `release runtime-build` 按显式 Profile 构建 `adk-runtime-bundle/v1`，只包含版本化 Skill support tree、bundle manifest、逐文件 checksum、许可证和 SPDX SBOM。它是供外部 handoff target 导入的 platform-neutral Runtime Bundle，不是 Codex direct export；制品不包含 ADK Python 实现、测试、内部 change evidence 或 source distribution，也不会写任何运行目录。
+
+发布 artifact 校验会从同一已验证 source 快照，用当前可信 renderer 重建预编译 bundles，并核对完整 target/文件/目录集合、摘要、模式和 export manifest。源内 Python 不执行，schema 不允许外部引用；重渲染沿现有归档的总字节、单文件和成员数量预算失败关闭。该检查验证内容一致性，来源认证仍由签名与受保护发布链承担。
 
 ## Repeated test effect comparison
 

@@ -7,7 +7,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "agent-dev-kit"
-version = "8.0.39"
+version = "8.0.40"
 description = "Platform-neutral agent asset compiler, distributor, and evaluator"
 readme = "README.md"
 requires-python = ">=3.8"

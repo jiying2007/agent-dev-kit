@@ -5,7 +5,6 @@ import unittest
 import json
 import os
 import stat
-import hashlib
 import io
 import tarfile
 from unittest import mock
@@ -23,6 +22,7 @@ from agent_dev_kit.target_contracts import (_json_object as load_target_object,
                                           load_target_contract, _validate_native_conformance_evidence)
 from agent_dev_kit.distribution import promotion_evidence
 from agent_dev_kit.distribution.release_contract import _canonical_manifest_sha256, validate_release_artifact
+from release_archive_fixture import release_fixture
 
 
 class StrictJSONTests(unittest.TestCase):
@@ -63,21 +63,8 @@ class StrictJSONTests(unittest.TestCase):
     def test_real_archive_reader_rejects_duplicate_manifests(self):
         with tempfile.TemporaryDirectory() as temp:
             artifact = Path(temp) / "agent-dev-kit-7.0.0.tar.gz"
-            source = b'{"version":"7.0.0"}'
-            sbom = b'{"spdxVersion":"SPDX-2.3"}'
-            release = {
-                "schema_version": 2, "version": "7.0.0",
-                "manifest_sha256": _canonical_manifest_sha256(source),
-                "direct_targets": [{"target": "claude-code", "agents": 1, "skills": 1}],
-                "external_targets": ["external-runtime"], "source_distribution": True,
-                "source_file_count": 1, "reproducible": False, "release_eligible": False,
-                "source_provenance": {"kind": "unbound-snapshot", "release_eligible": False,
-                                      "commit": None, "tree": None, "dirty": None,
-                                      "source_distribution_sha256": hashlib.sha256(
-                                          b"manifest.json\0" + hashlib.sha256(source).digest()).hexdigest()},
-                "sbom": {"path": "sbom.spdx.json", "sha256": hashlib.sha256(sbom).hexdigest(),
-                         "validated": True},
-            }
+            release, members = release_fixture()
+            source = dict(members)["manifest.json"]
             release_raw = json.dumps(release).encode()
             cases = ((source, release_raw, True),
                      (b'{"version":"invalid","version":"7.0.0"}', release_raw, False),
@@ -85,9 +72,9 @@ class StrictJSONTests(unittest.TestCase):
                      (source, b'{"extra":NaN,' + release_raw[1:], False))
             for source_raw, raw, valid in cases:
                 with tarfile.open(artifact, "w:gz") as archive:
-                    for name, payload in (("manifest.json", source_raw), ("source/manifest.json", source_raw),
-                                          ("sbom.spdx.json", sbom),
-                                          ("release-manifest.json", raw)):
+                    for name, payload in members + [("release-manifest.json", raw)]:
+                        if name in ("manifest.json", "source/manifest.json"):
+                            payload = source_raw
                         info = tarfile.TarInfo(name)
                         info.size = len(payload)
                         archive.addfile(info, io.BytesIO(payload))
