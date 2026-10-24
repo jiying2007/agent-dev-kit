@@ -298,6 +298,7 @@ def _render_support_files(
     rendered: List[RenderedFile] = []
     for directory_name in contract.data["support_directories"]:
         source_root = asset.path / str(directory_name)
+        ensure_within(source_root, asset.path, "asset support directory")
         if not source_root.exists():
             continue
         if source_root.is_symlink() or not source_root.is_dir():
@@ -368,10 +369,12 @@ def _render_historical_selection(
     asset_kind: Optional[str],
     *,
     budget: Optional[RenderBudget] = None,
+    allow_native_verifier: bool = True,
 ) -> RenderedBundle:
     """Internal receipt inventory reproduction; never current target admission."""
     return _render_selection(
-        manifest, _load_historical_target_contract(manifest, target), profiles, optional_skills, asset_kind,
+        manifest, _load_historical_target_contract(manifest, target, allow_native_verifier=allow_native_verifier),
+        profiles, optional_skills, asset_kind,
         budget=budget,
     )
 

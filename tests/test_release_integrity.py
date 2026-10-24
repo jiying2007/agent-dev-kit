@@ -7,17 +7,18 @@ import io
 import json
 import os
 import subprocess
+import sys
 import tarfile
 import tempfile
 import unittest
 from contextlib import redirect_stdout
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from unittest import mock
 
 from agent_dev_kit import release, target_contracts, targets
 from agent_dev_kit.distribution import archive_io, release_artifacts, release_contract
-from agent_dev_kit.model import Manifest, ManifestError
+from agent_dev_kit.model import Manifest, ManifestError, canonical_json_bytes
 from release_archive_fixture import release_fixture
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -93,6 +94,85 @@ class ReleaseInventoryTest(unittest.TestCase):
             path = Path(original["path"]).parent / ("assets/empty-" + str(index) + ".txt")
             changes["source/" + str(path)] = b""
         self.manifest["direct_targets"][0]["skills"] = count
+        self.rewrite_source(changes)
+
+    def native_receipt_source(self, schema, *, registered=False):
+        path = "source/manifests/target-contracts/claude-code.json"
+        contract = json.loads(dict(self.members)[path])
+        receipt = b"{}\n"
+        contract["adapter"]["conformance"] = {
+            "level": "runtime", "certification": "conformance-certified", "native_runtime_smoke": "pass",
+            "runtime_binary": "offline-fixture", "runtime_binary_sha256": "a" * 64,
+            "runtime_version": "offline-fixture-1", "runtime_version_pin": "offline-fixture-1",
+            "last_verified_at": "2026-10-24T00:00:00Z",
+            "evidence": [{"receipt_schema": "adk-native-target-conformance-receipt/v2",
+                          "path": "reports/offline-fixture.json", "sha256": hashlib.sha256(receipt).hexdigest(),
+                          "target": "claude-code", "runtime_version": "offline-fixture-1",
+                          "bundle_sha256": "b" * 64, "contract_sha256": "c" * 64, "layer": "runtime"}],
+        }
+        contract["adapter"]["conformance_trust_policy"] = {
+            "enabled": True, "trusted_authorities": ["offline-fixture"],
+            "verification_backend": "external-signature-verifier",
+        }
+        for stage in ("discovery", "load", "trigger"):
+            contract["adapter"]["capabilities"][stage] = "native-verified"
+        registry = {"schema": "adk-native-conformance-trust-registry/v1", "status": "active",
+                    "authority_model": "owner-reviewed-managed-registry", "authorities": {}}
+        changes = {}
+        if registered:
+            contract["adapter"]["conformance_trust_policy"]["verification_backend"] = "ci-provenance-verifier"
+            contract_digest = target_contracts._native_contract_digest(contract)
+            now = datetime.now(timezone.utc).replace(microsecond=0) - timedelta(minutes=1)
+            stages = []
+            for index, stage in enumerate(("discovery", "load", "trigger")):
+                started = now - timedelta(minutes=4 - index)
+                authority = {"execution_authority": "ci-approved", "authority_id": "offline-fixture", "scope": stage}
+                authority["attestation_sha256"] = target_contracts._authority_digest(authority)
+                stages.append({
+                    "stage": stage, "command_sha256": str(index + 1) * 64,
+                    "assertion_sha256": ("a", "b", "c")[index] * 64,
+                    "assertion_result_sha256": ("d", "e", "f")[index] * 64,
+                    "semantic_assertion_status": "pass", "result_sha256": str(index + 4) * 64,
+                    "exit_code": 0, "started_at": started.isoformat(),
+                    "completed_at": (started + timedelta(seconds=10)).isoformat(), "duration_ms": 10000,
+                    "environment": {"platform": "linux", "architecture": "x86_64",
+                                    "cwd_sha256": "7" * 64, "environment_sha256": "8" * 64,
+                                    "runtime_binary_sha256": "a" * 64, "bundle_sha256": "b" * 64,
+                                    "contract_sha256": contract_digest},
+                    "privacy": {"raw_content_stored": False, "secrets_stored": False, "sanitized": True},
+                    "authority": authority,
+                })
+            receipt_data = {
+                "schema": "adk-native-target-conformance-receipt/v2", "receipt_id": "offline-fixture-native",
+                "target": "claude-code", "runtime": {"binary": "offline-fixture", "binary_sha256": "a" * 64,
+                                                     "version": "offline-fixture-1", "version_pin": "offline-fixture-1"},
+                "bundle_sha256": "b" * 64, "contract_sha256": contract_digest,
+                "verified_at": now.isoformat(), "stages": stages,
+            }
+            receipt = json.dumps(receipt_data).encode()
+            conformance = contract["adapter"]["conformance"]
+            conformance["last_verified_at"] = receipt_data["verified_at"]
+            conformance["evidence"][0]["sha256"] = hashlib.sha256(receipt).hexdigest()
+            conformance["evidence"][0]["contract_sha256"] = contract_digest
+            binary = Path(sys.executable).resolve()
+            signature = b'{"fixture":"not-a-real-signature"}\n'
+            registry["authorities"]["offline-fixture"] = {
+                "enabled": True, "policy_backend": "ci-provenance-verifier", "verifier": "sigstore-cosign-blob",
+                "allowed_targets": ["claude-code"], "certificate_identity": "https://invalid.example/fixture",
+                "certificate_oidc_issuer": "https://invalid.example/issuer",
+                "cosign_binary": str(binary), "cosign_binary_sha256": hashlib.sha256(binary.read_bytes()).hexdigest(),
+                "receipts": {receipt_data["receipt_id"]: {
+                    "receipt_canonical_sha256": hashlib.sha256(canonical_json_bytes(receipt_data)).hexdigest(),
+                    "bundle_path": "reports/offline-fixture.sigstore.json", "bundle_sha256": hashlib.sha256(signature).hexdigest(),
+                }},
+            }
+            changes["source/reports/offline-fixture.sigstore.json"] = signature
+        changes.update({
+            path: json.dumps(contract).encode(),
+            "source/manifests/native_conformance_trust_registry.json": json.dumps(registry).encode(),
+            "source/reports/offline-fixture.json": receipt,
+            "source/schemas/native-target-conformance-receipt-v2.schema.json": json.dumps(schema).encode(),
+        })
         self.rewrite_source(changes)
 
     def test_real_source_inventory_is_accepted_in_any_member_order(self):
@@ -201,6 +281,73 @@ class ReleaseInventoryTest(unittest.TestCase):
                 self.write(members)
                 with self.subTest(schema=schema, value=value), self.assertRaisesRegex(ValueError, "bundle source schema"):
                     release_contract.validate_release_artifact(self.path)
+
+    def test_native_receipt_schema_is_checked_before_reference_resolution(self):
+        for reference in ("$ref", "$dynamicRef"):
+            self.native_receipt_source({reference: "https://invalid.example/never-request.json"})
+            with self.subTest(reference=reference), \
+                 mock.patch("urllib.request.urlopen", side_effect=AssertionError("external I/O forbidden")) as network:
+                with self.assertRaises(ValueError) as caught:
+                    release_contract.validate_release_artifact(self.path)
+                network.assert_not_called()
+                self.assertIn("bundle source schema must use local references", str(caught.exception))
+
+    def test_local_native_schema_preserves_receipt_validation(self):
+        schema = json.loads((ROOT / "schemas/native-target-conformance-receipt-v2.schema.json").read_bytes())
+        self.native_receipt_source(schema)
+        source = Path(self.temp.name) / "local-native-source"
+        archive_io.inspect_archive_snapshot(self.path.read_bytes(), source_directory=source)
+        with mock.patch("urllib.request.urlopen", side_effect=AssertionError("external I/O forbidden")) as network, \
+             mock.patch("agent_dev_kit.native_trust.verify_sigstore_blob",
+                        side_effect=AssertionError("invalid receipt must not reach verification")) as verifier:
+            for loader in (target_contracts.load_target_contract, target_contracts._load_historical_target_contract):
+                with self.subTest(loader=loader.__name__), \
+                     self.assertRaisesRegex(ManifestError, "native receipt schema failure"):
+                    loader(Manifest.load(source), "claude-code")
+            network.assert_not_called()
+            verifier.assert_not_called()
+
+    def test_archive_registry_cannot_authorize_host_native_verifier_execution(self):
+        schema = json.loads((ROOT / "schemas/native-target-conformance-receipt-v2.schema.json").read_bytes())
+        self.native_receipt_source(schema, registered=True)
+        with mock.patch("agent_dev_kit.sigstore_blob.subprocess.run",
+                        side_effect=AssertionError("archive-selected execution blocked")) as process, \
+             mock.patch.object(target_contracts, "build_managed_native_trust_verifier",
+                               wraps=target_contracts.build_managed_native_trust_verifier) as verifier:
+            with self.assertRaises(ValueError) as caught:
+                release_contract.validate_release_artifact(self.path)
+            process.assert_not_called()
+            verifier.assert_not_called()
+            self.assertIn("independently trusted verifier authority", str(caught.exception))
+
+    def test_external_support_root_is_rejected_before_filesystem_inspection(self):
+        outside = Path(self.temp.name) / "outside-source"
+        outside.mkdir()
+        (outside / "sentinel.txt").write_text("test-owned harmless content\n")
+        contract_path = "source/manifests/target-contracts/claude-code.json"
+        schema_path = "source/manifests/target-contract.schema.json"
+        contract = json.loads(dict(self.members)[contract_path])
+        contract["support_directories"] = [str(outside)]
+        schema = json.loads(dict(self.members)[schema_path])
+        schema["properties"]["support_directories"]["items"] = {"type": "string"}
+        self.rewrite_source({contract_path: json.dumps(contract).encode(), schema_path: json.dumps(schema).encode()})
+        inspected = []
+        original_exists, original_rglob = Path.exists, Path.rglob
+
+        def exists(path):
+            if path == outside:
+                inspected.append("exists")
+            return original_exists(path)
+
+        def rglob(path, pattern):
+            if path == outside:
+                inspected.append("rglob")
+            return original_rglob(path, pattern)
+
+        with mock.patch.object(Path, "exists", exists), mock.patch.object(Path, "rglob", rglob):
+            with self.assertRaisesRegex(ManifestError, "asset support.*escapes allowed root"):
+                release_contract.validate_release_artifact(self.path)
+        self.assertEqual([], inspected)
 
     def test_malformed_local_schema_is_a_structured_contract_failure(self):
         for value in ({"$ref": "#"}, {"$ref": "#/$defs/missing"}):

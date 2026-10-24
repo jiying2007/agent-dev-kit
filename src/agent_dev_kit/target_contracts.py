@@ -393,17 +393,22 @@ def load_target_contract(manifest: Manifest, target: str) -> TargetContract:
     return _load_target_contract(manifest, target, historical=False)
 
 
-def _load_historical_target_contract(manifest: Manifest, target: str) -> TargetContract:
+def _load_historical_target_contract(
+    manifest: Manifest, target: str, *, allow_native_verifier: bool = True,
+) -> TargetContract:
     """Reproduce trusted installed assets without renewing target freshness.
 
     Receipt timestamps are mutable, so they cannot establish a trusted clock.
     Recovery retains all structural and native trust checks and only separates
     natural source expiry from admission of a new install/export operation.
+    Untrusted archive callers must disallow native verifier execution explicitly.
     """
-    return _load_target_contract(manifest, target, historical=True)
+    return _load_target_contract(manifest, target, historical=True, allow_native_verifier=allow_native_verifier)
 
 
-def _load_target_contract(manifest: Manifest, target: str, *, historical: bool) -> TargetContract:
+def _load_target_contract(
+    manifest: Manifest, target: str, *, historical: bool, allow_native_verifier: bool = True,
+) -> TargetContract:
     config = manifest.target(target)
     raw_path = config.get("contract")
     if not isinstance(raw_path, str) or not raw_path:
@@ -470,6 +475,10 @@ def _load_target_contract(manifest: Manifest, target: str, *, historical: bool) 
     conformance = adapter.get("conformance", {})
     trust_verifier = None
     if isinstance(conformance, dict) and conformance.get("level") == "runtime":
+        if not allow_native_verifier:
+            raise ManifestError(
+                "target_contract_untrusted: archive runtime conformance requires independently trusted verifier authority"
+            )
         trust_policy = adapter.get("conformance_trust_policy")
         if not isinstance(trust_policy, dict):
             raise ManifestError("target_contract_untrusted: native trust policy is missing")

@@ -109,6 +109,9 @@ def _validate_bundles(
         inspect_archive_snapshot(raw, source_directory=source_root)
         for name in ("manifest.schema.json", "target-contract.schema.json"):
             _offline_render_schema(source_root / "manifests" / name)
+        native_schema = source_root / "schemas" / "native-target-conformance-receipt-v2.schema.json"
+        if native_schema.exists():
+            _offline_render_schema(native_schema)
         manifest = Manifest.load(source_root)
         for target in sorted(manifest.direct_targets()):
             prefix = "bundles/" + target + "/"
@@ -116,7 +119,9 @@ def _validate_bundles(
             config = manifest.target(target)
             kinds = config.get("supported_asset_kinds", [])
             kind = kinds[0] if isinstance(kinds, list) and len(kinds) == 1 else None
-            bundle = _render_historical_selection(manifest, target, ["embedded-fullstack"], (), kind, budget=budget)
+            bundle = _render_historical_selection(
+                manifest, target, ["embedded-fullstack"], (), kind, budget=budget, allow_native_verifier=False,
+            )
             for rendered in bundle.files:
                 name = prefix + rendered.destination
                 budget.check_name(name)
