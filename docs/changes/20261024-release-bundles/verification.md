@@ -10,7 +10,9 @@
 - `compiler.export_manifest` 仅把原内联清单构造抽为纯函数；正常 export 和 release verifier 共用原有 `adk-export-manifest/v2` 字段与序列化顺序，不新增 schema。
 - 主 Agent 后续批准的输出预算已落实在现有 `targets.py` renderer：release 显式构造共享 `RenderBudget`，总输出、单文件、文件数和路径字节分别取自 `archive_io.MAX_DECODED_BYTES`、`MAX_MEMBER_BYTES`、`MAX_MEMBERS`、`MAX_NAME_BYTES`（默认 128 MiB、32 MiB、8192、4096）。同一状态跨全部 target 和 export manifest 使用，不在每个 target 重置。
 - 有界路径把 `yaml.safe_dump` 接到分块 UTF-8 writer；在保留编码数据前检查剩余单文件/总预算，避免先建立完整放大后的 frontmatter 字符串。body 也通过同一 writer；support 文件先检查大小再分块读取；资产最少文件数提前校验，每个 support 和 export manifest 文件继续单独消费文件数。已有源文件大小、JSON 深度与成员数约束限制输入，输出超过预算时立即中止。普通 export/安装未传预算，继续走原有默认路径。
-- 源包 Python 仅作为数据复制；不导入或执行。manifest/target schema 在使用前拒绝外部引用和嵌套引用作用域，避免归档 schema 发起网络解析。局部引用缺失/递归等外部库异常在 canonical verifier 边界变为结构化失败，同时保留原始异常 cause。
+- 源包 Python 仅作为数据复制；不导入或执行。manifest、target contract 和存在的 Native receipt schema 在使用前拒绝外部引用和嵌套引用作用域，避免归档 schema 发起网络解析。局部引用缺失/递归等外部库异常在 canonical verifier 边界变为结构化失败，同时保留原始异常 cause。
+- support root 经原有 `ensure_within` 在 `exists`、`rglob` 和读取前验证；保留未解析的原路径供原有 symlink 拒绝逻辑使用，不让包内可改 schema 授予目录访问权限。
+- 公开 release validator 固定传入 `allow_native_verifier=False`，经既有历史 renderer/target loader 传播；runtime conformance 在 `build_managed_native_trust_verifier` 前失败关闭，不解析包内 registry 来授予宿主执行权。私有参数默认为 `True`，普通本地 `load_target_contract` 和 installation inventory 的原有 managed Native 路径不改变。
 - archive-resource、strict-json、release-manifest 的旧“正例”缺 source 合同与 bundles，已迁移到共享测试夹具 `tests/release_archive_fixture.py`。夹具保留真实 schema、target contract 和 Agent/Skill，通过真实 `Manifest.validate(strict=True)` 与 `export_assets` 生成。未放宽 validator 或给非发布包添加豁免。
 
 ## 实际执行
@@ -64,8 +66,31 @@ python3 /tmp/adk_f1_compatibility.py
 
 与审查前精确基线构建及正式 v8.0.39 已核对摘要一致。新 canonical validator 返回 `status=pass`、`release_eligible=true`；把 target owner 的时钟推进到两个 source 均过期的 `2027-01-12` 后，历史包验收合同逐字段相同。独立测试还证实同一时刻的新 target 准入仍返回 `target_contract_stale`，历史验收不续期当前准入。
 
+## 独立复核反馈修复后的实际验证
+
+独立 reviewer `ai/root/release_governance_audit` 提供了三个真实公开入口 RED：Native receipt schema 外部引用、support root 在 containment 前遍历、合法 Native receipt 通过包内 registry 选择宿主 verifier。实现者先把三项验收写入回归，再做最小修复；原始 RED 全部保留，未修改 reviewer 的探针或断言。四个用例中另一个为默认本地 Native receipt 校验的正向控制。
+
+实际 schema 消费链已逐 owner 检索：`Manifest.load` / `_manifest_schema_bundle` 使用 `manifests/manifest.schema.json`；历史 target loader 使用 `manifests/target-contract.schema.json`；`_validate_native_conformance_evidence` 使用 `schemas/native-target-conformance-receipt-v2.schema.json`。同一 offline guard 覆盖这三处，第三份在存在时先检查，静态最小 source 不被要求携带未使用的 Native schema。manifest 的 source/source fallback 在 release 路径不可达，因为第一候选 schema 是此前必检的固定文件。Native registry 使用既有手写结构验证，sigstore owner 不读取其他 JSON Schema。公开 release 的 runtime 分支另在构造 managed verifier 前拒绝；没有跳过信任检查后继续渲染的路径。
+
+所有以下记录使用同一 `run_checks.py` 留下完整命令、开始/结束时间、退出码、stdout/stderr 摘要、Git HEAD/tree、前后工作区摘要。记录前后 `snapshot_stable=true`；源文件指纹见 `evidence/source-fingerprints.json`。原始记录统一位于 `/workspace/scratch/712af632e2a5/apply20261024/`，每个下列 label 都有 `.json`、`.stdout`、`.stderr`。
+
+| 命令或验证范围 | 实际结果 | 记录 label |
+| --- | --- | --- |
+| 四项新验收，修改生产实现前 | exit 1；4 tests / 0.356s；4 failures，详见 negative-results.md | `adk-f1-review-regressions-red` |
+| 四项新验收，修复后 | exit 0；4 tests / 0.350s；三个归档反例的相应外部访问均为 0，执行反例的 managed verifier 构造为 0；默认本地路径保留原 receipt 校验 | `adk-f1-review-regressions-green` |
+| `bash tests/test_release_manifest_contract.sh` | exit 0；archive bounds 22 tests / 0.778s；CI authority 4 / 0.027s；release integrity 31 / 37.383s；release rehearsal 1 / 9.728s；总耗时 48.728s | `adk-f1-review-release` |
+| `python3 -m unittest test_native_trust test_install_upgrade.ExportOutputBoundaryTest test_install_upgrade.InstallUpgradeTest test_install_receipt_authority test_strict_json` | exit 0；40 tests / 7.361s；含原本地 production loader 自动注入 managed verifier 的成功用例 | `adk-f1-review-native-install` |
+| `bash tests/test_target_contracts.sh` | exit 0；target contracts PASS，含 9 smoke tests / 9.416s | `adk-f1-review-targets` |
+| `python3 /tmp/adk_f1_compatibility.py` | exit 0；完整 v8.0.39 重建仍为 `680ab5bb…a4429b487`；正常及 `2027-01-12` 历史时钟验收相同；3.443s | `adk-f1-review-compatibility` |
+| 项目默认 Ruff：distribution、targets、target_contracts、compiler 及本次相关 Python 测试/helper | exit 0；All checks passed | `adk-f1-review-lint` |
+| `ruff check --select E4,E7,E9,F,B,UP,SIM,I src/agent_dev_kit/distribution` | exit 0；All checks passed | `adk-f1-review-ci-lint` |
+| Mypy：archive_io、release_contract、targets、target_contracts、compiler | exit 0；Success: no issues found in 5 source files | `adk-f1-review-types` |
+| `bash tests/test_module_size_budget.sh` | exit 0；status=pass，import fanout 26/28，无超限或 support debt | `adk-f1-review-module-budget` |
+
+新回归的完整类内方法为 `test_native_receipt_schema_is_checked_before_reference_resolution`、`test_local_native_schema_preserves_receipt_validation`、`test_external_support_root_is_rejected_before_filesystem_inspection`、`test_archive_registry_cannot_authorize_host_native_verifier_execution`，均属于 `test_release_integrity.ReleaseInventoryTest`。执行反例使用原始完整 Native receipt schema、语义完整的三阶段 receipt、真实宿主二进制摘要和包内 registry；只在外部效果边界拦截并计数，不 mock 其 schema/receipt/trust 检查。默认本地 loader 与历史 loader 的无效 receipt 仍由原 receipt schema 拒绝；受管理本地成功用例由原 `test_native_trust` 保持。
+
 ## 剩余 Gate 与边界
 
-完整回归、独立只读审核、精确提交 CI 和发布由主 Agent 统一整合；实现者尚未提交、推送或发布。本轮没有执行真实 Native runtime、G22、LTA 或产品资格。当前正式 direct targets 是 static 合同；未来 runtime-certified 合同仍沿现有历史 renderer 的 Native trust owner 检查，其现场验收不由本记录授予。
+完整回归、独立只读审核、精确提交 CI 和发布由主 Agent 统一整合；实现者尚未提交、推送或发布。本轮没有执行真实 Native runtime、G22、LTA 或产品资格。当前正式 direct targets 是 static 合同，静态发布包保持兼容。公开 release validator 当前拒绝 runtime conformance 归档：包内 registry 不是独立可信执行授权，不能据此构造或执行宿主 verifier；后续若支持 runtime 归档，须另行设计独立可信 context，不通过本次公共接口绕过。普通本地 managed Native 的原有语义保持，其现场验收不由本记录授予。
 
 归档与输出预算已同时落实；它们约束输入和已生成的数据规模，不能替代操作系统的 CPU/内存隔离。完整回归和独立 Spec/Quality 结论仍由主 Agent 收口，不能用这里的定向 PASS 替代。

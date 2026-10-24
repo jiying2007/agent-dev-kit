@@ -51,3 +51,21 @@ python3 -m unittest test_release_integrity.ReleaseInventoryTest.test_frontmatter
 主 Agent 的真实 CI focused lint 报告 `release_contract.py` 的 `I001`：compiler import 需排在 contracts import 前。已用 apply_patch 仅修正导入顺序，随后 `ruff check --select E4,E7,E9,F,B,UP,SIM,I src/agent_dev_kit/distribution` 实际 exit 0。
 
 实现者额外把同一严格 profile 试用于 CI 此选择范围外的 legacy `targets.py` / `compiler.py`，实际 exit 1 / 56 项，主要为既有 `typing.Optional/Dict/Tuple` 与 `.format` 风格（新增参数沿用该文件风格），另有现有 alias import block 排序。没有批量改写这些非本次预算缺陷；它们的项目默认 lint、mypy 和实际 CI distribution 选择均通过。该额外检查不记为 PASS，也不改 lint 配置来隐藏结果。
+
+## 独立复核的三个 P2 与实现前 RED
+
+独立 reviewer `ai/root/release_governance_audit` 使用真实公开 `validate_release_artifact` 找到三项遗漏。原始脚本与输出保存在 `/workspace/scratch/712af632e2a5/apply20261024/review-f1/`；没有覆盖其 RED，也没有改变探针断言：
+
+- `probe_native_schema_offline.py` / `native-schema-offline-v2-red.*`：runtime conformance 的第三份 Native receipt schema 可以请求外部 `$ref`；`urllib.request.urlopen` 在测试边界被拦截，实际网络 I/O 为 0。
+- `probe_support_containment.py` / `support-containment-red.*`：归档可放宽自身 schema 并把 support root 指向临时目录，原 renderer 先 `rglob`，逐文件 containment 才拒绝；独立探针实际委托遍历一个自建无害文件，未读该文件正文。
+- `probe_native_execution_boundary.py` / `native-execution-red.*`：使用未修改的完整 Native receipt schema、合法 receipt 结构和包内 enabled authority，能够到达归档指定的 `/usr/bin/true verify-blob …` 调用；在 `subprocess.run` 前拦截，实际执行为 0。这证明自报二进制摘要和 source inventory 不能充当宿主执行授权。
+
+实现者按冻结验收新增真实归档回归，在生产修复之前执行以下方法：
+
+```text
+python3 -m unittest test_release_integrity.ReleaseInventoryTest.test_native_receipt_schema_is_checked_before_reference_resolution test_release_integrity.ReleaseInventoryTest.test_local_native_schema_preserves_receipt_validation test_release_integrity.ReleaseInventoryTest.test_external_support_root_is_rejected_before_filesystem_inspection test_release_integrity.ReleaseInventoryTest.test_archive_registry_cannot_authorize_host_native_verifier_execution
+```
+
+实际退出码 `1`，`Ran 4 tests in 0.356s / FAILED (failures=4)`。`$ref` 与 `$dynamicRef` 各触发一次被拦截的 urlopen；support 记录为 `['exists', 'rglob']`；执行反例使用当前 Python 解释器路径及真实 SHA256，观察到一次 `verify-blob` subprocess 调用并在执行前阻断。原始完整记录为 `/workspace/scratch/712af632e2a5/apply20261024/adk-f1-review-regressions-red.{json,stdout,stderr}`，stderr SHA256 为 `9a4bc00133718d4b0d29ebe8fe2f2699aab1809f26f9a8377413db42c811320e`。
+
+修复后的同一安全验收全部通过，stdout/stderr 和实际命令见 `adk-f1-review-regressions-green.*`。默认本地 receipt 的正向控制迁至显式 `load_target_contract` 与 `_load_historical_target_contract`，因为冻结设计要求公开 release 在 receipt 验证之前拒绝归档 runtime conformance；公开入口另以完整 receipt 反例断言 managed verifier 构造与 subprocess 均为 0，没有以不完整 receipt 提前失败来替代执行边界验证。后续原本地 managed Native 成功用例、安装恢复、整包与历史时钟正控制均保持通过。

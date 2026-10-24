@@ -5,7 +5,9 @@
 - 基线：`415590db44e88979185efb850e2339a3f95411ef`。
 - 新测试从冻结验收条件派生，先在旧 `targets.py` 执行；没有 mock runtime 或改动资格合同。
 - 命令：`PYTHONPATH=src python3 -m unittest discover -s tests -p test_target_smoke.py -v`。
-- 结果：8 项运行，3 项通过、5 项失败，exit 1，5.826 秒。原始输出见 `evidence/red-target-smoke.txt`。
+- 结果：8 项运行，3 项通过、5 项失败，exit 1，5.826 秒。原始输出见 `evidence/red-target-smoke.json`：按原字节 base64 保存，含 SHA256、字节数与原 Git blob，解码后逐字节恢复日志。
+
+证据封装补充：独立全 patch 的格式检查实际发现原 unittest 输出 `AssertionError: 0 != 1 : ` 自带尾空格，原 `check-format.sh` 会拒绝该明文新增文件。未修改格式门禁，也未裁剪失败输出；现以 JSON/base64 无损保存全部 4646 字节，SHA256 为 `46f04ed1e3214d41a608577267c9bd6f56f0860b4c605ee22ff916547d654acb`。原明文仍存在于实现提交 `fa0bf9691e24113a0064cbe4c7f6f62ca6e1bb47` 的 blob `9e262b76649f2dc08a834d5fe0f766ead0880b1f`。解码、Git blob 与仓外保留原件已逐字节核对，完整分支 diff 格式检查随后通过。
 - 两个真实进程组反例均发现：报告 timeout 后后代仍写 marker（父进程存活和提前退出持 pipe 两种情况）。
 - 16 MiB stdout、stdout/stderr 各 600 KiB 的合计超量均被旧入口接受；公共 CLI 对超量返回 0。
 - 成功/nonzero 的计数和摘要语义、合计恰好 1 MiB 边界已经通过，后续修复不得破坏。

@@ -17,7 +17,7 @@
 
 | 检查 | 实际结果 | 原始输出 |
 | --- | --- | --- |
-| 修复前 smoke 行为 | 8 项，3 pass / 5 fail，exit 1 | `evidence/red-target-smoke.txt` |
+| 修复前 smoke 行为 | 8 项，3 pass / 5 fail，exit 1 | `evidence/red-target-smoke.json`（原字节无损封装） |
 | 第一版提取后的 resource 清理缺口 | 8 项断言虽通过，但有 ResourceWarning，未计为干净成功 | `evidence/first-pass-with-resource-warnings.txt` |
 | transport 资源泄漏回归先红 | 1 项 fail，exit 1 | `evidence/red-transport-cleanup.txt` |
 | `bash tests/test_target_contracts.sh` | exit 0，原有合同检查及新增 9 项通过，9.051 秒 | `evidence/green-target-contracts.txt` |

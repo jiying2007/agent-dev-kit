@@ -8,9 +8,10 @@
   "files": {
     "src/agent_dev_kit/compiler.py": "72a981a3ad66bebce77960339eafd55ce3abd75553bef5fa1cfcbcb37471f3c0",
     "src/agent_dev_kit/distribution/archive_io.py": "f693b56de052f33c1fb83b5abc95342f31af95b52795182f116fd78db61a6998",
-    "src/agent_dev_kit/distribution/release_contract.py": "7580fcafe1c55b03c29a03c84db738ecb7fe1993c9e0c537a025996050f75f82",
-    "src/agent_dev_kit/targets.py": "a188891cb0569a1b4cea7721aea51d8770b218fe7f62cbfa2e2ed18b57456d6a",
-    "tests/test_release_integrity.py": "8e8ceb85d49e1a1c28efbf3e6aef2f8fb8c768252c78cc22e99a4e4bfd01a0e9",
+    "src/agent_dev_kit/distribution/release_contract.py": "6f322e405555383b6f50206c97e754eedc33edaa3982c358c638797ca6aaba1a",
+    "src/agent_dev_kit/target_contracts.py": "aea9b0a1fb395d157f61d1860f762ecb80da0bc9365bbeaac46bd96b5892dc26",
+    "src/agent_dev_kit/targets.py": "9b2125d496a2a8a324395fc144ff814ec4d798dc2e82990e4515eab21bf1c6f9",
+    "tests/test_release_integrity.py": "c91523591a1eb97f89bf4c56ce110b5ec245b472df06b2d02713b4ad45cd4436",
     "tests/test_archive_resource_bounds.py": "202e616077bd3a1614bc4ef284648b46af011295a7796b405d76eafd3e8e8af4",
     "tests/test_strict_json.py": "ede17f3f0e2aa7f262bb0d08aa5072d07edaf62fa9633d2c35a8e5d23c8c6e02",
     "tests/test_release_manifest_contract.sh": "7febce7d578d1dc4911d6161918cab9a913df69695d1dfafe3f8b4451cf79f2c",
