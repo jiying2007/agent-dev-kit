@@ -1,0 +1,6 @@
+test_timeout_stops_descendant_before_returning (test_target_smoke.TargetSmokeBudgetTest) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 3.416s
+
+OK

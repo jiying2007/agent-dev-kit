@@ -14,9 +14,10 @@ from pathlib import Path
 from unittest import mock
 
 from agent_dev_kit.distribution import archive_io, release_artifacts, release_contract
-from agent_dev_kit.model import ManifestError, canonical_json_bytes
+from agent_dev_kit.model import ManifestError
 from agent_dev_kit import release
 from agent_dev_kit.cli import main as cli_main
+from release_archive_fixture import release_fixture
 
 
 class ArchiveResourceTests(unittest.TestCase):
@@ -25,24 +26,8 @@ class ArchiveResourceTests(unittest.TestCase):
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
         self.path = self.root / "agent-dev-kit-7.0.0.tar.gz"
-        source = b'{"version":"7.0.0"}'
-        sbom = b'{"spdxVersion":"SPDX-2.3"}'
-        release = {
-            "schema_version": 2, "version": "7.0.0",
-            "manifest_sha256": hashlib.sha256(canonical_json_bytes({"version": "7.0.0"})).hexdigest(),
-            "direct_targets": [{"target": "claude-code", "agents": 1, "skills": 1}],
-            "external_targets": ["external-runtime"], "source_distribution": True,
-            "source_file_count": 1, "reproducible": False, "release_eligible": False,
-            "source_provenance": {"kind": "unbound-snapshot", "release_eligible": False,
-                                  "commit": None, "tree": None, "dirty": None,
-                                  "source_distribution_sha256": hashlib.sha256(
-                                      b"manifest.json\0" + hashlib.sha256(source).digest()).hexdigest()},
-            "sbom": {"path": "sbom.spdx.json", "sha256": hashlib.sha256(sbom).hexdigest(),
-                     "validated": True},
-        }
-        self.members = [("manifest.json", source), ("source/manifest.json", source),
-                        ("release-manifest.json", json.dumps(release).encode()),
-                        ("sbom.spdx.json", sbom)]
+        metadata, self.members = release_fixture()
+        self.members.insert(-1, ("release-manifest.json", json.dumps(metadata).encode()))
         self.write_archive(self.members)
 
     def write_archive(self, members, *, format=tarfile.PAX_FORMAT):
@@ -249,7 +234,7 @@ class ArchiveResourceTests(unittest.TestCase):
             release_contract.validate_release_artifact(self.path)
 
     def test_long_pax_names_remain_compatible_within_budget(self):
-        self.write_archive([("bundles/" + "a" * 200, b"safe")] + self.members)
+        self.write_archive([("extra/" + "a" * 200, b"safe")] + self.members)
         self.assertEqual("pass", release_contract.validate_release_artifact(self.path)["status"])
 
     def test_digest_and_extraction_use_exact_snapshot_after_path_replacement(self):

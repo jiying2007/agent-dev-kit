@@ -1,0 +1,15 @@
+test_timeout_closes_pipe_transports_before_the_event_loop (test_target_smoke.TargetSmokeBudgetTest.test_timeout_closes_pipe_transports_before_the_event_loop) ... FAIL
+
+======================================================================
+FAIL: test_timeout_closes_pipe_transports_before_the_event_loop (test_target_smoke.TargetSmokeBudgetTest.test_timeout_closes_pipe_transports_before_the_event_loop)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/712af632e2a5/agent-dev-kit/tests/test_target_smoke.py", line 120, in test_timeout_closes_pipe_transports_before_the_event_loop
+    self.assertEqual(completed.stderr, "", "pipe cleanup leaked transports or event-loop callbacks")
+AssertionError: '/opt/codex/runtimes/codex-primary-runtime[2523 chars]ck\n' != ''
+Diff is 2591 characters long. Set self.maxDiff to None to see it. : pipe cleanup leaked transports or event-loop callbacks
+
+----------------------------------------------------------------------
+Ran 1 test in 1.330s
+
+FAILED (failures=1)

@@ -1,0 +1,14 @@
+test_exact_combined_output_budget_passes (test_target_smoke.TargetSmokeBudgetTest) ... ok
+test_exited_launcher_pipe_holders_obey_the_same_deadline (test_target_smoke.TargetSmokeBudgetTest) ... ok
+test_nonzero_exit_keeps_bounded_diagnostics (test_target_smoke.TargetSmokeBudgetTest) ... ok
+test_public_cli_output_overflow_is_nonzero_and_private (test_target_smoke.TargetSmokeBudgetTest) ... ok
+test_sixteen_megabyte_output_fails_with_sanitized_budget_code (test_target_smoke.TargetSmokeBudgetTest) ... ok
+test_stdout_and_stderr_share_one_budget (test_target_smoke.TargetSmokeBudgetTest) ... ok
+test_success_retains_only_digests_counts_and_exit (test_target_smoke.TargetSmokeBudgetTest) ... ok
+test_timeout_closes_pipe_transports_before_the_event_loop (test_target_smoke.TargetSmokeBudgetTest) ... ok
+test_timeout_stops_descendant_before_returning (test_target_smoke.TargetSmokeBudgetTest) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 9.644s
+
+OK

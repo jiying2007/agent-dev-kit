@@ -1,0 +1,16 @@
+test_timeout_stops_descendant_before_returning (test_target_smoke.TargetSmokeBudgetTest) ... FAIL
+
+======================================================================
+FAIL: test_timeout_stops_descendant_before_returning (test_target_smoke.TargetSmokeBudgetTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/712af632e2a5/agent-dev-kit/tests/test_target_smoke.py", line 155, in test_timeout_stops_descendant_before_returning
+    self.check_descendant_timeout(launcher_exits=False)
+  File "/workspace/scratch/712af632e2a5/agent-dev-kit/tests/test_target_smoke.py", line 142, in check_descendant_timeout
+    self.assertLess(elapsed, 2.75)
+AssertionError: 6.11528599599842 not less than 2.75
+
+----------------------------------------------------------------------
+Ran 1 test in 6.117s
+
+FAILED (failures=1)

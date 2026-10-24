@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
+import asyncio
 import os
-import subprocess
 import tempfile
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
@@ -23,6 +23,7 @@ from .model import (
     sha256_bytes,
 )
 from .safe_yaml import safe_load
+from .process_execution import OutputBudgetExceeded, execute_bounded
 from .target_contracts import (
     CONTRACT_SCHEMA as CONTRACT_SCHEMA,
     TargetContract as TargetContract,
@@ -38,6 +39,86 @@ from .target_contracts import (
 CHECK_SCHEMA = "adk-target-check/v1"
 SMOKE_SCHEMA = "adk-target-smoke/v1"
 ASSET_KINDS = ("agent", "skill")
+SMOKE_OUTPUT_LIMIT = 1024 * 1024
+
+
+@dataclass
+class RenderBudget:
+    """One caller-owned output budget, shared across files and target bundles."""
+
+    max_bytes: int
+    max_file_bytes: int
+    max_files: int
+    max_name_bytes: int
+    _bytes: int = field(default=0, init=False)
+    _files: int = field(default=0, init=False)
+
+    def __post_init__(self) -> None:
+        if any(isinstance(value, bool) or not isinstance(value, int) or value < 1
+               for value in (self.max_bytes, self.max_file_bytes, self.max_files, self.max_name_bytes)):
+            raise ValueError("render output budgets must be positive integers")
+
+    def require_files(self, count: int) -> None:
+        if count > self.max_files - self._files:
+            raise ManifestError("render_output_budget_exceeded: file count")
+
+    def check_name(self, name: str) -> None:
+        if len(name) > self.max_name_bytes or len(name.encode("utf-8")) > self.max_name_bytes:
+            raise ManifestError("render_output_budget_exceeded: file name bytes")
+
+    def file_buffer(self) -> "_RenderBuffer":
+        self.require_files(1)
+        remaining = self.max_bytes - self._bytes
+        limit = min(self.max_file_bytes, remaining)
+        reason = "total byte" if remaining < self.max_file_bytes else "file byte"
+        return _RenderBuffer(self, limit, reason)
+
+    def _consume(self, size: int) -> None:
+        self.require_files(1)
+        if size > self.max_file_bytes:
+            raise ManifestError("render_output_budget_exceeded: file byte")
+        if size > self.max_bytes - self._bytes:
+            raise ManifestError("render_output_budget_exceeded: total byte")
+        self._bytes += size
+        self._files += 1
+
+
+class _RenderBuffer:
+    """Bound UTF-8 emission before retaining or joining the full output."""
+
+    def __init__(self, budget: RenderBudget, limit: int, reason: str) -> None:
+        self._budget = budget
+        self._limit = limit
+        self._reason = reason
+        self._data = bytearray()
+
+    @property
+    def remaining_bytes(self) -> int:
+        return self._limit - len(self._data)
+
+    def check_bytes(self, size: int) -> None:
+        if size > self.remaining_bytes:
+            raise ManifestError("render_output_budget_exceeded: " + self._reason)
+
+    def write(self, value: str) -> int:
+        # UTF-8 needs at least one byte per character. Reject a giant scalar
+        # before encoding it, then bound the temporary encoding chunks as well.
+        self.check_bytes(len(value))
+        for start in range(0, len(value), 64 * 1024):
+            self.write_bytes(value[start:start + 64 * 1024].encode("utf-8"))
+        return len(value)
+
+    def write_bytes(self, value: bytes) -> None:
+        self.check_bytes(len(value))
+        self._data.extend(value)
+
+    def rstrip(self) -> None:
+        while self._data and self._data[-1] in b" \t\n\r\v\f":
+            self._data.pop()
+
+    def finish(self) -> bytes:
+        self._budget._consume(len(self._data))
+        return bytes(self._data)
 
 
 @dataclass(frozen=True)
@@ -109,13 +190,21 @@ def _provenance(manifest: Manifest, contract: TargetContract, asset: Asset, sour
     }
 
 
-def _render_main(manifest: Manifest, contract: TargetContract, asset: Asset) -> RenderedFile:
+def _render_main(
+    manifest: Manifest, contract: TargetContract, asset: Asset, *, budget: Optional[RenderBudget] = None,
+) -> RenderedFile:
     if asset.kind not in contract.supported_asset_kinds:
         raise TargetUsageError(
             "unsupported_asset_kind: target={} kind={} asset={}".format(
                 contract.name, asset.kind, asset.name
             )
         )
+    destination = contract.layout(asset.kind, asset.name)
+    output = None
+    if budget is not None:
+        budget.check_name(destination)
+        output = budget.file_buffer()
+        output.write("---\n")
     source = _content_path(asset)
     if source.is_symlink() or not source.is_file():
         raise ManifestError("asset_content_invalid: missing regular content file: {}".format(source))
@@ -178,25 +267,29 @@ def _render_main(manifest: Manifest, contract: TargetContract, asset: Asset) -> 
                 contract.name, asset.name, ",".join(missing)
             )
         )
-    rendered_frontmatter = yaml.safe_dump(
-        metadata,
-        allow_unicode=True,
-        default_flow_style=False,
-        sort_keys=False,
-    ).rstrip()
-    content = ("---\n{}\n---\n\n{}".format(rendered_frontmatter, body)).encode("utf-8")
+    if output is None:
+        rendered_frontmatter = yaml.safe_dump(
+            metadata, allow_unicode=True, default_flow_style=False, sort_keys=False,
+        ).rstrip()
+        content = ("---\n{}\n---\n\n{}".format(rendered_frontmatter, body)).encode("utf-8")
+    else:
+        yaml.safe_dump(metadata, stream=output, allow_unicode=True, default_flow_style=False, sort_keys=False)
+        output.rstrip()
+        output.write("\n---\n\n")
+        output.write(body)
+        content = output.finish()
     return RenderedFile(
         kind=asset.kind,
         name=asset.name,
         source=source.relative_to(manifest.root).as_posix(),
-        destination=contract.layout(asset.kind, asset.name),
+        destination=destination,
         content=content,
         mode=0o644,
     )
 
 
 def _render_support_files(
-    manifest: Manifest, contract: TargetContract, asset: Asset
+    manifest: Manifest, contract: TargetContract, asset: Asset, *, budget: Optional[RenderBudget] = None,
 ) -> List[RenderedFile]:
     if asset.kind != "skill":
         return []
@@ -205,6 +298,7 @@ def _render_support_files(
     rendered: List[RenderedFile] = []
     for directory_name in contract.data["support_directories"]:
         source_root = asset.path / str(directory_name)
+        ensure_within(source_root, asset.path, "asset support directory")
         if not source_root.exists():
             continue
         if source_root.is_symlink() or not source_root.is_dir():
@@ -217,23 +311,39 @@ def _render_support_files(
             ensure_within(source, asset.path, "asset support file")
             relative = source.relative_to(asset.path)
             destination = (skill_root / relative).as_posix()
-            mode = 0o755 if source.stat().st_mode & 0o111 else 0o644
+            info = source.stat()
+            mode = 0o755 if info.st_mode & 0o111 else 0o644
+            if budget is None:
+                content = source.read_bytes()
+            else:
+                budget.check_name(destination)
+                output = budget.file_buffer()
+                output.check_bytes(info.st_size)
+                with source.open("rb") as stream:
+                    while True:
+                        chunk = stream.read(min(64 * 1024, output.remaining_bytes + 1))
+                        if not chunk:
+                            break
+                        output.write_bytes(chunk)
+                content = output.finish()
             rendered.append(
                 RenderedFile(
                     kind=asset.kind,
                     name=asset.name,
                     source=source.relative_to(manifest.root).as_posix(),
                     destination=destination,
-                    content=source.read_bytes(),
+                    content=content,
                     mode=mode,
                 )
             )
     return rendered
 
 
-def render_asset(manifest: Manifest, contract: TargetContract, asset: Asset) -> Tuple[RenderedFile, ...]:
-    files = [_render_main(manifest, contract, asset)]
-    files.extend(_render_support_files(manifest, contract, asset))
+def render_asset(
+    manifest: Manifest, contract: TargetContract, asset: Asset, *, budget: Optional[RenderBudget] = None,
+) -> Tuple[RenderedFile, ...]:
+    files = [_render_main(manifest, contract, asset, budget=budget)]
+    files.extend(_render_support_files(manifest, contract, asset, budget=budget))
     return tuple(files)
 
 
@@ -257,10 +367,15 @@ def _render_historical_selection(
     profiles: Sequence[str],
     optional_skills: Sequence[str],
     asset_kind: Optional[str],
+    *,
+    budget: Optional[RenderBudget] = None,
+    allow_native_verifier: bool = True,
 ) -> RenderedBundle:
     """Internal receipt inventory reproduction; never current target admission."""
     return _render_selection(
-        manifest, _load_historical_target_contract(manifest, target), profiles, optional_skills, asset_kind
+        manifest, _load_historical_target_contract(manifest, target, allow_native_verifier=allow_native_verifier),
+        profiles, optional_skills, asset_kind,
+        budget=budget,
     )
 
 
@@ -270,6 +385,8 @@ def _render_selection(
     profiles: Sequence[str],
     optional_skills: Sequence[str],
     asset_kind: Optional[str],
+    *,
+    budget: Optional[RenderBudget] = None,
 ) -> RenderedBundle:
     target = contract.name
     resolution = manifest.resolve_profiles(profiles, optional_skills)
@@ -291,8 +408,10 @@ def _render_selection(
         )
     files: List[RenderedFile] = []
     destinations: Dict[str, RenderedFile] = {}
+    if budget is not None:
+        budget.require_files(len(assets))
     for asset in assets:
-        for rendered in render_asset(manifest, contract, asset):
+        for rendered in render_asset(manifest, contract, asset, budget=budget):
             if rendered.destination in destinations:
                 other = destinations[rendered.destination]
                 raise ManifestError(
@@ -409,24 +528,24 @@ def run_target_smoke(
         started_at = datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
         started = time.monotonic()
         try:
-            completed = subprocess.run(
-                list(runtime_command),
-                cwd=str(manifest.root),
+            completed = execute_bounded(
+                runtime_command,
+                cwd=manifest.root,
                 env=environment,
-                check=False,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                timeout=timeout_seconds,
+                timeout_seconds=timeout_seconds,
+                output_limit=SMOKE_OUTPUT_LIMIT,
             )
-        except subprocess.TimeoutExpired:
+        except (asyncio.TimeoutError, OutputBudgetExceeded) as exc:
+            output_exceeded = isinstance(exc, OutputBudgetExceeded)
             return {
                 "schema": SMOKE_SCHEMA,
                 "status": "fail",
                 "certification": "caller-supplied-smoke",
                 "target": target,
                 "stage": stage,
-                "error_code": "runtime_timeout",
+                "error_code": "runtime_output_budget_exceeded" if output_exceeded else "runtime_timeout",
                 "timeout_seconds": timeout_seconds,
+                "output_limit_bytes": SMOKE_OUTPUT_LIMIT,
                 "started_at": started_at,
                 "duration_ms": round((time.monotonic() - started) * 1000.0, 3),
                 "runtime_command_sha256": command_digest,
@@ -434,17 +553,17 @@ def run_target_smoke(
             }
     return {
         "schema": SMOKE_SCHEMA,
-        "status": "pass" if completed.returncode == 0 else "fail",
+        "status": "pass" if completed["exit_code"] == 0 else "fail",
         "certification": "caller-supplied-smoke",
         "target": target,
         "stage": stage,
         "started_at": started_at,
         "duration_ms": round((time.monotonic() - started) * 1000.0, 3),
         "runtime_command_sha256": command_digest,
-        "runtime_exit_code": completed.returncode,
-        "stdout_bytes": len(completed.stdout),
-        "stdout_sha256": sha256_bytes(completed.stdout),
-        "stderr_bytes": len(completed.stderr),
-        "stderr_sha256": sha256_bytes(completed.stderr),
+        "runtime_exit_code": completed["exit_code"],
+        "stdout_bytes": completed["stdout_bytes"],
+        "stdout_sha256": completed["stdout_sha256"],
+        "stderr_bytes": completed["stderr_bytes"],
+        "stderr_sha256": completed["stderr_sha256"],
         "static_check": static,
     }

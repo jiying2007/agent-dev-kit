@@ -1,0 +1,26 @@
+{
+  "files": {
+    "src/agent_dev_kit/native_campaign_execution.py": {
+      "bytes": 15003,
+      "sha256": "4855a70b34ec92839c0b7f52e750f534b031c7f23e9bdc6311bfd9c26d2fc397"
+    },
+    "src/agent_dev_kit/process_execution.py": {
+      "bytes": 5941,
+      "sha256": "0951d70f54e1e0bec8cb1121b0ead209ed937cecd32d625daecd0d70c6b3ef60"
+    },
+    "src/agent_dev_kit/targets.py": {
+      "bytes": 17459,
+      "sha256": "3461f680eb175a5290b472bd71931cee1358cc41d540dd6fb8e842b951b1d5d9"
+    },
+    "tests/test_target_contracts.sh": {
+      "bytes": 22058,
+      "sha256": "74b8741210c9c1f173a9068744a66e1ccf39a94ca900341dfa3e141e7299d669"
+    },
+    "tests/test_target_smoke.py": {
+      "bytes": 7739,
+      "sha256": "fb941ffdbd753eefa16d7b8178144543c77895665a0dd8935359bb891e5fa7b9"
+    }
+  },
+  "platform": "Linux",
+  "python": "3.12.14"
+}

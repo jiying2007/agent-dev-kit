@@ -13,7 +13,7 @@ from typing import Dict, Optional, Sequence, Tuple
 from .installation_contract import _regular_install_path
 from .locking import TargetLock
 from .model import Manifest, ManifestError, ensure_within
-from .targets import render_selection
+from .targets import RenderedBundle, render_selection
 
 
 def _export_paths(requested_root: Path, target: str) -> Tuple[Path, Path]:
@@ -31,6 +31,33 @@ def _path_identity(path: Path) -> Optional[Tuple[int, int]]:
     except FileNotFoundError:
         return None
     return info.st_dev, info.st_ino
+
+
+def export_manifest(manifest: Manifest, bundle: RenderedBundle) -> Dict[str, object]:
+    """Describe exactly the renderer-owned export, shared with release verification."""
+    return {
+        "schema": "adk-export-manifest/v2",
+        "schema_version": 2,
+        "manifest_version": manifest.version,
+        "manifest_sha256": manifest.digest,
+        "target": bundle.target,
+        "contract_sha256": bundle.contract.digest,
+        "contract_status": bundle.contract.status,
+        "profiles": list(bundle.resolution.profiles),
+        "optional_skills": list(bundle.optional_skills),
+        "asset_kind": bundle.asset_kind,
+        "files": [
+            {
+                "kind": rendered.kind,
+                "name": rendered.name,
+                "source": rendered.source,
+                "path": rendered.destination,
+                "sha256": rendered.sha256,
+                "mode": format(rendered.mode, "04o"),
+            }
+            for rendered in bundle.files
+        ],
+    }
 
 
 def export_assets(
@@ -70,29 +97,7 @@ def export_assets(
                     staged.parent.mkdir(parents=True, exist_ok=True)
                     staged.write_bytes(rendered.content)
                     staged.chmod(rendered.mode)
-                inventory = {
-                    "schema": "adk-export-manifest/v2",
-                    "schema_version": 2,
-                    "manifest_version": manifest.version,
-                    "manifest_sha256": manifest.digest,
-                    "target": target,
-                    "contract_sha256": bundle.contract.digest,
-                    "contract_status": bundle.contract.status,
-                    "profiles": list(bundle.resolution.profiles),
-                    "optional_skills": list(optional_skills),
-                    "asset_kind": asset_kind,
-                    "files": [
-                        {
-                            "kind": rendered.kind,
-                            "name": rendered.name,
-                            "source": rendered.source,
-                            "path": rendered.destination,
-                            "sha256": rendered.sha256,
-                            "mode": format(rendered.mode, "04o"),
-                        }
-                        for rendered in bundle.files
-                    ],
-                }
+                inventory = export_manifest(manifest, bundle)
                 (staging_target / "adk-export-manifest.json").write_text(
                     json.dumps(inventory, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
                 )

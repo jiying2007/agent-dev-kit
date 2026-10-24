@@ -1,0 +1,1037 @@
+{
+  "schema": "independent-read-only-source-review/v1",
+  "reviewer": "/root/release_governance_audit",
+  "scope": "F1 release bundle validation, bounded rendering, archive trust boundaries and corresponding tests",
+  "excluded_scope": "F2 subprocess/smoke implementation authored by this reviewer; reviewed independently by /root/root_code_audit",
+  "verdict_created_at": "2026-10-24T16:41:15.508562+00:00",
+  "initial_reviewed_commit": "fa0bf9691e24113a0064cbe4c7f6f62ca6e1bb47",
+  "behavior_executed_from_commit": "775352c86a5f67f38b6d3650f8b933e832c7f49c",
+  "final_reviewed_commit": "3f0f0599de49140ade2225540dd44f2fb42030ad",
+  "final_reviewed_tree": "a49a55acb74e143326073b4e0205886ad7219585",
+  "source_set_sha256": "159eb3966fea67fd48f6409b45c8e1444a65a2fc53496114f3f5d1f779fe3d6e",
+  "source_files": {
+    "src/agent_dev_kit/compiler.py": {
+      "sha256": "72a981a3ad66bebce77960339eafd55ce3abd75553bef5fa1cfcbcb37471f3c0",
+      "bytes": 6570,
+      "git_blob": "52aeb04a0440e58c4d3f811fdd49ebdc7c78d11e",
+      "matches_commit": true
+    },
+    "src/agent_dev_kit/distribution/archive_io.py": {
+      "sha256": "f693b56de052f33c1fb83b5abc95342f31af95b52795182f116fd78db61a6998",
+      "bytes": 12452,
+      "git_blob": "af1293cb775372f62a932a7930c94a2fee61c3ae",
+      "matches_commit": true
+    },
+    "src/agent_dev_kit/distribution/release_contract.py": {
+      "sha256": "6f322e405555383b6f50206c97e754eedc33edaa3982c358c638797ca6aaba1a",
+      "bytes": 11428,
+      "git_blob": "44497adf88ebca4861a83fed698bc867429e64d2",
+      "matches_commit": true
+    },
+    "src/agent_dev_kit/target_contracts.py": {
+      "sha256": "aea9b0a1fb395d157f61d1860f762ecb80da0bc9365bbeaac46bd96b5892dc26",
+      "bytes": 21633,
+      "git_blob": "fd8dbd50778492fba4f2602331e32a3baf49232d",
+      "matches_commit": true
+    },
+    "src/agent_dev_kit/targets.py": {
+      "sha256": "9b2125d496a2a8a324395fc144ff814ec4d798dc2e82990e4515eab21bf1c6f9",
+      "bytes": 22023,
+      "git_blob": "03d420ed4889d60b216630c49efedfffbecbea3b",
+      "matches_commit": true
+    },
+    "tests/test_release_integrity.py": {
+      "sha256": "c91523591a1eb97f89bf4c56ce110b5ec245b472df06b2d02713b4ad45cd4436",
+      "bytes": 36783,
+      "git_blob": "13a356d18cc3fb46b15594794ea1e2a7944a136d",
+      "matches_commit": true
+    },
+    "tests/test_archive_resource_bounds.py": {
+      "sha256": "202e616077bd3a1614bc4ef284648b46af011295a7796b405d76eafd3e8e8af4",
+      "bytes": 15173,
+      "git_blob": "0f24ba9acf2887f16b1af5cd3f71018a36be0412",
+      "matches_commit": true
+    },
+    "tests/test_strict_json.py": {
+      "sha256": "ede17f3f0e2aa7f262bb0d08aa5072d07edaf62fa9633d2c35a8e5d23c8c6e02",
+      "bytes": 13128,
+      "git_blob": "10390b18cf9660d47f5dd0d6dd3430a2824cca28",
+      "matches_commit": true
+    },
+    "tests/test_release_manifest_contract.sh": {
+      "sha256": "7febce7d578d1dc4911d6161918cab9a913df69695d1dfafe3f8b4451cf79f2c",
+      "bytes": 5322,
+      "git_blob": "ad3e0ded1a9086c024265fb608e5c1ff7fa30eb6",
+      "matches_commit": true
+    },
+    "tests/release_archive_fixture.py": {
+      "sha256": "a512b0259efc35ea964210c61235920c4f32d24f7539b13103744b038c6f00bb",
+      "bytes": 4071,
+      "git_blob": "3f630e9605744875769537b9f6dc084dc5c055d5",
+      "matches_commit": true
+    }
+  },
+  "active_contract_files": {
+    "docs/changes/20261024-release-bundles/requirements.md": {
+      "sha256": "90127df6e93a16a82f4ca4f20adb280fd144c930051163e17002f9a8c8126f29",
+      "bytes": 1808,
+      "git_blob": "42a4aef959f8b9ce37edf61d2d200cc66bee13e3",
+      "matches_commit": true
+    },
+    "docs/changes/20261024-release-bundles/design.md": {
+      "sha256": "5469d45005c656c4c9ab3ec7ddfd80a855bce805e536924aa0db82e81a99424d",
+      "bytes": 2778,
+      "git_blob": "c0a1bdd2d88611af60278063a645704349ebee58",
+      "matches_commit": true
+    },
+    "docs/commands.md": {
+      "sha256": "db609c3ea4f6ed74fafc4176b25785ca7c2f4ec8737aff98af23be0b09784da4",
+      "bytes": 33125,
+      "git_blob": "8d3f89e7305360414c759cca2493fa3519c9ac30",
+      "matches_commit": true
+    },
+    "CHANGELOG.md": {
+      "sha256": "a6d200849a186d3f8d25ac9fc0be986fc505208ebc4f3e834b5d949a4c910317",
+      "bytes": 74617,
+      "git_blob": "1212345c0524155a9fe42b2a6769869d41e020f3",
+      "matches_commit": true
+    }
+  },
+  "spec_verdict": "pass",
+  "quality_verdict": "pass",
+  "blocking_f1_findings": [],
+  "verdict_scope": "F1 behavior, relevant tests, active contract text and scoped quality; no full-regression, CI or publication authorization inferred",
+  "initial_failures_preserved": {
+    "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/findings-initial.json",
+    "sha256": "55638138a93a2e451e84e874fdc5c99899f906bdbbc39e621d0b64a1724a298c",
+    "bytes": 6568
+  },
+  "fixed_findings": [
+    {
+      "id": "F1-REVIEW-01",
+      "severity": "P2",
+      "title": "Native receipt schema bypasses offline preflight",
+      "disposition": "fixed-and-independently-reverified",
+      "initial_commit": "fa0bf9691e24113a0064cbe4c7f6f62ca6e1bb47",
+      "initial_observation": "native-schema-offline-v2-red",
+      "fixed_behavior_commit": "775352c86a5f67f38b6d3650f8b933e832c7f49c",
+      "python312_recheck": "native-schema-offline-green",
+      "python38_recheck": "native-schema-python38-final",
+      "probe": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/probe_native_schema_offline.py",
+        "sha256": "358d8fe092c39b65705bb3a6757dfbd91a1b059d845baaa7dab9f2148c95f015",
+        "bytes": 4131
+      },
+      "python312_observed_effects": {
+        "public_entry": "validate_release_artifact",
+        "observed_error": "release bundle source schema must use local references",
+        "external_reference_attempts": [],
+        "actual_network_requests": 0,
+        "source_and_manifests_modified_only_in_temporary_archive": true
+      },
+      "python38_observed_effects": {
+        "public_entry": "validate_release_artifact",
+        "observed_error": "release bundle source schema must use local references",
+        "external_reference_attempts": [],
+        "actual_network_requests": 0,
+        "source_and_manifests_modified_only_in_temporary_archive": true
+      }
+    },
+    {
+      "id": "F1-REVIEW-02",
+      "severity": "P2",
+      "title": "Untrusted support directory is traversed before containment",
+      "disposition": "fixed-and-independently-reverified",
+      "initial_commit": "fa0bf9691e24113a0064cbe4c7f6f62ca6e1bb47",
+      "initial_observation": "support-containment-red",
+      "fixed_behavior_commit": "775352c86a5f67f38b6d3650f8b933e832c7f49c",
+      "python312_recheck": "support-containment-green",
+      "python38_recheck": "support-containment-python38-final",
+      "probe": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/probe_support_containment.py",
+        "sha256": "94307bae05d59cd50671474e16e2263867a147958cd7de5b767dc39eccd60223",
+        "bytes": 3025
+      },
+      "python312_observed_effects": {
+        "public_entry": "validate_release_artifact",
+        "observed_error": "asset support directory escapes allowed root: /tmp/independent-f1-support-0o9kd222/outside-private-source",
+        "external_support_traversals": [],
+        "actual_outside_fixture_files": 1,
+        "fixture_is_reviewer_owned": true
+      },
+      "python38_observed_effects": {
+        "public_entry": "validate_release_artifact",
+        "observed_error": "asset support directory escapes allowed root: /tmp/independent-f1-support-7pnzej7_/outside-private-source",
+        "external_support_traversals": [],
+        "actual_outside_fixture_files": 1,
+        "fixture_is_reviewer_owned": true
+      }
+    },
+    {
+      "id": "F1-REVIEW-03",
+      "severity": "P2",
+      "title": "Archive-managed registry selects a host verifier without independent authority",
+      "disposition": "fixed-and-independently-reverified",
+      "initial_commit": "fa0bf9691e24113a0064cbe4c7f6f62ca6e1bb47",
+      "initial_observation": "native-execution-red",
+      "fixed_behavior_commit": "775352c86a5f67f38b6d3650f8b933e832c7f49c",
+      "python312_recheck": "native-execution-green",
+      "python38_recheck": "native-execution-python38-final",
+      "probe": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/probe_native_execution_boundary.py",
+        "sha256": "df48113e122e4e415edaa459b9f014d43d4bbb0418b08d03e4fc5c4b3148bb5b",
+        "bytes": 7409
+      },
+      "python312_observed_effects": {
+        "public_entry": "validate_release_artifact",
+        "observed_error": "target_contract_untrusted: archive runtime conformance requires independently trusted verifier authority",
+        "archive_selected_subprocess_attempts": [],
+        "actual_subprocess_executions": 0,
+        "receipt_schema_bytes_are_original": true,
+        "archive_code_executed": false,
+        "untrusted_binary": "/usr/bin/true",
+        "untrusted_binary_sha256": "b860051e15938770f4164177f2fc2d4e1af26b226c9b0c3ea75a36d1be33a3cf"
+      },
+      "python38_observed_effects": {
+        "public_entry": "validate_release_artifact",
+        "observed_error": "target_contract_untrusted: archive runtime conformance requires independently trusted verifier authority",
+        "archive_selected_subprocess_attempts": [],
+        "actual_subprocess_executions": 0,
+        "receipt_schema_bytes_are_original": true,
+        "archive_code_executed": false,
+        "untrusted_binary": "/usr/bin/true",
+        "untrusted_binary_sha256": "b860051e15938770f4164177f2fc2d4e1af26b226c9b0c3ea75a36d1be33a3cf"
+      }
+    }
+  ],
+  "final_source_execution_interval": {
+    "started_at": "2026-10-24T16:31:35.772052+00:00",
+    "completed_at": "2026-10-24T16:40:35.232937+00:00"
+  },
+  "executions": [
+    {
+      "label": "native-schema-offline-green",
+      "argv": [
+        "/workspace/scratch/712af632e2a5/audit-venv/bin/python3",
+        "/workspace/scratch/712af632e2a5/apply20261024/review-f1/probe_native_schema_offline.py"
+      ],
+      "cwd": "/workspace/scratch/712af632e2a5/agent-dev-kit",
+      "started_at": "2026-10-24T16:31:35.776557+00:00",
+      "completed_at": "2026-10-24T16:31:36.044990+00:00",
+      "elapsed_seconds": 0.268,
+      "exit_code": 0,
+      "source_stable": true,
+      "stdout": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/native-schema-offline-green.stdout",
+        "bytes": 264,
+        "sha256": "7ca432004d120eb0c2c7ab1e54047d1825f8f064cd5f268a9c40c475b2577666"
+      },
+      "stderr": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/native-schema-offline-green.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "record": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/native-schema-offline-green.json",
+        "sha256": "c9f8c0e2160263076b8cd9fdc4bee55dc2fb79f6dca6ec472e6e3d085f6f4e7e",
+        "bytes": 4194
+      }
+    },
+    {
+      "label": "support-containment-green",
+      "argv": [
+        "/workspace/scratch/712af632e2a5/audit-venv/bin/python3",
+        "/workspace/scratch/712af632e2a5/apply20261024/review-f1/probe_support_containment.py"
+      ],
+      "cwd": "/workspace/scratch/712af632e2a5/agent-dev-kit",
+      "started_at": "2026-10-24T16:31:35.786368+00:00",
+      "completed_at": "2026-10-24T16:31:36.101403+00:00",
+      "elapsed_seconds": 0.315,
+      "exit_code": 0,
+      "source_stable": true,
+      "stdout": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/support-containment-green.stdout",
+        "bytes": 290,
+        "sha256": "ba8d7ac31116de15b7e17717a13f14041f9be38fa7acc0c04dea597e1fcba493"
+      },
+      "stderr": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/support-containment-green.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "record": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/support-containment-green.json",
+        "sha256": "6c05593f5972cb9cad64101db80f38a44fc5f90479738199727213a163719b4c",
+        "bytes": 4186
+      }
+    },
+    {
+      "label": "native-execution-green",
+      "argv": [
+        "/workspace/scratch/712af632e2a5/audit-venv/bin/python3",
+        "/workspace/scratch/712af632e2a5/apply20261024/review-f1/probe_native_execution_boundary.py"
+      ],
+      "cwd": "/workspace/scratch/712af632e2a5/agent-dev-kit",
+      "started_at": "2026-10-24T16:31:35.772052+00:00",
+      "completed_at": "2026-10-24T16:31:36.087294+00:00",
+      "elapsed_seconds": 0.315,
+      "exit_code": 0,
+      "source_stable": true,
+      "stdout": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/native-execution-green.stdout",
+        "bytes": 476,
+        "sha256": "84aa1e75968aeb1627dd48726f7e9233581481ee0a8ae8ae336d0e2a69591e8b"
+      },
+      "stderr": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/native-execution-green.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "record": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/native-execution-green.json",
+        "sha256": "5c87b8d94f9003ea88d5cfe12b755db74752b1cd8a9e7f5ba2b36edd4e937491",
+        "bytes": 4183
+      }
+    },
+    {
+      "label": "release-contract-final",
+      "argv": [
+        "bash",
+        "tests/test_release_manifest_contract.sh"
+      ],
+      "cwd": "/workspace/scratch/712af632e2a5/agent-dev-kit",
+      "started_at": "2026-10-24T16:32:26.424749+00:00",
+      "completed_at": "2026-10-24T16:33:17.166824+00:00",
+      "elapsed_seconds": 50.742,
+      "exit_code": 0,
+      "source_stable": true,
+      "stdout": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/release-contract-final.stdout",
+        "bytes": 195,
+        "sha256": "272ced98a24f73f8f707320dc89fba257fdf844fd8f73d58ab614459c2b60cf6"
+      },
+      "stderr": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/release-contract-final.stderr",
+        "bytes": 452,
+        "sha256": "f50b554aeeb6e0cef5b601385bc294412111a52000ea687c221ead0d450a5c23"
+      },
+      "record": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/release-contract-final.json",
+        "sha256": "e54da6cba9692626d7a9c3aff8a5b1806787283eb9e63c82f7c67ebbfdef1b44",
+        "bytes": 4085
+      }
+    },
+    {
+      "label": "archive-counterexamples-final",
+      "argv": [
+        "/workspace/scratch/712af632e2a5/audit-venv/bin/python3",
+        "/workspace/scratch/712af632e2a5/apply20261024/review-f1/independent_archive_probes.py"
+      ],
+      "cwd": "/workspace/scratch/712af632e2a5/agent-dev-kit",
+      "started_at": "2026-10-24T16:32:26.414309+00:00",
+      "completed_at": "2026-10-24T16:32:42.176229+00:00",
+      "elapsed_seconds": 15.762,
+      "exit_code": 0,
+      "source_stable": true,
+      "stdout": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/archive-counterexamples-final.stdout",
+        "bytes": 4391,
+        "sha256": "3b795dfadf33d7a2310147cff3c2950752179426461bad4b9c8cb620767cbc90"
+      },
+      "stderr": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/archive-counterexamples-final.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "record": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/archive-counterexamples-final.json",
+        "sha256": "da529f12ff4125221c423a4ffa563be6b1c47f8794bb8e91fe274123731c5297",
+        "bytes": 4201
+      }
+    },
+    {
+      "label": "official-history-final",
+      "argv": [
+        "/workspace/scratch/712af632e2a5/audit-venv/bin/python3",
+        "/workspace/scratch/712af632e2a5/apply20261024/review-f1/probe_historical_official.py"
+      ],
+      "cwd": "/workspace/scratch/712af632e2a5/agent-dev-kit",
+      "started_at": "2026-10-24T16:34:53.510232+00:00",
+      "completed_at": "2026-10-24T16:34:55.830497+00:00",
+      "elapsed_seconds": 2.32,
+      "exit_code": 0,
+      "source_stable": true,
+      "stdout": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/official-history-final.stdout",
+        "bytes": 392,
+        "sha256": "c7b4f4f9cb101874fd310a389de677c3ea95ef70828c26aebd9b060b298ef9ab"
+      },
+      "stderr": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/official-history-final.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "record": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/official-history-final.json",
+        "sha256": "108fa2f935ef0b1a84e024a52f9b5fa60deddda0e5a3139d106b70da07bb7066",
+        "bytes": 4176
+      }
+    },
+    {
+      "label": "local-native-install-retained-1641",
+      "argv": [
+        "/workspace/scratch/712af632e2a5/audit-venv/bin/python3",
+        "-m",
+        "unittest",
+        "test_native_trust",
+        "test_install_upgrade.ExportOutputBoundaryTest",
+        "test_install_upgrade.InstallUpgradeTest",
+        "test_install_receipt_authority",
+        "-v"
+      ],
+      "cwd": "/workspace/scratch/712af632e2a5/agent-dev-kit",
+      "started_at": "2026-10-24T16:40:27.794005+00:00",
+      "completed_at": "2026-10-24T16:40:35.232937+00:00",
+      "elapsed_seconds": 7.439,
+      "exit_code": 0,
+      "source_stable": true,
+      "stdout": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/local-native-install-retained-1641.stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/local-native-install-retained-1641.stderr",
+        "bytes": 4772,
+        "sha256": "c693cb2dd905f7dd59b33c09e9134ead516813c4414541fec6abf5d445a3fa45"
+      },
+      "record": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/local-native-install-retained-1641.json",
+        "sha256": "491b4dfd1b69deb9beb5792435161d17ca99570fbbc5ca583754c07fd2c6261f",
+        "bytes": 4321
+      }
+    },
+    {
+      "label": "strict-json-final",
+      "argv": [
+        "/workspace/scratch/712af632e2a5/audit-venv/bin/python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_strict_json.py",
+        "-v"
+      ],
+      "cwd": "/workspace/scratch/712af632e2a5/agent-dev-kit",
+      "started_at": "2026-10-24T16:33:50.468658+00:00",
+      "completed_at": "2026-10-24T16:33:50.839808+00:00",
+      "elapsed_seconds": 0.371,
+      "exit_code": 0,
+      "source_stable": true,
+      "stdout": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/strict-json-final.stdout",
+        "bytes": 656,
+        "sha256": "f6e5884bfe47622cbf106ccc6cb07cffd8af0037ddd21474854da8b6a9281ab7"
+      },
+      "stderr": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/strict-json-final.stderr",
+        "bytes": 2193,
+        "sha256": "f234165615766c54848ebd99a5da4f2974c195c385fae4fa92a8acdfab6324dd"
+      },
+      "record": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/strict-json-final.json",
+        "sha256": "4a4cf7bb2c75b7f1883597c5616a84aa2b0290a22fd98f273f8acb4fcc1b6d1b",
+        "bytes": 4185
+      }
+    },
+    {
+      "label": "ruff-final",
+      "argv": [
+        "/workspace/scratch/712af632e2a5/audit-venv/bin/python3",
+        "-m",
+        "ruff",
+        "check",
+        "--no-cache",
+        "src/agent_dev_kit/compiler.py",
+        "src/agent_dev_kit/distribution/archive_io.py",
+        "src/agent_dev_kit/distribution/release_contract.py",
+        "src/agent_dev_kit/targets.py",
+        "src/agent_dev_kit/target_contracts.py",
+        "tests/test_release_integrity.py",
+        "tests/test_archive_resource_bounds.py",
+        "tests/test_strict_json.py",
+        "tests/release_archive_fixture.py"
+      ],
+      "cwd": "/workspace/scratch/712af632e2a5/agent-dev-kit",
+      "started_at": "2026-10-24T16:33:34.527490+00:00",
+      "completed_at": "2026-10-24T16:33:34.559956+00:00",
+      "elapsed_seconds": 0.032,
+      "exit_code": 0,
+      "source_stable": true,
+      "stdout": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/ruff-final.stdout",
+        "bytes": 19,
+        "sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18"
+      },
+      "stderr": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/ruff-final.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "record": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/ruff-final.json",
+        "sha256": "32e9d96f54e8b0e61a2294f8938c8ec1acaec6ff863dc80c03e1d7c89e741c0a",
+        "bytes": 4486
+      }
+    },
+    {
+      "label": "ruff-focused-final",
+      "argv": [
+        "/workspace/scratch/712af632e2a5/audit-venv/bin/python3",
+        "-m",
+        "ruff",
+        "check",
+        "--no-cache",
+        "--select",
+        "E4,E7,E9,F,B,UP,SIM,I",
+        "src/agent_dev_kit/distribution"
+      ],
+      "cwd": "/workspace/scratch/712af632e2a5/agent-dev-kit",
+      "started_at": "2026-10-24T16:33:34.539715+00:00",
+      "completed_at": "2026-10-24T16:33:34.572618+00:00",
+      "elapsed_seconds": 0.033,
+      "exit_code": 0,
+      "source_stable": true,
+      "stdout": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/ruff-focused-final.stdout",
+        "bytes": 19,
+        "sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18"
+      },
+      "stderr": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/ruff-focused-final.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "record": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/ruff-focused-final.json",
+        "sha256": "ad59920eda4208dd9c80de56d5ca7bb80d58013c19d9e7fee6f0b9fda92b6dfd",
+        "bytes": 4208
+      }
+    },
+    {
+      "label": "mypy-final",
+      "argv": [
+        "/workspace/scratch/712af632e2a5/audit-venv/bin/python3",
+        "-m",
+        "mypy",
+        "--cache-dir",
+        "/tmp/adk-f1-independent-mypy",
+        "src/agent_dev_kit/compiler.py",
+        "src/agent_dev_kit/distribution/archive_io.py",
+        "src/agent_dev_kit/distribution/release_contract.py",
+        "src/agent_dev_kit/targets.py",
+        "src/agent_dev_kit/target_contracts.py"
+      ],
+      "cwd": "/workspace/scratch/712af632e2a5/agent-dev-kit",
+      "started_at": "2026-10-24T16:33:34.538927+00:00",
+      "completed_at": "2026-10-24T16:33:35.606289+00:00",
+      "elapsed_seconds": 1.067,
+      "exit_code": 0,
+      "source_stable": true,
+      "stdout": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/mypy-final.stdout",
+        "bytes": 43,
+        "sha256": "e317872697c2cbfdefa321527a6efe73290dff3a390b0fa8723b87092eccba6a"
+      },
+      "stderr": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/mypy-final.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "record": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/mypy-final.json",
+        "sha256": "c017f98c98e72c16f1045786b4e5cced80fa3aca0c8744b49a35a3570e6e4ca7",
+        "bytes": 4353
+      }
+    },
+    {
+      "label": "module-budget-final",
+      "argv": [
+        "bash",
+        "tests/test_module_size_budget.sh"
+      ],
+      "cwd": "/workspace/scratch/712af632e2a5/agent-dev-kit",
+      "started_at": "2026-10-24T16:33:50.481860+00:00",
+      "completed_at": "2026-10-24T16:33:52.903048+00:00",
+      "elapsed_seconds": 2.421,
+      "exit_code": 0,
+      "source_stable": true,
+      "stdout": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/module-budget-final.stdout",
+        "bytes": 441,
+        "sha256": "0ccc4c9849f20299423d10b933d895f9b7cd102677de60940adf25c102fa9c7c"
+      },
+      "stderr": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/module-budget-final.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "record": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/module-budget-final.json",
+        "sha256": "5be7ede6274d6b0cdb8b5bd46491dd35244c916a6031e7d7683775088abad920",
+        "bytes": 4066
+      }
+    },
+    {
+      "label": "f1-patch-check-final",
+      "argv": [
+        "git",
+        "diff",
+        "--check",
+        "415590db44e88979185efb850e2339a3f95411ef",
+        "775352c86a5f67f38b6d3650f8b933e832c7f49c",
+        "--",
+        "src/agent_dev_kit/compiler.py",
+        "src/agent_dev_kit/distribution/archive_io.py",
+        "src/agent_dev_kit/distribution/release_contract.py",
+        "src/agent_dev_kit/targets.py",
+        "src/agent_dev_kit/target_contracts.py",
+        "tests/test_release_integrity.py",
+        "tests/test_archive_resource_bounds.py",
+        "tests/test_strict_json.py",
+        "tests/test_release_manifest_contract.sh",
+        "tests/release_archive_fixture.py",
+        "docs/changes/20261024-release-bundles"
+      ],
+      "cwd": "/workspace/scratch/712af632e2a5/agent-dev-kit",
+      "started_at": "2026-10-24T16:34:13.451996+00:00",
+      "completed_at": "2026-10-24T16:34:13.460571+00:00",
+      "elapsed_seconds": 0.008,
+      "exit_code": 0,
+      "source_stable": true,
+      "stdout": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/f1-patch-check-final.stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/f1-patch-check-final.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "record": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/f1-patch-check-final.json",
+        "sha256": "2943f68714f30a510fcb84a444d7980849105c5a8f408b86b26b7446fda1b73c",
+        "bytes": 4636
+      }
+    },
+    {
+      "label": "native-schema-python38-final",
+      "argv": [
+        "/workspace/scratch/712af632e2a5/apply20261024/review-f2/venv38/bin/python",
+        "/workspace/scratch/712af632e2a5/apply20261024/review-f1/probe_native_schema_offline.py"
+      ],
+      "cwd": "/workspace/scratch/712af632e2a5/agent-dev-kit",
+      "started_at": "2026-10-24T16:36:23.847328+00:00",
+      "completed_at": "2026-10-24T16:36:24.413239+00:00",
+      "elapsed_seconds": 0.566,
+      "exit_code": 0,
+      "source_stable": true,
+      "stdout": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/native-schema-python38-final.stdout",
+        "bytes": 264,
+        "sha256": "7ca432004d120eb0c2c7ab1e54047d1825f8f064cd5f268a9c40c475b2577666"
+      },
+      "stderr": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/native-schema-python38-final.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "record": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/native-schema-python38-final.json",
+        "sha256": "37adabe48d11ef7ec07aa71bef81639309f8e872de27ca3cd3e1ba5edaa96fe6",
+        "bytes": 4216
+      }
+    },
+    {
+      "label": "support-containment-python38-final",
+      "argv": [
+        "/workspace/scratch/712af632e2a5/apply20261024/review-f2/venv38/bin/python",
+        "/workspace/scratch/712af632e2a5/apply20261024/review-f1/probe_support_containment.py"
+      ],
+      "cwd": "/workspace/scratch/712af632e2a5/agent-dev-kit",
+      "started_at": "2026-10-24T16:36:23.845988+00:00",
+      "completed_at": "2026-10-24T16:36:24.513529+00:00",
+      "elapsed_seconds": 0.667,
+      "exit_code": 0,
+      "source_stable": true,
+      "stdout": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/support-containment-python38-final.stdout",
+        "bytes": 290,
+        "sha256": "3a1ca487ed9d1e26594207bd36f5cf036077c1bf8cc997702e35393e3deeb8b2"
+      },
+      "stderr": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/support-containment-python38-final.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "record": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/support-containment-python38-final.json",
+        "sha256": "b6f5adced1d10dbb53f222fb965dec8965d7b616bd6a05eace11b47650969366",
+        "bytes": 4232
+      }
+    },
+    {
+      "label": "native-execution-python38-final",
+      "argv": [
+        "/workspace/scratch/712af632e2a5/apply20261024/review-f2/venv38/bin/python",
+        "/workspace/scratch/712af632e2a5/apply20261024/review-f1/probe_native_execution_boundary.py"
+      ],
+      "cwd": "/workspace/scratch/712af632e2a5/agent-dev-kit",
+      "started_at": "2026-10-24T16:36:23.857426+00:00",
+      "completed_at": "2026-10-24T16:36:24.426745+00:00",
+      "elapsed_seconds": 0.569,
+      "exit_code": 0,
+      "source_stable": true,
+      "stdout": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/native-execution-python38-final.stdout",
+        "bytes": 476,
+        "sha256": "84aa1e75968aeb1627dd48726f7e9233581481ee0a8ae8ae336d0e2a69591e8b"
+      },
+      "stderr": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/native-execution-python38-final.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "record": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/native-execution-python38-final.json",
+        "sha256": "4dd0770ed1a4d37babf62658e3e45d74b2585141e1d80d17a318b42a04e5f95a",
+        "bytes": 4229
+      }
+    },
+    {
+      "label": "packaging-patch-check-final",
+      "argv": [
+        "git",
+        "diff",
+        "--check",
+        "415590db44e88979185efb850e2339a3f95411ef",
+        "3f0f0599de49140ade2225540dd44f2fb42030ad"
+      ],
+      "cwd": "/workspace/scratch/712af632e2a5/agent-dev-kit",
+      "started_at": "2026-10-24T16:38:43.169338+00:00",
+      "completed_at": "2026-10-24T16:38:43.185659+00:00",
+      "elapsed_seconds": 0.016,
+      "exit_code": 0,
+      "source_stable": true,
+      "stdout": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/packaging-patch-check-final.stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/packaging-patch-check-final.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "record": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/packaging-patch-check-final.json",
+        "sha256": "9a6cc00cda578b83c7b9597ed19dff0037938a6e524fe1f50e2533c521aa45e1",
+        "bytes": 4170
+      }
+    },
+    {
+      "label": "packaging-format-final",
+      "argv": [
+        "bash",
+        "scripts/check-format.sh"
+      ],
+      "cwd": "/workspace/scratch/712af632e2a5/agent-dev-kit",
+      "started_at": "2026-10-24T16:38:43.727104+00:00",
+      "completed_at": "2026-10-24T16:38:44.042982+00:00",
+      "elapsed_seconds": 0.316,
+      "exit_code": 0,
+      "source_stable": true,
+      "stdout": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/packaging-format-final.stdout",
+        "bytes": 20,
+        "sha256": "e9164f6e26a94c516e08caffa2e6a611fb00b5ea8833ac84da6e8744a75c4a8d"
+      },
+      "stderr": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/packaging-format-final.stderr",
+        "bytes": 1804,
+        "sha256": "db656b6fed3929a11f07617fe11170c879f8ee1d850ae75a5c1381ab21f443ae"
+      },
+      "record": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/packaging-format-final.json",
+        "sha256": "589f76252731e4874a7899a186578eb1853ef9821051bb253a26f10e6a8b6bc3",
+        "bytes": 4068
+      }
+    }
+  ],
+  "binding": {
+    "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/binding-3f0f059.json",
+    "sha256": "e375e3f0ea02453701524b70897ae5cf8ced89716feb0a8bb039c40b0620dad1",
+    "bytes": 4697
+  },
+  "behavior_binding": {
+    "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/binding-775352c.json",
+    "sha256": "655e5b69f105783bfa2924becf478a400595095eb8c68e2d58026c0486710198",
+    "bytes": 4697
+  },
+  "python312_environment": {
+    "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+    "PyYAML": "6.0.3",
+    "jsonschema": "4.26.0",
+    "ruff": "0.17.1",
+    "mypy": "2.4.0"
+  },
+  "python38_supplementary_review": {
+    "reviewer": "ai/root/root_code_audit",
+    "record": {
+      "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f2/executions-post-f1-775352c86a5f.json",
+      "sha256": "c16ba51d55b9c754f0312765e231ddba70f130d3f4f763281e1f5b93f1d1e161",
+      "bytes": 12149
+    },
+    "source_commit": "775352c86a5f67f38b6d3650f8b933e832c7f49c",
+    "environment": "standard host via approved require_escalated",
+    "actual_checks": [
+      {
+        "command": [
+          "/workspace/scratch/712af632e2a5/apply20261024/review-f2/venv38/bin/python",
+          "-m",
+          "unittest",
+          "test_release_integrity.ReleaseInventoryTest",
+          "-v"
+        ],
+        "cwd": "/workspace/scratch/712af632e2a5/apply20261024/review-f2/source-post-f1-775352c86a5f",
+        "elapsed_seconds": 2.399064767996606,
+        "exit_code": 0,
+        "selected_interpreter": "/workspace/scratch/712af632e2a5/apply20261024/review-f2/venv38/bin/python",
+        "stderr": "test_aliased_source_assets_cannot_exceed_rendered_file_budget (test_release_integrity.ReleaseInventoryTest) ... ok\ntest_all_duplicate_unsafe_and_special_members_are_rejected (test_release_integrity.ReleaseInventoryTest) ... ok\ntest_archive_registry_cannot_authorize_host_native_verifier_execution (test_release_integrity.ReleaseInventoryTest) ... ok\ntest_archived_python_is_data_and_never_imported (test_release_integrity.ReleaseInventoryTest) ... ok\ntest_cumulative_render_budget_is_shared_by_assets_and_targets (test_release_integrity.ReleaseInventoryTest) ... ok\ntest_embedded_source_manifest_must_match_top_level (test_release_integrity.ReleaseInventoryTest) ... ok\ntest_exact_output_limits_preserve_renderer_bytes (test_release_integrity.ReleaseInventoryTest) ... ok\ntest_export_manifest_itself_must_fit_the_rendered_file_budget (test_release_integrity.ReleaseInventoryTest) ... ok\ntest_external_support_root_is_rejected_before_filesystem_inspection (test_release_integrity.ReleaseInventoryTest) ... ok\ntest_frontmatter_output_is_bounded_during_encoding (test_release_integrity.ReleaseInventoryTest) ... ok\ntest_historical_bundle_remains_verifiable_after_source_expiry (test_release_integrity.ReleaseInventoryTest) ... ok\ntest_local_native_schema_preserves_receipt_validation (test_release_integrity.ReleaseInventoryTest) ... ok\ntest_malformed_local_schema_is_a_structured_contract_failure (test_release_integrity.ReleaseInventoryTest) ... ok\ntest_missing_extra_and_false_source_count_are_rejected (test_release_integrity.ReleaseInventoryTest) ... ok\ntest_native_receipt_schema_is_checked_before_reference_resolution (test_release_integrity.ReleaseInventoryTest) ... ok\ntest_real_source_inventory_is_accepted_in_any_member_order (test_release_integrity.ReleaseInventoryTest) ... ok\ntest_renamed_public_publish_is_rejected_before_github_discovery (test_release_integrity.ReleaseInventoryTest) ... ok\ntest_repeated_support_output_uses_the_same_byte_budget (test_release_integrity.ReleaseInventoryTest) ... ok\ntest_source_payload_drift_rejected_after_outer_checksum_is_recomputed (test_release_integrity.ReleaseInventoryTest) ... ok\ntest_source_schema_cannot_request_external_references (test_release_integrity.ReleaseInventoryTest) ... ok\n\n----------------------------------------------------------------------\nRan 20 tests in 2.055s\n\nOK\n",
+        "stdout": ""
+      },
+      {
+        "command": [
+          "/workspace/scratch/712af632e2a5/apply20261024/review-f2/venv38/bin/python",
+          "-m",
+          "unittest",
+          "test_native_trust.ManagedNativeTrustVerifierTest.test_production_loader_auto_injects_managed_verifier",
+          "test_native_trust.ManagedNativeTrustVerifierTest.test_managed_verifier_accepts_only_registered_exact_receipt",
+          "-v"
+        ],
+        "cwd": "/workspace/scratch/712af632e2a5/apply20261024/review-f2/source-post-f1-775352c86a5f",
+        "elapsed_seconds": 0.3332990679991781,
+        "exit_code": 0,
+        "selected_interpreter": "/workspace/scratch/712af632e2a5/apply20261024/review-f2/venv38/bin/python",
+        "stderr": "test_production_loader_auto_injects_managed_verifier (test_native_trust.ManagedNativeTrustVerifierTest) ... ok\ntest_managed_verifier_accepts_only_registered_exact_receipt (test_native_trust.ManagedNativeTrustVerifierTest) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.084s\n\nOK\n",
+        "stdout": ""
+      }
+    ],
+    "source_snapshot_stable": true
+  },
+  "artifact_outcomes": {
+    "baseline": {
+      "path": "/workspace/scratch/712af632e2a5/release_audit/agent-dev-kit-8.0.39.tar.gz",
+      "sha256": "680ab5bbf4340c5ae75e1e8441dc3531a50795d1c0d8e395a84448ba4429b487",
+      "canonical": {
+        "schema": "adk-release-artifact-contract/v1",
+        "status": "pass",
+        "version": "8.0.39",
+        "artifact": "agent-dev-kit-8.0.39.tar.gz",
+        "artifact_sha256": "680ab5bbf4340c5ae75e1e8441dc3531a50795d1c0d8e395a84448ba4429b487",
+        "release_manifest_sha256": "79be9e66c4fc8362ee83933f4f8604f89db9af39bd2691bdc468c03a752c3e54",
+        "manifest_sha256": "4bb9b91d8701e3e5b9300bcb5a0a1f7995503b9b665bac69d4a17aad1361fd0e",
+        "sbom_sha256": "47f496aa698ea55721960a0cc07b56032ab720919e214a86efb5a11855a99541",
+        "release_eligible": true
+      },
+      "prepublication_status": "pass"
+    },
+    "derivative_archive_outcomes": [
+      {
+        "mutation": "changed-skill",
+        "changed_members": 1,
+        "all_source_member_bytes_unchanged": true,
+        "outer_checksum_recomputed": true,
+        "results": {
+          "canonical": {
+            "rejected": true,
+            "error_type": "ValueError",
+            "message": "release bundle files, bytes or modes differ from source renderer"
+          },
+          "prepublication": {
+            "rejected": true,
+            "error_type": "ManifestError",
+            "message": "release bundle files, bytes or modes differ from source renderer"
+          }
+        }
+      },
+      {
+        "mutation": "missing-all-bundles",
+        "changed_members": 259,
+        "all_source_member_bytes_unchanged": true,
+        "outer_checksum_recomputed": true,
+        "results": {
+          "canonical": {
+            "rejected": true,
+            "error_type": "ValueError",
+            "message": "release bundle files, bytes or modes differ from source renderer"
+          },
+          "prepublication": {
+            "rejected": true,
+            "error_type": "ManifestError",
+            "message": "release bundle files, bytes or modes differ from source renderer"
+          }
+        }
+      },
+      {
+        "mutation": "self-rehashed-export",
+        "changed_members": 2,
+        "all_source_member_bytes_unchanged": true,
+        "outer_checksum_recomputed": true,
+        "results": {
+          "canonical": {
+            "rejected": true,
+            "error_type": "ValueError",
+            "message": "release bundle files, bytes or modes differ from source renderer"
+          },
+          "prepublication": {
+            "rejected": true,
+            "error_type": "ManifestError",
+            "message": "release bundle files, bytes or modes differ from source renderer"
+          }
+        }
+      },
+      {
+        "mutation": "mode-drift",
+        "changed_members": 1,
+        "all_source_member_bytes_unchanged": true,
+        "outer_checksum_recomputed": true,
+        "results": {
+          "canonical": {
+            "rejected": true,
+            "error_type": "ValueError",
+            "message": "release bundle files, bytes or modes differ from source renderer"
+          },
+          "prepublication": {
+            "rejected": true,
+            "error_type": "ManifestError",
+            "message": "release bundle files, bytes or modes differ from source renderer"
+          }
+        }
+      },
+      {
+        "mutation": "self-reduced-target-inventory",
+        "changed_members": 130,
+        "all_source_member_bytes_unchanged": true,
+        "outer_checksum_recomputed": true,
+        "results": {
+          "canonical": {
+            "rejected": true,
+            "error_type": "ValueError",
+            "message": "release bundle target counts differ from source renderer"
+          },
+          "prepublication": {
+            "rejected": true,
+            "error_type": "ManifestError",
+            "message": "release bundle target counts differ from source renderer"
+          }
+        }
+      },
+      {
+        "mutation": "unowned-directory",
+        "changed_members": 1,
+        "all_source_member_bytes_unchanged": true,
+        "outer_checksum_recomputed": true,
+        "results": {
+          "canonical": {
+            "rejected": true,
+            "error_type": "ValueError",
+            "message": "release bundle directories differ from source renderer"
+          },
+          "prepublication": {
+            "rejected": true,
+            "error_type": "ManifestError",
+            "message": "release bundle directories differ from source renderer"
+          }
+        }
+      }
+    ],
+    "official_archive_unchanged": true,
+    "remote_or_formal_release_action": false
+  },
+  "historical_clock_outcome": {
+    "artifact_sha256": "680ab5bbf4340c5ae75e1e8441dc3531a50795d1c0d8e395a84448ba4429b487",
+    "historical_clock": "2027-01-12",
+    "canonical_contract_unchanged": true,
+    "admissions": [
+      {
+        "target": "claude-code",
+        "admission": "rejected_stale"
+      },
+      {
+        "target": "opencode",
+        "admission": "rejected_stale"
+      }
+    ],
+    "published_or_rebuilt_any_release": false
+  },
+  "format_failure_and_resolution": {
+    "original_failed_commit": "775352c86a5f67f38b6d3650f8b933e832c7f49c",
+    "original_failure_record": {
+      "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/patch-check-final.json",
+      "sha256": "a367dacc56f2d6ab536674aaec52026202d5ab52fe0667bacdfa194268bd34aa",
+      "bytes": 4142
+    },
+    "reason": "A trailing space in original F2 unittest failure output.",
+    "resolution": "Lossless JSON/base64 container; original decoded bytes match original Git blob exactly.",
+    "packaged_output": {
+      "path": "/workspace/scratch/712af632e2a5/agent-dev-kit/docs/changes/20261024-target-smoke/evidence/red-target-smoke.json",
+      "sha256": "8f6e7d0ac83e1afc1d1fc702f4889eb046a3143d49311199fc318532671d2a6f",
+      "bytes": 6847
+    },
+    "decoded_original_sha256": "46f04ed1e3214d41a608577267c9bd6f56f0860b4c605ee22ff916547d654acb",
+    "decoded_original_bytes": 4646,
+    "final_patch_check": "packaging-patch-check-final",
+    "final_real_format_check": "packaging-format-final",
+    "original_failure_preserved": true
+  },
+  "evidence_tool_anomalies": [
+    {
+      "excluded_record": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/local-native-install-final.json",
+        "sha256": "989844b19064afa9c6fd46e34890001a31226487bc63f0385ab6bd7b3784ac79",
+        "bytes": 4297
+      },
+      "expected_stderr_at_record_creation": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/local-native-install-final.stderr",
+        "bytes": 4772,
+        "sha256": "c693cb2dd905f7dd59b33c09e9134ead516813c4414541fec6abf5d445a3fa45"
+      },
+      "retained_stderr_at_final_review": {
+        "path": "/workspace/scratch/712af632e2a5/apply20261024/review-f1/local-native-install-final.stderr",
+        "sha256": "af08cb3e6a9fa6efd583a146bf7f0d530441f8e06dbe3bbff904a19bf7cdbaa5",
+        "bytes": 4509
+      },
+      "finding": "The first Native/install stderr file did not match its recorded digest/length; it is not counted as usable PASS evidence.",
+      "cause": "Undetermined evidence retention anomaly; no production source changed.",
+      "resolution": "Original record and raw file retained untouched; runner now creates unique labels exclusively; identical 26 tests rerun under local-native-install-retained-1641 with verified matching raw hashes."
+    }
+  ],
+  "limitations": [
+    "No formal release, tag, publication, remote mutation, or GitHub CI run was performed by this reviewer.",
+    "No full ADK/Root regression verdict or release authorization is inferred from these scoped executions.",
+    "Archive content consistency is separate from signature and protected-publisher source authentication.",
+    "Runtime-conformance archives are deliberately rejected without independent trusted verifier authority; local managed Native defaults remain unchanged.",
+    "Input and generated-output byte/count limits do not replace OS CPU or memory isolation.",
+    "F2 was implemented by this reviewer and is excluded from this independent behavior review; /root/root_code_audit owns that verdict.",
+    "Native, G22, LTA, field and Product M5 qualification are unchanged."
+  ],
+  "sensitive_data_scan": {
+    "files_scanned": 83,
+    "high_confidence_pattern_hits": [],
+    "manual_scope": "Synthetic fixture identities, reviewer-owned temporary paths and public source; no real network or archive-selected program execution."
+  }
+}

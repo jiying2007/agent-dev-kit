@@ -1,0 +1,2741 @@
+diff --git a/.version-lock b/.version-lock
+index 1c6d153..2a6ca92 100644
+--- a/.version-lock
++++ b/.version-lock
+@@ -1,3 +1,3 @@
+-version: 8.0.39
+-locked_at: 2026-10-23T11:57:13Z
+-locked_by: owner-delegated-implementation
++version: 8.0.40
++locked_at: 2026-10-24T16:02:44Z
++locked_by: ai/root
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index 2c9335b..1212345 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -2,6 +2,13 @@
+ 
+ ## Unreleased
+ 
++### 8.0.40 source candidate
++- Verify the complete precompiled bundle inventory against trusted rendering of the validated source snapshot, including target/count, file and directory identity, hashes, modes and export manifests; reject missing or self-rehashed altered bundles before publication.
++- Keep release reconstruction offline and resource-bounded, without executing archived Python; retain historical source reconstruction and current-source freshness as separate contracts.
++- Check support roots before filesystem access and prevent archived Native registries from authorizing host verifier execution. Release validation rejects runtime-conformance archives without an independent trusted authority path; static releases and normal local managed Native verification retain their existing contracts.
++- Share one bounded subprocess owner across caller-supplied target smoke and Native campaigns, with a combined 1 MiB smoke output budget, a deadline covering inherited pipes, and POSIX process-group cleanup on failure.
++- Add real negative-input, subprocess and recovery regressions, retaining Python 3.8+ support, protected main CI and immutable component publication; no new Native, effect, field or Product M5 qualification is inferred.
++
+ ### 8.0.39 source candidate
+ - Build eligible releases from a fixed Git tree and verified blob bytes, excluding ignored and index-hidden worktree drift while preserving committed file modes and literal source content.
+ - Verify the complete bounded source inventory, canonical digest, file count and embedded manifest; route public publish through the same verifier and publish the tarball, checksum and release contract from one captured snapshot.
+diff --git a/CONTEXT.md b/CONTEXT.md
+index 66a5881..6a7df0b 100644
+--- a/CONTEXT.md
++++ b/CONTEXT.md
+@@ -1,7 +1,7 @@
+ # CONTEXT.md — agent-dev-kit 领域语言定义
+ 
+ > 文档状态：受机器门禁约束的领域上下文投影
+-> 产品版本：8.0.39
++> 产品版本：8.0.40
+ > 结构化单一事实源：`manifest.json`
+ 
+ ---
+diff --git a/README.md b/README.md
+index 3654da7..fbbfb48 100644
+--- a/README.md
++++ b/README.md
+@@ -11,7 +11,7 @@ ADK 不再在 README 中维护“候选 / 已发布 / live”之类可漂移的
+ - **Runtime conformance**：以 target/runtime receipt 与证据级别 `static / smoke / native / certified` 为权威。
+ - **Product qualification**：由消费方/产品仓的 qualification 与 field evidence 独立决定，不由 ADK 组件版本继承。
+ 
+-`manifest.json` 当前 source version 为 `8.0.39`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
++`manifest.json` 当前 source version 为 `8.0.40`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
+ 
+ 8.0.0 维护 CLI 迁移：`performance.sh optimize`、`auto-ops.sh cleanup/optimize` 仅输出有界只读计划，JSON 使用 `adk-maintenance-plan/v1` 与 `status=planned`；维护 `--apply` 返回 blocked、exit 2，不再自动删除文件或修改权限。调用方必须移除维护 `--apply` 并按 `applied=false` 处理报告；见 [维护迁移说明](docs/changes/20261006-comprehensive-contracts/design.md)。
+ 
+diff --git a/docs/changes/20261024-release-bundles/PROGRESS.md b/docs/changes/20261024-release-bundles/PROGRESS.md
+new file mode 100644
+index 0000000..5d00490
+--- /dev/null
++++ b/docs/changes/20261024-release-bundles/PROGRESS.md
+@@ -0,0 +1,9 @@
++# F1 实现交接
++
++- 当前角色：实现者 `ai/root/adk_code_audit`，不是独立审查者；需求/设计由主 Agent 冻结。
++- 已完成：行为负例先红、source 重渲染验证、compiler 清单纯函数复用、真实最小夹具迁移、定向发布/安装/归档/JSON/模块预算验证、精确基线整包无字节漂移验证；后续批准的 renderer 总字节/单文件/文件数/路径预算也已先红后绿，含分块编码与 export manifest。独立复核发现的三个 P2（Native schema 外部解析、support root 先越界遍历、archive registry 授权宿主执行）也已按主 Agent 冻结边界先红后绿；生产 fix 和定向测试已冻结。
++- 当前工件：`verification.md`、`negative-results.md` 与 `tasks.md`。
++- 已排除：只信包内 export manifest 自有摘要；给 `release_eligible=false` 包豁免；导入或执行归档 Python；两遍读取之间重新打开归档路径；放宽历史合同以授予新的当前准入；信包内 schema 授予源外目录访问；信包内 registry/二进制摘要授予宿主执行；跳过 runtime 信任验证后 PASS。
++- 当前状态：生产源码已冻结，独立只读 reviewer `ai/root/release_governance_audit` 已接手 F1；其 F2 实现不作为该审核的独立范围。
++- 待整合：独立只读 Spec/Quality 审核、完整回归、精确提交 CI 和远端流程由主 Agent 收口。
++- 不得推断：定向测试 PASS 不等于完整回归或 Native/现场资格；工作区包含其他 Agent 的独立变更，不能覆盖或回退。
+diff --git a/docs/changes/20261024-release-bundles/design.md b/docs/changes/20261024-release-bundles/design.md
+new file mode 100644
+index 0000000..c0a1bdd
+--- /dev/null
++++ b/docs/changes/20261024-release-bundles/design.md
+@@ -0,0 +1,15 @@
++# 设计
++
++复用 `distribution/archive_io.py` 的有界读取与 release contract 的来源验证，基于受验证 source 和现有 target renderer/export manifest 形成预期输出，再对 bundle 的 target、路径、内容摘要、模式和数量进行校验。检查不得仅信任待验包内部可重写的摘要。
++
++实现范围为 distribution owner、既有 target renderer/contract owner 与 release integrity 回归；不修改 shared schema、根 manifest、CI 或版本。主 Agent 串行整合版本与发布。回滚使用前一正式版本，不改写已发布资产。
++
++契约迁移补充：既有 archive resource bounds、strict JSON 和 release manifest shell 回归的正向样例声明 direct target，却仅提供版本字段 source、没有 bundle。将这些正向样例迁移为真实最小可渲染 source 与 bundle，复用已有测试 helper；不为不完整样例添加 validator 豁免。
++
++资源边界补充：release 重渲染经既有 renderer 的可选输出预算逐资产累计约束，避免有界输入被静态 frontmatter 重复放大。archive 首次读取后的同一 immutable bytes 作为临时 source 物化输入，避免重新打开可变路径；包内 Python 不执行，schema 只能离线解析。
++
++独立审核扩展的信任边界：source inventory 只证明包内内容一致性，不让归档的 schema 或 Native registry 获得宿主权限。沿真实 renderer 调用链，对 manifest、target contract 和可达 Native receipt schema 复用同一离线 guard；support root 在任何 exists/rglob 前经原 ensure_within owner 校验。历史 renderer 与 target contract loader 之间用私有 Native verifier 许可参数区分原本机受管理调用与不可信归档重渲染：正常调用保持原默认，release 公共入口固定禁止。runtime conformance 在构造或执行 managed verifier 前失败关闭，不跳过 Native 验证，也不授予包内指定二进制或其自报 digest 执行权。当前两项正式 target 均为 static；今后如需接纳 runtime 归档，必须另行提供独立可信授权路径，不能通过本次接口绕过。
++
++三项新负例分别证明 Native schema 曾请求外部引用、support root 曾先遍历源外目录、合法 Native receipt 曾到达归档指定的宿主 subprocess 调用。探针使用受控临时目录并拦截网络/进程执行，原始失败保留；修复后要求相应外部访问/执行调用次数为零，并继续验证静态包与正常本地 Native owner。
++
++2026-10-24 历史检索负结果：`knowledge/L2-domain/lessons.md` 不存在。当前隔离环境无 `~/codex` Knowledge Provider / Execution Policy；记为环境 not-run，不能声称 live gate 通过。已有正式归档与审查反例为本变更输入。
+diff --git a/docs/changes/20261024-release-bundles/evidence/source-fingerprints.json b/docs/changes/20261024-release-bundles/evidence/source-fingerprints.json
+new file mode 100644
+index 0000000..ebcfe61
+--- /dev/null
++++ b/docs/changes/20261024-release-bundles/evidence/source-fingerprints.json
+@@ -0,0 +1,20 @@
++{
++  "change": "20261024-release-bundles",
++  "recorded_on": "2026-10-24",
++  "role": "implementer",
++  "base_commit": "415590db44e88979185efb850e2339a3f95411ef",
++  "candidate_version": "8.0.40",
++  "scope_note": "targets.py whole-file digest includes frozen F2 smoke changes; F1 ownership is rendering budgets/helpers only.",
++  "files": {
++    "src/agent_dev_kit/compiler.py": "72a981a3ad66bebce77960339eafd55ce3abd75553bef5fa1cfcbcb37471f3c0",
++    "src/agent_dev_kit/distribution/archive_io.py": "f693b56de052f33c1fb83b5abc95342f31af95b52795182f116fd78db61a6998",
++    "src/agent_dev_kit/distribution/release_contract.py": "6f322e405555383b6f50206c97e754eedc33edaa3982c358c638797ca6aaba1a",
++    "src/agent_dev_kit/target_contracts.py": "aea9b0a1fb395d157f61d1860f762ecb80da0bc9365bbeaac46bd96b5892dc26",
++    "src/agent_dev_kit/targets.py": "9b2125d496a2a8a324395fc144ff814ec4d798dc2e82990e4515eab21bf1c6f9",
++    "tests/test_release_integrity.py": "c91523591a1eb97f89bf4c56ce110b5ec245b472df06b2d02713b4ad45cd4436",
++    "tests/test_archive_resource_bounds.py": "202e616077bd3a1614bc4ef284648b46af011295a7796b405d76eafd3e8e8af4",
++    "tests/test_strict_json.py": "ede17f3f0e2aa7f262bb0d08aa5072d07edaf62fa9633d2c35a8e5d23c8c6e02",
++    "tests/test_release_manifest_contract.sh": "7febce7d578d1dc4911d6161918cab9a913df69695d1dfafe3f8b4451cf79f2c",
++    "tests/release_archive_fixture.py": "a512b0259efc35ea964210c61235920c4f32d24f7539b13103744b038c6f00bb"
++  }
++}
+diff --git a/docs/changes/20261024-release-bundles/negative-results.md b/docs/changes/20261024-release-bundles/negative-results.md
+new file mode 100644
+index 0000000..950ec16
+--- /dev/null
++++ b/docs/changes/20261024-release-bundles/negative-results.md
+@@ -0,0 +1,71 @@
++# 真实负向结果
++
++实现者：`ai/root/adk_code_audit`。本阶段是 F1 实现，不是独立审核。固定父提交 `415590db44e88979185efb850e2339a3f95411ef`；审查反例和用户新授权经主 Agent 的 requirements/design 冻结后进入实现。
++
++## 原实现失败
++
++2026-10-24，先增加公开行为验收，再在未改生产实现上运行：
++
++```text
++python3 -m unittest test_release_integrity.ReleaseGitInputTest.test_real_bundle_bytes_modes_inventory_and_target_counts_are_required test_release_integrity.ReleaseGitInputTest.test_recomputed_export_manifest_cannot_authorize_a_changed_bundle test_release_integrity.ReleaseGitInputTest.test_public_publish_rejects_missing_bundles_before_github_discovery test_release_integrity.ReleaseGitInputTest.test_real_clean_bundle_validation_remains_positive
++```
++
++实际退出码 `1`；原始结果尾部：
++
++```text
++Ran 4 tests in 12.006s
++
++FAILED (failures=9)
++```
++
++其中七个归档变体（全部 bundle 缺失、单 target 缺失、单文件缺失、Skill 内容修改、额外文件、模式变化、虚假 target count）以及自重算 export manifest 均出现 `AssertionError: ValueError not raised`；公开 publish 的缺 bundle 变体仍到达 GitHub CLI discovery，触发预设的 `AssertionError: premature gh discovery`。真实干净包正向控制通过。fixture 发布始终 dry-run，没有网络写入。
++
++旧 archive-resource / strict-json / release-manifest 正例只声明 target，但不含可渲染 source 或 bundle；这些正例随合同迁移为真实最小 source/export，不新增 `release_eligible=false` 豁免。
++
++## 新增历史验收测试的断言修正
++
++`python3 -m unittest test_release_integrity.ReleaseInventoryTest` 首轮为 `Ran 9 tests in 0.557s / FAILED (failures=1)`，退出码 `1`。历史包验证已经通过，当前准入确实拒绝过期 contract，但测试误匹配了 `expired`，实际稳定错误码为 `target_contract_stale`。按已有 owner 的错误码修正断言，不改生产准入或历史逻辑。
++
++## 新读取 source schema 的失败边界
++
++在源码重渲染路径加入后，仓外只读网络阻断探针 `/tmp/adk_f1_schema_probe.py` 观察到自引用 schema 抛 `RecursionError`，缺失 local reference 抛 jsonschema 的 `_WrappedReferencingError`；未出现 PASS。它们原先不在 CLI 已有的 `ValueError` 失败边界内，会产生未结构化 traceback。新增公开 `_main` 回归首先实际失败：`Ran 1 test in 0.147s / FAILED (errors=2)`，退出码 `1`。将归档控制的 renderer/schema 非标准异常在 release verifier 入口包装成 `ValueError`，保留原始 cause；没有改 schema、准入或 renderer 语义。嵌套旧式 `id` 作用域和 `$recursiveRef` 外部引用也在离线 guard 中拒绝。
++
++## 环境与范围
++
++当前运行解释器 Python 3.12，依赖为本轮独立环境中的 PyYAML 6.0.3 / jsonschema 4.26.0。历史知识文件不存在；没有执行真实 Native、G22、LTA 或产品资格。
++
++## 输出放大预算先红
++
++主 Agent 批准补齐 renderer 预算后，先在未加预算的实现运行四个公开 release validator 用例：单文件深层 YAML 编码放大、跨资产/跨 target 累计输出、80 个资产别名复用同一源文件、20 个资产重复导出同一 48 KiB support 文件。测试仅将现有归档常量缩小到 128–512 KiB / 64 members，真实输入仍低于这些上限，不进行 OOM 实验。
++
++实际命令：
++
++```text
++python3 -m unittest test_release_integrity.ReleaseInventoryTest.test_frontmatter_output_is_bounded_during_encoding test_release_integrity.ReleaseInventoryTest.test_cumulative_render_budget_is_shared_by_assets_and_targets test_release_integrity.ReleaseInventoryTest.test_aliased_source_assets_cannot_exceed_rendered_file_budget test_release_integrity.ReleaseInventoryTest.test_repeated_support_output_uses_the_same_byte_budget
++```
++
++退出码 `1`，`Ran 4 tests in 0.613s / FAILED (failures=5)`。原实现把所有放大输出构造完，最终才报 `release bundle files, bytes or modes differ from source renderer`，没有在单文件、累计或文件数上限处停止；因此未满足用例要求的 `render_output_budget_exceeded`。跨 target 子例单独失败，避免只给每个 target 重置预算的伪修复。
++
++## Lint 范围与实际失败
++
++主 Agent 的真实 CI focused lint 报告 `release_contract.py` 的 `I001`：compiler import 需排在 contracts import 前。已用 apply_patch 仅修正导入顺序，随后 `ruff check --select E4,E7,E9,F,B,UP,SIM,I src/agent_dev_kit/distribution` 实际 exit 0。
++
++实现者额外把同一严格 profile 试用于 CI 此选择范围外的 legacy `targets.py` / `compiler.py`，实际 exit 1 / 56 项，主要为既有 `typing.Optional/Dict/Tuple` 与 `.format` 风格（新增参数沿用该文件风格），另有现有 alias import block 排序。没有批量改写这些非本次预算缺陷；它们的项目默认 lint、mypy 和实际 CI distribution 选择均通过。该额外检查不记为 PASS，也不改 lint 配置来隐藏结果。
++
++## 独立复核的三个 P2 与实现前 RED
++
++独立 reviewer `ai/root/release_governance_audit` 使用真实公开 `validate_release_artifact` 找到三项遗漏。原始脚本与输出保存在 `/workspace/scratch/712af632e2a5/apply20261024/review-f1/`；没有覆盖其 RED，也没有改变探针断言：
++
++- `probe_native_schema_offline.py` / `native-schema-offline-v2-red.*`：runtime conformance 的第三份 Native receipt schema 可以请求外部 `$ref`；`urllib.request.urlopen` 在测试边界被拦截，实际网络 I/O 为 0。
++- `probe_support_containment.py` / `support-containment-red.*`：归档可放宽自身 schema 并把 support root 指向临时目录，原 renderer 先 `rglob`，逐文件 containment 才拒绝；独立探针实际委托遍历一个自建无害文件，未读该文件正文。
++- `probe_native_execution_boundary.py` / `native-execution-red.*`：使用未修改的完整 Native receipt schema、合法 receipt 结构和包内 enabled authority，能够到达归档指定的 `/usr/bin/true verify-blob …` 调用；在 `subprocess.run` 前拦截，实际执行为 0。这证明自报二进制摘要和 source inventory 不能充当宿主执行授权。
++
++实现者按冻结验收新增真实归档回归，在生产修复之前执行以下方法：
++
++```text
++python3 -m unittest test_release_integrity.ReleaseInventoryTest.test_native_receipt_schema_is_checked_before_reference_resolution test_release_integrity.ReleaseInventoryTest.test_local_native_schema_preserves_receipt_validation test_release_integrity.ReleaseInventoryTest.test_external_support_root_is_rejected_before_filesystem_inspection test_release_integrity.ReleaseInventoryTest.test_archive_registry_cannot_authorize_host_native_verifier_execution
++```
++
++实际退出码 `1`，`Ran 4 tests in 0.356s / FAILED (failures=4)`。`$ref` 与 `$dynamicRef` 各触发一次被拦截的 urlopen；support 记录为 `['exists', 'rglob']`；执行反例使用当前 Python 解释器路径及真实 SHA256，观察到一次 `verify-blob` subprocess 调用并在执行前阻断。原始完整记录为 `/workspace/scratch/712af632e2a5/apply20261024/adk-f1-review-regressions-red.{json,stdout,stderr}`，stderr SHA256 为 `9a4bc00133718d4b0d29ebe8fe2f2699aab1809f26f9a8377413db42c811320e`。
++
++修复后的同一安全验收全部通过，stdout/stderr 和实际命令见 `adk-f1-review-regressions-green.*`。默认本地 receipt 的正向控制迁至显式 `load_target_contract` 与 `_load_historical_target_contract`，因为冻结设计要求公开 release 在 receipt 验证之前拒绝归档 runtime conformance；公开入口另以完整 receipt 反例断言 managed verifier 构造与 subprocess 均为 0，没有以不完整 receipt 提前失败来替代执行边界验证。后续原本地 managed Native 成功用例、安装恢复、整包与历史时钟正控制均保持通过。
+diff --git a/docs/changes/20261024-release-bundles/requirements.md b/docs/changes/20261024-release-bundles/requirements.md
+new file mode 100644
+index 0000000..42a4aef
+--- /dev/null
++++ b/docs/changes/20261024-release-bundles/requirements.md
+@@ -0,0 +1,18 @@
++# 发布 bundle 完整性
++
++## 目标与边界
++
++修复 2026-10-24 全面审查 F1：canonical release validator 与发布前断言必须拒绝缺失或被修改的预编译 bundle。冻结基线为 `415590db44e88979185efb850e2339a3f95411ef`。用户已授权按建议全部优化落地，含既有受保护提交、审核和发布流程。
++
++保留现有 release manifest、三资产、签名和 immutable release 权威，不新增发布框架，不把当前正式产物认定为损坏。风险层级 E3；实际运行与产品资格不由本变更授予。
++
++## 验收
++
++- 干净真实构建通过；篡改 Skill、删除全部 bundles、缺少 target、增加/删除文件、模式漂移均失败关闭。
++- 修改或重算待验包自有 manifest 不能替代受验证 source 身份。
++- 有界归档、路径、重复、链接和 source 校验既有行为继续成立。
++- 所有归档 source 中实际可达的 JSON Schema 均须在引用解析前通过同一离线检查，包括 Native receipt schema；不能由包内 schema 触发网络请求。
++- support root 必须在 exists、遍历和读取之前通过独立的资产目录边界检查；归档可改写的 schema 不能充当文件系统访问授权。
++- 归档内 Native registry 不能授权宿主程序执行。公开 release validator 必须在调用 managed Native verifier 前拒绝 runtime conformance；不提供跳过信任校验或允许归档执行的公共开关。
++- 正常本地 target admission、安装恢复等已授权 managed Native 路径保持原语义。当前正式静态 target 包及 v8.0.39 整包继续通过；没有独立可信 Native 执行授权的 runtime 归档明确失败，不能降为 static 或宣称 Native 通过。
++- 完整回归、独立只读 Spec/Quality 审核与精确提交 CI 通过后才发布。
+diff --git a/docs/changes/20261024-release-bundles/tasks.md b/docs/changes/20261024-release-bundles/tasks.md
+new file mode 100644
+index 0000000..23c28b6
+--- /dev/null
++++ b/docs/changes/20261024-release-bundles/tasks.md
+@@ -0,0 +1,14 @@
++# 任务
++
++- [x] 从验收条件补确定性负例并确认旧实现失败。
++- [x] 迁移 archive-resource、strict-json 与 release-manifest 的最小正例：旧正例只含 version 和 source manifest，却声明有 direct target 而没有 bundle，不再满足完整性交付合同；复用真实最小 source/renderer 生成合法正例，不按 release_eligible 豁免校验。
++- [x] 在既有归档与发布合同 owner 中补完整性验证，保留公共合同。
++- [x] 抽出 compiler 已有 export-manifest 纯构造函数供 export 与 release validator 共用；保留真实 build 逐字节输出和原 export/安装回归，避免第二份 manifest 定义。已检索 export、release、quality、target-source-probe 与测试调用点；精确基线重建整包 SHA256 与原始正式摘要一致，见 verification.md。
++- [x] 按主 Agent 新授权，在既有 renderer 补跨 target 的总字节、单文件字节和文件数预算；使用 archive_io 现有上限，frontmatter 在编码过程中限额、support 文件分块读取，预算包含 export manifest；先跑真实小型输出放大反例，保留普通 export/安装输出和已冻结 smoke 行为。最终 27 release integrity tests、22 archive tests、4 CI authority tests、1 rehearsal、20 install/export tests、target contracts（含 9 smoke）及定向 lint/mypy 全部通过，见 verification.md。
++- [x] 修复独立复核的三个 P2：覆盖 Native receipt 分支实际使用的第三份 source schema，在引用解析前做同一 offline guard；support root 在任何 exists/rglob 前按 asset root 检查 containment，保留原 symlink 拒绝；release 公共入口固定禁止 archive Native verifier，并在构造 managed verifier 前拒绝 runtime conformance。真实 public validator 回归先红再绿（4 tests / 4 failures → 4 tests / PASS），普通本地 managed Native 默认语义保持。调用点已检索：私有 historical renderer 仅由 release validator、installation inventory 与定向测试使用；安装恢复不传新限制，默认保持原行为。最终 58 项 release 脚本用例、40 项 Native/安装/strict JSON、target contracts、历史整包、lint/type/module budget 均通过，具体命令和 raw pointer 见 verification.md。
++- [ ] 执行 release integrity、安装升级、模块预算和完整回归，保存原始退出码及输出。
++- [ ] 独立只读复核新实现及篡改反例；由主 Agent 统一提交、CI、发布核验。
++
++定向验证已完成并存于 `verification.md`；完整回归和独立审核由主 Agent 在多任务整合后统一执行，尚未把该 Gate 勾选为完成。
++
++新增预算调用点检索：`render_asset` 被 renderer、target check 及 target-contract shell 测试调用；`_render_main` 有 intent-boundary shell 用例；`_render_historical_selection` 同时用于 installation inventory 与 release validator。新增可选参数默认不改变既有调用者，只由 release verifier 显式提供预算。F2 smoke/process 范围不修改。
+diff --git a/docs/changes/20261024-release-bundles/verification.md b/docs/changes/20261024-release-bundles/verification.md
+new file mode 100644
+index 0000000..912afef
+--- /dev/null
++++ b/docs/changes/20261024-release-bundles/verification.md
+@@ -0,0 +1,96 @@
++# F1 实现验证
++
++实现者：`ai/root/adk_code_audit`。这份记录是实现验证，不是独立 Spec/Quality 审核。验证日期为 2026-10-24，工作分支 `fix/audit-boundaries-20261024`，父提交 `415590db44e88979185efb850e2339a3f95411ef`。
++
++## 实现与合同
++
++- 归档第一遍读取同时记录 `bundles/` 真实文件摘要、模式及目录条目，原有 compressed/decoded/member/name/JSON/metadata/PAX 上限和重复、冲突、链接检查不变。
++- 先完成既有 release manifest、SBOM、source manifest、source count 和 source tree digest 校验，再把同一份不可变 `raw: bytes` 中的 source 复制到私有临时目录。两遍之间不重新打开归档路径；复制继续使用同一有界读取器，权限归一化为 0644/0755，临时根目录为 0700。
++- 使用当前已加载的 `Manifest` 和现有 `_render_historical_selection` 从 source 数据重现每个 direct target。校验完整 target/count、文件路径集合、内容摘要、权限、export manifest 字节，以及存在的目录条目。归档目录标记允许省略；额外目录和目录模式漂移拒绝。
++- `compiler.export_manifest` 仅把原内联清单构造抽为纯函数；正常 export 和 release verifier 共用原有 `adk-export-manifest/v2` 字段与序列化顺序，不新增 schema。
++- 主 Agent 后续批准的输出预算已落实在现有 `targets.py` renderer：release 显式构造共享 `RenderBudget`，总输出、单文件、文件数和路径字节分别取自 `archive_io.MAX_DECODED_BYTES`、`MAX_MEMBER_BYTES`、`MAX_MEMBERS`、`MAX_NAME_BYTES`（默认 128 MiB、32 MiB、8192、4096）。同一状态跨全部 target 和 export manifest 使用，不在每个 target 重置。
++- 有界路径把 `yaml.safe_dump` 接到分块 UTF-8 writer；在保留编码数据前检查剩余单文件/总预算，避免先建立完整放大后的 frontmatter 字符串。body 也通过同一 writer；support 文件先检查大小再分块读取；资产最少文件数提前校验，每个 support 和 export manifest 文件继续单独消费文件数。已有源文件大小、JSON 深度与成员数约束限制输入，输出超过预算时立即中止。普通 export/安装未传预算，继续走原有默认路径。
++- 源包 Python 仅作为数据复制；不导入或执行。manifest、target contract 和存在的 Native receipt schema 在使用前拒绝外部引用和嵌套引用作用域，避免归档 schema 发起网络解析。局部引用缺失/递归等外部库异常在 canonical verifier 边界变为结构化失败，同时保留原始异常 cause。
++- support root 经原有 `ensure_within` 在 `exists`、`rglob` 和读取前验证；保留未解析的原路径供原有 symlink 拒绝逻辑使用，不让包内可改 schema 授予目录访问权限。
++- 公开 release validator 固定传入 `allow_native_verifier=False`，经既有历史 renderer/target loader 传播；runtime conformance 在 `build_managed_native_trust_verifier` 前失败关闭，不解析包内 registry 来授予宿主执行权。私有参数默认为 `True`，普通本地 `load_target_contract` 和 installation inventory 的原有 managed Native 路径不改变。
++- archive-resource、strict-json、release-manifest 的旧“正例”缺 source 合同与 bundles，已迁移到共享测试夹具 `tests/release_archive_fixture.py`。夹具保留真实 schema、target contract 和 Agent/Skill，通过真实 `Manifest.validate(strict=True)` 与 `export_assets` 生成。未放宽 validator 或给非发布包添加豁免。
++
++## 实际执行
++
++所有命令的外层使用 `/workspace/scratch/712af632e2a5/audit-tools/rtk proxy`，环境为 `PATH=/workspace/scratch/712af632e2a5/audit-venv/bin:/usr/bin:/bin`、`PYTHONPATH=src:tests`。`python3` 为本轮独立 Python 3.12 解释器，PyYAML 6.0.3、jsonschema 4.26.0。
++
++| 命令 | 实际结果 |
++| --- | --- |
++| 首轮四个 F1 行为用例，未修改生产实现 | exit 1；4 tests / 12.006s；9 failures；见 negative-results.md |
++| 相同四个用例，核心实现完成后 | exit 0；4 tests / 19.251s；OK |
++| `python3 -m unittest test_release_integrity test_archive_resource_bounds test_strict_json`，完成夹具迁移后 | exit 0；53 tests / 38.810s；OK |
++| `bash tests/test_release_manifest_contract.sh`，加入历史/离线 schema/目录与 export manifest 验收后 | exit 0；archive bounds 22 tests / 0.890s；CI authority 4 tests / 0.028s；release integrity 20 tests / 34.313s；release rehearsal 1 test / 10.330s；全部 OK |
++| `python3 -m unittest test_release_integrity.ReleaseInventoryTest`，补局部引用异常边界后 | exit 0；10 tests / 0.658s；OK；包括新的 CLI 结构化失败断言 |
++| `python3 -m unittest test_install_upgrade.ExportOutputBoundaryTest test_install_upgrade.InstallUpgradeTest test_install_receipt_authority` | exit 0；20 tests / 6.824s；OK |
++| `bash tests/test_module_size_budget.sh` | exit 0；status=pass；默认 30000 bytes；import fanout 26/28；support module count=0 |
++| `git diff --check -- src/agent_dev_kit/compiler.py src/agent_dev_kit/distribution/archive_io.py src/agent_dev_kit/distribution/release_contract.py tests/test_release_integrity.py tests/test_archive_resource_bounds.py tests/test_strict_json.py tests/test_release_manifest_contract.sh` | exit 0；无输出 |
++
++新增反例包括删除全部 bundles、删除 target、删除单文件、篡改 Skill、增加文件、文件模式漂移、虚假 target count、缺 export manifest、额外目录、目录模式漂移，以及改 Skill 后自行重算 export manifest。公开 publish 的无 bundle 变体在 GitHub CLI discovery 前失败；无实际发布。现有资源边界测试同时证实输入路径在首遍读取后被替换时，后续重渲染和 digest 仍使用原快照。
++
++## 输出预算完成后的最终定向验证
++
++此轮在主 Agent 完成候选版本 `8.0.40` 同步后执行；整包兼容探针仍固定历史基线 `415590db44e88979185efb850e2339a3f95411ef`。未修改 F2 smoke/process 函数。新增预算反例先红的结果见 negative-results.md。
++
++| 命令 | 实际结果 |
++| --- | --- |
++| `python3 -m unittest test_release_integrity.ReleaseInventoryTest` | exit 0；16 tests / 1.498s；包括 UTF-8 精确字节、文件数、路径上限正例和减 1 反例，及 export manifest 自身超过单文件上限 |
++| `bash tests/test_release_manifest_contract.sh` | exit 0；archive bounds 22 tests / 0.840s；CI authority 4 tests / 0.034s；release integrity 27 tests / 38.163s；release rehearsal 1 test / 10.013s；全部 OK |
++| `bash tests/test_target_contracts.sh` | exit 0；target contracts PASS，含 9 smoke tests / 9.145s；无真实 Native runtime |
++| `python3 -m unittest test_install_upgrade.ExportOutputBoundaryTest test_install_upgrade.InstallUpgradeTest test_install_receipt_authority` | exit 0；20 tests / 7.177s；OK |
++| `python3 /tmp/adk_f1_compatibility.py` | exit 0；新有界 renderer 验收完整旧包 PASS，重建摘要仍为下述 680ab5…；历史时钟合同相同 |
++| `ruff check src/agent_dev_kit/targets.py src/agent_dev_kit/compiler.py src/agent_dev_kit/distribution/archive_io.py src/agent_dev_kit/distribution/release_contract.py tests/test_release_integrity.py tests/release_archive_fixture.py tests/test_archive_resource_bounds.py tests/test_strict_json.py` | exit 0；All checks passed |
++| `ruff check --select E4,E7,E9,F,B,UP,SIM,I src/agent_dev_kit/distribution` | exit 0；CI 该 scope 的严格选择全部通过 |
++| `mypy src/agent_dev_kit/targets.py src/agent_dev_kit/compiler.py src/agent_dev_kit/distribution/archive_io.py src/agent_dev_kit/distribution/release_contract.py` | exit 0；Success: no issues found in 4 source files |
++| `bash tests/test_module_size_budget.sh` | exit 0；status=pass；import fanout 26/28；无 oversize/support debt |
++
++新预算矩阵使用真实小型 source：深层 JSON 转 YAML 缩进使单文件/总输出放大；两个 target 分别未超限但合计超限；80 个资产别名复用一个源文件；20 个资产重复输出同一 48 KiB support 文件；10 个资产各重复 100 个空 support 文件使 export manifest 超限。测试输入全部先通过原有归档预算，预期在生成阶段返回 `render_output_budget_exceeded`，而非等全部放大结果构造完再发现 digest 不匹配。没有进行内存耗尽实验。
++
++## 精确基线的整包无漂移证据
++
++仓外脚本 `/tmp/adk_f1_compatibility.py` 从本地 Git 创建独立 clean clone 并固定 `415590db44e88979185efb850e2339a3f95411ef`，使用当前实现重建完整 v8.0.39。实际命令：
++
++```text
++python3 /tmp/adk_f1_compatibility.py
++```
++
++退出码 `0`。产物为 `/workspace/scratch/712af632e2a5/f1-baseline-verify/agent-dev-kit-8.0.39.tar.gz`，完整归档 SHA256：
++
++```text
++680ab5bbf4340c5ae75e1e8441dc3531a50795d1c0d8e395a84448ba4429b487
++```
++
++与审查前精确基线构建及正式 v8.0.39 已核对摘要一致。新 canonical validator 返回 `status=pass`、`release_eligible=true`；把 target owner 的时钟推进到两个 source 均过期的 `2027-01-12` 后，历史包验收合同逐字段相同。独立测试还证实同一时刻的新 target 准入仍返回 `target_contract_stale`，历史验收不续期当前准入。
++
++## 独立复核反馈修复后的实际验证
++
++独立 reviewer `ai/root/release_governance_audit` 提供了三个真实公开入口 RED：Native receipt schema 外部引用、support root 在 containment 前遍历、合法 Native receipt 通过包内 registry 选择宿主 verifier。实现者先把三项验收写入回归，再做最小修复；原始 RED 全部保留，未修改 reviewer 的探针或断言。四个用例中另一个为默认本地 Native receipt 校验的正向控制。
++
++实际 schema 消费链已逐 owner 检索：`Manifest.load` / `_manifest_schema_bundle` 使用 `manifests/manifest.schema.json`；历史 target loader 使用 `manifests/target-contract.schema.json`；`_validate_native_conformance_evidence` 使用 `schemas/native-target-conformance-receipt-v2.schema.json`。同一 offline guard 覆盖这三处，第三份在存在时先检查，静态最小 source 不被要求携带未使用的 Native schema。manifest 的 source/source fallback 在 release 路径不可达，因为第一候选 schema 是此前必检的固定文件。Native registry 使用既有手写结构验证，sigstore owner 不读取其他 JSON Schema。公开 release 的 runtime 分支另在构造 managed verifier 前拒绝；没有跳过信任检查后继续渲染的路径。
++
++所有以下记录使用同一 `run_checks.py` 留下完整命令、开始/结束时间、退出码、stdout/stderr 摘要、Git HEAD/tree、前后工作区摘要。记录前后 `snapshot_stable=true`；源文件指纹见 `evidence/source-fingerprints.json`。原始记录统一位于 `/workspace/scratch/712af632e2a5/apply20261024/`，每个下列 label 都有 `.json`、`.stdout`、`.stderr`。
++
++| 命令或验证范围 | 实际结果 | 记录 label |
++| --- | --- | --- |
++| 四项新验收，修改生产实现前 | exit 1；4 tests / 0.356s；4 failures，详见 negative-results.md | `adk-f1-review-regressions-red` |
++| 四项新验收，修复后 | exit 0；4 tests / 0.350s；三个归档反例的相应外部访问均为 0，执行反例的 managed verifier 构造为 0；默认本地路径保留原 receipt 校验 | `adk-f1-review-regressions-green` |
++| `bash tests/test_release_manifest_contract.sh` | exit 0；archive bounds 22 tests / 0.778s；CI authority 4 / 0.027s；release integrity 31 / 37.383s；release rehearsal 1 / 9.728s；总耗时 48.728s | `adk-f1-review-release` |
++| `python3 -m unittest test_native_trust test_install_upgrade.ExportOutputBoundaryTest test_install_upgrade.InstallUpgradeTest test_install_receipt_authority test_strict_json` | exit 0；40 tests / 7.361s；含原本地 production loader 自动注入 managed verifier 的成功用例 | `adk-f1-review-native-install` |
++| `bash tests/test_target_contracts.sh` | exit 0；target contracts PASS，含 9 smoke tests / 9.416s | `adk-f1-review-targets` |
++| `python3 /tmp/adk_f1_compatibility.py` | exit 0；完整 v8.0.39 重建仍为 `680ab5bb…a4429b487`；正常及 `2027-01-12` 历史时钟验收相同；3.443s | `adk-f1-review-compatibility` |
++| 项目默认 Ruff：distribution、targets、target_contracts、compiler 及本次相关 Python 测试/helper | exit 0；All checks passed | `adk-f1-review-lint` |
++| `ruff check --select E4,E7,E9,F,B,UP,SIM,I src/agent_dev_kit/distribution` | exit 0；All checks passed | `adk-f1-review-ci-lint` |
++| Mypy：archive_io、release_contract、targets、target_contracts、compiler | exit 0；Success: no issues found in 5 source files | `adk-f1-review-types` |
++| `bash tests/test_module_size_budget.sh` | exit 0；status=pass，import fanout 26/28，无超限或 support debt | `adk-f1-review-module-budget` |
++
++新回归的完整类内方法为 `test_native_receipt_schema_is_checked_before_reference_resolution`、`test_local_native_schema_preserves_receipt_validation`、`test_external_support_root_is_rejected_before_filesystem_inspection`、`test_archive_registry_cannot_authorize_host_native_verifier_execution`，均属于 `test_release_integrity.ReleaseInventoryTest`。执行反例使用原始完整 Native receipt schema、语义完整的三阶段 receipt、真实宿主二进制摘要和包内 registry；只在外部效果边界拦截并计数，不 mock 其 schema/receipt/trust 检查。默认本地 loader 与历史 loader 的无效 receipt 仍由原 receipt schema 拒绝；受管理本地成功用例由原 `test_native_trust` 保持。
++
++## 剩余 Gate 与边界
++
++完整回归、独立只读审核、精确提交 CI 和发布由主 Agent 统一整合；实现者尚未提交、推送或发布。本轮没有执行真实 Native runtime、G22、LTA 或产品资格。当前正式 direct targets 是 static 合同，静态发布包保持兼容。公开 release validator 当前拒绝 runtime conformance 归档：包内 registry 不是独立可信执行授权，不能据此构造或执行宿主 verifier；后续若支持 runtime 归档，须另行设计独立可信 context，不通过本次公共接口绕过。普通本地 managed Native 的原有语义保持，其现场验收不由本记录授予。
++
++归档与输出预算已同时落实；它们约束输入和已生成的数据规模，不能替代操作系统的 CPU/内存隔离。完整回归和独立 Spec/Quality 结论仍由主 Agent 收口，不能用这里的定向 PASS 替代。
+diff --git a/docs/changes/20261024-target-smoke/design.md b/docs/changes/20261024-target-smoke/design.md
+new file mode 100644
+index 0000000..1d838b6
+--- /dev/null
++++ b/docs/changes/20261024-target-smoke/design.md
+@@ -0,0 +1,7 @@
++# 设计
++
++优先复用已有 native campaign 有界执行能力，将底层进程预算 owner 收敛为可共享实现；smoke 与 native campaign 各自保留业务结果映射。统一总体 deadline、stdout/stderr 合计字节预算和 POSIX 进程组清理，包含直接子进程退出后仍被后代持有的管道。
++
++实现范围为 `targets.py`、必要的 native execution owner 和定向回归；不修改根 manifest、schema、CI、版本或其他发布逻辑。公共接口变化先检索全部调用点。回滚为上一正式版本。
++
++历史 lessons 路径缺失，已记录负结果。隔离环境无声明的 Knowledge Provider 与 Execution Policy，记为环境 not-run；不把本地受控 smoke 当作 Native 或 live 资格。
+diff --git a/docs/changes/20261024-target-smoke/evidence/first-pass-with-resource-warnings.txt b/docs/changes/20261024-target-smoke/evidence/first-pass-with-resource-warnings.txt
+new file mode 100644
+index 0000000..f0ff0cc
+--- /dev/null
++++ b/docs/changes/20261024-target-smoke/evidence/first-pass-with-resource-warnings.txt
+@@ -0,0 +1,43 @@
++test_exact_combined_output_budget_passes (test_target_smoke.TargetSmokeBudgetTest.test_exact_combined_output_budget_passes) ... ok
++test_exited_launcher_pipe_holders_obey_the_same_deadline (test_target_smoke.TargetSmokeBudgetTest.test_exited_launcher_pipe_holders_obey_the_same_deadline) ... ok
++test_nonzero_exit_keeps_bounded_diagnostics (test_target_smoke.TargetSmokeBudgetTest.test_nonzero_exit_keeps_bounded_diagnostics) ... /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_subprocess.py:125: ResourceWarning: unclosed transport <_UnixSubprocessTransport pid=9 returncode=0 stdout=<_UnixReadPipeTransport fd=7 open> stderr=<_UnixReadPipeTransport fd=9 open>>
++  _warn(f"unclosed transport {self!r}", ResourceWarning, source=self)
++ResourceWarning: Enable tracemalloc to get the object allocation traceback
++Exception ignored in: <function BaseSubprocessTransport.__del__ at 0x7f52df089620>
++Traceback (most recent call last):
++  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_subprocess.py", line 126, in __del__
++    self.close()
++  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_subprocess.py", line 104, in close
++    proto.pipe.close()
++  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/unix_events.py", line 568, in close
++    self._close(None)
++  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/unix_events.py", line 592, in _close
++    self._loop.call_soon(self._call_connection_lost, exc)
++  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py", line 799, in call_soon
++    self._check_closed()
++  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py", line 545, in _check_closed
++    raise RuntimeError('Event loop is closed')
++RuntimeError: Event loop is closed
++/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py:404: ResourceWarning: unclosed file <_io.FileIO name=7 mode='rb' closefd=True>
++  parsed = [sys.intern(str(x)) for x in rel.split(sep) if x and x != '.']
++ResourceWarning: Enable tracemalloc to get the object allocation traceback
++/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py:404: ResourceWarning: unclosed file <_io.FileIO name=9 mode='rb' closefd=True>
++  parsed = [sys.intern(str(x)) for x in rel.split(sep) if x and x != '.']
++ResourceWarning: Enable tracemalloc to get the object allocation traceback
++/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/unix_events.py:572: ResourceWarning: unclosed transport <_UnixReadPipeTransport closing fd=7 open>
++  _warn(f"unclosed transport {self!r}", ResourceWarning, source=self)
++ResourceWarning: Enable tracemalloc to get the object allocation traceback
++/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/unix_events.py:572: ResourceWarning: unclosed transport <_UnixReadPipeTransport fd=9 open>
++  _warn(f"unclosed transport {self!r}", ResourceWarning, source=self)
++ResourceWarning: Enable tracemalloc to get the object allocation traceback
++ok
++test_public_cli_output_overflow_is_nonzero_and_private (test_target_smoke.TargetSmokeBudgetTest.test_public_cli_output_overflow_is_nonzero_and_private) ... ok
++test_sixteen_megabyte_output_fails_with_sanitized_budget_code (test_target_smoke.TargetSmokeBudgetTest.test_sixteen_megabyte_output_fails_with_sanitized_budget_code) ... ok
++test_stdout_and_stderr_share_one_budget (test_target_smoke.TargetSmokeBudgetTest.test_stdout_and_stderr_share_one_budget) ... ok
++test_success_retains_only_digests_counts_and_exit (test_target_smoke.TargetSmokeBudgetTest.test_success_retains_only_digests_counts_and_exit) ... ok
++test_timeout_stops_descendant_before_returning (test_target_smoke.TargetSmokeBudgetTest.test_timeout_stops_descendant_before_returning) ... ok
++
++----------------------------------------------------------------------
++Ran 8 tests in 7.885s
++
++OK
+diff --git a/docs/changes/20261024-target-smoke/evidence/green-module-budget.txt b/docs/changes/20261024-target-smoke/evidence/green-module-budget.txt
+new file mode 100644
+index 0000000..5918d4a
+--- /dev/null
++++ b/docs/changes/20261024-target-smoke/evidence/green-module-budget.txt
+@@ -0,0 +1,2 @@
++{"default_max_bytes": 30000, "import_fan_out_hotspot": "src/agent_dev_kit/cli.py", "largest_baseline_bytes": 0, "legacy_exception_count": 0, "max_import_fan_out": 28, "observed_max_import_fan_out": 26, "preferred_execution_namespace": "execution_policy", "schema": "adk-module-size-budget/v1", "status": "pass", "support_module_count": 0, "transitional_support_debt_count": 0}
++[PASS] module size and bounded-context architecture policy pass
+diff --git a/docs/changes/20261024-target-smoke/evidence/green-native-boundaries.txt b/docs/changes/20261024-target-smoke/evidence/green-native-boundaries.txt
+new file mode 100644
+index 0000000..2f406f9
+--- /dev/null
++++ b/docs/changes/20261024-target-smoke/evidence/green-native-boundaries.txt
+@@ -0,0 +1,8 @@
++test_bounded_context_modules_stay_under_repository_default_budget (test_native_campaign_boundaries.NativeCampaignBoundaryTest.test_bounded_context_modules_stay_under_repository_default_budget) ... ok
++test_dependency_direction_is_contract_to_execution_to_orchestration (test_native_campaign_boundaries.NativeCampaignBoundaryTest.test_dependency_direction_is_contract_to_execution_to_orchestration) ... ok
++test_native_campaign_v2_is_the_only_active_certification_contract (test_native_campaign_boundaries.NativeCampaignBoundaryTest.test_native_campaign_v2_is_the_only_active_certification_contract) ... ok
++
++----------------------------------------------------------------------
++Ran 3 tests in 0.018s
++
++OK
+diff --git a/docs/changes/20261024-target-smoke/evidence/green-native-campaign.txt b/docs/changes/20261024-target-smoke/evidence/green-native-campaign.txt
+new file mode 100644
+index 0000000..4412eae
+--- /dev/null
++++ b/docs/changes/20261024-target-smoke/evidence/green-native-campaign.txt
+@@ -0,0 +1,5 @@
++..................................
++----------------------------------------------------------------------
++Ran 34 tests in 7.872s
++
++OK
+diff --git a/docs/changes/20261024-target-smoke/evidence/green-python38-host-smoke.txt b/docs/changes/20261024-target-smoke/evidence/green-python38-host-smoke.txt
+new file mode 100644
+index 0000000..35e7477
+--- /dev/null
++++ b/docs/changes/20261024-target-smoke/evidence/green-python38-host-smoke.txt
+@@ -0,0 +1,14 @@
++test_exact_combined_output_budget_passes (test_target_smoke.TargetSmokeBudgetTest) ... ok
++test_exited_launcher_pipe_holders_obey_the_same_deadline (test_target_smoke.TargetSmokeBudgetTest) ... ok
++test_nonzero_exit_keeps_bounded_diagnostics (test_target_smoke.TargetSmokeBudgetTest) ... ok
++test_public_cli_output_overflow_is_nonzero_and_private (test_target_smoke.TargetSmokeBudgetTest) ... ok
++test_sixteen_megabyte_output_fails_with_sanitized_budget_code (test_target_smoke.TargetSmokeBudgetTest) ... ok
++test_stdout_and_stderr_share_one_budget (test_target_smoke.TargetSmokeBudgetTest) ... ok
++test_success_retains_only_digests_counts_and_exit (test_target_smoke.TargetSmokeBudgetTest) ... ok
++test_timeout_closes_pipe_transports_before_the_event_loop (test_target_smoke.TargetSmokeBudgetTest) ... ok
++test_timeout_stops_descendant_before_returning (test_target_smoke.TargetSmokeBudgetTest) ... ok
++
++----------------------------------------------------------------------
++Ran 9 tests in 9.644s
++
++OK
+diff --git a/docs/changes/20261024-target-smoke/evidence/green-python38-host-timeout.txt b/docs/changes/20261024-target-smoke/evidence/green-python38-host-timeout.txt
+new file mode 100644
+index 0000000..a033dc1
+--- /dev/null
++++ b/docs/changes/20261024-target-smoke/evidence/green-python38-host-timeout.txt
+@@ -0,0 +1,6 @@
++test_timeout_stops_descendant_before_returning (test_target_smoke.TargetSmokeBudgetTest) ... ok
++
++----------------------------------------------------------------------
++Ran 1 test in 3.416s
++
++OK
+diff --git a/docs/changes/20261024-target-smoke/evidence/green-suppress-quality.txt b/docs/changes/20261024-target-smoke/evidence/green-suppress-quality.txt
+new file mode 100644
+index 0000000..fb8fc98
+--- /dev/null
++++ b/docs/changes/20261024-target-smoke/evidence/green-suppress-quality.txt
+@@ -0,0 +1,2 @@
++All checks passed!
++Success: no issues found in 1 source file
+diff --git a/docs/changes/20261024-target-smoke/evidence/green-suppress-smoke.txt b/docs/changes/20261024-target-smoke/evidence/green-suppress-smoke.txt
+new file mode 100644
+index 0000000..3c433a4
+--- /dev/null
++++ b/docs/changes/20261024-target-smoke/evidence/green-suppress-smoke.txt
+@@ -0,0 +1,14 @@
++test_exact_combined_output_budget_passes (test_target_smoke.TargetSmokeBudgetTest.test_exact_combined_output_budget_passes) ... ok
++test_exited_launcher_pipe_holders_obey_the_same_deadline (test_target_smoke.TargetSmokeBudgetTest.test_exited_launcher_pipe_holders_obey_the_same_deadline) ... ok
++test_nonzero_exit_keeps_bounded_diagnostics (test_target_smoke.TargetSmokeBudgetTest.test_nonzero_exit_keeps_bounded_diagnostics) ... ok
++test_public_cli_output_overflow_is_nonzero_and_private (test_target_smoke.TargetSmokeBudgetTest.test_public_cli_output_overflow_is_nonzero_and_private) ... ok
++test_sixteen_megabyte_output_fails_with_sanitized_budget_code (test_target_smoke.TargetSmokeBudgetTest.test_sixteen_megabyte_output_fails_with_sanitized_budget_code) ... ok
++test_stdout_and_stderr_share_one_budget (test_target_smoke.TargetSmokeBudgetTest.test_stdout_and_stderr_share_one_budget) ... ok
++test_success_retains_only_digests_counts_and_exit (test_target_smoke.TargetSmokeBudgetTest.test_success_retains_only_digests_counts_and_exit) ... ok
++test_timeout_closes_pipe_transports_before_the_event_loop (test_target_smoke.TargetSmokeBudgetTest.test_timeout_closes_pipe_transports_before_the_event_loop) ... ok
++test_timeout_stops_descendant_before_returning (test_target_smoke.TargetSmokeBudgetTest.test_timeout_stops_descendant_before_returning) ... ok
++
++----------------------------------------------------------------------
++Ran 9 tests in 9.056s
++
++OK
+diff --git a/docs/changes/20261024-target-smoke/evidence/green-target-contracts.txt b/docs/changes/20261024-target-smoke/evidence/green-target-contracts.txt
+new file mode 100644
+index 0000000..65737ff
+--- /dev/null
++++ b/docs/changes/20261024-target-smoke/evidence/green-target-contracts.txt
+@@ -0,0 +1,6 @@
++.........
++----------------------------------------------------------------------
++Ran 9 tests in 9.051s
++
++OK
++[PASS] target contracts
+diff --git a/docs/changes/20261024-target-smoke/evidence/red-python38-sandbox-timeout.txt b/docs/changes/20261024-target-smoke/evidence/red-python38-sandbox-timeout.txt
+new file mode 100644
+index 0000000..b06aac5
+--- /dev/null
++++ b/docs/changes/20261024-target-smoke/evidence/red-python38-sandbox-timeout.txt
+@@ -0,0 +1,16 @@
++test_timeout_stops_descendant_before_returning (test_target_smoke.TargetSmokeBudgetTest) ... FAIL
++
++======================================================================
++FAIL: test_timeout_stops_descendant_before_returning (test_target_smoke.TargetSmokeBudgetTest)
++----------------------------------------------------------------------
++Traceback (most recent call last):
++  File "/workspace/scratch/712af632e2a5/agent-dev-kit/tests/test_target_smoke.py", line 155, in test_timeout_stops_descendant_before_returning
++    self.check_descendant_timeout(launcher_exits=False)
++  File "/workspace/scratch/712af632e2a5/agent-dev-kit/tests/test_target_smoke.py", line 142, in check_descendant_timeout
++    self.assertLess(elapsed, 2.75)
++AssertionError: 6.11528599599842 not less than 2.75
++
++----------------------------------------------------------------------
++Ran 1 test in 6.117s
++
++FAILED (failures=1)
+diff --git a/docs/changes/20261024-target-smoke/evidence/red-target-smoke.json b/docs/changes/20261024-target-smoke/evidence/red-target-smoke.json
+new file mode 100644
+index 0000000..6fde52f
+--- /dev/null
++++ b/docs/changes/20261024-target-smoke/evidence/red-target-smoke.json
+@@ -0,0 +1,11 @@
++{
++  "format": "retained-command-output/v1",
++  "original_path": "docs/changes/20261024-target-smoke/evidence/red-target-smoke.txt",
++  "original_commit": "fa0bf9691e24113a0064cbe4c7f6f62ca6e1bb47",
++  "original_git_blob": "9e262b76649f2dc08a834d5fe0f766ead0880b1f",
++  "raw_bytes": 4646,
++  "raw_sha256": "46f04ed1e3214d41a608577267c9bd6f56f0860b4c605ee22ff916547d654acb",
++  "encoding": "base64",
++  "raw_base64": "dGVzdF9leGFjdF9jb21iaW5lZF9vdXRwdXRfYnVkZ2V0X3Bhc3NlcyAodGVzdF90YXJnZXRfc21va2UuVGFyZ2V0U21va2VCdWRnZXRUZXN0LnRlc3RfZXhhY3RfY29tYmluZWRfb3V0cHV0X2J1ZGdldF9wYXNzZXMpIC4uLiBvawp0ZXN0X2V4aXRlZF9sYXVuY2hlcl9waXBlX2hvbGRlcnNfb2JleV90aGVfc2FtZV9kZWFkbGluZSAodGVzdF90YXJnZXRfc21va2UuVGFyZ2V0U21va2VCdWRnZXRUZXN0LnRlc3RfZXhpdGVkX2xhdW5jaGVyX3BpcGVfaG9sZGVyc19vYmV5X3RoZV9zYW1lX2RlYWRsaW5lKSAuLi4gRkFJTAp0ZXN0X25vbnplcm9fZXhpdF9rZWVwc19ib3VuZGVkX2RpYWdub3N0aWNzICh0ZXN0X3RhcmdldF9zbW9rZS5UYXJnZXRTbW9rZUJ1ZGdldFRlc3QudGVzdF9ub256ZXJvX2V4aXRfa2VlcHNfYm91bmRlZF9kaWFnbm9zdGljcykgLi4uIG9rCnRlc3RfcHVibGljX2NsaV9vdXRwdXRfb3ZlcmZsb3dfaXNfbm9uemVyb19hbmRfcHJpdmF0ZSAodGVzdF90YXJnZXRfc21va2UuVGFyZ2V0U21va2VCdWRnZXRUZXN0LnRlc3RfcHVibGljX2NsaV9vdXRwdXRfb3ZlcmZsb3dfaXNfbm9uemVyb19hbmRfcHJpdmF0ZSkgLi4uIEZBSUwKdGVzdF9zaXh0ZWVuX21lZ2FieXRlX291dHB1dF9mYWlsc193aXRoX3Nhbml0aXplZF9idWRnZXRfY29kZSAodGVzdF90YXJnZXRfc21va2UuVGFyZ2V0U21va2VCdWRnZXRUZXN0LnRlc3Rfc2l4dGVlbl9tZWdhYnl0ZV9vdXRwdXRfZmFpbHNfd2l0aF9zYW5pdGl6ZWRfYnVkZ2V0X2NvZGUpIC4uLiBGQUlMCnRlc3Rfc3Rkb3V0X2FuZF9zdGRlcnJfc2hhcmVfb25lX2J1ZGdldCAodGVzdF90YXJnZXRfc21va2UuVGFyZ2V0U21va2VCdWRnZXRUZXN0LnRlc3Rfc3Rkb3V0X2FuZF9zdGRlcnJfc2hhcmVfb25lX2J1ZGdldCkgLi4uIEZBSUwKdGVzdF9zdWNjZXNzX3JldGFpbnNfb25seV9kaWdlc3RzX2NvdW50c19hbmRfZXhpdCAodGVzdF90YXJnZXRfc21va2UuVGFyZ2V0U21va2VCdWRnZXRUZXN0LnRlc3Rfc3VjY2Vzc19yZXRhaW5zX29ubHlfZGlnZXN0c19jb3VudHNfYW5kX2V4aXQpIC4uLiBvawp0ZXN0X3RpbWVvdXRfc3RvcHNfZGVzY2VuZGFudF9iZWZvcmVfcmV0dXJuaW5nICh0ZXN0X3RhcmdldF9zbW9rZS5UYXJnZXRTbW9rZUJ1ZGdldFRlc3QudGVzdF90aW1lb3V0X3N0b3BzX2Rlc2NlbmRhbnRfYmVmb3JlX3JldHVybmluZykgLi4uIEZBSUwKCj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KRkFJTDogdGVzdF9leGl0ZWRfbGF1bmNoZXJfcGlwZV9ob2xkZXJzX29iZXlfdGhlX3NhbWVfZGVhZGxpbmUgKHRlc3RfdGFyZ2V0X3Ntb2tlLlRhcmdldFNtb2tlQnVkZ2V0VGVzdC50ZXN0X2V4aXRlZF9sYXVuY2hlcl9waXBlX2hvbGRlcnNfb2JleV90aGVfc2FtZV9kZWFkbGluZSkKLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQpUcmFjZWJhY2sgKG1vc3QgcmVjZW50IGNhbGwgbGFzdCk6CiAgRmlsZSAiL3dvcmtzcGFjZS9zY3JhdGNoLzcxMmFmNjMyZTJhNS9hZ2VudC1kZXYta2l0L3Rlc3RzL3Rlc3RfdGFyZ2V0X3Ntb2tlLnB5IiwgbGluZSAxMjAsIGluIHRlc3RfZXhpdGVkX2xhdW5jaGVyX3BpcGVfaG9sZGVyc19vYmV5X3RoZV9zYW1lX2RlYWRsaW5lCiAgICBzZWxmLmNoZWNrX2Rlc2NlbmRhbnRfdGltZW91dChsYXVuY2hlcl9leGl0cz1UcnVlKQogIEZpbGUgIi93b3Jrc3BhY2Uvc2NyYXRjaC83MTJhZjYzMmUyYTUvYWdlbnQtZGV2LWtpdC90ZXN0cy90ZXN0X3RhcmdldF9zbW9rZS5weSIsIGxpbmUgMTExLCBpbiBjaGVja19kZXNjZW5kYW50X3RpbWVvdXQKICAgIHNlbGYuYXNzZXJ0RmFsc2UobWFya2VyLmV4aXN0cygpLCAiZGVzY2VuZGFudCBzdXJ2aXZlZCB0aGUgdGltZW91dCBjbGVhbnVwIikKQXNzZXJ0aW9uRXJyb3I6IFRydWUgaXMgbm90IGZhbHNlIDogZGVzY2VuZGFudCBzdXJ2aXZlZCB0aGUgdGltZW91dCBjbGVhbnVwCgo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CkZBSUw6IHRlc3RfcHVibGljX2NsaV9vdXRwdXRfb3ZlcmZsb3dfaXNfbm9uemVyb19hbmRfcHJpdmF0ZSAodGVzdF90YXJnZXRfc21va2UuVGFyZ2V0U21va2VCdWRnZXRUZXN0LnRlc3RfcHVibGljX2NsaV9vdXRwdXRfb3ZlcmZsb3dfaXNfbm9uemVyb19hbmRfcHJpdmF0ZSkKLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQpUcmFjZWJhY2sgKG1vc3QgcmVjZW50IGNhbGwgbGFzdCk6CiAgRmlsZSAiL3dvcmtzcGFjZS9zY3JhdGNoLzcxMmFmNjMyZTJhNS9hZ2VudC1kZXYta2l0L3Rlc3RzL3Rlc3RfdGFyZ2V0X3Ntb2tlLnB5IiwgbGluZSA5MCwgaW4gdGVzdF9wdWJsaWNfY2xpX291dHB1dF9vdmVyZmxvd19pc19ub256ZXJvX2FuZF9wcml2YXRlCiAgICBzZWxmLmFzc2VydEVxdWFsKGNvbXBsZXRlZC5yZXR1cm5jb2RlLCAxLCBjb21wbGV0ZWQuc3RkZXJyKQpBc3NlcnRpb25FcnJvcjogMCAhPSAxIDogCgo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CkZBSUw6IHRlc3Rfc2l4dGVlbl9tZWdhYnl0ZV9vdXRwdXRfZmFpbHNfd2l0aF9zYW5pdGl6ZWRfYnVkZ2V0X2NvZGUgKHRlc3RfdGFyZ2V0X3Ntb2tlLlRhcmdldFNtb2tlQnVkZ2V0VGVzdC50ZXN0X3NpeHRlZW5fbWVnYWJ5dGVfb3V0cHV0X2ZhaWxzX3dpdGhfc2FuaXRpemVkX2J1ZGdldF9jb2RlKQotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tClRyYWNlYmFjayAobW9zdCByZWNlbnQgY2FsbCBsYXN0KToKICBGaWxlICIvd29ya3NwYWNlL3NjcmF0Y2gvNzEyYWY2MzJlMmE1L2FnZW50LWRldi1raXQvdGVzdHMvdGVzdF90YXJnZXRfc21va2UucHkiLCBsaW5lIDYxLCBpbiB0ZXN0X3NpeHRlZW5fbWVnYWJ5dGVfb3V0cHV0X2ZhaWxzX3dpdGhfc2FuaXRpemVkX2J1ZGdldF9jb2RlCiAgICBzZWxmLmFzc2VydEVxdWFsKHJlc3VsdFsic3RhdHVzIl0sICJmYWlsIikKQXNzZXJ0aW9uRXJyb3I6ICdwYXNzJyAhPSAnZmFpbCcKLSBwYXNzCisgZmFpbAoKCj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KRkFJTDogdGVzdF9zdGRvdXRfYW5kX3N0ZGVycl9zaGFyZV9vbmVfYnVkZ2V0ICh0ZXN0X3RhcmdldF9zbW9rZS5UYXJnZXRTbW9rZUJ1ZGdldFRlc3QudGVzdF9zdGRvdXRfYW5kX3N0ZGVycl9zaGFyZV9vbmVfYnVkZ2V0KQotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tClRyYWNlYmFjayAobW9zdCByZWNlbnQgY2FsbCBsYXN0KToKICBGaWxlICIvd29ya3NwYWNlL3NjcmF0Y2gvNzEyYWY2MzJlMmE1L2FnZW50LWRldi1raXQvdGVzdHMvdGVzdF90YXJnZXRfc21va2UucHkiLCBsaW5lIDcwLCBpbiB0ZXN0X3N0ZG91dF9hbmRfc3RkZXJyX3NoYXJlX29uZV9idWRnZXQKICAgIHNlbGYuYXNzZXJ0RXF1YWwocmVzdWx0WyJzdGF0dXMiXSwgImZhaWwiKQpBc3NlcnRpb25FcnJvcjogJ3Bhc3MnICE9ICdmYWlsJwotIHBhc3MKKyBmYWlsCgoKPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQpGQUlMOiB0ZXN0X3RpbWVvdXRfc3RvcHNfZGVzY2VuZGFudF9iZWZvcmVfcmV0dXJuaW5nICh0ZXN0X3RhcmdldF9zbW9rZS5UYXJnZXRTbW9rZUJ1ZGdldFRlc3QudGVzdF90aW1lb3V0X3N0b3BzX2Rlc2NlbmRhbnRfYmVmb3JlX3JldHVybmluZykKLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQpUcmFjZWJhY2sgKG1vc3QgcmVjZW50IGNhbGwgbGFzdCk6CiAgRmlsZSAiL3dvcmtzcGFjZS9zY3JhdGNoLzcxMmFmNjMyZTJhNS9hZ2VudC1kZXYta2l0L3Rlc3RzL3Rlc3RfdGFyZ2V0X3Ntb2tlLnB5IiwgbGluZSAxMTYsIGluIHRlc3RfdGltZW91dF9zdG9wc19kZXNjZW5kYW50X2JlZm9yZV9yZXR1cm5pbmcKICAgIHNlbGYuY2hlY2tfZGVzY2VuZGFudF90aW1lb3V0KGxhdW5jaGVyX2V4aXRzPUZhbHNlKQogIEZpbGUgIi93b3Jrc3BhY2Uvc2NyYXRjaC83MTJhZjYzMmUyYTUvYWdlbnQtZGV2LWtpdC90ZXN0cy90ZXN0X3RhcmdldF9zbW9rZS5weSIsIGxpbmUgMTExLCBpbiBjaGVja19kZXNjZW5kYW50X3RpbWVvdXQKICAgIHNlbGYuYXNzZXJ0RmFsc2UobWFya2VyLmV4aXN0cygpLCAiZGVzY2VuZGFudCBzdXJ2aXZlZCB0aGUgdGltZW91dCBjbGVhbnVwIikKQXNzZXJ0aW9uRXJyb3I6IFRydWUgaXMgbm90IGZhbHNlIDogZGVzY2VuZGFudCBzdXJ2aXZlZCB0aGUgdGltZW91dCBjbGVhbnVwCgotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tClJhbiA4IHRlc3RzIGluIDUuODI2cwoKRkFJTEVEIChmYWlsdXJlcz01KQo=",
++  "packaging_note": "Lossless representation of the original failed unittest output, including its trailing space. Decode raw_base64 to recover the exact original bytes. This changes only the container format, not the observed failure."
++}
+diff --git a/docs/changes/20261024-target-smoke/evidence/red-transport-cleanup.txt b/docs/changes/20261024-target-smoke/evidence/red-transport-cleanup.txt
+new file mode 100644
+index 0000000..80734b6
+--- /dev/null
++++ b/docs/changes/20261024-target-smoke/evidence/red-transport-cleanup.txt
+@@ -0,0 +1,15 @@
++test_timeout_closes_pipe_transports_before_the_event_loop (test_target_smoke.TargetSmokeBudgetTest.test_timeout_closes_pipe_transports_before_the_event_loop) ... FAIL
++
++======================================================================
++FAIL: test_timeout_closes_pipe_transports_before_the_event_loop (test_target_smoke.TargetSmokeBudgetTest.test_timeout_closes_pipe_transports_before_the_event_loop)
++----------------------------------------------------------------------
++Traceback (most recent call last):
++  File "/workspace/scratch/712af632e2a5/agent-dev-kit/tests/test_target_smoke.py", line 120, in test_timeout_closes_pipe_transports_before_the_event_loop
++    self.assertEqual(completed.stderr, "", "pipe cleanup leaked transports or event-loop callbacks")
++AssertionError: '/opt/codex/runtimes/codex-primary-runtime[2523 chars]ck\n' != ''
++Diff is 2591 characters long. Set self.maxDiff to None to see it. : pipe cleanup leaked transports or event-loop callbacks
++
++----------------------------------------------------------------------
++Ran 1 test in 1.330s
++
++FAILED (failures=1)
+diff --git a/docs/changes/20261024-target-smoke/evidence/source-fingerprints.json b/docs/changes/20261024-target-smoke/evidence/source-fingerprints.json
+new file mode 100644
+index 0000000..424f354
+--- /dev/null
++++ b/docs/changes/20261024-target-smoke/evidence/source-fingerprints.json
+@@ -0,0 +1,26 @@
++{
++  "files": {
++    "src/agent_dev_kit/native_campaign_execution.py": {
++      "bytes": 15003,
++      "sha256": "4855a70b34ec92839c0b7f52e750f534b031c7f23e9bdc6311bfd9c26d2fc397"
++    },
++    "src/agent_dev_kit/process_execution.py": {
++      "bytes": 5941,
++      "sha256": "0951d70f54e1e0bec8cb1121b0ead209ed937cecd32d625daecd0d70c6b3ef60"
++    },
++    "src/agent_dev_kit/targets.py": {
++      "bytes": 17459,
++      "sha256": "3461f680eb175a5290b472bd71931cee1358cc41d540dd6fb8e842b951b1d5d9"
++    },
++    "tests/test_target_contracts.sh": {
++      "bytes": 22058,
++      "sha256": "74b8741210c9c1f173a9068744a66e1ccf39a94ca900341dfa3e141e7299d669"
++    },
++    "tests/test_target_smoke.py": {
++      "bytes": 7739,
++      "sha256": "fb941ffdbd753eefa16d7b8178144543c77895665a0dd8935359bb891e5fa7b9"
++    }
++  },
++  "platform": "Linux",
++  "python": "3.12.14"
++}
+diff --git a/docs/changes/20261024-target-smoke/negative-results.md b/docs/changes/20261024-target-smoke/negative-results.md
+new file mode 100644
+index 0000000..bd6ba5e
+--- /dev/null
++++ b/docs/changes/20261024-target-smoke/negative-results.md
+@@ -0,0 +1,39 @@
++# 负向证据
++
++## 修改前真实行为测试
++
++- 基线：`415590db44e88979185efb850e2339a3f95411ef`。
++- 新测试从冻结验收条件派生，先在旧 `targets.py` 执行；没有 mock runtime 或改动资格合同。
++- 命令：`PYTHONPATH=src python3 -m unittest discover -s tests -p test_target_smoke.py -v`。
++- 结果：8 项运行，3 项通过、5 项失败，exit 1，5.826 秒。原始输出见 `evidence/red-target-smoke.json`：按原字节 base64 保存，含 SHA256、字节数与原 Git blob，解码后逐字节恢复日志。
++
++证据封装补充：独立全 patch 的格式检查实际发现原 unittest 输出 `AssertionError: 0 != 1 : ` 自带尾空格，原 `check-format.sh` 会拒绝该明文新增文件。未修改格式门禁，也未裁剪失败输出；现以 JSON/base64 无损保存全部 4646 字节，SHA256 为 `46f04ed1e3214d41a608577267c9bd6f56f0860b4c605ee22ff916547d654acb`。原明文仍存在于实现提交 `fa0bf9691e24113a0064cbe4c7f6f62ca6e1bb47` 的 blob `9e262b76649f2dc08a834d5fe0f766ead0880b1f`。解码、Git blob 与仓外保留原件已逐字节核对，完整分支 diff 格式检查随后通过。
++- 两个真实进程组反例均发现：报告 timeout 后后代仍写 marker（父进程存活和提前退出持 pipe 两种情况）。
++- 16 MiB stdout、stdout/stderr 各 600 KiB 的合计超量均被旧入口接受；公共 CLI 对超量返回 0。
++- 成功/nonzero 的计数和摘要语义、合计恰好 1 MiB 边界已经通过，后续修复不得破坏。
++
++## 调用点检索
++
++迁移前全库检索 `_kill_process`、`_drain`、`_execute_async`、`_execute`、`native_campaign_execution`、`run_target_smoke`。生产调用点为 `delivery_cli.py` 和 native orchestration；native 测试导入 `_execute` 与 `_semantic_assertion`。保留 native `_execute` 的业务错误映射，不建立兼容 alias；底层执行 owner 下沉为 stdlib-only 共享模块，避免 targets/native 反向依赖。动态外部私有符号使用不属于已声明公共 API。
++
++## 第一版提取暴露的 transport 清理缺口
++
++首次从 native reader/task 实现提取共享 owner 后，8 项 smoke 行为断言通过，但实际运行输出仍出现 `ResourceWarning` 与 `Event loop is closed`。不能把该运行当作无缺陷验证。原始输出见 `evidence/first-pass-with-resource-warnings.txt`。
++
++根因是已退出 launcher 的后代仍持有管道；取消 StreamReader task 并不关闭底层 pipe transport。先补真实独立 Python 进程回归，开启 `ResourceWarning` 并触发垃圾回收，要求 stderr 为空。旧提取实现运行 1 项、失败 1 项、exit 1，1.330 秒；原始输出见 `evidence/red-transport-cleanup.txt`。
++
++随后改用公开 `asyncio.SubprocessProtocol` / `SubprocessTransport` 统一持有进程和管道，在失败时终止进程组、关闭 transport，并等待完整关闭；不访问 `Process._transport` 私有字段。Python 文档明确区分 `process_exited` 与管道关闭，并公开 `SubprocessTransport.close()`：<https://docs.python.org/3/library/asyncio-protocol.html>。
++
++## 范围
++
++探针仅使用隔离临时目录和本地 Python 进程。没有模型调用、Native 认证、现场证据或远端写入。历史 lessons 与 Knowledge Provider 的环境缺口沿用本 change 设计中已记录的事实。
++
++## Python 3.8 的隔离环境负例与同源对照
++
++独立 reviewer 在 CPython 3.8.20 / PyYAML 6.0.3 / jsonschema 4.17.3 的原 smoke 测试观察到 exact-combined-budget 与 live-parent-timeout 两项失败，后者耗时约 6.14 秒；其原始记录保留在独立审查目录。实现者随后对当前 `process_execution.py` SHA-256 `01e3da0bc9cee08055dafafb178c270f8e6ece2a18de2ad542027a1b252d5b9d` 重放同一个 `test_timeout_stops_descendant_before_returning`，在默认隔离执行环境确认失败：elapsed 6.115 秒，原断言要求 <2.75 秒，原始输出见 `evidence/red-python38-sandbox-timeout.txt`。
++
++未改源码、测试、解释器或 deadline，仅通过标准工具的 `require_escalated` 在 host 进程可见性下执行完全相同测试：PASS，整个测试 3.416 秒（包含原测试额外 2.3 秒 marker 等待）。接着同源全部 9 项 smoke 在 host 环境 PASS，9.644 秒，无资源警告；原始输出见 `evidence/green-python38-host-timeout.txt` 和 `evidence/green-python38-host-smoke.txt`。
++
++这构成环境关联反证，不能把隔离环境负例直接归为已确认的产品 Python 3.8 回归。没有增加清理等待、放宽时限或删除断言；独立 reviewer 继续保存 callback lifecycle 对照并作最终同源 host 复验。本记录也不把 host 通过推断为所有隔离运行平台均已验证。
++
++独立 callback trace 随后定位到隔离环境的 `ThreadedChildWatcher` 线程→event-loop 唤醒延迟：exact 1 MiB 用例在约 0.020 秒已经 `waitpid.return` 且两路 pipe lost，但 `process_exited` 直到约 5.007 秒的 timer 唤醒才被处理；host 同脚本在 0.016570 秒 waitpid 返回后，0.016704 秒即处理 process_exited，0.017396 秒完成。live-launcher 超时用例同样已完成 waitpid 回收，只是 callback 再迟约 5.005 秒。故不是没有收割子进程，也不是生产清理等待常量本身有兼容缺陷；不为这一环境事件循环行为增加生产兼容分支。原 trace 保存在独立审核的 `lifecycle-python38-sandbox.json` / `lifecycle-python38-host.json` 中。
+diff --git a/docs/changes/20261024-target-smoke/requirements.md b/docs/changes/20261024-target-smoke/requirements.md
+new file mode 100644
+index 0000000..fa4c31f
+--- /dev/null
++++ b/docs/changes/20261024-target-smoke/requirements.md
+@@ -0,0 +1,15 @@
++# Target smoke 执行边界
++
++## 目标与边界
++
++修复 2026-10-24 全面审查 F2：公开 caller-supplied smoke 的输出与进程生命周期必须有界。冻结基线 `415590db44e88979185efb850e2339a3f95411ef`，用户授权按建议全部优化落地。风险层级 E3。
++
++保持 caller-supplied-smoke 等级和既有 Native 认证边界，不制造认证运行证据，不新增执行平台。
++
++## 验收
++
++- 正常成功与非零退出保持有界诊断和原有结果语义。
++- stdout/stderr 合计超过预算必须失败，不能无限缓冲。
++- 超时返回后后代不得继续写 marker；父进程退出但后代持有管道仍受总体 deadline 限制。
++- 输出只记摘要与计数，保留已有不泄露正文行为。
++- Native campaign 原有预算和进程组清理继续通过；平台验证范围据实声明。
+diff --git a/docs/changes/20261024-target-smoke/tasks.md b/docs/changes/20261024-target-smoke/tasks.md
+new file mode 100644
+index 0000000..8526897
+--- /dev/null
++++ b/docs/changes/20261024-target-smoke/tasks.md
+@@ -0,0 +1,6 @@
++# 任务
++
++- [x] 从验收条件补正常、超量、后代超时、父退出管道存活的行为测试，并确认旧缺陷。
++- [x] 复用并收敛有界执行 owner，保留业务合同和输出脱敏。
++- [ ] 执行 smoke / native 边界、模块预算及完整回归，保留原始验证结果。
++- [ ] 独立只读 Spec/Quality 审核；由主 Agent 统一发布核验。
+diff --git a/docs/changes/20261024-target-smoke/verification.md b/docs/changes/20261024-target-smoke/verification.md
+new file mode 100644
+index 0000000..58d2069
+--- /dev/null
++++ b/docs/changes/20261024-target-smoke/verification.md
+@@ -0,0 +1,50 @@
++# F2 实现与定向验证
++
++## 实现
++
++基线 `415590db44e88979185efb850e2339a3f95411ef`，工作分支 `fix/audit-boundaries-20261024`。`process_execution.py` 是 stdlib-only 的进程生命周期 owner，`targets.py` 与 `native_campaign_execution.py` 保留各自业务结果和错误映射。
++
++- smoke stdout/stderr 共用固定 1 MiB 预算；溢出的 chunk 不进入保留缓冲区，失败码为 `runtime_output_budget_exceeded`。
++- deadline 包含直接进程退出和全部输出管道关闭；父进程先退出不解除后代持 pipe 的超时约束。
++- 失败时 POSIX 发送 SIGKILL 到创建时隔离的原进程组，关闭所有 transport，并等待进程及管道关闭；额外清理等待最多 5 秒。本地探针确认直接子进程已被 reap。该边界不承诺清理主动创建新 session 逃出原进程组的程序。
++- 非 POSIX 保留直接子进程终止能力；本轮没有验证 Windows，也不声称等价的后代树清理。
++- stdin 采用 Native 现有的 DEVNULL 非交互约定。Native 原有 `native_campaign_output_budget_exceeded` 业务错误、stage evidence 与认证合同未变。
++- smoke 结果保持 `caller-supplied-smoke`；结果中只有运行退出码、字节计数与 SHA-256 摘要，不持久化命令/输出正文。共享 owner 的暂存原始字节只供 Native 语义匹配，大小受同一预算限制。
++
++## 实际验证
++
++环境：Linux，Python 3.12.14。Shell 经工作区 `rtk proxy`，Python 来自隔离 `audit-venv`。源码指纹保存在 `evidence/source-fingerprints.json`；这些是本地未提交修复的证据，不是正式发布或认证运行证据。
++
++| 检查 | 实际结果 | 原始输出 |
++| --- | --- | --- |
++| 修复前 smoke 行为 | 8 项，3 pass / 5 fail，exit 1 | `evidence/red-target-smoke.json`（原字节无损封装） |
++| 第一版提取后的 resource 清理缺口 | 8 项断言虽通过，但有 ResourceWarning，未计为干净成功 | `evidence/first-pass-with-resource-warnings.txt` |
++| transport 资源泄漏回归先红 | 1 项 fail，exit 1 | `evidence/red-transport-cleanup.txt` |
++| `bash tests/test_target_contracts.sh` | exit 0，原有合同检查及新增 9 项通过，9.051 秒 | `evidence/green-target-contracts.txt` |
++| `bash tests/test_native_campaign.sh` | exit 0，34 项通过，7.872 秒，无资源警告 | `evidence/green-native-campaign.txt` |
++| `python3 -m unittest discover -s tests -p test_native_campaign_boundaries.py -v` | exit 0，3 项通过 | `evidence/green-native-boundaries.txt` |
++| `bash tests/test_module_size_budget.sh` | exit 0，fan-out 26/28，oversize/support debt 均 0 | `evidence/green-module-budget.txt` |
++| `git diff --check` | exit 0 | 工具执行结果 |
++
++新增 9 项行为测试覆盖成功、非零退出、stdout/stderr 各 16 MiB、合计超限、合计恰好预算、公共 CLI 非零与摘要脱敏、父进程存活/提前退出的后代 deadline、退出后的 pipe transport 资源关闭。后代探针忽略 SIGTERM，超时返回后直接父进程 PID 已消失，继续等待后临时 marker 仍未产生。管道资源测试在独立 Python 进程开启 ResourceWarning 并触发 GC，要求 stderr 为空。
++
++## 集成阶段待完成
++
++初始定向验证阶段，隔离环境尚未提供 ruff/mypy，未将它们计为通过。后续主 Agent 已安装项目声明的质量工具；下节记录新增的实际质量检查。完整回归及版本/文档一致性检查仍由主 Agent 统一运行，避免与其他变更同时修改测试 fixture。独立 Spec/Quality 复审也由主 Agent 调度；`tasks.md` 的完整回归和复审项保持未完成。
++
++回滚为上一正式版本；本子任务未提交、推送、合并、发布或修改资格状态。
++
++## Focused quality 补充
++
++主 Agent 将新 process owner 纳入 CI focused 选项后发现两项 SIM105。实现者仅将原 `ProcessLookupError` 和 `asyncio.TimeoutError` 的 `try/except/pass` 改为 `contextlib.suppress`；清理动作、等待时长、保留原始异常的语义都不变。没有追加其他 F2 逻辑修改。
++
++- `python3 -m ruff check src/agent_dev_kit/process_execution.py --select E4,E7,E9,F,B,UP,SIM,I`：exit 0，All checks passed。
++- `python3 -m mypy --config-file pyproject.toml --cache-dir /tmp/adk-f2-focused-mypy src/agent_dev_kit/process_execution.py`：exit 0，1 source file 通过。
++- `PYTHONPATH=src python3 -m unittest discover -s tests -p test_target_smoke.py -v`：exit 0，9/9，通过耗时 9.056 秒，无资源警告。
++- `git diff --check`：exit 0。
++
++原始输出见 `evidence/green-suppress-quality.txt`、`evidence/green-suppress-smoke.txt`。原指纹文件保留为此前运行的历史快照，不覆盖旧证据；本次 `process_execution.py` SHA-256 为 `01e3da0bc9cee08055dafafb178c270f8e6ece2a18de2ad542027a1b252d5b9d`。已请独立 reviewer `/root/root_code_audit` 对这两处等价修正复核并更新最终源码绑定。
++
++## Python 3.8 的真实运行补验
++
++采用独立 reviewer 已准备的 CPython 3.8.20 环境，PyYAML 6.0.3、jsonschema 4.17.3。默认隔离执行曾触发超时清理延迟；同源码、同测试、同解释器改用标准 host 执行后，原 live-parent timeout 测试 PASS（3.416 秒，含 2.3 秒 marker 等待），全部 9 项 smoke PASS（9.644 秒），无资源警告。源码和断言未作兼容性补丁；环境关联的负例、对照和归因边界见 `negative-results.md`。最终独立审核仍负责绑定同一源码指纹并复验最低支持版本。
+diff --git a/docs/commands.md b/docs/commands.md
+index 428290d..8d3f89e 100644
+--- a/docs/commands.md
++++ b/docs/commands.md
+@@ -133,6 +133,8 @@ bash scripts/devkit.sh target smoke --target claude-code --stage discovery --pro
+ 
+ 当前 `claude-code`、`opencode` 均为 `experimental`。真实 runtime smoke 至少分 discovery、load、trigger、permission 四阶段；本地结果记录 `started_at`、`duration_ms`、runtime command SHA256、exit code 和 stdout/stderr digest，runtime/version 与可复核证据摘要必须由外部 campaign 一并留存。
+ 
++`target smoke` 使用非交互 stdin（DEVNULL），stdout/stderr 合计预算为 1 MiB；超量返回 `runtime_output_budget_exceeded`。总体超时包括直接进程退出及输出管道关闭，失败时终止并回收进程。POSIX 清理创建时隔离的原进程组；主动创建新 session 的后代不在该保证范围。其他平台只保证直接子进程终止。本地 caller-supplied smoke 的资格等级保持不变。
++
+ ## native-campaign
+ 
+ Prepare, execute, and finalize a version-pinned native discovery/load/trigger campaign without promoting the active target contract.
+@@ -410,6 +412,8 @@ bash scripts/devkit.sh release publish --version "$VERSION" --backend github --a
+ 
+ `release runtime-build` 按显式 Profile 构建 `adk-runtime-bundle/v1`，只包含版本化 Skill support tree、bundle manifest、逐文件 checksum、许可证和 SPDX SBOM。它是供外部 handoff target 导入的 platform-neutral Runtime Bundle，不是 Codex direct export；制品不包含 ADK Python 实现、测试、内部 change evidence 或 source distribution，也不会写任何运行目录。
+ 
++发布 artifact 校验会从同一已验证 source 快照，用当前可信 renderer 重建预编译 bundles，并核对完整 target/文件/目录集合、摘要、模式和 export manifest。源内 Python 不执行，所有可达 schema 不允许外部引用，support 目录在访问前须位于资产目录内；重渲染沿现有归档的总字节、单文件和成员数量预算失败关闭。归档自带的 Native registry 不构成宿主执行授权，因此该入口在调用验证程序前拒绝 runtime conformance，不提供跳过信任校验的开关；当前正式静态 target 包继续受支持，正常本地 managed Native 验证流程保持原语义。该检查验证内容一致性，来源认证仍由签名与受保护发布链承担。
++
+ ## Repeated test effect comparison
+ 
+ `adk eval compare-trials --input campaign.json --output comparison.json --summary-json` validates complete fixed-plan trials. Exit codes: 0 improved/non-inferior; 1 regressed; 2 inconclusive/invalid. Test-only; no runtime, release or product authority. See `docs/runbooks/effect-trials.md`.
+diff --git a/manifest.json b/manifest.json
+index 0dc1509..6cfa519 100644
+--- a/manifest.json
++++ b/manifest.json
+@@ -1,5 +1,5 @@
+ {
+-  "version": "8.0.39",
++  "version": "8.0.40",
+   "locale": "zh-CN",
+   "platforms": [
+     "linux-embedded",
+diff --git a/manifests/software_m5_eval_contract.json b/manifests/software_m5_eval_contract.json
+index 37244b1..b8e294b 100644
+--- a/manifests/software_m5_eval_contract.json
++++ b/manifests/software_m5_eval_contract.json
+@@ -1,6 +1,6 @@
+ {
+   "schema": "adk-runtime-eval-campaign/v1",
+-  "campaign_id": "software-m5-8.0.39",
++  "campaign_id": "software-m5-8.0.40",
+   "tasks": "tests/fixtures/software_m5_eval_tasks.jsonl",
+   "minimum_tasks": 60,
+   "runtimes": [
+diff --git a/pyproject.toml b/pyproject.toml
+index cfd4e0f..baeed0b 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -7,7 +7,7 @@ build-backend = "setuptools.build_meta"
+ 
+ [project]
+ name = "agent-dev-kit"
+-version = "8.0.39"
++version = "8.0.40"
+ description = "Platform-neutral agent asset compiler, distributor, and evaluator"
+ readme = "README.md"
+ requires-python = ">=3.8"
+diff --git a/src/agent_dev_kit/__init__.py b/src/agent_dev_kit/__init__.py
+index dc48d52..a5d0e9d 100644
+--- a/src/agent_dev_kit/__init__.py
++++ b/src/agent_dev_kit/__init__.py
+@@ -1,3 +1,3 @@
+ """agent-dev-kit structured control plane."""
+ 
+-__version__ = "8.0.39"
++__version__ = "8.0.40"
+diff --git a/src/agent_dev_kit/compiler.py b/src/agent_dev_kit/compiler.py
+index 222f62c..52aeb04 100644
+--- a/src/agent_dev_kit/compiler.py
++++ b/src/agent_dev_kit/compiler.py
+@@ -13,7 +13,7 @@ from typing import Dict, Optional, Sequence, Tuple
+ from .installation_contract import _regular_install_path
+ from .locking import TargetLock
+ from .model import Manifest, ManifestError, ensure_within
+-from .targets import render_selection
++from .targets import RenderedBundle, render_selection
+ 
+ 
+ def _export_paths(requested_root: Path, target: str) -> Tuple[Path, Path]:
+@@ -33,6 +33,33 @@ def _path_identity(path: Path) -> Optional[Tuple[int, int]]:
+     return info.st_dev, info.st_ino
+ 
+ 
++def export_manifest(manifest: Manifest, bundle: RenderedBundle) -> Dict[str, object]:
++    """Describe exactly the renderer-owned export, shared with release verification."""
++    return {
++        "schema": "adk-export-manifest/v2",
++        "schema_version": 2,
++        "manifest_version": manifest.version,
++        "manifest_sha256": manifest.digest,
++        "target": bundle.target,
++        "contract_sha256": bundle.contract.digest,
++        "contract_status": bundle.contract.status,
++        "profiles": list(bundle.resolution.profiles),
++        "optional_skills": list(bundle.optional_skills),
++        "asset_kind": bundle.asset_kind,
++        "files": [
++            {
++                "kind": rendered.kind,
++                "name": rendered.name,
++                "source": rendered.source,
++                "path": rendered.destination,
++                "sha256": rendered.sha256,
++                "mode": format(rendered.mode, "04o"),
++            }
++            for rendered in bundle.files
++        ],
++    }
++
++
+ def export_assets(
+     manifest: Manifest,
+     target: str,
+@@ -70,29 +97,7 @@ def export_assets(
+                     staged.parent.mkdir(parents=True, exist_ok=True)
+                     staged.write_bytes(rendered.content)
+                     staged.chmod(rendered.mode)
+-                inventory = {
+-                    "schema": "adk-export-manifest/v2",
+-                    "schema_version": 2,
+-                    "manifest_version": manifest.version,
+-                    "manifest_sha256": manifest.digest,
+-                    "target": target,
+-                    "contract_sha256": bundle.contract.digest,
+-                    "contract_status": bundle.contract.status,
+-                    "profiles": list(bundle.resolution.profiles),
+-                    "optional_skills": list(optional_skills),
+-                    "asset_kind": asset_kind,
+-                    "files": [
+-                        {
+-                            "kind": rendered.kind,
+-                            "name": rendered.name,
+-                            "source": rendered.source,
+-                            "path": rendered.destination,
+-                            "sha256": rendered.sha256,
+-                            "mode": format(rendered.mode, "04o"),
+-                        }
+-                        for rendered in bundle.files
+-                    ],
+-                }
++                inventory = export_manifest(manifest, bundle)
+                 (staging_target / "adk-export-manifest.json").write_text(
+                     json.dumps(inventory, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+                 )
+diff --git a/src/agent_dev_kit/distribution/archive_io.py b/src/agent_dev_kit/distribution/archive_io.py
+index f728071..af1293c 100644
+--- a/src/agent_dev_kit/distribution/archive_io.py
++++ b/src/agent_dev_kit/distribution/archive_io.py
+@@ -93,6 +93,7 @@ class _ForwardTarReader(io.RawIOBase):
+ 
+ def load_archive_snapshot(
+     artifact: Path, *, require_json: bool = True, source_inventory: dict[str, Any] | None = None,
++    bundle_inventory: dict[str, tuple[str | None, int]] | None = None,
+ ) -> tuple[bytes, dict[str, bytes]]:
+     """Inspect one bounded regular-file snapshot; never extract to the filesystem.
+ 
+@@ -104,15 +105,25 @@ def load_archive_snapshot(
+         raw = read_bounded_bytes(artifact, max_bytes=MAX_COMPRESSED_BYTES, regular_only=True)
+     except (StrictJSONError, OSError, ValueError) as exc:
+         raise ArchiveInputError("release artifact must be a bounded regular file") from exc
+-    return raw, inspect_archive_snapshot(raw, require_json=require_json, source_inventory=source_inventory)
++    return raw, inspect_archive_snapshot(raw, require_json=require_json, source_inventory=source_inventory,
++                                        bundle_inventory=bundle_inventory)
+ 
+ 
+ def inspect_archive_snapshot(
+     raw: bytes, *, require_json: bool = True, source_inventory: dict[str, Any] | None = None,
++    bundle_inventory: dict[str, tuple[str | None, int]] | None = None,
++    source_directory: Path | None = None,
+ ) -> dict[str, bytes]:
+-    """Preflight already-captured bytes without reopening a path."""
++    """Inspect captured bytes and optionally copy source into a private new directory.
++
++    The verifier requests source materialization only after a complete first
++    pass has validated this same immutable byte snapshot. No archive code is
++    imported or executed; the bounded reader remains the sole member parser.
++    """
+     if not isinstance(raw, bytes) or len(raw) > MAX_COMPRESSED_BYTES:
+         raise ArchiveInputError("release artifact exceeds compressed byte budget")
++    if source_directory is not None:
++        source_directory.mkdir(mode=0o700, exist_ok=False)
+     payloads: dict[str, bytes] = {}
+     names: dict[str, bool] = {}
+     parents: set[str] = set()
+@@ -160,19 +171,28 @@ def inspect_archive_snapshot(
+                         raise ArchiveInputError("release archive contains conflicting member paths")
+                     names[name] = member.isdir()
+                     parents.update(ancestors)
++                    bundle_member = bundle_inventory is not None and (name == "bundles" or name.startswith("bundles/"))
+                     if member.isdir():
+                         if member.size:
+                             raise ArchiveInputError("release directory member has a payload")
++                        if bundle_member:
++                            assert bundle_inventory is not None
++                            bundle_inventory[name] = (None, member.mode)
+                         continue
+-                    source_member = source_inventory is not None and name.startswith("source/")
++                    source_member = (source_inventory is not None or source_directory is not None) and name.startswith("source/")
+                     capture_json = name in _JSON_NAMES or (source_member and name == "source/manifest.json")
+-                    if not (source_member or capture_json):
++                    if not (source_member or capture_json or bundle_member):
+                         continue
+                     if capture_json and member.size > MAX_JSON_BYTES:
+                         raise ArchiveInputError("release JSON member exceeds byte budget")
+                     source = archive.extractfile(member)
+                     if source is None:
+                         raise ArchiveInputError("release regular member cannot be read")
++                    output = None
++                    if source_member and source_directory is not None:
++                        destination = source_directory.joinpath(*path.parts[1:])
++                        destination.parent.mkdir(parents=True, exist_ok=True)
++                        output = destination.open("xb")
+                     reader.payload_mode = True
+                     try:
+                         with source:
+@@ -181,6 +201,8 @@ def inspect_archive_snapshot(
+                                 size = len(data)
+                                 digest = hashlib.sha256(data).digest()
+                                 payloads[name] = data
++                                if output is not None:
++                                    output.write(data)
+                             else:
+                                 hasher = hashlib.sha256()
+                                 size = 0
+@@ -190,13 +212,21 @@ def inspect_archive_snapshot(
+                                         break
+                                     size += len(chunk)
+                                     hasher.update(chunk)
++                                    if output is not None:
++                                        output.write(chunk)
+                                 digest = hasher.digest()
+                     finally:
+                         reader.payload_mode = False
++                        if output is not None:
++                            output.close()
++                            destination.chmod(0o755 if member.mode & 0o111 else 0o644)
+                     if size != member.size:
+                         raise ArchiveInputError("release regular member is truncated")
+                     if source_member:
+                         source_digests[name[len("source/"):]] = digest
++                    if bundle_member:
++                        assert bundle_inventory is not None
++                        bundle_inventory[name] = (digest.hex(), member.mode)
+             # Tar EOF may precede gzip EOF. Account for padding/concatenated
+             # streams and validate gzip CRC rather than trusting a prefix.
+             reader.skipping = True
+diff --git a/src/agent_dev_kit/distribution/release_contract.py b/src/agent_dev_kit/distribution/release_contract.py
+index e2d125d..44497ad 100644
+--- a/src/agent_dev_kit/distribution/release_contract.py
++++ b/src/agent_dev_kit/distribution/release_contract.py
+@@ -2,7 +2,8 @@
+ 
+ The release builder remains responsible for assembly. This module is the
+ bounded contract verifier used after assembly and before provenance attestation.
+-It never extracts archive members to disk.
++After source verification, a private temporary source copy is rendered by the
++already-loaded compiler; archive Python code is never imported or executed.
+ """
+ 
+ from __future__ import annotations
+@@ -11,17 +12,22 @@ import argparse
+ import hashlib
+ import json
+ import tarfile
++import tempfile
+ from collections.abc import Mapping, Sequence
+-from pathlib import Path
++from pathlib import Path, PurePosixPath
+ from typing import Any
+ 
+ from jsonschema import Draft202012Validator
+ 
++from agent_dev_kit.compiler import export_manifest
+ from agent_dev_kit.contracts.schema_loader import packaged_schema_bytes
+-from agent_dev_kit.model import canonical_json_bytes
++from agent_dev_kit.model import Manifest, canonical_json_bytes
++from agent_dev_kit.targets import RenderBudget, _render_historical_selection
+ 
+ from ..strict_json import StrictJSONError
+ from ..strict_json import loads as load_strict_json
++from ..strict_json import read as read_strict_json
++from . import archive_io
+ from .archive_io import inspect_archive_snapshot, load_archive_snapshot
+ 
+ _SCHEMA_NAME = "release-manifest-v2.schema.json"
+@@ -68,15 +74,92 @@ def _canonical_manifest_sha256(raw: bytes) -> str:
+     return _sha256(canonical_json_bytes(value))
+ 
+ 
++def _offline_render_schema(path: Path) -> None:
++    """Do not allow archived schema data to initiate reference network requests."""
++    schema = read_strict_json(path, regular_only=True)
++    pending = [schema]
++    while pending:
++        value = pending.pop()
++        if isinstance(value, dict):
++            if value is not schema and ("$id" in value or isinstance(value.get("id"), str)):
++                raise ValueError("release bundle source schema has a nested reference scope")
++            for key in ("$ref", "$dynamicRef", "$recursiveRef"):
++                reference = value.get(key)
++                if reference is not None and (not isinstance(reference, str) or not reference.startswith("#")):
++                    raise ValueError("release bundle source schema must use local references")
++            pending.extend(value.values())
++        elif isinstance(value, list):
++            pending.extend(value)
++
++
++def _validate_bundles(
++    raw: bytes,
++    release_manifest: Mapping[str, Any],
++    actual: Mapping[str, tuple[str | None, int]],
++) -> None:
++    """Reproduce bundle bytes from the verified source, never its declared hashes."""
++    expected: dict[str, tuple[str, int]] = {}
++    targets = []
++    budget = RenderBudget(max_bytes=archive_io.MAX_DECODED_BYTES,
++                          max_file_bytes=archive_io.MAX_MEMBER_BYTES,
++                          max_files=archive_io.MAX_MEMBERS,
++                          max_name_bytes=archive_io.MAX_NAME_BYTES)
++    with tempfile.TemporaryDirectory(prefix="adk-release-bundles-") as temporary:
++        source_root = Path(temporary) / "source"
++        inspect_archive_snapshot(raw, source_directory=source_root)
++        for name in ("manifest.schema.json", "target-contract.schema.json"):
++            _offline_render_schema(source_root / "manifests" / name)
++        native_schema = source_root / "schemas" / "native-target-conformance-receipt-v2.schema.json"
++        if native_schema.exists():
++            _offline_render_schema(native_schema)
++        manifest = Manifest.load(source_root)
++        for target in sorted(manifest.direct_targets()):
++            prefix = "bundles/" + target + "/"
++            budget.check_name(prefix)
++            config = manifest.target(target)
++            kinds = config.get("supported_asset_kinds", [])
++            kind = kinds[0] if isinstance(kinds, list) and len(kinds) == 1 else None
++            bundle = _render_historical_selection(
++                manifest, target, ["embedded-fullstack"], (), kind, budget=budget, allow_native_verifier=False,
++            )
++            for rendered in bundle.files:
++                name = prefix + rendered.destination
++                budget.check_name(name)
++                expected[name] = (rendered.sha256, rendered.mode)
++            inventory = budget.file_buffer()
++            for chunk in json.JSONEncoder(ensure_ascii=False, indent=2).iterencode(export_manifest(manifest, bundle)):
++                inventory.write(chunk)
++            inventory.write("\n")
++            inventory_name = prefix + "adk-export-manifest.json"
++            budget.check_name(inventory_name)
++            expected[inventory_name] = (_sha256(inventory.finish()), 0o644)
++            targets.append({"target": target, "agents": bundle.agent_count, "skills": bundle.skill_count})
++        if sorted(release_manifest["direct_targets"], key=lambda value: value["target"]) != targets:
++            raise ValueError("release bundle target counts differ from source renderer")
++    directories = {
++        parent.as_posix() for name in expected for parent in PurePosixPath(name).parents
++        if parent != PurePosixPath(".")
++    }
++    files = {name: value for name, value in actual.items() if value[0] is not None}
++    if files != expected:
++        raise ValueError("release bundle files, bytes or modes differ from source renderer")
++    if any(name not in directories or value != (None, 0o755)
++           for name, value in actual.items() if value[0] is None):
++        raise ValueError("release bundle directories differ from source renderer")
++
++
+ def validate_release_artifact(artifact: Path, *, raw_snapshot: bytes | None = None) -> dict[str, Any]:
+-    """Validate manifest, SBOM and source-manifest identities inside an archive."""
++    """Validate archive identities and every bundle against its verified source."""
+ 
+     source_inventory: dict[str, Any] = {}
++    bundle_inventory: dict[str, tuple[str | None, int]] = {}
+     if raw_snapshot is None:
+-        raw, payloads = load_archive_snapshot(artifact, source_inventory=source_inventory)
++        raw, payloads = load_archive_snapshot(artifact, source_inventory=source_inventory,
++                                             bundle_inventory=bundle_inventory)
+     else:
+         raw = raw_snapshot
+-        payloads = inspect_archive_snapshot(raw, source_inventory=source_inventory)
++        payloads = inspect_archive_snapshot(raw, source_inventory=source_inventory,
++                                            bundle_inventory=bundle_inventory)
+     release_bytes = payloads["release-manifest.json"]
+     try:
+         release_manifest = load_strict_json(release_bytes, max_bytes=_MAX_JSON_BYTES)
+@@ -113,6 +196,15 @@ def validate_release_artifact(artifact: Path, *, raw_snapshot: bytes | None = No
+         raise ValueError("release source file count does not match archive")
+     if source_inventory["sha256"] != release_manifest["source_provenance"]["source_distribution_sha256"]:
+         raise ValueError("release source distribution digest does not match archive")
++    try:
++        _validate_bundles(raw, release_manifest, bundle_inventory)
++    except (OSError, ValueError):
++        raise
++    except Exception as exc:
++        # Archive-controlled schemas can raise reference-library exceptions or
++        # recursion errors. Keep these at the public malformed-input boundary,
++        # retaining the original cause for programmatic diagnostics.
++        raise ValueError("release bundle source could not be rendered safely") from exc
+ 
+     return {
+         "schema": "adk-release-artifact-contract/v1",
+diff --git a/src/agent_dev_kit/native_campaign_execution.py b/src/agent_dev_kit/native_campaign_execution.py
+index 4712ba9..bb8cf79 100644
+--- a/src/agent_dev_kit/native_campaign_execution.py
++++ b/src/agent_dev_kit/native_campaign_execution.py
+@@ -3,17 +3,15 @@
+ from __future__ import annotations
+ 
+ import asyncio
+-import hashlib
+ import os
+ import platform
+ import re
+-import signal
+ import tempfile
+-import time
+ from pathlib import Path
+ from typing import Any, Mapping, Sequence
+ 
+ from .model import Manifest, ManifestError, canonical_json_bytes, sha256_bytes
++from .process_execution import OutputBudgetExceeded, ProcessResult, execute_bounded
+ from .native_campaign_contract import (
+     EVIDENCE_SCHEMA,
+     MAX_OUTPUT_BYTES,
+@@ -34,101 +32,6 @@ from .target_contracts import _native_contract_digest, load_target_contract
+ from .targets import _write_bundle, render_selection
+ 
+ 
+-def _kill_process(process: asyncio.subprocess.Process) -> None:
+-    # An exited launcher can leave a grandchild in its session still holding
+-    # stdout/stderr open. Kill the original process group even after the direct
+-    # child has exited; otherwise pipe drains can outlive the execution budget.
+-    if os.name == "posix":
+-        try:
+-            os.killpg(process.pid, signal.SIGKILL)
+-        except ProcessLookupError:
+-            pass
+-    elif process.returncode is None:
+-        process.kill()
+-
+-
+-async def _drain(
+-    stream: asyncio.StreamReader,
+-    process: asyncio.subprocess.Process,
+-    limit: int,
+-    shared_total: list[int],
+-) -> tuple[int, str, bytes]:
+-    digest = hashlib.sha256()
+-    total = 0
+-    captured = bytearray()
+-    while True:
+-        chunk = await stream.read(65536)
+-        if not chunk:
+-            break
+-        total += len(chunk)
+-        # The budget covers stdout and stderr together. Both readers run on
+-        # the same event loop, so updating this counter is atomic until the
+-        # next await. Per-stream caps alone would admit twice the budget.
+-        shared_total[0] += len(chunk)
+-        if shared_total[0] > limit:
+-            _kill_process(process)
+-            raise ManifestError("native_campaign_output_budget_exceeded")
+-        digest.update(chunk)
+-        captured.extend(chunk)
+-    return total, digest.hexdigest(), bytes(captured)
+-
+-
+-async def _execute_async(
+-    command: Sequence[str],
+-    *,
+-    cwd: Path,
+-    env: Mapping[str, str],
+-    timeout_seconds: int,
+-    output_limit: int,
+-) -> dict[str, Any]:
+-    kwargs: dict[str, Any] = {}
+-    if os.name == "posix":
+-        kwargs["start_new_session"] = True
+-    process = await asyncio.create_subprocess_exec(
+-        *command,
+-        cwd=str(cwd),
+-        env=dict(env),
+-        stdin=asyncio.subprocess.DEVNULL,
+-        stdout=asyncio.subprocess.PIPE,
+-        stderr=asyncio.subprocess.PIPE,
+-        **kwargs,
+-    )
+-    assert process.stdout is not None and process.stderr is not None
+-    started = time.monotonic()
+-    shared_total = [0]
+-    stdout_task = asyncio.create_task(_drain(process.stdout, process, output_limit, shared_total))
+-    stderr_task = asyncio.create_task(_drain(process.stderr, process, output_limit, shared_total))
+-    wait_task = asyncio.create_task(process.wait())
+-    tasks = (wait_task, stdout_task, stderr_task)
+-    try:
+-        # The deadline covers process exit AND both pipe drains. A launcher can
+-        # exit early while a grandchild still owns the inherited pipe fds.
+-        _, stdout, stderr = await asyncio.wait_for(
+-            asyncio.gather(*tasks), timeout=timeout_seconds
+-        )
+-    except BaseException:
+-        # Preserve timeout/output-budget/cancellation failures while ensuring
+-        # no background reader survives the return of this invocation.
+-        _kill_process(process)
+-        for task in tasks:
+-            if not task.done():
+-                task.cancel()
+-        await asyncio.gather(*tasks, return_exceptions=True)
+-        if process.returncode is None:
+-            await asyncio.wait_for(process.wait(), timeout=5)
+-        raise
+-    return {
+-        "exit_code": int(process.returncode or 0),
+-        "duration_ms": round((time.monotonic() - started) * 1000),
+-        "stdout_bytes": stdout[0],
+-        "stdout_sha256": stdout[1],
+-        "stdout": stdout[2],
+-        "stderr_bytes": stderr[0],
+-        "stderr_sha256": stderr[1],
+-        "stderr": stderr[2],
+-    }
+-
+-
+ def _execute(
+     command: Sequence[str],
+     *,
+@@ -136,16 +39,17 @@ def _execute(
+     env: Mapping[str, str],
+     timeout_seconds: int,
+     output_limit: int,
+-) -> dict[str, Any]:
+-    return asyncio.run(
+-        _execute_async(
++) -> ProcessResult:
++    try:
++        return execute_bounded(
+             command,
+             cwd=cwd,
+             env=env,
+             timeout_seconds=timeout_seconds,
+             output_limit=output_limit,
+         )
+-    )
++    except OutputBudgetExceeded as exc:
++        raise ManifestError("native_campaign_output_budget_exceeded") from exc
+ 
+ 
+ def _base_environment(auth_mode: str) -> dict[str, str]:
+diff --git a/src/agent_dev_kit/process_execution.py b/src/agent_dev_kit/process_execution.py
+new file mode 100644
+index 0000000..3ebe72b
+--- /dev/null
++++ b/src/agent_dev_kit/process_execution.py
+@@ -0,0 +1,162 @@
++"""One bounded process lifecycle for target smoke and native campaigns.
++
++Output is captured only within an aggregate byte budget. Callers own evidence
++projection and business error codes; this module does not grant certification.
++POSIX cleanup covers the launched session's process group, including pipe
++holders left behind by an exited launcher. Other platforms kill the direct
++child only and must not claim POSIX descendant cleanup.
++"""
++
++from __future__ import annotations
++
++import asyncio
++import hashlib
++import os
++import signal
++import time
++from contextlib import suppress
++from pathlib import Path
++from typing import Mapping, Sequence, TypedDict
++
++
++class OutputBudgetExceeded(ValueError):
++    """The combined stdout/stderr budget was exceeded; no raw output escapes."""
++
++
++class ProcessResult(TypedDict):
++    exit_code: int
++    duration_ms: float
++    stdout_bytes: int
++    stdout_sha256: str
++    stdout: bytes
++    stderr_bytes: int
++    stderr_sha256: str
++    stderr: bytes
++
++
++def _kill_process(transport: asyncio.SubprocessTransport) -> None:
++    # Kill the group even when its launcher has exited: descendants can still
++    # own inherited pipes or continue work after the direct process is gone.
++    if os.name == "posix":
++        with suppress(ProcessLookupError):
++            os.killpg(transport.get_pid(), signal.SIGKILL)
++    elif transport.get_returncode() is None:
++        transport.kill()
++
++
++class _OutputProtocol(asyncio.SubprocessProtocol):
++    """Capture a bounded pair of streams and signal full transport closure."""
++
++    def __init__(self, loop: asyncio.AbstractEventLoop, output_limit: int) -> None:
++        self.completed: asyncio.Future[None] = loop.create_future()
++        self.closed: asyncio.Future[None] = loop.create_future()
++        self.output_limit = output_limit
++        self.total = 0
++        self.streams = {1: bytearray(), 2: bytearray()}
++        self.digests = {1: hashlib.sha256(), 2: hashlib.sha256()}
++
++    def pipe_data_received(self, fd: int, data: bytes) -> None:
++        if self.completed.done() or fd not in self.streams:
++            return
++        # Callbacks share one event loop. Splitting stdout/stderr never grants
++        # another budget; reject the overflowing chunk before retaining it.
++        self.total += len(data)
++        if self.total > self.output_limit:
++            self.completed.set_exception(OutputBudgetExceeded("process_output_budget_exceeded"))
++            return
++        self.streams[fd].extend(data)
++        self.digests[fd].update(data)
++
++    def pipe_connection_lost(self, fd: int, exc: Exception | None) -> None:
++        if exc is not None and not self.completed.done():
++            self.completed.set_exception(exc)
++
++    def connection_lost(self, exc: Exception | None) -> None:
++        # Process exit alone is insufficient: this callback follows closure
++        # of the complete subprocess transport, including its pipe handles.
++        if not self.completed.done():
++            if exc is not None:
++                self.completed.set_exception(exc)
++            else:
++                self.completed.set_result(None)
++        if not self.closed.done():
++            self.closed.set_result(None)
++
++
++async def execute_bounded_async(
++    command: Sequence[str],
++    *,
++    cwd: Path,
++    env: Mapping[str, str],
++    timeout_seconds: int,
++    output_limit: int,
++) -> ProcessResult:
++    if (type(timeout_seconds) is not int or timeout_seconds < 1
++            or type(output_limit) is not int or output_limit < 1):
++        raise ValueError("invalid_process_budget")
++    loop = asyncio.get_running_loop()
++    protocol = _OutputProtocol(loop, output_limit)
++    started = time.monotonic()
++    transport, _ = await loop.subprocess_exec(
++        lambda: protocol,
++        *command,
++        cwd=str(cwd),
++        env=dict(env),
++        stdin=asyncio.subprocess.DEVNULL,
++        stdout=asyncio.subprocess.PIPE,
++        stderr=asyncio.subprocess.PIPE,
++        start_new_session=os.name == "posix",
++    )
++    try:
++        # A successful direct exit is insufficient while descendants retain
++        # stdout/stderr. The same deadline bounds exit AND both pipe drains.
++        await asyncio.wait_for(
++            asyncio.shield(protocol.completed),
++            timeout=max(0, timeout_seconds - (time.monotonic() - started)),
++        )
++    except BaseException:
++        _kill_process(transport)
++        # Use public transport ownership rather than Process._transport. Closing
++        # pipes after killing the group also handles an already-exited launcher;
++        # cancelled StreamReader tasks alone would leak their underlying handles.
++        transport.close()
++        # Transport handles are closed; preserve the original failure if the
++        # bounded cleanup wait itself reaches its deadline.
++        with suppress(asyncio.TimeoutError):
++            await asyncio.wait_for(asyncio.shield(protocol.closed), timeout=5)
++        raise
++    finally:
++        transport.close()
++        if not protocol.completed.done():
++            protocol.completed.cancel()
++        elif not protocol.completed.cancelled():
++            protocol.completed.exception()
++    returncode = transport.get_returncode()
++    if returncode is None:
++        raise RuntimeError("process_closed_without_exit")
++    return {
++        "exit_code": returncode,
++        "duration_ms": round((time.monotonic() - started) * 1000),
++        "stdout_bytes": len(protocol.streams[1]),
++        "stdout_sha256": protocol.digests[1].hexdigest(),
++        "stdout": bytes(protocol.streams[1]),
++        "stderr_bytes": len(protocol.streams[2]),
++        "stderr_sha256": protocol.digests[2].hexdigest(),
++        "stderr": bytes(protocol.streams[2]),
++    }
++
++
++def execute_bounded(
++    command: Sequence[str],
++    *,
++    cwd: Path,
++    env: Mapping[str, str],
++    timeout_seconds: int,
++    output_limit: int,
++) -> ProcessResult:
++    return asyncio.run(
++        execute_bounded_async(
++            command, cwd=cwd, env=env,
++            timeout_seconds=timeout_seconds, output_limit=output_limit,
++        )
++    )
+diff --git a/src/agent_dev_kit/target_contracts.py b/src/agent_dev_kit/target_contracts.py
+index 75e0898..fd8dbd5 100644
+--- a/src/agent_dev_kit/target_contracts.py
++++ b/src/agent_dev_kit/target_contracts.py
+@@ -393,17 +393,22 @@ def load_target_contract(manifest: Manifest, target: str) -> TargetContract:
+     return _load_target_contract(manifest, target, historical=False)
+ 
+ 
+-def _load_historical_target_contract(manifest: Manifest, target: str) -> TargetContract:
++def _load_historical_target_contract(
++    manifest: Manifest, target: str, *, allow_native_verifier: bool = True,
++) -> TargetContract:
+     """Reproduce trusted installed assets without renewing target freshness.
+ 
+     Receipt timestamps are mutable, so they cannot establish a trusted clock.
+     Recovery retains all structural and native trust checks and only separates
+     natural source expiry from admission of a new install/export operation.
++    Untrusted archive callers must disallow native verifier execution explicitly.
+     """
+-    return _load_target_contract(manifest, target, historical=True)
++    return _load_target_contract(manifest, target, historical=True, allow_native_verifier=allow_native_verifier)
+ 
+ 
+-def _load_target_contract(manifest: Manifest, target: str, *, historical: bool) -> TargetContract:
++def _load_target_contract(
++    manifest: Manifest, target: str, *, historical: bool, allow_native_verifier: bool = True,
++) -> TargetContract:
+     config = manifest.target(target)
+     raw_path = config.get("contract")
+     if not isinstance(raw_path, str) or not raw_path:
+@@ -470,6 +475,10 @@ def _load_target_contract(manifest: Manifest, target: str, *, historical: bool)
+     conformance = adapter.get("conformance", {})
+     trust_verifier = None
+     if isinstance(conformance, dict) and conformance.get("level") == "runtime":
++        if not allow_native_verifier:
++            raise ManifestError(
++                "target_contract_untrusted: archive runtime conformance requires independently trusted verifier authority"
++            )
+         trust_policy = adapter.get("conformance_trust_policy")
+         if not isinstance(trust_policy, dict):
+             raise ManifestError("target_contract_untrusted: native trust policy is missing")
+diff --git a/src/agent_dev_kit/targets.py b/src/agent_dev_kit/targets.py
+index 897f95c..03d420e 100644
+--- a/src/agent_dev_kit/targets.py
++++ b/src/agent_dev_kit/targets.py
+@@ -2,11 +2,11 @@
+ 
+ from __future__ import annotations
+ 
++import asyncio
+ import os
+-import subprocess
+ import tempfile
+ import time
+-from dataclasses import dataclass
++from dataclasses import dataclass, field
+ from datetime import datetime, timezone
+ from pathlib import Path
+ from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
+@@ -23,6 +23,7 @@ from .model import (
+     sha256_bytes,
+ )
+ from .safe_yaml import safe_load
++from .process_execution import OutputBudgetExceeded, execute_bounded
+ from .target_contracts import (
+     CONTRACT_SCHEMA as CONTRACT_SCHEMA,
+     TargetContract as TargetContract,
+@@ -38,6 +39,86 @@ from .target_contracts import (
+ CHECK_SCHEMA = "adk-target-check/v1"
+ SMOKE_SCHEMA = "adk-target-smoke/v1"
+ ASSET_KINDS = ("agent", "skill")
++SMOKE_OUTPUT_LIMIT = 1024 * 1024
++
++
++@dataclass
++class RenderBudget:
++    """One caller-owned output budget, shared across files and target bundles."""
++
++    max_bytes: int
++    max_file_bytes: int
++    max_files: int
++    max_name_bytes: int
++    _bytes: int = field(default=0, init=False)
++    _files: int = field(default=0, init=False)
++
++    def __post_init__(self) -> None:
++        if any(isinstance(value, bool) or not isinstance(value, int) or value < 1
++               for value in (self.max_bytes, self.max_file_bytes, self.max_files, self.max_name_bytes)):
++            raise ValueError("render output budgets must be positive integers")
++
++    def require_files(self, count: int) -> None:
++        if count > self.max_files - self._files:
++            raise ManifestError("render_output_budget_exceeded: file count")
++
++    def check_name(self, name: str) -> None:
++        if len(name) > self.max_name_bytes or len(name.encode("utf-8")) > self.max_name_bytes:
++            raise ManifestError("render_output_budget_exceeded: file name bytes")
++
++    def file_buffer(self) -> "_RenderBuffer":
++        self.require_files(1)
++        remaining = self.max_bytes - self._bytes
++        limit = min(self.max_file_bytes, remaining)
++        reason = "total byte" if remaining < self.max_file_bytes else "file byte"
++        return _RenderBuffer(self, limit, reason)
++
++    def _consume(self, size: int) -> None:
++        self.require_files(1)
++        if size > self.max_file_bytes:
++            raise ManifestError("render_output_budget_exceeded: file byte")
++        if size > self.max_bytes - self._bytes:
++            raise ManifestError("render_output_budget_exceeded: total byte")
++        self._bytes += size
++        self._files += 1
++
++
++class _RenderBuffer:
++    """Bound UTF-8 emission before retaining or joining the full output."""
++
++    def __init__(self, budget: RenderBudget, limit: int, reason: str) -> None:
++        self._budget = budget
++        self._limit = limit
++        self._reason = reason
++        self._data = bytearray()
++
++    @property
++    def remaining_bytes(self) -> int:
++        return self._limit - len(self._data)
++
++    def check_bytes(self, size: int) -> None:
++        if size > self.remaining_bytes:
++            raise ManifestError("render_output_budget_exceeded: " + self._reason)
++
++    def write(self, value: str) -> int:
++        # UTF-8 needs at least one byte per character. Reject a giant scalar
++        # before encoding it, then bound the temporary encoding chunks as well.
++        self.check_bytes(len(value))
++        for start in range(0, len(value), 64 * 1024):
++            self.write_bytes(value[start:start + 64 * 1024].encode("utf-8"))
++        return len(value)
++
++    def write_bytes(self, value: bytes) -> None:
++        self.check_bytes(len(value))
++        self._data.extend(value)
++
++    def rstrip(self) -> None:
++        while self._data and self._data[-1] in b" \t\n\r\v\f":
++            self._data.pop()
++
++    def finish(self) -> bytes:
++        self._budget._consume(len(self._data))
++        return bytes(self._data)
+ 
+ 
+ @dataclass(frozen=True)
+@@ -109,13 +190,21 @@ def _provenance(manifest: Manifest, contract: TargetContract, asset: Asset, sour
+     }
+ 
+ 
+-def _render_main(manifest: Manifest, contract: TargetContract, asset: Asset) -> RenderedFile:
++def _render_main(
++    manifest: Manifest, contract: TargetContract, asset: Asset, *, budget: Optional[RenderBudget] = None,
++) -> RenderedFile:
+     if asset.kind not in contract.supported_asset_kinds:
+         raise TargetUsageError(
+             "unsupported_asset_kind: target={} kind={} asset={}".format(
+                 contract.name, asset.kind, asset.name
+             )
+         )
++    destination = contract.layout(asset.kind, asset.name)
++    output = None
++    if budget is not None:
++        budget.check_name(destination)
++        output = budget.file_buffer()
++        output.write("---\n")
+     source = _content_path(asset)
+     if source.is_symlink() or not source.is_file():
+         raise ManifestError("asset_content_invalid: missing regular content file: {}".format(source))
+@@ -178,25 +267,29 @@ def _render_main(manifest: Manifest, contract: TargetContract, asset: Asset) ->
+                 contract.name, asset.name, ",".join(missing)
+             )
+         )
+-    rendered_frontmatter = yaml.safe_dump(
+-        metadata,
+-        allow_unicode=True,
+-        default_flow_style=False,
+-        sort_keys=False,
+-    ).rstrip()
+-    content = ("---\n{}\n---\n\n{}".format(rendered_frontmatter, body)).encode("utf-8")
++    if output is None:
++        rendered_frontmatter = yaml.safe_dump(
++            metadata, allow_unicode=True, default_flow_style=False, sort_keys=False,
++        ).rstrip()
++        content = ("---\n{}\n---\n\n{}".format(rendered_frontmatter, body)).encode("utf-8")
++    else:
++        yaml.safe_dump(metadata, stream=output, allow_unicode=True, default_flow_style=False, sort_keys=False)
++        output.rstrip()
++        output.write("\n---\n\n")
++        output.write(body)
++        content = output.finish()
+     return RenderedFile(
+         kind=asset.kind,
+         name=asset.name,
+         source=source.relative_to(manifest.root).as_posix(),
+-        destination=contract.layout(asset.kind, asset.name),
++        destination=destination,
+         content=content,
+         mode=0o644,
+     )
+ 
+ 
+ def _render_support_files(
+-    manifest: Manifest, contract: TargetContract, asset: Asset
++    manifest: Manifest, contract: TargetContract, asset: Asset, *, budget: Optional[RenderBudget] = None,
+ ) -> List[RenderedFile]:
+     if asset.kind != "skill":
+         return []
+@@ -205,6 +298,7 @@ def _render_support_files(
+     rendered: List[RenderedFile] = []
+     for directory_name in contract.data["support_directories"]:
+         source_root = asset.path / str(directory_name)
++        ensure_within(source_root, asset.path, "asset support directory")
+         if not source_root.exists():
+             continue
+         if source_root.is_symlink() or not source_root.is_dir():
+@@ -217,23 +311,39 @@ def _render_support_files(
+             ensure_within(source, asset.path, "asset support file")
+             relative = source.relative_to(asset.path)
+             destination = (skill_root / relative).as_posix()
+-            mode = 0o755 if source.stat().st_mode & 0o111 else 0o644
++            info = source.stat()
++            mode = 0o755 if info.st_mode & 0o111 else 0o644
++            if budget is None:
++                content = source.read_bytes()
++            else:
++                budget.check_name(destination)
++                output = budget.file_buffer()
++                output.check_bytes(info.st_size)
++                with source.open("rb") as stream:
++                    while True:
++                        chunk = stream.read(min(64 * 1024, output.remaining_bytes + 1))
++                        if not chunk:
++                            break
++                        output.write_bytes(chunk)
++                content = output.finish()
+             rendered.append(
+                 RenderedFile(
+                     kind=asset.kind,
+                     name=asset.name,
+                     source=source.relative_to(manifest.root).as_posix(),
+                     destination=destination,
+-                    content=source.read_bytes(),
++                    content=content,
+                     mode=mode,
+                 )
+             )
+     return rendered
+ 
+ 
+-def render_asset(manifest: Manifest, contract: TargetContract, asset: Asset) -> Tuple[RenderedFile, ...]:
+-    files = [_render_main(manifest, contract, asset)]
+-    files.extend(_render_support_files(manifest, contract, asset))
++def render_asset(
++    manifest: Manifest, contract: TargetContract, asset: Asset, *, budget: Optional[RenderBudget] = None,
++) -> Tuple[RenderedFile, ...]:
++    files = [_render_main(manifest, contract, asset, budget=budget)]
++    files.extend(_render_support_files(manifest, contract, asset, budget=budget))
+     return tuple(files)
+ 
+ 
+@@ -257,10 +367,15 @@ def _render_historical_selection(
+     profiles: Sequence[str],
+     optional_skills: Sequence[str],
+     asset_kind: Optional[str],
++    *,
++    budget: Optional[RenderBudget] = None,
++    allow_native_verifier: bool = True,
+ ) -> RenderedBundle:
+     """Internal receipt inventory reproduction; never current target admission."""
+     return _render_selection(
+-        manifest, _load_historical_target_contract(manifest, target), profiles, optional_skills, asset_kind
++        manifest, _load_historical_target_contract(manifest, target, allow_native_verifier=allow_native_verifier),
++        profiles, optional_skills, asset_kind,
++        budget=budget,
+     )
+ 
+ 
+@@ -270,6 +385,8 @@ def _render_selection(
+     profiles: Sequence[str],
+     optional_skills: Sequence[str],
+     asset_kind: Optional[str],
++    *,
++    budget: Optional[RenderBudget] = None,
+ ) -> RenderedBundle:
+     target = contract.name
+     resolution = manifest.resolve_profiles(profiles, optional_skills)
+@@ -291,8 +408,10 @@ def _render_selection(
+         )
+     files: List[RenderedFile] = []
+     destinations: Dict[str, RenderedFile] = {}
++    if budget is not None:
++        budget.require_files(len(assets))
+     for asset in assets:
+-        for rendered in render_asset(manifest, contract, asset):
++        for rendered in render_asset(manifest, contract, asset, budget=budget):
+             if rendered.destination in destinations:
+                 other = destinations[rendered.destination]
+                 raise ManifestError(
+@@ -409,24 +528,24 @@ def run_target_smoke(
+         started_at = datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+         started = time.monotonic()
+         try:
+-            completed = subprocess.run(
+-                list(runtime_command),
+-                cwd=str(manifest.root),
++            completed = execute_bounded(
++                runtime_command,
++                cwd=manifest.root,
+                 env=environment,
+-                check=False,
+-                stdout=subprocess.PIPE,
+-                stderr=subprocess.PIPE,
+-                timeout=timeout_seconds,
++                timeout_seconds=timeout_seconds,
++                output_limit=SMOKE_OUTPUT_LIMIT,
+             )
+-        except subprocess.TimeoutExpired:
++        except (asyncio.TimeoutError, OutputBudgetExceeded) as exc:
++            output_exceeded = isinstance(exc, OutputBudgetExceeded)
+             return {
+                 "schema": SMOKE_SCHEMA,
+                 "status": "fail",
+                 "certification": "caller-supplied-smoke",
+                 "target": target,
+                 "stage": stage,
+-                "error_code": "runtime_timeout",
++                "error_code": "runtime_output_budget_exceeded" if output_exceeded else "runtime_timeout",
+                 "timeout_seconds": timeout_seconds,
++                "output_limit_bytes": SMOKE_OUTPUT_LIMIT,
+                 "started_at": started_at,
+                 "duration_ms": round((time.monotonic() - started) * 1000.0, 3),
+                 "runtime_command_sha256": command_digest,
+@@ -434,17 +553,17 @@ def run_target_smoke(
+             }
+     return {
+         "schema": SMOKE_SCHEMA,
+-        "status": "pass" if completed.returncode == 0 else "fail",
++        "status": "pass" if completed["exit_code"] == 0 else "fail",
+         "certification": "caller-supplied-smoke",
+         "target": target,
+         "stage": stage,
+         "started_at": started_at,
+         "duration_ms": round((time.monotonic() - started) * 1000.0, 3),
+         "runtime_command_sha256": command_digest,
+-        "runtime_exit_code": completed.returncode,
+-        "stdout_bytes": len(completed.stdout),
+-        "stdout_sha256": sha256_bytes(completed.stdout),
+-        "stderr_bytes": len(completed.stderr),
+-        "stderr_sha256": sha256_bytes(completed.stderr),
++        "runtime_exit_code": completed["exit_code"],
++        "stdout_bytes": completed["stdout_bytes"],
++        "stdout_sha256": completed["stdout_sha256"],
++        "stderr_bytes": completed["stderr_bytes"],
++        "stderr_sha256": completed["stderr_sha256"],
+         "static_check": static,
+     }
+diff --git a/tests/release_archive_fixture.py b/tests/release_archive_fixture.py
+new file mode 100644
+index 0000000..3f630e9
+--- /dev/null
++++ b/tests/release_archive_fixture.py
+@@ -0,0 +1,82 @@
++"""Small real source/export fixture shared by release archive boundary tests."""
++from __future__ import annotations
++
++import copy
++import hashlib
++import json
++import tempfile
++from functools import lru_cache
++from pathlib import Path
++
++from agent_dev_kit.compiler import export_assets
++from agent_dev_kit.model import Manifest, sha256_tree
++
++ROOT = Path(__file__).resolve().parents[1]
++
++
++@lru_cache(maxsize=1)
++def _rendered_fixture():
++    data = json.loads((ROOT / "manifest.json").read_bytes())
++    data["version"] = "7.0.0"
++    data["agents"] = [item for item in data["agents"] if item["name"] == "requirements-analyst"]
++    data["skills"] = [item for item in data["skills"] if item["name"] == "adk-requirements-triage"]
++    data["optional_skills"] = []
++    data["tool_targets"] = {"claude-code": data["tool_targets"]["claude-code"]}
++    data["default_profile"] = "embedded-fullstack"
++    data["profiles"] = {
++        "embedded-fullstack": {
++            "description": "Minimal real release fixture",
++            "trigger_examples": [],
++            "include_agents": ["requirements-analyst"],
++            "include_skills": ["adk-requirements-triage"],
++        }
++    }
++    data["workflows"] = data["workflows"][:1]
++    source_manifest = (json.dumps(data, ensure_ascii=False, indent=2) + "\n").encode()
++    sbom = b'{"spdxVersion":"SPDX-2.3"}\n'
++    with tempfile.TemporaryDirectory(prefix="adk-release-fixture-") as temporary:
++        source = Path(temporary) / "source"
++        source.mkdir()
++        paths = ["manifests/manifest.schema.json", "manifests/target-contract.schema.json",
++                 data["tool_targets"]["claude-code"]["contract"]]
++        paths.extend(item["path"] for key in ("agents", "skills", "workflows") for item in data[key])
++        for name in paths:
++            destination = source / name
++            destination.parent.mkdir(parents=True, exist_ok=True)
++            destination.write_bytes((ROOT / name).read_bytes())
++            destination.chmod(0o644)
++        (source / "manifest.json").write_bytes(source_manifest)
++        (source / "README.md").write_bytes(b"source inventory fixture\n")
++        manifest = Manifest.load(source)
++        failures = manifest.validate(strict=True)
++        if failures:
++            raise AssertionError("invalid release fixture: " + "; ".join(failures))
++        output = Path(temporary) / "bundles"
++        result = export_assets(manifest, "claude-code", output, ["embedded-fullstack"])
++        source_files = sorted(path for path in source.rglob("*") if path.is_file())
++        release_manifest = {
++            "schema_version": 2, "version": manifest.version,
++            "manifest_sha256": manifest.digest,
++            "direct_targets": [{"target": "claude-code", "agents": result["agents"],
++                                "skills": result["skills"]}],
++            "external_targets": sorted(manifest.external_targets()), "source_distribution": True,
++            "source_file_count": len(source_files), "reproducible": False, "release_eligible": False,
++            "source_provenance": {"kind": "unbound-snapshot", "release_eligible": False,
++                                  "commit": None, "tree": None, "dirty": None,
++                                  "source_distribution_sha256": sha256_tree(source)},
++            "sbom": {"path": "sbom.spdx.json", "sha256": hashlib.sha256(sbom).hexdigest(),
++                     "validated": True},
++        }
++        members = [("manifest.json", source_manifest)]
++        members.extend(("source/" + path.relative_to(source).as_posix(), path.read_bytes())
++                       for path in source_files)
++        members.extend(("bundles/" + path.relative_to(output).as_posix(), path.read_bytes())
++                       for path in sorted(output.rglob("*")) if path.is_file())
++        members.append(("sbom.spdx.json", sbom))
++    return release_manifest, members
++
++
++def release_fixture():
++    """Return independent metadata and member bytes; every fixture file is 0644."""
++    manifest, members = _rendered_fixture()
++    return copy.deepcopy(manifest), list(members)
+diff --git a/tests/test_archive_resource_bounds.py b/tests/test_archive_resource_bounds.py
+index a0a0b7a..0f24ba9 100644
+--- a/tests/test_archive_resource_bounds.py
++++ b/tests/test_archive_resource_bounds.py
+@@ -14,9 +14,10 @@ from pathlib import Path
+ from unittest import mock
+ 
+ from agent_dev_kit.distribution import archive_io, release_artifacts, release_contract
+-from agent_dev_kit.model import ManifestError, canonical_json_bytes
++from agent_dev_kit.model import ManifestError
+ from agent_dev_kit import release
+ from agent_dev_kit.cli import main as cli_main
++from release_archive_fixture import release_fixture
+ 
+ 
+ class ArchiveResourceTests(unittest.TestCase):
+@@ -25,24 +26,8 @@ class ArchiveResourceTests(unittest.TestCase):
+         self.addCleanup(self.temp.cleanup)
+         self.root = Path(self.temp.name)
+         self.path = self.root / "agent-dev-kit-7.0.0.tar.gz"
+-        source = b'{"version":"7.0.0"}'
+-        sbom = b'{"spdxVersion":"SPDX-2.3"}'
+-        release = {
+-            "schema_version": 2, "version": "7.0.0",
+-            "manifest_sha256": hashlib.sha256(canonical_json_bytes({"version": "7.0.0"})).hexdigest(),
+-            "direct_targets": [{"target": "claude-code", "agents": 1, "skills": 1}],
+-            "external_targets": ["external-runtime"], "source_distribution": True,
+-            "source_file_count": 1, "reproducible": False, "release_eligible": False,
+-            "source_provenance": {"kind": "unbound-snapshot", "release_eligible": False,
+-                                  "commit": None, "tree": None, "dirty": None,
+-                                  "source_distribution_sha256": hashlib.sha256(
+-                                      b"manifest.json\0" + hashlib.sha256(source).digest()).hexdigest()},
+-            "sbom": {"path": "sbom.spdx.json", "sha256": hashlib.sha256(sbom).hexdigest(),
+-                     "validated": True},
+-        }
+-        self.members = [("manifest.json", source), ("source/manifest.json", source),
+-                        ("release-manifest.json", json.dumps(release).encode()),
+-                        ("sbom.spdx.json", sbom)]
++        metadata, self.members = release_fixture()
++        self.members.insert(-1, ("release-manifest.json", json.dumps(metadata).encode()))
+         self.write_archive(self.members)
+ 
+     def write_archive(self, members, *, format=tarfile.PAX_FORMAT):
+@@ -249,7 +234,7 @@ class ArchiveResourceTests(unittest.TestCase):
+             release_contract.validate_release_artifact(self.path)
+ 
+     def test_long_pax_names_remain_compatible_within_budget(self):
+-        self.write_archive([("bundles/" + "a" * 200, b"safe")] + self.members)
++        self.write_archive([("extra/" + "a" * 200, b"safe")] + self.members)
+         self.assertEqual("pass", release_contract.validate_release_artifact(self.path)["status"])
+ 
+     def test_digest_and_extraction_use_exact_snapshot_after_path_replacement(self):
+diff --git a/tests/test_release_integrity.py b/tests/test_release_integrity.py
+index 0af8413..13a356d 100644
+--- a/tests/test_release_integrity.py
++++ b/tests/test_release_integrity.py
+@@ -1,20 +1,25 @@
+ """Public release behavior binds Git inputs, archive contents and published assets."""
+ from __future__ import annotations
+ 
++import copy
+ import hashlib
+ import io
+ import json
+ import os
+ import subprocess
++import sys
+ import tarfile
+ import tempfile
+ import unittest
++from contextlib import redirect_stdout
++from datetime import date, datetime, timedelta, timezone
+ from pathlib import Path
+ from unittest import mock
+ 
+-from agent_dev_kit import release
+-from agent_dev_kit.distribution import release_artifacts, release_contract
++from agent_dev_kit import release, target_contracts, targets
++from agent_dev_kit.distribution import archive_io, release_artifacts, release_contract
+ from agent_dev_kit.model import Manifest, ManifestError, canonical_json_bytes
++from release_archive_fixture import release_fixture
+ 
+ ROOT = Path(__file__).resolve().parents[1]
+ 
+@@ -24,26 +29,7 @@ class ReleaseInventoryTest(unittest.TestCase):
+         self.temp = tempfile.TemporaryDirectory()
+         self.addCleanup(self.temp.cleanup)
+         self.path = Path(self.temp.name) / "agent-dev-kit-7.0.0.tar.gz"
+-        source = b'{"version":"7.0.0"}\n'
+-        readme = b"source inventory fixture\n"
+-        sbom = b'{"spdxVersion":"SPDX-2.3"}\n'
+-        digest = hashlib.sha256()
+-        for name, value in (("README.md", readme), ("manifest.json", source)):
+-            digest.update(name.encode() + b"\0" + hashlib.sha256(value).digest())
+-        self.manifest = {
+-            "schema_version": 2, "version": "7.0.0",
+-            "manifest_sha256": hashlib.sha256(canonical_json_bytes({"version": "7.0.0"})).hexdigest(),
+-            "direct_targets": [{"target": "claude-code", "agents": 1, "skills": 1}],
+-            "external_targets": ["external-runtime"], "source_distribution": True,
+-            "source_file_count": 2, "reproducible": False, "release_eligible": False,
+-            "source_provenance": {"kind": "unbound-snapshot", "release_eligible": False,
+-                                  "commit": None, "tree": None, "dirty": None,
+-                                  "source_distribution_sha256": digest.hexdigest()},
+-            "sbom": {"path": "sbom.spdx.json", "sha256": hashlib.sha256(sbom).hexdigest(),
+-                     "validated": True},
+-        }
+-        self.members = [("manifest.json", source), ("source/manifest.json", source),
+-                        ("source/README.md", readme), ("sbom.spdx.json", sbom)]
++        self.manifest, self.members = release_fixture()
+ 
+     def write(self, members=None, special=None):
+         values = list(self.members if members is None else members)
+@@ -58,10 +44,200 @@ class ReleaseInventoryTest(unittest.TestCase):
+         self.path.with_name(self.path.name + ".sha256").write_text(
+             hashlib.sha256(self.path.read_bytes()).hexdigest() + "  " + self.path.name + "\n")
+ 
++    def update_source_inventory(self, members):
++        source = {name[len("source/"):]: value for name, value in members if name.startswith("source/")}
++        digest = hashlib.sha256()
++        for name in sorted(source, key=Path):
++            digest.update(name.encode() + b"\0" + hashlib.sha256(source[name]).digest())
++        self.manifest["source_file_count"] = len(source)
++        self.manifest["source_provenance"]["source_distribution_sha256"] = digest.hexdigest()
++
++    def rewrite_source(self, replacements):
++        members = dict(self.members)
++        members.update(replacements)
++        if "source/manifest.json" in replacements:
++            members["manifest.json"] = replacements["source/manifest.json"]
++            self.manifest["manifest_sha256"] = release_contract._canonical_manifest_sha256(members["manifest.json"])
++        values = list(members.items())
++        self.update_source_inventory(values)
++        self.write(values)
++
++    def amplified_frontmatter(self, rows, *, second_target=False):
++        nested = {"rows": [0] * rows}
++        for _ in range(50):
++            nested = {"level": nested}
++        changes = {}
++        names = ["claude-code", "opencode"] if second_target else ["claude-code"]
++        for target in names:
++            path = "manifests/target-contracts/" + target + ".json"
++            contract = json.loads((ROOT / path).read_bytes())
++            for kind in ("agent", "skill"):
++                contract["frontmatter"][kind]["static"]["amplification"] = nested
++            changes["source/" + path] = json.dumps(contract, separators=(",", ":")).encode()
++        if second_target:
++            source = json.loads(dict(self.members)["source/manifest.json"])
++            source["tool_targets"]["opencode"] = Manifest.load(ROOT).data["tool_targets"]["opencode"]
++            changes["source/manifest.json"] = json.dumps(source).encode()
++            self.manifest["direct_targets"].append({"target": "opencode", "agents": 1, "skills": 1})
++        self.rewrite_source(changes)
++
++    def aliased_skills(self, count, *, support=b"", empty_support_files=0):
++        source = json.loads(dict(self.members)["source/manifest.json"])
++        original = source["skills"][0]
++        source["skills"] = [dict(original, name="budget-skill-" + str(index)) for index in range(count)]
++        source["profiles"]["embedded-fullstack"]["include_skills"] = [item["name"] for item in source["skills"]]
++        changes = {"source/manifest.json": json.dumps(source).encode(),
++                   "source/" + original["path"]: b"---\ndescription: bounded alias fixture\n---\nbody\n"}
++        if support:
++            changes["source/" + str(Path(original["path"]).parent / "assets/payload.bin")] = support
++        for index in range(empty_support_files):
++            path = Path(original["path"]).parent / ("assets/empty-" + str(index) + ".txt")
++            changes["source/" + str(path)] = b""
++        self.manifest["direct_targets"][0]["skills"] = count
++        self.rewrite_source(changes)
++
++    def native_receipt_source(self, schema, *, registered=False):
++        path = "source/manifests/target-contracts/claude-code.json"
++        contract = json.loads(dict(self.members)[path])
++        receipt = b"{}\n"
++        contract["adapter"]["conformance"] = {
++            "level": "runtime", "certification": "conformance-certified", "native_runtime_smoke": "pass",
++            "runtime_binary": "offline-fixture", "runtime_binary_sha256": "a" * 64,
++            "runtime_version": "offline-fixture-1", "runtime_version_pin": "offline-fixture-1",
++            "last_verified_at": "2026-10-24T00:00:00Z",
++            "evidence": [{"receipt_schema": "adk-native-target-conformance-receipt/v2",
++                          "path": "reports/offline-fixture.json", "sha256": hashlib.sha256(receipt).hexdigest(),
++                          "target": "claude-code", "runtime_version": "offline-fixture-1",
++                          "bundle_sha256": "b" * 64, "contract_sha256": "c" * 64, "layer": "runtime"}],
++        }
++        contract["adapter"]["conformance_trust_policy"] = {
++            "enabled": True, "trusted_authorities": ["offline-fixture"],
++            "verification_backend": "external-signature-verifier",
++        }
++        for stage in ("discovery", "load", "trigger"):
++            contract["adapter"]["capabilities"][stage] = "native-verified"
++        registry = {"schema": "adk-native-conformance-trust-registry/v1", "status": "active",
++                    "authority_model": "owner-reviewed-managed-registry", "authorities": {}}
++        changes = {}
++        if registered:
++            contract["adapter"]["conformance_trust_policy"]["verification_backend"] = "ci-provenance-verifier"
++            contract_digest = target_contracts._native_contract_digest(contract)
++            now = datetime.now(timezone.utc).replace(microsecond=0) - timedelta(minutes=1)
++            stages = []
++            for index, stage in enumerate(("discovery", "load", "trigger")):
++                started = now - timedelta(minutes=4 - index)
++                authority = {"execution_authority": "ci-approved", "authority_id": "offline-fixture", "scope": stage}
++                authority["attestation_sha256"] = target_contracts._authority_digest(authority)
++                stages.append({
++                    "stage": stage, "command_sha256": str(index + 1) * 64,
++                    "assertion_sha256": ("a", "b", "c")[index] * 64,
++                    "assertion_result_sha256": ("d", "e", "f")[index] * 64,
++                    "semantic_assertion_status": "pass", "result_sha256": str(index + 4) * 64,
++                    "exit_code": 0, "started_at": started.isoformat(),
++                    "completed_at": (started + timedelta(seconds=10)).isoformat(), "duration_ms": 10000,
++                    "environment": {"platform": "linux", "architecture": "x86_64",
++                                    "cwd_sha256": "7" * 64, "environment_sha256": "8" * 64,
++                                    "runtime_binary_sha256": "a" * 64, "bundle_sha256": "b" * 64,
++                                    "contract_sha256": contract_digest},
++                    "privacy": {"raw_content_stored": False, "secrets_stored": False, "sanitized": True},
++                    "authority": authority,
++                })
++            receipt_data = {
++                "schema": "adk-native-target-conformance-receipt/v2", "receipt_id": "offline-fixture-native",
++                "target": "claude-code", "runtime": {"binary": "offline-fixture", "binary_sha256": "a" * 64,
++                                                     "version": "offline-fixture-1", "version_pin": "offline-fixture-1"},
++                "bundle_sha256": "b" * 64, "contract_sha256": contract_digest,
++                "verified_at": now.isoformat(), "stages": stages,
++            }
++            receipt = json.dumps(receipt_data).encode()
++            conformance = contract["adapter"]["conformance"]
++            conformance["last_verified_at"] = receipt_data["verified_at"]
++            conformance["evidence"][0]["sha256"] = hashlib.sha256(receipt).hexdigest()
++            conformance["evidence"][0]["contract_sha256"] = contract_digest
++            binary = Path(sys.executable).resolve()
++            signature = b'{"fixture":"not-a-real-signature"}\n'
++            registry["authorities"]["offline-fixture"] = {
++                "enabled": True, "policy_backend": "ci-provenance-verifier", "verifier": "sigstore-cosign-blob",
++                "allowed_targets": ["claude-code"], "certificate_identity": "https://invalid.example/fixture",
++                "certificate_oidc_issuer": "https://invalid.example/issuer",
++                "cosign_binary": str(binary), "cosign_binary_sha256": hashlib.sha256(binary.read_bytes()).hexdigest(),
++                "receipts": {receipt_data["receipt_id"]: {
++                    "receipt_canonical_sha256": hashlib.sha256(canonical_json_bytes(receipt_data)).hexdigest(),
++                    "bundle_path": "reports/offline-fixture.sigstore.json", "bundle_sha256": hashlib.sha256(signature).hexdigest(),
++                }},
++            }
++            changes["source/reports/offline-fixture.sigstore.json"] = signature
++        changes.update({
++            path: json.dumps(contract).encode(),
++            "source/manifests/native_conformance_trust_registry.json": json.dumps(registry).encode(),
++            "source/reports/offline-fixture.json": receipt,
++            "source/schemas/native-target-conformance-receipt-v2.schema.json": json.dumps(schema).encode(),
++        })
++        self.rewrite_source(changes)
++
+     def test_real_source_inventory_is_accepted_in_any_member_order(self):
+         self.write(list(reversed(self.members)))
+         self.assertEqual("pass", release_contract.validate_release_artifact(self.path)["status"])
+ 
++    def test_frontmatter_output_is_bounded_during_encoding(self):
++        self.amplified_frontmatter(3000)
++        with mock.patch.object(archive_io, "MAX_MEMBER_BYTES", 128 * 1024), \
++             self.assertRaisesRegex(ValueError, "render_output_budget_exceeded.*file byte"):
++            release_contract.validate_release_artifact(self.path)
++
++    def test_cumulative_render_budget_is_shared_by_assets_and_targets(self):
++        for second_target in (False, True):
++            self.amplified_frontmatter(1500 if second_target else 3000, second_target=second_target)
++            with self.subTest(second_target=second_target), \
++                 mock.patch.object(archive_io, "MAX_DECODED_BYTES", 512 * 1024), \
++                 mock.patch.object(archive_io, "MAX_MEMBER_BYTES", 384 * 1024), \
++                 self.assertRaisesRegex(ValueError, "render_output_budget_exceeded.*total byte"):
++                release_contract.validate_release_artifact(self.path)
++
++    def test_aliased_source_assets_cannot_exceed_rendered_file_budget(self):
++        self.aliased_skills(80)
++        with mock.patch.object(archive_io, "MAX_MEMBERS", 64), \
++             mock.patch.object(targets, "_render_main", wraps=targets._render_main) as render, \
++             self.assertRaisesRegex(ValueError, "render_output_budget_exceeded.*file count"):
++            release_contract.validate_release_artifact(self.path)
++        self.assertLessEqual(render.call_count, 64)
++
++    def test_repeated_support_output_uses_the_same_byte_budget(self):
++        self.aliased_skills(20, support=b"x" * (48 * 1024))
++        with mock.patch.object(archive_io, "MAX_DECODED_BYTES", 512 * 1024), \
++             self.assertRaisesRegex(ValueError, "render_output_budget_exceeded.*total byte"):
++            release_contract.validate_release_artifact(self.path)
++
++    def test_export_manifest_itself_must_fit_the_rendered_file_budget(self):
++        self.aliased_skills(10, empty_support_files=100)
++        with mock.patch.object(archive_io, "MAX_MEMBER_BYTES", 128 * 1024), \
++             self.assertRaisesRegex(ValueError, "render_output_budget_exceeded.*file byte"):
++            release_contract.validate_release_artifact(self.path)
++
++    def test_exact_output_limits_preserve_renderer_bytes(self):
++        source = Path(self.temp.name) / "exact-source"
++        for name, content in self.members:
++            if name.startswith("source/"):
++                path = source / name[len("source/"):]
++                path.parent.mkdir(parents=True, exist_ok=True)
++                path.write_bytes(content)
++        manifest = Manifest.load(source)
++        expected = targets._render_historical_selection(manifest, "claude-code", ["embedded-fullstack"], (), None)
++        limits = {"max_bytes": sum(len(item.content) for item in expected.files),
++                  "max_file_bytes": max(len(item.content) for item in expected.files),
++                  "max_files": len(expected.files),
++                  "max_name_bytes": max(len(item.destination.encode()) for item in expected.files)}
++        actual = targets._render_historical_selection(
++            manifest, "claude-code", ["embedded-fullstack"], (), None, budget=targets.RenderBudget(**limits))
++        self.assertEqual(expected.files, actual.files)
++        for key, message in (("max_bytes", "total byte"), ("max_file_bytes", "file byte"),
++                             ("max_files", "file count"), ("max_name_bytes", "file name")):
++            lowered = dict(limits)
++            lowered[key] -= 1
++            with self.subTest(limit=key), self.assertRaisesRegex(ManifestError, "render_output_budget_exceeded.*" + message):
++                targets._render_historical_selection(
++                    manifest, "claude-code", ["embedded-fullstack"], (), None, budget=targets.RenderBudget(**lowered))
++
+     def test_source_payload_drift_rejected_after_outer_checksum_is_recomputed(self):
+         self.write([(name, b"changed\n" if name == "source/README.md" else raw)
+                     for name, raw in self.members])
+@@ -69,12 +245,12 @@ class ReleaseInventoryTest(unittest.TestCase):
+             release_contract.validate_release_artifact(self.path)
+ 
+     def test_missing_extra_and_false_source_count_are_rejected(self):
+-        for members in (self.members[:-2] + self.members[-1:],
++        for members in ([item for item in self.members if item[0] != "source/README.md"],
+                         self.members + [("source/extra.txt", b"extra")]):
+             self.write(members)
+             with self.subTest(members=len(members)), self.assertRaisesRegex(ValueError, "source file count"):
+                 release_contract.validate_release_artifact(self.path)
+-        self.manifest["source_file_count"] = 3
++        self.manifest["source_file_count"] += 1
+         self.write()
+         with self.assertRaisesRegex(ValueError, "source file count"):
+             release_contract.validate_release_artifact(self.path)
+@@ -85,6 +261,117 @@ class ReleaseInventoryTest(unittest.TestCase):
+         with self.assertRaisesRegex(ValueError, "source manifest"):
+             release_contract.validate_release_artifact(self.path)
+ 
++    def test_archived_python_is_data_and_never_imported(self):
++        members = self.members + [("source/src/agent_dev_kit/compiler.py",
++                                   b'raise RuntimeError("archive Python was executed")\n')]
++        self.update_source_inventory(members)
++        self.write(members)
++        self.assertEqual("pass", release_contract.validate_release_artifact(self.path)["status"])
++
++    def test_source_schema_cannot_request_external_references(self):
++        for schema in ("manifest.schema.json", "target-contract.schema.json"):
++            for value in ({"$ref": "https://invalid.example/never-fetch.json"},
++                          {"$recursiveRef": "https://invalid.example/never-fetch.json"},
++                          {"$defs": {"nested": {"$id": "https://invalid.example/scope"}}},
++                          {"$defs": {"nested": {"id": "https://invalid.example/legacy-scope"}}}):
++                name = "source/manifests/" + schema
++                members = [(path, json.dumps(value).encode() if path == name else raw)
++                           for path, raw in self.members]
++                self.update_source_inventory(members)
++                self.write(members)
++                with self.subTest(schema=schema, value=value), self.assertRaisesRegex(ValueError, "bundle source schema"):
++                    release_contract.validate_release_artifact(self.path)
++
++    def test_native_receipt_schema_is_checked_before_reference_resolution(self):
++        for reference in ("$ref", "$dynamicRef"):
++            self.native_receipt_source({reference: "https://invalid.example/never-request.json"})
++            with self.subTest(reference=reference), \
++                 mock.patch("urllib.request.urlopen", side_effect=AssertionError("external I/O forbidden")) as network:
++                with self.assertRaises(ValueError) as caught:
++                    release_contract.validate_release_artifact(self.path)
++                network.assert_not_called()
++                self.assertIn("bundle source schema must use local references", str(caught.exception))
++
++    def test_local_native_schema_preserves_receipt_validation(self):
++        schema = json.loads((ROOT / "schemas/native-target-conformance-receipt-v2.schema.json").read_bytes())
++        self.native_receipt_source(schema)
++        source = Path(self.temp.name) / "local-native-source"
++        archive_io.inspect_archive_snapshot(self.path.read_bytes(), source_directory=source)
++        with mock.patch("urllib.request.urlopen", side_effect=AssertionError("external I/O forbidden")) as network, \
++             mock.patch("agent_dev_kit.native_trust.verify_sigstore_blob",
++                        side_effect=AssertionError("invalid receipt must not reach verification")) as verifier:
++            for loader in (target_contracts.load_target_contract, target_contracts._load_historical_target_contract):
++                with self.subTest(loader=loader.__name__), \
++                     self.assertRaisesRegex(ManifestError, "native receipt schema failure"):
++                    loader(Manifest.load(source), "claude-code")
++            network.assert_not_called()
++            verifier.assert_not_called()
++
++    def test_archive_registry_cannot_authorize_host_native_verifier_execution(self):
++        schema = json.loads((ROOT / "schemas/native-target-conformance-receipt-v2.schema.json").read_bytes())
++        self.native_receipt_source(schema, registered=True)
++        with mock.patch("agent_dev_kit.sigstore_blob.subprocess.run",
++                        side_effect=AssertionError("archive-selected execution blocked")) as process, \
++             mock.patch.object(target_contracts, "build_managed_native_trust_verifier",
++                               wraps=target_contracts.build_managed_native_trust_verifier) as verifier:
++            with self.assertRaises(ValueError) as caught:
++                release_contract.validate_release_artifact(self.path)
++            process.assert_not_called()
++            verifier.assert_not_called()
++            self.assertIn("independently trusted verifier authority", str(caught.exception))
++
++    def test_external_support_root_is_rejected_before_filesystem_inspection(self):
++        outside = Path(self.temp.name) / "outside-source"
++        outside.mkdir()
++        (outside / "sentinel.txt").write_text("test-owned harmless content\n")
++        contract_path = "source/manifests/target-contracts/claude-code.json"
++        schema_path = "source/manifests/target-contract.schema.json"
++        contract = json.loads(dict(self.members)[contract_path])
++        contract["support_directories"] = [str(outside)]
++        schema = json.loads(dict(self.members)[schema_path])
++        schema["properties"]["support_directories"]["items"] = {"type": "string"}
++        self.rewrite_source({contract_path: json.dumps(contract).encode(), schema_path: json.dumps(schema).encode()})
++        inspected = []
++        original_exists, original_rglob = Path.exists, Path.rglob
++
++        def exists(path):
++            if path == outside:
++                inspected.append("exists")
++            return original_exists(path)
++
++        def rglob(path, pattern):
++            if path == outside:
++                inspected.append("rglob")
++            return original_rglob(path, pattern)
++
++        with mock.patch.object(Path, "exists", exists), mock.patch.object(Path, "rglob", rglob):
++            with self.assertRaisesRegex(ManifestError, "asset support.*escapes allowed root"):
++                release_contract.validate_release_artifact(self.path)
++        self.assertEqual([], inspected)
++
++    def test_malformed_local_schema_is_a_structured_contract_failure(self):
++        for value in ({"$ref": "#"}, {"$ref": "#/$defs/missing"}):
++            members = [(name, json.dumps(value).encode() if name == "source/manifests/manifest.schema.json" else raw)
++                       for name, raw in self.members]
++            self.update_source_inventory(members)
++            self.write(members)
++            output = io.StringIO()
++            with self.subTest(schema=value), redirect_stdout(output):
++                self.assertEqual(1, release_contract._main([str(self.path)]))
++                result = json.loads(output.getvalue())
++                self.assertEqual("fail", result["status"])
++                self.assertIn("bundle", result["error"])
++
++    def test_historical_bundle_remains_verifiable_after_source_expiry(self):
++        self.write()
++        contract = json.loads(dict(self.members)["source/manifests/target-contracts/claude-code.json"])
++        expired = date.fromisoformat(contract["source"]["expires_at"]) + timedelta(days=1)
++        with mock.patch.object(target_contracts, "date", wraps=date) as clock:
++            clock.today.return_value = expired
++            self.assertEqual("pass", release_contract.validate_release_artifact(self.path)["status"])
++            with self.assertRaisesRegex(ManifestError, "target_contract_stale"):
++                target_contracts.load_target_contract(Manifest.load(ROOT), "claude-code")
++
+     def test_renamed_public_publish_is_rejected_before_github_discovery(self):
+         self.write()
+         renamed = self.path.with_name("agent-dev-kit-9.9.9.tar.gz")
+@@ -143,6 +430,84 @@ class ReleaseGitInputTest(unittest.TestCase):
+     def build(self):
+         return release.build_release(Manifest.load(self.source), self.root / "dist")
+ 
++    def bundle_variant(self, mutation):
++        artifact = self.root / mutation / Path(self.baseline["artifact"]).name
++        artifact.parent.mkdir()
++        with tarfile.open(fileobj=io.BytesIO(self.baseline_bytes), mode="r:gz") as archive:
++            members = [(copy.copy(item), archive.extractfile(item).read() if item.isfile() else None)
++                       for item in archive]
++        skill = next(item.name for item, _ in members
++                     if item.isfile() and item.name.startswith("bundles/claude-code/")
++                     and item.name.endswith("/SKILL.md"))
++        replacement = b"# modified compiled skill\n"
++        with tarfile.open(artifact, "w:gz") as archive:
++            for item, payload in members:
++                if mutation == "missing-all" and (item.name == "bundles" or item.name.startswith("bundles/")):
++                    continue
++                if mutation == "missing-target" and item.name.startswith("bundles/claude-code"):
++                    continue
++                if mutation == "missing-file" and item.name == skill:
++                    continue
++                if mutation == "missing-export-manifest" and item.name == "bundles/claude-code/adk-export-manifest.json":
++                    continue
++                if mutation == "changed-directory-mode" and item.name == "bundles/claude-code":
++                    item.mode = 0o777
++                if item.name == skill:
++                    if mutation in ("changed-file", "self-rehashed-export-manifest"):
++                        payload = replacement
++                    if mutation == "changed-mode":
++                        item.mode = 0o755 if item.mode == 0o644 else 0o644
++                if mutation == "self-rehashed-export-manifest" and item.name == "bundles/claude-code/adk-export-manifest.json":
++                    inventory = json.loads(payload)
++                    for record in inventory["files"]:
++                        if "bundles/claude-code/" + record["path"] == skill:
++                            record["sha256"] = hashlib.sha256(replacement).hexdigest()
++                    payload = json.dumps(inventory, ensure_ascii=False, indent=2).encode() + b"\n"
++                if mutation == "false-target-count" and item.name == "release-manifest.json":
++                    manifest = json.loads(payload)
++                    manifest["direct_targets"][0]["skills"] += 1
++                    payload = json.dumps(manifest).encode()
++                if payload is not None:
++                    item.size = len(payload)
++                archive.addfile(item, io.BytesIO(payload) if payload is not None else None)
++            if mutation == "extra-file":
++                item = tarfile.TarInfo("bundles/claude-code/unmanaged.txt")
++                item.size = len(replacement)
++                item.mode = 0o644
++                archive.addfile(item, io.BytesIO(replacement))
++            if mutation == "extra-directory":
++                item = tarfile.TarInfo("bundles/claude-code/unmanaged")
++                item.type = tarfile.DIRTYPE
++                item.mode = 0o755
++                archive.addfile(item)
++        artifact.with_name(artifact.name + ".sha256").write_text(
++            hashlib.sha256(artifact.read_bytes()).hexdigest() + "  " + artifact.name + "\n")
++        return artifact
++
++    def test_real_bundle_bytes_modes_inventory_and_target_counts_are_required(self):
++        for mutation in ("missing-all", "missing-target", "missing-file", "changed-file",
++                         "extra-file", "changed-mode", "false-target-count", "missing-export-manifest",
++                         "extra-directory", "changed-directory-mode"):
++            artifact = self.bundle_variant(mutation)
++            with self.subTest(mutation=mutation), self.assertRaisesRegex(ValueError, "bundle"):
++                release_contract.validate_release_artifact(artifact)
++
++    def test_recomputed_export_manifest_cannot_authorize_a_changed_bundle(self):
++        artifact = self.bundle_variant("self-rehashed-export-manifest")
++        with self.assertRaisesRegex(ValueError, "bundle"):
++            release_contract.validate_release_artifact(artifact)
++
++    def test_public_publish_rejects_missing_bundles_before_github_discovery(self):
++        artifact = self.bundle_variant("missing-all")
++        with mock.patch.object(release.shutil, "which", side_effect=AssertionError("premature gh discovery")):
++            with self.assertRaisesRegex(ManifestError, "bundle"):
++                release.publish_release(self.baseline["version"], "github", artifact, dry_run=True)
++
++    def test_real_clean_bundle_validation_remains_positive(self):
++        artifact = self.root / Path(self.baseline["artifact"]).name
++        artifact.write_bytes(self.baseline_bytes)
++        self.assertEqual("pass", release_contract.validate_release_artifact(artifact)["status"])
++
+     def test_ignored_file_cannot_enter_clean_commit_release(self):
+         ignored = self.source / "docs/.cache/review-sentinel.txt"
+         ignored.parent.mkdir()
+diff --git a/tests/test_release_manifest_contract.sh b/tests/test_release_manifest_contract.sh
+index ccd7f95..ad3e0de 100755
+--- a/tests/test_release_manifest_contract.sh
++++ b/tests/test_release_manifest_contract.sh
+@@ -8,16 +8,18 @@ python3 -m unittest discover -s tests -p test_release_integrity.py
+ python3 - <<'PY'
+ from __future__ import annotations
+ 
+-import hashlib
+ import io
+ import json
++import sys
+ import tarfile
+ import tempfile
+ from pathlib import Path
+ 
+ from agent_dev_kit.distribution import validate_release_artifact, validate_release_manifest
+ from agent_dev_kit.distribution.release_artifacts import SOURCE_DISTRIBUTION_DIRECTORIES, SOURCE_DISTRIBUTION_FILES
+-from agent_dev_kit.model import canonical_json_bytes
++
++sys.path.insert(0, str(Path.cwd() / "tests"))
++from release_archive_fixture import release_fixture
+ 
+ root = Path.cwd()
+ assert (root / "manifest.json").is_file(), "canonical manifest.json is missing"
+@@ -62,31 +64,8 @@ assert 'gh release create "$RELEASE_TAG"' in workflow, "release workflow missing
+ assert 'gh release download "$RELEASE_TAG"' in workflow, "release retry does not verify existing GitHub Release assets"
+ assert 'cmp "$archive"' in workflow and 'cmp "$checksum"' in workflow and 'cmp "$contract"' in workflow, "release retry must compare all validated assets"
+ 
+-version = "7.0.0"
+-source_manifest_value = {"version": version}
+-source_manifest = json.dumps(source_manifest_value, indent=2).encode() + b"\n"
+-sbom = b'{"spdxVersion":"SPDX-2.3"}\n'
+-sha = lambda value: hashlib.sha256(value).hexdigest()
+-release_manifest = {
+-    "schema_version": 2,
+-    "version": version,
+-    "manifest_sha256": sha(canonical_json_bytes(source_manifest_value)),
+-    "direct_targets": [{"target": "claude-code", "agents": 1, "skills": 1}],
+-    "external_targets": ["external-runtime"],
+-    "source_distribution": True,
+-    "source_file_count": 1,
+-    "reproducible": False,
+-    "release_eligible": False,
+-    "source_provenance": {
+-        "kind": "unbound-snapshot",
+-        "release_eligible": False,
+-        "commit": None,
+-        "tree": None,
+-        "dirty": None,
+-        "source_distribution_sha256": sha(b"manifest.json\0" + hashlib.sha256(source_manifest).digest()),
+-    },
+-    "sbom": {"path": "sbom.spdx.json", "sha256": sha(sbom), "validated": True},
+-}
++release_manifest, members = release_fixture()
++version = release_manifest["version"]
+ assert validate_release_manifest(release_manifest)["status"] == "pass"
+ 
+ mismatch = json.loads(json.dumps(release_manifest))
+@@ -98,12 +77,7 @@ assert any("release_eligible must match" in item for item in validation["failure
+ with tempfile.TemporaryDirectory() as temp:
+     artifact = Path(temp) / f"agent-dev-kit-{version}.tar.gz"
+     with tarfile.open(artifact, "w:gz") as archive:
+-        for name, payload in (
+-            ("manifest.json", source_manifest),
+-            ("source/manifest.json", source_manifest),
+-            ("sbom.spdx.json", sbom),
+-            ("release-manifest.json", json.dumps(release_manifest).encode()),
+-        ):
++        for name, payload in members + [("release-manifest.json", json.dumps(release_manifest).encode())]:
+             info = tarfile.TarInfo(name)
+             info.size = len(payload)
+             archive.addfile(info, io.BytesIO(payload))
+diff --git a/tests/test_strict_json.py b/tests/test_strict_json.py
+index 14346fb..10390b1 100644
+--- a/tests/test_strict_json.py
++++ b/tests/test_strict_json.py
+@@ -5,7 +5,6 @@ import unittest
+ import json
+ import os
+ import stat
+-import hashlib
+ import io
+ import tarfile
+ from unittest import mock
+@@ -23,6 +22,7 @@ from agent_dev_kit.target_contracts import (_json_object as load_target_object,
+                                           load_target_contract, _validate_native_conformance_evidence)
+ from agent_dev_kit.distribution import promotion_evidence
+ from agent_dev_kit.distribution.release_contract import _canonical_manifest_sha256, validate_release_artifact
++from release_archive_fixture import release_fixture
+ 
+ 
+ class StrictJSONTests(unittest.TestCase):
+@@ -63,21 +63,8 @@ class StrictJSONTests(unittest.TestCase):
+     def test_real_archive_reader_rejects_duplicate_manifests(self):
+         with tempfile.TemporaryDirectory() as temp:
+             artifact = Path(temp) / "agent-dev-kit-7.0.0.tar.gz"
+-            source = b'{"version":"7.0.0"}'
+-            sbom = b'{"spdxVersion":"SPDX-2.3"}'
+-            release = {
+-                "schema_version": 2, "version": "7.0.0",
+-                "manifest_sha256": _canonical_manifest_sha256(source),
+-                "direct_targets": [{"target": "claude-code", "agents": 1, "skills": 1}],
+-                "external_targets": ["external-runtime"], "source_distribution": True,
+-                "source_file_count": 1, "reproducible": False, "release_eligible": False,
+-                "source_provenance": {"kind": "unbound-snapshot", "release_eligible": False,
+-                                      "commit": None, "tree": None, "dirty": None,
+-                                      "source_distribution_sha256": hashlib.sha256(
+-                                          b"manifest.json\0" + hashlib.sha256(source).digest()).hexdigest()},
+-                "sbom": {"path": "sbom.spdx.json", "sha256": hashlib.sha256(sbom).hexdigest(),
+-                         "validated": True},
+-            }
++            release, members = release_fixture()
++            source = dict(members)["manifest.json"]
+             release_raw = json.dumps(release).encode()
+             cases = ((source, release_raw, True),
+                      (b'{"version":"invalid","version":"7.0.0"}', release_raw, False),
+@@ -85,9 +72,9 @@ class StrictJSONTests(unittest.TestCase):
+                      (source, b'{"extra":NaN,' + release_raw[1:], False))
+             for source_raw, raw, valid in cases:
+                 with tarfile.open(artifact, "w:gz") as archive:
+-                    for name, payload in (("manifest.json", source_raw), ("source/manifest.json", source_raw),
+-                                          ("sbom.spdx.json", sbom),
+-                                          ("release-manifest.json", raw)):
++                    for name, payload in members + [("release-manifest.json", raw)]:
++                        if name in ("manifest.json", "source/manifest.json"):
++                            payload = source_raw
+                         info = tarfile.TarInfo(name)
+                         info.size = len(payload)
+                         archive.addfile(info, io.BytesIO(payload))
+diff --git a/tests/test_target_contracts.sh b/tests/test_target_contracts.sh
+index a77f734..40c81e5 100755
+--- a/tests/test_target_contracts.sh
++++ b/tests/test_target_contracts.sh
+@@ -587,4 +587,7 @@ finally:
+     shutil.rmtree(str(temp), ignore_errors=True)
+ PY
+ 
++PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}" python3 -m unittest discover \
++  -s "$ROOT_DIR/tests" -p test_target_smoke.py
++
+ echo "[PASS] target contracts"
+diff --git a/tests/test_target_smoke.py b/tests/test_target_smoke.py
+new file mode 100644
+index 0000000..a8571af
+--- /dev/null
++++ b/tests/test_target_smoke.py
+@@ -0,0 +1,163 @@
++"""Behavioral budgets for the public caller-supplied target smoke."""
++
++from __future__ import annotations
++
++import hashlib
++import json
++import os
++import subprocess
++import sys
++import tempfile
++import time
++import unittest
++from pathlib import Path
++
++from agent_dev_kit.model import Manifest
++from agent_dev_kit.targets import run_target_smoke
++
++
++ROOT = Path(__file__).resolve().parents[1]
++MANIFEST = Manifest.load(ROOT)
++OUTPUT_LIMIT = 1024 * 1024
++PRIVATE_OUTPUT = "private-smoke-output-must-not-appear-in-evidence"
++
++
++class TargetSmokeBudgetTest(unittest.TestCase):
++    def smoke(self, code: str, timeout: int = 5) -> dict:
++        return run_target_smoke(
++            MANIFEST, "claude-code", "discovery", [sys.executable, "-c", code],
++            profile="core", timeout_seconds=timeout,
++        )
++
++    def assert_private(self, result: dict) -> None:
++        self.assertEqual(result["certification"], "caller-supplied-smoke")
++        self.assertNotIn(PRIVATE_OUTPUT, json.dumps(result))
++        self.assertNotIn("stdout", result)
++        self.assertNotIn("stderr", result)
++
++    def test_success_retains_only_digests_counts_and_exit(self) -> None:
++        stdout = PRIVATE_OUTPUT.encode()
++        stderr = b"private-stderr"
++        result = self.smoke(
++            "import sys;sys.stdout.buffer.write(%r);sys.stderr.buffer.write(%r)" % (stdout, stderr)
++        )
++        self.assertEqual(result["status"], "pass")
++        self.assertEqual(result["runtime_exit_code"], 0)
++        self.assertEqual(result["stdout_bytes"], len(stdout))
++        self.assertEqual(result["stderr_bytes"], len(stderr))
++        self.assertEqual(result["stdout_sha256"], hashlib.sha256(stdout).hexdigest())
++        self.assertEqual(result["stderr_sha256"], hashlib.sha256(stderr).hexdigest())
++        self.assert_private(result)
++
++    def test_nonzero_exit_keeps_bounded_diagnostics(self) -> None:
++        result = self.smoke("import sys;sys.stderr.write(%r);sys.exit(7)" % PRIVATE_OUTPUT)
++        self.assertEqual(result["status"], "fail")
++        self.assertEqual(result["runtime_exit_code"], 7)
++        self.assertEqual(result["stderr_bytes"], len(PRIVATE_OUTPUT))
++        self.assert_private(result)
++
++    def test_sixteen_megabyte_output_fails_with_sanitized_budget_code(self) -> None:
++        for stream in ("stdout", "stderr"):
++            with self.subTest(stream=stream):
++                result = self.smoke(
++                    "import sys;sys.stdout.write(%r);sys.%s.buffer.write(b'x'*(16*1024*1024))"
++                    % (PRIVATE_OUTPUT, stream)
++                )
++                self.assertEqual(result["status"], "fail")
++                self.assertEqual(result["error_code"], "runtime_output_budget_exceeded")
++                self.assertEqual(result["output_limit_bytes"], OUTPUT_LIMIT)
++                self.assert_private(result)
++
++    def test_stdout_and_stderr_share_one_budget(self) -> None:
++        result = self.smoke(
++            "import sys;sys.stdout.buffer.write(b'a'*(600*1024));sys.stderr.buffer.write(b'b'*(600*1024))"
++        )
++        self.assertEqual(result["status"], "fail")
++        self.assertEqual(result["error_code"], "runtime_output_budget_exceeded")
++        self.assert_private(result)
++
++    def test_exact_combined_output_budget_passes(self) -> None:
++        result = self.smoke(
++            "import sys;sys.stdout.buffer.write(b'a'*(512*1024));sys.stderr.buffer.write(b'b'*(512*1024))"
++        )
++        self.assertEqual(result["status"], "pass")
++        self.assertEqual(result["stdout_bytes"] + result["stderr_bytes"], OUTPUT_LIMIT)
++        self.assert_private(result)
++
++    def test_public_cli_output_overflow_is_nonzero_and_private(self) -> None:
++        command = [
++            sys.executable, "-m", "agent_dev_kit.cli", "target", "smoke",
++            "--target", "claude-code", "--stage", "discovery", "--profile", "core",
++            "--timeout-seconds", "5", "--summary-json", "--runtime-command",
++            sys.executable, "-c", "import sys;sys.stdout.buffer.write(b'x'*(16*1024*1024))",
++        ]
++        completed = subprocess.run(command, cwd=str(ROOT), capture_output=True, text=True, timeout=10)
++        self.assertEqual(completed.returncode, 1, completed.stderr)
++        result = json.loads(completed.stdout)
++        self.assertEqual(result["error_code"], "runtime_output_budget_exceeded")
++        self.assert_private(result)
++
++    @unittest.skipUnless(os.name == "posix", "requires POSIX pipe-holder cleanup")
++    def test_timeout_closes_pipe_transports_before_the_event_loop(self) -> None:
++        launcher = (
++            "import subprocess,sys;"
++            "subprocess.Popen([sys.executable,'-c','import time;time.sleep(3)'])"
++        )
++        script = (
++            "import gc,json,sys,warnings;from pathlib import Path;"
++            "from agent_dev_kit.model import Manifest;"
++            "from agent_dev_kit.targets import run_target_smoke;"
++            "warnings.simplefilter('always',ResourceWarning);"
++            "result=run_target_smoke(Manifest.load(Path(%r)),'claude-code','discovery',"
++            "[sys.executable,'-c',%r],profile='core',timeout_seconds=1);"
++            "gc.collect();print(json.dumps(result))" % (str(ROOT), launcher)
++        )
++        completed = subprocess.run(
++            [sys.executable, "-c", script], cwd=str(ROOT), capture_output=True, text=True, timeout=10,
++        )
++        self.assertEqual(completed.returncode, 0, completed.stderr)
++        self.assertEqual(json.loads(completed.stdout)["error_code"], "runtime_timeout")
++        self.assertEqual(completed.stderr, "", "pipe cleanup leaked transports or event-loop callbacks")
++
++    def check_descendant_timeout(self, *, launcher_exits: bool) -> None:
++        with tempfile.TemporaryDirectory(prefix="target-smoke-descendant-") as temp:
++            marker = Path(temp) / "late-child.txt"
++            parent_pid = Path(temp) / "parent.pid"
++            child = (
++                "import signal,time;from pathlib import Path;"
++                "signal.signal(signal.SIGTERM,signal.SIG_IGN);"
++                "time.sleep(3);Path(%r).write_text('late')" % str(marker)
++            )
++            code = (
++                "import os,subprocess,sys,time;from pathlib import Path;"
++                "Path(%r).write_text(str(os.getpid()));"
++                "subprocess.Popen([sys.executable,'-c',%r]);" % (str(parent_pid), child)
++            )
++            if not launcher_exits:
++                code += "time.sleep(10)"
++            started = time.monotonic()
++            result = self.smoke(code, timeout=1)
++            elapsed = time.monotonic() - started
++            # Leave scheduling slack without admitting the child's three-second work.
++            self.assertLess(elapsed, 2.75)
++            self.assertEqual(result["status"], "fail")
++            self.assertEqual(result["error_code"], "runtime_timeout")
++            self.assertFalse(marker.exists(), "descendant completed before timeout return")
++            self.assertTrue(parent_pid.exists(), "runtime was not started")
++            with self.assertRaises(ProcessLookupError):
++                os.kill(int(parent_pid.read_text()), 0)
++            time.sleep(2.3)
++            self.assertFalse(marker.exists(), "descendant survived the timeout cleanup")
++            self.assert_private(result)
++
++    @unittest.skipUnless(os.name == "posix", "requires POSIX process-group cleanup")
++    def test_timeout_stops_descendant_before_returning(self) -> None:
++        self.check_descendant_timeout(launcher_exits=False)
++
++    @unittest.skipUnless(os.name == "posix", "requires POSIX process-group cleanup")
++    def test_exited_launcher_pipe_holders_obey_the_same_deadline(self) -> None:
++        self.check_descendant_timeout(launcher_exits=True)
++
++
++if __name__ == "__main__":
++    unittest.main()

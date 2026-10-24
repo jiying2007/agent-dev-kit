@@ -1,0 +1,1634 @@
+{
+  "before_renewal_observation": {
+    "executions": [
+      {
+        "command": [
+          "/workspace/scratch/712af632e2a5/audit-venv/bin/python3",
+          "-m",
+          "agent_dev_kit.cli",
+          "harness",
+          "readiness",
+          "--root",
+          "/workspace/scratch/712af632e2a5/agent-dev-kit",
+          "--gate",
+          "--summary-json"
+        ],
+        "cwd": "/workspace/scratch/712af632e2a5/agent-dev-kit",
+        "elapsed_seconds": 0.16553409599873703,
+        "exit_code": 2,
+        "stderr": "",
+        "stdout": "{\"schema_version\":\"adk-harness-readiness-report/v1\",\"contract_version\":\"1.0.0\",\"mode\":\"gate\",\"as_of\":\"2026-10-24\",\"target_root\":\"/workspace/scratch/712af632e2a5/agent-dev-kit\",\"overall_status\":\"needs-review\",\"counts\":{\"pass\":0,\"partial\":0,\"needs-review\":7,\"blocked\":0,\"not-applicable\":0},\"scan\":{\"files_seen\":1498,\"text_files_read\":15,\"truncated\":false,\"errors\":[]},\"dimensions\":[{\"dimension_id\":\"context_legibility\",\"title\":\"Context legibility\",\"status\":\"needs-review\",\"evidence_refs\":[\".adk/harness-readiness.json\",\"AGENTS.md\",\"README.md\"],\"last_verified_at\":\"2026-10-23\",\"owner\":\"leiwenjun\",\"review\":{\"status\":\"invalid\",\"reason\":\"invalid_or_missing_delegated_review\"},\"blockers\":[{\"code\":\"invalid_delegated_review\",\"message\":\"已委派的复审缺少有效来源、双维结论、身份或一致日期\",\"evidence_ref\":\".adk/harness-readiness.json\"}],\"next_action\":\"补齐精简的根 AGENTS.md 与 README，并把细节下沉到可索引文档。\"},{\"dimension_id\":\"spec_and_execution_contract\",\"title\":\"Spec and execution contract\",\"status\":\"needs-review\",\"evidence_refs\":[\".adk/harness-readiness.json\",\"docs/changes/2026-09-25-agent-value-trust/negative-results.md\",\"docs/changes/2026-09-25-agent-value-trust/requirements.md\",\"docs/changes/2026-09-25-agent-value-trust/tasks.md\",\"docs/changes/2026-09-25-effect-trials/design.md\",\"docs/changes/2026-09-25-effect-trials/negative-results.md\",\"docs/changes/2026-09-25-effect-trials/requirements.md\",\"docs/changes/2026-09-25-effect-trials/tasks.md\",\"docs/changes/2026-09-25-native-campaign-finalize/negative-results.md\",\"docs/changes/2026-09-25-native-campaign-finalize/requirements.md\",\"docs/changes/2026-09-25-native-campaign-finalize/tasks.md\",\"docs/changes/2026-09-25-native-campaign-project-layout/negative-results.md\"],\"last_verified_at\":\"2026-10-23\",\"owner\":\"leiwenjun\",\"review\":{\"status\":\"invalid\",\"reason\":\"invalid_or_missing_delegated_review\"},\"blockers\":[{\"code\":\"invalid_delegated_review\",\"message\":\"已委派的复审缺少有效来源、双维结论、身份或一致日期\",\"evidence_ref\":\".adk/harness-readiness.json\"}],\"next_action\":\"为非平凡变更保留 spec、task/plan 与可测试验收证据。\"},{\"dimension_id\":\"tool_and_permission_boundary\",\"title\":\"Tool and permission boundary\",\"status\":\"needs-review\",\"evidence_refs\":[\".adk/harness-readiness.json\"],\"last_verified_at\":\"2026-10-23\",\"owner\":\"leiwenjun\",\"review\":{\"status\":\"invalid\",\"reason\":\"invalid_or_missing_delegated_review\"},\"blockers\":[{\"code\":\"invalid_delegated_review\",\"message\":\"已委派的复审缺少有效来源、双维结论、身份或一致日期\",\"evidence_ref\":\".adk/harness-readiness.json\"}],\"next_action\":\"固定 MCP 依赖、使用环境凭证，并记录只读、审批、allow/deny 与 fallback 边界。\"},{\"dimension_id\":\"state_and_knowledge_continuity\",\"title\":\"State and knowledge continuity\",\"status\":\"needs-review\",\"evidence_refs\":[\".adk/harness-readiness.json\",\"docs/changes/20261024-release-bundles/PROGRESS.md\",\"docs/changes/adk-platform-convergence-v1/state.yaml\",\"docs/changes/adk-self-readiness-ownership/state.yaml\",\"docs/changes/adk-terminal-contract-hardening/state.yaml\",\"docs/changes/adk-v3-1-rc2-target-conformance/state.yaml\",\"docs/changes/adk-v3-1-software-m5-ready/state.yaml\",\"docs/runbooks/README.md\",\"docs/runbooks/agent-value-lifecycle.md\",\"docs/runbooks/artifact-gated-delivery.md\",\"docs/runbooks/bugfix-delivery.md\",\"docs/runbooks/codex-pilot-evidence.md\"],\"last_verified_at\":\"2026-10-23\",\"owner\":\"leiwenjun\",\"review\":{\"status\":\"invalid\",\"reason\":\"invalid_or_missing_delegated_review\"},\"blockers\":[{\"code\":\"invalid_delegated_review\",\"message\":\"已委派的复审缺少有效来源、双维结论、身份或一致日期\",\"evidence_ref\":\".adk/harness-readiness.json\"}],\"next_action\":\"持久化变更状态，并把可复用决策写入受治理 decision/runbook/knowledge 工件。\"},{\"dimension_id\":\"verification_review_and_eval\",\"title\":\"Verification, review and evaluation\",\"status\":\"needs-review\",\"evidence_refs\":[\".adk/harness-readiness.json\",\".github/workflows/branch-gc.yml\",\".github/workflows/ci.yml\",\".github/workflows/claude-consumer-contract.yml\",\".github/workflows/codex-consumer-contract.yml\",\".github/workflows/digital-worker-contract.yml\",\"AGENTS.md\",\"README.md\",\"tests/lib/bash-test-helpers.sh\",\"tests/mcp_2026_activation/mcp_activation_test.go\",\"tests/release_archive_fixture.py\",\"tests/run_all.sh\"],\"last_verified_at\":\"2026-10-23\",\"owner\":\"leiwenjun\",\"review\":{\"status\":\"invalid\",\"reason\":\"invalid_or_missing_delegated_review\"},\"blockers\":[{\"code\":\"invalid_delegated_review\",\"message\":\"已委派的复审缺少有效来源、双维结论、身份或一致日期\",\"evidence_ref\":\".adk/harness-readiness.json\"}],\"next_action\":\"补齐测试、CI 和根文档中的可执行验证命令，并保留 review/eval 证据。\"},{\"dimension_id\":\"recovery_and_rollback\",\"title\":\"Recovery and rollback\",\"status\":\"needs-review\",\"evidence_refs\":[\".adk/harness-readiness.json\",\"scripts/backup-rollback.sh\"],\"last_verified_at\":\"2026-10-23\",\"owner\":\"leiwenjun\",\"review\":{\"status\":\"invalid\",\"reason\":\"invalid_or_missing_delegated_review\"},\"blockers\":[{\"code\":\"invalid_delegated_review\",\"message\":\"已委派的复审缺少有效来源、双维结论、身份或一致日期\",\"evidence_ref\":\".adk/harness-readiness.json\"}],\"next_action\":\"记录可执行 rollback/recovery/backup 路径及触发条件。\"},{\"dimension_id\":\"freshness_and_entropy_control\",\"title\":\"Freshness and entropy control\",\"status\":\"needs-review\",\"evidence_refs\":[\".adk/harness-readiness.json\",\".github/CODEOWNERS\",\"OWNERS\",\"scripts/check-format.sh\",\"tests/test_catalog.sh\",\"tests/test_eval_catalog.py\",\"tests/test_eval_catalog.sh\",\"tests/test_mcp_freshness_ssot.sh\"],\"last_verified_at\":\"2026-10-23\",\"owner\":\"leiwenjun\",\"review\":{\"status\":\"invalid\",\"reason\":\"invalid_or_missing_delegated_review\"},\"blockers\":[{\"code\":\"invalid_delegated_review\",\"message\":\"已委派的复审缺少有效来源、双维结论、身份或一致日期\",\"evidence_ref\":\".adk/harness-readiness.json\"}],\"next_action\":\"增加文档/格式/目录新鲜度机械检查和明确 ownership。\"}],\"score\":null,\"field_evidence_status\":\"not-verified\"}\n"
+      },
+      {
+        "command": [
+          "bash",
+          "tests/test_review_evidence.sh"
+        ],
+        "cwd": "/workspace/scratch/712af632e2a5/agent-dev-kit",
+        "elapsed_seconds": 1.0547166480027954,
+        "exit_code": 0,
+        "stderr": ".............................................\n----------------------------------------------------------------------\nRan 45 tests in 0.963s\n\nOK\n",
+        "stdout": ""
+      },
+      {
+        "command": [
+          "bash",
+          "tests/test_harness_readiness.sh"
+        ],
+        "cwd": "/workspace/scratch/712af632e2a5/agent-dev-kit",
+        "elapsed_seconds": 0.909289750001335,
+        "exit_code": 1,
+        "stderr": "Traceback (most recent call last):\n  File \"<stdin>\", line 9, in <module>\nAssertionError: {'schema_version': 'adk-harness-readiness-report/v1', 'contract_version': '1.0.0', 'mode': 'report-only', 'as_of': '2026-10-23', 'target_root': '/workspace/scratch/712af632e2a5/agent-dev-kit', 'overall_status': 'needs-review', 'counts': {'pass': 0, 'partial': 0, 'needs-review': 7, 'blocked': 0, 'not-applicable': 0}, 'scan': {'files_seen': 1498, 'text_files_read': 15, 'truncated': False, 'errors': []}, 'dimensions': [{'dimension_id': 'context_legibility', 'title': 'Context legibility', 'status': 'needs-review', 'evidence_refs': ['.adk/harness-readiness.json', 'AGENTS.md', 'README.md'], 'last_verified_at': '2026-10-23', 'owner': 'leiwenjun', 'review': {'status': 'invalid', 'reason': 'invalid_or_missing_delegated_review'}, 'blockers': [{'code': 'invalid_delegated_review', 'message': '已委派的复审缺少有效来源、双维结论、身份或一致日期', 'evidence_ref': '.adk/harness-readiness.json'}], 'next_action': '补齐精简的根 AGENTS.md 与 README，并把细节下沉到可索引文档。'}, {'dimension_id': 'spec_and_execution_contract', 'title': 'Spec and execution contract', 'status': 'needs-review', 'evidence_refs': ['.adk/harness-readiness.json', 'docs/changes/2026-09-25-agent-value-trust/negative-results.md', 'docs/changes/2026-09-25-agent-value-trust/requirements.md', 'docs/changes/2026-09-25-agent-value-trust/tasks.md', 'docs/changes/2026-09-25-effect-trials/design.md', 'docs/changes/2026-09-25-effect-trials/negative-results.md', 'docs/changes/2026-09-25-effect-trials/requirements.md', 'docs/changes/2026-09-25-effect-trials/tasks.md', 'docs/changes/2026-09-25-native-campaign-finalize/negative-results.md', 'docs/changes/2026-09-25-native-campaign-finalize/requirements.md', 'docs/changes/2026-09-25-native-campaign-finalize/tasks.md', 'docs/changes/2026-09-25-native-campaign-project-layout/negative-results.md'], 'last_verified_at': '2026-10-23', 'owner': 'leiwenjun', 'review': {'status': 'invalid', 'reason': 'invalid_or_missing_delegated_review'}, 'blockers': [{'code': 'invalid_delegated_review', 'message': '已委派的复审缺少有效来源、双维结论、身份或一致日期', 'evidence_ref': '.adk/harness-readiness.json'}], 'next_action': '为非平凡变更保留 spec、task/plan 与可测试验收证据。'}, {'dimension_id': 'tool_and_permission_boundary', 'title': 'Tool and permission boundary', 'status': 'needs-review', 'evidence_refs': ['.adk/harness-readiness.json'], 'last_verified_at': '2026-10-23', 'owner': 'leiwenjun', 'review': {'status': 'invalid', 'reason': 'invalid_or_missing_delegated_review'}, 'blockers': [{'code': 'invalid_delegated_review', 'message': '已委派的复审缺少有效来源、双维结论、身份或一致日期', 'evidence_ref': '.adk/harness-readiness.json'}], 'next_action': '固定 MCP 依赖、使用环境凭证，并记录只读、审批、allow/deny 与 fallback 边界。'}, {'dimension_id': 'state_and_knowledge_continuity', 'title': 'State and knowledge continuity', 'status': 'needs-review', 'evidence_refs': ['.adk/harness-readiness.json', 'docs/changes/20261024-release-bundles/PROGRESS.md', 'docs/changes/adk-platform-convergence-v1/state.yaml', 'docs/changes/adk-self-readiness-ownership/state.yaml', 'docs/changes/adk-terminal-contract-hardening/state.yaml', 'docs/changes/adk-v3-1-rc2-target-conformance/state.yaml', 'docs/changes/adk-v3-1-software-m5-ready/state.yaml', 'docs/runbooks/README.md', 'docs/runbooks/agent-value-lifecycle.md', 'docs/runbooks/artifact-gated-delivery.md', 'docs/runbooks/bugfix-delivery.md', 'docs/runbooks/codex-pilot-evidence.md'], 'last_verified_at': '2026-10-23', 'owner': 'leiwenjun', 'review': {'status': 'invalid', 'reason': 'invalid_or_missing_delegated_review'}, 'blockers': [{'code': 'invalid_delegated_review', 'message': '已委派的复审缺少有效来源、双维结论、身份或一致日期', 'evidence_ref': '.adk/harness-readiness.json'}], 'next_action': '持久化变更状态，并把可复用决策写入受治理 decision/runbook/knowledge 工件。'}, {'dimension_id': 'verification_review_and_eval', 'title': 'Verification, review and evaluation', 'status': 'needs-review', 'evidence_refs': ['.adk/harness-readiness.json', '.github/workflows/branch-gc.yml', '.github/workflows/ci.yml', '.github/workflows/claude-consumer-contract.yml', '.github/workflows/codex-consumer-contract.yml', '.github/workflows/digital-worker-contract.yml', 'AGENTS.md', 'README.md', 'tests/lib/bash-test-helpers.sh', 'tests/mcp_2026_activation/mcp_activation_test.go', 'tests/release_archive_fixture.py', 'tests/run_all.sh'], 'last_verified_at': '2026-10-23', 'owner': 'leiwenjun', 'review': {'status': 'invalid', 'reason': 'invalid_or_missing_delegated_review'}, 'blockers': [{'code': 'invalid_delegated_review', 'message': '已委派的复审缺少有效来源、双维结论、身份或一致日期', 'evidence_ref': '.adk/harness-readiness.json'}], 'next_action': '补齐测试、CI 和根文档中的可执行验证命令，并保留 review/eval 证据。'}, {'dimension_id': 'recovery_and_rollback', 'title': 'Recovery and rollback', 'status': 'needs-review', 'evidence_refs': ['.adk/harness-readiness.json', 'scripts/backup-rollback.sh'], 'last_verified_at': '2026-10-23', 'owner': 'leiwenjun', 'review': {'status': 'invalid', 'reason': 'invalid_or_missing_delegated_review'}, 'blockers': [{'code': 'invalid_delegated_review', 'message': '已委派的复审缺少有效来源、双维结论、身份或一致日期', 'evidence_ref': '.adk/harness-readiness.json'}], 'next_action': '记录可执行 rollback/recovery/backup 路径及触发条件。'}, {'dimension_id': 'freshness_and_entropy_control', 'title': 'Freshness and entropy control', 'status': 'needs-review', 'evidence_refs': ['.adk/harness-readiness.json', '.github/CODEOWNERS', 'OWNERS', 'scripts/check-format.sh', 'tests/test_catalog.sh', 'tests/test_eval_catalog.py', 'tests/test_eval_catalog.sh', 'tests/test_mcp_freshness_ssot.sh'], 'last_verified_at': '2026-10-23', 'owner': 'leiwenjun', 'review': {'status': 'invalid', 'reason': 'invalid_or_missing_delegated_review'}, 'blockers': [{'code': 'invalid_delegated_review', 'message': '已委派的复审缺少有效来源、双维结论、身份或一致日期', 'evidence_ref': '.adk/harness-readiness.json'}], 'next_action': '增加文档/格式/目录新鲜度机械检查和明确 ownership。'}], 'score': None, 'field_evidence_status': 'not-verified'}\n",
+        "stdout": ""
+      }
+    ],
+    "material_mcp_configs": [],
+    "observed_at": "2026-10-24T16:16:35.757502+00:00",
+    "previous_record": {
+      "evidence": [
+        {
+          "actual_sha256": "3c406c07c5af41b65c6c6732f85ea8983aad7bfd6ccccd6374ea1ae75a737987",
+          "declared_sha256": "3c406c07c5af41b65c6c6732f85ea8983aad7bfd6ccccd6374ea1ae75a737987",
+          "path": ".adk/reviews/evidence/harness-source-20261023-8.0.39/source-observation.json",
+          "valid_digest": true
+        },
+        {
+          "actual_sha256": "711a500ae2cdb928e2aaba489ded9eccb6e40834589cccdb00775e0785305e98",
+          "declared_sha256": "711a500ae2cdb928e2aaba489ded9eccb6e40834589cccdb00775e0785305e98",
+          "path": ".adk/reviews/evidence/harness-source-20261023-8.0.39/independent-review.json",
+          "valid_digest": true
+        }
+      ],
+      "path": ".adk/reviews/harness-source-20261023-8.0.39.json",
+      "reviewer": {
+        "id": "ai/root/architecture_audit",
+        "independence": "independent",
+        "kind": "ai"
+      },
+      "sha256": "9ceb000c7ed70bdd3e9fc3be29abde0da62e5ea1d6583c6b37cc88971a72f9f7",
+      "sources": [
+        {
+          "current_sha256": "80c4105be9d42c79f5057726fbb9971aa0a638ee17f47f31377c04085b1095cc",
+          "path": ".github/CODEOWNERS",
+          "previous_sha256": "80c4105be9d42c79f5057726fbb9971aa0a638ee17f47f31377c04085b1095cc",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "9c88b4fc19147008351bef181a275fb371b986567eadaa2892b5292b8322e47d",
+          "path": ".github/workflows/branch-gc.yml",
+          "previous_sha256": "9c88b4fc19147008351bef181a275fb371b986567eadaa2892b5292b8322e47d",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "8c0b509ca8e46ddf9e67d9aed00d5bd28da73bf831de9a35601a4f625381e910",
+          "path": ".github/workflows/ci.yml",
+          "previous_sha256": "8c0b509ca8e46ddf9e67d9aed00d5bd28da73bf831de9a35601a4f625381e910",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "2abc7885d7ab3476776ef4cbcbc022d008734ceb3e714381cc994ebdc543526b",
+          "path": ".github/workflows/claude-consumer-contract.yml",
+          "previous_sha256": "2abc7885d7ab3476776ef4cbcbc022d008734ceb3e714381cc994ebdc543526b",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "f1e9e882dd0ee2995ac10d5ffa57ca97451b3ff9143f1019c617830ea2d4bbb9",
+          "path": ".github/workflows/codex-consumer-contract.yml",
+          "previous_sha256": "f1e9e882dd0ee2995ac10d5ffa57ca97451b3ff9143f1019c617830ea2d4bbb9",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "3575ad868bebbc6120e39a37f0786d249ec1a4887bcc1a775378c0bc1ac02eee",
+          "path": ".github/workflows/digital-worker-contract.yml",
+          "previous_sha256": "3575ad868bebbc6120e39a37f0786d249ec1a4887bcc1a775378c0bc1ac02eee",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "61a06f86a6b5382855fab70a3098f878e9f7d3e0af653a86fbd199d8d5d13167",
+          "path": "AGENTS.md",
+          "previous_sha256": "61a06f86a6b5382855fab70a3098f878e9f7d3e0af653a86fbd199d8d5d13167",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "2f6489345553319676f1f4178becbbd027cd148166339d95a6290d20001e4564",
+          "path": "CHANGELOG.md",
+          "previous_sha256": "20b26d7f8540b4f3985b2a0fb7902fa3d1d76fe25eb781803c26e8755393b356",
+          "unchanged": false
+        },
+        {
+          "current_sha256": "04214b6ee2937ef8c786f998ee890a0cecacb7dd318bab99a13db844f850a95e",
+          "path": "OWNERS",
+          "previous_sha256": "04214b6ee2937ef8c786f998ee890a0cecacb7dd318bab99a13db844f850a95e",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "13e695fabe0839cf09b7bf1f322b440815bf6c9050ab77b27b3c4c39eaf60566",
+          "path": "README.md",
+          "previous_sha256": "1b21f3232173a72fad4e2924ebd29c8318a5e35d6740fe250d87066296dddc52",
+          "unchanged": false
+        },
+        {
+          "current_sha256": "9eb0f82be4ec98662524ed13773dbcd86c0c073c609e622d76341342e1a6f2ac",
+          "path": "docs/agent-operating-rules.md",
+          "previous_sha256": "9eb0f82be4ec98662524ed13773dbcd86c0c073c609e622d76341342e1a6f2ac",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "8c55aac803a078e6490fd7ffac9a70df27a1dfbd6740ab16c479de4c12cf39f6",
+          "path": "docs/architecture/canonical-change-authority.md",
+          "previous_sha256": "8c55aac803a078e6490fd7ffac9a70df27a1dfbd6740ab16c479de4c12cf39f6",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "da7aa6c51295be56368b90594b7eb6469bf0a43b3888d7a482839bb22c0970c0",
+          "path": "docs/changes/2026-09-25-agent-value-trust/negative-results.md",
+          "previous_sha256": "da7aa6c51295be56368b90594b7eb6469bf0a43b3888d7a482839bb22c0970c0",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "429e4296ec368df67542c7b536c478c2ac2f16adedad9dfddc1b53383cc343ad",
+          "path": "docs/changes/2026-09-25-agent-value-trust/requirements.md",
+          "previous_sha256": "429e4296ec368df67542c7b536c478c2ac2f16adedad9dfddc1b53383cc343ad",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "ccee418ae0bd170f1c579bf0cb48af9be1dff833629c95705f5deca431e1d499",
+          "path": "docs/changes/2026-09-25-agent-value-trust/tasks.md",
+          "previous_sha256": "ccee418ae0bd170f1c579bf0cb48af9be1dff833629c95705f5deca431e1d499",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "a23b59b2cab96879196748bd082347a8d00a756598460ad3f83f97c7a50e976f",
+          "path": "docs/changes/2026-09-25-effect-trials/design.md",
+          "previous_sha256": "a23b59b2cab96879196748bd082347a8d00a756598460ad3f83f97c7a50e976f",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "045d0b30fd4e15dabfa0436d3b34403bb3bd5b6b8916ef4cb708a2e6523cdf73",
+          "path": "docs/changes/2026-09-25-effect-trials/negative-results.md",
+          "previous_sha256": "045d0b30fd4e15dabfa0436d3b34403bb3bd5b6b8916ef4cb708a2e6523cdf73",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "f4a2bffa3a90d0955a2b9e50d5e3201a30f667edb30a1709985bab2f856ed281",
+          "path": "docs/changes/2026-09-25-effect-trials/requirements.md",
+          "previous_sha256": "f4a2bffa3a90d0955a2b9e50d5e3201a30f667edb30a1709985bab2f856ed281",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "802ca9c194d39060eb931af0f3e8042d5f1e62acc9249abeaead6b5ede8615b9",
+          "path": "docs/changes/2026-09-25-effect-trials/tasks.md",
+          "previous_sha256": "802ca9c194d39060eb931af0f3e8042d5f1e62acc9249abeaead6b5ede8615b9",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "d5d436b9ddf56b37c22f200b2f84a7fd09d3e964b8d91c4051649eb51b207673",
+          "path": "docs/changes/2026-09-25-native-campaign-finalize/negative-results.md",
+          "previous_sha256": "d5d436b9ddf56b37c22f200b2f84a7fd09d3e964b8d91c4051649eb51b207673",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "45da7af9938c1c826ca203ab5439d55aac9def3a4da218a30a5252d531d3d0a7",
+          "path": "docs/changes/2026-09-25-native-campaign-finalize/requirements.md",
+          "previous_sha256": "45da7af9938c1c826ca203ab5439d55aac9def3a4da218a30a5252d531d3d0a7",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "b94ecc55058d993aa5ceb2da12020ffc181b68de7b4924c591f7a5567ccaee09",
+          "path": "docs/changes/2026-09-25-native-campaign-finalize/tasks.md",
+          "previous_sha256": "b94ecc55058d993aa5ceb2da12020ffc181b68de7b4924c591f7a5567ccaee09",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "9426f86cc945edfaa63590e140c0ec458762beea4e09bf0a0886badb15151338",
+          "path": "docs/changes/2026-09-25-native-campaign-project-layout/negative-results.md",
+          "previous_sha256": "9426f86cc945edfaa63590e140c0ec458762beea4e09bf0a0886badb15151338",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "2f3fca0914f53aabe3713f3d0094fb6bacb3e3d1e0df867db134d71835d3e2ce",
+          "path": "docs/changes/2026-09-25-native-campaign-project-layout/tasks.md",
+          "previous_sha256": "2f3fca0914f53aabe3713f3d0094fb6bacb3e3d1e0df867db134d71835d3e2ce",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "9fb7e932b609f3af6824ac003a2a3b7d5d8eeb65c3fa57ddbb54dd17e4e8d7c3",
+          "path": "docs/changes/20261023-output-boundaries/design.md",
+          "previous_sha256": "9fb7e932b609f3af6824ac003a2a3b7d5d8eeb65c3fa57ddbb54dd17e4e8d7c3",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "12dbdebd9253534e6277276822e1e779144a778d153ac8f5c9d8c95b1a2330d4",
+          "path": "docs/changes/20261023-output-boundaries/requirements.md",
+          "previous_sha256": "12dbdebd9253534e6277276822e1e779144a778d153ac8f5c9d8c95b1a2330d4",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "d33944cca8953c24f48c6cd535f6d4ce287c2c25730a113f22e0ffe131929b61",
+          "path": "docs/changes/20261023-output-boundaries/tasks.md",
+          "previous_sha256": "d33944cca8953c24f48c6cd535f6d4ce287c2c25730a113f22e0ffe131929b61",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "031c9556b21838bad423f3b22182bf25cba6ea2c67e0b68cd67fb7192bdc1f8b",
+          "path": "docs/changes/20261023-release-contract/design.md",
+          "previous_sha256": "031c9556b21838bad423f3b22182bf25cba6ea2c67e0b68cd67fb7192bdc1f8b",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "62af6210c96e8d4d388476f07d07f6a08d9c5ee769e0ac0f177806406bd2e237",
+          "path": "docs/changes/20261023-release-contract/requirements.md",
+          "previous_sha256": "62af6210c96e8d4d388476f07d07f6a08d9c5ee769e0ac0f177806406bd2e237",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "6ec54c597a177d58b1c5540dda3e852a72f6baa9005d66d9f6e7119c395a24ad",
+          "path": "docs/changes/20261023-release-contract/tasks.md",
+          "previous_sha256": "6ec54c597a177d58b1c5540dda3e852a72f6baa9005d66d9f6e7119c395a24ad",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "f95699e68437bafa0199a5564af18cbc7e3f78de290f4b01dc17737d0b68156e",
+          "path": "docs/changes/adk-platform-convergence-v1/state.yaml",
+          "previous_sha256": "f95699e68437bafa0199a5564af18cbc7e3f78de290f4b01dc17737d0b68156e",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "d590a0ae6b1b666cc1d6d64ab7b1e8fd5f128979993595eea8489783138f46d1",
+          "path": "docs/changes/adk-self-readiness-ownership/state.yaml",
+          "previous_sha256": "d590a0ae6b1b666cc1d6d64ab7b1e8fd5f128979993595eea8489783138f46d1",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "87b107bda25456141bae1a3b035c7e2c30616afd8baf86d333216a87f0754f5f",
+          "path": "docs/changes/adk-terminal-contract-hardening/state.yaml",
+          "previous_sha256": "87b107bda25456141bae1a3b035c7e2c30616afd8baf86d333216a87f0754f5f",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "ed9597562535265d61322e9558727acf963193e121570d1a7bafe5136d4299d6",
+          "path": "docs/changes/adk-v3-1-rc2-target-conformance/state.yaml",
+          "previous_sha256": "ed9597562535265d61322e9558727acf963193e121570d1a7bafe5136d4299d6",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "fa314d45b209d8bea753377d18848cb02793d62c660dd69e906b7d8ee96e1134",
+          "path": "docs/changes/adk-v3-1-software-m5-ready/state.yaml",
+          "previous_sha256": "fa314d45b209d8bea753377d18848cb02793d62c660dd69e906b7d8ee96e1134",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "37ff7e9a84d590999e31b86493ee82de2a313e5efded23bba90a3c885977bee5",
+          "path": "docs/changes/agent-ecosystem-standards-hardening/state.yaml",
+          "previous_sha256": "37ff7e9a84d590999e31b86493ee82de2a313e5efded23bba90a3c885977bee5",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "05f6229eaf01b22c13b8576c4a81035c172e9d03af5a3874b24404e3e137e8e8",
+          "path": "docs/commands.md",
+          "previous_sha256": "df23cf7fd58dec7e7b12b16c70eca14aaddc15a0a568afcfeaad3724a835530d",
+          "unchanged": false
+        },
+        {
+          "current_sha256": "0888aa2b94f929760040517deaf9a47b517648b0694209d48309956fbe83273d",
+          "path": "docs/runbooks/README.md",
+          "previous_sha256": "0888aa2b94f929760040517deaf9a47b517648b0694209d48309956fbe83273d",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "84e629c1c040b265d6a64369c5b39d6af2e999576af4429939738ff00b5a4c37",
+          "path": "docs/runbooks/agent-value-lifecycle.md",
+          "previous_sha256": "84e629c1c040b265d6a64369c5b39d6af2e999576af4429939738ff00b5a4c37",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "f83375f1392b20006f29e43ce5b0807530ad850969e6ee67e3b861a78fa98dd6",
+          "path": "docs/runbooks/artifact-gated-delivery.md",
+          "previous_sha256": "f83375f1392b20006f29e43ce5b0807530ad850969e6ee67e3b861a78fa98dd6",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "f7ef75ace0052ecbde911b06e3b45a1d22045ba24257c642736f72f6f28ff623",
+          "path": "docs/runbooks/bugfix-delivery.md",
+          "previous_sha256": "f7ef75ace0052ecbde911b06e3b45a1d22045ba24257c642736f72f6f28ff623",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "5ff92fab93baf7403b838a67f359e29016a6ce19563eb98006cca6c842ae298c",
+          "path": "docs/runbooks/codex-pilot-evidence.md",
+          "previous_sha256": "5ff92fab93baf7403b838a67f359e29016a6ce19563eb98006cca6c842ae298c",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "43bf36ec8a1a9a12bf30bb29b7a9f2bdbfd9a00f849ad700a85fb1cd440dde18",
+          "path": "docs/runbooks/codex-runtime-method-boundary.md",
+          "previous_sha256": "43bf36ec8a1a9a12bf30bb29b7a9f2bdbfd9a00f849ad700a85fb1cd440dde18",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "31ce75ccf900c455bd7302a25e34d2573e96cd1dac26085a97a13a7f046772f8",
+          "path": "docs/runbooks/native-campaign.md",
+          "previous_sha256": "31ce75ccf900c455bd7302a25e34d2573e96cd1dac26085a97a13a7f046772f8",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "3ece049725e38609706acc556932c4053a075fbf67101a27499a23e4dc57ea88",
+          "path": "docs/usage.md",
+          "previous_sha256": "3ece049725e38609706acc556932c4053a075fbf67101a27499a23e4dc57ea88",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "fe8076296b8cf214aee52a5ad32dabff5d383555e76f6d3d3e542e2e6617fb91",
+          "path": "manifests/context_state_contracts.json",
+          "previous_sha256": "fe8076296b8cf214aee52a5ad32dabff5d383555e76f6d3d3e542e2e6617fb91",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "e12c527dcfcfc61030b9a344f9d7fa3efeb828c364f5707285bdded69fcd8358",
+          "path": "manifests/harness_readiness_contracts.json",
+          "previous_sha256": "e12c527dcfcfc61030b9a344f9d7fa3efeb828c364f5707285bdded69fcd8358",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "799b0388c82c6cb6925caf0c2cd6e44685eeca5277a9b5128a9cec50551e158f",
+          "path": "manifests/token_context_policy.json",
+          "previous_sha256": "799b0388c82c6cb6925caf0c2cd6e44685eeca5277a9b5128a9cec50551e158f",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "b8fbb6466bba0d47e414e9db5d41d821d7d753b0087cbb624af987ee61d10d41",
+          "path": "scripts/backup-rollback.sh",
+          "previous_sha256": "b8fbb6466bba0d47e414e9db5d41d821d7d753b0087cbb624af987ee61d10d41",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "5810e3880f2af51cf7b39f5e1c2caa49012c89ddfc7fc6224e74adf707249227",
+          "path": "scripts/check-format.sh",
+          "previous_sha256": "5810e3880f2af51cf7b39f5e1c2caa49012c89ddfc7fc6224e74adf707249227",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "83a2949102955281f13a94e2f871d36e170cbfe76d053032ce5c114dc065ed29",
+          "path": "src/agent_dev_kit/readiness.py",
+          "previous_sha256": "83a2949102955281f13a94e2f871d36e170cbfe76d053032ce5c114dc065ed29",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "5d361c7bd0fbbc2ce923071d3b5afcefb5998a8047d49e54be70f19ca49c554c",
+          "path": "src/agent_dev_kit/readiness_tools.py",
+          "previous_sha256": "5d361c7bd0fbbc2ce923071d3b5afcefb5998a8047d49e54be70f19ca49c554c",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "90a6fa1c00f18ffaa9394fc548cbf5739e8eeda8b827832eef516961164d263d",
+          "path": "tests/lib/bash-test-helpers.sh",
+          "previous_sha256": "90a6fa1c00f18ffaa9394fc548cbf5739e8eeda8b827832eef516961164d263d",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "560fa3a6e299dca198b7417dec72bc77998aa736587a83c795cb579abd686324",
+          "path": "tests/mcp_2026_activation/mcp_activation_test.go",
+          "previous_sha256": "560fa3a6e299dca198b7417dec72bc77998aa736587a83c795cb579abd686324",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "f7328fd18b81713f6053924099bd81fde92cc4a2ac2ddab7710feab9fc1d8fd1",
+          "path": "tests/run_all.sh",
+          "previous_sha256": "f7328fd18b81713f6053924099bd81fde92cc4a2ac2ddab7710feab9fc1d8fd1",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "9341118fc2187764597d0445caddfa5930fbc95fb0eeed6665d29ef9b4a3844e",
+          "path": "tests/test_agent_ecosystem_standards.sh",
+          "previous_sha256": "9341118fc2187764597d0445caddfa5930fbc95fb0eeed6665d29ef9b4a3844e",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "a7136691eeed9ff7a64a3c98fb2508d3dac82ca35c09ea9d1ab4d3b16a244a02",
+          "path": "tests/test_agent_platform.sh",
+          "previous_sha256": "a7136691eeed9ff7a64a3c98fb2508d3dac82ca35c09ea9d1ab4d3b16a244a02",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "122fce83231fbd4af11789da15933c1fbf63b25aee218fdd306c8889c1382798",
+          "path": "tests/test_catalog.sh",
+          "previous_sha256": "122fce83231fbd4af11789da15933c1fbf63b25aee218fdd306c8889c1382798",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "dd0f1d497a0125284ce674690315b6854bebc30257f1ed6ce1f4f552897ff8c7",
+          "path": "tests/test_eval_catalog.py",
+          "previous_sha256": "dd0f1d497a0125284ce674690315b6854bebc30257f1ed6ce1f4f552897ff8c7",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "fbb79f7fdcf60b5dde639d2c03e6ba09dc178efe43d98274ca8e410f5aec9946",
+          "path": "tests/test_eval_catalog.sh",
+          "previous_sha256": "fbb79f7fdcf60b5dde639d2c03e6ba09dc178efe43d98274ca8e410f5aec9946",
+          "unchanged": true
+        },
+        {
+          "current_sha256": "9ccac15a620e20f9d5eacb1e1e50f47c191e3ce5bb07015f3f6b91def51c44af",
+          "path": "tests/test_mcp_freshness_ssot.sh",
+          "previous_sha256": "9ccac15a620e20f9d5eacb1e1e50f47c191e3ce5bb07015f3f6b91def51c44af",
+          "unchanged": true
+        }
+      ]
+    },
+    "raw_dimensions": {
+      "context_legibility": {
+        "blockers": [],
+        "evidence_refs": [
+          "AGENTS.md",
+          "README.md"
+        ],
+        "raw_status": "pass"
+      },
+      "freshness_and_entropy_control": {
+        "blockers": [],
+        "evidence_refs": [
+          "scripts/check-format.sh",
+          "tests/test_catalog.sh",
+          "tests/test_eval_catalog.py",
+          "tests/test_eval_catalog.sh",
+          "tests/test_mcp_freshness_ssot.sh",
+          ".github/CODEOWNERS",
+          "OWNERS"
+        ],
+        "raw_status": "pass"
+      },
+      "recovery_and_rollback": {
+        "blockers": [],
+        "evidence_refs": [
+          "scripts/backup-rollback.sh"
+        ],
+        "raw_status": "pass"
+      },
+      "spec_and_execution_contract": {
+        "blockers": [],
+        "evidence_refs": [
+          "docs/changes/2026-09-25-agent-value-trust/requirements.md",
+          "docs/changes/2026-09-25-effect-trials/design.md",
+          "docs/changes/2026-09-25-effect-trials/requirements.md",
+          "docs/changes/2026-09-25-native-campaign-finalize/requirements.md",
+          "docs/changes/2026-09-25-agent-value-trust/tasks.md",
+          "docs/changes/2026-09-25-effect-trials/tasks.md",
+          "docs/changes/2026-09-25-native-campaign-finalize/tasks.md",
+          "docs/changes/2026-09-25-native-campaign-project-layout/tasks.md",
+          "docs/changes/2026-09-25-agent-value-trust/negative-results.md",
+          "docs/changes/2026-09-25-effect-trials/negative-results.md",
+          "docs/changes/2026-09-25-native-campaign-finalize/negative-results.md",
+          "docs/changes/2026-09-25-native-campaign-project-layout/negative-results.md"
+        ],
+        "raw_status": "pass"
+      },
+      "state_and_knowledge_continuity": {
+        "blockers": [],
+        "evidence_refs": [
+          "docs/changes/20261024-release-bundles/PROGRESS.md",
+          "docs/changes/adk-platform-convergence-v1/state.yaml",
+          "docs/changes/adk-self-readiness-ownership/state.yaml",
+          "docs/changes/adk-terminal-contract-hardening/state.yaml",
+          "docs/changes/adk-v3-1-rc2-target-conformance/state.yaml",
+          "docs/changes/adk-v3-1-software-m5-ready/state.yaml",
+          "docs/runbooks/README.md",
+          "docs/runbooks/agent-value-lifecycle.md",
+          "docs/runbooks/artifact-gated-delivery.md",
+          "docs/runbooks/bugfix-delivery.md",
+          "docs/runbooks/codex-pilot-evidence.md",
+          "docs/runbooks/codex-runtime-method-boundary.md"
+        ],
+        "raw_status": "pass"
+      },
+      "tool_and_permission_boundary": {
+        "blockers": [],
+        "evidence_refs": [],
+        "raw_status": "not-applicable"
+      },
+      "verification_review_and_eval": {
+        "blockers": [],
+        "evidence_refs": [
+          "tests/lib/bash-test-helpers.sh",
+          "tests/mcp_2026_activation/mcp_activation_test.go",
+          "tests/release_archive_fixture.py",
+          "tests/run_all.sh",
+          "tests/test_agent_ecosystem_standards.sh",
+          ".github/workflows/branch-gc.yml",
+          ".github/workflows/ci.yml",
+          ".github/workflows/claude-consumer-contract.yml",
+          ".github/workflows/codex-consumer-contract.yml",
+          ".github/workflows/digital-worker-contract.yml",
+          "AGENTS.md",
+          "README.md"
+        ],
+        "raw_status": "pass"
+      }
+    },
+    "raw_projection_is_not_current_gate_verdict": true,
+    "raw_source_count": 44,
+    "raw_source_refs": [
+      ".github/CODEOWNERS",
+      ".github/workflows/branch-gc.yml",
+      ".github/workflows/ci.yml",
+      ".github/workflows/claude-consumer-contract.yml",
+      ".github/workflows/codex-consumer-contract.yml",
+      ".github/workflows/digital-worker-contract.yml",
+      "AGENTS.md",
+      "OWNERS",
+      "README.md",
+      "docs/changes/2026-09-25-agent-value-trust/negative-results.md",
+      "docs/changes/2026-09-25-agent-value-trust/requirements.md",
+      "docs/changes/2026-09-25-agent-value-trust/tasks.md",
+      "docs/changes/2026-09-25-effect-trials/design.md",
+      "docs/changes/2026-09-25-effect-trials/negative-results.md",
+      "docs/changes/2026-09-25-effect-trials/requirements.md",
+      "docs/changes/2026-09-25-effect-trials/tasks.md",
+      "docs/changes/2026-09-25-native-campaign-finalize/negative-results.md",
+      "docs/changes/2026-09-25-native-campaign-finalize/requirements.md",
+      "docs/changes/2026-09-25-native-campaign-finalize/tasks.md",
+      "docs/changes/2026-09-25-native-campaign-project-layout/negative-results.md",
+      "docs/changes/2026-09-25-native-campaign-project-layout/tasks.md",
+      "docs/changes/20261024-release-bundles/PROGRESS.md",
+      "docs/changes/adk-platform-convergence-v1/state.yaml",
+      "docs/changes/adk-self-readiness-ownership/state.yaml",
+      "docs/changes/adk-terminal-contract-hardening/state.yaml",
+      "docs/changes/adk-v3-1-rc2-target-conformance/state.yaml",
+      "docs/changes/adk-v3-1-software-m5-ready/state.yaml",
+      "docs/runbooks/README.md",
+      "docs/runbooks/agent-value-lifecycle.md",
+      "docs/runbooks/artifact-gated-delivery.md",
+      "docs/runbooks/bugfix-delivery.md",
+      "docs/runbooks/codex-pilot-evidence.md",
+      "docs/runbooks/codex-runtime-method-boundary.md",
+      "scripts/backup-rollback.sh",
+      "scripts/check-format.sh",
+      "tests/lib/bash-test-helpers.sh",
+      "tests/mcp_2026_activation/mcp_activation_test.go",
+      "tests/release_archive_fixture.py",
+      "tests/run_all.sh",
+      "tests/test_agent_ecosystem_standards.sh",
+      "tests/test_catalog.sh",
+      "tests/test_eval_catalog.py",
+      "tests/test_eval_catalog.sh",
+      "tests/test_mcp_freshness_ssot.sh"
+    ],
+    "reviewer": "ai/root/root_code_audit",
+    "scan": {
+      "errors": [],
+      "files_seen": 1498,
+      "truncated": false
+    },
+    "schema": "independent-harness-source-observation/v1",
+    "source_head": "55cd509c389a07c16123812fcd1842a6550cdf34",
+    "source_root": "/workspace/scratch/712af632e2a5/agent-dev-kit",
+    "source_sha256_after": {
+      ".adk/review-authorization.md": "1594e628184cb0e4ad6c669bf5ce39dcb1f333d03d0798bebb080856e703cda5",
+      ".adk/review-policy.json": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+      ".github/CODEOWNERS": "80c4105be9d42c79f5057726fbb9971aa0a638ee17f47f31377c04085b1095cc",
+      ".github/workflows/branch-gc.yml": "9c88b4fc19147008351bef181a275fb371b986567eadaa2892b5292b8322e47d",
+      ".github/workflows/ci.yml": "8c0b509ca8e46ddf9e67d9aed00d5bd28da73bf831de9a35601a4f625381e910",
+      ".github/workflows/claude-consumer-contract.yml": "2abc7885d7ab3476776ef4cbcbc022d008734ceb3e714381cc994ebdc543526b",
+      ".github/workflows/codex-consumer-contract.yml": "f1e9e882dd0ee2995ac10d5ffa57ca97451b3ff9143f1019c617830ea2d4bbb9",
+      ".github/workflows/digital-worker-contract.yml": "3575ad868bebbc6120e39a37f0786d249ec1a4887bcc1a775378c0bc1ac02eee",
+      ".version-lock": "56908b263dc5b6e17e7765e8c7befe8a6d37b28e1ab8785d636a73ed6485846c",
+      "AGENTS.md": "61a06f86a6b5382855fab70a3098f878e9f7d3e0af653a86fbd199d8d5d13167",
+      "CHANGELOG.md": "2f6489345553319676f1f4178becbbd027cd148166339d95a6290d20001e4564",
+      "OWNERS": "04214b6ee2937ef8c786f998ee890a0cecacb7dd318bab99a13db844f850a95e",
+      "README.md": "13e695fabe0839cf09b7bf1f322b440815bf6c9050ab77b27b3c4c39eaf60566",
+      "docs/agent-operating-rules.md": "9eb0f82be4ec98662524ed13773dbcd86c0c073c609e622d76341342e1a6f2ac",
+      "docs/architecture/canonical-change-authority.md": "8c55aac803a078e6490fd7ffac9a70df27a1dfbd6740ab16c479de4c12cf39f6",
+      "docs/changes/2026-09-25-agent-value-trust/negative-results.md": "da7aa6c51295be56368b90594b7eb6469bf0a43b3888d7a482839bb22c0970c0",
+      "docs/changes/2026-09-25-agent-value-trust/requirements.md": "429e4296ec368df67542c7b536c478c2ac2f16adedad9dfddc1b53383cc343ad",
+      "docs/changes/2026-09-25-agent-value-trust/tasks.md": "ccee418ae0bd170f1c579bf0cb48af9be1dff833629c95705f5deca431e1d499",
+      "docs/changes/2026-09-25-effect-trials/design.md": "a23b59b2cab96879196748bd082347a8d00a756598460ad3f83f97c7a50e976f",
+      "docs/changes/2026-09-25-effect-trials/negative-results.md": "045d0b30fd4e15dabfa0436d3b34403bb3bd5b6b8916ef4cb708a2e6523cdf73",
+      "docs/changes/2026-09-25-effect-trials/requirements.md": "f4a2bffa3a90d0955a2b9e50d5e3201a30f667edb30a1709985bab2f856ed281",
+      "docs/changes/2026-09-25-effect-trials/tasks.md": "802ca9c194d39060eb931af0f3e8042d5f1e62acc9249abeaead6b5ede8615b9",
+      "docs/changes/2026-09-25-native-campaign-finalize/negative-results.md": "d5d436b9ddf56b37c22f200b2f84a7fd09d3e964b8d91c4051649eb51b207673",
+      "docs/changes/2026-09-25-native-campaign-finalize/requirements.md": "45da7af9938c1c826ca203ab5439d55aac9def3a4da218a30a5252d531d3d0a7",
+      "docs/changes/2026-09-25-native-campaign-finalize/tasks.md": "b94ecc55058d993aa5ceb2da12020ffc181b68de7b4924c591f7a5567ccaee09",
+      "docs/changes/2026-09-25-native-campaign-project-layout/negative-results.md": "9426f86cc945edfaa63590e140c0ec458762beea4e09bf0a0886badb15151338",
+      "docs/changes/2026-09-25-native-campaign-project-layout/tasks.md": "2f3fca0914f53aabe3713f3d0094fb6bacb3e3d1e0df867db134d71835d3e2ce",
+      "docs/changes/20261023-output-boundaries/design.md": "9fb7e932b609f3af6824ac003a2a3b7d5d8eeb65c3fa57ddbb54dd17e4e8d7c3",
+      "docs/changes/20261023-output-boundaries/requirements.md": "12dbdebd9253534e6277276822e1e779144a778d153ac8f5c9d8c95b1a2330d4",
+      "docs/changes/20261023-output-boundaries/tasks.md": "d33944cca8953c24f48c6cd535f6d4ce287c2c25730a113f22e0ffe131929b61",
+      "docs/changes/20261023-release-contract/design.md": "031c9556b21838bad423f3b22182bf25cba6ea2c67e0b68cd67fb7192bdc1f8b",
+      "docs/changes/20261023-release-contract/requirements.md": "62af6210c96e8d4d388476f07d07f6a08d9c5ee769e0ac0f177806406bd2e237",
+      "docs/changes/20261023-release-contract/tasks.md": "6ec54c597a177d58b1c5540dda3e852a72f6baa9005d66d9f6e7119c395a24ad",
+      "docs/changes/20261024-release-bundles/PROGRESS.md": "36764e73d5110d9366a0013abc7e4b22c21d0cf3f45999d619d3c979c212d49b",
+      "docs/changes/20261024-release-bundles/design.md": "954cdbd64045c0d58710cf4c5cde79ae4ab29a981f0496eb0560091032cd283c",
+      "docs/changes/20261024-release-bundles/negative-results.md": "ba6a35bcca40951d05635f9ca411636c55c09639b686041a0e42ff1fdf29b163",
+      "docs/changes/20261024-release-bundles/requirements.md": "2dcda6dac82189d8a4835e234446ffaa3b097e8435ddf2bbb464a0ff9bc2d57b",
+      "docs/changes/20261024-release-bundles/tasks.md": "6be7ef3613b86c93bd494206d88806cda84537a71703834455f096561bd606f6",
+      "docs/changes/20261024-release-bundles/verification.md": "a0e6ea6525748f19e59b36552d8628efa948ad86a2a64b6dee66ea652ab6fc9a",
+      "docs/changes/20261024-target-smoke/design.md": "cd6a75ac6165e105c4496f5a7a769da3df602625e08b9430d67bedf0bd6732d6",
+      "docs/changes/20261024-target-smoke/negative-results.md": "3260c20b0e53c5d9c1f0151b60dcd173fc1784d13cbb4dbc6af8936aeac51ede",
+      "docs/changes/20261024-target-smoke/requirements.md": "d67aca13ffd076a1147a5a92d8cdc1c2af24497739cc507bcf6c32ddce19c850",
+      "docs/changes/20261024-target-smoke/tasks.md": "9144755b2ec4487cb9055e1284577d00e0bb41b8d84480f84133af45343040e8",
+      "docs/changes/20261024-target-smoke/verification.md": "26711b453add2f9b5435370f0e7cdf0e4b540cc23805c4015b5a56db3f033fb7",
+      "docs/changes/adk-platform-convergence-v1/state.yaml": "f95699e68437bafa0199a5564af18cbc7e3f78de290f4b01dc17737d0b68156e",
+      "docs/changes/adk-self-readiness-ownership/state.yaml": "d590a0ae6b1b666cc1d6d64ab7b1e8fd5f128979993595eea8489783138f46d1",
+      "docs/changes/adk-terminal-contract-hardening/state.yaml": "87b107bda25456141bae1a3b035c7e2c30616afd8baf86d333216a87f0754f5f",
+      "docs/changes/adk-v3-1-rc2-target-conformance/state.yaml": "ed9597562535265d61322e9558727acf963193e121570d1a7bafe5136d4299d6",
+      "docs/changes/adk-v3-1-software-m5-ready/state.yaml": "fa314d45b209d8bea753377d18848cb02793d62c660dd69e906b7d8ee96e1134",
+      "docs/changes/agent-ecosystem-standards-hardening/state.yaml": "37ff7e9a84d590999e31b86493ee82de2a313e5efded23bba90a3c885977bee5",
+      "docs/commands.md": "05f6229eaf01b22c13b8576c4a81035c172e9d03af5a3874b24404e3e137e8e8",
+      "docs/runbooks/README.md": "0888aa2b94f929760040517deaf9a47b517648b0694209d48309956fbe83273d",
+      "docs/runbooks/agent-value-lifecycle.md": "84e629c1c040b265d6a64369c5b39d6af2e999576af4429939738ff00b5a4c37",
+      "docs/runbooks/artifact-gated-delivery.md": "f83375f1392b20006f29e43ce5b0807530ad850969e6ee67e3b861a78fa98dd6",
+      "docs/runbooks/bugfix-delivery.md": "f7ef75ace0052ecbde911b06e3b45a1d22045ba24257c642736f72f6f28ff623",
+      "docs/runbooks/codex-pilot-evidence.md": "5ff92fab93baf7403b838a67f359e29016a6ce19563eb98006cca6c842ae298c",
+      "docs/runbooks/codex-runtime-method-boundary.md": "43bf36ec8a1a9a12bf30bb29b7a9f2bdbfd9a00f849ad700a85fb1cd440dde18",
+      "docs/runbooks/native-campaign.md": "31ce75ccf900c455bd7302a25e34d2573e96cd1dac26085a97a13a7f046772f8",
+      "docs/usage.md": "3ece049725e38609706acc556932c4053a075fbf67101a27499a23e4dc57ea88",
+      "manifest.json": "1b02751baa1ebad3070ddc156b258b384a907bee44637bfdcc5f36e44a6799f6",
+      "manifests/context_state_contracts.json": "fe8076296b8cf214aee52a5ad32dabff5d383555e76f6d3d3e542e2e6617fb91",
+      "manifests/harness_readiness_contracts.json": "e12c527dcfcfc61030b9a344f9d7fa3efeb828c364f5707285bdded69fcd8358",
+      "manifests/token_context_policy.json": "799b0388c82c6cb6925caf0c2cd6e44685eeca5277a9b5128a9cec50551e158f",
+      "pyproject.toml": "5dfd467777106a51119d596d4c50c9a5732c0cc47465e3e43f7a701bff05dbc3",
+      "scripts/backup-rollback.sh": "b8fbb6466bba0d47e414e9db5d41d821d7d753b0087cbb624af987ee61d10d41",
+      "scripts/check-format.sh": "5810e3880f2af51cf7b39f5e1c2caa49012c89ddfc7fc6224e74adf707249227",
+      "src/agent_dev_kit/compiler.py": "72a981a3ad66bebce77960339eafd55ce3abd75553bef5fa1cfcbcb37471f3c0",
+      "src/agent_dev_kit/distribution/archive_io.py": "f693b56de052f33c1fb83b5abc95342f31af95b52795182f116fd78db61a6998",
+      "src/agent_dev_kit/distribution/release_contract.py": "7580fcafe1c55b03c29a03c84db738ecb7fe1993c9e0c537a025996050f75f82",
+      "src/agent_dev_kit/native_campaign_execution.py": "4855a70b34ec92839c0b7f52e750f534b031c7f23e9bdc6311bfd9c26d2fc397",
+      "src/agent_dev_kit/process_execution.py": "01e3da0bc9cee08055dafafb178c270f8e6ece2a18de2ad542027a1b252d5b9d",
+      "src/agent_dev_kit/readiness.py": "83a2949102955281f13a94e2f871d36e170cbfe76d053032ce5c114dc065ed29",
+      "src/agent_dev_kit/readiness_evidence.py": "ef980657486084eea8ab8a03ab357a76a3ed43691aca8d6909b06642764c808b",
+      "src/agent_dev_kit/readiness_tools.py": "5d361c7bd0fbbc2ce923071d3b5afcefb5998a8047d49e54be70f19ca49c554c",
+      "src/agent_dev_kit/review_evidence.py": "73d85e864a3da125bf94808f19616f52150751a94ccc729ac66f66d2576b8808",
+      "src/agent_dev_kit/strict_json.py": "e11233b8d02d7fb95a8f2f93bfff065a1db84c4ef0820fef6d817600abe8ec98",
+      "src/agent_dev_kit/targets.py": "a188891cb0569a1b4cea7721aea51d8770b218fe7f62cbfa2e2ed18b57456d6a",
+      "tests/lib/bash-test-helpers.sh": "90a6fa1c00f18ffaa9394fc548cbf5739e8eeda8b827832eef516961164d263d",
+      "tests/mcp_2026_activation/mcp_activation_test.go": "560fa3a6e299dca198b7417dec72bc77998aa736587a83c795cb579abd686324",
+      "tests/release_archive_fixture.py": "a512b0259efc35ea964210c61235920c4f32d24f7539b13103744b038c6f00bb",
+      "tests/run_all.sh": "f7328fd18b81713f6053924099bd81fde92cc4a2ac2ddab7710feab9fc1d8fd1",
+      "tests/test_agent_ecosystem_standards.sh": "9341118fc2187764597d0445caddfa5930fbc95fb0eeed6665d29ef9b4a3844e",
+      "tests/test_agent_platform.sh": "a7136691eeed9ff7a64a3c98fb2508d3dac82ca35c09ea9d1ab4d3b16a244a02",
+      "tests/test_catalog.sh": "122fce83231fbd4af11789da15933c1fbf63b25aee218fdd306c8889c1382798",
+      "tests/test_eval_catalog.py": "dd0f1d497a0125284ce674690315b6854bebc30257f1ed6ce1f4f552897ff8c7",
+      "tests/test_eval_catalog.sh": "fbb79f7fdcf60b5dde639d2c03e6ba09dc178efe43d98274ca8e410f5aec9946",
+      "tests/test_mcp_freshness_ssot.sh": "9ccac15a620e20f9d5eacb1e1e50f47c191e3ce5bb07015f3f6b91def51c44af",
+      "tests/test_release_integrity.py": "8e8ceb85d49e1a1c28efbf3e6aef2f8fb8c768252c78cc22e99a4e4bfd01a0e9",
+      "tests/test_target_smoke.py": "fb941ffdbd753eefa16d7b8178144543c77895665a0dd8935359bb891e5fa7b9"
+    },
+    "source_sha256_before": {
+      ".adk/review-authorization.md": "1594e628184cb0e4ad6c669bf5ce39dcb1f333d03d0798bebb080856e703cda5",
+      ".adk/review-policy.json": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+      ".github/CODEOWNERS": "80c4105be9d42c79f5057726fbb9971aa0a638ee17f47f31377c04085b1095cc",
+      ".github/workflows/branch-gc.yml": "9c88b4fc19147008351bef181a275fb371b986567eadaa2892b5292b8322e47d",
+      ".github/workflows/ci.yml": "8c0b509ca8e46ddf9e67d9aed00d5bd28da73bf831de9a35601a4f625381e910",
+      ".github/workflows/claude-consumer-contract.yml": "2abc7885d7ab3476776ef4cbcbc022d008734ceb3e714381cc994ebdc543526b",
+      ".github/workflows/codex-consumer-contract.yml": "f1e9e882dd0ee2995ac10d5ffa57ca97451b3ff9143f1019c617830ea2d4bbb9",
+      ".github/workflows/digital-worker-contract.yml": "3575ad868bebbc6120e39a37f0786d249ec1a4887bcc1a775378c0bc1ac02eee",
+      ".version-lock": "56908b263dc5b6e17e7765e8c7befe8a6d37b28e1ab8785d636a73ed6485846c",
+      "AGENTS.md": "61a06f86a6b5382855fab70a3098f878e9f7d3e0af653a86fbd199d8d5d13167",
+      "CHANGELOG.md": "2f6489345553319676f1f4178becbbd027cd148166339d95a6290d20001e4564",
+      "OWNERS": "04214b6ee2937ef8c786f998ee890a0cecacb7dd318bab99a13db844f850a95e",
+      "README.md": "13e695fabe0839cf09b7bf1f322b440815bf6c9050ab77b27b3c4c39eaf60566",
+      "docs/agent-operating-rules.md": "9eb0f82be4ec98662524ed13773dbcd86c0c073c609e622d76341342e1a6f2ac",
+      "docs/architecture/canonical-change-authority.md": "8c55aac803a078e6490fd7ffac9a70df27a1dfbd6740ab16c479de4c12cf39f6",
+      "docs/changes/2026-09-25-agent-value-trust/negative-results.md": "da7aa6c51295be56368b90594b7eb6469bf0a43b3888d7a482839bb22c0970c0",
+      "docs/changes/2026-09-25-agent-value-trust/requirements.md": "429e4296ec368df67542c7b536c478c2ac2f16adedad9dfddc1b53383cc343ad",
+      "docs/changes/2026-09-25-agent-value-trust/tasks.md": "ccee418ae0bd170f1c579bf0cb48af9be1dff833629c95705f5deca431e1d499",
+      "docs/changes/2026-09-25-effect-trials/design.md": "a23b59b2cab96879196748bd082347a8d00a756598460ad3f83f97c7a50e976f",
+      "docs/changes/2026-09-25-effect-trials/negative-results.md": "045d0b30fd4e15dabfa0436d3b34403bb3bd5b6b8916ef4cb708a2e6523cdf73",
+      "docs/changes/2026-09-25-effect-trials/requirements.md": "f4a2bffa3a90d0955a2b9e50d5e3201a30f667edb30a1709985bab2f856ed281",
+      "docs/changes/2026-09-25-effect-trials/tasks.md": "802ca9c194d39060eb931af0f3e8042d5f1e62acc9249abeaead6b5ede8615b9",
+      "docs/changes/2026-09-25-native-campaign-finalize/negative-results.md": "d5d436b9ddf56b37c22f200b2f84a7fd09d3e964b8d91c4051649eb51b207673",
+      "docs/changes/2026-09-25-native-campaign-finalize/requirements.md": "45da7af9938c1c826ca203ab5439d55aac9def3a4da218a30a5252d531d3d0a7",
+      "docs/changes/2026-09-25-native-campaign-finalize/tasks.md": "b94ecc55058d993aa5ceb2da12020ffc181b68de7b4924c591f7a5567ccaee09",
+      "docs/changes/2026-09-25-native-campaign-project-layout/negative-results.md": "9426f86cc945edfaa63590e140c0ec458762beea4e09bf0a0886badb15151338",
+      "docs/changes/2026-09-25-native-campaign-project-layout/tasks.md": "2f3fca0914f53aabe3713f3d0094fb6bacb3e3d1e0df867db134d71835d3e2ce",
+      "docs/changes/20261023-output-boundaries/design.md": "9fb7e932b609f3af6824ac003a2a3b7d5d8eeb65c3fa57ddbb54dd17e4e8d7c3",
+      "docs/changes/20261023-output-boundaries/requirements.md": "12dbdebd9253534e6277276822e1e779144a778d153ac8f5c9d8c95b1a2330d4",
+      "docs/changes/20261023-output-boundaries/tasks.md": "d33944cca8953c24f48c6cd535f6d4ce287c2c25730a113f22e0ffe131929b61",
+      "docs/changes/20261023-release-contract/design.md": "031c9556b21838bad423f3b22182bf25cba6ea2c67e0b68cd67fb7192bdc1f8b",
+      "docs/changes/20261023-release-contract/requirements.md": "62af6210c96e8d4d388476f07d07f6a08d9c5ee769e0ac0f177806406bd2e237",
+      "docs/changes/20261023-release-contract/tasks.md": "6ec54c597a177d58b1c5540dda3e852a72f6baa9005d66d9f6e7119c395a24ad",
+      "docs/changes/20261024-release-bundles/PROGRESS.md": "36764e73d5110d9366a0013abc7e4b22c21d0cf3f45999d619d3c979c212d49b",
+      "docs/changes/20261024-release-bundles/design.md": "954cdbd64045c0d58710cf4c5cde79ae4ab29a981f0496eb0560091032cd283c",
+      "docs/changes/20261024-release-bundles/negative-results.md": "ba6a35bcca40951d05635f9ca411636c55c09639b686041a0e42ff1fdf29b163",
+      "docs/changes/20261024-release-bundles/requirements.md": "2dcda6dac82189d8a4835e234446ffaa3b097e8435ddf2bbb464a0ff9bc2d57b",
+      "docs/changes/20261024-release-bundles/tasks.md": "6be7ef3613b86c93bd494206d88806cda84537a71703834455f096561bd606f6",
+      "docs/changes/20261024-release-bundles/verification.md": "a0e6ea6525748f19e59b36552d8628efa948ad86a2a64b6dee66ea652ab6fc9a",
+      "docs/changes/20261024-target-smoke/design.md": "cd6a75ac6165e105c4496f5a7a769da3df602625e08b9430d67bedf0bd6732d6",
+      "docs/changes/20261024-target-smoke/negative-results.md": "3260c20b0e53c5d9c1f0151b60dcd173fc1784d13cbb4dbc6af8936aeac51ede",
+      "docs/changes/20261024-target-smoke/requirements.md": "d67aca13ffd076a1147a5a92d8cdc1c2af24497739cc507bcf6c32ddce19c850",
+      "docs/changes/20261024-target-smoke/tasks.md": "9144755b2ec4487cb9055e1284577d00e0bb41b8d84480f84133af45343040e8",
+      "docs/changes/20261024-target-smoke/verification.md": "26711b453add2f9b5435370f0e7cdf0e4b540cc23805c4015b5a56db3f033fb7",
+      "docs/changes/adk-platform-convergence-v1/state.yaml": "f95699e68437bafa0199a5564af18cbc7e3f78de290f4b01dc17737d0b68156e",
+      "docs/changes/adk-self-readiness-ownership/state.yaml": "d590a0ae6b1b666cc1d6d64ab7b1e8fd5f128979993595eea8489783138f46d1",
+      "docs/changes/adk-terminal-contract-hardening/state.yaml": "87b107bda25456141bae1a3b035c7e2c30616afd8baf86d333216a87f0754f5f",
+      "docs/changes/adk-v3-1-rc2-target-conformance/state.yaml": "ed9597562535265d61322e9558727acf963193e121570d1a7bafe5136d4299d6",
+      "docs/changes/adk-v3-1-software-m5-ready/state.yaml": "fa314d45b209d8bea753377d18848cb02793d62c660dd69e906b7d8ee96e1134",
+      "docs/changes/agent-ecosystem-standards-hardening/state.yaml": "37ff7e9a84d590999e31b86493ee82de2a313e5efded23bba90a3c885977bee5",
+      "docs/commands.md": "05f6229eaf01b22c13b8576c4a81035c172e9d03af5a3874b24404e3e137e8e8",
+      "docs/runbooks/README.md": "0888aa2b94f929760040517deaf9a47b517648b0694209d48309956fbe83273d",
+      "docs/runbooks/agent-value-lifecycle.md": "84e629c1c040b265d6a64369c5b39d6af2e999576af4429939738ff00b5a4c37",
+      "docs/runbooks/artifact-gated-delivery.md": "f83375f1392b20006f29e43ce5b0807530ad850969e6ee67e3b861a78fa98dd6",
+      "docs/runbooks/bugfix-delivery.md": "f7ef75ace0052ecbde911b06e3b45a1d22045ba24257c642736f72f6f28ff623",
+      "docs/runbooks/codex-pilot-evidence.md": "5ff92fab93baf7403b838a67f359e29016a6ce19563eb98006cca6c842ae298c",
+      "docs/runbooks/codex-runtime-method-boundary.md": "43bf36ec8a1a9a12bf30bb29b7a9f2bdbfd9a00f849ad700a85fb1cd440dde18",
+      "docs/runbooks/native-campaign.md": "31ce75ccf900c455bd7302a25e34d2573e96cd1dac26085a97a13a7f046772f8",
+      "docs/usage.md": "3ece049725e38609706acc556932c4053a075fbf67101a27499a23e4dc57ea88",
+      "manifest.json": "1b02751baa1ebad3070ddc156b258b384a907bee44637bfdcc5f36e44a6799f6",
+      "manifests/context_state_contracts.json": "fe8076296b8cf214aee52a5ad32dabff5d383555e76f6d3d3e542e2e6617fb91",
+      "manifests/harness_readiness_contracts.json": "e12c527dcfcfc61030b9a344f9d7fa3efeb828c364f5707285bdded69fcd8358",
+      "manifests/token_context_policy.json": "799b0388c82c6cb6925caf0c2cd6e44685eeca5277a9b5128a9cec50551e158f",
+      "pyproject.toml": "5dfd467777106a51119d596d4c50c9a5732c0cc47465e3e43f7a701bff05dbc3",
+      "scripts/backup-rollback.sh": "b8fbb6466bba0d47e414e9db5d41d821d7d753b0087cbb624af987ee61d10d41",
+      "scripts/check-format.sh": "5810e3880f2af51cf7b39f5e1c2caa49012c89ddfc7fc6224e74adf707249227",
+      "src/agent_dev_kit/compiler.py": "72a981a3ad66bebce77960339eafd55ce3abd75553bef5fa1cfcbcb37471f3c0",
+      "src/agent_dev_kit/distribution/archive_io.py": "f693b56de052f33c1fb83b5abc95342f31af95b52795182f116fd78db61a6998",
+      "src/agent_dev_kit/distribution/release_contract.py": "7580fcafe1c55b03c29a03c84db738ecb7fe1993c9e0c537a025996050f75f82",
+      "src/agent_dev_kit/native_campaign_execution.py": "4855a70b34ec92839c0b7f52e750f534b031c7f23e9bdc6311bfd9c26d2fc397",
+      "src/agent_dev_kit/process_execution.py": "01e3da0bc9cee08055dafafb178c270f8e6ece2a18de2ad542027a1b252d5b9d",
+      "src/agent_dev_kit/readiness.py": "83a2949102955281f13a94e2f871d36e170cbfe76d053032ce5c114dc065ed29",
+      "src/agent_dev_kit/readiness_evidence.py": "ef980657486084eea8ab8a03ab357a76a3ed43691aca8d6909b06642764c808b",
+      "src/agent_dev_kit/readiness_tools.py": "5d361c7bd0fbbc2ce923071d3b5afcefb5998a8047d49e54be70f19ca49c554c",
+      "src/agent_dev_kit/review_evidence.py": "73d85e864a3da125bf94808f19616f52150751a94ccc729ac66f66d2576b8808",
+      "src/agent_dev_kit/strict_json.py": "e11233b8d02d7fb95a8f2f93bfff065a1db84c4ef0820fef6d817600abe8ec98",
+      "src/agent_dev_kit/targets.py": "a188891cb0569a1b4cea7721aea51d8770b218fe7f62cbfa2e2ed18b57456d6a",
+      "tests/lib/bash-test-helpers.sh": "90a6fa1c00f18ffaa9394fc548cbf5739e8eeda8b827832eef516961164d263d",
+      "tests/mcp_2026_activation/mcp_activation_test.go": "560fa3a6e299dca198b7417dec72bc77998aa736587a83c795cb579abd686324",
+      "tests/release_archive_fixture.py": "a512b0259efc35ea964210c61235920c4f32d24f7539b13103744b038c6f00bb",
+      "tests/run_all.sh": "f7328fd18b81713f6053924099bd81fde92cc4a2ac2ddab7710feab9fc1d8fd1",
+      "tests/test_agent_ecosystem_standards.sh": "9341118fc2187764597d0445caddfa5930fbc95fb0eeed6665d29ef9b4a3844e",
+      "tests/test_agent_platform.sh": "a7136691eeed9ff7a64a3c98fb2508d3dac82ca35c09ea9d1ab4d3b16a244a02",
+      "tests/test_catalog.sh": "122fce83231fbd4af11789da15933c1fbf63b25aee218fdd306c8889c1382798",
+      "tests/test_eval_catalog.py": "dd0f1d497a0125284ce674690315b6854bebc30257f1ed6ce1f4f552897ff8c7",
+      "tests/test_eval_catalog.sh": "fbb79f7fdcf60b5dde639d2c03e6ba09dc178efe43d98274ca8e410f5aec9946",
+      "tests/test_mcp_freshness_ssot.sh": "9ccac15a620e20f9d5eacb1e1e50f47c191e3ce5bb07015f3f6b91def51c44af",
+      "tests/test_release_integrity.py": "8e8ceb85d49e1a1c28efbf3e6aef2f8fb8c768252c78cc22e99a4e4bfd01a0e9",
+      "tests/test_target_smoke.py": "fb941ffdbd753eefa16d7b8178144543c77895665a0dd8935359bb891e5fa7b9"
+    }
+  },
+  "bound_source_count": 62,
+  "implementation_execution_commit": "775352c86a5f67f38b6d3650f8b933e832c7f49c",
+  "material_mcp_configs": [],
+  "new_raw_refs_relative_to_previous_source_set": [
+    "docs/changes/20261024-release-bundles/PROGRESS.md",
+    "tests/release_archive_fixture.py"
+  ],
+  "observed_at": "2026-10-24T16:45:43.619881Z",
+  "policy_or_validator_changed": false,
+  "policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+  "previous_review": {
+    "current_record_validity": "invalid for changed sources and newly selected raw refs; not reused as a current PASS",
+    "digest_valid_original_evidence": [
+      {
+        "actual_sha256": "3c406c07c5af41b65c6c6732f85ea8983aad7bfd6ccccd6374ea1ae75a737987",
+        "base": "repository",
+        "path": ".adk/reviews/evidence/harness-source-20261023-8.0.39/source-observation.json",
+        "sha256": "3c406c07c5af41b65c6c6732f85ea8983aad7bfd6ccccd6374ea1ae75a737987"
+      },
+      {
+        "actual_sha256": "711a500ae2cdb928e2aaba489ded9eccb6e40834589cccdb00775e0785305e98",
+        "base": "repository",
+        "path": ".adk/reviews/evidence/harness-source-20261023-8.0.39/independent-review.json",
+        "sha256": "711a500ae2cdb928e2aaba489ded9eccb6e40834589cccdb00775e0785305e98"
+      }
+    ],
+    "path": ".adk/reviews/harness-source-20261023-8.0.39.json",
+    "reviewer": {
+      "id": "ai/root/architecture_audit",
+      "independence": "independent",
+      "kind": "ai"
+    },
+    "sha256": "9ceb000c7ed70bdd3e9fc3be29abde0da62e5ea1d6583c6b37cc88971a72f9f7",
+    "source_comparison": [
+      {
+        "current_sha256": "80c4105be9d42c79f5057726fbb9971aa0a638ee17f47f31377c04085b1095cc",
+        "old_sha256": "80c4105be9d42c79f5057726fbb9971aa0a638ee17f47f31377c04085b1095cc",
+        "path": ".github/CODEOWNERS",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "9c88b4fc19147008351bef181a275fb371b986567eadaa2892b5292b8322e47d",
+        "old_sha256": "9c88b4fc19147008351bef181a275fb371b986567eadaa2892b5292b8322e47d",
+        "path": ".github/workflows/branch-gc.yml",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "8c0b509ca8e46ddf9e67d9aed00d5bd28da73bf831de9a35601a4f625381e910",
+        "old_sha256": "8c0b509ca8e46ddf9e67d9aed00d5bd28da73bf831de9a35601a4f625381e910",
+        "path": ".github/workflows/ci.yml",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "2abc7885d7ab3476776ef4cbcbc022d008734ceb3e714381cc994ebdc543526b",
+        "old_sha256": "2abc7885d7ab3476776ef4cbcbc022d008734ceb3e714381cc994ebdc543526b",
+        "path": ".github/workflows/claude-consumer-contract.yml",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "f1e9e882dd0ee2995ac10d5ffa57ca97451b3ff9143f1019c617830ea2d4bbb9",
+        "old_sha256": "f1e9e882dd0ee2995ac10d5ffa57ca97451b3ff9143f1019c617830ea2d4bbb9",
+        "path": ".github/workflows/codex-consumer-contract.yml",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "3575ad868bebbc6120e39a37f0786d249ec1a4887bcc1a775378c0bc1ac02eee",
+        "old_sha256": "3575ad868bebbc6120e39a37f0786d249ec1a4887bcc1a775378c0bc1ac02eee",
+        "path": ".github/workflows/digital-worker-contract.yml",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "61a06f86a6b5382855fab70a3098f878e9f7d3e0af653a86fbd199d8d5d13167",
+        "old_sha256": "61a06f86a6b5382855fab70a3098f878e9f7d3e0af653a86fbd199d8d5d13167",
+        "path": "AGENTS.md",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "a6d200849a186d3f8d25ac9fc0be986fc505208ebc4f3e834b5d949a4c910317",
+        "old_sha256": "20b26d7f8540b4f3985b2a0fb7902fa3d1d76fe25eb781803c26e8755393b356",
+        "path": "CHANGELOG.md",
+        "unchanged": false
+      },
+      {
+        "current_sha256": "04214b6ee2937ef8c786f998ee890a0cecacb7dd318bab99a13db844f850a95e",
+        "old_sha256": "04214b6ee2937ef8c786f998ee890a0cecacb7dd318bab99a13db844f850a95e",
+        "path": "OWNERS",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "13e695fabe0839cf09b7bf1f322b440815bf6c9050ab77b27b3c4c39eaf60566",
+        "old_sha256": "1b21f3232173a72fad4e2924ebd29c8318a5e35d6740fe250d87066296dddc52",
+        "path": "README.md",
+        "unchanged": false
+      },
+      {
+        "current_sha256": "9eb0f82be4ec98662524ed13773dbcd86c0c073c609e622d76341342e1a6f2ac",
+        "old_sha256": "9eb0f82be4ec98662524ed13773dbcd86c0c073c609e622d76341342e1a6f2ac",
+        "path": "docs/agent-operating-rules.md",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "8c55aac803a078e6490fd7ffac9a70df27a1dfbd6740ab16c479de4c12cf39f6",
+        "old_sha256": "8c55aac803a078e6490fd7ffac9a70df27a1dfbd6740ab16c479de4c12cf39f6",
+        "path": "docs/architecture/canonical-change-authority.md",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "da7aa6c51295be56368b90594b7eb6469bf0a43b3888d7a482839bb22c0970c0",
+        "old_sha256": "da7aa6c51295be56368b90594b7eb6469bf0a43b3888d7a482839bb22c0970c0",
+        "path": "docs/changes/2026-09-25-agent-value-trust/negative-results.md",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "429e4296ec368df67542c7b536c478c2ac2f16adedad9dfddc1b53383cc343ad",
+        "old_sha256": "429e4296ec368df67542c7b536c478c2ac2f16adedad9dfddc1b53383cc343ad",
+        "path": "docs/changes/2026-09-25-agent-value-trust/requirements.md",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "ccee418ae0bd170f1c579bf0cb48af9be1dff833629c95705f5deca431e1d499",
+        "old_sha256": "ccee418ae0bd170f1c579bf0cb48af9be1dff833629c95705f5deca431e1d499",
+        "path": "docs/changes/2026-09-25-agent-value-trust/tasks.md",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "a23b59b2cab96879196748bd082347a8d00a756598460ad3f83f97c7a50e976f",
+        "old_sha256": "a23b59b2cab96879196748bd082347a8d00a756598460ad3f83f97c7a50e976f",
+        "path": "docs/changes/2026-09-25-effect-trials/design.md",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "045d0b30fd4e15dabfa0436d3b34403bb3bd5b6b8916ef4cb708a2e6523cdf73",
+        "old_sha256": "045d0b30fd4e15dabfa0436d3b34403bb3bd5b6b8916ef4cb708a2e6523cdf73",
+        "path": "docs/changes/2026-09-25-effect-trials/negative-results.md",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "f4a2bffa3a90d0955a2b9e50d5e3201a30f667edb30a1709985bab2f856ed281",
+        "old_sha256": "f4a2bffa3a90d0955a2b9e50d5e3201a30f667edb30a1709985bab2f856ed281",
+        "path": "docs/changes/2026-09-25-effect-trials/requirements.md",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "802ca9c194d39060eb931af0f3e8042d5f1e62acc9249abeaead6b5ede8615b9",
+        "old_sha256": "802ca9c194d39060eb931af0f3e8042d5f1e62acc9249abeaead6b5ede8615b9",
+        "path": "docs/changes/2026-09-25-effect-trials/tasks.md",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "d5d436b9ddf56b37c22f200b2f84a7fd09d3e964b8d91c4051649eb51b207673",
+        "old_sha256": "d5d436b9ddf56b37c22f200b2f84a7fd09d3e964b8d91c4051649eb51b207673",
+        "path": "docs/changes/2026-09-25-native-campaign-finalize/negative-results.md",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "45da7af9938c1c826ca203ab5439d55aac9def3a4da218a30a5252d531d3d0a7",
+        "old_sha256": "45da7af9938c1c826ca203ab5439d55aac9def3a4da218a30a5252d531d3d0a7",
+        "path": "docs/changes/2026-09-25-native-campaign-finalize/requirements.md",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "b94ecc55058d993aa5ceb2da12020ffc181b68de7b4924c591f7a5567ccaee09",
+        "old_sha256": "b94ecc55058d993aa5ceb2da12020ffc181b68de7b4924c591f7a5567ccaee09",
+        "path": "docs/changes/2026-09-25-native-campaign-finalize/tasks.md",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "9426f86cc945edfaa63590e140c0ec458762beea4e09bf0a0886badb15151338",
+        "old_sha256": "9426f86cc945edfaa63590e140c0ec458762beea4e09bf0a0886badb15151338",
+        "path": "docs/changes/2026-09-25-native-campaign-project-layout/negative-results.md",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "2f3fca0914f53aabe3713f3d0094fb6bacb3e3d1e0df867db134d71835d3e2ce",
+        "old_sha256": "2f3fca0914f53aabe3713f3d0094fb6bacb3e3d1e0df867db134d71835d3e2ce",
+        "path": "docs/changes/2026-09-25-native-campaign-project-layout/tasks.md",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "9fb7e932b609f3af6824ac003a2a3b7d5d8eeb65c3fa57ddbb54dd17e4e8d7c3",
+        "old_sha256": "9fb7e932b609f3af6824ac003a2a3b7d5d8eeb65c3fa57ddbb54dd17e4e8d7c3",
+        "path": "docs/changes/20261023-output-boundaries/design.md",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "12dbdebd9253534e6277276822e1e779144a778d153ac8f5c9d8c95b1a2330d4",
+        "old_sha256": "12dbdebd9253534e6277276822e1e779144a778d153ac8f5c9d8c95b1a2330d4",
+        "path": "docs/changes/20261023-output-boundaries/requirements.md",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "d33944cca8953c24f48c6cd535f6d4ce287c2c25730a113f22e0ffe131929b61",
+        "old_sha256": "d33944cca8953c24f48c6cd535f6d4ce287c2c25730a113f22e0ffe131929b61",
+        "path": "docs/changes/20261023-output-boundaries/tasks.md",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "031c9556b21838bad423f3b22182bf25cba6ea2c67e0b68cd67fb7192bdc1f8b",
+        "old_sha256": "031c9556b21838bad423f3b22182bf25cba6ea2c67e0b68cd67fb7192bdc1f8b",
+        "path": "docs/changes/20261023-release-contract/design.md",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "62af6210c96e8d4d388476f07d07f6a08d9c5ee769e0ac0f177806406bd2e237",
+        "old_sha256": "62af6210c96e8d4d388476f07d07f6a08d9c5ee769e0ac0f177806406bd2e237",
+        "path": "docs/changes/20261023-release-contract/requirements.md",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "6ec54c597a177d58b1c5540dda3e852a72f6baa9005d66d9f6e7119c395a24ad",
+        "old_sha256": "6ec54c597a177d58b1c5540dda3e852a72f6baa9005d66d9f6e7119c395a24ad",
+        "path": "docs/changes/20261023-release-contract/tasks.md",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "f95699e68437bafa0199a5564af18cbc7e3f78de290f4b01dc17737d0b68156e",
+        "old_sha256": "f95699e68437bafa0199a5564af18cbc7e3f78de290f4b01dc17737d0b68156e",
+        "path": "docs/changes/adk-platform-convergence-v1/state.yaml",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "d590a0ae6b1b666cc1d6d64ab7b1e8fd5f128979993595eea8489783138f46d1",
+        "old_sha256": "d590a0ae6b1b666cc1d6d64ab7b1e8fd5f128979993595eea8489783138f46d1",
+        "path": "docs/changes/adk-self-readiness-ownership/state.yaml",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "87b107bda25456141bae1a3b035c7e2c30616afd8baf86d333216a87f0754f5f",
+        "old_sha256": "87b107bda25456141bae1a3b035c7e2c30616afd8baf86d333216a87f0754f5f",
+        "path": "docs/changes/adk-terminal-contract-hardening/state.yaml",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "ed9597562535265d61322e9558727acf963193e121570d1a7bafe5136d4299d6",
+        "old_sha256": "ed9597562535265d61322e9558727acf963193e121570d1a7bafe5136d4299d6",
+        "path": "docs/changes/adk-v3-1-rc2-target-conformance/state.yaml",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "fa314d45b209d8bea753377d18848cb02793d62c660dd69e906b7d8ee96e1134",
+        "old_sha256": "fa314d45b209d8bea753377d18848cb02793d62c660dd69e906b7d8ee96e1134",
+        "path": "docs/changes/adk-v3-1-software-m5-ready/state.yaml",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "37ff7e9a84d590999e31b86493ee82de2a313e5efded23bba90a3c885977bee5",
+        "old_sha256": "37ff7e9a84d590999e31b86493ee82de2a313e5efded23bba90a3c885977bee5",
+        "path": "docs/changes/agent-ecosystem-standards-hardening/state.yaml",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "db609c3ea4f6ed74fafc4176b25785ca7c2f4ec8737aff98af23be0b09784da4",
+        "old_sha256": "df23cf7fd58dec7e7b12b16c70eca14aaddc15a0a568afcfeaad3724a835530d",
+        "path": "docs/commands.md",
+        "unchanged": false
+      },
+      {
+        "current_sha256": "0888aa2b94f929760040517deaf9a47b517648b0694209d48309956fbe83273d",
+        "old_sha256": "0888aa2b94f929760040517deaf9a47b517648b0694209d48309956fbe83273d",
+        "path": "docs/runbooks/README.md",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "84e629c1c040b265d6a64369c5b39d6af2e999576af4429939738ff00b5a4c37",
+        "old_sha256": "84e629c1c040b265d6a64369c5b39d6af2e999576af4429939738ff00b5a4c37",
+        "path": "docs/runbooks/agent-value-lifecycle.md",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "f83375f1392b20006f29e43ce5b0807530ad850969e6ee67e3b861a78fa98dd6",
+        "old_sha256": "f83375f1392b20006f29e43ce5b0807530ad850969e6ee67e3b861a78fa98dd6",
+        "path": "docs/runbooks/artifact-gated-delivery.md",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "f7ef75ace0052ecbde911b06e3b45a1d22045ba24257c642736f72f6f28ff623",
+        "old_sha256": "f7ef75ace0052ecbde911b06e3b45a1d22045ba24257c642736f72f6f28ff623",
+        "path": "docs/runbooks/bugfix-delivery.md",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "5ff92fab93baf7403b838a67f359e29016a6ce19563eb98006cca6c842ae298c",
+        "old_sha256": "5ff92fab93baf7403b838a67f359e29016a6ce19563eb98006cca6c842ae298c",
+        "path": "docs/runbooks/codex-pilot-evidence.md",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "43bf36ec8a1a9a12bf30bb29b7a9f2bdbfd9a00f849ad700a85fb1cd440dde18",
+        "old_sha256": "43bf36ec8a1a9a12bf30bb29b7a9f2bdbfd9a00f849ad700a85fb1cd440dde18",
+        "path": "docs/runbooks/codex-runtime-method-boundary.md",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "31ce75ccf900c455bd7302a25e34d2573e96cd1dac26085a97a13a7f046772f8",
+        "old_sha256": "31ce75ccf900c455bd7302a25e34d2573e96cd1dac26085a97a13a7f046772f8",
+        "path": "docs/runbooks/native-campaign.md",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "3ece049725e38609706acc556932c4053a075fbf67101a27499a23e4dc57ea88",
+        "old_sha256": "3ece049725e38609706acc556932c4053a075fbf67101a27499a23e4dc57ea88",
+        "path": "docs/usage.md",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "fe8076296b8cf214aee52a5ad32dabff5d383555e76f6d3d3e542e2e6617fb91",
+        "old_sha256": "fe8076296b8cf214aee52a5ad32dabff5d383555e76f6d3d3e542e2e6617fb91",
+        "path": "manifests/context_state_contracts.json",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "e12c527dcfcfc61030b9a344f9d7fa3efeb828c364f5707285bdded69fcd8358",
+        "old_sha256": "e12c527dcfcfc61030b9a344f9d7fa3efeb828c364f5707285bdded69fcd8358",
+        "path": "manifests/harness_readiness_contracts.json",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "799b0388c82c6cb6925caf0c2cd6e44685eeca5277a9b5128a9cec50551e158f",
+        "old_sha256": "799b0388c82c6cb6925caf0c2cd6e44685eeca5277a9b5128a9cec50551e158f",
+        "path": "manifests/token_context_policy.json",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "b8fbb6466bba0d47e414e9db5d41d821d7d753b0087cbb624af987ee61d10d41",
+        "old_sha256": "b8fbb6466bba0d47e414e9db5d41d821d7d753b0087cbb624af987ee61d10d41",
+        "path": "scripts/backup-rollback.sh",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "5810e3880f2af51cf7b39f5e1c2caa49012c89ddfc7fc6224e74adf707249227",
+        "old_sha256": "5810e3880f2af51cf7b39f5e1c2caa49012c89ddfc7fc6224e74adf707249227",
+        "path": "scripts/check-format.sh",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "83a2949102955281f13a94e2f871d36e170cbfe76d053032ce5c114dc065ed29",
+        "old_sha256": "83a2949102955281f13a94e2f871d36e170cbfe76d053032ce5c114dc065ed29",
+        "path": "src/agent_dev_kit/readiness.py",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "5d361c7bd0fbbc2ce923071d3b5afcefb5998a8047d49e54be70f19ca49c554c",
+        "old_sha256": "5d361c7bd0fbbc2ce923071d3b5afcefb5998a8047d49e54be70f19ca49c554c",
+        "path": "src/agent_dev_kit/readiness_tools.py",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "90a6fa1c00f18ffaa9394fc548cbf5739e8eeda8b827832eef516961164d263d",
+        "old_sha256": "90a6fa1c00f18ffaa9394fc548cbf5739e8eeda8b827832eef516961164d263d",
+        "path": "tests/lib/bash-test-helpers.sh",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "560fa3a6e299dca198b7417dec72bc77998aa736587a83c795cb579abd686324",
+        "old_sha256": "560fa3a6e299dca198b7417dec72bc77998aa736587a83c795cb579abd686324",
+        "path": "tests/mcp_2026_activation/mcp_activation_test.go",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "f7328fd18b81713f6053924099bd81fde92cc4a2ac2ddab7710feab9fc1d8fd1",
+        "old_sha256": "f7328fd18b81713f6053924099bd81fde92cc4a2ac2ddab7710feab9fc1d8fd1",
+        "path": "tests/run_all.sh",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "9341118fc2187764597d0445caddfa5930fbc95fb0eeed6665d29ef9b4a3844e",
+        "old_sha256": "9341118fc2187764597d0445caddfa5930fbc95fb0eeed6665d29ef9b4a3844e",
+        "path": "tests/test_agent_ecosystem_standards.sh",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "a7136691eeed9ff7a64a3c98fb2508d3dac82ca35c09ea9d1ab4d3b16a244a02",
+        "old_sha256": "a7136691eeed9ff7a64a3c98fb2508d3dac82ca35c09ea9d1ab4d3b16a244a02",
+        "path": "tests/test_agent_platform.sh",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "122fce83231fbd4af11789da15933c1fbf63b25aee218fdd306c8889c1382798",
+        "old_sha256": "122fce83231fbd4af11789da15933c1fbf63b25aee218fdd306c8889c1382798",
+        "path": "tests/test_catalog.sh",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "dd0f1d497a0125284ce674690315b6854bebc30257f1ed6ce1f4f552897ff8c7",
+        "old_sha256": "dd0f1d497a0125284ce674690315b6854bebc30257f1ed6ce1f4f552897ff8c7",
+        "path": "tests/test_eval_catalog.py",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "fbb79f7fdcf60b5dde639d2c03e6ba09dc178efe43d98274ca8e410f5aec9946",
+        "old_sha256": "fbb79f7fdcf60b5dde639d2c03e6ba09dc178efe43d98274ca8e410f5aec9946",
+        "path": "tests/test_eval_catalog.sh",
+        "unchanged": true
+      },
+      {
+        "current_sha256": "9ccac15a620e20f9d5eacb1e1e50f47c191e3ce5bb07015f3f6b91def51c44af",
+        "old_sha256": "9ccac15a620e20f9d5eacb1e1e50f47c191e3ce5bb07015f3f6b91def51c44af",
+        "path": "tests/test_mcp_freshness_ssot.sh",
+        "unchanged": true
+      }
+    ]
+  },
+  "previous_source_reuse_boundary": "58 unchanged file digests and original independently reviewed evidence are eligible for attributed reuse; selected governance, evaluator, state and runbook sources were also reread. This reviewer does not claim a new line-by-line review of every old file.",
+  "raw_dimensions": {
+    "context_legibility": {
+      "blockers": [],
+      "evidence_refs": [
+        "AGENTS.md",
+        "README.md"
+      ],
+      "status": "pass"
+    },
+    "freshness_and_entropy_control": {
+      "blockers": [],
+      "evidence_refs": [
+        "scripts/check-format.sh",
+        "tests/test_catalog.sh",
+        "tests/test_eval_catalog.py",
+        "tests/test_eval_catalog.sh",
+        "tests/test_mcp_freshness_ssot.sh",
+        ".github/CODEOWNERS",
+        "OWNERS"
+      ],
+      "status": "pass"
+    },
+    "recovery_and_rollback": {
+      "blockers": [],
+      "evidence_refs": [
+        "scripts/backup-rollback.sh"
+      ],
+      "status": "pass"
+    },
+    "spec_and_execution_contract": {
+      "blockers": [],
+      "evidence_refs": [
+        "docs/changes/2026-09-25-agent-value-trust/requirements.md",
+        "docs/changes/2026-09-25-effect-trials/design.md",
+        "docs/changes/2026-09-25-effect-trials/requirements.md",
+        "docs/changes/2026-09-25-native-campaign-finalize/requirements.md",
+        "docs/changes/2026-09-25-agent-value-trust/tasks.md",
+        "docs/changes/2026-09-25-effect-trials/tasks.md",
+        "docs/changes/2026-09-25-native-campaign-finalize/tasks.md",
+        "docs/changes/2026-09-25-native-campaign-project-layout/tasks.md",
+        "docs/changes/2026-09-25-agent-value-trust/negative-results.md",
+        "docs/changes/2026-09-25-effect-trials/negative-results.md",
+        "docs/changes/2026-09-25-native-campaign-finalize/negative-results.md",
+        "docs/changes/2026-09-25-native-campaign-project-layout/negative-results.md"
+      ],
+      "status": "pass"
+    },
+    "state_and_knowledge_continuity": {
+      "blockers": [],
+      "evidence_refs": [
+        "docs/changes/20261024-release-bundles/PROGRESS.md",
+        "docs/changes/adk-platform-convergence-v1/state.yaml",
+        "docs/changes/adk-self-readiness-ownership/state.yaml",
+        "docs/changes/adk-terminal-contract-hardening/state.yaml",
+        "docs/changes/adk-v3-1-rc2-target-conformance/state.yaml",
+        "docs/changes/adk-v3-1-software-m5-ready/state.yaml",
+        "docs/runbooks/README.md",
+        "docs/runbooks/agent-value-lifecycle.md",
+        "docs/runbooks/artifact-gated-delivery.md",
+        "docs/runbooks/bugfix-delivery.md",
+        "docs/runbooks/codex-pilot-evidence.md",
+        "docs/runbooks/codex-runtime-method-boundary.md"
+      ],
+      "status": "pass"
+    },
+    "tool_and_permission_boundary": {
+      "blockers": [],
+      "evidence_refs": [],
+      "status": "not-applicable"
+    },
+    "verification_review_and_eval": {
+      "blockers": [],
+      "evidence_refs": [
+        "tests/lib/bash-test-helpers.sh",
+        "tests/mcp_2026_activation/mcp_activation_test.go",
+        "tests/release_archive_fixture.py",
+        "tests/run_all.sh",
+        "tests/test_agent_ecosystem_standards.sh",
+        ".github/workflows/branch-gc.yml",
+        ".github/workflows/ci.yml",
+        ".github/workflows/claude-consumer-contract.yml",
+        ".github/workflows/codex-consumer-contract.yml",
+        ".github/workflows/digital-worker-contract.yml",
+        "AGENTS.md",
+        "README.md"
+      ],
+      "status": "pass"
+    }
+  },
+  "raw_projection_is_not_a_current_gate_verdict": true,
+  "raw_source_refs": [
+    ".github/CODEOWNERS",
+    ".github/workflows/branch-gc.yml",
+    ".github/workflows/ci.yml",
+    ".github/workflows/claude-consumer-contract.yml",
+    ".github/workflows/codex-consumer-contract.yml",
+    ".github/workflows/digital-worker-contract.yml",
+    "AGENTS.md",
+    "OWNERS",
+    "README.md",
+    "docs/changes/2026-09-25-agent-value-trust/negative-results.md",
+    "docs/changes/2026-09-25-agent-value-trust/requirements.md",
+    "docs/changes/2026-09-25-agent-value-trust/tasks.md",
+    "docs/changes/2026-09-25-effect-trials/design.md",
+    "docs/changes/2026-09-25-effect-trials/negative-results.md",
+    "docs/changes/2026-09-25-effect-trials/requirements.md",
+    "docs/changes/2026-09-25-effect-trials/tasks.md",
+    "docs/changes/2026-09-25-native-campaign-finalize/negative-results.md",
+    "docs/changes/2026-09-25-native-campaign-finalize/requirements.md",
+    "docs/changes/2026-09-25-native-campaign-finalize/tasks.md",
+    "docs/changes/2026-09-25-native-campaign-project-layout/negative-results.md",
+    "docs/changes/2026-09-25-native-campaign-project-layout/tasks.md",
+    "docs/changes/20261024-release-bundles/PROGRESS.md",
+    "docs/changes/adk-platform-convergence-v1/state.yaml",
+    "docs/changes/adk-self-readiness-ownership/state.yaml",
+    "docs/changes/adk-terminal-contract-hardening/state.yaml",
+    "docs/changes/adk-v3-1-rc2-target-conformance/state.yaml",
+    "docs/changes/adk-v3-1-software-m5-ready/state.yaml",
+    "docs/runbooks/README.md",
+    "docs/runbooks/agent-value-lifecycle.md",
+    "docs/runbooks/artifact-gated-delivery.md",
+    "docs/runbooks/bugfix-delivery.md",
+    "docs/runbooks/codex-pilot-evidence.md",
+    "docs/runbooks/codex-runtime-method-boundary.md",
+    "scripts/backup-rollback.sh",
+    "scripts/check-format.sh",
+    "tests/lib/bash-test-helpers.sh",
+    "tests/mcp_2026_activation/mcp_activation_test.go",
+    "tests/release_archive_fixture.py",
+    "tests/run_all.sh",
+    "tests/test_agent_ecosystem_standards.sh",
+    "tests/test_catalog.sh",
+    "tests/test_eval_catalog.py",
+    "tests/test_eval_catalog.sh",
+    "tests/test_mcp_freshness_ssot.sh"
+  ],
+  "reviewer": "ai/root/root_code_audit",
+  "scan": {
+    "errors": [],
+    "files_seen": 1504,
+    "truncated": false
+  },
+  "schema": "independent-harness-source-observation/v1",
+  "scope": "Seven repository-source readiness dimensions; no live/field or release authority",
+  "source_bindings": [
+    {
+      "commit_blob_oid": "7ae90d01e5aa7a8eef7f222a75c1cf8c5ffd4634",
+      "path": ".github/CODEOWNERS",
+      "sha256": "80c4105be9d42c79f5057726fbb9971aa0a638ee17f47f31377c04085b1095cc"
+    },
+    {
+      "commit_blob_oid": "e565e661759c9ff2d210a54a0052a70067c8eb26",
+      "path": ".github/workflows/branch-gc.yml",
+      "sha256": "9c88b4fc19147008351bef181a275fb371b986567eadaa2892b5292b8322e47d"
+    },
+    {
+      "commit_blob_oid": "775d407e4964b30fd2f8f75d68c46b14cac3e0e8",
+      "path": ".github/workflows/ci.yml",
+      "sha256": "8c0b509ca8e46ddf9e67d9aed00d5bd28da73bf831de9a35601a4f625381e910"
+    },
+    {
+      "commit_blob_oid": "48696597a5a28cf6689f846b66c4c40d71c309fa",
+      "path": ".github/workflows/claude-consumer-contract.yml",
+      "sha256": "2abc7885d7ab3476776ef4cbcbc022d008734ceb3e714381cc994ebdc543526b"
+    },
+    {
+      "commit_blob_oid": "c9c693924217a9a7aee20e0768f84853a67f3f03",
+      "path": ".github/workflows/codex-consumer-contract.yml",
+      "sha256": "f1e9e882dd0ee2995ac10d5ffa57ca97451b3ff9143f1019c617830ea2d4bbb9"
+    },
+    {
+      "commit_blob_oid": "22c063aa41ea18e9a7433ac75a6a921098837a44",
+      "path": ".github/workflows/digital-worker-contract.yml",
+      "sha256": "3575ad868bebbc6120e39a37f0786d249ec1a4887bcc1a775378c0bc1ac02eee"
+    },
+    {
+      "commit_blob_oid": "1daed34102e7f167796abf36e9c44dc89d723735",
+      "path": "AGENTS.md",
+      "sha256": "61a06f86a6b5382855fab70a3098f878e9f7d3e0af653a86fbd199d8d5d13167"
+    },
+    {
+      "commit_blob_oid": "1212345c0524155a9fe42b2a6769869d41e020f3",
+      "path": "CHANGELOG.md",
+      "sha256": "a6d200849a186d3f8d25ac9fc0be986fc505208ebc4f3e834b5d949a4c910317"
+    },
+    {
+      "commit_blob_oid": "663cee4ad3050c387f62faf747383f817d8c0918",
+      "path": "OWNERS",
+      "sha256": "04214b6ee2937ef8c786f998ee890a0cecacb7dd318bab99a13db844f850a95e"
+    },
+    {
+      "commit_blob_oid": "fbbfb4804cf4ffd7e9b8964b2238eabe35b018b3",
+      "path": "README.md",
+      "sha256": "13e695fabe0839cf09b7bf1f322b440815bf6c9050ab77b27b3c4c39eaf60566"
+    },
+    {
+      "commit_blob_oid": "bf10800194baf921c933bf9256a3a084dfa5c120",
+      "path": "docs/agent-operating-rules.md",
+      "sha256": "9eb0f82be4ec98662524ed13773dbcd86c0c073c609e622d76341342e1a6f2ac"
+    },
+    {
+      "commit_blob_oid": "e386457a384a8288d8b299417662feadf360a349",
+      "path": "docs/changes/2026-09-25-agent-value-trust/negative-results.md",
+      "sha256": "da7aa6c51295be56368b90594b7eb6469bf0a43b3888d7a482839bb22c0970c0"
+    },
+    {
+      "commit_blob_oid": "f8e2ad1e4e9673690efef3bbeee4e6ef1a12d7ff",
+      "path": "docs/changes/2026-09-25-agent-value-trust/requirements.md",
+      "sha256": "429e4296ec368df67542c7b536c478c2ac2f16adedad9dfddc1b53383cc343ad"
+    },
+    {
+      "commit_blob_oid": "fd1be2a7de5137246f992ac29832d22162095cef",
+      "path": "docs/changes/2026-09-25-agent-value-trust/tasks.md",
+      "sha256": "ccee418ae0bd170f1c579bf0cb48af9be1dff833629c95705f5deca431e1d499"
+    },
+    {
+      "commit_blob_oid": "f63a9c531638c2f927a318c1e19c9abbb2fc0e99",
+      "path": "docs/changes/2026-09-25-effect-trials/design.md",
+      "sha256": "a23b59b2cab96879196748bd082347a8d00a756598460ad3f83f97c7a50e976f"
+    },
+    {
+      "commit_blob_oid": "af9d53c10e1d41c60d30469bcee035ffcb085f0a",
+      "path": "docs/changes/2026-09-25-effect-trials/negative-results.md",
+      "sha256": "045d0b30fd4e15dabfa0436d3b34403bb3bd5b6b8916ef4cb708a2e6523cdf73"
+    },
+    {
+      "commit_blob_oid": "487176d0e79c04e6b35ad986b191d75a115dffe9",
+      "path": "docs/changes/2026-09-25-effect-trials/requirements.md",
+      "sha256": "f4a2bffa3a90d0955a2b9e50d5e3201a30f667edb30a1709985bab2f856ed281"
+    },
+    {
+      "commit_blob_oid": "86334bc86f3452d1fe098ad8fcea6e81b1c0328f",
+      "path": "docs/changes/2026-09-25-effect-trials/tasks.md",
+      "sha256": "802ca9c194d39060eb931af0f3e8042d5f1e62acc9249abeaead6b5ede8615b9"
+    },
+    {
+      "commit_blob_oid": "b5812182f60fb25749d488ba1732814b0a0fb98f",
+      "path": "docs/changes/2026-09-25-native-campaign-finalize/negative-results.md",
+      "sha256": "d5d436b9ddf56b37c22f200b2f84a7fd09d3e964b8d91c4051649eb51b207673"
+    },
+    {
+      "commit_blob_oid": "4362cafe870c3dd8e85418d26939061a47720354",
+      "path": "docs/changes/2026-09-25-native-campaign-finalize/requirements.md",
+      "sha256": "45da7af9938c1c826ca203ab5439d55aac9def3a4da218a30a5252d531d3d0a7"
+    },
+    {
+      "commit_blob_oid": "c869b9a4743a2b2a7d63ea489d92768c1fb65389",
+      "path": "docs/changes/2026-09-25-native-campaign-finalize/tasks.md",
+      "sha256": "b94ecc55058d993aa5ceb2da12020ffc181b68de7b4924c591f7a5567ccaee09"
+    },
+    {
+      "commit_blob_oid": "03661c273d1fabe94c69b301c087d505fe92e620",
+      "path": "docs/changes/2026-09-25-native-campaign-project-layout/negative-results.md",
+      "sha256": "9426f86cc945edfaa63590e140c0ec458762beea4e09bf0a0886badb15151338"
+    },
+    {
+      "commit_blob_oid": "136bb6ef8252302ff20ebea868daeba21503b39f",
+      "path": "docs/changes/2026-09-25-native-campaign-project-layout/tasks.md",
+      "sha256": "2f3fca0914f53aabe3713f3d0094fb6bacb3e3d1e0df867db134d71835d3e2ce"
+    },
+    {
+      "commit_blob_oid": "5d0049016dc16cb6f9c2b33623fdc9c000d34490",
+      "path": "docs/changes/20261024-release-bundles/PROGRESS.md",
+      "sha256": "45d5688628b9f84828982fa9b6c60f37d87c9b10e489745b64ae0fd48e3313d5"
+    },
+    {
+      "commit_blob_oid": "c0a1bdd2d88611af60278063a645704349ebee58",
+      "path": "docs/changes/20261024-release-bundles/design.md",
+      "sha256": "5469d45005c656c4c9ab3ec7ddfd80a855bce805e536924aa0db82e81a99424d"
+    },
+    {
+      "commit_blob_oid": "42a4aef959f8b9ce37edf61d2d200cc66bee13e3",
+      "path": "docs/changes/20261024-release-bundles/requirements.md",
+      "sha256": "90127df6e93a16a82f4ca4f20adb280fd144c930051163e17002f9a8c8126f29"
+    },
+    {
+      "commit_blob_oid": "23c28b6ae5bc14310566944514a39324be0e84be",
+      "path": "docs/changes/20261024-release-bundles/tasks.md",
+      "sha256": "20790b5edea0158cc748e7b777cebae3b2c35374a194f701bc8096d41a081dc3"
+    },
+    {
+      "commit_blob_oid": "1d838b607ec691e5f2ad8a1310c07dfadffeeb09",
+      "path": "docs/changes/20261024-target-smoke/design.md",
+      "sha256": "cd6a75ac6165e105c4496f5a7a769da3df602625e08b9430d67bedf0bd6732d6"
+    },
+    {
+      "commit_blob_oid": "fa4c31fd4d7c74fef28dcb4d93bce16c78d885f9",
+      "path": "docs/changes/20261024-target-smoke/requirements.md",
+      "sha256": "d67aca13ffd076a1147a5a92d8cdc1c2af24497739cc507bcf6c32ddce19c850"
+    },
+    {
+      "commit_blob_oid": "8526897424889c894559d79727283eae64c882bf",
+      "path": "docs/changes/20261024-target-smoke/tasks.md",
+      "sha256": "9144755b2ec4487cb9055e1284577d00e0bb41b8d84480f84133af45343040e8"
+    },
+    {
+      "commit_blob_oid": "46ba48c50e1dbdf0641da2e1135d1764c1f29c18",
+      "path": "docs/changes/adk-platform-convergence-v1/state.yaml",
+      "sha256": "f95699e68437bafa0199a5564af18cbc7e3f78de290f4b01dc17737d0b68156e"
+    },
+    {
+      "commit_blob_oid": "f209dedd8a769fb1ee9ed3e09009057c497c6f5f",
+      "path": "docs/changes/adk-self-readiness-ownership/state.yaml",
+      "sha256": "d590a0ae6b1b666cc1d6d64ab7b1e8fd5f128979993595eea8489783138f46d1"
+    },
+    {
+      "commit_blob_oid": "d29ac17b343295ea49faffcf4411585f9a32052a",
+      "path": "docs/changes/adk-terminal-contract-hardening/state.yaml",
+      "sha256": "87b107bda25456141bae1a3b035c7e2c30616afd8baf86d333216a87f0754f5f"
+    },
+    {
+      "commit_blob_oid": "7d4b785c88f05103bfe8780e00ff835044c0ff42",
+      "path": "docs/changes/adk-v3-1-rc2-target-conformance/state.yaml",
+      "sha256": "ed9597562535265d61322e9558727acf963193e121570d1a7bafe5136d4299d6"
+    },
+    {
+      "commit_blob_oid": "67917e6c47cb749b65ce694cd1a1f2eed45b1ef5",
+      "path": "docs/changes/adk-v3-1-software-m5-ready/state.yaml",
+      "sha256": "fa314d45b209d8bea753377d18848cb02793d62c660dd69e906b7d8ee96e1134"
+    },
+    {
+      "commit_blob_oid": "8d3f89e7305360414c759cca2493fa3519c9ac30",
+      "path": "docs/commands.md",
+      "sha256": "db609c3ea4f6ed74fafc4176b25785ca7c2f4ec8737aff98af23be0b09784da4"
+    },
+    {
+      "commit_blob_oid": "b8494789d1da824821bb43e0f1483cb754a899d9",
+      "path": "docs/runbooks/README.md",
+      "sha256": "0888aa2b94f929760040517deaf9a47b517648b0694209d48309956fbe83273d"
+    },
+    {
+      "commit_blob_oid": "fa521ab09ecc51276266bdda9f66d78e4cb3ddf2",
+      "path": "docs/runbooks/agent-value-lifecycle.md",
+      "sha256": "84e629c1c040b265d6a64369c5b39d6af2e999576af4429939738ff00b5a4c37"
+    },
+    {
+      "commit_blob_oid": "e9d31045955924a08a8042375f9c3ff3a9eca74a",
+      "path": "docs/runbooks/artifact-gated-delivery.md",
+      "sha256": "f83375f1392b20006f29e43ce5b0807530ad850969e6ee67e3b861a78fa98dd6"
+    },
+    {
+      "commit_blob_oid": "4b729130b7349a2ea1009591391ba520c3317f41",
+      "path": "docs/runbooks/bugfix-delivery.md",
+      "sha256": "f7ef75ace0052ecbde911b06e3b45a1d22045ba24257c642736f72f6f28ff623"
+    },
+    {
+      "commit_blob_oid": "9d5ca26cf3c5f3c33cc6a1a2f40ccb931aeaeb17",
+      "path": "docs/runbooks/codex-pilot-evidence.md",
+      "sha256": "5ff92fab93baf7403b838a67f359e29016a6ce19563eb98006cca6c842ae298c"
+    },
+    {
+      "commit_blob_oid": "78775af7f84a7e538b9df535bdab39d66cca7379",
+      "path": "docs/runbooks/codex-runtime-method-boundary.md",
+      "sha256": "43bf36ec8a1a9a12bf30bb29b7a9f2bdbfd9a00f849ad700a85fb1cd440dde18"
+    },
+    {
+      "commit_blob_oid": "6cfa5195870bfec04ca5f298661c8fa531d649c8",
+      "path": "manifest.json",
+      "sha256": "1b02751baa1ebad3070ddc156b258b384a907bee44637bfdcc5f36e44a6799f6"
+    },
+    {
+      "commit_blob_oid": "701644a373e020f56c8a89c614b7555cbed62212",
+      "path": "manifests/harness_readiness_contracts.json",
+      "sha256": "e12c527dcfcfc61030b9a344f9d7fa3efeb828c364f5707285bdded69fcd8358"
+    },
+    {
+      "commit_blob_oid": "1fb0df8cb1621f27acde7ee5bddfc6946b450025",
+      "path": "scripts/backup-rollback.sh",
+      "sha256": "b8fbb6466bba0d47e414e9db5d41d821d7d753b0087cbb624af987ee61d10d41"
+    },
+    {
+      "commit_blob_oid": "b701a9666c33e4a415e353bb788e338acf6e4074",
+      "path": "scripts/check-format.sh",
+      "sha256": "5810e3880f2af51cf7b39f5e1c2caa49012c89ddfc7fc6224e74adf707249227"
+    },
+    {
+      "commit_blob_oid": "af1293cb775372f62a932a7930c94a2fee61c3ae",
+      "path": "src/agent_dev_kit/distribution/archive_io.py",
+      "sha256": "f693b56de052f33c1fb83b5abc95342f31af95b52795182f116fd78db61a6998"
+    },
+    {
+      "commit_blob_oid": "44497adf88ebca4861a83fed698bc867429e64d2",
+      "path": "src/agent_dev_kit/distribution/release_contract.py",
+      "sha256": "6f322e405555383b6f50206c97e754eedc33edaa3982c358c638797ca6aaba1a"
+    },
+    {
+      "commit_blob_oid": "3ebe72b8312e7c7f1161e2a251cc8cc2fe3c116d",
+      "path": "src/agent_dev_kit/process_execution.py",
+      "sha256": "01e3da0bc9cee08055dafafb178c270f8e6ece2a18de2ad542027a1b252d5b9d"
+    },
+    {
+      "commit_blob_oid": "8053d8735ab8a076abcbe3d4e82dc5b2ee7a512d",
+      "path": "src/agent_dev_kit/readiness.py",
+      "sha256": "83a2949102955281f13a94e2f871d36e170cbfe76d053032ce5c114dc065ed29"
+    },
+    {
+      "commit_blob_oid": "c6505e413c4180e276906233874b59e0c1486056",
+      "path": "src/agent_dev_kit/readiness_tools.py",
+      "sha256": "5d361c7bd0fbbc2ce923071d3b5afcefb5998a8047d49e54be70f19ca49c554c"
+    },
+    {
+      "commit_blob_oid": "fd8dbd50778492fba4f2602331e32a3baf49232d",
+      "path": "src/agent_dev_kit/target_contracts.py",
+      "sha256": "aea9b0a1fb395d157f61d1860f762ecb80da0bc9365bbeaac46bd96b5892dc26"
+    },
+    {
+      "commit_blob_oid": "03d420ed4889d60b216630c49efedfffbecbea3b",
+      "path": "src/agent_dev_kit/targets.py",
+      "sha256": "9b2125d496a2a8a324395fc144ff814ec4d798dc2e82990e4515eab21bf1c6f9"
+    },
+    {
+      "commit_blob_oid": "aae8f4f7d462a22e5e140513aa1d0561e922af26",
+      "path": "tests/lib/bash-test-helpers.sh",
+      "sha256": "90a6fa1c00f18ffaa9394fc548cbf5739e8eeda8b827832eef516961164d263d"
+    },
+    {
+      "commit_blob_oid": "de8224a3454f4d780b8215bc0c18c32341010477",
+      "path": "tests/mcp_2026_activation/mcp_activation_test.go",
+      "sha256": "560fa3a6e299dca198b7417dec72bc77998aa736587a83c795cb579abd686324"
+    },
+    {
+      "commit_blob_oid": "3f630e9605744875769537b9f6dc084dc5c055d5",
+      "path": "tests/release_archive_fixture.py",
+      "sha256": "a512b0259efc35ea964210c61235920c4f32d24f7539b13103744b038c6f00bb"
+    },
+    {
+      "commit_blob_oid": "07e12dfd6956bb28d530c2a0849ed3b840c68b43",
+      "path": "tests/run_all.sh",
+      "sha256": "f7328fd18b81713f6053924099bd81fde92cc4a2ac2ddab7710feab9fc1d8fd1"
+    },
+    {
+      "commit_blob_oid": "f34f3e209dbb29d8e1453bce9ed796b0f60890b4",
+      "path": "tests/test_agent_ecosystem_standards.sh",
+      "sha256": "9341118fc2187764597d0445caddfa5930fbc95fb0eeed6665d29ef9b4a3844e"
+    },
+    {
+      "commit_blob_oid": "e3a3c9b531da1f42896f6091421ff90aa6829584",
+      "path": "tests/test_catalog.sh",
+      "sha256": "122fce83231fbd4af11789da15933c1fbf63b25aee218fdd306c8889c1382798"
+    },
+    {
+      "commit_blob_oid": "1e81d0253716a8480c41ac7cbbe1d4ae823c78fa",
+      "path": "tests/test_eval_catalog.py",
+      "sha256": "dd0f1d497a0125284ce674690315b6854bebc30257f1ed6ce1f4f552897ff8c7"
+    },
+    {
+      "commit_blob_oid": "3ffb8b586d87dd992198c7d96d0f0292f1e1307c",
+      "path": "tests/test_eval_catalog.sh",
+      "sha256": "fbb79f7fdcf60b5dde639d2c03e6ba09dc178efe43d98274ca8e410f5aec9946"
+    },
+    {
+      "commit_blob_oid": "a7db6f937a50add23835b54849b834a9ac26c107",
+      "path": "tests/test_mcp_freshness_ssot.sh",
+      "sha256": "9ccac15a620e20f9d5eacb1e1e50f47c191e3ce5bb07015f3f6b91def51c44af"
+    }
+  ],
+  "source_commit": "3f0f0599de49140ade2225540dd44f2fb42030ad",
+  "source_tree": "a49a55acb74e143326073b4e0205886ad7219585",
+  "total_reference_budget": 64,
+  "validator_sha256": {
+    "src/agent_dev_kit/readiness_evidence.py": "ef980657486084eea8ab8a03ab357a76a3ed43691aca8d6909b06642764c808b",
+    "src/agent_dev_kit/review_evidence.py": "73d85e864a3da125bf94808f19616f52150751a94ccc729ac66f66d2576b8808",
+    "src/agent_dev_kit/strict_json.py": "e11233b8d02d7fb95a8f2f93bfff065a1db84c4ef0820fef6d817600abe8ec98"
+  }
+}

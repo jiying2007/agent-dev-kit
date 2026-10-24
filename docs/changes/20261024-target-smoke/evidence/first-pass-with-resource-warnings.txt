@@ -1,0 +1,43 @@
+test_exact_combined_output_budget_passes (test_target_smoke.TargetSmokeBudgetTest.test_exact_combined_output_budget_passes) ... ok
+test_exited_launcher_pipe_holders_obey_the_same_deadline (test_target_smoke.TargetSmokeBudgetTest.test_exited_launcher_pipe_holders_obey_the_same_deadline) ... ok
+test_nonzero_exit_keeps_bounded_diagnostics (test_target_smoke.TargetSmokeBudgetTest.test_nonzero_exit_keeps_bounded_diagnostics) ... /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_subprocess.py:125: ResourceWarning: unclosed transport <_UnixSubprocessTransport pid=9 returncode=0 stdout=<_UnixReadPipeTransport fd=7 open> stderr=<_UnixReadPipeTransport fd=9 open>>
+  _warn(f"unclosed transport {self!r}", ResourceWarning, source=self)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+Exception ignored in: <function BaseSubprocessTransport.__del__ at 0x7f52df089620>
+Traceback (most recent call last):
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_subprocess.py", line 126, in __del__
+    self.close()
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_subprocess.py", line 104, in close
+    proto.pipe.close()
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/unix_events.py", line 568, in close
+    self._close(None)
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/unix_events.py", line 592, in _close
+    self._loop.call_soon(self._call_connection_lost, exc)
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py", line 799, in call_soon
+    self._check_closed()
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py", line 545, in _check_closed
+    raise RuntimeError('Event loop is closed')
+RuntimeError: Event loop is closed
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py:404: ResourceWarning: unclosed file <_io.FileIO name=7 mode='rb' closefd=True>
+  parsed = [sys.intern(str(x)) for x in rel.split(sep) if x and x != '.']
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py:404: ResourceWarning: unclosed file <_io.FileIO name=9 mode='rb' closefd=True>
+  parsed = [sys.intern(str(x)) for x in rel.split(sep) if x and x != '.']
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/unix_events.py:572: ResourceWarning: unclosed transport <_UnixReadPipeTransport closing fd=7 open>
+  _warn(f"unclosed transport {self!r}", ResourceWarning, source=self)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/unix_events.py:572: ResourceWarning: unclosed transport <_UnixReadPipeTransport fd=9 open>
+  _warn(f"unclosed transport {self!r}", ResourceWarning, source=self)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_public_cli_output_overflow_is_nonzero_and_private (test_target_smoke.TargetSmokeBudgetTest.test_public_cli_output_overflow_is_nonzero_and_private) ... ok
+test_sixteen_megabyte_output_fails_with_sanitized_budget_code (test_target_smoke.TargetSmokeBudgetTest.test_sixteen_megabyte_output_fails_with_sanitized_budget_code) ... ok
+test_stdout_and_stderr_share_one_budget (test_target_smoke.TargetSmokeBudgetTest.test_stdout_and_stderr_share_one_budget) ... ok
+test_success_retains_only_digests_counts_and_exit (test_target_smoke.TargetSmokeBudgetTest.test_success_retains_only_digests_counts_and_exit) ... ok
+test_timeout_stops_descendant_before_returning (test_target_smoke.TargetSmokeBudgetTest.test_timeout_stops_descendant_before_returning) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 7.885s
+
+OK
