@@ -18,6 +18,8 @@
 
 ## 工件
 
+以下为信息角色，不要求每项各建文件。复用项目已有需求/设计/任务合同，将动态信息合并到一份当前状态入口；默认不超过8 KiB、最多3个下一动作，历史只保留链接与身份。可用`devkit.sh goal state-check --state <current.json> --summary-json`检查结构化入口；这是文档卫生检查，不授予任务完成。领域必须保留更多原文时显式记录原因，不自动截断证据。
+
 - `PROJECT.md`：目标、边界、非目标、长期约束。
 - `REQUIREMENTS.md`：可证伪需求、验收条件、开放问题。
 - `PLAN.md`：阶段、依赖、done criteria、验证命令。
@@ -39,10 +41,16 @@
 - 进入完成声明前，先生成 `completion_claim`，再由 `adk-verification-before-completion` 独立核对证据。
 - retry budget 用尽、heartbeat 过期或连续无信息增量时，必须 replan、split、blocked 或 abort，不能继续盲目推进。
 
-结构化长任务统一生成 `runtime_control.event/v1`，由 `agent_dev_kit.runtime_control` 唯一 Engine
+结构化长任务统一生成 `runtime_control.event/v1`，由 `agent_dev_kit.execution_policy` 唯一 Engine
 折叠成 state/decision。runtime adapter 只采集 Goal、usage snapshot、progress、heartbeat、retry、
 checkpoint、evidence 和 delivery artifact，不得复制 policy 或自行判断动作。Codex 用户入口由
 其 runtime adapter 提供；ADK 不再暴露第二套 token/execution CLI。
+
+进度proof使用原`criterion_id`、`change_kind`和已登记`evidence_ids`。旧revision-only事件可历史回放，但不能持续清除无进展计数；换evidence id不改变digest时不算新证据。非关闭进度达到`progress.non_closing_limit`（缺省8次）时replan；只有原验收首次绑定新的criterion-closed证据且未闭项净减少，或带前后计划证据的有效replan，才清零该计数；普通计数变化或震荡不清零。关键假设与阻塞变化也是进度，不以测试数量衡量。
+
+重规划记录两个不同且已登记的计划SHA256，并说明scope/dependency/acceptance/verification调整。结构校验只能证明声明与证据绑定；计划是否实际改变执行仍由审查核验。提高预算本身不重置收敛计数。验收调整必须保留原目标分母，需求变化仍按原权限处理。
+
+阶段收口使用公开`evaluate_milestone`核对当前绑定进度、checkpoint和预算/停滞，不调用完整final、不改变goal状态或最终open items；其通过仅为本地checkpoint资格，领域验收仍检查证据内容。最终报告同时给证据结论和`budget_status`，`current-snapshot`不证明历史合规，final PASS也不授予继续超预算执行。
 
 ## Spec-Driven Execution Gate
 

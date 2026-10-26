@@ -40,7 +40,8 @@
       "properties": {
         "staleness_seconds": {"type": "integer", "minimum": 1},
         "retry_limit": {"type": "integer", "minimum": 1},
-        "no_progress_limit": {"type": "integer", "minimum": 1}
+        "no_progress_limit": {"type": "integer", "minimum": 1},
+        "non_closing_limit": {"type": "integer", "minimum": 1}
       }
     },
     "artifact_applicability": {

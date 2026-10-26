@@ -3,6 +3,7 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}" python3 "$ROOT_DIR/tests/test_execution_policy.py"
+PYTHONPATH="$ROOT_DIR/src:$ROOT_DIR/tests${PYTHONPATH:+:$PYTHONPATH}" python3 -m unittest test_goal_convergence test_planning_state
 PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}" python3 - "$ROOT_DIR" <<'PY'
 import sys
 from pathlib import Path

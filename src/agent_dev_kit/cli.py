@@ -149,10 +149,14 @@ def _cmd_security(argv: Sequence[str]) -> int:
 
 
 def _cmd_goal(argv: Sequence[str]) -> int:
+    if argv and argv[0] == "state-check":
+        from .planning_state import main as state_check
+
+        return state_check(argv[1:])
     if not argv or argv[0] != "check":
         from .model import ManifestError
 
-        raise ManifestError("usage: devkit.sh goal check [--summary-json]")
+        raise ManifestError("usage: devkit.sh goal {check|state-check} [options]")
     return subprocess.call(["bash", str(ROOT / "scripts" / "check-goal-contracts.sh")] + list(argv[1:]), cwd=str(ROOT))
 
 

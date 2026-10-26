@@ -1,8 +1,8 @@
 ---
 name: adk-systematic-debugging
 description: 系统化调试流程，面向根因未明的问题定位与修复验证
-version: 1.1.1
-last_updated: 2026-10-16
+version: 1.2.0
+last_updated: 2026-10-26
 triggers:
   - "调试"
   - "排查问题"
@@ -39,6 +39,7 @@ constraints:
 - 预先定义观测指标与日志采集方式。
 
 ## 方法选择
+- 先按不确定性选择最少必要方法。确定性错误与源码已形成直接因果链时，记录复现、原因及修复验证即可，不为模板补齐5层Why、虚构竞争假设或制造负结果。
 - 5-Why：用于已有强现象链的问题；每层 Why 必须有证据。
 - 二分法：用于范围过大或回归引入点未知的问题，覆盖代码、配置、模块和输入数据。
 - 假设矩阵：用于多根因并存场景，按概率、影响和验证成本排序。
@@ -56,7 +57,7 @@ constraints:
 10. **根因收敛与复验**：给出根因证据链，执行修复前后对比验证。
 11. **升级**：无信息增量则回到假设。
 
-E2/E3 选一项关键前提，以冻结输入和复现命令证伪；复用有效反例，连续两轮无新信息则重审，不强制加 Agent。
+E2/E3 对影响正确性或安全边界的关键前提，以冻结输入和复现命令做适用的反例验证；已有有效反例可复用并核身份。方法不适用时说明直接因果证据，不强制加 Agent；连续两轮无新信息则重审。
 
 ## Repair, Not Blind Retry
 
@@ -84,27 +85,16 @@ do_not_repeat:
 
 ## Commands
 ```bash
-git bisect start
-git bisect bad HEAD
-git bisect good <last_good_commit>
-rg -n "error|fatal|panic|timeout|reset" <log-or-src>
-journalctl --since "1 hour ago" --priority=err
-ss -tlnp | grep <port>
+rtk rg -n "error|fatal|panic|timeout|reset" <log-or-src>
 <debug-transport-readonly-cmd>
 <target-debugger> <elf-or-process> --readonly
 ```
 
 ## Evidence Template
 ```md
-- Repro Baseline:
-  - 环境 / 复现步骤 / 复现率:
-- Hypothesis Matrix:
-  | # | 假设 | 概率 | 验证方式 | 结果 |
-  |---|------|------|---------|------|
-  | 1 | ... | 高 | ... | pass/fail |
-- 5-Why Chain: Why -> 证据 -> 下一层 Why -> 根因
-- Experiment #n: 变量 / 命令 / 结果
-- Negative Findings:
+- Repro Baseline: 环境 / 输入 / 复现率
+- Selected Method / Applicability: 直接因果 | Hypothesis Matrix | 5-Why Chain | 二分
+- Experiment / Negative Findings: 变量 / 命令 / 观察 / 结论
 - Repair Note:
 - Root Cause Chain: 根因 + 证据列表
 - Fix Verification: 修复前 / 修复后 / 回归测试
@@ -119,18 +109,13 @@ ss -tlnp | grep <port>
 
 ## Quality Gate
 - 调试记录必须包含时间线、实验步骤、观察结果和结论映射。
-- 至少有一条被证伪假设的记录。
+- 存在竞争假设或高风险关键前提时记录实际证伪结果；直接根因路径说明方法适用性，不要求人为增加实验。
 - 修复记录必须包含 failed scope、preserved passing scope、minimal rerun 和 rollback anchor。
 - 修复结论必须包含"复现 -> 修复 -> 回归"三段证据。
 - 若根因仍不确定，必须显式标记为 `needs-fix`，禁止"疑似已修复"式结论。
-- 5-Why 链必须每层有证据支撑。
+- 使用5-Why时每层有证据支撑，因果链到达可验证根因即可停止，不固定层数。
 - 使用二分法时必须记录每步 good/bad 判定依据。
 - AI 工具/CLI 行为异常不得先归因实现 bug；必须固定复现、对照文档版本、追到源码或配置决策点，并用 git log/blame 建时间线。
 
 ## 合理化借口拦截
-
-| 借口 | 现实 | 正确做法 |
-|------|------|---------|
-| "大概知道问题在哪" | 直觉需要实验验证 | 按假设-实验-证伪记录时间线 |
-| "改一处好了不用深究" | 表面修复会复发 | 完成复现、修复、回归三段证据 |
-| "偶现不好复现" | 偶现仍是缺陷 | 标记 `needs-fix` 并固化触发条件 |
+直觉不构成根因证据；偶现先固化触发条件，保持`needs-fix`直至完成复现、修复与回归。
