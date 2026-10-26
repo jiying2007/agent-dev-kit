@@ -1,7 +1,7 @@
 ---
 name: adk-unit-test-embedded
 description: MCU/RTOS 单元测试断言与替身；非跨模块测试策略
-version: 1.1.0
+version: 1.1.1
 last_updated: 2026-08-30
 triggers:
   - "单元测试"

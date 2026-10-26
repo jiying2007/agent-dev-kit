@@ -1,7 +1,7 @@
 ---
 name: adk-task-breakdown
 description: 复杂任务拆解及并行边界；单点小修无需拆包
-version: 1.4.1
+version: 1.4.2
 last_updated: 2026-09-27
 triggers:
   - "拆解任务"
