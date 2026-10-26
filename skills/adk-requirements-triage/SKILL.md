@@ -1,7 +1,7 @@
 ---
 name: adk-requirements-triage
 description: 需求不清时澄清目标边界和验收；已明确任务无需重复访谈
-version: 1.3.0
+version: 1.3.1
 last_updated: 2026-07-11
 triggers:
   - "需求不清楚"

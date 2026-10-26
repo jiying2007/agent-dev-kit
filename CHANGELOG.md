@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### 8.1.1 source candidate
+- Advance eight Skill patch versions whose source content had changed since the exact 8.0.2 consumer baseline without a corresponding Skill version update. Preserve their existing content and the strict consumer import guard.
+- Keep the 8.1.0 convergence implementation unchanged; this source packaging repair still requires fresh protected CI and signed exact-source promotion before runtime adoption.
+
 ### 8.1.0 source candidate
 - Bind long-task progress to original criteria and fresh registered evidence; legacy revision-only events remain readable but cannot continually clear no-progress detection. Bound non-closing work and reject counter oscillation as closure evidence.
 - Add a separate local milestone check without completing the parent goal or granting delivery privileges. Require changed plan identities and execution adjustments for replan; report budget observations independently from final evidence qualification.

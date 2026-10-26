@@ -1,7 +1,7 @@
 ---
 name: adk-release-versioning
 description: 版本号、Changelog 和发布基线规划；不执行真实发布
-version: 1.4.0
+version: 1.4.1
 last_updated: 2026-09-19
 triggers:
   - "版本发布"
