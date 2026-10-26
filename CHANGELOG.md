@@ -3,7 +3,7 @@
 ## Unreleased
 
 ### 8.1.2 source candidate
-- Reuse the canonical bounded strict JSON parser in read-only goal current-state validation, rejecting duplicate keys, NaN, overflowing numeric literals and excessive nesting.
+- Reuse the canonical bounded strict JSON parser in read-only goal current-state validation, rejecting duplicate keys, NaN, overflowing numeric literals and excessive nesting; use descriptor-based regular-file reads to reject FIFO, directory and leaf-symlink input without blocking.
 - Add deterministic regressions; preserve existing byte budget, read-only semantics and independent native/effect/field/product qualifications.
 
 ### 8.1.1 source candidate

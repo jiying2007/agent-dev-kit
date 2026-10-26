@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import tempfile
 import unittest
 from pathlib import Path
@@ -35,6 +36,25 @@ class PlanningStateTest(unittest.TestCase):
                 self.assertEqual("fail", check_current_state(path)["status"])
             path.write_text(json.dumps({"schema_version": "adk.current-state/v1", "historical_body": "full copied history"}))
             self.assertIn("current-state-fields-invalid", check_current_state(path)["reasons"])
+
+
+    @unittest.skipUnless(hasattr(os, "mkfifo"), "POSIX input boundary")
+    def test_state_input_rejects_fifo_and_leaf_symlink_without_hanging(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            source = root / "original.json"
+            source.write_text('{"schema_version":"adk.current-state/v1"}')
+            alias = root / "alias.json"
+            alias.symlink_to(source)
+            fifo = root / "blocked.fifo"
+            os.mkfifo(fifo)
+            for unsafe in (alias, fifo, root):
+                with self.subTest(unsafe=unsafe.name):
+                    result = check_current_state(unsafe)
+                    self.assertEqual("fail", result["status"])
+                    self.assertIn("current-state-input-invalid", result["reasons"])
+                    self.assertFalse(result["completion_allowed"])
+                    self.assertIsNone(result["state_sha256"])
 
     def test_duplicate_keys_nonfinite_values_and_excessive_depth_fail_closed(self) -> None:
         valid = {"schema_version": "adk.current-state/v1", "goal_ref": "requirements.md",

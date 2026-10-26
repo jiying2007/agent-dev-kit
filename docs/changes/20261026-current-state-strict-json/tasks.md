@@ -1,6 +1,6 @@
 # Tasks
 
-- [x] Replace permissive current-state JSON decoding with canonical strict decoding.
+- [x] Replace permissive JSON decoding with canonical strict decoding and bounded regular-file capture.
 - [x] Add deterministic negative test cases and retain read-only semantics.
 - [x] Synchronize patch SemVer 8.1.2 and changelog.
 - [ ] Pass exact PR CI across supported Python versions.
