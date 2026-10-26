@@ -292,8 +292,8 @@ def reduce_events(events: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
                 if any(key not in state["evidence"] for key in ids):
                     raise ExecutionPolicyError("progress evidence must already be registered")
                 digests = {state["evidence"][key] for key in ids}
-                previous = set(state["progress"]["used_evidence_digests"])
-                if not digests - previous:
+                previous_digests = set(state["progress"]["used_evidence_digests"])
+                if not digests - previous_digests:
                     raise ExecutionPolicyError("progress requires new evidence, not a renamed digest")
                 if change == "replan":
                     if set(payload) != proof_fields | replan_fields:
@@ -317,7 +317,7 @@ def reduce_events(events: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
                             and goal["open_items_count"] < state["progress"]["open_items_at_progress"]):
                         state["progress"]["non_closing_advances"] = 0
                         state["progress"]["closed_criteria"].append(criterion)
-                state["progress"]["used_evidence_digests"] = sorted(previous | digests)
+                state["progress"]["used_evidence_digests"] = sorted(previous_digests | digests)
                 state["progress"]["verified_revision"] = revision
                 state["progress"]["criterion_id"] = criterion
                 state["progress"]["evidence_ids"] = ids

@@ -14,9 +14,14 @@
       "base": "repository",
       "path": ".adk/reviews/evidence/harness-source-20261026-8.1.0/independent-review.md",
       "sha256": "de92aec077a096d4741602b550b8426ed47809f773d40441b243fc356f81a523"
+    },
+    {
+      "base": "repository",
+      "path": ".adk/reviews/evidence/harness-source-20261026-8.1.0/mypy-refresh.md",
+      "sha256": "2b0f2e1b036c52bf5dfcf90853f7756ce3548335aa9fcda868f5391ce59d5363"
     }
   ],
-  "evidence_completed_at": "2026-10-26T12:57:32Z",
+  "evidence_completed_at": "2026-10-26T13:08:08Z",
   "findings": [],
   "limitations": [
     "Actual fresh independent AI source and seven-dimension review of the 8.1.0 candidate. The reviewer directly inspected 42 bounded source paths, recomputed all 62 prior source references and attributed unchanged historical review rather than claiming a complete reread.",
@@ -25,7 +30,7 @@
   ],
   "owner": "leiwenjun",
   "policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
-  "reviewed_at": "2026-10-26T12:57:32Z",
+  "reviewed_at": "2026-10-26T13:08:08Z",
   "reviewer": {
     "id": "ai/root/convergence_review",
     "kind": "ai",
