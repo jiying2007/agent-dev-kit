@@ -7,6 +7,8 @@ import json
 from pathlib import Path
 from typing import Any, Sequence
 
+from .strict_json import loads as load_strict_json
+
 
 def check_current_state(path: Path, *, max_bytes: int = 8192) -> dict[str, Any]:
     if isinstance(max_bytes, bool) or not isinstance(max_bytes, int) or not 1 <= max_bytes <= 1024 * 1024:
@@ -18,7 +20,7 @@ def check_current_state(path: Path, *, max_bytes: int = 8192) -> dict[str, Any]:
         reasons.append("current-state-byte-limit")
     else:
         try:
-            value = json.loads(raw)
+            value = load_strict_json(raw, max_bytes=max_bytes)
         except (ValueError, UnicodeError):
             value = None
         if not isinstance(value, dict) or value.get("schema_version") != "adk.current-state/v1":

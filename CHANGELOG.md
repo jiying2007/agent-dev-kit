@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### 8.1.2 source candidate
+- Reuse the canonical bounded strict JSON parser in read-only goal current-state validation, rejecting duplicate keys, NaN, overflowing numeric literals and excessive nesting.
+- Add deterministic regressions; preserve existing byte budget, read-only semantics and independent native/effect/field/product qualifications.
+
 ### 8.1.1 source candidate
 - Advance eight Skill patch versions whose source content had changed since the exact 8.0.2 consumer baseline without a corresponding Skill version update. Preserve their existing content and the strict consumer import guard.
 - Keep the 8.1.0 convergence implementation unchanged; this source packaging repair still requires fresh protected CI and signed exact-source promotion before runtime adoption.

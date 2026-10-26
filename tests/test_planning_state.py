@@ -35,3 +35,26 @@ class PlanningStateTest(unittest.TestCase):
                 self.assertEqual("fail", check_current_state(path)["status"])
             path.write_text(json.dumps({"schema_version": "adk.current-state/v1", "historical_body": "full copied history"}))
             self.assertIn("current-state-fields-invalid", check_current_state(path)["reasons"])
+
+    def test_duplicate_keys_nonfinite_values_and_excessive_depth_fail_closed(self) -> None:
+        valid = {"schema_version": "adk.current-state/v1", "goal_ref": "requirements.md",
+                 "milestone": "owner lifecycle", "evidence_refs": ["tests-receipt.json"],
+                 "blockers": [], "next_actions": ["verify shutdown"], "history_refs": ["history.md"]}
+        original = json.dumps(valid)
+        invalid_cases = (
+            original.replace('"goal_ref": "requirements.md"',
+                             '"goal_ref": "requirements.md", "goal_ref": "forged.md"'),
+            original.replace('"milestone": "owner lifecycle"', '"milestone": NaN'),
+            original.replace('"milestone": "owner lifecycle"', '"milestone": 1e10000'),
+            original.replace('"milestone": "owner lifecycle"',
+                             '"milestone": ' + "[" * 65 + '"owner lifecycle"' + "]" * 65),
+        )
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "current.json"
+            for raw in invalid_cases:
+                with self.subTest(raw=raw[:80]):
+                    path.write_text(raw)
+                    result = check_current_state(path)
+                    self.assertEqual("fail", result["status"])
+                    self.assertIn("current-state-schema-invalid", result["reasons"])
+                    self.assertFalse(result["completion_allowed"])
