@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### 8.1.0 source candidate
+- Bind long-task progress to original criteria and fresh registered evidence; legacy revision-only events remain readable but cannot continually clear no-progress detection. Bound non-closing work and reject counter oscillation as closure evidence.
+- Add a separate local milestone check without completing the parent goal or granting delivery privileges. Require changed plan identities and execution adjustments for replan; report budget observations independently from final evidence qualification.
+- Keep one bounded current-state entry, validate its hygiene through the existing goal CLI, and select debugging methods by risk and uncertainty without weakening domain acceptance or independent review.
+- Preserve Python 3.8+, exact signed provider promotion, protected main CI and separate runtime/product qualification. Codex adoption still requires its managed source-to-live verification.
+
 ### 8.0.40 source candidate
 - Verify the complete precompiled bundle inventory against trusted rendering of the validated source snapshot, including target/count, file and directory identity, hashes, modes and export manifests; reject missing or self-rehashed altered bundles before publication.
 - Keep release reconstruction offline and resource-bounded, without executing archived Python; retain historical source reconstruction and current-source freshness as separate contracts.

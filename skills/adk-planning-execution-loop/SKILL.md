@@ -1,8 +1,8 @@
 ---
 name: adk-planning-execution-loop
 description: 长任务计划审查、分阶段执行、恢复与收口闭环
-version: 1.3.1
-last_updated: 2026-09-27
+version: 1.4.0
+last_updated: 2026-10-26
 triggers:
   - "执行计划"
   - "多阶段任务"
@@ -28,35 +28,34 @@ constraints:
 # adk-planning-execution-loop
 
 ## Goal
-- 把长任务从"靠会话记忆推进"改为可恢复、可验证、可审查的执行闭环。
-- 通过检查点机制确保每个阶段的产出可独立验证。
-- 覆盖嵌入式全栈长任务：芯片/板级 bring-up、启动链/rootfs、Linux BSP 迁移、RTOS 应用联调、驱动到应用链路、上位机产测工具交付、OTA/回滚和现场维护闭环。
+- 用可恢复的检查点推进长任务；每阶段有独立验收，领域标准由项目定义。
 
 ## Prerequisites
-- 已有需求或计划来源。
-- 已明确任务边界、验证命令和停止条件。
+- 已有需求/计划、边界、验证命令和停止条件。
 
 ## Workflow
 1. 计划审查：检查依赖顺序、验证命令、隐含环境假设和阻塞条件；受控生命周期操作先冻结 owner × state × event × resource × termination × invariant 基线。
 2. 任务切片：每阶段输出 task-package v2 kind/question/evidence/permission/exit/handoff/retention、scope、done criteria 和验证命令。
-3. 状态外化：建立或更新 `PROJECT/REQUIREMENTS/STATE/PLAN/SUMMARY` 等同类 planning 工件。
+3. 状态外化：复用项目需求与计划；仅维护一份当前状态入口，合并阶段、风险、下一动作、恢复信息和证据指针，不按字段另建文件或复制历史正文。
 4. 连续性证明：长任务必须记录 active plan、findings、progress、attestation 和 excluded context。
 5. 执行检查点：每完成一个阶段，更新状态、证据和风险。
    - 同一逻辑目标的相关小改按里程碑连续推进：及时跑定向验证，完整回归和整批审查集中在里程碑末；共享契约、权限或发布边界变化立即升级对应门禁，不为每个小点重复 PR/合并。
-6. 恢复记录：维护 `session-state`、`next-actions`、`risk-ledger`、`resume-prompt`。
+   - 每批冻结可关闭的纵向交付与验收。新发现仅纳入本批阻塞项，其余待办；不减完整目标分母。
+6. 恢复记录：当前状态合并 `session-state/next-actions/risk-ledger/resume-prompt`，最多3个下一动作、默认8 KiB；超限摘要并链接历史，领域例外说明原因。
    - 暂停恢复或重试可能重跑已进入的步骤；对外部写入先核操作标识、实际生效回执和目标状态，未知结果先对账，不盲目重试。
 7. 偏离处理：发现计划错误、共享契约冲突、验证失败或 research/prototype 请求实现权限时，暂停并回到计划审查；`design-change` 或连续两轮新 blocker/major finding class 必须 replan。
 8. 目标闭环检查：核对原始目标、当前声明、证据、剩余未闭环项和停止条件。
 9. 计划完整性检查：无 phase heading 不得报告 `0/0 complete`；混合状态格式按字段核对；stop gate 只有 explicit opt-in、in_progress 和 ledger progress 同时满足才可阻断。
 10. 卡死保护：检查 retry budget、heartbeat、staleness threshold 和连续无信息增量轮次。
+    - 进度绑定原验收、新证据及变化；关键假设/阻塞变化有效，编号和测试数不证明收敛。无关闭项达到批次阈值则重规划，绑定前后计划及实际调整；只增预算无效。
 11. 收口验证：进入完成声明前，执行 completion gate 并核对证据支持结论。
 12. 复盘归档：任务完成后输出复盘记录，沉淀经验与改进项；仅在逻辑任务完成、跨会话交接、用户要求归档/提交前检查或 scope/owner 重大变化时执行完整 session-wrap/final gate。
+    - checkpoint/里程碑与整体final分离：阶段不complete父目标或授予commit/apply/release；无宿主阶段入口时用项目验证，不重复整体final。缺独审记录依赖并继续其他READY项。
 
 ## Templates
 - 长任务恢复与中途改范围处理模板：`references/long-task-recovery.md`。
 - 连续性证明模板：`templates/context/continuity-attestation.md`。
-- 检查点、偏差记录、恢复 prompt 和失败回退锚点都应写入可复用工件，不依赖会话记忆。
-- 检查点默认存放在当前 change 或任务目录下；临时材料只能进入 session 级状态，不得进入长期 knowledge。
+- 检查点、偏差和恢复锚点合并在当前change状态；临时材料不进入长期knowledge。
 
 ## Goal Closure / Anti-stall
 
@@ -78,43 +77,11 @@ constraints:
 
 ## Commands
 ```bash
-# 创建变更提案
-bash scripts/devkit.sh propose --change <change-id> --title "<目标>"
-
-# 验证阶段完成
-bash scripts/devkit.sh verify --change <change-id>
-
-# 提交评审
-bash scripts/devkit.sh review --change <change-id> --result pass --blockers 0 --majors 0 --minors 0
-
-# 检查当前阶段状态
-rg -n "status:" docs/changes/<change-id>/checkpoint-*.md
-
-# 导出恢复上下文
-cat docs/changes/<change-id>/session-state.md
-
-# 生成复盘报告
-bash scripts/devkit.sh archive --change <change-id>
+rtk bash scripts/devkit.sh goal state-check --state <current.json> --summary-json
+rtk bash scripts/devkit.sh verify --change <change-id>
 ```
 
-## Evidence Template
-```md
-- Plan Review:
-- Stage Checklist:
-- Work Item Contract (kind/question/evidence/permission/exit/handoff/retention):
-- Planning Artifacts:
-- Continuity Attestation:
-- Goal Closure:
-- Anti-stall Check:
-- Session State:
-- Next Actions:
-- Risk Ledger:
-- Resume Prompt:
-- Verification Evidence:
-- Final Gate:
-- Deviation Records:
-- Retrospective:
-```
+证据复用当前状态、Work Item Contract、Goal Closure、Anti-stall、Verification及偏差记录，不另建同名模板。
 
 ## Failure Handling
 - 同一验证失败两次仍无根因时，回到假设矩阵并更新风险台账。
@@ -129,11 +96,12 @@ bash scripts/devkit.sh archive --change <change-id>
 ## Quality Gate
 - 每个阶段必须有验证证据，禁止无证据的阶段推进。
 - 所有阶段只接受 task-package v2；prototype 必须附 prototype_evidence，v1 或权限冲突固定 needs-fix。
-- 恢复摘要必须能让新会话继续执行，包含完整上下文。
+- 恢复摘要覆盖当前动作必需上下文，其余保留指针。
 - 目标闭环记录必须能从原始目标追溯到完成声明、证据和剩余风险。
 - Anti-stall 检查必须包含 retry budget、staleness threshold、heartbeat 和停止条件。
+- 证据完成、当前预算状态和历史预算合规分别报告；final PASS不证明执行期间未超预算。仅收到预算stop时必须停止实施并按授权重规划。
 - `targeted-finding-review` 只能关闭对应 finding；受控生命周期任务整体通过前必须有适用的 whole-lifecycle review。
 - 完成结论必须经过 `adk-verification-before-completion`。
 - 偏差记录必须完整，包含根因、影响和处理决策。
-- 复盘必须在任务完成后 48 小时内完成。
+- 适用的复盘在任务完成后48小时内完成，不逐批重复。
 - orphan checkpoint 和过期临时状态必须有保留或删除决策。

@@ -1,8 +1,8 @@
 ---
 name: adk-verification-before-completion
 description: 完成前验证门禁，确保交付声明与证据一致
-version: 1.7.1
-last_updated: 2026-09-28
+version: 1.8.0
+last_updated: 2026-10-26
 triggers:
   - "准备完成"
   - "准备提交"
@@ -27,6 +27,7 @@ constraints:
 - 在交付前统一核对验证证据、评审状态、运行边界和风险闭环，避免“未验先结论”。
 
 ## Prerequisites
+- 先确认是阶段验收还是完整目标交付；阶段只检查冻结范围与受影响验证，不重复全目标final或整批无关回归。完整目标仍逐项保留原验收与独立审查要求。
 - 已整理改动范围，并收集 lint/test/build/smoke、评审状态、风险和回退证据。
 - 已区分 claimant 的完成声明与 verifier 的独立核验；主观或用户可见功能不能由实现者自证。
 
@@ -49,11 +50,7 @@ constraints:
 
 ## Commands
 ```bash
-rtk git diff --name-only <base>...HEAD
-rtk <project-lint-cmd>
 rtk <project-test-cmd>
-rtk bash scripts/devkit.sh runtime-boundary
-rtk bash scripts/check-codify-governance.sh
 ```
 
 ## Evidence Template
@@ -83,28 +80,22 @@ rtk bash scripts/check-codify-governance.sh
 - Final Gate Result:
 ```
 
-```md
-Evidence Index（命令级）:
-| Command | Exit Code | Result Summary | Evidence Path | Layer | Related Artifact |
-|---|---|---|---|---|---|
-| <cmd> | 0 | <summary> | <path> | Workflow | verify-report |
-```
+Evidence Index复用已有command/exit code/summary/path/layer/artifact记录。
 
 ## Failure Handling
 - 关键命令无法执行、claimant 声明缺证据、证据过期、verifier 未独立核对或主观功能缺 verifier verdict 时，必须说明原因并输出 `needs-fix`。
 - blocker 未闭环、retry budget 用尽、heartbeat 过期或 open items 未解释时，不得给 `pass`。
 - required artifact、skipped skill 原因、tool fallback/fallback evidence 或必要运行态证据缺失时，不得放行。
 
-## 与 adk-commit-pr-quality-gate 的区别
-- `adk-verification-before-completion`：完成前自检，证明完成声明、验证命令、运行证据和风险边界一致。
-- `adk-commit-pr-quality-gate`：提交/PR 质量门禁，聚焦格式、规范、评审与 SCM 交付质量。
+提交/PR格式与SCM交付另由`adk-commit-pr-quality-gate`负责。
 
 ## Quality Gate
 - 输出必须包含验证命令、关键结果、风险项和处理状态；完成声明必须区分 claimant、verifier、证据列表、缺失证据和 open items。
 - 未闭环 blocker、缺独立 Subjective Feature Proof、证据过期或 completion guard 必需项失败时，结论固定 `needs-fix`。
 - Runtime Control Plane Audit 缺 deny-path test、loaded_tools 或 rollback_path 不得放行；Trace Eval Regression Evidence 缺 regression case 且无 not_applicable_reason 不得放行。
 - 跨模块/协议/数据/发布/存储/资源/UI 变更必须有 standards/architecture/ship disclosure/canonical resolution parity/browser evidence 或 not-applicable；运行目录、配置、runner 与 UI 证据不得用源码推断替代。
-- Evidence Index 字段必须完整且至少包含一条负结果或被证伪路径；中高风险任务还必须有 Replayable Evidence Bundle、Tool / Skill Evidence Plan 和 Completion Guard Payload。
+- Evidence Index记录适用命令和实际结果；负结果/被证伪路径在竞争假设、失败修复或高风险边界下提供，不为低风险明确根因任务补造。中高风险任务保留适用的Replayable Evidence Bundle、Tool / Skill Evidence Plan和Completion Guard Payload，同一证据可引用复用。
+- 证据结论、预算状态、运行采用分别报告；预算只核当前快照时不得声称历史合规。阶段通过不完成父目标，也不授予产品、提交或发布资格。
 - Codify Decision 必须记录 reusable_pattern、promotion_candidate、next_task_friction_reduced、reduced_by、reduction_evidence、do_not_promote_reason、owner_review、rollback_path、verification_evidence；`promotion_candidate: true` 缺 owner_review、rollback_path、verification_evidence 或摩擦下降证据时固定 `needs-fix`。
 - 受控生命周期操作缺契约、owner、终止路径或真实环境边界不得完成；生命周期变更缺 whole-lifecycle review，或 design-change/新增 blocker-major/超自审预算未 replan 时不得 `pass`。
 - breaking change 必须有迁移与回退；模型/上下文/工具权限变化必须证明 approval/deny gate 未放宽。

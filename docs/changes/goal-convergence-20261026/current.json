@@ -1,0 +1,9 @@
+{
+  "schema_version": "adk.current-state/v1",
+  "goal_ref": "requirements.md",
+  "milestone": "源码与本轮验证已完成；正式运行采用未完成",
+  "evidence_refs": ["validation.md", "negative-results.md", "../../../tests/test_goal_convergence.py", "../../../tests/test_planning_state.py"],
+  "blockers": ["exact provider导入需要clean commit及签名promotion，当前无提交发布授权；目标受保护dirty须隔离", "全仓strict参考审阅到期，当前Harness审核需绑定新快照"],
+  "next_actions": ["处理并复验已列明的发布门禁，保留本轮已通过证据", "经明确授权形成提交与签名发布身份，在隔离Codex目标执行exact导入", "完成source-to-live并在原GROS线程核验新调度采用"],
+  "history_refs": ["design.md", "tasks.md"]
+}

@@ -56,6 +56,18 @@
     "goal_tokens": {"type": "integer", "minimum": 0},
     "token_budget": {"type": ["integer", "null"], "minimum": 1},
     "token_ratio": {"type": ["number", "null"], "minimum": 0},
+    "budget_status": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scope", "status", "token_exhausted", "time_exhausted", "historical_compliance_verified"],
+      "properties": {
+        "scope": {"const": "current-snapshot"},
+        "status": {"enum": ["within", "exceeded", "unknown"]},
+        "token_exhausted": {"type": "boolean"},
+        "time_exhausted": {"type": "boolean"},
+        "historical_compliance_verified": {"const": false}
+      }
+    },
     "context_ratio": {"type": "number", "minimum": 0},
     "time_elapsed_seconds": {"type": "number", "minimum": 0},
     "heartbeat_age_seconds": {"type": ["number", "null"], "minimum": 0},
