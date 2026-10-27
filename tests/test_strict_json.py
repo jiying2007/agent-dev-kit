@@ -232,6 +232,15 @@ class StrictJSONTests(unittest.TestCase):
             {"😀": ["😀", "中文"]},
             loads(r'{"\ud83d\ude00":["\ud83d\ude00","中文"]}'),
         )
+        self.assertEqual(
+            {"literal": r"\uD800"},
+            loads(r'{"literal":"\\uD800"}'),
+        )
+        with mock.patch(
+            "agent_dev_kit.strict_json._scalar_guard",
+            side_effect=AssertionError("ordinary JSON should not need Unicode tree scan"),
+        ):
+            self.assertEqual({"name": "中文"}, loads('{"name":"中文"}'))
 
     def test_ambiguity_nonfinite_and_budgets(self):
         for raw in ('{"x":1,"x":2}', '{"x":1,"\\u0078":2}',

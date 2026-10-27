@@ -17,3 +17,7 @@ Python's default JSON decoder accepts syntactically escaped lone UTF-16 surrogat
 ## Harness contract input authority
 
 The Harness contract parser previously followed symlinks and read unbounded JSON. Route it through the same strict JSON decoder with descriptor-based regular-file checks, a 256 KiB hard limit and lexical parent-component symlink preflight. Continue enforcing all existing schema and review semantics. A signed review must bind the changed readiness_evidence.py validator fingerprint; this source-only repair is not an independent delegated review. Symlink preflight is not a guarantee against concurrent parent replacement.
+
+## Bounded Unicode scan cost
+
+Only escaped surrogate code units (JSON `\\uD800`-`\\uDFFF`, case-insensitive hex) can enter a decoded string as lone surrogates: direct invalid UTF-8 is already rejected at decode, while direct `str` input is encoded as UTF-8 before parsing. Check the bounded raw byte payload for those escapes and perform the existing complete parsed-tree Unicode scalar validation only when a possible surrogate escape appears. False-positive matches inside escaped backslash text are safe, because the final tree check will accept actual valid scalar text. Test the fast path and valid literal backslashes, and preserve failure for real escaped lone surrogates.

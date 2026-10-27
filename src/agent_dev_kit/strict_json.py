@@ -4,12 +4,14 @@ from __future__ import annotations
 import json
 import math
 import os
+import re
 import stat
 from pathlib import Path
 from typing import Any, Sequence
 
 DEFAULT_MAX_BYTES = 4 * 1024 * 1024
 DEFAULT_MAX_DEPTH = 64
+_SURROGATE_ESCAPE = re.compile(rb"\\u[dD][89aAbBcCdDeEfF][0-9a-fA-F]{2}")
 
 
 class StrictJSONError(ValueError):
@@ -89,7 +91,8 @@ def loads(data: str | bytes, *, max_bytes: int = DEFAULT_MAX_BYTES,
         _depth_guard(text, max_depth)
         parsed = json.loads(text, object_pairs_hook=unique_object,
                             parse_float=_finite_float, parse_constant=_reject_constant)
-        _scalar_guard(parsed)
+        if _SURROGATE_ESCAPE.search(raw):
+            _scalar_guard(parsed)
         return parsed
     except StrictJSONError:
         raise
