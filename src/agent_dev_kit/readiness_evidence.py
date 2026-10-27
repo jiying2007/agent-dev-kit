@@ -2,14 +2,13 @@
 
 from __future__ import annotations
 
-import json
 import os
 import re
 from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Tuple
 
-from .strict_json import StrictJSONError, loads as load_strict_json
+from .strict_json import StrictJSONError, loads as load_strict_json, read as read_strict_json, read_bytes as read_bounded_bytes
 
 EXPECTED_DIMENSIONS = (
     "context_legibility",
@@ -47,10 +46,13 @@ class ReadinessContractError(ValueError):
 def load_readiness_contract(path: Path) -> Dict[str, Any]:
     """Load and minimally validate the readiness contract."""
 
+    candidate = path.expanduser().absolute()
     try:
-        value = json.loads(path.expanduser().resolve().read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError, RecursionError) as exc:
-        raise ReadinessContractError("cannot load Harness readiness contract: {}".format(exc)) from exc
+        if any(part.is_symlink() for part in (candidate, *candidate.parents)):
+            raise ReadinessContractError("Harness readiness contract path contains a symlink")
+        value = read_strict_json(candidate, max_bytes=256 * 1024, regular_only=True)
+    except (OSError, StrictJSONError) as exc:
+        raise ReadinessContractError("cannot load Harness readiness contract safely") from exc
     if not isinstance(value, dict):
         raise ReadinessContractError("Harness readiness contract must be a JSON object")
     dimensions = value.get("dimensions")
@@ -165,10 +167,28 @@ class RepositoryIndex:
         self.files: Dict[str, Path] = {}
         self.text_cache: Dict[str, Optional[str]] = {}
         self.errors: List[str] = []
+        self.mcp_config_names = {str(name).lower() for name in contract["mcp"]["config_names"]}
+        self.max_mcp_configs = int(contract["mcp"]["max_configs"])
+        # Names only. Unsafe files must never be opened, but also must not
+        # vanish from a security assessment as not-applicable.
+        self.unsafe_mcp_configs: set[str] = set()
+        self.unsafe_mcp_config_overflow = False
         self.truncated = False
         self._scan()
 
     def _scan(self) -> None:
+        def note_unsafe_mcp(path: Path) -> None:
+            if path.name.lower() not in self.mcp_config_names:
+                return
+            try:
+                relative = path.relative_to(self.root).as_posix()
+            except ValueError:
+                return
+            if len(self.unsafe_mcp_configs) < self.max_mcp_configs:
+                self.unsafe_mcp_configs.add(relative)
+            else:
+                self.unsafe_mcp_config_overflow = True
+
         def on_error(exc: OSError) -> None:
             name = getattr(exc, "filename", None)
             if name:
@@ -184,6 +204,9 @@ class RepositoryIndex:
             str(self.root), topdown=True, onerror=on_error, followlinks=False
         ):
             current_path = Path(current)
+            for name in directories:
+                if name not in self.excluded:
+                    note_unsafe_mcp(current_path / name)
             directories[:] = sorted(
                 name
                 for name in directories
@@ -192,6 +215,7 @@ class RepositoryIndex:
             for name in sorted(filenames):
                 path = current_path / name
                 if path.is_symlink() or not path.is_file():
+                    note_unsafe_mcp(path)
                     continue
                 if len(self.files) >= self.max_files:
                     self.truncated = True
@@ -213,11 +237,13 @@ class RepositoryIndex:
             self.text_cache[relative] = None
             return None
         try:
-            if path.stat().st_size > self.max_file_bytes:
-                self.text_cache[relative] = None
-                return None
-            value = path.read_text(encoding="utf-8")
-        except (OSError, UnicodeDecodeError):
+            # Path ancestry is checked before opening. This is a preflight;
+            # the descriptor read below is what bounds bytes and leaf type.
+            if any(part.is_symlink() for part in (path, *path.parents)):
+                raise StrictJSONError("Harness evidence path contains a symlink")
+            raw = read_bounded_bytes(path, max_bytes=self.max_file_bytes, regular_only=True)
+            value = raw.decode("utf-8", errors="strict")
+        except (OSError, UnicodeError, StrictJSONError):
             value = None
         self.text_cache[relative] = value
         return value

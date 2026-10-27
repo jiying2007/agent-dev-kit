@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+### 8.1.2 source candidate
+- Reuse the canonical bounded strict JSON parser in read-only goal current-state validation, rejecting duplicate keys, NaN, overflowing numeric literals and excessive nesting; use descriptor-based regular-file reads plus parent-component preflight to reject FIFO, directory and symlink-aliased paths without blocking.
+- Reject escaped lone Unicode surrogates in all canonical strict JSON consumers, including object keys and nested state strings. Use a bounded byte-level surrogate-escape prefilter so ordinary JSON avoids unnecessary traversal. Fail closed on ambiguous MCP permission configs and bound Harness file snapshots using the canonical regular-file reader. Keep native/effect/field/product qualifications independent.
+
+- Harden MCP command/args, Header values, indirect env strings and HTTP/SSE URL authentication sinks against literal credentials. Validate URL userinfo (username and password), scheme and port, and surface symlink/FIFO/directory MCP config names instead of mistakenly treating them as not-applicable. Preserve opaque diagnostics and managed references; genuine independent seven-dimensional review is still required.
+
+- Reject ambiguous URL authorities containing literal or encoded backslashes/separators, and fail closed on explicitly empty credential query/userinfo fields while preserving legitimate managed references. Retain independent review requirements.
+
+- Validate raw MCP URL text before urlsplit can strip CR/LF/TAB/control characters, and treat explicitly empty header/env/args credential sinks as invalid rather than as legitimate omitted credentials. Keep managed reference positives and source-pinned independent review gates.
+
 ### 8.1.1 source candidate
 - Advance eight Skill patch versions whose source content had changed since the exact 8.0.2 consumer baseline without a corresponding Skill version update. Preserve their existing content and the strict consumer import guard.
 - Keep the 8.1.0 convergence implementation unchanged; this source packaging repair still requires fresh protected CI and signed exact-source promotion before runtime adoption.
@@ -949,3 +959,5 @@
 - 文档: docs/
 - 快速入门: docs/quick-start.md
 - 故障排除: docs/troubleshooting.md
+
+- Keep security-negative fixtures below production credential-pattern heuristics; source contract tests must not ship credential-like literals. Nested CLI assignments such as `--env=TOKEN=value` are checked independently, not swallowed by an outer option match.

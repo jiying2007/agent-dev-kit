@@ -7,18 +7,38 @@ import json
 from pathlib import Path
 from typing import Any, Sequence
 
+from .strict_json import StrictJSONError, read_bytes as read_bounded_bytes
+from .strict_json import loads as load_strict_json
+
+
+def _reject_symlink_path(path: Path) -> None:
+    """Fail closed on symlinked components, including parents (preflight only)."""
+    current = path
+    while True:
+        if current.is_symlink():
+            raise StrictJSONError("current-state path contains symlink")
+        if current.parent == current:
+            return
+        current = current.parent
+
 
 def check_current_state(path: Path, *, max_bytes: int = 8192) -> dict[str, Any]:
     if isinstance(max_bytes, bool) or not isinstance(max_bytes, int) or not 1 <= max_bytes <= 1024 * 1024:
         raise ValueError("max_bytes must be between 1 and 1048576")
-    with path.open("rb") as stream:
-        raw = stream.read(max_bytes + 1)
     reasons: list[str] = []
-    if len(raw) > max_bytes:
-        reasons.append("current-state-byte-limit")
-    else:
+    raw: bytes | None
+    try:
+        _reject_symlink_path(path)
+        raw = read_bounded_bytes(path, max_bytes=max_bytes, regular_only=True)
+    except StrictJSONError as exc:
+        raw = None
+        reasons.append(
+            "current-state-byte-limit" if str(exc) == "JSON exceeds byte budget"
+            else "current-state-input-invalid"
+        )
+    if raw is not None:
         try:
-            value = json.loads(raw)
+            value = load_strict_json(raw, max_bytes=max_bytes)
         except (ValueError, UnicodeError):
             value = None
         if not isinstance(value, dict) or value.get("schema_version") != "adk.current-state/v1":
@@ -44,7 +64,7 @@ def check_current_state(path: Path, *, max_bytes: int = 8192) -> dict[str, Any]:
         "completion_allowed": False,
         "evidence_contents_verified": False,
         "max_bytes": max_bytes,
-        "state_sha256": hashlib.sha256(raw).hexdigest() if len(raw) <= max_bytes else None,
+        "state_sha256": hashlib.sha256(raw).hexdigest() if raw is not None else None,
         "reasons": reasons,
     }
 
