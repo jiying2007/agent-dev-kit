@@ -120,7 +120,9 @@ def _credential_argument_issues(
             malformed = True
         flag = _CREDENTIAL_FLAG.fullmatch(value)
         if flag and _sensitive_key(flag.group(1), fragments):
-            if position + 1 >= len(args) or not args[position + 1] or args[position + 1].startswith("-"):
+            if (position + 1 >= len(args)
+                    or not args[position + 1].strip()
+                    or args[position + 1].startswith("-")):
                 malformed = True
             elif not _safe_secret_reference(args[position + 1]):
                 issues.append("args[{}]".format(position + 1))

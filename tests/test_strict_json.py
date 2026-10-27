@@ -191,8 +191,13 @@ class StrictJSONTests(unittest.TestCase):
                         "demo", {"command": "npx", "args": args}
                     )
                     self.assertEqual("pass", status, blockers)
+            # Whitespace-only split credential values are incomplete, not
+            # valid managed secret references; exercise the full scanner.
             for args in (["safe-package@1.2.3", "--token"],
                          ["safe-package@1.2.3", "--token", "--other"],
+                         ["safe-package@1.2.3", "--token", " "],
+                         ["safe-package@1.2.3", "--token", "\t"],
+                         ["safe-package@1.2.3", "--token", " \t "],
                          ["safe-package@1.2.3", 42]):
                 with self.subTest(invalid=args):
                     status, _refs, blockers = evaluate("demo", {"command": "npx", "args": args})
