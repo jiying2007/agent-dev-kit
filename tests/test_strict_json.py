@@ -159,13 +159,13 @@ class StrictJSONTests(unittest.TestCase):
             )
             self.assertEqual("pass", status, blockers)
             bad = (
-                ["safe-package@1.2.3", "--token=DEMO_LITERAL_SECRET"],
-                ["safe-package@1.2.3", "--api-key", "DEMO_LITERAL_SECRET"],
-                ["safe-package@1.2.3", "--header=Authorization: Bearer DEMO_LITERAL_SECRET"],
-                ["safe-package@1.2.3", "TOKEN=DEMO_LITERAL_SECRET"],
-                ["safe-package@1.2.3", "--env=TOKEN=DEMO_LITERAL_SECRET"],
-                ["safe-package@1.2.3", "node script --api-key DEMO_LITERAL_SECRET"],
-                ["safe-package@1.2.3", "-H", "Authorization: Bearer DEMO_LITERAL_SECRET"],
+                ["safe-package@1.2.3", "--token=demo_value"],
+                ["safe-package@1.2.3", "--api-key", "demo_value"],
+                ["safe-package@1.2.3", "--header=Authorization: Bearer demo_value"],
+                ["safe-package@1.2.3", "TOKEN=demo_value"],
+                ["safe-package@1.2.3", "--env=TOKEN=demo_value"],
+                ["safe-package@1.2.3", "node script --api-key demo_value"],
+                ["safe-package@1.2.3", "-H", "Authorization: Bearer demo_value"],
             )
             for args in bad:
                 with self.subTest(bad=args):
@@ -174,7 +174,7 @@ class StrictJSONTests(unittest.TestCase):
                     )
                     self.assertEqual("blocked", status)
                     self.assertIn("hardcoded_mcp_secret", {b["code"] for b in blockers})
-                    self.assertNotIn("DEMO_LITERAL_SECRET", str(blockers))
+                    self.assertNotIn("demo_value", str(blockers))
                     self.assertNotIn("sk-demo_marker", str(blockers))
                     self.assertTrue(any(
                         "#mcpServers[0].args[" in b["evidence_ref"]
@@ -201,13 +201,13 @@ class StrictJSONTests(unittest.TestCase):
             for server in (
                 {"command": "npx", "args": ["unpinned-package"]},
                 {"command": "npx", "args": ["safe-package@1.2.3"],
-                 "headers": {"private-token-DEMO_LITERAL_SECRET": "DEMO_LITERAL_SECRET"}},
+                 "headers": {"private-token-demo_value": "demo_value"}},
             ):
                 with self.subTest(redaction=server):
                     status, _refs, blockers = evaluate("sk-demo_marker", server)
                     self.assertIn(status, ("blocked", "needs-review"))
                     self.assertNotIn("sk-demo_marker", str(blockers))
-                    self.assertNotIn("DEMO_LITERAL_SECRET", str(blockers))
+                    self.assertNotIn("demo_value", str(blockers))
                     self.assertTrue(any("mcpServers[0]" in b["evidence_ref"] for b in blockers))
 
     def test_harness_index_reads_one_bounded_regular_descriptor(self):

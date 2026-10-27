@@ -47,7 +47,7 @@ def _sensitive_key(key: str, fragments: Sequence[str]) -> bool:
 
 
 _CREDENTIAL_ASSIGNMENT = re.compile(
-    r"(?<![A-Za-z0-9_-])(--?[A-Za-z][A-Za-z0-9_-]*|[A-Za-z][A-Za-z0-9_-]*)\s*([=:])\s*([^\s;,&]+)",
+    r"(?=(?<![A-Za-z0-9_-])(--?[A-Za-z][A-Za-z0-9_-]*|[A-Za-z][A-Za-z0-9_-]*)\s*([=:])\s*([^\s;,&]+))",
     re.IGNORECASE,
 )
 _CREDENTIAL_INLINE = re.compile(
@@ -59,6 +59,8 @@ _CREDENTIAL_FLAG = re.compile(r"--?([A-Za-z][A-Za-z0-9_-]*)\Z")
 
 def _literal_credential_argument(text: str, fragments: Sequence[str]) -> bool:
     """Guard shell-like credential literals without evaluating shell or echoing input."""
+    # A zero-width scan also sees nested assignments (e.g. --env=TOKEN=value)
+    # rather than consuming the complete argument at --env=.
     for match in _CREDENTIAL_ASSIGNMENT.finditer(text):
         name = match.group(1).lstrip("-")
         if not _sensitive_key(name, fragments):
