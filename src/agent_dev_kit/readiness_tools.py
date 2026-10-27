@@ -45,6 +45,71 @@ def _sensitive_key(key: str, fragments: Sequence[str]) -> bool:
     )
 
 
+
+_CREDENTIAL_ASSIGNMENT = re.compile(
+    r"(?<![A-Za-z0-9_-])(--?[A-Za-z][A-Za-z0-9_-]*|[A-Za-z][A-Za-z0-9_-]*)\s*([=:])\s*([^\s;,&]+)",
+    re.IGNORECASE,
+)
+_CREDENTIAL_INLINE = re.compile(
+    r"(?:^|[\s;])--([A-Za-z][A-Za-z0-9_-]*)\s+([^\s;,&]+)", re.IGNORECASE,
+)
+_BEARER_ARG = re.compile(r"\bBearer\s+([^\s;,&]+)", re.IGNORECASE)
+_CREDENTIAL_FLAG = re.compile(r"--?([A-Za-z][A-Za-z0-9_-]*)\Z")
+
+
+def _literal_credential_argument(text: str, fragments: Sequence[str]) -> bool:
+    """Guard shell-like credential literals without evaluating shell or echoing input."""
+    for match in _CREDENTIAL_ASSIGNMENT.finditer(text):
+        name = match.group(1).lstrip("-")
+        if not _sensitive_key(name, fragments):
+            continue
+        if name.lower() == "authorization":
+            candidate = text[match.end(2):].strip().split(";", 1)[0].strip()
+        else:
+            candidate = match.group(3)
+        if not candidate or not _safe_secret_reference(candidate):
+            return True
+    for match in _CREDENTIAL_INLINE.finditer(text):
+        if _sensitive_key(match.group(1), fragments) and not _safe_secret_reference(match.group(2)):
+            return True
+    for match in _BEARER_ARG.finditer(text):
+        if not _safe_secret_reference("Bearer " + match.group(1)):
+            return True
+    return False
+
+
+def _credential_argument_issues(
+    server: Mapping[str, Any], fragments: Sequence[str],
+) -> Tuple[List[str], bool]:
+    """Return opaque argument locations and malformed-input status, never values."""
+    args = server.get("args", [])
+    if not isinstance(args, list) or any(not isinstance(item, str) for item in args):
+        return [], True
+    issues: List[str] = []
+    command = server.get("command")
+    if isinstance(command, str) and _literal_credential_argument(command, fragments):
+        issues.append("command")
+    for position, value in enumerate(args):
+        if _literal_credential_argument(value, fragments):
+            issues.append("args[{}]".format(position))
+        flag = _CREDENTIAL_FLAG.fullmatch(value)
+        if flag and _sensitive_key(flag.group(1), fragments):
+            if position + 1 >= len(args) or not args[position + 1] or args[position + 1].startswith("--"):
+                return sorted(set(issues)), True
+            if not _safe_secret_reference(args[position + 1]):
+                issues.append("args[{}]".format(position + 1))
+    return sorted(set(issues)), False
+
+
+def _opaque_sensitive_ref(
+    relative: str, parts: Tuple[str, ...], positions: Mapping[str, int], ordinal: int,
+) -> str:
+    """No arbitrary server names or JSON keys may occur in a blocker ref."""
+    if len(parts) >= 2 and parts[0] == "mcpServers" and parts[1] in positions:
+        return "{}#mcpServers[{}].sensitive[{}]".format(relative, positions[parts[1]], ordinal)
+    return "{}#sensitive[{}]".format(relative, ordinal)
+
+
 def _unpinned_npx_dependency(server: Mapping[str, Any]) -> Optional[str]:
     command = server.get("command")
     args = server.get("args")
@@ -216,6 +281,9 @@ def _evaluate_tools(
             parse_failed = True
             record_blocker(_blocker("invalid_mcp_schema", "MCP 配置必须包含 mcpServers 对象", relative))
             continue
+        servers = data["mcpServers"]
+        server_positions = {name: position for position, name in enumerate(sorted(servers))}
+        sensitive_ordinal = 0
         for parts, key, value in _walk_json(data):
             if not _sensitive_key(key, fragments) or value is None:
                 continue
@@ -225,31 +293,34 @@ def _evaluate_tools(
                     _blocker(
                         "hardcoded_mcp_secret",
                         "MCP 敏感字段使用了非环境引用；值已脱敏",
-                        "{}#{}".format(relative, ".".join(parts)),
+                        _opaque_sensitive_ref(relative, parts, server_positions, sensitive_ordinal),
                     )
                 )
-        servers = data["mcpServers"]
-        for server_name in sorted(servers):
+                sensitive_ordinal += 1
+        for server_name, position in server_positions.items():
             server = servers[server_name]
+            opaque = "{}#mcpServers[{}]".format(relative, position)
             if not isinstance(server, dict):
                 parse_failed = True
+                record_blocker(_blocker("invalid_mcp_server", "MCP server 定义必须是对象", opaque))
+                continue
+            unsafe, malformed = _credential_argument_issues(server, fragments)
+            if malformed:
+                parse_failed = True
+                record_blocker(_blocker("invalid_mcp_command_args", "MCP 凭证参数不完整或类型无效", opaque + ".args"))
+            for location in unsafe:
+                hardcoded_secret = True
                 record_blocker(
                     _blocker(
-                        "invalid_mcp_server",
-                        "MCP server 定义必须是对象",
-                        "{}#mcpServers.{}".format(relative, server_name),
+                        "hardcoded_mcp_secret",
+                        "MCP command/args 含明文凭证；值已脱敏",
+                        opaque + "." + location,
                     )
                 )
-                continue
-            dependency = _unpinned_npx_dependency(server)
-            if dependency is not None:
+            if _unpinned_npx_dependency(server) is not None:
                 unpinned = True
                 record_blocker(
-                    _blocker(
-                        "unpinned_mcp_dependency",
-                        "npx 类 MCP dependency 未固定版本",
-                        "{}#mcpServers.{}.args".format(relative, server_name),
-                    )
+                    _blocker("unpinned_mcp_dependency", "npx 类 MCP dependency 未固定版本", opaque + ".args")
                 )
     permission_refs = _permission_document_evidence(index, contract)
     structured_status, structured_refs, structured_blockers = _structured_permission_evidence(

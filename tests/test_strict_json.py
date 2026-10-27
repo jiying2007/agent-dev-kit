@@ -133,6 +133,83 @@ class StrictJSONTests(unittest.TestCase):
             self.assertEqual("partial", status)
             self.assertNotIn("invalid_mcp_json", {b["code"] for b in blockers})
 
+    def test_harness_mcp_cli_credentials_and_opaque_report_refs(self):
+        from agent_dev_kit.readiness_evidence import RepositoryIndex, load_readiness_contract
+        from agent_dev_kit.readiness_tools import _evaluate_tools
+
+        root_dir = Path(__file__).resolve().parents[1]
+        contract = load_readiness_contract(root_dir / "manifests/harness_readiness_contracts.json")
+        metadata = {"dimensions": {"tool_and_permission_boundary": {
+            "permission_boundary": {"read_only": True, "approval_required": True,
+                                    "credential_source": "environment-variable"}}}}
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "docs").mkdir()
+            (root / "docs/security.md").write_text(
+                "read-only approval credential environment variable", encoding="utf-8"
+            )
+            config = root / ".mcp.json"
+
+            def evaluate(name, server):
+                config.write_text(json.dumps({"mcpServers": {name: server}}), encoding="utf-8")
+                return _evaluate_tools(RepositoryIndex(root, contract), contract, metadata)
+
+            status, _refs, blockers = evaluate(
+                "demo", {"command": "npx", "args": ["safe-package@1.2.3"]}
+            )
+            self.assertEqual("pass", status, blockers)
+            bad = (
+                ["safe-package@1.2.3", "--token=DEMO_LITERAL_SECRET"],
+                ["safe-package@1.2.3", "--api-key", "DEMO_LITERAL_SECRET"],
+                ["safe-package@1.2.3", "--header=Authorization: Bearer DEMO_LITERAL_SECRET"],
+                ["safe-package@1.2.3", "TOKEN=DEMO_LITERAL_SECRET"],
+                ["safe-package@1.2.3", "--env=TOKEN=DEMO_LITERAL_SECRET"],
+                ["safe-package@1.2.3", "node script --api-key DEMO_LITERAL_SECRET"],
+                ["safe-package@1.2.3", "-H", "Authorization: Bearer DEMO_LITERAL_SECRET"],
+            )
+            for args in bad:
+                with self.subTest(bad=args):
+                    status, _refs, blockers = evaluate(
+                        "sk-demo_marker", {"command": "npx", "args": args}
+                    )
+                    self.assertEqual("blocked", status)
+                    self.assertIn("hardcoded_mcp_secret", {b["code"] for b in blockers})
+                    self.assertNotIn("DEMO_LITERAL_SECRET", str(blockers))
+                    self.assertNotIn("sk-demo_marker", str(blockers))
+                    self.assertTrue(any(
+                        "#mcpServers[0].args[" in b["evidence_ref"]
+                        for b in blockers if b["code"] == "hardcoded_mcp_secret"
+                    ))
+            ref = "$" + "{DEMO_TOKEN}"
+            for args in (
+                ["safe-package@1.2.3", "--token=" + ref],
+                ["safe-package@1.2.3", "--token", ref],
+                ["safe-package@1.2.3", "--header=Authorization: Bearer " + ref],
+            ):
+                with self.subTest(safe=args):
+                    status, _refs, blockers = evaluate(
+                        "demo", {"command": "npx", "args": args}
+                    )
+                    self.assertEqual("pass", status, blockers)
+            for args in (["safe-package@1.2.3", "--token"],
+                         ["safe-package@1.2.3", "--token", "--other"],
+                         ["safe-package@1.2.3", 42]):
+                with self.subTest(invalid=args):
+                    status, _refs, blockers = evaluate("demo", {"command": "npx", "args": args})
+                    self.assertEqual("needs-review", status, blockers)
+                    self.assertIn("invalid_mcp_command_args", {b["code"] for b in blockers})
+            for server in (
+                {"command": "npx", "args": ["unpinned-package"]},
+                {"command": "npx", "args": ["safe-package@1.2.3"],
+                 "headers": {"private-token-DEMO_LITERAL_SECRET": "DEMO_LITERAL_SECRET"}},
+            ):
+                with self.subTest(redaction=server):
+                    status, _refs, blockers = evaluate("sk-demo_marker", server)
+                    self.assertIn(status, ("blocked", "needs-review"))
+                    self.assertNotIn("sk-demo_marker", str(blockers))
+                    self.assertNotIn("DEMO_LITERAL_SECRET", str(blockers))
+                    self.assertTrue(any("mcpServers[0]" in b["evidence_ref"] for b in blockers))
+
     def test_harness_index_reads_one_bounded_regular_descriptor(self):
         from agent_dev_kit.readiness_evidence import RepositoryIndex, load_readiness_contract
 

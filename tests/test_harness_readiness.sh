@@ -75,10 +75,10 @@ assert tool["status"] == "blocked", tool
 codes = {item["code"] for item in tool["blockers"]}
 assert "hardcoded_mcp_secret" in codes, tool
 assert "unpinned_mcp_dependency" in codes, tool
-assert any("#mcpServers.unsafe-example.headers.Authorization" in item["evidence_ref"] for item in tool["blockers"]), tool
-assert any("#mcpServers.unsafe-example.headers.accessToken" in item["evidence_ref"] for item in tool["blockers"]), tool
-assert any("#mcpServers.unsafe-example.headers.password" in item["evidence_ref"] for item in tool["blockers"]), tool
-assert any("#mcpServers.unsafe-example.headers.apiKey" in item["evidence_ref"] for item in tool["blockers"]), tool
+secret_refs = [item["evidence_ref"] for item in tool["blockers"] if item["code"] == "hardcoded_mcp_secret"]
+assert len(secret_refs) >= 4 and len(secret_refs) == len(set(secret_refs)), tool
+assert all((".sensitive[" in ref or "#sensitive[" in ref) for ref in secret_refs), tool
+assert "unsafe-example" not in str(tool["blockers"]), tool
 PY
 
 if rg -q 'fixture-literal-value|fixture-camelcase-value|prefix-|FIXTURE_API_KEY' "$TMP_DIR/blocked.json"; then
