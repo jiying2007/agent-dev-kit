@@ -8,3 +8,5 @@
 - [ ] Promote Root using verified release evidence, never copied historical qualification.
 
 G21, G22 and LTA-04 remain separate authentic-evidence blockers.
+
+- [x] Add URL authority backslash/encoded-delimiter, invalid percent escape and empty-auth query/userinfo fail-closed tests after Review #5663083519.

@@ -8,6 +8,8 @@
 
 - Harden MCP command/args, Header values, indirect env strings and HTTP/SSE URL authentication sinks against literal credentials. Validate URL userinfo (username and password), scheme and port, and surface symlink/FIFO/directory MCP config names instead of mistakenly treating them as not-applicable. Preserve opaque diagnostics and managed references; genuine independent seven-dimensional review is still required.
 
+- Reject ambiguous URL authorities containing literal or encoded backslashes/separators, and fail closed on explicitly empty credential query/userinfo fields while preserving legitimate managed references. Retain independent review requirements.
+
 ### 8.1.1 source candidate
 - Advance eight Skill patch versions whose source content had changed since the exact 8.0.2 consumer baseline without a corresponding Skill version update. Preserve their existing content and the strict consumer import guard.
 - Keep the 8.1.0 convergence implementation unchanged; this source packaging repair still requires fresh protected CI and signed exact-source promotion before runtime adoption.

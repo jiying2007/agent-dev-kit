@@ -137,11 +137,17 @@ def _url_credential_issues(value: Any, fragments: Sequence[str]) -> Tuple[bool, 
         parts = urlsplit(value)
         if (parts.scheme.lower() not in ("http", "https", "ws", "wss")
                 or not parts.netloc or not parts.hostname
-                or any(char.isspace() or char == "\\\\" for char in parts.netloc)):
+                or any(char.isspace() or char == "\\" for char in parts.netloc)):
             return False, True
         # Accessing .port raises ValueError for malformed and out-of-range ports.
         port = parts.port
         if port == 0:
+            return False, True
+        # Reject encoded authority separators as well as literal backslashes.
+        decoded_host = unquote(parts.hostname, errors="strict")
+        if any(ord(char) < 33 or char in "\\/\x40?#" for char in decoded_host):
+            return False, True
+        if re.search(r"%(?![0-9a-fA-F]{2})", value):
             return False, True
         query = parse_qsl(parts.query, keep_blank_values=True, errors="strict",
                           max_num_fields=129)
@@ -154,10 +160,14 @@ def _url_credential_issues(value: Any, fragments: Sequence[str]) -> Tuple[bool, 
         # even if the username has another malformed or non-managed value.
         if password is not None:
             password = unquote(password, errors="strict")
+            if not password.strip():
+                return False, True
             if not _safe_secret_reference(password):
                 return True, False
         if username is not None:
             username = unquote(username, errors="strict")
+            if not username.strip():
+                return False, True
             if _literal_credential_argument(username, fragments):
                 return True, False
             # Username may itself be an authentication identity. Only
@@ -169,6 +179,8 @@ def _url_credential_issues(value: Any, fragments: Sequence[str]) -> Tuple[bool, 
     except (ValueError, UnicodeError):
         return False, True
     for key, content in query:
+        if _sensitive_key(key, fragments) and not content.strip():
+            return False, True
         if ((_sensitive_key(key, fragments) and not _safe_secret_reference(content))
                 or _literal_credential_argument(content, fragments)):
             return True, False

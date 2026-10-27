@@ -436,6 +436,59 @@ class StrictJSONTests(unittest.TestCase):
             self.assertEqual("needs-review", status, blockers)
             self.assertIn("unsafe_mcp_config", {b["code"] for b in blockers})
 
+    def test_harness_rejects_ambiguous_url_authorities_and_empty_credentials(self):
+        from agent_dev_kit.readiness_evidence import RepositoryIndex, load_readiness_contract
+        from agent_dev_kit.readiness_tools import _evaluate_tools
+
+        contract = load_readiness_contract(
+            Path(__file__).resolve().parents[1] / "manifests/harness_readiness_contracts.json"
+        )
+        metadata = {"dimensions": {"tool_and_permission_boundary": {
+            "permission_boundary": {"read_only": True, "approval_required": True,
+                                    "credential_source": "environment-variable"}}}}
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "docs").mkdir()
+            (root / "docs" / "security.md").write_text(
+                "MCP read-only approval credential environment variable",
+                encoding="utf-8",
+            )
+            config = root / "mcp.json"
+
+            def evaluate(url):
+                config.write_text(json.dumps({"mcpServers": {"demo": {
+                    "type": "http", "url": url}}}), encoding="utf-8")
+                return _evaluate_tools(RepositoryIndex(root, contract), contract, metadata)
+
+            for url in (
+                r"https://example.test\foo/mcp",
+                "https://example.test%5cfoo/mcp",
+                "https://example.test%2ffoo/mcp",
+                "https://example.test/mcp?access_token=",
+                "https://example.test/mcp?access_token",
+                "https://example.test/mcp?Authorization=",
+                "https://example.test/mcp#access_token=",
+                "https://%24%7BDEMO_USER%7D:@example.test/mcp",
+                "https://:%24%7BDEMO_PWD%7D@example.test/mcp",
+                "https://example.test/mcp?access_token=%ZZ",
+            ):
+                with self.subTest(malformed=url):
+                    status, _evidence, blockers = evaluate(url)
+                    self.assertEqual("needs-review", status, blockers)
+                    self.assertIn("invalid_mcp_url", {b["code"] for b in blockers})
+                    self.assertNotIn("access_token=", str(blockers))
+
+            managed = "$" + "{DEMO_TOKEN}"
+            for url in (
+                "https://example.test/mcp",
+                "https://example.test/mcp?access_token=" + managed,
+                "https://example.test/mcp#access_token=" + managed,
+                "https://%24%7BDEMO_USER%7D:%24%7BDEMO_PWD%7D@example.test/mcp",
+            ):
+                with self.subTest(valid=url):
+                    status, _evidence, blockers = evaluate(url)
+                    self.assertEqual("pass", status, blockers)
+
     def test_harness_index_reads_one_bounded_regular_descriptor(self):
         from agent_dev_kit.readiness_evidence import RepositoryIndex, load_readiness_contract
 
