@@ -1,7 +1,7 @@
 # Tasks
 
 - [x] Replace permissive JSON decoding with canonical strict decoding and bounded regular-file capture.
-- [x] Cover ambiguous JSON, safe file reads, Unicode, literal MCP command/args credentials, composite sensitive keys, Bearer/Basic header values, empty flags and sanitized evidence refs; preserve read-only/review boundaries.
+- [x] Cover ambiguous JSON, bounded files, Unicode, MCP command/args/header/env/URL literal credentials, malformed command/map/URL types, managed placeholders and opaque evidence refs; preserve review and runtime qualification boundaries.
 - [x] Synchronize patch SemVer 8.1.2 and changelog.
 - [ ] Pass exact PR CI across supported Python versions.
 - [ ] Pass fresh-main CI and immutable signed release.

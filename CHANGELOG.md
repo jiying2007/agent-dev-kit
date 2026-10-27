@@ -6,7 +6,7 @@
 - Reuse the canonical bounded strict JSON parser in read-only goal current-state validation, rejecting duplicate keys, NaN, overflowing numeric literals and excessive nesting; use descriptor-based regular-file reads plus parent-component preflight to reject FIFO, directory and symlink-aliased paths without blocking.
 - Reject escaped lone Unicode surrogates in all canonical strict JSON consumers, including object keys and nested state strings. Use a bounded byte-level surrogate-escape prefilter so ordinary JSON avoids unnecessary traversal. Fail closed on ambiguous MCP permission configs and bound Harness file snapshots using the canonical regular-file reader. Keep native/effect/field/product qualifications independent.
 
-- Harden MCP command/args and header value semantics against literal credentials, including Bearer/Basic schemes, single-dash flags and empty assignments. Detect bounded sensitive components anywhere in composite header/env keys, retain canonical environment references and opaque security evidence; source review remains independent.
+- Harden MCP command/args, Header values, indirect env strings and HTTP/SSE URL authentication sinks against literal credentials (query parameters and userinfo). Refuse malformed env/headers/URL/command field types, keep opaque diagnostics and managed env references. Genuine seven-dimensional source review remains required.
 
 ### 8.1.1 source candidate
 - Advance eight Skill patch versions whose source content had changed since the exact 8.0.2 consumer baseline without a corresponding Skill version update. Preserve their existing content and the strict consumer import guard.

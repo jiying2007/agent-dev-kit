@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
+from urllib.parse import parse_qsl, unquote, urlsplit
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
 from .readiness_evidence import (
@@ -117,6 +118,40 @@ def _credential_argument_issues(
             elif not _safe_secret_reference(args[position + 1]):
                 issues.append("args[{}]".format(position + 1))
     return sorted(set(issues)), malformed
+
+
+
+_URL_SINK_NAMES = frozenset(("url", "uri", "endpoint", "baseurl", "serverurl", "sseurl"))
+_SECURITY_OBJECT_NAMES = frozenset(("env", "headers", "httpheaders", "requestheaders"))
+
+
+def _mcp_url_key(key: str) -> bool:
+    return re.sub(r"[^a-z0-9]", "", key.lower()) in _URL_SINK_NAMES
+
+
+def _url_credential_issues(value: Any, fragments: Sequence[str]) -> Tuple[bool, bool]:
+    """Return (literal-credential, malformed) without returning or logging URL text."""
+    if not isinstance(value, str) or not value.strip() or len(value) > 8192 or value.count("&") > 128:
+        return False, True
+    try:
+        parts = urlsplit(value)
+        if not parts.scheme or not parts.netloc:
+            return False, True
+        query = parse_qsl(parts.query, keep_blank_values=True, errors="strict")
+        if "=" in parts.fragment:
+            query += parse_qsl(parts.fragment, keep_blank_values=True, errors="strict")
+        password = parts.password
+        if password is not None and not _safe_secret_reference(unquote(password, errors="strict")):
+            return True, False
+        if parts.username is not None and password is None:
+            return False, True
+    except (ValueError, UnicodeError):
+        return False, True
+    for key, content in query:
+        if ((_sensitive_key(key, fragments) and not _safe_secret_reference(content))
+                or _literal_credential_argument(content, fragments)):
+            return True, False
+    return False, False
 
 
 def _opaque_sensitive_ref(
@@ -303,6 +338,28 @@ def _evaluate_tools(
         server_positions = {name: position for position, name in enumerate(sorted(servers))}
         sensitive_ordinal = 0
         for parts, key, value in _walk_json(data):
+            source = _opaque_sensitive_ref(relative, parts, server_positions, sensitive_ordinal)
+            key_folded = key.lower()
+            if (key_folded in _SECURITY_OBJECT_NAMES
+                    and (not isinstance(value, dict)
+                         or any(not isinstance(item, str) for item in value.values()))):
+                parse_failed = True
+                record_blocker(
+                    _blocker("invalid_mcp_security_fields", "MCP env/headers 必须是字符串映射", source)
+                )
+                sensitive_ordinal += 1
+                continue
+            url_literal, url_invalid = (
+                _url_credential_issues(value, fragments)
+                if _mcp_url_key(key) else (False, False)
+            )
+            if url_invalid:
+                parse_failed = True
+                record_blocker(
+                    _blocker("invalid_mcp_url", "MCP URL 类型、编码或预算不符合输入契约", source)
+                )
+                sensitive_ordinal += 1
+                continue
             if value is None:
                 continue
             header_literal = (
@@ -311,15 +368,22 @@ def _evaluate_tools(
                         for part in parts[:-1])
                 and _literal_credential_argument(value, fragments)
             )
-            if not _sensitive_key(key, fragments) and not header_literal:
+            env_literal = (
+                isinstance(value, str)
+                and "env" in (part.lower() for part in parts[:-1])
+                and _literal_credential_argument(value, fragments)
+            )
+            if not (_sensitive_key(key, fragments) or header_literal
+                    or env_literal or url_literal):
                 continue
-            if header_literal or not isinstance(value, str) or not _safe_secret_reference(value):
+            if (header_literal or env_literal or url_literal or not isinstance(value, str)
+                    or not _safe_secret_reference(value)):
                 hardcoded_secret = True
                 record_blocker(
                     _blocker(
                         "hardcoded_mcp_secret",
-                        "MCP 敏感字段使用了非环境引用；值已脱敏",
-                        _opaque_sensitive_ref(relative, parts, server_positions, sensitive_ordinal),
+                        "MCP 配置含非环境引用的敏感值；值已脱敏",
+                        source,
                     )
                 )
                 sensitive_ordinal += 1
@@ -330,6 +394,17 @@ def _evaluate_tools(
                 parse_failed = True
                 record_blocker(_blocker("invalid_mcp_server", "MCP server 定义必须是对象", opaque))
                 continue
+            if ("command" in server
+                    and (not isinstance(server["command"], str) or not server["command"].strip())):
+                parse_failed = True
+                record_blocker(
+                    _blocker("invalid_mcp_command", "MCP command 必须是非空字符串", opaque + ".command")
+                )
+            if "command" not in server and not any(_mcp_url_key(key) for key in server):
+                parse_failed = True
+                record_blocker(
+                    _blocker("invalid_mcp_server_endpoint", "MCP 缺少 command 或 URL 声明", opaque)
+                )
             unsafe, malformed = _credential_argument_issues(server, fragments)
             if malformed:
                 parse_failed = True
