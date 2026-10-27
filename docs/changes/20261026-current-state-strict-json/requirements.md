@@ -9,3 +9,5 @@ Reject unsafe leaf inputs (FIFO, directory and symlink) with a structured failur
 Reject symlinked parent directories as well as the file leaf; state-check accepts path input but must not silently follow path aliases. This check is preflight-only and does not certify a concurrent malicious writer.
 
 Reject invalid Unicode scalar values (unpaired UTF-16 surrogate escapes) in JSON object keys and any nested string value; a properly paired surrogate escape is accepted as its real Unicode code point. State hygiene must not PASS escaped values that cannot be represented in UTF-8.
+
+The Harness readiness contract is an input to governance decisions and must use the canonical bounded strict JSON reader (256 KiB ceiling), reject symlink ancestry and non-regular files, and never leak invalid source values in parser errors. Preserve all seven dimensions and current review authority; a stricter loader does not itself renew review evidence.

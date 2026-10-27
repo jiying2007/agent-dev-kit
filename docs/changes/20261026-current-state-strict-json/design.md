@@ -13,3 +13,7 @@ State-source path preflight walks every lexical parent to reject symlink aliases
 ## Unicode scalar validation
 
 Python's default JSON decoder accepts syntactically escaped lone UTF-16 surrogates and returns strings that cannot be encoded to UTF-8. Reuse the same canonical strict decoder for all callers and iterate the bounded parsed value tree, rejecting such string values and object keys with a sanitized StrictJSONError. This does not echo user-provided keys or values. Proper surrogate pairs decode to valid Unicode and remain accepted.
+
+## Harness contract input authority
+
+The Harness contract parser previously followed symlinks and read unbounded JSON. Route it through the same strict JSON decoder with descriptor-based regular-file checks, a 256 KiB hard limit and lexical parent-component symlink preflight. Continue enforcing all existing schema and review semantics. A signed review must bind the changed readiness_evidence.py validator fingerprint; this source-only repair is not an independent delegated review. Symlink preflight is not a guarantee against concurrent parent replacement.

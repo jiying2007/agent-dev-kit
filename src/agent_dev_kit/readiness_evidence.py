@@ -2,14 +2,13 @@
 
 from __future__ import annotations
 
-import json
 import os
 import re
 from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Tuple
 
-from .strict_json import StrictJSONError, loads as load_strict_json
+from .strict_json import StrictJSONError, loads as load_strict_json, read as read_strict_json
 
 EXPECTED_DIMENSIONS = (
     "context_legibility",
@@ -47,10 +46,13 @@ class ReadinessContractError(ValueError):
 def load_readiness_contract(path: Path) -> Dict[str, Any]:
     """Load and minimally validate the readiness contract."""
 
+    candidate = path.expanduser().absolute()
     try:
-        value = json.loads(path.expanduser().resolve().read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError, RecursionError) as exc:
-        raise ReadinessContractError("cannot load Harness readiness contract: {}".format(exc)) from exc
+        if any(part.is_symlink() for part in (candidate, *candidate.parents)):
+            raise ReadinessContractError("Harness readiness contract path contains a symlink")
+        value = read_strict_json(candidate, max_bytes=256 * 1024, regular_only=True)
+    except (OSError, StrictJSONError) as exc:
+        raise ReadinessContractError("cannot load Harness readiness contract safely") from exc
     if not isinstance(value, dict):
         raise ReadinessContractError("Harness readiness contract must be a JSON object")
     dimensions = value.get("dimensions")

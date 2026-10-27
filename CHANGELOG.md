@@ -4,7 +4,7 @@
 
 ### 8.1.2 source candidate
 - Reuse the canonical bounded strict JSON parser in read-only goal current-state validation, rejecting duplicate keys, NaN, overflowing numeric literals and excessive nesting; use descriptor-based regular-file reads plus parent-component preflight to reject FIFO, directory and symlink-aliased paths without blocking.
-- Reject escaped lone Unicode surrogates in all canonical strict JSON consumers, including object keys and nested state strings; retain properly paired surrogate support and add deterministic regressions without elevating native/effect/field/product qualifications.
+- Reject escaped lone Unicode surrogates in all canonical strict JSON consumers, including object keys and nested state strings; bound the Harness contract loader through that same strict reader (no duplicate keys, symlink aliases, special-file reads or oversized contracts). Add deterministic regressions without elevating native/effect/field/product qualifications.
 
 ### 8.1.1 source candidate
 - Advance eight Skill patch versions whose source content had changed since the exact 8.0.2 consumer baseline without a corresponding Skill version update. Preserve their existing content and the strict consumer import guard.

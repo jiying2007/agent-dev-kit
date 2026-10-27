@@ -100,6 +100,46 @@ class StrictJSONTests(unittest.TestCase):
                 with self.subTest(raw=raw), self.assertRaises(ValueError):
                     _canonical_manifest_sha256(path.read_bytes())
 
+    def test_harness_contract_loader_rejects_ambiguous_unbounded_and_alias_inputs(self):
+        from agent_dev_kit.readiness_evidence import (
+            ReadinessContractError, load_readiness_contract,
+        )
+        root = Path(__file__).resolve().parents[1]
+        canonical = root / "manifests" / "harness_readiness_contracts.json"
+        self.assertEqual("1.0.0", load_readiness_contract(canonical)["schema_version"])
+        with tempfile.TemporaryDirectory() as temp:
+            workspace = Path(temp)
+            path = workspace / "contract.json"
+            for raw in (
+                b'{"schema_version":"1.0.0","schema_version":"2.0.0"}',
+                b'{"verification":{"max_age_days":30,"max_age_days":0}}',
+                b'{"review":NaN}',
+                b'{"review":1e999}',
+                b'{"review":"\\ud800"}',
+                b'{"review":0}' + b" " * (256 * 1024),
+            ):
+                with self.subTest(raw=raw[:70]):
+                    path.write_bytes(raw)
+                    with self.assertRaises(ReadinessContractError):
+                        load_readiness_contract(path)
+            path.write_bytes(canonical.read_bytes())
+            self.assertEqual("1.0.0", load_readiness_contract(path)["schema_version"])
+            if os.name == "posix":
+                leaf = workspace / "leaf.json"
+                leaf.symlink_to(path)
+                parent = workspace / "aliased-dir"
+                parent.symlink_to(workspace, target_is_directory=True)
+                for unsafe in (leaf, parent / path.name):
+                    with self.subTest(unsafe=unsafe.name), self.assertRaisesRegex(
+                        ReadinessContractError, "symlink"
+                    ):
+                        load_readiness_contract(unsafe)
+                if hasattr(os, "mkfifo"):
+                    fifo = workspace / "input.fifo"
+                    os.mkfifo(fifo)
+                    with self.assertRaises(ReadinessContractError):
+                        load_readiness_contract(fifo)
+
     def test_target_and_promotion_file_budget(self):
         with tempfile.TemporaryDirectory() as temp:
             path = Path(temp) / "evidence.json"
