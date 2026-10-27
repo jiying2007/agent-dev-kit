@@ -58,6 +58,25 @@ class PlanningStateTest(unittest.TestCase):
                     self.assertFalse(result["completion_allowed"])
                     self.assertIsNone(result["state_sha256"])
 
+    def test_lone_surrogates_cannot_pass_state_hygiene(self) -> None:
+        valid = {"schema_version": "adk.current-state/v1", "goal_ref": "requirements.md",
+                 "milestone": "phase", "evidence_refs": ["receipt.json"],
+                 "blockers": [], "next_actions": ["verify"], "history_refs": []}
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "current.json"
+            for field in ("goal_ref", "milestone", "evidence_refs"):
+                candidate = dict(valid)
+                candidate[field] = ["\ud800"] if field == "evidence_refs" else "\ud800"
+                path.write_text(json.dumps(candidate, ensure_ascii=True), encoding="utf-8")
+                with self.subTest(field=field):
+                    result = check_current_state(path)
+                    self.assertEqual("fail", result["status"])
+                    self.assertIn("current-state-schema-invalid", result["reasons"])
+                    self.assertFalse(result["completion_allowed"])
+            valid["goal_ref"] = "验收-😀.md"
+            path.write_text(json.dumps(valid, ensure_ascii=True), encoding="utf-8")
+            self.assertEqual("pass", check_current_state(path)["status"])
+
     def test_duplicate_keys_nonfinite_values_and_excessive_depth_fail_closed(self) -> None:
         valid = {"schema_version": "adk.current-state/v1", "goal_ref": "requirements.md",
                  "milestone": "owner lifecycle", "evidence_refs": ["tests-receipt.json"],

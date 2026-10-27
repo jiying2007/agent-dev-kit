@@ -57,6 +57,23 @@ def _depth_guard(text: str, maximum: int) -> None:
             depth -= 1
 
 
+def _scalar_guard(value: Any) -> None:
+    """Reject escaped lone surrogates in object keys or nested string values."""
+    pending = [value]
+    while pending:
+        item = pending.pop()
+        if isinstance(item, str):
+            try:
+                item.encode("utf-8")
+            except UnicodeEncodeError as exc:
+                raise StrictJSONError("JSON contains invalid Unicode scalar values") from exc
+        elif isinstance(item, dict):
+            pending.extend(item.keys())
+            pending.extend(item.values())
+        elif isinstance(item, list):
+            pending.extend(item)
+
+
 def loads(data: str | bytes, *, max_bytes: int = DEFAULT_MAX_BYTES,
           max_depth: int = DEFAULT_MAX_DEPTH) -> Any:
     for limit in (max_bytes, max_depth):
@@ -70,8 +87,10 @@ def loads(data: str | bytes, *, max_bytes: int = DEFAULT_MAX_BYTES,
             raise StrictJSONError("JSON exceeds byte budget")
         text = raw.decode("utf-8")
         _depth_guard(text, max_depth)
-        return json.loads(text, object_pairs_hook=unique_object,
-                          parse_float=_finite_float, parse_constant=_reject_constant)
+        parsed = json.loads(text, object_pairs_hook=unique_object,
+                            parse_float=_finite_float, parse_constant=_reject_constant)
+        _scalar_guard(parsed)
+        return parsed
     except StrictJSONError:
         raise
     except (UnicodeError, json.JSONDecodeError, RecursionError, ValueError) as exc:

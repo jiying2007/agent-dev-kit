@@ -177,6 +177,22 @@ class StrictJSONTests(unittest.TestCase):
         self.assertEqual({"name": "[\\\"]", "x": [1, 2.5]}, loads('{"name":"[\\\\\\\"]","x":[1,2.5]}'))
         self.assertEqual([1, True, None], loads(b"[1,true,null]"))
 
+    def test_unicode_scalar_values_reject_lone_surrogates(self):
+        for raw in (
+            r'"\ud800"', r'"\udc00"', r'"\ud800\ud800"',
+            r'{"\ud800":1}', r'{"nested":[{"value":"\udc00"}]}',
+            r'{"x":"\ud83dX"}',
+        ):
+            for source in (raw, raw.encode("ascii")):
+                with self.subTest(source=raw), self.assertRaisesRegex(
+                    StrictJSONError, "invalid Unicode scalar"
+                ):
+                    loads(source)
+        self.assertEqual(
+            {"😀": ["😀", "中文"]},
+            loads(r'{"\ud83d\ude00":["\ud83d\ude00","中文"]}'),
+        )
+
     def test_ambiguity_nonfinite_and_budgets(self):
         for raw in ('{"x":1,"x":2}', '{"x":1,"\\u0078":2}',
                     '{"a":{"x":1,"x":2}}', 'NaN', 'Infinity', '-Infinity', '1e999'):
