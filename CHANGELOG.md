@@ -10,6 +10,8 @@
 
 - Reject ambiguous URL authorities containing literal or encoded backslashes/separators, and fail closed on explicitly empty credential query/userinfo fields while preserving legitimate managed references. Retain independent review requirements.
 
+- Validate raw MCP URL text before urlsplit can strip CR/LF/TAB/control characters, and treat explicitly empty header/env/args credential sinks as invalid rather than as legitimate omitted credentials. Keep managed reference positives and source-pinned independent review gates.
+
 ### 8.1.1 source candidate
 - Advance eight Skill patch versions whose source content had changed since the exact 8.0.2 consumer baseline without a corresponding Skill version update. Preserve their existing content and the strict consumer import guard.
 - Keep the 8.1.0 convergence implementation unchanged; this source packaging repair still requires fresh protected CI and signed exact-source promotion before runtime adoption.

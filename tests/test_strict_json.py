@@ -489,6 +489,80 @@ class StrictJSONTests(unittest.TestCase):
                     status, _evidence, blockers = evaluate(url)
                     self.assertEqual("pass", status, blockers)
 
+    def test_harness_original_url_controls_and_empty_mcp_credentials_fail_closed(self):
+        from agent_dev_kit.readiness_evidence import RepositoryIndex, load_readiness_contract
+        from agent_dev_kit.readiness_tools import _evaluate_tools
+
+        contract = load_readiness_contract(
+            Path(__file__).resolve().parents[1] / "manifests/harness_readiness_contracts.json"
+        )
+        metadata = {"dimensions": {"tool_and_permission_boundary": {
+            "permission_boundary": {"read_only": True, "approval_required": True,
+                                    "credential_source": "environment-variable"}}}}
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / "docs").mkdir()
+            (root / "docs/security.md").write_text(
+                "MCP read-only approval credential environment variable", encoding="utf-8"
+            )
+            config = root / ".mcp.json"
+
+            def evaluate(server):
+                config.write_text(json.dumps({"mcpServers": {"demo": server}}),
+                                  encoding="utf-8")
+                return _evaluate_tools(RepositoryIndex(root, contract), contract, metadata)
+
+            for url in (
+                "https://exa\nmple.test/mcp",
+                "https://exa\rmple.test/mcp",
+                "https://exa\tmple.test/mcp",
+                "\nhttps://example.test/mcp",
+                "https://example.test/mcp ",
+                "https://example.test/mcp%0A",
+                "https://example.test/mcp?access_token=%0d",
+            ):
+                with self.subTest(url=repr(url)):
+                    status, _refs, blockers = evaluate({"type": "http", "url": url})
+                    self.assertEqual("needs-review", status, blockers)
+                    self.assertIn("invalid_mcp_url", {item["code"] for item in blockers})
+                    self.assertNotIn("example.test", str(blockers))
+
+            malformed_credentials = (
+                {"command": "npx", "args": ["safe-package@1.2.3"],
+                 "env": {"APP_OPTIONS": "TOKEN="}},
+                {"command": "npx", "args": ["safe-package@1.2.3"],
+                 "env": {"TOKEN": ""}},
+                {"command": "npx", "args": ["safe-package@1.2.3"],
+                 "headers": {"Authorization": ""}},
+                {"command": "npx", "args": ["safe-package@1.2.3"],
+                 "headers": {"X-Custom": "Bearer "}},
+                {"command": "npx", "args": ["safe-package@1.2.3"],
+                 "headers": {"X-Custom": "Basic"}},
+                {"command": "npx", "args": ["safe-package@1.2.3"],
+                 "env": {"APP_OPTIONS": "--env=TOKEN="}},
+            )
+            for server in malformed_credentials:
+                with self.subTest(server=server):
+                    status, _refs, blockers = evaluate(server)
+                    self.assertEqual("needs-review", status, blockers)
+                    self.assertIn("invalid_mcp_credential",
+                                  {item["code"] for item in blockers})
+                    self.assertNotIn("APP_OPTIONS", str(blockers))
+
+            managed = "$" + "{DEMO_TOKEN}"
+            for server in (
+                {"command": "npx", "args": ["safe-package@1.2.3"],
+                 "env": {"APP_OPTIONS": "TOKEN=" + managed}},
+                {"command": "npx", "args": ["safe-package@1.2.3"],
+                 "env": {"TOKEN": managed}},
+                {"command": "npx", "args": ["safe-package@1.2.3"],
+                 "headers": {"Authorization": "Bearer " + managed}},
+                {"type": "http", "url": "https://example.test/mcp?access_token=" + managed},
+            ):
+                with self.subTest(managed=server):
+                    status, _refs, blockers = evaluate(server)
+                    self.assertEqual("pass", status, blockers)
+
     def test_harness_index_reads_one_bounded_regular_descriptor(self):
         from agent_dev_kit.readiness_evidence import RepositoryIndex, load_readiness_contract
 

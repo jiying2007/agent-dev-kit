@@ -10,3 +10,5 @@
 G21, G22 and LTA-04 remain separate authentic-evidence blockers.
 
 - [x] Add URL authority backslash/encoded-delimiter, invalid percent escape and empty-auth query/userinfo fail-closed tests after Review #5663083519.
+
+- [x] Reject pre-normalization URL whitespace/C0/C1 and encoded C0/DEL; classify empty env/header/command credentials as needs-review and add integrated positive/negative cases.

@@ -60,10 +60,19 @@ _CREDENTIAL_INLINE = re.compile(
 )
 _AUTH_SCHEME = re.compile(r"\b(?:Bearer|Basic)\s+([^\s;,&]+)", re.IGNORECASE)
 _EMPTY_CREDENTIAL = re.compile(
-    r"(?<![A-Za-z0-9_-])(--?[A-Za-z][A-Za-z0-9_-]*)\s*[=:]\s*(?=$|[;,&])",
+    r"(?<![A-Za-z0-9_-])(--?[A-Za-z][A-Za-z0-9_-]*|[A-Za-z][A-Za-z0-9_-]*)\s*[=:]\s*(?=$|[;,&])",
     re.IGNORECASE,
 )
+_EMPTY_AUTH_SCHEME = re.compile(r"(?:Bearer|Basic)\s*\Z", re.IGNORECASE)
 _CREDENTIAL_FLAG = re.compile(r"--?([A-Za-z][A-Za-z0-9_-]*)\Z")
+
+
+def _missing_credential_argument(text: str, fragments: Sequence[str]) -> bool:
+    """Distinguish explicit-but-empty secrets from omitted optional config."""
+    return bool(_EMPTY_AUTH_SCHEME.fullmatch(text.strip())) or any(
+        _sensitive_key(match.group(1).lstrip("-"), fragments)
+        for match in _EMPTY_CREDENTIAL.finditer(text)
+    )
 
 
 def _literal_credential_argument(text: str, fragments: Sequence[str]) -> bool:
@@ -102,14 +111,12 @@ def _credential_argument_issues(
     if isinstance(command, str):
         if _literal_credential_argument(command, fragments):
             issues.append("command")
-        if any(_sensitive_key(match.group(1).lstrip("-"), fragments)
-               for match in _EMPTY_CREDENTIAL.finditer(command)):
+        if _missing_credential_argument(command, fragments):
             malformed = True
     for position, value in enumerate(args):
         if _literal_credential_argument(value, fragments):
             issues.append("args[{}]".format(position))
-        if any(_sensitive_key(match.group(1).lstrip("-"), fragments)
-               for match in _EMPTY_CREDENTIAL.finditer(value)):
+        if _missing_credential_argument(value, fragments):
             malformed = True
         flag = _CREDENTIAL_FLAG.fullmatch(value)
         if flag and _sensitive_key(flag.group(1), fragments):
@@ -132,6 +139,12 @@ def _mcp_url_key(key: str) -> bool:
 def _url_credential_issues(value: Any, fragments: Sequence[str]) -> Tuple[bool, bool]:
     """Return (literal-credential, malformed) without returning or logging URL text."""
     if not isinstance(value, str) or not value.strip() or len(value) > 8192 or value.count("&") > 128:
+        return False, True
+    # urlsplit strips CR/LF/TAB and leading C0 controls before exposing the
+    # parsed authority. Inspect original input so forbidden bytes cannot vanish.
+    if any(ord(char) < 32 or 127 <= ord(char) <= 159 or char.isspace() for char in value):
+        return False, True
+    if re.search(r"%(?:0[0-9a-f]|1[0-9a-f]|7f)", value, re.IGNORECASE):
         return False, True
     try:
         parts = urlsplit(value)
@@ -404,6 +417,24 @@ def _evaluate_tools(
                 parse_failed = True
                 record_blocker(
                     _blocker("invalid_mcp_url", "MCP URL 类型、编码或预算不符合输入契约", source)
+                )
+                sensitive_ordinal += 1
+                continue
+            # Explicitly present but empty credential fields are not managed
+            # references. They require review, even under neutral parent keys.
+            is_sensitive = _sensitive_key(key, fragments)
+            security_ancestors = any(part.lower() in _SECURITY_OBJECT_NAMES
+                                     for part in parts[:-1])
+            missing_credential = (
+                (is_sensitive and (value is None
+                                   or isinstance(value, str) and not value.strip()))
+                or (security_ancestors and isinstance(value, str)
+                    and _missing_credential_argument(value, fragments))
+            )
+            if missing_credential:
+                parse_failed = True
+                record_blocker(
+                    _blocker("invalid_mcp_credential", "MCP 存在未填写的凭证声明", source)
                 )
                 sensitive_ordinal += 1
                 continue
