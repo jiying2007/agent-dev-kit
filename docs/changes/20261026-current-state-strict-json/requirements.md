@@ -5,3 +5,5 @@ The read-only `goal state-check` must reject ambiguous duplicate keys, nonfinite
 No Native G21, effect G22, LTA-04, Product M5, runtime import or live apply is authorized by state hygiene alone.
 
 Reject unsafe leaf inputs (FIFO, directory and symlink) with a structured failure using the canonical descriptor-based bounded reader. Preserve `state_sha256=null` for unsafe or over-budget inputs and the exact source-byte digest for valid inputs.
+
+Reject symlinked parent directories as well as the file leaf; state-check accepts path input but must not silently follow path aliases. This check is preflight-only and does not certify a concurrent malicious writer.

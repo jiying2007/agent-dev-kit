@@ -39,7 +39,7 @@ class PlanningStateTest(unittest.TestCase):
 
 
     @unittest.skipUnless(hasattr(os, "mkfifo"), "POSIX input boundary")
-    def test_state_input_rejects_fifo_and_leaf_symlink_without_hanging(self) -> None:
+    def test_state_input_rejects_fifo_and_symlink_components_without_hanging(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             source = root / "original.json"
@@ -48,7 +48,9 @@ class PlanningStateTest(unittest.TestCase):
             alias.symlink_to(source)
             fifo = root / "blocked.fifo"
             os.mkfifo(fifo)
-            for unsafe in (alias, fifo, root):
+            aliased_parent = root / "aliased-parent"
+            aliased_parent.symlink_to(root, target_is_directory=True)
+            for unsafe in (alias, aliased_parent / source.name, fifo, root):
                 with self.subTest(unsafe=unsafe.name):
                     result = check_current_state(unsafe)
                     self.assertEqual("fail", result["status"])

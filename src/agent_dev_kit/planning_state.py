@@ -11,12 +11,24 @@ from .strict_json import StrictJSONError, read_bytes as read_bounded_bytes
 from .strict_json import loads as load_strict_json
 
 
+def _reject_symlink_path(path: Path) -> None:
+    """Fail closed on symlinked components, including parents (preflight only)."""
+    current = path
+    while True:
+        if current.is_symlink():
+            raise StrictJSONError("current-state path contains symlink")
+        if current.parent == current:
+            return
+        current = current.parent
+
+
 def check_current_state(path: Path, *, max_bytes: int = 8192) -> dict[str, Any]:
     if isinstance(max_bytes, bool) or not isinstance(max_bytes, int) or not 1 <= max_bytes <= 1024 * 1024:
         raise ValueError("max_bytes must be between 1 and 1048576")
     reasons: list[str] = []
     raw: bytes | None
     try:
+        _reject_symlink_path(path)
         raw = read_bounded_bytes(path, max_bytes=max_bytes, regular_only=True)
     except StrictJSONError as exc:
         raw = None
