@@ -388,6 +388,8 @@ class StrictJSONTests(unittest.TestCase):
             for url in (
                 "https://token%3Ddemo_value:%24%7BDEMO_PWD%7D@example.test/mcp",
                 "https://user:demo_value@example.test/mcp",
+                "https://%24%7BDEMO_USER%7D:demo_value@example.test/mcp",
+                "https://token%3Ddemo_value:demo_value@example.test/mcp",
             ):
                 with self.subTest(credential=url):
                     status, _evidence, blockers = evaluate({"type": "http", "url": url})

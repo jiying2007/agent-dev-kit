@@ -150,6 +150,12 @@ def _url_credential_issues(value: Any, fragments: Sequence[str]) -> Tuple[bool, 
                                max_num_fields=129)
         username = parts.username
         password = parts.password
+        # A literal password is unconditionally a credential violation,
+        # even if the username has another malformed or non-managed value.
+        if password is not None:
+            password = unquote(password, errors="strict")
+            if not _safe_secret_reference(password):
+                return True, False
         if username is not None:
             username = unquote(username, errors="strict")
             if _literal_credential_argument(username, fragments):
@@ -158,13 +164,7 @@ def _url_credential_issues(value: Any, fragments: Sequence[str]) -> Tuple[bool, 
             # verifiable managed references may be embedded in source URLs.
             if not _safe_secret_reference(username):
                 return False, True
-        if password is not None:
-            password = unquote(password, errors="strict")
-            if not _safe_secret_reference(password):
-                return True, False
-            if username is None:
-                return False, True
-        elif username is not None:
+        if (password is not None) != (username is not None):
             return False, True
     except (ValueError, UnicodeError):
         return False, True
