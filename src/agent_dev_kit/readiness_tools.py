@@ -135,15 +135,36 @@ def _url_credential_issues(value: Any, fragments: Sequence[str]) -> Tuple[bool, 
         return False, True
     try:
         parts = urlsplit(value)
-        if not parts.scheme or not parts.netloc:
+        if (parts.scheme.lower() not in ("http", "https", "ws", "wss")
+                or not parts.netloc or not parts.hostname
+                or any(char.isspace() or char == "\\\\" for char in parts.netloc)):
             return False, True
-        query = parse_qsl(parts.query, keep_blank_values=True, errors="strict")
+        # Accessing .port raises ValueError for malformed and out-of-range ports.
+        port = parts.port
+        if port == 0:
+            return False, True
+        query = parse_qsl(parts.query, keep_blank_values=True, errors="strict",
+                          max_num_fields=129)
         if "=" in parts.fragment:
-            query += parse_qsl(parts.fragment, keep_blank_values=True, errors="strict")
+            query += parse_qsl(parts.fragment, keep_blank_values=True, errors="strict",
+                               max_num_fields=129)
+        username = parts.username
         password = parts.password
-        if password is not None and not _safe_secret_reference(unquote(password, errors="strict")):
-            return True, False
-        if parts.username is not None and password is None:
+        if username is not None:
+            username = unquote(username, errors="strict")
+            if _literal_credential_argument(username, fragments):
+                return True, False
+            # Username may itself be an authentication identity. Only
+            # verifiable managed references may be embedded in source URLs.
+            if not _safe_secret_reference(username):
+                return False, True
+        if password is not None:
+            password = unquote(password, errors="strict")
+            if not _safe_secret_reference(password):
+                return True, False
+            if username is None:
+                return False, True
+        elif username is not None:
             return False, True
     except (ValueError, UnicodeError):
         return False, True
@@ -284,7 +305,11 @@ def _evaluate_tools(
         for relative in index.files
         if _material_evidence(relative) and Path(relative).name.lower() in names
     )
-    if not all_configs:
+    unsafe_configs = sorted(
+        relative for relative in index.unsafe_mcp_configs if _material_evidence(relative)
+    )
+    if (not all_configs and not unsafe_configs
+            and not index.unsafe_mcp_config_overflow):
         return "not-applicable", [], []
     blockers: List[Dict[str, str]] = []
     blocker_limit = int(contract["scan"]["max_blockers_per_dimension"])
@@ -304,7 +329,17 @@ def _evaluate_tools(
             ]
         return list(blockers)
 
-    parse_failed = False
+    parse_failed = bool(unsafe_configs) or index.unsafe_mcp_config_overflow
+    for position, relative in enumerate(unsafe_configs):
+        record_blocker(
+            _blocker(
+                "unsafe_mcp_config",
+                "发现符号链接、目录或非普通文件形式的 MCP 配置，无法安全读取",
+                "{}#unsafe[{}]".format(Path(relative).name.lower(), position),
+            )
+        )
+    if index.unsafe_mcp_config_overflow:
+        record_blocker(_blocker("mcp_config_limit_exceeded", "不安全 MCP 配置超过扫描预算"))
     hardcoded_secret = False
     unpinned = False
     max_configs = int(contract["mcp"]["max_configs"])

@@ -167,10 +167,28 @@ class RepositoryIndex:
         self.files: Dict[str, Path] = {}
         self.text_cache: Dict[str, Optional[str]] = {}
         self.errors: List[str] = []
+        self.mcp_config_names = {str(name).lower() for name in contract["mcp"]["config_names"]}
+        self.max_mcp_configs = int(contract["mcp"]["max_configs"])
+        # Names only. Unsafe files must never be opened, but also must not
+        # vanish from a security assessment as not-applicable.
+        self.unsafe_mcp_configs: set[str] = set()
+        self.unsafe_mcp_config_overflow = False
         self.truncated = False
         self._scan()
 
     def _scan(self) -> None:
+        def note_unsafe_mcp(path: Path) -> None:
+            if path.name.lower() not in self.mcp_config_names:
+                return
+            try:
+                relative = path.relative_to(self.root).as_posix()
+            except ValueError:
+                return
+            if len(self.unsafe_mcp_configs) < self.max_mcp_configs:
+                self.unsafe_mcp_configs.add(relative)
+            else:
+                self.unsafe_mcp_config_overflow = True
+
         def on_error(exc: OSError) -> None:
             name = getattr(exc, "filename", None)
             if name:
@@ -186,6 +204,9 @@ class RepositoryIndex:
             str(self.root), topdown=True, onerror=on_error, followlinks=False
         ):
             current_path = Path(current)
+            for name in directories:
+                if name not in self.excluded:
+                    note_unsafe_mcp(current_path / name)
             directories[:] = sorted(
                 name
                 for name in directories
@@ -194,6 +215,7 @@ class RepositoryIndex:
             for name in sorted(filenames):
                 path = current_path / name
                 if path.is_symlink() or not path.is_file():
+                    note_unsafe_mcp(path)
                     continue
                 if len(self.files) >= self.max_files:
                     self.truncated = True

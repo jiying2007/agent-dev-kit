@@ -362,6 +362,78 @@ class StrictJSONTests(unittest.TestCase):
                     )
                     self.assertNotIn("demo_value", str(blockers))
 
+    def test_harness_mcp_url_userinfo_ports_and_unsafe_config_index(self):
+        from agent_dev_kit.readiness_evidence import RepositoryIndex, load_readiness_contract
+        from agent_dev_kit.readiness_tools import _evaluate_tools
+
+        contract = load_readiness_contract(
+            Path(__file__).resolve().parents[1] / "manifests/harness_readiness_contracts.json"
+        )
+        metadata = {"dimensions": {"tool_and_permission_boundary": {
+            "permission_boundary": {"read_only": True, "approval_required": True,
+                                    "credential_source": "environment-variable"}}}}
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (root / "docs").mkdir()
+            (root / "docs/security.md").write_text(
+                "MCP read-only approval credential environment variable", encoding="utf-8"
+            )
+            config = root / ".mcp.json"
+
+            def evaluate(value):
+                config.write_text(json.dumps({"mcpServers": {"demo": value}}),
+                                  encoding="utf-8")
+                return _evaluate_tools(RepositoryIndex(root, contract), contract, metadata)
+
+            for url in (
+                "https://token%3Ddemo_value:%24%7BDEMO_PWD%7D@example.test/mcp",
+                "https://user:demo_value@example.test/mcp",
+            ):
+                with self.subTest(credential=url):
+                    status, _evidence, blockers = evaluate({"type": "http", "url": url})
+                    self.assertNotEqual("pass", status, blockers)
+                    self.assertNotIn("demo_value", str(blockers))
+            for url in (
+                "https://example.test:badport/mcp",
+                "https://example.test:99999/mcp",
+                "https://example.test:0/mcp",
+                "file:///tmp/mcp",
+                "https://user@example.test/mcp",
+                "https://user:%24%7BDEMO_PWD%7D@example.test/mcp",
+            ):
+                with self.subTest(malformed=url):
+                    status, _evidence, blockers = evaluate({"type": "http", "url": url})
+                    self.assertEqual("needs-review", status, blockers)
+                    self.assertIn("invalid_mcp_url", {b["code"] for b in blockers})
+            safe = "https://%24%7BDEMO_USER%7D:%24%7BDEMO_PWD%7D@example.test/mcp"
+            status, _evidence, blockers = evaluate({"type": "http", "url": safe})
+            self.assertEqual("pass", status, blockers)
+
+            # Unsafe declarations may not silently disappear and cause N/A.
+            config.unlink()
+            regular = root / "receipt.json"
+            regular.write_text('{"mcpServers": {}}', encoding="utf-8")
+            config.symlink_to(regular)
+            index = RepositoryIndex(root, contract)
+            self.assertIn(".mcp.json", index.unsafe_mcp_configs)
+            status, _evidence, blockers = _evaluate_tools(index, contract, metadata)
+            self.assertEqual("needs-review", status, blockers)
+            self.assertIn("unsafe_mcp_config", {b["code"] for b in blockers})
+            config.unlink()
+
+            if hasattr(os, "mkfifo"):
+                os.mkfifo(config)
+                index = RepositoryIndex(root, contract)
+                status, _evidence, blockers = _evaluate_tools(index, contract, metadata)
+                self.assertEqual("needs-review", status, blockers)
+                self.assertIn("unsafe_mcp_config", {b["code"] for b in blockers})
+                config.unlink()
+            config.mkdir()
+            index = RepositoryIndex(root, contract)
+            status, _evidence, blockers = _evaluate_tools(index, contract, metadata)
+            self.assertEqual("needs-review", status, blockers)
+            self.assertIn("unsafe_mcp_config", {b["code"] for b in blockers})
+
     def test_harness_index_reads_one_bounded_regular_descriptor(self):
         from agent_dev_kit.readiness_evidence import RepositoryIndex, load_readiness_contract
 
