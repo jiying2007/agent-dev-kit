@@ -21,3 +21,11 @@ The Harness contract parser previously followed symlinks and read unbounded JSON
 ## Bounded Unicode scan cost
 
 Only escaped surrogate code units (JSON `\\uD800`-`\\uDFFF`, case-insensitive hex) can enter a decoded string as lone surrogates: direct invalid UTF-8 is already rejected at decode, while direct `str` input is encoded as UTF-8 before parsing. Check the bounded raw byte payload for those escapes and perform the existing complete parsed-tree Unicode scalar validation only when a possible surrogate escape appears. False-positive matches inside escaped backslash text are safe, because the final tree check will accept actual valid scalar text. Test the fast path and valid literal backslashes, and preserve failure for real escaped lone surrogates.
+
+## Independent review blocking findings (2026-10-27)
+
+A separate independent code review of exact PR HEAD identified a pre-existing risk: `readiness_tools._evaluate_tools` used Python `json.loads`, allowing repeated `mcpServers` keys to hide earlier sensitive configuration before `_walk_json`. Use `strict_json.loads` instead and fail closed with `invalid_mcp_json`; reject NaN, overflowing float and escaped lone surrogates without leaking input into blockers.
+
+A second finding concerns `RepositoryIndex.read_text`: its `stat()` followed by independent `Path.read_text()` may read a grown/replaced input beyond the scan budget. Capture bytes once using the existing `strict_json.read_bytes(..., regular_only=True)` (O_NOFOLLOW, O_NONBLOCK, fstat regular file, max_bytes+1), reject symlink ancestry before opening, and decode UTF-8 strictly. This eliminates the unbounded separate read; it does not prove atomic parent directory isolation during concurrent renames.
+
+The source and test changes invalidate the previous 8.1.1 delegated review. New independent review of the current head and changed validator/runtime source is still mandatory before merging; do not treat a CI pass on specific code tests as a Harness receipt.

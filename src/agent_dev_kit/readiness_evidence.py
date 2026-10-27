@@ -8,7 +8,7 @@ from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Tuple
 
-from .strict_json import StrictJSONError, loads as load_strict_json, read as read_strict_json
+from .strict_json import StrictJSONError, loads as load_strict_json, read as read_strict_json, read_bytes as read_bounded_bytes
 
 EXPECTED_DIMENSIONS = (
     "context_legibility",
@@ -215,11 +215,13 @@ class RepositoryIndex:
             self.text_cache[relative] = None
             return None
         try:
-            if path.stat().st_size > self.max_file_bytes:
-                self.text_cache[relative] = None
-                return None
-            value = path.read_text(encoding="utf-8")
-        except (OSError, UnicodeDecodeError):
+            # Path ancestry is checked before opening. This is a preflight;
+            # the descriptor read below is what bounds bytes and leaf type.
+            if any(part.is_symlink() for part in (path, *path.parents)):
+                raise StrictJSONError("Harness evidence path contains a symlink")
+            raw = read_bounded_bytes(path, max_bytes=self.max_file_bytes, regular_only=True)
+            value = raw.decode("utf-8", errors="strict")
+        except (OSError, UnicodeError, StrictJSONError):
             value = None
         self.text_cache[relative] = value
         return value

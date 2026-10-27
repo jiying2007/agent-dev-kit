@@ -100,6 +100,79 @@ class StrictJSONTests(unittest.TestCase):
                 with self.subTest(raw=raw), self.assertRaises(ValueError):
                     _canonical_manifest_sha256(path.read_bytes())
 
+    def test_harness_mcp_config_rejects_duplicate_keys_and_nonfinite_numbers(self):
+        from agent_dev_kit.readiness_evidence import RepositoryIndex, load_readiness_contract
+        from agent_dev_kit.readiness_tools import _evaluate_tools
+
+        canonical = Path(__file__).resolve().parents[1] / "manifests/harness_readiness_contracts.json"
+        contract = load_readiness_contract(canonical)
+        ambiguous = (
+            '{"mcpServers":{"danger":{"headers":{"token":"test-literal"}}},'
+            '"mcpServers":{"clean":{"command":"npx","args":["safe-package@1.2.3"]}}}',
+            '{"mcpServers":{"clean":{"command":"npx","command":"node"}}}',
+            '{"mcpServers":{"clean":{"args":[NaN]}}}',
+            '{"mcpServers":{"clean":{"args":[1e999]}}}',
+            '{"mcpServers":{"clean":{"args":["\\uD800"]}}}',
+        )
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            source = root / ".mcp.json"
+            for raw in ambiguous:
+                with self.subTest(raw=raw[:75]):
+                    source.write_text(raw, encoding="utf-8")
+                    index = RepositoryIndex(root, contract)
+                    status, _evidence, blockers = _evaluate_tools(index, contract)
+                    self.assertEqual("needs-review", status)
+                    self.assertIn("invalid_mcp_json", {b["code"] for b in blockers})
+                    self.assertNotIn("test-literal", str(blockers))
+            source.write_text(
+                '{"mcpServers":{"clean":{"command":"npx","args":["safe-package@1.2.3"]}}}',
+                encoding="utf-8",
+            )
+            status, _evidence, blockers = _evaluate_tools(RepositoryIndex(root, contract), contract)
+            self.assertEqual("partial", status)
+            self.assertNotIn("invalid_mcp_json", {b["code"] for b in blockers})
+
+    def test_harness_index_reads_one_bounded_regular_descriptor(self):
+        from agent_dev_kit.readiness_evidence import RepositoryIndex, load_readiness_contract
+
+        canonical = Path(__file__).resolve().parents[1] / "manifests/harness_readiness_contracts.json"
+        contract = load_readiness_contract(canonical)
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            directory = root / "work"
+            directory.mkdir()
+            source = directory / "notes.md"
+            source.write_text("safe\n", encoding="utf-8")
+            index = RepositoryIndex(root, contract)
+            # Reject a separate read_text() call, which is not descriptor-bound.
+            with mock.patch.object(Path, "read_text", side_effect=AssertionError("unbounded text read")):
+                self.assertEqual("safe\n", index.read_text("work/notes.md"))
+
+            over = root / "large.md"
+            over.write_text("ok", encoding="utf-8")
+            index = RepositoryIndex(root, contract)
+            over.write_bytes(b"x" * (index.max_file_bytes + 1))
+            self.assertIsNone(index.read_text("large.md"))
+
+            replaced = root / "replaced.md"
+            replaced.write_text("initial\n", encoding="utf-8")
+            index = RepositoryIndex(root, contract)
+            if hasattr(os, "mkfifo"):
+                replaced.unlink()
+                os.mkfifo(replaced)
+                self.assertIsNone(index.read_text("replaced.md"))
+
+            aliased_dir = root / "symlinked"
+            aliased_dir.mkdir()
+            nested = aliased_dir / "owned.json"
+            nested.write_text("safe", encoding="utf-8")
+            index = RepositoryIndex(root, contract)
+            original = root / "real"
+            aliased_dir.rename(original)
+            aliased_dir.symlink_to(original, target_is_directory=True)
+            self.assertIsNone(index.read_text("symlinked/owned.json"))
+
     def test_harness_contract_loader_rejects_ambiguous_unbounded_and_alias_inputs(self):
         from agent_dev_kit.readiness_evidence import (
             ReadinessContractError, load_readiness_contract,

@@ -11,3 +11,5 @@ Reject symlinked parent directories as well as the file leaf; state-check accept
 Reject invalid Unicode scalar values (unpaired UTF-16 surrogate escapes) in JSON object keys and any nested string value; a properly paired surrogate escape is accepted as its real Unicode code point. State hygiene must not PASS escaped values that cannot be represented in UTF-8.
 
 The Harness readiness contract is an input to governance decisions and must use the canonical bounded strict JSON reader (256 KiB ceiling), reject symlink ancestry and non-regular files, and never leak invalid source values in parser errors. Preserve all seven dimensions and current review authority; a stricter loader does not itself renew review evidence.
+
+The real independent review of ADK #226 found two further source hardening requirements: reject ambiguous `mcpServers` JSON before secret scanning, and bind Harness text evidence reads to a bounded regular file descriptor instead of separate `stat/read_text`. Preserve fail-closed security findings, redact unsafe values, and do not regenerate or imply an independent review PASS without actual separate reviewer execution.

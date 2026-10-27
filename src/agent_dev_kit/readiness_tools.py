@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 import re
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
@@ -14,6 +13,7 @@ from .readiness_evidence import (
     _deduplicate,
     _material_evidence,
 )
+from .strict_json import StrictJSONError, loads as load_strict_json
 
 
 def _walk_json(value: Any, parts: Tuple[str, ...] = ()) -> Iterable[Tuple[Tuple[str, ...], str, Any]]:
@@ -207,8 +207,8 @@ def _evaluate_tools(
             record_blocker(_blocker("unreadable_mcp_config", "MCP 配置无法在扫描预算内读取", relative))
             continue
         try:
-            data = json.loads(content)
-        except (json.JSONDecodeError, RecursionError):
+            data = load_strict_json(content, max_bytes=index.max_file_bytes)
+        except StrictJSONError:
             parse_failed = True
             record_blocker(_blocker("invalid_mcp_json", "MCP 配置不是有效 JSON", relative))
             continue
