@@ -210,6 +210,81 @@ class StrictJSONTests(unittest.TestCase):
                     self.assertNotIn("demo_value", str(blockers))
                     self.assertTrue(any("mcpServers[0]" in b["evidence_ref"] for b in blockers))
 
+    def test_harness_mcp_sensitive_aliases_and_header_value_semantics(self):
+        from agent_dev_kit.readiness_evidence import RepositoryIndex, load_readiness_contract
+        from agent_dev_kit.readiness_tools import _evaluate_tools, _sensitive_key
+
+        root_dir = Path(__file__).resolve().parents[1]
+        contract = load_readiness_contract(root_dir / "manifests/harness_readiness_contracts.json")
+        fragments = contract["mcp"]["sensitive_key_fragments"]
+        for key in ("private-token-demo_value", "apiKey", "prefix_API_KEY_suffix",
+                    "accessToken", "x-auth", "myCredentialValue"):
+            self.assertTrue(_sensitive_key(key, fragments), key)
+        for key in ("tokenizer", "command", "name", "mcpServers"):
+            self.assertFalse(_sensitive_key(key, fragments), key)
+
+        metadata = {"dimensions": {"tool_and_permission_boundary": {
+            "permission_boundary": {"read_only": True, "approval_required": True,
+                                    "credential_source": "environment-variable"}}}}
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / "docs").mkdir()
+            (root / "docs/security.md").write_text(
+                "read-only approval credential environment variable", encoding="utf-8"
+            )
+            config = root / ".mcp.json"
+
+            def inspect(server):
+                config.write_text(json.dumps({"mcpServers": {"sk-test_opaque": server}}),
+                                  encoding="utf-8")
+                return _evaluate_tools(RepositoryIndex(root, contract), contract, metadata)
+
+            for headers in (
+                {"private-token-demo_value": "demo_value"},
+                {"prefix_api_key_suffix": "demo_value"},
+                {"X-Auth": "Bearer demo_value"},
+                {"X-Custom": "Bearer demo_value"},
+                {"X-Custom": "Basic demo_value"},
+            ):
+                with self.subTest(headers=headers):
+                    status, _refs, blockers = inspect(
+                        {"command": "npx", "args": ["safe-package@1.2.3"], "headers": headers}
+                    )
+                    self.assertEqual("blocked", status, blockers)
+                    self.assertIn("hardcoded_mcp_secret", {b["code"] for b in blockers})
+                    self.assertNotIn("demo_value", str(blockers))
+                    self.assertNotIn("sk-test_opaque", str(blockers))
+
+            ref = "$" + "{DEMO_TOKEN}"
+            for headers in (
+                {"X-Auth": "Bearer " + ref},
+                {"X-Auth": "Basic " + ref},
+                {"private-token-demo_value": ref},
+            ):
+                with self.subTest(safe=headers):
+                    status, _refs, blockers = inspect(
+                        {"command": "npx", "args": ["safe-package@1.2.3"], "headers": headers}
+                    )
+                    self.assertEqual("pass", status, blockers)
+
+            for arg in ("-token demo_value", "--token demo_value",
+                        "--header=Authorization: Basic demo_value"):
+                with self.subTest(arg=arg):
+                    status, _refs, blockers = inspect(
+                        {"command": "npx", "args": ["safe-package@1.2.3", arg]}
+                    )
+                    self.assertEqual("blocked", status, blockers)
+                    self.assertNotIn("demo_value", str(blockers))
+
+            for arg in ("--token=", "-token=", "--api-key:"):
+                with self.subTest(missing=arg):
+                    status, _refs, blockers = inspect(
+                        {"command": "npx", "args": ["safe-package@1.2.3", arg]}
+                    )
+                    self.assertEqual("needs-review", status, blockers)
+                    self.assertIn("invalid_mcp_command_args",
+                                  {b["code"] for b in blockers})
+
     def test_harness_index_reads_one_bounded_regular_descriptor(self):
         from agent_dev_kit.readiness_evidence import RepositoryIndex, load_readiness_contract
 

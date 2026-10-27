@@ -30,19 +30,23 @@ def _walk_json(value: Any, parts: Tuple[str, ...] = ()) -> Iterable[Tuple[Tuple[
 
 def _safe_secret_reference(value: str) -> bool:
     stripped = value.strip()
+    if stripped.lower().startswith("basic "):
+        return bool(SECRET_REFERENCE.fullmatch(stripped[6:].strip()))
     return not stripped or bool(SECRET_REFERENCE.fullmatch(stripped))
 
 
 def _sensitive_key(key: str, fragments: Sequence[str]) -> bool:
-    normalized = re.sub(r"[^a-z0-9]", "_", key.lower()).strip("_")
+    camel = re.sub(r"(?<=[a-z0-9])(?=[A-Z])", "_", key)
+    normalized = re.sub(r"[^a-z0-9]", "_", camel.lower()).strip("_")
     compact = normalized.replace("_", "")
-    return any(
-        normalized == fragment
-        or normalized.endswith("_" + fragment)
-        or compact == fragment.replace("_", "")
-        or compact.endswith(fragment.replace("_", ""))
-        for fragment in fragments
-    )
+    for fragment in (*fragments, "auth", "credential", "credentials"):
+        token = re.sub(r"[^a-z0-9]", "_", fragment.lower()).strip("_")
+        if (normalized == token or normalized.endswith("_" + token)
+                or compact == token.replace("_", "")
+                or compact.endswith(token.replace("_", ""))
+                or ("_" + token + "_") in ("_" + normalized + "_")):
+            return True
+    return False
 
 
 
@@ -51,9 +55,13 @@ _CREDENTIAL_ASSIGNMENT = re.compile(
     re.IGNORECASE,
 )
 _CREDENTIAL_INLINE = re.compile(
-    r"(?:^|[\s;])--([A-Za-z][A-Za-z0-9_-]*)\s+([^\s;,&]+)", re.IGNORECASE,
+    r"(?:^|[\s;])--?([A-Za-z][A-Za-z0-9_-]*)\s+([^\s;,&]+)", re.IGNORECASE,
 )
-_BEARER_ARG = re.compile(r"\bBearer\s+([^\s;,&]+)", re.IGNORECASE)
+_AUTH_SCHEME = re.compile(r"\b(?:Bearer|Basic)\s+([^\s;,&]+)", re.IGNORECASE)
+_EMPTY_CREDENTIAL = re.compile(
+    r"(?<![A-Za-z0-9_-])(--?[A-Za-z][A-Za-z0-9_-]*)\s*[=:]\s*(?=$|[;,&])",
+    re.IGNORECASE,
+)
 _CREDENTIAL_FLAG = re.compile(r"--?([A-Za-z][A-Za-z0-9_-]*)\Z")
 
 
@@ -74,8 +82,8 @@ def _literal_credential_argument(text: str, fragments: Sequence[str]) -> bool:
     for match in _CREDENTIAL_INLINE.finditer(text):
         if _sensitive_key(match.group(1), fragments) and not _safe_secret_reference(match.group(2)):
             return True
-    for match in _BEARER_ARG.finditer(text):
-        if not _safe_secret_reference("Bearer " + match.group(1)):
+    for match in _AUTH_SCHEME.finditer(text):
+        if not _safe_secret_reference(match.group(1)):
             return True
     return False
 
@@ -88,19 +96,27 @@ def _credential_argument_issues(
     if not isinstance(args, list) or any(not isinstance(item, str) for item in args):
         return [], True
     issues: List[str] = []
+    malformed = False
     command = server.get("command")
-    if isinstance(command, str) and _literal_credential_argument(command, fragments):
-        issues.append("command")
+    if isinstance(command, str):
+        if _literal_credential_argument(command, fragments):
+            issues.append("command")
+        if any(_sensitive_key(match.group(1).lstrip("-"), fragments)
+               for match in _EMPTY_CREDENTIAL.finditer(command)):
+            malformed = True
     for position, value in enumerate(args):
         if _literal_credential_argument(value, fragments):
             issues.append("args[{}]".format(position))
+        if any(_sensitive_key(match.group(1).lstrip("-"), fragments)
+               for match in _EMPTY_CREDENTIAL.finditer(value)):
+            malformed = True
         flag = _CREDENTIAL_FLAG.fullmatch(value)
         if flag and _sensitive_key(flag.group(1), fragments):
-            if position + 1 >= len(args) or not args[position + 1] or args[position + 1].startswith("--"):
-                return sorted(set(issues)), True
-            if not _safe_secret_reference(args[position + 1]):
+            if position + 1 >= len(args) or not args[position + 1] or args[position + 1].startswith("-"):
+                malformed = True
+            elif not _safe_secret_reference(args[position + 1]):
                 issues.append("args[{}]".format(position + 1))
-    return sorted(set(issues)), False
+    return sorted(set(issues)), malformed
 
 
 def _opaque_sensitive_ref(
@@ -287,9 +303,17 @@ def _evaluate_tools(
         server_positions = {name: position for position, name in enumerate(sorted(servers))}
         sensitive_ordinal = 0
         for parts, key, value in _walk_json(data):
-            if not _sensitive_key(key, fragments) or value is None:
+            if value is None:
                 continue
-            if not isinstance(value, str) or not _safe_secret_reference(value):
+            header_literal = (
+                isinstance(value, str)
+                and any(part.lower() in ("headers", "httpheaders", "requestheaders")
+                        for part in parts[:-1])
+                and _literal_credential_argument(value, fragments)
+            )
+            if not _sensitive_key(key, fragments) and not header_literal:
+                continue
+            if header_literal or not isinstance(value, str) or not _safe_secret_reference(value):
                 hardcoded_secret = True
                 record_blocker(
                     _blocker(
