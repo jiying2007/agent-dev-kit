@@ -1,0 +1,373 @@
+{
+  "schema": "adk-review-evidence/v1",
+  "subject_id": "harness-readiness",
+  "scope": "harness-source",
+  "author_id": "ai/root",
+  "owner": "leiwenjun",
+  "reviewer": {
+    "id": "gpt-6/automation/77d99976-7eec-8330-ae9c-a132419c0ce6",
+    "kind": "ai",
+    "independence": "independent"
+  },
+  "evidence_completed_at": "2026-10-27T14:55:16Z",
+  "reviewed_at": "2026-10-27T14:55:16Z",
+  "verdicts": {
+    "spec": "pass",
+    "quality": "pass"
+  },
+  "dimension_ids": [
+    "context_legibility",
+    "spec_and_execution_contract",
+    "tool_and_permission_boundary",
+    "state_and_knowledge_continuity",
+    "verification_review_and_eval",
+    "recovery_and_rollback",
+    "freshness_and_entropy_control"
+  ],
+  "findings": [
+    {
+      "id": "split-token-whitespace",
+      "severity": "major",
+      "disposition": "fixed",
+      "reason": "readiness_tools.py:121-128 now checks .strip() on split sensitive flag values; full _evaluate_tools negative fixtures cover space, tab and mixed whitespace, while managed ${DEMO_TOKEN} remains a positive. Static source only; does not execute MCP."
+    },
+    {
+      "id": "parent-path-race",
+      "severity": "minor",
+      "disposition": "accepted-risk",
+      "reason": "Parent directory symlink inspection is an expressly scoped non-atomic preflight, not a guarantee against malicious concurrent parent rename. Open leaf descriptor remains bounded and regular-only. Hostile concurrent writers are outside this source hygiene contract."
+    }
+  ],
+  "limitations": [
+    "Independent repository-source-only Spec/Quality semantic review; no human owner approval, signing identity, live MCP server, native target test, field result or product qualification.",
+    "Raw tool_and_permission_boundary not-applicable for this ADK repository is not a general MCP runtime-safety PASS. Static scanner checks bounded declarations and does not execute shells/authentication.",
+    "Parent-directory symlink checks are preflights and do not establish atomic TOCTOU isolation against malicious concurrent rename.",
+    "Three supported-Python CI regression jobs on original code HEAD had only stale delegated-review failure. New receipt/metadata source identity must pass new exact-head required checks before any protected merge or release.",
+    "58 historical source refs were byte-identity compared using full untruncated Git trees rather than all 58 re-read line by line; four changed refs were fetched and their actual UTF-8 bytes SHA-256 recomputed."
+  ],
+  "policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+  "validator_sha256": {
+    "src/agent_dev_kit/review_evidence.py": "73d85e864a3da125bf94808f19616f52150751a94ccc729ac66f66d2576b8808",
+    "src/agent_dev_kit/strict_json.py": "72f06f4dcaebfed83bd1ae9876e38d4f7d82d8a1473b40b66beffb6338ee94a5",
+    "src/agent_dev_kit/readiness_evidence.py": "6fdfd5bea3ee097ac21d2b2ab469378c8c84f78856061b680ebb0c5f9d726778"
+  },
+  "sources": [
+    {
+      "base": "repository",
+      "path": ".github/CODEOWNERS",
+      "sha256": "80c4105be9d42c79f5057726fbb9971aa0a638ee17f47f31377c04085b1095cc"
+    },
+    {
+      "base": "repository",
+      "path": ".github/workflows/branch-gc.yml",
+      "sha256": "9c88b4fc19147008351bef181a275fb371b986567eadaa2892b5292b8322e47d"
+    },
+    {
+      "base": "repository",
+      "path": ".github/workflows/ci.yml",
+      "sha256": "8c0b509ca8e46ddf9e67d9aed00d5bd28da73bf831de9a35601a4f625381e910"
+    },
+    {
+      "base": "repository",
+      "path": ".github/workflows/claude-consumer-contract.yml",
+      "sha256": "2abc7885d7ab3476776ef4cbcbc022d008734ceb3e714381cc994ebdc543526b"
+    },
+    {
+      "base": "repository",
+      "path": ".github/workflows/codex-consumer-contract.yml",
+      "sha256": "f1e9e882dd0ee2995ac10d5ffa57ca97451b3ff9143f1019c617830ea2d4bbb9"
+    },
+    {
+      "base": "repository",
+      "path": ".github/workflows/digital-worker-contract.yml",
+      "sha256": "3575ad868bebbc6120e39a37f0786d249ec1a4887bcc1a775378c0bc1ac02eee"
+    },
+    {
+      "base": "repository",
+      "path": "AGENTS.md",
+      "sha256": "61a06f86a6b5382855fab70a3098f878e9f7d3e0af653a86fbd199d8d5d13167"
+    },
+    {
+      "base": "repository",
+      "path": "CHANGELOG.md",
+      "sha256": "14c3d348d3f968b938c39e43723cfb23f88142a5ec8bd5873fe371142f203809"
+    },
+    {
+      "base": "repository",
+      "path": "OWNERS",
+      "sha256": "04214b6ee2937ef8c786f998ee890a0cecacb7dd318bab99a13db844f850a95e"
+    },
+    {
+      "base": "repository",
+      "path": "README.md",
+      "sha256": "2b32d628e724e10ee987896959786528057034fbd78f9e2fd5602b861b9f1aab"
+    },
+    {
+      "base": "repository",
+      "path": "docs/agent-operating-rules.md",
+      "sha256": "8e7d7ab4e57ab43cf6aee5b8d93ab7840ba84791e09c46157732fbf282ad11b9"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/2026-09-25-agent-value-trust/negative-results.md",
+      "sha256": "da7aa6c51295be56368b90594b7eb6469bf0a43b3888d7a482839bb22c0970c0"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/2026-09-25-agent-value-trust/requirements.md",
+      "sha256": "429e4296ec368df67542c7b536c478c2ac2f16adedad9dfddc1b53383cc343ad"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/2026-09-25-agent-value-trust/tasks.md",
+      "sha256": "ccee418ae0bd170f1c579bf0cb48af9be1dff833629c95705f5deca431e1d499"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/2026-09-25-effect-trials/design.md",
+      "sha256": "a23b59b2cab96879196748bd082347a8d00a756598460ad3f83f97c7a50e976f"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/2026-09-25-effect-trials/negative-results.md",
+      "sha256": "045d0b30fd4e15dabfa0436d3b34403bb3bd5b6b8916ef4cb708a2e6523cdf73"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/2026-09-25-effect-trials/requirements.md",
+      "sha256": "f4a2bffa3a90d0955a2b9e50d5e3201a30f667edb30a1709985bab2f856ed281"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/2026-09-25-effect-trials/tasks.md",
+      "sha256": "802ca9c194d39060eb931af0f3e8042d5f1e62acc9249abeaead6b5ede8615b9"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/2026-09-25-native-campaign-finalize/negative-results.md",
+      "sha256": "d5d436b9ddf56b37c22f200b2f84a7fd09d3e964b8d91c4051649eb51b207673"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/2026-09-25-native-campaign-finalize/requirements.md",
+      "sha256": "45da7af9938c1c826ca203ab5439d55aac9def3a4da218a30a5252d531d3d0a7"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/2026-09-25-native-campaign-finalize/tasks.md",
+      "sha256": "b94ecc55058d993aa5ceb2da12020ffc181b68de7b4924c591f7a5567ccaee09"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/2026-09-25-native-campaign-project-layout/negative-results.md",
+      "sha256": "9426f86cc945edfaa63590e140c0ec458762beea4e09bf0a0886badb15151338"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/2026-09-25-native-campaign-project-layout/tasks.md",
+      "sha256": "2f3fca0914f53aabe3713f3d0094fb6bacb3e3d1e0df867db134d71835d3e2ce"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261024-release-bundles/PROGRESS.md",
+      "sha256": "45d5688628b9f84828982fa9b6c60f37d87c9b10e489745b64ae0fd48e3313d5"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261024-release-bundles/design.md",
+      "sha256": "5469d45005c656c4c9ab3ec7ddfd80a855bce805e536924aa0db82e81a99424d"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261024-release-bundles/requirements.md",
+      "sha256": "90127df6e93a16a82f4ca4f20adb280fd144c930051163e17002f9a8c8126f29"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261024-release-bundles/tasks.md",
+      "sha256": "20790b5edea0158cc748e7b777cebae3b2c35374a194f701bc8096d41a081dc3"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261024-target-smoke/design.md",
+      "sha256": "cd6a75ac6165e105c4496f5a7a769da3df602625e08b9430d67bedf0bd6732d6"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261024-target-smoke/requirements.md",
+      "sha256": "d67aca13ffd076a1147a5a92d8cdc1c2af24497739cc507bcf6c32ddce19c850"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261024-target-smoke/tasks.md",
+      "sha256": "9144755b2ec4487cb9055e1284577d00e0bb41b8d84480f84133af45343040e8"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/adk-platform-convergence-v1/state.yaml",
+      "sha256": "f95699e68437bafa0199a5564af18cbc7e3f78de290f4b01dc17737d0b68156e"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/adk-self-readiness-ownership/state.yaml",
+      "sha256": "d590a0ae6b1b666cc1d6d64ab7b1e8fd5f128979993595eea8489783138f46d1"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/adk-terminal-contract-hardening/state.yaml",
+      "sha256": "87b107bda25456141bae1a3b035c7e2c30616afd8baf86d333216a87f0754f5f"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/adk-v3-1-rc2-target-conformance/state.yaml",
+      "sha256": "ed9597562535265d61322e9558727acf963193e121570d1a7bafe5136d4299d6"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/adk-v3-1-software-m5-ready/state.yaml",
+      "sha256": "fa314d45b209d8bea753377d18848cb02793d62c660dd69e906b7d8ee96e1134"
+    },
+    {
+      "base": "repository",
+      "path": "docs/commands.md",
+      "sha256": "db609c3ea4f6ed74fafc4176b25785ca7c2f4ec8737aff98af23be0b09784da4"
+    },
+    {
+      "base": "repository",
+      "path": "docs/runbooks/README.md",
+      "sha256": "0888aa2b94f929760040517deaf9a47b517648b0694209d48309956fbe83273d"
+    },
+    {
+      "base": "repository",
+      "path": "docs/runbooks/agent-value-lifecycle.md",
+      "sha256": "84e629c1c040b265d6a64369c5b39d6af2e999576af4429939738ff00b5a4c37"
+    },
+    {
+      "base": "repository",
+      "path": "docs/runbooks/artifact-gated-delivery.md",
+      "sha256": "f83375f1392b20006f29e43ce5b0807530ad850969e6ee67e3b861a78fa98dd6"
+    },
+    {
+      "base": "repository",
+      "path": "docs/runbooks/bugfix-delivery.md",
+      "sha256": "f7ef75ace0052ecbde911b06e3b45a1d22045ba24257c642736f72f6f28ff623"
+    },
+    {
+      "base": "repository",
+      "path": "docs/runbooks/codex-pilot-evidence.md",
+      "sha256": "5ff92fab93baf7403b838a67f359e29016a6ce19563eb98006cca6c842ae298c"
+    },
+    {
+      "base": "repository",
+      "path": "docs/runbooks/codex-runtime-method-boundary.md",
+      "sha256": "43bf36ec8a1a9a12bf30bb29b7a9f2bdbfd9a00f849ad700a85fb1cd440dde18"
+    },
+    {
+      "base": "repository",
+      "path": "manifest.json",
+      "sha256": "9b1858e2df22c2fc6fd106952263c78120602cc932d028cc0ff46f2bc5f39f5d"
+    },
+    {
+      "base": "repository",
+      "path": "manifests/harness_readiness_contracts.json",
+      "sha256": "e12c527dcfcfc61030b9a344f9d7fa3efeb828c364f5707285bdded69fcd8358"
+    },
+    {
+      "base": "repository",
+      "path": "scripts/backup-rollback.sh",
+      "sha256": "b8fbb6466bba0d47e414e9db5d41d821d7d753b0087cbb624af987ee61d10d41"
+    },
+    {
+      "base": "repository",
+      "path": "scripts/check-format.sh",
+      "sha256": "5810e3880f2af51cf7b39f5e1c2caa49012c89ddfc7fc6224e74adf707249227"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/distribution/archive_io.py",
+      "sha256": "f693b56de052f33c1fb83b5abc95342f31af95b52795182f116fd78db61a6998"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/distribution/release_contract.py",
+      "sha256": "6f322e405555383b6f50206c97e754eedc33edaa3982c358c638797ca6aaba1a"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/process_execution.py",
+      "sha256": "01e3da0bc9cee08055dafafb178c270f8e6ece2a18de2ad542027a1b252d5b9d"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/readiness.py",
+      "sha256": "83a2949102955281f13a94e2f871d36e170cbfe76d053032ce5c114dc065ed29"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/readiness_tools.py",
+      "sha256": "2ecdfd21eb665d45ff2ae279ffcf05eb01f09edfce391b1db105a03d15fd1cb5"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/target_contracts.py",
+      "sha256": "aea9b0a1fb395d157f61d1860f762ecb80da0bc9365bbeaac46bd96b5892dc26"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/targets.py",
+      "sha256": "9b2125d496a2a8a324395fc144ff814ec4d798dc2e82990e4515eab21bf1c6f9"
+    },
+    {
+      "base": "repository",
+      "path": "tests/lib/bash-test-helpers.sh",
+      "sha256": "90a6fa1c00f18ffaa9394fc548cbf5739e8eeda8b827832eef516961164d263d"
+    },
+    {
+      "base": "repository",
+      "path": "tests/mcp_2026_activation/mcp_activation_test.go",
+      "sha256": "560fa3a6e299dca198b7417dec72bc77998aa736587a83c795cb579abd686324"
+    },
+    {
+      "base": "repository",
+      "path": "tests/release_archive_fixture.py",
+      "sha256": "a512b0259efc35ea964210c61235920c4f32d24f7539b13103744b038c6f00bb"
+    },
+    {
+      "base": "repository",
+      "path": "tests/run_all.sh",
+      "sha256": "f7328fd18b81713f6053924099bd81fde92cc4a2ac2ddab7710feab9fc1d8fd1"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_agent_ecosystem_standards.sh",
+      "sha256": "9341118fc2187764597d0445caddfa5930fbc95fb0eeed6665d29ef9b4a3844e"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_catalog.sh",
+      "sha256": "122fce83231fbd4af11789da15933c1fbf63b25aee218fdd306c8889c1382798"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_eval_catalog.py",
+      "sha256": "dd0f1d497a0125284ce674690315b6854bebc30257f1ed6ce1f4f552897ff8c7"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_eval_catalog.sh",
+      "sha256": "fbb79f7fdcf60b5dde639d2c03e6ba09dc178efe43d98274ca8e410f5aec9946"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_mcp_freshness_ssot.sh",
+      "sha256": "9ccac15a620e20f9d5eacb1e1e50f47c191e3ce5bb07015f3f6b91def51c44af"
+    }
+  ],
+  "evidence": [
+    {
+      "base": "repository",
+      "path": ".adk/reviews/evidence/harness-source-20261027-8.1.2/independent-review.md",
+      "sha256": "11a757ab177025ea6ac2e0679af8c39b477595b04afd4d1402a68b3ad92b82c7"
+    }
+  ]
+}
