@@ -54,4 +54,43 @@ rg -q 'timing budget exceeded' "$TMP_DIR/fail.err" || {
   exit 1
 }
 
+"$ROOT_DIR/scripts/check-performance-budgets.sh" --summary-json \
+  --timing-json "$TMP_DIR/quick-fail.json" >"$TMP_DIR/report-only.json"
+python3 - "$TMP_DIR/report-only.json" <<'PY'
+import json
+import sys
+with open(sys.argv[1], encoding="utf-8") as stream:
+    report = json.load(stream)
+assert report["status"] == "warn", report
+assert report["strict"] == 0 and report["failures"] == 0, report
+assert report["elapsed_ms"] == 999999 and report["budget_ms"] > 0, report
+PY
+
+python3 - "$TMP_DIR/quick-pass.json" "$TMP_DIR/full-pass.json" <<'PY'
+import json
+import sys
+with open(sys.argv[1], encoding="utf-8") as stream:
+    report = json.load(stream)
+report.update(mode="full", elapsed_ms=331902)
+with open(sys.argv[2], "w", encoding="utf-8") as stream:
+    json.dump(report, stream, indent=2)
+PY
+"$ROOT_DIR/scripts/check-performance-budgets.sh" --summary-json \
+  --timing-json "$TMP_DIR/full-pass.json" >"$TMP_DIR/full-budget.json"
+python3 - "$TMP_DIR/full-budget.json" <<'PY'
+import json
+import sys
+with open(sys.argv[1], encoding="utf-8") as stream:
+    report = json.load(stream)
+assert report["status"] == "pass" and report["mode"] == "full", report
+assert report["elapsed_ms"] == 331902 and report["budget_ms"] == 600000, report
+assert report["strict"] == 0, report
+PY
+
+if "$ROOT_DIR/scripts/check-performance-budgets.sh" --summary-json \
+  --timing-json "$TMP_DIR/missing.json" >"$TMP_DIR/missing-budget.json"; then
+  echo "[FAIL] missing timing must not be reported as a successful observation" >&2
+  exit 1
+fi
+
 echo "[PASS] performance budgets"

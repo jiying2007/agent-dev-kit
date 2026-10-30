@@ -106,12 +106,52 @@ jobs:
       - name: Run full regression suite
         run: bash tests/run_all.sh --timing-json /tmp/adk-tests.json
 
+      - name: Report observed full regression budget
+        if: always()
+        run: |
+          if [[ ! -f /tmp/adk-tests.json ]]; then
+            echo "::warning::Full regression timing is unavailable; no budget observation was made"
+            echo "### Full regression budget: unavailable" >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          bash scripts/check-performance-budgets.sh --summary-json \
+            --timing-json /tmp/adk-tests.json > /tmp/adk-performance-budget.json
+          python - <<'PY'
+          import json
+          import os
+          import platform
+          from pathlib import Path
+
+          path = Path("/tmp/adk-performance-budget.json")
+          report = json.loads(path.read_text(encoding="utf-8"))
+          report.update(
+              python_version=platform.python_version(),
+              runner_os=os.environ["RUNNER_OS"],
+              runner_arch=os.environ["RUNNER_ARCH"],
+              source_commit=os.environ["GITHUB_SHA"],
+              workflow_run_id=os.environ["GITHUB_RUN_ID"],
+              enforcement="report-only",
+          )
+          path.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as stream:
+              stream.write(
+                  "### Full regression budget: {status}\n\n"
+                  "Observed: {elapsed_ms} ms / {budget_ms} ms. "
+                  "Python {python_version}; {runner_os}/{runner_arch}; report-only.\n"
+                  .format(**report)
+              )
+          if report["status"] == "warn":
+              print("::warning::Observed full regression time exceeds its report-only budget")
+          PY
+
       - name: Upload timing evidence
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: adk-regression-timing-py${{ matrix.python-version }}
-          path: /tmp/adk-tests.json
+          path: |
+            /tmp/adk-tests.json
+            /tmp/adk-performance-budget.json
           if-no-files-found: ignore
           retention-days: 14
 

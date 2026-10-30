@@ -336,6 +336,8 @@ bash scripts/devkit.sh test --fail-fast
 
 测量 manifest 校验、profile 解析、target static check、CLI cold-start、10x export plan、10x filesystem I/O 和 peak allocation 的平台自身性能。该命令不声称测量模型推理、真实目标运行时、并发 writer 或现场性能。
 
+公开 CI 的每个 Python regression job 使用本次 `adk-tests.json` 调用既有 `check-performance-budgets.sh`，将 observed/budget、pass/warn、解释器、runner、source commit 与 run ID 写入同一 timing artifact 的 `adk-performance-budget.json` 及 job summary。该步骤保持 report-only；超预算只告警。timing 不可用时显式告警，不生成零耗时成功观察；报告本身损坏或执行失败按既有 CI 错误规则处理，不使用 continue-on-error 隐藏失败。Root quick strict 校验独立保留。
+
 ```bash
 bash scripts/devkit.sh benchmark run --iterations 10 --output /tmp/adk-benchmark.json --summary-json
 bash scripts/devkit.sh benchmark report --input /tmp/adk-benchmark.json --output /tmp/adk-benchmark.md
