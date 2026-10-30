@@ -87,6 +87,16 @@ MCP、A2A、OpenTelemetry GenAI 等外部标准只能通过 versioned adapter bo
 
 ## 5. 快速开始
 
+先按任务选择主入口，结果中的 source、component release、runtime 与 product 状态分别判断：
+
+| 我要做什么 | 主入口 | 后续路径与结果解释 |
+| --- | --- | --- |
+| 使用资产 | `bash scripts/devkit.sh doctor --summary-json` | 检查环境后选择 profile，按 [安装命令](docs/commands.md#install) 生成并审查 plan，再 apply、保留 receipt；取消后按恢复说明核对 staging/backup。Codex 使用外部 source-to-live 交接链。 |
+| 判断当前是否可用 | `bash scripts/devkit.sh target check --all --level static --summary-json` | 先确认静态契约；再分别核对上方四轴的来源。`static` 通过不表示真实 runtime 已认证，产品资格由消费方判定。 |
+| 发布或升级 | `bash scripts/devkit.sh release check --summary-json` | 按 [发布与使用指南](docs/adk-usage-guide.md) 核对当前候选的验证、独立审核、精确源码及签名材料；跨版本安装显式提供 previous source，保留回滚收据。 |
+
+以下为源码维护检查清单；每项输出只说明其检查范围：
+
 ```bash
 bash scripts/devkit.sh validate --strict
 bash scripts/devkit.sh target check --all --level static --summary-json
