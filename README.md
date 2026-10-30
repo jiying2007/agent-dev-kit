@@ -15,7 +15,16 @@ ADK 不再在 README 中维护“候选 / 已发布 / live”之类可漂移的�
 
 8.0.0 维护 CLI 迁移：`performance.sh optimize`、`auto-ops.sh cleanup/optimize` 仅输出有界只读计划，JSON 使用 `adk-maintenance-plan/v1` 与 `status=planned`；维护 `--apply` 返回 blocked、exit 2，不再自动删除文件或修改权限。调用方必须移除维护 `--apply` 并按 `applied=false` 处理报告；见 [维护迁移说明](docs/changes/20261006-comprehensive-contracts/design.md)。
 
-发布支持基线为 Python 3.8+。运行依赖固定为 `PyYAML==6.0.3`，Python 3.8/3.9 使用 `jsonschema==4.17.3`，Python 3.10+ 使用 `jsonschema==4.26.0`；质量依赖在 `pyproject.toml:[project.optional-dependencies].quality` 中按解释器锁定。
+包兼容下限为 Python 3.8+。运行依赖固定为 `PyYAML==6.0.3`，Python 3.8/3.9 使用 `jsonschema==4.17.3`，Python 3.10+ 使用 `jsonschema==4.26.0`；质量依赖在 `pyproject.toml:[project.optional-dependencies].quality` 中按解释器锁定。
+
+| Python 范围 | 项目验证范围 | 使用口径 |
+| --- | --- | --- |
+| 3.8 | CI legacy compatibility lane | 保留旧宿主兼容；上游已结束支持 |
+| 3.9 / 3.10 | 符合包下限，未列入当前 CI 矩阵 | legacy compatibility；上游已结束支持 |
+| 3.11 / 3.12 | 当前 CI 验证运行环境 | 正式验证优先选用，并检查上游维护状态 |
+| 其他满足下限的版本 | 尚未纳入当前 CI 矩阵 | unvalidated；不能自动继承项目验证结论 |
+
+截至 2026-10-30，[Python 官方生命周期](https://devguide.python.org/versions/)标明 3.8、3.9、3.10 分别于 2024-10-07、2025-10-31、2026-10-01 结束支持。包兼容或 CI 通过均不保证上游持续安全维护；新增解释器支持和最低版本调整须单独验证并按版本策略迁移。
 
 ## 1. 定位边界
 
@@ -96,7 +105,7 @@ python -m pip install .
 adk validate --strict
 ```
 
-发布/认证环境建议设置 `ADK_REQUIRE_SUPPORTED_PYTHON=1`。`scripts/devkit.sh` 默认按 `python3.12 -> python3.11 -> python3` 选择解释器；低于 Python 3.8 的解释器仅可产生开发期结果，不能升级为 release/certification evidence。
+发布/认证环境建议设置 `ADK_REQUIRE_SUPPORTED_PYTHON=1`，该开关只强制包兼容下限，不能证明上游安全维护、CI 覆盖或产品资格。`scripts/devkit.sh` 默认按 `python3.12 -> python3.11 -> python3` 选择解释器；低于 Python 3.8 的解释器仅可产生开发期结果，不能升级为 release/certification evidence。Legacy 或未列入 CI 的解释器会在 stderr 给出明确提示，`doctor.environment_support` 分别输出兼容、CI 与已知上游 EOL 信息。
 
 ## 6. 质量与发布原则
 

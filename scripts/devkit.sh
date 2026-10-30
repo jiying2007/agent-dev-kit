@@ -58,4 +58,17 @@ if [[ "${PYTHON_SUPPORTED}" != "1" && "${COMMAND}" != "doctor" ]]; then
   echo "[WARN] set ADK_REQUIRE_SUPPORTED_PYTHON=1 for fail-fast release validation" >&2
 fi
 
+if [[ "$PYTHON_SUPPORTED" == "1" ]]; then
+  case "$PYTHON_VERSION" in
+    3.8.*|3.9.*|3.10.*)
+      echo "[WARN] Python $PYTHON_VERSION is legacy compatibility only; upstream support has ended" >&2
+      echo "[INFO] prefer reviewed Python 3.11/3.12; ADK_REQUIRE_SUPPORTED_PYTHON checks the compatibility minimum only" >&2
+      ;;
+    3.11.*|3.12.*) ;;
+    *)
+      echo "[WARN] Python $PYTHON_VERSION meets the package minimum but is outside the ADK CI-tested matrix (3.8, 3.11, 3.12)" >&2
+      ;;
+  esac
+fi
+
 exec "${PYTHON_BIN}" -m agent_dev_kit.cli "$@"

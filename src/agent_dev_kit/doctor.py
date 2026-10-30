@@ -18,6 +18,32 @@ from .model import Manifest
 
 
 MINIMUM_PYTHON = (3, 8)
+CI_TESTED_PYTHON = ((3, 8), (3, 11), (3, 12))
+UPSTREAM_EOL = {"3.8": "2024-10-07", "3.9": "2025-10-31", "3.10": "2026-10-01"}
+
+
+def _python_environment_support(version: Sequence[int]) -> Dict[str, Any]:
+    """Separate package compatibility, our test matrix and known upstream EOL."""
+    minor = tuple(version[:2])
+    label = ".".join(str(part) for part in minor)
+    compatible = minor >= MINIMUM_PYTHON
+    eol = UPSTREAM_EOL.get(label)
+    tested = minor in CI_TESTED_PYTHON
+    return {
+        "python_minimum": "3.8",
+        "python_supported": compatible,
+        "python_support_scope": "package-compatibility-only",
+        "python_ci_tested": tested,
+        "python_ci_matrix": [".".join(map(str, item)) for item in CI_TESTED_PYTHON],
+        "python_runtime_class": (
+            "unsupported" if not compatible else "legacy-compatibility" if eol
+            else "ci-validated" if tested else "unvalidated"
+        ),
+        "python_upstream_status": "end-of-life" if eol else "not-assessed",
+        "python_upstream_eol_date": eol,
+        "python_upstream_reference": "https://devguide.python.org/versions/",
+        "python_upstream_reference_checked_at": "2026-10-30",
+    }
 
 def _required_distributions() -> Dict[str, str]:
     return {
@@ -60,9 +86,15 @@ def run_doctor(
     failures = list(manifest.validate(strict=True))
     warnings = []
     required_distributions = _required_distributions()
-    python_supported = sys.version_info >= MINIMUM_PYTHON
-    if not python_supported:
+    python_support = _python_environment_support(sys.version_info[:2])
+    if not python_support["python_supported"]:
         failures.append("Python 3.8 or newer is required")
+    elif python_support["python_runtime_class"] == "legacy-compatibility":
+        warnings.append("Python is legacy-compatible but upstream support ended on {}; "
+                        "prefer a reviewed, upstream-maintained CI runtime".format(
+                            python_support["python_upstream_eol_date"]))
+    elif not python_support["python_ci_tested"]:
+        warnings.append("Python meets the package minimum but is outside the ADK CI-tested matrix")
     dependency_versions = {
         name: _distribution_version(name) for name in sorted(required_distributions)
     }
@@ -116,8 +148,7 @@ def run_doctor(
         "root": str(manifest.root),
         "python": sys.version.split()[0],
         "environment_support": {
-            "python_minimum": "3.8",
-            "python_supported": python_supported,
+            **python_support,
             "required_distributions": dict(sorted(required_distributions.items())),
             "installed_distributions": dependency_versions,
             "dependencies_supported": dependency_support,

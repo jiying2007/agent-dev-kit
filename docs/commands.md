@@ -81,7 +81,9 @@ bash scripts/devkit.sh manifest composition-check --summary-json
 
 ## doctor
 
-只读检查 manifest、Python 3.8+、固定 PyYAML/jsonschema 版本、runtime 安装与认证、CLI 版本、target 可写性和 writer lock 状态。Python 3.8/3.9 对应 `jsonschema==4.17.3`，Python 3.10+ 对应 `jsonschema==4.26.0`。输出只包含状态，不读取或打印凭证值；解释器或依赖不在发布支持基线时返回失败。
+只读检查 manifest、Python 3.8+ 包兼容下限、固定 PyYAML/jsonschema 版本、runtime 安装与认证、CLI 版本、target 可写性和 writer lock 状态。Python 3.8/3.9 对应 `jsonschema==4.17.3`，Python 3.10+ 对应 `jsonschema==4.26.0`。输出只包含状态，不读取或打印凭证值；解释器低于兼容下限或固定依赖不匹配时返回失败。
+
+`environment_support.python_supported` 保留原兼容判断，并明确标记 `python_support_scope=package-compatibility-only`。`python_ci_tested/python_ci_matrix` 只描述项目测试范围，`python_runtime_class` 区分 unsupported、legacy-compatibility、ci-validated 与 unvalidated。已知 EOL 的 3.8/3.9/3.10 返回官方结束日期；其他版本的上游状态为 not-assessed，不能据 null 日期声称仍获安全维护。参考来源与核验日期同时输出；doctor 不在运行中联网刷新生命周期。
 
 ```bash
 bash scripts/devkit.sh doctor --summary-json
