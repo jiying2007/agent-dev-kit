@@ -235,7 +235,9 @@ def _apply_validated_plan(
     moved_backups: List[Dict[str, str]] = []
     previous_receipt: Optional[str] = None
     previous_receipt_sha256: Optional[str] = None
-    preserve_staging = False
+    # Keep the incomplete-transaction marker until commit or full recovery.
+    # BaseException cancellation must not erase it between rename/bookkeeping.
+    preserve_staging = True
     try:
         receipt_path = target / install_contract.RECEIPT_NAME
         if receipt_path.is_file():
@@ -287,6 +289,7 @@ def _apply_validated_plan(
         receipt["receipt_sha256"] = install_contract._receipt_digest(receipt)
         text = install_contract._encode_document(receipt, "install receipt")
         install_contract._write_document(text, receipt_path)
+        preserve_staging = False
         return {
             "schema": "adk-install-result/v2",
             "status": "pass",
@@ -314,10 +317,7 @@ def _apply_validated_plan(
         finally:
             if recovery_complete:
                 shutil.rmtree(str(backup_root), ignore_errors=True)
-            else:
-                # The only recoverable snapshot may be in backups/staging.
-                # A retained run directory also blocks later apply/rollback.
-                preserve_staging = True
+                preserve_staging = False
         raise
     finally:
         if not preserve_staging:

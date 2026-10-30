@@ -77,6 +77,8 @@ bash scripts/devkit.sh manifest composition-check --summary-json
 
 成功报告包含 canonical source、source/round-trip digest、owner domain count，以及 `runtime_enabled=false`、`writes=false` 和 `composition_generator=null`。任何 policy、owner、canonical source、round-trip 语义或 digest 漂移都会 fail closed 并返回非零。物理 manifest split、fragment loader 和 build-time composition generator 不属于当前产品契约；若未来重新引入，必须作为新的 versioned contract 独立设计，而不是复活隐藏兼容入口。
 
+安装取消后的恢复材料：`install apply` 在 receipt 提交或完整补偿前保留 `.adk-staging/<run>`，其中断状态会阻止后续 apply/rollback。保留 staging 与 `.adk-backups/<run>` 并按受审查恢复流程核对文件和收据，不先清理标记。多文件 campaign 文档发布被取消时保留随机 `.stage/.previous` 文件，原文档可能位于目标或 previous 副本；未核对完整集合前不能使用部分输出作证据。该保留策略不承诺掉电级集合原子性。
+
 ## doctor
 
 只读检查 manifest、Python 3.8+、固定 PyYAML/jsonschema 版本、runtime 安装与认证、CLI 版本、target 可写性和 writer lock 状态。Python 3.8/3.9 对应 `jsonschema==4.17.3`，Python 3.10+ 对应 `jsonschema==4.26.0`。输出只包含状态，不读取或打印凭证值；解释器或依赖不在发布支持基线时返回失败。

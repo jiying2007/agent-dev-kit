@@ -95,7 +95,8 @@ def write_texts_atomic(documents: Sequence[Tuple[Path, str]]) -> None:
 
     Each rename is atomic; the set is not crash-atomic. Parents and concurrent
     writers remain caller-owned, as for write_text_atomic. Recovery failures
-    retain original files and identify the reserved recovery paths.
+    retain original files and identify the reserved recovery paths. Cancellation
+    during publication or recovery retains staged files and original backups.
     """
     paths = validate_document_outputs([path for path, _ in documents])
     identities = [_file_identity(path) for path in paths]
@@ -123,6 +124,9 @@ def write_texts_atomic(documents: Sequence[Tuple[Path, str]]) -> None:
         validate_document_outputs(paths)
         if [_file_identity(path) for path in paths] != identities:
             raise ManifestError("document output identity changed during staging")
+        # Cancellation can occur after a rename but before its bookkeeping.
+        # Cleanup is safe only after the whole set commits or recovery finishes.
+        preserve = True
         try:
             for index, path in enumerate(paths):
                 validate_document_outputs([path])
@@ -150,7 +154,6 @@ def write_texts_atomic(documents: Sequence[Tuple[Path, str]]) -> None:
                 except Exception as recovery_error:
                     recovery_errors.append(str(recovery_error))
             if recovery_errors:
-                preserve = True
                 recovery_paths = []
                 for index in moved:
                     backup = backups[index]
@@ -160,7 +163,9 @@ def write_texts_atomic(documents: Sequence[Tuple[Path, str]]) -> None:
                     "document publication and recovery failed; recover original documents from {}: {}"
                     .format(", ".join(recovery_paths), "; ".join(recovery_errors))
                 ) from publication_error
+            preserve = False
             raise
+        preserve = False
     finally:
         if not preserve:
             for path in staged + [path for path in backups if path is not None]:

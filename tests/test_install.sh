@@ -129,5 +129,6 @@ grep -q "vendor-specific-runtime" "$TMP_DIR/platform.err" || {
 }
 
 python3 "$ROOT_DIR/tests/test_install_upgrade.py" InstallUpgradeTest
+python3 "$ROOT_DIR/tests/test_cancellation_recovery.py"
 
 echo "[PASS] canonical transactional installer preserves source authority across version upgrades"
