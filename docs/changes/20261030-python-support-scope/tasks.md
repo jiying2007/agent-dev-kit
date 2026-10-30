@@ -15,4 +15,3 @@
 同轮完整回归初次为 98/101：两项 workflow 契约失败已修正并逐项复测通过；余下一项 Harness readiness 因源码变更拒绝旧审核凭据。保留原兼容下限及 strict 开关语义，新的诊断字段不签发 upstream/security/runtime/product 资格。
 
 负面查证：本工作区未找到 `knowledge/L2-domain/lessons.md`；没有可复用的已登记独立审核自动任务。未调用 Codex/Work、付费模型或额外代理。
-

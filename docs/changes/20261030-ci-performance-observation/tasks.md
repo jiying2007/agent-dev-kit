@@ -15,4 +15,3 @@
 同轮完整回归初次为 98/101，耗时 288491 ms；两项 workflow 失败已逐项复测通过，旧版 Harness 独立审核失效仍阻断。该单次本地耗时不代表性能改善、稳定分布或托管 CI；公开 CI 将记录自身实际 observed/budget。最慢 release archive 测试已使用进程内缓存的最小真实 fixture，未为缩短耗时删减负例或签名/恢复断言。
 
 负面查证：本工作区未找到 `knowledge/L2-domain/lessons.md`；没有可复用的已登记独立审核自动任务。未调用 Codex/Work、付费模型或额外代理。
-
