@@ -74,37 +74,6 @@ extract_values() {
   rg -o "\"${key}\": \"[^\"]+\"" "$MANIFEST" | sed "s/.*\"${key}\": \"//; s/\"$//" | sort -u
 }
 
-budget_for_mode() {
-  local wanted="$1"
-  local python_version
-  python_version="$(python3 -c 'import sys; print(".".join(map(str, sys.version_info[:2])))')"
-  awk -v wanted="$wanted" -v python_version="$python_version" '
-    /"budget_id":/ {
-      mode=""
-      scope="default"
-    }
-    /"mode":/ {
-      mode=$0
-      sub(/.*"mode": "/, "", mode)
-      sub(/".*/, "", mode)
-    }
-    /"python":/ {
-      scope=$0
-      sub(/.*"python": "/, "", scope)
-      sub(/".*/, "", scope)
-    }
-    /"max_elapsed_ms":/ {
-      value=$0
-      sub(/.*"max_elapsed_ms": /, "", value)
-      sub(/,.*/, "", value)
-      if (mode == wanted && (scope == python_version || scope == "default")) {
-        print value
-        exit
-      }
-    }
-  ' "$MANIFEST"
-}
-
 require_file "manifests/adk_performance_budgets.json"
 if [[ -f "$MANIFEST" ]]; then
   checked=$((checked + 1))
@@ -144,21 +113,20 @@ if [[ -n "$TIMING_JSON" ]]; then
   checked=$((checked + 1))
   if [[ ! -f "$TIMING_JSON" ]]; then
     record_failure "timing json not found: $TIMING_JSON"
-  elif ! python3 -m json.tool "$TIMING_JSON" >/dev/null; then
-    record_failure "invalid timing json: $TIMING_JSON"
   else
-    mode="$(rg -o '"mode": "[^"]+"' "$TIMING_JSON" | sed 's/.*"mode": "//; s/"$//' | sed -n '1p')"
-    elapsed_ms="$(rg -o '"elapsed_ms": [0-9]+' "$TIMING_JSON" | sed 's/.*: //' | sed -n '1p')"
-    budget_ms="$(budget_for_mode "$mode")"
     checked=$((checked + 1))
-    if [[ -z "$mode" || -z "$elapsed_ms" || -z "$budget_ms" ]]; then
-      record_failure "timing json mode or elapsed_ms does not match a configured budget"
-    elif [[ "$elapsed_ms" -gt "$budget_ms" ]]; then
-      if [[ "$STRICT" -eq 1 ]]; then
-        record_failure "timing budget exceeded: mode=$mode elapsed_ms=$elapsed_ms budget_ms=$budget_ms"
-      else
-        record_warning "timing budget exceeded: mode=$mode elapsed_ms=$elapsed_ms budget_ms=$budget_ms"
+    if values="$(PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}" \
+      python3 -m agent_dev_kit.performance_timing "$MANIFEST" "$TIMING_JSON")"; then
+      read -r mode elapsed_ms budget_ms <<<"$values"
+      if [[ "$elapsed_ms" -gt "$budget_ms" ]]; then
+        if [[ "$STRICT" -eq 1 ]]; then
+          record_failure "timing budget exceeded: mode=$mode elapsed_ms=$elapsed_ms budget_ms=$budget_ms"
+        else
+          record_warning "timing budget exceeded: mode=$mode elapsed_ms=$elapsed_ms budget_ms=$budget_ms"
+        fi
       fi
+    else
+      record_failure "invalid timing json or configured mode budget"
     fi
   fi
 elif [[ "$STRICT" -eq 1 ]]; then
