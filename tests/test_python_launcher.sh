@@ -85,6 +85,31 @@ with open(sys.argv[1], "r", encoding="utf-8") as handle:
     data = json.load(handle)
 assert "environment_support" in data
 assert "python_supported" in data["environment_support"]
+assert data["environment_support"]["python_support_scope"] == "package-compatibility-only"
+assert data["environment_support"]["python_ci_matrix"] == ["3.8", "3.11", "3.12"]
 PY
+
+for version in 3.8.20 3.10.22 3.14.0; do
+  fixture="$TMP_DIR/python-$version"
+  cat >"$fixture" <<SH
+#!/usr/bin/env bash
+if [[ "\${1:-}" == "-c" ]]; then
+  echo "$version 1"
+  exit 0
+fi
+echo "fixture-compatible-runtime"
+SH
+  chmod +x "$fixture"
+  ADK_PYTHON_BIN="$fixture" ADK_REQUIRE_SUPPORTED_PYTHON=1 \
+    bash "$ROOT_DIR/scripts/devkit.sh" help >"$TMP_DIR/class.out" 2>"$TMP_DIR/class.err"
+  rg -q 'fixture-compatible-runtime' "$TMP_DIR/class.out"
+  if [[ "$version" == "3.14.0" ]]; then
+    rg -q 'outside the ADK CI-tested matrix' "$TMP_DIR/class.err"
+  else
+    rg -q 'legacy compatibility only; upstream support has ended' "$TMP_DIR/class.err"
+  fi
+done
+
+PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}" python3 "$ROOT_DIR/tests/test_python_support.py"
 
 echo "[PASS] ADK Python launcher selection and fail-fast contract hold"

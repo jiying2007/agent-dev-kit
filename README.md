@@ -11,11 +11,20 @@ ADK 不再在 README 中维护“候选 / 已发布 / live”之类可漂移的�
 - **Runtime conformance**：以 target/runtime receipt 与证据级别 `static / smoke / native / certified` 为权威。
 - **Product qualification**：由消费方/产品仓的 qualification 与 field evidence 独立决定，不由 ADK 组件版本继承。
 
-`manifest.json` 当前 source version 为 `8.1.3`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
+`manifest.json` 当前 source version 为 `8.1.4`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
 
 8.0.0 维护 CLI 迁移：`performance.sh optimize`、`auto-ops.sh cleanup/optimize` 仅输出有界只读计划，JSON 使用 `adk-maintenance-plan/v1` 与 `status=planned`；维护 `--apply` 返回 blocked、exit 2，不再自动删除文件或修改权限。调用方必须移除维护 `--apply` 并按 `applied=false` 处理报告；见 [维护迁移说明](docs/changes/20261006-comprehensive-contracts/design.md)。
 
-发布支持基线为 Python 3.8+。运行依赖固定为 `PyYAML==6.0.3`，Python 3.8/3.9 使用 `jsonschema==4.17.3`，Python 3.10+ 使用 `jsonschema==4.26.0`；质量依赖在 `pyproject.toml:[project.optional-dependencies].quality` 中按解释器锁定。
+包兼容下限为 Python 3.8+。运行依赖固定为 `PyYAML==6.0.3`，Python 3.8/3.9 使用 `jsonschema==4.17.3`，Python 3.10+ 使用 `jsonschema==4.26.0`；质量依赖在 `pyproject.toml:[project.optional-dependencies].quality` 中按解释器锁定。
+
+| Python 范围 | 项目验证范围 | 使用口径 |
+| --- | --- | --- |
+| 3.8 | CI legacy compatibility lane | 保留旧宿主兼容；上游已结束支持 |
+| 3.9 / 3.10 | 符合包下限，未列入当前 CI 矩阵 | legacy compatibility；上游已结束支持 |
+| 3.11 / 3.12 | 当前 CI 验证运行环境 | 正式验证优先选用，并检查上游维护状态 |
+| 其他满足下限的版本 | 尚未纳入当前 CI 矩阵 | unvalidated；不能自动继承项目验证结论 |
+
+截至 2026-10-30，[Python 官方生命周期](https://devguide.python.org/versions/)标明 3.8、3.9、3.10 分别于 2024-10-07、2025-10-31、2026-10-01 结束支持。包兼容或 CI 通过均不保证上游持续安全维护；新增解释器支持和最低版本调整须单独验证并按版本策略迁移。
 
 ## 1. 定位边界
 
@@ -78,6 +87,16 @@ MCP、A2A、OpenTelemetry GenAI 等外部标准只能通过 versioned adapter bo
 
 ## 5. 快速开始
 
+先按任务选择主入口，结果中的 source、component release、runtime 与 product 状态分别判断：
+
+| 我要做什么 | 主入口 | 后续路径与结果解释 |
+| --- | --- | --- |
+| 使用资产 | `bash scripts/devkit.sh doctor --summary-json` | 检查环境后选择 profile，按 [安装命令](docs/commands.md#install) 生成并审查 plan，再 apply、保留 receipt；取消后按恢复说明核对 staging/backup。Codex 使用外部 source-to-live 交接链。 |
+| 判断当前是否可用 | `bash scripts/devkit.sh target check --all --level static --summary-json` | 先确认静态契约；再分别核对上方四轴的来源。`static` 通过不表示真实 runtime 已认证，产品资格由消费方判定。 |
+| 发布或升级 | `bash scripts/devkit.sh release check --summary-json` | 按 [发布与使用指南](docs/adk-usage-guide.md) 核对当前候选的验证、独立审核、精确源码及签名材料；跨版本安装显式提供 previous source，保留回滚收据。 |
+
+以下为源码维护检查清单；每项输出只说明其检查范围：
+
 ```bash
 bash scripts/devkit.sh validate --strict
 bash scripts/devkit.sh target check --all --level static --summary-json
@@ -96,7 +115,7 @@ python -m pip install .
 adk validate --strict
 ```
 
-发布/认证环境建议设置 `ADK_REQUIRE_SUPPORTED_PYTHON=1`。`scripts/devkit.sh` 默认按 `python3.12 -> python3.11 -> python3` 选择解释器；低于 Python 3.8 的解释器仅可产生开发期结果，不能升级为 release/certification evidence。
+发布/认证环境建议设置 `ADK_REQUIRE_SUPPORTED_PYTHON=1`，该开关只强制包兼容下限，不能证明上游安全维护、CI 覆盖或产品资格。`scripts/devkit.sh` 默认按 `python3.12 -> python3.11 -> python3` 选择解释器；低于 Python 3.8 的解释器仅可产生开发期结果，不能升级为 release/certification evidence。Legacy 或未列入 CI 的解释器会在 stderr 给出明确提示，`doctor.environment_support` 分别输出兼容、CI 与已知上游 EOL 信息。
 
 ## 6. 质量与发布原则
 

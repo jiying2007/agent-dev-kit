@@ -77,9 +77,13 @@ bash scripts/devkit.sh manifest composition-check --summary-json
 
 成功报告包含 canonical source、source/round-trip digest、owner domain count，以及 `runtime_enabled=false`、`writes=false` 和 `composition_generator=null`。任何 policy、owner、canonical source、round-trip 语义或 digest 漂移都会 fail closed 并返回非零。物理 manifest split、fragment loader 和 build-time composition generator 不属于当前产品契约；若未来重新引入，必须作为新的 versioned contract 独立设计，而不是复活隐藏兼容入口。
 
+安装取消后的恢复材料：`install apply` 在 receipt 提交或完整补偿前保留 `.adk-staging/<run>`，其中断状态会阻止后续 apply/rollback。保留 staging 与 `.adk-backups/<run>` 并按受审查恢复流程核对文件和收据，不先清理标记。多文件 campaign 文档发布被取消时保留随机 `.stage/.previous` 文件，原文档可能位于目标或 previous 副本；未核对完整集合前不能使用部分输出作证据。该保留策略不承诺掉电级集合原子性。
+
 ## doctor
 
-只读检查 manifest、Python 3.8+、固定 PyYAML/jsonschema 版本、runtime 安装与认证、CLI 版本、target 可写性和 writer lock 状态。Python 3.8/3.9 对应 `jsonschema==4.17.3`，Python 3.10+ 对应 `jsonschema==4.26.0`。输出只包含状态，不读取或打印凭证值；解释器或依赖不在发布支持基线时返回失败。
+只读检查 manifest、Python 3.8+ 包兼容下限、固定 PyYAML/jsonschema 版本、runtime 安装与认证、CLI 版本、target 可写性和 writer lock 状态。Python 3.8/3.9 对应 `jsonschema==4.17.3`，Python 3.10+ 对应 `jsonschema==4.26.0`。输出只包含状态，不读取或打印凭证值；解释器低于兼容下限或固定依赖不匹配时返回失败。
+
+`environment_support.python_supported` 保留原兼容判断，并明确标记 `python_support_scope=package-compatibility-only`。`python_ci_tested/python_ci_matrix` 只描述项目测试范围，`python_runtime_class` 区分 unsupported、legacy-compatibility、ci-validated 与 unvalidated。已知 EOL 的 3.8/3.9/3.10 返回官方结束日期；其他版本的上游状态为 not-assessed，不能据 null 日期声称仍获安全维护。参考来源与核验日期同时输出；doctor 不在运行中联网刷新生命周期。
 
 ```bash
 bash scripts/devkit.sh doctor --summary-json
@@ -333,6 +337,8 @@ bash scripts/devkit.sh test --fail-fast
 ## benchmark
 
 测量 manifest 校验、profile 解析、target static check、CLI cold-start、10x export plan、10x filesystem I/O 和 peak allocation 的平台自身性能。该命令不声称测量模型推理、真实目标运行时、并发 writer 或现场性能。
+
+公开 CI 的每个 Python regression job 使用本次 `adk-tests.json` 调用既有 `check-performance-budgets.sh`，将 observed/budget、pass/warn、解释器、runner、source commit 与 run ID 写入同一 timing artifact 的 `adk-performance-budget.json` 及 job summary。该步骤保持 report-only；超预算只告警。timing 不可用时显式告警，不生成零耗时成功观察；报告本身损坏或执行失败按既有 CI 错误规则处理，不使用 continue-on-error 隐藏失败。Root quick strict 校验独立保留。
 
 ```bash
 bash scripts/devkit.sh benchmark run --iterations 10 --output /tmp/adk-benchmark.json --summary-json
