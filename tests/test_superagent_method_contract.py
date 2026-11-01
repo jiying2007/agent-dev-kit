@@ -68,7 +68,17 @@ class SuperagentMethodContractTests(unittest.TestCase):
             ("approved", "implementation-verified"),
         ):
             with self.subTest(permission=permission, gate=gate):
-                self.as    def test_explicit_implementation_and_valid_prototype_baselines(self) -> None:
+                expected = []
+                if permission != "forbidden":
+                    expected.append("research requires implementation_permission=forbidden")
+                if gate != "evidence-reviewed":
+                    expected.append("research requires exit_gate=evidence-reviewed")
+                self.assertEqual(
+                    tuple(expected),
+                    validate_task_package(self._task("research", permission, gate)),
+                )
+
+    def test_explicit_implementation_and_valid_prototype_baselines(self) -> None:
         implementation = self._task("implementation", "approved", "implementation-verified")
         prototype = self._task("prototype", "forbidden", "prototype-reviewed")
         decision = self._task("decision", "forbidden", "owner-decision")
