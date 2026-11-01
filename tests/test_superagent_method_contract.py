@@ -22,15 +22,18 @@ class SuperagentMethodContractTests(unittest.TestCase):
         parallel = (ROOT / "skills/adk-parallel-agent-governance/SKILL.md").read_text(encoding="utf-8")
         rules = (ROOT / "docs/agent-operating-rules.md").read_text(encoding="utf-8")
         for source, tokens in (
-            (planning, ("context/evidence", "policy_revision", "hand-back", "UNKNOWN", "人类注意力", "not-run")),
-            (parallel, ("context-only", "stable work-item ID", "trusted intake", "UNKNOWN", "Worker")),
-            (rules, ("stable source event", "来源事件", "上下文", "不可恢复", "Action Gateway")),
+            (planning, ("context/evidence", "hand-back", "UNKNOWN")),
+            (parallel, ("context-only", "stable work-item ID", "Worker")),
+            (rules, ("source_id", "native_event_id", "policy_revision",
+                     "trusted intake", "UNKNOWN", "not-run", "Action Gateway")),
         ):
             for token in tokens:
                 with self.subTest(token=token):
                     self.assertIn(token, source)
-        self.assertIn("宿主", planning)
+        self.assertIn("只有已验证交付", rules)
         self.assertIn("不应把本节的提示词当作隔离或准入证明", rules)
+        self.assertNotIn("danger-full-access", planning)
+        self.assertNotIn("danger-full-access", parallel)
 
     @staticmethod
     def _task(kind: str, permission: str, exit_gate: str) -> dict[str, object]:
