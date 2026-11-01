@@ -1,8 +1,8 @@
 ---
 name: adk-planning-execution-loop
 description: 长任务计划审查、分阶段执行、恢复与收口闭环
-version: 1.4.0
-last_updated: 2026-10-26
+version: 1.4.1
+last_updated: 2026-11-01
 triggers:
   - "执行计划"
   - "多阶段任务"
