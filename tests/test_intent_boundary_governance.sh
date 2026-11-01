@@ -24,6 +24,10 @@ done
 [[ -f "$ROOT_DIR/templates/artifacts/prototype-evidence-template.md" ]]
 rg -q "adk-prototype-evidence-schema-v1" "$ROOT_DIR/templates/artifacts/prototype-evidence-template.md"
 
+# Run the Superagent method contract in the existing full/quick CI owner.
+PYTHONPATH="$ROOT_DIR/src" python3 -m unittest discover \
+  -s "$ROOT_DIR/tests" -p 'test_superagent_method_contract.py' -v
+
 PYTHONPATH="$ROOT_DIR/src" python3 - "$ROOT_DIR" <<'PY'
 import copy
 import json
