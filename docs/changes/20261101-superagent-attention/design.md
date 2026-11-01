@@ -18,7 +18,7 @@ trusted source policy + owner/authority -> intake decision
      current verification/result or human action
 ```
 
-现有工作项明确绑定的 follow-up 交给原 Worker；没有明确指针时不凭主题相似合并。超 scope 必须交由可信入口重新决策。Policy revision 和人工 stop 不得被上下文覆写。
+现有工作项明确绑定的 follow-up 交回原 WorkItem/owner，由可信 Router 在当前授权/策略版本下重新确认 Assignment 与可用的 Worker attempt；不得假设原 Worker 实例仍存活。没有明确指针时不凭主题相似合并。超 scope 必须交由可信入口重新决策。Policy revision 和人工 stop 不得被上下文覆写。
 
 ## Attention
 
@@ -33,4 +33,7 @@ trusted source policy + owner/authority -> intake decision
 
 ## Rollback
 
-恢复上述 3 个已有资产的先前内容并删除新的测试即可，不存在数据迁移、运行时写入或新 provider 配置。
+区分方法撤销和完整源码回退：
+
+- **仅撤销方法规则**：恢复原有两个 Skill 及 `docs/agent-operating-rules.md`，撤销新增 Python 单元测试与它在现有 `tests/test_intent_boundary_governance.sh` 的调用。
+- **完整 PR 回滚**：必须在受保护分支通过正式 revert/new-change 流程处理本 PR 全部改动，包括 `manifest.json`、`pyproject.toml`、`.version-lock`、`README.md`、`CONTEXT.md`、`CHANGELOG.md`、`src/agent_dev_kit/__init__.py`、`manifests/software_m5_eval_contract.json`、测试/方法与 `docs/changes/20261101-superagent-attention`，重新核版本 SSOT、原生 CI、独立审查与 Root Gitlink/lock 关联。**已发布的 immutable tag/Release 不可篡改或删除**；发布后回退需新的版本、来源绑定证据和正常提升流程。不存在本次变更新增的数据库迁移或 provider 配置。
