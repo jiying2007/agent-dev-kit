@@ -48,7 +48,7 @@ class SuperagentMethodContractTests(unittest.TestCase):
             "primary_action": "read external evidence",
             "action_mode": "readonly",
             "verification": ["verify source identity"],
-            "artifacts": ["research.md"],
+            "artifacts": (["prototype_evidence:reviewed-prototype.md"] if kind == "prototype" else ["research.md"]),
             "blockers": [],
             "work_item_kind": kind,
             "question_to_resolve": "does this evidence warrant a new change?",
@@ -68,12 +68,42 @@ class SuperagentMethodContractTests(unittest.TestCase):
             ("approved", "implementation-verified"),
         ):
             with self.subTest(permission=permission, gate=gate):
-                self.assertTrue(validate_task_package(self._task("research", permission, gate)))
+                self.as    def test_explicit_implementation_and_valid_prototype_baselines(self) -> None:
+        implementation = self._task("implementation", "approved", "implementation-verified")
+        prototype = self._task("prototype", "forbidden", "prototype-reviewed")
+        decision = self._task("decision", "forbidden", "owner-decision")
+        for item in (implementation, prototype, decision):
+            self.assertEqual((), validate_task_package(item))
 
-    def test_implementation_remains_explicit_and_prototype_does_not_escalate(self) -> None:
-        self.assertEqual((), validate_task_package(self._task("implementation", "approved", "implementation-verified")))
-        self.assertTrue(validate_task_package(self._task("prototype", "approved", "implementation-verified")))
-        self.assertTrue(validate_task_package(self._task("decision", "approved", "implementation-verified")))
+    def test_prototype_and_decision_reject_only_the_wrong_boundary(self) -> None:
+        for kind, gate in (("prototype", "prototype-reviewed"), ("decision", "owner-decision")):
+            valid = self._task(kind, "forbidden", gate)
+            self.assertEqual((), validate_task_package(valid))
+            with self.subTest(kind=kind, field="permission"):
+                self.assertEqual(
+                    (f"{kind} requires implementation_permission=forbidden",),
+                    validate_task_package(dict(valid, implementation_permission="approved")),
+                )
+            with self.subTest(kind=kind, field="exit_gate"):
+                self.assertEqual(
+                    (f"{kind} requires exit_gate={gate}",),
+                    validate_task_package(dict(valid, exit_gate="implementation-verified")),
+                )
+
+    def test_prototype_artifact_does_not_hide_permission_failures(self) -> None:
+        valid = self._task("prototype", "forbidden", "prototype-reviewed")
+        self.assertEqual((), validate_task_package(valid))
+        self.assertEqual(
+            ("prototype requires implementation_permission=forbidden",
+             "prototype requires exit_gate=prototype-reviewed"),
+            validate_task_package(
+                dict(valid, implementation_permission="approved", exit_gate="implementation-verified")
+            ),
+        )
+        self.assertEqual(
+            ("prototype requires a prototype_evidence artifact",),
+            validate_task_package(dict(valid, artifacts=["research.md"])),
+        )
 
 
 if __name__ == "__main__":
