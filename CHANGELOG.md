@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### 8.1.5 source candidate
+- Integrate event-driven continuation, context-only follow-ups, trustworthy scope hand-back, durable Worker checkpoints and low-noise human-attention guidelines into existing Agent operating rules and compact Skill entries, preserving strict Source/Action Gateway authority.
+- Add deterministic method/typed-intake regression cases and retain source-context ratchets. This does **not** deploy the DSH runtime, certify event delivery or notifications, relax independent review, or qualify actual service/provider/field outcomes.
+
 ### 8.1.2 source candidate
 - Reuse the canonical bounded strict JSON parser in read-only goal current-state validation, rejecting duplicate keys, NaN, overflowing numeric literals and excessive nesting; use descriptor-based regular-file reads plus parent-component preflight to reject FIFO, directory and symlink-aliased paths without blocking.
 - Reject escaped lone Unicode surrogates in all canonical strict JSON consumers, including object keys and nested state strings. Use a bounded byte-level surrogate-escape prefilter so ordinary JSON avoids unnecessary traversal. Fail closed on ambiguous MCP permission configs and bound Harness file snapshots using the canonical regular-file reader. Keep native/effect/field/product qualifications independent.
