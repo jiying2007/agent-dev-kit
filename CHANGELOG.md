@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### 8.2.2 source candidate
+- Close route-to-profile reachability for three existing registered Core Skills without growing the default `core` Profile: long-task execution in `team-core`, offline core dumps in `incident-response`, and embedded storage layout migration in `embedded-fullstack`.
+- Correct the long-task route's invalid optional-skill-install claim; require explicit specialist Profile selection, not implicit authority.
+- Add deterministic routed-primary coverage and missing/false-optional negative regressions; update only the measured specialist source-byte ratchets. No new Skill, Agent, Profile, runtime, provider, or user directory mutation.
+- Preserve officially supported Python 3.8, source/release review gates, original M5 thresholds and the four-axis qualification boundary.
+
+
 ### 8.2.1 source candidate
 - Fix workflow IR stage authority: require exact frontmatter/body stage list and order, and register the previously omitted package stage in Skill curation without weakening approval or publisher safeguards.
 - Separate driver implementation from board bring-up routing; remove unrelated generic automatic-progress and documentation-review Skill triggers. Add positive, negative and full-catalog competition regressions.
