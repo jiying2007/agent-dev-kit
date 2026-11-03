@@ -119,6 +119,10 @@ class WorkflowIRTest(unittest.TestCase):
                 "\nStage Contract\n--------------\n3. `publish`: Setext H2 duplicate\n",
                 "\n<h2>Stage Contract</h2>\n3. `publish`: HTML H2 duplicate\n",
                 "\nDocument discusses Stage Contract again\n",
+                "\n## Stage\u3000Contract\n3. `publish`: ideographic-space duplicate\n",
+                "\n## Stage\u00a0Contract\n3. `publish`: nonbreaking-space duplicate\n",
+                "\n＃＃ Stage Contract\n3. `publish`: fullwidth-hash duplicate\n",
+                "\n## Stage\u200bContract\n3. `publish`: zero-width duplicate\n",
             ):
                 path.write_text(valid_document + trailing, encoding="utf-8")
                 with self.assertRaises(ManifestError):
@@ -137,6 +141,9 @@ class WorkflowIRTest(unittest.TestCase):
                                 "1. `propose`: plan\n2. `verify`: inspect\n+ 3. `publish`: plus-prefixed stage",
                                 "1. `propose`: plan\n2. `verify`: inspect\n> 3. `publish`: quoted stage",
                                 "1. `propose`: plan\n2. `verify`: inspect\n3 . `publish`: spaced ordinal",
+                "1. `propose`: plan\n2. `verify`: inspect\n3、 `publish`：中文编号",
+                "1. `propose`: plan\n2. `verify`: inspect\n第三步 `publish`: Chinese stage",
+                "1. `propose`: plan\n2. `verify`: inspect\nNotes: extra stage prose",
             ):
                 path.write_text("# Example\n\n## Stage Contract\n" + body
                                 + "\n\n## Commands\n", encoding="utf-8")

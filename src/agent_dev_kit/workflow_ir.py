@@ -6,6 +6,7 @@ import argparse
 import hashlib
 import json
 import re
+import unicodedata
 from pathlib import Path
 from typing import Any, Dict, Mapping, Optional, Sequence
 
@@ -181,7 +182,11 @@ def _stage_contract_digest(path: Path, stages: Sequence[str]) -> str:
     headings = [line for line in text.splitlines() if heading.match(line)]
     # Reserve the phrase in the whole document, including Setext/HTML
     # heading variants which Markdown may render as the same stage heading.
-    label_mentions = re.findall(r"(?i)\bstage[ \t]+contract\b", text)
+    normalized = unicodedata.normalize("NFKC", text).casefold()
+    # Unicode format separators are invisible to humans, but must never
+    # create a second visually identical authoritative stage heading.
+    normalized = "".join(" " if unicodedata.category(ch) == "Cf" else ch for ch in normalized)
+    label_mentions = re.findall(r"\bstage[^\S\r\n]+contract\b", normalized)
     if headings != [marker] or text.count(marker) != 1 or len(label_mentions) != 1:
         raise ManifestError("workflow body requires one canonical Stage Contract heading: {}".format(path))
     section = text.split(marker, 1)[1]
@@ -193,15 +198,17 @@ def _stage_contract_digest(path: Path, stages: Sequence[str]) -> str:
     # Parse every numbered row as a stage candidate, including malformed ones.
     # A selective findall silently ignores hidden additional stages if a
     # reviewer later updates the trusted body digest alongside that text.
-    numbered = re.compile(r"^[ \t]*(?:[-*+>][ \t]*)*[0-9]+[ \t]*[.)]")
+    # The Stage Contract body is a deliberately closed grammar: blank lines
+    # and canonical decimal rows only.  Any prose, Chinese ordinals, quotes,
+    # bullets, malformed separators or hidden stages must fail before hashing.
     canonical_step = re.compile(r"^([1-9][0-9]*)\.[ \t]+`([^`]+)`[ \t]*[:：].*$")
     body_steps = []
     for line in section.splitlines():
-        if not numbered.match(line):
+        if not line.strip():
             continue
         match = canonical_step.fullmatch(line)
         if match is None:
-            raise ManifestError("workflow Stage Contract has a malformed numbered stage: {}".format(path))
+            raise ManifestError("workflow Stage Contract contains noncanonical stage text: {}".format(path))
         body_steps.append((match.group(1), match.group(2)))
     if ([int(number) for number, _ in body_steps] != list(range(1, len(stages) + 1))
             or [name for _, name in body_steps] != list(stages)):
