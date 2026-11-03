@@ -210,7 +210,11 @@ def _stage_contract_digest(path: Path, stages: Sequence[str]) -> str:
             if canonical_heading.fullmatch(line) is None:
                 raise ManifestError("workflow heading is not canonical ASCII ATX: {}".format(path))
             headings.append(line)
-    if in_fence or headings.count(marker) != 1:
+    # Reject an alternative case/spacing/punctuation spelling of the
+    # authoritative heading, even if it is otherwise valid ASCII ATX.
+    stage_heading_aliases = [line for line in headings
+                             if re.sub(r"[^a-z]", "", line.casefold()) == "stagecontract"]
+    if in_fence or stage_heading_aliases != [marker]:
         raise ManifestError("workflow body requires one canonical Stage Contract heading: {}".format(path))
     section = text.split(marker, 1)[1]
     if "\n## " in section:

@@ -132,6 +132,10 @@ class WorkflowIRTest(unittest.TestCase):
                 "\n## St\u0430ge Contract\n3. `publish`: Cyrillic homoglyph\n",
                 "\n> ## Stage Contract\n3. `publish`: blockquoted heading\n",
                 "\n## Stage\u2060 Contract\n3. `publish`: word joiner\n",
+                "\n## Stage contract\n3. `publish`: lowercase duplicate\n",
+                "\n## Stage  Contract\n3. `publish`: padded duplicate\n",
+                "\n## Stage-Contract\n3. `publish`: punctuation duplicate\n",
+                "\n# STAGE CONTRACT\n3. `publish`: H1 alias\n",
                 "\n&#35;&#35; Stage Contract\n3. `publish`: encoded heading marker\n",
             ):
                 path.write_text(valid_document + trailing, encoding="utf-8")
