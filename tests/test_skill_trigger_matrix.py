@@ -143,5 +143,60 @@ class SkillTriggerMatrixTests(unittest.TestCase):
                 self.assertIn(exclusion, description, owner)
                 self.assertNotIn(distinct_signal, other["description"], (owner, neighbor))
 
+
+    def test_full_inventory_description_and_isolated_trigger_contract(self) -> None:
+        """All declared Skills have both discovery boundaries and executable isolated match cases.
+
+        This exercises the deterministic ADK matcher, not native host discovery or task success.
+        """
+        manifest = Manifest.load(ROOT)
+        seen = set()
+        for section, scope in (("skills", "skill"), ("optional_skills", "optional-skill")):
+            for item in manifest.data[section]:
+                name = item["name"]
+                with self.subTest(name=name, scope=scope):
+                    self.assertNotIn(name, seen)
+                    seen.add(name)
+                    metadata = _frontmatter(ROOT / item["path"])
+                    self.assertEqual(metadata.get("name"), name)
+                    description = metadata.get("description")
+                    self.assertIsInstance(description, str)
+                    self.assertGreaterEqual(len(description.strip()), 30)
+                    self.assertLessEqual(len(description), 1024)
+                    self.assertTrue(
+                        any(marker in description for marker in ("用于", "适用", "面向")),
+                        (name, "missing use-when language"),
+                    )
+                    self.assertTrue(
+                        any(marker in description for marker in
+                            ("不用于", "不负责", "不处理", "不执行", "不能替代", "无需", "不自动")),
+                        (name, "missing exclusion language"),
+                    )
+                    positives = metadata.get("triggers")
+                    negatives = metadata.get("non_triggers")
+                    self.assertIsInstance(positives, list)
+                    self.assertIsInstance(negatives, list)
+                    self.assertTrue(positives)
+                    self.assertTrue(negatives)
+                    self.assertTrue(all(isinstance(value, str) and value.strip() for value in positives))
+                    self.assertTrue(all(isinstance(value, str) and value.strip() for value in negatives))
+                    positive = match_text(manifest, positives[0], skill=name, scope=scope)
+                    negative = match_text(manifest, negatives[0], skill=name, scope=scope)
+                    self.assertIs(positive.get("match"), True, (name, "positive", positive))
+                    self.assertIs(negative.get("match"), False, (name, "negative", negative))
+        self.assertEqual(len(seen), len(manifest.data["skills"]) + len(manifest.data["optional_skills"]))
+
+    def test_repo_drift_local_commands_refer_to_real_scripts(self) -> None:
+        """Reject stale in-repository script references without guessing target project paths."""
+        import re
+
+        content = (ROOT / "skills/adk-repo-drift-remediation/SKILL.md").read_text(encoding="utf-8")
+        commands = content.split("## Commands", 1)[1].split("## Evidence Template", 1)[0]
+        paths = re.findall(r"\brtk bash (scripts/[A-Za-z0-9_-]+\.sh)\b", commands)
+        self.assertTrue(paths)
+        for relative in paths:
+            with self.subTest(script=relative):
+                self.assertTrue((ROOT / relative).is_file(), relative)
+
 if __name__ == "__main__":
     unittest.main()
