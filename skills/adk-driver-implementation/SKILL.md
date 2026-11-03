@@ -1,11 +1,12 @@
 ---
 name: adk-driver-implementation
 description: Linux、RTOS 与 bare-metal 驱动实现、验证和资源生命周期收口
-version: 2.0.0
-last_updated: 2026-09-17
+version: 2.0.1
+last_updated: 2026-11-03
 triggers:
   - 驱动开发
   - 编写驱动
+  - 写驱动
   - 实现驱动
 non_triggers:
   - BSP 分析

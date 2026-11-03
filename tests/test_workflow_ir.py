@@ -98,6 +98,17 @@ class WorkflowIRTest(unittest.TestCase):
             policy = load_policy(ROOT / "manifests" / "workflow_ir_policy.json")
             self.assertNotIn(malicious_digest, set(policy["projection_digests"].values()))
 
+            for body in (
+                "1. `propose`: plan\n2. `package`: write\n3. `verify`: inspect",
+                "1. `verify`: inspect\n2. `propose`: plan",
+                "1. `propose`: plan\n2. `propose`: duplicated",
+                "1. `propose`: plan\n3. `verify`: skipped stage number",
+            ):
+                path.write_text("# Example\n\n## Stage Contract\n" + body
+                                + "\n\n## Commands\n", encoding="utf-8")
+                with self.assertRaises(ManifestError):
+                    _stage_contract_digest(path, ["propose", "verify"])
+
     def test_dangling_transition_and_success_cycle_fail_closed(self) -> None:
         report = compile_workflow_ir(Manifest.load(ROOT))
         policy = load_policy(ROOT / "manifests" / "workflow_ir_policy.json")

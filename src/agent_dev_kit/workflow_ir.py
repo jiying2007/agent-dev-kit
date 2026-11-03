@@ -180,9 +180,13 @@ def _stage_contract_digest(path: Path, stages: Sequence[str]) -> str:
     section = text.split(marker, 1)[1]
     if "\n## " in section:
         section = section.split("\n## ", 1)[0]
-    for stage in stages:
-        if "`{}`".format(stage) not in section:
-            raise ManifestError("workflow Stage Contract is missing stage {}: {}".format(stage, path))
+    # The previous substring check silently accepted extra or reordered
+    # Stage Contract steps (notably curation.package), so the compiled IR
+    # could omit an advertised execution boundary while all checks passed.
+    body_steps = re.findall(r"(?m)^([1-9][0-9]*)[.] [`]([^`]+)[`]:", section)
+    if ([int(number) for number, _ in body_steps] != list(range(1, len(stages) + 1))
+            or [name for _, name in body_steps] != list(stages)):
+        raise ManifestError("workflow frontmatter/body stage order differs: {}".format(path))
     canonical = "\n".join(line.rstrip() for line in section.strip().splitlines()) + "\n"
     return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
 

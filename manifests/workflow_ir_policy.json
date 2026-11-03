@@ -141,6 +141,7 @@
     "runtime-control-plane-audit": "read-only",
     "closure-check": "verification",
     "contract": "design-write",
+    "package": "design-write",
     "propose": "design-write",
     "decide": "owner-decision",
     "apply": "implementation",

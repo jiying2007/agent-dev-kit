@@ -1,8 +1,8 @@
 ---
 name: skill-curation-delivery
 description: 技能候选筛选、core/optional 归属和触发质量验证工作流
-version: 1.1.0
-last_updated: 2026-07-07
+version: 1.1.1
+last_updated: 2026-11-03
 primary_agent: requirements-analyst
 primary_skill: adk-requirements-triage
 triggers:
@@ -17,6 +17,7 @@ stages:
   - intake
   - classify
   - contract
+  - package
   - verify
   - review
 artifacts:

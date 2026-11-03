@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### 8.2.1 source candidate
+- Fix workflow IR stage authority: require exact frontmatter/body stage list and order, and register the previously omitted package stage in Skill curation without weakening approval or publisher safeguards.
+- Separate driver implementation from board bring-up routing; remove unrelated generic automatic-progress and documentation-review Skill triggers. Add positive, negative and full-catalog competition regressions.
+- Run source-version checks before heavyweight dependencies in all supported Python contract/regression jobs. Keep Python 3.8 officially supported and retain the fail-closed aggregate matrix evidence authority.
+- No new Agent/runtime/provider, no model turn, no native target or field qualification; requires independent current-source Harness review, exact PR/main CI and immutable Release before Root promotion.
+
 ### 8.2.0 source candidate
 - Add the platform-neutral core `adk-goal-authoring` Skill and read-only `goal plan-check`, `render` and `resume` commands, preserving original acceptance criteria, finite batches and budget proposals without changing host Goal authority.
 - Reuse bounded strict JSON and current-state extension validation; reject batches with unfinished dependencies and cover malformed inputs, special files and cross-project invocation with deterministic regressions.

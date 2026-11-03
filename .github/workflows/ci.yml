@@ -37,21 +37,22 @@ jobs:
           cache: pip
           cache-dependency-path: pyproject.toml
 
+      - name: Validate PR source version advance before dependency installation
+        if: ${{ github.event_name == 'pull_request' }}
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          set -euo pipefail
+          git show "${BASE_SHA}:manifest.json" > "$RUNNER_TEMP/base-manifest.json"
+          PYTHONPATH=src python -m agent_dev_kit.versioning require-advance \
+            --previous-manifest "$RUNNER_TEMP/base-manifest.json" \
+            --candidate-manifest manifest.json
+
       - name: Install contract dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y ripgrep shellcheck
           python -m pip install '.[test]'
-
-      - name: Validate PR source version advance
-        if: ${{ github.event_name == 'pull_request' && matrix.python-version == '3.11' }}
-        env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
-        run: |
-          git show "${BASE_SHA}:manifest.json" > "$RUNNER_TEMP/base-manifest.json"
-          python -m agent_dev_kit.versioning require-advance \
-            --previous-manifest "$RUNNER_TEMP/base-manifest.json" \
-            --candidate-manifest manifest.json
 
       - name: Validate manifest and assets
         run: bash scripts/devkit.sh validate --strict
@@ -96,6 +97,20 @@ jobs:
           python-version: ${{ matrix.python-version }}
           cache: pip
           cache-dependency-path: pyproject.toml
+
+      - name: Validate PR source version before expensive regression
+        if: ${{ github.event_name == 'pull_request' }}
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          set -euo pipefail
+          # Default PR checkout is shallow: fetch the exact advertised base,
+          # not a drifting branch name or mutable release tag.
+          git -c protocol.version=2 fetch --no-tags --depth=1 origin "$BASE_SHA"
+          git show "${BASE_SHA}:manifest.json" > "$RUNNER_TEMP/base-manifest.json"
+          PYTHONPATH=src python -m agent_dev_kit.versioning require-advance \
+            --previous-manifest "$RUNNER_TEMP/base-manifest.json" \
+            --candidate-manifest manifest.json
 
       - name: Install regression dependencies
         run: |

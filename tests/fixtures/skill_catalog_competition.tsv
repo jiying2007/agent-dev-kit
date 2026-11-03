@@ -19,3 +19,7 @@ R017	abstain	-	-	今天午饭吃什么
 R018	abstain	-	-	请用一句话问候大家
 R019	abstain	-	-	介绍一下适合猫咪玩的毛线球
 R020	abstain	-	-	周末是否适合去爬山
+R021	primary	adk-driver-implementation	-	帮我写驱动源码并覆盖Linux错误路径
+R022	primary	adk-driver-bringup-checklist	-	请做首板联调，检查时钟复位和外设探测
+R023	abstain	-	-	按建议自动推进普通代码仓库
+R024	abstain	-	-	请做文档审查和文字校对

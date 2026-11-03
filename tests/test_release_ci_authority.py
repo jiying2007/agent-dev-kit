@@ -77,6 +77,26 @@ class ReleaseCiAuthorityTest(unittest.TestCase):
         with self.assertRaises(SystemExit):
             self.run_case(RUN, run_id="not-numeric")
 
+    def test_source_version_preflight_precedes_heavy_matrix_install(self) -> None:
+        workflow = (SOURCE.parent / "ci.yml").read_text(encoding="utf-8")
+        contract = workflow.split("\n  contract:\n", 1)[1].split("\n  regression:\n", 1)[0]
+        regression = workflow.split("\n  regression:\n", 1)[1].split("\n  deterministic-eval-package:\n", 1)[0]
+        for section, preflight, dependencies in (
+            (contract, "Validate PR source version advance before dependency installation",
+             "Install contract dependencies"),
+            (regression, "Validate PR source version before expensive regression",
+             "Install regression dependencies"),
+        ):
+            with self.subTest(preflight=preflight):
+                self.assertIn("require-advance", section)
+                self.assertIn("PYTHONPATH=src python -m agent_dev_kit.versioning", section)
+                self.assertLess(section.index(preflight), section.index(dependencies))
+        # Version errors never downgrade the supported Python matrix authority.
+        quality = workflow.split("\n  deterministic-eval-package:\n", 1)[1]
+        self.assertIn("if: ${{ always() }}", quality)
+        self.assertIn("CONTRACT_MATRIX_RESULT", quality)
+        self.assertIn("REGRESSION_MATRIX_RESULT", quality)
+
     def test_missing_or_corrupt_orphan_evidence_fails(self) -> None:
         for value in ({"workflow_runs": []}, {"workflow_runs": [{**RUN, "event": "pull_request"}]}, []):
             with self.subTest(value=value):
