@@ -193,7 +193,7 @@ def _stage_contract_digest(path: Path, stages: Sequence[str]) -> str:
     atx_probe = re.compile(r"^[ \t]*#{1,6}")
     quoted_probe = re.compile(r"^[ \t]*(?:[>+*-][ \t]*)+#{1,6}")
     html_probe = re.compile(r"^[ \t]*<h[1-6](?:[\s>])", re.IGNORECASE)
-    setext_probe = re.compile(r"^[ \t]*(?:={2,}|-{2,})[ \t]*$")
+    setext_probe = re.compile(r"^[ \t]*(?:=+|-+)[ \t]*$")
     # Deliberately scan every source line, including code fences and indented
     # examples. Treat a second heading-like declaration as invalid even when
     # Markdown would render it as code; this avoids implementing a fragile
