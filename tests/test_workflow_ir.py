@@ -109,6 +109,7 @@ class WorkflowIRTest(unittest.TestCase):
             # The old parser truncated at the first later H2, so a second
             # Stage Contract heading kept the previous digest unchanged.
             valid_document = path.read_text(encoding="utf-8")
+            valid_digest = _stage_contract_digest(path, ["propose", "verify"])
             for trailing in (
                 "\n## Stage Contract\n3. `publish`: hidden unauthorized stage\n",
                 "\n### Stage Contract\n3. `publish`: hidden under H3\n",
@@ -118,7 +119,7 @@ class WorkflowIRTest(unittest.TestCase):
                 "\n## Stage Contract (copy)\n3. `publish`: ambiguous heading\n",
                 "\nStage Contract\n--------------\n3. `publish`: Setext H2 duplicate\n",
                 "\n<h2>Stage Contract</h2>\n3. `publish`: HTML H2 duplicate\n",
-                "\nDocument discusses Stage Contract again\n",
+
                 "\n## Stage\u3000Contract\n3. `publish`: ideographic-space duplicate\n",
                 "\n## Stage\u00a0Contract\n3. `publish`: nonbreaking-space duplicate\n",
                 "\n＃＃ Stage Contract\n3. `publish`: fullwidth-hash duplicate\n",
@@ -126,10 +127,19 @@ class WorkflowIRTest(unittest.TestCase):
                 "\n## Stage&nbsp;Contract\n3. `publish`: named HTML entity\n",
                 "\n## Stage&#32;Contract\n3. `publish`: numeric HTML entity\n",
                 "\n## Sta&#103;e Contract\n3. `publish`: encoded heading letter\n",
+                "\n## Stage\u034f Contract\n3. `publish`: combining grapheme joiner\n",
+                "\n## Stage\ufe0e Contract\n3. `publish`: variation selector\n",
+                "\n## St\u0430ge Contract\n3. `publish`: Cyrillic homoglyph\n",
+                "\n> ## Stage Contract\n3. `publish`: blockquoted heading\n",
+                "\n## Stage\u2060 Contract\n3. `publish`: word joiner\n",
+                "\n&#35;&#35; Stage Contract\n3. `publish`: encoded heading marker\n",
             ):
                 path.write_text(valid_document + trailing, encoding="utf-8")
                 with self.assertRaises(ManifestError):
                     _stage_contract_digest(path, ["propose", "verify"])
+
+            path.write_text(valid_document + "\nDocument discusses Stage Contract again\n", encoding="utf-8")
+            self.assertEqual(_stage_contract_digest(path, ["propose", "verify"]), valid_digest)
 
             for body in (
                 "1. `propose`: plan\n2. `package`: write\n3. `verify`: inspect",

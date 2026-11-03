@@ -177,18 +177,40 @@ def _frontmatter(path: Path) -> Dict[str, Any]:
 def _stage_contract_digest(path: Path, stages: Sequence[str]) -> str:
     text = path.read_text(encoding="utf-8")
     marker = "## Stage Contract"
-    # A duplicate/ambiguous heading outside the first section must not be
-    # able to inject stages while preserving the first section digest.
-    heading = re.compile(r"(?i)^[ \t]*#{1,6}[ \t]*stage[ \t]+contract\b.*$")
-    headings = [line for line in text.splitlines() if heading.match(line)]
-    # Reserve the phrase in the whole document, including Setext/HTML
-    # heading variants which Markdown may render as the same stage heading.
-    normalized = unicodedata.normalize("NFKC", unescape(text)).casefold()
-    # Unicode format separators are invisible to humans, but must never
-    # create a second visually identical authoritative stage heading.
-    normalized = "".join(" " if unicodedata.category(ch) == "Cf" else ch for ch in normalized)
-    label_mentions = re.findall(r"\bstage[^\S\r\n]+contract\b", normalized)
-    if headings != [marker] or text.count(marker) != 1 or len(label_mentions) != 1:
+    # Managed Workflow headings have a closed, ASCII-only ATX grammar.
+    # Reject all alternate Markdown/HTML heading spellings before slicing
+    # the authoritative Stage Contract: Unicode homoglyphs/marks, encoded
+    # hash signs, blockquotes, Setext headings and duplicate H2s must not
+    # silently escape the immutable projection digest.
+    lines = text.splitlines()
+    body_start = 0
+    if lines and lines[0] == "---":
+        try:
+            body_start = lines.index("---", 1) + 1
+        except ValueError as exc:
+            raise ManifestError("workflow frontmatter is not terminated: {}".format(path)) from exc
+    canonical_heading = re.compile(r"#{1,2} [A-Za-z][A-Za-z0-9 -]*")
+    atx_probe = re.compile(r"^[ \t]*#{1,6}")
+    quoted_probe = re.compile(r"^[ \t]*(?:[>+*-][ \t]*)+#{1,6}")
+    html_probe = re.compile(r"^[ \t]*<h[1-6](?:[\s>])", re.IGNORECASE)
+    setext_probe = re.compile(r"^[ \t]*(?:={2,}|-{2,})[ \t]*$")
+    fence = re.compile(r"^[ \t]*(?:```|~~~)")
+    headings = []
+    in_fence = False
+    for line in lines[body_start:]:
+        if fence.match(line):
+            in_fence = not in_fence
+            continue
+        if in_fence:
+            continue
+        rendered = unicodedata.normalize("NFKC", unescape(line))
+        if html_probe.match(rendered) or setext_probe.fullmatch(rendered) or quoted_probe.match(rendered):
+            raise ManifestError("workflow body has unsupported alternate heading: {}".format(path))
+        if atx_probe.match(rendered):
+            if canonical_heading.fullmatch(line) is None:
+                raise ManifestError("workflow heading is not canonical ASCII ATX: {}".format(path))
+            headings.append(line)
+    if in_fence or headings.count(marker) != 1:
         raise ManifestError("workflow body requires one canonical Stage Contract heading: {}".format(path))
     section = text.split(marker, 1)[1]
     if "\n## " in section:
