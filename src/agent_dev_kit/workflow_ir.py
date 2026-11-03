@@ -179,7 +179,10 @@ def _stage_contract_digest(path: Path, stages: Sequence[str]) -> str:
     # able to inject stages while preserving the first section digest.
     heading = re.compile(r"(?i)^[ \t]*#{1,6}[ \t]*stage[ \t]+contract\b.*$")
     headings = [line for line in text.splitlines() if heading.match(line)]
-    if headings != [marker] or text.count(marker) != 1:
+    # Reserve the phrase in the whole document, including Setext/HTML
+    # heading variants which Markdown may render as the same stage heading.
+    label_mentions = re.findall(r"(?i)\bstage[ \t]+contract\b", text)
+    if headings != [marker] or text.count(marker) != 1 or len(label_mentions) != 1:
         raise ManifestError("workflow body requires one canonical Stage Contract heading: {}".format(path))
     section = text.split(marker, 1)[1]
     if "\n## " in section:

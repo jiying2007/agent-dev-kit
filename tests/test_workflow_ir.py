@@ -116,6 +116,9 @@ class WorkflowIRTest(unittest.TestCase):
                 "\n## stage Contract\n3. `publish`: mixed-case duplicate\n",
                 "\n## Stage  Contract\n3. `publish`: extra-space duplicate\n",
                 "\n## Stage Contract (copy)\n3. `publish`: ambiguous heading\n",
+                "\nStage Contract\n--------------\n3. `publish`: Setext H2 duplicate\n",
+                "\n<h2>Stage Contract</h2>\n3. `publish`: HTML H2 duplicate\n",
+                "\nDocument discusses Stage Contract again\n",
             ):
                 path.write_text(valid_document + trailing, encoding="utf-8")
                 with self.assertRaises(ManifestError):
