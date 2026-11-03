@@ -1,8 +1,8 @@
 ---
 name: adk-parallel-agent-governance
-description: 并行子代理治理，定义任务分片、scope_write、冲突矩阵、等待和整合验证
-version: 1.4.2
-last_updated: 2026-11-01
+description: "用于多个 Agent 并行时划分 scope、共享契约、冲突矩阵和最终集成验证；不用于单点小改或擅自委派有额外权限的任务。"
+version: 1.4.3
+last_updated: 2026-11-03
 triggers:
   - "并行 agent"
   - "多 agent"

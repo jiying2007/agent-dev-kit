@@ -52,8 +52,8 @@
 | 30 | 10 | `planning` | primary | playbook | `adk-lightweight-planning` | 用于用户明确要求先给计划、尚不修改文件的只读编码方案；不用于已批准的长任务执行或自动开启外部写入。 | 给我一个计划 | `skills/adk-lightweight-planning/SKILL.md` |
 | 30 | 15 | `planning` | primary | generator | `adk-goal-authoring` | 用于长期目标过大、Goal 不收敛时生成可验证的目标合同、有限批次和恢复入口；不用于已有计划的日常执行或自行设置宿主预算与权限。 | 生成Goal | `skills/adk-goal-authoring/SKILL.md` |
 | 30 | 20 | `planning` | primary | playbook | `adk-task-breakdown` | 复杂任务拆解及并行边界；单点小修无需拆包 | 拆解任务 | `skills/adk-task-breakdown/SKILL.md` |
-| 30 | 25 | `planning` | primary | pipeline | `adk-planning-execution-loop` | 长任务计划审查、分阶段执行、恢复与收口闭环 | 执行计划 | `skills/adk-planning-execution-loop/SKILL.md` |
-| 30 | 30 | `planning` | primary | governance | `adk-parallel-agent-governance` | 并行子代理治理，定义任务分片、scope_write、冲突矩阵、等待和整合验证 | 并行 agent | `skills/adk-parallel-agent-governance/SKILL.md` |
+| 30 | 25 | `planning` | primary | pipeline | `adk-planning-execution-loop` | 用于已批准的多阶段长任务计划执行、恢复检查点、有限重试与收口验证；不用于仅索要只读计划，也不自行扩大宿主预算或权限。 | 执行计划 | `skills/adk-planning-execution-loop/SKILL.md` |
+| 30 | 30 | `planning` | primary | governance | `adk-parallel-agent-governance` | 用于多个 Agent 并行时划分 scope、共享契约、冲突矩阵和最终集成验证；不用于单点小改或擅自委派有额外权限的任务。 | 并行 agent | `skills/adk-parallel-agent-governance/SKILL.md` |
 | 30 | 40 | `planning` | primary | governance | `adk-worktree-governance` | git worktree 隔离开发治理，规范创建准入、目录、基线验证、同步、清理和禁止操作 | worktree | `skills/adk-worktree-governance/SKILL.md` |
 | 30 | 50 | `planning` | primary | generator | `adk-context-compress-handoff` | 用于长任务上下文压缩、跨会话恢复及交接时保存目标、证据指针和下一动作；不用于替代原始高风险证据或任务执行。 | 上下文压缩 | `skills/adk-context-compress-handoff/SKILL.md` |
 | 40 | 10 | `design` | primary | generator | `adk-interface-contract-design` | 用于模块 API、协议消息及生命周期状态转换的接口契约设计与迁移评审；不用于需求未收敛时直接写实现或放行设备动作。 | 设计接口 | `skills/adk-interface-contract-design/SKILL.md` |
@@ -66,22 +66,22 @@
 | 50 | 30 | `implementation` | primary | playbook | `adk-bsp-porting-playbook` | 用于 BSP 移植涉及启动链、驱动依赖、构建环境和迁移风险时规划与验证；不用于未授权的设备刷写或纯源码阅读。 | BSP移植 | `skills/adk-bsp-porting-playbook/SKILL.md` |
 | 50 | 40 | `implementation` | primary | playbook | `adk-rtos-task-design` | RTOS 任务、优先级、共享资源和实时性验证设计 | RTOS任务 | `skills/adk-rtos-task-design/SKILL.md` |
 | 50 | 50 | `implementation` | primary | playbook | `adk-interrupt-dma-patterns` | 用于中断、DMA、缓存一致性、共享缓冲所有权的实现模式与实时性检查；不用于无中断参与的普通应用逻辑或免证据修改寄存器。 | 中断处理 | `skills/adk-interrupt-dma-patterns/SKILL.md` |
-| 50 | 60 | `implementation` | primary | playbook | `adk-protocol-stack-integration` | 协议栈接入与状态机整合 | 协议栈 | `skills/adk-protocol-stack-integration/SKILL.md` |
+| 50 | 60 | `implementation` | primary | playbook | `adk-protocol-stack-integration` | 用于通信协议栈适配、连接状态机和跨层错误处理的集成设计与回归；不用于纯寄存器布局设计或仅修复孤立格式问题。 | 协议栈 | `skills/adk-protocol-stack-integration/SKILL.md` |
 | 50 | 70 | `implementation` | primary | tool-wrapper | `adk-cmake-cross-build` | 用于嵌入式 CMake 工程的交叉编译、工具链配置与多目标构建排障；不用于无 CMake 的构建系统或直接设备部署。 | CMake | `skills/adk-cmake-cross-build/SKILL.md` |
 | 50 | 80 | `implementation` | primary | reviewer | `adk-code-simplification` | 用于代码结构冗长且行为已被测试约束时做等价代码简化；不用于未建立行为基线的功能修改、性能调优或根因不明的错误。 | 代码太复杂 | `skills/adk-code-simplification/SKILL.md` |
 | 60 | 10 | `debugging` | primary | playbook | `adk-systematic-debugging` | 系统化调试流程，面向根因未明的问题定位与修复验证 | 调试 | `skills/adk-systematic-debugging/SKILL.md` |
 | 60 | 20 | `debugging` | primary | tool-wrapper | `adk-embedded-debug-transport` | 用于管理串口、SSH、ADB、远程 GDB 等调试通道的连接与权限证据；不用于隐式远程部署、修改设备配置或替代故障根因分析。 | 调试通道 | `skills/adk-embedded-debug-transport/SKILL.md` |
 | 60 | 30 | `debugging` | primary | playbook | `adk-embedded-remote-debug-log-triage` | 用于远程设备 SSH、ADB、串口与启动日志取证和分层连通性定位；不用于未授权远程写入、替代离线 core dump 解析或新驱动实现。 | 远程调试 | `skills/adk-embedded-remote-debug-log-triage/SKILL.md` |
-| 60 | 40 | `debugging` | primary | playbook | `adk-offline-core-dump-triage` | 嵌入式 Linux 离线 core dump 取证，先校验 core/binary/BuildID/符号/GDB 依赖，再给可信 backtrace、根因边界和下一步探针 | core dump | `skills/adk-offline-core-dump-triage/SKILL.md` |
+| 60 | 40 | `debugging` | primary | playbook | `adk-offline-core-dump-triage` | 用于离线分析嵌入式 Linux core dump，并对 binary、BuildID、符号与 GDB 匹配留证；不用于无符号时编造可信 backtrace 或操作在线设备。 | core dump | `skills/adk-offline-core-dump-triage/SKILL.md` |
 | 60 | 50 | `debugging` | primary | playbook | `adk-hardware-debugging` | 用于板级电源、时钟、复位和硬件异常的假设验证与证据定位；不用于把 Linux oops 直接归咎硬件或未经许可执行带风险的硬件操作。 | 硬件调试 | `skills/adk-hardware-debugging/SKILL.md` |
-| 60 | 60 | `debugging` | primary | tool-wrapper | `adk-performance-profiling-embedded` | 嵌入式性能分析：有指标时测真实负载并交替 A/B；无指标不启用 | 性能分析 | `skills/adk-performance-profiling-embedded/SKILL.md` |
+| 60 | 60 | `debugging` | primary | tool-wrapper | `adk-performance-profiling-embedded` | 用于有明确指标时对嵌入式真实负载做性能分析和可比较的 A/B 验证；无指标不启用，也不用于仅凭推测宣布性能改善。 | 性能分析 | `skills/adk-performance-profiling-embedded/SKILL.md` |
 | 70 | 10 | `verification` | primary | playbook | `adk-test-strategy` | 平台中立的软件测试策略与 TDD 分级，按行为、风险和现有测试入口生成可复跑的验证矩阵与证据 | 测试策略 | `skills/adk-test-strategy/SKILL.md` |
 | 70 | 20 | `verification` | primary | generator | `adk-unit-test-embedded` | MCU/RTOS 单元测试断言与替身；非跨模块测试策略 | 单元测试 | `skills/adk-unit-test-embedded/SKILL.md` |
 | 70 | 30 | `verification` | primary | playbook | `adk-integration-hil-sil` | 用于软件在环与硬件在环的集成测试、场景配置与结果证据编排；不用于仅做单元测试或绕过真实设备操作授权。 | 集成测试 | `skills/adk-integration-hil-sil/SKILL.md` |
 | 70 | 40 | `verification` | primary | tool-wrapper | `adk-embedded-diagnostic-harness` | 用于诊断 CLI、prog_tool、strict 套件及 HIL/SIL 证据的返回码和行为验证；不用于无许可的现场产测写入或直接放行量产。 | 诊断 harness | `skills/adk-embedded-diagnostic-harness/SKILL.md` |
 | 70 | 50 | `verification` | primary | playbook | `adk-fault-injection-recovery` | 用于已授权的故障注入、失败路径与恢复能力验证，并记录可重放的回滚证据；不用于未经隔离的生产设备破坏性实验。 | 故障注入 | `skills/adk-fault-injection-recovery/SKILL.md` |
 | 70 | 60 | `verification` | primary | reviewer | `adk-artifact-gating` | 用于跨仓交付物需要标签、状态与验收交接协议时定义 Artifact 门禁；不用于单仓常规测试、直接上传制品或发布批准。 | artifact 门禁 | `skills/adk-artifact-gating/SKILL.md` |
-| 70 | 70 | `verification` | primary | pipeline | `adk-pilot-framework` | 跨仓库 Pilot 试跑框架——场景定义、证据收集与门禁验收 | 试跑 | `skills/adk-pilot-framework/SKILL.md` |
+| 70 | 70 | `verification` | primary | pipeline | `adk-pilot-framework` | 用于跨仓新能力的有界 Pilot 试跑、证据采集、失败门禁和回退判定；不用于替代正式产品资格认证或自动将试验结果发布。 | 试跑 | `skills/adk-pilot-framework/SKILL.md` |
 | 70 | 80 | `verification` | primary | reviewer | `adk-verification-before-completion` | 完成前验证门禁，确保交付声明与证据一致 | 准备完成 | `skills/adk-verification-before-completion/SKILL.md` |
 | 80 | 10 | `review_quality` | supporting | reviewer | `adk-chinese-commit-conventions` | 用于中文 Git 提交标题、scope 和变更摘要的规范化；不用于自动创建提交、调整权限或替代提交前质量门禁。 | 中文提交 | `skills/adk-chinese-commit-conventions/SKILL.md` |
 | 80 | 20 | `review_quality` | supporting | reviewer | `adk-chinese-code-review` | 用于团队需要中文代码审查意见的格式、严重性和反馈沟通约定；不用于代替实际独立代码审查、修复验证或审批。 | 代码审查 | `skills/adk-chinese-code-review/SKILL.md` |
@@ -90,13 +90,13 @@
 | 80 | 50 | `review_quality` | primary | reviewer | `adk-static-analysis-c-cpp` | C/C++ 静态分析与缺陷治理 | 静态分析 | `skills/adk-static-analysis-c-cpp/SKILL.md` |
 | 80 | 60 | `review_quality` | primary | reviewer | `adk-commit-pr-quality-gate` | 用于提交 PR 前核对测试证据、差异范围与质量门禁；不能替代独立代码审查，也不用于未授权的合并或发布。 | 提交代码 | `skills/adk-commit-pr-quality-gate/SKILL.md` |
 | 90 | 10 | `release_closure` | primary | generator | `adk-release-versioning` | 版本号、Changelog 和发布基线规划；不执行真实发布 | 版本发布 | `skills/adk-release-versioning/SKILL.md` |
-| 90 | 20 | `release_closure` | primary | reviewer | `adk-production-field-readiness` | 嵌入式量产、产测、烧录、诊断、OTA、回滚与现场维护 readiness | 量产 | `skills/adk-production-field-readiness/SKILL.md` |
+| 90 | 20 | `release_closure` | primary | reviewer | `adk-production-field-readiness` | 用于嵌入式产测、OTA、诊断及现场维护的量产准备状态和证据审查；不用于仅凭桌面测试宣称量产就绪或直接刷写设备。 | 量产 | `skills/adk-production-field-readiness/SKILL.md` |
 | 90 | 30 | `release_closure` | primary | pipeline | `adk-embedded-release-orchestration` | 用于嵌入式固件 OTA 制品的发布准备、签名证据和回滚编排；不用于未经单独授权的真实 publish、设备 flash 或发布批准。 | 嵌入式发布编排 | `skills/adk-embedded-release-orchestration/SKILL.md` |
 | 90 | 40 | `release_closure` | primary | pipeline | `adk-embedded-storage-layout-migration` | 用于 MTD、UBI、分区及文件系统布局迁移的 host 端检查、演练和回退设计；不用于未授权的设备存储写入或纯日志检索。 | UBIFS | `skills/adk-embedded-storage-layout-migration/SKILL.md` |
 | 90 | 50 | `release_closure` | supporting | generator | `adk-cross-team-handoff` | 用于产品、研发、测试等多团队交接时明确责任、接口和验收证据；不用于替代需求变更批准或直接操作外部系统。 | 团队交接 | `skills/adk-cross-team-handoff/SKILL.md` |
 | 90 | 60 | `release_closure` | primary | governance | `adk-branch-closeout` | 用于代码与验证完成后的分支收口、PR 选择和保留或清理决策；不用于未验证时直接合并、删除用户工作树或替代评审。 | 分支收尾 | `skills/adk-branch-closeout/SKILL.md` |
 | 90 | 70 | `release_closure` | primary | reviewer | `adk-after-action-review` | 用于任务交付后复盘问题、修复成本与可复用经验并形成候选记录；不用于替代交付前验证或直接发布未经审核的长期记忆。 | 任务复盘 | `skills/adk-after-action-review/SKILL.md` |
-| 100 | 10 | `governance` | primary | governance | `adk-memory-curator` | 记忆整理与候选治理，审计 memories、AGENTS、归档、session 总结和决策记录，生成可审查 memory candidate | 记忆整理 | `skills/adk-memory-curator/SKILL.md` |
+| 100 | 10 | `governance` | primary | governance | `adk-memory-curator` | 用于已授权的历史记录、项目知识和决策证据整理，生成可审查的 memory candidate；不用于静默写入长期记忆或传播无关敏感上下文。 | 记忆整理 | `skills/adk-memory-curator/SKILL.md` |
 | 100 | 20 | `governance` | primary | governance | `adk-archive-governance` | 用于检查和修复现有归档的元数据、topic、hash 与安全问题；不负责新建知识笔记或代替知识候选的正式审核。 | 归档治理 | `skills/adk-archive-governance/SKILL.md` |
 | 100 | 30 | `governance` | primary | generator | `adk-knowledge-archive` | 用于新建脱敏的研究、排障与决策归档候选并登记证据指针；不处理已有归档的元数据修复，也不替代发布审核。 | 知识归档 | `skills/adk-knowledge-archive/SKILL.md` |
 | 100 | 50 | `governance` | primary | reviewer | `adk-engineering-growth-review` | 用于基于已授权的工程历史和交付证据做长期开发习惯复盘、学习建议与趋势分析；不用于推断私人属性或无证据评判个人表现。 | 开发者成长复盘 | `skills/adk-engineering-growth-review/SKILL.md` |
