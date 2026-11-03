@@ -29,9 +29,9 @@
       "potential_full_source_bytes": 193787
     },
     "embedded-fullstack": {
-      "assets": 53,
-      "entry_file_bytes": 226978,
-      "potential_full_source_bytes": 286466
+      "assets": 54,
+      "entry_file_bytes": 230096,
+      "potential_full_source_bytes": 289584
     },
     "team-core": {
       "assets": 35,
@@ -39,9 +39,9 @@
       "potential_full_source_bytes": 212956
     },
     "large-refactor": {
-      "assets": 54,
-      "entry_file_bytes": 229299,
-      "potential_full_source_bytes": 293796
+      "assets": 55,
+      "entry_file_bytes": 232417,
+      "potential_full_source_bytes": 296914
     },
     "incident-response": {
       "assets": 9,
@@ -57,6 +57,6 @@
   "baseline_source": {
     "version": "7.1.0",
     "commit": "70fac05125907e4930ee73f3928799e11bac55de",
-    "note": "Original baseline: independently measured Git blob sizes before 7.2.0. 2026-11-03 user-authorized adk-goal-authoring addition: author-self-review, add exactly 4457 entry bytes and 1864 deferred-support bytes plus one asset only to core and its inheriting profiles. Rationale and verification: docs/changes/20261103-adk-goal-authoring/design.md. No runtime token-budget or release-authority change. 2026-11-03 v8.2.2: three existing registered-but-unreachable core Skills are attached to existing specialist Profiles only (team-core, incident-response, embedded-fullstack). Platform-neutral core remains unchanged. Checked source bytes: team-core 160166/212956; incident-response 34102/37403; embedded-fullstack 226978/286466; inherited large-refactor 229299/293796. These are source bytes, not native runtime token measurements."
+    "note": "Original baseline: independently measured Git blob sizes before 7.2.0. 2026-11-03 user-authorized adk-goal-authoring addition: author-self-review, add exactly 4457 entry bytes and 1864 deferred-support bytes plus one asset only to core and its inheriting profiles. Rationale and verification: docs/changes/20261103-adk-goal-authoring/design.md. No runtime token-budget or release-authority change. 2026-11-03 v8.2.2: three existing registered-but-unreachable core Skills are attached to existing specialist Profiles only (team-core, incident-response, embedded-fullstack). Platform-neutral core remains unchanged. Checked source bytes: team-core 160166/212956; incident-response 34102/37403; embedded-fullstack 230096/289584; inherited large-refactor 232417/296914. These are source bytes, not native runtime token measurements."
   }
 }
