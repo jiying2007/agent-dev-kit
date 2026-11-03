@@ -122,6 +122,8 @@ class WorkflowIRTest(unittest.TestCase):
                 "\n## Stage  Contract\n3. `publish`: extra-space duplicate\n",
                 "\n## Stage Contract (copy)\n3. `publish`: ambiguous heading\n",
                 "\nStage Contract\n--------------\n3. `publish`: Setext H2 duplicate\n",
+                "\nStage Contract\n-\n3. `publish`: single-dash Setext H2 duplicate\n",
+                "\nStage Contract\n=\n3. `publish`: single-equals Setext H1 duplicate\n",
                 "\n<h2>Stage Contract</h2>\n3. `publish`: HTML H2 duplicate\n",
 
                 "\n## Stage\u3000Contract\n3. `publish`: ideographic-space duplicate\n",
