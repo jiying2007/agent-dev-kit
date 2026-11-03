@@ -1365,15 +1365,15 @@
       "extends": "core",
       "include_skills": [
         "adk-planning-execution-loop",
+        "adk-artifact-gating",
+        "adk-pilot-framework",
         "adk-chinese-commit-conventions",
         "adk-chinese-code-review",
         "adk-cross-team-handoff",
         "adk-memory-curator",
         "adk-archive-governance",
         "adk-knowledge-archive",
-        "adk-engineering-growth-review",
-        "adk-artifact-gating",
-        "adk-pilot-framework"
+        "adk-engineering-growth-review"
       ]
     },
     "large-refactor": {

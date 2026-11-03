@@ -66,7 +66,7 @@ class RuntimeBundleTest(unittest.TestCase):
                 names = archive.getnames()
                 self.assertIn("bundle-manifest.json", names)
                 self.assertIn("checksums.sha256", names)
-                self.assertTrue(any(name.startswith("skills/adk-cross-team-handoff/1.0.0/") for name in names))
+                self.assertTrue(any(name.startswith("skills/adk-cross-team-handoff/") and name.endswith("/SKILL.md") for name in names))
                 forbidden = ("src/agent_dev_kit", "tests/", ".github/", "docs/changes/", "source/")
                 self.assertFalse(any(name.startswith(forbidden) for name in names))
                 manifest = json.load(archive.extractfile("bundle-manifest.json"))

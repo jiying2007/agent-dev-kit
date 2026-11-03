@@ -15,33 +15,33 @@
   "profiles": {
     "core": {
       "assets": 27,
-      "entry_file_bytes": 129818,
-      "potential_full_source_bytes": 170465
+      "entry_file_bytes": 129761,
+      "potential_full_source_bytes": 170408
     },
     "release-hardening": {
       "assets": 23,
-      "entry_file_bytes": 107062,
-      "potential_full_source_bytes": 145562
+      "entry_file_bytes": 107005,
+      "potential_full_source_bytes": 145505
     },
     "personal-core": {
       "assets": 32,
-      "entry_file_bytes": 148896,
-      "potential_full_source_bytes": 194608
+      "entry_file_bytes": 148839,
+      "potential_full_source_bytes": 194551
     },
     "embedded-fullstack": {
       "assets": 54,
-      "entry_file_bytes": 232978,
-      "potential_full_source_bytes": 292466
+      "entry_file_bytes": 232919,
+      "potential_full_source_bytes": 292407
     },
     "team-core": {
       "assets": 37,
-      "entry_file_bytes": 166517,
-      "potential_full_source_bytes": 230206
+      "entry_file_bytes": 166460,
+      "potential_full_source_bytes": 230149
     },
     "large-refactor": {
       "assets": 55,
-      "entry_file_bytes": 235403,
-      "potential_full_source_bytes": 299900
+      "entry_file_bytes": 235344,
+      "potential_full_source_bytes": 299841
     },
     "incident-response": {
       "assets": 9,
@@ -50,13 +50,13 @@
     },
     "research-intake": {
       "assets": 20,
-      "entry_file_bytes": 83220,
-      "potential_full_source_bytes": 121998
+      "entry_file_bytes": 83163,
+      "potential_full_source_bytes": 121941
     }
   },
   "baseline_source": {
     "version": "7.1.0",
     "commit": "70fac05125907e4930ee73f3928799e11bac55de",
-    "note": "Original baseline: independently measured Git blob sizes before 7.2.0. 2026-11-03 user-authorized adk-goal-authoring addition: author-self-review, add exactly 4457 entry bytes and 1864 deferred-support bytes plus one asset only to core and its inheriting profiles. Rationale and verification: docs/changes/20261103-adk-goal-authoring/design.md. No runtime token-budget or release-authority change. 2026-11-03 v8.2.2: three existing registered-but-unreachable core Skills are attached to existing specialist Profiles only (team-core, incident-response, embedded-fullstack). Platform-neutral core remains unchanged. Checked source bytes: team-core 160166/212956; incident-response 34102/37403; embedded-fullstack 230096/289584; inherited large-refactor 232417/296914. These are source bytes, not native runtime token measurements. 2026-11-03 v8.2.3: reviewed source-only description boundary improvements and explicit team-core reachability for existing artifact/pilot Skills; per-profile source byte ratchets refreshed from exact Git tree with support references counted. This is not a native tokenizer or runtime-context measurement. Duplicate private support references are retained for independently exportable Skills, not compatibility aliases."
+    "note": "Original baseline: independently measured Git blob sizes before 7.2.0. 2026-11-03 user-authorized adk-goal-authoring addition: author-self-review, add exactly 4457 entry bytes and 1864 deferred-support bytes plus one asset only to core and its inheriting profiles. Rationale and verification: docs/changes/20261103-adk-goal-authoring/design.md. No runtime token-budget or release-authority change. 2026-11-03 v8.2.2: three existing registered-but-unreachable core Skills are attached to existing specialist Profiles only (team-core, incident-response, embedded-fullstack). Platform-neutral core remains unchanged. Checked source bytes: team-core 160166/212956; incident-response 34102/37403; embedded-fullstack 230096/289584; inherited large-refactor 232417/296914. These are source bytes, not native runtime token measurements. 2026-11-03 v8.2.3: reviewed source-only description boundary improvements and explicit team-core reachability for existing artifact/pilot Skills; per-profile source byte ratchets refreshed from exact Git tree with support references counted. This is not a native tokenizer or runtime-context measurement. Duplicate private support references are retained for independently exportable Skills, not compatibility aliases. 8.2.3 CI repair: sorted team-core Skill lifecycle order and shortened review entry below its unchanged 7200-byte ceiling; first-party catalog find retains bring-up keyword. Source-byte values adjusted for both exact description changes."
   }
 }

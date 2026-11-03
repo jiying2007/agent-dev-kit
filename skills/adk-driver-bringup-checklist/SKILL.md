@@ -1,6 +1,6 @@
 ---
 name: adk-driver-bringup-checklist
-description: "用于首板联调时核对驱动时钟、复位、probe、中断和外设依赖；不用于直接编写驱动业务代码或未经独立授权执行设备寄存器写操作。"
+description: "用于首板 bring-up 联调时核对驱动时钟、复位、probe、中断和外设依赖；不用于直接编写驱动代码或未经授权执行设备寄存器写操作。"
 version: 2.0.2
 last_updated: 2026-11-03
 triggers:
