@@ -125,6 +125,9 @@ class WorkflowIRTest(unittest.TestCase):
                 "\nStage Contract\n-\n3. `publish`: single-dash Setext H2 duplicate\n",
                 "\nStage Contract\n=\n3. `publish`: single-equals Setext H1 duplicate\n",
                 "\n<h2>Stage Contract</h2>\n3. `publish`: HTML H2 duplicate\n",
+                "\n<div><h2>Stage Contract</h2></div>\n3. `publish`: nested HTML H2 duplicate\n",
+                "\n> Stage Contract\n> -\n> 3. `publish`: blockquote Setext H2 duplicate\n",
+                "\n> > Stage Contract\n> > =\n> > 3. `publish`: nested blockquote Setext H1\n",
 
                 "\n## Stage\u3000Contract\n3. `publish`: ideographic-space duplicate\n",
                 "\n## Stage\u00a0Contract\n3. `publish`: nonbreaking-space duplicate\n",

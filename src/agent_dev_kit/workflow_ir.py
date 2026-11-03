@@ -192,8 +192,8 @@ def _stage_contract_digest(path: Path, stages: Sequence[str]) -> str:
     canonical_heading = re.compile(r"#{1,2} [A-Za-z][A-Za-z0-9 -]*")
     heading_candidate = re.compile(r"(?<![A-Za-z0-9_])#{1,6}[ \t]")
 
-    html_probe = re.compile(r"^[ \t]*<h[1-6](?:[\s>])", re.IGNORECASE)
-    setext_probe = re.compile(r"^[ \t]*(?:=+|-+)[ \t]*$")
+    html_probe = re.compile(r"<h[1-6](?:\s|>)", re.IGNORECASE)
+    setext_probe = re.compile(r"^[ \t]*(?:>[ \t]*)*(?:=+|-+)[ \t]*$")
     # Deliberately scan every source line, including code fences and indented
     # examples. Treat a second heading-like declaration as invalid even when
     # Markdown would render it as code; this avoids implementing a fragile
@@ -201,7 +201,7 @@ def _stage_contract_digest(path: Path, stages: Sequence[str]) -> str:
     headings = []
     for line in lines[body_start:]:
         rendered = unicodedata.normalize("NFKC", unescape(line))
-        if html_probe.match(rendered) or setext_probe.fullmatch(rendered):
+        if html_probe.search(rendered) or setext_probe.fullmatch(rendered):
             raise ManifestError("workflow body has unsupported alternate heading: {}".format(path))
         if heading_candidate.search(rendered):
             if canonical_heading.fullmatch(line) is None:
