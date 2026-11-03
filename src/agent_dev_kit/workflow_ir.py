@@ -194,15 +194,12 @@ def _stage_contract_digest(path: Path, stages: Sequence[str]) -> str:
     quoted_probe = re.compile(r"^[ \t]*(?:[>+*-][ \t]*)+#{1,6}")
     html_probe = re.compile(r"^[ \t]*<h[1-6](?:[\s>])", re.IGNORECASE)
     setext_probe = re.compile(r"^[ \t]*(?:={2,}|-{2,})[ \t]*$")
-    fence = re.compile(r"^[ \t]*(?:```|~~~)")
+    # Deliberately scan every source line, including code fences and indented
+    # examples. Treat a second heading-like declaration as invalid even when
+    # Markdown would render it as code; this avoids implementing a fragile
+    # second CommonMark fence parser or hiding a real H2 behind malformed fences.
     headings = []
-    in_fence = False
     for line in lines[body_start:]:
-        if fence.match(line):
-            in_fence = not in_fence
-            continue
-        if in_fence:
-            continue
         rendered = unicodedata.normalize("NFKC", unescape(line))
         if html_probe.match(rendered) or setext_probe.fullmatch(rendered) or quoted_probe.match(rendered):
             raise ManifestError("workflow body has unsupported alternate heading: {}".format(path))
@@ -214,7 +211,7 @@ def _stage_contract_digest(path: Path, stages: Sequence[str]) -> str:
     # authoritative heading, even if it is otherwise valid ASCII ATX.
     stage_heading_aliases = [line for line in headings
                              if re.sub(r"[^a-z]", "", line.casefold()) == "stagecontract"]
-    if in_fence or stage_heading_aliases != [marker]:
+    if stage_heading_aliases != [marker]:
         raise ManifestError("workflow body requires one canonical Stage Contract heading: {}".format(path))
     section = text.split(marker, 1)[1]
     if "\n## " in section:

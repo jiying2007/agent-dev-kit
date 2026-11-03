@@ -110,6 +110,10 @@ class WorkflowIRTest(unittest.TestCase):
             # Stage Contract heading kept the previous digest unchanged.
             valid_document = path.read_text(encoding="utf-8")
             valid_digest = _stage_contract_digest(path, ["propose", "verify"])
+            # A legitimate command code fence is fine; it must not change
+            # the authority or the digest of the preceding Stage Contract.
+            path.write_text(valid_document + "\n```sh\necho ok\n```\n", encoding="utf-8")
+            self.assertEqual(_stage_contract_digest(path, ["propose", "verify"]), valid_digest)
             for trailing in (
                 "\n## Stage Contract\n3. `publish`: hidden unauthorized stage\n",
                 "\n### Stage Contract\n3. `publish`: hidden under H3\n",
@@ -136,6 +140,9 @@ class WorkflowIRTest(unittest.TestCase):
                 "\n## Stage  Contract\n3. `publish`: padded duplicate\n",
                 "\n## Stage-Contract\n3. `publish`: punctuation duplicate\n",
                 "\n# STAGE CONTRACT\n3. `publish`: H1 alias\n",
+                "\n    ```\n## Stage Contract\n3. `publish`: indented-fence bypass\n    ```\n",
+                "\n```python\n~~~\n## Stage Contract\n3. `publish`: mismatched-fence bypass\n```\n",
+                "\n```md\n## Stage Contract\n3. `publish`: code-example duplicate\n```\n",
                 "\n&#35;&#35; Stage Contract\n3. `publish`: encoded heading marker\n",
             ):
                 path.write_text(valid_document + trailing, encoding="utf-8")
