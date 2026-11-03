@@ -66,6 +66,12 @@ class WorkflowIRTest(unittest.TestCase):
                 target = candidate_root / relative
                 target.parent.mkdir(parents=True, exist_ok=True)
                 target.write_bytes((ROOT / relative).read_bytes())
+            # The compiler also validates its schema relative to the isolated
+            # source root; keep this fixture limited to the real schema file.
+            schema_rel = Path("schemas/workflow-ir-v2.schema.json")
+            schema_target = candidate_root / schema_rel
+            schema_target.parent.mkdir(parents=True, exist_ok=True)
+            schema_target.write_bytes((ROOT / schema_rel).read_bytes())
             candidate = Manifest(candidate_root, manifest.data, candidate_root / "manifest.json")
             self.assertEqual(compile_workflow_ir(candidate, policy_path)["workflow_count"],
                              len(manifest.data["workflows"]))
