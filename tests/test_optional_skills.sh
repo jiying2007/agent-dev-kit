@@ -19,6 +19,12 @@ for required in (
 assert "adk-artifact-gated-lite" not in names
 PY
 
+# Retired Core Skill compatibility mirror must not reappear in optional tree.
+[[ ! -e "$ROOT_DIR/optional-skills/adk-planning-execution-loop" ]] || {
+  echo "[FAIL] retired optional planning Skill mirror returned" >&2
+  exit 1
+}
+
 TARGET="$TMP_DIR/.claude"
 PLAN="$TMP_DIR/optional-plan.json"
 

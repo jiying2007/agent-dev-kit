@@ -50,8 +50,8 @@ constraints:
 ```bash
 rtk git status --short
 rtk rg -n "TODO|FIXME|deprecated|legacy|stale|archive|manifest|registry" <repo>
-rtk bash scripts/check.sh
-rtk bash scripts/doctor.sh --scope all
+rtk bash scripts/devkit.sh validate --strict
+rtk bash scripts/devkit.sh doctor
 ```
 
 ## Evidence Template

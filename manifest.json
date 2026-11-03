@@ -1,5 +1,5 @@
 {
-  "version": "8.2.2",
+  "version": "8.2.3",
   "locale": "zh-CN",
   "platforms": [
     "linux-embedded",
@@ -1371,7 +1371,9 @@
         "adk-memory-curator",
         "adk-archive-governance",
         "adk-knowledge-archive",
-        "adk-engineering-growth-review"
+        "adk-engineering-growth-review",
+        "adk-artifact-gating",
+        "adk-pilot-framework"
       ]
     },
     "large-refactor": {
