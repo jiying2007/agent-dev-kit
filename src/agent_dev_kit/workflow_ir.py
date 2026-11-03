@@ -183,7 +183,7 @@ def _stage_contract_digest(path: Path, stages: Sequence[str]) -> str:
     # The previous substring check silently accepted extra or reordered
     # Stage Contract steps (notably curation.package), so the compiled IR
     # could omit an advertised execution boundary while all checks passed.
-    body_steps = re.findall(r"(?m)^([1-9][0-9]*)[.] [`]([^`]+)[`]:", section)
+    body_steps = re.findall(r"(?m)^([1-9][0-9]*)[.]\s*`([^`]+)`\s*[:：]", section)
     if ([int(number) for number, _ in body_steps] != list(range(1, len(stages) + 1))
             or [name for _, name in body_steps] != list(stages)):
         raise ManifestError("workflow frontmatter/body stage order differs: {}".format(path))

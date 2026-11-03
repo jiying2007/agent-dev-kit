@@ -78,7 +78,7 @@ class SkillGovernanceTests(unittest.TestCase):
         self.assertEqual(result.get("selection_group"), "code-review", result)
 
     def test_driver_bringup_exposes_live_device_escalation_without_granting_it(self) -> None:
-        result = match_text(self.manifest, "驱动开发")
+        result = match_text(self.manifest, "首板联调")
         self.assertTrue(result.get("match"), result)
         self.assertEqual(result.get("skill"), "adk-driver-bringup-checklist", result)
         self.assertEqual(result.get("effect_scope"), "workspace", result)
@@ -151,9 +151,15 @@ class SkillGovernanceTests(unittest.TestCase):
         medium = match_text(self.manifest, "定位根因")
         self.assertEqual(medium.get("execution_effort"), "E2", medium)
 
-        driver = match_text(self.manifest, "驱动开发")
+        driver = match_text(self.manifest, "首板联调")
         self.assertEqual(driver.get("execution_effort"), "E3", driver)
         self.assertEqual(driver.get("live_device_authorization"), "explicit-required", driver)
+
+        implementation = match_text(self.manifest, "写驱动")
+        self.assertEqual(implementation.get("skill"), "adk-driver-implementation", implementation)
+        self.assertEqual(implementation.get("effect_scope"), "workspace", implementation)
+        self.assertEqual(implementation.get("mutation_permission"), "deny", implementation)
+        self.assertEqual(implementation.get("live_device_authorization"), "not-required", implementation)
 
         release = match_text(self.manifest, "准备发布")
         self.assertEqual(release.get("execution_effort"), "E3", release)

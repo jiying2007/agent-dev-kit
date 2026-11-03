@@ -137,6 +137,12 @@ test_routing_register_map() {
 test_routing_driver() {
     local output
     output=$(match_cli --text "写驱动" 2>&1) || true
+    [[ "$output" == *"match=true"* && "$output" == *"source=routing"* && "$output" == *"skill=adk-driver-implementation"* ]]
+}
+
+test_routing_driver_bringup() {
+    local output
+    output=$(match_cli --text "首板联调" 2>&1) || true
     [[ "$output" == *"match=true"* && "$output" == *"source=routing"* && "$output" == *"skill=adk-driver-bringup-checklist"* ]]
 }
 
@@ -375,7 +381,8 @@ run_test "调试问题 -> adk-systematic-debugging" test_routing_debugging
 run_test "真实问题排查 -> adk-systematic-debugging" test_routing_debugging_natural_language
 run_test "提交代码 -> adk-commit-pr-quality-gate" test_routing_commit_pr
 run_test "设计寄存器 -> adk-register-map-design" test_routing_register_map
-run_test "写驱动 -> adk-driver-bringup-checklist" test_routing_driver
+run_test "写驱动 -> adk-driver-implementation" test_routing_driver
+run_test "首板联调 -> adk-driver-bringup-checklist" test_routing_driver_bringup
 run_test "准备发布 -> adk-release-versioning" test_routing_release
 run_test "BSP移植 -> adk-bsp-porting-playbook" test_routing_bsp
 run_test "启动链 -> adk-bsp-porting-playbook" test_routing_boot_chain

@@ -46,7 +46,7 @@
 | 10 | 20 | `routing` | primary | governance | `adk-context-engineering` | 规划和裁剪 Agent 任务上下文，决定稳定规则、动态证据、按需 references、摘要与 raw pointer 的加载边界。用于上下文膨胀、跨阶段/跨会话恢复、并行 Agent 隔离、信息缺失或错误上下文导致理解偏差的场景；不用于替代任务规划、代码实现或 token 治理门禁。 | 上下文工程 | `skills/adk-context-engineering/SKILL.md` |
 | 10 | 30 | `routing` | primary | governance | `adk-token-context-governance` | 全链路保真省 Token 治理，统一预算、渐进加载、原文回退与高风险原文门禁 | 省 token | `skills/adk-token-context-governance/SKILL.md` |
 | 20 | 10 | `intake` | primary | playbook | `adk-requirements-triage` | 需求不清时澄清目标边界和验收；已明确任务无需重复访谈 | 需求不清楚 | `skills/adk-requirements-triage/SKILL.md` |
-| 20 | 20 | `intake` | primary | inversion | `adk-structured-requirements-questioning` | 结构化需求提问对齐，通过有序问题消除模糊需求 | 文档审查 | `skills/adk-structured-requirements-questioning/SKILL.md` |
+| 20 | 20 | `intake` | primary | inversion | `adk-structured-requirements-questioning` | 结构化需求提问对齐，通过有序问题消除模糊需求 | 帮我理清需求 | `skills/adk-structured-requirements-questioning/SKILL.md` |
 | 20 | 30 | `intake` | primary | reviewer | `adk-repo-prompt-analysis` | 逆向分析开源项目中的 Prompt/系统指令设计，提取上下文工程模式 | 分析子仓 prompt | `skills/adk-repo-prompt-analysis/SKILL.md` |
 | 20 | 40 | `intake` | primary | reviewer | `adk-skill-deep-analysis` | 从产品视角深度拆解 AI Skill 的设计意图、独特解法和可借鉴模式 | 深度拆解 skill | `skills/adk-skill-deep-analysis/SKILL.md` |
 | 30 | 10 | `planning` | primary | playbook | `adk-lightweight-planning` | 轻量只读计划生成能力，用于用户明确要求先给计划但尚未要求执行或写文件的编码任务 | 给我一个计划 | `skills/adk-lightweight-planning/SKILL.md` |
@@ -62,7 +62,7 @@
 | 40 | 40 | `design` | primary | generator | `adk-register-map-design` | 定义寄存器映射与位域文档 | 设计寄存器 | `skills/adk-register-map-design/SKILL.md` |
 | 40 | 50 | `design` | primary | playbook | `adk-bsp-analysis` | 分析现有嵌入式 BSP 源码、启动/探测路径、clock/reset/pinctrl/IRQ/DMA 依赖、硬件参考和 patch 历史，形成证据化架构理解与迁移风险。用于 BSP 代码梳理、厂商实现追踪、SoC/board 差异和历史 workaround 分析；不用于直接实现新驱动或 live 板级故障隔离。 | BSP 分析 | `skills/adk-bsp-analysis/SKILL.md` |
 | 50 | 10 | `implementation` | primary | playbook | `adk-driver-implementation` | Linux、RTOS 与 bare-metal 驱动实现、验证和资源生命周期收口 | 驱动开发 | `skills/adk-driver-implementation/SKILL.md` |
-| 50 | 20 | `implementation` | primary | playbook | `adk-driver-bringup-checklist` | 驱动 bring-up 标准检查清单；默认只读诊断，寄存器或设备写操作必须经过 live-device 显式授权门禁 | 驱动开发 | `skills/adk-driver-bringup-checklist/SKILL.md` |
+| 50 | 20 | `implementation` | primary | playbook | `adk-driver-bringup-checklist` | 驱动 bring-up 标准检查清单；默认只读诊断，寄存器或设备写操作必须经过 live-device 显式授权门禁 | 驱动调试 | `skills/adk-driver-bringup-checklist/SKILL.md` |
 | 50 | 30 | `implementation` | primary | playbook | `adk-bsp-porting-playbook` | BSP 移植流程与风险控制；源码/构建与真实设备刷写权限分离 | BSP移植 | `skills/adk-bsp-porting-playbook/SKILL.md` |
 | 50 | 40 | `implementation` | primary | playbook | `adk-rtos-task-design` | RTOS 任务、优先级、共享资源和实时性验证设计 | RTOS任务 | `skills/adk-rtos-task-design/SKILL.md` |
 | 50 | 50 | `implementation` | primary | playbook | `adk-interrupt-dma-patterns` | 中断、DMA、缓存一致性与缓冲所有权模式设计 | 中断处理 | `skills/adk-interrupt-dma-patterns/SKILL.md` |

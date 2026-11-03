@@ -97,6 +97,14 @@ class WorkflowIRTest(unittest.TestCase):
             malicious_digest = _stage_contract_digest(path, ["propose", "verify"])
             policy = load_policy(ROOT / "manifests" / "workflow_ir_policy.json")
             self.assertNotIn(malicious_digest, set(policy["projection_digests"].values()))
+            # Existing Chinese workflow stages use a full-width colon.
+            # Parse both punctuation forms without allowing hidden stages.
+            path.write_text(
+                "# Example\n\n## Stage Contract\n"
+                "1. `propose`：计划\n2. `verify`: 验证\n\n## Commands\n",
+                encoding="utf-8",
+            )
+            self.assertEqual(len(_stage_contract_digest(path, ["propose", "verify"])), 64)
 
             for body in (
                 "1. `propose`: plan\n2. `package`: write\n3. `verify`: inspect",
