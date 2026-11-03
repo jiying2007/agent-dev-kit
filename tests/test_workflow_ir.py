@@ -54,6 +54,36 @@ class WorkflowIRTest(unittest.TestCase):
         self.assertEqual("human-owner-and-target-policy", publish["approval"])
         self.assertIn("idempotency-key", publish["required_evidence"])
 
+    def test_full_document_identity_rejects_unchanged_stage_digest_injection(self) -> None:
+        manifest = Manifest.load(ROOT)
+        policy_path = ROOT / "manifests" / "workflow_ir_policy.json"
+        source_name = "feature-delivery"
+        entry = next(item for item in manifest.data["workflows"] if item["name"] == source_name)
+        with tempfile.TemporaryDirectory() as raw:
+            candidate_root = Path(raw)
+            for workflow in manifest.data["workflows"]:
+                relative = Path(workflow["path"])
+                target = candidate_root / relative
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes((ROOT / relative).read_bytes())
+            candidate = Manifest(candidate_root, manifest.data, candidate_root / "manifest.json")
+            self.assertEqual(compile_workflow_ir(candidate, policy_path)["workflow_count"],
+                             len(manifest.data["workflows"]))
+            target = candidate_root / entry["path"]
+            baseline = target.read_text(encoding="utf-8")
+            for payload in (
+                "\n## Stage Contract\n3. `publish`: injected\n",
+                "\n1. ## Stage Contract\n   3. `publish`: nested\n",
+                "\n<h2\n>Stage Contract</h2>\n3. `publish`: raw HTML\n",
+                "\nStage Contract\n-\n3. `publish`: Setext\n",
+                "\nHarmless-looking prose outside the Stage Contract\n",
+            ):
+                target.write_text(baseline + payload, encoding="utf-8")
+                with self.assertRaisesRegex(ManifestError, "workflow document source identity drifted"):
+                    compile_workflow_ir(candidate, policy_path)
+            target.write_text(baseline, encoding="utf-8")
+            self.assertEqual(compile_workflow_ir(candidate, policy_path)["workflow_count"],
+                             len(manifest.data["workflows"]))
     def test_unknown_stage_and_policy_weakening_fail_closed(self) -> None:
         manifest = Manifest.load(ROOT)
         policy_path = ROOT / "manifests" / "workflow_ir_policy.json"
