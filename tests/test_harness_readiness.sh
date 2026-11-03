@@ -125,6 +125,27 @@ PYDATE
 bash "$ROOT_DIR/scripts/devkit.sh" harness readiness \
   --root "$ROOT_DIR" --as-of "$SELF_AS_OF" --summary-json >"$TMP_DIR/self-historical.json"
 
+# Surface the underlying canonical review-validation error before the generic
+# fail-closed Harness report collapses all invalid evidence to needs-review.
+# This is diagnostics only; it never changes or accepts a review verdict.
+PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}" python3 - "$ROOT_DIR" <<'PYREVIEW'
+import sys
+from pathlib import Path
+from agent_dev_kit.review_evidence import ReviewEvidenceError, validate_review
+
+root = Path(sys.argv[1])
+record = root / ".adk/reviews/harness-source-20261103-8.2.1.json"
+if record.is_file():
+    try:
+        checked = validate_review(
+            root, record, expected_subject="harness-readiness",
+            expected_scope="harness-source",
+        )
+        print("[DIAG] canonical Harness source review: {}".format(checked["status"]), file=sys.stderr)
+    except (OSError, ReviewEvidenceError) as exc:
+        print("[DIAG] canonical Harness source review rejected: {}".format(exc), file=sys.stderr)
+PYREVIEW
+
 # Independently check the genuine current-date Gate, never a time-travel PASS.
 SELF_LIVE_RC=0
 bash "$ROOT_DIR/scripts/devkit.sh" harness readiness \
