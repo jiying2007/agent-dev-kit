@@ -107,7 +107,7 @@ def _routing(manifest: Manifest) -> list[str]:
         positive = item.get("positive_examples") if isinstance(item.get("positive_examples"), list) else []
         negative = item.get("negative_examples") if isinstance(item.get("negative_examples"), list) else []
         lines.append(
-            f"| `{item.get('name','')}` | {item.get('description','')} | {intent.get('availability', intent.get('profile_availability', 'profile-resolved'))} | "
+            f"| `{item.get('name','')}` | {item.get('description','')} | {intent.get('availability', 'explicit-profile-required' if intent.get('profile_availability') == 'explicit-profile-required' else 'profile-resolved')} | "
             f"{_list_text(item.get('profiles'))} | `{item.get('workflow','')}` | `{intent.get('primary_skill','')}` | "
             f"{_list_text(intent.get('supporting_skills'))} | {_list_text(intent.get('fallback_skills'))} | "
             f"{_list_text(intent.get('mutually_exclusive'))} | {positive[0] if positive else ''} | {negative[0] if negative else ''} |"
