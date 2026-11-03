@@ -1,8 +1,8 @@
 ---
 name: adk-archive-governance
-description: 检查并修复 docs/archive 元数据、topic、hash 与安全问题；不负责新建知识笔记
-version: 1.0.1
-last_updated: 2026-05-31
+description: "用于检查和修复现有归档的元数据、topic、hash 与安全问题；不负责新建知识笔记或代替知识候选的正式审核。"
+version: 1.0.2
+last_updated: 2026-11-03
 triggers:
   - "归档治理"
   - "归档检查"
