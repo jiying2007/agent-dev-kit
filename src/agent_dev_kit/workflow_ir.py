@@ -190,8 +190,8 @@ def _stage_contract_digest(path: Path, stages: Sequence[str]) -> str:
         except ValueError as exc:
             raise ManifestError("workflow frontmatter is not terminated: {}".format(path)) from exc
     canonical_heading = re.compile(r"#{1,2} [A-Za-z][A-Za-z0-9 -]*")
-    atx_probe = re.compile(r"^[ \t]*#{1,6}")
-    quoted_probe = re.compile(r"^[ \t]*(?:[>+*-][ \t]*)+#{1,6}")
+    heading_candidate = re.compile(r"(?<![A-Za-z0-9_])#{1,6}[ \t]")
+
     html_probe = re.compile(r"^[ \t]*<h[1-6](?:[\s>])", re.IGNORECASE)
     setext_probe = re.compile(r"^[ \t]*(?:=+|-+)[ \t]*$")
     # Deliberately scan every source line, including code fences and indented
@@ -201,9 +201,9 @@ def _stage_contract_digest(path: Path, stages: Sequence[str]) -> str:
     headings = []
     for line in lines[body_start:]:
         rendered = unicodedata.normalize("NFKC", unescape(line))
-        if html_probe.match(rendered) or setext_probe.fullmatch(rendered) or quoted_probe.match(rendered):
+        if html_probe.match(rendered) or setext_probe.fullmatch(rendered):
             raise ManifestError("workflow body has unsupported alternate heading: {}".format(path))
-        if atx_probe.match(rendered):
+        if heading_candidate.search(rendered):
             if canonical_heading.fullmatch(line) is None:
                 raise ManifestError("workflow heading is not canonical ASCII ATX: {}".format(path))
             headings.append(line)
