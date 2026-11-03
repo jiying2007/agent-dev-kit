@@ -16,6 +16,7 @@ from unittest.mock import patch
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
+from agent_dev_kit._matcher_kernel import _frontmatter
 from agent_dev_kit.model import Manifest, ManifestError
 from agent_dev_kit.distribution.release_artifacts import _copy_runtime_skill
 from agent_dev_kit.release import build_runtime_bundle
@@ -66,7 +67,10 @@ class RuntimeBundleTest(unittest.TestCase):
                 names = archive.getnames()
                 self.assertIn("bundle-manifest.json", names)
                 self.assertIn("checksums.sha256", names)
-                self.assertTrue(any(name.startswith("skills/adk-cross-team-handoff/") and name.endswith("/SKILL.md") for name in names))
+                source_version = _frontmatter(ROOT / "skills/adk-cross-team-handoff/SKILL.md")["version"]
+                self.assertIn(
+                    "skills/adk-cross-team-handoff/{}/SKILL.md".format(source_version), names
+                )
                 forbidden = ("src/agent_dev_kit", "tests/", ".github/", "docs/changes/", "source/")
                 self.assertFalse(any(name.startswith(forbidden) for name in names))
                 manifest = json.load(archive.extractfile("bundle-manifest.json"))
