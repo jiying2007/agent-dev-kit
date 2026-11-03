@@ -1,8 +1,8 @@
 ---
 name: adk-context-compress-handoff
-description: 上下文压缩与会话接力，区分 stable/dynamic/evidence/excluded context，生成可恢复摘要、下一步和风险边界
-version: 1.0.0
-last_updated: 2026-05-31
+description: "用于长任务上下文压缩、跨会话恢复及交接时保存目标、证据指针和下一动作；不用于替代原始高风险证据或任务执行。"
+version: 1.0.1
+last_updated: 2026-11-03
 triggers:
   - "上下文压缩"
   - "会话接力"
