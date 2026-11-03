@@ -6,7 +6,7 @@
       "last_verified_at": "2026-11-03",
       "review_evidence": {
         "path": ".adk/reviews/harness-source-20261103-8.2.1.json",
-        "sha256": "1edf604bf55ff5343670cc319b0b42687062a92777f6266a2dddad7eb47ffd9e"
+        "sha256": "4a3c2b989061548b88c22bcfb0ea76d3dcf6935b5003ed0dbfb5919d291214b3"
       }
     },
     "spec_and_execution_contract": {
@@ -14,7 +14,7 @@
       "last_verified_at": "2026-11-03",
       "review_evidence": {
         "path": ".adk/reviews/harness-source-20261103-8.2.1.json",
-        "sha256": "1edf604bf55ff5343670cc319b0b42687062a92777f6266a2dddad7eb47ffd9e"
+        "sha256": "4a3c2b989061548b88c22bcfb0ea76d3dcf6935b5003ed0dbfb5919d291214b3"
       }
     },
     "tool_and_permission_boundary": {
@@ -22,7 +22,7 @@
       "last_verified_at": "2026-11-03",
       "review_evidence": {
         "path": ".adk/reviews/harness-source-20261103-8.2.1.json",
-        "sha256": "1edf604bf55ff5343670cc319b0b42687062a92777f6266a2dddad7eb47ffd9e"
+        "sha256": "4a3c2b989061548b88c22bcfb0ea76d3dcf6935b5003ed0dbfb5919d291214b3"
       }
     },
     "state_and_knowledge_continuity": {
@@ -30,7 +30,7 @@
       "last_verified_at": "2026-11-03",
       "review_evidence": {
         "path": ".adk/reviews/harness-source-20261103-8.2.1.json",
-        "sha256": "1edf604bf55ff5343670cc319b0b42687062a92777f6266a2dddad7eb47ffd9e"
+        "sha256": "4a3c2b989061548b88c22bcfb0ea76d3dcf6935b5003ed0dbfb5919d291214b3"
       }
     },
     "verification_review_and_eval": {
@@ -38,7 +38,7 @@
       "last_verified_at": "2026-11-03",
       "review_evidence": {
         "path": ".adk/reviews/harness-source-20261103-8.2.1.json",
-        "sha256": "1edf604bf55ff5343670cc319b0b42687062a92777f6266a2dddad7eb47ffd9e"
+        "sha256": "4a3c2b989061548b88c22bcfb0ea76d3dcf6935b5003ed0dbfb5919d291214b3"
       }
     },
     "recovery_and_rollback": {
@@ -46,7 +46,7 @@
       "last_verified_at": "2026-11-03",
       "review_evidence": {
         "path": ".adk/reviews/harness-source-20261103-8.2.1.json",
-        "sha256": "1edf604bf55ff5343670cc319b0b42687062a92777f6266a2dddad7eb47ffd9e"
+        "sha256": "4a3c2b989061548b88c22bcfb0ea76d3dcf6935b5003ed0dbfb5919d291214b3"
       }
     },
     "freshness_and_entropy_control": {
@@ -54,7 +54,7 @@
       "last_verified_at": "2026-11-03",
       "review_evidence": {
         "path": ".adk/reviews/harness-source-20261103-8.2.1.json",
-        "sha256": "1edf604bf55ff5343670cc319b0b42687062a92777f6266a2dddad7eb47ffd9e"
+        "sha256": "4a3c2b989061548b88c22bcfb0ea76d3dcf6935b5003ed0dbfb5919d291214b3"
       }
     }
   }

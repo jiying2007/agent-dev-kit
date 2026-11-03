@@ -9,8 +9,8 @@
     "kind": "ai",
     "independence": "independent"
   },
-  "evidence_completed_at": "2026-11-03T10:31:03Z",
-  "reviewed_at": "2026-11-03T10:31:03Z",
+  "evidence_completed_at": "2026-11-03T12:06:23Z",
+  "reviewed_at": "2026-11-03T12:06:23Z",
   "verdicts": {
     "spec": "pass",
     "quality": "pass"
@@ -41,12 +41,12 @@
       "id": "review-ci-bootstrap",
       "severity": "minor",
       "disposition": "accepted-risk",
-      "reason": "Original exact-head CI 41613220261 had 100/101 passes per Python 3.8/3.11/3.12 lane with only old 8.2.0 review binding failing test_harness_readiness; aggregate consequently red. This new evidence must be independently validated by new exact-commit native CI; no gating waiver or prior PASS is asserted."
+      "reason": "Exact HEAD run 41630553492 passed canonical validate_review but failed full readiness due to three missing untruncated evaluator raw source refs; this revision binds all three by substituting redundant entries without weakening any gate. New exact-head CI remains to be validated."
     }
   ],
   "limitations": [
     "AI source reviewer only: not human, separate GitHub account, owner, implementation agent or GitHub APPROVE.",
-    "Source-bound seven-dimensional Spec/Quality review is not canonical validate_review PASS until a subsequent native CI checks this record and all seven pointers; original 41613220261 remains a failed run.",
+    "Original predecessor review passed canonical validate_review on exact-head CI 41630553492, but seven-dimension readiness failed. This revised record requires fresh canonical verification and native CI; no validated status or release readiness is presumed.",
     "No direct device, target-runtime, real Codex/Claude campaign, provider credentials or product M5/field/native qualification was exercised.",
     "No merge, release, signed promotion, deployment or claim of verified runtime user-value improvement; downstream component and product gates remain separate.",
     "Earlier 8.2.0 independent review and sources are preserved unchanged; current 8.2.1 is bound to actual current source-byte SHA-256 only."
@@ -105,26 +105,6 @@
     },
     {
       "base": "repository",
-      "path": "CONTEXT.md",
-      "sha256": "0a618f601aff47b4d24d97f6e8799d96b1f2369f8d6a2d7fc124c3f90c03499c"
-    },
-    {
-      "base": "repository",
-      "path": "OWNERS",
-      "sha256": "04214b6ee2937ef8c786f998ee890a0cecacb7dd318bab99a13db844f850a95e"
-    },
-    {
-      "base": "repository",
-      "path": "README.md",
-      "sha256": "98408bec9e269db49e7e51a2b5efeaa5d216f2e61090294c685cdb1811f34e43"
-    },
-    {
-      "base": "repository",
-      "path": "docs/agent-skill-catalog.md",
-      "sha256": "0c0754f55fb450ecfd07ecf044199034c98dff5f618dce0f9f18caf04f1c239a"
-    },
-    {
-      "base": "repository",
       "path": "docs/changes/2026-09-25-agent-value-trust/negative-results.md",
       "sha256": "da7aa6c51295be56368b90594b7eb6469bf0a43b3888d7a482839bb22c0970c0"
     },
@@ -180,6 +160,11 @@
     },
     {
       "base": "repository",
+      "path": "docs/changes/2026-09-25-native-campaign-project-layout/tasks.md",
+      "sha256": "2f3fca0914f53aabe3713f3d0094fb6bacb3e3d1e0df867db134d71835d3e2ce"
+    },
+    {
+      "base": "repository",
       "path": "docs/changes/20261024-release-bundles/PROGRESS.md",
       "sha256": "45d5688628b9f84828982fa9b6c60f37d87c9b10e489745b64ae0fd48e3313d5"
     },
@@ -210,11 +195,6 @@
     },
     {
       "base": "repository",
-      "path": "docs/runbooks/README.md",
-      "sha256": "0888aa2b94f929760040517deaf9a47b517648b0694209d48309956fbe83273d"
-    },
-    {
-      "base": "repository",
       "path": "docs/runbooks/agent-value-lifecycle.md",
       "sha256": "84e629c1c040b265d6a64369c5b39d6af2e999576af4429939738ff00b5a4c37"
     },
@@ -232,6 +212,16 @@
       "base": "repository",
       "path": "docs/runbooks/codex-pilot-evidence.md",
       "sha256": "5ff92fab93baf7403b838a67f359e29016a6ce19563eb98006cca6c842ae298c"
+    },
+    {
+      "base": "repository",
+      "path": "docs/runbooks/codex-runtime-method-boundary.md",
+      "sha256": "43bf36ec8a1a9a12bf30bb29b7a9f2bdbfd9a00f849ad700a85fb1cd440dde18"
+    },
+    {
+      "base": "repository",
+      "path": "docs/runbooks/README.md",
+      "sha256": "0888aa2b94f929760040517deaf9a47b517648b0694209d48309956fbe83273d"
     },
     {
       "base": "repository",
@@ -260,8 +250,18 @@
     },
     {
       "base": "repository",
+      "path": "OWNERS",
+      "sha256": "04214b6ee2937ef8c786f998ee890a0cecacb7dd318bab99a13db844f850a95e"
+    },
+    {
+      "base": "repository",
       "path": "pyproject.toml",
       "sha256": "aa0233064e5e8e73e10f8f4e8cac0edba78bfaf8dc1dde40fec968d175f2d9c2"
+    },
+    {
+      "base": "repository",
+      "path": "README.md",
+      "sha256": "98408bec9e269db49e7e51a2b5efeaa5d216f2e61090294c685cdb1811f34e43"
     },
     {
       "base": "repository",
@@ -285,11 +285,6 @@
     },
     {
       "base": "repository",
-      "path": "src/agent_dev_kit/__init__.py",
-      "sha256": "3f0ccc3f887fc3fa10a1b1d2dc82690d960fde60b786781afe5ae5654037f44e"
-    },
-    {
-      "base": "repository",
       "path": "src/agent_dev_kit/_matcher_kernel.py",
       "sha256": "9fcf4276cdaeeee2276e04ff6a965f04ec77a6db157276d4f1d6a6f63248b33a"
     },
@@ -300,13 +295,13 @@
     },
     {
       "base": "repository",
-      "path": "src/agent_dev_kit/readiness.py",
-      "sha256": "83a2949102955281f13a94e2f871d36e170cbfe76d053032ce5c114dc065ed29"
+      "path": "src/agent_dev_kit/readiness_tools.py",
+      "sha256": "2ecdfd21eb665d45ff2ae279ffcf05eb01f09edfce391b1db105a03d15fd1cb5"
     },
     {
       "base": "repository",
-      "path": "src/agent_dev_kit/readiness_tools.py",
-      "sha256": "2ecdfd21eb665d45ff2ae279ffcf05eb01f09edfce391b1db105a03d15fd1cb5"
+      "path": "src/agent_dev_kit/readiness.py",
+      "sha256": "83a2949102955281f13a94e2f871d36e170cbfe76d053032ce5c114dc065ed29"
     },
     {
       "base": "repository",
@@ -337,6 +332,11 @@
       "base": "repository",
       "path": "tests/run_all.sh",
       "sha256": "f7328fd18b81713f6053924099bd81fde92cc4a2ac2ddab7710feab9fc1d8fd1"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_agent_ecosystem_standards.sh",
+      "sha256": "9341118fc2187764597d0445caddfa5930fbc95fb0eeed6665d29ef9b4a3844e"
     },
     {
       "base": "repository",
@@ -373,7 +373,7 @@
     {
       "base": "repository",
       "path": ".adk/reviews/evidence/harness-source-20261103-8.2.1/independent-review.md",
-      "sha256": "62fd907fa4b5353df72b3be97937df9ccab411690356cf0f844aac129b9b66e1"
+      "sha256": "5d1258b274fb5a0a6c0b4220730cae17d3a4cddb4aa7b50969056d9c11547c02"
     }
   ]
 }
