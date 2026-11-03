@@ -1,8 +1,8 @@
 ---
 name: adk-knowledge-archive
-description: 新建研究、排障和决策的脱敏归档候选；不处理已有归档的元数据修复
-version: 1.0.1
-last_updated: 2026-05-31
+description: "用于新建脱敏的研究、排障与决策归档候选并登记证据指针；不处理已有归档的元数据修复，也不替代发布审核。"
+version: 1.0.2
+last_updated: 2026-11-03
 triggers:
   - "知识归档"
   - "长期沉淀"
