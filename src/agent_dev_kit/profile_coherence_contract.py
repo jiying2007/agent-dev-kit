@@ -204,7 +204,46 @@ def _routing_primary_coverage(manifest: Manifest, inventory: Mapping[str, Mappin
             route_kind = "unknown"
             failures.append(f"route primary is not a managed Skill: {intent}:{primary}")
         records.append({"intent": intent, "primary_skill": primary, "kind": route_kind, "profiles": profiles})
-    return {"total": len(records), "profile_bound": sum(row["kind"] == "profile" for row in records),
+    # A router scenario advertises *specific* Profiles, not every Profile
+    # that happens to hold the Skill. Fail closed on a wrong declared scope;
+    # otherwise the catalog may promise a Skill the selected Profile cannot load.
+    intent_by_name = {row.get("intent"): row for row in intents
+                      if isinstance(row, dict) and isinstance(row.get("intent"), str)}
+    scenarios = manifest.data.get("skill_routing_matrix", [])
+    if not isinstance(scenarios, list):
+        failures.append("skill routing scenario matrix must be a list")
+        scenarios = []
+    scenario_names: set[str] = set()
+    for scenario in scenarios:
+        if not isinstance(scenario, dict):
+            failures.append("skill routing scenario must be an object")
+            continue
+        name = scenario.get("name")
+        allowed = scenario.get("profiles")
+        intent_name = scenario.get("routing_intent")
+        if not isinstance(name, str) or not name or name in scenario_names:
+            failures.append("skill routing scenario has an invalid or duplicate name")
+            continue
+        scenario_names.add(name)
+        if (not isinstance(allowed, list) or not allowed
+                or any(not isinstance(item, str) or item not in inventory for item in allowed)
+                or len(allowed) != len(set(allowed))):
+            failures.append(f"route scenario has invalid allowed Profiles: {name}")
+            continue
+        route = intent_by_name.get(intent_name)
+        if route is None:
+            failures.append(f"route scenario refers to unknown intent: {name}")
+            continue
+        primary = route.get("primary_skill")
+        if primary in core:
+            unavailable = sorted(set(allowed) - set(membership.get(primary, [])))
+            if unavailable:
+                failures.append(f"route scenario Profile cannot load primary Skill: {name}:{primary}:{','.join(unavailable)}")
+        elif primary in optional:
+            if route.get("availability", route.get("profile_availability")) != "optional-skill-required":
+                failures.append(f"route scenario optional primary lacks explicit install: {name}:{primary}")
+        else:
+            failures.append(f"route scenario has unknown primary Skill: {name}:{primary}")    return {"total": len(records), "profile_bound": sum(row["kind"] == "profile" for row in records),
             "explicit_optional": sum(row["kind"] == "explicit-optional" for row in records),
             "items": records}, failures
 

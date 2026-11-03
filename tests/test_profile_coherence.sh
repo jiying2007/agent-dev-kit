@@ -163,6 +163,33 @@ for row in drift.values():
 _, errors = _routing_primary_coverage(manifest, drift)
 assert any("unreachable" in item and "adk-offline-core-dump-triage" in item for item in errors), errors
 
+# Negative: a route must never advertise a Profile which cannot load its primary.
+scenario_drift = copy.deepcopy(manifest.data)
+next(row for row in scenario_drift["skill_routing_matrix"]
+     if row["name"] == "long_execution")["profiles"] = ["core"]
+changed = Manifest(manifest.root, scenario_drift, manifest.source)
+_, errors = _routing_primary_coverage(changed, inventory)
+assert any("scenario Profile cannot load primary Skill" in item and "long_execution" in item
+           for item in errors), errors
+
+# Negative: a valid Profile cannot mask a second declared, unreachable Profile.
+scenario_drift = copy.deepcopy(manifest.data)
+next(row for row in scenario_drift["skill_routing_matrix"]
+     if row["name"] == "long_execution")["profiles"] = ["team-core", "core"]
+changed = Manifest(manifest.root, scenario_drift, manifest.source)
+_, errors = _routing_primary_coverage(changed, inventory)
+assert any("scenario Profile cannot load primary Skill" in item and "core" in item
+           for item in errors), errors
+
+# Negative: unknown or empty declared Profile sets are never treated as valid.
+for invalid in (["missing-specialist-profile"], []):
+    scenario_drift = copy.deepcopy(manifest.data)
+    next(row for row in scenario_drift["skill_routing_matrix"]
+         if row["name"] == "long_execution")["profiles"] = invalid
+    changed = Manifest(manifest.root, scenario_drift, manifest.source)
+    _, errors = _routing_primary_coverage(changed, inventory)
+    assert any("scenario has invalid allowed Profiles" in item for item in errors), errors
+
 # Negative: a core source Skill cannot claim an optional package that does not exist.
 candidate = copy.deepcopy(manifest.data)
 next(row for row in candidate["routing"]["intents"] if row["intent"] == "planning_execution")["availability"] = "optional-skill-required"
