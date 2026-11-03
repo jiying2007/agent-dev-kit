@@ -243,7 +243,8 @@ def _routing_primary_coverage(manifest: Manifest, inventory: Mapping[str, Mappin
             if route.get("availability", route.get("profile_availability")) != "optional-skill-required":
                 failures.append(f"route scenario optional primary lacks explicit install: {name}:{primary}")
         else:
-            failures.append(f"route scenario has unknown primary Skill: {name}:{primary}")    return {"total": len(records), "profile_bound": sum(row["kind"] == "profile" for row in records),
+            failures.append(f"route scenario has unknown primary Skill: {name}:{primary}")
+    return {"total": len(records), "profile_bound": sum(row["kind"] == "profile" for row in records),
             "explicit_optional": sum(row["kind"] == "explicit-optional" for row in records),
             "items": records}, failures
 
