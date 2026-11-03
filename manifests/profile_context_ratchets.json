@@ -15,33 +15,33 @@
   "profiles": {
     "core": {
       "assets": 27,
-      "entry_file_bytes": 129761,
-      "potential_full_source_bytes": 170408
+      "entry_file_bytes": 129719,
+      "potential_full_source_bytes": 170366
     },
     "release-hardening": {
       "assets": 23,
-      "entry_file_bytes": 107005,
-      "potential_full_source_bytes": 145505
+      "entry_file_bytes": 106963,
+      "potential_full_source_bytes": 145463
     },
     "personal-core": {
       "assets": 32,
-      "entry_file_bytes": 148839,
-      "potential_full_source_bytes": 194551
+      "entry_file_bytes": 148797,
+      "potential_full_source_bytes": 194509
     },
     "embedded-fullstack": {
       "assets": 54,
-      "entry_file_bytes": 232919,
-      "potential_full_source_bytes": 292407
+      "entry_file_bytes": 232877,
+      "potential_full_source_bytes": 292365
     },
     "team-core": {
       "assets": 37,
-      "entry_file_bytes": 166460,
-      "potential_full_source_bytes": 230149
+      "entry_file_bytes": 166418,
+      "potential_full_source_bytes": 230107
     },
     "large-refactor": {
       "assets": 55,
-      "entry_file_bytes": 235344,
-      "potential_full_source_bytes": 299841
+      "entry_file_bytes": 235302,
+      "potential_full_source_bytes": 299799
     },
     "incident-response": {
       "assets": 9,
@@ -50,8 +50,8 @@
     },
     "research-intake": {
       "assets": 20,
-      "entry_file_bytes": 83163,
-      "potential_full_source_bytes": 121941
+      "entry_file_bytes": 83121,
+      "potential_full_source_bytes": 121899
     }
   },
   "baseline_source": {

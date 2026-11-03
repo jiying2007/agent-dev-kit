@@ -1,6 +1,6 @@
 ---
 name: adk-verification-before-completion
-description: "用于交付完成前核对测试、审查、权限、证据与回滚的真实状态；不用于把实现者自述、静态检查或过期收据当作完成证明。"
+description: "用于完成前核对测试、审查和真实证据；不用于把自述、静态检查或过期收据当作完成证明。"
 version: 1.8.1
 last_updated: 2026-11-03
 triggers:
