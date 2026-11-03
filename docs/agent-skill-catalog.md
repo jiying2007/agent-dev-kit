@@ -42,13 +42,13 @@
 
 | Order | Stage | Category | Activation | Pattern | Name | Description | First Trigger | Path |
 |---:|---:|---|---|---|---|---|---|---|
-| 10 | 10 | `routing` | primary | governance | `adk-runtime-router` | ADK 原生运行时技能路由入口，统一判定 primary、supporting、内部降级与跳过条件 | 技能路由 | `skills/adk-runtime-router/SKILL.md` |
+| 10 | 10 | `routing` | primary | governance | `adk-runtime-router` | 用于任务开始前在可信 Skills 清单中选定唯一 primary、supporting 和回退路径；不用于已有明确任务包时重复路由或隐式授予执行权限。 | 技能路由 | `skills/adk-runtime-router/SKILL.md` |
 | 10 | 20 | `routing` | primary | governance | `adk-context-engineering` | 用于上下文膨胀、跨会话恢复或并行 Agent 隔离时规划稳定规则、按需引用及证据指针；不用于直接替代任务计划、代码实现或 Token 配额门禁。 | 上下文工程 | `skills/adk-context-engineering/SKILL.md` |
 | 10 | 30 | `routing` | primary | governance | `adk-token-context-governance` | 全链路保真省 Token 治理，统一预算、渐进加载、原文回退与高风险原文门禁 | 省 token | `skills/adk-token-context-governance/SKILL.md` |
-| 20 | 10 | `intake` | primary | playbook | `adk-requirements-triage` | 需求不清时澄清目标边界和验收；已明确任务无需重复访谈 | 需求不清楚 | `skills/adk-requirements-triage/SKILL.md` |
+| 20 | 10 | `intake` | primary | playbook | `adk-requirements-triage` | 用于需求不清时澄清目标、范围边界和可验证验收标准；已明确的开发任务无需重复访谈，也不用于代替实际实现。 | 需求不清楚 | `skills/adk-requirements-triage/SKILL.md` |
 | 20 | 20 | `intake` | primary | inversion | `adk-structured-requirements-questioning` | 结构化需求提问对齐，通过有序问题消除模糊需求 | 帮我理清需求 | `skills/adk-structured-requirements-questioning/SKILL.md` |
-| 20 | 30 | `intake` | primary | reviewer | `adk-repo-prompt-analysis` | 逆向分析开源项目中的 Prompt/系统指令设计，提取上下文工程模式 | 分析子仓 prompt | `skills/adk-repo-prompt-analysis/SKILL.md` |
-| 20 | 40 | `intake` | primary | reviewer | `adk-skill-deep-analysis` | 从产品视角深度拆解 AI Skill 的设计意图、独特解法和可借鉴模式 | 深度拆解 skill | `skills/adk-skill-deep-analysis/SKILL.md` |
+| 20 | 30 | `intake` | primary | reviewer | `adk-repo-prompt-analysis` | 用于逆向审查参考仓 Agent Prompt 的约束、结构与上下文工程方法；不用于直接复制不可信指令或运行外部仓脚本。 | 分析子仓 prompt | `skills/adk-repo-prompt-analysis/SKILL.md` |
+| 20 | 40 | `intake` | primary | reviewer | `adk-skill-deep-analysis` | 用于外部或本地 Skill 的设计意图、差异价值与可迁移方法评估；不用于未经来源审查直接安装或自动批准候选 Skill。 | 深度拆解 skill | `skills/adk-skill-deep-analysis/SKILL.md` |
 | 30 | 10 | `planning` | primary | playbook | `adk-lightweight-planning` | 用于用户明确要求先给计划、尚不修改文件的只读编码方案；不用于已批准的长任务执行或自动开启外部写入。 | 给我一个计划 | `skills/adk-lightweight-planning/SKILL.md` |
 | 30 | 15 | `planning` | primary | generator | `adk-goal-authoring` | 用于长期目标过大、Goal 不收敛时生成可验证的目标合同、有限批次和恢复入口；不用于已有计划的日常执行或自行设置宿主预算与权限。 | 生成Goal | `skills/adk-goal-authoring/SKILL.md` |
 | 30 | 20 | `planning` | primary | playbook | `adk-task-breakdown` | 复杂任务拆解及并行边界；单点小修无需拆包 | 拆解任务 | `skills/adk-task-breakdown/SKILL.md` |
@@ -59,12 +59,12 @@
 | 40 | 10 | `design` | primary | generator | `adk-interface-contract-design` | 用于模块 API、协议消息及生命周期状态转换的接口契约设计与迁移评审；不用于需求未收敛时直接写实现或放行设备动作。 | 设计接口 | `skills/adk-interface-contract-design/SKILL.md` |
 | 40 | 20 | `design` | primary | generator | `adk-adr-writer` | 用于架构方案已有明确权衡、需要记录决定与替代方案时生成 ADR；不用于在需求不明时直接替代需求澄清或执行代码修改。 | 写ADR | `skills/adk-adr-writer/SKILL.md` |
 | 40 | 30 | `design` | primary | reviewer | `adk-component-api-stability` | 用于组件 API 演进时检查调用方、兼容边界、迁移与回滚证据；不用于未经设计直接大范围改签名或纯格式修改。 | API稳定性 | `skills/adk-component-api-stability/SKILL.md` |
-| 40 | 40 | `design` | primary | generator | `adk-register-map-design` | 定义寄存器映射与位域文档 | 设计寄存器 | `skills/adk-register-map-design/SKILL.md` |
+| 40 | 40 | `design` | primary | generator | `adk-register-map-design` | 用于芯片寄存器映射、位域权限和驱动接口文档设计；不用于直接对真实寄存器写入或代替外设时序调试。 | 设计寄存器 | `skills/adk-register-map-design/SKILL.md` |
 | 40 | 50 | `design` | primary | playbook | `adk-bsp-analysis` | 分析现有嵌入式 BSP 源码、启动/探测路径、clock/reset/pinctrl/IRQ/DMA 依赖、硬件参考和 patch 历史，形成证据化架构理解与迁移风险。用于 BSP 代码梳理、厂商实现追踪、SoC/board 差异和历史 workaround 分析；不用于直接实现新驱动或 live 板级故障隔离。 | BSP 分析 | `skills/adk-bsp-analysis/SKILL.md` |
 | 50 | 10 | `implementation` | primary | playbook | `adk-driver-implementation` | 用于 Linux、RTOS 或裸机驱动代码实现、资源生命周期与定向回归；不用于仅做首板调试清单或未经授权的真实设备刷写。 | 驱动开发 | `skills/adk-driver-implementation/SKILL.md` |
 | 50 | 20 | `implementation` | primary | playbook | `adk-driver-bringup-checklist` | 用于首板联调时核对驱动时钟、复位、probe、中断和外设依赖；不用于直接编写驱动业务代码或未经独立授权执行设备寄存器写操作。 | 驱动调试 | `skills/adk-driver-bringup-checklist/SKILL.md` |
 | 50 | 30 | `implementation` | primary | playbook | `adk-bsp-porting-playbook` | 用于 BSP 移植涉及启动链、驱动依赖、构建环境和迁移风险时规划与验证；不用于未授权的设备刷写或纯源码阅读。 | BSP移植 | `skills/adk-bsp-porting-playbook/SKILL.md` |
-| 50 | 40 | `implementation` | primary | playbook | `adk-rtos-task-design` | RTOS 任务、优先级、共享资源和实时性验证设计 | RTOS任务 | `skills/adk-rtos-task-design/SKILL.md` |
+| 50 | 40 | `implementation` | primary | playbook | `adk-rtos-task-design` | 用于 RTOS 任务优先级、时序约束、同步资源与调度风险设计；不用于纯裸机单循环程序或未经测量声称实时性达标。 | RTOS任务 | `skills/adk-rtos-task-design/SKILL.md` |
 | 50 | 50 | `implementation` | primary | playbook | `adk-interrupt-dma-patterns` | 用于中断、DMA、缓存一致性、共享缓冲所有权的实现模式与实时性检查；不用于无中断参与的普通应用逻辑或免证据修改寄存器。 | 中断处理 | `skills/adk-interrupt-dma-patterns/SKILL.md` |
 | 50 | 60 | `implementation` | primary | playbook | `adk-protocol-stack-integration` | 用于通信协议栈适配、连接状态机和跨层错误处理的集成设计与回归；不用于纯寄存器布局设计或仅修复孤立格式问题。 | 协议栈 | `skills/adk-protocol-stack-integration/SKILL.md` |
 | 50 | 70 | `implementation` | primary | tool-wrapper | `adk-cmake-cross-build` | 用于嵌入式 CMake 工程的交叉编译、工具链配置与多目标构建排障；不用于无 CMake 的构建系统或直接设备部署。 | CMake | `skills/adk-cmake-cross-build/SKILL.md` |
@@ -86,10 +86,10 @@
 | 80 | 10 | `review_quality` | supporting | reviewer | `adk-chinese-commit-conventions` | 用于中文 Git 提交标题、scope 和变更摘要的规范化；不用于自动创建提交、调整权限或替代提交前质量门禁。 | 中文提交 | `skills/adk-chinese-commit-conventions/SKILL.md` |
 | 80 | 20 | `review_quality` | supporting | reviewer | `adk-chinese-code-review` | 用于团队需要中文代码审查意见的格式、严重性和反馈沟通约定；不用于代替实际独立代码审查、修复验证或审批。 | 代码审查 | `skills/adk-chinese-code-review/SKILL.md` |
 | 80 | 30 | `review_quality` | primary | reviewer | `adk-code-review-loop` | 用于独立代码审查、缺陷真实性核验、修复反馈及复审闭环；不用于代码自动放行、语言格式润色或代替提交前质量门禁。 | 独立代码审查 | `skills/adk-code-review-loop/SKILL.md` |
-| 80 | 40 | `review_quality` | primary | reviewer | `adk-repo-drift-remediation` | 仓库漂移治理，面向全仓偏离、冗余、残留、边界不清、文档代码不一致和提交前质量收口 | 仓库漂移 | `skills/adk-repo-drift-remediation/SKILL.md` |
+| 80 | 40 | `review_quality` | primary | reviewer | `adk-repo-drift-remediation` | 用于全仓漂移、兼容残留、冗余目录和文档代码不一致的取证与修复计划；不用于跳过基线验证或清除用户未授权的改动。 | 仓库漂移 | `skills/adk-repo-drift-remediation/SKILL.md` |
 | 80 | 50 | `review_quality` | primary | reviewer | `adk-static-analysis-c-cpp` | C/C++ 静态分析与缺陷治理 | 静态分析 | `skills/adk-static-analysis-c-cpp/SKILL.md` |
 | 80 | 60 | `review_quality` | primary | reviewer | `adk-commit-pr-quality-gate` | 用于提交 PR 前核对测试证据、差异范围与质量门禁；不能替代独立代码审查，也不用于未授权的合并或发布。 | 提交代码 | `skills/adk-commit-pr-quality-gate/SKILL.md` |
-| 90 | 10 | `release_closure` | primary | generator | `adk-release-versioning` | 版本号、Changelog 和发布基线规划；不执行真实发布 | 版本发布 | `skills/adk-release-versioning/SKILL.md` |
+| 90 | 10 | `release_closure` | primary | generator | `adk-release-versioning` | 用于规划版本号、Changelog 和发布基线并检查历史版本一致性；不执行真实发布，也不用于替代固件包验证或设备更新。 | 版本发布 | `skills/adk-release-versioning/SKILL.md` |
 | 90 | 20 | `release_closure` | primary | reviewer | `adk-production-field-readiness` | 用于嵌入式产测、OTA、诊断及现场维护的量产准备状态和证据审查；不用于仅凭桌面测试宣称量产就绪或直接刷写设备。 | 量产 | `skills/adk-production-field-readiness/SKILL.md` |
 | 90 | 30 | `release_closure` | primary | pipeline | `adk-embedded-release-orchestration` | 用于嵌入式固件 OTA 制品的发布准备、签名证据和回滚编排；不用于未经单独授权的真实 publish、设备 flash 或发布批准。 | 嵌入式发布编排 | `skills/adk-embedded-release-orchestration/SKILL.md` |
 | 90 | 40 | `release_closure` | primary | pipeline | `adk-embedded-storage-layout-migration` | 用于 MTD、UBI、分区及文件系统布局迁移的 host 端检查、演练和回退设计；不用于未授权的设备存储写入或纯日志检索。 | UBIFS | `skills/adk-embedded-storage-layout-migration/SKILL.md` |

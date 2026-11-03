@@ -1,8 +1,8 @@
 ---
 name: adk-release-versioning
-description: 版本号、Changelog 和发布基线规划；不执行真实发布
-version: 1.4.1
-last_updated: 2026-09-19
+description: "用于规划版本号、Changelog 和发布基线并检查历史版本一致性；不执行真实发布，也不用于替代固件包验证或设备更新。"
+version: 1.4.2
+last_updated: 2026-11-03
 triggers:
   - "版本发布"
   - "版本管理"

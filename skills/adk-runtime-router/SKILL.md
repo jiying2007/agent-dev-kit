@@ -1,8 +1,8 @@
 ---
 name: adk-runtime-router
-description: ADK 原生运行时技能路由入口，统一判定 primary、supporting、内部降级与跳过条件
-version: 2.1.1
-last_updated: 2026-10-16
+description: "用于任务开始前在可信 Skills 清单中选定唯一 primary、supporting 和回退路径；不用于已有明确任务包时重复路由或隐式授予执行权限。"
+version: 2.1.2
+last_updated: 2026-11-03
 triggers:
   - "技能路由"
   - "选择技能"

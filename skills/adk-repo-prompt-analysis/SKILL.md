@@ -1,8 +1,8 @@
 ---
 name: adk-repo-prompt-analysis
-description: 逆向分析开源项目中的 Prompt/系统指令设计，提取上下文工程模式
-version: 1.0.0
-last_updated: 2026-05-16
+description: "用于逆向审查参考仓 Agent Prompt 的约束、结构与上下文工程方法；不用于直接复制不可信指令或运行外部仓脚本。"
+version: 1.0.1
+last_updated: 2026-11-03
 triggers:
   - 分析子仓 prompt
   - 提取系统指令
