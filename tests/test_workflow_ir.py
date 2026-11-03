@@ -106,6 +106,21 @@ class WorkflowIRTest(unittest.TestCase):
             )
             self.assertEqual(len(_stage_contract_digest(path, ["propose", "verify"])), 64)
 
+            # The old parser truncated at the first later H2, so a second
+            # Stage Contract heading kept the previous digest unchanged.
+            valid_document = path.read_text(encoding="utf-8")
+            for trailing in (
+                "\n## Stage Contract\n3. `publish`: hidden unauthorized stage\n",
+                "\n### Stage Contract\n3. `publish`: hidden under H3\n",
+                "\n  ## Stage Contract\n3. `publish`: indented duplicate\n",
+                "\n## stage Contract\n3. `publish`: mixed-case duplicate\n",
+                "\n## Stage  Contract\n3. `publish`: extra-space duplicate\n",
+                "\n## Stage Contract (copy)\n3. `publish`: ambiguous heading\n",
+            ):
+                path.write_text(valid_document + trailing, encoding="utf-8")
+                with self.assertRaises(ManifestError):
+                    _stage_contract_digest(path, ["propose", "verify"])
+
             for body in (
                 "1. `propose`: plan\n2. `package`: write\n3. `verify`: inspect",
                 "1. `verify`: inspect\n2. `propose`: plan",
@@ -116,6 +131,9 @@ class WorkflowIRTest(unittest.TestCase):
                 "1. `propose`: plan\n2. `verify`: inspect\n- 3. `publish`: nested stage",
                 "1. `propose`: plan\n2. `verify`: inspect\n0. `publish`: zero stage",
                 "1. `propose`: plan\n2. `verify`: inspect\n3) `publish`: invalid delimiter",
+                                "1. `propose`: plan\n2. `verify`: inspect\n+ 3. `publish`: plus-prefixed stage",
+                                "1. `propose`: plan\n2. `verify`: inspect\n> 3. `publish`: quoted stage",
+                                "1. `propose`: plan\n2. `verify`: inspect\n3 . `publish`: spaced ordinal",
             ):
                 path.write_text("# Example\n\n## Stage Contract\n" + body
                                 + "\n\n## Commands\n", encoding="utf-8")

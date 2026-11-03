@@ -175,8 +175,12 @@ def _frontmatter(path: Path) -> Dict[str, Any]:
 def _stage_contract_digest(path: Path, stages: Sequence[str]) -> str:
     text = path.read_text(encoding="utf-8")
     marker = "## Stage Contract"
-    if marker not in text:
-        raise ManifestError("workflow body is missing Stage Contract: {}".format(path))
+    # A duplicate/ambiguous heading outside the first section must not be
+    # able to inject stages while preserving the first section digest.
+    heading = re.compile(r"(?i)^[ \t]*#{1,6}[ \t]*stage[ \t]+contract\b.*$")
+    headings = [line for line in text.splitlines() if heading.match(line)]
+    if headings != [marker] or text.count(marker) != 1:
+        raise ManifestError("workflow body requires one canonical Stage Contract heading: {}".format(path))
     section = text.split(marker, 1)[1]
     if "\n## " in section:
         section = section.split("\n## ", 1)[0]
@@ -186,7 +190,7 @@ def _stage_contract_digest(path: Path, stages: Sequence[str]) -> str:
     # Parse every numbered row as a stage candidate, including malformed ones.
     # A selective findall silently ignores hidden additional stages if a
     # reviewer later updates the trusted body digest alongside that text.
-    numbered = re.compile(r"^[ \t]*(?:[-*][ \t]+)?[0-9]+[.)]")
+    numbered = re.compile(r"^[ \t]*(?:[-*+>][ \t]*)*[0-9]+[ \t]*[.)]")
     canonical_step = re.compile(r"^([1-9][0-9]*)\.[ \t]+`([^`]+)`[ \t]*[:：].*$")
     body_steps = []
     for line in section.splitlines():
