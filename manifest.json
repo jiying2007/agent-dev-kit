@@ -1,5 +1,5 @@
 {
-  "version": "8.2.1",
+  "version": "8.2.2",
   "locale": "zh-CN",
   "platforms": [
     "linux-embedded",
@@ -1341,6 +1341,7 @@
         "adk-cmake-cross-build",
         "adk-embedded-debug-transport",
         "adk-embedded-remote-debug-log-triage",
+        "adk-offline-core-dump-triage",
         "adk-hardware-debugging",
         "adk-performance-profiling-embedded",
         "adk-unit-test-embedded",
@@ -1350,7 +1351,8 @@
         "adk-static-analysis-c-cpp",
         "adk-release-versioning",
         "adk-production-field-readiness",
-        "adk-embedded-release-orchestration"
+        "adk-embedded-release-orchestration",
+        "adk-embedded-storage-layout-migration"
       ]
     },
     "team-core": {
@@ -1362,6 +1364,7 @@
       ],
       "extends": "core",
       "include_skills": [
+        "adk-planning-execution-loop",
         "adk-chinese-commit-conventions",
         "adk-chinese-code-review",
         "adk-cross-team-handoff",
@@ -1397,6 +1400,7 @@
       "include_skills": [
         "adk-systematic-debugging",
         "adk-embedded-remote-debug-log-triage",
+        "adk-offline-core-dump-triage",
         "adk-performance-profiling-embedded",
         "adk-fault-injection-recovery",
         "adk-static-analysis-c-cpp",
@@ -2020,8 +2024,7 @@
       "routing_intent": "planning_execution",
       "workflow": "feature-delivery",
       "profiles": [
-        "core",
-        "embedded-fullstack"
+        "team-core"
       ],
       "positive_examples": [
         "分阶段执行并持续验证",
@@ -2371,11 +2374,10 @@
         "mutually_exclusive": [
           "adk-lightweight-planning"
         ],
-        "availability": "optional-skill-required",
         "task_mode": "implementation",
         "mutation_permission": "workspace-write",
         "risk": "medium",
-        "profile_availability": "optional-skill-required",
+        "profile_availability": "explicit-profile-required",
         "required_evidence": [
           "approved plan and scoped mutation boundary"
         ],
@@ -2710,6 +2712,7 @@
         "intent": "offline_core_dump_triage",
         "intent_zh": "core dump/core文件/离线core/BuildID/符号不匹配/gdb分析core/SIGSEGV core",
         "primary_skill": "adk-offline-core-dump-triage",
+        "profile_availability": "explicit-profile-required",
         "supporting_skills": [
           "adk-systematic-debugging"
         ],
@@ -2773,6 +2776,7 @@
         "intent": "embedded_storage_layout_migration",
         "intent_zh": "UBIFS/SquashFS/ubiblock/业务分区/分区保留/存储布局迁移/OTA布局迁移/文件系统切换",
         "primary_skill": "adk-embedded-storage-layout-migration",
+        "profile_availability": "explicit-profile-required",
         "supporting_skills": [
           "adk-embedded-release-orchestration",
           "adk-production-field-readiness"

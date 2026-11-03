@@ -168,6 +168,86 @@ def _observability(
     return stats, standalone_overlap
 
 
+def _routing_primary_coverage(manifest: Manifest, inventory: Mapping[str, Mapping[str, Any]]) -> tuple[dict[str, Any], list[str]]:
+    """Fail closed when a routed primary cannot resolve through any Profile or explicit optional install."""
+    core = {item["name"] for item in manifest.data.get("skills", [])
+            if isinstance(item, dict) and isinstance(item.get("name"), str)}
+    optional = {item["name"] for item in manifest.data.get("optional_skills", [])
+                if isinstance(item, dict) and isinstance(item.get("name"), str)}
+    membership: dict[str, list[str]] = {}
+    for profile, record in inventory.items():
+        for skill in _strings(record.get("resolved_skills")):
+            membership.setdefault(skill, []).append(profile)
+    routing = manifest.data.get("routing", {})
+    intents = routing.get("intents", []) if isinstance(routing, dict) else []
+    failures: list[str] = []
+    records: list[dict[str, Any]] = []
+    for row in intents:
+        if not isinstance(row, dict):
+            continue
+        intent, primary = row.get("intent"), row.get("primary_skill")
+        if not isinstance(intent, str) or not isinstance(primary, str):
+            failures.append("route has invalid intent or primary")
+            continue
+        profiles = sorted(membership.get(primary, []))
+        if primary in core:
+            route_kind = "profile"
+            if not profiles:
+                failures.append(f"routed core Skill is unreachable from all Profiles: {intent}:{primary}")
+            if row.get("availability") == "optional-skill-required" or row.get("profile_availability") == "optional-skill-required":
+                failures.append(f"routed core Skill falsely claims optional installation: {intent}:{primary}")
+        elif primary in optional:
+            route_kind = "explicit-optional"
+            if row.get("availability", row.get("profile_availability")) != "optional-skill-required":
+                failures.append(f"optional routed Skill lacks opt-in: {intent}:{primary}")
+        else:
+            route_kind = "unknown"
+            failures.append(f"route primary is not a managed Skill: {intent}:{primary}")
+        records.append({"intent": intent, "primary_skill": primary, "kind": route_kind, "profiles": profiles})
+    # A router scenario advertises *specific* Profiles, not every Profile
+    # that happens to hold the Skill. Fail closed on a wrong declared scope;
+    # otherwise the catalog may promise a Skill the selected Profile cannot load.
+    intent_by_name = {row.get("intent"): row for row in intents
+                      if isinstance(row, dict) and isinstance(row.get("intent"), str)}
+    scenarios = manifest.data.get("skill_routing_matrix", [])
+    if not isinstance(scenarios, list):
+        failures.append("skill routing scenario matrix must be a list")
+        scenarios = []
+    scenario_names: set[str] = set()
+    for scenario in scenarios:
+        if not isinstance(scenario, dict):
+            failures.append("skill routing scenario must be an object")
+            continue
+        name = scenario.get("name")
+        allowed = scenario.get("profiles")
+        intent_name = scenario.get("routing_intent")
+        if not isinstance(name, str) or not name or name in scenario_names:
+            failures.append("skill routing scenario has an invalid or duplicate name")
+            continue
+        scenario_names.add(name)
+        if (not isinstance(allowed, list) or not allowed
+                or any(not isinstance(item, str) or item not in inventory for item in allowed)
+                or len(allowed) != len(set(allowed))):
+            failures.append(f"route scenario has invalid allowed Profiles: {name}")
+            continue
+        route = intent_by_name.get(intent_name)
+        if route is None:
+            failures.append(f"route scenario refers to unknown intent: {name}")
+            continue
+        primary = route.get("primary_skill")
+        if primary in core:
+            unavailable = sorted(set(allowed) - set(membership.get(primary, [])))
+            if unavailable:
+                failures.append(f"route scenario Profile cannot load primary Skill: {name}:{primary}:{','.join(unavailable)}")
+        elif primary in optional:
+            if route.get("availability", route.get("profile_availability")) != "optional-skill-required":
+                failures.append(f"route scenario optional primary lacks explicit install: {name}:{primary}")
+        else:
+            failures.append(f"route scenario has unknown primary Skill: {name}:{primary}")
+    return {"total": len(records), "profile_bound": sum(row["kind"] == "profile" for row in records),
+            "explicit_optional": sum(row["kind"] == "explicit-optional" for row in records),
+            "items": records}, failures
+
 def validate_profile_coherence(root: Path) -> dict[str, Any]:
     manifest = Manifest.load(root)
     profiles = _profiles(manifest)
@@ -258,6 +338,8 @@ def validate_profile_coherence(root: Path) -> dict[str, Any]:
             failures.append(str(exc))
 
     stats, standalone_overlap = _observability(inventory)
+    routed_coverage, route_failures = _routing_primary_coverage(manifest, inventory)
+    failures.extend(route_failures)
     return {
         "schema": "adk-profile-coherence/v2",
         "status": "fail" if failures else "pass",
@@ -267,6 +349,7 @@ def validate_profile_coherence(root: Path) -> dict[str, Any]:
         "profile_inventory": {name: inventory[name] for name in sorted(inventory)},
         "capability_stats": stats,
         "standalone_core_overlap": standalone_overlap,
+        "routed_primary_coverage": routed_coverage,
         "failures": failures,
         "warnings": warnings,
     }

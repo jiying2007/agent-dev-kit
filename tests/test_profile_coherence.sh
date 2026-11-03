@@ -123,6 +123,10 @@ assert summary["profiles"] == len(profiles), summary
 assert summary["profile_inventory"] == expected_inventory, summary
 assert summary["capability_stats"] == expected_stats, summary
 assert summary["standalone_core_overlap"] == expected_overlap, summary
+assert summary["routed_primary_coverage"]["total"] == len(manifest["routing"]["intents"]), summary
+assert summary["routed_primary_coverage"]["profile_bound"] == len(manifest["routing"]["intents"]) - 2, summary
+assert summary["routed_primary_coverage"]["explicit_optional"] == 2, summary
+assert all(row["profiles"] for row in summary["routed_primary_coverage"]["items"] if row["kind"] == "profile"), summary
 PY
 
 [[ ! -e "$ROOT_DIR/skills/adk-test-strategy/references/embedded-tdd-matrix.md" ]] || {
@@ -139,4 +143,59 @@ PY
   exit 1
 }
 
-echo "[PASS] profile coherence"
+PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}" python3 - "$ROOT_DIR" <<'PY'
+import copy
+import sys
+from pathlib import Path
+from agent_dev_kit.model import Manifest
+from agent_dev_kit.profile_coherence_contract import _profile_inventory, _profiles, _routing_primary_coverage
+
+manifest = Manifest.load(Path(sys.argv[1]))
+profiles = _profiles(manifest)
+inventory = {name: _profile_inventory(manifest, profiles, name) for name in profiles}
+actual, errors = _routing_primary_coverage(manifest, inventory)
+assert actual["total"] == len(manifest.data["routing"]["intents"]) and not errors, (actual, errors)
+
+# Negative: an installation Profile missing a routed primary must fail closed.
+drift = copy.deepcopy(inventory)
+for row in drift.values():
+    row["resolved_skills"] = [name for name in row["resolved_skills"] if name != "adk-offline-core-dump-triage"]
+_, errors = _routing_primary_coverage(manifest, drift)
+assert any("unreachable" in item and "adk-offline-core-dump-triage" in item for item in errors), errors
+
+# Negative: a route must never advertise a Profile which cannot load its primary.
+scenario_drift = copy.deepcopy(manifest.data)
+next(row for row in scenario_drift["skill_routing_matrix"]
+     if row["name"] == "long_execution")["profiles"] = ["core"]
+changed = Manifest(manifest.root, scenario_drift, manifest.source)
+_, errors = _routing_primary_coverage(changed, inventory)
+assert any("scenario Profile cannot load primary Skill" in item and "long_execution" in item
+           for item in errors), errors
+
+# Negative: a valid Profile cannot mask a second declared, unreachable Profile.
+scenario_drift = copy.deepcopy(manifest.data)
+next(row for row in scenario_drift["skill_routing_matrix"]
+     if row["name"] == "long_execution")["profiles"] = ["team-core", "core"]
+changed = Manifest(manifest.root, scenario_drift, manifest.source)
+_, errors = _routing_primary_coverage(changed, inventory)
+assert any("scenario Profile cannot load primary Skill" in item and "core" in item
+           for item in errors), errors
+
+# Negative: unknown or empty declared Profile sets are never treated as valid.
+for invalid in (["missing-specialist-profile"], []):
+    scenario_drift = copy.deepcopy(manifest.data)
+    next(row for row in scenario_drift["skill_routing_matrix"]
+         if row["name"] == "long_execution")["profiles"] = invalid
+    changed = Manifest(manifest.root, scenario_drift, manifest.source)
+    _, errors = _routing_primary_coverage(changed, inventory)
+    assert any("scenario has invalid allowed Profiles" in item for item in errors), errors
+
+# Negative: a core source Skill cannot claim an optional package that does not exist.
+candidate = copy.deepcopy(manifest.data)
+next(row for row in candidate["routing"]["intents"] if row["intent"] == "planning_execution")["availability"] = "optional-skill-required"
+modified = Manifest(manifest.root, candidate, manifest.source)
+_, errors = _routing_primary_coverage(modified, inventory)
+assert any("falsely claims optional" in item for item in errors), errors
+PY
+
+echo "[PASS] profile coherence and routed Skill reachability"
