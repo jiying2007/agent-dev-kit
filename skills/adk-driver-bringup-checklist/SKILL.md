@@ -6,6 +6,7 @@ last_updated: 2026-11-03
 triggers:
   - "驱动调试"
   - "驱动bringup"
+  - "bringup检查表"
   - "首板联调"
   - "外设联调"
 non_triggers:

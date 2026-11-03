@@ -2658,7 +2658,7 @@
       },
       {
         "intent": "driver_bringup",
-        "intent_zh": "驱动调试/驱动bringup/首板联调/外设联调",
+        "intent_zh": "驱动调试/驱动bringup/首板联调/外设联调/bringup检查表",
         "primary_skill": "adk-driver-bringup-checklist",
         "supporting_skills": [
           "adk-register-map-design"

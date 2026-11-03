@@ -73,3 +73,4 @@ adk-driver-bringup-checklist	skill	1	请检查首板联调的时钟和复位
 adk-structured-requirements-questioning	skill	0	请做文档审查和文字校对
 adk-structured-requirements-questioning	skill	1	帮我理清需求并确认验收标准
 adk-production-field-readiness	skill	0	按建议自动推进代码仓库优化
+adk-driver-bringup-checklist	skill	1	请生成 bringup 检查表用于首板联调
