@@ -183,7 +183,19 @@ def _stage_contract_digest(path: Path, stages: Sequence[str]) -> str:
     # The previous substring check silently accepted extra or reordered
     # Stage Contract steps (notably curation.package), so the compiled IR
     # could omit an advertised execution boundary while all checks passed.
-    body_steps = re.findall(r"(?m)^([1-9][0-9]*)[.]\s*`([^`]+)`\s*[:：]", section)
+    # Parse every numbered row as a stage candidate, including malformed ones.
+    # A selective findall silently ignores hidden additional stages if a
+    # reviewer later updates the trusted body digest alongside that text.
+    numbered = re.compile(r"^[ \t]*(?:[-*][ \t]+)?[0-9]+[.)]")
+    canonical_step = re.compile(r"^([1-9][0-9]*)\.[ \t]+`([^`]+)`[ \t]*[:：].*$")
+    body_steps = []
+    for line in section.splitlines():
+        if not numbered.match(line):
+            continue
+        match = canonical_step.fullmatch(line)
+        if match is None:
+            raise ManifestError("workflow Stage Contract has a malformed numbered stage: {}".format(path))
+        body_steps.append((match.group(1), match.group(2)))
     if ([int(number) for number, _ in body_steps] != list(range(1, len(stages) + 1))
             or [name for _, name in body_steps] != list(stages)):
         raise ManifestError("workflow frontmatter/body stage order differs: {}".format(path))

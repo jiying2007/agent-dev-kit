@@ -111,6 +111,11 @@ class WorkflowIRTest(unittest.TestCase):
                 "1. `verify`: inspect\n2. `propose`: plan",
                 "1. `propose`: plan\n2. `propose`: duplicated",
                 "1. `propose`: plan\n3. `verify`: skipped stage number",
+                "1. `propose`: plan\n2. `verify`: inspect\n3. `publish` — hidden stage",
+                "1. `propose`: plan\n2. `verify`: inspect\n 3. `publish`: indented stage",
+                "1. `propose`: plan\n2. `verify`: inspect\n- 3. `publish`: nested stage",
+                "1. `propose`: plan\n2. `verify`: inspect\n0. `publish`: zero stage",
+                "1. `propose`: plan\n2. `verify`: inspect\n3) `publish`: invalid delimiter",
             ):
                 path.write_text("# Example\n\n## Stage Contract\n" + body
                                 + "\n\n## Commands\n", encoding="utf-8")
