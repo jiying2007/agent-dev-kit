@@ -1,8 +1,8 @@
 ---
 name: adk-test-strategy
-description: 平台中立的软件测试策略与 TDD 分级，按行为、风险和现有测试入口生成可复跑的验证矩阵与证据
-version: 2.1.2
-last_updated: 2026-09-28
+description: "用于定义跨模块测试策略、风险分级、行为覆盖和可复跑验证矩阵；不用于只生成嵌入式局部替身代码或代替真实执行结果。"
+version: 2.1.3
+last_updated: 2026-11-03
 triggers:
   - "测试策略"
   - "TDD"
