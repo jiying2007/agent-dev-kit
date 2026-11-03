@@ -45,8 +45,8 @@ grep -q '| `planning_only` | 用户明确要求只读计划，不创建、不修
   exit 1
 }
 
-grep -q '| `long_execution` | 长任务需要计划审查、检查点、恢复和完成前闭环 | optional-skill-required | core, embedded-fullstack | `feature-delivery` | `adk-planning-execution-loop` |' "$CATALOG_OUT" || {
-  echo "[FAIL] catalog missing optional availability for long_execution" >&2
+grep -q '| `long_execution` | 长任务需要计划审查、检查点、恢复和完成前闭环 | explicit-profile-required | team-core | `feature-delivery` | `adk-planning-execution-loop` |' "$CATALOG_OUT" || {
+  echo "[FAIL] catalog missing explicit specialist Profile availability for long_execution" >&2
   exit 1
 }
 
