@@ -14,9 +14,9 @@
   },
   "profiles": {
     "core": {
-      "assets": 26,
-      "entry_file_bytes": 124913,
-      "potential_full_source_bytes": 163505
+      "assets": 27,
+      "entry_file_bytes": 129370,
+      "potential_full_source_bytes": 169826
     },
     "release-hardening": {
       "assets": 23,
@@ -24,24 +24,24 @@
       "potential_full_source_bytes": 144374
     },
     "personal-core": {
-      "assets": 31,
-      "entry_file_bytes": 143809,
-      "potential_full_source_bytes": 187466
+      "assets": 32,
+      "entry_file_bytes": 148266,
+      "potential_full_source_bytes": 193787
     },
     "embedded-fullstack": {
-      "assets": 51,
-      "entry_file_bytes": 217949,
-      "potential_full_source_bytes": 275382
+      "assets": 52,
+      "entry_file_bytes": 222406,
+      "potential_full_source_bytes": 281703
     },
     "team-core": {
-      "assets": 33,
-      "entry_file_bytes": 148472,
-      "potential_full_source_bytes": 198098
+      "assets": 34,
+      "entry_file_bytes": 152929,
+      "potential_full_source_bytes": 204419
     },
     "large-refactor": {
-      "assets": 52,
-      "entry_file_bytes": 220270,
-      "potential_full_source_bytes": 282712
+      "assets": 53,
+      "entry_file_bytes": 224727,
+      "potential_full_source_bytes": 289033
     },
     "incident-response": {
       "assets": 8,
@@ -57,6 +57,6 @@
   "baseline_source": {
     "version": "7.1.0",
     "commit": "70fac05125907e4930ee73f3928799e11bac55de",
-    "note": "Asset source bytes were independently measured from Git blob sizes before the 7.2.0 observability implementation; 7.2.0 changes do not alter profiled Agent/Skill asset content."
+    "note": "Original baseline: independently measured Git blob sizes before 7.2.0. 2026-11-03 user-authorized adk-goal-authoring addition: author-self-review, add exactly 4457 entry bytes and 1864 deferred-support bytes plus one asset only to core and its inheriting profiles. Rationale and verification: docs/changes/20261103-adk-goal-authoring/design.md. No runtime token-budget or release-authority change."
   }
 }
