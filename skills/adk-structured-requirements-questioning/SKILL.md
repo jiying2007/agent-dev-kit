@@ -1,17 +1,13 @@
 ---
 name: adk-structured-requirements-questioning
 description: 结构化需求提问对齐，通过有序问题消除模糊需求
-version: 1.0.0
-last_updated: 2026-05-06
+version: 1.0.1
+last_updated: 2026-11-03
 triggers:
-  - "文档审查"
-  - "review with docs"
-  - "查文档验证"
   - "帮我理清需求"
   - "先发散再提问"
   - "这个功能怎么做"
-  - "文档验证"
-  - "验证文档"
+  - "澄清需求验收"
 non_triggers:
   - "开始写代码"
   - "测试运行"

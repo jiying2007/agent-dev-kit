@@ -76,6 +76,7 @@
     "adk-component-api-stability": {"capability_class":"guardrail","runtime_role":"primary","selection_group":"api-stability"},
     "adk-bsp-analysis": {"selection_group":"bsp-analysis","effect_ceiling":"read-only"},
     "adk-planning-execution-loop": {"capability_class":"workflow","runtime_role":"primary","selection_group":"execution-governance","effect_ceiling":"workspace-write"},
+    "adk-driver-implementation": {"capability_class":"task","runtime_role":"primary","selection_group":"driver-implementation","effect_ceiling":"workspace-write"},
     "adk-driver-bringup-checklist": {"capability_class":"task","runtime_role":"primary","selection_group":"driver-development","effect_ceiling":"workspace-write","escalation_effects":["live-device:register-write","live-device:diagnostic-write"]},
     "adk-bsp-porting-playbook": {"capability_class":"task","runtime_role":"primary","selection_group":"bsp-porting","effect_ceiling":"workspace-write","escalation_effects":["live-device:flash","live-device:storage-write"]},
     "adk-interrupt-dma-patterns": {"capability_class":"task","runtime_role":"primary","selection_group":"interrupt-dma"},

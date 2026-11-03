@@ -1,5 +1,5 @@
 {
-  "version": "8.2.0",
+  "version": "8.2.1",
   "locale": "zh-CN",
   "platforms": [
     "linux-embedded",
@@ -2651,8 +2651,14 @@
         ]
       },
       {
+        "intent": "driver_implementation",
+        "intent_zh": "驱动开发/写驱动/编写驱动/实现驱动",
+        "primary_skill": "adk-driver-implementation",
+        "supporting_skills": []
+      },
+      {
         "intent": "driver_bringup",
-        "intent_zh": "驱动开发/驱动调试/写驱动/驱动bringup",
+        "intent_zh": "驱动调试/驱动bringup/首板联调/外设联调/bringup检查表",
         "primary_skill": "adk-driver-bringup-checklist",
         "supporting_skills": [
           "adk-register-map-design"
@@ -2737,7 +2743,7 @@
       },
       {
         "intent": "production_field_readiness",
-        "intent_zh": "量产/产测/烧录/诊断/现场维护/OTA升级/回滚/RMA/设备健康检查/production-field/field readiness/embedded-production-field-readiness/simulate-device/模拟设备/设备状态机/自动推进",
+        "intent_zh": "量产/产测/烧录/诊断/现场维护/OTA升级/回滚/RMA/设备健康检查/production-field/field readiness/embedded-production-field-readiness/simulate-device/模拟设备/设备状态机",
         "primary_skill": "adk-production-field-readiness",
         "supporting_skills": [
           "adk-release-versioning",

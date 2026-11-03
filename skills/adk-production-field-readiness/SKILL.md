@@ -1,8 +1,8 @@
 ---
 name: adk-production-field-readiness
 description: 嵌入式量产、产测、烧录、诊断、OTA、回滚与现场维护 readiness
-version: 1.0.0
-last_updated: 2026-05-19
+version: 1.0.1
+last_updated: 2026-11-03
 triggers:
   - "量产"
   - "产测"
@@ -19,7 +19,6 @@ triggers:
   - "simulate-device"
   - "模拟设备"
   - "设备状态机"
-  - "自动推进"
 non_triggers:
   - 通用 Web 发布
   - 纯版本号整理且不涉及设备交付

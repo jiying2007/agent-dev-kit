@@ -199,7 +199,7 @@ test_routing_10_register_map() {
 # 11. adk-driver-bringup-checklist
 test_routing_11_driver_bringup() {
     local output
-    output=$(match_cli --text "驱动开发" 2>&1) || true
+    output=$(match_cli --text "首板联调" 2>&1) || true
     [[ "$output" == *"match=true"* && "$output" == *"skill=adk-driver-bringup-checklist"* ]]
 }
 
@@ -317,10 +317,10 @@ test_multi_slash_intent_zh_last() {
 }
 
 test_multi_slash_intent_zh_substring() {
-    # "驱动开发/驱动调试/写驱动/驱动bringup" - 匹配写驱动段
+    # "驱动开发/写驱动/编写驱动/实现驱动" - 匹配源码实现段
     local output
     output=$(match_cli --text "写驱动" 2>&1) || true
-    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-driver-bringup-checklist"* ]]
+    [[ "$output" == *"match=true"* && "$output" == *"skill=adk-driver-implementation"* ]]
 }
 
 test_multi_slash_intent_zh_partial() {

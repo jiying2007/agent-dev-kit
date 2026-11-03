@@ -67,3 +67,10 @@ adk-token-context-governance	skill	1	查最近决策时使用 Progressive Memory
 adk-token-context-governance	skill	0	高风险审计要求直接看原文
 adk-incident-rca-report	optional-skill	1	线上事故需要做根因分析复盘
 adk-incident-rca-report	optional-skill	0	本地开发阶段的临时报错先不复盘
+adk-driver-implementation	skill	1	帮我写驱动源码并添加错误恢复测试
+adk-driver-bringup-checklist	skill	0	只要求编写驱动代码暂不上板
+adk-driver-bringup-checklist	skill	1	请检查首板联调的时钟和复位
+adk-structured-requirements-questioning	skill	0	请做文档审查和文字校对
+adk-structured-requirements-questioning	skill	1	帮我理清需求并确认验收标准
+adk-production-field-readiness	skill	0	按建议自动推进代码仓库优化
+adk-driver-bringup-checklist	skill	1	请生成 bringup 检查表用于首板联调

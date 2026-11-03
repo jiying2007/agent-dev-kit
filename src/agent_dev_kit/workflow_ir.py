@@ -6,6 +6,8 @@ import argparse
 import hashlib
 import json
 import re
+import unicodedata
+from html import unescape
 from pathlib import Path
 from typing import Any, Dict, Mapping, Optional, Sequence
 
@@ -29,6 +31,7 @@ POLICY_FIELDS = {
     "terminal_states",
     "edge_conditions",
     "projection_digests",
+    "document_digests",
     "stage_classes",
     "stage_bindings",
 }
@@ -118,6 +121,12 @@ def load_policy(path: Path) -> Dict[str, Any]:
         ):
             raise ManifestError("projection_digests contains an invalid entry")
 
+    document_digests = raw.get("document_digests")
+    if not isinstance(document_digests, dict) or set(document_digests) != set(projection_digests):
+        raise ManifestError("document_digests must exactly cover managed workflow projections")
+    if any(not isinstance(digest, str) or re.fullmatch(r"[0-9a-f]{64}", digest) is None
+           for digest in document_digests.values()):
+        raise ManifestError("document_digests contains an invalid source digest")
     classes = raw.get("stage_classes")
     if not isinstance(classes, dict) or not classes:
         raise ManifestError("stage_classes must be a non-empty object")
@@ -175,14 +184,66 @@ def _frontmatter(path: Path) -> Dict[str, Any]:
 def _stage_contract_digest(path: Path, stages: Sequence[str]) -> str:
     text = path.read_text(encoding="utf-8")
     marker = "## Stage Contract"
-    if marker not in text:
-        raise ManifestError("workflow body is missing Stage Contract: {}".format(path))
+    # Managed Workflow headings have a closed, ASCII-only ATX grammar.
+    # Reject all alternate Markdown/HTML heading spellings before slicing
+    # the authoritative Stage Contract: Unicode homoglyphs/marks, encoded
+    # hash signs, blockquotes, Setext headings and duplicate H2s must not
+    # silently escape the immutable projection digest.
+    lines = text.splitlines()
+    body_start = 0
+    if lines and lines[0] == "---":
+        try:
+            body_start = lines.index("---", 1) + 1
+        except ValueError as exc:
+            raise ManifestError("workflow frontmatter is not terminated: {}".format(path)) from exc
+    canonical_heading = re.compile(r"#{1,2} [A-Za-z][A-Za-z0-9 -]*")
+    heading_candidate = re.compile(r"(?<![A-Za-z0-9_])#{1,6}[ \t]")
+
+    html_probe = re.compile(r"<h[1-6]\b", re.IGNORECASE)
+    setext_probe = re.compile(r"^[ \t]*(?:>[ \t]*)*(?:=+|-+)[ \t]*$")
+    # Deliberately scan every source line, including code fences and indented
+    # examples. Treat a second heading-like declaration as invalid even when
+    # Markdown would render it as code; this avoids implementing a fragile
+    # second CommonMark fence parser or hiding a real H2 behind malformed fences.
+    headings = []
+    for line in lines[body_start:]:
+        rendered = unicodedata.normalize("NFKC", unescape(line))
+        if html_probe.search(rendered) or setext_probe.fullmatch(rendered):
+            raise ManifestError("workflow body has unsupported alternate heading: {}".format(path))
+        if heading_candidate.search(rendered):
+            if canonical_heading.fullmatch(line) is None:
+                raise ManifestError("workflow heading is not canonical ASCII ATX: {}".format(path))
+            headings.append(line)
+    # Reject an alternative case/spacing/punctuation spelling of the
+    # authoritative heading, even if it is otherwise valid ASCII ATX.
+    stage_heading_aliases = [line for line in headings
+                             if re.sub(r"[^a-z]", "", line.casefold()) == "stagecontract"]
+    if stage_heading_aliases != [marker]:
+        raise ManifestError("workflow body requires one canonical Stage Contract heading: {}".format(path))
     section = text.split(marker, 1)[1]
     if "\n## " in section:
         section = section.split("\n## ", 1)[0]
-    for stage in stages:
-        if "`{}`".format(stage) not in section:
-            raise ManifestError("workflow Stage Contract is missing stage {}: {}".format(stage, path))
+    # The previous substring check silently accepted extra or reordered
+    # Stage Contract steps (notably curation.package), so the compiled IR
+    # could omit an advertised execution boundary while all checks passed.
+    # Parse every numbered row as a stage candidate, including malformed ones.
+    # A selective findall silently ignores hidden additional stages if a
+    # reviewer later updates the trusted body digest alongside that text.
+    # The Stage Contract body is a deliberately closed grammar: blank lines
+    # and canonical decimal rows only.  Any prose, Chinese ordinals, quotes,
+    # bullets, malformed separators or hidden stages must fail before hashing.
+    canonical_step = re.compile(r"^([1-9][0-9]*)\.[ \t]+`([^`]+)`[ \t]*[:：].*$")
+    body_steps = []
+    for line in section.splitlines():
+        if not line.strip():
+            continue
+        match = canonical_step.fullmatch(line)
+        if match is None:
+            raise ManifestError("workflow Stage Contract contains noncanonical stage text: {}".format(path))
+        body_steps.append((match.group(1), match.group(2)))
+    if ([int(number) for number, _ in body_steps] != list(range(1, len(stages) + 1))
+            or [name for _, name in body_steps] != list(stages)):
+        raise ManifestError("workflow frontmatter/body stage order differs: {}".format(path))
     canonical = "\n".join(line.rstrip() for line in section.strip().splitlines()) + "\n"
     return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
 
@@ -282,8 +343,8 @@ def compile_workflow_ir(
     compiled = []
     names = set()
     manifest_names = {entry.get("name") for entry in workflows if isinstance(entry, dict)}
-    if set(policy["projection_digests"]) != manifest_names:
-        raise ManifestError("workflow projection digests must cover every managed workflow exactly")
+    if set(policy["projection_digests"]) != manifest_names or set(policy["document_digests"]) != manifest_names:
+        raise ManifestError("workflow source/projection digests must cover every managed workflow exactly")
     for entry in workflows:
         if not isinstance(entry, dict):
             raise ManifestError("manifest workflow entry must be an object")
@@ -293,6 +354,10 @@ def compile_workflow_ir(
         names.add(name)
         relative = _string(entry.get("path"), "workflow {} path".format(name))
         path = manifest.root / relative
+        # Whole-document exact-byte identity is a precondition to interpreting Markdown.
+        # Stage-only projections cannot protect arbitrary content after the next heading.
+        if hashlib.sha256(path.read_bytes()).hexdigest() != policy["document_digests"][name]:
+            raise ManifestError("workflow document source identity drifted: {}".format(name))
         frontmatter = _frontmatter(path)
         for field in ("name", "description", "primary_agent", "primary_skill", "command_risk"):
             if frontmatter.get(field) != entry.get(field):
