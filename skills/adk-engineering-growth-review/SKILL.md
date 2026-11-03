@@ -1,8 +1,8 @@
 ---
 name: adk-engineering-growth-review
-description: 本地工程成长复盘与学习建议，宽读本地 Codex 历史、归档、日报和项目证据，识别长期趋势、重复问题和训练计划
-version: 1.0.0
-last_updated: 2026-05-31
+description: "用于基于已授权的工程历史和交付证据做长期开发习惯复盘、学习建议与趋势分析；不用于推断私人属性或无证据评判个人表现。"
+version: 1.0.1
+last_updated: 2026-11-03
 triggers:
   - "开发者成长复盘"
   - "成长分析"

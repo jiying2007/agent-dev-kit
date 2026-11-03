@@ -1,8 +1,8 @@
 ---
 name: adk-embedded-debug-transport
-description: 嵌入式设备调试通道治理，覆盖 ADB/logcat、SSH、串口控制台、GDB remote、硬件调试探针和厂商 CLI 的连接边界、命令风险、证据采集和回滚锚点
-version: 1.0.0
-last_updated: 2026-07-04
+description: "用于管理串口、SSH、ADB、远程 GDB 等调试通道的连接与权限证据；不用于隐式远程部署、修改设备配置或替代故障根因分析。"
+version: 1.0.1
+last_updated: 2026-11-03
 triggers:
   - "调试通道"
   - "设备调试通道"

@@ -1,8 +1,8 @@
 ---
 name: adk-embedded-diagnostic-harness
-description: 嵌入式诊断 harness 治理，覆盖 prog_tool、diag 命令、strict/env 套件、返回码语义、HIL/SIL 证据和产测 CLI 验证
-version: 1.0.0
-last_updated: 2026-05-31
+description: "用于诊断 CLI、prog_tool、strict 套件及 HIL/SIL 证据的返回码和行为验证；不用于无许可的现场产测写入或直接放行量产。"
+version: 1.0.1
+last_updated: 2026-11-03
 triggers:
   - "诊断 harness"
   - "diag 命令"

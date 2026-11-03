@@ -1,8 +1,8 @@
 ---
 name: adk-embedded-release-orchestration
-description: 嵌入式全栈发布编排；release preparation、真实 publish 与 live-device flash 分权治理
-version: 2.0.0
-last_updated: 2026-09-17
+description: "用于嵌入式固件 OTA 制品的发布准备、签名证据和回滚编排；不用于未经单独授权的真实 publish、设备 flash 或发布批准。"
+version: 2.0.1
+last_updated: 2026-11-03
 triggers:
   - "嵌入式发布编排"
   - "固件发布"
