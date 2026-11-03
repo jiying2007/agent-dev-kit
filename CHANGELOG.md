@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### 8.2.0 source candidate
+- Add the platform-neutral core `adk-goal-authoring` Skill and read-only `goal plan-check`, `render` and `resume` commands, preserving original acceptance criteria, finite batches and budget proposals without changing host Goal authority.
+- Reuse bounded strict JSON and current-state extension validation; reject batches with unfinished dependencies and cover malformed inputs, special files and cross-project invocation with deterministic regressions.
+- Retain exact signed source promotion, independent review and separate runtime/product qualification.
+
 ### 8.1.5 source candidate
 - Integrate event-driven continuation, context-only follow-ups, trustworthy scope hand-back, durable Worker checkpoints and low-noise human-attention guidelines into existing Agent operating rules and compact Skill entries, preserving strict Source/Action Gateway authority.
 - Add deterministic method/typed-intake regression cases and retain source-context ratchets. This does **not** deploy the DSH runtime, certify event delivery or notifications, relax independent review, or qualify actual service/provider/field outcomes.

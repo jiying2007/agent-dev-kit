@@ -62,6 +62,7 @@
     }
   },
   "overrides": {
+    "adk-goal-authoring": {"capability_class":"task","runtime_role":"primary","selection_group":"goal-authoring"},
     "adk-runtime-router": {"capability_class":"meta","runtime_role":"primary","selection_group":"runtime-routing"},
     "adk-context-engineering": {"capability_class":"support","runtime_role":"supporting","selection_group":"context-policy"},
     "adk-token-context-governance": {"capability_class":"guardrail","runtime_role":"primary","selection_group":"context-policy"},

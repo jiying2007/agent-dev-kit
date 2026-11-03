@@ -22,6 +22,12 @@
   },
   "relationships": [
     {
+      "from": "adk-goal-authoring",
+      "to": "adk-planning-execution-loop",
+      "type": "handoff",
+      "requirement": "when-applicable"
+    },
+    {
       "from": "adk-verification-before-completion",
       "to": "adk-after-action-review",
       "type": "context-prerequisite",

@@ -10,6 +10,23 @@ from agent_dev_kit.planning_state import check_current_state
 
 
 class PlanningStateTest(unittest.TestCase):
+    def test_bounded_work_in_progress_is_compatible_but_not_a_completion_claim(self) -> None:
+        value = {"schema_version": "adk.current-state/v1", "goal_ref": "requirements.md",
+                 "milestone": "AAC", "evidence_refs": [], "blockers": [],
+                 "next_actions": ["inspect current source"], "history_refs": [],
+                 "work_in_progress": {"ref": "batch.md", "status": "OPEN",
+                                      "prior_verified_checkpoint": 220}}
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "current.json"
+            path.write_text(json.dumps(value))
+            self.assertEqual("pass", check_current_state(path)["status"])
+            self.assertFalse(check_current_state(path)["completion_allowed"])
+            for invalid in ({"unknown": "x"}, {"status": []},
+                            {"prior_verified_checkpoint": True}, {}, "OPEN"):
+                value["work_in_progress"] = invalid
+                path.write_text(json.dumps(value))
+                self.assertIn("current-state-work-in-progress-invalid", check_current_state(path)["reasons"])
+
     def test_current_state_is_bounded_without_granting_completion(self) -> None:
         value = {"schema_version": "adk.current-state/v1", "goal_ref": "requirements.md",
                  "milestone": "owner lifecycle", "evidence_refs": ["tests-receipt.json"],

@@ -11,6 +11,17 @@ from .strict_json import StrictJSONError, read_bytes as read_bounded_bytes
 from .strict_json import loads as load_strict_json
 
 
+def valid_work_in_progress(work: Any) -> bool:
+    """Validate the optional frontier extension without granting completion."""
+    allowed = {"ref", "status", "prior_verified_checkpoint", "replan", "qualification"}
+    return (isinstance(work, dict) and bool(work) and not set(work) - allowed
+            and all(isinstance(v, str) and bool(v.strip())
+                    for k, v in work.items() if k != "prior_verified_checkpoint")
+            and ("prior_verified_checkpoint" not in work
+                 or (type(work["prior_verified_checkpoint"]) is int
+                     and work["prior_verified_checkpoint"] >= 0)))
+
+
 def _reject_symlink_path(path: Path) -> None:
     """Fail closed on symlinked components, including parents (preflight only)."""
     current = path
@@ -45,8 +56,11 @@ def check_current_state(path: Path, *, max_bytes: int = 8192) -> dict[str, Any]:
             reasons.append("current-state-schema-invalid")
         else:
             required = {"schema_version", "goal_ref", "milestone", "evidence_refs", "blockers", "next_actions", "history_refs"}
-            if set(value) != required:
+            if not required <= set(value) or set(value) - required - {"work_in_progress"}:
                 reasons.append("current-state-fields-invalid")
+            if "work_in_progress" in value:
+                if not valid_work_in_progress(value["work_in_progress"]):
+                    reasons.append("current-state-work-in-progress-invalid")
             for key in ("goal_ref", "milestone"):
                 if not isinstance(value.get(key), str) or not value[key].strip():
                     reasons.append("current-state-" + key.replace("_", "-") + "-missing")

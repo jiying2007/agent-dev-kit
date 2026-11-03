@@ -1,5 +1,5 @@
 {
-  "version": "8.1.5",
+  "version": "8.2.0",
   "locale": "zh-CN",
   "platforms": [
     "linux-embedded",
@@ -813,6 +813,16 @@
       "pattern": "playbook"
     },
     {
+      "name": "adk-goal-authoring",
+      "path": "skills/adk-goal-authoring/SKILL.md",
+      "quality_tier": "p1",
+      "category": "planning",
+      "lifecycle_order": 30,
+      "stage_order": 15,
+      "activation_mode": "primary",
+      "pattern": "generator"
+    },
+    {
       "name": "adk-planning-execution-loop",
       "path": "skills/adk-planning-execution-loop/SKILL.md",
       "quality_tier": "p0",
@@ -1236,6 +1246,7 @@
         "adk-requirements-triage",
         "adk-structured-requirements-questioning",
         "adk-lightweight-planning",
+        "adk-goal-authoring",
         "adk-task-breakdown",
         "adk-parallel-agent-governance",
         "adk-worktree-governance",
@@ -2340,6 +2351,12 @@
         "mutually_exclusive": [
           "adk-planning-execution-loop"
         ]
+      },
+      {
+        "intent": "goal_authoring",
+        "intent_zh": "生成Goal/Goal怎么写/目标合同/目标过大/长期不收敛",
+        "primary_skill": "adk-goal-authoring",
+        "supporting_skills": []
       },
       {
         "intent": "planning_execution",
