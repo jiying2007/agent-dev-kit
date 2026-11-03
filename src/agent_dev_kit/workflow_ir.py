@@ -7,6 +7,7 @@ import hashlib
 import json
 import re
 import unicodedata
+from html import unescape
 from pathlib import Path
 from typing import Any, Dict, Mapping, Optional, Sequence
 
@@ -182,7 +183,7 @@ def _stage_contract_digest(path: Path, stages: Sequence[str]) -> str:
     headings = [line for line in text.splitlines() if heading.match(line)]
     # Reserve the phrase in the whole document, including Setext/HTML
     # heading variants which Markdown may render as the same stage heading.
-    normalized = unicodedata.normalize("NFKC", text).casefold()
+    normalized = unicodedata.normalize("NFKC", unescape(text)).casefold()
     # Unicode format separators are invisible to humans, but must never
     # create a second visually identical authoritative stage heading.
     normalized = "".join(" " if unicodedata.category(ch) == "Cf" else ch for ch in normalized)

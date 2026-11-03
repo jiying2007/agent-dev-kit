@@ -123,6 +123,9 @@ class WorkflowIRTest(unittest.TestCase):
                 "\n## Stage\u00a0Contract\n3. `publish`: nonbreaking-space duplicate\n",
                 "\n＃＃ Stage Contract\n3. `publish`: fullwidth-hash duplicate\n",
                 "\n## Stage\u200bContract\n3. `publish`: zero-width duplicate\n",
+                "\n## Stage&nbsp;Contract\n3. `publish`: named HTML entity\n",
+                "\n## Stage&#32;Contract\n3. `publish`: numeric HTML entity\n",
+                "\n## Sta&#103;e Contract\n3. `publish`: encoded heading letter\n",
             ):
                 path.write_text(valid_document + trailing, encoding="utf-8")
                 with self.assertRaises(ManifestError):
