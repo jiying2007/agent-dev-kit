@@ -1364,10 +1364,10 @@
       ],
       "extends": "core",
       "include_skills": [
+        "adk-planning-execution-loop",
         "adk-chinese-commit-conventions",
         "adk-chinese-code-review",
         "adk-cross-team-handoff",
-        "adk-planning-execution-loop",
         "adk-memory-curator",
         "adk-archive-governance",
         "adk-knowledge-archive",

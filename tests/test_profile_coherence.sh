@@ -154,7 +154,7 @@ manifest = Manifest.load(Path(sys.argv[1]))
 profiles = _profiles(manifest)
 inventory = {name: _profile_inventory(manifest, profiles, name) for name in profiles}
 actual, errors = _routing_primary_coverage(manifest, inventory)
-assert actual["total"] == 47 and not errors, (actual, errors)
+assert actual["total"] == len(manifest.data["routing"]["intents"]) and not errors, (actual, errors)
 
 # Negative: an installation Profile missing a routed primary must fail closed.
 drift = copy.deepcopy(inventory)
