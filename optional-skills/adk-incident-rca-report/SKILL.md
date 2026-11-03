@@ -1,8 +1,8 @@
 ---
 name: adk-incident-rca-report
-description: 线上事故复盘与根因分析闭环
-version: 1.0.0
-last_updated: 2026-05-06
+description: "用于生产事故稳定后整理时间线、根因、恢复和防复发证据；不用于事故正在处置时替代现场响应或虚构不存在的取证材料。"
+version: 1.0.1
+last_updated: 2026-11-03
 triggers:
   - "线上事故"
   - "故障复盘"

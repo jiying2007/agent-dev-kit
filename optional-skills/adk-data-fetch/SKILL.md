@@ -1,8 +1,8 @@
 ---
 name: adk-data-fetch
-description: 数据获取技能组合——包含邮件获取与网页正文提取
-version: 1.0.0
-last_updated: 2026-05-06
+description: "用于按 URL 或 IMAP 类型选择**已显式安装**的数据获取子 Skill 并检查访问权限；不自动安装子 Skill，不用于数据库操作或未授权的邮件读取。"
+version: 1.0.1
+last_updated: 2026-11-03
 triggers:
   - "获取数据"
   - "数据抓取"

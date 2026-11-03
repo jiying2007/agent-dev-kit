@@ -1,8 +1,8 @@
 ---
 name: adk-fetch-url-content
-description: URL 正文提取——从网页提取结构化内容
-version: 1.0.0
-last_updated: 2026-05-06
+description: "用于对明确的公开 HTTP(S) URL 做正文提取与结构化 Markdown 转换；不用于网页搜索、绕过登录、内网探测或抓取受限资源。"
+version: 1.0.1
+last_updated: 2026-11-03
 triggers:
   - "获取网页内容"
   - "抓取链接正文"

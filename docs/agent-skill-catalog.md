@@ -54,7 +54,7 @@
 | 30 | 20 | `planning` | primary | playbook | `adk-task-breakdown` | 用于复杂需求拆解任务包、依赖关系及并行边界；单点小修无需拆包，也不用于替代已批准计划的持续执行。 | 拆解任务 | `skills/adk-task-breakdown/SKILL.md` |
 | 30 | 25 | `planning` | primary | pipeline | `adk-planning-execution-loop` | 用于已批准的多阶段长任务计划执行、恢复检查点、有限重试与收口验证；不用于仅索要只读计划，也不自行扩大宿主预算或权限。 | 执行计划 | `skills/adk-planning-execution-loop/SKILL.md` |
 | 30 | 30 | `planning` | primary | governance | `adk-parallel-agent-governance` | 用于多个 Agent 并行时划分 scope、共享契约、冲突矩阵和最终集成验证；不用于单点小改或擅自委派有额外权限的任务。 | 并行 agent | `skills/adk-parallel-agent-governance/SKILL.md` |
-| 30 | 40 | `planning` | primary | governance | `adk-worktree-governance` | git worktree 隔离开发治理，规范创建准入、目录、基线验证、同步、清理和禁止操作 | worktree | `skills/adk-worktree-governance/SKILL.md` |
+| 30 | 40 | `planning` | primary | governance | `adk-worktree-governance` | 用于 git worktree 并行开发前的隔离、基线锁定、同步与安全清理；不用于擅自删除脏工作树或替代多 Agent 任务拆分。 | worktree | `skills/adk-worktree-governance/SKILL.md` |
 | 30 | 50 | `planning` | primary | generator | `adk-context-compress-handoff` | 用于长任务上下文压缩、跨会话恢复及交接时保存目标、证据指针和下一动作；不用于替代原始高风险证据或任务执行。 | 上下文压缩 | `skills/adk-context-compress-handoff/SKILL.md` |
 | 40 | 10 | `design` | primary | generator | `adk-interface-contract-design` | 用于模块 API、协议消息及生命周期状态转换的接口契约设计与迁移评审；不用于需求未收敛时直接写实现或放行设备动作。 | 设计接口 | `skills/adk-interface-contract-design/SKILL.md` |
 | 40 | 20 | `design` | primary | generator | `adk-adr-writer` | 用于架构方案已有明确权衡、需要记录决定与替代方案时生成 ADR；不用于在需求不明时直接替代需求澄清或执行代码修改。 | 写ADR | `skills/adk-adr-writer/SKILL.md` |
@@ -106,13 +106,13 @@
 | Order | Stage | Category | Activation | Pattern | Name | Description | First Trigger | Path |
 |---:|---:|---|---|---|---|---|---|---|
 | 20 | 50 | `intake` | primary | pipeline | `adk-external-practice-absorption` | 统一评估 GitHub、GitLab、Gitee、OpenAI/Codex 官方、Anthropic/Claude 官方、微信公众号和人工证据中的外部 Agent、Skill、Workflow 与工程实践，并把批准项闭环到 ADK change、验证、pilot、发布复审和退役。用于“吸收外部实践”“评估参考实现”“从官方或社区沉淀 Agent/Skill/Workflow”“Gitee/GitLab/GitHub 实践研究”等请求；不用于普通功能开发、单纯浏览网页或未经 owner 决策的自动安装/复制。 | 吸收外部实践 | `optional-skills/adk-external-practice-absorption/SKILL.md` |
-| 50 | 90 | `implementation` | supporting | tool-wrapper | `adk-data-fetch` | 数据获取技能组合——包含邮件获取与网页正文提取 | 获取数据 | `optional-skills/adk-data-fetch/SKILL.md` |
-| 50 | 91 | `implementation` | supporting | tool-wrapper | `adk-email-imap-fetch` | IMAP 邮件获取——从邮箱获取邮件列表和内容 | 获取邮件 | `optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md` |
-| 50 | 92 | `implementation` | supporting | tool-wrapper | `adk-fetch-url-content` | URL 正文提取——从网页提取结构化内容 | 获取网页内容 | `optional-skills/adk-data-fetch/adk-fetch-url-content/SKILL.md` |
-| 70 | 90 | `verification` | primary | playbook | `adk-test-flakiness-triage` | 定位测试波动根因并给出稳定化方案 | 测试波动 | `optional-skills/adk-test-flakiness-triage/SKILL.md` |
-| 80 | 70 | `review_quality` | primary | reviewer | `adk-security-supply-chain` | 第三方技能、脚本与参考资产引入前的安全和供应链审查 | 供应链审查 | `optional-skills/adk-security-supply-chain/SKILL.md` |
-| 90 | 80 | `release_closure` | fallback | generator | `adk-incident-rca-report` | 线上事故复盘与根因分析闭环 | 线上事故 | `optional-skills/adk-incident-rca-report/SKILL.md` |
-| 100 | 40 | `governance` | primary | governance | `adk-skill-composition-governance` | 治理技能组合、触发优先级、fallback 与弃用关系 | 技能组合 | `optional-skills/adk-skill-composition-governance/SKILL.md` |
+| 50 | 90 | `implementation` | supporting | tool-wrapper | `adk-data-fetch` | 用于按 URL 或 IMAP 类型选择**已显式安装**的数据获取子 Skill 并检查访问权限；不自动安装子 Skill，不用于数据库操作或未授权的邮件读取。 | 获取数据 | `optional-skills/adk-data-fetch/SKILL.md` |
+| 50 | 91 | `implementation` | supporting | tool-wrapper | `adk-email-imap-fetch` | 用于已授权邮箱的只读 IMAP 邮件列表及正文提取，并限制凭据与输出范围；不用于邮件发送、归档写入或扫描无关邮箱。 | 获取邮件 | `optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md` |
+| 50 | 92 | `implementation` | supporting | tool-wrapper | `adk-fetch-url-content` | 用于对明确的公开 HTTP(S) URL 做正文提取与结构化 Markdown 转换；不用于网页搜索、绕过登录、内网探测或抓取受限资源。 | 获取网页内容 | `optional-skills/adk-data-fetch/adk-fetch-url-content/SKILL.md` |
+| 70 | 90 | `verification` | primary | playbook | `adk-test-flakiness-triage` | 用于非确定性测试故障的复现、波动归因和消除不稳定方案验证；不用于把失败盲目重跑到绿或降低测试门禁。 | 测试波动 | `optional-skills/adk-test-flakiness-triage/SKILL.md` |
+| 80 | 70 | `review_quality` | primary | reviewer | `adk-security-supply-chain` | 用于第三方 Skill、脚本、依赖和参考资产引入前的来源、权限与供应链审查；不用于自动安装不可信包或把静态扫描当安全认证。 | 供应链审查 | `optional-skills/adk-security-supply-chain/SKILL.md` |
+| 90 | 80 | `release_closure` | fallback | generator | `adk-incident-rca-report` | 用于生产事故稳定后整理时间线、根因、恢复和防复发证据；不用于事故正在处置时替代现场响应或虚构不存在的取证材料。 | 线上事故 | `optional-skills/adk-incident-rca-report/SKILL.md` |
+| 100 | 40 | `governance` | primary | governance | `adk-skill-composition-governance` | 用于多个 Skill 的触发冲突、组合边界、fallback 和退役策略审查；不用于新增并行路由权威或直接提升工具写权限。 | 技能组合 | `optional-skills/adk-skill-composition-governance/SKILL.md` |
 
 ## Workflows
 

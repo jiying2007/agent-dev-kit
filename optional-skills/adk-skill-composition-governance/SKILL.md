@@ -1,8 +1,8 @@
 ---
 name: adk-skill-composition-governance
-description: 治理技能组合、触发优先级、fallback 与弃用关系
-version: 1.1.1
-last_updated: 2026-08-31
+description: "用于多个 Skill 的触发冲突、组合边界、fallback 和退役策略审查；不用于新增并行路由权威或直接提升工具写权限。"
+version: 1.1.2
+last_updated: 2026-11-03
 triggers:
   - "技能组合"
   - "触发冲突"
