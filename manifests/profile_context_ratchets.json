@@ -3,7 +3,7 @@
   "status": "active",
   "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
   "measured_from": "source-file-bytes",
-  "measured_at": "2026-09-28",
+  "measured_at": "2026-11-03",
   "policy": {
     "fail_on_entry_file_growth": true,
     "fail_on_potential_full_source_growth": true,
@@ -15,48 +15,48 @@
   "profiles": {
     "core": {
       "assets": 27,
-      "entry_file_bytes": 129370,
-      "potential_full_source_bytes": 169826
+      "entry_file_bytes": 129818,
+      "potential_full_source_bytes": 170465
     },
     "release-hardening": {
       "assets": 23,
-      "entry_file_bytes": 106065,
-      "potential_full_source_bytes": 144374
+      "entry_file_bytes": 107062,
+      "potential_full_source_bytes": 145562
     },
     "personal-core": {
       "assets": 32,
-      "entry_file_bytes": 148266,
-      "potential_full_source_bytes": 193787
+      "entry_file_bytes": 148896,
+      "potential_full_source_bytes": 194608
     },
     "embedded-fullstack": {
       "assets": 54,
-      "entry_file_bytes": 230096,
-      "potential_full_source_bytes": 289584
+      "entry_file_bytes": 232978,
+      "potential_full_source_bytes": 292466
     },
     "team-core": {
-      "assets": 35,
-      "entry_file_bytes": 160166,
-      "potential_full_source_bytes": 212956
+      "assets": 37,
+      "entry_file_bytes": 166517,
+      "potential_full_source_bytes": 230206
     },
     "large-refactor": {
       "assets": 55,
-      "entry_file_bytes": 232417,
-      "potential_full_source_bytes": 296914
+      "entry_file_bytes": 235403,
+      "potential_full_source_bytes": 299900
     },
     "incident-response": {
       "assets": 9,
-      "entry_file_bytes": 34102,
-      "potential_full_source_bytes": 37403
+      "entry_file_bytes": 34519,
+      "potential_full_source_bytes": 37820
     },
     "research-intake": {
       "assets": 20,
-      "entry_file_bytes": 82660,
-      "potential_full_source_bytes": 121247
+      "entry_file_bytes": 83220,
+      "potential_full_source_bytes": 121998
     }
   },
   "baseline_source": {
     "version": "7.1.0",
     "commit": "70fac05125907e4930ee73f3928799e11bac55de",
-    "note": "Original baseline: independently measured Git blob sizes before 7.2.0. 2026-11-03 user-authorized adk-goal-authoring addition: author-self-review, add exactly 4457 entry bytes and 1864 deferred-support bytes plus one asset only to core and its inheriting profiles. Rationale and verification: docs/changes/20261103-adk-goal-authoring/design.md. No runtime token-budget or release-authority change. 2026-11-03 v8.2.2: three existing registered-but-unreachable core Skills are attached to existing specialist Profiles only (team-core, incident-response, embedded-fullstack). Platform-neutral core remains unchanged. Checked source bytes: team-core 160166/212956; incident-response 34102/37403; embedded-fullstack 230096/289584; inherited large-refactor 232417/296914. These are source bytes, not native runtime token measurements."
+    "note": "Original baseline: independently measured Git blob sizes before 7.2.0. 2026-11-03 user-authorized adk-goal-authoring addition: author-self-review, add exactly 4457 entry bytes and 1864 deferred-support bytes plus one asset only to core and its inheriting profiles. Rationale and verification: docs/changes/20261103-adk-goal-authoring/design.md. No runtime token-budget or release-authority change. 2026-11-03 v8.2.2: three existing registered-but-unreachable core Skills are attached to existing specialist Profiles only (team-core, incident-response, embedded-fullstack). Platform-neutral core remains unchanged. Checked source bytes: team-core 160166/212956; incident-response 34102/37403; embedded-fullstack 230096/289584; inherited large-refactor 232417/296914. These are source bytes, not native runtime token measurements. 2026-11-03 v8.2.3: reviewed source-only description boundary improvements and explicit team-core reachability for existing artifact/pilot Skills; per-profile source byte ratchets refreshed from exact Git tree with support references counted. This is not a native tokenizer or runtime-context measurement. Duplicate private support references are retained for independently exportable Skills, not compatibility aliases."
   }
 }

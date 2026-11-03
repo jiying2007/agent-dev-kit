@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### 8.2.3 source candidate
+- Strengthen the source-only discovery descriptions and exclusion boundaries across the Skill catalog; add all-inventory positive/negative isolated matcher tests without claiming native runtime effectiveness.
+- Attach two previously unprofiled core Skills to specialist team-core, preserving default core membership; reject future unprofiled core assets.
+- Correct non-existent repository maintenance command references, fail closed when optional data-fetch child Skills are absent, and remove the obsolete optional planning recovery mirror.
+- Preserve Python 3.8 support, approved source-to-live boundaries, no implicit model/provider runtime, and independent source review requirements.
+- Source-size ratchets reflect registered profile changes only; no measured native token or latency claim.
+
 ### 8.2.2 source candidate
 - Close route-to-profile reachability for three existing registered Core Skills without growing the default `core` Profile: long-task execution in `team-core`, offline core dumps in `incident-response`, and embedded storage layout migration in `embedded-fullstack`.
 - Correct the long-task route's invalid optional-skill-install claim; require explicit specialist Profile selection, not implicit authority.
