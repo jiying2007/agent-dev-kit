@@ -1,8 +1,8 @@
 ---
 name: adk-runtime-router
 description: "用于任务开始前在可信 Skills 清单中选定唯一 primary、supporting 和回退路径；不用于已有明确任务包时重复路由或隐式授予执行权限。"
-version: 2.1.2
-last_updated: 2026-11-03
+version: 2.1.3
+last_updated: 2026-11-04
 triggers:
   - "技能路由"
   - "选择技能"
@@ -77,7 +77,7 @@ constraints:
 - ADK 源仓内可执行：
 
 ```bash
-bash scripts/check-profile-coherence.sh
+bash tests/test_profile_coherence.sh
 bash scripts/devkit.sh validate --strict
 ```
 

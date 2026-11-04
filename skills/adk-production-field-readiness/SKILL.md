@@ -1,8 +1,8 @@
 ---
 name: adk-production-field-readiness
 description: "用于嵌入式产测、OTA、诊断及现场维护的量产准备状态和证据审查；不用于仅凭桌面测试宣称量产就绪或直接刷写设备。"
-version: 1.0.2
-last_updated: 2026-11-03
+version: 1.0.3
+last_updated: 2026-11-04
 triggers:
   - "量产"
   - "产测"
@@ -69,22 +69,14 @@ constraints:
 ```
 
 ## Commands
+本 Skill 不提供 `scripts/firmware-release.sh`、目标项目 `build.sh` 或刷写脚本。先审查目标工程真实入口与证据。
+
 ```bash
-# MCU 发布工具入口
-rtk bash scripts/firmware-release.sh profile <profile>
-rtk bash scripts/firmware-release.sh package-external --profile <profile> --boot <boot.hex> --app <app.hex> --version <x.y.z> --output-dir /tmp/adk-pilot/<target>/out
-rtk bash scripts/firmware-release.sh check-package /tmp/adk-pilot/<target>/out/<bundle>
-
-# 烧录/readback 先 dry-run，再进入实机阶段
-rtk python3 /tmp/adk-pilot/<target>/out/<bundle>/burn_firmware.py --dry-run
-rtk python3 /tmp/adk-pilot/<target>/out/<bundle>/readback_verify.py --dry-run
-
-# SoC/Linux 与整机 OTA 入口
-rtk bash build.sh verify
-rtk bash build.sh self-check
-rtk bash build.sh modules-status
-rtk bash tools/ota-packager/ota-packager.sh self-test --json
+git -C <target-repo> status --short
+rg -n 'firmware|ota|rollback|flash|partition|self-test|checksum' <target-repo>
+sha256sum <reviewed-firmware-artifact>
 ```
+构建、烧录、readback 与 OTA 必须由经授权的目标操作者，按受审查的项目命令和先行 dry-run 实际执行；缺失实机证据不得宣称 ready。
 
 ## Evidence Promotion
 - `planned -> evidence-ready`: 至少有一个真实工程输入、一组可复跑命令、制品清单、正负路径证据和残留缺口。

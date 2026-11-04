@@ -1,8 +1,8 @@
 ---
 name: adk-fault-injection-recovery
 description: "用于已授权的故障注入、失败路径与恢复能力验证，并记录可重放的回滚证据；不用于未经隔离的生产设备破坏性实验。"
-version: 1.0.1
-last_updated: 2026-11-03
+version: 1.0.2
+last_updated: 2026-11-04
 triggers:
   - "故障注入"
   - "故障恢复"
@@ -40,18 +40,16 @@ constraints:
 7. **输出改进项**：恢复盲点、告警缺口、监控增强建议。
 
 ## Commands
+默认只读。此 Skill 不直接写入 `/sys/kernel/debug`、`/dev/watchdog`，也不启动资源耗尽负载。
+
 ```bash
-echo 1 > /sys/kernel/debug/failslab/verbose
-echo 100 > /sys/kernel/debug/failslab/probability
-echo -1 > /sys/kernel/debug/failslab/times
-echo 1 > /dev/watchdog
-<debug-transport> inject --target <target> --point <func> --value <bad_value>
-<recovery-verify-cmd> --scenario <scenario>
-dmesg | grep -iE "fault|error|panic|recover"
+cat /proc/interrupts
+dmesg | tail -n 120
 journalctl -p err --since "10 min ago"
-stress-ng --vm 2 --vm-bytes 256M --timeout 60s
-minicom -D /dev/ttyUSB0 -b 115200 -C fault_test.log
 ```
+
+## 故障注入授权边界
+仅在已明确授权的隔离 SIL/HIL/lab 目标上，由独立设备操作者使用经审查的项目注入器。必须先冻结目标身份、注入类型、资源预算、恢复命令、回滚方案与停止条件，并保留真实注入/恢复回执；否则保持 `not_evaluated`。
 
 ## Evidence Template
 ```md

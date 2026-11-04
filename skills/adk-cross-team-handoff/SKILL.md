@@ -1,8 +1,8 @@
 ---
 name: adk-cross-team-handoff
 description: "用于产品、研发、测试等多团队交接时明确责任、接口和验收证据；不用于替代需求变更批准或直接操作外部系统。"
-version: 1.0.1
-last_updated: 2026-11-03
+version: 1.0.2
+last_updated: 2026-11-04
 triggers:
   - "团队交接"
   - "模块移交"
@@ -105,8 +105,8 @@ ls -la <module_path>/.access
 # 验证文档完整性
 find docs/ -name "*.md" | xargs wc -l | sort -n
 
-# 生成交接报告
-bash scripts/devkit.sh verify --change <handoff-id>
+# 仅用于核验真实已登记的 ADK change；不会生成交接报告
+bash scripts/devkit.sh verify --change <approved-adk-change-id>
 
 # 检查签收状态
 rg -n "sign-off|签字|确认" docs/changes/<handoff-id>/

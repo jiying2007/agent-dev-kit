@@ -1,8 +1,8 @@
 ---
 name: adk-incident-rca-report
 description: "用于生产事故稳定后整理时间线、根因、恢复和防复发证据；不用于事故正在处置时替代现场响应或虚构不存在的取证材料。"
-version: 1.0.1
-last_updated: 2026-11-03
+version: 1.0.2
+last_updated: 2026-11-04
 triggers:
   - "线上事故"
   - "故障复盘"
@@ -94,8 +94,7 @@ rg -n "alert|warning|critical" <monitoring_log_dir>
 # 统计影响范围
 rg -c "error" <log_dir> | sort -t: -k2 -rn | head -20
 
-# 生成 RCA 报告骨架
-bash scripts/devkit.sh verify --change <incident-id>
+# RCA 按本 Skill 的 Evidence Template 编写；devkit verify 不生成 RCA，只核验已有 ADK change。
 ```
 
 ## Evidence Template

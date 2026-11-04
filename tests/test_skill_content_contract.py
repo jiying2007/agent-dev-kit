@@ -57,6 +57,41 @@ class SkillContentContractTests(unittest.TestCase):
         skill = (ROOT / "skills/adk-skill-deep-analysis/SKILL.md").read_text(encoding="utf-8")
         self.assertIn("# Skill 设计深度审查", skill)
 
+
+    def test_all_skill_shell_references_use_declared_adk_commands(self) -> None:
+        import re
+        from agent_dev_kit.cli_runtime import PUBLIC_COMMANDS
+
+        allowed = {command for command, _ in PUBLIC_COMMANDS}
+        items = [*self.manifest["skills"], *self.manifest["optional_skills"]]
+        for item in items:
+            text = (ROOT / item["path"]).read_text(encoding="utf-8")
+            blocks = re.findall(r"```(?:bash|sh)\n([\s\S]*?)\n```", text)
+            with self.subTest(skill=item["name"]):
+                for block in blocks:
+                    for command in re.findall(r"scripts/devkit\.sh\s+([a-z][a-z-]*)", block):
+                        self.assertIn(command, allowed, (item["name"], command))
+                    for script in re.findall(
+                        r"(?m)^(?:rtk\s+)?(?:bash|python3?)\s+(scripts/[A-Za-z0-9_./-]+\.(?:sh|py))\b",
+                        block,
+                    ):
+                        self.assertTrue((ROOT / script).is_file(), (item["name"], script))
+                self.assertNotRegex(text, r"devkit\.sh\s+verify\s+--analysis")
+
+    def test_fault_injection_defaults_never_write_live_device(self) -> None:
+        import re
+
+        text = (ROOT / "skills/adk-fault-injection-recovery/SKILL.md").read_text(encoding="utf-8")
+        section = text.split("## Commands", 1)[1].split("## Evidence Template", 1)[0]
+        for pattern in (
+            r"(?m)^\s*echo\s+.*>\s*/sys/kernel/debug",
+            r"(?m)^\s*echo\s+.*>\s*/dev/watchdog",
+            r"(?m)^\s*stress-ng\s+.*--vm",
+        ):
+            self.assertIsNone(re.search(pattern, section))
+        self.assertIn("独立设备操作者", section)
+        self.assertIn("not_evaluated", section)
+
     def test_details_are_supplemental_not_duplicate_skills(self) -> None:
         for path in ROOT.glob("skills/*/references/details.md"):
             with self.subTest(path=path.name, parent=path.parent.parent.name):
