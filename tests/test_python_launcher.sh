@@ -57,9 +57,46 @@ exit 97
 SH
 chmod +x "$auto_bin/python3.12" "$auto_bin/python3.11" "$auto_bin/python3"
 
-env -u ADK_PYTHON_BIN PATH="$auto_bin:$PATH" \
+env -u ADK_PYTHON_BIN -u VIRTUAL_ENV PATH="$auto_bin:$PATH" \
   bash "$ROOT_DIR/scripts/devkit.sh" help >"$TMP_DIR/auto.out" 2>"$TMP_DIR/auto.err"
 rg -q --fixed-strings -- "auto-selected-python3.12" "$TMP_DIR/auto.out"
+
+# An activated venv must override the host's auto Python 3.12, and explicit
+# ADK_PYTHON_BIN must still override the activated venv.
+mkdir -p "$TMP_DIR/venv/bin"
+cat >"$TMP_DIR/venv/bin/python" <<'SH'
+#!/usr/bin/env bash
+set -euo pipefail
+if [[ "${1:-}" == "-c" ]]; then
+  echo "3.11.14 1"
+  exit 0
+fi
+echo "venv-selected-python3.11"
+SH
+chmod +x "$TMP_DIR/venv/bin/python"
+env -u ADK_PYTHON_BIN VIRTUAL_ENV="$TMP_DIR/venv" PATH="$auto_bin:$PATH" \
+  bash "$ROOT_DIR/scripts/devkit.sh" help >"$TMP_DIR/venv.out" 2>"$TMP_DIR/venv.err"
+rg -q --fixed-strings -- "venv-selected-python3.11" "$TMP_DIR/venv.out"
+
+ADK_PYTHON_BIN="$auto_bin/python3.12" VIRTUAL_ENV="$TMP_DIR/venv" \
+  bash "$ROOT_DIR/scripts/devkit.sh" help >"$TMP_DIR/override.out" 2>"$TMP_DIR/override.err"
+rg -q --fixed-strings -- "auto-selected-python3.12" "$TMP_DIR/override.out"
+
+mkdir -p "$TMP_DIR/old-venv/bin"
+ln -s "$TMP_DIR/python-3.8.20" "$TMP_DIR/old-venv/bin/python"
+if env -u ADK_PYTHON_BIN VIRTUAL_ENV="$TMP_DIR/old-venv" PATH="$auto_bin:$PATH" \
+  bash "$ROOT_DIR/scripts/devkit.sh" help >"$TMP_DIR/old-venv.out" 2>&1; then
+  echo "[FAIL] unsupported activated venv silently fell back to host Python" >&2
+  exit 1
+fi
+rg -q 'venv-selected .*3.8.20' "$TMP_DIR/old-venv.out"
+
+if env -u ADK_PYTHON_BIN VIRTUAL_ENV="$TMP_DIR/missing-venv" PATH="$auto_bin:$PATH" \
+  bash "$ROOT_DIR/scripts/devkit.sh" help >"$TMP_DIR/missing-venv.out" 2>&1; then
+  echo "[FAIL] missing activated venv silently fell back to host Python" >&2
+  exit 1
+fi
+rg -q --fixed-strings -- 'selected ADK Python (venv) is not executable' "$TMP_DIR/missing-venv.out"
 
 ADK_PYTHON_BIN=python3 bash "$ROOT_DIR/scripts/devkit.sh" help >"$TMP_DIR/help.out" 2>"$TMP_DIR/help.err"
 rg -q --fixed-strings -- "Commands:" "$TMP_DIR/help.out"

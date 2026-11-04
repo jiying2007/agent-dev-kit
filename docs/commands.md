@@ -4,8 +4,8 @@
 
 解释器入口仅用于 **ADK 构建/维护控制面**：
 
-- 需要 Python 3.11+；未设置 `ADK_PYTHON_BIN` 时按 `python3.12 -> python3.11 -> python3` 选择，不满足最低版本时无条件 fail closed。
-- 使用 `ADK_PYTHON_BIN=/reviewed/python3.12` 指向已隔离的构建解释器。旧 `ADK_REQUIRE_SUPPORTED_PYTHON` 宽松开关已移除。
+- 需要 Python 3.11+；显式 `ADK_PYTHON_BIN` 优先，其次使用激活的 `VIRTUAL_ENV/bin/python`，仅当未激活 venv 时按 `python3.12 -> python3.11 -> python3` 选择；旧解释器或残缺 venv 均 fail closed。
+- 推荐在 ADK 源仓中建立单一 `.venv`（`python3.12 -m venv .venv`，`source .venv/bin/activate`），不向 Skill 消费端分发。可用 `ADK_PYTHON_BIN=/reviewed/python3.12` 显式覆盖；旧 `ADK_REQUIRE_SUPPORTED_PYTHON` 宽松开关已移除。
 - 本机无 Python 3.11+ 时可以在受保护 GitHub Actions 验证，或在 Docker 可用时通过 `scripts/run-local-ci-parity.sh --python all --mode full`；CLI 无法在旧解释器上运行。
 - **已发布的纯 Skill 运行时包不要求 ADK Python，也不能因为构建环境换版本就自动授予 runtime/field 资格。**
 

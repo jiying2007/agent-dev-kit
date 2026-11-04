@@ -9,6 +9,11 @@ export PYTHONPATH="${ROOT_DIR}/src${PYTHONPATH:+:${PYTHONPATH}}"
 PYTHON_SELECTION="explicit"
 if [[ -n "${ADK_PYTHON_BIN:-}" ]]; then
   PYTHON_BIN="${ADK_PYTHON_BIN}"
+elif [[ -n "${VIRTUAL_ENV:-}" ]]; then
+  # An active venv is the developer's selected build environment. Never
+  # silently jump to a newer host interpreter and lose installed dependencies.
+  PYTHON_SELECTION="venv"
+  PYTHON_BIN="${VIRTUAL_ENV%/}/bin/python"
 else
   PYTHON_SELECTION="auto"
   PYTHON_BIN=""
@@ -23,7 +28,7 @@ fi
 
 if [[ "${PYTHON_BIN}" == */* ]]; then
   [[ -x "${PYTHON_BIN}" ]] || {
-    echo "[FAIL] ADK_PYTHON_BIN is not executable: ${PYTHON_BIN}" >&2
+    echo "[FAIL] selected ADK Python (${PYTHON_SELECTION}) is not executable: ${PYTHON_BIN}" >&2
     exit 2
   }
 elif ! command -v "${PYTHON_BIN}" >/dev/null 2>&1; then

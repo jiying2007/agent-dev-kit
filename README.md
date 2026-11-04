@@ -110,14 +110,16 @@ bash scripts/check-runtime-boundary.sh
 bash tests/run_all.sh --quick
 ```
 
-Python package 安装：
+Python package 安装（仅 ADK 构建/管理工作区，建议统一为一个隔离 venv）：
 
 ```bash
-python -m pip install .
+python3.12 -m venv .venv  # 也可使用受支持的 Python 3.11
+source .venv/bin/activate
+python -m pip install -e '.[quality]'
 adk validate --strict
 ```
 
-`scripts/devkit.sh` 默认按 `python3.12 -> python3.11 -> python3` 选择解释器，并对低于 3.11 的环境始终 fail-closed；不再存在旧版 `ADK_REQUIRE_SUPPORTED_PYTHON` 开关。3.13+ 仅符合包最低要求，不自动取得 3.11/3.12 原生 CI 测试结论。推荐用单一构建 venv，无需向 Skill 消费者传播该环境。
+`scripts/devkit.sh` 先使用显式 `ADK_PYTHON_BIN`，否则优先使用已激活的 `VIRTUAL_ENV`，未激活时才按 `python3.12 -> python3.11 -> python3` 选择解释器，并对低于 3.11 的环境始终 fail-closed；不再存在旧版 `ADK_REQUIRE_SUPPORTED_PYTHON` 开关。3.13+ 仅符合包最低要求，不自动取得 3.11/3.12 原生 CI 测试结论。推荐用单一构建 venv，无需向 Skill 消费者传播该环境。
 
 ## 6. 质量与发布原则
 

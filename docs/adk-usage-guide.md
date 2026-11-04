@@ -64,7 +64,7 @@ bash scripts/devkit.sh security check --summary-json
 bash tests/run_all.sh
 ```
 
-ADK 构建解释器基线为 Python 3.11+，由 launcher 自动按 `python3.12 -> python3.11 -> python3` 选择，也可显式设置 `ADK_PYTHON_BIN`；低于最低版本时不执行管理命令。部署的纯 Skill 资产无需同一 Python 环境。
+ADK 构建解释器基线为 Python 3.11+。建议激活单个构建专用 `.venv`：launcher 优先使用显式 `ADK_PYTHON_BIN`，再使用已激活 `VIRTUAL_ENV/bin/python`；未激活时自动按 `python3.12 -> python3.11 -> python3` 选择。低于最低版本或 venv 不完整会拒绝运行，不回退宿主；部署的纯 Skill 资产无需同一 Python 环境。
 
 本机代理包装（例如操作者自己的命令前缀）不是 ADK 运行依赖。active scripts、测试与 GitHub Actions 必须能在普通 runner 上执行。
 
