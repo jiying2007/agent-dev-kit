@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### 10.0.2 — opt-in managed retirement for safe source upgrades
+- Implement receipt-bound, explicit managed-retire of obsolete unchanged assets under the same install lock, transaction backup and recovery path; rollback reconstructs previous inventory from reviewed old source.
+- Add drift, tampered-plan, recreated-unmanaged-file, and injected-failure regression tests. Default remains rollback-first; no real target/native certification is claimed.
+
+
 ### 10.0.1 — legacy language Skill upgrade regression and official reference refresh
 - Exercise both original v9.0.0 retired Skill names and original team-core membership in an isolated old-source simulation, with drifted-file refusal and exact-receipt rollback-before-reinstall. These tests do not certify a real 9.x target upgrade.
 - Refresh official OpenAI Plugin/Skill boundary and Skills evaluation references from the already allowed developers.openai.com domain. Record method-only `watch` decisions, not runtime enablement.
