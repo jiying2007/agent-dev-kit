@@ -1,5 +1,5 @@
 {
-  "version": "9.0.0",
+  "version": "10.0.0",
   "locale": "zh-CN",
   "platforms": [
     "linux-embedded",
@@ -1053,26 +1053,6 @@
       "pattern": "reviewer"
     },
     {
-      "name": "adk-chinese-commit-conventions",
-      "path": "skills/adk-chinese-commit-conventions/SKILL.md",
-      "quality_tier": "p0",
-      "category": "review_quality",
-      "lifecycle_order": 80,
-      "stage_order": 10,
-      "activation_mode": "supporting",
-      "pattern": "reviewer"
-    },
-    {
-      "name": "adk-chinese-code-review",
-      "path": "skills/adk-chinese-code-review/SKILL.md",
-      "quality_tier": "p0",
-      "category": "review_quality",
-      "lifecycle_order": 80,
-      "stage_order": 20,
-      "activation_mode": "supporting",
-      "pattern": "reviewer"
-    },
-    {
       "name": "adk-code-review-loop",
       "path": "skills/adk-code-review-loop/SKILL.md",
       "quality_tier": "p0",
@@ -1367,8 +1347,6 @@
         "adk-planning-execution-loop",
         "adk-artifact-gating",
         "adk-pilot-framework",
-        "adk-chinese-commit-conventions",
-        "adk-chinese-code-review",
         "adk-cross-team-handoff",
         "adk-memory-curator",
         "adk-archive-governance",
@@ -2618,7 +2596,7 @@
       },
       {
         "intent": "commit_pr_quality_gate",
-        "intent_zh": "提交代码/准备提交/提交前检查",
+        "intent_zh": "提交代码/准备提交/提交前检查/中文提交信息/英文提交信息/提交信息格式/写commit message/commit message",
         "primary_skill": "adk-commit-pr-quality-gate",
         "supporting_skills": [
           "adk-verification-before-completion"
@@ -2626,7 +2604,7 @@
       },
       {
         "intent": "code_review_loop",
-        "intent_zh": "独立代码审查/code review loop/review闭环/review反馈/review反馈核验/审查反馈/收到review/修复review/复审",
+        "intent_zh": "独立代码审查/code review loop/review闭环/review反馈/review反馈核验/审查反馈/收到review/修复review/复审/代码审查/中文代码审查/英文代码审查",
         "primary_skill": "adk-code-review-loop",
         "supporting_skills": [
           "adk-commit-pr-quality-gate"

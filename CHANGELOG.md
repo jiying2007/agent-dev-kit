@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+### 10.0.0 source candidate — Skill capability, locale and contract convergence
+- BREAKING: remove two duplicate language-only core Skills (`adk-chinese-code-review` and `adk-chinese-commit-conventions`) from Manifest, team-core Profile and distributed source; no alias or compatibility mirror. Shared review severity/communication guidance moves under `adk-code-review-loop/references/`; commit format follows the repository policy and `adk-commit-pr-quality-gate`.
+- Normalize nine OpenAI `agents/openai.yaml` files to the documented `interface` mapping; retain already conformant files unchanged.
+- Remove seven obsolete Skill identity/frontmatter and duplicated SOP copies from `references/details.md`; references now carry only supplemental examples or domain knowledge.
+- Retire fixed SOP heading/minimum-length content gate; enforce portable metadata, current typed contracts, real skill identity and OpenAI metadata with a Python 3.11+ test suite.
+- Add read-only deterministic Conventional Commit validator (issue linking opt-in), locale-aware review/commit matching, and new routing/permission regression cases.
+- Scale clarification and PR evidence requirements by true blocking risk; keep high-risk permission, release, schema and live-device gates fail-closed.
+- Source-only migration: ADK 9.x users must update governed Profile/installer inventory after release; `llm_agent` and Codex live target remain on their existing independently pinned source until verified promotion. No native runtime or product field qualification is claimed.
+
+
 ### 9.0.0 source candidate — major Python build boundary
 - Break the ADK *build/control-plane* interpreter floor from Python 3.8 to Python 3.11. Retire Python 3.8/3.9/3.10 branches, legacy pinned libraries, compatibility module, fallback guards, old Bullseye Docker bootstrap and related CI lanes.
 - Keep the Python 3.11/3.12 native contract and regression matrix, strict aggregate evaluation, source-bound independent review, release provenance, target/runtime and permission boundaries unchanged.

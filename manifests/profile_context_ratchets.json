@@ -3,7 +3,7 @@
   "status": "active",
   "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
   "measured_from": "source-file-bytes",
-  "measured_at": "2026-11-03",
+  "measured_at": "2026-11-04",
   "policy": {
     "fail_on_entry_file_growth": true,
     "fail_on_potential_full_source_growth": true,
@@ -15,48 +15,48 @@
   "profiles": {
     "core": {
       "assets": 27,
-      "entry_file_bytes": 129719,
-      "potential_full_source_bytes": 170366
+      "entry_file_bytes": 132309,
+      "potential_full_source_bytes": 170421
     },
     "release-hardening": {
       "assets": 23,
-      "entry_file_bytes": 106963,
-      "potential_full_source_bytes": 145463
+      "entry_file_bytes": 109553,
+      "potential_full_source_bytes": 141635
     },
     "personal-core": {
       "assets": 32,
-      "entry_file_bytes": 148797,
-      "potential_full_source_bytes": 194509
+      "entry_file_bytes": 151387,
+      "potential_full_source_bytes": 190681
     },
     "embedded-fullstack": {
       "assets": 54,
-      "entry_file_bytes": 232877,
-      "potential_full_source_bytes": 292365
+      "entry_file_bytes": 235467,
+      "potential_full_source_bytes": 283982
     },
     "team-core": {
-      "assets": 37,
-      "entry_file_bytes": 166418,
-      "potential_full_source_bytes": 230107
+      "assets": 35,
+      "entry_file_bytes": 164575,
+      "potential_full_source_bytes": 209030
     },
     "large-refactor": {
       "assets": 55,
-      "entry_file_bytes": 235302,
-      "potential_full_source_bytes": 299799
+      "entry_file_bytes": 237892,
+      "potential_full_source_bytes": 288438
     },
     "incident-response": {
       "assets": 9,
-      "entry_file_bytes": 34519,
-      "potential_full_source_bytes": 37820
+      "entry_file_bytes": 36135,
+      "potential_full_source_bytes": 39436
     },
     "research-intake": {
       "assets": 20,
-      "entry_file_bytes": 83121,
-      "potential_full_source_bytes": 121899
+      "entry_file_bytes": 84916,
+      "potential_full_source_bytes": 118623
     }
   },
   "baseline_source": {
     "version": "7.1.0",
     "commit": "70fac05125907e4930ee73f3928799e11bac55de",
-    "note": "Original baseline: independently measured Git blob sizes before 7.2.0. 2026-11-03 user-authorized adk-goal-authoring addition: author-self-review, add exactly 4457 entry bytes and 1864 deferred-support bytes plus one asset only to core and its inheriting profiles. Rationale and verification: docs/changes/20261103-adk-goal-authoring/design.md. No runtime token-budget or release-authority change. 2026-11-03 v8.2.2: three existing registered-but-unreachable core Skills are attached to existing specialist Profiles only (team-core, incident-response, embedded-fullstack). Platform-neutral core remains unchanged. Checked source bytes: team-core 160166/212956; incident-response 34102/37403; embedded-fullstack 230096/289584; inherited large-refactor 232417/296914. These are source bytes, not native runtime token measurements. 2026-11-03 v8.2.3: reviewed source-only description boundary improvements and explicit team-core reachability for existing artifact/pilot Skills; per-profile source byte ratchets refreshed from exact Git tree with support references counted. This is not a native tokenizer or runtime-context measurement. Duplicate private support references are retained for independently exportable Skills, not compatibility aliases. 8.2.3 CI repair: sorted team-core Skill lifecycle order and shortened review entry below its unchanged 7200-byte ceiling; first-party catalog find retains bring-up keyword. Source-byte values adjusted for both exact description changes."
+    "note": "Original baseline: independently measured Git blob sizes before 7.2.0. 2026-11-03 user-authorized adk-goal-authoring addition: author-self-review, add exactly 4457 entry bytes and 1864 deferred-support bytes plus one asset only to core and its inheriting profiles. Rationale and verification: docs/changes/20261103-adk-goal-authoring/design.md. No runtime token-budget or release-authority change. 2026-11-03 v8.2.2: three existing registered-but-unreachable core Skills are attached to existing specialist Profiles only (team-core, incident-response, embedded-fullstack). Platform-neutral core remains unchanged. Checked source bytes: team-core 160166/212956; incident-response 34102/37403; embedded-fullstack 230096/289584; inherited large-refactor 232417/296914. These are source bytes, not native runtime token measurements. 2026-11-03 v8.2.3: reviewed source-only description boundary improvements and explicit team-core reachability for existing artifact/pilot Skills; per-profile source byte ratchets refreshed from exact Git tree with support references counted. This is not a native tokenizer or runtime-context measurement. Duplicate private support references are retained for independently exportable Skills, not compatibility aliases. 8.2.3 CI repair: sorted team-core Skill lifecycle order and shortened review entry below its unchanged 7200-byte ceiling; first-party catalog find retains bring-up keyword. Source-byte values adjusted for both exact description changes. 2026-11-04 v10.0.0 source-only measurement from feature-branch Git tree 1819607e3fccc61de9041bde3c28af62a2c74819, not a runtime token claim: capability-based language consolidation removed two team Skills and seven redundant references; 9 OpenAI metadata corrections and risk-aware gate instructions add exactly 2590 entry bytes to shared profiles, while most deferred support footprints decrease. All eight Profile limits reset to exact measured source values with ZERO growth slack and original fail-on-growth policy retained. Detailed deltas and self-review boundary: docs/changes/skill-v10-convergence/measurement.md. Formal independent release review remains a separate gate."
   }
 }

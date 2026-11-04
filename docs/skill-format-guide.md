@@ -26,6 +26,13 @@ ADK authoring 可以继续使用：
 
 但 frontmatter 不承载 nested permission、approval、selection graph 或完整 workflow state。机器策略放 typed contract。
 
+## 语言与输出策略
+
+- 语言是输出策略而非 Skill identity：项目 `manifest.locale` 定义默认语言，用户或目标仓库的明确要求可覆盖，技术标识不翻译。
+- 不为相同的提交、审查、测试或规划方法创建 `chinese-*`、`english-*` 平行 Skill。专业方法确实不同且有独立正负例时除外。
+- 提交格式归目标仓库 Commit Policy；代码审查的行为和级别由统一审查 Skill 负责。
+- 不保留旧名 alias、兼容镜像或二次 authority；能力迁移后需更新 Profile/Manifest/安装和测试。
+
 ## Description 触发质量
 
 `description` 是运行时 discovery 第一层，必须表达 **what + when + boundary**：

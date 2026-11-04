@@ -77,6 +77,19 @@ class SkillGovernanceTests(unittest.TestCase):
         self.assertEqual(result.get("skill"), "adk-code-review-loop", result)
         self.assertEqual(result.get("selection_group"), "code-review", result)
 
+    def test_output_locale_is_not_skill_identity(self) -> None:
+        for prompt in ("代码审查", "中文代码审查", "请用中文进行代码审查"):
+            with self.subTest(prompt=prompt):
+                result = match_text(self.manifest, prompt)
+                self.assertIs(result.get("match"), True, result)
+                self.assertEqual(result.get("skill"), "adk-code-review-loop", result)
+        for prompt in ("中文提交信息", "提交信息格式", "请生成中文提交信息并检查提交格式"):
+            with self.subTest(prompt=prompt):
+                result = match_text(self.manifest, prompt)
+                self.assertIs(result.get("match"), True, result)
+                self.assertEqual(result.get("skill"), "adk-commit-pr-quality-gate", result)
+                self.assertEqual(result.get("mutation_permission"), "deny", result)
+
     def test_driver_bringup_exposes_live_device_escalation_without_granting_it(self) -> None:
         result = match_text(self.manifest, "首板联调")
         self.assertTrue(result.get("match"), result)

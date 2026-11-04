@@ -227,6 +227,48 @@ class InstallUpgradeTest(SourceFixture):
         self.assertFalse(self.receipt.exists())
         self.assertFalse((self.target / SCRIPT).exists())
 
+    def test_retired_profile_skill_requires_verified_rollback_before_reinstall(self):
+        # A retired managed Skill is not silently pruned. Verify rollback-first
+        # migration, exact old-source authority and a new, clean install receipt.
+        import copy
+
+        self.install(self.previous)
+        old_snapshot = self.snapshot()
+        retired = "adk-after-action-review"
+        old_path = self.target / "skills" / retired / "SKILL.md"
+        self.assertTrue(old_path.is_file())
+
+        candidate_data = copy.deepcopy(self.candidate.data)
+        candidate_data["profiles"]["core"]["include_skills"].remove(retired)
+        candidate = Manifest(self.candidate.root, candidate_data, self.candidate.source)
+        plan = create_plan(
+            candidate, "claude-code", str(self.target), ["core"], [], "copy",
+            previous_manifest=self.previous,
+        )
+        self.assertEqual(plan["status"], "needs-review", plan)
+        self.assertTrue(any(
+            retired in item["destination"] and "rollback current install first" in item["reason"]
+            for item in plan["conflicts"]
+        ), plan["conflicts"])
+        self.assertEqual(self.snapshot(), old_snapshot)
+        self.assertTrue(old_path.is_file())
+
+        old_rollback = rollback(self.receipt, manifest=self.previous)
+        self.assertEqual(old_rollback["status"], "pass", old_rollback)
+        self.assertFalse(old_path.exists())
+        self.assertFalse(self.receipt.exists())
+
+        fresh = create_plan(candidate, "claude-code", str(self.target), ["core"], [], "copy")
+        self.assertEqual(fresh["status"], "ready", fresh)
+        location = self.work / "retired-clean-plan.json"
+        write_plan(fresh, location)
+        applied = apply_plan(candidate, location)
+        self.assertEqual(applied["status"], "pass", applied)
+        self.assertFalse(old_path.exists())
+        receipt = json.loads(self.receipt.read_text(encoding="utf-8"))
+        self.assertFalse(any(retired in row["destination"] for row in receipt["installed"]))
+        self.assertTrue(any("adk-code-review-loop" in row["destination"] for row in receipt["installed"]))
+
     def test_cli_requires_previous_source_at_plan_apply_and_rollback(self):
         self.install(self.previous)
         original = self.snapshot()

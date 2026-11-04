@@ -4,7 +4,7 @@
   "baseline_source_commit": "d55c84b5b0ce86e8432d08e8c0d33f95bfb32725",
   "identity_baseline": {
     "agent_count": 13,
-    "core_skill_count": 58,
+    "core_skill_count": 56,
     "optional_skill_count": 8
   },
   "agent_thin_contract": {

@@ -24,3 +24,6 @@ R022	primary	adk-driver-bringup-checklist	-	请做首板联调，检查时钟复
 R023	abstain	-	-	按建议自动推进普通代码仓库
 R024	abstain	-	-	请做文档审查和文字校对
 R025	collision	adk-driver-bringup-checklist	adk-driver-implementation	请规划驱动开发步骤并生成 bringup 检查表。
+R026	primary	adk-code-review-loop	-	请用中文进行代码审查，逐项给出 findings
+R027	primary	adk-commit-pr-quality-gate	-	请生成中文提交信息并检查提交格式
+R028	abstain	-	-	请把这段散文翻译成中文

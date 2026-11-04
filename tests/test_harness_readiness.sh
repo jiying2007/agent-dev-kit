@@ -178,43 +178,58 @@ historical, live = [json.load(open(p, encoding="utf-8")) for p in sys.argv[1:3]]
 live_rc = int(sys.argv[3])
 metadata = json.load(open(sys.argv[4], encoding="utf-8"))
 contract = json.load(open(sys.argv[5], encoding="utf-8"))
-assert historical["overall_status"] == "pass", historical
-assert historical["counts"] == {
-    "pass": 6, "partial": 0, "needs-review": 0,
-    "blocked": 0, "not-applicable": 1,
-}, historical
+# A new source branch cannot reuse the previous version's independent
+# delegated review. PR regression only verifies report-only fail-closed
+# semantics; final release authorization still requires a fresh source review.
 assert historical["field_evidence_status"] == "not-verified", historical
-
-max_age = contract["verification"]["max_age_days"]
-today = dt.datetime.now(dt.timezone.utc).date()
-stale = {
-    dimension
-    for dimension, item in metadata["dimensions"].items()
-    if (today - dt.date.fromisoformat(item["last_verified_at"])).days > max_age
-}
-if stale:
-    # Renewal requires actual scoped review evidence; never auto-pass or backdate it.
+if historical["overall_status"] == "needs-review":
+    assert historical["counts"]["pass"] == 0, historical
+    assert historical["counts"]["needs-review"] > 0, historical
+    assert any(
+        blocker["code"] == "invalid_delegated_review"
+        for dimension in historical["dimensions"]
+        for blocker in dimension["blockers"]
+    ), historical
     assert live_rc == 2, (live_rc, live)
-    assert live["overall_status"] == "partial", live
-    observed_stale = {
-        dim["dimension_id"]
-        for dim in live["dimensions"]
-        if any(b["code"] == "stale_last_verified_at" for b in dim["blockers"])
-    }
-    applicable_stale = {
-        dim["dimension_id"]
-        for dim in live["dimensions"]
-        if dim["dimension_id"] in stale and dim["status"] != "not-applicable"
-    }
-    assert observed_stale == applicable_stale, (observed_stale, applicable_stale, live)
-    assert live["counts"]["blocked"] == 0 and live["counts"]["needs-review"] == 0, live
-    assert all(
-        dim["status"] in {"partial", "not-applicable"}
-        for dim in live["dimensions"]
+    assert live["overall_status"] == "needs-review", live
+    assert live["counts"]["pass"] == 0, live
+    assert any(
+        blocker["code"] == "invalid_delegated_review"
+        for dimension in live["dimensions"]
+        for blocker in dimension["blockers"]
     ), live
 else:
-    assert live_rc == 0 and live["overall_status"] == "pass", (live_rc, live)
-    assert live["counts"] == historical["counts"], live
+    assert historical["overall_status"] == "pass", historical
+    assert historical["counts"] == {
+        "pass": 6, "partial": 0, "needs-review": 0,
+        "blocked": 0, "not-applicable": 1,
+    }, historical
+    max_age = contract["verification"]["max_age_days"]
+    today = dt.datetime.now(dt.timezone.utc).date()
+    stale = {
+        dimension
+        for dimension, item in metadata["dimensions"].items()
+        if (today - dt.date.fromisoformat(item["last_verified_at"])).days > max_age
+    }
+    if stale:
+        assert live_rc == 2, (live_rc, live)
+        assert live["overall_status"] == "partial", live
+        observed_stale = {
+            dim["dimension_id"]
+            for dim in live["dimensions"]
+            if any(b["code"] == "stale_last_verified_at" for b in dim["blockers"])
+        }
+        applicable_stale = {
+            dim["dimension_id"]
+            for dim in live["dimensions"]
+            if dim["dimension_id"] in stale and dim["status"] != "not-applicable"
+        }
+        assert observed_stale == applicable_stale, (observed_stale, applicable_stale, live)
+        assert live["counts"]["blocked"] == 0 and live["counts"]["needs-review"] == 0, live
+        assert all(dim["status"] in {"partial", "not-applicable"} for dim in live["dimensions"]), live
+    else:
+        assert live_rc == 0 and live["overall_status"] == "pass", (live_rc, live)
+        assert live["counts"] == historical["counts"], live
 assert live["field_evidence_status"] == "not-verified", live
 PY
 
