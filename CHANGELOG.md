@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### 10.0.1 — legacy language Skill upgrade regression and official reference refresh
+- Exercise both original v9.0.0 retired Skill names and original team-core membership in an isolated old-source simulation, with drifted-file refusal and exact-receipt rollback-before-reinstall. These tests do not certify a real 9.x target upgrade.
+- Refresh official OpenAI Plugin/Skill boundary and Skills evaluation references from the already allowed developers.openai.com domain. Record method-only `watch` decisions, not runtime enablement.
+- Preserve existing non-pruning transactional migration; managed retirement needs explicit old-source/receipt review rather than an implicit destructive upgrade.
+
 ### 10.0.0 source candidate — Skill capability, locale and contract convergence
 - BREAKING: remove two duplicate language-only core Skills (`adk-chinese-code-review` and `adk-chinese-commit-conventions`) from Manifest, team-core Profile and distributed source; no alias or compatibility mirror. Shared review severity/communication guidance moves under `adk-code-review-loop/references/`; commit format follows the repository policy and `adk-commit-pr-quality-gate`.
 - Normalize nine OpenAI `agents/openai.yaml` files to the documented `interface` mapping; retain already conformant files unchanged.
