@@ -42,6 +42,13 @@ def move_retirements(
         backup = install_contract._regular_install_path(
             backup_root / relative, backup_root, "retired managed backup"
         )
+        # Recheck immediately before moving: validation occurred under the
+        # advisory lock, but an independent writer may still mutate a file
+        # while the new bundle is being staged.
+        if (not destination.is_file() or destination.is_symlink()
+                or sha256_tree(destination) != row["installed_sha256"]):
+            raise ManifestError("retired managed destination drifted before move")
+        verify_managed_file_mode(destination, row["file_mode"], "retired managed destination")
         backup.parent.mkdir(parents=True, exist_ok=True)
         os.replace(str(destination), str(backup))
         moved_backups.append({
