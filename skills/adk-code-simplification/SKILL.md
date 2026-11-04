@@ -1,8 +1,8 @@
 ---
 name: adk-code-simplification
-description: 代码简化——在不改变行为的前提下提高清晰度
-version: 1.1.0
-last_updated: 2026-05-06
+description: "用于代码结构冗长且行为已被测试约束时做等价代码简化；不用于未建立行为基线的功能修改、性能调优或根因不明的错误。"
+version: 1.1.1
+last_updated: 2026-11-03
 triggers:
   - "代码太复杂"
   - "简化代码"

@@ -1,8 +1,8 @@
 ---
 name: adk-skill-deep-analysis
-description: 从产品视角深度拆解 AI Skill 的设计意图、独特解法和可借鉴模式
-version: 1.0.0
-last_updated: 2026-05-16
+description: "用于外部或本地 Skill 的设计意图、差异价值与可迁移方法评估；不用于未经来源审查直接安装或自动批准候选 Skill。"
+version: 1.0.1
+last_updated: 2026-11-03
 triggers:
   - 深度拆解 skill
   - 分析 skill 设计

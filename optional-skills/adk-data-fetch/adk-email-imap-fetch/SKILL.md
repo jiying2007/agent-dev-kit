@@ -1,8 +1,8 @@
 ---
 name: adk-email-imap-fetch
-description: IMAP 邮件获取——从邮箱获取邮件列表和内容
-version: 1.0.0
-last_updated: 2026-05-06
+description: "用于已授权邮箱的只读 IMAP 邮件列表及正文提取，并限制凭据与输出范围；不用于邮件发送、归档写入或扫描无关邮箱。"
+version: 1.0.1
+last_updated: 2026-11-03
 triggers:
   - "获取邮件"
   - "读取邮箱"

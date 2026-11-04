@@ -1,8 +1,8 @@
 ---
 name: adk-branch-closeout
-description: 开发分支收尾治理，验证完成后选择本地合并、创建 PR、保留或丢弃并执行清理
-version: 1.0.1
-last_updated: 2026-08-31
+description: "用于代码与验证完成后的分支收口、PR 选择和保留或清理决策；不用于未验证时直接合并、删除用户工作树或替代评审。"
+version: 1.0.2
+last_updated: 2026-11-03
 triggers:
   - "分支收尾"
   - "开发完成"

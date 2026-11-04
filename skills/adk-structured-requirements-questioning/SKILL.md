@@ -1,7 +1,7 @@
 ---
 name: adk-structured-requirements-questioning
-description: 结构化需求提问对齐，通过有序问题消除模糊需求
-version: 1.0.1
+description: "用于需求目标、术语和验收边界仍模糊时开展有序澄清；不用于明确的小范围实现、文档润色或重复询问已知条件。"
+version: 1.0.2
 last_updated: 2026-11-03
 triggers:
   - "帮我理清需求"

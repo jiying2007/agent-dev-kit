@@ -1,8 +1,8 @@
 ---
 name: adk-cmake-cross-build
-description: CMake 交叉编译与多目标构建
-version: 1.0.0
-last_updated: 2026-05-06
+description: "用于嵌入式 CMake 工程的交叉编译、工具链配置与多目标构建排障；不用于无 CMake 的构建系统或直接设备部署。"
+version: 1.0.1
+last_updated: 2026-11-03
 triggers:
   - "CMake"
   - "交叉编译"

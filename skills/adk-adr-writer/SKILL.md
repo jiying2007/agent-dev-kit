@@ -1,8 +1,8 @@
 ---
 name: adk-adr-writer
-description: 产出 Architecture Decision Record 并固化技术决策
-version: 1.1.0
-last_updated: 2026-05-06
+description: "用于架构方案已有明确权衡、需要记录决定与替代方案时生成 ADR；不用于在需求不明时直接替代需求澄清或执行代码修改。"
+version: 1.1.1
+last_updated: 2026-11-03
 triggers:
   - "写ADR"
   - "架构决策"

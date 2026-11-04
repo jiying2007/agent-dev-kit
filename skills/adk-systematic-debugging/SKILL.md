@@ -1,8 +1,8 @@
 ---
 name: adk-systematic-debugging
-description: 系统化调试流程，面向根因未明的问题定位与修复验证
-version: 1.2.0
-last_updated: 2026-10-26
+description: "用于根因不明的问题复现、单变量假设验证和确定性回归；不用于跳过取证直接猜测修复或替代性能基准实验。"
+version: 1.2.1
+last_updated: 2026-11-03
 triggers:
   - "调试"
   - "排查问题"

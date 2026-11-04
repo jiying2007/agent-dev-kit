@@ -1,5 +1,5 @@
 {
-  "version": "8.2.2",
+  "version": "8.2.3",
   "locale": "zh-CN",
   "platforms": [
     "linux-embedded",
@@ -1365,6 +1365,8 @@
       "extends": "core",
       "include_skills": [
         "adk-planning-execution-loop",
+        "adk-artifact-gating",
+        "adk-pilot-framework",
         "adk-chinese-commit-conventions",
         "adk-chinese-code-review",
         "adk-cross-team-handoff",

@@ -1,8 +1,8 @@
 ---
 name: adk-rtos-task-design
-description: RTOS 任务、优先级、共享资源和实时性验证设计
-version: 2.0.0
-last_updated: 2026-09-17
+description: "用于 RTOS 任务优先级、时序约束、同步资源与调度风险设计；不用于纯裸机单循环程序或未经测量声称实时性达标。"
+version: 2.0.1
+last_updated: 2026-11-03
 triggers:
   - "RTOS任务"
   - "任务设计"

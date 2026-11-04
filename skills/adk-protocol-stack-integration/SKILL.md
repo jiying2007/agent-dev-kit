@@ -1,8 +1,8 @@
 ---
 name: adk-protocol-stack-integration
-description: 协议栈接入与状态机整合
-version: 1.0.0
-last_updated: 2026-05-06
+description: "用于通信协议栈适配、连接状态机和跨层错误处理的集成设计与回归；不用于纯寄存器布局设计或仅修复孤立格式问题。"
+version: 1.0.1
+last_updated: 2026-11-03
 triggers:
   - "协议栈"
   - "协议集成"

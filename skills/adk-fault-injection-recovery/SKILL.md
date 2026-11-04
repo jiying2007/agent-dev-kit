@@ -1,8 +1,8 @@
 ---
 name: adk-fault-injection-recovery
-description: 故障注入与恢复策略验证
-version: 1.0.0
-last_updated: 2026-05-06
+description: "用于已授权的故障注入、失败路径与恢复能力验证，并记录可重放的回滚证据；不用于未经隔离的生产设备破坏性实验。"
+version: 1.0.1
+last_updated: 2026-11-03
 triggers:
   - "故障注入"
   - "故障恢复"

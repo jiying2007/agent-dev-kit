@@ -1,8 +1,8 @@
 ---
 name: adk-artifact-gating
-description: 跨仓库 Artifact 门禁协议——统一标签、状态机与交接规范
-version: 1.0.0
-last_updated: 2026-05-08
+description: "用于跨仓交付物需要标签、状态与验收交接协议时定义 Artifact 门禁；不用于单仓常规测试、直接上传制品或发布批准。"
+version: 1.0.1
+last_updated: 2026-11-03
 triggers:
   - "artifact 门禁"
   - "跨角色交接"

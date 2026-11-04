@@ -1,8 +1,8 @@
 ---
 name: adk-context-engineering
-description: 规划和裁剪 Agent 任务上下文，决定稳定规则、动态证据、按需 references、摘要与 raw pointer 的加载边界。用于上下文膨胀、跨阶段/跨会话恢复、并行 Agent 隔离、信息缺失或错误上下文导致理解偏差的场景；不用于替代任务规划、代码实现或 token 治理门禁。
-version: 2.0.0
-last_updated: 2026-09-15
+description: "用于上下文膨胀、跨会话恢复或并行 Agent 隔离时规划稳定规则、按需引用及证据指针；不用于直接替代任务计划、代码实现或 Token 配额门禁。"
+version: 2.0.1
+last_updated: 2026-11-03
 triggers:
   - 上下文工程
   - 上下文膨胀

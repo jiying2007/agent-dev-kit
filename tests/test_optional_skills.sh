@@ -19,6 +19,32 @@ for required in (
 assert "adk-artifact-gated-lite" not in names
 PY
 
+# Retired Core Skill compatibility mirror must not reappear in optional tree.
+[[ ! -e "$ROOT_DIR/optional-skills/adk-planning-execution-loop" ]] || {
+  echo "[FAIL] retired optional planning Skill mirror returned" >&2
+  exit 1
+}
+
+# Parent composition is advisory: optional children require an explicit selection.
+PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}" python3 - "$ROOT_DIR" <<'PY'
+from pathlib import Path
+import sys
+from agent_dev_kit.model import Manifest
+
+root = Path(sys.argv[1])
+manifest = Manifest.load(root)
+parent = {item.name for item in manifest.resolve_profiles(["core"], ["adk-data-fetch"]).skills}
+assert "adk-data-fetch" in parent
+assert "adk-email-imap-fetch" not in parent
+assert "adk-fetch-url-content" not in parent
+with_url = {item.name for item in manifest.resolve_profiles(
+    ["core"], ["adk-data-fetch", "adk-fetch-url-content"]
+).skills}
+assert "adk-fetch-url-content" in with_url
+instructions = (root / "optional-skills/adk-data-fetch/SKILL.md").read_text(encoding="utf-8")
+assert "不自动安装子 Skill" in instructions
+PY
+
 TARGET="$TMP_DIR/.claude"
 PLAN="$TMP_DIR/optional-plan.json"
 

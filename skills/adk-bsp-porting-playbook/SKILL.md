@@ -1,8 +1,8 @@
 ---
 name: adk-bsp-porting-playbook
-description: BSP 移植流程与风险控制；源码/构建与真实设备刷写权限分离
-version: 2.0.0
-last_updated: 2026-09-17
+description: "用于 BSP 移植涉及启动链、驱动依赖、构建环境和迁移风险时规划与验证；不用于未授权的设备刷写或纯源码阅读。"
+version: 2.0.1
+last_updated: 2026-11-03
 triggers:
   - "BSP移植"
   - "板级移植"

@@ -1,8 +1,8 @@
 ---
 name: adk-token-context-governance
-description: 全链路保真省 Token 治理，统一预算、渐进加载、原文回退与高风险原文门禁
-version: 1.3.0
-last_updated: 2026-09-14
+description: "用于日志与上下文过长时设置 Token 预算、分层读取和原文回退门禁；不用于压缩掉高风险证据或放宽验证要求。"
+version: 1.3.1
+last_updated: 2026-11-03
 triggers:
   - "省 token"
   - "上下文太大"

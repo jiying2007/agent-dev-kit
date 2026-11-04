@@ -1,8 +1,8 @@
 ---
 name: adk-chinese-code-review
-description: 中文代码审查规范——适配国内团队沟通风格
-version: 1.1.0
-last_updated: 2026-05-06
+description: "用于团队需要中文代码审查意见的格式、严重性和反馈沟通约定；不用于代替实际独立代码审查、修复验证或审批。"
+version: 1.1.1
+last_updated: 2026-11-03
 triggers:
   - "代码审查"
   - "review 代码"

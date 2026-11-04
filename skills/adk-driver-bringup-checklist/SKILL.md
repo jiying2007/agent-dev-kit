@@ -1,7 +1,7 @@
 ---
 name: adk-driver-bringup-checklist
-description: 驱动 bring-up 标准检查清单；默认只读诊断，寄存器或设备写操作必须经过 live-device 显式授权门禁
-version: 2.0.1
+description: "用于首板 bring-up 联调时核对驱动时钟、复位、probe、中断和外设依赖；不用于直接编写驱动代码或未经授权执行设备寄存器写操作。"
+version: 2.0.2
 last_updated: 2026-11-03
 triggers:
   - "驱动调试"

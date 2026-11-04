@@ -121,6 +121,7 @@ assert summary["status"] == "pass", summary
 assert summary["source"] == "manifest.json", summary
 assert summary["profiles"] == len(profiles), summary
 assert summary["profile_inventory"] == expected_inventory, summary
+assert all_skills == {item['name'] for item in manifest['skills']}, 'core Skill unreachable from any Profile'
 assert summary["capability_stats"] == expected_stats, summary
 assert summary["standalone_core_overlap"] == expected_overlap, summary
 assert summary["routed_primary_coverage"]["total"] == len(manifest["routing"]["intents"]), summary

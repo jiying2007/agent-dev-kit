@@ -1,8 +1,8 @@
 ---
 name: adk-verification-before-completion
-description: 完成前验证门禁，确保交付声明与证据一致
-version: 1.8.0
-last_updated: 2026-10-26
+description: "用于完成前核对测试、审查和真实证据；不用于把自述、静态检查或过期收据当作完成证明。"
+version: 1.8.1
+last_updated: 2026-11-03
 triggers:
   - "准备完成"
   - "准备提交"

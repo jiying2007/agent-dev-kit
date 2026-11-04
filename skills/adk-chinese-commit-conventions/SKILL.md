@@ -1,8 +1,8 @@
 ---
 name: adk-chinese-commit-conventions
-description: 中文 Git 提交规范——适配国内开发团队
-version: 1.1.0
-last_updated: 2026-05-06
+description: "用于中文 Git 提交标题、scope 和变更摘要的规范化；不用于自动创建提交、调整权限或替代提交前质量门禁。"
+version: 1.1.1
+last_updated: 2026-11-03
 triggers:
   - "中文提交"
   - "commit 规范"

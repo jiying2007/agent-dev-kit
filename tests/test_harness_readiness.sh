@@ -131,19 +131,35 @@ bash "$ROOT_DIR/scripts/devkit.sh" harness readiness \
 PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}" python3 - "$ROOT_DIR" <<'PYREVIEW'
 import sys
 from pathlib import Path
+import json
 from agent_dev_kit.review_evidence import ReviewEvidenceError, validate_review
 
 root = Path(sys.argv[1])
-record = root / ".adk/reviews/harness-source-20261103-8.2.1.json"
-if record.is_file():
-    try:
-        checked = validate_review(
-            root, record, expected_subject="harness-readiness",
-            expected_scope="harness-source",
-        )
-        print("[DIAG] canonical Harness source review: {}".format(checked["status"]), file=sys.stderr)
-    except (OSError, ReviewEvidenceError) as exc:
-        print("[DIAG] canonical Harness source review rejected: {}".format(exc), file=sys.stderr)
+try:
+    # Follow the current metadata authority; historical review filenames are not
+    # reliable diagnostic targets after a source-bound release version change.
+    with (root / ".adk/harness-readiness.json").open(encoding="utf-8") as stream:
+        metadata = json.load(stream)
+    dimensions = metadata.get("dimensions")
+    if not isinstance(dimensions, dict) or not dimensions:
+        raise ValueError("Harness dimensions are missing")
+    pointers = set()
+    for dimension in dimensions.values():
+        evidence = dimension.get("review_evidence") if isinstance(dimension, dict) else None
+        path = evidence.get("path") if isinstance(evidence, dict) else None
+        if not isinstance(path, str) or not path:
+            raise ValueError("Harness review pointer is missing")
+        pointers.add(path)
+    if len(pointers) != 1:
+        raise ValueError("Harness review pointers are inconsistent")
+    record = root / next(iter(pointers))
+    checked = validate_review(
+        root, record, expected_subject="harness-readiness",
+        expected_scope="harness-source",
+    )
+    print("[DIAG] canonical Harness source review: {}".format(checked["status"]), file=sys.stderr)
+except (OSError, ValueError, ReviewEvidenceError) as exc:
+    print("[DIAG] canonical Harness source review rejected: {}".format(exc), file=sys.stderr)
 PYREVIEW
 
 # Independently check the genuine current-date Gate, never a time-travel PASS.

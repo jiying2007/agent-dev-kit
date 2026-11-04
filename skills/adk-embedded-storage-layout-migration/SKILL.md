@@ -1,8 +1,8 @@
 ---
 name: adk-embedded-storage-layout-migration
-description: 嵌入式存储布局和文件系统迁移治理；默认只做 host/dry-run 与证据门禁，真实设备写入必须独立授权
-version: 2.0.0
-last_updated: 2026-09-17
+description: "用于 MTD、UBI、分区及文件系统布局迁移的 host 端检查、演练和回退设计；不用于未授权的设备存储写入或纯日志检索。"
+version: 2.0.1
+last_updated: 2026-11-03
 triggers:
   - "UBIFS"
   - "SquashFS"

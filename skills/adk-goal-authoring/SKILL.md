@@ -1,7 +1,7 @@
 ---
 name: adk-goal-authoring
-description: 生成或修订可验证的长期目标合同、预算提案和有限交付批次；用于Goal怎么写、目标过大或长期不收敛。已有计划的日常执行用规划执行技能，单点修复无需生成合同。
-version: 0.1.0
+description: "用于长期目标过大、Goal 不收敛时生成可验证的目标合同、有限批次和恢复入口；不用于已有计划的日常执行或自行设置宿主预算与权限。"
+version: 0.1.1
 last_updated: 2026-11-03
 triggers:
   - "生成Goal"

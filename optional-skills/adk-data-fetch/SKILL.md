@@ -1,8 +1,8 @@
 ---
 name: adk-data-fetch
-description: 数据获取技能组合——包含邮件获取与网页正文提取
-version: 1.0.0
-last_updated: 2026-05-06
+description: "用于按 URL 或 IMAP 类型选择**已显式安装**的数据获取子 Skill 并检查访问权限；不自动安装子 Skill，不用于数据库操作或未授权的邮件读取。"
+version: 1.0.1
+last_updated: 2026-11-03
 triggers:
   - "获取数据"
   - "数据抓取"
@@ -15,7 +15,7 @@ inputs:
 outputs:
   - 结构化内容（Markdown 或 JSON）
 constraints:
-  - 必须遵循各子技能的安全与隐私约束
+  - 必须显式安装所需子 Skill；父 Skill 不自动安装子 Skill，缺失时停止并提示安装
   - 凭证必须从环境变量读取
 ---
 
@@ -28,6 +28,7 @@ constraints:
 ## Prerequisites
 - 已明确数据源类型（URL 或邮箱）。
 - 已准备数据源的访问凭证或 URL。
+- 已确认目标运行时**单独安装**对应的 `adk-fetch-url-content` 或 `adk-email-imap-fetch`；父 Skill 不会隐式安装它们。
 
 ## 子技能
 
@@ -42,8 +43,9 @@ constraints:
 2. **路由到子技能**：
    - URL 类请求 → `adk-fetch-url-content`
    - 邮箱类请求 → `adk-email-imap-fetch`
-3. **执行子技能**：按照子技能的 Workflow 执行。
-4. **输出结果**：返回结构化内容。
+3. **存在性门禁**：检查所选子 Skill 是否存在于已安装的目标目录中；缺失时报告 `needs-fix` 和安装要求，**禁止假定会自动安装或直接执行**。
+4. **执行子技能**：仅在子 Skill 实际可用时按照它的 Workflow 执行。
+5. **输出结果**：返回结构化内容。
 
 ## 路由规则
 
@@ -57,6 +59,7 @@ constraints:
 ## Quality Gate
 - 数据获取必须成功（子技能通过）。
 - 输出必须为结构化格式。
+- 缺少子 Skill 时必须停止，不得伪称数据获取成功。
 - 凭证未硬编码。
 - 遵守数据源的安全规则（如 robots.txt、只读邮箱）。
 
@@ -67,6 +70,10 @@ constraints:
 - 获取状态: pass / needs-fix
 - 输出大小: <size> bytes
 ```
+
+## 安装边界
+
+`adk-data-fetch`、`adk-email-imap-fetch`、`adk-fetch-url-content` 是三个独立可选安装项。根据实际数据源显式选父 Skill 与**所需**子 Skill；无需 IMAP 时不得因安装父 Skill 隐式扩大邮件权限。首次部署请通过 `adk install plan --with-optional-skill ...` 审核精确目标清单；所有安装都必须遵守现有 plan/apply 授权。
 
 ## Failure Handling
 - 子技能失败时，记录错误并返回 `needs-fix`。

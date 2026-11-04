@@ -1,8 +1,8 @@
 ---
 name: adk-security-supply-chain
-description: 第三方技能、脚本与参考资产引入前的安全和供应链审查
-version: 1.1.0
-last_updated: 2026-07-07
+description: "用于第三方 Skill、脚本、依赖和参考资产引入前的来源、权限与供应链审查；不用于自动安装不可信包或把静态扫描当安全认证。"
+version: 1.1.1
+last_updated: 2026-11-03
 triggers:
   - "供应链审查"
   - "第三方引入"
