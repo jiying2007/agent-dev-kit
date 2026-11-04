@@ -448,6 +448,129 @@ class InstallUpgradeTest(SourceFixture):
                 self.assertEqual(before, self.snapshot())
                 self.assertEqual(frozen_previous, previous_path.read_bytes())
 
+    def _candidate_retiring_core_skill(self):
+        import copy
+
+        retired = "adk-after-action-review"
+        data = copy.deepcopy(self.candidate.data)
+        data["profiles"]["core"]["include_skills"].remove(retired)
+        return Manifest(self.candidate.root, data, self.candidate.source)
+
+    def test_explicit_managed_retire_is_transactional_and_rollback_restores_old_receipt(self):
+        self.install(self.previous)
+        original = self.snapshot()
+        unmanaged = self.target / "KEEP-unmanaged.txt"
+        unmanaged.write_bytes(b"not an ADK-managed asset\n")
+        old_path = self.target / "skills/adk-after-action-review/SKILL.md"
+        candidate = self._candidate_retiring_core_skill()
+
+        # The default remains rollback-first. Only an explicit reviewed old
+        # source and opt-in authorizes retirement.
+        normal = create_plan(candidate, "claude-code", str(self.target), ["core"], [], "copy",
+                             previous_manifest=self.previous)
+        self.assertEqual("needs-review", normal["status"])
+        with self.assertRaisesRegex(ManifestError, "requires reviewed exact"):
+            create_plan(candidate, "claude-code", str(self.target), ["core"], [], "copy",
+                        allow_managed_retire=True)
+
+        planned = create_plan(candidate, "claude-code", str(self.target), ["core"], [], "copy",
+                              previous_manifest=self.previous, allow_managed_retire=True)
+        self.assertEqual("ready", planned["status"], planned["conflicts"])
+        self.assertIn("skills/adk-after-action-review/SKILL.md",
+                      {row["destination"] for row in planned["retirements"]})
+        location = self.work / "managed-retire-plan.json"
+        write_plan(planned, location)
+        applied = apply_plan(candidate, location, previous_manifest=self.previous)
+        self.assertEqual("pass", applied["status"])
+        self.assertFalse(old_path.exists())
+        self.assertEqual(b"not an ADK-managed asset\n", unmanaged.read_bytes())
+        receipt = json.loads(self.receipt.read_text(encoding="utf-8"))
+        self.assertGreater(len(receipt["retired"]), 0)
+        self.assertFalse(any(row["destination"] == "skills/adk-after-action-review/SKILL.md"
+                             for row in receipt["installed"]))
+
+        self.assertEqual("pass", rollback(self.receipt, manifest=candidate,
+                                          previous_manifest=self.previous)["status"])
+        self.assertEqual(original, self.snapshot())
+        self.assertTrue(old_path.is_file())
+        self.assertEqual(b"not an ADK-managed asset\n", unmanaged.read_bytes())
+
+    def test_managed_retire_refuses_tampered_plan_and_drifted_retired_asset(self):
+        self.install(self.previous)
+        candidate = self._candidate_retiring_core_skill()
+        plan = create_plan(candidate, "claude-code", str(self.target), ["core"], [], "copy",
+                           previous_manifest=self.previous, allow_managed_retire=True)
+        self.assertEqual("ready", plan["status"])
+        before = self.snapshot()
+        import copy
+
+        forged = copy.deepcopy(plan)
+        forged["retirements"][0]["destination"] = "skills/unmanaged/SKILL.md"
+        path = self.work / "forged-retire-plan.json"
+        write_plan(forged, path)
+        with self.assertRaisesRegex(ManifestError, "not a trusted obsolete managed asset"):
+            apply_plan(candidate, path, previous_manifest=self.previous)
+        self.assertEqual(before, self.snapshot())
+
+        retired_path = self.target / plan["retirements"][0]["destination"]
+        retired_path.write_bytes(b"user-modified old file\n")
+        changed = self.snapshot()
+        legitimate = self.work / "retire-plan.json"
+        write_plan(plan, legitimate)
+        with self.assertRaisesRegex(ManifestError, "retired managed destination changed"):
+            apply_plan(candidate, legitimate, previous_manifest=self.previous)
+        self.assertEqual(changed, self.snapshot())
+        new_plan = create_plan(candidate, "claude-code", str(self.target), ["core"], [], "copy",
+                               previous_manifest=self.previous, allow_managed_retire=True)
+        self.assertEqual("needs-review", new_plan["status"])
+
+    def test_retirement_backup_failure_compensates_entire_upgrade(self):
+        from agent_dev_kit import installation_retirement
+
+        self.install(self.previous)
+        original = self.snapshot()
+        # The first successful installation already owns a valid backup root;
+        # an aborted upgrade must preserve that history and add no new backup.
+        old_backup_roots = sorted(p.name for p in (self.target / ".adk-backups").iterdir())
+        candidate = self._candidate_retiring_core_skill()
+        plan = create_plan(candidate, "claude-code", str(self.target), ["core"], [], "copy",
+                           previous_manifest=self.previous, allow_managed_retire=True)
+        self.assertEqual("ready", plan["status"])
+        path = self.work / "fail-retire-plan.json"
+        write_plan(plan, path)
+        original_hash = installation_retirement.sha256_tree
+
+        def broken_hash(path):
+            if ".adk-backups" in Path(path).parts and "adk-after-action-review" in str(path):
+                raise OSError("injected failed retirement backup digest")
+            return original_hash(path)
+
+        with patch.object(installation_retirement, "sha256_tree", side_effect=broken_hash):
+            with self.assertRaisesRegex(OSError, "injected failed retirement backup"):
+                apply_plan(candidate, path, previous_manifest=self.previous)
+        self.assertEqual(original, self.snapshot())
+        self.assertFalse(any((self.target / ".adk-staging").glob("*")))
+        self.assertEqual(
+            old_backup_roots,
+            sorted(p.name for p in (self.target / ".adk-backups").iterdir()),
+        )
+
+    def test_rollback_retirement_refuses_recreated_unmanaged_target(self):
+        self.install(self.previous)
+        candidate = self._candidate_retiring_core_skill()
+        plan = create_plan(candidate, "claude-code", str(self.target), ["core"], [], "copy",
+                           previous_manifest=self.previous, allow_managed_retire=True)
+        path = self.work / "retire-recreation-plan.json"
+        write_plan(plan, path)
+        self.assertEqual("pass", apply_plan(candidate, path, previous_manifest=self.previous)["status"])
+        retired_path = self.target / "skills/adk-after-action-review/SKILL.md"
+        retired_path.write_text("user created new file", encoding="utf-8")
+        new_receipt = self.receipt.read_bytes()
+        with self.assertRaisesRegex(ManifestError, "no longer absent"):
+            rollback(self.receipt, manifest=candidate, previous_manifest=self.previous)
+        self.assertEqual(b"user created new file", retired_path.read_bytes())
+        self.assertEqual(new_receipt, self.receipt.read_bytes())
+
     def test_expired_old_contract_allows_upgrade_and_recovery_but_not_new_admission(self):
         self.install(self.previous)
         before = self.snapshot()

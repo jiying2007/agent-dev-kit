@@ -80,6 +80,10 @@ def _cmd_install(argv: Sequence[str]) -> int:
     plan.add_argument("--mode", choices=("copy", "symlink"), default="copy")
     plan.add_argument("--output", required=True)
     plan.add_argument("--ttl-minutes", type=int, default=60)
+    plan.add_argument(
+        "--managed-retire", action="store_true",
+        help="opt-in transactional retirement of obsolete, unchanged receipt-managed assets; requires --previous-source",
+    )
     plan.add_argument("--summary-json", action="store_true")
     apply = sub.add_parser("apply")
     apply.add_argument("--plan", required=True)
@@ -109,6 +113,7 @@ def _cmd_install(argv: Sequence[str]) -> int:
             args.ttl_minutes,
             args.asset_kind,
             previous_manifest=previous_manifest,
+            allow_managed_retire=args.managed_retire,
         )
         write_plan(result, Path(args.output))
         if args.summary_json:

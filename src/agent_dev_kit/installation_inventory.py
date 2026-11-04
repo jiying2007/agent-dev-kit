@@ -7,6 +7,7 @@ import stat
 from pathlib import Path
 from typing import Any, Mapping, Set
 
+from . import installation_contract as install_contract
 from .model import Manifest, ManifestError, sha256_file
 from .targets import RenderedBundle, _render_historical_selection
 
@@ -95,3 +96,33 @@ def verify_managed_file_mode(path: Path, declared_mode: object, label: str) -> N
         raise ManifestError("{} is not a regular managed file: {}".format(label, path))
     if not _mode_matches(actual, int(declared_mode, 8), os.name):
         raise ManifestError("{} permission mode drifted: {}".format(label, path))
+
+
+def verify_backup_inventory(receipt: Mapping[str, Any], backup_root: Path) -> None:
+    """Reject omitted/extra backup files before destructive directory cleanup."""
+    expected: Set[str] = {
+        str(item["destination"]) for item in receipt["installed"] if item.get("backup") is not None
+    }
+    for row in receipt.get("retired", []):
+        if not isinstance(row, dict) or not isinstance(row.get("destination"), str):
+            raise ManifestError("rollback retired backup inventory is malformed")
+        expected.add(row["destination"])
+    if receipt.get("previous_receipt") is not None:
+        expected.add(install_contract.RECEIPT_NAME)
+    actual: Set[str] = set()
+    limit = max(32, len(expected) * 8 + 16)
+    for count, candidate in enumerate(backup_root.rglob("*"), 1):
+        if count > limit:
+            raise ManifestError("rollback backup inventory exceeds entry budget")
+        relative = candidate.relative_to(backup_root).as_posix()
+        if candidate.is_symlink():
+            raise ManifestError("rollback backup inventory contains a symlink")
+        if candidate.is_file():
+            actual.add(relative)
+        elif candidate.is_dir():
+            if not any(path.startswith(relative + "/") for path in expected):
+                raise ManifestError("rollback backup inventory contains an unlisted directory")
+        else:
+            raise ManifestError("rollback backup inventory contains a non-regular entry")
+    if actual != expected:
+        raise ManifestError("rollback backup inventory differs from receipt references")

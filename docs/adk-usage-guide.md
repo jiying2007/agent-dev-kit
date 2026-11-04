@@ -158,6 +158,28 @@ bash scripts/devkit.sh install apply --plan /tmp/adk-plan.json
 bash scripts/devkit.sh install rollback --receipt /tmp/adk-target/.adk-install-receipt.json
 ```
 
+安全差异升级（**可选**，默认仍为回滚优先）：
+
+```bash
+# 从经过审查的、与目标旧收据完全匹配的不可变旧版目录加载来源
+bash scripts/devkit.sh install plan \
+  --tool claude-code --target /tmp/adk-target --mode copy --profile core \
+  --previous-source /path/to/reviewed-immutable-old-adk \
+  --managed-retire --output /tmp/managed-upgrade-plan.json --summary-json
+# 先检查计划的 retirements、operations 和 conflicts，确认 status=ready
+bash scripts/devkit.sh install apply \
+  --plan /tmp/managed-upgrade-plan.json \
+  --previous-source /path/to/reviewed-immutable-old-adk --summary-json
+# 如需恢复，必须同时提供旧版本真实来源才能核验完整备份及旧收据
+bash scripts/devkit.sh install rollback \
+  --receipt /tmp/adk-target/.adk-install-receipt.json \
+  --previous-source /path/to/reviewed-immutable-old-adk --summary-json
+```
+
+- `--managed-retire` 只允许删除旧版可信收据中登记、但新版渲染集合不再包含的**原样**受管理文件；必需 `--previous-source`，目标内容哈希、权限、旧 Manifest/contract、路径必须全部匹配。默认为拒绝并提示先回滚，不做隐式清退。
+- 升级计划会显式列出 `retirements`；旧文件通过原有事务备份和锁机制移动，应用失败自动补偿，升级后回滚可恢复原始文件及收据；任何用户修改、意外软链、未登记资产或新建同名文件都会拒绝覆盖/删除。
+- 该选项不是对任意 9.x 目录的信任授权：操作者需自行审核、固定旧版来源（建议精确 Git SHA/签名来源），不可把临时编辑的旧 Manifest 当成可信来源。不能以 CI 的合成迁移测试冒充真实设备上的升级验证。
+
 确定性导出：
 
 ```bash
