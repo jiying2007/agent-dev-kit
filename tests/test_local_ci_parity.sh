@@ -135,6 +135,34 @@ for token in \
   }
 done
 
+# Refuse drift between the canonical dependency pins and local Docker tools.
+python3 - "$ROOT_DIR/pyproject.toml" "$DOCKERFILE" <<'PY'
+import pathlib
+import re
+import sys
+import tomllib
+
+project = tomllib.loads(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8"))["project"]
+docker = pathlib.Path(sys.argv[2]).read_text(encoding="utf-8")
+build_pins = dict(re.findall(r"(?m)^ARG ([A-Z][A-Z_]+)_VERSION=([^\\s#]+)$", docker))
+bindings = {
+    "PyYAML": "PYYAML",
+    "jsonschema": "JSONSCHEMA",
+    "ruff": "RUFF",
+    "pip-audit": "PIP_AUDIT",
+    "mypy": "MYPY",
+    "types-jsonschema": "TYPES_JSONSCHEMA",
+    "types-PyYAML": "TYPES_PYYAML",
+}
+dependencies = project["dependencies"] + project["optional-dependencies"]["quality"]
+assert len(dependencies) == len(bindings), dependencies
+for dependency in dependencies:
+    name, version = dependency.split("==", 1)
+    assert build_pins[bindings[name]] == version, (
+        name, "local Docker pin differs from pyproject", version, build_pins[bindings[name]]
+    )
+PY
+
 for kernel_path in \
   'src/agent_dev_kit/contracts' \
   'src/agent_dev_kit/evidence' \
