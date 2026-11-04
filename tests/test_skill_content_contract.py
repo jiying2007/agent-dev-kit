@@ -50,9 +50,12 @@ class SkillContentContractTests(unittest.TestCase):
                 self.assertEqual(body.count("## Goal\n"), 1)
                 self.assertNotIn("## Goal\n## Prerequisites", body)
                 self.assertNotIn("<what-to-do>", body)
+                self.assertNotIn("</what-to-do>", body)
+                self.assertNotIn("<supporting-info>", body)
+                self.assertNotIn("</supporting-info>", body)
                 self.assertIn("## Workflow", body)
         skill = (ROOT / "skills/adk-skill-deep-analysis/SKILL.md").read_text(encoding="utf-8")
-        self.assertIn("# Skill 设计与可迁移实践深度评估", skill)
+        self.assertIn("# Skill 设计深度审查", skill)
 
     def test_details_are_supplemental_not_duplicate_skills(self) -> None:
         for path in ROOT.glob("skills/*/references/details.md"):
