@@ -24,6 +24,7 @@ def create_plan(
     asset_kind: Optional[str] = None,
     *,
     previous_manifest: Optional[Manifest] = None,
+    allow_managed_retire: bool = False,
 ) -> Dict[str, Any]:
     if mode != "copy":
         if mode == "symlink":
@@ -92,13 +93,33 @@ def create_plan(
         )
 
     requested = {str(item["destination"]) for item in operations}
+    retirements: List[Dict[str, str]] = []
     for relative in sorted(set(managed).difference(requested)):
-        conflicts.append(
-            {
+        if not allow_managed_retire:
+            conflicts.append({
                 "destination": relative,
                 "reason": "managed destination is outside requested profile; rollback current install first",
-            }
+            })
+            continue
+        if previous_manifest is None:
+            raise ManifestError("managed retirement requires reviewed exact --previous-source")
+        old = managed[relative]
+        destination = install_contract._regular_install_path(
+            target / relative, target, "retired managed destination"
         )
+        if not destination.is_file() or destination.is_symlink() or sha256_tree(destination) != old["installed_sha256"]:
+            conflicts.append({"destination": relative, "reason": "retired managed destination missing or drifted"})
+            continue
+        try:
+            verify_managed_file_mode(destination, old["file_mode"], "retired managed destination")
+        except ManifestError:
+            conflicts.append({"destination": relative, "reason": "retired managed destination permission drifted"})
+            continue
+        retirements.append({
+            "destination": relative,
+            "installed_sha256": old["installed_sha256"],
+            "file_mode": old["file_mode"],
+        })
 
     now = install_contract._utc_now()
     return {
@@ -111,6 +132,8 @@ def create_plan(
         "manifest_sha256": manifest.digest,
         "contract_sha256": bundle.contract.digest,
         "active_receipt_sha256": active_receipt_sha256,
+        "managed_retire": allow_managed_retire,
+        "retirements": retirements,
         "tool": tool,
         "target": str(target),
         "profiles": list(bundle.resolution.profiles),
@@ -168,6 +191,10 @@ def validate_plan(
     optional_skills = plan.get("optional_skills")
     asset_kind = plan.get("asset_kind")
     operations = plan.get("operations")
+    retirements = plan.get("retirements", [])
+    managed_retire = plan.get("managed_retire", False)
+    if type(managed_retire) is not bool or not isinstance(retirements, list):
+        raise ManifestError("install plan retirement policy is invalid")
     if not isinstance(tool, str):
         raise ManifestError("install plan tool must be a string")
     if not isinstance(profiles, list) or not profiles or not all(isinstance(item, str) for item in profiles):
@@ -217,8 +244,28 @@ def validate_plan(
     if plan.get("contract_sha256") != bundle.contract.digest:
         raise ManifestError("target contract changed after install plan creation")
     expected = {item.destination: item for item in bundle.files}
-    if set(managed_current).difference(expected):
+    expected_retired = set(managed_current).difference(expected)
+    if expected_retired and (not managed_retire or previous_manifest is None):
         raise ManifestError("active install receipt has assets outside requested selection; rollback first")
+    if retirements and not managed_retire:
+        raise ManifestError("retirements require explicit managed-retire authorization")
+    retired_seen: Set[str] = set()
+    for row in retirements:
+        if not isinstance(row, dict) or set(row) != {"destination", "installed_sha256", "file_mode"}:
+            raise ManifestError("install plan has malformed managed retirement")
+        relative = row["destination"]
+        if not isinstance(relative, str) or relative not in expected_retired or relative in retired_seen:
+            raise ManifestError("install plan retirement is not a trusted obsolete managed asset")
+        retired_seen.add(relative)
+        old = managed_current[relative]
+        if row["installed_sha256"] != old["installed_sha256"] or row["file_mode"] != old["file_mode"]:
+            raise ManifestError("install plan retirement disagrees with trusted receipt")
+        destination = install_contract._regular_install_path(target / relative, target, "retired managed destination")
+        if not destination.is_file() or destination.is_symlink() or sha256_tree(destination) != old["installed_sha256"]:
+            raise ManifestError("retired managed destination changed after plan creation")
+        verify_managed_file_mode(destination, old["file_mode"], "retired managed destination")
+    if retired_seen != expected_retired:
+        raise ManifestError("install plan must account for every retired managed asset")
     seen: Set[str] = set()
     for operation in operations:
         if not isinstance(operation, dict):
