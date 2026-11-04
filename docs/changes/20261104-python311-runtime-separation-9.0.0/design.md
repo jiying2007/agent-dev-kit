@@ -10,3 +10,5 @@
 8. Harness 七维 source-bound 旧签名对于 9.0.0 无效。必须有独立新审核、强制门禁、精确主线签名与 Root 正式受保护交付；发现失败如实保留。
 
 历史 v1 的审计记录与不可变 8.x Release 保留原样；新 9.0.0 workflow 归档 provenance_authority 只输出 v2，不引入 v1 fallback。
+
+三个独立消费契约 Workflow（Digital Worker、Codex、Claude）的离线校验只保留 Python 3.11/3.12，保留原协议身份/授权/无模型执行语义，消除最后的 Python 3.8 CI 轮次；这些入口不替代各消费端自身真实运行时要求。
