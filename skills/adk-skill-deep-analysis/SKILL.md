@@ -1,8 +1,8 @@
 ---
 name: adk-skill-deep-analysis
 description: "用于外部或本地 Skill 的设计意图、差异价值与可迁移方法评估；不用于未经来源审查直接安装或自动批准候选 Skill。"
-version: 1.0.1
-last_updated: 2026-11-03
+version: 1.0.2
+last_updated: 2026-11-04
 triggers:
   - 深度拆解 skill
   - 分析 skill 设计
@@ -22,7 +22,7 @@ constraints:
   - 5 维评分必须给出具体证据
 ---
 
-# 分析仓库的 prompt 结构
+# Skill 设计与可迁移实践深度评估
 
 ## Goal
 从产品视角深度拆解目标仓库中的 Skill 设计，提炼可复用的设计模式、确定性边界和不适合吸收的风险。
