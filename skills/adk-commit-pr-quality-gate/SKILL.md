@@ -17,7 +17,7 @@ inputs:
 outputs:
   - 分级门禁结论（pass/needs-fix）与整改项
 constraints:
-  - 没有验证证据不得给通过结论
+  - 缺少适用于当前风险的验证证据不得给通过结论
   - blocker 或 major 未闭环不得给 pass
   - 问题陈述不清或单次改动包含多个不相关问题时不得放行
 ---
@@ -87,6 +87,13 @@ git diff --name-only <base>...HEAD
 - adk-commit-pr-quality-gate: 提交/PR 门禁（格式规范、评审闭环）
 - adk-verification-before-completion: 完成前自检（验证命令、证据完整性）
 
+## 按风险适用的证据门禁
+
+- E0/E1 或局部可逆小改：仅要求变更范围、适用的定向验证、失败路径（适用时）和结果；无关的 DB、发布、MCP、设备或 AI review 材料标为 `not_applicable`，不能为了填模板制造假证据。
+- E2/E3、公共 API、schema/数据库、CI、外部权限、发布和受控生命周期：保留相应专项测试、审查、回滚与授权证据，真实风险不因语言或低 Token 设置而降低。
+- `cannot-verify`、缺失适用证据和真实 blocker 仍 fail-closed；禁止将“未执行”写成通过。
+- Issue 链接由真实任务关系和仓库策略决定，不为无 Issue 的普通修复创建虚假链接。
+
 ## Quality Gate
 - 输出必须可执行、可验证、可追溯。
 - 结论必须与分级统计一致，且可复核。
@@ -96,7 +103,7 @@ git diff --name-only <base>...HEAD
 - 若触及技能资产但无安装范围或归属结论，结论必须为 `needs-fix`。
 - 若 AI-assisted output 缺少 human owner、复审责任或冲突修复证据，结论必须为 `needs-fix`。
 - 若 DB/schema/API 删除或迁移缺少调用点、迁移或 approval 证据，结论必须为 `needs-fix`。
-- 若缺少负结果或被证伪路径记录，结论必须为 `needs-fix`。
+- 缺陷诊断、假设调查或高风险变更若缺少适用的负结果/证伪记录，结论为 `needs-fix`；无此路径的小改标记 `not_applicable`。
 - 若 AI/CI review 缺少结构化 findings、trusted-trigger 或 untrusted PR secret 隔离证据，结论必须为 `needs-fix`。
 - 若 SCM review comment 来自自由文本或 inline anchoring 未验证，结论必须为 `needs-fix`。
 - 若运行控制面变更缺少 slash/MCP/permission 审计、deny-path test、approval boundary 或 rollback 证据，结论必须为 `needs-fix`。
