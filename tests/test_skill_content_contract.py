@@ -47,8 +47,8 @@ class SkillContentContractTests(unittest.TestCase):
             with self.subTest(skill=name):
                 content = (ROOT / "skills" / name / "SKILL.md").read_text(encoding="utf-8")
                 body = content.split("---", 2)[2]
-                self.assertEqual(body.count("## Goal\\n"), 1)
-                self.assertNotIn("## Goal\\n## Prerequisites", body)
+                self.assertEqual(body.count("## Goal\n"), 1)
+                self.assertNotIn("## Goal\n## Prerequisites", body)
                 self.assertNotIn("<what-to-do>", body)
                 self.assertIn("## Workflow", body)
         skill = (ROOT / "skills/adk-skill-deep-analysis/SKILL.md").read_text(encoding="utf-8")
