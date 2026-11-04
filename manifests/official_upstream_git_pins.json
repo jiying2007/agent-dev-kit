@@ -1,0 +1,22 @@
+{
+  "schema": "adk-official-upstream-git-pins/v1",
+  "status": "watch",
+  "semantics": "read-only-upstream-change-detection-not-automatic-source-approval",
+  "last_reviewed_at": "2026-11-04",
+  "sources": [
+    {
+      "id": "openai-plugins-examples",
+      "repository": "openai/plugins",
+      "branch": "main",
+      "reviewed_sha": "b767f8fa3be1a22b093127dd59956c91ecffca9d",
+      "reason": "Current official Skills/Plugins example repository; drift requires human review."
+    },
+    {
+      "id": "openai-skills-legacy",
+      "repository": "openai/skills",
+      "branch": "main",
+      "reviewed_sha": "49f948faa9258a0c61caceaf225e179651397431",
+      "reason": "Retired Skills repository; watch only to detect redirects or unexpected maintenance; never treat as the current authority."
+    }
+  ]
+}

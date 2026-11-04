@@ -1,0 +1,64 @@
+name: official-upstream-drift
+
+on:
+  schedule:
+    - cron: '17 4 * * 1' # Weekly observation, not a timing SLA or source approval.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: official-upstream-drift-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  source-observation:
+    name: official-upstream-drift
+    if: github.repository == 'jiying2007/agent-dev-kit' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - name: Checkout exact reviewed main source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          submodules: false
+
+      - name: Set up supported Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.11'
+
+      - name: Observe reviewed official GitHub upstream HEADs without credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          report="$RUNNER_TEMP/official-upstream-drift.json"
+          code=0
+          PYTHONPATH=src python3 -m agent_dev_kit.official_upstream_drift --root . --summary-json > "$report" || code=$?
+          cat "$report"
+          {
+            echo '### Official upstream HEAD drift (read-only)'
+            echo ''
+            echo 'Compared public GitHub repository HEADs with reviewed immutable pins. This does not compare all official doc contents, refresh source trust, or qualify an agent/runtime/release.'
+            echo ''
+            echo '```json'
+            cat "$report"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          if [[ "$code" == 2 ]]; then
+            echo '::warning title=Official upstream source changed::Review current upstream changes before refreshing pinned source provenance.'
+          elif [[ "$code" != 0 ]]; then
+            echo '::error title=Official upstream observation incomplete::No source freshness or unchanged conclusion may be inferred.'
+          fi
+          exit "$code"
+
+      - name: Upload bounded, read-only source observation
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: official-upstream-drift-${{ github.sha }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/official-upstream-drift.json
+          if-no-files-found: warn
+          retention-days: 30
