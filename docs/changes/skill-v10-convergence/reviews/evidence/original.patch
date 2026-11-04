@@ -1,0 +1,3191 @@
+diff --git a/.version-lock b/.version-lock
+index 29a5a856..04de5f89 100644
+--- a/.version-lock
++++ b/.version-lock
+@@ -1,3 +1,3 @@
+-version: 9.0.0
+-locked_at: 2026-11-04T00:00:00Z
+-locked_by: github-connector/python311-breaking-scope
++version: 10.0.0
++locked_at: 2026-11-04T04:34:00Z
++locked_by: github-connector/skill-language-and-contract-convergence
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index 0102aa64..97e37ec8 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -2,6 +2,16 @@
+ 
+ ## Unreleased
+ 
++### 10.0.0 source candidate — Skill capability, locale and contract convergence
++- BREAKING: remove two duplicate language-only core Skills (`adk-chinese-code-review` and `adk-chinese-commit-conventions`) from Manifest, team-core Profile and distributed source; no alias or compatibility mirror. Shared review severity/communication guidance moves under `adk-code-review-loop/references/`; commit format follows the repository policy and `adk-commit-pr-quality-gate`.
++- Normalize nine OpenAI `agents/openai.yaml` files to the documented `interface` mapping; retain already conformant files unchanged.
++- Remove seven obsolete Skill identity/frontmatter and duplicated SOP copies from `references/details.md`; references now carry only supplemental examples or domain knowledge.
++- Retire fixed SOP heading/minimum-length content gate; enforce portable metadata, current typed contracts, real skill identity and OpenAI metadata with a Python 3.11+ test suite.
++- Add read-only deterministic Conventional Commit validator (issue linking opt-in), locale-aware review/commit matching, and new routing/permission regression cases.
++- Scale clarification and PR evidence requirements by true blocking risk; keep high-risk permission, release, schema and live-device gates fail-closed.
++- Source-only migration: ADK 9.x users must update governed Profile/installer inventory after release; `llm_agent` and Codex live target remain on their existing independently pinned source until verified promotion. No native runtime or product field qualification is claimed.
++
++
+ ### 9.0.0 source candidate — major Python build boundary
+ - Break the ADK *build/control-plane* interpreter floor from Python 3.8 to Python 3.11. Retire Python 3.8/3.9/3.10 branches, legacy pinned libraries, compatibility module, fallback guards, old Bullseye Docker bootstrap and related CI lanes.
+ - Keep the Python 3.11/3.12 native contract and regression matrix, strict aggregate evaluation, source-bound independent review, release provenance, target/runtime and permission boundaries unchanged.
+diff --git a/CONTEXT.md b/CONTEXT.md
+index 5674523b..1a751d03 100644
+--- a/CONTEXT.md
++++ b/CONTEXT.md
+@@ -1,7 +1,7 @@
+ # CONTEXT.md — agent-dev-kit 领域语言定义
+ 
+ > 文档状态：受机器门禁约束的领域上下文投影
+-> 产品版本：9.0.0
++> 产品版本：10.0.0
+ > 结构化单一事实源：`manifest.json`
+ 
+ ---
+diff --git a/README.md b/README.md
+index 0d3b4fa0..2a906231 100644
+--- a/README.md
++++ b/README.md
+@@ -11,7 +11,7 @@ ADK 不再在 README 中维护“候选 / 已发布 / live”之类可漂移的
+ - **Runtime conformance**：以 target/runtime receipt 与证据级别 `static / smoke / native / certified` 为权威。
+ - **Product qualification**：由消费方/产品仓的 qualification 与 field evidence 独立决定，不由 ADK 组件版本继承。
+ 
+-`manifest.json` 当前 source version 为 `9.0.0`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
++`manifest.json` 当前 source version 为 `10.0.0`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
+ 
+ 8.0.0 维护 CLI 迁移：`performance.sh optimize`、`auto-ops.sh cleanup/optimize` 仅输出有界只读计划，JSON 使用 `adk-maintenance-plan/v1` 与 `status=planned`；维护 `--apply` 返回 blocked、exit 2，不再自动删除文件或修改权限。调用方必须移除维护 `--apply` 并按 `applied=false` 处理报告；见 [维护迁移说明](docs/changes/20261006-comprehensive-contracts/design.md)。
+ 
+diff --git a/docs/agent-skill-catalog.md b/docs/agent-skill-catalog.md
+index ae0c3c46..3f2aac9b 100644
+--- a/docs/agent-skill-catalog.md
++++ b/docs/agent-skill-catalog.md
+@@ -83,8 +83,6 @@
+ | 70 | 60 | `verification` | primary | reviewer | `adk-artifact-gating` | 用于跨仓交付物需要标签、状态与验收交接协议时定义 Artifact 门禁；不用于单仓常规测试、直接上传制品或发布批准。 | artifact 门禁 | `skills/adk-artifact-gating/SKILL.md` |
+ | 70 | 70 | `verification` | primary | pipeline | `adk-pilot-framework` | 用于跨仓新能力的有界 Pilot 试跑、证据采集、失败门禁和回退判定；不用于替代正式产品资格认证或自动将试验结果发布。 | 试跑 | `skills/adk-pilot-framework/SKILL.md` |
+ | 70 | 80 | `verification` | primary | reviewer | `adk-verification-before-completion` | 用于完成前核对测试、审查和真实证据；不用于把自述、静态检查或过期收据当作完成证明。 | 准备完成 | `skills/adk-verification-before-completion/SKILL.md` |
+-| 80 | 10 | `review_quality` | supporting | reviewer | `adk-chinese-commit-conventions` | 用于中文 Git 提交标题、scope 和变更摘要的规范化；不用于自动创建提交、调整权限或替代提交前质量门禁。 | 中文提交 | `skills/adk-chinese-commit-conventions/SKILL.md` |
+-| 80 | 20 | `review_quality` | supporting | reviewer | `adk-chinese-code-review` | 用于团队需要中文代码审查意见的格式、严重性和反馈沟通约定；不用于代替实际独立代码审查、修复验证或审批。 | 代码审查 | `skills/adk-chinese-code-review/SKILL.md` |
+ | 80 | 30 | `review_quality` | primary | reviewer | `adk-code-review-loop` | 用于独立代码审查、问题复核与反馈闭环；不用于自动批准或代替提交前门禁。 | 独立代码审查 | `skills/adk-code-review-loop/SKILL.md` |
+ | 80 | 40 | `review_quality` | primary | reviewer | `adk-repo-drift-remediation` | 用于全仓漂移、兼容残留、冗余目录和文档代码不一致的取证与修复计划；不用于跳过基线验证或清除用户未授权的改动。 | 仓库漂移 | `skills/adk-repo-drift-remediation/SKILL.md` |
+ | 80 | 50 | `review_quality` | primary | reviewer | `adk-static-analysis-c-cpp` | 用于 C/C++ 静态分析告警分级、根因追踪与误报确认，并补最小复现；不用于把单次扫描当作完整功能或动态安全验收。 | 静态分析 | `skills/adk-static-analysis-c-cpp/SKILL.md` |
+diff --git a/docs/changes/skill-v10-convergence/design.md b/docs/changes/skill-v10-convergence/design.md
+new file mode 100644
+index 00000000..ee11fb76
+--- /dev/null
++++ b/docs/changes/skill-v10-convergence/design.md
+@@ -0,0 +1,18 @@
++# Skill convergence — design
++
++## Single authorities
++- `manifest.json`: Skill identity, Profile, default locale and routing intent.
++- `manifests/skill_content_contracts_v2.json`: capability class, runtime role, selection and effect ceilings. Delete language-support overrides.
++- `adk-code-review-loop/SKILL.md`: snapshot, review, severity, evidence and replan. Optional guidance in `references/review-communication-guidance.md`.
++- `adk-commit-pr-quality-gate/SKILL.md`: applicable commit/PR readiness evidence; repository `AGENTS.md` owns formatting/locale.
++- `src/agent_dev_kit/commit_message_policy.py`: safe pure validation; output pass/needs-fix and exit 0/2. No filesystem writes or subprocess Git.
++- `tests/test_skill_content.sh`: portable identity, typed and OpenAI metadata tests rather than line-count or fixed SOP template.
++
++## Migration
++Remove language-only Skill directories and Manifest/Profile references in one atomic Git tree; do not ship shim, alias or duplicate references. Deployment cleans old files only with governed installer ownership/digest evidence. Keep users' modified files untouched and classify as manual conflict.
++
++## Risk controls
++Read-only review unchanged. Only user-authorized SCM tool/Agent roles can mutate. E0/E1 minor tasks can record not_applicable evidence; E2/E3/schema/release/authorization cases remain fail-closed. ADK build requires Python 3.11+, deployed Skill assets do not intrinsically require Python.
++
++## Rollback
++Do not rewrite immutable tags. Revert the source PR with a new version if verification fails; consumers continue exact-pinned 9.0.0 until independent source-to-live promotion.
+diff --git a/docs/changes/skill-v10-convergence/measurement.md b/docs/changes/skill-v10-convergence/measurement.md
+new file mode 100644
+index 00000000..c11727da
+--- /dev/null
++++ b/docs/changes/skill-v10-convergence/measurement.md
+@@ -0,0 +1,29 @@
++# Source-byte Profile context ratchet — ADK 10.0.0
++
++Date: 2026-11-04. Source identity: PR #236, branch commit `1819607e3fccc61de9041bde3c28af62a2c74819`; no native runtime, model or provider tokenizer was used. Asset files were counted from exact Git tree object sizes, and deferred support counted only `references/`, `scripts/`, `assets/` beneath selected Agent/Skill directories. The original `profile_context_footprint.py` source algorithm was preserved.
++
++| Profile | Assets old → new | Entry bytes old → new | Full potential source old → new |
++|---|---:|---:|---:|
++| core | 27 → 27 | 129719 → 132309 | 170366 → 170421 |
++| release-hardening | 23 → 23 | 106963 → 109553 | 145463 → 141635 |
++| personal-core | 32 → 32 | 148797 → 151387 | 194509 → 190681 |
++| embedded-fullstack | 54 → 54 | 232877 → 235467 | 292365 → 283982 |
++| team-core | 37 → 35 | 166418 → 164575 | 230107 → 209030 |
++| large-refactor | 55 → 55 | 235302 → 237892 | 299799 → 288438 |
++| incident-response | 9 → 9 | 34519 → 36135 | 37820 → 39436 |
++| research-intake | 20 → 20 | 83121 → 84916 | 121899 → 118623 |
++
++## Reviewed rationale
++
++- The prior source-growth ratchet was correct to fail: replacing rigid SOP instructions and language-only Skills changes the owned source body size. This is not a CI infrastructure failure and cannot be hidden by disabling enforcement.
++- Shared profiles gained **2,590 entry bytes**, largely due to the risk-scoped commit/PR and requirements contracts and new Code Review guidance; their deferred supplemental reference sources decreased or remained nearly stable.
++- `team-core` lost **two Skills**, lowering its total asset count **37 → 35**, entry bytes **166,418 → 164,575**, potential full source bytes **230,107 → 209,030**.
++- `incident-response` does not inherit `core`: its focused shared gate grew **1,616 entry bytes** and support unchanged. Source bytes are not initial runtime context or real token consumption.
++- All eight ratchet values now equal their **exact measured source usage** (no extra headroom). `fail_on_entry_file_growth` and `fail_on_potential_full_source_growth` stay `true`, and the existing negative test will still reject one additional byte of source growth.
++- This is a scoped author-led source measurement/rationale. It does **not** create an independent reviewer identity, change release authorization, or satisfy native runtime/effect qualification.
++
++## Reproduction and checks
++
++- Repository `manifest.json`: resolve Agent/Skill Profile inheritance and unique assets.
++- For each declared asset, count the exact SKILL.md or AGENTS.md Git blob size as entry bytes; recursively count only `references/scripts/assets` as deferred support.
++- Run `bash tests/test_profile_context_footprint.sh` and complete Python 3.11/3.12 full regression on this exact new head; output source-byte measurement with version and SHA.
+diff --git a/docs/changes/skill-v10-convergence/requirements.md b/docs/changes/skill-v10-convergence/requirements.md
+new file mode 100644
+index 00000000..18035f1d
+--- /dev/null
++++ b/docs/changes/skill-v10-convergence/requirements.md
+@@ -0,0 +1,21 @@
++# Skill capability convergence — requirements
++
++## Goal
++Make ADK Skill routing capability-based, not language-siloed. Remove redundant legacy content and protect read-only authorization while preserving Chinese output and non-Chinese portability.
++
++## Non-goals
++No new LLM runtime, no real model campaign, no device flashing, no direct write to Codex/Claude/OpenCode live homes, no use of Codex or ChatGPT Work shared quota.
++
++## Acceptance
++1. Manifest and Profile contain 56 core + 8 optional Skills, with no shipped `adk-chinese-*` aliases.
++2. Unified `adk-code-review-loop` handles Chinese/English requests, preserving blocker/major semantics and real review evidence.
++3. Commit quality gate uses repo locale and has read-only deterministic syntax checker; no implicit `git commit`, `--amend`, `push`, `merge`.
++4. All extant `skills/*/agents/openai.yaml` have `interface` mapping; old `references/details.md` files no longer clone Skill frontmatter or Workflow.
++5. Remove obsolete minimum-line/fixed-heading tests; new tests verify identity, descriptions, scope, v2 behavior and negative/abstain routing.
++6. Version strictly advances to 10.0.0 before PR; release and Root promotion remain independent protected steps.
++
++## Required evidence
++Fresh Python 3.11 and 3.12 contract + regression CI, diff/format checks, source-bound review, immutable tag/release and verified downstream lock/source-to-live promotion if/when executed.
++
++## Blocker policy
++Any contract mismatch, untrusted SCM side effect, missing required CI, or unreconciled downstream pin blocks release/consumer claims, but not independent source-only refinement.
+diff --git a/docs/changes/skill-v10-convergence/tasks.md b/docs/changes/skill-v10-convergence/tasks.md
+new file mode 100644
+index 00000000..1d610e84
+--- /dev/null
++++ b/docs/changes/skill-v10-convergence/tasks.md
+@@ -0,0 +1,14 @@
++# Skill convergence — implementation and verification
++
++- [x] Snapshot main at `f9984ca91e6b511937137df0558d51d179ff2a8f`.
++- [x] Normalize nine malformed OpenAI Skill metadata files.
++- [x] Remove two language-only Skill identities and move their unique capability guidance to primary owners.
++- [x] Remove old duplicated reference identities and procedures in seven retained `details.md`.
++- [x] Add deterministic read-only commit message checker and tests.
++- [x] Replace legacy one-size-fits-all Skill content gate with portable identity/policy tests.
++- [x] Add locale routing, negative tests and risk-aware requirement and PR gates.
++- [x] Bump source version and document breaking migration.
++- [x] Fresh GitHub Actions Python 3.11/3.12 contract, full regression, security and target checks on `42d4ffddfdfc76b90b5e7512594b233af11a2712` (run 41781560766 and required security/platform runs).
++- [x] Reconcile installer rollback-first behavior with 10.0.0 migration docs; add a negative upgrade/rollback/reinstall test (requires fresh CI on the new head).
++- [ ] Independent source-bound review and protected PR merge.
++- [ ] Immutable Release, verified `llm_agent` lock and `~/codex` source-to-live promotion. These are downstream deliverables, not automatically satisfied by PR CI.
+diff --git a/docs/migrations/skill-v10-language-convergence.md b/docs/migrations/skill-v10-language-convergence.md
+new file mode 100644
+index 00000000..922deb37
+--- /dev/null
++++ b/docs/migrations/skill-v10-language-convergence.md
+@@ -0,0 +1,22 @@
++# ADK 10.0.0 Skill capability and language convergence
++
++## Breaking change
++Remove `adk-chinese-code-review` and `adk-chinese-commit-conventions` from core and `team-core`. This is intentional: language is output policy, not a separate Skill execution workflow.
++
++## Replacement
++- `adk-code-review-loop`: code review in the user's requested language (default: `manifest.locale=zh-CN`), unified evidence and `blocker/major/minor` severity.
++- `adk-commit-pr-quality-gate`: commit/PR quality. Use repository Commit Policy; optional syntax validator `python3 -m agent_dev_kit.commit_message_policy --message "fix(runtime): 修复回退判断"` runs only in ADK build environment.
++- No compatibility aliases, mirroring, implicit git commits or required Issue number for normal fixes.
++
++## Installation and rollback
++1. Preserve existing source/live target identity and back up managed installer inventory.
++2. After immutable 10.0.0 release verification, regenerate install/export plan from exact source/tag.
++3. The current transactional installer deliberately **does not prune** a managed destination omitted from the new Profile. A direct 9.x → 10.0.0 `install plan` returns `needs-review` with `managed destination is outside requested profile; rollback current install first`; it must not be forced or described as an automatic deletion.
++4. Using the **trusted exact previous 9.x source and active receipt**, run the canonical `install rollback` workflow under the target lock. Verify the old files, modes and receipt first; if any managed file is modified, missing or inconsistent, stop for conflict resolution without deleting it. Confirm only the intended old managed assets were removed or restored; preserve unrelated/unmanaged files.
++5. With the target free of managed retired assets, generate a fresh exact-10.0.0 `install plan`, review all creates and target identity, then `install apply` and verify its new receipt. Never write directly into a live home to bypass the plan/apply authority.
++6. Verify target discovery uses the surviving primary Skills and that retired `adk-chinese-*` directories are absent. If a directory persists because it is unmanaged or user-edited, surface it as a conflict rather than deleting it.
++7. Promote `llm_agent` pin and `~/codex -> ~/.codex` only after independent source/version/digest and native target verification. Do not infer runtime qualification from source CI.
++8. To roll back, use a new reviewed source/release and its exact pin; never move existing immutable tags.
++
++## Operational boundary
++ADK build/control plane requires Python >=3.11, but consuming `SKILL.md` assets after deployment has no blanket Python requirement. Only specific Skill-owned external tools may require interpreters.
+diff --git a/docs/skill-format-guide.md b/docs/skill-format-guide.md
+index 1cf545fd..0bd2653a 100644
+--- a/docs/skill-format-guide.md
++++ b/docs/skill-format-guide.md
+@@ -26,6 +26,13 @@ ADK authoring 可以继续使用：
+ 
+ 但 frontmatter 不承载 nested permission、approval、selection graph 或完整 workflow state。机器策略放 typed contract。
+ 
++## 语言与输出策略
++
++- 语言是输出策略而非 Skill identity：项目 `manifest.locale` 定义默认语言，用户或目标仓库的明确要求可覆盖，技术标识不翻译。
++- 不为相同的提交、审查、测试或规划方法创建 `chinese-*`、`english-*` 平行 Skill。专业方法确实不同且有独立正负例时除外。
++- 提交格式归目标仓库 Commit Policy；代码审查的行为和级别由统一审查 Skill 负责。
++- 不保留旧名 alias、兼容镜像或二次 authority；能力迁移后需更新 Profile/Manifest/安装和测试。
++
+ ## Description 触发质量
+ 
+ `description` 是运行时 discovery 第一层，必须表达 **what + when + boundary**：
+diff --git a/manifest.json b/manifest.json
+index 41dcc3e4..ffaa32a0 100644
+--- a/manifest.json
++++ b/manifest.json
+@@ -1,5 +1,5 @@
+ {
+-  "version": "9.0.0",
++  "version": "10.0.0",
+   "locale": "zh-CN",
+   "platforms": [
+     "linux-embedded",
+@@ -1052,26 +1052,6 @@
+       "activation_mode": "primary",
+       "pattern": "reviewer"
+     },
+-    {
+-      "name": "adk-chinese-commit-conventions",
+-      "path": "skills/adk-chinese-commit-conventions/SKILL.md",
+-      "quality_tier": "p0",
+-      "category": "review_quality",
+-      "lifecycle_order": 80,
+-      "stage_order": 10,
+-      "activation_mode": "supporting",
+-      "pattern": "reviewer"
+-    },
+-    {
+-      "name": "adk-chinese-code-review",
+-      "path": "skills/adk-chinese-code-review/SKILL.md",
+-      "quality_tier": "p0",
+-      "category": "review_quality",
+-      "lifecycle_order": 80,
+-      "stage_order": 20,
+-      "activation_mode": "supporting",
+-      "pattern": "reviewer"
+-    },
+     {
+       "name": "adk-code-review-loop",
+       "path": "skills/adk-code-review-loop/SKILL.md",
+@@ -1367,8 +1347,6 @@
+         "adk-planning-execution-loop",
+         "adk-artifact-gating",
+         "adk-pilot-framework",
+-        "adk-chinese-commit-conventions",
+-        "adk-chinese-code-review",
+         "adk-cross-team-handoff",
+         "adk-memory-curator",
+         "adk-archive-governance",
+@@ -2618,7 +2596,7 @@
+       },
+       {
+         "intent": "commit_pr_quality_gate",
+-        "intent_zh": "提交代码/准备提交/提交前检查",
++        "intent_zh": "提交代码/准备提交/提交前检查/中文提交信息/英文提交信息/提交信息格式/写commit message/commit message",
+         "primary_skill": "adk-commit-pr-quality-gate",
+         "supporting_skills": [
+           "adk-verification-before-completion"
+@@ -2626,7 +2604,7 @@
+       },
+       {
+         "intent": "code_review_loop",
+-        "intent_zh": "独立代码审查/code review loop/review闭环/review反馈/review反馈核验/审查反馈/收到review/修复review/复审",
++        "intent_zh": "独立代码审查/code review loop/review闭环/review反馈/review反馈核验/审查反馈/收到review/修复review/复审/代码审查/中文代码审查/英文代码审查",
+         "primary_skill": "adk-code-review-loop",
+         "supporting_skills": [
+           "adk-commit-pr-quality-gate"
+diff --git a/manifests/content_architecture_policy.json b/manifests/content_architecture_policy.json
+index 8271147f..f3d7334b 100644
+--- a/manifests/content_architecture_policy.json
++++ b/manifests/content_architecture_policy.json
+@@ -4,7 +4,7 @@
+   "baseline_source_commit": "d55c84b5b0ce86e8432d08e8c0d33f95bfb32725",
+   "identity_baseline": {
+     "agent_count": 13,
+-    "core_skill_count": 58,
++    "core_skill_count": 56,
+     "optional_skill_count": 8
+   },
+   "agent_thin_contract": {
+diff --git a/manifests/profile_context_ratchets.json b/manifests/profile_context_ratchets.json
+index d9fddda0..bf7f0e52 100644
+--- a/manifests/profile_context_ratchets.json
++++ b/manifests/profile_context_ratchets.json
+@@ -3,7 +3,7 @@
+   "status": "active",
+   "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+   "measured_from": "source-file-bytes",
+-  "measured_at": "2026-11-03",
++  "measured_at": "2026-11-04",
+   "policy": {
+     "fail_on_entry_file_growth": true,
+     "fail_on_potential_full_source_growth": true,
+@@ -15,48 +15,48 @@
+   "profiles": {
+     "core": {
+       "assets": 27,
+-      "entry_file_bytes": 129719,
+-      "potential_full_source_bytes": 170366
++      "entry_file_bytes": 132309,
++      "potential_full_source_bytes": 170421
+     },
+     "release-hardening": {
+       "assets": 23,
+-      "entry_file_bytes": 106963,
+-      "potential_full_source_bytes": 145463
++      "entry_file_bytes": 109553,
++      "potential_full_source_bytes": 141635
+     },
+     "personal-core": {
+       "assets": 32,
+-      "entry_file_bytes": 148797,
+-      "potential_full_source_bytes": 194509
++      "entry_file_bytes": 151387,
++      "potential_full_source_bytes": 190681
+     },
+     "embedded-fullstack": {
+       "assets": 54,
+-      "entry_file_bytes": 232877,
+-      "potential_full_source_bytes": 292365
++      "entry_file_bytes": 235467,
++      "potential_full_source_bytes": 283982
+     },
+     "team-core": {
+-      "assets": 37,
+-      "entry_file_bytes": 166418,
+-      "potential_full_source_bytes": 230107
++      "assets": 35,
++      "entry_file_bytes": 164575,
++      "potential_full_source_bytes": 209030
+     },
+     "large-refactor": {
+       "assets": 55,
+-      "entry_file_bytes": 235302,
+-      "potential_full_source_bytes": 299799
++      "entry_file_bytes": 237892,
++      "potential_full_source_bytes": 288438
+     },
+     "incident-response": {
+       "assets": 9,
+-      "entry_file_bytes": 34519,
+-      "potential_full_source_bytes": 37820
++      "entry_file_bytes": 36135,
++      "potential_full_source_bytes": 39436
+     },
+     "research-intake": {
+       "assets": 20,
+-      "entry_file_bytes": 83121,
+-      "potential_full_source_bytes": 121899
++      "entry_file_bytes": 84916,
++      "potential_full_source_bytes": 118623
+     }
+   },
+   "baseline_source": {
+     "version": "7.1.0",
+     "commit": "70fac05125907e4930ee73f3928799e11bac55de",
+-    "note": "Original baseline: independently measured Git blob sizes before 7.2.0. 2026-11-03 user-authorized adk-goal-authoring addition: author-self-review, add exactly 4457 entry bytes and 1864 deferred-support bytes plus one asset only to core and its inheriting profiles. Rationale and verification: docs/changes/20261103-adk-goal-authoring/design.md. No runtime token-budget or release-authority change. 2026-11-03 v8.2.2: three existing registered-but-unreachable core Skills are attached to existing specialist Profiles only (team-core, incident-response, embedded-fullstack). Platform-neutral core remains unchanged. Checked source bytes: team-core 160166/212956; incident-response 34102/37403; embedded-fullstack 230096/289584; inherited large-refactor 232417/296914. These are source bytes, not native runtime token measurements. 2026-11-03 v8.2.3: reviewed source-only description boundary improvements and explicit team-core reachability for existing artifact/pilot Skills; per-profile source byte ratchets refreshed from exact Git tree with support references counted. This is not a native tokenizer or runtime-context measurement. Duplicate private support references are retained for independently exportable Skills, not compatibility aliases. 8.2.3 CI repair: sorted team-core Skill lifecycle order and shortened review entry below its unchanged 7200-byte ceiling; first-party catalog find retains bring-up keyword. Source-byte values adjusted for both exact description changes."
++    "note": "Original baseline: independently measured Git blob sizes before 7.2.0. 2026-11-03 user-authorized adk-goal-authoring addition: author-self-review, add exactly 4457 entry bytes and 1864 deferred-support bytes plus one asset only to core and its inheriting profiles. Rationale and verification: docs/changes/20261103-adk-goal-authoring/design.md. No runtime token-budget or release-authority change. 2026-11-03 v8.2.2: three existing registered-but-unreachable core Skills are attached to existing specialist Profiles only (team-core, incident-response, embedded-fullstack). Platform-neutral core remains unchanged. Checked source bytes: team-core 160166/212956; incident-response 34102/37403; embedded-fullstack 230096/289584; inherited large-refactor 232417/296914. These are source bytes, not native runtime token measurements. 2026-11-03 v8.2.3: reviewed source-only description boundary improvements and explicit team-core reachability for existing artifact/pilot Skills; per-profile source byte ratchets refreshed from exact Git tree with support references counted. This is not a native tokenizer or runtime-context measurement. Duplicate private support references are retained for independently exportable Skills, not compatibility aliases. 8.2.3 CI repair: sorted team-core Skill lifecycle order and shortened review entry below its unchanged 7200-byte ceiling; first-party catalog find retains bring-up keyword. Source-byte values adjusted for both exact description changes. 2026-11-04 v10.0.0 source-only measurement from feature-branch Git tree 1819607e3fccc61de9041bde3c28af62a2c74819, not a runtime token claim: capability-based language consolidation removed two team Skills and seven redundant references; 9 OpenAI metadata corrections and risk-aware gate instructions add exactly 2590 entry bytes to shared profiles, while most deferred support footprints decrease. All eight Profile limits reset to exact measured source values with ZERO growth slack and original fail-on-growth policy retained. Detailed deltas and self-review boundary: docs/changes/skill-v10-convergence/measurement.md. Formal independent release review remains a separate gate."
+   }
+ }
+diff --git a/manifests/skill_content_contracts_v2.json b/manifests/skill_content_contracts_v2.json
+index 69fb40fe..db094eb8 100644
+--- a/manifests/skill_content_contracts_v2.json
++++ b/manifests/skill_content_contracts_v2.json
+@@ -58,58 +58,294 @@
+     "eval_obligations": {
+       "trigger": true,
+       "behavior": true,
+-      "authority_for": ["workflow", "guardrail", "tool", "meta"]
++      "authority_for": [
++        "workflow",
++        "guardrail",
++        "tool",
++        "meta"
++      ]
+     }
+   },
+   "overrides": {
+-    "adk-goal-authoring": {"capability_class":"task","runtime_role":"primary","selection_group":"goal-authoring"},
+-    "adk-runtime-router": {"capability_class":"meta","runtime_role":"primary","selection_group":"runtime-routing"},
+-    "adk-context-engineering": {"capability_class":"support","runtime_role":"supporting","selection_group":"context-policy"},
+-    "adk-token-context-governance": {"capability_class":"guardrail","runtime_role":"primary","selection_group":"context-policy"},
+-    "adk-requirements-triage": {"selection_group":"requirements-intake"},
+-    "adk-structured-requirements-questioning": {"capability_class":"support","runtime_role":"supporting","selection_group":"requirements-intake"},
+-    "adk-lightweight-planning": {"capability_class":"workflow","runtime_role":"primary","selection_group":"planning"},
+-    "adk-parallel-agent-governance": {"capability_class":"workflow","runtime_role":"primary","selection_group":"parallel-governance"},
+-    "adk-worktree-governance": {"capability_class":"guardrail","runtime_role":"primary","selection_group":"workspace-governance","effect_ceiling":"workspace-write"},
+-    "adk-context-compress-handoff": {"capability_class":"workflow","runtime_role":"primary","selection_group":"handoff-context","effect_ceiling":"read-only"},
+-    "adk-adr-writer": {"capability_class":"task","runtime_role":"primary","selection_group":"architecture-documentation"},
+-    "adk-component-api-stability": {"capability_class":"guardrail","runtime_role":"primary","selection_group":"api-stability"},
+-    "adk-bsp-analysis": {"selection_group":"bsp-analysis","effect_ceiling":"read-only"},
+-    "adk-planning-execution-loop": {"capability_class":"workflow","runtime_role":"primary","selection_group":"execution-governance","effect_ceiling":"workspace-write"},
+-    "adk-driver-implementation": {"capability_class":"task","runtime_role":"primary","selection_group":"driver-implementation","effect_ceiling":"workspace-write"},
+-    "adk-driver-bringup-checklist": {"capability_class":"task","runtime_role":"primary","selection_group":"driver-development","effect_ceiling":"workspace-write","escalation_effects":["live-device:register-write","live-device:diagnostic-write"]},
+-    "adk-bsp-porting-playbook": {"capability_class":"task","runtime_role":"primary","selection_group":"bsp-porting","effect_ceiling":"workspace-write","escalation_effects":["live-device:flash","live-device:storage-write"]},
+-    "adk-interrupt-dma-patterns": {"capability_class":"task","runtime_role":"primary","selection_group":"interrupt-dma"},
+-    "adk-cmake-cross-build": {"capability_class":"tool","runtime_role":"primary","selection_group":"build","effect_ceiling":"build-artifact-write"},
+-    "adk-code-simplification": {"capability_class":"task","runtime_role":"primary","selection_group":"refactor","effect_ceiling":"workspace-write"},
+-    "adk-systematic-debugging": {"capability_class":"workflow","runtime_role":"primary","selection_group":"debugging"},
+-    "adk-embedded-debug-transport": {"capability_class":"tool","runtime_role":"primary","selection_group":"debug-transport"},
+-    "adk-test-strategy": {"capability_class":"workflow","runtime_role":"primary","selection_group":"test-strategy","effect_ceiling":"read-only"},
+-    "adk-embedded-diagnostic-harness": {"capability_class":"tool","runtime_role":"primary","selection_group":"diagnostic-harness"},
+-    "adk-artifact-gating": {"capability_class":"guardrail","runtime_role":"governance","selection_group":"artifact-gating","effect_ceiling":"read-only"},
+-    "adk-verification-before-completion": {"capability_class":"guardrail","runtime_role":"primary","selection_group":"completion-verification","effect_ceiling":"read-only"},
+-    "adk-chinese-commit-conventions": {"capability_class":"support","runtime_role":"supporting","selection_group":"commit-quality"},
+-    "adk-chinese-code-review": {"capability_class":"support","runtime_role":"supporting","selection_group":"code-review"},
+-    "adk-code-review-loop": {"capability_class":"workflow","runtime_role":"primary","selection_group":"code-review"},
+-    "adk-static-analysis-c-cpp": {"capability_class":"tool","runtime_role":"primary","selection_group":"static-analysis","effect_ceiling":"diagnostic-execution"},
+-    "adk-commit-pr-quality-gate": {"capability_class":"guardrail","runtime_role":"primary","selection_group":"commit-quality"},
+-    "adk-production-field-readiness": {"capability_class":"guardrail","runtime_role":"primary","selection_group":"field-readiness","effect_ceiling":"read-only"},
+-    "adk-embedded-release-orchestration": {"capability_class":"workflow","runtime_role":"primary","selection_group":"embedded-release","effect_ceiling":"release-preparation","escalation_effects":["release-target:publish","live-device:flash"]},
+-    "adk-embedded-storage-layout-migration": {"capability_class":"workflow","runtime_role":"primary","selection_group":"storage-migration","effect_ceiling":"release-preparation","escalation_effects":["live-device:storage-write","live-device:flash"]},
+-    "adk-cross-team-handoff": {"capability_class":"support","runtime_role":"supporting","selection_group":"handoff","effect_ceiling":"read-only","implicit_trigger_policy":"explicit-only"},
+-    "adk-after-action-review": {"capability_class":"workflow","runtime_role":"primary","selection_group":"after-action-review","effect_ceiling":"read-only"},
+-    "adk-memory-curator": {"capability_class":"task","runtime_role":"primary","selection_group":"memory-governance"},
+-    "adk-archive-governance": {"capability_class":"guardrail","runtime_role":"primary","selection_group":"archive-governance"},
+-    "adk-knowledge-archive": {"capability_class":"task","runtime_role":"primary","selection_group":"knowledge-archive","effect_ceiling":"workspace-write"},
+-    "adk-engineering-growth-review": {"capability_class":"task","runtime_role":"primary","selection_group":"engineering-review"},
+-    "adk-external-practice-absorption": {"capability_class":"workflow","runtime_role":"primary","selection_group":"external-practice","effect_ceiling":"external-read"},
+-    "adk-data-fetch": {"capability_class":"tool","runtime_role":"supporting","selection_group":"data-fetch","effect_ceiling":"external-read","implicit_trigger_policy":"explicit-only"},
+-    "adk-email-imap-fetch": {"capability_class":"tool","runtime_role":"supporting","selection_group":"data-fetch","effect_ceiling":"external-read","implicit_trigger_policy":"explicit-only"},
+-    "adk-fetch-url-content": {"capability_class":"tool","runtime_role":"supporting","selection_group":"data-fetch","effect_ceiling":"external-read","implicit_trigger_policy":"explicit-only"},
+-    "adk-test-flakiness-triage": {"capability_class":"task","runtime_role":"primary","selection_group":"test-flakiness","effect_ceiling":"diagnostic-execution"},
+-    "adk-security-supply-chain": {"capability_class":"guardrail","runtime_role":"primary","selection_group":"supply-chain-security","effect_ceiling":"read-only"},
+-    "adk-incident-rca-report": {"capability_class":"support","runtime_role":"fallback","selection_group":"incident-report","effect_ceiling":"read-only","implicit_trigger_policy":"explicit-only"},
+-    "adk-skill-composition-governance": {"capability_class":"meta","runtime_role":"primary","selection_group":"skill-governance","effect_ceiling":"read-only"},
+-    "adk-branch-closeout": {"capability_class":"workflow","runtime_role":"primary","selection_group":"branch-closeout","effect_ceiling":"release-preparation"}
++    "adk-goal-authoring": {
++      "capability_class": "task",
++      "runtime_role": "primary",
++      "selection_group": "goal-authoring"
++    },
++    "adk-runtime-router": {
++      "capability_class": "meta",
++      "runtime_role": "primary",
++      "selection_group": "runtime-routing"
++    },
++    "adk-context-engineering": {
++      "capability_class": "support",
++      "runtime_role": "supporting",
++      "selection_group": "context-policy"
++    },
++    "adk-token-context-governance": {
++      "capability_class": "guardrail",
++      "runtime_role": "primary",
++      "selection_group": "context-policy"
++    },
++    "adk-requirements-triage": {
++      "selection_group": "requirements-intake"
++    },
++    "adk-structured-requirements-questioning": {
++      "capability_class": "support",
++      "runtime_role": "supporting",
++      "selection_group": "requirements-intake"
++    },
++    "adk-lightweight-planning": {
++      "capability_class": "workflow",
++      "runtime_role": "primary",
++      "selection_group": "planning"
++    },
++    "adk-parallel-agent-governance": {
++      "capability_class": "workflow",
++      "runtime_role": "primary",
++      "selection_group": "parallel-governance"
++    },
++    "adk-worktree-governance": {
++      "capability_class": "guardrail",
++      "runtime_role": "primary",
++      "selection_group": "workspace-governance",
++      "effect_ceiling": "workspace-write"
++    },
++    "adk-context-compress-handoff": {
++      "capability_class": "workflow",
++      "runtime_role": "primary",
++      "selection_group": "handoff-context",
++      "effect_ceiling": "read-only"
++    },
++    "adk-adr-writer": {
++      "capability_class": "task",
++      "runtime_role": "primary",
++      "selection_group": "architecture-documentation"
++    },
++    "adk-component-api-stability": {
++      "capability_class": "guardrail",
++      "runtime_role": "primary",
++      "selection_group": "api-stability"
++    },
++    "adk-bsp-analysis": {
++      "selection_group": "bsp-analysis",
++      "effect_ceiling": "read-only"
++    },
++    "adk-planning-execution-loop": {
++      "capability_class": "workflow",
++      "runtime_role": "primary",
++      "selection_group": "execution-governance",
++      "effect_ceiling": "workspace-write"
++    },
++    "adk-driver-implementation": {
++      "capability_class": "task",
++      "runtime_role": "primary",
++      "selection_group": "driver-implementation",
++      "effect_ceiling": "workspace-write"
++    },
++    "adk-driver-bringup-checklist": {
++      "capability_class": "task",
++      "runtime_role": "primary",
++      "selection_group": "driver-development",
++      "effect_ceiling": "workspace-write",
++      "escalation_effects": [
++        "live-device:register-write",
++        "live-device:diagnostic-write"
++      ]
++    },
++    "adk-bsp-porting-playbook": {
++      "capability_class": "task",
++      "runtime_role": "primary",
++      "selection_group": "bsp-porting",
++      "effect_ceiling": "workspace-write",
++      "escalation_effects": [
++        "live-device:flash",
++        "live-device:storage-write"
++      ]
++    },
++    "adk-interrupt-dma-patterns": {
++      "capability_class": "task",
++      "runtime_role": "primary",
++      "selection_group": "interrupt-dma"
++    },
++    "adk-cmake-cross-build": {
++      "capability_class": "tool",
++      "runtime_role": "primary",
++      "selection_group": "build",
++      "effect_ceiling": "build-artifact-write"
++    },
++    "adk-code-simplification": {
++      "capability_class": "task",
++      "runtime_role": "primary",
++      "selection_group": "refactor",
++      "effect_ceiling": "workspace-write"
++    },
++    "adk-systematic-debugging": {
++      "capability_class": "workflow",
++      "runtime_role": "primary",
++      "selection_group": "debugging"
++    },
++    "adk-embedded-debug-transport": {
++      "capability_class": "tool",
++      "runtime_role": "primary",
++      "selection_group": "debug-transport"
++    },
++    "adk-test-strategy": {
++      "capability_class": "workflow",
++      "runtime_role": "primary",
++      "selection_group": "test-strategy",
++      "effect_ceiling": "read-only"
++    },
++    "adk-embedded-diagnostic-harness": {
++      "capability_class": "tool",
++      "runtime_role": "primary",
++      "selection_group": "diagnostic-harness"
++    },
++    "adk-artifact-gating": {
++      "capability_class": "guardrail",
++      "runtime_role": "governance",
++      "selection_group": "artifact-gating",
++      "effect_ceiling": "read-only"
++    },
++    "adk-verification-before-completion": {
++      "capability_class": "guardrail",
++      "runtime_role": "primary",
++      "selection_group": "completion-verification",
++      "effect_ceiling": "read-only"
++    },
++    "adk-code-review-loop": {
++      "capability_class": "workflow",
++      "runtime_role": "primary",
++      "selection_group": "code-review"
++    },
++    "adk-static-analysis-c-cpp": {
++      "capability_class": "tool",
++      "runtime_role": "primary",
++      "selection_group": "static-analysis",
++      "effect_ceiling": "diagnostic-execution"
++    },
++    "adk-commit-pr-quality-gate": {
++      "capability_class": "guardrail",
++      "runtime_role": "primary",
++      "selection_group": "commit-quality"
++    },
++    "adk-production-field-readiness": {
++      "capability_class": "guardrail",
++      "runtime_role": "primary",
++      "selection_group": "field-readiness",
++      "effect_ceiling": "read-only"
++    },
++    "adk-embedded-release-orchestration": {
++      "capability_class": "workflow",
++      "runtime_role": "primary",
++      "selection_group": "embedded-release",
++      "effect_ceiling": "release-preparation",
++      "escalation_effects": [
++        "release-target:publish",
++        "live-device:flash"
++      ]
++    },
++    "adk-embedded-storage-layout-migration": {
++      "capability_class": "workflow",
++      "runtime_role": "primary",
++      "selection_group": "storage-migration",
++      "effect_ceiling": "release-preparation",
++      "escalation_effects": [
++        "live-device:storage-write",
++        "live-device:flash"
++      ]
++    },
++    "adk-cross-team-handoff": {
++      "capability_class": "support",
++      "runtime_role": "supporting",
++      "selection_group": "handoff",
++      "effect_ceiling": "read-only",
++      "implicit_trigger_policy": "explicit-only"
++    },
++    "adk-after-action-review": {
++      "capability_class": "workflow",
++      "runtime_role": "primary",
++      "selection_group": "after-action-review",
++      "effect_ceiling": "read-only"
++    },
++    "adk-memory-curator": {
++      "capability_class": "task",
++      "runtime_role": "primary",
++      "selection_group": "memory-governance"
++    },
++    "adk-archive-governance": {
++      "capability_class": "guardrail",
++      "runtime_role": "primary",
++      "selection_group": "archive-governance"
++    },
++    "adk-knowledge-archive": {
++      "capability_class": "task",
++      "runtime_role": "primary",
++      "selection_group": "knowledge-archive",
++      "effect_ceiling": "workspace-write"
++    },
++    "adk-engineering-growth-review": {
++      "capability_class": "task",
++      "runtime_role": "primary",
++      "selection_group": "engineering-review"
++    },
++    "adk-external-practice-absorption": {
++      "capability_class": "workflow",
++      "runtime_role": "primary",
++      "selection_group": "external-practice",
++      "effect_ceiling": "external-read"
++    },
++    "adk-data-fetch": {
++      "capability_class": "tool",
++      "runtime_role": "supporting",
++      "selection_group": "data-fetch",
++      "effect_ceiling": "external-read",
++      "implicit_trigger_policy": "explicit-only"
++    },
++    "adk-email-imap-fetch": {
++      "capability_class": "tool",
++      "runtime_role": "supporting",
++      "selection_group": "data-fetch",
++      "effect_ceiling": "external-read",
++      "implicit_trigger_policy": "explicit-only"
++    },
++    "adk-fetch-url-content": {
++      "capability_class": "tool",
++      "runtime_role": "supporting",
++      "selection_group": "data-fetch",
++      "effect_ceiling": "external-read",
++      "implicit_trigger_policy": "explicit-only"
++    },
++    "adk-test-flakiness-triage": {
++      "capability_class": "task",
++      "runtime_role": "primary",
++      "selection_group": "test-flakiness",
++      "effect_ceiling": "diagnostic-execution"
++    },
++    "adk-security-supply-chain": {
++      "capability_class": "guardrail",
++      "runtime_role": "primary",
++      "selection_group": "supply-chain-security",
++      "effect_ceiling": "read-only"
++    },
++    "adk-incident-rca-report": {
++      "capability_class": "support",
++      "runtime_role": "fallback",
++      "selection_group": "incident-report",
++      "effect_ceiling": "read-only",
++      "implicit_trigger_policy": "explicit-only"
++    },
++    "adk-skill-composition-governance": {
++      "capability_class": "meta",
++      "runtime_role": "primary",
++      "selection_group": "skill-governance",
++      "effect_ceiling": "read-only"
++    },
++    "adk-branch-closeout": {
++      "capability_class": "workflow",
++      "runtime_role": "primary",
++      "selection_group": "branch-closeout",
++      "effect_ceiling": "release-preparation"
++    }
+   }
+ }
+diff --git a/manifests/software_m5_eval_contract.json b/manifests/software_m5_eval_contract.json
+index 4cba908e..ddab1211 100644
+--- a/manifests/software_m5_eval_contract.json
++++ b/manifests/software_m5_eval_contract.json
+@@ -1,6 +1,6 @@
+ {
+   "schema": "adk-runtime-eval-campaign/v1",
+-  "campaign_id": "software-m5-9.0.0",
++  "campaign_id": "software-m5-10.0.0",
+   "tasks": "tests/fixtures/software_m5_eval_tasks.jsonl",
+   "minimum_tasks": 60,
+   "runtimes": [
+diff --git a/pyproject.toml b/pyproject.toml
+index 1f7d748c..b785979c 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
+ 
+ [project]
+ name = "agent-dev-kit"
+-version = "9.0.0"
++version = "10.0.0"
+ description = "Platform-neutral agent asset compiler, distributor, and evaluator"
+ readme = "README.md"
+ requires-python = ">=3.11"
+diff --git a/skills/adk-archive-governance/agents/openai.yaml b/skills/adk-archive-governance/agents/openai.yaml
+index 0211425d..174e9523 100644
+--- a/skills/adk-archive-governance/agents/openai.yaml
++++ b/skills/adk-archive-governance/agents/openai.yaml
+@@ -1,2 +1,3 @@
+-display_name: ADK Archive Governance
+-short_description: Govern docs/archive metadata, registries, hashes, superseded records, and archive checks.
++interface:
++  display_name: ADK Archive Governance
++  short_description: Govern docs/archive metadata, registries, hashes, superseded records, and archive checks.
+diff --git a/skills/adk-artifact-gating/references/details.md b/skills/adk-artifact-gating/references/details.md
+index 15fbd57f..bad63852 100644
+--- a/skills/adk-artifact-gating/references/details.md
++++ b/skills/adk-artifact-gating/references/details.md
+@@ -1,41 +1,6 @@
+----
+-name: adk-artifact-gating
+-description: 跨仓库 Artifact 门禁协议——统一标签、状态机与交接规范
+-version: 1.0.0
+-last_updated: 2026-05-08
+-triggers:
+-  - "artifact 门禁"
+-  - "跨角色交接"
+-  - "变更工件"
+-  - "标签化交付"
+-non_triggers:
+-  - 单文件低风险修复且无需跨角色交接
+-  - 纯探索性代码阅读
+-inputs:
+-  - 变更需求、实现范围、验证命令结果、评审结论
+-outputs:
+-  - 标签化 artifact 块（ImplementationPlan / ReviewReport / TestReport）
+-  - 门禁结论（pass / needs-fix / BLOCKED）
+-  - 交接签收记录
+-constraints:
+-  - 所有 artifact 必须包含 status 字段和验证证据
+-  - 缺少验证证据时结论固定为 needs-fix 或 BLOCKED
+-  - ReviewReport 与 TestReport 结论不允许矛盾
+-  - 状态机转换必须经过校验，禁止跳过中间状态
+----
+-
+-# adk-artifact-gating
+-
+-## Goal
+-
+-在跨仓库、跨角色交付场景中，用统一的 artifact 标签体系和状态机门禁，消灭"口头完成"和"结论无证据"问题。
+-
+-## Prerequisites
+-
+-- 理解 artifact 门禁的基本概念
+-- 熟悉跨角色协作流程
+-- 了解状态机转换规则
+-- 具备基本的文档编写能力
++# adk-artifact-gating — 补充参考资料
++
++此参考文件只提供可选背景、示例和检查提示；当前能力流程、权限、回退与放行结论以 `../SKILL.md`、Manifest 及运行时门禁为准。示例命令不得被解释为写权限授权。
+ 
+ ## 来源说明
+ 
+@@ -110,57 +75,3 @@ tests_run:
+ - **子仓 → adk**：子仓变更必须产出 TestReport，adk 侧做 ReviewReport
+ - **adk → explicit tool target**：adk 变更必须先通过 `check-adk-harden-readiness.sh` 与 `runtime-boundary` 门禁，再进入目标运行时适配层
+ - **多仓联动**：每个仓独立 artifact，汇总为 change-set 后统一门禁
+-
+-## Commands
+-
+-```bash
+-# 检查 artifact 完整性
+-rg -n "ImplementationPlan|ReviewReport|TestReport" docs/changes/<change-id>/
+-
+-# 验证状态字段完整性
+-rg -n "status:" docs/changes/<change-id>/ | grep -v "PASS\|READY\|BLOCKED"
+-
+-# 门禁检查
+-bash scripts/devkit.sh verify --change <change-id>
+-
+-# 签收归档
+-bash scripts/devkit.sh archive --change <change-id> --evidence docs/changes/<change-id>/
+-```
+-
+-## Evidence Template
+-
+-```md
+-[gate-summary]
+-change_id: <change-id>
+-total_artifacts: 3
+-passed: 3
+-blocked: 0
+-needs_fix: 0
+-final_decision: pass | needs-fix
+-handoff_complete: true | false
+-```
+-
+-## Quality Gate
+-
+-1. 三类 artifact 均存在且字段完整
+-2. ReviewReport 与 TestReport 结论一致
+-3. 所有验证命令可复现
+-4. 状态机转换经脚本校验
+-5. 交接签收记录完整
+-
+-## Workflow
+-
+-1. 识别变更范围与影响角色
+-2. 为每个 artifact 生成统一标签（ImplementationPlan / ReviewReport / TestReport）
+-3. 填充状态字段（draft → in-review → approved / needs-fix / BLOCKED）
+-4. 执行验证命令并附加证据
+-5. 交接签收：接收方确认 artifact 完整性
+-6. 门禁结论：全部 artifact approved 且无矛盾 → pass
+-
+-## 待完善事项
+-
+-- [ ] 跨仓库 artifact 路径标准化（当前各仓路径约定不统一）
+-- [ ] artifact 自动发现与校验脚本（当前依赖手动检查）
+-- [ ] 多仓联动时的依赖图自动推导
+-- [ ] artifact 版本追踪（同一变更的 artifact 演进历史）
+-- [ ] 与 OpenSpec 变更单元的桥接映射
+diff --git a/skills/adk-chinese-code-review/SKILL.md b/skills/adk-chinese-code-review/SKILL.md
+deleted file mode 100644
+index 31c41e31..00000000
+--- a/skills/adk-chinese-code-review/SKILL.md
++++ /dev/null
+@@ -1,74 +0,0 @@
+----
+-name: adk-chinese-code-review
+-description: "用于团队需要中文代码审查意见的格式、严重性和反馈沟通约定；不用于代替实际独立代码审查、修复验证或审批。"
+-version: 1.1.1
+-last_updated: 2026-11-03
+-triggers:
+-  - "代码审查"
+-  - "review 代码"
+-  - "检查代码质量"
+-  - "运行测试"
+-non_triggers:
+-  - "写代码"
+-inputs:
+-  - 代码变更（diff）
+-outputs:
+-  - 审查报告（中文）
+-constraints:
+-  - 使用中文输出
+-  - 先扬后抑的沟通风格
+----
+-
+-# 中文代码审查规范
+-
+-## Goal
+-
+-提供适配国内团队沟通风格的代码审查规范，确保审查意见既有技术深度又兼顾沟通效率。
+-
+-
+-## Prerequisites
+-- 确认代码变更（diff）完整且可读。
+-- 获取最小上下文：变更目的、影响范围。
+-
+-
+-## Workflow
+-1. **获取完整 diff**：确认变更范围和目的。
+-   ```bash
+-   git diff <base>...HEAD --stat
+-   git diff <base>...HEAD
+-   ```
+-2. **快速扫描**：先整体看一遍，了解变更意图和范围。
+-3. **逐项审查**：按五维度清单逐项检查。
+-4. **记录发现**：使用先扬后抑风格，标注严重性。
+-5. **生成审查报告**：按严重性排序，输出结构化报告。
+-
+-
+-## Quality Gate
+-- 五维度审查全覆盖。
+-- 审查意见使用中文且符合沟通风格。
+-- 发现已按严重性排序。
+-- Critical 发现必须有明确修复建议。
+-- 审查报告格式完整。
+-
+-
+-## Failure Handling
+-- diff 不完整时，要求补充后再审查。
+-- 审查遗漏时，补充检查并更新报告。
+-- 发现无法判断时，标记为"待确认"并给出建议。
+-
+-
+-## Evidence Template
+-
+-```md
+-status: pass | needs-fix | BLOCKED
+-commands:
+-- <command + exit code>
+-evidence:
+-- <path or output summary>
+-risks:
+-- <remaining risk or none>
+-```
+-
+-## References
+-- 详细背景、命令、模板、示例和扩展检查项保存在 `references/details.md`。
+-- 入口文件只保留触发和执行所需的最小上下文，避免默认加载过多 token。
+diff --git a/skills/adk-chinese-code-review/references/details.md b/skills/adk-chinese-code-review/references/details.md
+deleted file mode 100644
+index 02efa586..00000000
+--- a/skills/adk-chinese-code-review/references/details.md
++++ /dev/null
+@@ -1,193 +0,0 @@
+----
+-name: adk-chinese-code-review
+-description: 中文代码审查规范——适配国内团队沟通风格
+-version: 1.1.0
+-last_updated: 2026-05-06
+-triggers:
+-  - "代码审查"
+-  - "review 代码"
+-  - "检查代码质量"
+-  - "运行测试"
+-non_triggers:
+-  - "写代码"
+-inputs:
+-  - 代码变更（diff）
+-outputs:
+-  - 审查报告（中文）
+-constraints:
+-  - 使用中文输出
+-  - 先扬后抑的沟通风格
+----
+-
+-# 中文代码审查规范
+-
+-## Goal
+-
+-提供适配国内团队沟通风格的代码审查规范，确保审查意见既有技术深度又兼顾沟通效率。
+-
+-## Prerequisites
+-- 确认代码变更（diff）完整且可读。
+-- 获取最小上下文：变更目的、影响范围。
+-
+-## 审查清单
+-
+-### 正确性 (Critical)
+-- [ ] 逻辑是否正确，边界条件是否处理
+-- [ ] 空指针/越界/溢出风险
+-- [ ] 并发安全（锁、原子操作、竞态条件）
+-- [ ] 错误处理是否完整（返回值检查、异常捕获）
+-- [ ] 资源释放（内存、文件句柄、网络连接）
+-
+-### 安全性 (Critical)
+-- [ ] 输入验证（注入、越权、路径遍历）
+-- [ ] 敏感数据处理（加密、脱敏、日志泄露）
+-- [ ] 认证/授权检查
+-- [ ] 硬编码密钥/密码
+-
+-### 可读性 (Important)
+-- [ ] 命名是否清晰，是否符合团队约定
+-- [ ] 注释是否充分，复杂逻辑是否有说明
+-- [ ] 函数长度是否合理（<50 行）
+-- [ ] 嵌套深度是否合理（<3 层）
+-
+-### 性能 (Suggestion)
+-- [ ] 是否有不必要的循环/拷贝/分配
+-- [ ] 数据结构选择是否合理
+-- [ ] 是否有 N+1 查询等问题
+-
+-### 规范 (Suggestion)
+-- [ ] 是否符合团队编码规范
+-- [ ] 提交信息是否符合规范
+-- [ ] 测试是否充分
+-
+-## 沟通风格
+-
+-### 先扬后抑
+-```
+-✅ "这个错误处理写得很清晰。不过这里有个边界条件可能没考虑到..."
+-❌ "这里有个 bug。"
+-```
+-
+-### 用建议代替命令
+-```
+-✅ "建议在这里加个空值检查，防止 NPE。"
+-❌ "这里必须加空值检查。"
+-```
+-
+-### 用提问代替否定
+-```
+-✅ "这里的并发安全是怎么考虑的？"
+-❌ "这里不是线程安全的。"
+-```
+-
+-### 分级表达
+-```
+-🔴 Critical: "这里会导致数据丢失，建议立即修复。"
+-🟡 Important: "这里的命名可能造成误解，建议调整。"
+-🟢 Suggestion: "这里可以考虑用 guard clause 提升可读性。"
+-```
+-
+-## Workflow
+-1. **获取完整 diff**：确认变更范围和目的。
+-   ```bash
+-   git diff <base>...HEAD --stat
+-   git diff <base>...HEAD
+-   ```
+-2. **快速扫描**：先整体看一遍，了解变更意图和范围。
+-3. **逐项审查**：按五维度清单逐项检查。
+-4. **记录发现**：使用先扬后抑风格，标注严重性。
+-5. **生成审查报告**：按严重性排序，输出结构化报告。
+-
+-## Commands
+-```bash
+-# 获取 diff
+-git diff <base>...HEAD --stat
+-git diff <base>...HEAD
+-
+-# 检查代码风格
+-<lint-cmd> <changed_files>
+-
+-# 检查安全问题
+-rg -n "password|secret|token|api_key" <changed_files>
+-rg -n "eval|exec|system|shell" <changed_files>
+-
+-# 检查复杂度
+-wc -l <changed_files>
+-```
+-
+-## Evidence Template
+-```md
+-# 代码审查报告
+-
+-## 变更概述
+-- 目的: <变更目的>
+-- 范围: <变更文件列表>
+-- 影响面: <影响范围>
+-
+-## 审查维度覆盖: 5/5
+-
+-## 发现列表
+-
+-### 🔴 Critical
+-| # | 文件 | 行号 | 发现 | 建议 |
+-|---|------|------|------|------|
+-| 1 | ... | ... | ... | ... |
+-
+-### 🟡 Important
+-| # | 文件 | 行号 | 发现 | 建议 |
+-|---|------|------|------|------|
+-| 1 | ... | ... | ... | ... |
+-
+-### 🟢 Suggestion
+-| # | 文件 | 行号 | 发现 | 建议 |
+-|---|------|------|------|------|
+-| 1 | ... | ... | ... | ... |
+-
+-## 亮点
+-- <值得肯定的地方>
+-
+-## 结论
+-- Critical: N 个
+-- Important: N 个
+-- Suggestion: N 个
+-- 总体评价: <总结>
+-```
+-
+-## 常见问题
+-
+-| 问题 | 严重性 | 审查要点 |
+-|------|--------|---------|
+-| 未检查返回值 | Critical | 所有可能失败的调用必须检查 |
+-| 裸 catch/except | Critical | 吞掉异常会隐藏 bug |
+-| 魔法数字 | Important | 提取为命名常量 |
+-| 过长函数 | Important | >50 行应拆分 |
+-| 命名不清晰 | Suggestion | 变量名应自解释 |
+-| 缺少注释 | Suggestion | 复杂逻辑需要说明 |
+-
+-## Failure Handling
+-- diff 不完整时，要求补充后再审查。
+-- 审查遗漏时，补充检查并更新报告。
+-- 发现无法判断时，标记为"待确认"并给出建议。
+-
+-## Quality Gate
+-- 五维度审查全覆盖。
+-- 审查意见使用中文且符合沟通风格。
+-- 发现已按严重性排序。
+-- Critical 发现必须有明确修复建议。
+-- 审查报告格式完整。
+-
+-## 合理化借口拦截
+-
+-| 借口 | 现实 | 正确做法 |
+-|------|------|---------|
+-| "代码能跑就行" | 能跑不等于正确 | 按五维度全面审查 |
+-| "审查太严格影响效率" | 低成本发现问题是审查的价值 | 保持标准不降低 |
+-| "这个问题以后再改" | 以后永远不会来 | 现在指出，避免债务积累 |
+-
+-## 健壮性规范
+-
+-- **输入验证**: 确认 diff 完整且可读
+-- **重试策略**: 审查遗漏时补充检查
+-- **超时控制**: 单次审查不超过 30 分钟
+-- **异常隔离**: 某个维度不阻塞其他维度
+-- **日志记录**: 记录审查发现和建议
+diff --git a/skills/adk-chinese-commit-conventions/SKILL.md b/skills/adk-chinese-commit-conventions/SKILL.md
+deleted file mode 100644
+index 9970650d..00000000
+--- a/skills/adk-chinese-commit-conventions/SKILL.md
++++ /dev/null
+@@ -1,83 +0,0 @@
+----
+-name: adk-chinese-commit-conventions
+-description: "用于中文 Git 提交标题、scope 和变更摘要的规范化；不用于自动创建提交、调整权限或替代提交前质量门禁。"
+-version: 1.1.1
+-last_updated: 2026-11-03
+-triggers:
+-  - "中文提交"
+-  - "commit 规范"
+-  - "提交信息格式"
+-  - "写 commit message"
+-  - "git commit"
+-  - "提交格式"
+-  - "commit message 格式"
+-non_triggers:
+-  - "需求模糊"
+-  - "调试代码"
+-inputs:
+-  - 代码变更内容
+-outputs:
+-  - 格式化的 commit message
+-constraints:
+-  - 使用中文提交信息
+-  - 遵循 conventional commits 格式
+----
+-
+-# 中文 Git 提交规范
+-
+-## Goal
+-- 提供适配国内开发团队的 Git 提交规范，确保 commit message 可读、可追溯。
+-
+-
+-## Prerequisites
+-- 确认代码变更已完成且可提交。
+-- 获取最小上下文：变更内容、影响范围。
+-
+-
+-## Workflow
+-1. **检查变更内容**：确认哪些文件被修改，变更类型是什么。
+-   ```bash
+-   git diff --cached --stat
+-   git diff --cached
+-   ```
+-2. **选择 type 和 scope**：根据变更内容选择最匹配的 type。
+-3. **编写中文描述**：简洁准确，动词开头，不超过 50 字。
+-4. **补充 body（可选）**：复杂变更需要说明原因和影响。
+-5. **补充 footer（可选）**：关联 issue、标记破坏性变更。
+-6. **组装并提交**：
+-   ```bash
+-   git commit -m "feat(driver): 新增 I2C 驱动初始化" -m "- 实现设备树解析
+-   - 添加 DMA 传输支持"
+-   ```
+-
+-
+-## Quality Gate
+-- commit message 符合格式规范。
+-- type 和 scope 准确反映变更内容。
+-- 描述使用中文且简洁准确（<50 字）。
+-- 破坏性变更必须标记 `!` 和 `BREAKING CHANGE` footer。
+-- 修复类提交必须关联 issue 编号。
+-
+-
+-## Failure Handling
+-- commit message 格式不合规时，用 `git commit --amend` 修正。
+-- 不确定 type 时，查看变更内容后选择最匹配的。
+-- 描述过长时，精简为一行摘要 + body 详细说明。
+-- scope 不确定时，查看变更涉及的主要模块。
+-
+-
+-## Evidence Template
+-
+-```md
+-status: pass | needs-fix | BLOCKED
+-commands:
+-- <command + exit code>
+-evidence:
+-- <path or output summary>
+-risks:
+-- <remaining risk or none>
+-```
+-
+-## References
+-- 详细背景、命令、模板、示例和扩展检查项保存在 `references/details.md`。
+-- 入口文件只保留触发和执行所需的最小上下文，避免默认加载过多 token。
+diff --git a/skills/adk-chinese-commit-conventions/references/details.md b/skills/adk-chinese-commit-conventions/references/details.md
+deleted file mode 100644
+index e91cbd87..00000000
+--- a/skills/adk-chinese-commit-conventions/references/details.md
++++ /dev/null
+@@ -1,197 +0,0 @@
+----
+-name: adk-chinese-commit-conventions
+-description: 中文 Git 提交规范——适配国内开发团队
+-version: 1.1.0
+-last_updated: 2026-05-06
+-triggers:
+-  - "中文提交"
+-  - "commit 规范"
+-  - "提交信息格式"
+-  - "写 commit message"
+-  - "git commit"
+-  - "提交格式"
+-  - "commit message 格式"
+-non_triggers:
+-  - "需求模糊"
+-  - "调试代码"
+-inputs:
+-  - 代码变更内容
+-outputs:
+-  - 格式化的 commit message
+-constraints:
+-  - 使用中文提交信息
+-  - 遵循 conventional commits 格式
+----
+-
+-# 中文 Git 提交规范
+-
+-## Goal
+-- 提供适配国内开发团队的 Git 提交规范，确保 commit message 可读、可追溯。
+-
+-## Prerequisites
+-- 确认代码变更已完成且可提交。
+-- 获取最小上下文：变更内容、影响范围。
+-
+-## 格式
+-
+-```
+-<type>(<scope>): <中文描述>
+-
+-<body>
+-
+-<footer>
+-```
+-
+-## Type 类型详解
+-
+-| Type | 中文 | 用途 | 触发条件 |
+-|------|------|------|---------|
+-| feat | 新功能 | 新增功能 | 有新用户可见行为 |
+-| fix | 修复 | 修复 bug | 修复已有功能缺陷 |
+-| docs | 文档 | 文档变更 | 仅修改文档/注释 |
+-| style | 格式 | 代码格式 | 空格/缩进/换行，不影响逻辑 |
+-| refactor | 重构 | 代码重构 | 既不修 bug 也不加功能 |
+-| perf | 性能 | 性能优化 | 提升性能且不改变行为 |
+-| test | 测试 | 测试相关 | 添加/修改测试 |
+-| chore | 杂项 | 构建/工具/配置 | 构建脚本、依赖更新 |
+-| ci | CI | CI/CD 相关 | CI 配置、流程变更 |
+-| revert | 回退 | 回退提交 | 回退之前的提交 |
+-
+-## Scope 规则
+-
+-- 使用模块名: `feat(driver): 新增 I2C 驱动初始化`
+-- 使用功能名: `fix(auth): 修复 token 过期未刷新`
+-- 使用文件名: `docs(readme): 更新安装说明`
+-- 多个 scope 用逗号: `feat(driver,hal): 统一接口抽象`
+-- 纯内部可省略: `refactor: 简化日志模块`
+-
+-## 示例
+-
+-### 标准提交
+-```
+-feat(driver): 新增 I2C 驱动初始化流程
+-
+-- 实现设备树解析
+-- 添加 DMA 传输支持
+-- 包含单元测试
+-
+-Closes #123
+-```
+-
+-### 修复提交
+-```
+-fix(rtos): 修复任务调度优先级反转问题
+-
+-使用优先级继承协议修复互斥锁导致的优先级反转。
+-高优先级任务等待低优先级任务释放锁时，临时提升低优先级。
+-
+-Fixes #456
+-```
+-
+-### 破坏性变更
+-```
+-feat(api)!: 重构用户认证接口
+-
+-BREAKING CHANGE: 移除旧版 /auth/login 接口，
+-统一使用 /api/v2/auth/login。
+-迁移指南见 docs/migration/v2-auth.md
+-
+-Closes #789
+-```
+-
+-### 简短提交
+-```
+-docs: 更新 README 安装说明
+-style: 统一缩进为 4 空格
+-chore: 升级依赖到最新版本
+-```
+-
+-## Workflow
+-1. **检查变更内容**：确认哪些文件被修改，变更类型是什么。
+-   ```bash
+-   git diff --cached --stat
+-   git diff --cached
+-   ```
+-2. **选择 type 和 scope**：根据变更内容选择最匹配的 type。
+-3. **编写中文描述**：简洁准确，动词开头，不超过 50 字。
+-4. **补充 body（可选）**：复杂变更需要说明原因和影响。
+-5. **补充 footer（可选）**：关联 issue、标记破坏性变更。
+-6. **组装并提交**：
+-   ```bash
+-   git commit -m "feat(driver): 新增 I2C 驱动初始化" -m "- 实现设备树解析
+-   - 添加 DMA 传输支持"
+-   ```
+-
+-## Commands
+-```bash
+-# 查看待提交变更
+-git diff --cached --stat
+-git diff --cached
+-
+-# 标准提交
+-git commit -m "<type>(<scope>): <描述>"
+-
+-# 多行提交
+-git commit -m "<type>(<scope>): <描述>" -m "<body>"
+-
+-# 校验最近 commit message 格式
+-git log --oneline -10 | grep -E "^[a-f0-9]+ (feat|fix|docs|style|refactor|perf|test|chore|ci|revert)"
+-
+-# 使用 commitlint 校验（如已安装）
+-echo "<type>(<scope>): <描述>" | npx commitlint 2>/dev/null || echo "commitlint not installed"
+-
+-# 检查是否有破坏性标记
+-git log --oneline -20 | grep "!"
+-```
+-
+-## 校验规则
+-
+-| 规则 | 说明 | 正则 |
+-|------|------|------|
+-| type 合法 | 必须为预定义 type | `^(feat\|fix\|docs\|style\|refactor\|perf\|test\|chore\|ci\|revert)` |
+-| scope 格式 | 小写字母/数字/逗号 | `^\([a-z0-9,]+\)` |
+-| 描述非空 | 冒号后必须有内容 | `: .+` |
+-| 描述长度 | 不超过 72 字符 | `^.{1,72}$` |
+-| 中文优先 | 描述使用中文 | 人工校验 |
+-
+-## Evidence Template
+-```md
+-- commit message: <完整 message>
+-- type: <feat/fix/docs/...>
+-- scope: <模块名>
+-- 描述: <中文描述>
+-- 格式检查: pass / needs-fix
+-- 破坏性变更: yes / no
+-- 关联 issue: #NNN / 无
+-- commit hash: <hash>
+-```
+-
+-## Failure Handling
+-- commit message 格式不合规时，用 `git commit --amend` 修正。
+-- 不确定 type 时，查看变更内容后选择最匹配的。
+-- 描述过长时，精简为一行摘要 + body 详细说明。
+-- scope 不确定时，查看变更涉及的主要模块。
+-
+-## Quality Gate
+-- commit message 符合格式规范。
+-- type 和 scope 准确反映变更内容。
+-- 描述使用中文且简洁准确（<50 字）。
+-- 破坏性变更必须标记 `!` 和 `BREAKING CHANGE` footer。
+-- 修复类提交必须关联 issue 编号。
+-
+-## 合理化借口拦截
+-
+-| 借口 | 现实 | 正确做法 |
+-|------|------|---------|
+-| "改动很小不用规范" | 小改动也需要可追溯 | 按格式写 commit message |
+-| "用英文更专业" | 中文团队用中文更高效 | 使用中文描述 |
+-| "来不及写详细了" | 10 秒写一行规范 message 不算慢 | 至少写 type(scope): 描述 |
+-| "git log 能看 diff 就行" | diff 不告诉你 why | commit message 记录意图 |
+-
+-## 健壮性规范
+-
+-- **输入验证**: 检查 type 和 scope 合法
+-- **重试策略**: commit 被拒绝时修正 message 重试
+-- **超时控制**: 写 commit message 不超过 2 分钟
+-- **异常隔离**: message 格式错误不影响代码
+-- **日志记录**: 记录最终 commit hash 和 message
+diff --git a/skills/adk-code-review-loop/SKILL.md b/skills/adk-code-review-loop/SKILL.md
+index 46a84247..9d62e8a1 100644
+--- a/skills/adk-code-review-loop/SKILL.md
++++ b/skills/adk-code-review-loop/SKILL.md
+@@ -35,13 +35,16 @@ constraints:
+ - 区分缺陷、误报、越界建议与无法验证项。
+ - 机械、语义及 readiness 分别裁决。
+ 
++## 输出语言
++
++输出语言遵守用户请求或项目 locale；统一分级不变。表达提示按需读取 `references/review-communication-guidance.md`。
++
+ ## Prerequisites
+-- 有明确 diff/文件清单、目标与非目标、相关测试结果。
+-- 声明 Review Target：`staged`、`working-tree` 或 `whole-branch`，并记录 HEAD 与 index/diff 身份。
+-- staged 目标存在 unstaged overlay 时，明确该 working tree 内容不在本轮审查范围。
+-- 标记 Reviewer Independence：`independent` 或 `author-self-review`；自审不得冒充独立审查。
+-- 受控生命周期操作需有 Requirement Baseline；不适用时显式标记 `not_applicable`。
+-- AI/CI 写 SCM comment 需结构化 finding 与触发/secret 隔离。
++
++- 冻结目标、diff、测试、HEAD 和 index；声明 `staged/working-tree/whole-branch` 与 overlay。
++- 标记 `independent` 或 `author-self-review`，不得以自审冒充独立复审。
++- 生命周期变更需 Requirement Baseline，不适用时标 `not_applicable`。
++- SCM comment 仅由结构化 findings 和可信 trigger/secret 边界生成。
+ 
+ ## Workflow
+ 1. **冻结快照**：记录 Review Target、HEAD、index/diff 指纹、目标文件和 Working Tree Overlay。
+@@ -71,12 +74,8 @@ E2/E3 应对冻结合同的关键前提提出可复现证伪；优先减法，CI
+ - shared contract/schema 或生命周期语义变更：回到 `adk-requirements-triage` + `adk-interface-contract-design`。
+ 
+ ## Commands
+-```bash
+-rtk git rev-parse HEAD
+-rtk git status --short
+-rtk git diff --check
+-<project-lint-cmd> && <project-test-cmd>
+-```
++
++只读取证命令和例外流程按需见 `references/review-governance-details.md`，不得由本 Skill 直接扩大权限。
+ 
+ ## Evidence Template
+ ```md
+diff --git a/skills/adk-code-review-loop/references/review-communication-guidance.md b/skills/adk-code-review-loop/references/review-communication-guidance.md
+new file mode 100644
+index 00000000..d52dfdd9
+--- /dev/null
++++ b/skills/adk-code-review-loop/references/review-communication-guidance.md
+@@ -0,0 +1,31 @@
++# 审查表达与五维补充检查（按需加载）
++
++此文件仅定义输出表达与补充检查提示。唯一审查流程、finding 分级、快照身份、独立性和收敛判定由 `../SKILL.md` 负责；不创建语言专属的审查 Skill。
++
++## 输出语言
++
++- 优先采用用户明确指定的语言；否则遵守项目 locale（ADK 默认简体中文）。代码标识、文件路径、API、错误码保持原文。
++- 同一 finding 的严重级别、证据、复现和后续动作不应因翻译而改变。
++- 直接说明问题：`[major] drivers/i2c.c:88 — 失败分支缺少资源释放，可能泄漏句柄；复现条件...；建议...。`
++- 不强制“先扬后抑”，不强制夸赞、问句或缓和重大问题；可在不影响严重性和结论时采用礼貌、简洁的协作表达。
++- 无法判断时标为 `question` 或 `cannot-verify-from-diff`，不得用模糊赞美代替证据。
++
++## 五维补充检查
++
++1. **正确性**：输入边界、空值、生命周期、竞态、错误分支与资源释放。
++2. **安全性**：输入验证、权限边界、敏感数据、日志脱敏和凭据。
++3. **可维护性**：命名、模块职责、复杂度和测试可读性；避免以固定行数阈值代替证据。
++4. **性能**：热路径、无谓拷贝、阻塞、N+1、资源预算和测量条件。
++5. **工程规范**：项目风格、迁移、回滚、相关测试、提交质量与交付证据。
++
++五维检查是可选的审阅提示，不替代审查主流程的机械、语义、权限和生命周期契约。不要把 `Critical/Important/Suggestion` 的旧分级当作另一套权威；统一采用 `blocker/major/minor/question/cannot-verify-from-diff`。
++
++## 反馈结构
++
++```text
++[major] <path>:<line> — <可核实的问题>
++Evidence: <复现/命令/快照>
++Impact: <具体影响>
++Suggested minimal fix: <最小修复>
++Verification: <验证命令与预期>
++```
+diff --git a/skills/adk-code-simplification/references/details.md b/skills/adk-code-simplification/references/details.md
+index 323bc4b5..2b783b42 100644
+--- a/skills/adk-code-simplification/references/details.md
++++ b/skills/adk-code-simplification/references/details.md
+@@ -1,32 +1,6 @@
+----
+-name: adk-code-simplification
+-description: 代码简化——在不改变行为的前提下提高清晰度
+-version: 1.1.0
+-last_updated: 2026-05-06
+-triggers:
+-  - "代码太复杂"
+-  - "简化代码"
+-  - "重构这段代码"
+-non_triggers:
+-  - "添加新功能"
+-  - "修复 bug"
+-inputs:
+-  - 待简化代码
+-outputs:
+-  - 简化后代码
+-constraints:
+-  - 不改变行为
+-  - 必须有测试覆盖
+----
++# adk-code-simplification — 补充参考资料
+ 
+-# 代码简化
+-
+-## Goal
+-- 在不改变行为的前提下提高代码清晰度和可维护性。
+-
+-## Prerequisites
+-- 确认待简化代码有测试覆盖。
+-- 获取最小上下文：代码路径、测试命令。
++此参考文件只提供可选背景、示例和检查提示；当前能力流程、权限、回退与放行结论以 `../SKILL.md`、Manifest 及运行时门禁为准。示例命令不得被解释为写权限授权。
+ 
+ ## 核心原则
+ 
+@@ -97,89 +71,3 @@ for (int i = 0; i < ARRAY_SIZE(handlers); i++) {
+     if (handlers[i].type == type) { handlers[i].fn(); break; }
+ }
+ ```
+-
+-## Workflow
+-1. **确认测试覆盖**：确保有测试保护现有行为。
+-   ```bash
+-   # 运行现有测试
+-   <test-cmd> --filter <target_module>
+-   ```
+-2. **识别代码异味**：按异味表逐项扫描目标代码。
+-   ```bash
+-   # 查找长函数
+-   rg -n "^(void|int|static|public|private).*\(" <file> | head -20
+-   # 查找深层嵌套
+-   rg -n "^\s{12,}" <file>  # 3 层以上缩进
+-   # 查找重复代码
+-   rg -c "pattern" <files>  # 高频出现的模式
+-   ```
+-3. **选择简化模式**：按核心原则选择合适模式。
+-4. **执行简化**：一次一个模式，每步后运行测试。
+-5. **对比验证**：确认行为不变、可读性提升。
+-   ```bash
+-   # 运行测试确认行为不变
+-   <test-cmd> --filter <target_module>
+-   # 对比行数
+-   wc -l <file_before> <file_after>
+-   ```
+-
+-## Commands
+-```bash
+-# 运行测试
+-<test-cmd> --filter <target_module>
+-
+-# 统计代码行数
+-wc -l <target_files>
+-
+-# 查找复杂函数
+-awk '/^[a-zA-Z].*\(.*\)/{name=$0; count=0} /{/{count++} /}/ && count>0{count--; if(count==0 && NR-start>50) print NR": "name}' <file>
+-
+-# 查找未使用代码
+-rg -n "unused|UNUSED|TODO.*remove|deprecated" <target_path>
+-```
+-
+-## Evidence Template
+-```md
+-- 简化模式: <pattern>
+-- 代码异味: <smell type>
+-- 简化前:
+-  - 行数: N
+-  - 圈复杂度: X
+-  - 嵌套深度: D
+-- 简化后:
+-  - 行数: M
+-  - 圈复杂度: Y
+-  - 嵌套深度: E
+-- 测试结果: pass / needs-fix
+-- 行数变化: before N -> after M (Δ -K)
+-- 可读性评估: 提升/持平
+-```
+-
+-## Failure Handling
+-- 简化后测试失败则立即回滚，分析失败原因。
+-- 若无法确定某行代码是否有用，先不删除，标记 TODO。
+-- 简化导致性能下降时，回滚并评估 trade-off。
+-- 若代码异味根因是架构问题，记录到 ADR 而非强行简化。
+-
+-## Quality Gate
+-- 简化前后测试全部通过。
+-- 代码行数减少或可读性提升。
+-- 无行为变更。
+-- 单次简化只应用一种模式。
+-- 简化后圈复杂度不高于简化前。
+-
+-## 合理化借口拦截
+-
+-| 借口 | 现实 | 正确做法 |
+-|------|------|---------|
+-| "原作者有原因才这么写" | 可能是历史遗留 | 先理解再决定是否简化 |
+-| "简化可能引入 bug" | 有测试就不怕 | 确保测试覆盖再简化 |
+-| "这段代码以后会改" | "以后"永远不会来 | 现在简化，减少未来债务 |
+-
+-## 健壮性规范
+-
+-- **输入验证**: 确认代码有测试覆盖
+-- **重试策略**: 简化后测试失败则回滚
+-- **超时控制**: 单次简化不超过 30 分钟
+-- **异常隔离**: 一次只简化一个模式
+-- **日志记录**: 记录简化前后的对比
+diff --git a/skills/adk-commit-pr-quality-gate/SKILL.md b/skills/adk-commit-pr-quality-gate/SKILL.md
+index cf5dad2e..eaa7e6b6 100644
+--- a/skills/adk-commit-pr-quality-gate/SKILL.md
++++ b/skills/adk-commit-pr-quality-gate/SKILL.md
+@@ -5,6 +5,9 @@ version: 1.1.2
+ last_updated: 2026-11-03
+ triggers:
+   - "提交代码"
++  - "中文提交信息"
++  - "提交信息格式"
++  - "commit message"
+   - "发起PR"
+   - "代码评审"
+ non_triggers:
+@@ -14,7 +17,7 @@ inputs:
+ outputs:
+   - 分级门禁结论（pass/needs-fix）与整改项
+ constraints:
+-  - 没有验证证据不得给通过结论
++  - 缺少适用于当前风险的验证证据不得给通过结论
+   - blocker 或 major 未闭环不得给 pass
+   - 问题陈述不清或单次改动包含多个不相关问题时不得放行
+ ---
+@@ -24,6 +27,13 @@ constraints:
+ ## Goal
+ - 核对提交证据、结论与范围。
+ 
++## 提交信息与授权边界
++
++- 提交格式以目标仓库的 Commit Policy（例如 `AGENTS.md`）为准；默认采用 `type(scope): 摘要`，不按中文/英文另建 Skill。
++- 文本语言遵守用户明确要求与项目 locale，类型、scope 和 `BREAKING CHANGE` 标识保持机器可解析；没有 Issue 的 bugfix 不得被强制要求捏造 Issue 编号。
++- 此 Skill 只分析、生成或校验提交信息；`git commit`、`--amend`、`push`、`merge` 与发布必须受独立的操作授权和当前工作树证据约束。
++- 格式校验示例：`python3 -m agent_dev_kit.commit_message_policy --message "fix(runtime): 修复回退判断"`。该工具仅返回验证结论，绝不执行 SCM 写入。
++
+ ## Prerequisites
+ - 汇总改动、验证及评审分级。
+ - 明确本次改动是否涉及 breaking change 与迁移影响。
+@@ -77,6 +87,13 @@ git diff --name-only <base>...HEAD
+ - adk-commit-pr-quality-gate: 提交/PR 门禁（格式规范、评审闭环）
+ - adk-verification-before-completion: 完成前自检（验证命令、证据完整性）
+ 
++## 按风险适用的证据门禁
++
++- E0/E1 或局部可逆小改：仅要求变更范围、适用的定向验证、失败路径（适用时）和结果；无关的 DB、发布、MCP、设备或 AI review 材料标为 `not_applicable`，不能为了填模板制造假证据。
++- E2/E3、公共 API、schema/数据库、CI、外部权限、发布和受控生命周期：保留相应专项测试、审查、回滚与授权证据，真实风险不因语言或低 Token 设置而降低。
++- `cannot-verify`、缺失适用证据和真实 blocker 仍 fail-closed；禁止将“未执行”写成通过。
++- Issue 链接由真实任务关系和仓库策略决定，不为无 Issue 的普通修复创建虚假链接。
++
+ ## Quality Gate
+ - 输出必须可执行、可验证、可追溯。
+ - 结论必须与分级统计一致，且可复核。
+@@ -86,7 +103,7 @@ git diff --name-only <base>...HEAD
+ - 若触及技能资产但无安装范围或归属结论，结论必须为 `needs-fix`。
+ - 若 AI-assisted output 缺少 human owner、复审责任或冲突修复证据，结论必须为 `needs-fix`。
+ - 若 DB/schema/API 删除或迁移缺少调用点、迁移或 approval 证据，结论必须为 `needs-fix`。
+-- 若缺少负结果或被证伪路径记录，结论必须为 `needs-fix`。
++- 缺陷诊断、假设调查或高风险变更若缺少适用的负结果/证伪记录，结论为 `needs-fix`；无此路径的小改标记 `not_applicable`。
+ - 若 AI/CI review 缺少结构化 findings、trusted-trigger 或 untrusted PR secret 隔离证据，结论必须为 `needs-fix`。
+ - 若 SCM review comment 来自自由文本或 inline anchoring 未验证，结论必须为 `needs-fix`。
+ - 若运行控制面变更缺少 slash/MCP/permission 审计、deny-path test、approval boundary 或 rollback 证据，结论必须为 `needs-fix`。
+diff --git a/skills/adk-context-compress-handoff/agents/openai.yaml b/skills/adk-context-compress-handoff/agents/openai.yaml
+index 2472cc78..44f79d21 100644
+--- a/skills/adk-context-compress-handoff/agents/openai.yaml
++++ b/skills/adk-context-compress-handoff/agents/openai.yaml
+@@ -1,2 +1,3 @@
+-display_name: ADK Context Compress Handoff
+-short_description: Produce recoverable context handoff summaries with evidence, excluded context, and next actions.
++interface:
++  display_name: ADK Context Compress Handoff
++  short_description: Produce recoverable context handoff summaries with evidence, excluded context, and next actions.
+diff --git a/skills/adk-embedded-debug-transport/agents/openai.yaml b/skills/adk-embedded-debug-transport/agents/openai.yaml
+index 197a8b3a..a3065298 100644
+--- a/skills/adk-embedded-debug-transport/agents/openai.yaml
++++ b/skills/adk-embedded-debug-transport/agents/openai.yaml
+@@ -1,2 +1,3 @@
+-display_name: ADK Embedded Debug Transport
+-short_description: Govern embedded debug access channels, command risk, evidence capture, and rollback boundaries.
++interface:
++  display_name: ADK Embedded Debug Transport
++  short_description: Govern embedded debug access channels, command risk, evidence capture, and rollback boundaries.
+diff --git a/skills/adk-embedded-diagnostic-harness/agents/openai.yaml b/skills/adk-embedded-diagnostic-harness/agents/openai.yaml
+index e621dc73..ddb21a32 100644
+--- a/skills/adk-embedded-diagnostic-harness/agents/openai.yaml
++++ b/skills/adk-embedded-diagnostic-harness/agents/openai.yaml
+@@ -1,2 +1,3 @@
+-display_name: ADK Embedded Diagnostic Harness
+-short_description: Govern embedded diagnostic CLI suites, expected return semantics, and HIL/SIL evidence.
++interface:
++  display_name: ADK Embedded Diagnostic Harness
++  short_description: Govern embedded diagnostic CLI suites, expected return semantics, and HIL/SIL evidence.
+diff --git a/skills/adk-embedded-release-orchestration/agents/openai.yaml b/skills/adk-embedded-release-orchestration/agents/openai.yaml
+index a1df2a87..3baaad6a 100644
+--- a/skills/adk-embedded-release-orchestration/agents/openai.yaml
++++ b/skills/adk-embedded-release-orchestration/agents/openai.yaml
+@@ -1,2 +1,3 @@
+-display_name: ADK Embedded Release Orchestration
+-short_description: Orchestrate embedded firmware release bundles, gates, evidence, and non-overwrite publishing.
++interface:
++  display_name: ADK Embedded Release Orchestration
++  short_description: Orchestrate embedded firmware release bundles, gates, evidence, and non-overwrite publishing.
+diff --git a/skills/adk-engineering-growth-review/agents/openai.yaml b/skills/adk-engineering-growth-review/agents/openai.yaml
+index 875057fd..b66751d4 100644
+--- a/skills/adk-engineering-growth-review/agents/openai.yaml
++++ b/skills/adk-engineering-growth-review/agents/openai.yaml
+@@ -1,2 +1,3 @@
+-display_name: ADK Engineering Growth Review
+-short_description: Review local engineering history and produce evidence-backed growth recommendations.
++interface:
++  display_name: ADK Engineering Growth Review
++  short_description: Review local engineering history and produce evidence-backed growth recommendations.
+diff --git a/skills/adk-interface-contract-design/references/details.md b/skills/adk-interface-contract-design/references/details.md
+index a9296f11..ce3029d9 100644
+--- a/skills/adk-interface-contract-design/references/details.md
++++ b/skills/adk-interface-contract-design/references/details.md
+@@ -1,90 +1,6 @@
+----
+-name: adk-interface-contract-design
+-description: 定义模块/API/消息接口契约
+-version: 1.0.0
+-last_updated: 2026-05-06
+-triggers:
+-  - "设计接口"
+-  - "API设计"
+-  - "接口契约"
+-non_triggers:
+-  - 纯内部重命名
+-inputs:
+-  - 调用方与被调方约束
+-outputs:
+-  - 接口契约草案
+-constraints:
+-  - 必须明确输入、输出、错误码
+----
++# adk-interface-contract-design — 补充参考资料
+ 
+-# adk-interface-contract-design
+-
+-## Goal
+-- 输出稳定、可验证的接口契约，降低跨模块返工。
+-- 确保嵌入式组件间接口（HAL/驱动/协议栈）有明确的版本化契约。
+-
+-## Prerequisites
+-- 明确调用链 owner、版本策略和兼容窗口。
+-- 确定输入输出数据源与错误语义边界。
+-- 了解目标平台约束（内存对齐、字节序、对齐要求）。
+-
+-## Workflow
+-1. **定义接口清单**：请求、响应、错误码、幂等语义。
+-   ```c
+-   /* 嵌入式接口契约示例 */
+-   typedef struct {
+-       uint32_t magic;        /* 0xCAFEBABE */
+-       uint16_t version;      /* 接口版本 */
+-       uint16_t cmd;          /* 命令码 */
+-       uint32_t payload_len;  /* 负载长度 */
+-       uint8_t  payload[];    /* 柔性数组 */
+-   } __attribute__((packed)) iface_msg_t;
+-
+-   /* 错误码定义 */
+-   typedef enum {
+-       IFACE_OK          =  0,
+-       IFACE_ERR_PARAM   = -1,  /* 参数非法 */
+-       IFACE_ERR_TIMEOUT = -2,  /* 超时 */
+-       IFACE_ERR_BUSY    = -3,  /* 忙 */
+-       IFACE_ERR_NOMEM   = -4,  /* 内存不足 */
+-       IFACE_ERR_PROTO   = -5,  /* 协议错误 */
+-   } iface_err_t;
+-   ```
+-2. **版本协商机制**：接口版本兼容性自动检测。
+-   ```c
+-   /* 版本协商 */
+-   #define IFACE_VERSION_MAJOR  2
+-   #define IFACE_VERSION_MINOR  1
+-   #define IFACE_VERSION_MAKE(maj, min) (((maj) << 8) | (min))
+-   #define IFACE_VERSION_CUR    IFACE_VERSION_MAKE(2, 1)
+-
+-   bool iface_version_compatible(uint16_t remote_ver) {
+-       uint8_t remote_major = remote_ver >> 8;
+-       return (remote_major == IFACE_VERSION_MAJOR);
+-   }
+-   ```
+-3. **错误码设计规范**：统一错误码空间，避免冲突。
+-   ```bash
+-   # 检查错误码定义一致性
+-   rg -n "IFACE_ERR_|ERR_" include/ src/ | sort
+-   # 检查是否有重复错误码值
+-   rg -o "= -[0-9]+" include/ | sort | uniq -d
+-   ```
+-4. **约束异常行为**：超时、限流、重试、降级策略。
+-   ```c
+-   /* 超时与重试配置 */
+-   #define IFACE_TIMEOUT_MS     1000
+-   #define IFACE_MAX_RETRIES    3
+-   #define IFACE_RETRY_DELAY_MS 100
+-   ```
+-5. **生成契约用例**：正常、边界、异常三类样例。
+-   ```bash
+-   # 编译契约测试
+-   gcc -I include/ -o iface_test tests/iface_contract.c -lcomponent
+-   # 运行契约验证
+-   ./iface_test --suite contract
+-   ```
+-6. **同步消费者影响**：列出受影响模块与改造顺序。
++此参考文件只提供可选背景、示例和检查提示；当前能力流程、权限、回退与放行结论以 `../SKILL.md`、Manifest 及运行时门禁为准。示例命令不得被解释为写权限授权。
+ 
+ ## Commands
+ ```bash
+@@ -110,51 +26,3 @@ pahole --class_name=iface_msg_t <module>.o
+ # 字节序验证
+ python3 -c "import struct; print(struct.pack('<I', 0xCAFEBABE).hex())"
+ ```
+-
+-## Evidence Template
+-```md
+-- Interface Definition:
+-  - Name: ____
+-  - Version: ____
+-  - Owner: ____
+-- Input/Output Spec:
+-  | Field | Type | Size | Description |
+-  |-------|------|------|-------------|
+-  | magic | uint32_t | 4B | 0xCAFEBABE |
+-  | version | uint16_t | 2B | 接口版本 |
+-- Error Codes:
+-  | Code | Value | Meaning | Recovery |
+-  |------|-------|---------|----------|
+-  | IFACE_OK | 0 | 成功 | - |
+-  | IFACE_ERR_TIMEOUT | -2 | 超时 | 重试 |
+-- Version Compatibility: [major 兼容 / minor 向后兼容]
+-- Deprecation Plan: [废弃周期与迁移路径]
+-- Validation Cases:
+-  - [ ] 正常路径: ____
+-  - [ ] 边界条件: ____
+-  - [ ] 异常路径: ____
+-- Struct Alignment: [packed/aligned, padding bytes]
+-```
+-
+-## Failure Handling
+-- 若调用方未确认兼容策略，结论置为 `needs-fix`。
+-- 若错误语义不一致，先冻结接口变更并回到设计讨论。
+-- 若结构体对齐不符合目标平台要求，添加 `__attribute__((packed))` 或调整字段顺序。
+-- 若版本协商失败，回退到最低公共版本并记录兼容降级。
+-
+-## Quality Gate
+-- 契约必须包含输入/输出/错误码/超时语义。
+-- 必须给出版本兼容与迁移方案。
+-- 必须附至少 3 条验证用例（正常/边界/异常）。
+-- 嵌入式接口必须验证结构体大小与对齐（`pahole` 或 `sizeof` 断言）。
+-- 错误码必须覆盖所有可恢复与不可恢复场景。
+-
+----
+-
+-## 合理化借口拦截
+-
+-| 借口 | 现实 | 正确做法 |
+-|------|------|---------|
+-| "接口很简单不需要契约" | 无契约的接口是集成阶段的定时炸弹 | 按 SKILL.md 至少定义输入/输出/错误码/超时语义 |
+-| "先写代码后面再补接口文档" | 后补的文档永远追不上代码的真实行为 | 先设计契约再实现，契约即测试依据 |
+-| "我们口头对齐过了" | 口头对齐在跨模块联调时毫无约束力 | 产出版本化的接口契约并附验证用例 |
+diff --git a/skills/adk-interrupt-dma-patterns/references/details.md b/skills/adk-interrupt-dma-patterns/references/details.md
+index d5001187..84cea840 100644
+--- a/skills/adk-interrupt-dma-patterns/references/details.md
++++ b/skills/adk-interrupt-dma-patterns/references/details.md
+@@ -1,94 +1,6 @@
+----
+-name: adk-interrupt-dma-patterns
+-description: 中断与 DMA 协作模式设计
+-version: 1.0.0
+-last_updated: 2026-05-06
+-triggers:
+-  - "中断处理"
+-  - "DMA处理"
+-  - "中断DMA"
+-non_triggers:
+-  - 轮询足够且低频场景
+-inputs:
+-  - 外设速率、缓冲策略
+-outputs:
+-  - ISR/DMA 模式建议
+-constraints:
+-  - 禁止在 ISR 做重计算
+----
++# adk-interrupt-dma-patterns — 补充参考资料
+ 
+-# adk-interrupt-dma-patterns
+-
+-## Goal
+-- 设计低抖动、可恢复的 ISR + DMA 协作方案。
+-- 确保中断响应时延满足实时性要求，DMA 传输可靠无丢帧。
+-
+-## Prerequisites
+-- 明确数据速率、缓冲深度、丢包容忍度和中断预算。
+-- 确认 DMA 通道与缓存一致性要求。
+-- 获取目标芯片中断控制器文档（NVIC/GIC）与 DMA 控制器手册。
+-
+-## Workflow
+-1. **中断优先级配置**：按实时性需求分配优先级。
+-   ```c
+-   /* STM32 NVIC 优先级配置示例 */
+-   HAL_NVIC_SetPriority(TIM1_UP_IRQn, 0, 0);   /* 最高：控制环 */
+-   HAL_NVIC_SetPriority(DMA1_Stream5_IRQn, 1, 0); /* 高：数据采集 */
+-   HAL_NVIC_SetPriority(USART1_IRQn, 2, 0);     /* 中：通信 */
+-   HAL_NVIC_SetPriority(I2C1_EV_IRQn, 3, 0);    /* 低：传感器 */
+-   
+-   /* Linux 中断亲和性设置 */
+-   echo 1 > /proc/irq/<irq_num>/smp_affinity  /* 绑定 CPU0 */
+-   echo <priority> > /proc/irq/<irq_num>/priority  /* RT 优先级 */
+-   ```
+-2. **模式选择**：中断驱动、DMA、混合模式按负载对比。
+-   | 模式 | 适用场景 | CPU 占用 | 延迟 |
+-   |------|---------|---------|------|
+-   | 纯中断 | 低速率 (<10KB/s) | 中 | 低 |
+-   | 纯 DMA | 高速率、CPU 不介入 | 低 | 中 |
+-   | 中断+DMA | 混合负载 | 低 | 低 |
+-3. **缓冲设计**：单缓冲/双缓冲/ring buffer 取舍。
+-   ```c
+-   /* 双缓冲 DMA 配置（STM32 HAL） */
+-   HAL_DMA_Start_IT(&hdma_memtomem_dma1_stream0,
+-                    (uint32_t)src_buf, (uint32_t)dst_buf, TRANSFER_SIZE);
+-   /* Ring Buffer 示例 */
+-   #define RING_SIZE  256
+-   static volatile uint8_t ring_buf[RING_SIZE];
+-   static volatile uint32_t ring_head = 0, ring_tail = 0;
+-   ```
+-4. **ISR 约束**：仅做标记与唤醒，不做复杂逻辑。
+-   ```c
+-   /* ISR 最小化示例 */
+-   void DMA1_Stream5_IRQHandler(void) {
+-       if (__HAL_DMA_GET_FLAG(&hdma, DMA_FLAG_TCIF0_4)) {
+-           __HAL_DMA_CLEAR_FLAG(&hdma, DMA_FLAG_TCIF0_4);
+-           g_dma_complete = 1;                    /* 标记 */
+-           osSignalSet(task_id, SIG_DMA_DONE);   /* 唤醒任务 */
+-       }
+-   }
+-   ```
+-5. **DMA 通道管理与冲突检测**。
+-   ```bash
+-   # Linux DMA 通道状态
+-   cat /sys/class/dma/dma0chan*/in_use
+-   # 检查 DMA 中断
+-   cat /proc/interrupts | grep dma
+-   # RTOS DMA 通道分配检查
+-   rg -n "DMA.*Channel\|dma.*ch" src/ include/
+-   ```
+-6. **并发问题诊断**：竞态、优先级反转、缓存一致性。
+-   ```bash
+-   # Linux: 检查中断延迟
+-   cyclictest -p 99 -i 1000 -l 10000 -m
+-   # 检查软中断分布
+-   cat /proc/softirqs
+-   # 检查抢占配置
+-   cat /proc/config.gz | gunzip | grep PREEMPT
+-   # 缓存一致性检查（DMA 缓冲区）
+-   rg -n "dma_alloc_coherent\|dma_map_single\|cache_flush" src/
+-   ```
+-7. **回归验证**：高负载、突发流量、错误注入下稳定性验证。
++此参考文件只提供可选背景、示例和检查提示；当前能力流程、权限、回退与放行结论以 `../SKILL.md`、Manifest 及运行时门禁为准。示例命令不得被解释为写权限授权。
+ 
+ ## Commands
+ ```bash
+@@ -117,46 +29,6 @@ stress-ng --cpu 4 --io 4 --timeout 60s &
+ <latency-measure-cmd> --irq --dma --duration 60
+ ```
+ 
+-## Evidence Template
+-```md
+-- Selected Pattern: [中断驱动/DMA/混合]
+-- Priority Config:
+-  | IRQ | Priority | Handler | Budget (us) |
+-  |-----|----------|---------|-------------|
+-  | TIM1_UP | 0,0 | ctrl_loop | <10 |
+-  | DMA1_CH5 | 1,0 | data_acq | <50 |
+-  | USART1 | 2,0 | uart_rx | <100 |
+-- Buffer Strategy: [single/double/ring] size=____
+-- ISR Budget: max=____ us, avg=____ us
+-- DMA Channel: ch____, direction=____, mode=circular/normal
+-- DMA Error Handling: [timeout/overflow/underrun recovery]
+-- Cache Coherency: [coherent/non-coherent + flush strategy]
+-- Stress Result:
+-  - Throughput: ____ KB/s
+-  - Latency: p50=____ us, p99=____ us, max=____ us
+-  - IRQ Loss: ____
+-  - DMA Error: ____
+-```
+-
+-## Failure Handling
+-- IRQ 丢失或风暴时，先降速并确认中断屏蔽策略（检查 NVIC 优先级分组）。
+-- DMA 异常频发时，退回中断最小路径定位根因（检查 DMA 传输完成标志）。
+-- 优先级反转时，引入优先级继承或调整任务/中断优先级分配。
+-- 缓存一致性问题导致 DMA 数据错乱，改用 `dma_alloc_coherent` 或手动 cache flush。
+-
+-## Quality Gate
+-- 必须说明 ISR 时间预算与 DMA 回调策略。
+-- 必须覆盖至少一个错误恢复路径。
+-- 压测结果需包含吞吐与时延双指标。
+-- ISR 执行时间必须 < 中断周期的 50%。
+-- DMA 缓冲区必须有溢出/欠载检测机制。
+-
+----
+-
+-## 健壮性规范
++## 设备权限说明
+ 
+-- **输入验证**: 执行前校验所有必要输入是否存在且格式正确
+-- **重试策略**: 外部命令失败时最多重试 3 次，指数退避（1s, 2s, 4s）
+-- **超时控制**: 单步操作超时 30 秒，整体流程超时 300 秒
+-- **异常隔离**: 单个步骤失败不阻塞其他独立步骤
+-- **日志记录**: 关键操作记录命令、退出码、耗时
++- `devmem2` 示例只允许只读参数并且设备身份已确认；任何寄存器写入或有负载影响的测试均需独立授权与回退方案。
+diff --git a/skills/adk-knowledge-archive/agents/openai.yaml b/skills/adk-knowledge-archive/agents/openai.yaml
+index 0e15acd5..2d3a49cb 100644
+--- a/skills/adk-knowledge-archive/agents/openai.yaml
++++ b/skills/adk-knowledge-archive/agents/openai.yaml
+@@ -1,2 +1,3 @@
+-display_name: ADK Knowledge Archive
+-short_description: Create sanitized, reusable archive candidates with provenance and governance handoff.
++interface:
++  display_name: ADK Knowledge Archive
++  short_description: Create sanitized, reusable archive candidates with provenance and governance handoff.
+diff --git a/skills/adk-lightweight-planning/agents/openai.yaml b/skills/adk-lightweight-planning/agents/openai.yaml
+index e97677ad..dfe66820 100644
+--- a/skills/adk-lightweight-planning/agents/openai.yaml
++++ b/skills/adk-lightweight-planning/agents/openai.yaml
+@@ -1,2 +1,3 @@
+-display_name: ADK Plan Lite
+-short_description: Create a concise read-only implementation plan for coding tasks.
++interface:
++  display_name: ADK Plan Lite
++  short_description: Create a concise read-only implementation plan for coding tasks.
+diff --git a/skills/adk-memory-curator/agents/openai.yaml b/skills/adk-memory-curator/agents/openai.yaml
+index eee72aae..db0b0849 100644
+--- a/skills/adk-memory-curator/agents/openai.yaml
++++ b/skills/adk-memory-curator/agents/openai.yaml
+@@ -1,2 +1,3 @@
+-display_name: ADK Memory Curator
+-short_description: Audit durable memory sources and produce evidence-backed memory candidates without silent writes.
++interface:
++  display_name: ADK Memory Curator
++  short_description: Audit durable memory sources and produce evidence-backed memory candidates without silent writes.
+diff --git a/skills/adk-pilot-framework/references/details.md b/skills/adk-pilot-framework/references/details.md
+index f6673b68..5aa9d0dd 100644
+--- a/skills/adk-pilot-framework/references/details.md
++++ b/skills/adk-pilot-framework/references/details.md
+@@ -1,40 +1,6 @@
+----
+-name: adk-pilot-framework
+-description: 跨仓库 Pilot 试跑框架——场景定义、证据收集与门禁验收
+-version: 1.0.0
+-last_updated: 2026-05-08
+-triggers:
+-  - "试跑"
+-  - "pilot"
+-  - "真实场景验证"
+-  - "运行目录验证"
+-  - "运行时试跑"
+-non_triggers:
+-  - 纯本地单元测试（无需运行目录验证）
+-  - 文档编写或方案讨论
+-inputs:
+-  - 待验证能力清单、目标运行目录、场景定义、预期行为
+-outputs:
+-  - 试跑报告（场景+证据+结论）
+-  - 门禁验收结果（pilot-pass / pilot-fail）
+-  - 回灌建议（采纳/改进/淘汰）
+-constraints:
+-  - 无真实运行证据不得声明 pilot 通过
+-  - 门禁三联证据必须全部 PASS（health-check / global-health / pilot-gate）
+-  - 失败项必须记录根因并转入调试流程
+----
+-
+-# adk-pilot-framework
+-
+-## Goal
+-## Prerequisites
+-
+-- 理解相关领域的基本概念
+-- 熟悉项目结构和工作流程
+-- 具备基本的文档编写能力
+-
+-
+-在将 adk 资产正式发布前，通过结构化的"场景→试跑→证据→门禁→回灌"闭环，在显式 tool target 中验证能力有效性，避免"本地通过但实战失败"。
++# adk-pilot-framework — 补充参考资料
++
++此参考文件只提供可选背景、示例和检查提示；当前能力流程、权限、回退与放行结论以 `../SKILL.md`、Manifest 及运行时门禁为准。示例命令不得被解释为写权限授权。
+ 
+ ## 来源说明
+ 
+@@ -111,76 +77,3 @@ bash scripts/check-adk-harden-readiness.sh . --require-pilot --skip-full-suite
+ 
+ ```md
+ # Pilot Report: pilot-<date>-<seq>
+-
+-## 场景
+-- 类型: <type>
+-- 目标目录: <target_dir>
+-- 测试能力: <skills_under_test>
+-
+-## 执行记录
+-| 步骤 | 命令 | 结果 | 证据路径 |
+-|------|------|------|----------|
+-| ... | ... | ... | ... |
+-
+-## 门禁结果
+-- health-check: PASS / FAIL
+-- global-health: PASS / FAIL
+-- pilot-gate: PASS / FAIL
+-- 最终结论: pilot-pass / pilot-fail
+-
+-## 回灌建议
+-- 采纳: <list>
+-- 改进: <list>
+-- 淘汰: <list>
+-
+-## 负结果记录
+-- <失败项 + 根因 + 影响>
+-```
+-
+-### 4. 门禁硬约束
+-
+-1. **三联证据**：health-check / global-health / pilot-gate 必须全部 PASS
+-2. **禁止事后补证据**：所有证据必须在试跑时实时记录
+-3. **失败即停止**：任一门禁失败，不得继续后续步骤
+-4. **回灌闭环**：试跑结果必须回写 `subrepos/adoption-matrix.md`
+-
+-## Commands
+-
+-```bash
+-# 交接试跑能力
+-bash scripts/devkit.sh convert --target claude-code --out /tmp/adk-handoff --profile personal-core
+-bash scripts/devkit.sh runtime-boundary
+-
+-# 健康检查三联
+-bash scripts/health-check.sh <tool-target-dir> minimal
+-bash scripts/devkit.sh runtime-boundary
+-bash scripts/check-adk-harden-readiness.sh . --require-pilot --skip-full-suite
+-
+-# 生成试跑报告
+-bash scripts/generate-weekly-report.sh --pilot
+-```
+-
+-## Workflow
+-
+-1. 定义试跑场景（目标运行目录、预期行为、验收标准）
+-2. 准备试跑环境（隔离配置、基线快照）
+-3. 执行试跑（运行能力、收集证据）
+-4. 门禁验收（health-check / global-health / pilot-gate 三联）
+-5. 记录结果（pass/fail + 根因 + 负结果留痕）
+-6. 回灌建议（采纳/改进/淘汰 → 更新 adoption-matrix.md）
+-
+-## Quality Gate
+-
+-1. 无真实运行证据不得声明 pilot 通过
+-2. 门禁三联证据必须全部 PASS（health-check / global-health / pilot-gate）
+-3. 失败项必须记录根因并转入调试流程
+-4. 负结果必须留痕（negative-results.md）
+-5. 回灌建议必须有具体证据支撑
+-
+-## 待完善事项
+-
+-- [ ] 试跑场景自动发现（从 AGENTS.md 意图路由表自动生成场景）
+-- [ ] 试跑报告结构化存储（当前为 Markdown，缺少查询能力）
+-- [ ] 多轮试跑对比分析（同一能力在不同版本的行为差异）
+-- [ ] 试跑环境自动隔离（避免试跑污染正式配置）
+-- [ ] 试跑结果自动回灌到 adoption-matrix.md
+diff --git a/skills/adk-release-versioning/references/details.md b/skills/adk-release-versioning/references/details.md
+index c324dab2..c2b903af 100644
+--- a/skills/adk-release-versioning/references/details.md
++++ b/skills/adk-release-versioning/references/details.md
+@@ -1,32 +1,6 @@
+----
+-name: adk-release-versioning
+-description: 版本策略、变更说明与发布基线
+-version: 1.1.0
+-last_updated: 2026-05-06
+-triggers:
+-  - "版本发布"
+-  - "版本管理"
+-  - "发版"
+-non_triggers:
+-  - 开发中临时调试
+-inputs:
+-  - 版本号策略、发布目标
+-outputs:
+-  - 发布清单与版本说明模板
+-  - 阶段门禁决策（baseline-aligned/migrate-ready/cutover-ready）
+-constraints:
+-  - 必须记录可回滚版本
+-  - 阶段式迁移必须记录每阶段回退锚点
+----
++# adk-release-versioning — 补充参考资料
+ 
+-# adk-release-versioning
+-
+-## Goal
+-- 统一版本语义与发布清单，降低升级和回退风险。
+-
+-## Prerequisites
+-- 确认版本策略（SemVer 或项目定制规则）。
+-- 收集本次发布范围、变更类型与受影响用户。
++此参考文件只提供可选背景、示例和检查提示；当前能力流程、权限、回退与放行结论以 `../SKILL.md`、Manifest 及运行时门禁为准。示例命令不得被解释为写权限授权。
+ 
+ ## 语义版本规则 (SemVer)
+ 
+@@ -45,110 +19,7 @@ constraints:
+ - 仅修复内部实现 → PATCH
+ - 不确定时选择更保守的版本位
+ 
+-## Workflow
+-1. **版本决策**：根据变更类型确定 major/minor/patch。
+-   ```bash
+-   # 查看最近版本
+-   git tag --list --sort=-version:refname | head -10
+-   # 查看自上次发布的变更
+-   git log $(git describe --tags --abbrev=0)..HEAD --oneline
+-   ```
+-2. **变更归档**：按 feat/fix/refactor/docs 分类生成 changelog。
+-3. **Changelog 生成**：
+-   ```bash
+-   # 按 type 分类生成 changelog
+-   git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:"- %s" | \
+-     grep -E "^- (feat|fix|refactor|perf|docs)" | sort
+-   ```
+-4. **发布清单**：制品、依赖、配置变更、迁移步骤。
+-5. **阶段矩阵**：给出里程碑阶段、退出条件、验证证据与回退锚点。
+-6. **回退预案**：可回滚版本、触发条件、验证命令。
+-7. **打 Tag 并发布**：
+-   ```bash
+-   git tag -a v1.2.0 -m "release: v1.2.0"
+-   git push origin v1.2.0
+-   ```
+-8. **发布签署**：输出 go/no-go 结论与残留风险。
+-
+-## Commands
+-```bash
+-# 查看版本历史
+-git tag --list --sort=-version:refname | head -10
+-
+-# 查看两版本间变更
+-git log v1.0.0..HEAD --oneline
+-
+-# 生成 changelog
+-git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:"- %s (%h)" | sort
+-
+-# 创建 annotated tag
+-git tag -a v1.2.0 -m "release: v1.2.0 - <变更摘要>"
+-
+-# 推送 tag
+-git push origin v1.2.0
+-
+-# 验证发布
+-git tag -v v1.2.0 2>/dev/null || echo "tag 未签名"
+-git log v1.2.0 --oneline -1
+-
+-# 版本号一致性检查
+-grep -r "version" package.json Cargo.toml pyproject.toml 2>/dev/null
+-```
+-
+-## Evidence Template
+-```md
+-- Version Decision:
+-  - 旧版本: vX.Y.Z
+-  - 新版本: vA.B.C
+-  - 决策依据: <breaking/feature/fix>
+-  - 变更统计: feat N 个, fix M 个, refactor K 个
+-- Change Summary:
+-  - feat: <列表>
+-  - fix: <列表>
+-  - breaking: <列表>
+-- Artifact List:
+-  | 制品 | 路径 | 校验和 |
+-  |------|------|--------|
+-  | ... | ... | sha256:... |
+-- Stage Gate Matrix:
+-  | 阶段 | 退出条件 | 验证证据 | 回退锚点 |
+-  |------|---------|---------|---------|
+-  | baseline-aligned | ... | ... | ... |
+-- Migration/Rollback Plan:
+-  - 迁移步骤: 1. ... 2. ...
+-  - 回退命令: `git checkout vOLD && <build-cmd>`
+-  - 回退验证: <命令>
+-- Release Gate Result: go / no-go + 残留风险
+-```
+-
+-## Failure Handling
+-- 版本号与变更类型不匹配时，停止切版并重审。
+-- 缺失回退路径时，结论必须为 `needs-fix`。
+-- Changelog 为空时，检查 commit message 是否符合规范。
+-- Tag 创建失败时，检查是否已存在同名 tag。
+-
+-## Quality Gate
+-- 必须给出版本号决策依据。
+-- 阶段式迁移必须给出阶段结论与回退锚点。
+-- 必须附完整迁移与回退步骤。
+-- 必须明确发布门禁结论与签署条件。
+-- Tag 必须为 annotated tag（`-a` 参数）。
+-- Changelog 必须覆盖自上次发布以来的所有变更。
+-
+-## 合理化借口拦截
+-
+-| 借口 | 现实 | 正确做法 |
+-|------|------|---------|
+-| "这次改动很小直接 patch" | 小改动也可能包含 breaking change | 按语义版本规则逐项检查变更类型 |
+-| "changelog 以后再补" | 以后永远不会补，用户无法了解变更 | 发布前必须生成完整 changelog |
+-| "tag 用 lightweight 就行" | lightweight tag 无法记录发布元信息 | 使用 `git tag -a` 创建 annotated tag |
+-
+----
+-
+-## 健壮性规范
++## 当前 ADK 发布边界
+ 
+-- **输入验证**: 执行前校验所有必要输入是否存在且格式正确
+-- **重试策略**: 外部命令失败时最多重试 3 次，指数退避（1s, 2s, 4s）
+-- **超时控制**: 单步操作超时 30 秒，整体流程超时 300 秒
+-- **异常隔离**: 单个步骤失败不阻塞其他独立步骤
+-- **日志记录**: 关键操作记录命令、退出码、耗时
++- 实际 Tag 和 GitHub Release 只由受保护 `main` 的 successful-main promotion 与 canonical release 自动生成。
++- 不手动执行旧版 `git tag` / `git push origin <tag>` 示例，不移动不可变 Tag；升级必须先验证 source 版本、资产摘要和回退锚点。
+diff --git a/skills/adk-requirements-triage/SKILL.md b/skills/adk-requirements-triage/SKILL.md
+index 8546a0d9..e6e1f957 100644
+--- a/skills/adk-requirements-triage/SKILL.md
++++ b/skills/adk-requirements-triage/SKILL.md
+@@ -27,7 +27,7 @@ outputs:
+ constraints:
+   - 不得跳过边界与非目标声明
+   - 不得省略 done-when、required evidence、artifact paths 和 blocker policy
+-  - 信息不足时不得直接进入实现
++  - 关键信息不足且无法安全假设时不得进入不可逆或高风险实现
+ ---
+ 
+ # adk-requirements-triage
+@@ -43,7 +43,7 @@ constraints:
+ 
+ | 类别 | 判定标准 | 处理方式 |
+ |------|---------|---------|
+-| 新功能 | 无现有代码对应 | 完整走 Workflow 8 步 |
++| 新功能 | 无现有代码对应 | 根据风险完成适用的 Workflow 步骤 |
+ | 增强 | 现有代码可扩展 | 重点分析影响面和兼容性 |
+ | 缺陷修复 | 行为偏离预期 | 先复现再定位，跳过部分规划步骤 |
+ | 技术债务 | 无功能变更 | 评估 ROI，低收益则推迟 |
+@@ -62,12 +62,12 @@ constraints:
+ 1. **探索式开场**：需求宽泛时先用 `references/exploratory-requirements-brief.md` 发散 2-4 个方向，再收敛边界。
+ 2. **结构化快速扫描**：定位模块入口、现有实现、相关测试与依赖约束。
+ 3. **识别关键疑问**：列出阻塞规划的问题，并按高/中/低优先级排序。
+-4. **领域建模预检**：对非纯配置/文案任务，先列出关键术语、实体、状态、接口、数据流和边界样例；字段缺失时不得进入实现。
+-5. **上下文充分性检查**：确认接口契约、风险点、验证方式均可陈述。
++4. **领域建模预检**：有跨模块状态、协议、数据或生命周期风险时补齐关键术语、实体、状态、接口和边界样例；纯局部低风险变更只保留相关字段。
++5. **上下文充分性检查**：区分真正阻塞的接口/安全/权限信息与可逆、低风险假设；不得重复询问已知事实。
+ 6. **需求分类**：按分类规则判定需求类别，选择对应处理方式。
+ 7. **优先级判定**：按矩阵评估业务影响、技术风险、时间紧迫度。
+ 8. **触发路由判断**：输出 core/optional 技能建议、触发理由与排除理由。
+-9. **需求拆分策略**：若需求过大，按模块、层次、阶段或风险拆成可独立验收的需求包。
++9. **需求拆分策略**：仅在任务确实跨多个独立验收单元时拆包；小范围修复采用简短验收和定向验证。
+ 10. **产出需求包**：目标、非目标、影响面、done-when、required evidence、artifact paths、blocker policy、验收标准、回退条件。
+ 11. **明确下一步**：给出可执行任务切分与责任边界（owner/scope）。
+ 
+@@ -124,9 +124,9 @@ rg -n "import|require|include|#include" <target_path> | head -20
+ ## Quality Gate
+ - 输出必须包含目标、非目标、影响面、验收标准四项。
+ - 输出必须包含 done-when、required evidence、artifact paths 和 blocker policy；缺任一项时结论固定为 `needs-fix`。
+-- 非纯配置/文案任务必须包含 Domain Model；缺关键术语、实体/状态、接口或边界样例时不得进入实现。
++- 涉及状态、协议、跨模块或资源生命周期的任务必须包含适用 Domain Model；局部低风险任务标记不适用，不要求虚构字段。
+ - 至少给出一个关键风险及对应验证方式。
+-- 若充分性检查未通过，结论必须为 `needs-fix`，并列出缺失信息。
++- 若缺失的是阻塞信息，结论为 `needs-fix` 并列出缺口；非阻塞细节记录可验证假设后可继续。
+ - 需求必须有明确分类和优先级。
+ - 拆分后的需求包必须各自具备独立验收标准。
+ 
+diff --git a/skills/adk-skill-deep-analysis/references/details.md b/skills/adk-skill-deep-analysis/references/details.md
+index 738661f3..01e56965 100644
+--- a/skills/adk-skill-deep-analysis/references/details.md
++++ b/skills/adk-skill-deep-analysis/references/details.md
+@@ -1,49 +1,6 @@
+----
+-name: adk-skill-deep-analysis
+-description: 从产品视角深度拆解 AI Skill 的设计意图、独特解法和可借鉴模式
+-version: 1.0.0
+-last_updated: 2026-05-16
+-triggers:
+-  - 深度拆解 skill
+-  - 分析 skill 设计
+-  - 提取设计模式
+-  - skill 产品视角分析
+-non_triggers:
+-  - 编写新 skill
+-  - 修改现有 skill
+-inputs:
+-  - repo_path: 目标仓库路径
+-  - skill_name: 可选，指定分析某个 skill
+-outputs:
+-  - deep_analysis: Skill 深度分析报告 (Markdown)
+-constraints:
+-  - 禁止直接引用 description 字段，必须从实现细节反推
+-  - 每个解法必须提供"通用做法 vs Skill 做法"对比
+-  - 5 维评分必须给出具体证据
+----
+-
+-## Goal
+-
+-从产品视角深度拆解目标仓库中的 Skill 设计，提炼可复用的设计模式、确定性边界和吸收边界。
+-
+-## Prerequisites
+-
+-- 理解相关领域的基本概念
+-- 熟悉项目结构和工作流程
+-- 具备基本的文档编写能力
+-
+-从产品视角深度拆解目标仓库中的 Skill 设计，提炼可复用的设计模式和最佳实践。
+-
+-## Workflow
+-
+-1. 扫描资源构成：`SKILL.md`、scripts、references、assets、tests、manifest。
+-2. 反推真实痛点：禁止只摘 description，必须从流程、脚本和失败处理推导。
+-3. 标注模式类型：Tool Wrapper、Generator、Reviewer、Inversion、Pipeline 或混合型。
+-4. 拆解确定性边界：哪些步骤由脚本/模板/schema 固化，哪些留给 LLM 判断。
+-5. 检查渐进式披露：frontmatter、入口正文、references/assets 是否层次清晰。
+-6. 评估输出契约：产物、schema、pass/needs-fix、deny-path 和复验方式是否明确。
+-7. 提炼可借鉴点：每项必须包含通用做法、Skill 做法、设计巧思、适用边界。
+-8. 给出吸收建议：ADOPT、MERGE、REJECT、ENHANCE，并说明与现有 adk 资产关系。
++# adk-skill-deep-analysis — 补充参考资料
++
++此参考文件只提供可选背景、示例和检查提示；当前能力流程、权限、回退与放行结论以 `../SKILL.md`、Manifest 及运行时门禁为准。示例命令不得被解释为写权限授权。
+ 
+ ## 执行流程（八阶段）
+ 
+@@ -134,50 +91,3 @@ constraints:
+ - 与 `adk-repo-prompt-analysis` 配合使用
+ - 输出的"独特解法"可直接用于 adk 的 skill 设计参考
+ - 输出的"5 维评分"可纳入 adk 的质量评估体系
+-
+-## Quality Gate
+-- 分析报告必须包含具体文件/行号证据
+-- 禁止直接引用 description 字段，必须从实现反推
+-- 5 维评分每项必须给出≥1个具体证据
+-- 输出报告必须包含"可借鉴点清单"章节
+-
+-## Commands
+-
+-```bash
+-# 分析仓库的 prompt 结构
+-bash scripts/devkit.sh analyze --repo <repo-path>
+-
+-# 生成分析报告
+-bash scripts/devkit.sh analyze --repo <repo-path> --output reports/analysis.md
+-
+-# 验证分析结果
+-bash scripts/devkit.sh verify --analysis reports/analysis.md
+-```
+-
+-## Evidence Template
+-
+-### 分析报告模板
+-
+-```markdown
+-# <仓库名> Prompt 分析报告
+-
+-> 分析时间: YYYY-MM-DD
+-> 分析工具: adk-repo-prompt-analysis
+-
+-## 发现的 Prompts
+-
+-| # | 文件路径 | Prompt 类型 | 用途 |
+-|---|---------|------------|------|
+-| 1 | ... | ... | ... |
+-
+-## 建议
+-
+-- 建议 1
+-- 建议 2
+-
+-## 验证
+-
+-- [ ] 所有 prompts 已识别
+-- [ ] 分类准确
+-- [ ] 建议可执行
+-```
+diff --git a/skills/adk-structured-requirements-questioning/SKILL.md b/skills/adk-structured-requirements-questioning/SKILL.md
+index 912be076..f38c91cb 100644
+--- a/skills/adk-structured-requirements-questioning/SKILL.md
++++ b/skills/adk-structured-requirements-questioning/SKILL.md
+@@ -1,7 +1,7 @@
+ ---
+ name: adk-structured-requirements-questioning
+ description: "用于需求目标、术语和验收边界仍模糊时开展有序澄清；不用于明确的小范围实现、文档润色或重复询问已知条件。"
+-version: 1.0.2
++version: 1.1.0
+ last_updated: 2026-11-03
+ triggers:
+   - "帮我理清需求"
+@@ -16,8 +16,8 @@ inputs:
+ outputs:
+   - 结构化需求文档
+ constraints:
+-  - 必须先提问再实现
+-  - 不允许假设用户意图
++  - 仅在缺少影响安全或验收的阻塞事实时提问
++  - 可逆、低风险细节允许明确记录假设后继续，禁止捏造事实或权限
+ ---
+ 
+ # 结构化需求提问对齐
+@@ -29,14 +29,12 @@ constraints:
+ - 确认用户能参与需求对齐会话。
+ - 获取最小上下文：用户原始需求描述。
+ 
+-## 核心流程
++## 触发条件和最小澄清
+ 
+-1. **收集原始需求**: 记录用户的原始描述
+-2. **短发散**: 给出 2-4 个可能方向，暴露关键取舍
+-3. **识别模糊点**: 列出所有不确定的部分
+-4. **逐点提问**: 对每个模糊点提出具体问题
+-5. **确认理解**: 用自己的话复述需求，请用户确认
+-6. **生成结构化文档**: 输出标准需求格式
++- 首先读取用户已给定的范围、此前决策、仓库事实和可用验收标准；禁止重复询问。
++- 只把会改变安全边界、不可逆操作、外部授权或验收结论的缺口列为阻塞问题；每轮优先提出一个关键问题。
++- 对可逆且低风险的非关键细节，给出明确假设、可用默认值、验证或回退方案并继续。不得将个人偏好推断为用户明确授权。
++- 非阻塞问题作为 `assumptions/open_questions` 记录，不能一律阻断实现。
+ 
+ ## 提问模板
+ 
+@@ -49,26 +47,28 @@ constraints:
+ | 约束 | "有什么技术限制？" |
+ 
+ ## Workflow
+-1. 收集原始需求：记录用户原始描述
+-2. 短发散：列出 2-4 个方向和取舍，不改文件
+-3. 识别模糊点：列出所有不确定的部分
+-4. 逐点提问：对每个模糊点提出具体问题
+-5. 确认理解：用自己的话复述需求，请用户确认
+-6. 生成结构化文档：输出标准需求格式
++
++1. 摘要已有需求、明确边界与已知事实，不重复发问。
++2. 发散最多 2–3 个可行方向，仅在影响决策时给出取舍。
++3. 对缺失的关键阻塞信息提出精准问题；无法互动时输出 `blocked` 与证据，不得猜测权限。
++4. 将低风险假设标为 `assumed`，交付最小验收标准与验证路径。
++5. 仅在新范围、不可逆操作或风险豁免需要额外审批时请求用户确认；正常明确任务直接继续。
++6. 把已收敛要求交给 `adk-requirements-triage` 形成可验证工作包。
+ 
+ ## 与 adk-requirements-triage 的区别
+ - adk-structured-requirements-questioning: 通过结构化提问消除模糊需求
+ - adk-requirements-triage: 将明确需求转为可验证的工程条目
+ 
+ ## Quality Gate
+-- 所有模糊点已对齐并记录
+-- 用户已确认需求理解
+-- 输出结构化需求文档
++- 每条真正阻塞的问题必须说明对应的验收、安全或授权影响。
++- 不得重复询问已经回答的内容；可逆低风险假设可留痕推进。
++- 不把用户再次确认作为所有正常开发任务的强制前提。
++- 输出可验证的目标、边界、验收和剩余风险。
+ 
+ ## Evidence Template
+ ```md
+ - 模糊点清单: (已对齐 N 个)
+-- 用户确认: pass / needs-fix
++- 需要额外授权: yes / no / blocked
+ - 输出文档路径: <path>
+ ```
+ 
+@@ -82,7 +82,7 @@ constraints:
+ ## 健壮性规范
+ 
+ - **输入验证**: 检查用户描述是否为空或过于模糊
+-- **重试策略**: 提问 3 次仍无法对齐则建议用户补充文档
+-- **超时控制**: 单轮对齐不超过 5 轮提问
++- **重试策略**: 同一问题无新信息则停止重复提问，报告缺口并推进独立工作
++- **超时控制**: 只针对阻塞问题提出必要澄清，其他内容直接执行或留痕假设
+ - **异常隔离**: 某个维度对齐失败不影响其他维度
+ - **日志记录**: 记录每个模糊点和最终确认结果
+diff --git a/src/agent_dev_kit/__init__.py b/src/agent_dev_kit/__init__.py
+index b755b9e4..bd81b06b 100644
+--- a/src/agent_dev_kit/__init__.py
++++ b/src/agent_dev_kit/__init__.py
+@@ -1,3 +1,3 @@
+ """agent-dev-kit structured control plane."""
+ 
+-__version__ = "9.0.0"
++__version__ = "10.0.0"
+diff --git a/src/agent_dev_kit/commit_message_policy.py b/src/agent_dev_kit/commit_message_policy.py
+new file mode 100644
+index 00000000..a7ad6bcc
+--- /dev/null
++++ b/src/agent_dev_kit/commit_message_policy.py
+@@ -0,0 +1,70 @@
++"""Read-only, deterministic Conventional Commit syntax checker; never mutates Git."""
++from __future__ import annotations
++import argparse
++import json
++import re
++from pathlib import Path
++
++TYPES = frozenset({"feat", "fix", "docs", "style", "refactor", "perf", "test", "chore", "ci", "revert", "build"})
++SUBJECT = re.compile(r"^(?P<type>[a-z]+)(?:\((?P<scope>[a-z0-9][a-z0-9.,/_-]*)\))?(?P<breaking>!)?: (?P<summary>\S.*)$")
++ISSUE = re.compile(r"(?im)^(?:closes?|fixes?|resolves?)\s+#\d+\s*$")
++BREAKING = re.compile(r"(?m)^BREAKING[ -]CHANGE:\s+\S")
++
++
++def validate_message(message: str, *, max_summary_length: int = 50, require_issue: bool = False) -> dict:
++    """Validate machine syntax; language selection belongs to the calling repository."""
++    subject = message.splitlines()[0].strip() if message.splitlines() else ""
++    match = SUBJECT.fullmatch(subject)
++    errors: list[str] = []
++    kind = match.group("type") if match else None
++    scope = match.group("scope") if match else None
++    summary = match.group("summary") if match else None
++    if not match:
++        errors.append("subject-format")
++    else:
++        if kind not in TYPES:
++            errors.append("type")
++        if len(summary) > max_summary_length:
++            errors.append("summary-length")
++        if summary.endswith(("。", ".")):
++            errors.append("summary-punctuation")
++    if require_issue and kind == "fix" and not ISSUE.search(message):
++        errors.append("issue-required-by-repository-policy")
++    return {
++        "status": "pass" if not errors else "needs-fix",
++        "type": kind,
++        "scope": scope,
++        "summary": summary,
++        "breaking": bool((match and match.group("breaking")) or BREAKING.search(message)),
++        "issues": errors,
++    }
++
++
++def main(argv: list[str] | None = None) -> int:
++    parser = argparse.ArgumentParser(description="Validate a commit message without SCM writes")
++    source = parser.add_mutually_exclusive_group(required=True)
++    source.add_argument("--message")
++    source.add_argument("--file", type=Path)
++    parser.add_argument("--require-issue", action="store_true")
++    parser.add_argument("--max-summary-length", type=int, default=50)
++    args = parser.parse_args(argv)
++    if not 1 <= args.max_summary_length <= 500:
++        parser.error("max-summary-length must be between 1 and 500")
++    if args.file:
++        if not args.file.is_file() or args.file.stat().st_size > 65536:
++            parser.error("message file must exist and be at most 64 KiB")
++        try:
++            message = args.file.read_text(encoding="utf-8")
++        except (OSError, UnicodeError) as exc:
++            parser.error("unable to read message: " + str(exc))
++    else:
++        message = args.message
++    result = validate_message(
++        message, max_summary_length=args.max_summary_length, require_issue=args.require_issue
++    )
++    print(json.dumps(result, ensure_ascii=False, sort_keys=True))
++    return 0 if result["status"] == "pass" else 2
++
++
++if __name__ == "__main__":
++    raise SystemExit(main())
+diff --git a/tests/fixtures/skill_catalog_competition.tsv b/tests/fixtures/skill_catalog_competition.tsv
+index ba1b375f..a119dbbe 100644
+--- a/tests/fixtures/skill_catalog_competition.tsv
++++ b/tests/fixtures/skill_catalog_competition.tsv
+@@ -24,3 +24,6 @@ R022	primary	adk-driver-bringup-checklist	-	请做首板联调，检查时钟复
+ R023	abstain	-	-	按建议自动推进普通代码仓库
+ R024	abstain	-	-	请做文档审查和文字校对
+ R025	collision	adk-driver-bringup-checklist	adk-driver-implementation	请规划驱动开发步骤并生成 bringup 检查表。
++R026	primary	adk-code-review-loop	-	请用中文进行代码审查，逐项给出 findings
++R027	primary	adk-commit-pr-quality-gate	-	请生成中文提交信息并检查提交格式
++R028	abstain	-	-	请把这段散文翻译成中文
+diff --git a/tests/run_all.sh b/tests/run_all.sh
+index 07e12dfd..78830c5a 100755
+--- a/tests/run_all.sh
++++ b/tests/run_all.sh
+@@ -244,6 +244,7 @@ QUICK_TESTS=(
+   test_hosted_workflow_hygiene.sh
+   test_performance_budgets.sh
+   test_skill_trigger_matrix.sh
++  test_skill_content.sh
+   test_skill_governance.sh
+   test_scripts_smoke.sh
+ )
+diff --git a/tests/test_commit_message_policy.py b/tests/test_commit_message_policy.py
+new file mode 100644
+index 00000000..c2971fa2
+--- /dev/null
++++ b/tests/test_commit_message_policy.py
+@@ -0,0 +1,36 @@
++"""Commit message syntax and no implicit issue requirement."""
++from __future__ import annotations
++import json
++import subprocess
++import sys
++import unittest
++from agent_dev_kit.commit_message_policy import validate_message
++
++
++class CommitMessagePolicyTests(unittest.TestCase):
++    def test_zh_and_en(self) -> None:
++        self.assertEqual(validate_message("fix(runtime): 修复边界条件")["status"], "pass")
++        self.assertEqual(validate_message("docs: Update README")["status"], "pass")
++
++    def test_issue_policy_is_opt_in(self) -> None:
++        self.assertEqual(validate_message("fix: 修复连接错误")["status"], "pass")
++        self.assertIn("issue-required-by-repository-policy",
++                      validate_message("fix: 修复连接错误", require_issue=True)["issues"])
++        self.assertEqual(validate_message("fix: 修复连接错误\n\nFixes #123", require_issue=True)["status"], "pass")
++
++    def test_breaking_and_invalid(self) -> None:
++        self.assertTrue(validate_message("feat(api)!: 统一接口")["breaking"])
++        self.assertTrue(validate_message("feat: 统一接口\n\nBREAKING CHANGE: Removed v1")["breaking"])
++        for msg in ("", "misc: 未知类型", "fix(scope) 缺少冒号", "fix: 修复问题。"):
++            with self.subTest(msg=msg):
++                self.assertEqual(validate_message(msg)["status"], "needs-fix")
++
++    def test_cli_is_read_only_and_returns_verdict(self) -> None:
++        for message, expected in (("test: 新增回归", 0), ("invalid", 2)):
++            result = subprocess.run(
++                [sys.executable, "-m", "agent_dev_kit.commit_message_policy", "--message", message],
++                capture_output=True, text=True, check=False,
++            )
++            self.assertEqual(result.returncode, expected, result.stderr)
++            self.assertEqual(json.loads(result.stdout)["status"],
++                             "pass" if expected == 0 else "needs-fix")
+diff --git a/tests/test_contract_registry.sh b/tests/test_contract_registry.sh
+old mode 100644
+new mode 100755
+index 09122b4b..9a2c5b34
+--- a/tests/test_contract_registry.sh
++++ b/tests/test_contract_registry.sh
+@@ -66,7 +66,7 @@ PY
+ python3 -m unittest tests.test_phase_context tests.test_skill_relationships -v
+ 
+ "$ROOT/scripts/devkit.sh" phase-context --domain general --phase review --summary-json \
+-  | python3 -c 'import json,sys; d=json.load(sys.stdin); assert d["schema"]=="adk-phase-context-resolution/v2"; rows={x["name"]:x for x in d["skills"]}; assert rows["adk-code-review-loop"]["runtime_role"]=="primary" and rows["adk-chinese-code-review"]["runtime_role"]=="supporting", d'
++  | python3 -c 'import json,sys; d=json.load(sys.stdin); assert d["schema"]=="adk-phase-context-resolution/v2"; rows={x["name"]:x for x in d["skills"]}; assert rows["adk-code-review-loop"]["runtime_role"]=="primary" and "adk-chinese-code-review" not in rows, d'
+ 
+ "$ROOT/scripts/devkit.sh" phase-context --lifecycle --summary-json \
+   | python3 -c 'import json,sys; d=json.load(sys.stdin); assert d["schema"]=="adk-delivery-lifecycle-resolution/v2"; assert [x["stage"] for x in d["steps"]]==["review","completion","commit-pr","closeout"], d'
+diff --git a/tests/test_harness_readiness.sh b/tests/test_harness_readiness.sh
+index cee245db..3b2e38a3 100755
+--- a/tests/test_harness_readiness.sh
++++ b/tests/test_harness_readiness.sh
+@@ -178,43 +178,58 @@ historical, live = [json.load(open(p, encoding="utf-8")) for p in sys.argv[1:3]]
+ live_rc = int(sys.argv[3])
+ metadata = json.load(open(sys.argv[4], encoding="utf-8"))
+ contract = json.load(open(sys.argv[5], encoding="utf-8"))
+-assert historical["overall_status"] == "pass", historical
+-assert historical["counts"] == {
+-    "pass": 6, "partial": 0, "needs-review": 0,
+-    "blocked": 0, "not-applicable": 1,
+-}, historical
++# A new source branch cannot reuse the previous version's independent
++# delegated review. PR regression only verifies report-only fail-closed
++# semantics; final release authorization still requires a fresh source review.
+ assert historical["field_evidence_status"] == "not-verified", historical
+-
+-max_age = contract["verification"]["max_age_days"]
+-today = dt.datetime.now(dt.timezone.utc).date()
+-stale = {
+-    dimension
+-    for dimension, item in metadata["dimensions"].items()
+-    if (today - dt.date.fromisoformat(item["last_verified_at"])).days > max_age
+-}
+-if stale:
+-    # Renewal requires actual scoped review evidence; never auto-pass or backdate it.
++if historical["overall_status"] == "needs-review":
++    assert historical["counts"]["pass"] == 0, historical
++    assert historical["counts"]["needs-review"] > 0, historical
++    assert any(
++        blocker["code"] == "invalid_delegated_review"
++        for dimension in historical["dimensions"]
++        for blocker in dimension["blockers"]
++    ), historical
+     assert live_rc == 2, (live_rc, live)
+-    assert live["overall_status"] == "partial", live
+-    observed_stale = {
+-        dim["dimension_id"]
+-        for dim in live["dimensions"]
+-        if any(b["code"] == "stale_last_verified_at" for b in dim["blockers"])
+-    }
+-    applicable_stale = {
+-        dim["dimension_id"]
+-        for dim in live["dimensions"]
+-        if dim["dimension_id"] in stale and dim["status"] != "not-applicable"
+-    }
+-    assert observed_stale == applicable_stale, (observed_stale, applicable_stale, live)
+-    assert live["counts"]["blocked"] == 0 and live["counts"]["needs-review"] == 0, live
+-    assert all(
+-        dim["status"] in {"partial", "not-applicable"}
+-        for dim in live["dimensions"]
++    assert live["overall_status"] == "needs-review", live
++    assert live["counts"]["pass"] == 0, live
++    assert any(
++        blocker["code"] == "invalid_delegated_review"
++        for dimension in live["dimensions"]
++        for blocker in dimension["blockers"]
+     ), live
+ else:
+-    assert live_rc == 0 and live["overall_status"] == "pass", (live_rc, live)
+-    assert live["counts"] == historical["counts"], live
++    assert historical["overall_status"] == "pass", historical
++    assert historical["counts"] == {
++        "pass": 6, "partial": 0, "needs-review": 0,
++        "blocked": 0, "not-applicable": 1,
++    }, historical
++    max_age = contract["verification"]["max_age_days"]
++    today = dt.datetime.now(dt.timezone.utc).date()
++    stale = {
++        dimension
++        for dimension, item in metadata["dimensions"].items()
++        if (today - dt.date.fromisoformat(item["last_verified_at"])).days > max_age
++    }
++    if stale:
++        assert live_rc == 2, (live_rc, live)
++        assert live["overall_status"] == "partial", live
++        observed_stale = {
++            dim["dimension_id"]
++            for dim in live["dimensions"]
++            if any(b["code"] == "stale_last_verified_at" for b in dim["blockers"])
++        }
++        applicable_stale = {
++            dim["dimension_id"]
++            for dim in live["dimensions"]
++            if dim["dimension_id"] in stale and dim["status"] != "not-applicable"
++        }
++        assert observed_stale == applicable_stale, (observed_stale, applicable_stale, live)
++        assert live["counts"]["blocked"] == 0 and live["counts"]["needs-review"] == 0, live
++        assert all(dim["status"] in {"partial", "not-applicable"} for dim in live["dimensions"]), live
++    else:
++        assert live_rc == 0 and live["overall_status"] == "pass", (live_rc, live)
++        assert live["counts"] == historical["counts"], live
+ assert live["field_evidence_status"] == "not-verified", live
+ PY
+ 
+diff --git a/tests/test_install_upgrade.py b/tests/test_install_upgrade.py
+index a8011db8..54b6e01c 100644
+--- a/tests/test_install_upgrade.py
++++ b/tests/test_install_upgrade.py
+@@ -227,6 +227,48 @@ def test_api_round_trip_restores_different_bytes_modes_and_original_receipt(self
+         self.assertFalse(self.receipt.exists())
+         self.assertFalse((self.target / SCRIPT).exists())
+ 
++    def test_retired_profile_skill_requires_verified_rollback_before_reinstall(self):
++        # A retired managed Skill is not silently pruned. Verify rollback-first
++        # migration, exact old-source authority and a new, clean install receipt.
++        import copy
++
++        self.install(self.previous)
++        old_snapshot = self.snapshot()
++        retired = "adk-after-action-review"
++        old_path = self.target / "skills" / retired / "SKILL.md"
++        self.assertTrue(old_path.is_file())
++
++        candidate_data = copy.deepcopy(self.candidate.data)
++        candidate_data["profiles"]["core"]["include_skills"].remove(retired)
++        candidate = Manifest(self.candidate.root, candidate_data, self.candidate.source)
++        plan = create_plan(
++            candidate, "claude-code", str(self.target), ["core"], [], "copy",
++            previous_manifest=self.previous,
++        )
++        self.assertEqual(plan["status"], "needs-review", plan)
++        self.assertTrue(any(
++            retired in item["destination"] and "rollback current install first" in item["reason"]
++            for item in plan["conflicts"]
++        ), plan["conflicts"])
++        self.assertEqual(self.snapshot(), old_snapshot)
++        self.assertTrue(old_path.is_file())
++
++        old_rollback = rollback(self.receipt, manifest=self.previous)
++        self.assertEqual(old_rollback["status"], "pass", old_rollback)
++        self.assertFalse(old_path.exists())
++        self.assertFalse(self.receipt.exists())
++
++        fresh = create_plan(candidate, "claude-code", str(self.target), ["core"], [], "copy")
++        self.assertEqual(fresh["status"], "ready", fresh)
++        location = self.work / "retired-clean-plan.json"
++        write_plan(fresh, location)
++        applied = apply_plan(candidate, location)
++        self.assertEqual(applied["status"], "pass", applied)
++        self.assertFalse(old_path.exists())
++        receipt = json.loads(self.receipt.read_text(encoding="utf-8"))
++        self.assertFalse(any(retired in row["destination"] for row in receipt["installed"]))
++        self.assertTrue(any("adk-code-review-loop" in row["destination"] for row in receipt["installed"]))
++
+     def test_cli_requires_previous_source_at_plan_apply_and_rollback(self):
+         self.install(self.previous)
+         original = self.snapshot()
+diff --git a/tests/test_phase_context.py b/tests/test_phase_context.py
+index 25b292de..a2413360 100644
+--- a/tests/test_phase_context.py
++++ b/tests/test_phase_context.py
+@@ -31,13 +31,13 @@ def test_manifest_has_no_phase_to_skill_path_mirror(self) -> None:
+             self.assertIsInstance(value, dict)
+             self.assertNotIn("L2-phase-triggered", value)
+ 
+-    def test_review_phase_resolves_primary_plus_language_overlay(self) -> None:
++    def test_review_phase_uses_one_primary_without_language_duplicate(self) -> None:
+         result = resolve_phase_context(self.manifest, "general", "review")
+         self.assertEqual(result["schema"], "adk-phase-context-resolution/v2")
+         self.assertEqual(result["status"], "pass")
+         rows = {item["name"]: item for item in result["skills"]}
+         self.assertEqual(rows["adk-code-review-loop"]["runtime_role"], "primary")
+-        self.assertEqual(rows["adk-chinese-code-review"]["runtime_role"], "supporting")
++        self.assertNotIn("adk-chinese-code-review", rows)
+         self.assertEqual(
+             [item["name"] for item in result["skills"] if item["runtime_role"] == "primary"],
+             ["adk-code-review-loop"],
+diff --git a/tests/test_skill_content.sh b/tests/test_skill_content.sh
+index 3cb65a67..2d2d2c5f 100755
+--- a/tests/test_skill_content.sh
++++ b/tests/test_skill_content.sh
+@@ -1,113 +1,8 @@
+ #!/usr/bin/env bash
+ set -euo pipefail
+-
+-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+-ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+-SKILLS_DIR="$ROOT_DIR/skills"
+-
+-pass=0
+-fail=0
+-errors=""
+-
+-fail_skill() {
+-  local skill="$1" check="$2"
+-  fail=$((fail + 1))
+-  errors+="  [FAIL] $skill: $check"$'\n'
+-}
+-
+-pass_skill() {
+-  local skill="$1" check="$2"
+-  pass=$((pass + 1))
+-}
+-
+-frontmatter_has_key() {
+-  local key="$1" file="$2"
+-  awk -v key="$key" 'NR <= 30 && $0 ~ "^" key ":" { found = 1 } END { exit found ? 0 : 1 }' "$file"
+-}
+-
+-for skill_dir in "$SKILLS_DIR"/*/; do
+-  [ -d "$skill_dir" ] || continue
+-  skill_name="$(basename "$skill_dir")"
+-  skill_file="$skill_dir/SKILL.md"
+-
+-  if [ ! -f "$skill_file" ]; then
+-    fail_skill "$skill_name" "SKILL.md not found"
+-    continue
+-  fi
+-
+-  content="$(cat "$skill_file")"
+-  body="$(sed -n '/^---$/,/^---$/d; p' "$skill_file")"
+-  body_lines="$(echo "$body" | wc -l)"
+-
+-  # Check 1: frontmatter must contain 'name'
+-  if frontmatter_has_key "name" "$skill_file"; then
+-    pass_skill "$skill_name" "frontmatter has name"
+-  else
+-    fail_skill "$skill_name" "frontmatter missing 'name'"
+-  fi
+-
+-  # Check 2: frontmatter must contain 'description'
+-  if frontmatter_has_key "description" "$skill_file"; then
+-    pass_skill "$skill_name" "frontmatter has description"
+-  else
+-    fail_skill "$skill_name" "frontmatter missing 'description'"
+-  fi
+-
+-  # Check 3: frontmatter must contain 'triggers'
+-  if frontmatter_has_key "triggers" "$skill_file"; then
+-    pass_skill "$skill_name" "frontmatter has triggers"
+-  else
+-    fail_skill "$skill_name" "frontmatter missing 'triggers'"
+-  fi
+-
+-  # Check 4: body must contain '## Goal' section
+-  if rg -q '^## Goal$' "$skill_file"; then
+-    pass_skill "$skill_name" "body has Goal section"
+-  else
+-    fail_skill "$skill_name" "body missing '## Goal' section"
+-  fi
+-
+-  # Check 5: body must contain '## Workflow' section
+-  if rg -q '^## Workflow$' "$skill_file"; then
+-    pass_skill "$skill_name" "body has Workflow section"
+-  else
+-    fail_skill "$skill_name" "body missing '## Workflow' section"
+-  fi
+-
+-  # Check 6: body must be >= 40 lines
+-  if [ "$body_lines" -ge 40 ]; then
+-    pass_skill "$skill_name" "body has $body_lines lines (>= 40)"
+-  else
+-    fail_skill "$skill_name" "body has $body_lines lines (< 40)"
+-  fi
+-
+-  # Check 7: triggers must be non-empty (has at least one list item after 'triggers:')
+-  trigger_block="$(sed -n '/^triggers:/,/^[a-z]/p' "$skill_file" | grep '^\s*-\s' || true)"
+-  if [ -n "$trigger_block" ]; then
+-    pass_skill "$skill_name" "triggers is non-empty"
+-  else
+-    fail_skill "$skill_name" "triggers is empty"
+-  fi
+-
+-  # Check 8: SKILL.md must stay as a compact SOP entrypoint
+-  total_lines="$(wc -l < "$skill_file")"
+-  if [ "$total_lines" -le 140 ]; then
+-    pass_skill "$skill_name" "entry has $total_lines lines (<= 140)"
+-  else
+-    fail_skill "$skill_name" "entry has $total_lines lines (> 140)"
+-  fi
+-done
+-
+-echo ""
+-echo "=== Skill Content Quality Test Results ==="
+-echo "Passed: $pass"
+-echo "Failed: $fail"
+-echo ""
+-
+-if [ -n "$errors" ]; then
+-  echo "Failures:"
+-  echo "$errors"
+-  exit 1
+-fi
+-
+-echo "[PASS] skill content quality"
++ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
++export PYTHONPATH="$ROOT_DIR/src"
++cd "$ROOT_DIR"
++# Content v2 has no universal SOP headings or minimum line count.
++python3 -m unittest tests.test_skill_content_contract tests.test_skill_openai_metadata tests.test_commit_message_policy -v
++echo "[PASS] Skills content v2, OpenAI metadata and Commit Policy"
+diff --git a/tests/test_skill_content_contract.py b/tests/test_skill_content_contract.py
+new file mode 100644
+index 00000000..401ba4be
+--- /dev/null
++++ b/tests/test_skill_content_contract.py
+@@ -0,0 +1,48 @@
++"""Skill content v2 checks without obsolete line-count or fixed-heading constraints."""
++from __future__ import annotations
++import json
++import unittest
++from pathlib import Path
++import yaml
++
++ROOT = Path(__file__).resolve().parents[1]
++
++
++class SkillContentContractTests(unittest.TestCase):
++    @classmethod
++    def setUpClass(cls) -> None:
++        cls.manifest = json.loads((ROOT / "manifest.json").read_text(encoding="utf-8"))
++
++    def test_all_registered_skill_frontmatter_and_body(self) -> None:
++        items = [*self.manifest["skills"], *self.manifest["optional_skills"]]
++        self.assertEqual(len({item["name"] for item in items}), len(items))
++        for item in items:
++            path = ROOT / item["path"]
++            with self.subTest(path=item["path"]):
++                content = path.read_text(encoding="utf-8")
++                self.assertTrue(content.startswith("---\n"))
++                _, header, body = content.split("---", 2)
++                meta = yaml.safe_load(header)
++                self.assertIsInstance(meta, dict)
++                self.assertEqual(meta.get("name"), item["name"])
++                self.assertTrue(isinstance(meta.get("description"), str) and meta["description"].strip())
++                self.assertLessEqual(len(meta["description"]), 1024)
++                self.assertTrue(body.strip())
++                self.assertTrue(isinstance(meta.get("triggers"), list) and meta["triggers"])
++                self.assertIsInstance(meta.get("non_triggers"), list)
++
++    def test_no_language_duplicate_skill_and_counts_match(self) -> None:
++        names = {v["name"] for t in ("skills", "optional_skills") for v in self.manifest[t]}
++        self.assertFalse(any(n.startswith(("adk-chinese-", "adk-english-")) for n in names))
++        for n in ("adk-chinese-code-review", "adk-chinese-commit-conventions"):
++            self.assertFalse((ROOT / "skills" / n).exists())
++        policy = json.loads((ROOT / "manifests/content_architecture_policy.json").read_text(encoding="utf-8"))
++        self.assertEqual(len(self.manifest["skills"]), policy["identity_baseline"]["core_skill_count"])
++        self.assertEqual(len(self.manifest["optional_skills"]), policy["identity_baseline"]["optional_skill_count"])
++
++    def test_details_are_supplemental_not_duplicate_skills(self) -> None:
++        for path in ROOT.glob("skills/*/references/details.md"):
++            with self.subTest(path=path.name, parent=path.parent.parent.name):
++                content = path.read_text(encoding="utf-8")
++                self.assertFalse(content.startswith("---\n"))
++                self.assertNotIn("## Workflow\n", content)
+diff --git a/tests/test_skill_governance.py b/tests/test_skill_governance.py
+index 4d66e71b..09350db3 100644
+--- a/tests/test_skill_governance.py
++++ b/tests/test_skill_governance.py
+@@ -77,6 +77,19 @@ def test_review_routing_uses_review_loop_not_language_overlay(self) -> None:
+         self.assertEqual(result.get("skill"), "adk-code-review-loop", result)
+         self.assertEqual(result.get("selection_group"), "code-review", result)
+ 
++    def test_output_locale_is_not_skill_identity(self) -> None:
++        for prompt in ("代码审查", "中文代码审查", "请用中文进行代码审查"):
++            with self.subTest(prompt=prompt):
++                result = match_text(self.manifest, prompt)
++                self.assertIs(result.get("match"), True, result)
++                self.assertEqual(result.get("skill"), "adk-code-review-loop", result)
++        for prompt in ("中文提交信息", "提交信息格式", "请生成中文提交信息并检查提交格式"):
++            with self.subTest(prompt=prompt):
++                result = match_text(self.manifest, prompt)
++                self.assertIs(result.get("match"), True, result)
++                self.assertEqual(result.get("skill"), "adk-commit-pr-quality-gate", result)
++                self.assertEqual(result.get("mutation_permission"), "deny", result)
++
+     def test_driver_bringup_exposes_live_device_escalation_without_granting_it(self) -> None:
+         result = match_text(self.manifest, "首板联调")
+         self.assertTrue(result.get("match"), result)
+diff --git a/tests/test_skill_openai_metadata.py b/tests/test_skill_openai_metadata.py
+new file mode 100644
+index 00000000..fa7ebb2f
+--- /dev/null
++++ b/tests/test_skill_openai_metadata.py
+@@ -0,0 +1,30 @@
++"""Validate OpenAI Skill UI metadata against the documented interface contract."""
++from __future__ import annotations
++
++import unittest
++from pathlib import Path
++
++import yaml
++
++ROOT = Path(__file__).resolve().parents[1]
++
++
++class SkillOpenAIMetadataTests(unittest.TestCase):
++    def test_all_present_openai_metadata_use_interface(self) -> None:
++        files = sorted(ROOT.glob("skills/*/agents/openai.yaml"))
++        self.assertTrue(files, "metadata inventory must not be empty")
++        for path in files:
++            with self.subTest(path=path.relative_to(ROOT)):
++                data = yaml.safe_load(path.read_text(encoding="utf-8"))
++                self.assertIsInstance(data, dict)
++                self.assertNotIn("display_name", data)
++                self.assertNotIn("short_description", data)
++                interface = data.get("interface")
++                self.assertIsInstance(interface, dict)
++                for key in ("display_name", "short_description"):
++                    self.assertIsInstance(interface.get(key), str)
++                    self.assertTrue(interface[key].strip())
++
++    def test_missing_interface_is_rejected(self) -> None:
++        invalid = yaml.safe_load("display_name: Old layout\nshort_description: Not nested\n")
++        self.assertNotIn("interface", invalid)
