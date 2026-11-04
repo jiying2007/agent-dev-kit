@@ -207,6 +207,13 @@ def _apply_validated_plan(
             "backup": (backup_root / rendered.destination).relative_to(target).as_posix(),
             "backup_sha256": "0" * 64,
         })
+    retired_preview = [{
+        "destination": row["destination"],
+        "installed_sha256": row["installed_sha256"],
+        "file_mode": row["file_mode"],
+        "backup": (backup_root / row["destination"]).relative_to(target).as_posix(),
+        "backup_sha256": "0" * 64,
+    } for row in plan.get("retirements", [])]
     receipt = {
         "schema": install_contract.RECEIPT_SCHEMA,
         "receipt_id": run_id,
@@ -219,6 +226,7 @@ def _apply_validated_plan(
         "backup_root": backup_root.relative_to(target).as_posix(),
         "previous_receipt": (backup_root / install_contract.RECEIPT_NAME).relative_to(target).as_posix(),
         "previous_receipt_sha256": "0" * 64, "installed": preview,
+        "retired": retired_preview,
         "receipt_sha256": "0" * 64,
     }
     install_contract._encode_document(receipt, "install receipt preview")
@@ -231,6 +239,7 @@ def _apply_validated_plan(
         raise
 
     installed: List[Dict[str, Any]] = []
+    retired: List[Dict[str, Any]] = []
     deployed: List[str] = []
     moved_backups: List[Dict[str, str]] = []
     previous_receipt: Optional[str] = None
@@ -284,7 +293,31 @@ def _apply_validated_plan(
                 }
             )
 
-        receipt.update(installed=installed, previous_receipt=previous_receipt,
+        # Retire only receipt-authorized obsolete files, under the same lock
+        # and compensation transaction as new/replaced assets. Do not unlink.
+        for row in plan.get("retirements", []):
+            relative = row["destination"]
+            destination = install_contract._regular_install_path(
+                target / relative, target, "retired managed destination"
+            )
+            backup = install_contract._regular_install_path(
+                backup_root / relative, backup_root, "retired managed backup"
+            )
+            backup.parent.mkdir(parents=True, exist_ok=True)
+            os.replace(str(destination), str(backup))
+            moved_backups.append({
+                "destination": relative,
+                "backup": backup.relative_to(target).as_posix(),
+            })
+            retired.append({
+                "destination": relative,
+                "installed_sha256": row["installed_sha256"],
+                "file_mode": row["file_mode"],
+                "backup": backup.relative_to(target).as_posix(),
+                "backup_sha256": sha256_tree(backup),
+            })
+
+        receipt.update(installed=installed, retired=retired, previous_receipt=previous_receipt,
                        previous_receipt_sha256=previous_receipt_sha256)
         receipt["receipt_sha256"] = install_contract._receipt_digest(receipt)
         text = install_contract._encode_document(receipt, "install receipt")
@@ -351,6 +384,10 @@ def _verify_backup_inventory(receipt: Mapping[str, Any], backup_root: Path) -> N
     expected: Set[str] = {
         str(item["destination"]) for item in receipt["installed"] if item.get("backup") is not None
     }
+    for row in receipt.get("retired", []):
+        if not isinstance(row, dict) or not isinstance(row.get("destination"), str):
+            raise ManifestError("rollback retired backup inventory is malformed")
+        expected.add(row["destination"])
     if receipt.get("previous_receipt") is not None:
         expected.add(install_contract.RECEIPT_NAME)
     actual: Set[str] = set()
@@ -412,6 +449,9 @@ def _rollback_locked(
     if not isinstance(installed, list) or not installed:
         raise ManifestError("rollback receipt contains no installed assets")
 
+    retired = receipt.get("retired", [])
+    if not isinstance(retired, list):
+        raise ManifestError("rollback retired inventory must be a list")
     _verify_backup_inventory(receipt, backup_root)
     previous_receipt_value = receipt.get("previous_receipt")
     previous_receipt: Optional[Path] = None
@@ -434,8 +474,37 @@ def _rollback_locked(
     elif receipt.get("previous_receipt_sha256") is not None:
         raise ManifestError("rollback receipt has a previous receipt digest without a previous receipt")
 
+    installed_destinations = {item["destination"] for item in installed}
+    expected_retired = set(previous_installed).difference(installed_destinations)
+    retired_seen: Set[str] = set()
+    for row in retired:
+        if not isinstance(row, dict) or set(row) != {
+            "destination", "installed_sha256", "file_mode", "backup", "backup_sha256"
+        }:
+            raise ManifestError("rollback has malformed retired managed asset")
+        relative = row["destination"]
+        if not isinstance(relative, str) or relative not in expected_retired or relative in retired_seen:
+            raise ManifestError("rollback retirement is not in trusted previous inventory")
+        retired_seen.add(relative)
+        previous_asset = previous_installed[relative]
+        if row["installed_sha256"] != previous_asset["installed_sha256"] or row["file_mode"] != previous_asset["file_mode"]:
+            raise ManifestError("rollback retired asset differs from trusted previous receipt")
+        expected_backup = (backup_root / relative).relative_to(target).as_posix()
+        if row["backup"] != expected_backup:
+            raise ManifestError("rollback retired backup path is not canonical")
+        destination = install_contract._regular_install_path(target / relative, target, "rollback retired destination")
+        if destination.exists() or destination.is_symlink():
+            raise ManifestError("rollback retired destination is no longer absent")
+        backup = install_contract._regular_install_path(target / expected_backup, target, "rollback retired backup")
+        if not backup.is_file() or backup.is_symlink() or sha256_tree(backup) != row["backup_sha256"]:
+            raise ManifestError("rollback retired backup is missing or changed")
+        if row["backup_sha256"] != previous_asset["installed_sha256"]:
+            raise ManifestError("rollback retired backup differs from trusted previous asset")
+        verify_managed_file_mode(backup, previous_asset["file_mode"], "rollback retired backup")
+    if retired_seen != expected_retired:
+        raise ManifestError("rollback omitted obsolete managed assets")
     backup_destinations = {item["destination"] for item in installed if item.get("backup") is not None}
-    if backup_destinations != set(previous_installed):
+    if backup_destinations.union(retired_seen) != set(previous_installed):
         raise ManifestError("rollback backup inventory differs from trusted previous receipt")
     seen: Set[str] = set()
     for item in installed:
@@ -503,6 +572,17 @@ def _rollback_locked(
                 os.replace(str(backup), str(destination))
                 restored_backups.append({"destination": destination, "backup": backup})
                 restored += 1
+        for row in retired:
+            destination = install_contract._regular_install_path(
+                target / row["destination"], target, "rollback retired destination"
+            )
+            backup = install_contract._regular_install_path(
+                target / row["backup"], target, "rollback retired backup"
+            )
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            os.replace(str(backup), str(destination))
+            restored_backups.append({"destination": destination, "backup": backup})
+            restored += 1
         if previous_receipt is not None:
             os.replace(str(previous_receipt), str(receipt_path))
         else:
