@@ -2596,7 +2596,7 @@
       },
       {
         "intent": "commit_pr_quality_gate",
-        "intent_zh": "提交代码/准备提交/提交前检查",
+        "intent_zh": "提交代码/准备提交/提交前检查/中文提交信息/英文提交信息/提交信息格式/写commit message/commit message",
         "primary_skill": "adk-commit-pr-quality-gate",
         "supporting_skills": [
           "adk-verification-before-completion"
@@ -2604,7 +2604,7 @@
       },
       {
         "intent": "code_review_loop",
-        "intent_zh": "独立代码审查/code review loop/review闭环/review反馈/review反馈核验/审查反馈/收到review/修复review/复审",
+        "intent_zh": "独立代码审查/code review loop/review闭环/review反馈/review反馈核验/审查反馈/收到review/修复review/复审/代码审查/中文代码审查/英文代码审查",
         "primary_skill": "adk-code-review-loop",
         "supporting_skills": [
           "adk-commit-pr-quality-gate"

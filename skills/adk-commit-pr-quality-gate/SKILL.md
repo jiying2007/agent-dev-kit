@@ -5,6 +5,9 @@ version: 1.1.2
 last_updated: 2026-11-03
 triggers:
   - "提交代码"
+  - "中文提交信息"
+  - "提交信息格式"
+  - "commit message"
   - "发起PR"
   - "代码评审"
 non_triggers:

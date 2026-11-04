@@ -26,5 +26,5 @@ class SkillOpenAIMetadataTests(unittest.TestCase):
                     self.assertTrue(interface[key].strip())
 
     def test_missing_interface_is_rejected(self) -> None:
-        invalid = yaml.safe_load("display_name: Old layout\\nshort_description: Not nested\\n")
+        invalid = yaml.safe_load("display_name: Old layout\nshort_description: Not nested\n")
         self.assertNotIn("interface", invalid)
