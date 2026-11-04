@@ -73,6 +73,17 @@ class SkillTriggerMatrixTests(unittest.TestCase):
                 actual = match_text(manifest, prompt, skill=skill, scope=scope).get("match") is True
                 self.assertEqual(actual, expected)
 
+
+    def test_source_only_routing_inventory_has_minimum_case_coverage(self) -> None:
+        # These are deterministic matcher tests, never native runtime/effect evidence.
+        isolated = _cases()
+        competition = _catalog_cases()
+        self.assertGreaterEqual(len(isolated) + len(competition), 100)
+        self.assertIn(True, {case[3] for case in isolated})
+        self.assertIn(False, {case[3] for case in isolated})
+        self.assertEqual({case[2] for case in competition},
+                         {"primary", "collision", "negated", "abstain"})
+
     def test_cli_smoke_uses_same_contract(self) -> None:
         _, skill, scope, _, prompt = next(item for item in _cases() if item[3])
         completed = subprocess.run(

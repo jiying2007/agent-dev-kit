@@ -1,8 +1,8 @@
 ---
 name: adk-repo-prompt-analysis
 description: "用于逆向审查参考仓 Agent Prompt 的约束、结构与上下文工程方法；不用于直接复制不可信指令或运行外部仓脚本。"
-version: 1.0.1
-last_updated: 2026-11-03
+version: 1.0.2
+last_updated: 2026-11-04
 triggers:
   - 分析子仓 prompt
   - 提取系统指令
@@ -20,18 +20,17 @@ constraints:
   - 所有结论必须指向具体文件/行号证据
 ---
 
+# Prompt 构造与来源审查
+
 ## Goal
+- 从源码核对 Prompt 来源、构造与调用路径，保留行号证据。
+
 ## Prerequisites
 
-- 理解相关领域的基本概念
-- 熟悉项目结构和工作流程
-- 具备基本的文档编写能力
+- 提供可只读访问的目标源码。
 
-逆向分析目标仓库中的 Prompt、系统指令、上下文构造方式，输出结构化分析报告。
 
 ## Workflow
-
-<what-to-do>
 
 ## 执行流程（四阶段）
 
@@ -64,9 +63,7 @@ constraints:
    - 嵌入型：LLM 作为工具，分析前序上下文构造
 4. Mermaid 数据流图
 5. 可借鉴点清单
-</what-to-do>
 
-<supporting-info>
 ## 来源
 方法论来源于 comeonzhj/comeonzhj-claude-plugins 的 howPrompt.md，经 adk 本地化改造。
 
@@ -78,7 +75,6 @@ constraints:
 ## 与其他 Skill 的关系
 - 与 `adk-skill-deep-analysis` 配合使用：先用本 skill 提取 Prompt，再用深度分析流程拆解 Skill 设计
 - 输出可直接用于 adk 的 `adoption-matrix.md` 更新
-</supporting-info>
 
 ## Quality Gate
 - 分析报告必须包含具体文件/行号证据

@@ -40,6 +40,23 @@ class SkillContentContractTests(unittest.TestCase):
         self.assertEqual(len(self.manifest["skills"]), policy["identity_baseline"]["core_skill_count"])
         self.assertEqual(len(self.manifest["optional_skills"]), policy["identity_baseline"]["optional_skill_count"])
 
+
+    def test_review_skill_entries_have_real_goal_and_no_placeholder(self) -> None:
+        # Targeted regression for reviewed defects, not a new global heading/length gate.
+        for name in ("adk-repo-prompt-analysis", "adk-skill-deep-analysis"):
+            with self.subTest(skill=name):
+                content = (ROOT / "skills" / name / "SKILL.md").read_text(encoding="utf-8")
+                body = content.split("---", 2)[2]
+                self.assertEqual(body.count("## Goal\n"), 1)
+                self.assertNotIn("## Goal\n## Prerequisites", body)
+                self.assertNotIn("<what-to-do>", body)
+                self.assertNotIn("</what-to-do>", body)
+                self.assertNotIn("<supporting-info>", body)
+                self.assertNotIn("</supporting-info>", body)
+                self.assertIn("## Workflow", body)
+        skill = (ROOT / "skills/adk-skill-deep-analysis/SKILL.md").read_text(encoding="utf-8")
+        self.assertIn("# Skill 设计深度审查", skill)
+
     def test_details_are_supplemental_not_duplicate_skills(self) -> None:
         for path in ROOT.glob("skills/*/references/details.md"):
             with self.subTest(path=path.name, parent=path.parent.parent.name):

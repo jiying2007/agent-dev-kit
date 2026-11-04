@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### 10.0.4 — Skill entry hygiene and source-only routing baseline
+- Correct misleading headings and a vestigial placeholder in two existing Skill entries; patch-bump their Skill versions without adding aliases or new assets.
+- Establish a minimum 100-case deterministic source-routing inventory from existing fixtures and guard reviewed entry hygiene; this is explicitly not a model-run, target-native, effect, or product qualification.
+- Document a budget-controlled path from offline routing to genuine runtime effect evaluation and retain native/product/field evidence separation.
+
+
 ### 10.0.3 — reviewed official source host and read-only upstream drift
 - Register current official ChatGPT Learn documentation on its reviewed host as a watch-only reference, without granting runtime permissions.
 - Record immutable example repository HEAD pins for openai/plugins and deprecated openai/skills, and observe read-only upstream HEAD changes weekly without credentials, automatic updates, or product qualification claims.
