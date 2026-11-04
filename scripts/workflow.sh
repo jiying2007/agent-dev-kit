@@ -637,7 +637,7 @@ archive_change() {
 - reviewer_id: ${DELEGATED_REVIEWER_ID:-not-recorded}
 - review_verdict: $archived_review_verdict
 - review_record_sha256: ${DELEGATED_RECORD_SHA256:-not-recorded}
-- promotion_authority: adk-promotion-evidence/v1 (exact-head repository promotion evidence remains separate and authoritative)
+- promotion_authority: adk-promotion-evidence/v2 (exact-head repository promotion evidence remains separate and authoritative)
 PROVENANCE
 
   mkdir -p "$archive_root"

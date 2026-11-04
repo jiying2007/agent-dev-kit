@@ -8,3 +8,5 @@
 6. Runtime Bundle 自由于 ADK Python：明确只读输出资产与依赖边界；不得将 Python-free 推论扩大到任意自定义脚本、插件或者目标运行时。
 7. 9.0.0 的 promotion-evidence 从 v1 明确变更为 v2（将源与 CI 声明约束改为 3.11/3.12），删除新发行物中的旧 v1 schema 而不是暗改 v1 意义。Root 当前签名 promotion_evidence consumer 的 REQUIRED_PYTHON 仍为 8.x 三版本。本 9.0.0 需要 Root 后续同源消费更新及签名原始证据，而不是在新版本 CI 中伪装兼容三版本。
 8. Harness 七维 source-bound 旧签名对于 9.0.0 无效。必须有独立新审核、强制门禁、精确主线签名与 Root 正式受保护交付；发现失败如实保留。
+
+历史 v1 的审计记录与不可变 8.x Release 保留原样；新 9.0.0 workflow 归档 provenance_authority 只输出 v2，不引入 v1 fallback。
