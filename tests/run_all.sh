@@ -244,6 +244,7 @@ QUICK_TESTS=(
   test_hosted_workflow_hygiene.sh
   test_performance_budgets.sh
   test_skill_trigger_matrix.sh
+  test_skill_content.sh
   test_skill_governance.sh
   test_scripts_smoke.sh
 )
