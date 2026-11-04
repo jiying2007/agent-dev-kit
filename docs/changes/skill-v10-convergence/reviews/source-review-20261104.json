@@ -1,0 +1,139 @@
+{
+  "schema": "adk-review-evidence/v1",
+  "subject_id": "adk-10.0.0-pr236",
+  "scope": "source-change",
+  "author_id": "jiying2007",
+  "owner": "leiwenjun",
+  "reviewer": {
+    "id": "ai/chatgpt/gpt6-pr236-independent-20261104",
+    "kind": "ai",
+    "independence": "independent"
+  },
+  "evidence_completed_at": "2026-11-04T06:29:55Z",
+  "reviewed_at": "2026-11-04T06:29:55Z",
+  "verdicts": {
+    "spec": "pass",
+    "quality": "pass"
+  },
+  "findings": [
+    {
+      "id": "minor-synthetic-retirement-fixture",
+      "severity": "minor",
+      "disposition": "accepted-risk",
+      "reason": "Upgrade regression uses a synthetic retired Skill, not the precise two ADK 9.0 Chinese Skills; actual live migration requires trusted old source and native receipt checks."
+    },
+    {
+      "id": "minor-source-bytes-only",
+      "severity": "minor",
+      "disposition": "accepted-risk",
+      "reason": "Profile size measurements refer to Git source bytes rather than model context tokens, latency or measured provider performance."
+    },
+    {
+      "id": "minor-release-deferred",
+      "severity": "minor",
+      "disposition": "accepted-risk",
+      "reason": "New evidence-bound HEAD CI, protected merge, Sigstore release and Root/live promotion have not been performed as of this source review."
+    }
+  ],
+  "limitations": [
+    "Independent owner-delegated AI source-only reviewer, not a human, GitHub APPROVE, original PR author or formal product certification.",
+    "GitHub connector authenticated login equals the PR author jiying2007; reviewer self-identification and digests are not cryptographic separate GitHub identity.",
+    "GitHub Actions matrix/security/platform evidence is real at original implementation HEAD, but subsequent evidence-only commits require fresh checks.",
+    "No native target/runtime/field M5, provider-model campaign, Sigstore release, downstream Root pin or home-directory writes are claimed."
+  ],
+  "policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+  "validator_sha256": {
+    "src/agent_dev_kit/review_evidence.py": "be4892f464496a29dbbb41ebb56c48984bf103d8eabe2ee6117bd583d1032c47",
+    "src/agent_dev_kit/strict_json.py": "72f06f4dcaebfed83bd1ae9876e38d4f7d82d8a1473b40b66beffb6338ee94a5",
+    "src/agent_dev_kit/readiness_evidence.py": "6fdfd5bea3ee097ac21d2b2ab469378c8c84f78856061b680ebb0c5f9d726778"
+  },
+  "target": {
+    "base_commit": "f9984ca91e6b511937137df0558d51d179ff2a8f",
+    "head_commit": "354b7e2f3128ee23f2a1abedef2b36ca13e5401c",
+    "original_patch_sha256": "7dff0c5c236eeb8afa4bef83875d0d03884822ad1ecaeeb22b98bc5b344835d2"
+  },
+  "sources": [
+    {
+      "base": "record",
+      "path": "evidence/original.patch",
+      "sha256": "7dff0c5c236eeb8afa4bef83875d0d03884822ad1ecaeeb22b98bc5b344835d2"
+    },
+    {
+      "base": "repository",
+      "path": "manifest.json",
+      "sha256": "5f7e081310c2e4a04061f231a75274955cb910a8479c7319a1cfc28dda9ef641"
+    },
+    {
+      "base": "repository",
+      "path": "manifests/skill_content_contracts_v2.json",
+      "sha256": "0d551e94b8548d16df5ef713e21a0abcb434b31a03fa162d2ee69fd0eb2705bb"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/commit_message_policy.py",
+      "sha256": "6709837633f17f9327bcef9ba7f89d9a597ef889bd40c72c8f55abfea7dc56fa"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/installation_plan.py",
+      "sha256": "824ddd0b1526e57f2809b53569e3fb926689f2de8a24de60b6571eda82470b8c"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/installation_transaction.py",
+      "sha256": "7013adeb13c5d309916fe592be17d8603fcf0dc2be30c1ff1b991ce0c54c5f48"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/installation_inventory.py",
+      "sha256": "64e162cc308bff1b1535c857421ba66721c4c34ff33c778aa0f5fd1b2ba36a04"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/review_evidence.py",
+      "sha256": "be4892f464496a29dbbb41ebb56c48984bf103d8eabe2ee6117bd583d1032c47"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_install_upgrade.py",
+      "sha256": "7ce58886179628ac7644d6cd32618aada4c4350cebcb3a343121ff78bae38165"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_skill_content_contract.py",
+      "sha256": "120fae03056849ddc0aa1ed0902c5750a658dacacf7d5b98da8c9aed9191f549"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_commit_message_policy.py",
+      "sha256": "620f4bb23a8627d6affbf0ca4be95a4d10fb79d5a81c53cf60f3be2574edeeed"
+    },
+    {
+      "base": "repository",
+      "path": ".adk/review-policy.json",
+      "sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24"
+    },
+    {
+      "base": "repository",
+      "path": ".adk/review-authorization.md",
+      "sha256": "1594e628184cb0e4ad6c669bf5ce39dcb1f333d03d0798bebb080856e703cda5"
+    },
+    {
+      "base": "repository",
+      "path": ".github/workflows/ci.yml",
+      "sha256": "bb0a80a3144a0a44bdd0cc5990b1f433f8124468d81dff5d3de439b6f96cca9f"
+    },
+    {
+      "base": "repository",
+      "path": "docs/migrations/skill-v10-language-convergence.md",
+      "sha256": "5aa181cb4d934bb24bf8de5030b8e27baf1c3dc6ad49ac97d1ec9c398f5032fc"
+    }
+  ],
+  "evidence": [
+    {
+      "base": "record",
+      "path": "independent-review.md",
+      "sha256": "aaa720302420b433f09f4d7618275b2220846eb4dfca8020c8488b8c98da8eaf"
+    }
+  ]
+}
