@@ -529,6 +529,9 @@ class InstallUpgradeTest(SourceFixture):
 
         self.install(self.previous)
         original = self.snapshot()
+        # The first successful installation already owns a valid backup root;
+        # an aborted upgrade must preserve that history and add no new backup.
+        old_backup_roots = sorted(p.name for p in (self.target / ".adk-backups").iterdir())
         candidate = self._candidate_retiring_core_skill()
         plan = create_plan(candidate, "claude-code", str(self.target), ["core"], [], "copy",
                            previous_manifest=self.previous, allow_managed_retire=True)
@@ -547,7 +550,10 @@ class InstallUpgradeTest(SourceFixture):
                 apply_plan(candidate, path, previous_manifest=self.previous)
         self.assertEqual(original, self.snapshot())
         self.assertFalse(any((self.target / ".adk-staging").glob("*")))
-        self.assertFalse(any((self.target / ".adk-backups").glob("*")))
+        self.assertEqual(
+            old_backup_roots,
+            sorted(p.name for p in (self.target / ".adk-backups").iterdir()),
+        )
 
     def test_rollback_retirement_refuses_recreated_unmanaged_target(self):
         self.install(self.previous)
