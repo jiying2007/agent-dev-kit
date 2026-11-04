@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### 10.0.3 — reviewed official source host and read-only upstream drift
+- Register current official ChatGPT Learn documentation on its reviewed host as a watch-only reference, without granting runtime permissions.
+- Record immutable example repository HEAD pins for openai/plugins and deprecated openai/skills, and observe read-only upstream HEAD changes weekly without credentials, automatic updates, or product qualification claims.
+- Add bounded network/error and offline regression tests; preserve original security, release, and native evidence gates.
+
+
 ### 10.0.2 — opt-in managed retirement for safe source upgrades
 - Implement receipt-bound, explicit managed-retire of obsolete unchanged assets under the same install lock, transaction backup and recovery path; rollback reconstructs previous inventory from reviewed old source.
 - Add drift, tampered-plan, recreated-unmanaged-file, and injected-failure regression tests. Default remains rollback-first; no real target/native certification is claimed.
