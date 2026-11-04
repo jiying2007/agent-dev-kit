@@ -11,20 +11,22 @@ ADK 不再在 README 中维护“候选 / 已发布 / live”之类可漂移的�
 - **Runtime conformance**：以 target/runtime receipt 与证据级别 `static / smoke / native / certified` 为权威。
 - **Product qualification**：由消费方/产品仓的 qualification 与 field evidence 独立决定，不由 ADK 组件版本继承。
 
-`manifest.json` 当前 source version 为 `8.2.3`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
+`manifest.json` 当前 source version 为 `9.0.0`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
 
 8.0.0 维护 CLI 迁移：`performance.sh optimize`、`auto-ops.sh cleanup/optimize` 仅输出有界只读计划，JSON 使用 `adk-maintenance-plan/v1` 与 `status=planned`；维护 `--apply` 返回 blocked、exit 2，不再自动删除文件或修改权限。调用方必须移除维护 `--apply` 并按 `applied=false` 处理报告；见 [维护迁移说明](docs/changes/20261006-comprehensive-contracts/design.md)。
 
-包兼容下限为 Python 3.8+。运行依赖固定为 `PyYAML==6.0.3`，Python 3.8/3.9 使用 `jsonschema==4.17.3`，Python 3.10+ 使用 `jsonschema==4.26.0`；质量依赖在 `pyproject.toml:[project.optional-dependencies].quality` 中按解释器锁定。
+ADK **源码管理、构建与发布控制面**需要 Python **3.11+**，当前已验证的构建解释器为 3.11、3.12。管理环境固定 `PyYAML==6.0.3` 与 `jsonschema==4.26.0`。Python 3.8/3.9/3.10 不再支持；旧宿主如需管理 ADK，必须先升级管理环境，而不是复制兼容 shim。
 
-| Python 范围 | 项目验证范围 | 使用口径 |
+**已部署的纯 Agent/Skill 资产不需要 ADK Python 环境。** 团队 Runtime Bundle 不包含 ADK 源码、Python 管理器、依赖和内部测试；运行时只需目标产品/CLI 能读取标准 Skill 文件。若某个独立 Skill 自身声明执行脚本或外部工具，其依赖由对应 Skill/目标 Runtime 单独声明，不得归因于 ADK 的 Python 构建基线。
+
+| 位置 | Python 要求 | 权威证据 |
 | --- | --- | --- |
-| 3.8 | CI legacy compatibility lane | 保留旧宿主兼容；上游已结束支持 |
-| 3.9 / 3.10 | 符合包下限，未列入当前 CI 矩阵 | legacy compatibility；上游已结束支持 |
-| 3.11 / 3.12 | 当前 CI 验证运行环境 | 正式验证优先选用，并检查上游维护状态 |
-| 其他满足下限的版本 | 尚未纳入当前 CI 矩阵 | unvalidated；不能自动继承项目验证结论 |
+| ADK 源码维护、安装管理 CLI、评测、打包与发布 | 3.11+，推荐隔离虚拟环境 | Python3.11 / 3.12 合同和全量回归 |
+| GitHub Actions / 本地 Docker 构建矩阵 | 3.11、3.12 | 精确 SHA 的原生检查 |
+| 已导出的纯 Codex/Claude/OpenCode Skills | **不要求 ADK Python** | Runtime Bundle 无 ADK Python/源码；实际消费仍需 runtime-native discovery/load/trigger 验证 |
+| 独立依赖 Python 的特定 Skill | 由 Skill 自己声明 | 逐 Skill 的受控工具与运行时证据 |
 
-截至 2026-10-30，[Python 官方生命周期](https://devguide.python.org/versions/)标明 3.8、3.9、3.10 分别于 2024-10-07、2025-10-31、2026-10-01 结束支持。包兼容或 CI 通过均不保证上游持续安全维护；新增解释器支持和最低版本调整须单独验证并按版本策略迁移。
+提高源码最低版本是 **9.0.0** 的破坏性变更，不会改变原有 Skill 数据格式、隐式授权、已发布不可变版本或下游产品资格。
 
 ## 1. 定位边界
 
@@ -115,7 +117,7 @@ python -m pip install .
 adk validate --strict
 ```
 
-发布/认证环境建议设置 `ADK_REQUIRE_SUPPORTED_PYTHON=1`，该开关只强制包兼容下限，不能证明上游安全维护、CI 覆盖或产品资格。`scripts/devkit.sh` 默认按 `python3.12 -> python3.11 -> python3` 选择解释器；低于 Python 3.8 的解释器仅可产生开发期结果，不能升级为 release/certification evidence。Legacy 或未列入 CI 的解释器会在 stderr 给出明确提示，`doctor.environment_support` 分别输出兼容、CI 与已知上游 EOL 信息。
+`scripts/devkit.sh` 默认按 `python3.12 -> python3.11 -> python3` 选择解释器，并对低于 3.11 的环境始终 fail-closed；不再存在旧版 `ADK_REQUIRE_SUPPORTED_PYTHON` 开关。3.13+ 仅符合包最低要求，不自动取得 3.11/3.12 原生 CI 测试结论。推荐用单一构建 venv，无需向 Skill 消费者传播该环境。
 
 ## 6. 质量与发布原则
 

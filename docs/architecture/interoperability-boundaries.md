@@ -59,4 +59,4 @@ A caller-supplied fixture or protocol smoke can prove only the scope it actually
 
 ## 7. Consumer-driven compatibility
 
-ADK releases should be consumed through immutable release/source identity plus a consumer contract. Consumers such as Codex or digital-worker own their local runtime assembly and must bind every vendored ADK asset to an exact release/source identity. Consumer CI should reject stale compatibility projections rather than requiring ADK core to embed consumer-specific assembly logic.
+ADK release/source-builder tooling uses Python 3.11+; its exported pure Skill files and runtime bundles carry no ADK interpreter/package dependency. Runtime-specific executable Skill tools must explicitly declare and validate their own dependencies. ADK releases should be consumed through immutable release/source identity plus a consumer contract. Consumers such as Codex or digital-worker own their local runtime assembly and must bind every vendored ADK asset to an exact release/source identity. Consumer CI should reject stale compatibility projections rather than requiring ADK core to embed consumer-specific assembly logic.

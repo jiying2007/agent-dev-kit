@@ -100,5 +100,21 @@ SH
   fi
 done
 
+[[ ! -e "$ROOT_DIR/src/agent_dev_kit/compat.py" ]] || {
+  echo "[FAIL] retired Python 3.8 compatibility module has returned" >&2
+  exit 1
+}
+python3 - "$ROOT_DIR/pyproject.toml" <<'PY'
+import pathlib
+import sys
+import tomllib
+
+metadata = tomllib.loads(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8"))
+project = metadata["project"]
+assert project["requires-python"] == ">=3.11", project
+assert set(project["dependencies"]) == {"PyYAML==6.0.3", "jsonschema==4.26.0"}, project
+assert metadata["tool"]["ruff"]["target-version"] == "py311", metadata
+assert "test" not in project.get("optional-dependencies", {}), "retired empty test extra remains"
+PY
 PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}" python3 "$ROOT_DIR/tests/test_python_support.py"
 echo "[PASS] ADK Python 3.11+ launcher and build-runtime boundary hold"

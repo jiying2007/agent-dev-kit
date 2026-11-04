@@ -2,7 +2,7 @@
 
 ## Goal
 
-从 `agent-dev-kit` 源仓向团队 Codex 用户交付可审查 Skill，同时不把 ADK Python 实现、测试和内部 change evidence 纳入团队运行时 Bundle。源仓 visibility/access policy 由仓库设置决定，本 runbook 不作私有性假设。
+从 `agent-dev-kit` 源仓向团队 Codex 用户交付可审查 Skill，同时不把 ADK Python 实现、虚拟环境、测试和内部 change evidence 纳入团队运行时 Bundle。**Python 3.11+ 仅为 ADK 构建与治理工具的要求，不是团队成员消费 Skill 的要求。**源仓 visibility/access policy 由仓库设置决定，本 runbook 不作私有性假设。
 
 ## Repositories
 
