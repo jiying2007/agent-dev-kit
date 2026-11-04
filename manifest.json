@@ -1053,26 +1053,6 @@
       "pattern": "reviewer"
     },
     {
-      "name": "adk-chinese-commit-conventions",
-      "path": "skills/adk-chinese-commit-conventions/SKILL.md",
-      "quality_tier": "p0",
-      "category": "review_quality",
-      "lifecycle_order": 80,
-      "stage_order": 10,
-      "activation_mode": "supporting",
-      "pattern": "reviewer"
-    },
-    {
-      "name": "adk-chinese-code-review",
-      "path": "skills/adk-chinese-code-review/SKILL.md",
-      "quality_tier": "p0",
-      "category": "review_quality",
-      "lifecycle_order": 80,
-      "stage_order": 20,
-      "activation_mode": "supporting",
-      "pattern": "reviewer"
-    },
-    {
       "name": "adk-code-review-loop",
       "path": "skills/adk-code-review-loop/SKILL.md",
       "quality_tier": "p0",
@@ -1367,8 +1347,6 @@
         "adk-planning-execution-loop",
         "adk-artifact-gating",
         "adk-pilot-framework",
-        "adk-chinese-commit-conventions",
-        "adk-chinese-code-review",
         "adk-cross-team-handoff",
         "adk-memory-curator",
         "adk-archive-governance",

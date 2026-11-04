@@ -24,6 +24,13 @@ constraints:
 ## Goal
 - 核对提交证据、结论与范围。
 
+## 提交信息与授权边界
+
+- 提交格式以目标仓库的 Commit Policy（例如 `AGENTS.md`）为准；默认采用 `type(scope): 摘要`，不按中文/英文另建 Skill。
+- 文本语言遵守用户明确要求与项目 locale，类型、scope 和 `BREAKING CHANGE` 标识保持机器可解析；没有 Issue 的 bugfix 不得被强制要求捏造 Issue 编号。
+- 此 Skill 只分析、生成或校验提交信息；`git commit`、`--amend`、`push`、`merge` 与发布必须受独立的操作授权和当前工作树证据约束。
+- 格式校验示例：`python3 -m agent_dev_kit.commit_message_policy --message "fix(runtime): 修复回退判断"`。该工具仅返回验证结论，绝不执行 SCM 写入。
+
 ## Prerequisites
 - 汇总改动、验证及评审分级。
 - 明确本次改动是否涉及 breaking change 与迁移影响。

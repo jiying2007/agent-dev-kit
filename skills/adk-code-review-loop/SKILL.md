@@ -35,6 +35,12 @@ constraints:
 - 区分缺陷、误报、越界建议与无法验证项。
 - 机械、语义及 readiness 分别裁决。
 
+## 输出语言与反馈表达
+
+- 审查流程、快照、分级和独立性是跨语言统一契约；输出语言服从用户明确要求，否则服从项目 `locale`（默认为 `zh-CN`）。
+- 不按中文/英文重复创建审查 Skill；不以“先扬后抑”、固定夸奖或委婉措辞弱化 blocker/major。
+- 具体表达与五维检查提示按需读取 `references/review-communication-guidance.md`，不替代实际审查或机器门禁。
+
 ## Prerequisites
 - 有明确 diff/文件清单、目标与非目标、相关测试结果。
 - 声明 Review Target：`staged`、`working-tree` 或 `whole-branch`，并记录 HEAD 与 index/diff 身份。
