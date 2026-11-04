@@ -21,7 +21,7 @@ constraints:
 
 ## Goal
 - 在交接窗口内冻结边界、责任与验收口径，避免"交接后才发现缺口"。
-- 确保交接完成后双方对状态、风险和后续行动有共同认知。
+- 明确双方对状态与风险的共同认知。
 
 ## Prerequisites
 - 已明确交接对象、窗口时间与系统边界。
@@ -105,7 +105,7 @@ ls -la <module_path>/.access
 # 验证文档完整性
 find docs/ -name "*.md" | xargs wc -l | sort -n
 
-# 仅用于核验真实已登记的 ADK change；不会生成交接报告
+# 只验证已登记 change，不生成交接报告
 bash scripts/devkit.sh verify --change <approved-adk-change-id>
 
 # 检查签收状态
@@ -133,7 +133,7 @@ rg -n "sign-off|签字|确认" docs/changes/<handoff-id>/
 - 若接收方无法在窗口期内完成验收，必须延期并通知所有相关方。
 
 ## Quality Gate
-- 交接文档必须覆盖范围、风险、验收、回退与升级通道。
+- 交接须覆盖范围、风险、验收与回退。
 - 每个关键模块必须有唯一主负责人，禁止责任重叠。
 - RACI 矩阵必须覆盖所有交接模块与关键任务。
 - 签收记录必须包含三方签字（交接方、接收方、批准方）。

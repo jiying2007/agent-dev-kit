@@ -83,14 +83,14 @@ constraints:
 - 输出报告必须包含"可借鉴点清单"章节
 
 ## Commands
-以下为只读源码定位命令，ADK 不提供 `devkit.sh analyze` 或 `verify --analysis`，报告仍须按 Evidence Template 独立审核。
+只读检索；无 `devkit.sh analyze` / `verify --analysis` 命令，报告须核证。
 
 ```bash
 git -C <source-repo> rev-parse HEAD
 git -C <source-repo> ls-files '*prompt*' '*system*' '*instruction*' '*SKILL.md' '*AGENTS.md'
 git -C <source-repo> grep -n -E 'system_prompt|user_prompt|messages|chat\\.completions|model\\.generate|invoke' -- .
 ```
-无匹配不是“没有 Prompt”的证据；不执行外部仓库脚本。
+无匹配不等于无 Prompt；不得执行外部脚本。
 
 ## Evidence Template
 
