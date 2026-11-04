@@ -64,7 +64,7 @@ bash scripts/devkit.sh security check --summary-json
 bash tests/run_all.sh
 ```
 
-解释器支持基线为 Python 3.11+。未设置 `ADK_PYTHON_BIN` 时，launcher 按 `python3.12 -> python3.11 -> python3` 选择；发布/认证验证应使用受支持解释器，并可设置 `ADK_REQUIRE_SUPPORTED_PYTHON=1` fail closed。
+ADK 构建解释器基线为 Python 3.11+，由 launcher 自动按 `python3.12 -> python3.11 -> python3` 选择，也可显式设置 `ADK_PYTHON_BIN`；低于最低版本时不执行管理命令。部署的纯 Skill 资产无需同一 Python 环境。
 
 本机代理包装（例如操作者自己的命令前缀）不是 ADK 运行依赖。active scripts、测试与 GitHub Actions 必须能在普通 runner 上执行。
 

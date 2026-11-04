@@ -39,7 +39,7 @@ bash scripts/devkit.sh review --change <id> --result pass --blockers 0 --majors 
 bash scripts/devkit.sh archive --change <id>
 ```
 
-归档后的 change 位于 `docs/changes/archive/<YYYYMMDD-change-id>/`，必须携带 `provenance.md`；archive 是不可变历史与来源绑定，不只是目录移动。仓库级发布/晋级仍以 `adk-promotion-evidence/v1` 的 exact-head 证据为权威，不在 change workspace 复制 CI 真相。
+归档后的 change 位于 `docs/changes/archive/<YYYYMMDD-change-id>/`，必须携带 `provenance.md`；archive 是不可变历史与来源绑定，不只是目录移动。仓库级发布/晋级仍以 `adk-promotion-evidence/v2` 的 exact-head 证据为权威，不在 change workspace 复制 CI 真相。
 
 ## Review independence and solo-maintainer boundary
 
