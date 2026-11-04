@@ -20,3 +20,7 @@ Remove `adk-chinese-code-review` and `adk-chinese-commit-conventions` from core 
 
 ## Operational boundary
 ADK build/control plane requires Python >=3.11, but consuming `SKILL.md` assets after deployment has no blanket Python requirement. Only specific Skill-owned external tools may require interpreters.
+
+## 10.0.1 regression boundary
+
+Both original `adk-chinese-code-review` and `adk-chinese-commit-conventions` names and their v9.0.0 `team-core` membership now receive isolated fixture-based migration tests. These fixtures use canonical v9 Manifest identities, but synthetic Skill bodies; they are **not** real previous source archives or target receipts. The installer still refuses modified managed files and requires exact trusted previous source + reviewed rollback/reinstall. No live target deployment has been verified.
