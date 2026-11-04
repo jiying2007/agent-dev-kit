@@ -8,10 +8,10 @@ references plus normalized claims. Existing artifact schemas remain unchanged.
 from __future__ import annotations
 
 from collections.abc import Mapping
+from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Any, Literal
 
-from agent_dev_kit.compat import frozen_slots_dataclass
 from agent_dev_kit.model import canonical_json_bytes, sha256_bytes
 from agent_dev_kit.privacy_ref import validate_no_secrets
 
@@ -27,7 +27,7 @@ _RUN_SCHEMA = "adk-run-evidence-composition/v1"
 _RECEIPT_SCHEMA = "adk-asset-invocation-receipt/v1"
 
 
-@frozen_slots_dataclass
+@dataclass(frozen=True, slots=True)
 class EvidenceBridgeContext:
     """Explicit source/provenance context unavailable inside legacy artifacts."""
 

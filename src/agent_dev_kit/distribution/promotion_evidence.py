@@ -24,12 +24,11 @@ from agent_dev_kit.contracts.schema_loader import packaged_schema_bytes
 from agent_dev_kit.model import canonical_json_bytes
 
 from ..atomic_io import write_text_atomic
-from ..compat import sha256_stream
 from ..strict_json import loads as load_strict_json
 from ..strict_json import read as read_strict_json
 
 _SCHEMA_NAME = "promotion-evidence-v1.schema.json"
-_REQUIRED_PYTHON = ["3.8", "3.11", "3.12"]
+_REQUIRED_PYTHON = ["3.11", "3.12"]
 
 
 def _sha256(value: bytes) -> str:
@@ -38,7 +37,7 @@ def _sha256(value: bytes) -> str:
 
 def _sha256_file(path: Path) -> str:
     with path.open("rb") as stream:
-        return sha256_stream(stream)
+        return hashlib.file_digest(stream, 'sha256').hexdigest()
 
 
 def _git(*args: str, cwd: Path) -> str:
