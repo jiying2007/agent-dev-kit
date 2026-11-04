@@ -31,13 +31,13 @@ class PhaseContextContractTests(unittest.TestCase):
             self.assertIsInstance(value, dict)
             self.assertNotIn("L2-phase-triggered", value)
 
-    def test_review_phase_resolves_primary_plus_language_overlay(self) -> None:
+    def test_review_phase_uses_one_primary_without_language_duplicate(self) -> None:
         result = resolve_phase_context(self.manifest, "general", "review")
         self.assertEqual(result["schema"], "adk-phase-context-resolution/v2")
         self.assertEqual(result["status"], "pass")
         rows = {item["name"]: item for item in result["skills"]}
         self.assertEqual(rows["adk-code-review-loop"]["runtime_role"], "primary")
-        self.assertEqual(rows["adk-chinese-code-review"]["runtime_role"], "supporting")
+        self.assertNotIn("adk-chinese-code-review", rows)
         self.assertEqual(
             [item["name"] for item in result["skills"] if item["runtime_role"] == "primary"],
             ["adk-code-review-loop"],
