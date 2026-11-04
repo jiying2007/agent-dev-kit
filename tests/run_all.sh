@@ -128,6 +128,7 @@ TESTS=(
   test_execution_policy.sh
   test_official_docs_governance.sh
   test_official_docs_timezone.sh
+  test_official_upstream_drift.sh
   test_intent_boundary_governance.sh
   test_agent_ecosystem_standards.sh
   test_agent_value.sh
