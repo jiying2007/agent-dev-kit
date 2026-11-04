@@ -35,19 +35,16 @@ constraints:
 - 区分缺陷、误报、越界建议与无法验证项。
 - 机械、语义及 readiness 分别裁决。
 
-## 输出语言与反馈表达
+## 输出语言
 
-- 审查流程、快照、分级和独立性是跨语言统一契约；输出语言服从用户明确要求，否则服从项目 `locale`（默认为 `zh-CN`）。
-- 不按中文/英文重复创建审查 Skill；不以“先扬后抑”、固定夸奖或委婉措辞弱化 blocker/major。
-- 具体表达与五维检查提示按需读取 `references/review-communication-guidance.md`，不替代实际审查或机器门禁。
+输出语言遵守用户请求或项目 locale；统一分级不变。表达提示按需读取 `references/review-communication-guidance.md`。
 
 ## Prerequisites
-- 有明确 diff/文件清单、目标与非目标、相关测试结果。
-- 声明 Review Target：`staged`、`working-tree` 或 `whole-branch`，并记录 HEAD 与 index/diff 身份。
-- staged 目标存在 unstaged overlay 时，明确该 working tree 内容不在本轮审查范围。
-- 标记 Reviewer Independence：`independent` 或 `author-self-review`；自审不得冒充独立审查。
-- 受控生命周期操作需有 Requirement Baseline；不适用时显式标记 `not_applicable`。
-- AI/CI 写 SCM comment 需结构化 finding 与触发/secret 隔离。
+
+- 冻结目标、diff、测试、HEAD 和 index；声明 `staged/working-tree/whole-branch` 与 overlay。
+- 标记 `independent` 或 `author-self-review`，不得以自审冒充独立复审。
+- 生命周期变更需 Requirement Baseline，不适用时标 `not_applicable`。
+- SCM comment 仅由结构化 findings 和可信 trigger/secret 边界生成。
 
 ## Workflow
 1. **冻结快照**：记录 Review Target、HEAD、index/diff 指纹、目标文件和 Working Tree Overlay。
@@ -77,12 +74,8 @@ E2/E3 应对冻结合同的关键前提提出可复现证伪；优先减法，CI
 - shared contract/schema 或生命周期语义变更：回到 `adk-requirements-triage` + `adk-interface-contract-design`。
 
 ## Commands
-```bash
-rtk git rev-parse HEAD
-rtk git status --short
-rtk git diff --check
-<project-lint-cmd> && <project-test-cmd>
-```
+
+只读取证命令和例外流程按需见 `references/review-governance-details.md`，不得由本 Skill 直接扩大权限。
 
 ## Evidence Template
 ```md
