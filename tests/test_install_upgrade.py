@@ -269,6 +269,93 @@ class InstallUpgradeTest(SourceFixture):
         self.assertFalse(any(retired in row["destination"] for row in receipt["installed"]))
         self.assertTrue(any("adk-code-review-loop" in row["destination"] for row in receipt["installed"]))
 
+    def test_both_original_v9_language_skills_need_verified_rollback(self):
+        """Synthetic content with exact historical v9.0.0 Skill identities."""
+        import copy
+
+        legacy_root = self.work / "synthetic-v9-source"
+        shutil.copytree(self.previous.root, legacy_root)
+        data = json.loads((legacy_root / "manifest.json").read_text(encoding="utf-8"))
+        retired = (
+            ("adk-chinese-commit-conventions", "adk-commit-pr-quality-gate", 10),
+            ("adk-chinese-code-review", "adk-code-review-loop", 20),
+        )
+        for old_name, current_name, order in retired:
+            current = next(item for item in data["skills"] if item["name"] == current_name)
+            item = copy.deepcopy(current)
+            item.update(
+                name=old_name,
+                path=f"skills/{old_name}/SKILL.md",
+                quality_tier="p0",
+                category="review_quality",
+                lifecycle_order=80,
+                stage_order=order,
+                activation_mode="supporting",
+                pattern="reviewer",
+            )
+            data["skills"].append(item)
+            data["profiles"]["team-core"]["include_skills"].append(old_name)
+            path = legacy_root / item["path"]
+            path.parent.mkdir(parents=True, exist_ok=True)
+            canonical = (legacy_root / current["path"]).read_text(encoding="utf-8")
+            self.assertIn(f"name: {current_name}", canonical)
+            path.write_text(
+                canonical.replace(f"name: {current_name}", f"name: {old_name}", 1),
+                encoding="utf-8",
+            )
+
+        (legacy_root / "manifest.json").write_text(
+            json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        )
+        sync_version_identity(legacy_root, "9.0.0", "isolated-v9-retirement-fixture")
+        old = Manifest.load(legacy_root)
+        old_plan = create_plan(
+            old, "claude-code", str(self.target), ["team-core"], [], "copy",
+        )
+        self.assertEqual("ready", old_plan["status"], old_plan)
+        old_plan_path = self.work / "v9-team-plan.json"
+        write_plan(old_plan, old_plan_path)
+        self.assertEqual("pass", apply_plan(old, old_plan_path)["status"])
+
+        old_paths = [self.target / f"skills/{name}/SKILL.md" for name, _, _ in retired]
+        self.assertTrue(all(path.is_file() for path in old_paths))
+        plan = create_plan(
+            self.candidate, "claude-code", str(self.target), ["team-core"], [], "copy",
+            previous_manifest=old,
+        )
+        self.assertEqual("needs-review", plan["status"], plan)
+        for old_name, _, _ in retired:
+            self.assertTrue(any(
+                old_name in conflict["destination"]
+                and "rollback current install first" in conflict["reason"]
+                for conflict in plan["conflicts"]
+            ), plan["conflicts"])
+
+        original = old_paths[0].read_bytes()
+        old_paths[0].write_bytes(original + b"\nUSER-EDITED\n")
+        with self.assertRaises(ManifestError):
+            rollback(self.receipt, manifest=old)
+        self.assertEqual(original + b"\nUSER-EDITED\n", old_paths[0].read_bytes())
+        old_paths[0].write_bytes(original)
+
+        self.assertEqual("pass", rollback(self.receipt, manifest=old)["status"])
+        self.assertFalse(self.receipt.exists())
+        self.assertTrue(all(not path.exists() for path in old_paths))
+        fresh = create_plan(
+            self.candidate, "claude-code", str(self.target), ["team-core"], [], "copy",
+        )
+        self.assertEqual("ready", fresh["status"], fresh)
+        fresh_path = self.work / "v10-team-plan.json"
+        write_plan(fresh, fresh_path)
+        self.assertEqual("pass", apply_plan(self.candidate, fresh_path)["status"])
+        self.assertTrue(all(not path.exists() for path in old_paths))
+        receipt = json.loads(self.receipt.read_text(encoding="utf-8"))
+        installed = [row["destination"] for row in receipt["installed"]]
+        for old_name, _, _ in retired:
+            self.assertFalse(any(old_name in destination for destination in installed))
+        self.assertTrue(any("adk-code-review-loop" in item for item in installed))
+        self.assertTrue(any("adk-commit-pr-quality-gate" in item for item in installed))
+
     def test_cli_requires_previous_source_at_plan_apply_and_rollback(self):
         self.install(self.previous)
         original = self.snapshot()
