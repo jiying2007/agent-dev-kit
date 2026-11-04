@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import hashlib
 import re
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path, PurePosixPath
 from typing import Any
 
@@ -238,7 +238,7 @@ def validate_review(
              "review record fields are incomplete or unsupported")
     _require(record["schema"] == SCHEMA and record["subject_id"] == expected_subject
              and record["scope"] == expected_scope, "review record subject or scope does not match")
-    current = now if now is not None else datetime.now(timezone.utc)
+    current = now if now is not None else datetime.now(UTC)
     _require(isinstance(current, datetime) and current.tzinfo is not None and current.utcoffset() is not None,
              "review evaluation time must have a timezone")
     policy = _policy(authority_root, expected_scope, record["policy_sha256"], current)
