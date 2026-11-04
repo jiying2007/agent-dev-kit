@@ -69,11 +69,7 @@ FOCUSED_TYPE_PATHS=("${CORE_KERNEL_PATHS[@]}" "$EXECUTION_POLICY_PATH")
 python -m compileall -q "${FOCUSED_TYPE_PATHS[@]}"
 ruff check "${CORE_KERNEL_PATHS[@]}" --select E4,E7,E9,F,B,UP,SIM,I
 ruff check "$EXECUTION_POLICY_PATH" --select E4,E7,E9,F,B,UP,SIM,I
-mypy_args=()
-if python -c 'import sys; raise SystemExit(0 if sys.version_info[:2] == (3, 8) else 1)'; then
-  mypy_args=(--python-version 3.8)
-fi
-mypy "${mypy_args[@]}" "${FOCUSED_TYPE_PATHS[@]}"
+mypy "${FOCUSED_TYPE_PATHS[@]}"
 
 python -m agent_dev_kit.cli target check --all --level static --summary-json
 
