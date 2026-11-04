@@ -66,7 +66,7 @@ PY
 python3 -m unittest tests.test_phase_context tests.test_skill_relationships -v
 
 "$ROOT/scripts/devkit.sh" phase-context --domain general --phase review --summary-json \
-  | python3 -c 'import json,sys; d=json.load(sys.stdin); assert d["schema"]=="adk-phase-context-resolution/v2"; rows={x["name"]:x for x in d["skills"]}; assert rows["adk-code-review-loop"]["runtime_role"]=="primary" and rows["adk-chinese-code-review"]["runtime_role"]=="supporting", d'
+  | python3 -c 'import json,sys; d=json.load(sys.stdin); assert d["schema"]=="adk-phase-context-resolution/v2"; rows={x["name"]:x for x in d["skills"]}; assert rows["adk-code-review-loop"]["runtime_role"]=="primary" and "adk-chinese-code-review" not in rows, d'
 
 "$ROOT/scripts/devkit.sh" phase-context --lifecycle --summary-json \
   | python3 -c 'import json,sys; d=json.load(sys.stdin); assert d["schema"]=="adk-delivery-lifecycle-resolution/v2"; assert [x["stage"] for x in d["steps"]]==["review","completion","commit-pr","closeout"], d'
