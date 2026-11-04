@@ -32,6 +32,8 @@ def create_plan(
         raise TargetUsageError("unsupported_install_mode: {}; use --mode copy".format(mode))
     if ttl_minutes < 1 or ttl_minutes > 1440:
         raise ManifestError("install plan TTL must be between 1 and 1440 minutes")
+    if allow_managed_retire and previous_manifest is None:
+        raise ManifestError("managed retirement requires reviewed exact --previous-source")
     bundle = render_selection(manifest, tool, profiles, optional_skills, asset_kind)
     target = install_contract._expand_target(target_value)
     receipt_path = target / install_contract.RECEIPT_NAME
