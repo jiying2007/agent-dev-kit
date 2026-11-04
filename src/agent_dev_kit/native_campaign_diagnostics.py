@@ -8,8 +8,9 @@ import json
 import os
 import re
 import stat
+from collections.abc import Mapping, Sequence
 from pathlib import Path
-from typing import Any, Mapping, Sequence
+from typing import Any
 
 from .model import ManifestError
 from .native_campaign_contract import (

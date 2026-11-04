@@ -272,7 +272,7 @@
     },
     {
       "id": "promotion-evidence",
-      "version": "1",
+      "version": "2",
       "owner": "distribution",
       "producer": "agent_dev_kit.distribution.promotion_evidence",
       "consumers": [
@@ -280,7 +280,7 @@
       ],
       "stability": "rc",
       "compatibility": "strict",
-      "schema_path": "schemas/promotion-evidence-v1.schema.json",
+      "schema_path": "schemas/promotion-evidence-v2.schema.json",
       "surface_path": null,
       "evidence_class": "release"
     },

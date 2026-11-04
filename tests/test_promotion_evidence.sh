@@ -58,12 +58,12 @@ python3 - "$TMP/promotion-evidence.json" "$head_sha" "$tree_sha" "$manifest_blob
 import json, sys
 path, head, tree, blob = sys.argv[1:]
 value = json.load(open(path, encoding='utf-8'))
-assert value['schema'] == 'adk-promotion-evidence/v1'
+assert value['schema'] == 'adk-promotion-evidence/v2'
 assert value['source']['commit'] == head
 assert value['source']['tree'] == tree
 assert value['source']['manifest_blob'] == blob
-assert value['ci']['contract_matrix']['python'] == ['3.8', '3.11', '3.12']
-assert value['ci']['regression_matrix']['python'] == ['3.8', '3.11', '3.12']
+assert value['ci']['contract_matrix']['python'] == ['3.11', '3.12']
+assert value['ci']['regression_matrix']['python'] == ['3.11', '3.12']
 assert value['provenance']['subject'] == 'promotion-evidence.json'
 PY
 
@@ -76,6 +76,19 @@ json.dump(value, open(dst, 'w', encoding='utf-8'))
 PY
 if python -m agent_dev_kit.distribution.promotion_evidence validate "$TMP/bad-ci.json"; then
   echo '[FAIL] invalid CI claim unexpectedly validated' >&2
+  exit 1
+fi
+
+python3 - "$TMP/promotion-evidence.json" "$TMP/bad-matrix.json" <<'PY'
+import json, sys
+with open(sys.argv[1], encoding='utf-8') as stream:
+    value = json.load(stream)
+value['ci']['contract_matrix']['python'] = ['3.8', '3.11', '3.12']
+with open(sys.argv[2], 'w', encoding='utf-8') as stream:
+    json.dump(value, stream)
+PY
+if python -m agent_dev_kit.distribution.promotion_evidence validate "$TMP/bad-matrix.json"; then
+  echo '[FAIL] retired Python matrix unexpectedly validated under v2' >&2
   exit 1
 fi
 

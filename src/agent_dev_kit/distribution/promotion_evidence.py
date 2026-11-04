@@ -27,7 +27,7 @@ from ..atomic_io import write_text_atomic
 from ..strict_json import loads as load_strict_json
 from ..strict_json import read as read_strict_json
 
-_SCHEMA_NAME = "promotion-evidence-v1.schema.json"
+_SCHEMA_NAME = "promotion-evidence-v2.schema.json"
 _REQUIRED_PYTHON = ["3.11", "3.12"]
 
 
@@ -144,7 +144,7 @@ def build_promotion_evidence(
     manifest_sha256 = _sha256(canonical_json_bytes(dict(manifest)))
 
     evidence: dict[str, Any] = {
-        "schema": "adk-promotion-evidence/v1",
+        "schema": "adk-promotion-evidence/v2",
         "issued_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
         "source": {
             "repository": repository,
