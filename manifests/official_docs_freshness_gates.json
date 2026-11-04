@@ -1,10 +1,11 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-10-29",
+  "last_updated": "2026-11-04",
   "review_policy": {
     "allowed_domains": [
       "code.claude.com",
       "developers.openai.com",
+      "learn.chatgpt.com",
       "platform.openai.com",
       "www.anthropic.com"
     ],
@@ -45,6 +46,7 @@
     "openai": {
       "allowed_domains": [
         "developers.openai.com",
+        "learn.chatgpt.com",
         "platform.openai.com"
       ],
       "minimum_sources": 64,
@@ -1138,6 +1140,21 @@
       "required_checks": [
         "check-official-docs-governance",
         "test_skill_trigger_matrix"
+      ]
+    },
+    {
+      "id": "openai-chatgpt-learn-use-chatgpt",
+      "title": "ChatGPT Learn: Use ChatGPT and select Work or Codex",
+      "url": "https://learn.chatgpt.com/docs/use-chatgpt",
+      "retrieved_at": "2026-11-04",
+      "expires_at": "2027-02-02",
+      "review_status": "watch",
+      "adoption_scope": "P2",
+      "owner": "agent-dev-kit",
+      "decision": "Review official ChatGPT workflow terminology and interaction guidance only; not a replacement for Agent Skills spec, not native runtime evidence, and no change to API/authorization.",
+      "required_checks": [
+        "check-official-docs-governance",
+        "validate-assets --strict"
       ]
     }
   ]
