@@ -44,6 +44,12 @@ line-length = 120
 [tool.ruff.lint]
 select = ["E4", "E7", "E9", "F"]
 
+# Preserve the exact independently reviewed validator source digest. The
+# datetime.timezone.utc usage is valid on Python 3.11+; this narrow style-only
+# exception keeps source-bound evidence valid without disabling other UP checks.
+[tool.ruff.lint.per-file-ignores]
+"src/agent_dev_kit/review_evidence.py" = ["UP017"]
+
 [tool.mypy]
 python_version = "3.11"
 strict = true
