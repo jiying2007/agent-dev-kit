@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### 9.0.0 source candidate — major Python build boundary
+- Break the ADK *build/control-plane* interpreter floor from Python 3.8 to Python 3.11. Retire Python 3.8/3.9/3.10 branches, legacy pinned libraries, compatibility module, fallback guards, old Bullseye Docker bootstrap and related CI lanes.
+- Keep the Python 3.11/3.12 native contract and regression matrix, strict aggregate evaluation, source-bound independent review, release provenance, target/runtime and permission boundaries unchanged.
+- Replace legacy dataclass/hash helpers with Python 3.11 stdlib APIs, preserving the same frozen/slots semantics and content digests. Use a single modern dependency set and local Docker matrix.
+- Runtime Skill bundles remain independent from the ADK Python package; specific Skill-owned tools declare their own dependencies. No native runtime-qualification or product M5 claim.
+- Root consumption requires a separate source-bound 9.0.0 promotion and consumer-contract update; no early gitlink/lock changes.
+
 ### 8.2.3 source candidate
 - Strengthen the source-only discovery descriptions and exclusion boundaries across the Skill catalog; add all-inventory positive/negative isolated matcher tests without claiming native runtime effectiveness.
 - Attach two previously unprofiled core Skills to specialist team-core, preserving default core membership; reject future unprofiled core assets.

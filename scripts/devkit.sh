@@ -9,6 +9,11 @@ export PYTHONPATH="${ROOT_DIR}/src${PYTHONPATH:+:${PYTHONPATH}}"
 PYTHON_SELECTION="explicit"
 if [[ -n "${ADK_PYTHON_BIN:-}" ]]; then
   PYTHON_BIN="${ADK_PYTHON_BIN}"
+elif [[ -n "${VIRTUAL_ENV:-}" ]]; then
+  # An active venv is the developer's selected build environment. Never
+  # silently jump to a newer host interpreter and lose installed dependencies.
+  PYTHON_SELECTION="venv"
+  PYTHON_BIN="${VIRTUAL_ENV%/}/bin/python"
 else
   PYTHON_SELECTION="auto"
   PYTHON_BIN=""
@@ -20,19 +25,10 @@ else
   done
   PYTHON_BIN="${PYTHON_BIN:-python3}"
 fi
-REQUIRE_SUPPORTED="${ADK_REQUIRE_SUPPORTED_PYTHON:-0}"
-
-case "${REQUIRE_SUPPORTED}" in
-  0|1) ;;
-  *)
-    echo "[FAIL] ADK_REQUIRE_SUPPORTED_PYTHON must be 0 or 1" >&2
-    exit 2
-    ;;
-esac
 
 if [[ "${PYTHON_BIN}" == */* ]]; then
   [[ -x "${PYTHON_BIN}" ]] || {
-    echo "[FAIL] ADK_PYTHON_BIN is not executable: ${PYTHON_BIN}" >&2
+    echo "[FAIL] selected ADK Python (${PYTHON_SELECTION}) is not executable: ${PYTHON_BIN}" >&2
     exit 2
   }
 elif ! command -v "${PYTHON_BIN}" >/dev/null 2>&1; then
@@ -41,34 +37,23 @@ elif ! command -v "${PYTHON_BIN}" >/dev/null 2>&1; then
 fi
 
 read -r PYTHON_VERSION PYTHON_SUPPORTED < <(
-  "${PYTHON_BIN}" -c 'import sys; print(".".join(map(str, sys.version_info[:3])), int(sys.version_info >= (3, 8)))'
+  "${PYTHON_BIN}" -c 'import sys; print(".".join(map(str, sys.version_info[:3])), int(sys.version_info >= (3, 11)))'
 ) || {
   echo "[FAIL] unable to inspect ADK Python interpreter: ${PYTHON_BIN}" >&2
   exit 2
 }
 
-COMMAND="${1:-help}"
-if [[ "${PYTHON_SUPPORTED}" != "1" && "${COMMAND}" != "doctor" ]]; then
-  if [[ "${REQUIRE_SUPPORTED}" == "1" ]]; then
-    echo "[FAIL] ADK requires Python 3.8+; ${PYTHON_SELECTION}-selected ${PYTHON_BIN}=${PYTHON_VERSION}" >&2
-    echo "[INFO] set ADK_PYTHON_BIN to a reviewed Python 3.8+ interpreter or use scripts/run-local-ci-parity.sh" >&2
-    exit 2
-  fi
-  echo "[WARN] unsupported ADK Python ${PYTHON_VERSION}; ${PYTHON_SELECTION}-selected ${PYTHON_BIN}; result is development-only, not release evidence" >&2
-  echo "[WARN] set ADK_REQUIRE_SUPPORTED_PYTHON=1 for fail-fast release validation" >&2
+if [[ "${PYTHON_SUPPORTED}" != "1" ]]; then
+  echo "[FAIL] ADK requires Python 3.11+; ${PYTHON_SELECTION}-selected ${PYTHON_BIN}=${PYTHON_VERSION}" >&2
+  echo "[INFO] set ADK_PYTHON_BIN to a Python 3.11+ interpreter in a build-only environment" >&2
+  exit 2
 fi
 
-if [[ "$PYTHON_SUPPORTED" == "1" ]]; then
-  case "$PYTHON_VERSION" in
-    3.8.*|3.9.*|3.10.*)
-      echo "[WARN] Python $PYTHON_VERSION is legacy compatibility only; upstream support has ended" >&2
-      echo "[INFO] prefer reviewed Python 3.11/3.12; ADK_REQUIRE_SUPPORTED_PYTHON checks the compatibility minimum only" >&2
-      ;;
-    3.11.*|3.12.*) ;;
-    *)
-      echo "[WARN] Python $PYTHON_VERSION meets the package minimum but is outside the ADK CI-tested matrix (3.8, 3.11, 3.12)" >&2
-      ;;
-  esac
-fi
+case "${PYTHON_VERSION}" in
+  3.11.*|3.12.*) ;;
+  *)
+    echo "[WARN] Python ${PYTHON_VERSION} meets the minimum but is outside the ADK CI-tested matrix (3.11, 3.12)" >&2
+    ;;
+esac
 
 exec "${PYTHON_BIN}" -m agent_dev_kit.cli "$@"

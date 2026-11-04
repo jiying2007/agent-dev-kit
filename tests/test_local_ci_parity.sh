@@ -27,7 +27,6 @@ for token in \
   'release_authority=none' \
   'file_mode_inventory=git-index-bound' \
   'container_user=65532:65532' \
-  'python=3.8' \
   'python=3.11' \
   'python=3.12'; do
   rg -Fq -- "$token" <<<"$plan" || {
@@ -36,10 +35,12 @@ for token in \
   }
 done
 
-if bash "$RUNNER" --python 3.10 --dry-run >/dev/null 2>&1; then
-  echo "[FAIL] local CI parity accepted an unsupported Python version" >&2
-  exit 1
-fi
+for unsupported in 3.8 3.10; do
+  if bash "$RUNNER" --python "$unsupported" --dry-run >/dev/null 2>&1; then
+    echo "[FAIL] local CI parity accepted retired Python $unsupported" >&2
+    exit 1
+  fi
+done
 
 for token in \
   '--read-only' \
@@ -50,7 +51,6 @@ for token in \
   'no-new-privileges' \
   '--tmpfs /work:rw,exec,nosuid,nodev,size=2g,mode=1777' \
   'dst=/source,readonly' \
-  'python:3.8-slim-bullseye@sha256:' \
   'python:3.11-slim@sha256:' \
   'python:3.12-slim@sha256:'; do
   rg -Fq -- "$token" "$RUNNER" || {
@@ -134,6 +134,34 @@ for token in \
     exit 1
   }
 done
+
+# Refuse drift between the canonical dependency pins and local Docker tools.
+python3 - "$ROOT_DIR/pyproject.toml" "$DOCKERFILE" <<'PY'
+import pathlib
+import re
+import sys
+import tomllib
+
+project = tomllib.loads(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8"))["project"]
+docker = pathlib.Path(sys.argv[2]).read_text(encoding="utf-8")
+build_pins = dict(re.findall(r"(?m)^ARG ([A-Z][A-Z_]+)_VERSION=([^\s#]+)$", docker))
+bindings = {
+    "PyYAML": "PYYAML",
+    "jsonschema": "JSONSCHEMA",
+    "ruff": "RUFF",
+    "pip-audit": "PIP_AUDIT",
+    "mypy": "MYPY",
+    "types-jsonschema": "TYPES_JSONSCHEMA",
+    "types-PyYAML": "TYPES_PYYAML",
+}
+dependencies = project["dependencies"] + project["optional-dependencies"]["quality"]
+assert len(dependencies) == len(bindings), dependencies
+for dependency in dependencies:
+    name, version = dependency.split("==", 1)
+    assert build_pins[bindings[name]] == version, (
+        name, "local Docker pin differs from pyproject", version, build_pins[bindings[name]]
+    )
+PY
 
 for kernel_path in \
   'src/agent_dev_kit/contracts' \

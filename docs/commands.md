@@ -2,17 +2,12 @@
 
 统一入口：`bash scripts/devkit.sh <command> [options]`
 
-解释器入口：
+解释器入口仅用于 **ADK 构建/维护控制面**：
 
-- 未设置 `ADK_PYTHON_BIN` 时按 `python3.12 -> python3.11 -> python3` 选择；这会
-  优先复用已安装的受审查解释器。若最终版本低于 3.8，除 `doctor` 外会明确
-  标记结果仅供开发，不能作为 release evidence。
-- 使用 `ADK_PYTHON_BIN=/reviewed/python3.12` 显式选择解释器。
-- 发布、制品或认证前设置 `ADK_REQUIRE_SUPPORTED_PYTHON=1`，旧解释器会在 CLI
-  执行前 fail-fast。
-- 本机没有受支持解释器时，使用
-  `scripts/run-local-ci-parity.sh --python all --mode full`；`doctor` 始终可在
-  旧环境运行以输出结构化诊断。
+- 需要 Python 3.11+；显式 `ADK_PYTHON_BIN` 优先，其次使用激活的 `VIRTUAL_ENV/bin/python`，仅当未激活 venv 时按 `python3.12 -> python3.11 -> python3` 选择；旧解释器或残缺 venv 均 fail closed。
+- 推荐在 ADK 源仓中建立单一 `.venv`（`python3.12 -m venv .venv`，`source .venv/bin/activate`），不向 Skill 消费端分发。可用 `ADK_PYTHON_BIN=/reviewed/python3.12` 显式覆盖；旧 `ADK_REQUIRE_SUPPORTED_PYTHON` 宽松开关已移除。
+- 本机无 Python 3.11+ 时可以在受保护 GitHub Actions 验证，或在 Docker 可用时通过 `scripts/run-local-ci-parity.sh --python all --mode full`；CLI 无法在旧解释器上运行。
+- **已发布的纯 Skill 运行时包不要求 ADK Python，也不能因为构建环境换版本就自动授予 runtime/field 资格。**
 
 ADK core 只提供平台中立命令。`manifest.json` 是唯一结构化 Manifest SSOT，并由 4.0 Draft 2020-12 JSON Schema 与语义规则共同校验；direct export 适配必须通过 `tool_targets` 和 versioned target contract 显式声明。需要外部声明式链路承接的运行体系进入 `external_handoff_targets`，不能把平台专属 handoff 或用户目录写入作为默认路径。
 
@@ -81,9 +76,9 @@ bash scripts/devkit.sh manifest composition-check --summary-json
 
 ## doctor
 
-只读检查 manifest、Python 3.8+ 包兼容下限、固定 PyYAML/jsonschema 版本、runtime 安装与认证、CLI 版本、target 可写性和 writer lock 状态。Python 3.8/3.9 对应 `jsonschema==4.17.3`，Python 3.10+ 对应 `jsonschema==4.26.0`。输出只包含状态，不读取或打印凭证值；解释器低于兼容下限或固定依赖不匹配时返回失败。
+只读检查 manifest、Python 3.11+ 管理环境要求、固定 PyYAML==6.0.3/jsonschema==4.26.0、runtime 安装与认证、CLI 版本、target 可写性和 writer lock 状态。输出只包含状态，不读取或打印凭证值；解释器低于下限时 launcher 直接拒绝执行。
 
-`environment_support.python_supported` 保留原兼容判断，并明确标记 `python_support_scope=package-compatibility-only`。`python_ci_tested/python_ci_matrix` 只描述项目测试范围，`python_runtime_class` 区分 unsupported、legacy-compatibility、ci-validated 与 unvalidated。已知 EOL 的 3.8/3.9/3.10 返回官方结束日期；其他版本的上游状态为 not-assessed，不能据 null 日期声称仍获安全维护。参考来源与核验日期同时输出；doctor 不在运行中联网刷新生命周期。
+`environment_support.python_supported` 表达构建解释器下限；`python_support_scope=build-control-plane-only` 与 `delivered_skill_requires_adk_python=false` 防止混淆消费端依赖。`python_ci_tested/python_ci_matrix` 只描述 3.11/3.12 项目测试范围；新解释器不自动继承认证，也不会根据源代码文案声明上游维护状态。
 
 ```bash
 bash scripts/devkit.sh doctor --summary-json

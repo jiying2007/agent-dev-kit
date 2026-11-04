@@ -73,6 +73,8 @@ class RuntimeBundleTest(unittest.TestCase):
                 )
                 forbidden = ("src/agent_dev_kit", "tests/", ".github/", "docs/changes/", "source/")
                 self.assertFalse(any(name.startswith(forbidden) for name in names))
+                self.assertFalse(any(name.endswith(".py") for name in names),
+                                 "pure Skill runtime bundle must not contain ADK Python source")
                 manifest = json.load(archive.extractfile("bundle-manifest.json"))
             self.assertEqual(manifest["schema"], "adk-runtime-bundle/v1")
             self.assertFalse(manifest["source_distribution"])

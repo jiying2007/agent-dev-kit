@@ -14,6 +14,21 @@ rg -q '"status":"pass"' "$TMP_DIR/perf-budget.json" || {
   exit 1
 }
 
+# Verify the control-plane baseline cannot resurrect legacy Python-specific budgets.
+python3 - "$ROOT_DIR/manifests/adk_performance_budgets.json" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+data = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
+budgets = data["budgets"]
+assert len(budgets) == 3, budgets
+for budget in budgets:
+    assert budget["mode"] in {"quick", "full", "benchmark"}, budget
+    assert budget.get("python") not in {"3.8", "3.9", "3.10"}, budget
+    assert "py38" not in budget["budget_id"], budget
+PY
+
 cat >"$TMP_DIR/quick-pass.json" <<'JSON'
 {
   "schema_version": 1,

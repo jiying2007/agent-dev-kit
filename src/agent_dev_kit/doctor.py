@@ -17,39 +17,30 @@ from .locking import target_lock_status
 from .model import Manifest
 
 
-MINIMUM_PYTHON = (3, 8)
-CI_TESTED_PYTHON = ((3, 8), (3, 11), (3, 12))
-UPSTREAM_EOL = {"3.8": "2024-10-07", "3.9": "2025-10-31", "3.10": "2026-10-01"}
+MINIMUM_PYTHON = (3, 11)
+CI_TESTED_PYTHON = ((3, 11), (3, 12))
 
 
 def _python_environment_support(version: Sequence[int]) -> Dict[str, Any]:
-    """Separate package compatibility, our test matrix and known upstream EOL."""
+    """Report build-control-plane interpreter requirements, not Skill runtime requirements."""
     minor = tuple(version[:2])
-    label = ".".join(str(part) for part in minor)
     compatible = minor >= MINIMUM_PYTHON
-    eol = UPSTREAM_EOL.get(label)
     tested = minor in CI_TESTED_PYTHON
     return {
-        "python_minimum": "3.8",
+        "python_minimum": "3.11",
         "python_supported": compatible,
-        "python_support_scope": "package-compatibility-only",
+        "python_support_scope": "build-control-plane-only",
         "python_ci_tested": tested,
         "python_ci_matrix": [".".join(map(str, item)) for item in CI_TESTED_PYTHON],
         "python_runtime_class": (
-            "unsupported" if not compatible else "legacy-compatibility" if eol
-            else "ci-validated" if tested else "unvalidated"
+            "unsupported" if not compatible else "ci-validated" if tested else "unvalidated"
         ),
-        "python_upstream_status": "end-of-life" if eol else "not-assessed",
-        "python_upstream_eol_date": eol,
-        "python_upstream_reference": "https://devguide.python.org/versions/",
-        "python_upstream_reference_checked_at": "2026-10-30",
+        "delivered_skill_requires_adk_python": False,
     }
 
+
 def _required_distributions() -> Dict[str, str]:
-    return {
-        "PyYAML": "6.0.3",
-        "jsonschema": "4.17.3" if sys.version_info < (3, 10) else "4.26.0",
-    }
+    return {"PyYAML": "6.0.3", "jsonschema": "4.26.0"}
 
 
 def _distribution_version(name: str) -> str:
@@ -88,11 +79,7 @@ def run_doctor(
     required_distributions = _required_distributions()
     python_support = _python_environment_support(sys.version_info[:2])
     if not python_support["python_supported"]:
-        failures.append("Python 3.8 or newer is required")
-    elif python_support["python_runtime_class"] == "legacy-compatibility":
-        warnings.append("Python is legacy-compatible but upstream support ended on {}; "
-                        "prefer a reviewed, upstream-maintained CI runtime".format(
-                            python_support["python_upstream_eol_date"]))
+        failures.append("Python 3.11 or newer is required")
     elif not python_support["python_ci_tested"]:
         warnings.append("Python meets the package minimum but is outside the ADK CI-tested matrix")
     dependency_versions = {

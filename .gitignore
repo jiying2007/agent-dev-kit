@@ -13,3 +13,4 @@ build/
 .cache/
 *.log
 tmp/
+.venv/

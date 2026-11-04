@@ -89,7 +89,7 @@ ARCHIVE_MATCH="$(find "$CHANGE_ROOT/archive" -maxdepth 1 -type d -name "*-smoke-
 grep -q '^stage: archived$' "$ARCHIVE_MATCH/state.yaml" || { echo "[FAIL] archive did not persist archived stage" >&2; exit 1; }
 grep -q 'schema: adk-change-provenance/v1' "$ARCHIVE_MATCH/provenance.md" || { echo "[FAIL] archive provenance schema missing" >&2; exit 1; }
 grep -q 'authority: ADK Canonical Change Contract' "$ARCHIVE_MATCH/provenance.md" || { echo "[FAIL] archive provenance authority missing" >&2; exit 1; }
-grep -q 'promotion_authority: adk-promotion-evidence/v1' "$ARCHIVE_MATCH/provenance.md" || { echo "[FAIL] archive provenance promotion authority missing" >&2; exit 1; }
+grep -q 'promotion_authority: adk-promotion-evidence/v2' "$ARCHIVE_MATCH/provenance.md" || { echo "[FAIL] archive provenance promotion authority missing" >&2; exit 1; }
 
 ## artifact consistency checks - fail path
 "$ROOT_DIR/scripts/workflow.sh" propose --change "$CHANGE_ID_ARTIFACT_FAIL" --title "artifact consistency fail" --root "$CHANGE_ROOT"

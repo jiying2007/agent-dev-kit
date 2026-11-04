@@ -21,7 +21,7 @@ def _regular_install_path(path: Path, root: Path, label: str) -> Path:
 
     Resolving a leaf or directory symlink before testing is_symlink() loses the
     alias. This helper checks each original component first, then applies the
-    existing canonical root-containment policy. It supports Python 3.8.
+    existing canonical root-containment policy. It supports the declared build-time Python baseline.
     """
     resolved_root = root.resolve()
     candidate = Path(path)
