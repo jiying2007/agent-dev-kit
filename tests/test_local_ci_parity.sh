@@ -144,7 +144,7 @@ import tomllib
 
 project = tomllib.loads(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8"))["project"]
 docker = pathlib.Path(sys.argv[2]).read_text(encoding="utf-8")
-build_pins = dict(re.findall(r"(?m)^ARG ([A-Z][A-Z_]+)_VERSION=([^\\s#]+)$", docker))
+build_pins = dict(re.findall(r"(?m)^ARG ([A-Z][A-Z_]+)_VERSION=([^\s#]+)$", docker))
 bindings = {
     "PyYAML": "PYYAML",
     "jsonschema": "JSONSCHEMA",
