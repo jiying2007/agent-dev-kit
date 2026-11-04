@@ -525,7 +525,7 @@ class InstallUpgradeTest(SourceFixture):
         self.assertEqual("needs-review", new_plan["status"])
 
     def test_retirement_backup_failure_compensates_entire_upgrade(self):
-        from agent_dev_kit import installation_transaction
+        from agent_dev_kit import installation_retirement
 
         self.install(self.previous)
         original = self.snapshot()
@@ -535,14 +535,14 @@ class InstallUpgradeTest(SourceFixture):
         self.assertEqual("ready", plan["status"])
         path = self.work / "fail-retire-plan.json"
         write_plan(plan, path)
-        original_hash = installation_transaction.sha256_tree
+        original_hash = installation_retirement.sha256_tree
 
         def broken_hash(path):
             if ".adk-backups" in Path(path).parts and "adk-after-action-review" in str(path):
                 raise OSError("injected failed retirement backup digest")
             return original_hash(path)
 
-        with patch.object(installation_transaction, "sha256_tree", side_effect=broken_hash):
+        with patch.object(installation_retirement, "sha256_tree", side_effect=broken_hash):
             with self.assertRaisesRegex(OSError, "injected failed retirement backup"):
                 apply_plan(candidate, path, previous_manifest=self.previous)
         self.assertEqual(original, self.snapshot())
