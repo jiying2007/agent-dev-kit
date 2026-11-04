@@ -14,7 +14,7 @@ import json
 import os
 import subprocess
 from collections.abc import Mapping, Sequence
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -145,7 +145,7 @@ def build_promotion_evidence(
 
     evidence: dict[str, Any] = {
         "schema": "adk-promotion-evidence/v2",
-        "issued_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+        "issued_at": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
         "source": {
             "repository": repository,
             "version": version,
