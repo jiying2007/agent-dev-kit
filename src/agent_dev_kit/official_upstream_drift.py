@@ -11,7 +11,6 @@ import argparse
 import datetime as dt
 import json
 import re
-import sys
 import urllib.error
 import urllib.request
 from pathlib import Path
