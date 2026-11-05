@@ -196,7 +196,7 @@ for path in workflow_files:
 # New matrix or Python 3.11 setup would silently revive a retired lane.
 for workflow in sorted(workflow_dir.glob("*.yml")):
     body = workflow.read_text(encoding="utf-8")
-    assert not re.search(r"(?m)^\\s+python-version:\\s*['\\\"]?3\\.11", body), workflow
+    assert not re.search(r'(?m)^\s+python-version:\s*.*3\.11', body), workflow
     assert "matrix.python-version" not in body, workflow
     if "actions/setup-python@" in body:
         assert "python-version: '3.12'" in body, workflow
