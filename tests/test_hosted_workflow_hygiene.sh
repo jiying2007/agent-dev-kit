@@ -192,6 +192,15 @@ for path in workflow_files:
         "workflow write permissions must match the reviewed allowlist",
     )
 
+# Python is a single-version build/control-plane dependency after 11.0.0.
+# New matrix or Python 3.11 setup would silently revive a retired lane.
+for workflow in sorted(workflow_dir.glob("*.yml")):
+    body = workflow.read_text(encoding="utf-8")
+    assert not re.search(r"(?m)^\\s+python-version:\\s*['\\\"]?3\\.11", body), workflow
+    assert "matrix.python-version" not in body, workflow
+    if "actions/setup-python@" in body:
+        assert "python-version: '3.12'" in body, workflow
+
 ci = (workflow_dir / "ci.yml").read_text(encoding="utf-8")
 assert "  push:\n    branches:\n      - main\n  pull_request:\n" in ci, "core CI must push-trigger only on main"
 assert "\n      - master\n" not in ci, "stale master push trigger must not return"
