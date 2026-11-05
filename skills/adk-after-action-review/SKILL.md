@@ -1,8 +1,8 @@
 ---
 name: adk-after-action-review
 description: "用于任务交付后复盘问题、修复成本与可复用经验并形成候选记录；不用于替代交付前验证或直接发布未经审核的长期记忆。"
-version: 1.2.1
-last_updated: 2026-11-03
+version: 1.2.2
+last_updated: 2026-11-04
 triggers:
   - "任务复盘"
   - "经验沉淀"
@@ -62,7 +62,7 @@ constraints:
 ```bash
 rtk bash scripts/check-memory-governance.sh
 rtk bash scripts/check-codify-governance.sh
-rtk bash scripts/validate-assets.sh --strict
+rtk bash scripts/devkit.sh validate --strict
 ```
 
 ## AAR Template

@@ -1,8 +1,8 @@
 ---
 name: adk-register-map-design
 description: "用于芯片寄存器映射、位域权限和驱动接口文档设计；不用于直接对真实寄存器写入或代替外设时序调试。"
-version: 1.0.1
-last_updated: 2026-11-03
+version: 1.0.2
+last_updated: 2026-11-04
 triggers:
   - "设计寄存器"
   - "寄存器映射"
@@ -38,8 +38,7 @@ constraints:
 rg -n "#define.*REG_|BIT\(|MASK" <driver_path>
 rg -n "TODO.*register|FIXME.*reg" <driver_path>
 rg -n "reserved|RESERVED" <header_path>
-python3 scripts/gen_reg_header.py --input reg_map.yaml --output reg_defs.h
-python3 scripts/validate_reg_map.py --input reg_map.yaml --datasheet ds.pdf
+# ADK 不内置生成器或校验器。目标项目需给出真实工具路径和 datasheet 版本；不可伪造 PASS。
 ```
 
 ## SVD 生成与验证

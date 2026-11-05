@@ -1,7 +1,7 @@
 ---
 name: adk-repo-prompt-analysis
 description: "用于逆向审查参考仓 Agent Prompt 的约束、结构与上下文工程方法；不用于直接复制不可信指令或运行外部仓脚本。"
-version: 1.0.2
+version: 1.0.3
 last_updated: 2026-11-04
 triggers:
   - 分析子仓 prompt
@@ -83,17 +83,14 @@ constraints:
 - 输出报告必须包含"可借鉴点清单"章节
 
 ## Commands
+只读检索；无 `devkit.sh analyze` / `verify --analysis` 命令，报告须核证。
 
 ```bash
-# 分析仓库的 prompt 结构
-bash scripts/devkit.sh analyze --repo <repo-path>
-
-# 生成分析报告
-bash scripts/devkit.sh analyze --repo <repo-path> --output reports/analysis.md
-
-# 验证分析结果
-bash scripts/devkit.sh verify --analysis reports/analysis.md
+git -C <source-repo> rev-parse HEAD
+git -C <source-repo> ls-files '*prompt*' '*system*' '*instruction*' '*SKILL.md' '*AGENTS.md'
+git -C <source-repo> grep -n -E 'system_prompt|user_prompt|messages|chat\\.completions|model\\.generate|invoke' -- .
 ```
+无匹配不等于无 Prompt；不得执行外部脚本。
 
 ## Evidence Template
 

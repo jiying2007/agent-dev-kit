@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### 10.0.5 — Skill command source integrity and fault-injection safety
+- Replace stale executable-looking Skill commands and retire false first-party script paths. Distinguish project-specific tool handoffs from ADK CLI.
+- Make fault-injection defaults read-only, requiring an explicitly authorized isolated HIL/lab operator for any mutation; retain real fault/recovery verification requirements.
+- Add deterministic command inventory/unsafe-action regression tests across registered core and optional Skills. Do not treat source checks as native, effect, field or Product M5 evidence.
+
+
 ### 10.0.4 — Skill entry hygiene and source-only routing baseline
 - Correct misleading headings and a vestigial placeholder in two existing Skill entries; patch-bump their Skill versions without adding aliases or new assets.
 - Establish a minimum 100-case deterministic source-routing inventory from existing fixtures and guard reviewed entry hygiene; this is explicitly not a model-run, target-native, effect, or product qualification.

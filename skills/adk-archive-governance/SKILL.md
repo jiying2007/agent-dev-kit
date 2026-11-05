@@ -1,8 +1,8 @@
 ---
 name: adk-archive-governance
 description: "用于检查和修复现有归档的元数据、topic、hash 与安全问题；不负责新建知识笔记或代替知识候选的正式审核。"
-version: 1.0.2
-last_updated: 2026-11-03
+version: 1.0.3
+last_updated: 2026-11-04
 triggers:
   - "归档治理"
   - "归档检查"
@@ -29,12 +29,12 @@ constraints:
 
 ## Goal
 - 治理 `docs/archive` 的可检索性、可审计性和安全边界。
-- 修复缺 meta、topic 未登记、hash 漂移、命名不合规、重复 superseded 和敏感材料风险。
+- 修复 meta、topic、hash、重复与敏感信息问题。
 
 ## Prerequisites
-- 已确认 archive 根目录和检查入口。
-- 已拿到归档检查输出或明确的不合规文件。
-- 已区分“创建新归档”和“治理已有归档”。
+- 已定位归档入口。
+- 已有归档检查输入或问题文件。
+- 仅治理已有归档。
 
 ## Workflow
 1. 读取 archive README、registry/schema 和检查脚本说明。
@@ -48,8 +48,8 @@ constraints:
 ## Commands
 ```bash
 rtk rg -n "archive|meta|topic|registry|content_sha256" docs/archive scripts
-rtk bash scripts/archive-check.sh
-rtk bash scripts/archive-search.sh "<query>" --json
+rtk bash scripts/check-memory-governance.sh
+# 归档专用检查器由目标项目声明；缺失则 blocked。
 ```
 
 ## Evidence Template
