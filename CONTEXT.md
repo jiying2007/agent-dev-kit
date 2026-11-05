@@ -157,7 +157,7 @@ rtk scripts/devkit.sh validate --strict
 rtk tests/run_all.sh
 ```
 
-发布/认证验证必须使用 Python 3.11+，并补 security、release check、target contract、rollback/rehearsal 与相应 runtime/field evidence。工具未安装、凭据缺失或外部数据不可得时必须标记 unavailable/blocked，不能记录为 pass。
+发布/认证验证必须使用 Python 3.12.x，并补 security、release check、target contract、rollback/rehearsal 与相应 runtime/field evidence。工具未安装、凭据缺失或外部数据不可得时必须标记 unavailable/blocked，不能记录为 pass。
 
 ---
 
