@@ -17,17 +17,17 @@ from .locking import target_lock_status
 from .model import Manifest
 
 
-MINIMUM_PYTHON = (3, 11)
-CI_TESTED_PYTHON = ((3, 11), (3, 12))
+MINIMUM_PYTHON = (3, 12)
+CI_TESTED_PYTHON = ((3, 12),)
 
 
 def _python_environment_support(version: Sequence[int]) -> Dict[str, Any]:
     """Report build-control-plane interpreter requirements, not Skill runtime requirements."""
     minor = tuple(version[:2])
-    compatible = minor >= MINIMUM_PYTHON
+    compatible = minor == MINIMUM_PYTHON
     tested = minor in CI_TESTED_PYTHON
     return {
-        "python_minimum": "3.11",
+        "python_minimum": "3.12",
         "python_supported": compatible,
         "python_support_scope": "build-control-plane-only",
         "python_ci_tested": tested,
@@ -79,9 +79,7 @@ def run_doctor(
     required_distributions = _required_distributions()
     python_support = _python_environment_support(sys.version_info[:2])
     if not python_support["python_supported"]:
-        failures.append("Python 3.11 or newer is required")
-    elif not python_support["python_ci_tested"]:
-        warnings.append("Python meets the package minimum but is outside the ADK CI-tested matrix")
+        failures.append("Python 3.12.x is required for ADK build/control plane")
     dependency_versions = {
         name: _distribution_version(name) for name in sorted(required_distributions)
     }
