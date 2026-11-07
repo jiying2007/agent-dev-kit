@@ -14,7 +14,7 @@ rg -q --fixed-strings -- "ADK_PYTHON_BIN was not found on PATH" "$TMP_DIR/missin
 
 # Retired interpreters must fail before loading any ADK Python package, even
 # for informational commands. No legacy environment bypass exists.
-for version in 3.8.20 3.10.22; do
+for version in 3.8.20 3.10.22 3.11.14 3.13.0 3.14.0; do
   old_python="$TMP_DIR/python-$version"
   cat >"$old_python" <<SH
 #!/usr/bin/env bash
@@ -31,7 +31,7 @@ SH
     echo "[FAIL] unsupported Python $version was accepted" >&2
     exit 1
   fi
-  rg -q --fixed-strings -- "ADK requires Python 3.11+" "$TMP_DIR/old.out"
+  rg -q --fixed-strings -- "ADK requires CPython 3.12.x" "$TMP_DIR/old.out"
 done
 
 auto_bin="$TMP_DIR/auto-bin"
@@ -68,28 +68,28 @@ cat >"$TMP_DIR/venv/bin/python" <<'SH'
 #!/usr/bin/env bash
 set -euo pipefail
 if [[ "${1:-}" == "-c" ]]; then
-  echo "3.11.14 1"
+  echo "3.12.14 1"
   exit 0
 fi
-echo "venv-selected-python3.11"
+echo "venv-selected-python3.12"
 SH
 chmod +x "$TMP_DIR/venv/bin/python"
 env -u ADK_PYTHON_BIN VIRTUAL_ENV="$TMP_DIR/venv" PATH="$auto_bin:$PATH" \
   bash "$ROOT_DIR/scripts/devkit.sh" help >"$TMP_DIR/venv.out" 2>"$TMP_DIR/venv.err"
-rg -q --fixed-strings -- "venv-selected-python3.11" "$TMP_DIR/venv.out"
+rg -q --fixed-strings -- "venv-selected-python3.12" "$TMP_DIR/venv.out"
 
 ADK_PYTHON_BIN="$auto_bin/python3.12" VIRTUAL_ENV="$TMP_DIR/venv" \
   bash "$ROOT_DIR/scripts/devkit.sh" help >"$TMP_DIR/override.out" 2>"$TMP_DIR/override.err"
 rg -q --fixed-strings -- "auto-selected-python3.12" "$TMP_DIR/override.out"
 
 mkdir -p "$TMP_DIR/old-venv/bin"
-ln -s "$TMP_DIR/python-3.8.20" "$TMP_DIR/old-venv/bin/python"
+ln -s "$TMP_DIR/python-3.11.14" "$TMP_DIR/old-venv/bin/python"
 if env -u ADK_PYTHON_BIN VIRTUAL_ENV="$TMP_DIR/old-venv" PATH="$auto_bin:$PATH" \
   bash "$ROOT_DIR/scripts/devkit.sh" help >"$TMP_DIR/old-venv.out" 2>&1; then
   echo "[FAIL] unsupported activated venv silently fell back to host Python" >&2
   exit 1
 fi
-rg -q 'venv-selected .*3.8.20' "$TMP_DIR/old-venv.out"
+rg -q 'venv-selected .*3.11.14' "$TMP_DIR/old-venv.out"
 
 if env -u ADK_PYTHON_BIN VIRTUAL_ENV="$TMP_DIR/missing-venv" PATH="$auto_bin:$PATH" \
   bash "$ROOT_DIR/scripts/devkit.sh" help >"$TMP_DIR/missing-venv.out" 2>&1; then
@@ -113,13 +113,13 @@ import sys
 with open(sys.argv[1], encoding="utf-8") as stream:
     data = json.load(stream)
 support = data["environment_support"]
-assert support["python_minimum"] == "3.11", support
+assert support["python_minimum"] == "3.12", support
 assert support["python_support_scope"] == "build-control-plane-only", support
-assert support["python_ci_matrix"] == ["3.11", "3.12"], support
+assert support["python_ci_matrix"] == ["3.12"], support
 assert support["delivered_skill_requires_adk_python"] is False, support
 PY
 
-for version in 3.11.14 3.12.12 3.14.0; do
+for version in 3.12.12; do
   fixture="$TMP_DIR/python-$version"
   cat >"$fixture" <<SH
 #!/usr/bin/env bash
@@ -132,9 +132,6 @@ SH
   chmod +x "$fixture"
   ADK_PYTHON_BIN="$fixture" bash "$ROOT_DIR/scripts/devkit.sh" help >"$TMP_DIR/class.out" 2>"$TMP_DIR/class.err"
   rg -q 'fixture-compatible-runtime' "$TMP_DIR/class.out"
-  if [[ "$version" == "3.14.0" ]]; then
-    rg -q 'outside the ADK CI-tested matrix' "$TMP_DIR/class.err"
-  fi
 done
 
 [[ ! -e "$ROOT_DIR/src/agent_dev_kit/compat.py" ]] || {
@@ -148,10 +145,11 @@ import tomllib
 
 metadata = tomllib.loads(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8"))
 project = metadata["project"]
-assert project["requires-python"] == ">=3.11", project
+assert project["requires-python"] == ">=3.12,<3.13", project
 assert set(project["dependencies"]) == {"PyYAML==6.0.3", "jsonschema==4.26.0"}, project
-assert metadata["tool"]["ruff"]["target-version"] == "py311", metadata
+assert metadata["tool"]["ruff"]["target-version"] == "py312", metadata
+assert metadata["tool"]["mypy"]["python_version"] == "3.12", metadata
 assert "test" not in project.get("optional-dependencies", {}), "retired empty test extra remains"
 PY
 PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}" python3 "$ROOT_DIR/tests/test_python_support.py"
-echo "[PASS] ADK Python 3.11+ launcher and build-runtime boundary hold"
+echo "[PASS] ADK Python 3.12-only launcher and build-runtime boundary hold"

@@ -17,7 +17,7 @@ for required in "$RUNNER" "$DOCKERFILE" "$ENTRYPOINT" "$HOSTED_CI" "$WAIVER" "$R
   }
 done
 
-plan="$(bash "$RUNNER" --python all --mode full --dry-run)"
+plan="$(bash "$RUNNER" --python 3.12 --mode full --dry-run)"
 for token in \
   'transport=docker' \
   'source_mount=read-only' \
@@ -27,7 +27,6 @@ for token in \
   'release_authority=none' \
   'file_mode_inventory=git-index-bound' \
   'container_user=65532:65532' \
-  'python=3.11' \
   'python=3.12'; do
   rg -Fq -- "$token" <<<"$plan" || {
     echo "[FAIL] local CI dry-run omitted boundary: $token" >&2
@@ -35,7 +34,7 @@ for token in \
   }
 done
 
-for unsupported in 3.8 3.10; do
+for unsupported in 3.8 3.10 3.11 all; do
   if bash "$RUNNER" --python "$unsupported" --dry-run >/dev/null 2>&1; then
     echo "[FAIL] local CI parity accepted retired Python $unsupported" >&2
     exit 1
@@ -51,7 +50,6 @@ for token in \
   'no-new-privileges' \
   '--tmpfs /work:rw,exec,nosuid,nodev,size=2g,mode=1777' \
   'dst=/source,readonly' \
-  'python:3.11-slim@sha256:' \
   'python:3.12-slim@sha256:'; do
   rg -Fq -- "$token" "$RUNNER" || {
     echo "[FAIL] local CI runner omitted hardening token: $token" >&2
@@ -235,20 +233,20 @@ PYTHONPATH="$ROOT_DIR/src" python3 -m agent_dev_kit.local_ci_receipt --root "$RO
   --source-snapshot-sha256 "$(printf 'a%.0s' {1..64})" \
   --file-mode-inventory-sha256 "$(printf 'b%.0s' {1..64})" \
   --definition-sha256 "$(printf 'c%.0s' {1..64})" \
-  --record "3.11|3.11.15|sha256:image|$(printf 'd%.0s' {1..64})|$(printf 'e%.0s' {1..64})|$(printf 'f%.0s' {1..64})|68|68|30|30" \
+  --record "3.12|3.12.15|sha256:image|$(printf 'd%.0s' {1..64})|$(printf 'e%.0s' {1..64})|$(printf 'f%.0s' {1..64})|68|68|30|30" \
   --summary-json >/dev/null
 PYTHONPATH="$ROOT_DIR/src" python3 -m agent_dev_kit.local_ci_receipt --root "$ROOT_DIR" check \
   --receipt "$receipt" --mode full \
   --source-snapshot-sha256 "$(printf 'a%.0s' {1..64})" \
   --file-mode-inventory-sha256 "$(printf 'b%.0s' {1..64})" \
   --definition-sha256 "$(printf 'c%.0s' {1..64})" \
-  --python-image "3.11=sha256:image" --summary-json >/dev/null
+  --python-image "3.12=sha256:image" --summary-json >/dev/null
 if PYTHONPATH="$ROOT_DIR/src" python3 -m agent_dev_kit.local_ci_receipt --root "$ROOT_DIR" check \
   --receipt "$receipt" --mode full \
   --source-snapshot-sha256 "$(printf '9%.0s' {1..64})" \
   --file-mode-inventory-sha256 "$(printf 'b%.0s' {1..64})" \
   --definition-sha256 "$(printf 'c%.0s' {1..64})" \
-  --python-image "3.11=sha256:image" --summary-json >/dev/null 2>&1; then
+  --python-image "3.12=sha256:image" --summary-json >/dev/null 2>&1; then
   echo "[FAIL] local CI receipt accepted a drifted source snapshot" >&2
   exit 1
 fi

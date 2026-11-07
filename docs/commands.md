@@ -4,9 +4,9 @@
 
 解释器入口仅用于 **ADK 构建/维护控制面**：
 
-- 需要 Python 3.11+；显式 `ADK_PYTHON_BIN` 优先，其次使用激活的 `VIRTUAL_ENV/bin/python`，仅当未激活 venv 时按 `python3.12 -> python3.11 -> python3` 选择；旧解释器或残缺 venv 均 fail closed。
+- 仅支持 Python 3.12.x；显式 `ADK_PYTHON_BIN` 优先，其次激活的 `VIRTUAL_ENV/bin/python`，否则按 `python3.12 -> python3` 选择并严格核验版本；拒绝 3.11 或未验证的 3.13+。
 - 推荐在 ADK 源仓中建立单一 `.venv`（`python3.12 -m venv .venv`，`source .venv/bin/activate`），不向 Skill 消费端分发。可用 `ADK_PYTHON_BIN=/reviewed/python3.12` 显式覆盖；旧 `ADK_REQUIRE_SUPPORTED_PYTHON` 宽松开关已移除。
-- 本机无 Python 3.11+ 时可以在受保护 GitHub Actions 验证，或在 Docker 可用时通过 `scripts/run-local-ci-parity.sh --python all --mode full`；CLI 无法在旧解释器上运行。
+- 本机无 Python 3.12 时交由受保护 GitHub Actions，或在 Docker 中使用 `scripts/run-local-ci-parity.sh --python 3.12 --mode full`；旧解释器不得运行 ADK CLI。
 - **已发布的纯 Skill 运行时包不要求 ADK Python，也不能因为构建环境换版本就自动授予 runtime/field 资格。**
 
 ADK core 只提供平台中立命令。`manifest.json` 是唯一结构化 Manifest SSOT，并由 4.0 Draft 2020-12 JSON Schema 与语义规则共同校验；direct export 适配必须通过 `tool_targets` 和 versioned target contract 显式声明。需要外部声明式链路承接的运行体系进入 `external_handoff_targets`，不能把平台专属 handoff 或用户目录写入作为默认路径。
@@ -76,9 +76,9 @@ bash scripts/devkit.sh manifest composition-check --summary-json
 
 ## doctor
 
-只读检查 manifest、Python 3.11+ 管理环境要求、固定 PyYAML==6.0.3/jsonschema==4.26.0、runtime 安装与认证、CLI 版本、target 可写性和 writer lock 状态。输出只包含状态，不读取或打印凭证值；解释器低于下限时 launcher 直接拒绝执行。
+只读检查 manifest、Python 3.12.x 管理环境要求、固定 PyYAML==6.0.3/jsonschema==4.26.0、runtime 安装与认证、CLI 版本、target 可写性和 writer lock 状态。输出只包含状态，不读取或打印凭证值；解释器低于下限时 launcher 直接拒绝执行。
 
-`environment_support.python_supported` 表达构建解释器下限；`python_support_scope=build-control-plane-only` 与 `delivered_skill_requires_adk_python=false` 防止混淆消费端依赖。`python_ci_tested/python_ci_matrix` 只描述 3.11/3.12 项目测试范围；新解释器不自动继承认证，也不会根据源代码文案声明上游维护状态。
+`environment_support.python_supported` 表达构建解释器下限；`python_support_scope=build-control-plane-only` 与 `delivered_skill_requires_adk_python=false` 防止混淆消费端依赖。`python_ci_tested/python_ci_matrix` 仅描述 3.12 的项目测试范围；其它解释器不自动继承认证，也不会根据源代码文案声明上游维护状态。
 
 ```bash
 bash scripts/devkit.sh doctor --summary-json

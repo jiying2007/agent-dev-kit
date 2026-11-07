@@ -11,18 +11,18 @@ ADK 不再在 README 中维护“候选 / 已发布 / live”之类可漂移的�
 - **Runtime conformance**：以 target/runtime receipt 与证据级别 `static / smoke / native / certified` 为权威。
 - **Product qualification**：由消费方/产品仓的 qualification 与 field evidence 独立决定，不由 ADK 组件版本继承。
 
-`manifest.json` 当前 source version 为 `10.0.5`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
+`manifest.json` 当前 source version 为 `11.0.0`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
 
 8.0.0 维护 CLI 迁移：`performance.sh optimize`、`auto-ops.sh cleanup/optimize` 仅输出有界只读计划，JSON 使用 `adk-maintenance-plan/v1` 与 `status=planned`；维护 `--apply` 返回 blocked、exit 2，不再自动删除文件或修改权限。调用方必须移除维护 `--apply` 并按 `applied=false` 处理报告；见 [维护迁移说明](docs/changes/20261006-comprehensive-contracts/design.md)。
 
-ADK **源码管理、构建与发布控制面**需要 Python **3.11+**，当前已验证的构建解释器为 3.11、3.12。管理环境固定 `PyYAML==6.0.3` 与 `jsonschema==4.26.0`。Python 3.8/3.9/3.10 不再支持；旧宿主如需管理 ADK，必须先升级管理环境，而不是复制兼容 shim。
+ADK **源码管理、构建与发布控制面**仅支持 CPython **3.12.x**（`>=3.12,<3.13`），建议使用独立 `.venv` 和固定依赖 `PyYAML==6.0.3`、`jsonschema==4.26.0`；3.11 与未验证的 3.13+ 均不受支持。纯 Skill 消费端不需要 ADK Python。
 
 **已部署的纯 Agent/Skill 资产不需要 ADK Python 环境。** 团队 Runtime Bundle 不包含 ADK 源码、Python 管理器、依赖和内部测试；运行时只需目标产品/CLI 能读取标准 Skill 文件。若某个独立 Skill 自身声明执行脚本或外部工具，其依赖由对应 Skill/目标 Runtime 单独声明，不得归因于 ADK 的 Python 构建基线。
 
 | 位置 | Python 要求 | 权威证据 |
 | --- | --- | --- |
-| ADK 源码维护、安装管理 CLI、评测、打包与发布 | 3.11+，推荐隔离虚拟环境 | Python3.11 / 3.12 合同和全量回归 |
-| GitHub Actions / 本地 Docker 构建矩阵 | 3.11、3.12 | 精确 SHA 的原生检查 |
+| ADK 源码维护、安装管理 CLI、评测、打包与发布 | Python 3.12 `.venv` | 单套 Python 3.12 合同和全量回归 |
+| GitHub Actions / 本地 Docker 构建 | Python 3.12 | 精确 SHA 的原生检查 |
 | 已导出的纯 Codex/Claude/OpenCode Skills | **不要求 ADK Python** | Runtime Bundle 无 ADK Python/源码；实际消费仍需 runtime-native discovery/load/trigger 验证 |
 | 独立依赖 Python 的特定 Skill | 由 Skill 自己声明 | 逐 Skill 的受控工具与运行时证据 |
 
@@ -113,13 +113,13 @@ bash tests/run_all.sh --quick
 Python package 安装（仅 ADK 构建/管理工作区，建议统一为一个隔离 venv）：
 
 ```bash
-python3.12 -m venv .venv  # 也可使用受支持的 Python 3.11
+python3.12 -m venv .venv
 source .venv/bin/activate
 python -m pip install -e '.[quality]'
 adk validate --strict
 ```
 
-`scripts/devkit.sh` 先使用显式 `ADK_PYTHON_BIN`，否则优先使用已激活的 `VIRTUAL_ENV`，未激活时才按 `python3.12 -> python3.11 -> python3` 选择解释器，并对低于 3.11 的环境始终 fail-closed；不再存在旧版 `ADK_REQUIRE_SUPPORTED_PYTHON` 开关。3.13+ 仅符合包最低要求，不自动取得 3.11/3.12 原生 CI 测试结论。推荐用单一构建 venv，无需向 Skill 消费者传播该环境。
+`scripts/devkit.sh` 优先显式 `ADK_PYTHON_BIN`，然后已激活的 `VIRTUAL_ENV`；否则从 `python3.12 -> python3` 选择并严格核验解释器为 3.12.x。旧 Python 3.11 venv 不可复用，不能静默回退到旧宿主；不要向纯 Skill 消费端分发构建环境。
 
 ## 6. 质量与发布原则
 
