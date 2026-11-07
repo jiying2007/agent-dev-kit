@@ -58,7 +58,7 @@ assert not (root / "manifest.yaml").exists()
 
 pyproject = (root / "pyproject.toml").read_text(encoding="utf-8")
 pyproject_data = tomllib.loads(pyproject)
-assert pyproject_data["project"]["requires-python"] == ">=3.11", pyproject_data
+assert pyproject_data["project"]["requires-python"] == ">=3.12,<3.13", pyproject_data
 
 def exact_pin_names(items):
     assert all(isinstance(item, str) and item.count("==") == 1 for item in items), items
@@ -76,13 +76,16 @@ assert exact_pin_names(pyproject_data["project"]["optional-dependencies"]["quali
 ], pyproject_data
 assert "test" not in pyproject_data["project"]["optional-dependencies"], pyproject_data
 assert pyproject_data["tool"]["mypy"] == {
-    "python_version": "3.11",
+    "python_version": "3.12",
     "strict": True,
     "warn_unreachable": True,
     "show_error_codes": True,
 }, pyproject_data
 ci = (root / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
-assert ci.count("python-version: ['3.11', '3.12']") == 2, ci
+assert ci.count("name: contract-py3.12") == 1, ci
+assert ci.count("name: regression-py3.12") == 1, ci
+assert ci.count("python-version: '3.12'") >= 2, ci
+assert "python-version: '3.11'" not in ci, ci
 assert "Run focused strict type analysis" in ci, ci
 
 assert manifest.data["install"] == {
