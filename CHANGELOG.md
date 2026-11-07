@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### 11.0.0 — Breaking: Python 3.12-only ADK management layer
+- Restrict build/control plane to CPython 3.12.x while delivered pure Skills stay Python-independent.
+- Preserve the contract, full regression, static security, promotion and signed Release gates; retire repeated 3.11 lanes and local compatibility surfaces.
+- Update native GitHub ruleset required contexts separately using trusted admin authority; never synthesize 3.11 success checks.
+
+
 ### 10.0.5 — Skill command source integrity and fault-injection safety
 - Replace stale executable-looking Skill commands and retire false first-party script paths. Distinguish project-specific tool handoffs from ADK CLI.
 - Make fault-injection defaults read-only, requiring an explicitly authorized isolated HIL/lab operator for any mutation; retain real fault/recovery verification requirements.

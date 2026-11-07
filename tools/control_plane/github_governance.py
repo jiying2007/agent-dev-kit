@@ -12,9 +12,7 @@ from typing import Any
 
 API_VERSION = "2022-11-28"
 DEFAULT_REQUIRED_CHECKS = (
-    "contract-py3.11",
     "contract-py3.12",
-    "regression-py3.11",
     "regression-py3.12",
     "deterministic-eval-package",
     "static-security",

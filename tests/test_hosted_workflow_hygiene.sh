@@ -192,6 +192,15 @@ for path in workflow_files:
         "workflow write permissions must match the reviewed allowlist",
     )
 
+# Python is a single-version build/control-plane dependency after 11.0.0.
+# New matrix or Python 3.11 setup would silently revive a retired lane.
+for workflow in sorted(workflow_dir.glob("*.yml")):
+    body = workflow.read_text(encoding="utf-8")
+    assert not re.search(r'(?m)^\s+python-version:\s*.*3\.11', body), workflow
+    assert "matrix.python-version" not in body, workflow
+    if "actions/setup-python@" in body:
+        assert "python-version: '3.12'" in body, workflow
+
 ci = (workflow_dir / "ci.yml").read_text(encoding="utf-8")
 assert "  push:\n    branches:\n      - main\n  pull_request:\n" in ci, "core CI must push-trigger only on main"
 assert "\n      - master\n" not in ci, "stale master push trigger must not return"
@@ -219,7 +228,7 @@ assert "if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }
 assert "id-token: write" in promotion, "promotion OIDC permission must remain explicit"
 
 # The native ruleset already requires deterministic-eval-package. This single
-# check MUST aggregate all supported Python 3.11 and 3.12 versions;
+# check MUST require the single supported Python 3.12 contract/full regression;
 # a failed contract/regression lane must never be silently skipped.
 def supported_python_gate(candidate: str) -> bool:
     try:
@@ -228,7 +237,10 @@ def supported_python_gate(candidate: str) -> bool:
     except ValueError:
         return False
     return all((
-        before.count("python-version: ['3.11', '3.12']") == 2,
+        before.count("python-version: '3.12'") == 2,
+        "    name: contract-py3.12" in before,
+        "    name: regression-py3.12" in before,
+        "matrix.python-version" not in before,
         '    name: deterministic-eval-package\n    if: ${{ always() }}\n    needs: [contract, regression]' in package,
         'CONTRACT_MATRIX_RESULT: ${{ needs.contract.result }}' in package,
         'REGRESSION_MATRIX_RESULT: ${{ needs.regression.result }}' in package,
@@ -241,9 +253,9 @@ for bad in (
     ci.replace('needs: [contract, regression]', 'needs: [contract]'),
     ci.replace('    if: ${{ always() }}\n    needs: [contract, regression]', '    needs: [contract, regression]'),
     ci.replace('"$CONTRACT_MATRIX_RESULT" != "success" || "$REGRESSION_MATRIX_RESULT" != "success"', '"$CONTRACT_MATRIX_RESULT" != "success"'),
-    ci.replace("python-version: ['3.11', '3.12']", "python-version: ['3.12']", 1),
+    ci.replace("python-version: '3.12'", "python-version: '3.11'", 1),
 ):
-    assert not supported_python_gate(bad), 'supported Python gate accepted a mutation that weakens 3.11/3.12 coverage'
+    assert not supported_python_gate(bad), 'Python 3.12 gate accepted a mutation that weakens supported coverage'
 
 wheel_upload = ci.split("      - name: Upload candidate wheel\n", 1)[1].split("\n  static-security:\n", 1)[0]
 assert "if-no-files-found: error" in wheel_upload, "candidate wheel upload must fail closed"
@@ -459,7 +471,7 @@ failing = module.evaluate_state(
     branch_name="main",
 )
 assert failing["compliant"] is False, failing
-assert "contract-py3.11" in failing["missing_status_checks"], failing
+assert "contract-py3.12" in failing["missing_status_checks"], failing
 assert "repository merge methods are not squash-only" in failing["violations"], failing
 assert failing["remediation"], failing
 

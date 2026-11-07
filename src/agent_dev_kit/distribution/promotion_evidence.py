@@ -28,7 +28,7 @@ from ..strict_json import loads as load_strict_json
 from ..strict_json import read as read_strict_json
 
 _SCHEMA_NAME = "promotion-evidence-v2.schema.json"
-_REQUIRED_PYTHON = ["3.11", "3.12"]
+_REQUIRED_PYTHON = ["3.12"]
 
 
 def _sha256(value: bytes) -> str:

@@ -17,7 +17,7 @@ elif [[ -n "${VIRTUAL_ENV:-}" ]]; then
 else
   PYTHON_SELECTION="auto"
   PYTHON_BIN=""
-  for candidate in python3.12 python3.11 python3; do
+  for candidate in python3.12 python3; do
     if command -v "${candidate}" >/dev/null 2>&1; then
       PYTHON_BIN="${candidate}"
       break
@@ -37,23 +37,16 @@ elif ! command -v "${PYTHON_BIN}" >/dev/null 2>&1; then
 fi
 
 read -r PYTHON_VERSION PYTHON_SUPPORTED < <(
-  "${PYTHON_BIN}" -c 'import sys; print(".".join(map(str, sys.version_info[:3])), int(sys.version_info >= (3, 11)))'
+  "${PYTHON_BIN}" -c 'import sys; print(".".join(map(str, sys.version_info[:3])), int(sys.version_info[:2] == (3, 12)))'
 ) || {
   echo "[FAIL] unable to inspect ADK Python interpreter: ${PYTHON_BIN}" >&2
   exit 2
 }
 
 if [[ "${PYTHON_SUPPORTED}" != "1" ]]; then
-  echo "[FAIL] ADK requires Python 3.11+; ${PYTHON_SELECTION}-selected ${PYTHON_BIN}=${PYTHON_VERSION}" >&2
-  echo "[INFO] set ADK_PYTHON_BIN to a Python 3.11+ interpreter in a build-only environment" >&2
+  echo "[FAIL] ADK requires CPython 3.12.x; ${PYTHON_SELECTION}-selected ${PYTHON_BIN}=${PYTHON_VERSION}" >&2
+  echo "[INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter" >&2
   exit 2
 fi
-
-case "${PYTHON_VERSION}" in
-  3.11.*|3.12.*) ;;
-  *)
-    echo "[WARN] Python ${PYTHON_VERSION} meets the minimum but is outside the ADK CI-tested matrix (3.11, 3.12)" >&2
-    ;;
-esac
 
 exec "${PYTHON_BIN}" -m agent_dev_kit.cli "$@"

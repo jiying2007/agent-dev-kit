@@ -5,7 +5,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 DOCKER_CONTEXT="$ROOT_DIR/tools/local-ci"
 
-PYTHON_SELECTION="all"
+PYTHON_SELECTION="3.12"
 MODE="full"
 PREPARE=0
 DRY_RUN=0
@@ -16,10 +16,10 @@ RECEIPT=""
 usage() {
   cat <<'USAGE'
 Usage:
-  scripts/run-local-ci-parity.sh [--python 3.11|3.12|all] [--mode quick|full] [--prepare] [--dry-run]
+  scripts/run-local-ci-parity.sh [--python 3.12] [--mode quick|full] [--prepare] [--dry-run]
       [--receipt <path>] [--check-receipt] [--verbose-success]
 
-Runs a local Docker parity matrix for the declared GitHub CI Python versions.
+Runs local Python 3.12 parity checks with unchanged source/receipt safeguards.
 
 Security and authority boundary:
   - source is mounted read-only and copied into an isolated tmpfs
@@ -77,9 +77,9 @@ while [[ $# -gt 0 ]]; do
 done
 
 case "$PYTHON_SELECTION" in
-  3.11|3.12|all) ;;
+  3.12) ;;
   *)
-    echo "[FAIL] --python must be 3.11, 3.12, or all" >&2
+    echo "[FAIL] --python must be 3.12" >&2
     exit 2
     ;;
 esac
@@ -97,7 +97,6 @@ esac
 
 base_image_for() {
   case "$1" in
-    3.11) printf '%s\n' 'python:3.11-slim@sha256:db3ff2e1800a8581e2c48a27c3995339d47bdf046da21c7627accd3d51053a93' ;;
     3.12) printf '%s\n' 'python:3.12-slim@sha256:57cd7c3a7a273101a6485ba99423ee568157882804b1124b4dd04266317710de' ;;
   esac
 }
@@ -107,9 +106,6 @@ tool_image_for() {
 }
 
 versions=("$PYTHON_SELECTION")
-if [[ "$PYTHON_SELECTION" == "all" ]]; then
-  versions=(3.11 3.12)
-fi
 
 echo "transport=docker"
 echo "source_mount=read-only"
