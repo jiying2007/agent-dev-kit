@@ -27,3 +27,9 @@ R025	collision	adk-driver-bringup-checklist	adk-driver-implementation	请规划�
 R026	primary	adk-code-review-loop	-	请用中文进行代码审查，逐项给出 findings
 R027	primary	adk-commit-pr-quality-gate	-	请生成中文提交信息并检查提交格式
 R028	abstain	-	-	请把这段散文翻译成中文
+R029	primary	adk-structured-requirements-questioning	-	帮我头脑风暴机器人底盘的导航主控方案
+R030	primary	adk-structured-requirements-questioning	-	Grill Me：拷问我的新架构设计
+R031	collision	adk-structured-requirements-questioning	adk-requirements-triage	对这个新功能做头脑风暴，不要急着写验收标准
+R032	collision	adk-structured-requirements-questioning	adk-requirements-triage	Grill Me，挑战这个新功能的关键假设
+R033	negated	-	adk-structured-requirements-questioning	不要头脑风暴
+R034	abstain	-	-	早上好，今天心情怎么样

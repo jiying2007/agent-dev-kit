@@ -209,5 +209,37 @@ class SkillTriggerMatrixTests(unittest.TestCase):
             with self.subTest(script=relative):
                 self.assertTrue((ROOT / relative).is_file(), relative)
 
+
+    def test_interactive_discovery_modes_and_routing(self) -> None:
+        """Source-only routing/contract checks, not native E2/E4 evidence."""
+        import json
+
+        manifest = Manifest.load(ROOT)
+        corpus = json.loads((ROOT / "tests/fixtures/interactive_discovery_cases.json").read_text(encoding="utf-8"))
+        self.assertEqual(corpus["schema"], "adk-interactive-discovery-cases/v1")
+        self.assertEqual(corpus["evidence_layer"], "source-test")
+        self.assertGreaterEqual(len(corpus["cases"]), 8)
+        skill = (ROOT / "skills/adk-structured-requirements-questioning/SKILL.md").read_text(encoding="utf-8")
+        metadata = _frontmatter(ROOT / "skills/adk-structured-requirements-questioning/SKILL.md")
+        contract = json.loads((ROOT / "manifests/skill_content_contracts_v2.json").read_text(encoding="utf-8"))
+        definition = contract["overrides"]["adk-structured-requirements-questioning"]
+        self.assertEqual(definition["runtime_role"], "primary")
+        self.assertEqual(definition["effect_ceiling"], "read-only")
+        self.assertIn("brainstorm", metadata["description"].lower())
+        self.assertIn("Grill Me", metadata["description"])
+        for marker in ("Explore protocol", "Challenge protocol", "Frontier", "Look before asking",
+                       "User-confirmed decisions", "Cross-mode convergence"):
+            self.assertIn(marker, skill)
+        for case in corpus["cases"]:
+            with self.subTest(case=case["id"]):
+                result = match_text(manifest, case["prompt"], scope="auto")
+                if case["expected_primary"] is None:
+                    self.assertIs(result.get("match"), False, result)
+                else:
+                    self.assertIs(result.get("match"), True, result)
+                    self.assertEqual(result.get("skill"), case["expected_primary"], result)
+                self.assertEqual(result.get("mutation_permission"), case["expected_mutation"], result)
+                self.assertTrue(case["behavior_obligation"].strip())
+
 if __name__ == "__main__":
     unittest.main()

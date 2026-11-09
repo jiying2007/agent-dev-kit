@@ -71,6 +71,12 @@ adk-driver-implementation	skill	1	帮我写驱动源码并添加错误恢复测�
 adk-driver-bringup-checklist	skill	0	只要求编写驱动代码暂不上板
 adk-driver-bringup-checklist	skill	1	请检查首板联调的时钟和复位
 adk-structured-requirements-questioning	skill	0	请做文档审查和文字校对
-adk-structured-requirements-questioning	skill	1	帮我理清需求并确认验收标准
+adk-structured-requirements-questioning	skill	1	请头脑风暴需求并讨论验收标准
 adk-production-field-readiness	skill	0	按建议自动推进代码仓库优化
 adk-driver-bringup-checklist	skill	1	请生成 bringup 检查表用于首板联调
+adk-structured-requirements-questioning	skill	1	请帮我头脑风暴一个新机器人导航方案
+adk-structured-requirements-questioning	skill	1	Grill Me：拷问我的技术设计并沿依赖决策树追问
+adk-structured-requirements-questioning	skill	1	请苏格拉底式追问产品目标和隐含假设
+adk-structured-requirements-questioning	skill	0	已有完整方案按计划直接执行
+adk-structured-requirements-questioning	skill	0	只执行已有任务包
+adk-structured-requirements-questioning	skill	0	纯文档润色

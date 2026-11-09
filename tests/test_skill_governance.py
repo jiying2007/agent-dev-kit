@@ -62,14 +62,16 @@ class SkillGovernanceTests(unittest.TestCase):
             ]
             self.assertEqual(len(primaries), 1, f"supporting skill {name} requires one same-group primary: {primaries}")
 
-    def test_requirements_supporting_trigger_promotes_only_to_requirements_primary(self) -> None:
+    def test_plain_requirements_route_to_triage_without_interactive_discovery(self) -> None:
+        # Deep exploration is an explicit separate intent, not the generic
+        # requirements intake fallback. Do not depend on retired promotion.
         result = match_text(self.manifest, "帮我理清需求")
         self.assertTrue(result.get("match"), result)
         self.assertEqual(result.get("skill"), "adk-requirements-triage", result)
         self.assertEqual(result.get("selection_group"), "requirements-intake", result)
         self.assertEqual(result.get("runtime_role"), "primary", result)
         self.assertNotIn("skill_runtime_role", result)
-        self.assertTrue(result.get("selection_group_promoted"), result)
+        self.assertFalse(result.get("selection_group_promoted", False), result)
 
     def test_review_routing_uses_review_loop_not_language_overlay(self) -> None:
         result = match_text(self.manifest, "代码审查")
