@@ -1,8 +1,8 @@
 ---
 name: adk-memory-curator
 description: "用于已授权的历史记录、项目知识和决策证据整理，生成可审查的 memory candidate；不用于静默写入长期记忆或传播无关敏感上下文。"
-version: 1.0.1
-last_updated: 2026-11-03
+version: 1.0.2
+last_updated: 2026-11-09
 triggers:
   - "记忆整理"
   - "memory curator"
@@ -49,8 +49,10 @@ constraints:
 ## Commands
 ```bash
 rtk rg -n "memory|candidate|AGENTS|archive|decision|lesson" <repo>
-rtk rg -n "api[_-]?key|token|secret|password|PRIVATE KEY" <candidate-path>
+rtk rg --hidden --no-ignore -l --glob "!**/.git/**" "api[_-]?key|token|secret|password|PRIVATE KEY" <candidate-path>  # 仅列文件名，不输出候选值
 ```
+
+仅凭文本搜索不能覆盖未解码二进制、加密内容或被排除范围；报告扫描范围与限制，不宣称全部无秘密。
 
 ## Evidence Template
 ```md

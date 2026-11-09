@@ -1,8 +1,8 @@
 ---
 name: adk-security-supply-chain
 description: "用于第三方 Skill、脚本、依赖和参考资产引入前的来源、权限与供应链审查；不用于自动安装不可信包或把静态扫描当安全认证。"
-version: 1.1.1
-last_updated: 2026-11-03
+version: 1.1.2
+last_updated: 2026-11-09
 triggers:
   - "供应链审查"
   - "第三方引入"
@@ -63,7 +63,7 @@ constraints:
 
 ## Commands
 ```bash
-rg -n "api[_-]?key|token|secret|password|PRIVATE KEY" <candidate_path>
+rg --hidden --no-ignore -l --glob "!**/.git/**" "api[_-]?key|token|secret|password|PRIVATE KEY" <candidate_path>  # 不回显值
 find <candidate_path> -type f -perm -111
 bash scripts/devkit.sh validate --strict
 rg -n "license|LICENSE" <candidate_path> | head -20
@@ -85,7 +85,7 @@ sha256sum -c <checksum_file>
 - CVE Scan Results:
 - Executable Scripts:
 - External Dependencies:
-- Secret Scan:
+- Secret Scan: coverage / excluded / not-scanned / candidate-paths / redaction
 - Signature Verification:
 - verification_command_safety:
   - command_id:
@@ -124,7 +124,7 @@ sha256sum -c <checksum_file>
 - 进入 `core` 前必须完成安全与供应链审查，包括 SBOM 和 CVE 扫描。
 - 进入 `optional/profile` 前必须有最小安装范围与回滚路径。
 - 所有可执行脚本必须说明用途，禁止引入用途不明的脚本。
-- 敏感信息扫描必须覆盖所有文件类型，包括二进制和配置文件。
+- 敏感信息扫描应声明 hidden／ignored／binary／encrypted 等覆盖情况和排除项；未支持的类型标记 not-scanned，不得以普通 rg 零命中宣称全面无秘密。
 - 签名验证结果必须记录在审查报告中，未签名资产必须标注风险等级。
 - 涉及 MCP、hooks、provider relay 或命令执行时，必须附 tool-call policy 和至少一个 deny-path 验证。
 - MCP/plugin 进入生产 profile 前必须附加载结果、暴露清单一致性和禁用回滚证据。
