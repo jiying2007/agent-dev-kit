@@ -1,28 +1,16 @@
-# Exploratory Requirements Brief
+# Exploratory Requirements Brief — handoff boundary
 
-用于需求宽泛、用户只给方向、PRD 过长或验收口径不清的开场阶段。目标是先发散，再拷问边界，最后压缩成可验证工程条目。
+用户明确要求头脑风暴、brainstorm、Grill Me、设计拷问或连续方案探索时，以 `adk-structured-requirements-questioning` 为唯一 primary；本文件不维护第二套问答 SOP。
 
-## 流程
+## Intake → triage handoff
+- 已验证事实与来源（能自己查的事实不向用户重复追问）
+- 目标与 Why、用户已确认取舍；AI 建议与未确认假设分开
+- 方案选项和真实利弊、关键反例、不可逆/高风险约束
+- Challenge 的已关闭决策及未决依赖 ID
+- 下一阶段验证条件、阻塞信息及用户停止/继续意图
 
-1. 不写代码、不改文件，先给出 2-4 个可行方向。
-2. 对每个方向说明收益、成本、风险和适用前提。
-3. 追问目标、非目标、用户、术语、边界、验收和验证方式。
-4. 将长描述压缩为 3-7 条验收标准。
-5. 若仍缺关键信息，输出阻塞问题；若已足够清晰，转入 `adk-task-breakdown`。
-
-## 输出
-
-```md
-- Candidate Directions:
-- Boundary Questions:
-- Shared Terms:
-- Acceptance Criteria:
-- Blocking Questions:
-- Next Skill:
-```
-
-## 边界
-
-- 不复制外部 skill 文案或安装外部运行态。
-- 不把共享语言写入长期文件，除非用户明确要求或已有项目级术语治理入口。
-- 发散阶段不能替代后续实现前的验证计划。
+## Triage responsibilities
+1. 不重启已完成的多轮讨论，不以先填验收合同打断探索。
+2. 将用户确认结论整理为目标、非目标、3–7 条可验证验收和证据路径。
+3. 只对仍阻塞安全、权限或验收的关键缺口提问；可逆小事项提出建议后继续。
+4. 交给既有任务拆解、设计、实现与验证，不暗中扩大用户授权。

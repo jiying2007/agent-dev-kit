@@ -84,6 +84,12 @@ Skill body 不强迫使用一套固定 headings。按 capability class 选择最
 - 高风险场景描述行为边界，但不得用 description 承诺权限。
 - 通过 positive、near-miss negative、abstain/collision fixture 验证；只改文案不等于完成。
 
+## 交互式探索的主入口与阶段边界
+
+- `adk-structured-requirements-questioning` 是独立的 read-only primary，分 Explore（开放式头脑风暴、逐轮一个关键问题）与 Challenge（依赖决策树、frontier 分轮拷问）。不复制为两个 Skill/Workflow。
+- `adk-requirements-triage` 只负责探索后的结构化验收和工程交接，不以模板过早收敛。已有明确计划的实现请求不得强制重新追问。
+- Native Claude/Codex 的 discovery/load/trigger 需要各自实际验证；确定性 matcher 命中不能替代多轮行为与交付质量的盲评。
+
 ## Routing 与 progressive disclosure
 
 `manifest.json:routing` 是 reviewed intent routing IR。`agent_dev_kit.matcher` 是唯一 canonical matcher authority，公共路由统一经 `scripts/devkit.sh match`；Skill eligibility、selection-group promotion、effect ceiling 与 escalation 由同一 matcher 语义产生，不再存在并行 matcher facade。

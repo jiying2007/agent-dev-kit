@@ -1,5 +1,5 @@
 {
-  "version": "11.0.0",
+  "version": "11.1.0",
   "locale": "zh-CN",
   "platforms": [
     "linux-embedded",
@@ -340,6 +340,7 @@
         "code-review-governor"
       ],
       "default_skills": [
+        "adk-structured-requirements-questioning",
         "adk-requirements-triage",
         "adk-task-breakdown"
       ],
@@ -1949,6 +1950,23 @@
       ]
     },
     {
+      "name": "interactive_discovery",
+      "description": "用户要求头脑风暴、方案共创或 Grill Me 决策拷问，需要先互动探索而不是立即产出验收合同",
+      "routing_intent": "interactive_discovery",
+      "workflow": "feature-delivery",
+      "profiles": [
+        "core",
+        "embedded-fullstack"
+      ],
+      "positive_examples": [
+        "对新功能头脑风暴，讨论真实需求",
+        "Grill Me：挑战方案，沿决策树追问风险"
+      ],
+      "negative_examples": [
+        "已有完整设计，按计划直接执行"
+      ]
+    },
+    {
       "name": "unclear_requirement",
       "description": "需求、边界、验收或优先级不清，需要先收敛",
       "routing_intent": "requirements_triage",
@@ -2301,6 +2319,17 @@
           "adk-context-engineering",
           "adk-verification-before-completion"
         ]
+      },
+      {
+        "intent": "interactive_discovery",
+        "intent_zh": "头脑风暴/脑暴/brainstorming/brainstorm/Grill Me/gill me/grilling/拷问我的方案/需求拷问/挑战方案/深度追问/苏格拉底式追问/先发散再提问/设计共创",
+        "primary_skill": "adk-structured-requirements-questioning",
+        "supporting_skills": [
+          "adk-requirements-triage"
+        ],
+        "task_mode": "readonly",
+        "mutation_permission": "deny",
+        "risk": "low"
       },
       {
         "intent": "requirements_triage",

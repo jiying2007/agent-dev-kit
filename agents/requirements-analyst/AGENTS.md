@@ -19,7 +19,8 @@
 `read-only`。只允许仓库读取与静态分析；不得修改实现、提交或发布。
 
 ## Default Capabilities
-- `adk-requirements-triage`
+- `adk-structured-requirements-questioning`（仅在请求 Explore / Challenge 时作为 primary）
+- `adk-requirements-triage`（探索结束后的验收收敛）
 - `adk-task-breakdown`
 
 具体需求收敛、任务拆解方法由 Skill 定义，本 Agent 不复制 procedure。需求执行字段 `done-when`、`required evidence`、`artifact paths`、`blocker policy` 的定义和校验以 `adk-requirements-triage` 为准。
