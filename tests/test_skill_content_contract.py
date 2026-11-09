@@ -40,7 +40,7 @@ class SkillContentContractTests(unittest.TestCase):
                     open_fence = not open_fence
             return not open_fence
 
-        self.assertFalse(balanced("## Example\\n```bash\\necho one\\n"))
+        self.assertFalse(balanced("## Example\n```bash\necho one\n"))
         items = [*self.manifest["skills"], *self.manifest["optional_skills"]]
         for item in items:
             with self.subTest(skill=item["name"]):
