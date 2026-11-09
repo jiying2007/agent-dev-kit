@@ -5,6 +5,7 @@
 | Scenario | Description | Availability | Profiles | Workflow | Primary | Supporting | Fallback | Mutually Exclusive | Positive Example | Negative Example |
 |---|---|---|---|---|---|---|---|---|---|---|
 | `runtime_routing` | 任务开始前选择 profile、primary skill 和 supporting skill | profile-resolved | core, embedded-fullstack | `runtime-routing` | `adk-runtime-router` | - | adk-requirements-triage | - | 判断这个任务应该使用哪个技能 | 只要计划，不要修改文件 |
+| `interactive_discovery` | 用户要求头脑风暴、方案共创或 Grill Me 决策拷问，需要先互动探索而不是立即产出验收合同 | profile-resolved | core, embedded-fullstack | `feature-delivery` | `adk-structured-requirements-questioning` | adk-requirements-triage | - | - | 对新功能头脑风暴，讨论真实需求 | 已有完整设计，按计划直接执行 |
 | `unclear_requirement` | 需求、边界、验收或优先级不清，需要先收敛 | profile-resolved | core, embedded-fullstack | `feature-delivery` | `adk-requirements-triage` | - | - | adk-lightweight-planning, adk-planning-execution-loop | 需求不清楚，先梳理目标和验收标准 | 按已有计划直接执行 |
 | `planning_only` | 用户明确要求只读计划，不创建、不修改、不删除文件 | profile-resolved | core | `-` | `adk-lightweight-planning` | - | adk-requirements-triage | adk-planning-execution-loop | 先给计划，不要改文件 | 按计划执行并修改代码 |
 | `task_breakdown` | 需求已明确但任务过大，需要拆成可执行任务包 | profile-resolved | core, embedded-fullstack | `feature-delivery` | `adk-task-breakdown` | adk-requirements-triage | adk-lightweight-planning | - | 任务太大，拆解成任务包 | 根因不明，先定位问题 |

@@ -39,7 +39,7 @@ grep -q '^## Agent Contract Matrix$' "$CATALOG_OUT" || {
   exit 1
 }
 
-grep -q '| `requirements-analyst` | 需求边界, 验收标准 | 代码实现, 发布操作 | architecture-planner, test-validation-engineer, code-review-governor | adk-requirements-triage, adk-task-breakdown |' "$CATALOG_OUT" || {
+grep -q '| `requirements-analyst` | 需求边界, 验收标准 | 代码实现, 发布操作 | architecture-planner, test-validation-engineer, code-review-governor | adk-structured-requirements-questioning, adk-requirements-triage, adk-task-breakdown |' "$CATALOG_OUT" || {
   echo "[FAIL] agent contract matrix missing requirements-analyst" >&2
   exit 1
 }
