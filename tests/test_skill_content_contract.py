@@ -137,6 +137,22 @@ class SkillContentContractTests(unittest.TestCase):
         self.assertIn("独立设备操作者", section)
         self.assertIn("not_evaluated", section)
 
+    def test_aar_templates_follow_standalone_skill_and_references_are_balanced(self) -> None:
+        aar = ROOT / "skills/adk-after-action-review"
+        instructions = (aar / "SKILL.md").read_text(encoding="utf-8")
+        for name, canonical in (
+            ("memory-candidate.md", "templates/memory/memory-candidate.md"),
+            ("after-action-review.md", "templates/memory/after-action-review.md"),
+            ("codify-decision.md", "templates/governance/codify-decision.md"),
+        ):
+            self.assertIn("references/" + name, instructions)
+            self.assertEqual((aar / "references" / name).read_bytes(), (ROOT / canonical).read_bytes())
+        details = ROOT / "skills/adk-pilot-framework/references/details.md"
+        self.assertEqual(
+            sum(line.lstrip().startswith("```") for line in details.read_text(encoding="utf-8").splitlines()) % 2,
+            0,
+        )
+
     def test_details_are_supplemental_not_duplicate_skills(self) -> None:
         for path in ROOT.glob("skills/*/references/details.md"):
             with self.subTest(path=path.name, parent=path.parent.parent.name):
