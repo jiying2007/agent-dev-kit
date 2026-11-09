@@ -49,6 +49,7 @@ constraints:
 10. 弃用治理：旧 skill 必须给 `deprecated_by` 或 `replaced_by`。
 11. 回归样例：为 primary/supporting/fallback 各补代表输入。
 12. 更新治理矩阵：记录场景、主技能、辅助技能、fallback、互斥和优先级。
+13. **行为 TDD**：对有真实交互行为变化的 Skill，先保留不加载旧/新 Skill 的失败基线，使用同模型/工具/上下文和固定任务对照验证；输出逐例回归、否定/对抗场景和真实 trace。没有宿主模型证据时明确 `not-measured`，不把路由 CI 作为效果提升。具体见 `references/skill-behavior-evaluation.md`。
 
 ## 组合规则
 - 一个场景一个 primary；supporting 不抢占触发。
@@ -115,3 +116,4 @@ bash scripts/pilot-readiness.sh --summary-json
 - 依赖图必须可视化展示技能间关系，禁止隐式依赖。
 - Generator/Reviewer/Pipeline/Inversion 的输出契约和硬门禁必须可验证。
 - 组合裁决必须保留 progressive disclosure 证据，证明未因全量上下文噪音导致 primary/supporting/fallback 误判。
+- Skill 发布前区分 source-contract PASS 与真实 host behavior `not-measured`；缺真实 trace 不得宣称达到上游产品体验。

@@ -67,11 +67,11 @@ constraints:
 5. **受控生命周期契约（条件性）**：若操作跨越状态或独占资源，冻结 owner、状态、事件、资源、终止和 invariant；其中必须覆盖可见性、取消、超时、恢复、迟到完成与 generation/op-id 隔离。详见 [生命周期操作契约](references/lifecycle-operation-contract.md)。
 6. **工具与 handoff 副作用边界（条件性）**：按调用参数和目标身份在写入前授权；拒绝、未知结果和重放按 [工具与 handoff 副作用契约](references/tool-effect-contract.md) 处理。
 7. **结构化输出契约**：API、消息、工具或 handoff schema 必须记录 required fields、enum、additionalProperties=false、refusal handling 和 parse-failure 处理。
-8. **生成契约用例**：正常、边界、异常三类样例。
-   ```bash
-   # 编译契约测试
+8. **生成契约用例**：正常、边界、异常三类样例，给出项目真实构建/测试入口及可证伪断言；不输出伪造的编译命令。
+9. **双方案设计**：对风险较高或长期公共接口设计，至少比较两种合理的模块边界、外部可见约束、演进成本与验证 seam；只有一条路径可行时解释约束。
+10. **领域语义挑战**：对术语、状态和边界值用真实反例验证；仅在术语/决策发生变化时更新既有 glossary/ADR，不为模板新建文件。
 
-> 详细内容已移至 `references/details.md`。
+需要深模块比较或一次性原型验证时按需读取 `references/design-quality-methods.md`；接口范例仍按需读取 `references/details.md`。
 
 ## Quality Gate
 - 契约必须包含输入/输出/错误码/超时语义。
@@ -90,7 +90,7 @@ constraints:
 ## Failure Handling
 - 若调用方未确认兼容策略，结论置为 `needs-fix`。
 - 若错误语义不一致，先冻结接口变更并回到设计讨论。
-- 若结构体对齐不符合目标平台要求，添加 `__attribute__((packed))` 或调整字段顺序。
+- 若 ABI 与线协议对齐冲突，优先区分内存表示与显式序列化，验证 `sizeof`/`offsetof`、目标架构非对齐访问和字节序；`packed` 不作为默认修复。
 - 若版本协商失败，回退到最低公共版本并记录兼容降级。
 
 

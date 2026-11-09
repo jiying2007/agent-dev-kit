@@ -44,7 +44,7 @@ constraints:
 2. 识别约束：记录语言、框架、目录边界、验证命令、部署或回滚限制。
 3. 问题门禁：只有在无法负责任地产生计划时，最多提出 1-2 个阻塞问题；否则说明假设并继续。
 4. 范围声明：明确 `In`、`Out`，避免计划默默扩大到实现、重构或清理。
-5. 行动项生成：按 discovery -> change -> validation -> rollout 顺序列出 4-10 个动作。
+5. 行动项生成：按 discovery -> change -> validation -> rollout 写 4–10 个可执行动作；能从仓库核实时明确文件/接口、所需变更、验证命令和完成证据，不猜测不存在的路径。
 6. 验证绑定：至少包含一条测试、lint、build、smoke 或人工验收项。
 7. 风险标注：列出边界条件、兼容性、数据迁移、权限或回滚风险。
 8. 退出判断：如果用户继续要求执行，切换到 `adk-requirements-triage`、`adk-task-breakdown`、`adk-planning-execution-loop` 或对应实现流程。

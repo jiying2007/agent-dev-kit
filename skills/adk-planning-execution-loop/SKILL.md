@@ -35,7 +35,7 @@ constraints:
 
 ## Workflow
 1. 计划审查：检查依赖顺序、验证命令、隐含环境假设和阻塞条件；受控生命周期操作先冻结 owner × state × event × resource × termination × invariant 基线。
-2. 任务切片：每阶段输出 task-package v2 kind/question/evidence/permission/exit/handoff/retention、scope、done criteria 和验证命令。
+2. 任务切片：优先采用可运行的纵向任务切片；每阶段输出 task-package v2 kind/question/evidence/permission/exit/handoff/retention、真实文件/接口、scope、done criteria 和可观察验证命令；不把准备工作当独立交付成果。
 3. 状态外化：复用项目需求与计划；仅维护一份当前状态入口，合并阶段、风险、下一动作、恢复信息和证据指针，不按字段另建文件或复制历史正文。
 4. 连续性证明：长任务必须记录 active plan、findings、progress、attestation 和 excluded context。
 5. 执行检查点：每完成一个阶段，更新状态、证据和风险。

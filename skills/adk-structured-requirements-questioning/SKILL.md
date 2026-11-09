@@ -43,6 +43,9 @@ constraints:
 ## Challenge protocol — decision tree
 用户要求“Grill Me / 拷问 / 挑战方案”时使用。为重要决策记录 id、前置依赖、备选、证据与状态：confirmed / proposed / unresolved / invalidated。**Frontier** 是依赖已解决的未决节点；每轮只问当前独立 frontier（通常 2–4 题），每题列建议、依据及反例；待回答后重算，不提前问下游。挑战真实的性能、成本、安全、兼容、资源和恢复风险，不能为了凑题追问。“都按建议”仅确认本轮明示选择。
 
+## 可抛弃原型（条件性）
+若争议在于状态机是否易理解或交互是否可用，先提出一个可证伪的问题与最小原型方案；按需读 `references/prototype-as-experiment.md`。本 Skill 只做只读设计，真实写文件或调用外部工具需独立进入已有授权实施流程。
+
 ## Cross-mode convergence
 用户可切换模式或停止；连续两轮没有新证据/决策时给出推荐或最小实验，拒绝空转。讨论结束形成简短设计及 User-confirmed decisions、AI 建议、开放问题、反例和验证路径；仅将确认内容交 `adk-requirements-triage`，按原有审批与工程门禁实现，讨论不等于授权写代码。
 
