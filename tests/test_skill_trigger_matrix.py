@@ -210,6 +210,28 @@ class SkillTriggerMatrixTests(unittest.TestCase):
                 self.assertTrue((ROOT / relative).is_file(), relative)
 
 
+    def test_negation_scope_and_paraphrase_regressions(self) -> None:
+        """Source-only routing checks: negated actions are not selected as primary."""
+        manifest = Manifest.load(ROOT)
+        cases = (
+            ("不要做性能分析，请只进行代码审查", "adk-code-review-loop", "adk-performance-profiling-embedded"),
+            ("Do not brainstorm. Implement the approved plan.", None, "adk-structured-requirements-questioning"),
+            ("按照已有方案推进，不要重新头脑风暴", None, "adk-structured-requirements-questioning"),
+            ("先不用做代码审查，给我整理需求和验收标准", None, "adk-code-review-loop"),
+            ("只读审查代码，不要修改文件", "adk-code-review-loop", None),
+            ("排查偶发死锁，先不要修改代码", "adk-systematic-debugging", None),
+            ("先聊聊方案和边界，不要直接实现", "adk-structured-requirements-questioning", None),
+        )
+        for prompt, expected, prohibited in cases:
+            with self.subTest(prompt=prompt):
+                result = match_text(manifest, prompt, scope="auto")
+                if expected is not None:
+                    self.assertEqual(result.get("skill"), expected, result)
+                if prohibited is not None:
+                    self.assertNotEqual(result.get("skill"), prohibited, result)
+                if "不要修改" in prompt:
+                    self.assertEqual(result.get("mutation_permission"), "deny", result)
+
     def test_interactive_discovery_modes_and_routing(self) -> None:
         """Source-only routing/contract checks, not native E2/E4 evidence."""
         import json
