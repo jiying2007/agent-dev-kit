@@ -54,6 +54,16 @@ Skill evolution must be evidence-driven and monotonic:
 - Keep rejected updates as review records; do not silently overwrite the active Skill.
 - Treat public marketplaces, private registries and shared folders as distribution channels only. They do not prove safety, quality, license compatibility or production readiness.
 
+## Skill Behavior RED → GREEN → REFACTOR
+
+- **RED（无 Skill 基线）**：固定真实任务、模型/版本、温度、工具与上下文；让未加载该 Skill 的 Agent 执行压力案例，保留原始回答与明确失败模式。没有运行能力则记 `not-measured`，不得编造失败。
+- **GREEN（候选 Skill）**：只改一项可验证行为，用同样任务集重跑；记录失败是否消失、原有成功是否回退、额外问答与工具调用成本。
+- **REFACTOR**：对成功但有多余规则的修改做减法；加入易误触发、对抗诱导、用户拒绝、已批准快路径及中断恢复样例；保留被拒变更。
+- **独立性**：候选作者不担任唯一效果裁判；至少一次盲看不同变体的对照评价，重大用户决策仍归用户。测试数据和评分标准预注册，不能挑案例后补阈值。
+- **晋级**：静态路由、合同、授权负例由 CI 证实；原生 discovery/load、任务行为、端到端结果分别核真实 trace。没有 E2–E4 时标 `not-measured`，只可声明 source-ready。
+
+离线试验和评分见 `references/skill-behavior-evaluation.md`，不自动启用付费模型或后台调用。
+
 ## Atomicity Rule
 
 Do not embed one Skill inside another Skill as an implicit dependency. Use Agent routing, workflow stages, or `adk-skill-composition-governance` to connect atomic skills. Each Skill must remain useful and testable on its own.

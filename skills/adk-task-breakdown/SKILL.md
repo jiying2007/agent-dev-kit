@@ -63,7 +63,7 @@ constraints:
    依赖图格式：`T1 → T2 → T3`（箭头表示"被依赖"）
    每次派发前计算就绪任务集合：前置任务已有验收证据、共享写冲突已解除，且 implementation 权限满足 v2 契约；完成一个任务后重新计算，阻塞项不得进入就绪集合。
 5. **生成任务包**：decision/research/prototype 固定 `implementation_permission=forbidden`；只有已批准 implementation 可为 `approved`，并给出 owner、依赖、验证、阻塞和 handoff。
-6. **右尺寸校准**：任务必须足够小以支持独立测试和 review；setup/config/docs 应并入真正消费它们的任务，避免独立“准备任务”丢失验收上下文。
+6. **纵向切片与右尺寸**：优先交付从入口到可观测结果的一条 tracer-bullet 纵向切片（公开 seam、最小实现、测试与真实产物）；setup/config/docs 并入消费它们的任务，保持可独立测试与 review。复杂依赖按需读 `references/vertical-slice-planning.md`。
 7. **估时与排期**：用三点估时法计算每个任务工时，标注关键路径。
 8. **定义交接令牌**：每个任务声明 `ready_to_handoff` 条件与接收方。
 9. **结构化输出门禁**：机器消费或并行调度的任务包必须映射到 `adk-task-package-schema-v2`，拒绝 v1、自由 JSON、隐式字段、未声明 enum 和 kind/permission 冲突。

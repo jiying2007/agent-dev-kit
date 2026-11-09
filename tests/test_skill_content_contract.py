@@ -31,6 +31,51 @@ class SkillContentContractTests(unittest.TestCase):
                 self.assertTrue(isinstance(meta.get("triggers"), list) and meta["triggers"])
                 self.assertIsInstance(meta.get("non_triggers"), list)
 
+    def test_registered_skill_markdown_fences_closed(self) -> None:
+        """Regression for a real unclosed shell fence in interface-contract-design."""
+        def balanced(text: str) -> bool:
+            open_fence = False
+            for line in text.splitlines():
+                if line.lstrip().startswith("```"):
+                    open_fence = not open_fence
+            return not open_fence
+
+        self.assertFalse(balanced("## Example\n```bash\necho one\n"))
+        items = [*self.manifest["skills"], *self.manifest["optional_skills"]]
+        for item in items:
+            with self.subTest(skill=item["name"]):
+                source = (ROOT / item["path"]).read_text(encoding="utf-8")
+                self.assertTrue(balanced(source), item["path"])
+
+    def test_skill_method_cases_are_not_fabricated_model_results(self) -> None:
+        fixture = json.loads((ROOT / "tests/fixtures/skill_method_cases.json").read_text(encoding="utf-8"))
+        self.assertEqual(fixture["schema"], "adk-skill-method-review-cases/v1")
+        self.assertEqual(fixture["behavior_status"], "not-measured")
+        cases = fixture["cases"]
+        self.assertGreaterEqual(len(cases), 8)
+        self.assertEqual(len({c["id"] for c in cases}), len(cases))
+        expected = {"debug-feedback", "tdd-public-seam", "architecture-deep-module",
+                    "domain-counterexample", "tracer-slice", "throwaway-prototype",
+                    "skill-red-green", "approval-negative"}
+        self.assertTrue(expected <= {c["id"] for c in cases})
+        for case in cases:
+            self.assertIn(case["mode"], {"positive", "negative", "adversarial"})
+            for field in ("prompt", "target_skill", "expected_behavior", "reject_behavior"):
+                self.assertTrue(isinstance(case[field], str) and case[field].strip(), (case["id"], field))
+        refs = [
+            "skills/adk-interface-contract-design/references/design-quality-methods.md",
+            "skills/adk-code-simplification/references/deep-module-design.md",
+            "skills/adk-systematic-debugging/references/tight-feedback-loop.md",
+            "skills/adk-test-strategy/references/high-value-tdd.md",
+            "skills/adk-task-breakdown/references/vertical-slice-planning.md",
+            "skills/adk-structured-requirements-questioning/references/prototype-as-experiment.md",
+            "optional-skills/adk-skill-composition-governance/references/skill-behavior-evaluation.md",
+            "docs/evals/skill-method-parity.md",
+        ]
+        for path in refs:
+            self.assertTrue((ROOT / path).is_file(), path)
+        self.assertIn("not-measured", (ROOT / "docs/evals/skill-method-parity.md").read_text(encoding="utf-8"))
+
     def test_no_language_duplicate_skill_and_counts_match(self) -> None:
         names = {v["name"] for t in ("skills", "optional_skills") for v in self.manifest[t]}
         self.assertFalse(any(n.startswith(("adk-chinese-", "adk-english-")) for n in names))

@@ -148,6 +148,8 @@ skills/<skill-name>/
 
 ## Eval minimum
 
+大改 Skill 先分离**结构/路由**与**真实行为**证据；方法类 Skill 改动应先记录无 Skill 失败基线，再与候选在相同模型、工具、上下文和预算下做真实任务对照。压力场景必须包含反例、跨轮纠错、用户拒绝/终止与已批准任务快路径；审查者不能只给自己作品评分。无模型执行环境时保留可复跑案例、明确 `not-measured`，不得由 source-test 伪推断 E2–E4。
+
 大改 Skill 至少证明：
 - should-trigger / positive
 - near-miss should-not-trigger
@@ -156,7 +158,7 @@ skills/<skill-name>/
 - behavior/evidence contract
 - authority/permission negative（有 side effect 时）
 
-Token 下降可记录为 efficiency observation，但不能替代 task success 与安全/authority evidence。
+Token 下降可记录为 efficiency observation，但不能替代 task success 与安全/authority evidence。源文件 Markdown 围栏必须闭合；解析错误会吞掉后续的质量门禁，纳入源测试。具体方法见 `optional-skills/adk-skill-composition-governance/references/skill-behavior-evaluation.md`。
 
 ## 运行时分层
 
