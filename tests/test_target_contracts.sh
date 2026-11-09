@@ -381,7 +381,16 @@ for target in (claude, opencode):
     skill = frontmatter(target / "skills/adk-requirements-triage/SKILL.md")
     assert skill["name"] == "adk-requirements-triage", skill
     assert skill["description"], skill
-    assert skill["metadata"]["adk"]["target"] == target.name, skill
+    provenance = skill["metadata"]
+    assert isinstance(provenance, dict), skill
+    assert provenance["adk.target"] == target.name, skill
+    assert set(provenance) == {"adk.asset_kind", "adk.manifest_version", "adk.source", "adk.target"}, skill
+    assert all(isinstance(key, str) and isinstance(value, str) for key, value in provenance.items()), skill
+    # Exported Skills must be runnable independently of the ADK source tree.
+    aar = target / "skills/adk-after-action-review"
+    assert (aar / "SKILL.md").is_file(), aar
+    for name in ("memory-candidate.md", "after-action-review.md", "codify-decision.md"):
+        assert (aar / "references" / name).is_file(), (aar, name)
 
 claude_read_only = frontmatter(claude / "agents/requirements-analyst.md")
 assert claude_read_only["name"] == "requirements-analyst", claude_read_only

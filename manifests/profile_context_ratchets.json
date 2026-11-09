@@ -16,32 +16,32 @@
     "core": {
       "assets": 27,
       "entry_file_bytes": 133576,
-      "potential_full_source_bytes": 180984
+      "potential_full_source_bytes": 180976
     },
     "release-hardening": {
       "assets": 23,
       "entry_file_bytes": 110194,
-      "potential_full_source_bytes": 151572
+      "potential_full_source_bytes": 151564
     },
     "personal-core": {
       "assets": 32,
       "entry_file_bytes": 152554,
-      "potential_full_source_bytes": 201144
+      "potential_full_source_bytes": 201136
     },
     "embedded-fullstack": {
       "assets": 54,
       "entry_file_bytes": 237905,
-      "potential_full_source_bytes": 295716
+      "potential_full_source_bytes": 295708
     },
     "team-core": {
       "assets": 35,
       "entry_file_bytes": 166078,
-      "potential_full_source_bytes": 220184
+      "potential_full_source_bytes": 220176
     },
     "large-refactor": {
       "assets": 55,
       "entry_file_bytes": 240937,
-      "potential_full_source_bytes": 302190
+      "potential_full_source_bytes": 302182
     },
     "incident-response": {
       "assets": 9,
@@ -57,6 +57,6 @@
   "baseline_source": {
     "version": "7.1.0",
     "commit": "70fac05125907e4930ee73f3928799e11bac55de",
-    "note": "Original baseline: independently measured Git blob sizes before 7.2.0. 2026-11-03 user-authorized adk-goal-authoring addition: author-self-review, add exactly 4457 entry bytes and 1864 deferred-support bytes plus one asset only to core and its inheriting profiles. Rationale and verification: docs/changes/20261103-adk-goal-authoring/design.md. No runtime token-budget or release-authority change. 2026-11-03 v8.2.2: three existing registered-but-unreachable core Skills are attached to existing specialist Profiles only (team-core, incident-response, embedded-fullstack). Platform-neutral core remains unchanged. Checked source bytes: team-core 160166/212956; incident-response 34102/37403; embedded-fullstack 230096/289584; inherited large-refactor 232417/296914. These are source bytes, not native runtime token measurements. 2026-11-03 v8.2.3: reviewed source-only description boundary improvements and explicit team-core reachability for existing artifact/pilot Skills; per-profile source byte ratchets refreshed from exact Git tree with support references counted. This is not a native tokenizer or runtime-context measurement. Duplicate private support references are retained for independently exportable Skills, not compatibility aliases. 8.2.3 CI repair: sorted team-core Skill lifecycle order and shortened review entry below its unchanged 7200-byte ceiling; first-party catalog find retains bring-up keyword. Source-byte values adjusted for both exact description changes. 2026-11-04 v10.0.0 source-only measurement from feature-branch Git tree 1819607e3fccc61de9041bde3c28af62a2c74819, not a runtime token claim: capability-based language consolidation removed two team Skills and seven redundant references; 9 OpenAI metadata corrections and risk-aware gate instructions add exactly 2590 entry bytes to shared profiles, while most deferred support footprints decrease. All eight Profile limits reset to exact measured source values with ZERO growth slack and original fail-on-growth policy retained. Detailed deltas and self-review boundary: docs/changes/skill-v10-convergence/measurement.md. Formal independent release review remains a separate gate. 2026-11-09 ADK 11.2.0 candidate exact source-byte recalibration from Git trees base=f55293dec57c0dd7cfc65372f29044ffe0b73ab9 and method-change=2af49544f53e501d7782d89aefec4a1a219a1a2a. 64 Skill identities unchanged. Seven skill-local on-demand references and revised entry instructions increase checked source bytes while avoiding unconditional loading: core entry +1831/full +8703, large-refactor entry +2438/full +10585. Each profile threshold is set to the exact candidate source byte measurement, not padded, in docs/changes/20261109-skill-method-quality/measurement.md. This is a reviewed source-growth ratchet only; runtime initial context, token savings, behavior success, native host certification and release authority are not measured or granted. 2026-11-09 skills-audit-closure: all eight profiles recalculated from exact baseline and candidate Git trees, including three self-contained AAR references and updated safety guidance; see docs/changes/20261109-skills-audit-closure/measurement.md. These are source bytes only, never native token/model/field measurements."
+    "note": "Original baseline: independently measured Git blob sizes before 7.2.0. 2026-11-03 user-authorized adk-goal-authoring addition: author-self-review, add exactly 4457 entry bytes and 1864 deferred-support bytes plus one asset only to core and its inheriting profiles. Rationale and verification: docs/changes/20261103-adk-goal-authoring/design.md. No runtime token-budget or release-authority change. 2026-11-03 v8.2.2: three existing registered-but-unreachable core Skills are attached to existing specialist Profiles only (team-core, incident-response, embedded-fullstack). Platform-neutral core remains unchanged. Checked source bytes: team-core 160166/212956; incident-response 34102/37403; embedded-fullstack 230096/289584; inherited large-refactor 232417/296914. These are source bytes, not native runtime token measurements. 2026-11-03 v8.2.3: reviewed source-only description boundary improvements and explicit team-core reachability for existing artifact/pilot Skills; per-profile source byte ratchets refreshed from exact Git tree with support references counted. This is not a native tokenizer or runtime-context measurement. Duplicate private support references are retained for independently exportable Skills, not compatibility aliases. 8.2.3 CI repair: sorted team-core Skill lifecycle order and shortened review entry below its unchanged 7200-byte ceiling; first-party catalog find retains bring-up keyword. Source-byte values adjusted for both exact description changes. 2026-11-04 v10.0.0 source-only measurement from feature-branch Git tree 1819607e3fccc61de9041bde3c28af62a2c74819, not a runtime token claim: capability-based language consolidation removed two team Skills and seven redundant references; 9 OpenAI metadata corrections and risk-aware gate instructions add exactly 2590 entry bytes to shared profiles, while most deferred support footprints decrease. All eight Profile limits reset to exact measured source values with ZERO growth slack and original fail-on-growth policy retained. Detailed deltas and self-review boundary: docs/changes/skill-v10-convergence/measurement.md. Formal independent release review remains a separate gate. 2026-11-09 ADK 11.2.0 candidate exact source-byte recalibration from Git trees base=f55293dec57c0dd7cfc65372f29044ffe0b73ab9 and method-change=2af49544f53e501d7782d89aefec4a1a219a1a2a. 64 Skill identities unchanged. Seven skill-local on-demand references and revised entry instructions increase checked source bytes while avoiding unconditional loading: core entry +1831/full +8703, large-refactor entry +2438/full +10585. Each profile threshold is set to the exact candidate source byte measurement, not padded, in docs/changes/20261109-skill-method-quality/measurement.md. This is a reviewed source-growth ratchet only; runtime initial context, token savings, behavior success, native host certification and release authority are not measured or granted. 2026-11-09 skills-audit-closure: all eight profiles recalculated from exact baseline and candidate Git trees, including three self-contained AAR references and updated safety guidance; see docs/changes/20261109-skills-audit-closure/measurement.md. These are source bytes only, never native token/model/field measurements. 2026-11-09 CI follow-up: trimmed 8 trailing spaces in canonical AAR template and exact mirrored skill-local reference; each including profile deferred support ratchet tightened by 8 bytes. Candidate tree 0c4fd0ca09b9a0a85293185901d449f840831961; source-only check."
   }
 }
