@@ -134,4 +134,3 @@ rg -n "import|require|include|#include" <target_path> | head -20
 - 若缺失的是阻塞信息，结论为 `needs-fix` 并列出缺口；非阻塞细节记录可验证假设后可继续。
 - 需求必须有明确分类和优先级。
 - 拆分后的需求包必须各自具备独立验收标准。
-
