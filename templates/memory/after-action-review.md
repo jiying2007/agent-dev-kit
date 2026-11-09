@@ -7,16 +7,16 @@ task:
   verification:
 
 success:
-  - 
+  -
 
 mistakes:
-  - 
+  -
 
 root_cause:
-  - 
+  -
 
 fixes:
-  - 
+  -
 
 lessons:
   - lesson:
@@ -32,11 +32,11 @@ memory_candidates:
 
 risk_decisions:
   low:
-    - 
+    -
   medium:
-    - 
+    -
   high:
-    - 
+    -
 
 stale_or_conflict_check:
   supersedes:
@@ -44,4 +44,4 @@ stale_or_conflict_check:
   next_review_by:
 
 open_items:
-  - 
+  -

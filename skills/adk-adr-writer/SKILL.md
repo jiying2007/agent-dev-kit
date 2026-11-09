@@ -1,8 +1,8 @@
 ---
 name: adk-adr-writer
 description: "用于架构方案已有明确权衡、需要记录决定与替代方案时生成 ADR；不用于在需求不明时直接替代需求澄清或执行代码修改。"
-version: 1.1.1
-last_updated: 2026-11-03
+version: 1.1.2
+last_updated: 2026-11-09
 triggers:
   - "写ADR"
   - "架构决策"
@@ -53,7 +53,9 @@ ls docs/adr/ADR-*.md 2>/dev/null | sort -t'-' -k2 -n | tail -5
 ls docs/adr/ADR-*.md 2>/dev/null | sort -t'-' -k2 -n | tail -5
 
 # 创建新 ADR
-next_num=$(printf "%03d" $(($(ls docs/adr/ADR-*.md 2>/dev/null | wc -l) + 1)))
+# 缺号不可复用：取已存在的最大编号，而非文件数量
+last_num=$(find docs/adr -maxdepth 1 -type f -name 'ADR-[0-9][0-9][0-9]-*.md' -printf '%f\n' 2>/dev/null | sed -nE 's/^ADR-([0-9]{3})-.*/\1/p' | sort -n | tail -1)
+next_num=$(printf "%03d" "$((10#${last_num:-000} + 1))")
 echo "Next ADR number: ADR-${next_num}"
 
 # 校验 ADR 完整性
@@ -69,8 +71,10 @@ grep -c "## Context\|## Decision\|## Alternatives\|## Consequences" docs/adr/ADR
 | 团队熟悉度 | 15% | 高(3) | 低(1) | 中(2) |
 | 维护成本 | 20% | 低(3) | 中(2) | 高(1) |
 | 迁移难度 | 20% | N/A | 低(3) | 高(1) |
-| **加权总分** | 100% | **2.8** | **2.2** | **1.6** |
+| **加权总分** | 100% | **2.69** | **2.30** | **1.65** |
 ```
+
+> N/A 按适用权重归一：A 以其他 80% 权重计算 2.15/0.80≈2.69；B、C 保留 100% 权重，结果展示两位小数。
 
 ## Evidence Template
 ```md

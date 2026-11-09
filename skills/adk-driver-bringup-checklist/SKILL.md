@@ -1,8 +1,8 @@
 ---
 name: adk-driver-bringup-checklist
 description: "用于首板 bring-up 联调时核对驱动时钟、复位、probe、中断和外设依赖；不用于直接编写驱动代码或未经授权执行设备寄存器写操作。"
-version: 2.0.2
-last_updated: 2026-11-03
+version: 2.0.3
+last_updated: 2026-11-09
 triggers:
   - "驱动调试"
   - "驱动bringup"
@@ -29,7 +29,7 @@ constraints:
 
 ## Prerequisites
 - 确认硬件版本、板卡序列/工位 identity、pinmux、供电和时钟配置一致。
-- 准备串口日志、调试通道和寄存器只读工具。
+- 准备串口日志、调试通道和依据手册确认不会清状态或扰动目标的被动观测工具；未知 MMIO 地址不能默认归类为无副作用读取。
 - 获取芯片参考手册（TRM）与外设寄存器映射表。
 
 ## Bring-up Stages
@@ -40,7 +40,7 @@ constraints:
 
 ## Workflow
 1. **冻结目标 identity**：记录 board revision、设备 identity、SoC/MCU、固件/内核版本和本轮 stage。
-2. **上电与只读检查**：电源、时钟、复位、pinmux、设备存在性和只读寄存器状态。
+2. **上电与被动观测**：电源、时钟、复位、pinmux 和已确认不会产生读副作用的状态寄存器；主动探测和自检另行按真实设备效果分类。
 3. **最小闭环**：I2C/SPI/UART/CAN/USB/Ethernet 先完成无破坏性的最小收发。
 4. **设备写升级门禁**：只有目标问题确实需要寄存器写、reset、模式切换或其他 live-device mutation 时，先记录目标地址/操作、预期状态、显式授权、rollback/recovery 和 readback/行为验证；缺任一项则保持只读，并 handoff 到受控 live-device operator，而不是在本 Skill 给出可执行写命令。
 5. **初始化与资源路径**：验证 probe/init、设备节点、资源申请、错误退出和生命周期。
@@ -50,14 +50,14 @@ constraints:
 
 ## Commands
 ```bash
-# 这里只保留只读诊断命令；任何寄存器写/reset/模式切换均由受控 live-device operator 执行。
-devmem2 <phys_addr>
+# 被动采集；仍需确认访问路径、权限及诊断窗口
 dmesg | tail -n 200
 ls -la /dev/<device>*
 cat /sys/class/<class>/<device>/uevent
 cat /proc/interrupts
-i2cdetect -y <bus>
-<driver-selftest-cmd> --smoke
+# i2cdetect 为主动 SMBus 探测（-y 仅跳过确认），不是只读观测。
+# devmem2 读取 MMIO 也可能清除状态／弹出 FIFO；须先核对 TRM 寄存器读副作用。
+# 驱动 selftest 可能改变状态，先取得真实命令定义和授权后交受控操作者。
 ```
 
 ## Evidence Template
@@ -65,7 +65,8 @@ i2cdetect -y <bus>
 - Bring-up Stage: minimal | functional | soak | production
 - Hardware Identity: board_rev / device_id / SoC-or-MCU / software_commit
 - Read-only Baseline:
-- Bus Probe Result:
+- Bus Probe Result: not-run | authorized-active-probe | evidence
+- Effect Classification: passive | active-probe | state-changing | destructive
 - Init Sequence Result:
 - Interrupt/DMA Result:
 - Live-device Mutation:
@@ -89,6 +90,7 @@ i2cdetect -y <bus>
 ## Quality Gate
 - minimal 阶段必须覆盖时钟、复位、总线和最小收发证据；functional 阶段再要求 IRQ/DMA 与错误恢复。
 - 每个阶段只对已执行证据给结论，`not-run` 不得写成 pass。
+- 所有主动总线探测、selftest、MMIO 和 live-device 写操作须按真实副作用分类；未知地址或工具不得默认 read-safe。
 - 所有 live-device 写操作必须记录 target identity、操作、授权、恢复路径和写后验证。
 - 24h 或更长 soak 是 production/field readiness 证据，不是所有 bring-up 的统一完成门槛。
 

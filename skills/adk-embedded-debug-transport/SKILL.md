@@ -1,8 +1,8 @@
 ---
 name: adk-embedded-debug-transport
 description: "用于管理串口、SSH、ADB、远程 GDB 等调试通道的连接与权限证据；不用于隐式远程部署、修改设备配置或替代故障根因分析。"
-version: 1.0.1
-last_updated: 2026-11-03
+version: 1.0.2
+last_updated: 2026-11-09
 triggers:
   - "调试通道"
   - "设备调试通道"
@@ -46,14 +46,14 @@ constraints:
 | serial console | boot、kernel、RTOS、早期启动和恢复 | boot log、panic/oops、shell prompt、版本banner | break/bootloader写入、环境变量修改、刷写升级需审批 |
 | SSH shell | Linux设备运行态、daemon、系统服务 | `dmesg`、`journalctl`、`ps`、`ip`、`cat /proc/*` | restart/kill/config write/package install需审批 |
 | ADB/logcat | Android或ADB暴露设备 | `adb devices`、`adb logcat -d`、`adb shell getprop` | remount、push、setprop、reboot、root需审批 |
-| GDB remote | 用户态/RTOS/bare-metal断点和状态读取 | attach、threads、bt、registers、memory read | continue、set variable、write memory、reset需审批 |
-| hardware debug probe | MCU/SoC低层 halt、寄存器和内存观察 | probe detect、halt status、register read、memory read | erase/program/fuse/lock/unlock需审批 |
+| GDB remote | 用户态/RTOS/bare-metal断点和状态读取 | 已暂停目标上的 threads、bt；经手册确认的非破坏性状态读取 | attach/halt 会暂停目标，resume/continue 会改变目标执行；均须评估授权与恢复 |
+| hardware debug probe | MCU/SoC低层 halt、寄存器和内存观察 | probe detect、halt status；已确认不清状态的读取 | halt/attach 以及有读副作用的 MMIO 不是被动采集；erase/program/fuse 等须单独审批 |
 | vendor debug CLI | 厂商产测、烧录、诊断、trace工具 | version、status、dry-run、readback摘要 | flash、calibration write、factory reset、publish需审批 |
 
 ## Workflow
 1. 固定上下文：设备、板级版本、固件/镜像、OS/runtime、复现步骤、当前供电/网络/串口/探针状态。
 2. 列通道矩阵：记录每个通道是否可用、凭证来源、权限级别、所需物理接触和失败回退方式。
-3. 做命令分级：把候选命令分为 `read-only`、`state-changing`、`destructive`。
+3. 做命令分级：候选命令区分 `passive-observation`、`active-probe`、`state-changing`、`destructive`，并记录是否会暂停进程、触发 I/O 或清除寄存器状态。
 4. 先跑连接验证：只确认设备可见、版本一致、符号/镜像匹配和日志窗口可采集。
 5. 采集最小证据：优先拿 boot/runtime 日志、进程状态、寄存器只读快照、core线索、版本banner和时间线锚点。
 6. 分流下一步：
@@ -66,8 +66,9 @@ constraints:
 ## Command Risk Model
 | Class | Rule | Examples |
 |---|---|---|
-| read-only | 可建议执行；仍需脱敏输出 | version/status/log dump/register read/backtrace |
-| state-changing | 需要明确授权、影响面和回滚锚点 | restart/kill/continue/set variable/write config |
+| passive-observation | 已确认不会扰动目标；仍需脱敏输出 | version/status/log dump/现有 core 的离线 backtrace |
+| active-probe | 需要明确探测范围和许可；不得称为纯只读 | i2cdetect、动态 selftest、主动访问设备总线 |
+| state-changing | 需要明确授权、影响面和回滚锚点 | GDB attach/halt/continue、restart/kill/set variable/write config、可能有副作用的 MMIO read |
 | destructive | 本 skill 不默认执行；必须单独审批 | erase/program/OTA apply/factory reset/fuse/partition wipe |
 
 ## Evidence Template
@@ -95,6 +96,6 @@ constraints:
 
 ## Quality Gate
 - 必须覆盖至少两类可选通道，或说明为什么只有一种通道可用。
-- 必须显式标记命令风险等级。
+- 必须显式标记命令风险等级；GDB attach/halt 和有读副作用的 MMIO 不能归为纯只读。
 - 任何写操作、重启、刷写、擦除、OTA或出厂复位都不能作为默认动作。
 - 调试通道结论不得替代根因结论；根因仍需证据链和专项 skill 验证。

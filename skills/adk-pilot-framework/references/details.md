@@ -77,3 +77,13 @@ bash scripts/check-adk-harden-readiness.sh . --require-pilot --skip-full-suite
 
 ```md
 # Pilot Report: pilot-<date>-<seq>
+- Scenario / Target Runtime / Exact Source:
+- Selected Skills / Profile:
+- Discovery / Load / Trigger Evidence:
+- Test / Validation Commands and Exit Codes:
+- Observed Result: pass | fail | not-run
+- Known Limitations / Missing Evidence:
+- Owner Decision / Rollback Anchor:
+```
+
+源码或静态导出通过不等于原生运行时或产品现场资格。

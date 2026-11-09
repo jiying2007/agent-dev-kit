@@ -4,7 +4,7 @@
 
 完整使用指南见 `docs/adk-usage-guide.md`；本文保留为常用命令速查。
 
-ADK 构建与管理环境为 Python 3.11+，固定依赖为 `PyYAML==6.0.3` 与 `jsonschema==4.26.0`；已导出纯 Skill 资产不依赖 ADK Python。发布前安装 `.[quality]` 并执行 Ruff 与 pip-audit；工具缺失或审计源不可用时不得声称质量门禁通过。
+ADK 构建与管理环境为 Python 3.12.x，固定依赖为 `PyYAML==6.0.3` 与 `jsonschema==4.26.0`；已导出纯 Skill 资产不依赖 ADK Python。发布前安装 `.[quality]` 并执行 Ruff 与 pip-audit；工具缺失或审计源不可用时不得声称质量门禁通过。
 
 升级现有自定义 manifest 时，先执行 `bash scripts/devkit.sh validate --strict`。关键 nested object 已改为 typed schema，旧的未知扩展字段、字符串冒充数组/布尔值以及缺失必填项会 fail closed；应按 `manifests/manifest.schema.json` 迁移。确需保留的产品级扩展元数据应移动到顶层 `x-<name>` namespace，不能通过放宽核心 schema 保留未声明行为。
 

@@ -13,7 +13,7 @@
 PYTHONPATH=src python3 -m unittest tests.test_skill_trigger_matrix tests.test_skill_content_contract
 ```
 
-若测试使用 `unittest` 模块搜索方式，在源码根目录执行；不要依赖外部模型、凭证或用户的 Codex/Work 配额。CI 的 Python 3.11/3.12 全量合同门禁仍为最终源码级验收依据。
+若测试使用 `unittest` 模块搜索方式，在源码根目录执行；不要依赖外部模型、凭证或用户的 Codex/Work 配额。CI 的 Python 3.12 全量合同门禁仍为最终源码级验收依据。
 
 ## 后续真实实验（按需、显式预算）
 

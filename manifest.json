@@ -1,5 +1,5 @@
 {
-  "version": "11.2.0",
+  "version": "11.2.1",
   "locale": "zh-CN",
   "platforms": [
     "linux-embedded",
@@ -2321,7 +2321,7 @@
       },
       {
         "intent": "interactive_discovery",
-        "intent_zh": "头脑风暴/脑暴/brainstorming/brainstorm/Grill Me/gill me/grilling/拷问我的方案/需求拷问/挑战方案/深度追问/苏格拉底式追问/先发散再提问/设计共创",
+        "intent_zh": "头脑风暴/脑暴/brainstorming/brainstorm/Grill Me/gill me/grilling/拷问我的方案/需求拷问/挑战方案/深度追问/苏格拉底式追问/先发散再提问/设计共创/先聊聊方案/先讨论方案",
         "primary_skill": "adk-structured-requirements-questioning",
         "supporting_skills": [
           "adk-requirements-triage"
@@ -2497,7 +2497,7 @@
       },
       {
         "intent": "systematic_debugging",
-        "intent_zh": "调试/调试问题/排查根因/问题排查/定位根因/真实问题排查/根因未明",
+        "intent_zh": "调试/调试问题/排查根因/问题排查/定位根因/真实问题排查/根因未明/排查偶发死锁/排查死锁",
         "primary_skill": "adk-systematic-debugging",
         "supporting_skills": [],
         "mutually_exclusive": [
@@ -2632,7 +2632,7 @@
       },
       {
         "intent": "code_review_loop",
-        "intent_zh": "独立代码审查/code review loop/review闭环/review反馈/review反馈核验/审查反馈/收到review/修复review/复审/代码审查/中文代码审查/英文代码审查",
+        "intent_zh": "独立代码审查/code review loop/review闭环/review反馈/review反馈核验/审查反馈/收到review/修复review/复审/代码审查/中文代码审查/英文代码审查/只读审查代码/只读代码审查",
         "primary_skill": "adk-code-review-loop",
         "supporting_skills": [
           "adk-commit-pr-quality-gate"

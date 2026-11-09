@@ -1,8 +1,8 @@
 ---
 name: adk-unit-test-embedded
 description: "用于 MCU/RTOS 的单元测试断言、替身与外设边界模拟；非跨模块测试策略，也不用于直接证明真实 HIL 性能。"
-version: 1.1.2
-last_updated: 2026-11-03
+version: 1.1.3
+last_updated: 2026-11-09
 triggers:
   - "单元测试"
   - "写测试"
@@ -41,8 +41,9 @@ constraints:
 # Unity 框架
 ceedling test:<module_name>
 ceedling gcov:<module_name>
-# CMock 自动生成 Mock
-ceedling module:create<module_name>
+# 启用 module_generator 后生成源文件、头文件、测试骨架（并非直接生成 CMock mock）
+ceedling "module:create[Sensor]"
+# CMock 的 mock 通过测试中依赖头文件和 Ceedling 配置生成
 # 覆盖率报告
 gcovr --root . --filter src/ --xml -o coverage.xml
 lcov --capture --directory build --output-file coverage.info

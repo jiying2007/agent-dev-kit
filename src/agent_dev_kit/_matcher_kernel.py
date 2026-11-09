@@ -79,16 +79,23 @@ def _is_locally_negated(
     match: Tuple[str, int, int],
     markers: Sequence[str],
 ) -> bool:
-    """Return true only when a configured marker directly prefixes a phrase.
+    """Match nearby prohibitions within one clause, not distant unrelated intent.
 
-    This intentionally does not use an arbitrary character window.  A remote
-    ``不`` elsewhere in the request must not suppress an unrelated positive
-    intent; multi-clause negation belongs in routing-ir/v2 ``all_of`` rules.
+    The bounded filler grammar covers common verbs and rephrasing without
+    treating an arbitrary '不' elsewhere in the request as a negation.
     """
 
     _, position, _ = match
     prefix = _normalized(text)[:position]
-    return any(prefix.endswith(_normalized(marker)) for marker in markers if _normalized(marker))
+    clause_start = max(prefix.rfind(separator) for separator in "，,。.!！?？；;：:")
+    local = prefix[clause_start + 1:]
+    fillers = ("", "做", "进行", "执行", "重新", "再", "先", "去",
+               "安排", "启动", "开始", "现在", "尝试", "继续",
+               "做一下", "先做", "先进行", "重新做", "重新进行")
+    candidates = tuple(_normalized(marker) for marker in markers if _normalized(marker)) + (
+        "donot", "don't", "dont", "never", "avoid", "without",
+    )
+    return any(local.endswith(marker + filler) for marker in candidates for filler in fillers)
 
 
 def _active_phrase_matches(
@@ -97,7 +104,7 @@ def _active_phrase_matches(
     markers: Sequence[str],
 ) -> Sequence[Tuple[str, int, int]]:
     return tuple(
-        item for item in _phrase_matches(text, phrase_set) if not _is_locally_negated(text, item, markers)
+        item for item in _all_phrase_matches(text, phrase_set) if not _is_locally_negated(text, item, markers)
     )
 
 

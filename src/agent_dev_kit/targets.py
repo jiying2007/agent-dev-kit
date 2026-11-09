@@ -181,12 +181,10 @@ def _split_frontmatter(text: str, source: Path) -> Tuple[Mapping[str, Any], str]
 
 def _provenance(manifest: Manifest, contract: TargetContract, asset: Asset, source: Path) -> Mapping[str, Any]:
     return {
-        "adk": {
-            "asset_kind": asset.kind,
-            "manifest_version": manifest.version,
-            "source": source.relative_to(manifest.root).as_posix(),
-            "target": contract.name,
-        }
+        "adk.asset_kind": str(asset.kind),
+        "adk.manifest_version": str(manifest.version),
+        "adk.source": source.relative_to(manifest.root).as_posix(),
+        "adk.target": str(contract.name),
     }
 
 
