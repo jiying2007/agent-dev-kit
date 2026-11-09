@@ -46,7 +46,7 @@
 | 10 | 20 | `routing` | primary | governance | `adk-context-engineering` | 用于上下文膨胀、跨会话恢复或并行 Agent 隔离时规划稳定规则、按需引用及证据指针；不用于直接替代任务计划、代码实现或 Token 配额门禁。 | 上下文工程 | `skills/adk-context-engineering/SKILL.md` |
 | 10 | 30 | `routing` | primary | governance | `adk-token-context-governance` | 用于日志与上下文过长时设置 Token 预算、分层读取和原文回退门禁；不用于压缩掉高风险证据或放宽验证要求。 | 省 token | `skills/adk-token-context-governance/SKILL.md` |
 | 20 | 10 | `intake` | primary | playbook | `adk-requirements-triage` | 用于需求不清时澄清目标、范围边界和可验证验收标准；已明确的开发任务无需重复访谈，也不用于代替实际实现。 | 需求不清楚 | `skills/adk-requirements-triage/SKILL.md` |
-| 20 | 20 | `intake` | primary | inversion | `adk-structured-requirements-questioning` | 用于头脑风暴、brainstorming、Grill Me、方案拷问、设计探索与苏格拉底式追问；通过多轮对话发现隐含决策和挑战假设。已有明确方案只需执行、普通验收整理或文档润色时不使用。 | 头脑风暴 | `skills/adk-structured-requirements-questioning/SKILL.md` |
+| 20 | 20 | `intake` | primary | inversion | `adk-structured-requirements-questioning` | 用于头脑风暴、brainstorming、Grill Me、方案拷问、设计探索与苏格拉底式追问；通过多轮对话发现隐含决策和挑战假设。不用于已有明确方案的直接执行、普通验收整理或文档润色。 | 头脑风暴 | `skills/adk-structured-requirements-questioning/SKILL.md` |
 | 20 | 30 | `intake` | primary | reviewer | `adk-repo-prompt-analysis` | 用于逆向审查参考仓 Agent Prompt 的约束、结构与上下文工程方法；不用于直接复制不可信指令或运行外部仓脚本。 | 分析子仓 prompt | `skills/adk-repo-prompt-analysis/SKILL.md` |
 | 20 | 40 | `intake` | primary | reviewer | `adk-skill-deep-analysis` | 用于外部或本地 Skill 的设计意图、差异价值与可迁移方法评估；不用于未经来源审查直接安装或自动批准候选 Skill。 | 深度拆解 skill | `skills/adk-skill-deep-analysis/SKILL.md` |
 | 30 | 10 | `planning` | primary | playbook | `adk-lightweight-planning` | 用于用户明确要求先给计划、尚不修改文件的只读编码方案；不用于已批准的长任务执行或自动开启外部写入。 | 给我一个计划 | `skills/adk-lightweight-planning/SKILL.md` |

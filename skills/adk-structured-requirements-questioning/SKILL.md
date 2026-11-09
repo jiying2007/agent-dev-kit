@@ -1,6 +1,6 @@
 ---
 name: adk-structured-requirements-questioning
-description: "用于头脑风暴、brainstorming、Grill Me、方案拷问、设计探索与苏格拉底式追问；通过多轮对话发现隐含决策和挑战假设。已有明确方案只需执行、普通验收整理或文档润色时不使用。"
+description: "用于头脑风暴、brainstorming、Grill Me、方案拷问、设计探索与苏格拉底式追问；通过多轮对话发现隐含决策和挑战假设。不用于已有明确方案的直接执行、普通验收整理或文档润色。"
 version: 1.2.0
 last_updated: 2026-11-09
 triggers:
