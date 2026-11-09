@@ -1,8 +1,8 @@
 ---
 name: adk-incident-rca-report
 description: "用于生产事故稳定后整理时间线、根因、恢复和防复发证据；不用于事故正在处置时替代现场响应或虚构不存在的取证材料。"
-version: 1.0.2
-last_updated: 2026-11-04
+version: 1.0.3
+last_updated: 2026-11-09
 triggers:
   - "线上事故"
   - "故障复盘"
@@ -86,7 +86,7 @@ git log --since "<incident-start>" --until "<incident-end>" --oneline
 rg -n "error|fatal|timeout|oom" <log_dir>
 
 # 查询配置变更历史
-git log --all --oneline -- "*.yaml" "*.yml" "*.conf" --since "<incident-start>"
+git log --all --oneline --since "<incident-start>" -- "*.yaml" "*.yml" "*.conf"
 
 # 检查监控告警记录
 rg -n "alert|warning|critical" <monitoring_log_dir>

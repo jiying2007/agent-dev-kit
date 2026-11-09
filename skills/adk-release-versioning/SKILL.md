@@ -1,8 +1,8 @@
 ---
 name: adk-release-versioning
 description: "用于规划版本号、Changelog 和发布基线并检查历史版本一致性；不执行真实发布，也不用于替代固件包验证或设备更新。"
-version: 1.4.2
-last_updated: 2026-11-03
+version: 1.4.3
+last_updated: 2026-11-09
 triggers:
   - "版本发布"
   - "版本管理"
@@ -49,12 +49,10 @@ constraints:
 5. **阶段矩阵**：给出里程碑阶段、退出条件、验证证据与回退锚点。
 6. **回退预案**：可回滚版本、触发条件、验证命令。
 7. **Promotion 发布**：
-   - 先用版本管理器同步并验证 source identity。
-   - PR 合并前必须先前移 source SemVer；required `contract-py3.11` 会把 head 与 exact base 比较，未前移直接拒绝。
-   - 只把 source/PR 合并到受保护的 `main`；不要手工移动、覆盖或复用已有版本 tag。
-   - `main` fresh CI 成功后，由 `release-tag-promotion` 对 exact main SHA 创建 annotated version tag，并调用 canonical release workflow。
-   - canonical release 必须从 exact tag 构建、校验、attest，并发布 GitHub Release；已有同 tag Release 只能在资产 byte-identical 时视为幂等成功。
-   - v7+ exact annotated tag 若因 package 阶段失败而缺少 Release，后续 successful-main promotion 会审计 immutable/asset/source identity 并通过 canonical release 自动补发；禁止移动旧 tag。
+   - 读取目标项目真实的 release policy、版本 SSOT、CI 与回滚机制，通用 Skill 不假设 ADK 发布链适用于任意仓。
+   - 合并前校验 exact base 与版本合法性；受保护主线 fresh CI 后才进行签名和制品发布，不覆盖不可变 tag。
+   - **仅对 agent-dev-kit 源仓** 使用 source SemVer 门禁、successful-main CI → release-tag-promotion → exact annotated tag → canonical release，并核验 digest/attestation。
+   - 非 ADK 项目没有上述工作流时标记 `not_applicable`，改用该项目实际审查过的发布门禁，不得伪造结果。
 8. **发布签署**：输出 go/no-go 结论与残留风险，并记录 tag、commit、GitHub Release 与 artifact digest。
 
 
@@ -63,7 +61,7 @@ constraints:
 - 阶段式迁移必须给出阶段结论与回退锚点。
 - 必须附完整迁移与回退步骤。
 - 必须明确发布门禁结论与签署条件。
-- PR 合并前 source SemVer 必须严格高于 exact base；正式 Tag 必须为 annotated tag，并由 successful-main promotion 自动创建。
+- 版本、tag 与受保护 CI 必须符合目标项目发布政策；仅 ADK 自身要求 source SemVer、annotated tag 及 successful-main promotion。
 - Changelog 必须覆盖自上次发布以来的所有变更。
 
 

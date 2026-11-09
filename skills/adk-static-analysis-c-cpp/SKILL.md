@@ -1,8 +1,8 @@
 ---
 name: adk-static-analysis-c-cpp
 description: "用于 C/C++ 静态分析告警分级、根因追踪与误报确认，并补最小复现；不用于把单次扫描当作完整功能或动态安全验收。"
-version: 1.0.1
-last_updated: 2026-11-03
+version: 1.0.2
+last_updated: 2026-11-09
 triggers:
   - "静态分析"
   - "代码检查"
@@ -35,11 +35,11 @@ constraints:
 
 ## Commands
 ```bash
-clang-tidy -p build compile_commands.json <file_or_dir>
+clang-tidy -p build src/example.c
 cppcheck --enable=warning,style,performance --project=compile_commands.json
 pvs-studio-analyzer analyze -o PVS-Studio.log -e <exclude_dir>
 plog-converter -a GA:1,2 -t tasklist PVS-Studio.log -o tasks.txt
-clang-tidy -p build --list-checks --checks='*' <file> 2>&1 | head -50
+clang-tidy -p build --list-checks --checks='*' src/example.c 2>&1 | head -50
 cppcheck --enable=all --suppress=missingIncludeSystem --xml <src_dir> 2> report.xml
 ```
 
