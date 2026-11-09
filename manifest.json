@@ -340,7 +340,6 @@
         "code-review-governor"
       ],
       "default_skills": [
-        "adk-structured-requirements-questioning",
         "adk-requirements-triage",
         "adk-task-breakdown"
       ],

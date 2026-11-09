@@ -15,8 +15,13 @@ triggers:
   - "需求梳理"
   - "帮我理清需求"
   - "边界和验收"
-  - "需求拷问"
 non_triggers:
+  - 头脑风暴
+  - brainstorming
+  - grill me
+  - gill me
+  - 方案拷问
+  - 挑战方案
   - 纯代码风格调整
   - 已有完整计划且只需按计划执行
   - 仅执行已有明确任务包
@@ -60,7 +65,7 @@ constraints:
 | P3-低优 | 锦上添花 | 低 | 不急 | 积压，有空再做 |
 
 ## Workflow
-1. **区分探索与收敛**：明确要求头脑风暴、Grill Me、方案拷问或多轮设计讨论时，先由 `adk-structured-requirements-questioning` 作为 primary 完成 Explore/Challenge，再接受已确认决策；普通模糊需求仍由本 Skill 进行最小结构化收敛。不得为了填验收模板跳过探索。
+1. **探索分流**：明确请求多轮头脑风暴或拷问时由 `adk-structured-requirements-questioning` 处理；本 Skill 只整理其已确认决策。普通模糊需求直接收敛。
 2. **结构化快速扫描**：定位模块入口、现有实现、相关测试与依赖约束。
 3. **识别关键疑问**：列出阻塞规划的问题，并按高/中/低优先级排序。
 4. **领域建模预检**：有跨模块状态、协议、数据或生命周期风险时补齐关键术语、实体、状态、接口和边界样例；纯局部低风险变更只保留相关字段。
@@ -74,7 +79,7 @@ constraints:
 
 ## Discovery Template
 - 嵌入式需求探索优先使用 `references/embedded-discovery-brief.md`。
-- 需求发散与拷问入口先路由 `adk-structured-requirements-questioning`；`references/exploratory-requirements-brief.md` 只定义向本 Skill 的交接边界。
+- 发散与拷问由 `adk-structured-requirements-questioning` 处理，交接见 `references/exploratory-requirements-brief.md`。
 - 当任务涉及芯片/板级约束、启动链、BSP、OS/runtime、驱动、组件、协议栈、设备应用、上位机/产测/诊断工具、构建调试、验证、发布、量产或现场维护时，必须先补齐目标层级、运行环境、接口边界和验证约束。
 - 通用产品探索只作为辅助，不应冲淡 adk 的嵌入式全栈开发定位。
 
@@ -119,8 +124,7 @@ rg -n "import|require|include|#include" <target_path> | head -20
 - 需求分类模糊时，选择风险更高的类别处理。
 
 ## 与 adk-structured-requirements-questioning 的区别
-- adk-requirements-triage: 已明确意图后的需求结构化、验收证据、任务边界；不负责深度对话。
-- adk-structured-requirements-questioning: 在 Explore / Challenge 中多轮探索真实意图、方案取舍、反例与依赖决策树，再将用户确认的结果交给本 Skill。
+- 本 Skill 收敛验收；对方负责 Explore / Challenge 多轮设计，完成后交接确认决策。
 
 ## Quality Gate
 - 输出必须包含目标、非目标、影响面、验收标准四项。
