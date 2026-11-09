@@ -91,9 +91,10 @@
       "selection_group": "requirements-intake"
     },
     "adk-structured-requirements-questioning": {
-      "capability_class": "support",
-      "runtime_role": "supporting",
-      "selection_group": "requirements-intake"
+      "capability_class": "task",
+      "runtime_role": "primary",
+      "selection_group": "interactive-discovery",
+      "effect_ceiling": "read-only"
     },
     "adk-lightweight-planning": {
       "capability_class": "workflow",

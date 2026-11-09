@@ -90,6 +90,7 @@ class RoutingIrContractTest(unittest.TestCase):
     def test_catalog_matrix_is_a_routing_ir_projection(self):
         expected = {
             "runtime_routing": "runtime_router",
+            "interactive_discovery": "interactive_discovery",
             "unclear_requirement": "requirements_triage",
             "planning_only": "plan_lite",
             "task_breakdown": "task_breakdown",

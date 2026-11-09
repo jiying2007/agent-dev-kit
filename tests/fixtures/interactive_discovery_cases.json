@@ -1,0 +1,74 @@
+{
+  "schema": "adk-interactive-discovery-cases/v1",
+  "evidence_layer": "source-test",
+  "limitations": [
+    "Routing fixtures cannot measure LLM conversations or native host load/trigger.",
+    "Behavior obligations are a manual evaluation rubric, not an observed PASS."
+  ],
+  "cases": [
+    {
+      "id": "explore-why",
+      "mode": "Explore",
+      "prompt": "帮我头脑风暴机器人底盘的新功能，我还不知道用户最在乎什么",
+      "expected_primary": "adk-structured-requirements-questioning",
+      "expected_mutation": "deny",
+      "behavior_obligation": "先查已知约束，再问一个影响设计的开放问题；不急于给诱导选项"
+    },
+    {
+      "id": "explore-options",
+      "mode": "Explore",
+      "prompt": "brainstorming：对家用机器人导航架构比较两三种方案",
+      "expected_primary": "adk-structured-requirements-questioning",
+      "expected_mutation": "deny",
+      "behavior_obligation": "目标明确后比较真实取舍，建议与用户决定区分"
+    },
+    {
+      "id": "challenge-tree",
+      "mode": "Challenge",
+      "prompt": "Grill Me：挑战方案并逐轮追问依赖和失败场景",
+      "expected_primary": "adk-structured-requirements-questioning",
+      "expected_mutation": "deny",
+      "behavior_obligation": "只问依赖已解决的 frontier，独立问题批量编号，后轮重算"
+    },
+    {
+      "id": "challenge-typo",
+      "mode": "Challenge",
+      "prompt": "gill me：拷问我的方案，找风险和反例",
+      "expected_primary": "adk-structured-requirements-questioning",
+      "expected_mutation": "deny",
+      "behavior_obligation": "别名可进入挑战模式，且不假装用户已确认"
+    },
+    {
+      "id": "challenge-socratic",
+      "mode": "Challenge",
+      "prompt": "苏格拉底式追问硬件与算法的预算冲突",
+      "expected_primary": "adk-structured-requirements-questioning",
+      "expected_mutation": "deny",
+      "behavior_obligation": "挑战隐含前提，事实缺失先自行调查"
+    },
+    {
+      "id": "ordinary-triage",
+      "mode": "Triage",
+      "prompt": "需求不清楚，先收敛目标边界与验收标准",
+      "expected_primary": "adk-requirements-triage",
+      "expected_mutation": "deny",
+      "behavior_obligation": "普通需求结构化，不强制深度多轮拷问"
+    },
+    {
+      "id": "ordinary-plan",
+      "mode": "Plan",
+      "prompt": "先给计划，不要修改文件",
+      "expected_primary": "adk-lightweight-planning",
+      "expected_mutation": "deny",
+      "behavior_obligation": "只读计划，不开展无关头脑风暴"
+    },
+    {
+      "id": "negated",
+      "mode": "Abstain",
+      "prompt": "不要头脑风暴",
+      "expected_primary": null,
+      "expected_mutation": "deny",
+      "behavior_obligation": "尊重否定指令，不触发探索 Skill"
+    }
+  ]
+}

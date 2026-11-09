@@ -1336,6 +1336,20 @@
         {
           "properties": {
             "name": {
+              "const": "interactive_discovery"
+            },
+            "routing_intent": {
+              "const": "interactive_discovery"
+            }
+          },
+          "required": [
+            "name",
+            "routing_intent"
+          ]
+        },
+        {
+          "properties": {
+            "name": {
               "const": "unclear_requirement"
             },
             "routing_intent": {
