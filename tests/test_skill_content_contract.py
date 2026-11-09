@@ -154,8 +154,9 @@ class SkillContentContractTests(unittest.TestCase):
         )
 
     def test_details_are_supplemental_not_duplicate_skills(self) -> None:
-        for path in ROOT.glob("skills/*/references/details.md"):
-            with self.subTest(path=path.name, parent=path.parent.parent.name):
-                content = path.read_text(encoding="utf-8")
-                self.assertFalse(content.startswith("---\n"))
-                self.assertNotIn("## Workflow\n", content)
+        for parent in ("skills", "optional-skills"):
+            for path in ROOT.glob(parent + "/*/references/details.md"):
+                with self.subTest(path=path.relative_to(ROOT)):
+                    content = path.read_text(encoding="utf-8")
+                    self.assertFalse(content.startswith("---\n"))
+                    self.assertNotIn("## Workflow\n", content)
