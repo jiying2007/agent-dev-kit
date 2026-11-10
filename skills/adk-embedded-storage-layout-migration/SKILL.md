@@ -1,8 +1,8 @@
 ---
 name: adk-embedded-storage-layout-migration
 description: "用于 MTD、UBI、分区及文件系统布局迁移的 host 端检查、演练和回退设计；不用于未授权的设备存储写入或纯日志检索。"
-version: 2.0.1
-last_updated: 2026-11-03
+version: 2.0.2
+last_updated: 2026-11-10
 triggers:
   - "UBIFS转SquashFS"
   - "SquashFS转UBIFS"
