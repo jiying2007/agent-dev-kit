@@ -279,6 +279,63 @@ class SkillTriggerMatrixTests(unittest.TestCase):
                 self.assertNotEqual(result.get("skill"), "adk-cmake-cross-build")
                 self.assertEqual(result.get("mutation_permission"), "deny")
 
+    def test_embedded_audit_method_and_reference_boundaries(self) -> None:
+        """Source-only policy checks, not claimed board or native-runtime evidence."""
+        def body(path: str) -> str:
+            return (ROOT / path).read_text(encoding="utf-8")
+
+        irq = body("skills/adk-interrupt-dma-patterns/references/details.md")
+        self.assertNotIn("devmem2 <NVIC", irq)
+        self.assertIn("不是直接测 IRQ entry latency", irq)
+        self.assertIn("rtos-isr-dma-diagnostics.md", irq)
+
+        hil = body("skills/adk-integration-hil-sil/SKILL.md")
+        self.assertNotIn("-DTARGET_SIM=ON", hil)
+        self.assertNotIn("scripts/ci_test.sh --", hil)
+        self.assertIn("compile-only", hil)
+        self.assertIn("not-run", hil)
+
+        protocol = body("skills/adk-protocol-stack-integration/SKILL.md")
+        self.assertNotIn('scapy.all.sniff(filter=', protocol)
+        self.assertIn("Python API", protocol)
+        self.assertIn("not", protocol.lower() or "not")
+
+        unit = body("skills/adk-unit-test-embedded/SKILL.md")
+        self.assertIn("MC/DC", unit)
+        self.assertIn("不等于 MC/DC", unit)
+        self.assertNotIn("≥80%", unit)
+
+        cmake = body("skills/adk-cmake-cross-build/SKILL.md")
+        self.assertIn("CROSSCOMPILING_EMULATOR", cmake)
+        self.assertIn("compile-only", cmake)
+        self.assertIn("not-run", cmake)
+
+        static = body("skills/adk-static-analysis-c-cpp/SKILL.md")
+        self.assertIn("--error-exitcode=1", static)
+        self.assertIn("--warnings-as-errors", static)
+        self.assertIn("BASE_SHA", static)
+        self.assertIn("非零", static)
+
+        production = body("skills/adk-embedded-release-orchestration/SKILL.md")
+        self.assertIn("multi-mcu-ota-recovery.md", production)
+        fault = body("skills/adk-hardware-debugging/SKILL.md")
+        self.assertIn("mcu-fault-reset-wakeup.md", fault)
+        self.assertIn("Cortex-M0", fault)
+        sysdebug = body("skills/adk-systematic-debugging/SKILL.md")
+        self.assertIn("embedded-diagnosis-branches.md", sysdebug)
+        perf = body("skills/adk-performance-profiling-embedded/SKILL.md")
+        self.assertIn("mcu-memory-footprint.md", perf)
+
+        for reference in (
+            "skills/adk-hardware-debugging/references/mcu-fault-reset-wakeup.md",
+            "skills/adk-interrupt-dma-patterns/references/rtos-isr-dma-diagnostics.md",
+            "skills/adk-systematic-debugging/references/embedded-diagnosis-branches.md",
+            "skills/adk-embedded-release-orchestration/references/multi-mcu-ota-recovery.md",
+            "skills/adk-performance-profiling-embedded/references/mcu-memory-footprint.md",
+        ):
+            with self.subTest(reference=reference):
+                self.assertTrue((ROOT / reference).is_file())
+
     def test_interactive_discovery_modes_and_routing(self) -> None:
         """Source-only routing/contract checks, not native E2/E4 evidence."""
         import json
