@@ -1,5 +1,5 @@
 {
-  "version": "11.2.1",
+  "version": "11.2.2",
   "locale": "zh-CN",
   "platforms": [
     "linux-embedded",
@@ -2497,7 +2497,7 @@
       },
       {
         "intent": "systematic_debugging",
-        "intent_zh": "调试/调试问题/排查根因/问题排查/定位根因/真实问题排查/根因未明/排查偶发死锁/排查死锁/UBIFS只读故障/UBIFS并发写/UBIFS变只读/SquashFS只读异常/df显示100%/文件系统只读故障/MQTTDNSresolutionfailed/DNS解析失败/Buildroot构建失败/Autotools缺少aclocal/Autotools构建失败/Yocto构建失败/电机过流故障",
+        "intent_zh": "调试/调试问题/排查根因/问题排查/定位根因/真实问题排查/根因未明/排查偶发死锁/排查死锁/UBIFS只读故障/UBIFS并发写/UBIFS变只读/SquashFS只读异常/df显示100%/文件系统只读故障/MQTTDNSresolutionfailed/DNS解析失败/Buildroot构建失败/Autotools缺少aclocal/Autotools构建失败/Yocto构建失败/电机过流故障/aclocal缺失/aclocal/automake缺失/Autoconf工具缺失",
         "primary_skill": "adk-systematic-debugging",
         "supporting_skills": [],
         "mutually_exclusive": [
