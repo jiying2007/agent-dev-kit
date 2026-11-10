@@ -1,8 +1,8 @@
 ---
 name: adk-integration-hil-sil
 description: "用于软件在环与硬件在环的集成测试、场景配置与结果证据编排；不用于仅做单元测试或绕过真实设备操作授权。"
-version: 1.0.1
-last_updated: 2026-11-03
+version: 1.0.2
+last_updated: 2026-11-10
 triggers:
   - "集成测试"
   - "HIL测试"
