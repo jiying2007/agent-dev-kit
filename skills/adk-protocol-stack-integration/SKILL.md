@@ -33,14 +33,19 @@ constraints:
 5. 联调验证：正常、乱序、丢包、断链重连场景回归。
 
 ## Commands
+先核对项目实际接口、协议端口、抓包权限及脱敏规则，`IFACE/PORT/PCAP` 由项目配置，不猜测默认值：
 ```bash
-<protocol-simulator-cmd> --scenario reconnect
-<packet-capture-cmd> --filter <protocol>
-tcpdump -i eth0 -w capture.pcap 'port <port>'
-wireshark -r capture.pcap -Y '<protocol>.field == <value>'
-tshark -r capture.pcap -T fields -e <protocol>.field1 -e <protocol>.field2
-scapy.all.sniff(filter="port <port>", count=100, prn=lambda p: p.summary())
+# 受控采样；可能采集隐私和凭据，须明确时间窗及保留策略
+tcpdump -i "$IFACE" -w "$PCAP" "port $PORT"
+# 离线分析
+tshark -r "$PCAP" -q
 ```
+Scapy 是 Python API；必须在 Python 环境中导入并确认 `scapy` 已安装，不得将 `scapy.all.sniff(...)` 直接粘入 Bash 块。发包和故障注入是主动操作，需单独授权。
+
+## Retry and timing boundary
+- 分层记录 DNS、TCP、TLS、应用握手和 KeepAlive 的独立 timeout 与状态机。
+- timeout/retry/backoff 由实际协议、链路和产品容错预算确定，不套用跨平台通用 30 秒、300 秒及三次重试。
+- 非幂等外部操作状态未知时先对账，禁止盲目重复执行。
 
 ## 协议栈分层架构
 | 层级 | 职责 | 典型协议 |
@@ -82,15 +87,6 @@ scapy.all.sniff(filter="port <port>", count=100, prn=lambda p: p.summary())
 
 ## Quality Gate
 - 必须包含连接、异常、重连三类状态定义。
-- 必须给出超时与重试的量化参数。
+- 必须给出有来源、符合目标协议和网络环境的超时及重试参数；未测值标记为待验证。
 - 必须有至少 1 个抓包或模拟器验证证据。
 
----
-
-## 健壮性规范
-
-- **输入验证**: 执行前校验所有必要输入是否存在且格式正确
-- **重试策略**: 外部命令失败时最多重试 3 次，指数退避（1s, 2s, 4s）
-- **超时控制**: 单步操作超时 30 秒，整体流程超时 300 秒
-- **异常隔离**: 单个步骤失败不阻塞其他独立步骤
-- **日志记录**: 关键操作记录命令、退出码、耗时

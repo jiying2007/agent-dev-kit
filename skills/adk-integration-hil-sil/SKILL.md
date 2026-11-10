@@ -24,71 +24,32 @@ constraints:
 - 建立可重复、可自动化的嵌入式集成测试流程。
 
 ## Prerequisites
-- 明确系统拓扑、接口依赖和硬件资源占用计划。
-- 定义 HIL 与 SIL 的覆盖边界和切换条件。
-- 准备测试框架（Robot Framework / pytest-embedded / Unity + CMock）。
+- 锁定设备族、board revision、固件 hash、runner、资源占用、受控 HIL operator 和安全恢复路径。
+- 优先使用目标仓现有 build/test 工具；先查 CMake option、pytest 插件、脚本和工装，不假定 `TARGET_SIM`、`pytest --board`、`scripts/ci_test.sh` 存在。
+- 设备编程、主动探测、重启、断电和故障注入分别执行授权与效果分级。
 
 ## Workflow
-1. **分层建模**：模块级（SIL）与系统级（HIL）用例划分。
-   - SIL：纯软件仿真，快速迭代，覆盖逻辑分支。
-   - HIL：真实硬件在环，覆盖时序、电气特性、协议交互。
-2. **SIL 环境搭建**：配置仿真环境与 mock 框架。
-   ```bash
-   # 编译 SIL 目标（host 架构）
-   cmake -S . -B build/sil -DCMAKE_BUILD_TYPE=Debug -DTARGET_SIM=ON
-   cmake --build build/sil -j$(nproc)
-   # 运行 SIL 测试
-   ctest --test-dir build/sil --output-on-failure
-   # 或使用 pytest-embedded
-   pytest tests/sil/ --tb=short -v
-   ```
-3. **HIL 环境搭建**：配置调试通道、串口、CAN 适配器。
-   ```bash
-   # 调试通道连接目标板，具体命令由板卡和工装决定
-   <debug-transport> connect --target <board> --mode readonly
-   <debug-transport> load --artifact build/hil/firmware.elf --dry-run
-   # 串口监控
-   picocom -b 115200 /dev/ttyUSB0
-   ```
-4. **编排用例矩阵**：功能、性能、异常恢复三类场景。
-   ```bash
-   # Robot Framework HIL 测试
-   robot --variable BOARD_ID:stm32f4disco tests/hil/
-   # pytest HIL 测试
-   pytest tests/hil/ --board=stm32f4disco --port=/dev/ttyUSB0 -v
-   ```
-5. **执行验证**：先 SIL 快速回归，再 HIL 关键链路验收。
-   ```bash
-   # CI 流水线：SIL 全量 + HIL 冒烟
-   ./scripts/ci_test.sh --sil full --hil smoke
-   # 完整 HIL 回归
-   ./scripts/ci_test.sh --hil full --hardware-rig rig-01
-   ```
-6. **结果汇总**：输出失败模式、复现路径与修复优先级。
+1. **分层**：区分 host-unit、compile-only、SIL/QEMU、HIL、人工板级和量产资格；哪层实测就只报告哪层。
+2. **确认执行后端**：以当前仓库的配置和真实命令为准；记录 compile-only/host/emulator/board-runner，`ctest` 在目标未注册 runner 时不等于真机运行。
+3. **资源隔离**：冻结构建输出、测试二进制、缓存、端口、串口、rig 和 device identity；共享资源禁止并行运行。
+4. **SIL**：按真实构建/仿真入口执行，采集架构、模拟精度、未覆盖硬件行为和原始证据。
+5. **HIL preflight**：只读核对 device/firmware、测试硬件、故障停止条件和健康恢复；需要刷写或改变设备状态时另交授权 operator。
+6. **逐级扩大**：单次 smoke→功能/异常回归→可选长稳；失联、身份漂移、core/fatal log 或恢复失败立即停止，不能重试刷到绿。
+7. **复验**：区分失败、跳过、未执行和预期负结果，记录命令、退出码、固件身份、串口/总线证据及 postcondition。
+8. **交付**：说明各层 pass/fail/not-run、依赖与残留缺口；本 Skill 不单独批准量产。
 
 ## Commands
+以下命令仅适用于**已验证使用 CMake/CTest 的工程**，不是任意项目通用入口：
 ```bash
-# SIL 构建与测试
-cmake --preset sil-debug && cmake --build build/sil-debug -j$(nproc)
-ctest --test-dir build/sil-debug --output-on-failure
-
-# HIL 固件装载或烧录，先 dry-run 再进入实机阶段
-<debug-transport> program build/hil/firmware.elf --verify --dry-run
-
-# HIL 测试执行
-pytest tests/hil/ --board=<board> --port=/dev/ttyUSB0 -v
-robot --variable BOARD_ID:<board> tests/hil/
-
-# 串口日志采集
-picocom -b 115200 /dev/ttyUSB0 --logfile hil_serial.log
-
-# CAN 总线监控
-candump can0 | tee hil_can.log
-
-# 测试报告生成
-robot --loglevel DEBUG --outputdir results/ tests/hil/
-pytest tests/hil/ --html=results/hil_report.html --self-contained-html
+ctest --test-dir build/sil --show-only=json-v1
+ctest --test-dir build/sil --output-on-failure
 ```
+pytest 工程须先检查实际插件/选项；目标不存在时不得猜测 `--board` 或 `--port`。现场命令、rig 与固件刷写由项目提供。
+
+## Budget / Retry
+- 按目标动作、恢复 SLA、硬件负载和阶段确定 timeout、退避及最大重试，不套用统一 30 秒/300 秒和三次重试。
+- 外部动作状态不明时先对账 artifact／boot_id／device status，不盲目重放。
+- 无设备或授权时只能 `not-run/blocked`，SIL 绿不代表 HIL 或 production-ready。
 
 ## Evidence Template
 ```md
@@ -117,16 +78,7 @@ pytest tests/hil/ --html=results/hil_report.html --self-contained-html
 ## Quality Gate
 - 必须说明 HIL 与 SIL 的覆盖分工。
 - 必须至少包含 1 条系统级异常恢复验证。
-- 发布前必须给出"可发布/不可发布"明确结论。
-- SIL 测试必须在 CI 中自动执行且通过率 100%。
-- HIL 测试报告必须包含串口日志与固件版本信息。
+- 发布准备应明确证据和未测缺口；最终 go/no-go 归项目发布门禁。
+- 纳入 CI 的适用 SIL 用例必须区分 pass/fail/skip/not-run，不以未执行或有未解释失败冒充 PASS。
+- HIL 报告记录固件/设备身份、原始证据（具备串口时包含串口日志）、退出码和最终健康状态。
 
----
-
-## 健壮性规范
-
-- **输入验证**: 执行前校验所有必要输入是否存在且格式正确
-- **重试策略**: 外部命令失败时最多重试 3 次，指数退避（1s, 2s, 4s）
-- **超时控制**: 单步操作超时 30 秒，整体流程超时 300 秒
-- **异常隔离**: 单个步骤失败不阻塞其他独立步骤
-- **日志记录**: 关键操作记录命令、退出码、耗时
