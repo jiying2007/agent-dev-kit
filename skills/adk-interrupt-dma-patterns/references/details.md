@@ -1,34 +1,19 @@
-# adk-interrupt-dma-patterns — 补充参考资料
+# IRQ/DMA 观测工具（按需参考）
 
-此参考文件只提供可选背景、示例和检查提示；当前能力流程、权限、回退与放行结论以 `../SKILL.md`、Manifest 及运行时门禁为准。示例命令不得被解释为写权限授权。
+本文件不授予任何实时设备权限；主流程以 `../SKILL.md`、Manifest、目标项目和 operator gate 为准。示例按平台分离。
 
-## Commands
-```bash
-# 中断统计
-cat /proc/interrupts
-watch -n 1 "cat /proc/interrupts | grep <device>"
+## Linux
+- `/proc/interrupts` 可作为 IRQ 计数观察；内核版本/模块/统计语义需确认。
+- `cyclictest` 测的是实时线程调度／唤醒延迟，**不是直接测 IRQ entry latency**；内核支持时可使用 timerlat/osnoise 区分 IRQ 与 thread，仍需测量时间基准和干扰。
+- `/sys/class/dma` 的路径不保证任何 Linux BSP 都存在，缺失标为 unavailable。
+- `perf`、tracefs、debugfs、stress-ng 等可能改变负载或内核状态，先核权限与隔离；不能把固定 4 CPU/4 IO、60 秒当作所有目标默认负载。
 
-# 中断延迟测试
-cyclictest -p 99 -i 1000 -l 10000 --mlockall -m
+## MCU / RTOS / bare-metal
+- 使用目标设备实际提供的 DWT/ETM、GPIO toggle、timer capture、逻辑分析仪或厂商 trace；并非所有 Cortex-M 都具有同一组 DWT/ETM。
+- NVIC/SCB 寄存器地址与读取副作用由该芯片的 CMSIS device header/TRM 验证，**禁止把 Linux devmem2 + Cortex-M NVIC 地址当成通用读命令**。
+- FromISR、ISR 优先级位数和 DMA cache/buffer 详细分支见 `rtos-isr-dma-diagnostics.md`；没有 cache 的 MCU 不需要虚构 invalidate 步骤。
 
-# DMA 状态
-cat /sys/class/dma/dma0chan*/in_use
+## 证据与预算
+记录 CPU/MCU/board/kernel/RTOS、toolchain、source/firmware hash、采样点、事件率与 burst、latency/jitter/CPU 预算、p50/p95/p99/max、原始 trace、观察动作副作用分类及恢复方案。缺真机数据只报告 needs-runtime-evidence。
 
-# ISR 代码审查
-rg -n "ISR|IRQ|irq_handler|DMA.*IRQ" <driver_path>
-
-# 寄存器级别中断检查
-devmem2 <NVIC_ISER_addr>    # 中断使能寄存器
-devmem2 <NVIC_IPR_addr>     # 中断优先级寄存器
-
-# 逻辑分析仪 / 示波器触发
-# （硬件工具，记录 GPIO toggle 测量 ISR 延迟）
-
-# 压力测试
-stress-ng --cpu 4 --io 4 --timeout 60s &
-<latency-measure-cmd> --irq --dma --duration 60
-```
-
-## 设备权限说明
-
-- `devmem2` 示例只允许只读参数并且设备身份已确认；任何寄存器写入或有负载影响的测试均需独立授权与回退方案。
+来源：https://wiki.linuxfoundation.org/realtime/documentation/howto/tools/cyclictest/start ; https://docs.kernel.org/trace/timerlat-tracer.html
