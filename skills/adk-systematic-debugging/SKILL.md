@@ -59,6 +59,10 @@ constraints:
 
 E2/E3 对影响正确性或安全边界的关键前提，以冻结输入和复现命令做适用的反例验证；已有有效反例可复用并核身份。方法不适用时说明直接因果证据，不强制加 Agent；连续两轮无新信息则重审。
 
+## 嵌入式场景分流
+
+遇到 UBIFS/SquashFS 只读或容量、Buildroot/Autotools 构建错误、Wi-Fi/DNS/MQTT 故障、SPI/QSPI 无画面、FOC 过流或偶发异常时，按需读取 `references/embedded-diagnosis-branches.md`，先区分现象、实际状态及变更/授权边界。该参考是分流提示，不替代目标 BSP、TRM 或现场记录。
+
 ## Repair, Not Blind Retry
 
 失败后的默认动作是缩小和修复，不是重复跑同一条命令或扩大改动面。

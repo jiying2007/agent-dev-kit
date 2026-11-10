@@ -2497,7 +2497,7 @@
       },
       {
         "intent": "systematic_debugging",
-        "intent_zh": "调试/调试问题/排查根因/问题排查/定位根因/真实问题排查/根因未明/排查偶发死锁/排查死锁",
+        "intent_zh": "调试/调试问题/排查根因/问题排查/定位根因/真实问题排查/根因未明/排查偶发死锁/排查死锁/UBIFS只读故障/UBIFS并发写/UBIFS变只读/SquashFS只读异常/df显示100%/文件系统只读故障/MQTTDNSresolutionfailed/DNS解析失败/Buildroot构建失败/Autotools缺少aclocal/Autotools构建失败/Yocto构建失败/电机过流故障",
         "primary_skill": "adk-systematic-debugging",
         "supporting_skills": [],
         "mutually_exclusive": [
@@ -2668,7 +2668,7 @@
       },
       {
         "intent": "driver_bringup",
-        "intent_zh": "驱动调试/驱动bringup/首板联调/外设联调/bringup检查表",
+        "intent_zh": "驱动调试/驱动bringup/首板联调/外设联调/bringup检查表/背光亮无图/显示屏初始化失败/SPI屏不显示/QSPI屏无显示",
         "primary_skill": "adk-driver-bringup-checklist",
         "supporting_skills": [
           "adk-register-map-design"
@@ -2690,9 +2690,18 @@
       },
       {
         "intent": "interrupt_dma_patterns",
-        "intent_zh": "中断处理/DMA处理/中断DMA",
+        "intent_zh": "中断处理/DMA处理/中断DMA/FromISR断言/FromISR/DMA读到旧数据/DMA缓存一致性/DMAcachecoherency/DMA偶发读到旧数据",
         "primary_skill": "adk-interrupt-dma-patterns",
         "supporting_skills": []
+      },
+      {
+        "intent": "mcu_fault_diagnostics",
+        "intent_zh": "HardFault/随机复位/MCU异常复位/低功耗后无法唤醒/唤醒源失效/看门狗意外复位",
+        "primary_skill": "adk-hardware-debugging",
+        "supporting_skills": [
+          "adk-systematic-debugging",
+          "adk-embedded-debug-transport"
+        ]
       },
       {
         "intent": "protocol_stack_integration",
@@ -2712,7 +2721,7 @@
       },
       {
         "intent": "cmake_cross_build",
-        "intent_zh": "CMake交叉编译/交叉编译/CMake构建",
+        "intent_zh": "CMake交叉编译/CMake构建/CMake工具链/CMake配置/CMakePresets/CMakeLists/交叉编译CMake",
         "primary_skill": "adk-cmake-cross-build",
         "supporting_skills": []
       },
@@ -2782,7 +2791,7 @@
       },
       {
         "intent": "embedded_storage_layout_migration",
-        "intent_zh": "UBIFS/SquashFS/ubiblock/业务分区/分区保留/存储布局迁移/OTA布局迁移/文件系统切换",
+        "intent_zh": "存储布局迁移/OTA布局迁移/文件系统切换/根文件系统迁移/UBIFS转SquashFS/SquashFS转UBIFS/UBI卷布局调整/分区重排/分区保留方案",
         "primary_skill": "adk-embedded-storage-layout-migration",
         "profile_availability": "explicit-profile-required",
         "supporting_skills": [
