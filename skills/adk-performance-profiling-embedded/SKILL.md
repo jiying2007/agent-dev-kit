@@ -1,8 +1,8 @@
 ---
 name: adk-performance-profiling-embedded
 description: "用于有明确指标时对嵌入式真实负载做性能分析和可比较的 A/B 验证；无指标不启用，也不用于仅凭推测宣布性能改善。"
-version: 1.1.1
-last_updated: 2026-11-03
+version: 1.1.2
+last_updated: 2026-11-10
 triggers:
   - "性能分析"
   - "性能优化"
