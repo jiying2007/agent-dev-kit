@@ -55,20 +55,26 @@ cppcheck --enable=all --suppress=missingIncludeSystem --xml <src_dir> 2> report.
 | 级别 | 定义 | 处理策略 |
 |------|------|----------|
 | Blocker | 内存越界/UAF/空指针解引用 | 阻断合并，立即修复 |
-| Major | 整数溢出/未初始化/资源泄漏 | 48 小时内修复 |
+| Major | 整数溢出/未初始化/资源泄漏 | 根据项目 SLA 与发布风险门禁处理，不使用通用 48 小时限制 |
 | Minor | 代码风格/命名规范 | 下个迭代修复 |
 | Info | 潜在优化建议 | 按需处理 |
 
 ## CI 集成示例
+
 ```yaml
-# .github/workflows/static-analysis.yml
+# 仅适用于已审查的 Ubuntu/CMake CI；BASE_SHA/HEAD_SHA 来自受信工作流
 static-analysis:
   steps:
-    - run: cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -B build
+    - run: cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
     - run: cppcheck --enable=warning --error-exitcode=1 --project=build/compile_commands.json
-    - run: clang-tidy -p build $(git diff --name-only HEAD~1 -- '*.c' '*.cpp')
+    - run: |
+        set -euo pipefail
+        : "${BASE_SHA:?trusted base missing}" "${HEAD_SHA:?trusted head missing}"
+        git diff --name-only --diff-filter=ACMR -z "$BASE_SHA" "$HEAD_SHA" -- '*.c' '*.cc' '*.cpp' |
+          xargs -0 -r clang-tidy -p build --warnings-as-errors='*'
 ```
 
+必须先检查 compiler database、所选规则和差异文件；空输入应明确 `not-applicable`，不是零缺陷。需要有故意触发高优先级告警、CI 返回非零的负例证明。比较基线必须正确，PR/fork 场景保持受信触发和 secret 隔离。
 ## Evidence Template
 ```md
 - Rule Set:
