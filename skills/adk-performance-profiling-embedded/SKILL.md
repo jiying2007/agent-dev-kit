@@ -1,8 +1,8 @@
 ---
 name: adk-performance-profiling-embedded
 description: "用于有明确指标时对嵌入式真实负载做性能分析和可比较的 A/B 验证；无指标不启用，也不用于仅凭推测宣布性能改善。"
-version: 1.1.1
-last_updated: 2026-11-03
+version: 1.1.2
+last_updated: 2026-11-10
 triggers:
   - "性能分析"
   - "性能优化"
@@ -44,6 +44,9 @@ valgrind --tool=massif --pages-as-heap=yes <binary>
 ms_print massif.out.<pid>
 <benchmark-cmd> --scenario <name> --repeat <declared-sample-count>
 ```
+
+## MCU 资源实测（按需）
+涉及 MCU Flash/RAM/stack、DMA buffer 或 retention memory 时，读取 `references/mcu-memory-footprint.md`；必须用同工具链 ELF/map/size 的实测差值并验证行为/实时性，不能由代码行数推算节省。
 
 ## 火焰图
 按目标 trace 能力选择 perf 或 DWT/ETM，生成热点归因报告。

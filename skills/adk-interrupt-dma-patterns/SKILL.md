@@ -1,14 +1,17 @@
 ---
 name: adk-interrupt-dma-patterns
 description: "用于中断、DMA、缓存一致性、共享缓冲所有权的实现模式与实时性检查；不用于无中断参与的普通应用逻辑或免证据修改寄存器。"
-version: 2.0.1
-last_updated: 2026-11-03
+version: 2.0.2
+last_updated: 2026-11-10
 triggers:
   - "中断处理"
   - "DMA处理"
   - "中断DMA"
   - "缓存一致性"
   - "DMA丢数据"
+  - "DMA读到旧数据"
+  - "FromISR断言"
+  - "DMA cache coherency"
 non_triggers:
   - 轮询已经满足已量化 latency/CPU budget 的场景
 inputs:
@@ -40,7 +43,7 @@ constraints:
 5. **Cache/coherency**：区分 coherent/non-coherent；non-coherent 路径明确 clean/invalidate、barrier、mapping/sync API 和方向。
 6. **Buffer/backpressure**：设计 single/double/ring/descriptor queue，覆盖 overrun、underrun、wrap、partial transfer 和 producer/consumer 失速。
 7. **DMA completion/error**：处理 complete/error/timeout/cancel/reset/late completion，确保 descriptor/channel/buffer 只释放一次。
-8. **并发验证**：检查 IRQ masking、nested interrupt、priority inversion、memory ordering、multi-core ownership 和 teardown race。
+8. **并发验证**：检查 IRQ masking、nested interrupt、priority inversion、memory ordering、multi-core ownership 和 teardown race；FreeRTOS 的 `FromISR` 断言先核对 port、实际 NVIC 优先级位数、ISR API 允许范围和逻辑优先级与数值方向，不套用其他 CPU 的 NVIC 寄存器。详见 `references/rtos-isr-dma-diagnostics.md`。
 9. **压力验证**：在代表性 burst/并发/错误注入下采集 throughput、latency、jitter、CPU、IRQ rate、drop/error count 和 recovery time。
 
 ## Platform Mapping

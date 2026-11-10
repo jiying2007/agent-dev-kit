@@ -1,14 +1,13 @@
 ---
 name: adk-embedded-storage-layout-migration
 description: "用于 MTD、UBI、分区及文件系统布局迁移的 host 端检查、演练和回退设计；不用于未授权的设备存储写入或纯日志检索。"
-version: 2.0.1
-last_updated: 2026-11-03
+version: 2.0.2
+last_updated: 2026-11-10
 triggers:
-  - "UBIFS"
-  - "SquashFS"
-  - "ubiblock"
-  - "业务分区"
-  - "分区保留"
+  - "UBIFS转SquashFS"
+  - "SquashFS转UBIFS"
+  - "UBI卷布局调整"
+  - "分区保留方案"
   - "存储布局迁移"
   - "OTA布局迁移"
   - "文件系统切换"
@@ -16,6 +15,8 @@ non_triggers:
   - "普通固件发布"
   - "只改版本号"
   - "非持久化临时挂载问题"
+  - "只分析UBIFS只读故障"
+  - "SquashFS空间占用解释"
 inputs:
   - 分区表、配置、rootfs/ubinize/OTA layout、boot log、保留要求、目标设备 identity、恢复能力
 outputs:
@@ -39,6 +40,7 @@ constraints:
 - 已明确必须保留的数据分区、最后可恢复版本和 recovery/backup 能力。
 
 ## Workflow
+0. **问题分流**：仅解释 SquashFS 只读/df 100%、UBIFS 只读退化、挂载或 I/O 错误时，交给 `adk-systematic-debugging`；只有明确的布局/文件系统变更计划才进入迁移。分析迁移风险（即使明确不执行迁移）仍属于本 Skill。
 1. **现状矩阵**：列 boot/rootfs、factory/data/ota、misc/pstore 等 partition/volume 的 FS、mount、update method、preserve policy 和运行态证据。
 2. **变更分类**：区分普通内容更新、布局迁移、FS 切换、回滚迁移、产线重刷；不同类别不能共享同一风险结论。
 3. **配置链对齐**：核 defconfig/current config、partition table、ubinize、mount script、OTA layout、release metadata 和 artifact hash。

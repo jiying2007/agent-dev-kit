@@ -1,8 +1,8 @@
 ---
 name: adk-embedded-release-orchestration
 description: "用于嵌入式固件 OTA 制品的发布准备、签名证据和回滚编排；不用于未经单独授权的真实 publish、设备 flash 或发布批准。"
-version: 2.0.1
-last_updated: 2026-11-03
+version: 2.0.2
+last_updated: 2026-11-10
 triggers:
   - "嵌入式发布编排"
   - "固件发布"
@@ -46,7 +46,8 @@ constraints:
 6. **device escalation**：真实 flash/OTA/deploy 前必须另行冻结 device/board identity、分区/region、explicit authorization、recovery image/path 和 post-write verification；publish 授权不能复用为 device authorization。
 7. **凭证边界**：NAS、签名、证书、registry、SSH 和设备凭证只由运行环境注入，不写入 skill/docs/memory/log。
 8. **产线交接**：guide 面向测试/生产/现场人员，明确允许的 artifact、设备范围、失败停止条件和恢复入口。
-9. **证据收口**：分别记录 prepare、publish、flash/deploy 的 actor、命令、exit code、artifact digest、target identity 与结果。
+9. **多 MCU 部分成功恢复（按需）**：SoC 与主板、电机、充电桩 MCU 共存的 OTA 参考 `references/multi-mcu-ota-recovery.md`；逐组件核兼容、激活、健康确认和部分失败回滚，单一制品 hash 不等于整机通过。
+10. **证据收口**：分别记录 prepare、publish、flash/deploy 的 actor、命令、exit code、artifact digest、target identity 与结果。
 
 ## Commands
 ```bash

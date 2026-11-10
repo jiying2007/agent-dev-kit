@@ -1,8 +1,8 @@
 ---
 name: adk-fault-injection-recovery
 description: "用于已授权的故障注入、失败路径与恢复能力验证，并记录可重放的回滚证据；不用于未经隔离的生产设备破坏性实验。"
-version: 1.0.2
-last_updated: 2026-11-04
+version: 1.0.3
+last_updated: 2026-11-10
 triggers:
   - "故障注入"
   - "故障恢复"
@@ -14,7 +14,7 @@ inputs:
 outputs:
   - 注入方案与恢复结果
 constraints:
-  - 覆盖掉电、超时、资源耗尽
+  - 根据项目风险选择故障模型；未经许可不得强制掉电和资源耗尽
 ---
 
 # adk-fault-injection-recovery
@@ -72,10 +72,10 @@ journalctl -p err --since "10 min ago"
 - 注入后系统 panic，保存串口日志与 coredump 后再重启。
 
 ## Quality Gate
-- 必须覆盖掉电、超时、资源耗尽中的至少两类。
+- 必须覆盖项目风险分析要求的故障类型；掉电、超时和资源耗尽是候选，不为凑两类而开展无关或危险实验。
 - 必须记录检测时间和恢复时间。
 - 结论需包含是否满足恢复 SLA。
-- 看门狗配置必须经过验证（注入 hang 场景确认触发 reset）。
+- 仅当 watchdog 属于本次目标且已授权隔离实验时，验证 timeout/reset/recovery；缺条件标记 not-evaluated。
 - 恢复后必须通过功能回归测试。
 
 ---
