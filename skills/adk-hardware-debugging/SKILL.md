@@ -1,8 +1,8 @@
 ---
 name: adk-hardware-debugging
 description: "用于板级电源、时钟、复位和硬件异常的假设验证与证据定位；不用于把 Linux oops 直接归咎硬件或未经许可执行带风险的硬件操作。"
-version: 1.0.1
-last_updated: 2026-11-03
+version: 1.0.2
+last_updated: 2026-11-10
 triggers:
   - 硬件调试
   - oops 分析
