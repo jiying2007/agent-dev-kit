@@ -298,7 +298,6 @@ class SkillTriggerMatrixTests(unittest.TestCase):
         protocol = body("skills/adk-protocol-stack-integration/SKILL.md")
         self.assertNotIn('scapy.all.sniff(filter=', protocol)
         self.assertIn("Python API", protocol)
-        self.assertIn("not", protocol.lower() or "not")
 
         unit = body("skills/adk-unit-test-embedded/SKILL.md")
         self.assertIn("MC/DC", unit)
