@@ -11,11 +11,11 @@
 | 文件 | 11.2.2 原值 | 11.2.3 候选 |
 |---|---:|---:|
 | Goal Authoring SKILL.md | 2018 | 1606 |
-| Planning Execution SKILL.md | 4533 | 1793 |
+| Planning Execution SKILL.md | 4533 | 1844 |
 | 既有恢复 reference | 1109 | 2417 |
-| 合计 | 7660 | 5816 |
+| 合计 | 7660 | 5867 |
 
-主入口两份合计从 6551 降至 3399（减少 3152 字符）；加上按需恢复 reference，合计减少 1844 字符。该数字来自源码长度，不是 Tokenizer/缓存/模型效果实测，也不意味着 runtime 初始上下文必然下降。Profile 既有 source-growth ratchet 不放宽。
+主入口两份合计从 6551 降至 3450（减少 3101 字符）；加上按需恢复 reference，合计减少 1793 字符。该数字来自源码长度，不是 Tokenizer/缓存/模型效果实测，也不意味着 runtime 初始上下文必然下降。Profile 既有 source-growth ratchet 不放宽。
 
 ## 验证和边界
 - `tests/test_skill_trigger_matrix.py` 与 `tests/fixtures/skill_trigger_cases.tsv`：新建与继续执行正例、只读 CI、计划审查、摘要请求、已有目标误触发负例。
