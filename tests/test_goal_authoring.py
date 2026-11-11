@@ -48,6 +48,25 @@ class GoalPlanTests(unittest.TestCase):
         self.assertIn("非关闭批次4次", text)
         self.assertIn("范围：", text)
 
+    def test_unknown_token_proposal_is_explicit_not_a_false_budget(self):
+        plan = copy.deepcopy(self.plan)
+        plan["budget_proposal"] = {
+            "tokens": None,
+            "basis": "缺少受信模型 usage；待真实计量后提交估计",
+            "native_goal_applied": False,
+        }
+        verdict = check(plan)
+        self.assertEqual(verdict["status"], "pass", verdict)
+        output = render(plan)
+        self.assertIn("预算提案：未知（待真实测量）", output)
+        self.assertIn("未设置原生预算", output)
+        for invalid in (0, -1, True, "100"):
+            plan["budget_proposal"]["tokens"] = invalid
+            self.assertIn("budget-proposal-invalid-or-claims-authority", check(plan)["reasons"])
+        plan["budget_proposal"]["tokens"] = None
+        plan["budget_proposal"]["native_goal_applied"] = True
+        self.assertIn("budget-proposal-invalid-or-claims-authority", check(plan)["reasons"])
+
     def test_original_denominator_unknown_parent_and_duplicate_ids_are_rejected(self):
         for mutation, expected in (
             (lambda p: p["parent_criteria"].append("AC-lost"), "original-criteria-unmapped"),

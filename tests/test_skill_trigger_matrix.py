@@ -197,6 +197,41 @@ class SkillTriggerMatrixTests(unittest.TestCase):
                     self.assertIs(negative.get("match"), False, (name, "negative", negative))
         self.assertEqual(len(seen), len(manifest.data["skills"]) + len(manifest.data["optional_skills"]))
 
+    def test_goal_skill_route_positive_negative_and_no_generic_hijack(self) -> None:
+        # Source-only matcher regression. Not evidence of native host invocation
+        # or actual token savings.
+        manifest = Manifest.load(ROOT)
+        direct = (
+            ("adk-goal-authoring", "生成Goal合同并保留原验收", True),
+            ("adk-goal-authoring", "Goal怎么写才可以验证？", True),
+            ("adk-goal-authoring", "已有Goal继续执行，不要重建", False),
+            ("adk-goal-authoring", "只查看CI状态", False),
+            ("adk-planning-execution-loop", "按现有计划继续执行并验证", True),
+            ("adk-planning-execution-loop", "分阶段执行现有任务包", True),
+            ("adk-planning-execution-loop", "计划审查和风险说明", False),
+            ("adk-planning-execution-loop", "恢复摘要", False),
+            ("adk-planning-execution-loop", "生成Goal合同", False),
+            ("adk-planning-execution-loop", "仅查询CI状态", False),
+        )
+        for skill, prompt, expected in direct:
+            with self.subTest(skill=skill, prompt=prompt):
+                answer = match_text(manifest, prompt, skill=skill, scope="skill")
+                self.assertIs(answer.get("match"), expected, answer)
+        for prompt, expected in (
+            ("生成Goal合同并保留原验收", "adk-goal-authoring"),
+            ("按现有计划继续执行并验证", "adk-planning-execution-loop"),
+        ):
+            with self.subTest(auto=prompt):
+                actual = match_text(manifest, prompt, scope="auto")
+                self.assertIs(actual.get("match"), True, actual)
+                self.assertEqual(actual.get("skill"), expected, actual)
+        author = _frontmatter(ROOT / "skills/adk-goal-authoring/SKILL.md")
+        execute = _frontmatter(ROOT / "skills/adk-planning-execution-loop/SKILL.md")
+        self.assertNotIn("长期不收敛", author["triggers"])
+        self.assertFalse({"计划审查", "长任务", "恢复摘要"} & set(execute["triggers"]))
+        self.assertIn("不用于", author["description"])
+        self.assertIn("不用于", execute["description"])
+
     def test_repo_drift_local_commands_refer_to_real_scripts(self) -> None:
         """Reject stale in-repository script references without guessing target project paths."""
         import re

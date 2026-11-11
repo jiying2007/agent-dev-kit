@@ -127,8 +127,11 @@ def check(plan: dict, state: Optional[dict] = None) -> dict:
         if not _text(batch["replan_effect"]):
             reasons.append("replan-effect-missing")
     budget = plan.get("budget_proposal")
+    # An honest unknown token estimate is preferable to fabricated precision.
+    # This is only a proposal; the native Goal's authority/budget is untouched.
+    tokens = budget.get("tokens") if isinstance(budget, dict) else None
     if (not isinstance(budget, dict) or set(budget) != {"tokens", "basis", "native_goal_applied"}
-            or type(budget.get("tokens")) is not int or budget["tokens"] < 1
+            or (tokens is not None and (type(tokens) is not int or tokens < 1))
             or not _text(budget.get("basis")) or budget.get("native_goal_applied") is not False):
         reasons.append("budget-proposal-invalid-or-claims-authority")
     if state is not None:
@@ -156,7 +159,9 @@ def render(plan: dict, state: Optional[dict] = None) -> str:
              "约束：" + "；".join(plan["constraints"]),
              "当前批次：" + plan["batch"]["id"], "退出条件：" + plan["batch"]["done_when"],
              "范围：" + "；".join(plan["batch"]["scope"]),
-             "预算提案：{} tokens；未设置原生预算。".format(plan["budget_proposal"]["tokens"]),
+             ("预算提案：{} tokens；未设置原生预算。".format(plan["budget_proposal"]["tokens"])
+              if plan["budget_proposal"]["tokens"] is not None
+              else "预算提案：未知（待真实测量）；未设置原生预算。"),
              "停止/重排：同因{}次、非关闭批次{}次；{}".format(
                  plan["batch"]["stop"]["same_failure_limit"],
                  plan["batch"]["stop"]["nonclosing_batch_limit"],

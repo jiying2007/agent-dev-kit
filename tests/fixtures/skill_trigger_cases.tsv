@@ -80,3 +80,13 @@ adk-structured-requirements-questioning	skill	1	请苏格拉底式追问产品�
 adk-structured-requirements-questioning	skill	0	已有完整方案按计划直接执行
 adk-structured-requirements-questioning	skill	0	只执行已有任务包
 adk-structured-requirements-questioning	skill	0	纯文档润色
+adk-goal-authoring	skill	1	生成Goal合同并建立可验证验收
+adk-goal-authoring	skill	1	重写Goal验收映射并保留原始分母
+adk-goal-authoring	skill	0	已有Goal继续执行，无需重建合同
+adk-goal-authoring	skill	0	只查看CI状态不要生成目标
+adk-goal-authoring	skill	0	只读计划对比，不创建Goal合同
+adk-planning-execution-loop	skill	1	按现有计划继续执行并核验阶段
+adk-planning-execution-loop	skill	1	恢复执行已批准任务继续提交阶段成果
+adk-planning-execution-loop	skill	0	只要计划不要执行
+adk-planning-execution-loop	skill	0	仅查询CI状态并汇报
+adk-planning-execution-loop	skill	0	计划审查和恢复摘要

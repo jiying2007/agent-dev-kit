@@ -1,5 +1,5 @@
 {
-  "version": "11.2.2",
+  "version": "11.2.3",
   "locale": "zh-CN",
   "platforms": [
     "linux-embedded",
@@ -2017,7 +2017,7 @@
     },
     {
       "name": "long_execution",
-      "description": "长任务需要计划审查、检查点、恢复和完成前闭环",
+      "description": "有批准计划的多阶段实际执行、检查点恢复与目标闭环",
       "routing_intent": "planning_execution",
       "workflow": "feature-delivery",
       "profiles": [
@@ -2025,7 +2025,7 @@
       ],
       "positive_examples": [
         "分阶段执行并持续验证",
-        "长任务需要恢复摘要和检查点"
+        "按现有计划继续执行并核对已验收项"
       ],
       "negative_examples": [
         "只要计划，不要执行"
@@ -2365,13 +2365,13 @@
       },
       {
         "intent": "goal_authoring",
-        "intent_zh": "生成Goal/Goal怎么写/目标合同/目标过大/长期不收敛",
+        "intent_zh": "生成Goal/Goal怎么写/目标合同/目标过大/重写Goal验收",
         "primary_skill": "adk-goal-authoring",
         "supporting_skills": []
       },
       {
         "intent": "planning_execution",
-        "intent_zh": "执行计划/多阶段任务/计划审查/长任务/分阶段执行/恢复摘要/中途改范围/失败阶段回退",
+        "intent_zh": "执行计划/按现有计划继续执行/分阶段执行/恢复执行已批准任务/失败阶段回退",
         "primary_skill": "adk-planning-execution-loop",
         "supporting_skills": [
           "adk-verification-before-completion"
