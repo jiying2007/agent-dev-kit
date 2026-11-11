@@ -1,5 +1,5 @@
 {
-  "version": "11.2.3",
+  "version": "11.2.4",
   "locale": "zh-CN",
   "platforms": [
     "linux-embedded",
@@ -1310,6 +1310,7 @@
         "application-engineer"
       ],
       "include_skills": [
+        "adk-planning-execution-loop",
         "adk-register-map-design",
         "adk-bsp-analysis",
         "adk-driver-implementation",
@@ -2021,7 +2022,8 @@
       "routing_intent": "planning_execution",
       "workflow": "feature-delivery",
       "profiles": [
-        "team-core"
+        "team-core",
+        "embedded-fullstack"
       ],
       "positive_examples": [
         "分阶段执行并持续验证",

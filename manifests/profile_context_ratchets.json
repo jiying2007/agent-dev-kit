@@ -29,9 +29,9 @@
       "potential_full_source_bytes": 204293
     },
     "embedded-fullstack": {
-      "assets": 54,
-      "entry_file_bytes": 241585,
-      "potential_full_source_bytes": 309519
+      "assets": 55,
+      "entry_file_bytes": 245296,
+      "potential_full_source_bytes": 316854
     },
     "team-core": {
       "assets": 35,
@@ -39,9 +39,9 @@
       "potential_full_source_bytes": 223333
     },
     "large-refactor": {
-      "assets": 55,
-      "entry_file_bytes": 244617,
-      "potential_full_source_bytes": 315993
+      "assets": 56,
+      "entry_file_bytes": 248328,
+      "potential_full_source_bytes": 323328
     },
     "incident-response": {
       "assets": 9,

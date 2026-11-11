@@ -36,6 +36,26 @@ class ProfileContextFootprintTest(unittest.TestCase):
                 self.assertGreater(first["assets"]["total"], 0)
                 self.assertGreater(first["entry_file_surface"]["bytes"], 0)
 
+    def test_embedded_goal_loop_is_available_without_team_profile(self) -> None:
+        # Execution remains on-demand: inclusion does not establish that a
+        # runtime eagerly loads SKILL.md, dispatches a model or grants writes.
+        embedded = MANIFEST.resolve_profiles(["embedded-fullstack"])
+        large = MANIFEST.resolve_profiles(["large-refactor"])
+        core = MANIFEST.resolve_profiles(["core"])
+        team = MANIFEST.resolve_profiles(["team-core"])
+        def names(result):
+            return {asset.name for asset in result.skills}
+        for profile in (embedded, large, team):
+            self.assertIn("adk-planning-execution-loop", names(profile))
+            self.assertIn("adk-goal-authoring", names(profile))
+        self.assertNotIn("adk-planning-execution-loop", names(core))
+        self.assertIn("adk-goal-authoring", names(core))
+        routing = next(v for v in MANIFEST.data["skill_routing_matrix"]
+                       if v["name"] == "long_execution")
+        self.assertEqual(routing["profiles"], ["team-core", "embedded-fullstack"])
+        self.assertFalse(profile_footprint(MANIFEST, "embedded-fullstack")["accounting"]
+                         ["runtime_initial_context_measured"])
+
     def test_all_profile_source_growth_ratchets_hold(self) -> None:
         for name in sorted(MANIFEST.data["profiles"]):
             with self.subTest(profile=name):

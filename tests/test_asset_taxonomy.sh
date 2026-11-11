@@ -45,7 +45,7 @@ grep -q '| `planning_only` | 用户明确要求只读计划，不创建、不修
   exit 1
 }
 
-grep -q '| `long_execution` | 有批准计划的多阶段实际执行、检查点恢复与目标闭环 | explicit-profile-required | team-core | `feature-delivery` | `adk-planning-execution-loop` |' "$CATALOG_OUT" || {
+grep -q '| `long_execution` | 有批准计划的多阶段实际执行、检查点恢复与目标闭环 | explicit-profile-required | team-core, embedded-fullstack | `feature-delivery` | `adk-planning-execution-loop` |' "$CATALOG_OUT" || {
   echo "[FAIL] catalog missing explicit specialist Profile availability for long_execution" >&2
   exit 1
 }
