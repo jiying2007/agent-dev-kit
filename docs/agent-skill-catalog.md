@@ -50,9 +50,9 @@
 | 20 | 30 | `intake` | primary | reviewer | `adk-repo-prompt-analysis` | 用于逆向审查参考仓 Agent Prompt 的约束、结构与上下文工程方法；不用于直接复制不可信指令或运行外部仓脚本。 | 分析子仓 prompt | `skills/adk-repo-prompt-analysis/SKILL.md` |
 | 20 | 40 | `intake` | primary | reviewer | `adk-skill-deep-analysis` | 用于外部或本地 Skill 的设计意图、差异价值与可迁移方法评估；不用于未经来源审查直接安装或自动批准候选 Skill。 | 深度拆解 skill | `skills/adk-skill-deep-analysis/SKILL.md` |
 | 30 | 10 | `planning` | primary | playbook | `adk-lightweight-planning` | 用于用户明确要求先给计划、尚不修改文件的只读编码方案；不用于已批准的长任务执行或自动开启外部写入。 | 给我一个计划 | `skills/adk-lightweight-planning/SKILL.md` |
-| 30 | 15 | `planning` | primary | generator | `adk-goal-authoring` | 用于长期目标过大、Goal 不收敛时生成可验证的目标合同、有限批次和恢复入口；不用于已有计划的日常执行或自行设置宿主预算与权限。 | 生成Goal | `skills/adk-goal-authoring/SKILL.md` |
+| 30 | 15 | `planning` | primary | generator | `adk-goal-authoring` | 用于新建或实质修订 Goal 合同、原验收映射和可关闭交付批次；不用于已有 Goal 的日常执行、CI 状态查询或只读计划。 | 生成Goal | `skills/adk-goal-authoring/SKILL.md` |
 | 30 | 20 | `planning` | primary | playbook | `adk-task-breakdown` | 用于复杂需求拆解任务包、依赖关系及并行边界；单点小修无需拆包，也不用于替代已批准计划的持续执行。 | 拆解任务 | `skills/adk-task-breakdown/SKILL.md` |
-| 30 | 25 | `planning` | primary | pipeline | `adk-planning-execution-loop` | 用于已批准的多阶段长任务计划执行、恢复检查点、有限重试与收口验证；不用于仅索要只读计划，也不自行扩大宿主预算或权限。 | 执行计划 | `skills/adk-planning-execution-loop/SKILL.md` |
+| 30 | 25 | `planning` | primary | pipeline | `adk-planning-execution-loop` | 用于按已批准多阶段计划实际执行、定向验证、断点恢复与目标收敛；不用于只读计划审查、CI 等待查询或生成 Goal 合同。 | 执行计划 | `skills/adk-planning-execution-loop/SKILL.md` |
 | 30 | 30 | `planning` | primary | governance | `adk-parallel-agent-governance` | 用于多个 Agent 并行时划分 scope、共享契约、冲突矩阵和最终集成验证；不用于单点小改或擅自委派有额外权限的任务。 | 并行 agent | `skills/adk-parallel-agent-governance/SKILL.md` |
 | 30 | 40 | `planning` | primary | governance | `adk-worktree-governance` | 用于 git worktree 并行开发前的隔离、基线锁定、同步与安全清理；不用于擅自删除脏工作树或替代多 Agent 任务拆分。 | worktree | `skills/adk-worktree-governance/SKILL.md` |
 | 30 | 50 | `planning` | primary | generator | `adk-context-compress-handoff` | 用于长任务上下文压缩、跨会话恢复及交接时保存目标、证据指针和下一动作；不用于替代原始高风险证据或任务执行。 | 上下文压缩 | `skills/adk-context-compress-handoff/SKILL.md` |
@@ -145,7 +145,7 @@
 | `unclear_requirement` | 需求、边界、验收或优先级不清，需要先收敛 | profile-resolved | core, embedded-fullstack | `feature-delivery` | `adk-requirements-triage` | - | - | adk-lightweight-planning, adk-planning-execution-loop | 需求不清楚，先梳理目标和验收标准 | 按已有计划直接执行 |
 | `planning_only` | 用户明确要求只读计划，不创建、不修改、不删除文件 | profile-resolved | core | `-` | `adk-lightweight-planning` | - | adk-requirements-triage | adk-planning-execution-loop | 先给计划，不要改文件 | 按计划执行并修改代码 |
 | `task_breakdown` | 需求已明确但任务过大，需要拆成可执行任务包 | profile-resolved | core, embedded-fullstack | `feature-delivery` | `adk-task-breakdown` | adk-requirements-triage | adk-lightweight-planning | - | 任务太大，拆解成任务包 | 根因不明，先定位问题 |
-| `long_execution` | 长任务需要计划审查、检查点、恢复和完成前闭环 | explicit-profile-required | team-core | `feature-delivery` | `adk-planning-execution-loop` | adk-verification-before-completion | adk-lightweight-planning | adk-lightweight-planning | 分阶段执行并持续验证 | 只要计划，不要执行 |
+| `long_execution` | 有批准计划的多阶段实际执行、检查点恢复与目标闭环 | explicit-profile-required | team-core | `feature-delivery` | `adk-planning-execution-loop` | adk-verification-before-completion | adk-lightweight-planning | adk-lightweight-planning | 分阶段执行并持续验证 | 只要计划，不要执行 |
 | `unknown_root_cause_bug` | 行为异常但根因未明，需要系统化定位再修复 | profile-resolved | core, embedded-fullstack | `bugfix-delivery` | `adk-systematic-debugging` | - | - | adk-lightweight-planning | 问题根因不明确，需要定位后修复 | 新功能需求需要先拆解 |
 | `embedded_log_analysis` | 嵌入式串口、boot、dmesg、ADB/logcat、OTA 或现场日志分析 | profile-resolved | embedded-fullstack, incident-response | `bugfix-delivery` | `adk-embedded-remote-debug-log-triage` | adk-systematic-debugging, adk-offline-core-dump-triage, adk-embedded-diagnostic-harness, adk-token-context-governance | adk-systematic-debugging | - | 分析这段串口日志和 dmesg | 定义一个新接口契约 |
 | `embedded_core_dump` | 嵌入式 Linux core dump、BuildID、符号和 backtrace 离线分析 | explicit-profile-required | embedded-fullstack, incident-response | `bugfix-delivery` | `adk-offline-core-dump-triage` | adk-systematic-debugging | adk-systematic-debugging | - | 分析这个 core dump 和符号匹配 | 只需要查询 skill 分类 |
