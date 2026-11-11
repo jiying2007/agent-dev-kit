@@ -10,11 +10,11 @@
 - 任务跨会话、跨阶段或有多个验证检查点。
 - 需要从参考仓吸收能力并落到 adk 资产。
 
-## 推荐组合
+## 推荐组合（默认轻量）
 
-- Agent：`requirements-analyst -> architecture-planner -> application-engineer -> test-validation-engineer -> code-review-governor`
-- Primary Skill：`adk-planning-execution-loop`
-- Supporting Skills：`adk-task-breakdown`、`adk-verification-before-completion`
+- 默认一名执行者、一个当前 Checkpoint、一个 primary Skill：有批准计划且确需跨阶段执行时按需加载 `adk-planning-execution-loop`。简单修复、CI 等待或只读查询不启用完整 Loop。
+- 仅当实际风险/范围需要时加载 `adk-task-breakdown` 和 `adk-verification-before-completion`；域内原有验收门禁仍然有效。
+- 复杂跨模块/独立审查时才使用 `requirements-analyst -> architecture-planner -> application-engineer -> test-validation-engineer -> code-review-governor` 分工，**不是普通 Goal 的默认五 Agent 链**。
 
 ## 工件
 
