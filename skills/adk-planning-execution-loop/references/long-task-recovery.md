@@ -60,3 +60,19 @@ Retry budget:
 Staleness threshold:
 Open items:
 ```
+
+## On-demand execution branches
+
+以下仅在对应条件触发时加载，不是每轮默认检查清单；适用原宿主/项目更严格合同仍优先。
+
+- **受控生命周期或外部写入**：涉及 OTA、生产设备、权限、迁移或发布，冻结 owner × state × event × resource × termination × invariant；核对原审批、回滚锚点和写入结果。网络/工具回执未知时先对账，不盲目重放。
+- **Task Package v2**：真正派工才写 kind/question/evidence/permission/exit/handoff/retention、scope_read/scope_write/must_not_touch。decision/research/prototype 不可获得 implementation 权限，缺依赖或原文审查时须先退回规划。
+- **Evidence / attestation**：验证必须能从原验收 criterion ID 和注册 evidence digest 追溯。新增测试计数、流水号和 heartbeat 不证明目标收敛。attestation 写入后回读；未通过不能声称完成或归档。
+- **风险与恢复**：发现设计/共享契约/重大 finding 变化时 replan；两次相同失败仍无根因先更新假设。计划偏差不按固定百分比机械重审：只在范围、原验收分母、权限、依赖或验证路径实质改变时启动适用审查。三次 blocker 是诊断信号，不自动升级某个组织层级。
+- **并行验证**：执行前核共享构建目录、缓存、端口、二进制或设备资源；相互冲突串行。阶段末收敛 orphan checkpoint，只保留通过/失败的可重放证据和真实恢复入口。
+- **Goal Closure**：原 goal_statement、completion_claim、claimant、独立 verifier、required_evidence、open_items 与 stop_condition (pass/replan/split/blocked/abort) 均需可追溯。当前预算、历史预算合规和证据验真分别报告；阶段 milestone 不调用整体 final，也不能自动完成父 Goal。
+- **Runtime 限制**：仅当宿主报告真实 stop 才停止实施并依现有权限重规划；不增加人民币日费用硬限制。纯 Skill 不能读出宿主私有 Goal、控制 scheduler 或自签审批。外部原始证据缺失时 UNKNOWN，不能因压缩摘要而放行。
+
+## Recovery handoff discipline
+
+新会话开始只读最近的可信 checkpoint、当前验收、开放的阻塞、已核验 source SHA 和最多三个 READY 动作。事件相同且上次动作成功时不重复调用模型；只有用户指令、HEAD、失败、新证据或审核要求变化，才更新派工。原始日志保留 raw_ref 并在高风险或语义冲突时按需回读。
