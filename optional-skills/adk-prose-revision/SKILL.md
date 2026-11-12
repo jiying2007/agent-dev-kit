@@ -7,6 +7,7 @@ triggers:
   - "成稿润色"
   - "语言润色"
   - "去 AI 腔"
+  - "去 AI 味"
   - "优化文稿表达"
   - "改写这篇文章"
   - "polish this draft"

@@ -97,3 +97,4 @@ adk-prose-revision	optional-skill	0	代码审查请关注异常路径和测试�
 adk-prose-revision	optional-skill	0	请写 ADR 记录架构选型与弃用方案
 adk-prose-revision	optional-skill	0	不要进行语言润色，只核实事实和数据来源
 adk-prose-revision	optional-skill	0	不要润色技术文档，先澄清需求
+adk-prose-revision	optional-skill	1	请对这篇技术博客去AI味，只保留原有事实和数字
