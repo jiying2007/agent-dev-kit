@@ -347,6 +347,12 @@
       "runtime_role": "primary",
       "selection_group": "branch-closeout",
       "effect_ceiling": "release-preparation"
+    },
+    "adk-prose-revision": {
+      "capability_class": "task",
+      "runtime_role": "primary",
+      "selection_group": "prose-revision",
+      "effect_ceiling": "workspace-write"
     }
   }
 }

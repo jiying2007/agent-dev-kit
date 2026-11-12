@@ -90,3 +90,10 @@ adk-planning-execution-loop	skill	1	恢复执行已批准任务继续提交阶�
 adk-planning-execution-loop	skill	0	只要计划不要执行
 adk-planning-execution-loop	skill	0	仅查询CI状态并汇报
 adk-planning-execution-loop	skill	0	计划审查和恢复摘要
+adk-prose-revision	optional-skill	1	请对这篇机器人选型报告做成稿润色，保留芯片型号与价格
+adk-prose-revision	optional-skill	1	请帮我检查并去 AI 腔，不要改动技术事实
+adk-prose-revision	optional-skill	1	Please polish this draft but preserve the citations
+adk-prose-revision	optional-skill	0	代码审查请关注异常路径和测试覆盖
+adk-prose-revision	optional-skill	0	请写 ADR 记录架构选型与弃用方案
+adk-prose-revision	optional-skill	0	不要进行语言润色，只核实事实和数据来源
+adk-prose-revision	optional-skill	0	不要润色技术文档，先澄清需求

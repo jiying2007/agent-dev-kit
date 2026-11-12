@@ -14,6 +14,7 @@ for required in (
     "adk-incident-rca-report",
     "adk-external-practice-absorption",
     "adk-test-flakiness-triage",
+    "adk-prose-revision",
 ):
     assert required in names, required
 assert "adk-artifact-gated-lite" not in names
@@ -35,6 +36,7 @@ root = Path(sys.argv[1])
 manifest = Manifest.load(root)
 parent = {item.name for item in manifest.resolve_profiles(["core"], ["adk-data-fetch"]).skills}
 assert "adk-data-fetch" in parent
+assert "adk-prose-revision" not in parent
 assert "adk-email-imap-fetch" not in parent
 assert "adk-fetch-url-content" not in parent
 with_url = {item.name for item in manifest.resolve_profiles(
@@ -56,6 +58,7 @@ bash "$ROOT_DIR/scripts/devkit.sh" install plan \
   --with-optional-skill adk-external-practice-absorption \
   --with-optional-skill adk-test-flakiness-triage \
   --with-optional-skill adk-incident-rca-report \
+  --with-optional-skill adk-prose-revision \
   --output "$PLAN" \
   --summary-json >"$TMP_DIR/plan.json"
 
@@ -71,6 +74,11 @@ bash "$ROOT_DIR/scripts/devkit.sh" install apply \
   echo "[FAIL] missing installed optional skill adk-external-practice-absorption" >&2
   exit 1
 }
+[[ -d "$TARGET/skills/adk-prose-revision" ]] || {
+  echo "[FAIL] missing installed optional skill adk-prose-revision" >&2
+  exit 1
+}
+
 [[ -d "$TARGET/skills/adk-incident-rca-report" ]] || {
   echo "[FAIL] missing installed optional skill adk-incident-rca-report" >&2
   exit 1

@@ -109,6 +109,7 @@
 | 50 | 92 | `implementation` | supporting | tool-wrapper | `adk-fetch-url-content` | 用于对明确的公开 HTTP(S) URL 做正文提取与结构化 Markdown 转换；不用于网页搜索、绕过登录、内网探测或抓取受限资源。 | 获取网页内容 | `optional-skills/adk-data-fetch/adk-fetch-url-content/SKILL.md` |
 | 70 | 90 | `verification` | primary | playbook | `adk-test-flakiness-triage` | 用于非确定性测试故障的复现、波动归因和消除不稳定方案验证；不用于把失败盲目重跑到绿或降低测试门禁。 | 测试波动 | `optional-skills/adk-test-flakiness-triage/SKILL.md` |
 | 80 | 70 | `review_quality` | primary | reviewer | `adk-security-supply-chain` | 用于第三方 Skill、脚本、依赖和参考资产引入前的来源、权限与供应链审查；不用于自动安装不可信包或把静态扫描当安全认证。 | 供应链审查 | `optional-skills/adk-security-supply-chain/SKILL.md` |
+| 80 | 75 | `review_quality` | primary | reviewer | `adk-prose-revision` | 用于对已完成的中文或英文文章、报告、说明文稿定位表达问题并做最小范围润色，保留事实、术语与原有风格；不用于代码审查、ADR 决策、事实核验或判断作者是否为 AI。 | 成稿润色 | `optional-skills/adk-prose-revision/SKILL.md` |
 | 90 | 80 | `release_closure` | fallback | generator | `adk-incident-rca-report` | 用于生产事故稳定后整理时间线、根因、恢复和防复发证据；不用于事故正在处置时替代现场响应或虚构不存在的取证材料。 | 线上事故 | `optional-skills/adk-incident-rca-report/SKILL.md` |
 | 100 | 40 | `governance` | primary | governance | `adk-skill-composition-governance` | 用于多个 Skill 的触发冲突、组合边界、fallback 和退役策略审查；不用于新增并行路由权威或直接提升工具写权限。 | 技能组合 | `optional-skills/adk-skill-composition-governance/SKILL.md` |
 
