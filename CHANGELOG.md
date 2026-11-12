@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### 11.2.7 — Optional prose quality review (method-only)
+- Add the independently authored, opt-in `adk-prose-revision` for post-draft language review and bounded rewrites; no third-party CC BY-NC source copied.
+- Preserve source facts, technical literals, qualifications, and structure, with deterministic routing/optional-install checks and explicit model-effect `not-measured` status.
+
 ### 11.0.0 — Breaking: Python 3.12-only ADK management layer
 - Restrict build/control plane to CPython 3.12.x while delivered pure Skills stay Python-independent.
 - Preserve the contract, full regression, static security, promotion and signed Release gates; retire repeated 3.11 lanes and local compatibility surfaces.
