@@ -1,11 +1,11 @@
 {
   "schema_version": "1.0.0",
-  "last_updated": "2026-05-28",
+  "last_updated": "2026-11-12",
   "source_docs": [
     "openai-prompt-caching",
     "openai-prompt-cache-retention"
   ],
-  "reference_boundary": "Official OpenAI prompt cache source docs are citation metadata and governance references only. This manifest defines API-backed runner pilot and token/cost governance fields; it must not make durable ADK skills depend on cache hits, enable hosted runners, user-directory writes, or compatibility defaults.",
+  "reference_boundary": "Official OpenAI prompt cache source docs are citation metadata and governance references only. This manifest defines API-backed runner pilot and token/cost governance fields; it must not make durable ADK skills depend on cache hits, enable hosted runners, user-directory writes, or compatibility defaults. GPT-5.6+ cache option fields and cache-write costs apply only to compatible Responses API hosts after provider/version capability verification; this manifest is not a runner switch.",
   "contracts": [
     {
       "id": "prompt-cache-retention-policy-v1",
@@ -37,13 +37,17 @@
         "retention policy records whether in_memory, 24h or model_default is used",
         "model support and unsupported in_memory cases are freshness-gated",
         "cached token metrics are observed without becoming correctness criteria",
-        "cache misses must not change semantic behavior"
+        "cache misses must not change semantic behavior",
+        "Provider-specific cache TTL and breakpoint options must be gated by verified model and API capability, not by an unconditional global policy.",
+        "Compare provider-billed cost per accepted milestone, including short and long cache-write charges; cache writes are a subset of input and must never be counted twice."
       ],
       "must_not": [
         "treat cache hit rate as correctness evidence",
         "put secrets into stable cache prefix",
         "hardcode volatile model cache support without freshness source",
-        "depend on cache persistence for workflow state"
+        "depend on cache persistence for workflow state",
+        "send prompt_cache_options or explicit prompt_cache_breakpoint to an unsupported provider/model",
+        "interpret cache write token counts as extra input tokens or a successful cache hit as proof of a better outcome"
       ]
     }
   ],
@@ -53,5 +57,60 @@
     "model_support_freshness_required": true,
     "cache_miss_must_be_behavior_preserving": true,
     "cached_token_metric_observation_only": true
-  }
+  },
+  "model_capability_profiles": {
+    "openai_responses_gpt_5_6_plus": {
+      "requires_verified_capability": "Responses API prompt_cache_options on GPT-5.6 or newer",
+      "ttl_field": "prompt_cache_options.ttl",
+      "allowed_ttls": [
+        "30m",
+        "12h"
+      ],
+      "breakpoint_modes": [
+        "implicit",
+        "explicit"
+      ],
+      "prompt_cache_key_role": "optional separation of accounting, not needed for cache routing",
+      "minimum_visible_prefix_tokens": 1024,
+      "cache_write_pricing": "provider-specific charges at 30m or 12h write rate; obtain current prices from provider",
+      "enabled_by_default": false
+    },
+    "openai_responses_gpt_5_5": {
+      "requires_verified_capability": "Responses API prompt_cache_retention on GPT-5.5",
+      "ttl_field": "prompt_cache_retention",
+      "allowed_ttls": [
+        "24h"
+      ],
+      "explicit_breakpoints_supported": false,
+      "enabled_by_default": false
+    },
+    "legacy_responses": {
+      "requires_verified_capability": "per-model retention support lookup before parameter use",
+      "ttl_field": "prompt_cache_retention",
+      "allowed_ttls": [
+        "in_memory",
+        "24h"
+      ],
+      "explicit_breakpoints_supported": false,
+      "enabled_by_default": false
+    }
+  },
+  "provider_cost_telemetry": {
+    "observed_fields": [
+      "input_tokens",
+      "cached_input_tokens",
+      "output_tokens",
+      "cache_write_tokens_30m",
+      "cache_write_tokens_12h",
+      "billed_fen"
+    ],
+    "source": "trusted provider usage and billing receipts, not model estimates",
+    "cache_write_tokens_are_non_cached_input_subset": true,
+    "missing_billed_fen_is_unknown_not_zero": true,
+    "comparison_unit": "actual provider billed fee per verified milestone",
+    "supported_provider_without_cache_write_fields": "record null; retain correct totals and mark cost attribution partial",
+    "fee_claim_requires": "matched real tasks, provider-billed costs and no quality regression"
+  },
+  "source_revalidated_at": "2026-11-12",
+  "source_url": "https://developers.openai.com/api/docs/guides/prompt-caching"
 }

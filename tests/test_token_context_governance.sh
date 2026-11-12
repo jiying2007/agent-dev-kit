@@ -61,6 +61,29 @@ assert "high-risk" in overlay["restore_on"], data
 assert "low-confidence" in overlay["restore_on"], data
 PY
 
+
+python3 - "$ROOT_DIR/manifests/prompt_cache_policy_contracts.json" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+data = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
+assert data["source_revalidated_at"] == "2026-11-12", data
+models = data["model_capability_profiles"]
+modern = models["openai_responses_gpt_5_6_plus"]
+assert modern["ttl_field"] == "prompt_cache_options.ttl", modern
+assert modern["allowed_ttls"] == ["30m", "12h"], modern
+assert modern["breakpoint_modes"] == ["implicit", "explicit"], modern
+assert modern["enabled_by_default"] is False, modern
+assert models["openai_responses_gpt_5_5"]["ttl_field"] == "prompt_cache_retention", models
+assert models["legacy_responses"]["enabled_by_default"] is False, models
+telemetry = data["provider_cost_telemetry"]
+assert telemetry["cache_write_tokens_are_non_cached_input_subset"] is True, telemetry
+assert telemetry["missing_billed_fen_is_unknown_not_zero"] is True, telemetry
+assert {"cache_write_tokens_30m", "cache_write_tokens_12h", "billed_fen"} <= set(telemetry["observed_fields"])
+assert "send prompt_cache_options or explicit prompt_cache_breakpoint to an unsupported provider/model" in data["contracts"][0]["must_not"], data
+PY
+
 for file in \
   "$ROOT_DIR/AGENTS.md" \
   "$ROOT_DIR/skills/adk-token-context-governance/SKILL.md" \
