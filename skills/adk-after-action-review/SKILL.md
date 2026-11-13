@@ -46,6 +46,7 @@ constraints:
 - 长期资产晋级：`references/codify-decision.md`
 
 ## Quality Gate
+- 正式规则晋级与高风险持久写入必须经过独立的 human approval；lite AAR 不因此等待审批。
 - lite 只要求结果真实、证据可回读、改进可执行、不泄露隐私；不用空白晋级字段阻止普通复盘。
 - promotion 必须维持完整审批、评测与回退；用户沉默和静态门禁不等于批准/实际效果。
 - 文档保真：不得编造已节省的 Token、时间或人力，以及不存在的实验、负责人和来源。
