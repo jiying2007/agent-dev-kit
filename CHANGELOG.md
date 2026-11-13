@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### 11.2.8 — Risk-tiered document authoring
+- Refine ADR/AAR/RCA/handoff/requirements/planning/archive Skills with evidence-bound lite/standard/formal decisions, no fake options, signatures, numbers or repeated mandatory templates.
+- Preserve high-risk authorization, verification, recovery and promotion contracts; add independent source-only negative fixtures without claiming model/token gains.
+
 ### 11.2.7 — Optional prose quality review (method-only)
 - Add the independently authored, opt-in `adk-prose-revision` for post-draft language review and bounded rewrites; no third-party CC BY-NC source copied.
 - Preserve source facts, technical literals, qualifications, and structure, with deterministic routing/optional-install checks and explicit model-effect `not-measured` status.
