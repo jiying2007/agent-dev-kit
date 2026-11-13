@@ -10,6 +10,7 @@ FILES = {
     "parallel": "skills/adk-parallel-agent-governance/SKILL.md",
     "test": "skills/adk-test-strategy/SKILL.md",
     "growth": "skills/adk-engineering-growth-review/SKILL.md",
+    "review": "skills/adk-code-review-loop/SKILL.md",
 }
 
 class SkillMethodEfficiencyTests(unittest.TestCase):
@@ -62,6 +63,18 @@ class SkillMethodEfficiencyTests(unittest.TestCase):
             "skills/adk-engineering-growth-review/references/growth-evidence-boundaries.md",
         ):
             self.assertTrue((ROOT / reference).is_file(), reference)
+
+    def test_feedback_triage_remains_read_only_and_non_final(self) -> None:
+        review = self.read("review")
+        for term in ("feedback-triage", "false-positive", "Snapshot ID",
+                     "cannot-verify-from-diff", "Final Verdict: pass",
+                     "Final Readiness: true", "whole-diff-review", "whole-lifecycle-review",
+                     "author-self-review", "blocker=0", "schema-backed findings",
+                     "untrusted PR", "design-change"):
+            self.assertIn(term, review)
+        self.assertIn("不强制 whole-diff/全量 CI/额外 reviewer", review)
+        self.assertIn("不能**替代最终", review)
+        self.assertIn("不自动批准", review)
 
     def test_no_new_global_skill_or_injected_lifecycle(self) -> None:
         guide = (ROOT / "docs/changes/20261113-skill-method-efficiency/design.md").read_text(encoding="utf-8")
