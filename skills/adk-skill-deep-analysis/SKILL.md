@@ -1,13 +1,17 @@
 ---
 name: adk-skill-deep-analysis
 description: "用于外部或本地 Skill 的设计意图、差异价值与可迁移方法评估；不用于未经来源审查直接安装或自动批准候选 Skill。"
-version: 1.0.3
+version: 1.0.4
 last_updated: 2026-11-13
 triggers:
   - 深度拆解 skill
   - 分析 skill 设计
   - 提取设计模式
   - skill 产品视角分析
+  - "全网搜索优质 Skills"
+  - "对标优质 Skills"
+  - "评估外部 Skill"
+  - "外部 Skill 方法对比"
 non_triggers:
   - 编写新 skill
   - 修改现有 skill
