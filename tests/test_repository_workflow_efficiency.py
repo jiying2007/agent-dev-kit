@@ -58,7 +58,7 @@ class RepositoryWorkflowSkillEfficiencyTests(unittest.TestCase):
             self.assertTrue((ROOT / Path(PATHS[key]).parent / ref).is_file())
         desc = (ROOT / "docs/changes/20261113-repository-workflow-efficiency/design.md").read_text(encoding="utf-8")
         self.assertIn("not-measured", desc)
-        self.assertIn("no new Skill/Agent/Workflow", desc)
+        self.assertIn("No new Skill/Agent/Workflow", desc)
 
 if __name__ == "__main__":
     unittest.main()
