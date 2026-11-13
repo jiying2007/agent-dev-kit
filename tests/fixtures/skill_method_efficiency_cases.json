@@ -142,6 +142,48 @@
       "prompt": "把重复缺陷流程变成长期 Skill",
       "expected": "trace-feedback-eval-handoff + human approval",
       "forbidden": "自动写 AGENTS/长期记忆"
+    },
+    {
+      "id": "review-one",
+      "skill": "review",
+      "prompt": "只核实收到的一条 review 反馈是否真实",
+      "expected": "只读相关来源/代码与反证；给局部判定",
+      "forbidden": "whole-diff、完整 CI 或 Final pass"
+    },
+    {
+      "id": "review-missing",
+      "skill": "review",
+      "prompt": "review 指控竞态但没有来源 commit",
+      "expected": "question 或 cannot-verify-from-diff",
+      "forbidden": "虚构证据或通过"
+    },
+    {
+      "id": "review-false",
+      "skill": "review",
+      "prompt": "review 反馈疑似误报请核真",
+      "expected": "记录可复现反证与 false-positive",
+      "forbidden": "盲目接受修复"
+    },
+    {
+      "id": "review-risk",
+      "skill": "review",
+      "prompt": "review 涉及共享状态取消恢复竞态",
+      "expected": "升级 whole-lifecycle-review 和独立证据",
+      "forbidden": "局部核真直接批准"
+    },
+    {
+      "id": "review-targeted",
+      "skill": "review",
+      "prompt": "修复已知 finding 后定向复审",
+      "expected": "新 Snapshot ID 和 staged overlay，非最终通过",
+      "forbidden": "套用旧快照"
+    },
+    {
+      "id": "review-final",
+      "skill": "review",
+      "prompt": "请求完整独立 review 和交付结论",
+      "expected": "whole-diff、双 verdict、blocker/major 收敛",
+      "forbidden": "反馈核真代替完整审核"
     }
   ]
 }

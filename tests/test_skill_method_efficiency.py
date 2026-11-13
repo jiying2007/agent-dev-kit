@@ -10,6 +10,7 @@ FILES = {
     "parallel": "skills/adk-parallel-agent-governance/SKILL.md",
     "test": "skills/adk-test-strategy/SKILL.md",
     "growth": "skills/adk-engineering-growth-review/SKILL.md",
+    "review": "skills/adk-code-review-loop/SKILL.md",
 }
 
 class SkillMethodEfficiencyTests(unittest.TestCase):
@@ -39,7 +40,7 @@ class SkillMethodEfficiencyTests(unittest.TestCase):
         self.assertIn("无新状态不循环调用模型等待", parallel)
 
     def test_authority_coverage_survives_compaction(self) -> None:
-        task, parallel, test, growth = (self.read(name) for name in FILES)
+        task, parallel, test, growth = (self.read(name) for name in ("task", "parallel", "test", "growth"))
         for token in ("adk-task-package-schema-v2", "structured_output_schema",
                       "strict_schema_decision", "refusal_handling", "implementation_permission",
                       "prototype_evidence", "global_constraints", "interfaces", "ready_to_handoff"):
@@ -62,6 +63,18 @@ class SkillMethodEfficiencyTests(unittest.TestCase):
             "skills/adk-engineering-growth-review/references/growth-evidence-boundaries.md",
         ):
             self.assertTrue((ROOT / reference).is_file(), reference)
+
+    def test_feedback_triage_remains_read_only_and_non_final(self) -> None:
+        review = self.read("review")
+        for term in ("feedback-triage", "false-positive", "Snapshot ID",
+                     "cannot-verify-from-diff", "Final Verdict: pass",
+                     "Final Readiness: true", "whole-diff-review", "whole-lifecycle-review",
+                     "author-self-review", "blocker=0", "schema-backed findings",
+                     "untrusted PR", "design-change"):
+            self.assertIn(term, review)
+        self.assertIn("不强制 whole-diff/全量 CI/额外 reviewer", review)
+        self.assertIn("不能**替代最终", review)
+        self.assertIn("不自动批准", review)
 
     def test_no_new_global_skill_or_injected_lifecycle(self) -> None:
         guide = (ROOT / "docs/changes/20261113-skill-method-efficiency/design.md").read_text(encoding="utf-8")
