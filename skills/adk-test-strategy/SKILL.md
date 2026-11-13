@@ -1,7 +1,7 @@
 ---
 name: adk-test-strategy
 description: "用于定义跨模块测试策略、风险分级、行为覆盖和可复跑验证矩阵；不用于只生成嵌入式局部替身代码或代替真实执行结果。"
-version: 2.2.0
+version: 2.2.1
 last_updated: 2026-11-13
 triggers:
   - "测试策略"
@@ -41,8 +41,9 @@ constraints:
 3. Level 2 在公开稳定 seam 建立有效红灯，最小改动修复并绿灯、重构；必要时按需读 `references/high-value-tdd.md`，禁止用内部 mock 次数冒充业务行为。
 4. **并行测试时**必须给 `Validation Resource Matrix:`，检查 output directory、binary/cache、port/device 是否隔离；有共享写入则串行，避免并发造成随机失败。
 5. 对 Agent/prompt 更改固定输入任务、grader 和版本身份，比较逐例退化；模拟 router/handoff 成功不代表真实 provider、runtime 或设备副作用已验证。
-6. 记录 `Evidence Index`（测试命令、退出码、版本、最小日志摘要/raw pointer）与真实未测试边界；只对受影响范围补测，不无条件运行与任务无关的昂贵全量套件。
-7. 最终结论交 `adk-verification-before-completion`；失败两轮无信息增量先进入 `adk-systematic-debugging`，不重复盲跑。
+6. 高风险安全补丁按需复核原始失败路径、同根因变体、合法行为保留和新引入风险；仅在授权隔离环境运行目标代码/样例，否则标 `not-tested`，不把 source 断言冒充 runtime 修复证明。
+7. 记录 `Evidence Index`（测试命令、退出码、版本、最小日志摘要/raw pointer）与真实未测试边界；只对受影响范围补测，不无条件运行与任务无关的昂贵全量套件。
+8. 最终结论交 `adk-verification-before-completion`；失败两轮无信息增量先进入 `adk-systematic-debugging`，不重复盲跑。
 
 ## Quality Gate
 - 行为变化有可复现断言或写明无法验证原因；Level 2 的 red/green 证据真实且原因正确。

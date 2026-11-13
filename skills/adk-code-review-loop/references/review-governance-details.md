@@ -82,3 +82,16 @@ AI/CI review 默认只是风险扫描，写入 SCM 属于独立的发布动作�
 - reviewer independence。
 
 staged 文件出现 `MM` 时，必须显式列出 unstaged overlay。修复未重新 stage、Snapshot ID 未更新时，不得声称最新修复已复审。
+
+## Review Coverage Ledger（大范围/高风险按需加载）
+- 在 `whole-diff-review` 或 `whole-lifecycle-review` 中从 frozen diff/requirement/impact graph 定义可审查单元（文件、接口、受影响调用者、资源生命周期、外部证据）。避免仅按文件数宣称覆盖，也不因未知范围自动猜全。
+- 每个单元记录 `scope_id / source_snapshot / status=inspected|uninspected|unavailable / evidence_ref / reason / risk_owner_decision`。可复用已核验证据引用，不能把 `not found` 直接当无漏洞。
+- `coverage=inspected` 只表示此单元有实际审查证据；它不是“无问题”的证明。高风险/关键依赖为 uninspected/unavailable 时必须补查或交 owner 风险决策；不得声称全覆盖。
+- 低风险、单条 `feedback-triage` 用 `not-applicable`，不强行制作覆盖账本；新代码或修复导致影响范围变化需更新快照与账本。
+
+## Security / High-Risk Patch Variant Validation（有补丁时才适用）
+- 锁定 vulnerable base 与 patched HEAD，先重跑已知原始失败/利用路径，在有授权且隔离的环境中确认 baseline failed → patched fixed；没有真实运行权限时只做 source 证据并标 `not-tested`。
+- 查验**相同根因**的相邻入口、解析路径、异常分支、权限/竞争状态及环境差异，保存检验过和未检验的变体，不因原 PoC 消失就认为漏洞完全消除。
+- 验证合法输入与兼容性未退化、原保护边界没有被放宽、是否引入新的安全失败；最小可复现负例关联 `scope_id`，不为凑数量生成无关变体。
+- 目标受控仓库代码、测试、脚本仅在明确授权和隔离条件下运行；不能执行不可信补丁脚本、远端/生产设备验证来代替审批。
+- 输出 `vulnerable_ref / patched_ref / original_repro / related_variants / legitimate_behavior / new_risks / runtime_evidence_or_not-tested / owner`。
