@@ -5,7 +5,7 @@
   "identity_baseline": {
     "agent_count": 13,
     "core_skill_count": 56,
-    "optional_skill_count": 8
+    "optional_skill_count": 9
   },
   "agent_thin_contract": {
     "p0_max_bytes": 5000,

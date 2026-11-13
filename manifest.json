@@ -1,5 +1,5 @@
 {
-  "version": "11.2.6",
+  "version": "11.2.7",
   "locale": "zh-CN",
   "platforms": [
     "linux-embedded",
@@ -1899,6 +1899,16 @@
       "category": "review_quality",
       "lifecycle_order": 80,
       "stage_order": 70,
+      "activation_mode": "primary",
+      "pattern": "reviewer"
+    },
+    {
+      "name": "adk-prose-revision",
+      "path": "optional-skills/adk-prose-revision/SKILL.md",
+      "quality_tier": "p2",
+      "category": "review_quality",
+      "lifecycle_order": 80,
+      "stage_order": 75,
       "activation_mode": "primary",
       "pattern": "reviewer"
     },
