@@ -46,7 +46,8 @@ class SkillMethodEfficiencyTests(unittest.TestCase):
             self.assertIn(token, task)
         for token in ("templates/planning/worker-contract.md", "context_noise_budget",
                       "report_schema", "must_not_touch", "primary_skill", "data-only",
-                      "task-package v2", "whole-diff"):
+                      "task-package v2", "whole-diff", "raw_output_retention_decision",
+                      "parent_merge_policy", "redaction_status"):
             self.assertIn(token, parallel)
         self.assertIn("Validation Resource Matrix:", test)
         self.assertIn("RED → GREEN → REFACTOR", test)
