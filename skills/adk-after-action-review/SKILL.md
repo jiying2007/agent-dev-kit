@@ -36,16 +36,18 @@ constraints:
 1. 读取目标、最新执行和真实验证结果；区分事实、推断、负结果，不编造根因和节约成本。
 2. 只提下一次可用的经验；无推广价值时输出极简 AAR 后结束。
 3. lite 不强迫填写 `reduction_evidence`、owner review、trace-eval 或完整 promotion 模板。
-4. promotion 对每条候选记录 `evidence`、`last_verified`、`confidence`、`risk`、`write_route`。正式 `Codify Decision` 仍包含 `reusable_pattern`、`promotion_candidate`、`next_task_friction_reduced`、`reduced_by`、`reduction_evidence`、`do_not_promote_reason`、`owner_review`、`rollback_path`、`verification_evidence`。
+4. promotion 对每条候选记录 `evidence`、`last_verified`、`confidence`、`risk`、`write_route`。正式 `Codify Decision` 需有 `delivery_goal`、`affected_asset`，并包含 `reusable_pattern`、`promotion_candidate`、`next_task_friction_reduced`、`reduced_by`、`reduction_evidence`、`do_not_promote_reason`、`owner_review`、`rollback_path`、`verification_evidence`。
 5. 只有正式指导规则晋级时才需要 `trace-feedback-eval-handoff`、`sanitized trace` 和 `trace_eval_regression_case` 及回归评测；缺真实模型证据标 `not-measured`，不伪造效果。
 6. 生产事故分析交给 `adk-incident-rca-report`，本 Skill 复用其结论不生成第二份 RCA。
 
 ## References (only on demand)
 - 简要复盘：`references/after-action-review.md`
 - 候选存储：`references/memory-candidate.md`，与 `templates/memory/memory-candidate.md` 语义一致
-- 长期资产晋级：`references/codify-decision.md`
+- 长期资产晋级：`references/codify-decision.md`，正式执行使用原有 `templates/governance/codify-decision.md` 合同
 
 ## Quality Gate
+- 不保存完整聊天记录，尤其不得外传密钥、原始会话与未脱敏日志。
+- 只有经验证可推广且获独立批准的正式候选才可设置 `promotion_candidate: true`；高风险/持久写入应标记 `requires_user_confirmation: true`，未批准只能保留候选。
 - 正式规则晋级与高风险持久写入必须经过独立的 human approval；lite AAR 不因此等待审批。
 - lite 只要求结果真实、证据可回读、改进可执行、不泄露隐私；不用空白晋级字段阻止普通复盘。
 - promotion 必须维持完整审批、评测与回退；用户沉默和静态门禁不等于批准/实际效果。
