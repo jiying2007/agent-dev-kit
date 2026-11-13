@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### 11.2.12 — Evidence-first external Skill and Prompt method intake
+- Analyze external methods through minimal source-linked reading and conditional security checks; never install external Skills, execute untrusted scripts or auto-promote adoption.
+- Trace prompt construction from actual callsites and trust layers. Remove forced multi-diagram, fixed scoring and contradictory direct-adoption writes.
+- Add 12 source-only positive/negative/permission cases; actual model effects, Token, cost and latency remain not-measured.
+
 ### 11.2.11 — Bounded review feedback triage
 - Route one-review-finding fact checks through read-only `feedback-triage`, not an unconditional full-diff review/CI loop; keep evidence and explicit escalation for lifecycle/security risk.
 - Preserve the independent complete review, latest-snapshot, blocker/major, trusted SCM comment and untrusted-PR boundaries. Six source-only expected/negative cases added.
