@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### 11.2.11 — Bounded review feedback triage
+- Route one-review-finding fact checks through read-only `feedback-triage`, not an unconditional full-diff review/CI loop; keep evidence and explicit escalation for lifecycle/security risk.
+- Preserve the independent complete review, latest-snapshot, blocker/major, trusted SCM comment and untrusted-PR boundaries. Six source-only expected/negative cases added.
+- Entry size 7,146 → 6,858 UTF-8 bytes; real model quality, routing accuracy, latency and billed Token effect remain `not-measured`.
+
 ### 11.2.10 — Risk-scoped repository workflow Skill efficiency
 - Split commit messages from PR readiness and relevant high-risk authorization/security checks; do not create PR or execute SCM from message-only requests.
 - Avoid worktree/branch setup when an existing branch suffices, and avoid mandatory four-option closeout menus when the user has selected an operation.
