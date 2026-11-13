@@ -37,7 +37,7 @@ constraints:
 2. 只提下一次可用的经验；无推广价值时输出极简 AAR 后结束。
 3. lite 不强迫填写 `reduction_evidence`、owner review、trace-eval 或完整 promotion 模板。
 4. promotion 对每条候选记录 `evidence`、`last_verified`、`confidence`、`risk`、`write_route`。正式 `Codify Decision` 仍包含 `reusable_pattern`、`promotion_candidate`、`next_task_friction_reduced`、`reduced_by`、`reduction_evidence`、`do_not_promote_reason`、`owner_review`、`rollback_path`、`verification_evidence`。
-5. 只有正式指导规则晋级时才需要 `trace-feedback-eval-handoff` 及回归评测；缺真实模型证据标 `not-measured`，不伪造效果。
+5. 只有正式指导规则晋级时才需要 `trace-feedback-eval-handoff`、`sanitized trace` 和 `trace_eval_regression_case` 及回归评测；缺真实模型证据标 `not-measured`，不伪造效果。
 6. 生产事故分析交给 `adk-incident-rca-report`，本 Skill 复用其结论不生成第二份 RCA。
 
 ## References (only on demand)
