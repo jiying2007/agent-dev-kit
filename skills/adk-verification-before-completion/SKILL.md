@@ -1,8 +1,8 @@
 ---
 name: adk-verification-before-completion
 description: "用于完成前核对测试、审查和真实证据；不用于把自述、静态检查或过期收据当作完成证明。"
-version: 1.8.1
-last_updated: 2026-11-03
+version: 1.8.2
+last_updated: 2026-11-14
 triggers:
   - "准备完成"
   - "准备提交"
@@ -24,79 +24,51 @@ constraints:
 # adk-verification-before-completion
 
 ## Goal
-- 在交付前统一核对验证证据、评审状态、运行边界和风险闭环，避免“未验先结论”。
+对明确的交付声明做独立、同快照、可追溯的完成验证。阶段里程碑和完整 Goal 终态分开，必要风险门禁不得因省 Token 或缩短报告而降低。
 
-## Prerequisites
-- 先确认是阶段验收还是完整目标交付；阶段只检查冻结范围与受影响验证，不重复全目标final或整批无关回归。完整目标仍逐项保留原验收与独立审查要求。
-- 已整理改动范围，并收集 lint/test/build/smoke、评审状态、风险和回退证据。
-- 已区分 claimant 的完成声明与 verifier 的独立核验；主观或用户可见功能不能由实现者自证。
+## Modes / Applicability
+- **checkpoint（阶段验收）**：仅核冻结子项、受影响接口和真实 lint/test/build/smoke、Review、阻塞及后续依赖；不重复全 Goal final 或无关验证。只能声明阶段结果，不能关闭父 Goal。
+- **goal-final（整个目标完成）**：核原始验收分母、全部交付和依赖、最终快照、独立验证、open items 与必要回归，符合所有适用门禁才声明 pass。
+- **风险与阶段正交**：low 用最小充分证据；medium/high 即使是 checkpoint，也必须按实际风险完成权限、生命周期、模型/工具、UI、数据/发布等专项门禁。未知风险不能降级为 low。
 
 ## Workflow
-1. **冻结范围与声明**：记录改动边界、影响面、非目标和 claimant 声明；verifier 逐条对照证据，不采信结论文本本身。
-2. **基础验证与评审闭环**：核对 lint/test/build/smoke、执行环境、blocker/major/minor；关键命令进入 Evidence Index。
-3. **生命周期与 review 收敛**：状态/异步/共享资源变更核对 owner/state/event/resource/termination/invariant、取消/超时/恢复/迟到完成、generation 隔离和真实环境边界；同时核对 review mode、finding class、reopen、clean-review、独立性与 replan。
-4. **运行资产与配置**：运行时目录需显式 tool target + 健康验证；配置变更需比较 `声明配置 vs 运行态加载`；runner/CLI/adapter/noninteractive/source-to-live 需 Runner Smoke Contract。
-5. **用户可见与回放证据**：主观/UI 行为记录 Subjective Feature Proof 与 Appshots / UI Evidence Boundary；中高风险任务记录 Replayable Evidence Bundle。
-6. **工具、技能与跨层披露**：核对 Tool / Skill Evidence Plan、required artifacts、skipped skills、tool fallback、fallback evidence、standards/architecture/ship disclosure、canonical resolution parity、browser evidence 或 not-applicable。
-7. **模型/上下文/控制面**：模型、上下文、工具权限变更补本地回归和 approval/deny 未放宽证据；slash command、MCP/tool server、hook、permission/approval/sandbox 变更补 Runtime Control Plane Audit。
-8. **Trace eval**：prompt、policy、skill routing、completion gate、agent guidance 变更补 Trace Eval Regression Evidence 或 `not_applicable_reason`。
-9. **兼容性与长任务完整性**：显式判断 breaking change、迁移/回退；长任务核 retry budget、heartbeat、staleness threshold、plan completeness、attestation readback、失败路径、已排除方案和 open items。
-10. **Codify Decision**：使用 `templates/governance/codify-decision.md` 记录复用价值、后续摩擦下降、owner review、rollback 与 verification evidence；不满足推广条件则写 `do_not_promote_reason`。
-11. **Completion Guard Payload**：中高风险任务对 build/lint/test/smoke/security/release 中适用项记录 status、exit_code、command、evidence_path、verified_at、verifier；缺失/失败/过期不得进入完成态。
-    可用 `agent_dev_kit.completion_coverage` 核静态覆盖；其 pass 不认证证据或授予完成权限，仍需独立 verifier。
-12. **反向核验并输出**：逐项证明“结论被证据支持”，输出 `pass` 或 `needs-fix`，列出未闭环项、下一步和责任人。
+1. **冻结来源与声明**：记录 scope/mode/risk、HEAD/source snapshot、原验收 IDs、claimant、verifier、变更与非目标。实现者自述、旧 CI 绿灯及源码推断不是独立结果。
+2. **最短证据链**：核命令、exit code、环境、时间、raw pointer、适用 lint/test/build/smoke 与 Review blocker/major。失败/缺失/过期标 `needs-fix`，不得把未执行写成 pass。
+3. **按风险启用专项门禁**：
+   - 状态/共享资源/异步 → owner/state/event/resource/termination/invariant，取消/超时/恢复/晚到、generation 与 whole-lifecycle review。
+   - 运行资产/配置/runner → 声明配置 vs `runtime_config_diff`、source-to-live、Runner Smoke Contract、真实加载/健康证据。
+   - UI/主观 → Subjective Feature Proof + independent_verifier、Appshots / UI Evidence Boundary；源码检查不替代运行态结果。
+   - prompt/policy/skill routing/model/context → Trace Eval Regression Evidence 或真实 `not_applicable_reason`；MCP/hook/permission/approval/sandbox → Runtime Control Plane Audit，核 allow/deny、loaded_tools、rollback_path。
+   - 中高风险、协议/数据/安全/发布 → Replayable Evidence Bundle、Tool / Skill Evidence Plan、Completion Guard Payload、迁移/回滚和适用的运行环境证据。
+4. **审查收敛**：验证需求/契约基线、Review Convergence Evidence、design-change/replan、skipped skills 与 fallback evidence。高风险关键范围 `uninspected` 时不得凭局部复核宣称整体通过。
+5. **结论/沉淀**：检查 required artifacts、open items、证据新鲜度与权限。checkpoint 只报告已完成子项与剩余验收分母；goal-final 按适用性处理 Codify Decision，不满足复用价值/owner 审核写 `do_not_promote_reason`，不能声称 `promotion_candidate: true`。结果 `pass | needs-fix`，附风险与下一步。
 
-详细适用性矩阵、原 25-step 解释、门禁细则与合理化借口拦截见 `references/verification-governance-details.md`。入口只保留每次完成前验证都需要的决策面和机器证据字段。
+完整 Applicability Matrix、25-step 解释、证据字段及高风险模板按需见 `references/verification-governance-details.md`；高风险、完成争议或证据缺失必须回读相关规范和原文。
 
-## Commands
-```bash
-rtk <project-test-cmd>
-```
-
-## Evidence Template
+## Evidence Template（最小入口）
 ```md
-- Scope Summary:
-- Completion Claim Audit:
-- Verification Command Results:
-- Runtime Config Audit:
-- Prompt Regression Evidence:
-- Model / Context Regression Evidence:
-- Runtime Control Plane Audit: slash_command_runtime_audit / mcp_runtime_contract / permission_profile_decision / loaded_tools / approval_boundary / deny_path_test / runtime_config_diff / rollback_path
-- Trace Eval Regression Evidence: trace_eval_regression_case / dataset_id / case_id / source_trace_id / prompt_version / candidate_prompt_version / expected_regression_signal / grader / score_threshold / regression_link / retention_policy / redaction_status / owner_approval / not_applicable_reason
-- Standards / Architecture / Ship Disclosure / Resolution Parity / Browser Evidence:
-- Evidence Index:
-- Replayable Evidence Bundle: input_snapshot / environment_snapshot / tool_transcript_digest / artifact_hashes / expected_assertions / sensitive_data_review / non_replayable_reason
-- Appshots / UI Evidence Boundary: visible_text_boundary / permission_scope / sensitive_content_review / runtime_evidence_or_not_applicable
-- Runner Smoke Contract: event_stream_schema / sandbox_approval_cwd / thread_turn_or_resume_reply / failure_cancel_path
-- Tool / Skill Evidence Plan: primary_skill / supporting_skills / required_artifacts / skipped skills / tool_fallback / fallback_evidence / evidence_paths
-- Codify Decision: delivery_goal / reusable_pattern / affected_asset / promotion_candidate / next_task_friction_reduced / reduced_by / reduction_evidence / do_not_promote_reason / owner_review / rollback_path / verification_evidence
-- Completion Guard Payload: required_checks / passed_checks / failed_checks / skipped_with_reason / stale_checks / verifier / completion_allowed
-- Lifecycle Operation Evidence: not_applicable_reason | contract / owner / state-events / termination / runtime-evidence
-- Review Convergence Evidence: review_round / review_mode / finding_classes / new_finding_class_count / reopened_finding_count / consecutive_clean_reviews / reviewer_independence / contract_change_decision / replan_reason
-- Subjective Feature Proof: feature / independent_verifier / expected / observed / evidence / verdict
-- Review Status (B/M/m):
-- Breaking Change Decision:
-- Risk + Rollback:
-- Final Gate Result:
+- Scope / Mode / Risk: checkpoint | goal-final / low | medium | high
+- Claimant / Verifier / Snapshot / Original Acceptance IDs:
+- Applicable Checks: command / exit_code / verified_at / raw_evidence
+- Review Status (B/M/m) / Open Items / Missing Evidence:
+- Applied / Skipped With Reason / Unchecked Scope:
+- Subjective Feature Proof: independent_verifier / expected / observed / verdict | not-applicable
+- Appshots / UI Evidence Boundary: runtime_evidence | not-applicable
+- Runner Smoke Contract: identity / execution / failure_cancel_path | not-applicable
+- Runtime Control Plane Audit: loaded_tools / approval_boundary / deny_path_test / runtime_config_diff / rollback_path | not-applicable
+- Trace Eval Regression Evidence: source_trace_id / grader / not_applicable_reason
+- Replayable Evidence Bundle: source_snapshot / tool_transcript / artifact_hashes | not-applicable
+- Tool / Skill Evidence Plan: primary / supporting / skipped skills / fallback_evidence | not-applicable
+- Lifecycle Operation Evidence: contract / owner / termination / runtime_evidence | not-applicable
+- Review Convergence Evidence: review_round / finding_classes / reviewer_independence / replan | not-applicable
+- Completion Guard Payload: required_checks / passed_checks / skipped_with_reason / stale_checks / verifier
+- Codify Decision: reusable_pattern / promotion_candidate: true | false / do_not_promote_reason / owner_review / rollback_path / verification_evidence | checkpoint-deferred
+- Final Gate Result: pass | needs-fix / qualification_boundary / next_action
 ```
 
-Evidence Index复用已有command/exit code/summary/path/layer/artifact记录。
-
-## Failure Handling
-- 关键命令无法执行、claimant 声明缺证据、证据过期、verifier 未独立核对或主观功能缺 verifier verdict 时，必须说明原因并输出 `needs-fix`。
-- blocker 未闭环、retry budget 用尽、heartbeat 过期或 open items 未解释时，不得给 `pass`。
-- required artifact、skipped skill 原因、tool fallback/fallback evidence 或必要运行态证据缺失时，不得放行。
-
-提交/PR格式与SCM交付另由`adk-commit-pr-quality-gate`负责。
-
-## Quality Gate
-- 输出必须包含验证命令、关键结果、风险项和处理状态；完成声明必须区分 claimant、verifier、证据列表、缺失证据和 open items。
-- 未闭环 blocker、缺独立 Subjective Feature Proof、证据过期或 completion guard 必需项失败时，结论固定 `needs-fix`。
-- Runtime Control Plane Audit 缺 deny-path test、loaded_tools 或 rollback_path 不得放行；Trace Eval Regression Evidence 缺 regression case 且无 not_applicable_reason 不得放行。
-- 跨模块/协议/数据/发布/存储/资源/UI 变更必须有 standards/architecture/ship disclosure/canonical resolution parity/browser evidence 或 not-applicable；运行目录、配置、runner 与 UI 证据不得用源码推断替代。
-- Evidence Index记录适用命令和实际结果；负结果/被证伪路径在竞争假设、失败修复或高风险边界下提供，不为低风险明确根因任务补造。中高风险任务保留适用的Replayable Evidence Bundle、Tool / Skill Evidence Plan和Completion Guard Payload，同一证据可引用复用。
-- 证据结论、预算状态、运行采用分别报告；预算只核当前快照时不得声称历史合规。阶段通过不完成父目标，也不授予产品、提交或发布资格。
-- Codify Decision 必须记录 reusable_pattern、promotion_candidate、next_task_friction_reduced、reduced_by、reduction_evidence、do_not_promote_reason、owner_review、rollback_path、verification_evidence；`promotion_candidate: true` 缺 owner_review、rollback_path、verification_evidence 或摩擦下降证据时固定 `needs-fix`。
-- 受控生命周期操作缺契约、owner、终止路径或真实环境边界不得完成；生命周期变更缺 whole-lifecycle review，或 design-change/新增 blocker-major/超自审预算未 replan 时不得 `pass`。
-- breaking change 必须有迁移与回退；模型/上下文/工具权限变化必须证明 approval/deny gate 未放宽。
-- 禁止使用“应该可以/理论上通过”等无证据措辞。
+## Failure Handling / Quality Gate
+- 任一适用必需项失败、无有效理由跳过、证据过期、Review blocker/major 未闭环或独立 verifier 缺失 → `needs-fix`；不得填空表掩盖缺口。
+- 运行态配置、Runner、权限、MCP、UI、发布或真实设备门禁需要现场/宿主证据时，缺失只能写未验证；`completion_coverage` 的静态 pass 不等于运行认证。
+- 生命周期缺 owner/终止/真实边界、设计变更未 replan、重大 Review 未独立闭环不得通过；breaking change 必须有迁移与回退。
+- `Codify Decision:` 仅在适用的最终交付/复用晋级时记录 reusable_pattern、promotion_candidate、next_task_friction_reduced、reduced_by、reduction_evidence、do_not_promote_reason、owner_review、rollback_path、verification_evidence；没有真实效果/owner review 不晋升。
+- 预算检查、组件发布和产品/现场资格是独立状态；阶段通过不赋予 commit/merge/release 权限。输出实际命令、证据、剩余风险和结论，禁止“应该通过”。

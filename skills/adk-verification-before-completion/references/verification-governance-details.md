@@ -93,3 +93,37 @@ required artifact 缺失、skipped skill 无原因、tool fallback 无 fallback 
 - blocker 未闭环：固定 `needs-fix`。
 - heartbeat/staleness/retry budget 失败：先恢复长任务一致性，再讨论完成。
 - 运行态证据不可获取：明确 not_applicable 或 owner 接受的替代证据边界；不得默认为通过。
+
+## Evidence fields (deferred full output)
+
+仅在 goal-final、适用的 medium/high gate 或完成争议时加载。低风险 checkpoint 使用 ../SKILL.md 的最小报告；各字段应有实际证据或明确 not-applicable，不必为空项生成大表。
+
+## Full Evidence Template (goal-final or medium/high only)
+```md
+- Scope Summary:
+- Completion Claim Audit:
+- Verification Command Results:
+- Runtime Config Audit:
+- Prompt Regression Evidence:
+- Model / Context Regression Evidence:
+- Runtime Control Plane Audit: slash_command_runtime_audit / mcp_runtime_contract / permission_profile_decision / loaded_tools / approval_boundary / deny_path_test / runtime_config_diff / rollback_path
+- Trace Eval Regression Evidence: trace_eval_regression_case / dataset_id / case_id / source_trace_id / prompt_version / candidate_prompt_version / expected_regression_signal / grader / score_threshold / regression_link / retention_policy / redaction_status / owner_approval / not_applicable_reason
+- Standards / Architecture / Ship Disclosure / Resolution Parity / Browser Evidence:
+- Evidence Index:
+- Replayable Evidence Bundle: input_snapshot / environment_snapshot / tool_transcript_digest / artifact_hashes / expected_assertions / sensitive_data_review / non_replayable_reason
+- Appshots / UI Evidence Boundary: visible_text_boundary / permission_scope / sensitive_content_review / runtime_evidence_or_not_applicable
+- Runner Smoke Contract: event_stream_schema / sandbox_approval_cwd / thread_turn_or_resume_reply / failure_cancel_path
+- Tool / Skill Evidence Plan: primary_skill / supporting_skills / required_artifacts / skipped skills / tool_fallback / fallback_evidence / evidence_paths
+- Codify Decision: delivery_goal / reusable_pattern / affected_asset / promotion_candidate / next_task_friction_reduced / reduced_by / reduction_evidence / do_not_promote_reason / owner_review / rollback_path / verification_evidence
+- Completion Guard Payload: required_checks / passed_checks / failed_checks / skipped_with_reason / stale_checks / verifier / completion_allowed
+- Lifecycle Operation Evidence: not_applicable_reason | contract / owner / state-events / termination / runtime-evidence
+- Review Convergence Evidence: review_round / review_mode / finding_classes / new_finding_class_count / reopened_finding_count / consecutive_clean_reviews / reviewer_independence / contract_change_decision / replan_reason
+- Subjective Feature Proof: feature / independent_verifier / expected / observed / evidence / verdict
+- Review Status (B/M/m):
+- Breaking Change Decision:
+- Risk + Rollback:
+- Final Gate Result:
+```
+
+Evidence Index复用已有command/exit code/summary/path/layer/artifact记录。
+
