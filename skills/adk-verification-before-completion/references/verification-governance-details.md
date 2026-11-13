@@ -126,4 +126,3 @@ required artifact 缺失、skipped skill 无原因、tool fallback 无 fallback 
 ```
 
 Evidence Index复用已有command/exit code/summary/path/layer/artifact记录。
-
