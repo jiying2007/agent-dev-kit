@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### 11.2.9 — Skill method efficiency (source-only)
+- Streamline task decomposition, parallel-agent work, risk-tiered testing and growth review to avoid unnecessary estimates, workers, repeated model polling and unbounded histories.
+- Preserve task-package v2, high-risk permission, evidence, reviewer independence and real test gates; keep long examples in deferred references and add 20 static case specifications.
+- Record source entry-byte delta without claiming actual model token, latency or quality improvements.
+
 ### 11.2.8 — Risk-tiered document authoring
 - Refine ADR/AAR/RCA/handoff/requirements/planning/archive Skills with evidence-bound lite/standard/formal decisions, no fake options, signatures, numbers or repeated mandatory templates.
 - Preserve high-risk authorization, verification, recovery and promotion contracts; add independent source-only negative fixtures without claiming model/token gains.

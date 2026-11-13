@@ -1,8 +1,8 @@
 ---
 name: adk-engineering-growth-review
 description: "用于基于已授权的工程历史和交付证据做长期开发习惯复盘、学习建议与趋势分析；不用于推断私人属性或无证据评判个人表现。"
-version: 1.0.1
-last_updated: 2026-11-03
+version: 1.1.0
+last_updated: 2026-11-13
 triggers:
   - "开发者成长复盘"
   - "成长分析"
@@ -32,107 +32,26 @@ constraints:
 # adk-engineering-growth-review
 
 ## Goal
-- 基于本地开发证据生成工程成长复盘和学习建议。
-- 识别跨项目、跨会话的重复问题、能力短板、稳定优势、风险模式和下一步训练计划。
-- 替代外部 `developer-growth-analysis` 的核心价值，同时把外部发送和联网资源检索降级为显式可选动作。
+根据**已授权且与问题相关**的工程证据，给出有用的成长复盘。不是对个人作无证据评价，也不把“成长报告”变成全盘扫描、模板填充或额外付费模型调用。
 
-## Prerequisites
-- 已确认用户需要成长复盘、编码习惯分析或学习建议，而不是普通会话总结、项目日报或 commit 摘要。
-- 已明确本次范围是当前项目、最近活跃项目、全量本地历史，还是用户指定路径。
-- 已确认本轮是否只输出报告，或需要额外产出本地文件、memory candidate、archive candidate。
-- 若用户要求联网资源、Slack、邮件或其他外部发送，必须先完成显式授权和权限边界确认。
-
-## Permission Model
-
-默认采用“本地宽读、外部窄写”：
-
-| 能力面 | 默认策略 |
-|---|---|
-| 读取 `$CODEX_HOME/history.jsonl` 或 `~/.codex/history.jsonl` | 允许，只读，可全量或按用户指定范围 |
-| 读取 `~/.codex/memories` | 允许，只读；输出必须区分既有记忆和新候选 |
-| 读取 `~/codex/docs/archive/`、`~/codex/reports/` | 允许，只读 |
-| 读取当前项目 `reports/`、`docs/archive/`、session wrap、research note | 允许，只读 |
-| 读取本地多个 repo 的 `git log`、commit summary、dirty 状态 | 允许，只读 |
-| 读取原始聊天、粘贴内容或历史片段 | 允许用于分析，但报告中必须摘要化和脱敏 |
-| 写本地报告或 archive note | 仅在用户要求产出文件时允许 |
-| 写 `~/.codex/memories`、AGENTS、长期规则 | 默认禁止；只生成候选 |
-| 联网搜索 HackerNews、文档或课程 | 可选增强，必须用户显式授权 |
-| Slack、邮件、IM、外部发送 | 默认禁止，必须用户显式授权 |
-
-## Scope Strategy
-- 默认范围：当前项目、最近活跃项目、可用 session wrap、项目日报和本地历史摘要。
-- 用户要求“长期趋势”“全局复盘”时，允许跨全部本地 Codex 历史和归档扫描。
-- 不强制短时间窗；输出时按时间衰减加权，近期问题优先，长期重复问题标为趋势。
-- 跨项目结论必须按项目或工作流聚类，避免把不同技术栈的问题混成单一判断。
+## Scope / permissions
+- 默认 **index-first**：当前项目及已提供的近期交付摘要先读目录/标题/结果与证据索引；只对影响结论的少量样本回读原文。
+- 用户明确请求跨项目或全量历史时才扩大范围，预先排除原始聊天、密钥、客户资料及重复记录；没有真实来源就标 `insufficient-evidence`。
+- 本地资料只读；报告保存仅在用户明确要求时写入受控工作区。不默认读取 `~/.codex/memories`、所有会话和其他项目，更不授权修改 `AGENTS` 或长期记忆。
+- 不自动外发 Slack/邮件/IM、不默认联网寻找课程。外部访问/发送需要显式授权，权限边界不能由本 Skill 扩大。
 
 ## Workflow
-1. 确定范围：记录用户指定范围；若未指定，选择当前项目 + 最近活跃项目 + 可用历史。
-2. 读取索引：先读取文件清单、报告标题、日期、项目名和 commit 摘要，建立 evidence index。
-3. 分层读取：对高信号材料回读局部原文；对低信号材料只保留摘要和路径。
-4. 脱敏处理：移除或摘要化 token、密钥、个人隐私、客户数据和完整聊天原文。
-5. 聚类分析：按项目、技术栈、任务类型、失败模式、验证门禁、协作模式归类。
-6. 趋势判断：区分一次性噪音、短期反复、长期趋势和高影响改进项。
-7. 成长建议：给出 3-5 个优先级排序的改进领域，每项绑定证据和具体训练动作。
-8. 学习计划：输出 1 周、2-4 周或用户指定周期的训练计划；不依赖外部资源也必须可执行。
-9. 候选沉淀：若发现稳定偏好或重复风险，只输出 memory/archive 候选；若建议改 prompt/skill/workflow，输出 trace-feedback-eval-handoff 候选。
-10. 可选增强：用户显式要求时，再进入联网资源检索或外部发送流程。
+1. 区分真正的长期成长评估与“只总结当前会话/commit/日报”；后者退出本 Skill。
+2. 选最小相关时间窗与项目范围，先检索索引、再按需读取高信号证据；事实与推断分开，不能凭一次故障推断长期能力或私人属性。
+3. 找到有重复证据的模式：可复用优势、常见返工、环境摩擦或测试/审查盲区；没有趋势就明确说样本不足，不凑满 3–5 个建议。
+4. 为每个有效建议给出“事实证据 → 可执行动作 → 可检查信号”，不用强制生成一周、两周、四周全套训练计划。
+5. 仅需要正式升级 prompt、Skill、Workflow 时输出 `trace-feedback-eval-handoff` 的 `eval candidate`、验证与 `human approval` 状态；普通成长复盘不自动修改长期资产。
+6. 限定输出长度并保留 raw evidence pointer；保密/权限、跨项目评估等深入细节按需读 `references/growth-evidence-boundaries.md`。
 
-## Report Template
-```md
-# Engineering Growth Review
-
-- Period:
-- Sources:
-- Scope:
-- Privacy Handling:
-
-## Work Pattern Summary
-<2-4 段，按项目/任务类型概括。>
-
-## Recurring Trends
-| Trend | Evidence | Impact | Confidence |
-|---|---|---|---|
-
-## Improvement Areas
-### 1. <Area>
-- Why it matters:
-- Evidence:
-- Recommendation:
-- Practice plan:
-- Review signal:
-
-## Strengths To Keep
-- <evidence-backed strength>
-
-## Training Plan
-| Horizon | Action | Evidence To Collect |
-|---|---|---|
-
-## Optional Follow-ups
-- Memory candidates:
-- Archive candidates:
-- External resource search: disabled unless explicitly authorized
-- External delivery: disabled unless explicitly authorized
-```
+## Output
+`Scope / Sources / Observations / Evidence / Recommendations / Validation Signals / Gaps`。确实没有可行动建议时写明原因；额外记忆、课程计划、跨平台发送只在显式请求且获授权时生成。
 
 ## Quality Gate
-- 报告必须列出证据来源，不得只凭印象评价。
-- 每个改进建议必须绑定至少一个本地证据来源或明确标记为低置信度。
-- 必须区分“长期趋势”和“短期噪音”。
-- 必须说明隐私处理：是否读取原始历史、是否脱敏、是否包含敏感内容。
-- 执行层改进建议必须绑定 eval candidate、validation signal 和 human approval 状态。
-- 默认不得调用外部网络、Slack、邮件、发布、提交或写长期记忆。
-- 若用户要求全量历史扫描，必须说明性能成本和摘要策略，不得把完整聊天原文复制进报告。
-
-## Evidence Template
-```md
-- Source Scope: current-project / recent-projects / all-local-history / user-specified
-- Read Mode: index-first / targeted-raw-read / full-local-scan
-- Local Sources:
-- Redaction Decision:
-- External Actions: none / user-authorized-search / user-authorized-delivery
-- Growth Findings:
-- Memory Candidates:
-- Archive Candidates:
-- Gate Result: pass / needs-fix
-```
+- 趋势必须有足够的跨时点证据，否则归类为单次观察；建议不得基于私人属性或未经证实的行为推断。
+- 默认报告只读与脱敏；不存在外部发送、付费调用、全历史扫描的隐式许可。
+- 保留来源、置信度与不确定性；源级字节降低不等于真实 Token/阅读质量改善。

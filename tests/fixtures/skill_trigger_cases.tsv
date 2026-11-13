@@ -105,3 +105,11 @@ adk-cross-team-handoff	skill	1	跨团队交接一个维护脚本，保留真实�
 adk-requirements-triage	skill	1	需求不明确，先给负责人一页需求摘要
 adk-lightweight-planning	skill	1	先给计划，小任务不必凑十个步骤
 adk-knowledge-archive	skill	1	将经过验证的排障教训做知识归档
+adk-task-breakdown	skill	1	任务太大需要拆解任务，先判断是否真的需要多任务包
+adk-task-breakdown	skill	0	单文件小修且无共享依赖变更，直接执行已批准补丁
+adk-parallel-agent-governance	skill	1	多 agent 并行施工前先核对收益与共享写冲突
+adk-parallel-agent-governance	skill	0	根因未明且任务无法独立拆分，不开展并行施工
+adk-test-strategy	skill	1	先写测试，按风险选择必要的测试矩阵
+adk-test-strategy	skill	0	纯文档修改且无行为变化，不扩展测试矩阵
+adk-engineering-growth-review	skill	1	请做开发者成长复盘，只读证据索引
+adk-engineering-growth-review	skill	0	只总结当前会话，不做长期成长分析
