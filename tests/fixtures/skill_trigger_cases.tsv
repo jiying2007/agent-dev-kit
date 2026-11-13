@@ -113,3 +113,10 @@ adk-test-strategy	skill	1	先写测试，按风险选择必要的测试矩阵
 adk-test-strategy	skill	0	纯文档修改且无行为变化，不扩展测试矩阵
 adk-engineering-growth-review	skill	1	请做开发者成长复盘，只读证据索引
 adk-engineering-growth-review	skill	0	只总结当前会话，不做长期成长分析
+adk-commit-pr-quality-gate	skill	1	请生成 commit message 并校验提交信息格式，暂不提交
+adk-commit-pr-quality-gate	skill	1	准备发起PR并核对代码测试证据
+adk-commit-pr-quality-gate	skill	0	只做静态代码审查，不提交PR也不修改
+adk-worktree-governance	skill	1	需要创建 worktree 隔离两条分支进行并行开发
+adk-worktree-governance	skill	0	单文件小改直接在当前分支实现，不创建工作树
+adk-branch-closeout	skill	1	请做 branch closeout 只汇报收尾状态
+adk-branch-closeout	skill	0	仍有测试失败先修 bug 不做分支收尾

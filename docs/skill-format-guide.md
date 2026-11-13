@@ -160,6 +160,13 @@ skills/<skill-name>/
 - 版本优化不能仅看 Skill 大小，必须观察路由是否正确、结果是否有用、安全/事实是否保真与实际模型/Token 消耗。
 - 更多背景见 `docs/changes/20261113-skill-method-efficiency/design.md`，不是新的运行时总入口。
 
+## SCM / Worktree / PR 任务的操作分级
+
+- 提交信息检查是 read-only message-only；PR-readiness、真实 SCM 写入、受控合并是不同权限边界，不因同一个 Skill 被路由就自动执行。
+- 需要工作树隔离时按净收益与风险判断，默认为 stay-current，未明确授权不可自动 stash/reset/删除用户数据。
+- 收尾用户已经选择具体路径时只检查该路径，不强制列出全部选项；合并后的 fresh-main 验证和高风险专项证据不能省略。
+- 参考 `docs/changes/20261113-repository-workflow-efficiency/design.md`；它是维护文档，不是新的常驻路由或权限来源。
+
 ## Eval minimum
 
 大改 Skill 先分离**结构/路由**与**真实行为**证据；方法类 Skill 改动应先记录无 Skill 失败基线，再与候选在相同模型、工具、上下文和预算下做真实任务对照。压力场景必须包含反例、跨轮纠错、用户拒绝/终止与已批准任务快路径；审查者不能只给自己作品评分。无模型执行环境时保留可复跑案例、明确 `not-measured`，不得由 source-test 伪推断 E2–E4。
