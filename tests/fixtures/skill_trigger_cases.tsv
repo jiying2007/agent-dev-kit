@@ -98,3 +98,10 @@ adk-prose-revision	optional-skill	0	请写 ADR 记录架构选型与弃用方案
 adk-prose-revision	optional-skill	0	不要进行语言润色，只核实事实和数据来源
 adk-prose-revision	optional-skill	0	不要润色技术文档，先澄清需求
 adk-prose-revision	optional-skill	1	请对这篇技术博客去AI味，只保留原有事实和数字
+adk-adr-writer	skill	1	请写ADR记录只有一个可行选型的取舍，不编造评分
+adk-after-action-review	skill	1	这次任务复盘只需简短记录经验和证据
+adk-incident-rca-report	optional-skill	1	线上事故根因仍未确认，请记录未决假设
+adk-cross-team-handoff	skill	1	跨团队交接一个维护脚本，保留真实验收和责任
+adk-requirements-triage	skill	1	需求不明确，先给负责人一页需求摘要
+adk-lightweight-planning	skill	1	先给计划，小任务不必凑十个步骤
+adk-knowledge-archive	skill	1	将经过验证的排障教训做知识归档

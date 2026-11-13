@@ -121,6 +121,12 @@ skills/<skill-name>/
 
 不得为每个 Skill 复制第二份 path/description/category identity catalog；Manifest 始终是 SSOT。
 
+## 专业文档的写作质量
+
+- 专业 Skills 按读者和风险选择内容深度，不强制制造备选方案、评分、因果层次或签字。
+- 统一维护方法见 `docs/runbooks/document-authoring-quality.md`，不作为运行时常驻上下文。
+- `adk-prose-revision` 仅显式选择使用，不影响事实、领域决策、权限和主流程。
+
 ## Progressive disclosure
 
 推荐加载次序：

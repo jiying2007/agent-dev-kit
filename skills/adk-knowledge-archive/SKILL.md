@@ -1,8 +1,8 @@
 ---
 name: adk-knowledge-archive
 description: "用于新建脱敏的研究、排障与决策归档候选并登记证据指针；不处理已有归档的元数据修复，也不替代发布审核。"
-version: 1.0.2
-last_updated: 2026-11-03
+version: 1.1.0
+last_updated: 2026-11-13
 triggers:
   - "知识归档"
   - "长期沉淀"
@@ -20,47 +20,26 @@ inputs:
 outputs:
   - 脱敏 Markdown 归档候选、topic、source provenance、验证记录、后续 memory/AGENTS 候选
 constraints:
-  - 不归档 secrets、auth、cache、runtime state、完整聊天记录
-  - 不把归档内容静默提升为规则或 memory
-  - 归档路径必须避开 build/control/runtime 产物
+  - 不归档 secrets、raw session、auth、runtime state、cache 或完整聊天内容
+  - 不自动发布长期规则，也不得编造来源、验证或目标路径
 ---
 
 # adk-knowledge-archive
 
 ## Goal
-- 把可复用工程知识沉淀为可检索、可审计、脱敏的归档材料。
-- 与 `adk-archive-governance` 分工：本 skill 创建归档候选；归档治理处理 meta、registry、hash 和不合规修复。
-
-## Prerequisites
-- 用户明确要求归档、保存、沉淀，或交付流程要求生成可审查 note。
-- 已识别源内容和目标 topic。
-- 已确认不包含敏感材料或已经脱敏。
+把有实际复用价值的排障、研究与决定整理为可检索的脱敏记录。已有归档的 meta、topic 和 hash 修复由 `adk-archive-governance` 负责。
 
 ## Workflow
-1. 识别来源：已有文件、当前会话、日报、session wrap、research note、debug note、外部文章摘要。
-2. 选择 topic：session-wrap、daily-summary、research-notes、debug-notes、external-articles 或 kebab-case 主题。
-3. 脱敏和去噪：删除 secrets、token、私有端点、完整原始日志、临时过程噪声。
-4. 保留可复用信息：背景、约束、决策、验证、风险、下一步和 provenance。
-5. 生成归档候选：Markdown 内容必须可单独阅读。
-6. 交给归档入口或项目约定；没有入口时报告 blocker，不自造长期路径。
-7. 若应影响未来行为，只输出 memory/AGENTS 候选，转交 `adk-memory-curator`。
-8. 若源材料来自外部网页、论文或第三方仓库，记录 source URL、retrieved_at 和版权边界。
-9. 若归档会替代旧笔记，先标注 supersedes 候选，不直接删除旧归档。
+1. 定位来源和真实 topic，按读者需要提炼已核实背景、结论、证据指针及适用边界。
+2. 排除敏感原文、凭据、完整会话、临时日志和一次性噪声。没有可复用经验时不生成凑数文档。
+3. 目标目录和 registry 遵循受管项目约定；路径不明标 `blocked`，不编造文件、topic 或更新时间。
+4. 仅在用户或已有流程明确要求时输出可写入 Markdown；后续指导规则只生成 memory/AGENTS 候选，不自动提升为全局规则。
+5. 如取自外部材料，记录确切 source、获取日期和版权边界；已有归档使用链接/注明 supersedes，不自行删除。
 
-## Evidence Template
-```md
-- Source:
-- Topic:
-- Archive Candidate Path:
-- Sanitization:
-- Provenance:
-- Verification:
-- Memory Candidate: yes / no
-- Gate Result: pass / needs-fix / blocked
-```
+## Minimal Evidence
+`Source / Topic / Finding / Validation Pointer / Boundaries / Sanitization / Candidate Path / Status`
 
 ## Quality Gate
-- 归档必须有 source、captured_at 或 last_verified。
-- 内容必须脱敏且可复用。
-- 不得写入 build、control、runtime、cache 或 credential 路径。
-- 归档后应能被 archive governance 检查。
+- 归档内容能独立阅读且保留事实来源；没有证据写“未核实”，不编造 `last_verified`。
+- 不写入 build、runtime、cache、control、credential 路径。
+- 文档保真：保留数字、技术术语、否定和条件、原始证据指针，不为自然度误改结论。

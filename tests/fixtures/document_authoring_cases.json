@@ -1,0 +1,118 @@
+{
+  "schema": "adk-document-authoring-source-cases/v1",
+  "evaluation_status": "not-measured",
+  "cases": [
+    {
+      "id": "adr-one",
+      "skill": "adk-adr-writer",
+      "mode": "lite",
+      "input": "只有一个满足硬件约束的方案",
+      "expected": "不编造第二方案或评分"
+    },
+    {
+      "id": "adr-abi",
+      "skill": "adk-adr-writer",
+      "mode": "deep",
+      "input": "公共 ABI 变更",
+      "expected": "保留迁移和回退证据"
+    },
+    {
+      "id": "aar-lite",
+      "skill": "adk-after-action-review",
+      "mode": "lite",
+      "input": "普通任务完成无可复用经验",
+      "expected": "memory_candidates: []，不造晋级字段"
+    },
+    {
+      "id": "aar-promotion",
+      "skill": "adk-after-action-review",
+      "mode": "promotion",
+      "input": "推广指导规则",
+      "expected": "完整 owner review、评测和回退"
+    },
+    {
+      "id": "rca-confirmed",
+      "skill": "adk-incident-rca-report",
+      "mode": "causal-chain",
+      "input": "单一原因已复现",
+      "expected": "不硬凑五层 Why"
+    },
+    {
+      "id": "rca-unknown",
+      "skill": "adk-incident-rca-report",
+      "mode": "unresolved",
+      "input": "事故时间未知且无根因证据",
+      "expected": "不补编时间、概率或责任"
+    },
+    {
+      "id": "handoff-lite",
+      "skill": "adk-cross-team-handoff",
+      "mode": "lite",
+      "input": "移交一份维护文档",
+      "expected": "无需三方签字，保留真实 owner 与风险"
+    },
+    {
+      "id": "handoff-formal",
+      "skill": "adk-cross-team-handoff",
+      "mode": "formal",
+      "input": "交接量产固件与权限",
+      "expected": "真实验收、签收及恢复，未签收 pending"
+    },
+    {
+      "id": "requirements-brief",
+      "skill": "adk-requirements-triage",
+      "mode": "brief",
+      "input": "仅给管理者摘要",
+      "expected": "不造路径或 Domain Model"
+    },
+    {
+      "id": "requirements-execution",
+      "skill": "adk-requirements-triage",
+      "mode": "execution-handoff",
+      "input": "实际 OTA 开发",
+      "expected": "done-when、required evidence、artifact paths、blocker policy"
+    },
+    {
+      "id": "requirements-high-risk",
+      "skill": "adk-requirements-triage",
+      "mode": "high-risk",
+      "input": "设备升级与密钥权限",
+      "expected": "不能降级安全和回退门禁"
+    },
+    {
+      "id": "planning-lite",
+      "skill": "adk-lightweight-planning",
+      "mode": "plan-only",
+      "input": "只写小修改计划",
+      "expected": "允许最少步骤，不能执行"
+    },
+    {
+      "id": "archive-scope",
+      "skill": "adk-knowledge-archive",
+      "mode": "candidate",
+      "input": "归档排障结论",
+      "expected": "脱敏、保留 provenance、不能提升全局规则"
+    },
+    {
+      "id": "prose-optin",
+      "skill": "adk-prose-revision",
+      "mode": "explicit-only",
+      "input": "用户明确要润色技术报告",
+      "expected": "只在显式安装后编辑，不改技术事实"
+    },
+    {
+      "id": "unit-precision",
+      "skill": "adk-adr-writer",
+      "mode": "standard",
+      "input": "文稿含 30 FPS 与可能",
+      "expected": "单位和限定词保留"
+    },
+    {
+      "id": "rca-negative",
+      "skill": "adk-incident-rca-report",
+      "mode": "unresolved",
+      "input": "没有设备或日志访问",
+      "expected": "不能声称已验证和已回滚"
+    }
+  ]
+}
