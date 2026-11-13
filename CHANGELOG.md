@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### 11.2.10 — Risk-scoped repository workflow Skill efficiency
+- Split commit messages from PR readiness and relevant high-risk authorization/security checks; do not create PR or execute SCM from message-only requests.
+- Avoid worktree/branch setup when an existing branch suffices, and avoid mandatory four-option closeout menus when the user has selected an operation.
+- Preserve exact-HEAD evidence, dirty user data, real authorization, target CI and no automatic destructive cleanup; add 18 source-only positive/negative cases. Actual model effectiveness and Token reduction remain not-measured.
+
 ### 11.2.9 — Skill method efficiency (source-only)
 - Streamline task decomposition, parallel-agent work, risk-tiered testing and growth review to avoid unnecessary estimates, workers, repeated model polling and unbounded histories.
 - Preserve task-package v2, high-risk permission, evidence, reviewer independence and real test gates; keep long examples in deferred references and add 20 static case specifications.

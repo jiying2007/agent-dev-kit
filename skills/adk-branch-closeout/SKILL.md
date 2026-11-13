@@ -1,8 +1,8 @@
 ---
 name: adk-branch-closeout
 description: "用于代码与验证完成后的分支收口、PR 选择和保留或清理决策；不用于未验证时直接合并、删除用户工作树或替代评审。"
-version: 1.0.2
-last_updated: 2026-11-03
+version: 1.1.0
+last_updated: 2026-11-13
 triggers:
   - "分支收尾"
   - "开发完成"
@@ -14,6 +14,7 @@ triggers:
 non_triggers:
   - 仍有测试失败且未定位根因
   - 只是询问 git 概念
+  - 不做分支收尾
 inputs:
   - 当前分支、基础分支、验证命令、测试结果、PR/合并目标
 outputs:
@@ -27,80 +28,23 @@ constraints:
 # adk-branch-closeout
 
 ## Goal
-- 在开发完成后提供 ADK 原生结构化收尾流程，覆盖验证、集成决策、远端授权和回滚边界。
-- 先验证，再给选项，最后按用户选择执行合并、PR、保留或丢弃。
-- 确保清理动作可审计、可回退，不误删用户工作。
+只对已完成或要求检查的分支进行**最小必要收尾**。不强迫每次展示四种收尾选项，也不在未验证、未授权或 dirty 不明时合并/删除。
 
-## Prerequisites
-- 已完成实现，并收集相关验证结果。
-- 已知道当前分支、基础分支和是否处于 worktree。
-- 已确认工作区没有未解释的无关改动。
-
-## 收尾选项
-
-| 选项 | 动作 | 何时使用 |
-|---|---|---|
-| local-merge | 合并回基础分支并清理分支 | 本地集成即可 |
-| create-pr | 推送并创建 PR | 需要远端审查 |
-| keep | 保留分支和 worktree | 用户稍后处理 |
-| discard | 丢弃分支和 worktree | 用户明确确认废弃 |
+## Choose one operation
+- **status-only**：只问收尾状态、CI 或下一步时，只读实际分支、PR、检查和阻塞；不自动修改、推送或创建额外 PR。
+- **create-pr**：明确要求提交 PR 时，核 HEAD/diff、真实验证、review 责任与保护规则；不要求再逐项展示 local-merge / keep / discard。
+- **merge**：已有 PR 需要合并时核精确 HEAD、必需 checks、权限和目标分支身份；合并后核 fresh-main CI。没有有效证据则 `blocked`。
+- **keep / discard**：保持源资产默认不清理；discard 和 worktree/branch 删除必须明确同意和可核实的来源/dirty 状态。
 
 ## Workflow
-1. **验证状态**：运行或确认关键测试、lint、build、smoke。失败则停止。
-2. **读取分支信息**：记录 current branch、base branch、worktree path。
-3. **检查未提交改动**：区分本次改动、用户既有改动和临时产物。
-4. **展示四个选项**：local-merge、create-pr、keep、discard。
-5. **执行选择**：只执行用户明确选择的路径。
-6. **合并后复验**：local-merge 后在基础分支上重新运行关键验证。
-7. **PR 记录**：create-pr 时输出摘要、测试计划和风险说明。
-8. **清理决策**：只在 local-merge 或 discard 且确认后清理分支/worktree。
-9. **收尾报告**：输出最终状态、命令证据、残留风险和下一步。
-
-## Closeout Report Template
-```md
-- Current Branch:
-- Base Branch:
-- Worktree Path:
-- Dirty State:
-- Verification Before Closeout:
-- Selected Option: local-merge | create-pr | keep | discard
-- Commands Run:
-- Post-merge Verification:
-- Cleanup:
-- Residual Risk:
-- Final Status:
-```
-
-## Commands
-```bash
-# 只读检查
-git status --short
-git branch --show-current
-git worktree list
-git merge-base HEAD main
-
-# PR 场景示例
-git push -u origin <branch>
-gh pr create --title "<title>" --body "<summary>"
-```
-
-## Failure Handling
-- 验证失败时停止收尾，切回 `adk-systematic-debugging` 或修复任务。
-- base branch 不明确时，先询问或根据 `main/master` merge-base 推断并声明假设。
-- PR 工具不可用时，输出 PR body 草案和手动步骤，不伪造已创建 PR。
-- discard 未收到精确确认时，不删除任何分支或 worktree。
+1. 读取 `git status --short`、base/head/worktree 和可信 CI/PR 回执；用户原有 dirty 变化不得被覆盖。
+2. 只针对请求的操作执行必要步骤；若测试失败、review blocker 未关闭或目标分支已变化，停止并给最小修复建议。
+3. 合并/PR 操作使用宿主现有工具和独立授权，不能把计划视为批准。GitHub/SCM 工具不可用时交付可复制的 PR 草稿，不虚报创建成功。
+4. 真正执行合并后在新主线再次验证受影响范围；状态更新需精确 commit/check 绑定。不能把功能分支通过当成 fresh-main 通过。
+5. 清理需选择可验证的目标与实际来源，**只在 explicit destructive cleanup approval 后操作**；已发布但未确认可删的 worktree 默认保留。
+6. 输出短报告：`operation / HEAD / evidence / result / blockers / remaining risk / next action`。完整分支生命周期选项按需见 `references/closeout-options.md`。
 
 ## Quality Gate
-- 合并或 PR 前必须有验证证据。
-- 必须给出四个收尾选项或说明为何某项不可用。
-- destructive cleanup 必须明确确认。
-- 合并后必须重新验证，不能只使用功能分支验证结果。
-- 最终状态必须可由命令复核。
-
-## 合理化借口拦截
-
-| 借口 | 现实 | 正确做法 |
-|------|------|---------|
-| "测试刚才过了" | 合并目标可能不同 | 收尾前重新核对验证 |
-| "直接帮用户删掉分支" | 可能删除重要工作 | 明确选择和确认 |
-| "PR 创建失败但差不多" | 失败不是完成 | 输出失败原因和手动步骤 |
+- 未关闭真实 blocker、缺验证或保护规则不满足时不得 PR/merge；未知写操作结果先核远端再重试。
+- 不强制展示所有四个选项；真实 destructive 操作必须明确批准并保护用户改动。
+- 真实合并后再次验证，未获得下游成功回执不宣称部署、发布或产品完成。
