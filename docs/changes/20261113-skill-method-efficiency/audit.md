@@ -16,7 +16,7 @@ Scope: 56 core + 9 optional Skills, total 65 SKILL.md entries, **284,427 UTF-8 b
 | adk-token-context-governance | 6,540 | KEEP | already defines deferred reads, source preservation and fallback |
 | adk-systematic-debugging | 6,133 | KEEP | already separates direct causality from uncertain cases, red/green and no blind retries |
 | adk-planning-execution-loop | 3,711 | KEEP | already bounded 1–4 tasks, no model polling and stage-vs-final validation |
-| adk-goal-authoring | 3,102 | KEEP | already avoids ungrounded token budgets and redundant planning |
+| adk-goal-authoring | 3,182 | KEEP | already avoids ungrounded token budgets and redundant planning |
 
 ## Negative results / constraints
 - **Not every long Skill is wasteful.** Verification, release, security, embedded/HIL and authority gates are intentionally dense; removal needs real failure evidence, not a size-only metric.
