@@ -47,7 +47,8 @@ class SkillMethodEfficiencyTests(unittest.TestCase):
         for token in ("templates/planning/worker-contract.md", "context_noise_budget",
                       "report_schema", "must_not_touch", "primary_skill", "data-only",
                       "task-package v2", "whole-diff", "raw_output_retention_decision",
-                      "parent_merge_policy", "redaction_status"):
+                      "parent_merge_policy", "redaction_status", "context-only",
+                      "stable work-item ID", "Worker"):
             self.assertIn(token, parallel)
         self.assertIn("Validation Resource Matrix:", test)
         self.assertIn("RED → GREEN → REFACTOR", test)
@@ -64,7 +65,7 @@ class SkillMethodEfficiencyTests(unittest.TestCase):
 
     def test_no_new_global_skill_or_injected_lifecycle(self) -> None:
         guide = (ROOT / "docs/changes/20261113-skill-method-efficiency/design.md").read_text(encoding="utf-8")
-        self.assertIn("不创建新 Agent/Skill/Workflow", guide)
+        self.assertIn("not create a new Agent/Skill/Workflow", guide)
         self.assertIn("not-measured", guide)
 
 if __name__ == "__main__":
