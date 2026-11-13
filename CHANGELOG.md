@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### 11.2.14 — Review coverage, patch variants and source-first CI
+- Preserve full-review evidence with conditional inspected/uninspected coverage; add on-demand validation of original high-risk patch failures, same-root variants, legitimate behavior and new risks without remote/device execution.
+- Bind C/C++ and BSP review examples to linux-embedded, mcu-rtos and mcu-baremetal toolchain eligibility; unavailable evidence is not a passed scan.
+- Move cheap catalog/content/trigger/SOP tests before heavy full-regression contracts; full 102 tests preserved, quick adds catalog coverage (61).
+- Add source-only positive/negative method cases and pre-register use of the existing effect-trials comparator. Actual host-model task success, Token, cost and latency remain not-measured.
+
 ### 11.2.13 — External Skills and Prompt discovery precision
 - Add natural-language triggers for comparing quality external Skills and tracing external Prompt callsites without changing the core routing engine or authorization model.
 - Extend canonical production matcher regression with positive, negated and catalog-level selection cases, retaining the separate optional external-practice adoption workflow.

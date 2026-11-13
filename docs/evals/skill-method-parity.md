@@ -13,9 +13,16 @@
 
 ## 测试映射
 - `bash scripts/devkit.sh validate --strict`：结构与机器授权元数据。
-- `python -m unittest tests.test_skill_content_contract -v`：64 个登记 Skill 的 Markdown 围栏和方法契约源回归。
+- `python -m unittest tests.test_skill_content_contract -v`：65 个登记 Skill 的 Markdown 围栏和方法契约源回归。
 - `bash tests/test_skill_trigger_matrix.sh`：触发词/否定/冲突的确定性 source-test。
 - `bash tests/run_all.sh`：现有完整工程回归。
 - **E2/E3/E4 额外记录**：真实 native discovery/load/trigger + 多轮/实作轨迹 +独立审核/使用方确认，不可由以上测试替代。
 
 本协议只定义可复跑的试验，当前不包含任何捏造的任务成功率或 Token 节省百分比。
+
+## 真实 Skill 改进评测的最小预注册批次（尚未执行）
+- 复用 `tests/fixtures/skill_method_cases.json` 中至少 5 个不同真实任务和不少于 3 次独立试验；方案候选覆盖需求澄清、debugging、TDD、review 和嵌入式目标适配。其 expected/reject 字段是**假设**，不可作为模型通过回执。
+- 执行前冻结 baseline/candidate **exact SHA**、native host、同一模型快照、采样参数、任务文本、工具/权限、缓存条件、上下文与 grader；用不参与编辑的 holdout 检验过拟合。真实数据含敏感信息时先脱敏并记录保真边界。
+- 复用 `agent_dev_kit.effect_trials.compare_effect_trial_file` 及已有 Run Evidence/Trace Summary；只从可信实测 run 提取 first-pass success、误路由、authorization failures、输入/输出/缓存 Token、tool calls、elapsed_ms 和人工干预。不可把脚本模拟、文件字节或源码触发测试计作模型行为。
+- **先判安全和质量不退化，再比较 Token/时延**。关键缺失（无可用 native host、无真实对照、无独立审查、缺成本记录）统一 `not-measured`，无需每小时巡检，不消耗未经授权的付费 Codex/Work 额度。
+- 允许先只读复用原有合格 traces；未找到对应 exact source/模型/工具身份时不得混合批次或补造实验。此处是评测协议与预注册任务，不是测试已执行的报告。

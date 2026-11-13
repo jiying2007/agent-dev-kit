@@ -36,7 +36,6 @@ rtk git diff --check --cached
 - Contract Change Decision: none | design-change
 - Replan Reason:
 - Mechanical Gate: pass | fail | not-run
-- Review Mode: task-level | whole-diff | whole-branch
 - Spec Verdict:
 - Quality Verdict:
 - Semantic Review: no-finding | findings-open | needs-context
@@ -46,6 +45,10 @@ rtk git diff --check --cached
 - Cannot Verify From Diff:
 - False Positives:
 - Out-of-scope Suggestions:
+- Review Coverage Ledger (whole-diff/whole-lifecycle when applicable):
+  | Scope ID | Source Snapshot | Inspected/Uninspected/Unavailable | Evidence | Owner/Risk Decision |
+  |---|---|---|---|---|
+- Patch Validation (when applicable): base / patched / original_repro / related_variants / legitimate_behavior / new_risks / not-tested
 - CI/PR Review Boundary:
   - trusted_trigger:
   - protected_secret_exposure:

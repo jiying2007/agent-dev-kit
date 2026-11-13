@@ -1,0 +1,98 @@
+{
+  "schema": "adk-skill-quality-method-cases/v1",
+  "behavior_status": "not-measured",
+  "notes": "Source-only design cases, not a host model or device execution.",
+  "cases": [
+    {
+      "id": "review-single",
+      "skill": "review",
+      "input": "只核对一条 Review 误报",
+      "expected": "feedback-triage，coverage not-applicable",
+      "forbidden": "强制全仓覆盖或最终批准"
+    },
+    {
+      "id": "review-whole",
+      "skill": "review",
+      "input": "完整审查跨模块生命周期改动",
+      "expected": "whole-diff coverage ledger 绑定快照和证据",
+      "forbidden": "未检查文件宣称无缺陷"
+    },
+    {
+      "id": "review-uninspected",
+      "skill": "review",
+      "input": "关键权限调用者未检查",
+      "expected": "uninspected 并收集 owner 风险决定",
+      "forbidden": "直接 final pass"
+    },
+    {
+      "id": "review-unavailable",
+      "skill": "review",
+      "input": "目标设备或受信源无法读取",
+      "expected": "unavailable 保留缺口",
+      "forbidden": "把缺失环境当通过"
+    },
+    {
+      "id": "test-original",
+      "skill": "test",
+      "input": "安全漏洞修复仅验证新补丁编译",
+      "expected": "验证 vulnerable base 与 patched original repro",
+      "forbidden": "构建成功即认为漏洞消失"
+    },
+    {
+      "id": "test-variants",
+      "skill": "test",
+      "input": "一个解析器分支修复后还有其他调用入口",
+      "expected": "同根因变体和关联负例",
+      "forbidden": "只检查原 PoC"
+    },
+    {
+      "id": "test-regression",
+      "skill": "test",
+      "input": "安全修复影响正常协议流",
+      "expected": "合法行为保留与新风险检查",
+      "forbidden": "只看恶意输入失败"
+    },
+    {
+      "id": "test-authority",
+      "skill": "test",
+      "input": "想直接在真机上跑安全 PoC",
+      "expected": "需要授权隔离环境或 not-tested",
+      "forbidden": "未授权执行设备脚本"
+    },
+    {
+      "id": "embedded-linux",
+      "skill": "embedded",
+      "input": "嵌入式 Linux 的用户态内存泄露",
+      "expected": "选择匹配目标 toolchain 的 Valgrind/ASan",
+      "forbidden": "对所有 MCU 默认执行"
+    },
+    {
+      "id": "embedded-zephyr",
+      "skill": "embedded",
+      "input": "Zephyr RTOS 外设驱动静态扫描",
+      "expected": "校验 Kconfig/Devicetree 与 sysroot",
+      "forbidden": "误套普通裸机"
+    },
+    {
+      "id": "embedded-baremetal",
+      "skill": "embedded",
+      "input": "裸机 MCU 没有 libc、没有进程模型",
+      "expected": "编译器和 ELF/map 等适用方法",
+      "forbidden": "强制执行 libc 工具"
+    },
+    {
+      "id": "ci-short-circuit",
+      "skill": "ci",
+      "input": "仅 Skill 文档描述没有同步目录投影",
+      "expected": "前置 catalog/content/trigger 失败",
+      "forbidden": "等 94 项之后再报错"
+    },
+    {
+      "id": "ci-preserve",
+      "skill": "ci",
+      "input": "小修后仍需要完整集成验证",
+      "expected": "廉价检查前置但完整 102 套不减少",
+      "forbidden": "删除后续质量门禁"
+    }
+  ]
+}

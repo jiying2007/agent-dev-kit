@@ -1,7 +1,7 @@
 ---
 name: adk-code-review-loop
 description: "用于独立代码审查、问题复核与反馈闭环；不用于自动批准或代替提交前门禁。"
-version: 1.7.4
+version: 1.7.5
 last_updated: 2026-11-13
 triggers:
   - "独立代码审查"
@@ -49,7 +49,7 @@ constraints:
 ## Workflow
 1. **按意图分流**：`feedback-triage` 仅核单条/有限条反馈。只读来源快照、相关代码/测试/契约和反证；判 `valid / false-positive / question / cannot-verify-from-diff`。不强制 whole-diff/全量 CI/额外 reviewer，不修改文件或发 SCM comment，**不得**给 `Final Verdict: pass`、`Final Readiness: true`。跨文件、共享状态、生命周期、安全/权限及无界影响升级完整审查；缺证据不猜。
 2. **定向复核**：`targeted-finding-review` 只核已知 finding 修复；更新 staged Snapshot ID、overlay、reopened；**不能**替代最终 `whole-diff-review` 或适用的 `whole-lifecycle-review`。
-3. **最终完整审查**：`whole-diff-review` 冻结 HEAD/index/diff 和 Requirement/Domain Model/Verification Baseline；核机械 build/test/format 和语义正确性，同轮输出 Spec/Quality 双 verdict；共享生命周期追加 whole-lifecycle，保留独立 reviewer。
+3. **最终完整审查**：`whole-diff-review` 冻结 HEAD/index/diff 和 Requirement/Domain Model/Verification Baseline；核机械 build/test/format 和语义正确性，同轮输出 Spec/Quality 双 verdict；共享生命周期追加 whole-lifecycle，保留独立 reviewer；大范围/高风险时记录 `Review Coverage Ledger`。
 4. **设计变更分流与收敛**：按 blocker/major/minor/question/cannot-verify-from-diff 分类并附证据；owner/state/event/resource/termination 或取消/超时/恢复变更标 `design-change` 并 replan；记录 new/reopened/clean rounds，不顺带重构。
 5. **门禁交接**：最终 review 交 `adk-commit-pr-quality-gate` 或 `adk-verification-before-completion`；不自动批准；重复模式经 trace-feedback-eval-handoff/AAR 才成为 durable rule。
 
@@ -79,6 +79,7 @@ E2/E3 应对冻结合同的关键前提提出可复现证伪；优先减法，CI
 - Reviewer Independence: independent | author-self-review
 - Review Round / Mode: <n> / feedback-triage | targeted-finding-review | whole-diff-review | whole-lifecycle-review
 - Finding Classes / New Finding Class Count / Reopened Finding Count / Consecutive Clean Reviews:
+- Review Coverage Ledger: not-applicable | inspected / uninspected / evidence / risk-decision
 - Lifecycle Operation Baseline: not_applicable | <path + digest>
 - Contract Change Decision: none | design-change
 - Replan Reason: <none | reason>
@@ -92,7 +93,7 @@ E2/E3 应对冻结合同的关键前提提出可复现证伪；优先减法，CI
 - 不得把机械门禁通过表述为语义审查通过；语义无发现也不得自动推导 `Final Readiness: true`。
 - staged 目标存在 `MM` 时必须列出 overlay，并设 `latest_worktree_reviewed: false`；修复后未重新 stage/更新 Snapshot ID，不得声称已复审。
 - `author-self-review` 不是 independent；高风险共享逻辑需要 owner 或独立审查证据。
-- `cannot-verify-from-diff` 必须补证据、owner 接受风险或明确不适用。
+- `cannot-verify-from-diff` 必须补证据、owner 接受风险或明确不适用；高风险必需范围若为 `uninspected` 且无 owner 风险决策不得 pass。
 - 缺 Requirement/Domain Model/Verification Baseline 时不得给 spec-compliance pass。
 - 受控生命周期操作缺 owner/state/event baseline，或 `design-change` 未回设计阶段时，spec-compliance 固定不通过。
 - `targeted-finding-review` 不得替代 whole-diff 或适用的 whole-lifecycle review。

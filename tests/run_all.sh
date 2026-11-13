@@ -83,6 +83,10 @@ fi
 TESTS=(
   test_validate.sh
   test_manifest_contract.sh
+  test_catalog.sh
+  test_skill_content.sh
+  test_skill_trigger_matrix.sh
+  test_skill_sop_quality.sh
   test_strict_json.sh
   test_contract_hardening.sh
   test_boundary_rehearsal.sh
@@ -92,7 +96,6 @@ TESTS=(
   test_manifest_composition_contract.sh
   test_manifest_composition_cli.sh
   test_test_registry.sh
-
   test_python_launcher.sh
   test_asset_content_quality.sh
   test_format.sh
@@ -165,8 +168,6 @@ TESTS=(
   test_workflow.sh
   test_workflow_verify_fail_closed.sh
   test_openspec_isolation.sh
-  test_catalog.sh
-  test_skill_trigger_matrix.sh
   test_boundary_conditions_match.sh
   test_enhanced_gate_check.sh
   test_templates.sh
@@ -175,10 +176,8 @@ TESTS=(
   test_integration.sh
   test_profile_coherence_enhanced.sh
   test_match_effectiveness.sh
-  test_skill_content.sh
   test_skill_governance.sh
   test_skill_dependencies.sh
-  test_skill_sop_quality.sh
   test_memory_governance.sh
   test_capability_uplift.sh
   test_docs_cli_alignment.sh
@@ -189,6 +188,9 @@ TESTS=(
 QUICK_TESTS=(
   test_validate.sh
   test_manifest_contract.sh
+  test_catalog.sh
+  test_skill_content.sh
+  test_skill_trigger_matrix.sh
   test_strict_json.sh
   test_contract_hardening.sh
   test_boundary_rehearsal.sh
@@ -198,7 +200,6 @@ QUICK_TESTS=(
   test_manifest_composition_contract.sh
   test_manifest_composition_cli.sh
   test_test_registry.sh
-
   test_python_launcher.sh
   test_runtime_boundary.sh
   test_profile_context_footprint.sh
@@ -244,8 +245,6 @@ QUICK_TESTS=(
   test_local_ci_parity.sh
   test_hosted_workflow_hygiene.sh
   test_performance_budgets.sh
-  test_skill_trigger_matrix.sh
-  test_skill_content.sh
   test_skill_governance.sh
   test_scripts_smoke.sh
 )

@@ -1,7 +1,7 @@
 ---
 name: adk-static-analysis-c-cpp
 description: "用于 C/C++ 静态分析告警分级、根因追踪与误报确认，并补最小复现；不用于把单次扫描当作完整功能或动态安全验收。"
-version: 1.0.3
+version: 1.0.4
 last_updated: 2026-11-10
 triggers:
   - "静态分析"
@@ -25,6 +25,12 @@ constraints:
 ## Prerequisites
 - 确认编译数据库或分析配置可用。
 - 约定规则集严重级别映射（blocker/major/minor）。
+
+## Target Eligibility（按目标分流，非一次跑全部工具）
+- `linux-embedded`：确认 kernel/userspace、交叉编译数据库与 sysroot；Linux/ASan/Valgrind 仅在该目标/宿主支持时选用。
+- `mcu-rtos`：锁定 RTOS、MCU ABI、具体编译器、链接脚本和构建变体；Zephyr 专属 Kconfig/Devicetree 只适用于实际 Zephyr 工程。
+- `mcu-baremetal`：无 libc/宿主 OS 的约束下优先编译器告警、ELF/map、MISRA/规则核对及可验证的静态路径；不得默认执行依赖 libc、进程或目标文件系统的工具。
+- 无匹配的 compile_commands/toolchain、不可获得的 target 或授权时标 `not-applicable / not-scanned`，禁止报告零告警等同于零缺陷。工具安装、私有许可证和固件写入均需独立权限。
 
 ## Workflow
 1. 规则基线设定：按项目风险选择规则集。

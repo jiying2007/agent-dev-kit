@@ -1,7 +1,7 @@
 ---
 name: adk-bsp-analysis
 description: 分析现有嵌入式 BSP 源码、启动/探测路径、clock/reset/pinctrl/IRQ/DMA 依赖、硬件参考和 patch 历史，形成证据化架构理解与迁移风险。用于 BSP 代码梳理、厂商实现追踪、SoC/board 差异和历史 workaround 分析；不用于直接实现新驱动或 live 板级故障隔离。
-version: 2.0.0
+version: 2.0.1
 last_updated: 2026-09-15
 triggers:
   - BSP 分析
@@ -37,6 +37,9 @@ constraints:
 ## Prerequisites
 - 明确 BSP root、SoC、board、kernel/RTOS 版本与目标问题。
 - 至少能访问源码；涉及寄存器/时序结论时还需要权威 hardware reference。
+
+## Target Family Gate
+按真实目标分支读取：`linux-embedded` 关注 bootloader/kernel/DTS/probe，`mcu-rtos` 关注内核配置、任务/驱动/板级初始化（Kconfig/Devicetree 仅在真实支持的平台适用），`mcu-baremetal` 关注启动向量、链接脚本、时钟复位和寄存器初始化。未确认 SoC/board/toolchain 时标 `unknown`；不得以 Zephyr 或 Linux 的机制强套普通裸机 MCU。
 
 ## Workflow
 1. **Scope identity**：锁定 BSP root、版本/commit、SoC、board、bootloader/kernel/RTOS identity 和分析问题。
