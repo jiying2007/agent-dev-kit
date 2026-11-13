@@ -42,6 +42,8 @@ class RepositoryWorkflowSkillEfficiencyTests(unittest.TestCase):
                        "Heartbeat / Staleness Threshold", "scope_write", "destructive cleanup"):
             self.assertIn(marker, w)
         self.assertIn("不得自动 commit、stash、reset", w)
+        self.assertIn("  - 不创建工作树", w)
+        self.assertIn("  - 不做分支收尾", c)
         for marker in ("status-only", "create-pr", "merge", "fresh-main",
                        "destructive cleanup approval"):
             self.assertIn(marker, c)

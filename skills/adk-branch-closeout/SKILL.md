@@ -14,6 +14,7 @@ triggers:
 non_triggers:
   - 仍有测试失败且未定位根因
   - 只是询问 git 概念
+  - 不做分支收尾
 inputs:
   - 当前分支、基础分支、验证命令、测试结果、PR/合并目标
 outputs:
