@@ -152,6 +152,14 @@ skills/<skill-name>/
 
 外部 Skill 先进入 method-only intake；审查 provenance、version、license、trigger quality、重复能力、side effects 与 rollback，再决定 ADOPT/MERGE/ENHANCE/OBSERVE/REJECT。第三方格式兼容不等于生产信任。
 
+## 模板负担与任务经济性
+
+- 对任务拆分、并行代理、测试策略和成长复盘，先问有没有必要启动复杂流程；简单/已完成任务应直接 short-circuit。
+- 只有机器调度与高风险执行需要全量 typed task package；用户只读计划无需填空式生成完整 JSON、工时与候选。
+- 只有资源独立且实测或有明确收益预期时并行；等待 CI 等无变化状态应交宿主，不让模型反复推理。
+- 版本优化不能仅看 Skill 大小，必须观察路由是否正确、结果是否有用、安全/事实是否保真与实际模型/Token 消耗。
+- 更多背景见 `docs/changes/20261113-skill-method-efficiency/design.md`，不是新的运行时总入口。
+
 ## Eval minimum
 
 大改 Skill 先分离**结构/路由**与**真实行为**证据；方法类 Skill 改动应先记录无 Skill 失败基线，再与候选在相同模型、工具、上下文和预算下做真实任务对照。压力场景必须包含反例、跨轮纠错、用户拒绝/终止与已批准任务快路径；审查者不能只给自己作品评分。无模型执行环境时保留可复跑案例、明确 `not-measured`，不得由 source-test 伪推断 E2–E4。

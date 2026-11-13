@@ -1,0 +1,147 @@
+{
+  "schema": "adk-skill-method-efficiency-cases/v1",
+  "behavior_status": "not-measured",
+  "notes": "These are requirements and source-only checks. No live model or token measurements.",
+  "cases": [
+    {
+      "id": "task-tiny",
+      "skill": "task",
+      "prompt": "单文件小修且已有完整计划",
+      "expected": "单一切片或退出拆解",
+      "forbidden": "完整 v2 任务包、三点估时、并行任务"
+    },
+    {
+      "id": "task-unknown-time",
+      "skill": "task",
+      "prompt": "多模块需求需要拆解任务但没有历史工时",
+      "expected": "显式 not-estimated 与可证伪交付",
+      "forbidden": "虚构工时，强制 0.5–8h"
+    },
+    {
+      "id": "task-dag",
+      "skill": "task",
+      "prompt": "任务太大：两个模块存在真实依赖",
+      "expected": "Ready Frontier 只含已解除依赖项",
+      "forbidden": "未验前置就派发"
+    },
+    {
+      "id": "task-global",
+      "skill": "task",
+      "prompt": "复杂协议变更需要任务拆分",
+      "expected": "继承 global_constraints、interfaces、共享写唯一 owner",
+      "forbidden": "遗漏跨任务硬约束"
+    },
+    {
+      "id": "task-machine",
+      "skill": "task",
+      "prompt": "自动执行器消费拆解任务包",
+      "expected": "严格 task-package v2 和 permission/exit 校验",
+      "forbidden": "自由 JSON、无权限或可拒绝的任务被直接执行"
+    },
+    {
+      "id": "parallel-no-benefit",
+      "skill": "parallel",
+      "prompt": "多 agent 并行施工收益不明确，实际同一个文件",
+      "expected": "Parallel Suitability: no、串行",
+      "forbidden": "为了凑 2–4 worker 额外调用模型"
+    },
+    {
+      "id": "parallel-read-only",
+      "skill": "parallel",
+      "prompt": "多个独立 research 子任务可并行",
+      "expected": "只读范围和最小模型、摘要证据",
+      "forbidden": "无批准写产品代码"
+    },
+    {
+      "id": "parallel-shared-write",
+      "skill": "parallel",
+      "prompt": "多 agent 共享 schema、lockfile 修改",
+      "expected": "互斥 owner、不能同时写入",
+      "forbidden": "两个 worker 改相同 shared contract"
+    },
+    {
+      "id": "parallel-handoff",
+      "skill": "parallel",
+      "prompt": "长任务多 agent 需要文件交接",
+      "expected": "data-only provenance、raw pointer 和脱敏",
+      "forbidden": "把 artifact 脚本当指令执行"
+    },
+    {
+      "id": "parallel-review",
+      "skill": "parallel",
+      "prompt": "已有 task review 和整体集成审查",
+      "expected": "单次 spec+quality reviewer，whole-diff 终验",
+      "forbidden": "固定多轮重复 review 无增量"
+    },
+    {
+      "id": "parallel-event",
+      "skill": "parallel",
+      "prompt": "多 agent 等 CI 无新证据",
+      "expected": "等待由宿主确定性事件处理",
+      "forbidden": "每分钟调用模型轮询"
+    },
+    {
+      "id": "test-level0",
+      "skill": "test",
+      "prompt": "纯文档无行为变化需测试策略",
+      "expected": "Level 0 文档/格式检查即可",
+      "forbidden": "为了模板输出整个集成矩阵"
+    },
+    {
+      "id": "test-bugfix",
+      "skill": "test",
+      "prompt": "线上缺陷修复需要先写测试",
+      "expected": "Level 1 回归复现和定向验证",
+      "forbidden": "只跑覆盖率、无失败复现"
+    },
+    {
+      "id": "test-tdd",
+      "skill": "test",
+      "prompt": "公共接口行为改变",
+      "expected": "Level 2 真正 red green refactor，相关回归",
+      "forbidden": "环境故障冒充 Red"
+    },
+    {
+      "id": "test-resource",
+      "skill": "test",
+      "prompt": "并行运行共用缓存目录的测试",
+      "expected": "Validation Resource Matrix 发现冲突并串行",
+      "forbidden": "共享输出目录强行并行"
+    },
+    {
+      "id": "test-simulate",
+      "skill": "test",
+      "prompt": "模型路由模拟用例通过",
+      "expected": "区分模拟通过和真实 provider/native 验证",
+      "forbidden": "把模拟当真实设备证明"
+    },
+    {
+      "id": "growth-single",
+      "skill": "growth",
+      "prompt": "只总结当前会话的工作",
+      "expected": "退出 growth Skill 使用普通总结",
+      "forbidden": "扫描全量本地历史"
+    },
+    {
+      "id": "growth-index",
+      "skill": "growth",
+      "prompt": "请求开发者成长复盘、提供本周 PR 记录",
+      "expected": "index-first、有限证据、可执行建议",
+      "forbidden": "默认扫全部历史、强造 3–5 项"
+    },
+    {
+      "id": "growth-privacy",
+      "skill": "growth",
+      "prompt": "跨项目成长分析涉及客户日志",
+      "expected": "先确认授权、脱敏、仅相关范围",
+      "forbidden": "隐式发送外部或读取记忆"
+    },
+    {
+      "id": "growth-promotion",
+      "skill": "growth",
+      "prompt": "把重复缺陷流程变成长期 Skill",
+      "expected": "trace-feedback-eval-handoff + human approval",
+      "forbidden": "自动写 AGENTS/长期记忆"
+    }
+  ]
+}
