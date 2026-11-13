@@ -40,7 +40,7 @@ class SkillMethodEfficiencyTests(unittest.TestCase):
         self.assertIn("无新状态不循环调用模型等待", parallel)
 
     def test_authority_coverage_survives_compaction(self) -> None:
-        task, parallel, test, growth = (self.read(name) for name in FILES)
+        task, parallel, test, growth = (self.read(name) for name in ("task", "parallel", "test", "growth"))
         for token in ("adk-task-package-schema-v2", "structured_output_schema",
                       "strict_schema_decision", "refusal_handling", "implementation_permission",
                       "prototype_evidence", "global_constraints", "interfaces", "ready_to_handoff"):
