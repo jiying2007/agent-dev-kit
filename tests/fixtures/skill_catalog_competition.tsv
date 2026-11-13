@@ -33,3 +33,7 @@ R031	primary	adk-structured-requirements-questioning	-	对这个新功能做头�
 R032	primary	adk-structured-requirements-questioning	-	Grill Me，挑战这个新功能的关键假设
 R033	negated	-	adk-structured-requirements-questioning	不要头脑风暴
 R034	abstain	-	-	早上好，今天心情怎么样
+R035	primary	adk-skill-deep-analysis	-	请全网搜索优质skills，参考优化ADK Skills
+R036	primary	adk-repo-prompt-analysis	-	请逆向 Prompt 调用链，核查来源可信度
+R037	negated	-	adk-skill-deep-analysis	不要对标优质 Skills
+R038	negated	-	adk-repo-prompt-analysis	不要逆向 Prompt 调用链

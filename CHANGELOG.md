@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### 11.2.13 — External Skills and Prompt discovery precision
+- Add natural-language triggers for comparing quality external Skills and tracing external Prompt callsites without changing the core routing engine or authorization model.
+- Extend canonical production matcher regression with positive, negated and catalog-level selection cases, retaining the separate optional external-practice adoption workflow.
+- Source and deterministic route evidence only. Real model skill selection, task quality, Token use, latency and cost remain not-measured.
+
 ### 11.2.12 — Evidence-first external Skill and Prompt method intake
 - Analyze external methods through minimal source-linked reading and conditional security checks; never install external Skills, execute untrusted scripts or auto-promote adoption.
 - Trace prompt construction from actual callsites and trust layers. Remove forced multi-diagram, fixed scoring and contradictory direct-adoption writes.

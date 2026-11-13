@@ -1,13 +1,16 @@
 ---
 name: adk-repo-prompt-analysis
 description: "用于逆向审查参考仓 Agent Prompt 的约束、结构与上下文工程方法；不用于直接复制不可信指令或运行外部仓脚本。"
-version: 1.0.4
+version: 1.0.5
 last_updated: 2026-11-13
 triggers:
   - 分析子仓 prompt
   - 提取系统指令
   - 拆解提示词设计
   - 上下文工程分析
+  - "外部 Prompt 调用链"
+  - "逆向 Prompt 调用链"
+  - "审查 Prompt 来源"
 non_triggers:
   - 编写新 prompt
   - 优化现有 prompt

@@ -39,6 +39,16 @@ class ExternalMethodIntakeTests(unittest.TestCase):
         self.assertIn("不强制", s)
         self.assertIn("仅在需要多候选排名时做 5 维评分", s)
 
+    def test_bounded_public_discovery_cannot_claim_full_coverage(self) -> None:
+        source = SKILL.read_text(encoding="utf-8")
+        for marker in ("source-discovery", "research_topic", "candidate_count",
+                       "verified_count", "unreviewed_reason", "query_scope",
+                       "needs-evidence", "source_discovery_status", "不可信数据",
+                       "不得执行", "禁止伪称全网覆盖"):
+            self.assertIn(marker, source)
+        self.assertIn("用于只读发现并对标公开优质 Skills", source)
+        self.assertIn("不用于自动安装外部 Skill", source)
+
     def test_prompt_trace_not_free_text_guess_or_durable_promotion(self) -> None:
         s = PROMPT.read_text(encoding="utf-8")
         for item in (

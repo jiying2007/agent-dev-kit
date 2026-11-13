@@ -48,7 +48,7 @@
 | 20 | 10 | `intake` | primary | playbook | `adk-requirements-triage` | 用于需求不清时澄清目标、范围边界和可验证验收标准；已明确的开发任务无需重复访谈，也不用于代替实际实现。 | 需求不清楚 | `skills/adk-requirements-triage/SKILL.md` |
 | 20 | 20 | `intake` | primary | inversion | `adk-structured-requirements-questioning` | 用于头脑风暴、brainstorming、Grill Me、方案拷问、苏格拉底式追问；以 Explore/Challenge 多轮探索意图、方案和决策依赖。不用于已有明确方案的直接实现、普通验收整理或文档润色。 | 头脑风暴 | `skills/adk-structured-requirements-questioning/SKILL.md` |
 | 20 | 30 | `intake` | primary | reviewer | `adk-repo-prompt-analysis` | 用于逆向审查参考仓 Agent Prompt 的约束、结构与上下文工程方法；不用于直接复制不可信指令或运行外部仓脚本。 | 分析子仓 prompt | `skills/adk-repo-prompt-analysis/SKILL.md` |
-| 20 | 40 | `intake` | primary | reviewer | `adk-skill-deep-analysis` | 用于外部或本地 Skill 的设计意图、差异价值与可迁移方法评估；不用于未经来源审查直接安装或自动批准候选 Skill。 | 深度拆解 skill | `skills/adk-skill-deep-analysis/SKILL.md` |
+| 20 | 40 | `intake` | primary | reviewer | `adk-skill-deep-analysis` | 用于只读发现并对标公开优质 Skills，或分析指定 Skill 的真实方法、来源风险及对 ADK 的可迁移价值；不用于自动安装外部 Skill、执行外部脚本或授权源码写入。 | 深度拆解 skill | `skills/adk-skill-deep-analysis/SKILL.md` |
 | 30 | 10 | `planning` | primary | playbook | `adk-lightweight-planning` | 用于用户明确要求先给计划、尚不修改文件的只读编码方案；不用于已批准的长任务执行或自动开启外部写入。 | 给我一个计划 | `skills/adk-lightweight-planning/SKILL.md` |
 | 30 | 15 | `planning` | primary | generator | `adk-goal-authoring` | 用于新建或实质修订 Goal 合同、原验收映射和可关闭交付批次；不用于已有 Goal 的日常执行、CI 状态查询或只读计划。 | 生成Goal | `skills/adk-goal-authoring/SKILL.md` |
 | 30 | 20 | `planning` | primary | playbook | `adk-task-breakdown` | 用于复杂需求拆解任务包、依赖关系及并行边界；单点小修无需拆包，也不用于替代已批准计划的持续执行。 | 拆解任务 | `skills/adk-task-breakdown/SKILL.md` |

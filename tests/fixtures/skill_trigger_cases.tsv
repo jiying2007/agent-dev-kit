@@ -120,3 +120,12 @@ adk-worktree-governance	skill	1	需要创建 worktree 隔离两条分支进行�
 adk-worktree-governance	skill	0	单文件小改直接在当前分支实现，不创建工作树
 adk-branch-closeout	skill	1	请做 branch closeout 只汇报收尾状态
 adk-branch-closeout	skill	0	仍有测试失败先修 bug 不做分支收尾
+adk-skill-deep-analysis	skill	1	请全网搜索优质skills，参考优化ADK Skills
+adk-skill-deep-analysis	skill	1	对标优质 Skills，先只读评估方法差异
+adk-skill-deep-analysis	skill	1	评估外部 Skill 的真实实现方法
+adk-skill-deep-analysis	skill	0	不要对标优质 Skills
+adk-skill-deep-analysis	skill	0	直接修改现有 skill，不做外部方法分析
+adk-repo-prompt-analysis	skill	1	请逆向 Prompt 调用链，查明真正调用来源
+adk-repo-prompt-analysis	skill	1	审查 Prompt 来源和工具上下文拼接
+adk-repo-prompt-analysis	skill	0	不要逆向 Prompt 调用链
+adk-repo-prompt-analysis	skill	0	直接优化现有 prompt，不分析外部来源
