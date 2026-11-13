@@ -1,8 +1,8 @@
 ---
 name: adk-incident-rca-report
 description: "用于生产事故稳定后整理时间线、根因、恢复和防复发证据；不用于事故正在处置时替代现场响应或虚构不存在的取证材料。"
-version: 1.0.3
-last_updated: 2026-11-09
+version: 1.1.0
+last_updated: 2026-11-13
 triggers:
   - "线上事故"
   - "故障复盘"
@@ -15,113 +15,34 @@ inputs:
 outputs:
   - RCA 报告、修复项、预防项
 constraints:
-  - 必须覆盖根因、触发条件、阻断措施
-  - 结论必须区分事实证据与推断判断
+  - 区分确认事实、已证实因果、候选假设与未决问题
+  - 不编造事故时间、影响、组织责任或概率；实际恢复操作需另行授权
 ---
 
 # adk-incident-rca-report
 
 ## Goal
-- 用事实证据还原事故链路，给出可验证的修复与预防闭环。
-- 通过 5-Why 分析确保根因穿透到系统层面而非停留在表面症状。
-
-## Prerequisites
-- 具备统一时区的事故时间线与关键日志片段。
-- 能获取对应发布记录、配置变更与监控告警数据。
+在事故止损后基于证据解释事件、原因与防复发。报告质量取决于因果证据，而不是 5-Why 的层数。
 
 ## Workflow
-1. 还原时间线：按分钟级记录发现、止损、恢复与复发节点。
-2. 分层证据：将"事实证据"与"推断判断"分离，并记录被证伪假设。
-3. 5-Why 根因分析：从表面症状逐层追问，直到到达系统性根因。
-4. 根因收敛：输出触发条件、放大路径、失效防线三段因果链。
-5. 动作闭环：按 blocker/major/minor 分级生成修复与预防项。
-6. 追踪计划：每个动作必须绑定 owner、截止时间、验收命令。
-7. 改进措施跟踪：建立改进项看板，定期回顾执行进度。
+1. 固定事件范围、已确认版本、证据指针和影响；时间不明则写 `unknown`，不编造分钟级时间线。
+2. 单一原因已复现时使用“触发 → 失效机制 → 影响 → 修复/验证”短链。
+3. 多因素场景才按需用 5-Why、故障树或事件序列分析；**5-Why 为可选分析工具**，不强制凑三层/五层，不能因为模板把责任推给组织。
+4. 根因没有确认时标 `unresolved`；分别记录事实、假设、被证伪方向、下一步取证，不编造概率或确定性判断。
+5. 产出具体改进与复验信号、实际 owner（未知则待确认）。涉及生产变更、安全、数据写入或回滚时维持真实的权限审批与恢复边界，不擅自操作。
+6. 短报告为默认；确有正式事故档案/多方协调需求时才补 RACI、完整影响核算和长期复查。
 
-## 5-Why 分析模板
+## Report
 ```md
-[5-why-analysis]
-问题: <表面症状>
-
-Why-1: <直接原因>
-  证据: <日志/监控数据>
-
-Why-2: <中间原因>
-  证据: <配置/代码变更>
-
-Why-3: <流程原因>
-  证据: <流程文档/操作记录>
-
-Why-4: <组织原因>
-  证据: <团队结构/职责分工>
-
-Why-5: <系统性根因>
-  证据: <架构/设计决策>
-
-根因分类: 代码缺陷 | 配置错误 | 流程缺失 | 监控不足 | 架构缺陷
+- Incident / status / time range:
+- Verified impact / unknown:
+- Facts and evidence pointers:
+- Causal chain: confirmed | hypothesis | unresolved
+- Remediation / owner / verification:
+- Open questions / residual risks:
 ```
-
-## 时间线重建模板
-```md
-[timeline]
-时区: UTC+8
-
-HH:MM - [触发] <触发事件描述>
-HH:MM - [发现] <如何发现事故>
-HH:MM - [止损] <采取的止损措施>
-HH:MM - [恢复] <恢复操作>
-HH:MM - [验证] <恢复验证>
-HH:MM - [关闭] <事故关闭>
-
-持续时间: <分钟>
-影响范围: <用户数/请求量/服务数>
-```
-
-## Commands
-```bash
-# 查询事故期间的 Git 提交
-git log --since "<incident-start>" --until "<incident-end>" --oneline
-
-# 搜索错误日志
-rg -n "error|fatal|timeout|oom" <log_dir>
-
-# 查询配置变更历史
-git log --all --oneline --since "<incident-start>" -- "*.yaml" "*.yml" "*.conf"
-
-# 检查监控告警记录
-rg -n "alert|warning|critical" <monitoring_log_dir>
-
-# 统计影响范围
-rg -c "error" <log_dir> | sort -t: -k2 -rn | head -20
-
-# RCA 按本 Skill 的 Evidence Template 编写；devkit verify 不生成 RCA，只核验已有 ADK change。
-```
-
-## Evidence Template
-```md
-- Incident ID:
-- Severity: P0 | P1 | P2 | P3
-- Timeline (UTC+8):
-- Impact Scope:
-- 5-Why Analysis:
-- Fact Evidence:
-- Ruled-out Hypotheses:
-- Root Cause Chain:
-- Actions (B/M/m + owner + due):
-- Verification Command Results:
-- Prevention Measures:
-- Monitoring Gaps:
-```
-
-## Failure Handling
-- 关键证据缺失时，结论固定为 `needs-fix`，先补采样与日志再继续。
-- 若修复涉及 breaking change，必须在报告中附迁移窗口与回退触发条件。
-- 若根因无法收敛到单一原因，必须列出所有候选根因并标注概率。
-- 若改进措施超过 30 天未完成，必须升级到管理层复审。
 
 ## Quality Gate
-- RCA 必须包含责任边界、改进计划、验收标准与复验结果。
-- 若涉及 breaking change，必须附迁移与回退路径。
-- 5-Why 分析必须至少穿透到第 3 层，禁止停留在表面症状。
-- 时间线必须覆盖从事发到恢复的完整链路，禁止遗漏关键节点。
-- 改进措施必须绑定 owner 与截止时间，禁止无主改进项。
+- 根因未验证不能宣称已闭环；不能虚构日志、时间点、损失、概率和复验结果。
+- 正式事故的审批、权限、生产恢复及验证要求不得因 lite 输出被降低。
+- 文档保真：保留原始证据、技术细节与不确定状态，不为了 5-Why 完整而创造因果。
