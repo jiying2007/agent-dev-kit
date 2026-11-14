@@ -210,7 +210,7 @@ class SkillQualityMethodsTests(unittest.TestCase):
         self.assertEqual(len(source_rows), 6)
         self.assertEqual(len(set(source_rows)), len(source_rows))
         for row in source_rows:
-            self.assertRegex(row, r"@[0-9a-f]{12}\`")
+            self.assertRegex(row, r"@[0-9a-f]{12}`")
         for marker in ("ADR-R1", "ADR-R2", "HANDOFF-R1", "HANDOFF-R2",
                        "LIFE-R1", "LIFE-R2", "not-measured", "不增加新 Skill"):
             self.assertIn(marker, notes)
