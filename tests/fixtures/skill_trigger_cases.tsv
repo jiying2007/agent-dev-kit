@@ -129,3 +129,6 @@ adk-repo-prompt-analysis	skill	1	请逆向 Prompt 调用链，查明真正调用
 adk-repo-prompt-analysis	skill	1	审查 Prompt 来源和工具上下文拼接
 adk-repo-prompt-analysis	skill	0	不要逆向 Prompt 调用链
 adk-repo-prompt-analysis	skill	0	直接优化现有 prompt，不分析外部来源
+adk-external-practice-absorption	optional-skill	1	继续吸收外部成熟方法，提升已有 Skills 的实际执行效果
+adk-external-practice-absorption	optional-skill	0	不要吸收外部成熟方法
+adk-skill-deep-analysis	skill	1	对标优质 Skills，先只读研究具体文件方法
