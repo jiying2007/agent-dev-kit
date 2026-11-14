@@ -31,3 +31,11 @@
 此前 `skill_method_ab_prereg.json` 仍登记 **11.2.16→11.2.17**，而当前候选已是 **11.2.18**。因两版均无实际模型评测，本轮将现用对照重绑为 `11.2.17@7aed1d... → 11.2.18@尚未合并`，原未执行方案保存在同一 JSON 的 `superseded_unrun_plan` 中。此为评测配置正确性修复，不是 A/B 结果。
 
 **独立留出风险**：9 个原始案例的 5/4 分组虽然互不重叠，但内容在修订期间已被作者查看，因此只能算开发用例；未来真实晋级需独立方新建未曝光 holdout。champion/challenger 版本比较与 no-skill/with-skill 消融必须分别注册、证明真实 Skill exposure 并独立评审，不得拿不同 bundle digest 冒充目标 Skill 缺席。E2–E4 与实际 Token/成本仍为 `not-measured`，没有自动模型运行。
+
+## 执行能力边界修复（本轮新增）
+
+[Agent Skills 官方评测指南](https://github.com/agentskills/agentskills/blob/main/docs/skill-creation/evaluating-skills.mdx)，单文件 blob `7c90d54295be`，强调 fresh context、真实 with/without 实验以及验证正确输出，而不是把 Skill 加载等同于完成。NVIDIA SkillEvaluator 亦区分 Discoverability（发现/加载）与 Correctness（实际结果）；参考其方法，但不导入任何评测器或付费模型。
+
+审查生产 ADK 源码后发现：`manifest.json` 将 `adk-external-practice-absorption` 列为 optional，显式 routing intent 中有 `availability=optional-skill-required`，但自然语言经 `optional_skill_trigger` 的路径只使用默认 `fallback-profile`。这样，**目录中匹配到 Optional Skill** 可能被误读为 **当前 Runtime 已安装**。
+
+已在已有 `src/agent_dev_kit/matcher.py` 的 `_apply_contract` 统一覆盖 Optional 来源的 `profile_availability=optional-skill-required`，并在实际 CLI `format_result` 追加该提示；`tests/test_skill_trigger_matrix.py` 使用生产 Matcher 验证显式 routing、lexical fallback、显式选择、Core 反例与否定输入。**这是源码级契约修复，不是原生宿主已安装的证明**；消费端仍需在可信 installed inventory 中核对，不得自动安装或越权。
