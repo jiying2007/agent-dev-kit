@@ -56,7 +56,7 @@
     "effect_comparator": "agent_dev_kit.effect_trials.compare_effect_trial_file"
   },
   "results": [],
-  "notes": "Source-only, unexecuted champion-challenger preregistration: latest reviewed 11.2.17 baseline versus 11.2.18 candidate. The superseded unrun record is retained. No native host calls, graded trials, runtime behavior, or Token/cost evidence. A no-skill ablation is a separate experiment requiring its own exact frozen skill-exposure proof, not this fixture.",
+  "notes": "Unexecuted champion/challenger source prereg; prior unrun identity retained. Train/holdout IDs are disjoint but their content was visible during Skill authoring, so this split is NOT an independent final holdout. Fresh unseen holdout tasks and an independent grader are required for native promotion. No-skill ablation needs a separate frozen exposure/control proof. E2-E4, Token, latency and cost remain not-measured.",
   "comparison_kind": "champion-challenger",
   "superseded_unrun_plan": {
     "baseline_release": "v11.2.16",
@@ -64,5 +64,6 @@
     "candidate_planned_release": "v11.2.17",
     "model_runs": 0,
     "reason": "11.2.17 source candidate merged without any pre-registered native model runs; preserve its identity while pre-registering 11.2.18 against the latest reviewed main."
-  }
+  },
+  "holdout_qualification": "development-fixture-only-after-author-exposure"
 }
