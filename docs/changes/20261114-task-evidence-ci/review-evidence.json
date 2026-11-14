@@ -1,0 +1,108 @@
+{
+  "schema": "adk-review-evidence/v1",
+  "subject_id": "20261114-task-evidence-ci",
+  "scope": "source-change",
+  "owner": "leiwenjun",
+  "author_id": "ai/root",
+  "reviewer": {
+    "id": "ai/root/review_existing_candidate",
+    "kind": "ai",
+    "independence": "independent"
+  },
+  "evidence_completed_at": "2026-11-14T12:48:55Z",
+  "reviewed_at": "2026-11-14T12:49:14Z",
+  "verdicts": {
+    "spec": "pass",
+    "quality": "pass"
+  },
+  "findings": [
+    {
+      "id": "ci-full-type-dependency-gap",
+      "severity": "major",
+      "disposition": "fixed",
+      "reason": "Reproduced fourteen full-CI errors and corrected five dependency modules with explicit types and existing validation. Full thirty-two-entry CI arguments with correct source resolution and fresh cache pass; two new negative regressions and valid controls preserve behavior."
+    },
+    {
+      "id": "ci-new-file-whitespace",
+      "severity": "major",
+      "disposition": "fixed",
+      "reason": "Four EOF blanks removed; original failing diagnostic encoded losslessly in JSON with exact 4512-byte SHA binding. Complete prospective Git diff check includes all newly tracked files; no format gate was relaxed."
+    }
+  ],
+  "limitations": [
+    "Independent read-only AI review with declared, not authenticated, identity. No human or GitHub approval is claimed.",
+    "This record reviews the exact b9f250ad-to-447b882b delta. Prior unchanged implementation was reviewed at c1ccff024b70155515dc002cf222dd6edb986363; its original record 569732ed76186e632f4b324842e026114d812aa956dcf3c06f40c8688a794d9b must be reconstructed from evidence commit b9f250adf8fc4bc8d35dff2e5b2d44376a5e8dc9, not falsely revalidated against changed current paths.",
+    "Old b9 regression passed 102/102 but other required contexts failed. New exact-head PR CI, main CI and immutable release remain separate requirements and are not asserted here.",
+    "No Codex/ChatGPT Work or paid model execution, E2-E4, native task effectiveness, Token/cost/latency gain or product qualification is supplied."
+  ],
+  "policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+  "validator_sha256": {
+    "src/agent_dev_kit/review_evidence.py": "be4892f464496a29dbbb41ebb56c48984bf103d8eabe2ee6117bd583d1032c47",
+    "src/agent_dev_kit/strict_json.py": "72f06f4dcaebfed83bd1ae9876e38d4f7d82d8a1473b40b66beffb6338ee94a5",
+    "src/agent_dev_kit/readiness_evidence.py": "6fdfd5bea3ee097ac21d2b2ab469378c8c84f78856061b680ebb0c5f9d726778"
+  },
+  "target": {
+    "base_commit": "b9f250adf8fc4bc8d35dff2e5b2d44376a5e8dc9",
+    "head_commit": "447b882b87f7702e217abfebecb4accb788065ca",
+    "original_patch_sha256": "875f5a47d24b1844126fe06006405a7d6e26c0edbbab817e7f033e93e904a811"
+  },
+  "sources": [
+    {
+      "base": "record",
+      "path": "evidence/original.patch",
+      "sha256": "875f5a47d24b1844126fe06006405a7d6e26c0edbbab817e7f033e93e904a811"
+    },
+    {
+      "base": "record",
+      "path": "evidence/source-bindings.json",
+      "sha256": "0edfd923c2c0e7e2418f1f45d575315f3e650e3ac4ea0661ad923ddf2ace5452"
+    },
+    {
+      "base": "record",
+      "path": "requirements.md",
+      "sha256": "10cd3614d5cfc84247fd5746d55c9d273bed72d2828bbbf8a4de222b51252950"
+    },
+    {
+      "base": "record",
+      "path": "design.md",
+      "sha256": "6e0600d3f93307c6acf9609179f61da02ec421628bcfb1fa924ba9be73c27e08"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261114-skill-execution-evidence/review-evidence.json",
+      "sha256": "569732ed76186e632f4b324842e026114d812aa956dcf3c06f40c8688a794d9b"
+    }
+  ],
+  "evidence": [
+    {
+      "base": "record",
+      "path": "review-findings.md",
+      "sha256": "22146aa70d773f4bb339c048955c067e69d455b543cd99fb9b17ed4863241cd3"
+    },
+    {
+      "base": "record",
+      "path": "verification.md",
+      "sha256": "31e1437c2a94bc0f8cdcefc51f67a47f83b91a43d7cd04b016cf1f28cb32fb7f"
+    },
+    {
+      "base": "record",
+      "path": "negative-results.md",
+      "sha256": "ecb737ff07ac2598d5a494c81bb675a2d3baf259ac705f7e94ddc82558852332"
+    },
+    {
+      "base": "record",
+      "path": "evidence/ci-failures.json",
+      "sha256": "c4f455d94ed87e8bc31f88fc3092b9cea33eb7c4676b962ca7213f0dea842dba"
+    },
+    {
+      "base": "record",
+      "path": "evidence/final-local-checks.json",
+      "sha256": "14a31af2109021b12b325fbfc006306ea2b593b2d306d78a1bea8ff3f6e3cdb1"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-binding.json",
+      "sha256": "cb34f47b3ada49896cb905679cc6d1ceb74bdea27c113b09e011de68a6b6e0de"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "base_sha": "b9f250adf8fc4bc8d35dff2e5b2d44376a5e8dc9",
+  "head_sha": "447b882b87f7702e217abfebecb4accb788065ca",
+  "tree_sha": "c391abbf0443c5d265bd82d36f1e7d7fad2c621b",
+  "files": {
+    "docs/changes/20261114-skill-execution-evidence/design.md": "2c3dff565cb44c7edbde4363ce029475b06d6f2749c8ae1a4c910b9b4f476aeb",
+    "docs/changes/20261114-skill-execution-evidence/evidence/first-integration.json": "504e3fac687fd09c835b848f4d52135e367f70668e04920ee61549ee3b176785",
+    "docs/changes/20261114-skill-execution-evidence/evidence/first-integration.txt": null,
+    "docs/changes/20261114-skill-execution-evidence/negative-results.md": "33040f7a256e595478e1c0bcb586ed6b190fbafbebe1ffeb95096b295e1708ef",
+    "docs/changes/20261114-skill-execution-evidence/requirements.md": "dc1721493fbeb0dce2eb918175404c24075e9d933ffa8dd022ec3aac2582b0f2",
+    "docs/changes/20261114-skill-execution-evidence/tasks.md": "763710d30225e8aad7d0a7d15f1165c2b55b254ae058cd9c5f0b85556f1fa924",
+    "docs/changes/20261114-task-evidence-ci/design.md": "6e0600d3f93307c6acf9609179f61da02ec421628bcfb1fa924ba9be73c27e08",
+    "docs/changes/20261114-task-evidence-ci/evidence/ci-failures.json": "c4f455d94ed87e8bc31f88fc3092b9cea33eb7c4676b962ca7213f0dea842dba",
+    "docs/changes/20261114-task-evidence-ci/evidence/final-local-checks.json": "14a31af2109021b12b325fbfc006306ea2b593b2d306d78a1bea8ff3f6e3cdb1",
+    "docs/changes/20261114-task-evidence-ci/negative-results.md": "ecb737ff07ac2598d5a494c81bb675a2d3baf259ac705f7e94ddc82558852332",
+    "docs/changes/20261114-task-evidence-ci/requirements.md": "10cd3614d5cfc84247fd5746d55c9d273bed72d2828bbbf8a4de222b51252950",
+    "docs/changes/20261114-task-evidence-ci/tasks.md": "edafa95c93e3e2181a5ee7e36798810edf6331dc9aa3f3d09e7df7b96c3ec195",
+    "docs/changes/20261114-task-evidence-ci/verification.md": "31e1437c2a94bc0f8cdcefc51f67a47f83b91a43d7cd04b016cf1f28cb32fb7f",
+    "src/agent_dev_kit/agent_value.py": "9f3955a5fd7ddb407b528d7440052266caadcff4786049f2629a6a7f947182df",
+    "src/agent_dev_kit/agent_value_contracts.py": "730d53d3c1c02636947838f8d0c7b38948a3a2801169a180e9586b55de45449d",
+    "src/agent_dev_kit/agent_value_receipts.py": "cdbef700e477a44e70e15aaf3dd32a8643f5a162d45af3cdc3b87833981fdf6a",
+    "src/agent_dev_kit/effect_trials.py": "eadbc1657592796e0b4c043437a64c1cb4ffdac6f146d88e77d906fa1a09143f",
+    "src/agent_dev_kit/run_evidence.py": "caf6c413760160dee8e9e140a70f8db0c6f8a3f61e8ade51fd9e1cb4480e0b21",
+    "tests/test_agent_value.py": "782435c99e154e25d5d0329a14115339c5d6e8fcb45133c1da78db596c3e3397",
+    "tests/test_run_evidence.py": "055644ea51f21d3d795df95a30b05393cec03e148f9480c26ae910cfcd8b64da"
+  },
+  "prior_review": {
+    "evidence_commit": "b9f250adf8fc4bc8d35dff2e5b2d44376a5e8dc9",
+    "source_commit": "c1ccff024b70155515dc002cf222dd6edb986363",
+    "record_path": "docs/changes/20261114-skill-execution-evidence/review-evidence.json",
+    "record_sha256": "569732ed76186e632f4b324842e026114d812aa956dcf3c06f40c8688a794d9b",
+    "requires_historical_checkout": true
+  }
+}
