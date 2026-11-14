@@ -9,6 +9,9 @@
 - [x] Add evidence reuse/inline fast path and third source comparison without expanding the 65-Skill catalog.
 - [x] Repair a real CI failure in `test_external_method_intake.py` (literal `\\t` versus TSV tab), retaining the assertion and 102-test denominator.
 - [x] Compare pinned SWE-Skills-Bench, AgentSkillOS and Waza sources; add version-fit/no-skill negative-value check with source-only regression and fourth comparison ledger.
+- [x] Fix 5600-byte router entry failure by retaining a concise Skill Fit Gate and moving optional details to existing reference, preserving all required source markers.
+- [x] Compare Microsoft Eval Guide, Microsoft skill-harm study, NVIDIA SkillEvaluator and Anthropic eval methods; add outcome-first/overhead triage with no new runner.
+- [x] Move the existing token-context gate to the fast beginning of the complete 102-test suite; preserve the original byte limit and test count.
 - [ ] Exact PR final-HEAD Python 3.12 contract, full regression, platform/security/dependency checks.
 - [ ] Independent protected PR review and merge decision.
 - [ ] Fresh-main CI, immutable release verification and any downstream Root promotion by a separate protected process.
