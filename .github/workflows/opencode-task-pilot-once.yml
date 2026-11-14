@@ -26,9 +26,13 @@ jobs:
       PILOT_EVENT_BEFORE: ${{ github.event.before }}
     steps:
       - name: Freeze the whole-job start before preparation
-        run: echo "PILOT_JOB_STARTED_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+        id: clock
+        timeout-minutes: 1
+        run: printf 'PILOT_JOB_STARTED_EPOCH=%s\n' "$(date +%s)" >> "$GITHUB_ENV"
 
       - name: Checkout reviewed experiment commit
+        id: checkout
+        timeout-minutes: 2
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.sha }}
@@ -36,14 +40,20 @@ jobs:
           persist-credentials: false
 
       - name: Set up the supported exporter interpreter
+        id: interpreter
+        timeout-minutes: 1
         uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: '3.12'
 
       - name: Install the frozen exporter dependencies
+        id: dependencies
+        timeout-minutes: 1
         run: python -m pip install --disable-pip-version-check PyYAML==6.0.3 jsonschema==4.26.0
 
       - name: Verify deterministic boundaries without running a model
+        id: contracts
+        timeout-minutes: 1
         run: PYTHONPATH=src python -m unittest discover -s tests -p test_hosted_task_pilot.py
 
       - name: Execute the single registered hosted attempt
@@ -53,8 +63,75 @@ jobs:
           --repo "$GITHUB_WORKSPACE"
           --out "$RUNNER_TEMP/hosted-task-pilot-20261114"
 
-      - name: Preserve reviewed evidence including failures
+      - name: Preserve bootstrap observations independently of checkout
+        id: bootstrap_evidence
         if: always()
+        timeout-minutes: 1
+        env:
+          PILOT_CLOCK_OUTCOME: ${{ steps.clock.outcome }}
+          PILOT_CHECKOUT_OUTCOME: ${{ steps.checkout.outcome }}
+          PILOT_INTERPRETER_OUTCOME: ${{ steps.interpreter.outcome }}
+          PILOT_DEPENDENCIES_OUTCOME: ${{ steps.dependencies.outcome }}
+          PILOT_CONTRACTS_OUTCOME: ${{ steps.contracts.outcome }}
+          PILOT_EXECUTION_OUTCOME: ${{ steps.execution.outcome }}
+        run: |
+          set -euo pipefail
+          umask 077
+          pilot_publication="${RUNNER_TEMP:?}/hosted-task-pilot-20261114/published"
+          mkdir -p "$pilot_publication"
+          pilot_summary="$pilot_publication/evidence/summary.json"
+          pilot_summary_present=false
+          pilot_summary_final_fields=false
+          pilot_summary_sha=""
+          if [[ -f "$pilot_summary" && ! -L "$pilot_summary" ]]; then
+            pilot_summary_present=true
+            pilot_summary_sha="$(sha256sum -- "$pilot_summary")"
+            pilot_summary_sha="${pilot_summary_sha%% *}"
+            if jq -e 'type == "object" and has("ended_at") and has("cleanup") and has("model_runs")' "$pilot_summary" > /dev/null; then
+              pilot_summary_final_fields=true
+            fi
+          fi
+          pilot_epoch="$(date +%s)"
+          pilot_utc="$(date -u -d "@$pilot_epoch" +%Y-%m-%dT%H:%M:%SZ)"
+          jq -n \
+            --arg observed_at "$pilot_utc" --argjson observed_epoch "$pilot_epoch" \
+            --arg started_epoch "${PILOT_JOB_STARTED_EPOCH:-}" \
+            --arg repository "${GITHUB_REPOSITORY:-}" --arg ref "${GITHUB_REF:-}" \
+            --arg head_sha "${GITHUB_SHA:-}" --arg run_id "${GITHUB_RUN_ID:-}" \
+            --arg run_attempt "${GITHUB_RUN_ATTEMPT:-}" \
+            --arg clock "${PILOT_CLOCK_OUTCOME:-unknown}" \
+            --arg checkout "${PILOT_CHECKOUT_OUTCOME:-unknown}" \
+            --arg interpreter "${PILOT_INTERPRETER_OUTCOME:-unknown}" \
+            --arg dependencies "${PILOT_DEPENDENCIES_OUTCOME:-unknown}" \
+            --arg contracts "${PILOT_CONTRACTS_OUTCOME:-unknown}" \
+            --arg execution "${PILOT_EXECUTION_OUTCOME:-unknown}" \
+            --argjson summary_present "$pilot_summary_present" \
+            --argjson summary_final_fields "$pilot_summary_final_fields" \
+            --arg summary_sha256 "$pilot_summary_sha" \
+            '{schema: "adk-hosted-task-pilot-bootstrap/v1",
+              observed_at_utc: $observed_at, observed_epoch: $observed_epoch,
+              first_step_epoch: ($started_epoch | if test("^[0-9]+$") then tonumber else null end),
+              observed_identity: {repository: $repository, ref: $ref, head_sha: $head_sha,
+                run_id: $run_id, run_attempt: $run_attempt},
+              step_outcomes: {clock: $clock, checkout: $checkout, interpreter: $interpreter,
+                dependencies: $dependencies, contracts: $contracts, execution: $execution},
+              coordinator_summary: {present: $summary_present, final_fields_observed: $summary_final_fields,
+                sha256: (if $summary_present then $summary_sha256 else null end)}}
+            + (if $summary_final_fields then
+                {status: "coordinator-summary-preserved"}
+              elif $execution == "skipped" and ($summary_present | not) then
+                {status: "not-run-before-coordinator", model_runs: 0, actual_skill_load: "not-run",
+                  possible_inference: false, not_started_conditions: ["baseline", "candidate"]}
+              else
+                {status: "possible-inference-without-complete-summary", model_runs: "unknown",
+                  actual_skill_load: "unknown", possible_inference: true}
+              end)' > "$RUNNER_TEMP/hosted-task-pilot-bootstrap-status.tmp"
+          mv -- "$RUNNER_TEMP/hosted-task-pilot-bootstrap-status.tmp" "$pilot_publication/bootstrap-status.json"
+
+      - name: Preserve reviewed evidence including failures
+        id: upload
+        if: always()
+        timeout-minutes: 2
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: opencode-task-pilot-${{ github.run_id }}-${{ github.run_attempt }}

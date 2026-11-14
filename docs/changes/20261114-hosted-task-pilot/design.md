@@ -8,7 +8,9 @@
 
 公开runner已提供Docker。固定使用标准容器，不依赖bubblewrap或改变Ubuntu安全设置。官方基础镜像在准备时解析为真实digest；为官方二进制准备必要动态库后封存image ID与包版本。官方工具归档先校验完整SHA再解包；允许根据真实tar目录只保留CPU必需成员，但不修改可执行字节。只读检查可用资源，资源不足按环境阻塞终止，不清理未知runner资产或扩大硬件额度。
 
-workflow首步记录真实时间，实验协调共用26分钟截止，为30分钟job上限保留4分钟收尾/上传余量。成对执行预留1140秒，计算为`2 × (300 + 100 + 2 × 70) + 60`：任务、恢复、四个容器各70秒外层生命周期及60秒记录/拷贝余量。因而checkout/依赖、资产与模型/镜像准备和两侧preflight共用首步起420秒截止。各准备操作timeout随该截止收紧，不能只给子命令独立上限。两个preflight全部结束后且仍有完整1140秒余量，才允许启动第一个条件；不足则两侧not-run。单任务推理上限仍为300秒，恢复上限100秒；实际daemon故障保留partial，不能为弥补开销缩短候选预算。
+workflow首步记录真实时间，实验协调共用26分钟截止，为30分钟job上限保留4分钟收尾/上传余量。成对执行预留1140秒，计算为`2 × (300 + 100 + 2 × 70) + 60`：任务、恢复、四个容器各70秒外层生命周期及60秒记录/拷贝余量。workflow的时钟步骤限1分钟；有明确id的checkout限2分钟、setup-python/pip/定向测试各限1分钟，四个前置步骤上界合计300秒。它们采用平台单步上界，实际时间全部扣入首步起420秒准备预算；协调器接管后，其余准备命令按420秒绝对截止的剩余时间收紧。不能把首步时间戳本身描述为对前置action的主动中断。两个preflight全部结束后且仍有完整1140秒余量，才允许启动第一个条件；不足则不启动模型。单任务推理上限仍为300秒，恢复上限100秒；实际daemon故障保留partial，不能为弥补开销缩短候选预算。
+
+upload之前增加always执行、限1分钟的独立bootstrap回执步骤，用runner现有shell与jq/printf等基础工具写固定的bootstrap-status.json；即使checkout失败也不依赖repo、Python包或新增执行工具。已有业务summary和manifest字节保持不变，不造替代模型回执。仅当execution outcome确为skipped且没有业务summary，才可报告模型0次/任务not-run；execution曾进入却没有完整回执时报告possible/unknown。记录原生steps outcome、首步epoch和真实当前UTC，不创建session、usage、容器停止或成功事实。upload限2分钟，上传仍受固定路径与公开字段白名单约束。合同测试实际执行fallback shell，覆盖前置失败、execution进入后缺回执、原有summary字节保留，并检查全部前置step timeout/id/always属性。
 
 准备阶段下载同一模型并保存实际digest；无推理预热，不把准备API请求记为模型调用。停止准备容器后再执行baseline/candidate，各自使用全新容器和独立状态目录。使用只读根、能力最小化、无新增权限、有限PID/CPU/内存及network none。官方Ollama与OpenCode在同一容器中通过loopback连接，工具/模型/Skill/config只读。持久可写挂载仅为该条件work及明确原生记录目录；镜像中该普通用户原生home路径和必要的`/tmp`另用各容器独立tmpfs，承接Ollama实际首启写入及运行临时状态，HOME字符串不被覆盖，且不绑定宿主目录、不收集或发布其内容。预检实际验证home可写、跨条件隔离及宿主home不可见。模型不可见case与完整ADK源码。运行前验证挂载与拒绝边界，之后不再改变配置。
 

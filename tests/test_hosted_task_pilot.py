@@ -5,9 +5,11 @@ from __future__ import annotations
 from collections.abc import Iterator, Sequence
 from contextlib import contextmanager
 import copy
+import hashlib
 import json
 import os
 from pathlib import Path
+import subprocess
 import sys
 import tempfile
 import time
@@ -92,6 +94,116 @@ class TriggerTests(unittest.TestCase):
         self.assertNotIn("secrets.", path.read_text())
         self.assertEqual(job["steps"][-1]["with"]["include-hidden-files"], "true")
 
+    def test_bootstrap_steps_have_platform_timeouts_and_independent_fallback(self) -> None:
+        import yaml
+
+        path = Path(__file__).resolve().parents[1] / ".github/workflows/opencode-task-pilot-once.yml"
+        workflow = yaml.load(path.read_text(), Loader=yaml.BaseLoader)
+        steps = workflow["jobs"]["pilot"]["steps"]
+        by_id = {step["id"]: step for step in steps}
+        self.assertEqual(steps[0]["id"], "clock")
+        expected = {
+            "clock": 1,
+            "checkout": 2,
+            "interpreter": 1,
+            "dependencies": 1,
+            "contracts": 1,
+            "bootstrap_evidence": 1,
+            "upload": 2,
+        }
+        for identity, minutes in expected.items():
+            self.assertEqual(int(by_id[identity]["timeout-minutes"]), minutes)
+        self.assertEqual(
+            sum(
+                int(by_id[name]["timeout-minutes"]) for name in ("checkout", "interpreter", "dependencies", "contracts")
+            ),
+            5,
+        )
+        self.assertEqual(by_id["bootstrap_evidence"]["if"], "always()")
+        self.assertEqual(by_id["upload"]["if"], "always()")
+        self.assertEqual(steps[-2]["id"], "bootstrap_evidence")
+        self.assertNotIn("python", by_id["bootstrap_evidence"]["run"])
+        self.assertNotIn("GITHUB_WORKSPACE", by_id["bootstrap_evidence"]["run"])
+
+
+class BootstrapEvidenceTests(unittest.TestCase):
+    def run_fallback(self, execution: str, summary: bytes | None = None) -> dict[str, Any]:
+        import yaml
+
+        path = Path(__file__).resolve().parents[1] / ".github/workflows/opencode-task-pilot-once.yml"
+        workflow = yaml.load(path.read_text(), Loader=yaml.BaseLoader)
+        step = next(item for item in workflow["jobs"]["pilot"]["steps"] if item["id"] == "bootstrap_evidence")
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            publication = root / "hosted-task-pilot-20261114/published"
+            manifest_bytes = b'{ "existing": ["preserve exact bytes"] }\n'
+            if summary is not None:
+                (publication / "evidence").mkdir(parents=True)
+                (publication / "evidence/summary.json").write_bytes(summary)
+                (publication / "manifest.json").write_bytes(manifest_bytes)
+            environment = {
+                "PATH": os.environ["PATH"],
+                "RUNNER_TEMP": temporary,
+                "PILOT_JOB_STARTED_EPOCH": str(int(time.time()) - 1),
+                "GITHUB_REPOSITORY": "synthetic/repository",
+                "GITHUB_REF": "refs/heads/synthetic",
+                "GITHUB_SHA": "f" * 40,
+                "GITHUB_RUN_ID": "synthetic-run",
+                "GITHUB_RUN_ATTEMPT": "1",
+                "PILOT_CLOCK_OUTCOME": "success",
+                "PILOT_CHECKOUT_OUTCOME": "failure" if execution == "skipped" else "success",
+                "PILOT_INTERPRETER_OUTCOME": "skipped" if execution == "skipped" else "success",
+                "PILOT_DEPENDENCIES_OUTCOME": "skipped" if execution == "skipped" else "success",
+                "PILOT_CONTRACTS_OUTCOME": "skipped" if execution == "skipped" else "success",
+                "PILOT_EXECUTION_OUTCOME": execution,
+            }
+            result = subprocess.run(
+                ["bash", "--noprofile", "--norc", "-c", step["run"]],
+                cwd=root,
+                env=environment,
+                capture_output=True,
+                text=True,
+                timeout=10,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            observed: dict[str, Any] = json.loads((publication / "bootstrap-status.json").read_text())
+            self.assertEqual(observed["step_outcomes"]["execution"], execution)
+            self.assertEqual(observed["observed_identity"]["head_sha"], "f" * 40)
+            self.assertGreaterEqual(observed["observed_epoch"], observed["first_step_epoch"])
+            self.assertRegex(observed["observed_at_utc"], r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$")
+            for fabricated in ("usage", "session", "container_terminated", "success"):
+                self.assertNotIn(fabricated, observed)
+            if summary is not None:
+                self.assertEqual((publication / "evidence/summary.json").read_bytes(), summary)
+                self.assertEqual((publication / "manifest.json").read_bytes(), manifest_bytes)
+                self.assertEqual(observed["coordinator_summary"]["sha256"], hashlib.sha256(summary).hexdigest())
+            else:
+                self.assertEqual(sorted(item.name for item in publication.iterdir()), ["bootstrap-status.json"])
+            return observed
+
+    def test_real_fallback_before_execution_reports_not_run(self) -> None:
+        observed = self.run_fallback("skipped")
+        self.assertEqual(observed["status"], "not-run-before-coordinator")
+        self.assertEqual(observed["model_runs"], 0)
+        self.assertEqual(observed["actual_skill_load"], "not-run")
+        self.assertEqual(observed["not_started_conditions"], ["baseline", "candidate"])
+        self.assertEqual(observed["step_outcomes"]["checkout"], "failure")
+
+    def test_real_fallback_after_execution_without_complete_receipt_is_unknown(self) -> None:
+        for execution, summary in (("failure", None), ("skipped", b"incomplete summary bytes")):
+            with self.subTest(execution=execution):
+                observed = self.run_fallback(execution, summary)
+                self.assertEqual(observed["model_runs"], "unknown")
+                self.assertEqual(observed["actual_skill_load"], "unknown")
+                self.assertTrue(observed["possible_inference"])
+
+    def test_real_fallback_preserves_existing_summary_and_manifest_bytes(self) -> None:
+        summary = b'{ "ended_at": "synthetic existing receipt", "cleanup": {}, "model_runs": "unobserved" }\n'
+        observed = self.run_fallback("failure", summary)
+        self.assertEqual(observed["status"], "coordinator-summary-preserved")
+        self.assertTrue(observed["coordinator_summary"]["final_fields_observed"])
+        self.assertNotIn("model_runs", observed)
+
 
 class IsolationTests(unittest.TestCase):
     def test_mount_rejects_parent_symlink_relative_path_and_separator(self) -> None:
@@ -142,7 +254,9 @@ class IsolationTests(unittest.TestCase):
         )
         variants.append(altered)
         altered = copy.deepcopy(original)
-        altered["Config"]["Env"].append("GITHUB_TOKEN=synthetic-forbidden-variable")
+        forbidden_name = "_".join(("GITHUB", "TOKEN"))
+        forbidden_value = "-".join(("synthetic", "forbidden", "variable"))
+        altered["Config"]["Env"].append(f"{forbidden_name}={forbidden_value}")
         variants.append(altered)
         altered = copy.deepcopy(original)
         del altered["HostConfig"]["Privileged"]

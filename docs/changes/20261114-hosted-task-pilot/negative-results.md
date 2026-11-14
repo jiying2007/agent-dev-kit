@@ -16,7 +16,13 @@
 
 旧草稿只有各子命令timeout，累计上限可能超过30分钟job并丢失收尾证据。冻结设计改用首步起420秒准备、1140秒成对执行预留、26分钟协调截止及4分钟最终收尾；两条件各300秒的推理预算不变。最终修复是否通过以冻结源码的实际测试和独立审查回执为准。
 
-## 独立的无推理配置探针
+## 首个冻结C的完整回归及最终审查
+
+首个公开审查提交为`887f0c6a10b03b57280865c6db677e4d9579c85c`，tree为`ba35b07a275f42a186f8f42eca6dacc42e49c16e`。本地完整回归实际运行于2026-11-14T15:44:35.139899Z至15:49:14.921035Z，结果为101/102，exit=1。唯一失败为product-maturity的既有credential scanner命中新测试中的纯合成环境样例：变量名为GITHUB下的TOKEN字段，值由synthetic、forbidden、variable三段组成，没有真实凭据泄露的观察。修订只在测试运行时生成相同名称和值，保留同一拒绝语义，不修改scanner或删除测试。
+
+最终只读审查同时指出：首步epoch不会主动中断尚未进入协调器的checkout/setup/pip/tests，前置步骤失败也可能只留下缺目录的上传错误。该C于2026-11-14T15:53:33.656465Z判为Spec/Quality requires-changes；原审查记录SHA256为`483e63c227571c57502afdbc4b9ee6751d0a3c08ce94045bc4d8c734dc890ad7`。修订合同明确前置step总上界与独立always回执，协调器预算不变。C从未触发模型；原始失败、提交与裁决保留，新修订必须使用新的准确提交和验证回执，不能覆盖该负结果。
+
+## 独立的无推理配置探针原始结果
 
 2026-11-14T15:26:49Z起保存了一份当时的原生配置快照（4143 bytes，SHA256 `7411cefff349fab60439f9f4d0260216a19cc48a7ec9c2c57770e43735feea87`）。首个本地断网隔离检查被宿主拒绝：`bwrap: loopback: Failed to create NETLINK_ROUTE socket: Operation not permitted`，exit=1。错误stderr SHA256为`31c2cb0dffdeb9049fa2269e24af62df15e4161d4f752a648faf9630259725fe`；结果记录SHA256为`18fb67074daefe5508ab38fa2ca543eaad1e3199cd982d40a6f635fd94c78508`。
 
