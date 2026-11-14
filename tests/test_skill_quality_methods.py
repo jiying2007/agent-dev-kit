@@ -184,5 +184,38 @@ class SkillQualityMethodsTests(unittest.TestCase):
         self.assertIn("not-measured", guide)
 
 
+    def test_reader_first_acceptance_and_feedback_are_source_only(self) -> None:
+        adr = source("skills/adk-adr-writer/SKILL.md")
+        handoff = source("skills/adk-cross-team-handoff/SKILL.md")
+        composition = source("optional-skills/adk-skill-composition-governance/SKILL.md")
+        lifecycle = source(
+            "optional-skills/adk-skill-composition-governance/references/adk-skill-lifecycle.md"
+        )
+        notes = source("docs/evals/external-skill-method-comparison-20261114-round2.md")
+
+        for marker in ("Reader-only acceptance", "reader_view", "self-review", "independent-verified",
+                       "not-run", "unknown/pending"):
+            self.assertIn(marker, adr)
+        for marker in ("Receiver cold-read", "pending", "not-run", "accepted", "不强制"):
+            self.assertIn(marker, handoff)
+        self.assertIn("失败反馈→回归候选", composition)
+        for marker in ("Failure Feedback → Deterministic Regression", "failure_trace_ref",
+                       "source_sha", "design-case", "not-measured", "holdout",
+                       "Lifecycle Review (report-only)", "required_and_forbidden_footprint",
+                       "owner_decision"):
+            self.assertIn(marker, lifecycle)
+
+        source_rows = [line for line in notes.splitlines()
+                       if line.startswith("| [") and "](https://github.com/" in line]
+        self.assertEqual(len(source_rows), 6)
+        self.assertEqual(len(set(source_rows)), len(source_rows))
+        for row in source_rows:
+            self.assertRegex(row, r"@[0-9a-f]{12}\`")
+        for marker in ("ADR-R1", "ADR-R2", "HANDOFF-R1", "HANDOFF-R2",
+                       "LIFE-R1", "LIFE-R2", "not-measured", "不增加新 Skill"):
+            self.assertIn(marker, notes)
+        self.assertNotIn("真实模型效果已提升", notes)
+
+
 if __name__ == "__main__":
     unittest.main()
