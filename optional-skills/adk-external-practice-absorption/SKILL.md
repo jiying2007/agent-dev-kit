@@ -1,10 +1,12 @@
 ---
 name: adk-external-practice-absorption
 description: 统一评估 GitHub、GitLab、Gitee、OpenAI/Codex 官方、Anthropic/Claude 官方、微信公众号和人工证据中的外部 Agent、Skill、Workflow 与工程实践，并把批准项闭环到 ADK change、验证、pilot、发布复审和退役。用于“吸收外部实践”“评估参考实现”“从官方或社区沉淀 Agent/Skill/Workflow”“Gitee/GitLab/GitHub 实践研究”等请求；不用于普通功能开发、单纯浏览网页或未经 owner 决策的自动安装/复制。
-version: 1.0.0
-last_updated: 2026-07-19
+version: 1.0.1
+last_updated: 2026-11-14
 triggers:
   - "吸收外部实践"
+  - "吸收外部成熟方法"
+  - "继续吸收外部成熟方法"
   - "评估参考实现"
   - "Gitee 实践吸收"
   - "GitHub GitLab Gitee 优秀实践"
@@ -41,6 +43,14 @@ constraints:
 - `external-practice-curator` 只读分析；不得批准、实现或发布自己筛选的候选。
 - owner decision 必须独立记录 `ADOPT|MERGE|ENHANCE|OBSERVE|REJECT`、负责人、日期、理由、目标和证据。
 - `ADOPT|MERGE|ENHANCE` 只授权创建 change proposal，不自动授权网络写入、安装、commit、push、publish 或 source-to-live apply。
+
+## Execution modes（按真实请求最短路径）
+
+- **source-only**：用户只要求阅读、搜索或对标时，交 `adk-skill-deep-analysis` 只读输出，不生成 change、安装或宣称行为改进。
+- **scoped-adoption（已有来源/用户授权）**：先核目标仓的最新 main、现有 PR、canonical candidate/owner decision 和 source digest；相同来源已审查且身份未变时**复用现有 ledger/evidence**，只补本次方法差异。合并相容改动到一个受保护 change/PR，而不是每个外部 Skill 各启动一个任务或重复全文检索。明确授权仅覆盖其声明范围，不能替代独立 owner 决策、工具权限、真实运行证据和发布门禁。
+- **portfolio-intake（广域发现）**：有界检索→去重→核实文件而非仓库主页→优先找现有 Skill 的具体失败/遗漏；高风险候选逐项审查。未知来源、证据或许可证保持 `OBSERVE/needs-evidence`。用户要继续执行时，形成最小 `source@sha → ADK current behavior → delta → test → blocker` handoff，避免止步于排名报告。
+- **behavior-qualification（用户请求效果证明）**：复用现有 `agent_dev_kit.effect_trials`、原预注册 train/holdout 与可信真实宿主 trace；每个案例隔离初始 workspace、工具权限与污染状态，只用同条件结果比较任务成功和错误触发。没有运行权限/真实费用数据时为 `not-measured`，不运行外部 evaluator、收费模型或伪造成绩。
+- 已批准开发任务中仅续做 code/test/CI 时，不重新启动本 Skill；交回原 implementation/verification primary，保持原 acceptance 分母。
 
 ## Prerequisites
 
