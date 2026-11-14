@@ -5,11 +5,11 @@
   "test_set_source": "tests/fixtures/skill_method_cases.json",
   "test_set_source_blob": "6dbb5678c1c71a560eca2dd13acdf79719afcfee",
   "baseline": {
-    "release": "v11.2.16",
-    "source_sha": "538e224ad91319a17a88f0e8c4d743dd89d7b02d"
+    "release": "v11.2.17",
+    "source_sha": "7aed1d2545babce16c41dc021ead01c8c324ce07"
   },
   "candidate": {
-    "planned_release": "v11.2.17",
+    "planned_release": "v11.2.18",
     "source_sha": null
   },
   "case_groups": {
@@ -56,5 +56,13 @@
     "effect_comparator": "agent_dev_kit.effect_trials.compare_effect_trial_file"
   },
   "results": [],
-  "notes": "Pre-registration of source fixture IDs only. All model behavior, user-visible success, real token/cost/latency remain not-measured until independent native host raw traces are captured."
+  "notes": "Source-only, unexecuted champion-challenger preregistration: latest reviewed 11.2.17 baseline versus 11.2.18 candidate. The superseded unrun record is retained. No native host calls, graded trials, runtime behavior, or Token/cost evidence. A no-skill ablation is a separate experiment requiring its own exact frozen skill-exposure proof, not this fixture.",
+  "comparison_kind": "champion-challenger",
+  "superseded_unrun_plan": {
+    "baseline_release": "v11.2.16",
+    "baseline_source_sha": "538e224ad91319a17a88f0e8c4d743dd89d7b02d",
+    "candidate_planned_release": "v11.2.17",
+    "model_runs": 0,
+    "reason": "11.2.17 source candidate merged without any pre-registered native model runs; preserve its identity while pre-registering 11.2.18 against the latest reviewed main."
+  }
 }
