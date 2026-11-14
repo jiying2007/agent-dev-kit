@@ -39,3 +39,11 @@
 审查生产 ADK 源码后发现：`manifest.json` 将 `adk-external-practice-absorption` 列为 optional，显式 routing intent 中有 `availability=optional-skill-required`，但自然语言经 `optional_skill_trigger` 的路径只使用默认 `fallback-profile`。这样，**目录中匹配到 Optional Skill** 可能被误读为 **当前 Runtime 已安装**。
 
 已在已有 `src/agent_dev_kit/matcher.py` 的 `_apply_contract` 统一覆盖 Optional 来源的 `profile_availability=optional-skill-required`，并在实际 CLI `format_result` 追加该提示；`tests/test_skill_trigger_matrix.py` 使用生产 Matcher 验证显式 routing、lexical fallback、显式选择、Core 反例与否定输入。**这是源码级契约修复，不是原生宿主已安装的证明**；消费端仍需在可信 installed inventory 中核对，不得自动安装或越权。
+
+## Prompt-length control（conditional）与小步候选
+
+新核验的 [Agent Skills 官方 Eval 指南](https://github.com/agentskills/agentskills/blob/main/docs/skill-creation/evaluating-skills.mdx) 单文件 blob `7c90d54295be` 要求**相同任务的有/无 Skill 或前后版本**评估，运行上下文隔离，按实际完成结果计分；[Microsoft SkillOpt](https://github.com/microsoft/SkillOpt/blob/main/README.md) 单文件 blob `7a3739381597` 采用有界局部编辑、拒绝变更记录及独立验证，而非不断加大指令。均属于**条件性增强现有 Reference**，不是启用它们的模型训练或后台循环。
+
+2026 年 WebDev-Skills-Bench 研究还报告过把与任务无关、但长度相同的控制文本加入比较，帮助区分“内容引导错误”和“上下文长度占用”两类影响；此结论来自原研究条件，不可外推为 ADK 的实测。仅当未来真实对照出现显著 Token 开销或非预期退化时，现有 `skill-behavior-evaluation.md` 可追加这个**单独预注册、同权限/干净初始上下文**的中性控制组；不扩大默认试验数量，不执行任何第三方 Skill 的代码或指令。
+
+**本轮实际工程回归**：在现有 `tests/test_skill_trigger_matrix.py` 中新增直接 `bash scripts/devkit.sh match --text` 的两例 CLI smoke，分别证明 Optional Skill 命中输出 `profile_availability=optional-skill-required`，以及明确拒绝输入不能被当成允许执行。生产 Matcher / CLI 的具体行为由最新 HEAD GitHub CI 判定；这仍是 E0/E1，不是原生安装或 E2–E4 效果证明。
