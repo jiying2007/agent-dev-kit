@@ -1,0 +1,14 @@
+{
+  "status": "pass",
+  "record_sha256": "bf17a54a7660d78811460cdc43c9ced3575d61a51d7f4c3d7d8a6af917a7375c",
+  "human_review_performed": false,
+  "field_evidence_verified": false,
+  "provider_execution_performed": false,
+  "product_release_authorized": false,
+  "validated_at": "2026-11-14T14:44:46.659994+00:00",
+  "prior_attempt": {
+    "status": "failed",
+    "error": "review timestamp must be canonical UTC",
+    "correction": "Changed +00:00 suffix to Z without changing fractional UTC instants or validator source. Error description is a coordinator transcription of the actual prior tool result."
+  }
+}

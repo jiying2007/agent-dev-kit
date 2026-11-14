@@ -1,0 +1,749 @@
+diff --git a/.version-lock b/.version-lock
+index 38039f9..428fadb 100644
+--- a/.version-lock
++++ b/.version-lock
+@@ -1,3 +1,3 @@
+-version: 11.3.0
+-locked_at: 2026-11-14T12:22:11Z
+-locked_by: ai/root/skill-execution-evidence
++version: 11.3.1
++locked_at: 2026-11-14T14:27:58Z
++locked_by: ai/root/task-retry-exposure
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index 7166f27..8f165be 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -2,6 +2,11 @@
+ 
+ ## Unreleased
+ 
++### 11.3.1 — Retry-safe task observations
++- Accept repeated native Skill-load events when identity, content digest and primary role agree, while retaining the complete raw event ledger and every retry/model/tool cost.
++- Aggregate repeated process checks with failure-preserving precedence. Validate every referenced evidence file before aggregation, keep output alias protection for unselected evidence, and preserve single-event report order and names.
++- Keep conflicting Skill versions/roles, duplicate event or model-call identities, multiple primary Skills and no-skill contamination rejected. Add importer and paired-trial regressions without changing schemas, statistics or qualification authority.
++
+ ### 11.3.0 — Task evidence import and artifact acceptance
+ - Add optional, non-executing task evidence import and controlled task-trial assembly into existing TraceRunFacts, RunEvidence and paired statistics. Bind initial input/workspace, source, actual Skill exposure, independent artifact acceptance and the complete event ledger without adding a runtime or a second statistics engine.
+ - Retain failure, retry and subtask usage; distinguish unavailable usage from zero, estimated cost from observed cost, and fixed task-budget failure from infrastructure-invalid observations. A missed Skill trigger remains an observed result in its assigned group.
+diff --git a/CONTEXT.md b/CONTEXT.md
+index adeaf55..0e9d6d6 100644
+--- a/CONTEXT.md
++++ b/CONTEXT.md
+@@ -1,7 +1,7 @@
+ # CONTEXT.md — agent-dev-kit 领域语言定义
+ 
+ > 文档状态：受机器门禁约束的领域上下文投影
+-> 产品版本：11.3.0
++> 产品版本：11.3.1
+ > 结构化单一事实源：`manifest.json`
+ 
+ ---
+diff --git a/README.md b/README.md
+index 0977f4e..f446074 100644
+--- a/README.md
++++ b/README.md
+@@ -11,7 +11,7 @@ ADK 不再在 README 中维护“候选 / 已发布 / live”之类可漂移的
+ - **Runtime conformance**：以 target/runtime receipt 与证据级别 `static / smoke / native / certified` 为权威。
+ - **Product qualification**：由消费方/产品仓的 qualification 与 field evidence 独立决定，不由 ADK 组件版本继承。
+ 
+-`manifest.json` 当前 source version 为 `11.3.0`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
++`manifest.json` 当前 source version 为 `11.3.1`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
+ 
+ 8.0.0 维护 CLI 迁移：`performance.sh optimize`、`auto-ops.sh cleanup/optimize` 仅输出有界只读计划，JSON 使用 `adk-maintenance-plan/v1` 与 `status=planned`；维护 `--apply` 返回 blocked、exit 2，不再自动删除文件或修改权限。调用方必须移除维护 `--apply` 并按 `applied=false` 处理报告；见 [维护迁移说明](docs/changes/20261006-comprehensive-contracts/design.md)。
+ 
+diff --git a/docs/changes/20261114-opencode-task-pilot/design.md b/docs/changes/20261114-opencode-task-pilot/design.md
+new file mode 100644
+index 0000000..6c37247
+--- /dev/null
++++ b/docs/changes/20261114-opencode-task-pilot/design.md
+@@ -0,0 +1,11 @@
++# 设计与执行边界
++
++官方 CLI 和本地模型负责实际执行；ADK 只提供冻结 Skill 资产、任务合同和验收入口。下载固定发布资产后核对完整 SHA256，再解包到任务专用目录。模型下载属于准备阶段，取得实际 digest 后先写冻结清单，再启动两个条件；不得执行中途替换模型。
++
++使用同一初始任务仓库快照复制两个工作目录，Skill 及宿主配置放在 grader 的 work/ 集合之外。宿主仅收到原始任务文本和用户式 Skill 请求，不收到验收期望、预期答案或修复诊断。最终验收由独立调用方执行现有 grade-task。
++
++优先使用官方 standalone CLI 与持久 session export/log；先核对稳定版本实际接口，不能用当前开发文档猜测不匹配字段。若需要运行本地 server 获取durable log，只使用官方服务，记录精确session身份，不引入第二个推理循环。关闭辅助/远程能力；原始事件不完整时只报告可证明事实，不制造完整coverage。
++
++本地CPU资源不足、安装失败、模型无法调用工具或时限内没有完成，均是有效先导结果或环境阻塞。最多一次有证据支持的环境准备修正；任务本身不重试以筛选成功。所有失败与配置变化保留。
++
++计划与验收由 ai/root 负责；环境/执行委派给独立执行者，原生任务由固定的 OpenCode 模型完成。只读审查检查来源和结论边界。不会把本工作区代理的编码/审查当成本次模型A/B。
+diff --git a/docs/changes/20261114-opencode-task-pilot/requirements.md b/docs/changes/20261114-opencode-task-pilot/requirements.md
+new file mode 100644
+index 0000000..0742138
+--- /dev/null
++++ b/docs/changes/20261114-opencode-task-pilot/requirements.md
+@@ -0,0 +1,22 @@
++# OpenCode 本地任务先导
++
++## 目标与范围
++
++在不调用 Codex/ChatGPT Work 额度或付费模型 API 的条件下，使用官方 OpenCode v2.3.0 与本地 Ollama 执行一个公开开发任务的 baseline/candidate 先导，获取第一份真实原生任务记录。现有 task grader/importer/统计器继续为唯一接续路径；本先导不新建 runtime、scheduler 或生产适配器。
++
++## 冻结的试验范围
++
++- 任务：`tests/fixtures/skill_execution_tasks/targeted-document-edit`，原始任务、初始工作区和现有 case 合同在执行前冻结摘要。case/期望内容不传给执行模型。
++- Skill：`adk-adr-writer`，baseline 来源 7aed1d2545babce16c41dc021ead01c8c324ce07，candidate 来源 4f77f795ecfba3e6bb1e167eb27cb84cca796845；只装载各自真实导出的对应 Skill 和它实际引用的资料。
++- 宿主：OpenCode v2.3.0，官方 Linux x64 资产 SHA256 fc0f81522aceeabac47693d88389efa2bc517ce74c2c38fd6967819fcc6e4d3b。
++- 本地推理：Ollama v0.40.16，官方 amd64 资产 SHA256 87bfafb2acbc89b2e6a1be0a9043de6aa75fb450696f86bc426e65fc448f788d；模型仅本地 `qwen3:1.7b`，运行前记录下载得到的完整模型 digest，两个条件使用同一 digest。
++- 初始规模：每个条件一次、同一开发任务；baseline 后 candidate。只诊断链路与描述性结果，不据此估计因果时延改善、泛化收益或全体 Skills 成熟度。
++
++## 验收与限制
++
++1. 在隔离的任务目录和配置/数据目录内执行，固定本地 provider，阻止云 provider、subagent、联网工具及任务外写入。不得读取已有账号凭证或改 live 用户资产。
++2. 每条件最多300秒，预算到期保留实际中断/失败与产物，不单侧重跑或隐藏失败；安装、模型准备失败记录为环境阻塞。
++3. 保留实际命令、退出码、起止时间、宿主版本、模型 digest、完整原始日志/持久会话导出、前后文件摘要。实际加载仅由宿主日志证明。
++4. 使用已有 grader 独立验收最终 `work/`；单次产物正确不证明过程权限或不重复副作用。
++5. 不确定的 attempts/tool/guardrail/skill 覆盖不能填 true；缺失或不完整 Token/cost 保留 unavailable。先获得原始样本再判断是否可安全转换，不提前捏造适配协议。
++6. 该先导不关闭原方案的32次示例试验、独立holdout或收益验收；根据真实记录决定是否值得扩大。
+diff --git a/docs/changes/20261114-opencode-task-pilot/tasks.md b/docs/changes/20261114-opencode-task-pilot/tasks.md
+new file mode 100644
+index 0000000..dc18ee7
+--- /dev/null
++++ b/docs/changes/20261114-opencode-task-pilot/tasks.md
+@@ -0,0 +1,7 @@
++# 任务
++
++- [ ] P1 核实固定发布资产和本地provider配置，校验下载摘要；verify：真实版本输出、配置与本地端点，不使用付费API或共享额度。
++- [ ] P2 准备两个冻结工作区和任务/模型/Skill摘要；verify：初始任务一致，干预来源不同且可回查，验收期望不进入执行上下文。
++- [ ] P3 各执行一次有界原生任务并保存原始记录；verify：真实session身份、命令、退出码、日志、时间与产物，所有失败保留。
++- [ ] P4 独立工件验收，判断记录完整性和是否能接入既有importer；verify：无法证明的覆盖/用量保持未知，报告限于先导范围。
++- [ ] P5 只读审查与长期保存结果；verify：来源摘要一致，工程发布与真实任务结果分开表述，未达到的原方案验收仍未完成。
+diff --git a/docs/changes/20261114-task-retry-exposure/design.md b/docs/changes/20261114-task-retry-exposure/design.md
+new file mode 100644
+index 0000000..fcff372
+--- /dev/null
++++ b/docs/changes/20261114-task-retry-exposure/design.md
+@@ -0,0 +1,11 @@
++# 设计
++
++`adk-task-events/v1` 中每条加载事件保持唯一 event_id 和连续 seq。导入器的 `ledger.skills` 是运行级暴露投影，不是原始事件账本；因此可以在确认同名事件的摘要和 primary 角色一致后，仅在该投影保留一条身份。
++
++每条事件仍先经过已有封闭字段、布尔类型、摘要、身份和顺序校验。已有同名暴露相同则不重复追加投影；不同则 fail closed。不会忽略冲突事件，也不会改变 attempt、模型 call、工具、handoff、验收或配对分组。原始账本通过 events_ref 保留字节绑定。
++
++同名过程 guardrail 的运行级状态按 `failed > passed > not-applicable` 聚合一次，并保留支持该状态的实际证据引用；全部原始事件和引用仍逐条核验并由原始账本绑定。报告中的 guardrail 和 verification 名称维持既有 `process/<name>`，单次事件输出不变；后续 passed 永不覆盖此前 failed。不得仅验证被选中的证据，也不引入另一套事件身份或虚构计量。
++
++公共 observation schema 和输出字段不变。全库检索已覆盖 `skill-load`、`ledger.skills`、`import_task_evidence` 与 task trial 调用；本次不增加动态导入或反射入口。只对之前误拒绝的有效重试输入增加兼容接受路径。
++
++共享导入逻辑按标准完整门禁执行。设计/协调/发布由 ai/root 负责，实现和独立只读审查分别委派。回退为撤回修复版本并恢复既有单次暴露限制，不改历史观测或历史发布资产。
+diff --git a/docs/changes/20261114-task-retry-exposure/evidence/diff-format.json b/docs/changes/20261114-task-retry-exposure/evidence/diff-format.json
+new file mode 100644
+index 0000000..af49e70
+--- /dev/null
++++ b/docs/changes/20261114-task-retry-exposure/evidence/diff-format.json
+@@ -0,0 +1,19 @@
++{
++  "check": "diff-format",
++  "started_at": "2026-11-14T14:20:51.422167+00:00",
++  "finished_at": "2026-11-14T14:20:51.431089+00:00",
++  "cwd": "/workspace/scratch/234e724cfc4b/adk-continuation",
++  "argv": [
++    "git",
++    "diff",
++    "--check",
++    "--",
++    "src/agent_dev_kit/task_evidence.py",
++    "tests/test_task_evidence.py",
++    "tests/test_task_trials.py",
++    "docs/runbooks/task-evidence.md"
++  ],
++  "returncode": 0,
++  "stdout_utf8": "",
++  "stderr_utf8": ""
++}
+diff --git a/docs/changes/20261114-task-retry-exposure/evidence/effect-trials.json b/docs/changes/20261114-task-retry-exposure/evidence/effect-trials.json
+new file mode 100644
+index 0000000..875bf5f
+--- /dev/null
++++ b/docs/changes/20261114-task-retry-exposure/evidence/effect-trials.json
+@@ -0,0 +1,13 @@
++{
++  "check": "effect-trials",
++  "started_at": "2026-11-14T14:20:46.312393+00:00",
++  "finished_at": "2026-11-14T14:20:51.421881+00:00",
++  "cwd": "/workspace/scratch/234e724cfc4b/adk-continuation",
++  "argv": [
++    "bash",
++    "tests/test_effect_trials.sh"
++  ],
++  "returncode": 0,
++  "stdout_utf8": "",
++  "stderr_utf8": "...................................\n----------------------------------------------------------------------\nRan 35 tests in 4.799s\n\nOK\n"
++}
+diff --git a/docs/changes/20261114-task-retry-exposure/evidence/frozen.json b/docs/changes/20261114-task-retry-exposure/evidence/frozen.json
+new file mode 100644
+index 0000000..494bde2
+--- /dev/null
++++ b/docs/changes/20261114-task-retry-exposure/evidence/frozen.json
+@@ -0,0 +1,82 @@
++{
++  "frozen_at": "2026-11-14T14:22:09.829663+00:00",
++  "base_commit": "4f77f795ecfba3e6bb1e167eb27cb84cca796845",
++  "files": {
++    "src/agent_dev_kit/task_evidence.py": {
++      "sha256": "cf7e7fb9dbcec1b9750c0a63f585c7ac26698c25b2fc14a69f4611b8b06b68d3",
++      "bytes": 28110
++    },
++    "tests/test_task_evidence.py": {
++      "sha256": "72928beae7c24d508693d9bb00b03f656c98fbfdd4b07c328aa7fcb571e8507e",
++      "bytes": 35037
++    },
++    "tests/test_task_trials.py": {
++      "sha256": "9d8c9e2b13958bbac931215950546969bae4a98ea02ed0c8a7c884e65730d56e",
++      "bytes": 16031
++    },
++    "docs/runbooks/task-evidence.md": {
++      "sha256": "5a13d454c9feb7bf8f398f6f29c79616c39fcc1f8f62fc731ab966a22af5b183",
++      "bytes": 12656
++    }
++  },
++  "checks": [
++    {
++      "file": "/workspace/scratch/234e724cfc4b/task-retry-evidence-cm59_dkh/red.json",
++      "sha256": "dc3cd724c88bd3a7031626729b72c3573a3ea29d2b7d91e669982d1d4cb0acc7",
++      "returncode": 1,
++      "counts": [
++        "9"
++      ],
++      "summary": [
++        "FAILED (failures=1, errors=13)"
++      ]
++    },
++    {
++      "file": "/workspace/scratch/234e724cfc4b/task-retry-evidence-cm59_dkh/green.json",
++      "sha256": "6e9bbf16891598bffe007d1ed6577572b8b9666fd7dcea102617fdbd4507218c",
++      "returncode": 0,
++      "counts": [
++        "9"
++      ],
++      "summary": [
++        "OK"
++      ]
++    },
++    {
++      "file": "/workspace/scratch/234e724cfc4b/task-retry-evidence-cm59_dkh/run-evidence.json",
++      "sha256": "aa2b05da6a1caa723133daa797c68befcd693f49bcf39ea26cbc929e33eeb8e6",
++      "returncode": 0,
++      "counts": [
++        "5",
++        "27",
++        "17"
++      ],
++      "summary": [
++        "OK",
++        "OK",
++        "OK"
++      ]
++    },
++    {
++      "file": "/workspace/scratch/234e724cfc4b/task-retry-evidence-cm59_dkh/effect-trials.json",
++      "sha256": "1ad34401d777a9b7ecae1677cf7e25c70cc342eb855f9b7630b8dff192885661",
++      "returncode": 0,
++      "counts": [
++        "35"
++      ],
++      "summary": [
++        "OK"
++      ]
++    },
++    {
++      "file": "/workspace/scratch/234e724cfc4b/task-retry-evidence-cm59_dkh/diff-format.json",
++      "sha256": "0657410c4f1ea989c5f45d402343b43eb7548199f5d9fefffc75714bcd7116f8",
++      "returncode": 0,
++      "counts": [],
++      "summary": []
++    }
++  ],
++  "static_checks": "ruff/mypy unavailable here; root preparing pinned quality environment for complete CI type graph",
++  "model_runs": 0,
++  "provenance": "synthetic-fixture tests only"
++}
+diff --git a/docs/changes/20261114-task-retry-exposure/evidence/green.json b/docs/changes/20261114-task-retry-exposure/evidence/green.json
+new file mode 100644
+index 0000000..e1d7f80
+--- /dev/null
++++ b/docs/changes/20261114-task-retry-exposure/evidence/green.json
+@@ -0,0 +1,31 @@
++{
++  "phase": "green-after-implementation",
++  "started_at": "2026-11-14T14:19:47.991489+00:00",
++  "finished_at": "2026-11-14T14:19:52.025663+00:00",
++  "cwd": "/workspace/scratch/234e724cfc4b/adk-continuation",
++  "argv": [
++    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
++    "-B",
++    "-m",
++    "unittest",
++    "-v",
++    "test_task_evidence.TaskEvidenceTest.test_import_is_existing_run_evidence_with_bounded_authority",
++    "test_task_evidence.TaskEvidenceTest.test_failed_retry_and_handoff_costs_are_retained",
++    "test_task_evidence.TaskEvidenceTest.test_repeated_skill_load_preserves_retry_costs_and_ledger",
++    "test_task_evidence.TaskEvidenceTest.test_repeated_skill_load_conflicts_and_duplicate_identity_still_rejected",
++    "test_task_evidence.TaskEvidenceTest.test_repeated_process_checks_preserve_worst_status_and_actual_evidence",
++    "test_task_evidence.TaskEvidenceTest.test_repeated_process_checks_validate_and_protect_unselected_evidence",
++    "test_task_evidence.TaskEvidenceTest.test_repeated_process_checks_do_not_expand_bounded_summary",
++    "test_task_trials.TaskTrialsTest.test_repeated_skill_load_keeps_retry_in_complete_population",
++    "test_task_trials.TaskTrialsTest.test_repeated_process_check_cannot_hide_earlier_failure"
++  ],
++  "returncode": 0,
++  "stdout_utf8": "",
++  "stderr_utf8": "test_import_is_existing_run_evidence_with_bounded_authority (test_task_evidence.TaskEvidenceTest.test_import_is_existing_run_evidence_with_bounded_authority) ... ok\ntest_failed_retry_and_handoff_costs_are_retained (test_task_evidence.TaskEvidenceTest.test_failed_retry_and_handoff_costs_are_retained) ... ok\ntest_repeated_skill_load_preserves_retry_costs_and_ledger (test_task_evidence.TaskEvidenceTest.test_repeated_skill_load_preserves_retry_costs_and_ledger) ... ok\ntest_repeated_skill_load_conflicts_and_duplicate_identity_still_rejected (test_task_evidence.TaskEvidenceTest.test_repeated_skill_load_conflicts_and_duplicate_identity_still_rejected) ... ok\ntest_repeated_process_checks_preserve_worst_status_and_actual_evidence (test_task_evidence.TaskEvidenceTest.test_repeated_process_checks_preserve_worst_status_and_actual_evidence) ... ok\ntest_repeated_process_checks_validate_and_protect_unselected_evidence (test_task_evidence.TaskEvidenceTest.test_repeated_process_checks_validate_and_protect_unselected_evidence) ... ok\ntest_repeated_process_checks_do_not_expand_bounded_summary (test_task_evidence.TaskEvidenceTest.test_repeated_process_checks_do_not_expand_bounded_summary) ... ok\ntest_repeated_skill_load_keeps_retry_in_complete_population (test_task_trials.TaskTrialsTest.test_repeated_skill_load_keeps_retry_in_complete_population) ... ok\ntest_repeated_process_check_cannot_hide_earlier_failure (test_task_trials.TaskTrialsTest.test_repeated_process_check_cannot_hide_earlier_failure) ... ok\n\n----------------------------------------------------------------------\nRan 9 tests in 3.638s\n\nOK\n",
++  "source_sha256": {
++    "src/agent_dev_kit/task_evidence.py": "cf7e7fb9dbcec1b9750c0a63f585c7ac26698c25b2fc14a69f4611b8b06b68d3",
++    "tests/test_task_evidence.py": "72928beae7c24d508693d9bb00b03f656c98fbfdd4b07c328aa7fcb571e8507e",
++    "tests/test_task_trials.py": "9d8c9e2b13958bbac931215950546969bae4a98ea02ed0c8a7c884e65730d56e",
++    "docs/runbooks/task-evidence.md": "5a13d454c9feb7bf8f398f6f29c79616c39fcc1f8f62fc731ab966a22af5b183"
++  }
++}
+diff --git a/docs/changes/20261114-task-retry-exposure/evidence/red.json b/docs/changes/20261114-task-retry-exposure/evidence/red.json
+new file mode 100644
+index 0000000..42b0598
+--- /dev/null
++++ b/docs/changes/20261114-task-retry-exposure/evidence/red.json
+@@ -0,0 +1,30 @@
++{
++  "phase": "red-before-implementation",
++  "started_at": "2026-11-14T14:18:25.096096+00:00",
++  "finished_at": "2026-11-14T14:18:26.215070+00:00",
++  "cwd": "/workspace/scratch/234e724cfc4b/adk-continuation",
++  "argv": [
++    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
++    "-B",
++    "-m",
++    "unittest",
++    "-v",
++    "test_task_evidence.TaskEvidenceTest.test_import_is_existing_run_evidence_with_bounded_authority",
++    "test_task_evidence.TaskEvidenceTest.test_failed_retry_and_handoff_costs_are_retained",
++    "test_task_evidence.TaskEvidenceTest.test_repeated_skill_load_preserves_retry_costs_and_ledger",
++    "test_task_evidence.TaskEvidenceTest.test_repeated_skill_load_conflicts_and_duplicate_identity_still_rejected",
++    "test_task_evidence.TaskEvidenceTest.test_repeated_process_checks_preserve_worst_status_and_actual_evidence",
++    "test_task_evidence.TaskEvidenceTest.test_repeated_process_checks_validate_and_protect_unselected_evidence",
++    "test_task_evidence.TaskEvidenceTest.test_repeated_process_checks_do_not_expand_bounded_summary",
++    "test_task_trials.TaskTrialsTest.test_repeated_skill_load_keeps_retry_in_complete_population",
++    "test_task_trials.TaskTrialsTest.test_repeated_process_check_cannot_hide_earlier_failure"
++  ],
++  "returncode": 1,
++  "stdout_utf8": "",
++  "stderr_utf8": "test_import_is_existing_run_evidence_with_bounded_authority (test_task_evidence.TaskEvidenceTest.test_import_is_existing_run_evidence_with_bounded_authority) ... ok\ntest_failed_retry_and_handoff_costs_are_retained (test_task_evidence.TaskEvidenceTest.test_failed_retry_and_handoff_costs_are_retained) ... ok\ntest_repeated_skill_load_preserves_retry_costs_and_ledger (test_task_evidence.TaskEvidenceTest.test_repeated_skill_load_preserves_retry_costs_and_ledger) ... ERROR\ntest_repeated_skill_load_conflicts_and_duplicate_identity_still_rejected (test_task_evidence.TaskEvidenceTest.test_repeated_skill_load_conflicts_and_duplicate_identity_still_rejected) ... ok\ntest_repeated_process_checks_preserve_worst_status_and_actual_evidence (test_task_evidence.TaskEvidenceTest.test_repeated_process_checks_preserve_worst_status_and_actual_evidence) ... \n  test_repeated_process_checks_preserve_worst_status_and_actual_evidence (test_task_evidence.TaskEvidenceTest.test_repeated_process_checks_preserve_worst_status_and_actual_evidence) (first='passed', second='passed') ... ERROR\n  test_repeated_process_checks_preserve_worst_status_and_actual_evidence (test_task_evidence.TaskEvidenceTest.test_repeated_process_checks_preserve_worst_status_and_actual_evidence) (first='failed', second='passed') ... ERROR\n  test_repeated_process_checks_preserve_worst_status_and_actual_evidence (test_task_evidence.TaskEvidenceTest.test_repeated_process_checks_preserve_worst_status_and_actual_evidence) (first='passed', second='failed') ... ERROR\n  test_repeated_process_checks_preserve_worst_status_and_actual_evidence (test_task_evidence.TaskEvidenceTest.test_repeated_process_checks_preserve_worst_status_and_actual_evidence) (first='failed', second='failed') ... ERROR\n  test_repeated_process_checks_preserve_worst_status_and_actual_evidence (test_task_evidence.TaskEvidenceTest.test_repeated_process_checks_preserve_worst_status_and_actual_evidence) (first='not-applicable', second='passed') ... ERROR\n  test_repeated_process_checks_preserve_worst_status_and_actual_evidence (test_task_evidence.TaskEvidenceTest.test_repeated_process_checks_preserve_worst_status_and_actual_evidence) (first='passed', second='not-applicable') ... ERROR\n  test_repeated_process_checks_preserve_worst_status_and_actual_evidence (test_task_evidence.TaskEvidenceTest.test_repeated_process_checks_preserve_worst_status_and_actual_evidence) (first='failed', second='not-applicable') ... ERROR\n  test_repeated_process_checks_preserve_worst_status_and_actual_evidence (test_task_evidence.TaskEvidenceTest.test_repeated_process_checks_preserve_worst_status_and_actual_evidence) (first='not-applicable', second='failed') ... ERROR\n  test_repeated_process_checks_preserve_worst_status_and_actual_evidence (test_task_evidence.TaskEvidenceTest.test_repeated_process_checks_preserve_worst_status_and_actual_evidence) (first='not-applicable', second='not-applicable') ... ERROR\ntest_repeated_process_checks_validate_and_protect_unselected_evidence (test_task_evidence.TaskEvidenceTest.test_repeated_process_checks_validate_and_protect_unselected_evidence) ... \n  test_repeated_process_checks_validate_and_protect_unselected_evidence (test_task_evidence.TaskEvidenceTest.test_repeated_process_checks_validate_and_protect_unselected_evidence) (statuses=('failed', 'passed')) ... FAIL\ntest_repeated_process_checks_do_not_expand_bounded_summary (test_task_evidence.TaskEvidenceTest.test_repeated_process_checks_do_not_expand_bounded_summary) ... ERROR\ntest_repeated_skill_load_keeps_retry_in_complete_population (test_task_trials.TaskTrialsTest.test_repeated_skill_load_keeps_retry_in_complete_population) ... ERROR\ntest_repeated_process_check_cannot_hide_earlier_failure (test_task_trials.TaskTrialsTest.test_repeated_process_check_cannot_hide_earlier_failure) ... ERROR\n\n======================================================================\nERROR: test_repeated_skill_load_preserves_retry_costs_and_ledger (test_task_evidence.TaskEvidenceTest.test_repeated_skill_load_preserves_retry_costs_and_ledger)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/tests/test_task_evidence.py\", line 187, in test_repeated_skill_load_preserves_retry_costs_and_ledger\n    result = self.import_data()\n             ^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/tests/test_task_evidence.py\", line 109, in import_data\n    return import_task_evidence(self.path, MANIFEST)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 495, in import_task_evidence\n    imported = read_task_evidence(input_path, manifest)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 470, in read_task_evidence\n    report = _import(package, manifest)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 381, in _import\n    ledger = _events(loads(event_bytes), package, run[\"run_id\"])\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 259, in _events\n    raise ManifestError(\"task evidence: duplicate or invalid skill exposure\")\nagent_dev_kit.model.ManifestError: task evidence: duplicate or invalid skill exposure\n\n======================================================================\nERROR: test_repeated_process_checks_preserve_worst_status_and_actual_evidence (test_task_evidence.TaskEvidenceTest.test_repeated_process_checks_preserve_worst_status_and_actual_evidence) (first='passed', second='passed')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/tests/test_task_evidence.py\", line 234, in test_repeated_process_checks_preserve_worst_status_and_actual_evidence\n    result = self.import_data()\n             ^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/tests/test_task_evidence.py\", line 109, in import_data\n    return import_task_evidence(self.path, MANIFEST)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 495, in import_task_evidence\n    imported = read_task_evidence(input_path, manifest)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 470, in read_task_evidence\n    report = _import(package, manifest)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 381, in _import\n    ledger = _events(loads(event_bytes), package, run[\"run_id\"])\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 272, in _events\n    raise ManifestError(\"task evidence: duplicate process guardrail\")\nagent_dev_kit.model.ManifestError: task evidence: duplicate process guardrail\n\n======================================================================\nERROR: test_repeated_process_checks_preserve_worst_status_and_actual_evidence (test_task_evidence.TaskEvidenceTest.test_repeated_process_checks_preserve_worst_status_and_actual_evidence) (first='failed', second='passed')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/tests/test_task_evidence.py\", line 234, in test_repeated_process_checks_preserve_worst_status_and_actual_evidence\n    result = self.import_data()\n             ^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/tests/test_task_evidence.py\", line 109, in import_data\n    return import_task_evidence(self.path, MANIFEST)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 495, in import_task_evidence\n    imported = read_task_evidence(input_path, manifest)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 470, in read_task_evidence\n    report = _import(package, manifest)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 381, in _import\n    ledger = _events(loads(event_bytes), package, run[\"run_id\"])\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 272, in _events\n    raise ManifestError(\"task evidence: duplicate process guardrail\")\nagent_dev_kit.model.ManifestError: task evidence: duplicate process guardrail\n\n======================================================================\nERROR: test_repeated_process_checks_preserve_worst_status_and_actual_evidence (test_task_evidence.TaskEvidenceTest.test_repeated_process_checks_preserve_worst_status_and_actual_evidence) (first='passed', second='failed')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/tests/test_task_evidence.py\", line 234, in test_repeated_process_checks_preserve_worst_status_and_actual_evidence\n    result = self.import_data()\n             ^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/tests/test_task_evidence.py\", line 109, in import_data\n    return import_task_evidence(self.path, MANIFEST)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 495, in import_task_evidence\n    imported = read_task_evidence(input_path, manifest)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 470, in read_task_evidence\n    report = _import(package, manifest)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 381, in _import\n    ledger = _events(loads(event_bytes), package, run[\"run_id\"])\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 272, in _events\n    raise ManifestError(\"task evidence: duplicate process guardrail\")\nagent_dev_kit.model.ManifestError: task evidence: duplicate process guardrail\n\n======================================================================\nERROR: test_repeated_process_checks_preserve_worst_status_and_actual_evidence (test_task_evidence.TaskEvidenceTest.test_repeated_process_checks_preserve_worst_status_and_actual_evidence) (first='failed', second='failed')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/tests/test_task_evidence.py\", line 234, in test_repeated_process_checks_preserve_worst_status_and_actual_evidence\n    result = self.import_data()\n             ^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/tests/test_task_evidence.py\", line 109, in import_data\n    return import_task_evidence(self.path, MANIFEST)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 495, in import_task_evidence\n    imported = read_task_evidence(input_path, manifest)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 470, in read_task_evidence\n    report = _import(package, manifest)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 381, in _import\n    ledger = _events(loads(event_bytes), package, run[\"run_id\"])\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 272, in _events\n    raise ManifestError(\"task evidence: duplicate process guardrail\")\nagent_dev_kit.model.ManifestError: task evidence: duplicate process guardrail\n\n======================================================================\nERROR: test_repeated_process_checks_preserve_worst_status_and_actual_evidence (test_task_evidence.TaskEvidenceTest.test_repeated_process_checks_preserve_worst_status_and_actual_evidence) (first='not-applicable', second='passed')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/tests/test_task_evidence.py\", line 234, in test_repeated_process_checks_preserve_worst_status_and_actual_evidence\n    result = self.import_data()\n             ^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/tests/test_task_evidence.py\", line 109, in import_data\n    return import_task_evidence(self.path, MANIFEST)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 495, in import_task_evidence\n    imported = read_task_evidence(input_path, manifest)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 470, in read_task_evidence\n    report = _import(package, manifest)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 381, in _import\n    ledger = _events(loads(event_bytes), package, run[\"run_id\"])\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 272, in _events\n    raise ManifestError(\"task evidence: duplicate process guardrail\")\nagent_dev_kit.model.ManifestError: task evidence: duplicate process guardrail\n\n======================================================================\nERROR: test_repeated_process_checks_preserve_worst_status_and_actual_evidence (test_task_evidence.TaskEvidenceTest.test_repeated_process_checks_preserve_worst_status_and_actual_evidence) (first='passed', second='not-applicable')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/tests/test_task_evidence.py\", line 234, in test_repeated_process_checks_preserve_worst_status_and_actual_evidence\n    result = self.import_data()\n             ^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/tests/test_task_evidence.py\", line 109, in import_data\n    return import_task_evidence(self.path, MANIFEST)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 495, in import_task_evidence\n    imported = read_task_evidence(input_path, manifest)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 470, in read_task_evidence\n    report = _import(package, manifest)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 381, in _import\n    ledger = _events(loads(event_bytes), package, run[\"run_id\"])\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 272, in _events\n    raise ManifestError(\"task evidence: duplicate process guardrail\")\nagent_dev_kit.model.ManifestError: task evidence: duplicate process guardrail\n\n======================================================================\nERROR: test_repeated_process_checks_preserve_worst_status_and_actual_evidence (test_task_evidence.TaskEvidenceTest.test_repeated_process_checks_preserve_worst_status_and_actual_evidence) (first='failed', second='not-applicable')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/tests/test_task_evidence.py\", line 234, in test_repeated_process_checks_preserve_worst_status_and_actual_evidence\n    result = self.import_data()\n             ^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/tests/test_task_evidence.py\", line 109, in import_data\n    return import_task_evidence(self.path, MANIFEST)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 495, in import_task_evidence\n    imported = read_task_evidence(input_path, manifest)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 470, in read_task_evidence\n    report = _import(package, manifest)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 381, in _import\n    ledger = _events(loads(event_bytes), package, run[\"run_id\"])\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 272, in _events\n    raise ManifestError(\"task evidence: duplicate process guardrail\")\nagent_dev_kit.model.ManifestError: task evidence: duplicate process guardrail\n\n======================================================================\nERROR: test_repeated_process_checks_preserve_worst_status_and_actual_evidence (test_task_evidence.TaskEvidenceTest.test_repeated_process_checks_preserve_worst_status_and_actual_evidence) (first='not-applicable', second='failed')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/tests/test_task_evidence.py\", line 234, in test_repeated_process_checks_preserve_worst_status_and_actual_evidence\n    result = self.import_data()\n             ^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/tests/test_task_evidence.py\", line 109, in import_data\n    return import_task_evidence(self.path, MANIFEST)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 495, in import_task_evidence\n    imported = read_task_evidence(input_path, manifest)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 470, in read_task_evidence\n    report = _import(package, manifest)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 381, in _import\n    ledger = _events(loads(event_bytes), package, run[\"run_id\"])\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 272, in _events\n    raise ManifestError(\"task evidence: duplicate process guardrail\")\nagent_dev_kit.model.ManifestError: task evidence: duplicate process guardrail\n\n======================================================================\nERROR: test_repeated_process_checks_preserve_worst_status_and_actual_evidence (test_task_evidence.TaskEvidenceTest.test_repeated_process_checks_preserve_worst_status_and_actual_evidence) (first='not-applicable', second='not-applicable')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/tests/test_task_evidence.py\", line 234, in test_repeated_process_checks_preserve_worst_status_and_actual_evidence\n    result = self.import_data()\n             ^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/tests/test_task_evidence.py\", line 109, in import_data\n    return import_task_evidence(self.path, MANIFEST)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 495, in import_task_evidence\n    imported = read_task_evidence(input_path, manifest)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 470, in read_task_evidence\n    report = _import(package, manifest)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 381, in _import\n    ledger = _events(loads(event_bytes), package, run[\"run_id\"])\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 272, in _events\n    raise ManifestError(\"task evidence: duplicate process guardrail\")\nagent_dev_kit.model.ManifestError: task evidence: duplicate process guardrail\n\n======================================================================\nERROR: test_repeated_process_checks_do_not_expand_bounded_summary (test_task_evidence.TaskEvidenceTest.test_repeated_process_checks_do_not_expand_bounded_summary)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/tests/test_task_evidence.py\", line 269, in test_repeated_process_checks_do_not_expand_bounded_summary\n    result = self.import_data()\n             ^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/tests/test_task_evidence.py\", line 109, in import_data\n    return import_task_evidence(self.path, MANIFEST)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 495, in import_task_evidence\n    imported = read_task_evidence(input_path, manifest)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 470, in read_task_evidence\n    report = _import(package, manifest)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 381, in _import\n    ledger = _events(loads(event_bytes), package, run[\"run_id\"])\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 272, in _events\n    raise ManifestError(\"task evidence: duplicate process guardrail\")\nagent_dev_kit.model.ManifestError: task evidence: duplicate process guardrail\n\n======================================================================\nERROR: test_repeated_skill_load_keeps_retry_in_complete_population (test_task_trials.TaskTrialsTest.test_repeated_skill_load_keeps_retry_in_complete_population)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/tests/test_task_trials.py\", line 169, in test_repeated_skill_load_keeps_retry_in_complete_population\n    value = self.compare()\n            ^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/tests/test_task_trials.py\", line 74, in compare\n    return compare_task_trials(self.path, MANIFEST, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_trials.py\", line 162, in compare_task_trials\n    report, inputs = _compare(package, manifest)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_trials.py\", line 110, in _compare\n    imported = read_task_evidence(package.directory / relative, manifest)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 470, in read_task_evidence\n    report = _import(package, manifest)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 381, in _import\n    ledger = _events(loads(event_bytes), package, run[\"run_id\"])\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 259, in _events\n    raise ManifestError(\"task evidence: duplicate or invalid skill exposure\")\nagent_dev_kit.model.ManifestError: task evidence: duplicate or invalid skill exposure\n\n======================================================================\nERROR: test_repeated_process_check_cannot_hide_earlier_failure (test_task_trials.TaskTrialsTest.test_repeated_process_check_cannot_hide_earlier_failure)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/tests/test_task_trials.py\", line 188, in test_repeated_process_check_cannot_hide_earlier_failure\n    value = self.compare()\n            ^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/tests/test_task_trials.py\", line 74, in compare\n    return compare_task_trials(self.path, MANIFEST, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_trials.py\", line 162, in compare_task_trials\n    report, inputs = _compare(package, manifest)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_trials.py\", line 110, in _compare\n    imported = read_task_evidence(package.directory / relative, manifest)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 470, in read_task_evidence\n    report = _import(package, manifest)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 381, in _import\n    ledger = _events(loads(event_bytes), package, run[\"run_id\"])\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/src/agent_dev_kit/task_evidence.py\", line 272, in _events\n    raise ManifestError(\"task evidence: duplicate process guardrail\")\nagent_dev_kit.model.ManifestError: task evidence: duplicate process guardrail\n\n======================================================================\nFAIL: test_repeated_process_checks_validate_and_protect_unselected_evidence (test_task_evidence.TaskEvidenceTest.test_repeated_process_checks_validate_and_protect_unselected_evidence) (statuses=('failed', 'passed'))\n----------------------------------------------------------------------\nagent_dev_kit.model.ManifestError: task evidence: duplicate process guardrail\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/workspace/scratch/234e724cfc4b/adk-continuation/tests/test_task_evidence.py\", line 256, in test_repeated_process_checks_validate_and_protect_unselected_evidence\n    with self.assertRaisesRegex(ManifestError, \"digest mismatch\"):\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: \"digest mismatch\" does not match \"task evidence: duplicate process guardrail\"\n\n----------------------------------------------------------------------\nRan 9 tests in 0.674s\n\nFAILED (failures=1, errors=13)\n",
++  "source_sha256": {
++    "src/agent_dev_kit/task_evidence.py": "46a4849d6a47c21f135029459ed34915a827fb49ae49af34d056e73dc122b150",
++    "tests/test_task_evidence.py": "72928beae7c24d508693d9bb00b03f656c98fbfdd4b07c328aa7fcb571e8507e",
++    "tests/test_task_trials.py": "9d8c9e2b13958bbac931215950546969bae4a98ea02ed0c8a7c884e65730d56e"
++  }
++}
+diff --git a/docs/changes/20261114-task-retry-exposure/evidence/run-evidence.json b/docs/changes/20261114-task-retry-exposure/evidence/run-evidence.json
+new file mode 100644
+index 0000000..24f26a9
+--- /dev/null
++++ b/docs/changes/20261114-task-retry-exposure/evidence/run-evidence.json
+@@ -0,0 +1,13 @@
++{
++  "check": "run-evidence",
++  "started_at": "2026-11-14T14:20:17.091030+00:00",
++  "finished_at": "2026-11-14T14:20:46.311585+00:00",
++  "cwd": "/workspace/scratch/234e724cfc4b/adk-continuation",
++  "argv": [
++    "bash",
++    "tests/test_run_evidence.sh"
++  ],
++  "returncode": 0,
++  "stdout_utf8": "[PASS] run evidence composition\n",
++  "stderr_utf8": ".....\n----------------------------------------------------------------------\nRan 5 tests in 0.480s\n\nOK\n...........................\n----------------------------------------------------------------------\nRan 27 tests in 6.564s\n\nOK\n.................\n----------------------------------------------------------------------\nRan 17 tests in 21.181s\n\nOK\n"
++}
+diff --git a/docs/changes/20261114-task-retry-exposure/negative-results.md b/docs/changes/20261114-task-retry-exposure/negative-results.md
+new file mode 100644
+index 0000000..e74441c
+--- /dev/null
++++ b/docs/changes/20261114-task-retry-exposure/negative-results.md
+@@ -0,0 +1,13 @@
++# 负结果与环境边界
++
++- 当前源码基线为 4f77f795ecfba3e6bb1e167eb27cb84cca796845 / 11.3.0。审计者实际复现同名同摘要 Skill 在第二 attempt 再次加载时抛出 `task evidence: duplicate or invalid skill exposure`；原有重试测试未包含 reload。后续保存 RED/GREEN 原始命令结果，不将此输入标为真实模型记录。
++- 同名过程检查在 pass→pass 和 failed→pass 下也被误拒绝为 `duplicate process guardrail`，即使 event_id 不同且 seq 连续。修复必须保留早期失败，不能通过后一次检查覆盖。
++- 当前执行环境实际未找到 rtk；不创建伪装包装器，不把缺失报告为已安装。只读核查与必要确定性复现使用已有 Python/Bash 入口，工具状态保持 unavailable。
++- `knowledge/L2-domain/lessons.md` 不存在，未命中可复用历史条目。
++- 当前无 Claude Code、OpenCode、Ollama 可执行程序；`/usr/bin/dot -V` 返回 Graphviz 2.42.4。无真实任务观测时不声明原生加载或收益已测。
++
++## 环境修复
++
++- 随后从官方 rtk-ai/rtk v1.2.0 发布下载 OSS 独立CLI，验证归档 SHA256 `a28407dc13038bdc9c2a1f5a047b0c636e0c1d495b15523576e2adb992a06a17` 后安装到本任务工具目录；实际版本输出 `rtk 1.2.0`。未安装代理、hooks 或全局模型配置。后续 shell 使用真实 `rtk bypass` 保留完整证据输出。
++- 第一条完整类型分析命令按CI读取了 `mypy` 可执行名，但目标安装目录不在PATH，启动时得到 FileNotFoundError，未执行类型检查。随后用同一Python的 `-m mypy` 与原始CI参数、新缓存和 `MYPYPATH=src` 修正调用方式，不删减检查入口。
++- 单独调用 `tests/test_promotion_evidence.sh` 时，本地未安装当前源码包且入口不自动设置 PYTHONPATH，出现 ModuleNotFoundError；保留该失败记录，再显式使用 `PYTHONPATH=src` 执行同一脚本。CI 的既有流程先安装当前包；本次未改脚本或放宽验证。
+diff --git a/docs/changes/20261114-task-retry-exposure/requirements.md b/docs/changes/20261114-task-retry-exposure/requirements.md
+new file mode 100644
+index 0000000..97b2743
+--- /dev/null
++++ b/docs/changes/20261114-task-retry-exposure/requirements.md
+@@ -0,0 +1,22 @@
++# 任务重试的重复过程观测
++
++## 目标
++
++真实执行在重试、恢复或子任务中可以再次加载同一 Skill，并重新执行同名过程检查。已有事件导入按 Skill 或 guardrail 名称全局拒绝重复，导致事件身份不同的合法重试观测无法进入任务证据链。本变更允许此类重复事件，保持完整原始账本和既有计量、验收、配对语义。
++
++## 边界
++
++- 只修改任务观测导入的重复暴露归一化、对应回归和必要说明；不运行模型、不新增 runtime、调度器或统计引擎。
++- 同名 Skill 的内容摘要或 primary 角色不一致仍拒绝；不同 primary Skill 仍拒绝。重复 event_id、call_id 或错误 seq 仍拒绝。
++- 不删除原始事件，不把重复加载算成多份 Skill 身份，不去除重试模型调用、工具调用、人工干预或失败。
++- 同名过程检查可重复，任何一次 failed 都必须保留为整次运行的失败；后续 passed 不得覆盖。每个过程证据引用仍须读取、核对和纳入输出别名保护。
++- 报告继续保持 caller-observed/test-only；不补造真实宿主数据，不提升发布或产品资格。
++
++## 验收
++
++1. 两次加载同名、同摘要、同 primary 角色的合法观测可导入，原始事件引用绑定包含两次加载的完整账本。
++2. 两个 attempt 的模型/工具成本均保留；最终成功仍不是 first-pass success。
++3. 同名 Skill 摘要变化、primary 冲突、重复事件身份、多 primary Skill 和 no-skill 对照污染继续拒绝。
++4. 同名过程检查的 pass→pass 可导入；failed→passed、passed→failed 均保持过程失败，非适用与通过组合保留可适用检查。摘要验证和证据读取不可因重复而省略。
++5. 合法重复暴露能通过现有任务配对前置核查，报告与既有统计权威保持不变。
++6. 完成确定性 RED/GREEN、受影响回归、适用完整 CI、独立 Spec/Quality 审查、受保护发布，再由消费者既有事务一次晋级。
+diff --git a/docs/changes/20261114-task-retry-exposure/tasks.md b/docs/changes/20261114-task-retry-exposure/tasks.md
+new file mode 100644
+index 0000000..90f8c28
+--- /dev/null
++++ b/docs/changes/20261114-task-retry-exposure/tasks.md
+@@ -0,0 +1,9 @@
++# 任务
++
++- [x] T1 保存原缺陷的确定性 RED 与有效控制；verify：`evidence/red.json` 保留7项新增回归和2项控制的原始执行；旧实现出现13个子案例error和1个failure，均为重复名称拒收。
++- [x] T2 修复重复过程观测的运行级投影，并补导入与配对回归；verify：相同命令GREEN 9/9，run-evidence 49项、effect-trials 35项通过；完整原始日志及四文件摘要见 `evidence/frozen.json`。一致重复加载可接受，身份/摘要/primary/对照冲突仍拒绝，同名过程失败不被覆盖，全部证据逐条验证，重试成本完整、first-pass=false。
++- [ ] T3 更新操作说明和补丁版本投影，执行适用静态与完整回归；verify：当前源码 fresh 结果，不放宽门禁。
++- [ ] T4 独立只读 Spec/Quality 审查并绑定精确源码；verify：所有 blocker/major 解除，证据记录保留真实时间与原始来源。
++- [ ] T5 受保护合并、主线 CI、不可变 Release 和消费者 source-only 晋级；verify：每个仓库的最终 SHA 与新鲜检查分别核对。
++
++T6 真实宿主任务试验沿用原方案，单独判断可执行性；本修复不构成其已完成证据。
+diff --git a/docs/evals/skill-method-parity.md b/docs/evals/skill-method-parity.md
+index 2338ccc..a53e8ea 100644
+--- a/docs/evals/skill-method-parity.md
++++ b/docs/evals/skill-method-parity.md
+@@ -4,7 +4,7 @@
+ `tests/fixtures/skill_method_cases.json` 的情景与 expected_behavior 是**待验证假设**；本轮只可声明源文件/引用/路由/格式等 E0/E1 通过。没有真实模型 transcript 时 E2/E3/E4 均为 **not-measured**，不能用 CI 通过宣称优于 Superpowers / Matt Pocock。
+ 
+ ## 盲评设置
+-- 在同模型、温度、预算、权限、上下文及任务集下冻结 baseline/candidate：11.3.0 候选的 **champion** 基线为 11.2.17 main（`7aed1d2545babce16c41dc021ead01c8c324ce07`），candidate exact SHA 必须在真实运行前锁定。此前 11.2.16→11.2.17 及 11.2.17→11.2.18 预注册均未执行，旧记录分别在 fixture 的 `superseded_unrun_plan` 与 `unexecuted_candidate_history` 中保留，不混用统计；来源方法只读引用。
++- 在同模型、温度、预算、权限、上下文及任务集下冻结 baseline/candidate：11.3.1 候选的 **champion** 基线为 11.2.17 main（`7aed1d2545babce16c41dc021ead01c8c324ce07`），candidate exact SHA 必须在真实运行前锁定。此前各未执行候选（含11.3.0）在 fixture 的 `superseded_unrun_plan` 与 `unexecuted_candidate_history` 中保留，不混用统计；来源方法只读引用。另行冻结的 OpenCode 开发任务先导不回填本方法 campaign 的结果或留出资格。
+ - 交互任务至少保留四轮真实问答与分支决策；实现任务使用固定公开的验收命令与有效失败样例。遇到不可用宿主，写 `not-measured` 而非无音频/无模型模拟绿灯。
+ - 每个方案输出脱敏原始 trace、源 SHA、命令/返回码、用户确认或拒绝、结果和工具成本。不能控制的网络/设备环境逐项标明。
+ - 双人盲评先复核是否符合真实目标，再分维度给 0–4 分：问题发现、候选取舍、反馈有效性、可测试性、任务完成、额外问答/工具成本。授权/安全越界硬失败；模型作者或同一次生成不能自称独立裁判。
+diff --git a/docs/runbooks/task-evidence.md b/docs/runbooks/task-evidence.md
+index 71a4abd..12195f1 100644
+--- a/docs/runbooks/task-evidence.md
++++ b/docs/runbooks/task-evidence.md
+@@ -67,6 +67,11 @@ started_at / finished_at / privacy_status`。
+ 原始账本保留所有失败、重试和子任务；模型事件按唯一 `call_id` 和 `accounting=exclusive-call` 记账，
+ 不把父级合计与子调用重复相加。
+ 
++重试或恢复中的重复 Skill 加载使用不同 `event_id`；同名、同摘要、同 primary 角色可归入一次运行级暴露，
++摘要或角色冲突仍拒绝。同名过程检查可多次出现，每次证据引用都必须核验；运行级状态按
++`failed > passed > not-applicable` 汇总，保留支持该状态的实际证据，后续通过不能覆盖早期失败。
++完整事件仍由原始账本摘要绑定，重试计量和输出对全部已读证据的保护保持不变。
++
+ 模型调用的 Token 为 input、cached_input、output；cached_input 已包含在 input 中，不能再次加到总输入。
+ 只聚合 runtime/provider 实际报告的值。任一调用缺测、估算或采集不完整，则对应整次运行指标不可用；
+ 字符数、输出长度和估算价格不能冒充 Token 或账单。费用币种必须一致。
+diff --git a/manifest.json b/manifest.json
+index e774e2b..f6fb118 100644
+--- a/manifest.json
++++ b/manifest.json
+@@ -1,5 +1,5 @@
+ {
+-  "version": "11.3.0",
++  "version": "11.3.1",
+   "locale": "zh-CN",
+   "platforms": [
+     "linux-embedded",
+diff --git a/manifests/software_m5_eval_contract.json b/manifests/software_m5_eval_contract.json
+index 567b76b..3a370c5 100644
+--- a/manifests/software_m5_eval_contract.json
++++ b/manifests/software_m5_eval_contract.json
+@@ -1,6 +1,6 @@
+ {
+   "schema": "adk-runtime-eval-campaign/v1",
+-  "campaign_id": "software-m5-11.3.0",
++  "campaign_id": "software-m5-11.3.1",
+   "tasks": "tests/fixtures/software_m5_eval_tasks.jsonl",
+   "minimum_tasks": 60,
+   "runtimes": [
+diff --git a/pyproject.toml b/pyproject.toml
+index 2106184..d72a199 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
+ 
+ [project]
+ name = "agent-dev-kit"
+-version = "11.3.0"
++version = "11.3.1"
+ description = "Platform-neutral agent asset compiler, distributor, and evaluator"
+ readme = "README.md"
+ requires-python = ">=3.12,<3.13"
+diff --git a/src/agent_dev_kit/__init__.py b/src/agent_dev_kit/__init__.py
+index 6dd3dfe..6a7fb40 100644
+--- a/src/agent_dev_kit/__init__.py
++++ b/src/agent_dev_kit/__init__.py
+@@ -1,3 +1,3 @@
+ """agent-dev-kit structured control plane."""
+ 
+-__version__ = "11.3.0"
++__version__ = "11.3.1"
+diff --git a/src/agent_dev_kit/task_evidence.py b/src/agent_dev_kit/task_evidence.py
+index 9998b53..cb8198e 100644
+--- a/src/agent_dev_kit/task_evidence.py
++++ b/src/agent_dev_kit/task_evidence.py
+@@ -221,7 +221,8 @@ def _events(value: Any, package: _Package, run_id: str) -> _Ledger:
+         raise ManifestError("task evidence: invalid model coverage")
+     ledger = _Ledger(tokens_complete=coverage["model_calls"], cost_complete=coverage["model_calls"])
+     ids: set[str] = set()
+-    guardrail_names: set[str] = set()
++    guardrail_positions: dict[str, tuple[int, int]] = {}
++    guardrail_priority = {"not-applicable": 0, "passed": 1, "failed": 2}
+     fields = {
+         "attempt": {"attempt_id"},
+         "skill-load": {"skill", "content_sha256", "primary"},
+@@ -255,9 +256,14 @@ def _events(value: Any, package: _Package, run_id: str) -> _Ledger:
+         elif kind == "skill-load":
+             name = validate_identifier(event["skill"], "loaded skill")
+             digest = validate_sha256(event["content_sha256"], "loaded skill digest")
+-            if type(event["primary"]) is not bool or any(skill == name for skill, _, _ in ledger.skills):
+-                raise ManifestError("task evidence: duplicate or invalid skill exposure")
+-            ledger.skills.append((name, digest, event["primary"]))
++            if type(event["primary"]) is not bool:
++                raise ManifestError("task evidence: invalid skill exposure role")
++            exposure = (name, digest, event["primary"])
++            previous = next((item for item in ledger.skills if item[0] == name), None)
++            if previous is not None and previous != exposure:
++                raise ManifestError("task evidence: conflicting skill exposure")
++            if previous is None:
++                ledger.skills.append(exposure)
+         elif kind == "human-intervention":
+             _choice(event["category"], {"correction", "approval", "clarification"}, "intervention category")
+             ledger.interventions += 1
+@@ -268,13 +274,16 @@ def _events(value: Any, package: _Package, run_id: str) -> _Ledger:
+             ))
+         elif kind == "guardrail":
+             name = validate_identifier(event["name"], "process guardrail")
+-            if name in guardrail_names:
+-                raise ManifestError("task evidence: duplicate process guardrail")
+-            guardrail_names.add(name)
+             status = _choice(event["status"], {"passed", "failed", "not-applicable"}, "guardrail status")
+             _, reference = package.checked(event["evidence"])
+-            ledger.guardrails.append(GuardrailFact("process/" + name, status))
+-            ledger.verification.append(VerificationFact("process/" + name, status, reference))
++            positions = guardrail_positions.get(name)
++            if positions is None:
++                guardrail_positions[name] = (len(ledger.guardrails), len(ledger.verification))
++                ledger.guardrails.append(GuardrailFact("process/" + name, status))
++                ledger.verification.append(VerificationFact("process/" + name, status, reference))
++            elif guardrail_priority[status] > guardrail_priority[ledger.guardrails[positions[0]].status]:
++                ledger.guardrails[positions[0]] = GuardrailFact("process/" + name, status)
++                ledger.verification[positions[1]] = VerificationFact("process/" + name, status, reference)
+         elif kind == "termination":
+             status = _choice(event["status"], {"failed", "blocked", "cancelled"}, "termination status")
+             categories = {"failed": {"timeout", "runtime-failure"},
+diff --git a/tests/fixtures/skill_method_ab_prereg.json b/tests/fixtures/skill_method_ab_prereg.json
+index 364c31a..854282d 100644
+--- a/tests/fixtures/skill_method_ab_prereg.json
++++ b/tests/fixtures/skill_method_ab_prereg.json
+@@ -9,7 +9,7 @@
+     "source_sha": "7aed1d2545babce16c41dc021ead01c8c324ce07"
+   },
+   "candidate": {
+-    "planned_release": "v11.3.0",
++    "planned_release": "v11.3.1",
+     "source_sha": null
+   },
+   "case_groups": {
+@@ -73,6 +73,13 @@
+       "merged_main_sha": "ebef1106aeecbe14e9ac676b2950b81895c1ea5b",
+       "model_runs": 0,
+       "reason": "Source-only candidate merged after independent review and CI. The authorized successor adds bounded task import, artifact acceptance and paired-state validation; no previous trial is relabelled as measured."
++    },
++    {
++      "planned_release": "v11.3.0",
++      "reviewed_source_sha": "3975e7f418c4686d558f455d72f808fce4f1d248",
++      "merged_main_sha": "4f77f795ecfba3e6bb1e167eb27cb84cca796845",
++      "model_runs": 0,
++      "reason": "This method campaign remained unexecuted when 11.3.0 was published. The successor corrects repeated task observations; the separately planned OpenCode task pilot does not retroactively populate this campaign or qualify its author-exposed holdout."
+     }
+   ],
+   "development_task_suite": "tests/fixtures/skill_execution_tasks/suite.json"
+diff --git a/tests/test_task_evidence.py b/tests/test_task_evidence.py
+index a89895c..29c7e26 100644
+--- a/tests/test_task_evidence.py
++++ b/tests/test_task_evidence.py
+@@ -108,6 +108,20 @@ class TaskEvidenceTest(unittest.TestCase):
+         self.persist()
+         return import_task_evidence(self.path, MANIFEST)
+ 
++    def process_observations(self, statuses):
++        template = next(item for item in self.events["events"] if item["kind"] == "guardrail")
++        self.events["events"] = [item for item in self.events["events"] if item["kind"] != "guardrail"]
++        references = []
++        for index, status in enumerate(statuses):
++            reference = write_json(self.root / f"process-{index}.json", {
++                "synthetic": True, "observation": index, "status": status,
++            })
++            event = copy.deepcopy(template)
++            event.update(event_id=f"guardrail-observation-{index}", status=status, evidence=reference)
++            self.events["events"].append(event)
++            references.append(reference)
++        return references
++
+     def cli(self, *args):
+         return subprocess.run(
+             ["bash", str(ROOT / "scripts/devkit.sh"), "eval", *map(str, args)],
+@@ -157,6 +171,107 @@ class TaskEvidenceTest(unittest.TestCase):
+         self.assertEqual(len(trace["handoffs"]), 1)
+         self.assertFalse(trace["first_pass_success"])
+ 
++    def test_repeated_skill_load_preserves_retry_costs_and_ledger(self):
++        reload = copy.deepcopy(self.events["events"][1])
++        reload["event_id"] = "load-2"
++        retry = copy.deepcopy(self.events["events"][3])
++        retry.update(event_id="model-2", call_id="child-model-2", attempt_id="attempt-2")
++        self.events["events"].extend([
++            {"event_id": "attempt-2", "kind": "attempt", "attempt_id": "attempt-2"},
++            reload,
++            {"event_id": "handoff-1", "kind": "handoff", "target": "synthetic-child", "outcome": "succeeded"},
++            retry,
++            {"event_id": "tool-2", "kind": "tool-call", "attempt_id": "attempt-2",
++             "tool": "read-artifact", "outcome": "succeeded"},
++        ])
++        result = self.import_data()
++        trace = result["run_evidence"]["trace_summary"]
++        self.assertEqual(trace["outcome"]["status"], "succeeded")
++        self.assertEqual(trace["primary_skill"], "adk-requirements-triage")
++        self.assertFalse(trace["wrong_skill"])
++        self.assertFalse(trace["first_pass_success"])
++        self.assertEqual(trace["tool_calls"], 2)
++        self.assertEqual(trace["token_usage"], {"input": 40, "cached_input": 4, "output": 10})
++        self.assertEqual(trace["cost"]["amount"], 2)
++        self.assertEqual(len(trace["handoffs"]), 1)
++        self.assertEqual(result["bindings"]["events_ref"], "ref:" + self.data["events"]["sha256"])
++        self.assertEqual(sum(event["kind"] == "skill-load" for event in self.events["events"]), 2)
++
++    def test_repeated_skill_load_conflicts_and_duplicate_identity_still_rejected(self):
++        original = copy.deepcopy((self.data, self.events))
++        for conflict in ("digest", "role", "role-type", "multiple-primary", "event-id", "absent"):
++            with self.subTest(conflict=conflict):
++                self.data, self.events = copy.deepcopy(original)
++                reload = copy.deepcopy(self.events["events"][1])
++                reload["event_id"] = "load-2"
++                if conflict == "digest":
++                    reload["content_sha256"] = "d" * 64
++                elif conflict == "role":
++                    reload["primary"] = False
++                elif conflict == "role-type":
++                    reload["primary"] = 1
++                elif conflict == "multiple-primary":
++                    reload["skill"] = "adk-debugging"
++                elif conflict == "event-id":
++                    reload["event_id"] = self.events["events"][1]["event_id"]
++                else:
++                    self.data["skill_exposure"]["expected"] = "absent"
++                self.events["events"].append(reload)
++                with self.assertRaises(ManifestError):
++                    self.import_data()
++
++    def test_repeated_process_checks_preserve_worst_status_and_actual_evidence(self):
++        cases = (
++            ("passed", "passed", "passed"), ("failed", "passed", "failed"),
++            ("passed", "failed", "failed"), ("failed", "failed", "failed"),
++            ("not-applicable", "passed", "passed"), ("passed", "not-applicable", "passed"),
++            ("failed", "not-applicable", "failed"), ("not-applicable", "failed", "failed"),
++            ("not-applicable", "not-applicable", "not-applicable"),
++        )
++        for first, second, expected in cases:
++            with self.subTest(first=first, second=second):
++                references = self.process_observations((first, second))
++                result = self.import_data()
++                trace = result["run_evidence"]["trace_summary"]
++                process = [item for item in trace["guardrails"] if item["name"] == "process/permission-boundary"]
++                verification = [item for item in trace["verification"] if item["name"] == "process/permission-boundary"]
++                self.assertEqual(process, [{"name": "process/permission-boundary", "status": expected}])
++                self.assertEqual(len(verification), 1)
++                self.assertEqual(verification[0]["status"], expected)
++                self.assertIn(verification[0]["evidence_ref"], [
++                    "ref:" + reference["sha256"] for status, reference in zip((first, second), references)
++                    if status == expected
++                ])
++                self.assertEqual(trace["outcome"]["status"], "failed" if expected == "failed" else "succeeded")
++                self.assertEqual(result["bindings"]["events_ref"], "ref:" + self.data["events"]["sha256"])
++
++    def test_repeated_process_checks_validate_and_protect_unselected_evidence(self):
++        for statuses in (("failed", "passed"), ("passed", "failed")):
++            with self.subTest(statuses=statuses):
++                references = self.process_observations(statuses)
++                self.persist()
++                unselected = self.root / references[statuses.index("passed")]["path"]
++                original = unselected.read_bytes()
++                unselected.write_bytes(original + b" ")
++                with self.assertRaisesRegex(ManifestError, "digest mismatch"):
++                    import_task_evidence(self.path, MANIFEST)
++                unselected.write_bytes(original)
++                with self.assertRaises(ManifestError):
++                    import_task_evidence(self.path, MANIFEST, output_path=unselected)
++                self.assertEqual(unselected.read_bytes(), original)
++
++    def test_repeated_process_checks_do_not_expand_bounded_summary(self):
++        reference = self.events["events"][-1]
++        for index in range(160):
++            event = copy.deepcopy(reference)
++            event["event_id"] = f"guardrail-repeat-{index}"
++            self.events["events"].append(event)
++        result = self.import_data()
++        trace = result["run_evidence"]["trace_summary"]
++        self.assertEqual(trace["outcome"]["status"], "succeeded")
++        self.assertEqual(sum(item["name"] == "process/permission-boundary" for item in trace["verification"]), 1)
++        self.assertEqual(result["bindings"]["events_ref"], "ref:" + self.data["events"]["sha256"])
++
+     def test_missing_or_estimated_usage_is_never_zero(self):
+         original = copy.deepcopy(self.events)
+         for change in ("missing-call", "usage", "cost", "estimated-usage", "estimated-cost"):
+diff --git a/tests/test_task_trials.py b/tests/test_task_trials.py
+index b38ada5..7dd662f 100644
+--- a/tests/test_task_trials.py
++++ b/tests/test_task_trials.py
+@@ -155,6 +155,42 @@ class TaskTrialsTest(unittest.TestCase):
+         self.assertGreater(value["comparison"]["metrics"]["wrong-skill-rate"]["candidate"]["mean"], 0)
+         self.assertNotEqual(value["verdict"], "improved")
+ 
++    def test_repeated_skill_load_keeps_retry_in_complete_population(self):
++        def change(envelope, events, acceptance, root):
++            reload = copy.deepcopy(events["events"][1])
++            reload["event_id"] = "load-2"
++            retry = copy.deepcopy(events["events"][3])
++            retry.update(event_id="model-2", call_id="model-2", attempt_id="attempt-2")
++            events["events"].extend([
++                {"event_id": "attempt-2", "kind": "attempt", "attempt_id": "attempt-2"}, reload, retry,
++            ])
++
++        self.mutate_observation(change)
++        value = self.compare()
++        comparison = value["comparison"]
++        self.assertEqual(value["verdict"], "improved")  # Synthetic latency arithmetic, not runtime evidence.
++        self.assertEqual(comparison["run_count"], 36)
++        self.assertEqual(comparison["outcome_counts"]["candidate"]["succeeded"], 18)
++        metrics = comparison["metrics"]
++        for metric in ("cost-per-task", "token-usage-per-task"):
++            self.assertGreater(metrics[metric]["candidate"]["mean"], metrics[metric]["baseline"]["mean"])
++        self.assertLess(metrics["first-pass-success-rate"]["candidate"]["mean"], 1)
++
++    def test_repeated_process_check_cannot_hide_earlier_failure(self):
++        def change(envelope, events, acceptance, root):
++            failed = events["events"][-1]
++            failed["status"] = "failed"
++            later = copy.deepcopy(failed)
++            later.update(event_id="guardrail-recheck", status="passed")
++            events["events"].append(later)
++
++        self.mutate_observation(change)
++        value = self.compare()
++        self.assertEqual(value["comparison"]["run_count"], 36)
++        self.assertEqual(value["comparison"]["outcome_counts"]["candidate"]["failed"], 1)
++        self.assertEqual(value["verdict"], "regressed")
++        self.assertEqual(value["comparison"]["reason"], "observed-guardrail-failure")
++
+     def test_timeout_stays_in_failure_denominator(self):
+         def change(envelope, events, acceptance, root):
+             acceptance["status"] = "not-run"

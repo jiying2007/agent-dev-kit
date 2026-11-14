@@ -1,0 +1,31 @@
+{
+  "phase": "green-after-implementation",
+  "started_at": "2026-11-14T14:19:47.991489+00:00",
+  "finished_at": "2026-11-14T14:19:52.025663+00:00",
+  "cwd": "/workspace/scratch/234e724cfc4b/adk-continuation",
+  "argv": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-B",
+    "-m",
+    "unittest",
+    "-v",
+    "test_task_evidence.TaskEvidenceTest.test_import_is_existing_run_evidence_with_bounded_authority",
+    "test_task_evidence.TaskEvidenceTest.test_failed_retry_and_handoff_costs_are_retained",
+    "test_task_evidence.TaskEvidenceTest.test_repeated_skill_load_preserves_retry_costs_and_ledger",
+    "test_task_evidence.TaskEvidenceTest.test_repeated_skill_load_conflicts_and_duplicate_identity_still_rejected",
+    "test_task_evidence.TaskEvidenceTest.test_repeated_process_checks_preserve_worst_status_and_actual_evidence",
+    "test_task_evidence.TaskEvidenceTest.test_repeated_process_checks_validate_and_protect_unselected_evidence",
+    "test_task_evidence.TaskEvidenceTest.test_repeated_process_checks_do_not_expand_bounded_summary",
+    "test_task_trials.TaskTrialsTest.test_repeated_skill_load_keeps_retry_in_complete_population",
+    "test_task_trials.TaskTrialsTest.test_repeated_process_check_cannot_hide_earlier_failure"
+  ],
+  "returncode": 0,
+  "stdout_utf8": "",
+  "stderr_utf8": "test_import_is_existing_run_evidence_with_bounded_authority (test_task_evidence.TaskEvidenceTest.test_import_is_existing_run_evidence_with_bounded_authority) ... ok\ntest_failed_retry_and_handoff_costs_are_retained (test_task_evidence.TaskEvidenceTest.test_failed_retry_and_handoff_costs_are_retained) ... ok\ntest_repeated_skill_load_preserves_retry_costs_and_ledger (test_task_evidence.TaskEvidenceTest.test_repeated_skill_load_preserves_retry_costs_and_ledger) ... ok\ntest_repeated_skill_load_conflicts_and_duplicate_identity_still_rejected (test_task_evidence.TaskEvidenceTest.test_repeated_skill_load_conflicts_and_duplicate_identity_still_rejected) ... ok\ntest_repeated_process_checks_preserve_worst_status_and_actual_evidence (test_task_evidence.TaskEvidenceTest.test_repeated_process_checks_preserve_worst_status_and_actual_evidence) ... ok\ntest_repeated_process_checks_validate_and_protect_unselected_evidence (test_task_evidence.TaskEvidenceTest.test_repeated_process_checks_validate_and_protect_unselected_evidence) ... ok\ntest_repeated_process_checks_do_not_expand_bounded_summary (test_task_evidence.TaskEvidenceTest.test_repeated_process_checks_do_not_expand_bounded_summary) ... ok\ntest_repeated_skill_load_keeps_retry_in_complete_population (test_task_trials.TaskTrialsTest.test_repeated_skill_load_keeps_retry_in_complete_population) ... ok\ntest_repeated_process_check_cannot_hide_earlier_failure (test_task_trials.TaskTrialsTest.test_repeated_process_check_cannot_hide_earlier_failure) ... ok\n\n----------------------------------------------------------------------\nRan 9 tests in 3.638s\n\nOK\n",
+  "source_sha256": {
+    "src/agent_dev_kit/task_evidence.py": "cf7e7fb9dbcec1b9750c0a63f585c7ac26698c25b2fc14a69f4611b8b06b68d3",
+    "tests/test_task_evidence.py": "72928beae7c24d508693d9bb00b03f656c98fbfdd4b07c328aa7fcb571e8507e",
+    "tests/test_task_trials.py": "9d8c9e2b13958bbac931215950546969bae4a98ea02ed0c8a7c884e65730d56e",
+    "docs/runbooks/task-evidence.md": "5a13d454c9feb7bf8f398f6f29c79616c39fcc1f8f62fc731ab966a22af5b183"
+  }
+}

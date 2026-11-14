@@ -1,0 +1,19 @@
+{
+  "check": "diff-format",
+  "started_at": "2026-11-14T14:20:51.422167+00:00",
+  "finished_at": "2026-11-14T14:20:51.431089+00:00",
+  "cwd": "/workspace/scratch/234e724cfc4b/adk-continuation",
+  "argv": [
+    "git",
+    "diff",
+    "--check",
+    "--",
+    "src/agent_dev_kit/task_evidence.py",
+    "tests/test_task_evidence.py",
+    "tests/test_task_trials.py",
+    "docs/runbooks/task-evidence.md"
+  ],
+  "returncode": 0,
+  "stdout_utf8": "",
+  "stderr_utf8": ""
+}

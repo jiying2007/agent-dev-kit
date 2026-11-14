@@ -1,0 +1,179 @@
+{
+  "schema": "adk-review-evidence/v1",
+  "subject_id": "20261114-task-retry-exposure",
+  "scope": "source-change",
+  "owner": "leiwenjun",
+  "author_id": "ai/root",
+  "reviewer": {
+    "id": "ai/root/runtime_continuation_audit",
+    "kind": "ai",
+    "independence": "independent"
+  },
+  "evidence_completed_at": "2026-11-14T14:40:18.184268Z",
+  "reviewed_at": "2026-11-14T14:41:55.962557Z",
+  "verdicts": {
+    "spec": "pass",
+    "quality": "pass"
+  },
+  "findings": [
+    {
+      "id": "consistent-reload-rejected",
+      "severity": "major",
+      "disposition": "fixed",
+      "reason": "Consistent repeated Skill-load events now aggregate only run-level identity; complete events, retries and model/tool costs remain. Conflicts and contamination remain rejected."
+    },
+    {
+      "id": "repeated-process-check-rejected",
+      "severity": "major",
+      "disposition": "fixed",
+      "reason": "Repeated checks aggregate failed > passed > not-applicable while every evidence reference is validated and retained in output alias protection. Later passes cannot hide failures."
+    },
+    {
+      "id": "type-analysis-receipt-gap",
+      "severity": "minor",
+      "disposition": "fixed",
+      "reason": "The previous observed type-check result lacked a retained raw log. A new exact-source check with all 18 actual CI paths and fresh cache passed 32 source files; this record uses its real completion time and preserves the distinction."
+    }
+  ],
+  "limitations": [
+    "Independent read-only AI review with declared, not authenticated, identity. No human or GitHub approval is claimed.",
+    "Exact source snapshot is 948f49b2ca3ecc56c9632946b67736b0c0047a14; later validation and review receipts preserve that snapshot. Source tasks.md and subsequent completion receipts are distinguished.",
+    "Protected exact-head PR CI, merged main CI, immutable Release and consumer local gates remain separate requirements and are not authorized by this review.",
+    "No model execution, native Skill-load evidence, task A/B, independent holdout, Token/cost/latency benefit or product qualification is supplied. The separate pilot was blocked before inference."
+  ],
+  "policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+  "validator_sha256": {
+    "src/agent_dev_kit/review_evidence.py": "be4892f464496a29dbbb41ebb56c48984bf103d8eabe2ee6117bd583d1032c47",
+    "src/agent_dev_kit/strict_json.py": "72f06f4dcaebfed83bd1ae9876e38d4f7d82d8a1473b40b66beffb6338ee94a5",
+    "src/agent_dev_kit/readiness_evidence.py": "6fdfd5bea3ee097ac21d2b2ab469378c8c84f78856061b680ebb0c5f9d726778"
+  },
+  "target": {
+    "base_commit": "4f77f795ecfba3e6bb1e167eb27cb84cca796845",
+    "head_commit": "948f49b2ca3ecc56c9632946b67736b0c0047a14",
+    "original_patch_sha256": "1a5bb40777fbb4b8e3dec0763bbeaab65d04e6e1b59aa36c713244abf42d60e5"
+  },
+  "sources": [
+    {
+      "base": "record",
+      "path": "evidence/original.patch",
+      "sha256": "1a5bb40777fbb4b8e3dec0763bbeaab65d04e6e1b59aa36c713244abf42d60e5"
+    },
+    {
+      "base": "record",
+      "path": "evidence/source-bindings.json",
+      "sha256": "0d7505d78b1e82c16963bd7a825f3315e204c74d0746b1aa19e046ada849fb73"
+    },
+    {
+      "base": "record",
+      "path": "requirements.md",
+      "sha256": "013e6479b5895a11c7f47117755af4a79d76c558a4c95d5179159c40aa321687"
+    },
+    {
+      "base": "record",
+      "path": "design.md",
+      "sha256": "e145743f818ddb2236cd1c9ce288d2f228d05fe8951bab97d813f1ccad7fb914"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/task_evidence.py",
+      "sha256": "cf7e7fb9dbcec1b9750c0a63f585c7ac26698c25b2fc14a69f4611b8b06b68d3"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_task_evidence.py",
+      "sha256": "72928beae7c24d508693d9bb00b03f656c98fbfdd4b07c328aa7fcb571e8507e"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_task_trials.py",
+      "sha256": "9d8c9e2b13958bbac931215950546969bae4a98ea02ed0c8a7c884e65730d56e"
+    },
+    {
+      "base": "repository",
+      "path": "docs/runbooks/task-evidence.md",
+      "sha256": "5a13d454c9feb7bf8f398f6f29c79616c39fcc1f8f62fc731ab966a22af5b183"
+    }
+  ],
+  "evidence": [
+    {
+      "base": "record",
+      "path": "review-findings.md",
+      "sha256": "1b9273eca151e90e729eb7d6ccb981f526225fd287fa9636acaae8cae9387c30"
+    },
+    {
+      "base": "record",
+      "path": "verification.md",
+      "sha256": "270bb2bc9d14ade2f8b30d0db0a45c12009b961d51d644c6554dd7eaf5e322b9"
+    },
+    {
+      "base": "record",
+      "path": "negative-results.md",
+      "sha256": "243c950f731665f945179c86c7ae2d1acdfbd6da7345b2b5d1824a771d520773"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-binding.json",
+      "sha256": "e19c384fd6636ff1224678bc09ccbfa23a04994bcd9ff7ab803d00f73954f943"
+    },
+    {
+      "base": "record",
+      "path": "evidence/red.json",
+      "sha256": "dc3cd724c88bd3a7031626729b72c3573a3ea29d2b7d91e669982d1d4cb0acc7"
+    },
+    {
+      "base": "record",
+      "path": "evidence/green.json",
+      "sha256": "6e9bbf16891598bffe007d1ed6577572b8b9666fd7dcea102617fdbd4507218c"
+    },
+    {
+      "base": "record",
+      "path": "evidence/run-evidence.json",
+      "sha256": "aa2b05da6a1caa723133daa797c68befcd693f49bcf39ea26cbc929e33eeb8e6"
+    },
+    {
+      "base": "record",
+      "path": "evidence/effect-trials.json",
+      "sha256": "1ad34401d777a9b7ecae1677cf7e25c70cc342eb855f9b7630b8dff192885661"
+    },
+    {
+      "base": "record",
+      "path": "evidence/frozen.json",
+      "sha256": "e09975102ff527d22b10c08a48a37f6d6c3941c06481c458d79afc6fe6e58be8"
+    },
+    {
+      "base": "record",
+      "path": "evidence/diff-format.json",
+      "sha256": "0657410c4f1ea989c5f45d402343b43eb7548199f5d9fefffc75714bcd7116f8"
+    },
+    {
+      "base": "record",
+      "path": "evidence/full.json",
+      "sha256": "95a7b161f45f8f9b9942380e049e41535a2709c4c06e63ece8934e2ca497e5d1"
+    },
+    {
+      "base": "record",
+      "path": "evidence/full-timing.json",
+      "sha256": "0a85b1dccaebc222d3dec6153170e7889f0d595f32694d7565e46044c6f89e40"
+    },
+    {
+      "base": "record",
+      "path": "evidence/full-type-analysis.json",
+      "sha256": "b5c43505152afc604e80749a15ec683a77d2fcada18e5e15447c6ea7b2435c87"
+    },
+    {
+      "base": "record",
+      "path": "evidence/additional-contract-checks.json",
+      "sha256": "a62cb7ca17e1b2d93c8ab692e6f5127521aa5c152d78ecb5330297d1efc654f3"
+    },
+    {
+      "base": "record",
+      "path": "evidence/promotion-corrected.json",
+      "sha256": "ad4b6032ff886500d64d8474882bbf635efad111eb0f975bda0ab1e236c460fe"
+    },
+    {
+      "base": "record",
+      "path": "evidence/prospective-format.json",
+      "sha256": "31a776f772d98f6b807c5f2f8f96a87a134656eca917e1a4e3b7c62a48c7ceb6"
+    }
+  ]
+}

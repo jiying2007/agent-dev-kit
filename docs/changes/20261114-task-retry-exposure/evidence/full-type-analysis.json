@@ -1,0 +1,32 @@
+{
+  "command": [
+    "python",
+    "-m",
+    "mypy",
+    "src/agent_dev_kit/contracts",
+    "src/agent_dev_kit/evidence",
+    "src/agent_dev_kit/target_adapters",
+    "src/agent_dev_kit/distribution",
+    "src/agent_dev_kit/execution_policy",
+    "src/agent_dev_kit/versioning.py",
+    "src/agent_dev_kit/installation_inventory.py",
+    "src/agent_dev_kit/installation_plan.py",
+    "src/agent_dev_kit/installation_transaction.py",
+    "src/agent_dev_kit/targets.py",
+    "src/agent_dev_kit/target_contracts.py",
+    "src/agent_dev_kit/delivery_cli.py",
+    "src/agent_dev_kit/release.py",
+    "src/agent_dev_kit/native_campaign_diagnostics.py",
+    "src/agent_dev_kit/review_evidence.py",
+    "src/agent_dev_kit/task_evidence.py",
+    "src/agent_dev_kit/task_trials.py",
+    "src/agent_dev_kit/task_acceptance.py"
+  ],
+  "source": "Actual current CI Run focused strict type analysis step; fresh cache; MYPYPATH=src",
+  "started_at": "2026-11-14T14:40:16.108140+00:00",
+  "finished_at": "2026-11-14T14:40:18.184268+00:00",
+  "exit_code": 0,
+  "stdout": "Success: no issues found in 32 source files\n",
+  "stderr": "",
+  "reason": "Persist exact-source full CI type-analysis evidence for final independent binding."
+}

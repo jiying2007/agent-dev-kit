@@ -1,0 +1,14 @@
+{
+  "command": [
+    "bash",
+    "tests/test_promotion_evidence.sh"
+  ],
+  "env_overrides": {
+    "PYTHONPATH": "src"
+  },
+  "started_at": "2026-11-14T14:33:43.279610+00:00",
+  "finished_at": "2026-11-14T14:33:44.064970+00:00",
+  "exit_code": 0,
+  "stdout": "{\"schema\": \"adk-promotion-evidence-generation/v1\", \"status\": \"pass\", \"out\": \"/tmp/tmp.LophmfCqSo/promotion-evidence.json\"}\n{\"failures\": [], \"schema\": \"adk-promotion-evidence-validation/v1\", \"status\": \"pass\"}\n{\"failures\": [\"'success' was expected\"], \"schema\": \"adk-promotion-evidence-validation/v1\", \"status\": \"fail\"}\n{\"failures\": [\"['3.12'] was expected\", \"ci.contract_matrix.python must be ['3.12']\"], \"schema\": \"adk-promotion-evidence-validation/v1\", \"status\": \"fail\"}\n{\"failures\": [\"source.ref must be refs/heads/main\"], \"schema\": \"adk-promotion-evidence-validation/v1\", \"status\": \"fail\"}\n[PASS] promotion evidence contract\n",
+  "stderr": ""
+}

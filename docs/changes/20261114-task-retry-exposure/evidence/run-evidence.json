@@ -1,0 +1,13 @@
+{
+  "check": "run-evidence",
+  "started_at": "2026-11-14T14:20:17.091030+00:00",
+  "finished_at": "2026-11-14T14:20:46.311585+00:00",
+  "cwd": "/workspace/scratch/234e724cfc4b/adk-continuation",
+  "argv": [
+    "bash",
+    "tests/test_run_evidence.sh"
+  ],
+  "returncode": 0,
+  "stdout_utf8": "[PASS] run evidence composition\n",
+  "stderr_utf8": ".....\n----------------------------------------------------------------------\nRan 5 tests in 0.480s\n\nOK\n...........................\n----------------------------------------------------------------------\nRan 27 tests in 6.564s\n\nOK\n.................\n----------------------------------------------------------------------\nRan 17 tests in 21.181s\n\nOK\n"
+}

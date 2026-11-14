@@ -108,6 +108,20 @@ class TaskEvidenceTest(unittest.TestCase):
         self.persist()
         return import_task_evidence(self.path, MANIFEST)
 
+    def process_observations(self, statuses):
+        template = next(item for item in self.events["events"] if item["kind"] == "guardrail")
+        self.events["events"] = [item for item in self.events["events"] if item["kind"] != "guardrail"]
+        references = []
+        for index, status in enumerate(statuses):
+            reference = write_json(self.root / f"process-{index}.json", {
+                "synthetic": True, "observation": index, "status": status,
+            })
+            event = copy.deepcopy(template)
+            event.update(event_id=f"guardrail-observation-{index}", status=status, evidence=reference)
+            self.events["events"].append(event)
+            references.append(reference)
+        return references
+
     def cli(self, *args):
         return subprocess.run(
             ["bash", str(ROOT / "scripts/devkit.sh"), "eval", *map(str, args)],
@@ -156,6 +170,107 @@ class TaskEvidenceTest(unittest.TestCase):
         self.assertEqual(trace["human_interventions"], 1)
         self.assertEqual(len(trace["handoffs"]), 1)
         self.assertFalse(trace["first_pass_success"])
+
+    def test_repeated_skill_load_preserves_retry_costs_and_ledger(self):
+        reload = copy.deepcopy(self.events["events"][1])
+        reload["event_id"] = "load-2"
+        retry = copy.deepcopy(self.events["events"][3])
+        retry.update(event_id="model-2", call_id="child-model-2", attempt_id="attempt-2")
+        self.events["events"].extend([
+            {"event_id": "attempt-2", "kind": "attempt", "attempt_id": "attempt-2"},
+            reload,
+            {"event_id": "handoff-1", "kind": "handoff", "target": "synthetic-child", "outcome": "succeeded"},
+            retry,
+            {"event_id": "tool-2", "kind": "tool-call", "attempt_id": "attempt-2",
+             "tool": "read-artifact", "outcome": "succeeded"},
+        ])
+        result = self.import_data()
+        trace = result["run_evidence"]["trace_summary"]
+        self.assertEqual(trace["outcome"]["status"], "succeeded")
+        self.assertEqual(trace["primary_skill"], "adk-requirements-triage")
+        self.assertFalse(trace["wrong_skill"])
+        self.assertFalse(trace["first_pass_success"])
+        self.assertEqual(trace["tool_calls"], 2)
+        self.assertEqual(trace["token_usage"], {"input": 40, "cached_input": 4, "output": 10})
+        self.assertEqual(trace["cost"]["amount"], 2)
+        self.assertEqual(len(trace["handoffs"]), 1)
+        self.assertEqual(result["bindings"]["events_ref"], "ref:" + self.data["events"]["sha256"])
+        self.assertEqual(sum(event["kind"] == "skill-load" for event in self.events["events"]), 2)
+
+    def test_repeated_skill_load_conflicts_and_duplicate_identity_still_rejected(self):
+        original = copy.deepcopy((self.data, self.events))
+        for conflict in ("digest", "role", "role-type", "multiple-primary", "event-id", "absent"):
+            with self.subTest(conflict=conflict):
+                self.data, self.events = copy.deepcopy(original)
+                reload = copy.deepcopy(self.events["events"][1])
+                reload["event_id"] = "load-2"
+                if conflict == "digest":
+                    reload["content_sha256"] = "d" * 64
+                elif conflict == "role":
+                    reload["primary"] = False
+                elif conflict == "role-type":
+                    reload["primary"] = 1
+                elif conflict == "multiple-primary":
+                    reload["skill"] = "adk-debugging"
+                elif conflict == "event-id":
+                    reload["event_id"] = self.events["events"][1]["event_id"]
+                else:
+                    self.data["skill_exposure"]["expected"] = "absent"
+                self.events["events"].append(reload)
+                with self.assertRaises(ManifestError):
+                    self.import_data()
+
+    def test_repeated_process_checks_preserve_worst_status_and_actual_evidence(self):
+        cases = (
+            ("passed", "passed", "passed"), ("failed", "passed", "failed"),
+            ("passed", "failed", "failed"), ("failed", "failed", "failed"),
+            ("not-applicable", "passed", "passed"), ("passed", "not-applicable", "passed"),
+            ("failed", "not-applicable", "failed"), ("not-applicable", "failed", "failed"),
+            ("not-applicable", "not-applicable", "not-applicable"),
+        )
+        for first, second, expected in cases:
+            with self.subTest(first=first, second=second):
+                references = self.process_observations((first, second))
+                result = self.import_data()
+                trace = result["run_evidence"]["trace_summary"]
+                process = [item for item in trace["guardrails"] if item["name"] == "process/permission-boundary"]
+                verification = [item for item in trace["verification"] if item["name"] == "process/permission-boundary"]
+                self.assertEqual(process, [{"name": "process/permission-boundary", "status": expected}])
+                self.assertEqual(len(verification), 1)
+                self.assertEqual(verification[0]["status"], expected)
+                self.assertIn(verification[0]["evidence_ref"], [
+                    "ref:" + reference["sha256"] for status, reference in zip((first, second), references)
+                    if status == expected
+                ])
+                self.assertEqual(trace["outcome"]["status"], "failed" if expected == "failed" else "succeeded")
+                self.assertEqual(result["bindings"]["events_ref"], "ref:" + self.data["events"]["sha256"])
+
+    def test_repeated_process_checks_validate_and_protect_unselected_evidence(self):
+        for statuses in (("failed", "passed"), ("passed", "failed")):
+            with self.subTest(statuses=statuses):
+                references = self.process_observations(statuses)
+                self.persist()
+                unselected = self.root / references[statuses.index("passed")]["path"]
+                original = unselected.read_bytes()
+                unselected.write_bytes(original + b" ")
+                with self.assertRaisesRegex(ManifestError, "digest mismatch"):
+                    import_task_evidence(self.path, MANIFEST)
+                unselected.write_bytes(original)
+                with self.assertRaises(ManifestError):
+                    import_task_evidence(self.path, MANIFEST, output_path=unselected)
+                self.assertEqual(unselected.read_bytes(), original)
+
+    def test_repeated_process_checks_do_not_expand_bounded_summary(self):
+        reference = self.events["events"][-1]
+        for index in range(160):
+            event = copy.deepcopy(reference)
+            event["event_id"] = f"guardrail-repeat-{index}"
+            self.events["events"].append(event)
+        result = self.import_data()
+        trace = result["run_evidence"]["trace_summary"]
+        self.assertEqual(trace["outcome"]["status"], "succeeded")
+        self.assertEqual(sum(item["name"] == "process/permission-boundary" for item in trace["verification"]), 1)
+        self.assertEqual(result["bindings"]["events_ref"], "ref:" + self.data["events"]["sha256"])
 
     def test_missing_or_estimated_usage_is_never_zero(self):
         original = copy.deepcopy(self.events)
