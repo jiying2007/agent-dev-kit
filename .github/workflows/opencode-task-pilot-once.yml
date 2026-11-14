@@ -1,0 +1,64 @@
+name: opencode-task-pilot-once
+
+on:
+  push:
+    branches:
+      - experiment/hosted-task-pilot-run-20261114
+
+permissions:
+  contents: read
+
+concurrency:
+  group: opencode-task-pilot-20261114
+  cancel-in-progress: false
+
+jobs:
+  pilot:
+    if: >-
+      github.repository == 'jiying2007/agent-dev-kit' &&
+      github.event_name == 'push' &&
+      github.ref == 'refs/heads/experiment/hosted-task-pilot-run-20261114' &&
+      github.event.before == 'c57f4f8a7983f52257c0587eb85881a006e6dc07' &&
+      github.run_attempt == 1
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      PILOT_EVENT_BEFORE: ${{ github.event.before }}
+    steps:
+      - name: Freeze the whole-job start before preparation
+        run: echo "PILOT_JOB_STARTED_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+
+      - name: Checkout reviewed experiment commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up the supported exporter interpreter
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.12'
+
+      - name: Install the frozen exporter dependencies
+        run: python -m pip install --disable-pip-version-check PyYAML==6.0.3 jsonschema==4.26.0
+
+      - name: Verify deterministic boundaries without running a model
+        run: PYTHONPATH=src python -m unittest discover -s tests -p test_hosted_task_pilot.py
+
+      - name: Execute the single registered hosted attempt
+        id: execution
+        run: >-
+          PYTHONPATH=src python -m agent_dev_kit.hosted_task_pilot
+          --repo "$GITHUB_WORKSPACE"
+          --out "$RUNNER_TEMP/hosted-task-pilot-20261114"
+
+      - name: Preserve reviewed evidence including failures
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: opencode-task-pilot-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/hosted-task-pilot-20261114/published/
+          if-no-files-found: error
+          include-hidden-files: true
+          retention-days: 90
