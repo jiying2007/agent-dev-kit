@@ -33,6 +33,12 @@
 - **归因而非猜因**：仅对同任务、同模型/工具权限、相同初始仓快照的成对原始轨迹做 `functional / efficiency / instrumentation` 分类。遗漏需求、错误版本是假设性的功能归因候选；额外全量验证、沉重实施流程、重复工具调用是效率归因候选。需在轨迹和最终产物中找到可证差异；仅凭长 Skill 文件、失败结果或单次分数不能认定 Skill 导致。
 - **失败与不完整**：缺一侧、timeout、环境漂移或 grader 自身不公平时标 `invalid-eval / INCOMPLETE` 并修复评测条件，不把缺失分数填成 0，也不将部分结果平均为 Skill Lift。守住必须的安全/合规/发布验证，但低风险阶段不强制执行不相关的完整 Goal 流程。
 
+## Targeted ablations（仅在真实 Skill Lift 难以归因时）
+
+- 先保持原有 `no-skill / champion / challenger` 试验身份分离；按 [Agent Skills evaluation guide](https://github.com/agentskills/agentskills/blob/main/docs/skill-creation/evaluating-skills.mdx) 固定任务输入、初始 workspace、Skill 曝露和 grader，而不把“Skill 命中”计作任务成功。
+- 当结果反常或 Token 开销明显增加、需要判断是**内容误导**还是**上下文长度干扰**时，可附加一个相同长度、同信任边界、与任务无关的**中性文本控制组**；它不得包含操作指令、真实凭证或扩大的工具权限。该条件单独预注册、隔离、统计，不混入原成对试验的样本/显著性结论；记录 `length_control_status: measured | not-measured`。
+- 参考 [SkillOpt](https://github.com/microsoft/SkillOpt) 的**小步改动 / 拒绝变更记录**：每次只修改一个可证伪失败模式，保留旧正确路径、被否决假设与回滚点；新候选只有在独立未曝光的验证集上确有净改善、且安全不退化时才建议晋级。不得声称此 Skill 本身运行了 SkillOpt、购买了模型推理或已取得真实效果数据。
+
 ## Evidence Contract
 - 固定 `baseline_sha / candidate_sha / model_runtime / tool_permissions / budget / grader_id / dataset_sha`，无真实 source 或宿主权限则中止并记 `not-measured`。
 - 先以安全/任务质量 **non-regression** 决定是否可比较 Token、wall time、tool calls；授权越界为硬失败，未报告的缓存 Token 记 unavailable。
