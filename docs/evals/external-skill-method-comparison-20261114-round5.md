@@ -13,7 +13,7 @@
 
 1. `optional-skills/adk-skill-composition-governance/references/skill-behavior-evaluation.md`：用原要求及真实工件 **outcome-first**，合法工具路径等价，不把“加载了 SKILL.md”当 no-skill 基线的通过项；以成对 trace 判功能/效率差异，缺失标无效，不造改善率。
 2. `skills/adk-planning-execution-loop/references/long-task-recovery.md`：阶段低风险时，已验证同快照证据可有条件复用；依赖、工具授权、设备状态或正式 final 变化后重新走适用门禁，不借优化绕过审查。
-3. `tests/run_all.sh`：将已有 `test_token_context_governance.sh` 提到完整回归前段，不改变 102 项分母或命令，只让长入口触发限额错误更早暴露。此前 PR #264 在第 40 多项才发现 Router 超过 5600 字节，本轮缩短入口至 5401 字节并保留限额。
+3. `tests/run_all.sh`：将已有 `test_token_context_governance.sh` 提到完整回归前段，不改变 102 项分母或命令，只让长入口触发限额错误更早暴露。此前 PR #264 在第 40 多项才发现 Router 超过 5600 字节，本轮将入口恢复到 5600 字节以下并保留限额。
 
 ## 验证边界
 
