@@ -12,6 +12,7 @@
 - [x] Fix 5600-byte router entry failure by retaining a concise Skill Fit Gate and moving optional details to existing reference, preserving all required source markers.
 - [x] Compare Microsoft Eval Guide, Microsoft skill-harm study, NVIDIA SkillEvaluator and Anthropic eval methods; add outcome-first/overhead triage with no new runner.
 - [x] Move the existing token-context gate to the fast beginning of the complete 102-test suite; preserve the original byte limit and test count.
+- [x] Fix public Matcher Optional availability marker for explicit routing, lexical fallback and direct selection; verify Core and negated routes with production matcher, not source keyword checks.
 - [ ] Exact PR final-HEAD Python 3.12 contract, full regression, platform/security/dependency checks.
 - [ ] Independent protected PR review and merge decision.
 - [ ] Fresh-main CI, immutable release verification and any downstream Root promotion by a separate protected process.
