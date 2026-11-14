@@ -1,8 +1,8 @@
 ---
 name: adk-unit-test-embedded
 description: "用于 MCU/RTOS 的单元测试断言、替身与外设边界模拟；非跨模块测试策略，也不用于直接证明真实 HIL 性能。"
-version: 1.1.4
-last_updated: 2026-11-10
+version: 1.1.5
+last_updated: 2026-11-14
 triggers:
   - "单元测试"
   - "写测试"
@@ -26,6 +26,10 @@ constraints:
 - 明确模块输入输出、依赖替身（mock/stub）策略。
 - 定义最小覆盖目标（关键路径与错误路径）。
 - 需要跨板级、SIL/HIL、boot、OTA 或现场层次时使用 `references/embedded-tdd-matrix.md`。
+
+## Target / Test Seam Gate
+- 只选择目标实际支持的 host-unit、cross-build compile-only、SIL/emulator 或 HIL/board-runner 之一；`ceedling/gcovr/lcov` 是条件性示例，必须先核实已安装工具与匹配的 compiler flags。无 libc/无 host runner 的 MCU 不应默认执行 host 工具。
+- 校验真实公开模块接口而不是 mock 的内部调用次数；W1C 寄存器、DMA ownership、ISR/任务竞态、队列溢出等边界应在可观察 seam 加负例。无法模拟的电气/实时行为保留 `needs-hil`，不推断板上已通过。
 
 ## Workflow
 1. 提炼可测单元：隔离外设依赖与全局状态。

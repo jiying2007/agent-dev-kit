@@ -1,8 +1,8 @@
 ---
 name: adk-performance-profiling-embedded
 description: "用于有明确指标时对嵌入式真实负载做性能分析和可比较的 A/B 验证；无指标不启用，也不用于仅凭推测宣布性能改善。"
-version: 1.1.2
-last_updated: 2026-11-10
+version: 1.1.3
+last_updated: 2026-11-14
 triggers:
   - "性能分析"
   - "性能优化"
@@ -33,6 +33,11 @@ constraints:
 4. 检查热点/内存/功耗、功能等价及热稳定；无效样本记 no-gain。
 5. 超预算须回滚，长稳复验须用真实场景。
 
+## Target Execution Gate
+- `linux-embedded`：内核/用户态、目标架构、性能计数器权限和内存资源决定是否可用 `perf`/`strace`/`valgrind`；用户态分析工具不可视作内核或 MCU 的通用工具。
+- `mcu-rtos` / `mcu-baremetal`：优先用板端计数/trace、DWT/ETM（如有）、GPIO timing、stack/heap high-water、工具链 ELF/map 与真实负载；没有板端证据则只做 host 结构分析并标 `not-measured`。
+- 采样之前核工具可用性、被测任务是否活动、负载输入、系统/编译身份和测量权限，禁止主动注入或配置修改以换取数据。
+
 ## Commands
 ```bash
 perf stat -p <pid> -- sleep 30
@@ -50,6 +55,8 @@ ms_print massif.out.<pid>
 
 ## 火焰图
 按目标 trace 能力选择 perf 或 DWT/ETM，生成热点归因报告。
+
+以下命令与表格的工具仅为**支持相应 Linux 目标时的参考**；裸机/RTOS 需用其实际 trace/资源工具，不把不存在的进程、LLC 或 Valgrind 输出记为有效。
 
 ## 瓶颈定位清单
 | 瓶颈类型 | 诊断信号 | 工具 |

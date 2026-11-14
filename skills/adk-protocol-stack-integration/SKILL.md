@@ -1,8 +1,8 @@
 ---
 name: adk-protocol-stack-integration
 description: "用于通信协议栈适配、连接状态机和跨层错误处理的集成设计与回归；不用于纯寄存器布局设计或仅修复孤立格式问题。"
-version: 1.0.2
-last_updated: 2026-11-10
+version: 1.0.3
+last_updated: 2026-11-14
 triggers:
   - "协议栈"
   - "协议集成"
@@ -31,6 +31,11 @@ constraints:
 3. 超时与重试策略：退避算法、最大重试次数、熔断条件。
 4. 兼容策略：协议版本协商与降级路径。
 5. 联调验证：正常、乱序、丢包、断链重连场景回归。
+
+## Execution Target Boundary
+- 先分类 Linux 用户态、Linux kernel、RTOS/裸机协议栈、纯离线日志或仿真；`tcpdump` / `tshark` 只在确实存在可访问网络接口、适当权限和合法数据范围时使用，MCU/RTOS 不得默认运行。
+- 无主动抓包许可时优先离线已有 trace、脱敏协议日志或仿真测试。丢包/乱序注入、网络配置修改与 live device 测试需要独立授权，不因需求是“集成测试”就自动放宽。
+- 链路错误报告按 DNS、TCP/UDP、TLS、协议握手、keepalive 分层标 `measured|inferred|unknown`，抓包数据不得暗示应用根因已确认。
 
 ## Commands
 先核对项目实际接口、协议端口、抓包权限及脱敏规则，`IFACE/PORT/PCAP` 由项目配置，不猜测默认值：
@@ -88,4 +93,4 @@ Scapy 是 Python API；必须在 Python 环境中导入并确认 `scapy` 已安�
 ## Quality Gate
 - 必须包含连接、异常、重连三类状态定义。
 - 必须给出有来源、符合目标协议和网络环境的超时及重试参数；未测值标记为待验证。
-- 必须有至少 1 个抓包或模拟器验证证据。
+- 必须有至少 1 个已授权抓包、脱敏日志或模拟器验证证据；目标能力/许可不可用时标记 `not-tested`，不得假称已验证。

@@ -1,8 +1,8 @@
 ---
 name: adk-register-map-design
 description: "用于芯片寄存器映射、位域权限和驱动接口文档设计；不用于直接对真实寄存器写入或代替外设时序调试。"
-version: 1.0.3
-last_updated: 2026-11-09
+version: 1.0.4
+last_updated: 2026-11-14
 triggers:
   - "设计寄存器"
   - "寄存器映射"
@@ -42,19 +42,22 @@ rg -n "reserved|RESERVED" <header_path>
 ```
 
 ## SVD 生成与验证
+下例仅为**新设计寄存器 Schema** 的概念示例，不代表任意实际 MCU 的地址、偏移、复位值或 SVD 工具输入；目标芯片必须从对应 datasheet/errata 逐项填写，并用实际生成器或验证器检查。
 ```yaml
-# 寄存器映射 YAML 示例
 peripherals:
-  - name: GPIOA
-    base_address: 0x40020000
+  - name: EXAMPLE_PERIPHERAL
+    base_address: null  # 从目标芯片手册填写，未知时禁止生成发布用定义
     registers:
-      - name: MODER
-        offset: 0x00
+      - name: CONTROL
+        offset: null
         size: 32
         access: read-write
-        reset_value: 0x00000000
+        reset_value: null
         fields:
-          - { name: MODE0, bit_offset: 0, bit_width: 2, enum: [Input:0, Output:1] }
+          - name: ENABLE
+            bit_offset: 0
+            bit_width: 1
+            enum: {Disabled: 0, Enabled: 1}
 ```
 
 ## 位域设计规范
