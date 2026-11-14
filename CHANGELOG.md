@@ -3,6 +3,8 @@
 ## Unreleased
 
 ### 11.2.18 — Reader-first docs and evidence-driven Skill lifecycle
+- Add a third read-only upstream comparison (Microsoft Waza, NVIDIA SkillEvaluator, Alibaba skill-up, Superpowers) and improve source→scoped adoption, native evaluation boundary, and inline Goal execution without installing new runtimes.
+- Exercise real production Matcher for continued external-method adoption and fix the optional-skill negation test that previously used the wrong core scope.
 - Compare six additional official and practitioner Skill sources by Git blob, extracting methods only rather than installing external plugins or dependencies.
 - Add a conditional cold-reader acceptance check to ADR and cross-team handoff Skills; preserve lite quick paths, real receiver signoff and missing-evidence handling.
 - Strengthen existing Skill lifecycle guidance for confirmed feedback → minimal deterministic regression, protected holdout, measured behavior boundaries and evidence-based retirement review.
