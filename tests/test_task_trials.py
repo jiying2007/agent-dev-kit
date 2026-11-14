@@ -155,6 +155,42 @@ class TaskTrialsTest(unittest.TestCase):
         self.assertGreater(value["comparison"]["metrics"]["wrong-skill-rate"]["candidate"]["mean"], 0)
         self.assertNotEqual(value["verdict"], "improved")
 
+    def test_repeated_skill_load_keeps_retry_in_complete_population(self):
+        def change(envelope, events, acceptance, root):
+            reload = copy.deepcopy(events["events"][1])
+            reload["event_id"] = "load-2"
+            retry = copy.deepcopy(events["events"][3])
+            retry.update(event_id="model-2", call_id="model-2", attempt_id="attempt-2")
+            events["events"].extend([
+                {"event_id": "attempt-2", "kind": "attempt", "attempt_id": "attempt-2"}, reload, retry,
+            ])
+
+        self.mutate_observation(change)
+        value = self.compare()
+        comparison = value["comparison"]
+        self.assertEqual(value["verdict"], "improved")  # Synthetic latency arithmetic, not runtime evidence.
+        self.assertEqual(comparison["run_count"], 36)
+        self.assertEqual(comparison["outcome_counts"]["candidate"]["succeeded"], 18)
+        metrics = comparison["metrics"]
+        for metric in ("cost-per-task", "token-usage-per-task"):
+            self.assertGreater(metrics[metric]["candidate"]["mean"], metrics[metric]["baseline"]["mean"])
+        self.assertLess(metrics["first-pass-success-rate"]["candidate"]["mean"], 1)
+
+    def test_repeated_process_check_cannot_hide_earlier_failure(self):
+        def change(envelope, events, acceptance, root):
+            failed = events["events"][-1]
+            failed["status"] = "failed"
+            later = copy.deepcopy(failed)
+            later.update(event_id="guardrail-recheck", status="passed")
+            events["events"].append(later)
+
+        self.mutate_observation(change)
+        value = self.compare()
+        self.assertEqual(value["comparison"]["run_count"], 36)
+        self.assertEqual(value["comparison"]["outcome_counts"]["candidate"]["failed"], 1)
+        self.assertEqual(value["verdict"], "regressed")
+        self.assertEqual(value["comparison"]["reason"], "observed-guardrail-failure")
+
     def test_timeout_stays_in_failure_denominator(self):
         def change(envelope, events, acceptance, root):
             acceptance["status"] = "not-run"

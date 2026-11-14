@@ -1,0 +1,82 @@
+{
+  "frozen_at": "2026-11-14T14:22:09.829663+00:00",
+  "base_commit": "4f77f795ecfba3e6bb1e167eb27cb84cca796845",
+  "files": {
+    "src/agent_dev_kit/task_evidence.py": {
+      "sha256": "cf7e7fb9dbcec1b9750c0a63f585c7ac26698c25b2fc14a69f4611b8b06b68d3",
+      "bytes": 28110
+    },
+    "tests/test_task_evidence.py": {
+      "sha256": "72928beae7c24d508693d9bb00b03f656c98fbfdd4b07c328aa7fcb571e8507e",
+      "bytes": 35037
+    },
+    "tests/test_task_trials.py": {
+      "sha256": "9d8c9e2b13958bbac931215950546969bae4a98ea02ed0c8a7c884e65730d56e",
+      "bytes": 16031
+    },
+    "docs/runbooks/task-evidence.md": {
+      "sha256": "5a13d454c9feb7bf8f398f6f29c79616c39fcc1f8f62fc731ab966a22af5b183",
+      "bytes": 12656
+    }
+  },
+  "checks": [
+    {
+      "file": "/workspace/scratch/234e724cfc4b/task-retry-evidence-cm59_dkh/red.json",
+      "sha256": "dc3cd724c88bd3a7031626729b72c3573a3ea29d2b7d91e669982d1d4cb0acc7",
+      "returncode": 1,
+      "counts": [
+        "9"
+      ],
+      "summary": [
+        "FAILED (failures=1, errors=13)"
+      ]
+    },
+    {
+      "file": "/workspace/scratch/234e724cfc4b/task-retry-evidence-cm59_dkh/green.json",
+      "sha256": "6e9bbf16891598bffe007d1ed6577572b8b9666fd7dcea102617fdbd4507218c",
+      "returncode": 0,
+      "counts": [
+        "9"
+      ],
+      "summary": [
+        "OK"
+      ]
+    },
+    {
+      "file": "/workspace/scratch/234e724cfc4b/task-retry-evidence-cm59_dkh/run-evidence.json",
+      "sha256": "aa2b05da6a1caa723133daa797c68befcd693f49bcf39ea26cbc929e33eeb8e6",
+      "returncode": 0,
+      "counts": [
+        "5",
+        "27",
+        "17"
+      ],
+      "summary": [
+        "OK",
+        "OK",
+        "OK"
+      ]
+    },
+    {
+      "file": "/workspace/scratch/234e724cfc4b/task-retry-evidence-cm59_dkh/effect-trials.json",
+      "sha256": "1ad34401d777a9b7ecae1677cf7e25c70cc342eb855f9b7630b8dff192885661",
+      "returncode": 0,
+      "counts": [
+        "35"
+      ],
+      "summary": [
+        "OK"
+      ]
+    },
+    {
+      "file": "/workspace/scratch/234e724cfc4b/task-retry-evidence-cm59_dkh/diff-format.json",
+      "sha256": "0657410c4f1ea989c5f45d402343b43eb7548199f5d9fefffc75714bcd7116f8",
+      "returncode": 0,
+      "counts": [],
+      "summary": []
+    }
+  ],
+  "static_checks": "ruff/mypy unavailable here; root preparing pinned quality environment for complete CI type graph",
+  "model_runs": 0,
+  "provenance": "synthetic-fixture tests only"
+}

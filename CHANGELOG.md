@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### 11.3.1 — Retry-safe task observations
+- Accept repeated native Skill-load events when identity, content digest and primary role agree, while retaining the complete raw event ledger and every retry/model/tool cost.
+- Aggregate repeated process checks with failure-preserving precedence. Validate every referenced evidence file before aggregation, keep output alias protection for unselected evidence, and preserve single-event report order and names.
+- Keep conflicting Skill versions/roles, duplicate event or model-call identities, multiple primary Skills and no-skill contamination rejected. Add importer and paired-trial regressions without changing schemas, statistics or qualification authority.
+
 ### 11.3.0 — Task evidence import and artifact acceptance
 - Add optional, non-executing task evidence import and controlled task-trial assembly into existing TraceRunFacts, RunEvidence and paired statistics. Bind initial input/workspace, source, actual Skill exposure, independent artifact acceptance and the complete event ledger without adding a runtime or a second statistics engine.
 - Retain failure, retry and subtask usage; distinguish unavailable usage from zero, estimated cost from observed cost, and fixed task-budget failure from infrastructure-invalid observations. A missed Skill trigger remains an observed result in its assigned group.

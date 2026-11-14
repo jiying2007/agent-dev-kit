@@ -9,7 +9,7 @@
     "source_sha": "7aed1d2545babce16c41dc021ead01c8c324ce07"
   },
   "candidate": {
-    "planned_release": "v11.3.0",
+    "planned_release": "v11.3.1",
     "source_sha": null
   },
   "case_groups": {
@@ -73,6 +73,13 @@
       "merged_main_sha": "ebef1106aeecbe14e9ac676b2950b81895c1ea5b",
       "model_runs": 0,
       "reason": "Source-only candidate merged after independent review and CI. The authorized successor adds bounded task import, artifact acceptance and paired-state validation; no previous trial is relabelled as measured."
+    },
+    {
+      "planned_release": "v11.3.0",
+      "reviewed_source_sha": "3975e7f418c4686d558f455d72f808fce4f1d248",
+      "merged_main_sha": "4f77f795ecfba3e6bb1e167eb27cb84cca796845",
+      "model_runs": 0,
+      "reason": "This method campaign remained unexecuted when 11.3.0 was published. The successor corrects repeated task observations; the separately planned OpenCode task pilot does not retroactively populate this campaign or qualify its author-exposed holdout."
     }
   ],
   "development_task_suite": "tests/fixtures/skill_execution_tasks/suite.json"

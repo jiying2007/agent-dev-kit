@@ -1,0 +1,13 @@
+{
+  "check": "effect-trials",
+  "started_at": "2026-11-14T14:20:46.312393+00:00",
+  "finished_at": "2026-11-14T14:20:51.421881+00:00",
+  "cwd": "/workspace/scratch/234e724cfc4b/adk-continuation",
+  "argv": [
+    "bash",
+    "tests/test_effect_trials.sh"
+  ],
+  "returncode": 0,
+  "stdout_utf8": "",
+  "stderr_utf8": "...................................\n----------------------------------------------------------------------\nRan 35 tests in 4.799s\n\nOK\n"
+}

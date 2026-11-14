@@ -221,7 +221,8 @@ def _events(value: Any, package: _Package, run_id: str) -> _Ledger:
         raise ManifestError("task evidence: invalid model coverage")
     ledger = _Ledger(tokens_complete=coverage["model_calls"], cost_complete=coverage["model_calls"])
     ids: set[str] = set()
-    guardrail_names: set[str] = set()
+    guardrail_positions: dict[str, tuple[int, int]] = {}
+    guardrail_priority = {"not-applicable": 0, "passed": 1, "failed": 2}
     fields = {
         "attempt": {"attempt_id"},
         "skill-load": {"skill", "content_sha256", "primary"},
@@ -255,9 +256,14 @@ def _events(value: Any, package: _Package, run_id: str) -> _Ledger:
         elif kind == "skill-load":
             name = validate_identifier(event["skill"], "loaded skill")
             digest = validate_sha256(event["content_sha256"], "loaded skill digest")
-            if type(event["primary"]) is not bool or any(skill == name for skill, _, _ in ledger.skills):
-                raise ManifestError("task evidence: duplicate or invalid skill exposure")
-            ledger.skills.append((name, digest, event["primary"]))
+            if type(event["primary"]) is not bool:
+                raise ManifestError("task evidence: invalid skill exposure role")
+            exposure = (name, digest, event["primary"])
+            previous = next((item for item in ledger.skills if item[0] == name), None)
+            if previous is not None and previous != exposure:
+                raise ManifestError("task evidence: conflicting skill exposure")
+            if previous is None:
+                ledger.skills.append(exposure)
         elif kind == "human-intervention":
             _choice(event["category"], {"correction", "approval", "clarification"}, "intervention category")
             ledger.interventions += 1
@@ -268,13 +274,16 @@ def _events(value: Any, package: _Package, run_id: str) -> _Ledger:
             ))
         elif kind == "guardrail":
             name = validate_identifier(event["name"], "process guardrail")
-            if name in guardrail_names:
-                raise ManifestError("task evidence: duplicate process guardrail")
-            guardrail_names.add(name)
             status = _choice(event["status"], {"passed", "failed", "not-applicable"}, "guardrail status")
             _, reference = package.checked(event["evidence"])
-            ledger.guardrails.append(GuardrailFact("process/" + name, status))
-            ledger.verification.append(VerificationFact("process/" + name, status, reference))
+            positions = guardrail_positions.get(name)
+            if positions is None:
+                guardrail_positions[name] = (len(ledger.guardrails), len(ledger.verification))
+                ledger.guardrails.append(GuardrailFact("process/" + name, status))
+                ledger.verification.append(VerificationFact("process/" + name, status, reference))
+            elif guardrail_priority[status] > guardrail_priority[ledger.guardrails[positions[0]].status]:
+                ledger.guardrails[positions[0]] = GuardrailFact("process/" + name, status)
+                ledger.verification[positions[1]] = VerificationFact("process/" + name, status, reference)
         elif kind == "termination":
             status = _choice(event["status"], {"failed", "blocked", "cancelled"}, "termination status")
             categories = {"failed": {"timeout", "runtime-failure"},

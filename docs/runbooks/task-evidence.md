@@ -67,6 +67,11 @@ started_at / finished_at / privacy_status`。
 原始账本保留所有失败、重试和子任务；模型事件按唯一 `call_id` 和 `accounting=exclusive-call` 记账，
 不把父级合计与子调用重复相加。
 
+重试或恢复中的重复 Skill 加载使用不同 `event_id`；同名、同摘要、同 primary 角色可归入一次运行级暴露，
+摘要或角色冲突仍拒绝。同名过程检查可多次出现，每次证据引用都必须核验；运行级状态按
+`failed > passed > not-applicable` 汇总，保留支持该状态的实际证据，后续通过不能覆盖早期失败。
+完整事件仍由原始账本摘要绑定，重试计量和输出对全部已读证据的保护保持不变。
+
 模型调用的 Token 为 input、cached_input、output；cached_input 已包含在 input 中，不能再次加到总输入。
 只聚合 runtime/provider 实际报告的值。任一调用缺测、估算或采集不完整，则对应整次运行指标不可用；
 字符数、输出长度和估算价格不能冒充 Token 或账单。费用币种必须一致。
