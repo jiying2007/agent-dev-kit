@@ -69,6 +69,7 @@ Open items:
 - **Task Package v2**：真正派工才写 kind/question/evidence/permission/exit/handoff/retention、scope_read/scope_write/must_not_touch。decision/research/prototype 不可获得 implementation 权限，缺依赖或原文审查时须先退回规划。
 - **Evidence / attestation**：验证必须能从原验收 criterion ID 和注册 evidence digest 追溯。新增测试计数、流水号和 heartbeat 不证明目标收敛。attestation 写入后回读；未通过不能声称完成或归档。
 - **风险与恢复**：发现设计/共享契约/重大 finding 变化时 replan；两次相同失败仍无根因先更新假设。计划偏差不按固定百分比机械重审：只在范围、原验收分母、权限、依赖或验证路径实质改变时启动适用审查。三次 blocker 是诊断信号，不自动升级某个组织层级。
+- **最小充分验证／避免重复全量流程**：对已批准计划的低风险阶段，按 `change_snapshot / affected_interfaces / prior_verified_snapshot / evidence_freshness` 选择最小受影响检查；相同快照且结果仍有效时复用原始回执并写明 `verification_reused / reason`，不要重复调用模型或重新跑整个 Goal。若输入、依赖、设备状态、权限或发布边界变化，旧证据失效；阶段 checkpoint 不替代最终要求的完整回归、独立 Review 和真实现场门禁。未运行且不可复用则 `not-tested`，失败仍保持 needs-fix。
 - **并行验证**：执行前核共享构建目录、缓存、端口、二进制或设备资源；相互冲突串行。阶段末收敛 orphan checkpoint，只保留通过/失败的可重放证据和真实恢复入口。
 - **Goal Closure**：原 goal_statement、completion_claim、claimant、独立 verifier、required_evidence、open_items 与 stop_condition (pass/replan/split/blocked/abort) 均需可追溯。当前预算、历史预算合规和证据验真分别报告；阶段 milestone 不调用整体 final，也不能自动完成父 Goal。
 - **Runtime 限制**：仅当宿主报告真实 stop 才停止实施并依现有权限重规划；不增加人民币日费用硬限制。纯 Skill 不能读出宿主私有 Goal、控制 scheduler 或自签审批。外部原始证据缺失时 UNKNOWN，不能因压缩摘要而放行。
