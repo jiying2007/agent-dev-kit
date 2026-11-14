@@ -1,0 +1,42 @@
+{
+  "schema": "adk-source-ci-failure-observation/v1",
+  "repository": "jiying2007/agent-dev-kit",
+  "head_sha": "b9f250adf8fc4bc8d35dff2e5b2d44376a5e8dc9",
+  "pr": 265,
+  "jobs": [
+    {
+      "id": 132449893656,
+      "name": "static-security",
+      "log_lines": [
+        "2026-11-14T12:38:33.4054294Z src/agent_dev_kit/agent_value_contracts.py:268: error: Value of type variable \"SupportsRichComparisonT\" of \"sorted\" cannot be \"Any | None\"  [type-var]",
+        "2026-11-14T12:38:33.4630536Z src/agent_dev_kit/agent_value_receipts.py:319: error: Returning Any from function declared to return \"dict[str, Any]\"  [no-any-return]",
+        "2026-11-14T12:38:33.5894318Z src/agent_dev_kit/agent_value.py:49: error: Function is missing a type annotation for one or more parameters  [no-untyped-def]",
+        "2026-11-14T12:38:33.5895434Z src/agent_dev_kit/agent_value.py:65: error: Function is missing a type annotation for one or more parameters  [no-untyped-def]",
+        "2026-11-14T12:38:33.5896387Z src/agent_dev_kit/agent_value.py:97: error: Name \"value_contracts.EvidenceVerifier\" is not defined  [name-defined]",
+        "2026-11-14T12:38:33.6306693Z src/agent_dev_kit/run_evidence.py:306: error: Argument \"aggregation_window\" to \"emit_measurements\" has incompatible type \"dict[str, datetime | None]\"; expected \"Mapping[str, datetime] | None\"  [arg-type]",
+        "2026-11-14T12:38:33.6308333Z src/agent_dev_kit/run_evidence.py:310: error: Argument 1 to \"_iso\" has incompatible type \"datetime | None\"; expected \"datetime\"  [arg-type]",
+        "2026-11-14T12:38:33.6309495Z src/agent_dev_kit/run_evidence.py:311: error: Argument 1 to \"_iso\" has incompatible type \"datetime | None\"; expected \"datetime\"  [arg-type]",
+        "2026-11-14T12:38:33.6310581Z src/agent_dev_kit/run_evidence.py:313: error: Argument 1 to \"_iso\" has incompatible type \"datetime | None\"; expected \"datetime\"  [arg-type]",
+        "2026-11-14T12:38:33.7808072Z src/agent_dev_kit/effect_trials.py:77: error: Returning Any from function declared to return \"Mapping[str, Any]\"  [no-any-return]",
+        "2026-11-14T12:38:33.7809215Z src/agent_dev_kit/effect_trials.py:226: error: Dict entry 1 has incompatible type \"str\": \"int\"; expected \"str\": \"str\"  [dict-item]",
+        "2026-11-14T12:38:33.7810251Z src/agent_dev_kit/effect_trials.py:226: error: Dict entry 2 has incompatible type \"str\": \"int\"; expected \"str\": \"str\"  [dict-item]",
+        "2026-11-14T12:38:33.7811669Z src/agent_dev_kit/effect_trials.py:227: error: Dict entry 3 has incompatible type \"str\": \"float\"; expected \"str\": \"str\"  [dict-item]",
+        "2026-11-14T12:38:33.7812789Z src/agent_dev_kit/effect_trials.py:228: error: Dict entry 4 has incompatible type \"str\": \"float\"; expected \"str\": \"str\"  [dict-item]",
+        "2026-11-14T12:38:33.8269641Z Found 14 errors in 5 files (checked 32 source files)"
+      ]
+    },
+    {
+      "id": 132449893438,
+      "name": "contract-py3.12",
+      "log_lines": [
+        "2026-11-14T12:38:38.6967722Z docs/changes/20261114-skill-execution-evidence/design.md:50: new blank line at EOF.",
+        "2026-11-14T12:38:38.6968700Z docs/changes/20261114-skill-execution-evidence/evidence/first-integration.txt:37: trailing whitespace.",
+        "2026-11-14T12:38:38.6969947Z docs/changes/20261114-skill-execution-evidence/evidence/first-integration.txt:40: trailing whitespace.",
+        "2026-11-14T12:38:38.6971131Z docs/changes/20261114-skill-execution-evidence/negative-results.md:22: new blank line at EOF.",
+        "2026-11-14T12:38:38.6972010Z docs/changes/20261114-skill-execution-evidence/requirements.md:37: new blank line at EOF.",
+        "2026-11-14T12:38:38.6973239Z docs/changes/20261114-skill-execution-evidence/tasks.md:20: new blank line at EOF.",
+        "2026-11-14T12:38:38.6974469Z [FAIL] detected whitespace errors in diff against origin/main"
+      ]
+    }
+  ]
+}

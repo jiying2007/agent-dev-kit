@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import copy
 import unittest
+from dataclasses import replace
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -130,6 +131,12 @@ class RunEvidenceCompositionTest(unittest.TestCase):
                 MANIFEST,
                 CONTRACT,
             )
+
+    def test_each_missing_aggregation_timestamp_fails_closed(self) -> None:
+        complete = observation(TestAssetObservation("profile", "core"))
+        for field in ("aggregation_from", "aggregation_through", "as_of"):
+            with self.subTest(field=field), self.assertRaisesRegex(ManifestError, "aggregation window and as_of"):
+                emit_run_evidence(replace(complete, **{field: None}), MANIFEST, CONTRACT)
 
     def test_duplicate_unknown_window_and_privacy_inputs_fail_closed(self) -> None:
         duplicate = TestAssetObservation("profile", "core")

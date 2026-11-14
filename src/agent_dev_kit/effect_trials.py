@@ -59,7 +59,7 @@ def _validate(document: Mapping[str, Any]) -> Mapping[str, Any]:
     if error is not None:
         location = "/".join(map(str, error.absolute_path)) or "<root>"
         raise ManifestError("invalid trial input at " + location)
-    plan = document["plan"]
+    plan: Mapping[str, Any] = document["plan"]
     start, through, as_of = (_time(plan["window"][name]) for name in ("from", "through", "as_of"))
     if not _time(plan["registered_at"]) <= start <= through <= as_of <= datetime.now(timezone.utc):
         raise ManifestError("trial plan must precede its fixed observation window")
@@ -216,7 +216,7 @@ def compare_effect_trials(document: Mapping[str, Any], manifest: Manifest) -> di
         metrics[name] = _paired_metric(left, right, plan["policy"], direction)
         metrics[name]["unit"] = unit
     verdict, reason = _verdict(metrics, plan, infra_failed=infra_failed, unsafe=unsafe)
-    reliability = {}
+    reliability: dict[str, dict[str, Any]] = {}
     for side, population in grouped.items():
         states = [[raw["trace_summary"]["outcome"]["status"] for raw in population[task]] for task in tasks]
         if any("not-available" in task for task in states):

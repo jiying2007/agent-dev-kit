@@ -286,14 +286,8 @@ def emit_run_evidence(
         for item in assets
     ]
     if receipts:
-        if any(
-            value is None
-            for value in (
-                observation.aggregation_from,
-                observation.aggregation_through,
-                observation.as_of,
-            )
-        ):
+        if (observation.aggregation_from is None or observation.aggregation_through is None
+                or observation.as_of is None):
             raise ManifestError("asset observations require aggregation window and as_of")
         window = {
             "from": observation.aggregation_from,

@@ -1,0 +1,23 @@
+{
+  "schema": "adk-local-source-checks/v1",
+  "executor": "ai/root",
+  "completed_before": "2026-11-14T12:46:24Z",
+  "evidence_scope": "test-only",
+  "checks": [
+    {
+      "name": "full-ci-strict-mypy",
+      "definition_source": ".github/workflows/ci.yml: Run focused strict type analysis",
+      "source_resolution": "MYPYPATH=src; PYTHONPATH contains quality tools only",
+      "cache": "fresh temporary directory",
+      "exit_code": 0,
+      "output": "Source parsing: MYPYPATH=src; PYTHONPATH contains quality tools only; fresh cache.\nSuccess: no issues found in 32 source files\n"
+    },
+    {
+      "name": "raw-log-roundtrip",
+      "raw_bytes": 4512,
+      "raw_sha256": "1e7224bf9148123949774cc7be27eff343ef4b4c640c5331222b45c7133836bf",
+      "source_commit": "c1ccff024b70155515dc002cf222dd6edb986363",
+      "byte_identical": true
+    }
+  ]
+}

@@ -8,7 +8,7 @@ import sys
 from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
+from typing import Any, Callable, Dict, List, Mapping, Optional, Sequence, Tuple
 
 from . import agent_value_contracts as value_contracts
 from . import agent_value_receipts as value_receipts
@@ -48,9 +48,9 @@ def _not_measured_metric(
 
 def _ratio_metric(
     receipts: Sequence[Mapping[str, Any]],
-    predicate,
+    predicate: Callable[[Mapping[str, Any]], bool],
     *,
-    applicable=None,
+    applicable: Optional[Callable[[Mapping[str, Any]], bool]] = None,
 ) -> Dict[str, Any]:
     selected = [item for item in receipts if applicable is None or applicable(item)]
     if not selected:
@@ -66,9 +66,9 @@ def _optional_metric(
     receipts: Sequence[Mapping[str, Any]],
     field: str,
     unit: str,
-    transform,
+    transform: Callable[[Any], float],
     *,
-    applicable=None,
+    applicable: Optional[Callable[[Mapping[str, Any]], bool]] = None,
 ) -> Dict[str, Any]:
     applicable_receipts = [item for item in receipts if applicable is None or applicable(item)]
     if not applicable_receipts:
@@ -94,7 +94,7 @@ def emit_measurements(
     manifest: Manifest,
     contract: Mapping[str, Any],
     schema_path: Optional[Path] = None,
-    evidence_verifier: Optional[value_contracts.EvidenceVerifier] = None,
+    evidence_verifier: Optional[value_receipts.EvidenceVerifier] = None,
     aggregation_window: Optional[Mapping[str, datetime]] = None,
     as_of: Optional[datetime] = None,
 ) -> Dict[str, Any]:

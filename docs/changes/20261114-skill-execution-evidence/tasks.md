@@ -17,4 +17,3 @@
 首轮集成诊断为101/102，唯一profile体积失败已精简引用并定向6/6复验，未提高预算。
 下一步：将冻结源码与真实审查记录提交受保护PR；核验最终提交的完整CI；验证主线CI与不可变release。
 T6当前为 evidence-blocked：没有允许宿主的真实任务观测，续行见 `docs/runbooks/task-evidence.md`。
-

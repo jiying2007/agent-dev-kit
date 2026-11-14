@@ -47,4 +47,3 @@ no-skill 侧实际加载目标 Skill 属对照污染；来源/初始状态漂移
 现有 CLI、Run Evidence、trace schema 和 effect comparison 的行为保持兼容。
 新增非执行导入为可选入口；回退本变更即可移除新增能力。
 若实现发现必须修改已有公共语义，先记录设计差异并做调用点搜索。
-
