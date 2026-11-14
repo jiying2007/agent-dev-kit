@@ -263,7 +263,7 @@ class SkillQualityMethodsTests(unittest.TestCase):
             self.assertIn(marker, recovery)
         for marker in ("Microsoft Eval Guide", "Agent Skills Can Be Harmful",
                        "NVIDIA SkillEvaluator", "Demystifying evals", "E0/E1",
-                       "not-measured", "5401"):
+                       "not-measured", "5600"):
             self.assertIn(marker, source_note)
         self.assertNotIn("ADK 实际模型完成率已提高", source_note)
 
