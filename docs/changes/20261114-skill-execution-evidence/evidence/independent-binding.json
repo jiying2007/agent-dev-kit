@@ -1,0 +1,33 @@
+{
+  "schema": "adk-independent-source-binding/v1",
+  "reviewer": "ai/root/review_existing_candidate",
+  "review_started_at": "2026-11-14T12:34:35Z",
+  "evidence_completed_at": "2026-11-14T12:35:31Z",
+  "reviewed_at": "2026-11-14T12:35:39Z",
+  "base_commit": "ebef1106aeecbe14e9ac676b2950b81895c1ea5b",
+  "head_commit": "c1ccff024b70155515dc002cf222dd6edb986363",
+  "tree": "a4b983f63acb038c7fe9966a29fb9c05d8e82df8",
+  "original_patch_sha256": "a2ff9abb78d76c7a571c1d02a68cf47ede4f2e0b3105ecb353b01210252727fe",
+  "changed_files": 75,
+  "explicitly_frozen_files_matched": 20,
+  "frozen_file_mismatches": 0,
+  "development_fixture_count": 36,
+  "development_fixture_tree_sha256": "e3cbf533dd90da8e9db2ac3003913dd66409d7ee52b18c882b23c5ff0c7c3052",
+  "verdicts": {
+    "spec": "pass",
+    "quality": "pass"
+  },
+  "open_blockers": 0,
+  "open_majors": 0,
+  "observations": [
+    "Read Git source/tree/parent from the independent clean worktree; regenerated complete original diff and compared its digest.",
+    "Read actual first integration log: 102 executed, 101 pass and one profile ratchet failure. Read fixed source and the final 6/6 profile, strict mypy and Ruff results.",
+    "Verified all twenty explicitly frozen source/test/document files and the entire thirty-six-file development fixture collection; retained prior semantic review for identical bytes.",
+    "Validated the original PR 264 typed record on this persisted source. Only review artifacts were added after checkout; reviewed implementation stayed unchanged."
+  ],
+  "limitations": [
+    "Read-only independent AI process, not authenticated identity or human review.",
+    "No final PR or main CI, immutable release or model effectiveness is asserted by this source binding.",
+    "E2-E4, native loading, actual task success, Token, cost and latency remain not-measured."
+  ]
+}
