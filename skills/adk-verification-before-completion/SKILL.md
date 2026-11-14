@@ -70,5 +70,5 @@ constraints:
 - 任一适用必需项失败、无有效理由跳过、证据过期、Review blocker/major 未闭环或独立 verifier 缺失 → `needs-fix`；不得填空表掩盖缺口。
 - 运行态配置、Runner、权限、MCP、UI、发布或真实设备门禁需要现场/宿主证据时，缺失只能写未验证；`completion_coverage` 的静态 pass 不等于运行认证。
 - 生命周期缺 owner/终止/真实边界、设计变更未 replan、重大 Review 未独立闭环不得通过；breaking change 必须有迁移与回退。
-- `Codify Decision:` 仅在适用的最终交付/复用晋级时记录 delivery_goal、reusable_pattern、promotion_candidate、next_task_friction_reduced、reduced_by、reduction_evidence、do_not_promote_reason、owner_review、rollback_path、verification_evidence；没有真实效果/owner review 不晋升。
+- `Codify Decision:` 仅在适用的最终交付/复用晋级时按 `templates/governance/codify-decision.md` 记录 delivery_goal、affected_asset、reusable_pattern、promotion_candidate、next_task_friction_reduced、reduced_by、reduction_evidence、do_not_promote_reason、owner_review、rollback_path、verification_evidence；没有真实效果/owner review 不晋升。
 - 预算检查、组件发布和产品/现场资格是独立状态；阶段通过不赋予 commit/merge/release 权限。输出实际命令、证据、剩余风险和结论，禁止“应该通过”。
