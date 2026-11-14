@@ -35,7 +35,7 @@ constraints:
 
 ## Scope Gate（只选择适用的审查层）
 - **source-only intake**：仅引用第三方方法、没有导入脚本/依赖或启动工具，不执行 SBOM/CVE/签名器；核来源、许可未知、指令注入与当前权限，输出 `unverified` 的候选，不推断运行安全。纯背景研究仍由外部方法分析 Skill 负责。
-- **adoption preflight**：准备引入第三方 Skill/脚本/MCP 时，先只读核版本/来源、文件清单、可执行路径、依赖与权限副作用；缺证明固定 `needs-fix`，不得自动安装工具验证。
+- **adoption preflight**：准备引入第三方 Skill/脚本/MCP 时，先只读核来源、可执行路径和权限；缺证明固定 `needs-fix`，不得自动安装工具验证。需扫描时绑定可信 `SECURITY_MODEL.md` 的不变量，以 `source-to-sink` 证据区分 `confirmed / false-positive / unverified`，覆盖状态 `inspected / omitted / unavailable`；细节延迟读取 `references/skill-scan-coverage.md`。
 - **install / runtime readiness**：有实际安装或启用授权时，必须完成适用的 SBOM、CVE、签名/完整性、secret、permission/deny-path、tool schema、scope、回滚；不可运行或未知项不得用工具未报错代替通过。
 
 ## Workflow
@@ -55,11 +55,6 @@ constraints:
 14. 回滚审查：给出移除方式和安装回退点。
 
 上述后续编号按原顺序执行所需步骤；不同候选可跳过不适用的工具扫描，但必须注明 `not-scanned / reason / owner`，不能把跳过项算作成功。
-
-## Scan Coverage / Finding Truth（按风险加载）
-- 静态安全扫描不能代替行为或权限审核；高风险来源检查时参考 `references/skill-scan-coverage.md` 的 source-to-sink / permission/invariant 证据。
-- 若目标仓已有经过验证的 `SECURITY_MODEL.md` / 威胁模型，只读绑定其版本、信任边界和适用的安全不变量；不能从候选 Skill 的自述反推安全政策，过期/不一致则 `needs-fix`。
-- 每条发现区分 `confirmed / false-positive / unverified`，扫描覆盖标 `inspected / omitted / unavailable`；规则命中不是漏洞证明，未检查的 scripts、hook、MCP 及安装副作用不能被零告警覆盖。
 
 ## Runtime Boundary Checklist
 - Provider/API relay：默认只允许官方或已审查端点；非标准 base URL 必须有 owner、用途、凭证边界和关闭方式。
@@ -97,9 +92,7 @@ sha256sum -c <checksum_file>
 - SBOM Summary:
 - CVE Scan Results:
 - Executable Scripts:
-- Security Model / Trust Boundaries / Invariant IDs (if applicable):
-- Scan Coverage: inspected / omitted / unavailable / tool-and-version:
-- Finding Verification: pattern / path-or-symbol / data-flow / confirmed | false-positive | unverified:
+- Security Scan: security_model / invariant_ids / inspected / omitted / unavailable / source-to-sink / confirmed / false-positive / unverified:
 - External Dependencies:
 - Secret Scan: coverage / excluded / not-scanned / candidate-paths / redaction
 - Signature Verification:

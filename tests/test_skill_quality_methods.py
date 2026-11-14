@@ -126,6 +126,9 @@ class SkillQualityMethodsTests(unittest.TestCase):
         self.assertIn("spec-compliance pass", review)
         self.assertNotIn("#define IFACE_TIMEOUT_MS     1000", design)
         self.assertNotIn("#define IFACE_MAX_RETRIES    3", design)
+        for token in ("partial", "stronger-than-spec", "undecidable", "searched_scope"):
+            self.assertIn(token, details)
+            self.assertIn(token, review_detail)
 
     def test_security_scanner_separates_coverage_from_verified_vulnerabilities(self) -> None:
         skill = source("optional-skills/adk-security-supply-chain/SKILL.md")
