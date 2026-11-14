@@ -19,6 +19,13 @@
 - 记录 `initial_workspace_ref / observed_tool_calls / final_artifact_ref / forbidden_side_effects / missing_observability`，真实 trace 可验证时才判实际行为；模拟 CLI/静态回放/离线 matcher 只给 E0/E1，不能伪造 native load、独立评价或任务完成率。
 - 真实宿主不可用时保留预注册和用例，明确 `not-measured`，**不因未测而运行收费模型、触发新定时任务或削弱安全 guardrail**。
 
+## Skill Value / Harm Gate（真实任务才判）
+
+- 只对确有真实运行证据的任务比较 `no-skill vs selected-skill`，固定 `target_repo@commit`、需求与可执行 verifier、model/runtime、工具授权、时间窗和初始 workspace。区分正确性、实际 Skill 调用、耗时/Token、越权或负面副作用；不能用通用问答或纯模板得分代表真实工程成功。
+- 特别检验三类负收益：`wrong-version`（Skill 的 API/框架版本落后于目标仓）、`explicit-instruction-conflict`（模板覆盖用户的明确非目标/验收）、`irrelevant-trigger`（无关任务仍加载）。记录原有成功任务的退化而不仅是新任务绿灯。
+- 分类 `beneficial / neutral / harmful / inconclusive` 必须有任务级成对结果与原始 verifier/trace；样本不足、未成对、审查不独立或环境漂移时统一 `inconclusive / not-measured`，不得用偶发一次成功批准长期 Skill 默认启用。
+- 这项检查沿用 ADK `effect_trials`，不导入 SWE-Skills-Bench 任务/模型执行器，不用 Skill 自己评价自己。没有明确性能增益也不能因此跳过安全/权限门禁。
+
 ## Evidence Contract
 - 固定 `baseline_sha / candidate_sha / model_runtime / tool_permissions / budget / grader_id / dataset_sha`，无真实 source 或宿主权限则中止并记 `not-measured`。
 - 先以安全/任务质量 **non-regression** 决定是否可比较 Token、wall time、tool calls；授权越界为硬失败，未报告的缓存 Token 记 unavailable。
