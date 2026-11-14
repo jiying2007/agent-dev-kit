@@ -1,8 +1,8 @@
 ---
 name: adk-security-supply-chain
 description: "用于第三方 Skill、脚本、依赖和参考资产引入前的来源、权限与供应链审查；不用于自动安装不可信包或把静态扫描当安全认证。"
-version: 1.1.2
-last_updated: 2026-11-09
+version: 1.1.3
+last_updated: 2026-11-14
 triggers:
   - "供应链审查"
   - "第三方引入"
@@ -33,8 +33,14 @@ constraints:
 - 已明确候选资产来源、版本或 commit。
 - 已明确安装范围：`core`、`optional`、`profile` 或 `reject`。
 
+## Scope Gate（只选择适用的审查层）
+- **source-only intake**：仅引用第三方方法、没有导入脚本/依赖或启动工具，不执行 SBOM/CVE/签名器；核来源、许可未知、指令注入与当前权限，输出 `unverified` 的候选，不推断运行安全。纯背景研究仍由外部方法分析 Skill 负责。
+- **adoption preflight**：准备引入第三方 Skill/脚本/MCP 时，先只读核版本/来源、文件清单、可执行路径、依赖与权限副作用；缺证明固定 `needs-fix`，不得自动安装工具验证。
+- **install / runtime readiness**：有实际安装或启用授权时，必须完成适用的 SBOM、CVE、签名/完整性、secret、permission/deny-path、tool schema、scope、回滚；不可运行或未知项不得用工具未报错代替通过。
+
 ## Workflow
-1. 来源审查：确认仓库可达性、维护状态、版本锚点。
+1. 按 Scope Gate 决定需要哪些审查和安装/运行权限；完整工作流只对真实引入/启用候选执行，避免为只读方法研究重复装扫描器。
+2. 来源审查：确认仓库可达性、维护状态、版本锚点。
 2. 许可证审查：确认 LICENSE 与使用范围。
 3. SBOM 生成：生成软件物料清单，记录所有直接与间接依赖。
 4. CVE 扫描：检查已知漏洞，评估影响范围与修复状态。
@@ -47,6 +53,8 @@ constraints:
 11. Runtime Control Plane Audit：若候选资产暴露 slash command、MCP server、hook、permission profile 或外部 connector，记录 `slash_command_runtime_audit`、`mcp_runtime_contract`、`permission_profile_decision`、`approval_boundary`、`deny_path_test` 和 `rollback_path`。
 12. 安装范围审查：确认仅进入 core/optional/profile/plugin 中的最小范围。
 13. 回滚审查：给出移除方式和安装回退点。
+
+上述后续编号按原顺序执行所需步骤；不同候选可跳过不适用的工具扫描，但必须注明 `not-scanned / reason / owner`，不能把跳过项算作成功。
 
 ## Runtime Boundary Checklist
 - Provider/API relay：默认只允许官方或已审查端点；非标准 base URL 必须有 owner、用途、凭证边界和关闭方式。

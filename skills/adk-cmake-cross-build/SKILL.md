@@ -1,8 +1,8 @@
 ---
 name: adk-cmake-cross-build
 description: "用于嵌入式 CMake 工程的交叉编译、工具链配置与多目标构建排障；不用于无 CMake 的构建系统或直接设备部署。"
-version: 1.0.2
-last_updated: 2026-11-10
+version: 1.0.3
+last_updated: 2026-11-14
 triggers:
   - "CMake"
   - "CMake交叉编译"
@@ -34,7 +34,7 @@ constraints:
 ## Workflow
 1. **编写 toolchain 文件**：定义编译器、sysroot、查找路径和 ABI flags。
 2. **固化 Presets**：用 `CMakePresets.json` 表达目标、构建类型和输出目录。
-3. **执行构建**：优先使用 presets；无 presets 时显式传入 toolchain file。
+3. **执行构建**：仅在目标仓允许执行并且 toolchain/generator/sysroot 存在时使用 presets；无 presets 时显式传入 toolchain file。不得替换或删除不属于本任务的 build 目录；用户未授权执行时只读规划。
 4. **执行后端判定**：在跑 CTest 前识别 host-unit、compile-only、emulator（含 `CROSSCOMPILING_EMULATOR`）、board-runner 四类。没有已验证的目标执行后端时，只能声称交叉构建成功；不能把主机上的 CTest 通过写成板端运行通过。
 5. **产物检查**：根据实际 toolchain 验证 ELF 架构、段大小、符号表和 map 文件。
 6. **记录制品与失败点**：输出日志、二进制位置与诊断建议。
@@ -43,7 +43,7 @@ constraints:
 ```bash
 cmake -S . -B build/<target> -DCMAKE_TOOLCHAIN_FILE=cmake/toolchain-<target>.cmake -G Ninja
 cmake --preset <preset-name>
-cmake --build build/<target> -j$(nproc) --verbose
+cmake --build build/<target> --parallel <resource-budget>  # 用实际 CPU/RAM/CI 配额定预算
 file build/<target>/firmware.elf
 arm-none-eabi-size build/<target>/firmware.elf
 arm-none-eabi-objdump -h build/<target>/firmware.elf
@@ -75,7 +75,7 @@ ctest --test-dir build/<target> --output-on-failure
 ## Quality Gate
 - 必须明确 host/build/target 区分与 toolchain 来源。
 - 至少一个目标平台完成交叉构建；可执行测试按 host/emulator/board 单独记录，无法运行目标测试时标记 `not-run` 而不是伪称闭环。
-- 构建日志需可复现同一结果（clean build 验证）。
+- 构建日志需可复现同一结果（clean build 验证，且只清理任务自有构建目录）；跨编译环境/host/target 的产物不得混用。
 - ELF 产物必须用目标工具链的 `file/readelf/size`（按实际可用工具）核验架构、段与大小，裸 bin 不能仅靠 `file` 判断 CPU 身份。
 - toolchain 文件必须纳入版本控制。
 

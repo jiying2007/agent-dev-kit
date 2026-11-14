@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### 11.2.16 — 65 Skills source-intake and embedded boundary hardening
+- Audit all 65 Manifest identities at an exact ADK source revision; classify 11 focused method fixes and retain 54 currently stable Skill contracts without needless churn. Source-only audit is not model behavior certification.
+- Harden optional URL/IMAP data-fetch against untrusted instructions, SSRF / redirects, read-state mutation and logging of private credentials; distinguish research-only supply-chain review from install/runtime readiness.
+- Bound protocol capture, MCU unit/HIL proof, register example truthfulness, Linux/MCU performance tools and CMake resource use by actual target and authorization.
+- Preserve full Skill routing and verification gates; add source-only positive/negative cases to existing content suite without installing plugins, adding a new runner or spending paid model quotas.
+- Native E2–E4 model behavior, real Token/cost savings and device outcomes remain not-measured.
+
 ### 11.2.15 — Stage-aware completion verification
 - Split existing completion verification into checkpoint versus goal-final with independent low/medium/high risk, allowing small phase checks to reuse evidence rather than repeat unrelated full-Goal procedures.
 - Preserve all fail-closed review, provenance, lifecycle, permission/deny-path, UI/runtime, release and Codify decision gates. Defer the complete field report template into the existing verification governance reference.

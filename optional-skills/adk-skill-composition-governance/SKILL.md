@@ -1,8 +1,8 @@
 ---
 name: adk-skill-composition-governance
 description: "用于多个 Skill 的触发冲突、组合边界、fallback 和退役策略审查；不用于新增并行路由权威或直接提升工具写权限。"
-version: 1.1.3
-last_updated: 2026-11-04
+version: 1.1.4
+last_updated: 2026-11-14
 triggers:
   - "技能组合"
   - "触发冲突"
@@ -35,6 +35,10 @@ constraints:
 ## Prerequisites
 - 已列出涉及的 skill、optional skill 和目标 profile。
 - 已有至少一条代表性任务输入。
+
+## Admission Modes
+- `collision-only`：一次触发冲突、无 Profile/依赖/权限变化时，仅冻结候选和 near-miss，运行现有 matcher/negative/collision case，提出最小修复；不强制 13 阶段和全量矩阵。
+- `composition-change`：调整 primary/supporting/fallback、Profile、权限、Workflow 或生命周期时，才完整执行下述组合治理、契约/安全门禁及必要的真实行为评测。
 
 ## Workflow
 1. 确定主技能：每个场景只能有一个 primary skill。
@@ -109,7 +113,7 @@ bash scripts/pilot-readiness.sh --summary-json
 - 若弃用技能无替代方案，必须冻结而非删除。
 
 ## Quality Gate
-- 组合规则必须能被脚本检查。
+- 组合规则必须能被脚本检查；`collision-only` 至少覆盖目标候选及近邻负例，不能凭命中一条字符串宣称宿主实际行为改善。
 - 触发样例必须覆盖正例、反例和 fallback。
 - 治理矩阵必须覆盖所有已知场景。
 - 冲突检测必须在每次 profile 变更后重新执行。
