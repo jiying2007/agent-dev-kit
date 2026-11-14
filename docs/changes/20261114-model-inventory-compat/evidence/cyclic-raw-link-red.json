@@ -1,0 +1,42 @@
+{
+  "observed_at": "2026-11-14T16:31:17.662609Z",
+  "source_sha256": "e2ba990c063d31507e7e3d6c5a8ec0137f551406fa3d07ec95b7a857c42c6a21",
+  "fixture": "synthetic minimal single manifest; not actual hosted model tree",
+  "raw_symlink_target": "1.7b/../../../../../blobs/sha256-ece5a617aeb3ec2dd89d3a96274fbc95edd6ca4c0a77599727c369353e651919",
+  "actual_os_stat": {
+    "type": "OSError",
+    "errno": 40,
+    "message": "Too many levels of symbolic links"
+  },
+  "inventory_outcome": {
+    "status": "accepted",
+    "identity": {
+      "model_name": "qwen3:1.7b",
+      "named_entry": "manifests-v2/ollama.com/library/qwen3/1.7b",
+      "binding": "direct-manifest",
+      "api_digest": "ece5a617aeb3ec2dd89d3a96274fbc95edd6ca4c0a77599727c369353e651919",
+      "api_runner": "ggml",
+      "named_manifest": {
+        "path": "blobs/sha256-ece5a617aeb3ec2dd89d3a96274fbc95edd6ca4c0a77599727c369353e651919",
+        "sha256": "ece5a617aeb3ec2dd89d3a96274fbc95edd6ca4c0a77599727c369353e651919",
+        "bytes": 311,
+        "raw_utf8": "{\"schemaVersion\":2,\"mediaType\":\"application/vnd.docker.distribution.manifest.v2+json\",\"runner\":\"ggml\",\"config\":{\"digest\":\"sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\",\"size\":2},\"layers\":[{\"digest\":\"sha256:552b4d79123f439c5ed64bf54ce07bb36ea98ec1453522064d4f54d8f796c564\",\"size\":25}]}"
+      },
+      "selected_manifest": {
+        "path": "blobs/sha256-ece5a617aeb3ec2dd89d3a96274fbc95edd6ca4c0a77599727c369353e651919",
+        "sha256": "ece5a617aeb3ec2dd89d3a96274fbc95edd6ca4c0a77599727c369353e651919",
+        "bytes": 311,
+        "raw_utf8": "{\"schemaVersion\":2,\"mediaType\":\"application/vnd.docker.distribution.manifest.v2+json\",\"runner\":\"ggml\",\"config\":{\"digest\":\"sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\",\"size\":2},\"layers\":[{\"digest\":\"sha256:552b4d79123f439c5ed64bf54ce07bb36ea98ec1453522064d4f54d8f796c564\",\"size\":25}]}"
+      }
+    },
+    "link": {
+      "kind": "symlink",
+      "target": "1.7b/../../../../../blobs/sha256-ece5a617aeb3ec2dd89d3a96274fbc95edd6ca4c0a77599727c369353e651919",
+      "normalized_target": "blobs/sha256-ece5a617aeb3ec2dd89d3a96274fbc95edd6ca4c0a77599727c369353e651919",
+      "link_sha256": "0be7de5a58430bfe86d6374df59b7d3eea3a17eca622ce7d917e94d46fc4ab91",
+      "target_sha256": "ece5a617aeb3ec2dd89d3a96274fbc95edd6ca4c0a77599727c369353e651919",
+      "target_bytes": 311
+    }
+  },
+  "model_or_docker_run": false
+}

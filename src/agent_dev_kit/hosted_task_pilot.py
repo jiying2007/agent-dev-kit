@@ -20,6 +20,7 @@ from types import FrameType
 from typing import Any
 
 from . import hosted_task_native as native
+from .hosted_model_inventory import inventory_model_store, read_model_record
 from .hosted_task_native import (
     PROMPT_SHA,
     TASK_SECONDS,
@@ -485,13 +486,8 @@ WORKDIR /work
             network="bridge",
         )
         assert prepared["state"]["ExitCode"] == 0 and not prepared["timed_out"], "Model preparation blocked"
-        model = json.loads((self.root / "prepare-records/model.json").read_text())
-        files = inventory(self.root / "models")
-        assert any(
-            item["sha256"] == model["digest"].removeprefix("sha256:")
-            for path, item in files.items()
-            if path.startswith("manifests/")
-        )
+        model = read_model_record(self.root / "prepare-records/model.json")
+        model_store = inventory_model_store(self.root / "models", model, native.MODEL)
         self.summary["model_digest"] = model["digest"]
         for condition in ("baseline", "candidate"):
             write_json(self.root / condition / "input/model.json", model)
@@ -501,7 +497,9 @@ WORKDIR /work
                 "frozen_at": now(),
                 "image": json.loads((self.evidence / "image-identity.json").read_text()),
                 "model": model,
-                "model_files": files,
+                "model_files": model_store["files"],
+                "model_identity": model_store["identity"],
+                "model_inventory_limits": model_store["limits"],
                 "tool_files": native.tool_inventory(self.root / "tools"),
                 "task_order": ["baseline", "candidate"],
                 "task_seconds_each": TASK_SECONDS,

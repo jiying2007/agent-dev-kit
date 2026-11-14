@@ -1,0 +1,37 @@
+{
+  "recorded_at": "2026-11-14T16:26:32.634426+00:00",
+  "sources": {
+    "manifest.go": {
+      "url": "https://github.com/ollama/ollama/blob/v0.40.16/manifest/manifest.go",
+      "git_blob_sha1": "93766ad2600da4db1de2674911a8e1823ce9e568",
+      "sha256": "2aa036f61cfffdff2f85fa3e0f29478c314c00c53aced8f9c6cb9103359f1bec",
+      "bytes": 46476
+    },
+    "paths.go": {
+      "url": "https://github.com/ollama/ollama/blob/v0.40.16/manifest/paths.go",
+      "git_blob_sha1": "cf3bfa2569bf1a3fbc69ef12455566e259515a2d",
+      "sha256": "ce16336074693e19fa8c75147c67b155b9be03542a5dd77500e8be42dba8ff04",
+      "bytes": 10402
+    },
+    "model_list.go": {
+      "url": "https://github.com/ollama/ollama/blob/v0.40.16/server/model_list.go",
+      "git_blob_sha1": "6be2862816f5ba2d6101812a1a03ee98fc079b8d",
+      "sha256": "3228de78ecde79183701e9a60c1c933f99576bb341df341339882852b0d0164a",
+      "bytes": 7444
+    }
+  },
+  "observed_run": "43614661952",
+  "observed_symlink_path": "models/manifests-v2/ollama.com/library/qwen3/1.7b",
+  "observed_raw_link_target": "not preserved in artifact; unavailable",
+  "api_reported_digest": "8f68893c685c3ddff2aa3fffce2aa60a30bb2da65ca488b61fff134a4d1730e7",
+  "validated_frozen_model_digest": "unavailable; inventory failed before freeze",
+  "inference_runs": 0,
+  "diagnosis": [
+    "Linux writer uses filepath.Rel and os.Symlink for v2 name -> content-addressed manifest blob, with copy fallback",
+    "v2 canonical public host is ollama.com; successful v2 writes can remove legacy named manifest",
+    "API tags returns selected child digest for manifest lists, not parent-list digest",
+    "Generic inventory must remain symlink-denying; dedicated model inventory must bind selected canonical name through parent/child bytes and full API digest/runner",
+    "Relative-link model fixture is synthetic source-derived, not a reconstruction of missing hosted readlink data"
+  ],
+  "native_rerun": false
+}

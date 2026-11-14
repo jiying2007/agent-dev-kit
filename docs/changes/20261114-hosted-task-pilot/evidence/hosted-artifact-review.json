@@ -1,0 +1,860 @@
+{
+  "reviewer": "ai/root/runtime_continuation_audit",
+  "role": "independent read-only artifact reviewer; did not implement or execute this hosted run; did not run grade-task",
+  "reviewed_at": "2026-11-14T16:22:26.026203Z",
+  "verdict": "verified failure evidence; stopped after successful model preparation and before runtime freeze or either task",
+  "run_identity": {
+    "repository": "jiying2007/agent-dev-kit",
+    "run_id": 43614661952,
+    "job_id": 132506978963,
+    "artifact_id": 14121104537,
+    "event": "push",
+    "before": "c57f4f8a7983f52257c0587eb85881a006e6dc07",
+    "head": "b8815263a31ee3b004c2e7e9eee564fe8a35dfc8",
+    "tree": "cb856f4b51fbe10eeac71a396f7cb87ca55e407e",
+    "attempt": 1,
+    "run_conclusion": "failure",
+    "branch": "experiment/hosted-task-pilot-run-20261114",
+    "bootstrap": "success",
+    "artifact_upload": "success",
+    "fresh_read_only_github_api_verified": true,
+    "before_evidence": "PILOT_EVENT_BEFORE in original job log; frozen workflow predicate"
+  },
+  "source_bindings": [
+    {
+      "path": ".github/workflows/opencode-task-pilot-once.yml",
+      "sha256": "cfbd9033d3b7933c0cd1c950179a3a651043b994b1ea782c60a623604679cd74",
+      "bytes": 6518
+    },
+    {
+      "path": "src/agent_dev_kit/hosted_task_pilot.py",
+      "sha256": "d4fa94e26a9cb2c9578b3aacb649029822001948366d4e5bcb15fc91ed3e4952",
+      "bytes": 29581
+    },
+    {
+      "path": "src/agent_dev_kit/hosted_task_native.py",
+      "sha256": "1d53d5502a714137c5e3f2fbfd11a71e9e891e802da1f5bd4048fa4d6da7ebe8",
+      "bytes": 24721
+    },
+    {
+      "path": "docs/changes/20261114-hosted-task-pilot/requirements.md",
+      "sha256": "b6c1e168afc1ed18816eda9bf0e7bb2e4eb6a61f7e5f8ab5f6918bc5b1dafb21",
+      "bytes": 7401
+    },
+    {
+      "path": "docs/changes/20261114-hosted-task-pilot/design.md",
+      "sha256": "97233ebef1179bef45bb069b04fbf3217d3095eead6ba9ecd76b203cb703e906",
+      "bytes": 6898
+    }
+  ],
+  "artifact_integrity": {
+    "archive": {
+      "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/hosted-task-pilot-43614661952.zip",
+      "bytes": 63998,
+      "sha256": "72d3c3c86939d14ba14a36ef1bb1d2475ec93b0ac5573933833a8dc6161c2f01"
+    },
+    "zip_crc_pass": true,
+    "zip_members": 93,
+    "uncompressed_bytes": 191322,
+    "no_duplicate_absolute_traversal_backslash_or_symlink_members": true,
+    "all_extracted_files_byte_identical_to_zip": true,
+    "manifest_members": 91,
+    "manifest_all_sizes_and_digests_match": true,
+    "raw_byte_identical_member_count": 90,
+    "independently_bound_non_manifest_files": [
+      {
+        "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/hosted-run-43614661952/manifest.json",
+        "bytes": 30768,
+        "sha256": "3fa240bac13be5d0a67db998033b38ac008ff9648fb2ce92242589d605533598"
+      },
+      {
+        "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/hosted-run-43614661952/bootstrap-status.json",
+        "bytes": 826,
+        "sha256": "acf6edac5da847ae1329dbaa6409634b28a77d48297703155b637bc18a91f344"
+      }
+    ],
+    "unexpected_extra_files": [],
+    "missing_manifest_members": [],
+    "bootstrap_summary_hash_matches": true
+  },
+  "publication_review": {
+    "safe_as_failure_evidence_deliverable": true,
+    "basis": "All members are expected UTF-8 evidence/config/Skill/initial-work files; CRC, path/type, exact file-set and digest checks pass; no published model weights, installers, private home, native data/state/cache, repository checkout, credential directory or socket; known credential-pattern scan found no matches.",
+    "scope_limit": "Safety verdict covers this exact ZIP and inspected evidence contents; it is not a universal secret-detection guarantee or native-runtime qualification.",
+    "known_sensitive_patterns_checked": 7,
+    "sensitive_pattern_matches": [],
+    "excluded_sensitive_files": [],
+    "redactions": [
+      {
+        "path": "prepare-records/raw/ollama-server.sanitized.log",
+        "sha256": "7e6f074dbb5ef3049275afe21f7902f3593027de0aae89f7ba13b3460befed3c",
+        "bytes": 3058,
+        "raw_sha256": "5d39c23ad22f874511e46a584b5133efcb86b50a22326ecdfd50922a06f67f31",
+        "removed_identity_line_numbers": [
+          1,
+          2,
+          4
+        ],
+        "byte_identical_raw": false
+      }
+    ],
+    "original_redacted_log_available": false,
+    "raw_log_limitation": "Raw digest and removed line numbers are producer records; published sanitized bytes are independently verified, but the private original identity lines are unavailable and were not reconstructed."
+  },
+  "input_bindings": {
+    "baseline": {
+      "config": {
+        "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/hosted-run-43614661952/baseline/config/opencode.json",
+        "bytes": 4143,
+        "sha256": "7411cefff349fab60439f9f4d0260216a19cc48a7ec9c2c57770e43735feea87"
+      },
+      "input": {
+        "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/hosted-run-43614661952/baseline/input/prompt.txt",
+        "bytes": 407,
+        "sha256": "5d70cb0689e244f868c32fb92600a3d96a0945fc4724be3d924952a2e8b252db"
+      },
+      "skills": {
+        "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/hosted-run-43614661952/baseline/skills/adk-adr-writer/SKILL.md",
+        "bytes": 2334,
+        "sha256": "e0672708e80c0636abaa812fa6be8d81d7b9f062a62e322b505c7f7d07c4e215"
+      },
+      "work": {
+        "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/hosted-run-43614661952/baseline/work/docs/ADR-021.md",
+        "bytes": 379,
+        "sha256": "6a6249b2f8df6c2a8cbea872f13319dd42cb07779bea6e204bfd614f19144359"
+      }
+    },
+    "candidate": {
+      "config": {
+        "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/hosted-run-43614661952/candidate/config/opencode.json",
+        "bytes": 4143,
+        "sha256": "7411cefff349fab60439f9f4d0260216a19cc48a7ec9c2c57770e43735feea87"
+      },
+      "input": {
+        "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/hosted-run-43614661952/candidate/input/prompt.txt",
+        "bytes": 407,
+        "sha256": "5d70cb0689e244f868c32fb92600a3d96a0945fc4724be3d924952a2e8b252db"
+      },
+      "skills": {
+        "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/hosted-run-43614661952/candidate/skills/adk-adr-writer/SKILL.md",
+        "bytes": 3399,
+        "sha256": "a21c9d9d2fd3aaf1e759e28c0353139a1fee67c2ea1e790e1fc882a54f0c60d4"
+      },
+      "work": {
+        "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/hosted-run-43614661952/candidate/work/docs/ADR-021.md",
+        "bytes": 379,
+        "sha256": "6a6249b2f8df6c2a8cbea872f13319dd42cb07779bea6e204bfd614f19144359"
+      }
+    }
+  },
+  "preparation_observed": {
+    "official_tool_archive_identities": [
+      {
+        "url": "https://github.com/anomalyco/opencode/releases/download/v2.3.0/opencode-linux-x64.tar.gz",
+        "archive_sha256": "fc0f81522aceeabac47693d88389efa2bc517ce74c2c38fd6967819fcc6e4d3b",
+        "archive_bytes": 121569810,
+        "extracted_members": [
+          "opencode"
+        ]
+      },
+      {
+        "url": "https://github.com/ollama/ollama/releases/download/v0.40.16/ollama-linux-amd64.tar.zst",
+        "archive_sha256": "87bfafb2acbc89b2e6a1be0a9043de6aa75fb450696f86bc426e65fc448f788d",
+        "archive_bytes": 1545767640,
+        "extracted_members": [
+          "bin/ollama",
+          "lib/ollama/CPP_HTTPLIB_LICENSE",
+          "lib/ollama/DLPACK_LICENSE",
+          "lib/ollama/FMT_LICENSE",
+          "lib/ollama/GO_LICENSE",
+          "lib/ollama/LLAMA_CPP_LICENSE",
+          "lib/ollama/LLAMA_CPP_VENDORS_LICENSE",
+          "lib/ollama/MLX_C_LICENSE",
+          "lib/ollama/MLX_LICENSE",
+          "lib/ollama/PICOJSON_LICENSE",
+          "lib/ollama/XGRAMMAR_LICENSE",
+          "lib/ollama/XGRAMMAR_NOTICE",
+          "lib/ollama/libggml-base.so",
+          "lib/ollama/libggml-base.so.0",
+          "lib/ollama/libggml-base.so.0.29.0",
+          "lib/ollama/libggml-cpu-alderlake.so",
+          "lib/ollama/libggml-cpu-cannonlake.so",
+          "lib/ollama/libggml-cpu-cascadelake.so",
+          "lib/ollama/libggml-cpu-cooperlake.so",
+          "lib/ollama/libggml-cpu-haswell.so",
+          "lib/ollama/libggml-cpu-icelake.so",
+          "lib/ollama/libggml-cpu-ivybridge.so",
+          "lib/ollama/libggml-cpu-piledriver.so",
+          "lib/ollama/libggml-cpu-sandybridge.so",
+          "lib/ollama/libggml-cpu-sapphirerapids.so",
+          "lib/ollama/libggml-cpu-skylakex.so",
+          "lib/ollama/libggml-cpu-sse42.so",
+          "lib/ollama/libggml-cpu-x64.so",
+          "lib/ollama/libggml-cpu-zen4.so",
+          "lib/ollama/libggml.so",
+          "lib/ollama/libggml.so.0",
+          "lib/ollama/libggml.so.0.29.0",
+          "lib/ollama/libgomp.so.1",
+          "lib/ollama/libgomp.so.1.0.0",
+          "lib/ollama/libllama-common.so",
+          "lib/ollama/libllama-common.so.0",
+          "lib/ollama/libllama-common.so.0.9.0",
+          "lib/ollama/libllama-quantize-impl.so",
+          "lib/ollama/libllama-server-impl.so",
+          "lib/ollama/libllama.so",
+          "lib/ollama/libllama.so.0",
+          "lib/ollama/libllama.so.0.9.0",
+          "lib/ollama/libmtmd.so",
+          "lib/ollama/libmtmd.so.0",
+          "lib/ollama/libmtmd.so.0.9.0",
+          "lib/ollama/llama-server"
+        ]
+      }
+    ],
+    "runner": {
+      "ImageOS": "ubuntu24",
+      "ImageVersion": "20261111.370.1",
+      "RUNNER_OS": "Linux",
+      "RUNNER_ARCH": "X64",
+      "GITHUB_REPOSITORY": "jiying2007/agent-dev-kit",
+      "GITHUB_SHA": "b8815263a31ee3b004c2e7e9eee564fe8a35dfc8",
+      "GITHUB_RUN_ID": "43614661952",
+      "GITHUB_RUN_ATTEMPT": "1"
+    },
+    "cpu_count": 4,
+    "image": {
+      "base_tag": "docker.io/library/python:3.12-slim-bookworm",
+      "base_repository_digest": "python@sha256:935c3c5b12357a7e10caa9c1e6ca5692344d97cf229832ef584be2cec9fc03df",
+      "amd64_manifest_digest": "sha256:0f086103b026048cc50cb5da25ec435c023c5241a83fc44daea593377abc61c4",
+      "base_image_id": "sha256:313cf8f190a1abab00472c1f0c950c10486c22114bcd8aef2a8198fb587a6d18",
+      "final_image_id": "sha256:18349bb25c5c076218764ab20f3cf22fd87d2a0fa7dec22c87bfff08d491e674",
+      "dockerfile_sha256": "69d38b17be42a9f23839dc6465975a95e714e1918fdd3ffadfcd8f2823a50274",
+      "frozen_at": "2026-11-14T16:16:54.059522+00:00"
+    },
+    "image_digests_and_inspect_crosschecked": true,
+    "model_pull_jsonl_rows": 111,
+    "model_pull_terminal_status": "success",
+    "model_pull_errors": [],
+    "native_model_metadata": {
+      "name": "qwen3:1.7b",
+      "model": "qwen3:1.7b",
+      "modified_at": "2026-11-14T16:17:03.400455515Z",
+      "size": 1359293444,
+      "digest": "8f68893c685c3ddff2aa3fffce2aa60a30bb2da65ca488b61fff134a4d1730e7",
+      "details": {
+        "parent_model": "",
+        "format": "gguf",
+        "family": "qwen3",
+        "families": [
+          "qwen3"
+        ],
+        "parameter_size": "2.0B",
+        "quantization_level": "Q4_K_M",
+        "context_length": 40960,
+        "embedding_length": 2048,
+        "runner": "ggml"
+      },
+      "capabilities": [
+        "completion",
+        "tools",
+        "thinking"
+      ]
+    },
+    "model_metadata_file": {
+      "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/hosted-run-43614661952/prepare-records/model.json",
+      "bytes": 550,
+      "sha256": "f375168bc7fb57a500e326b1a300eb76f6399be2d360a1bf484d9a7fe21a8d7e"
+    },
+    "model_digest_observed": "8f68893c685c3ddff2aa3fffce2aa60a30bb2da65ca488b61fff134a4d1730e7",
+    "ollama_version": {
+      "version": "0.40.16"
+    },
+    "observed_http_endpoints": [
+      {
+        "method": "GET",
+        "path": "/api/version"
+      },
+      {
+        "method": "POST",
+        "path": "/api/pull"
+      },
+      {
+        "method": "GET",
+        "path": "/api/tags"
+      },
+      {
+        "method": "POST",
+        "path": "/api/show"
+      }
+    ],
+    "prepare_container": {
+      "label": "model-prepare",
+      "mode": "prepare",
+      "container_id": "7f67ab3a2e1df3dd5c2ba4c76debd575964ddf61fb0521605bc079cf47b9a301",
+      "image_id": "sha256:18349bb25c5c076218764ab20f3cf22fd87d2a0fa7dec22c87bfff08d491e674",
+      "network": "bridge",
+      "budget_seconds": 540,
+      "timed_out": false,
+      "state": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-11-14T16:16:54.17758088Z",
+        "FinishedAt": "2026-11-14T16:17:03.503630623Z"
+      },
+      "observed_terminated": true,
+      "finished_observation": "2026-11-14T16:17:04.730020+00:00",
+      "actual_container_seconds": 9.32605,
+      "termination_observation_seconds": 10.572225257
+    },
+    "ollama_stop": {
+      "at": "2026-11-14T16:17:03.489217+00:00",
+      "exit_code": -9
+    },
+    "container_remove_command_exit": 0,
+    "container_remove_id_matches": true,
+    "cleanup": {
+      "remaining_containers": [],
+      "failures": []
+    },
+    "preparation_network": "bridge as authorized for public model download; task network-none qualification did not execute"
+  },
+  "blocking_failure": {
+    "raw_error": "Unexpected symlink in data: /home/runner/work/_temp/hosted-task-pilot-20261114/models/manifests-v2/ollama.com/library/qwen3/1.7b",
+    "phase": "host model inventory after prepare container stopped/removed, before assigning runtime model digest or writing frozen-runtime",
+    "observed_symlink_path": "models/manifests-v2/ollama.com/library/qwen3/1.7b",
+    "symlink_target_available": false,
+    "symlink_target_safety": "unverified; target/model tree is excluded from the artifact",
+    "summary_model_digest": "unavailable",
+    "interpretation": "A genuine digest is already present in native model.json. The summary value reflects the incomplete inventory/freeze path and must not be presented as a failed download or absence of observed metadata.",
+    "frozen_runtime_present": false,
+    "frozen_dependencies_present": false
+  },
+  "task_execution_review": {
+    "pilot_task_cli_invocations": 0,
+    "pilot_model_inference": "not-run",
+    "model_runs_zero_corroborated": true,
+    "basis": [
+      "Only the prepare container appears in preserved actual Docker command/state records.",
+      "Its mounted C2 prepare mode calls version/pull/tags/show and returns; no task or generation endpoint is present in the original request log.",
+      "Host C2 run() rejects inventory before both preflight containers, attempt registration, or run_condition().",
+      "No task-start, attempt, preflight, condition records, recovery or session export exists; summary and both untouched work hashes agree."
+    ],
+    "baseline": "not-run",
+    "candidate": "not-run",
+    "task_network_none_preflight": "not-run",
+    "opencode_native_config_acceptance": "not-run",
+    "native_skill_load": "not-run",
+    "native_tool_or_model_event_coverage": "not-run",
+    "native_session_export": "not-run",
+    "usage_measurement": "not-run; no numeric token/cost record is synthesized",
+    "task_grading_by_this_reviewer": "not-run; root owns independent existing grade-task invocation",
+    "work_files": "both remain exactly the initial 379-byte ADR; not model-created task outputs"
+  },
+  "cannot_establish": [
+    "Successful original development task execution or actual native Skill exposure.",
+    "Native OpenCode configuration/session acceptance or complete native tool/model/usage coverage.",
+    "Full model content inventory/digest freeze, model symlink target identity or containment.",
+    "Both task containers network-none/HOME/mount/read-only preflight qualification.",
+    "Model performance, token/cost savings, paired A/B benefit or broader T6 completion.",
+    "Independent byte-level rehash of excluded tool archives, model weights, private native state or unsanitized log."
+  ],
+  "source_evidence": [
+    {
+      "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/hosted-run-terminal.json",
+      "bytes": 17910,
+      "sha256": "96771665476822be8c702a972575a4baab02984bdd49943c5e3694a3b0534cab"
+    },
+    {
+      "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/hosted-run-43614661952-api-reviewed.json",
+      "bytes": 1698,
+      "sha256": "5c69fdaf31b08b093a5929334adf1fbf4e5c191d59014b23db34626fcb45ed75"
+    },
+    {
+      "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/hosted-run-job.log",
+      "bytes": 43966,
+      "sha256": "03e6c7f9a95ddcc277bee3bb94edb162aa0ecad6d5fb9a6826194d8e8d7da852"
+    }
+  ],
+  "published_file_bindings": [
+    {
+      "path": "baseline/config/opencode.json",
+      "bytes": 4143,
+      "sha256": "7411cefff349fab60439f9f4d0260216a19cc48a7ec9c2c57770e43735feea87"
+    },
+    {
+      "path": "baseline/input/prompt.txt",
+      "bytes": 407,
+      "sha256": "5d70cb0689e244f868c32fb92600a3d96a0945fc4724be3d924952a2e8b252db"
+    },
+    {
+      "path": "baseline/skills/adk-adr-writer/SKILL.md",
+      "bytes": 2334,
+      "sha256": "e0672708e80c0636abaa812fa6be8d81d7b9f062a62e322b505c7f7d07c4e215"
+    },
+    {
+      "path": "baseline/work/docs/ADR-021.md",
+      "bytes": 379,
+      "sha256": "6a6249b2f8df6c2a8cbea872f13319dd42cb07779bea6e204bfd614f19144359"
+    },
+    {
+      "path": "bootstrap-status.json",
+      "bytes": 826,
+      "sha256": "acf6edac5da847ae1329dbaa6409634b28a77d48297703155b637bc18a91f344"
+    },
+    {
+      "path": "candidate/config/opencode.json",
+      "bytes": 4143,
+      "sha256": "7411cefff349fab60439f9f4d0260216a19cc48a7ec9c2c57770e43735feea87"
+    },
+    {
+      "path": "candidate/input/prompt.txt",
+      "bytes": 407,
+      "sha256": "5d70cb0689e244f868c32fb92600a3d96a0945fc4724be3d924952a2e8b252db"
+    },
+    {
+      "path": "candidate/skills/adk-adr-writer/SKILL.md",
+      "bytes": 3399,
+      "sha256": "a21c9d9d2fd3aaf1e759e28c0353139a1fee67c2ea1e790e1fc882a54f0c60d4"
+    },
+    {
+      "path": "candidate/work/docs/ADR-021.md",
+      "bytes": 379,
+      "sha256": "6a6249b2f8df6c2a8cbea872f13319dd42cb07779bea6e204bfd614f19144359"
+    },
+    {
+      "path": "evidence/Dockerfile",
+      "bytes": 451,
+      "sha256": "69d38b17be42a9f23839dc6465975a95e714e1918fdd3ffadfcd8f2823a50274"
+    },
+    {
+      "path": "evidence/commands/base-inspect.json",
+      "bytes": 358,
+      "sha256": "0586422480d589ec12504e97d81306e72ff55e6178eb8d50c54864df2e6b0cc3"
+    },
+    {
+      "path": "evidence/commands/base-inspect.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/commands/base-inspect.stdout",
+      "bytes": 2819,
+      "sha256": "888582f9214277913a3c8bd329663517e9a76560eeca82f3d77e2c8cdcc2e62e"
+    },
+    {
+      "path": "evidence/commands/base-manifest.json",
+      "bytes": 423,
+      "sha256": "2d1d874c584b4a236a9f133ae6aced7761f27f764e041d6aa664293aabba06bc"
+    },
+    {
+      "path": "evidence/commands/base-manifest.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/commands/base-manifest.stdout",
+      "bytes": 6546,
+      "sha256": "935c3c5b12357a7e10caa9c1e6ca5692344d97cf229832ef584be2cec9fc03df"
+    },
+    {
+      "path": "evidence/commands/base-pull.json",
+      "bytes": 378,
+      "sha256": "ee39c6b6aeece0381bea2a3bdb6d3800410ab670a13e622b45231a49bad3604f"
+    },
+    {
+      "path": "evidence/commands/base-pull.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/commands/base-pull.stdout",
+      "bytes": 729,
+      "sha256": "ccd98fb2eb59173678acf3b48bc3179905fd71c15ac8ee6b300127c5d2540f64"
+    },
+    {
+      "path": "evidence/commands/baseline-export.json",
+      "bytes": 518,
+      "sha256": "17392824e5782051512bbfab6c9258e8a2491e4e14f58916b6b94bca09b6ed63"
+    },
+    {
+      "path": "evidence/commands/baseline-export.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/commands/baseline-export.stdout",
+      "bytes": 15994,
+      "sha256": "9652e25ba9ed6fe5215ca05cbf1166947fef49a95aaabf61283358f3ac0cc95d"
+    },
+    {
+      "path": "evidence/commands/baseline-source.json",
+      "bytes": 452,
+      "sha256": "ac49a69a30658d087a003d361f45ae5982f62dfe68b48f1f93f05b94d3c9acc3"
+    },
+    {
+      "path": "evidence/commands/baseline-source.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/commands/baseline-source.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/commands/candidate-export.json",
+      "bytes": 519,
+      "sha256": "532e64cf6c7ad13316be26687f91cf548764bd3910fa23ea72c61009627923e2"
+    },
+    {
+      "path": "evidence/commands/candidate-export.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/commands/candidate-export.stdout",
+      "bytes": 15995,
+      "sha256": "8151b1b4ad248bb4d3b4e092ad583639f2d4c37cf24622b33234f335d32fa2f0"
+    },
+    {
+      "path": "evidence/commands/candidate-source.json",
+      "bytes": 453,
+      "sha256": "cdab7a8135f67f464a01074a4f0a0bc8ed74dd74c439c24638f93d6a821a24d0"
+    },
+    {
+      "path": "evidence/commands/candidate-source.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/commands/candidate-source.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/commands/docker-version.json",
+      "bytes": 327,
+      "sha256": "f47db06311dd3752b741b9cc4a3fc70f2842dbddcf06b4e84bb29cf5fc0ffa38"
+    },
+    {
+      "path": "evidence/commands/docker-version.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/commands/docker-version.stdout",
+      "bytes": 1078,
+      "sha256": "1647560e301abf68c6e094ab63fc046cd6fd4bedf77df30597f1cf7d14438bc0"
+    },
+    {
+      "path": "evidence/commands/image-build.json",
+      "bytes": 479,
+      "sha256": "cacbf273f2cd9c9a0d503d84b858e2d1d74ba0ee33f7eb6dd13baa2142be8315"
+    },
+    {
+      "path": "evidence/commands/image-build.stderr",
+      "bytes": 2087,
+      "sha256": "d3c90323e33c568b37f2889e21844b0523016ce09c4cb66f18136b86ecea193e"
+    },
+    {
+      "path": "evidence/commands/image-build.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/commands/image-inspect.json",
+      "bytes": 341,
+      "sha256": "65c679435be2434174506029cf4b1b8588b6c1ae6aa92a13cddf614ddeb0d932"
+    },
+    {
+      "path": "evidence/commands/image-inspect.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/commands/image-inspect.stdout",
+      "bytes": 3036,
+      "sha256": "335ae6c52bcc5bd3e352d7f04ff90af292f34ac9a426a8ee5515b19603eddf53"
+    },
+    {
+      "path": "evidence/commands/model-prepare-container-log.json",
+      "bytes": 382,
+      "sha256": "cb3e2d391b992f2ca6faf6ecc3ca4c84745e2ff0d00209b56eda91454b6727bf"
+    },
+    {
+      "path": "evidence/commands/model-prepare-container-log.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/commands/model-prepare-container-log.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/commands/model-prepare-create.json",
+      "bytes": 1515,
+      "sha256": "9fb105c0eaa51983ac283e4e8c92a5fe05c92e84ba5b40ff8040222cfa362ea3"
+    },
+    {
+      "path": "evidence/commands/model-prepare-create.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/commands/model-prepare-create.stdout",
+      "bytes": 65,
+      "sha256": "2403ecf4afcf0c7e899bcf99d19dfcde31b6bd3025553a3888d524366a49ee9a"
+    },
+    {
+      "path": "evidence/commands/model-prepare-created.json",
+      "bytes": 365,
+      "sha256": "86feb4e39d4de2743480dc963be67a7d078cdb10d9674ef04e708209de2eac14"
+    },
+    {
+      "path": "evidence/commands/model-prepare-created.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/commands/model-prepare-created.stdout",
+      "bytes": 10227,
+      "sha256": "af0225fd863d64fb3922b6a7094541974716d6c967c8114ca75a2f43ced17bcb"
+    },
+    {
+      "path": "evidence/commands/model-prepare-remove.json",
+      "bytes": 359,
+      "sha256": "d203ddcc6cef8f7b6e55a4ef056947eaf8ad8deaed1589212cd68b7535abeccd"
+    },
+    {
+      "path": "evidence/commands/model-prepare-remove.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/commands/model-prepare-remove.stdout",
+      "bytes": 65,
+      "sha256": "2403ecf4afcf0c7e899bcf99d19dfcde31b6bd3025553a3888d524366a49ee9a"
+    },
+    {
+      "path": "evidence/commands/model-prepare-start.json",
+      "bytes": 363,
+      "sha256": "939358183175f4a8c66dbdbcaf50d8573c6508cc01f79580343977089a9b3c79"
+    },
+    {
+      "path": "evidence/commands/model-prepare-start.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/commands/model-prepare-start.stdout",
+      "bytes": 65,
+      "sha256": "2403ecf4afcf0c7e899bcf99d19dfcde31b6bd3025553a3888d524366a49ee9a"
+    },
+    {
+      "path": "evidence/commands/model-prepare-stopped.json",
+      "bytes": 366,
+      "sha256": "bee1564ce49b8a41768b9b656fde1dccb749b96b533b6c1b4b7ce8f9928777a4"
+    },
+    {
+      "path": "evidence/commands/model-prepare-stopped.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/commands/model-prepare-stopped.stdout",
+      "bytes": 10787,
+      "sha256": "019ed67f9e4cf009a36673b262911ba592faed5ee8f39c8c485963993d45552f"
+    },
+    {
+      "path": "evidence/commands/model-prepare-wait.json",
+      "bytes": 377,
+      "sha256": "a6509f6634e457b6c1b4c9b41e22e02ba196d560c12b4628aee2ccfa4ff5b598"
+    },
+    {
+      "path": "evidence/commands/model-prepare-wait.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/commands/model-prepare-wait.stdout",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "evidence/commands/ollama-download.json",
+      "bytes": 641,
+      "sha256": "07503b36e3aa22a3d91c7cd04ec7263e6dd15a8dac1bfa2d99a9320c07f6e238"
+    },
+    {
+      "path": "evidence/commands/ollama-download.stderr",
+      "bytes": 792,
+      "sha256": "930023a349a637abfbb1dc2e8928407921206b96063e71f864fcaa2bb69ede7f"
+    },
+    {
+      "path": "evidence/commands/ollama-download.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/commands/opencode-download.json",
+      "bytes": 645,
+      "sha256": "a789ba388fe473f2c17c3b23e7342be49371250e4d1b831b156937a4d32098db"
+    },
+    {
+      "path": "evidence/commands/opencode-download.stderr",
+      "bytes": 397,
+      "sha256": "db0cd188d576b1d3f4259a4ea725a481e24f81b0588c98a5956eb1e12c46f31b"
+    },
+    {
+      "path": "evidence/commands/opencode-download.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/commands/platform-inspect.json",
+      "bytes": 411,
+      "sha256": "dc74c2874d05f4024e8e798de65993379bf3a14a27e39d03785d10141badc8d0"
+    },
+    {
+      "path": "evidence/commands/platform-inspect.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/commands/platform-inspect.stdout",
+      "bytes": 2913,
+      "sha256": "a78d53a482a88b643e4f2de657310a2f526c4b08213d2e6df67714406d66fafa"
+    },
+    {
+      "path": "evidence/commands/platform-pull.json",
+      "bytes": 431,
+      "sha256": "3268129126bfa2818e96a581fad3d15f5f8f8c05b75996eefe20022f346ec0b4"
+    },
+    {
+      "path": "evidence/commands/platform-pull.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/commands/platform-pull.stdout",
+      "bytes": 417,
+      "sha256": "b6d0c0fc0d338a7fb8f8765c02d364382f1fa46f958b23c459aaad76f80cbaa2"
+    },
+    {
+      "path": "evidence/commands/source-head.json",
+      "bytes": 305,
+      "sha256": "ea5c70e860d810d1ffd7e12b2d59a99fbde2158e2dd49acf58048a13a207909f"
+    },
+    {
+      "path": "evidence/commands/source-head.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/commands/source-head.stdout",
+      "bytes": 41,
+      "sha256": "4f9d8e2128478f711db7add5353afa62d562d1e11ed9fe7ca0f026260424b0e9"
+    },
+    {
+      "path": "evidence/frozen-inputs.json",
+      "bytes": 1929,
+      "sha256": "fc41c1c76cb077034080d46beb74d2e5a78bad3ec166a37ce2e77f024dcd07cc"
+    },
+    {
+      "path": "evidence/image-identity.json",
+      "bytes": 607,
+      "sha256": "2df221db22a16da6ae4b3bc7e39705853ed3dea007dc41b1846dcd2ce91751ba"
+    },
+    {
+      "path": "evidence/model-prepare-result.json",
+      "bytes": 784,
+      "sha256": "061e420e90dab67367398074e0699f1bf8285c377527c99aae33e7624e32af1f"
+    },
+    {
+      "path": "evidence/native-module.json",
+      "bytes": 238,
+      "sha256": "a19ea8967385534245e5aead609e8fffb13422ed3ca2fb94645dc17389ba945c"
+    },
+    {
+      "path": "evidence/ollama-asset.json",
+      "bytes": 1940,
+      "sha256": "9ca0a6402cea6850a854876f58541cc7b70a7918d5331ae78488f29449909fdf"
+    },
+    {
+      "path": "evidence/opencode-asset.json",
+      "bytes": 267,
+      "sha256": "38db058b6bca31945af74992ea8aae347bd5a5fe2961381956a3774b4386a5ec"
+    },
+    {
+      "path": "evidence/resources.json",
+      "bytes": 2120,
+      "sha256": "9065dea6f2ef9f2deaf1b38d7c3b39ed03395d7b5c937e5600216046be4cb5bc"
+    },
+    {
+      "path": "evidence/summary.json",
+      "bytes": 787,
+      "sha256": "751ef2e4949311e22a3e6c2fedfa6644ef67e47dcbd0cbcc1de2c5d920a9a821"
+    },
+    {
+      "path": "manifest.json",
+      "bytes": 30768,
+      "sha256": "3fa240bac13be5d0a67db998033b38ac008ff9648fb2ce92242589d605533598"
+    },
+    {
+      "path": "prepare-records/environment.json",
+      "bytes": 848,
+      "sha256": "dba68d470e8cc10fdac495ba118a1f13f1c9e52a6a943319573f02562a18fd27"
+    },
+    {
+      "path": "prepare-records/model-pull-command.json",
+      "bytes": 184,
+      "sha256": "030eed26957b05ce5ad21a5c07bcbfd70b0d38b254c7db2f8ef23719a77de27f"
+    },
+    {
+      "path": "prepare-records/model-show.json",
+      "bytes": 28950,
+      "sha256": "e09d88f6b4b5619a72e9f8281a403acb9d1c507d2c299a66c4905c4c0f6a3342"
+    },
+    {
+      "path": "prepare-records/model.json",
+      "bytes": 550,
+      "sha256": "f375168bc7fb57a500e326b1a300eb76f6399be2d360a1bf484d9a7fe21a8d7e"
+    },
+    {
+      "path": "prepare-records/raw/model-pull.jsonl",
+      "bytes": 16868,
+      "sha256": "a87ffe7639a8cb735d31e3f743f9247a4f2b2d6a1c4915a9ce30cfce4c2af425"
+    },
+    {
+      "path": "prepare-records/raw/ollama-server.sanitized.log",
+      "bytes": 3058,
+      "sha256": "7e6f074dbb5ef3049275afe21f7902f3593027de0aae89f7ba13b3460befed3c"
+    },
+    {
+      "path": "prepare-records/server-stop.json",
+      "bytes": 66,
+      "sha256": "8710a044ba32aec5362497be6453722f219d0da5a814bd0a1454b0f580282583"
+    },
+    {
+      "path": "prepare-records/server-version.json",
+      "bytes": 27,
+      "sha256": "08ffc5526032c62e4bda58db8ce3faf55fd3fb0fbe6168d074ebc127c74ad87f"
+    }
+  ],
+  "review_actions": {
+    "source_modified": false,
+    "artifact_modified": false,
+    "model_or_docker_started": false,
+    "workflow_dispatched_or_rerun": false,
+    "grader_executed": false,
+    "only_new_files": "Independent API review receipt and this artifact review JSON outside the extracted artifact directory."
+  }
+}
