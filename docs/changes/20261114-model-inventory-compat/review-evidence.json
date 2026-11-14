@@ -1,0 +1,141 @@
+{
+  "schema": "adk-review-evidence/v1",
+  "subject_id": "20261114-model-inventory-compat",
+  "scope": "source-change",
+  "owner": "leiwenjun",
+  "author_id": "ai/root/consumer_adoption_audit",
+  "reviewer": {
+    "id": "ai/root/task_protocol_audit",
+    "kind": "ai",
+    "independence": "independent"
+  },
+  "reviewed_at": "2026-11-14T16:45:34Z",
+  "evidence_completed_at": "2026-11-14T16:43:14.625027Z",
+  "verdicts": {
+    "spec": "pass",
+    "quality": "pass"
+  },
+  "findings": [
+    {
+      "id": "model-inventory-raw-link-lexical-cancellation",
+      "severity": "major",
+      "disposition": "fixed",
+      "reason": "An actual independent synthetic probe observed ELOOP while the draft admitted a lexically cancelled raw link. Canonical raw relative-target equality now rejects self-link, regular-file and detour ancestors. The actual RED had three failing subTests in one of 19 methods; the corresponding method passed in the final 36-method / 52-subTest GREEN. The original combined capture and missing pre-fix snapshot limitations are retained."
+    }
+  ],
+  "limitations": [
+    "Independent read-only AI review with declared, not authenticated, identity. No human or GitHub reviewer approval is claimed.",
+    "Exact reviewed source is 86710516da820dc112f8126298aa23ab5d2d502a, tree 4fae75d73e88141cdd8696a9fb377ad5c00fe8df. Full regression ran against this exact frozen worktree/index while local HEAD stayed at D; source drift was empty, and local HEAD was advanced only after the full run.",
+    "The review binds 15 source/fact/control files, seven staged receipts and 27 lossless wrapper members. This typed record and subsequent M3/M4 task status updates are root-authored transcriptions after review, not content represented as reviewed in advance.",
+    "RED originally captured a combined stream, not separate stdout/stderr. The complete pre-fix draft module snapshot was not captured. Neither missing original was fabricated or replaced by a new run.",
+    "The original hosted run 43614661952 remains a one-shot preparation failure with zero task inference. A native model API digest was observed, but full model-store freeze and both task conditions were not run. The original model tree and link target are unavailable.",
+    "No second hosted, Docker or model experiment is authorized or performed by this review. The new model inventory has deterministic fixture coverage, not a new native task qualification.",
+    "No native Skill-load, accepted OpenCode configuration, complete session/usage, A/B benefit, independent holdout or Token/cost/latency savings is established.",
+    "This source review does not merge main, change the immutable v11.3.1 release, move the execution branch or satisfy consumer native gates. The author-local pushed=false observation is distinct from root's normal review-branch synchronization."
+  ],
+  "policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+  "validator_sha256": {
+    "src/agent_dev_kit/review_evidence.py": "be4892f464496a29dbbb41ebb56c48984bf103d8eabe2ee6117bd583d1032c47",
+    "src/agent_dev_kit/strict_json.py": "72f06f4dcaebfed83bd1ae9876e38d4f7d82d8a1473b40b66beffb6338ee94a5",
+    "src/agent_dev_kit/readiness_evidence.py": "6fdfd5bea3ee097ac21d2b2ab469378c8c84f78856061b680ebb0c5f9d726778"
+  },
+  "target": {
+    "base_commit": "94da65553e163b34ac5a73c1aef07f228aacdcd5",
+    "head_commit": "86710516da820dc112f8126298aa23ab5d2d502a",
+    "original_patch_sha256": "4c41f5ae603958ad474a3c536513678914d9dbc2bcb696d1b74980a362ef0a11"
+  },
+  "sources": [
+    {
+      "base": "record",
+      "path": "requirements.md",
+      "sha256": "ffaab8ee265cb543d5fb971dde5a4a435955ffffd8aec24437ecdf90cd352e4d"
+    },
+    {
+      "base": "record",
+      "path": "design.md",
+      "sha256": "8b2af253b5e95389f2b33810a2086e85ecb2e82df25ea9ae12d64cd1971a20d1"
+    },
+    {
+      "base": "record",
+      "path": "evidence/original.patch",
+      "sha256": "4c41f5ae603958ad474a3c536513678914d9dbc2bcb696d1b74980a362ef0a11"
+    },
+    {
+      "base": "record",
+      "path": "evidence/source-bindings.json",
+      "sha256": "2441537dcd5b752da5bb2c2492a073726fb923b595078fd0099a1e8b3d781721"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/hosted_model_inventory.py",
+      "sha256": "4ceb390bb9b1fb019a006d910b7d5414b40d87038029238c7cd26b0d42b8d8b7"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/hosted_task_pilot.py",
+      "sha256": "d94999980ac02427d43afe55a657ba1120e8e9c471d9770b408c031287c3db78"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_hosted_model_inventory.py",
+      "sha256": "134958eabf7ac40d230e05ea25c0539ea7e804f4c2cb6dcd1c3608c9dfa1b229"
+    },
+    {
+      "base": "repository",
+      "path": ".github/workflows/opencode-task-pilot-once.yml",
+      "sha256": "cfbd9033d3b7933c0cd1c950179a3a651043b994b1ea782c60a623604679cd74"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/hosted_task_native.py",
+      "sha256": "1d53d5502a714137c5e3f2fbfd11a71e9e891e802da1f5bd4048fa4d6da7ebe8"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_hosted_task_pilot.py",
+      "sha256": "67b14e9ccf42b1e40ed1e58d1dd17cc403721d1a19ae86724245eadcbf25181b"
+    }
+  ],
+  "evidence": [
+    {
+      "base": "record",
+      "path": "verification.md",
+      "sha256": "ff6442bc3bae8cfce8e295897fc3b1b58bf9f6d980ea47956e08265ca8a5acb1"
+    },
+    {
+      "base": "record",
+      "path": "review-findings.md",
+      "sha256": "b801fd75fe82763059fd662eb3915ce36e97262024fd220b43397f7f72ed4780"
+    },
+    {
+      "base": "record",
+      "path": "evidence/author-validation.json",
+      "sha256": "b5ed6f6518c72ffb569271bc6d410fc132fd28b7b26f613639329ac7cce2ff57"
+    },
+    {
+      "base": "record",
+      "path": "evidence/cyclic-raw-link-red.json",
+      "sha256": "2778bd918ff0690d9a96192b76a42524efe6c108278150e8ff7e382107877e6d"
+    },
+    {
+      "base": "record",
+      "path": "evidence/full-regression.json",
+      "sha256": "dd69ef204fd827198847e10c91be09b9a763ba056711b354c46f42c634a8825e"
+    },
+    {
+      "base": "record",
+      "path": "evidence/official-diagnosis.json",
+      "sha256": "10b7872f740d022870b765d491deab5afaa5a007c2b97365ca27a5dab9efa64a"
+    },
+    {
+      "base": "record",
+      "path": "evidence/receipt-checks.json",
+      "sha256": "55a3e9a7d0f33e4c4277d2e05136ab396aae977b8462eba653438493302b68e7"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-review.json",
+      "sha256": "e3abd83869f2cb966d6f1f83d6c46d2d2fe0c102a4922954f7412c757d0ea72d"
+    }
+  ]
+}

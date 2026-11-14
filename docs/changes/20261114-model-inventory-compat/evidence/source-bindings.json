@@ -1,0 +1,87 @@
+{
+  "frozen_at": "2026-11-14T16:37:49.165369Z",
+  "base_commit": "94da65553e163b34ac5a73c1aef07f228aacdcd5",
+  "index_tree": "4fae75d73e88141cdd8696a9fb377ad5c00fe8df",
+  "original_patch_sha256": "4c41f5ae603958ad474a3c536513678914d9dbc2bcb696d1b74980a362ef0a11",
+  "files": {
+    "docs/changes/20261114-hosted-task-pilot/evidence/hosted-artifact-review.json": {
+      "sha256": "94d19b1e1ce983cd36eabb6a41a9ad0b153785b955218f7fa5ac97dbb799696f",
+      "bytes": 32986
+    },
+    "docs/changes/20261114-hosted-task-pilot/evidence/hosted-root-check.json": {
+      "sha256": "dde0fc51fae94e03274200f314d6e737b5f64294a93a1760200c9f7121801805",
+      "bytes": 2573
+    },
+    "docs/changes/20261114-hosted-task-pilot/result.md": {
+      "sha256": "2e570dbd1fba2c1e43d2b582970c65e995fca483a5694a8f20c3138638ea7763",
+      "bytes": 3531
+    },
+    "docs/changes/20261114-hosted-task-pilot/tasks.md": {
+      "sha256": "008f62c5dc083d503aa75c960fea4d00c54ef7f21180bc21d7d0cb1acccdc3d4",
+      "bytes": 2263
+    },
+    "docs/changes/20261114-model-inventory-compat/design.md": {
+      "sha256": "8b2af253b5e95389f2b33810a2086e85ecb2e82df25ea9ae12d64cd1971a20d1",
+      "bytes": 4163
+    },
+    "docs/changes/20261114-model-inventory-compat/evidence/cyclic-raw-link-red.json": {
+      "sha256": "2778bd918ff0690d9a96192b76a42524efe6c108278150e8ff7e382107877e6d",
+      "bytes": 2505
+    },
+    "docs/changes/20261114-model-inventory-compat/evidence/official-diagnosis.json": {
+      "sha256": "10b7872f740d022870b765d491deab5afaa5a007c2b97365ca27a5dab9efa64a",
+      "bytes": 1946
+    },
+    "docs/changes/20261114-model-inventory-compat/requirements.md": {
+      "sha256": "ffaab8ee265cb543d5fb971dde5a4a435955ffffd8aec24437ecdf90cd352e4d",
+      "bytes": 2094
+    },
+    "docs/changes/20261114-model-inventory-compat/tasks.md": {
+      "sha256": "eb085a218afa7d4ced03bf5de6c6303d498996c955740b10dfa53ba4890fc001",
+      "bytes": 1074
+    },
+    "src/agent_dev_kit/hosted_model_inventory.py": {
+      "sha256": "4ceb390bb9b1fb019a006d910b7d5414b40d87038029238c7cd26b0d42b8d8b7",
+      "bytes": 16991
+    },
+    "src/agent_dev_kit/hosted_task_pilot.py": {
+      "sha256": "d94999980ac02427d43afe55a657ba1120e8e9c471d9770b408c031287c3db78",
+      "bytes": 29640
+    },
+    "tests/test_hosted_model_inventory.py": {
+      "sha256": "134958eabf7ac40d230e05ea25c0539ea7e804f4c2cb6dcd1c3608c9dfa1b229",
+      "bytes": 15475
+    },
+    ".github/workflows/opencode-task-pilot-once.yml": {
+      "sha256": "cfbd9033d3b7933c0cd1c950179a3a651043b994b1ea782c60a623604679cd74",
+      "bytes": 6518
+    },
+    "src/agent_dev_kit/hosted_task_native.py": {
+      "sha256": "1d53d5502a714137c5e3f2fbfd11a71e9e891e802da1f5bd4048fa4d6da7ebe8",
+      "bytes": 24721
+    },
+    "tests/test_hosted_task_pilot.py": {
+      "sha256": "67b14e9ccf42b1e40ed1e58d1dd17cc403721d1a19ae86724245eadcbf25181b",
+      "bytes": 24160
+    }
+  },
+  "unchanged_c2_paths": [
+    ".github/workflows/opencode-task-pilot-once.yml",
+    "src/agent_dev_kit/hosted_task_native.py",
+    "tests/test_hosted_task_pilot.py"
+  ],
+  "prospective_diff_check": "pass",
+  "security_check": {
+    "schema_version": 1,
+    "status": "pass",
+    "failures": [],
+    "warnings": [],
+    "inventory_source": "git",
+    "files_scanned": 2099,
+    "scan_limit": 50000
+  },
+  "preliminary_format_correction": {
+    "observed": "new blank line at EOF in root-authored requirements.md and design.md",
+    "resolution": "removed only the extra trailing blank lines with apply_patch before this freeze; staged diff check passed"
+  }
+}

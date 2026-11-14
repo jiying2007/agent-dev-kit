@@ -1,0 +1,1883 @@
+diff --git a/docs/changes/20261114-hosted-task-pilot/evidence/hosted-artifact-review.json b/docs/changes/20261114-hosted-task-pilot/evidence/hosted-artifact-review.json
+new file mode 100644
+index 0000000..49f3992
+--- /dev/null
++++ b/docs/changes/20261114-hosted-task-pilot/evidence/hosted-artifact-review.json
+@@ -0,0 +1,860 @@
++{
++  "reviewer": "ai/root/runtime_continuation_audit",
++  "role": "independent read-only artifact reviewer; did not implement or execute this hosted run; did not run grade-task",
++  "reviewed_at": "2026-11-14T16:22:26.026203Z",
++  "verdict": "verified failure evidence; stopped after successful model preparation and before runtime freeze or either task",
++  "run_identity": {
++    "repository": "jiying2007/agent-dev-kit",
++    "run_id": 43614661952,
++    "job_id": 132506978963,
++    "artifact_id": 14121104537,
++    "event": "push",
++    "before": "c57f4f8a7983f52257c0587eb85881a006e6dc07",
++    "head": "b8815263a31ee3b004c2e7e9eee564fe8a35dfc8",
++    "tree": "cb856f4b51fbe10eeac71a396f7cb87ca55e407e",
++    "attempt": 1,
++    "run_conclusion": "failure",
++    "branch": "experiment/hosted-task-pilot-run-20261114",
++    "bootstrap": "success",
++    "artifact_upload": "success",
++    "fresh_read_only_github_api_verified": true,
++    "before_evidence": "PILOT_EVENT_BEFORE in original job log; frozen workflow predicate"
++  },
++  "source_bindings": [
++    {
++      "path": ".github/workflows/opencode-task-pilot-once.yml",
++      "sha256": "cfbd9033d3b7933c0cd1c950179a3a651043b994b1ea782c60a623604679cd74",
++      "bytes": 6518
++    },
++    {
++      "path": "src/agent_dev_kit/hosted_task_pilot.py",
++      "sha256": "d4fa94e26a9cb2c9578b3aacb649029822001948366d4e5bcb15fc91ed3e4952",
++      "bytes": 29581
++    },
++    {
++      "path": "src/agent_dev_kit/hosted_task_native.py",
++      "sha256": "1d53d5502a714137c5e3f2fbfd11a71e9e891e802da1f5bd4048fa4d6da7ebe8",
++      "bytes": 24721
++    },
++    {
++      "path": "docs/changes/20261114-hosted-task-pilot/requirements.md",
++      "sha256": "b6c1e168afc1ed18816eda9bf0e7bb2e4eb6a61f7e5f8ab5f6918bc5b1dafb21",
++      "bytes": 7401
++    },
++    {
++      "path": "docs/changes/20261114-hosted-task-pilot/design.md",
++      "sha256": "97233ebef1179bef45bb069b04fbf3217d3095eead6ba9ecd76b203cb703e906",
++      "bytes": 6898
++    }
++  ],
++  "artifact_integrity": {
++    "archive": {
++      "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/hosted-task-pilot-43614661952.zip",
++      "bytes": 63998,
++      "sha256": "72d3c3c86939d14ba14a36ef1bb1d2475ec93b0ac5573933833a8dc6161c2f01"
++    },
++    "zip_crc_pass": true,
++    "zip_members": 93,
++    "uncompressed_bytes": 191322,
++    "no_duplicate_absolute_traversal_backslash_or_symlink_members": true,
++    "all_extracted_files_byte_identical_to_zip": true,
++    "manifest_members": 91,
++    "manifest_all_sizes_and_digests_match": true,
++    "raw_byte_identical_member_count": 90,
++    "independently_bound_non_manifest_files": [
++      {
++        "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/hosted-run-43614661952/manifest.json",
++        "bytes": 30768,
++        "sha256": "3fa240bac13be5d0a67db998033b38ac008ff9648fb2ce92242589d605533598"
++      },
++      {
++        "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/hosted-run-43614661952/bootstrap-status.json",
++        "bytes": 826,
++        "sha256": "acf6edac5da847ae1329dbaa6409634b28a77d48297703155b637bc18a91f344"
++      }
++    ],
++    "unexpected_extra_files": [],
++    "missing_manifest_members": [],
++    "bootstrap_summary_hash_matches": true
++  },
++  "publication_review": {
++    "safe_as_failure_evidence_deliverable": true,
++    "basis": "All members are expected UTF-8 evidence/config/Skill/initial-work files; CRC, path/type, exact file-set and digest checks pass; no published model weights, installers, private home, native data/state/cache, repository checkout, credential directory or socket; known credential-pattern scan found no matches.",
++    "scope_limit": "Safety verdict covers this exact ZIP and inspected evidence contents; it is not a universal secret-detection guarantee or native-runtime qualification.",
++    "known_sensitive_patterns_checked": 7,
++    "sensitive_pattern_matches": [],
++    "excluded_sensitive_files": [],
++    "redactions": [
++      {
++        "path": "prepare-records/raw/ollama-server.sanitized.log",
++        "sha256": "7e6f074dbb5ef3049275afe21f7902f3593027de0aae89f7ba13b3460befed3c",
++        "bytes": 3058,
++        "raw_sha256": "5d39c23ad22f874511e46a584b5133efcb86b50a22326ecdfd50922a06f67f31",
++        "removed_identity_line_numbers": [
++          1,
++          2,
++          4
++        ],
++        "byte_identical_raw": false
++      }
++    ],
++    "original_redacted_log_available": false,
++    "raw_log_limitation": "Raw digest and removed line numbers are producer records; published sanitized bytes are independently verified, but the private original identity lines are unavailable and were not reconstructed."
++  },
++  "input_bindings": {
++    "baseline": {
++      "config": {
++        "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/hosted-run-43614661952/baseline/config/opencode.json",
++        "bytes": 4143,
++        "sha256": "7411cefff349fab60439f9f4d0260216a19cc48a7ec9c2c57770e43735feea87"
++      },
++      "input": {
++        "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/hosted-run-43614661952/baseline/input/prompt.txt",
++        "bytes": 407,
++        "sha256": "5d70cb0689e244f868c32fb92600a3d96a0945fc4724be3d924952a2e8b252db"
++      },
++      "skills": {
++        "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/hosted-run-43614661952/baseline/skills/adk-adr-writer/SKILL.md",
++        "bytes": 2334,
++        "sha256": "e0672708e80c0636abaa812fa6be8d81d7b9f062a62e322b505c7f7d07c4e215"
++      },
++      "work": {
++        "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/hosted-run-43614661952/baseline/work/docs/ADR-021.md",
++        "bytes": 379,
++        "sha256": "6a6249b2f8df6c2a8cbea872f13319dd42cb07779bea6e204bfd614f19144359"
++      }
++    },
++    "candidate": {
++      "config": {
++        "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/hosted-run-43614661952/candidate/config/opencode.json",
++        "bytes": 4143,
++        "sha256": "7411cefff349fab60439f9f4d0260216a19cc48a7ec9c2c57770e43735feea87"
++      },
++      "input": {
++        "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/hosted-run-43614661952/candidate/input/prompt.txt",
++        "bytes": 407,
++        "sha256": "5d70cb0689e244f868c32fb92600a3d96a0945fc4724be3d924952a2e8b252db"
++      },
++      "skills": {
++        "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/hosted-run-43614661952/candidate/skills/adk-adr-writer/SKILL.md",
++        "bytes": 3399,
++        "sha256": "a21c9d9d2fd3aaf1e759e28c0353139a1fee67c2ea1e790e1fc882a54f0c60d4"
++      },
++      "work": {
++        "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/hosted-run-43614661952/candidate/work/docs/ADR-021.md",
++        "bytes": 379,
++        "sha256": "6a6249b2f8df6c2a8cbea872f13319dd42cb07779bea6e204bfd614f19144359"
++      }
++    }
++  },
++  "preparation_observed": {
++    "official_tool_archive_identities": [
++      {
++        "url": "https://github.com/anomalyco/opencode/releases/download/v2.3.0/opencode-linux-x64.tar.gz",
++        "archive_sha256": "fc0f81522aceeabac47693d88389efa2bc517ce74c2c38fd6967819fcc6e4d3b",
++        "archive_bytes": 121569810,
++        "extracted_members": [
++          "opencode"
++        ]
++      },
++      {
++        "url": "https://github.com/ollama/ollama/releases/download/v0.40.16/ollama-linux-amd64.tar.zst",
++        "archive_sha256": "87bfafb2acbc89b2e6a1be0a9043de6aa75fb450696f86bc426e65fc448f788d",
++        "archive_bytes": 1545767640,
++        "extracted_members": [
++          "bin/ollama",
++          "lib/ollama/CPP_HTTPLIB_LICENSE",
++          "lib/ollama/DLPACK_LICENSE",
++          "lib/ollama/FMT_LICENSE",
++          "lib/ollama/GO_LICENSE",
++          "lib/ollama/LLAMA_CPP_LICENSE",
++          "lib/ollama/LLAMA_CPP_VENDORS_LICENSE",
++          "lib/ollama/MLX_C_LICENSE",
++          "lib/ollama/MLX_LICENSE",
++          "lib/ollama/PICOJSON_LICENSE",
++          "lib/ollama/XGRAMMAR_LICENSE",
++          "lib/ollama/XGRAMMAR_NOTICE",
++          "lib/ollama/libggml-base.so",
++          "lib/ollama/libggml-base.so.0",
++          "lib/ollama/libggml-base.so.0.29.0",
++          "lib/ollama/libggml-cpu-alderlake.so",
++          "lib/ollama/libggml-cpu-cannonlake.so",
++          "lib/ollama/libggml-cpu-cascadelake.so",
++          "lib/ollama/libggml-cpu-cooperlake.so",
++          "lib/ollama/libggml-cpu-haswell.so",
++          "lib/ollama/libggml-cpu-icelake.so",
++          "lib/ollama/libggml-cpu-ivybridge.so",
++          "lib/ollama/libggml-cpu-piledriver.so",
++          "lib/ollama/libggml-cpu-sandybridge.so",
++          "lib/ollama/libggml-cpu-sapphirerapids.so",
++          "lib/ollama/libggml-cpu-skylakex.so",
++          "lib/ollama/libggml-cpu-sse42.so",
++          "lib/ollama/libggml-cpu-x64.so",
++          "lib/ollama/libggml-cpu-zen4.so",
++          "lib/ollama/libggml.so",
++          "lib/ollama/libggml.so.0",
++          "lib/ollama/libggml.so.0.29.0",
++          "lib/ollama/libgomp.so.1",
++          "lib/ollama/libgomp.so.1.0.0",
++          "lib/ollama/libllama-common.so",
++          "lib/ollama/libllama-common.so.0",
++          "lib/ollama/libllama-common.so.0.9.0",
++          "lib/ollama/libllama-quantize-impl.so",
++          "lib/ollama/libllama-server-impl.so",
++          "lib/ollama/libllama.so",
++          "lib/ollama/libllama.so.0",
++          "lib/ollama/libllama.so.0.9.0",
++          "lib/ollama/libmtmd.so",
++          "lib/ollama/libmtmd.so.0",
++          "lib/ollama/libmtmd.so.0.9.0",
++          "lib/ollama/llama-server"
++        ]
++      }
++    ],
++    "runner": {
++      "ImageOS": "ubuntu24",
++      "ImageVersion": "20261111.370.1",
++      "RUNNER_OS": "Linux",
++      "RUNNER_ARCH": "X64",
++      "GITHUB_REPOSITORY": "jiying2007/agent-dev-kit",
++      "GITHUB_SHA": "b8815263a31ee3b004c2e7e9eee564fe8a35dfc8",
++      "GITHUB_RUN_ID": "43614661952",
++      "GITHUB_RUN_ATTEMPT": "1"
++    },
++    "cpu_count": 4,
++    "image": {
++      "base_tag": "docker.io/library/python:3.12-slim-bookworm",
++      "base_repository_digest": "python@sha256:935c3c5b12357a7e10caa9c1e6ca5692344d97cf229832ef584be2cec9fc03df",
++      "amd64_manifest_digest": "sha256:0f086103b026048cc50cb5da25ec435c023c5241a83fc44daea593377abc61c4",
++      "base_image_id": "sha256:313cf8f190a1abab00472c1f0c950c10486c22114bcd8aef2a8198fb587a6d18",
++      "final_image_id": "sha256:18349bb25c5c076218764ab20f3cf22fd87d2a0fa7dec22c87bfff08d491e674",
++      "dockerfile_sha256": "69d38b17be42a9f23839dc6465975a95e714e1918fdd3ffadfcd8f2823a50274",
++      "frozen_at": "2026-11-14T16:16:54.059522+00:00"
++    },
++    "image_digests_and_inspect_crosschecked": true,
++    "model_pull_jsonl_rows": 111,
++    "model_pull_terminal_status": "success",
++    "model_pull_errors": [],
++    "native_model_metadata": {
++      "name": "qwen3:1.7b",
++      "model": "qwen3:1.7b",
++      "modified_at": "2026-11-14T16:17:03.400455515Z",
++      "size": 1359293444,
++      "digest": "8f68893c685c3ddff2aa3fffce2aa60a30bb2da65ca488b61fff134a4d1730e7",
++      "details": {
++        "parent_model": "",
++        "format": "gguf",
++        "family": "qwen3",
++        "families": [
++          "qwen3"
++        ],
++        "parameter_size": "2.0B",
++        "quantization_level": "Q4_K_M",
++        "context_length": 40960,
++        "embedding_length": 2048,
++        "runner": "ggml"
++      },
++      "capabilities": [
++        "completion",
++        "tools",
++        "thinking"
++      ]
++    },
++    "model_metadata_file": {
++      "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/hosted-run-43614661952/prepare-records/model.json",
++      "bytes": 550,
++      "sha256": "f375168bc7fb57a500e326b1a300eb76f6399be2d360a1bf484d9a7fe21a8d7e"
++    },
++    "model_digest_observed": "8f68893c685c3ddff2aa3fffce2aa60a30bb2da65ca488b61fff134a4d1730e7",
++    "ollama_version": {
++      "version": "0.40.16"
++    },
++    "observed_http_endpoints": [
++      {
++        "method": "GET",
++        "path": "/api/version"
++      },
++      {
++        "method": "POST",
++        "path": "/api/pull"
++      },
++      {
++        "method": "GET",
++        "path": "/api/tags"
++      },
++      {
++        "method": "POST",
++        "path": "/api/show"
++      }
++    ],
++    "prepare_container": {
++      "label": "model-prepare",
++      "mode": "prepare",
++      "container_id": "7f67ab3a2e1df3dd5c2ba4c76debd575964ddf61fb0521605bc079cf47b9a301",
++      "image_id": "sha256:18349bb25c5c076218764ab20f3cf22fd87d2a0fa7dec22c87bfff08d491e674",
++      "network": "bridge",
++      "budget_seconds": 540,
++      "timed_out": false,
++      "state": {
++        "Status": "exited",
++        "Running": false,
++        "Paused": false,
++        "Restarting": false,
++        "OOMKilled": false,
++        "Dead": false,
++        "Pid": 0,
++        "ExitCode": 0,
++        "Error": "",
++        "StartedAt": "2026-11-14T16:16:54.17758088Z",
++        "FinishedAt": "2026-11-14T16:17:03.503630623Z"
++      },
++      "observed_terminated": true,
++      "finished_observation": "2026-11-14T16:17:04.730020+00:00",
++      "actual_container_seconds": 9.32605,
++      "termination_observation_seconds": 10.572225257
++    },
++    "ollama_stop": {
++      "at": "2026-11-14T16:17:03.489217+00:00",
++      "exit_code": -9
++    },
++    "container_remove_command_exit": 0,
++    "container_remove_id_matches": true,
++    "cleanup": {
++      "remaining_containers": [],
++      "failures": []
++    },
++    "preparation_network": "bridge as authorized for public model download; task network-none qualification did not execute"
++  },
++  "blocking_failure": {
++    "raw_error": "Unexpected symlink in data: /home/runner/work/_temp/hosted-task-pilot-20261114/models/manifests-v2/ollama.com/library/qwen3/1.7b",
++    "phase": "host model inventory after prepare container stopped/removed, before assigning runtime model digest or writing frozen-runtime",
++    "observed_symlink_path": "models/manifests-v2/ollama.com/library/qwen3/1.7b",
++    "symlink_target_available": false,
++    "symlink_target_safety": "unverified; target/model tree is excluded from the artifact",
++    "summary_model_digest": "unavailable",
++    "interpretation": "A genuine digest is already present in native model.json. The summary value reflects the incomplete inventory/freeze path and must not be presented as a failed download or absence of observed metadata.",
++    "frozen_runtime_present": false,
++    "frozen_dependencies_present": false
++  },
++  "task_execution_review": {
++    "pilot_task_cli_invocations": 0,
++    "pilot_model_inference": "not-run",
++    "model_runs_zero_corroborated": true,
++    "basis": [
++      "Only the prepare container appears in preserved actual Docker command/state records.",
++      "Its mounted C2 prepare mode calls version/pull/tags/show and returns; no task or generation endpoint is present in the original request log.",
++      "Host C2 run() rejects inventory before both preflight containers, attempt registration, or run_condition().",
++      "No task-start, attempt, preflight, condition records, recovery or session export exists; summary and both untouched work hashes agree."
++    ],
++    "baseline": "not-run",
++    "candidate": "not-run",
++    "task_network_none_preflight": "not-run",
++    "opencode_native_config_acceptance": "not-run",
++    "native_skill_load": "not-run",
++    "native_tool_or_model_event_coverage": "not-run",
++    "native_session_export": "not-run",
++    "usage_measurement": "not-run; no numeric token/cost record is synthesized",
++    "task_grading_by_this_reviewer": "not-run; root owns independent existing grade-task invocation",
++    "work_files": "both remain exactly the initial 379-byte ADR; not model-created task outputs"
++  },
++  "cannot_establish": [
++    "Successful original development task execution or actual native Skill exposure.",
++    "Native OpenCode configuration/session acceptance or complete native tool/model/usage coverage.",
++    "Full model content inventory/digest freeze, model symlink target identity or containment.",
++    "Both task containers network-none/HOME/mount/read-only preflight qualification.",
++    "Model performance, token/cost savings, paired A/B benefit or broader T6 completion.",
++    "Independent byte-level rehash of excluded tool archives, model weights, private native state or unsanitized log."
++  ],
++  "source_evidence": [
++    {
++      "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/hosted-run-terminal.json",
++      "bytes": 17910,
++      "sha256": "96771665476822be8c702a972575a4baab02984bdd49943c5e3694a3b0534cab"
++    },
++    {
++      "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/hosted-run-43614661952-api-reviewed.json",
++      "bytes": 1698,
++      "sha256": "5c69fdaf31b08b093a5929334adf1fbf4e5c191d59014b23db34626fcb45ed75"
++    },
++    {
++      "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/hosted-run-job.log",
++      "bytes": 43966,
++      "sha256": "03e6c7f9a95ddcc277bee3bb94edb162aa0ecad6d5fb9a6826194d8e8d7da852"
++    }
++  ],
++  "published_file_bindings": [
++    {
++      "path": "baseline/config/opencode.json",
++      "bytes": 4143,
++      "sha256": "7411cefff349fab60439f9f4d0260216a19cc48a7ec9c2c57770e43735feea87"
++    },
++    {
++      "path": "baseline/input/prompt.txt",
++      "bytes": 407,
++      "sha256": "5d70cb0689e244f868c32fb92600a3d96a0945fc4724be3d924952a2e8b252db"
++    },
++    {
++      "path": "baseline/skills/adk-adr-writer/SKILL.md",
++      "bytes": 2334,
++      "sha256": "e0672708e80c0636abaa812fa6be8d81d7b9f062a62e322b505c7f7d07c4e215"
++    },
++    {
++      "path": "baseline/work/docs/ADR-021.md",
++      "bytes": 379,
++      "sha256": "6a6249b2f8df6c2a8cbea872f13319dd42cb07779bea6e204bfd614f19144359"
++    },
++    {
++      "path": "bootstrap-status.json",
++      "bytes": 826,
++      "sha256": "acf6edac5da847ae1329dbaa6409634b28a77d48297703155b637bc18a91f344"
++    },
++    {
++      "path": "candidate/config/opencode.json",
++      "bytes": 4143,
++      "sha256": "7411cefff349fab60439f9f4d0260216a19cc48a7ec9c2c57770e43735feea87"
++    },
++    {
++      "path": "candidate/input/prompt.txt",
++      "bytes": 407,
++      "sha256": "5d70cb0689e244f868c32fb92600a3d96a0945fc4724be3d924952a2e8b252db"
++    },
++    {
++      "path": "candidate/skills/adk-adr-writer/SKILL.md",
++      "bytes": 3399,
++      "sha256": "a21c9d9d2fd3aaf1e759e28c0353139a1fee67c2ea1e790e1fc882a54f0c60d4"
++    },
++    {
++      "path": "candidate/work/docs/ADR-021.md",
++      "bytes": 379,
++      "sha256": "6a6249b2f8df6c2a8cbea872f13319dd42cb07779bea6e204bfd614f19144359"
++    },
++    {
++      "path": "evidence/Dockerfile",
++      "bytes": 451,
++      "sha256": "69d38b17be42a9f23839dc6465975a95e714e1918fdd3ffadfcd8f2823a50274"
++    },
++    {
++      "path": "evidence/commands/base-inspect.json",
++      "bytes": 358,
++      "sha256": "0586422480d589ec12504e97d81306e72ff55e6178eb8d50c54864df2e6b0cc3"
++    },
++    {
++      "path": "evidence/commands/base-inspect.stderr",
++      "bytes": 0,
++      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++    },
++    {
++      "path": "evidence/commands/base-inspect.stdout",
++      "bytes": 2819,
++      "sha256": "888582f9214277913a3c8bd329663517e9a76560eeca82f3d77e2c8cdcc2e62e"
++    },
++    {
++      "path": "evidence/commands/base-manifest.json",
++      "bytes": 423,
++      "sha256": "2d1d874c584b4a236a9f133ae6aced7761f27f764e041d6aa664293aabba06bc"
++    },
++    {
++      "path": "evidence/commands/base-manifest.stderr",
++      "bytes": 0,
++      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++    },
++    {
++      "path": "evidence/commands/base-manifest.stdout",
++      "bytes": 6546,
++      "sha256": "935c3c5b12357a7e10caa9c1e6ca5692344d97cf229832ef584be2cec9fc03df"
++    },
++    {
++      "path": "evidence/commands/base-pull.json",
++      "bytes": 378,
++      "sha256": "ee39c6b6aeece0381bea2a3bdb6d3800410ab670a13e622b45231a49bad3604f"
++    },
++    {
++      "path": "evidence/commands/base-pull.stderr",
++      "bytes": 0,
++      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++    },
++    {
++      "path": "evidence/commands/base-pull.stdout",
++      "bytes": 729,
++      "sha256": "ccd98fb2eb59173678acf3b48bc3179905fd71c15ac8ee6b300127c5d2540f64"
++    },
++    {
++      "path": "evidence/commands/baseline-export.json",
++      "bytes": 518,
++      "sha256": "17392824e5782051512bbfab6c9258e8a2491e4e14f58916b6b94bca09b6ed63"
++    },
++    {
++      "path": "evidence/commands/baseline-export.stderr",
++      "bytes": 0,
++      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++    },
++    {
++      "path": "evidence/commands/baseline-export.stdout",
++      "bytes": 15994,
++      "sha256": "9652e25ba9ed6fe5215ca05cbf1166947fef49a95aaabf61283358f3ac0cc95d"
++    },
++    {
++      "path": "evidence/commands/baseline-source.json",
++      "bytes": 452,
++      "sha256": "ac49a69a30658d087a003d361f45ae5982f62dfe68b48f1f93f05b94d3c9acc3"
++    },
++    {
++      "path": "evidence/commands/baseline-source.stderr",
++      "bytes": 0,
++      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++    },
++    {
++      "path": "evidence/commands/baseline-source.stdout",
++      "bytes": 0,
++      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++    },
++    {
++      "path": "evidence/commands/candidate-export.json",
++      "bytes": 519,
++      "sha256": "532e64cf6c7ad13316be26687f91cf548764bd3910fa23ea72c61009627923e2"
++    },
++    {
++      "path": "evidence/commands/candidate-export.stderr",
++      "bytes": 0,
++      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++    },
++    {
++      "path": "evidence/commands/candidate-export.stdout",
++      "bytes": 15995,
++      "sha256": "8151b1b4ad248bb4d3b4e092ad583639f2d4c37cf24622b33234f335d32fa2f0"
++    },
++    {
++      "path": "evidence/commands/candidate-source.json",
++      "bytes": 453,
++      "sha256": "cdab7a8135f67f464a01074a4f0a0bc8ed74dd74c439c24638f93d6a821a24d0"
++    },
++    {
++      "path": "evidence/commands/candidate-source.stderr",
++      "bytes": 0,
++      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++    },
++    {
++      "path": "evidence/commands/candidate-source.stdout",
++      "bytes": 0,
++      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++    },
++    {
++      "path": "evidence/commands/docker-version.json",
++      "bytes": 327,
++      "sha256": "f47db06311dd3752b741b9cc4a3fc70f2842dbddcf06b4e84bb29cf5fc0ffa38"
++    },
++    {
++      "path": "evidence/commands/docker-version.stderr",
++      "bytes": 0,
++      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++    },
++    {
++      "path": "evidence/commands/docker-version.stdout",
++      "bytes": 1078,
++      "sha256": "1647560e301abf68c6e094ab63fc046cd6fd4bedf77df30597f1cf7d14438bc0"
++    },
++    {
++      "path": "evidence/commands/image-build.json",
++      "bytes": 479,
++      "sha256": "cacbf273f2cd9c9a0d503d84b858e2d1d74ba0ee33f7eb6dd13baa2142be8315"
++    },
++    {
++      "path": "evidence/commands/image-build.stderr",
++      "bytes": 2087,
++      "sha256": "d3c90323e33c568b37f2889e21844b0523016ce09c4cb66f18136b86ecea193e"
++    },
++    {
++      "path": "evidence/commands/image-build.stdout",
++      "bytes": 0,
++      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++    },
++    {
++      "path": "evidence/commands/image-inspect.json",
++      "bytes": 341,
++      "sha256": "65c679435be2434174506029cf4b1b8588b6c1ae6aa92a13cddf614ddeb0d932"
++    },
++    {
++      "path": "evidence/commands/image-inspect.stderr",
++      "bytes": 0,
++      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++    },
++    {
++      "path": "evidence/commands/image-inspect.stdout",
++      "bytes": 3036,
++      "sha256": "335ae6c52bcc5bd3e352d7f04ff90af292f34ac9a426a8ee5515b19603eddf53"
++    },
++    {
++      "path": "evidence/commands/model-prepare-container-log.json",
++      "bytes": 382,
++      "sha256": "cb3e2d391b992f2ca6faf6ecc3ca4c84745e2ff0d00209b56eda91454b6727bf"
++    },
++    {
++      "path": "evidence/commands/model-prepare-container-log.stderr",
++      "bytes": 0,
++      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++    },
++    {
++      "path": "evidence/commands/model-prepare-container-log.stdout",
++      "bytes": 0,
++      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++    },
++    {
++      "path": "evidence/commands/model-prepare-create.json",
++      "bytes": 1515,
++      "sha256": "9fb105c0eaa51983ac283e4e8c92a5fe05c92e84ba5b40ff8040222cfa362ea3"
++    },
++    {
++      "path": "evidence/commands/model-prepare-create.stderr",
++      "bytes": 0,
++      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++    },
++    {
++      "path": "evidence/commands/model-prepare-create.stdout",
++      "bytes": 65,
++      "sha256": "2403ecf4afcf0c7e899bcf99d19dfcde31b6bd3025553a3888d524366a49ee9a"
++    },
++    {
++      "path": "evidence/commands/model-prepare-created.json",
++      "bytes": 365,
++      "sha256": "86feb4e39d4de2743480dc963be67a7d078cdb10d9674ef04e708209de2eac14"
++    },
++    {
++      "path": "evidence/commands/model-prepare-created.stderr",
++      "bytes": 0,
++      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++    },
++    {
++      "path": "evidence/commands/model-prepare-created.stdout",
++      "bytes": 10227,
++      "sha256": "af0225fd863d64fb3922b6a7094541974716d6c967c8114ca75a2f43ced17bcb"
++    },
++    {
++      "path": "evidence/commands/model-prepare-remove.json",
++      "bytes": 359,
++      "sha256": "d203ddcc6cef8f7b6e55a4ef056947eaf8ad8deaed1589212cd68b7535abeccd"
++    },
++    {
++      "path": "evidence/commands/model-prepare-remove.stderr",
++      "bytes": 0,
++      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++    },
++    {
++      "path": "evidence/commands/model-prepare-remove.stdout",
++      "bytes": 65,
++      "sha256": "2403ecf4afcf0c7e899bcf99d19dfcde31b6bd3025553a3888d524366a49ee9a"
++    },
++    {
++      "path": "evidence/commands/model-prepare-start.json",
++      "bytes": 363,
++      "sha256": "939358183175f4a8c66dbdbcaf50d8573c6508cc01f79580343977089a9b3c79"
++    },
++    {
++      "path": "evidence/commands/model-prepare-start.stderr",
++      "bytes": 0,
++      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++    },
++    {
++      "path": "evidence/commands/model-prepare-start.stdout",
++      "bytes": 65,
++      "sha256": "2403ecf4afcf0c7e899bcf99d19dfcde31b6bd3025553a3888d524366a49ee9a"
++    },
++    {
++      "path": "evidence/commands/model-prepare-stopped.json",
++      "bytes": 366,
++      "sha256": "bee1564ce49b8a41768b9b656fde1dccb749b96b533b6c1b4b7ce8f9928777a4"
++    },
++    {
++      "path": "evidence/commands/model-prepare-stopped.stderr",
++      "bytes": 0,
++      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++    },
++    {
++      "path": "evidence/commands/model-prepare-stopped.stdout",
++      "bytes": 10787,
++      "sha256": "019ed67f9e4cf009a36673b262911ba592faed5ee8f39c8c485963993d45552f"
++    },
++    {
++      "path": "evidence/commands/model-prepare-wait.json",
++      "bytes": 377,
++      "sha256": "a6509f6634e457b6c1b4c9b41e22e02ba196d560c12b4628aee2ccfa4ff5b598"
++    },
++    {
++      "path": "evidence/commands/model-prepare-wait.stderr",
++      "bytes": 0,
++      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++    },
++    {
++      "path": "evidence/commands/model-prepare-wait.stdout",
++      "bytes": 2,
++      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
++    },
++    {
++      "path": "evidence/commands/ollama-download.json",
++      "bytes": 641,
++      "sha256": "07503b36e3aa22a3d91c7cd04ec7263e6dd15a8dac1bfa2d99a9320c07f6e238"
++    },
++    {
++      "path": "evidence/commands/ollama-download.stderr",
++      "bytes": 792,
++      "sha256": "930023a349a637abfbb1dc2e8928407921206b96063e71f864fcaa2bb69ede7f"
++    },
++    {
++      "path": "evidence/commands/ollama-download.stdout",
++      "bytes": 0,
++      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++    },
++    {
++      "path": "evidence/commands/opencode-download.json",
++      "bytes": 645,
++      "sha256": "a789ba388fe473f2c17c3b23e7342be49371250e4d1b831b156937a4d32098db"
++    },
++    {
++      "path": "evidence/commands/opencode-download.stderr",
++      "bytes": 397,
++      "sha256": "db0cd188d576b1d3f4259a4ea725a481e24f81b0588c98a5956eb1e12c46f31b"
++    },
++    {
++      "path": "evidence/commands/opencode-download.stdout",
++      "bytes": 0,
++      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++    },
++    {
++      "path": "evidence/commands/platform-inspect.json",
++      "bytes": 411,
++      "sha256": "dc74c2874d05f4024e8e798de65993379bf3a14a27e39d03785d10141badc8d0"
++    },
++    {
++      "path": "evidence/commands/platform-inspect.stderr",
++      "bytes": 0,
++      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++    },
++    {
++      "path": "evidence/commands/platform-inspect.stdout",
++      "bytes": 2913,
++      "sha256": "a78d53a482a88b643e4f2de657310a2f526c4b08213d2e6df67714406d66fafa"
++    },
++    {
++      "path": "evidence/commands/platform-pull.json",
++      "bytes": 431,
++      "sha256": "3268129126bfa2818e96a581fad3d15f5f8f8c05b75996eefe20022f346ec0b4"
++    },
++    {
++      "path": "evidence/commands/platform-pull.stderr",
++      "bytes": 0,
++      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++    },
++    {
++      "path": "evidence/commands/platform-pull.stdout",
++      "bytes": 417,
++      "sha256": "b6d0c0fc0d338a7fb8f8765c02d364382f1fa46f958b23c459aaad76f80cbaa2"
++    },
++    {
++      "path": "evidence/commands/source-head.json",
++      "bytes": 305,
++      "sha256": "ea5c70e860d810d1ffd7e12b2d59a99fbde2158e2dd49acf58048a13a207909f"
++    },
++    {
++      "path": "evidence/commands/source-head.stderr",
++      "bytes": 0,
++      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++    },
++    {
++      "path": "evidence/commands/source-head.stdout",
++      "bytes": 41,
++      "sha256": "4f9d8e2128478f711db7add5353afa62d562d1e11ed9fe7ca0f026260424b0e9"
++    },
++    {
++      "path": "evidence/frozen-inputs.json",
++      "bytes": 1929,
++      "sha256": "fc41c1c76cb077034080d46beb74d2e5a78bad3ec166a37ce2e77f024dcd07cc"
++    },
++    {
++      "path": "evidence/image-identity.json",
++      "bytes": 607,
++      "sha256": "2df221db22a16da6ae4b3bc7e39705853ed3dea007dc41b1846dcd2ce91751ba"
++    },
++    {
++      "path": "evidence/model-prepare-result.json",
++      "bytes": 784,
++      "sha256": "061e420e90dab67367398074e0699f1bf8285c377527c99aae33e7624e32af1f"
++    },
++    {
++      "path": "evidence/native-module.json",
++      "bytes": 238,
++      "sha256": "a19ea8967385534245e5aead609e8fffb13422ed3ca2fb94645dc17389ba945c"
++    },
++    {
++      "path": "evidence/ollama-asset.json",
++      "bytes": 1940,
++      "sha256": "9ca0a6402cea6850a854876f58541cc7b70a7918d5331ae78488f29449909fdf"
++    },
++    {
++      "path": "evidence/opencode-asset.json",
++      "bytes": 267,
++      "sha256": "38db058b6bca31945af74992ea8aae347bd5a5fe2961381956a3774b4386a5ec"
++    },
++    {
++      "path": "evidence/resources.json",
++      "bytes": 2120,
++      "sha256": "9065dea6f2ef9f2deaf1b38d7c3b39ed03395d7b5c937e5600216046be4cb5bc"
++    },
++    {
++      "path": "evidence/summary.json",
++      "bytes": 787,
++      "sha256": "751ef2e4949311e22a3e6c2fedfa6644ef67e47dcbd0cbcc1de2c5d920a9a821"
++    },
++    {
++      "path": "manifest.json",
++      "bytes": 30768,
++      "sha256": "3fa240bac13be5d0a67db998033b38ac008ff9648fb2ce92242589d605533598"
++    },
++    {
++      "path": "prepare-records/environment.json",
++      "bytes": 848,
++      "sha256": "dba68d470e8cc10fdac495ba118a1f13f1c9e52a6a943319573f02562a18fd27"
++    },
++    {
++      "path": "prepare-records/model-pull-command.json",
++      "bytes": 184,
++      "sha256": "030eed26957b05ce5ad21a5c07bcbfd70b0d38b254c7db2f8ef23719a77de27f"
++    },
++    {
++      "path": "prepare-records/model-show.json",
++      "bytes": 28950,
++      "sha256": "e09d88f6b4b5619a72e9f8281a403acb9d1c507d2c299a66c4905c4c0f6a3342"
++    },
++    {
++      "path": "prepare-records/model.json",
++      "bytes": 550,
++      "sha256": "f375168bc7fb57a500e326b1a300eb76f6399be2d360a1bf484d9a7fe21a8d7e"
++    },
++    {
++      "path": "prepare-records/raw/model-pull.jsonl",
++      "bytes": 16868,
++      "sha256": "a87ffe7639a8cb735d31e3f743f9247a4f2b2d6a1c4915a9ce30cfce4c2af425"
++    },
++    {
++      "path": "prepare-records/raw/ollama-server.sanitized.log",
++      "bytes": 3058,
++      "sha256": "7e6f074dbb5ef3049275afe21f7902f3593027de0aae89f7ba13b3460befed3c"
++    },
++    {
++      "path": "prepare-records/server-stop.json",
++      "bytes": 66,
++      "sha256": "8710a044ba32aec5362497be6453722f219d0da5a814bd0a1454b0f580282583"
++    },
++    {
++      "path": "prepare-records/server-version.json",
++      "bytes": 27,
++      "sha256": "08ffc5526032c62e4bda58db8ce3faf55fd3fb0fbe6168d074ebc127c74ad87f"
++    }
++  ],
++  "review_actions": {
++    "source_modified": false,
++    "artifact_modified": false,
++    "model_or_docker_started": false,
++    "workflow_dispatched_or_rerun": false,
++    "grader_executed": false,
++    "only_new_files": "Independent API review receipt and this artifact review JSON outside the extracted artifact directory."
++  }
++}
+diff --git a/docs/changes/20261114-hosted-task-pilot/evidence/hosted-root-check.json b/docs/changes/20261114-hosted-task-pilot/evidence/hosted-root-check.json
+new file mode 100644
+index 0000000..23db302
+--- /dev/null
++++ b/docs/changes/20261114-hosted-task-pilot/evidence/hosted-root-check.json
+@@ -0,0 +1,67 @@
++{
++  "schema": "adk-hosted-pilot-artifact-check/v1",
++  "checked_at": "2026-11-14T16:21:01.150479Z",
++  "run_id": 43614661952,
++  "attempt": 1,
++  "source_commit": "b8815263a31ee3b004c2e7e9eee564fe8a35dfc8",
++  "artifact_sha256": "72d3c3c86939d14ba14a36ef1bb1d2475ec93b0ac5573933833a8dc6161c2f01",
++  "manifest_members_verified": 91,
++  "total_files": 93,
++  "manifest_sha256": "3fa240bac13be5d0a67db998033b38ac008ff9648fb2ce92242589d605533598",
++  "bootstrap_sha256": "acf6edac5da847ae1329dbaa6409634b28a77d48297703155b637bc18a91f344",
++  "summary_sha256": "751ef2e4949311e22a3e6c2fedfa6644ef67e47dcbd0cbcc1de2c5d920a9a821",
++  "conditions": {
++    "baseline": {
++      "task_status": "not-run",
++      "work_sha256": "6a6249b2f8df6c2a8cbea872f13319dd42cb07779bea6e204bfd614f19144359",
++      "task_acceptance": "not-run",
++      "skill_load": "not-run",
++      "usage": "not-run"
++    },
++    "candidate": {
++      "task_status": "not-run",
++      "work_sha256": "6a6249b2f8df6c2a8cbea872f13319dd42cb07779bea6e204bfd614f19144359",
++      "task_acceptance": "not-run",
++      "skill_load": "not-run",
++      "usage": "not-run"
++    }
++  },
++  "grader": {
++    "tool": "existing eval grade-task",
++    "invoked": false,
++    "case_sha256": "a9a6143b2a36c324435c321171ad09925457dd8d7f8209180ff64f1ecebe59e0",
++    "reason": "No task was started. The two work files are unchanged initial fixtures; grading them would not be an executed-task result."
++  },
++  "model_tag_observation": {
++    "name": "qwen3:1.7b",
++    "model": "qwen3:1.7b",
++    "modified_at": "2026-11-14T16:17:03.400455515Z",
++    "size": 1359293444,
++    "digest": "8f68893c685c3ddff2aa3fffce2aa60a30bb2da65ca488b61fff134a4d1730e7",
++    "details": {
++      "parent_model": "",
++      "format": "gguf",
++      "family": "qwen3",
++      "families": [
++        "qwen3"
++      ],
++      "parameter_size": "2.0B",
++      "quantization_level": "Q4_K_M",
++      "context_length": 40960,
++      "embedding_length": 2048,
++      "runner": "ggml"
++    },
++    "capabilities": [
++      "completion",
++      "tools",
++      "thinking"
++    ]
++  },
++  "full_runtime_frozen": false,
++  "repeat_run_performed": false,
++  "limitations": [
++    "The model store and actual symlink target are excluded from the public artifact. The rejected link path is observed; its target legality cannot be established from this artifact.",
++    "Prepared model tag/digest is a native API observation. The failed coordinator did not complete the manifest/blob identity freeze.",
++    "No OpenCode preflight/task/session/usage evidence was produced; no efficacy or savings conclusion follows."
++  ]
++}
+diff --git a/docs/changes/20261114-hosted-task-pilot/result.md b/docs/changes/20261114-hosted-task-pilot/result.md
+new file mode 100644
+index 0000000..d35d3c4
+--- /dev/null
++++ b/docs/changes/20261114-hosted-task-pilot/result.md
+@@ -0,0 +1,37 @@
++# 唯一托管尝试的实际结果
++
++## 裁决
++
++Run [43614661952](https://github.com/jiying2007/agent-dev-kit/actions/runs/43614661952)、job `132506978963`、attempt 1执行准确C2 `b8815263a31ee3b004c2e7e9eee564fe8a35dfc8`。它于2026-11-14T16:16:02Z创建，16:17:09Z终态为failure。模型准备成功后，host模型清单因符号链接拒绝而停止；baseline与candidate均为not-run。没有重新触发、rerun、选择性补跑或扩大模型预算。
++
++正式v11.3.1发布与本实验分别判定。本实验没有产生任务效果、Skill实际加载或Token/费用/时延收益，也不满足消费者的真实原生门禁。
++
++## 已观察的准备结果
++
++实际Docker镜像构建、官方工具获取和模型pull成功。qwen3:1.7b的原生`model.json`报告完整digest `8f68893c685c3ddff2aa3fffce2aa60a30bb2da65ca488b61fff134a4d1730e7`，size为1359293444。准备容器ExitCode=0、Running=false、Pid=0，docker rm返回0；Ollama子进程-9对应finally主动停止，不能误算为模型推理失败。
++
++实际错误为`Unexpected symlink in data: .../models/manifests-v2/ollama.com/library/qwen3/1.7b`。此时完整模型文件清单和`frozen-runtime.json`尚未生成；summary保留model_digest unavailable。原生API观察与完整内容冻结不是同一项证据，原summary保持字节不变。模型存储实体及实际readlink目标未发布，不能根据这个工件推定目标合法。
++
++## 条件与验收
++
++| 项目 | baseline | candidate |
++| --- | --- | --- |
++| OpenCode原生配置/断网容器预检 | not-run | not-run |
++| 任务CLI与推理 | not-run | not-run |
++| 实际Skill加载/session/export | not-run | not-run |
++| usage/任务验收 | not-run | not-run |
++| 最终work | 初始379字节ADR未变 | 初始379字节ADR未变 |
++
++`conditions=[]`和0次任务推理由实际命令、原生日志与C2控制流交叉核实。两个work不是模型产物，因此未调用既有grade-task对它们生成假想任务结果。未测Token或费用保持not-run，不填写数值0。
++
++## 工件完整性与独立审查
++
++GitHub [artifact 14121104537](https://github.com/jiying2007/agent-dev-kit/actions/runs/43614661952/artifacts/14121104537) 原始ZIP为63,998 bytes，SHA256 `72d3c3c86939d14ba14a36ef1bb1d2475ec93b0ac5573933833a8dc6161c2f01`。93个成员通过CRC与安全路径检查；91个native manifest成员全部匹配长度、摘要与ZIP原字节，其余恰为manifest和bootstrap。bootstrap独立绑定summary摘要；未误称它受native manifest覆盖。
++
++独立工件审查实际时间为2026-11-14T16:22:26.026203Z；审查原件SHA256为`94d19b1e1ce983cd36eabb6a41a9ad0b153785b955218f7fa5ac97dbb799696f`。未发布模型权重、安装包、私人home、native state/cache或完整仓库。唯一脱敏Ollama日志保存原件摘要与删除行号，审查只核验实际提供的发布副本，没有重建身份行。
++
++交付包包含原始ZIP、GitHub终态/独立API复查、准确job文本、触发回执及两路审查，77,947 bytes，SHA256 `5f4d7aae8359224eee00b08ce2f257a71fa66b68865528fb619bb857cbc07b76`。它是失败准备证据，不是效果认证。
++
++## 后续源码修复
++
++模型清单兼容性修复在`../20261114-model-inventory-compat/`单独登记。它针对固定官方版本的v2链接布局和manifest-list的parent/child摘要语义；不放宽通用inventory或发布allowlist。局部源码验证不回写本次结果，不移动执行分支，也不启动第二次任务。真实任务效果与独立新任务验证仍未完成。
+diff --git a/docs/changes/20261114-hosted-task-pilot/tasks.md b/docs/changes/20261114-hosted-task-pilot/tasks.md
+index b5c93ee..759a417 100644
+--- a/docs/changes/20261114-hosted-task-pilot/tasks.md
++++ b/docs/changes/20261114-hosted-task-pilot/tasks.md
+@@ -3,6 +3,6 @@
+ - [x] H1 冻结独立宿主合同和前次负结果；verify：requirements/design明确source、模型、预算、身份、一次触发和效果边界，保留本地0-run记录。
+ - [x] H2 实现最小工作流和typed core中的有界实验协调模块及合同测试；verify：官方资产摘要、基线/候选导出、相同输入、模型/镜像预冻结、断网条件隔离、300秒中断与收尾、严格证据allowlist全部显式实现；前置workflow有独立timeout和保守bootstrap回执。修订后的17项定向测试、原失败product-maturity门禁、严格类型及Ruff/格式检查通过；两个实现模块字节和已通过module-size检查的版本相同，不新增产品CLI或manifest入口。原生资格留待H4实际预检；新版本完整回归与最终审查由H3单独判定。
+ - [x] H3 独立Spec/Quality审查、定向验证和完整回归；verify：C2/b881526的17项定向测试、严格类型与静态检查、完整回归102/102通过；独立Spec/Quality均pass，open blocker/major为0。31个归档成员及11份回执由独立只读审查核验，typed review-evidence实际校验pass。原C的101/102与requires-changes保留；synthetic fixture修复不修改scanner或拒绝语义。此勾选为后续状态记录，C2原tasks快照仍在original.patch/source-bindings中；原生Docker资格仍必须在job实际取得。
+-- [ ] H4 精确源码一次触发；verify：正常权限允许，before=B/c57、head=C2/b881526、attempt=1；准备记录及两个实际条件结果完整保存；失败不重跑。后续回执提交不是执行目标。
+-- [ ] H5 独立工件验收和原始证据审查；verify：使用既有grader，区分实际加载/执行/覆盖/usage及unknown，不把成功声明作为外部验收。
+-- [ ] H6 保存结果并更新原计划；verify：实验身份、全部失败、原始引用、适用范围和剩余未测项清楚，证据不自动赋予发布/产品/泛化资格。
++- [x] H4 精确源码一次触发并关闭该尝试；verify：run43614661952正常push，before=B/c57、head=C2/b881526、attempt=1，终态failure；模型准备成功后因清单链接被拒，两条件均not-run，93文件原件保留；失败没有重跑。后续回执提交不是执行目标，完成此项不表示原生任务通过。
++- [ ] H5 真实任务独立验收尚未运行；verify：独立原始工件审查完成并确认0次任务推理、两侧work仍是初始字节；没有实际任务产物，因此既有grader未调用，实际加载/session/usage仍not-run，不能标为任务验收完成。
++- [x] H6 保存已发生结果并更新原计划；verify：result.md、准确原始ZIP和独立工件审查保留完整负结果；原计划记录一次失败和未完成项，后续兼容性修复单独登记，不自动赋予发布/产品/泛化资格。
+diff --git a/docs/changes/20261114-model-inventory-compat/design.md b/docs/changes/20261114-model-inventory-compat/design.md
+new file mode 100644
+index 0000000..1f2c6b8
+--- /dev/null
++++ b/docs/changes/20261114-model-inventory-compat/design.md
+@@ -0,0 +1,17 @@
++# 设计
++
++设计者为 `ai/root`；实现者为 `ai/root/consumer_adoption_audit`；独立只读审查者为 `ai/root/task_protocol_audit`。实现者新增具名内部模块 `src/agent_dev_kit/hosted_model_inventory.py`，修改host协调器的模型清单调用及定向测试；不修改native通用清单、发布器、本设计或工作流。
++
++在typed core内新增模型专用清单函数或等价最小职责单元，替换host协调器中唯一的模型数据清单调用。通用inventory、工具清单及发布器保持既有边界。读取已停止准备容器的只读候选数据时先列举并核对目录/文件类型，再解析限定位置的相对链接，逐层拒绝链接祖先；不使用不受约束的resolve-follow和递归目录链接。清单条数有固定上限，JSON/manifest等小型身份文件读取有字节上限；大模型blob用流式摘要。每个允许的链接必须指向同root内直接普通文件，清单同时保存链接本身和目标身份，目标不得脱离原模型集合。被链接manifest与API完整digest绑定；官方布局若还要求其他身份约束，一并按准确源码落实。
++
++固定版本官方 [manifest/manifest.go](https://github.com/ollama/ollama/blob/v0.40.16/manifest/manifest.go) 的Linux写入流程将manifest内容存入content-addressed blob，以相对符号链接建立v2规范命名入口，旧目录入口可能被删除。因此不能继续要求摘要只能出现在 `manifests/` 下；[manifest/paths.go](https://github.com/ollama/ollama/blob/v0.40.16/manifest/paths.go) 定义v2规范主机为ollama.com。[server/model_list.go](https://github.com/ollama/ollama/blob/v0.40.16/server/model_list.go) 的manifest-list分支返回所选child digest；它可能与命名入口所指parent list内容SHA不同。新函数显式绑定选定模型名和规范命名入口，分别支持普通manifest的直接摘要绑定，以及命名parent list→唯一明确child descriptor→内容摘要已核验的leaf→API digest/runner的绑定链。只存在任意同digest blob不能通过；不模拟Go序列化来制造digest，不将parent/child摘要混为一谈。未实现的嵌套、inline或歧义list保持拒绝并说明原因；必须有API digest不匹配、错误命名入口和歧义child的负例。
++
++新模块只接受模型专用输入，边界尽量小，全部异常在推理前失败。调用关系为host→模型清单模块，不增加产品CLI、manifest注册或共享schema。模块体积与依赖数量按仓库现有门禁验证，不为本次修复添加例外。
++
++首次草稿预审实际发现：只对raw链接字符串做词法归一化，会把内核解析为ELOOP或ENOTDIR的路径错误准入。链接目标必须与官方writer产生的规范相对表达严格相等；不能先经过tag、普通文件或其他目录，再用`..`抵消。该草稿Major的独立RED保存在`evidence/cyclic-raw-link-red.json`；后续测试验证真实内核错误与算法拒绝，而不跟随恶意目标取证。JSON解析复用既有`strict_json.loads`并显式限制1MiB与32层，保留重复键、非有限数及UTF-8拒绝。定向回归位于新增`tests/test_hosted_model_inventory.py`，与原`test_hosted_task_pilot.py`共同执行；本次不改已经执行过的工作流。
++
++原始run只证明出现了指定路径的链接，未发布模型存储实体和原始链接目标。合成回归必须明确来自官方实现的最小布局，不能标为重放完整原宿主树。与官方布局不符或尚无法确认的情况保持拒绝。
++
++测试先保留原C2对允许官方布局的失败，再验证允许布局、普通旧布局及不同恶意/异常链接失败。运行受影响合同、类型/静态/module-size检查及仓库要求的完整回归；如最小修复触及模块体积要求，做职责清晰的拆分，不扩张质量门禁例外。
++
++后续源码验证仅说明本地确定性修复成立。此次不启动Docker/模型、没有第二个条件对照，也不把修复后单元结果回写为run43614661952成功。未来真实验证必须另有明确预注册；本轮只保存修复、准确限制与完成回执。
+diff --git a/docs/changes/20261114-model-inventory-compat/evidence/cyclic-raw-link-red.json b/docs/changes/20261114-model-inventory-compat/evidence/cyclic-raw-link-red.json
+new file mode 100644
+index 0000000..0e66fb4
+--- /dev/null
++++ b/docs/changes/20261114-model-inventory-compat/evidence/cyclic-raw-link-red.json
+@@ -0,0 +1,42 @@
++{
++  "observed_at": "2026-11-14T16:31:17.662609Z",
++  "source_sha256": "e2ba990c063d31507e7e3d6c5a8ec0137f551406fa3d07ec95b7a857c42c6a21",
++  "fixture": "synthetic minimal single manifest; not actual hosted model tree",
++  "raw_symlink_target": "1.7b/../../../../../blobs/sha256-ece5a617aeb3ec2dd89d3a96274fbc95edd6ca4c0a77599727c369353e651919",
++  "actual_os_stat": {
++    "type": "OSError",
++    "errno": 40,
++    "message": "Too many levels of symbolic links"
++  },
++  "inventory_outcome": {
++    "status": "accepted",
++    "identity": {
++      "model_name": "qwen3:1.7b",
++      "named_entry": "manifests-v2/ollama.com/library/qwen3/1.7b",
++      "binding": "direct-manifest",
++      "api_digest": "ece5a617aeb3ec2dd89d3a96274fbc95edd6ca4c0a77599727c369353e651919",
++      "api_runner": "ggml",
++      "named_manifest": {
++        "path": "blobs/sha256-ece5a617aeb3ec2dd89d3a96274fbc95edd6ca4c0a77599727c369353e651919",
++        "sha256": "ece5a617aeb3ec2dd89d3a96274fbc95edd6ca4c0a77599727c369353e651919",
++        "bytes": 311,
++        "raw_utf8": "{\"schemaVersion\":2,\"mediaType\":\"application/vnd.docker.distribution.manifest.v2+json\",\"runner\":\"ggml\",\"config\":{\"digest\":\"sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\",\"size\":2},\"layers\":[{\"digest\":\"sha256:552b4d79123f439c5ed64bf54ce07bb36ea98ec1453522064d4f54d8f796c564\",\"size\":25}]}"
++      },
++      "selected_manifest": {
++        "path": "blobs/sha256-ece5a617aeb3ec2dd89d3a96274fbc95edd6ca4c0a77599727c369353e651919",
++        "sha256": "ece5a617aeb3ec2dd89d3a96274fbc95edd6ca4c0a77599727c369353e651919",
++        "bytes": 311,
++        "raw_utf8": "{\"schemaVersion\":2,\"mediaType\":\"application/vnd.docker.distribution.manifest.v2+json\",\"runner\":\"ggml\",\"config\":{\"digest\":\"sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\",\"size\":2},\"layers\":[{\"digest\":\"sha256:552b4d79123f439c5ed64bf54ce07bb36ea98ec1453522064d4f54d8f796c564\",\"size\":25}]}"
++      }
++    },
++    "link": {
++      "kind": "symlink",
++      "target": "1.7b/../../../../../blobs/sha256-ece5a617aeb3ec2dd89d3a96274fbc95edd6ca4c0a77599727c369353e651919",
++      "normalized_target": "blobs/sha256-ece5a617aeb3ec2dd89d3a96274fbc95edd6ca4c0a77599727c369353e651919",
++      "link_sha256": "0be7de5a58430bfe86d6374df59b7d3eea3a17eca622ce7d917e94d46fc4ab91",
++      "target_sha256": "ece5a617aeb3ec2dd89d3a96274fbc95edd6ca4c0a77599727c369353e651919",
++      "target_bytes": 311
++    }
++  },
++  "model_or_docker_run": false
++}
+diff --git a/docs/changes/20261114-model-inventory-compat/evidence/official-diagnosis.json b/docs/changes/20261114-model-inventory-compat/evidence/official-diagnosis.json
+new file mode 100644
+index 0000000..6851ebd
+--- /dev/null
++++ b/docs/changes/20261114-model-inventory-compat/evidence/official-diagnosis.json
+@@ -0,0 +1,37 @@
++{
++  "recorded_at": "2026-11-14T16:26:32.634426+00:00",
++  "sources": {
++    "manifest.go": {
++      "url": "https://github.com/ollama/ollama/blob/v0.40.16/manifest/manifest.go",
++      "git_blob_sha1": "93766ad2600da4db1de2674911a8e1823ce9e568",
++      "sha256": "2aa036f61cfffdff2f85fa3e0f29478c314c00c53aced8f9c6cb9103359f1bec",
++      "bytes": 46476
++    },
++    "paths.go": {
++      "url": "https://github.com/ollama/ollama/blob/v0.40.16/manifest/paths.go",
++      "git_blob_sha1": "cf3bfa2569bf1a3fbc69ef12455566e259515a2d",
++      "sha256": "ce16336074693e19fa8c75147c67b155b9be03542a5dd77500e8be42dba8ff04",
++      "bytes": 10402
++    },
++    "model_list.go": {
++      "url": "https://github.com/ollama/ollama/blob/v0.40.16/server/model_list.go",
++      "git_blob_sha1": "6be2862816f5ba2d6101812a1a03ee98fc079b8d",
++      "sha256": "3228de78ecde79183701e9a60c1c933f99576bb341df341339882852b0d0164a",
++      "bytes": 7444
++    }
++  },
++  "observed_run": "43614661952",
++  "observed_symlink_path": "models/manifests-v2/ollama.com/library/qwen3/1.7b",
++  "observed_raw_link_target": "not preserved in artifact; unavailable",
++  "api_reported_digest": "8f68893c685c3ddff2aa3fffce2aa60a30bb2da65ca488b61fff134a4d1730e7",
++  "validated_frozen_model_digest": "unavailable; inventory failed before freeze",
++  "inference_runs": 0,
++  "diagnosis": [
++    "Linux writer uses filepath.Rel and os.Symlink for v2 name -> content-addressed manifest blob, with copy fallback",
++    "v2 canonical public host is ollama.com; successful v2 writes can remove legacy named manifest",
++    "API tags returns selected child digest for manifest lists, not parent-list digest",
++    "Generic inventory must remain symlink-denying; dedicated model inventory must bind selected canonical name through parent/child bytes and full API digest/runner",
++    "Relative-link model fixture is synthetic source-derived, not a reconstruction of missing hosted readlink data"
++  ],
++  "native_rerun": false
++}
+diff --git a/docs/changes/20261114-model-inventory-compat/requirements.md b/docs/changes/20261114-model-inventory-compat/requirements.md
+new file mode 100644
+index 0000000..0ac1884
+--- /dev/null
++++ b/docs/changes/20261114-model-inventory-compat/requirements.md
+@@ -0,0 +1,16 @@
++# 模型仓库清单兼容性修复
++
++## 真实失败与范围
++
++公开一次先导 run `43614661952`、attempt 1、执行提交 `b8815263a31ee3b004c2e7e9eee564fe8a35dfc8` 在模型准备容器成功退出后，因 `models/manifests-v2/ollama.com/library/qwen3/1.7b` 是符号链接而被通用 `inventory` 拒绝。两条件均未启动，模型推理次数为0；本次原始ZIP SHA256为 `72d3c3c86939d14ba14a36ef1bb1d2475ec93b0ac5573933833a8dc6161c2f01`。
++
++本变更修复实验执行工具对官方Ollama模型存储的清单兼容性。它不修改已完成实验、不启动第二次实跑、不改workflow触发或预算、不修改生产manifest或CLI，不赋予真实任务、模型加载或收益资格。
++
++## 验收
++
++1. 先读取固定版本Ollama v0.40.16的官方实现，引用准确源码，确认官方存储布局；不能由失败路径推定本次实际链接目标，因为发布工件没有保留该目标。
++2. 通用输入、work、Skill、config与发布allowlist继续拒绝符号链接。仅模型根目录使用独立且有界的清单算法。
++3. 模型清单记录目录内普通文件内容摘要/字节数及允许的官方链接路径、原始目标、规范化目录内目标与目标内容身份。拒绝绝对/越界目标、链接链、循环、悬空、目录链接、特殊文件、链接祖先及身份不一致。不得通过忽略链接、删除链接或只信任tag文本绕过模型身份冻结。
++4. 模型身份验证使用官方布局中的完整manifest内容，与真实model.json中完整digest绑定；有显式失败，不能把不匹配继续标记为冻结成功。最终准入必须保留两条件预检和所有既有隔离/计时条件。
++5. 回归用合成最小目录复现原失败并证明修复；安全负例覆盖各拒绝边界。测试不下载模型，不调用原生模型执行，不使用真实运行的原件作为可改测试工作区。
++6. 保留失败实验、C2及其审查回执；新增修复只在独立审查分支正常提交，不移动执行分支、不重跑任何job、不更新正式Release或消费者锁。
+diff --git a/docs/changes/20261114-model-inventory-compat/tasks.md b/docs/changes/20261114-model-inventory-compat/tasks.md
+new file mode 100644
+index 0000000..3854037
+--- /dev/null
++++ b/docs/changes/20261114-model-inventory-compat/tasks.md
+@@ -0,0 +1,6 @@
++# 任务
++
++- [x] M1 记录真实失败、冻结修复范围及不重跑约束；verify：requirements/design绑定准确run/C2/ZIP，区分实际链接路径和未观测目标。
++- [x] M2 官方布局核验、最小安全修复和RED/GREEN；verify：官方v0.40.16三份源码身份已绑定；新增模型专用模块，保留通用inventory/发布器/workflow字节。普通与parent-child清单绑定、v2优先、规范raw相对路径、fd-relative/no-follow及严格JSON边界已实现；原通用拒绝RED及草稿3个路径子例RED保留。实际定向36个方法通过，Ruff、格式、mypy的5个文件、module-size/security全部exit0；模型/Docker未重跑。完整回归与最终独立裁决由M3单独判定。
++- [ ] M3 定向与完整验证、独立Spec/Quality审查；verify：精确源码/原件、真实命令结果、开放重大问题为0；静态通过不代替原生重测。
++- [ ] M4 正常提交保存并同步计划；verify：执行分支仍为C2、run attempt仍1、正式发布和消费者锁未变，负结果与局部修复均可追溯。
+diff --git a/src/agent_dev_kit/hosted_model_inventory.py b/src/agent_dev_kit/hosted_model_inventory.py
+new file mode 100644
+index 0000000..cdd729a
+--- /dev/null
++++ b/src/agent_dev_kit/hosted_model_inventory.py
+@@ -0,0 +1,365 @@
++"""Bounded, read-only identity checks for the pilot's Ollama v0.40.16 store.
++
++This does not relax work/Skill inventories or publication rules. The supported
++Linux writer uses relative v2 name links to directly addressed manifest blobs.
++"""
++
++from __future__ import annotations
++
++from collections.abc import Iterator, Mapping
++from contextlib import contextmanager
++import hashlib
++import os
++from pathlib import Path, PurePosixPath
++import posixpath
++import re
++import stat
++from typing import Any
++
++from .strict_json import StrictJSONError, loads
++
++MAX_ENTRIES = 4096
++MAX_DEPTH = 8
++MAX_JSON_BYTES = 1024 * 1024
++MAX_JSON_DEPTH = 32
++MAX_LINK_BYTES = 4096
++MAX_CHILDREN = 64
++MANIFEST_TYPE = "application/vnd.docker.distribution.manifest.v2+json"
++LIST_TYPE = "application/vnd.ollama.manifest.list.v2+json"
++_DIGEST = re.compile(r"(?:sha256:)?([0-9a-f]{64})")
++_BLOB = re.compile(r"sha256-([0-9a-f]{64})")
++_COMPONENT = re.compile(r"[a-z0-9][a-z0-9._-]*")
++_DIRECTORY_FLAGS = os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW
++_FILE_FLAGS = os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK
++Signature = tuple[int, int, int, int, int, int]
++
++
++class ModelInventoryError(RuntimeError):
++    """The collection or identity cannot be admitted before inference."""
++
++
++def _signature(info: os.stat_result) -> Signature:
++    return info.st_dev, info.st_ino, info.st_mode, info.st_size, info.st_mtime_ns, info.st_ctime_ns
++
++
++@contextmanager
++def _directory(start: int, parts: tuple[str, ...]) -> Iterator[int]:
++    descriptor = os.dup(start)
++    try:
++        for part in parts:
++            next_descriptor = os.open(part, _DIRECTORY_FLAGS, dir_fd=descriptor)
++            os.close(descriptor)
++            descriptor = next_descriptor
++        yield descriptor
++    except OSError as error:
++        raise ModelInventoryError("Missing, linked, or unsafe model directory") from error
++    finally:
++        os.close(descriptor)
++
++
++@contextmanager
++def _root_directory(root: Path) -> Iterator[int]:
++    if not root.is_absolute() or root == Path("/") or ".." in root.parts or len(root.parts) > 64:
++        raise ModelInventoryError("Model root must be a bounded absolute directory path")
++    anchor = os.open("/", _DIRECTORY_FLAGS)
++    try:
++        with _directory(anchor, root.parts[1:]) as descriptor:
++            yield descriptor
++    finally:
++        os.close(anchor)
++
++
++@contextmanager
++def _plain_file(parent: int, name: str, expected: Signature) -> Iterator[int]:
++    descriptor = os.open(name, _FILE_FLAGS, dir_fd=parent)
++    try:
++        info = os.fstat(descriptor)
++        if not stat.S_ISREG(info.st_mode) or _signature(info) != expected:
++            raise ModelInventoryError("Model file identity changed before reading")
++        yield descriptor
++        if _signature(os.fstat(descriptor)) != expected:
++            raise ModelInventoryError("Model file identity changed while reading")
++    finally:
++        os.close(descriptor)
++
++
++def _stream_digest(parent: int, name: str, expected: Signature) -> str:
++    digest = hashlib.sha256()
++    total = 0
++    with _plain_file(parent, name, expected) as descriptor:
++        while chunk := os.read(descriptor, 1024 * 1024):
++            total += len(chunk)
++            if total > expected[3]:
++                raise ModelInventoryError("Model file grew while hashing")
++            digest.update(chunk)
++    if total != expected[3]:
++        raise ModelInventoryError("Model file size changed while hashing")
++    return digest.hexdigest()
++
++
++def _json_object(data: bytes) -> dict[str, Any]:
++    try:
++        value = loads(data, max_bytes=MAX_JSON_BYTES, max_depth=MAX_JSON_DEPTH)
++    except StrictJSONError as error:
++        raise ModelInventoryError(f"Invalid model identity JSON: {error}") from error
++    if not isinstance(value, dict):
++        raise ModelInventoryError("Model identity must be a JSON object")
++    return value
++
++
++def _small_bytes(parent: int, name: str, expected: Signature) -> bytes:
++    if expected[3] > MAX_JSON_BYTES:
++        raise ModelInventoryError("Model identity JSON exceeds byte limit")
++    with _plain_file(parent, name, expected) as descriptor:
++        chunks = []
++        remaining = MAX_JSON_BYTES + 1
++        while remaining and (chunk := os.read(descriptor, min(65536, remaining))):
++            chunks.append(chunk)
++            remaining -= len(chunk)
++    data = b"".join(chunks)
++    if len(data) > MAX_JSON_BYTES or len(data) != expected[3]:
++        raise ModelInventoryError("Model identity size changed or exceeded byte limit")
++    return data
++
++
++def read_model_record(path: Path) -> dict[str, Any]:
++    """Read the native API record without following links or unbounded JSON."""
++    try:
++        with _root_directory(path.parent) as parent:
++            info = os.stat(path.name, dir_fd=parent, follow_symlinks=False)
++            if not stat.S_ISREG(info.st_mode):
++                raise ModelInventoryError("Model API record must be a plain file")
++            return _json_object(_small_bytes(parent, path.name, _signature(info)))
++    except OSError as error:
++        raise ModelInventoryError("Cannot safely read model API record") from error
++
++
++def _allowed_link(parts: tuple[str, ...]) -> bool:
++    return (
++        len(parts) == 5
++        and parts[:3] == ("manifests-v2", "ollama.com", "library")
++        and all(_COMPONENT.fullmatch(part) for part in parts[3:])
++        and all(part not in (".", "..") for part in parts)
++    )
++
++
++def _link_destination(parts: tuple[str, ...], raw: str) -> str:
++    if not raw or raw.startswith("/") or len(raw.encode("utf-8")) > MAX_LINK_BYTES:
++        raise ModelInventoryError("Absolute or oversized model link target")
++    result = list(parts[:-1])
++    for component in PurePosixPath(raw).parts:
++        if component == "..":
++            if not result:
++                raise ModelInventoryError("Model link target escapes root")
++            result.pop()
++        elif component != ".":
++            result.append(component)
++    if len(result) != 2 or result[0] != "blobs" or not _BLOB.fullmatch(result[1]):
++        raise ModelInventoryError("Model link must directly name a content-addressed blob")
++    destination = "/".join(result)
++    if raw != posixpath.relpath(destination, "/".join(parts[:-1])):
++        raise ModelInventoryError("Model link target is not the official canonical relative path")
++    return destination
++
++
++def _scan(root: int) -> tuple[dict[str, dict[str, Any]], dict[str, Signature]]:
++    files: dict[str, dict[str, Any]] = {}
++    identities: dict[str, Signature] = {}
++
++    def visit(directory: int, prefix: tuple[str, ...]) -> None:
++        before = _signature(os.fstat(directory))
++        with os.scandir(directory) as entries:
++            for entry in entries:
++                parts = (*prefix, entry.name)
++                relative = "/".join(parts)
++                if len(parts) > MAX_DEPTH or len(identities) >= MAX_ENTRIES:
++                    raise ModelInventoryError("Model tree exceeds depth or entry limit")
++                relative.encode("utf-8")
++                info = os.stat(entry.name, dir_fd=directory, follow_symlinks=False)
++                identity = _signature(info)
++                identities[relative] = identity
++                if stat.S_ISDIR(info.st_mode):
++                    with _directory(directory, (entry.name,)) as child:
++                        if _signature(os.fstat(child)) != identity:
++                            raise ModelInventoryError("Model directory identity changed")
++                        visit(child, parts)
++                elif stat.S_ISREG(info.st_mode):
++                    if (
++                        parts[0] in ("manifests", "manifests-v2") or entry.name.endswith(".json")
++                    ) and info.st_size > MAX_JSON_BYTES:
++                        raise ModelInventoryError("Model identity JSON exceeds byte limit")
++                    digest = _stream_digest(directory, entry.name, identity)
++                    if parts[0] == "blobs":
++                        match = _BLOB.fullmatch(entry.name) if len(parts) == 2 else None
++                        if match is None or match[1] != digest:
++                            raise ModelInventoryError("Blob filename does not match complete content digest")
++                    files[relative] = {"kind": "file", "sha256": digest, "bytes": info.st_size}
++                elif stat.S_ISLNK(info.st_mode):
++                    if not _allowed_link(parts):
++                        raise ModelInventoryError("Link outside supported official v2 manifest location")
++                    raw = os.readlink(entry.name, dir_fd=directory)
++                    destination = _link_destination(parts, raw)
++                    if _signature(os.stat(entry.name, dir_fd=directory, follow_symlinks=False)) != identity:
++                        raise ModelInventoryError("Model link identity changed")
++                    files[relative] = {
++                        "kind": "symlink",
++                        "target": raw,
++                        "normalized_target": destination,
++                        "link_sha256": hashlib.sha256(raw.encode()).hexdigest(),
++                    }
++                else:
++                    raise ModelInventoryError("Special model filesystem object is unsupported")
++        if _signature(os.fstat(directory)) != before:
++            raise ModelInventoryError("Model directory changed during enumeration")
++
++    visit(root, ())
++    for item in files.values():
++        if item["kind"] == "symlink":
++            target = files.get(item["normalized_target"])
++            if target is None or target["kind"] != "file":
++                raise ModelInventoryError("Dangling, chained, or directory model link")
++            item.update(target_sha256=target["sha256"], target_bytes=target["bytes"])
++    return dict(sorted(files.items())), identities
++
++
++def _digest(value: object) -> str:
++    match = _DIGEST.fullmatch(value) if isinstance(value, str) else None
++    if match is None:
++        raise ModelInventoryError("Full canonical SHA256 model digest is required")
++    return match[1]
++
++
++def _read_manifest(
++    root: int, path: str, files: dict[str, dict[str, Any]], identities: dict[str, Signature]
++) -> tuple[dict[str, Any], dict[str, Any]]:
++    item = files.get(path)
++    if item is None or item["kind"] != "file":
++        raise ModelInventoryError("Manifest must resolve to an inventoried plain file")
++    parts = PurePosixPath(path).parts
++    with _directory(root, parts[:-1]) as parent:
++        data = _small_bytes(parent, parts[-1], identities[path])
++    if hashlib.sha256(data).hexdigest() != item["sha256"]:
++        raise ModelInventoryError("Manifest identity changed after enumeration")
++    parsed = _json_object(data)
++    if type(parsed.get("schemaVersion")) is not int or parsed["schemaVersion"] != 2:
++        raise ModelInventoryError("Unsupported manifest schema version")
++    return parsed, {"path": path, "sha256": item["sha256"], "bytes": len(data), "raw_utf8": data.decode("utf-8")}
++
++
++def _verify_leaf(leaf: dict[str, Any], files: dict[str, dict[str, Any]], runner: str) -> None:
++    if leaf.get("mediaType") != MANIFEST_TYPE or "manifests" in leaf:
++        raise ModelInventoryError("Nested or unsupported leaf manifest")
++    if leaf.get("runner", runner) != runner:
++        raise ModelInventoryError("Leaf runner does not match native API record")
++    config, layers = leaf.get("config"), leaf.get("layers")
++    if not isinstance(config, dict) or not isinstance(layers, list) or len(layers) > MAX_ENTRIES:
++        raise ModelInventoryError("Incomplete leaf manifest")
++    for layer in [config, *layers]:
++        if not isinstance(layer, dict):
++            raise ModelInventoryError("Invalid manifest layer descriptor")
++        digest = _digest(layer.get("digest"))
++        item = files.get("blobs/sha256-" + digest)
++        if item is None or item["kind"] != "file" or item["sha256"] != digest:
++            raise ModelInventoryError("Manifest references a missing or unverified blob")
++        size = layer.get("size")
++        if type(size) is not int or size < 0 or size != item["bytes"]:
++            raise ModelInventoryError("Manifest layer size does not match blob")
++
++
++def _bind(
++    root: int,
++    files: dict[str, dict[str, Any]],
++    identities: dict[str, Signature],
++    model: Mapping[str, Any],
++    expected_name: str,
++) -> dict[str, Any]:
++    parts = expected_name.split(":")
++    if len(parts) != 2 or not all(_COMPONENT.fullmatch(part) and part not in (".", "..") for part in parts):
++        raise ModelInventoryError("Only an explicit canonical public model and tag are supported")
++    if model.get("name") != expected_name or model.get("model") != expected_name:
++        raise ModelInventoryError("API record does not identify the selected model name")
++    digest = _digest(model.get("digest"))
++    details = model.get("details")
++    runner = details.get("runner") if isinstance(details, dict) else None
++    if runner not in ("ggml", "llamacpp", "mlx"):
++        raise ModelInventoryError("API record lacks a supported explicit runner")
++    suffix = "/".join(parts)
++    choices = [
++        "manifests-v2/ollama.com/library/" + suffix,
++        "manifests/registry.ollama.ai/library/" + suffix,
++        "manifests/ollama.com/library/" + suffix,
++    ]
++    named = next((path for path in choices if path in identities), None)
++    if named is None or named not in files:
++        raise ModelInventoryError("Selected canonical named manifest is missing or not a file")
++    item = files[named]
++    path = item["normalized_target"] if item["kind"] == "symlink" else named
++    parent, parent_record = _read_manifest(root, path, files, identities)
++    leaf, leaf_record = parent, parent_record
++    binding = "direct-manifest"
++    if parent.get("mediaType") == LIST_TYPE:
++        children = parent.get("manifests")
++        if not isinstance(children, list) or not 1 <= len(children) <= MAX_CHILDREN:
++            raise ModelInventoryError("Manifest list exceeds supported bounds")
++        matches = []
++        seen: set[tuple[str, str]] = set()
++        for child in children:
++            if (
++                not isinstance(child, dict)
++                or child.get("mediaType") != MANIFEST_TYPE
++                or any(key in child for key in ("config", "layers", "manifests"))
++            ):
++                raise ModelInventoryError("Inline or nested manifest list entry is unsupported")
++            child_digest = _digest(child.get("digest"))
++            child_runner = child.get("runner")
++            if child_runner not in ("ggml", "llamacpp", "mlx") or (child_digest, child_runner) in seen:
++                raise ModelInventoryError("Ambiguous or unsupported child descriptor")
++            seen.add((child_digest, child_runner))
++            if child_digest == digest:
++                matches.append(child)
++        if len(matches) != 1 or matches[0]["runner"] != runner:
++            raise ModelInventoryError("API digest and runner do not select one child descriptor")
++        leaf, leaf_record = _read_manifest(root, "blobs/sha256-" + digest, files, identities)
++        binding = "manifest-list-child"
++    if leaf_record["sha256"] != digest:
++        raise ModelInventoryError("Selected manifest bytes do not match complete API digest")
++    _verify_leaf(leaf, files, runner)
++    return {
++        "model_name": expected_name,
++        "named_entry": named,
++        "binding": binding,
++        "api_digest": digest,
++        "api_runner": runner,
++        "named_manifest": parent_record,
++        "selected_manifest": leaf_record,
++    }
++
++
++def inventory_model_store(root: Path, model: Mapping[str, Any], expected_name: str) -> dict[str, Any]:
++    """Freeze files, allowed links, and canonical-name/API manifest identity."""
++    try:
++        with _root_directory(root) as descriptor:
++            initial = _signature(os.fstat(descriptor))
++            files, identities = _scan(descriptor)
++            binding = _bind(descriptor, files, identities, model, expected_name)
++            for relative, expected in identities.items():
++                parts = PurePosixPath(relative).parts
++                with _directory(descriptor, parts[:-1]) as parent:
++                    if _signature(os.stat(parts[-1], dir_fd=parent, follow_symlinks=False)) != expected:
++                        raise ModelInventoryError("Model tree identity changed before freezing")
++            with _root_directory(root) as current:
++                if _signature(os.fstat(current)) != initial:
++                    raise ModelInventoryError("Model root identity changed before freezing")
++            return {
++                "files": files,
++                "identity": binding,
++                "limits": {
++                    "entries": MAX_ENTRIES,
++                    "depth": MAX_DEPTH,
++                    "json_bytes": MAX_JSON_BYTES,
++                    "json_depth": MAX_JSON_DEPTH,
++                    "manifest_children": MAX_CHILDREN,
++                },
++            }
++    except (OSError, UnicodeError) as error:
++        raise ModelInventoryError("Unsafe, missing, or changed model-store object") from error
+diff --git a/src/agent_dev_kit/hosted_task_pilot.py b/src/agent_dev_kit/hosted_task_pilot.py
+index 4934879..1a8dddc 100644
+--- a/src/agent_dev_kit/hosted_task_pilot.py
++++ b/src/agent_dev_kit/hosted_task_pilot.py
+@@ -20,6 +20,7 @@ from types import FrameType
+ from typing import Any
+ 
+ from . import hosted_task_native as native
++from .hosted_model_inventory import inventory_model_store, read_model_record
+ from .hosted_task_native import (
+     PROMPT_SHA,
+     TASK_SECONDS,
+@@ -485,13 +486,8 @@ WORKDIR /work
+             network="bridge",
+         )
+         assert prepared["state"]["ExitCode"] == 0 and not prepared["timed_out"], "Model preparation blocked"
+-        model = json.loads((self.root / "prepare-records/model.json").read_text())
+-        files = inventory(self.root / "models")
+-        assert any(
+-            item["sha256"] == model["digest"].removeprefix("sha256:")
+-            for path, item in files.items()
+-            if path.startswith("manifests/")
+-        )
++        model = read_model_record(self.root / "prepare-records/model.json")
++        model_store = inventory_model_store(self.root / "models", model, native.MODEL)
+         self.summary["model_digest"] = model["digest"]
+         for condition in ("baseline", "candidate"):
+             write_json(self.root / condition / "input/model.json", model)
+@@ -501,7 +497,9 @@ WORKDIR /work
+                 "frozen_at": now(),
+                 "image": json.loads((self.evidence / "image-identity.json").read_text()),
+                 "model": model,
+-                "model_files": files,
++                "model_files": model_store["files"],
++                "model_identity": model_store["identity"],
++                "model_inventory_limits": model_store["limits"],
+                 "tool_files": native.tool_inventory(self.root / "tools"),
+                 "task_order": ["baseline", "candidate"],
+                 "task_seconds_each": TASK_SECONDS,
+diff --git a/tests/test_hosted_model_inventory.py b/tests/test_hosted_model_inventory.py
+new file mode 100644
+index 0000000..37818ba
+--- /dev/null
++++ b/tests/test_hosted_model_inventory.py
+@@ -0,0 +1,323 @@
++"""Synthetic source-derived layouts; never a replay of the lost hosted model tree."""
++
++from __future__ import annotations
++
++import copy
++import errno
++import hashlib
++import json
++import os
++from pathlib import Path
++import tempfile
++from typing import Any
++import unittest
++from unittest.mock import patch
++
++from agent_dev_kit import hosted_model_inventory as models
++from agent_dev_kit import hosted_task_native as native
++
++
++class Store:
++    def __init__(self, parent: Path) -> None:
++        self.root = parent / "models"
++        (self.root / "blobs").mkdir(parents=True)
++        config = self.layer(b'{"model_format":"gguf"}')
++        weight = self.layer(b"synthetic public weights, not a real model")
++        self.leaf: dict[str, Any] = {
++            "schemaVersion": 2,
++            "mediaType": models.MANIFEST_TYPE,
++            "config": config,
++            "layers": [weight],
++            "runner": "ggml",
++        }
++        self.digest = self.blob(self.json_bytes(self.leaf))
++        self.named = self.root / "manifests-v2/ollama.com/library/qwen3/1.7b"
++        self.alias(self.named, self.digest)
++        self.api: dict[str, Any] = {
++            "name": "qwen3:1.7b",
++            "model": "qwen3:1.7b",
++            "digest": self.digest,
++            "details": {"runner": "ggml", "format": "gguf"},
++        }
++
++    @staticmethod
++    def json_bytes(value: object) -> bytes:
++        return (json.dumps(value, separators=(",", ":")) + "\n").encode()
++
++    def blob(self, data: bytes) -> str:
++        digest = hashlib.sha256(data).hexdigest()
++        (self.root / "blobs" / ("sha256-" + digest)).write_bytes(data)
++        return digest
++
++    def layer(self, data: bytes) -> dict[str, Any]:
++        return {"mediaType": "application/octet-stream", "digest": "sha256:" + self.blob(data), "size": len(data)}
++
++    def alias(self, path: Path, digest: str, *, regular: bool = False) -> None:
++        path.parent.mkdir(parents=True, exist_ok=True)
++        if path.is_symlink() or path.exists():
++            path.unlink()
++        blob = self.root / "blobs" / ("sha256-" + digest)
++        if regular:
++            path.write_bytes(blob.read_bytes())
++        else:
++            path.symlink_to(os.path.relpath(blob, path.parent))
++
++    def descriptor(self, *, runner: str = "ggml") -> dict[str, Any]:
++        return {
++            "mediaType": models.MANIFEST_TYPE,
++            "digest": "sha256:" + self.digest,
++            "runner": runner,
++            "format": "gguf",
++        }
++
++    def parent(self, children: list[dict[str, Any]]) -> str:
++        digest = self.blob(self.json_bytes({"schemaVersion": 2, "mediaType": models.LIST_TYPE, "manifests": children}))
++        self.alias(self.named, digest)
++        return digest
++
++    def freeze(self) -> dict[str, Any]:
++        return models.inventory_model_store(self.root, self.api, "qwen3:1.7b")
++
++
++class ModelInventoryTests(unittest.TestCase):
++    def setUp(self) -> None:
++        self.temporary = tempfile.TemporaryDirectory()
++        self.addCleanup(self.temporary.cleanup)
++        self.store = Store(Path(self.temporary.name))
++
++    def test_official_relative_v2_link_is_recorded_without_relaxing_generic_inventory(self) -> None:
++        with self.assertRaisesRegex(RuntimeError, "Unexpected symlink"):
++            native.inventory(self.store.root)
++        frozen = self.store.freeze()
++        link = frozen["files"][self.store.named.relative_to(self.store.root).as_posix()]
++        self.assertEqual(link["kind"], "symlink")
++        self.assertEqual(link["target"], os.readlink(self.store.named))
++        self.assertEqual(link["link_sha256"], hashlib.sha256(link["target"].encode()).hexdigest())
++        self.assertEqual(link["normalized_target"], "blobs/sha256-" + self.store.digest)
++        self.assertEqual(link["target_sha256"], self.store.digest)
++        identity = frozen["identity"]
++        self.assertEqual(identity["binding"], "direct-manifest")
++        self.assertEqual(identity["api_digest"], self.store.digest)
++        self.assertEqual(hashlib.sha256(identity["named_manifest"]["raw_utf8"].encode()).hexdigest(), self.store.digest)
++
++    def test_regular_legacy_and_v2_copy_fallback_are_supported(self) -> None:
++        for path in (self.store.named, self.store.root / "manifests/registry.ollama.ai/library/qwen3/1.7b"):
++            with self.subTest(path=str(path)):
++                if self.store.named.exists():
++                    self.store.named.unlink()
++                self.store.alias(path, self.store.digest, regular=True)
++                self.assertEqual(
++                    self.store.freeze()["identity"]["named_entry"], path.relative_to(self.store.root).as_posix()
++                )
++
++    def test_manifest_list_binds_distinct_parent_to_selected_child_and_api_runner(self) -> None:
++        parent = self.store.parent([self.store.descriptor()])
++        self.assertNotEqual(parent, self.store.digest)
++        identity = self.store.freeze()["identity"]
++        self.assertEqual(identity["binding"], "manifest-list-child")
++        self.assertEqual(identity["named_manifest"]["sha256"], parent)
++        self.assertEqual(identity["selected_manifest"]["sha256"], self.store.digest)
++        self.assertEqual(identity["api_runner"], "ggml")
++
++    def test_v2_priority_cannot_be_bypassed_by_matching_legacy_entry(self) -> None:
++        legacy = self.store.root / "manifests/registry.ollama.ai/library/qwen3/1.7b"
++        self.store.alias(legacy, self.store.digest, regular=True)
++        wrong = self.store.blob(self.store.json_bytes({**self.store.leaf, "marker": "different manifest"}))
++        self.store.alias(self.store.named, wrong)
++        with self.assertRaisesRegex(models.ModelInventoryError, "complete API digest"):
++            self.store.freeze()
++        self.store.alias(self.store.named, self.store.digest)
++        self.store.alias(legacy, wrong, regular=True)
++        self.assertEqual(
++            self.store.freeze()["identity"]["named_entry"], self.store.named.relative_to(self.store.root).as_posix()
++        )
++
++    def test_matching_arbitrary_blob_or_wrong_named_entry_is_insufficient(self) -> None:
++        self.store.named.rename(self.store.named.with_name("other-tag"))
++        with self.assertRaisesRegex(models.ModelInventoryError, "canonical named manifest"):
++            self.store.freeze()
++
++    def test_api_name_digest_and_runner_are_independently_bound(self) -> None:
++        original = copy.deepcopy(self.store.api)
++        for change in (
++            {"name": "other:tag"},
++            {"model": "other:tag"},
++            {"digest": "f" * 64},
++            {"digest": "short"},
++            {"details": {"runner": "llamacpp"}},
++        ):
++            with self.subTest(change=change):
++                self.store.api = {**original, **change}
++                with self.assertRaises(models.ModelInventoryError):
++                    self.store.freeze()
++
++    def test_absolute_escape_self_cycle_and_link_chain_targets_are_rejected(self) -> None:
++        sibling = self.store.named.with_name("other-tag")
++        self.store.alias(sibling, self.store.digest)
++        for target in ("/models/blobs/sha256-" + self.store.digest, "../../../../../outside", "1.7b", "other-tag"):
++            with self.subTest(target=target):
++                self.store.named.unlink()
++                self.store.named.symlink_to(target)
++                with self.assertRaises(models.ModelInventoryError):
++                    self.store.freeze()
++
++    def test_raw_link_ancestors_cannot_be_lexically_cancelled(self) -> None:
++        (self.store.named.parent / "ordinary").write_bytes(b"ordinary file")
++        (self.store.named.parent / "detour").mkdir()
++        for prefix, native_errno in (("1.7b", errno.ELOOP), ("ordinary", errno.ENOTDIR), ("detour", None)):
++            with self.subTest(prefix=prefix):
++                self.store.named.unlink()
++                self.store.named.symlink_to(prefix + "/../../../../../blobs/sha256-" + self.store.digest)
++                if native_errno is not None:
++                    with self.assertRaises(OSError) as raised:
++                        self.store.named.stat()
++                    self.assertEqual(raised.exception.errno, native_errno)
++                with self.assertRaises(models.ModelInventoryError):
++                    self.store.freeze()
++
++    def test_dangling_and_directory_targets_are_rejected(self) -> None:
++        blob = self.store.root / "blobs" / ("sha256-" + self.store.digest)
++        blob.unlink()
++        with self.assertRaises(models.ModelInventoryError):
++            self.store.freeze()
++        blob.mkdir()
++        with self.assertRaises(models.ModelInventoryError):
++            self.store.freeze()
++
++    def test_symlinked_blob_and_ancestors_are_rejected(self) -> None:
++        blob = self.store.root / "blobs" / ("sha256-" + self.store.digest)
++        outside = Path(self.temporary.name) / "outside-blob"
++        blob.rename(outside)
++        blob.symlink_to(outside)
++        with self.assertRaises(models.ModelInventoryError):
++            self.store.freeze()
++        blob.unlink()
++        outside.rename(blob)
++        alias = Path(self.temporary.name) / "linked-parent"
++        alias.symlink_to(self.store.root.parent, target_is_directory=True)
++        with self.assertRaises(models.ModelInventoryError):
++            models.inventory_model_store(alias / "models", self.store.api, "qwen3:1.7b")
++        directory = self.store.root / "manifests-v2/ollama.com/library"
++        saved = self.store.root / "saved-library"
++        directory.rename(saved)
++        directory.symlink_to(saved, target_is_directory=True)
++        with self.assertRaises(models.ModelInventoryError):
++            self.store.freeze()
++
++    def test_unsupported_link_location_and_special_file_are_rejected(self) -> None:
++        link = self.store.root / "unexpected-link"
++        link.symlink_to("blobs/sha256-" + self.store.digest)
++        with self.assertRaises(models.ModelInventoryError):
++            self.store.freeze()
++        link.unlink()
++        os.mkfifo(self.store.root / "unexpected-fifo")
++        with self.assertRaisesRegex(models.ModelInventoryError, "Special"):
++            self.store.freeze()
++
++    def test_blob_filename_and_complete_content_must_agree(self) -> None:
++        blob = self.store.root / "blobs" / ("sha256-" + self.store.digest)
++        blob.write_bytes(b"corrupt manifest")
++        with self.assertRaisesRegex(models.ModelInventoryError, "complete content digest"):
++            self.store.freeze()
++
++    def test_ambiguous_runner_inline_and_nested_lists_are_rejected(self) -> None:
++        descriptor = self.store.descriptor()
++        children_cases = [
++            [descriptor, descriptor],
++            [descriptor, self.store.descriptor(runner="llamacpp")],
++            [self.store.descriptor(runner="llamacpp")],
++            [{**descriptor, "config": {}}],
++            [{**descriptor, "mediaType": models.LIST_TYPE}],
++            [{**descriptor, "digest": "sha256:" + "e" * 64}],
++        ]
++        for children in children_cases:
++            with self.subTest(children=children):
++                self.store.parent(children)
++                with self.assertRaises(models.ModelInventoryError):
++                    self.store.freeze()
++
++    def test_missing_leaf_blob_layer_or_wrong_size_is_rejected(self) -> None:
++        self.store.parent([self.store.descriptor()])
++        (self.store.root / "blobs" / ("sha256-" + self.store.digest)).unlink()
++        with self.assertRaises(models.ModelInventoryError):
++            self.store.freeze()
++        self.store.blob(self.store.json_bytes(self.store.leaf))
++        wrong = copy.deepcopy(self.store.leaf)
++        wrong["config"]["size"] += 1
++        self.store.api["digest"] = self.store.blob(self.store.json_bytes(wrong))
++        self.store.alias(self.store.named, self.store.api["digest"])
++        with self.assertRaisesRegex(models.ModelInventoryError, "layer size"):
++            self.store.freeze()
++
++    def test_json_api_record_and_manifest_limits_are_enforced(self) -> None:
++        record = Path(self.temporary.name) / "model.json"
++        record.write_bytes(self.store.json_bytes(self.store.api))
++        self.assertEqual(models.read_model_record(record), self.store.api)
++        record.write_bytes(b" " * (models.MAX_JSON_BYTES + 1))
++        with self.assertRaisesRegex(models.ModelInventoryError, "byte limit"):
++            models.read_model_record(record)
++        oversized = self.store.blob(b" " * (models.MAX_JSON_BYTES + 1))
++        self.store.alias(self.store.named, oversized)
++        self.store.api["digest"] = oversized
++        with self.assertRaisesRegex(models.ModelInventoryError, "byte limit"):
++            self.store.freeze()
++
++    def test_entry_depth_and_child_count_are_bounded(self) -> None:
++        self.store.parent([self.store.descriptor()] * (models.MAX_CHILDREN + 1))
++        with self.assertRaisesRegex(models.ModelInventoryError, "bounds"):
++            self.store.freeze()
++        self.store.alias(self.store.named, self.store.digest)
++        deep = self.store.root.joinpath(*(["deep"] * (models.MAX_DEPTH + 1)))
++        deep.mkdir(parents=True)
++        with self.assertRaisesRegex(models.ModelInventoryError, "depth or entry limit"):
++            self.store.freeze()
++        with tempfile.TemporaryDirectory() as temporary:
++            other = Store(Path(temporary))
++            metadata = other.root / "metadata"
++            metadata.mkdir()
++            for index in range(models.MAX_ENTRIES + 1):
++                (metadata / str(index)).write_bytes(b"public")
++            with self.assertRaisesRegex(models.ModelInventoryError, "depth or entry limit"):
++                other.freeze()
++
++    def test_duplicate_json_fields_are_not_silently_interpreted(self) -> None:
++        data = self.store.json_bytes(self.store.leaf).replace(
++            b'{"schemaVersion":2,', b'{"schemaVersion":2,"schemaVersion":2,', 1
++        )
++        digest = self.store.blob(data)
++        self.store.alias(self.store.named, digest)
++        self.store.api["digest"] = digest
++        with self.assertRaisesRegex(models.ModelInventoryError, "duplicate"):
++            self.store.freeze()
++
++    def test_shared_strict_json_rejects_depth_nonfinite_and_invalid_unicode(self) -> None:
++        record = Path(self.temporary.name) / "model.json"
++        nested = b'{"nested":' + b"[" * models.MAX_JSON_DEPTH + b"0" + b"]" * models.MAX_JSON_DEPTH + b"}"
++        for data, reason in (
++            (nested, "nesting"),
++            (b'{"bad":NaN}', "non-finite"),
++            (b'{"bad":1e9999}', "non-finite"),
++            (b"\xff", "invalid JSON"),
++            (b'{"bad":"\\ud800"}', "Unicode"),
++        ):
++            with self.subTest(reason=reason):
++                record.write_bytes(data)
++                with self.assertRaisesRegex(models.ModelInventoryError, reason):
++                    models.read_model_record(record)
++
++    def test_content_changed_between_inventory_and_identity_read_fails_closed(self) -> None:
++        original = models._small_bytes
++        blob = self.store.root / "blobs" / ("sha256-" + self.store.digest)
++
++        def mutate(parent: int, name: str, expected: models.Signature) -> bytes:
++            info = blob.stat()
++            os.utime(blob, ns=(info.st_atime_ns, info.st_mtime_ns + 1_000_000_000))
++            return original(parent, name, expected)
++
++        with patch.object(models, "_small_bytes", side_effect=mutate):
++            with self.assertRaisesRegex(models.ModelInventoryError, "identity changed"):
++                self.store.freeze()
++
++
++if __name__ == "__main__":
++    unittest.main()

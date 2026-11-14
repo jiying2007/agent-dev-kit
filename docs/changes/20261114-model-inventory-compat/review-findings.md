@@ -1,0 +1,13 @@
+# 独立审查范围与发现
+
+设计及证据协调为`ai/root`，实现者为`ai/root/consumer_adoption_audit`，最终只读审查为`ai/root/task_protocol_audit`。原托管工件另由`ai/root/runtime_continuation_audit`独立核验。以上为声明的AI角色分离，不声称人类或GitHub reviewer审批。
+
+审查对象为源码提交`86710516da820dc112f8126298aa23ab5d2d502a`，tree `4fae75d73e88141cdd8696a9fb377ad5c00fe8df`，base为`94da65553e163b34ac5a73c1aef07f228aacdcd5`。保留的完整原始patch和15项文件绑定区分12项变更与3项C2原字节不变。
+
+预审唯一Major为raw链接祖先被词法消去后错误准入。独立探针实际观察到OS ELOOP，而草稿仍接受；作者随后用一个测试方法中的三个subTest复现自引用、普通文件祖先与目录绕行。修复要求raw target与官方规范relative表达严格一致，且完整保留fd-relative/no-follow、content-addressed blob、规范模型名称及parent/child/API digest绑定。最终GREEN包含同一方法的全部子例。独立RED原件及作者真实合并输出均保留。
+
+RED调用当时没有分别采集stdout/stderr，也未保存完整旧草稿模块快照；本次如实保留缺口，没有补造原件或重新执行旧代码以替代当时记录。官方样式小型目录是合成回归，不是缺失的原宿主模型树重放。JSON校验复用既有strict_json，显式保留1MiB/32层及重复键/非有限数拒绝。
+
+最终Spec/Quality裁决及实际审查时刻以`evidence/independent-review.json`为准。审查覆盖准确实现、定向与全量原件、官方身份、真实失败结果说明和归档保真。后续typed记录为root按真实裁决生成的结构化转录，不具有另行的人类审批或生产发布效力。
+
+原run43614661952仍是准备阶段失败、两条件not-run。此次源码修复没有新增模型/Docker/job；任务执行分支仍为C2，正式main/release和消费者锁不由本次工程审查改变。

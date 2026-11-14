@@ -1,0 +1,19 @@
+{
+  "checked_at": "2026-11-14T16:43:14.625027Z",
+  "source_commit": "86710516da820dc112f8126298aa23ab5d2d502a",
+  "security_check": {
+    "schema_version": 1,
+    "status": "pass",
+    "failures": [],
+    "warnings": [],
+    "inventory_source": "git",
+    "files_scanned": 2105,
+    "scan_limit": 50000
+  },
+  "diff_check": {
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "scope": "Six receipt files after full regression; runnable source remains exact E"
+}

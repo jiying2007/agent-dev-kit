@@ -1,0 +1,593 @@
+{
+  "schema_version": 1,
+  "record_kind": "independent-read-only-spec-quality-review",
+  "reviewed_at": "2026-11-14T16:45:34Z",
+  "reviewer": "ai/root/task_protocol_audit",
+  "role_separation": {
+    "design_and_evidence_coordinator": "ai/root",
+    "implementation_author": "ai/root/consumer_adoption_audit",
+    "original_hosted_artifact_reviewer": "ai/root/runtime_continuation_audit",
+    "review_kind": "AI role separation; no human or GitHub approval claimed"
+  },
+  "scope": {
+    "change": "20261114-model-inventory-compat",
+    "source_commit": "86710516da820dc112f8126298aa23ab5d2d502a",
+    "source_tree": "4fae75d73e88141cdd8696a9fb377ad5c00fe8df",
+    "base_commit": "94da65553e163b34ac5a73c1aef07f228aacdcd5",
+    "repository": "/workspace/scratch/234e724cfc4b/adk-hosted-pilot",
+    "source_files_bound": 15,
+    "changed_source_and_fact_files": 12,
+    "unchanged_control_files": 3,
+    "staged_receipts_reviewed": 7,
+    "description": "Frozen source E, its design/requirements/tasks snapshot, archived one-shot failure facts, official fixed-version source diagnosis, deterministic RED/GREEN and full regression evidence, and seven exact staged receipts.",
+    "source_only": true,
+    "may_trigger": false,
+    "subsequent_typed_record_reviewed": false,
+    "subsequent_M3_M4_task_checkoffs_reviewed": false,
+    "later_receipt_commits_are_not_execution_targets": true
+  },
+  "spec_review": {
+    "verdict": "pass",
+    "reasons": [
+      "The model-specific inventory is a typed host-only core module. The host uses it after completed preparation; generic input/work/config/Skill inventory, native publisher and workflow remain byte-identical to C2.",
+      "The bounded Linux model store walk holds directory descriptors, uses no-follow opens, rejects directory links and special files, verifies before/after identities and all content-addressed blob bytes, and does not follow raw named links through the kernel.",
+      "Canonical named v2 lookup has priority over legacy lookup. Named manifest identity is bound to exact bytes and either a direct API digest or a bounded manifest-list parent, unique selected child, selected leaf bytes, API digest and runner.",
+      "Raw model symlink targets must equal the official canonical relative expression. The earlier lexical cancellation flaw is closed without broadening general symlink or artifact publication policy.",
+      "Existing strict_json parsing enforces explicit 1 MiB and 32-level limits, duplicate-key and non-finite rejection. Unsupported nested/inline/ambiguous model lists fail closed.",
+      "The result and receipt notes distinguish successful hosted model preparation from failed full inventory freeze and zero task runs. They do not convert synthetic tests into native acceptance, Skill loading, usage, session or efficacy evidence."
+    ]
+  },
+  "quality_review": {
+    "verdict": "pass",
+    "reasons": [
+      "Read all frozen implementation and new regression tests, host integration diff, requirements/design/tasks, and archived outcome facts; no remaining concrete blocker found.",
+      "Independently reproduced the pre-fix raw-link flaw using a synthetic filesystem. Actual ELOOP differed from the draft's acceptance; the original negative receipt is retained unchanged.",
+      "Author evidence shows 36 test methods (19 new, 17 existing) and 52 actual subTest callbacks passing in 1.426 seconds, with mypy on five files, Ruff, formatting, module-size and security checks passing.",
+      "The separate repository full regression completed 102 of 102 registered gates with exit 0, empty stderr and no frozen-source drift. The raw timing, command result and streams agree.",
+      "The 23-member author wrapper and 4-member full wrapper reconstruct exact UTF-8 source bytes. All declared lengths and SHA256 values match original scratch evidence; no mismatches were found.",
+      "Seven final staged receipts match scratch originals and Git index bytes. Fifteen frozen file identities still match source E, index and working tree; no unstaged changes were observed.",
+      "Post-full security and staged-diff receipts report a clean check over 2105 Git inventory files, without changing the scanner or source."
+    ]
+  },
+  "verdict": "pass",
+  "open_findings": [],
+  "closed_findings": [
+    {
+      "id": "MODEL-INVENTORY-RAW-LINK-LEXICAL-CANCELLATION",
+      "severity": "major",
+      "status": "closed",
+      "observed_at": "2026-11-14T16:31:17.662609Z",
+      "draft_sha256": "e2ba990c063d31507e7e3d6c5a8ec0137f551406fa3d07ec95b7a857c42c6a21",
+      "issue": "Lexically cancelling raw link path components admitted a self-referential tag ancestor that the kernel rejected with ELOOP, and could similarly discard regular-file or detour ancestors.",
+      "independent_original": {
+        "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/model-inventory-independent-probes/cyclic-raw-link-ancestor.json",
+        "bytes": 2505,
+        "sha256": "2778bd918ff0690d9a96192b76a42524efe6c108278150e8ff7e382107877e6d"
+      },
+      "author_red": {
+        "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/model-inventory-compat-audit/red-raw-link-cases.json",
+        "sha256": "e227938bdb9597a5721467bf8a75ab64e01db11dfe825ffdff3ec74c77b21883",
+        "combined_log_path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/model-inventory-compat-audit/red-raw-link-cases.combined.log",
+        "combined_log_sha256": "2049b687f452ccd4de444c73474107126c58982e5ef75a35544d4eee9d8c9c97",
+        "test_methods": 19,
+        "failing_subtests": 3,
+        "failing_test_methods": 1,
+        "exit_code": 1
+      },
+      "resolution": "Require the raw target to exactly equal the canonical relative path from the named-link parent to the already inventoried content-addressed blob; reject noncanonical raw ancestor semantics before admission.",
+      "fixed_module_sha256": "4ceb390bb9b1fb019a006d910b7d5414b40d87038029238c7cd26b0d42b8d8b7",
+      "regression_test_sha256": "134958eabf7ac40d230e05ea25c0539ea7e804f4c2cb6dcd1c3608c9dfa1b229",
+      "verification": "The matching raw-link method and its self-link, ordinary-file and directory-detour subtests are included in the actual final 36-method / 52-subTest GREEN evidence.",
+      "evidence_limit": "RED captured a combined stream only. The complete pre-fix module snapshot was not saved. No separate streams or snapshot were manufactured and old code was not rerun to substitute for contemporaneous evidence."
+    }
+  ],
+  "source_file_bindings": {
+    "docs/changes/20261114-hosted-task-pilot/evidence/hosted-artifact-review.json": {
+      "sha256": "94d19b1e1ce983cd36eabb6a41a9ad0b153785b955218f7fa5ac97dbb799696f",
+      "bytes": 32986
+    },
+    "docs/changes/20261114-hosted-task-pilot/evidence/hosted-root-check.json": {
+      "sha256": "dde0fc51fae94e03274200f314d6e737b5f64294a93a1760200c9f7121801805",
+      "bytes": 2573
+    },
+    "docs/changes/20261114-hosted-task-pilot/result.md": {
+      "sha256": "2e570dbd1fba2c1e43d2b582970c65e995fca483a5694a8f20c3138638ea7763",
+      "bytes": 3531
+    },
+    "docs/changes/20261114-hosted-task-pilot/tasks.md": {
+      "sha256": "008f62c5dc083d503aa75c960fea4d00c54ef7f21180bc21d7d0cb1acccdc3d4",
+      "bytes": 2263
+    },
+    "docs/changes/20261114-model-inventory-compat/design.md": {
+      "sha256": "8b2af253b5e95389f2b33810a2086e85ecb2e82df25ea9ae12d64cd1971a20d1",
+      "bytes": 4163
+    },
+    "docs/changes/20261114-model-inventory-compat/evidence/cyclic-raw-link-red.json": {
+      "sha256": "2778bd918ff0690d9a96192b76a42524efe6c108278150e8ff7e382107877e6d",
+      "bytes": 2505
+    },
+    "docs/changes/20261114-model-inventory-compat/evidence/official-diagnosis.json": {
+      "sha256": "10b7872f740d022870b765d491deab5afaa5a007c2b97365ca27a5dab9efa64a",
+      "bytes": 1946
+    },
+    "docs/changes/20261114-model-inventory-compat/requirements.md": {
+      "sha256": "ffaab8ee265cb543d5fb971dde5a4a435955ffffd8aec24437ecdf90cd352e4d",
+      "bytes": 2094
+    },
+    "docs/changes/20261114-model-inventory-compat/tasks.md": {
+      "sha256": "eb085a218afa7d4ced03bf5de6c6303d498996c955740b10dfa53ba4890fc001",
+      "bytes": 1074
+    },
+    "src/agent_dev_kit/hosted_model_inventory.py": {
+      "sha256": "4ceb390bb9b1fb019a006d910b7d5414b40d87038029238c7cd26b0d42b8d8b7",
+      "bytes": 16991
+    },
+    "src/agent_dev_kit/hosted_task_pilot.py": {
+      "sha256": "d94999980ac02427d43afe55a657ba1120e8e9c471d9770b408c031287c3db78",
+      "bytes": 29640
+    },
+    "tests/test_hosted_model_inventory.py": {
+      "sha256": "134958eabf7ac40d230e05ea25c0539ea7e804f4c2cb6dcd1c3608c9dfa1b229",
+      "bytes": 15475
+    },
+    ".github/workflows/opencode-task-pilot-once.yml": {
+      "sha256": "cfbd9033d3b7933c0cd1c950179a3a651043b994b1ea782c60a623604679cd74",
+      "bytes": 6518
+    },
+    "src/agent_dev_kit/hosted_task_native.py": {
+      "sha256": "1d53d5502a714137c5e3f2fbfd11a71e9e891e802da1f5bd4048fa4d6da7ebe8",
+      "bytes": 24721
+    },
+    "tests/test_hosted_task_pilot.py": {
+      "sha256": "67b14e9ccf42b1e40ed1e58d1dd17cc403721d1a19ae86724245eadcbf25181b",
+      "bytes": 24160
+    }
+  },
+  "changed_files": [
+    "docs/changes/20261114-hosted-task-pilot/evidence/hosted-artifact-review.json",
+    "docs/changes/20261114-hosted-task-pilot/evidence/hosted-root-check.json",
+    "docs/changes/20261114-hosted-task-pilot/result.md",
+    "docs/changes/20261114-hosted-task-pilot/tasks.md",
+    "docs/changes/20261114-model-inventory-compat/design.md",
+    "docs/changes/20261114-model-inventory-compat/evidence/cyclic-raw-link-red.json",
+    "docs/changes/20261114-model-inventory-compat/evidence/official-diagnosis.json",
+    "docs/changes/20261114-model-inventory-compat/requirements.md",
+    "docs/changes/20261114-model-inventory-compat/tasks.md",
+    "src/agent_dev_kit/hosted_model_inventory.py",
+    "src/agent_dev_kit/hosted_task_pilot.py",
+    "tests/test_hosted_model_inventory.py"
+  ],
+  "unchanged_c2_paths": [
+    ".github/workflows/opencode-task-pilot-once.yml",
+    "src/agent_dev_kit/hosted_task_native.py",
+    "tests/test_hosted_task_pilot.py"
+  ],
+  "original_patch": {
+    "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/root-model-inventory-v1/original.patch",
+    "bytes": 92943,
+    "sha256": "4c41f5ae603958ad474a3c536513678914d9dbc2bcb696d1b74980a362ef0a11"
+  },
+  "original_source_bindings": {
+    "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/root-model-inventory-v1/source-bindings.json",
+    "bytes": 3560,
+    "sha256": "2441537dcd5b752da5bb2c2492a073726fb923b595078fd0099a1e8b3d781721"
+  },
+  "final_staged_receipt_bindings": [
+    {
+      "path": "/workspace/scratch/234e724cfc4b/adk-hosted-pilot/docs/changes/20261114-model-inventory-compat/evidence/author-validation.json",
+      "bytes": 45630,
+      "sha256": "b5ed6f6518c72ffb569271bc6d410fc132fd28b7b26f613639329ac7cce2ff57"
+    },
+    {
+      "path": "/workspace/scratch/234e724cfc4b/adk-hosted-pilot/docs/changes/20261114-model-inventory-compat/evidence/full-regression.json",
+      "bytes": 14507,
+      "sha256": "dd69ef204fd827198847e10c91be09b9a763ba056711b354c46f42c634a8825e"
+    },
+    {
+      "path": "/workspace/scratch/234e724cfc4b/adk-hosted-pilot/docs/changes/20261114-model-inventory-compat/evidence/original.patch",
+      "bytes": 92943,
+      "sha256": "4c41f5ae603958ad474a3c536513678914d9dbc2bcb696d1b74980a362ef0a11"
+    },
+    {
+      "path": "/workspace/scratch/234e724cfc4b/adk-hosted-pilot/docs/changes/20261114-model-inventory-compat/evidence/source-bindings.json",
+      "bytes": 3560,
+      "sha256": "2441537dcd5b752da5bb2c2492a073726fb923b595078fd0099a1e8b3d781721"
+    },
+    {
+      "path": "/workspace/scratch/234e724cfc4b/adk-hosted-pilot/docs/changes/20261114-model-inventory-compat/evidence/receipt-checks.json",
+      "bytes": 474,
+      "sha256": "55a3e9a7d0f33e4c4277d2e05136ab396aae977b8462eba653438493302b68e7"
+    },
+    {
+      "path": "/workspace/scratch/234e724cfc4b/adk-hosted-pilot/docs/changes/20261114-model-inventory-compat/verification.md",
+      "bytes": 2221,
+      "sha256": "ff6442bc3bae8cfce8e295897fc3b1b58bf9f6d980ea47956e08265ca8a5acb1"
+    },
+    {
+      "path": "/workspace/scratch/234e724cfc4b/adk-hosted-pilot/docs/changes/20261114-model-inventory-compat/review-findings.md",
+      "bytes": 1996,
+      "sha256": "b801fd75fe82763059fd662eb3915ce36e97262024fd220b43397f7f72ed4780"
+    }
+  ],
+  "wrapper_fidelity": {
+    "verdict": "pass",
+    "wrappers": [
+      {
+        "wrapper": {
+          "path": "/workspace/scratch/234e724cfc4b/adk-hosted-pilot/docs/changes/20261114-model-inventory-compat/evidence/author-validation.json",
+          "bytes": 45630,
+          "sha256": "b5ed6f6518c72ffb569271bc6d410fc132fd28b7b26f613639329ac7cce2ff57"
+        },
+        "member_count": 23,
+        "raw_bytes": 38617,
+        "members": [
+          {
+            "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/model-inventory-compat-audit/freeze.json",
+            "bytes": 10503,
+            "sha256": "29738d0bef7532451a01c410cd8d884ed2621eee2de4c8e268d4170f9546e79a"
+          },
+          {
+            "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/model-inventory-compat-audit/red-generic-inventory.json",
+            "bytes": 2310,
+            "sha256": "7bb4f425972a6309e5baff78d18f44f3d6742164aa9d824d0334d12978e0da66"
+          },
+          {
+            "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/model-inventory-compat-audit/red-generic-inventory.combined.log",
+            "bytes": 705,
+            "sha256": "6d6e8b43dd93fd0234e07b56a7f39a019276f5da6e83213c6a2007c8a37c265d"
+          },
+          {
+            "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/model-inventory-compat-audit/red-raw-link-cases.json",
+            "bytes": 6825,
+            "sha256": "e227938bdb9597a5721467bf8a75ab64e01db11dfe825ffdff3ec74c77b21883"
+          },
+          {
+            "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/model-inventory-compat-audit/red-raw-link-cases.combined.log",
+            "bytes": 6055,
+            "sha256": "2049b687f452ccd4de444c73474107126c58982e5ef75a35544d4eee9d8c9c97"
+          },
+          {
+            "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/model-inventory-compat-audit/final-validation/unit-contracts.json",
+            "bytes": 1182,
+            "sha256": "392deb5a00a316bdc7b6a22f4aa199496a8e49a57cb6e6f158609890a32ff2dc"
+          },
+          {
+            "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/model-inventory-compat-audit/final-validation/unit-contracts.stdout",
+            "bytes": 106,
+            "sha256": "da6623961566788434de487e2a5d4cc98e9bb4685782accb91f367691c6f2c81"
+          },
+          {
+            "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/model-inventory-compat-audit/final-validation/unit-contracts.stderr",
+            "bytes": 6269,
+            "sha256": "da240448573c685d422e2185c089224c173acd13af2c873275f7bdd04149777b"
+          },
+          {
+            "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/model-inventory-compat-audit/final-validation/ruff.json",
+            "bytes": 851,
+            "sha256": "1314769bc1f3032a6ffa335a2be105f5767eda2a1c44ddccd40316e2dddf07a6"
+          },
+          {
+            "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/model-inventory-compat-audit/final-validation/ruff.stdout",
+            "bytes": 19,
+            "sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18"
+          },
+          {
+            "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/model-inventory-compat-audit/final-validation/ruff.stderr",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/model-inventory-compat-audit/final-validation/mypy.json",
+            "bytes": 860,
+            "sha256": "8e68dcff6266acb778324887b056e47950a2facd90cfe539d83fc6abd1f5a6ba"
+          },
+          {
+            "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/model-inventory-compat-audit/final-validation/mypy.stdout",
+            "bytes": 43,
+            "sha256": "e317872697c2cbfdefa321527a6efe73290dff3a390b0fa8723b87092eccba6a"
+          },
+          {
+            "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/model-inventory-compat-audit/final-validation/mypy.stderr",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/model-inventory-compat-audit/final-validation/format.json",
+            "bytes": 869,
+            "sha256": "0dc2e50f8de15c5060ef0a6528dd71873eca9747e79ea65076f1c61e9ce2a3b2"
+          },
+          {
+            "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/model-inventory-compat-audit/final-validation/format.stdout",
+            "bytes": 26,
+            "sha256": "f114d83b30c5c657ee43a847a45bafccaea255d82673feb87c26d252c61e29c1"
+          },
+          {
+            "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/model-inventory-compat-audit/final-validation/format.stderr",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/model-inventory-compat-audit/final-validation/module-size.json",
+            "bytes": 600,
+            "sha256": "f9418bee213747db0a72bac07fec10829b0cd0ebce7603afb2e069dc5ecffdb2"
+          },
+          {
+            "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/model-inventory-compat-audit/final-validation/module-size.stdout",
+            "bytes": 441,
+            "sha256": "6c6b313dcfabe67bf7fa40bd9e9e9770042fa81711595bd093055aff9608bfbd"
+          },
+          {
+            "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/model-inventory-compat-audit/final-validation/module-size.stderr",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/model-inventory-compat-audit/final-validation/security.json",
+            "bytes": 810,
+            "sha256": "d83ea8a3c9ab85490613f9ebac7fde08d8ff8dcebc2a13922e42a6334b3a474e"
+          },
+          {
+            "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/model-inventory-compat-audit/final-validation/security.stdout",
+            "bytes": 143,
+            "sha256": "a621c001fa61a75f1ebb47ca9ed981dc7c607698012784671b985053a695c874"
+          },
+          {
+            "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/model-inventory-compat-audit/final-validation/security.stderr",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "mismatches": []
+      },
+      {
+        "wrapper": {
+          "path": "/workspace/scratch/234e724cfc4b/adk-hosted-pilot/docs/changes/20261114-model-inventory-compat/evidence/full-regression.json",
+          "bytes": 14507,
+          "sha256": "dd69ef204fd827198847e10c91be09b9a763ba056711b354c46f42c634a8825e"
+        },
+        "member_count": 4,
+        "raw_bytes": 12118,
+        "members": [
+          {
+            "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/root-model-inventory-v1/full-result.json",
+            "bytes": 728,
+            "sha256": "44424d5131ee18b4adaeabcf9526476c514a18434251d1d4cac5269d13b14cd1"
+          },
+          {
+            "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/root-model-inventory-v1/full.stdout",
+            "bytes": 3174,
+            "sha256": "0d1bee4e82001511f12291d9c3be0867228a5a396f58b49d3acd176ef3eed61e"
+          },
+          {
+            "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/root-model-inventory-v1/full.stderr",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/root-model-inventory-v1/full-timing.json",
+            "bytes": 8216,
+            "sha256": "4ab79f1c2fb2f9822b5466b2325fa5184dd2e9bc316d57921b5801eb0fd76003"
+          }
+        ],
+        "mismatches": []
+      }
+    ],
+    "combined_members": 27,
+    "combined_original_bytes": 50735,
+    "mismatches": [],
+    "receipt_scope_note": "The receipt-checks file's six-file scope describes the six other receipt files before that check record was copied into the seven-file staged set."
+  },
+  "author_validation": {
+    "freeze_path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/model-inventory-compat-audit/freeze.json",
+    "freeze_sha256": "29738d0bef7532451a01c410cd8d884ed2621eee2de4c8e268d4170f9546e79a",
+    "test_methods": 36,
+    "new_test_methods": 19,
+    "existing_test_methods": 17,
+    "actual_subtest_callbacks": 52,
+    "unittest_reported_seconds": 1.426,
+    "gates": [
+      {
+        "name": "unit-contracts",
+        "exit_code": 0
+      },
+      {
+        "name": "mypy",
+        "exit_code": 0,
+        "source_files": 5
+      },
+      {
+        "name": "ruff",
+        "exit_code": 0
+      },
+      {
+        "name": "format",
+        "exit_code": 0,
+        "source_files": 5
+      },
+      {
+        "name": "module-size",
+        "exit_code": 0
+      },
+      {
+        "name": "security",
+        "exit_code": 0,
+        "inventory_files": 2099
+      }
+    ],
+    "evidence_class": "Deterministic filesystem and contract tests; no model inference or Docker invocation",
+    "pushed_false_scope": "The author's freeze field describes the author personally not pushing. Root separately saved source E to the review branch."
+  },
+  "full_regression": {
+    "result": {
+      "argv": [
+        "/workspace/scratch/234e724cfc4b/verified-tools/rtk-v1.2.0/rtk",
+        "bypass",
+        "bash",
+        "tests/run_all.sh",
+        "--timing-json",
+        "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/root-model-inventory-v1/full-timing.json"
+      ],
+      "started_at": "2026-11-14T16:37:49.936583Z",
+      "source_bindings_sha256": "2441537dcd5b752da5bb2c2492a073726fb923b595078fd0099a1e8b3d781721",
+      "index_tree": "4fae75d73e88141cdd8696a9fb377ad5c00fe8df",
+      "finished_at": "2026-11-14T16:42:30.915439Z",
+      "exit_code": 0,
+      "stdout_sha256": "0d1bee4e82001511f12291d9c3be0867228a5a396f58b49d3acd176ef3eed61e",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_drift": []
+    },
+    "timing": {
+      "mode": "full",
+      "status": "pass",
+      "total": 102,
+      "pass": 102,
+      "fail": 0,
+      "elapsed_ms": 280833
+    },
+    "raw_source_directory": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/root-model-inventory-v1",
+    "reviewer_reran_full_suite": false,
+    "evidence_evaluation": "Command result, exact stdout/stderr, per-gate timing and source binding all agree. The 102 registered gates and dedicated 36-method suite are reported separately."
+  },
+  "receipt_checks": {
+    "checked_at": "2026-11-14T16:43:14.625027Z",
+    "source_commit": "86710516da820dc112f8126298aa23ab5d2d502a",
+    "security_check": {
+      "schema_version": 1,
+      "status": "pass",
+      "failures": [],
+      "warnings": [],
+      "inventory_source": "git",
+      "files_scanned": 2105,
+      "scan_limit": 50000
+    },
+    "diff_check": {
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "scope": "Six receipt files after full regression; runnable source remains exact E"
+  },
+  "official_source_diagnosis": {
+    "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/model-inventory-compat-audit/official-diagnosis.json",
+    "sha256": "10b7872f740d022870b765d491deab5afaa5a007c2b97365ca27a5dab9efa64a",
+    "release": "Ollama v0.40.16",
+    "source_tree": "d63b702609c4300a2ca07be2bdb0adb9834725e5",
+    "source_files": [
+      {
+        "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/model-inventory-compat-audit/official-v0.40.16/manifest.go",
+        "upstream": "manifest/manifest.go",
+        "git_blob": "93766ad2600da4db1de2674911a8e1823ce9e568",
+        "bytes": 46476,
+        "sha256": "2aa036f61cfffdff2f85fa3e0f29478c314c00c53aced8f9c6cb9103359f1bec"
+      },
+      {
+        "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/model-inventory-compat-audit/official-v0.40.16/paths.go",
+        "upstream": "manifest/paths.go",
+        "git_blob": "cf3bfa2569bf1a3fbc69ef12455566e259515a2d",
+        "bytes": 10402,
+        "sha256": "ce16336074693e19fa8c75147c67b155b9be03542a5dd77500e8be42dba8ff04"
+      },
+      {
+        "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/model-inventory-compat-audit/official-v0.40.16/model_list.go",
+        "upstream": "server/model_list.go",
+        "git_blob": "6be2862816f5ba2d6101812a1a03ee98fc079b8d",
+        "bytes": 7444,
+        "sha256": "3228de78ecde79183701e9a60c1c933f99576bb341df341339882852b0d0164a"
+      }
+    ],
+    "independently_checked": "Exact byte size, SHA256 and Git blob SHA1; filepath.Rel plus symlink construction, canonical v2 host, legacy removal and selected-child API digest semantics.",
+    "limits": "This is a bounded supported-layout implementation. Official source evidence and synthetic regressions do not reconstruct the missing actual hosted model tree."
+  },
+  "archived_hosted_outcome": {
+    "run_id": 43614661952,
+    "attempt": 1,
+    "source_commit": "b8815263a31ee3b004c2e7e9eee564fe8a35dfc8",
+    "status": "completed",
+    "conclusion": "failure",
+    "terminal_stage": "model preparation succeeded; generic model inventory rejected a v2 symlink before preflights and paired task execution",
+    "observed_model_digest": "8f68893c685c3ddff2aa3fffce2aa60a30bb2da65ca488b61fff134a4d1730e7",
+    "summary_model_digest": "unavailable because full inventory freeze failed before summary assignment",
+    "model_runs": 0,
+    "native_skill_load": "not-run",
+    "task_preflights": "not-run",
+    "task_sessions": "not-run",
+    "native_usage": "not-run",
+    "grader": "not-run",
+    "cleanup": "Preparation container exited 0, was observed stopped with Running=false and Pid=0, and docker rm exited 0. Ollama server -9 is the documented finally cleanup.",
+    "raw_artifact": {
+      "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/hosted-task-pilot-43614661952.zip",
+      "bytes": 63998,
+      "members": 93,
+      "sha256": "72d3c3c86939d14ba14a36ef1bb1d2475ec93b0ac5573933833a8dc6161c2f01"
+    },
+    "independent_artifact_review": {
+      "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/independent-artifact-review-43614661952.json",
+      "bytes": 32986,
+      "sha256": "94d19b1e1ce983cd36eabb6a41a9ad0b153785b955218f7fa5ac97dbb799696f"
+    },
+    "root_artifact_check": {
+      "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/root-artifact-check-43614661952.json",
+      "bytes": 2573,
+      "sha256": "dde0fc51fae94e03274200f314d6e737b5f64294a93a1760200c9f7121801805"
+    },
+    "absent_evidence": "The original raw link target and model store were not published. Their safety, exact layout and full identity cannot be established from the archived artifact."
+  },
+  "public_identity_observations": {
+    "checked_during_final_review": true,
+    "method": "Read-only GitHub API fetch through the normal connector",
+    "source_commit": {
+      "url": "https://api.github.com/repos/jiying2007/agent-dev-kit/git/commits/86710516da820dc112f8126298aa23ab5d2d502a",
+      "sha": "86710516da820dc112f8126298aa23ab5d2d502a",
+      "tree": "4fae75d73e88141cdd8696a9fb377ad5c00fe8df",
+      "parents": [
+        "94da65553e163b34ac5a73c1aef07f228aacdcd5"
+      ]
+    },
+    "review_branch": {
+      "ref": "refs/heads/experiment/hosted-task-pilot-review",
+      "sha": "86710516da820dc112f8126298aa23ab5d2d502a"
+    },
+    "execution_branch": {
+      "ref": "refs/heads/experiment/hosted-task-pilot-run-20261114",
+      "sha": "b8815263a31ee3b004c2e7e9eee564fe8a35dfc8"
+    },
+    "main_branch": {
+      "ref": "refs/heads/main",
+      "sha": "c57f4f8a7983f52257c0587eb85881a006e6dc07"
+    },
+    "original_run": {
+      "url": "https://github.com/jiying2007/agent-dev-kit/actions/runs/43614661952",
+      "id": 43614661952,
+      "status": "completed",
+      "conclusion": "failure",
+      "run_attempt": 1,
+      "head_sha": "b8815263a31ee3b004c2e7e9eee564fe8a35dfc8",
+      "created_at": "2026-11-14T16:16:02Z",
+      "updated_at": "2026-11-14T16:17:09Z"
+    }
+  },
+  "limitations": [
+    "No second hosted experiment is authorized or performed by this change or review; may_trigger remains false.",
+    "No Docker, native model, task, grader or inference was run by this reviewer.",
+    "The patch has not been validated against a new actual Ollama-prepared model tree or a second native OpenCode task.",
+    "Prior local native config probing was blocked by the network-isolation capability before OpenCode ran; that observation remains not-run, not a passing native check.",
+    "No native Skill loading, accepted configuration, session completeness, real usage, A/B task success or efficacy improvement is established.",
+    "The original C negative review, C2 source review, local preparation negative and hosted preparation failure remain distinct observations.",
+    "The seven listed receipts were reviewed. Subsequent root-generated typed review records and M3/M4 task status edits do not yet exist in the reviewed set and are not represented as previously reviewed.",
+    "This verdict does not promote main, a release, the execution branch or consumer lock; it closes source-level engineering review only."
+  ],
+  "reviewer_actions": {
+    "repo_source_edits": 0,
+    "repo_document_edits": 0,
+    "git_index_edits": 0,
+    "git_head_moves": 0,
+    "commits": 0,
+    "pushes": 0,
+    "model_runs": 0,
+    "docker_invocations": 0,
+    "full_suite_reruns": 0,
+    "deterministic_independent_probe": "One previously recorded synthetic raw-link filesystem reproduction, retained as contemporaneous negative evidence",
+    "final_checks": "Read exact source/evidence bytes, recompute hashes, compare Git source/index/worktree and original wrapper members, inspect actual validation results, refresh public identities",
+    "scratch_output": "This new independent review record only"
+  }
+}
