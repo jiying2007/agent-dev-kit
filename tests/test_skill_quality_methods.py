@@ -217,5 +217,31 @@ class SkillQualityMethodsTests(unittest.TestCase):
         self.assertNotIn("真实模型效果已提升", notes)
 
 
+    def test_skill_fit_and_measured_value_are_not_trigger_success(self) -> None:
+        router = source("skills/adk-runtime-router/SKILL.md")
+        details = source("skills/adk-runtime-router/references/runtime-routing-details.md")
+        eval_guide = source(
+            "optional-skills/adk-skill-composition-governance/references/skill-behavior-evaluation.md"
+        )
+        audit = source("docs/evals/external-skill-method-comparison-20261114-round4.md")
+        for marker in ("Skill Fit Gate", "no-skill/abstain", "目标仓当前源码", "过期 Skill 模板"):
+            self.assertIn(marker, router)
+        for marker in ("target_repo@commit", "target_api_or_toolchain_version",
+                       "skill_supported_scope", "conflicting_guidance", "version-unverified",
+                       "second classifier"):
+            self.assertIn(marker, details)
+        for marker in ("no-skill vs selected-skill", "wrong-version",
+                       "explicit-instruction-conflict", "irrelevant-trigger",
+                       "beneficial / neutral / harmful / inconclusive", "not-measured",
+                       "effect_trials"):
+            self.assertIn(marker, eval_guide)
+        for marker in ("SWE-Skills-Bench", "AgentSkillOS", "Waza v0.41.0",
+                       "FIT-01", "FIT-02", "FIT-03", "VALUE-01", "VALUE-02",
+                       "VALUE-03", "E0/E1", "E2–E4"):
+            self.assertIn(marker, audit)
+        self.assertNotIn("ADK 已实测改善", audit)
+
+
+
 if __name__ == "__main__":
     unittest.main()
