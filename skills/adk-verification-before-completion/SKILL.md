@@ -28,7 +28,7 @@ constraints:
 
 ## Modes / Applicability
 - **checkpoint（阶段验收）**：仅核冻结子项、受影响接口和真实 lint/test/build/smoke、Review、阻塞及后续依赖；不重复全 Goal final 或无关验证。只能声明阶段结果，不能关闭父 Goal。
-- **goal-final（整个目标完成）**：核原始验收分母、全部交付和依赖、最终快照、独立验证、open items 与必要回归，符合所有适用门禁才声明 pass。
+- **goal-final（整个目标完成）**：核原验收分母、全部交付和依赖、最终快照、独立验证、open items 与必要回归，符合所有适用门禁才声明 pass。
 - **风险与阶段正交**：low 用最小充分证据；medium/high 即使是 checkpoint，也必须按实际风险完成权限、生命周期、模型/工具、UI、数据/发布等专项门禁。未知风险不能降级为 low。
 
 ## Workflow
@@ -70,5 +70,5 @@ constraints:
 - 任一适用必需项失败、无有效理由跳过、证据过期、Review blocker/major 未闭环或独立 verifier 缺失 → `needs-fix`；不得填空表掩盖缺口。
 - 运行态配置、Runner、权限、MCP、UI、发布或真实设备门禁需要现场/宿主证据时，缺失只能写未验证；`completion_coverage` 的静态 pass 不等于运行认证。
 - 生命周期缺 owner/终止/真实边界、设计变更未 replan、重大 Review 未独立闭环不得通过；breaking change 必须有迁移与回退。
-- `Codify Decision:` 仅在适用的最终交付/复用晋级时记录 reusable_pattern、promotion_candidate、next_task_friction_reduced、reduced_by、reduction_evidence、do_not_promote_reason、owner_review、rollback_path、verification_evidence；没有真实效果/owner review 不晋升。
+- `Codify Decision:` 仅在适用的最终交付/复用晋级时记录 delivery_goal、reusable_pattern、promotion_candidate、next_task_friction_reduced、reduced_by、reduction_evidence、do_not_promote_reason、owner_review、rollback_path、verification_evidence；没有真实效果/owner review 不晋升。
 - 预算检查、组件发布和产品/现场资格是独立状态；阶段通过不赋予 commit/merge/release 权限。输出实际命令、证据、剩余风险和结论，禁止“应该通过”。
