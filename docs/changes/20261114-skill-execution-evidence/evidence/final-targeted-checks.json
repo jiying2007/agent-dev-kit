@@ -1,0 +1,26 @@
+{
+  "schema": "adk-local-source-checks/v1",
+  "completed_before": "2026-11-14T12:32:33Z",
+  "executor": "ai/root",
+  "evidence_scope": "test-only",
+  "checks": [
+    {
+      "name": "profile-context",
+      "command": "bash tests/test_profile_context_footprint.sh",
+      "exit_code": 0,
+      "output": "......\n----------------------------------------------------------------------\nRan 6 tests in 0.854s\n\nOK\n"
+    },
+    {
+      "name": "type-check",
+      "command": "PYTHONPATH=/workspace/scratch/234e724cfc4b/adk-quality:src python3 -m mypy src/agent_dev_kit/task_evidence.py src/agent_dev_kit/task_trials.py src/agent_dev_kit/task_acceptance.py src/agent_dev_kit/evaluation_cli.py",
+      "exit_code": 0,
+      "output": "Success: no issues found in 4 source files\n"
+    },
+    {
+      "name": "lint",
+      "command": "PYTHONPATH=/workspace/scratch/234e724cfc4b/adk-quality:src python3 -m ruff check src/agent_dev_kit/task_evidence.py src/agent_dev_kit/task_trials.py src/agent_dev_kit/task_acceptance.py src/agent_dev_kit/evaluation_cli.py tests/test_task_evidence.py tests/test_task_trials.py tests/test_skill_execution_tasks.py",
+      "exit_code": 0,
+      "output": "All checks passed!\n"
+    }
+  ]
+}

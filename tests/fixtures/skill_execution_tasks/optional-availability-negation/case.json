@@ -1,0 +1,51 @@
+{
+  "schema_version": "adk-development-task/v1",
+  "task_id": "optional-availability-negation",
+  "family": "optional-availability",
+  "evidence_scope": "test-only",
+  "initial_dir": "initial",
+  "checks": [
+    {
+      "name": "installed-inventory-preserved",
+      "kind": "unchanged",
+      "path": "work/inventory.json",
+      "source": "inventory.json"
+    },
+    {
+      "name": "requests-preserved",
+      "kind": "unchanged",
+      "path": "work/requests.json",
+      "source": "requests.json"
+    },
+    {
+      "name": "availability-and-negation-respected",
+      "kind": "json-equals",
+      "path": "work/routes.json",
+      "expected": [
+        {
+          "request_id": "absent",
+          "state": "not-installed",
+          "selected": null,
+          "load": [],
+          "install": false
+        },
+        {
+          "request_id": "negated",
+          "state": "user-excluded",
+          "selected": null,
+          "load": [],
+          "install": false
+        },
+        {
+          "request_id": "available",
+          "state": "installed-eligible",
+          "selected": "adk-prose-revision",
+          "load": [
+            "adk-prose-revision"
+          ],
+          "install": false
+        }
+      ]
+    }
+  ]
+}

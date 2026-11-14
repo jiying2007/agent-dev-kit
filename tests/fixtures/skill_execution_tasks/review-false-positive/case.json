@@ -1,0 +1,53 @@
+{
+  "schema_version": "adk-development-task/v1",
+  "task_id": "review-false-positive",
+  "family": "review-feedback",
+  "evidence_scope": "test-only",
+  "initial_dir": "initial",
+  "checks": [
+    {
+      "name": "implementation-preserved",
+      "kind": "unchanged",
+      "path": "work/limit_items.py",
+      "source": "limit_items.py"
+    },
+    {
+      "name": "finding-preserved",
+      "kind": "unchanged",
+      "path": "work/finding.json",
+      "source": "finding.json"
+    },
+    {
+      "name": "finding-truth-and-scope",
+      "kind": "json-equals",
+      "path": "work/review.json",
+      "expected": {
+        "finding_id": "R1",
+        "disposition": "false-positive",
+        "review_mode": "feedback-triage",
+        "source": "limit_items.py",
+        "condition": "limit is None",
+        "observed_outputs": [
+          {
+            "limit": null,
+            "items": [
+              1,
+              2
+            ]
+          },
+          {
+            "limit": 0,
+            "items": []
+          },
+          {
+            "limit": 1,
+            "items": [
+              1
+            ]
+          }
+        ],
+        "required_changes": []
+      }
+    }
+  ]
+}

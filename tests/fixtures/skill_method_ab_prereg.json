@@ -9,7 +9,7 @@
     "source_sha": "7aed1d2545babce16c41dc021ead01c8c324ce07"
   },
   "candidate": {
-    "planned_release": "v11.2.18",
+    "planned_release": "v11.3.0",
     "source_sha": null
   },
   "case_groups": {
@@ -65,5 +65,15 @@
     "model_runs": 0,
     "reason": "11.2.17 source candidate merged without any pre-registered native model runs; preserve its identity while pre-registering 11.2.18 against the latest reviewed main."
   },
-  "holdout_qualification": "development-fixture-only-after-author-exposure"
+  "holdout_qualification": "development-fixture-only-after-author-exposure",
+  "unexecuted_candidate_history": [
+    {
+      "planned_release": "v11.2.18",
+      "reviewed_source_sha": "2d5306b8ce342b88d04420d55843ce752c0e5240",
+      "merged_main_sha": "ebef1106aeecbe14e9ac676b2950b81895c1ea5b",
+      "model_runs": 0,
+      "reason": "Source-only candidate merged after independent review and CI. The authorized successor adds bounded task import, artifact acceptance and paired-state validation; no previous trial is relabelled as measured."
+    }
+  ],
+  "development_task_suite": "tests/fixtures/skill_execution_tasks/suite.json"
 }

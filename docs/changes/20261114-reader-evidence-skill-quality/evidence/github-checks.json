@@ -1,0 +1,111 @@
+{
+  "schema": "adk-source-check-observation/v1",
+  "source": "https://api.github.com/repos/jiying2007/agent-dev-kit/commits/2d5306b8ce342b88d04420d55843ce752c0e5240/check-runs?per_page=100",
+  "retrieved_at": "2026-11-14T12:21:00Z",
+  "head_sha": "2d5306b8ce342b88d04420d55843ce752c0e5240",
+  "base_sha": "7aed1d2545babce16c41dc021ead01c8c324ce07",
+  "mergeable": true,
+  "mergeable_state": "clean",
+  "checks": [
+    {
+      "id": 132445085920,
+      "name": "promotion-evidence",
+      "status": "completed",
+      "conclusion": "skipped",
+      "head_sha": "2d5306b8ce342b88d04420d55843ce752c0e5240",
+      "completed_at": "2026-11-14T12:18:47Z",
+      "url": "https://github.com/jiying2007/agent-dev-kit/actions/runs/43593720859/job/132445085920"
+    },
+    {
+      "id": 132444979389,
+      "name": "deterministic-eval-package",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "2d5306b8ce342b88d04420d55843ce752c0e5240",
+      "completed_at": "2026-11-14T12:18:47Z",
+      "url": "https://github.com/jiying2007/agent-dev-kit/actions/runs/43593720859/job/132444979389"
+    },
+    {
+      "id": 132443869394,
+      "name": "CodeQL",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "2d5306b8ce342b88d04420d55843ce752c0e5240",
+      "completed_at": "2026-11-14T12:14:01Z",
+      "url": "https://github.com/jiying2007/agent-dev-kit/runs/132443869394"
+    },
+    {
+      "id": 132443690282,
+      "name": "branch-gc-apply",
+      "status": "completed",
+      "conclusion": "skipped",
+      "head_sha": "2d5306b8ce342b88d04420d55843ce752c0e5240",
+      "completed_at": "2026-11-14T12:13:14Z",
+      "url": "https://github.com/jiying2007/agent-dev-kit/actions/runs/43593720838/job/132443690282"
+    },
+    {
+      "id": 132443689384,
+      "name": "regression-py3.12",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "2d5306b8ce342b88d04420d55843ce752c0e5240",
+      "completed_at": "2026-11-14T12:18:22Z",
+      "url": "https://github.com/jiying2007/agent-dev-kit/actions/runs/43593720859/job/132443689384"
+    },
+    {
+      "id": 132443689319,
+      "name": "static-security",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "2d5306b8ce342b88d04420d55843ce752c0e5240",
+      "completed_at": "2026-11-14T12:13:44Z",
+      "url": "https://github.com/jiying2007/agent-dev-kit/actions/runs/43593720859/job/132443689319"
+    },
+    {
+      "id": 132443689193,
+      "name": "dependency-review",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "2d5306b8ce342b88d04420d55843ce752c0e5240",
+      "completed_at": "2026-11-14T12:13:38Z",
+      "url": "https://github.com/jiying2007/agent-dev-kit/actions/runs/43593720921/job/132443689193"
+    },
+    {
+      "id": 132443688990,
+      "name": "contract-py3.12",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "2d5306b8ce342b88d04420d55843ce752c0e5240",
+      "completed_at": "2026-11-14T12:14:38Z",
+      "url": "https://github.com/jiying2007/agent-dev-kit/actions/runs/43593720859/job/132443688990"
+    },
+    {
+      "id": 132443688984,
+      "name": "codeql-python",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "2d5306b8ce342b88d04420d55843ce752c0e5240",
+      "completed_at": "2026-11-14T12:14:06Z",
+      "url": "https://github.com/jiying2007/agent-dev-kit/actions/runs/43593720846/job/132443688984"
+    },
+    {
+      "id": 132443688942,
+      "name": "platform-vnext",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "2d5306b8ce342b88d04420d55843ce752c0e5240",
+      "completed_at": "2026-11-14T12:13:40Z",
+      "url": "https://github.com/jiying2007/agent-dev-kit/actions/runs/43593720868/job/132443688942"
+    },
+    {
+      "id": 132443688915,
+      "name": "branch-gc-dry-run",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "2d5306b8ce342b88d04420d55843ce752c0e5240",
+      "completed_at": "2026-11-14T12:13:22Z",
+      "url": "https://github.com/jiying2007/agent-dev-kit/actions/runs/43593720838/job/132443688915"
+    }
+  ],
+  "scope": "github-source-ci-only"
+}

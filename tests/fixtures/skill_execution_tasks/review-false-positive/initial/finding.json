@@ -1,0 +1,6 @@
+{
+  "finding_id": "R1",
+  "claim": "A zero limit is falsy and returns all items.",
+  "suggested_change": "Replace if not limit with if limit is None.",
+  "scope": "limit_items.py"
+}

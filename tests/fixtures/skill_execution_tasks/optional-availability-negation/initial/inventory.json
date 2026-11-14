@@ -1,0 +1,12 @@
+{
+  "trusted_installed": [
+    "adk-runtime-router",
+    "adk-planning-execution-loop",
+    "adk-prose-revision"
+  ],
+  "catalog_optional": [
+    "adk-prose-revision",
+    "adk-external-practice-absorption"
+  ],
+  "native_loaded": []
+}

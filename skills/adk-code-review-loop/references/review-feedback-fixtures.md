@@ -13,6 +13,10 @@
 - Why not applicable:
 - Follow-up:
 
+### 局部误报：零值与缺省值
+
+当 finding 声称“`limit=0` 因 falsy 被当成无限制”，先读实际分支：`if limit is None` 与 `if not limit` 的语义不同。核对契约中 None/0/正数各自的结果及对应快照，再给 `confirmed / false-positive / needs-context`。实际代码已区分零值时，保留实现、记录该 finding 的反证和 `no-change`；不为了回应审查而改正确代码、引入全库重构或自动发出远端评论。这个局部结论只覆盖该 finding，不能写成 whole-diff 已通过。
+
 ## Out-of-scope Fixture
 
 - Suggestion:

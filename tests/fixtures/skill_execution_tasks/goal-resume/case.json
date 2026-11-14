@@ -1,0 +1,48 @@
+{
+  "schema_version": "adk-development-task/v1",
+  "task_id": "goal-resume",
+  "family": "goal-recovery",
+  "evidence_scope": "test-only",
+  "initial_dir": "initial",
+  "checks": [
+    {
+      "name": "resume-without-parent-closure",
+      "kind": "json-equals",
+      "path": "work/checkpoint.json",
+      "expected": {
+        "goal_id": "release-goal",
+        "revision": 4,
+        "last_completed": "release-index",
+        "publish_state": "succeeded",
+        "logical_task_open": true,
+        "next_actions": [
+          "verify-device"
+        ]
+      }
+    },
+    {
+      "name": "completed-package-preserved",
+      "kind": "unchanged",
+      "path": "work/artifacts/package.txt",
+      "source": "artifacts/package.txt"
+    },
+    {
+      "name": "publish-receipt-preserved",
+      "kind": "unchanged",
+      "path": "work/receipts/release.json",
+      "source": "receipts/release.json"
+    },
+    {
+      "name": "release-index-completed",
+      "kind": "json-equals",
+      "path": "work/release-index.json",
+      "expected": {
+        "release_id": "rel-17",
+        "package": "artifacts/package.txt",
+        "receipt": "receipts/release.json",
+        "publish_state": "succeeded",
+        "device_acceptance": "blocked"
+      }
+    }
+  ]
+}

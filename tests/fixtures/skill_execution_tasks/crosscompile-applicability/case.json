@@ -1,0 +1,69 @@
+{
+  "schema_version": "adk-development-task/v1",
+  "task_id": "crosscompile-applicability",
+  "family": "embedded-applicability",
+  "evidence_scope": "test-only",
+  "initial_dir": "initial",
+  "checks": [
+    {
+      "name": "package-infra-preserved",
+      "kind": "unchanged",
+      "path": "work/package/sensor/sensor.mk",
+      "source": "package/sensor/sensor.mk"
+    },
+    {
+      "name": "configure-preserved",
+      "kind": "unchanged",
+      "path": "work/package/sensor/configure.ac",
+      "source": "package/sensor/configure.ac"
+    },
+    {
+      "name": "original-failure-preserved",
+      "kind": "unchanged",
+      "path": "work/build-output.txt",
+      "source": "build-output.txt"
+    },
+    {
+      "name": "target-capabilities-preserved",
+      "kind": "unchanged",
+      "path": "work/targets.json",
+      "source": "targets.json"
+    },
+    {
+      "name": "host-failure-localized",
+      "kind": "json-equals",
+      "path": "work/diagnosis.json",
+      "expected": {
+        "build_system": "autotools",
+        "first_failure": "/bin/sh: aclocal: command not found",
+        "failure_layer": "host",
+        "next_probe": {
+          "kind": "host-tool-availability",
+          "tools": [
+            "aclocal",
+            "automake",
+            "autoconf"
+          ]
+        },
+        "build_status": "not-run"
+      }
+    },
+    {
+      "name": "linux-mcu-probes-separated",
+      "kind": "json-equals",
+      "path": "work/target-probes.json",
+      "expected": [
+        {
+          "target": "linux-embedded",
+          "probe": "perf",
+          "measured": false
+        },
+        {
+          "target": "mcu-rtos",
+          "probe": "DWT",
+          "measured": false
+        }
+      ]
+    }
+  ]
+}

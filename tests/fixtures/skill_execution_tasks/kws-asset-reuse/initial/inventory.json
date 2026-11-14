@@ -1,0 +1,19 @@
+{
+  "requested_profile": "q8-16k-mono",
+  "assets": [
+    {
+      "path": "assets/features.csv",
+      "sha256": "9e877d106eaefb4b7609793afb77ecca6114b9e87659de7533b4e84640475915",
+      "profile": "q8-16k-mono",
+      "verified": true,
+      "kind": "synthetic-development-features"
+    },
+    {
+      "path": "assets/stale.txt",
+      "sha256": null,
+      "profile": "float-8k-stereo",
+      "verified": false,
+      "kind": "nonmatching-placeholder"
+    }
+  ]
+}

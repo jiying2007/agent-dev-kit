@@ -1,0 +1,20 @@
+[
+  {
+    "request_id": "absent",
+    "skill": "adk-external-practice-absorption",
+    "message": "只读分析成熟外部做法，不要安装任何技能。",
+    "negated": false
+  },
+  {
+    "request_id": "negated",
+    "skill": "adk-prose-revision",
+    "message": "不要使用 adk-prose-revision，只处理指定拼写错误。",
+    "negated": true
+  },
+  {
+    "request_id": "available",
+    "skill": "adk-prose-revision",
+    "message": "使用已安装的 adk-prose-revision 改善这份成稿。",
+    "negated": false
+  }
+]

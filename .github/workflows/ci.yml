@@ -276,6 +276,9 @@ jobs:
           src/agent_dev_kit/release.py
           src/agent_dev_kit/native_campaign_diagnostics.py
           src/agent_dev_kit/review_evidence.py
+          src/agent_dev_kit/task_evidence.py
+          src/agent_dev_kit/task_trials.py
+          src/agent_dev_kit/task_acceptance.py
 
       - name: Audit declared project dependencies
         run: pip-audit --strict --progress-spinner off .

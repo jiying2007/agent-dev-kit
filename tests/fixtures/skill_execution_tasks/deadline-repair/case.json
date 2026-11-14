@@ -1,0 +1,54 @@
+{
+  "schema_version": "adk-development-task/v1",
+  "task_id": "deadline-repair",
+  "family": "debugging-repair",
+  "evidence_scope": "test-only",
+  "initial_dir": "initial",
+  "checks": [
+    {
+      "name": "deadline-boundary-fixed",
+      "kind": "text-replace-once",
+      "path": "work/retry_policy.py",
+      "source": "retry_policy.py",
+      "before": "return elapsed_ms <= timeout_ms",
+      "after": "return elapsed_ms < timeout_ms"
+    },
+    {
+      "name": "regression-preserved",
+      "kind": "unchanged",
+      "path": "work/deadline_cases.py",
+      "source": "deadline_cases.py"
+    },
+    {
+      "name": "original-signal-and-passing-neighbours",
+      "kind": "json-equals",
+      "path": "work/expected-results.json",
+      "expected": {
+        "signal": "deadline-boundary",
+        "scope": "expected-results-only",
+        "cases": [
+          {
+            "elapsed_ms": 0,
+            "timeout_ms": 100,
+            "retry_allowed": true
+          },
+          {
+            "elapsed_ms": 99,
+            "timeout_ms": 100,
+            "retry_allowed": true
+          },
+          {
+            "elapsed_ms": 100,
+            "timeout_ms": 100,
+            "retry_allowed": false
+          },
+          {
+            "elapsed_ms": 101,
+            "timeout_ms": 100,
+            "retry_allowed": false
+          }
+        ]
+      }
+    }
+  ]
+}
