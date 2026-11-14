@@ -1,8 +1,8 @@
 ---
 name: adk-skill-deep-analysis
 description: "用于只读发现并对标公开优质 Skills，或分析指定 Skill 的真实方法、来源风险及对 ADK 的可迁移价值；不用于自动安装外部 Skill、执行外部脚本或授权源码写入。"
-version: 1.0.4
-last_updated: 2026-11-13
+version: 1.0.5
+last_updated: 2026-11-14
 triggers:
   - 深度拆解 skill
   - 分析 skill 设计
@@ -48,6 +48,10 @@ constraints:
 6. **结论**：`ADOPT / MERGE / ENHANCE / OBSERVE / REJECT`、来源证据、未知项、最小变更和回滚。**只读**，不得自动安装、写来源仓、更新 adoption matrix、长期知识、运行时配置或触发付费模型。
 
 复杂路径、完整 5 维评分或安全审计时才读取 `references/details.md`；Skill 组合与路由仍由现有 `adk-skill-composition-governance` 负责。
+
+## Implementable handoff（只读研究到执行）
+
+用户同时要求“对标并优化已有 Skills”时，本 Skill 仅产生可核的最小交接包：`source_identity@sha / verified_method / affected_existing_skill / observable_failure_or_gap / minimal_delta / runnable_regression / preserved_success / permission_boundary / eval_status`，交由已有 `adk-external-practice-absorption` 与实施/验证 primary 在各自权限内推进；**本 Skill 不写仓、不替 owner 审批、不把来源摘要当验收**。若已有对应 PR/已审来源，引用最新状态与差异，不重复整个搜集过程。未有可观察问题时选择 `RETAIN/OBSERVE`，不要为凑改动另写规则。
 
 ## Quality Gate
 - 证据要有 `source_identity + path/line_or_symbol`，与 ADK 当前实现对应。用户可见建议不能冒充模型实测或生产信任。

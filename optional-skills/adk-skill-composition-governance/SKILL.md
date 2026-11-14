@@ -1,7 +1,7 @@
 ---
 name: adk-skill-composition-governance
 description: "用于多个 Skill 的触发冲突、组合边界、fallback 和退役策略审查；不用于新增并行路由权威或直接提升工具写权限。"
-version: 1.1.5
+version: 1.1.6
 last_updated: 2026-11-14
 triggers:
   - "技能组合"
@@ -54,6 +54,8 @@ constraints:
 11. 回归样例：为 primary/supporting/fallback 各补代表输入。
 12. 更新治理矩阵：记录场景、主技能、辅助技能、fallback、互斥和优先级。
 13. **行为 TDD**：Skill 行为变更先冻结同模型/工具/上下文的 baseline/candidate 和训练/留出案例 ID，再做正反/near-miss、独立盲评与成本对照；禁止用 holdout 调参。未取得真实模型 trace 保持 `not-measured`，不得拿路由 CI 代替行为改善。详细控制见 `references/skill-behavior-evaluation.md`。
+
+14. **失败反馈→回归候选**：仅针对已核实的重复失败，在现有测试/fixtures 补最小正例、反例和适用确定性检查；改动前保存失败证据，修复后核旧成功路径。真实模型未执行仍为 `not-measured`，不得靠 E0/E1 判定模型成功。按需见 `references/adk-skill-lifecycle.md`。
 
 ## 组合规则
 - 一个场景一个 primary；supporting 不抢占触发。

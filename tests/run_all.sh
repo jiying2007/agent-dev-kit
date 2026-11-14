@@ -87,6 +87,7 @@ TESTS=(
   test_skill_content.sh
   test_skill_trigger_matrix.sh
   test_skill_sop_quality.sh
+  test_token_context_governance.sh
   test_strict_json.sh
   test_contract_hardening.sh
   test_boundary_rehearsal.sh
@@ -126,7 +127,6 @@ TESTS=(
   test_software_m5_ready.sh
   test_repository_runtime_evidence.sh
   test_token_budget.sh
-  test_token_context_governance.sh
   test_task_cost.sh
   test_execution_policy.sh
   test_official_docs_governance.sh

@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+### 11.2.18 — Reader-first docs and evidence-driven Skill lifecycle
+- Add direct public CLI smoke for Optional Skill install-marker and negative intent, plus conditional length-matched ablation guidance when real paired behavior needs causal triage; bounded Skill edits and unchanged guardrails, no extra runner.
+- Correct production Matcher Optional availability: a catalog/lexical hit now carries `profile_availability=optional-skill-required` in structured and CLI results, including fallback and explicit selection. Add production-route tests; target host still verifies installation independently.
+- Add outcome-first task grading and paired functional/efficiency failure attribution in existing deferred Skill evaluation guidance; put verified same-snapshot stage reuse behind strict evidence/permission boundaries. Move the existing token-context gate earlier in the 102-test suite to fail fast when router entry size regresses (limit unchanged at 5600 bytes).
+- Absorb SWE-Skills-Bench requirement-paired findings as a *conditional* Skill Fit Gate: target version and explicit user acceptance outrank mismatched templates; allow no-skill/abstain without adding another router.
+- Add a source-only regression for wrong-version, instruction-conflict and irrelevant-trigger; only measured, paired native traces can classify beneficial/neutral/harmful Skill effect. Fix literal-tab assertion in the new optional-skill test.
+- Add a third read-only upstream comparison (Microsoft Waza, NVIDIA SkillEvaluator, Alibaba skill-up, Superpowers) and improve source→scoped adoption, native evaluation boundary, and inline Goal execution without installing new runtimes.
+- Exercise real production Matcher for continued external-method adoption and fix the optional-skill negation test that previously used the wrong core scope.
+- Compare six additional official and practitioner Skill sources by Git blob, extracting methods only rather than installing external plugins or dependencies.
+- Add a conditional cold-reader acceptance check to ADR and cross-team handoff Skills; preserve lite quick paths, real receiver signoff and missing-evidence handling.
+- Strengthen existing Skill lifecycle guidance for confirmed feedback → minimal deterministic regression, protected holdout, measured behavior boundaries and evidence-based retirement review.
+- Keep the 65-Skill catalog, one Manifest/Router, approval gates and runtime distribution unchanged. Source tests are E0/E1 only; real native host performance, Token, latency and E2–E4 remain not-measured.
+
 ### 11.2.17 — Evidence-first independent Skills method convergence
 - Ground 22 public reference files by immutable Git blobs and compare their methods against ADK's existing 65-Skill architecture, avoiding full skill-pack imports.
 - Verify interface/protocol requirements in both directions (spec-to-code and code-to-spec) when an implementation exists; preserve uninspected and unknown scope.

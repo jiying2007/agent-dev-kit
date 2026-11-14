@@ -13,6 +13,33 @@
 
 汇报最小字段：`candidate_sha / baseline_sha / model_runtime / scenario_id / raw_trace_ref / judge / behavior_verdict / permission_verdict / tokens / tool_calls / unresolved`。
 
+## Case isolation / observation boundary（需要真实评测时）
+
+- 复用已有 `effect_trials`，按固定案例在 baseline/candidate 间恢复**相同初始 workspace、输入、工具权限和缓存条件**；工作树输出只能证明最终状态，不足以证明中途未越权读写或未外传。
+- 记录 `initial_workspace_ref / observed_tool_calls / final_artifact_ref / forbidden_side_effects / missing_observability`，真实 trace 可验证时才判实际行为；模拟 CLI/静态回放/离线 matcher 只给 E0/E1，不能伪造 native load、独立评价或任务完成率。
+- 真实宿主不可用时保留预注册和用例，明确 `not-measured`，**不因未测而运行收费模型、触发新定时任务或削弱安全 guardrail**。
+
+## Skill Value / Harm Gate（真实任务才判）
+
+- 只对确有真实运行证据的任务比较 `no-skill vs selected-skill`，固定 `target_repo@commit`、需求与可执行 verifier、model/runtime、工具授权、时间窗和初始 workspace。区分正确性、实际 Skill 调用、耗时/Token、越权或负面副作用；不能用通用问答或纯模板得分代表真实工程成功。
+- 特别检验三类负收益：`wrong-version`（Skill 的 API/框架版本落后于目标仓）、`explicit-instruction-conflict`（模板覆盖用户的明确非目标/验收）、`irrelevant-trigger`（无关任务仍加载）。记录原有成功任务的退化而不仅是新任务绿灯。
+- 分类 `beneficial / neutral / harmful / inconclusive` 必须有任务级成对结果与原始 verifier/trace；样本不足、未成对、审查不独立或环境漂移时统一 `inconclusive / not-measured`，不得用偶发一次成功批准长期 Skill 默认启用。
+- 这项检查沿用 ADK `effect_trials`，不导入 SWE-Skills-Bench 任务/模型执行器，不用 Skill 自己评价自己。没有明确性能增益也不能因此跳过安全/权限门禁。
+
+## Outcome-first and overhead attribution（真实轨迹适用）
+
+- **先判最终结果**：按原用户需求、目标仓版本、可执行验收与真实工件状态判 correctness/completion；工具序列可以有多个合法路径，不强迫与参考轨迹逐步一致。随后再判 tool selection、arguments、必要性和时间/Token；权限越界、伪造证据及违反硬合同仍是独立 hard fail。
+- **防止不公平 grader**：no-skill 基线不可能读取候选 Skill 的 `SKILL.md`，不得以“必须阅读目标 Skill”作为两组共同成功条件。用可行的 reference solution 和 negative control 先核验评测设定。真实任务没有明确路径约束时，换用同样安全且得到正确结果的命令不应被误判失败。
+- **归因而非猜因**：仅对同任务、同模型/工具权限、相同初始仓快照的成对原始轨迹做 `functional / efficiency / instrumentation` 分类。遗漏需求、错误版本是假设性的功能归因候选；额外全量验证、沉重实施流程、重复工具调用是效率归因候选。需在轨迹和最终产物中找到可证差异；仅凭长 Skill 文件、失败结果或单次分数不能认定 Skill 导致。
+- **有效任务失败（task-timeout）**：agent 在预注册的任务时间/执行预算内未完成，包括慢执行、挂死或重试耗尽，计为有效 task failure 并保留在任务分母中；不得因为候选较慢而删除失败样本或只重试候选。保留截止时产物、工具轨迹和已消耗用量。
+- **评测不完整（infrastructure-timeout）**：仅基础设施/采集链路超时、缺一侧、环境漂移或 grader 自身不公平时标 `invalid-eval / INCOMPLETE`，保留全组与原始失败记录并修复评测条件；按预注册规则成对重跑，不选择性重试或事后剔除不利样本。不把缺失分数填成 0，也不将部分结果平均为 Skill Lift。无法区分超时来源时保持原因未明，不直接认定为基础设施失败。守住必须的安全/合规/发布验证，但低风险阶段不强制执行不相关的完整 Goal 流程。
+
+## Targeted ablations（仅在真实 Skill Lift 难以归因时）
+
+- 先保持原有 `no-skill / champion / challenger` 试验身份分离；按 [Agent Skills evaluation guide](https://github.com/agentskills/agentskills/blob/main/docs/skill-creation/evaluating-skills.mdx) 固定任务输入、初始 workspace、Skill 曝露和 grader，而不把“Skill 命中”计作任务成功。
+- 当结果反常或 Token 开销明显增加、需要判断是**内容误导**还是**上下文长度干扰**时，可附加一个相同长度、同信任边界、与任务无关的**中性文本控制组**；它不得包含操作指令、真实凭证或扩大的工具权限。该条件单独预注册、隔离、统计，不混入原成对试验的样本/显著性结论；记录 `length_control_status: measured | not-measured`。
+- 参考 [SkillOpt](https://github.com/microsoft/SkillOpt) 的**小步改动 / 拒绝变更记录**：每次只修改一个可证伪失败模式，保留旧正确路径、被否决假设与回滚点；新候选只有在独立未曝光的验证集上确有净改善、且安全不退化时才建议晋级。不得声称此 Skill 本身运行了 SkillOpt、购买了模型推理或已取得真实效果数据。
+
 ## Evidence Contract
 - 固定 `baseline_sha / candidate_sha / model_runtime / tool_permissions / budget / grader_id / dataset_sha`，无真实 source 或宿主权限则中止并记 `not-measured`。
 - 先以安全/任务质量 **non-regression** 决定是否可比较 Token、wall time、tool calls；授权越界为硬失败，未报告的缓存 Token 记 unavailable。

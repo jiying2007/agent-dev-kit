@@ -69,6 +69,8 @@ def format_result(result: Mapping[str, Any]) -> str:
     if result.get("match") is not True:
         return base
     extras = []
+    if result.get("profile_availability") == "optional-skill-required":
+        extras.append("profile_availability=optional-skill-required")
     for key in (
         "runtime_role",
         "selection_group",
@@ -232,6 +234,11 @@ def _derive_effort(result: Mapping[str, Any], metadata: Mapping[str, Any]) -> Di
 
 def _apply_contract(result: Mapping[str, Any], metadata: Mapping[str, Any]) -> Dict[str, Any]:
     constrained = dict(result)
+    # Matching an optional catalogue asset does not prove it was installed in
+    # the target runtime. The lexical and same-group fallback paths lack the
+    # explicit routing entry that otherwise provides this availability marker.
+    if metadata["scope"] == "optional":
+        constrained["profile_availability"] = "optional-skill-required"
     constrained["runtime_role"] = metadata["runtime_role"]
     constrained["selection_group"] = metadata["selection_group"]
     constrained["effect_ceiling"] = metadata["effect_ceiling"]

@@ -30,6 +30,18 @@ Use progressive disclosure rather than loading a whole tool or skill catalog:
 
 For Code Intelligence, preserve the `code_intelligence_provider_contract` evidence tuple: provider, tool, query, repo_ref, hit_summary, decision impact. For Tool Search, preserve namespace, query, selected surface, loaded tools and schema review.
 
+## Skill applicability / version compatibility (only when relevant)
+
+- Preserve `user_acceptance`, `target_repo@commit`, available `target_api_or_toolchain_version`, `skill_supported_scope` and `conflicting_guidance` before applying a version-specific recommendation.
+- A current, credible project implementation or explicit user constraint is not overridden by a third-party Skill template. If target or skill version is unknown, read current source/config or mark `version-unverified` and constrain the advice; do not invent compatibility.
+- If a candidate conflicts with target version, environment or user's explicit non-goal, abstain/no-skill or select an already-trusted applicable Skill with the existing fallback/permission gate. A successful trigger is not a successful outcome.
+- The canonical matcher still owns deterministic routing; this check is a scoped execution **fit** decision, not a second classifier or silent change to Manifest/Profiles.
+
+## Optional availability is not native installation
+
+- The public matcher now returns `profile_availability=optional-skill-required` for any Optional Skill selected through explicit routing, lexical fallback, or explicit selection. This is **catalog metadata**, not an installation receipt or tool authorization; the consuming runtime must check its own trusted installed inventory before loading/executing. If absent, stay in the declared fallback/abstain path, never auto-install the source package or escalate mutation authority.
+- Core Skills retain their existing availability semantics. A failed match must not be presented as an installed or executable Skill.
+
 ## Fallback and Failure Semantics
 
 - `no match`: do not invent a skill. Use triage or no-skill/needs-input and record the gap.
