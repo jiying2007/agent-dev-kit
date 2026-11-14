@@ -155,10 +155,22 @@ class SkillQualityMethodsTests(unittest.TestCase):
         self.assertEqual(fixture["schema"], "adk-skill-method-ab-prereg/v1")
         self.assertEqual(fixture["status"], "not-measured")
         self.assertEqual(fixture["execution"], "no-model-runs")
+        self.assertEqual(fixture["comparison_kind"], "champion-challenger")
+        self.assertEqual(fixture["baseline"]["release"], "v11.2.17")
         self.assertEqual(fixture["baseline"]["source_sha"],
-                         "538e224ad91319a17a88f0e8c4d743dd89d7b02d")
+                         "7aed1d2545babce16c41dc021ead01c8c324ce07")
+        manifest = json.loads(source("manifest.json"))
+        self.assertEqual(fixture["candidate"]["planned_release"], "v" + manifest["version"])
         self.assertIsNone(fixture["candidate"]["source_sha"])
         self.assertEqual(fixture["results"], [])
+        prior = fixture["superseded_unrun_plan"]
+        self.assertEqual(prior["baseline_release"], "v11.2.16")
+        self.assertEqual(prior["candidate_planned_release"], "v11.2.17")
+        self.assertEqual(prior["baseline_source_sha"], "538e224ad91319a17a88f0e8c4d743dd89d7b02d")
+        self.assertEqual(prior["model_runs"], 0)
+        self.assertEqual(fixture["holdout_qualification"],
+                         "development-fixture-only-after-author-exposure")
+        self.assertIn("NOT an independent final holdout", fixture["notes"])
         train = fixture["case_groups"]["train_case_ids"]
         holdout = fixture["case_groups"]["holdout_case_ids"]
         self.assertGreaterEqual(len(train), 5)
