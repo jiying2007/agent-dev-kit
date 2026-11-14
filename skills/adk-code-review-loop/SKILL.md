@@ -1,8 +1,8 @@
 ---
 name: adk-code-review-loop
 description: "用于独立代码审查、问题复核与反馈闭环；不用于自动批准或代替提交前门禁。"
-version: 1.7.5
-last_updated: 2026-11-13
+version: 1.7.6
+last_updated: 2026-11-14
 triggers:
   - "独立代码审查"
   - "code review loop"
@@ -94,7 +94,7 @@ E2/E3 应对冻结合同的关键前提提出可复现证伪；优先减法，CI
 - staged 目标存在 `MM` 时必须列出 overlay，并设 `latest_worktree_reviewed: false`；修复后未重新 stage/更新 Snapshot ID，不得声称已复审。
 - `author-self-review` 不是 independent；高风险共享逻辑需要 owner 或独立审查证据。
 - `cannot-verify-from-diff` 必须补证据、owner 接受风险或明确不适用；高风险必需范围若为 `uninspected` 且无 owner 风险决策不得 pass。
-- 缺 Requirement/Domain Model/Verification Baseline 时不得给 spec-compliance pass。
+- 缺需求基线或 Spec↔Code 双向核对证据时，不得给完整 spec-compliance pass；细节见按需 reference。
 - 受控生命周期操作缺 owner/state/event baseline，或 `design-change` 未回设计阶段时，spec-compliance 固定不通过。
 - `targeted-finding-review` 不得替代 whole-diff 或适用的 whole-lifecycle review。
 - reviewer 只读：不得修改工作树、切分支、执行破坏性操作，也不得被要求忽略发现或预设严重级别。

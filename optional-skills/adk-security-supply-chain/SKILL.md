@@ -1,7 +1,7 @@
 ---
 name: adk-security-supply-chain
 description: "用于第三方 Skill、脚本、依赖和参考资产引入前的来源、权限与供应链审查；不用于自动安装不可信包或把静态扫描当安全认证。"
-version: 1.1.3
+version: 1.1.4
 last_updated: 2026-11-14
 triggers:
   - "供应链审查"
@@ -35,24 +35,24 @@ constraints:
 
 ## Scope Gate（只选择适用的审查层）
 - **source-only intake**：仅引用第三方方法、没有导入脚本/依赖或启动工具，不执行 SBOM/CVE/签名器；核来源、许可未知、指令注入与当前权限，输出 `unverified` 的候选，不推断运行安全。纯背景研究仍由外部方法分析 Skill 负责。
-- **adoption preflight**：准备引入第三方 Skill/脚本/MCP 时，先只读核版本/来源、文件清单、可执行路径、依赖与权限副作用；缺证明固定 `needs-fix`，不得自动安装工具验证。
+- **adoption preflight**：准备引入第三方 Skill/脚本/MCP 时，先只读核来源、可执行路径和权限；缺证明固定 `needs-fix`，不得自动安装工具验证。需扫描时绑定可信 `SECURITY_MODEL.md` 的不变量，以 `source-to-sink` 证据区分 `confirmed / false-positive / unverified`，覆盖状态 `inspected / omitted / unavailable`；细节延迟读取 `references/skill-scan-coverage.md`。
 - **install / runtime readiness**：有实际安装或启用授权时，必须完成适用的 SBOM、CVE、签名/完整性、secret、permission/deny-path、tool schema、scope、回滚；不可运行或未知项不得用工具未报错代替通过。
 
 ## Workflow
 1. 按 Scope Gate 决定需要哪些审查和安装/运行权限；完整工作流只对真实引入/启用候选执行，避免为只读方法研究重复装扫描器。
 2. 来源审查：确认仓库可达性、维护状态、版本锚点。
-2. 许可证审查：确认 LICENSE 与使用范围。
-3. SBOM 生成：生成软件物料清单，记录所有直接与间接依赖。
-4. CVE 扫描：检查已知漏洞，评估影响范围与修复状态。
-5. 脚本审查：列出可执行脚本、危险命令、网络访问和写入路径。
-6. 敏感信息审查：检查密钥、token、个人路径和内部域名。
-7. 签名验证：验证资产完整性与发布者身份。
-8. 运行态信任边界审查：确认 base URL、relay、MCP server、hooks、sandbox 和 approval policy。
-9. 工具调用策略审查：为读文件、写文件、命令执行、网络访问、凭证读取列出 allow/deny 条件。
-10. MCP/plugin readiness：核对暴露清单、schema/smoke、auth scope、依赖边界和回滚步骤。
-11. Runtime Control Plane Audit：若候选资产暴露 slash command、MCP server、hook、permission profile 或外部 connector，记录 `slash_command_runtime_audit`、`mcp_runtime_contract`、`permission_profile_decision`、`approval_boundary`、`deny_path_test` 和 `rollback_path`。
-12. 安装范围审查：确认仅进入 core/optional/profile/plugin 中的最小范围。
-13. 回滚审查：给出移除方式和安装回退点。
+3. 许可证审查：确认 LICENSE 与使用范围。
+4. SBOM 生成：生成软件物料清单，记录所有直接与间接依赖。
+5. CVE 扫描：检查已知漏洞，评估影响范围与修复状态。
+6. 脚本审查：列出可执行脚本、危险命令、网络访问和写入路径。
+7. 敏感信息审查：检查密钥、token、个人路径和内部域名。
+8. 签名验证：验证资产完整性与发布者身份。
+9. 运行态信任边界审查：确认 base URL、relay、MCP server、hooks、sandbox 和 approval policy。
+10. 工具调用策略审查：为读文件、写文件、命令执行、网络访问、凭证读取列出 allow/deny 条件。
+11. MCP/plugin readiness：核对暴露清单、schema/smoke、auth scope、依赖边界和回滚步骤。
+12. Runtime Control Plane Audit：若候选资产暴露 slash command、MCP server、hook、permission profile 或外部 connector，记录 `slash_command_runtime_audit`、`mcp_runtime_contract`、`permission_profile_decision`、`approval_boundary`、`deny_path_test` 和 `rollback_path`。
+13. 安装范围审查：确认仅进入 core/optional/profile/plugin 中的最小范围。
+14. 回滚审查：给出移除方式和安装回退点。
 
 上述后续编号按原顺序执行所需步骤；不同候选可跳过不适用的工具扫描，但必须注明 `not-scanned / reason / owner`，不能把跳过项算作成功。
 
@@ -92,6 +92,7 @@ sha256sum -c <checksum_file>
 - SBOM Summary:
 - CVE Scan Results:
 - Executable Scripts:
+- Security Scan: security_model / invariant_ids / inspected / omitted / unavailable / source-to-sink / confirmed / false-positive / unverified:
 - External Dependencies:
 - Secret Scan: coverage / excluded / not-scanned / candidate-paths / redaction
 - Signature Verification:

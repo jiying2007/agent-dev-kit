@@ -95,3 +95,10 @@ staged 文件出现 `MM` 时，必须显式列出 unstaged overlay。修复未�
 - 验证合法输入与兼容性未退化、原保护边界没有被放宽、是否引入新的安全失败；最小可复现负例关联 `scope_id`，不为凑数量生成无关变体。
 - 目标受控仓库代码、测试、脚本仅在明确授权和隔离条件下运行；不能执行不可信补丁脚本、远端/生产设备验证来代替审批。
 - 输出 `vulnerable_ref / patched_ref / original_repro / related_variants / legitimate_behavior / new_risks / runtime_evidence_or_not-tested / owner`。
+
+## Spec-to-Code 双向一致性（完整范围且有需求/规格变更时）
+- 先冻结当前生效规格、原需求 ID、目标实现 SHA、真实调用者与模块/协议边界。只选实际受影响范围；单条 `feedback-triage` 不启动全量规格审计。
+- **spec → code**：逐条将要求映射到代码路径/符号、验证用例和观察证据；基础状态 `verified / contradicted / absent / not-checked`；细分 `implemented / partial / stronger-than-spec / undecidable`，其中 partial 需列失效路径、stronger-than-spec 需找未声明约束、undecidable 是规格不能测试。若声称 absent，必须有 `searched_scope`、符号/别名/调用链及排除记录；搜索不足只能 not-checked。README、grep 命中或覆盖率不能代替语义证明。
+- **code → spec**：检查本次变更引入的可观察状态/错误码/权限/超时/副作用；标 `documented / undocumented / not-checked`，其中 undocumented 不一定是漏洞，但需判断意图、风险、兼容与需求变更授权。
+- 账本必须显式保留 `required_scope / inspected_scope / omitted_scope / evidence_ref / risk_owner_decision`，无界/不可获取范围标 `not-checked`，不可推断“已审查 100% = 缺陷发现 100%”。
+- 高风险关键要求 contradicted/absent/not-checked，或未经授权的未声明副作用，不得给 spec-compliance pass；先补证据、回设计/owner 决策。完整验证与缺陷发现率/误报率须分开呈现。

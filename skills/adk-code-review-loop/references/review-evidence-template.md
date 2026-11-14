@@ -43,6 +43,7 @@ rtk git diff --check --cached
   | ID | Severity | File | Evidence | Required Action | Status |
   |---|---|---|---|---|---|
 - Cannot Verify From Diff:
+- Spec-to-Code Ledger (when applicable): requirement->code / code->spec / not-checked / owner-risk-decision
 - False Positives:
 - Out-of-scope Suggestions:
 - Review Coverage Ledger (whole-diff/whole-lifecycle when applicable):

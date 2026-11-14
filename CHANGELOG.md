@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### 11.2.17 — Evidence-first independent Skills method convergence
+- Ground 22 public reference files by immutable Git blobs and compare their methods against ADK's existing 65-Skill architecture, avoiding full skill-pack imports.
+- Verify interface/protocol requirements in both directions (spec-to-code and code-to-spec) when an implementation exists; preserve uninspected and unknown scope.
+- Harden optional supply-chain scanner intake with target SECURITY_MODEL invariants, source-to-sink evidence, coverage ledger and confirmed/false-positive/unverified classifications.
+- Freeze existing Skill-method train/holdout case IDs and raw host evidence requirements without running a paid model; choose Token improvements by measured task impact rather than source byte size.
+- Retain existing single router, permissions and workflows, with source-only regression tests; actual E2–E4 task success, cost and latency remain not-measured.
+
 ### 11.2.16 — 65 Skills source-intake and embedded boundary hardening
 - Audit all 65 Manifest identities at an exact ADK source revision; classify 11 focused method fixes and retain 54 currently stable Skill contracts without needless churn. Source-only audit is not model behavior certification.
 - Harden optional URL/IMAP data-fetch against untrusted instructions, SSRF / redirects, read-state mutation and logging of private credentials; distinguish research-only supply-chain review from install/runtime readiness.
