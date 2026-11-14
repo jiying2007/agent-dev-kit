@@ -3,6 +3,8 @@
 ## Unreleased
 
 ### 11.2.18 — Reader-first docs and evidence-driven Skill lifecycle
+- Absorb SWE-Skills-Bench requirement-paired findings as a *conditional* Skill Fit Gate: target version and explicit user acceptance outrank mismatched templates; allow no-skill/abstain without adding another router.
+- Add a source-only regression for wrong-version, instruction-conflict and irrelevant-trigger; only measured, paired native traces can classify beneficial/neutral/harmful Skill effect. Fix literal-tab assertion in the new optional-skill test.
 - Add a third read-only upstream comparison (Microsoft Waza, NVIDIA SkillEvaluator, Alibaba skill-up, Superpowers) and improve source→scoped adoption, native evaluation boundary, and inline Goal execution without installing new runtimes.
 - Exercise real production Matcher for continued external-method adoption and fix the optional-skill negation test that previously used the wrong core scope.
 - Compare six additional official and practitioner Skill sources by Git blob, extracting methods only rather than installing external plugins or dependencies.
