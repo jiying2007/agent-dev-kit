@@ -37,6 +37,11 @@ For Code Intelligence, preserve the `code_intelligence_provider_contract` eviden
 - If a candidate conflicts with target version, environment or user's explicit non-goal, abstain/no-skill or select an already-trusted applicable Skill with the existing fallback/permission gate. A successful trigger is not a successful outcome.
 - The canonical matcher still owns deterministic routing; this check is a scoped execution **fit** decision, not a second classifier or silent change to Manifest/Profiles.
 
+## Optional availability is not native installation
+
+- The public matcher now returns `profile_availability=optional-skill-required` for any Optional Skill selected through explicit routing, lexical fallback, or explicit selection. This is **catalog metadata**, not an installation receipt or tool authorization; the consuming runtime must check its own trusted installed inventory before loading/executing. If absent, stay in the declared fallback/abstain path, never auto-install the source package or escalate mutation authority.
+- Core Skills retain their existing availability semantics. A failed match must not be presented as an installed or executable Skill.
+
 ## Fallback and Failure Semantics
 
 - `no match`: do not invent a skill. Use triage or no-skill/needs-input and record the gap.
