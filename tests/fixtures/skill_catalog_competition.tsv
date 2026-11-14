@@ -37,3 +37,6 @@ R035	primary	adk-skill-deep-analysis	-	请全网搜索优质skills，参考优�
 R036	primary	adk-repo-prompt-analysis	-	请逆向 Prompt 调用链，核查来源可信度
 R037	negated	-	adk-skill-deep-analysis	不要对标优质 Skills
 R038	negated	-	adk-repo-prompt-analysis	不要逆向 Prompt 调用链
+R039	primary	adk-external-practice-absorption	-	继续吸收外部成熟方法，提升已有 Skills 的实际执行效果
+R040	primary	adk-skill-deep-analysis	-	对标优质 Skills，先只读研究具体文件方法
+R041	negated	-	adk-external-practice-absorption	不要吸收外部成熟方法
