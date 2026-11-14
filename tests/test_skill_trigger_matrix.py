@@ -95,6 +95,30 @@ class SkillTriggerMatrixTests(unittest.TestCase):
 
 
 
+    def test_cli_optional_install_requirement_and_negation(self) -> None:
+        # Run the *published CLI path*, not only the in-process matcher.
+        # A catalog hit is not a native host installation receipt.
+        cases = (
+            ("继续吸收外部成熟方法，提升已有 Skills 的实际执行效果",
+             0, "skill=adk-external-practice-absorption",
+             "profile_availability=optional-skill-required"),
+            ("不要吸收外部成熟方法", 1,
+             "match=false decision=abstain", "mutation_permission=deny"),
+        )
+        for prompt, exit_code, first, second in cases:
+            with self.subTest(prompt=prompt):
+                completed = subprocess.run(
+                    ["bash", str(ROOT / "scripts/devkit.sh"),
+                     "match", "--text", prompt],
+                    cwd=str(ROOT), check=False, text=True,
+                    stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=30,
+                )
+                self.assertEqual(completed.returncode, exit_code,
+                                 completed.stderr or completed.stdout)
+                self.assertIn(first, completed.stdout, completed.stdout)
+                self.assertIn(second, completed.stdout, completed.stdout)
+
+
     def test_catalog_auto_selection_and_abstention(self) -> None:
         manifest = Manifest.load(ROOT)
         optional_names = {item["name"] for item in manifest.data["optional_skills"]}
