@@ -44,13 +44,13 @@ constraints:
 1. **Intent Triage**：识别任务模式；边界不清先 `adk-requirements-triage`。
 2. **Risk Gate**：共享接口/CI/发布按中高风险；E0–E3 控投入，不豁免 R2。
 3. **Progressive Disclosure**：执行 `skill-catalog-lazy-loading-v1`。先比较 `namespace_summary`、trigger、boundary；只为候选加载 `deferred_surface`，并记录 `loaded_tools` 与 `schema_review`。
-3.5. **Skill Fit Gate**：命中不代表适配；版本/平台/验收冲突须核目标仓当前源码，禁用过期 Skill 模板；不适配则 `no-skill/abstain`；细则见 `references/runtime-routing-details.md`。
-4. **Route**：只选一个 primary skill；supporting skills 只能补充检查项。recall / reasoning / ranking / feedback 分层，执行裁决来自确定性规则、结构化校验或 owner approval。
-5. **Evidence Plan**：中高风险必须生成 `Tool / Skill Evidence Plan`，包含 `primary`、`supporting`、`fallback`、`verification`，以及 required/recommended skills、artifacts 与 evidence paths。
-6. **Tool Evidence**：保留 `code_intelligence_provider_contract` 与 Tool Search 选项/来源/权限证据。
-7. **Degrade Fail-Closed**：出现 `no match`、`ambiguous`、`retrieval failed` 或工具不可用时，记录原因和 fallback evidence；不得把降级写成成功验证。
-8. **Evidence Depth**：按风险 L1/L2/L3；高风险保留 raw evidence。
-9. **Execute + Verify**：加载 primary skill 推进；产生改动时最终经过 `adk-verification-before-completion`。
+4. **Skill Fit Gate**：命中不代表适配；版本/平台/验收冲突须核目标仓当前源码，禁用过期 Skill 模板；不适配则 `no-skill/abstain`；细则见 `references/runtime-routing-details.md`。
+5. **Route**：只选一个 primary skill；supporting skills 只能补充检查项。recall / reasoning / ranking / feedback 分层，执行裁决来自确定性规则、结构化校验或 owner approval。
+6. **Evidence Plan**：中高风险必须生成 `Tool / Skill Evidence Plan`，包含 `primary`、`supporting`、`fallback`、`verification`，以及 required/recommended skills、artifacts 与 evidence paths。
+7. **Tool Evidence**：保留 `code_intelligence_provider_contract` 与 Tool Search 选项/来源/权限证据。
+8. **Degrade Fail-Closed**：出现 `no match`、`ambiguous`、`retrieval failed` 或工具不可用时，记录原因和 fallback evidence；不得把降级写成成功验证。
+9. **Evidence Depth**：按风险 L1/L2/L3；高风险保留 raw evidence。
+10. **Execute + Verify**：加载 primary skill 推进；产生改动时最终经过 `adk-verification-before-completion`。
 
 冲突/降级时再读 `references/runtime-routing-details.md`。
 
