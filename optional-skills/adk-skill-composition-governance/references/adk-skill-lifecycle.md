@@ -64,6 +64,18 @@ Skill evolution must be evidence-driven and monotonic:
 
 离线试验和评分见 `references/skill-behavior-evaluation.md`，不自动启用付费模型或后台调用。
 
+## Failure Feedback → Deterministic Regression (conditional)
+- First freeze an actual, redacted `failure_trace_ref`, `source_sha`, expected/observed, error class and affected Skill; if evidence is only a hypothetical example, label it `design-case`, not a reproduced failure.
+- Classify whether the correction is stable and testable: use the **existing** trigger matrix for misrouting, an existing fixture/contract test for schema or permission mistakes, and an approved real-host trial only for semantic task-quality failures. Do not add tests that simply search for the new slogan while missing the behavior.
+- Write the smallest positive/negative case with an explicit forbidden outcome; show the deterministic RED if runnable, apply the minimal Skill change, then show GREEN and check previously passing examples. When RED cannot run, record `not-run` and keep the effect `not-measured`.
+- Train-case failures can guide edits; reserve frozen holdout cases for final comparison. Do not contaminate holdout, auto-approve rules, rewrite global instructions or leak raw transcripts/credentials.
+- Avoid a universal "one correction = one new rule" policy: consolidate repeats by failure cause; retire ineffective instructions after observed regression and owner review.
+
+## Lifecycle Review (report-only)
+- Review operational states as `active / deprecation-candidate / deprecated / retired` **only as analyst labels** unless the canonical ADK Manifest explicitly supports that value; never silently add unsupported lifecycle enums or a second state registry.
+- Consider verified use, true route overlap, actual task outcomes, target profile footprint, replacement availability, consumer compatibility and rollback evidence. Inactivity or directory age alone is not a reason to delete a Skill.
+- For proposed retirement, record `candidate / evidence / owner_decision / replacement / affected_profiles / fallback / required_and_forbidden_footprint / rollback`. Without consent, native evidence or verified replacement, leave the active asset unchanged.
+
 ## Atomicity Rule
 
 Do not embed one Skill inside another Skill as an implicit dependency. Use Agent routing, workflow stages, or `adk-skill-composition-governance` to connect atomic skills. Each Skill must remain useful and testable on its own.
