@@ -1,0 +1,165 @@
+{
+  "reviewer": "/root/runtime_continuation_audit",
+  "reviewed_at": "2026-11-14T15:20:13.394494Z",
+  "scope": "input identity audit for hosted pilot preregistration; no model, Docker, network preparation, source mutation, or branch operation",
+  "repo_head": "c57f4f8a7983f52257c0587eb85881a006e6dc07",
+  "contracts": [
+    {
+      "path": "/workspace/scratch/234e724cfc4b/adk-hosted-pilot/docs/changes/20261114-hosted-task-pilot/requirements.md",
+      "bytes": 4193,
+      "sha256": "ecf82e26c14c06e6f18aa87639b93872f30b7a7a3b9971bb64f21652a89ad6be"
+    },
+    {
+      "path": "/workspace/scratch/234e724cfc4b/adk-hosted-pilot/docs/changes/20261114-hosted-task-pilot/design.md",
+      "bytes": 3726,
+      "sha256": "8abe23772023bf4e25f3238c04f32c8ee1c6a766c7c11d94656138e133e5a222"
+    }
+  ],
+  "conditions": [
+    {
+      "condition": "baseline",
+      "source_commit": "7aed1d2545babce16c41dc021ead01c8c324ce07",
+      "source_skill": {
+        "path": "/workspace/scratch/234e724cfc4b/opencode-task-pilot/sources/baseline/skills/adk-adr-writer/SKILL.md",
+        "bytes": 2614,
+        "sha256": "04267d6288de34d97f2774aa016f1c3366f75699a8638d9c57a5875f376dfcc1"
+      },
+      "source_matches_exact_git_blob": true,
+      "source_manifest_raw_sha256": "a9cc646538bc4309998c2112cc2e7c2102603211faf3268a70767db8b0d37b45",
+      "source_manifest_canonical_sha256": "5cdc7620a63d62223fe3f0a56b3aea7075d6408918ba891e77d0783621e05990",
+      "full_exported_skill": {
+        "path": "/workspace/scratch/234e724cfc4b/opencode-task-pilot/exports/baseline/opencode/skills/adk-adr-writer/SKILL.md",
+        "bytes": 2334,
+        "sha256": "e0672708e80c0636abaa812fa6be8d81d7b9f062a62e322b505c7f7d07c4e215"
+      },
+      "export_manifest": {
+        "path": "/workspace/scratch/234e724cfc4b/opencode-task-pilot/exports/baseline/opencode/adk-export-manifest.json",
+        "bytes": 17417,
+        "sha256": "7d3eb63f45960f024220929ccefb85dd6e3a67bc9d5a084916013e317bd421aa"
+      },
+      "export_manifest_version": "11.2.17",
+      "export_manifest_all_files_verified": 51,
+      "selected_export_file_set": [
+        {
+          "path": "/workspace/scratch/234e724cfc4b/opencode-task-pilot/exports/baseline/opencode/skills/adk-adr-writer/SKILL.md",
+          "bytes": 2334,
+          "sha256": "e0672708e80c0636abaa812fa6be8d81d7b9f062a62e322b505c7f7d07c4e215"
+        }
+      ],
+      "declared_reference_file_set": [],
+      "source_and_export_body_identical": true,
+      "native_skill_load_observation": "not-run",
+      "runtime_reference_reads": "not-run"
+    },
+    {
+      "condition": "candidate",
+      "source_commit": "c57f4f8a7983f52257c0587eb85881a006e6dc07",
+      "source_skill": {
+        "path": "/workspace/scratch/234e724cfc4b/adk-hosted-pilot/skills/adk-adr-writer/SKILL.md",
+        "bytes": 3680,
+        "sha256": "e013d6e67dc993a3c3a0cf589d6e1c1e3b4534c1a053422c8c1df0c04813dba2"
+      },
+      "source_matches_exact_git_blob": true,
+      "source_manifest_raw_sha256": "e44a41105d5b869b096cbbbf26b8bd2878c1348e4cec5fa1c7b5d7b3b140c92e",
+      "source_manifest_canonical_sha256": "473a331517cc098be8d47664247707deaa355af72dcf03463f98229850fa66a8",
+      "full_exported_skill": {
+        "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/candidate-export/opencode/skills/adk-adr-writer/SKILL.md",
+        "bytes": 3399,
+        "sha256": "a21c9d9d2fd3aaf1e759e28c0353139a1fee67c2ea1e790e1fc882a54f0c60d4"
+      },
+      "export_manifest": {
+        "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/candidate-export/opencode/adk-export-manifest.json",
+        "bytes": 17416,
+        "sha256": "eb7e413cbdc219d5e03256aa50d0b5267ed806ceda117002b82fd8ec17e33e39"
+      },
+      "export_manifest_version": "11.3.1",
+      "export_manifest_all_files_verified": 51,
+      "selected_export_file_set": [
+        {
+          "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/candidate-export/opencode/skills/adk-adr-writer/SKILL.md",
+          "bytes": 3399,
+          "sha256": "a21c9d9d2fd3aaf1e759e28c0353139a1fee67c2ea1e790e1fc882a54f0c60d4"
+        }
+      ],
+      "declared_reference_file_set": [],
+      "source_and_export_body_identical": true,
+      "native_skill_load_observation": "not-run",
+      "runtime_reference_reads": "not-run"
+    }
+  ],
+  "task_inputs": {
+    "source_commit": "c57f4f8a7983f52257c0587eb85881a006e6dc07",
+    "task": {
+      "path": "/workspace/scratch/234e724cfc4b/adk-hosted-pilot/tests/fixtures/skill_execution_tasks/targeted-document-edit/task.md",
+      "bytes": 351,
+      "sha256": "6bc93366986b29af97fe8328f1c338ae90763a235ba917531b803e8df7e6bc44"
+    },
+    "prompt": {
+      "path": "/workspace/scratch/234e724cfc4b/opencode-task-pilot/baseline/prompt.txt",
+      "bytes": 407,
+      "sha256": "5d70cb0689e244f868c32fb92600a3d96a0945fc4724be3d924952a2e8b252db"
+    },
+    "identical_prompt_copy": {
+      "path": "/workspace/scratch/234e724cfc4b/opencode-task-pilot/candidate/prompt.txt",
+      "bytes": 407,
+      "sha256": "5d70cb0689e244f868c32fb92600a3d96a0945fc4724be3d924952a2e8b252db"
+    },
+    "prompt_derivation": "exact task.md bytes + UTF-8 suffix; no trimming or rewriting",
+    "prompt_suffix_utf8": "\n请使用 `adk-adr-writer` Skill 完成上述任务。\n",
+    "initial_file_set": [
+      {
+        "path": "/workspace/scratch/234e724cfc4b/adk-hosted-pilot/tests/fixtures/skill_execution_tasks/targeted-document-edit/initial/docs/ADR-021.md",
+        "bytes": 379,
+        "sha256": "6a6249b2f8df6c2a8cbea872f13319dd42cb07779bea6e204bfd614f19144359"
+      }
+    ],
+    "identical_existing_work_copies": [
+      {
+        "path": "/workspace/scratch/234e724cfc4b/opencode-task-pilot/baseline/work/docs/ADR-021.md",
+        "bytes": 379,
+        "sha256": "6a6249b2f8df6c2a8cbea872f13319dd42cb07779bea6e204bfd614f19144359"
+      },
+      {
+        "path": "/workspace/scratch/234e724cfc4b/opencode-task-pilot/candidate/work/docs/ADR-021.md",
+        "bytes": 379,
+        "sha256": "6a6249b2f8df6c2a8cbea872f13319dd42cb07779bea6e204bfd614f19144359"
+      }
+    ],
+    "case_for_external_grader_only": {
+      "path": "/workspace/scratch/234e724cfc4b/adk-hosted-pilot/tests/fixtures/skill_execution_tasks/targeted-document-edit/case.json",
+      "bytes": 454,
+      "sha256": "a9a6143b2a36c324435c321171ad09925457dd8d7f8209180ff64f1ecebe59e0"
+    },
+    "task_initial_case_match_exact_git_blobs": true,
+    "initial_adr_literal_reference": "docs/protocol-v2.md#retry",
+    "initial_adr_reference_target_provided": false,
+    "reference_handling": "preserve literal text as task requires; do not fabricate or mount a reference target absent from initial fixture"
+  },
+  "historical_candidate_not_for_execution": {
+    "source_commit": "4f77f795ecfba3e6bb1e167eb27cb84cca796845",
+    "source_skill": {
+      "path": "/workspace/scratch/234e724cfc4b/opencode-task-pilot/sources/candidate/skills/adk-adr-writer/SKILL.md",
+      "bytes": 3680,
+      "sha256": "e013d6e67dc993a3c3a0cf589d6e1c1e3b4534c1a053422c8c1df0c04813dba2"
+    },
+    "full_exported_skill": {
+      "path": "/workspace/scratch/234e724cfc4b/opencode-task-pilot/exports/candidate/opencode/skills/adk-adr-writer/SKILL.md",
+      "bytes": 3399,
+      "sha256": "66da161ec404900d8cdfaf77700e4c411b117c44116efb3e0361baf64fd12d95"
+    },
+    "source_bytes_equal_current_candidate": true,
+    "export_only_difference": "adk.manifest_version: 11.3.0 -> 11.3.1"
+  },
+  "findings": [],
+  "audit_correction": {
+    "initial_assertion": "Compared export manifest_sha256 with raw Git manifest.json SHA256; failed before output file creation.",
+    "corrected_basis": "src/agent_dev_kit/model.py canonical_json_bytes uses UTF-8 json.dumps(ensure_ascii=False,sort_keys=True,separators=(comma,colon)) plus LF; Manifest.digest hashes those bytes.",
+    "corrected_comparison": "Both export manifests match the canonical digest of manifest.json at their exact source commits.",
+    "source_or_export_modified": false
+  },
+  "limitations": [
+    "No real model/Skill invocation has occurred; declared reference set is not native runtime read telemetry.",
+    "The new requirements/design are experimental contracts, not files in candidate c57 source.",
+    "Hashes bind current raw files; later prompt/task/Skill/contract changes require updated preregistration before model execution."
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "frozen_at": "2026-11-14T16:01:24.341026Z",
+  "base_commit": "c57f4f8a7983f52257c0587eb85881a006e6dc07",
+  "parent_commit": "887f0c6a10b03b57280865c6db677e4d9579c85c",
+  "index_tree": "cb856f4b51fbe10eeac71a396f7cb87ca55e407e",
+  "original_patch_sha256": "dde8de75fc8f4283a40befebe33af39a1779d9307ab8887fa60f11a9ce9b33a4",
+  "revision_patch_sha256": "0ed6c96e5c4a93591097c616de791cd1d3299a874179e435ce7cbfb7a7a94ebc",
+  "files": {
+    ".github/workflows/opencode-task-pilot-once.yml": {
+      "sha256": "cfbd9033d3b7933c0cd1c950179a3a651043b994b1ea782c60a623604679cd74",
+      "bytes": 6518
+    },
+    "src/agent_dev_kit/hosted_task_pilot.py": {
+      "sha256": "d4fa94e26a9cb2c9578b3aacb649029822001948366d4e5bcb15fc91ed3e4952",
+      "bytes": 29581
+    },
+    "src/agent_dev_kit/hosted_task_native.py": {
+      "sha256": "1d53d5502a714137c5e3f2fbfd11a71e9e891e802da1f5bd4048fa4d6da7ebe8",
+      "bytes": 24721
+    },
+    "tests/test_hosted_task_pilot.py": {
+      "sha256": "67b14e9ccf42b1e40ed1e58d1dd17cc403721d1a19ae86724245eadcbf25181b",
+      "bytes": 24160
+    },
+    "docs/changes/20261114-hosted-task-pilot/design.md": {
+      "sha256": "97233ebef1179bef45bb069b04fbf3217d3095eead6ba9ecd76b203cb703e906",
+      "bytes": 6898
+    },
+    "docs/changes/20261114-hosted-task-pilot/negative-results.md": {
+      "sha256": "aa1649d174f8731cd6435ebd8f202f25c488b275eb5388f8141fa28e033698d3",
+      "bytes": 4154
+    },
+    "docs/changes/20261114-hosted-task-pilot/requirements.md": {
+      "sha256": "b6c1e168afc1ed18816eda9bf0e7bb2e4eb6a61f7e5f8ab5f6918bc5b1dafb21",
+      "bytes": 7401
+    },
+    "docs/changes/20261114-hosted-task-pilot/tasks.md": {
+      "sha256": "6940bb224869632e0375539a11b68349f4ca497ab343cf2d3e2bed3bfb2282f7",
+      "bytes": 1781
+    }
+  },
+  "prospective_diff_check": "pass"
+}

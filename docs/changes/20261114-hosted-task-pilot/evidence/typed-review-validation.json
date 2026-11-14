@@ -1,0 +1,161 @@
+{
+  "checked_at": "2026-11-14T16:15:08.728981Z",
+  "result": {
+    "schema": "adk-review-evidence/v1",
+    "subject_id": "20261114-hosted-task-pilot",
+    "scope": "source-change",
+    "owner": "leiwenjun",
+    "author_id": "ai/root/consumer_adoption_audit",
+    "reviewer": {
+      "id": "ai/root/task_protocol_audit",
+      "kind": "ai",
+      "independence": "independent"
+    },
+    "evidence_completed_at": "2026-11-14T16:11:57.536865Z",
+    "reviewed_at": "2026-11-14T16:14:28.544953Z",
+    "verdicts": {
+      "spec": "pass",
+      "quality": "pass"
+    },
+    "findings": [
+      {
+        "id": "h3-bootstrap-deadline",
+        "severity": "major",
+        "disposition": "fixed",
+        "reason": "C2 bounds four bootstrap actions to 300 seconds plus a separate clock bound; actual elapsed time remains charged to the fixed preparation deadline. Checkout-independent always evidence preserves existing summary/manifest and conservatively reports unknown after possible execution. Actual shell contract tests passed."
+      },
+      {
+        "id": "h3-required-full-gate",
+        "severity": "major",
+        "disposition": "fixed",
+        "reason": "The synthetic forbidden environment fixture is reconstructed at runtime with unchanged rejection meaning; the scanner is unchanged. Actual product-maturity gate and required full regression passed, 102/102. The rejected C result remains preserved."
+      }
+    ],
+    "limitations": [
+      "Independent read-only AI review with declared, not authenticated, identity; no human or GitHub reviewer approval is claimed.",
+      "Executable source is exactly b8815263a31ee3b004c2e7e9eee564fe8a35dfc8. The source review occurred at 2026-11-14T16:07:25.979218Z; the later receipt review binds 11 files and verifies 31 lossless wrapper members. This typed record is a subsequent root-authored transcription, not a separately reviewed source change.",
+      "The later receipt commit changes task completion status and adds records. The C2 tasks snapshot remains bound by source-bindings and original.patch. Only C2, not the receipt commit, is authorized as the single hosted execution target.",
+      "Native Docker/configuration qualification, model execution, actual Skill-load, session export, usage and external task acceptance are not established by these deterministic checks; they require actual hosted results.",
+      "One public development task with fixed baseline-first order cannot establish general Skill efficacy, independent holdout performance, statistical improvement, or Token/cost/latency savings.",
+      "This review neither satisfies consumer native gates nor authorizes a production release. Earlier C rejection and local pre-CLI negative results remain valid and separate."
+    ],
+    "policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+    "validator_sha256": {
+      "src/agent_dev_kit/review_evidence.py": "be4892f464496a29dbbb41ebb56c48984bf103d8eabe2ee6117bd583d1032c47",
+      "src/agent_dev_kit/strict_json.py": "72f06f4dcaebfed83bd1ae9876e38d4f7d82d8a1473b40b66beffb6338ee94a5",
+      "src/agent_dev_kit/readiness_evidence.py": "6fdfd5bea3ee097ac21d2b2ab469378c8c84f78856061b680ebb0c5f9d726778"
+    },
+    "target": {
+      "base_commit": "c57f4f8a7983f52257c0587eb85881a006e6dc07",
+      "head_commit": "b8815263a31ee3b004c2e7e9eee564fe8a35dfc8",
+      "original_patch_sha256": "dde8de75fc8f4283a40befebe33af39a1779d9307ab8887fa60f11a9ce9b33a4"
+    },
+    "sources": [
+      {
+        "base": "record",
+        "path": "requirements.md",
+        "sha256": "b6c1e168afc1ed18816eda9bf0e7bb2e4eb6a61f7e5f8ab5f6918bc5b1dafb21"
+      },
+      {
+        "base": "record",
+        "path": "design.md",
+        "sha256": "97233ebef1179bef45bb069b04fbf3217d3095eead6ba9ecd76b203cb703e906"
+      },
+      {
+        "base": "record",
+        "path": "evidence/original.patch",
+        "sha256": "dde8de75fc8f4283a40befebe33af39a1779d9307ab8887fa60f11a9ce9b33a4"
+      },
+      {
+        "base": "record",
+        "path": "evidence/source-bindings.json",
+        "sha256": "e5894962d0076dcc29ac1759cfcc9297adb237e3dcd6153c1c0f05713c0618fa"
+      },
+      {
+        "base": "repository",
+        "path": ".github/workflows/opencode-task-pilot-once.yml",
+        "sha256": "cfbd9033d3b7933c0cd1c950179a3a651043b994b1ea782c60a623604679cd74"
+      },
+      {
+        "base": "repository",
+        "path": "src/agent_dev_kit/hosted_task_pilot.py",
+        "sha256": "d4fa94e26a9cb2c9578b3aacb649029822001948366d4e5bcb15fc91ed3e4952"
+      },
+      {
+        "base": "repository",
+        "path": "src/agent_dev_kit/hosted_task_native.py",
+        "sha256": "1d53d5502a714137c5e3f2fbfd11a71e9e891e802da1f5bd4048fa4d6da7ebe8"
+      },
+      {
+        "base": "repository",
+        "path": "tests/test_hosted_task_pilot.py",
+        "sha256": "67b14e9ccf42b1e40ed1e58d1dd17cc403721d1a19ae86724245eadcbf25181b"
+      }
+    ],
+    "evidence": [
+      {
+        "base": "record",
+        "path": "negative-results.md",
+        "sha256": "aa1649d174f8731cd6435ebd8f202f25c488b275eb5388f8141fa28e033698d3"
+      },
+      {
+        "base": "record",
+        "path": "verification.md",
+        "sha256": "06b6b8d228227f9845f05f4313a8001df6534f376fac17d9ac92cf51073b8463"
+      },
+      {
+        "base": "record",
+        "path": "review-findings.md",
+        "sha256": "eb745436cb0c3f855d50f6e43903e1b541917c670c904c9831f8f54595a98dc6"
+      },
+      {
+        "base": "record",
+        "path": "evidence/author-validation.json",
+        "sha256": "8317ae74e93161d40669d394adcfc015e7c494f8826381a946200a3b73101020"
+      },
+      {
+        "base": "record",
+        "path": "evidence/full-regression.json",
+        "sha256": "36ea335c5929375cc694bb2565ce5046f1960a323ea9c2a5ec9a48cef268705d"
+      },
+      {
+        "base": "record",
+        "path": "evidence/independent-review.json",
+        "sha256": "e599d4a33af8ed215823e2886ffd7db6ff9789f3898233fecb7fbd0f455f4898"
+      },
+      {
+        "base": "record",
+        "path": "evidence/input-identity.json",
+        "sha256": "be8367bcb2d93afd4d465362ac75539eeb211cc1371b613fe24b0bf9ed7a82ee"
+      },
+      {
+        "base": "record",
+        "path": "evidence/native-config-probe.json",
+        "sha256": "ff061415935e8c3b3f4b9310c40ab78fe42e0fc817c5a69a0d6b8e64690e8bc1"
+      },
+      {
+        "base": "record",
+        "path": "evidence/prior-rejected-source.json",
+        "sha256": "02ad524478d821ff2a20d6cfa92a8b9bff0c905495c57072b234ce2cfd5074a1"
+      },
+      {
+        "base": "record",
+        "path": "evidence/receipt-checks.json",
+        "sha256": "aee861dff892335a292b7bc6c8f6e1850ec3438025b4d1cae7619296f8fa51c6"
+      },
+      {
+        "base": "record",
+        "path": "evidence/receipt-fidelity-review.json",
+        "sha256": "c3960543001158f3c0b98cdc599e1eecb1b259a56b9cd6250d9bf98b17f8d8ed"
+      }
+    ],
+    "status": "pass",
+    "record_sha256": "3ef159154d3b7ab8be8641077b0201fdf0fb9a9e4cbc6dc40fa13954b442c326",
+    "review_policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+    "review_scope": "source-change",
+    "human_review_performed": false,
+    "field_evidence_verified": false,
+    "provider_execution_performed": false,
+    "product_release_authorized": false
+  }
+}

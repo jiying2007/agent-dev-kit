@@ -1,0 +1,27 @@
+{
+  "schema": "adk-receipt-checks/v1",
+  "started_at": "2026-11-14T16:11:56.876637Z",
+  "completed_at": "2026-11-14T16:11:57.536865Z",
+  "source_commit": "b8815263a31ee3b004c2e7e9eee564fe8a35dfc8",
+  "security_check": {
+    "schema_version": 1,
+    "status": "pass",
+    "failures": [],
+    "warnings": [],
+    "inventory_source": "git",
+    "files_scanned": 2085,
+    "scan_limit": 50000
+  },
+  "staged_diff_check": {
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "prior_operator_invocation_error": {
+    "operation": "security_check(Path.cwd())",
+    "correct_signature": "security_check(Manifest.load(Path.cwd()))",
+    "observed_exception": "ManifestError: filesystem security inventory exceeds file limit",
+    "classification": "operator-argument-error; not a credential finding or actual product gate result",
+    "resolution": "correct typed Manifest input; no scanner or budget changes"
+  }
+}

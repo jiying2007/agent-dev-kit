@@ -1,0 +1,476 @@
+{
+  "reviewed_at": "2026-11-14T16:14:28.544953Z",
+  "reviewer": "ai/task_protocol_audit",
+  "review_kind": "receipt-only fidelity review",
+  "spec_verdict": "pass",
+  "quality_verdict": "pass",
+  "open_findings": [],
+  "open_blocker_count": 0,
+  "open_major_count": 0,
+  "current_head": "b8815263a31ee3b004c2e7e9eee564fe8a35dfc8",
+  "approved_execution_commit": "b8815263a31ee3b004c2e7e9eee564fe8a35dfc8",
+  "approved_execution_tree": "cb856f4b51fbe10eeac71a396f7cb87ca55e407e",
+  "execution_before_base": "c57f4f8a7983f52257c0587eb85881a006e6dc07",
+  "scope": "The current 11 staged receipt/document files only; no source/config/contract edit, no fresh full regression, no Docker/model/native probe execution.",
+  "frozen_source_files_verified": [
+    {
+      "path": ".github/workflows/opencode-task-pilot-once.yml",
+      "sha256": "cfbd9033d3b7933c0cd1c950179a3a651043b994b1ea782c60a623604679cd74",
+      "bytes": 6518,
+      "worktree_index_C2_byte_identical": true
+    },
+    {
+      "path": "src/agent_dev_kit/hosted_task_pilot.py",
+      "sha256": "d4fa94e26a9cb2c9578b3aacb649029822001948366d4e5bcb15fc91ed3e4952",
+      "bytes": 29581,
+      "worktree_index_C2_byte_identical": true
+    },
+    {
+      "path": "src/agent_dev_kit/hosted_task_native.py",
+      "sha256": "1d53d5502a714137c5e3f2fbfd11a71e9e891e802da1f5bd4048fa4d6da7ebe8",
+      "bytes": 24721,
+      "worktree_index_C2_byte_identical": true
+    },
+    {
+      "path": "tests/test_hosted_task_pilot.py",
+      "sha256": "67b14e9ccf42b1e40ed1e58d1dd17cc403721d1a19ae86724245eadcbf25181b",
+      "bytes": 24160,
+      "worktree_index_C2_byte_identical": true
+    },
+    {
+      "path": "docs/changes/20261114-hosted-task-pilot/design.md",
+      "sha256": "97233ebef1179bef45bb069b04fbf3217d3095eead6ba9ecd76b203cb703e906",
+      "bytes": 6898,
+      "worktree_index_C2_byte_identical": true
+    },
+    {
+      "path": "docs/changes/20261114-hosted-task-pilot/negative-results.md",
+      "sha256": "aa1649d174f8731cd6435ebd8f202f25c488b275eb5388f8141fa28e033698d3",
+      "bytes": 4154,
+      "worktree_index_C2_byte_identical": true
+    },
+    {
+      "path": "docs/changes/20261114-hosted-task-pilot/requirements.md",
+      "sha256": "b6c1e168afc1ed18816eda9bf0e7bb2e4eb6a61f7e5f8ab5f6918bc5b1dafb21",
+      "bytes": 7401,
+      "worktree_index_C2_byte_identical": true
+    },
+    {
+      "path": "docs/changes/20261114-hosted-task-pilot/tasks.md",
+      "sha256": "6940bb224869632e0375539a11b68349f4ca497ab343cf2d3e2bed3bfb2282f7",
+      "bytes": 1781,
+      "worktree_index_C2_byte_identical": true
+    }
+  ],
+  "staged_receipt_files": [
+    {
+      "path": "docs/changes/20261114-hosted-task-pilot/evidence/author-validation.json",
+      "bytes": 25498,
+      "sha256": "8317ae74e93161d40669d394adcfc015e7c494f8826381a946200a3b73101020",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "docs/changes/20261114-hosted-task-pilot/evidence/full-regression.json",
+      "bytes": 14377,
+      "sha256": "36ea335c5929375cc694bb2565ce5046f1960a323ea9c2a5ec9a48cef268705d",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "docs/changes/20261114-hosted-task-pilot/evidence/independent-review.json",
+      "bytes": 13230,
+      "sha256": "e599d4a33af8ed215823e2886ffd7db6ff9789f3898233fecb7fbd0f455f4898",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "docs/changes/20261114-hosted-task-pilot/evidence/input-identity.json",
+      "bytes": 8362,
+      "sha256": "be8367bcb2d93afd4d465362ac75539eeb211cc1371b613fe24b0bf9ed7a82ee",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "docs/changes/20261114-hosted-task-pilot/evidence/native-config-probe.json",
+      "bytes": 16517,
+      "sha256": "ff061415935e8c3b3f4b9310c40ab78fe42e0fc817c5a69a0d6b8e64690e8bc1",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "docs/changes/20261114-hosted-task-pilot/evidence/original.patch",
+      "bytes": 109621,
+      "sha256": "dde8de75fc8f4283a40befebe33af39a1779d9307ab8887fa60f11a9ce9b33a4",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "docs/changes/20261114-hosted-task-pilot/evidence/prior-rejected-source.json",
+      "bytes": 27695,
+      "sha256": "02ad524478d821ff2a20d6cfa92a8b9bff0c905495c57072b234ce2cfd5074a1",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "docs/changes/20261114-hosted-task-pilot/evidence/receipt-checks.json",
+      "bytes": 919,
+      "sha256": "aee861dff892335a292b7bc6c8f6e1850ec3438025b4d1cae7619296f8fa51c6",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "docs/changes/20261114-hosted-task-pilot/evidence/source-bindings.json",
+      "bytes": 1812,
+      "sha256": "e5894962d0076dcc29ac1759cfcc9297adb237e3dcd6153c1c0f05713c0618fa",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "docs/changes/20261114-hosted-task-pilot/review-findings.md",
+      "bytes": 1651,
+      "sha256": "eb745436cb0c3f855d50f6e43903e1b541917c670c904c9831f8f54595a98dc6",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "docs/changes/20261114-hosted-task-pilot/verification.md",
+      "bytes": 2499,
+      "sha256": "06b6b8d228227f9845f05f4313a8001df6534f376fac17d9ac92cf51073b8463",
+      "index_matches_worktree": true
+    }
+  ],
+  "lossless_wrappers": [
+    {
+      "path": "docs/changes/20261114-hosted-task-pilot/evidence/author-validation.json",
+      "member_count": 15,
+      "members": [
+        {
+          "member": "format.json",
+          "original_path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/bootstrap-revision-freeze-20261114/format.json",
+          "bytes": 826,
+          "sha256": "cbcb76e5e0a719a128954971ffc7c00582063fcb38088ed00ca76cabc60b097c",
+          "utf8_roundtrip_matches_original": true
+        },
+        {
+          "member": "format.log",
+          "original_path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/bootstrap-revision-freeze-20261114/format.log",
+          "bytes": 26,
+          "sha256": "eee76f865de5a9f2456950f710ae5d5f9b5bd0ea02aa54f614c5eed6642a0bfd",
+          "utf8_roundtrip_matches_original": true
+        },
+        {
+          "member": "frozen-validation.json",
+          "original_path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/bootstrap-revision-freeze-20261114/frozen-validation.json",
+          "bytes": 2814,
+          "sha256": "cb70071822c8d641d5a2ef00658288a11787ba5bcd0f129b4b45b75ae2559b34",
+          "utf8_roundtrip_matches_original": true
+        },
+        {
+          "member": "manifest.json",
+          "original_path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/bootstrap-revision-freeze-20261114/manifest.json",
+          "bytes": 1778,
+          "sha256": "d0d770bac560ec713e884aaa81ff2d644322d5e91d92661bb56600974a274627",
+          "utf8_roundtrip_matches_original": true
+        },
+        {
+          "member": "module-size.json",
+          "original_path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/bootstrap-revision-freeze-20261114/module-size.json",
+          "bytes": 1274,
+          "sha256": "b02443d1b67f1babcbb16f896cd29f8debe689aed019d834dc9e32d22ab8e7da",
+          "utf8_roundtrip_matches_original": true
+        },
+        {
+          "member": "module-size.log",
+          "original_path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/bootstrap-revision-freeze-20261114/module-size.log",
+          "bytes": 441,
+          "sha256": "6c6b313dcfabe67bf7fa40bd9e9e9770042fa81711595bd093055aff9608bfbd",
+          "utf8_roundtrip_matches_original": true
+        },
+        {
+          "member": "mypy.json",
+          "original_path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/bootstrap-revision-freeze-20261114/mypy.json",
+          "bytes": 842,
+          "sha256": "c68ddb276334d6e887ed0ff4a9ff6393074d011b185f871c84d7606feea80add",
+          "utf8_roundtrip_matches_original": true
+        },
+        {
+          "member": "mypy.log",
+          "original_path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/bootstrap-revision-freeze-20261114/mypy.log",
+          "bytes": 43,
+          "sha256": "8228fcc5ce46d42d01caf3cd941f4e9c5f2bcc372bb5b147a2f0572d2dd675a8",
+          "utf8_roundtrip_matches_original": true
+        },
+        {
+          "member": "opencode-config.json",
+          "original_path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/bootstrap-revision-freeze-20261114/opencode-config.json",
+          "bytes": 4143,
+          "sha256": "7411cefff349fab60439f9f4d0260216a19cc48a7ec9c2c57770e43735feea87",
+          "utf8_roundtrip_matches_original": true
+        },
+        {
+          "member": "product-maturity.json",
+          "original_path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/bootstrap-revision-freeze-20261114/product-maturity.json",
+          "bytes": 844,
+          "sha256": "bbbd663c77092bee1059fef042ec8e44c60928a7f56d32d4deb7f81225ede9a4",
+          "utf8_roundtrip_matches_original": true
+        },
+        {
+          "member": "product-maturity.log",
+          "original_path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/bootstrap-revision-freeze-20261114/product-maturity.log",
+          "bytes": 43,
+          "sha256": "806c1d0bff64284bbff0916daccf73947f462e701bc757f9ad72963d9c2dfb87",
+          "utf8_roundtrip_matches_original": true
+        },
+        {
+          "member": "ruff.json",
+          "original_path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/bootstrap-revision-freeze-20261114/ruff.json",
+          "bytes": 810,
+          "sha256": "c12f0d48b49ebd8fda2501449ea90a2663aa1bc912aa3a158b89bc90e98ff600",
+          "utf8_roundtrip_matches_original": true
+        },
+        {
+          "member": "ruff.log",
+          "original_path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/bootstrap-revision-freeze-20261114/ruff.log",
+          "bytes": 19,
+          "sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",
+          "utf8_roundtrip_matches_original": true
+        },
+        {
+          "member": "unit-contracts.json",
+          "original_path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/bootstrap-revision-freeze-20261114/unit-contracts.json",
+          "bytes": 3783,
+          "sha256": "6b301b505982f78a22fb766f00bcae9b56d2f28ac0261c4f4925f950881c408b",
+          "utf8_roundtrip_matches_original": true
+        },
+        {
+          "member": "unit-contracts.log",
+          "original_path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/bootstrap-revision-freeze-20261114/unit-contracts.log",
+          "bytes": 2932,
+          "sha256": "7bbf2c4bd993f10ed7788602d4b626d83e4a0de82ab9b45b881ffc056ed26f1e",
+          "utf8_roundtrip_matches_original": true
+        }
+      ]
+    },
+    {
+      "path": "docs/changes/20261114-hosted-task-pilot/evidence/full-regression.json",
+      "member_count": 4,
+      "members": [
+        {
+          "member": "full-result.json",
+          "original_path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/root-frozen-v2/full-result.json",
+          "bytes": 637,
+          "sha256": "9a9d26c17a2c91af6f3451cd344779bc56da3b164a122cbf63586f21cd548afd",
+          "utf8_roundtrip_matches_original": true
+        },
+        {
+          "member": "full.stdout",
+          "original_path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/root-frozen-v2/full.stdout",
+          "bytes": 3174,
+          "sha256": "0d1bee4e82001511f12291d9c3be0867228a5a396f58b49d3acd176ef3eed61e",
+          "utf8_roundtrip_matches_original": true
+        },
+        {
+          "member": "full.stderr",
+          "original_path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/root-frozen-v2/full.stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "utf8_roundtrip_matches_original": true
+        },
+        {
+          "member": "full-timing.json",
+          "original_path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/root-frozen-v2/full-timing.json",
+          "bytes": 8217,
+          "sha256": "158d11747b886b198559eb1a2632fcb8f71a9e448162fd5be08d2cfaee63a08e",
+          "utf8_roundtrip_matches_original": true
+        }
+      ]
+    },
+    {
+      "path": "docs/changes/20261114-hosted-task-pilot/evidence/native-config-probe.json",
+      "member_count": 6,
+      "members": [
+        {
+          "member": "opencode.json",
+          "original_path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/native-config-probe-20261114T152649Z/config/opencode.json",
+          "bytes": 4143,
+          "sha256": "7411cefff349fab60439f9f4d0260216a19cc48a7ec9c2c57770e43735feea87",
+          "utf8_roundtrip_matches_original": true
+        },
+        {
+          "member": "snapshot.json",
+          "original_path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/native-config-probe-20261114T152649Z/snapshot.json",
+          "bytes": 4674,
+          "sha256": "73d5c37678667fc862cff31f9dea47194ef53c939c1b1ef732c0d9e2353c86c0",
+          "utf8_roundtrip_matches_original": true
+        },
+        {
+          "member": "isolation.json",
+          "original_path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/native-config-probe-20261114T152649Z/raw/isolation.json",
+          "bytes": 1944,
+          "sha256": "47026db2ede74f9b15d366512777bf053351bcd491d2e28ce7082cbd8801df44",
+          "utf8_roundtrip_matches_original": true
+        },
+        {
+          "member": "isolation.stdout",
+          "original_path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/native-config-probe-20261114T152649Z/raw/isolation.stdout",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "utf8_roundtrip_matches_original": true
+        },
+        {
+          "member": "isolation.stderr",
+          "original_path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/native-config-probe-20261114T152649Z/raw/isolation.stderr",
+          "bytes": 80,
+          "sha256": "31c2cb0dffdeb9049fa2269e24af62df15e4161d4f752a648faf9630259725fe",
+          "utf8_roundtrip_matches_original": true
+        },
+        {
+          "member": "result.json",
+          "original_path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/native-config-probe-20261114T152649Z/result.json",
+          "bytes": 2732,
+          "sha256": "18fb67074daefe5508ab38fa2ca543eaad1e3199cd982d40a6f635fd94c78508",
+          "utf8_roundtrip_matches_original": true
+        }
+      ]
+    },
+    {
+      "path": "docs/changes/20261114-hosted-task-pilot/evidence/prior-rejected-source.json",
+      "member_count": 6,
+      "members": [
+        {
+          "member": "independent-review-C-887f0c6.json",
+          "original_path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/independent-review-C-887f0c6.json",
+          "bytes": 10098,
+          "sha256": "483e63c227571c57502afdbc4b9ee6751d0a3c08ce94045bc4d8c734dc890ad7",
+          "utf8_roundtrip_matches_original": true
+        },
+        {
+          "member": "source-bindings.json",
+          "original_path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/root-frozen/source-bindings.json",
+          "bytes": 1654,
+          "sha256": "0b5d285a936d69946073df3dd67385a084dddf8e5c912fedee290f313ff509d0",
+          "utf8_roundtrip_matches_original": true
+        },
+        {
+          "member": "full-result.json",
+          "original_path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/root-frozen/full-result.json",
+          "bytes": 634,
+          "sha256": "6af5ad42f52596d758fe4afd382da8b735cf966726a6ff7d5e517e869fb79159",
+          "utf8_roundtrip_matches_original": true
+        },
+        {
+          "member": "full.stdout",
+          "original_path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/root-frozen/full.stdout",
+          "bytes": 3128,
+          "sha256": "56b05e9007bc656ce346d7ef567817b52ae8a10b263aeb2a10736f4145e18004",
+          "utf8_roundtrip_matches_original": true
+        },
+        {
+          "member": "full.stderr",
+          "original_path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/root-frozen/full.stderr",
+          "bytes": 383,
+          "sha256": "52fefb0923630997e8c5ec43f698833b3a53c09d9c0d538fafd3b2ea47d72017",
+          "utf8_roundtrip_matches_original": true
+        },
+        {
+          "member": "full-timing.json",
+          "original_path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/root-frozen/full-timing.json",
+          "bytes": 8217,
+          "sha256": "94697fd4e24b11e7ead717450b628b49bea87efc3223ae48f656a709efb8cb44",
+          "utf8_roundtrip_matches_original": true
+        }
+      ]
+    }
+  ],
+  "total_lossless_members_verified": 31,
+  "direct_original_copies": [
+    {
+      "path": "docs/changes/20261114-hosted-task-pilot/evidence/source-bindings.json",
+      "original_path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/root-frozen-v2/source-bindings.json",
+      "bytes": 1812,
+      "sha256": "e5894962d0076dcc29ac1759cfcc9297adb237e3dcd6153c1c0f05713c0618fa",
+      "byte_identical": true
+    },
+    {
+      "path": "docs/changes/20261114-hosted-task-pilot/evidence/original.patch",
+      "original_path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/root-frozen-v2/original.patch",
+      "bytes": 109621,
+      "sha256": "dde8de75fc8f4283a40befebe33af39a1779d9307ab8887fa60f11a9ce9b33a4",
+      "byte_identical": true
+    },
+    {
+      "path": "docs/changes/20261114-hosted-task-pilot/evidence/independent-review.json",
+      "original_path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/independent-review-C2-b881526.json",
+      "bytes": 13230,
+      "sha256": "e599d4a33af8ed215823e2886ffd7db6ff9789f3898233fecb7fbd0f455f4898",
+      "byte_identical": true
+    },
+    {
+      "path": "docs/changes/20261114-hosted-task-pilot/evidence/input-identity.json",
+      "original_path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/input-identity-audit-20261114T152013Z.json",
+      "bytes": 8362,
+      "sha256": "be8367bcb2d93afd4d465362ac75539eeb211cc1371b613fe24b0bf9ed7a82ee",
+      "byte_identical": true
+    },
+    {
+      "path": "docs/changes/20261114-hosted-task-pilot/evidence/receipt-checks.json",
+      "original_path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/receipt-checks-before-review.json",
+      "bytes": 919,
+      "sha256": "aee861dff892335a292b7bc6c8f6e1850ec3438025b4d1cae7619296f8fa51c6",
+      "byte_identical": true
+    }
+  ],
+  "semantic_fidelity": {
+    "C_requires_changes_preserved": true,
+    "C_original_full_regression": {
+      "total": 102,
+      "pass": 101,
+      "fail": 1,
+      "exit_code": 1
+    },
+    "C_rejected_review_sha256": "483e63c227571c57502afdbc4b9ee6751d0a3c08ce94045bc4d8c734dc890ad7",
+    "C2_pass_review_preserved_sha256": "e599d4a33af8ed215823e2886ffd7db6ff9789f3898233fecb7fbd0f455f4898",
+    "native_probe_status": "environment-blocked-before-cli",
+    "native_probe_config_session_docker": "not-run",
+    "native_probe_opencode_invocations": 0,
+    "native_probe_model_invocations": 0,
+    "input_identity_record": "Historical input-only audit retained verbatim; its earlier contract snapshot is not substituted for C2 frozen contract identities.",
+    "verification_and_review_findings": "Accurately distinguish C rejection, C2 source/quality pass, synthetic fallback tests, native probe failure and pending hosted/grader observations.",
+    "execution_target_remains_C2_not_future_receipt_commit": true,
+    "bootstrap_status_requires_separate_binding": "Preserved in verification.md; no claim that the original native manifest already covers the later workflow metadata file."
+  },
+  "recorded_receipt_checks": {
+    "original_path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/receipt-checks-before-review.json",
+    "sha256": "aee861dff892335a292b7bc6c8f6e1850ec3438025b4d1cae7619296f8fa51c6",
+    "completed_at": "2026-11-14T16:11:57.536865Z",
+    "security_result": {
+      "schema_version": 1,
+      "status": "pass",
+      "failures": [],
+      "warnings": [],
+      "inventory_source": "git",
+      "files_scanned": 2085,
+      "scan_limit": 50000
+    },
+    "staged_diff_check": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "operator_error_classification": {
+      "operation": "security_check(Path.cwd())",
+      "correct_signature": "security_check(Manifest.load(Path.cwd()))",
+      "observed_exception": "ManifestError: filesystem security inventory exceeds file limit",
+      "classification": "operator-argument-error; not a credential finding or actual product gate result",
+      "resolution": "correct typed Manifest input; no scanner or budget changes"
+    },
+    "scope_note": "Read the actual recorded correct Manifest-input result and verified the exact archived bytes. The earlier Path-input inventory exception is not represented as a credential finding or product gate failure. No scanner modification or fresh security/full test run was performed by this reviewer."
+  },
+  "future_receipt_commit_boundary": {
+    "D_not_execution_target": true,
+    "this_review_does_not_claim_future_files_already_reviewed": true,
+    "root_announced_future_changes": "Typed receipt and H3 checkbox may be added after this verdict. They are not part of this 11-file index binding. A changed tasks.md must not be described as byte-identical to C2; preserve its C2 snapshot and continue to execute exact C2 only."
+  },
+  "limitations": [
+    "Receipt fidelity does not expand the C2 source review into actual hosted Docker/model/Skill/session/usage/task qualification.",
+    "Actual H4 preflight and execution, H5 independent grading and raw evidence review remain pending.",
+    "No new complete regression was run; the archive preserves the already-verified 102/102 C2 result."
+  ],
+  "reviewer_actions": {
+    "repository_files_written": false,
+    "head_moved": false,
+    "model_or_docker_run": false,
+    "existing_independent_reviews_modified": false
+  }
+}

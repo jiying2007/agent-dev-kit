@@ -1,0 +1,240 @@
+{
+  "reviewed_at": "2026-11-14T16:07:25.979218Z",
+  "reviewer": "ai/task_protocol_audit",
+  "role": "independent read-only Spec/Quality reviewer; did not implement reviewed coordinator/workflow/tests",
+  "candidate_commit": "b8815263a31ee3b004c2e7e9eee564fe8a35dfc8",
+  "candidate_tree": "cb856f4b51fbe10eeac71a396f7cb87ca55e407e",
+  "candidate_parent": "887f0c6a10b03b57280865c6db677e4d9579c85c",
+  "registered_before_base": "c57f4f8a7983f52257c0587eb85881a006e6dc07",
+  "remote_commit_api_verified": true,
+  "remote_commit_api_url": "https://api.github.com/repos/jiying2007/agent-dev-kit/git/commits/b8815263a31ee3b004c2e7e9eee564fe8a35dfc8",
+  "files": {
+    ".github/workflows/opencode-task-pilot-once.yml": {
+      "sha256": "cfbd9033d3b7933c0cd1c950179a3a651043b994b1ea782c60a623604679cd74",
+      "bytes": 6518
+    },
+    "src/agent_dev_kit/hosted_task_pilot.py": {
+      "sha256": "d4fa94e26a9cb2c9578b3aacb649029822001948366d4e5bcb15fc91ed3e4952",
+      "bytes": 29581
+    },
+    "src/agent_dev_kit/hosted_task_native.py": {
+      "sha256": "1d53d5502a714137c5e3f2fbfd11a71e9e891e802da1f5bd4048fa4d6da7ebe8",
+      "bytes": 24721
+    },
+    "tests/test_hosted_task_pilot.py": {
+      "sha256": "67b14e9ccf42b1e40ed1e58d1dd17cc403721d1a19ae86724245eadcbf25181b",
+      "bytes": 24160
+    },
+    "docs/changes/20261114-hosted-task-pilot/design.md": {
+      "sha256": "97233ebef1179bef45bb069b04fbf3217d3095eead6ba9ecd76b203cb703e906",
+      "bytes": 6898
+    },
+    "docs/changes/20261114-hosted-task-pilot/negative-results.md": {
+      "sha256": "aa1649d174f8731cd6435ebd8f202f25c488b275eb5388f8141fa28e033698d3",
+      "bytes": 4154
+    },
+    "docs/changes/20261114-hosted-task-pilot/requirements.md": {
+      "sha256": "b6c1e168afc1ed18816eda9bf0e7bb2e4eb6a61f7e5f8ab5f6918bc5b1dafb21",
+      "bytes": 7401
+    },
+    "docs/changes/20261114-hosted-task-pilot/tasks.md": {
+      "sha256": "6940bb224869632e0375539a11b68349f4ca497ab343cf2d3e2bed3bfb2282f7",
+      "bytes": 1781
+    }
+  },
+  "original_patch_sha256": "dde8de75fc8f4283a40befebe33af39a1779d9307ab8887fa60f11a9ce9b33a4",
+  "revision_patch_sha256": "0ed6c96e5c4a93591097c616de791cd1d3299a874179e435ce7cbfb7a7a94ebc",
+  "spec_verdict": "pass",
+  "quality_verdict": "pass",
+  "open_findings": [],
+  "open_blocker_count": 0,
+  "open_major_count": 0,
+  "may_trigger_hosted_pilot": true,
+  "approved_scope": "H3 source/contract/quality review for the exact C2 and the already-registered single hosted attempt only. Actual hosted native preflight must pass before either task. This is not native acceptance, task success, product/release qualification, or authorization to retry/change the registered experiment.",
+  "closed_findings": [
+    {
+      "id": "H3-BOOTSTRAP-DEADLINE",
+      "prior_severity": "major",
+      "resolution": "Four bootstrap actions have platform step bounds totaling 300 seconds; clock is separately bounded at 60 seconds. Actual elapsed time remains charged against the unchanged 420-second preparation deadline. A checkout-independent always fallback records real outcomes and preserves existing summary/manifest bytes. Only execution=skipped with no summary records no run; entered execution or incomplete summary stays unknown. Upload is bounded at 120 seconds.",
+      "verification": "Read frozen workflow and revised contract; read actual 17-test output including real bash fallback execution, incomplete-summary subtest, exact-byte preservation and timeout/id/always assertions."
+    },
+    {
+      "id": "H3-REQUIRED-FULL-GATE",
+      "prior_severity": "major",
+      "resolution": "Synthetic forbidden environment name/value is reconstructed at runtime with the identical string and unchanged rejection assertion. Repository credential scanner and validator were not weakened.",
+      "verification": "Actual product-maturity targeted gate passed, and required complete regression on C2-bound files passed 102/102."
+    }
+  ],
+  "confirmed_controls": [
+    "Typed core host/native split, bounded module sizes, no product CLI/manifest/release changes; docs contain contracts/evidence only.",
+    "Exact repository/ref/push/before-base/run-attempt trigger predicate; unchanged task/model/source identities and one attempt per condition.",
+    "Task attempt is registered before possible inference; post-start inspect/remove failure cannot reset inference to zero/not-run.",
+    "Same frozen tool/image/model inputs, both preflights before either task, hidden case/full repository/credentials/socket excluded from task mounts.",
+    "Standard Docker isolation with task network-none, read-only root/tools/models/config/input/skills, task-local writable state/home/tmp and no host environment passthrough.",
+    "300-second condition budget covers all inference; stopped-container observation required; export recovery has no model mount or Ollama, work read-only and original native state unchanged.",
+    "Strict publication selection, sensitive-output exclusion, labeled identity-log redaction and raw digests; bootstrap-status is a separate fixed metadata file and does not rewrite the native manifest.",
+    "Unknown Skill load/inference/session/usage remains unavailable/unknown until independent raw review."
+  ],
+  "validation": {
+    "author_targeted_contract_tests": {
+      "count": 17,
+      "duration_seconds": 1.164,
+      "result": "pass",
+      "actual_fallback_shell_cases": 4,
+      "actions_outcomes_in_unit_cases": "explicitly synthetic"
+    },
+    "author_targeted_product_maturity": "pass",
+    "author_static_checks": {
+      "mypy_files": 3,
+      "mypy": "pass",
+      "ruff": "pass",
+      "format": "pass",
+      "module_size": "pass"
+    },
+    "author_manifest_members_independently_hash_verified": 14,
+    "required_full_regression": {
+      "total": 102,
+      "pass": 102,
+      "fail": 0,
+      "exit_code": 0,
+      "started_at": "2026-11-14T16:01:29.480448Z",
+      "finished_at": "2026-11-14T16:06:13.335802Z",
+      "stdout_sha256": "0d1bee4e82001511f12291d9c3be0867228a5a396f58b49d3acd176ef3eed61e",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_bindings_sha256": "e5894962d0076dcc29ac1759cfcc9297adb237e3dcd6153c1c0f05713c0618fa"
+    },
+    "reviewer_executed_model_or_docker": false,
+    "reviewer_modified_repository": false,
+    "reviewer_moved_local_head": false
+  },
+  "untested_limits": [
+    "Actual GitHub Actions timeout/outcome orchestration and the complete hosted job have not executed; tests run the actual fallback shell with synthetic step outcomes.",
+    "Actual Docker image/native HOME/network-none/read-only mount qualification remains hosted-preflight work. Source review and mocked daemon observations do not establish it.",
+    "The previous local native probe failed at bwrap network isolation before OpenCode started; current native configuration/session acceptance remains not-run locally.",
+    "No hosted actual model digest, task inference, native Skill exposure, session/export/usage or independent task grade is established by this review.",
+    "Official OpenCode v2.3.0 source confirms workspace-relative file-resource normalization; that is static compatibility evidence, not native CLI acceptance.",
+    "Any eventual pair remains fixed-order single-pair descriptive evidence with shared-host-cache limitations; it cannot establish general Skills benefit or close the broader task campaign.",
+    "The previous C requires-changes record remains unchanged and is not relabeled as passed; this verdict applies only to C2."
+  ],
+  "prior_rejected_review": {
+    "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/independent-review-C-887f0c6.json",
+    "sha256": "483e63c227571c57502afdbc4b9ee6751d0a3c08ce94045bc4d8c734dc890ad7"
+  },
+  "evidence_paths": [
+    {
+      "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/root-frozen-v2/source-bindings.json",
+      "bytes": 1812,
+      "sha256": "e5894962d0076dcc29ac1759cfcc9297adb237e3dcd6153c1c0f05713c0618fa"
+    },
+    {
+      "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/root-frozen-v2/original.patch",
+      "bytes": 109621,
+      "sha256": "dde8de75fc8f4283a40befebe33af39a1779d9307ab8887fa60f11a9ce9b33a4"
+    },
+    {
+      "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/root-frozen-v2/revision.patch",
+      "bytes": 26828,
+      "sha256": "0ed6c96e5c4a93591097c616de791cd1d3299a874179e435ce7cbfb7a7a94ebc"
+    },
+    {
+      "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/root-frozen-v2/full-result.json",
+      "bytes": 637,
+      "sha256": "9a9d26c17a2c91af6f3451cd344779bc56da3b164a122cbf63586f21cd548afd"
+    },
+    {
+      "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/root-frozen-v2/full.stdout",
+      "bytes": 3174,
+      "sha256": "0d1bee4e82001511f12291d9c3be0867228a5a396f58b49d3acd176ef3eed61e"
+    },
+    {
+      "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/root-frozen-v2/full.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/root-frozen-v2/full-timing.json",
+      "bytes": 8217,
+      "sha256": "158d11747b886b198559eb1a2632fcb8f71a9e448162fd5be08d2cfaee63a08e"
+    },
+    {
+      "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/bootstrap-revision-freeze-20261114/manifest.json",
+      "bytes": 1778,
+      "sha256": "d0d770bac560ec713e884aaa81ff2d644322d5e91d92661bb56600974a274627"
+    },
+    {
+      "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/bootstrap-revision-freeze-20261114/frozen-validation.json",
+      "bytes": 2814,
+      "sha256": "cb70071822c8d641d5a2ef00658288a11787ba5bcd0f129b4b45b75ae2559b34"
+    },
+    {
+      "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/bootstrap-revision-freeze-20261114/unit-contracts.json",
+      "bytes": 3783,
+      "sha256": "6b301b505982f78a22fb766f00bcae9b56d2f28ac0261c4f4925f950881c408b"
+    },
+    {
+      "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/bootstrap-revision-freeze-20261114/unit-contracts.log",
+      "bytes": 2932,
+      "sha256": "7bbf2c4bd993f10ed7788602d4b626d83e4a0de82ab9b45b881ffc056ed26f1e"
+    },
+    {
+      "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/bootstrap-revision-freeze-20261114/product-maturity.json",
+      "bytes": 844,
+      "sha256": "bbbd663c77092bee1059fef042ec8e44c60928a7f56d32d4deb7f81225ede9a4"
+    },
+    {
+      "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/bootstrap-revision-freeze-20261114/product-maturity.log",
+      "bytes": 43,
+      "sha256": "806c1d0bff64284bbff0916daccf73947f462e701bc757f9ad72963d9c2dfb87"
+    },
+    {
+      "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/bootstrap-revision-freeze-20261114/ruff.json",
+      "bytes": 810,
+      "sha256": "c12f0d48b49ebd8fda2501449ea90a2663aa1bc912aa3a158b89bc90e98ff600"
+    },
+    {
+      "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/bootstrap-revision-freeze-20261114/ruff.log",
+      "bytes": 19,
+      "sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18"
+    },
+    {
+      "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/bootstrap-revision-freeze-20261114/mypy.json",
+      "bytes": 842,
+      "sha256": "c68ddb276334d6e887ed0ff4a9ff6393074d011b185f871c84d7606feea80add"
+    },
+    {
+      "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/bootstrap-revision-freeze-20261114/mypy.log",
+      "bytes": 43,
+      "sha256": "8228fcc5ce46d42d01caf3cd941f4e9c5f2bcc372bb5b147a2f0572d2dd675a8"
+    },
+    {
+      "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/bootstrap-revision-freeze-20261114/format.json",
+      "bytes": 826,
+      "sha256": "cbcb76e5e0a719a128954971ffc7c00582063fcb38088ed00ca76cabc60b097c"
+    },
+    {
+      "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/bootstrap-revision-freeze-20261114/format.log",
+      "bytes": 26,
+      "sha256": "eee76f865de5a9f2456950f710ae5d5f9b5bd0ea02aa54f614c5eed6642a0bfd"
+    },
+    {
+      "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/bootstrap-revision-freeze-20261114/module-size.json",
+      "bytes": 1274,
+      "sha256": "b02443d1b67f1babcbb16f896cd29f8debe689aed019d834dc9e32d22ab8e7da"
+    },
+    {
+      "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/bootstrap-revision-freeze-20261114/module-size.log",
+      "bytes": 441,
+      "sha256": "6c6b313dcfabe67bf7fa40bd9e9e9770042fa81711595bd093055aff9608bfbd"
+    },
+    {
+      "path": "/workspace/scratch/234e724cfc4b/hosted-pilot-validation/independent-review-C-887f0c6.json",
+      "bytes": 10098,
+      "sha256": "483e63c227571c57502afdbc4b9ee6751d0a3c08ce94045bc4d8c734dc890ad7"
+    }
+  ],
+  "official_source_refs": [
+    "https://github.com/anomalyco/opencode/blob/v2.3.0/packages/core/src/file-access.ts",
+    "https://github.com/anomalyco/opencode/blob/v2.3.0/packages/core/src/permission.ts",
+    "https://github.com/anomalyco/opencode/blob/v2.3.0/packages/core/src/config/plugin/policy.ts"
+  ]
+}

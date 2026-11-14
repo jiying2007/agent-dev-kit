@@ -1,0 +1,2037 @@
+diff --git a/.github/workflows/opencode-task-pilot-once.yml b/.github/workflows/opencode-task-pilot-once.yml
+new file mode 100644
+index 0000000000000000000000000000000000000000..ab36ef85d20fb69ba2f1c14bbcbfab9b75d19c57
+--- /dev/null
++++ b/.github/workflows/opencode-task-pilot-once.yml
+@@ -0,0 +1,141 @@
++name: opencode-task-pilot-once
++
++on:
++  push:
++    branches:
++      - experiment/hosted-task-pilot-run-20261114
++
++permissions:
++  contents: read
++
++concurrency:
++  group: opencode-task-pilot-20261114
++  cancel-in-progress: false
++
++jobs:
++  pilot:
++    if: >-
++      github.repository == 'jiying2007/agent-dev-kit' &&
++      github.event_name == 'push' &&
++      github.ref == 'refs/heads/experiment/hosted-task-pilot-run-20261114' &&
++      github.event.before == 'c57f4f8a7983f52257c0587eb85881a006e6dc07' &&
++      github.run_attempt == 1
++    runs-on: ubuntu-24.04
++    timeout-minutes: 30
++    env:
++      PILOT_EVENT_BEFORE: ${{ github.event.before }}
++    steps:
++      - name: Freeze the whole-job start before preparation
++        id: clock
++        timeout-minutes: 1
++        run: printf 'PILOT_JOB_STARTED_EPOCH=%s\n' "$(date +%s)" >> "$GITHUB_ENV"
++
++      - name: Checkout reviewed experiment commit
++        id: checkout
++        timeout-minutes: 2
++        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
++        with:
++          ref: ${{ github.sha }}
++          fetch-depth: 0
++          persist-credentials: false
++
++      - name: Set up the supported exporter interpreter
++        id: interpreter
++        timeout-minutes: 1
++        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
++        with:
++          python-version: '3.12'
++
++      - name: Install the frozen exporter dependencies
++        id: dependencies
++        timeout-minutes: 1
++        run: python -m pip install --disable-pip-version-check PyYAML==6.0.3 jsonschema==4.26.0
++
++      - name: Verify deterministic boundaries without running a model
++        id: contracts
++        timeout-minutes: 1
++        run: PYTHONPATH=src python -m unittest discover -s tests -p test_hosted_task_pilot.py
++
++      - name: Execute the single registered hosted attempt
++        id: execution
++        run: >-
++          PYTHONPATH=src python -m agent_dev_kit.hosted_task_pilot
++          --repo "$GITHUB_WORKSPACE"
++          --out "$RUNNER_TEMP/hosted-task-pilot-20261114"
++
++      - name: Preserve bootstrap observations independently of checkout
++        id: bootstrap_evidence
++        if: always()
++        timeout-minutes: 1
++        env:
++          PILOT_CLOCK_OUTCOME: ${{ steps.clock.outcome }}
++          PILOT_CHECKOUT_OUTCOME: ${{ steps.checkout.outcome }}
++          PILOT_INTERPRETER_OUTCOME: ${{ steps.interpreter.outcome }}
++          PILOT_DEPENDENCIES_OUTCOME: ${{ steps.dependencies.outcome }}
++          PILOT_CONTRACTS_OUTCOME: ${{ steps.contracts.outcome }}
++          PILOT_EXECUTION_OUTCOME: ${{ steps.execution.outcome }}
++        run: |
++          set -euo pipefail
++          umask 077
++          pilot_publication="${RUNNER_TEMP:?}/hosted-task-pilot-20261114/published"
++          mkdir -p "$pilot_publication"
++          pilot_summary="$pilot_publication/evidence/summary.json"
++          pilot_summary_present=false
++          pilot_summary_final_fields=false
++          pilot_summary_sha=""
++          if [[ -f "$pilot_summary" && ! -L "$pilot_summary" ]]; then
++            pilot_summary_present=true
++            pilot_summary_sha="$(sha256sum -- "$pilot_summary")"
++            pilot_summary_sha="${pilot_summary_sha%% *}"
++            if jq -e 'type == "object" and has("ended_at") and has("cleanup") and has("model_runs")' "$pilot_summary" > /dev/null; then
++              pilot_summary_final_fields=true
++            fi
++          fi
++          pilot_epoch="$(date +%s)"
++          pilot_utc="$(date -u -d "@$pilot_epoch" +%Y-%m-%dT%H:%M:%SZ)"
++          jq -n \
++            --arg observed_at "$pilot_utc" --argjson observed_epoch "$pilot_epoch" \
++            --arg started_epoch "${PILOT_JOB_STARTED_EPOCH:-}" \
++            --arg repository "${GITHUB_REPOSITORY:-}" --arg ref "${GITHUB_REF:-}" \
++            --arg head_sha "${GITHUB_SHA:-}" --arg run_id "${GITHUB_RUN_ID:-}" \
++            --arg run_attempt "${GITHUB_RUN_ATTEMPT:-}" \
++            --arg clock "${PILOT_CLOCK_OUTCOME:-unknown}" \
++            --arg checkout "${PILOT_CHECKOUT_OUTCOME:-unknown}" \
++            --arg interpreter "${PILOT_INTERPRETER_OUTCOME:-unknown}" \
++            --arg dependencies "${PILOT_DEPENDENCIES_OUTCOME:-unknown}" \
++            --arg contracts "${PILOT_CONTRACTS_OUTCOME:-unknown}" \
++            --arg execution "${PILOT_EXECUTION_OUTCOME:-unknown}" \
++            --argjson summary_present "$pilot_summary_present" \
++            --argjson summary_final_fields "$pilot_summary_final_fields" \
++            --arg summary_sha256 "$pilot_summary_sha" \
++            '{schema: "adk-hosted-task-pilot-bootstrap/v1",
++              observed_at_utc: $observed_at, observed_epoch: $observed_epoch,
++              first_step_epoch: ($started_epoch | if test("^[0-9]+$") then tonumber else null end),
++              observed_identity: {repository: $repository, ref: $ref, head_sha: $head_sha,
++                run_id: $run_id, run_attempt: $run_attempt},
++              step_outcomes: {clock: $clock, checkout: $checkout, interpreter: $interpreter,
++                dependencies: $dependencies, contracts: $contracts, execution: $execution},
++              coordinator_summary: {present: $summary_present, final_fields_observed: $summary_final_fields,
++                sha256: (if $summary_present then $summary_sha256 else null end)}}
++            + (if $summary_final_fields then
++                {status: "coordinator-summary-preserved"}
++              elif $execution == "skipped" and ($summary_present | not) then
++                {status: "not-run-before-coordinator", model_runs: 0, actual_skill_load: "not-run",
++                  possible_inference: false, not_started_conditions: ["baseline", "candidate"]}
++              else
++                {status: "possible-inference-without-complete-summary", model_runs: "unknown",
++                  actual_skill_load: "unknown", possible_inference: true}
++              end)' > "$RUNNER_TEMP/hosted-task-pilot-bootstrap-status.tmp"
++          mv -- "$RUNNER_TEMP/hosted-task-pilot-bootstrap-status.tmp" "$pilot_publication/bootstrap-status.json"
++
++      - name: Preserve reviewed evidence including failures
++        id: upload
++        if: always()
++        timeout-minutes: 2
++        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
++        with:
++          name: opencode-task-pilot-${{ github.run_id }}-${{ github.run_attempt }}
++          path: ${{ runner.temp }}/hosted-task-pilot-20261114/published/
++          if-no-files-found: error
++          include-hidden-files: true
++          retention-days: 90
+diff --git a/docs/changes/20261114-hosted-task-pilot/design.md b/docs/changes/20261114-hosted-task-pilot/design.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..cb171dc9abf7b548e4e1692fe8d21ec42a308182
+--- /dev/null
++++ b/docs/changes/20261114-hosted-task-pilot/design.md
+@@ -0,0 +1,23 @@
++# 设计
++
++复用既有官方导出、原任务文件、上一份准备脚本已核实的v2配置结构和官方CLI。本次新增范围仅为实验分支上的一次性工作流与有界实验协调模块，不实现另一套推理循环、scheduler、统计器或生产adapter。
++
++根规则要求新增Python工具归入typed core，不能以“一次性实验”为由制造例外。因此宿主事件/来源、镜像、容器预算及证据协调放在`src/agent_dev_kit/hosted_task_pilot.py`；容器内原生配置、健康检查、任务及官方导出放在`src/agent_dev_kit/hosted_task_native.py`，宿主单向依赖native模块。两模块各自满足现有30KB预算，不新增豁免或通用support模块。容器仅挂载native模块的准确副本，保存源/副本摘要，不挂整个Python包或repo。合同派生测试放在`tests/test_hosted_task_pilot.py`。工作流使用`PYTHONPATH=src python -m agent_dev_kit.hosted_task_pilot`，不新增稳定CLI或manifest入口。`docs/changes/`仅承载需求设计、任务及证据。此源码仅同步到实验分支，不合并主线，不改变现有发布版本。新增隔离与执行工具按安全变更运行一次完整回归，并完成适用静态/类型检查。
++
++执行分支固定为`experiment/hosted-task-pilot-run-20261114`，初始base B为`c57f4f8a7983f52257c0587eb85881a006e6dc07`。源码提交C先放在不触发模型的review branch，经独立只读Spec/Quality审查后，执行分支从B建立，再用expected_sha=B的普通fast-forward update_ref一次前移到C。workflow的exact ref、repository、event.before=B及run_attempt=1共同限制触发；没有workflow_dispatch、schedule或rerun路径。connector拒绝正常workflow/ref权限时停止，不另找凭据通道。
++
++公开runner已提供Docker。固定使用标准容器，不依赖bubblewrap或改变Ubuntu安全设置。官方基础镜像在准备时解析为真实digest；为官方二进制准备必要动态库后封存image ID与包版本。官方工具归档先校验完整SHA再解包；允许根据真实tar目录只保留CPU必需成员，但不修改可执行字节。只读检查可用资源，资源不足按环境阻塞终止，不清理未知runner资产或扩大硬件额度。
++
++workflow首步记录真实时间，实验协调共用26分钟截止，为30分钟job上限保留4分钟收尾/上传余量。成对执行预留1140秒，计算为`2 × (300 + 100 + 2 × 70) + 60`：任务、恢复、四个容器各70秒外层生命周期及60秒记录/拷贝余量。workflow的时钟步骤限1分钟；有明确id的checkout限2分钟、setup-python/pip/定向测试各限1分钟，四个前置步骤上界合计300秒。它们采用平台单步上界，实际时间全部扣入首步起420秒准备预算；协调器接管后，其余准备命令按420秒绝对截止的剩余时间收紧。不能把首步时间戳本身描述为对前置action的主动中断。两个preflight全部结束后且仍有完整1140秒余量，才允许启动第一个条件；不足则不启动模型。单任务推理上限仍为300秒，恢复上限100秒；实际daemon故障保留partial，不能为弥补开销缩短候选预算。
++
++upload之前增加always执行、限1分钟的独立bootstrap回执步骤，用runner现有shell与jq/printf等基础工具写固定的bootstrap-status.json；即使checkout失败也不依赖repo、Python包或新增执行工具。已有业务summary和manifest字节保持不变，不造替代模型回执。仅当execution outcome确为skipped且没有业务summary，才可报告模型0次/任务not-run；execution曾进入却没有完整回执时报告possible/unknown。记录原生steps outcome、首步epoch和真实当前UTC，不创建session、usage、容器停止或成功事实。upload限2分钟，上传仍受固定路径与公开字段白名单约束。合同测试实际执行fallback shell，覆盖前置失败、execution进入后缺回执、原有summary字节保留，并检查全部前置step timeout/id/always属性。
++
++准备阶段下载同一模型并保存实际digest；无推理预热，不把准备API请求记为模型调用。停止准备容器后再执行baseline/candidate，各自使用全新容器和独立状态目录。使用只读根、能力最小化、无新增权限、有限PID/CPU/内存及network none。官方Ollama与OpenCode在同一容器中通过loopback连接，工具/模型/Skill/config只读。持久可写挂载仅为该条件work及明确原生记录目录；镜像中该普通用户原生home路径和必要的`/tmp`另用各容器独立tmpfs，承接Ollama实际首启写入及运行临时状态，HOME字符串不被覆盖，且不绑定宿主目录、不收集或发布其内容。预检实际验证home可写、跨条件隔离及宿主home不可见。模型不可见case与完整ADK源码。运行前验证挂载与拒绝边界，之后不再改变配置。
++
++外层协调器负责从该条件首次推理前开始计算的300秒预算、实际中断与容器退出确认；预算覆盖该条件全部推理，达到上限立即终止实际执行容器并确认退出，不把Docker客户端结束等同于容器已停止。原生OpenCode负责所有模型与工具行为，官方session导出只读获取。保留失败和缺测；收集范围使用逐文件allowlist，排除home、私钥、token、缓存和二进制/模型。最终work及原始命令、事件、摘要进入Actions artifact，取得后由既有grader独立验收；若在不同job验收，case只存在于grader所在checkout，不进入执行容器。
++
++推理容器停止并确认后，可启动单独的有界恢复容器执行官方session list/export。这一容器无模型挂载、无Ollama服务、无网络，work只读，不执行任务或调用模型；它不能延长推理预算。先保留原生状态的原始摘要，导出若需要可写运行状态则使用明确标注的副本及独立临时区，原记录不得被覆盖；导出失败如实保留，不修造session或usage。恢复临时状态仍排除于发布包之外。
++
++条件尝试在容器启动前登记，之后的inspect、日志、移除、导出等故障不能抹掉先前可能已发生的推理。异常收尾核对现存task-start及容器回执；已启动或无法排除执行的条件保持partial/unknown，不能重新标记0-run或not-run。合同测试注入任务启动后的记录/移除失败以验证保守状态传播，故障注入本身不作为原生Docker通过证据。
++
++协调/需求设计由ai/root负责，workflow/脚本实现由独立执行者承担，Spec/Quality审查由未实现该脚本的只读审查者承担。触发前完成本地可执行的语法、配置、资源/身份/路径拒绝检查；Docker原生隔离的实际资格由job预检取得，不能以静态审查冒充。准备或任务失败均保留，不通过重新push或rerun取代失败。
+diff --git a/docs/changes/20261114-hosted-task-pilot/negative-results.md b/docs/changes/20261114-hosted-task-pilot/negative-results.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..49b9e45a8c3b3f9cb6f4d9592e270f3b1e820908
+--- /dev/null
++++ b/docs/changes/20261114-hosted-task-pilot/negative-results.md
+@@ -0,0 +1,33 @@
++# 已观察的负结果与边界
++
++## 原本地先导保持不变
++
++前次本地OpenCode/Ollama先导在模型manifest下载阶段因宿主网络不可达停止，model_runs=0；其候选仍是11.3.0/4f77f795。已保存证据包SHA256为`6b5a76779320f45422ca4a06dfa394fff85106d352b65e7fbea56da7aa6018ca`。本实验使用独立公开宿主和11.3.1/c57候选，不覆盖该记录，也不把静态导出或服务健康检查算作推理。
++
++## 规则与历史检查
++
++草案曾将主动协调脚本放入docs/changes。独立审查指出根规则要求新增Python工具进入typed core，已有只读审查探针不足以构成豁免。root据此修订本次合同，将执行职责放入两个typed core模块、测试放入tests；不修改根规则，不新增产品CLI或正式版本。
++
++按R1.8实际查询`knowledge/L2-domain/lessons.md`中的OpenCode、Ollama、Docker、容器、任务证据及实效关键词，文件不存在，查询exit=2；没有假定存在或编造历史经验。
++
++## 草稿中发现的证据与预算缺陷
++
++独立审查发现任务执行后若inspect/logs/remove抛错，旧草稿可能仍发布空条件和model_runs=0。这是记录逻辑缺陷，并非实际发生的模型试验。修复要求在启动前登记尝试，异常收尾保留possible-inference及unknown状态，并以启动后的故障注入测试验证。
++
++旧草稿只有各子命令timeout，累计上限可能超过30分钟job并丢失收尾证据。冻结设计改用首步起420秒准备、1140秒成对执行预留、26分钟协调截止及4分钟最终收尾；两条件各300秒的推理预算不变。最终修复是否通过以冻结源码的实际测试和独立审查回执为准。
++
++## 首个冻结C的完整回归及最终审查
++
++首个公开审查提交为`887f0c6a10b03b57280865c6db677e4d9579c85c`，tree为`ba35b07a275f42a186f8f42eca6dacc42e49c16e`。本地完整回归实际运行于2026-11-14T15:44:35.139899Z至15:49:14.921035Z，结果为101/102，exit=1。唯一失败为product-maturity的既有credential scanner命中新测试中的纯合成环境样例：变量名为GITHUB下的TOKEN字段，值由synthetic、forbidden、variable三段组成，没有真实凭据泄露的观察。修订只在测试运行时生成相同名称和值，保留同一拒绝语义，不修改scanner或删除测试。
++
++最终只读审查同时指出：首步epoch不会主动中断尚未进入协调器的checkout/setup/pip/tests，前置步骤失败也可能只留下缺目录的上传错误。该C于2026-11-14T15:53:33.656465Z判为Spec/Quality requires-changes；原审查记录SHA256为`483e63c227571c57502afdbc4b9ee6751d0a3c08ce94045bc4d8c734dc890ad7`。修订合同明确前置step总上界与独立always回执，协调器预算不变。C从未触发模型；原始失败、提交与裁决保留，新修订必须使用新的准确提交和验证回执，不能覆盖该负结果。
++
++## 独立的无推理配置探针原始结果
++
++2026-11-14T15:26:49Z起保存了一份当时的原生配置快照（4143 bytes，SHA256 `7411cefff349fab60439f9f4d0260216a19cc48a7ec9c2c57770e43735feea87`）。首个本地断网隔离检查被宿主拒绝：`bwrap: loopback: Failed to create NETLINK_ROUTE socket: Operation not permitted`，exit=1。错误stderr SHA256为`31c2cb0dffdeb9049fa2269e24af62df15e4161d4f752a648faf9630259725fe`；结果记录SHA256为`18fb67074daefe5508ab38fa2ca543eaad1e3199cd982d40a6f635fd94c78508`。
++
++OpenCode本体、Ollama和模型均未启动；当前配置解析、session命令与Docker原生资格均not-run。没有去掉断网设置、修改权限或重复该路径。官方源码与历史CLI帮助仅支持配置/入口选择，实际Docker接受性仍由本实验job的无推理preflight判断。上述快照是明确的历史探针身份，不能替代最终源码的配置摘要。
++
++## 结论范围
++
++确定性合同测试和源码审查只验证协调器的实现。它们不证明原生Skill已加载、模型任务已完成、usage完整、真实Token/费用降低或消费者门禁已满足。模型任务只有实际job执行及独立原始证据审查后才能报告；尚未执行的步骤保留not-run。
+diff --git a/docs/changes/20261114-hosted-task-pilot/requirements.md b/docs/changes/20261114-hosted-task-pilot/requirements.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..02dfc0883f3b91e59b4e130713712121e97f5546
+--- /dev/null
++++ b/docs/changes/20261114-hosted-task-pilot/requirements.md
+@@ -0,0 +1,53 @@
++# 公共 Actions 原生任务先导
++
++## 目标和授权范围
++
++使用已允许的公开 GitHub Actions 执行环境、官方 OpenCode 与免费本地 Ollama，直接运行一个真实开发任务的新旧条件，取得可复核原始记录。此环境执行任务本身，不作为本地网络代理。代码仅保存在实验分支，不修改ADK正式版本、已发布runtime、消费者本地门禁或发布工作流。新增Python协调工具遵守根规则置于typed core，但不注册产品CLI、不更改manifest、不进入正式主线或发布包。
++
++本地先导的 `environment-blocked-before-inference` 与 model_runs=0 保留，证据包SHA256为 `6b5a76779320f45422ca4a06dfa394fff85106d352b65e7fbea56da7aa6018ca`。本次是独立宿主预注册；不能重新标记该历史结果或重置其一次环境修正记录。
++
++## 冻结范围
++
++- 开发任务：`targeted-document-edit`；使用当前正式源码的原始task、initial/work和case合同。执行模型不能读取case、验收答案、整个仓库或来源checkout。
++- baseline：11.2.17 / `7aed1d2545babce16c41dc021ead01c8c324ce07`。
++- candidate：已发布11.3.1 / `c57f4f8a7983f52257c0587eb85881a006e6dc07`。只导出并暴露各自真实 `adk-adr-writer`，内容摘要和引用集合在运行前冻结。
++- 官方完整导出文件身份：baseline SHA256 `e0672708e80c0636abaa812fa6be8d81d7b9f062a62e322b505c7f7d07c4e215`；candidate SHA256 `a21c9d9d2fd3aaf1e759e28c0353139a1fee67c2ea1e790e1fc882a54f0c60d4`。candidate源文件SHA256为`e013d6e67dc993a3c3a0cf589d6e1c1e3b4534c1a053422c8c1df0c04813dba2`，与11.3.0源文件逐字节相同；导出文件因真实版本元数据变化而不同，保留原样，不为匹配旧摘要修改内容。源文件与导出文件身份分别记录。
++- OpenCode v2.3.0官方Linux x64归档SHA256：`fc0f81522aceeabac47693d88389efa2bc517ce74c2c38fd6967819fcc6e4d3b`。
++- Ollama v0.40.16官方amd64归档SHA256：`87bfafb2acbc89b2e6a1be0a9043de6aa75fb450696f86bc426e65fc448f788d`。
++- 唯一模型：`qwen3:1.7b`；只在准备阶段下载，在任何推理前冻结真实完整digest，两个条件使用同一只读模型集合。缺digest禁止启动条件。
++- 宿主：公开`ubuntu-24.04` runner上的标准Docker。记录实际runner image、Docker版本、官方基础镜像digest、最终容器image ID及依赖清单；全部在推理前冻结，两条件相同。
++- 固定顺序baseline后candidate，各一个CLI任务调用，各最多300秒；超时、错误、未加载、失败产物完整保留。不单侧重跑，不改模型、任务或预算筛选成功。
++
++## 执行前输入身份
++
++任务源码身份统一为candidate正式提交`c57f4f8a7983f52257c0587eb85881a006e6dc07`，两个条件使用该提交的同一任务与初始工作区；Skill干预来源分别为上述baseline/candidate提交，二者不与任务源码身份混用。两个选定Skill导出目录各仅有`SKILL.md`，声明的外部参考文件集合均为`[]`；这些准备身份不证明实际加载。
++
++| 对象 | 字节数 | SHA256 |
++| --- | ---: | --- |
++| baseline源`skills/adk-adr-writer/SKILL.md` | 2614 | `04267d6288de34d97f2774aa016f1c3366f75699a8638d9c57a5875f376dfcc1` |
++| candidate源`skills/adk-adr-writer/SKILL.md` | 3680 | `e013d6e67dc993a3c3a0cf589d6e1c1e3b4534c1a053422c8c1df0c04813dba2` |
++| `targeted-document-edit/task.md` | 351 | `6bc93366986b29af97fe8328f1c338ae90763a235ba917531b803e8df7e6bc44` |
++| `targeted-document-edit/initial/docs/ADR-021.md` | 379 | `6a6249b2f8df6c2a8cbea872f13319dd42cb07779bea6e204bfd614f19144359` |
++| 共同prompt | 407 | `5d70cb0689e244f868c32fb92600a3d96a0945fc4724be3d924952a2e8b252db` |
++| 执行器外`targeted-document-edit/case.json` | 454 | `a9a6143b2a36c324435c321171ad09925457dd8d7f8209180ff64f1ecebe59e0` |
++
++路径根为`tests/fixtures/skill_execution_tasks/`。prompt严格按以下字节拼接，不trim或重排：
++
++```python
++prompt_bytes = task_bytes + "\n请使用 `adk-adr-writer` Skill 完成上述任务。\n".encode("utf-8")
++```
++
++ADR中的`docs/protocol-v2.md#retry`仅是需保留的字面引用，fixture未提供引用目标，不临时生成或挂载该文档。运行前核对上述摘要；不匹配即停止。
++
++## 必须满足
++
++1. 先审查源码，再一次性正常push触发。仅exact repository、execution branch、before base SHA及run_attempt=1允许进入；之后的新push或rerun不再进入模型执行。
++2. 一个公开job最多30分钟；workflow首步记录实际开始时间，协调执行以该起点26分钟为截止，为收尾、上传及启动开销保留4分钟。冻结成对执行预留为1140秒：两个300秒任务、两个100秒恢复、每个容器70秒外层启动/终止/取证上限，以及60秒记录/拷贝余量。workflow前置checkout/setup-python/pip/定向测试采用各自明确step timeout，总上界300秒；首步时钟步骤另限60秒。它们的实际耗时全额扣入首步起420秒准备预算，但不声称GitHub action自己动态扣费。协调器一进入即按该420秒绝对截止限制后续准备操作，余量不足不启动模型。任何前置失败都由独立的always短时fallback保留真实步骤outcome；execution若曾进入而缺完整回执只能标unknown，不能补造0-run。任一准备前置未完成或启动第一个条件前不再有1140秒余量，两个条件均不启动，不缩短单侧预算或只执行一侧。准备失败即停止，不修改宿主网络/AppArmor/sysctl，不切换隔离机制、不要求额外权限或绕过拒绝。
++3. 准备容器可下载公开模型。推理前停止联网准备容器；两个执行容器均`--network none`，只用容器内loopback。不得挂载仓库、case、`.git`、凭据目录或Docker socket。
++4. 仅挂载只读官方工具、模型、所选Skill/配置，以及当前条件的work与原生日志目录。HOME/CODEX_HOME不被重定义；镜像中该普通用户原生home路径及必要的`/tmp`使用各容器独立tmpfs，供Ollama临时身份和运行状态使用，不绑定宿主home，不进入证据发布包。无云provider、subagent、联网工具、shell或任务外读写。
++5. 无模型的隔离预检先证实只读根、挂载集合、无任务答案/宿主凭据、断外网及本地服务健康。任一关键前置不满足，两个条件均not-run。
++6. 完整保存实际命令、版本、起止时间、返回码、session身份及原生日志/可得导出、前后文件摘要。私钥/身份引导行不得进入发布包；脱敏副本必须标注并保留原件摘要。
++   任务容器启动前先登记尝试；实际启动之后即使inspect/logs/remove或导出失败，也保留可能已执行的状态和已有原件，不能退回model_runs=0、空条件或not-run。未知执行状态明确为unknown/partial。
++7. 使用既有`grade-task`在执行器外独立验收最终工件。没有原始样本前不新建日志转换器；不确定coverage或缺usage不得填true或0。
++8. 单任务先导只支持链路诊断及描述性结果，不关闭原方案的独立新任务验证、完整小批诊断或收益门槛，不回填legacy方法campaign。
++9. 固定顺序、单次执行及共享宿主文件缓存均为已知限制。两条件原生服务/状态各自全新，但不清理宿主缓存、不声称硬件缓存等价；不将一对耗时或Token差值解释为稳定的因果收益或全量Skills认证。
+diff --git a/docs/changes/20261114-hosted-task-pilot/tasks.md b/docs/changes/20261114-hosted-task-pilot/tasks.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..e676834dee7462e18531cf18c9803363c6b4c970
+--- /dev/null
++++ b/docs/changes/20261114-hosted-task-pilot/tasks.md
+@@ -0,0 +1,8 @@
++# 任务
++
++- [x] H1 冻结独立宿主合同和前次负结果；verify：requirements/design明确source、模型、预算、身份、一次触发和效果边界，保留本地0-run记录。
++- [x] H2 实现最小工作流和typed core中的有界实验协调模块及合同测试；verify：官方资产摘要、基线/候选导出、相同输入、模型/镜像预冻结、断网条件隔离、300秒中断与收尾、严格证据allowlist全部显式实现；前置workflow有独立timeout和保守bootstrap回执。修订后的17项定向测试、原失败product-maturity门禁、严格类型及Ruff/格式检查通过；两个实现模块字节和已通过module-size检查的版本相同，不新增产品CLI或manifest入口。原生资格留待H4实际预检；新版本完整回归与最终审查由H3单独判定。
++- [ ] H3 独立Spec/Quality审查、定向验证和完整回归；verify：语法、类型、配置、触发谓词、隐藏答案/凭据边界及失败路径有证据，合同测试含实际本地子进程超时/进程组清理、路径拒绝和三个真实fallback shell分支，open blocker/major为0；修复synthetic fixture扫描冲突但不修改scanner或拒绝语义。原生Docker预检仍必须在job实际执行。
++- [ ] H4 精确源码一次触发；verify：正常权限允许，before=B、head=C、attempt=1；准备记录及两个实际条件结果完整保存；失败不重跑。
++- [ ] H5 独立工件验收和原始证据审查；verify：使用既有grader，区分实际加载/执行/覆盖/usage及unknown，不把成功声明作为外部验收。
++- [ ] H6 保存结果并更新原计划；verify：实验身份、全部失败、原始引用、适用范围和剩余未测项清楚，证据不自动赋予发布/产品/泛化资格。
+diff --git a/src/agent_dev_kit/hosted_task_native.py b/src/agent_dev_kit/hosted_task_native.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..7f1de3d0ad3833f72b52eae18213dce088898e80
+--- /dev/null
++++ b/src/agent_dev_kit/hosted_task_native.py
+@@ -0,0 +1,599 @@
++"""Container-local official CLI execution and raw recording for one experiment."""
++
++from __future__ import annotations
++
++import argparse
++from collections.abc import Mapping, Sequence
++import datetime as dt
++import errno
++import hashlib
++import json
++import os
++from pathlib import Path
++import re
++import signal
++import socket
++import subprocess
++import time
++import urllib.error
++import urllib.request
++from typing import Any
++
++MODEL = "qwen3:1.7b"
++
++
++TASK_SECONDS = 300
++
++
++MODEL_URL = "http://127.0.0.1:11439"
++
++
++PROMPT_SHA = "5d70cb0689e244f868c32fb92600a3d96a0945fc4724be3d924952a2e8b252db"
++
++
++def now() -> str:
++    return dt.datetime.now(dt.timezone.utc).isoformat()
++
++
++def write_json(path: Path, value: object) -> None:
++    path.parent.mkdir(parents=True, exist_ok=True)
++    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n")
++
++
++def sha(path: Path) -> str:
++    with path.open("rb") as stream:
++        return hashlib.file_digest(stream, "sha256").hexdigest()
++
++
++def inventory(root: Path) -> dict[str, dict[str, str | int]]:
++    result: dict[str, dict[str, str | int]] = {}
++    for path in sorted(root.rglob("*")):
++        if path.is_symlink():
++            raise RuntimeError(f"Unexpected symlink in data: {path}")
++        if path.is_file():
++            result[str(path.relative_to(root))] = {"sha256": sha(path), "bytes": path.stat().st_size}
++    return result
++
++
++def tool_inventory(root: Path) -> dict[str, dict[str, str | int]]:
++    result: dict[str, dict[str, str | int]] = {}
++    for path in sorted(root.rglob("*")):
++        if path.is_file():
++            assert path.resolve().is_relative_to(root.resolve()), "Official tool link escaped its collection"
++            item: dict[str, str | int] = {"sha256": sha(path), "bytes": path.stat().st_size}
++            if path.is_symlink():
++                item["symlink_target"] = os.readlink(path)
++            result[str(path.relative_to(root))] = item
++    return result
++
++
++def command(
++    args: Sequence[str],
++    directory: Path,
++    label: str,
++    timeout: float,
++    *,
++    cwd: Path | None = None,
++    check: bool = True,
++    env: Mapping[str, str] | None = None,
++) -> dict[str, Any]:
++    if timeout <= 0:
++        raise RuntimeError("Command budget exhausted before launch")
++    directory.mkdir(parents=True, exist_ok=True)
++    record: dict[str, Any] = {
++        "argv": list(args),
++        "started_at": now(),
++        "timeout_seconds": timeout,
++        "timed_out": False,
++        "launched": False,
++    }
++    started = time.monotonic()
++    process: subprocess.Popen[bytes] | None = None
++    try:
++        with (directory / f"{label}.stdout").open("wb") as stdout, (directory / f"{label}.stderr").open("wb") as stderr:
++            process = subprocess.Popen(args, cwd=cwd, env=env, stdout=stdout, stderr=stderr, start_new_session=True)
++            record.update(launched=True, pid=process.pid)
++            write_json(directory / f"{label}.json", record)
++            try:
++                process.wait(timeout=timeout)
++            except subprocess.TimeoutExpired:
++                record["timed_out"] = True
++            finally:
++                # Also clean descendants on cancellation; the CLI may have forked.
++                try:
++                    os.killpg(process.pid, signal.SIGKILL)
++                except ProcessLookupError:
++                    pass
++                process.wait(timeout=5)
++    finally:
++        record.update(
++            exit_code=process.returncode if process else None,
++            ended_at=now(),
++            duration_seconds=time.monotonic() - started,
++        )
++        write_json(directory / f"{label}.json", record)
++    if check and record["exit_code"] != 0:
++        raise RuntimeError(f"{label} failed ({record['exit_code']}); see preserved command output")
++    return record
++
++
++def opencode_config() -> dict[str, Any]:
++    permissions = [{"action": "*", "resource": "*", "effect": "deny"}]
++    for action, resources in {
++        "read": [".", "docs", "docs/ADR-021.md", "/skills/adk-adr-writer/*"],
++        "external_directory": ["/skills/adk-adr-writer/*"],
++        "edit": ["docs/ADR-021.md"],
++        "glob": ["*"],
++        "grep": ["*"],
++        "skill": ["adk-adr-writer"],
++    }.items():
++        permissions.extend({"action": action, "resource": item, "effect": "allow"} for item in resources)
++    policies = [
++        {"action": action, "resource": "*", "effect": "deny"}
++        for action in (
++            "provider.use",
++            "integration.connect",
++            "integration.use",
++            "mcp.use",
++            "plugin.use",
++            "websearch.use",
++            "skill.use",
++            "tool.use",
++        )
++    ]
++    policies += [
++        {"action": action, "resource": resource, "effect": "allow"}
++        for action, resource in (
++            ("provider.use", "ollama"),
++            ("integration.use", "ollama"),
++            ("skill.use", "adk-adr-writer"),
++            *(
++                ("tool.use", item)
++                for item in (
++                    "read:*",
++                    "edit:*",
++                    "glob:*",
++                    "grep:*",
++                    "skill:adk-adr-writer",
++                    "external_directory:/skills/adk-adr-writer/*",
++                )
++            ),
++        )
++    ]
++    return {
++        "$schema": "https://opencode.ai/v2/config.json",
++        "model": "ollama/qwen3:1.7b",
++        "default_agent": "build",
++        "update": "disable",
++        "share": "disabled",
++        "warming": False,
++        "snapshots": False,
++        "formatter": False,
++        "lsp": False,
++        "compaction": {"auto": False},
++        "instructions": [],
++        "plugins": [],
++        "mcp": {},
++        "skills": ["/skills"],
++        "permissions": permissions,
++        "policies": policies,
++        "agents": {
++            "build": {"model": "ollama/qwen3:1.7b", "steps": 20},
++            **{name: {"disabled": True} for name in ("general", "explore", "title", "summary", "compaction")},
++        },
++        "providers": {
++            "ollama": {
++                "name": "Task-local Ollama",
++                "package": "@opencode/ai/providers/openai-compatible",
++                "env": [],
++                "settings": {"baseURL": MODEL_URL + "/v1", "apiKey": False, "provider": "ollama"},
++                "models": {
++                    MODEL: {
++                        "name": MODEL,
++                        "capabilities": {"tools": True, "input": ["text"], "output": ["text"], "temperature": True},
++                        "limit": {"context": 16384, "output": 4096},
++                        "body": {"temperature": 0, "seed": 20261114},
++                    }
++                },
++            }
++        },
++        "experimental": {"subagent_depth": 0},
++    }
++
++
++def api(route: str, body: dict[str, Any] | None = None, timeout: float = 10) -> dict[str, Any]:
++    request = urllib.request.Request(
++        MODEL_URL + route,
++        data=None if body is None else json.dumps(body).encode(),
++        headers={"Content-Type": "application/json"},
++    )
++    with urllib.request.urlopen(request, timeout=timeout) as response:
++        result: dict[str, Any] = json.load(response)
++        return result
++
++
++def native_environment() -> dict[str, str]:
++    # HOME is supplied by Docker for the image's real user; never override it.
++    result = {key: os.environ[key] for key in ("PATH", "HOME", "LANG", "LC_ALL") if key in os.environ}
++    result.update(
++        {
++            "XDG_CONFIG_HOME": "/scratch/config",
++            "XDG_DATA_HOME": "/records/data",
++            "XDG_STATE_HOME": "/records/state",
++            "XDG_CACHE_HOME": "/scratch/cache",
++            "TMPDIR": "/tmp",
++            "OPENCODE_CONFIG_DIR": "/config",
++            "OPENCODE_CONFIG": "/config/opencode.json",
++            "OPENCODE_DISABLE_PROJECT_CONFIG": "1",
++            "OPENCODE_DISABLE_CLAUDE_CODE": "1",
++            "OPENCODE_DISABLE_MODELS_FETCH": "1",
++            "OPENCODE_DISABLE_FILEWATCHER": "1",
++            "OLLAMA_HOST": "127.0.0.1:11439",
++            "OLLAMA_MODELS": "/models",
++            "OLLAMA_NO_CLOUD": "1",
++            "OLLAMA_NOHISTORY": "1",
++            "OLLAMA_VULKAN": "0",
++            "OLLAMA_CONTEXT_LENGTH": "16384",
++            "OLLAMA_NUM_PARALLEL": "1",
++            "OLLAMA_MAX_LOADED_MODELS": "1",
++            "OLLAMA_KEEP_ALIVE": "5m",
++        }
++    )
++    return result
++
++
++def assert_offline_layout() -> dict[str, Any]:
++    assert os.getuid() != 0 and os.environ.get("HOME") == "/home/pilot"
++    assert not any(
++        key.startswith(("GITHUB_", "ACTIONS_", "GH_", "AWS_", "OPENAI_", "ANTHROPIC_")) for key in os.environ
++    )
++    for path in ("/repo", "/case.json", "/github/workspace", "/var/run/docker.sock", "/.git"):
++        assert not Path(path).exists(), path
++    assert sorted(path.name for path in Path("/sys/class/net").iterdir()) == ["lo"]
++    home = Path("/home/pilot")
++    assert list(home.iterdir()) == [], "Each container must have a fresh private home"
++    (home / "private-home-probe").write_text("task-local")
++    (home / "private-home-probe").unlink()
++    readonly = {
++        path: bool(os.statvfs(path).f_flag & os.ST_RDONLY)
++        for path in ("/", "/tools", "/config", "/skills", "/input", "/runner/run-pilot.py")
++    }
++    assert all(readonly.values()), readonly
++    with socket.socket() as connection:
++        connection.settimeout(1)
++        try:
++            connection.connect(("192.0.2.1", 9))
++            raise RuntimeError("Unexpected external route in network-none container")
++        except OSError as error:
++            assert error.errno == errno.ENETUNREACH, error
++    for target in (Path("/isolation-write-probe"), Path("/skills/isolation-write-probe")):
++        try:
++            target.write_text("must fail")
++        except OSError as error:
++            assert error.errno in (errno.EROFS, errno.EACCES)
++        else:
++            raise RuntimeError(f"Unexpected write outside work/records: {target}")
++    return {
++        "uid": os.getuid(),
++        "home": os.environ["HOME"],
++        "readonly": readonly,
++        "interfaces": ["lo"],
++        "external_connect_errno": errno.ENETUNREACH,
++    }
++
++
++def mount_spec(source: Path, destination: str, readonly: bool = True) -> str:
++    if not source.is_absolute() or source.resolve() != source or "," in str(source):
++        raise RuntimeError("Mount source must be a plain absolute task path")
++    if not source.exists():
++        raise RuntimeError(f"Mount source missing: {source}")
++    return f"type=bind,source={source},target={destination}" + (",readonly" if readonly else "")
++
++
++def capture_attempt(root: Path, evidence: Path, condition: str, attempt: dict[str, Any], stable: bool) -> None:
++    records = root / condition / "records"
++    for filename in ("task-start.json", "raw/task.json"):
++        path = records / filename
++        if path.exists():
++            attempt[filename] = json.loads(path.read_text())
++    proof = evidence / f"{condition}-task-result.json"
++    if proof.exists():
++        attempt["container_observation"] = json.loads(proof.read_text())
++    attempt["work_snapshot_stable"] = stable
++    if stable:
++        write_json(evidence / f"{condition}-final-work.json", inventory(root / condition / "work"))
++    write_json(evidence / f"{condition}-attempt.json", attempt)
++
++
++def validate_container(
++    created: dict[str, Any], mounts: list[tuple[Path, str, bool]], image: str, network: str, uid: int
++) -> None:
++    expected = {target: (str(source), not readonly) for source, target, readonly in mounts}
++    actual = created["Mounts"]
++    assert all(item["Type"] in ("bind", "tmpfs") for item in actual), "Unexpected volume mount"
++    assert {item["Destination"]: (item["Source"], item["RW"]) for item in actual if item["Type"] == "bind"} == expected
++    host = created["HostConfig"]
++    assert host["NetworkMode"] == network and host["ReadonlyRootfs"]
++    assert not host["Privileged"] and created["Image"] == image and created["Config"]["User"] == "pilot"
++    assert host["CapDrop"] == ["ALL"] and host["CapAdd"] in (None, [])
++    assert "no-new-privileges" in host["SecurityOpt"]
++    assert host["PidMode"] == "" and host["IpcMode"] == "private" and not host.get("Binds")
++    assert host["PidsLimit"] == 256 and host["Memory"] == 8 * 1024**3 and host["NanoCpus"] == 4 * 10**9
++    expected_tmpfs = {
++        target: f"rw,nosuid,nodev,size={size},uid={uid},gid={uid},mode=0700"
++        for target, size in (("/home/pilot", "16m"), ("/tmp", "256m"), ("/scratch", "512m"))
++    }
++    assert host["Tmpfs"] == expected_tmpfs
++    assert all(item["Destination"] in expected_tmpfs for item in actual if item["Type"] == "tmpfs")
++    assert not any(
++        item.split("=", 1)[0].startswith(("GITHUB_", "GH_", "ACTIONS_", "AWS_", "OPENAI_", "ANTHROPIC_"))
++        for item in created["Config"]["Env"]
++    )
++
++
++def native_export(records: Path) -> None:
++    # This mode has no /models mount or Ollama process and sees read-only /work.
++    assert not Path("/models").exists()
++    assert bool(os.statvfs("/work").f_flag & os.ST_RDONLY)
++    env = native_environment()
++    binary = "/tools/opencode/opencode"
++    listed = command(
++        [binary, "session", "list", "--standalone", "--format", "json"],
++        records / "raw",
++        "session-list",
++        35,
++        env=env,
++        check=False,
++    )
++    identities: set[str] = set()
++
++    def visit(value: object) -> None:
++        if isinstance(value, dict):
++            for key, item in value.items():
++                if key in ("id", "sessionID", "session_id") and isinstance(item, str) and item.startswith("ses"):
++                    identities.add(item)
++                visit(item)
++        elif isinstance(value, list):
++            for item in value:
++                visit(item)
++
++    if listed["exit_code"] == 0:
++        visit(json.loads((records / "raw/session-list.stdout").read_text()))
++    result: dict[str, Any] = {"session_ids": sorted(identities), "model_process_started": False}
++    if len(identities) == 1:
++        identity = next(iter(identities))
++        result["export"] = command(
++            [binary, "session", "export", "--standalone", identity],
++            records / "raw",
++            "session-export",
++            45,
++            env=env,
++            check=False,
++        )
++    else:
++        result["export_status"] = "unavailable: session identity not unique"
++    write_json(records / "export-result.json", result)
++
++
++def inside(mode: str) -> None:
++    records = Path("/records")
++    env = native_environment()
++    write_json(records / "environment.json", env)
++    if mode == "export":
++        assert_offline_layout()
++        native_export(records)
++        return
++    if mode != "prepare":
++        write_json(records / "isolation.json", assert_offline_layout())
++        assert bool(os.statvfs("/models").f_flag & os.ST_RDONLY)
++    assert os.environ.get("HOME") == "/home/pilot" and os.getuid() != 0
++    raw = records / "raw"
++    raw.mkdir(exist_ok=True)
++    server: subprocess.Popen[bytes] | None = None
++    try:
++        with (raw / "ollama-server.stdout").open("wb") as server_log:
++            server = subprocess.Popen(
++                ["/tools/ollama/bin/ollama", "serve"], env=env, stdout=server_log, stderr=subprocess.STDOUT
++            )
++            deadline = time.monotonic() + 12
++            while True:
++                try:
++                    version = api("/api/version", timeout=1)
++                    assert version["version"] == "0.40.16", version
++                    break
++                except (OSError, urllib.error.URLError):
++                    if server.poll() is not None or time.monotonic() >= deadline:
++                        raise RuntimeError("Local Ollama health failed; no repair/retry of this host")
++                    time.sleep(0.2)
++            write_json(records / "server-version.json", version)
++            if mode == "prepare":
++                body = {"model": MODEL, "stream": True}
++                request = urllib.request.Request(
++                    MODEL_URL + "/api/pull",
++                    data=json.dumps(body).encode(),
++                    headers={"Content-Type": "application/json"},
++                )
++                write_json(
++                    records / "model-pull-command.json",
++                    {"url": MODEL_URL + "/api/pull", "body": body, "started_at": now(), "inference": False},
++                )
++                with (
++                    urllib.request.urlopen(request, timeout=480) as response,
++                    (raw / "model-pull.jsonl").open("wb") as log,
++                ):
++                    for line in response:
++                        log.write(line)
++                        log.flush()
++                        item = json.loads(line)
++                        if "error" in item:
++                            raise RuntimeError(item["error"])
++                model = next(item for item in api("/api/tags")["models"] if item["name"] == MODEL)
++                assert re.fullmatch(r"(?:sha256:)?[0-9a-f]{64}", model["digest"])
++                write_json(records / "model.json", model)
++                write_json(records / "model-show.json", api("/api/show", {"model": MODEL}))
++                return
++            expected = json.loads(Path("/input/model.json").read_text())
++            actual = next(item for item in api("/api/tags")["models"] if item["name"] == MODEL)
++            assert actual["digest"] == expected["digest"]
++            write_json(records / "model-identity.json", actual)
++            binary = "/tools/opencode/opencode"
++            if mode == "preflight":
++                command(["dpkg-query", "-W", "-f=${binary:Package}\t${Version}\n"], raw, "image-packages", 10, env=env)
++                command([binary, "--version"], raw, "opencode-version", 10, env=env)
++                assert (raw / "opencode-version.stdout").read_text().strip() == "opencode v2.3.0"
++                libraries = [
++                    Path("/tools/opencode/opencode"),
++                    Path("/tools/ollama/bin/ollama"),
++                    Path("/tools/ollama/lib/ollama/llama-server"),
++                ]
++                libraries += sorted(Path("/tools/ollama/lib/ollama").glob("*.so*"))
++                for index, library in enumerate(libraries):
++                    command(["ldd", str(library)], raw, f"ldd-{index}", 5, env=env)
++                    assert "not found" not in (raw / f"ldd-{index}.stdout").read_text()
++                command(
++                    [binary, "models", "--standalone", "--print-logs", "--log-level", "debug"],
++                    raw,
++                    "model-inventory",
++                    35,
++                    env=env,
++                )
++                assert MODEL in (raw / "model-inventory.stdout").read_text()
++                write_json(records / "preflight.json", {"status": "pass", "inference_calls": 0, "at": now()})
++                return
++            assert mode == "task"
++            prompt = Path("/input/prompt.txt").read_text()
++            assert hashlib.sha256(prompt.encode()).hexdigest() == PROMPT_SHA
++            write_json(
++                records / "task-start.json",
++                {"at": now(), "task_cli_attempts": 1, "model_inference_observed": "unavailable-pending-raw-review"},
++            )
++            command(
++                [
++                    binary,
++                    "run",
++                    "--standalone",
++                    "--format",
++                    "json",
++                    "--print-logs",
++                    "--log-level",
++                    "debug",
++                    "--agent",
++                    "build",
++                    "--model",
++                    "ollama/qwen3:1.7b",
++                    "--title",
++                    "ADK targeted document edit pilot",
++                    prompt,
++                ],
++                raw,
++                "task",
++                TASK_SECONDS,
++                env=env,
++                check=False,
++            )
++    finally:
++        if server is not None:
++            if server.poll() is None:
++                server.kill()
++            server.wait(timeout=5)
++            write_json(records / "server-stop.json", {"at": now(), "exit_code": server.returncode})
++
++
++SECRET_PATTERNS = (
++    r"-----BEGIN [A-Z ]*PRIVATE KEY-----",
++    r"ssh-(?:ed25519|rsa)\s+[A-Za-z0-9+/]{24,}",
++    r"(?:gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,})",
++    r"\bsk-(?:proj-)?[A-Za-z0-9_-]{24,}",
++    r"(?i)\bbearer\s+[A-Za-z0-9._~-]{12,}",
++    r"https?://[^\s/\"'<>]+:[^\s/\"'<>]+@",
++    r"""(?i)["'](?:api[_-]?key|access[_-]?token|refresh[_-]?token|password|client[_-]?secret|authorization)["']\s*:\s*["'][^"']+""",
++)
++
++
++def publish_evidence(root: Path, evidence: Path, summary: dict[str, Any]) -> None:
++    summary["ended_at"] = now()
++    attempted = {item["condition"] for item in summary["conditions"]}
++    summary["not_started_conditions"] = [name for name in ("baseline", "candidate") if name not in attempted]
++    summary["actual_skill_load"] = (
++        "unavailable-pending-native-raw-review" if summary["possible_inference"] else "not-run"
++    )
++    summary["usage"] = "unavailable-pending-native-raw-review"
++    write_json(evidence / "summary.json", summary)
++    output = root / "published"
++    output.mkdir(exist_ok=True)
++    allowed = list(evidence.rglob("*.json")) + list(evidence.rglob("*.stdout")) + list(evidence.rglob("*.stderr"))
++    allowed += [evidence / "Dockerfile"] if (evidence / "Dockerfile").exists() else []
++    for condition in ("baseline", "candidate"):
++        for folder in ("work", "skills", "config", "input"):
++            if (root / condition / folder).exists():
++                allowed += [path for path in (root / condition / folder).rglob("*") if path.is_file()]
++        for phase in ("records", "preflight", "recovery"):
++            phase_root = root / condition / phase
++            if phase_root.exists():
++                allowed += list(phase_root.glob("*.json"))
++                if (phase_root / "raw").exists():
++                    allowed += [path for path in (phase_root / "raw").iterdir() if path.is_file()]
++    if (root / "prepare-records").exists():
++        allowed += list((root / "prepare-records").glob("*.json"))
++        allowed += [path for path in (root / "prepare-records/raw").glob("*") if path.is_file()]
++    manifest, excluded = [], []
++    for source in sorted(set(allowed)):
++        relative = source.relative_to(root)
++        if source.is_symlink() or any(
++            part in ("home", "data", "state", "cache", "models", "sources", ".git") for part in relative.parts
++        ):
++            raise RuntimeError(f"Publication allowlist violation: {relative}")
++        raw = source.read_bytes()
++        text = raw.decode("utf-8", errors="replace")
++        removed = []
++        if source.name == "ollama-server.stdout":
++            lines = text.splitlines(keepends=True)
++            removed = [
++                index + 1
++                for index, line in enumerate(lines)
++                if "ssh-ed25519 " in line or "Couldn't find '" in line or "Your new public key is:" in line
++            ]
++            text = "".join(line for index, line in enumerate(lines) if index + 1 not in removed)
++            relative = relative.with_name("ollama-server.sanitized.log")
++        if any(re.search(pattern, text) for pattern in SECRET_PATTERNS):
++            excluded.append(
++                {
++                    "path": str(relative),
++                    "raw_sha256": hashlib.sha256(raw).hexdigest(),
++                    "reason": "credential-pattern scan; raw preserved only in private job staging",
++                }
++            )
++            continue
++        target = output / relative
++        target.parent.mkdir(parents=True, exist_ok=True)
++        target.write_bytes(text.encode() if removed else raw)
++        manifest.append(
++            {
++                "path": str(relative),
++                "sha256": sha(target),
++                "bytes": target.stat().st_size,
++                "raw_sha256": hashlib.sha256(raw).hexdigest(),
++                "removed_identity_line_numbers": removed,
++                "byte_identical_raw": not removed,
++            }
++        )
++    write_json(
++        output / "manifest.json",
++        {
++            "files": manifest,
++            "excluded_sensitive_files": excluded,
++            "state_directories_excluded": True,
++            "whole_repository_excluded": True,
++        },
++    )
++    if excluded:
++        write_json(
++            output / "publication-limits.json",
++            {"complete_raw_available": False, "excluded_sensitive_files": excluded, "coverage": "unavailable"},
++        )
++
++
++if __name__ == "__main__":
++    parser = argparse.ArgumentParser()
++    parser.add_argument("--inside", choices=("prepare", "preflight", "task", "export"), required=True)
++    inside(parser.parse_args().inside)
+diff --git a/src/agent_dev_kit/hosted_task_pilot.py b/src/agent_dev_kit/hosted_task_pilot.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..49348792cc430bd0da47dba406d6b7a1df18d0c8
+--- /dev/null
++++ b/src/agent_dev_kit/hosted_task_pilot.py
+@@ -0,0 +1,656 @@
++"""One preregistered experiment; no public CLI registration, grader, or retry loop."""
++
++from __future__ import annotations
++
++import argparse
++from collections.abc import Mapping, Sequence
++import datetime as dt
++import hashlib
++import json
++import os
++from pathlib import Path, PurePosixPath
++import re
++import shutil
++import signal
++import subprocess
++import sys
++import tarfile
++import time
++from types import FrameType
++from typing import Any
++
++from . import hosted_task_native as native
++from .hosted_task_native import (
++    PROMPT_SHA,
++    TASK_SECONDS,
++    command,
++    inventory,
++    now,
++    opencode_config,
++    sha,
++    write_json,
++)
++
++REPOSITORY = "jiying2007/agent-dev-kit"
++BRANCH = "refs/heads/experiment/hosted-task-pilot-run-20261114"
++BEFORE = "c57f4f8a7983f52257c0587eb85881a006e6dc07"
++BASELINE = "7aed1d2545babce16c41dc021ead01c8c324ce07"
++LOCAL_NEGATIVE = "6b5a76779320f45422ca4a06dfa394fff85106d352b65e7fbea56da7aa6018ca"
++BASE_IMAGE = "docker.io/library/python:3.12-slim-bookworm"
++JOB_SECONDS = 26 * 60
++PAIR_RESERVE = 2 * (TASK_SECONDS + 100 + 2 * 70) + 60
++Mount = tuple[Path, str, bool]
++TASK_SHA = "6bc93366986b29af97fe8328f1c338ae90763a235ba917531b803e8df7e6bc44"
++CASE_SHA = "a9a6143b2a36c324435c321171ad09925457dd8d7f8209180ff64f1ecebe59e0"
++WORK_SHA = "6a6249b2f8df6c2a8cbea872f13319dd42cb07779bea6e204bfd614f19144359"
++SKILL_SHA = {
++    "baseline": "e0672708e80c0636abaa812fa6be8d81d7b9f062a62e322b505c7f7d07c4e215",
++    "candidate": "a21c9d9d2fd3aaf1e759e28c0353139a1fee67c2ea1e790e1fc882a54f0c60d4",
++}
++SOURCE_SHA = {
++    "baseline": "04267d6288de34d97f2774aa016f1c3366f75699a8638d9c57a5875f376dfcc1",
++    "candidate": "e013d6e67dc993a3c3a0cf589d6e1c1e3b4534c1a053422c8c1df0c04813dba2",
++}
++ASSETS = {
++    "opencode": (
++        "https://github.com/anomalyco/opencode/releases/download/v2.3.0/opencode-linux-x64.tar.gz",
++        "fc0f81522aceeabac47693d88389efa2bc517ce74c2c38fd6967819fcc6e4d3b",
++    ),
++    "ollama": (
++        "https://github.com/ollama/ollama/releases/download/v0.40.16/ollama-linux-amd64.tar.zst",
++        "87bfafb2acbc89b2e6a1be0a9043de6aa75fb450696f86bc426e65fc448f788d",
++    ),
++}
++
++
++def trigger_allowed(values: Mapping[str, str]) -> bool:
++    return (
++        values.get("GITHUB_REPOSITORY") == REPOSITORY
++        and values.get("GITHUB_REF") == BRANCH
++        and values.get("GITHUB_EVENT_NAME") == "push"
++        and values.get("PILOT_EVENT_BEFORE") == BEFORE
++        and values.get("GITHUB_RUN_ATTEMPT") == "1"
++        and bool(re.fullmatch(r"[0-9a-f]{40}", values.get("GITHUB_SHA", "")))
++    )
++
++
++def cpu_member(name: str) -> bool:
++    path = PurePosixPath(name)
++    return name == "bin/ollama" or (
++        len(path.parts) == 3
++        and path.parts[:2] == ("lib", "ollama")
++        and (".so" in path.name or path.name == "llama-server" or path.name.endswith(("LICENSE", "NOTICE")))
++    )
++
++
++class HostedPilot:
++    def __init__(self, repo: Path, root: Path, job_started: float) -> None:
++        self.repo, self.root = repo, root
++        self.evidence = root / "evidence"
++        self.evidence.mkdir(parents=True)
++        self.docker_env = {key: os.environ[key] for key in ("PATH", "LANG", "LC_ALL") if key in os.environ}
++        self.docker_env["DOCKER_CONFIG"] = str(root / "docker-config")
++        Path(self.docker_env["DOCKER_CONFIG"]).mkdir()
++        self.uid = os.getuid()
++        self.image = ""
++        self.live: set[str] = set()
++        self.sequence = 0
++        self.deadline = time.monotonic() + job_started + JOB_SECONDS - time.time()
++        self.preparing = True
++        self.alarms_enabled = False
++        self.cleaning = False
++        self.summary: dict[str, Any] = {
++            "started_at": now(),
++            "status": "preparing",
++            "job_started_epoch": job_started,
++            "coordinator_deadline_epoch": job_started + JOB_SECONDS,
++            "local_negative_sha256": LOCAL_NEGATIVE,
++            "model_runs": 0,
++            "model_digest": "unavailable",
++            "conditions": [],
++            "possible_inference": False,
++        }
++
++    def remaining(self) -> float:
++        return max(0, self.deadline - time.monotonic())
++
++    def host_command(
++        self,
++        args: Sequence[str],
++        label: str,
++        timeout: float,
++        *,
++        cwd: Path | None = None,
++        env: Mapping[str, str] | None = None,
++        check: bool = True,
++    ) -> dict[str, Any]:
++        budget = timeout if self.cleaning else min(timeout, self.remaining())
++        if self.preparing and not self.cleaning:
++            budget = min(budget, max(0, self.remaining() - PAIR_RESERVE))
++        return command(args, self.evidence / "commands", label, budget, cwd=cwd, env=env, check=check)
++
++    def docker(self, args: Sequence[str], label: str, timeout: float = 30, check: bool = True) -> dict[str, Any]:
++        return self.host_command(["docker", *args], label, timeout, env=self.docker_env, check=check)
++
++    def output(self, label: str) -> str:
++        return (self.evidence / "commands" / f"{label}.stdout").read_text()
++
++    def prepare_sources(self) -> None:
++        assert self.uid >= 1000, "Hosted worker must run as an ordinary user"
++        assert trigger_allowed(os.environ), "Unregistered event/ref/before/attempt"
++        self.host_command(["git", "rev-parse", "HEAD"], "source-head", 10, cwd=self.repo)
++        assert self.output("source-head").strip() == os.environ["GITHUB_SHA"]
++        resources: dict[str, Any] = {
++            "cpu_count": os.cpu_count(),
++            "disk_free_bytes": shutil.disk_usage(self.root).free,
++            "meminfo": Path("/proc/meminfo").read_text(),
++            "runner": {
++                key: os.environ.get(key)
++                for key in (
++                    "ImageOS",
++                    "ImageVersion",
++                    "RUNNER_OS",
++                    "RUNNER_ARCH",
++                    "GITHUB_REPOSITORY",
++                    "GITHUB_SHA",
++                    "GITHUB_RUN_ID",
++                    "GITHUB_RUN_ATTEMPT",
++                )
++            },
++        }
++        assert resources["disk_free_bytes"] >= 8 * 1024**3, "Insufficient free task storage"
++        match = re.search(r"MemAvailable:\s+(\d+)", resources["meminfo"])
++        assert match is not None
++        available = int(match[1])
++        assert available >= 8 * 1024**2 and resources["cpu_count"] >= 4
++        write_json(self.evidence / "resources.json", resources)
++        shutil.copyfile(native.__file__, self.root / "run-pilot.py")
++        assert sha(Path(native.__file__)) == sha(self.root / "run-pilot.py")
++        write_json(
++            self.evidence / "native-module.json",
++            {
++                "source": "src/agent_dev_kit/hosted_task_native.py",
++                "source_sha256": sha(Path(native.__file__)),
++                "mounted_copy_sha256": sha(self.root / "run-pilot.py"),
++            },
++        )
++        for condition, commit in (("baseline", BASELINE), ("candidate", BEFORE)):
++            source = self.root / "sources" / condition
++            source.mkdir(parents=True)
++            archive = self.root / f"{condition}-source.tar"
++            self.host_command(
++                ["git", "archive", "--format=tar", "--output", str(archive), commit],
++                f"{condition}-source",
++                30,
++                cwd=self.repo,
++            )
++            with tarfile.open(archive) as contents:
++                contents.extractall(source, filter="data")
++            assert sha(source / "skills/adk-adr-writer/SKILL.md") == SOURCE_SHA[condition]
++            env = {key: os.environ[key] for key in ("PATH", "LANG", "LC_ALL") if key in os.environ}
++            env["ADK_PYTHON_BIN"] = sys.executable
++            self.host_command(
++                [
++                    "bash",
++                    "scripts/devkit.sh",
++                    "export",
++                    "--target",
++                    "opencode",
++                    "--profile",
++                    "core",
++                    "--asset-kind",
++                    "skill",
++                    "--out",
++                    str(self.root / "exports" / condition),
++                    "--summary-json",
++                ],
++                f"{condition}-export",
++                60,
++                cwd=source,
++                env=env,
++            )
++            target = self.root / condition
++            selected = self.root / "exports" / condition / "opencode/skills/adk-adr-writer"
++            assert inventory(selected) == {
++                "SKILL.md": {"sha256": SKILL_SHA[condition], "bytes": (selected / "SKILL.md").stat().st_size}
++            }
++            shutil.copytree(selected, target / "skills/adk-adr-writer")
++            fixture = self.root / "sources/candidate/tests/fixtures/skill_execution_tasks/targeted-document-edit"
++            if condition == "baseline":
++                continue
++            assert sha(fixture / "task.md") == TASK_SHA and sha(fixture / "case.json") == CASE_SHA
++            assert sha(fixture / "initial/docs/ADR-021.md") == WORK_SHA
++            prompt = (fixture / "task.md").read_bytes() + "\n请使用 `adk-adr-writer` Skill 完成上述任务。\n".encode()
++            assert hashlib.sha256(prompt).hexdigest() == PROMPT_SHA
++            for name in ("baseline", "candidate"):
++                target = self.root / name
++                shutil.copytree(fixture / "initial", target / "work")
++                for folder in ("input", "config", "records", "preflight", "recovery"):
++                    (target / folder).mkdir(parents=True)
++                (target / "input/prompt.txt").write_bytes(prompt)
++                write_json(target / "config/opencode.json", opencode_config())
++        inputs = {
++            name: {
++                "source_commit": BASELINE if name == "baseline" else BEFORE,
++                "work": inventory(self.root / name / "work"),
++                "skills": inventory(self.root / name / "skills"),
++                "input": inventory(self.root / name / "input"),
++                "config": inventory(self.root / name / "config"),
++                "references": [],
++            }
++            for name in ("baseline", "candidate")
++        }
++        write_json(
++            self.evidence / "frozen-inputs.json",
++            {"task_sha256": TASK_SHA, "case_sha256": CASE_SHA, "prompt_sha256": PROMPT_SHA, "conditions": inputs},
++        )
++
++    def prepare_tools(self) -> None:
++        for name, (url, expected) in ASSETS.items():
++            archive = self.root / (name + (".tar.gz" if name == "opencode" else ".tar.zst"))
++            self.host_command(
++                [
++                    "curl",
++                    "--disable",
++                    "--fail",
++                    "--location",
++                    "--proto",
++                    "=https",
++                    "--tlsv1.2",
++                    "--connect-timeout",
++                    "30",
++                    "--max-time",
++                    "240",
++                    "--retry",
++                    "0",
++                    "--output",
++                    str(archive),
++                    url,
++                ],
++                name + "-download",
++                250,
++                env=self.docker_env,
++            )
++            assert sha(archive) == expected, f"{name} archive checksum mismatch"
++            destination = self.root / "tools" / name
++            destination.mkdir(parents=True)
++            selected: list[str] = []
++            if name == "opencode":
++                with tarfile.open(archive) as contents:
++                    for item in contents:
++                        if item.name.lstrip("./") == "opencode" and item.isfile():
++                            contents.extract(item, destination, filter="data")
++                            selected.append(item.name)
++            else:
++                decompressor = subprocess.Popen(
++                    ["zstd", "--decompress", "--stdout", str(archive)], stdout=subprocess.PIPE
++                )
++                assert decompressor.stdout is not None
++                try:
++                    with tarfile.open(fileobj=decompressor.stdout, mode="r|") as contents:
++                        for item in contents:
++                            if cpu_member(item.name):
++                                contents.extract(item, destination, filter="data")
++                                selected.append(item.name)
++                finally:
++                    decompressor.stdout.close()
++                    assert decompressor.wait(timeout=20) == 0
++                assert "bin/ollama" in selected and "lib/ollama/llama-server" in selected
++            write_json(
++                self.evidence / f"{name}-asset.json",
++                {
++                    "url": url,
++                    "archive_sha256": expected,
++                    "archive_bytes": archive.stat().st_size,
++                    "extracted_members": selected,
++                },
++            )
++            archive.unlink()  # Only the task-owned, already-verified download.
++
++    def prepare_image(self) -> None:
++        self.docker(["version", "--format", "{{json .}}"], "docker-version")
++        self.docker(["pull", "--platform", "linux/amd64", BASE_IMAGE], "base-pull", 240)
++        self.docker(["image", "inspect", BASE_IMAGE], "base-inspect")
++        base = json.loads(self.output("base-inspect"))[0]
++        assert base["Architecture"] == "amd64" and base["Os"] == "linux"
++        references = [ref for ref in base["RepoDigests"] if ref.split("@")[0] in ("python", "docker.io/library/python")]
++        assert len(references) == 1
++        reference = references[0]
++        self.docker(["buildx", "imagetools", "inspect", "--raw", reference], "base-manifest", 30)
++        manifest = json.loads(self.output("base-manifest"))
++        if "manifests" in manifest:
++            platforms = [
++                item["digest"]
++                for item in manifest["manifests"]
++                if item.get("platform", {}).get("os") == "linux"
++                and item.get("platform", {}).get("architecture") == "amd64"
++            ]
++            assert len(platforms) == 1
++            platform_digest = platforms[0]
++        else:
++            platform_digest = reference.split("@", 1)[1]
++        assert re.fullmatch(r"sha256:[0-9a-f]{64}", platform_digest)
++        pinned = "docker.io/library/python@" + platform_digest
++        self.docker(["pull", "--platform", "linux/amd64", pinned], "platform-pull", 120)
++        self.docker(["image", "inspect", pinned], "platform-inspect")
++        pinned_image = json.loads(self.output("platform-inspect"))[0]
++        assert (
++            pinned_image["Id"] == base["Id"]
++            and pinned_image["Architecture"] == "amd64"
++            and pinned_image["Os"] == "linux"
++        )
++        build = self.root / "image-build"
++        build.mkdir()
++        dockerfile = f"""FROM {pinned}
++RUN apt-get update && apt-get install -y --no-install-recommends libstdc++6 passwd && rm -rf /var/lib/apt/lists/* && useradd --create-home --uid {self.uid} --user-group --home-dir /home/pilot pilot && mkdir -p /work /records /config /skills /input /tools /runner /scratch
++ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 PYTHONDONTWRITEBYTECODE=1
++USER pilot
++WORKDIR /work
++"""
++        (build / "Dockerfile").write_text(dockerfile)
++        shutil.copyfile(build / "Dockerfile", self.evidence / "Dockerfile")
++        tag = "adk-hosted-pilot:" + os.environ["GITHUB_RUN_ID"]
++        self.docker(
++            ["build", "--platform", "linux/amd64", "--network", "default", "--tag", tag, str(build)], "image-build", 240
++        )
++        self.docker(["image", "inspect", tag], "image-inspect")
++        final = json.loads(self.output("image-inspect"))[0]
++        assert final["Architecture"] == "amd64" and final["Os"] == "linux" and final["Config"]["User"] == "pilot"
++        self.image = final["Id"]
++        assert re.fullmatch(r"sha256:[0-9a-f]{64}", self.image)
++        write_json(
++            self.evidence / "image-identity.json",
++            {
++                "base_tag": BASE_IMAGE,
++                "base_repository_digest": reference,
++                "amd64_manifest_digest": platform_digest,
++                "base_image_id": base["Id"],
++                "final_image_id": self.image,
++                "dockerfile_sha256": sha(build / "Dockerfile"),
++                "frozen_at": now(),
++            },
++        )
++
++    def container(
++        self, mode: str, label: str, mounts: list[Mount], budget: float, network: str = "none"
++    ) -> dict[str, Any]:
++        self.sequence += 1
++        name = f"adk-pilot-{os.environ['GITHUB_RUN_ID']}-{self.sequence}"
++        args = [
++            "create",
++            "--name",
++            name,
++            "--init",
++            "--network",
++            network,
++            "--ipc",
++            "private",
++            "--read-only",
++            "--cap-drop",
++            "ALL",
++            "--security-opt",
++            "no-new-privileges",
++            "--pids-limit",
++            "256",
++            "--cpus",
++            "4",
++            "--memory",
++            "8g",
++            "--stop-timeout",
++            "0",
++        ]
++        for target, size in (("/home/pilot", "16m"), ("/tmp", "256m"), ("/scratch", "512m")):
++            args += ["--tmpfs", f"{target}:rw,nosuid,nodev,size={size},uid={self.uid},gid={self.uid},mode=0700"]
++        for source, target, readonly in mounts:
++            assert source.resolve().is_relative_to(self.root.resolve())
++            args += ["--mount", native.mount_spec(source, target, readonly)]
++        args += [self.image, "python3", "/runner/run-pilot.py", "--inside", mode]
++        self.live.add(name)
++        self.docker(args, label + "-create", 10)
++        identity = self.output(label + "-create").strip()
++        assert re.fullmatch(r"[0-9a-f]{64}", identity)
++        self.live.add(identity)
++        self.live.remove(name)
++        self.docker(["inspect", identity], label + "-created", 10)
++        created = json.loads(self.output(label + "-created"))[0]
++        native.validate_container(created, mounts, self.image, network, self.uid)
++        started = time.monotonic()
++        self.docker(["start", identity], label + "-start", min(10, budget))
++        wait = self.docker(
++            ["wait", identity], label + "-wait", max(0.1, budget - (time.monotonic() - started)), check=False
++        )
++        timed_out = wait["timed_out"]
++        if timed_out:
++            self.docker(["kill", "--signal", "KILL", identity], label + "-deadline-kill", 10, check=False)
++            self.docker(["wait", identity], label + "-after-kill", 10, check=False)
++        self.docker(["inspect", identity], label + "-stopped", 10)
++        stopped = json.loads(self.output(label + "-stopped"))[0]
++        assert stopped["State"]["Running"] is False, "Container termination was not established"
++        self.docker(["logs", "--timestamps", identity], label + "-container-log", 10, check=False)
++        result = {
++            "label": label,
++            "mode": mode,
++            "container_id": identity,
++            "image_id": self.image,
++            "network": network,
++            "budget_seconds": budget,
++            "timed_out": timed_out,
++            "state": stopped["State"],
++            "observed_terminated": True,
++            "finished_observation": now(),
++        }
++        state = stopped["State"]
++        result["actual_container_seconds"] = (
++            dt.datetime.fromisoformat(state["FinishedAt"].replace("Z", "+00:00"))
++            - dt.datetime.fromisoformat(state["StartedAt"].replace("Z", "+00:00"))
++        ).total_seconds()
++        result["termination_observation_seconds"] = time.monotonic() - started
++        write_json(self.evidence / f"{label}-result.json", result)
++        self.docker(["rm", identity], label + "-remove", 10)
++        self.live.remove(identity)
++        return result
++
++    def mounts(self, condition: str, records: Path, *, recovery: bool = False) -> list[Mount]:
++        target = self.root / condition
++        tools = self.root / "tools" if not recovery else self.root / "export-tools"
++        mounts = [
++            (tools, "/tools", True),
++            (self.root / "run-pilot.py", "/runner/run-pilot.py", True),
++            (target / "config", "/config", True),
++            (target / "skills", "/skills", True),
++            (target / "input", "/input", True),
++            (target / "work", "/work", recovery),
++            (records, "/records", False),
++        ]
++        if not recovery:
++            mounts.append((self.root / "models", "/models", True))
++        return mounts
++
++    def run(self) -> None:
++        self.prepare_sources()
++        self.prepare_tools()
++        self.prepare_image()
++        for path in (self.root / "models", self.root / "prepare-records"):
++            path.mkdir()
++        prepared = self.container(
++            "prepare",
++            "model-prepare",
++            [
++                (self.root / "tools", "/tools", True),
++                (self.root / "run-pilot.py", "/runner/run-pilot.py", True),
++                (self.root / "models", "/models", False),
++                (self.root / "prepare-records", "/records", False),
++            ],
++            540,
++            network="bridge",
++        )
++        assert prepared["state"]["ExitCode"] == 0 and not prepared["timed_out"], "Model preparation blocked"
++        model = json.loads((self.root / "prepare-records/model.json").read_text())
++        files = inventory(self.root / "models")
++        assert any(
++            item["sha256"] == model["digest"].removeprefix("sha256:")
++            for path, item in files.items()
++            if path.startswith("manifests/")
++        )
++        self.summary["model_digest"] = model["digest"]
++        for condition in ("baseline", "candidate"):
++            write_json(self.root / condition / "input/model.json", model)
++        write_json(
++            self.evidence / "frozen-runtime.json",
++            {
++                "frozen_at": now(),
++                "image": json.loads((self.evidence / "image-identity.json").read_text()),
++                "model": model,
++                "model_files": files,
++                "tool_files": native.tool_inventory(self.root / "tools"),
++                "task_order": ["baseline", "candidate"],
++                "task_seconds_each": TASK_SECONDS,
++                "inference_started": False,
++            },
++        )
++        for condition in ("baseline", "candidate"):
++            preflight = self.container(
++                "preflight", condition + "-preflight", self.mounts(condition, self.root / condition / "preflight"), 100
++            )
++            assert preflight["state"]["ExitCode"] == 0 and not preflight["timed_out"], (
++                "Offline preflight failed; no condition will run"
++            )
++            assert sha(self.root / condition / "work/docs/ADR-021.md") == WORK_SHA
++        packages = {
++            name: sha(self.root / name / "preflight/raw/image-packages.stdout") for name in ("baseline", "candidate")
++        }
++        assert len(set(packages.values())) == 1, "The two containers have different installed dependencies"
++        write_json(
++            self.evidence / "frozen-dependencies.json",
++            {"image_id": self.image, "inventory_sha256": packages, "frozen_at": now()},
++        )
++        shutil.copytree(self.root / "tools/opencode", self.root / "export-tools/opencode")
++        self.finish_preparation()
++        for condition in ("baseline", "candidate"):
++            self.run_condition(condition)
++        self.summary["status"] = "executed-awaiting-independent-grading"
++
++    def finish_preparation(self) -> None:
++        assert self.remaining() >= PAIR_RESERVE, "420-second preparation deadline exhausted; neither task may start"
++        self.preparing = False
++        if self.alarms_enabled:
++            signal.setitimer(signal.ITIMER_REAL, self.remaining())
++
++    def verify_inputs(self, condition: str) -> None:
++        frozen = json.loads((self.evidence / "frozen-inputs.json").read_text())["conditions"][condition]
++        for folder in ("work", "skills", "config"):
++            assert inventory(self.root / condition / folder) == frozen[folder], (
++                f"Changed frozen input: {condition}/{folder}"
++            )
++        assert sha(self.root / condition / "input/prompt.txt") == PROMPT_SHA
++        assert sha(self.root / "run-pilot.py") == sha(Path(native.__file__))
++        runtime = json.loads((self.evidence / "frozen-runtime.json").read_text())
++        assert json.loads((self.root / condition / "input/model.json").read_text()) == runtime["model"]
++
++    def capture_attempt(self, condition: str, attempt: dict[str, Any]) -> None:
++        native.capture_attempt(self.root, self.evidence, condition, attempt, not self.live)
++
++    def run_condition(self, condition: str) -> None:
++        self.verify_inputs(condition)
++        original = self.root / condition / "records"
++        assert not (original / "task-start.json").exists()
++        attempt: dict[str, Any] = {
++            "condition": condition,
++            "registered_at": now(),
++            "status": "execution-may-start",
++            "native_task_cli_attempts": "unavailable-pending-raw-review",
++        }
++        self.summary["conditions"].append(attempt)
++        self.summary.update(possible_inference=True, model_runs="unavailable-pending-raw-review")
++        write_json(self.evidence / f"{condition}-attempt.json", attempt)
++        try:
++            attempt["container_observation"] = self.container(
++                "task", condition + "-task", self.mounts(condition, original), TASK_SECONDS
++            )
++            attempt["status"] = "container-stopped"
++        except Exception as error:
++            attempt.update(status="execution-or-observation-failed", error=str(error))
++            raise
++        finally:
++            self.capture_attempt(condition, attempt)
++        before = {name: inventory(original / name) if (original / name).exists() else {} for name in ("data", "state")}
++        write_json(self.evidence / f"{condition}-native-state.json", {"original": before, "export_uses_copy": True})
++        recovery = self.root / condition / "recovery"
++        for name in ("data", "state"):
++            if (original / name).exists():
++                shutil.copytree(original / name, recovery / name)
++        try:
++            attempt["read_only_export"] = self.container(
++                "export", condition + "-export", self.mounts(condition, recovery, recovery=True), 100
++            )
++        finally:
++            after = {
++                name: inventory(original / name) if (original / name).exists() else {} for name in ("data", "state")
++            }
++            write_json(
++                self.evidence / f"{condition}-native-state-after-export.json",
++                {"original": after, "unchanged": before == after},
++            )
++            assert before == after, "Recovery modified original native state"
++            self.capture_attempt(condition, attempt)
++
++    def cleanup(self) -> None:
++        self.cleaning = True
++        failures: list[str] = []
++        for index, identity in enumerate(list(self.live)):
++            try:
++                self.docker(["kill", "--signal", "KILL", identity], f"cleanup-{index}-kill", 10, check=False)
++                self.docker(["inspect", identity], f"cleanup-{index}-inspect", 10)
++                state = json.loads(self.output(f"cleanup-{index}-inspect"))[0]["State"]
++                assert state["Running"] is False
++                self.docker(["rm", identity], f"cleanup-{index}-remove", 10)
++                self.live.remove(identity)
++            except Exception as error:
++                failures.append(str(error))
++        self.summary["cleanup"] = {"remaining_containers": sorted(self.live), "failures": failures}
++        for attempt in self.summary["conditions"]:
++            try:
++                self.capture_attempt(attempt["condition"], attempt)
++            except Exception as error:
++                failures.append(str(error))
++
++    def publish(self) -> None:
++        native.publish_evidence(self.root, self.evidence, self.summary)
++
++
++def stop_coordinator(signum: int, frame: FrameType | None) -> None:
++    raise TimeoutError(f"Coordinator deadline or cancellation signal {signum}")
++
++
++def main() -> int:
++    parser = argparse.ArgumentParser()
++    parser.add_argument("--repo", type=Path)
++    parser.add_argument("--out", type=Path)
++    args = parser.parse_args()
++    assert args.repo and args.out and trigger_allowed(os.environ)
++    root = args.out.resolve()
++    assert root.is_relative_to(Path(os.environ["RUNNER_TEMP"]).resolve())
++    assert not root.exists(), "The one registered hosted attempt must use a fresh task directory"
++    root.mkdir()
++    pilot = HostedPilot(args.repo.resolve(), root, float(os.environ["PILOT_JOB_STARTED_EPOCH"]))
++    signal.signal(signal.SIGTERM, stop_coordinator)
++    signal.signal(signal.SIGINT, stop_coordinator)
++    signal.signal(signal.SIGALRM, stop_coordinator)
++    try:
++        assert pilot.remaining() > 0, "Job preparation used the entire coordinator budget"
++        assert pilot.remaining() > PAIR_RESERVE, "Preparation deadline exhausted before coordinator launch"
++        pilot.alarms_enabled = True
++        signal.setitimer(signal.ITIMER_REAL, pilot.remaining() - PAIR_RESERVE)
++        pilot.run()
++    except Exception as error:
++        pilot.summary.update(status="blocked-or-partial", error=str(error))
++    finally:
++        signal.setitimer(signal.ITIMER_REAL, 0)
++        pilot.cleanup()
++        pilot.publish()
++    print(json.dumps(pilot.summary, ensure_ascii=False))
++    return 0 if pilot.summary["status"] == "executed-awaiting-independent-grading" and not pilot.live else 1
++
++
++if __name__ == "__main__":
++    raise SystemExit(main())
+diff --git a/tests/test_hosted_task_pilot.py b/tests/test_hosted_task_pilot.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..ba35bada14128a97d8a62158009fce687e28669e
+--- /dev/null
++++ b/tests/test_hosted_task_pilot.py
+@@ -0,0 +1,476 @@
++"""Contract boundaries, not a substitute for actual Docker/OpenCode qualification."""
++
++from __future__ import annotations
++
++from collections.abc import Iterator, Sequence
++from contextlib import contextmanager
++import copy
++import hashlib
++import json
++import os
++from pathlib import Path
++import subprocess
++import sys
++import tempfile
++import time
++from typing import Any
++import unittest
++from unittest.mock import patch
++
++from agent_dev_kit import hosted_task_native as native
++from agent_dev_kit import hosted_task_pilot as pilot
++
++
++@contextmanager
++def experiment() -> Iterator[pilot.HostedPilot]:
++    with tempfile.TemporaryDirectory() as temporary:
++        root = Path(temporary)
++        instance = pilot.HostedPilot(root, root, time.time())
++        instance.uid = 1001
++        instance.image = "sha256:" + "a" * 64
++        yield instance
++
++
++def inspected(mounts: list[pilot.Mount], image: str, uid: int) -> dict[str, Any]:
++    """A synthetic daemon observation: tests rejection, never Docker compatibility."""
++    return {
++        "Mounts": [{"Type": "bind", "Destination": dest, "Source": str(src), "RW": not ro} for src, dest, ro in mounts],
++        "Image": image,
++        "Config": {"User": "pilot", "Env": ["PATH=/usr/local/bin:/usr/bin:/bin", "LANG=C.UTF-8"]},
++        "HostConfig": {
++            "NetworkMode": "none",
++            "ReadonlyRootfs": True,
++            "Privileged": False,
++            "CapDrop": ["ALL"],
++            "CapAdd": None,
++            "SecurityOpt": ["no-new-privileges"],
++            "PidMode": "",
++            "IpcMode": "private",
++            "Binds": None,
++            "PidsLimit": 256,
++            "Memory": 8 * 1024**3,
++            "NanoCpus": 4 * 10**9,
++            "Tmpfs": {
++                target: f"rw,nosuid,nodev,size={size},uid={uid},gid={uid},mode=0700"
++                for target, size in (("/home/pilot", "16m"), ("/tmp", "256m"), ("/scratch", "512m"))
++            },
++        },
++    }
++
++
++class TriggerTests(unittest.TestCase):
++    def test_only_exact_first_registered_push_is_allowed(self) -> None:
++        event = {
++            "GITHUB_REPOSITORY": "jiying2007/agent-dev-kit",
++            "GITHUB_REF": "refs/heads/experiment/hosted-task-pilot-run-20261114",
++            "GITHUB_EVENT_NAME": "push",
++            "PILOT_EVENT_BEFORE": "c57f4f8a7983f52257c0587eb85881a006e6dc07",
++            "GITHUB_RUN_ATTEMPT": "1",
++            "GITHUB_SHA": "b" * 40,
++        }
++        self.assertTrue(pilot.trigger_allowed(event))
++        for key, forbidden in (
++            ("GITHUB_REPOSITORY", "someone/agent-dev-kit"),
++            ("GITHUB_REF", "refs/heads/main"),
++            ("GITHUB_EVENT_NAME", "workflow_dispatch"),
++            ("PILOT_EVENT_BEFORE", "0" * 40),
++            ("PILOT_EVENT_BEFORE", "b" * 40),
++            ("GITHUB_RUN_ATTEMPT", "2"),
++            ("GITHUB_SHA", "main"),
++        ):
++            with self.subTest(key=key, forbidden=forbidden):
++                self.assertFalse(pilot.trigger_allowed({**event, key: forbidden}))
++
++    def test_workflow_has_no_dispatch_secret_or_write_permission(self) -> None:
++        import yaml
++
++        path = Path(__file__).resolve().parents[1] / ".github/workflows/opencode-task-pilot-once.yml"
++        workflow = yaml.load(path.read_text(), Loader=yaml.BaseLoader)
++        self.assertEqual(set(workflow["on"]), {"push"})
++        self.assertEqual(workflow["permissions"], {"contents": "read"})
++        job = workflow["jobs"]["pilot"]
++        self.assertEqual(job["timeout-minutes"], "30")
++        self.assertIn("PILOT_JOB_STARTED_EPOCH", job["steps"][0]["run"])
++        self.assertNotIn("secrets.", path.read_text())
++        self.assertEqual(job["steps"][-1]["with"]["include-hidden-files"], "true")
++
++    def test_bootstrap_steps_have_platform_timeouts_and_independent_fallback(self) -> None:
++        import yaml
++
++        path = Path(__file__).resolve().parents[1] / ".github/workflows/opencode-task-pilot-once.yml"
++        workflow = yaml.load(path.read_text(), Loader=yaml.BaseLoader)
++        steps = workflow["jobs"]["pilot"]["steps"]
++        by_id = {step["id"]: step for step in steps}
++        self.assertEqual(steps[0]["id"], "clock")
++        expected = {
++            "clock": 1,
++            "checkout": 2,
++            "interpreter": 1,
++            "dependencies": 1,
++            "contracts": 1,
++            "bootstrap_evidence": 1,
++            "upload": 2,
++        }
++        for identity, minutes in expected.items():
++            self.assertEqual(int(by_id[identity]["timeout-minutes"]), minutes)
++        self.assertEqual(
++            sum(
++                int(by_id[name]["timeout-minutes"]) for name in ("checkout", "interpreter", "dependencies", "contracts")
++            ),
++            5,
++        )
++        self.assertEqual(by_id["bootstrap_evidence"]["if"], "always()")
++        self.assertEqual(by_id["upload"]["if"], "always()")
++        self.assertEqual(steps[-2]["id"], "bootstrap_evidence")
++        self.assertNotIn("python", by_id["bootstrap_evidence"]["run"])
++        self.assertNotIn("GITHUB_WORKSPACE", by_id["bootstrap_evidence"]["run"])
++
++
++class BootstrapEvidenceTests(unittest.TestCase):
++    def run_fallback(self, execution: str, summary: bytes | None = None) -> dict[str, Any]:
++        import yaml
++
++        path = Path(__file__).resolve().parents[1] / ".github/workflows/opencode-task-pilot-once.yml"
++        workflow = yaml.load(path.read_text(), Loader=yaml.BaseLoader)
++        step = next(item for item in workflow["jobs"]["pilot"]["steps"] if item["id"] == "bootstrap_evidence")
++        with tempfile.TemporaryDirectory() as temporary:
++            root = Path(temporary)
++            publication = root / "hosted-task-pilot-20261114/published"
++            manifest_bytes = b'{ "existing": ["preserve exact bytes"] }\n'
++            if summary is not None:
++                (publication / "evidence").mkdir(parents=True)
++                (publication / "evidence/summary.json").write_bytes(summary)
++                (publication / "manifest.json").write_bytes(manifest_bytes)
++            environment = {
++                "PATH": os.environ["PATH"],
++                "RUNNER_TEMP": temporary,
++                "PILOT_JOB_STARTED_EPOCH": str(int(time.time()) - 1),
++                "GITHUB_REPOSITORY": "synthetic/repository",
++                "GITHUB_REF": "refs/heads/synthetic",
++                "GITHUB_SHA": "f" * 40,
++                "GITHUB_RUN_ID": "synthetic-run",
++                "GITHUB_RUN_ATTEMPT": "1",
++                "PILOT_CLOCK_OUTCOME": "success",
++                "PILOT_CHECKOUT_OUTCOME": "failure" if execution == "skipped" else "success",
++                "PILOT_INTERPRETER_OUTCOME": "skipped" if execution == "skipped" else "success",
++                "PILOT_DEPENDENCIES_OUTCOME": "skipped" if execution == "skipped" else "success",
++                "PILOT_CONTRACTS_OUTCOME": "skipped" if execution == "skipped" else "success",
++                "PILOT_EXECUTION_OUTCOME": execution,
++            }
++            result = subprocess.run(
++                ["bash", "--noprofile", "--norc", "-c", step["run"]],
++                cwd=root,
++                env=environment,
++                capture_output=True,
++                text=True,
++                timeout=10,
++            )
++            self.assertEqual(result.returncode, 0, result.stderr)
++            observed: dict[str, Any] = json.loads((publication / "bootstrap-status.json").read_text())
++            self.assertEqual(observed["step_outcomes"]["execution"], execution)
++            self.assertEqual(observed["observed_identity"]["head_sha"], "f" * 40)
++            self.assertGreaterEqual(observed["observed_epoch"], observed["first_step_epoch"])
++            self.assertRegex(observed["observed_at_utc"], r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$")
++            for fabricated in ("usage", "session", "container_terminated", "success"):
++                self.assertNotIn(fabricated, observed)
++            if summary is not None:
++                self.assertEqual((publication / "evidence/summary.json").read_bytes(), summary)
++                self.assertEqual((publication / "manifest.json").read_bytes(), manifest_bytes)
++                self.assertEqual(observed["coordinator_summary"]["sha256"], hashlib.sha256(summary).hexdigest())
++            else:
++                self.assertEqual(sorted(item.name for item in publication.iterdir()), ["bootstrap-status.json"])
++            return observed
++
++    def test_real_fallback_before_execution_reports_not_run(self) -> None:
++        observed = self.run_fallback("skipped")
++        self.assertEqual(observed["status"], "not-run-before-coordinator")
++        self.assertEqual(observed["model_runs"], 0)
++        self.assertEqual(observed["actual_skill_load"], "not-run")
++        self.assertEqual(observed["not_started_conditions"], ["baseline", "candidate"])
++        self.assertEqual(observed["step_outcomes"]["checkout"], "failure")
++
++    def test_real_fallback_after_execution_without_complete_receipt_is_unknown(self) -> None:
++        for execution, summary in (("failure", None), ("skipped", b"incomplete summary bytes")):
++            with self.subTest(execution=execution):
++                observed = self.run_fallback(execution, summary)
++                self.assertEqual(observed["model_runs"], "unknown")
++                self.assertEqual(observed["actual_skill_load"], "unknown")
++                self.assertTrue(observed["possible_inference"])
++
++    def test_real_fallback_preserves_existing_summary_and_manifest_bytes(self) -> None:
++        summary = b'{ "ended_at": "synthetic existing receipt", "cleanup": {}, "model_runs": "unobserved" }\n'
++        observed = self.run_fallback("failure", summary)
++        self.assertEqual(observed["status"], "coordinator-summary-preserved")
++        self.assertTrue(observed["coordinator_summary"]["final_fields_observed"])
++        self.assertNotIn("model_runs", observed)
++
++
++class IsolationTests(unittest.TestCase):
++    def test_mount_rejects_parent_symlink_relative_path_and_separator(self) -> None:
++        with tempfile.TemporaryDirectory() as temporary:
++            root = Path(temporary)
++            (root / "real").mkdir()
++            (root / "real/file").write_text("public")
++            (root / "link").symlink_to(root / "real", target_is_directory=True)
++            (root / "comma,file").write_text("public")
++            self.assertTrue(native.mount_spec(root / "real/file", "/input/file").endswith(",readonly"))
++            for source in (root / "link/file", Path("relative"), root / "comma,file"):
++                with self.subTest(source=str(source)), self.assertRaises(RuntimeError):
++                    native.mount_spec(source, "/input/file")
++
++    def test_archive_selection_excludes_gpu_and_traversal(self) -> None:
++        self.assertTrue(pilot.cpu_member("lib/ollama/libggml-cpu-x64.so"))
++        self.assertTrue(pilot.cpu_member("bin/ollama"))
++        for path in (
++            "../../bin/ollama",
++            "/bin/ollama",
++            "lib/ollama/cuda_v12/libggml.so",
++            "lib/ollama/../libggml.so",
++            "lib/ollama/vulkan/libvulkan.so",
++            "lib/ollama/id_ed25519",
++        ):
++            self.assertFalse(pilot.cpu_member(path), path)
++
++    def test_incomplete_or_weakened_daemon_observation_is_rejected(self) -> None:
++        mounts = [(Path("/task/work"), "/work", False)]
++        original = inspected(mounts, "fixed-image", 1001)
++        native.validate_container(original, mounts, "fixed-image", "none", 1001)
++        variants = []
++        for key, value in (
++            ("NetworkMode", "bridge"),
++            ("ReadonlyRootfs", False),
++            ("Privileged", True),
++            ("CapAdd", ["SYS_ADMIN"]),
++            ("PidMode", "host"),
++            ("IpcMode", "host"),
++            ("Tmpfs", {}),
++        ):
++            altered = copy.deepcopy(original)
++            altered["HostConfig"][key] = value
++            variants.append(altered)
++        altered = copy.deepcopy(original)
++        altered["Mounts"].append(
++            {"Type": "bind", "Source": "/var/run/docker.sock", "Destination": "/var/run/docker.sock", "RW": True}
++        )
++        variants.append(altered)
++        altered = copy.deepcopy(original)
++        forbidden_name = "_".join(("GITHUB", "TOKEN"))
++        forbidden_value = "-".join(("synthetic", "forbidden", "variable"))
++        altered["Config"]["Env"].append(f"{forbidden_name}={forbidden_value}")
++        variants.append(altered)
++        altered = copy.deepcopy(original)
++        del altered["HostConfig"]["Privileged"]
++        variants.append(altered)
++        for index, altered in enumerate(variants):
++            with self.subTest(index=index), self.assertRaises((AssertionError, KeyError)):
++                native.validate_container(altered, mounts, "fixed-image", "none", 1001)
++
++    def test_recovery_has_no_models_and_work_is_read_only(self) -> None:
++        with experiment() as run:
++            normal = run.mounts("baseline", run.root / "baseline/records")
++            recovery = run.mounts("baseline", run.root / "baseline/recovery", recovery=True)
++            self.assertIn((run.root / "models", "/models", True), normal)
++            self.assertFalse(any(target == "/models" for _, target, _ in recovery))
++            self.assertIn((run.root / "baseline/work", "/work", True), recovery)
++            self.assertIn((run.root / "export-tools", "/tools", True), recovery)
++
++    def test_changed_frozen_work_skill_config_or_model_input_is_rejected(self) -> None:
++        with experiment() as run:
++            target = run.root / "baseline"
++            for folder in ("work", "skills", "config", "input"):
++                (target / folder).mkdir(parents=True)
++            for folder in ("work", "skills", "config"):
++                (target / folder / "fixture").write_text("original public fixture")
++            task = Path(__file__).parent / "fixtures/skill_execution_tasks/targeted-document-edit/task.md"
++            (target / "input/prompt.txt").write_bytes(
++                task.read_bytes() + "\n请使用 `adk-adr-writer` Skill 完成上述任务。\n".encode()
++            )
++            (run.root / "run-pilot.py").write_bytes(Path(native.__file__).read_bytes())
++            model = {"digest": "synthetic-unit-test-identity"}
++            native.write_json(target / "input/model.json", model)
++            native.write_json(run.evidence / "frozen-runtime.json", {"model": model})
++            native.write_json(
++                run.evidence / "frozen-inputs.json",
++                {
++                    "conditions": {
++                        "baseline": {
++                            folder: native.inventory(target / folder) for folder in ("work", "skills", "config")
++                        }
++                    }
++                },
++            )
++            run.verify_inputs("baseline")
++            for folder in ("work", "skills", "config"):
++                changed = target / folder / "fixture"
++                changed.write_text("changed after preflight")
++                with self.subTest(folder=folder), self.assertRaises(AssertionError):
++                    run.verify_inputs("baseline")
++                changed.write_text("original public fixture")
++            native.write_json(target / "input/model.json", {"digest": "changed-unit-test-identity"})
++            with self.assertRaises(AssertionError):
++                run.verify_inputs("baseline")
++
++
++class DeadlineTests(unittest.TestCase):
++    def test_expired_preparation_never_launches_a_child(self) -> None:
++        with experiment() as run:
++            self.assertEqual(pilot.JOB_SECONDS - pilot.PAIR_RESERVE, 420)
++            run.deadline = time.monotonic() + pilot.PAIR_RESERVE - 1
++            witness = run.root / "forbidden-child"
++            with self.assertRaises(RuntimeError):
++                run.host_command(
++                    [sys.executable, "-c", f"from pathlib import Path; Path({str(witness)!r}).touch()"], "expired", 10
++                )
++            self.assertFalse(witness.exists())
++            with self.assertRaises(AssertionError):
++                run.finish_preparation()
++            self.assertTrue(run.preparing)
++            self.assertEqual(run.summary["model_runs"], 0)
++
++    def test_preparation_time_is_charged_from_first_workflow_step(self) -> None:
++        with tempfile.TemporaryDirectory() as temporary:
++            run = pilot.HostedPilot(Path(temporary), Path(temporary), time.time() - 425)
++            with self.assertRaises(AssertionError):
++                run.finish_preparation()
++            self.assertLess(run.remaining(), pilot.PAIR_RESERVE)
++
++    def test_real_timeout_kills_process_group_and_preserves_receipt(self) -> None:
++        with tempfile.TemporaryDirectory() as temporary:
++            root = Path(temporary)
++            witness, pidfile = root / "descendant-survived", root / "child-pid"
++            child = f"import time; from pathlib import Path; time.sleep(0.7); Path({str(witness)!r}).touch(); time.sleep(30)"
++            parent = f"import subprocess,sys,time; from pathlib import Path; p=subprocess.Popen([sys.executable,'-c',{child!r}]); Path({str(pidfile)!r}).write_text(str(p.pid)); time.sleep(30)"
++            result = native.command([sys.executable, "-c", parent], root / "raw", "timeout", 0.25, check=False)
++            self.assertTrue(result["timed_out"])
++            self.assertEqual(result["exit_code"], -9)
++            self.assertTrue(pidfile.exists(), "The descendant must actually start for this test")
++            time.sleep(0.8)
++            self.assertFalse(witness.exists(), "Killing only the client/parent would leave this witness")
++            state = Path("/proc") / pidfile.read_text() / "stat"
++            if state.exists():
++                self.assertEqual(state.read_text().split()[2], "Z")
++            receipt = json.loads((root / "raw/timeout.json").read_text())
++            self.assertEqual(receipt["exit_code"], -9)
++            self.assertGreater(receipt["duration_seconds"], 0.2)
++
++
++class PartialExecutionTests(unittest.TestCase):
++    def test_post_start_inspect_or_remove_failure_cannot_report_zero_runs(self) -> None:
++        for failing_suffix in ("-stopped", "-remove"):
++            with self.subTest(failing_suffix=failing_suffix), experiment() as run:
++                for folder in (
++                    "tools",
++                    "models",
++                    "baseline/config",
++                    "baseline/skills",
++                    "baseline/input",
++                    "baseline/work",
++                    "baseline/records",
++                ):
++                    (run.root / folder).mkdir(parents=True)
++                (run.root / "run-pilot.py").write_text("test-only")
++                run.preparing = False
++                created = inspected(run.mounts("baseline", run.root / "baseline/records"), run.image, run.uid)
++                identity = "f" * 64
++
++                def fake_docker(
++                    args: Sequence[str], label: str, timeout: float = 30, check: bool = True
++                ) -> dict[str, Any]:
++                    if label.endswith(failing_suffix):
++                        raise RuntimeError("injected daemon observation failure after task start")
++                    commands = run.evidence / "commands"
++                    commands.mkdir(exist_ok=True)
++                    stdout = commands / f"{label}.stdout"
++                    if args[0] == "create":
++                        stdout.write_text(identity)
++                    elif label.endswith("-created"):
++                        stdout.write_text(json.dumps([created]))
++                    elif args[0] == "start":
++                        native.write_json(
++                            run.root / "baseline/records/task-start.json",
++                            {"task_cli_attempts": 1, "model_inference_observed": "unavailable"},
++                        )
++                    elif label.endswith("-stopped"):
++                        stdout.write_text(
++                            json.dumps(
++                                [
++                                    {
++                                        "State": {
++                                            "Running": False,
++                                            "ExitCode": 0,
++                                            "StartedAt": "2026-11-14T00:00:00Z",
++                                            "FinishedAt": "2026-11-14T00:00:01Z",
++                                        }
++                                    }
++                                ]
++                            )
++                        )
++                    return {"exit_code": 0, "timed_out": False}
++
++                with (
++                    patch.dict(os.environ, {"GITHUB_RUN_ID": "synthetic-unit-test"}),
++                    patch.object(run, "verify_inputs"),
++                    patch.object(run, "docker", side_effect=fake_docker),
++                ):
++                    with self.assertRaisesRegex(RuntimeError, "injected daemon"):
++                        run.run_condition("baseline")
++                run.publish()
++                summary = json.loads((run.root / "published/evidence/summary.json").read_text())
++                self.assertNotEqual(summary["model_runs"], 0)
++                self.assertNotEqual(summary["actual_skill_load"], "not-run")
++                self.assertEqual(len(summary["conditions"]), 1)
++                self.assertEqual(summary["conditions"][0]["task-start.json"]["task_cli_attempts"], 1)
++                self.assertEqual(summary["conditions"][0]["status"], "execution-or-observation-failed")
++
++
++class EvidenceTests(unittest.TestCase):
++    def test_no_attempt_is_explicitly_not_run_for_both_conditions(self) -> None:
++        with experiment() as run:
++            run.publish()
++            summary = json.loads((run.root / "published/evidence/summary.json").read_text())
++            self.assertEqual(summary["model_runs"], 0)
++            self.assertEqual(summary["model_digest"], "unavailable")
++            self.assertEqual(summary["not_started_conditions"], ["baseline", "candidate"])
++            self.assertEqual(summary["actual_skill_load"], "not-run")
++
++    def test_allowlist_excludes_private_state_and_labels_identity_redaction(self) -> None:
++        with experiment() as run:
++            for folder in (
++                "home",
++                "models",
++                "sources",
++                "baseline/records/data",
++                "baseline/records/state",
++                "baseline/work",
++                "baseline/records/raw",
++            ):
++                (run.root / folder).mkdir(parents=True)
++                (run.root / folder / "excluded.txt").write_text("synthetic private state")
++            original = run.root / "baseline/records/raw/ollama-server.stdout"
++            (run.root / "baseline/work/.extra-file").write_text("unexpected public output for independent grader")
++            original.write_text("server startup\nYour new public key is:\nssh-ed25519 " + "A" * 60 + "\nhealthy\n")
++            secret = run.root / "baseline/records/raw/credentials.stdout"
++            secret.write_text("ghp_" + "A" * 30)
++            raw_hash = native.sha(original)
++            run.publish()
++            manifest = json.loads((run.root / "published/manifest.json").read_text())
++            paths = [item["path"] for item in manifest["files"]]
++            self.assertIn("baseline/work/.extra-file", paths)
++            self.assertFalse(
++                any(
++                    "/data/" in path or "/state/" in path or path.startswith(("home/", "models/", "sources/"))
++                    for path in paths
++                )
++            )
++            entry = next(item for item in manifest["files"] if item["path"].endswith("ollama-server.sanitized.log"))
++            self.assertFalse(entry["byte_identical_raw"])
++            self.assertEqual(entry["raw_sha256"], raw_hash)
++            self.assertEqual(entry["removed_identity_line_numbers"], [2, 3])
++            self.assertEqual(native.sha(original), raw_hash)
++            self.assertEqual(len(manifest["excluded_sensitive_files"]), 1)
++            limits = json.loads((run.root / "published/publication-limits.json").read_text())
++            self.assertEqual(limits["coverage"], "unavailable")
++
++
++if __name__ == "__main__":
++    unittest.main()
