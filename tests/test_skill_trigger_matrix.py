@@ -7,7 +7,7 @@ import unittest
 from pathlib import Path
 
 from agent_dev_kit._matcher_kernel import _frontmatter
-from agent_dev_kit.matcher import match_text
+from agent_dev_kit.matcher import format_result, match_text
 from agent_dev_kit.model import Manifest
 
 
@@ -121,6 +121,47 @@ class SkillTriggerMatrixTests(unittest.TestCase):
                         self.assertIs(explicit.get("match"), True, explicit)
                     elif kind == "negated":
                         self.assertIs(explicit.get("match"), False, explicit)
+
+
+
+    def test_optional_skill_is_not_implicitly_installed_by_a_catalog_hit(self) -> None:
+        """Production matcher: routed and lexical Optional matches both need installation.
+
+        Static catalog routing is not proof that the current target runtime
+        contains the selected optional asset.  This tests the public structured
+        response and the human-facing CLI formatter, not a native host install.
+        """
+        manifest = Manifest.load(ROOT)
+        optional = "adk-external-practice-absorption"
+        for prompt, source in (
+            ("请评估参考实现，并吸收外部实践中的设计方法", "routing"),
+            ("继续吸收外部成熟方法，提升已有 Skills 的实际执行效果",
+             "optional_skill_trigger"),
+        ):
+            with self.subTest(prompt=prompt):
+                result = match_text(manifest, prompt, scope="auto")
+                self.assertIs(result.get("match"), True, result)
+                self.assertEqual(result.get("skill"), optional, result)
+                self.assertEqual(result.get("source"), source, result)
+                self.assertEqual(result.get("profile_availability"),
+                                 "optional-skill-required", result)
+                self.assertEqual(result.get("mutation_permission"), "deny", result)
+                self.assertIn("profile_availability=optional-skill-required",
+                              format_result(result))
+
+        explicit = match_text(manifest, "继续吸收外部成熟方法",
+                              skill=optional, scope="optional-skill")
+        self.assertIs(explicit.get("match"), True, explicit)
+        self.assertEqual(explicit.get("profile_availability"), "optional-skill-required",
+                         explicit)
+
+        core = match_text(manifest, "对标优质 Skills，先只读研究具体文件方法", scope="auto")
+        self.assertEqual(core.get("skill"), "adk-skill-deep-analysis", core)
+        self.assertNotEqual(core.get("profile_availability"), "optional-skill-required")
+
+        refused = match_text(manifest, "不要吸收外部成熟方法", scope="auto")
+        self.assertIs(refused.get("match"), False, refused)
+        self.assertEqual(refused.get("mutation_permission"), "deny", refused)
 
 
     def test_portable_description_discovery_boundaries(self) -> None:
