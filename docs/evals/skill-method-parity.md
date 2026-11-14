@@ -4,7 +4,7 @@
 `tests/fixtures/skill_method_cases.json` 的情景与 expected_behavior 是**待验证假设**；本轮只可声明源文件/引用/路由/格式等 E0/E1 通过。没有真实模型 transcript 时 E2/E3/E4 均为 **not-measured**，不能用 CI 通过宣称优于 Superpowers / Matt Pocock。
 
 ## 盲评设置
-- 在同模型、温度、预算、权限、上下文及任务集下冻结 baseline/candidate：11.2.18 候选的 **champion** 基线为 11.2.17 main（`7aed1d2545babce16c41dc021ead01c8c324ce07`），candidate exact SHA 必须在真实运行前锁定。此前 11.2.16→11.2.17 预注册未执行，旧记录在 fixture 的 `superseded_unrun_plan` 中保留，不混用两批统计；来源方法只读引用。
+- 在同模型、温度、预算、权限、上下文及任务集下冻结 baseline/candidate：11.3.0 候选的 **champion** 基线为 11.2.17 main（`7aed1d2545babce16c41dc021ead01c8c324ce07`），candidate exact SHA 必须在真实运行前锁定。此前 11.2.16→11.2.17 及 11.2.17→11.2.18 预注册均未执行，旧记录分别在 fixture 的 `superseded_unrun_plan` 与 `unexecuted_candidate_history` 中保留，不混用统计；来源方法只读引用。
 - 交互任务至少保留四轮真实问答与分支决策；实现任务使用固定公开的验收命令与有效失败样例。遇到不可用宿主，写 `not-measured` 而非无音频/无模型模拟绿灯。
 - 每个方案输出脱敏原始 trace、源 SHA、命令/返回码、用户确认或拒绝、结果和工具成本。不能控制的网络/设备环境逐项标明。
 - 双人盲评先复核是否符合真实目标，再分维度给 0–4 分：问题发现、候选取舍、反馈有效性、可测试性、任务完成、额外问答/工具成本。授权/安全越界硬失败；模型作者或同一次生成不能自称独立裁判。
@@ -19,6 +19,10 @@
 - **E2/E3/E4 额外记录**：真实 native discovery/load/trigger + 多轮/实作轨迹 +独立审核/使用方确认，不可由以上测试替代。
 
 本协议只定义可复跑的试验，当前不包含任何捏造的任务成功率或 Token 节省百分比。
+
+11.3.0 的真实任务观测接入见 `docs/runbooks/task-evidence.md`；八类公开开发任务见
+`tests/fixtures/skill_execution_tasks/README.md`。`grade-task -> import-task -> compare-task-trials`
+只实现有界工件验收与调用方观测的一致性核查，继续复用原统计器；运行时真实性和最终 holdout 不由这些命令生成。
 
 ## 真实 Skill 改进评测的最小预注册批次（尚未执行）
 - 复用 `tests/fixtures/skill_method_cases.json` 中至少 5 个不同真实任务和不少于 3 次独立试验；方案候选覆盖需求澄清、debugging、TDD、review 和嵌入式目标适配。其 expected/reject 字段是**假设**，不可作为模型通过回执。

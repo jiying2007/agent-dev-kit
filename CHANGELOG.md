@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### 11.3.0 — Task evidence import and artifact acceptance
+- Add optional, non-executing task evidence import and controlled task-trial assembly into existing TraceRunFacts, RunEvidence and paired statistics. Bind initial input/workspace, source, actual Skill exposure, independent artifact acceptance and the complete event ledger without adding a runtime or a second statistics engine.
+- Retain failure, retry and subtask usage; distinguish unavailable usage from zero, estimated cost from observed cost, and fixed task-budget failure from infrastructure-invalid observations. A missed Skill trigger remains an observed result in its assigned group.
+- Add read-only development artifact acceptance for eight task categories, including wrong-output and unrelated-edit counterexamples. Development fixtures remain author-exposed and cannot serve as an independent final holdout or real model performance results.
+- Fill scoped execution gaps in existing Skill references; retain all 65 registered Skill identities, the existing router and permission boundaries.
+- Preserve the independent source review and exact-head CI of PR 264, including the corrected task-timeout denominator. Native task trials, Token savings, cost reductions and E2–E4 remain unmeasured until genuine authorized host observations are supplied.
+
 ### 11.2.18 — Reader-first docs and evidence-driven Skill lifecycle
 - Add direct public CLI smoke for Optional Skill install-marker and negative intent, plus conditional length-matched ablation guidance when real paired behavior needs causal triage; bounded Skill edits and unchanged guardrails, no extra runner.
 - Correct production Matcher Optional availability: a catalog/lexical hit now carries `profile_availability=optional-skill-required` in structured and CLI results, including fallback and explicit selection. Add production-route tests; target host still verifies installation independently.

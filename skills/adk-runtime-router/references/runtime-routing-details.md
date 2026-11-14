@@ -41,6 +41,11 @@ For Code Intelligence, preserve the `code_intelligence_provider_contract` eviden
 
 - The public matcher now returns `profile_availability=optional-skill-required` for any Optional Skill selected through explicit routing, lexical fallback, or explicit selection. This is **catalog metadata**, not an installation receipt or tool authorization; the consuming runtime must check its own trusted installed inventory before loading/executing. If absent, stay in the declared fallback/abstain path, never auto-install the source package or escalate mutation authority.
 - Core Skills retain their existing availability semantics. A failed match must not be presented as an installed or executable Skill.
+- Explicit user exclusion takes precedence over a catalog match or installed state: do not load the negated Skill, and do not install a missing Optional to make a route succeed. Keep `catalog-eligible`, `installed-eligible`, and actually `native-loaded` distinct; a planned load is not a loading receipt.
+
+## Clear execution intent and unresolved decisions
+
+An approved task package plus an explicit continuation request keeps its established execution owner; do not route it back into Explore or repeat answered questions merely because it contains words such as "plan" or "requirements". When a decision still changes scope, target, acceptance or authority, ask that decision through the existing requirements workflow. Repository facts and available inventory are read-only lookups, not questions to offload to the user. This is an execution fit check, not a replacement for the canonical matcher.
 
 ## Fallback and Failure Semantics
 

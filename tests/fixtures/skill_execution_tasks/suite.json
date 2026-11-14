@@ -1,0 +1,56 @@
+{
+  "schema_version": "adk-development-task-suite/v1",
+  "evidence_scope": "test-only",
+  "evaluation_status": "not-measured",
+  "split": "development",
+  "cases": [
+    {
+      "task_id": "deadline-repair",
+      "family": "debugging-repair",
+      "case": "deadline-repair/case.json",
+      "prompt": "deadline-repair/task.md"
+    },
+    {
+      "task_id": "review-false-positive",
+      "family": "review-feedback",
+      "case": "review-false-positive/case.json",
+      "prompt": "review-false-positive/task.md"
+    },
+    {
+      "task_id": "goal-resume",
+      "family": "goal-recovery",
+      "case": "goal-resume/case.json",
+      "prompt": "goal-resume/task.md"
+    },
+    {
+      "task_id": "kws-asset-reuse",
+      "family": "verified-asset-reuse",
+      "case": "kws-asset-reuse/case.json",
+      "prompt": "kws-asset-reuse/task.md"
+    },
+    {
+      "task_id": "crosscompile-applicability",
+      "family": "embedded-applicability",
+      "case": "crosscompile-applicability/case.json",
+      "prompt": "crosscompile-applicability/task.md"
+    },
+    {
+      "task_id": "targeted-document-edit",
+      "family": "document-preservation",
+      "case": "targeted-document-edit/case.json",
+      "prompt": "targeted-document-edit/task.md"
+    },
+    {
+      "task_id": "intent-distinction",
+      "family": "clear-ambiguous-intent",
+      "case": "intent-distinction/case.json",
+      "prompt": "intent-distinction/task.md"
+    },
+    {
+      "task_id": "optional-availability-negation",
+      "family": "optional-availability",
+      "case": "optional-availability-negation/case.json",
+      "prompt": "optional-availability-negation/task.md"
+    }
+  ]
+}

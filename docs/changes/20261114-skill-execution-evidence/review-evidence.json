@@ -1,0 +1,128 @@
+{
+  "schema": "adk-review-evidence/v1",
+  "subject_id": "20261114-skill-execution-evidence",
+  "scope": "source-change",
+  "owner": "leiwenjun",
+  "author_id": "ai/root",
+  "reviewer": {
+    "id": "ai/root/review_existing_candidate",
+    "kind": "ai",
+    "independence": "independent"
+  },
+  "reviewed_at": "2026-11-14T12:35:39Z",
+  "evidence_completed_at": "2026-11-14T12:35:31Z",
+  "verdicts": {
+    "spec": "pass",
+    "quality": "pass"
+  },
+  "findings": [
+    {
+      "id": "task-evidence-output-overwrite",
+      "severity": "major",
+      "disposition": "fixed",
+      "reason": "Full read-set and existing atomic output checks reject input/alias overwrite; invalid inputs no longer write output. Reviewed CLI regressions include hard and symbolic links."
+    },
+    {
+      "id": "task-evidence-unchecked-pairing",
+      "severity": "major",
+      "disposition": "fixed",
+      "reason": "Task trial preflight binds actual task input, initial workspace/source, per-task assigned exposure, grader and provenance before the unchanged comparator. Missing loads and task timeouts stay in the assigned population."
+    },
+    {
+      "id": "profile-source-budget-growth",
+      "severity": "major",
+      "disposition": "fixed",
+      "reason": "The first 101/102 integration failure is retained. Only the affected MCU reference was condensed; final profile size 46580 is below the unchanged 46612 cap and the fresh targeted 6/6 check passed."
+    },
+    {
+      "id": "development-fixture-ignored-log",
+      "severity": "minor",
+      "disposition": "fixed",
+      "reason": "Renamed the ignored synthetic build.log to build-output.txt and verified all thirty-six fixture files can be tracked."
+    },
+    {
+      "id": "grader-importer-path-drift",
+      "severity": "minor",
+      "disposition": "fixed",
+      "reason": "Reused the existing evidence path pattern and added rejected path cases; the changed source/test hashes were independently reread before final binding."
+    },
+    {
+      "id": "runbook-schema-field",
+      "severity": "minor",
+      "disposition": "fixed",
+      "reason": "Documented required schema_version fields, distinct acceptance/report fields, invalid-input versus invalid-comparison behavior and unavailable usage semantics."
+    }
+  ],
+  "limitations": [
+    "Independent read-only AI source review under the existing owner delegation; identities are declared, not platform-authenticated. No human approval or GitHub APPROVE is claimed.",
+    "The target is the original source commit c1ccff024b70155515dc002cf222dd6edb986363. This later evidence-only record preserves its complete original diff and file identities without hashing itself.",
+    "The original full local integration diagnostic was 101/102, with one profile size failure. Its fix passed targeted 6/6; final exact PR/main CI and immutable release are separate delivery evidence, not asserted here.",
+    "Caller-observed/test-only evidence consistency does not authenticate historical host state, capture completeness, native loading, grader independence, E2-E4 or real task/Token/cost/latency benefit.",
+    "No absent lifecycle stage was fabricated. This record grants neither product qualification nor release authority."
+  ],
+  "policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+  "validator_sha256": {
+    "src/agent_dev_kit/review_evidence.py": "be4892f464496a29dbbb41ebb56c48984bf103d8eabe2ee6117bd583d1032c47",
+    "src/agent_dev_kit/strict_json.py": "72f06f4dcaebfed83bd1ae9876e38d4f7d82d8a1473b40b66beffb6338ee94a5",
+    "src/agent_dev_kit/readiness_evidence.py": "6fdfd5bea3ee097ac21d2b2ab469378c8c84f78856061b680ebb0c5f9d726778"
+  },
+  "target": {
+    "base_commit": "ebef1106aeecbe14e9ac676b2950b81895c1ea5b",
+    "head_commit": "c1ccff024b70155515dc002cf222dd6edb986363",
+    "original_patch_sha256": "a2ff9abb78d76c7a571c1d02a68cf47ede4f2e0b3105ecb353b01210252727fe"
+  },
+  "sources": [
+    {
+      "base": "record",
+      "path": "evidence/original.patch",
+      "sha256": "a2ff9abb78d76c7a571c1d02a68cf47ede4f2e0b3105ecb353b01210252727fe"
+    },
+    {
+      "base": "record",
+      "path": "evidence/source-bindings.json",
+      "sha256": "0e778961287d8217ace3aa5b8e4ee037f2c53ca0f7dc8c746406bff8027ede33"
+    },
+    {
+      "base": "record",
+      "path": "requirements.md",
+      "sha256": "d86aa527679be30c23341eac2be09a3a82b9e9fd53ca4ef9d084820ab1774a00"
+    },
+    {
+      "base": "record",
+      "path": "design.md",
+      "sha256": "916388cded28d81550532399abb628fae79bd22952ec78e2a545aa085fa2b8f9"
+    }
+  ],
+  "evidence": [
+    {
+      "base": "record",
+      "path": "review-findings.md",
+      "sha256": "067875904dcd2a730a83f39b33e5eb67e66423195d78039c204558073c37f59c"
+    },
+    {
+      "base": "record",
+      "path": "verification.md",
+      "sha256": "bc6f15df8e39b7710dac32a83a7fb8d3ffcdf15af9a1069cfcd7a34f8250d32d"
+    },
+    {
+      "base": "record",
+      "path": "negative-results.md",
+      "sha256": "81c4e27c1f77dbecc2bac66fd69f8fda1b48cd14fb030cb844ea2bf288713be3"
+    },
+    {
+      "base": "record",
+      "path": "evidence/final-targeted-checks.json",
+      "sha256": "9a1024c164635a4597e81b9b7a8162cd2e270b3c354e22305b155940848627df"
+    },
+    {
+      "base": "record",
+      "path": "evidence/first-integration.txt",
+      "sha256": "1e7224bf9148123949774cc7be27eff343ef4b4c640c5331222b45c7133836bf"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-binding.json",
+      "sha256": "47933e446bb430f63574e12c98cbb57e55c4cdf3e6b29d87a39c5bb7ac49e78f"
+    }
+  ]
+}

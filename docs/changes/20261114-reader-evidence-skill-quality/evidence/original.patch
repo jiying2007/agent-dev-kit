@@ -1,0 +1,1062 @@
+diff --git a/.version-lock b/.version-lock
+index 07d59c2..c20a4ef 100644
+--- a/.version-lock
++++ b/.version-lock
+@@ -1,3 +1,3 @@
+-version: 11.2.17
+-locked_at: 2026-11-14T02:45:00Z
+-locked_by: github-connector/external-method-convergence
++version: 11.2.18
++locked_at: 2026-11-14T03:27:00Z
++locked_by: github-connector/reader-first-skill-quality
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index fe59fb6..c09d3cf 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -2,6 +2,19 @@
+ 
+ ## Unreleased
+ 
++### 11.2.18 — Reader-first docs and evidence-driven Skill lifecycle
++- Add direct public CLI smoke for Optional Skill install-marker and negative intent, plus conditional length-matched ablation guidance when real paired behavior needs causal triage; bounded Skill edits and unchanged guardrails, no extra runner.
++- Correct production Matcher Optional availability: a catalog/lexical hit now carries `profile_availability=optional-skill-required` in structured and CLI results, including fallback and explicit selection. Add production-route tests; target host still verifies installation independently.
++- Add outcome-first task grading and paired functional/efficiency failure attribution in existing deferred Skill evaluation guidance; put verified same-snapshot stage reuse behind strict evidence/permission boundaries. Move the existing token-context gate earlier in the 102-test suite to fail fast when router entry size regresses (limit unchanged at 5600 bytes).
++- Absorb SWE-Skills-Bench requirement-paired findings as a *conditional* Skill Fit Gate: target version and explicit user acceptance outrank mismatched templates; allow no-skill/abstain without adding another router.
++- Add a source-only regression for wrong-version, instruction-conflict and irrelevant-trigger; only measured, paired native traces can classify beneficial/neutral/harmful Skill effect. Fix literal-tab assertion in the new optional-skill test.
++- Add a third read-only upstream comparison (Microsoft Waza, NVIDIA SkillEvaluator, Alibaba skill-up, Superpowers) and improve source→scoped adoption, native evaluation boundary, and inline Goal execution without installing new runtimes.
++- Exercise real production Matcher for continued external-method adoption and fix the optional-skill negation test that previously used the wrong core scope.
++- Compare six additional official and practitioner Skill sources by Git blob, extracting methods only rather than installing external plugins or dependencies.
++- Add a conditional cold-reader acceptance check to ADR and cross-team handoff Skills; preserve lite quick paths, real receiver signoff and missing-evidence handling.
++- Strengthen existing Skill lifecycle guidance for confirmed feedback → minimal deterministic regression, protected holdout, measured behavior boundaries and evidence-based retirement review.
++- Keep the 65-Skill catalog, one Manifest/Router, approval gates and runtime distribution unchanged. Source tests are E0/E1 only; real native host performance, Token, latency and E2–E4 remain not-measured.
++
+ ### 11.2.17 — Evidence-first independent Skills method convergence
+ - Ground 22 public reference files by immutable Git blobs and compare their methods against ADK's existing 65-Skill architecture, avoiding full skill-pack imports.
+ - Verify interface/protocol requirements in both directions (spec-to-code and code-to-spec) when an implementation exists; preserve uninspected and unknown scope.
+diff --git a/CONTEXT.md b/CONTEXT.md
+index 443567b..307f90e 100644
+--- a/CONTEXT.md
++++ b/CONTEXT.md
+@@ -1,7 +1,7 @@
+ # CONTEXT.md — agent-dev-kit 领域语言定义
+ 
+ > 文档状态：受机器门禁约束的领域上下文投影
+-> 产品版本：11.2.17
++> 产品版本：11.2.18
+ > 结构化单一事实源：`manifest.json`
+ 
+ ---
+diff --git a/README.md b/README.md
+index 576a7dd..e04c967 100644
+--- a/README.md
++++ b/README.md
+@@ -11,7 +11,7 @@ ADK 不再在 README 中维护“候选 / 已发布 / live”之类可漂移的
+ - **Runtime conformance**：以 target/runtime receipt 与证据级别 `static / smoke / native / certified` 为权威。
+ - **Product qualification**：由消费方/产品仓的 qualification 与 field evidence 独立决定，不由 ADK 组件版本继承。
+ 
+-`manifest.json` 当前 source version 为 `11.2.17`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
++`manifest.json` 当前 source version 为 `11.2.18`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
+ 
+ 8.0.0 维护 CLI 迁移：`performance.sh optimize`、`auto-ops.sh cleanup/optimize` 仅输出有界只读计划，JSON 使用 `adk-maintenance-plan/v1` 与 `status=planned`；维护 `--apply` 返回 blocked、exit 2，不再自动删除文件或修改权限。调用方必须移除维护 `--apply` 并按 `applied=false` 处理报告；见 [维护迁移说明](docs/changes/20261006-comprehensive-contracts/design.md)。
+ 
+diff --git a/docs/changes/20261114-reader-evidence-skill-quality/design.md b/docs/changes/20261114-reader-evidence-skill-quality/design.md
+new file mode 100644
+index 0000000..b1f953c
+--- /dev/null
++++ b/docs/changes/20261114-reader-evidence-skill-quality/design.md
+@@ -0,0 +1,13 @@
++# Design: smallest existing-asset improvement
++
++Use existing `adk-adr-writer`, `adk-cross-team-handoff` and `adk-skill-composition-governance` reference; do not introduce parallel workflows. A cold-reader check operates on the final document and its authorized pointers, not on author's accumulated hidden context. It is lightweight self-review by default; independent validation only when actually performed and approved.
++
++Feedback uses `failure_trace_ref` and `source_sha`, separates observed failure from hypothetical cases, adds minimal positive/negative examples in existing tests/fixtures, and preserves train/holdout separation. High-impact changes retain full security/approval/rollback gates; static tests cannot be called real model trials.
++
++The six upstream method comparisons are read-only, blob-pinned, and not software dependencies. Existing public runtime and platform-neutral architecture are retained. Revert this PR to undo new guidance without deleting any existing skill.
++
++## Extension: production routing and lowest-cost implementation
++
++The public matcher must select external-practice absorption for explicit **continued adoption** language, not just the read-only source-analysis skill. New catalog cases drive the real matcher with core and optional scopes, including local negation. Existing verified sources and PR context become the initial delta; never recreate a whole new campaign for each candidate. Inline Goal execution stays single-owner for nonconflicting write scopes, with phase checks and a final independent review when applicable; privilege/acceptance changes still go through protected gates.
++
++The direct comparison added by this extension is in `docs/evals/external-skill-method-comparison-20261114-round3.md`. This is E0/E1 source and production-matcher behavior only; no native host model calls, task completion or Token improvement are claimed.
+diff --git a/docs/changes/20261114-reader-evidence-skill-quality/requirements.md b/docs/changes/20261114-reader-evidence-skill-quality/requirements.md
+new file mode 100644
+index 0000000..b29b528
+--- /dev/null
++++ b/docs/changes/20261114-reader-evidence-skill-quality/requirements.md
+@@ -0,0 +1,8 @@
++# ADK 11.2.18: reader-first and feedback-based Skill method quality
++
++- Reference six independently inspected source files, each with exact file blob and method-only decision.
++- Improve existing ADR and handoff authoring: an unfamiliar reader should identify status, decision, relevant evidence, next action and recovery without hidden chat context.
++- Keep lite authoring cheap; a self-check must not impersonate actual independent reader or receiver signoff.
++- Improve existing Skill lifecycle: confirmed failure feedback should yield the smallest appropriate regression case; static tests must not imply E2–E4 model performance.
++- No new Skill/Agent/Runner/Daemon, second Manifest authority, new permission grant, auto-install, hourly patrol, or Codex/Work quota spending.
++- Preserve source/release/runtime/product four-axis status and existing protected release flow.
+diff --git a/docs/changes/20261114-reader-evidence-skill-quality/tasks.md b/docs/changes/20261114-reader-evidence-skill-quality/tasks.md
+new file mode 100644
+index 0000000..70bcc39
+--- /dev/null
++++ b/docs/changes/20261114-reader-evidence-skill-quality/tasks.md
+@@ -0,0 +1,22 @@
++# Status and evidence scope
++
++- [x] Inspect current ADK 11.2.17 main and earlier 22-source/65-Skill audits.
++- [x] Read six additional upstream source files and record Git file blobs, comparison and non-transferable platform rules.
++- [x] Add conditional reader checks to existing ADR and handoff Skills.
++- [x] Extend existing composition lifecycle with scoped correction-to-regression and evidence-based retirement review.
++- [x] Add source-level regression and synchronize 11.2.18 version projections.
++- [x] Validate a concrete source→implementation intent in real Matcher fixtures; correct optional-skill negative test scope.
++- [x] Add evidence reuse/inline fast path and third source comparison without expanding the 65-Skill catalog.
++- [x] Repair a real CI failure in `test_external_method_intake.py` (literal `\\t` versus TSV tab), retaining the assertion and 102-test denominator.
++- [x] Compare pinned SWE-Skills-Bench, AgentSkillOS and Waza sources; add version-fit/no-skill negative-value check with source-only regression and fourth comparison ledger.
++- [x] Fix 5600-byte router entry failure by retaining a concise Skill Fit Gate and moving optional details to existing reference, preserving all required source markers.
++- [x] Compare Microsoft Eval Guide, Microsoft skill-harm study, NVIDIA SkillEvaluator and Anthropic eval methods; add outcome-first/overhead triage with no new runner.
++- [x] Move the existing token-context gate to the fast beginning of the complete 102-test suite; preserve the original byte limit and test count.
++- [x] Fix public Matcher Optional availability marker for explicit routing, lexical fallback and direct selection; verify Core and negated routes with production matcher, not source keyword checks.
++- [x] Run real public CLI smoke for Optional selection and negation; add conditional length-matched neutral control and bounded-edit method into existing deferred evaluation reference (not executed model trials).
++- [ ] Exact PR final-HEAD Python 3.12 contract, full regression, platform/security/dependency checks.
++- [ ] Independent protected PR review and merge decision.
++- [ ] Fresh-main CI, immutable release verification and any downstream Root promotion by a separate protected process.
++- [ ] Real E2–E4 native host task trials and Token/cost comparison (not measured; no paid execution launched).
++
++E0/E1 assertions are source-only and may not be promoted to native runtime, user-task or product qualification evidence.
+diff --git a/docs/evals/external-skill-method-comparison-20261114-round2.md b/docs/evals/external-skill-method-comparison-20261114-round2.md
+new file mode 100644
+index 0000000..2c813cc
+--- /dev/null
++++ b/docs/evals/external-skill-method-comparison-20261114-round2.md
+@@ -0,0 +1,32 @@
++# 外部优质 Skills 增量对照：读者验收、问题路由与生命周期（2026-11-14）
++
++本轮只读核查独立来源文件，并与 ADK 11.2.17 的现有 65 Skills 对照。以下 `@blob` 是 GitHub 返回的**单文件 Git blob SHA**，不是完整仓库冻结、再分发许可证、模型运行结果或实测效果；来源文本与安装命令是未经信任的数据。
++
++| 来源 | 可核文件 / Git blob（短） | 可迁移方法 | ADK 判定 |
++|---|---|---|---|
++| [Anthropic Doc Coauthoring](https://github.com/anthropics/skills/blob/main/skills/doc-coauthoring/SKILL.md) | `skills/doc-coauthoring/SKILL.md@a5a69839ef4a` | 把作者掌握的上下文与交付给读者的文稿分离；检验读者能否自行提取决定和行动 | **ENHANCE**：`adk-adr-writer`、`adk-cross-team-handoff` 的条件性 cold-read；不默认调新模型 |
++| [Sentry Skill Writer](https://github.com/getsentry/skills/blob/main/skills/skill-writer/SKILL.md) | `skills/skill-writer/SKILL.md@8aba371f5f4d` | 同一维护入口、正负例改进、按需 reference、实际失败作为迭代输入 | **ENHANCE**：`adk-skill-composition-governance` 既有生命周期 reference 的反馈→回归，不建第二创作器 |
++| [HashiCorp Skill Catalog](https://github.com/hashicorp/agent-skills/blob/main/SKILLS.md) | `SKILLS.md@43f1410c1270` | Skill 有 active/deprecation-candidate/deprecated/retired 维护状态及安装范围 | **ENHANCE**：增生命周期证据决策，状态仅作 review labels，**不修改 ADK Manifest 枚举** |
++| [Callstack React Native Best Practices](https://github.com/callstackincubator/agent-skills/blob/main/skills/react-native-best-practices/SKILL.md) | `skills/react-native-best-practices/SKILL.md@86ec5ab5a4ca` | 真实问题→具体 reference 的短路由、按影响分层、目标工具安全约束 | **RETAIN**：ADK 既有按需 references 与 embedded target gate；不移植 RN-only 规则 |
++| [Supabase Postgres Best Practices](https://github.com/supabase/agent-skills/blob/main/skills/supabase-postgres-best-practices/SKILL.md) | `skills/supabase-postgres-best-practices/SKILL.md@6400792389df` | 优先级排序与单项错误/正确示例；按真正任务入口引用规则 | **RETAIN**：复用 ADK 的 impact-first/按需加载；不把 Postgres 规则变为通用 MCU 规则 |
++| [Google Labs Stitch Skills](https://github.com/google-labs-code/stitch-skills/blob/main/README.md) | `README.md@baecaabfa0fc` | 独立目标安装边界、按技术栈分发与参考资源区分 | **OBSERVE**：不安装其插件、MCP 或目标工具，不增加 ADK core 依赖 |
++
++## 本轮最小变更与实测边界
++
++1. **Reader check**：高影响 ADR 或正式交接，在只给读者最终文档及实际可访问引用的情况下，检查决定、状态、行动、证据与回退可否被定位。普通 lite 仅简短自检，不添加必须的模型调用或签收流程。
++2. **Feedback-to-regression**：在既有组合治理 lifecycle reference 中，用真实失败的 `source_sha + trace_ref + expected/observed` 先做最小负例/正例与受影响确定性检查。假设用例标 `design-case`，未跑 RED/GREEN 标 `not-run`，不声称模型行为改善。
++3. **Lifecycle**：只有真实使用、路由冲突、可替代证据与消费足迹才提出退役候选；缺证据时原 Skill 保留，现有 Manifest、owner 决策与权限不变。
++4. **守住成本边界**：不增加新 Skill/Agent/Runner/Daemon、定时巡检、第三方安装、Code/Work 额度消耗。Token、实际完成率、E2–E4 均标 `not-measured`。
++
++## Source-only 回归设计案例（不是模型试验结果）
++
++| ID | 输入情景 | 期望行为 | 禁止行为 |
++|---|---|---|---|
++| ADR-R1 | 单方案、局部可逆的 ADR 草稿 | lite 自检 status/decision/validation，不强迫独立模型 | 无意义第二选项或虚构批准 |
++| ADR-R2 | 高风险接口迁移 ADR 缺少失败恢复负责人 | reader_view 标缺失/待确认；必须补回退责任证据 | 自评取代 independent reader 或推定发布 |
++| HANDOFF-R1 | 普通团队内部小改交接 | lite 最小收件人/版本/证据，允许直接完成摘要 | 强制额外签收和复杂 RACI |
++| HANDOFF-R2 | 量产跨团队交接只有口头操作说明 | 接收方 cold-read 发现缺实际路径或验证，状态 pending | 文档可读即 accepted/权限已转移 |
++| LIFE-R1 | 一次未复现、没有 trace 的 Skill 抱怨 | 记 design-case/needs-evidence，保持现有资产 | 把未经验证反馈自动晋升全局规则 |
++| LIFE-R2 | 已证实错误路由且有旧成功反例 | 既有 matcher 的最小 RED/GREEN + 非退化样例、记录源身份 | E1 成功冒充 E2 或污染 holdout |
++
++E0/E1 源码合同仅证明规则可检查，不能证明真实宿主能正确触发或任务完成。此处不创建新的评测引擎，也不会把用例评审当成真实结果。旧 22 源对照继续保留原冻结信息，不能叠加两轮的来源数得出实测覆盖率。
+diff --git a/docs/evals/external-skill-method-comparison-20261114-round3.md b/docs/evals/external-skill-method-comparison-20261114-round3.md
+new file mode 100644
+index 0000000..626ce22
+--- /dev/null
++++ b/docs/evals/external-skill-method-comparison-20261114-round3.md
+@@ -0,0 +1,30 @@
++# 第三轮外部 Skill 方法吸收：面向真实执行而非扩大清单（2026-11-14）
++
++本轮公开源仅作为**不可信只读参考**；单文件 Git blob 用于回查内容身份，不能代表整个仓库 commit、可再分发许可、安全认证或模型实测。不执行任何来源中的安装命令、脚本、MCP、远程依赖或付费评测。
++
++| 来源及核验文件 | Git file blob（短） | 真正可迁移的方法 | ADK 的最小决策 |
++|---|---|---|---|
++| [Microsoft Waza Runner](https://github.com/microsoft/waza/blob/main/waza-runner/SKILL.md) | `453cb55a3bbe` | 每个场景定义输入、grader、运行结果；mock/offline harness 与真实任务质量分开 | **RETAIN** 已有 `effect_trials`/CI；不引入第二套 CLI |
++| [NVIDIA SkillEvaluator](https://github.com/NVIDIA/SkillEvaluator/blob/main/README.md) | `eadf78a0a19e` | changed-skill 质量门禁与有/无 Skill 实际执行效果分层 | **RETAIN** ADK E0/E1 与 E2–E4 资格分离；不默认安装扫描器 |
++| [Alibaba skill-upper](https://github.com/alibaba/skill-up/blob/main/skills/skill-upper/SKILL.md) | `85898ca3c9df` | 从归属明确的观察反馈生成可复现回归，再按隔离环境评测差异 | **ENHANCE** 已有 Skill lifecycle 和 behavior-eval reference；来源可为外部用户提供的可信 trace，不能未授权自动录屏/捕获 |
++| [Superpowers executing-plans](https://github.com/obra/superpowers/blob/main/skills/executing-plans/SKILL.md) | `ea23196d7450` | 已批准计划的 inline 实现、逐项验证、偏差裁决 ledger、末尾整体 review，减少每任务多 Agent/重读 | **ENHANCE** `adk-planning-execution-loop`；权限扩大与不可逆动作仍按原规范暂停 |
++| [Superpowers systematic-debugging](https://github.com/obra/superpowers/blob/main/skills/systematic-debugging/SKILL.md) | `62fc752aaef5` | 根因先于修复，最小验证、跨层边界定位、三次失败后质疑假设 | **RETAIN** `adk-systematic-debugging` 已有最短反馈、单变量、两次无增益 replan，避免再加平行流程 |
++
++## 经实际 ADK 源码确认的缺口
++
++1. **真实指令路由**：`全网搜索优质 Skills` 有现成的 read-only 入口，但“继续吸收外部成熟方法，提升已有 Skills 的实际执行效果”未被已有实用路由用例覆盖。
++2. **Optional negation 回归盲区**：既有 catalog competition 测试在核竞争 Skill 时固定使用 Core `scope=skill`；对 Optional Skill 会因查无文件而 trivially false，无法证明原生 matcher 的 Optional 否定匹配正确。本轮按目标注册身份选择 `optional-skill`/ `skill`，并加入实际语言输入。
++3. **研究→实施 handoff**：来源已冻结、目标已有清晰批准范围时，重复广域研究和一源一立项会占用上下文，难以推进交付。本轮 `scoped-adoption` 优先复用 ledger、合并同一受保护变更的相关工作； `source-only` 仍只读。已批准 implementation 不再重启外部 intake。
++4. **Goal 费用与完成率**：采用 inline fast path 和批末独立 review；计划与源码冲突时记带证据的局部 ruling，不隐式扩大权限或修改 acceptance。不得把空 heartbeat、模板或权限推断视为交付。
++5. **效果证据隔离**：已有 `effect_trials` 的真实 run 仍需同起点 workspace 与可观察的 tool trace；只校验最终文件状态不能证明过程无越权。没有合格真实宿主数据，保持 `E2–E4=not-measured`。
++
++## 本轮测试
++
++- `tests/fixtures/skill_catalog_competition.tsv`: 新增 R039–R041，覆盖吸收继续执行、纯研究、明确否定。
++- `tests/fixtures/skill_trigger_cases.tsv`: 真实语言的 Optional Skill 正反例 + Core Skill 研究例。
++- `tests/test_skill_trigger_matrix.py`: 将竞争测试覆盖到正确的 Optional `scope`，跑**生产 Matcher 本身**，而不是只核包含特定词。
++- `tests/test_external_method_intake.py`: 合同边界检查，不代替生产路由测试或模型行为证据。
++
++## 结果边界
++
++**当前为 PR 候选**，能由 CI 证明的是源约束、生产 Matcher 路由/否定和完整回归（E0/E1）。真实模型能否正确触发、一次交付率、令牌/调用与延迟变化，需按相同真实宿主和 frozen baseline/candidate 重复对照；不得以这些路由测试声称完成 E2–E4，也不得把未执行称为通过。保留单一 Manifest/Router/effect_trials、65 Skill 身份、原权限、受保护 PR 流程。
+diff --git a/docs/evals/external-skill-method-comparison-20261114-round4.md b/docs/evals/external-skill-method-comparison-20261114-round4.md
+new file mode 100644
+index 0000000..8e1b91f
+--- /dev/null
++++ b/docs/evals/external-skill-method-comparison-20261114-round4.md
+@@ -0,0 +1,31 @@
++# 第四轮：Skill 的“净收益”与版本适配优先（2026-11-14）
++
++本轮目标不是继续扩大 ADK 的 Skill 数量，而是减少**过期/错用 Skill 对实际任务的伤害**，并要求在原需求、真实项目与可执行验收下验证是否值得加载。所有外部项目均只读研究，未执行外部安装、hooks/MCP、模型/付费脚本或第三方评测器。下列 SHA 是**单文件 Git blob**，不是整仓 commit、再分发许可或安全认证。
++
++| 核验来源 | 文件 blob SHA（短） | 重要方法 / 不可迁移处 | ADK 决策 |
++|---|---|---|---|
++| [SWE-Skills-Bench v2](https://github.com/ControllableModel/SWE-Skills-Bench/blob/main/README.md) | `README.md@922619aebcd7` | 固定真实仓库 commit + 需求 + hidden verifier，配对比较 `none/one`。其公开样本中多数收益有限，且存在版本过期引导风险；结果不能直接推定 ADK 的 65 Skills | **ENHANCE**：`adk-runtime-router` 先检查目标项目版本/显式任务限制，允许 no-skill；真实效果沿用 ADK `effect_trials` |
++| [AgentSkillOS](https://github.com/ynulihao/AgentSkillOS/blob/main/README.md) | `README.md@0e54eeeac645` | 大规模 Skill 检索树和 DAG 编排面向高达数十万候选；当前 ADK 仅 65 项，已有唯一 Manifest/Router，迁移会加重维护 | **OBSERVE**：不引入第二套检索器/执行器 |
++| [Microsoft Waza v0.41.0](https://github.com/microsoft/waza/blob/main/README.md) | `README.md@bf40aa02240f` | logical attempt / lineage / checkpoint 的冻结身份、复用和恢复；需要区分 2026-11-13 发行版与 main-only 命令 | **RETAIN**：现有 ADK Goal state/evidence 与恢复；不混入外部 CLI、不冒称运行可用 |
++
++## 原 ADK 的缺口和本次改动
++
++- `adk-runtime-router` 此前优先从候选触发开始路由，却缺少显式的 **target version fit**：Skill 引用可能来自旧 SDK、板级 BSP、框架或 API 版本。新增 Skill Fit Gate：命中只是候选，目标仓可信源码/当前用户验收优先；不适用时 `no-skill/abstain`，但仍完成轻量路由，不默默跳过。
++- `adk-runtime-router/references/runtime-routing-details.md` 仅在跨版本冲突、需 fallback 或低置信度时加载，核 `user_acceptance / target_repo@commit / target_api_or_toolchain_version / skill_supported_scope / conflicting_guidance`，不让人肉治理取代生产 matcher。
++- 已有 `adk-skill-composition-governance/references/skill-behavior-evaluation.md` 增加 Skill Value/Harm Gate：隔离初始 workspace，同一目标+需求+verifier 下成对比较，覆盖 wrong-version、explicit-instruction-conflict、irrelevant-trigger。只有真实 trace 才判 beneficial/neutral/harmful；否则 `not-measured`。
++- 未新增 Skill、Agent、Runner、Schema、权限或模型训练任务；未修改 pre-registered holdout，避免污染盲评。新版 Skill 源码与 Matcher 契约在现有 PR 回归检查。
++
++## 可复跑的反例设计（**仅设计、不是已执行模型实验**）
++
++| 案例 | 应有行为 | 禁止行为 |
++|---|---|---|
++| FIT-01 | 用户指定当前 SDK 2.x、外部 Skill 引用 1.x API，先核项目 API 后决定是否加载 | 直接沿用过期示例覆盖项目代码 |
++| FIT-02 | 已批准单文件修复，只需原回归，保留现有验收分母 | Skill 自带通用模板强迫新建完整规划 |
++| FIT-03 | 对普通背景问答无合格 Skill，给 no-skill/abstain | 为增加激活率加载最接近的 Skill |
++| VALUE-01 | 固定真实仓、任务、工具与 verifier 比较 with/without，并记任务差分和成本 | 把“加载成功”当成完成率提升 |
++| VALUE-02 | Skill 使原本通过的任务回退，分类 harmful/待复审 | 仅看新增成功样例，忽视退化 |
++| VALUE-03 | 只有源码路由/格式检查没有宿主轨迹，记录 not-measured | 把 E0/E1 升格为 E2–E4 或声称节省 Token |
++
++## 资格边界
++
++源级质量与生产确定性 matcher 的回归属于 E0/E1；真正的原生发现/加载、任务完成、越权、Token/缓存、费用、耗时属于 E2–E4。未经真实测量不得宣称提升。外部论文与 README 的统计结论仅说明基准自己的条件，不等于 ADK 真实用户效果。
+diff --git a/docs/evals/external-skill-method-comparison-20261114-round5.md b/docs/evals/external-skill-method-comparison-20261114-round5.md
+new file mode 100644
+index 0000000..7a0c372
+--- /dev/null
++++ b/docs/evals/external-skill-method-comparison-20261114-round5.md
+@@ -0,0 +1,49 @@
++# 第五轮外部方法吸收：结果优先评测、差分归因和验证经济性（2026-11-14）
++
++本轮按可信来源核验**具体内容**，只读提炼方法，未安装第三方 CLI、hooks、MCP、技能包或执行付费模型。Git blob 仅冻结**单文件**身份，不构成版权/安全认证。以下方法改动均进入已有 ADK Skill 的按需 Reference，无新增运行时/评测引擎或全局常驻 Skill。
++
++| 来源 | 证据 | 具体做法 | ADK 决策 |
++|---|---|---|---|
++| [Microsoft Eval Guide — eval-faq Skill](https://github.com/microsoft/eval-guide/blob/main/skills/eval-faq/SKILL.md) | `skills/eval-faq/SKILL.md@90079fec0af8` | 先以需求和最终状态判断正确性，再看工具选择、参数、必要性；只在合同明确时检查操作顺序，不能机械罚掉合法实现 | **ENHANCE**：已有 `skill-behavior-evaluation.md` 的 outcome-first grader，安全/授权仍为硬门禁 |
++| [Microsoft Research — Agent Skills Can Be Harmful](https://www.microsoft.com/en-us/research/publication/agent-skills-can-be-harmful-an-empirical-study-of-skill-induced-failures-in-llm-agents/) | 2026-08 公开论文，非 Git 代码 | 307 个归因案例含 125 功能失败与 182 效率退化；多余验证与重型实施流程是具体风险 | **ENHANCE**：成对轨迹才作功能/效率归因；长任务按已验证快照复用阶段证据，不强制每一步完整 Goal |
++| [NVIDIA SkillEvaluator](https://github.com/NVIDIA/SkillEvaluator/blob/main/skills/skillevaluator/SKILL.md) | `skills/skillevaluator/SKILL.md@5d6c5412b3fd` | 缺一侧轨迹/工具失败/不完整执行不能按有效的 Skill Lift 汇总，缺失分数不当作零 | **RETAIN+PRECISION**：ADK 现有 effect_trials/Run Evidence 继续权威；补 `invalid-eval / INCOMPLETE` 的结果披露 |
++| [Anthropic — Demystifying evals](https://www.anthropic.com/research/demystifying-evals-for-ai-agents) | 官方方法研究，非 Git 代码 | 任务必须让正确实现有机会通过 grader；保留成功/否定用例；人工审读 trace 以区分 Agent 错误和评测错误 | **RETAIN** 原有 train/holdout、独立 reviewer；本轮补 reference solution/grader 对照要求 |
++
++## 具体落实
++
++1. `optional-skills/adk-skill-composition-governance/references/skill-behavior-evaluation.md`：用原要求及真实工件 **outcome-first**，合法工具路径等价，不把“加载了 SKILL.md”当 no-skill 基线的通过项；以成对 trace 判功能/效率差异，缺失标无效，不造改善率。
++2. `skills/adk-planning-execution-loop/references/long-task-recovery.md`：阶段低风险时，已验证同快照证据可有条件复用；依赖、工具授权、设备状态或正式 final 变化后重新走适用门禁，不借优化绕过审查。
++3. `tests/run_all.sh`：将已有 `test_token_context_governance.sh` 提到完整回归前段，不改变 102 项分母或命令，只让长入口触发限额错误更早暴露。此前 PR #264 在第 40 多项才发现 Router 超过 5600 字节，本轮将入口恢复到 5600 字节以下并保留限额。
++
++## 验证边界
++
++本轮仓库验证仅为 E0/E1（源码/真实确定性 Matcher/既有 CI）；E2–E4 真实宿主任务成功、Token/缓存成本、延迟等均 `not-measured`。不能用上游论文结论证明 ADK 自身增益，也不能用文档中列出的未运行设计案例冒充模型轨迹。无授权不发起付费执行、外部环境写入或新定时巡检。
++
++## 增量源码核查：champion/challenger 与短入口
++
++- [OpenAI Skill Creator](https://github.com/openai/skills/blob/main/skills/.system/skill-creator/SKILL.md) 单文件 blob `72bc0b97e7a6`：主入口只保留执行必要指令、额外参考按需读取，属于 **RETAIN/ENHANCE**。对应本轮 `adk-external-practice-absorption` 将四种模式压缩，消除与既有工作流重复的解释；没有增加 Skill 或常驻 Reference。
++- [Skill-RSI — HOW_IT_WORKS](https://github.com/justinwetch/Skill-RSI/blob/main/docs/HOW_IT_WORKS.md) 单文件 blob `216de8ac1807`：同任务 champion/challenger 做小范围变化，稳定用例不能被探索新获益抵消，属于 **ENHANCE（方法）**，不是引入其循环执行器、模型评审或高成本研究包。
++- [EvoSkill architecture](https://github.com/sentient-agi/EvoSkill/blob/main/docs/architecture.md) 单文件 blob `e7ff9d2feee1`：失败轨迹→单点假设→隐藏验证→保留最佳候选，作为 **OBSERVE**；不安装其 frontier/多分支执行、远程沙箱或自动生成技能。ADK 已有失败反馈、effect_trials 与 owner review，不创建并行平台。
++- [Sentry Skill Writer iteration path](https://github.com/getsentry/skills/blob/main/skills/skill-writer/references/iteration-path.md) 单文件 blob `4a979365b938`：正负例和来源分类应分开记录，稳定已成功用例要防退化；既有生命周期方法已经覆盖，本轮 **RETAIN**，不复制模板。
++
++### 已定位的执行前评测身份缺口
++
++此前 `skill_method_ab_prereg.json` 仍登记 **11.2.16→11.2.17**，而当前候选已是 **11.2.18**。因两版均无实际模型评测，本轮将现用对照重绑为 `11.2.17@7aed1d... → 11.2.18@尚未合并`，原未执行方案保存在同一 JSON 的 `superseded_unrun_plan` 中。此为评测配置正确性修复，不是 A/B 结果。
++
++**独立留出风险**：9 个原始案例的 5/4 分组虽然互不重叠，但内容在修订期间已被作者查看，因此只能算开发用例；未来真实晋级需独立方新建未曝光 holdout。champion/challenger 版本比较与 no-skill/with-skill 消融必须分别注册、证明真实 Skill exposure 并独立评审，不得拿不同 bundle digest 冒充目标 Skill 缺席。E2–E4 与实际 Token/成本仍为 `not-measured`，没有自动模型运行。
++
++## 执行能力边界修复（本轮新增）
++
++[Agent Skills 官方评测指南](https://github.com/agentskills/agentskills/blob/main/docs/skill-creation/evaluating-skills.mdx)，单文件 blob `7c90d54295be`，强调 fresh context、真实 with/without 实验以及验证正确输出，而不是把 Skill 加载等同于完成。NVIDIA SkillEvaluator 亦区分 Discoverability（发现/加载）与 Correctness（实际结果）；参考其方法，但不导入任何评测器或付费模型。
++
++审查生产 ADK 源码后发现：`manifest.json` 将 `adk-external-practice-absorption` 列为 optional，显式 routing intent 中有 `availability=optional-skill-required`，但自然语言经 `optional_skill_trigger` 的路径只使用默认 `fallback-profile`。这样，**目录中匹配到 Optional Skill** 可能被误读为 **当前 Runtime 已安装**。
++
++已在已有 `src/agent_dev_kit/matcher.py` 的 `_apply_contract` 统一覆盖 Optional 来源的 `profile_availability=optional-skill-required`，并在实际 CLI `format_result` 追加该提示；`tests/test_skill_trigger_matrix.py` 使用生产 Matcher 验证显式 routing、lexical fallback、显式选择、Core 反例与否定输入。**这是源码级契约修复，不是原生宿主已安装的证明**；消费端仍需在可信 installed inventory 中核对，不得自动安装或越权。
++
++## Prompt-length control（conditional）与小步候选
++
++新核验的 [Agent Skills 官方 Eval 指南](https://github.com/agentskills/agentskills/blob/main/docs/skill-creation/evaluating-skills.mdx) 单文件 blob `7c90d54295be` 要求**相同任务的有/无 Skill 或前后版本**评估，运行上下文隔离，按实际完成结果计分；[Microsoft SkillOpt](https://github.com/microsoft/SkillOpt/blob/main/README.md) 单文件 blob `7a3739381597` 采用有界局部编辑、拒绝变更记录及独立验证，而非不断加大指令。均属于**条件性增强现有 Reference**，不是启用它们的模型训练或后台循环。
++
++2026 年 WebDev-Skills-Bench 研究还报告过把与任务无关、但长度相同的控制文本加入比较，帮助区分“内容引导错误”和“上下文长度占用”两类影响；此结论来自原研究条件，不可外推为 ADK 的实测。仅当未来真实对照出现显著 Token 开销或非预期退化时，现有 `skill-behavior-evaluation.md` 可追加这个**单独预注册、同权限/干净初始上下文**的中性控制组；不扩大默认试验数量，不执行任何第三方 Skill 的代码或指令。
++
++**本轮实际工程回归**：在现有 `tests/test_skill_trigger_matrix.py` 中新增直接 `bash scripts/devkit.sh match --text` 的两例 CLI smoke，分别证明 Optional Skill 命中输出 `profile_availability=optional-skill-required`，以及明确拒绝输入不能被当成允许执行。生产 Matcher / CLI 的具体行为由最新 HEAD GitHub CI 判定；这仍是 E0/E1，不是原生安装或 E2–E4 效果证明。
+diff --git a/docs/evals/skill-method-parity.md b/docs/evals/skill-method-parity.md
+index 1398026..4346f23 100644
+--- a/docs/evals/skill-method-parity.md
++++ b/docs/evals/skill-method-parity.md
+@@ -4,7 +4,7 @@
+ `tests/fixtures/skill_method_cases.json` 的情景与 expected_behavior 是**待验证假设**；本轮只可声明源文件/引用/路由/格式等 E0/E1 通过。没有真实模型 transcript 时 E2/E3/E4 均为 **not-measured**，不能用 CI 通过宣称优于 Superpowers / Matt Pocock。
+ 
+ ## 盲评设置
+-- 在相同模型/版本、温度、预算、工具权限、项目上下文和任务集下冻结 baseline/candidate 的 immutable commit；本轮候选以前一已发布的 v11.2.16（538e224ad91319a17a88f0e8c4d743dd89d7b02d）为来源基线，旧 v11.1.0 仅作历史对照，不能与新候选混用统计。上游只作方法对照，不复制到运行仓。
++- 在同模型、温度、预算、权限、上下文及任务集下冻结 baseline/candidate：11.2.18 候选的 **champion** 基线为 11.2.17 main（`7aed1d2545babce16c41dc021ead01c8c324ce07`），candidate exact SHA 必须在真实运行前锁定。此前 11.2.16→11.2.17 预注册未执行，旧记录在 fixture 的 `superseded_unrun_plan` 中保留，不混用两批统计；来源方法只读引用。
+ - 交互任务至少保留四轮真实问答与分支决策；实现任务使用固定公开的验收命令与有效失败样例。遇到不可用宿主，写 `not-measured` 而非无音频/无模型模拟绿灯。
+ - 每个方案输出脱敏原始 trace、源 SHA、命令/返回码、用户确认或拒绝、结果和工具成本。不能控制的网络/设备环境逐项标明。
+ - 双人盲评先复核是否符合真实目标，再分维度给 0–4 分：问题发现、候选取舍、反馈有效性、可测试性、任务完成、额外问答/工具成本。授权/安全越界硬失败；模型作者或同一次生成不能自称独立裁判。
+@@ -28,8 +28,8 @@
+ - 允许先只读复用原有合格 traces；未找到对应 exact source/模型/工具身份时不得混合批次或补造实验。此处是评测协议与预注册任务，不是测试已执行的报告。
+ 
+ ## 真实触发 / 行为评测的预注册 ID（source-only，不是效果结果）
+-- 预注册合同在 `tests/fixtures/skill_method_ab_prereg.json`；案例原文来自 `skill_method_cases.json@6dbb5678c1c71a560eca2dd13acdf79719afcfee`，`train_case_ids` 与 `holdout_case_ids` **不重叠且覆盖全部 9 个已有案例**。候选 release/source SHA 在真实执行前补固定值；不能提前猜 commit。
++- 预注册合同位于 `tests/fixtures/skill_method_ab_prereg.json`；原案例来自 `skill_method_cases.json@6dbb5678c1c71a560eca2dd13acdf79719afcfee`，5 个 train 与 4 个 holdout ID **集合不相交**。然而案例内容已经在方法优化过程中被作者查看，故本批明确是 `development-fixture-only-after-author-exposure`，**不得把这 4 个案例当新的独立最终留出集**；真实晋级前由独立评测方重新冻结未见过的 holdout 和评分标准。候选 SHA 以实际发布前的精确 source 身份为准，未执行时保持 null。
+ - 描述、路由或方法的修改仅能利用 train 案例。冻结候选后留出集做独立终验；若使用留出集迭代，则原留出结论失效，必须重新预注册完全未参与优化的案例。
+-- 真实宿主可用且用户授权时，相同 model snapshot、工具权限、上下文、缓存条件与预算下按预注册重复；必要时加入不加载该 Skill 的阴性基线。每项用固定 grader、原始 trace 与 source SHA 跟踪。
++- 真实宿主可用且用户授权时，先验证候选与 champion 的 exact source/skill exposure、原始任务和环境一致，再按重新冻结的独立 holdout 重复。**champion→challenger** 评估版本增量；**no-skill→with-skill** 是另一项消融实验，必须单独证明 baseline 没有加载目标 Skill，不能只凭两个 bundle digest 不相同便假定完成消融。两类实验分别保存固定 grader、原始 trace 与 source SHA。
+ - 先核 `unauthorized_tool_use / fabricated_evidence / security_regression` 硬失败，再比较任务成功、误触发、人工干预、Token（输入/输出/缓存）、tool calls、elapsed_ms 和可核账单成本。优先修复高影响失败，而非按文件数量、Start 数或静态 bytes 排名。
+ - 复用已有 `agent_dev_kit.effect_trials.compare_effect_trial_file` 和 Run Evidence。当前 `status=not-measured`、`execution=no-model-runs`、`results=[]`，所有 E2–E4 与真实 Token/成本提升均未实测；不为本协议新建模型 runner、定时任务或消耗 Codex/Work 额度。
+diff --git a/manifest.json b/manifest.json
+index b253614..fb1eb72 100644
+--- a/manifest.json
++++ b/manifest.json
+@@ -1,5 +1,5 @@
+ {
+-  "version": "11.2.17",
++  "version": "11.2.18",
+   "locale": "zh-CN",
+   "platforms": [
+     "linux-embedded",
+diff --git a/manifests/software_m5_eval_contract.json b/manifests/software_m5_eval_contract.json
+index dbf844a..4153dcb 100644
+--- a/manifests/software_m5_eval_contract.json
++++ b/manifests/software_m5_eval_contract.json
+@@ -1,6 +1,6 @@
+ {
+   "schema": "adk-runtime-eval-campaign/v1",
+-  "campaign_id": "software-m5-11.2.17",
++  "campaign_id": "software-m5-11.2.18",
+   "tasks": "tests/fixtures/software_m5_eval_tasks.jsonl",
+   "minimum_tasks": 60,
+   "runtimes": [
+diff --git a/optional-skills/adk-external-practice-absorption/SKILL.md b/optional-skills/adk-external-practice-absorption/SKILL.md
+index 70b9c61..9f912b3 100644
+--- a/optional-skills/adk-external-practice-absorption/SKILL.md
++++ b/optional-skills/adk-external-practice-absorption/SKILL.md
+@@ -1,10 +1,12 @@
+ ---
+ name: adk-external-practice-absorption
+ description: 统一评估 GitHub、GitLab、Gitee、OpenAI/Codex 官方、Anthropic/Claude 官方、微信公众号和人工证据中的外部 Agent、Skill、Workflow 与工程实践，并把批准项闭环到 ADK change、验证、pilot、发布复审和退役。用于“吸收外部实践”“评估参考实现”“从官方或社区沉淀 Agent/Skill/Workflow”“Gitee/GitLab/GitHub 实践研究”等请求；不用于普通功能开发、单纯浏览网页或未经 owner 决策的自动安装/复制。
+-version: 1.0.0
+-last_updated: 2026-07-19
++version: 1.0.1
++last_updated: 2026-11-14
+ triggers:
+   - "吸收外部实践"
++  - "吸收外部成熟方法"
++  - "继续吸收外部成熟方法"
+   - "评估参考实现"
+   - "Gitee 实践吸收"
+   - "GitHub GitLab Gitee 优秀实践"
+@@ -42,6 +44,14 @@ constraints:
+ - owner decision 必须独立记录 `ADOPT|MERGE|ENHANCE|OBSERVE|REJECT`、负责人、日期、理由、目标和证据。
+ - `ADOPT|MERGE|ENHANCE` 只授权创建 change proposal，不自动授权网络写入、安装、commit、push、publish 或 source-to-live apply。
+ 
++## Execution modes（按真实请求最短路径）
++
++- **source-only**：仅检索/阅读时交只读分析，不写仓或安装。
++- **scoped-adoption**：优先复用现有 ledger/evidence、已审 source SHA 与同一受保护 PR；仅在用户授权范围内实施，仍需独立 owner 决策和原权限/发布门禁。
++- **portfolio-intake**：有界发现、去重并找已有 Skill 的真实缺口；输出 source@sha、最小差异及可执行回归，不重复整轮研究。
++- **behavior-qualification**：用原有 effect_trials、冻结 train/holdout 和同条件真实 trace；无证据记 `not-measured`，不调用未授权模型或外部 evaluator。
++- 已批准的 code/test/CI 续做任务直接交实施/验证 primary，不重启来源 intake。
++
+ ## Prerequisites
+ 
+ - 至少提供一个可核验的 candidate ledger、cycle evidence、不可变来源 revision/hash 或等价脱敏证据；仅有未经核验的正文摘要时停在 `needs-fix`。
+diff --git a/optional-skills/adk-skill-composition-governance/SKILL.md b/optional-skills/adk-skill-composition-governance/SKILL.md
+index f6cf954..fbf4f9c 100644
+--- a/optional-skills/adk-skill-composition-governance/SKILL.md
++++ b/optional-skills/adk-skill-composition-governance/SKILL.md
+@@ -1,7 +1,7 @@
+ ---
+ name: adk-skill-composition-governance
+ description: "用于多个 Skill 的触发冲突、组合边界、fallback 和退役策略审查；不用于新增并行路由权威或直接提升工具写权限。"
+-version: 1.1.5
++version: 1.1.6
+ last_updated: 2026-11-14
+ triggers:
+   - "技能组合"
+@@ -55,6 +55,8 @@ constraints:
+ 12. 更新治理矩阵：记录场景、主技能、辅助技能、fallback、互斥和优先级。
+ 13. **行为 TDD**：Skill 行为变更先冻结同模型/工具/上下文的 baseline/candidate 和训练/留出案例 ID，再做正反/near-miss、独立盲评与成本对照；禁止用 holdout 调参。未取得真实模型 trace 保持 `not-measured`，不得拿路由 CI 代替行为改善。详细控制见 `references/skill-behavior-evaluation.md`。
+ 
++14. **失败反馈→回归候选**：仅针对已核实的重复失败，在现有测试/fixtures 补最小正例、反例和适用确定性检查；改动前保存失败证据，修复后核旧成功路径。真实模型未执行仍为 `not-measured`，不得靠 E0/E1 判定模型成功。按需见 `references/adk-skill-lifecycle.md`。
++
+ ## 组合规则
+ - 一个场景一个 primary；supporting 不抢占触发。
+ - fallback 必须在目标 profile 或可选安装范围内可用。
+diff --git a/optional-skills/adk-skill-composition-governance/references/adk-skill-lifecycle.md b/optional-skills/adk-skill-composition-governance/references/adk-skill-lifecycle.md
+index 56421e6..16bee58 100644
+--- a/optional-skills/adk-skill-composition-governance/references/adk-skill-lifecycle.md
++++ b/optional-skills/adk-skill-composition-governance/references/adk-skill-lifecycle.md
+@@ -64,6 +64,18 @@ Skill evolution must be evidence-driven and monotonic:
+ 
+ 离线试验和评分见 `references/skill-behavior-evaluation.md`，不自动启用付费模型或后台调用。
+ 
++## Failure Feedback → Deterministic Regression (conditional)
++- First freeze an actual, redacted `failure_trace_ref`, `source_sha`, expected/observed, error class and affected Skill; if evidence is only a hypothetical example, label it `design-case`, not a reproduced failure.
++- Classify whether the correction is stable and testable: use the **existing** trigger matrix for misrouting, an existing fixture/contract test for schema or permission mistakes, and an approved real-host trial only for semantic task-quality failures. Do not add tests that simply search for the new slogan while missing the behavior.
++- Write the smallest positive/negative case with an explicit forbidden outcome; show the deterministic RED if runnable, apply the minimal Skill change, then show GREEN and check previously passing examples. When RED cannot run, record `not-run` and keep the effect `not-measured`.
++- Train-case failures can guide edits; reserve frozen holdout cases for final comparison. Do not contaminate holdout, auto-approve rules, rewrite global instructions or leak raw transcripts/credentials.
++- Avoid a universal "one correction = one new rule" policy: consolidate repeats by failure cause; retire ineffective instructions after observed regression and owner review.
++
++## Lifecycle Review (report-only)
++- Review operational states as `active / deprecation-candidate / deprecated / retired` **only as analyst labels** unless the canonical ADK Manifest explicitly supports that value; never silently add unsupported lifecycle enums or a second state registry.
++- Consider verified use, true route overlap, actual task outcomes, target profile footprint, replacement availability, consumer compatibility and rollback evidence. Inactivity or directory age alone is not a reason to delete a Skill.
++- For proposed retirement, record `candidate / evidence / owner_decision / replacement / affected_profiles / fallback / required_and_forbidden_footprint / rollback`. Without consent, native evidence or verified replacement, leave the active asset unchanged.
++
+ ## Atomicity Rule
+ 
+ Do not embed one Skill inside another Skill as an implicit dependency. Use Agent routing, workflow stages, or `adk-skill-composition-governance` to connect atomic skills. Each Skill must remain useful and testable on its own.
+diff --git a/optional-skills/adk-skill-composition-governance/references/skill-behavior-evaluation.md b/optional-skills/adk-skill-composition-governance/references/skill-behavior-evaluation.md
+index 45cc2d8..204daea 100644
+--- a/optional-skills/adk-skill-composition-governance/references/skill-behavior-evaluation.md
++++ b/optional-skills/adk-skill-composition-governance/references/skill-behavior-evaluation.md
+@@ -13,6 +13,33 @@
+ 
+ 汇报最小字段：`candidate_sha / baseline_sha / model_runtime / scenario_id / raw_trace_ref / judge / behavior_verdict / permission_verdict / tokens / tool_calls / unresolved`。
+ 
++## Case isolation / observation boundary（需要真实评测时）
++
++- 复用已有 `effect_trials`，按固定案例在 baseline/candidate 间恢复**相同初始 workspace、输入、工具权限和缓存条件**；工作树输出只能证明最终状态，不足以证明中途未越权读写或未外传。
++- 记录 `initial_workspace_ref / observed_tool_calls / final_artifact_ref / forbidden_side_effects / missing_observability`，真实 trace 可验证时才判实际行为；模拟 CLI/静态回放/离线 matcher 只给 E0/E1，不能伪造 native load、独立评价或任务完成率。
++- 真实宿主不可用时保留预注册和用例，明确 `not-measured`，**不因未测而运行收费模型、触发新定时任务或削弱安全 guardrail**。
++
++## Skill Value / Harm Gate（真实任务才判）
++
++- 只对确有真实运行证据的任务比较 `no-skill vs selected-skill`，固定 `target_repo@commit`、需求与可执行 verifier、model/runtime、工具授权、时间窗和初始 workspace。区分正确性、实际 Skill 调用、耗时/Token、越权或负面副作用；不能用通用问答或纯模板得分代表真实工程成功。
++- 特别检验三类负收益：`wrong-version`（Skill 的 API/框架版本落后于目标仓）、`explicit-instruction-conflict`（模板覆盖用户的明确非目标/验收）、`irrelevant-trigger`（无关任务仍加载）。记录原有成功任务的退化而不仅是新任务绿灯。
++- 分类 `beneficial / neutral / harmful / inconclusive` 必须有任务级成对结果与原始 verifier/trace；样本不足、未成对、审查不独立或环境漂移时统一 `inconclusive / not-measured`，不得用偶发一次成功批准长期 Skill 默认启用。
++- 这项检查沿用 ADK `effect_trials`，不导入 SWE-Skills-Bench 任务/模型执行器，不用 Skill 自己评价自己。没有明确性能增益也不能因此跳过安全/权限门禁。
++
++## Outcome-first and overhead attribution（真实轨迹适用）
++
++- **先判最终结果**：按原用户需求、目标仓版本、可执行验收与真实工件状态判 correctness/completion；工具序列可以有多个合法路径，不强迫与参考轨迹逐步一致。随后再判 tool selection、arguments、必要性和时间/Token；权限越界、伪造证据及违反硬合同仍是独立 hard fail。
++- **防止不公平 grader**：no-skill 基线不可能读取候选 Skill 的 `SKILL.md`，不得以“必须阅读目标 Skill”作为两组共同成功条件。用可行的 reference solution 和 negative control 先核验评测设定。真实任务没有明确路径约束时，换用同样安全且得到正确结果的命令不应被误判失败。
++- **归因而非猜因**：仅对同任务、同模型/工具权限、相同初始仓快照的成对原始轨迹做 `functional / efficiency / instrumentation` 分类。遗漏需求、错误版本是假设性的功能归因候选；额外全量验证、沉重实施流程、重复工具调用是效率归因候选。需在轨迹和最终产物中找到可证差异；仅凭长 Skill 文件、失败结果或单次分数不能认定 Skill 导致。
++- **有效任务失败（task-timeout）**：agent 在预注册的任务时间/执行预算内未完成，包括慢执行、挂死或重试耗尽，计为有效 task failure 并保留在任务分母中；不得因为候选较慢而删除失败样本或只重试候选。保留截止时产物、工具轨迹和已消耗用量。
++- **评测不完整（infrastructure-timeout）**：仅基础设施/采集链路超时、缺一侧、环境漂移或 grader 自身不公平时标 `invalid-eval / INCOMPLETE`，保留全组与原始失败记录并修复评测条件；按预注册规则成对重跑，不选择性重试或事后剔除不利样本。不把缺失分数填成 0，也不将部分结果平均为 Skill Lift。无法区分超时来源时保持原因未明，不直接认定为基础设施失败。守住必须的安全/合规/发布验证，但低风险阶段不强制执行不相关的完整 Goal 流程。
++
++## Targeted ablations（仅在真实 Skill Lift 难以归因时）
++
++- 先保持原有 `no-skill / champion / challenger` 试验身份分离；按 [Agent Skills evaluation guide](https://github.com/agentskills/agentskills/blob/main/docs/skill-creation/evaluating-skills.mdx) 固定任务输入、初始 workspace、Skill 曝露和 grader，而不把“Skill 命中”计作任务成功。
++- 当结果反常或 Token 开销明显增加、需要判断是**内容误导**还是**上下文长度干扰**时，可附加一个相同长度、同信任边界、与任务无关的**中性文本控制组**；它不得包含操作指令、真实凭证或扩大的工具权限。该条件单独预注册、隔离、统计，不混入原成对试验的样本/显著性结论；记录 `length_control_status: measured | not-measured`。
++- 参考 [SkillOpt](https://github.com/microsoft/SkillOpt) 的**小步改动 / 拒绝变更记录**：每次只修改一个可证伪失败模式，保留旧正确路径、被否决假设与回滚点；新候选只有在独立未曝光的验证集上确有净改善、且安全不退化时才建议晋级。不得声称此 Skill 本身运行了 SkillOpt、购买了模型推理或已取得真实效果数据。
++
+ ## Evidence Contract
+ - 固定 `baseline_sha / candidate_sha / model_runtime / tool_permissions / budget / grader_id / dataset_sha`，无真实 source 或宿主权限则中止并记 `not-measured`。
+ - 先以安全/任务质量 **non-regression** 决定是否可比较 Token、wall time、tool calls；授权越界为硬失败，未报告的缓存 Token 记 unavailable。
+diff --git a/pyproject.toml b/pyproject.toml
+index a550fc9..7ff3af9 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
+ 
+ [project]
+ name = "agent-dev-kit"
+-version = "11.2.17"
++version = "11.2.18"
+ description = "Platform-neutral agent asset compiler, distributor, and evaluator"
+ readme = "README.md"
+ requires-python = ">=3.12,<3.13"
+diff --git a/skills/adk-adr-writer/SKILL.md b/skills/adk-adr-writer/SKILL.md
+index 6756ee1..e7d0d8d 100644
+--- a/skills/adk-adr-writer/SKILL.md
++++ b/skills/adk-adr-writer/SKILL.md
+@@ -1,7 +1,7 @@
+ ---
+ name: adk-adr-writer
+ description: "用于架构方案已有明确权衡、需要记录决定与替代方案时生成 ADR；不用于在需求不明时直接替代需求澄清或执行代码修改。"
+-version: 1.2.0
++version: 1.2.1
+ last_updated: 2026-11-13
+ triggers:
+   - "写ADR"
+@@ -36,6 +36,11 @@ constraints:
+ 4. 需要写入仓库时，按目标项目的 ADR 编号规则查找已有编号（例如 `ADR-NNN`），不覆盖旧决策；仅要求草稿则不写文件。
+ 5. 自检事实、术语、数值、限制词和引用关系；删无必要的复述。
+ 
++## Reader-only acceptance（按风险，不默认增加模型轮次）
++- **lite**：作者只依据成稿而非历史会话自检：读者能否区分 `proposed / accepted`、说出核心决定及其理由、定位验证办法？能则结束，不另建文档评测流水线。
++- **standard/deep 或需长期跨团队引用**：冻结仅含最终草稿和明确引用的 `reader_view`，按目标读者回答：`What was decided? Why? What changes for me? What evidence is missing? Who owns rollback?`。回答依赖未提供的口头背景、含糊状态或不存在的证据时，修正文档或标 `unknown/pending`，不虚构批准、结果和责任人。
++- 只做作者冷读时标 `reader_check: self-review`；独立读者或真实模型评测只有在被授权且实际执行后才标 `independent-verified`，否则 `not-run`。不能用作者自评冒充真实读者理解率。
++
+ ## Output
+ ```md
+ # ADR: <决策>
+diff --git a/skills/adk-cross-team-handoff/SKILL.md b/skills/adk-cross-team-handoff/SKILL.md
+index 5e42ba9..3a99ac8 100644
+--- a/skills/adk-cross-team-handoff/SKILL.md
++++ b/skills/adk-cross-team-handoff/SKILL.md
+@@ -1,7 +1,7 @@
+ ---
+ name: adk-cross-team-handoff
+ description: "用于产品、研发、测试等多团队交接时明确责任、接口和验收证据；不用于替代需求变更批准或直接操作外部系统。"
+-version: 1.1.0
++version: 1.1.1
+ last_updated: 2026-11-13
+ triggers:
+   - "团队交接"
+@@ -35,6 +35,11 @@ constraints:
+ 4. formal 按团队真实制度记录 RACI、签收、权限/回退计划，未提供的证据标待补。
+ 5. 逾期或签收失败时提示重新协调，**不得自动修改权限或回滚设备**。
+ 
++## Receiver cold-read（仅 formal 或材料有歧义时）
++- 让接收方在**只看交接文档与声明可访问的证据链接**时回答：交付物及版本在哪里、如何独立验证、哪些风险/依赖仍 `pending`、失败后联系谁及如何停止/恢复。无法回答则改进交接材料或明确待补，不能靠移交方口头背景补造结论。
++- lite 不强制新报告、额外模型或签收轮次；formal 的真实接收方验证与批准仍须由受权主体执行，作者自查仅记 `receiver_check: self-review`，未执行的独立核验记 `not-run`。
++- 可定位文档不等于资产已交付、命令已运行、权限已转移或接收方已 `accepted`；事实仍按原证据门禁判定。
++
+ ## Minimal Handoff
+ ```md
+ - Scope / exclusions / version:
+diff --git a/skills/adk-planning-execution-loop/SKILL.md b/skills/adk-planning-execution-loop/SKILL.md
+index d15162b..99d06f9 100644
+--- a/skills/adk-planning-execution-loop/SKILL.md
++++ b/skills/adk-planning-execution-loop/SKILL.md
+@@ -1,8 +1,8 @@
+ ---
+ name: adk-planning-execution-loop
+ description: "用于按已批准多阶段计划实际执行、定向验证、断点恢复与目标收敛；不用于只读计划审查、CI 等待查询或生成 Goal 合同。"
+-version: 1.4.3
+-last_updated: 2026-11-11
++version: 1.4.4
++last_updated: 2026-11-14
+ triggers:
+   - "执行计划"
+   - "按现有计划继续执行"
+@@ -33,6 +33,8 @@ constraints:
+ 2. **选择**：选 1–4 个依赖已满足、可关闭的纵向交付；明确文件/工具边界、证据、最小验证和停止条件。单文件简单修复无需启动完整长任务流程。
+ 3. **预检**：优先使用宿主的真实事件/状态指纹；CI pending、无新证据、已成功的同状态工具/验证交给确定性执行器，不重新调用模型。同 Goal/阶段无实质变化不重复推理；高风险、缺失或来源不可信时回读原文并审核。
+ 4. **执行**：围绕当前批次推进，可连续完成相关小改并跑定向测试；批末运行受影响回归，原 Goal 最终完成才运行整体 final。共享契约/权限/发布边界变化立即升级原门禁。
++   - **inline fast path**：已批准且共享写集不冲突的任务，默认现有单执行者逐项 RED→GREEN/定向验证，批末安排一次适用的独立 whole-diff/高风险审查；不要给每个简单子项都启动新的实现者+审查者。多执行者仅在真实并行收益大于新上下文成本、写集隔离且宿主允许时使用。
++   - **分歧裁决**：计划步骤与真实源码/测试输出不一致时，记录 `planned / observed / ruling / evidence / rollback`。只在既定权限、验收与可逆范围内裁决局部实现细节；扩大权限、产品要求变化、不可逆动作或原验收改变必须停下重新审批，不能借“继续执行”默改目标。
+ 5. **检查点**：只保存当前验收、`logical_task_open`、实质变化、新证据 raw_ref、未解阻塞、来源 SHA 和下一动作。默认 ≤8 KiB、最多 3 个下一动作；长日志和旧对话外部可回读，不反复注入模型。
+ 6. **收敛**：相同失败两次先修正假设；`design-change` 或连续两轮新 blocker/major finding class 须 replan；无有效进展、预算 stop 或真实 blocker 时 replan/split/blocked。不能靠心跳、重复证据、改编号或提预算清零，须改变依赖/范围/验收/验证路径并核效果。
+ 7. **验收**：核对原验收分母、证据来源、未关闭项和独立验证；阶段 checkpoint 不完成父 Goal、不授予 commit/apply/release。外部写入结果不明时先对账再重试。
+diff --git a/skills/adk-planning-execution-loop/references/long-task-recovery.md b/skills/adk-planning-execution-loop/references/long-task-recovery.md
+index df805ef..1019e75 100644
+--- a/skills/adk-planning-execution-loop/references/long-task-recovery.md
++++ b/skills/adk-planning-execution-loop/references/long-task-recovery.md
+@@ -69,6 +69,7 @@ Open items:
+ - **Task Package v2**：真正派工才写 kind/question/evidence/permission/exit/handoff/retention、scope_read/scope_write/must_not_touch。decision/research/prototype 不可获得 implementation 权限，缺依赖或原文审查时须先退回规划。
+ - **Evidence / attestation**：验证必须能从原验收 criterion ID 和注册 evidence digest 追溯。新增测试计数、流水号和 heartbeat 不证明目标收敛。attestation 写入后回读；未通过不能声称完成或归档。
+ - **风险与恢复**：发现设计/共享契约/重大 finding 变化时 replan；两次相同失败仍无根因先更新假设。计划偏差不按固定百分比机械重审：只在范围、原验收分母、权限、依赖或验证路径实质改变时启动适用审查。三次 blocker 是诊断信号，不自动升级某个组织层级。
++- **最小充分验证／避免重复全量流程**：对已批准计划的低风险阶段，按 `change_snapshot / affected_interfaces / prior_verified_snapshot / evidence_freshness` 选择最小受影响检查；相同快照且结果仍有效时复用原始回执并写明 `verification_reused / reason`，不要重复调用模型或重新跑整个 Goal。若输入、依赖、设备状态、权限或发布边界变化，旧证据失效；阶段 checkpoint 不替代最终要求的完整回归、独立 Review 和真实现场门禁。未运行且不可复用则 `not-tested`，失败仍保持 needs-fix。
+ - **并行验证**：执行前核共享构建目录、缓存、端口、二进制或设备资源；相互冲突串行。阶段末收敛 orphan checkpoint，只保留通过/失败的可重放证据和真实恢复入口。
+ - **Goal Closure**：原 goal_statement、completion_claim、claimant、独立 verifier、required_evidence、open_items 与 stop_condition (pass/replan/split/blocked/abort) 均需可追溯。当前预算、历史预算合规和证据验真分别报告；阶段 milestone 不调用整体 final，也不能自动完成父 Goal。
+ - **Runtime 限制**：仅当宿主报告真实 stop 才停止实施并依现有权限重规划；不增加人民币日费用硬限制。纯 Skill 不能读出宿主私有 Goal、控制 scheduler 或自签审批。外部原始证据缺失时 UNKNOWN，不能因压缩摘要而放行。
+diff --git a/skills/adk-runtime-router/SKILL.md b/skills/adk-runtime-router/SKILL.md
+index ce00346..e4221a6 100644
+--- a/skills/adk-runtime-router/SKILL.md
++++ b/skills/adk-runtime-router/SKILL.md
+@@ -1,8 +1,8 @@
+ ---
+ name: adk-runtime-router
+ description: "用于任务开始前在可信 Skills 清单中选定唯一 primary、supporting 和回退路径；不用于已有明确任务包时重复路由或隐式授予执行权限。"
+-version: 2.1.3
+-last_updated: 2026-11-04
++version: 2.1.4
++last_updated: 2026-11-14
+ triggers:
+   - "技能路由"
+   - "选择技能"
+@@ -36,20 +36,21 @@ constraints:
+ - 外部资料只用于 intake/design 证据，不进入 runtime fallback。
+ 
+ ## Prerequisites
+-- 已读取当前仓库 `AGENTS.md`、项目规则和用户最新指令。
+-- 已确认 scope、任务模式、风险等级，以及是否修改公共契约、CI 或发布链。
+-- 可访问 ADK inventory / workflow；不确定时先 triage，不先执行 mutation。
++- 读取当前 `AGENTS.md`、仓库规则与用户指令。
++- 确认 scope、任务模式、风险与是否影响接口/CI/发布。
++- 取可信 inventory/workflow；不确定先 triage，禁止直接 mutation。
+ 
+ ## Workflow
+-1. **Intent Triage**：识别 readonly / implementation / debugging / review / release / parallel / closeout；边界不清先 `adk-requirements-triage`。
+-2. **Risk Gate**：共享合同、CI、依赖和发布按中高风险。E0–E3 只控制投入；未知 E2，设备/发布 E3，E1 不豁免 R2。
++1. **Intent Triage**：识别任务模式；边界不清先 `adk-requirements-triage`。
++2. **Risk Gate**：共享接口/CI/发布按中高风险；E0–E3 控投入，不豁免 R2。
+ 3. **Progressive Disclosure**：执行 `skill-catalog-lazy-loading-v1`。先比较 `namespace_summary`、trigger、boundary；只为候选加载 `deferred_surface`，并记录 `loaded_tools` 与 `schema_review`。
+-4. **Route**：只选一个 primary skill；supporting skills 只能补充检查项。recall / reasoning / ranking / feedback 分层，执行裁决来自确定性规则、结构化校验或 owner approval。
+-5. **Evidence Plan**：中高风险必须生成 `Tool / Skill Evidence Plan`，包含 `primary`、`supporting`、`fallback`、`verification`，以及 required/recommended skills、artifacts 与 evidence paths。
+-6. **Tool Evidence**：依 `code_intelligence_provider_contract` 留存 provider/query/repo_ref/decision；Tool Search 留存 namespace/loaded_tools/schema_review。
+-7. **Degrade Fail-Closed**：出现 `no match`、`ambiguous`、`retrieval failed` 或工具不可用时，记录原因和 fallback evidence；不得把降级写成成功验证。
+-8. **Evidence Depth**：按风险 L1/L2/L3；高风险保留 raw evidence。
+-9. **Execute + Verify**：加载 primary skill 推进；产生改动时最终经过 `adk-verification-before-completion`。
++4. **Skill Fit Gate**：命中不代表适配；版本/平台/验收冲突须核目标仓当前源码，禁用过期 Skill 模板；不适配则 `no-skill/abstain`；细则见 `references/runtime-routing-details.md`。
++5. **Route**：只选一个 primary skill；supporting skills 只能补充检查项。recall / reasoning / ranking / feedback 分层，执行裁决来自确定性规则、结构化校验或 owner approval。
++6. **Evidence Plan**：中高风险必须生成 `Tool / Skill Evidence Plan`，包含 `primary`、`supporting`、`fallback`、`verification`，以及 required/recommended skills、artifacts 与 evidence paths。
++7. **Tool Evidence**：保留 `code_intelligence_provider_contract` 与 Tool Search 选项/来源/权限证据。
++8. **Degrade Fail-Closed**：出现 `no match`、`ambiguous`、`retrieval failed` 或工具不可用时，记录原因和 fallback evidence；不得把降级写成成功验证。
++9. **Evidence Depth**：按风险 L1/L2/L3；高风险保留 raw evidence。
++10. **Execute + Verify**：加载 primary skill 推进；产生改动时最终经过 `adk-verification-before-completion`。
+ 
+ 冲突/降级时再读 `references/runtime-routing-details.md`。
+ 
+@@ -89,8 +90,8 @@ bash scripts/devkit.sh validate --strict
+ 
+ ## Quality Gate
+ - 必须给出 primary、supporting、fallback、verification；不得有两个 primary。
+-- 中高风险必须有 Tool / Skill Evidence Plan；降级、skipped skill、tool failure 必须有可追溯 evidence。
+-- Effort 不改变授权、R2、Review/Release；无匹配 abstain。
++- 中高风险必须有 Tool / Skill Evidence Plan；降级、skipped skill、tool failure 要留 evidence。
++- Effort 不改变授权、R2、Review/Release；不适配则 `no-skill/abstain`。
+ - 大型目录先 `namespace_summary`，再按需 `deferred_surface`；记录 `loaded_tools` / `schema_review`。
+ - 高风险或低置信度必须保留 L3/raw evidence；summary 不能替代原始证据。
+ - active Skill/workflow/profile/handoff 不得声明外部参考仓为 runtime fallback。
+diff --git a/skills/adk-runtime-router/references/runtime-routing-details.md b/skills/adk-runtime-router/references/runtime-routing-details.md
+index e59e6f7..6bdd6d5 100644
+--- a/skills/adk-runtime-router/references/runtime-routing-details.md
++++ b/skills/adk-runtime-router/references/runtime-routing-details.md
+@@ -30,6 +30,18 @@ Use progressive disclosure rather than loading a whole tool or skill catalog:
+ 
+ For Code Intelligence, preserve the `code_intelligence_provider_contract` evidence tuple: provider, tool, query, repo_ref, hit_summary, decision impact. For Tool Search, preserve namespace, query, selected surface, loaded tools and schema review.
+ 
++## Skill applicability / version compatibility (only when relevant)
++
++- Preserve `user_acceptance`, `target_repo@commit`, available `target_api_or_toolchain_version`, `skill_supported_scope` and `conflicting_guidance` before applying a version-specific recommendation.
++- A current, credible project implementation or explicit user constraint is not overridden by a third-party Skill template. If target or skill version is unknown, read current source/config or mark `version-unverified` and constrain the advice; do not invent compatibility.
++- If a candidate conflicts with target version, environment or user's explicit non-goal, abstain/no-skill or select an already-trusted applicable Skill with the existing fallback/permission gate. A successful trigger is not a successful outcome.
++- The canonical matcher still owns deterministic routing; this check is a scoped execution **fit** decision, not a second classifier or silent change to Manifest/Profiles.
++
++## Optional availability is not native installation
++
++- The public matcher now returns `profile_availability=optional-skill-required` for any Optional Skill selected through explicit routing, lexical fallback, or explicit selection. This is **catalog metadata**, not an installation receipt or tool authorization; the consuming runtime must check its own trusted installed inventory before loading/executing. If absent, stay in the declared fallback/abstain path, never auto-install the source package or escalate mutation authority.
++- Core Skills retain their existing availability semantics. A failed match must not be presented as an installed or executable Skill.
++
+ ## Fallback and Failure Semantics
+ 
+ - `no match`: do not invent a skill. Use triage or no-skill/needs-input and record the gap.
+diff --git a/skills/adk-skill-deep-analysis/SKILL.md b/skills/adk-skill-deep-analysis/SKILL.md
+index 91cd829..0a66b30 100644
+--- a/skills/adk-skill-deep-analysis/SKILL.md
++++ b/skills/adk-skill-deep-analysis/SKILL.md
+@@ -1,8 +1,8 @@
+ ---
+ name: adk-skill-deep-analysis
+ description: "用于只读发现并对标公开优质 Skills，或分析指定 Skill 的真实方法、来源风险及对 ADK 的可迁移价值；不用于自动安装外部 Skill、执行外部脚本或授权源码写入。"
+-version: 1.0.4
+-last_updated: 2026-11-13
++version: 1.0.5
++last_updated: 2026-11-14
+ triggers:
+   - 深度拆解 skill
+   - 分析 skill 设计
+@@ -49,6 +49,10 @@ constraints:
+ 
+ 复杂路径、完整 5 维评分或安全审计时才读取 `references/details.md`；Skill 组合与路由仍由现有 `adk-skill-composition-governance` 负责。
+ 
++## Implementable handoff（只读研究到执行）
++
++用户同时要求“对标并优化已有 Skills”时，本 Skill 仅产生可核的最小交接包：`source_identity@sha / verified_method / affected_existing_skill / observable_failure_or_gap / minimal_delta / runnable_regression / preserved_success / permission_boundary / eval_status`，交由已有 `adk-external-practice-absorption` 与实施/验证 primary 在各自权限内推进；**本 Skill 不写仓、不替 owner 审批、不把来源摘要当验收**。若已有对应 PR/已审来源，引用最新状态与差异，不重复整个搜集过程。未有可观察问题时选择 `RETAIN/OBSERVE`，不要为凑改动另写规则。
++
+ ## Quality Gate
+ - 证据要有 `source_identity + path/line_or_symbol`，与 ADK 当前实现对应。用户可见建议不能冒充模型实测或生产信任。
+ - 缺失 license、未检查代码、无法核验的依赖/副作用标 `unknown / needs-fix`；高风险不因平均分高而自动通过。
+diff --git a/src/agent_dev_kit/__init__.py b/src/agent_dev_kit/__init__.py
+index fff8976..0f89a74 100644
+--- a/src/agent_dev_kit/__init__.py
++++ b/src/agent_dev_kit/__init__.py
+@@ -1,3 +1,3 @@
+ """agent-dev-kit structured control plane."""
+ 
+-__version__ = "11.2.17"
++__version__ = "11.2.18"
+diff --git a/src/agent_dev_kit/matcher.py b/src/agent_dev_kit/matcher.py
+index c400967..48de94b 100644
+--- a/src/agent_dev_kit/matcher.py
++++ b/src/agent_dev_kit/matcher.py
+@@ -69,6 +69,8 @@ def format_result(result: Mapping[str, Any]) -> str:
+     if result.get("match") is not True:
+         return base
+     extras = []
++    if result.get("profile_availability") == "optional-skill-required":
++        extras.append("profile_availability=optional-skill-required")
+     for key in (
+         "runtime_role",
+         "selection_group",
+@@ -232,6 +234,11 @@ def _derive_effort(result: Mapping[str, Any], metadata: Mapping[str, Any]) -> Di
+ 
+ def _apply_contract(result: Mapping[str, Any], metadata: Mapping[str, Any]) -> Dict[str, Any]:
+     constrained = dict(result)
++    # Matching an optional catalogue asset does not prove it was installed in
++    # the target runtime. The lexical and same-group fallback paths lack the
++    # explicit routing entry that otherwise provides this availability marker.
++    if metadata["scope"] == "optional":
++        constrained["profile_availability"] = "optional-skill-required"
+     constrained["runtime_role"] = metadata["runtime_role"]
+     constrained["selection_group"] = metadata["selection_group"]
+     constrained["effect_ceiling"] = metadata["effect_ceiling"]
+diff --git a/tests/fixtures/skill_catalog_competition.tsv b/tests/fixtures/skill_catalog_competition.tsv
+index 5e636ca..401f0b5 100644
+--- a/tests/fixtures/skill_catalog_competition.tsv
++++ b/tests/fixtures/skill_catalog_competition.tsv
+@@ -37,3 +37,6 @@ R035	primary	adk-skill-deep-analysis	-	请全网搜索优质skills，参考优
+ R036	primary	adk-repo-prompt-analysis	-	请逆向 Prompt 调用链，核查来源可信度
+ R037	negated	-	adk-skill-deep-analysis	不要对标优质 Skills
+ R038	negated	-	adk-repo-prompt-analysis	不要逆向 Prompt 调用链
++R039	primary	adk-external-practice-absorption	-	继续吸收外部成熟方法，提升已有 Skills 的实际执行效果
++R040	primary	adk-skill-deep-analysis	-	对标优质 Skills，先只读研究具体文件方法
++R041	negated	-	adk-external-practice-absorption	不要吸收外部成熟方法
+diff --git a/tests/fixtures/skill_method_ab_prereg.json b/tests/fixtures/skill_method_ab_prereg.json
+index 9475576..73d8724 100644
+--- a/tests/fixtures/skill_method_ab_prereg.json
++++ b/tests/fixtures/skill_method_ab_prereg.json
+@@ -5,11 +5,11 @@
+   "test_set_source": "tests/fixtures/skill_method_cases.json",
+   "test_set_source_blob": "6dbb5678c1c71a560eca2dd13acdf79719afcfee",
+   "baseline": {
+-    "release": "v11.2.16",
+-    "source_sha": "538e224ad91319a17a88f0e8c4d743dd89d7b02d"
++    "release": "v11.2.17",
++    "source_sha": "7aed1d2545babce16c41dc021ead01c8c324ce07"
+   },
+   "candidate": {
+-    "planned_release": "v11.2.17",
++    "planned_release": "v11.2.18",
+     "source_sha": null
+   },
+   "case_groups": {
+@@ -56,5 +56,14 @@
+     "effect_comparator": "agent_dev_kit.effect_trials.compare_effect_trial_file"
+   },
+   "results": [],
+-  "notes": "Pre-registration of source fixture IDs only. All model behavior, user-visible success, real token/cost/latency remain not-measured until independent native host raw traces are captured."
++  "notes": "Unexecuted champion/challenger source prereg; prior unrun identity retained. Train/holdout IDs are disjoint but their content was visible during Skill authoring, so this split is NOT an independent final holdout. Fresh unseen holdout tasks and an independent grader are required for native promotion. No-skill ablation needs a separate frozen exposure/control proof. E2-E4, Token, latency and cost remain not-measured.",
++  "comparison_kind": "champion-challenger",
++  "superseded_unrun_plan": {
++    "baseline_release": "v11.2.16",
++    "baseline_source_sha": "538e224ad91319a17a88f0e8c4d743dd89d7b02d",
++    "candidate_planned_release": "v11.2.17",
++    "model_runs": 0,
++    "reason": "11.2.17 source candidate merged without any pre-registered native model runs; preserve its identity while pre-registering 11.2.18 against the latest reviewed main."
++  },
++  "holdout_qualification": "development-fixture-only-after-author-exposure"
+ }
+diff --git a/tests/fixtures/skill_trigger_cases.tsv b/tests/fixtures/skill_trigger_cases.tsv
+index caf84a9..4a32808 100644
+--- a/tests/fixtures/skill_trigger_cases.tsv
++++ b/tests/fixtures/skill_trigger_cases.tsv
+@@ -129,3 +129,6 @@ adk-repo-prompt-analysis	skill	1	请逆向 Prompt 调用链，查明真正调用
+ adk-repo-prompt-analysis	skill	1	审查 Prompt 来源和工具上下文拼接
+ adk-repo-prompt-analysis	skill	0	不要逆向 Prompt 调用链
+ adk-repo-prompt-analysis	skill	0	直接优化现有 prompt，不分析外部来源
++adk-external-practice-absorption	optional-skill	1	继续吸收外部成熟方法，提升已有 Skills 的实际执行效果
++adk-external-practice-absorption	optional-skill	0	不要吸收外部成熟方法
++adk-skill-deep-analysis	skill	1	对标优质 Skills，先只读研究具体文件方法
+diff --git a/tests/run_all.sh b/tests/run_all.sh
+index f5f2f4c..5a770e5 100644
+--- a/tests/run_all.sh
++++ b/tests/run_all.sh
+@@ -87,6 +87,7 @@ TESTS=(
+   test_skill_content.sh
+   test_skill_trigger_matrix.sh
+   test_skill_sop_quality.sh
++  test_token_context_governance.sh
+   test_strict_json.sh
+   test_contract_hardening.sh
+   test_boundary_rehearsal.sh
+@@ -126,7 +127,6 @@ TESTS=(
+   test_software_m5_ready.sh
+   test_repository_runtime_evidence.sh
+   test_token_budget.sh
+-  test_token_context_governance.sh
+   test_task_cost.sh
+   test_execution_policy.sh
+   test_official_docs_governance.sh
+diff --git a/tests/test_external_method_intake.py b/tests/test_external_method_intake.py
+index 32573d0..19048db 100644
+--- a/tests/test_external_method_intake.py
++++ b/tests/test_external_method_intake.py
+@@ -49,6 +49,33 @@ class ExternalMethodIntakeTests(unittest.TestCase):
+         self.assertIn("用于只读发现并对标公开优质 Skills", source)
+         self.assertIn("不用于自动安装外部 Skill", source)
+ 
++    def test_source_to_implementation_handoff_is_bounded(self) -> None:
++        deep = SKILL.read_text(encoding="utf-8")
++        adoption = (ROOT / "optional-skills/adk-external-practice-absorption/SKILL.md").read_text(
++            encoding="utf-8"
++        )
++        loop = (ROOT / "skills/adk-planning-execution-loop/SKILL.md").read_text(encoding="utf-8")
++        behavioral = (ROOT / "optional-skills/adk-skill-composition-governance"
++                      / "references/skill-behavior-evaluation.md").read_text(encoding="utf-8")
++        for marker in ("Implementable handoff", "source_identity@sha", "runnable_regression",
++                       "本 Skill 不写仓", "affected_existing_skill"):
++            self.assertIn(marker, deep)
++        for marker in ("scoped-adoption", "portfolio-intake", "source-only",
++                       "behavior-qualification", "复用现有 ledger/evidence",
++                       "not-measured", "独立 owner 决策"):
++            self.assertIn(marker, adoption)
++        for marker in ("inline fast path", "planned / observed / ruling / evidence / rollback",
++                       "共享写集不冲突", "扩大权限"):
++            self.assertIn(marker, loop)
++        for marker in ("Case isolation", "initial_workspace_ref", "observed_tool_calls",
++                       "forbidden_side_effects", "missing_observability"):
++            self.assertIn(marker, behavioral)
++        competition = (ROOT / "tests/fixtures/skill_catalog_competition.tsv").read_text(
++            encoding="utf-8"
++        )
++        self.assertIn("继续吸收外部成熟方法，提升已有 Skills 的实际执行效果", competition)
++        self.assertIn("R041\tnegated\t-\tadk-external-practice-absorption", competition)
++
+     def test_prompt_trace_not_free_text_guess_or_durable_promotion(self) -> None:
+         s = PROMPT.read_text(encoding="utf-8")
+         for item in (
+diff --git a/tests/test_skill_method_efficiency.py b/tests/test_skill_method_efficiency.py
+index 88c6222..38121c0 100644
+--- a/tests/test_skill_method_efficiency.py
++++ b/tests/test_skill_method_efficiency.py
+@@ -81,5 +81,18 @@ class SkillMethodEfficiencyTests(unittest.TestCase):
+         self.assertIn("not create a new Agent/Skill/Workflow", guide)
+         self.assertIn("not-measured", guide)
+ 
++    def test_task_timeout_is_failure_not_discarded_as_incomplete(self) -> None:
++        guide = (ROOT / "optional-skills/adk-skill-composition-governance/references/skill-behavior-evaluation.md").read_text(encoding="utf-8")
++        task = next(line for line in guide.splitlines() if "（task-timeout）" in line)
++        infrastructure = next(line for line in guide.splitlines() if "（infrastructure-timeout）" in line)
++        for term in ("预注册", "有效 task failure", "保留在任务分母中",
++                     "不得", "删除失败样本", "用量"):
++            self.assertIn(term, task)
++        self.assertNotIn("invalid-eval", task)
++        for term in ("基础设施/采集链路超时", "invalid-eval / INCOMPLETE",
++                     "保留全组", "成对重跑", "不选择性重试",
++                     "无法区分超时来源时保持原因未明"):
++            self.assertIn(term, infrastructure)
++
+ if __name__ == "__main__":
+     unittest.main()
+diff --git a/tests/test_skill_quality_methods.py b/tests/test_skill_quality_methods.py
+index 9ebc49a..ee17d56 100644
+--- a/tests/test_skill_quality_methods.py
++++ b/tests/test_skill_quality_methods.py
+@@ -87,6 +87,10 @@ class SkillQualityMethodsTests(unittest.TestCase):
+             self.assertLess(rows.index("test_catalog.sh"), rows.index("test_strict_json.sh"))
+         self.assertLess(full.index("test_skill_sop_quality.sh"), full.index("test_contract_hardening.sh"))
+         self.assertNotIn("test_skill_sop_quality.sh", quick)
++        # Reuse the existing token/context gate early, rather than adding a
++        # second byte limit or waiting for the long test matrix to reach it.
++        self.assertLess(full.index("test_token_context_governance.sh"),
++                        full.index("test_strict_json.sh"))
+ 
+     def test_real_eval_is_pre_registered_but_unmeasured(self) -> None:
+         guide = source("docs/evals/skill-method-parity.md")
+@@ -151,10 +155,22 @@ class SkillQualityMethodsTests(unittest.TestCase):
+         self.assertEqual(fixture["schema"], "adk-skill-method-ab-prereg/v1")
+         self.assertEqual(fixture["status"], "not-measured")
+         self.assertEqual(fixture["execution"], "no-model-runs")
++        self.assertEqual(fixture["comparison_kind"], "champion-challenger")
++        self.assertEqual(fixture["baseline"]["release"], "v11.2.17")
+         self.assertEqual(fixture["baseline"]["source_sha"],
+-                         "538e224ad91319a17a88f0e8c4d743dd89d7b02d")
++                         "7aed1d2545babce16c41dc021ead01c8c324ce07")
++        manifest = json.loads(source("manifest.json"))
++        self.assertEqual(fixture["candidate"]["planned_release"], "v" + manifest["version"])
+         self.assertIsNone(fixture["candidate"]["source_sha"])
+         self.assertEqual(fixture["results"], [])
++        prior = fixture["superseded_unrun_plan"]
++        self.assertEqual(prior["baseline_release"], "v11.2.16")
++        self.assertEqual(prior["candidate_planned_release"], "v11.2.17")
++        self.assertEqual(prior["baseline_source_sha"], "538e224ad91319a17a88f0e8c4d743dd89d7b02d")
++        self.assertEqual(prior["model_runs"], 0)
++        self.assertEqual(fixture["holdout_qualification"],
++                         "development-fixture-only-after-author-exposure")
++        self.assertIn("NOT an independent final holdout", fixture["notes"])
+         train = fixture["case_groups"]["train_case_ids"]
+         holdout = fixture["case_groups"]["holdout_case_ids"]
+         self.assertGreaterEqual(len(train), 5)
+@@ -184,5 +200,86 @@ class SkillQualityMethodsTests(unittest.TestCase):
+         self.assertIn("not-measured", guide)
+ 
+ 
++    def test_reader_first_acceptance_and_feedback_are_source_only(self) -> None:
++        adr = source("skills/adk-adr-writer/SKILL.md")
++        handoff = source("skills/adk-cross-team-handoff/SKILL.md")
++        composition = source("optional-skills/adk-skill-composition-governance/SKILL.md")
++        lifecycle = source(
++            "optional-skills/adk-skill-composition-governance/references/adk-skill-lifecycle.md"
++        )
++        notes = source("docs/evals/external-skill-method-comparison-20261114-round2.md")
++
++        for marker in ("Reader-only acceptance", "reader_view", "self-review", "independent-verified",
++                       "not-run", "unknown/pending"):
++            self.assertIn(marker, adr)
++        for marker in ("Receiver cold-read", "pending", "not-run", "accepted", "不强制"):
++            self.assertIn(marker, handoff)
++        self.assertIn("失败反馈→回归候选", composition)
++        for marker in ("Failure Feedback → Deterministic Regression", "failure_trace_ref",
++                       "source_sha", "design-case", "not-measured", "holdout",
++                       "Lifecycle Review (report-only)", "required_and_forbidden_footprint",
++                       "owner_decision"):
++            self.assertIn(marker, lifecycle)
++
++        source_rows = [line for line in notes.splitlines()
++                       if line.startswith("| [") and "](https://github.com/" in line]
++        self.assertEqual(len(source_rows), 6)
++        self.assertEqual(len(set(source_rows)), len(source_rows))
++        for row in source_rows:
++            self.assertRegex(row, r"@[0-9a-f]{12}`")
++        for marker in ("ADR-R1", "ADR-R2", "HANDOFF-R1", "HANDOFF-R2",
++                       "LIFE-R1", "LIFE-R2", "not-measured", "不增加新 Skill"):
++            self.assertIn(marker, notes)
++        self.assertNotIn("真实模型效果已提升", notes)
++
++
++    def test_skill_fit_and_measured_value_are_not_trigger_success(self) -> None:
++        router = source("skills/adk-runtime-router/SKILL.md")
++        details = source("skills/adk-runtime-router/references/runtime-routing-details.md")
++        eval_guide = source(
++            "optional-skills/adk-skill-composition-governance/references/skill-behavior-evaluation.md"
++        )
++        audit = source("docs/evals/external-skill-method-comparison-20261114-round4.md")
++        for marker in ("Skill Fit Gate", "no-skill/abstain", "目标仓当前源码", "过期 Skill 模板"):
++            self.assertIn(marker, router)
++        for marker in ("target_repo@commit", "target_api_or_toolchain_version",
++                       "skill_supported_scope", "conflicting_guidance", "version-unverified",
++                       "second classifier"):
++            self.assertIn(marker, details)
++        for marker in ("no-skill vs selected-skill", "wrong-version",
++                       "explicit-instruction-conflict", "irrelevant-trigger",
++                       "beneficial / neutral / harmful / inconclusive", "not-measured",
++                       "effect_trials"):
++            self.assertIn(marker, eval_guide)
++        for marker in ("SWE-Skills-Bench", "AgentSkillOS", "Waza v0.41.0",
++                       "FIT-01", "FIT-02", "FIT-03", "VALUE-01", "VALUE-02",
++                       "VALUE-03", "E0/E1", "E2–E4"):
++            self.assertIn(marker, audit)
++        self.assertNotIn("ADK 已实测改善", audit)
++
++
++
++    def test_outcome_first_evaluation_and_minimal_verification_without_overclaim(self) -> None:
++        eval_ref = source(
++            "optional-skills/adk-skill-composition-governance/references/skill-behavior-evaluation.md"
++        )
++        recovery = source("skills/adk-planning-execution-loop/references/long-task-recovery.md")
++        source_note = source("docs/evals/external-skill-method-comparison-20261114-round5.md")
++        for marker in ("Outcome-first and overhead attribution", "no-skill", "correctness/completion",
++                       "functional / efficiency / instrumentation", "invalid-eval / INCOMPLETE",
++                       "hard fail", "不应被误判失败"):
++            self.assertIn(marker, eval_ref)
++        for marker in ("最小充分验证", "change_snapshot / affected_interfaces",
++                       "prior_verified_snapshot", "verification_reused / reason",
++                       "not-tested", "完整回归"):
++            self.assertIn(marker, recovery)
++        for marker in ("Microsoft Eval Guide", "Agent Skills Can Be Harmful",
++                       "NVIDIA SkillEvaluator", "Demystifying evals", "E0/E1",
++                       "not-measured", "5600"):
++            self.assertIn(marker, source_note)
++        self.assertNotIn("ADK 实际模型完成率已提高", source_note)
++
++
++
+ if __name__ == "__main__":
+     unittest.main()
+diff --git a/tests/test_skill_trigger_matrix.py b/tests/test_skill_trigger_matrix.py
+index abc70e9..0766488 100644
+--- a/tests/test_skill_trigger_matrix.py
++++ b/tests/test_skill_trigger_matrix.py
+@@ -7,7 +7,7 @@ import unittest
+ from pathlib import Path
+ 
+ from agent_dev_kit._matcher_kernel import _frontmatter
+-from agent_dev_kit.matcher import match_text
++from agent_dev_kit.matcher import format_result, match_text
+ from agent_dev_kit.model import Manifest
+ 
+ 
+@@ -95,8 +95,33 @@ class SkillTriggerMatrixTests(unittest.TestCase):
+ 
+ 
+ 
++    def test_cli_optional_install_requirement_and_negation(self) -> None:
++        # Run the *published CLI path*, not only the in-process matcher.
++        # A catalog hit is not a native host installation receipt.
++        cases = (
++            ("继续吸收外部成熟方法，提升已有 Skills 的实际执行效果",
++             0, "skill=adk-external-practice-absorption",
++             "profile_availability=optional-skill-required"),
++            ("不要吸收外部成熟方法", 1,
++             "match=false decision=abstain", "mutation_permission=deny"),
++        )
++        for prompt, exit_code, first, second in cases:
++            with self.subTest(prompt=prompt):
++                completed = subprocess.run(
++                    ["bash", str(ROOT / "scripts/devkit.sh"),
++                     "match", "--text", prompt],
++                    cwd=str(ROOT), check=False, text=True,
++                    stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=30,
++                )
++                self.assertEqual(completed.returncode, exit_code,
++                                 completed.stderr or completed.stdout)
++                self.assertIn(first, completed.stdout, completed.stdout)
++                self.assertIn(second, completed.stdout, completed.stdout)
++
++
+     def test_catalog_auto_selection_and_abstention(self) -> None:
+         manifest = Manifest.load(ROOT)
++        optional_names = {item["name"] for item in manifest.data["optional_skills"]}
+         for line, identifier, kind, expected, competitor, prompt in _catalog_cases():
+             with self.subTest(line=line, case=identifier, kind=kind):
+                 # Use the production public matcher across the *whole* catalog;
+@@ -112,7 +137,8 @@ class SkillTriggerMatrixTests(unittest.TestCase):
+                     self.assertEqual(result.get("runtime_role"), "primary", result)
+                 if competitor != "-":
+                     self.assertNotEqual(result.get("skill"), competitor, result)
+-                    explicit = match_text(manifest, prompt, skill=competitor, scope="skill")
++                    competitor_scope = "optional-skill" if competitor in optional_names else "skill"
++                    explicit = match_text(manifest, prompt, skill=competitor, scope=competitor_scope)
+                     if kind == "collision":
+                         # The losing Skill really could have matched, so this
+                         # proves automatic selection rather than a trivial hit.
+@@ -121,6 +147,47 @@ class SkillTriggerMatrixTests(unittest.TestCase):
+                         self.assertIs(explicit.get("match"), False, explicit)
+ 
+ 
++
++    def test_optional_skill_is_not_implicitly_installed_by_a_catalog_hit(self) -> None:
++        """Production matcher: routed and lexical Optional matches both need installation.
++
++        Static catalog routing is not proof that the current target runtime
++        contains the selected optional asset.  This tests the public structured
++        response and the human-facing CLI formatter, not a native host install.
++        """
++        manifest = Manifest.load(ROOT)
++        optional = "adk-external-practice-absorption"
++        for prompt, source in (
++            ("请评估参考实现，并吸收外部实践中的设计方法", "routing"),
++            ("继续吸收外部成熟方法，提升已有 Skills 的实际执行效果",
++             "optional_skill_trigger"),
++        ):
++            with self.subTest(prompt=prompt):
++                result = match_text(manifest, prompt, scope="auto")
++                self.assertIs(result.get("match"), True, result)
++                self.assertEqual(result.get("skill"), optional, result)
++                self.assertEqual(result.get("source"), source, result)
++                self.assertEqual(result.get("profile_availability"),
++                                 "optional-skill-required", result)
++                self.assertEqual(result.get("mutation_permission"), "deny", result)
++                self.assertIn("profile_availability=optional-skill-required",
++                              format_result(result))
++
++        explicit = match_text(manifest, "继续吸收外部成熟方法",
++                              skill=optional, scope="optional-skill")
++        self.assertIs(explicit.get("match"), True, explicit)
++        self.assertEqual(explicit.get("profile_availability"), "optional-skill-required",
++                         explicit)
++
++        core = match_text(manifest, "对标优质 Skills，先只读研究具体文件方法", scope="auto")
++        self.assertEqual(core.get("skill"), "adk-skill-deep-analysis", core)
++        self.assertNotEqual(core.get("profile_availability"), "optional-skill-required")
++
++        refused = match_text(manifest, "不要吸收外部成熟方法", scope="auto")
++        self.assertIs(refused.get("match"), False, refused)
++        self.assertEqual(refused.get("mutation_permission"), "deny", refused)
++
++
+     def test_portable_description_discovery_boundaries(self) -> None:
+         """Only source metadata preflight; never native host routing evidence."""
+         manifest = Manifest.load(ROOT)

@@ -1,0 +1,3 @@
+host: preparing autoreconf
+/bin/sh: aclocal: command not found
+make: *** [sensor-autoreconf] Error 127

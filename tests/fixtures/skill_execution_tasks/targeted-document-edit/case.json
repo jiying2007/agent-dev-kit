@@ -1,0 +1,17 @@
+{
+  "schema_version": "adk-development-task/v1",
+  "task_id": "targeted-document-edit",
+  "family": "document-preservation",
+  "evidence_scope": "test-only",
+  "initial_dir": "initial",
+  "checks": [
+    {
+      "name": "only-authorized-span-changed",
+      "kind": "text-replace-once",
+      "path": "work/docs/ADR-021.md",
+      "source": "docs/ADR-021.md",
+      "before": "Retry timeout: 250 ms.",
+      "after": "Retry timeout: 500 ms."
+    }
+  ]
+}

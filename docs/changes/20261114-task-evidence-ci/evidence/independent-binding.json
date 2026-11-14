@@ -1,0 +1,37 @@
+{
+  "schema": "adk-independent-source-binding/v1",
+  "reviewer": "ai/root/review_existing_candidate",
+  "review_started_at": "2026-11-14T12:44:00Z",
+  "source_binding_started_at": "2026-11-14T12:48:34Z",
+  "evidence_completed_at": "2026-11-14T12:48:55Z",
+  "reviewed_at": "2026-11-14T12:49:14Z",
+  "base_commit": "b9f250adf8fc4bc8d35dff2e5b2d44376a5e8dc9",
+  "head_commit": "447b882b87f7702e217abfebecb4accb788065ca",
+  "tree_sha": "c391abbf0443c5d265bd82d36f1e7d7fad2c621b",
+  "changed_files": 20,
+  "existing_files_matched": 19,
+  "deleted_files_matched": 1,
+  "original_patch_bytes": 32926,
+  "original_patch_sha256": "875f5a47d24b1844126fe06006405a7d6e26c0edbbab817e7f033e93e904a811",
+  "verdicts": {
+    "spec": "pass",
+    "quality": "pass"
+  },
+  "independently_executed_tests": {
+    "negative": 2,
+    "positive": 2,
+    "passed": 4
+  },
+  "prior_review": {
+    "evidence_commit": "b9f250adf8fc4bc8d35dff2e5b2d44376a5e8dc9",
+    "source_commit": "c1ccff024b70155515dc002cf222dd6edb986363",
+    "record_sha256": "569732ed76186e632f4b324842e026114d812aa956dcf3c06f40c8688a794d9b",
+    "requires_historical_checkout": true
+  },
+  "observations": [
+    "GitHub and local Git source/parent/tree match; complete twenty-path delta and all source/test hashes were independently checked.",
+    "Actual full original diff matches retained bytes. Four document changes only remove final LF; preserved JSON decodes to the original 4512 bytes and SHA.",
+    "Independent git diff --check from protected base ebef1106 to the fix commit passed. Complete 32-entry strict mypy and related regression records were read.",
+    "No gate weakening, new model invocation, statistics change or release qualification is asserted. Final exact-head CI remains a separate requirement."
+  ]
+}

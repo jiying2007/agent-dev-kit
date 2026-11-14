@@ -316,7 +316,7 @@ def prepare_managed_receipt(
         schema_path=schema_path,
         as_of=as_of,
     )
-    return json.loads(canonical_json_bytes(receipt).decode("utf-8"))
+    return dict(json.loads(canonical_json_bytes(receipt).decode("utf-8")))
 
 
 def validate_receipt(

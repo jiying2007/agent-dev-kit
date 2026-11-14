@@ -1,0 +1,43 @@
+{
+  "schema_version": "adk-development-task/v1",
+  "task_id": "kws-asset-reuse",
+  "family": "verified-asset-reuse",
+  "evidence_scope": "test-only",
+  "initial_dir": "initial",
+  "checks": [
+    {
+      "name": "asset-inventory-preserved",
+      "kind": "unchanged",
+      "path": "work/inventory.json",
+      "source": "inventory.json"
+    },
+    {
+      "name": "verified-features-preserved",
+      "kind": "unchanged",
+      "path": "work/assets/features.csv",
+      "source": "assets/features.csv"
+    },
+    {
+      "name": "nonmatching-asset-preserved",
+      "kind": "unchanged",
+      "path": "work/assets/stale.txt",
+      "source": "assets/stale.txt"
+    },
+    {
+      "name": "matching-verified-assets-selected",
+      "kind": "json-equals",
+      "path": "work/selection.json",
+      "expected": {
+        "profile": "q8-16k-mono",
+        "reused_assets": [
+          {
+            "path": "assets/features.csv",
+            "sha256": "9e877d106eaefb4b7609793afb77ecca6114b9e87659de7533b4e84640475915"
+          }
+        ],
+        "new_assets": [],
+        "runtime_evidence": "not-measured"
+      }
+    }
+  ]
+}

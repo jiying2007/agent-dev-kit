@@ -1,0 +1,513 @@
+diff --git a/docs/changes/20261114-skill-execution-evidence/design.md b/docs/changes/20261114-skill-execution-evidence/design.md
+index aaa6220..1da5e89 100644
+--- a/docs/changes/20261114-skill-execution-evidence/design.md
++++ b/docs/changes/20261114-skill-execution-evidence/design.md
+@@ -47,4 +47,3 @@ no-skill 侧实际加载目标 Skill 属对照污染；来源/初始状态漂移
+ 现有 CLI、Run Evidence、trace schema 和 effect comparison 的行为保持兼容。
+ 新增非执行导入为可选入口；回退本变更即可移除新增能力。
+ 若实现发现必须修改已有公共语义，先记录设计差异并做调用点搜索。
+-
+diff --git a/docs/changes/20261114-skill-execution-evidence/evidence/first-integration.json b/docs/changes/20261114-skill-execution-evidence/evidence/first-integration.json
+new file mode 100644
+index 0000000..0c88f49
+--- /dev/null
++++ b/docs/changes/20261114-skill-execution-evidence/evidence/first-integration.json
+@@ -0,0 +1,9 @@
++{
++  "schema": "adk-preserved-execution-output/v1",
++  "encoding": "utf-8",
++  "raw_bytes": 4512,
++  "raw_sha256": "1e7224bf9148123949774cc7be27eff343ef4b4c640c5331222b45c7133836bf",
++  "original_source_commit": "c1ccff024b70155515dc002cf222dd6edb986363",
++  "original_path": "docs/changes/20261114-skill-execution-evidence/evidence/first-integration.txt",
++  "stdout_utf8": "[PASS] test_validate\n[PASS] test_manifest_contract\n[PASS] test_catalog\n[PASS] test_skill_content\n[PASS] test_skill_trigger_matrix\n[PASS] test_skill_sop_quality\n[PASS] test_token_context_governance\n[PASS] test_strict_json\n[PASS] test_contract_hardening\n[PASS] test_boundary_rehearsal\n[PASS] test_contract_registry\n[PASS] test_schema_resource_sync\n[PASS] test_manifest_consumer_boundary\n[PASS] test_manifest_composition_contract\n[PASS] test_manifest_composition_cli\n[PASS] test_test_registry\n[PASS] test_python_launcher\n[PASS] test_asset_content_quality\n[PASS] test_format\n[PASS] test_no_external_repo_refs\n[PASS] test_file_modes\n[PASS] test_install\n[PASS] test_profile_coherence\n[FAIL] test_profile_context_footprint\n  stderr (last 80 lines):\n    F.....\n    ======================================================================\n    FAIL: test_all_profile_source_growth_ratchets_hold (test_profile_context_footprint.ProfileContextFootprintTest.test_all_profile_source_growth_ratchets_hold) (profile='incident-response')\n    ----------------------------------------------------------------------\n    Traceback (most recent call last):\n      File \"/workspace/scratch/234e724cfc4b/adk-iteration/tests/test_profile_context_footprint.py\", line 63, in test_all_profile_source_growth_ratchets_hold\n        self.assertEqual(result[\"status\"], \"pass\", result)\n    AssertionError: 'fail' != 'pass'\n    - fail\n    + pass\n     : {'schema': 'adk-profile-context-ratchet-result/v1', 'status': 'fail', 'profile': 'incident-response', 'actual': {'entry_file_bytes': 36266, 'potential_full_source_bytes': 47259}, 'ratchet': {'entry_file_bytes': 37797, 'potential_full_source_bytes': 46612}, 'asset_count': 9, 'asset_count_baseline': 9, 'failures': ['potential_full_source_bytes grew: actual=47259 ratchet=46612'], 'semantics': 'source-growth-review-ratchet-not-runtime-context-budget', 'runtime_initial_context_claim': False, 'release_authorized': False}\n    \n    ----------------------------------------------------------------------\n    Ran 6 tests in 0.820s\n    \n    FAILED (failures=1)\n[PASS] test_optional_skills\n[PASS] test_convert\n[PASS] test_runtime_boundary\n[PASS] test_target_contracts\n[PASS] test_target_adapter_spi\n[PASS] test_native_trust\n[PASS] test_sigstore_blob\n[PASS] test_native_campaign\n[PASS] test_native_campaign_boundaries\n[PASS] test_native_campaign_diagnostics\n[PASS] test_target_source_probe\n[PASS] test_effect_eval\n[PASS] test_completion_coverage\n[PASS] test_eval_catalog\n[PASS] test_external_reference_binding\n[PASS] test_runtime_comparison_contract\n[PASS] test_product_maturity\n[PASS] test_runtime_bundle\n[PASS] test_release_manifest_contract\n[PASS] test_software_m5_ready\n[PASS] test_repository_runtime_evidence\n[PASS] test_token_budget\n[PASS] test_task_cost\n[PASS] test_execution_policy\n[PASS] test_official_docs_governance\n[PASS] test_official_docs_timezone\n[PASS] test_official_upstream_drift\n[PASS] test_intent_boundary_governance\n[PASS] test_agent_ecosystem_standards\n[PASS] test_agent_value\n[PASS] test_agent_value_trust\n[PASS] test_trace_summary\n[PASS] test_run_evidence\n[PASS] test_evidence_envelope\n[PASS] test_evidence_bridge\n[PASS] test_effect_comparator\n[PASS] test_effect_trials\n[PASS] test_effect_campaign_materializer\n[PASS] test_runtime_capabilities\n[PASS] test_tool_skill_evidence_contracts\n[PASS] test_asset_taxonomy\n[PASS] test_workflow_contract\n[PASS] test_workflow_ir\n[PASS] test_workflow_closure\n[PASS] test_goal_contracts\n[PASS] test_capability_health\n[PASS] test_harness_readiness\n[PASS] test_review_evidence\n[PASS] test_archive_restore\n[PASS] test_local_ci_parity\n[PASS] test_hosted_workflow_hygiene\n[PASS] test_github_governance_admin\n[PASS] test_performance_budgets\n[PASS] test_change_governance\n[PASS] test_evidence_index\n[PASS] test_evidence_graph\n[PASS] test_pilot_readiness\n[PASS] test_embedded_production_field_pilot\n[PASS] test_embedded_workflow_pilots\n[PASS] test_embedded_test_matrix_example\n[PASS] test_workflow\n[PASS] test_workflow_verify_fail_closed\n[PASS] test_openspec_isolation\n[PASS] test_boundary_conditions_match\n[PASS] test_enhanced_gate_check\n[PASS] test_templates\n[PASS] test_context_md\n[PASS] test_boundary_conditions\n[PASS] test_integration\n[PASS] test_profile_coherence_enhanced\n[PASS] test_match_effectiveness\n[PASS] test_skill_governance\n[PASS] test_skill_dependencies\n[PASS] test_memory_governance\n[PASS] test_capability_uplift\n[PASS] test_docs_cli_alignment\n[PASS] test_performance_ops\n[PASS] test_scripts_smoke\n[SUMMARY] tests=102 pass=101 fail=1\n"
++}
+diff --git a/docs/changes/20261114-skill-execution-evidence/evidence/first-integration.txt b/docs/changes/20261114-skill-execution-evidence/evidence/first-integration.txt
+deleted file mode 100644
+index ff5866e..0000000
+--- a/docs/changes/20261114-skill-execution-evidence/evidence/first-integration.txt
++++ /dev/null
+@@ -1,120 +0,0 @@
+-[PASS] test_validate
+-[PASS] test_manifest_contract
+-[PASS] test_catalog
+-[PASS] test_skill_content
+-[PASS] test_skill_trigger_matrix
+-[PASS] test_skill_sop_quality
+-[PASS] test_token_context_governance
+-[PASS] test_strict_json
+-[PASS] test_contract_hardening
+-[PASS] test_boundary_rehearsal
+-[PASS] test_contract_registry
+-[PASS] test_schema_resource_sync
+-[PASS] test_manifest_consumer_boundary
+-[PASS] test_manifest_composition_contract
+-[PASS] test_manifest_composition_cli
+-[PASS] test_test_registry
+-[PASS] test_python_launcher
+-[PASS] test_asset_content_quality
+-[PASS] test_format
+-[PASS] test_no_external_repo_refs
+-[PASS] test_file_modes
+-[PASS] test_install
+-[PASS] test_profile_coherence
+-[FAIL] test_profile_context_footprint
+-  stderr (last 80 lines):
+-    F.....
+-    ======================================================================
+-    FAIL: test_all_profile_source_growth_ratchets_hold (test_profile_context_footprint.ProfileContextFootprintTest.test_all_profile_source_growth_ratchets_hold) (profile='incident-response')
+-    ----------------------------------------------------------------------
+-    Traceback (most recent call last):
+-      File "/workspace/scratch/234e724cfc4b/adk-iteration/tests/test_profile_context_footprint.py", line 63, in test_all_profile_source_growth_ratchets_hold
+-        self.assertEqual(result["status"], "pass", result)
+-    AssertionError: 'fail' != 'pass'
+-    - fail
+-    + pass
+-     : {'schema': 'adk-profile-context-ratchet-result/v1', 'status': 'fail', 'profile': 'incident-response', 'actual': {'entry_file_bytes': 36266, 'potential_full_source_bytes': 47259}, 'ratchet': {'entry_file_bytes': 37797, 'potential_full_source_bytes': 46612}, 'asset_count': 9, 'asset_count_baseline': 9, 'failures': ['potential_full_source_bytes grew: actual=47259 ratchet=46612'], 'semantics': 'source-growth-review-ratchet-not-runtime-context-budget', 'runtime_initial_context_claim': False, 'release_authorized': False}
+-    
+-    ----------------------------------------------------------------------
+-    Ran 6 tests in 0.820s
+-    
+-    FAILED (failures=1)
+-[PASS] test_optional_skills
+-[PASS] test_convert
+-[PASS] test_runtime_boundary
+-[PASS] test_target_contracts
+-[PASS] test_target_adapter_spi
+-[PASS] test_native_trust
+-[PASS] test_sigstore_blob
+-[PASS] test_native_campaign
+-[PASS] test_native_campaign_boundaries
+-[PASS] test_native_campaign_diagnostics
+-[PASS] test_target_source_probe
+-[PASS] test_effect_eval
+-[PASS] test_completion_coverage
+-[PASS] test_eval_catalog
+-[PASS] test_external_reference_binding
+-[PASS] test_runtime_comparison_contract
+-[PASS] test_product_maturity
+-[PASS] test_runtime_bundle
+-[PASS] test_release_manifest_contract
+-[PASS] test_software_m5_ready
+-[PASS] test_repository_runtime_evidence
+-[PASS] test_token_budget
+-[PASS] test_task_cost
+-[PASS] test_execution_policy
+-[PASS] test_official_docs_governance
+-[PASS] test_official_docs_timezone
+-[PASS] test_official_upstream_drift
+-[PASS] test_intent_boundary_governance
+-[PASS] test_agent_ecosystem_standards
+-[PASS] test_agent_value
+-[PASS] test_agent_value_trust
+-[PASS] test_trace_summary
+-[PASS] test_run_evidence
+-[PASS] test_evidence_envelope
+-[PASS] test_evidence_bridge
+-[PASS] test_effect_comparator
+-[PASS] test_effect_trials
+-[PASS] test_effect_campaign_materializer
+-[PASS] test_runtime_capabilities
+-[PASS] test_tool_skill_evidence_contracts
+-[PASS] test_asset_taxonomy
+-[PASS] test_workflow_contract
+-[PASS] test_workflow_ir
+-[PASS] test_workflow_closure
+-[PASS] test_goal_contracts
+-[PASS] test_capability_health
+-[PASS] test_harness_readiness
+-[PASS] test_review_evidence
+-[PASS] test_archive_restore
+-[PASS] test_local_ci_parity
+-[PASS] test_hosted_workflow_hygiene
+-[PASS] test_github_governance_admin
+-[PASS] test_performance_budgets
+-[PASS] test_change_governance
+-[PASS] test_evidence_index
+-[PASS] test_evidence_graph
+-[PASS] test_pilot_readiness
+-[PASS] test_embedded_production_field_pilot
+-[PASS] test_embedded_workflow_pilots
+-[PASS] test_embedded_test_matrix_example
+-[PASS] test_workflow
+-[PASS] test_workflow_verify_fail_closed
+-[PASS] test_openspec_isolation
+-[PASS] test_boundary_conditions_match
+-[PASS] test_enhanced_gate_check
+-[PASS] test_templates
+-[PASS] test_context_md
+-[PASS] test_boundary_conditions
+-[PASS] test_integration
+-[PASS] test_profile_coherence_enhanced
+-[PASS] test_match_effectiveness
+-[PASS] test_skill_governance
+-[PASS] test_skill_dependencies
+-[PASS] test_memory_governance
+-[PASS] test_capability_uplift
+-[PASS] test_docs_cli_alignment
+-[PASS] test_performance_ops
+-[PASS] test_scripts_smoke
+-[SUMMARY] tests=102 pass=101 fail=1
+diff --git a/docs/changes/20261114-skill-execution-evidence/negative-results.md b/docs/changes/20261114-skill-execution-evidence/negative-results.md
+index 88cea15..c88b608 100644
+--- a/docs/changes/20261114-skill-execution-evidence/negative-results.md
++++ b/docs/changes/20261114-skill-execution-evidence/negative-results.md
+@@ -19,4 +19,3 @@
+   修复仅精简 `mcu-memory-footprint.md`：2208降为1523字节，profile降为46574（上限46612）；
+   保留全部新增与原边界，profile 6/6、content 71/71定向复验通过。
+   随后澄清“不无故全量重建”，最终文件1529字节、profile 46580字节；再次6/6通过。
+-
+diff --git a/docs/changes/20261114-skill-execution-evidence/requirements.md b/docs/changes/20261114-skill-execution-evidence/requirements.md
+index 101e7cf..29547a7 100644
+--- a/docs/changes/20261114-skill-execution-evidence/requirements.md
++++ b/docs/changes/20261114-skill-execution-evidence/requirements.md
+@@ -34,4 +34,3 @@ https://chatgpt.com/space/page_b7138a96c4588191afaa4df2ebb7bd5f 。
+ 
+ 不修改现有路由 materializer 的意义，不新建生产 agent runtime、scheduler 或统计引擎；
+ 不自动安装技能、改变安全/发布政策、调用 Codex/ChatGPT Work 额度或创建定时巡检。
+-
+diff --git a/docs/changes/20261114-skill-execution-evidence/tasks.md b/docs/changes/20261114-skill-execution-evidence/tasks.md
+index c53b82b..9c11889 100644
+--- a/docs/changes/20261114-skill-execution-evidence/tasks.md
++++ b/docs/changes/20261114-skill-execution-evidence/tasks.md
+@@ -17,4 +17,3 @@
+ 首轮集成诊断为101/102，唯一profile体积失败已精简引用并定向6/6复验，未提高预算。
+ 下一步：将冻结源码与真实审查记录提交受保护PR；核验最终提交的完整CI；验证主线CI与不可变release。
+ T6当前为 evidence-blocked：没有允许宿主的真实任务观测，续行见 `docs/runbooks/task-evidence.md`。
+-
+diff --git a/docs/changes/20261114-task-evidence-ci/design.md b/docs/changes/20261114-task-evidence-ci/design.md
+new file mode 100644
+index 0000000..4cff4a7
+--- /dev/null
++++ b/docs/changes/20261114-task-evidence-ci/design.md
+@@ -0,0 +1,18 @@
++# 设计：完整类型图与原始日志保真
++
++设计/协调为 `ai/root`，五模块实现为 `ai/root/implement_task_evidence`，
++只读独立复审为 `ai/root/review_existing_candidate`。
++
++CI错误来自新增task模块把既有agent_value_contracts、agent_value_receipts、agent_value、
++run_evidence、effect_trials纳入更完整的类型依赖图。改动限于callback参数/正确类型归属、
++经现有验证后的字符串/映射窄化、datetime可空状态窄化和异质字典注解。
++不改变统计公式、失败语义、授权或输入放行条件。
++
++本地仅把src加入PYTHONPATH的mypy运行会把部分导入当作外部包，出现非等价绿灯。
++复验使用完整CI清单与显式MYPYPATH源码解析，另直接检查全部五个问题模块，避免缓存/搜索路径掩盖。
++
++原始first-integration.txt含测试框架空白行，直接作为新文本提交违反既有diff格式门禁。
++改用first-integration.json的stdout_utf8保存原文，连同raw_bytes与raw_sha256；
++反编码后必须与原日志完全一致，不删除失败、不改历史时间或102/101/1分母。
++旧typed记录保持原字节，适用于原source/证据提交；其引用的历史文件在Git对象中保留。
++本增量采用新的change与审查记录，绑定修复来源，不将历史记录视为当前字节的通过证明。
+diff --git a/docs/changes/20261114-task-evidence-ci/evidence/ci-failures.json b/docs/changes/20261114-task-evidence-ci/evidence/ci-failures.json
+new file mode 100644
+index 0000000..3006376
+--- /dev/null
++++ b/docs/changes/20261114-task-evidence-ci/evidence/ci-failures.json
+@@ -0,0 +1,42 @@
++{
++  "schema": "adk-source-ci-failure-observation/v1",
++  "repository": "jiying2007/agent-dev-kit",
++  "head_sha": "b9f250adf8fc4bc8d35dff2e5b2d44376a5e8dc9",
++  "pr": 265,
++  "jobs": [
++    {
++      "id": 132449893656,
++      "name": "static-security",
++      "log_lines": [
++        "2026-11-14T12:38:33.4054294Z src/agent_dev_kit/agent_value_contracts.py:268: error: Value of type variable \"SupportsRichComparisonT\" of \"sorted\" cannot be \"Any | None\"  [type-var]",
++        "2026-11-14T12:38:33.4630536Z src/agent_dev_kit/agent_value_receipts.py:319: error: Returning Any from function declared to return \"dict[str, Any]\"  [no-any-return]",
++        "2026-11-14T12:38:33.5894318Z src/agent_dev_kit/agent_value.py:49: error: Function is missing a type annotation for one or more parameters  [no-untyped-def]",
++        "2026-11-14T12:38:33.5895434Z src/agent_dev_kit/agent_value.py:65: error: Function is missing a type annotation for one or more parameters  [no-untyped-def]",
++        "2026-11-14T12:38:33.5896387Z src/agent_dev_kit/agent_value.py:97: error: Name \"value_contracts.EvidenceVerifier\" is not defined  [name-defined]",
++        "2026-11-14T12:38:33.6306693Z src/agent_dev_kit/run_evidence.py:306: error: Argument \"aggregation_window\" to \"emit_measurements\" has incompatible type \"dict[str, datetime | None]\"; expected \"Mapping[str, datetime] | None\"  [arg-type]",
++        "2026-11-14T12:38:33.6308333Z src/agent_dev_kit/run_evidence.py:310: error: Argument 1 to \"_iso\" has incompatible type \"datetime | None\"; expected \"datetime\"  [arg-type]",
++        "2026-11-14T12:38:33.6309495Z src/agent_dev_kit/run_evidence.py:311: error: Argument 1 to \"_iso\" has incompatible type \"datetime | None\"; expected \"datetime\"  [arg-type]",
++        "2026-11-14T12:38:33.6310581Z src/agent_dev_kit/run_evidence.py:313: error: Argument 1 to \"_iso\" has incompatible type \"datetime | None\"; expected \"datetime\"  [arg-type]",
++        "2026-11-14T12:38:33.7808072Z src/agent_dev_kit/effect_trials.py:77: error: Returning Any from function declared to return \"Mapping[str, Any]\"  [no-any-return]",
++        "2026-11-14T12:38:33.7809215Z src/agent_dev_kit/effect_trials.py:226: error: Dict entry 1 has incompatible type \"str\": \"int\"; expected \"str\": \"str\"  [dict-item]",
++        "2026-11-14T12:38:33.7810251Z src/agent_dev_kit/effect_trials.py:226: error: Dict entry 2 has incompatible type \"str\": \"int\"; expected \"str\": \"str\"  [dict-item]",
++        "2026-11-14T12:38:33.7811669Z src/agent_dev_kit/effect_trials.py:227: error: Dict entry 3 has incompatible type \"str\": \"float\"; expected \"str\": \"str\"  [dict-item]",
++        "2026-11-14T12:38:33.7812789Z src/agent_dev_kit/effect_trials.py:228: error: Dict entry 4 has incompatible type \"str\": \"float\"; expected \"str\": \"str\"  [dict-item]",
++        "2026-11-14T12:38:33.8269641Z Found 14 errors in 5 files (checked 32 source files)"
++      ]
++    },
++    {
++      "id": 132449893438,
++      "name": "contract-py3.12",
++      "log_lines": [
++        "2026-11-14T12:38:38.6967722Z docs/changes/20261114-skill-execution-evidence/design.md:50: new blank line at EOF.",
++        "2026-11-14T12:38:38.6968700Z docs/changes/20261114-skill-execution-evidence/evidence/first-integration.txt:37: trailing whitespace.",
++        "2026-11-14T12:38:38.6969947Z docs/changes/20261114-skill-execution-evidence/evidence/first-integration.txt:40: trailing whitespace.",
++        "2026-11-14T12:38:38.6971131Z docs/changes/20261114-skill-execution-evidence/negative-results.md:22: new blank line at EOF.",
++        "2026-11-14T12:38:38.6972010Z docs/changes/20261114-skill-execution-evidence/requirements.md:37: new blank line at EOF.",
++        "2026-11-14T12:38:38.6973239Z docs/changes/20261114-skill-execution-evidence/tasks.md:20: new blank line at EOF.",
++        "2026-11-14T12:38:38.6974469Z [FAIL] detected whitespace errors in diff against origin/main"
++      ]
++    }
++  ]
++}
+diff --git a/docs/changes/20261114-task-evidence-ci/evidence/final-local-checks.json b/docs/changes/20261114-task-evidence-ci/evidence/final-local-checks.json
+new file mode 100644
+index 0000000..468eaa9
+--- /dev/null
++++ b/docs/changes/20261114-task-evidence-ci/evidence/final-local-checks.json
+@@ -0,0 +1,23 @@
++{
++  "schema": "adk-local-source-checks/v1",
++  "executor": "ai/root",
++  "completed_before": "2026-11-14T12:46:24Z",
++  "evidence_scope": "test-only",
++  "checks": [
++    {
++      "name": "full-ci-strict-mypy",
++      "definition_source": ".github/workflows/ci.yml: Run focused strict type analysis",
++      "source_resolution": "MYPYPATH=src; PYTHONPATH contains quality tools only",
++      "cache": "fresh temporary directory",
++      "exit_code": 0,
++      "output": "Source parsing: MYPYPATH=src; PYTHONPATH contains quality tools only; fresh cache.\nSuccess: no issues found in 32 source files\n"
++    },
++    {
++      "name": "raw-log-roundtrip",
++      "raw_bytes": 4512,
++      "raw_sha256": "1e7224bf9148123949774cc7be27eff343ef4b4c640c5331222b45c7133836bf",
++      "source_commit": "c1ccff024b70155515dc002cf222dd6edb986363",
++      "byte_identical": true
++    }
++  ]
++}
+diff --git a/docs/changes/20261114-task-evidence-ci/negative-results.md b/docs/changes/20261114-task-evidence-ci/negative-results.md
+new file mode 100644
+index 0000000..b0342df
+--- /dev/null
++++ b/docs/changes/20261114-task-evidence-ci/negative-results.md
+@@ -0,0 +1,7 @@
++# 真实失败记录
++
++- PR265 HEAD b9f250ad：contract-py3.12失败，四个新文档EOF空行和first-integration.txt的两行尾空白。
++  本地check-format时这些材料尚未tracked，未覆盖最终提交diff；后续核最终Git对象的完整差异。
++- 同HEAD static-security的完整strict mypy失败：五个既有模块共14错误；新task入口代码的四文件定向检查不能替代完整依赖图。
++- 在新cache下，仅PYTHONPATH包含src的本地完整清单仍可静默跳过导入错误；显式五模块和MYPYPATH解析用于等价复现。
++- 首轮集成诊断的101/102日志有真实空白，保留全部原字节于JSON，不通过删失败或改返回码修格式。
+diff --git a/docs/changes/20261114-task-evidence-ci/requirements.md b/docs/changes/20261114-task-evidence-ci/requirements.md
+new file mode 100644
+index 0000000..7a907ea
+--- /dev/null
++++ b/docs/changes/20261114-task-evidence-ci/requirements.md
+@@ -0,0 +1,12 @@
++# 任务证据入口的完整CI收敛
++
++PR265最终提交 `b9f250adf8fc4bc8d35dff2e5b2d44376a5e8dc9` 的真实CI失败，
++需要保持原门禁完成集成修复，属于用户已授权的全部迭代范围。
++
++- C1：新增入口依赖闭包在完整CI strict mypy范围内通过；不移除检查、不增加ignore或放宽类型配置。
++- C2：五个既有依赖只做可证明的类型声明/窄化，保持运行时验证、计量和统计算法语义。
++- C3：修复新文档的末尾空行；原失败日志以JSON无损保存，原始字节长度和SHA-256可重建验证。
++- C4：保留此前源码与审查的历史提交/原始时间；对本次增量单独进行独立Spec/Quality审查，
++  最终HEAD所有必需CI通过后才合并，主线CI和不可变发布分别核查。
++
++不新增runtime、模型调用、生产权限或实效证据；E2–E4仍需真实宿主记录。
+diff --git a/docs/changes/20261114-task-evidence-ci/tasks.md b/docs/changes/20261114-task-evidence-ci/tasks.md
+new file mode 100644
+index 0000000..64163e5
+--- /dev/null
++++ b/docs/changes/20261114-task-evidence-ci/tasks.md
+@@ -0,0 +1,8 @@
++# 任务与门禁
++
++- [x] T1 读取真实CI日志并复现14项类型错误及5个文件中6处空白格式问题。
++- [x] T2 在既有五模块做最小类型修复；verify：新cache与MYPYPATH的完整CI清单32source通过；19/7/35/42项现有及新增回归通过。
++- [x] T3 日志无损JSON封装及文档EOF修正；verify：重建4512字节及原SHA完全一致，临时index纳入全部增量后的完整PR diff格式通过。
++- [ ] T4 冻结增量、独立Spec/Quality审查、最终PR完整CI、合并、主线与不可变Release逐项核验。
++
++原源码审查与CI失败保留，不用重跑掩盖既有失败，也不把定向检查当全部CI通过。
+diff --git a/docs/changes/20261114-task-evidence-ci/verification.md b/docs/changes/20261114-task-evidence-ci/verification.md
+new file mode 100644
+index 0000000..be2f3b3
+--- /dev/null
++++ b/docs/changes/20261114-task-evidence-ci/verification.md
+@@ -0,0 +1,21 @@
++# CI修复验证
++
++原失败HEAD：`b9f250adf8fc4bc8d35dff2e5b2d44376a5e8dc9`。
++原始CI日志提取见 `evidence/ci-failures.json`；字段/时间保留工具返回，不补造执行。
++
++- GitHub原HEAD的完整regression于2026-11-14T12:43:01Z输出 `tests=102 pass=102 fail=0`。
++  contract与static-security另有失败；deterministic-eval-package只运行前置要求检查即失败，其余全部skipped，未执行包评估。
++- 实现者按CI清单、正确MYPYPATH和全新cache重现14错，最小修复后32个入口source通过。
++  协调者于2026-11-14T12:46:24Z前以同样完整清单/新cache实际复验通过；不是仅四个新模块的定向检查。
++- 实现者运行agent_value 19项、agent_value_trust 7项、effect_trials 35项、run_evidence 5+22+15项，均通过。
++  新增负例覆盖无效/缺失/混合Agent ID与三种各自缺失的聚合时间；不放宽原验证。
++- 独立审查者以只读 `-B` 执行两个新增负例及两个有效控制，4/4通过。
++- 原失败日志4512字节无损编码为JSON；反编码与真实Git对象 `c1ccff:原路径` 完全相同，
++  SHA-256为 `1e7224bf9148123949774cc7be27eff343ef4b4c640c5331222b45c7133836bf`。
++- 临时Git index纳入所有待提交改动后 against `ebef1106` 的完整diff格式检查为0；module-size/fan-out政策通过，未增加support模块。
++
++上述记录不意味着修复后最终HEAD的完整CI已运行；该门禁在新提交上独立检查。
++旧源码审查记录仍保留原字节和时间，其适用的证据提交为 `b9f250ad`，
++原记录SHA为 `569732ed76186e632f4b324842e026114d812aa956dcf3c06f40c8688a794d9b`。
++当前树格式和日志容器已改变，旧记录不能在当前路径冒充fresh pass；重建历史记录需使用原Git对象。
++本增量记录独立绑定 `b9f250ad -> 修复源码提交`，不会更改旧时间或复制新的计量/发布权威。
+diff --git a/src/agent_dev_kit/agent_value.py b/src/agent_dev_kit/agent_value.py
+index a3dc9b8..0bb6a64 100644
+--- a/src/agent_dev_kit/agent_value.py
++++ b/src/agent_dev_kit/agent_value.py
+@@ -8,7 +8,7 @@ import sys
+ from collections import defaultdict
+ from datetime import datetime, timezone
+ from pathlib import Path
+-from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
++from typing import Any, Callable, Dict, List, Mapping, Optional, Sequence, Tuple
+ 
+ from . import agent_value_contracts as value_contracts
+ from . import agent_value_receipts as value_receipts
+@@ -48,9 +48,9 @@ def _not_measured_metric(
+ 
+ def _ratio_metric(
+     receipts: Sequence[Mapping[str, Any]],
+-    predicate,
++    predicate: Callable[[Mapping[str, Any]], bool],
+     *,
+-    applicable=None,
++    applicable: Optional[Callable[[Mapping[str, Any]], bool]] = None,
+ ) -> Dict[str, Any]:
+     selected = [item for item in receipts if applicable is None or applicable(item)]
+     if not selected:
+@@ -66,9 +66,9 @@ def _optional_metric(
+     receipts: Sequence[Mapping[str, Any]],
+     field: str,
+     unit: str,
+-    transform,
++    transform: Callable[[Any], float],
+     *,
+-    applicable=None,
++    applicable: Optional[Callable[[Mapping[str, Any]], bool]] = None,
+ ) -> Dict[str, Any]:
+     applicable_receipts = [item for item in receipts if applicable is None or applicable(item)]
+     if not applicable_receipts:
+@@ -94,7 +94,7 @@ def emit_measurements(
+     manifest: Manifest,
+     contract: Mapping[str, Any],
+     schema_path: Optional[Path] = None,
+-    evidence_verifier: Optional[value_contracts.EvidenceVerifier] = None,
++    evidence_verifier: Optional[value_receipts.EvidenceVerifier] = None,
+     aggregation_window: Optional[Mapping[str, datetime]] = None,
+     as_of: Optional[datetime] = None,
+ ) -> Dict[str, Any]:
+diff --git a/src/agent_dev_kit/agent_value_contracts.py b/src/agent_dev_kit/agent_value_contracts.py
+index f3d9c1d..c1dec30 100644
+--- a/src/agent_dev_kit/agent_value_contracts.py
++++ b/src/agent_dev_kit/agent_value_contracts.py
+@@ -260,7 +260,10 @@ def validate_contract(contract: Mapping[str, Any], manifest: Manifest) -> Dict[s
+     raw_contracts = contract.get("agent_contracts")
+     if not isinstance(raw_contracts, list):
+         raise ManifestError("agent_contracts must be an array")
+-    contract_ids = [item.get("agent_id") for item in raw_contracts if isinstance(item, dict)]
++    contract_ids = [
++        validate_identifier(item.get("agent_id"), "agent contract ID")
++        for item in raw_contracts if isinstance(item, dict)
++    ]
+     if len(contract_ids) != len(raw_contracts) or len(contract_ids) != len(set(contract_ids)):
+         raise ManifestError("agent contract IDs must be present and unique")
+     if set(contract_ids) != identities["agent"]:
+diff --git a/src/agent_dev_kit/agent_value_receipts.py b/src/agent_dev_kit/agent_value_receipts.py
+index 63931ad..5ee08a4 100644
+--- a/src/agent_dev_kit/agent_value_receipts.py
++++ b/src/agent_dev_kit/agent_value_receipts.py
+@@ -316,7 +316,7 @@ def prepare_managed_receipt(
+         schema_path=schema_path,
+         as_of=as_of,
+     )
+-    return json.loads(canonical_json_bytes(receipt).decode("utf-8"))
++    return dict(json.loads(canonical_json_bytes(receipt).decode("utf-8")))
+ 
+ 
+ def validate_receipt(
+diff --git a/src/agent_dev_kit/effect_trials.py b/src/agent_dev_kit/effect_trials.py
+index 2bf243c..c0efcbe 100644
+--- a/src/agent_dev_kit/effect_trials.py
++++ b/src/agent_dev_kit/effect_trials.py
+@@ -59,7 +59,7 @@ def _validate(document: Mapping[str, Any]) -> Mapping[str, Any]:
+     if error is not None:
+         location = "/".join(map(str, error.absolute_path)) or "<root>"
+         raise ManifestError("invalid trial input at " + location)
+-    plan = document["plan"]
++    plan: Mapping[str, Any] = document["plan"]
+     start, through, as_of = (_time(plan["window"][name]) for name in ("from", "through", "as_of"))
+     if not _time(plan["registered_at"]) <= start <= through <= as_of <= datetime.now(timezone.utc):
+         raise ManifestError("trial plan must precede its fixed observation window")
+@@ -216,7 +216,7 @@ def compare_effect_trials(document: Mapping[str, Any], manifest: Manifest) -> di
+         metrics[name] = _paired_metric(left, right, plan["policy"], direction)
+         metrics[name]["unit"] = unit
+     verdict, reason = _verdict(metrics, plan, infra_failed=infra_failed, unsafe=unsafe)
+-    reliability = {}
++    reliability: dict[str, dict[str, Any]] = {}
+     for side, population in grouped.items():
+         states = [[raw["trace_summary"]["outcome"]["status"] for raw in population[task]] for task in tasks]
+         if any("not-available" in task for task in states):
+diff --git a/src/agent_dev_kit/run_evidence.py b/src/agent_dev_kit/run_evidence.py
+index d13ba85..af22c09 100644
+--- a/src/agent_dev_kit/run_evidence.py
++++ b/src/agent_dev_kit/run_evidence.py
+@@ -286,14 +286,8 @@ def emit_run_evidence(
+         for item in assets
+     ]
+     if receipts:
+-        if any(
+-            value is None
+-            for value in (
+-                observation.aggregation_from,
+-                observation.aggregation_through,
+-                observation.as_of,
+-            )
+-        ):
++        if (observation.aggregation_from is None or observation.aggregation_through is None
++                or observation.as_of is None):
+             raise ManifestError("asset observations require aggregation window and as_of")
+         window = {
+             "from": observation.aggregation_from,
+diff --git a/tests/test_agent_value.py b/tests/test_agent_value.py
+index 55b4583..125f512 100644
+--- a/tests/test_agent_value.py
++++ b/tests/test_agent_value.py
+@@ -120,6 +120,15 @@ def emit(receipts: list, contract: dict = CONTRACT, evidence_verifier=None) -> d
+ 
+ 
+ class AgentValueContractTest(unittest.TestCase):
++    def test_contract_rejects_invalid_ids_before_set_comparison(self) -> None:
++        for invalid in (None, [], 42):
++            with self.subTest(invalid=invalid):
++                contract = copy.deepcopy(CONTRACT)
++                contract["agent_contracts"][0]["agent_id"] = invalid
++                contract["agent_contracts"][1]["agent_id"] = "unknown-agent"
++                with self.assertRaises(ManifestError):
++                    validate_contract(contract, MANIFEST)
++
+     def test_contract_covers_live_manifest_without_parallel_identity_catalog(self) -> None:
+         report = validate_contract(CONTRACT, MANIFEST)
+         self.assertEqual("pass", report["status"])
+diff --git a/tests/test_run_evidence.py b/tests/test_run_evidence.py
+index a78a0cb..9d6795f 100644
+--- a/tests/test_run_evidence.py
++++ b/tests/test_run_evidence.py
+@@ -2,6 +2,7 @@ from __future__ import annotations
+ 
+ import copy
+ import unittest
++from dataclasses import replace
+ from datetime import datetime, timezone
+ from pathlib import Path
+ 
+@@ -131,6 +132,12 @@ class RunEvidenceCompositionTest(unittest.TestCase):
+                 CONTRACT,
+             )
+ 
++    def test_each_missing_aggregation_timestamp_fails_closed(self) -> None:
++        complete = observation(TestAssetObservation("profile", "core"))
++        for field in ("aggregation_from", "aggregation_through", "as_of"):
++            with self.subTest(field=field), self.assertRaisesRegex(ManifestError, "aggregation window and as_of"):
++                emit_run_evidence(replace(complete, **{field: None}), MANIFEST, CONTRACT)
++
+     def test_duplicate_unknown_window_and_privacy_inputs_fail_closed(self) -> None:
+         duplicate = TestAssetObservation("profile", "core")
+         with self.assertRaisesRegex(ManifestError, "duplicate asset"):

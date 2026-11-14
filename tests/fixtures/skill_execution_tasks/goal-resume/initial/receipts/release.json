@@ -1,0 +1,7 @@
+{
+  "operation_id": "publish-17",
+  "release_id": "rel-17",
+  "status": "succeeded",
+  "package": "artifacts/package.txt",
+  "caller_observed": true
+}

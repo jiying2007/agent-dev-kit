@@ -1,0 +1,12 @@
+{
+  "goal_id": "release-goal",
+  "revision": 3,
+  "last_completed": "package",
+  "publish_state": "unknown",
+  "logical_task_open": true,
+  "next_actions": [
+    "reconcile-publish",
+    "write-release-index",
+    "verify-device"
+  ]
+}

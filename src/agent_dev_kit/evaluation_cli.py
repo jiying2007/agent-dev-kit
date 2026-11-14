@@ -20,6 +20,8 @@ from .repository_evaluation import certify_repository_report
 from .repository_evaluation_contract import repository_plan
 from .strict_json import read as read_json
 from .boundary_rehearsal import rehearse
+from .task_evidence import import_task_evidence
+from .task_trials import compare_task_trials
 
 DEFAULT_CAMPAIGN_CONTRACT = (ROOT / "manifests" / "software_m5_eval_contract.json").resolve()
 
@@ -54,6 +56,22 @@ def main(argv: Sequence[str] | None = None) -> int:
     trials.add_argument("--input", required=True)
     trials.add_argument("--output")
     trials.add_argument("--summary-json", action="store_true")
+    task_import = sub.add_parser("import-task", help="Import bounded local task observations without execution")
+    task_import.add_argument("--input", required=True)
+    task_import.add_argument("--output")
+    task_import.add_argument("--summary-json", action="store_true")
+    task_trials = sub.add_parser("compare-task-trials", help="Check task input/state/assignment, then compare complete trials")
+    task_trials.add_argument("--input", required=True)
+    task_trials.add_argument("--output")
+    task_trials.add_argument("--summary-json", action="store_true")
+    task_grade = sub.add_parser("grade-task", help="Check development task artifacts without executing candidates")
+    task_grade.add_argument("--case", required=True)
+    task_grade.add_argument("--workspace", required=True)
+    task_grade.add_argument("--output", required=True)
+    task_grade.add_argument("--run-id", required=True)
+    task_grade.add_argument("--executor-id", required=True)
+    task_grade.add_argument("--grader-id", required=True)
+    task_grade.add_argument("--summary-json", action="store_true")
     effect = sub.add_parser("effect")
     effect.add_argument("--contract", default=str(ROOT / "manifests" / "effect_eval_contract.json"))
     effect.add_argument("--output")
@@ -123,6 +141,36 @@ def main(argv: Sequence[str] | None = None) -> int:
     certify.add_argument("--output")
     certify.add_argument("--summary-json", action="store_true")
     args = parser.parse_args(argv)
+    if args.action in {"import-task", "grade-task", "compare-task-trials"}:
+        try:
+            if args.action == "import-task":
+                value = import_task_evidence(Path(args.input), _manifest(),
+                                             output_path=Path(args.output) if args.output else None)
+            elif args.action == "compare-task-trials":
+                value = compare_task_trials(Path(args.input), _manifest(),
+                                            output_path=Path(args.output) if args.output else None)
+            else:
+                from .task_acceptance import grade_task_artifacts
+
+                value = grade_task_artifacts(
+                    Path(args.case), Path(args.workspace), Path(args.output),
+                    run_id=args.run_id, executor_id=args.executor_id, grader_id=args.grader_id,
+                )
+        except (ManifestError, OSError, ValueError, RecursionError, OverflowError):
+            # Never echo raw paths, event text, or invalid JSON from an untrusted package.
+            value = {
+                "schema_version": {"import-task": "adk-task-evidence-import/v1",
+                                   "compare-task-trials": "adk-task-trial-comparison/v1",
+                                   "grade-task": "adk-task-acceptance-error/v1"}[args.action],
+                "status": "invalid", "reason": "invalid-input-or-evidence",
+                "trust": "caller-observed", "evidence_scope": "test-only",
+                "quality_evidence_eligible": False, "release_authorized": False, "raw_content_stored": False,
+            }
+        if args.summary_json or not args.output or value["status"] == "invalid":
+            _json(value)
+        if args.action == "compare-task-trials" and value["status"] == "compared":
+            return {"improved": 0, "non-inferior": 0, "regressed": 1}.get(value["verdict"], 2)
+        return 0 if value["status"] in {"imported", "passed"} else 2 if value["status"] == "invalid" else 1
     if args.action == "boundaries":
         value = rehearse()
         _json(value)

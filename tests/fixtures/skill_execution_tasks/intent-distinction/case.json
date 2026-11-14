@@ -1,0 +1,42 @@
+{
+  "schema_version": "adk-development-task/v1",
+  "task_id": "intent-distinction",
+  "family": "clear-ambiguous-intent",
+  "evidence_scope": "test-only",
+  "initial_dir": "initial",
+  "checks": [
+    {
+      "name": "requests-preserved",
+      "kind": "unchanged",
+      "path": "work/requests.json",
+      "source": "requests.json"
+    },
+    {
+      "name": "intent-decision-and-open-question",
+      "kind": "json-equals",
+      "path": "work/decisions.json",
+      "expected": [
+        {
+          "request_id": "clear",
+          "mode": "execute-approved",
+          "primary": "adk-planning-execution-loop",
+          "questions": []
+        },
+        {
+          "request_id": "ambiguous",
+          "mode": "explore",
+          "primary": "adk-structured-requirements-questioning",
+          "questions": [
+            {
+              "id": "target-platform",
+              "options": [
+                "linux-embedded",
+                "mcu-rtos"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

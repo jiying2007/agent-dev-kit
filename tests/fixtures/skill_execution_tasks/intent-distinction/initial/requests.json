@@ -1,0 +1,24 @@
+[
+  {
+    "request_id": "clear",
+    "message": "按已经批准的计划继续完成这个 Goal；下一项、范围和验收已经确定。",
+    "approved_task": {
+      "next": "repair-timeout",
+      "scope": [
+        "retry_policy.py"
+      ],
+      "acceptance": "deadline-boundary"
+    }
+  },
+  {
+    "request_id": "ambiguous",
+    "message": "想做一个语音设备，先一起想清楚方向。",
+    "unknowns": [
+      "target-platform"
+    ],
+    "candidate_platforms": [
+      "linux-embedded",
+      "mcu-rtos"
+    ]
+  }
+]

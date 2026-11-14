@@ -120,6 +120,15 @@ def emit(receipts: list, contract: dict = CONTRACT, evidence_verifier=None) -> d
 
 
 class AgentValueContractTest(unittest.TestCase):
+    def test_contract_rejects_invalid_ids_before_set_comparison(self) -> None:
+        for invalid in (None, [], 42):
+            with self.subTest(invalid=invalid):
+                contract = copy.deepcopy(CONTRACT)
+                contract["agent_contracts"][0]["agent_id"] = invalid
+                contract["agent_contracts"][1]["agent_id"] = "unknown-agent"
+                with self.assertRaises(ManifestError):
+                    validate_contract(contract, MANIFEST)
+
     def test_contract_covers_live_manifest_without_parallel_identity_catalog(self) -> None:
         report = validate_contract(CONTRACT, MANIFEST)
         self.assertEqual("pass", report["status"])

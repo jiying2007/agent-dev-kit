@@ -1,0 +1,38 @@
+{
+  "schema": "adk-review-evidence/v1",
+  "subject_id": "20261114-reader-evidence-skill-quality",
+  "scope": "source-change",
+  "owner": "leiwenjun",
+  "author_id": "ai/root",
+  "reviewer": {"id": "ai/root/review_existing_candidate", "kind": "ai", "independence": "independent"},
+  "reviewed_at": "2026-11-14T12:18:59Z",
+  "evidence_completed_at": "2026-11-14T12:18:52Z",
+  "verdicts": {"quality": "pass", "spec": "pass"},
+  "findings": [
+    {"id": "task-timeout-denominator", "severity": "major", "disposition": "fixed", "reason": "Fixed task-budget timeouts remain valid task failures with full denominator and usage; only evidenced infrastructure/capture problems are invalid or incomplete. The independent reviewer checked the exact two-file fix and its CI integration."}
+  ],
+  "limitations": [
+    "Independent read-only AI review; identity is declared, not authenticated. No human GitHub approval is claimed.",
+    "The complete original diff and source bindings refer to the original reviewed base/head, even when this historical record is persisted in a later iteration. No absent lifecycle stages are synthesized.",
+    "E0/E1 source and deterministic regression only. E2-E4, real task completion, Token, cost and latency remain not-measured. Release, main CI and downstream promotion require their own evidence."
+  ],
+  "policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+  "validator_sha256": {
+    "src/agent_dev_kit/review_evidence.py": "be4892f464496a29dbbb41ebb56c48984bf103d8eabe2ee6117bd583d1032c47",
+    "src/agent_dev_kit/strict_json.py": "72f06f4dcaebfed83bd1ae9876e38d4f7d82d8a1473b40b66beffb6338ee94a5",
+    "src/agent_dev_kit/readiness_evidence.py": "6fdfd5bea3ee097ac21d2b2ab469378c8c84f78856061b680ebb0c5f9d726778"
+  },
+  "target": {
+    "base_commit": "7aed1d2545babce16c41dc021ead01c8c324ce07",
+    "head_commit": "2d5306b8ce342b88d04420d55843ce752c0e5240",
+    "original_patch_sha256": "af5717c5379742100be6aaf85bcd4e16853f6fba7f2603be08f16749fd33231d"
+  },
+  "sources": [
+    {"base": "record", "path": "evidence/original.patch", "sha256": "af5717c5379742100be6aaf85bcd4e16853f6fba7f2603be08f16749fd33231d"},
+    {"base": "record", "path": "evidence/source-bindings.json", "sha256": "bceb4523e62f3a8dcdad2667d50c3464a102b0cc105654fcfbf8af4b818e2e00"}
+  ],
+  "evidence": [
+    {"base": "record", "path": "review-findings.md", "sha256": "2e0c61b6578b513c978ffd4ece1e1608b4a6b245711dd5baeab5b6ebb05a5185"},
+    {"base": "record", "path": "evidence/github-checks.json", "sha256": "3370a8a2527773c372918934c576b79f4f9a0c42d67ce69c2e054b5d4d449b16"}
+  ]
+}

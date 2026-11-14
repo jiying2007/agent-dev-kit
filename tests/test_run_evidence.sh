@@ -7,4 +7,10 @@ PYTHON_BIN="${ADK_PYTHON_BIN:-python3}"
 PYTHONPATH="${ROOT_DIR}/src${PYTHONPATH:+:${PYTHONPATH}}" \
   "${PYTHON_BIN}" "${ROOT_DIR}/tests/test_run_evidence.py"
 
+PYTHONPATH="${ROOT_DIR}/src${PYTHONPATH:+:${PYTHONPATH}}" \
+  "${PYTHON_BIN}" "${ROOT_DIR}/tests/test_task_evidence.py"
+
+PYTHONPATH="${ROOT_DIR}/src${PYTHONPATH:+:${PYTHONPATH}}" \
+  "${PYTHON_BIN}" "${ROOT_DIR}/tests/test_task_trials.py"
+
 echo "[PASS] run evidence composition"

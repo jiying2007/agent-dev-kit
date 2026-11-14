@@ -1,0 +1,20 @@
+[
+  {
+    "id": "linux-embedded",
+    "os": "Linux",
+    "arch": "armv7",
+    "metric": "userspace-latency",
+    "available_tools": [
+      "perf"
+    ]
+  },
+  {
+    "id": "mcu-rtos",
+    "os": "FreeRTOS",
+    "arch": "cortex-m7",
+    "metric": "task-cycles",
+    "available_tools": [
+      "DWT"
+    ]
+  }
+]

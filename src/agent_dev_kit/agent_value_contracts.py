@@ -260,7 +260,10 @@ def validate_contract(contract: Mapping[str, Any], manifest: Manifest) -> Dict[s
     raw_contracts = contract.get("agent_contracts")
     if not isinstance(raw_contracts, list):
         raise ManifestError("agent_contracts must be an array")
-    contract_ids = [item.get("agent_id") for item in raw_contracts if isinstance(item, dict)]
+    contract_ids = [
+        validate_identifier(item.get("agent_id"), "agent contract ID")
+        for item in raw_contracts if isinstance(item, dict)
+    ]
     if len(contract_ids) != len(raw_contracts) or len(contract_ids) != len(set(contract_ids)):
         raise ManifestError("agent contract IDs must be present and unique")
     if set(contract_ids) != identities["agent"]:
