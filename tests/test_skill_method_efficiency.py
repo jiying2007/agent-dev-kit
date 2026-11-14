@@ -81,5 +81,18 @@ class SkillMethodEfficiencyTests(unittest.TestCase):
         self.assertIn("not create a new Agent/Skill/Workflow", guide)
         self.assertIn("not-measured", guide)
 
+    def test_task_timeout_is_failure_not_discarded_as_incomplete(self) -> None:
+        guide = (ROOT / "optional-skills/adk-skill-composition-governance/references/skill-behavior-evaluation.md").read_text(encoding="utf-8")
+        task = next(line for line in guide.splitlines() if "（task-timeout）" in line)
+        infrastructure = next(line for line in guide.splitlines() if "（infrastructure-timeout）" in line)
+        for term in ("预注册", "有效 task failure", "保留在任务分母中",
+                     "不得", "删除失败样本", "用量"):
+            self.assertIn(term, task)
+        self.assertNotIn("invalid-eval", task)
+        for term in ("基础设施/采集链路超时", "invalid-eval / INCOMPLETE",
+                     "保留全组", "成对重跑", "不选择性重试",
+                     "无法区分超时来源时保持原因未明"):
+            self.assertIn(term, infrastructure)
+
 if __name__ == "__main__":
     unittest.main()
