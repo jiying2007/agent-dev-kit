@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### 11.2.15 — Stage-aware completion verification
+- Split existing completion verification into checkpoint versus goal-final with independent low/medium/high risk, allowing small phase checks to reuse evidence rather than repeat unrelated full-Goal procedures.
+- Preserve all fail-closed review, provenance, lifecycle, permission/deny-path, UI/runtime, release and Codify decision gates. Defer the complete field report template into the existing verification governance reference.
+- Cut verification SKILL.md source UTF-8 size from 9476 to 6705 bytes (source-only observation, not measured model-token saving).
+- Add 9 source-only stage/authority examples and contract tests; E2–E4 host behavior, billed Token and task success remain not-measured.
+
 ### 11.2.14 — Review coverage, patch variants and source-first CI
 - Preserve full-review evidence with conditional inspected/uninspected coverage; add on-demand validation of original high-risk patch failures, same-root variants, legitimate behavior and new risks without remote/device execution.
 - Bind C/C++ and BSP review examples to linux-embedded, mcu-rtos and mcu-baremetal toolchain eligibility; unavailable evidence is not a passed scan.
