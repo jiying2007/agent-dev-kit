@@ -7,6 +7,8 @@
 - [x] Add source-level regression and synchronize 11.2.18 version projections.
 - [x] Validate a concrete source→implementation intent in real Matcher fixtures; correct optional-skill negative test scope.
 - [x] Add evidence reuse/inline fast path and third source comparison without expanding the 65-Skill catalog.
+- [x] Repair a real CI failure in `test_external_method_intake.py` (literal `\\t` versus TSV tab), retaining the assertion and 102-test denominator.
+- [x] Compare pinned SWE-Skills-Bench, AgentSkillOS and Waza sources; add version-fit/no-skill negative-value check with source-only regression and fourth comparison ledger.
 - [ ] Exact PR final-HEAD Python 3.12 contract, full regression, platform/security/dependency checks.
 - [ ] Independent protected PR review and merge decision.
 - [ ] Fresh-main CI, immutable release verification and any downstream Root promotion by a separate protected process.
