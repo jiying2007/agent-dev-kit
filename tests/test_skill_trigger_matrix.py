@@ -97,6 +97,7 @@ class SkillTriggerMatrixTests(unittest.TestCase):
 
     def test_catalog_auto_selection_and_abstention(self) -> None:
         manifest = Manifest.load(ROOT)
+        optional_names = {item["name"] for item in manifest.data["optional_skills"]}
         for line, identifier, kind, expected, competitor, prompt in _catalog_cases():
             with self.subTest(line=line, case=identifier, kind=kind):
                 # Use the production public matcher across the *whole* catalog;
@@ -112,7 +113,8 @@ class SkillTriggerMatrixTests(unittest.TestCase):
                     self.assertEqual(result.get("runtime_role"), "primary", result)
                 if competitor != "-":
                     self.assertNotEqual(result.get("skill"), competitor, result)
-                    explicit = match_text(manifest, prompt, skill=competitor, scope="skill")
+                    competitor_scope = "optional-skill" if competitor in optional_names else "skill"
+                    explicit = match_text(manifest, prompt, skill=competitor, scope=competitor_scope)
                     if kind == "collision":
                         # The losing Skill really could have matched, so this
                         # proves automatic selection rather than a trivial hit.
