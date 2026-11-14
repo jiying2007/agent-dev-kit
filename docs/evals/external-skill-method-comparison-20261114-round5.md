@@ -18,3 +18,16 @@
 ## 验证边界
 
 本轮仓库验证仅为 E0/E1（源码/真实确定性 Matcher/既有 CI）；E2–E4 真实宿主任务成功、Token/缓存成本、延迟等均 `not-measured`。不能用上游论文结论证明 ADK 自身增益，也不能用文档中列出的未运行设计案例冒充模型轨迹。无授权不发起付费执行、外部环境写入或新定时巡检。
+
+## 增量源码核查：champion/challenger 与短入口
+
+- [OpenAI Skill Creator](https://github.com/openai/skills/blob/main/skills/.system/skill-creator/SKILL.md) 单文件 blob `72bc0b97e7a6`：主入口只保留执行必要指令、额外参考按需读取，属于 **RETAIN/ENHANCE**。对应本轮 `adk-external-practice-absorption` 将四种模式压缩，消除与既有工作流重复的解释；没有增加 Skill 或常驻 Reference。
+- [Skill-RSI — HOW_IT_WORKS](https://github.com/justinwetch/Skill-RSI/blob/main/docs/HOW_IT_WORKS.md) 单文件 blob `216de8ac1807`：同任务 champion/challenger 做小范围变化，稳定用例不能被探索新获益抵消，属于 **ENHANCE（方法）**，不是引入其循环执行器、模型评审或高成本研究包。
+- [EvoSkill architecture](https://github.com/sentient-agi/EvoSkill/blob/main/docs/architecture.md) 单文件 blob `e7ff9d2feee1`：失败轨迹→单点假设→隐藏验证→保留最佳候选，作为 **OBSERVE**；不安装其 frontier/多分支执行、远程沙箱或自动生成技能。ADK 已有失败反馈、effect_trials 与 owner review，不创建并行平台。
+- [Sentry Skill Writer iteration path](https://github.com/getsentry/skills/blob/main/skills/skill-writer/references/iteration-path.md) 单文件 blob `4a979365b938`：正负例和来源分类应分开记录，稳定已成功用例要防退化；既有生命周期方法已经覆盖，本轮 **RETAIN**，不复制模板。
+
+### 已定位的执行前评测身份缺口
+
+此前 `skill_method_ab_prereg.json` 仍登记 **11.2.16→11.2.17**，而当前候选已是 **11.2.18**。因两版均无实际模型评测，本轮将现用对照重绑为 `11.2.17@7aed1d... → 11.2.18@尚未合并`，原未执行方案保存在同一 JSON 的 `superseded_unrun_plan` 中。此为评测配置正确性修复，不是 A/B 结果。
+
+**独立留出风险**：9 个原始案例的 5/4 分组虽然互不重叠，但内容在修订期间已被作者查看，因此只能算开发用例；未来真实晋级需独立方新建未曝光 holdout。champion/challenger 版本比较与 no-skill/with-skill 消融必须分别注册、证明真实 Skill exposure 并独立评审，不得拿不同 bundle digest 冒充目标 Skill 缺席。E2–E4 与实际 Token/成本仍为 `not-measured`，没有自动模型运行。
