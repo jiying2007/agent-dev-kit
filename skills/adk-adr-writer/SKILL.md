@@ -1,7 +1,7 @@
 ---
 name: adk-adr-writer
 description: "用于架构方案已有明确权衡、需要记录决定与替代方案时生成 ADR；不用于在需求不明时直接替代需求澄清或执行代码修改。"
-version: 1.2.0
+version: 1.2.1
 last_updated: 2026-11-13
 triggers:
   - "写ADR"
@@ -35,6 +35,11 @@ constraints:
 3. 记录后果与可验证证据，缺失的成本、性能或决策状态标为待核。
 4. 需要写入仓库时，按目标项目的 ADR 编号规则查找已有编号（例如 `ADR-NNN`），不覆盖旧决策；仅要求草稿则不写文件。
 5. 自检事实、术语、数值、限制词和引用关系；删无必要的复述。
+
+## Reader-only acceptance（按风险，不默认增加模型轮次）
+- **lite**：作者只依据成稿而非历史会话自检：读者能否区分 `proposed / accepted`、说出核心决定及其理由、定位验证办法？能则结束，不另建文档评测流水线。
+- **standard/deep 或需长期跨团队引用**：冻结仅含最终草稿和明确引用的 `reader_view`，按目标读者回答：`What was decided? Why? What changes for me? What evidence is missing? Who owns rollback?`。回答依赖未提供的口头背景、含糊状态或不存在的证据时，修正文档或标 `unknown/pending`，不虚构批准、结果和责任人。
+- 只做作者冷读时标 `reader_check: self-review`；独立读者或真实模型评测只有在被授权且实际执行后才标 `independent-verified`，否则 `not-run`。不能用作者自评冒充真实读者理解率。
 
 ## Output
 ```md
