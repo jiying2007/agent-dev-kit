@@ -3,6 +3,7 @@
 ## Unreleased
 
 ### 11.2.18 — Reader-first docs and evidence-driven Skill lifecycle
+- Correct production Matcher Optional availability: a catalog/lexical hit now carries `profile_availability=optional-skill-required` in structured and CLI results, including fallback and explicit selection. Add production-route tests; target host still verifies installation independently.
 - Add outcome-first task grading and paired functional/efficiency failure attribution in existing deferred Skill evaluation guidance; put verified same-snapshot stage reuse behind strict evidence/permission boundaries. Move the existing token-context gate earlier in the 102-test suite to fail fast when router entry size regresses (limit unchanged at 5600 bytes).
 - Absorb SWE-Skills-Bench requirement-paired findings as a *conditional* Skill Fit Gate: target version and explicit user acceptance outrank mismatched templates; allow no-skill/abstain without adding another router.
 - Add a source-only regression for wrong-version, instruction-conflict and irrelevant-trigger; only measured, paired native traces can classify beneficial/neutral/harmful Skill effect. Fix literal-tab assertion in the new optional-skill test.
