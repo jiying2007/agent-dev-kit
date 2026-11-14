@@ -49,6 +49,33 @@ class ExternalMethodIntakeTests(unittest.TestCase):
         self.assertIn("用于只读发现并对标公开优质 Skills", source)
         self.assertIn("不用于自动安装外部 Skill", source)
 
+    def test_source_to_implementation_handoff_is_bounded(self) -> None:
+        deep = SKILL.read_text(encoding="utf-8")
+        adoption = (ROOT / "optional-skills/adk-external-practice-absorption/SKILL.md").read_text(
+            encoding="utf-8"
+        )
+        loop = (ROOT / "skills/adk-planning-execution-loop/SKILL.md").read_text(encoding="utf-8")
+        behavioral = (ROOT / "optional-skills/adk-skill-composition-governance"
+                      / "references/skill-behavior-evaluation.md").read_text(encoding="utf-8")
+        for marker in ("Implementable handoff", "source_identity@sha", "runnable_regression",
+                       "本 Skill 不写仓", "affected_existing_skill"):
+            self.assertIn(marker, deep)
+        for marker in ("scoped-adoption", "portfolio-intake", "source-only",
+                       "behavior-qualification", "复用现有 ledger/evidence",
+                       "not-measured", "独立 owner 决策"):
+            self.assertIn(marker, adoption)
+        for marker in ("inline fast path", "planned / observed / ruling / evidence / rollback",
+                       "共享写集不冲突", "扩大权限"):
+            self.assertIn(marker, loop)
+        for marker in ("Case isolation", "initial_workspace_ref", "observed_tool_calls",
+                       "forbidden_side_effects", "missing_observability"):
+            self.assertIn(marker, behavioral)
+        competition = (ROOT / "tests/fixtures/skill_catalog_competition.tsv").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("继续吸收外部成熟方法，提升已有 Skills 的实际执行效果", competition)
+        self.assertIn("R041\\tnegated\\t-\\tadk-external-practice-absorption", competition)
+
     def test_prompt_trace_not_free_text_guess_or_durable_promotion(self) -> None:
         s = PROMPT.read_text(encoding="utf-8")
         for item in (
