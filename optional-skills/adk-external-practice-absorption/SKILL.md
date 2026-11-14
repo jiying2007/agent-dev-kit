@@ -46,11 +46,11 @@ constraints:
 
 ## Execution modes（按真实请求最短路径）
 
-- **source-only**：用户只要求阅读、搜索或对标时，交 `adk-skill-deep-analysis` 只读输出，不生成 change、安装或宣称行为改进。
-- **scoped-adoption（已有来源/用户授权）**：先核目标仓的最新 main、现有 PR、canonical candidate/owner decision 和 source digest；相同来源已审查且身份未变时**复用现有 ledger/evidence**，只补本次方法差异。合并相容改动到一个受保护 change/PR，而不是每个外部 Skill 各启动一个任务或重复全文检索。明确授权仅覆盖其声明范围，不能替代独立 owner 决策、工具权限、真实运行证据和发布门禁。
-- **portfolio-intake（广域发现）**：有界检索→去重→核实文件而非仓库主页→优先找现有 Skill 的具体失败/遗漏；高风险候选逐项审查。未知来源、证据或许可证保持 `OBSERVE/needs-evidence`。用户要继续执行时，形成最小 `source@sha → ADK current behavior → delta → test → blocker` handoff，避免止步于排名报告。
-- **behavior-qualification（用户请求效果证明）**：复用现有 `agent_dev_kit.effect_trials`、原预注册 train/holdout 与可信真实宿主 trace；每个案例隔离初始 workspace、工具权限与污染状态，只用同条件结果比较任务成功和错误触发。没有运行权限/真实费用数据时为 `not-measured`，不运行外部 evaluator、收费模型或伪造成绩。
-- 已批准开发任务中仅续做 code/test/CI 时，不重新启动本 Skill；交回原 implementation/verification primary，保持原 acceptance 分母。
+- **source-only**：仅检索/阅读时交只读分析，不写仓或安装。
+- **scoped-adoption**：优先复用现有 ledger/evidence、已审 source SHA 与同一受保护 PR；仅在用户授权范围内实施，仍需独立 owner 决策和原权限/发布门禁。
+- **portfolio-intake**：有界发现、去重并找已有 Skill 的真实缺口；输出 source@sha、最小差异及可执行回归，不重复整轮研究。
+- **behavior-qualification**：用原有 effect_trials、冻结 train/holdout 和同条件真实 trace；无证据记 `not-measured`，不调用未授权模型或外部 evaluator。
+- 已批准的 code/test/CI 续做任务直接交实施/验证 primary，不重启来源 intake。
 
 ## Prerequisites
 
