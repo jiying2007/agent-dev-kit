@@ -1,7 +1,7 @@
 ---
 name: adk-security-supply-chain
 description: "用于第三方 Skill、脚本、依赖和参考资产引入前的来源、权限与供应链审查；不用于自动安装不可信包或把静态扫描当安全认证。"
-version: 1.1.3
+version: 1.1.4
 last_updated: 2026-11-14
 triggers:
   - "供应链审查"
@@ -41,20 +41,25 @@ constraints:
 ## Workflow
 1. 按 Scope Gate 决定需要哪些审查和安装/运行权限；完整工作流只对真实引入/启用候选执行，避免为只读方法研究重复装扫描器。
 2. 来源审查：确认仓库可达性、维护状态、版本锚点。
-2. 许可证审查：确认 LICENSE 与使用范围。
-3. SBOM 生成：生成软件物料清单，记录所有直接与间接依赖。
-4. CVE 扫描：检查已知漏洞，评估影响范围与修复状态。
-5. 脚本审查：列出可执行脚本、危险命令、网络访问和写入路径。
-6. 敏感信息审查：检查密钥、token、个人路径和内部域名。
-7. 签名验证：验证资产完整性与发布者身份。
-8. 运行态信任边界审查：确认 base URL、relay、MCP server、hooks、sandbox 和 approval policy。
-9. 工具调用策略审查：为读文件、写文件、命令执行、网络访问、凭证读取列出 allow/deny 条件。
-10. MCP/plugin readiness：核对暴露清单、schema/smoke、auth scope、依赖边界和回滚步骤。
-11. Runtime Control Plane Audit：若候选资产暴露 slash command、MCP server、hook、permission profile 或外部 connector，记录 `slash_command_runtime_audit`、`mcp_runtime_contract`、`permission_profile_decision`、`approval_boundary`、`deny_path_test` 和 `rollback_path`。
-12. 安装范围审查：确认仅进入 core/optional/profile/plugin 中的最小范围。
-13. 回滚审查：给出移除方式和安装回退点。
+3. 许可证审查：确认 LICENSE 与使用范围。
+4. SBOM 生成：生成软件物料清单，记录所有直接与间接依赖。
+5. CVE 扫描：检查已知漏洞，评估影响范围与修复状态。
+6. 脚本审查：列出可执行脚本、危险命令、网络访问和写入路径。
+7. 敏感信息审查：检查密钥、token、个人路径和内部域名。
+8. 签名验证：验证资产完整性与发布者身份。
+9. 运行态信任边界审查：确认 base URL、relay、MCP server、hooks、sandbox 和 approval policy。
+10. 工具调用策略审查：为读文件、写文件、命令执行、网络访问、凭证读取列出 allow/deny 条件。
+11. MCP/plugin readiness：核对暴露清单、schema/smoke、auth scope、依赖边界和回滚步骤。
+12. Runtime Control Plane Audit：若候选资产暴露 slash command、MCP server、hook、permission profile 或外部 connector，记录 `slash_command_runtime_audit`、`mcp_runtime_contract`、`permission_profile_decision`、`approval_boundary`、`deny_path_test` 和 `rollback_path`。
+13. 安装范围审查：确认仅进入 core/optional/profile/plugin 中的最小范围。
+14. 回滚审查：给出移除方式和安装回退点。
 
 上述后续编号按原顺序执行所需步骤；不同候选可跳过不适用的工具扫描，但必须注明 `not-scanned / reason / owner`，不能把跳过项算作成功。
+
+## Scan Coverage / Finding Truth（按风险加载）
+- 静态安全扫描不能代替行为或权限审核；高风险来源检查时参考 `references/skill-scan-coverage.md` 的 source-to-sink / permission/invariant 证据。
+- 若目标仓已有经过验证的 `SECURITY_MODEL.md` / 威胁模型，只读绑定其版本、信任边界和适用的安全不变量；不能从候选 Skill 的自述反推安全政策，过期/不一致则 `needs-fix`。
+- 每条发现区分 `confirmed / false-positive / unverified`，扫描覆盖标 `inspected / omitted / unavailable`；规则命中不是漏洞证明，未检查的 scripts、hook、MCP 及安装副作用不能被零告警覆盖。
 
 ## Runtime Boundary Checklist
 - Provider/API relay：默认只允许官方或已审查端点；非标准 base URL 必须有 owner、用途、凭证边界和关闭方式。
@@ -92,6 +97,9 @@ sha256sum -c <checksum_file>
 - SBOM Summary:
 - CVE Scan Results:
 - Executable Scripts:
+- Security Model / Trust Boundaries / Invariant IDs (if applicable):
+- Scan Coverage: inspected / omitted / unavailable / tool-and-version:
+- Finding Verification: pattern / path-or-symbol / data-flow / confirmed | false-positive | unverified:
 - External Dependencies:
 - Secret Scan: coverage / excluded / not-scanned / candidate-paths / redaction
 - Signature Verification:

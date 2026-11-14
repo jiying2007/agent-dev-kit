@@ -1,8 +1,8 @@
 ---
 name: adk-interface-contract-design
 description: "用于模块 API、协议消息及生命周期状态转换的接口契约设计与迁移评审；不用于需求未收敛时直接写实现或放行设备动作。"
-version: 1.3.4
-last_updated: 2026-11-03
+version: 1.3.5
+last_updated: 2026-11-14
 triggers:
   - "设计接口"
   - "API设计"
@@ -57,19 +57,14 @@ constraints:
    # 检查是否有重复错误码值
    rg -o "= -[0-9]+" include/ | sort | uniq -d
    ```
-4. **约束异常行为**：超时、限流、重试、降级策略。
-   ```c
-   /* 超时与重试配置 */
-   #define IFACE_TIMEOUT_MS     1000
-   #define IFACE_MAX_RETRIES    3
-   #define IFACE_RETRY_DELAY_MS 100
-   ```
+4. **约束异常行为**：超时、限流、重试、降级必须来自目标协议、真实链路/设备预算与可证伪实验；不可把示例 1000ms/3 次重试当通用生产默认值。
 5. **受控生命周期契约（条件性）**：若操作跨越状态或独占资源，冻结 owner、状态、事件、资源、终止和 invariant；其中必须覆盖可见性、取消、超时、恢复、迟到完成与 generation/op-id 隔离。详见 [生命周期操作契约](references/lifecycle-operation-contract.md)。
 6. **工具与 handoff 副作用边界（条件性）**：按调用参数和目标身份在写入前授权；拒绝、未知结果和重放按 [工具与 handoff 副作用契约](references/tool-effect-contract.md) 处理。
 7. **结构化输出契约**：API、消息、工具或 handoff schema 必须记录 required fields、enum、additionalProperties=false、refusal handling 和 parse-failure 处理。
 8. **生成契约用例**：正常、边界、异常三类样例，给出项目真实构建/测试入口及可证伪断言；不输出伪造的编译命令。
 9. **双方案设计**：对风险较高或长期公共接口设计，至少比较两种合理的模块边界、外部可见约束、演进成本与验证 seam；只有一条路径可行时解释约束。
 10. **领域语义挑战**：对术语、状态和边界值用真实反例验证；仅在术语/决策发生变化时更新既有 glossary/ADR，不为模板新建文件。
+11. **Spec-to-Code 双向核对（有实现或修改现有协议时）**：按需读 `references/spec-code-bidirectional.md`，分别验证规格要求是否有实现、代码可观察行为是否有规格依据；未检查与未知不得计为通过。纯设计阶段只标待验证，不假定实现已存在。
 
 需要深模块比较或一次性原型验证时按需读取 `references/design-quality-methods.md`；接口范例仍按需读取 `references/details.md`。
 
@@ -78,7 +73,7 @@ constraints:
 - 词义冲突时用反例固定术语；深模块应隐藏可变复杂度，不建重复词汇/ADR。
 - 机器消费契约必须包含 strict schema、required fields、enum 和 refusal/parse-failure handling。
 - 必须给出版本兼容与迁移方案。
-- 必须附至少 3 条验证用例（正常/边界/异常）。
+- 必须附至少 3 条验证用例（正常/边界/异常）；若已存在实现，关键需求与未声明代码行为须有双向核对状态，缺证据标 `not-checked`。
 - 嵌入式接口必须验证结构体大小与对齐（`pahole` 或 `sizeof` 断言）。
 - 错误码必须覆盖所有可恢复与不可恢复场景。
 - 受控生命周期操作必须给出 owner × state × event × resource × termination × invariant 矩阵，并明确 generation/op-id、幂等、重试预算与 callback/cleanup 并发边界；缺失时不得进入实现或给出设计通过结论。

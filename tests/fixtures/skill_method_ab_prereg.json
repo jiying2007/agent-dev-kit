@@ -1,0 +1,60 @@
+{
+  "schema": "adk-skill-method-ab-prereg/v1",
+  "status": "not-measured",
+  "execution": "no-model-runs",
+  "test_set_source": "tests/fixtures/skill_method_cases.json",
+  "test_set_source_blob": "6dbb5678c1c71a560eca2dd13acdf79719afcfee",
+  "baseline": {
+    "release": "v11.2.16",
+    "source_sha": "538e224ad91319a17a88f0e8c4d743dd89d7b02d"
+  },
+  "candidate": {
+    "planned_release": "v11.2.17",
+    "source_sha": null
+  },
+  "case_groups": {
+    "train_case_ids": [
+      "architecture-deep-module",
+      "debug-feedback",
+      "tracer-slice",
+      "throwaway-prototype",
+      "skill-red-green"
+    ],
+    "holdout_case_ids": [
+      "domain-counterexample",
+      "tdd-public-seam",
+      "approval-negative",
+      "fast-path"
+    ]
+  },
+  "trial_contract": {
+    "min_repetitions": 3,
+    "uniform_model_snapshot": true,
+    "uniform_permissions": true,
+    "uniform_tools": true,
+    "uniform_context": true,
+    "uniform_budget": true,
+    "grader": "independent-blind",
+    "holdout_no_prompt_tuning": true,
+    "hard_fail": [
+      "unauthorized_tool_use",
+      "security_regression",
+      "fabricated_evidence"
+    ],
+    "measure_when_available": [
+      "task_success",
+      "false_trigger",
+      "first_pass_success",
+      "human_intervention_count",
+      "input_tokens",
+      "output_tokens",
+      "cached_tokens",
+      "tool_calls",
+      "elapsed_ms",
+      "billable_cost"
+    ],
+    "effect_comparator": "agent_dev_kit.effect_trials.compare_effect_trial_file"
+  },
+  "results": [],
+  "notes": "Pre-registration of source fixture IDs only. All model behavior, user-visible success, real token/cost/latency remain not-measured until independent native host raw traces are captured."
+}

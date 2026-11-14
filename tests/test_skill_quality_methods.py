@@ -97,5 +97,89 @@ class SkillQualityMethodsTests(unittest.TestCase):
             self.assertIn(marker, guide)
 
 
+    def test_external_skill_references_are_source_pinned_and_not_installed(self) -> None:
+        content = source("docs/evals/external-skill-method-comparison-20261114.md")
+        rows = [line for line in content.splitlines() if line.startswith("| [") and "](https://github.com/" in line]
+        self.assertEqual(len(rows), 22)
+        self.assertEqual(sum("ENHANCE" in row for row in rows), 8)
+        self.assertEqual(sum("RETAIN" in row for row in rows), 11)
+        self.assertEqual(sum("OBSERVE" in row for row in rows), 3)
+        for row in rows:
+            self.assertRegex(row, r"@[0-9a-f]{12}`")
+        self.assertIn("not-measured", content)
+        self.assertIn("不授权复制外部源码", content)
+
+    def test_spec_to_code_is_bidirectional_and_unchecked_is_not_success(self) -> None:
+        design = source("skills/adk-interface-contract-design/SKILL.md")
+        review = source("skills/adk-code-review-loop/SKILL.md")
+        details = source("skills/adk-interface-contract-design/references/spec-code-bidirectional.md")
+        review_detail = source("skills/adk-code-review-loop/references/review-governance-details.md")
+        template = source("skills/adk-code-review-loop/references/review-evidence-template.md")
+        self.assertIn("Spec-to-Code 双向核对", design)
+        self.assertIn("references/spec-code-bidirectional.md", design)
+        for token in ("spec → code", "code → spec", "verified / contradicted / absent / not-checked",
+                      "documented / undocumented / not-checked", "risk_owner_decision",
+                      "缺陷发现率", "not-tested"):
+            self.assertIn(token, details)
+        self.assertIn("Spec-to-Code", review_detail)
+        self.assertIn("Spec-to-Code Ledger", template)
+        self.assertIn("spec-compliance pass", review)
+        self.assertNotIn("#define IFACE_TIMEOUT_MS     1000", design)
+        self.assertNotIn("#define IFACE_MAX_RETRIES    3", design)
+
+    def test_security_scanner_separates_coverage_from_verified_vulnerabilities(self) -> None:
+        skill = source("optional-skills/adk-security-supply-chain/SKILL.md")
+        ref = source("optional-skills/adk-security-supply-chain/references/skill-scan-coverage.md")
+        for token in ("source-only intake", "adoption preflight", "install / runtime readiness",
+                      "SECURITY_MODEL.md", "confirmed / false-positive / unverified",
+                      "inspected / omitted / unavailable", "source-to-sink"):
+            self.assertIn(token, skill)
+        for token in ("candidate_source@commit/tag", "reachable_sink", "affected_principal",
+                      "inspected/omitted/unavailable", "false-positive", "unverified",
+                      "deny_path", "SECURITY_MODEL.md@digest"):
+            self.assertIn(token, ref)
+        self.assertIn("不自动安装/执行不可信目标", ref)
+        self.assertIn("3. 许可证审查：", skill)
+        self.assertNotIn("\n2. 许可证审查：", skill)
+
+    def test_preregistered_train_holdout_is_disjoint_and_has_no_claimed_runs(self) -> None:
+        fixture = json.loads(source("tests/fixtures/skill_method_ab_prereg.json"))
+        examples = json.loads(source("tests/fixtures/skill_method_cases.json"))
+        self.assertEqual(fixture["schema"], "adk-skill-method-ab-prereg/v1")
+        self.assertEqual(fixture["status"], "not-measured")
+        self.assertEqual(fixture["execution"], "no-model-runs")
+        self.assertEqual(fixture["baseline"]["source_sha"],
+                         "538e224ad91319a17a88f0e8c4d743dd89d7b02d")
+        self.assertIsNone(fixture["candidate"]["source_sha"])
+        self.assertEqual(fixture["results"], [])
+        train = fixture["case_groups"]["train_case_ids"]
+        holdout = fixture["case_groups"]["holdout_case_ids"]
+        self.assertGreaterEqual(len(train), 5)
+        self.assertGreaterEqual(len(holdout), 4)
+        self.assertFalse(set(train) & set(holdout))
+        self.assertEqual(set(train) | set(holdout), {x["id"] for x in examples["cases"]})
+        self.assertEqual(fixture["trial_contract"]["min_repetitions"], 3)
+        self.assertTrue(fixture["trial_contract"]["holdout_no_prompt_tuning"])
+        self.assertIn("unauthorized_tool_use", fixture["trial_contract"]["hard_fail"])
+        self.assertEqual(fixture["trial_contract"]["effect_comparator"],
+                         "agent_dev_kit.effect_trials.compare_effect_trial_file")
+        guide = source("optional-skills/adk-skill-composition-governance/references/skill-behavior-evaluation.md")
+        self.assertIn("train_case_ids", guide)
+        self.assertIn("holdout_case_ids", guide)
+        self.assertIn("invalid-eval", guide)
+        self.assertIn("not-measured", guide)
+
+    def test_cost_priority_requires_real_task_quality_evidence(self) -> None:
+        skill = source("skills/adk-token-context-governance/SKILL.md")
+        for token in ("Impact-first Selection", "task_success / safety / latency",
+                      "cached_tokens", "tool_calls", "串行外部检索瀑布",
+                      "not-measured", "audit/L3"):
+            self.assertIn(token, skill)
+        guide = source("docs/evals/skill-method-parity.md")
+        self.assertIn("skill_method_ab_prereg.json", guide)
+        self.assertIn("compare_effect_trial_file", guide)
+        self.assertIn("not-measured", guide)
+
+
 if __name__ == "__main__":
     unittest.main()
