@@ -87,6 +87,10 @@ class SkillQualityMethodsTests(unittest.TestCase):
             self.assertLess(rows.index("test_catalog.sh"), rows.index("test_strict_json.sh"))
         self.assertLess(full.index("test_skill_sop_quality.sh"), full.index("test_contract_hardening.sh"))
         self.assertNotIn("test_skill_sop_quality.sh", quick)
+        # Reuse the existing token/context gate early, rather than adding a
+        # second byte limit or waiting for the long test matrix to reach it.
+        self.assertLess(full.index("test_token_context_governance.sh"),
+                        full.index("test_strict_json.sh"))
 
     def test_real_eval_is_pre_registered_but_unmeasured(self) -> None:
         guide = source("docs/evals/skill-method-parity.md")
@@ -240,6 +244,28 @@ class SkillQualityMethodsTests(unittest.TestCase):
                        "VALUE-03", "E0/E1", "E2–E4"):
             self.assertIn(marker, audit)
         self.assertNotIn("ADK 已实测改善", audit)
+
+
+
+    def test_outcome_first_evaluation_and_minimal_verification_without_overclaim(self) -> None:
+        eval_ref = source(
+            "optional-skills/adk-skill-composition-governance/references/skill-behavior-evaluation.md"
+        )
+        recovery = source("skills/adk-planning-execution-loop/references/long-task-recovery.md")
+        source_note = source("docs/evals/external-skill-method-comparison-20261114-round5.md")
+        for marker in ("Outcome-first and overhead attribution", "no-skill", "correctness/completion",
+                       "functional / efficiency / instrumentation", "invalid-eval / INCOMPLETE",
+                       "hard fail", "不应被误判失败"):
+            self.assertIn(marker, eval_ref)
+        for marker in ("最小充分验证", "change_snapshot / affected_interfaces",
+                       "prior_verified_snapshot", "verification_reused / reason",
+                       "not-tested", "完整回归"):
+            self.assertIn(marker, recovery)
+        for marker in ("Microsoft Eval Guide", "Agent Skills Can Be Harmful",
+                       "NVIDIA SkillEvaluator", "Demystifying evals", "E0/E1",
+                       "not-measured", "5401"):
+            self.assertIn(marker, source_note)
+        self.assertNotIn("ADK 实际模型完成率已提高", source_note)
 
 
 
