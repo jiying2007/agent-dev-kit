@@ -1,0 +1,40 @@
+[
+  {
+    "command": [
+      "git",
+      "read-tree",
+      "HEAD"
+    ],
+    "started_at": "2026-11-14T14:35:00.820393+00:00",
+    "finished_at": "2026-11-14T14:35:00.825894+00:00",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "git",
+      "add",
+      "--all"
+    ],
+    "started_at": "2026-11-14T14:35:00.825903+00:00",
+    "finished_at": "2026-11-14T14:35:00.889545+00:00",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--cached",
+      "--check",
+      "HEAD"
+    ],
+    "started_at": "2026-11-14T14:35:00.889561+00:00",
+    "finished_at": "2026-11-14T14:35:00.896458+00:00",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  }
+]

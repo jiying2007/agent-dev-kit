@@ -1,0 +1,57 @@
+[
+  {
+    "command": [
+      "bash",
+      "scripts/devkit.sh",
+      "validate",
+      "--strict"
+    ],
+    "cwd": "/workspace/scratch/234e724cfc4b/adk-continuation",
+    "started_at": "2026-11-14T14:33:21.981500+00:00",
+    "finished_at": "2026-11-14T14:33:24.086479+00:00",
+    "exit_code": 0,
+    "stdout": "Validation passed. strict=1 quick=0\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "bash",
+      "tests/test_module_size_budget.sh"
+    ],
+    "cwd": "/workspace/scratch/234e724cfc4b/adk-continuation",
+    "started_at": "2026-11-14T14:33:24.086669+00:00",
+    "finished_at": "2026-11-14T14:33:27.080932+00:00",
+    "exit_code": 0,
+    "stdout": "{\"default_max_bytes\": 30000, \"import_fan_out_hotspot\": \"src/agent_dev_kit/cli.py\", \"largest_baseline_bytes\": 0, \"legacy_exception_count\": 0, \"max_import_fan_out\": 28, \"observed_max_import_fan_out\": 28, \"preferred_execution_namespace\": \"execution_policy\", \"schema\": \"adk-module-size-budget/v1\", \"status\": \"pass\", \"support_module_count\": 0, \"transitional_support_debt_count\": 0}\n[PASS] module size and bounded-context architecture policy pass\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "bash",
+      "tests/test_promotion_evidence.sh"
+    ],
+    "cwd": "/workspace/scratch/234e724cfc4b/adk-continuation",
+    "started_at": "2026-11-14T14:33:27.081081+00:00",
+    "finished_at": "2026-11-14T14:33:27.124509+00:00",
+    "exit_code": 1,
+    "stdout": "",
+    "stderr": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3: Error while finding module specification for 'agent_dev_kit.distribution.promotion_evidence' (ModuleNotFoundError: No module named 'agent_dev_kit')\n"
+  },
+  {
+    "command": [
+      "python",
+      "-m",
+      "ruff",
+      "check",
+      "src",
+      "tools",
+      "tests/fixtures/fake_target_runtime.py"
+    ],
+    "cwd": "/workspace/scratch/234e724cfc4b/adk-continuation",
+    "started_at": "2026-11-14T14:33:27.124655+00:00",
+    "finished_at": "2026-11-14T14:33:27.178867+00:00",
+    "exit_code": 0,
+    "stdout": "All checks passed!\n",
+    "stderr": ""
+  }
+]
