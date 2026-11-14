@@ -74,7 +74,7 @@ class ExternalMethodIntakeTests(unittest.TestCase):
             encoding="utf-8"
         )
         self.assertIn("继续吸收外部成熟方法，提升已有 Skills 的实际执行效果", competition)
-        self.assertIn("R041\\tnegated\\t-\\tadk-external-practice-absorption", competition)
+        self.assertIn("R041\tnegated\t-\tadk-external-practice-absorption", competition)
 
     def test_prompt_trace_not_free_text_guess_or_durable_promotion(self) -> None:
         s = PROMPT.read_text(encoding="utf-8")
