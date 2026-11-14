@@ -5,6 +5,8 @@
 - [x] Add conditional reader checks to existing ADR and handoff Skills.
 - [x] Extend existing composition lifecycle with scoped correction-to-regression and evidence-based retirement review.
 - [x] Add source-level regression and synchronize 11.2.18 version projections.
+- [x] Validate a concrete source→implementation intent in real Matcher fixtures; correct optional-skill negative test scope.
+- [x] Add evidence reuse/inline fast path and third source comparison without expanding the 65-Skill catalog.
 - [ ] Exact PR final-HEAD Python 3.12 contract, full regression, platform/security/dependency checks.
 - [ ] Independent protected PR review and merge decision.
 - [ ] Fresh-main CI, immutable release verification and any downstream Root promotion by a separate protected process.
