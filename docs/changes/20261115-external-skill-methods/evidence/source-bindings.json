@@ -1,0 +1,347 @@
+{
+  "schema": "adk-source-freeze-binding/v1",
+  "source_base": "5e0e83bcc127665de9a352e9eacfe9b092106cb2",
+  "source_head": "cd1d9b316facff73bcec0ed39d3a942a959292e4",
+  "source_tree": "9020ba384be332dbd95575044da6b84313706c64",
+  "frozen_at": "2026-11-15T14:48:40.189890Z",
+  "original_patch_sha256": "6ef7ac27cc4c6bdde40dacf230731f4a320035f43c9531c8ca568f70ed148383",
+  "original_patch_bytes": 720111,
+  "files": [
+    {
+      "path": ".version-lock",
+      "bytes": 67,
+      "sha256": "9e9997e8bed4374846edd500883671749470238786d30213235929f29ad46966",
+      "git_blob": "aadd93e67a5c6fc99c42ce4992bc579ae3bbf2de",
+      "mode": "100644"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "bytes": 102089,
+      "sha256": "623404314f96c6350cad3a86c9ac8ab3692af70d5df383ca8bb773158301f85c",
+      "git_blob": "caf3f70b1daec29b2859a2463f63aac26310f47d",
+      "mode": "100644"
+    },
+    {
+      "path": "CONTEXT.md",
+      "bytes": 8643,
+      "sha256": "aad254c71ea8c80dc9db747bcf95a8013a35bf7047e03d80e9b26305e5677a3e",
+      "git_blob": "c082bbd2cc16a3ccddf008ca48633aee4a10459b",
+      "mode": "100644"
+    },
+    {
+      "path": "README.md",
+      "bytes": 13086,
+      "sha256": "fa1c6ee4fa0861e5d14b7c49731f42f4058676bba3db8c5939af44d696b65080",
+      "git_blob": "cdb08dae4819a109c50eef4129e5401bd3e82718",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/agent-skill-catalog.md",
+      "bytes": 38507,
+      "sha256": "c5d5cb791588f61c4fc7cd06512531ec89c432c46e6ed05f67e60b1bfba353b0",
+      "git_blob": "e5bedd125460af6726e7aad1985248e9161d4ad2",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/changes/20261115-external-skill-methods/audit.md",
+      "bytes": 10777,
+      "sha256": "ec4d3a3e795c4abc8ad0f7500464330b6baa0803cf3c38dae02b47452be93a55",
+      "git_blob": "6685b27c1eb32d6c0ec4e7b2f2accf57230d7156",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/changes/20261115-external-skill-methods/design.md",
+      "bytes": 5471,
+      "sha256": "9567c72b65245fef2652a0c432789b221ecfc06ee11ee68abcfb412e95d8a38e",
+      "git_blob": "24df2b161ef2fdac07466134cba37e3157bd60b6",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/changes/20261115-external-skill-methods/evidence/catalog-drift-failure.json",
+      "bytes": 24272,
+      "sha256": "15bf6926fd5d76b4069bf533379ac8793e1221fc78df60c40c2a70ffbf589ad5",
+      "git_blob": "eb3905e8be0e4af943647127bec8bdea48a85c6d",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/changes/20261115-external-skill-methods/evidence/completion-contract-failure.json",
+      "bytes": 32608,
+      "sha256": "7439e6e4591bcc68c03d42bb5d048adbce7cb7d6cebd4a5eadf89fea54a67914",
+      "git_blob": "6c92fbcf3ab226e03c7373712bec8d10eb32308e",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/changes/20261115-external-skill-methods/evidence/completion-contract-fix.json",
+      "bytes": 67632,
+      "sha256": "23121286ab90828457dd588332251a6a129f93e60e52b8663ba856549cc6443d",
+      "git_blob": "f56d48d9eaf8523aa66a356e1400a509de46a480",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/changes/20261115-external-skill-methods/evidence/contract-review.md",
+      "bytes": 5096,
+      "sha256": "df766aba5fec87c369aa31397c5fd92aa4ee5697c55841ae41d1567fa42ddb93",
+      "git_blob": "a2631d85814eb09278a8f919a1e49171ef379561",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/changes/20261115-external-skill-methods/evidence/core-budget-followup.json",
+      "bytes": 41036,
+      "sha256": "5cd5f6d7c50bae59b00ef38e1c9aa3cc6662a7f0bd69ea135182b50bf4768345",
+      "git_blob": "8e4a083a86e102d65d95713420f54b52a28c6b77",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/changes/20261115-external-skill-methods/evidence/core-diagnostics.json",
+      "bytes": 83127,
+      "sha256": "dd989229b3c1929bb9095e9bb39566531a747ff160bbfb82cdb39a516f0fcd6c",
+      "git_blob": "924eab97e124199d3ab066e82741e5114c8d188b",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/changes/20261115-external-skill-methods/evidence/domain-diagnostics.json",
+      "bytes": 27673,
+      "sha256": "e6a0ea01fe196555ac345efb6ad614e262e61361af344d23657c987303800891",
+      "git_blob": "ed1ab53c4719a4fb375187e0797bb3b07bce48fa",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/changes/20261115-external-skill-methods/evidence/independent-source-review.md",
+      "bytes": 7762,
+      "sha256": "439d4ac196f823c70a2209b93cc4234fb36ad2367996f8d26608501c2345ab01",
+      "git_blob": "788a5edfaa1f4944100bcac9873e0fffdede2881",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/changes/20261115-external-skill-methods/evidence/integration-preflight.json",
+      "bytes": 95459,
+      "sha256": "48346a7de39d11a0188b6d1364e383a8356c88bc1ff41e5c058928a230a30bdd",
+      "git_blob": "ed1a2ca7ce0b7c906aedce22631985c005df0424",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/changes/20261115-external-skill-methods/evidence/prereview-routing.json",
+      "bytes": 13162,
+      "sha256": "f8f87f76eb5ce64e72082f1c53ea4c62325e9b464bc4688e20717a4adc36a21d",
+      "git_blob": "2eaad313a3dad80236beaa21dc5d7f23cfe67171",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/changes/20261115-external-skill-methods/evidence/prereview.md",
+      "bytes": 4439,
+      "sha256": "171b4bf91bffb01155e868676338dbce243bdc9814dc4a34d6a9642f5fc4c75c",
+      "git_blob": "fd6855fa0146ede763a038ad533fd6865afe7d6e",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/changes/20261115-external-skill-methods/evidence/research-core.json",
+      "bytes": 69491,
+      "sha256": "b1b96537ccdd467894ac70ee82943dbb12b2f882e97c316200c159086e5d12e4",
+      "git_blob": "0ee43785d40c0191cd6f0add586e21e75a4b328b",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/changes/20261115-external-skill-methods/evidence/research-domain.json",
+      "bytes": 71278,
+      "sha256": "c264052cc53f4d087719239415b198aae37c2c207826df6777f0fa0f4df26e0a",
+      "git_blob": "84215ed3208fc9eb499f3041e99e9e48d01c9f43",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/changes/20261115-external-skill-methods/evidence/research-root.json",
+      "bytes": 3169,
+      "sha256": "1ee29c79ecb998e77cd6dd41461c1f17c7d84f6a5b23b8572bc6cdbcf10b5fd7",
+      "git_blob": "47db76e15ec54cd1ae6ecf11e3737353033b9bed",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/changes/20261115-external-skill-methods/negative-results.md",
+      "bytes": 7655,
+      "sha256": "b136856ff480973fc6bdaca46ec09fd9fe09d8c32786c6e849337a6e1809f5d1",
+      "git_blob": "0e4b8c566c33a52216ce54fee612d0eebc10d82a",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/changes/20261115-external-skill-methods/requirements.md",
+      "bytes": 4561,
+      "sha256": "d66a8ccb4e645a4416318261935384c97eec0c1e8e756ccfafd58c4fcefec0ca",
+      "git_blob": "14fb20376754b8784de54f64bc6007695dcc105e",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/changes/20261115-external-skill-methods/source-review.md",
+      "bytes": 10440,
+      "sha256": "65a6a90e734514fc8f73e69f82cf567cc8ce7f3f8e03b0173668f4d147b90d86",
+      "git_blob": "566249c1a367798792097195c234d53f2a15ba4f",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/changes/20261115-external-skill-methods/tasks.md",
+      "bytes": 3068,
+      "sha256": "8b26966df824a7e09c23ecd13b1f5a1d410004609eb598575745109b352a38dd",
+      "git_blob": "70e8b985230d76bdcc28016b76422d92beec9fcf",
+      "mode": "100644"
+    },
+    {
+      "path": "manifest.json",
+      "bytes": 90987,
+      "sha256": "b6975a3821037da98e60bb5f109263815cd99897212df149a0748915c8c97d8d",
+      "git_blob": "9c80567fd34bdc1b92ef9fe567c5024f7417ce28",
+      "mode": "100644"
+    },
+    {
+      "path": "manifests/software_m5_eval_contract.json",
+      "bytes": 705,
+      "sha256": "020cbb2bc59a1274f7949e9f0d50406375816b6962d684e87b59036e2acde38c",
+      "git_blob": "90450e9326cb2ffc261e7948d86868ccf7197bf4",
+      "mode": "100644"
+    },
+    {
+      "path": "pyproject.toml",
+      "bytes": 1309,
+      "sha256": "cbc5cf57e98bc824b979ef58cce7396614ae2e7ec1a00b6d602d39a436a90ca7",
+      "git_blob": "52c878b3df2dfcc680cfaf1b32f9414a04d6e081",
+      "mode": "100644"
+    },
+    {
+      "path": "skills/adk-performance-profiling-embedded/SKILL.md",
+      "bytes": 3094,
+      "sha256": "c4c6b3e039bc022224a832d146f833b4ca9b69eefc08ee6f3b4a7f53dbaf2a3a",
+      "git_blob": "f72b38801171a5ca565405ab84a598bd051a3f19",
+      "mode": "100644"
+    },
+    {
+      "path": "skills/adk-performance-profiling-embedded/references/mcu-memory-footprint.md",
+      "bytes": 4583,
+      "sha256": "29add9e8e457932d195282b80364ecbc2f31e724d3fd509c0ba154e1fc3e486a",
+      "git_blob": "9221b95d4364b4f26617b3385d7fed9e137a9dfd",
+      "mode": "100644"
+    },
+    {
+      "path": "skills/adk-static-analysis-c-cpp/SKILL.md",
+      "bytes": 3405,
+      "sha256": "285a91f97eec057220e0f0e12f6070c1a2011e511523f8f2287190747a5e107a",
+      "git_blob": "4bbb10a5553d0aa849c5133dba2d6bffca96476a",
+      "mode": "100644"
+    },
+    {
+      "path": "skills/adk-systematic-debugging/SKILL.md",
+      "bytes": 3142,
+      "sha256": "dec791825d8b05166718bfcc0e7190bd4d4da253d610ea45702bc81fe23b722e",
+      "git_blob": "6f5453ff05b2106324b6c81a6b0017fd19b4d079",
+      "mode": "100644"
+    },
+    {
+      "path": "skills/adk-systematic-debugging/references/sanitizer-validation.md",
+      "bytes": 2463,
+      "sha256": "2d708bd56c0147437a53fe568ae483d41be10dd3481d691485d9db48cdc89fdd",
+      "git_blob": "fe9d0ac7e8bd9c53f7cedeca4a5d26ab64e8dbf5",
+      "mode": "100644"
+    },
+    {
+      "path": "skills/adk-systematic-debugging/references/tight-feedback-loop.md",
+      "bytes": 1187,
+      "sha256": "8f94f087b206d6bccb0a253231e9aa3bbe0a614b3be563e5d6c23d0da25672ab",
+      "git_blob": "a4cd5e164cee269b2be25856c1e602623507f994",
+      "mode": "100644"
+    },
+    {
+      "path": "skills/adk-task-breakdown/SKILL.md",
+      "bytes": 3659,
+      "sha256": "3d25e72fadcf2f74f4936223065097de9b7f26c41d4982ac0eb58ab4161c9f20",
+      "git_blob": "67edcf4f519e6cebca1ef8847a64644920076eed",
+      "mode": "100644"
+    },
+    {
+      "path": "skills/adk-task-breakdown/references/vertical-slice-planning.md",
+      "bytes": 3796,
+      "sha256": "f7267bb5a367369cbc40d0059d847f9e61d9d8f1d1cc23b17d5a3cf769de2260",
+      "git_blob": "1b0977d635e23911bd42a55e0b8354f78c11a0af",
+      "mode": "100644"
+    },
+    {
+      "path": "skills/adk-test-strategy/SKILL.md",
+      "bytes": 3612,
+      "sha256": "e7442473f760be5402a114b61378686816c8f35a3cde1ada59801a6d11cf7378",
+      "git_blob": "786a30565cd7739340e497e0adb0e1c89100ab39",
+      "mode": "100644"
+    },
+    {
+      "path": "skills/adk-test-strategy/references/high-value-tdd.md",
+      "bytes": 3247,
+      "sha256": "256c691c86dfd8126412564435d19f33cdc37fe245ae5aa7fd34b1ca4f7e094f",
+      "git_blob": "05c40e1f1d6b19a3b98519dd3c542b4f2d3cde63",
+      "mode": "100644"
+    },
+    {
+      "path": "skills/adk-unit-test-embedded/SKILL.md",
+      "bytes": 3068,
+      "sha256": "dd6bb63fe1b749a5d24767ddc8819d3f66c7dfd8cba94bbc1fb8fc1a88563db3",
+      "git_blob": "b97d09d30973b1c54d0ad3067a1a405dd4c034e7",
+      "mode": "100644"
+    },
+    {
+      "path": "skills/adk-unit-test-embedded/references/embedded-tdd-matrix.md",
+      "bytes": 783,
+      "sha256": "f244f5966faf07639c7cd3e94d6edaafe4489754963bd0c09b0279ba4b91b642",
+      "git_blob": "c1fa37aa190a10f549117442b93abe053f2464d4",
+      "mode": "100644"
+    },
+    {
+      "path": "skills/adk-unit-test-embedded/references/property-stateful-tests.md",
+      "bytes": 3315,
+      "sha256": "393b50c821794982d2e482e99ece5f9a6753bfe7c36b37752f2b3af950fde1a4",
+      "git_blob": "83c5ad4c600bf8a6e46dcdfd7f693e399ddfbc10",
+      "mode": "100644"
+    },
+    {
+      "path": "skills/adk-verification-before-completion/SKILL.md",
+      "bytes": 4508,
+      "sha256": "d60736e972a74d8d8843e80916cc8df30e83849effe13c48d14b60576903873d",
+      "git_blob": "954c2d3cab236017a421064dee51e08cc42ac63d",
+      "mode": "100644"
+    },
+    {
+      "path": "skills/adk-verification-before-completion/references/verification-governance-details.md",
+      "bytes": 8937,
+      "sha256": "e1ba3b03082c917372d2b33800b0506304d1612e2e7c4216d1fe2689106873fd",
+      "git_blob": "25d558e0962092af56e713e1647e1854acad0a2b",
+      "mode": "100644"
+    },
+    {
+      "path": "src/agent_dev_kit/__init__.py",
+      "bytes": 70,
+      "sha256": "1f0e2c2ccf359b42f2afd250c8dc2b5eacc30cbd2194609ddffcffd81c728393",
+      "git_blob": "7f73bad4b557eed44589a8e5faa961e83c0e6842",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/fixtures/skill_method_ab_prereg.json",
+      "bytes": 4268,
+      "sha256": "965b0e7a17c59575b6a3f4d35c06ef76877b821e9528e69f238ab16fb0b44eba",
+      "git_blob": "774851aacf4e00e0420ef55bdee84186f83d296d",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_external_core_methods.py",
+      "bytes": 10296,
+      "sha256": "23a674d721ded86c74f01269e3d0a2033535f7f1614c005e0ec1e4d1ed454009",
+      "git_blob": "d7540048a171602fab5c0988eeb03af27a564b6d",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_external_domain_methods.py",
+      "bytes": 9442,
+      "sha256": "13bc2eb0f7262dc727f18e199e37f00ce40ae950d162617e2ef1280285e0f2ec",
+      "git_blob": "c1c6805f1c6bcbf119155c344964c681423f33cb",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_skill_content.sh",
+      "bytes": 777,
+      "sha256": "ce9022dda23ae1d974262ae685710b07eae3b7a75a50078536320d565dec772d",
+      "git_blob": "351616f5f50c0cdfe3b6998e9ae09028c9176b88",
+      "mode": "100644"
+    }
+  ]
+}

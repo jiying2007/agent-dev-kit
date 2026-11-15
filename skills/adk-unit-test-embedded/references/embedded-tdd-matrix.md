@@ -1,49 +1,12 @@
 # Embedded Full-stack TDD Matrix
 
-## Test Level Decision
+记录 Level（0/1/2）、TDD required（yes/no）与理由，只选适用层：
 
-- Level: 0 | 1 | 2
-- TDD required: yes | no
-- Reason:
+| 层次 | 候选检查 |
+|---|---|
+| 构建/制品 | build-smoke、cross-build、boot/image/rootfs checksum、static-analysis |
+| 模块/应用 | host-unit-c-cpp、cmake-ctest、linux-userspace、host-tool-test |
+| 系统/硬件 | qemu-sil、boot-smoke、flashing-smoke、hil-confirmation |
+| 可靠性/现场 | fault-injection、ota-rollback、factory-diagnostics、long-run |
 
-## Test Matrix
-
-| Case | Layer | Type | Command | Expected |
-|---|---|---|---|---|
-| build-smoke | build | smoke |  |  |
-| artifact-checksum | boot/image/rootfs | artifact integrity |  |  |
-| host-unit-c-cpp | driver/component | happy path |  |  |
-| cmake-ctest | component/application | regression |  |  |
-| cross-build | silicon/board/OS | build |  |  |
-| boot-smoke | boot chain/rootfs | smoke |  |  |
-| flashing-smoke | board/flashing | smoke |  |  |
-| linux-userspace | device application | smoke/regression |  |  |
-| host-tool-test | upper-computer/tooling | unit/regression |  |  |
-| qemu-sil | system | simulation |  |  |
-| hil-confirmation | hardware/system | hardware confirmation |  |  |
-| static-analysis | codebase | static |  |  |
-| fault-injection | reliability | error path |  |  |
-| ota-rollback | release/field | upgrade recovery |  |  |
-| factory-diagnostics | production/field | production smoke |  |  |
-| long-run | reliability | soak/stability |  |  |
-
-## Red / Green Evidence
-
-- Red command:
-- Red result:
-- Green command:
-- Green result:
-
-## Not Tested
-
-- Gap:
-- Reason:
-- Follow-up:
-
-## Evidence Requirements
-
-- Boot evidence:
-- Board/HIL evidence:
-- Factory/diagnostics evidence:
-- OTA/rollback evidence:
-- Manual evidence owner:
+每个实际用例填写 layer/type、输入/expected、red/green command/result、artifact/raw path；未测记 gap/reason/follow-up。Boot、board/HIL、factory/diagnostics、OTA/rollback 分开留证，人工确认注明 owner。选择测试层不增加烧录或现场操作权限。

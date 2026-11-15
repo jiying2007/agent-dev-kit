@@ -51,7 +51,7 @@
 | 20 | 40 | `intake` | primary | reviewer | `adk-skill-deep-analysis` | 用于只读发现并对标公开优质 Skills，或分析指定 Skill 的真实方法、来源风险及对 ADK 的可迁移价值；不用于自动安装外部 Skill、执行外部脚本或授权源码写入。 | 深度拆解 skill | `skills/adk-skill-deep-analysis/SKILL.md` |
 | 30 | 10 | `planning` | primary | playbook | `adk-lightweight-planning` | 用于用户明确要求先给计划、尚不修改文件的只读编码方案；不用于已批准的长任务执行或自动开启外部写入。 | 给我一个计划 | `skills/adk-lightweight-planning/SKILL.md` |
 | 30 | 15 | `planning` | primary | generator | `adk-goal-authoring` | 用于新建或实质修订 Goal 合同、原验收映射和可关闭交付批次；不用于已有 Goal 的日常执行、CI 状态查询或只读计划。 | 生成Goal | `skills/adk-goal-authoring/SKILL.md` |
-| 30 | 20 | `planning` | primary | playbook | `adk-task-breakdown` | 用于复杂需求拆解任务包、依赖关系及并行边界；单点小修无需拆包，也不用于替代已批准计划的持续执行。 | 拆解任务 | `skills/adk-task-breakdown/SKILL.md` |
+| 30 | 20 | `planning` | primary | playbook | `adk-task-breakdown` | 用于复杂需求拆解、公共契约迁移拆分及并行边界；单点小修无需拆包，也不替代已批准计划的持续执行。 | 拆解任务 | `skills/adk-task-breakdown/SKILL.md` |
 | 30 | 25 | `planning` | primary | pipeline | `adk-planning-execution-loop` | 用于按已批准多阶段计划实际执行、定向验证、断点恢复与目标收敛；不用于只读计划审查、CI 等待查询或生成 Goal 合同。 | 执行计划 | `skills/adk-planning-execution-loop/SKILL.md` |
 | 30 | 30 | `planning` | primary | governance | `adk-parallel-agent-governance` | 用于多个 Agent 并行时划分 scope、共享契约、冲突矩阵和最终集成验证；不用于单点小改或擅自委派有额外权限的任务。 | 并行 agent | `skills/adk-parallel-agent-governance/SKILL.md` |
 | 30 | 40 | `planning` | primary | governance | `adk-worktree-governance` | 用于 git worktree 并行开发前的隔离、基线锁定、同步与安全清理；不用于擅自删除脏工作树或替代多 Agent 任务拆分。 | worktree | `skills/adk-worktree-governance/SKILL.md` |
@@ -69,14 +69,14 @@
 | 50 | 60 | `implementation` | primary | playbook | `adk-protocol-stack-integration` | 用于通信协议栈适配、连接状态机和跨层错误处理的集成设计与回归；不用于纯寄存器布局设计或仅修复孤立格式问题。 | 协议栈 | `skills/adk-protocol-stack-integration/SKILL.md` |
 | 50 | 70 | `implementation` | primary | tool-wrapper | `adk-cmake-cross-build` | 用于嵌入式 CMake 工程的交叉编译、工具链配置与多目标构建排障；不用于无 CMake 的构建系统或直接设备部署。 | CMake | `skills/adk-cmake-cross-build/SKILL.md` |
 | 50 | 80 | `implementation` | primary | reviewer | `adk-code-simplification` | 用于代码结构冗长且行为已被测试约束时做等价代码简化；不用于未建立行为基线的功能修改、性能调优或根因不明的错误。 | 代码太复杂 | `skills/adk-code-simplification/SKILL.md` |
-| 60 | 10 | `debugging` | primary | playbook | `adk-systematic-debugging` | 用于根因不明的问题复现、单变量假设验证和确定性回归；不用于跳过取证直接猜测修复或替代性能基准实验。 | 调试 | `skills/adk-systematic-debugging/SKILL.md` |
+| 60 | 10 | `debugging` | primary | playbook | `adk-systematic-debugging` | 用于根因不明问题的复现、单变量实验、sanitizer 取证与回归；不用于跳过取证猜修复或替代性能基准。 | 调试 | `skills/adk-systematic-debugging/SKILL.md` |
 | 60 | 20 | `debugging` | primary | tool-wrapper | `adk-embedded-debug-transport` | 用于管理串口、SSH、ADB、远程 GDB 等调试通道的连接与权限证据；不用于隐式远程部署、修改设备配置或替代故障根因分析。 | 调试通道 | `skills/adk-embedded-debug-transport/SKILL.md` |
 | 60 | 30 | `debugging` | primary | playbook | `adk-embedded-remote-debug-log-triage` | 用于远程设备 SSH、ADB、串口与启动日志取证和分层连通性定位；不用于未授权远程写入、替代离线 core dump 解析或新驱动实现。 | 远程调试 | `skills/adk-embedded-remote-debug-log-triage/SKILL.md` |
 | 60 | 40 | `debugging` | primary | playbook | `adk-offline-core-dump-triage` | 用于离线分析嵌入式 Linux core dump，并对 binary、BuildID、符号与 GDB 匹配留证；不用于无符号时编造可信 backtrace 或操作在线设备。 | core dump | `skills/adk-offline-core-dump-triage/SKILL.md` |
 | 60 | 50 | `debugging` | primary | playbook | `adk-hardware-debugging` | 用于板级电源、时钟、复位和硬件异常的假设验证与证据定位；不用于把 Linux oops 直接归咎硬件或未经许可执行带风险的硬件操作。 | 硬件调试 | `skills/adk-hardware-debugging/SKILL.md` |
-| 60 | 60 | `debugging` | primary | tool-wrapper | `adk-performance-profiling-embedded` | 用于有明确指标时对嵌入式真实负载做性能分析和可比较的 A/B 验证；无指标不启用，也不用于仅凭推测宣布性能改善。 | 性能分析 | `skills/adk-performance-profiling-embedded/SKILL.md` |
-| 70 | 10 | `verification` | primary | playbook | `adk-test-strategy` | 用于定义跨模块测试策略、风险分级、行为覆盖和可复跑验证矩阵；不用于只生成嵌入式局部替身代码或代替真实执行结果。 | 测试策略 | `skills/adk-test-strategy/SKILL.md` |
-| 70 | 20 | `verification` | primary | generator | `adk-unit-test-embedded` | 用于 MCU/RTOS 的单元测试断言、替身与外设边界模拟；非跨模块测试策略，也不用于直接证明真实 HIL 性能。 | 单元测试 | `skills/adk-unit-test-embedded/SKILL.md` |
+| 60 | 60 | `debugging` | primary | tool-wrapper | `adk-performance-profiling-embedded` | 用于有指标的嵌入式性能分析、栈上界判读和真实负载 A/B；不用于无指标猜测或推断收益。 | 性能分析 | `skills/adk-performance-profiling-embedded/SKILL.md` |
+| 70 | 10 | `verification` | primary | playbook | `adk-test-strategy` | 用于跨模块测试策略、独立期望值、检查器校准、风险与行为覆盖；不用于只生成嵌入式局部替身代码或代替真实执行结果。 | 测试策略 | `skills/adk-test-strategy/SKILL.md` |
+| 70 | 20 | `verification` | primary | generator | `adk-unit-test-embedded` | 用于 MCU/RTOS 单元测试断言、性质/状态序列测试与外设替身；非跨模块策略，不用于证明真实 HIL 性能。 | 单元测试 | `skills/adk-unit-test-embedded/SKILL.md` |
 | 70 | 30 | `verification` | primary | playbook | `adk-integration-hil-sil` | 用于软件在环与硬件在环的集成测试、场景配置与结果证据编排；不用于仅做单元测试或绕过真实设备操作授权。 | 集成测试 | `skills/adk-integration-hil-sil/SKILL.md` |
 | 70 | 40 | `verification` | primary | tool-wrapper | `adk-embedded-diagnostic-harness` | 用于诊断 CLI、prog_tool、strict 套件及 HIL/SIL 证据的返回码和行为验证；不用于无许可的现场产测写入或直接放行量产。 | 诊断 harness | `skills/adk-embedded-diagnostic-harness/SKILL.md` |
 | 70 | 50 | `verification` | primary | playbook | `adk-fault-injection-recovery` | 用于已授权的故障注入、失败路径与恢复能力验证，并记录可重放的回滚证据；不用于未经隔离的生产设备破坏性实验。 | 故障注入 | `skills/adk-fault-injection-recovery/SKILL.md` |

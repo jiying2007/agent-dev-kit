@@ -1,0 +1,1317 @@
+{
+  "researcher": "external_core_methods",
+  "baseline": "5e0e83bcc127665de9a352e9eacfe9b092106cb2",
+  "version": "11.3.3",
+  "scope": "39 assigned core-method skills; broad web discovery plus primary file reads, not exhaustive internet coverage",
+  "evidence_boundary": {
+    "models_or_external_runners": "not-run",
+    "real_devices_mailboxes_desktop": "not-run",
+    "model_AB_token_cost_latency": "not-measured",
+    "third_party_scripts": "read-only; not executed",
+    "source_snapshot_semantics": "Git commit and file blob captured; licenses independently read where available"
+  },
+  "sources": [
+    {
+      "id": "mattpocock/skills",
+      "repo": "mattpocock/skills",
+      "sha": "5863806dd4e15c63174bee4e7515a4256792ecfa",
+      "date": "2026-11-12T08:42:38Z",
+      "url": "https://github.com/mattpocock/skills/commit/5863806dd4e15c63174bee4e7515a4256792ecfa",
+      "license": "MIT",
+      "license_evidence": {
+        "url": "https://github.com/mattpocock/skills/blob/5863806dd4e15c63174bee4e7515a4256792ecfa/LICENSE",
+        "git_blob_sha": "f1dd2c09108dde1a5f56097cee8461b3ea834499",
+        "read_scope": "license identification and terms"
+      },
+      "files": [
+        {
+          "url": "https://github.com/mattpocock/skills/blob/5863806dd4e15c63174bee4e7515a4256792ecfa/skills/engineering/to-tickets/SKILL.md",
+          "path": "skills/engineering/to-tickets/SKILL.md",
+          "git_blob_sha": "9b77a01db9460c99c22d03c910c349f890f12c0e",
+          "read_scope": "full",
+          "executed": false
+        }
+      ],
+      "decision": "candidate",
+      "method": "C1：全局重构可用 expand→migrate→contract；普通新功能仍用纵向切片。",
+      "adk_gap_or_existing_coverage": "ADK 当前 vertical-slice-planning 要求每片独立可运行，尚未说明跨契约重构的条件性兼容路径。",
+      "limits": "不采用固定估时、强制拆票或外部任务系统；不复制整段文本。"
+    },
+    {
+      "id": "addyosmani/agent-skills",
+      "repo": "addyosmani/agent-skills",
+      "sha": "39b723ceebf81474d0557c1fecd01eddab585563",
+      "date": "2026-11-14T04:33:55Z",
+      "url": "https://github.com/addyosmani/agent-skills/commit/39b723ceebf81474d0557c1fecd01eddab585563",
+      "license": "MIT",
+      "license_evidence": {
+        "url": "https://github.com/addyosmani/agent-skills/blob/39b723ceebf81474d0557c1fecd01eddab585563/LICENSE",
+        "git_blob_sha": "d67778ada6b9cda6227e9130da182c13e73c8b2e",
+        "read_scope": "license identification and terms"
+      },
+      "files": [
+        {
+          "url": "https://github.com/addyosmani/agent-skills/blob/39b723ceebf81474d0557c1fecd01eddab585563/skills/constraint-driven-development/SKILL.md",
+          "path": "skills/constraint-driven-development/SKILL.md",
+          "git_blob_sha": "20cef20c0938923fe784c77c625f9f9256d665fe",
+          "read_scope": "full",
+          "executed": false
+        },
+        {
+          "url": "https://github.com/addyosmani/agent-skills/blob/39b723ceebf81474d0557c1fecd01eddab585563/skills/constraint-driven-development/scripts/quality-gate.mjs",
+          "path": "skills/constraint-driven-development/scripts/quality-gate.mjs",
+          "git_blob_sha": "33b33a728150b71a6ceccecfde09a59fc139d719",
+          "read_scope": "full",
+          "executed": false
+        }
+      ],
+      "decision": "candidate",
+      "method": "C3：实际 checker 将工具退出、报告完整性及严重度阈值分开，拒绝缺字段、未知等级和扫描错误。",
+      "adk_gap_or_existing_coverage": "ADK 要求退出码和原始证据，但未明确新增/修改/可疑 checker 的已知违规校准。",
+      "limits": "只独立概括方法并自写例子，不执行/引入 quality-gate.mjs，不把所有任务变成新 Gate。"
+    },
+    {
+      "id": "obra/superpowers",
+      "repo": "obra/superpowers",
+      "sha": "22f0b463e7a5e579904dd6211a520321035526f7",
+      "date": "2026-11-03T22:17:07Z",
+      "url": "https://github.com/obra/superpowers/commit/22f0b463e7a5e579904dd6211a520321035526f7",
+      "license": "MIT",
+      "license_evidence": {
+        "url": "https://github.com/obra/superpowers/blob/22f0b463e7a5e579904dd6211a520321035526f7/LICENSE",
+        "git_blob_sha": "abf0390320aa14406af7a520b9b0739fdda9bf08",
+        "read_scope": "license identification and terms"
+      },
+      "files": [
+        {
+          "url": "https://github.com/obra/superpowers/blob/22f0b463e7a5e579904dd6211a520321035526f7/skills/test-driven-development/SKILL.md",
+          "path": "skills/test-driven-development/SKILL.md",
+          "git_blob_sha": "46838cc9e893c06259e3bdad0fc2425b36242f15",
+          "read_scope": "full",
+          "executed": false
+        },
+        {
+          "url": "https://github.com/obra/superpowers/blob/22f0b463e7a5e579904dd6211a520321035526f7/skills/test-driven-development/writing-good-tests.md",
+          "path": "skills/test-driven-development/writing-good-tests.md",
+          "git_blob_sha": "d3c4482fd30b4f9084bb61545fe73939a7502c28",
+          "read_scope": "full",
+          "executed": false
+        }
+      ],
+      "decision": "candidate",
+      "method": "C2：断言值来自独立契约；每个可疑测试应能暴露一个明确错误变体。",
+      "adk_gap_or_existing_coverage": "ADK 已有 public seam、RED/GREEN 与 mock 边界，缺少同 helper 自证和 mutation sensitivity 的明确处理。",
+      "limits": "不采用测试前代码一律删除、每函数强制测试或全仓 mutation 工具。"
+    },
+    {
+      "id": "getsentry/skills",
+      "repo": "getsentry/skills",
+      "sha": "a582c51ee29d0f35e6ac321340796f77d43da733",
+      "date": "2026-11-14T19:38:57Z",
+      "url": "https://github.com/getsentry/skills/commit/a582c51ee29d0f35e6ac321340796f77d43da733",
+      "license": "Apache-2.0",
+      "license_evidence": {
+        "url": "https://github.com/getsentry/skills/blob/a582c51ee29d0f35e6ac321340796f77d43da733/LICENSE",
+        "git_blob_sha": "753a6c03c60a9232405d05170bd3ad3cab49a1ef",
+        "read_scope": "license identification and terms"
+      },
+      "files": [
+        {
+          "url": "https://github.com/getsentry/skills/blob/a582c51ee29d0f35e6ac321340796f77d43da733/skills/find-bugs/SKILL.md",
+          "path": "skills/find-bugs/SKILL.md",
+          "git_blob_sha": "490a181b1a47537cd19eacbdd8f2c46740a268db",
+          "read_scope": "full",
+          "executed": false
+        },
+        {
+          "url": "https://github.com/getsentry/skills/blob/a582c51ee29d0f35e6ac321340796f77d43da733/skills/iterate-pr/SKILL.md",
+          "path": "skills/iterate-pr/SKILL.md",
+          "git_blob_sha": "679e17ee1c6036ed2b4ffc2402a2733875b37245",
+          "read_scope": "full",
+          "executed": false
+        }
+      ],
+      "decision": "retain",
+      "method": "审查读取完整改动、调用者和保护条件以消除误报；PR 循环区分 actionable 与 pending/draft/no-check。",
+      "adk_gap_or_existing_coverage": "ADK 已有 Spec↔Code、覆盖账本、精确快照与受保护状态核验，未证实新增缺口。",
+      "limits": "不引入 AXIS/Codex full-auto runner、模型轮询或硬编码 bot；只读了 Skill，未认证配套脚本。"
+    },
+    {
+      "id": "microsoft/hve-core",
+      "repo": "microsoft/hve-core",
+      "sha": "0e5623a16e06c5b1353bbf77ad4cba49db4c28b1",
+      "date": "2026-11-14T00:48:06Z",
+      "url": "https://github.com/microsoft/hve-core/commit/0e5623a16e06c5b1353bbf77ad4cba49db4c28b1",
+      "license": "MIT",
+      "license_evidence": {
+        "url": "https://github.com/microsoft/hve-core/blob/0e5623a16e06c5b1353bbf77ad4cba49db4c28b1/LICENSE",
+        "git_blob_sha": "7bd95a91b6c6fb9db499b17d1380351180b94aa8",
+        "read_scope": "license identification and terms"
+      },
+      "files": [
+        {
+          "url": "https://github.com/microsoft/hve-core/blob/0e5623a16e06c5b1353bbf77ad4cba49db4c28b1/.github/skills/rpi/rpi-implement/SKILL.md",
+          "path": ".github/skills/rpi/rpi-implement/SKILL.md",
+          "git_blob_sha": "3bef513408e52fa63ac82cdb0c3a38b172c5a7e2",
+          "read_scope": "full",
+          "executed": false
+        }
+      ],
+      "decision": "retain",
+      "method": "只执行依赖满足的计划项，按任务保留证据，执行完成和审查完成分开。",
+      "adk_gap_or_existing_coverage": "ADK Ready Frontier、执行状态和恢复合同已覆盖。",
+      "limits": "不采用工具/模型常量或由实现者自行改设计的流程。"
+    },
+    {
+      "id": "google/agents-cli",
+      "repo": "google/agents-cli",
+      "sha": "6eedbdc2f44c388cbfc5f305eb83b9924cfefebb",
+      "date": "2026-11-12T14:58:35Z",
+      "url": "https://github.com/google/agents-cli/commit/6eedbdc2f44c388cbfc5f305eb83b9924cfefebb",
+      "license": "Apache-2.0",
+      "license_evidence": {
+        "url": "https://github.com/google/agents-cli/blob/6eedbdc2f44c388cbfc5f305eb83b9924cfefebb/LICENSE",
+        "git_blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+        "read_scope": "license identification and terms"
+      },
+      "files": [
+        {
+          "url": "https://github.com/google/agents-cli/blob/6eedbdc2f44c388cbfc5f305eb83b9924cfefebb/skills/google-agents-cli-eval/SKILL.md",
+          "path": "skills/google-agents-cli-eval/SKILL.md",
+          "git_blob_sha": "5c888512832a67ad58d6b1238f493d9f22b5ae8f",
+          "read_scope": "full",
+          "executed": false
+        }
+      ],
+      "decision": "retain",
+      "method": "逐例保存 trace 与实际 outcome，候选改动检查目标与回归；错误不能靠汇总分数掩盖。",
+      "adk_gap_or_existing_coverage": "ADK effect_trials、holdout 和 source/native 边界已覆盖且更明确。",
+      "limits": "不运行付费 provider/GEPA；不采用固定轮次、temperature 0 确定性保证。"
+    },
+    {
+      "id": "muratcankoylan/Agent-Skills-for-Context-Engineering",
+      "repo": "muratcankoylan/Agent-Skills-for-Context-Engineering",
+      "sha": "9ff0c99108b36d3b886defd825d8ac1f47dba374",
+      "date": "2026-10-12T02:06:39Z",
+      "url": "https://github.com/muratcankoylan/Agent-Skills-for-Context-Engineering/commit/9ff0c99108b36d3b886defd825d8ac1f47dba374",
+      "license": "MIT",
+      "license_evidence": {
+        "url": "https://github.com/muratcankoylan/Agent-Skills-for-Context-Engineering/blob/9ff0c99108b36d3b886defd825d8ac1f47dba374/LICENSE",
+        "git_blob_sha": "387dad51962f18a262524740e762deb62844d817",
+        "read_scope": "license identification and terms"
+      },
+      "files": [
+        {
+          "url": "https://github.com/muratcankoylan/Agent-Skills-for-Context-Engineering/blob/9ff0c99108b36d3b886defd825d8ac1f47dba374/skills/context-compression/SKILL.md",
+          "path": "skills/context-compression/SKILL.md",
+          "git_blob_sha": "44b78abf987b07ee5c63bc325a5ced366ffd7d15",
+          "read_scope": "full",
+          "executed": false
+        }
+      ],
+      "decision": "retain",
+      "method": "压缩显式保留工件身份、当前状态和增量合并，原始上下文可回溯。",
+      "adk_gap_or_existing_coverage": "ADK 当前状态、排除项、raw pointer、恢复检查已覆盖。",
+      "limits": "不采信未复现的基准百分比、通用压缩阈值或 token 效果；不增加独立运行时索引。"
+    },
+    {
+      "id": "anthropics/skills",
+      "repo": "anthropics/skills",
+      "sha": "1780c5e5a552fd4d1c9d6a7b0cab26b0c2bef064",
+      "date": "2026-11-14T15:16:42Z",
+      "url": "https://github.com/anthropics/skills/commit/1780c5e5a552fd4d1c9d6a7b0cab26b0c2bef064",
+      "license": "unconfirmed-for-exact-file",
+      "license_evidence": null,
+      "files": [
+        {
+          "url": "https://github.com/anthropics/skills/blob/1780c5e5a552fd4d1c9d6a7b0cab26b0c2bef064/skills/doc-coauthoring/SKILL.md",
+          "path": "skills/doc-coauthoring/SKILL.md",
+          "git_blob_sha": "a5a69839ef4a161131d80b6daef10037a9686f4a",
+          "read_scope": "full",
+          "executed": false
+        }
+      ],
+      "decision": "retain",
+      "method": "让读者只基于成品回答理解问题；作者历史不应代替文档本身的说明。",
+      "adk_gap_or_existing_coverage": "ADK ADR 和跨团队交接已包含按风险冷读、自审与独立审查分离。",
+      "limits": "仓库 README 的 many-skills Apache-2.0 不能证明此文件许可；仅独立概括，不复制；不采用每节固定大量提问。"
+    },
+    {
+      "id": "openai/skills",
+      "repo": "openai/skills",
+      "sha": "49f948faa9258a0c61caceaf225e179651397431",
+      "date": "2026-06-24T02:36:12Z",
+      "url": "https://github.com/openai/skills/commit/49f948faa9258a0c61caceaf225e179651397431",
+      "license": "Apache-2.0 (per-skill LICENSE.txt)",
+      "license_evidence": {
+        "url": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/gh-fix-ci/LICENSE.txt",
+        "git_blob_sha": "13e25df86ce06eb6488e6a6bc5c5847f5dedc352",
+        "read_scope": "license identification and terms"
+      },
+      "files": [
+        {
+          "url": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/gh-fix-ci/SKILL.md",
+          "path": "skills/.curated/gh-fix-ci/SKILL.md",
+          "git_blob_sha": "76bdeb6a7bff93cbe924c0652f1fd7a3c3ffc46c",
+          "read_scope": "full",
+          "executed": false
+        },
+        {
+          "url": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/gh-fix-ci/scripts/inspect_pr_checks.py",
+          "path": "skills/.curated/gh-fix-ci/scripts/inspect_pr_checks.py",
+          "git_blob_sha": "06cd03c5fc61c784d082e1c25a533c94e0912b3f",
+          "read_scope": "full",
+          "executed": false
+        }
+      ],
+      "decision": "retain",
+      "method": "CI 诊断优先真实失败日志；处理 gh 字段/下载不兼容与日志不可用。",
+      "adk_gap_or_existing_coverage": "ADK 已有真实命令、错误分类和 readiness 核验；该 helper 是 provider 专用，不能直接当通用 Gate。",
+      "limits": "脚本 exit 0 的 no failing checks 不证明检查全部通过；不导入或执行，未将其判定认证为完整门禁。"
+    },
+    {
+      "id": "firecrawl/skills",
+      "repo": "firecrawl/skills",
+      "sha": "1d4b0728d0f448cafef2eb8370c907fde7cb6f42",
+      "date": "2026-11-11T21:43:21Z",
+      "url": "https://github.com/firecrawl/skills/commit/1d4b0728d0f448cafef2eb8370c907fde7cb6f42",
+      "license": "ISC",
+      "license_evidence": {
+        "url": "https://github.com/firecrawl/skills/blob/1d4b0728d0f448cafef2eb8370c907fde7cb6f42/LICENSE",
+        "git_blob_sha": "49f8600931998aa1a104ee3ecdf4724066573f65",
+        "read_scope": "license identification and terms"
+      },
+      "files": [
+        {
+          "url": "https://github.com/firecrawl/skills/blob/1d4b0728d0f448cafef2eb8370c907fde7cb6f42/skills/core/firecrawl/SKILL.md",
+          "path": "skills/core/firecrawl/SKILL.md",
+          "git_blob_sha": "a8baff5d20669ac6dfc8cda522a7a1de4d4fd5be",
+          "read_scope": "full",
+          "executed": false
+        },
+        {
+          "url": "https://github.com/firecrawl/skills/blob/1d4b0728d0f448cafef2eb8370c907fde7cb6f42/skills/core/firecrawl/rules/security.md",
+          "path": "skills/core/firecrawl/rules/security.md",
+          "git_blob_sha": "f5031370325672611980381078afafac31d7c89d",
+          "read_scope": "full",
+          "executed": false
+        }
+      ],
+      "decision": "retain",
+      "method": "已知页面直读、复用已抓取结果、保留请求身份后恢复大输出；外部内容作为不可信数据。",
+      "adk_gap_or_existing_coverage": "ADK URL fetch 已有按权限获取、预算、partial、原始指针；这些原则无需重复新增。",
+      "limits": "不采纳默认专用收费 CLI、后台 monitor、自动反馈或安装动作；未运行 CLI。"
+    },
+    {
+      "id": "sweetrb/apple-mail-mcp",
+      "repo": "sweetrb/apple-mail-mcp",
+      "sha": "2e2f245016a6b59fc361783e6bbc865591d18c07",
+      "date": "2026-11-13T12:37:15Z",
+      "url": "https://github.com/sweetrb/apple-mail-mcp/commit/2e2f245016a6b59fc361783e6bbc865591d18c07",
+      "license": "MIT",
+      "license_evidence": {
+        "url": "https://github.com/sweetrb/apple-mail-mcp/blob/2e2f245016a6b59fc361783e6bbc865591d18c07/LICENSE",
+        "git_blob_sha": "7737e71ab910c6e716cd6eddecde1701277ee0aa",
+        "read_scope": "license identification and terms"
+      },
+      "files": [
+        {
+          "url": "https://github.com/sweetrb/apple-mail-mcp/blob/2e2f245016a6b59fc361783e6bbc865591d18c07/skills/apple-mail/SKILL.md",
+          "path": "skills/apple-mail/SKILL.md",
+          "git_blob_sha": "16dbd5beb5d803ca73be381d473cc93f91c9924d",
+          "read_scope": "selected: skill opening and IMAP/read-only matching lines",
+          "executed": false
+        }
+      ],
+      "decision": "retain",
+      "method": "选读工具契约说明 EXAMINE/BODY.PEEK、UIDVALIDITY+UID、原始字节及大小边界。",
+      "adk_gap_or_existing_coverage": "ADK IMAP 已有只读稳定身份、消息数/字节限制、错误与 partial，未发现新方法缺口。",
+      "limits": "只读 Skill 的入口和匹配 IMAP/只读条目，未读/执行服务器实现，也未操作任何邮箱。"
+    }
+  ],
+  "candidates": [
+    {
+      "id": "C1",
+      "method": "conditional expand-migrate-contract",
+      "targets": [
+        "skills/adk-task-breakdown/SKILL.md",
+        "skills/adk-task-breakdown/references/vertical-slice-planning.md"
+      ],
+      "condition": "Only broad contract refactor that cannot stay independently valid under ordinary vertical slicing",
+      "source": "mattpocock/skills",
+      "acceptance": "Real temporary Python API and two consumers: direct contract and early contract fail; expand, migrate each consumer, final contract preserve same outputs. Explicit transition owner/removal task and final integration; no additional permission."
+    },
+    {
+      "id": "C2",
+      "method": "independent test oracle and targeted wrong-variant check",
+      "targets": [
+        "skills/adk-test-strategy/SKILL.md",
+        "skills/adk-test-strategy/references/high-value-tdd.md"
+      ],
+      "condition": "New/modified or suspicious behavior test whose expected could mirror implementation",
+      "source": "obra/superpowers",
+      "acceptance": "Run final public example: a wrong escaping implementation fools mirrored expected but is rejected by literal independent fixture; correct behavior and empty/normal input remain passing."
+    },
+    {
+      "id": "C3",
+      "method": "conditional checker calibration",
+      "targets": [
+        "skills/adk-test-strategy/SKILL.md",
+        "skills/adk-test-strategy/references/high-value-tdd.md",
+        "skills/adk-verification-before-completion/SKILL.md",
+        "skills/adk-verification-before-completion/references/verification-governance-details.md"
+      ],
+      "condition": "New, modified or suspicious checker only; same identity/config/schema/scope valid calibration reusable",
+      "source": "addyosmani/agent-skills",
+      "acceptance": "Execute final public example through real scanner process returning controlled reports: clean/below-threshold pass; above-threshold, unknown severity, missing fields, incomplete/empty coverage, tool error do not pass even at exit 0. No new runtime."
+    }
+  ],
+  "retrieval_limits": [
+    "Web search was actually called across primary-skill ecosystems; search directory/readme discovery was not counted as method proof.",
+    "Pinned GitHub pages sometimes returned DisabledError in web open; exact files were retrieved by approved GitHub fetch_file at API-confirmed commits.",
+    "Source branch dates describe snapshots; no assertion of newest/best universal quality.",
+    "Anthropic exact doc-coauthoring license not confirmed; no code/text copying.",
+    "Apple Mail was deliberately sampled for read-only IMAP contract; backend behavior was not tested."
+  ],
+  "prior_rounds_checked": [
+    "docs/changes/20261115-skill-method-reliability/audit.md",
+    "docs/changes/20261113-external-method-intake/sources.md"
+  ],
+  "coverage": [
+    {
+      "name": "adk-runtime-router",
+      "path": "skills/adk-runtime-router/SKILL.md",
+      "decision": "retain",
+      "rationale": "保留：可信 inventory、唯一 primary 与 installed/native-loaded 状态分开；不需新增路由层。",
+      "actual_reads": [
+        {
+          "path": "skills/adk-runtime-router/SKILL.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-runtime-router/SKILL.md",
+          "sha256": "d77f73c6eaee5c9eea2bbe349eb12cc535b6c5628ddd106b95e4b0afd2dc14a3",
+          "git_blob_sha": "e4221a63cb951dfc206f9138c26141f5d8fd431f",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-runtime-router/references/runtime-routing-details.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-runtime-router/references/runtime-routing-details.md",
+          "sha256": "7d4207293a5a99bc48434e34128841df290af30dc6794a923a9086fc4171bbe1",
+          "git_blob_sha": "f30031e24580c72f1247119cab40dc52d366ca88",
+          "read_scope": "full"
+        }
+      ]
+    },
+    {
+      "name": "adk-context-engineering",
+      "path": "skills/adk-context-engineering/SKILL.md",
+      "decision": "retain",
+      "rationale": "保留：稳定规则、动态状态和证据隔离，恢复核对已覆盖；不引入固定压缩比例。",
+      "actual_reads": [
+        {
+          "path": "skills/adk-context-engineering/SKILL.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-context-engineering/SKILL.md",
+          "sha256": "2036424ab37e7722043f8e41a662ff890108d5beae83c7f7fc0b19b64bef8038",
+          "git_blob_sha": "7bf14b57294f80971c713deb552f4e0beb2c6dbd",
+          "read_scope": "full"
+        }
+      ]
+    },
+    {
+      "name": "adk-token-context-governance",
+      "path": "skills/adk-token-context-governance/SKILL.md",
+      "decision": "retain",
+      "rationale": "保留：先控工作量再测成本，原始证据可回溯；文档字节不当作 Token 收益。",
+      "actual_reads": [
+        {
+          "path": "skills/adk-token-context-governance/SKILL.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-token-context-governance/SKILL.md",
+          "sha256": "e426f29fa1f3a519c8932ade7caed1d43cf71728f902f781b0d9d24adcc25f1d",
+          "git_blob_sha": "03a735d7faae07fa35db8491e9944ebe11c0f367",
+          "read_scope": "full"
+        }
+      ]
+    },
+    {
+      "name": "adk-requirements-triage",
+      "path": "skills/adk-requirements-triage/SKILL.md",
+      "decision": "retain",
+      "rationale": "保留：brief/execution/high-risk 分流与避免重复提问已覆盖所检索需求方法。",
+      "actual_reads": [
+        {
+          "path": "skills/adk-requirements-triage/SKILL.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-requirements-triage/SKILL.md",
+          "sha256": "ea58deea04468736cda73a3231dfd58854e088f243987063962597d44d35a56a",
+          "git_blob_sha": "43e6e6e463d026ecbc44e3404c716bc838913587",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-requirements-triage/references/embedded-discovery-brief.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-requirements-triage/references/embedded-discovery-brief.md",
+          "sha256": "7e288b51e2512b725f14eb52285fc4391faae7b568d300c7538179038d9156da",
+          "git_blob_sha": "b3983557b95917a1093ffa0d64ffebc2e5fd332b",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-requirements-triage/references/exploratory-requirements-brief.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-requirements-triage/references/exploratory-requirements-brief.md",
+          "sha256": "9c115653d3de2c5c31a984588082ba495198d9a51439a5e107066ff0046430fb",
+          "git_blob_sha": "c2358903d236fba94ecc1dba697386638280c37d",
+          "read_scope": "full"
+        }
+      ]
+    },
+    {
+      "name": "adk-structured-requirements-questioning",
+      "path": "skills/adk-structured-requirements-questioning/SKILL.md",
+      "decision": "retain",
+      "rationale": "保留：Explore/Challenge、决策前沿、有界收敛和 prototype 权限分离已覆盖。",
+      "actual_reads": [
+        {
+          "path": "skills/adk-structured-requirements-questioning/SKILL.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-structured-requirements-questioning/SKILL.md",
+          "sha256": "985fb9408ea393ec7322065f4bebc11541664b59d3ee63b026762f0c1282ff00",
+          "git_blob_sha": "b9328369a2cd7f9ea4faf60c958b0a902befb202",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-structured-requirements-questioning/references/prototype-as-experiment.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-structured-requirements-questioning/references/prototype-as-experiment.md",
+          "sha256": "b76187a6d57e2b954688953af08df4c1e75dd4bb456f55108d7d25e847e27129",
+          "git_blob_sha": "654a449ba2d86c2ff16fd14a88a309ccc337faa1",
+          "read_scope": "full"
+        }
+      ]
+    },
+    {
+      "name": "adk-repo-prompt-analysis",
+      "path": "skills/adk-repo-prompt-analysis/SKILL.md",
+      "decision": "retain",
+      "rationale": "保留：实际调用点、角色、信任边界与 source SHA 对照；源码推断不冒充运行结果。",
+      "actual_reads": [
+        {
+          "path": "skills/adk-repo-prompt-analysis/SKILL.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-repo-prompt-analysis/SKILL.md",
+          "sha256": "202f2a15d8bed57f78d28308d388e0424df4f94783de9e472f38f692ea922dc3",
+          "git_blob_sha": "8ae146546cb2806bc4d9e2f0b257572107f7b57a",
+          "read_scope": "full"
+        }
+      ]
+    },
+    {
+      "name": "adk-skill-deep-analysis",
+      "path": "skills/adk-skill-deep-analysis/SKILL.md",
+      "decision": "retain",
+      "rationale": "保留：有界发现、核验来源与 method-only handoff；不靠 stars 或目录排名。",
+      "actual_reads": [
+        {
+          "path": "skills/adk-skill-deep-analysis/SKILL.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-skill-deep-analysis/SKILL.md",
+          "sha256": "69eaff562babdcc57464582632d7491b3bc2f64000e71d86ada8ab193ef47ded",
+          "git_blob_sha": "0a66b30462bb56e3de2b57070c208316d8fa5f3a",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-skill-deep-analysis/references/details.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-skill-deep-analysis/references/details.md",
+          "sha256": "582bfc5374a7d80847f570b5a4fce2fc6558c5e43f70cd8261956eadccd6e8e6",
+          "git_blob_sha": "744430c8df357ad4cc16cf192cf37fa9554c5d9d",
+          "read_scope": "full"
+        }
+      ]
+    },
+    {
+      "name": "adk-lightweight-planning",
+      "path": "skills/adk-lightweight-planning/SKILL.md",
+      "decision": "retain",
+      "rationale": "保留：只读最小计划、不强制固定任务数；现有计划可直接继续。",
+      "actual_reads": [
+        {
+          "path": "skills/adk-lightweight-planning/SKILL.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-lightweight-planning/SKILL.md",
+          "sha256": "43bc00ae93f65c5cabd61d61c455faa8cfa4382095e15b9f8d882739513c34bc",
+          "git_blob_sha": "fb572637a11ce11e7ae5d3c89ff56a8c194d3726",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-lightweight-planning/README.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-lightweight-planning/README.md",
+          "sha256": "8df5c88632885b07dc4a341b6904b57d687de144db79f2bf06d39e31dd0e2985",
+          "git_blob_sha": "411c8973c5fb8f81a24cdf9b11604b40a399eec7",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-lightweight-planning/agents/openai.yaml",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-lightweight-planning/agents/openai.yaml",
+          "sha256": "29a33d35e237437b617366384e22e09a6b7c489fae8054f88c44dd51e25f20b5",
+          "git_blob_sha": "dfe6682034190c40960bfe36e2c1a89a3849a8fd",
+          "read_scope": "full"
+        }
+      ]
+    },
+    {
+      "name": "adk-task-breakdown",
+      "path": "skills/adk-task-breakdown/SKILL.md",
+      "decision": "enhance",
+      "rationale": "改进 C1：纵向切片缺跨公共契约重构的条件性 expand→真实消费者迁移→contract 路径及提前删除反例。",
+      "actual_reads": [
+        {
+          "path": "skills/adk-task-breakdown/SKILL.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-task-breakdown/SKILL.md",
+          "sha256": "9df8ca2e477e17e439c64df29d4476aa2b8515ca2622f23864ef83662a54e3c6",
+          "git_blob_sha": "7432c0c82fe9d15df30cc89fa137b402587a81db",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-task-breakdown/references/task-packaging.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-task-breakdown/references/task-packaging.md",
+          "sha256": "6a417e248ca5bd0f31f63758d6921779ae68e8800365d67f463d89b54b5e5aa3",
+          "git_blob_sha": "c8dd41e0caa444c5af571c2d66a62a96ed2556b2",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-task-breakdown/references/vertical-slice-planning.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-task-breakdown/references/vertical-slice-planning.md",
+          "sha256": "5d7d65ecc9b5ec5ad8f9ba21d1c1c9d25a933737a1610535589ca762eb1f4ab6",
+          "git_blob_sha": "cd62929fe242110bd3fd2a6684bc63367640dd4f",
+          "read_scope": "full"
+        }
+      ]
+    },
+    {
+      "name": "adk-parallel-agent-governance",
+      "path": "skills/adk-parallel-agent-governance/SKILL.md",
+      "decision": "retain",
+      "rationale": "保留：ownership、真实依赖前沿、共享写串行和最终整合已明确；不增加无价值 worker。",
+      "actual_reads": [
+        {
+          "path": "skills/adk-parallel-agent-governance/SKILL.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-parallel-agent-governance/SKILL.md",
+          "sha256": "79590645943c485b30a0807d08038918bc046d746bdf7d254efa224a81d7689b",
+          "git_blob_sha": "1ff0353145fe44d6c8044e34ee25788ff447b36f",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-parallel-agent-governance/references/parallel-worktree-task-package.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-parallel-agent-governance/references/parallel-worktree-task-package.md",
+          "sha256": "e1636ebb5af5a1c3f60f8d5711eb0d07b3ce52f9461d85dff4aa90017ad6afa7",
+          "git_blob_sha": "87a6da0b48c2e9783a26241ef33e45ab5342c648",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-parallel-agent-governance/references/subagent-review-checklist.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-parallel-agent-governance/references/subagent-review-checklist.md",
+          "sha256": "b771c82410f6c982e9482c27cf79ad0a28a8bd5ffdf3ea15c63ed2ae592e843c",
+          "git_blob_sha": "e55eaf650d6f4690d92c8e6089d59d32f7a799f3",
+          "read_scope": "full"
+        }
+      ]
+    },
+    {
+      "name": "adk-worktree-governance",
+      "path": "skills/adk-worktree-governance/SKILL.md",
+      "decision": "retain",
+      "rationale": "保留：dirty preservation、条件性隔离、来源和清理授权；不为所有小任务建 worktree。",
+      "actual_reads": [
+        {
+          "path": "skills/adk-worktree-governance/SKILL.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-worktree-governance/SKILL.md",
+          "sha256": "a9e7b174e1d9a65816d38b2ee0b56a08193a10d220a40d9c9bd38df064ec23ad",
+          "git_blob_sha": "aefb2fa3fd40f9cc31aada9acab20838dc50c482",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-worktree-governance/references/parallel-worktree-task-package.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-worktree-governance/references/parallel-worktree-task-package.md",
+          "sha256": "f80471b63906ed9755a06b7b0c9f638509ff1a0951a1ccb79f8a566909f2d1f4",
+          "git_blob_sha": "bde4c96c974fdac56a09b50dd945e153081b6b4d",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-worktree-governance/references/worktree-operation-boundaries.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-worktree-governance/references/worktree-operation-boundaries.md",
+          "sha256": "c155ad103636bb452163b52c06d036e1bf75f9ae34cb411467a38fb4c805dc8f",
+          "git_blob_sha": "5ebd6ca773b28bdba04a61a667a3672ff84bfba4",
+          "read_scope": "full"
+        }
+      ]
+    },
+    {
+      "name": "adk-context-compress-handoff",
+      "path": "skills/adk-context-compress-handoff/SKILL.md",
+      "decision": "retain",
+      "rationale": "保留：最新目标、排除项、raw pointer 与下一步已明确，交接不自动晋升 durable rule。",
+      "actual_reads": [
+        {
+          "path": "skills/adk-context-compress-handoff/SKILL.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-context-compress-handoff/SKILL.md",
+          "sha256": "697c701f0907297d5239d4669b8a6e2573422166a887d4e523ca283c8ddc34a1",
+          "git_blob_sha": "38f94ededa39e0136ed4f07ead24cc10b544634d",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-context-compress-handoff/README.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-context-compress-handoff/README.md",
+          "sha256": "4c76f8c71b05435bc10d614b20011d643f798be03ecb57d0c192a6852886ee14",
+          "git_blob_sha": "d1bf34ae8e15fa825bf64a85853bb639b61df22d",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-context-compress-handoff/agents/openai.yaml",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-context-compress-handoff/agents/openai.yaml",
+          "sha256": "60e59ca0c78d7202172eea257a23803188f8017776d18d58851ef4934090e00c",
+          "git_blob_sha": "44f79d2174ec6c1b0e4e1f8e16fa512210d27778",
+          "read_scope": "full"
+        }
+      ]
+    },
+    {
+      "name": "adk-adr-writer",
+      "path": "skills/adk-adr-writer/SKILL.md",
+      "decision": "retain",
+      "rationale": "保留：读者冷读、自审与独立核验已经吸收 doc-coauthoring 的有效机制。",
+      "actual_reads": [
+        {
+          "path": "skills/adk-adr-writer/SKILL.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-adr-writer/SKILL.md",
+          "sha256": "e013d6e67dc993a3c3a0cf589d6e1c1e3b4534c1a053422c8c1df0c04813dba2",
+          "git_blob_sha": "ae3a98b5a0e1999d43ee9a36a2cce07fc427d382",
+          "read_scope": "full"
+        }
+      ]
+    },
+    {
+      "name": "adk-goal-authoring",
+      "path": "skills/adk-goal-authoring/SKILL.md",
+      "decision": "retain",
+      "rationale": "保留：原验收分母、阶段/整体与 Goal 恢复状态已经前轮修复，不重复新增状态层。",
+      "actual_reads": [
+        {
+          "path": "skills/adk-goal-authoring/SKILL.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-goal-authoring/SKILL.md",
+          "sha256": "2af53b2706bab3d8ca14069a52ea3c51dc2b2d09e54ed46bb1a20ff1f3079e93",
+          "git_blob_sha": "cd668c80a3a62bcadc8f6ca1cdf791402a16bc88",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-goal-authoring/references/goal-plan.json",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-goal-authoring/references/goal-plan.json",
+          "sha256": "e1a1facc23f826e4f65ec3b9a978a7c4feef889187d1d0302472215cd156a43b",
+          "git_blob_sha": "7f35ee1caeb659b47cbc805f0107dd3284f123db",
+          "read_scope": "full"
+        }
+      ]
+    },
+    {
+      "name": "adk-planning-execution-loop",
+      "path": "skills/adk-planning-execution-loop/SKILL.md",
+      "decision": "retain",
+      "rationale": "保留：checkpoint 对齐、冲突裁决、无增量停止及外部副作用对账已覆盖 HVE 类方法。",
+      "actual_reads": [
+        {
+          "path": "skills/adk-planning-execution-loop/SKILL.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-planning-execution-loop/SKILL.md",
+          "sha256": "dcb5d29a1cf0f7f849e390287a74b8167a1afa60849070bcba66148b5e1453bf",
+          "git_blob_sha": "99d06f90661d28103b87e1c8cc07f5ff83e7cf6d",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-planning-execution-loop/references/long-task-recovery.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-planning-execution-loop/references/long-task-recovery.md",
+          "sha256": "1bb86490fb7f335fd7f5f478a6be9c750b25ac0c025039b561a55bc4467bc375",
+          "git_blob_sha": "5d2b37d5b1fc692a86d3dbaa5a04304ff6d2c968",
+          "read_scope": "full"
+        }
+      ]
+    },
+    {
+      "name": "adk-code-simplification",
+      "path": "skills/adk-code-simplification/SKILL.md",
+      "decision": "retain",
+      "rationale": "保留：public seam、调用者负担和行为不变优先于行数；未确认新的简化方法缺口。",
+      "actual_reads": [
+        {
+          "path": "skills/adk-code-simplification/SKILL.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-code-simplification/SKILL.md",
+          "sha256": "ca77fa395fbbc17469890ec9f2409f01c442b0678904c9ec34115e8926e281e3",
+          "git_blob_sha": "42b1540590869156af4f462958687cd2aac8500b",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-code-simplification/references/deep-module-design.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-code-simplification/references/deep-module-design.md",
+          "sha256": "a5e463ebe150966c75e975feb6233914f1fa418d36abd1b588c5ae863e0ac797",
+          "git_blob_sha": "7a294528019411649dfc84f5f5e79a7ab82e195f",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-code-simplification/references/details.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-code-simplification/references/details.md",
+          "sha256": "46fb6f895ed2d2a6affac689756ea41b61b16faf4dabaa7136436933783360c6",
+          "git_blob_sha": "4f5ec1be3bb629581b05a7849c8e5234a23adaf8",
+          "read_scope": "full"
+        }
+      ]
+    },
+    {
+      "name": "adk-test-strategy",
+      "path": "skills/adk-test-strategy/SKILL.md",
+      "decision": "enhance",
+      "rationale": "改进 C2/C3：已有 TDD 和 mock 边界，补独立 expected 及错误变体敏感性；新建/修改/可疑 checker 才校准。",
+      "actual_reads": [
+        {
+          "path": "skills/adk-test-strategy/SKILL.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-test-strategy/SKILL.md",
+          "sha256": "148c7a8c2ef778684cb37ff5c2dc6b719ff69c0f054372f42748baebcab459ff",
+          "git_blob_sha": "6a3c7c62812733f7c0484774beb87a20ae70c74b",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-test-strategy/references/high-value-tdd.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-test-strategy/references/high-value-tdd.md",
+          "sha256": "282c51defc3281b9bc87e2bb975c1d207beb412ffee6f9b1d3311781d00be73e",
+          "git_blob_sha": "25d1f7373f575dbefd34e3adb9ae1ce0a8f8d286",
+          "read_scope": "full"
+        }
+      ]
+    },
+    {
+      "name": "adk-artifact-gating",
+      "path": "skills/adk-artifact-gating/SKILL.md",
+      "decision": "retain",
+      "rationale": "保留：PASS/READY 及阶段条件已经对齐真实工作流，不重复前轮修复。",
+      "actual_reads": [
+        {
+          "path": "skills/adk-artifact-gating/SKILL.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-artifact-gating/SKILL.md",
+          "sha256": "f19df4551579597b09c5a400c6ffdef6b48b4a8d0c27ce911c1429a5eb04947c",
+          "git_blob_sha": "da4328a303fe3b0ea9dd116350961a71882122f6",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-artifact-gating/references/details.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-artifact-gating/references/details.md",
+          "sha256": "def3c5a6ce7066b09bbd28a77260f1682e39c0ffd1f5383f5fe47d3e02b9e9e7",
+          "git_blob_sha": "ab51413bf831af643c805e7120fb23bd8d13866f",
+          "read_scope": "full"
+        }
+      ]
+    },
+    {
+      "name": "adk-pilot-framework",
+      "path": "skills/adk-pilot-framework/SKILL.md",
+      "decision": "retain",
+      "rationale": "保留：smoke/comparative、error/blocked/inconclusive 分开，不把模拟或源码当真实模型效果。",
+      "actual_reads": [
+        {
+          "path": "skills/adk-pilot-framework/SKILL.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-pilot-framework/SKILL.md",
+          "sha256": "5ed0041ab153c4b0514402ad548216055b38db469ab0d30b422ee09899cfe253",
+          "git_blob_sha": "904b084359c8a1fe284d0c57ee5c886dcf077771",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-pilot-framework/references/details.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-pilot-framework/references/details.md",
+          "sha256": "08faff8c175aba7641da273bdcec4fac21b14baf270de3efc16ba7abc1400361",
+          "git_blob_sha": "e0a681a96a5a86b32dc8dd7f591657b0d42e8560",
+          "read_scope": "full"
+        }
+      ]
+    },
+    {
+      "name": "adk-verification-before-completion",
+      "path": "skills/adk-verification-before-completion/SKILL.md",
+      "decision": "enhance",
+      "rationale": "改进 C3：现有退出码/raw pointer 不足以证明 checker 拒绝违规，补条件性阈值/完整性/执行失败校准及有效证据复用。",
+      "actual_reads": [
+        {
+          "path": "skills/adk-verification-before-completion/SKILL.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-verification-before-completion/SKILL.md",
+          "sha256": "9f290e17847ef913b5f6ac12127f20fb8b128cda0b70c02775a658e3e7e98eee",
+          "git_blob_sha": "bacc35284785928445ba2e0ddacbc0f8655ec606",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-verification-before-completion/references/verification-governance-details.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-verification-before-completion/references/verification-governance-details.md",
+          "sha256": "6990e8a02a7e4ce7b63576e824763ff3ead750a9de79d765db0a83d179535755",
+          "git_blob_sha": "c272bb914911d54bf521ec2f2dccb689b65da023",
+          "read_scope": "full"
+        }
+      ]
+    },
+    {
+      "name": "adk-code-review-loop",
+      "path": "skills/adk-code-review-loop/SKILL.md",
+      "decision": "retain",
+      "rationale": "保留：完整快照、调用点保护条件、Spec↔Code、coverage ledger 与误报核实已覆盖 Sentry/Addy 有效审查方法。",
+      "actual_reads": [
+        {
+          "path": "skills/adk-code-review-loop/SKILL.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-code-review-loop/SKILL.md",
+          "sha256": "b0559782d71aed048fb96cd4aab019e90c79e444f221e1d88b6a635ccc435d4c",
+          "git_blob_sha": "38ddec70eb7487c783f8a26509ba0f077a435d40",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-code-review-loop/references/review-communication-guidance.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-code-review-loop/references/review-communication-guidance.md",
+          "sha256": "0b68e9b0bbceceaf56458383137958c041ee7d75f343a12b5fd5a9cae71d8ddb",
+          "git_blob_sha": "d52dfdd9db9f2a465df26414e8bb0023a9f45379",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-code-review-loop/references/review-evidence-template.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-code-review-loop/references/review-evidence-template.md",
+          "sha256": "95c51b6f6fbad9782acc513e20d8cdda02436a5fb3789742d77cf50d832c4e7b",
+          "git_blob_sha": "3634579a1c56cf93b26eb7221ded8482156cdd77",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-code-review-loop/references/review-feedback-fixtures.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-code-review-loop/references/review-feedback-fixtures.md",
+          "sha256": "a08bd0302b87b7186bfb4d641485d501c2cce666654e9d5a4194fa1685b73071",
+          "git_blob_sha": "52a79f67e795f248b81a7a638c1c5284dd226b8c",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-code-review-loop/references/review-governance-details.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-code-review-loop/references/review-governance-details.md",
+          "sha256": "b75403ea56c108e170cea17f6cfdcaec40c4d940114a7e682fa349a8d48c823e",
+          "git_blob_sha": "889218b7d9db485285db72d93649a427b48a5518",
+          "read_scope": "full"
+        }
+      ]
+    },
+    {
+      "name": "adk-repo-drift-remediation",
+      "path": "skills/adk-repo-drift-remediation/SKILL.md",
+      "decision": "retain",
+      "rationale": "保留：先 issue map、共享写串行、保留用户 dirty 状态；无新增必要步骤。",
+      "actual_reads": [
+        {
+          "path": "skills/adk-repo-drift-remediation/SKILL.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-repo-drift-remediation/SKILL.md",
+          "sha256": "94d2f317c59a61a0c80b75e20bf636b46b49b728af85dfa117beaa20bb1d5857",
+          "git_blob_sha": "126165827f528a15af3c0b3cf86cde6a34cdf595",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-repo-drift-remediation/README.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-repo-drift-remediation/README.md",
+          "sha256": "64a339900700aa3444f589aa9549d082124f2bf20e40ea58270d7ce8066bafa7",
+          "git_blob_sha": "bbb9ffc101cd6ac54317dac5183bd3ee015d85ea",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-repo-drift-remediation/agents/openai.yaml",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-repo-drift-remediation/agents/openai.yaml",
+          "sha256": "daf474758479bf0bbfbd6350e6215c76dfbe7d23233e613c262f0a9f2e149470",
+          "git_blob_sha": "697f5074deb1d789d265e0de0416e504fdf9fac9",
+          "read_scope": "full"
+        }
+      ]
+    },
+    {
+      "name": "adk-commit-pr-quality-gate",
+      "path": "skills/adk-commit-pr-quality-gate/SKILL.md",
+      "decision": "retain",
+      "rationale": "保留：message-only/高风险分流及限定证据复用已覆盖，不扩大无关 gate。",
+      "actual_reads": [
+        {
+          "path": "skills/adk-commit-pr-quality-gate/SKILL.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-commit-pr-quality-gate/SKILL.md",
+          "sha256": "ac2559e3a0320be3aa3f83336ce0f3fa7359408625447eabcb00103b360abfc6",
+          "git_blob_sha": "050cf95bc3c2f5b29f21e4658805ddb87c6058ee",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-commit-pr-quality-gate/references/pr-risk-gates.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-commit-pr-quality-gate/references/pr-risk-gates.md",
+          "sha256": "dc5398ac9800eaeaaaac5800072b09801716be730d05d68a95b4c3400de67027",
+          "git_blob_sha": "cbd8582597fdc5d53b5d34701e48ed536f8cfde4",
+          "read_scope": "full"
+        }
+      ]
+    },
+    {
+      "name": "adk-release-versioning",
+      "path": "skills/adk-release-versioning/SKILL.md",
+      "decision": "retain",
+      "rationale": "保留：完整 log/body、真实已验证基线与版本影响已前轮修复，不用最近 tag 猜测。",
+      "actual_reads": [
+        {
+          "path": "skills/adk-release-versioning/SKILL.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-release-versioning/SKILL.md",
+          "sha256": "4a80611ceda62c35c558371d47238d3b5f2516a20efc067160abefc3ce686163",
+          "git_blob_sha": "5b00d772ab95e0978d7c4039c304887d4173843d",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-release-versioning/references/details.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-release-versioning/references/details.md",
+          "sha256": "6da9f5f3ce85401938db084b0aa1df5e78683ad1f4132927c50ddbc55a4c1bed",
+          "git_blob_sha": "b2c501842e5f22694538391f5d2ee617809290ee",
+          "read_scope": "full"
+        }
+      ]
+    },
+    {
+      "name": "adk-cross-team-handoff",
+      "path": "skills/adk-cross-team-handoff/SKILL.md",
+      "decision": "retain",
+      "rationale": "保留：冷读理解核验、pending/accepted 与真实收件回执分开；不凭发出就声称交接完成。",
+      "actual_reads": [
+        {
+          "path": "skills/adk-cross-team-handoff/SKILL.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-cross-team-handoff/SKILL.md",
+          "sha256": "c02d4289a267bf655f0c22b9fdfac3638ee21067ad61aab60917fbdcc3334323",
+          "git_blob_sha": "3a99ac808bf02120abe6a5b508bef0010f673a28",
+          "read_scope": "full"
+        }
+      ]
+    },
+    {
+      "name": "adk-branch-closeout",
+      "path": "skills/adk-branch-closeout/SKILL.md",
+      "decision": "retain",
+      "rationale": "保留：操作级授权、actual HEAD/checks、fresh main 与 cleanup 边界完整；不采纳自动分支删除。",
+      "actual_reads": [
+        {
+          "path": "skills/adk-branch-closeout/SKILL.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-branch-closeout/SKILL.md",
+          "sha256": "297be37797361052529e78667e871fff5f10a8891b5f98ab9ec0dd3873000f8a",
+          "git_blob_sha": "2d436fc51a76e66c579042493135516c86c371be",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-branch-closeout/references/closeout-options.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-branch-closeout/references/closeout-options.md",
+          "sha256": "4bab5ac06d023ad9d764f537fd523147c089ef96f51bf691ef94fe6ddd58e3e6",
+          "git_blob_sha": "86e53e4497b875b75a24129e1ac8ad7bb5cd900a",
+          "read_scope": "full"
+        }
+      ]
+    },
+    {
+      "name": "adk-after-action-review",
+      "path": "skills/adk-after-action-review/SKILL.md",
+      "decision": "retain",
+      "rationale": "保留：复盘和晋升分离、必须真实效果，不因外部流行实践就晋升规则。",
+      "actual_reads": [
+        {
+          "path": "skills/adk-after-action-review/SKILL.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-after-action-review/SKILL.md",
+          "sha256": "ae6e24987988e0d095ae4db176f0d180814c723337f0ced9038d989f3f042462",
+          "git_blob_sha": "cec7d4b51daf500be270581c790aef7eeabaf104",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-after-action-review/references/after-action-review.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-after-action-review/references/after-action-review.md",
+          "sha256": "7cdb7dcf86c40457a9c4a008086c8dfb467b8c52fc9d1bd52b9f514edc24fab5",
+          "git_blob_sha": "33c0825776ab10105d8381f59ad3b6bc8c04d5e0",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-after-action-review/references/codify-decision.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-after-action-review/references/codify-decision.md",
+          "sha256": "bfa0e7b547453341f266799786286a30dc3af47bc23db020968c0e4c0fe94a90",
+          "git_blob_sha": "52b1b474f54bc76b3d6fba1e8304e53e8f6d63ea",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-after-action-review/references/memory-candidate.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-after-action-review/references/memory-candidate.md",
+          "sha256": "3125b4c2cb0b38ecf8d542ff75b7db48feecb473742325abd05ee5a687888a3a",
+          "git_blob_sha": "702aced3a49cc5adddf33686afc081b7b1e8fb44",
+          "read_scope": "full"
+        }
+      ]
+    },
+    {
+      "name": "adk-memory-curator",
+      "path": "skills/adk-memory-curator/SKILL.md",
+      "decision": "retain",
+      "rationale": "保留：来源冲突、last_verified、raw pointer 及敏感信息边界已覆盖压缩/记忆核心方法。",
+      "actual_reads": [
+        {
+          "path": "skills/adk-memory-curator/SKILL.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-memory-curator/SKILL.md",
+          "sha256": "4f1b1e136a0eeb07f0b407ca7cae406734b13b602b3fb292ad30e0967ab71f3a",
+          "git_blob_sha": "5bc13c4f4174624663a89e5cc8734d42179b2142",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-memory-curator/README.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-memory-curator/README.md",
+          "sha256": "1c9f71a0511b8f6979e38c9825fd7aaaedcb62e62686316f9edeb1b55bf96933",
+          "git_blob_sha": "a90db02f1be4fa9f456e24f4a931cdad259a6903",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-memory-curator/agents/openai.yaml",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-memory-curator/agents/openai.yaml",
+          "sha256": "24ec7d756319b13019ccdb7b227d67f23066beae23e05e02e5339d4340231acc",
+          "git_blob_sha": "db0b084970bff6d5eb5cdd0726a976262b4b8fb1",
+          "read_scope": "full"
+        }
+      ]
+    },
+    {
+      "name": "adk-archive-governance",
+      "path": "skills/adk-archive-governance/SKILL.md",
+      "decision": "retain",
+      "rationale": "保留：目标 schema/hash/supersedes 与保留依据完整；不任意删除归档。",
+      "actual_reads": [
+        {
+          "path": "skills/adk-archive-governance/SKILL.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-archive-governance/SKILL.md",
+          "sha256": "c421043f058e6440a37a711ba198586a6d91b79abe8c8ae465b7248d4a553a42",
+          "git_blob_sha": "825237cd8d5108b6b45533f352c41242b467c14f",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-archive-governance/README.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-archive-governance/README.md",
+          "sha256": "f0d5f306b1d8ddafa6065d4c07883ae6bcfd123857e0cdec22fcdec7ba0036c6",
+          "git_blob_sha": "777dc00b02aa03d642041fb71a3e54a66ab94333",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-archive-governance/agents/openai.yaml",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-archive-governance/agents/openai.yaml",
+          "sha256": "1a49a5ab0c79fab66f27c547d8dd7ea85307a96e214062611c4f8e4da8f90b96",
+          "git_blob_sha": "174e9523634c71615fc7ff3d7094548a3fc186d9",
+          "read_scope": "full"
+        }
+      ]
+    },
+    {
+      "name": "adk-knowledge-archive",
+      "path": "skills/adk-knowledge-archive/SKILL.md",
+      "decision": "retain",
+      "rationale": "保留：来源、权利、不确定性、真实新知识增量；不批量制造重复笔记。",
+      "actual_reads": [
+        {
+          "path": "skills/adk-knowledge-archive/SKILL.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-knowledge-archive/SKILL.md",
+          "sha256": "fb31246a4016f866dbcffefeb324595d5cc6569f5c331ab2b8f5c399c407baa7",
+          "git_blob_sha": "73d8519350051b9c02aadaadfa1293deebc3b269",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-knowledge-archive/README.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-knowledge-archive/README.md",
+          "sha256": "07d5563a38ec220a6937c32a7339cd866942df34936c366ddfb1e4f2c4fde8ea",
+          "git_blob_sha": "de534394e4358dc6812dd3ac3a3d40410648d6c6",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-knowledge-archive/agents/openai.yaml",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-knowledge-archive/agents/openai.yaml",
+          "sha256": "c915127f7ac46ebdce1bd6afd512c0039cfea00a6fa6dc5fc8d5f4a653b5a7ba",
+          "git_blob_sha": "2d3a49cb10ab7b49174564111133699c068bab1e",
+          "read_scope": "full"
+        }
+      ]
+    },
+    {
+      "name": "adk-engineering-growth-review",
+      "path": "skills/adk-engineering-growth-review/SKILL.md",
+      "decision": "retain",
+      "rationale": "保留：index-first、明确跨项目范围、证据趋势不推断人格；不为优化添加模型评测。",
+      "actual_reads": [
+        {
+          "path": "skills/adk-engineering-growth-review/SKILL.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-engineering-growth-review/SKILL.md",
+          "sha256": "1cb57aaa0364e19ccb07717a9c2e9586de56eb0dae98c8c7f0921cda5e9aac99",
+          "git_blob_sha": "06b4029aa40f5eced604f3da95a13b23b1320533",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-engineering-growth-review/README.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-engineering-growth-review/README.md",
+          "sha256": "9d19616439a76b780d6b66c41373a089b0c32406f1a073cf00c485925201f663",
+          "git_blob_sha": "2b3a2e09c760a59c9805df49b9ff1a7b2bf969bc",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-engineering-growth-review/agents/openai.yaml",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-engineering-growth-review/agents/openai.yaml",
+          "sha256": "17530036dc4d53ee862d6030d03cea86392d1e3ed1a4ce2e9178df4e8458bc05",
+          "git_blob_sha": "b66751d4185a004dce444b9a1e24ec82131f02ab",
+          "read_scope": "full"
+        },
+        {
+          "path": "skills/adk-engineering-growth-review/references/growth-evidence-boundaries.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-engineering-growth-review/references/growth-evidence-boundaries.md",
+          "sha256": "0b3f9a93d9cd77346dacb69840ec003c168d5885d9843842a3f22ac18c810653",
+          "git_blob_sha": "e6540e1e825e08448da2f7721aec84baa5663837",
+          "read_scope": "full"
+        }
+      ]
+    },
+    {
+      "name": "adk-external-practice-absorption",
+      "path": "optional-skills/adk-external-practice-absorption/SKILL.md",
+      "decision": "retain",
+      "rationale": "保留：collector/owner/implementer/verifier 分离，来源身份/许可/生命周期已有；不安装外部 Skill。",
+      "actual_reads": [
+        {
+          "path": "optional-skills/adk-external-practice-absorption/SKILL.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/optional-skills/adk-external-practice-absorption/SKILL.md",
+          "sha256": "3d6a62b500113d0f0a88727c54fcfd0b7d0f692be1cd96d45d0590c5f0aee164",
+          "git_blob_sha": "9f912b31f1f69e46d4cfa5540710b78a2c4c33be",
+          "read_scope": "full"
+        },
+        {
+          "path": "optional-skills/adk-external-practice-absorption/agents/openai.yaml",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/optional-skills/adk-external-practice-absorption/agents/openai.yaml",
+          "sha256": "a3778c89b5a1937facc40e463d91966a70a0c8e7f31c2afbc50d4f302d8cb4fe",
+          "git_blob_sha": "d5bfa4d04e441df464f7d93a819ca8254af1d6b4",
+          "read_scope": "full"
+        }
+      ]
+    },
+    {
+      "name": "adk-data-fetch",
+      "path": "optional-skills/adk-data-fetch/SKILL.md",
+      "decision": "retain",
+      "rationale": "保留：父 wrapper 和独立安装的两个获取子技能边界清楚，不隐含邮箱权限。",
+      "actual_reads": [
+        {
+          "path": "optional-skills/adk-data-fetch/SKILL.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/optional-skills/adk-data-fetch/SKILL.md",
+          "sha256": "2b21813be53528c13eefee6add282615730d36fa712073bae3943370e069b0f0",
+          "git_blob_sha": "8f114f511cabd2bfec337a9fa0734a0b89046892",
+          "read_scope": "full"
+        }
+      ]
+    },
+    {
+      "name": "adk-email-imap-fetch",
+      "path": "optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md",
+      "decision": "retain",
+      "rationale": "保留：EXAMINE、UIDVALIDITY+UID、BODY.PEEK、字节预算与 partial/error 已覆盖；未对真实邮箱运行。",
+      "actual_reads": [
+        {
+          "path": "optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md",
+          "sha256": "3cff893650e3fa6da6ec383a3eb05bd18468f5de7794c3c2d9f1f067c2f7d373",
+          "git_blob_sha": "db1594b7ace1cf64c6bec55658369fd7f27929e5",
+          "read_scope": "full"
+        }
+      ]
+    },
+    {
+      "name": "adk-fetch-url-content",
+      "path": "optional-skills/adk-data-fetch/adk-fetch-url-content/SKILL.md",
+      "decision": "retain",
+      "rationale": "保留：DNS/origin/redirect/private 拒绝、HTML/base/links 与 partial 明确；未用 Firecrawl 替换已够用路径。",
+      "actual_reads": [
+        {
+          "path": "optional-skills/adk-data-fetch/adk-fetch-url-content/SKILL.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/optional-skills/adk-data-fetch/adk-fetch-url-content/SKILL.md",
+          "sha256": "39a05fb731de1c3251c887587ffdb9cedcfa10d5c547910f8fb0969748d64b39",
+          "git_blob_sha": "54ecaeec74ef1356e29e48df1c7534f187d39fe5",
+          "read_scope": "full"
+        }
+      ]
+    },
+    {
+      "name": "adk-test-flakiness-triage",
+      "path": "optional-skills/adk-test-flakiness-triage/SKILL.md",
+      "decision": "retain",
+      "rationale": "保留：逐例真实报告、缺失/错误不得成功、有界样本和环境值保护已前轮加强；不宣称低概率统计置信。",
+      "actual_reads": [
+        {
+          "path": "optional-skills/adk-test-flakiness-triage/SKILL.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/optional-skills/adk-test-flakiness-triage/SKILL.md",
+          "sha256": "1b198f8b975bea9529552d899e38ae335ab2d6684e21e74c2eefcbb83f3898ba",
+          "git_blob_sha": "7792ad4c9db20941e28d5d70a60b8bd7c7c167fe",
+          "read_scope": "full"
+        },
+        {
+          "path": "optional-skills/adk-test-flakiness-triage/references/details.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/optional-skills/adk-test-flakiness-triage/references/details.md",
+          "sha256": "efaef84006e04c7b502837d7c2548459c86793c921f969824a593db1e4ab1f97",
+          "git_blob_sha": "b3f0ef5d59e8a2e91710fda6016da53a0fd8298e",
+          "read_scope": "full"
+        }
+      ]
+    },
+    {
+      "name": "adk-prose-revision",
+      "path": "optional-skills/adk-prose-revision/SKILL.md",
+      "decision": "retain",
+      "rationale": "保留：report/revise、技术 literal 与限定语保护，不推断 AI 作者；未发现新缺口。",
+      "actual_reads": [
+        {
+          "path": "optional-skills/adk-prose-revision/SKILL.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/optional-skills/adk-prose-revision/SKILL.md",
+          "sha256": "5c0dbe215745f6d3aa09676a88f550248579e71a79dd3703ab82ec2c62ec0360",
+          "git_blob_sha": "382ed9cdf9aa6029d482d0e4a4a6b1fe3e43a51b",
+          "read_scope": "full"
+        },
+        {
+          "path": "optional-skills/adk-prose-revision/references/review-cases.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/optional-skills/adk-prose-revision/references/review-cases.md",
+          "sha256": "fb82979ca071f05be5c533370e05340d08bf705e5b78392c0facc263df03cfa5",
+          "git_blob_sha": "5feb15f8f3d14a0bb97a4f5156ac2d099e4766c6",
+          "read_scope": "full"
+        }
+      ]
+    },
+    {
+      "name": "adk-incident-rca-report",
+      "path": "optional-skills/adk-incident-rca-report/SKILL.md",
+      "decision": "retain",
+      "rationale": "保留：事实/假设/因果分离、有证据才用 5 Whys；不虚构 owner 或时间。",
+      "actual_reads": [
+        {
+          "path": "optional-skills/adk-incident-rca-report/SKILL.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/optional-skills/adk-incident-rca-report/SKILL.md",
+          "sha256": "b653aafe11d25922f895874cc1e61989f7d1f8d892efec5e3b7f830c4fa09cb4",
+          "git_blob_sha": "1942cac37965917b5979283eb8108f9bbdc5be5f",
+          "read_scope": "full"
+        }
+      ]
+    },
+    {
+      "name": "adk-skill-composition-governance",
+      "path": "optional-skills/adk-skill-composition-governance/SKILL.md",
+      "decision": "retain",
+      "rationale": "保留：canonical matcher、holdout、source/native/effect 边界与行为评估已经清楚；不引入外部 trigger/eval runner。",
+      "actual_reads": [
+        {
+          "path": "optional-skills/adk-skill-composition-governance/SKILL.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/optional-skills/adk-skill-composition-governance/SKILL.md",
+          "sha256": "d50c3fc1512a58337ab066e60107d17ef25ddcae1bfc0a9914f444b7a5469fad",
+          "git_blob_sha": "fbf4f9c71205fc5c018831dc26b4e28eb7fd7672",
+          "read_scope": "full"
+        },
+        {
+          "path": "optional-skills/adk-skill-composition-governance/references/adk-skill-lifecycle.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/optional-skills/adk-skill-composition-governance/references/adk-skill-lifecycle.md",
+          "sha256": "5aba1c61b0686bc0bb25818834eb01a91d60b05a0de91c40fb73cedda5e23de3",
+          "git_blob_sha": "16bee5898462338d40cb2b07f6b4eac67b3d48a5",
+          "read_scope": "full"
+        },
+        {
+          "path": "optional-skills/adk-skill-composition-governance/references/skill-behavior-evaluation.md",
+          "absolute_path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/optional-skills/adk-skill-composition-governance/references/skill-behavior-evaluation.md",
+          "sha256": "e54daf26764853d5fe8bb8b0b134442e3d500b12fcf5d33254ef8bab242eee82",
+          "git_blob_sha": "204daead15aa9a7a67f6cf9ac6840bf15a42d235",
+          "read_scope": "full"
+        }
+      ]
+    }
+  ],
+  "coverage_summary": {
+    "assigned": 39,
+    "unique_reviewed": 39,
+    "enhance": 3,
+    "retain": 36,
+    "actual_files_read": 88
+  }
+}
