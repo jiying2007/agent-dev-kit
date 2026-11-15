@@ -4,6 +4,41 @@
 冻结芯片布局、链接脚本、toolchain/flags、源/配置/ELF hash、map及上板限制。构建失败记 blocked，不报节省。
 同工具链用 size -A、nm --print-size --size-sort、objdump/map及 -fstack-usage .su 核 .text/.rodata/.data/.bss、alignment、Flash初始化副本、DMA/uncached/retention区；stack/heap reserve与RTOS逐任务high-water分开核算。
 
+## 栈证据
+
+`.su` 逐函数、单位 bytes，按实际 GCC 版本解析列：`static` 固定 frame，`dynamic,bounded` 是该函数用量上界，只有 `dynamic` 时仅有界部分；均不自动含调用链。
+
+从实际调用图/反汇编核同时存活 frame，不能取 max(frame) 或所有函数之和当任务峰值。递归深度、间接调用、VLA/alloca、库/汇编、优化/LTO、ABI 未定保留 unknown；按 port 区分任务/IRQ 栈，计嵌套、异常入栈、RTOS context/FPU，host 不能推出 MCU 上界。
+
+high-water 只反映观测窗口/负载，核 API/port、单位与开销。上游 FreeRTOS `uxTaskGetStackHighWaterMark` 是自启动以来最小剩余 words（按 `StackType_t` 换算），vendor API 另核；Zephyr thread analyzer 也不证明未经历路径。余量非最坏上界，未上板 `not-measured`。
+
+以下 `stack.c` 仅用于 host GCC x86-64 的 `.su` 反例：
+
+```c
+#include <stddef.h>
+__attribute__((noinline)) int leaf(int x) {
+    volatile unsigned char bytes[256];
+    bytes[0] = x; return bytes[0];
+}
+__attribute__((noinline)) int caller(int x) {
+    volatile unsigned char bytes[384];
+    bytes[0] = x;
+    int result = leaf(x);
+    return bytes[0] + result;
+}
+__attribute__((noinline)) int dynamic_frame(size_t n) {
+    if (n == 0 || n > 4096) return 0;
+    volatile unsigned char bytes[n];
+    bytes[0] = 1; return bytes[0];
+}
+```
+
+```bash
+gcc -std=c11 -O0 -fstack-usage -fno-omit-frame-pointer -mno-red-zone -c stack.c -o stack.o
+```
+
+读取新 `stack.su`：caller 调 leaf 时数组仍存活；dynamic_frame 的 `dynamic` 数字不含完整 VLA。留实际 qualifier/数字，不写死 frame；缺产物/qualifier 先核支持。`-mno-red-zone` 仅属 x86-64；该例未验证 dynamic,bounded、IRQ 或真实 high-water。
+
 ## 安全优化
 授权 scope 内先量化 const/rodata、buffer缩容、成员重排、库/section GC、libc/优化级别变更。不得用共享 static 代替可重入局部数组或随意移动 DMA/cache line、保留区/向量表；核 packed 非对齐风险，保留错误路径与可恢复性。
 输出 build identity、scope、before/after section bytes及重复测量、remaining risk；验证功能、latency/jitter、温升/功耗和回滚。无板端证据记 needs-runtime-evidence。
@@ -16,4 +51,4 @@
 
 剪辑分类报告目标类别与 unknown/silence 的混淆；连续监听冻结各候选在验证集确定的阈值/后处理，用一致的误唤醒预算或项目工作点比较误唤醒次数和负音频时长、漏检及触发延迟，不强求不同分数尺度采用同一数值阈值，也不能用剪辑准确率替代流式效果。前端、量化和后处理用共享输入核对 host/target 输出，注明容差；再测板端 Flash/RAM、时延和功耗。仅有合成特征或 host 数据时保留实际覆盖范围，不启动未授权训练/模型服务来补结果。
 
-参考：https://sourceware.org/binutils/docs/binutils/size.html ; https://gcc.gnu.org/onlinedocs/gcc/Developer-Options.html ; https://www.tensorflow.org/datasets/catalog/speech_commands
+参考：[size](https://sourceware.org/binutils/docs/binutils/size.html)、[GCC .su](https://gcc.gnu.org/onlinedocs/gcc/Developer-Options.html)、[FreeRTOS API](https://github.com/FreeRTOS/FreeRTOS-Kernel/blob/ca759444e9ca59cfa3a9faa6cb8b49e0772ca520/include/task.h)、[Zephyr analyzer](https://docs.zephyrproject.org/latest/services/debugging/thread-analyzer.html)、[Speech Commands](https://www.tensorflow.org/datasets/catalog/speech_commands)。

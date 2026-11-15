@@ -1,128 +1,136 @@
 # Verification Governance Details
 
-按 progressive disclosure 使用：日常完成前核验先读 `../SKILL.md`；只有命中对应风险面、证据字段需要解释、或 gate 失败需要追溯规则时再读本文件。
+按需细读；权限与阶段边界见 `../SKILL.md`，填写模板不授予权限。
 
 ## Applicability Matrix
 
-| 变更类型 | 必补证据 |
+| 影响面 | 对应下方步骤 |
 |---|---|
-| 主观/用户可见功能 | Subjective Feature Proof，独立 verifier，expected/observed/verdict |
-| 状态、异步完成、共享资源 | owner/state/event/resource/termination/invariant，取消/超时/恢复/迟到完成，generation 隔离，真实环境边界 |
-| 运行时目录 | 显式 tool target 适配证据 + 运行目录健康验证 |
-| 运行时配置 | 声明配置 vs 运行态加载 |
-| prompt/policy/guidance/routing/completion gate | before/after 行为证据 + Trace Eval Regression Evidence 或 not_applicable_reason |
-| runner/CLI/adapter/noninteractive/source-to-live | Runner Smoke Contract |
-| UI / 浏览器可见行为 | UI/Appshots Evidence Boundary + browser/runtime evidence |
-| slash command/MCP/tool server/hook/permission/approval/sandbox | Runtime Control Plane Audit + deny path + rollback |
-| 模型/上下文/工具能力 | 本地回归 + approval/deny 未放宽证据 |
-| 中高风险交付 | Replayable Evidence Bundle + Tool/Skill Evidence Plan + Completion Guard Payload |
-| 跨模块/协议/数据/发布/存储/资源/UI | standards impact + architecture review + ship disclosure + canonical resolution parity 或明确 not-applicable |
-| breaking change | breaking decision + migration + rollback |
+| 主观/UI | 3、12 |
+| 状态/异步/共享资源 | 5、6 |
+| 目录/配置/runner/CLI/adapter/noninteractive/source-to-live | 7、8、13 |
+| prompt/policy/guidance/routing/completion gate/model/context | 9、17、19，或真实不适用原因 |
+| slash/MCP/hook/permission/approval/sandbox | 18 |
+| medium/high、协议/数据/安全/发布 | 11、14、24及适用迁移/回退、运行环境 |
+| 跨模块/协议/数据/发布/存储/资源/UI | 15 |
+| breaking change | 16 |
+| 新建/修改/可疑 checker | 下方条件性校准 |
 
 ## Detailed 25-Step Verification Flow
 
-1. 收敛改动范围，明确影响面与非目标。
-2. 分离 claimant 的完成声明与 verifier 的独立核验，不采信结论文本本身。
-3. 核对 lint/test/build/smoke、执行环境；主观/用户可见行为需独立 Subjective Feature Proof。
-4. 按 blocker/major/minor 检查评审闭环。
-5. 若涉及生命周期操作，检查 owner/state/event/resource/termination/invariant、取消/超时/恢复/迟到完成、generation 隔离与真实环境边界。
-6. 检查 review mode、finding class、reopen、clean-review、independence 与 replan；targeted finding 修复不能冒充整体生命周期通过。
-7. 运行时目录补 tool target 适配和健康验证。
-8. 运行时配置补声明配置与实际加载对比。
-9. prompt/policy 文本补 before/after 行为对比与失败样例。
-10. 关键命令进入 Evidence Index，记录命令、退出码、摘要、证据路径、层级和关联工件。
-11. 中高风险交付补 Replayable Evidence Bundle：input/environment snapshot、tool transcript digest、artifact hashes、expected assertions、sensitive-data review、不可回放原因。
-12. UI/用户可见行为补 Appshots/UI Evidence Boundary：可见窗口/文本、permission scope、sensitive-content review；源码检查不能替代 runtime UI 证据。
-13. runner/CLI/adapter/noninteractive/运行资产链路补 Runner Smoke Contract：schema/JSONL、sandbox、approval、cwd、thread/turn、resume/reply、失败/取消路径。
-14. 核对 Tool / Skill Evidence Plan：primary/supporting skills、required artifacts、skipped skills、tool fallback、fallback evidence、evidence paths。
-15. 跨模块/协议/数据/发布/存储/资源/UI 变更补 standards impact、architecture review、ship disclosure、canonical resolution parity、browser evidence 或 not-applicable。
-16. 显式判断 breaking change，并给 migration/rollback。
-17. 模型切换、上下文扩容、工具能力提升补本地回归和权限/approval 未放宽证据。
-18. Runtime Control Plane Audit：slash command、MCP/tool server、hook、permission profile、approval policy、sandbox 变更记录 `slash_command_runtime_audit`、`mcp_runtime_contract`、`permission_profile_decision`、`loaded_tools`、`approval_boundary`、`deny_path_test`、`runtime_config_diff`、`rollback_path`。
-19. Trace Eval Regression Evidence：prompt/policy/routing/completion gate/guidance 变更记录 `trace_eval_regression_case` 或 `not_applicable_reason`；候选包括 dataset_id、case_id、source_trace_id、prompt_version、candidate_prompt_version、expected_regression_signal、grader、score_threshold、regression_link、retention_policy、redaction_status、owner_approval。
-20. 反向核验每个结论是否真的被证据支持，禁止先结论后补证据。
-21. 长任务核 retry budget、heartbeat、staleness threshold、plan completeness、attestation readback、失败路径、已排除方案与 open items。
-22. 使用 `templates/governance/codify-decision.md` 完成 Codify Decision：delivery_goal、reusable_pattern、affected_asset、promotion_candidate、next_task_friction_reduced、reduced_by、reduction_evidence、do_not_promote_reason、owner_review、rollback_path、verification_evidence。
-23. 只有 verification_evidence、owner_review、rollback_path 和摩擦下降证据完整时才允许 `promotion_candidate: true`；否则写 do_not_promote_reason。
-24. 中高风险任务生成 Completion Guard Payload；对 build/lint/test/smoke/security/release 中适用项记录 status、exit_code、command、evidence_path、verified_at、verifier。
-25. 输出 pass/needs-fix、剩余风险、下一步和责任人。
+1. 冻结 scope/mode/risk、快照、原验收、影响面和非目标。
+2. claimant 自述/源码推断不替代独立 verifier 的实际证据。
+3. 核 lint/test/build/smoke 环境；主观功能补 Subjective Feature Proof。
+4. 核 blocker/major/minor 闭环，不带重大问题通过。
+5. 生命周期核入口列出的契约、取消/超时/恢复/迟到及 generation，明确真实边界。
+6. 核 review mode、finding class、reopen、clean-review、independence；局部修复不等于整体。
+7. 运行目录核 tool target 适配和健康。
+8. 配置声明对照实际加载。
+9. prompt/policy 补前后行为及失败样例，未测量明确说明。
+10. Evidence Index 记命令、退出码、时间/版本、原始路径/层级/工件；过期重验，至少一条负结果/被证伪路径。
+11. 按矩阵补回放输入/环境/hash/敏感信息复核；不能回放须说明替代证据。
+12. UI 核可见状态、权限与敏感内容；源码不能代替运行。
+13. runner 核 JSONL、执行身份、续接、失败/取消；字段见模板。
+14. 核 required artifacts、primary/supporting/skipped skills 与 fallback evidence。
+15. 跨界核 standards/architecture/ship disclosure/canonical resolution parity，或明确不适用。
+16. 显式 breaking decision、migration、rollback。
+17. 能力扩展核本地回归和权限未放宽。
+18. 控制面核允许/拒绝、实际加载/配置和回退。
+19. Trace Eval 可回溯，字段见模板；source-only 不当模型效果。
+20. 反查每个结论的证据，不先定结论。
+21. 长任务核 retry/heartbeat/staleness、plan completeness、attestation readback、失败/排除项；失配先恢复。
+22. 仅适用的 goal-final/晋级填 Codify；checkpoint 可延期。
+23. 后续摩擦下降、owner、回退及验证齐全才允许 `promotion_candidate: true`；一次性/仅当前环境 workaround 不晋升。
+24. 按矩阵对适用 build/lint/test/smoke/security/release 记录 status/exit_code/command/evidence_path/verified_at/verifier。
+25. 给 pass/needs-fix、未查范围、open items、风险/下一步/owner；必需项失败/过期/无有效跳过理由均 needs-fix。
 
-## Gate Details
+## Checker 校准：区分执行成功与业务通过
 
-### Completion claim
-完成声明至少区分 claimant、verifier、证据、缺失证据、open items。主观或用户可见行为还要区分 expected、observed、verdict。claimant 自述、源码推断或“看起来没问题”均不能替代独立验证。
+仅新建/修改/结果矛盾时固定版本、命令链、schema/阈值/范围和输入身份，运行下表对照并记 expected/observed/raw pointer。同配置的有效证据可复用，变化后重校准。exit 0 仅可能表示生成报告；未知/缺失/执行或覆盖错误不得通过，一律拒绝也不正确。
 
-### Evidence freshness and replay
-关键命令必须可追溯；过期证据不能复用。Evidence Index 至少保留一条负结果或被证伪路径，避免只收集支持结论的样本。中高风险任务应可回放；不可回放必须写明原因和替代证据。
+将三段分别存为临时 `checker.py`、`scanner.py`、`report.json`，运行 `python3 checker.py error python3 scanner.py report.json 0`。scanner 仅回显受控报告，不能证明真实扫描能力；这不是生产 Gate。下表逐例修改报告，直接运行 scanner 均可 exit 0，包装器须拒绝违规/错误；阈值改 `warning` 后 warning 也须拒绝。
+
+<!-- adk-example: checker-calibration -->
+```python
+import json
+import subprocess
+import sys
+
+levels = {"info": 0, "warning": 1, "error": 2}
+threshold, command = sys.argv[1], sys.argv[2:]
+verdict, scanner_exit = 2, None
+try:
+    run = subprocess.run(command, capture_output=True, text=True)
+    scanner_exit = run.returncode
+    report = json.loads(run.stdout)
+    valid = (
+        run.returncode == 0 and threshold in levels
+        and isinstance(report, dict) and type(report.get("schema")) is int and report["schema"] == 1
+        and report.get("complete") is True and report.get("errors") == []
+        and isinstance(report.get("scanned"), list)
+        and all(isinstance(path, str) for path in report["scanned"])
+        and set(report["scanned"]) == {"a.py", "b.py"}
+        and isinstance(report.get("findings"), list)
+        and all(isinstance(level, str) and level in levels for level in report["findings"])
+    )
+    if valid:
+        verdict = int(any(levels[level] >= levels[threshold] for level in report["findings"]))
+except (OSError, ValueError, TypeError):
+    pass
+print(json.dumps({"scanner_exit": scanner_exit, "verdict": verdict}))
+raise SystemExit(verdict)
+```
+
+<!-- adk-example: checker-scanner -->
+```python
+from pathlib import Path
+import sys
+print(Path(sys.argv[1]).read_text())
+raise SystemExit(int(sys.argv[2]))
+```
+
+<!-- adk-example: checker-clean-report -->
+```json
+{"schema":1,"complete":true,"errors":[],"scanned":["a.py","b.py"],"findings":[]}
+```
+
+| 从正常报告改一项 | error 阈值预期 |
+|---|---|
+| 不改 / findings=["warning"] | 0 / 0，保留合法通过 |
+| findings=["error"] | 1，达到阈值 |
+| errors 非空 / scanner 最后参数改 3 | 2，报告错误/进程失败 |
+| complete=false / 删除 findings / scanned=[] 或仅 a.py | 2，覆盖或 schema 不完整 |
+| findings=["unknown"] / 非 JSON | 2，不猜未知结果 |
+
+findings 在此仅存级别。真实工具按实际 schema、范围和超时/取消合同适配，保存原报告后再判定，不能据此认证现场覆盖。
+
+## Claim、证据与权限
+
+按新增/修改/删除/重命名追溯原需求和当前行为；删除核旧行为消失，重命名不重造功能。未运行标 skipped/not-tested，不计通过；缺现场证据须说明 fallback 和 owner 接受的替代边界。not_applicable 不能掩盖缺口。design-change、新 blocker/major finding class 或超自审预算须 replan。
 
 ### Completion Guard 静态覆盖审计
 
-ADK 源仓可用 `rtk python3 -m agent_dev_kit.completion_coverage --input <completion-coverage.json> --summary-json` 对 `required_checks` 与命令观察项作封闭字段、同源快照、退出码和新鲜度核对。输入示例见 `tests/fixtures/completion_coverage_valid.json`。缺失、必需项跳过、任意失败或过期均返回 `needs-fix`；畸形输入返回 `invalid`。`status=pass` 只表示自报数据结构和集合覆盖，`completion_allowed=false` 始终成立；实际命令、证据 ref、verifier 身份和目标环境仍由独立验证者与目标项目门禁核对。
-
-### 需求差异与实际检查范围
-
-验证变更时先将每条需求标为新增、修改、删除或重命名，并绑定原需求身份、当前预期行为及检查结果。删除项应验证旧行为确已消失，不要求重新实现已删除需求；重命名项应追溯旧行为而非只看新名称。未执行或缺环境的检查记录 `skipped` 与原因，不能计入通过数；报告须列出实际运行的检查和未检查范围。
-
-### Lifecycle and review convergence
-受控生命周期操作必须有契约、owner 结论、终止路径和所需真实环境边界。生命周期变更必须有适用的 whole-lifecycle review。出现 `design-change`、新增 blocker/major finding class、或超过自审轮次预算时必须 replan。
-
-### Tool and skill evidence
-required artifact 缺失、skipped skill 无原因、tool fallback 无 fallback evidence，均固定 `needs-fix`。工具不可用时应记录 fallback，而不是把“未执行”写成通过。
-
-### Runtime control
-权限、approval 或 sandbox 变更必须同时证明 allow/deny 边界；缺 `deny_path_test`、`loaded_tools`、`rollback_path` 时不得完成。不得因为本地 happy path 成功就推断生产权限边界安全。
-
-### Codify
-可复用模式提升为 durable guidance 前必须证明后续摩擦确实下降，并保留 owner review、rollback 和 verification evidence。一次性 workaround、只在当前环境成立的技巧、或没有回退面的做法不应 promotion。
-
-## Rationalization Intercepts
-
-| 借口 | 风险 | 正确做法 |
-|---|---|---|
-| “我验证过了” | 口头验证不可复现、不可审计 | 写 Evidence Index，保留命令/退出码/结果摘要/证据路径 |
-| “跑了一遍应该没问题” | “应该”不是证据；一次 happy path 不等于门禁闭环 | 可复跑验证，并保留至少一条负结果/被证伪路径 |
-| “改动很小不用全量看” | 改动大小与影响面不等价 | 按 applicability matrix 只跑相关但足够的验证，不跳过必需证据 |
-| “源码看起来 UI 会这样” | source-only inspection 不是用户可见 runtime evidence | 补 Appshots/UI/浏览器或真实运行证据 |
-| “AI reviewer 没报错” | reviewer 不是 verifier，且可能缺运行态上下文 | 独立执行完成门禁并记录证据 |
-| “测试绿了就能发” | 测试无法自动覆盖 migration、rollback、权限、运行态配置和发布披露 | 同时核兼容性、控制面和 ship disclosure |
-
-## Failure Triage
-
-- 关键命令无法执行：记录原因、fallback 和降低后的完成度，不伪造 pass。
-- 证据过期：重新验证，而不是复用旧绿灯。
-- blocker 未闭环：固定 `needs-fix`。
-- heartbeat/staleness/retry budget 失败：先恢复长任务一致性，再讨论完成。
-- 运行态证据不可获取：明确 not_applicable 或 owner 接受的替代证据边界；不得默认为通过。
-
-## Evidence fields (deferred full output)
-
-仅在 goal-final、适用的 medium/high gate 或完成争议时加载。低风险 checkpoint 使用 ../SKILL.md 的最小报告；各字段应有实际证据或明确 not-applicable，不必为空项生成大表。
+源仓 `rtk python3 -m agent_dev_kit.completion_coverage --input <completion-coverage.json> --summary-json` 核封闭字段、同源快照、退出码/新鲜度；输入见 `tests/fixtures/completion_coverage_valid.json`。必需项缺失/跳过/失败/过期 → needs-fix；畸形 → invalid。`status=pass` 仅自报结构和集合覆盖，`completion_allowed=false` 始终成立；命令、证据 ref、verifier、目标环境仍需独立核对。
 
 ## Full Evidence Template (goal-final or medium/high only)
+
+低风险用入口最小报告，缺证据不靠填表。Codify 模板：`templates/governance/codify-decision.md`。
+
 ```md
-- Scope Summary:
-- Completion Claim Audit:
-- Verification Command Results:
-- Runtime Config Audit:
-- Prompt Regression Evidence:
-- Model / Context Regression Evidence:
+- Scope Summary / Completion Claim Audit / Verification Command Results:
+- Runtime Config Audit / Prompt Regression Evidence / Model / Context Regression Evidence:
 - Runtime Control Plane Audit: slash_command_runtime_audit / mcp_runtime_contract / permission_profile_decision / loaded_tools / approval_boundary / deny_path_test / runtime_config_diff / rollback_path
 - Trace Eval Regression Evidence: trace_eval_regression_case / dataset_id / case_id / source_trace_id / prompt_version / candidate_prompt_version / expected_regression_signal / grader / score_threshold / regression_link / retention_policy / redaction_status / owner_approval / not_applicable_reason
 - Standards / Architecture / Ship Disclosure / Resolution Parity / Browser Evidence:
-- Evidence Index:
-- Replayable Evidence Bundle: input_snapshot / environment_snapshot / tool_transcript_digest / artifact_hashes / expected_assertions / sensitive_data_review / non_replayable_reason
+- Evidence Index: command / exit code / summary / path / layer / artifact
+- Replayable Evidence Bundle: source_snapshot / input_snapshot / environment_snapshot / tool_transcript / tool_transcript_digest / artifact_hashes / expected_assertions / sensitive_data_review / non_replayable_reason
 - Appshots / UI Evidence Boundary: visible_text_boundary / permission_scope / sensitive_content_review / runtime_evidence_or_not_applicable
 - Runner Smoke Contract: event_stream_schema / sandbox_approval_cwd / thread_turn_or_resume_reply / failure_cancel_path
 - Tool / Skill Evidence Plan: primary_skill / supporting_skills / required_artifacts / skipped skills / tool_fallback / fallback_evidence / evidence_paths
 - Codify Decision: delivery_goal / reusable_pattern / affected_asset / promotion_candidate / next_task_friction_reduced / reduced_by / reduction_evidence / do_not_promote_reason / owner_review / rollback_path / verification_evidence
 - Completion Guard Payload: required_checks / passed_checks / failed_checks / skipped_with_reason / stale_checks / verifier / completion_allowed
 - Lifecycle Operation Evidence: not_applicable_reason | contract / owner / state-events / termination / runtime-evidence
-- Review Convergence Evidence: review_round / review_mode / finding_classes / new_finding_class_count / reopened_finding_count / consecutive_clean_reviews / reviewer_independence / contract_change_decision / replan_reason
+- Review Convergence Evidence: review_round / review_mode / finding_classes / new_finding_class_count / reopened_finding_count / consecutive_clean_reviews / contract_change_decision / replan_reason / reviewer_independence
 - Subjective Feature Proof: feature / independent_verifier / expected / observed / evidence / verdict
-- Review Status (B/M/m):
-- Breaking Change Decision:
-- Risk + Rollback:
-- Final Gate Result:
+- Review Status (B/M/m) / Breaking Change Decision / Risk + Rollback / Final Gate Result:
 ```
-
-Evidence Index复用已有command/exit code/summary/path/layer/artifact记录。

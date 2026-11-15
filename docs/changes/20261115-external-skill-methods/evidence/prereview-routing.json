@@ -1,0 +1,91 @@
+{
+  "review_kind": "mutable-tree-pre-review-not-final",
+  "started_at": "2026-11-15T14:09:59.292518+00:00",
+  "completed_at": "2026-11-15T14:10:00.686474+00:00",
+  "before": {
+    "skills/adk-performance-profiling-embedded/SKILL.md": {
+      "sha256": "926a230935c8664f89b97f2435341946aac0620f5aa99032fa65701f353be18d",
+      "content": "---\nname: adk-performance-profiling-embedded\ndescription: \"用于有指标的嵌入式性能分析、栈上界判读和真实负载 A/B；不用于无指标猜测或推断收益。\"\nversion: 1.1.5\nlast_updated: 2026-11-15\ntriggers:\n  - \"性能分析\"\n  - \"性能优化\"\n  - \"性能调优\"\n  - \"栈上界\"\nnon_triggers:\n  - 无性能指标诉求的小改\ninputs:\n  - 性能指标、采样数据\noutputs:\n  - 瓶颈定位与优化建议\nconstraints:\n  - 优化效果必须可量化对比；只定位瓶颈时不要求已有候选改动\n---\n\n# adk-performance-profiling-embedded\n\n## Goal\n固定基准场景与 KPI（时延、吞吐、CPU、内存、功耗），量化瓶颈或候选收益。\n\n## Workflow\n1. 核**真实负载**计数/正确输出；无活动 `run-validity=invalid`。固定源码/编译/设备/输入身份、频率/温度/供电/预热、采样点/预算及扰动。\n2. **定位瓶颈**：先低开销统计 CPU、等待/I/O、锁、内存，再采样原因；给证据、可证伪候选和最小实验，无候选不强制 A/B。\n3. **比较候选**：等价输入输出、有效负载后 A/B/A/B，核波动/漂移。时延报 p50/p95/p99，吞吐报有效工作量/时间，Flash/RAM 报段/峰值，能耗按同工作量；段大小不用分位数。\n4. 核功能、内存、功耗及热稳定，超预算回滚；有效候选做真实长稳复验。无效 `invalid`，样本不足/噪声不可分 `inconclusive`，有效证据支持无收益才 `no-gain`；均留原因、不宣传收益。噪声先查环境不刷分；只读诊断不授权优化/设备配置变更。\n\n## Target Execution Gate\n- `linux-embedded`：核内核/用户态、架构、计数器权限/资源；CPU 用 perf/flame graph，堆用 memcheck，I/O 用 strace -T/perf trace，锁用 perf lock/lockstat，LLC miss 用 perf stat -e cache-misses。先核采样计数；热点不等于整体收益，用户态工具不通用于内核/MCU。\n- `mcu-rtos` / `mcu-baremetal`：按支持用板端计数/trace、DWT/ETM、GPIO timing、stack/heap high-water、ELF/map；host 分析不能替代板端 `not-measured`。\n- 核工具、系统/编译身份和权限，不隐式注入/改配置。资源不足可选 host memcheck/ASan 或板端计数；不跨编译优化等级比较性能。\n\n## Commands\n仅选支持工具和预算窗口，留命令/退出码/耗时；失败不消费旧结果：\n```bash\nperf stat -p <pid> -- sleep <sample-window-seconds>\nperf record -g -p <pid> -- sleep <sample-window-seconds> && perf report --stdio\nvalgrind --tool=callgrind --callgrind-out-file=callgrind.out <binary> && callgrind_annotate callgrind.out\n```\nbenchmark 使用项目真实命令，不假定通用参数。\n\n## MCU 资源实测（按需）\nFlash/RAM/stack、DMA/retention 或 KWS/音频读 `references/mcu-memory-footprint.md`：同工具链 ELF/map/size，区分 `.su` frame、调用链和实测余量，不从行数或 high-water 推断完整资源上界。\n\n交付上述原始证据、样本数/KPI/不确定性和复现入口；无有效采样只给假设与缺口。\n"
+    },
+    "skills/adk-systematic-debugging/SKILL.md": {
+      "sha256": "b97b861390c0b64e57c51431dd4f0b1d941f41ec4a55d79971688b3f89d75b6d",
+      "content": "---\nname: adk-systematic-debugging\ndescription: \"用于根因不明问题的复现、单变量实验、sanitizer 取证与回归；不用于跳过取证猜修复或替代性能基准。\"\nversion: 1.2.3\nlast_updated: 2026-11-15\ntriggers:\n  - \"调试\"\n  - \"排查问题\"\n  - \"故障定位\"\n  - \"代码有问题\"\n  - \"诊断循环\"\n  - \"根因排查\"\n  - \"问题排查\"\n  - \"定位根因\"\n  - \"真实问题排查\"\n  - \"根因未明\"\n  - \"失败定位\"\n  - \"sanitizer\"\n  - \"UBSan\"\nnon_triggers:\n  - 已有明确根因且只需执行已确认修复\n  - 纯文档或命名修改\ninputs:\n  - 现象描述、触发条件、日志与监控证据\noutputs:\n  - 假设矩阵、实验记录、repair note、根因结论与修复验证证据\nconstraints:\n  - 先做只读诊断，未经确认不做破坏性操作\n  - 单轮仅验证一个假设并记录正负结果\n  - 没有证据链不得给出根因结论\n  - 禁止在未缩小失败范围时盲目重试或扩大改动\n---\n\n# adk-systematic-debugging\n\n## Goal\n以最小实验定位根因并验证修复。\n\n## Prerequisites\n固定版本/环境/输入/时间窗、指标与日志；先只读，破坏性操作保持原授权边界。\n\n## 方法选择\n- 直接因果链明确时记录复现/原因/修复，不虚构假设或负结果。\n- 多根因按概率/影响/证伪成本排序；强现象链用 5-Why，每层有证据，到可验证根因即停。\n- 范围大、回归引入点未知或假设穷尽时，二分代码/配置/模块/输入，逐步记 good/bad；矛盾先查测试信号。\n\n## Workflow\n1. 固定现象/影响/触发，建立会因缺陷转红的最小信号。困难/偶现读 `references/tight-feedback-loop.md` 核复现率与误报；替代信号标 `proxy evidence`，无安全复现方式记 blocker。\n2. 单变量实验留时间线、命令/输入、观察/反例/不可重复路径，收缩失败范围。E2/E3 正确性/安全关键前提做适用证伪，可复用同身份证据，不强制加 Agent。\n3. **Repair Note**：failed scope、preserved passing scope、minimal rerun、rollback anchor、风险、root cause status。格式失败修 schema/模板；语义失败固定断言；并行只 reopen 失败项；设备不稳先固化环境，保留通过产物。\n4. 映射观察与根因，执行同条件“复现 -> 修复 -> 回归”并核原通过路径。连续两轮无信息增量则停，重审信号/假设；5-Why 断链先补证。未收敛保持 `needs-fix`。\n\n## 按需取证\n- 内存/UB/数据竞争：读 `references/sanitizer-validation.md` 核目标/runtime 与已知缺陷对照；UBSan 报警即使 exit 0 也不能通过。\n- UBIFS/SquashFS、Buildroot/Autotools、Wi-Fi/DNS/MQTT、SPI/QSPI、FOC：读 `references/embedded-diagnosis-branches.md` 选择下一证据，不替代 BSP/TRM 或现场记录。\n- AI 工具/CLI 异常：对照文档版本，追源码/配置决策点，用 git log/blame 建时间线后归因。\n\n## Commands\n```bash\nrtk rg -n \"error|fatal|panic|timeout|reset\" <log-or-src>\n```\ntransport/debugger 仅用已核实的只读入口；交付所选方法适用性、上述原始证据和结果，未跑记 `not-run`。\n"
+    },
+    "skills/adk-unit-test-embedded/SKILL.md": {
+      "sha256": "71619e6a214c76591cf2302d452e9d64a65aedfcff7b4445d75c2b9f704ec5d0",
+      "content": "---\nname: adk-unit-test-embedded\ndescription: \"用于 MCU/RTOS 单元测试断言、性质/状态序列测试与外设替身；非跨模块策略，不用于证明真实 HIL 性能。\"\nversion: 1.1.7\nlast_updated: 2026-11-15\ntriggers:\n  - \"单元测试\"\n  - \"写测试\"\n  - \"测试用例\"\n  - \"性质测试\"\n  - \"状态序列测试\"\nnon_triggers:\n  - 纯硬件连线问题\ninputs:\n  - 模块接口、边界条件\noutputs:\n  - 仅设计时交付用例与断言；已授权实施后交付实际测试、fixture 路径、命令和结果\n  - 未覆盖的硬件或实时边界及后续验证条件\nconstraints:\n  - 优先覆盖边界与错误路径\n---\n\n# adk-unit-test-embedded\n\n## Goal\n用公开契约验证模块，沿用测试入口与 mock/stub，不另建框架。\n\n## Target / Test Seam Gate\n- 按目标选 host-unit、cross-build compile-only、SIL/emulator、HIL/board-runner，分别记录；compile-only 不证明断言运行。先核工具、runner、compiler flags、libc 支持，不默认 MCU 能跑 host 工具。\n- 测公开接口的可观察状态，不以 mock 内部调用次数自证。W1C、DMA ownership、ISR/任务竞态、队列溢出加适用负例；电气/实时边界无法模拟则 `needs-hil`。\n\n## Workflow\n1. 读接口/验收/历史缺陷，确定外设/时钟/全局替身；从契约得出输入/期望，至少一条边界和错误路径。\n2. 解析器、编解码、队列或 lifecycle 的组合空间较大时读 `references/property-stateful-tests.md`，用独立性质和有界状态序列，核有效输入非空、状态复位和反例回放。\n3. 设计交清单；实施由已授权实现职责编写测试/fixture，不能用清单关闭。缺陷先确认原失败，再核修复/同根因变体/原通过路径。\n4. 跑已核定向命令，交版本/层次/路径/断言/退出码/缺口；未执行 `not-run`。不稳查时间依赖/共享状态，覆盖噪声回到关键路径。\n\n跨板级、boot、OTA/现场层次读 `references/embedded-tdd-matrix.md`。内存/UB/线程竞争需要动态取证时按需交 `adk-systematic-debugging` 的 sanitizer 方法；未安装或 runtime 不支持则保留缺口，不能把普通单测当插桩通过。\n\n## Commands\n仅选项目已有工具，不全跑示例或为未知 runner 造 `--module` 参数。\n```bash\nceedling test:<module_name>\nceedling gcov:<module_name>\n# 启用 module_generator 后生成源/头/测试骨架；CMock mock 由依赖头和配置生成\nceedling \"module:create[Sensor]\"\ngcovr --root . --filter src/ --xml -o coverage.xml\nlcov --capture --directory build --output-file coverage.info\ngenhtml coverage.info --output-directory coverage_html\n```\n\n## 覆盖与交付\n行/分支/函数覆盖按风险/基线设目标并留报告，不用统一百分比认证。条件/决策覆盖（含 BullseyeCoverage）不等于 MC/DC；安全关键场景核规范/工具能力/独立 MC/DC 报告，缺证据 `not-evaluated`。覆盖不代替板级时序/HIL；缺陷修复附可追溯回归。\n"
+    }
+  },
+  "after_sha256": {
+    "skills/adk-performance-profiling-embedded/SKILL.md": "926a230935c8664f89b97f2435341946aac0620f5aa99032fa65701f353be18d",
+    "skills/adk-systematic-debugging/SKILL.md": "b97b861390c0b64e57c51431dd4f0b1d941f41ec4a55d79971688b3f89d75b6d",
+    "skills/adk-unit-test-embedded/SKILL.md": "71619e6a214c76591cf2302d452e9d64a65aedfcff7b4445d75c2b9f704ec5d0"
+  },
+  "stable_during_observation": true,
+  "cases": [
+    {
+      "case_id": "embedded-property-negative",
+      "command": [
+        "bash",
+        "scripts/devkit.sh",
+        "match",
+        "--skill",
+        "adk-unit-test-embedded",
+        "--text",
+        "为 Python Web API 编写性质测试，不涉及 MCU 或 RTOS"
+      ],
+      "cwd": "/workspace/scratch/771b38332ec2/agent-dev-kit-external",
+      "exit_code": 0,
+      "stdout": "match=true skill=adk-unit-test-embedded reason=matched_trigger phrase=性质测试 runtime_role=primary selection_group=verification effect_ceiling=diagnostic-execution effect_scope=host-system effect_operation=diagnostic live_device_authorization=not-required execution_effort=E2\n",
+      "stderr": ""
+    },
+    {
+      "case_id": "sanitizer-explanation-negative",
+      "command": [
+        "bash",
+        "scripts/devkit.sh",
+        "match",
+        "--skill",
+        "adk-systematic-debugging",
+        "--text",
+        "只解释 sanitizer 的基本概念，不排障、不运行工具"
+      ],
+      "cwd": "/workspace/scratch/771b38332ec2/agent-dev-kit-external",
+      "exit_code": 0,
+      "stdout": "match=true skill=adk-systematic-debugging reason=matched_trigger phrase=sanitizer runtime_role=primary selection_group=debugging effect_ceiling=diagnostic-execution effect_scope=host-system effect_operation=diagnostic live_device_authorization=not-required execution_effort=E2\n",
+      "stderr": ""
+    },
+    {
+      "case_id": "stack-explanation-negative",
+      "command": [
+        "bash",
+        "scripts/devkit.sh",
+        "match",
+        "--skill",
+        "adk-performance-profiling-embedded",
+        "--text",
+        "仅讲解数学上的调用栈上界定义，不开展任何基准任务"
+      ],
+      "cwd": "/workspace/scratch/771b38332ec2/agent-dev-kit-external",
+      "exit_code": 0,
+      "stdout": "match=true skill=adk-performance-profiling-embedded reason=matched_trigger phrase=栈上界 runtime_role=primary selection_group=debugging effect_ceiling=diagnostic-execution effect_scope=host-system effect_operation=diagnostic live_device_authorization=not-required execution_effort=E2\n",
+      "stderr": ""
+    },
+    {
+      "case_id": "ubsan-denial-control",
+      "command": [
+        "bash",
+        "scripts/devkit.sh",
+        "match",
+        "--skill",
+        "adk-systematic-debugging",
+        "--text",
+        "当前调优不需要 UBSan，请仅说明算法复杂度"
+      ],
+      "cwd": "/workspace/scratch/771b38332ec2/agent-dev-kit-external",
+      "exit_code": 1,
+      "stdout": "match=false skill=adk-systematic-debugging reason=no_trigger_matched\n",
+      "stderr": ""
+    }
+  ]
+}

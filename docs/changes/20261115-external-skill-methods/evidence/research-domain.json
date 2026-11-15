@@ -1,0 +1,1661 @@
+{
+  "schema": "adk-external-domain-research/v1",
+  "role": "domain researcher then T3 implementer after independently reviewed contract",
+  "baseline": "5e0e83bcc127665de9a352e9eacfe9b092106cb2",
+  "baseline_version": "11.3.3",
+  "scope": {
+    "skills": 26,
+    "actual_read_files": 55,
+    "external_search": "原始仓库/具体 SKILL.md/reference/script 和官方文档交叉核实；非穷尽全网"
+  },
+  "local_rules": {
+    "read": [
+      "AGENTS.md",
+      "docs/agent-operating-rules.md",
+      "docs/changes/20261115-skill-method-reliability/audit.md",
+      "docs/changes/20261115-skill-task-usability/audit.md",
+      "docs/changes/20261115-external-skill-methods/requirements.md",
+      "docs/changes/20261115-external-skill-methods/design.md",
+      "docs/changes/20261115-external-skill-methods/tasks.md"
+    ],
+    "negative": "knowledge/L2-domain/lessons.md absent；rtk absent，parent 已授权真实 Bash，不造 wrapper"
+  },
+  "coverage": [
+    {
+      "name": "adk-interface-contract-design",
+      "path": "skills/adk-interface-contract-design/SKILL.md",
+      "quality_tier": "p0",
+      "category": "design",
+      "lifecycle_order": 40,
+      "stage_order": 10,
+      "activation_mode": "primary",
+      "pattern": "generator",
+      "actual_read_paths": [
+        {
+          "path": "skills/adk-interface-contract-design/SKILL.md",
+          "baseline_sha256": "80cb37dab157fa767a32fdb73e074a2fe2cc819d9bb4ea949dae3fda325e7376",
+          "git_blob_sha": "5eca151a61981d18d3697e6b3fa2ed2f2c756b80",
+          "bytes": 6471,
+          "read_scope": "full",
+          "read_status": "inspected"
+        },
+        {
+          "path": "skills/adk-interface-contract-design/references/design-quality-methods.md",
+          "baseline_sha256": "0d2a5ae8f32b3950d2b1a21ac913029905aded6f02bd1b0b2e591f61a29bcaf6",
+          "git_blob_sha": "e28a344dd8989179e39f83c8afa405dee4055f75",
+          "bytes": 2184,
+          "read_scope": "full",
+          "read_status": "inspected"
+        },
+        {
+          "path": "skills/adk-interface-contract-design/references/details.md",
+          "baseline_sha256": "a1c98cdecc2f490f9b5177aabd8e5358b020b2831e785a346fd3d992c0bfd3a0",
+          "git_blob_sha": "ce3029d9fbcfd091f9f058f198559f572732474d",
+          "bytes": 932,
+          "read_scope": "full",
+          "read_status": "inspected"
+        },
+        {
+          "path": "skills/adk-interface-contract-design/references/lifecycle-operation-contract.md",
+          "baseline_sha256": "22532bfe0e89fac9596023f0a2b708d46b98722d4acf6adc90bf833e0f82db71",
+          "git_blob_sha": "dac285c357b87bda2cc468d64fc38d931330aa51",
+          "bytes": 2393,
+          "read_scope": "full",
+          "read_status": "inspected"
+        },
+        {
+          "path": "skills/adk-interface-contract-design/references/spec-code-bidirectional.md",
+          "baseline_sha256": "cfb70c950ca482ce2a4136aa26fe2a3a60c21349949188192a5f0f13450923ce",
+          "git_blob_sha": "12b0ea0bec197ae0e9db6d4c59d93772efdf29e9",
+          "bytes": 2238,
+          "read_scope": "full",
+          "read_status": "inspected"
+        },
+        {
+          "path": "skills/adk-interface-contract-design/references/tool-effect-contract.md",
+          "baseline_sha256": "428be87b2acb671e01581ae83af46dfb0e87c8cdb1d24d11e18a231244b67ea4",
+          "git_blob_sha": "64865b9122ebf281971818bdea4f6446a1758ff0",
+          "bytes": 2845,
+          "read_scope": "full",
+          "read_status": "inspected"
+        }
+      ],
+      "decision": "RETAIN",
+      "current_method": "公开 ABI/序列化/内存布局、状态/owner/generation/晚到完成、spec→code 与 code→spec 双向核对已具体。",
+      "reason": "保持已有契约方法；新性质测试在 unit 引用公开契约，不再增加治理层。",
+      "candidate_ids": [],
+      "external_source_ids": [
+        "trailofbits-property"
+      ],
+      "evidence_boundary": "源码与方法对照；非模型或板端效果证据"
+    },
+    {
+      "name": "adk-component-api-stability",
+      "path": "skills/adk-component-api-stability/SKILL.md",
+      "quality_tier": "p0",
+      "category": "design",
+      "lifecycle_order": 40,
+      "stage_order": 30,
+      "activation_mode": "primary",
+      "pattern": "reviewer",
+      "actual_read_paths": [
+        {
+          "path": "skills/adk-component-api-stability/SKILL.md",
+          "baseline_sha256": "345654c2510a7a9cef27388bd21b2f9df6d4f2c5b81de58a6912d1eb00d6d243",
+          "git_blob_sha": "538407bb30b6e0579672f6234d793a0704e499a5",
+          "bytes": 5451,
+          "read_scope": "full",
+          "read_status": "inspected"
+        }
+      ],
+      "decision": "RETAIN",
+      "current_method": "区分重新编译消费者、旧二进制布局/字节/ABI 和行为兼容；工具错误不当成通过。",
+      "reason": "迁移顺序由 core 的 task-breakdown 补足；本 Skill 的 ABI 分流无需重复。",
+      "candidate_ids": [],
+      "external_source_ids": [
+        "obra-debugging"
+      ],
+      "evidence_boundary": "源码与方法对照；非模型或板端效果证据"
+    },
+    {
+      "name": "adk-register-map-design",
+      "path": "skills/adk-register-map-design/SKILL.md",
+      "quality_tier": "p0",
+      "category": "design",
+      "lifecycle_order": 40,
+      "stage_order": 40,
+      "activation_mode": "primary",
+      "pattern": "generator",
+      "actual_read_paths": [
+        {
+          "path": "skills/adk-register-map-design/SKILL.md",
+          "baseline_sha256": "3097750aaf1f6fabfd499b19335e888df8f23b791d9d591e2bc42216ff3b32fd",
+          "git_blob_sha": "d82eda9634aa10e6026a0b562e2b382180234c7b",
+          "bytes": 3920,
+          "read_scope": "full",
+          "read_status": "inspected"
+        }
+      ],
+      "decision": "RETAIN",
+      "current_method": "已有 W1C/read-clear/FIFO/reserved、宽度/endian/TRM 约束。",
+      "reason": "寄存器必须由对应硬件手册验证，不照搬通用 bit 操作模板。",
+      "candidate_ids": [],
+      "external_source_ids": [
+        "zephyr-build"
+      ],
+      "evidence_boundary": "源码与方法对照；非模型或板端效果证据"
+    },
+    {
+      "name": "adk-bsp-analysis",
+      "path": "skills/adk-bsp-analysis/SKILL.md",
+      "quality_tier": "p1",
+      "category": "design",
+      "lifecycle_order": 40,
+      "stage_order": 50,
+      "activation_mode": "primary",
+      "pattern": "playbook",
+      "actual_read_paths": [
+        {
+          "path": "skills/adk-bsp-analysis/SKILL.md",
+          "baseline_sha256": "afb1112e6e10d1b605f9bccb6837afdca9506ccac2881f98dd044d344fe78835",
+          "git_blob_sha": "929e9ba760ad73979ba41e028385d7efaef2d5a4",
+          "bytes": 3928,
+          "read_scope": "full",
+          "read_status": "inspected"
+        },
+        {
+          "path": "skills/adk-bsp-analysis/references/bsp-analysis-details.md",
+          "baseline_sha256": "e371db7e0af45f212a4f9fc75d0b8049d78c2ed42270ab160b99707b26990c9c",
+          "git_blob_sha": "b9016cd4f521354f72a6ec2abbf6a7b8fd425c67",
+          "bytes": 1666,
+          "read_scope": "full",
+          "read_status": "inspected"
+        }
+      ],
+      "decision": "RETAIN",
+      "current_method": "资源/依赖图、SoC/board/toolchain 与 runtime 分流、源码/errata/history 原因链。",
+      "reason": "外部 Zephyr 方法不应变成全平台默认；已有证据充分。",
+      "candidate_ids": [],
+      "external_source_ids": [
+        "zephyr-build"
+      ],
+      "evidence_boundary": "源码与方法对照；非模型或板端效果证据"
+    },
+    {
+      "name": "adk-driver-implementation",
+      "path": "skills/adk-driver-implementation/SKILL.md",
+      "quality_tier": "p1",
+      "category": "implementation",
+      "lifecycle_order": 50,
+      "stage_order": 10,
+      "activation_mode": "primary",
+      "pattern": "playbook",
+      "actual_read_paths": [
+        {
+          "path": "skills/adk-driver-implementation/SKILL.md",
+          "baseline_sha256": "c915a72b5373f98234a7bdf6eef5df71bb99a8bc2201cc96a6a145038b06a409",
+          "git_blob_sha": "e2a26df790d5f8f668caddf131e82838e7e0e564",
+          "bytes": 5130,
+          "read_scope": "full",
+          "read_status": "inspected"
+        }
+      ],
+      "decision": "RETAIN",
+      "current_method": "部分初始化、资源 owner、cancel/reset、晚到完成与 teardown 已覆盖。",
+      "reason": "fail-at-N unwind 可用但未发现未覆盖的实质需求，保留而不凑增量。",
+      "candidate_ids": [],
+      "external_source_ids": [
+        "trailofbits-handbook"
+      ],
+      "evidence_boundary": "源码与方法对照；非模型或板端效果证据"
+    },
+    {
+      "name": "adk-driver-bringup-checklist",
+      "path": "skills/adk-driver-bringup-checklist/SKILL.md",
+      "quality_tier": "p0",
+      "category": "implementation",
+      "lifecycle_order": 50,
+      "stage_order": 20,
+      "activation_mode": "primary",
+      "pattern": "playbook",
+      "actual_read_paths": [
+        {
+          "path": "skills/adk-driver-bringup-checklist/SKILL.md",
+          "baseline_sha256": "80e53c502e62692275d5cddb3d1f21a23c8fdf02b477c205fa983ec1ef711441",
+          "git_blob_sha": "7f5154f2926ef55538983d455767208b96fb740b",
+          "bytes": 5457,
+          "read_scope": "full",
+          "read_status": "inspected"
+        }
+      ],
+      "decision": "RETAIN",
+      "current_method": "最小通信、功能、soak、生产准备分层，实际 effect/权限边界明确。",
+      "reason": "状态序列探索属于 host seam，不能由此跳过板级 bring-up。",
+      "candidate_ids": [],
+      "external_source_ids": [
+        "zephyr-build"
+      ],
+      "evidence_boundary": "源码与方法对照；非模型或板端效果证据"
+    },
+    {
+      "name": "adk-bsp-porting-playbook",
+      "path": "skills/adk-bsp-porting-playbook/SKILL.md",
+      "quality_tier": "p0",
+      "category": "implementation",
+      "lifecycle_order": 50,
+      "stage_order": 30,
+      "activation_mode": "primary",
+      "pattern": "playbook",
+      "actual_read_paths": [
+        {
+          "path": "skills/adk-bsp-porting-playbook/SKILL.md",
+          "baseline_sha256": "9a9d368a3006d06e1de67feda480b78097e816fb1ce30904cfb29be1b37efa17",
+          "git_blob_sha": "c9a93413e3fb76fc55f6da02e5fcd966bbfb56fe",
+          "bytes": 4812,
+          "read_scope": "full",
+          "read_status": "inspected"
+        }
+      ],
+      "decision": "RETAIN",
+      "current_method": "冻结目标、产物/恢复路径，先最小启动再外设。",
+      "reason": "已有阶段证据和回退，不加入默认烧录或外部框架。",
+      "candidate_ids": [],
+      "external_source_ids": [
+        "zephyr-build"
+      ],
+      "evidence_boundary": "源码与方法对照；非模型或板端效果证据"
+    },
+    {
+      "name": "adk-rtos-task-design",
+      "path": "skills/adk-rtos-task-design/SKILL.md",
+      "quality_tier": "p0",
+      "category": "implementation",
+      "lifecycle_order": 50,
+      "stage_order": 40,
+      "activation_mode": "primary",
+      "pattern": "playbook",
+      "actual_read_paths": [
+        {
+          "path": "skills/adk-rtos-task-design/SKILL.md",
+          "baseline_sha256": "0c2a9cd2148878cfd8fd06c65789d3f015dc5139ed243ea46302089e2c99cea3",
+          "git_blob_sha": "c018062338f5bd478f6fbcd71ef4e39582c6a800",
+          "bytes": 5815,
+          "read_scope": "full",
+          "read_status": "inspected"
+        }
+      ],
+      "decision": "RETAIN",
+      "current_method": "最新轮已修响应时间分析：有界假设、失败/不支持及同步依赖。",
+      "reason": "不重复 RTA 方法；本轮栈证据在 performance 单点补足。",
+      "candidate_ids": [],
+      "external_source_ids": [
+        "zephyr-performance"
+      ],
+      "evidence_boundary": "源码与方法对照；非模型或板端效果证据"
+    },
+    {
+      "name": "adk-interrupt-dma-patterns",
+      "path": "skills/adk-interrupt-dma-patterns/SKILL.md",
+      "quality_tier": "p0",
+      "category": "implementation",
+      "lifecycle_order": 50,
+      "stage_order": 50,
+      "activation_mode": "primary",
+      "pattern": "playbook",
+      "actual_read_paths": [
+        {
+          "path": "skills/adk-interrupt-dma-patterns/SKILL.md",
+          "baseline_sha256": "49bfd3961ad45dc00afe801086c4b3974518180123bb003941d51c436e81eaea",
+          "git_blob_sha": "eb6d6b7ad74a355b2c049cef81477962244352b4",
+          "bytes": 5406,
+          "read_scope": "full",
+          "read_status": "inspected"
+        },
+        {
+          "path": "skills/adk-interrupt-dma-patterns/references/details.md",
+          "baseline_sha256": "775bfc53ca049cfdb7c49b9ca8301019ac610e3fb3fa47785dbafe80a872d931",
+          "git_blob_sha": "59b883b26bdd3a3dd27c4845ffa344e938aab24d",
+          "bytes": 1709,
+          "read_scope": "full",
+          "read_status": "inspected"
+        },
+        {
+          "path": "skills/adk-interrupt-dma-patterns/references/rtos-isr-dma-diagnostics.md",
+          "baseline_sha256": "a85ea19b6ae121f4da011d2c96d86270826f430d88bbfa93df3b19d040dc5a14",
+          "git_blob_sha": "671a11e2df2fe49f98d2bdcd5401c123982d950d",
+          "bytes": 1645,
+          "read_scope": "full",
+          "read_status": "inspected"
+        }
+      ],
+      "decision": "RETAIN",
+      "current_method": "已有 volatile 非同步、所有权/cache/barrier、IRQ/RTOS API 限制及晚到完成。",
+      "reason": "TSan host 结果不能证明 ISR/DMA 硬件同步；保持适用性边界。",
+      "candidate_ids": [],
+      "external_source_ids": [
+        "trailofbits-handbook"
+      ],
+      "evidence_boundary": "源码与方法对照；非模型或板端效果证据"
+    },
+    {
+      "name": "adk-protocol-stack-integration",
+      "path": "skills/adk-protocol-stack-integration/SKILL.md",
+      "quality_tier": "p0",
+      "category": "implementation",
+      "lifecycle_order": 50,
+      "stage_order": 60,
+      "activation_mode": "primary",
+      "pattern": "playbook",
+      "actual_read_paths": [
+        {
+          "path": "skills/adk-protocol-stack-integration/SKILL.md",
+          "baseline_sha256": "7ac9b5cbb2b1a1a854063b86003c135d816f5a4a5a0a9400d0b6505cff1fa702",
+          "git_blob_sha": "5452f046b39e2b5605f88f32aa65ffaf21bc04df",
+          "bytes": 4145,
+          "read_scope": "full",
+          "read_status": "inspected"
+        }
+      ],
+      "decision": "RETAIN",
+      "current_method": "已有分层协议诊断、bounded capture、真实采集失败与旧工件隔离。",
+      "reason": "不重复上一轮采集修正；parse/状态性质方法由 unit 按需提供。",
+      "candidate_ids": [],
+      "external_source_ids": [
+        "trailofbits-property"
+      ],
+      "evidence_boundary": "源码与方法对照；非模型或板端效果证据"
+    },
+    {
+      "name": "adk-cmake-cross-build",
+      "path": "skills/adk-cmake-cross-build/SKILL.md",
+      "quality_tier": "p0",
+      "category": "implementation",
+      "lifecycle_order": 50,
+      "stage_order": 70,
+      "activation_mode": "primary",
+      "pattern": "tool-wrapper",
+      "actual_read_paths": [
+        {
+          "path": "skills/adk-cmake-cross-build/SKILL.md",
+          "baseline_sha256": "fe07fc732eabeaf8628f58c02bf37334964dfa6487ffc4fa03d8fab4f7dd19f1",
+          "git_blob_sha": "77e772776a36139388a731d555db563f3311ddae",
+          "bytes": 4127,
+          "read_scope": "full",
+          "read_status": "inspected"
+        }
+      ],
+      "decision": "RETAIN",
+      "current_method": "真实 toolchain/preset/sysroot、host find_program、执行后端及 CTest 空集判定已修。",
+      "reason": "外部 .conf CONFIG_ 反例提醒不可照搬；构建流程无需泛化新增。",
+      "candidate_ids": [],
+      "external_source_ids": [
+        "zephyr-build"
+      ],
+      "evidence_boundary": "源码与方法对照；非模型或板端效果证据"
+    },
+    {
+      "name": "adk-systematic-debugging",
+      "path": "skills/adk-systematic-debugging/SKILL.md",
+      "quality_tier": "p0",
+      "category": "debugging",
+      "lifecycle_order": 60,
+      "stage_order": 10,
+      "activation_mode": "primary",
+      "pattern": "playbook",
+      "actual_read_paths": [
+        {
+          "path": "skills/adk-systematic-debugging/SKILL.md",
+          "baseline_sha256": "190ec72507347b19f0378b6952c58917746714bc5a386c027941241bb05b75a1",
+          "git_blob_sha": "45bf02a8de90af8c5f82bfb5a45a6f30361e723d",
+          "bytes": 6133,
+          "read_scope": "full",
+          "read_status": "inspected"
+        },
+        {
+          "path": "skills/adk-systematic-debugging/references/embedded-diagnosis-branches.md",
+          "baseline_sha256": "b1f5e669d12c5923a60426aa7268f94ac0832072808f200a08d0a49be0ef6d89",
+          "git_blob_sha": "099940f7dad76c01971be181caab997a93897e50",
+          "bytes": 2793,
+          "read_scope": "full",
+          "read_status": "inspected"
+        },
+        {
+          "path": "skills/adk-systematic-debugging/references/tight-feedback-loop.md",
+          "baseline_sha256": "9eaef1a93621056fb8d65f8ffd60398367f1749888592186c8d286d44109bea0",
+          "git_blob_sha": "e8d8e5ead5204b015a87e7610cc55989dcba320a",
+          "bytes": 1262,
+          "read_scope": "full",
+          "read_status": "inspected"
+        }
+      ],
+      "decision": "ENHANCE",
+      "current_method": "复现/单变量/二分/最小信号/根因证据完整；缺 sanitizer 支持探测与默认 recover 诊断判读。",
+      "reason": "新增自身 sanitizer reference，压缩重复说明以抵消全源预算。",
+      "candidate_ids": [
+        "D2"
+      ],
+      "external_source_ids": [
+        "trailofbits-handbook",
+        "obra-debugging"
+      ],
+      "evidence_boundary": "源码与方法对照；非模型或板端效果证据"
+    },
+    {
+      "name": "adk-embedded-debug-transport",
+      "path": "skills/adk-embedded-debug-transport/SKILL.md",
+      "quality_tier": "p0",
+      "category": "debugging",
+      "lifecycle_order": 60,
+      "stage_order": 20,
+      "activation_mode": "primary",
+      "pattern": "tool-wrapper",
+      "actual_read_paths": [
+        {
+          "path": "skills/adk-embedded-debug-transport/LICENSE",
+          "baseline_sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
+          "git_blob_sha": "1c326f3a91d2e3889cb5259af82a3fdd96a4ba72",
+          "bytes": 61,
+          "read_scope": "full",
+          "read_status": "inspected"
+        },
+        {
+          "path": "skills/adk-embedded-debug-transport/README.md",
+          "baseline_sha256": "453bf2b168e3ba1a2c7176e59803709ac714749701f07809163c39614fc3220d",
+          "git_blob_sha": "c975880282efd85f55780b4c423efcedcdf58edf",
+          "bytes": 391,
+          "read_scope": "full",
+          "read_status": "inspected"
+        },
+        {
+          "path": "skills/adk-embedded-debug-transport/SKILL.md",
+          "baseline_sha256": "ccb5656dc5580d5f6d70290928f9b45a9573f376bc30cab92b62fa901875d1d4",
+          "git_blob_sha": "d4100591b2faa1f536bafce5b8a12837fcd31d09",
+          "bytes": 5745,
+          "read_scope": "full",
+          "read_status": "inspected"
+        },
+        {
+          "path": "skills/adk-embedded-debug-transport/agents/openai.yaml",
+          "baseline_sha256": "5482eefa68e99a12a9c0a9ec90c1d958cfac588f30c516c419c216b7dfa7ae69",
+          "git_blob_sha": "a30652980d243b2de8379d1e02946e6ebfa18090",
+          "bytes": 173,
+          "read_scope": "full",
+          "read_status": "inspected"
+        }
+      ],
+      "decision": "RETAIN",
+      "current_method": "transport、操作风险、只读与设备 effect 边界明确。",
+      "reason": "不把调试连接当实际诊断或自动开放写权限。",
+      "candidate_ids": [],
+      "external_source_ids": [
+        "obra-debugging"
+      ],
+      "evidence_boundary": "源码与方法对照；非模型或板端效果证据"
+    },
+    {
+      "name": "adk-embedded-remote-debug-log-triage",
+      "path": "skills/adk-embedded-remote-debug-log-triage/SKILL.md",
+      "quality_tier": "p1",
+      "category": "debugging",
+      "lifecycle_order": 60,
+      "stage_order": 30,
+      "activation_mode": "primary",
+      "pattern": "playbook",
+      "actual_read_paths": [
+        {
+          "path": "skills/adk-embedded-remote-debug-log-triage/LICENSE",
+          "baseline_sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
+          "git_blob_sha": "1c326f3a91d2e3889cb5259af82a3fdd96a4ba72",
+          "bytes": 61,
+          "read_scope": "full",
+          "read_status": "inspected"
+        },
+        {
+          "path": "skills/adk-embedded-remote-debug-log-triage/README.md",
+          "baseline_sha256": "9aa267e1e3eda44db5c9fadba10ce9d422da36dca50183a6236a4266f1cb8487",
+          "git_blob_sha": "b8ad51e75a696100dfc4381cba5db3c50b1fd7a4",
+          "bytes": 560,
+          "read_scope": "full",
+          "read_status": "inspected"
+        },
+        {
+          "path": "skills/adk-embedded-remote-debug-log-triage/SKILL.md",
+          "baseline_sha256": "af339cd5cb7f9155eff3dae00f3b49ff1da16ed90fc0d1dfafd6700d4dc820ff",
+          "git_blob_sha": "9936e058634b407592f10e286ce3e3afa4e3ddb5",
+          "bytes": 6746,
+          "read_scope": "full",
+          "read_status": "inspected"
+        },
+        {
+          "path": "skills/adk-embedded-remote-debug-log-triage/agents/openai.yaml",
+          "baseline_sha256": "e627b547abc25a924ac9899add7d9158fa9f194a5f2a3cbf8cc4e4e30b1d380e",
+          "git_blob_sha": "d50dba172a3732c982867bb1205024b2c193c2f2",
+          "bytes": 189,
+          "read_scope": "full",
+          "read_status": "inspected"
+        },
+        {
+          "path": "skills/adk-embedded-remote-debug-log-triage/references/remote-adb-hil-contract.md",
+          "baseline_sha256": "768139df1964829995b8fc0721638673079b3a488d4dabbd4f3516b981b5f7f8",
+          "git_blob_sha": "6b573675b3a48548fdbda7649397c0304af69d43",
+          "bytes": 3301,
+          "read_scope": "full",
+          "read_status": "inspected"
+        }
+      ],
+      "decision": "RETAIN",
+      "current_method": "分层健康、ADB 命令语义、熔断/恢复及 live 权限明确。",
+      "reason": "保留 runner/环境/product 分离；不启动 live capture。",
+      "candidate_ids": [],
+      "external_source_ids": [
+        "obra-debugging"
+      ],
+      "evidence_boundary": "源码与方法对照；非模型或板端效果证据"
+    },
+    {
+      "name": "adk-offline-core-dump-triage",
+      "path": "skills/adk-offline-core-dump-triage/SKILL.md",
+      "quality_tier": "p1",
+      "category": "debugging",
+      "lifecycle_order": 60,
+      "stage_order": 40,
+      "activation_mode": "primary",
+      "pattern": "playbook",
+      "actual_read_paths": [
+        {
+          "path": "skills/adk-offline-core-dump-triage/SKILL.md",
+          "baseline_sha256": "6a30f8a9ae8a47766e8196c9a8c6396a38e9b74b0d981220e11fe81f1dd777a9",
+          "git_blob_sha": "bff5d56495dfacc6a986e9a211074b1a559d0958",
+          "bytes": 3562,
+          "read_scope": "full",
+          "read_status": "inspected"
+        }
+      ],
+      "decision": "RETAIN",
+      "current_method": "镜像/ELF/sysroot 身份、精确 GDB、禁 autoload、未知帧标记已具备。",
+      "reason": "sanitizer 是另一路动态证据，不冒充 core dump 分析。",
+      "candidate_ids": [],
+      "external_source_ids": [
+        "trailofbits-handbook"
+      ],
+      "evidence_boundary": "源码与方法对照；非模型或板端效果证据"
+    },
+    {
+      "name": "adk-hardware-debugging",
+      "path": "skills/adk-hardware-debugging/SKILL.md",
+      "quality_tier": "p1",
+      "category": "debugging",
+      "lifecycle_order": 60,
+      "stage_order": 50,
+      "activation_mode": "primary",
+      "pattern": "playbook",
+      "actual_read_paths": [
+        {
+          "path": "skills/adk-hardware-debugging/SKILL.md",
+          "baseline_sha256": "69f3eade6355e566e1c7a4d3a59a8233401e491e517e00b46959f67a001847ec",
+          "git_blob_sha": "4207ed8d0f287c908963e0859728bd977380a040",
+          "bytes": 2701,
+          "read_scope": "full",
+          "read_status": "inspected"
+        },
+        {
+          "path": "skills/adk-hardware-debugging/references/mcu-fault-reset-wakeup.md",
+          "baseline_sha256": "8ce111266cca681154fd796de59efeb7319f4e6c2af9f6be2fdcb529531bcc04",
+          "git_blob_sha": "722fdb6ebfd3d5c68b48662a5750de5069c181f4",
+          "bytes": 1919,
+          "read_scope": "full",
+          "read_status": "inspected"
+        }
+      ],
+      "decision": "RETAIN",
+      "current_method": "架构相关 fault/reset/wakeup 与 ELF 地址/重定位规则上一轮已修。",
+      "reason": "没有新设备证据不改现有 Cortex-M/地址映射方法。",
+      "candidate_ids": [],
+      "external_source_ids": [
+        "zephyr-performance"
+      ],
+      "evidence_boundary": "源码与方法对照；非模型或板端效果证据"
+    },
+    {
+      "name": "adk-performance-profiling-embedded",
+      "path": "skills/adk-performance-profiling-embedded/SKILL.md",
+      "quality_tier": "p0",
+      "category": "debugging",
+      "lifecycle_order": 60,
+      "stage_order": 60,
+      "activation_mode": "primary",
+      "pattern": "tool-wrapper",
+      "actual_read_paths": [
+        {
+          "path": "skills/adk-performance-profiling-embedded/SKILL.md",
+          "baseline_sha256": "dddbfa10380680807cb7c0918f6c92d93163379def98592dc1df4e75a814badf",
+          "git_blob_sha": "51aec4a68b942cae3ff8ca910670ca9b593f5786",
+          "bytes": 3919,
+          "read_scope": "full",
+          "read_status": "inspected"
+        },
+        {
+          "path": "skills/adk-performance-profiling-embedded/references/mcu-memory-footprint.md",
+          "baseline_sha256": "eeaf2bbf3a5764021d35445d7af32ca2fb595e6d9e6db983230e048b5829b17c",
+          "git_blob_sha": "6bde0804565b68b80f0a1d7613995ffb5f2aa2e3",
+          "bytes": 2533,
+          "read_scope": "full",
+          "read_status": "inspected"
+        }
+      ],
+      "decision": "ENHANCE",
+      "current_method": "已有真实负载、A/B/A/B、扰动/漂移、KPI 及 inconclusive/no-gain；.su/high-water 语义尚不足。",
+      "reason": "增加逐函数 frame、dynamic qualifier、调用链/IRQ/port/单位及观测余量边界。",
+      "candidate_ids": [
+        "D3"
+      ],
+      "external_source_ids": [
+        "zephyr-performance",
+        "intel-linux-perf"
+      ],
+      "evidence_boundary": "源码与方法对照；非模型或板端效果证据"
+    },
+    {
+      "name": "adk-unit-test-embedded",
+      "path": "skills/adk-unit-test-embedded/SKILL.md",
+      "quality_tier": "p0",
+      "category": "verification",
+      "lifecycle_order": 70,
+      "stage_order": 20,
+      "activation_mode": "primary",
+      "pattern": "generator",
+      "actual_read_paths": [
+        {
+          "path": "skills/adk-unit-test-embedded/SKILL.md",
+          "baseline_sha256": "ee8b6fb2ab8d3426642664975abdad87fcaed43f3486da85c586a4f8e0e12053",
+          "git_blob_sha": "b804e81288fa434bae9b7008f12e68cfb90405f8",
+          "bytes": 4104,
+          "read_scope": "full",
+          "read_status": "inspected"
+        },
+        {
+          "path": "skills/adk-unit-test-embedded/references/embedded-tdd-matrix.md",
+          "baseline_sha256": "1b3a44a2d34bb6beec0b850169e3ad243b3f9f3a24cac2dba032576f33b92d00",
+          "git_blob_sha": "8e7ec1dd29383a503114e879cca3e55bde434cc3",
+          "bytes": 1369,
+          "read_scope": "full",
+          "read_status": "inspected"
+        }
+      ],
+      "decision": "ENHANCE",
+      "current_method": "已有公开 seam、target/layer、真实断言与设计/执行区分；无性质、生成器有效性与可重放状态序列。",
+      "reason": "新增独立性质、有界合法/拒绝序列、状态重置、非空 reachability 与反例回放；不引入框架。",
+      "candidate_ids": [
+        "D1",
+        "D2"
+      ],
+      "external_source_ids": [
+        "trailofbits-property",
+        "trailofbits-handbook"
+      ],
+      "evidence_boundary": "源码与方法对照；非模型或板端效果证据"
+    },
+    {
+      "name": "adk-integration-hil-sil",
+      "path": "skills/adk-integration-hil-sil/SKILL.md",
+      "quality_tier": "p0",
+      "category": "verification",
+      "lifecycle_order": 70,
+      "stage_order": 30,
+      "activation_mode": "primary",
+      "pattern": "playbook",
+      "actual_read_paths": [
+        {
+          "path": "skills/adk-integration-hil-sil/SKILL.md",
+          "baseline_sha256": "02bf30ac9e91c5ea56cef5622e44a459b814190a9d534344755bc88339359fce",
+          "git_blob_sha": "d5a2054880496cde78eceae84f48c89b52b850e6",
+          "bytes": 4318,
+          "read_scope": "full",
+          "read_status": "inspected"
+        }
+      ],
+      "decision": "RETAIN",
+      "current_method": "层次、runner 身份、隔离/停止/健康、CTest 空集及 actual assertions 已明确。",
+      "reason": "host 状态枚举不能升级为 HIL；不重复执行 gate。",
+      "candidate_ids": [],
+      "external_source_ids": [
+        "trailofbits-handbook"
+      ],
+      "evidence_boundary": "源码与方法对照；非模型或板端效果证据"
+    },
+    {
+      "name": "adk-embedded-diagnostic-harness",
+      "path": "skills/adk-embedded-diagnostic-harness/SKILL.md",
+      "quality_tier": "p0",
+      "category": "verification",
+      "lifecycle_order": 70,
+      "stage_order": 40,
+      "activation_mode": "primary",
+      "pattern": "tool-wrapper",
+      "actual_read_paths": [
+        {
+          "path": "skills/adk-embedded-diagnostic-harness/LICENSE",
+          "baseline_sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
+          "git_blob_sha": "1c326f3a91d2e3889cb5259af82a3fdd96a4ba72",
+          "bytes": 61,
+          "read_scope": "full",
+          "read_status": "inspected"
+        },
+        {
+          "path": "skills/adk-embedded-diagnostic-harness/README.md",
+          "baseline_sha256": "37fc552aff1dd57ab25ce50cb3d2b669a6a59cd8e59cc70030139c63b9505751",
+          "git_blob_sha": "6005feb11ddfc27c5db48f421e1e3e6986c0d04d",
+          "bytes": 343,
+          "read_scope": "full",
+          "read_status": "inspected"
+        },
+        {
+          "path": "skills/adk-embedded-diagnostic-harness/SKILL.md",
+          "baseline_sha256": "d71784d7b68812caca8aadd8119ea761072c2333cfd03dc0c007ed94f6975709",
+          "git_blob_sha": "664e510af7a18b24c7518f58fd54b2a7a82de594",
+          "bytes": 3087,
+          "read_scope": "full",
+          "read_status": "inspected"
+        },
+        {
+          "path": "skills/adk-embedded-diagnostic-harness/agents/openai.yaml",
+          "baseline_sha256": "e994baf88b865d08f5808d321936ea25fdbf5b7ef42abf8d196ce433f211122a",
+          "git_blob_sha": "ddb21a32a52583d51156e186585bdb0801b196c5",
+          "bytes": 168,
+          "read_scope": "full",
+          "read_status": "inspected"
+        }
+      ],
+      "decision": "RETAIN",
+      "current_method": "预期返回码、invoke_ret、harness/env/product 失败分类可用。",
+      "reason": "新示例沿用分类，不新增统一 runtime/checker。",
+      "candidate_ids": [],
+      "external_source_ids": [
+        "sentry-scanner",
+        "trailofbits-handbook"
+      ],
+      "evidence_boundary": "源码与方法对照；非模型或板端效果证据"
+    },
+    {
+      "name": "adk-fault-injection-recovery",
+      "path": "skills/adk-fault-injection-recovery/SKILL.md",
+      "quality_tier": "p0",
+      "category": "verification",
+      "lifecycle_order": 70,
+      "stage_order": 50,
+      "activation_mode": "primary",
+      "pattern": "playbook",
+      "actual_read_paths": [
+        {
+          "path": "skills/adk-fault-injection-recovery/SKILL.md",
+          "baseline_sha256": "8765aad5a698ff110e7765e72aa2c7286cfb9801557ec8b33ee0bb4e18c1e812",
+          "git_blob_sha": "01ef6c409bdfa9d4c00cef778dea3177bf2d7e09",
+          "bytes": 3559,
+          "read_scope": "full",
+          "read_status": "inspected"
+        }
+      ],
+      "decision": "RETAIN",
+      "current_method": "单点、风险驱动注入、恢复/回退及 live effect 授权已明确。",
+      "reason": "Linux fail-nth 为可用条件方法，但无工具/内核证据，不扩至设备。",
+      "candidate_ids": [],
+      "external_source_ids": [
+        "trailofbits-handbook"
+      ],
+      "evidence_boundary": "源码与方法对照；非模型或板端效果证据"
+    },
+    {
+      "name": "adk-static-analysis-c-cpp",
+      "path": "skills/adk-static-analysis-c-cpp/SKILL.md",
+      "quality_tier": "p0",
+      "category": "review_quality",
+      "lifecycle_order": 80,
+      "stage_order": 50,
+      "activation_mode": "primary",
+      "pattern": "reviewer",
+      "actual_read_paths": [
+        {
+          "path": "skills/adk-static-analysis-c-cpp/SKILL.md",
+          "baseline_sha256": "d87b79a048d5e61164b6ab3ef58aaf53e8ee830eb65d1031805f7f2ec0638ee6",
+          "git_blob_sha": "26124f9f4249d3ef0e0c578831204b4cd0a1f076",
+          "bytes": 4032,
+          "read_scope": "full",
+          "read_status": "inspected"
+        }
+      ],
+      "decision": "ENHANCE-HANDOFF",
+      "current_method": "匹配 compile DB、头文件消费者 TU、范围与工具失败上一轮已修。",
+      "reason": "仅补动态 sanitizer 按 Skill 名条件交接和不可用边界，不混淆静态/动态证明或建立硬跨目录链接。",
+      "candidate_ids": [
+        "D2"
+      ],
+      "external_source_ids": [
+        "trailofbits-handbook"
+      ],
+      "evidence_boundary": "源码与方法对照；非模型或板端效果证据"
+    },
+    {
+      "name": "adk-production-field-readiness",
+      "path": "skills/adk-production-field-readiness/SKILL.md",
+      "quality_tier": "p0",
+      "category": "release_closure",
+      "lifecycle_order": 90,
+      "stage_order": 20,
+      "activation_mode": "primary",
+      "pattern": "reviewer",
+      "actual_read_paths": [
+        {
+          "path": "skills/adk-production-field-readiness/SKILL.md",
+          "baseline_sha256": "bc708d31b288c346035a97459e6a08c001112d7f4979adc65311a39fe8588c63",
+          "git_blob_sha": "d864336f23a9563fad78f27b08dfdbddeb2105f1",
+          "bytes": 5395,
+          "read_scope": "full",
+          "read_status": "inspected"
+        },
+        {
+          "path": "skills/adk-production-field-readiness/references/pilot-measurement-evidence.md",
+          "baseline_sha256": "ead5542e88462d8d5e599755991be6fecfa92b061fb4dc4471dfda8977c2a355",
+          "git_blob_sha": "faf4083758a12cda2fe4a0e1a965468e9ef8f4bd",
+          "bytes": 1793,
+          "read_scope": "full",
+          "read_status": "inspected"
+        }
+      ],
+      "decision": "RETAIN",
+      "current_method": "真实工厂/board/OTA/恢复、pilot 测量与缺现场数据区分。",
+      "reason": "没有现场数据不新造 readiness pass。",
+      "candidate_ids": [],
+      "external_source_ids": [
+        "zephyr-performance"
+      ],
+      "evidence_boundary": "源码与方法对照；非模型或板端效果证据"
+    },
+    {
+      "name": "adk-embedded-release-orchestration",
+      "path": "skills/adk-embedded-release-orchestration/SKILL.md",
+      "quality_tier": "p0",
+      "category": "release_closure",
+      "lifecycle_order": 90,
+      "stage_order": 30,
+      "activation_mode": "primary",
+      "pattern": "pipeline",
+      "actual_read_paths": [
+        {
+          "path": "skills/adk-embedded-release-orchestration/LICENSE",
+          "baseline_sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
+          "git_blob_sha": "1c326f3a91d2e3889cb5259af82a3fdd96a4ba72",
+          "bytes": 61,
+          "read_scope": "full",
+          "read_status": "inspected"
+        },
+        {
+          "path": "skills/adk-embedded-release-orchestration/README.md",
+          "baseline_sha256": "e917b29015b779f128478eb2e450f27c0e1cd19d1be639321e7000677b08d5d0",
+          "git_blob_sha": "f093c89f695ebc73ecb8895680aab8bfd6ea0804",
+          "bytes": 342,
+          "read_scope": "full",
+          "read_status": "inspected"
+        },
+        {
+          "path": "skills/adk-embedded-release-orchestration/SKILL.md",
+          "baseline_sha256": "0d63a32211b37f318f87e8389f42c852bd7f6889010250f68eb01d45b6d7d889",
+          "git_blob_sha": "3aaa041a04848e72cd68c2e7fe785da939f2bafa",
+          "bytes": 5253,
+          "read_scope": "full",
+          "read_status": "inspected"
+        },
+        {
+          "path": "skills/adk-embedded-release-orchestration/agents/openai.yaml",
+          "baseline_sha256": "42f5870f805301ab55c6d1a8fbcb378ecb1a9620cfc50c03dd297eddf82b1057",
+          "git_blob_sha": "3baaad6a3aeaf5a9b7728492c7681dcfec82a096",
+          "bytes": 177,
+          "read_scope": "full",
+          "read_status": "inspected"
+        },
+        {
+          "path": "skills/adk-embedded-release-orchestration/references/multi-mcu-ota-recovery.md",
+          "baseline_sha256": "8e67f41286a6d36c70aa2090ee9f3a8bd62ce1244a3ffd608a47f0a68aeb175e",
+          "git_blob_sha": "ba9fd82c7e172aec3c58a666e7f4aad614f65367",
+          "bytes": 1698,
+          "read_scope": "full",
+          "read_status": "inspected"
+        }
+      ],
+      "decision": "RETAIN",
+      "current_method": "制品发布和设备状态分离，多 MCU 部分成功/失败与恢复回执。",
+      "reason": "本轮 host 方法不改变 release/field 授权和真实回执。",
+      "candidate_ids": [],
+      "external_source_ids": [
+        "obra-debugging"
+      ],
+      "evidence_boundary": "源码与方法对照；非模型或板端效果证据"
+    },
+    {
+      "name": "adk-embedded-storage-layout-migration",
+      "path": "skills/adk-embedded-storage-layout-migration/SKILL.md",
+      "quality_tier": "p1",
+      "category": "release_closure",
+      "lifecycle_order": 90,
+      "stage_order": 40,
+      "activation_mode": "primary",
+      "pattern": "pipeline",
+      "actual_read_paths": [
+        {
+          "path": "skills/adk-embedded-storage-layout-migration/SKILL.md",
+          "baseline_sha256": "946eb383aca9f59b304c78ce1f7a4f9980ef876f6fb1bb1c269af8036dfeb026",
+          "git_blob_sha": "2756aa6712a1b6bb2169b9eb56a65231ac3c7351",
+          "bytes": 5602,
+          "read_scope": "full",
+          "read_status": "inspected"
+        }
+      ],
+      "decision": "RETAIN",
+      "current_method": "配置/制品/runtime 因果链、保留数据、pilot receipt、rollout 与rollback具体。",
+      "reason": "不把 UBIFS 只读/容量症状直接转成迁移任务。",
+      "candidate_ids": [],
+      "external_source_ids": [
+        "obra-debugging"
+      ],
+      "evidence_boundary": "源码与方法对照；非模型或板端效果证据"
+    },
+    {
+      "name": "adk-security-supply-chain",
+      "path": "optional-skills/adk-security-supply-chain/SKILL.md",
+      "quality_tier": "p2",
+      "category": "review_quality",
+      "lifecycle_order": 80,
+      "stage_order": 70,
+      "activation_mode": "primary",
+      "pattern": "reviewer",
+      "actual_read_paths": [
+        {
+          "path": "optional-skills/adk-security-supply-chain/SKILL.md",
+          "baseline_sha256": "acff83f54f2f15e0160d18b3e6b3e84f09be4b75b4d06e8b459c2b3345bc635f",
+          "git_blob_sha": "e123bcdb9c01b3fe3059f17fd5df710476561ba5",
+          "bytes": 8270,
+          "read_scope": "full",
+          "read_status": "inspected"
+        },
+        {
+          "path": "optional-skills/adk-security-supply-chain/references/skill-scan-coverage.md",
+          "baseline_sha256": "6fc92933a7ea418d824d2e92eb64bdd26e0e25e53969d4dd3ce95de0c54b0d15",
+          "git_blob_sha": "b3d5842fd23228b869bc568121dbd5c2db412850",
+          "bytes": 1879,
+          "read_scope": "full",
+          "read_status": "inspected"
+        }
+      ],
+      "decision": "RETAIN",
+      "current_method": "source-only intake / adoption preflight / runtime、逐文件覆盖和 source-to-sink 已具体。",
+      "reason": "getsentry 原文和脚本仍有启发，但 ADK 已覆盖；不引入正则匹配即安全结论。",
+      "candidate_ids": [],
+      "external_source_ids": [
+        "sentry-scanner"
+      ],
+      "evidence_boundary": "源码与方法对照；非模型或板端效果证据"
+    }
+  ],
+  "external_sources": [
+    {
+      "id": "trailofbits-property",
+      "repo": "trailofbits/skills",
+      "sha": "149d7b21f4067765b82e67029730b42d228ef4b4",
+      "tree": "c5c5969f30963626f70c4a7cf2b1fe1f445e999c",
+      "date": "2026-11-12T17:48:47Z",
+      "subject": "Add Trailmark taint-trace skill and native analyzer workflow (#502)",
+      "version": "property-based-testing 1.2.3",
+      "license": "CC-BY-SA-4.0 (repository root)",
+      "files": [
+        {
+          "url": "https://github.com/trailofbits/skills/blob/149d7b21f4067765b82e67029730b42d228ef4b4/plugins/property-based-testing/skills/property-based-testing/SKILL.md",
+          "git_blob_sha": "1cc39d8d8cba5955bf9c8d7c9a2aef348722a55e",
+          "read_scope": "full",
+          "read_status": "inspected"
+        },
+        {
+          "url": "https://github.com/trailofbits/skills/blob/149d7b21f4067765b82e67029730b42d228ef4b4/plugins/property-based-testing/skills/property-based-testing/references/generating.md",
+          "git_blob_sha": "0133ccd27580a6f68d662807832de67cb1d91514",
+          "read_scope": "full",
+          "read_status": "inspected"
+        },
+        {
+          "url": "https://github.com/trailofbits/skills/blob/149d7b21f4067765b82e67029730b42d228ef4b4/plugins/property-based-testing/skills/property-based-testing/references/reviewing.md",
+          "git_blob_sha": "a2ca783a7dabaece9e383f0ace972bb4fe2f7881",
+          "read_scope": "full",
+          "read_status": "inspected"
+        },
+        {
+          "url": "https://github.com/trailofbits/skills/blob/149d7b21f4067765b82e67029730b42d228ef4b4/plugins/property-based-testing/skills/property-based-testing/references/interpreting-failures.md",
+          "git_blob_sha": "10aeac48d239da352206b8c49f72ee776e5ca5be",
+          "read_scope": "full",
+          "read_status": "inspected"
+        }
+      ],
+      "methods": "契约性质、生成约束、独立预期、可重放缩减输入、把实现缺陷/性质错误/契约歧义分开。",
+      "decision": "adopt-method-only",
+      "adk_gap": "unit 没有性质/状态序列、有效样本非空及 harness reachability 指引。",
+      "execution": "未安装或执行第三方代码；不复制代码/文本。"
+    },
+    {
+      "id": "trailofbits-handbook",
+      "repo": "trailofbits/skills",
+      "sha": "149d7b21f4067765b82e67029730b42d228ef4b4",
+      "tree": "c5c5969f30963626f70c4a7cf2b1fe1f445e999c",
+      "date": "2026-11-12T17:48:47Z",
+      "subject": "Add Trailmark taint-trace skill and native analyzer workflow (#502)",
+      "version": "testing-handbook-skills 1.2.2",
+      "license": "CC-BY-SA-4.0 (repository root)",
+      "files": [
+        {
+          "url": "https://github.com/trailofbits/skills/blob/149d7b21f4067765b82e67029730b42d228ef4b4/plugins/testing-handbook-skills/skills/address-sanitizer/SKILL.md",
+          "git_blob_sha": "d63e7624542dff969568452c2e4e072cf75e5b85",
+          "read_scope": "full",
+          "read_status": "inspected"
+        },
+        {
+          "url": "https://github.com/trailofbits/skills/blob/149d7b21f4067765b82e67029730b42d228ef4b4/plugins/testing-handbook-skills/skills/harness-writing/SKILL.md",
+          "git_blob_sha": "7b497d2d41c17466c7d77350ddfe75fab686bff1",
+          "read_scope": "full",
+          "read_status": "inspected"
+        },
+        {
+          "url": "https://github.com/trailofbits/skills/blob/149d7b21f4067765b82e67029730b42d228ef4b4/plugins/testing-handbook-skills/skills/libfuzzer/SKILL.md",
+          "git_blob_sha": "6ab7664a36232a9b1d7953c286d8643e1e747645",
+          "read_scope": "full",
+          "read_status": "inspected"
+        },
+        {
+          "url": "https://github.com/trailofbits/skills/blob/149d7b21f4067765b82e67029730b42d228ef4b4/plugins/testing-handbook-skills/skills/coverage-analysis/SKILL.md",
+          "git_blob_sha": "7e171db0ccb636a40c7ae3683f91fee1c6a91272",
+          "read_scope": "full",
+          "read_status": "inspected"
+        }
+      ],
+      "methods": "窄目标 harness、每轮状态重置、独立回放、匹配源码的 SUT 覆盖和 sanitizer 检测有效性。",
+      "decision": "adopt-method-with-primary-doc-corrections",
+      "adk_gap": "UBSan recovery、实际插桩/运行及缺 runtime 判读不足。",
+      "execution": "clang/libFuzzer/llvm-cov 不存在，未执行这些工具；只运行本地独立 GCC UBSan 反例。"
+    },
+    {
+      "id": "obra-debugging",
+      "repo": "obra/superpowers",
+      "sha": "22f0b463e7a5e579904dd6211a520321035526f7",
+      "tree": "8fddc972a73e9af7501442df0e638d8e29842b6b",
+      "date": "2026-11-03T22:17:07Z",
+      "subject": "Release v7.0.2: brainstorming tuning, harness bootstrap fixes, SDD helper fixes (#2657)",
+      "version": "7.0.2",
+      "license": "MIT",
+      "files": [
+        {
+          "url": "https://github.com/obra/superpowers/blob/22f0b463e7a5e579904dd6211a520321035526f7/skills/systematic-debugging/SKILL.md",
+          "git_blob_sha": "62fc752aaef59a8bbed5d305f4cadc60f8ae07ed",
+          "read_scope": "full",
+          "read_status": "inspected"
+        },
+        {
+          "url": "https://github.com/obra/superpowers/blob/22f0b463e7a5e579904dd6211a520321035526f7/skills/systematic-debugging/root-cause-tracing.md",
+          "git_blob_sha": "0e72e8f9566b7ef85e814633d1feacad9d0c5868",
+          "read_scope": "full",
+          "read_status": "inspected"
+        }
+      ],
+      "methods": "复现、跨边界证据、沿调用链追源、单变量实验。",
+      "decision": "retain-existing",
+      "adk_gap": "现有 systematic + tight-feedback-loop 已覆盖，不能为吸收而重复增加流程。",
+      "execution": "未执行外部诊断脚本；没有模型效果证据。"
+    },
+    {
+      "id": "sentry-scanner",
+      "repo": "getsentry/skills",
+      "sha": "a582c51ee29d0f35e6ac321340796f77d43da733",
+      "tree": "e908e2dbcdcde94ebd1e5c5dc73cd4c7c12a1104",
+      "date": "2026-11-14T19:38:57Z",
+      "subject": "docs(document-api-endpoint): Say @sentry/api releases from getsentry/sentry (#193)",
+      "version": "commit-pinned",
+      "license": "Apache-2.0",
+      "files": [
+        {
+          "url": "https://github.com/getsentry/skills/blob/a582c51ee29d0f35e6ac321340796f77d43da733/skills/skill-scanner/SKILL.md",
+          "git_blob_sha": "c4faa021ceb71271bfc1c379eb7f8510da1cf5d4",
+          "read_scope": "full",
+          "read_status": "inspected"
+        },
+        {
+          "url": "https://github.com/getsentry/skills/blob/a582c51ee29d0f35e6ac321340796f77d43da733/skills/skill-scanner/references/dangerous-code-patterns.md",
+          "git_blob_sha": "974073260eb9fa199efcd9cd0f21b0f7f31fe694",
+          "read_scope": "full",
+          "read_status": "inspected"
+        },
+        {
+          "url": "https://github.com/getsentry/skills/blob/a582c51ee29d0f35e6ac321340796f77d43da733/skills/skill-scanner/scripts/scan_skill.py",
+          "git_blob_sha": "14aaa7b059c659ea5c2719fa266f19641dfd9d3d",
+          "read_scope": "lines 1-130 and 541-675 (675 total)",
+          "read_status": "inspected"
+        }
+      ],
+      "methods": "逐文件/加载入口、危险脚本与结构自动执行路径、source-to-sink 意图确认。",
+      "decision": "retain-existing",
+      "adk_gap": "security-supply-chain 已有 source/adoption/runtime 分层、覆盖/排除/不可得与 source-to-sink；不导入正则 scanner。",
+      "execution": "仅人工读取；脚本未运行。主函数返回 JSON findings 不等于按业务等级非零退出。"
+    },
+    {
+      "id": "zephyr-build",
+      "repo": "beriberikix/zephyr-agent-skills",
+      "sha": "ed63cdfb8cdfbeb5946ea39c33f4aa6bcf3a5cce",
+      "tree": "60d5d8ad4dd3785d80eaca96f2587e3a755b4eba",
+      "date": "2026-05-18T20:57:40Z",
+      "subject": "Merge pull request #4 from beriberikix/feat/skill-registry-v2",
+      "version": "commit-pinned",
+      "license": "Apache-2.0",
+      "files": [
+        {
+          "url": "https://github.com/beriberikix/zephyr-agent-skills/blob/ed63cdfb8cdfbeb5946ea39c33f4aa6bcf3a5cce/skills/build-system/SKILL.md",
+          "git_blob_sha": "3539f568f58fea127aea33d4dc03ca41843d5b2c",
+          "read_scope": "full",
+          "read_status": "inspected"
+        },
+        {
+          "url": "https://github.com/beriberikix/zephyr-agent-skills/blob/ed63cdfb8cdfbeb5946ea39c33f4aa6bcf3a5cce/skills/build-system/references/kconfig.md",
+          "git_blob_sha": "0852dd12c3b5f82b5d3d62fd8df7cba717081f09",
+          "read_scope": "full",
+          "read_status": "inspected"
+        }
+      ],
+      "methods": "跟踪构建系统、Kconfig 和最终 build/zephyr/.config；目标配置与实际生成物对照。",
+      "decision": "retain-with-rejected-claim",
+      "adk_gap": "ADK 已区分目标/toolchain/sysroot；无 CMake/Zephyr 工具不能验证额外流程。",
+      "execution": "未执行 west/CMake/Zephyr，未操作开发板。"
+    },
+    {
+      "id": "zephyr-performance",
+      "repo": "beriberikix/zephyr-agent-skills",
+      "sha": "ed63cdfb8cdfbeb5946ea39c33f4aa6bcf3a5cce",
+      "tree": "60d5d8ad4dd3785d80eaca96f2587e3a755b4eba",
+      "date": "2026-05-18T20:57:40Z",
+      "subject": "Merge pull request #4 from beriberikix/feat/skill-registry-v2",
+      "version": "commit-pinned",
+      "license": "Apache-2.0",
+      "files": [
+        {
+          "url": "https://github.com/beriberikix/zephyr-agent-skills/blob/ed63cdfb8cdfbeb5946ea39c33f4aa6bcf3a5cce/skills/power-performance/SKILL.md",
+          "git_blob_sha": "75786e5747744bb54f6803562d75877f8e69fc0d",
+          "read_scope": "full",
+          "read_status": "inspected"
+        },
+        {
+          "url": "https://github.com/beriberikix/zephyr-agent-skills/blob/ed63cdfb8cdfbeb5946ea39c33f4aa6bcf3a5cce/skills/power-performance/references/performance_tuning.md",
+          "git_blob_sha": "fb8204a01f4afba6ad55e78e89f902690def790a",
+          "read_scope": "full",
+          "read_status": "inspected"
+        },
+        {
+          "url": "https://github.com/beriberikix/zephyr-agent-skills/blob/ed63cdfb8cdfbeb5946ea39c33f4aa6bcf3a5cce/skills/power-performance/scripts/power_budget_estimator.py",
+          "git_blob_sha": "747f886854c0e15f2cf9a3edce787eef1868b48f",
+          "read_scope": "full",
+          "read_status": "inspected"
+        }
+      ],
+      "methods": "map 与逐线程运行时栈观测结合；功耗模型输入和真实数据分开。",
+      "decision": "adopt-stack-interpretation-only",
+      "adk_gap": "MCU reference 提到 .su/high-water 却未说明其上下界、调用链和单位。",
+      "execution": "不导入电源配置或 estimator；未执行 Zephyr/功耗脚本/设备采样。"
+    },
+    {
+      "id": "intel-linux-perf",
+      "repo": "intel/skills",
+      "sha": "22bf0c0d0167f4da18e2effbfd2661b2481b3cd8",
+      "tree": "12959d6bd4aa30ca3d013cd015f326d8de77c977",
+      "date": "2026-11-12T23:27:45Z",
+      "subject": "chore(deps): Bump the codeql-action group with 3 updates (#99)",
+      "version": "commit-pinned",
+      "license": "Root LICENSE Apache-2.0; SKILL.md declares MIT; scope unresolved, no copying",
+      "files": [
+        {
+          "url": "https://github.com/intel/skills/blob/22bf0c0d0167f4da18e2effbfd2661b2481b3cd8/skills/linux-perf/SKILL.md",
+          "git_blob_sha": "ab8b4f218c12d4df8996a77217d4674af6ad42f4",
+          "read_scope": "full",
+          "read_status": "inspected"
+        }
+      ],
+      "methods": "先低开销统计再热点/锁/调度采样，按实际 CPU/event/capability 选择。",
+      "decision": "retain-existing",
+      "adk_gap": "现有性能 Skill 已要求有效负载、定位/比较分流、漂移/采样扰动、同口径 KPI。",
+      "execution": "perf 缺失，不执行 sudo/内核参数或新增依赖。"
+    }
+  ],
+  "primary_sources": [
+    {
+      "id": "gcc-ubsan",
+      "url": "https://gcc.gnu.org/onlinedocs/gcc-14.2.0/gcc/Instrumentation-Options.html",
+      "version": "14.2.0",
+      "verified_fact": "UBSan recovery 及 sanitizer 组合/runtime 约束。"
+    },
+    {
+      "id": "clang-ubsan",
+      "url": "https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html",
+      "version": "live docs read 2026-11-15",
+      "verified_fact": "默认 report-and-continue 与 no-recover；仅文档核实，Clang 不可用。"
+    },
+    {
+      "id": "clang-asan",
+      "url": "https://clang.llvm.org/docs/AddressSanitizer.html",
+      "version": "live docs read 2026-11-15",
+      "verified_fact": "目标支持和巨大虚拟地址映射并非相同的驻留内存占用。"
+    },
+    {
+      "id": "llvm-libfuzzer",
+      "url": "https://llvm.org/docs/LibFuzzer.html",
+      "version": "live docs read 2026-11-15",
+      "verified_fact": "runs/time/RSS 预算、回放和进程内状态边界，未运行。"
+    },
+    {
+      "id": "gcc-stack",
+      "url": "https://gcc.gnu.org/onlinedocs/gcc/Developer-Options.html",
+      "version": "live docs read 2026-11-15",
+      "verified_fact": "逐函数 .su 的 static/dynamic/bounded 语义；当前文档列数可能不同于 GCC 14.2 实测格式。"
+    },
+    {
+      "id": "freertos-stack",
+      "url": "https://github.com/FreeRTOS/FreeRTOS-Kernel/blob/ca759444e9ca59cfa3a9faa6cb8b49e0772ca520/include/task.h",
+      "version": "ca759444e9ca59cfa3a9faa6cb8b49e0772ca520",
+      "verified_fact": "已读1865-2019；high-water 为自任务启动以来最小剩余 words，非未来最坏界；需核 vendor port。"
+    },
+    {
+      "id": "zephyr-kconfig",
+      "url": "https://docs.zephyrproject.org/latest/build/kconfig/setting.html",
+      "version": "live docs read 2026-11-15",
+      "verified_fact": "conf 使用 CONFIG_<symbol>；生成 build/zephyr/.config 是实际构建证据。"
+    },
+    {
+      "id": "zephyr-thread-analyzer",
+      "url": "https://docs.zephyrproject.org/latest/services/debugging/thread-analyzer.html",
+      "version": "live docs read 2026-11-15",
+      "verified_fact": "可按需运行 thread_analyzer，测量有自身资源成本；未执行。"
+    },
+    {
+      "id": "hypothesis",
+      "url": "https://hypothesis.readthedocs.io/en/latest/settings.html",
+      "version": "live docs read 2026-11-15",
+      "verified_fact": "assume 丢弃输入，过量过滤可 health check / Unsatisfiable；不是自动空集 pass。"
+    },
+    {
+      "id": "linux-fault-injection",
+      "url": "https://docs.kernel.org/fault-injection/fault-injection.html",
+      "version": "live docs read 2026-11-15",
+      "verified_fact": "fail-nth 是受限定的故障注入；只研究未执行。"
+    }
+  ],
+  "selected": [
+    {
+      "id": "D1",
+      "name": "property/stateful 测试",
+      "paths": [
+        "skills/adk-unit-test-embedded/SKILL.md",
+        "skills/adk-unit-test-embedded/references/property-stateful-tests.md"
+      ],
+      "method": "公开契约性质与独立状态 oracle；有效/被拒绝操作、非空到达计数、每轮复位、固定预算、输入/序列回放；最小性仅在已删减或枚举证明时声称。",
+      "validation": "最终公开 Python fence 实跑：121序列、426步，字母表内最短[1,0,2,0]，期望最后pop1/错误0；跨无关序列重放一致，修复121全过。不是Hypothesis/libFuzzer运行。",
+      "unmeasured": "Hypothesis/libFuzzer/coverage-guided fuzz、板端中断/竞态与模型效果。"
+    },
+    {
+      "id": "D2",
+      "name": "sanitizer 实际支持及诊断判读",
+      "paths": [
+        "skills/adk-systematic-debugging/SKILL.md",
+        "skills/adk-systematic-debugging/references/sanitizer-validation.md",
+        "skills/adk-unit-test-embedded/SKILL.md",
+        "skills/adk-static-analysis-c-cpp/SKILL.md"
+      ],
+      "method": "分别核编译/链接、runtime 启动、已知缺陷插桩报告、修复对照；exit0但UBSan诊断仍失败；缺工具或runtime错误不是干净结果。",
+      "validation": "最终公开 C/Bash fence 实跑：GCC14.2，recover exit0且signed-overflow诊断，fatal exit1同类诊断，fixed exit0且空stderr。",
+      "unmeasured": "ASan/TSan/Clang、目标runtime/板端；不自动安装。"
+    },
+    {
+      "id": "D3",
+      "name": "MCU 栈证据语义",
+      "paths": [
+        "skills/adk-performance-profiling-embedded/SKILL.md",
+        "skills/adk-performance-profiling-embedded/references/mcu-memory-footprint.md"
+      ],
+      "method": ".su逐函数fixed/dynamic/bounded与调用链分别解释；递归/间接调用/IRQ/RTOS context 未界定即unknown；high-water核单位和观察窗口。",
+      "validation": "最终公开 C/Bash fence 实编译：leaf288 static，caller432 static，dynamic_frame48 dynamic；同对象运行caller(3)与合法4096字节VLA路径退出0。数字仅该构建，不宣称测得任务栈峰值或板端界。",
+      "unmeasured": "dynamic,bounded 未实测；调用栈最坏上界、IRQ/RTOS context和真实high-water均仅官方依据/not-run。"
+    }
+  ],
+  "export_findings": {
+    "implementation": "targets.py::_render_support_files 只复制已选 asset 自身支持文件；不跟随跨 Skill 相对依赖。",
+    "profiles": "core/personal-core/team-core 有systematic无unit；incident 有systematic/static/performance无unit；research-intake 有static无systematic/unit。",
+    "decision": "完整sanitizer归systematic；unit/static只条件交接Skill名并保留不可用边界，不硬跨目录引用。"
+  },
+  "budget": {
+    "baseline_owned_bytes": 26145,
+    "limits": "原8 profile ratchet保持；incident-response 46565/46612仅47B。删重复而非删工具/边界；不把字节变化当Token或模型收益。",
+    "status": "Two final clarifications updated owned byte deltas; prior shared profile snapshot retained historically, root owns final combined ratchet.",
+    "owned_skill_net_bytes": 1688,
+    "incident_owned_net_bytes": -5,
+    "unit_net_bytes": 1693
+  },
+  "rejected_or_deferred": [
+    "Trail of Bits property 的矛盾 assume 例不能宣传空输入照样PASS：以 Hypothesis Unsatisfiable/health check 官方语义纠正。",
+    "不照搬 ASan 20TB=真实RSS 或默认-rss_limit_mb=0；保持有界内存/时间。",
+    "不照搬任意uint8_t*到uint32_t*读取（对齐/aliasing），不为速度用ASan recover掩盖报告。",
+    "coverage-analysis 的导出/错误吞并示例不照搬；只吸收匹配构建、SUT reachability和回放方法，未执行其脚本。",
+    "Zephyr kconfig ref声称.conf不加CONFIG_，与官方文档冲突，拒绝；不普遍强制thread analyzer或电源状态。",
+    "Zephyr功耗脚本仅作只读参考；模型估算/占空比警告不得当实际电池寿命或功耗证据。",
+    "Intel通用IPC阈值、总是SIMD和sudo/perf配置建议不采纳；license内外不一致不复制。",
+    "Linux fail-at-N unwind候选有官方方法但现有driver/fault技能已覆盖关键恢复，缺具体新缺口不为凑数添加。"
+  ],
+  "host_evidence": {
+    "directory": "/workspace/scratch/771b38332ec2/domain-host-probes",
+    "raw_report": "probe_results.json",
+    "stateful": {
+      "cases": 121,
+      "steps": 426,
+      "counterexample": [
+        1,
+        0,
+        2,
+        0
+      ],
+      "actual": [
+        "ok",
+        0,
+        "ok",
+        0
+      ],
+      "expected": [
+        "ok",
+        0,
+        "ok",
+        1
+      ],
+      "replay": [
+        "ok",
+        0,
+        "ok",
+        0
+      ],
+      "fixed_pass": 121
+    },
+    "available": "gcc Debian14.2.0-19; Bash/Python",
+    "missing": [
+      "rtk",
+      "clang",
+      "clang++",
+      "llvm-profdata",
+      "llvm-cov",
+      "perf",
+      "cmake",
+      "ninja",
+      "cargo",
+      "rustc",
+      "valgrind",
+      "hypothesis"
+    ],
+    "effects": "只隔离scratch编译/程序；无第三方脚本执行、无安装、无设备/网络采集",
+    "public_fence_raw_report": "/workspace/scratch/771b38332ec2/domain-host-probes/public-fences/diagnostics.json",
+    "public_fence_raw_report_sha256": "64f4ad942410d2cf8059fbcedbf26d05a15a76ce1cbe70bf06a3524351b548c6",
+    "public_fence_source_files": [
+      {
+        "path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-unit-test-embedded/references/property-stateful-tests.md",
+        "sha256": "2f78fcf354c527fa12fb72c54e87f88882a45f7f7296647bd1184a9005316edf"
+      },
+      {
+        "path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-systematic-debugging/references/sanitizer-validation.md",
+        "sha256": "42e0c636ad9c0d74546cda1c3c5412e5ba24868030a669662bdd7930ce48e210"
+      },
+      {
+        "path": "/workspace/scratch/771b38332ec2/agent-dev-kit-external/skills/adk-performance-profiling-embedded/references/mcu-memory-footprint.md",
+        "sha256": "29add9e8e457932d195282b80364ecbc2f31e724d3fd509c0ba154e1fc3e486a"
+      }
+    ],
+    "public_fence_scope": {
+      "stateful": "finite standard-library host enumeration; 0 model/fuzzer/board runs",
+      "sanitizer": "GCC host UBSan only",
+      "stack": "static/dynamic .su and allowed VLA execution; no measured runtime peak or MCU upper bound",
+      "not_run": [
+        "ASan",
+        "TSan",
+        "Clang",
+        "Hypothesis",
+        "libFuzzer",
+        "dynamic,bounded example",
+        "RTOS/IRQ/high-water board observation"
+      ]
+    },
+    "current_fence_equivalence": "/workspace/scratch/771b38332ec2/domain-t3-clarifications.json"
+  },
+  "limitations": [
+    "所有26项均源码审阅与方法决定，不声称每项都需要文本修改。",
+    "未作任何模型评测；success/token/cost/latency与板端性能not-measured/not-run。",
+    "没有以单次host绿色推断目标内存/并发/IRQ/DMA或最坏栈安全。",
+    "原始错误日志和source-only证据留scratch；父代理审查后决定公开内容。"
+  ],
+  "implementation": {
+    "status": "frozen-for-root-review",
+    "frozen_at": "2026-11-15T14:19:01.173364+00:00",
+    "owned_changed_files": [
+      {
+        "path": "skills/adk-performance-profiling-embedded/SKILL.md",
+        "sha256": "c4c6b3e039bc022224a832d146f833b4ca9b69eefc08ee6f3b4a7f53dbaf2a3a",
+        "bytes": 3094,
+        "baseline_bytes": 3919,
+        "byte_delta": -825
+      },
+      {
+        "path": "skills/adk-performance-profiling-embedded/references/mcu-memory-footprint.md",
+        "sha256": "29add9e8e457932d195282b80364ecbc2f31e724d3fd509c0ba154e1fc3e486a",
+        "bytes": 4583,
+        "baseline_bytes": 2533,
+        "byte_delta": 2050
+      },
+      {
+        "path": "skills/adk-static-analysis-c-cpp/SKILL.md",
+        "sha256": "285a91f97eec057220e0f0e12f6070c1a2011e511523f8f2287190747a5e107a",
+        "bytes": 3405,
+        "baseline_bytes": 4032,
+        "byte_delta": -627
+      },
+      {
+        "path": "skills/adk-systematic-debugging/SKILL.md",
+        "sha256": "dec791825d8b05166718bfcc0e7190bd4d4da253d610ea45702bc81fe23b722e",
+        "bytes": 3142,
+        "baseline_bytes": 6133,
+        "byte_delta": -2991
+      },
+      {
+        "path": "skills/adk-systematic-debugging/references/sanitizer-validation.md",
+        "sha256": "2d708bd56c0147437a53fe568ae483d41be10dd3481d691485d9db48cdc89fdd",
+        "bytes": 2463,
+        "baseline_bytes": 0,
+        "byte_delta": 2463
+      },
+      {
+        "path": "skills/adk-systematic-debugging/references/tight-feedback-loop.md",
+        "sha256": "8f94f087b206d6bccb0a253231e9aa3bbe0a614b3be563e5d6c23d0da25672ab",
+        "bytes": 1187,
+        "baseline_bytes": 1262,
+        "byte_delta": -75
+      },
+      {
+        "path": "skills/adk-unit-test-embedded/SKILL.md",
+        "sha256": "dd6bb63fe1b749a5d24767ddc8819d3f66c7dfd8cba94bbc1fb8fc1a88563db3",
+        "bytes": 3068,
+        "baseline_bytes": 4104,
+        "byte_delta": -1036
+      },
+      {
+        "path": "skills/adk-unit-test-embedded/references/embedded-tdd-matrix.md",
+        "sha256": "f244f5966faf07639c7cd3e94d6edaafe4489754963bd0c09b0279ba4b91b642",
+        "bytes": 783,
+        "baseline_bytes": 1369,
+        "byte_delta": -586
+      },
+      {
+        "path": "skills/adk-unit-test-embedded/references/property-stateful-tests.md",
+        "sha256": "393b50c821794982d2e482e99ece5f9a6753bfe7c36b37752f2b3af950fde1a4",
+        "bytes": 3315,
+        "baseline_bytes": 0,
+        "byte_delta": 3315
+      },
+      {
+        "path": "tests/test_external_domain_methods.py",
+        "sha256": "13bc2eb0f7262dc727f18e199e37f00ce40ae950d162617e2ef1280285e0f2ec",
+        "bytes": 9442,
+        "baseline_bytes": 0,
+        "byte_delta": 9442
+      }
+    ],
+    "test_module": "tests/test_external_domain_methods.py",
+    "no_commit_push": true,
+    "no_contract_manifest_runner_changes": true,
+    "clarifications": "/workspace/scratch/771b38332ec2/domain-t3-clarifications.json"
+  },
+  "verification": {
+    "dedicated": {
+      "command": "PYTHONPATH=src python3 -m unittest tests.test_external_domain_methods -v",
+      "tests": 4,
+      "skips": 0,
+      "status": "pass"
+    },
+    "existing_and_dedicated": {
+      "command": "PYTHONPATH=src python3 -m unittest tests.test_external_domain_methods tests.test_skill_trigger_matrix tests.test_skill_content_contract tests.test_skill_governance tests.test_skill_portfolio_quality tests.test_skill_quality_methods -v",
+      "tests": 65,
+      "skips": 0,
+      "status": "pass",
+      "raw_log": "/workspace/scratch/771b38332ec2/domain-targeted-tests.log",
+      "raw_sha256": "fe7317ff046e77f7b037431d779a137ed38a136dd47d1639afa263312ead2c20"
+    },
+    "discovery": {
+      "positive_prompts": 6,
+      "negative_prompts": 8,
+      "surfaces": [
+        "production match_text isolated Skill",
+        "production match_text full catalog auto"
+      ],
+      "authority": "all these prompts retain mutation_permission=deny",
+      "scope": "deterministic catalog behavior only, not native host/model quality"
+    },
+    "profiles_raw": "/workspace/scratch/771b38332ec2/domain-profile-ratchets.json",
+    "profiles_snapshot": [
+      {
+        "profile": "core",
+        "full_source_bytes": 174381,
+        "status": "pass",
+        "failures": []
+      },
+      {
+        "profile": "embedded-fullstack",
+        "full_source_bytes": 316936,
+        "status": "fail",
+        "failures": [
+          "potential_full_source_bytes grew: actual=316936 ratchet=316854"
+        ]
+      },
+      {
+        "profile": "incident-response",
+        "full_source_bytes": 46524,
+        "status": "pass",
+        "failures": []
+      },
+      {
+        "profile": "large-refactor",
+        "full_source_bytes": 323818,
+        "status": "fail",
+        "failures": [
+          "potential_full_source_bytes grew: actual=323818 ratchet=323328"
+        ]
+      },
+      {
+        "profile": "personal-core",
+        "full_source_bytes": 192889,
+        "status": "pass",
+        "failures": []
+      },
+      {
+        "profile": "release-hardening",
+        "full_source_bytes": 157913,
+        "status": "pass",
+        "failures": []
+      },
+      {
+        "profile": "research-intake",
+        "full_source_bytes": 118692,
+        "status": "pass",
+        "failures": []
+      },
+      {
+        "profile": "team-core",
+        "full_source_bytes": 212063,
+        "status": "pass",
+        "failures": []
+      }
+    ],
+    "remaining": "Root owns final frozen full suite, independent review and release.",
+    "final_clarifications": {
+      "schema": "adk-domain-t3-clarifications/v1",
+      "recorded_at": "2026-11-15T14:19:01.173364+00:00",
+      "status": "frozen-for-root-review",
+      "changes": [
+        {
+          "path": "skills/adk-unit-test-embedded/references/property-stateful-tests.md",
+          "before_sha256": "2f78fcf354c527fa12fb72c54e87f88882a45f7f7296647bd1184a9005316edf",
+          "after_sha256": "393b50c821794982d2e482e99ece5f9a6753bfe7c36b37752f2b3af950fde1a4",
+          "before_bytes": 3279,
+          "after_bytes": 3315,
+          "byte_delta": 36,
+          "fence_body_sha256": [
+            "ce905f20f069f914f8ced3bcde27b5b240ea34451dc241618096995a0886fa27"
+          ],
+          "fence_bodies_byte_identical": true
+        },
+        {
+          "path": "skills/adk-systematic-debugging/references/sanitizer-validation.md",
+          "before_sha256": "42e0c636ad9c0d74546cda1c3c5412e5ba24868030a669662bdd7930ce48e210",
+          "after_sha256": "2d708bd56c0147437a53fe568ae483d41be10dd3481d691485d9db48cdc89fdd",
+          "before_bytes": 2427,
+          "after_bytes": 2463,
+          "byte_delta": 36,
+          "fence_body_sha256": [
+            "925b6c15e791f619622563f469405e4896be209f24eb84715ef3de83708a8392",
+            "9b633797aea9f6520371f38334f85778aa6fe38a305f2bb3817dcb45757a0b33"
+          ],
+          "fence_bodies_byte_identical": true
+        }
+      ],
+      "code_fence_bodies_unchanged": true,
+      "verification": {
+        "command": "PYTHONPATH=src python3 -m unittest tests.test_external_domain_methods -v",
+        "tests": 4,
+        "skips": 0,
+        "result": "pass",
+        "raw_log": "/workspace/scratch/771b38332ec2/domain-t3-clarifications-tests.log",
+        "raw_log_sha256": "2b03446dcc8ef210d62ff91a7f0495f24b4836ae94f207ff318e389ab49b6add",
+        "diff_check": "pass"
+      },
+      "scope": "Only two prose/command clarifications; no code fence, framework or test-scope change."
+    }
+  },
+  "implementation_negative_results": [
+    {
+      "observation": "Initial bare property/stateful/sanitizer/stack trigger aliases selected non-domain or explanation prompts.",
+      "resolution": "Removed bare aliases; added domain/intent phrases. Production positive/near-miss/explanation/negation tests pass. Descriptions retain searchable nouns."
+    },
+    {
+      "observation": "New sanitizer diagnosis wording collided with existing production-field-readiness routing; negative stack noun phrase was not rejected with an intervening assessment verb.",
+      "resolution": "Use sanitizer取证 and 评估MCU/RTOS栈上界 task phrases; no matcher/manifest modifications."
+    },
+    {
+      "observation": "Initial descriptions dropped exact exclusion markers and single-test discovery wording.",
+      "resolution": "Restored 单元测试/非/无指标/不用于 boundaries; all original description contracts pass."
+    },
+    {
+      "observation": "Initial draft exceeded source budgets.",
+      "resolution": "Consolidated duplicate workflow/quality/templates, keeping technical methods and target/error boundaries. Report exact latest profile failures without raising limits."
+    },
+    {
+      "observation": "Manual module import lacked PYTHONPATH=src.",
+      "resolution": "Use repository source path for actual commands; no package installation or wrapper."
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 ---
 name: adk-static-analysis-c-cpp
 description: "用于 C/C++ 静态分析告警分级、根因追踪与误报确认，并补最小复现；不用于把单次扫描当作完整功能或动态安全验收。"
-version: 1.0.5
+version: 1.0.6
 last_updated: 2026-11-15
 triggers:
   - "静态分析"
@@ -20,38 +20,33 @@ constraints:
 # adk-static-analysis-c-cpp
 
 ## Goal
-定位静态缺陷，给出可复验的修复与误报依据。
-
-## Prerequisites
-确认编译数据库、分析配置和规则严重级别。
+定位静态缺陷；冻结编译数据库、规则/严重级别，保留修复与误报依据。
 
 ## Target Eligibility（按目标分流，非一次跑全部工具）
-- `linux-embedded`：核 kernel/userspace、交叉编译数据库、sysroot；只选目标/宿主支持的工具。
-- `mcu-rtos`：核 RTOS、MCU ABI、编译器、链接脚本、构建变体；Zephyr 的 Kconfig/Devicetree 不通用于其他工程。
-- `mcu-baremetal`：按无 libc/宿主 OS 的约束选择告警、ELF/map、MISRA 和静态路径，不默认存在进程或文件系统。
-- 缺匹配的 compile_commands/toolchain、target 或授权，标 `not-applicable / not-scanned`；零告警不等于零缺陷。安装、许可证、固件写入需独立权限。
+- `linux-embedded`：kernel/userspace、交叉编译数据库、sysroot、工具支持。
+- `mcu-rtos`：RTOS/ABI、compiler/linker script/变体；Zephyr Kconfig/Devicetree 不通用。
+- `mcu-baremetal`：无 libc/OS、进程/文件系统时选告警、ELF/map、MISRA/静态路径。
+- 缺匹配 compile_commands/toolchain/target 或授权记 `not-applicable / not-scanned`；安装/许可证/固件写入需独立权限。
 
 ## Workflow
-1. 规则基线设定：按项目风险选择规则集。
-2. 源变化选对应 translation units（TU）；头文件按依赖文件/构建图选消费者 TU，规则/宏/构建变化选受影响目标。范围无法证明时扫该目标完整编译数据库，不能跳过仅 `.h/.hpp` 的变化。
-3. 带 TU、target flags、header filter 扫描，输出位置、规则与级别；头文件不能脱离构建上下文单独分析。
-4. 去噪与归因：剔除误报并保留依据。
-5. 整改优先级：优先处理内存安全、并发、未定义行为问题。
-6. 回归确认：修复后重跑受影响 TU 并比对残留问题，不以过滤修改行代替完整路径分析。
+1. 源变化选 translation units（TU）；头文件按依赖图选消费者，规则/宏/构建变化选目标。范围不明扫目标完整库，不跳过仅 `.h/.hpp` 变化。
+2. 带 TU、target flags、header filter 扫描，记录位置/规则/级别；头文件保留构建上下文，优先内存/并发/UB。
+3. 修复重跑受影响 TU，比对残留，不以修改行过滤代替路径分析；零告警不等于零缺陷。
+4. 动态复核按需交已安装的 `adk-systematic-debugging` sanitizer 方法，不可用记 `not-run`。插桩/运行与扫描分开留证，UBSan 报警即使 exit 0 也不通过。
 
 ## Commands
-路径来自真实构建；规则按 `.clang-tidy`、cppcheck/PVS 配置选择，不一次运行全部工具：
+按真实构建及 `.clang-tidy`、cppcheck/PVS 配置选工具：
 ```bash
 clang-tidy -p build src/example.c
 cppcheck --enable=warning,style,performance --project=compile_commands.json
 ```
 
 ## 缺陷严重级别映射
-按项目风险映射：Blocker（越界/UAF/空指针）阻断；Major（溢出/未初始化/泄漏）按 SLA 整改；Minor 风格与 Info 优化按需处理，不设通用时限。
+按风险映射：Blocker（越界/UAF/空指针）阻断或批准豁免；Major（溢出/未初始化/泄漏）有 owner/SLA；Minor 风格、Info 优化按需。
 
 ## CI 集成示例
 
-按受信 `BASE_SHA/HEAD_SHA` 和构建依赖选 TU；纯文档可不扫描，仅无 .c/.cpp 变化不够。以下适用 Ubuntu/CMake：用真实 preset/toolchain 生成数据库，缺依赖映射时分析全部 TU；不同工具规则不可替代。
+受信 `BASE_SHA/HEAD_SHA` 与依赖选 TU；纯文档可免，仅无 .c/.cpp 变化不够。Ubuntu/CMake 例：真实 preset/toolchain 生成数据库，缺依赖图扫全库；工具规则不可替代。
 ```yaml
 static-analysis:
   steps:
@@ -70,15 +65,4 @@ static-analysis:
         PY
 ```
 
-核数据库、规则、完成的 TU 与头文件范围；空库、缺工具、解析失败记 `not-scanned`。用仅改头文件的已知告警验证 CI 非零。PR/fork 保持受信触发与 secret 隔离。依据：https://clang.llvm.org/extra/clang-tidy/ 。
-## Evidence Template
-```md
-- Rule Set:
-- Scan Summary (B/M/m):
-- Top Blockers:
-- False Positive Notes:
-- Re-scan Delta:
-```
-
-## Quality Gate
-blocker 清零或有批准豁免，major 有整改计划与 owner；误报/抑制须留依据。结果可复跑可比对；配置故障先修复，不能将未扫描记成功。
+交付数据库/规则、完成 TU/头文件范围、分级数量/blocker、误报/抑制依据及 re-scan delta。空库/缺工具/解析失败记 `not-scanned`，先修配置；仅改头文件的已知告警须使 CI 非零。PR/fork 受信触发、secret 隔离。依据：https://clang.llvm.org/extra/clang-tidy/ 。
