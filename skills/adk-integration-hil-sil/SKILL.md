@@ -1,8 +1,8 @@
 ---
 name: adk-integration-hil-sil
 description: "用于软件在环与硬件在环的集成测试、场景配置与结果证据编排；不用于仅做单元测试或绕过真实设备操作授权。"
-version: 1.0.2
-last_updated: 2026-11-10
+version: 1.0.3
+last_updated: 2026-11-15
 triggers:
   - "集成测试"
   - "HIL测试"
@@ -20,8 +20,7 @@ constraints:
 # adk-integration-hil-sil
 
 ## Goal
-- 通过 HIL/SIL 组合验证系统级行为和回归稳定性。
-- 建立可重复、可自动化的嵌入式集成测试流程。
+用目标工程的 SIL/HIL 验证系统行为与回归，保留可复跑证据。
 
 ## Prerequisites
 - 锁定设备族、board revision、固件 hash、runner、资源占用、受控 HIL operator 和安全恢复路径。
@@ -30,7 +29,7 @@ constraints:
 
 ## Workflow
 1. **分层**：区分 host-unit、compile-only、SIL/QEMU、HIL、人工板级和量产资格；哪层实测就只报告哪层。
-2. **确认执行后端**：以当前仓库的配置和真实命令为准；记录 compile-only/host/emulator/board-runner，`ctest` 在目标未注册 runner 时不等于真机运行。
+2. **执行后端**：按真实命令区分 compile-only/host/emulator/board-runner；未注册目标 runner 时 CTest 通过不证明板上运行。
 3. **资源隔离**：冻结构建输出、测试二进制、缓存、端口、串口、rig 和 device identity；共享资源禁止并行运行。
 4. **SIL**：按真实构建/仿真入口执行，采集架构、模拟精度、未覆盖硬件行为和原始证据。
 5. **HIL preflight**：只读核对 device/firmware、测试硬件、故障停止条件和健康恢复；需要刷写或改变设备状态时另交授权 operator。
@@ -39,11 +38,12 @@ constraints:
 8. **交付**：说明各层 pass/fail/not-run、依赖与残留缺口；本 Skill 不单独批准量产。
 
 ## Commands
-以下命令仅适用于**已验证使用 CMake/CTest 的工程**，不是任意项目通用入口：
+仅适用于已核实使用 CMake/CTest 的工程：
 ```bash
 ctest --test-dir build/sil --show-only=json-v1
-ctest --test-dir build/sil --output-on-failure
+ctest --test-dir build/sil --output-on-failure --no-tests=error
 ```
+发现与执行使用同一配置/筛选；空集/全禁用/筛空须失败，退出 0 不把 skip/not-run 变成 pass。
 pytest 工程须先检查实际插件/选项；目标不存在时不得猜测 `--board` 或 `--port`。现场命令、rig 与固件刷写由项目提供。
 
 ## Budget / Retry

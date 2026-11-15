@@ -1,0 +1,2282 @@
+diff --git a/.version-lock b/.version-lock
+index 259c051..c06a041 100644
+--- a/.version-lock
++++ b/.version-lock
+@@ -1,3 +1,3 @@
+-version: 11.3.2
+-locked_at: 2026-11-15T05:03:22Z
++version: 11.3.3
++locked_at: 2026-11-15T05:58:41Z
+ locked_by: agent
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index 5f4829a..7f2c766 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -2,6 +2,14 @@
+ 
+ ## Unreleased
+ 
++### 11.3.3 — Reliable Skill commands and consistent task state
++
++- 统一 current-state 字段边界，使状态预检不再接受恢复入口会拒绝的过长或重复列表；保留既有错误码、严格输入和只读恢复语义。
++- 发布方法从明确核实的正式基线或首发路径保留完整提交历史；偶发测试方法使用真实结果、独立日志和逐次退出码，避免名称出现次数和 tee 把失败误作成功。
++- CMake 与 SIL/HIL 命令拒绝空测试集；协议离线分析输出可归属的包证据并识别空匹配；硬件调试先匹配内核/模块与重定位信息，再解释源码地址。
++- 对齐 Artifact 文档与已实现 workflow 状态，修复跨文件错误码候选扫描。完整复查 65 项现有 Skills，不新增身份、权限或运行时。
++- 回归与隔离真实工具示例仅证明所测任务边界；模型任务成功率、Token、成本和端到端时延仍未测量。
++
+ ### 11.3.2 — Task discovery, recovery and usable Skill workflows
+ 
+ - 修复 `catalog find` 只查名称/描述导致已声明任务表达无法找到 Skill 的问题；全部 65 项按正向 trigger 可检索，保留原类型范围与只读边界。
+diff --git a/CONTEXT.md b/CONTEXT.md
+index fb4e7d9..7347a27 100644
+--- a/CONTEXT.md
++++ b/CONTEXT.md
+@@ -1,7 +1,7 @@
+ # CONTEXT.md — agent-dev-kit 领域语言定义
+ 
+ > 文档状态：受机器门禁约束的领域上下文投影
+-> 产品版本：11.3.2
++> 产品版本：11.3.3
+ > 结构化单一事实源：`manifest.json`
+ 
+ ---
+diff --git a/README.md b/README.md
+index 8cd3d69..f6be1d2 100644
+--- a/README.md
++++ b/README.md
+@@ -28,7 +28,7 @@ ADK 不再在 README 中维护“候选 / 已发布 / live”之类可漂移的
+ - **Runtime conformance**：以 target/runtime receipt 与证据级别 `static / smoke / native / certified` 为权威。
+ - **Product qualification**：由消费方/产品仓的 qualification 与 field evidence 独立决定，不由 ADK 组件版本继承。
+ 
+-`manifest.json` 当前 source version 为 `11.3.2`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
++`manifest.json` 当前 source version 为 `11.3.3`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
+ 
+ 8.0.0 维护 CLI 迁移：`performance.sh optimize`、`auto-ops.sh cleanup/optimize` 仅输出有界只读计划，JSON 使用 `adk-maintenance-plan/v1` 与 `status=planned`；维护 `--apply` 返回 blocked、exit 2，不再自动删除文件或修改权限。调用方必须移除维护 `--apply` 并按 `applied=false` 处理报告；见 [维护迁移说明](docs/changes/20261006-comprehensive-contracts/design.md)。
+ 
+diff --git a/docs/changes/20261115-skill-method-reliability/audit.md b/docs/changes/20261115-skill-method-reliability/audit.md
+new file mode 100644
+index 0000000..7a9418e
+--- /dev/null
++++ b/docs/changes/20261115-skill-method-reliability/audit.md
+@@ -0,0 +1,84 @@
++# 全部 65 项 Skill 深审与处理决定
++
++本轮实施基线为 `1282c78b145afca670cf8e5733d80bd3c61f5cfb`（11.3.2，PR #267）。两组初审分别读取原本地候选 `092abfed…` / `597e1ddb…`；逐路径核验表明这些实际读取的 Skill 与消费者内容同合并基线一致。保留原读取身份，不改写历史执行 SHA。
++
++覆盖 56 core + 9 optional，共 65 个唯一身份：**8 项方法修复、2 项共享消费者实现修复、55 项保留**。保留表示本轮没有确认需要修改的具体缺陷，不表示全平台运行认证。前序 catalog 的全部 65 项检索改进继续保留。
++
++- [领域 23 项实际阅读与决定](evidence/coverage-domain.json)
++- [任务与可选 42 项实际阅读与决定](evidence/coverage-task.json)
++
++以下按 Manifest 顺序列出本轮决定；原 JSON 保存实际读取的正文、references、README 与相关消费者路径。
++
++| Skill | 决定 | 具体依据 |
++|---|---|---|
++| `adk-runtime-router` | 保留 | 唯一primary、可信inventory和fit检查明确；未以micro标签创建低风险执行权限。 |
++| `adk-context-engineering` | 保留 | 稳定规则与动态证据分开，按需回读raw pointer，恢复信息边界完整。 |
++| `adk-token-context-governance` | 保留 | 压缩保留高风险原文回退，ADK源码检查已有适用范围，不把字节数当Token实测。 |
++| `adk-requirements-triage` | 保留 | brief、execution-handoff和high-risk分流避免重复访谈，已有明确任务交还实施。 |
++| `adk-structured-requirements-questioning` | 保留 | Explore/Challenge按决策依赖推进，明确退出条件和只读探索边界。 |
++| `adk-repo-prompt-analysis` | 保留 | 结论追实际调用点、角色和动态输入，不从description推断实现或执行外部脚本。 |
++| `adk-skill-deep-analysis` | 保留 | 有界发现与只读方法对照保留来源、反例和实施交接，未知效果不冒充实测。 |
++| `adk-lightweight-planning` | 保留 | 只读计划按实际行动规模裁剪，直接实施请求退出，不强制无用步骤。 |
++| `adk-task-breakdown` | 保留 | 单切片、多切片和机器派工区分，真实依赖/共享文件决定并行边界。 |
++| `adk-parallel-agent-governance` | 保留 | 收益准入、单写者、最小工作包与最终整合均明确，不用子任务成功替代目标。 |
++| `adk-worktree-governance` | 保留 | 明确stay-current与隔离条件，保护dirty状态并保留创建/清理授权来源。 |
++| `adk-context-compress-handoff` | 保留 | 摘要保留最新目标、排除项、原证据和最多三个下一动作，不提升为长期事实。 |
++| `adk-interface-contract-design` | 方法修复 | 已复现rg输出文件名前缀导致跨头文件相同错误码漏检，改为有边界的字面值候选扫描。 |
++| `adk-adr-writer` | 保留 | 按风险记录真实取舍，reader-only检查不伪造独立核验，定向修改保留事实。 |
++| `adk-component-api-stability` | 保留 | 已分别验证源码 API、旧消费者原字节 ABI 与行为，工具错误和缺类型信息不会作为兼容通过。 |
++| `adk-register-map-design` | 保留 | W1C/read-clear/FIFO 与 reserved 位避免盲目 RMW，并绑定访问宽度、字节序与手册版本；无确认的新缺陷。 |
++| `adk-bsp-analysis` | 保留 | 已区分 Linux/RTOS/裸机入口，并以源码、硬件章节和历史证据串联资源依赖；本轮无确认的新方法缺陷。 |
++| `adk-goal-authoring` | 共享实现修复 | 公开resume拒绝的过长/重复状态列表曾被state-check接受，共享字段约束并保留原reason。 |
++| `adk-planning-execution-loop` | 共享实现修复 | 其公开state-check入口现在采用恢复同一字段边界，避免成功预检后无法恢复。 |
++| `adk-driver-implementation` | 保留 | 覆盖 partial init、资源回收、IRQ/DMA ownership、cancel/reset 与 late completion；本轮未确认具体实现反例。 |
++| `adk-driver-bringup-checklist` | 保留 | 已有 minimal/functional/soak 分层、主动探测与 MMIO 读副作用判定，未把最小 bring-up 冒充量产验证。 |
++| `adk-bsp-porting-playbook` | 保留 | 启动链分层、目标制品身份、最小启动验证与恢复路径已有明确顺序；未确认需改的新反例。 |
++| `adk-rtos-task-design` | 保留 | 复核已修的固定优先级响应时间递推、阻塞/IRQ 干扰项及适用前提；未将 trace 样本等同 WCET 上界。 |
++| `adk-interrupt-dma-patterns` | 保留 | ISR API 优先级、CPU/device 所有权、cache-line/方向及取消迟到完成已有区分；本轮未得额外可复现缺陷。 |
++| `adk-protocol-stack-integration` | 方法修复 | 真实 TShark 证明原 -q 示例成功却无分析输出；改为有帧输出的离线过滤，零目标证据标 partial，主动采集有界且失败不消费旧文件。 |
++| `adk-cmake-cross-build` | 方法修复 | 真实 CTest 反例证明空/全禁用/筛空原命令退出 0；修正为空集失败并保留目标执行后端和 skip 边界。 |
++| `adk-code-simplification` | 保留 | 现有简化示例已保留后续cleanup，真实行为基线与调用负担替代行数判断。 |
++| `adk-systematic-debugging` | 保留 | 最小可失败信号、单变量因果与停止条件完整，不强制凑Why层数或无关反例。 |
++| `adk-embedded-debug-transport` | 保留 | 连接与根因分析边界分开，attach/halt/continue 和 MMIO 读副作用未被误归为被动观察。 |
++| `adk-embedded-remote-debug-log-triage` | 保留 | 分层连通性、ADB 语义确认、失联后停止扩大及恢复重做 preflight 已形成具体流程；本轮无新增机制反例。 |
++| `adk-offline-core-dump-triage` | 保留 | 已有 binary/libs/BuildID 关联、指定 GDB 和先设 sysroot 的 batch 顺序；缺符号与映射保持 partial。 |
++| `adk-hardware-debugging` | 方法修复 | 直接对 runtime PC 使用 vmlinux 地址查询缺少所属和重定位前提；改为先核内核/模块/段，再选 ELF 和可信地址映射。 |
++| `adk-performance-profiling-embedded` | 保留 | 已分开瓶颈诊断与候选比较、真实活动负载和各 KPI 口径，KWS 划分/阈值及 host/板端证据限制明确。 |
++| `adk-test-strategy` | 保留 | 已区分只读策略和授权实施，测试层级与实际风险匹配，保留真实red/green和资源隔离。 |
++| `adk-unit-test-embedded` | 保留 | 已区分设计清单与实际测试交付，使用公开可观察 seam 并保留 host/compile-only/SIL/HIL 多层组合限制。 |
++| `adk-integration-hil-sil` | 方法修复 | 修复真实 CTest 的空集成功，统一发现/运行配置与筛选，同时保留 host/SIL/HIL、skip/not-run 和最终健康边界。 |
++| `adk-embedded-diagnostic-harness` | 保留 | 按 expected code/invoke_ret 与前置条件判断，区分 harness、产品和环境失败，不一概把非零设备码当失败。 |
++| `adk-fault-injection-recovery` | 保留 | 故障类型按项目风险选择，watchdog 验证条件化，检测/恢复时延和恢复后功能检查未被省略。 |
++| `adk-artifact-gating` | 方法修复 | 主文approved状态无法通过现有workflow的PASS门禁，统一现有状态语义与模板必需字段。 |
++| `adk-pilot-framework` | 保留 | 现有smoke/收益比较与任务产物验收已分离，环境阻塞不等于能力失败。 |
++| `adk-verification-before-completion` | 保留 | checkpoint与goal-final按适用风险分开，同快照证据及未验证边界明确。 |
++| `adk-code-review-loop` | 保留 | feedback/targeted/whole-diff分流、真实快照和独立性保留，未把局部复核当整体通过。 |
++| `adk-repo-drift-remediation` | 保留 | 问题地图和源事实先于治理修复，用户改动保护及共享触点串行规则保持。 |
++| `adk-static-analysis-c-cpp` | 保留 | 已按实际 compilation database 选择 TU 和头文件消费者，空库/解析失败不会作为零告警成功，未重复上轮修复。 |
++| `adk-commit-pr-quality-gate` | 保留 | message-only与PR/high-risk分流，复用适用回执而不重复无关验证。 |
++| `adk-release-versioning` | 方法修复 | 真实Git复现历史漏项、首发吞错及非发布tag误选；显式基线/首发并保留完整hash与正文。 |
++| `adk-production-field-readiness` | 保留 | 现场 readiness 要真实烧录/boot/产测/OTA/回滚材料，生产率试点又单列基线和时间口径；本轮未确认新方法错误。 |
++| `adk-embedded-release-orchestration` | 保留 | prepare/publish/device-deploy 与多 MCU 部分成功恢复已分开，逐组件身份/健康/回滚证据清楚；无新确认缺陷。 |
++| `adk-embedded-storage-layout-migration` | 保留 | 已有分区保留策略、配置/产物/运行态对齐、host dry-run 与真实迁移回执分离；未发现新确认缺陷。 |
++| `adk-cross-team-handoff` | 保留 | lite/formal与pending/accepted界限明确，文档完成不推断实际签收或权限转移。 |
++| `adk-branch-closeout` | 保留 | 只执行请求的收尾操作，远端未知先对账，合并后fresh-main与清理边界明确。 |
++| `adk-after-action-review` | 保留 | 普通复盘与晋级分离，没有复用价值可无候选，不制造降本或因果证据。 |
++| `adk-memory-curator` | 保留 | 只读候选整理、冲突与晋级审查明确，secret检索仅列文件名且说明覆盖限制。 |
++| `adk-archive-governance` | 保留 | 已有归档的meta/topic/hash修复遵循目标检查入口，不擅自删除历史或提升全局规则。 |
++| `adk-knowledge-archive` | 保留 | 新归档保留来源和适用边界，未知路径阻塞、不虚构验证或提升长期指导。 |
++| `adk-engineering-growth-review` | 保留 | index-first和明确跨项目授权限制读取，趋势需跨时点证据，不凑训练建议。 |
++| `adk-external-practice-absorption` | 保留 | 来源、独立owner决策、实施与验证角色分开；已批准续做不重启intake。 |
++| `adk-data-fetch` | 保留 | 父项与两个可选子项独立安装，明确来源/权限与缺失拒绝，未假定父项隐式安装子项。 |
++| `adk-email-imap-fetch` | 保留 | 当前方法已限定EXAMINE、UIDVALIDITY/UID与BODY.PEEK，部分结果和逐封错误不会伪作完整获取。 |
++| `adk-fetch-url-content` | 保留 | 当前方法已限制origin/重定向/IP，提取保留链接语义并区分空壳、截断和完整结果。 |
++| `adk-test-flakiness-triage` | 方法修复 | 真实原命令误算失败、吞退出码且输出合成凭据值；改为真实逐轮证据、原退出码及仅变量名。 |
++| `adk-security-supply-chain` | 保留 | source-only/adoption/runtime分层，覆盖、误报和拒绝路径明确；静态零命中不被当作安全认证。 |
++| `adk-prose-revision` | 保留 | report/revise按请求分流，保留技术字面量与事实，不据文风判断作者身份或强造改动。 |
++| `adk-incident-rca-report` | 保留 | 已区分事实、已证因果和未决假设，5-Why按需且不虚构责任或恢复证据。 |
++| `adk-skill-composition-governance` | 保留 | 沿用canonical matcher，source-contract与真实行为评测分开，不新增第二路由权威。 |
++
++## 已证范围与保留边界
++
++真实工具复现使用隔离 CMake/CTest、TShark 离线自造 PCAP、GCC/addr2line 与 Linux helper 的 host ELF，以及临时 Git、进程和 workflow 消费者夹具。测试明确区分执行失败、空集、运行时 skip、零匹配、缺失映射与完整结果；不把退出 0 一概解释为任务成功。
++
++本轮没有真实模型 A/B、native Skill loading、设备/内核/HIL、实时网络抓包、邮箱或付费模型调用。模型成功率、Token、费用和端到端时延收益保持未测量；静态源体量及既有 profile 阈值单列，不能代替运行测量。E1 路由仍不可达，既有身份、安装选择与权限边界不改变。
+diff --git a/docs/changes/20261115-skill-method-reliability/design.md b/docs/changes/20261115-skill-method-reliability/design.md
+new file mode 100644
+index 0000000..f9e0e43
+--- /dev/null
++++ b/docs/changes/20261115-skill-method-reliability/design.md
+@@ -0,0 +1,24 @@
++# 设计与影响
++
++## 边界
++
++前序 [PR #267](https://github.com/jiying2007/agent-dev-kit/pull/267) 已在 8 项必需检查通过后正常 squash 合并为 `1282c78b145afca670cf8e5733d80bd3c61f5cfb`。新实现所在独立 worktree 已对齐这个内容相同的 main tree，原修改保持。当前候选为 11.3.3，以单独 PR 送审。发布顺序沿用既有 main CI → promotion → annotated tag → canonical release，前序版本发布完成后再合并本候选，避免使前序 promotion 的 current-main 绑定失效。
++
++前序 11.3.2 已完成主线 CI 与 canonical release，annotated tag 精确指向上述 main；其实际事件、必需检查和 GitHub 报告的制品摘要保存在 [前序交付观察](evidence/predecessor-release.json)。本候选仍须自己的完整验证和交付。
++
++## 实现原则
++
++- current-state 的字段约束只保留一个共享实现，两个公开消费者继续负责其各自文件读取、错误码格式、计划依赖和输出。复用现有 typed core，不复制状态权威；调用点先检索。
++- 发布示例显式接受已核实的 baseline 或首发选择，先得到完整真实历史再人工分类。不添加自动发布程序，不把任意最近 tag 当正式版本。
++- flaky 的统计方法解释 observation、failure、error、skip 和 missing 的区别；有界重复示例直接调用已审查的命令数组，不用 eval，不隐式扩大重跑或安装范围。
++- 专业命令只作最小必要修正，并保留工具、目标与证据适用条件。涉及 CTest、抓包、地址重定位的反例使用隔离的真实工具与合成输入，不访问设备或实时网络流量。
++- 主文保持任务入口，长示例只在既有 references 中按需加载。优先替换错误段落而不是叠加规则。
++- Artifact 与接口候选扫描只对齐已有实际行为，不创建新状态机或新的通过标准。
++
++## 验证与回滚
++
++共享代码用公开 CLI 的边界与重复值反例，保持原正常、拒绝、输出大小和无副作用测试。命令文档直接提取最终示例在临时 Git 仓、合成日志、离线 pcap 和最小 CMake 工程执行；不能用新增关键词断言冒充方法执行。
++
++复用既有测试入口承载必要回归，原 full suite、静态 CI 和 profile 阈值不放宽。工具缺失须保留 not-run/环境说明，不将缺工具算成功。独立 reviewer 只读核验冻结源码、原始结果和限制。
++
++回滚通过回退本候选；无数据、安装或 Manifest 身份迁移。新增拒绝只针对原 `resume` 已拒绝而 `state-check` 错误接受的状态，旧合法状态继续通过。
+diff --git a/docs/changes/20261115-skill-method-reliability/evidence/coverage-domain.json b/docs/changes/20261115-skill-method-reliability/evidence/coverage-domain.json
+new file mode 100644
+index 0000000..1c5bbc6
+--- /dev/null
++++ b/docs/changes/20261115-skill-method-reliability/evidence/coverage-domain.json
+@@ -0,0 +1,166 @@
++{
++  "scope": "23 core embedded/build/driver/protocol/debug/test Skills; source review is not runtime certification",
++  "reviewed_baseline_source": "092abfed44dabe74d13b2133dd57ac440c8455bb",
++  "implementation_workspace": "/workspace/scratch/771b38332ec2/agent-dev-kit-next",
++  "unique_skill_count": 23,
++  "additional_read_paths": [
++    "AGENTS.md",
++    "docs/agent-operating-rules.md",
++    "docs/embedded-constraints.md",
++    "docs/changes/20261115-skill-task-usability/audit.md"
++  ],
++  "items": [
++    {
++      "id": "adk-bsp-analysis",
++      "decision": "retain",
++      "reason": "已区分 Linux/RTOS/裸机入口，并以源码、硬件章节和历史证据串联资源依赖；本轮无确认的新方法缺陷。",
++      "read_paths": ["skills/adk-bsp-analysis/SKILL.md", "skills/adk-bsp-analysis/references/bsp-analysis-details.md"]
++    },
++    {
++      "id": "adk-bsp-porting-playbook",
++      "decision": "retain",
++      "reason": "启动链分层、目标制品身份、最小启动验证与恢复路径已有明确顺序；未确认需改的新反例。",
++      "read_paths": ["skills/adk-bsp-porting-playbook/SKILL.md"]
++    },
++    {
++      "id": "adk-cmake-cross-build",
++      "decision": "change",
++      "reason": "真实 CTest 反例证明空/全禁用/筛空原命令退出 0；修正为空集失败并保留目标执行后端和 skip 边界。",
++      "read_paths": ["skills/adk-cmake-cross-build/SKILL.md"]
++    },
++    {
++      "id": "adk-driver-bringup-checklist",
++      "decision": "retain",
++      "reason": "已有 minimal/functional/soak 分层、主动探测与 MMIO 读副作用判定，未把最小 bring-up 冒充量产验证。",
++      "read_paths": ["skills/adk-driver-bringup-checklist/SKILL.md"]
++    },
++    {
++      "id": "adk-driver-implementation",
++      "decision": "retain",
++      "reason": "覆盖 partial init、资源回收、IRQ/DMA ownership、cancel/reset 与 late completion；本轮未确认具体实现反例。",
++      "read_paths": ["skills/adk-driver-implementation/SKILL.md"]
++    },
++    {
++      "id": "adk-register-map-design",
++      "decision": "retain",
++      "reason": "W1C/read-clear/FIFO 与 reserved 位避免盲目 RMW，并绑定访问宽度、字节序与手册版本；无确认的新缺陷。",
++      "read_paths": ["skills/adk-register-map-design/SKILL.md"]
++    },
++    {
++      "id": "adk-rtos-task-design",
++      "decision": "retain",
++      "reason": "复核已修的固定优先级响应时间递推、阻塞/IRQ 干扰项及适用前提；未将 trace 样本等同 WCET 上界。",
++      "read_paths": ["skills/adk-rtos-task-design/SKILL.md"]
++    },
++    {
++      "id": "adk-interrupt-dma-patterns",
++      "decision": "retain",
++      "reason": "ISR API 优先级、CPU/device 所有权、cache-line/方向及取消迟到完成已有区分；本轮未得额外可复现缺陷。",
++      "read_paths": ["skills/adk-interrupt-dma-patterns/SKILL.md", "skills/adk-interrupt-dma-patterns/references/details.md", "skills/adk-interrupt-dma-patterns/references/rtos-isr-dma-diagnostics.md"]
++    },
++    {
++      "id": "adk-performance-profiling-embedded",
++      "decision": "retain",
++      "reason": "已分开瓶颈诊断与候选比较、真实活动负载和各 KPI 口径，KWS 划分/阈值及 host/板端证据限制明确。",
++      "read_paths": ["skills/adk-performance-profiling-embedded/SKILL.md", "skills/adk-performance-profiling-embedded/references/mcu-memory-footprint.md"]
++    },
++    {
++      "id": "adk-component-api-stability",
++      "decision": "retain",
++      "reason": "已分别验证源码 API、旧消费者原字节 ABI 与行为，工具错误和缺类型信息不会作为兼容通过。",
++      "read_paths": ["skills/adk-component-api-stability/SKILL.md"]
++    },
++    {
++      "id": "adk-hardware-debugging",
++      "decision": "change",
++      "reason": "直接对 runtime PC 使用 vmlinux 地址查询缺少所属和重定位前提；改为先核内核/模块/段，再选 ELF 和可信地址映射。",
++      "read_paths": ["skills/adk-hardware-debugging/SKILL.md", "skills/adk-hardware-debugging/references/mcu-fault-reset-wakeup.md"]
++    },
++    {
++      "id": "adk-offline-core-dump-triage",
++      "decision": "retain",
++      "reason": "已有 binary/libs/BuildID 关联、指定 GDB 和先设 sysroot 的 batch 顺序；缺符号与映射保持 partial。",
++      "read_paths": ["skills/adk-offline-core-dump-triage/SKILL.md"]
++    },
++    {
++      "id": "adk-embedded-debug-transport",
++      "decision": "retain",
++      "reason": "连接与根因分析边界分开，attach/halt/continue 和 MMIO 读副作用未被误归为被动观察。",
++      "read_paths": ["skills/adk-embedded-debug-transport/SKILL.md", "skills/adk-embedded-debug-transport/README.md"]
++    },
++    {
++      "id": "adk-embedded-remote-debug-log-triage",
++      "decision": "retain",
++      "reason": "分层连通性、ADB 语义确认、失联后停止扩大及恢复重做 preflight 已形成具体流程；本轮无新增机制反例。",
++      "read_paths": ["skills/adk-embedded-remote-debug-log-triage/SKILL.md", "skills/adk-embedded-remote-debug-log-triage/README.md", "skills/adk-embedded-remote-debug-log-triage/references/remote-adb-hil-contract.md"]
++    },
++    {
++      "id": "adk-embedded-diagnostic-harness",
++      "decision": "retain",
++      "reason": "按 expected code/invoke_ret 与前置条件判断，区分 harness、产品和环境失败，不一概把非零设备码当失败。",
++      "read_paths": ["skills/adk-embedded-diagnostic-harness/SKILL.md", "skills/adk-embedded-diagnostic-harness/README.md"]
++    },
++    {
++      "id": "adk-protocol-stack-integration",
++      "decision": "change",
++      "reason": "真实 TShark 证明原 -q 示例成功却无分析输出；改为有帧输出的离线过滤，零目标证据标 partial，主动采集有界且失败不消费旧文件。",
++      "read_paths": ["skills/adk-protocol-stack-integration/SKILL.md"]
++    },
++    {
++      "id": "adk-embedded-storage-layout-migration",
++      "decision": "retain",
++      "reason": "已有分区保留策略、配置/产物/运行态对齐、host dry-run 与真实迁移回执分离；未发现新确认缺陷。",
++      "read_paths": ["skills/adk-embedded-storage-layout-migration/SKILL.md"]
++    },
++    {
++      "id": "adk-embedded-release-orchestration",
++      "decision": "retain",
++      "reason": "prepare/publish/device-deploy 与多 MCU 部分成功恢复已分开，逐组件身份/健康/回滚证据清楚；无新确认缺陷。",
++      "read_paths": ["skills/adk-embedded-release-orchestration/SKILL.md", "skills/adk-embedded-release-orchestration/README.md", "skills/adk-embedded-release-orchestration/references/multi-mcu-ota-recovery.md"]
++    },
++    {
++      "id": "adk-production-field-readiness",
++      "decision": "retain",
++      "reason": "现场 readiness 要真实烧录/boot/产测/OTA/回滚材料，生产率试点又单列基线和时间口径；本轮未确认新方法错误。",
++      "read_paths": ["skills/adk-production-field-readiness/SKILL.md", "skills/adk-production-field-readiness/references/pilot-measurement-evidence.md"]
++    },
++    {
++      "id": "adk-fault-injection-recovery",
++      "decision": "retain",
++      "reason": "故障类型按项目风险选择，watchdog 验证条件化，检测/恢复时延和恢复后功能检查未被省略。",
++      "read_paths": ["skills/adk-fault-injection-recovery/SKILL.md"]
++    },
++    {
++      "id": "adk-integration-hil-sil",
++      "decision": "change",
++      "reason": "修复真实 CTest 的空集成功，统一发现/运行配置与筛选，同时保留 host/SIL/HIL、skip/not-run 和最终健康边界。",
++      "read_paths": ["skills/adk-integration-hil-sil/SKILL.md"]
++    },
++    {
++      "id": "adk-static-analysis-c-cpp",
++      "decision": "retain",
++      "reason": "已按实际 compilation database 选择 TU 和头文件消费者，空库/解析失败不会作为零告警成功，未重复上轮修复。",
++      "read_paths": ["skills/adk-static-analysis-c-cpp/SKILL.md"]
++    },
++    {
++      "id": "adk-unit-test-embedded",
++      "decision": "retain",
++      "reason": "已区分设计清单与实际测试交付，使用公开可观察 seam 并保留 host/compile-only/SIL/HIL 多层组合限制。",
++      "read_paths": ["skills/adk-unit-test-embedded/SKILL.md", "skills/adk-unit-test-embedded/references/embedded-tdd-matrix.md"]
++    }
++  ],
++  "not_counted_here": [
++    "adk-artifact-gating and adk-interface-contract-design were implemented by this owner but remain in the other auditor's 42-ID coverage set",
++    "adk-data-fetch, adk-fetch-url-content and adk-email-imap-fetch were delegated to deep_task_usability"
++  ],
++  "runtime_evidence": {
++    "results": "/workspace/scratch/771b38332ec2/domain-audit-repro/final-example-results.json",
++    "counterexamples": "/workspace/scratch/771b38332ec2/domain-audit-repro/results.json",
++    "capture_control_flow": "/workspace/scratch/771b38332ec2/protocol-capture-flow-review.json"
++  },
++  "unmeasured": [
++    "live capture, kernel/MCU/board execution, physical electrical/timing and HIL behavior",
++    "real source qualification by the isolated synthetic workflow fixtures",
++    "model task success, provider tokens, costs and end-to-end time improvements"
++  ]
++}
+diff --git a/docs/changes/20261115-skill-method-reliability/evidence/coverage-task.json b/docs/changes/20261115-skill-method-reliability/evidence/coverage-task.json
+new file mode 100644
+index 0000000..ce422c6
+--- /dev/null
++++ b/docs/changes/20261115-skill-method-reliability/evidence/coverage-task.json
+@@ -0,0 +1,420 @@
++{
++  "audit_source_commit": "597e1ddb035ec5be8b32a97f6b6908786d0c5a4a",
++  "audit_repository": "/workspace/scratch/771b38332ec2/agent-dev-kit",
++  "implementation_worktree": "/workspace/scratch/771b38332ec2/agent-dev-kit-next",
++  "scope": {
++    "core": 33,
++    "optional": 9,
++    "total": 42
++  },
++  "evidence": [
++    "/workspace/scratch/771b38332ec2/deep-task-usability/early-repros.json",
++    "/workspace/scratch/771b38332ec2/deep-task-usability/method-repros.json"
++  ],
++  "limitations": "正文/reference与定向实际消费者审查；未运行真实模型A/B、用户runtime、设备或邮箱。保留决定不是所有目标环境的资格认证。",
++  "skills": [
++    {
++      "id": "adk-adr-writer",
++      "decision": "retain",
++      "files_read": [
++        "skills/adk-adr-writer/SKILL.md"
++      ],
++      "reason": "按风险记录真实取舍，reader-only检查不伪造独立核验，定向修改保留事实。"
++    },
++    {
++      "id": "adk-after-action-review",
++      "decision": "retain",
++      "files_read": [
++        "skills/adk-after-action-review/SKILL.md",
++        "skills/adk-after-action-review/references/after-action-review.md",
++        "skills/adk-after-action-review/references/codify-decision.md",
++        "skills/adk-after-action-review/references/memory-candidate.md"
++      ],
++      "reason": "普通复盘与晋级分离，没有复用价值可无候选，不制造降本或因果证据。"
++    },
++    {
++      "id": "adk-archive-governance",
++      "decision": "retain",
++      "files_read": [
++        "skills/adk-archive-governance/SKILL.md",
++        "skills/adk-archive-governance/README.md"
++      ],
++      "reason": "已有归档的meta/topic/hash修复遵循目标检查入口，不擅自删除历史或提升全局规则。"
++    },
++    {
++      "id": "adk-artifact-gating",
++      "decision": "change",
++      "files_read": [
++        "skills/adk-artifact-gating/SKILL.md",
++        "skills/adk-artifact-gating/references/details.md"
++      ],
++      "reason": "主文approved状态无法通过现有workflow的PASS门禁，统一现有状态语义与模板必需字段。",
++      "implementation_owner": "deep_domain_methods"
++    },
++    {
++      "id": "adk-branch-closeout",
++      "decision": "retain",
++      "files_read": [
++        "skills/adk-branch-closeout/SKILL.md",
++        "skills/adk-branch-closeout/references/closeout-options.md"
++      ],
++      "reason": "只执行请求的收尾操作，远端未知先对账，合并后fresh-main与清理边界明确。"
++    },
++    {
++      "id": "adk-code-review-loop",
++      "decision": "retain",
++      "files_read": [
++        "skills/adk-code-review-loop/SKILL.md",
++        "skills/adk-code-review-loop/references/review-communication-guidance.md",
++        "skills/adk-code-review-loop/references/review-evidence-template.md",
++        "skills/adk-code-review-loop/references/review-feedback-fixtures.md",
++        "skills/adk-code-review-loop/references/review-governance-details.md"
++      ],
++      "reason": "feedback/targeted/whole-diff分流、真实快照和独立性保留，未把局部复核当整体通过。"
++    },
++    {
++      "id": "adk-code-simplification",
++      "decision": "retain",
++      "files_read": [
++        "skills/adk-code-simplification/SKILL.md",
++        "skills/adk-code-simplification/references/deep-module-design.md",
++        "skills/adk-code-simplification/references/details.md"
++      ],
++      "reason": "现有简化示例已保留后续cleanup，真实行为基线与调用负担替代行数判断。"
++    },
++    {
++      "id": "adk-commit-pr-quality-gate",
++      "decision": "retain",
++      "files_read": [
++        "skills/adk-commit-pr-quality-gate/SKILL.md",
++        "skills/adk-commit-pr-quality-gate/references/pr-risk-gates.md"
++      ],
++      "reason": "message-only与PR/high-risk分流，复用适用回执而不重复无关验证。"
++    },
++    {
++      "id": "adk-context-compress-handoff",
++      "decision": "retain",
++      "files_read": [
++        "skills/adk-context-compress-handoff/SKILL.md",
++        "skills/adk-context-compress-handoff/README.md"
++      ],
++      "reason": "摘要保留最新目标、排除项、原证据和最多三个下一动作，不提升为长期事实。"
++    },
++    {
++      "id": "adk-context-engineering",
++      "decision": "retain",
++      "files_read": [
++        "skills/adk-context-engineering/SKILL.md"
++      ],
++      "reason": "稳定规则与动态证据分开，按需回读raw pointer，恢复信息边界完整。"
++    },
++    {
++      "id": "adk-cross-team-handoff",
++      "decision": "retain",
++      "files_read": [
++        "skills/adk-cross-team-handoff/SKILL.md"
++      ],
++      "reason": "lite/formal与pending/accepted界限明确，文档完成不推断实际签收或权限转移。"
++    },
++    {
++      "id": "adk-data-fetch",
++      "decision": "retain",
++      "files_read": [
++        "optional-skills/adk-data-fetch/SKILL.md"
++      ],
++      "reason": "父项与两个可选子项独立安装，明确来源/权限与缺失拒绝，未假定父项隐式安装子项。"
++    },
++    {
++      "id": "adk-email-imap-fetch",
++      "decision": "retain",
++      "files_read": [
++        "optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md"
++      ],
++      "reason": "当前方法已限定EXAMINE、UIDVALIDITY/UID与BODY.PEEK，部分结果和逐封错误不会伪作完整获取。"
++    },
++    {
++      "id": "adk-engineering-growth-review",
++      "decision": "retain",
++      "files_read": [
++        "skills/adk-engineering-growth-review/SKILL.md",
++        "skills/adk-engineering-growth-review/README.md",
++        "skills/adk-engineering-growth-review/references/growth-evidence-boundaries.md"
++      ],
++      "reason": "index-first和明确跨项目授权限制读取，趋势需跨时点证据，不凑训练建议。"
++    },
++    {
++      "id": "adk-external-practice-absorption",
++      "decision": "retain",
++      "files_read": [
++        "optional-skills/adk-external-practice-absorption/SKILL.md"
++      ],
++      "reason": "来源、独立owner决策、实施与验证角色分开；已批准续做不重启intake。"
++    },
++    {
++      "id": "adk-fetch-url-content",
++      "decision": "retain",
++      "files_read": [
++        "optional-skills/adk-data-fetch/adk-fetch-url-content/SKILL.md"
++      ],
++      "reason": "当前方法已限制origin/重定向/IP，提取保留链接语义并区分空壳、截断和完整结果。"
++    },
++    {
++      "id": "adk-goal-authoring",
++      "decision": "consumer-fix",
++      "files_read": [
++        "skills/adk-goal-authoring/SKILL.md",
++        "skills/adk-goal-authoring/references/goal-plan.json"
++      ],
++      "reason": "公开resume拒绝的过长/重复状态列表曾被state-check接受，共享字段约束并保留原reason。",
++      "implementation_owner": "deep_task_usability",
++      "consumer_files_read": [
++        "src/agent_dev_kit/planning_state.py",
++        "src/agent_dev_kit/goal_plan.py",
++        "tests/test_planning_state.py",
++        "tests/test_goal_authoring.py"
++      ]
++    },
++    {
++      "id": "adk-incident-rca-report",
++      "decision": "retain",
++      "files_read": [
++        "optional-skills/adk-incident-rca-report/SKILL.md"
++      ],
++      "reason": "已区分事实、已证因果和未决假设，5-Why按需且不虚构责任或恢复证据。"
++    },
++    {
++      "id": "adk-interface-contract-design",
++      "decision": "change",
++      "files_read": [
++        "skills/adk-interface-contract-design/SKILL.md",
++        "skills/adk-interface-contract-design/references/design-quality-methods.md",
++        "skills/adk-interface-contract-design/references/details.md",
++        "skills/adk-interface-contract-design/references/lifecycle-operation-contract.md",
++        "skills/adk-interface-contract-design/references/spec-code-bidirectional.md",
++        "skills/adk-interface-contract-design/references/tool-effect-contract.md"
++      ],
++      "reason": "已复现rg输出文件名前缀导致跨头文件相同错误码漏检，改为有边界的字面值候选扫描。",
++      "implementation_owner": "deep_domain_methods"
++    },
++    {
++      "id": "adk-knowledge-archive",
++      "decision": "retain",
++      "files_read": [
++        "skills/adk-knowledge-archive/SKILL.md",
++        "skills/adk-knowledge-archive/README.md"
++      ],
++      "reason": "新归档保留来源和适用边界，未知路径阻塞、不虚构验证或提升长期指导。"
++    },
++    {
++      "id": "adk-lightweight-planning",
++      "decision": "retain",
++      "files_read": [
++        "skills/adk-lightweight-planning/SKILL.md",
++        "skills/adk-lightweight-planning/README.md"
++      ],
++      "reason": "只读计划按实际行动规模裁剪，直接实施请求退出，不强制无用步骤。"
++    },
++    {
++      "id": "adk-memory-curator",
++      "decision": "retain",
++      "files_read": [
++        "skills/adk-memory-curator/SKILL.md",
++        "skills/adk-memory-curator/README.md"
++      ],
++      "reason": "只读候选整理、冲突与晋级审查明确，secret检索仅列文件名且说明覆盖限制。"
++    },
++    {
++      "id": "adk-parallel-agent-governance",
++      "decision": "retain",
++      "files_read": [
++        "skills/adk-parallel-agent-governance/SKILL.md",
++        "skills/adk-parallel-agent-governance/references/parallel-worktree-task-package.md",
++        "skills/adk-parallel-agent-governance/references/subagent-review-checklist.md"
++      ],
++      "reason": "收益准入、单写者、最小工作包与最终整合均明确，不用子任务成功替代目标。"
++    },
++    {
++      "id": "adk-pilot-framework",
++      "decision": "retain",
++      "files_read": [
++        "skills/adk-pilot-framework/SKILL.md",
++        "skills/adk-pilot-framework/references/details.md"
++      ],
++      "reason": "现有smoke/收益比较与任务产物验收已分离，环境阻塞不等于能力失败。"
++    },
++    {
++      "id": "adk-planning-execution-loop",
++      "decision": "consumer-fix",
++      "files_read": [
++        "skills/adk-planning-execution-loop/SKILL.md",
++        "skills/adk-planning-execution-loop/references/long-task-recovery.md"
++      ],
++      "reason": "其公开state-check入口现在采用恢复同一字段边界，避免成功预检后无法恢复。",
++      "implementation_owner": "deep_task_usability",
++      "consumer_files_read": [
++        "src/agent_dev_kit/planning_state.py",
++        "src/agent_dev_kit/goal_plan.py",
++        "tests/test_planning_state.py",
++        "tests/test_goal_authoring.py"
++      ]
++    },
++    {
++      "id": "adk-prose-revision",
++      "decision": "retain",
++      "files_read": [
++        "optional-skills/adk-prose-revision/SKILL.md",
++        "optional-skills/adk-prose-revision/references/review-cases.md"
++      ],
++      "reason": "report/revise按请求分流，保留技术字面量与事实，不据文风判断作者身份或强造改动。"
++    },
++    {
++      "id": "adk-release-versioning",
++      "decision": "change",
++      "files_read": [
++        "skills/adk-release-versioning/SKILL.md",
++        "skills/adk-release-versioning/references/details.md"
++      ],
++      "reason": "真实Git复现历史漏项、首发吞错及非发布tag误选；显式基线/首发并保留完整hash与正文。",
++      "implementation_owner": "deep_task_usability"
++    },
++    {
++      "id": "adk-repo-drift-remediation",
++      "decision": "retain",
++      "files_read": [
++        "skills/adk-repo-drift-remediation/SKILL.md",
++        "skills/adk-repo-drift-remediation/README.md"
++      ],
++      "reason": "问题地图和源事实先于治理修复，用户改动保护及共享触点串行规则保持。"
++    },
++    {
++      "id": "adk-repo-prompt-analysis",
++      "decision": "retain",
++      "files_read": [
++        "skills/adk-repo-prompt-analysis/SKILL.md"
++      ],
++      "reason": "结论追实际调用点、角色和动态输入，不从description推断实现或执行外部脚本。"
++    },
++    {
++      "id": "adk-requirements-triage",
++      "decision": "retain",
++      "files_read": [
++        "skills/adk-requirements-triage/SKILL.md",
++        "skills/adk-requirements-triage/references/embedded-discovery-brief.md",
++        "skills/adk-requirements-triage/references/exploratory-requirements-brief.md"
++      ],
++      "reason": "brief、execution-handoff和high-risk分流避免重复访谈，已有明确任务交还实施。"
++    },
++    {
++      "id": "adk-runtime-router",
++      "decision": "retain",
++      "files_read": [
++        "skills/adk-runtime-router/SKILL.md",
++        "skills/adk-runtime-router/references/runtime-routing-details.md"
++      ],
++      "reason": "唯一primary、可信inventory和fit检查明确；未以micro标签创建低风险执行权限。"
++    },
++    {
++      "id": "adk-security-supply-chain",
++      "decision": "retain",
++      "files_read": [
++        "optional-skills/adk-security-supply-chain/SKILL.md",
++        "optional-skills/adk-security-supply-chain/references/skill-scan-coverage.md"
++      ],
++      "reason": "source-only/adoption/runtime分层，覆盖、误报和拒绝路径明确；静态零命中不被当作安全认证。"
++    },
++    {
++      "id": "adk-skill-composition-governance",
++      "decision": "retain",
++      "files_read": [
++        "optional-skills/adk-skill-composition-governance/SKILL.md",
++        "optional-skills/adk-skill-composition-governance/references/adk-skill-lifecycle.md",
++        "optional-skills/adk-skill-composition-governance/references/skill-behavior-evaluation.md"
++      ],
++      "reason": "沿用canonical matcher，source-contract与真实行为评测分开，不新增第二路由权威。"
++    },
++    {
++      "id": "adk-skill-deep-analysis",
++      "decision": "retain",
++      "files_read": [
++        "skills/adk-skill-deep-analysis/SKILL.md",
++        "skills/adk-skill-deep-analysis/references/details.md"
++      ],
++      "reason": "有界发现与只读方法对照保留来源、反例和实施交接，未知效果不冒充实测。"
++    },
++    {
++      "id": "adk-structured-requirements-questioning",
++      "decision": "retain",
++      "files_read": [
++        "skills/adk-structured-requirements-questioning/SKILL.md",
++        "skills/adk-structured-requirements-questioning/references/prototype-as-experiment.md"
++      ],
++      "reason": "Explore/Challenge按决策依赖推进，明确退出条件和只读探索边界。"
++    },
++    {
++      "id": "adk-systematic-debugging",
++      "decision": "retain",
++      "files_read": [
++        "skills/adk-systematic-debugging/SKILL.md",
++        "skills/adk-systematic-debugging/references/embedded-diagnosis-branches.md",
++        "skills/adk-systematic-debugging/references/tight-feedback-loop.md"
++      ],
++      "reason": "最小可失败信号、单变量因果与停止条件完整，不强制凑Why层数或无关反例。"
++    },
++    {
++      "id": "adk-task-breakdown",
++      "decision": "retain",
++      "files_read": [
++        "skills/adk-task-breakdown/SKILL.md",
++        "skills/adk-task-breakdown/references/task-packaging.md",
++        "skills/adk-task-breakdown/references/vertical-slice-planning.md"
++      ],
++      "reason": "单切片、多切片和机器派工区分，真实依赖/共享文件决定并行边界。"
++    },
++    {
++      "id": "adk-test-flakiness-triage",
++      "decision": "change",
++      "files_read": [
++        "optional-skills/adk-test-flakiness-triage/SKILL.md",
++        "optional-skills/adk-test-flakiness-triage/references/details.md"
++      ],
++      "reason": "真实原命令误算失败、吞退出码且输出合成凭据值；改为真实逐轮证据、原退出码及仅变量名。",
++      "implementation_owner": "deep_task_usability"
++    },
++    {
++      "id": "adk-test-strategy",
++      "decision": "retain",
++      "files_read": [
++        "skills/adk-test-strategy/SKILL.md",
++        "skills/adk-test-strategy/references/high-value-tdd.md"
++      ],
++      "reason": "已区分只读策略和授权实施，测试层级与实际风险匹配，保留真实red/green和资源隔离。"
++    },
++    {
++      "id": "adk-token-context-governance",
++      "decision": "retain",
++      "files_read": [
++        "skills/adk-token-context-governance/SKILL.md"
++      ],
++      "reason": "压缩保留高风险原文回退，ADK源码检查已有适用范围，不把字节数当Token实测。"
++    },
++    {
++      "id": "adk-verification-before-completion",
++      "decision": "retain",
++      "files_read": [
++        "skills/adk-verification-before-completion/SKILL.md",
++        "skills/adk-verification-before-completion/references/verification-governance-details.md"
++      ],
++      "reason": "checkpoint与goal-final按适用风险分开，同快照证据及未验证边界明确。"
++    },
++    {
++      "id": "adk-worktree-governance",
++      "decision": "retain",
++      "files_read": [
++        "skills/adk-worktree-governance/SKILL.md",
++        "skills/adk-worktree-governance/references/parallel-worktree-task-package.md",
++        "skills/adk-worktree-governance/references/worktree-operation-boundaries.md"
++      ],
++      "reason": "明确stay-current与隔离条件，保护dirty状态并保留创建/清理授权来源。"
++    }
++  ]
++}
+diff --git a/docs/changes/20261115-skill-method-reliability/evidence/predecessor-release.json b/docs/changes/20261115-skill-method-reliability/evidence/predecessor-release.json
+new file mode 100644
+index 0000000..cfa492c
+--- /dev/null
++++ b/docs/changes/20261115-skill-method-reliability/evidence/predecessor-release.json
+@@ -0,0 +1,110 @@
++{
++  "schema": "adk-predecessor-delivery-observation/v1",
++  "repository": "jiying2007/agent-dev-kit",
++  "pr": {
++    "number": 267,
++    "url": "https://github.com/jiying2007/agent-dev-kit/pull/267",
++    "head_sha": "3b2a1a59f3ad5756531857650bc5a181473633c4",
++    "merged_at": "2026-11-15T06:01:26Z",
++    "merge_commit_sha": "1282c78b145afca670cf8e5733d80bd3c61f5cfb",
++    "merge_method": "squash"
++  },
++  "required_checks": [
++    {
++      "name": "deterministic-eval-package",
++      "status": "completed",
++      "conclusion": "success",
++      "url": "https://github.com/jiying2007/agent-dev-kit/actions/runs/43683105211/job/132718965291"
++    },
++    {
++      "name": "static-security",
++      "status": "completed",
++      "conclusion": "success",
++      "url": "https://github.com/jiying2007/agent-dev-kit/actions/runs/43683105211/job/132717783218"
++    },
++    {
++      "name": "regression-py3.12",
++      "status": "completed",
++      "conclusion": "success",
++      "url": "https://github.com/jiying2007/agent-dev-kit/actions/runs/43683105211/job/132717783212"
++    },
++    {
++      "name": "contract-py3.12",
++      "status": "completed",
++      "conclusion": "success",
++      "url": "https://github.com/jiying2007/agent-dev-kit/actions/runs/43683105211/job/132717783056"
++    },
++    {
++      "name": "platform-vnext",
++      "status": "completed",
++      "conclusion": "success",
++      "url": "https://github.com/jiying2007/agent-dev-kit/actions/runs/43683105239/job/132717783041"
++    },
++    {
++      "name": "dependency-review",
++      "status": "completed",
++      "conclusion": "success",
++      "url": "https://github.com/jiying2007/agent-dev-kit/actions/runs/43683105234/job/132717783021"
++    },
++    {
++      "name": "codeql-python",
++      "status": "completed",
++      "conclusion": "success",
++      "url": "https://github.com/jiying2007/agent-dev-kit/actions/runs/43683105235/job/132717783002"
++    },
++    {
++      "name": "branch-gc-dry-run",
++      "status": "completed",
++      "conclusion": "success",
++      "url": "https://github.com/jiying2007/agent-dev-kit/actions/runs/43683105213/job/132717782836"
++    }
++  ],
++  "main_ci": {
++    "id": 43683558546,
++    "url": "https://github.com/jiying2007/agent-dev-kit/actions/runs/43683558546",
++    "conclusion": "success"
++  },
++  "promotion": {
++    "id": 43684004663,
++    "url": "https://github.com/jiying2007/agent-dev-kit/actions/runs/43684004663",
++    "conclusion": "success"
++  },
++  "tag": {
++    "name": "v11.3.2",
++    "object_sha": "984144b056b48c113609ed2e0635d3f83c5261e7",
++    "type": "annotated",
++    "target_sha": "1282c78b145afca670cf8e5733d80bd3c61f5cfb"
++  },
++  "release": {
++    "url": "https://github.com/jiying2007/agent-dev-kit/releases/tag/v11.3.2",
++    "published_at": "2026-11-15T06:11:44Z",
++    "draft": false,
++    "assets": [
++      {
++        "name": "agent-dev-kit-11.3.2.tar.gz",
++        "state": "uploaded",
++        "size": 3441779,
++        "digest": "sha256:3d45879cf90000c84c68f11ce6e57561e6ad0380c3c772af24bb8e4cdf30c8ec",
++        "url": "https://github.com/jiying2007/agent-dev-kit/releases/download/v11.3.2/agent-dev-kit-11.3.2.tar.gz"
++      },
++      {
++        "name": "agent-dev-kit-11.3.2.tar.gz.sha256",
++        "state": "uploaded",
++        "size": 94,
++        "digest": "sha256:256b0fe49e79df9f6c10a5f51af42f12ea5b125627f1c506849a71dc24f09d13",
++        "url": "https://github.com/jiying2007/agent-dev-kit/releases/download/v11.3.2/agent-dev-kit-11.3.2.tar.gz.sha256"
++      },
++      {
++        "name": "release-contract.json",
++        "state": "uploaded",
++        "size": 592,
++        "digest": "sha256:d5290288acaf224d1dc3ed67e5e9a8937b6d4a013c485229fbc4061147182049",
++        "url": "https://github.com/jiying2007/agent-dev-kit/releases/download/v11.3.2/release-contract.json"
++      }
++    ]
++  },
++  "limits": [
++    "Observed existing GitHub PR/check/run/tag/release responses; release asset digests are GitHub-reported, not independently redownloaded here.",
++    "This records predecessor 11.3.2 only and does not assert this change's future CI, merge or release."
++  ]
++}
+diff --git a/docs/changes/20261115-skill-method-reliability/negative-results.md b/docs/changes/20261115-skill-method-reliability/negative-results.md
+new file mode 100644
+index 0000000..9564778
+--- /dev/null
++++ b/docs/changes/20261115-skill-method-reliability/negative-results.md
+@@ -0,0 +1,14 @@
++# 负结果与已排除路径
++
++- Build 前按 `ctest|tshark|flaky|release|current.state|goal.*resume|错误码|kaslr` 检索 `knowledge/L2-domain/lessons.md`；文件不存在，未据此引用历史经验。当前依据为本轮隔离复现和现存源码。
++- 原 CTest 命令对空集、全部禁用、筛选后空集都返回 0；真实 CMake 3.31.6 隔离执行已确认。正常/失败对照用于排除仅由环境造成的误判。
++- 原发布命令遗漏 breaking/revert/非标准提交，首发吞掉无 tag 的 Git 错误，非发布 checkpoint tag 改变基线；复现仅使用临时仓。
++- 原 state-check 对过长/重复引用列表通过，而同输入的 resume 拒绝；样例均远低于 8 KiB，排除字节预算原因。
++- 原 flaky 示例把 PASSED 名称出现次数统计为 failures，方括号名称漏匹配，失败循环经 tee 返回 0；环境输出问题仅使用清空环境后的合成变量验证，没有读取真实凭据。
++- 原内核 addr2line 建议缺少重定位分支；host PIE 只用于证明运行时地址不能直接当链接地址，不充当真实内核/设备认证。
++- 本机没有 rtk；按已核实的仓库无运行时依赖说明使用原 Bash/Python 入口，不创建伪 wrapper 或声称运行过缺失工具。
++- 新增 current-state 边界测试在旧实现上实际失败 7 项；共享约束修复后相关 31 项通过。独立 105 组函数/文件读取差分中，Goal 结果不变，state-check 仅 8 个原误接收输入变为拒绝；这不是 105 个 CLI 或模型任务。
++- 真实 TShark 对零字节文件也返回 0，纠正最初“零字节必为读取失败”的推断；最终把零字节、合法零包与目标筛选零匹配标为无目标证据，坏格式仍保留原非零退出。
++- 独立预审发现主动采集失败仍可能分析旧 PCAP，以及成功解码不证明 ELF 所属正确；已分离纯离线/主动模式，主动命令用失败依赖并使用本轮新路径，地址解码先核所属内核/模块/段。三条采集失败注入只验证 shell 控制流，不充当 live capture。
++- 定向内容集成曾为 81/82：协议示例改用有界 TShark 后删去了既有 tcpdump 工具边界文字。恢复“主动 tcpdump/tshark 抓包须有实际接口、权限和数据范围”的有用说明；没有恢复无界命令或修改原断言。最终复验另留实际结果。
++- 首次正式全量在 `f538db1224e77d2ba06a32387dee57a15a5b3bbe` 上发现 `test_skill_trigger_matrix` 要求的明确“Scapy 是 Python API”说明被精炼掉。该已失败运行在 44 组通过、1 组失败时主动中止，工具会话退出 130，不记为完整回归或全绿；原源码绑定、补丁和原日志保留。通读同一用例又发现 `Cortex-M0` 完整内核名称被缩写；一并恢复两处明确说明，保持命令、能力边界及全部原测试，再对修订后的源码执行完整回归。
+diff --git a/docs/changes/20261115-skill-method-reliability/requirements.md b/docs/changes/20261115-skill-method-reliability/requirements.md
+new file mode 100644
+index 0000000..a078763
+--- /dev/null
++++ b/docs/changes/20261115-skill-method-reliability/requirements.md
+@@ -0,0 +1,23 @@
++# Skill 实际任务方法可靠性
++
++## 目标与范围
++
++用户要求全面优化全部 Skills 的功能、性能和易用性，并已授权公开推送、受保护合并和继续深入优化。本轮在 11.3.2 候选基础上，对 56 core + 9 optional 的正文、适用 references 及实际消费者再次深审，优先修复能由具体任务反例确认的错误；保留有用且没有确认缺陷的方法。
++
++统一问题是：Skill 给出的命令或状态解释可能把空结果、遗漏、不同接口的矛盾判断或错误证据当成成功。本轮只修既有工作流和共享实现，不新建 Skill、门禁、执行平台、模型评测或运行时。
++
++## 验收
++
++1. 同一 current-state 的字段边界在公开 `goal state-check` 与 `goal resume` 一致：history ≤3，evidence/blockers ≤8，next_actions 为 1–3；字符串列表唯一且非空白。保留各入口现有错误码及短路/聚合行为（例如 `current-state-next-actions-limit` 与 `state-next_actions-invalid`），不要求两入口的 reason 字符串相同；严格 JSON、有界读取、路径拒绝及只读恢复边界不变。
++2. 发布变更清单基于明确核实的正式发布基线；首发有明确路径，非发布 tag 不改变基线。正式发布身份须有项目政策/已核证据，不能仅凭 tag 可解析。完整保留提交身份、subject、body、breaking/revert/未知类型；不存在、非 HEAD 祖先的基线、shallow 不完整历史和 Git 失败不得变为空成功。
++3. 偶发测试方法使用测试框架实际结果和执行次数作分母；名称包含空格或正则字符不能误分类。重复执行有界、日志独立、保存每次真实退出码；采集失败不得刷绿。环境比对不输出任意匹配变量的值。
++4. CMake 与 SIL/HIL 的 CTest 示例将空测试集、全部禁用及筛选后为空作为失败；正常与真实失败结果保留。编译成功仍不能证明目标上执行成功。
++5. 离线抓包命令产生可归属的实际包结果，避免默认名称解析和无意义空输出；空文件、坏文件、零包或目标 display filter 匹配零包不冒充协议验证成功。
++6. 内核/模块回溯先匹配制品与地址所属，区分 function+offset、运行时 PC 和链接地址；缺 KASLR/模块映射信息保持 partial，不通过关闭防护或猜偏移生成结论。
++7. Artifact 主文、reference 和已有 workflow 对状态语义一致；模板满足声明的 owner 等字段，签收和状态文本不代替真实验证。
++8. 跨文件重复错误码的字面值候选扫描能发现相同值，并明确不能证明宏/表达式/别名/不同命名空间的最终冲突。
++9. 全部 65 项都有实际审查决定；原身份、安装选择、路由和权限不变，8 个已有 profile ratchet 不提高阈值；收益只报告实际测得范围。
++
++## 非目标
++
++不新增 Skills、绕过受保护检查、安装到用户运行时、操作真实设备/邮箱、付费模型 A/B、计划任务或低风险路由授权。真实模型成功率、Token、成本和端到端时延仍未测量。
+diff --git a/docs/changes/20261115-skill-method-reliability/tasks.md b/docs/changes/20261115-skill-method-reliability/tasks.md
+new file mode 100644
+index 0000000..d1b1cc9
+--- /dev/null
++++ b/docs/changes/20261115-skill-method-reliability/tasks.md
+@@ -0,0 +1,17 @@
++# 任务与验证
++
++当前职责：root 负责合同、整合、证据与受保护交付；deep_task_usability 负责共享状态、发布和 flaky；deep_domain_methods 负责领域方法、Artifact 和接口候选扫描；独立 reviewer 不实现。
++
++| 任务 | Owner | 状态 | Verify |
++|---|---|---|---|
++| 完整 65 项深审，记录原失败、覆盖与保留理由 | 两位实现分工 / root 汇总 | 已完成：65 唯一项、131 阅读路径 | 两组实际读取清单与 Manifest 56+9 唯一身份逐项对齐，原读取路径与合并基线内容一致 |
++| 共享 current-state 字段校验并保留消费者错误码 | deep_task_usability | 已实现；定向 31 项通过 | 同输入调用公开 state-check/resume 的合法上界、越界、重复、严格读取和无执行回归；新增边界测试曾红 7 项 |
++| 完整发布历史与 flaky 实际取证示例 | deep_task_usability | 已实现；11 项实际示例回归通过 | 临时 Git 仓首发/正式基线/非发布 tag/错误基线；实际执行最终示例的成功/失败/混合/特殊测试名与合成凭据 |
++| CTest 空集、离线抓包及重定位解码修正 | deep_domain_methods | 已实现；领域夹具 43/43（含准备/静态项） | 真实 CTest 的空/禁用/筛空/正常/失败/运行时 skip，真实离线 pcap/坏文件/零匹配，真实 PIE 地址反例与适用边界 |
++| Artifact 实现语义与跨文件错误码候选扫描 | deep_domain_methods | 已实现；包含在领域夹具结果 | 隔离 workflow review 的 PASS/拒绝对照与真实多文件扫描；模板字段核对，不冒充完整源码资格认证 |
++| 版本候选、全量回归、独立 Spec/Quality 与证据绑定 | root / 独立 reviewer | 11.3.3 已同步；待冻结全量和最终裁决 | strict、既有 8 profile ratchet、完整 tests/run_all.sh、当前源码摘要与独立 finding 收口 |
++| 受保护 PR / main CI / promotion / release | root | 待前序完成 | exact HEAD 的必需检查、squash 合并、实际 tag/release/制品状态 |
++
++不得以改变文字数量、扫描命中或模型未执行的 fixture，声称全部 Skills 的模型效果、Token 或时延已提升。
++
++本表是源码冻结前状态；最终全量验证、独立裁决和远端交付随后写入同目录验证/完成回执，不改写此前执行时间。
+diff --git a/docs/runbooks/artifact-gated-delivery.md b/docs/runbooks/artifact-gated-delivery.md
+index e9d3104..c43e064 100644
+--- a/docs/runbooks/artifact-gated-delivery.md
++++ b/docs/runbooks/artifact-gated-delivery.md
+@@ -27,6 +27,8 @@
+ 
+ ## 4. 最小标签模板
+ 
++以下为真实通过记录；NEEDS-FIX/BLOCKED 配 `verdict: needs-fix`，未验证不预填 PASS。
++
+ ```md
+ [artifact:ImplementationPlan]
+ status: READY
+@@ -38,10 +40,14 @@ handoff_to:
+ 
+ [artifact:ReviewReport]
+ status: PASS
+-verdict: pass | needs-fix
++owner: <reviewer>
++verdict: pass
++findings:
++- <finding or none>
+ 
+ [artifact:TestReport]
+ status: PASS
++owner: <test-owner>
+ tests_run:
+ - <command + result>
+ ```
+diff --git a/manifest.json b/manifest.json
+index ce0051f..80a43fb 100644
+--- a/manifest.json
++++ b/manifest.json
+@@ -1,5 +1,5 @@
+ {
+-  "version": "11.3.2",
++  "version": "11.3.3",
+   "locale": "zh-CN",
+   "platforms": [
+     "linux-embedded",
+diff --git a/manifests/software_m5_eval_contract.json b/manifests/software_m5_eval_contract.json
+index 027fe28..5a31ebc 100644
+--- a/manifests/software_m5_eval_contract.json
++++ b/manifests/software_m5_eval_contract.json
+@@ -1,6 +1,6 @@
+ {
+   "schema": "adk-runtime-eval-campaign/v1",
+-  "campaign_id": "software-m5-11.3.2",
++  "campaign_id": "software-m5-11.3.3",
+   "tasks": "tests/fixtures/software_m5_eval_tasks.jsonl",
+   "minimum_tasks": 60,
+   "runtimes": [
+diff --git a/optional-skills/adk-test-flakiness-triage/SKILL.md b/optional-skills/adk-test-flakiness-triage/SKILL.md
+index 55899de..7792ad4 100644
+--- a/optional-skills/adk-test-flakiness-triage/SKILL.md
++++ b/optional-skills/adk-test-flakiness-triage/SKILL.md
+@@ -1,8 +1,8 @@
+ ---
+ name: adk-test-flakiness-triage
+ description: "用于非确定性测试故障的复现、波动归因和消除不稳定方案验证；不用于把失败盲目重跑到绿或降低测试门禁。"
+-version: 1.0.3
+-last_updated: 2026-11-14
++version: 1.0.4
++last_updated: 2026-11-15
+ triggers:
+   - "测试波动"
+   - "flaky test"
+diff --git a/optional-skills/adk-test-flakiness-triage/references/details.md b/optional-skills/adk-test-flakiness-triage/references/details.md
+index 9f2f13d..b3f0ef5 100644
+--- a/optional-skills/adk-test-flakiness-triage/references/details.md
++++ b/optional-skills/adk-test-flakiness-triage/references/details.md
+@@ -1,87 +1,63 @@
+-# 测试波动 — 按需诊断示例
++# 测试波动 — 按需取证
+ 
+-此参考文件仅保存日志分析、重试与隔离示例。主工作流、风险、权限、统计判断与放行条件均以 `../SKILL.md` 为准。任何固定重复次数都只是 smoke，不作为低失败率保证。
++沿用 `../SKILL.md` 的风险、权限、统计与隔离边界。重复次数只限定 smoke，不证明低失败率目标；不执行未经审查的测试或生产操作。
+ 
+-## 不稳定测试识别
+-```bash
+-# 从 CI 日志中提取失败测试
+-rg -n "FAILED|ERROR" ci-log.txt | grep -i "test"
+-
+-# 统计测试失败率
+-for test in $(cat test-list.txt); do
+-  count=$(rg -c "$test" ci-log.txt 2>/dev/null || echo 0)
+-  echo "$test: $count failures"
+-done | sort -t: -k2 -rn
++## 先定义样本与结果
+ 
+-# 列出最近失败的测试
+-git log --oneline --all --grep="flaky" | head -20
++- 从测试框架的 JUnit/JSON/原生报告读取精确用例 ID、每次结果和执行环境；空格、方括号等属于名称，不作为正则或 shell 分词。日志命中次数不是失败数，进程非零也不等于所有用例失败。
++- 分开记录 `passed / failed / error / skipped / missing`。分母来自真正执行的用例或同一用例的独立运行次数；报告计划次数、实际次数和排除原因。缺报告、收集/启动错误或全部跳过不能算成功样本，更不能从分母静默删除不利结果。
++- 只有逐轮报告完整、版本/选择器/环境可比，才计算用例失败率并说明统计假设；无法归因时只报告原退出码与未知项。框架已有统计工具优先，不用通用 grep 推算。
+ 
+-# 检查测试历史通过率
+-rg -n "pass_rate|flaky" test-reports/ | sort -t: -k2 -rn
+-```
++## 有界命令采样（Bash）
+ 
+-## 重试策略模板
+-```md
+-[retry-strategy]
+-test_name: <测试名称>
+-current_retry: <当前重试次数>
+-recommended_retry: <建议重试次数>
+-backoff_strategy: linear | exponential | fixed
+-max_wait: <最大等待时间>
+-conditions:
+-  - <重试条件 1>
+-  - <重试条件 2>
+-rationale: <选择此策略的原因>
+-```
++从项目已核测试入口构造 `test_command` 数组，再调用 `run_flaky_samples 10 <新证据目录> "${test_command[@]}"`。命令自身须有适用的超时/取消路径；次数限制不限制单次耗时。每次 `FLAKY_SAMPLE_DIR` 指向新目录，已审查的项目 runner 可用它保存 JUnit/JSON；不支持时仅取得日志和退出码，不宣称用例报告完整。没有 eval，不执行日志里的命令。
+ 
+-## 隔离方法
+-```md
+-[isolation-method]
+-test_name: <测试名称>
+-isolation_type: environment | data | timing | resource
+-steps:
+-  1. <隔离步骤 1>
+-  2. <隔离步骤 2>
+-  3. <隔离步骤 3>
+-expected_behavior: <隔离后预期行为>
+-verification: <验证命令>
+-```
+-
+-## 根因分析模板
+-```md
+-[root-cause-analysis]
+-test_name: <测试名称>
+-failure_pattern: <失败模式>
+-5-why:
+-  why-1: <直接原因>
+-  why-2: <中间原因>
+-  why-3: <系统性根因>
+-root_cause_category: timing | resource_leak | external_dependency | race_condition | environment
+-fix_type: code_change | test_rewrite | environment_setup | retry_config
+-fix_description: <修复描述>
+-regression_test: <回归测试命令>
+-```
+-
+-## Commands
+ ```bash
+-# 运行测试多次统计失败率
+-for i in {1..10}; do <test_cmd> 2>&1 | tee -a test-run-$i.log; done
++run_flaky_samples() (
++  set -euo pipefail
++  (( $# >= 3 )) || { printf 'usage: run_flaky_samples <1-20> <new-directory> <command> [args...]\n' >&2; exit 2; }
++  samples=$1
++  evidence=$2
++  shift 2
++  [[ "$samples" =~ ^([1-9]|1[0-9]|20)$ ]] || exit 2
++  mkdir -- "$evidence" || exit 2
++  evidence=$(cd -- "$evidence" && pwd -P) || exit 2
++  printf 'attempt\texit_code\n' > "$evidence/results.tsv" || exit 2
++  failed=0
++  for ((attempt=1; attempt<=samples; attempt++)); do
++    sample_dir="$evidence/run-$attempt"
++    mkdir -- "$sample_dir" || exit 2
++    exec 3>"$sample_dir/output.log" || exit 2
++    result=0
++    FLAKY_SAMPLE_DIR="$sample_dir" "$@" >&3 2>&1 || result=$?
++    exec 3>&- || exit 2
++    printf '%s\t%s\n' "$attempt" "$result" >> "$evidence/results.tsv" || exit 2
++    if (( result != 0 )); then failed=1; fi
++  done
++  printf 'attempts=%s\nrecords=%s\n' "$samples" "$evidence/results.tsv" || exit 2
++  exit "$failed"
++)
++```
+ 
+-# 搜索常见波动原因
+-rg -n "timeout|race|port already in use|resource busy|connection refused" <test_log_dir>
++返回 0 只表示已采样命令均返回 0，仍须核真实报告和选择器；1 表示至少一次非零，2 表示参数或采集失败。任何失败保留目录与已得样本，不 append 旧日志、不重跑到绿；采集失败不得产出完整性/稳定性通过结论。
+ 
+-# 检查测试依赖
+-rg -n "import|require|from" <test_file> | head -20
++## 环境比较与最小诊断
+ 
+-# 检查环境变量
+-env | grep -i "test\|ci\|debug" | sort
++先比较版本、已脱敏配置和资源状态。以下仅列相关变量**名称**；需要值时逐项使用已核安全白名单，凭据值不进入日志。
+ 
+-# 对比成功与失败的日志差异
+-diff <(rg -n "INFO|DEBUG" success.log) <(rg -n "INFO|DEBUG" failure.log) | head -50
++```bash
++# environment-names: values are never printed
++python3 - <<'PY'
++import json, os
++print(json.dumps(sorted(name for name in os.environ
++                       if any(key in name.upper() for key in ("TEST", "CI", "DEBUG")))))
++PY
++```
+ 
+-# 检查端口占用
+-ss -tlnp | grep <test_port>
++日志检索只定位假设，不作为统计结果：
+ 
+-# 检查文件锁
+-lsof | grep <test_data_dir>
++```bash
++rg -n 'timeout|race|port already in use|resource busy|connection refused' <test-log-directory>
+ ```
++
++单次实验记录 `hypothesis / changed variable / expected / observed / raw report / disproved-or-open`。重试方案记录原策略、预算、适用错误和停止条件；隔离记录 owner、原测试状态、解除条件及 CI 证据，不能把 quarantine 计为 PASS。只在证据支持跨层因果时展开 5-Why，验证修复后仍保留原失败与通过路径。
+diff --git a/pyproject.toml b/pyproject.toml
+index 63130e8..69afea8 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
+ 
+ [project]
+ name = "agent-dev-kit"
+-version = "11.3.2"
++version = "11.3.3"
+ description = "Platform-neutral agent asset compiler, distributor, and evaluator"
+ readme = "README.md"
+ requires-python = ">=3.12,<3.13"
+diff --git a/skills/adk-artifact-gating/SKILL.md b/skills/adk-artifact-gating/SKILL.md
+index a5ef162..da4328a 100644
+--- a/skills/adk-artifact-gating/SKILL.md
++++ b/skills/adk-artifact-gating/SKILL.md
+@@ -1,8 +1,8 @@
+ ---
+ name: adk-artifact-gating
+ description: "用于跨仓交付物需要标签、状态与验收交接协议时定义 Artifact 门禁；不用于单仓常规测试、直接上传制品或发布批准。"
+-version: 1.0.1
+-last_updated: 2026-11-03
++version: 1.0.2
++last_updated: 2026-11-15
+ triggers:
+   - "artifact 门禁"
+   - "跨角色交接"
+@@ -20,48 +20,36 @@ outputs:
+ constraints:
+   - 所有 artifact 必须包含 status 字段和验证证据
+   - 缺少验证证据时结论固定为 needs-fix 或 BLOCKED
+-  - ReviewReport 与 TestReport 结论不允许矛盾
+-  - 状态机转换必须经过校验，禁止跳过中间状态
++  - 报告结论不得与最终门禁结果冲突
++  - Artifact status 与 workflow stage 分开，沿用已有 workflow 校验
+ ---
+ 
+ # adk-artifact-gating
+ 
+ ## Goal
+ 
+-在跨仓库、跨角色交付场景中，用统一的 artifact 标签体系和状态机门禁，消灭"口头完成"和"结论无证据"问题。
+-
++在跨仓、跨角色交付中，用标签、owner 和真实验证证据形成可复核结论。
+ 
+ ## Prerequisites
+ 
+-- 理解 artifact 门禁的基本概念
+-- 熟悉跨角色协作流程
+-- 了解状态机转换规则
+-- 具备基本的文档编写能力
+-
++确认变更目录、交付 owner、验证入口与接收方；按项目已有 workflow 推进，不另建状态机。
+ 
+ ## Workflow
+ 
+-1. 识别变更范围与影响角色
+-2. 为每个 artifact 生成统一标签（ImplementationPlan / ReviewReport / TestReport）
+-3. 填充状态字段（draft → in-review → approved / needs-fix / BLOCKED）
+-4. 执行验证命令并附加证据
+-5. 交接签收：接收方确认 artifact 完整性
+-6. 门禁结论：全部 artifact approved 且无矛盾 → pass
+-
++1. 核范围、owner、接收方；生成 ImplementationPlan / ReviewReport / TestReport 标签。
++2. 计划就绪填 READY；评审/测试按实证填 PASS、NEEDS-FIX 或 BLOCKED，approved 不等于 PASS。
++3. 执行验证，附命令、退出码和证据，由接收方签收完整性。
++4. verify 通过后，ReviewReport/TestReport=PASS、verdict=pass 且与 review 结果一致才给门禁 pass；签收不代替验证。
+ 
+ ## Quality Gate
+ 
+-1. 三类 artifact 均存在且字段完整
+-2. ReviewReport 与 TestReport 结论一致
+-3. 所有验证命令可复现
+-4. 状态机转换经脚本校验
+-5. 交接签收记录完整
+-
++三类标签、owner/证据/签收完整，命令可复现，报告与门禁一致；阶段校验沿用 workflow。
+ 
+ ## Evidence Template
+ 
+ ```md
+ status: pass | needs-fix | BLOCKED
++owner: <gate-owner>
+ commands:
+ - <command + exit code>
+ evidence:
+@@ -71,5 +59,4 @@ risks:
+ ```
+ 
+ ## References
+-- 详细背景、命令、模板、示例和扩展检查项保存在 `references/details.md`。
+-- 入口文件只保留触发和执行所需的最小上下文，避免默认加载过多 token。
++- 状态语义、完整模板与交接见 `references/details.md`。
+diff --git a/skills/adk-artifact-gating/references/details.md b/skills/adk-artifact-gating/references/details.md
+index bad6385..ab51413 100644
+--- a/skills/adk-artifact-gating/references/details.md
++++ b/skills/adk-artifact-gating/references/details.md
+@@ -1,19 +1,16 @@
+ # adk-artifact-gating — 补充参考资料
+ 
+-此参考文件只提供可选背景、示例和检查提示；当前能力流程、权限、回退与放行结论以 `../SKILL.md`、Manifest 及运行时门禁为准。示例命令不得被解释为写权限授权。
++按需加载；示例不增加写权限。
+ 
+ ## 来源说明
+ 
+-- **本地实现**：`adk-artifact-gating` 是唯一 artifact 门禁入口
+-- **Runbook 参考**：`docs/runbooks/artifact-gated-delivery.md`
+-- **门禁机制**：`adk-verification-before-completion` 的证据核验体系
+-- **评审标准**：`adk-commit-pr-quality-gate` 的分级评审（blocker/major/minor）
++Runbook：`docs/runbooks/artifact-gated-delivery.md`；证据核验与分级评审分别沿用 `adk-verification-before-completion`、`adk-commit-pr-quality-gate`。
+ 
+ ## 模式描述
+ 
+ ### 1. 统一 Artifact 标签规范
+ 
+-每个交付物必须使用三类标准标签：
++交付包包含以下标签：
+ 
+ | 标签 | 用途 | 必填字段 |
+ |------|------|----------|
+@@ -21,19 +18,13 @@
+ | `[artifact:ReviewReport]` | 评审报告 | status, owner, verdict, findings |
+ | `[artifact:TestReport]` | 测试报告 | status, owner, tests_run |
+ 
+-### 2. 状态机
++### 2. 报告与 workflow 状态
+ 
+-```
+-DRAFT → READY → VERIFIED → PASS
+-                 ↓            ↓
+-              BLOCKED     NEEDS-FIX → DRAFT（修复后重新进入）
+-```
++`scripts/workflow.sh` 管理 `propose → apply → verify → review → archive`；其 `stage` 不等于 artifact 的 `status`，不强制逐 artifact 状态迁移。
+ 
+-**硬约束**：
+-- `DRAFT → READY`：所有必填字段已填写
+-- `READY → VERIFIED`：验证命令已执行且结果已记录
+-- `VERIFIED → PASS`：ReviewReport 和 TestReport 均为 PASS 且结论一致
+-- 任何阶段发现证据缺失 → 固定为 `BLOCKED` 或 `NEEDS-FIX`
++- 计划完整标 READY；报告按实证标 PASS、NEEDS-FIX 或 BLOCKED。
++- `review --result pass` 消费 verified 入口和 PASS/PASS 报告；verdict 若有须为 pass，模板要求填写。approved 不是 PASS。
++- `review --result needs-fix` 拒绝 PASS/PASS 且 verdict=pass。缺证据保持 NEEDS-FIX/BLOCKED；状态/签收不替代验证或适用的独立 review evidence。
+ 
+ ### 3. 交接协议
+ 
+@@ -51,6 +42,8 @@ signoff: <next-owner> 确认签收
+ 
+ ### 4. 最小标签模板
+ 
++以下为真实通过记录；NEEDS-FIX/BLOCKED 配 `verdict: needs-fix`，未验证不预填 PASS。
++
+ ```md
+ [artifact:ImplementationPlan]
+ status: READY
+@@ -62,10 +55,14 @@ handoff_to:
+ 
+ [artifact:ReviewReport]
+ status: PASS
+-verdict: pass | needs-fix
++owner: <reviewer>
++verdict: pass
++findings:
++- <finding or none>
+ 
+ [artifact:TestReport]
+ status: PASS
++owner: <test-owner>
+ tests_run:
+ - <command + result>
+ ```
+diff --git a/skills/adk-cmake-cross-build/SKILL.md b/skills/adk-cmake-cross-build/SKILL.md
+index 307943f..77e7727 100644
+--- a/skills/adk-cmake-cross-build/SKILL.md
++++ b/skills/adk-cmake-cross-build/SKILL.md
+@@ -1,8 +1,8 @@
+ ---
+ name: adk-cmake-cross-build
+ description: "用于嵌入式 CMake 工程的交叉编译、工具链配置与多目标构建排障；不用于无 CMake 的构建系统或直接设备部署。"
+-version: 1.0.3
+-last_updated: 2026-11-14
++version: 1.0.4
++last_updated: 2026-11-15
+ triggers:
+   - "CMake"
+   - "CMake交叉编译"
+@@ -23,21 +23,19 @@ constraints:
+ # adk-cmake-cross-build
+ 
+ ## Goal
+-- 构建稳定可复现的 CMake 交叉编译链路。
+-- 支持多目标平台（ARM Cortex-M/A、RISC-V）统一构建入口。
++复现 ARM Cortex-M/A、RISC-V 等实际目标的 CMake 交叉构建。
+ 
+ ## Prerequisites
+ - 明确 host/build/target 三元组与编译器版本。
+ - 准备 toolchain file、sysroot、依赖路径映射。
+-- 先确认目标确实使用 CMake（包括 Buildroot/Yocto 中的 CMake package），并读取项目要求的 CMake 版本与 generator；不得把 Autotools/Make/Buildroot/Yocto 一概路由到 CMake。
++- 确认实际使用 CMake（含 Buildroot/Yocto 的 CMake package），核版本与 generator；不将其他构建系统一概转为 CMake。
+ 
+ ## Workflow
+ 1. **编写 toolchain 文件**：定义编译器、sysroot、查找路径和 ABI flags。
+ 2. **固化 Presets**：用 `CMakePresets.json` 表达目标、构建类型和输出目录。
+ 3. **执行构建**：仅在目标仓允许执行并且 toolchain/generator/sysroot 存在时使用 presets；无 presets 时显式传入 toolchain file。不得替换或删除不属于本任务的 build 目录；用户未授权执行时只读规划。
+ 4. **执行后端判定**：在跑 CTest 前识别 host-unit、compile-only、emulator（含 `CROSSCOMPILING_EMULATOR`）、board-runner 四类。没有已验证的目标执行后端时，只能声称交叉构建成功；不能把主机上的 CTest 通过写成板端运行通过。
+-5. **产物检查**：根据实际 toolchain 验证 ELF 架构、段大小、符号表和 map 文件。
+-6. **记录制品与失败点**：输出日志、二进制位置与诊断建议。
++5. **产物检查**：用实际 toolchain 核 ELF 架构、段、符号/map；记录二进制、日志、失败点与诊断建议。
+ 
+ ## Commands
+ ```bash
+@@ -48,8 +46,9 @@ file build/<target>/firmware.elf
+ arm-none-eabi-size build/<target>/firmware.elf
+ arm-none-eabi-objdump -h build/<target>/firmware.elf
+ # 仅在发现目标项目已有 host/emulator/board test runner 后运行：
+-ctest --test-dir build/<target> --output-on-failure
++ctest --test-dir build/<target> --output-on-failure --no-tests=error
+ ```
++按实际 build/config/filter 核执行数量；空集/全禁用/筛空须失败，skip/not-run 不算通过。见 [CTest](https://cmake.org/cmake/help/v3.20/manual/ctest.1.html)。
+ 
+ ## Evidence Template
+ ```md
+@@ -58,8 +57,7 @@ ctest --test-dir build/<target> --output-on-failure
+ - Build Matrix:
+   | Preset | Type | Status | Size |
+   |--------|------|--------|------|
+-  | arm-m4-debug | Debug | PASS/FAIL | __ KB |
+-  | arm-m4-release | Release | PASS/FAIL | __ KB |
++  | actual-preset | Debug/Release | PASS/FAIL | __ KB |
+ - Build Result: [link to build log]
+ - ELF Verification: `file` output, section sizes
+ - Test Result: [ctest summary]
+diff --git a/skills/adk-hardware-debugging/SKILL.md b/skills/adk-hardware-debugging/SKILL.md
+index 326cb28..4207ed8 100644
+--- a/skills/adk-hardware-debugging/SKILL.md
++++ b/skills/adk-hardware-debugging/SKILL.md
+@@ -1,8 +1,8 @@
+ ---
+ name: adk-hardware-debugging
+ description: "用于板级电源、时钟、复位和硬件异常的假设验证与证据定位；不用于把 Linux oops 直接归咎硬件或未经许可执行带风险的硬件操作。"
+-version: 1.0.2
+-last_updated: 2026-11-10
++version: 1.0.3
++last_updated: 2026-11-15
+ triggers:
+   - 硬件调试
+   - oops 分析
+@@ -31,47 +31,38 @@ constraints:
+ # adk-hardware-debugging
+ 
+ ## Goal
+-- 基于日志、调用栈、寄存器和硬件证据定位异常根因，输出可复现的排查路径。
++以可复核证据定位故障，保留验证边界。
+ 
+ ## Prerequisites
+-- 已收集复现步骤、硬件版本、软件版本、日志和相关符号文件。
+-- 已明确异常类型，例如 oops、panic、总线超时、DMA 错误或信号异常。
+-- 已知道可执行的现场验证手段，如 dmesg、设备调试通道、寄存器 dump 或波形采集。
++确认硬件/软件身份、日志、符号与调试通道；MMIO 读副作用和现场权限先核实。
+ 
+ ## Workflow
+-1. 复现建模：记录触发步骤、频率、环境差异和最近变更。
+-2. 日志解析：解析 fault type、PC/LR、call trace、寄存器和 taint 信息。
+-3. 数据追踪：从故障点反向追踪状态来源、调用者和硬件事件。
+-4. 假设排序：按证据强弱列出候选根因和置信度。
+-5. 内核/芯片能力分流：首先核对 Cortex-M0/M0+/M23/M3/M4 等架构、厂商复位源寄存器与 SDK；不能对不具备 CFSR/HFSR/BFAR 的内核套用 M3/M4 故障寄存器流程。诊断 HardFault、看门狗重启、低功耗唤醒时按需读取 `references/mcu-fault-reset-wakeup.md`。
+-6. 最小验证：设计单变量验证动作，避免一次改变多个条件。
+-7. 结论闭环：给出根因、证据、修复方向、回归范围和残留风险。
++1. 记录触发、频率、环境/变更及 fault type、PC/LR、栈、寄存器和 taint。
++2. 先据 Oops 模块标记/可信映射判定 PC 或函数所属内核、具体模块及段，再核架构与对应 `vmlinux/.ko`（MCU 用对应 ELF）。`function+offset/size` 用匹配内核 helper；runtime PC 按可信 KASLR/模块映射换算。缺所属/映射或 `??:0` 记 `partial`；行号不证明选对 ELF，不猜偏移或关闭 KASLR。
++3. 按实际 Cortex-M/SDK 核 CFSR/HFSR/BFAR 能力，Cortex-M0/M0+/M23 不套 M3/M4 流程；HardFault、复位或唤醒按需读 `references/mcu-fault-reset-wakeup.md`。
++4. 反追状态来源、调用者与硬件事件；列假设、置信度、单变量验证及修复/回归范围。
+ 
+ ## Commands
+ ```bash
+ rg -n "dev_err|WARN_ON|BUG_ON|panic|timeout|ETIMEDOUT" <target-dir>
+ rg -n "request_irq|spin_lock|mutex_lock|dma_|completion|wait_event" <target-dir>
+ dmesg
+-addr2line -e <vmlinux> <pc-address>
++# Linux function+offset/size
++"$kernel_src/scripts/faddr2line" "$matched_elf" "$function_offset"
++# 已按映射归一化或已证明无需重定位的链接地址
++"$target_addr2line" -f -i -e "$matched_elf" "$pc_link"
+ ```
++依据：[Linux 解码脚本](https://github.com/torvalds/linux/blob/master/scripts/faddr2line)。退出 0 不证明解析成功。
+ 
+ ## Evidence Template
+ ```md
+-- Symptom:
+-- Reproduction:
+-- Logs:
+-- Call Trace:
+-- Register State:
+-- Hypotheses:
+-  - confidence: high|medium|low
+-    evidence:
+-    validation:
+-- Root Cause:
++- Symptom / Reproduction / HW-SW Identity:
++- Matched ELF / Address Mapping / Logs / Registers:
++- Hypotheses: confidence + evidence + single-variable validation
++- Root Cause / Regression / Residual Risk:
+ - Gate Result: pass|needs-fix
+ ```
+ 
+ ## Quality Gate
+-- 根因结论必须有日志、代码位置或硬件测量支撑。
+-- 每个候选原因都有置信度和验证动作。
+-- 输出必须包含 `pass` 或 `needs-fix`，缺少复现证据时不得给通过结论。
+-- 修复建议必须包含回归验证范围。
++- 根因须有匹配日志、源码或硬件测量支撑；假设附置信度与验证动作。
++- 输出 `pass` 或 `needs-fix`；缺复现、符号或映射证据不得通过，修复建议须带回归范围。
+diff --git a/skills/adk-integration-hil-sil/SKILL.md b/skills/adk-integration-hil-sil/SKILL.md
+index 62402d4..d5a2054 100644
+--- a/skills/adk-integration-hil-sil/SKILL.md
++++ b/skills/adk-integration-hil-sil/SKILL.md
+@@ -1,8 +1,8 @@
+ ---
+ name: adk-integration-hil-sil
+ description: "用于软件在环与硬件在环的集成测试、场景配置与结果证据编排；不用于仅做单元测试或绕过真实设备操作授权。"
+-version: 1.0.2
+-last_updated: 2026-11-10
++version: 1.0.3
++last_updated: 2026-11-15
+ triggers:
+   - "集成测试"
+   - "HIL测试"
+@@ -20,8 +20,7 @@ constraints:
+ # adk-integration-hil-sil
+ 
+ ## Goal
+-- 通过 HIL/SIL 组合验证系统级行为和回归稳定性。
+-- 建立可重复、可自动化的嵌入式集成测试流程。
++用目标工程的 SIL/HIL 验证系统行为与回归，保留可复跑证据。
+ 
+ ## Prerequisites
+ - 锁定设备族、board revision、固件 hash、runner、资源占用、受控 HIL operator 和安全恢复路径。
+@@ -30,7 +29,7 @@ constraints:
+ 
+ ## Workflow
+ 1. **分层**：区分 host-unit、compile-only、SIL/QEMU、HIL、人工板级和量产资格；哪层实测就只报告哪层。
+-2. **确认执行后端**：以当前仓库的配置和真实命令为准；记录 compile-only/host/emulator/board-runner，`ctest` 在目标未注册 runner 时不等于真机运行。
++2. **执行后端**：按真实命令区分 compile-only/host/emulator/board-runner；未注册目标 runner 时 CTest 通过不证明板上运行。
+ 3. **资源隔离**：冻结构建输出、测试二进制、缓存、端口、串口、rig 和 device identity；共享资源禁止并行运行。
+ 4. **SIL**：按真实构建/仿真入口执行，采集架构、模拟精度、未覆盖硬件行为和原始证据。
+ 5. **HIL preflight**：只读核对 device/firmware、测试硬件、故障停止条件和健康恢复；需要刷写或改变设备状态时另交授权 operator。
+@@ -39,11 +38,12 @@ constraints:
+ 8. **交付**：说明各层 pass/fail/not-run、依赖与残留缺口；本 Skill 不单独批准量产。
+ 
+ ## Commands
+-以下命令仅适用于**已验证使用 CMake/CTest 的工程**，不是任意项目通用入口：
++仅适用于已核实使用 CMake/CTest 的工程：
+ ```bash
+ ctest --test-dir build/sil --show-only=json-v1
+-ctest --test-dir build/sil --output-on-failure
++ctest --test-dir build/sil --output-on-failure --no-tests=error
+ ```
++发现与执行使用同一配置/筛选；空集/全禁用/筛空须失败，退出 0 不把 skip/not-run 变成 pass。
+ pytest 工程须先检查实际插件/选项；目标不存在时不得猜测 `--board` 或 `--port`。现场命令、rig 与固件刷写由项目提供。
+ 
+ ## Budget / Retry
+diff --git a/skills/adk-interface-contract-design/SKILL.md b/skills/adk-interface-contract-design/SKILL.md
+index 5f5e859..5eca151 100644
+--- a/skills/adk-interface-contract-design/SKILL.md
++++ b/skills/adk-interface-contract-design/SKILL.md
+@@ -1,8 +1,8 @@
+ ---
+ name: adk-interface-contract-design
+ description: "用于模块 API、协议消息及生命周期状态转换的接口契约设计与迁移评审；不用于需求未收敛时直接写实现或放行设备动作。"
+-version: 1.3.5
+-last_updated: 2026-11-14
++version: 1.3.6
++last_updated: 2026-11-15
+ triggers:
+   - "设计接口"
+   - "API设计"
+@@ -24,14 +24,13 @@ constraints:
+ # adk-interface-contract-design
+ 
+ ## Goal
+-- 输出稳定、可验证的接口契约，降低跨模块返工。
+-- 确保嵌入式组件间接口（HAL/驱动/协议栈）有明确的版本化契约。
++输出可验证的模块/嵌入式 HAL、驱动与协议栈契约，明确版本与调用方。
+ 
+ 
+ ## Prerequisites
+ - 明确调用链 owner、版本策略和兼容窗口。
+ - 确定输入输出数据源与错误语义边界。
+-- 了解目标平台约束（内存对齐、字节序、对齐要求）。
++- 了解目标平台的内存对齐和字节序。
+ - 若请求会启动、取消或恢复共享资源操作，已识别唯一 owner 与状态可见性。
+ 
+ 
+@@ -54,9 +53,10 @@ constraints:
+    ```bash
+    # 检查错误码定义一致性
+    rg -n "IFACE_ERR_|ERR_" include/ src/ | sort
+-   # 检查是否有重复错误码值
+-   rg -o "= -[0-9]+" include/ | sort | uniq -d
++   # 跨文件重复字面值候选（不带文件名前缀）
++   rg --no-filename -o "= -[0-9]+" include/ | sort | uniq -d
+    ```
++   仅覆盖该负十进制写法；宏/表达式/别名/其他进制另核。同一命名空间才判断冲突；零候选不证明无冲突。
+ 4. **约束异常行为**：超时、限流、重试、降级必须来自目标协议、真实链路/设备预算与可证伪实验；不可把示例 1000ms/3 次重试当通用生产默认值。
+ 5. **受控生命周期契约（条件性）**：若操作跨越状态或独占资源，冻结 owner、状态、事件、资源、终止和 invariant；其中必须覆盖可见性、取消、超时、恢复、迟到完成与 generation/op-id 隔离。详见 [生命周期操作契约](references/lifecycle-operation-contract.md)。
+ 6. **工具与 handoff 副作用边界（条件性）**：按调用参数和目标身份在写入前授权；拒绝、未知结果和重放按 [工具与 handoff 副作用契约](references/tool-effect-contract.md) 处理。
+diff --git a/skills/adk-protocol-stack-integration/SKILL.md b/skills/adk-protocol-stack-integration/SKILL.md
+index a06cf7e..5452f04 100644
+--- a/skills/adk-protocol-stack-integration/SKILL.md
++++ b/skills/adk-protocol-stack-integration/SKILL.md
+@@ -1,8 +1,8 @@
+ ---
+ name: adk-protocol-stack-integration
+ description: "用于通信协议栈适配、连接状态机和跨层错误处理的集成设计与回归；不用于纯寄存器布局设计或仅修复孤立格式问题。"
+-version: 1.0.3
+-last_updated: 2026-11-14
++version: 1.0.4
++last_updated: 2026-11-15
+ triggers:
+   - "协议栈"
+   - "协议集成"
+@@ -33,35 +33,28 @@ constraints:
+ 5. 联调验证：正常、乱序、丢包、断链重连场景回归。
+ 
+ ## Execution Target Boundary
+-- 先分类 Linux 用户态、Linux kernel、RTOS/裸机协议栈、纯离线日志或仿真；`tcpdump` / `tshark` 只在确实存在可访问网络接口、适当权限和合法数据范围时使用，MCU/RTOS 不得默认运行。
++- 先分类 Linux 用户态、Linux kernel、RTOS/裸机、离线日志或仿真。主动 `tcpdump/tshark` 抓包须有实际接口、权限和数据范围；离线 `tshark` 不要求连接设备，MCU/RTOS 不默认具备这些工具。
+ - 无主动抓包许可时优先离线已有 trace、脱敏协议日志或仿真测试。丢包/乱序注入、网络配置修改与 live device 测试需要独立授权，不因需求是“集成测试”就自动放宽。
+ - 链路错误报告按 DNS、TCP/UDP、TLS、协议握手、keepalive 分层标 `measured|inferred|unknown`，抓包数据不得暗示应用根因已确认。
+ 
+ ## Commands
+-先核对项目实际接口、协议端口、抓包权限及脱敏规则，`IFACE/PORT/PCAP` 由项目配置，不猜测默认值：
++离线优先：核实 `PCAP` 来源，以实际问题的 `DISPLAY_FILTER` 分析：
+ ```bash
+-# 受控采样；可能采集隐私和凭据，须明确时间窗及保留策略
+-tcpdump -i "$IFACE" -w "$PCAP" "port $PORT"
+-# 离线分析
+-tshark -r "$PCAP" -q
++tshark -n -r "$PCAP" -Y "$DISPLAY_FILTER"
+ ```
+-Scapy 是 Python API；必须在 Python 环境中导入并确认 `scapy` 已安装，不得将 `scapy.all.sniff(...)` 直接粘入 Bash 块。发包和故障注入是主动操作，需单独授权。
++主动抓包另需授权及接口/端口/脱敏核实；采样时间与包数取预算内正值，`PCAP` 用本轮新路径。可用项目已有有界入口；下例只在采集成功后分析，失败保留退出码，不消费旧文件：
++```bash
++tshark -n -i "$IFACE" -f "port $PORT" -a "duration:$CAPTURE_SECONDS" -c "$PACKET_LIMIT" -w "$PCAP" &&
++  tshark -n -r "$PCAP" -Y "$DISPLAY_FILTER"
++```
++保留退出码、帧号/时间及匹配包数。坏文件记读取失败；零字节、合法零包或筛选零匹配即使退出 0 也记 `partial: 无目标协议证据`。大文件按问题限定窗口；`-q` 仅与明确的 `-z` 统计项组合，不单独用作分析。参见 [TShark](https://www.wireshark.org/docs/man-pages/tshark.html)。
++Scapy 是 Python API，须在已安装依赖的 Python 环境导入执行，不把 `scapy.all.sniff(...)` 粘入 Bash；发包/注入仍属主动操作。
+ 
+ ## Retry and timing boundary
+ - 分层记录 DNS、TCP、TLS、应用握手和 KeepAlive 的独立 timeout 与状态机。
+ - timeout/retry/backoff 由实际协议、链路和产品容错预算确定，不套用跨平台通用 30 秒、300 秒及三次重试。
+ - 非幂等外部操作状态未知时先对账，禁止盲目重复执行。
+ 
+-## 协议栈分层架构
+-| 层级 | 职责 | 典型协议 |
+-|------|------|----------|
+-| Application | 用户业务逻辑 | MQTT/CoAP/HTTP |
+-| Session/Security | 加密与鉴权 | TLS/DTLS |
+-| Transport | 连接与拥塞控制 | TCP/UDP/QUIC |
+-| Network | 路由与寻址 | IP/IPv6 |
+-| Link | 帧收发与 MAC | Ethernet/WiFi/BLE |
+-| Physical | 信号调制 | PHY/射频 |
+-
+ ## 分层测试策略
+ | 层级 | 测试重点 | 工具 |
+ |------|----------|------|
+@@ -70,13 +63,6 @@ Scapy 是 Python API；必须在 Python 环境中导入并确认 `scapy` 已安
+ | 传输层 | 连接管理、拥塞控制 | tc netem + iperf3 |
+ | 应用层 | 协议语义、状态机 | 模拟器 + Fuzz 测试 |
+ 
+-## 合理化借口拦截
+-
+-| 借口 | 现实 | 正确做法 |
+-|------|------|---------|
+-| "协议文档看过了不用抓包" | 文档可能有错误或版本差异 | 抓包验证实际行为 |
+-| "正常流程通了就行" | 异常场景才是协议可靠性的试金石 | 必须测试丢包/乱序/重连 |
+-
+ ## Evidence Template
+ ```md
+ - State Machine:
+diff --git a/skills/adk-release-versioning/SKILL.md b/skills/adk-release-versioning/SKILL.md
+index cad0dc6..5b00d77 100644
+--- a/skills/adk-release-versioning/SKILL.md
++++ b/skills/adk-release-versioning/SKILL.md
+@@ -1,8 +1,8 @@
+ ---
+ name: adk-release-versioning
+ description: "用于规划版本号、Changelog 和发布基线并检查历史版本一致性；不执行真实发布，也不用于替代固件包验证或设备更新。"
+-version: 1.4.3
+-last_updated: 2026-11-09
++version: 1.4.4
++last_updated: 2026-11-15
+ triggers:
+   - "版本发布"
+   - "版本管理"
+@@ -22,57 +22,27 @@ constraints:
+ # adk-release-versioning
+ 
+ ## Goal
+-- 核对版本与回退证据。
+-
++核对版本、完整变更范围和回退证据；不执行真实发布。
+ 
+ ## Prerequisites
+-- 确认版本策略（SemVer 或项目定制规则）。
+-- 收集本次发布范围、变更类型与受影响用户。
+-
++确认目标 commit、受影响用户及项目版本、正式发布、CI 和回滚政策；首发需明确确认。
+ 
+ ## Workflow
+-1. **版本决策**：根据变更类型确定 major/minor/patch。
+-   ```bash
+-   # 查看最近版本
+-   git tag --list --sort=-version:refname | head -10
+-   # 查看自上次发布的变更
+-   git log $(git describe --tags --abbrev=0)..HEAD --oneline
+-   ```
+-2. **变更归档**：按 feat/fix/refactor/docs 分类生成 changelog。
+-3. **Changelog 生成**：
+-   ```bash
+-   # 按 type 分类生成 changelog
+-   git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:"- %s" | \
+-     grep -E "^- (feat|fix|refactor|perf|docs)" | sort
+-   ```
+-4. **发布清单**：制品、依赖、配置变更、迁移步骤。
+-5. **阶段矩阵**：给出里程碑阶段、退出条件、验证证据与回退锚点。
+-6. **回退预案**：可回滚版本、触发条件、验证命令。
+-7. **Promotion 发布**：
+-   - 读取目标项目真实的 release policy、版本 SSOT、CI 与回滚机制，通用 Skill 不假设 ADK 发布链适用于任意仓。
+-   - 合并前校验 exact base 与版本合法性；受保护主线 fresh CI 后才进行签名和制品发布，不覆盖不可变 tag。
+-   - **仅对 agent-dev-kit 源仓** 使用 source SemVer 门禁、successful-main CI → release-tag-promotion → exact annotated tag → canonical release，并核验 digest/attestation。
+-   - 非 ADK 项目没有上述工作流时标记 `not_applicable`，改用该项目实际审查过的发布门禁，不得伪造结果。
+-8. **发布签署**：输出 go/no-go 结论与残留风险，并记录 tag、commit、GitHub Release 与 artifact digest。
+-
++1. **冻结范围**：正式发布记录确定 baseline，核其为目标祖先；不自动选择最近 tag。shallow/缺历史先按授权补齐，不改用首发。
++2. **完整取证**：使用 `references/details.md` 的只读示例保留全部 hash、subject、body；首发列所有可达历史，Git 失败立即停止。
++3. **版本与 Changelog**：逐条核实际影响并分类，breaking/revert/build/ci/未知类型均保留审阅去向；按兼容性决定 major/minor/patch 和迁移说明。
++4. **清单**：制品、依赖、配置、迁移、可回滚版本、触发条件和验证命令；阶段式迁移各列退出条件、证据及回退锚点。
++5. **Promotion 交接**：核 exact base/版本，受保护主线 fresh CI 后才签名/发布，核 tag/digest/attestation。ADK 专用链见 reference；其他项目遵循自身政策。
++6. **签署**：报告 go/no-go、残余风险和缺失证据，绑定 tag/commit/Release/digest；未执行不得声称已发布。
+ 
+ ## Quality Gate
+-- 必须给出版本号决策依据。
+-- 阶段式迁移必须给出阶段结论与回退锚点。
+-- 必须附完整迁移与回退步骤。
+-- 必须明确发布门禁结论与签署条件。
+-- 版本、tag 与受保护 CI 必须符合目标项目发布政策；仅 ADK 自身要求 source SemVer、annotated tag 及 successful-main promotion。
+-- Changelog 必须覆盖自上次发布以来的所有变更。
+-
++- 历史与分类覆盖全部待发布变更；撤销及非用户可见项也保留依据，不冒充仍生效的功能。
++- 版本、迁移/回退、阶段结论和签署条件可追溯，tag/CI 符合目标政策。
+ 
+ ## Failure Handling
+-- 版本号与变更类型不匹配时，停止切版并重审。
+-- 缺失回退路径时，结论必须为 `needs-fix`。
+-- Changelog 为空时，检查 commit message 是否符合规范。
+-- Tag 创建失败时，检查同名 tag 是否已存在；若已指向不同 commit，必须提升 SemVer，禁止覆盖旧 tag。
+-- GitHub Release 已存在时，只有远端 assets 与本轮 validated bundle byte-identical 才允许幂等通过。
+-- Tag 已存在但 Release 缺失时，不删除或重建 tag；由 self-heal audit 绑定 exact tag/commit 后补发。
+-
++- 空清单先核 baseline/HEAD；Git 错误、历史不完整、版本不匹配或缺回退 → `needs-fix`。
++- 同名 tag 指向不同 commit 必须提升 SemVer，禁止覆盖；已有 Release 仅在 assets 与 validated bundle byte-identical 时可幂等通过。
++- ADK tag 已存在但 Release 缺失，不重建 tag；self-heal audit 绑定 exact tag/commit 后补发。
+ 
+ ## Evidence Template
+ 
+@@ -87,5 +57,4 @@ risks:
+ ```
+ 
+ ## References
+-- 详细背景、命令、模板、示例和扩展检查项保存在 `references/details.md`。
+-- 入口文件只保留触发和执行所需的最小上下文，避免默认加载过多 token。
++需要完整历史命令、SemVer 对照或 ADK 发布边界时读 `references/details.md`。
+diff --git a/skills/adk-release-versioning/references/details.md b/skills/adk-release-versioning/references/details.md
+index c2b903a..b2c5018 100644
+--- a/skills/adk-release-versioning/references/details.md
++++ b/skills/adk-release-versioning/references/details.md
+@@ -1,6 +1,36 @@
+ # adk-release-versioning — 补充参考资料
+ 
+-此参考文件只提供可选背景、示例和检查提示；当前能力流程、权限、回退与放行结论以 `../SKILL.md`、Manifest 及运行时门禁为准。示例命令不得被解释为写权限授权。
++按需读取；不授予发布、安装或远端写入权限。
++
++## 完整发布历史（Bash）
++
++先由项目政策和实际发布记录核实基线身份；可解析的 tag 本身不是发布证明。定义下列函数后，首发调用 `release_history initial`，其他发布调用 `release_history since-release <已核正式发布ref>`。在目标仓运行，HEAD 为本次目标；输出非零时整份清单无效，保留错误，不改用另一个范围凑成功。
++
++```bash
++release_history() (
++  set -euo pipefail
++  case "${1-}:$#" in
++    initial:1|since-release:2) ;;
++    *) printf 'usage: release_history initial | since-release <verified-release-ref>\n' >&2; exit 2 ;;
++  esac
++  target=$(git rev-parse --verify 'HEAD^{commit}') || exit "$?"
++  shallow=$(git rev-parse --is-shallow-repository) || exit "$?"
++  [[ "$shallow" == false ]] || { printf 'incomplete history: shallow repository\n' >&2; exit 1; }
++  base=INITIAL
++  range=$target
++  if [[ "$1" == since-release ]]; then
++    base=$(git rev-parse --verify --end-of-options "$2^{commit}") || exit "$?"
++    git merge-base --is-ancestor "$base" "$target" || {
++      printf 'release baseline is not a verified ancestor of HEAD\n' >&2; exit 1;
++    }
++    range="$base..$target"
++  fi
++  printf 'base=%s\ntarget=%s\n' "$base" "$target" || exit "$?"
++  git --no-pager log --no-show-signature --reverse --format='commit %H%n%B' "$range" --
++)
++```
++
++按完整清单分类后写 Changelog，逐项保留去向；未知类型、正文 `BREAKING CHANGE`、revert 和非用户可见变更不能被过滤。先核变更是否仍生效，再决定版本影响。没有提交仅表示已核范围为空，不自动证明可发布。
+ 
+ ## 语义版本规则 (SemVer)
+ 
+@@ -13,12 +43,6 @@
+ | Bug 修复 | PATCH+1 | 1.0.0 → 1.0.1 | 向后兼容的修复 |
+ | 预发布 | 后缀 | 1.1.0-beta.1 | 测试阶段版本 |
+ 
+-判断规则：
+-- 有删除/重命名公开 API → MAJOR
+-- 有新增公开 API → MINOR
+-- 仅修复内部实现 → PATCH
+-- 不确定时选择更保守的版本位
+-
+ ## 当前 ADK 发布边界
+ 
+ - 实际 Tag 和 GitHub Release 只由受保护 `main` 的 successful-main promotion 与 canonical release 自动生成。
+diff --git a/src/agent_dev_kit/__init__.py b/src/agent_dev_kit/__init__.py
+index e0cd5e7..5853ea1 100644
+--- a/src/agent_dev_kit/__init__.py
++++ b/src/agent_dev_kit/__init__.py
+@@ -1,3 +1,3 @@
+ """agent-dev-kit structured control plane."""
+ 
+-__version__ = "11.3.2"
++__version__ = "11.3.3"
+diff --git a/src/agent_dev_kit/goal_plan.py b/src/agent_dev_kit/goal_plan.py
+index b951ba5..17d1843 100644
+--- a/src/agent_dev_kit/goal_plan.py
++++ b/src/agent_dev_kit/goal_plan.py
+@@ -7,7 +7,7 @@ import json
+ from pathlib import Path
+ from typing import Any, Optional, Sequence
+ 
+-from .planning_state import _reject_symlink_path, valid_work_in_progress
++from .planning_state import _reject_symlink_path, current_state_field_issues
+ from .strict_json import read_bytes as read_bounded_bytes, loads as load_strict_json
+ 
+ 
+@@ -142,17 +142,12 @@ def _check(plan: dict, state: Optional[dict], *, for_resume: bool) -> dict:
+             or not _text(budget.get("basis")) or budget.get("native_goal_applied") is not False):
+         reasons.append("budget-proposal-invalid-or-claims-authority")
+     if state is not None:
+-        required_state = {"schema_version", "goal_ref", "milestone", "evidence_refs", "blockers", "next_actions", "history_refs"}
+-        if (not required_state <= set(state) or set(state) - required_state - {"work_in_progress"}
+-                or state.get("schema_version") != "adk.current-state/v1"):
+-            reasons.append("current-state-fields-invalid")
+-        if "work_in_progress" in state and not valid_work_in_progress(state["work_in_progress"]):
+-            reasons.append("current-state-work-in-progress-invalid")
+-        for key in ("goal_ref", "milestone"):
+-            if not _text(state.get(key)):
+-                reasons.append("state-" + key + "-invalid")
+-        for key, low, high in (("evidence_refs", 0, 8), ("blockers", 0, 8), ("next_actions", 1, 3), ("history_refs", 0, 3)):
+-            if not _texts(state.get(key), minimum=low, maximum=high):
++        for key, _ in current_state_field_issues(state):
++            if key in ("schema", "fields"):
++                reasons.append("current-state-fields-invalid")
++            elif key == "work_in_progress":
++                reasons.append("current-state-work-in-progress-invalid")
++            else:
+                 reasons.append("state-" + key + "-invalid")
+     return {"schema_version": "adk.goal-plan-check/v1", "status": "fail" if reasons else "pass",
+             "read_only": True, "runtime_authority": False, "completion_allowed": False,
+diff --git a/src/agent_dev_kit/planning_state.py b/src/agent_dev_kit/planning_state.py
+index b7b1918..050780f 100644
+--- a/src/agent_dev_kit/planning_state.py
++++ b/src/agent_dev_kit/planning_state.py
+@@ -22,6 +22,36 @@ def valid_work_in_progress(work: Any) -> bool:
+                      and work["prior_verified_checkpoint"] >= 0)))
+ 
+ 
++def current_state_field_issues(value: Any) -> list[tuple[str, str]]:
++    """Share field constraints; callers retain their public diagnostic formats."""
++    if not isinstance(value, dict):
++        return [("schema", "invalid")]
++    issues = []
++    if value.get("schema_version") != "adk.current-state/v1":
++        issues.append(("schema", "invalid"))
++    required = {"schema_version", "goal_ref", "milestone", "evidence_refs", "blockers", "next_actions", "history_refs"}
++    if not required <= set(value) or set(value) - required - {"work_in_progress"}:
++        issues.append(("fields", "invalid"))
++    if "work_in_progress" in value and not valid_work_in_progress(value["work_in_progress"]):
++        issues.append(("work_in_progress", "invalid"))
++    for key in ("goal_ref", "milestone"):
++        if not isinstance(value.get(key), str) or not value[key].strip():
++            issues.append((key, "missing"))
++    limits = (("evidence_refs", 0, 8), ("blockers", 0, 8),
++              ("next_actions", 1, 3), ("history_refs", 0, 3))
++    for key, _, _ in limits:
++        items = value.get(key)
++        if (not isinstance(items, list)
++                or any(not isinstance(item, str) or not item.strip() for item in items)
++                or len(set(items)) != len(items)):
++            issues.append((key, "invalid"))
++    for key, minimum, maximum in limits:
++        items = value.get(key)
++        if isinstance(items, list) and not minimum <= len(items) <= maximum:
++            issues.append((key, "limit"))
++    return issues
++
++
+ def _reject_symlink_path(path: Path) -> None:
+     """Fail closed on symlinked components, including parents (preflight only)."""
+     current = path
+@@ -52,25 +82,16 @@ def check_current_state(path: Path, *, max_bytes: int = 8192) -> dict[str, Any]:
+             value = load_strict_json(raw, max_bytes=max_bytes)
+         except (ValueError, UnicodeError):
+             value = None
+-        if not isinstance(value, dict) or value.get("schema_version") != "adk.current-state/v1":
++        issues = current_state_field_issues(value)
++        if ("schema", "invalid") in issues:
+             reasons.append("current-state-schema-invalid")
+         else:
+-            required = {"schema_version", "goal_ref", "milestone", "evidence_refs", "blockers", "next_actions", "history_refs"}
+-            if not required <= set(value) or set(value) - required - {"work_in_progress"}:
+-                reasons.append("current-state-fields-invalid")
+-            if "work_in_progress" in value:
+-                if not valid_work_in_progress(value["work_in_progress"]):
+-                    reasons.append("current-state-work-in-progress-invalid")
+-            for key in ("goal_ref", "milestone"):
+-                if not isinstance(value.get(key), str) or not value[key].strip():
+-                    reasons.append("current-state-" + key.replace("_", "-") + "-missing")
+-            for key in ("evidence_refs", "blockers", "next_actions", "history_refs"):
+-                items = value.get(key)
+-                if not isinstance(items, list) or any(not isinstance(item, str) or not item.strip() for item in items):
+-                    reasons.append("current-state-" + key.replace("_", "-") + "-invalid")
+-            actions = value.get("next_actions")
+-            if isinstance(actions, list) and not 1 <= len(actions) <= 3:
+-                reasons.append("current-state-next-actions-limit")
++            for key, kind in issues:
++                if kind == "limit" and key != "next_actions":
++                    kind = "invalid"
++                reason = "current-state-" + key.replace("_", "-") + "-" + kind
++                if reason not in reasons:
++                    reasons.append(reason)
+     return {
+         "schema_version": "adk.current-state-check/v1",
+         "status": "fail" if reasons else "pass",
+diff --git a/tests/fixtures/skill_method_ab_prereg.json b/tests/fixtures/skill_method_ab_prereg.json
+index 1e0e27f..cc00123 100644
+--- a/tests/fixtures/skill_method_ab_prereg.json
++++ b/tests/fixtures/skill_method_ab_prereg.json
+@@ -9,7 +9,7 @@
+     "source_sha": "7aed1d2545babce16c41dc021ead01c8c324ce07"
+   },
+   "candidate": {
+-    "planned_release": "v11.3.2",
++    "planned_release": "v11.3.3",
+     "source_sha": null
+   },
+   "case_groups": {
+@@ -67,6 +67,12 @@
+   },
+   "holdout_qualification": "development-fixture-only-after-author-exposure",
+   "unexecuted_candidate_history": [
++    {
++      "planned_release": "v11.3.2",
++      "merged_main_sha": "1282c78b145afca670cf8e5733d80bd3c61f5cfb",
++      "model_runs": 0,
++      "reason": "The task-usability source candidate merged after independent review and all required checks. This successor repairs concrete command and current-state failures; deterministic examples are not native model, Token, latency or cost observations."
++    },
+     {
+       "planned_release": "v11.3.1",
+       "merged_main_sha": "c57f4f8a7983f52257c0587eb85881a006e6dc07",
+diff --git a/tests/test_goal_authoring.py b/tests/test_goal_authoring.py
+index 2aa6ce3..0427bc4 100644
+--- a/tests/test_goal_authoring.py
++++ b/tests/test_goal_authoring.py
+@@ -48,9 +48,12 @@ class GoalPlanTests(unittest.TestCase):
+             before = {path.name: path.read_bytes() for path in root.iterdir()}
+             environment = dict(os.environ, ADK_PYTHON_BIN=os.sys.executable,
+                                PYTHONDONTWRITEBYTECODE="1")
++            arguments = ["--state", str(state_path)]
++            if action != "state-check":
++                arguments += ["--plan", str(plan_path)]
+             result = subprocess.run(
+                 ["bash", str(ROOT / "scripts/devkit.sh"), "goal", action,
+-                 "--plan", str(plan_path), "--state", str(state_path)],
++                 *arguments],
+                 cwd=root, env=environment, capture_output=True, text=True, timeout=15,
+             )
+             self.assertEqual(before, {path.name: path.read_bytes() for path in root.iterdir()})
+@@ -267,6 +270,48 @@ class GoalPlanTests(unittest.TestCase):
+                 self.assertEqual(expected, check_current_state(path)["status"])
+                 self.assertEqual(expected, check(self.plan, state)["status"])
+ 
++    def test_public_state_check_and_resume_agree_on_frontier_field_boundaries(self):
++        for field, maximum in (("evidence_refs", 8), ("blockers", 8),
++                               ("next_actions", 3), ("history_refs", 3)):
++            cases = (
++                ("upper-bound", [f"{field}-{i}" for i in range(maximum)], 0),
++                ("too-many", [f"{field}-{i}" for i in range(maximum + 1)], 1),
++                ("duplicates", ["same reference", "same reference"], 1),
++                ("blank", [" \t"], 1),
++                ("wrong-type", [None], 1),
++                ("empty", [], int(field == "next_actions")),
++            )
++            for label, values, expected in cases:
++                state = self._resume_state()
++                state[field] = values
++                for action in ("state-check", "resume"):
++                    with self.subTest(field=field, case=label, action=action):
++                        result = self._public_goal(action, self.plan, state)
++                        self.assertEqual(expected, result.returncode, result.stdout + result.stderr)
++                        if expected:
++                            verdict = json.loads(result.stdout)
++                            self.assertEqual("fail", verdict["status"])
++                            if action == "resume":
++                                reason = f"state-{field}-invalid"
++                            elif field == "next_actions" and label in ("too-many", "empty"):
++                                reason = "current-state-next-actions-limit"
++                            else:
++                                reason = "current-state-" + field.replace("_", "-") + "-invalid"
++                            self.assertIn(reason, verdict["reasons"])
++                            self.assertTrue(verdict["read_only"])
++                            self.assertFalse(verdict["completion_allowed"])
++
++    def test_public_state_error_vocabularies_and_schema_short_circuit_are_preserved(self):
++        state = self._resume_state()
++        state.update(schema_version="unknown", goal_ref="", next_actions=[None] * 4)
++        preflight = self._public_goal("state-check", self.plan, state)
++        resume = self._public_goal("resume", self.plan, state)
++        self.assertEqual(1, preflight.returncode)
++        self.assertEqual(1, resume.returncode)
++        self.assertEqual(["current-state-schema-invalid"], json.loads(preflight.stdout)["reasons"])
++        self.assertEqual(["current-state-fields-invalid", "state-goal_ref-invalid",
++                          "state-next_actions-invalid"], json.loads(resume.stdout)["reasons"])
++
+     def test_strict_input_boundaries_and_digest_bind_same_read(self):
+         with tempfile.TemporaryDirectory() as temp:
+             path = Path(temp) / "plan.json"
+diff --git a/tests/test_planning_state.py b/tests/test_planning_state.py
+index d43894b..9a26a60 100644
+--- a/tests/test_planning_state.py
++++ b/tests/test_planning_state.py
+@@ -54,6 +54,22 @@ class PlanningStateTest(unittest.TestCase):
+             path.write_text(json.dumps({"schema_version": "adk.current-state/v1", "historical_body": "full copied history"}))
+             self.assertIn("current-state-fields-invalid", check_current_state(path)["reasons"])
+ 
++    def test_existing_field_errors_still_aggregate_before_read_only_failure(self) -> None:
++        value = {"schema_version": "adk.current-state/v1", "goal_ref": " ",
++                 "milestone": "phase", "evidence_refs": [], "blockers": [],
++                 "next_actions": [None] * 4, "history_refs": [], "unknown": True}
++        with tempfile.TemporaryDirectory() as temp:
++            path = Path(temp) / "current.json"
++            path.write_text(json.dumps(value))
++            before = path.read_bytes()
++            result = check_current_state(path)
++            self.assertEqual("fail", result["status"])
++            self.assertEqual(["current-state-fields-invalid", "current-state-goal-ref-missing",
++                              "current-state-next-actions-invalid", "current-state-next-actions-limit"],
++                             result["reasons"])
++            self.assertEqual(before, path.read_bytes())
++            self.assertFalse(result["completion_allowed"])
++
+ 
+     @unittest.skipUnless(hasattr(os, "mkfifo"), "POSIX input boundary")
+     def test_state_input_rejects_fifo_and_symlink_components_without_hanging(self) -> None:
+diff --git a/tests/test_skill_command_examples.py b/tests/test_skill_command_examples.py
+new file mode 100644
+index 0000000..3148f72
+--- /dev/null
++++ b/tests/test_skill_command_examples.py
+@@ -0,0 +1,226 @@
++"""Execute the published Skill examples against isolated, observable failures."""
++from __future__ import annotations
++
++import json
++import os
++from pathlib import Path
++import re
++import subprocess
++import sys
++import tempfile
++import unittest
++
++
++ROOT = Path(__file__).resolve().parents[1]
++RELEASE = "skills/adk-release-versioning/references/details.md"
++FLAKY = "optional-skills/adk-test-flakiness-triage/references/details.md"
++
++
++def bash_example(path: str, marker: str) -> str:
++    blocks = re.findall(r"```bash\n(.*?)```", (ROOT / path).read_text(), re.S)
++    matches = [block for block in blocks if marker in block]
++    if len(matches) != 1:
++        raise AssertionError(f"expected one executable example for {marker}: {path}")
++    return matches[0]
++
++
++def run_example(code: str, root: Path, *arguments: str, environment=None):
++    return subprocess.run(["bash", "-c", code, "skill-example", *arguments], cwd=root,
++                          env=environment, capture_output=True, text=True, timeout=15)
++
++
++class ReleaseHistoryExampleTests(unittest.TestCase):
++    def setUp(self):
++        self.temporary = tempfile.TemporaryDirectory()
++        self.addCleanup(self.temporary.cleanup)
++        self.root = Path(self.temporary.name)
++        self.repo = self.root / "source repository"
++        self.repo.mkdir()
++        self.environment = dict(os.environ, GIT_CONFIG_NOSYSTEM="1", GIT_CONFIG_GLOBAL=os.devnull,
++                                GIT_AUTHOR_NAME="Skill fixture", GIT_COMMITTER_NAME="Skill fixture",
++                                GIT_AUTHOR_EMAIL="fixture@example.invalid",
++                                GIT_COMMITTER_EMAIL="fixture@example.invalid")
++        self.git("init", "-q")
++        self.code = bash_example(RELEASE, "release_history()") + '\nrelease_history "$@"\n'
++
++    def git(self, *arguments):
++        result = subprocess.run(["git", *arguments], cwd=self.repo, env=self.environment,
++                                capture_output=True, text=True, timeout=15)
++        self.assertEqual(0, result.returncode, result.stderr)
++        return result.stdout.strip()
++
++    def commit(self, subject, body=""):
++        self.git("commit", "--allow-empty", "-q", "-m", subject, "-m", body)
++        return self.git("rev-parse", "HEAD")
++
++    def history(self, *arguments, root=None):
++        return run_example(self.code, root or self.repo, *arguments, environment=self.environment)
++
++    def test_initial_release_preserves_all_commits_without_tags(self):
++        first = self.commit("first implementation", "Details without a conventional prefix")
++        second = self.commit("fix: initial error", "Second paragraph\n\nMore evidence")
++        result = self.history("initial")
++        self.assertEqual(0, result.returncode, result.stderr)
++        self.assertIn("base=INITIAL", result.stdout)
++        for value in (first, second, "first implementation", "Details without a conventional prefix",
++                      "fix: initial error", "Second paragraph\n\nMore evidence"):
++            self.assertIn(value, result.stdout)
++        self.assertLess(result.stdout.index("commit " + first), result.stdout.index("commit " + second))
++
++    def test_verified_release_range_keeps_breaking_revert_and_unknown_types(self):
++        baseline = self.commit("published baseline")
++        self.git("tag", "v1.0.0")
++        changes = [
++            ("feat: export data", "Export behavior"),
++            ("build!: require toolchain 18", "BREAKING CHANGE: old build format is rejected"),
++            ("revert: remove export", "Reverts the export behavior"),
++            ("security patch for parser", "No conventional type; still needs review"),
++        ]
++        commits = []
++        for index, (subject, body) in enumerate(changes):
++            commits.append(self.commit(subject, body))
++            if index == 2:
++                self.git("tag", "scratch-checkpoint")
++        result = self.history("since-release", "v1.0.0")
++        self.assertEqual(0, result.returncode, result.stderr)
++        self.assertIn("base=" + baseline, result.stdout)
++        self.assertNotIn("commit " + baseline, result.stdout)
++        for identity, (subject, body) in zip(commits, changes):
++            self.assertIn("commit " + identity, result.stdout)
++            self.assertIn(subject, result.stdout)
++            self.assertIn(body, result.stdout)
++        self.assertEqual(commits[-1], self.git("rev-parse", "HEAD"))
++
++    def test_invalid_or_unrelated_baseline_fails_without_initial_fallback(self):
++        self.commit("baseline")
++        unrelated = self.git("commit-tree", self.git("rev-parse", "HEAD^{tree}"), "-m", "unrelated root")
++        for baseline in ("missing-release", "--all", unrelated):
++            with self.subTest(baseline=baseline):
++                result = self.history("since-release", baseline)
++                self.assertNotEqual(0, result.returncode)
++                self.assertEqual("", result.stdout)
++                self.assertTrue(result.stderr)
++
++    def test_shallow_history_is_rejected_even_for_explicit_initial_mode(self):
++        self.commit("first")
++        self.commit("second")
++        clone = self.root / "shallow"
++        self.git("clone", "-q", "--depth=1", self.repo.as_uri(), str(clone))
++        result = self.history("initial", root=clone)
++        self.assertNotEqual(0, result.returncode)
++        self.assertIn("shallow", result.stderr)
++        self.assertEqual("", result.stdout)
++
++    def test_empty_verified_range_is_distinct_from_git_or_usage_failure(self):
++        identity = self.commit("release")
++        result = self.history("since-release", identity)
++        self.assertEqual(0, result.returncode, result.stderr)
++        self.assertIn("base=" + identity, result.stdout)
++        self.assertIn("target=" + identity, result.stdout)
++        self.assertNotIn("commit ", result.stdout)
++        for arguments, root in (((), self.repo), (("initial", "extra"), self.repo),
++                                (("initial",), self.root)):
++            with self.subTest(arguments=arguments, root=root.name):
++                failed = self.history(*arguments, root=root)
++                self.assertNotEqual(0, failed.returncode)
++                self.assertEqual("", failed.stdout)
++
++
++class FlakySampleExampleTests(unittest.TestCase):
++    def setUp(self):
++        self.temporary = tempfile.TemporaryDirectory()
++        self.addCleanup(self.temporary.cleanup)
++        self.root = Path(self.temporary.name)
++        self.code = bash_example(FLAKY, "run_flaky_samples()") + '\nrun_flaky_samples "$@"\n'
++        self.runner = self.root / "sample runner [fixture].py"
++        self.runner.write_text(
++            "import json, os, sys\n"
++            "from pathlib import Path\n"
++            "sample = Path(os.environ['FLAKY_SAMPLE_DIR'])\n"
++            "attempt = int(sample.name.removeprefix('run-'))\n"
++            "code = int(sys.argv[1].split(',')[attempt - 1])\n"
++            "outcome = 'passed' if code == 0 else 'failed' if code == 1 else 'error'\n"
++            "(sample / 'result.json').write_text(json.dumps({'name': sys.argv[2], 'outcome': outcome}))\n"
++            "print('PASSED noisy_log_name\\nPASSED noisy_log_name')\n"
++            "print(outcome, sys.argv[2], flush=True)\n"
++            "print('stderr retained', file=sys.stderr)\n"
++            "sys.exit(code)\n"
++        )
++
++    def sample(self, codes, name="test_items[case 1]", directory="new evidence", code=None):
++        output = self.root / directory
++        command = [sys.executable, str(self.runner), ",".join(map(str, codes)), name]
++        if code is not None:
++            command = [sys.executable, "-c", code]
++        result = run_example(self.code, self.root, str(len(codes)), str(output), *command)
++        return result, output
++
++    def test_success_failure_and_mixed_runs_keep_exact_exit_codes_and_reports(self):
++        literal_name = "test_items[case 1]; $(touch MUST_NOT_RUN)"
++        for codes in ([0, 0, 0], [9, 9, 9], [0, 1, 2, 0]):
++            with self.subTest(codes=codes):
++                result, output = self.sample(codes, literal_name, directory="runs-" + "-".join(map(str, codes)))
++                self.assertEqual(int(any(codes)), result.returncode, result.stderr)
++                rows = (output / "results.tsv").read_text().splitlines()
++                self.assertEqual(["attempt\texit_code", *[f"{i}\t{code}" for i, code in enumerate(codes, 1)]], rows)
++                for attempt, code in enumerate(codes, 1):
++                    run = output / f"run-{attempt}"
++                    report = json.loads((run / "result.json").read_text())
++                    self.assertEqual(literal_name, report["name"])
++                    self.assertEqual("passed" if code == 0 else "failed" if code == 1 else "error", report["outcome"])
++                    log = (run / "output.log").read_text()
++                    self.assertIn("stderr retained", log)
++                    self.assertIn(literal_name, log)
++                self.assertFalse((self.root / "MUST_NOT_RUN").exists())
++
++    def test_existing_evidence_is_not_reused_or_overwritten(self):
++        result, output = self.sample([0])
++        self.assertEqual(0, result.returncode, result.stderr)
++        before = {path.relative_to(output): path.read_bytes() for path in output.rglob("*") if path.is_file()}
++        result, _ = self.sample([1])
++        self.assertEqual(2, result.returncode, result.stderr)
++        self.assertEqual(before, {path.relative_to(output): path.read_bytes()
++                                  for path in output.rglob("*") if path.is_file()})
++
++    def test_sample_collection_failure_stops_without_fake_completed_attempt(self):
++        command = ("import os; from pathlib import Path; "
++                   "sample=Path(os.environ['FLAKY_SAMPLE_DIR']); "
++                   "(sample.parent / 'run-2').write_text('blocked collection path'); "
++                   "print('first real observation')")
++        result, output = self.sample([0, 0, 0], code=command)
++        self.assertEqual(2, result.returncode, result.stderr)
++        self.assertEqual("attempt\texit_code\n1\t0\n", (output / "results.tsv").read_text())
++        self.assertIn("first real observation", (output / "run-1/output.log").read_text())
++        self.assertFalse((output / "run-3").exists())
++        self.assertNotIn("attempts=3", result.stdout)
++
++    def test_status_write_failure_is_not_a_successful_collection(self):
++        command = ("import os; from pathlib import Path; "
++                   "status=Path(os.environ['FLAKY_SAMPLE_DIR']).parent / 'results.tsv'; "
++                   "status.unlink(); status.mkdir(); print('test command returned zero')")
++        result, output = self.sample([0], code=command)
++        self.assertEqual(2, result.returncode, result.stderr)
++        self.assertIn("returned zero", (output / "run-1/output.log").read_text())
++
++    def test_invalid_sample_budgets_do_not_execute_or_create_output(self):
++        for budget in ("0", "21", "-1", "99999", "$(touch MUST_NOT_RUN)"):
++            with self.subTest(budget=budget):
++                output = self.root / "not-created"
++                result = run_example(self.code, self.root, budget, str(output), "false")
++                self.assertEqual(2, result.returncode)
++                self.assertFalse(output.exists())
++        self.assertFalse((self.root / "MUST_NOT_RUN").exists())
++
++    def test_environment_example_only_prints_names_not_synthetic_secret_values(self):
++        environment = {"PATH": os.environ["PATH"], "CI_JOB_TOKEN": "synthetic-private-value",
++                       "TEST_PASSWORD": "another-private-value", "UNRELATED": "debug-value"}
++        code = bash_example(FLAKY, "# environment-names:")
++        result = run_example(code, self.root, environment=environment)
++        self.assertEqual(0, result.returncode, result.stderr)
++        self.assertEqual(["CI_JOB_TOKEN", "TEST_PASSWORD"], json.loads(result.stdout))
++        for value in environment.values():
++            self.assertNotIn(value, result.stdout)
++
++
++if __name__ == "__main__":
++    unittest.main()
+diff --git a/tests/test_skill_content.sh b/tests/test_skill_content.sh
+index b98bd7b..9be7324 100644
+--- a/tests/test_skill_content.sh
++++ b/tests/test_skill_content.sh
+@@ -4,5 +4,5 @@ ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+ export PYTHONPATH="$ROOT_DIR/src"
+ cd "$ROOT_DIR"
+ # Content v2 has no universal SOP headings or minimum line count.
+-python3 -m unittest tests.test_skill_content_contract tests.test_document_authoring_skills tests.test_skill_method_efficiency tests.test_skill_quality_methods tests.test_verification_stage_economy tests.test_skill_portfolio_quality tests.test_external_method_intake tests.test_repository_workflow_efficiency tests.test_skill_execution_tasks tests.test_skill_openai_metadata tests.test_commit_message_policy -v
++python3 -m unittest tests.test_skill_content_contract tests.test_document_authoring_skills tests.test_skill_method_efficiency tests.test_skill_quality_methods tests.test_verification_stage_economy tests.test_skill_portfolio_quality tests.test_external_method_intake tests.test_repository_workflow_efficiency tests.test_skill_execution_tasks tests.test_skill_command_examples tests.test_skill_openai_metadata tests.test_commit_message_policy -v
+ echo "[PASS] Skills content v2, OpenAI metadata and Commit Policy"

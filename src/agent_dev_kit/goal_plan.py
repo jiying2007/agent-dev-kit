@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 from typing import Any, Optional, Sequence
 
-from .planning_state import _reject_symlink_path, valid_work_in_progress
+from .planning_state import _reject_symlink_path, current_state_field_issues
 from .strict_json import read_bytes as read_bounded_bytes, loads as load_strict_json
 
 
@@ -142,17 +142,12 @@ def _check(plan: dict, state: Optional[dict], *, for_resume: bool) -> dict:
             or not _text(budget.get("basis")) or budget.get("native_goal_applied") is not False):
         reasons.append("budget-proposal-invalid-or-claims-authority")
     if state is not None:
-        required_state = {"schema_version", "goal_ref", "milestone", "evidence_refs", "blockers", "next_actions", "history_refs"}
-        if (not required_state <= set(state) or set(state) - required_state - {"work_in_progress"}
-                or state.get("schema_version") != "adk.current-state/v1"):
-            reasons.append("current-state-fields-invalid")
-        if "work_in_progress" in state and not valid_work_in_progress(state["work_in_progress"]):
-            reasons.append("current-state-work-in-progress-invalid")
-        for key in ("goal_ref", "milestone"):
-            if not _text(state.get(key)):
-                reasons.append("state-" + key + "-invalid")
-        for key, low, high in (("evidence_refs", 0, 8), ("blockers", 0, 8), ("next_actions", 1, 3), ("history_refs", 0, 3)):
-            if not _texts(state.get(key), minimum=low, maximum=high):
+        for key, _ in current_state_field_issues(state):
+            if key in ("schema", "fields"):
+                reasons.append("current-state-fields-invalid")
+            elif key == "work_in_progress":
+                reasons.append("current-state-work-in-progress-invalid")
+            else:
                 reasons.append("state-" + key + "-invalid")
     return {"schema_version": "adk.goal-plan-check/v1", "status": "fail" if reasons else "pass",
             "read_only": True, "runtime_authority": False, "completion_allowed": False,

@@ -1,8 +1,8 @@
 ---
 name: adk-protocol-stack-integration
 description: "用于通信协议栈适配、连接状态机和跨层错误处理的集成设计与回归；不用于纯寄存器布局设计或仅修复孤立格式问题。"
-version: 1.0.3
-last_updated: 2026-11-14
+version: 1.0.4
+last_updated: 2026-11-15
 triggers:
   - "协议栈"
   - "协议集成"
@@ -33,34 +33,27 @@ constraints:
 5. 联调验证：正常、乱序、丢包、断链重连场景回归。
 
 ## Execution Target Boundary
-- 先分类 Linux 用户态、Linux kernel、RTOS/裸机协议栈、纯离线日志或仿真；`tcpdump` / `tshark` 只在确实存在可访问网络接口、适当权限和合法数据范围时使用，MCU/RTOS 不得默认运行。
+- 先分类 Linux 用户态、Linux kernel、RTOS/裸机、离线日志或仿真。主动 `tcpdump/tshark` 抓包须有实际接口、权限和数据范围；离线 `tshark` 不要求连接设备，MCU/RTOS 不默认具备这些工具。
 - 无主动抓包许可时优先离线已有 trace、脱敏协议日志或仿真测试。丢包/乱序注入、网络配置修改与 live device 测试需要独立授权，不因需求是“集成测试”就自动放宽。
 - 链路错误报告按 DNS、TCP/UDP、TLS、协议握手、keepalive 分层标 `measured|inferred|unknown`，抓包数据不得暗示应用根因已确认。
 
 ## Commands
-先核对项目实际接口、协议端口、抓包权限及脱敏规则，`IFACE/PORT/PCAP` 由项目配置，不猜测默认值：
+离线优先：核实 `PCAP` 来源，以实际问题的 `DISPLAY_FILTER` 分析：
 ```bash
-# 受控采样；可能采集隐私和凭据，须明确时间窗及保留策略
-tcpdump -i "$IFACE" -w "$PCAP" "port $PORT"
-# 离线分析
-tshark -r "$PCAP" -q
+tshark -n -r "$PCAP" -Y "$DISPLAY_FILTER"
 ```
-Scapy 是 Python API；必须在 Python 环境中导入并确认 `scapy` 已安装，不得将 `scapy.all.sniff(...)` 直接粘入 Bash 块。发包和故障注入是主动操作，需单独授权。
+主动抓包另需授权及接口/端口/脱敏核实；采样时间与包数取预算内正值，`PCAP` 用本轮新路径。可用项目已有有界入口；下例只在采集成功后分析，失败保留退出码，不消费旧文件：
+```bash
+tshark -n -i "$IFACE" -f "port $PORT" -a "duration:$CAPTURE_SECONDS" -c "$PACKET_LIMIT" -w "$PCAP" &&
+  tshark -n -r "$PCAP" -Y "$DISPLAY_FILTER"
+```
+保留退出码、帧号/时间及匹配包数。坏文件记读取失败；零字节、合法零包或筛选零匹配即使退出 0 也记 `partial: 无目标协议证据`。大文件按问题限定窗口；`-q` 仅与明确的 `-z` 统计项组合，不单独用作分析。参见 [TShark](https://www.wireshark.org/docs/man-pages/tshark.html)。
+Scapy 是 Python API，须在已安装依赖的 Python 环境导入执行，不把 `scapy.all.sniff(...)` 粘入 Bash；发包/注入仍属主动操作。
 
 ## Retry and timing boundary
 - 分层记录 DNS、TCP、TLS、应用握手和 KeepAlive 的独立 timeout 与状态机。
 - timeout/retry/backoff 由实际协议、链路和产品容错预算确定，不套用跨平台通用 30 秒、300 秒及三次重试。
 - 非幂等外部操作状态未知时先对账，禁止盲目重复执行。
-
-## 协议栈分层架构
-| 层级 | 职责 | 典型协议 |
-|------|------|----------|
-| Application | 用户业务逻辑 | MQTT/CoAP/HTTP |
-| Session/Security | 加密与鉴权 | TLS/DTLS |
-| Transport | 连接与拥塞控制 | TCP/UDP/QUIC |
-| Network | 路由与寻址 | IP/IPv6 |
-| Link | 帧收发与 MAC | Ethernet/WiFi/BLE |
-| Physical | 信号调制 | PHY/射频 |
 
 ## 分层测试策略
 | 层级 | 测试重点 | 工具 |
@@ -69,13 +62,6 @@ Scapy 是 Python API；必须在 Python 环境中导入并确认 `scapy` 已安�
 | 链路层 | 帧收发、MAC 仲裁 | 抓包 + 帧注入器 |
 | 传输层 | 连接管理、拥塞控制 | tc netem + iperf3 |
 | 应用层 | 协议语义、状态机 | 模拟器 + Fuzz 测试 |
-
-## 合理化借口拦截
-
-| 借口 | 现实 | 正确做法 |
-|------|------|---------|
-| "协议文档看过了不用抓包" | 文档可能有错误或版本差异 | 抓包验证实际行为 |
-| "正常流程通了就行" | 异常场景才是协议可靠性的试金石 | 必须测试丢包/乱序/重连 |
 
 ## Evidence Template
 ```md

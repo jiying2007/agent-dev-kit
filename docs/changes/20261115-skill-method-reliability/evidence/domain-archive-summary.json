@@ -1,0 +1,544 @@
+{
+  "schema": "adk-domain-evidence-archive-summary/v1",
+  "generated_at": "2026-11-15T06:39:43.472056+00:00",
+  "generation_scope": "Read-only catalogue of existing evidence. No tool tests, trigger tests, paid models, or full suites rerun; no repo or old evidence modified.",
+  "frozen_source": {
+    "commit": "134927418b98abc515b367ca06b3404aac22960e",
+    "tree": "6563c7bf338b269f64818fb3c394c3d44355872a",
+    "pre_wording_commit": "f538db1224e77d2ba06a32387dee57a15a5b3bbe"
+  },
+  "minimum_archive_files": [
+    {
+      "original_path": "/workspace/scratch/771b38332ec2/domain-audit-repro/results.json",
+      "archive_basename": "results.json",
+      "bytes": 11933,
+      "sha256": "353ebc2a72bacb48be7dc4cd4fa42391b5e791b92f48e6f1605a6d48d577d864",
+      "filesystem_mtime_utc": "2026-11-15T05:56:24.569715+00:00",
+      "filesystem_mtime_ns": 1794722184569715456,
+      "mtime_is_execution_time": false,
+      "actual_recorded_time": {
+        "absolute_start": null,
+        "absolute_end": null,
+        "reason": "Original evidence did not record absolute execution time; file mtime is not substituted."
+      },
+      "purpose": "20 original real-tool process records: CTest no-tests behavior, PIE normalization, offline TShark controls."
+    },
+    {
+      "original_path": "/workspace/scratch/771b38332ec2/domain-audit-repro/run_repros.py",
+      "archive_basename": "run_repros.py",
+      "bytes": 5196,
+      "sha256": "37cde0f392af82218ee871d3cd290d30e789a7e672a0349aab758e7d193f3341",
+      "filesystem_mtime_utc": "2026-11-15T05:56:21.432520+00:00",
+      "filesystem_mtime_ns": 1794722181432520131,
+      "mtime_is_execution_time": false,
+      "actual_recorded_time": null,
+      "purpose": "Original counterexample reproducer; requires relocation.c and isolated external tools."
+    },
+    {
+      "original_path": "/workspace/scratch/771b38332ec2/domain-audit-repro/final-example-results.json",
+      "archive_basename": "final-example-results.json",
+      "bytes": 43811,
+      "sha256": "0e269607003b3384fc4850d2b145f90a04a8d9667baedc47e06cb3bc2660492b",
+      "filesystem_mtime_utc": "2026-11-15T06:16:06.191833+00:00",
+      "filesystem_mtime_ns": 1794723366191833280,
+      "mtime_is_execution_time": false,
+      "actual_recorded_time": {
+        "absolute_start": null,
+        "absolute_end": null,
+        "reason": "Original evidence did not record absolute execution time; file mtime is not substituted.",
+        "relative_time": "Each process retains elapsed_seconds; not an end-to-end benchmark."
+      },
+      "purpose": "43 checks / 41 process records on documented commands before the two wording corrections."
+    },
+    {
+      "original_path": "/workspace/scratch/771b38332ec2/domain-audit-repro/final-example-regressions.py",
+      "archive_basename": "final-example-regressions.py",
+      "bytes": 14651,
+      "sha256": "6a646d785e5be00eaf2898adaf076daf3b0f50a7870dcf58b7d173cd736e78a5",
+      "filesystem_mtime_utc": "2026-11-15T06:11:20.816797+00:00",
+      "filesystem_mtime_ns": 1794723080816796741,
+      "mtime_is_execution_time": false,
+      "actual_recorded_time": null,
+      "purpose": "Final documented-command reproducer; reads relocation.c and one-packet.pcap and generates other fixtures."
+    },
+    {
+      "original_path": "/workspace/scratch/771b38332ec2/domain-audit-repro/relocation.c",
+      "archive_basename": "relocation.c",
+      "bytes": 403,
+      "sha256": "d09ad29dc8a5098c4ed5f92cbb6cd85e87cf3d1cb85a624fbb231fda1ead9702",
+      "filesystem_mtime_utc": "2026-11-15T05:51:21.068853+00:00",
+      "filesystem_mtime_ns": 1794721881068853404,
+      "mtime_is_execution_time": false,
+      "actual_recorded_time": null,
+      "purpose": "Required 403-byte self-authored host PIE source; neither reproducer generates it."
+    },
+    {
+      "original_path": "/workspace/scratch/771b38332ec2/domain-audit-repro/one-packet.pcap",
+      "archive_basename": "one-packet.pcap",
+      "bytes": 75,
+      "sha256": "543d5502b77245c05cfad00e4a9d6241beaf81735cb9572f19d2c5dde78e5517",
+      "filesystem_mtime_utc": "2026-11-15T05:56:22.882900+00:00",
+      "filesystem_mtime_ns": 1794722182882900323,
+      "mtime_is_execution_time": false,
+      "actual_recorded_time": null,
+      "purpose": "75-byte self-authored IPv4/UDP fixture; final reproducer reads it directly, original reproducer can generate it."
+    },
+    {
+      "original_path": "/workspace/scratch/771b38332ec2/domain-audit-repro/trigger-matrix-refinement.log",
+      "archive_basename": "trigger-matrix-refinement.log",
+      "bytes": 113,
+      "sha256": "bbba185c84a00c3bb83467bed812919b8a72afd2058c3296e14f30faaf1a4c2f",
+      "filesystem_mtime_utc": "2026-11-15T06:27:14.128272+00:00",
+      "filesystem_mtime_ns": 1794724034128271507,
+      "mtime_is_execution_time": false,
+      "actual_recorded_time": {
+        "absolute_start": null,
+        "absolute_end": null,
+        "reason": "Original evidence did not record absolute execution time; file mtime is not substituted.",
+        "framework_elapsed_seconds": 2.317
+      },
+      "purpose": "One post-wording bash tests/test_skill_trigger_matrix.sh run: 14 tests, OK."
+    },
+    {
+      "original_path": "/workspace/scratch/771b38332ec2/domain-audit-tools/wireshark-package-receipt.json",
+      "archive_basename": "wireshark-package-receipt.json",
+      "bytes": 16777,
+      "sha256": "246a10da17ef2868afea3808971c3a29ac698e05d38a4ee553e64c389197967c",
+      "filesystem_mtime_utc": "2026-11-15T05:54:37.868803+00:00",
+      "filesystem_mtime_ns": 1794722077868802964,
+      "mtime_is_execution_time": false,
+      "actual_recorded_time": {
+        "acquisition_time": null,
+        "reason": "No absolute acquisition or execution time field in original receipt."
+      },
+      "purpose": "Pinned versions/filenames/SHA256/sizes for isolated TShark dependencies."
+    },
+    {
+      "original_path": "/workspace/scratch/771b38332ec2/protocol-capture-flow-review.json",
+      "archive_basename": "protocol-capture-flow-review.json",
+      "bytes": 1729,
+      "sha256": "7af96f6c75f3a20f2ce3318ad04251b5ae3b218c4e6669807ae4b75ecfb73e95",
+      "filesystem_mtime_utc": "2026-11-15T06:08:40.190492+00:00",
+      "filesystem_mtime_ns": 1794722920190492129,
+      "mtime_is_execution_time": false,
+      "actual_recorded_time": {
+        "started_at": "2026-11-15T06:08:40.181590+00:00",
+        "completed_at": "2026-11-15T06:08:40.189990+00:00"
+      },
+      "purpose": "Three independent control-flow injections with complete stub: capture42 prevents analysis; analysis7 propagates; both0 succeeds. No live capture."
+    }
+  ],
+  "minimum_archive_bytes": 94688,
+  "related_existing_records_and_optional_dependency": [
+    {
+      "original_path": "/workspace/scratch/771b38332ec2/domain-audit-repro/coverage-domain.json",
+      "archive_basename": "coverage-domain.json",
+      "bytes": 9241,
+      "sha256": "8b5ba940a6acad13be52e0559e128dc6ac8cfa729dc865c1c9ee7568017313ab",
+      "filesystem_mtime_utc": "2026-11-15T06:13:08.059254+00:00",
+      "filesystem_mtime_ns": 1794723188059254155,
+      "mtime_is_execution_time": false,
+      "actual_recorded_time": null,
+      "purpose": "Original 23 unique domain Skill coverage (4 change/19 retain); artifact/interface belong to the sibling 42-ID set."
+    },
+    {
+      "original_path": "/workspace/scratch/771b38332ec2/next-independent-evidence-applicability.json",
+      "archive_basename": "next-independent-evidence-applicability.json",
+      "bytes": 5324,
+      "sha256": "57c3fd0a95a90e83f0e2ae024de59656c1e6d3c4fc76c5298e9f4496747f486f",
+      "filesystem_mtime_utc": "2026-11-15T06:33:37.668122+00:00",
+      "filesystem_mtime_ns": 1794724417668122154,
+      "mtime_is_execution_time": false,
+      "actual_recorded_time": {
+        "checked_at": "2026-11-15T06:33:37.659363Z",
+        "meaning": "Applicability inspection time, not original execution time."
+      },
+      "purpose": "Existing independent applicability binding; reference it without repeating its review."
+    },
+    {
+      "original_path": "/workspace/scratch/771b38332ec2/domain-audit-tools/linux-v6.12/scripts/faddr2line",
+      "archive_basename": "faddr2line",
+      "bytes": 11106,
+      "sha256": "353f412e968517f69eeec952a57a76f7187728052e23c603885d9f28f15e31a0",
+      "filesystem_mtime_utc": "2026-11-15T06:04:40.430443+00:00",
+      "filesystem_mtime_ns": 1794722680430443200,
+      "mtime_is_execution_time": false,
+      "actual_recorded_time": null,
+      "purpose": "Optional small vendored dependency; exact public v6.12 source and SHA256 are also recorded."
+    }
+  ],
+  "original_counterexamples": {
+    "process_rows": 20,
+    "recorded_absolute_execution_time": null,
+    "categories": {
+      "tool_versions": 2,
+      "CTest_execution": 10,
+      "host_PIE": 4,
+      "offline_TShark": 4
+    }
+  },
+  "final43": {
+    "checks": 43,
+    "passed": 43,
+    "process_records": 41,
+    "check_categories": [
+      {
+        "category": "environment prerequisite",
+        "count": 1,
+        "labels": [
+          "make-available"
+        ]
+      },
+      {
+        "category": "CMake configure",
+        "count": 6,
+        "labels": [
+          "configure-empty",
+          "configure-disabled",
+          "configure-filtered",
+          "configure-pass",
+          "configure-fail",
+          "configure-runtime-skip"
+        ]
+      },
+      {
+        "category": "CTest execution and skip interpretation",
+        "count": 14,
+        "labels": [
+          "adk-cmake-cross-build-empty",
+          "adk-cmake-cross-build-disabled",
+          "adk-cmake-cross-build-filtered",
+          "adk-cmake-cross-build-pass",
+          "adk-cmake-cross-build-fail",
+          "adk-cmake-cross-build-runtime-skip",
+          "adk-cmake-cross-build-skip-visible",
+          "adk-integration-hil-sil-empty",
+          "adk-integration-hil-sil-disabled",
+          "adk-integration-hil-sil-filtered",
+          "adk-integration-hil-sil-pass",
+          "adk-integration-hil-sil-fail",
+          "adk-integration-hil-sil-runtime-skip",
+          "adk-integration-hil-sil-skip-visible"
+        ]
+      },
+      {
+        "category": "CTest discovery",
+        "count": 1,
+        "labels": [
+          "discovery-real-test"
+        ]
+      },
+      {
+        "category": "offline TShark pcap",
+        "count": 5,
+        "labels": [
+          "pcap-valid-udp",
+          "pcap-malformed",
+          "pcap-zero-byte",
+          "pcap-valid-zero-packet",
+          "pcap-zero-filter-match"
+        ]
+      },
+      {
+        "category": "host PIE and symbolication",
+        "count": 4,
+        "labels": [
+          "pie-build",
+          "raw-pc-not-resolved",
+          "corrected-pc-resolved",
+          "function-offset-resolved"
+        ]
+      },
+      {
+        "category": "artifact template structure",
+        "count": 3,
+        "labels": [
+          "template-fields-ImplementationPlan",
+          "template-fields-ReviewReport",
+          "template-fields-TestReport"
+        ]
+      },
+      {
+        "category": "public workflow consumer",
+        "count": 5,
+        "labels": [
+          "workflow-pass",
+          "workflow-old-approved",
+          "workflow-test-blocked",
+          "workflow-conflicting-result",
+          "workflow-not-verified"
+        ]
+      },
+      {
+        "category": "interface lexical candidate scan",
+        "count": 3,
+        "labels": [
+          "interface-cross-file-duplicate",
+          "interface-unique",
+          "interface-symbolic-uncovered"
+        ]
+      },
+      {
+        "category": "source stability",
+        "count": 1,
+        "labels": [
+          "source-stable"
+        ]
+      }
+    ],
+    "process_categories": [
+      {
+        "category": "tool versions",
+        "count": 4,
+        "labels": [
+          "ctest-version",
+          "gcc-version",
+          "addr2line-version",
+          "tshark-version"
+        ]
+      },
+      {
+        "category": "CMake configure",
+        "count": 6,
+        "labels": [
+          "configure-empty",
+          "configure-disabled",
+          "configure-filtered",
+          "configure-pass",
+          "configure-fail",
+          "configure-runtime-skip"
+        ]
+      },
+      {
+        "category": "CTest execution",
+        "count": 12,
+        "labels": [
+          "adk-cmake-cross-build-empty",
+          "adk-cmake-cross-build-disabled",
+          "adk-cmake-cross-build-filtered",
+          "adk-cmake-cross-build-pass",
+          "adk-cmake-cross-build-fail",
+          "adk-cmake-cross-build-runtime-skip",
+          "adk-integration-hil-sil-empty",
+          "adk-integration-hil-sil-disabled",
+          "adk-integration-hil-sil-filtered",
+          "adk-integration-hil-sil-pass",
+          "adk-integration-hil-sil-fail",
+          "adk-integration-hil-sil-runtime-skip"
+        ]
+      },
+      {
+        "category": "CTest discovery",
+        "count": 1,
+        "labels": [
+          "hil-sil-discovery"
+        ]
+      },
+      {
+        "category": "offline TShark pcap",
+        "count": 5,
+        "labels": [
+          "pcap-valid-udp",
+          "pcap-malformed",
+          "pcap-zero-byte",
+          "pcap-valid-zero-packet",
+          "pcap-zero-filter-match"
+        ]
+      },
+      {
+        "category": "host PIE build/runtime/address/helper",
+        "count": 5,
+        "labels": [
+          "pie-build",
+          "pie-runtime-addresses",
+          "pie-raw-runtime-pc",
+          "pie-corrected-link-pc",
+          "function-offset-helper"
+        ]
+      },
+      {
+        "category": "public workflow consumer",
+        "count": 5,
+        "labels": [
+          "workflow-pass",
+          "workflow-old-approved",
+          "workflow-test-blocked",
+          "workflow-conflicting-result",
+          "workflow-not-verified"
+        ]
+      },
+      {
+        "category": "interface lexical candidate scan",
+        "count": 3,
+        "labels": [
+          "interface-cross-file-duplicate",
+          "interface-unique",
+          "interface-symbolic-uncovered"
+        ]
+      }
+    ],
+    "interpretation": "43 check results, not 43 processes or suites; 41 actual process records include versions and fixture setup."
+  },
+  "wording_correction_applicability": {
+    "receipt_path": "/workspace/scratch/771b38332ec2/next-independent-evidence-applicability.json",
+    "receipt_sha256": "57c3fd0a95a90e83f0e2ae024de59656c1e6d3c4fc76c5298e9f4496747f486f",
+    "changes": [
+      "Protocol prose explicitly says Scapy is a Python API.",
+      "Hardware prose restores the explicit Cortex-M0 name."
+    ],
+    "source_hash_changes": [
+      {
+        "path": "skills/adk-protocol-stack-integration/SKILL.md",
+        "actual_execution_file_sha256": "0c1c534913402463fa963379064dfb418ed3cb3d32efd03ab36689c20212dd87",
+        "final_source_file_sha256": "7ac9b5cbb2b1a1a854063b86003c135d816f5a4a5a0a9400d0b6505cff1fa702",
+        "reason": "clarifying prose only; all Bash command blocks remain byte-identical"
+      },
+      {
+        "path": "skills/adk-hardware-debugging/SKILL.md",
+        "actual_execution_file_sha256": "24e2f444d8f32bba9df8ad8085db060a6e24df0a30cdab227b1a6954446b557e",
+        "final_source_file_sha256": "69f3eade6355e566e1c7a4d3a59a8233401e491e517e00b46959f67a001847ec",
+        "reason": "clarifying prose only; all Bash command blocks remain byte-identical"
+      }
+    ],
+    "unchanged_blocks": [
+      "Both protocol Bash blocks: offline TShark and bounded active capture joined to analysis by &&.",
+      "Complete hardware Bash block: source searches, dmesg, faddr2line and target addr2line.",
+      "Entire other seven files in final43 source_files: CTest examples, artifact main/reference/runbook, workflow consumer, and interface scan."
+    ],
+    "documented_executed_command_bindings": [
+      {
+        "path": "skills/adk-cmake-cross-build/SKILL.md",
+        "command": "ctest --test-dir build/<target> --output-on-failure --no-tests=error",
+        "process_labels": [
+          "adk-cmake-cross-build-empty",
+          "adk-cmake-cross-build-disabled",
+          "adk-cmake-cross-build-filtered",
+          "adk-cmake-cross-build-pass",
+          "adk-cmake-cross-build-fail",
+          "adk-cmake-cross-build-runtime-skip"
+        ]
+      },
+      {
+        "path": "skills/adk-integration-hil-sil/SKILL.md",
+        "command": "ctest --test-dir build/sil --output-on-failure --no-tests=error",
+        "process_labels": [
+          "adk-integration-hil-sil-empty",
+          "adk-integration-hil-sil-disabled",
+          "adk-integration-hil-sil-filtered",
+          "adk-integration-hil-sil-pass",
+          "adk-integration-hil-sil-fail",
+          "adk-integration-hil-sil-runtime-skip"
+        ]
+      },
+      {
+        "path": "skills/adk-integration-hil-sil/SKILL.md",
+        "command": "ctest --test-dir build/sil --show-only=json-v1",
+        "process_labels": [
+          "hil-sil-discovery"
+        ]
+      },
+      {
+        "path": "skills/adk-protocol-stack-integration/SKILL.md",
+        "command": "tshark -n -r \"$PCAP\" -Y \"$DISPLAY_FILTER\"",
+        "process_labels": [
+          "pcap-valid-udp",
+          "pcap-malformed",
+          "pcap-zero-byte",
+          "pcap-valid-zero-packet",
+          "pcap-zero-filter-match"
+        ]
+      },
+      {
+        "path": "skills/adk-hardware-debugging/SKILL.md",
+        "command": "\"$target_addr2line\" -f -i -e \"$matched_elf\" \"$pc_link\"",
+        "process_labels": [
+          "pie-raw-runtime-pc",
+          "pie-corrected-link-pc"
+        ]
+      },
+      {
+        "path": "skills/adk-hardware-debugging/SKILL.md",
+        "command": "\"$kernel_src/scripts/faddr2line\" \"$matched_elf\" \"$function_offset\"",
+        "process_labels": [
+          "function-offset-helper"
+        ]
+      },
+      {
+        "path": "skills/adk-interface-contract-design/SKILL.md",
+        "command": "rg --no-filename -o \"= -[0-9]+\" include/ | sort | uniq -d",
+        "process_labels": [
+          "interface-cross-file-duplicate",
+          "interface-unique",
+          "interface-symbolic-uncovered"
+        ]
+      }
+    ],
+    "active_capture_command_sha256_without_terminal_lf": "942b4d9da2d93818ce7317b160ab1c7c692c87f155c801ce8714fdb04e6d699b",
+    "all_documented_executed_commands_equal_final_source": true,
+    "binding_status": "evidence-applicable; final full-suite result and final review are separate",
+    "prior_results_not_relabeled_as_rerun": true
+  },
+  "tool_dependencies": {
+    "versions_from_original_process_stdout": {
+      "ctest-version": "ctest version 3.31.6",
+      "gcc-version": "gcc (Debian 14.2.0-19) 14.2.0",
+      "addr2line-version": "GNU addr2line (GNU Binutils for Debian) 2.44",
+      "tshark-version": "TShark (Wireshark) 4.4.18."
+    },
+    "cmake": {
+      "wheel_filename": "cmake-3.31.6-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "original_path": "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-3.31.6-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "bytes": 27800904,
+      "sha256": "1c8b05df0602365da91ee6a3336fe57525b137706c4ab5675498f662ae1dbcec",
+      "distribution": "Public cmake Python wheel, version 3.31.6; original wheel remains in task scratch.",
+      "archive_large_binary_required": false
+    },
+    "tshark": {
+      "package_count": 72,
+      "package_bytes": 45295256,
+      "package_base_url": "https://deb.debian.org/debian/",
+      "receipt": "/workspace/scratch/771b38332ec2/domain-audit-tools/wireshark-package-receipt.json",
+      "main_package": {
+        "Version": "4.4.18-0+deb13u1",
+        "Filename": "pool/main/w/wireshark/tshark_4.4.18-0+deb13u1_amd64.deb",
+        "SHA256": "adeef5cc162cb0aba9b41b6bf67cbed99dc6b1ca4a07ca94f3e50c917c87bce6",
+        "Size": "180260"
+      },
+      "installation": "dpkg-deb -x to task scratch only; no global configuration or install scripts.",
+      "archive_extracted_runtime_required": false
+    },
+    "faddr2line": {
+      "url": "https://raw.githubusercontent.com/torvalds/linux/v6.12/scripts/faddr2line",
+      "sha256": "353f412e968517f69eeec952a57a76f7187728052e23c603885d9f28f15e31a0",
+      "original_path": "/workspace/scratch/771b38332ec2/domain-audit-tools/linux-v6.12/scripts/faddr2line",
+      "bytes": 11106
+    },
+    "other_host_dependencies": [
+      "Python 3",
+      "Bash",
+      "GNU make",
+      "GCC and glibc development support",
+      "GNU binutils including addr2line/nm/readelf",
+      "awk",
+      "ripgrep",
+      "Pinned repository workflow consumer and its dependencies"
+    ]
+  },
+  "replay_notes": [
+    "Keep archived raw files unchanged. Both reproducers write outputs beside themselves: replay only in a fresh disposable copy.",
+    "final-example-regressions.py has a fixed absolute REPO path; both scripts expect ../domain-audit-tools. When relocating, adapt only a disposable copy to the pinned source checkout and reconstructed tool layout.",
+    "Keep relocation.c and one-packet.pcap beside both scripts. Original run_repros.py generates the pcap; final-example-regressions.py reads it. Other disposable fixtures are generated by the scripts.",
+    "Reacquire pinned CMake/TShark dependencies with exact hashes, or reuse existing task scratch tools. The Linux helper has a pinned public URL and SHA256; its 11106-byte source may optionally be archived. Large external binaries need not enter repo evidence.",
+    "The trigger log records 14 tests, 2.317s, OK; it has no absolute start/end. mtime is filesystem metadata only.",
+    "Reference the existing independent applicability receipt; this catalogue is neither an additional review nor a test rerun."
+  ],
+  "boundaries": [
+    "Real host-tool fixtures only: no live capture, real kernel/KASLR/module, MCU, device, HIL, model, email, or end-to-end protocol qualification.",
+    "Runtime-skipped CTest may exit 0; skip-visible checks do not treat this as executed assertions.",
+    "Zero-byte, valid zero-packet and zero target-filter matches can exit 0; these remain partial without target protocol evidence.",
+    "Workflow fixtures seed a synthetic verified stage outside the repo; consumer checks do not qualify source release.",
+    "Interface scanning is a lexical negative-decimal candidate mechanism; symbolic aliases, expressions, other radices and namespaces require separate analysis.",
+    "Missing original absolute times remain unknown; mtime and elapsed durations do not substitute for actual UTC execution time.",
+    "final-source-footprint.json is historical and excluded from the minimum set. Its old byte delta is not a final-source measurement."
+  ]
+}

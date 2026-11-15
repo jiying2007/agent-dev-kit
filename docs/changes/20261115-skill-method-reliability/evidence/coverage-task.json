@@ -1,0 +1,420 @@
+{
+  "audit_source_commit": "597e1ddb035ec5be8b32a97f6b6908786d0c5a4a",
+  "audit_repository": "/workspace/scratch/771b38332ec2/agent-dev-kit",
+  "implementation_worktree": "/workspace/scratch/771b38332ec2/agent-dev-kit-next",
+  "scope": {
+    "core": 33,
+    "optional": 9,
+    "total": 42
+  },
+  "evidence": [
+    "/workspace/scratch/771b38332ec2/deep-task-usability/early-repros.json",
+    "/workspace/scratch/771b38332ec2/deep-task-usability/method-repros.json"
+  ],
+  "limitations": "正文/reference与定向实际消费者审查；未运行真实模型A/B、用户runtime、设备或邮箱。保留决定不是所有目标环境的资格认证。",
+  "skills": [
+    {
+      "id": "adk-adr-writer",
+      "decision": "retain",
+      "files_read": [
+        "skills/adk-adr-writer/SKILL.md"
+      ],
+      "reason": "按风险记录真实取舍，reader-only检查不伪造独立核验，定向修改保留事实。"
+    },
+    {
+      "id": "adk-after-action-review",
+      "decision": "retain",
+      "files_read": [
+        "skills/adk-after-action-review/SKILL.md",
+        "skills/adk-after-action-review/references/after-action-review.md",
+        "skills/adk-after-action-review/references/codify-decision.md",
+        "skills/adk-after-action-review/references/memory-candidate.md"
+      ],
+      "reason": "普通复盘与晋级分离，没有复用价值可无候选，不制造降本或因果证据。"
+    },
+    {
+      "id": "adk-archive-governance",
+      "decision": "retain",
+      "files_read": [
+        "skills/adk-archive-governance/SKILL.md",
+        "skills/adk-archive-governance/README.md"
+      ],
+      "reason": "已有归档的meta/topic/hash修复遵循目标检查入口，不擅自删除历史或提升全局规则。"
+    },
+    {
+      "id": "adk-artifact-gating",
+      "decision": "change",
+      "files_read": [
+        "skills/adk-artifact-gating/SKILL.md",
+        "skills/adk-artifact-gating/references/details.md"
+      ],
+      "reason": "主文approved状态无法通过现有workflow的PASS门禁，统一现有状态语义与模板必需字段。",
+      "implementation_owner": "deep_domain_methods"
+    },
+    {
+      "id": "adk-branch-closeout",
+      "decision": "retain",
+      "files_read": [
+        "skills/adk-branch-closeout/SKILL.md",
+        "skills/adk-branch-closeout/references/closeout-options.md"
+      ],
+      "reason": "只执行请求的收尾操作，远端未知先对账，合并后fresh-main与清理边界明确。"
+    },
+    {
+      "id": "adk-code-review-loop",
+      "decision": "retain",
+      "files_read": [
+        "skills/adk-code-review-loop/SKILL.md",
+        "skills/adk-code-review-loop/references/review-communication-guidance.md",
+        "skills/adk-code-review-loop/references/review-evidence-template.md",
+        "skills/adk-code-review-loop/references/review-feedback-fixtures.md",
+        "skills/adk-code-review-loop/references/review-governance-details.md"
+      ],
+      "reason": "feedback/targeted/whole-diff分流、真实快照和独立性保留，未把局部复核当整体通过。"
+    },
+    {
+      "id": "adk-code-simplification",
+      "decision": "retain",
+      "files_read": [
+        "skills/adk-code-simplification/SKILL.md",
+        "skills/adk-code-simplification/references/deep-module-design.md",
+        "skills/adk-code-simplification/references/details.md"
+      ],
+      "reason": "现有简化示例已保留后续cleanup，真实行为基线与调用负担替代行数判断。"
+    },
+    {
+      "id": "adk-commit-pr-quality-gate",
+      "decision": "retain",
+      "files_read": [
+        "skills/adk-commit-pr-quality-gate/SKILL.md",
+        "skills/adk-commit-pr-quality-gate/references/pr-risk-gates.md"
+      ],
+      "reason": "message-only与PR/high-risk分流，复用适用回执而不重复无关验证。"
+    },
+    {
+      "id": "adk-context-compress-handoff",
+      "decision": "retain",
+      "files_read": [
+        "skills/adk-context-compress-handoff/SKILL.md",
+        "skills/adk-context-compress-handoff/README.md"
+      ],
+      "reason": "摘要保留最新目标、排除项、原证据和最多三个下一动作，不提升为长期事实。"
+    },
+    {
+      "id": "adk-context-engineering",
+      "decision": "retain",
+      "files_read": [
+        "skills/adk-context-engineering/SKILL.md"
+      ],
+      "reason": "稳定规则与动态证据分开，按需回读raw pointer，恢复信息边界完整。"
+    },
+    {
+      "id": "adk-cross-team-handoff",
+      "decision": "retain",
+      "files_read": [
+        "skills/adk-cross-team-handoff/SKILL.md"
+      ],
+      "reason": "lite/formal与pending/accepted界限明确，文档完成不推断实际签收或权限转移。"
+    },
+    {
+      "id": "adk-data-fetch",
+      "decision": "retain",
+      "files_read": [
+        "optional-skills/adk-data-fetch/SKILL.md"
+      ],
+      "reason": "父项与两个可选子项独立安装，明确来源/权限与缺失拒绝，未假定父项隐式安装子项。"
+    },
+    {
+      "id": "adk-email-imap-fetch",
+      "decision": "retain",
+      "files_read": [
+        "optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md"
+      ],
+      "reason": "当前方法已限定EXAMINE、UIDVALIDITY/UID与BODY.PEEK，部分结果和逐封错误不会伪作完整获取。"
+    },
+    {
+      "id": "adk-engineering-growth-review",
+      "decision": "retain",
+      "files_read": [
+        "skills/adk-engineering-growth-review/SKILL.md",
+        "skills/adk-engineering-growth-review/README.md",
+        "skills/adk-engineering-growth-review/references/growth-evidence-boundaries.md"
+      ],
+      "reason": "index-first和明确跨项目授权限制读取，趋势需跨时点证据，不凑训练建议。"
+    },
+    {
+      "id": "adk-external-practice-absorption",
+      "decision": "retain",
+      "files_read": [
+        "optional-skills/adk-external-practice-absorption/SKILL.md"
+      ],
+      "reason": "来源、独立owner决策、实施与验证角色分开；已批准续做不重启intake。"
+    },
+    {
+      "id": "adk-fetch-url-content",
+      "decision": "retain",
+      "files_read": [
+        "optional-skills/adk-data-fetch/adk-fetch-url-content/SKILL.md"
+      ],
+      "reason": "当前方法已限制origin/重定向/IP，提取保留链接语义并区分空壳、截断和完整结果。"
+    },
+    {
+      "id": "adk-goal-authoring",
+      "decision": "consumer-fix",
+      "files_read": [
+        "skills/adk-goal-authoring/SKILL.md",
+        "skills/adk-goal-authoring/references/goal-plan.json"
+      ],
+      "reason": "公开resume拒绝的过长/重复状态列表曾被state-check接受，共享字段约束并保留原reason。",
+      "implementation_owner": "deep_task_usability",
+      "consumer_files_read": [
+        "src/agent_dev_kit/planning_state.py",
+        "src/agent_dev_kit/goal_plan.py",
+        "tests/test_planning_state.py",
+        "tests/test_goal_authoring.py"
+      ]
+    },
+    {
+      "id": "adk-incident-rca-report",
+      "decision": "retain",
+      "files_read": [
+        "optional-skills/adk-incident-rca-report/SKILL.md"
+      ],
+      "reason": "已区分事实、已证因果和未决假设，5-Why按需且不虚构责任或恢复证据。"
+    },
+    {
+      "id": "adk-interface-contract-design",
+      "decision": "change",
+      "files_read": [
+        "skills/adk-interface-contract-design/SKILL.md",
+        "skills/adk-interface-contract-design/references/design-quality-methods.md",
+        "skills/adk-interface-contract-design/references/details.md",
+        "skills/adk-interface-contract-design/references/lifecycle-operation-contract.md",
+        "skills/adk-interface-contract-design/references/spec-code-bidirectional.md",
+        "skills/adk-interface-contract-design/references/tool-effect-contract.md"
+      ],
+      "reason": "已复现rg输出文件名前缀导致跨头文件相同错误码漏检，改为有边界的字面值候选扫描。",
+      "implementation_owner": "deep_domain_methods"
+    },
+    {
+      "id": "adk-knowledge-archive",
+      "decision": "retain",
+      "files_read": [
+        "skills/adk-knowledge-archive/SKILL.md",
+        "skills/adk-knowledge-archive/README.md"
+      ],
+      "reason": "新归档保留来源和适用边界，未知路径阻塞、不虚构验证或提升长期指导。"
+    },
+    {
+      "id": "adk-lightweight-planning",
+      "decision": "retain",
+      "files_read": [
+        "skills/adk-lightweight-planning/SKILL.md",
+        "skills/adk-lightweight-planning/README.md"
+      ],
+      "reason": "只读计划按实际行动规模裁剪，直接实施请求退出，不强制无用步骤。"
+    },
+    {
+      "id": "adk-memory-curator",
+      "decision": "retain",
+      "files_read": [
+        "skills/adk-memory-curator/SKILL.md",
+        "skills/adk-memory-curator/README.md"
+      ],
+      "reason": "只读候选整理、冲突与晋级审查明确，secret检索仅列文件名且说明覆盖限制。"
+    },
+    {
+      "id": "adk-parallel-agent-governance",
+      "decision": "retain",
+      "files_read": [
+        "skills/adk-parallel-agent-governance/SKILL.md",
+        "skills/adk-parallel-agent-governance/references/parallel-worktree-task-package.md",
+        "skills/adk-parallel-agent-governance/references/subagent-review-checklist.md"
+      ],
+      "reason": "收益准入、单写者、最小工作包与最终整合均明确，不用子任务成功替代目标。"
+    },
+    {
+      "id": "adk-pilot-framework",
+      "decision": "retain",
+      "files_read": [
+        "skills/adk-pilot-framework/SKILL.md",
+        "skills/adk-pilot-framework/references/details.md"
+      ],
+      "reason": "现有smoke/收益比较与任务产物验收已分离，环境阻塞不等于能力失败。"
+    },
+    {
+      "id": "adk-planning-execution-loop",
+      "decision": "consumer-fix",
+      "files_read": [
+        "skills/adk-planning-execution-loop/SKILL.md",
+        "skills/adk-planning-execution-loop/references/long-task-recovery.md"
+      ],
+      "reason": "其公开state-check入口现在采用恢复同一字段边界，避免成功预检后无法恢复。",
+      "implementation_owner": "deep_task_usability",
+      "consumer_files_read": [
+        "src/agent_dev_kit/planning_state.py",
+        "src/agent_dev_kit/goal_plan.py",
+        "tests/test_planning_state.py",
+        "tests/test_goal_authoring.py"
+      ]
+    },
+    {
+      "id": "adk-prose-revision",
+      "decision": "retain",
+      "files_read": [
+        "optional-skills/adk-prose-revision/SKILL.md",
+        "optional-skills/adk-prose-revision/references/review-cases.md"
+      ],
+      "reason": "report/revise按请求分流，保留技术字面量与事实，不据文风判断作者身份或强造改动。"
+    },
+    {
+      "id": "adk-release-versioning",
+      "decision": "change",
+      "files_read": [
+        "skills/adk-release-versioning/SKILL.md",
+        "skills/adk-release-versioning/references/details.md"
+      ],
+      "reason": "真实Git复现历史漏项、首发吞错及非发布tag误选；显式基线/首发并保留完整hash与正文。",
+      "implementation_owner": "deep_task_usability"
+    },
+    {
+      "id": "adk-repo-drift-remediation",
+      "decision": "retain",
+      "files_read": [
+        "skills/adk-repo-drift-remediation/SKILL.md",
+        "skills/adk-repo-drift-remediation/README.md"
+      ],
+      "reason": "问题地图和源事实先于治理修复，用户改动保护及共享触点串行规则保持。"
+    },
+    {
+      "id": "adk-repo-prompt-analysis",
+      "decision": "retain",
+      "files_read": [
+        "skills/adk-repo-prompt-analysis/SKILL.md"
+      ],
+      "reason": "结论追实际调用点、角色和动态输入，不从description推断实现或执行外部脚本。"
+    },
+    {
+      "id": "adk-requirements-triage",
+      "decision": "retain",
+      "files_read": [
+        "skills/adk-requirements-triage/SKILL.md",
+        "skills/adk-requirements-triage/references/embedded-discovery-brief.md",
+        "skills/adk-requirements-triage/references/exploratory-requirements-brief.md"
+      ],
+      "reason": "brief、execution-handoff和high-risk分流避免重复访谈，已有明确任务交还实施。"
+    },
+    {
+      "id": "adk-runtime-router",
+      "decision": "retain",
+      "files_read": [
+        "skills/adk-runtime-router/SKILL.md",
+        "skills/adk-runtime-router/references/runtime-routing-details.md"
+      ],
+      "reason": "唯一primary、可信inventory和fit检查明确；未以micro标签创建低风险执行权限。"
+    },
+    {
+      "id": "adk-security-supply-chain",
+      "decision": "retain",
+      "files_read": [
+        "optional-skills/adk-security-supply-chain/SKILL.md",
+        "optional-skills/adk-security-supply-chain/references/skill-scan-coverage.md"
+      ],
+      "reason": "source-only/adoption/runtime分层，覆盖、误报和拒绝路径明确；静态零命中不被当作安全认证。"
+    },
+    {
+      "id": "adk-skill-composition-governance",
+      "decision": "retain",
+      "files_read": [
+        "optional-skills/adk-skill-composition-governance/SKILL.md",
+        "optional-skills/adk-skill-composition-governance/references/adk-skill-lifecycle.md",
+        "optional-skills/adk-skill-composition-governance/references/skill-behavior-evaluation.md"
+      ],
+      "reason": "沿用canonical matcher，source-contract与真实行为评测分开，不新增第二路由权威。"
+    },
+    {
+      "id": "adk-skill-deep-analysis",
+      "decision": "retain",
+      "files_read": [
+        "skills/adk-skill-deep-analysis/SKILL.md",
+        "skills/adk-skill-deep-analysis/references/details.md"
+      ],
+      "reason": "有界发现与只读方法对照保留来源、反例和实施交接，未知效果不冒充实测。"
+    },
+    {
+      "id": "adk-structured-requirements-questioning",
+      "decision": "retain",
+      "files_read": [
+        "skills/adk-structured-requirements-questioning/SKILL.md",
+        "skills/adk-structured-requirements-questioning/references/prototype-as-experiment.md"
+      ],
+      "reason": "Explore/Challenge按决策依赖推进，明确退出条件和只读探索边界。"
+    },
+    {
+      "id": "adk-systematic-debugging",
+      "decision": "retain",
+      "files_read": [
+        "skills/adk-systematic-debugging/SKILL.md",
+        "skills/adk-systematic-debugging/references/embedded-diagnosis-branches.md",
+        "skills/adk-systematic-debugging/references/tight-feedback-loop.md"
+      ],
+      "reason": "最小可失败信号、单变量因果与停止条件完整，不强制凑Why层数或无关反例。"
+    },
+    {
+      "id": "adk-task-breakdown",
+      "decision": "retain",
+      "files_read": [
+        "skills/adk-task-breakdown/SKILL.md",
+        "skills/adk-task-breakdown/references/task-packaging.md",
+        "skills/adk-task-breakdown/references/vertical-slice-planning.md"
+      ],
+      "reason": "单切片、多切片和机器派工区分，真实依赖/共享文件决定并行边界。"
+    },
+    {
+      "id": "adk-test-flakiness-triage",
+      "decision": "change",
+      "files_read": [
+        "optional-skills/adk-test-flakiness-triage/SKILL.md",
+        "optional-skills/adk-test-flakiness-triage/references/details.md"
+      ],
+      "reason": "真实原命令误算失败、吞退出码且输出合成凭据值；改为真实逐轮证据、原退出码及仅变量名。",
+      "implementation_owner": "deep_task_usability"
+    },
+    {
+      "id": "adk-test-strategy",
+      "decision": "retain",
+      "files_read": [
+        "skills/adk-test-strategy/SKILL.md",
+        "skills/adk-test-strategy/references/high-value-tdd.md"
+      ],
+      "reason": "已区分只读策略和授权实施，测试层级与实际风险匹配，保留真实red/green和资源隔离。"
+    },
+    {
+      "id": "adk-token-context-governance",
+      "decision": "retain",
+      "files_read": [
+        "skills/adk-token-context-governance/SKILL.md"
+      ],
+      "reason": "压缩保留高风险原文回退，ADK源码检查已有适用范围，不把字节数当Token实测。"
+    },
+    {
+      "id": "adk-verification-before-completion",
+      "decision": "retain",
+      "files_read": [
+        "skills/adk-verification-before-completion/SKILL.md",
+        "skills/adk-verification-before-completion/references/verification-governance-details.md"
+      ],
+      "reason": "checkpoint与goal-final按适用风险分开，同快照证据及未验证边界明确。"
+    },
+    {
+      "id": "adk-worktree-governance",
+      "decision": "retain",
+      "files_read": [
+        "skills/adk-worktree-governance/SKILL.md",
+        "skills/adk-worktree-governance/references/parallel-worktree-task-package.md",
+        "skills/adk-worktree-governance/references/worktree-operation-boundaries.md"
+      ],
+      "reason": "明确stay-current与隔离条件，保护dirty状态并保留创建/清理授权来源。"
+    }
+  ]
+}

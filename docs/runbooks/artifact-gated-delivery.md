@@ -27,6 +27,8 @@
 
 ## 4. 最小标签模板
 
+以下为真实通过记录；NEEDS-FIX/BLOCKED 配 `verdict: needs-fix`，未验证不预填 PASS。
+
 ```md
 [artifact:ImplementationPlan]
 status: READY
@@ -38,10 +40,14 @@ handoff_to:
 
 [artifact:ReviewReport]
 status: PASS
-verdict: pass | needs-fix
+owner: <reviewer>
+verdict: pass
+findings:
+- <finding or none>
 
 [artifact:TestReport]
 status: PASS
+owner: <test-owner>
 tests_run:
 - <command + result>
 ```

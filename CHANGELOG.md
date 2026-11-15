@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+### 11.3.3 — Reliable Skill commands and consistent task state
+
+- 统一 current-state 字段边界，使状态预检不再接受恢复入口会拒绝的过长或重复列表；保留既有错误码、严格输入和只读恢复语义。
+- 发布方法从明确核实的正式基线或首发路径保留完整提交历史；偶发测试方法使用真实结果、独立日志和逐次退出码，避免名称出现次数和 tee 把失败误作成功。
+- CMake 与 SIL/HIL 命令拒绝空测试集；协议离线分析输出可归属的包证据并识别空匹配；硬件调试先匹配内核/模块与重定位信息，再解释源码地址。
+- 对齐 Artifact 文档与已实现 workflow 状态，修复跨文件错误码候选扫描。完整复查 65 项现有 Skills，不新增身份、权限或运行时。
+- 回归与隔离真实工具示例仅证明所测任务边界；模型任务成功率、Token、成本和端到端时延仍未测量。
+
 ### 11.3.2 — Task discovery, recovery and usable Skill workflows
 
 - 修复 `catalog find` 只查名称/描述导致已声明任务表达无法找到 Skill 的问题；全部 65 项按正向 trigger 可检索，保留原类型范围与只读边界。

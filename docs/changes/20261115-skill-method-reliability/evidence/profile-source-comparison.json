@@ -1,0 +1,460 @@
+{
+  "schema": "adk-skill-source-footprint-comparison/v1",
+  "base_commit": "1282c78b145afca670cf8e5733d80bd3c61f5cfb",
+  "source_commit": "134927418b98abc515b367ca06b3404aac22960e",
+  "profile_count": 8,
+  "profiles": [
+    {
+      "profile": "core",
+      "before": {
+        "schema": "adk-profile-context-ratchet-result/v1",
+        "status": "pass",
+        "profile": "core",
+        "actual": {
+          "entry_file_bytes": 106251,
+          "potential_full_source_bytes": 175342
+        },
+        "ratchet": {
+          "entry_file_bytes": 133940,
+          "potential_full_source_bytes": 184133
+        },
+        "asset_count": 27,
+        "asset_count_baseline": 27,
+        "failures": [],
+        "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+        "runtime_initial_context_claim": false,
+        "release_authorized": false
+      },
+      "after": {
+        "schema": "adk-profile-context-ratchet-result/v1",
+        "status": "pass",
+        "profile": "core",
+        "actual": {
+          "entry_file_bytes": 106348,
+          "potential_full_source_bytes": 175439
+        },
+        "ratchet": {
+          "entry_file_bytes": 133940,
+          "potential_full_source_bytes": 184133
+        },
+        "asset_count": 27,
+        "asset_count_baseline": 27,
+        "failures": [],
+        "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+        "runtime_initial_context_claim": false,
+        "release_authorized": false
+      },
+      "source_delta": {
+        "entry_file_bytes": 97,
+        "potential_full_source_bytes": 97
+      }
+    },
+    {
+      "profile": "embedded-fullstack",
+      "before": {
+        "schema": "adk-profile-context-ratchet-result/v1",
+        "status": "pass",
+        "profile": "embedded-fullstack",
+        "actual": {
+          "entry_file_bytes": 222440,
+          "potential_full_source_bytes": 315501
+        },
+        "ratchet": {
+          "entry_file_bytes": 245296,
+          "potential_full_source_bytes": 316854
+        },
+        "asset_count": 55,
+        "asset_count_baseline": 55,
+        "failures": [],
+        "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+        "runtime_initial_context_claim": false,
+        "release_authorized": false
+      },
+      "after": {
+        "schema": "adk-profile-context-ratchet-result/v1",
+        "status": "pass",
+        "profile": "embedded-fullstack",
+        "actual": {
+          "entry_file_bytes": 221389,
+          "potential_full_source_bytes": 315739
+        },
+        "ratchet": {
+          "entry_file_bytes": 245296,
+          "potential_full_source_bytes": 316854
+        },
+        "asset_count": 55,
+        "asset_count_baseline": 55,
+        "failures": [],
+        "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+        "runtime_initial_context_claim": false,
+        "release_authorized": false
+      },
+      "source_delta": {
+        "entry_file_bytes": -1051,
+        "potential_full_source_bytes": 238
+      }
+    },
+    {
+      "profile": "incident-response",
+      "before": {
+        "schema": "adk-profile-context-ratchet-result/v1",
+        "status": "pass",
+        "profile": "incident-response",
+        "actual": {
+          "entry_file_bytes": 35247,
+          "potential_full_source_bytes": 46565
+        },
+        "ratchet": {
+          "entry_file_bytes": 37797,
+          "potential_full_source_bytes": 46612
+        },
+        "asset_count": 9,
+        "asset_count_baseline": 9,
+        "failures": [],
+        "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+        "runtime_initial_context_claim": false,
+        "release_authorized": false
+      },
+      "after": {
+        "schema": "adk-profile-context-ratchet-result/v1",
+        "status": "pass",
+        "profile": "incident-response",
+        "actual": {
+          "entry_file_bytes": 35247,
+          "potential_full_source_bytes": 46565
+        },
+        "ratchet": {
+          "entry_file_bytes": 37797,
+          "potential_full_source_bytes": 46612
+        },
+        "asset_count": 9,
+        "asset_count_baseline": 9,
+        "failures": [],
+        "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+        "runtime_initial_context_claim": false,
+        "release_authorized": false
+      },
+      "source_delta": {
+        "entry_file_bytes": 0,
+        "potential_full_source_bytes": 0
+      }
+    },
+    {
+      "profile": "large-refactor",
+      "before": {
+        "schema": "adk-profile-context-ratchet-result/v1",
+        "status": "pass",
+        "profile": "large-refactor",
+        "actual": {
+          "entry_file_bytes": 225465,
+          "potential_full_source_bytes": 322383
+        },
+        "ratchet": {
+          "entry_file_bytes": 248328,
+          "potential_full_source_bytes": 323328
+        },
+        "asset_count": 56,
+        "asset_count_baseline": 56,
+        "failures": [],
+        "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+        "runtime_initial_context_claim": false,
+        "release_authorized": false
+      },
+      "after": {
+        "schema": "adk-profile-context-ratchet-result/v1",
+        "status": "pass",
+        "profile": "large-refactor",
+        "actual": {
+          "entry_file_bytes": 224414,
+          "potential_full_source_bytes": 322621
+        },
+        "ratchet": {
+          "entry_file_bytes": 248328,
+          "potential_full_source_bytes": 323328
+        },
+        "asset_count": 56,
+        "asset_count_baseline": 56,
+        "failures": [],
+        "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+        "runtime_initial_context_claim": false,
+        "release_authorized": false
+      },
+      "source_delta": {
+        "entry_file_bytes": -1051,
+        "potential_full_source_bytes": 238
+      }
+    },
+    {
+      "profile": "personal-core",
+      "before": {
+        "schema": "adk-profile-context-ratchet-result/v1",
+        "status": "pass",
+        "profile": "personal-core",
+        "actual": {
+          "entry_file_bytes": 122027,
+          "potential_full_source_bytes": 193566
+        },
+        "ratchet": {
+          "entry_file_bytes": 152918,
+          "potential_full_source_bytes": 204293
+        },
+        "asset_count": 32,
+        "asset_count_baseline": 32,
+        "failures": [],
+        "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+        "runtime_initial_context_claim": false,
+        "release_authorized": false
+      },
+      "after": {
+        "schema": "adk-profile-context-ratchet-result/v1",
+        "status": "pass",
+        "profile": "personal-core",
+        "actual": {
+          "entry_file_bytes": 121119,
+          "potential_full_source_bytes": 193947
+        },
+        "ratchet": {
+          "entry_file_bytes": 152918,
+          "potential_full_source_bytes": 204293
+        },
+        "asset_count": 32,
+        "asset_count_baseline": 32,
+        "failures": [],
+        "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+        "runtime_initial_context_claim": false,
+        "release_authorized": false
+      },
+      "source_delta": {
+        "entry_file_bytes": -908,
+        "potential_full_source_bytes": 381
+      }
+    },
+    {
+      "profile": "release-hardening",
+      "before": {
+        "schema": "adk-profile-context-ratchet-result/v1",
+        "status": "pass",
+        "profile": "release-hardening",
+        "actual": {
+          "entry_file_bytes": 94287,
+          "potential_full_source_bytes": 156335
+        },
+        "ratchet": {
+          "entry_file_bytes": 112256,
+          "potential_full_source_bytes": 159576
+        },
+        "asset_count": 23,
+        "asset_count_baseline": 23,
+        "failures": [],
+        "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+        "runtime_initial_context_claim": false,
+        "release_authorized": false
+      },
+      "after": {
+        "schema": "adk-profile-context-ratchet-result/v1",
+        "status": "pass",
+        "profile": "release-hardening",
+        "actual": {
+          "entry_file_bytes": 93379,
+          "potential_full_source_bytes": 156716
+        },
+        "ratchet": {
+          "entry_file_bytes": 112256,
+          "potential_full_source_bytes": 159576
+        },
+        "asset_count": 23,
+        "asset_count_baseline": 23,
+        "failures": [],
+        "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+        "runtime_initial_context_claim": false,
+        "release_authorized": false
+      },
+      "source_delta": {
+        "entry_file_bytes": -908,
+        "potential_full_source_bytes": 381
+      }
+    },
+    {
+      "profile": "research-intake",
+      "before": {
+        "schema": "adk-profile-context-ratchet-result/v1",
+        "status": "pass",
+        "profile": "research-intake",
+        "actual": {
+          "entry_file_bytes": 70884,
+          "potential_full_source_bytes": 119641
+        },
+        "ratchet": {
+          "entry_file_bytes": 86571,
+          "potential_full_source_bytes": 124543
+        },
+        "asset_count": 20,
+        "asset_count_baseline": 20,
+        "failures": [],
+        "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+        "runtime_initial_context_claim": false,
+        "release_authorized": false
+      },
+      "after": {
+        "schema": "adk-profile-context-ratchet-result/v1",
+        "status": "pass",
+        "profile": "research-intake",
+        "actual": {
+          "entry_file_bytes": 70981,
+          "potential_full_source_bytes": 119738
+        },
+        "ratchet": {
+          "entry_file_bytes": 86571,
+          "potential_full_source_bytes": 124543
+        },
+        "asset_count": 20,
+        "asset_count_baseline": 20,
+        "failures": [],
+        "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+        "runtime_initial_context_claim": false,
+        "release_authorized": false
+      },
+      "source_delta": {
+        "entry_file_bytes": 97,
+        "potential_full_source_bytes": 97
+      }
+    },
+    {
+      "profile": "team-core",
+      "before": {
+        "schema": "adk-profile-context-ratchet-result/v1",
+        "status": "pass",
+        "profile": "team-core",
+        "actual": {
+          "entry_file_bytes": 131736,
+          "potential_full_source_bytes": 213244
+        },
+        "ratchet": {
+          "entry_file_bytes": 166442,
+          "potential_full_source_bytes": 223333
+        },
+        "asset_count": 35,
+        "asset_count_baseline": 35,
+        "failures": [],
+        "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+        "runtime_initial_context_claim": false,
+        "release_authorized": false
+      },
+      "after": {
+        "schema": "adk-profile-context-ratchet-result/v1",
+        "status": "pass",
+        "profile": "team-core",
+        "actual": {
+          "entry_file_bytes": 131661,
+          "potential_full_source_bytes": 213121
+        },
+        "ratchet": {
+          "entry_file_bytes": 166442,
+          "potential_full_source_bytes": 223333
+        },
+        "asset_count": 35,
+        "asset_count_baseline": 35,
+        "failures": [],
+        "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+        "runtime_initial_context_claim": false,
+        "release_authorized": false
+      },
+      "source_delta": {
+        "entry_file_bytes": -75,
+        "potential_full_source_bytes": -123
+      }
+    }
+  ],
+  "previous_changed_skill_ids": [
+    "adk-code-review-loop",
+    "adk-code-simplification",
+    "adk-component-api-stability",
+    "adk-email-imap-fetch",
+    "adk-fetch-url-content",
+    "adk-goal-authoring",
+    "adk-offline-core-dump-triage",
+    "adk-performance-profiling-embedded",
+    "adk-pilot-framework",
+    "adk-rtos-task-design",
+    "adk-static-analysis-c-cpp",
+    "adk-test-strategy",
+    "adk-token-context-governance",
+    "adk-unit-test-embedded"
+  ],
+  "current_changed_skill_ids": [
+    "adk-artifact-gating",
+    "adk-cmake-cross-build",
+    "adk-hardware-debugging",
+    "adk-integration-hil-sil",
+    "adk-interface-contract-design",
+    "adk-protocol-stack-integration",
+    "adk-release-versioning",
+    "adk-test-flakiness-triage"
+  ],
+  "cumulative_changed_skill_ids": [
+    "adk-artifact-gating",
+    "adk-cmake-cross-build",
+    "adk-code-review-loop",
+    "adk-code-simplification",
+    "adk-component-api-stability",
+    "adk-email-imap-fetch",
+    "adk-fetch-url-content",
+    "adk-goal-authoring",
+    "adk-hardware-debugging",
+    "adk-integration-hil-sil",
+    "adk-interface-contract-design",
+    "adk-offline-core-dump-triage",
+    "adk-performance-profiling-embedded",
+    "adk-pilot-framework",
+    "adk-protocol-stack-integration",
+    "adk-release-versioning",
+    "adk-rtos-task-design",
+    "adk-static-analysis-c-cpp",
+    "adk-test-flakiness-triage",
+    "adk-test-strategy",
+    "adk-token-context-governance",
+    "adk-unit-test-embedded"
+  ],
+  "manifest_only_version_changed": true,
+  "interpretation": "source bytes only; not provider tokens, native context, task quality, cost or latency",
+  "base_tree": "4a9aa96cb80b589994e24e2008de75d47f39fbd4",
+  "source_tree": "6563c7bf338b269f64818fb3c394c3d44355872a",
+  "measurement_started_at": "2026-11-15T06:33:56.195228Z",
+  "measured_at": "2026-11-15T06:33:57.034441Z",
+  "status": "pass",
+  "ratchet_unchanged": true,
+  "ratchet_sha256": "f283524ecff14179cad628735bef9e20580da00c2505687ecca9530da3737bff",
+  "source_versions": {
+    "base": "11.3.2",
+    "candidate": "11.3.3"
+  },
+  "measurement_method": {
+    "loader": "agent_dev_kit.model.Manifest.load",
+    "checker": "agent_dev_kit.profile_context_footprint.enforce_profile_ratchet",
+    "checker_source_sha256": "e649c724054e6bf6ed8467dddf9766a29dffff0d54591add25980d0dfa9f009d",
+    "baseline_workspace": "/workspace/scratch/771b38332ec2/agent-dev-kit",
+    "candidate_workspace": "/workspace/scratch/771b38332ec2/agent-dev-kit-next",
+    "workspace_bindings": {
+      "baseline": {
+        "commit": "1282c78b145afca670cf8e5733d80bd3c61f5cfb",
+        "tree": "4a9aa96cb80b589994e24e2008de75d47f39fbd4",
+        "observed_worktree_head": "a6b283936aabff3b7fb7f804e4ecadfea6f52e95"
+      },
+      "candidate": {
+        "commit": "134927418b98abc515b367ca06b3404aac22960e",
+        "tree": "6563c7bf338b269f64818fb3c394c3d44355872a",
+        "observed_worktree_head": "134927418b98abc515b367ca06b3404aac22960e"
+      }
+    },
+    "counted_input_file_counts": {
+      "/workspace/scratch/771b38332ec2/agent-dev-kit": 117,
+      "/workspace/scratch/771b38332ec2/agent-dev-kit-next": 117
+    },
+    "binding_checks": "Exact tree and clean tracked source before/after; every counted source path is tracked; original ratchet bytes unchanged",
+    "accounting": "UTF-8 source bytes of resolved Agent/Skill entry files plus deferred references/scripts/assets",
+    "runtime_initial_context_measured": false,
+    "provider_tokens_measured": false,
+    "task_quality_cost_latency_measured": false
+  },
+  "supersedes_measurement_source_commit": "f538db1224e77d2ba06a32387dee57a15a5b3bbe"
+}

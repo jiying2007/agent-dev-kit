@@ -1,0 +1,110 @@
+{
+  "schema": "adk-predecessor-delivery-observation/v1",
+  "repository": "jiying2007/agent-dev-kit",
+  "pr": {
+    "number": 267,
+    "url": "https://github.com/jiying2007/agent-dev-kit/pull/267",
+    "head_sha": "3b2a1a59f3ad5756531857650bc5a181473633c4",
+    "merged_at": "2026-11-15T06:01:26Z",
+    "merge_commit_sha": "1282c78b145afca670cf8e5733d80bd3c61f5cfb",
+    "merge_method": "squash"
+  },
+  "required_checks": [
+    {
+      "name": "deterministic-eval-package",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/jiying2007/agent-dev-kit/actions/runs/43683105211/job/132718965291"
+    },
+    {
+      "name": "static-security",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/jiying2007/agent-dev-kit/actions/runs/43683105211/job/132717783218"
+    },
+    {
+      "name": "regression-py3.12",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/jiying2007/agent-dev-kit/actions/runs/43683105211/job/132717783212"
+    },
+    {
+      "name": "contract-py3.12",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/jiying2007/agent-dev-kit/actions/runs/43683105211/job/132717783056"
+    },
+    {
+      "name": "platform-vnext",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/jiying2007/agent-dev-kit/actions/runs/43683105239/job/132717783041"
+    },
+    {
+      "name": "dependency-review",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/jiying2007/agent-dev-kit/actions/runs/43683105234/job/132717783021"
+    },
+    {
+      "name": "codeql-python",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/jiying2007/agent-dev-kit/actions/runs/43683105235/job/132717783002"
+    },
+    {
+      "name": "branch-gc-dry-run",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/jiying2007/agent-dev-kit/actions/runs/43683105213/job/132717782836"
+    }
+  ],
+  "main_ci": {
+    "id": 43683558546,
+    "url": "https://github.com/jiying2007/agent-dev-kit/actions/runs/43683558546",
+    "conclusion": "success"
+  },
+  "promotion": {
+    "id": 43684004663,
+    "url": "https://github.com/jiying2007/agent-dev-kit/actions/runs/43684004663",
+    "conclusion": "success"
+  },
+  "tag": {
+    "name": "v11.3.2",
+    "object_sha": "984144b056b48c113609ed2e0635d3f83c5261e7",
+    "type": "annotated",
+    "target_sha": "1282c78b145afca670cf8e5733d80bd3c61f5cfb"
+  },
+  "release": {
+    "url": "https://github.com/jiying2007/agent-dev-kit/releases/tag/v11.3.2",
+    "published_at": "2026-11-15T06:11:44Z",
+    "draft": false,
+    "assets": [
+      {
+        "name": "agent-dev-kit-11.3.2.tar.gz",
+        "state": "uploaded",
+        "size": 3441779,
+        "digest": "sha256:3d45879cf90000c84c68f11ce6e57561e6ad0380c3c772af24bb8e4cdf30c8ec",
+        "url": "https://github.com/jiying2007/agent-dev-kit/releases/download/v11.3.2/agent-dev-kit-11.3.2.tar.gz"
+      },
+      {
+        "name": "agent-dev-kit-11.3.2.tar.gz.sha256",
+        "state": "uploaded",
+        "size": 94,
+        "digest": "sha256:256b0fe49e79df9f6c10a5f51af42f12ea5b125627f1c506849a71dc24f09d13",
+        "url": "https://github.com/jiying2007/agent-dev-kit/releases/download/v11.3.2/agent-dev-kit-11.3.2.tar.gz.sha256"
+      },
+      {
+        "name": "release-contract.json",
+        "state": "uploaded",
+        "size": 592,
+        "digest": "sha256:d5290288acaf224d1dc3ed67e5e9a8937b6d4a013c485229fbc4061147182049",
+        "url": "https://github.com/jiying2007/agent-dev-kit/releases/download/v11.3.2/release-contract.json"
+      }
+    ]
+  },
+  "limits": [
+    "Observed existing GitHub PR/check/run/tag/release responses; release asset digests are GitHub-reported, not independently redownloaded here.",
+    "This records predecessor 11.3.2 only and does not assert this change's future CI, merge or release."
+  ]
+}

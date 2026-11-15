@@ -54,6 +54,22 @@ class PlanningStateTest(unittest.TestCase):
             path.write_text(json.dumps({"schema_version": "adk.current-state/v1", "historical_body": "full copied history"}))
             self.assertIn("current-state-fields-invalid", check_current_state(path)["reasons"])
 
+    def test_existing_field_errors_still_aggregate_before_read_only_failure(self) -> None:
+        value = {"schema_version": "adk.current-state/v1", "goal_ref": " ",
+                 "milestone": "phase", "evidence_refs": [], "blockers": [],
+                 "next_actions": [None] * 4, "history_refs": [], "unknown": True}
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "current.json"
+            path.write_text(json.dumps(value))
+            before = path.read_bytes()
+            result = check_current_state(path)
+            self.assertEqual("fail", result["status"])
+            self.assertEqual(["current-state-fields-invalid", "current-state-goal-ref-missing",
+                              "current-state-next-actions-invalid", "current-state-next-actions-limit"],
+                             result["reasons"])
+            self.assertEqual(before, path.read_bytes())
+            self.assertFalse(result["completion_allowed"])
+
 
     @unittest.skipUnless(hasattr(os, "mkfifo"), "POSIX input boundary")
     def test_state_input_rejects_fifo_and_symlink_components_without_hanging(self) -> None:

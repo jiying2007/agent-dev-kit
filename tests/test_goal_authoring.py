@@ -48,9 +48,12 @@ class GoalPlanTests(unittest.TestCase):
             before = {path.name: path.read_bytes() for path in root.iterdir()}
             environment = dict(os.environ, ADK_PYTHON_BIN=os.sys.executable,
                                PYTHONDONTWRITEBYTECODE="1")
+            arguments = ["--state", str(state_path)]
+            if action != "state-check":
+                arguments += ["--plan", str(plan_path)]
             result = subprocess.run(
                 ["bash", str(ROOT / "scripts/devkit.sh"), "goal", action,
-                 "--plan", str(plan_path), "--state", str(state_path)],
+                 *arguments],
                 cwd=root, env=environment, capture_output=True, text=True, timeout=15,
             )
             self.assertEqual(before, {path.name: path.read_bytes() for path in root.iterdir()})
@@ -266,6 +269,48 @@ class GoalPlanTests(unittest.TestCase):
                 expected = "pass" if work.get("status") == "OPEN" else "fail"
                 self.assertEqual(expected, check_current_state(path)["status"])
                 self.assertEqual(expected, check(self.plan, state)["status"])
+
+    def test_public_state_check_and_resume_agree_on_frontier_field_boundaries(self):
+        for field, maximum in (("evidence_refs", 8), ("blockers", 8),
+                               ("next_actions", 3), ("history_refs", 3)):
+            cases = (
+                ("upper-bound", [f"{field}-{i}" for i in range(maximum)], 0),
+                ("too-many", [f"{field}-{i}" for i in range(maximum + 1)], 1),
+                ("duplicates", ["same reference", "same reference"], 1),
+                ("blank", [" \t"], 1),
+                ("wrong-type", [None], 1),
+                ("empty", [], int(field == "next_actions")),
+            )
+            for label, values, expected in cases:
+                state = self._resume_state()
+                state[field] = values
+                for action in ("state-check", "resume"):
+                    with self.subTest(field=field, case=label, action=action):
+                        result = self._public_goal(action, self.plan, state)
+                        self.assertEqual(expected, result.returncode, result.stdout + result.stderr)
+                        if expected:
+                            verdict = json.loads(result.stdout)
+                            self.assertEqual("fail", verdict["status"])
+                            if action == "resume":
+                                reason = f"state-{field}-invalid"
+                            elif field == "next_actions" and label in ("too-many", "empty"):
+                                reason = "current-state-next-actions-limit"
+                            else:
+                                reason = "current-state-" + field.replace("_", "-") + "-invalid"
+                            self.assertIn(reason, verdict["reasons"])
+                            self.assertTrue(verdict["read_only"])
+                            self.assertFalse(verdict["completion_allowed"])
+
+    def test_public_state_error_vocabularies_and_schema_short_circuit_are_preserved(self):
+        state = self._resume_state()
+        state.update(schema_version="unknown", goal_ref="", next_actions=[None] * 4)
+        preflight = self._public_goal("state-check", self.plan, state)
+        resume = self._public_goal("resume", self.plan, state)
+        self.assertEqual(1, preflight.returncode)
+        self.assertEqual(1, resume.returncode)
+        self.assertEqual(["current-state-schema-invalid"], json.loads(preflight.stdout)["reasons"])
+        self.assertEqual(["current-state-fields-invalid", "state-goal_ref-invalid",
+                          "state-next_actions-invalid"], json.loads(resume.stdout)["reasons"])
 
     def test_strict_input_boundaries_and_digest_bind_same_read(self):
         with tempfile.TemporaryDirectory() as temp:

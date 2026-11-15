@@ -1,8 +1,8 @@
 ---
 name: adk-hardware-debugging
 description: "用于板级电源、时钟、复位和硬件异常的假设验证与证据定位；不用于把 Linux oops 直接归咎硬件或未经许可执行带风险的硬件操作。"
-version: 1.0.2
-last_updated: 2026-11-10
+version: 1.0.3
+last_updated: 2026-11-15
 triggers:
   - 硬件调试
   - oops 分析
@@ -31,47 +31,38 @@ constraints:
 # adk-hardware-debugging
 
 ## Goal
-- 基于日志、调用栈、寄存器和硬件证据定位异常根因，输出可复现的排查路径。
+以可复核证据定位故障，保留验证边界。
 
 ## Prerequisites
-- 已收集复现步骤、硬件版本、软件版本、日志和相关符号文件。
-- 已明确异常类型，例如 oops、panic、总线超时、DMA 错误或信号异常。
-- 已知道可执行的现场验证手段，如 dmesg、设备调试通道、寄存器 dump 或波形采集。
+确认硬件/软件身份、日志、符号与调试通道；MMIO 读副作用和现场权限先核实。
 
 ## Workflow
-1. 复现建模：记录触发步骤、频率、环境差异和最近变更。
-2. 日志解析：解析 fault type、PC/LR、call trace、寄存器和 taint 信息。
-3. 数据追踪：从故障点反向追踪状态来源、调用者和硬件事件。
-4. 假设排序：按证据强弱列出候选根因和置信度。
-5. 内核/芯片能力分流：首先核对 Cortex-M0/M0+/M23/M3/M4 等架构、厂商复位源寄存器与 SDK；不能对不具备 CFSR/HFSR/BFAR 的内核套用 M3/M4 故障寄存器流程。诊断 HardFault、看门狗重启、低功耗唤醒时按需读取 `references/mcu-fault-reset-wakeup.md`。
-6. 最小验证：设计单变量验证动作，避免一次改变多个条件。
-7. 结论闭环：给出根因、证据、修复方向、回归范围和残留风险。
+1. 记录触发、频率、环境/变更及 fault type、PC/LR、栈、寄存器和 taint。
+2. 先据 Oops 模块标记/可信映射判定 PC 或函数所属内核、具体模块及段，再核架构与对应 `vmlinux/.ko`（MCU 用对应 ELF）。`function+offset/size` 用匹配内核 helper；runtime PC 按可信 KASLR/模块映射换算。缺所属/映射或 `??:0` 记 `partial`；行号不证明选对 ELF，不猜偏移或关闭 KASLR。
+3. 按实际 Cortex-M/SDK 核 CFSR/HFSR/BFAR 能力，Cortex-M0/M0+/M23 不套 M3/M4 流程；HardFault、复位或唤醒按需读 `references/mcu-fault-reset-wakeup.md`。
+4. 反追状态来源、调用者与硬件事件；列假设、置信度、单变量验证及修复/回归范围。
 
 ## Commands
 ```bash
 rg -n "dev_err|WARN_ON|BUG_ON|panic|timeout|ETIMEDOUT" <target-dir>
 rg -n "request_irq|spin_lock|mutex_lock|dma_|completion|wait_event" <target-dir>
 dmesg
-addr2line -e <vmlinux> <pc-address>
+# Linux function+offset/size
+"$kernel_src/scripts/faddr2line" "$matched_elf" "$function_offset"
+# 已按映射归一化或已证明无需重定位的链接地址
+"$target_addr2line" -f -i -e "$matched_elf" "$pc_link"
 ```
+依据：[Linux 解码脚本](https://github.com/torvalds/linux/blob/master/scripts/faddr2line)。退出 0 不证明解析成功。
 
 ## Evidence Template
 ```md
-- Symptom:
-- Reproduction:
-- Logs:
-- Call Trace:
-- Register State:
-- Hypotheses:
-  - confidence: high|medium|low
-    evidence:
-    validation:
-- Root Cause:
+- Symptom / Reproduction / HW-SW Identity:
+- Matched ELF / Address Mapping / Logs / Registers:
+- Hypotheses: confidence + evidence + single-variable validation
+- Root Cause / Regression / Residual Risk:
 - Gate Result: pass|needs-fix
 ```
 
 ## Quality Gate
-- 根因结论必须有日志、代码位置或硬件测量支撑。
-- 每个候选原因都有置信度和验证动作。
-- 输出必须包含 `pass` 或 `needs-fix`，缺少复现证据时不得给通过结论。
-- 修复建议必须包含回归验证范围。
+- 根因须有匹配日志、源码或硬件测量支撑；假设附置信度与验证动作。
+- 输出 `pass` 或 `needs-fix`；缺复现、符号或映射证据不得通过，修复建议须带回归范围。

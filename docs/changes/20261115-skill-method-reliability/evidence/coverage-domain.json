@@ -1,0 +1,166 @@
+{
+  "scope": "23 core embedded/build/driver/protocol/debug/test Skills; source review is not runtime certification",
+  "reviewed_baseline_source": "092abfed44dabe74d13b2133dd57ac440c8455bb",
+  "implementation_workspace": "/workspace/scratch/771b38332ec2/agent-dev-kit-next",
+  "unique_skill_count": 23,
+  "additional_read_paths": [
+    "AGENTS.md",
+    "docs/agent-operating-rules.md",
+    "docs/embedded-constraints.md",
+    "docs/changes/20261115-skill-task-usability/audit.md"
+  ],
+  "items": [
+    {
+      "id": "adk-bsp-analysis",
+      "decision": "retain",
+      "reason": "已区分 Linux/RTOS/裸机入口，并以源码、硬件章节和历史证据串联资源依赖；本轮无确认的新方法缺陷。",
+      "read_paths": ["skills/adk-bsp-analysis/SKILL.md", "skills/adk-bsp-analysis/references/bsp-analysis-details.md"]
+    },
+    {
+      "id": "adk-bsp-porting-playbook",
+      "decision": "retain",
+      "reason": "启动链分层、目标制品身份、最小启动验证与恢复路径已有明确顺序；未确认需改的新反例。",
+      "read_paths": ["skills/adk-bsp-porting-playbook/SKILL.md"]
+    },
+    {
+      "id": "adk-cmake-cross-build",
+      "decision": "change",
+      "reason": "真实 CTest 反例证明空/全禁用/筛空原命令退出 0；修正为空集失败并保留目标执行后端和 skip 边界。",
+      "read_paths": ["skills/adk-cmake-cross-build/SKILL.md"]
+    },
+    {
+      "id": "adk-driver-bringup-checklist",
+      "decision": "retain",
+      "reason": "已有 minimal/functional/soak 分层、主动探测与 MMIO 读副作用判定，未把最小 bring-up 冒充量产验证。",
+      "read_paths": ["skills/adk-driver-bringup-checklist/SKILL.md"]
+    },
+    {
+      "id": "adk-driver-implementation",
+      "decision": "retain",
+      "reason": "覆盖 partial init、资源回收、IRQ/DMA ownership、cancel/reset 与 late completion；本轮未确认具体实现反例。",
+      "read_paths": ["skills/adk-driver-implementation/SKILL.md"]
+    },
+    {
+      "id": "adk-register-map-design",
+      "decision": "retain",
+      "reason": "W1C/read-clear/FIFO 与 reserved 位避免盲目 RMW，并绑定访问宽度、字节序与手册版本；无确认的新缺陷。",
+      "read_paths": ["skills/adk-register-map-design/SKILL.md"]
+    },
+    {
+      "id": "adk-rtos-task-design",
+      "decision": "retain",
+      "reason": "复核已修的固定优先级响应时间递推、阻塞/IRQ 干扰项及适用前提；未将 trace 样本等同 WCET 上界。",
+      "read_paths": ["skills/adk-rtos-task-design/SKILL.md"]
+    },
+    {
+      "id": "adk-interrupt-dma-patterns",
+      "decision": "retain",
+      "reason": "ISR API 优先级、CPU/device 所有权、cache-line/方向及取消迟到完成已有区分；本轮未得额外可复现缺陷。",
+      "read_paths": ["skills/adk-interrupt-dma-patterns/SKILL.md", "skills/adk-interrupt-dma-patterns/references/details.md", "skills/adk-interrupt-dma-patterns/references/rtos-isr-dma-diagnostics.md"]
+    },
+    {
+      "id": "adk-performance-profiling-embedded",
+      "decision": "retain",
+      "reason": "已分开瓶颈诊断与候选比较、真实活动负载和各 KPI 口径，KWS 划分/阈值及 host/板端证据限制明确。",
+      "read_paths": ["skills/adk-performance-profiling-embedded/SKILL.md", "skills/adk-performance-profiling-embedded/references/mcu-memory-footprint.md"]
+    },
+    {
+      "id": "adk-component-api-stability",
+      "decision": "retain",
+      "reason": "已分别验证源码 API、旧消费者原字节 ABI 与行为，工具错误和缺类型信息不会作为兼容通过。",
+      "read_paths": ["skills/adk-component-api-stability/SKILL.md"]
+    },
+    {
+      "id": "adk-hardware-debugging",
+      "decision": "change",
+      "reason": "直接对 runtime PC 使用 vmlinux 地址查询缺少所属和重定位前提；改为先核内核/模块/段，再选 ELF 和可信地址映射。",
+      "read_paths": ["skills/adk-hardware-debugging/SKILL.md", "skills/adk-hardware-debugging/references/mcu-fault-reset-wakeup.md"]
+    },
+    {
+      "id": "adk-offline-core-dump-triage",
+      "decision": "retain",
+      "reason": "已有 binary/libs/BuildID 关联、指定 GDB 和先设 sysroot 的 batch 顺序；缺符号与映射保持 partial。",
+      "read_paths": ["skills/adk-offline-core-dump-triage/SKILL.md"]
+    },
+    {
+      "id": "adk-embedded-debug-transport",
+      "decision": "retain",
+      "reason": "连接与根因分析边界分开，attach/halt/continue 和 MMIO 读副作用未被误归为被动观察。",
+      "read_paths": ["skills/adk-embedded-debug-transport/SKILL.md", "skills/adk-embedded-debug-transport/README.md"]
+    },
+    {
+      "id": "adk-embedded-remote-debug-log-triage",
+      "decision": "retain",
+      "reason": "分层连通性、ADB 语义确认、失联后停止扩大及恢复重做 preflight 已形成具体流程；本轮无新增机制反例。",
+      "read_paths": ["skills/adk-embedded-remote-debug-log-triage/SKILL.md", "skills/adk-embedded-remote-debug-log-triage/README.md", "skills/adk-embedded-remote-debug-log-triage/references/remote-adb-hil-contract.md"]
+    },
+    {
+      "id": "adk-embedded-diagnostic-harness",
+      "decision": "retain",
+      "reason": "按 expected code/invoke_ret 与前置条件判断，区分 harness、产品和环境失败，不一概把非零设备码当失败。",
+      "read_paths": ["skills/adk-embedded-diagnostic-harness/SKILL.md", "skills/adk-embedded-diagnostic-harness/README.md"]
+    },
+    {
+      "id": "adk-protocol-stack-integration",
+      "decision": "change",
+      "reason": "真实 TShark 证明原 -q 示例成功却无分析输出；改为有帧输出的离线过滤，零目标证据标 partial，主动采集有界且失败不消费旧文件。",
+      "read_paths": ["skills/adk-protocol-stack-integration/SKILL.md"]
+    },
+    {
+      "id": "adk-embedded-storage-layout-migration",
+      "decision": "retain",
+      "reason": "已有分区保留策略、配置/产物/运行态对齐、host dry-run 与真实迁移回执分离；未发现新确认缺陷。",
+      "read_paths": ["skills/adk-embedded-storage-layout-migration/SKILL.md"]
+    },
+    {
+      "id": "adk-embedded-release-orchestration",
+      "decision": "retain",
+      "reason": "prepare/publish/device-deploy 与多 MCU 部分成功恢复已分开，逐组件身份/健康/回滚证据清楚；无新确认缺陷。",
+      "read_paths": ["skills/adk-embedded-release-orchestration/SKILL.md", "skills/adk-embedded-release-orchestration/README.md", "skills/adk-embedded-release-orchestration/references/multi-mcu-ota-recovery.md"]
+    },
+    {
+      "id": "adk-production-field-readiness",
+      "decision": "retain",
+      "reason": "现场 readiness 要真实烧录/boot/产测/OTA/回滚材料，生产率试点又单列基线和时间口径；本轮未确认新方法错误。",
+      "read_paths": ["skills/adk-production-field-readiness/SKILL.md", "skills/adk-production-field-readiness/references/pilot-measurement-evidence.md"]
+    },
+    {
+      "id": "adk-fault-injection-recovery",
+      "decision": "retain",
+      "reason": "故障类型按项目风险选择，watchdog 验证条件化，检测/恢复时延和恢复后功能检查未被省略。",
+      "read_paths": ["skills/adk-fault-injection-recovery/SKILL.md"]
+    },
+    {
+      "id": "adk-integration-hil-sil",
+      "decision": "change",
+      "reason": "修复真实 CTest 的空集成功，统一发现/运行配置与筛选，同时保留 host/SIL/HIL、skip/not-run 和最终健康边界。",
+      "read_paths": ["skills/adk-integration-hil-sil/SKILL.md"]
+    },
+    {
+      "id": "adk-static-analysis-c-cpp",
+      "decision": "retain",
+      "reason": "已按实际 compilation database 选择 TU 和头文件消费者，空库/解析失败不会作为零告警成功，未重复上轮修复。",
+      "read_paths": ["skills/adk-static-analysis-c-cpp/SKILL.md"]
+    },
+    {
+      "id": "adk-unit-test-embedded",
+      "decision": "retain",
+      "reason": "已区分设计清单与实际测试交付，使用公开可观察 seam 并保留 host/compile-only/SIL/HIL 多层组合限制。",
+      "read_paths": ["skills/adk-unit-test-embedded/SKILL.md", "skills/adk-unit-test-embedded/references/embedded-tdd-matrix.md"]
+    }
+  ],
+  "not_counted_here": [
+    "adk-artifact-gating and adk-interface-contract-design were implemented by this owner but remain in the other auditor's 42-ID coverage set",
+    "adk-data-fetch, adk-fetch-url-content and adk-email-imap-fetch were delegated to deep_task_usability"
+  ],
+  "runtime_evidence": {
+    "results": "/workspace/scratch/771b38332ec2/domain-audit-repro/final-example-results.json",
+    "counterexamples": "/workspace/scratch/771b38332ec2/domain-audit-repro/results.json",
+    "capture_control_flow": "/workspace/scratch/771b38332ec2/protocol-capture-flow-review.json"
+  },
+  "unmeasured": [
+    "live capture, kernel/MCU/board execution, physical electrical/timing and HIL behavior",
+    "real source qualification by the isolated synthetic workflow fixtures",
+    "model task success, provider tokens, costs and end-to-end time improvements"
+  ]
+}

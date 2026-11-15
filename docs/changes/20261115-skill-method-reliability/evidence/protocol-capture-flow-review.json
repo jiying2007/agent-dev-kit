@@ -1,0 +1,38 @@
+{
+  "reviewer_id": "ai/root/remote_source_review",
+  "scope": "pre-freeze shell-control-flow check of extracted active capture example; no real tshark or device",
+  "started_at": "2026-11-15T06:08:40.181590+00:00",
+  "completed_at": "2026-11-15T06:08:40.189990+00:00",
+  "source_path": "skills/adk-protocol-stack-integration/SKILL.md",
+  "source_sha256": "fd8085c386c0b5c59e430d2eb6ddaf3dd75ec4d4f50f9d0d17943fd792bceb3d",
+  "source_commands": "tshark -n -i \"$IFACE\" -f \"port $PORT\" -a \"duration:$CAPTURE_SECONDS\" -c \"$PACKET_LIMIT\" -w \"$PCAP\" &&\n  tshark -n -r \"$PCAP\" -Y \"$DISPLAY_FILTER\"",
+  "source_commands_sha256": "942b4d9da2d93818ce7317b160ab1c7c692c87f155c801ce8714fdb04e6d699b",
+  "script_utf8": "tshark() {\n  local arg\n  for arg in \"$@\"; do\n    if [[ \"$arg\" == -i ]]; then\n      printf 'capture\n'\n      return \"$CAPTURE_EXIT\"\n    fi\n  done\n  printf 'analysis\n'\n  return \"$ANALYSIS_EXIT\"\n}\ntshark -n -i \"$IFACE\" -f \"port $PORT\" -a \"duration:$CAPTURE_SECONDS\" -c \"$PACKET_LIMIT\" -w \"$PCAP\" &&\n  tshark -n -r \"$PCAP\" -Y \"$DISPLAY_FILTER\"\n",
+  "script_sha256": "00ebb89aa56fadbfb2ada04f2aab68e62cbc64040834d48f14b2634d46f0093e",
+  "cases": [
+    {
+      "capture_exit": 42,
+      "analysis_exit": 0,
+      "actual_exit_code": 42,
+      "stdout": "capture\n",
+      "stderr": ""
+    },
+    {
+      "capture_exit": 0,
+      "analysis_exit": 7,
+      "actual_exit_code": 7,
+      "stdout": "capture\nanalysis\n",
+      "stderr": ""
+    },
+    {
+      "capture_exit": 0,
+      "analysis_exit": 0,
+      "actual_exit_code": 0,
+      "stdout": "capture\nanalysis\n",
+      "stderr": ""
+    }
+  ],
+  "actual_tshark_run": false,
+  "source_unchanged": true,
+  "status": "pass"
+}

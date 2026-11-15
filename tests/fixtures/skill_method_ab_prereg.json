@@ -9,7 +9,7 @@
     "source_sha": "7aed1d2545babce16c41dc021ead01c8c324ce07"
   },
   "candidate": {
-    "planned_release": "v11.3.2",
+    "planned_release": "v11.3.3",
     "source_sha": null
   },
   "case_groups": {
@@ -67,6 +67,12 @@
   },
   "holdout_qualification": "development-fixture-only-after-author-exposure",
   "unexecuted_candidate_history": [
+    {
+      "planned_release": "v11.3.2",
+      "merged_main_sha": "1282c78b145afca670cf8e5733d80bd3c61f5cfb",
+      "model_runs": 0,
+      "reason": "The task-usability source candidate merged after independent review and all required checks. This successor repairs concrete command and current-state failures; deterministic examples are not native model, Token, latency or cost observations."
+    },
     {
       "planned_release": "v11.3.1",
       "merged_main_sha": "c57f4f8a7983f52257c0587eb85881a006e6dc07",

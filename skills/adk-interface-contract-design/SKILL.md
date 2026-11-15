@@ -1,8 +1,8 @@
 ---
 name: adk-interface-contract-design
 description: "用于模块 API、协议消息及生命周期状态转换的接口契约设计与迁移评审；不用于需求未收敛时直接写实现或放行设备动作。"
-version: 1.3.5
-last_updated: 2026-11-14
+version: 1.3.6
+last_updated: 2026-11-15
 triggers:
   - "设计接口"
   - "API设计"
@@ -24,14 +24,13 @@ constraints:
 # adk-interface-contract-design
 
 ## Goal
-- 输出稳定、可验证的接口契约，降低跨模块返工。
-- 确保嵌入式组件间接口（HAL/驱动/协议栈）有明确的版本化契约。
+输出可验证的模块/嵌入式 HAL、驱动与协议栈契约，明确版本与调用方。
 
 
 ## Prerequisites
 - 明确调用链 owner、版本策略和兼容窗口。
 - 确定输入输出数据源与错误语义边界。
-- 了解目标平台约束（内存对齐、字节序、对齐要求）。
+- 了解目标平台的内存对齐和字节序。
 - 若请求会启动、取消或恢复共享资源操作，已识别唯一 owner 与状态可见性。
 
 
@@ -54,9 +53,10 @@ constraints:
    ```bash
    # 检查错误码定义一致性
    rg -n "IFACE_ERR_|ERR_" include/ src/ | sort
-   # 检查是否有重复错误码值
-   rg -o "= -[0-9]+" include/ | sort | uniq -d
+   # 跨文件重复字面值候选（不带文件名前缀）
+   rg --no-filename -o "= -[0-9]+" include/ | sort | uniq -d
    ```
+   仅覆盖该负十进制写法；宏/表达式/别名/其他进制另核。同一命名空间才判断冲突；零候选不证明无冲突。
 4. **约束异常行为**：超时、限流、重试、降级必须来自目标协议、真实链路/设备预算与可证伪实验；不可把示例 1000ms/3 次重试当通用生产默认值。
 5. **受控生命周期契约（条件性）**：若操作跨越状态或独占资源，冻结 owner、状态、事件、资源、终止和 invariant；其中必须覆盖可见性、取消、超时、恢复、迟到完成与 generation/op-id 隔离。详见 [生命周期操作契约](references/lifecycle-operation-contract.md)。
 6. **工具与 handoff 副作用边界（条件性）**：按调用参数和目标身份在写入前授权；拒绝、未知结果和重放按 [工具与 handoff 副作用契约](references/tool-effect-contract.md) 处理。

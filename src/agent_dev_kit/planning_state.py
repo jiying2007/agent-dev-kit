@@ -22,6 +22,36 @@ def valid_work_in_progress(work: Any) -> bool:
                      and work["prior_verified_checkpoint"] >= 0)))
 
 
+def current_state_field_issues(value: Any) -> list[tuple[str, str]]:
+    """Share field constraints; callers retain their public diagnostic formats."""
+    if not isinstance(value, dict):
+        return [("schema", "invalid")]
+    issues = []
+    if value.get("schema_version") != "adk.current-state/v1":
+        issues.append(("schema", "invalid"))
+    required = {"schema_version", "goal_ref", "milestone", "evidence_refs", "blockers", "next_actions", "history_refs"}
+    if not required <= set(value) or set(value) - required - {"work_in_progress"}:
+        issues.append(("fields", "invalid"))
+    if "work_in_progress" in value and not valid_work_in_progress(value["work_in_progress"]):
+        issues.append(("work_in_progress", "invalid"))
+    for key in ("goal_ref", "milestone"):
+        if not isinstance(value.get(key), str) or not value[key].strip():
+            issues.append((key, "missing"))
+    limits = (("evidence_refs", 0, 8), ("blockers", 0, 8),
+              ("next_actions", 1, 3), ("history_refs", 0, 3))
+    for key, _, _ in limits:
+        items = value.get(key)
+        if (not isinstance(items, list)
+                or any(not isinstance(item, str) or not item.strip() for item in items)
+                or len(set(items)) != len(items)):
+            issues.append((key, "invalid"))
+    for key, minimum, maximum in limits:
+        items = value.get(key)
+        if isinstance(items, list) and not minimum <= len(items) <= maximum:
+            issues.append((key, "limit"))
+    return issues
+
+
 def _reject_symlink_path(path: Path) -> None:
     """Fail closed on symlinked components, including parents (preflight only)."""
     current = path
@@ -52,25 +82,16 @@ def check_current_state(path: Path, *, max_bytes: int = 8192) -> dict[str, Any]:
             value = load_strict_json(raw, max_bytes=max_bytes)
         except (ValueError, UnicodeError):
             value = None
-        if not isinstance(value, dict) or value.get("schema_version") != "adk.current-state/v1":
+        issues = current_state_field_issues(value)
+        if ("schema", "invalid") in issues:
             reasons.append("current-state-schema-invalid")
         else:
-            required = {"schema_version", "goal_ref", "milestone", "evidence_refs", "blockers", "next_actions", "history_refs"}
-            if not required <= set(value) or set(value) - required - {"work_in_progress"}:
-                reasons.append("current-state-fields-invalid")
-            if "work_in_progress" in value:
-                if not valid_work_in_progress(value["work_in_progress"]):
-                    reasons.append("current-state-work-in-progress-invalid")
-            for key in ("goal_ref", "milestone"):
-                if not isinstance(value.get(key), str) or not value[key].strip():
-                    reasons.append("current-state-" + key.replace("_", "-") + "-missing")
-            for key in ("evidence_refs", "blockers", "next_actions", "history_refs"):
-                items = value.get(key)
-                if not isinstance(items, list) or any(not isinstance(item, str) or not item.strip() for item in items):
-                    reasons.append("current-state-" + key.replace("_", "-") + "-invalid")
-            actions = value.get("next_actions")
-            if isinstance(actions, list) and not 1 <= len(actions) <= 3:
-                reasons.append("current-state-next-actions-limit")
+            for key, kind in issues:
+                if kind == "limit" and key != "next_actions":
+                    kind = "invalid"
+                reason = "current-state-" + key.replace("_", "-") + "-" + kind
+                if reason not in reasons:
+                    reasons.append(reason)
     return {
         "schema_version": "adk.current-state-check/v1",
         "status": "fail" if reasons else "pass",
