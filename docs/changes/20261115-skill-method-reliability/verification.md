@@ -29,14 +29,26 @@
 
 此前内容集成曾为 81/82，原因是 tcpdump 工具边界文字缺失；恢复有效说明后重验通过。发布/状态/flaky 的原反例及红绿日志分别保存在 [方法反例](evidence/task-method-diagnostics.json) 和 [定向测试日志](evidence/task-regression-logs.json)。
 
-归档的原日志、旧补丁和反例采用 UTF-8 `raw_text` 包装，解码后逐字节对应其 `raw_sha256`；未裁剪、规范化空白或改写执行时间。独立状态检查复用以两个 Python 源文件完全相同为依据；协议控制流复用以命令块完全相同为依据；领域报告保留原整文件摘要并单独说明最终方法适用性，没有把旧报告伪装成新快照重跑。
+原日志、旧补丁和未清理反例采用 UTF-8 `raw_text` 包装，解码后逐字节对应其 `raw_sha256`；未裁剪、规范化空白或改写执行时间。下节单列公开归档中一份环境变量反例的有损清理，它使用 `sanitized_text` 与单独的派生摘要，不能还原原件。独立状态检查复用以两个 Python 源文件完全相同为依据；协议控制流复用以命令块完全相同为依据；领域报告保留原整文件摘要并单独说明最终方法适用性，没有把旧报告伪装成新快照重跑。
 
 领域复现脚本保留实际执行时的仓库路径和隔离工具布局，作为可检查的原执行脚本保存，不是直接安装入口。重放需在隔离副本配置相应 checkout 与工具路径，恢复 `relocation.c`，并按 `domain-pcap-fixture.json` 的 base64 和 SHA-256 恢复原 `one-packet.pcap`；工具包来源与摘要另有原回执。原记录的 host 限制不因重放而改变。
 
 ## 独立审核与尚未证明的结果
 
-最终独立 Spec / Quality、原发现、处置及证据摘要见 [审查报告](review-findings.md)、[独立绑定](evidence/independent-review-binding.json) 和 [机器可校验记录](review-evidence.json)。审核者只读，作者与审核者身份不同；AI 身份为声明身份，不等同人类 GitHub approval。
+冻结源码的独立 Spec / Quality、原发现及处置见 [原审查报告](review-findings.md) 与 [原独立绑定](evidence/independent-review-binding.json)。它们保留首次交付记录时的真实观察；归档清理之后的当前材料由下节补充审查及 [当前机器可校验记录](review-evidence.json) 重新绑定。审核者只读，作者与审核者身份不同；AI 身份为声明身份，不等同人类 GitHub approval。
 
 未运行真实模型任务 A/B、原生 Skill 加载认证、板端/内核/HIL、实时抓包、邮箱或付费模型调用；Token、费用、模型任务成功率和端到端时延收益仍未测。E1 低风险实现路由仍不可达。本机缺少 rtk，按仓库已有无运行时依赖说明使用 Bash/Python 原入口，未伪造包装器。既有脚本文件模式警告没有通过批量 chmod 隐藏。
 
 本文件写入时，本候选是完成本地验证并准备受保护交付的 11.3.3；远端 PR 检查、合并和 canonical release 以随后真实 GitHub 事件为准。
+
+## 首次 PR CI 的归档问题与修订
+
+[PR #268](https://github.com/jiying2007/agent-dev-kit/pull/268) 的首个完整回执 HEAD 为 `d2198327df378844b4a1453cc3c6aa5144aec2a9`。实际远端完整回归为 **101/102**，唯一失败是 `test_product_maturity` 的既有安全扫描；确定性评测包随后因依赖回归未通过而失败，不能计为另一项独立实现故障。原始工作日志和本地定向红绿材料保存在 [CI 与清理回执](evidence/ci-initial-results.json)。
+
+扫描命中 `task-method-diagnostics.json` 中 `method-repros.json` 的环境变量反例。该反例使用隔离合成输入，但旧命令的 stdout 原样保留了固定的模拟变量值，呈现凭据样式。当前公开归档仅对 `$.flaky_environment.result.stdout` 做有损清理，移除合成值及进程 PATH 的具体值；保留原退出码、观察到的变量名称、确实打印过合成值的事实，以及原全文和原 stdout 的摘要与字节数。另一份 `early-repros.json` 继续原样保存，其他反例字段保持。
+
+派生材料明确使用 `sanitized_text`，其摘要与原始摘要分别记录，并声明不能从公开材料无损恢复原 stdout。没有修改扫描器、添加忽略规则、利用占位符豁免、编码隐藏原值或放宽测试。原件仍保留在原执行证据位置；已发布的旧 HEAD 和 [旧机器审核副本](evidence/review-before-ci.json) 保留此前真实摘要与时间。
+
+原反例没有另存独立的生成脚本；合成输入的归属依据为实施者原执行记录与落盘的 `sanitized_fixture_only` 标记，不能补造脚本再作为原执行证据。清理前在本地实际复现了同一拒绝，清理后同一 `test_product_maturity.sh` 通过；这项定向复验只验证本次归档修复，不能替代随后新 HEAD 的远端全量。
+
+这次只改公开证据的表达及相应绑定，35 个冻结源码文件、完整原补丁、最终本地 102/102 的实际运行结果均不变。原 06:45 审查针对旧归档的逐字节结论不自动适用于清理后的材料；新的 [归档补充审查](evidence/ci-followup-review.json) 以真实后续时间重新核对。新 PR HEAD 仍需再次通过全部 8 项既有远端检查后才可合并。

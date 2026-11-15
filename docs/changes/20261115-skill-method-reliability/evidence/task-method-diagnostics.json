@@ -1,5 +1,5 @@
 {
-  "schema": "adk-raw-evidence-archive/v1",
+  "schema": "adk-evidence-archive/v1",
   "files": [
     {
       "original_filename": "deep-task-usability/early-repros.json",
@@ -11,9 +11,24 @@
     {
       "original_filename": "deep-task-usability/method-repros.json",
       "encoding": "utf-8",
-      "raw_sha256": "79a9c8829ad1edf8482dd83dbd4630be9eceecee55aad4fff3405a28024997ee",
-      "raw_bytes": 2075,
-      "raw_text": "{\n  \"interface_duplicate\": {\n    \"document_command\": \"rg -o \\\"= -[0-9]+\\\" include/ | sort | uniq -d\",\n    \"document_result\": {\n      \"exit\": 0,\n      \"stdout\": \"\",\n      \"stderr\": \"\"\n    },\n    \"raw_matches\": {\n      \"exit\": 0,\n      \"stdout\": \"include/a.h:= -7\\ninclude/b.h:= -7\\n\",\n      \"stderr\": \"\"\n    }\n  },\n  \"flaky_count\": {\n    \"document_command\": \"for test in $(cat test-list.txt); do\\n  count=$(rg -c \\\"$test\\\" ci-log.txt 2>/dev/null || echo 0)\\n  echo \\\"$test: $count failures\\\"\\ndone | sort -t: -k2 -rn\",\n    \"result\": {\n      \"exit\": 0,\n      \"stdout\": \"test_ok: 2 failures\\ntest_items[case-1]: 0 failures\\n\",\n      \"stderr\": \"\"\n    },\n    \"expected\": {\n      \"test_ok\": 0,\n      \"test_items[case-1]\": 1\n    }\n  },\n  \"flaky_repeat\": {\n    \"document_command\": \"for i in {1..10}; do false 2>&1 | tee -a test-run-$i.log; done\",\n    \"all_test_runs_exit\": 1,\n    \"result\": {\n      \"exit\": 0,\n      \"stdout\": \"\",\n      \"stderr\": \"\"\n    },\n    \"created_logs\": 10\n  },\n  \"flaky_environment\": {\n    \"document_command\": \"env | grep -i \\\"test\\\\|ci\\\\|debug\\\" | sort\",\n    \"sanitized_fixture_only\": true,\n    \"result\": {\n      \"exit\": 0,\n      \"stdout\": \"CI_JOB_TOKEN=synthetic-secret-must-not-log\\nPATH=/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/override:/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin:/opt/codex/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/agent/.local/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/fallback\\n\",\n      \"stderr\": \"\"\n    }\n  },\n  \"artifact_status\": {\n    \"approved\": {\n      \"exit\": 1,\n      \"stdout\": \"\",\n      \"stderr\": \"[FAIL] review result pass requires artifact ReviewReport/TestReport status both PASS\\n\"\n    },\n    \"PASS\": {\n      \"exit\": 0,\n      \"stdout\": \"[OK] review passed: /tmp/adk-artifact-probe-9tqqgke4/case-pass\\n[INFO] report: /tmp/adk-artifact-probe-9tqqgke4/case-pass/review-report.md\\n\",\n      \"stderr\": \"\"\n    }\n  }\n}\n"
+      "representation": "sanitized-evidence",
+      "original_raw_sha256": "79a9c8829ad1edf8482dd83dbd4630be9eceecee55aad4fff3405a28024997ee",
+      "original_raw_bytes": 2075,
+      "sanitized_sha256": "43a09bd9be53174586401d19dbe31d5f804338d9f1f3e17f11f746b51a932ce2",
+      "sanitized_bytes": 1653,
+      "sanitized_text": "{\n  \"interface_duplicate\": {\n    \"document_command\": \"rg -o \\\"= -[0-9]+\\\" include/ | sort | uniq -d\",\n    \"document_result\": {\n      \"exit\": 0,\n      \"stdout\": \"\",\n      \"stderr\": \"\"\n    },\n    \"raw_matches\": {\n      \"exit\": 0,\n      \"stdout\": \"include/a.h:= -7\\ninclude/b.h:= -7\\n\",\n      \"stderr\": \"\"\n    }\n  },\n  \"flaky_count\": {\n    \"document_command\": \"for test in $(cat test-list.txt); do\\n  count=$(rg -c \\\"$test\\\" ci-log.txt 2>/dev/null || echo 0)\\n  echo \\\"$test: $count failures\\\"\\ndone | sort -t: -k2 -rn\",\n    \"result\": {\n      \"exit\": 0,\n      \"stdout\": \"test_ok: 2 failures\\ntest_items[case-1]: 0 failures\\n\",\n      \"stderr\": \"\"\n    },\n    \"expected\": {\n      \"test_ok\": 0,\n      \"test_items[case-1]\": 1\n    }\n  },\n  \"flaky_repeat\": {\n    \"document_command\": \"for i in {1..10}; do false 2>&1 | tee -a test-run-$i.log; done\",\n    \"all_test_runs_exit\": 1,\n    \"result\": {\n      \"exit\": 0,\n      \"stdout\": \"\",\n      \"stderr\": \"\"\n    },\n    \"created_logs\": 10\n  },\n  \"flaky_environment\": {\n    \"document_command\": \"env | grep -i \\\"test\\\\|ci\\\\|debug\\\" | sort\",\n    \"sanitized_fixture_only\": true,\n    \"result\": {\n      \"exit\": 0,\n      \"stdout\": \"[omitted: synthetic variable value and process PATH]\",\n      \"stderr\": \"\"\n    }\n  },\n  \"artifact_status\": {\n    \"approved\": {\n      \"exit\": 1,\n      \"stdout\": \"\",\n      \"stderr\": \"[FAIL] review result pass requires artifact ReviewReport/TestReport status both PASS\\n\"\n    },\n    \"PASS\": {\n      \"exit\": 0,\n      \"stdout\": \"[OK] review passed: /tmp/adk-artifact-probe-9tqqgke4/case-pass\\n[INFO] report: /tmp/adk-artifact-probe-9tqqgke4/case-pass/review-report.md\\n\",\n      \"stderr\": \"\"\n    }\n  }\n}\n",
+      "sanitization": {
+        "field": "$.flaky_environment.result.stdout",
+        "reason": "The public artifact retains outcomes and variable names but omits the known synthetic fixture value and process PATH; no credential scanner rule or exception was changed.",
+        "observed_variable_names": [
+          "CI_JOB_TOKEN",
+          "PATH"
+        ],
+        "synthetic_fixture_value_was_printed": true,
+        "original_stdout_sha256": "ba619e20823975215ac576f9b3312b4aec5ea04f5cf709e87d86700d86513f50",
+        "original_stdout_bytes": 472,
+        "raw_recoverable_from_public_record": false
+      }
     }
   ]
 }
