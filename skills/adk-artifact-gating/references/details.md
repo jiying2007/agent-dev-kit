@@ -1,19 +1,16 @@
 # adk-artifact-gating — 补充参考资料
 
-此参考文件只提供可选背景、示例和检查提示；当前能力流程、权限、回退与放行结论以 `../SKILL.md`、Manifest 及运行时门禁为准。示例命令不得被解释为写权限授权。
+按需加载；示例不增加写权限。
 
 ## 来源说明
 
-- **本地实现**：`adk-artifact-gating` 是唯一 artifact 门禁入口
-- **Runbook 参考**：`docs/runbooks/artifact-gated-delivery.md`
-- **门禁机制**：`adk-verification-before-completion` 的证据核验体系
-- **评审标准**：`adk-commit-pr-quality-gate` 的分级评审（blocker/major/minor）
+Runbook：`docs/runbooks/artifact-gated-delivery.md`；证据核验与分级评审分别沿用 `adk-verification-before-completion`、`adk-commit-pr-quality-gate`。
 
 ## 模式描述
 
 ### 1. 统一 Artifact 标签规范
 
-每个交付物必须使用三类标准标签：
+交付包包含以下标签：
 
 | 标签 | 用途 | 必填字段 |
 |------|------|----------|
@@ -21,19 +18,13 @@
 | `[artifact:ReviewReport]` | 评审报告 | status, owner, verdict, findings |
 | `[artifact:TestReport]` | 测试报告 | status, owner, tests_run |
 
-### 2. 状态机
+### 2. 报告与 workflow 状态
 
-```
-DRAFT → READY → VERIFIED → PASS
-                 ↓            ↓
-              BLOCKED     NEEDS-FIX → DRAFT（修复后重新进入）
-```
+`scripts/workflow.sh` 管理 `propose → apply → verify → review → archive`；其 `stage` 不等于 artifact 的 `status`，不强制逐 artifact 状态迁移。
 
-**硬约束**：
-- `DRAFT → READY`：所有必填字段已填写
-- `READY → VERIFIED`：验证命令已执行且结果已记录
-- `VERIFIED → PASS`：ReviewReport 和 TestReport 均为 PASS 且结论一致
-- 任何阶段发现证据缺失 → 固定为 `BLOCKED` 或 `NEEDS-FIX`
+- 计划完整标 READY；报告按实证标 PASS、NEEDS-FIX 或 BLOCKED。
+- `review --result pass` 消费 verified 入口和 PASS/PASS 报告；verdict 若有须为 pass，模板要求填写。approved 不是 PASS。
+- `review --result needs-fix` 拒绝 PASS/PASS 且 verdict=pass。缺证据保持 NEEDS-FIX/BLOCKED；状态/签收不替代验证或适用的独立 review evidence。
 
 ### 3. 交接协议
 
@@ -51,6 +42,8 @@ signoff: <next-owner> 确认签收
 
 ### 4. 最小标签模板
 
+以下为真实通过记录；NEEDS-FIX/BLOCKED 配 `verdict: needs-fix`，未验证不预填 PASS。
+
 ```md
 [artifact:ImplementationPlan]
 status: READY
@@ -62,10 +55,14 @@ handoff_to:
 
 [artifact:ReviewReport]
 status: PASS
-verdict: pass | needs-fix
+owner: <reviewer>
+verdict: pass
+findings:
+- <finding or none>
 
 [artifact:TestReport]
 status: PASS
+owner: <test-owner>
 tests_run:
 - <command + result>
 ```

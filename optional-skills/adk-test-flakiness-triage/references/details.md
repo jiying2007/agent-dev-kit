@@ -1,87 +1,63 @@
-# 测试波动 — 按需诊断示例
+# 测试波动 — 按需取证
 
-此参考文件仅保存日志分析、重试与隔离示例。主工作流、风险、权限、统计判断与放行条件均以 `../SKILL.md` 为准。任何固定重复次数都只是 smoke，不作为低失败率保证。
+沿用 `../SKILL.md` 的风险、权限、统计与隔离边界。重复次数只限定 smoke，不证明低失败率目标；不执行未经审查的测试或生产操作。
 
-## 不稳定测试识别
+## 先定义样本与结果
+
+- 从测试框架的 JUnit/JSON/原生报告读取精确用例 ID、每次结果和执行环境；空格、方括号等属于名称，不作为正则或 shell 分词。日志命中次数不是失败数，进程非零也不等于所有用例失败。
+- 分开记录 `passed / failed / error / skipped / missing`。分母来自真正执行的用例或同一用例的独立运行次数；报告计划次数、实际次数和排除原因。缺报告、收集/启动错误或全部跳过不能算成功样本，更不能从分母静默删除不利结果。
+- 只有逐轮报告完整、版本/选择器/环境可比，才计算用例失败率并说明统计假设；无法归因时只报告原退出码与未知项。框架已有统计工具优先，不用通用 grep 推算。
+
+## 有界命令采样（Bash）
+
+从项目已核测试入口构造 `test_command` 数组，再调用 `run_flaky_samples 10 <新证据目录> "${test_command[@]}"`。命令自身须有适用的超时/取消路径；次数限制不限制单次耗时。每次 `FLAKY_SAMPLE_DIR` 指向新目录，已审查的项目 runner 可用它保存 JUnit/JSON；不支持时仅取得日志和退出码，不宣称用例报告完整。没有 eval，不执行日志里的命令。
+
 ```bash
-# 从 CI 日志中提取失败测试
-rg -n "FAILED|ERROR" ci-log.txt | grep -i "test"
-
-# 统计测试失败率
-for test in $(cat test-list.txt); do
-  count=$(rg -c "$test" ci-log.txt 2>/dev/null || echo 0)
-  echo "$test: $count failures"
-done | sort -t: -k2 -rn
-
-# 列出最近失败的测试
-git log --oneline --all --grep="flaky" | head -20
-
-# 检查测试历史通过率
-rg -n "pass_rate|flaky" test-reports/ | sort -t: -k2 -rn
+run_flaky_samples() (
+  set -euo pipefail
+  (( $# >= 3 )) || { printf 'usage: run_flaky_samples <1-20> <new-directory> <command> [args...]\n' >&2; exit 2; }
+  samples=$1
+  evidence=$2
+  shift 2
+  [[ "$samples" =~ ^([1-9]|1[0-9]|20)$ ]] || exit 2
+  mkdir -- "$evidence" || exit 2
+  evidence=$(cd -- "$evidence" && pwd -P) || exit 2
+  printf 'attempt\texit_code\n' > "$evidence/results.tsv" || exit 2
+  failed=0
+  for ((attempt=1; attempt<=samples; attempt++)); do
+    sample_dir="$evidence/run-$attempt"
+    mkdir -- "$sample_dir" || exit 2
+    exec 3>"$sample_dir/output.log" || exit 2
+    result=0
+    FLAKY_SAMPLE_DIR="$sample_dir" "$@" >&3 2>&1 || result=$?
+    exec 3>&- || exit 2
+    printf '%s\t%s\n' "$attempt" "$result" >> "$evidence/results.tsv" || exit 2
+    if (( result != 0 )); then failed=1; fi
+  done
+  printf 'attempts=%s\nrecords=%s\n' "$samples" "$evidence/results.tsv" || exit 2
+  exit "$failed"
+)
 ```
 
-## 重试策略模板
-```md
-[retry-strategy]
-test_name: <测试名称>
-current_retry: <当前重试次数>
-recommended_retry: <建议重试次数>
-backoff_strategy: linear | exponential | fixed
-max_wait: <最大等待时间>
-conditions:
-  - <重试条件 1>
-  - <重试条件 2>
-rationale: <选择此策略的原因>
-```
+返回 0 只表示已采样命令均返回 0，仍须核真实报告和选择器；1 表示至少一次非零，2 表示参数或采集失败。任何失败保留目录与已得样本，不 append 旧日志、不重跑到绿；采集失败不得产出完整性/稳定性通过结论。
 
-## 隔离方法
-```md
-[isolation-method]
-test_name: <测试名称>
-isolation_type: environment | data | timing | resource
-steps:
-  1. <隔离步骤 1>
-  2. <隔离步骤 2>
-  3. <隔离步骤 3>
-expected_behavior: <隔离后预期行为>
-verification: <验证命令>
-```
+## 环境比较与最小诊断
 
-## 根因分析模板
-```md
-[root-cause-analysis]
-test_name: <测试名称>
-failure_pattern: <失败模式>
-5-why:
-  why-1: <直接原因>
-  why-2: <中间原因>
-  why-3: <系统性根因>
-root_cause_category: timing | resource_leak | external_dependency | race_condition | environment
-fix_type: code_change | test_rewrite | environment_setup | retry_config
-fix_description: <修复描述>
-regression_test: <回归测试命令>
-```
+先比较版本、已脱敏配置和资源状态。以下仅列相关变量**名称**；需要值时逐项使用已核安全白名单，凭据值不进入日志。
 
-## Commands
 ```bash
-# 运行测试多次统计失败率
-for i in {1..10}; do <test_cmd> 2>&1 | tee -a test-run-$i.log; done
-
-# 搜索常见波动原因
-rg -n "timeout|race|port already in use|resource busy|connection refused" <test_log_dir>
-
-# 检查测试依赖
-rg -n "import|require|from" <test_file> | head -20
-
-# 检查环境变量
-env | grep -i "test\|ci\|debug" | sort
-
-# 对比成功与失败的日志差异
-diff <(rg -n "INFO|DEBUG" success.log) <(rg -n "INFO|DEBUG" failure.log) | head -50
-
-# 检查端口占用
-ss -tlnp | grep <test_port>
-
-# 检查文件锁
-lsof | grep <test_data_dir>
+# environment-names: values are never printed
+python3 - <<'PY'
+import json, os
+print(json.dumps(sorted(name for name in os.environ
+                       if any(key in name.upper() for key in ("TEST", "CI", "DEBUG")))))
+PY
 ```
+
+日志检索只定位假设，不作为统计结果：
+
+```bash
+rg -n 'timeout|race|port already in use|resource busy|connection refused' <test-log-directory>
+```
+
+单次实验记录 `hypothesis / changed variable / expected / observed / raw report / disproved-or-open`。重试方案记录原策略、预算、适用错误和停止条件；隔离记录 owner、原测试状态、解除条件及 CI 证据，不能把 quarantine 计为 PASS。只在证据支持跨层因果时展开 5-Why，验证修复后仍保留原失败与通过路径。

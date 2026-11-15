@@ -1,8 +1,8 @@
 ---
 name: adk-cmake-cross-build
 description: "用于嵌入式 CMake 工程的交叉编译、工具链配置与多目标构建排障；不用于无 CMake 的构建系统或直接设备部署。"
-version: 1.0.3
-last_updated: 2026-11-14
+version: 1.0.4
+last_updated: 2026-11-15
 triggers:
   - "CMake"
   - "CMake交叉编译"
@@ -23,21 +23,19 @@ constraints:
 # adk-cmake-cross-build
 
 ## Goal
-- 构建稳定可复现的 CMake 交叉编译链路。
-- 支持多目标平台（ARM Cortex-M/A、RISC-V）统一构建入口。
+复现 ARM Cortex-M/A、RISC-V 等实际目标的 CMake 交叉构建。
 
 ## Prerequisites
 - 明确 host/build/target 三元组与编译器版本。
 - 准备 toolchain file、sysroot、依赖路径映射。
-- 先确认目标确实使用 CMake（包括 Buildroot/Yocto 中的 CMake package），并读取项目要求的 CMake 版本与 generator；不得把 Autotools/Make/Buildroot/Yocto 一概路由到 CMake。
+- 确认实际使用 CMake（含 Buildroot/Yocto 的 CMake package），核版本与 generator；不将其他构建系统一概转为 CMake。
 
 ## Workflow
 1. **编写 toolchain 文件**：定义编译器、sysroot、查找路径和 ABI flags。
 2. **固化 Presets**：用 `CMakePresets.json` 表达目标、构建类型和输出目录。
 3. **执行构建**：仅在目标仓允许执行并且 toolchain/generator/sysroot 存在时使用 presets；无 presets 时显式传入 toolchain file。不得替换或删除不属于本任务的 build 目录；用户未授权执行时只读规划。
 4. **执行后端判定**：在跑 CTest 前识别 host-unit、compile-only、emulator（含 `CROSSCOMPILING_EMULATOR`）、board-runner 四类。没有已验证的目标执行后端时，只能声称交叉构建成功；不能把主机上的 CTest 通过写成板端运行通过。
-5. **产物检查**：根据实际 toolchain 验证 ELF 架构、段大小、符号表和 map 文件。
-6. **记录制品与失败点**：输出日志、二进制位置与诊断建议。
+5. **产物检查**：用实际 toolchain 核 ELF 架构、段、符号/map；记录二进制、日志、失败点与诊断建议。
 
 ## Commands
 ```bash
@@ -48,8 +46,9 @@ file build/<target>/firmware.elf
 arm-none-eabi-size build/<target>/firmware.elf
 arm-none-eabi-objdump -h build/<target>/firmware.elf
 # 仅在发现目标项目已有 host/emulator/board test runner 后运行：
-ctest --test-dir build/<target> --output-on-failure
+ctest --test-dir build/<target> --output-on-failure --no-tests=error
 ```
+按实际 build/config/filter 核执行数量；空集/全禁用/筛空须失败，skip/not-run 不算通过。见 [CTest](https://cmake.org/cmake/help/v3.20/manual/ctest.1.html)。
 
 ## Evidence Template
 ```md
@@ -58,8 +57,7 @@ ctest --test-dir build/<target> --output-on-failure
 - Build Matrix:
   | Preset | Type | Status | Size |
   |--------|------|--------|------|
-  | arm-m4-debug | Debug | PASS/FAIL | __ KB |
-  | arm-m4-release | Release | PASS/FAIL | __ KB |
+  | actual-preset | Debug/Release | PASS/FAIL | __ KB |
 - Build Result: [link to build log]
 - ELF Verification: `file` output, section sizes
 - Test Result: [ctest summary]

@@ -1,8 +1,8 @@
 ---
 name: adk-release-versioning
 description: "用于规划版本号、Changelog 和发布基线并检查历史版本一致性；不执行真实发布，也不用于替代固件包验证或设备更新。"
-version: 1.4.3
-last_updated: 2026-11-09
+version: 1.4.4
+last_updated: 2026-11-15
 triggers:
   - "版本发布"
   - "版本管理"
@@ -22,57 +22,27 @@ constraints:
 # adk-release-versioning
 
 ## Goal
-- 核对版本与回退证据。
-
+核对版本、完整变更范围和回退证据；不执行真实发布。
 
 ## Prerequisites
-- 确认版本策略（SemVer 或项目定制规则）。
-- 收集本次发布范围、变更类型与受影响用户。
-
+确认目标 commit、受影响用户及项目版本、正式发布、CI 和回滚政策；首发需明确确认。
 
 ## Workflow
-1. **版本决策**：根据变更类型确定 major/minor/patch。
-   ```bash
-   # 查看最近版本
-   git tag --list --sort=-version:refname | head -10
-   # 查看自上次发布的变更
-   git log $(git describe --tags --abbrev=0)..HEAD --oneline
-   ```
-2. **变更归档**：按 feat/fix/refactor/docs 分类生成 changelog。
-3. **Changelog 生成**：
-   ```bash
-   # 按 type 分类生成 changelog
-   git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:"- %s" | \
-     grep -E "^- (feat|fix|refactor|perf|docs)" | sort
-   ```
-4. **发布清单**：制品、依赖、配置变更、迁移步骤。
-5. **阶段矩阵**：给出里程碑阶段、退出条件、验证证据与回退锚点。
-6. **回退预案**：可回滚版本、触发条件、验证命令。
-7. **Promotion 发布**：
-   - 读取目标项目真实的 release policy、版本 SSOT、CI 与回滚机制，通用 Skill 不假设 ADK 发布链适用于任意仓。
-   - 合并前校验 exact base 与版本合法性；受保护主线 fresh CI 后才进行签名和制品发布，不覆盖不可变 tag。
-   - **仅对 agent-dev-kit 源仓** 使用 source SemVer 门禁、successful-main CI → release-tag-promotion → exact annotated tag → canonical release，并核验 digest/attestation。
-   - 非 ADK 项目没有上述工作流时标记 `not_applicable`，改用该项目实际审查过的发布门禁，不得伪造结果。
-8. **发布签署**：输出 go/no-go 结论与残留风险，并记录 tag、commit、GitHub Release 与 artifact digest。
-
+1. **冻结范围**：正式发布记录确定 baseline，核其为目标祖先；不自动选择最近 tag。shallow/缺历史先按授权补齐，不改用首发。
+2. **完整取证**：使用 `references/details.md` 的只读示例保留全部 hash、subject、body；首发列所有可达历史，Git 失败立即停止。
+3. **版本与 Changelog**：逐条核实际影响并分类，breaking/revert/build/ci/未知类型均保留审阅去向；按兼容性决定 major/minor/patch 和迁移说明。
+4. **清单**：制品、依赖、配置、迁移、可回滚版本、触发条件和验证命令；阶段式迁移各列退出条件、证据及回退锚点。
+5. **Promotion 交接**：核 exact base/版本，受保护主线 fresh CI 后才签名/发布，核 tag/digest/attestation。ADK 专用链见 reference；其他项目遵循自身政策。
+6. **签署**：报告 go/no-go、残余风险和缺失证据，绑定 tag/commit/Release/digest；未执行不得声称已发布。
 
 ## Quality Gate
-- 必须给出版本号决策依据。
-- 阶段式迁移必须给出阶段结论与回退锚点。
-- 必须附完整迁移与回退步骤。
-- 必须明确发布门禁结论与签署条件。
-- 版本、tag 与受保护 CI 必须符合目标项目发布政策；仅 ADK 自身要求 source SemVer、annotated tag 及 successful-main promotion。
-- Changelog 必须覆盖自上次发布以来的所有变更。
-
+- 历史与分类覆盖全部待发布变更；撤销及非用户可见项也保留依据，不冒充仍生效的功能。
+- 版本、迁移/回退、阶段结论和签署条件可追溯，tag/CI 符合目标政策。
 
 ## Failure Handling
-- 版本号与变更类型不匹配时，停止切版并重审。
-- 缺失回退路径时，结论必须为 `needs-fix`。
-- Changelog 为空时，检查 commit message 是否符合规范。
-- Tag 创建失败时，检查同名 tag 是否已存在；若已指向不同 commit，必须提升 SemVer，禁止覆盖旧 tag。
-- GitHub Release 已存在时，只有远端 assets 与本轮 validated bundle byte-identical 才允许幂等通过。
-- Tag 已存在但 Release 缺失时，不删除或重建 tag；由 self-heal audit 绑定 exact tag/commit 后补发。
-
+- 空清单先核 baseline/HEAD；Git 错误、历史不完整、版本不匹配或缺回退 → `needs-fix`。
+- 同名 tag 指向不同 commit 必须提升 SemVer，禁止覆盖；已有 Release 仅在 assets 与 validated bundle byte-identical 时可幂等通过。
+- ADK tag 已存在但 Release 缺失，不重建 tag；self-heal audit 绑定 exact tag/commit 后补发。
 
 ## Evidence Template
 
@@ -87,5 +57,4 @@ risks:
 ```
 
 ## References
-- 详细背景、命令、模板、示例和扩展检查项保存在 `references/details.md`。
-- 入口文件只保留触发和执行所需的最小上下文，避免默认加载过多 token。
+需要完整历史命令、SemVer 对照或 ADK 发布边界时读 `references/details.md`。

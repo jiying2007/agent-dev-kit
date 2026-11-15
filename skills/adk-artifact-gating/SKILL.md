@@ -1,8 +1,8 @@
 ---
 name: adk-artifact-gating
 description: "用于跨仓交付物需要标签、状态与验收交接协议时定义 Artifact 门禁；不用于单仓常规测试、直接上传制品或发布批准。"
-version: 1.0.1
-last_updated: 2026-11-03
+version: 1.0.2
+last_updated: 2026-11-15
 triggers:
   - "artifact 门禁"
   - "跨角色交接"
@@ -20,48 +20,36 @@ outputs:
 constraints:
   - 所有 artifact 必须包含 status 字段和验证证据
   - 缺少验证证据时结论固定为 needs-fix 或 BLOCKED
-  - ReviewReport 与 TestReport 结论不允许矛盾
-  - 状态机转换必须经过校验，禁止跳过中间状态
+  - 报告结论不得与最终门禁结果冲突
+  - Artifact status 与 workflow stage 分开，沿用已有 workflow 校验
 ---
 
 # adk-artifact-gating
 
 ## Goal
 
-在跨仓库、跨角色交付场景中，用统一的 artifact 标签体系和状态机门禁，消灭"口头完成"和"结论无证据"问题。
-
+在跨仓、跨角色交付中，用标签、owner 和真实验证证据形成可复核结论。
 
 ## Prerequisites
 
-- 理解 artifact 门禁的基本概念
-- 熟悉跨角色协作流程
-- 了解状态机转换规则
-- 具备基本的文档编写能力
-
+确认变更目录、交付 owner、验证入口与接收方；按项目已有 workflow 推进，不另建状态机。
 
 ## Workflow
 
-1. 识别变更范围与影响角色
-2. 为每个 artifact 生成统一标签（ImplementationPlan / ReviewReport / TestReport）
-3. 填充状态字段（draft → in-review → approved / needs-fix / BLOCKED）
-4. 执行验证命令并附加证据
-5. 交接签收：接收方确认 artifact 完整性
-6. 门禁结论：全部 artifact approved 且无矛盾 → pass
-
+1. 核范围、owner、接收方；生成 ImplementationPlan / ReviewReport / TestReport 标签。
+2. 计划就绪填 READY；评审/测试按实证填 PASS、NEEDS-FIX 或 BLOCKED，approved 不等于 PASS。
+3. 执行验证，附命令、退出码和证据，由接收方签收完整性。
+4. verify 通过后，ReviewReport/TestReport=PASS、verdict=pass 且与 review 结果一致才给门禁 pass；签收不代替验证。
 
 ## Quality Gate
 
-1. 三类 artifact 均存在且字段完整
-2. ReviewReport 与 TestReport 结论一致
-3. 所有验证命令可复现
-4. 状态机转换经脚本校验
-5. 交接签收记录完整
-
+三类标签、owner/证据/签收完整，命令可复现，报告与门禁一致；阶段校验沿用 workflow。
 
 ## Evidence Template
 
 ```md
 status: pass | needs-fix | BLOCKED
+owner: <gate-owner>
 commands:
 - <command + exit code>
 evidence:
@@ -71,5 +59,4 @@ risks:
 ```
 
 ## References
-- 详细背景、命令、模板、示例和扩展检查项保存在 `references/details.md`。
-- 入口文件只保留触发和执行所需的最小上下文，避免默认加载过多 token。
+- 状态语义、完整模板与交接见 `references/details.md`。
