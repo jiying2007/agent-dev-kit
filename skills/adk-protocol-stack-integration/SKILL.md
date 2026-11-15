@@ -48,7 +48,7 @@ tshark -n -i "$IFACE" -f "port $PORT" -a "duration:$CAPTURE_SECONDS" -c "$PACKET
   tshark -n -r "$PCAP" -Y "$DISPLAY_FILTER"
 ```
 保留退出码、帧号/时间及匹配包数。坏文件记读取失败；零字节、合法零包或筛选零匹配即使退出 0 也记 `partial: 无目标协议证据`。大文件按问题限定窗口；`-q` 仅与明确的 `-z` 统计项组合，不单独用作分析。参见 [TShark](https://www.wireshark.org/docs/man-pages/tshark.html)。
-Scapy 调用须在已安装依赖的 Python 环境导入执行，不把 `scapy.all.sniff(...)` 粘入 Bash；发包/注入仍属主动操作。
+Scapy 是 Python API，须在已安装依赖的 Python 环境导入执行，不把 `scapy.all.sniff(...)` 粘入 Bash；发包/注入仍属主动操作。
 
 ## Retry and timing boundary
 - 分层记录 DNS、TCP、TLS、应用握手和 KeepAlive 的独立 timeout 与状态机。

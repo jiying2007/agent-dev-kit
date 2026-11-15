@@ -39,7 +39,7 @@ constraints:
 ## Workflow
 1. 记录触发、频率、环境/变更及 fault type、PC/LR、栈、寄存器和 taint。
 2. 先据 Oops 模块标记/可信映射判定 PC 或函数所属内核、具体模块及段，再核架构与对应 `vmlinux/.ko`（MCU 用对应 ELF）。`function+offset/size` 用匹配内核 helper；runtime PC 按可信 KASLR/模块映射换算。缺所属/映射或 `??:0` 记 `partial`；行号不证明选对 ELF，不猜偏移或关闭 KASLR。
-3. 按实际 Cortex-M/SDK 核 CFSR/HFSR/BFAR 能力，M0/M0+/M23 不套 M3/M4 流程；HardFault、复位或唤醒按需读 `references/mcu-fault-reset-wakeup.md`。
+3. 按实际 Cortex-M/SDK 核 CFSR/HFSR/BFAR 能力，Cortex-M0/M0+/M23 不套 M3/M4 流程；HardFault、复位或唤醒按需读 `references/mcu-fault-reset-wakeup.md`。
 4. 反追状态来源、调用者与硬件事件；列假设、置信度、单变量验证及修复/回归范围。
 
 ## Commands
