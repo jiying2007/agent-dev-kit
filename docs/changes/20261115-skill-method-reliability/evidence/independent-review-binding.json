@@ -1,0 +1,497 @@
+{
+  "schema": "adk-independent-source-review-binding/v1",
+  "reviewer_id": "ai/root/remote_source_review",
+  "reviewer_kind": "ai",
+  "independence": "independent",
+  "identity_assurance": "declared-not-authenticated",
+  "review_scope": "source-change",
+  "base_commit": "1282c78b145afca670cf8e5733d80bd3c61f5cfb",
+  "source_commit": "134927418b98abc515b367ca06b3404aac22960e",
+  "source_tree": "6563c7bf338b269f64818fb3c394c3d44355872a",
+  "source_file_count": 35,
+  "source_frozen_at": "2026-11-15T06:31:42.124986Z",
+  "evidence_completed_at": "2026-11-15T06:41:07.734661Z",
+  "reviewed_at": "2026-11-15T06:45:32.798603Z",
+  "verdicts": {
+    "spec": "pass",
+    "quality": "pass"
+  },
+  "open_findings": {
+    "blocker": 0,
+    "major": 0,
+    "minor": 0
+  },
+  "findings": [
+    {
+      "id": "capture-failure-must-not-consume-existing-pcap",
+      "severity": "major",
+      "disposition": "fixed",
+      "reason": "Final active capture uses a new PCAP path and capture && analysis. Independent exact-block shell injections preserve capture exit 42 without analysis, analysis exit 7 after successful capture, and success exit 0. The identical Bash block is bound to the final source; no live capture was run."
+    },
+    {
+      "id": "address-ownership-required-before-elf-decoding",
+      "severity": "major",
+      "disposition": "fixed",
+      "reason": "Final method requires Oops/module/mapping evidence to determine the owning kernel/module/section before choosing matched ELF and trusted relocation. Missing ownership/mapping remains partial, and a resolved line is not identity proof. Host PIE/helper examples support only the stated host scope, not real kernel, module, MCU or board qualification."
+    }
+  ],
+  "limitations": [
+    "Independent AI source-change review; identity is declared, not authenticated. This is not human or GitHub approval, a merge receipt, a release receipt, or authorization to bypass protected checks.",
+    "The reviewer did not rerun the complete 102-group suite. It independently reconciled original full log, registered names, timing, completion and all frozen source hashes; separate independent pre-freeze checks retain their actual timestamps and scope.",
+    "The 105 cases are Python public-function and bounded-file checks, not 105 CLI or model tasks. The three active-capture cases validate shell control flow only, with no actual TShark/live capture.",
+    "The original domain result is 43 checks and 41 process records, including configuration, versions and static checks. Two explanatory source lines changed later; original file hashes and unknown absolute run times remain intact, with exact command-block applicability proved separately.",
+    "No real kernel/KASLR/module, MCU, device, HIL, live traffic, mailbox, user runtime installation or native Skill-loading qualification was performed. Host PIE, synthetic PCAP and seeded verified-stage workflow fixtures do not replace those outcomes.",
+    "Ruff, mypy and shellcheck executions are not in the supplied local evidence. The final PR HEAD including added receipts still requires all protected remote checks before merge and release.",
+    "No real-model A/B, independent holdout, task-success, provider Token, cost or end-to-end latency improvement was measured. Source-byte/profile ratchet changes and test counts are not those benefits.",
+    "The 65-identity source audit is not proof that every unchanged Skill was independently executed or all defects eliminated. E1 low-risk implementation routing remains unavailable; this candidate adds no execution authority.",
+    "The flaky sampler preserves process outcomes and logs but does not automatically prove framework report completeness or stability; project runners supply their own timeout/cancellation path. Interface scanning remains a limited lexical candidate search.",
+    "The retained f538db full run ended after 44 passing groups and one failure with tool-session exit 130; it was not a completed 102-group regression. Historical raw results, source identities and timestamps must not be relabeled as the final run.",
+    "Any subsequent source change requires reevaluation of affected evidence and review applicability. Final source Spec/Quality pass does not itself establish subsequent CI, merge, release, installation or product qualification."
+  ],
+  "target": {
+    "base_commit": "1282c78b145afca670cf8e5733d80bd3c61f5cfb",
+    "head_commit": "134927418b98abc515b367ca06b3404aac22960e",
+    "original_patch_sha256": "6cb4856a90473add91a9204d3795b5503c6ca0746d02d3f286d8eedea1a3cc8e"
+  },
+  "source_binding_sha256": "adfd10c7f6a6d8c6508fc71f2d0161d001a3790a19e6743f7d4b392ddb6f3122",
+  "original_patch_sha256": "6cb4856a90473add91a9204d3795b5503c6ca0746d02d3f286d8eedea1a3cc8e",
+  "files": {
+    ".version-lock": "76bdde3d02fd4d69e0f0ed09681dfdf6c6c0e7c16fbe3acecbd128c590abf5aa",
+    "CHANGELOG.md": "dfe30ef53e22e45d8f21192a0ff1fe2390e8e69661d25874f70f6dc9755f1702",
+    "CONTEXT.md": "667d5fd8f4708a591a676b1e7a2fd66e36654fb8928218192af4689688080b01",
+    "README.md": "ea6d1c300d2270ba03fb75dbc84c005e1c24bbb6b4e7030857964da6a898f9eb",
+    "docs/changes/20261115-skill-method-reliability/audit.md": "6614581adb3d1ae9fa3ed9200351420c65730fce6a6d8d532a2dfb62e37cc24b",
+    "docs/changes/20261115-skill-method-reliability/design.md": "fe578180558c4ddde3a908afafa669d73e21e1fb6870e409c5f168309dc42605",
+    "docs/changes/20261115-skill-method-reliability/evidence/coverage-domain.json": "8b5ba940a6acad13be52e0559e128dc6ac8cfa729dc865c1c9ee7568017313ab",
+    "docs/changes/20261115-skill-method-reliability/evidence/coverage-task.json": "c9b2269cfebc136c3811fa49cc9a3224cd66fe1f8e7f80d09fdd600b2c0ed4d4",
+    "docs/changes/20261115-skill-method-reliability/evidence/predecessor-release.json": "4e26aedb2815c209cbd82617579a7408fcf4dadf05bcda3c3926a4738c87c2a6",
+    "docs/changes/20261115-skill-method-reliability/negative-results.md": "a792832a96abb8f538c01622cb0ecb446bd2065a375238aadfde42b6f4451a7f",
+    "docs/changes/20261115-skill-method-reliability/requirements.md": "7f190be476c203666ec8c576d28399b254bed883d0f9bd0a1fb8c87780824844",
+    "docs/changes/20261115-skill-method-reliability/tasks.md": "b8fab88572e8e97ab73546adc8e6e756182dfe067a1cb0b08ac1e9e96b1f0154",
+    "docs/runbooks/artifact-gated-delivery.md": "d152a06d7f1ab477615d4e03e5f00b5dd29d791e6b32ab5523aa19b13767fc84",
+    "manifest.json": "1df4ec11b467e73771f76ae7fc150024e4643c3a1dfb82c8657cc369a9587ed1",
+    "manifests/software_m5_eval_contract.json": "200c2925efdf755cd233821c7f705944f2a53a4f19ba2836da1a33b4de07d1ce",
+    "optional-skills/adk-test-flakiness-triage/SKILL.md": "1b198f8b975bea9529552d899e38ae335ab2d6684e21e74c2eefcbb83f3898ba",
+    "optional-skills/adk-test-flakiness-triage/references/details.md": "efaef84006e04c7b502837d7c2548459c86793c921f969824a593db1e4ab1f97",
+    "pyproject.toml": "13ee74c4e4a2e81b305b4b364ad2d5f496195846c674d38ee58d85d1a7f799f9",
+    "skills/adk-artifact-gating/SKILL.md": "f19df4551579597b09c5a400c6ffdef6b48b4a8d0c27ce911c1429a5eb04947c",
+    "skills/adk-artifact-gating/references/details.md": "def3c5a6ce7066b09bbd28a77260f1682e39c0ffd1f5383f5fe47d3e02b9e9e7",
+    "skills/adk-cmake-cross-build/SKILL.md": "fe07fc732eabeaf8628f58c02bf37334964dfa6487ffc4fa03d8fab4f7dd19f1",
+    "skills/adk-hardware-debugging/SKILL.md": "69f3eade6355e566e1c7a4d3a59a8233401e491e517e00b46959f67a001847ec",
+    "skills/adk-integration-hil-sil/SKILL.md": "02bf30ac9e91c5ea56cef5622e44a459b814190a9d534344755bc88339359fce",
+    "skills/adk-interface-contract-design/SKILL.md": "80cb37dab157fa767a32fdb73e074a2fe2cc819d9bb4ea949dae3fda325e7376",
+    "skills/adk-protocol-stack-integration/SKILL.md": "7ac9b5cbb2b1a1a854063b86003c135d816f5a4a5a0a9400d0b6505cff1fa702",
+    "skills/adk-release-versioning/SKILL.md": "4a80611ceda62c35c558371d47238d3b5f2516a20efc067160abefc3ce686163",
+    "skills/adk-release-versioning/references/details.md": "6da9f5f3ce85401938db084b0aa1df5e78683ad1f4132927c50ddbc55a4c1bed",
+    "src/agent_dev_kit/__init__.py": "ede9b11bda87fd8505d8943171507887159bb04904e8429b68d1b548a3cb8b1e",
+    "src/agent_dev_kit/goal_plan.py": "1cfce27a61bae9f7b2662916b8573f83c31bf13662eacf0bc3a8f697b647b1f1",
+    "src/agent_dev_kit/planning_state.py": "52f9c916334a3740d851d3ff24f2fc31d9a80016175e16be51a5b5132354b2b4",
+    "tests/fixtures/skill_method_ab_prereg.json": "3248820584ef8a11ddb73054423975dd36a06f386b02b7419949584ec8bcb29d",
+    "tests/test_goal_authoring.py": "967eb9586b2e533b5e8f9c4749c5cd82baa23d85651c23494771a716c3e448f4",
+    "tests/test_planning_state.py": "41a931ad8ade18036262421d26c13045d827d1e9c4a6d1a7a1861435ba8b40b4",
+    "tests/test_skill_command_examples.py": "58fba5eea4e6d60143c3df582e03cf5483d191d337091877fdc3a1f46af0319a",
+    "tests/test_skill_content.sh": "bbcef49d7cea0cae8217f390eca7bffca3d260913e16609e400735e759074e14"
+  },
+  "full_suite": {
+    "actual_execution_source_commit": "134927418b98abc515b367ca06b3404aac22960e",
+    "source_tree": "6563c7bf338b269f64818fb3c394c3d44355872a",
+    "started_at": "2026-11-15T06:31:42.905059Z",
+    "completed_at": "2026-11-15T06:41:07.734661Z",
+    "total": 102,
+    "passed": 102,
+    "failed": 0,
+    "exit_code": 0,
+    "suite_elapsed_ms": 564511,
+    "wrapper_elapsed_ms": 564831,
+    "registered_log_timing_names_identical": true,
+    "source_stable": true,
+    "raw_log_sha256": "0d1bee4e82001511f12291d9c3be0867228a5a396f58b49d3acd176ef3eed61e",
+    "timing_sha256": "91b1047476b6b8b9c91ed568a6519cc483d80c8b63168bebb1bba01e4cf3e082",
+    "completion_sha256": "506f9fc2f6faa95d27d8564056bf407af9a23b0d6ac186320d168708c1c26a79",
+    "reviewer_reran_full_suite": false
+  },
+  "archive_integrity": {
+    "raw_text_files_verified": 13,
+    "raw_text_bindings": [
+      {
+        "container": "evidence/full-log.json",
+        "original_filename": "next-full.log",
+        "raw_sha256": "0d1bee4e82001511f12291d9c3be0867228a5a396f58b49d3acd176ef3eed61e",
+        "raw_bytes": 3174,
+        "original_bytes_equal": true
+      },
+      {
+        "container": "evidence/diagnostic1.json",
+        "original_filename": "next-diagnostic1-source-bindings.json",
+        "raw_sha256": "617fa9d43bd0935681b71863110b1f854643ec427d6996ce9be74c5882c04c38",
+        "raw_bytes": 4687,
+        "original_bytes_equal": true
+      },
+      {
+        "container": "evidence/diagnostic1.json",
+        "original_filename": "next-diagnostic1-source.patch",
+        "raw_sha256": "3ae269b22970b14e5064105c5dcdb7ee2e40cf4abd51e203729fc65931507b41",
+        "raw_bytes": 127938,
+        "original_bytes_equal": true
+      },
+      {
+        "container": "evidence/diagnostic1.json",
+        "original_filename": "next-diagnostic1-full.log",
+        "raw_sha256": "705acf94f4ee7a8034ba13c2bde5e7edf73df769e682ceab512f2406e2c63e95",
+        "raw_bytes": 6439,
+        "original_bytes_equal": true
+      },
+      {
+        "container": "evidence/diagnostic1.json",
+        "original_filename": "next-diagnostic1-interruption.json",
+        "raw_sha256": "e12be9e355005a782d7cd856e118dae42e1f9a351f53d4fad27fc01f5546fe99",
+        "raw_bytes": 842,
+        "original_bytes_equal": true
+      },
+      {
+        "container": "evidence/task-method-diagnostics.json",
+        "original_filename": "deep-task-usability/early-repros.json",
+        "raw_sha256": "43cee35168a03489f207385673b501a7b7a066f81bbe7cd6c30e9f04ea37330a",
+        "raw_bytes": 5914,
+        "original_bytes_equal": true
+      },
+      {
+        "container": "evidence/task-method-diagnostics.json",
+        "original_filename": "deep-task-usability/method-repros.json",
+        "raw_sha256": "79a9c8829ad1edf8482dd83dbd4630be9eceecee55aad4fff3405a28024997ee",
+        "raw_bytes": 2075,
+        "original_bytes_equal": true
+      },
+      {
+        "container": "evidence/task-regression-logs.json",
+        "original_filename": "deep-task-usability/goal-consistency-red.log",
+        "raw_sha256": "23f03cc139a2b7598b7d4ae16e4489804396f4a105ccbdd9b9445c6a6dc71ca2",
+        "raw_bytes": 9222,
+        "original_bytes_equal": true
+      },
+      {
+        "container": "evidence/task-regression-logs.json",
+        "original_filename": "deep-task-usability/goal-consistency-green.log",
+        "raw_sha256": "98a29964877aadfd96bb5b76c327870b416552bd00a775ae18a27935850b1db6",
+        "raw_bytes": 5682,
+        "original_bytes_equal": true
+      },
+      {
+        "container": "evidence/task-regression-logs.json",
+        "original_filename": "deep-task-usability/command-examples-green.log",
+        "raw_sha256": "d248d58f925b528c65f94d178a9c061218d4dedac7fbc2c64ebce34379146e3b",
+        "raw_bytes": 2243,
+        "original_bytes_equal": true
+      },
+      {
+        "container": "evidence/task-regression-logs.json",
+        "original_filename": "deep-task-usability/skill-content-integration-failure.log",
+        "raw_sha256": "94ba44ba8a91d397504d7cf1d6c4926a67c290c2d4aa64902a8c1f62ceed5d8c",
+        "raw_bytes": 19622,
+        "original_bytes_equal": true
+      },
+      {
+        "container": "evidence/task-regression-logs.json",
+        "original_filename": "next-skill-content-green.log",
+        "raw_sha256": "d00b20628e6d931708709c372f336f435faf17eaa002af5a8f9a5177095e5fba",
+        "raw_bytes": 14872,
+        "original_bytes_equal": true
+      },
+      {
+        "container": "evidence/task-regression-logs.json",
+        "original_filename": "domain-audit-repro/trigger-matrix-refinement.log",
+        "raw_sha256": "bbba185c84a00c3bb83467bed812919b8a72afd2058c3296e14f30faaf1a4c2f",
+        "raw_bytes": 113,
+        "original_bytes_equal": true
+      }
+    ],
+    "direct_copies_verified": {
+      "source-bindings.json": "next-source-bindings.json",
+      "original.patch": "next-source.patch",
+      "full-timing.json": "next-full-timing.json",
+      "validation-completion.json": "next-validation-completion.json",
+      "profile-source-comparison.json": "next-profile-source-comparison.json",
+      "independent-checks.json": "method-review-pre-freeze-checks.json",
+      "independent-checks.py": "method-review-pre-freeze-checks.py",
+      "independent-coverage-check.json": "next-independent-coverage-check.json",
+      "independent-evidence-applicability.json": "next-independent-evidence-applicability.json",
+      "protocol-capture-flow-review.json": "protocol-capture-flow-review.json",
+      "domain-original-results.json": "domain-audit-repro/results.json",
+      "domain-run-repros.py": "domain-audit-repro/run_repros.py",
+      "domain-final-results.json": "domain-audit-repro/final-example-results.json",
+      "domain-final-example-regressions.py": "domain-audit-repro/final-example-regressions.py",
+      "domain-relocation.c": "domain-audit-repro/relocation.c",
+      "domain-tool-receipt.json": "domain-audit-tools/wireshark-package-receipt.json",
+      "domain-archive-summary.json": "domain-audit-repro/domain-evidence-archive-summary.json"
+    },
+    "direct_copy_count": 17,
+    "base64_pcap": {
+      "raw_sha256": "543d5502b77245c05cfad00e4a9d6241beaf81735cb9572f19d2c5dde78e5517",
+      "bytes": 75,
+      "equals_original_fixture": true
+    }
+  },
+  "coverage": {
+    "core": 56,
+    "optional": 9,
+    "unique": 65,
+    "read_paths": 131,
+    "decisions": {
+      "retain": 55,
+      "change": 8,
+      "consumer-fix": 2
+    },
+    "manifest_only_version_changed": true,
+    "reviewed_full_candidate_diff_and_necessary_context": true,
+    "repeated_every_unchanged_skill_fulltext_or_execution": false
+  },
+  "evidence_applicability": {
+    "schema": "adk-independent-evidence-applicability/v1",
+    "reviewer_id": "ai/root/remote_source_review",
+    "checked_at": "2026-11-15T06:33:37.659363Z",
+    "source_commit": "134927418b98abc515b367ca06b3404aac22960e",
+    "source_tree": "6563c7bf338b269f64818fb3c394c3d44355872a",
+    "base_commit": "1282c78b145afca670cf8e5733d80bd3c61f5cfb",
+    "source_binding": {
+      "path": "/workspace/scratch/771b38332ec2/next-source-bindings.json",
+      "sha256": "adfd10c7f6a6d8c6508fc71f2d0161d001a3790a19e6743f7d4b392ddb6f3122",
+      "bytes": 4687
+    },
+    "source_file_count": 35,
+    "patch_sha256": "6cb4856a90473add91a9204d3795b5503c6ca0746d02d3f286d8eedea1a3cc8e",
+    "remote_commit_get_observed": {
+      "sha": "134927418b98abc515b367ca06b3404aac22960e",
+      "tree": "6563c7bf338b269f64818fb3c394c3d44355872a",
+      "parents": [
+        "f538db1224e77d2ba06a32387dee57a15a5b3bbe"
+      ]
+    },
+    "old_to_final_changed_paths": [
+      "skills/adk-protocol-stack-integration/SKILL.md",
+      "skills/adk-hardware-debugging/SKILL.md",
+      "docs/changes/20261115-skill-method-reliability/negative-results.md"
+    ],
+    "old_to_final_diff_sha256": "c9c1ac8e55501d6d0a548227b3fdc5425f7cd327c8a859089c5210613be7cbef",
+    "pre_freeze_state_checks": {
+      "evidence": {
+        "path": "/workspace/scratch/771b38332ec2/method-review-pre-freeze-checks.json",
+        "sha256": "d4b853f8a2f70d4878583a0ab06fb510110448d365a5dd2b2b3a392ba3da7d5a",
+        "bytes": 210572
+      },
+      "actual_started_at": "2026-11-15T06:07:52.308569Z",
+      "actual_completed_at": "2026-11-15T06:07:52.370885Z",
+      "reused_by": "identical complete Python source files and plan input",
+      "cases": 105,
+      "new_rejections": 8,
+      "goal_changes": 0
+    },
+    "pre_freeze_capture_flow": {
+      "evidence": {
+        "path": "/workspace/scratch/771b38332ec2/protocol-capture-flow-review.json",
+        "sha256": "7af96f6c75f3a20f2ce3318ad04251b5ae3b218c4e6669807ae4b75ecfb73e95",
+        "bytes": 1729
+      },
+      "actual_started_at": "2026-11-15T06:08:40.181590+00:00",
+      "actual_completed_at": "2026-11-15T06:08:40.189990+00:00",
+      "reused_by": "identical complete active Bash example",
+      "command_sha256": "942b4d9da2d93818ce7317b160ab1c7c692c87f155c801ce8714fdb04e6d699b",
+      "real_tshark_or_live_capture": false
+    },
+    "pre_freeze_domain_checks": {
+      "evidence": {
+        "path": "/workspace/scratch/771b38332ec2/domain-audit-repro/final-example-results.json",
+        "sha256": "0e269607003b3384fc4850d2b145f90a04a8d9667baedc47e06cb3bc2660492b",
+        "bytes": 43811
+      },
+      "checks": 43,
+      "process_rows": 41,
+      "source_hash_changes": [
+        {
+          "path": "skills/adk-protocol-stack-integration/SKILL.md",
+          "actual_execution_file_sha256": "0c1c534913402463fa963379064dfb418ed3cb3d32efd03ab36689c20212dd87",
+          "final_source_file_sha256": "7ac9b5cbb2b1a1a854063b86003c135d816f5a4a5a0a9400d0b6505cff1fa702",
+          "reason": "clarifying prose only; all Bash command blocks remain byte-identical"
+        },
+        {
+          "path": "skills/adk-hardware-debugging/SKILL.md",
+          "actual_execution_file_sha256": "24e2f444d8f32bba9df8ad8085db060a6e24df0a30cdab227b1a6954446b557e",
+          "final_source_file_sha256": "69f3eade6355e566e1c7a4d3a59a8233401e491e517e00b46959f67a001847ec",
+          "reason": "clarifying prose only; all Bash command blocks remain byte-identical"
+        }
+      ],
+      "all_documented_executed_commands_equal_final_source": true,
+      "actual_execution_time": "not recorded in the original result; not invented here",
+      "runtime_scope": "real tools on isolated host fixtures; no live capture, kernel, MCU, HIL or model evaluation"
+    },
+    "retained_interrupted_failure": {
+      "evidence": {
+        "path": "/workspace/scratch/771b38332ec2/next-diagnostic1-interruption.json",
+        "sha256": "e12be9e355005a782d7cd856e118dae42e1f9a351f53d4fad27fc01f5546fe99",
+        "bytes": 842
+      },
+      "source_commit": "f538db1224e77d2ba06a32387dee57a15a5b3bbe",
+      "exit": 130,
+      "pass": 44,
+      "fail": 1,
+      "full_suite_completed": false,
+      "raw_log": {
+        "path": "/workspace/scratch/771b38332ec2/next-diagnostic1-full.log",
+        "sha256": "705acf94f4ee7a8034ba13c2bde5e7edf73df769e682ceab512f2406e2c63e95",
+        "bytes": 6439
+      },
+      "source_binding": {
+        "path": "/workspace/scratch/771b38332ec2/next-diagnostic1-source-bindings.json",
+        "sha256": "617fa9d43bd0935681b71863110b1f854643ec427d6996ce9be74c5882c04c38",
+        "bytes": 4687
+      },
+      "patch": {
+        "path": "/workspace/scratch/771b38332ec2/next-diagnostic1-source.patch",
+        "sha256": "3ae269b22970b14e5064105c5dcdb7ee2e40cf4abd51e203729fc65931507b41",
+        "bytes": 127938
+      }
+    },
+    "coverage": {
+      "path": "/workspace/scratch/771b38332ec2/next-independent-coverage-check.json",
+      "sha256": "b0c03ffa1873fa9f773c32db598d13129133085f63a62eeec03c573160a12515",
+      "bytes": 8436
+    },
+    "final_review_signed": false,
+    "status": "evidence-applicable; final full-suite result and final review are separate",
+    "limitations": [
+      "This file verifies applicability and byte identities only, not a final Spec/Quality verdict.",
+      "No prior execution timestamp, source hash or raw result was changed or relabeled as a rerun.",
+      "The original domain source footprint belongs to its original measured files; it is not a final source-size figure."
+    ]
+  },
+  "profile_check": {
+    "count": 8,
+    "status": "pass",
+    "ratchet_unchanged": true,
+    "ratchet_sha256": "f283524ecff14179cad628735bef9e20580da00c2505687ecca9530da3737bff",
+    "measurement_started_at": "2026-11-15T06:33:56.195228Z",
+    "measured_at": "2026-11-15T06:33:57.034441Z",
+    "source_commit": "134927418b98abc515b367ca06b3404aac22960e",
+    "source_tree": "6563c7bf338b269f64818fb3c394c3d44355872a",
+    "source_bytes_only": true
+  },
+  "archived_receipts_read": {
+    "verification.md": {
+      "sha256": "17ec67c26ab56f761127d9c7449035d1d780ae58d04ea865a2f9f43ad65f792b",
+      "bytes": 6701
+    },
+    "completion.md": {
+      "sha256": "7ef31ed546e466c5b430794f0bda9c7b4e61022ba1a0ae7e27b6e310873260c4",
+      "bytes": 1873
+    }
+  },
+  "artifact_digests": {
+    "completion.md": {
+      "sha256": "7ef31ed546e466c5b430794f0bda9c7b4e61022ba1a0ae7e27b6e310873260c4",
+      "bytes": 1873
+    },
+    "evidence/diagnostic1.json": {
+      "sha256": "2903d025b8537b8a056418195ddd565a51bd394da4301b54e0f2fc8b7bf73cc4",
+      "bytes": 146312
+    },
+    "evidence/domain-archive-summary.json": {
+      "sha256": "54bcddd36b4d3c4fca21c6f6602208298fe906fe529b88f925bed5c1a067e34d",
+      "bytes": 22638
+    },
+    "evidence/domain-final-example-regressions.py": {
+      "sha256": "6a646d785e5be00eaf2898adaf076daf3b0f50a7870dcf58b7d173cd736e78a5",
+      "bytes": 14651
+    },
+    "evidence/domain-final-results.json": {
+      "sha256": "0e269607003b3384fc4850d2b145f90a04a8d9667baedc47e06cb3bc2660492b",
+      "bytes": 43811
+    },
+    "evidence/domain-original-results.json": {
+      "sha256": "353ebc2a72bacb48be7dc4cd4fa42391b5e791b92f48e6f1605a6d48d577d864",
+      "bytes": 11933
+    },
+    "evidence/domain-pcap-fixture.json": {
+      "sha256": "3d20b2655bfd6f3b1fa8063378a85f345b790249ca8e45b11e8841da1b918d57",
+      "bytes": 311
+    },
+    "evidence/domain-relocation.c": {
+      "sha256": "d09ad29dc8a5098c4ed5f92cbb6cd85e87cf3d1cb85a624fbb231fda1ead9702",
+      "bytes": 403
+    },
+    "evidence/domain-run-repros.py": {
+      "sha256": "37cde0f392af82218ee871d3cd290d30e789a7e672a0349aab758e7d193f3341",
+      "bytes": 5196
+    },
+    "evidence/domain-tool-receipt.json": {
+      "sha256": "246a10da17ef2868afea3808971c3a29ac698e05d38a4ee553e64c389197967c",
+      "bytes": 16777
+    },
+    "evidence/full-log.json": {
+      "sha256": "dd108bf3e6900107109c101ab9a454b2f5b4a53881b352032029c1a5e9ed1a6d",
+      "bytes": 3559
+    },
+    "evidence/full-timing.json": {
+      "sha256": "91b1047476b6b8b9c91ed568a6519cc483d80c8b63168bebb1bba01e4cf3e082",
+      "bytes": 8359
+    },
+    "evidence/independent-checks.json": {
+      "sha256": "d4b853f8a2f70d4878583a0ab06fb510110448d365a5dd2b2b3a392ba3da7d5a",
+      "bytes": 210572
+    },
+    "evidence/independent-checks.py": {
+      "sha256": "0603382b7a8f0d5d28b7c965e392c905588694191bfcc349af2a0c38ddfb20b8",
+      "bytes": 6569
+    },
+    "evidence/independent-coverage-check.json": {
+      "sha256": "b0c03ffa1873fa9f773c32db598d13129133085f63a62eeec03c573160a12515",
+      "bytes": 8436
+    },
+    "evidence/independent-evidence-applicability.json": {
+      "sha256": "57c3fd0a95a90e83f0e2ae024de59656c1e6d3c4fc76c5298e9f4496747f486f",
+      "bytes": 5324
+    },
+    "evidence/original.patch": {
+      "sha256": "6cb4856a90473add91a9204d3795b5503c6ca0746d02d3f286d8eedea1a3cc8e",
+      "bytes": 128490
+    },
+    "evidence/profile-source-comparison.json": {
+      "sha256": "3e7c1e90baff2a403825f68d981d294f5187eb541bfb7e31710db0999ebf2e9d",
+      "bytes": 15230
+    },
+    "evidence/protocol-capture-flow-review.json": {
+      "sha256": "7af96f6c75f3a20f2ce3318ad04251b5ae3b218c4e6669807ae4b75ecfb73e95",
+      "bytes": 1729
+    },
+    "evidence/source-bindings.json": {
+      "sha256": "adfd10c7f6a6d8c6508fc71f2d0161d001a3790a19e6743f7d4b392ddb6f3122",
+      "bytes": 4687
+    },
+    "evidence/task-method-diagnostics.json": {
+      "sha256": "caf0e837d0f1ad5f3b628e5acf931e1c7ce74d88083f9adc339c3ccafc0f0f7c",
+      "bytes": 9436
+    },
+    "evidence/task-regression-logs.json": {
+      "sha256": "ea2cfd2b32876dce5d1c44d38b85622b5b329e9e7d26d63d37e3bc7c05d5c146",
+      "bytes": 53953
+    },
+    "evidence/validation-completion.json": {
+      "sha256": "506f9fc2f6faa95d27d8564056bf407af9a23b0d6ac186320d168708c1c26a79",
+      "bytes": 539
+    },
+    "verification.md": {
+      "sha256": "17ec67c26ab56f761127d9c7449035d1d780ae58d04ea865a2f9f43ad65f792b",
+      "bytes": 6701
+    }
+  },
+  "report": {
+    "original_scratch_path": "/workspace/scratch/771b38332ec2/method-final-review.md",
+    "sha256": "0134d1e0574d2046e4a5b0c1f0a31c698e4c1182f0ec32ee3efb14384c5f9fc7"
+  },
+  "observations": [
+    "All 35 frozen source paths match both Git blobs and current working-tree bytes; later changes are added receipts only.",
+    "Base-to-final raw patch is byte-identical to the archived original.patch.",
+    "All 102 registered group names are unique and exactly match raw PASS rows and timing order.",
+    "All 13 raw_text payloads and 17 direct-copy artifacts match their original scratch bytes; the 75-byte base64 PCAP matches its original fixture.",
+    "The final source, preserved diagnostic source and earlier pre-freeze executions remain distinct and are explicitly bound.",
+    "Source Spec/Quality is complete; this reviewer performed no push, merge, release, installation or device action."
+  ]
+}

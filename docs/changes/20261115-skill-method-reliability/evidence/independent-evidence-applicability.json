@@ -1,0 +1,118 @@
+{
+  "schema": "adk-independent-evidence-applicability/v1",
+  "reviewer_id": "ai/root/remote_source_review",
+  "checked_at": "2026-11-15T06:33:37.659363Z",
+  "source_commit": "134927418b98abc515b367ca06b3404aac22960e",
+  "source_tree": "6563c7bf338b269f64818fb3c394c3d44355872a",
+  "base_commit": "1282c78b145afca670cf8e5733d80bd3c61f5cfb",
+  "source_binding": {
+    "path": "/workspace/scratch/771b38332ec2/next-source-bindings.json",
+    "sha256": "adfd10c7f6a6d8c6508fc71f2d0161d001a3790a19e6743f7d4b392ddb6f3122",
+    "bytes": 4687
+  },
+  "source_file_count": 35,
+  "patch_sha256": "6cb4856a90473add91a9204d3795b5503c6ca0746d02d3f286d8eedea1a3cc8e",
+  "remote_commit_get_observed": {
+    "sha": "134927418b98abc515b367ca06b3404aac22960e",
+    "tree": "6563c7bf338b269f64818fb3c394c3d44355872a",
+    "parents": [
+      "f538db1224e77d2ba06a32387dee57a15a5b3bbe"
+    ]
+  },
+  "old_to_final_changed_paths": [
+    "skills/adk-protocol-stack-integration/SKILL.md",
+    "skills/adk-hardware-debugging/SKILL.md",
+    "docs/changes/20261115-skill-method-reliability/negative-results.md"
+  ],
+  "old_to_final_diff_sha256": "c9c1ac8e55501d6d0a548227b3fdc5425f7cd327c8a859089c5210613be7cbef",
+  "pre_freeze_state_checks": {
+    "evidence": {
+      "path": "/workspace/scratch/771b38332ec2/method-review-pre-freeze-checks.json",
+      "sha256": "d4b853f8a2f70d4878583a0ab06fb510110448d365a5dd2b2b3a392ba3da7d5a",
+      "bytes": 210572
+    },
+    "actual_started_at": "2026-11-15T06:07:52.308569Z",
+    "actual_completed_at": "2026-11-15T06:07:52.370885Z",
+    "reused_by": "identical complete Python source files and plan input",
+    "cases": 105,
+    "new_rejections": 8,
+    "goal_changes": 0
+  },
+  "pre_freeze_capture_flow": {
+    "evidence": {
+      "path": "/workspace/scratch/771b38332ec2/protocol-capture-flow-review.json",
+      "sha256": "7af96f6c75f3a20f2ce3318ad04251b5ae3b218c4e6669807ae4b75ecfb73e95",
+      "bytes": 1729
+    },
+    "actual_started_at": "2026-11-15T06:08:40.181590+00:00",
+    "actual_completed_at": "2026-11-15T06:08:40.189990+00:00",
+    "reused_by": "identical complete active Bash example",
+    "command_sha256": "942b4d9da2d93818ce7317b160ab1c7c692c87f155c801ce8714fdb04e6d699b",
+    "real_tshark_or_live_capture": false
+  },
+  "pre_freeze_domain_checks": {
+    "evidence": {
+      "path": "/workspace/scratch/771b38332ec2/domain-audit-repro/final-example-results.json",
+      "sha256": "0e269607003b3384fc4850d2b145f90a04a8d9667baedc47e06cb3bc2660492b",
+      "bytes": 43811
+    },
+    "checks": 43,
+    "process_rows": 41,
+    "source_hash_changes": [
+      {
+        "path": "skills/adk-protocol-stack-integration/SKILL.md",
+        "actual_execution_file_sha256": "0c1c534913402463fa963379064dfb418ed3cb3d32efd03ab36689c20212dd87",
+        "final_source_file_sha256": "7ac9b5cbb2b1a1a854063b86003c135d816f5a4a5a0a9400d0b6505cff1fa702",
+        "reason": "clarifying prose only; all Bash command blocks remain byte-identical"
+      },
+      {
+        "path": "skills/adk-hardware-debugging/SKILL.md",
+        "actual_execution_file_sha256": "24e2f444d8f32bba9df8ad8085db060a6e24df0a30cdab227b1a6954446b557e",
+        "final_source_file_sha256": "69f3eade6355e566e1c7a4d3a59a8233401e491e517e00b46959f67a001847ec",
+        "reason": "clarifying prose only; all Bash command blocks remain byte-identical"
+      }
+    ],
+    "all_documented_executed_commands_equal_final_source": true,
+    "actual_execution_time": "not recorded in the original result; not invented here",
+    "runtime_scope": "real tools on isolated host fixtures; no live capture, kernel, MCU, HIL or model evaluation"
+  },
+  "retained_interrupted_failure": {
+    "evidence": {
+      "path": "/workspace/scratch/771b38332ec2/next-diagnostic1-interruption.json",
+      "sha256": "e12be9e355005a782d7cd856e118dae42e1f9a351f53d4fad27fc01f5546fe99",
+      "bytes": 842
+    },
+    "source_commit": "f538db1224e77d2ba06a32387dee57a15a5b3bbe",
+    "exit": 130,
+    "pass": 44,
+    "fail": 1,
+    "full_suite_completed": false,
+    "raw_log": {
+      "path": "/workspace/scratch/771b38332ec2/next-diagnostic1-full.log",
+      "sha256": "705acf94f4ee7a8034ba13c2bde5e7edf73df769e682ceab512f2406e2c63e95",
+      "bytes": 6439
+    },
+    "source_binding": {
+      "path": "/workspace/scratch/771b38332ec2/next-diagnostic1-source-bindings.json",
+      "sha256": "617fa9d43bd0935681b71863110b1f854643ec427d6996ce9be74c5882c04c38",
+      "bytes": 4687
+    },
+    "patch": {
+      "path": "/workspace/scratch/771b38332ec2/next-diagnostic1-source.patch",
+      "sha256": "3ae269b22970b14e5064105c5dcdb7ee2e40cf4abd51e203729fc65931507b41",
+      "bytes": 127938
+    }
+  },
+  "coverage": {
+    "path": "/workspace/scratch/771b38332ec2/next-independent-coverage-check.json",
+    "sha256": "b0c03ffa1873fa9f773c32db598d13129133085f63a62eeec03c573160a12515",
+    "bytes": 8436
+  },
+  "final_review_signed": false,
+  "status": "evidence-applicable; final full-suite result and final review are separate",
+  "limitations": [
+    "This file verifies applicability and byte identities only, not a final Spec/Quality verdict.",
+    "No prior execution timestamp, source hash or raw result was changed or relabeled as a rerun.",
+    "The original domain source footprint belongs to its original measured files; it is not a final source-size figure."
+  ]
+}

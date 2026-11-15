@@ -1,0 +1,434 @@
+{
+  "tshark": {
+    "Version": "4.4.18-0+deb13u1",
+    "Filename": "pool/main/w/wireshark/tshark_4.4.18-0+deb13u1_amd64.deb",
+    "SHA256": "adeef5cc162cb0aba9b41b6bf67cbed99dc6b1ca4a07ca94f3e50c917c87bce6",
+    "Size": "180260"
+  },
+  "libwireshark18": {
+    "Version": "4.4.18-0+deb13u1",
+    "Filename": "pool/main/w/wireshark/libwireshark18_4.4.18-0+deb13u1_amd64.deb",
+    "SHA256": "81fb3315aafca26b848c7039ce7c3db3c10deb9d0b202c0ec2356e159e80799a",
+    "Size": "21228932"
+  },
+  "libwiretap15": {
+    "Version": "4.4.18-0+deb13u1",
+    "Filename": "pool/main/w/wireshark/libwiretap15_4.4.18-0+deb13u1_amd64.deb",
+    "SHA256": "200a26ef86ed732cfd3bf970303557e4fa55634907d3bcdca0a6f517d527e3dc",
+    "Size": "273440"
+  },
+  "libwsutil16": {
+    "Version": "4.4.18-0+deb13u1",
+    "Filename": "pool/main/w/wireshark/libwsutil16_4.4.18-0+deb13u1_amd64.deb",
+    "SHA256": "3ac9d8d14d71271631e7b749bcd76941bd25b3f2c15de166f32bcbf306ac9933",
+    "Size": "130976"
+  },
+  "libwireshark-data": {
+    "Version": "4.4.18-0+deb13u1",
+    "Filename": "pool/main/w/wireshark/libwireshark-data_4.4.18-0+deb13u1_all.deb",
+    "SHA256": "816aa2de8557bdcb89a3b4602fb7d5d5783f712cc8acab0ca7ce5765c2de6645",
+    "Size": "460276"
+  },
+  "wireshark-common": {
+    "Version": "4.4.18-0+deb13u1",
+    "Filename": "pool/main/w/wireshark/wireshark-common_4.4.18-0+deb13u1_amd64.deb",
+    "SHA256": "b95ab65ae1e20b36d8fffbe88dac1c632a2b576e4f8c6ffa53cabd2f81033978",
+    "Size": "604648"
+  },
+  "libc6": {
+    "Version": "2.41-12+deb13u4",
+    "Filename": "pool/main/g/glibc/libc6_2.41-12+deb13u4_amd64.deb",
+    "SHA256": "967aa62605721081c3eb2a17650611a792aa802d76a6511d1840242623d204c9",
+    "Size": "2846580"
+  },
+  "libglib2.0-0t64": {
+    "Version": "2.84.4-3~deb13u5",
+    "Filename": "pool/main/g/glib2.0/libglib2.0-0t64_2.84.4-3~deb13u5_amd64.deb",
+    "SHA256": "e2baf92c57d1db1753e5781a61450d9a01e7833c7bd2dfe87776a6811c11ecc2",
+    "Size": "1521120"
+  },
+  "libnl-3-200": {
+    "Version": "3.7.0-2",
+    "Filename": "pool/main/libn/libnl3/libnl-3-200_3.7.0-2_amd64.deb",
+    "SHA256": "ce5c153953016be42def7b105f37d55eae07a9608d1dfe6bcb03cc017fc384cb",
+    "Size": "59432"
+  },
+  "libnl-route-3-200": {
+    "Version": "3.7.0-2",
+    "Filename": "pool/main/libn/libnl3/libnl-route-3-200_3.7.0-2_amd64.deb",
+    "SHA256": "1c8c95542688996cff8e954583642b10a3bd78b69954f565fda62144c2bc3897",
+    "Size": "181704"
+  },
+  "libpcap0.8t64": {
+    "Version": "1.10.5-2",
+    "Filename": "pool/main/libp/libpcap/libpcap0.8t64_1.10.5-2_amd64.deb",
+    "SHA256": "6a756d536a5b0cd3ef92f19ff9f22ed80c66baadbc0fe55d599f4aa0c27d3f86",
+    "Size": "168608"
+  },
+  "libbcg729-0": {
+    "Version": "1.1.1-3+deb13u1",
+    "Filename": "pool/main/b/bcg729/libbcg729-0_1.1.1-3+deb13u1_amd64.deb",
+    "SHA256": "5b0175dd97a54acae860a6b228683bad092ae5dd02eaf64fb4664b7b9b7e3f01",
+    "Size": "35608"
+  },
+  "libbrotli1": {
+    "Version": "1.1.0-2+b7",
+    "Filename": "pool/main/b/brotli/libbrotli1_1.1.0-2+b7_amd64.deb",
+    "SHA256": "0fb79f88db210afbd69282ab9649e525f393ec6950ca34da1a6b359250b8d7db",
+    "Size": "306624"
+  },
+  "libcares2": {
+    "Version": "1.34.5-1+deb13u1",
+    "Filename": "pool/main/c/c-ares/libcares2_1.34.5-1+deb13u1_amd64.deb",
+    "SHA256": "5034a2c34ea4730797df1a5f6a0ec142d7d09ce6923c06e167f08ad2e69a4218",
+    "Size": "98272"
+  },
+  "libgcrypt20": {
+    "Version": "1.11.0-7+deb13u1",
+    "Filename": "pool/main/libg/libgcrypt20/libgcrypt20_1.11.0-7+deb13u1_amd64.deb",
+    "SHA256": "f0eb41f8cb40896e0822e9ab65611e8383c12b721c76c54764f744abb4a8c247",
+    "Size": "843104"
+  },
+  "libgnutls30t64": {
+    "Version": "3.8.9-3+deb13u4",
+    "Filename": "pool/main/g/gnutls28/libgnutls30t64_3.8.9-3+deb13u4_amd64.deb",
+    "SHA256": "18a8bdfd91c7e3bcb01719d55a2b56849c7160b34f1f52b1c4fdfdd41bf1352b",
+    "Size": "1469024"
+  },
+  "libk5crypto3": {
+    "Version": "1.21.3-5+deb13u1",
+    "Filename": "pool/main/k/krb5/libk5crypto3_1.21.3-5+deb13u1_amd64.deb",
+    "SHA256": "7da07ee674b47f1f0be7cc89317c25310086a1f1761217d0f72e6ae2c5a69b84",
+    "Size": "81152"
+  },
+  "libkrb5-3": {
+    "Version": "1.21.3-5+deb13u1",
+    "Filename": "pool/main/k/krb5/libkrb5-3_1.21.3-5+deb13u1_amd64.deb",
+    "SHA256": "47d71d6a7f2e59b9bae5f89602397594805113b95889ad18fa703cd53abafc97",
+    "Size": "326056"
+  },
+  "liblua5.4-0": {
+    "Version": "5.4.7-1+b2",
+    "Filename": "pool/main/l/lua5.4/liblua5.4-0_5.4.7-1+b2_amd64.deb",
+    "SHA256": "3456e23667f21a5bea4f2182ec878621bf4c47fbc9819fdaad8835d6d1ee6247",
+    "Size": "146640"
+  },
+  "liblz4-1": {
+    "Version": "1.10.0-4",
+    "Filename": "pool/main/l/lz4/liblz4-1_1.10.0-4_amd64.deb",
+    "SHA256": "c31ec4c7c82755a38b2f3fe066fc0c5518cc91a601a268fbcd19bdacb1f22e1e",
+    "Size": "63900"
+  },
+  "libnghttp2-14": {
+    "Version": "1.64.0-1.1+deb13u1",
+    "Filename": "pool/main/n/nghttp2/libnghttp2-14_1.64.0-1.1+deb13u1_amd64.deb",
+    "SHA256": "896cb217537c09251fb909b8541349010ac279d802d871e98c06a62a2c67ce2c",
+    "Size": "76188"
+  },
+  "libnghttp3-9": {
+    "Version": "1.8.0-1",
+    "Filename": "pool/main/n/nghttp3/libnghttp3-9_1.8.0-1_amd64.deb",
+    "SHA256": "388e4c33b72829cbf0d098afdc8539fa5ba7458eddb077f5538fdb4d5538716b",
+    "Size": "67656"
+  },
+  "libopencore-amrnb0": {
+    "Version": "0.1.6-1+b2",
+    "Filename": "pool/main/o/opencore-amr/libopencore-amrnb0_0.1.6-1+b2_amd64.deb",
+    "SHA256": "25ec8a9f76a9b4377e676c3223d59eed5a0a3a943438c8cab066238328b24315",
+    "Size": "97456"
+  },
+  "libopus0": {
+    "Version": "1.5.2-2",
+    "Filename": "pool/main/o/opus/libopus0_1.5.2-2_amd64.deb",
+    "SHA256": "794056db33d71b2ac4bd8b5a4eb23b627bcb8a49d123c33b6e841a996253a067",
+    "Size": "2851932"
+  },
+  "libpcre2-8-0": {
+    "Version": "10.46-1~deb13u2",
+    "Filename": "pool/main/p/pcre2/libpcre2-8-0_10.46-1~deb13u2_amd64.deb",
+    "SHA256": "1252b96a5bc44bb5db982bef8eb18e54f5047cede2aff641bce4f8e1edb91c3e",
+    "Size": "298872"
+  },
+  "libsbc1": {
+    "Version": "2.1-1",
+    "Filename": "pool/main/s/sbc/libsbc1_2.1-1_amd64.deb",
+    "SHA256": "367a4355c925bbb4d197985a2dae5eff293baace58a16a3e8efaf50208f12a6b",
+    "Size": "32020"
+  },
+  "libsmi2t64": {
+    "Version": "0.4.8+dfsg2-17+b1",
+    "Filename": "pool/main/libs/libsmi/libsmi2t64_0.4.8+dfsg2-17+b1_amd64.deb",
+    "SHA256": "c5bef97b6d4c74879993f217a46395500004f186f92e007135496bf4ca2c1085",
+    "Size": "120768"
+  },
+  "libsnappy1v5": {
+    "Version": "1.2.2-1",
+    "Filename": "pool/main/s/snappy/libsnappy1v5_1.2.2-1_amd64.deb",
+    "SHA256": "53ec5f1050d64375a63cd1c30ee4a6d21ef0cfd485f9999aa0b70dd424ca3465",
+    "Size": "29252"
+  },
+  "libspandsp2t64": {
+    "Version": "0.0.6+dfsg-2.2",
+    "Filename": "pool/main/s/spandsp/libspandsp2t64_0.0.6+dfsg-2.2_amd64.deb",
+    "SHA256": "f36c92d0ecf2035502def728e64d6a2817544748091eccbc1714dc8604525b84",
+    "Size": "282180"
+  },
+  "libxml2": {
+    "Version": "2.12.7+dfsg+really2.9.14-2.1+deb13u3",
+    "Filename": "pool/main/libx/libxml2/libxml2_2.12.7+dfsg+really2.9.14-2.1+deb13u3_amd64.deb",
+    "SHA256": "e0c6b63ce4602a036a526f60fe5e6c1586710688058d98fc1001b9b3147b7efd",
+    "Size": "699724"
+  },
+  "libzstd1": {
+    "Version": "1.5.7+dfsg-1",
+    "Filename": "pool/main/libz/libzstd/libzstd1_1.5.7+dfsg-1_amd64.deb",
+    "SHA256": "2f6a2aeacfc925eba8b00ac9139bc4bfccf8cacb09eb93de067074b26948eef9",
+    "Size": "303836"
+  },
+  "zlib1g": {
+    "Version": "1:1.3.dfsg+really1.3.1-1+b1",
+    "Filename": "pool/main/z/zlib/zlib1g_1.3.dfsg+really1.3.1-1+b1_amd64.deb",
+    "SHA256": "015be740d6236ad114582dea500c1d907f29e16d6db00566ca32fb68d71ac90d",
+    "Size": "88892"
+  },
+  "libcap2": {
+    "Version": "1:2.75-10+deb13u1+b3",
+    "Filename": "pool/main/libc/libcap2/libcap2_2.75-10+deb13u1+b3_amd64.deb",
+    "SHA256": "89fc4d34fc7a28ad6f0fcd0c561ab253b9dedf6f77f5a000b47c276c8295bf67",
+    "Size": "28988"
+  },
+  "libmaxminddb0": {
+    "Version": "1.12.2-1",
+    "Filename": "pool/main/libm/libmaxminddb/libmaxminddb0_1.12.2-1_amd64.deb",
+    "SHA256": "025e1acec95ff56c44c0cb21c4c5fc42eeae323c263900729931ea5a1b95bc21",
+    "Size": "25800"
+  },
+  "libnl-genl-3-200": {
+    "Version": "3.7.0-2",
+    "Filename": "pool/main/libn/libnl3/libnl-genl-3-200_3.7.0-2_amd64.deb",
+    "SHA256": "8f2f81ef4c6f8636f0b0cb2ff40b3c54a497d121f49c485620ae43c94782cd94",
+    "Size": "18136"
+  },
+  "libspeexdsp1": {
+    "Version": "1.2.1-3",
+    "Filename": "pool/main/s/speexdsp/libspeexdsp1_1.2.1-3_amd64.deb",
+    "SHA256": "4f0f6fc83b2f9fbb85b5a1c1470033979bbcd4c72d2177fea98a55f014c4391e",
+    "Size": "42864"
+  },
+  "libssh-4": {
+    "Version": "0.11.5-0+deb13u1",
+    "Filename": "pool/main/libs/libssh/libssh-4_0.11.5-0+deb13u1_amd64.deb",
+    "SHA256": "bc8cbc13617d1b21fa6f686f9f269a4f849f00624d5bb179785a058981701233",
+    "Size": "211924"
+  },
+  "libsystemd0": {
+    "Version": "257.13-1~deb13u1",
+    "Filename": "pool/main/s/systemd/libsystemd0_257.13-1~deb13u1_amd64.deb",
+    "SHA256": "ab0d4127b5e46e6f8c015a1db15a62ba9ae274cdefa150083adf90ada0600ea1",
+    "Size": "454648"
+  },
+  "debconf": {
+    "Version": "1.5.91",
+    "Filename": "pool/main/d/debconf/debconf_1.5.91_all.deb",
+    "SHA256": "1ddc7e6c5925f748eefb7ca811d98e049f18c158bb21fbc7e122262ce6011e49",
+    "Size": "121088"
+  },
+  "libcap2-bin": {
+    "Version": "1:2.75-10+deb13u1+b3",
+    "Filename": "pool/main/libc/libcap2/libcap2-bin_2.75-10+deb13u1+b3_amd64.deb",
+    "SHA256": "6404b8ee315ce3eb8e273981650e419ff0e91aed5213d4975a6895f98944ea80",
+    "Size": "36456"
+  },
+  "libgcc-s1": {
+    "Version": "14.2.0-19",
+    "Filename": "pool/main/g/gcc-14/libgcc-s1_14.2.0-19_amd64.deb",
+    "SHA256": "3c71917b490d1a17aed43196a2787a256ecf060526cdb20216a74bedc061b150",
+    "Size": "72772"
+  },
+  "libatomic1": {
+    "Version": "14.2.0-19",
+    "Filename": "pool/main/g/gcc-14/libatomic1_14.2.0-19_amd64.deb",
+    "SHA256": "212b399aae2f7299203d261a57e49372e09565a9a5ea971905f94a3960366c05",
+    "Size": "9308"
+  },
+  "libffi8": {
+    "Version": "3.4.8-2",
+    "Filename": "pool/main/libf/libffi/libffi8_3.4.8-2_amd64.deb",
+    "SHA256": "0ebdc340de33333639c3c63874cd4b15ac2e83dfa1ef3053b7eefaf4919f4f68",
+    "Size": "24144"
+  },
+  "libmount1": {
+    "Version": "2.41.5-0+deb13u1",
+    "Filename": "pool/main/u/util-linux/libmount1_2.41.5-0+deb13u1_amd64.deb",
+    "SHA256": "6d00f45f2e80e078e906e3eedecd3ba6913e39fef49bff361ee583f17f00ec05",
+    "Size": "210408"
+  },
+  "libselinux1": {
+    "Version": "3.8.1-1",
+    "Filename": "pool/main/libs/libselinux/libselinux1_3.8.1-1_amd64.deb",
+    "SHA256": "68bb8d32bd8d6d7d2f5952a169db03d1484b46ae1e52abccdec42a19dccea5d5",
+    "Size": "84680"
+  },
+  "libdbus-1-3": {
+    "Version": "1.16.2-2",
+    "Filename": "pool/main/d/dbus/libdbus-1-3_1.16.2-2_amd64.deb",
+    "SHA256": "bbcb711daff7e104b5f80f9b05475b6142674bfe65518a36a56e96a91068a3f5",
+    "Size": "177904"
+  },
+  "libgpg-error0": {
+    "Version": "1.51-4",
+    "Filename": "pool/main/libg/libgpg-error/libgpg-error0_1.51-4_amd64.deb",
+    "SHA256": "22b95570fd41c113ef6f5651563b4d748292844baab1278a46eb940c1dec2322",
+    "Size": "82108"
+  },
+  "libgmp10": {
+    "Version": "2:6.3.0+dfsg-3",
+    "Filename": "pool/main/g/gmp/libgmp10_6.3.0+dfsg-3_amd64.deb",
+    "SHA256": "d0d0265eb01770f17afd0f7c8c0622f80479dcfbbe13653a0debeec61464e622",
+    "Size": "560220"
+  },
+  "libhogweed6t64": {
+    "Version": "3.10.1-1",
+    "Filename": "pool/main/n/nettle/libhogweed6t64_3.10.1-1_amd64.deb",
+    "SHA256": "b059ed155115ac09da295322de48ee1ed58ef5fa45edcc9e12ff0e94636ef25f",
+    "Size": "335240"
+  },
+  "libidn2-0": {
+    "Version": "2.3.8-2",
+    "Filename": "pool/main/libi/libidn2/libidn2-0_2.3.8-2_amd64.deb",
+    "SHA256": "90b039bcdc4578f8e1c4935adf8dbb525e36a164deefdbbb8c45bac347d48278",
+    "Size": "109096"
+  },
+  "libnettle8t64": {
+    "Version": "3.10.1-1",
+    "Filename": "pool/main/n/nettle/libnettle8t64_3.10.1-1_amd64.deb",
+    "SHA256": "1b03d4a9cd9c8143ba50fe6396f36937e901a317d492d179f4596862c1731cfe",
+    "Size": "305436"
+  },
+  "libp11-kit0": {
+    "Version": "0.25.5-3",
+    "Filename": "pool/main/p/p11-kit/libp11-kit0_0.25.5-3_amd64.deb",
+    "SHA256": "784bf2063e166c8bc851a32623b74ebd85c499043a9d57c5bbd64fa63447f45a",
+    "Size": "425240"
+  },
+  "libtasn1-6": {
+    "Version": "4.20.0-2+deb13u1",
+    "Filename": "pool/main/libt/libtasn1-6/libtasn1-6_4.20.0-2+deb13u1_amd64.deb",
+    "SHA256": "23fec6e06583ce2bad9b2c04c9b485e90440e259b1abf8677cd80d3ce60831ad",
+    "Size": "50112"
+  },
+  "libunistring5": {
+    "Version": "1.3-2",
+    "Filename": "pool/main/libu/libunistring/libunistring5_1.3-2_amd64.deb",
+    "SHA256": "6dd3490bef06ea1096f32d10766b7e016cf579bfae8451d1b7df15ce05b8aa46",
+    "Size": "476768"
+  },
+  "libkrb5support0": {
+    "Version": "1.21.3-5+deb13u1",
+    "Filename": "pool/main/k/krb5/libkrb5support0_1.21.3-5+deb13u1_amd64.deb",
+    "SHA256": "3a0acd8b37955c0e102c756b52c97df2a31f67b96453c35dab70df218d309117",
+    "Size": "33124"
+  },
+  "libcom-err2": {
+    "Version": "1.47.2-3+b12",
+    "Filename": "pool/main/e/e2fsprogs/libcom-err2_1.47.2-3+b12_amd64.deb",
+    "SHA256": "bd43e020b8fed399db3eebf098111f10fba4c436fff99ccad72cc7e27c9764ec",
+    "Size": "25036"
+  },
+  "libkeyutils1": {
+    "Version": "1.6.3-6",
+    "Filename": "pool/main/k/keyutils/libkeyutils1_1.6.3-6_amd64.deb",
+    "SHA256": "0b11ad17be0300b63ad4eeb4c6450fed24d34b7b740f23e5363dcb29ee6d5eba",
+    "Size": "9456"
+  },
+  "libssl3t64": {
+    "Version": "3.5.7-1~deb13u2",
+    "Filename": "pool/main/o/openssl/libssl3t64_3.5.7-1~deb13u2_amd64.deb",
+    "SHA256": "916f7f40b34a06e6ebfaefcdab331bff458328411da672598f126a760472467d",
+    "Size": "2453872"
+  },
+  "libstdc++6": {
+    "Version": "14.2.0-19",
+    "Filename": "pool/main/g/gcc-14/libstdc++6_14.2.0-19_amd64.deb",
+    "SHA256": "ab1fa05837aa7a92aae748fd07a18a35f7d18bb4a71c4724fe2bbf0e32089de0",
+    "Size": "713628"
+  },
+  "libxxhash0": {
+    "Version": "0.8.3-2",
+    "Filename": "pool/main/x/xxhash/libxxhash0_0.8.3-2_amd64.deb",
+    "SHA256": "81da7064d56fc044f5db4bb3c1e80ff50a4986dcbbf80d958eeca565b44c157f",
+    "Size": "27096"
+  },
+  "libtiff6": {
+    "Version": "4.7.0-3+deb13u3",
+    "Filename": "pool/main/t/tiff/libtiff6_4.7.0-3+deb13u3_amd64.deb",
+    "SHA256": "6bb2038f36817ae1ee6d33df03917b21835dcc2e0f3e3e80a71390e83c171173",
+    "Size": "345492"
+  },
+  "liblzma5": {
+    "Version": "5.8.1-1+deb13u1",
+    "Filename": "pool/main/x/xz-utils/liblzma5_5.8.1-1+deb13u1_amd64.deb",
+    "SHA256": "1cfcc6e0dc36f438a79b6e2189facdb9d150b08f57d190a60e01c98075c7f896",
+    "Size": "309492"
+  },
+  "libgssapi-krb5-2": {
+    "Version": "1.21.3-5+deb13u1",
+    "Filename": "pool/main/k/krb5/libgssapi-krb5-2_1.21.3-5+deb13u1_amd64.deb",
+    "SHA256": "30847c1fde4240567d7ed3aeab4f655dd591203758b857e85e824045aae70299",
+    "Size": "138356"
+  },
+  "gcc-14-base": {
+    "Version": "14.2.0-19",
+    "Filename": "pool/main/g/gcc-14/gcc-14-base_14.2.0-19_amd64.deb",
+    "SHA256": "5b6825de4263824b78c4c51f6476414f3b4e89c2ab63e81dc8b9b5501e867cf6",
+    "Size": "49432"
+  },
+  "libblkid1": {
+    "Version": "2.41.5-0+deb13u1",
+    "Filename": "pool/main/u/util-linux/libblkid1_2.41.5-0+deb13u1_amd64.deb",
+    "SHA256": "81535f3c2c0efc732965907c8749103a0a26377c761622c9ce39b4c92dcde52f",
+    "Size": "171612"
+  },
+  "openssl-provider-legacy": {
+    "Version": "3.5.7-1~deb13u2",
+    "Filename": "pool/main/o/openssl/openssl-provider-legacy_3.5.7-1~deb13u2_amd64.deb",
+    "SHA256": "f155c8191ae6d41da73d792f4182680aeafeb85c3dd223934ee9fdd115c4f1fa",
+    "Size": "316132"
+  },
+  "libdeflate0": {
+    "Version": "1.23-2",
+    "Filename": "pool/main/libd/libdeflate/libdeflate0_1.23-2_amd64.deb",
+    "SHA256": "5fe37fb79d53f5c91da6ba3ac4c1a8453e1f2b1ff0e0ea45189c5338bbfdbf82",
+    "Size": "47344"
+  },
+  "libjbig0": {
+    "Version": "2.1-6.1+b2",
+    "Filename": "pool/main/j/jbigkit/libjbig0_2.1-6.1+b2_amd64.deb",
+    "SHA256": "95cbc44561651e1b3385454df08e8f2efe84498f6963a85259be2cc2fe798709",
+    "Size": "32116"
+  },
+  "libjpeg62-turbo": {
+    "Version": "1:2.1.5-4",
+    "Filename": "pool/main/libj/libjpeg-turbo/libjpeg62-turbo_2.1.5-4_amd64.deb",
+    "SHA256": "5504299ad0e3c0a9ca9f962a68a650a040db52f9f416a109e74df48d55601d3f",
+    "Size": "168152"
+  },
+  "liblerc4": {
+    "Version": "4.0.0+ds-5",
+    "Filename": "pool/main/l/lerc/liblerc4_4.0.0+ds-5_amd64.deb",
+    "SHA256": "2e0c13c0ddbde12968c2c713c2e0474a5b78e90d5216031256a725e8c76aa31c",
+    "Size": "182976"
+  },
+  "libwebp7": {
+    "Version": "1.5.0-0.1",
+    "Filename": "pool/main/libw/libwebp/libwebp7_1.5.0-0.1_amd64.deb",
+    "SHA256": "c749744b04abdd1426b0c7718e516362c03a557c5151662092d6d4f2cef6e7c1",
+    "Size": "317856"
+  },
+  "libsharpyuv0": {
+    "Version": "1.5.0-0.1",
+    "Filename": "pool/main/libw/libwebp/libsharpyuv0_1.5.0-0.1_amd64.deb",
+    "SHA256": "51934833d909588f7761fd84362114e90d8d2d38af57edf5df5c4a705e037547",
+    "Size": "115612"
+  }
+}

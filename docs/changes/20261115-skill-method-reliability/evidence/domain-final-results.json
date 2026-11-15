@@ -1,0 +1,1167 @@
+{
+  "scope": "real tools on isolated host fixtures; no live capture, kernel, MCU, HIL or model evaluation",
+  "fixture_root": "/workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn",
+  "source_files": {
+    "skills/adk-cmake-cross-build/SKILL.md": {
+      "sha256": "fe07fc732eabeaf8628f58c02bf37334964dfa6487ffc4fa03d8fab4f7dd19f1",
+      "bytes": 4127
+    },
+    "skills/adk-integration-hil-sil/SKILL.md": {
+      "sha256": "02bf30ac9e91c5ea56cef5622e44a459b814190a9d534344755bc88339359fce",
+      "bytes": 4318
+    },
+    "skills/adk-protocol-stack-integration/SKILL.md": {
+      "sha256": "0c1c534913402463fa963379064dfb418ed3cb3d32efd03ab36689c20212dd87",
+      "bytes": 4134
+    },
+    "skills/adk-hardware-debugging/SKILL.md": {
+      "sha256": "24e2f444d8f32bba9df8ad8085db060a6e24df0a30cdab227b1a6954446b557e",
+      "bytes": 2694
+    },
+    "skills/adk-artifact-gating/SKILL.md": {
+      "sha256": "f19df4551579597b09c5a400c6ffdef6b48b4a8d0c27ce911c1429a5eb04947c",
+      "bytes": 2061
+    },
+    "skills/adk-artifact-gating/references/details.md": {
+      "sha256": "def3c5a6ce7066b09bbd28a77260f1682e39c0ffd1f5383f5fe47d3e02b9e9e7",
+      "bytes": 2316
+    },
+    "skills/adk-interface-contract-design/SKILL.md": {
+      "sha256": "80cb37dab157fa767a32fdb73e074a2fe2cc819d9bb4ea949dae3fda325e7376",
+      "bytes": 6471
+    },
+    "docs/runbooks/artifact-gated-delivery.md": {
+      "sha256": "d152a06d7f1ab477615d4e03e5f00b5dd29d791e6b32ab5523aa19b13767fc84",
+      "bytes": 1623
+    },
+    "scripts/workflow.sh": {
+      "sha256": "5bf290fac80dfd49f86c96b0d84fc6f8f3181e46383b6ed92b26fb41ec39ed3f",
+      "bytes": 19515
+    }
+  },
+  "external_helper": {
+    "url": "https://raw.githubusercontent.com/torvalds/linux/v6.12/scripts/faddr2line",
+    "sha256": "353f412e968517f69eeec952a57a76f7187728052e23c603885d9f28f15e31a0"
+  },
+  "independent_capture_flow_receipt": "/workspace/scratch/771b38332ec2/protocol-capture-flow-review.json",
+  "rows": [
+    {
+      "label": "ctest-version",
+      "argv": [
+        "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin/ctest",
+        "--version"
+      ],
+      "exit": 0,
+      "stdout": "ctest version 3.31.6\n\nCMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
+      "stderr": "",
+      "elapsed_seconds": 0.012156411001342349
+    },
+    {
+      "label": "gcc-version",
+      "argv": [
+        "gcc",
+        "--version"
+      ],
+      "exit": 0,
+      "stdout": "gcc (Debian 14.2.0-19) 14.2.0\nCopyright (C) 2024 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+      "stderr": "",
+      "elapsed_seconds": 0.002841513000021223
+    },
+    {
+      "label": "addr2line-version",
+      "argv": [
+        "addr2line",
+        "--version"
+      ],
+      "exit": 0,
+      "stdout": "GNU addr2line (GNU Binutils for Debian) 2.44\nCopyright (C) 2025 Free Software Foundation, Inc.\nThis program is free software; you may redistribute it under the terms of\nthe GNU General Public License version 3 or (at your option) any later version.\nThis program has absolutely no warranty.\n",
+      "stderr": "",
+      "elapsed_seconds": 0.004253368999343365
+    },
+    {
+      "label": "configure-empty",
+      "argv": [
+        "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin/cmake",
+        "-S",
+        "/workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/cmake-project",
+        "-B",
+        "/workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/empty",
+        "-G",
+        "Unix Makefiles",
+        "-DDOMAIN_CASE=empty"
+      ],
+      "exit": 0,
+      "stdout": "-- Configuring done (0.0s)\n-- Generating done (0.0s)\n-- Build files have been written to: /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/empty\n",
+      "stderr": "",
+      "elapsed_seconds": 0.02744874299969524
+    },
+    {
+      "label": "configure-disabled",
+      "argv": [
+        "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin/cmake",
+        "-S",
+        "/workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/cmake-project",
+        "-B",
+        "/workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/disabled",
+        "-G",
+        "Unix Makefiles",
+        "-DDOMAIN_CASE=disabled"
+      ],
+      "exit": 0,
+      "stdout": "-- Configuring done (0.0s)\n-- Generating done (0.0s)\n-- Build files have been written to: /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/disabled\n",
+      "stderr": "",
+      "elapsed_seconds": 0.017107028001191793
+    },
+    {
+      "label": "configure-filtered",
+      "argv": [
+        "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin/cmake",
+        "-S",
+        "/workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/cmake-project",
+        "-B",
+        "/workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/filtered",
+        "-G",
+        "Unix Makefiles",
+        "-DDOMAIN_CASE=filtered"
+      ],
+      "exit": 0,
+      "stdout": "-- Configuring done (0.0s)\n-- Generating done (0.0s)\n-- Build files have been written to: /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/filtered\n",
+      "stderr": "",
+      "elapsed_seconds": 0.016783621002105065
+    },
+    {
+      "label": "configure-pass",
+      "argv": [
+        "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin/cmake",
+        "-S",
+        "/workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/cmake-project",
+        "-B",
+        "/workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/pass",
+        "-G",
+        "Unix Makefiles",
+        "-DDOMAIN_CASE=pass"
+      ],
+      "exit": 0,
+      "stdout": "-- Configuring done (0.0s)\n-- Generating done (0.0s)\n-- Build files have been written to: /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/pass\n",
+      "stderr": "",
+      "elapsed_seconds": 0.02165206300196587
+    },
+    {
+      "label": "configure-fail",
+      "argv": [
+        "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin/cmake",
+        "-S",
+        "/workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/cmake-project",
+        "-B",
+        "/workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/fail",
+        "-G",
+        "Unix Makefiles",
+        "-DDOMAIN_CASE=fail"
+      ],
+      "exit": 0,
+      "stdout": "-- Configuring done (0.0s)\n-- Generating done (0.0s)\n-- Build files have been written to: /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/fail\n",
+      "stderr": "",
+      "elapsed_seconds": 0.023290236000320874
+    },
+    {
+      "label": "configure-runtime-skip",
+      "argv": [
+        "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin/cmake",
+        "-S",
+        "/workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/cmake-project",
+        "-B",
+        "/workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/runtime-skip",
+        "-G",
+        "Unix Makefiles",
+        "-DDOMAIN_CASE=runtime-skip"
+      ],
+      "exit": 0,
+      "stdout": "-- Configuring done (0.0s)\n-- Generating done (0.0s)\n-- Build files have been written to: /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/runtime-skip\n",
+      "stderr": "",
+      "elapsed_seconds": 0.04253788300047745
+    },
+    {
+      "label": "adk-cmake-cross-build-empty",
+      "argv": [
+        "bash",
+        "-euo",
+        "pipefail",
+        "-c",
+        "ctest --test-dir /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/empty --output-on-failure --no-tests=error"
+      ],
+      "exit": 8,
+      "stdout": "Internal ctest changing into directory: /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/empty\nTest project /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/empty\n",
+      "stderr": "No tests were found!!!\nErrors while running CTest\n",
+      "elapsed_seconds": 0.009410719001607504,
+      "source": {
+        "path": "skills/adk-cmake-cross-build/SKILL.md",
+        "line": 49,
+        "command": "ctest --test-dir build/<target> --output-on-failure --no-tests=error"
+      }
+    },
+    {
+      "label": "adk-cmake-cross-build-disabled",
+      "argv": [
+        "bash",
+        "-euo",
+        "pipefail",
+        "-c",
+        "ctest --test-dir /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/disabled --output-on-failure --no-tests=error"
+      ],
+      "exit": 8,
+      "stdout": "Internal ctest changing into directory: /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/disabled\nTest project /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/disabled\n    Start 1: example\n1/1 Test #1: example ..........................***Not Run (Disabled)   0.00 sec\n",
+      "stderr": "No tests were found!!!\nErrors while running CTest\n",
+      "elapsed_seconds": 0.010838291000254685,
+      "source": {
+        "path": "skills/adk-cmake-cross-build/SKILL.md",
+        "line": 49,
+        "command": "ctest --test-dir build/<target> --output-on-failure --no-tests=error"
+      }
+    },
+    {
+      "label": "adk-cmake-cross-build-filtered",
+      "argv": [
+        "bash",
+        "-euo",
+        "pipefail",
+        "-c",
+        "ctest --test-dir /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/filtered --output-on-failure --no-tests=error -R '^not-a-test$'"
+      ],
+      "exit": 8,
+      "stdout": "Internal ctest changing into directory: /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/filtered\nTest project /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/filtered\n",
+      "stderr": "No tests were found!!!\nErrors while running CTest\n",
+      "elapsed_seconds": 0.013988467999297427,
+      "source": {
+        "path": "skills/adk-cmake-cross-build/SKILL.md",
+        "line": 49,
+        "command": "ctest --test-dir build/<target> --output-on-failure --no-tests=error"
+      }
+    },
+    {
+      "label": "adk-cmake-cross-build-pass",
+      "argv": [
+        "bash",
+        "-euo",
+        "pipefail",
+        "-c",
+        "ctest --test-dir /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/pass --output-on-failure --no-tests=error"
+      ],
+      "exit": 0,
+      "stdout": "Internal ctest changing into directory: /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/pass\nTest project /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/pass\n    Start 1: example\n1/1 Test #1: example ..........................   Passed    0.00 sec\n\n100% tests passed, 0 tests failed out of 1\n\nTotal Test time (real) =   0.01 sec\n",
+      "stderr": "",
+      "elapsed_seconds": 0.017897509002068546,
+      "source": {
+        "path": "skills/adk-cmake-cross-build/SKILL.md",
+        "line": 49,
+        "command": "ctest --test-dir build/<target> --output-on-failure --no-tests=error"
+      }
+    },
+    {
+      "label": "adk-cmake-cross-build-fail",
+      "argv": [
+        "bash",
+        "-euo",
+        "pipefail",
+        "-c",
+        "ctest --test-dir /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/fail --output-on-failure --no-tests=error"
+      ],
+      "exit": 8,
+      "stdout": "Internal ctest changing into directory: /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/fail\nTest project /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/fail\n    Start 1: example\n1/1 Test #1: example ..........................***Failed    0.00 sec\n\n\n0% tests passed, 1 tests failed out of 1\n\nTotal Test time (real) =   0.01 sec\n\nThe following tests FAILED:\n\t  1 - example (Failed)\n",
+      "stderr": "Errors while running CTest\n",
+      "elapsed_seconds": 0.01264184799947543,
+      "source": {
+        "path": "skills/adk-cmake-cross-build/SKILL.md",
+        "line": 49,
+        "command": "ctest --test-dir build/<target> --output-on-failure --no-tests=error"
+      }
+    },
+    {
+      "label": "adk-cmake-cross-build-runtime-skip",
+      "argv": [
+        "bash",
+        "-euo",
+        "pipefail",
+        "-c",
+        "ctest --test-dir /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/runtime-skip --output-on-failure --no-tests=error"
+      ],
+      "exit": 0,
+      "stdout": "Internal ctest changing into directory: /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/runtime-skip\nTest project /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/runtime-skip\n    Start 1: example\n1/1 Test #1: example ..........................***Skipped   0.00 sec\n\n100% tests passed, 0 tests failed out of 1\n\nTotal Test time (real) =   0.00 sec\n\nThe following tests did not run:\n\t  1 - example (Skipped)\n",
+      "stderr": "",
+      "elapsed_seconds": 0.012036918000376318,
+      "source": {
+        "path": "skills/adk-cmake-cross-build/SKILL.md",
+        "line": 49,
+        "command": "ctest --test-dir build/<target> --output-on-failure --no-tests=error"
+      }
+    },
+    {
+      "label": "adk-integration-hil-sil-empty",
+      "argv": [
+        "bash",
+        "-euo",
+        "pipefail",
+        "-c",
+        "ctest --test-dir /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/empty --output-on-failure --no-tests=error"
+      ],
+      "exit": 8,
+      "stdout": "Internal ctest changing into directory: /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/empty\nTest project /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/empty\n",
+      "stderr": "No tests were found!!!\nErrors while running CTest\n",
+      "elapsed_seconds": 0.006771451997337863,
+      "source": {
+        "path": "skills/adk-integration-hil-sil/SKILL.md",
+        "line": 44,
+        "command": "ctest --test-dir build/sil --output-on-failure --no-tests=error"
+      }
+    },
+    {
+      "label": "adk-integration-hil-sil-disabled",
+      "argv": [
+        "bash",
+        "-euo",
+        "pipefail",
+        "-c",
+        "ctest --test-dir /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/disabled --output-on-failure --no-tests=error"
+      ],
+      "exit": 8,
+      "stdout": "Internal ctest changing into directory: /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/disabled\nTest project /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/disabled\n    Start 1: example\n1/1 Test #1: example ..........................***Not Run (Disabled)   0.00 sec\n",
+      "stderr": "No tests were found!!!\nErrors while running CTest\n",
+      "elapsed_seconds": 0.011298074998194352,
+      "source": {
+        "path": "skills/adk-integration-hil-sil/SKILL.md",
+        "line": 44,
+        "command": "ctest --test-dir build/sil --output-on-failure --no-tests=error"
+      }
+    },
+    {
+      "label": "adk-integration-hil-sil-filtered",
+      "argv": [
+        "bash",
+        "-euo",
+        "pipefail",
+        "-c",
+        "ctest --test-dir /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/filtered --output-on-failure --no-tests=error -R '^not-a-test$'"
+      ],
+      "exit": 8,
+      "stdout": "Internal ctest changing into directory: /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/filtered\nTest project /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/filtered\n",
+      "stderr": "No tests were found!!!\nErrors while running CTest\n",
+      "elapsed_seconds": 0.00859880500138388,
+      "source": {
+        "path": "skills/adk-integration-hil-sil/SKILL.md",
+        "line": 44,
+        "command": "ctest --test-dir build/sil --output-on-failure --no-tests=error"
+      }
+    },
+    {
+      "label": "adk-integration-hil-sil-pass",
+      "argv": [
+        "bash",
+        "-euo",
+        "pipefail",
+        "-c",
+        "ctest --test-dir /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/pass --output-on-failure --no-tests=error"
+      ],
+      "exit": 0,
+      "stdout": "Internal ctest changing into directory: /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/pass\nTest project /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/pass\n    Start 1: example\n1/1 Test #1: example ..........................   Passed    0.00 sec\n\n100% tests passed, 0 tests failed out of 1\n\nTotal Test time (real) =   0.00 sec\n",
+      "stderr": "",
+      "elapsed_seconds": 0.010779715001262957,
+      "source": {
+        "path": "skills/adk-integration-hil-sil/SKILL.md",
+        "line": 44,
+        "command": "ctest --test-dir build/sil --output-on-failure --no-tests=error"
+      }
+    },
+    {
+      "label": "adk-integration-hil-sil-fail",
+      "argv": [
+        "bash",
+        "-euo",
+        "pipefail",
+        "-c",
+        "ctest --test-dir /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/fail --output-on-failure --no-tests=error"
+      ],
+      "exit": 8,
+      "stdout": "Internal ctest changing into directory: /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/fail\nTest project /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/fail\n    Start 1: example\n1/1 Test #1: example ..........................***Failed    0.00 sec\n\n\n0% tests passed, 1 tests failed out of 1\n\nTotal Test time (real) =   0.00 sec\n\nThe following tests FAILED:\n\t  1 - example (Failed)\n",
+      "stderr": "Errors while running CTest\n",
+      "elapsed_seconds": 0.012239338997460436,
+      "source": {
+        "path": "skills/adk-integration-hil-sil/SKILL.md",
+        "line": 44,
+        "command": "ctest --test-dir build/sil --output-on-failure --no-tests=error"
+      }
+    },
+    {
+      "label": "adk-integration-hil-sil-runtime-skip",
+      "argv": [
+        "bash",
+        "-euo",
+        "pipefail",
+        "-c",
+        "ctest --test-dir /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/runtime-skip --output-on-failure --no-tests=error"
+      ],
+      "exit": 0,
+      "stdout": "Internal ctest changing into directory: /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/runtime-skip\nTest project /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/runtime-skip\n    Start 1: example\n1/1 Test #1: example ..........................***Skipped   0.01 sec\n\n100% tests passed, 0 tests failed out of 1\n\nTotal Test time (real) =   0.01 sec\n\nThe following tests did not run:\n\t  1 - example (Skipped)\n",
+      "stderr": "",
+      "elapsed_seconds": 0.01683733299796586,
+      "source": {
+        "path": "skills/adk-integration-hil-sil/SKILL.md",
+        "line": 44,
+        "command": "ctest --test-dir build/sil --output-on-failure --no-tests=error"
+      }
+    },
+    {
+      "label": "hil-sil-discovery",
+      "argv": [
+        "bash",
+        "-euo",
+        "pipefail",
+        "-c",
+        "ctest --test-dir /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/pass --show-only=json-v1"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"backtraceGraph\" : \n  {\n    \"commands\" : \n    [\n      \"add_test\"\n    ],\n    \"files\" : \n    [\n      \"/workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/cmake-project/CMakeLists.txt\"\n    ],\n    \"nodes\" : \n    [\n      {\n        \"file\" : 0\n      },\n      {\n        \"command\" : 0,\n        \"file\" : 0,\n        \"line\" : 8,\n        \"parent\" : 0\n      }\n    ]\n  },\n  \"kind\" : \"ctestInfo\",\n  \"tests\" : \n  [\n    {\n      \"backtrace\" : 1,\n      \"command\" : \n      [\n        \"/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin/cmake\",\n        \"-E\",\n        \"true\"\n      ],\n      \"name\" : \"example\",\n      \"properties\" : \n      [\n        {\n          \"name\" : \"WORKING_DIRECTORY\",\n          \"value\" : \"/workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/ctest/pass\"\n        }\n      ]\n    }\n  ],\n  \"version\" : \n  {\n    \"major\" : 1,\n    \"minor\" : 0\n  }\n}",
+      "stderr": "",
+      "elapsed_seconds": 0.008635238002170809,
+      "source": {
+        "path": "skills/adk-integration-hil-sil/SKILL.md",
+        "line": 43,
+        "command": "ctest --test-dir build/sil --show-only=json-v1"
+      }
+    },
+    {
+      "label": "tshark-version",
+      "argv": [
+        "/workspace/scratch/771b38332ec2/domain-audit-tools/wireshark-root/usr/bin/tshark",
+        "--version"
+      ],
+      "exit": 0,
+      "stdout": "TShark (Wireshark) 4.4.18.\n\nCopyright 1998-2026 Gerald Combs <gerald@wireshark.org> and contributors.\nLicensed under the terms of the GNU General Public License (version 2 or later).\nThis is free software; see the file named COPYING in the distribution. There is\nNO WARRANTY; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\nCompiled (64-bit) using GCC 14.2.0, with GLib 2.84.4, with libpcap, with POSIX\ncapabilities (Linux), with libnl 3, with zlib 1.3.1, without zlib-ng, with\nPCRE2, with Lua 5.4.7, with GnuTLS 3.8.9 and PKCS #11 support, with Gcrypt\n1.11.0, with Kerberos (MIT), with MaxMind, with nghttp2 1.64.0, with nghttp3\n1.8.0, with brotli, with LZ4, with Zstandard, with Snappy, with libxml2 2.9.14,\nwith libsmi 0.4.8, with binary plugins.\n\nRunning on Linux 6.18.57, with INTEL(R) XEON(R) PLATINUM 8573C (with SSE4.2),\nwith 9967 MB of physical memory, with GLib 2.84.4, with libpcap 1.10.5 (with\nTPACKET_V3), with zlib 1.3.1, with PCRE2 10.46 2025-08-27, with c-ares 1.34.5,\nwith GnuTLS 3.8.9, with Gcrypt 1.11.0, with nghttp2 1.64.0, with nghttp3 1.8.0,\nwith brotli 1.1.0, with LZ4 1.10.0, with Zstandard 1.5.7, with libsmi 0.4.8,\nwith LC_TYPE=C.UTF-8, binary plugins supported.\n",
+      "stderr": "",
+      "elapsed_seconds": 0.49617098800081294
+    },
+    {
+      "label": "pcap-valid-udp",
+      "argv": [
+        "bash",
+        "-euo",
+        "pipefail",
+        "-c",
+        "tshark -n -r \"$PCAP\" -Y \"$DISPLAY_FILTER\""
+      ],
+      "exit": 0,
+      "stdout": "    1   0.000000 198.51.100.1 → 198.51.100.2 UDP 35 49152 → 49153 Len=7\n",
+      "stderr": "",
+      "elapsed_seconds": 0.3922657520015491,
+      "source": {
+        "path": "skills/adk-protocol-stack-integration/SKILL.md",
+        "line": 43,
+        "command": "tshark -n -r \"$PCAP\" -Y \"$DISPLAY_FILTER\""
+      },
+      "matched_frames": 1,
+      "input_sha256": "543d5502b77245c05cfad00e4a9d6241beaf81735cb9572f19d2c5dde78e5517"
+    },
+    {
+      "label": "pcap-malformed",
+      "argv": [
+        "bash",
+        "-euo",
+        "pipefail",
+        "-c",
+        "tshark -n -r \"$PCAP\" -Y \"$DISPLAY_FILTER\""
+      ],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tshark: The file \"/workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/malformed capture.pcap\" isn't a capture file in a format TShark understands.\n",
+      "elapsed_seconds": 0.3831444330025988,
+      "source": {
+        "path": "skills/adk-protocol-stack-integration/SKILL.md",
+        "line": 43,
+        "command": "tshark -n -r \"$PCAP\" -Y \"$DISPLAY_FILTER\""
+      },
+      "matched_frames": 0,
+      "input_sha256": "cc6a8bf04da754f98bb81a92d70d7251aa0bc9e7ca3cfa9717cc87b4f0185e1a"
+    },
+    {
+      "label": "pcap-zero-byte",
+      "argv": [
+        "bash",
+        "-euo",
+        "pipefail",
+        "-c",
+        "tshark -n -r \"$PCAP\" -Y \"$DISPLAY_FILTER\""
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "elapsed_seconds": 0.4161028559974511,
+      "source": {
+        "path": "skills/adk-protocol-stack-integration/SKILL.md",
+        "line": 43,
+        "command": "tshark -n -r \"$PCAP\" -Y \"$DISPLAY_FILTER\""
+      },
+      "matched_frames": 0,
+      "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "pcap-valid-zero-packet",
+      "argv": [
+        "bash",
+        "-euo",
+        "pipefail",
+        "-c",
+        "tshark -n -r \"$PCAP\" -Y \"$DISPLAY_FILTER\""
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "elapsed_seconds": 0.23053924199848552,
+      "source": {
+        "path": "skills/adk-protocol-stack-integration/SKILL.md",
+        "line": 43,
+        "command": "tshark -n -r \"$PCAP\" -Y \"$DISPLAY_FILTER\""
+      },
+      "matched_frames": 0,
+      "input_sha256": "7fc34f2f51797bc1deb12f9f856941cf6e997187a347bd09ed065dc34bbe969d"
+    },
+    {
+      "label": "pcap-zero-filter-match",
+      "argv": [
+        "bash",
+        "-euo",
+        "pipefail",
+        "-c",
+        "tshark -n -r \"$PCAP\" -Y \"$DISPLAY_FILTER\""
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "elapsed_seconds": 0.21257101300216164,
+      "source": {
+        "path": "skills/adk-protocol-stack-integration/SKILL.md",
+        "line": 43,
+        "command": "tshark -n -r \"$PCAP\" -Y \"$DISPLAY_FILTER\""
+      },
+      "matched_frames": 0,
+      "input_sha256": "543d5502b77245c05cfad00e4a9d6241beaf81735cb9572f19d2c5dde78e5517"
+    },
+    {
+      "label": "pie-build",
+      "argv": [
+        "gcc",
+        "-g",
+        "-O0",
+        "-fPIE",
+        "-pie",
+        "/workspace/scratch/771b38332ec2/domain-audit-repro/relocation.c",
+        "-ldl",
+        "-o",
+        "/workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/relocation"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "elapsed_seconds": 0.06780293300107587
+    },
+    {
+      "label": "pie-runtime-addresses",
+      "argv": [
+        "/workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/relocation"
+      ],
+      "exit": 0,
+      "stdout": "55761dada149 55761dad9000\n",
+      "stderr": "",
+      "elapsed_seconds": 0.0015205909985525068
+    },
+    {
+      "label": "pie-raw-runtime-pc",
+      "argv": [
+        "bash",
+        "-euo",
+        "pipefail",
+        "-c",
+        "\"$target_addr2line\" -f -i -e \"$matched_elf\" \"$pc_link\""
+      ],
+      "exit": 0,
+      "stdout": "??\n??:0\n",
+      "stderr": "",
+      "elapsed_seconds": 0.005671615999744972,
+      "source": {
+        "path": "skills/adk-hardware-debugging/SKILL.md",
+        "line": 53,
+        "command": "\"$target_addr2line\" -f -i -e \"$matched_elf\" \"$pc_link\""
+      }
+    },
+    {
+      "label": "pie-corrected-link-pc",
+      "argv": [
+        "bash",
+        "-euo",
+        "pipefail",
+        "-c",
+        "\"$target_addr2line\" -f -i -e \"$matched_elf\" \"$pc_link\""
+      ],
+      "exit": 0,
+      "stdout": "marked_function\n/workspace/scratch/771b38332ec2/domain-audit-repro/relocation.c:7\n",
+      "stderr": "",
+      "elapsed_seconds": 0.00769480599774397,
+      "source": {
+        "path": "skills/adk-hardware-debugging/SKILL.md",
+        "line": 53,
+        "command": "\"$target_addr2line\" -f -i -e \"$matched_elf\" \"$pc_link\""
+      }
+    },
+    {
+      "label": "function-offset-helper",
+      "argv": [
+        "bash",
+        "-euo",
+        "pipefail",
+        "-c",
+        "\"$kernel_src/scripts/faddr2line\" \"$matched_elf\" \"$function_offset\""
+      ],
+      "exit": 0,
+      "stdout": "marked_function+0x0/0xf:\nmarked_function at /workspace/scratch/771b38332ec2/domain-audit-repro/relocation.c:7\n",
+      "stderr": "",
+      "elapsed_seconds": 0.08901396399960504,
+      "source": {
+        "path": "skills/adk-hardware-debugging/SKILL.md",
+        "line": 51,
+        "command": "\"$kernel_src/scripts/faddr2line\" \"$matched_elf\" \"$function_offset\""
+      }
+    },
+    {
+      "label": "workflow-pass",
+      "argv": [
+        "bash",
+        "/workspace/scratch/771b38332ec2/agent-dev-kit-next/scripts/workflow.sh",
+        "review",
+        "--change",
+        "pass",
+        "--root",
+        "/workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/workflow-fixtures",
+        "--result",
+        "pass",
+        "--blockers",
+        "0",
+        "--majors",
+        "0",
+        "--minors",
+        "0"
+      ],
+      "exit": 0,
+      "stdout": "[OK] review passed: /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/workflow-fixtures/pass\n[INFO] report: /workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/workflow-fixtures/pass/review-report.md\n",
+      "stderr": "",
+      "elapsed_seconds": 0.059294679998856736,
+      "source": {
+        "path": "skills/adk-artifact-gating/references/details.md",
+        "template": "minimal artifact tags"
+      }
+    },
+    {
+      "label": "workflow-old-approved",
+      "argv": [
+        "bash",
+        "/workspace/scratch/771b38332ec2/agent-dev-kit-next/scripts/workflow.sh",
+        "review",
+        "--change",
+        "old-approved",
+        "--root",
+        "/workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/workflow-fixtures",
+        "--result",
+        "pass",
+        "--blockers",
+        "0",
+        "--majors",
+        "0",
+        "--minors",
+        "0"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "[FAIL] review result pass requires artifact ReviewReport/TestReport status both PASS\n",
+      "elapsed_seconds": 0.055512663999252254,
+      "source": {
+        "path": "skills/adk-artifact-gating/references/details.md",
+        "template": "minimal artifact tags"
+      }
+    },
+    {
+      "label": "workflow-test-blocked",
+      "argv": [
+        "bash",
+        "/workspace/scratch/771b38332ec2/agent-dev-kit-next/scripts/workflow.sh",
+        "review",
+        "--change",
+        "test-blocked",
+        "--root",
+        "/workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/workflow-fixtures",
+        "--result",
+        "pass",
+        "--blockers",
+        "0",
+        "--majors",
+        "0",
+        "--minors",
+        "0"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "[FAIL] review result pass requires artifact ReviewReport/TestReport status both PASS\n",
+      "elapsed_seconds": 0.06179975499981083,
+      "source": {
+        "path": "skills/adk-artifact-gating/references/details.md",
+        "template": "minimal artifact tags"
+      }
+    },
+    {
+      "label": "workflow-conflicting-result",
+      "argv": [
+        "bash",
+        "/workspace/scratch/771b38332ec2/agent-dev-kit-next/scripts/workflow.sh",
+        "review",
+        "--change",
+        "conflicting-result",
+        "--root",
+        "/workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/workflow-fixtures",
+        "--result",
+        "needs-fix",
+        "--blockers",
+        "0",
+        "--majors",
+        "0",
+        "--minors",
+        "0"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "[FAIL] review result needs-fix conflicts with artifact PASS/PASS verdict=pass\n",
+      "elapsed_seconds": 0.04644009500043467,
+      "source": {
+        "path": "skills/adk-artifact-gating/references/details.md",
+        "template": "minimal artifact tags"
+      }
+    },
+    {
+      "label": "workflow-not-verified",
+      "argv": [
+        "bash",
+        "/workspace/scratch/771b38332ec2/agent-dev-kit-next/scripts/workflow.sh",
+        "review",
+        "--change",
+        "not-verified",
+        "--root",
+        "/workspace/scratch/771b38332ec2/domain-audit-repro/domain-final-woci83rn/workflow-fixtures",
+        "--result",
+        "pass",
+        "--blockers",
+        "0",
+        "--majors",
+        "0",
+        "--minors",
+        "0"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "[FAIL] review requires stage 'verified', current: applied\n",
+      "elapsed_seconds": 0.015580362000036985,
+      "source": {
+        "path": "skills/adk-artifact-gating/references/details.md",
+        "template": "minimal artifact tags"
+      }
+    },
+    {
+      "label": "interface-cross-file-duplicate",
+      "argv": [
+        "bash",
+        "-euo",
+        "pipefail",
+        "-c",
+        "rg --no-filename -o \"= -[0-9]+\" include/ | sort | uniq -d"
+      ],
+      "exit": 0,
+      "stdout": "= -7\n",
+      "stderr": "",
+      "elapsed_seconds": 0.015386021997983335,
+      "source": {
+        "path": "skills/adk-interface-contract-design/SKILL.md",
+        "line": 57,
+        "command": "rg --no-filename -o \"= -[0-9]+\" include/ | sort | uniq -d"
+      }
+    },
+    {
+      "label": "interface-unique",
+      "argv": [
+        "bash",
+        "-euo",
+        "pipefail",
+        "-c",
+        "rg --no-filename -o \"= -[0-9]+\" include/ | sort | uniq -d"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "elapsed_seconds": 0.01580596499843523,
+      "source": {
+        "path": "skills/adk-interface-contract-design/SKILL.md",
+        "line": 57,
+        "command": "rg --no-filename -o \"= -[0-9]+\" include/ | sort | uniq -d"
+      }
+    },
+    {
+      "label": "interface-symbolic-uncovered",
+      "argv": [
+        "bash",
+        "-euo",
+        "pipefail",
+        "-c",
+        "rg --no-filename -o \"= -[0-9]+\" include/ | sort | uniq -d"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "",
+      "elapsed_seconds": 0.011366152997652534,
+      "source": {
+        "path": "skills/adk-interface-contract-design/SKILL.md",
+        "line": 57,
+        "command": "rg --no-filename -o \"= -[0-9]+\" include/ | sort | uniq -d"
+      }
+    }
+  ],
+  "checks": [
+    {
+      "label": "make-available",
+      "passed": true,
+      "evidence_labels": [],
+      "interpretation": "existing host generator only"
+    },
+    {
+      "label": "configure-empty",
+      "passed": true,
+      "evidence_labels": [
+        "configure-empty"
+      ],
+      "interpretation": "host-only project configuration"
+    },
+    {
+      "label": "configure-disabled",
+      "passed": true,
+      "evidence_labels": [
+        "configure-disabled"
+      ],
+      "interpretation": "host-only project configuration"
+    },
+    {
+      "label": "configure-filtered",
+      "passed": true,
+      "evidence_labels": [
+        "configure-filtered"
+      ],
+      "interpretation": "host-only project configuration"
+    },
+    {
+      "label": "configure-pass",
+      "passed": true,
+      "evidence_labels": [
+        "configure-pass"
+      ],
+      "interpretation": "host-only project configuration"
+    },
+    {
+      "label": "configure-fail",
+      "passed": true,
+      "evidence_labels": [
+        "configure-fail"
+      ],
+      "interpretation": "host-only project configuration"
+    },
+    {
+      "label": "configure-runtime-skip",
+      "passed": true,
+      "evidence_labels": [
+        "configure-runtime-skip"
+      ],
+      "interpretation": "host-only project configuration"
+    },
+    {
+      "label": "adk-cmake-cross-build-empty",
+      "passed": true,
+      "evidence_labels": [
+        "adk-cmake-cross-build-empty"
+      ],
+      "interpretation": "zero runnable tests fail; real pass/fail preserved"
+    },
+    {
+      "label": "adk-cmake-cross-build-disabled",
+      "passed": true,
+      "evidence_labels": [
+        "adk-cmake-cross-build-disabled"
+      ],
+      "interpretation": "zero runnable tests fail; real pass/fail preserved"
+    },
+    {
+      "label": "adk-cmake-cross-build-filtered",
+      "passed": true,
+      "evidence_labels": [
+        "adk-cmake-cross-build-filtered"
+      ],
+      "interpretation": "zero runnable tests fail; real pass/fail preserved"
+    },
+    {
+      "label": "adk-cmake-cross-build-pass",
+      "passed": true,
+      "evidence_labels": [
+        "adk-cmake-cross-build-pass"
+      ],
+      "interpretation": "zero runnable tests fail; real pass/fail preserved"
+    },
+    {
+      "label": "adk-cmake-cross-build-fail",
+      "passed": true,
+      "evidence_labels": [
+        "adk-cmake-cross-build-fail"
+      ],
+      "interpretation": "zero runnable tests fail; real pass/fail preserved"
+    },
+    {
+      "label": "adk-cmake-cross-build-runtime-skip",
+      "passed": true,
+      "evidence_labels": [
+        "adk-cmake-cross-build-runtime-skip"
+      ],
+      "interpretation": "runtime skip remains not-run, not a test pass"
+    },
+    {
+      "label": "adk-cmake-cross-build-skip-visible",
+      "passed": true,
+      "evidence_labels": [
+        "adk-cmake-cross-build-runtime-skip"
+      ],
+      "interpretation": "exit 0 does not turn skip into executed assertions"
+    },
+    {
+      "label": "adk-integration-hil-sil-empty",
+      "passed": true,
+      "evidence_labels": [
+        "adk-integration-hil-sil-empty"
+      ],
+      "interpretation": "zero runnable tests fail; real pass/fail preserved"
+    },
+    {
+      "label": "adk-integration-hil-sil-disabled",
+      "passed": true,
+      "evidence_labels": [
+        "adk-integration-hil-sil-disabled"
+      ],
+      "interpretation": "zero runnable tests fail; real pass/fail preserved"
+    },
+    {
+      "label": "adk-integration-hil-sil-filtered",
+      "passed": true,
+      "evidence_labels": [
+        "adk-integration-hil-sil-filtered"
+      ],
+      "interpretation": "zero runnable tests fail; real pass/fail preserved"
+    },
+    {
+      "label": "adk-integration-hil-sil-pass",
+      "passed": true,
+      "evidence_labels": [
+        "adk-integration-hil-sil-pass"
+      ],
+      "interpretation": "zero runnable tests fail; real pass/fail preserved"
+    },
+    {
+      "label": "adk-integration-hil-sil-fail",
+      "passed": true,
+      "evidence_labels": [
+        "adk-integration-hil-sil-fail"
+      ],
+      "interpretation": "zero runnable tests fail; real pass/fail preserved"
+    },
+    {
+      "label": "adk-integration-hil-sil-runtime-skip",
+      "passed": true,
+      "evidence_labels": [
+        "adk-integration-hil-sil-runtime-skip"
+      ],
+      "interpretation": "runtime skip remains not-run, not a test pass"
+    },
+    {
+      "label": "adk-integration-hil-sil-skip-visible",
+      "passed": true,
+      "evidence_labels": [
+        "adk-integration-hil-sil-runtime-skip"
+      ],
+      "interpretation": "exit 0 does not turn skip into executed assertions"
+    },
+    {
+      "label": "discovery-real-test",
+      "passed": true,
+      "evidence_labels": [
+        "hil-sil-discovery"
+      ],
+      "interpretation": "discovery sees one actual registered host test"
+    },
+    {
+      "label": "pcap-valid-udp",
+      "passed": true,
+      "evidence_labels": [
+        "pcap-valid-udp"
+      ],
+      "interpretation": "evidence-present; not protocol integration qualification"
+    },
+    {
+      "label": "pcap-malformed",
+      "passed": true,
+      "evidence_labels": [
+        "pcap-malformed"
+      ],
+      "interpretation": "read-error; not protocol integration qualification"
+    },
+    {
+      "label": "pcap-zero-byte",
+      "passed": true,
+      "evidence_labels": [
+        "pcap-zero-byte"
+      ],
+      "interpretation": "partial-no-target-evidence; not protocol integration qualification"
+    },
+    {
+      "label": "pcap-valid-zero-packet",
+      "passed": true,
+      "evidence_labels": [
+        "pcap-valid-zero-packet"
+      ],
+      "interpretation": "partial-no-target-evidence; not protocol integration qualification"
+    },
+    {
+      "label": "pcap-zero-filter-match",
+      "passed": true,
+      "evidence_labels": [
+        "pcap-zero-filter-match"
+      ],
+      "interpretation": "partial-no-target-evidence; not protocol integration qualification"
+    },
+    {
+      "label": "pie-build",
+      "passed": true,
+      "evidence_labels": [
+        "pie-build"
+      ],
+      "interpretation": "host PIE only"
+    },
+    {
+      "label": "raw-pc-not-resolved",
+      "passed": true,
+      "evidence_labels": [
+        "pie-raw-runtime-pc"
+      ],
+      "interpretation": "raw runtime address is not a valid link address"
+    },
+    {
+      "label": "corrected-pc-resolved",
+      "passed": true,
+      "evidence_labels": [
+        "pie-corrected-link-pc"
+      ],
+      "interpretation": "actual dladdr base; not a KASLR kernel or MCU test"
+    },
+    {
+      "label": "function-offset-resolved",
+      "passed": true,
+      "evidence_labels": [
+        "function-offset-helper"
+      ],
+      "interpretation": "Linux v6.12 helper on host ELF, not a target kernel qualification"
+    },
+    {
+      "label": "template-fields-ImplementationPlan",
+      "passed": true,
+      "evidence_labels": [],
+      "interpretation": "declared template fields exist; not runtime enforcement"
+    },
+    {
+      "label": "template-fields-ReviewReport",
+      "passed": true,
+      "evidence_labels": [],
+      "interpretation": "declared template fields exist; not runtime enforcement"
+    },
+    {
+      "label": "template-fields-TestReport",
+      "passed": true,
+      "evidence_labels": [],
+      "interpretation": "declared template fields exist; not runtime enforcement"
+    },
+    {
+      "label": "workflow-pass",
+      "passed": true,
+      "evidence_labels": [
+        "workflow-pass"
+      ],
+      "interpretation": "isolated verified-state consumer fixture; never source release qualification"
+    },
+    {
+      "label": "workflow-old-approved",
+      "passed": true,
+      "evidence_labels": [
+        "workflow-old-approved"
+      ],
+      "interpretation": "isolated verified-state consumer fixture; never source release qualification"
+    },
+    {
+      "label": "workflow-test-blocked",
+      "passed": true,
+      "evidence_labels": [
+        "workflow-test-blocked"
+      ],
+      "interpretation": "isolated verified-state consumer fixture; never source release qualification"
+    },
+    {
+      "label": "workflow-conflicting-result",
+      "passed": true,
+      "evidence_labels": [
+        "workflow-conflicting-result"
+      ],
+      "interpretation": "isolated verified-state consumer fixture; never source release qualification"
+    },
+    {
+      "label": "workflow-not-verified",
+      "passed": true,
+      "evidence_labels": [
+        "workflow-not-verified"
+      ],
+      "interpretation": "isolated verified-state consumer fixture; never source release qualification"
+    },
+    {
+      "label": "interface-cross-file-duplicate",
+      "passed": true,
+      "evidence_labels": [
+        "interface-cross-file-duplicate"
+      ],
+      "interpretation": "lexical candidate only; symbolic/namespace conflicts require separate analysis"
+    },
+    {
+      "label": "interface-unique",
+      "passed": true,
+      "evidence_labels": [
+        "interface-unique"
+      ],
+      "interpretation": "lexical candidate only; symbolic/namespace conflicts require separate analysis"
+    },
+    {
+      "label": "interface-symbolic-uncovered",
+      "passed": true,
+      "evidence_labels": [
+        "interface-symbolic-uncovered"
+      ],
+      "interpretation": "lexical candidate only; symbolic/namespace conflicts require separate analysis"
+    },
+    {
+      "label": "source-stable",
+      "passed": true,
+      "evidence_labels": [],
+      "interpretation": "source excerpts did not change during this run"
+    }
+  ],
+  "passed": 43,
+  "total": 43
+}
