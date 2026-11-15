@@ -1,0 +1,244 @@
+[
+  {
+    "name": "build-old",
+    "argv": [
+      "gcc",
+      "-g",
+      "-shared",
+      "-fPIC",
+      "-I",
+      "old",
+      "provider.c",
+      "-o",
+      "old/libcomponent.so"
+    ],
+    "cwd": "/workspace/scratch/771b38332ec2/domain-validation/examples-h887atry",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "name": "build-new",
+    "argv": [
+      "gcc",
+      "-g",
+      "-shared",
+      "-fPIC",
+      "-I",
+      "new",
+      "provider.c",
+      "-o",
+      "new/libcomponent.so"
+    ],
+    "cwd": "/workspace/scratch/771b38332ec2/domain-validation/examples-h887atry",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "name": "build-old-consumer",
+    "argv": [
+      "gcc",
+      "-I",
+      "old",
+      "tests/compat_v1.c",
+      "-L",
+      "old",
+      "-lcomponent",
+      "-Wl,-rpath,$ORIGIN",
+      "-o",
+      "old/consumer"
+    ],
+    "cwd": "/workspace/scratch/771b38332ec2/domain-validation/examples-h887atry",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "name": "old-consumer-old-library",
+    "argv": [
+      "./old/consumer"
+    ],
+    "cwd": "/workspace/scratch/771b38332ec2/domain-validation/examples-h887atry",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "name": "old-consumer-new-library",
+    "argv": [
+      "./old/consumer"
+    ],
+    "cwd": "/workspace/scratch/771b38332ec2/domain-validation/examples-h887atry",
+    "exit_code": 7,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "name": "symbols-old",
+    "argv": [
+      "nm",
+      "-D",
+      "--defined-only",
+      "old/libcomponent.so"
+    ],
+    "cwd": "/workspace/scratch/771b38332ec2/domain-validation/examples-h887atry",
+    "exit_code": 0,
+    "stdout": "00000000000010f9 T component_get\n",
+    "stderr": ""
+  },
+  {
+    "name": "symbols-new",
+    "argv": [
+      "nm",
+      "-D",
+      "--defined-only",
+      "new/libcomponent.so"
+    ],
+    "cwd": "/workspace/scratch/771b38332ec2/domain-validation/examples-h887atry",
+    "exit_code": 0,
+    "stdout": "00000000000010f9 T component_get\n",
+    "stderr": ""
+  },
+  {
+    "name": "native-source-example",
+    "argv": [
+      "bash"
+    ],
+    "cwd": "/workspace/scratch/771b38332ec2/domain-validation/examples-h887atry",
+    "exit_code": 0,
+    "stdout": "source compatibility case passed\n",
+    "stderr": ""
+  },
+  {
+    "name": "new-wrapper-propagates-seven",
+    "argv": [
+      "bash"
+    ],
+    "cwd": "/workspace/scratch/771b38332ec2/domain-validation/examples-h887atry",
+    "exit_code": 7,
+    "stdout": "",
+    "stderr": "compatibility case failed: 7\n"
+  },
+  {
+    "name": "old-wrapper-hides-seven",
+    "argv": [
+      "bash",
+      "-c",
+      "./compat_test_v1 && echo \"ABI compatible\" || echo \"ABI broken\""
+    ],
+    "cwd": "/workspace/scratch/771b38332ec2/domain-validation/examples-h887atry",
+    "exit_code": 0,
+    "stdout": "ABI broken\n",
+    "stderr": ""
+  },
+  {
+    "name": "compile-failure-stops-before-stale-executable",
+    "argv": [
+      "bash"
+    ],
+    "cwd": "/workspace/scratch/771b38332ec2/domain-validation/examples-h887atry",
+    "exit_code": 1,
+    "stdout": "",
+    "stderr": "cc1: fatal error: tests/missing.c: No such file or directory\ncompilation terminated.\n"
+  },
+  {
+    "name": "header-baseline-compiles",
+    "argv": [
+      "gcc",
+      "-fsyntax-only",
+      "/workspace/scratch/771b38332ec2/domain-validation/examples-h887atry/src/header consumer.c"
+    ],
+    "cwd": "/workspace/scratch/771b38332ec2/domain-validation/examples-h887atry",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "name": "header-only-change-reaches-consumer",
+    "argv": [
+      "gcc",
+      "-fsyntax-only",
+      "/workspace/scratch/771b38332ec2/domain-validation/examples-h887atry/src/header consumer.c"
+    ],
+    "cwd": "/workspace/scratch/771b38332ec2/domain-validation/examples-h887atry",
+    "exit_code": 1,
+    "stdout": "",
+    "stderr": "In file included from /workspace/scratch/771b38332ec2/domain-validation/examples-h887atry/src/header consumer.c:1:\n/workspace/scratch/771b38332ec2/domain-validation/examples-h887atry/src/sample.h:1:2: error: #error deterministic-header-only-change\n    1 | #error deterministic-header-only-change\n      |  ^~~~~\n/workspace/scratch/771b38332ec2/domain-validation/examples-h887atry/src/header consumer.c: In function ‘main’:\n/workspace/scratch/771b38332ec2/domain-validation/examples-h887atry/src/header consumer.c:2:25: error: implicit declaration of function ‘sample’ [-Wimplicit-function-declaration]\n    2 | int main(void) { return sample(); }\n      |                         ^~~~~~\n"
+  },
+  {
+    "name": "static-example-bash-syntax",
+    "argv": [
+      "bash",
+      "-n"
+    ],
+    "cwd": "/workspace/scratch/771b38332ec2/domain-validation/examples-h887atry",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "name": "actual-tu-enumerator-header-only",
+    "argv": [
+      "python3",
+      "-c",
+      "import json, os, sys\nfrom pathlib import Path\nrows = json.loads(Path('build/compile_commands.json').read_text())\npaths = sorted({str((Path(row['directory']) / row['file']).resolve(strict=True)) for row in rows})\nif not paths:\n    raise SystemExit('no translation units: not-scanned')\nfor path in paths:\n    sys.stdout.buffer.write(os.fsencode(path) + b'\\0')"
+    ],
+    "cwd": "/workspace/scratch/771b38332ec2/domain-validation/examples-h887atry",
+    "exit_code": 0,
+    "stdout": "/workspace/scratch/771b38332ec2/domain-validation/examples-h887atry/src/header consumer.c\u0000",
+    "stderr": ""
+  },
+  {
+    "name": "empty-tu-database-not-scanned",
+    "argv": [
+      "python3",
+      "-c",
+      "import json, os, sys\nfrom pathlib import Path\nrows = json.loads(Path('build/compile_commands.json').read_text())\npaths = sorted({str((Path(row['directory']) / row['file']).resolve(strict=True)) for row in rows})\nif not paths:\n    raise SystemExit('no translation units: not-scanned')\nfor path in paths:\n    sys.stdout.buffer.write(os.fsencode(path) + b'\\0')"
+    ],
+    "cwd": "/workspace/scratch/771b38332ec2/domain-validation/examples-h887atry",
+    "exit_code": 1,
+    "stdout": "",
+    "stderr": "no translation units: not-scanned\n"
+  },
+  {
+    "name": "rtos-response-time",
+    "include_irq": false,
+    "iterations": [
+      3,
+      4,
+      4
+    ],
+    "deadline": 5,
+    "within_deadline": true
+  },
+  {
+    "name": "rtos-response-time",
+    "include_irq": true,
+    "iterations": [
+      3,
+      4.5,
+      6.0
+    ],
+    "deadline": 5,
+    "within_deadline": false
+  },
+  {
+    "name": "core-batch-shell-syntax",
+    "argv": [
+      "bash",
+      "-n"
+    ],
+    "cwd": "/workspace/scratch/771b38332ec2/domain-validation/examples-h887atry",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "name": "scope",
+    "real_scanner_gdb_abidiff": "not-run: tools unavailable",
+    "url_imap": "not-run: no external account or fetch requested",
+    "performance_or_model_improvement": "not-measured",
+    "note": "TU enumeration and shell syntax are not scanner/GDB execution evidence"
+  }
+]

@@ -1,0 +1,69 @@
+{
+  "source_hashes": {
+    "skills/adk-offline-core-dump-triage/SKILL.md": "6a30f8a9ae8a47766e8196c9a8c6396a38e9b74b0d981220e11fe81f1dd777a9",
+    "skills/adk-performance-profiling-embedded/SKILL.md": "dddbfa10380680807cb7c0918f6c92d93163379def98592dc1df4e75a814badf",
+    "skills/adk-static-analysis-c-cpp/SKILL.md": "d87b79a048d5e61164b6ab3ef58aaf53e8ee830eb65d1031805f7f2ec0638ee6"
+  },
+  "real_perf_or_valgrind_executed": false,
+  "results": [
+    {
+      "kind": "perf",
+      "producer_returns": 42,
+      "report_returns": 0,
+      "called": [
+        "record"
+      ],
+      "exit_code": 42
+    },
+    {
+      "kind": "perf",
+      "producer_returns": 0,
+      "report_returns": 0,
+      "called": [
+        "record",
+        "report"
+      ],
+      "exit_code": 0
+    },
+    {
+      "kind": "perf",
+      "producer_returns": 0,
+      "report_returns": 7,
+      "called": [
+        "record",
+        "report"
+      ],
+      "exit_code": 7
+    },
+    {
+      "kind": "callgrind",
+      "producer_returns": 42,
+      "report_returns": 0,
+      "called": [
+        "callgrind"
+      ],
+      "exit_code": 42
+    },
+    {
+      "kind": "callgrind",
+      "producer_returns": 0,
+      "report_returns": 0,
+      "called": [
+        "callgrind",
+        "annotate"
+      ],
+      "exit_code": 0
+    },
+    {
+      "kind": "callgrind",
+      "producer_returns": 0,
+      "report_returns": 7,
+      "called": [
+        "callgrind",
+        "annotate"
+      ],
+      "exit_code": 7
+    }
+  ],
+  "status": "pass"
+}

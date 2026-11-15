@@ -1,0 +1,6 @@
+{
+  "original_filename": "functional-guard.log",
+  "encoding": "utf-8",
+  "raw_sha256": "abb18d33d5a53175c44f3c2ad6984b7ca57af7c3f544f8efc9683231c20be62c",
+  "raw_text": "base_sha=c57f4f8a7983f52257c0587eb85881a006e6dc07\ncandidate_sha256=46fb6f895ed2d2a6affac689756ea41b61b16faf4dabaa7136436933783360c6\ncompiler=/usr/bin/cc\ncommand=/usr/bin/cc -std=c11 -Wall -Wextra -Werror /tmp/adk-functional-guard-qssk0c7p/baseline.c -o /tmp/adk-functional-guard-qssk0c7p/baseline\ncompile_exit=0\n\n\nbaseline_exit=1; expected_exit=1\nmask=0 before=2 after=0\nmask=1 before=2 after=0\nmask=2 before=2 after=0\nmask=3 before=2 after=0\nmask=4 before=2 after=0\nmask=5 before=2 after=0\nmask=6 before=2 after=0\nmask=7 before=12 after=12\nmismatches=7\n\n\ncommand=/usr/bin/cc -std=c11 -Wall -Wextra -Werror /tmp/adk-functional-guard-qssk0c7p/candidate.c -o /tmp/adk-functional-guard-qssk0c7p/candidate\ncompile_exit=0\n\n\ncandidate_exit=0; expected_exit=0\nmask=0 before=2 after=2\nmask=1 before=2 after=2\nmask=2 before=2 after=2\nmask=3 before=2 after=2\nmask=4 before=2 after=2\nmask=5 before=2 after=2\nmask=6 before=2 after=2\nmask=7 before=12 after=12\nmismatches=0\n\n\n"
+}

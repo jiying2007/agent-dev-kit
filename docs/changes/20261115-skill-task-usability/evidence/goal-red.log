@@ -1,0 +1,86 @@
+test_budget_authority_and_empty_exit_cannot_pass (test_goal_authoring.GoalPlanTests.test_budget_authority_and_empty_exit_cannot_pass) ... ok
+test_core_profile_contains_authoring_skill (test_goal_authoring.GoalPlanTests.test_core_profile_contains_authoring_skill) ... ok
+test_current_frontier_is_bounded_and_does_not_load_history (test_goal_authoring.GoalPlanTests.test_current_frontier_is_bounded_and_does_not_load_history) ... ok
+test_current_state_work_in_progress_uses_shared_validation (test_goal_authoring.GoalPlanTests.test_current_state_work_in_progress_uses_shared_validation) ... ok
+test_dependencies_and_fake_closure_fail (test_goal_authoring.GoalPlanTests.test_dependencies_and_fake_closure_fail) ... ok
+test_example_does_not_propose_unmeasured_token_budget (test_goal_authoring.GoalPlanTests.test_example_does_not_propose_unmeasured_token_budget) ... FAIL
+test_fifo_and_symlink_inputs_fail_without_hanging (test_goal_authoring.GoalPlanTests.test_fifo_and_symlink_inputs_fail_without_hanging) ... ok
+test_load_limits_duplicate_keys_and_cli_fail_closed (test_goal_authoring.GoalPlanTests.test_load_limits_duplicate_keys_and_cli_fail_closed) ... ok
+test_original_denominator_unknown_parent_and_duplicate_ids_are_rejected (test_goal_authoring.GoalPlanTests.test_original_denominator_unknown_parent_and_duplicate_ids_are_rejected) ... ok
+test_public_adk_cli_runs_from_another_project (test_goal_authoring.GoalPlanTests.test_public_adk_cli_runs_from_another_project) ... ok
+test_public_resume_can_show_blocked_batch_and_unclosed_dependency (test_goal_authoring.GoalPlanTests.test_public_resume_can_show_blocked_batch_and_unclosed_dependency) ... FAIL
+test_public_resume_can_show_closed_batch_without_reopening_or_approving_it (test_goal_authoring.GoalPlanTests.test_public_resume_can_show_closed_batch_without_reopening_or_approving_it) ... FAIL
+test_public_resume_fails_on_output_limit_without_truncating_blockers (test_goal_authoring.GoalPlanTests.test_public_resume_fails_on_output_limit_without_truncating_blockers) ... FAIL
+test_public_resume_keeps_input_byte_limits (test_goal_authoring.GoalPlanTests.test_public_resume_keeps_input_byte_limits) ... ok
+test_public_resume_preserves_state_and_never_executes_recorded_actions (test_goal_authoring.GoalPlanTests.test_public_resume_preserves_state_and_never_executes_recorded_actions) ... FAIL
+test_public_resume_still_rejects_invalid_evidence_dependencies_and_state (test_goal_authoring.GoalPlanTests.test_public_resume_still_rejects_invalid_evidence_dependencies_and_state) ... ok
+test_ready_cannot_bypass_open_dependency_or_select_blocked_item (test_goal_authoring.GoalPlanTests.test_ready_cannot_bypass_open_dependency_or_select_blocked_item) ... ok
+test_selected_open_deliverable_cannot_bypass_dependency (test_goal_authoring.GoalPlanTests.test_selected_open_deliverable_cannot_bypass_dependency) ... ok
+test_strict_input_boundaries_and_digest_bind_same_read (test_goal_authoring.GoalPlanTests.test_strict_input_boundaries_and_digest_bind_same_read) ... ok
+test_unknown_token_proposal_is_explicit_not_a_false_budget (test_goal_authoring.GoalPlanTests.test_unknown_token_proposal_is_explicit_not_a_false_budget) ... ok
+test_untrusted_json_types_are_diagnostics (test_goal_authoring.GoalPlanTests.test_untrusted_json_types_are_diagnostics) ... ok
+test_valid_contract_does_not_grant_runtime_or_completion (test_goal_authoring.GoalPlanTests.test_valid_contract_does_not_grant_runtime_or_completion) ... ok
+
+======================================================================
+FAIL: test_example_does_not_propose_unmeasured_token_budget (test_goal_authoring.GoalPlanTests.test_example_does_not_propose_unmeasured_token_budget)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/771b38332ec2/agent-dev-kit/tests/test_goal_authoring.py", line 165, in test_example_does_not_propose_unmeasured_token_budget
+    self.assertIsNone(self.plan["budget_proposal"]["tokens"])
+AssertionError: 300000 is not None
+
+======================================================================
+FAIL: test_public_resume_can_show_blocked_batch_and_unclosed_dependency (test_goal_authoring.GoalPlanTests.test_public_resume_can_show_blocked_batch_and_unclosed_dependency)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/771b38332ec2/agent-dev-kit/tests/test_goal_authoring.py", line 95, in test_public_resume_can_show_blocked_batch_and_unclosed_dependency
+    self.assertEqual(0, result.returncode, result.stderr + result.stdout)
+AssertionError: 0 != 1 : {"schema_version":"adk.goal-plan-check/v1","status":"fail","read_only":true,"runtime_authority":false,"completion_allowed":false,"evidence_contents_verified":false,"reasons":["batch-selected-unavailable-deliverable"],"parent_count":2,"deliverable_count":2,"plan_sha256":"4e4646ab0ec21684c6373f296eb2b088a838d023fce137dcd183e03581f5b137"}
+
+
+======================================================================
+FAIL: test_public_resume_can_show_closed_batch_without_reopening_or_approving_it (test_goal_authoring.GoalPlanTests.test_public_resume_can_show_closed_batch_without_reopening_or_approving_it)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/771b38332ec2/agent-dev-kit/tests/test_goal_authoring.py", line 79, in test_public_resume_can_show_closed_batch_without_reopening_or_approving_it
+    self.assertEqual(0, result.returncode, result.stderr + result.stdout)
+AssertionError: 0 != 1 : {"schema_version":"adk.goal-plan-check/v1","status":"fail","read_only":true,"runtime_authority":false,"completion_allowed":false,"evidence_contents_verified":false,"reasons":["batch-selected-unavailable-deliverable"],"parent_count":2,"deliverable_count":2,"plan_sha256":"bee8da413870429023364c143f45929c3fefdbbb716d0cabf7d471d23db8a116"}
+
+
+======================================================================
+FAIL: test_public_resume_fails_on_output_limit_without_truncating_blockers (test_goal_authoring.GoalPlanTests.test_public_resume_fails_on_output_limit_without_truncating_blockers)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/771b38332ec2/agent-dev-kit/tests/test_goal_authoring.py", line 143, in test_public_resume_fails_on_output_limit_without_truncating_blockers
+    self.assertEqual(1, result.returncode, result.stdout)
+AssertionError: 1 != 0 : Goal 草案（未启动、未修改既有目标）：
+original objective xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+完整原合同：requirements.md#original-acceptance
+约束：保留原目标及累计；不提交或操作设备
+当前批次：B-error
+退出条件：错误传播子项以真实失败/成功证据关闭；板级及完整目标保持独立验收。
+范围：export implementation；actual consumer tests
+预算提案：300000 tokens；未设置原生预算。
+停止/重排：同因2次、非关闭批次4次；匹配板级输入和设备授权到达才重查D-board
+重规划效果核验：若本批不能关闭D-error，固定未解错误路径，改依赖或验证路径并在下一批核验效果；不以新增测试数计关闭。
+阶段仅使用定向/里程碑验证；整体完成才运行 final。
+原目标全部验收保留；子项关闭不等于父目标完成，不重建或清零既有 Goal。
+当前：software verified; board awaiting authorization
+下一动作：
+touch NEXT_ACTION_MUST_NOT_RUN
+
+
+======================================================================
+FAIL: test_public_resume_preserves_state_and_never_executes_recorded_actions (test_goal_authoring.GoalPlanTests.test_public_resume_preserves_state_and_never_executes_recorded_actions)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/771b38332ec2/agent-dev-kit/tests/test_goal_authoring.py", line 66, in test_public_resume_preserves_state_and_never_executes_recorded_actions
+    self.assertIn(value, result.stdout)
+AssertionError: 'UNKNOWN external effect; reconcile before retry' not found in 'Goal 草案（未启动、未修改既有目标）：\n修复导出消费者的错误传播，保留公开接口；实际消费者失败前后对比和回归通过后交付软件切片。\n完整原合同：requirements.md#original-acceptance\n约束：保留原目标及累计；不提交或操作设备\n当前批次：B-error\n退出条件：错误传播子项以真实失败/成功证据关闭；板级及完整目标保持独立验收。\n范围：export implementation；actual consumer tests\n预算提案：300000 tokens；未设置原生预算。\n停止/重排：同因2次、非关闭批次4次；匹配板级输入和设备授权到达才重查D-board\n重规划效果核验：若本批不能关闭D-error，固定未解错误路径，改依赖或验证路径并在下一批核验效果；不以新增测试数计关闭。\n阶段仅使用定向/里程碑验证；整体完成才运行 final。\n原目标全部验收保留；子项关闭不等于父目标完成，不重建或清零既有 Goal。\n当前：software verified; board awaiting authorization\n下一动作：\ntouch NEXT_ACTION_MUST_NOT_RUN\n'
+
+----------------------------------------------------------------------
+Ran 22 tests in 1.943s
+
+FAILED (failures=5)
+{"schema_version":"adk.goal-plan-check/v1","status":"pass","read_only":true,"runtime_authority":false,"completion_allowed":false,"evidence_contents_verified":false,"reasons":[],"parent_count":2,"deliverable_count":2,"plan_sha256":"a44c996a1e9de3d60b8ad443bac1096dcd348c4e8fa71e411e5df3f89e8eebac"}
+{"status": "fail", "read_only": true, "error": "resume requires --state"}

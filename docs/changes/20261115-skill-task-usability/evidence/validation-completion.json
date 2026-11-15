@@ -1,0 +1,18 @@
+{
+  "source_commit": "092abfed44dabe74d13b2133dd57ac440c8455bb",
+  "source_tree": "a4e3b821af71d7bff4ecfdf048dc16417ce3a1e2",
+  "source_frozen_at": "2026-11-15T05:18:06.885391Z",
+  "evidence_completed_at": "2026-11-15T05:27:40.687596Z",
+  "command": "bash tests/run_all.sh --timing-json /workspace/scratch/771b38332ec2/final-all-tests-timing.json",
+  "exit_code": 0,
+  "python_version": "3.12.14",
+  "total": 102,
+  "pass": 102,
+  "fail": 0,
+  "elapsed_ms": 556068,
+  "frozen_source_unchanged": true,
+  "source_files_checked": 41,
+  "remote_push": "blocked-by-auto-review",
+  "remote_ci": "not-run",
+  "released": false
+}
