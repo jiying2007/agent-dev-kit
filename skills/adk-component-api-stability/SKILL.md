@@ -1,8 +1,8 @@
 ---
 name: adk-component-api-stability
 description: "用于组件 API 演进时检查调用方、兼容边界、迁移与回滚证据；不用于未经设计直接大范围改签名或纯格式修改。"
-version: 1.0.1
-last_updated: 2026-11-03
+version: 1.0.2
+last_updated: 2026-11-15
 triggers:
   - "API稳定性"
   - "组件API"
@@ -20,113 +20,73 @@ constraints:
 # adk-component-api-stability
 
 ## Goal
-- 建立 API 稳定性基线，控制破坏性变更风险。
-- 确保嵌入式组件（HAL/BSP/协议栈）接口在版本迭代中的向后兼容。
+- 建立 API 稳定性基线，控制嵌入式 HAL/BSP/协议栈的破坏性变更风险。
+- 分别验证源码 API、二进制 ABI 与运行行为，结论限定于真实消费者和目标。
 
 ## Prerequisites
-- 收集 API 使用方清单与版本分布。
-- 明确当前语义不稳定点与历史兼容问题。
-- 准备 ABI 检查工具（abidiff / abi-compliance-checker）。
+- 收集 API 使用方清单与版本分布，以及新旧源码/制品、公开头文件和历史兼容问题。
+- 锁定目标架构、toolchain/ABI flags、shared/static library、header-only 或 firmware 接口类型。
+- 确认是否承诺旧二进制兼容，以及类型分析工具和 host/emulator/board runner；无执行后端时只做可完成的静态分析。
 
 ## Workflow
-1. **盘点公开 API**：按稳定（stable）/试验（experimental）/废弃（deprecated）分类。
-   ```bash
-   # 扫描公开符号
-   nm -D --defined-only libcomponent.so | grep " T " | sort
-   # 扫描头文件导出
-   rg -n "^(int|void|struct|enum|typedef).*\(" include/component/*.h
-   # 查找废弃标记
-   rg -n "deprecated|DEPRECATED|__attribute__.*deprecated" include/
-   ```
-2. **ABI 兼容性检查**：对比新旧版本的 ABI 差异。
-   ```bash
-   # 使用 abidiff 检查 ABI 变化
-   abidiff libcomponent_old.so libcomponent_new.so
-   # 使用 abi-dumper + abi-compliance-checker
-   abi-dumper libcomponent_old.so -o old.abi
-   abi-dumper libcomponent_new.so -o new.abi
-   abi-compliance-checker -l libcomponent -old old.abi -new new.abi
-   ```
-3. **API 版本管理**：遵循语义化版本（SemVer），维护变更日志。
-   ```bash
-   # 检查版本号定义
-   rg -n "VERSION|version" include/component/version.h
-   # 生成变更日志
-   git log --oneline --since="$(git log -1 --format=%ai v1.2.0)" --grep="api\|API\|breaking"
-   ```
-4. **兼容测试设计**：老版本调用方回归验证。
-   ```bash
-   # 编译兼容性测试
-   gcc -I include/ -L . -lcomponent -o compat_test_v1 tests/compat_v1.c
-   # 运行兼容回归
-   ./compat_test_v1 && echo "ABI compatible" || echo "ABI broken"
-   ```
-5. **评估兼容影响**：识别破坏性变更和行为变更。
-6. **制定演进策略**：版本号规则、弃用窗口（>= 2 个版本）、迁移提示。
-7. **形成发布建议**：可放行条件与阻断项。
+1. **盘点契约与消费者**：按 stable/experimental/deprecated 分类公开函数、类型、宏、回调和数据格式，找实际调用方；符号/正则扫描只是入口，不能覆盖宏、内联与动态调用。
+2. **源码 API**：用旧消费者源码对新头文件和新实现构建，核签名、宏、类型、错误码及编译条件；按项目真实 toolchain/target 执行，不默认宿主 gcc。
+3. **二进制 ABI**：仅对有二进制兼容承诺的接口检查。核架构、调用约定、布局、导出符号/版本和 ABI flags；ELF 类型比较先确认匹配的 DWARF/CTF/BTF 等信息。`nm` 或缺类型信息的报告只能说明符号层差异。
+4. **旧二进制验证**：保留旧消费者 executable/object 的原始字节；动态库场景在隔离环境替换新库，静态库场景用旧 object 链接新 archive。只在匹配的 host/emulator/board runner 上运行，不把重编消费者成功当作旧二进制兼容。缺后端记 compile-only/not-run。
+5. **行为兼容**：复用旧契约的正常、边界、错误和生命周期用例；分别记录 API 构建、ABI 比较与运行结果。失败保留原始退出码，工具错误不能记为兼容通过。
+6. **演进与交付**：按消费者版本及项目承诺确定 SemVer、弃用窗口、迁移和回滚路径；输出验证范围、破坏性变更和缺口。本 Skill 给发布建议，不自行发布或通知外部人员。
 
 ## Commands
+仅在已授权、真实目标使用对应工具时采用；从项目构建/测试配置和已核验的帮助中选择完整定向命令，确认真实 runner，不拼接假定的通用筛选参数：
 ```bash
-# 公开 API 扫描
-rg -n "public|export|__attribute__.*visibility.*default" <component_path>
-
-# ABI 检查
+rg -n "public|export|deprecated|DEPRECATED|VERSION" <component_path>
+# ELF shared library 示例；需匹配的类型调试信息
 abidiff libcomponent_old.so libcomponent_new.so
-abi-compliance-checker -l libcomponent -old old.abi -new new.abi
-
-# 版本号检查
-rg -n "#define.*VERSION" include/
-
-# 兼容性测试
-<project-test-cmd> --filter compatibility
-
-# 符号导出检查
-nm -D --defined-only libcomponent.so | c++filt | grep " T "
-
-# 头文件依赖分析
-gcc -M -I include/ src/component.c | head -20
+# 符号检查只提供局部证据，不证明布局/调用约定兼容
+nm -D --defined-only libcomponent.so
+<reviewed-compatibility-command>
 ```
+
+以下仅为已确认 native GCC 工程的**源码兼容**示例；库放在消费者之后，运行时库查找按项目隔离配置：
+```bash
+set -euo pipefail
+gcc -I include/ tests/compat_v1.c -L . -lcomponent -o compat_test_v1
+if ./compat_test_v1; then
+  echo "source compatibility case passed"
+else
+  compat_status=$?
+  echo "compatibility case failed: $compat_status" >&2
+  exit "$compat_status"
+fi
+```
+`abidiff` 的非零状态含工具错误、ABI 变化等位标志，按实际版本解释；不得把所有非零笼统归为 breaking，也不能用 `|| echo` 吞掉失败。参考：https://sourceware.org/libabigail/manual/abidiff.html 。
 
 ## Evidence Template
 ```md
-- API Inventory:
-  | Category | Count | Examples |
-  |----------|-------|---------|
-  | Stable | __ | func_a, func_b |
-  | Experimental | __ | func_x |
-  | Deprecated | __ | func_old (remove in v2.0) |
-- ABI Check Result:
-  - Added symbols: __
-  - Removed symbols: __ (BREAKING)
-  - Changed signatures: __
-- Breaking Changes: [list with migration path]
-- Deprecation Window: [version range for removal]
+- Target / Toolchain / Old-New Artifacts:
+- API Inventory: stable / experimental / deprecated + consumers
+- Source API / Binary ABI / Behavior Result: pass | fail | partial | not-run | not-applicable
+- ABI Differences and Type Information Coverage:
+- Breaking Changes and Migration:
+- Deprecation Window:
 - Consumer Impact:
-  | Consumer | Version | Affected APIs | Action |
-  |----------|---------|---------------|--------|
-  | module_a | v1.2 | func_x | update call |
-- Compatibility Test Result: [pass/fail + log link]
+- Compatibility Tests: consumer/artifact/runner + exit code + log link
+- Rollback / Known Gaps:
 ```
 
 ## Failure Handling
-- 调用方影响无法评估时，强制 `needs-fix` 并扩大审查范围。
-- 若发现未声明的 breaking change，阻断发布并补迁移文档。
-- ABI 检查工具不可用时，手动对比 `nm` 符号表输出。
-- 若废弃 API 仍有活跃调用方，延长弃用窗口并发送通知。
+- 调用方影响无法评估时记 `needs-fix`，补使用证据，不猜测无消费者。
+- 未声明的 breaking change 阻断发布建议，先补迁移方案。
+- ABI 工具或类型信息不可用时可比较符号表，但 ABI 结论保持 `partial`；补旧 object/executable 与目标验证。
+- 废弃 API 仍有活跃调用方时调整迁移/弃用安排；通知内容和收件人交给已有授权流程。
 
 ## Quality Gate
-- 必须区分行为变更与签名变更。
-- 必须给出调用方影响清单和迁移路径。
-- 兼容回归结果必须可追溯到命令或报告。
-- ABI 检查必须零未声明的 breaking change 方可发布。
-- 版本号必须遵循 SemVer 规则（MAJOR.MINOR.PATCH）。
-
----
+- 区分行为变更与签名/布局变更，给出真实调用方影响和迁移路径。
+- 源码重编通过、符号名不变和 host 测试通过均不能替代所承诺的目标 ABI 验证。
+- 兼容回归可追溯到命令、输入制品和报告；ABI 检查零未声明 breaking change，缺口不能算通过。
+- 版本遵循 SemVer；发布与设备操作仍由各自授权流程执行。
 
 ## 健壮性规范
-
-- **输入验证**: 执行前校验所有必要输入是否存在且格式正确
-- **重试策略**: 外部命令失败时最多重试 3 次，指数退避（1s, 2s, 4s）
-- **超时控制**: 单步操作超时 30 秒，整体流程超时 300 秒
-- **异常隔离**: 单个步骤失败不阻塞其他独立步骤
-- **日志记录**: 关键操作记录命令、退出码、耗时
+- 执行前核输入、工具、目标与权限；不把本 Skill 当作构建、设备或发布的新授权源。
+- 超时按构建规模、工具与 runner 预算；仅重试已判定的瞬时工具故障，不重跑兼容失败刷绿。
+- 独立检查可继续，失败不隐藏；记录命令、原始退出码、耗时和日志。

@@ -89,7 +89,7 @@
 - **E1 轻量**：仅明确评估为 low risk、workspace-only 的局部实现。仍使用唯一 `docs/changes/<id>/` 变更合同；`requirements.md` 可缩至目标/非目标/验收，`design.md` 可缩至边界/影响/回滚，`tasks.md` 可缩至单个带 verify 的任务。三个文件仍存在；绝不省掉 R2 阶段门、基本 diff/test 或安全验证。当前未被路由显式判低风险的任务**不得自动使用 E1**。
 - **E2 标准**：中风险或未知风险默认；按现有需求、设计、测试和 Spec/Quality 双维审查推进，必要时进行关键假设证伪。
 - **E3 严格**：高风险、live-device、Flash/OTA、签名/权限、存储迁移、真实发布或明确升级效果的动作；独立证伪/负向测试/回滚/来源证据不可省。真实设备写入与发布仍需独立授权。
-- 该等级是执行深度建议，不是 permission/approval/canonical change 的新事实来源。生产 matcher 可返回 `execution_effort` 与 `effort_basis`；`mutation_permission`、effect ceiling、live-device/release authorization 仍独立 fail-closed。匹配失败或风险不明不得用 E0/E1 绕过。
+- 该等级是执行深度建议，不是 permission/approval/canonical change 的新事实来源。生产 matcher 可返回 `execution_effort` 与 `effort_basis`；`mutation_permission`、effect ceiling、live-device/release authorization 仍独立 fail-closed。匹配失败或风险不明不得用 E0/E1 绕过。当前 Manifest 没有可达的 E1 实现路由；启用前须另行验证可信低风险来源与拒绝路径，不能用 task-cost 的 micro 标签代替。
 - 相同目标应优先删减冗余状态、适配器和 Agent 轮次，而不是新增平行 Skill 或 Gate；只有固定源码/模型/预算下的真实 A/B 证据能证明效率收益。
 
 ## 八阶段生命周期框架

@@ -208,6 +208,16 @@ bash scripts/devkit.sh goal check
 bash scripts/devkit.sh goal check --summary-json
 ```
 
+生成或恢复具体任务的 Goal 合同时，使用下列独立的只读入口：
+
+```bash
+bash scripts/devkit.sh goal plan-check --plan <goal.json>
+bash scripts/devkit.sh goal render --plan <goal.json>
+bash scripts/devkit.sh goal resume --plan <goal.json> --state <current.json>
+```
+
+`plan-check` 校验待执行批次；`resume` 可查看原批次已关闭或被阻塞后的状态，保留证据、阻塞和在途工作，并不执行或重新选择任务。二者都不验证业务证据内容、不授予完成权限或修改原生预算。恢复输入和输出各限 8 KiB，超限明确失败；完整 Goal 输入限 64 KiB，历史按引用读取。示例见 `skills/adk-goal-authoring/references/goal-plan.json`。
+
 ## capability
 
 检查 ADK 功能健康闭环，确认 goal -> agent -> skill -> workflow -> script -> test -> doc 引用完整。

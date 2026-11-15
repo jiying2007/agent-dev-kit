@@ -58,6 +58,6 @@ rtk git diff --check --cached
 - Fix Plan:
 - Re-review Result:
 - Final Verdict: pass | needs-fix
-- Quality Verdict: locally-clean | independent-final-pass | needs-fix
+- Review Independence Result: locally-clean | independent-final-pass | needs-fix
 - Final Readiness: true | false
 ```

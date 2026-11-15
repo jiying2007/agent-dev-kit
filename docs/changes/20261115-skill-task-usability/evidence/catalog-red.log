@@ -1,0 +1,4 @@
+[OK] catalog generated: /tmp/tmp.0ZRzvFMsIs/catalog.md
+Traceback (most recent call last):
+  File "<stdin>", line 31, in <module>
+AssertionError: ('adk-runtime-router', '技能路由')

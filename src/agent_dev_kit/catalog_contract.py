@@ -167,11 +167,14 @@ def find_rows(manifest: Manifest, kind: str, keyword: str) -> list[str]:
         for item in records:
             name = str(item.get("name", ""))
             path = str(item.get("path", ""))
+            triggers = ""
             if label in {"skill", "optional-skill"}:
-                desc = str(_skill_frontmatter(manifest.root, item).get("description", ""))
+                metadata = _skill_frontmatter(manifest.root, item)
+                desc = str(metadata.get("description", ""))
+                triggers = _list_text(metadata.get("triggers"))
             else:
                 desc = str(item.get("description") or item.get("role") or "")
-            haystack = " ".join([name, desc, str(item.get("primary_agent", "")), str(item.get("primary_skill", ""))]).casefold()
+            haystack = " ".join([name, desc, triggers, str(item.get("primary_agent", "")), str(item.get("primary_skill", ""))]).casefold()
             if needle in haystack:
                 rows.append(f"{label}\t{name}\t{desc}\t{path}")
     if kind in {"all", "profile"}:

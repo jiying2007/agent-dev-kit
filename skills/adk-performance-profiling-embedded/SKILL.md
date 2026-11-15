@@ -1,8 +1,8 @@
 ---
 name: adk-performance-profiling-embedded
 description: "用于有明确指标时对嵌入式真实负载做性能分析和可比较的 A/B 验证；无指标不启用，也不用于仅凭推测宣布性能改善。"
-version: 1.1.3
-last_updated: 2026-11-14
+version: 1.1.4
+last_updated: 2026-11-15
 triggers:
   - "性能分析"
   - "性能优化"
@@ -14,7 +14,7 @@ inputs:
 outputs:
   - 瓶颈定位与优化建议
 constraints:
-  - 优化前后必须可量化对比
+  - 优化效果必须可量化对比；只定位瓶颈时不要求已有候选改动
 ---
 
 # adk-performance-profiling-embedded
@@ -27,78 +27,43 @@ constraints:
 - 固定基准场景。
 
 ## Workflow
-1. 核实**真实负载**计数和正确输出，无活动记 `run-validity=invalid`。
-2. 锁定源码/编译/输入哈希、频率/温度/供电/预热与样本预算。
-3. 交替 A/B/A/B 采样，比较 p50/p95/p99、波动和环境漂移。
-4. 检查热点/内存/功耗、功能等价及热稳定；无效样本记 no-gain。
-5. 超预算须回滚，长稳复验须用真实场景。
+1. 确定是定位瓶颈还是比较候选；核实**真实负载**计数和正确输出，无活动记 `run-validity=invalid`。
+2. 锁定源码/编译/输入哈希、频率/温度/供电/预热、采样点和样本预算；先核采样器对负载的扰动。
+3. **定位瓶颈**：低开销统计区分 CPU、等待/I/O、锁和内存，再采样最可能原因。交付证据、可证伪候选和最小实验；无候选版本不强制 A/B。
+4. **比较候选**：功能等价、负载有效后 A/B/A/B 采样，核波动与漂移。时延报 p50/p95/p99；吞吐报有效工作量/时间，Flash/RAM 报段/峰值，能耗按同工作量，不给段大小造分位数。
+5. 核功能、内存、功耗及热稳定。无效样本记 `invalid`，样本不足或无法区分噪声记 `inconclusive`；有效证据支持无收益才记 `no-gain`，均不能宣传收益。
+6. 副作用超预算须回滚；有效候选的长稳复验使用真实场景。只读诊断不要求实施优化或触发设备配置修改。
 
 ## Target Execution Gate
-- `linux-embedded`：内核/用户态、目标架构、性能计数器权限和内存资源决定是否可用 `perf`/`strace`/`valgrind`；用户态分析工具不可视作内核或 MCU 的通用工具。
-- `mcu-rtos` / `mcu-baremetal`：优先用板端计数/trace、DWT/ETM（如有）、GPIO timing、stack/heap high-water、工具链 ELF/map 与真实负载；没有板端证据则只做 host 结构分析并标 `not-measured`。
-- 采样之前核工具可用性、被测任务是否活动、负载输入、系统/编译身份和测量权限，禁止主动注入或配置修改以换取数据。
+- `linux-embedded`：按内核/用户态、架构、计数器权限和资源选择 `perf`/`strace`/`valgrind`；用户态工具不通用于内核或 MCU。
+- `mcu-rtos` / `mcu-baremetal`：用板端计数/trace、DWT/ETM（如有）、GPIO timing、stack/heap high-water、ELF/map；无板端证据时 host 分析记 `not-measured`。
+- 采样前核工具、活动负载、输入、系统/编译身份和权限；不隐式注入或改配置。资源不足时选 host memcheck/ASan 或板端计数，不能跨编译优化等级比较性能。
 
 ## Commands
+仅选目标支持的工具，窗口和次数来自采样预算。保留命令、退出码和耗时；采集失败不得消费旧结果：
 ```bash
-perf stat -p <pid> -- sleep 30
-perf record -g -p <pid> -- sleep 30 && perf report --stdio
-gprof <binary> gmon.out > analysis.txt
-valgrind --tool=callgrind --callgrind-out-file=callgrind.out <binary>
-callgrind_annotate callgrind.out
-valgrind --tool=massif --pages-as-heap=yes <binary>
-ms_print massif.out.<pid>
-<benchmark-cmd> --scenario <name> --repeat <declared-sample-count>
+perf stat -p <pid> -- sleep <sample-window-seconds>
+perf record -g -p <pid> -- sleep <sample-window-seconds> && perf report --stdio
+valgrind --tool=callgrind --callgrind-out-file=callgrind.out <binary> && callgrind_annotate callgrind.out
 ```
+benchmark 使用项目真实命令，不假定通用参数。
 
 ## MCU 资源实测（按需）
-涉及 MCU Flash/RAM/stack、DMA buffer 或 retention memory 时，读取 `references/mcu-memory-footprint.md`；必须用同工具链 ELF/map/size 的实测差值并验证行为/实时性，不能由代码行数推算节省。
-
-## 火焰图
-按目标 trace 能力选择 perf 或 DWT/ETM，生成热点归因报告。
-
-以下命令与表格的工具仅为**支持相应 Linux 目标时的参考**；裸机/RTOS 需用其实际 trace/资源工具，不把不存在的进程、LLC 或 Valgrind 输出记为有效。
+Flash/RAM/stack、DMA/retention 或 KWS/音频比较时读 `references/mcu-memory-footprint.md`；用同工具链 ELF/map/size，不由行数推算资源节省。
 
 ## 瓶颈定位清单
-| 瓶颈类型 | 诊断信号 | 工具 |
-|----------|----------|------|
-| CPU 热点 | perf 采样热点 | perf record + flame graph |
-| 内存泄漏 | 堆持续增长 | valgrind --tool=memcheck |
-| I/O 阻塞 | 线程长时间 wait | strace -T / perf trace |
-| 锁竞争 | mutex wait 时间长 | perf lock / lockstat |
-| 缓存未命中 | LLC miss rate 高 | perf stat -e cache-misses |
-
-## 合理化借口拦截
-
-| 借口 | 现实 | 正确做法 |
-|------|------|---------|
-| "看起来没问题了" | 未经量化对比无法确认优化效果 | 必须提供前后同口径数据 |
-| "Valgrind 太慢不实用" | 目标设备可能无法运行 Valgrind | 选择宿主 memcheck/ASan 或板端内存计数；不得把不同编译优化等级当作同口径性能对照 |
-| "火焰图看不懂" | 归因不等于整体收益 | 先用采样计数复核热点 |
+Linux 目标参考：CPU 热点用 perf/flame graph，堆增长用 memcheck，I/O 等待用 strace -T/perf trace，锁等待用 perf lock/lockstat，LLC miss 用 perf stat -e cache-misses；先核采样计数，热点不等于整体收益。
 
 ## Evidence Template
 ```md
 - Source / Build / Device / Input Hash:
 - Workload Counts / run-validity: valid | invalid | not-run
-- A/B/A/B Order and Sample Count:
-- p50/p95/p99 Before/After and Uncertainty:
+- Diagnosis: bottleneck evidence / falsifiable candidate / next experiment
+- Comparison (when requested): A/B/A/B order / sample count / KPI / uncertainty / inconclusive or no-gain reason
 - Functional and Thermal Side Effects:
 - Rollback / Reproduction:
 ```
 
-## Failure Handling
-- 数据波动过大时，先固定环境和输入再复测。
-- 优化带来副作用超阈值时立即回退并重新评估。
-
 ## Quality Gate
-- 必须提供优化前后同口径对比数据，含真实负载活动、输入输出等价性、环境/构建身份和 run-validity。
-- 必须说明收益与副作用是否可接受。
-- 必须给出可执行回退方案。
-
----
-
-## 健壮性规范
-
-- **输入验证**：校验输入与数据口径
-- **重试/超时**：按目标场景预算；无效测量不重复刷分。
-- **异常隔离**: 单个步骤失败不阻塞其他独立步骤
-- **日志记录**: 关键操作记录命令、退出码、耗时
+- 诊断有活动负载、归因证据和下一步实验；无有效采样只给假设与缺口。
+- 收益结论须有等价输入输出、环境/构建身份、run-validity 和同口径对照；噪声先查环境，不重复刷分。副作用超预算回滚。

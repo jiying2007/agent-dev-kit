@@ -1,0 +1,201 @@
+{
+  "schema": "adk-review-evidence/v1",
+  "subject_id": "20261115-skill-task-usability",
+  "scope": "source-change",
+  "owner": "leiwenjun",
+  "author_id": "ai/root",
+  "reviewer": {
+    "id": "ai/root/independent_review",
+    "kind": "ai",
+    "independence": "independent"
+  },
+  "evidence_completed_at": "2026-11-15T05:27:40.687596Z",
+  "reviewed_at": "2026-11-15T05:29:27.176113Z",
+  "verdicts": {
+    "spec": "pass",
+    "quality": "pass"
+  },
+  "findings": [
+    {
+      "id": "perf-record-error-masked-by-report",
+      "severity": "major",
+      "disposition": "fixed",
+      "reason": "Frozen Markdown retains record && report; independent injected record=42 skips report and exits 42, and report=7 after successful record exits 7."
+    },
+    {
+      "id": "profile-source-growth-ratchet-exceeded",
+      "severity": "major",
+      "disposition": "fixed",
+      "reason": "Diagnostic full run was 101/102 with only profile_context_footprint failing. Frozen source passes all original eight profile ratchets and final 102/102 full run without ratchet changes."
+    }
+  ],
+  "limitations": [
+    "AI identity is declared, not authenticated; review is independent from implementation and does not assert human or GitHub approval.",
+    "Source-change Spec/Quality pass only. Remote push is recorded blocked-by-auto-review; PR, remote CI, merge and release are not performed or approved by this review.",
+    "Ruff, mypy, shellcheck and real clang-tidy/cppcheck/GDB/abidiff execution are not supplied; local syntax/enumeration/GCC checks do not replace those tools. Required remote/static gates remain pending before merge/release.",
+    "No real model task A/B, native Skill loading, independent holdout, Token/cost/latency improvement, hardware outcome or product qualification has been measured.",
+    "65 identities were covered by implementation audit records and independently reconciled to Manifest; this is not a claim that every unchanged Skill was independently executed or all defects eliminated.",
+    "Only scratch review artifacts were written by this reviewer; no source, release, remote service, mailbox, user device, runtime or model service was modified.",
+    "Current Manifest has no reachable E1 low-risk implementation route. Micro task-cost is advisory and cannot override canonical routing or mutation deny. Documentation corrected; enabling E1 remains unimplemented."
+  ],
+  "policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+  "validator_sha256": {
+    "src/agent_dev_kit/review_evidence.py": "be4892f464496a29dbbb41ebb56c48984bf103d8eabe2ee6117bd583d1032c47",
+    "src/agent_dev_kit/strict_json.py": "72f06f4dcaebfed83bd1ae9876e38d4f7d82d8a1473b40b66beffb6338ee94a5",
+    "src/agent_dev_kit/readiness_evidence.py": "6fdfd5bea3ee097ac21d2b2ab469378c8c84f78856061b680ebb0c5f9d726778"
+  },
+  "target": {
+    "base_commit": "c57f4f8a7983f52257c0587eb85881a006e6dc07",
+    "head_commit": "092abfed44dabe74d13b2133dd57ac440c8455bb",
+    "original_patch_sha256": "b098a9087a3d4a1ba1709027ba435909bf83ee1089333d25023a33aab4f4f483"
+  },
+  "sources": [
+    {
+      "base": "record",
+      "path": "evidence/original.patch",
+      "sha256": "b098a9087a3d4a1ba1709027ba435909bf83ee1089333d25023a33aab4f4f483"
+    },
+    {
+      "base": "record",
+      "path": "evidence/source-bindings.json",
+      "sha256": "35a9aa968b2ed06fed34f150b25cf961586804458ab2b41ed6739ffe155bda32"
+    },
+    {
+      "base": "record",
+      "path": "requirements.md",
+      "sha256": "b9e1c1f1f40458b571b711cf95f8ae369454cb0d86a23593385e8320cdb6589a"
+    },
+    {
+      "base": "record",
+      "path": "design.md",
+      "sha256": "b31be15fc44b324f6dd3cfe9c74c1bc94230a92fe8b81aecc43a61fef9ba6936"
+    },
+    {
+      "base": "record",
+      "path": "audit.md",
+      "sha256": "b117cc721bd705740fc86c2a513b1020468511889aec52eb080e6145e71f180c"
+    }
+  ],
+  "evidence": [
+    {
+      "base": "record",
+      "path": "verification.md",
+      "sha256": "531b4a297fe42f06c9914d8427cf5f71e9a1441f3d410e51778042fa9c25c6d9"
+    },
+    {
+      "base": "record",
+      "path": "negative-results.md",
+      "sha256": "ffc19c41c7e49edc3e8da2741706548835757c668d1ad13428c0fa9402cfc6ec"
+    },
+    {
+      "base": "record",
+      "path": "completion.md",
+      "sha256": "a60c749112acc20e4be7e42ae3967f1afec83f2150f859123a272b8e1afcf8c2"
+    },
+    {
+      "base": "record",
+      "path": "review-findings.md",
+      "sha256": "c2c8d5d1a0c8476d9e005f335a46539dfd7df0d6cd695cf0cbfae6940d7c8b78"
+    },
+    {
+      "base": "record",
+      "path": "evidence/catalog-green.log",
+      "sha256": "84f5256213dd17038a68186278ea5cfae5c548d1fe33eb18d6e68fa7886ab780"
+    },
+    {
+      "base": "record",
+      "path": "evidence/catalog-red.log",
+      "sha256": "c5fad5488e04fa9ac070de8b42ed1c090530de38c54ffcd9ae4e0562e94ffeda"
+    },
+    {
+      "base": "record",
+      "path": "evidence/command-error-propagation.json",
+      "sha256": "7e52d1f06ecef7c65891f8a9e73a9933d4ff6c739c88860c045f2ead9de05bdf"
+    },
+    {
+      "base": "record",
+      "path": "evidence/diagnostic-full-timing.json",
+      "sha256": "39d9124d34174b2525e4d844a52b2174cff22c5c11b4bf3664e116765733c395"
+    },
+    {
+      "base": "record",
+      "path": "evidence/diagnostic-full-log.json",
+      "sha256": "33980ccbb9c039e269a22d15f57de4f3bf60d6f495dc9b7d8d520b0bac8039fc"
+    },
+    {
+      "base": "record",
+      "path": "evidence/domain-example-results.json",
+      "sha256": "034775eaee7b77b356af3b37719ae5ecf32cffbe8429bf4cfe41ae92a779a99c"
+    },
+    {
+      "base": "record",
+      "path": "evidence/domain-examples.py",
+      "sha256": "de31be291f25106ffd4ceadc2df4f5657dae85494f8ffe094d31c8af339f7392"
+    },
+    {
+      "base": "record",
+      "path": "evidence/format-validation.log",
+      "sha256": "9c9dfb250d298b5253df5037a69cb01dc2f04e718711e487b6fb130b56f4d0e1"
+    },
+    {
+      "base": "record",
+      "path": "evidence/full-timing.json",
+      "sha256": "3082ce09f3b06557d898d9c1c21091cb4c593de0762e48e71b4826d532372ac4"
+    },
+    {
+      "base": "record",
+      "path": "evidence/full.log",
+      "sha256": "0d1bee4e82001511f12291d9c3be0867228a5a396f58b49d3acd176ef3eed61e"
+    },
+    {
+      "base": "record",
+      "path": "evidence/functional-guard-log.json",
+      "sha256": "6f84cb53f8cb51539517eaa48f374c729ad6a4a26c802124db5e3c28667da28c"
+    },
+    {
+      "base": "record",
+      "path": "evidence/goal-green.log",
+      "sha256": "567224b43a40e1ecc7d0fecb4c5b95c56243d3b41a69520e4e378862a410b610"
+    },
+    {
+      "base": "record",
+      "path": "evidence/goal-red.log",
+      "sha256": "e3914b10bf2d6cba063185c54f837527850634bff68750ca0ef4b71ce5b2a97b"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-checks.json",
+      "sha256": "9bcbac166e3d1e1e176cace4e59410865b1976d45245046154a6545f02add923"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-review-binding.json",
+      "sha256": "53ab9c84d84c3e4c4e2deb67f44ae3b3feb6d0331067c4c72bcb43ccd20f7cf5"
+    },
+    {
+      "base": "record",
+      "path": "evidence/profile-ratchets.json",
+      "sha256": "d79e7b015533885e7f4ce9861734d9ec88a471591f8f2c5beac15f2f057d890b"
+    },
+    {
+      "base": "record",
+      "path": "evidence/skill-regression.log",
+      "sha256": "6d8fe5be6d76b1f908d484eed6d4f5ab3ee8043c51b87d55373379ef5ba7b0d1"
+    },
+    {
+      "base": "record",
+      "path": "evidence/strict-validation.log",
+      "sha256": "217441b0093d06aee8580867f6b676d59324c8118079d0f1be5a8ccf88043848"
+    },
+    {
+      "base": "record",
+      "path": "evidence/token-budget.json",
+      "sha256": "558da400c5f2a6ad7bf4fabd9a841dee3f7c627a851f5c7f22e10da4346f2775"
+    },
+    {
+      "base": "record",
+      "path": "evidence/validation-completion.json",
+      "sha256": "b2bdd0bb38e0365dada87b06d770d4075572198311a08802d2f46b064961a551"
+    }
+  ]
+}

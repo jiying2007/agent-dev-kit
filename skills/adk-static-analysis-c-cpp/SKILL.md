@@ -1,8 +1,8 @@
 ---
 name: adk-static-analysis-c-cpp
 description: "用于 C/C++ 静态分析告警分级、根因追踪与误报确认，并补最小复现；不用于把单次扫描当作完整功能或动态安全验收。"
-version: 1.0.4
-last_updated: 2026-11-10
+version: 1.0.5
+last_updated: 2026-11-15
 triggers:
   - "静态分析"
   - "代码检查"
@@ -20,67 +20,57 @@ constraints:
 # adk-static-analysis-c-cpp
 
 ## Goal
-- 通过静态分析尽早发现高风险缺陷并闭环整改。
+定位静态缺陷，给出可复验的修复与误报依据。
 
 ## Prerequisites
-- 确认编译数据库或分析配置可用。
-- 约定规则集严重级别映射（blocker/major/minor）。
+确认编译数据库、分析配置和规则严重级别。
 
 ## Target Eligibility（按目标分流，非一次跑全部工具）
-- `linux-embedded`：确认 kernel/userspace、交叉编译数据库与 sysroot；Linux/ASan/Valgrind 仅在该目标/宿主支持时选用。
-- `mcu-rtos`：锁定 RTOS、MCU ABI、具体编译器、链接脚本和构建变体；Zephyr 专属 Kconfig/Devicetree 只适用于实际 Zephyr 工程。
-- `mcu-baremetal`：无 libc/宿主 OS 的约束下优先编译器告警、ELF/map、MISRA/规则核对及可验证的静态路径；不得默认执行依赖 libc、进程或目标文件系统的工具。
-- 无匹配的 compile_commands/toolchain、不可获得的 target 或授权时标 `not-applicable / not-scanned`，禁止报告零告警等同于零缺陷。工具安装、私有许可证和固件写入均需独立权限。
+- `linux-embedded`：核 kernel/userspace、交叉编译数据库、sysroot；只选目标/宿主支持的工具。
+- `mcu-rtos`：核 RTOS、MCU ABI、编译器、链接脚本、构建变体；Zephyr 的 Kconfig/Devicetree 不通用于其他工程。
+- `mcu-baremetal`：按无 libc/宿主 OS 的约束选择告警、ELF/map、MISRA 和静态路径，不默认存在进程或文件系统。
+- 缺匹配的 compile_commands/toolchain、target 或授权，标 `not-applicable / not-scanned`；零告警不等于零缺陷。安装、许可证、固件写入需独立权限。
 
 ## Workflow
 1. 规则基线设定：按项目风险选择规则集。
-2. 执行扫描：输出问题、位置、规则编号和严重级别。
-3. 去噪与归因：剔除误报并保留依据。
-4. 整改优先级：优先处理内存安全、并发、未定义行为问题。
-5. 回归确认：修复后重跑扫描并比对残留问题。
+2. 源变化选对应 translation units（TU）；头文件按依赖文件/构建图选消费者 TU，规则/宏/构建变化选受影响目标。范围无法证明时扫该目标完整编译数据库，不能跳过仅 `.h/.hpp` 的变化。
+3. 带 TU、target flags、header filter 扫描，输出位置、规则与级别；头文件不能脱离构建上下文单独分析。
+4. 去噪与归因：剔除误报并保留依据。
+5. 整改优先级：优先处理内存安全、并发、未定义行为问题。
+6. 回归确认：修复后重跑受影响 TU 并比对残留问题，不以过滤修改行代替完整路径分析。
 
 ## Commands
+路径来自真实构建；规则按 `.clang-tidy`、cppcheck/PVS 配置选择，不一次运行全部工具：
 ```bash
 clang-tidy -p build src/example.c
 cppcheck --enable=warning,style,performance --project=compile_commands.json
-pvs-studio-analyzer analyze -o PVS-Studio.log -e <exclude_dir>
-plog-converter -a GA:1,2 -t tasklist PVS-Studio.log -o tasks.txt
-clang-tidy -p build --list-checks --checks='*' src/example.c 2>&1 | head -50
-cppcheck --enable=all --suppress=missingIncludeSystem --xml <src_dir> 2> report.xml
 ```
 
-## 工具配置与规则集
-| 工具 | 配置文件 | 说明 |
-|------|----------|------|
-| cppcheck | `.cppcheck-suppress` | 逐行抑制误报，必须附理由 |
-| clang-tidy | `.clang-tidy` | 启用/禁用检查项，按项目风险定制 |
-| PVS-Studio | `.pvsconfig` | 规则集选择与项目排除 |
-| compile_commands.json | `build/` | cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON 生成 |
-
 ## 缺陷严重级别映射
-| 级别 | 定义 | 处理策略 |
-|------|------|----------|
-| Blocker | 内存越界/UAF/空指针解引用 | 阻断合并，立即修复 |
-| Major | 整数溢出/未初始化/资源泄漏 | 根据项目 SLA 与发布风险门禁处理，不使用通用 48 小时限制 |
-| Minor | 代码风格/命名规范 | 下个迭代修复 |
-| Info | 潜在优化建议 | 按需处理 |
+按项目风险映射：Blocker（越界/UAF/空指针）阻断；Major（溢出/未初始化/泄漏）按 SLA 整改；Minor 风格与 Info 优化按需处理，不设通用时限。
 
 ## CI 集成示例
 
+按受信 `BASE_SHA/HEAD_SHA` 和构建依赖选 TU；纯文档可不扫描，仅无 .c/.cpp 变化不够。以下适用 Ubuntu/CMake：用真实 preset/toolchain 生成数据库，缺依赖映射时分析全部 TU；不同工具规则不可替代。
 ```yaml
-# 仅适用于已审查的 Ubuntu/CMake CI；BASE_SHA/HEAD_SHA 来自受信工作流
 static-analysis:
   steps:
-    - run: cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
     - run: cppcheck --enable=warning --error-exitcode=1 --project=build/compile_commands.json
     - run: |
         set -euo pipefail
-        : "${BASE_SHA:?trusted base missing}" "${HEAD_SHA:?trusted head missing}"
-        git diff --name-only --diff-filter=ACMR -z "$BASE_SHA" "$HEAD_SHA" -- '*.c' '*.cc' '*.cpp' |
-          xargs -0 -r clang-tidy -p build --warnings-as-errors='*'
+        python3 - <<'PY' | xargs -0 -r clang-tidy -p build --header-filter='.*' --warnings-as-errors='*'
+        import json, os, sys
+        from pathlib import Path
+        rows = json.loads(Path('build/compile_commands.json').read_text())
+        paths = sorted({str((Path(row['directory']) / row['file']).resolve(strict=True)) for row in rows})
+        if not paths:
+            raise SystemExit('no translation units: not-scanned')
+        for path in paths:
+            sys.stdout.buffer.write(os.fsencode(path) + b'\0')
+        PY
 ```
 
-必须先检查 compiler database、所选规则和差异文件；空输入应明确 `not-applicable`，不是零缺陷。需要有故意触发高优先级告警、CI 返回非零的负例证明。比较基线必须正确，PR/fork 场景保持受信触发和 secret 隔离。
+核数据库、规则、完成的 TU 与头文件范围；空库、缺工具、解析失败记 `not-scanned`。用仅改头文件的已知告警验证 CI 非零。PR/fork 保持受信触发与 secret 隔离。依据：https://clang.llvm.org/extra/clang-tidy/ 。
 ## Evidence Template
 ```md
 - Rule Set:
@@ -90,21 +80,5 @@ static-analysis:
 - Re-scan Delta:
 ```
 
-## Failure Handling
-- 扫描无法执行时先修复编译数据库再继续。
-- 误报争议需记录判定依据，不得直接忽略不留痕。
-
 ## Quality Gate
-- blocker 必须清零或给出批准豁免记录。
-- major 需有明确整改计划与 owner。
-- 扫描结果必须可复跑并可比对。
-
----
-
-## 合理化借口拦截
-
-| 借口 | 现实 | 正确做法 |
-|------|------|---------|
-| "这个告警是误报不用管" | 被忽略的"误报"往往是真实缺陷的遮羞布 | 按 SKILL.md 逐条确认并记录豁免理由 |
-| "老代码一直这么写的" | 技术债不会因为存在时间长就变成正确做法 | blocker 必须清零，major 需有整改计划 |
-| "静态分析太慢影响开发节奏" | 生产事故比分析慢 100 倍 | 将扫描集成到 CI，结果可复跑可比对 |
+blocker 清零或有批准豁免，major 有整改计划与 owner；误报/抑制须留依据。结果可复跑可比对；配置故障先修复，不能将未扫描记成功。

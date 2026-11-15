@@ -2,6 +2,23 @@
 
 `agent-dev-kit`（ADK）是平台中立的 Agent 资产契约、编译、验证、评测与分发 SDK。它把 Agent、Skill、Profile、Workflow、治理契约和证据模型压实为可验证、可回滚、可发布的资产；ADK core 不绑定单一模型提供商、IDE、CLI 或生产 Agent runtime。
 
+## 用 Skills 完成任务
+
+已部署资产后，直接向目标 Agent 说明任务、已有材料和希望得到的结果。无需记住 65 个 Skill 名称；是否自动发现和触发取决于目标运行时已验证的加载能力。尚未部署时先看下方[快速开始](#5-快速开始)。
+
+| 任务示例 | 现有能力入口 | 应交付什么 |
+| --- | --- | --- |
+| “帮我比较两个方案，先找最影响决定的问题” | 需求澄清 / 交互式设计探索 | 可行选项、取舍、推荐和关键未决项；已有明确方案时接着执行 |
+| “按现有计划继续执行，复用已通过的结果” | 计划执行循环 / Goal 恢复 | 当前实际改动、验证结果、未关闭项及下一动作 |
+| “定位这个偶发超时，先建立可复现信号” | 系统化调试 | 最小复现、被证伪的假设、根因证据和修复路径 |
+| “实现这个 RTOS 驱动，并补超时和恢复测试” | 驱动实现 / IRQ-DMA / 嵌入式测试 | 目标代码、实际测试、构建结果及尚需上板的边界 |
+| “判断升级是否兼容现有调用方” | 组件 API 稳定性 | 源 API、二进制 ABI、行为兼容的分别结论和迁移办法 |
+| “只找 CPU 和内存瓶颈，先不改代码” | 嵌入式性能分析 | 可比负载下的热点、资源测量和下一次最小实验 |
+| “核实这条 Review 意见；别重新审整仓” | 代码 Review 的局部反馈核验 | 原意见、证据、判定及必要的最小动作 |
+| “把这个决定写成同事能独立理解的 ADR” | ADR / 文档交接 | 可使用的正文、决策理由、依据与适用边界 |
+
+完整的现有能力见 [Skill 目录](docs/agent-skill-catalog.md)；按任务准备输入、判断结果和处理缺工具，见[使用说明](docs/usage.md#按任务使用-skills)。optional 能力仅在已安装且任务适用时使用。普通 Skill 使用不要求运行 ADK 发布或源码治理检查。
+
 ## 权威状态模型
 
 ADK 不再在 README 中维护“候选 / 已发布 / live”之类可漂移的手写状态副本。状态分为四个正交维度：
@@ -11,7 +28,7 @@ ADK 不再在 README 中维护“候选 / 已发布 / live”之类可漂移的�
 - **Runtime conformance**：以 target/runtime receipt 与证据级别 `static / smoke / native / certified` 为权威。
 - **Product qualification**：由消费方/产品仓的 qualification 与 field evidence 独立决定，不由 ADK 组件版本继承。
 
-`manifest.json` 当前 source version 为 `11.3.1`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
+`manifest.json` 当前 source version 为 `11.3.2`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
 
 8.0.0 维护 CLI 迁移：`performance.sh optimize`、`auto-ops.sh cleanup/optimize` 仅输出有界只读计划，JSON 使用 `adk-maintenance-plan/v1` 与 `status=planned`；维护 `--apply` 返回 blocked、exit 2，不再自动删除文件或修改权限。调用方必须移除维护 `--apply` 并按 `applied=false` 处理报告；见 [维护迁移说明](docs/changes/20261006-comprehensive-contracts/design.md)。
 

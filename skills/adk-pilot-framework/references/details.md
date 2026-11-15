@@ -5,10 +5,9 @@
 ## 来源说明
 
 - **核心来源**：`llm_agent/AGENTS.md` 中的"D5-D7 实战试跑与回灌"流程
-- **Runbook 参考**：`docs/runbooks/production-deployment.md`
-- **门禁机制**：`scripts/check-adk-harden-readiness.sh --require-pilot`
-- **健康检查**：`scripts/health-check.sh` + target-specific smoke checks
-- **迭代依据**：`AGENTS.md` 第 3 节"先在 agent-dev-kit 完成资产化与验证、再交接到显式 tool target 试跑、再回灌 adk"双向闭环
+- **部署参考**：ADK 源仓的 `docs/adk-usage-guide.md`；其他项目读取自己的部署与恢复说明。
+- **检查入口**：目标实际声明的健康、加载与任务验收命令；不存在的旧脚本不视为可用。
+- **效果比较**：ADK 的 `docs/evals/skill-method-parity.md`；只做 smoke 时不加载完整比较协议。
 
 ## 模式描述
 
@@ -25,7 +24,7 @@
 ### 2. 试跑执行流程
 
 ```
-场景定义 → 能力安装 → 真实执行 → 证据收集 → 门禁验收 → 回灌决策
+场景定义 → 核对已部署能力 → 真实执行 → 产物验收 → 改进建议
 ```
 
 **Step 1: 场景定义**
@@ -42,10 +41,7 @@ success_criteria: <可量化验收标准>
 ```
 
 **Step 2: 能力交接**
-```bash
-bash scripts/devkit.sh convert --target claude-code --out /tmp/adk-handoff --profile personal-core
-bash scripts/devkit.sh runtime-boundary
-```
+先核现有能力来源和加载状态；需要安装/升级时交目标项目已授权的部署流程，准备好恢复入口后再试跑。不要为已有可用安装重复导出或重装。
 
 **Step 3: 真实执行**
 - 在目标目录执行真实任务
@@ -53,25 +49,21 @@ bash scripts/devkit.sh runtime-boundary
 - 禁止事后补写或美化日志
 
 **Step 4: 证据收集**
-```bash
-# 三联门禁证据
-bash scripts/health-check.sh <tool-target-dir> minimal
-bash scripts/devkit.sh runtime-boundary
-bash scripts/check-adk-harden-readiness.sh . --require-pilot --skip-full-suite
-```
+保留任务输入/源码身份、实际加载轨迹（可用时）、最终产物、验收命令与退出码、失败与重试、未取得的用量。使用目标当前声明且已核实的检查入口，不臆造通用命令。精简日志保留原文指针。
 
 **Step 5: 门禁验收**
-- 三联证据必须全部 PASS
-- 任一失败 → pilot-fail，转入调试
+- 任务验收与目标必需检查分别判断；不能用全部健康检查通过替代任务交付。
+- 实际行为失败、环境阻塞和证据不足分别记录；未知根因进入取证，不因一次不明失败直接淘汰能力。
 
 **Step 6: 回灌决策**
 
 | 结果 | 决策 | 动作 |
 |------|------|------|
-| 全部 PASS 且行为符合预期 | 采纳 | 升级为 adk 默认推荐 |
+| 全部 PASS 且行为符合预期 | 采纳候选 | 交独立采纳决策；不自动升级默认推荐 |
 | PASS 但行为有偏差 | 改进 | 记录偏差，优化后重跑 |
 | FAIL 且根因明确 | 修复 | 修复后重跑 |
-| FAIL 且根因不明 | 淘汰 | 记录负结果，降级或移除 |
+| FAIL 且根因不明 | 调查 | 保留失败，提出最小证伪实验，不直接删除能力 |
+| 环境阻塞或证据不足 | 暂不判断 | 明确恢复条件或缺失证据，不能算通过或能力失败 |
 
 ### 3. 试跑报告模板
 

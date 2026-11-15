@@ -13,16 +13,16 @@
 | L2 | 测试失败、接口变化、根因未明 | 局部原文窗口、调用方、关键 diff、错误栈 |
 | L3 | 高风险任务或交付争议 | 完整原文、完整日志、完整 diff |
 
-## Task Cost 路由
+## Task Cost 预算回执
 
-读取 Skill 或 Hub 前先按 `templates/context/task-cost-profile.md` 判定 `task_cost`：
+按 `templates/context/task-cost-profile.md` 估计读取预算；`task_cost` 不替代 canonical routing、风险评估或授权：
 
-- `micro`：一行文档、局部机械修改、明确的小测试；不加载 skill、不查 Hub，直接定向验证。
+- `micro`：一行文档、局部机械修改、明确的小测试的零 Skill/Hub 读取预算；只有已有可信执行路径满足此预算时才适用，不能据此跳过路由或要求的检查。
 - `standard`：单模块常规改动；最多一个 primary skill，只有项目事实相关时做 Hub 预检。
 - `complex`：跨文件、根因未明、共享契约或长任务；一个 primary skill，small Hub 预检，计划与阶段验证。
 - `high-risk`：安全、权限、迁移、生产、发布；L2/L3 原文、完整 gate、审批和回滚，Token 预算不得弱化证据。
 
-判级先于关键词匹配；零命中允许 micro/standard 直接执行。supporting skill 只补充主流程，不重复加载相邻工作流。
+零命中仍按 router 的 triage/abstain 处理，`mutation_permission=deny` 不得被预算回执覆盖。当前 Manifest 没有可达的 E1 实现路由，不能把 `micro` 输出当作 E1 已生效；已批准任务沿原执行 owner 续做。supporting skill 只补充主流程，不重复加载相邻工作流。
 
 ## 变换层边界
 
