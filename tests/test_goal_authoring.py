@@ -23,6 +23,147 @@ class GoalPlanTests(unittest.TestCase):
     def setUp(self):
         self.plan = json.loads(EXAMPLE.read_text())
 
+    def _resume_state(self):
+        return {
+            "schema_version": "adk.current-state/v1",
+            "goal_ref": "requirements.md#original-acceptance",
+            "milestone": "software verified; board awaiting authorization",
+            "evidence_refs": ["receipts/not-loaded.json"],
+            "blockers": ["UNKNOWN external effect; reconcile before retry"],
+            "next_actions": ["touch NEXT_ACTION_MUST_NOT_RUN"],
+            "history_refs": ["history/not-loaded.md"],
+            "work_in_progress": {
+                "ref": "current-batch.md", "status": "BLOCKED",
+                "prior_verified_checkpoint": 220, "replan": "keep original batch",
+                "qualification": "board evidence unavailable",
+            },
+        }
+
+    def _public_goal(self, action, plan, state):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            plan_path, state_path = root / "goal.json", root / "current.json"
+            plan_path.write_text(json.dumps(plan, ensure_ascii=False), encoding="utf-8")
+            state_path.write_text(json.dumps(state, ensure_ascii=False), encoding="utf-8")
+            before = {path.name: path.read_bytes() for path in root.iterdir()}
+            environment = dict(os.environ, ADK_PYTHON_BIN=os.sys.executable,
+                               PYTHONDONTWRITEBYTECODE="1")
+            result = subprocess.run(
+                ["bash", str(ROOT / "scripts/devkit.sh"), "goal", action,
+                 "--plan", str(plan_path), "--state", str(state_path)],
+                cwd=root, env=environment, capture_output=True, text=True, timeout=15,
+            )
+            self.assertEqual(before, {path.name: path.read_bytes() for path in root.iterdir()})
+            return result
+
+    def test_public_resume_preserves_state_and_never_executes_recorded_actions(self):
+        state = self._resume_state()
+        self.plan["deliverables"][0]["verify"] = ["touch VERIFY_MUST_NOT_RUN"]
+        result = self._public_goal("resume", self.plan, state)
+        self.assertEqual(0, result.returncode, result.stderr + result.stdout)
+        for value in (state["goal_ref"], state["milestone"], *state["blockers"],
+                      *state["evidence_refs"], *state["next_actions"], *state["history_refs"]):
+            self.assertIn(value, result.stdout)
+        for value in state["work_in_progress"].values():
+            self.assertIn(str(value), result.stdout)
+        self.assertIn("D-error [ready]", result.stdout)
+        self.assertIn("VERIFY_MUST_NOT_RUN", result.stdout)
+        self.assertNotIn("Goal 草案", result.stdout)
+        for flag in ("read_only=true", "runtime_authority=false", "completion_allowed=false",
+                     "evidence_contents_verified=false"):
+            self.assertIn(flag, result.stdout)
+
+    def test_public_resume_can_show_closed_batch_without_reopening_or_approving_it(self):
+        self.plan["deliverables"][0].update(status="closed", evidence=["receipts/closed.json"])
+        result = self._public_goal("resume", self.plan, self._resume_state())
+        self.assertEqual(0, result.returncode, result.stderr + result.stdout)
+        self.assertIn(self.plan["batch"]["id"], result.stdout)
+        self.assertIn("D-error [closed]", result.stdout)
+        self.assertIn("receipts/closed.json", result.stdout)
+        self.assertIn("completion_allowed=false", result.stdout)
+        for action in ("plan-check", "render"):
+            strict = self._public_goal(action, self.plan, self._resume_state())
+            self.assertEqual(1, strict.returncode, strict.stdout)
+            verdict = json.loads(strict.stdout)
+            self.assertIn("batch-selected-unavailable-deliverable", verdict["reasons"])
+            self.assertFalse(verdict["runtime_authority"])
+            self.assertFalse(verdict["completion_allowed"])
+
+    def test_public_resume_can_show_blocked_batch_and_unclosed_dependency(self):
+        self.plan["batch"]["deliverables"] = ["D-board"]
+        result = self._public_goal("resume", self.plan, self._resume_state())
+        self.assertEqual(0, result.returncode, result.stderr + result.stdout)
+        self.assertIn("D-board [blocked]", result.stdout)
+        self.assertIn("D-error [ready]", result.stdout)
+        self.assertIn(self.plan["batch"]["stop"]["external_trigger"], result.stdout)
+        strict = self._public_goal("plan-check", self.plan, self._resume_state())
+        self.assertEqual(1, strict.returncode, strict.stdout)
+        self.assertIn("batch-selected-unavailable-deliverable", json.loads(strict.stdout)["reasons"])
+
+    def test_public_resume_still_rejects_invalid_evidence_dependencies_and_state(self):
+        cases = (
+            (lambda p, s: p["deliverables"][0].update(status="closed"), "closed-without-evidence"),
+            (lambda p, s: p["deliverables"][1].update(status="ready"), "ready-or-closed-with-open-dependency"),
+            (lambda p, s: p["deliverables"][1].update(status="closed", evidence=["receipt"]),
+             "ready-or-closed-with-open-dependency"),
+            (lambda p, s: p["deliverables"][1].update(depends_on=["unknown"]), "unknown-dependency"),
+            (lambda p, s: p["deliverables"][0].update(status="blocked", depends_on=["D-board"]),
+             "dependency-cycle-or-unresolved"),
+            (lambda p, s: p["deliverables"][1].update(status="invalid"), "deliverable-status-invalid"),
+            (lambda p, s: p["batch"].update(deliverables=[]), "batch-selection-invalid"),
+            (lambda p, s: p["batch"].update(deliverables=["unknown"]), "batch-selection-invalid"),
+            (lambda p, s: p["parent_criteria"].append("AC-lost"), "original-criteria-unmapped"),
+            (lambda p, s: s.update(work_in_progress={"unknown": "value"}), "current-state-work-in-progress-invalid"),
+            (lambda p, s: s.update(next_actions=["a", "b", "c", "d"]), "state-next_actions-invalid"),
+        )
+        for mutate, reason in cases:
+            with self.subTest(reason=reason):
+                plan, state = copy.deepcopy(self.plan), self._resume_state()
+                plan["batch"]["deliverables"] = ["D-board"]
+                mutate(plan, state)
+                result = self._public_goal("resume", plan, state)
+                self.assertEqual(1, result.returncode, result.stdout)
+                verdict = json.loads(result.stdout)
+                self.assertIn(reason, verdict["reasons"])
+                self.assertFalse(verdict["runtime_authority"])
+                self.assertFalse(verdict["completion_allowed"])
+        self.plan["deliverables"][1]["status"] = "open"
+        self.plan["batch"]["deliverables"] = ["D-board"]
+        result = self._public_goal("resume", self.plan, self._resume_state())
+        self.assertEqual(1, result.returncode, result.stdout)
+        self.assertIn("batch-selected-with-open-dependency", json.loads(result.stdout)["reasons"])
+
+    def test_public_resume_fails_on_output_limit_without_truncating_blockers(self):
+        state = self._resume_state()
+        self.plan["objective"] = "original objective " + "x" * 5000
+        state["blockers"] = ["must preserve entire blocker " + "y" * 4000]
+        self.assertLess(len(json.dumps(self.plan, ensure_ascii=False).encode()), 65536)
+        self.assertLess(len(json.dumps(state, ensure_ascii=False).encode()), 8192)
+        result = self._public_goal("resume", self.plan, state)
+        self.assertEqual(1, result.returncode, result.stdout)
+        verdict = json.loads(result.stdout)
+        self.assertEqual("fail", verdict["status"])
+        self.assertTrue(verdict["read_only"])
+        self.assertIn("rendered frontier exceeds byte limit", verdict["error"])
+
+    def test_public_resume_keeps_input_byte_limits(self):
+        for oversized in ("plan", "state"):
+            with self.subTest(oversized=oversized):
+                plan, state = copy.deepcopy(self.plan), self._resume_state()
+                if oversized == "plan":
+                    plan["objective"] = "x" * 65537
+                else:
+                    state["blockers"] = ["x" * 8193]
+                result = self._public_goal("resume", plan, state)
+                self.assertEqual(1, result.returncode, result.stdout)
+                verdict = json.loads(result.stdout)
+                self.assertEqual("fail", verdict["status"])
+                self.assertTrue(verdict["read_only"])
+                self.assertIn("JSON exceeds byte budget", verdict["error"])
+
+    def test_example_does_not_propose_unmeasured_token_budget(self):
+        self.assertIsNone(self.plan["budget_proposal"]["tokens"])
+
     def test_public_adk_cli_runs_from_another_project(self):
         with tempfile.TemporaryDirectory() as temp:
             environment = dict(os.environ, ADK_PYTHON_BIN=os.sys.executable)

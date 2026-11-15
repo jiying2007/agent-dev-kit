@@ -17,5 +17,5 @@
     "stop": {"same_failure_limit": 2, "nonclosing_batch_limit": 4, "external_trigger": "匹配板级输入和设备授权到达才重查D-board"},
     "replan_effect": "若本批不能关闭D-error，固定未解错误路径，改依赖或验证路径并在下一批核验效果；不以新增测试数计关闭。"
   },
-  "budget_proposal": {"tokens": 300000, "basis": "示例提案；实际项目按恢复成本与预期工具轮次估算并取得预算授权", "native_goal_applied": false}
+  "budget_proposal": {"tokens": null, "basis": "尚无受信模型用量；待真实测量后再提出有依据的估计", "native_goal_applied": false}
 }

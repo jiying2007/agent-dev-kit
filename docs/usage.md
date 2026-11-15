@@ -2,7 +2,36 @@
 
 `agent-dev-kit` 是通用 ADK 资产包。它维护 Agent、Skill、Profile、Workflow 和治理契约，并通过显式 direct `tool_targets` 导出到不同运行时；需要外部声明式链路承接的运行体系进入 `external_handoff_targets`，core 不绑定任何单一平台。
 
-完整使用指南见 `docs/adk-usage-guide.md`；本文保留为常用命令速查。
+本文先说明如何用现有 Skills 完成任务，再提供源码管理命令速查；安装、升级和目标环境细节见 `docs/adk-usage-guide.md`。
+
+## 按任务使用 Skills
+
+已安装资产时，先给任务目标和现有材料，Agent 按当前阶段选择入口。一个请求通常只需要一个 primary；辅助能力只在当前步骤确实需要时加载。
+
+| 当前要解决的问题 | 最少有用输入 | 应得到的可用结果 |
+| --- | --- | --- |
+| 澄清需求、头脑风暴、挑战方案 | 目标、约束、已有决定；未知项可以明确未知 | 少量真正改变选择的问题、可行方案、推荐与验收；明确实施请求不重新访谈 |
+| 计划、实现与持续推进 | 现有合同或任务、当前状态、相关源码与测试入口 | 可关闭的工作切片、真实改动及结果；继续已有目标，恢复阻塞与在途工作 |
+| 驱动、BSP、RTOS、协议、接口 | 目标芯片/板/运行模型、规格、工具链、消费者 | 适配目标的设计或实现、构建/测试及未上板边界；源码任务与设备操作分别判断 |
+| 调试、core、性能、资源优化 | 故障或目标指标、输入负载、匹配制品、现有观测 | 最短可证伪实验、根因/热点证据；定位任务可止于诊断，比较任务再验证收益 |
+| 测试、Review、静态分析、安全 | 要证明的行为或待核实的意见、变更、测试/扫描入口 | 用例或已授权测试代码、真实 finding 与复现；误报、未覆盖范围分别说明 |
+| 文档、ADR、复盘、交接 | 读者、用途、素材与既有格式 | 能直接使用的正文或指定局部修改；事实、数字、未决状态保真 |
+| 发布、迁移、归档、分支收尾 | 版本、目标、验收结果、现有权限与恢复方案 | 可执行的发布/迁移准备或收尾结果；外部实际完成以真实回执为准 |
+| 检索、资料获取、记忆和上下文 | 已授权来源、具体问题或筛选条件、当前需要的事实 | 有来源的可用内容、必要原文入口、明确缺失；不把完整历史反复加载 |
+
+不必先填写一整套表：能从仓库、已有状态或材料读出的信息先读取；只在缺失信息会改变当前决定时询问。已有授权可覆盖的步骤连续推进，支持完整交付；超出权限的设备、发布等操作仍走原审批。简单任务使用已有轻量路径和定向验证，高风险按实际边界升级。
+
+**结果要求随请求变化。** “只分析”交付分析；“写测试/修复/修改文档”在已有实施授权内交付实际文件和验证；“继续”从当前状态接续。不能把计划写完、命令启动或模板填满作为实际工作完成。
+
+**缺工具时先给出仍能完成的结果。** 例如无目标板时完成源码/交叉构建并标出待上板项；没有 ABI 类型信息时只报告已核实的符号差异；获取到网页空壳时报告正文未取得。不要把未执行算成功，也不要为了完成普通任务安装 ADK 的内部构建环境。
+
+完整清单由 [Manifest 生成的目录](agent-skill-catalog.md) 提供，包含全部 core 和 optional Skills；[路由矩阵](reference/skill-routing-matrix.md) 说明主入口与辅助关系。以下命令用于 ADK 源码工作区内查询，不是用户每次使用 Skill 的前置步骤：
+
+```bash
+bash scripts/devkit.sh catalog find --type skill --keyword 调试
+bash scripts/devkit.sh catalog find --type optional-skill --keyword "fetch data"
+bash scripts/devkit.sh match --skill adk-planning-execution-loop --text "按现有计划继续执行"
+```
 
 ADK 构建与管理环境为 Python 3.12.x，固定依赖为 `PyYAML==6.0.3` 与 `jsonschema==4.26.0`；已导出纯 Skill 资产不依赖 ADK Python。发布前安装 `.[quality]` 并执行 Ruff 与 pip-audit；工具缺失或审计源不可用时不得声称质量门禁通过。
 
@@ -110,7 +139,7 @@ bash scripts/devkit.sh export --target opencode --profile team-core --with-optio
 bash scripts/devkit.sh catalog build
 bash scripts/devkit.sh catalog find --type optional-skill --keyword 事故
 bash scripts/devkit.sh match --skill adk-requirements-triage --text "收到模糊需求或跨团队需求时"
-bash scripts/devkit.sh match --skill adk-planning-execution-loop --scope optional-skill --text "复杂任务需要计划审查和执行检查点时"
+bash scripts/devkit.sh match --skill adk-planning-execution-loop --text "按现有计划继续执行"
 ```
 
 技能组合规则：

@@ -38,6 +38,11 @@ def _texts(value: Any, minimum: int = 1, maximum: int = 100) -> bool:
 
 
 def check(plan: dict, state: Optional[dict] = None) -> dict:
+    """Validate a batch selected for execution; recovery never weakens this API."""
+    return _check(plan, state, for_resume=False)
+
+
+def _check(plan: dict, state: Optional[dict], *, for_resume: bool) -> dict:
     reasons = []
     required = {"schema_version", "objective", "original_goal_ref", "constraints",
                 "parent_criteria", "deliverables", "batch", "budget_proposal"}
@@ -109,9 +114,11 @@ def check(plan: dict, state: Optional[dict] = None) -> dict:
         selected = batch["deliverables"]
         if not _text(batch["id"]) or not _texts(selected, maximum=4) or any(x not in ids for x in selected):
             reasons.append("batch-selection-invalid")
-        elif any(statuses.get(x) not in ("ready", "open") for x in selected):
+        elif not for_resume and any(statuses.get(x) not in ("ready", "open") for x in selected):
             reasons.append("batch-selected-unavailable-deliverable")
-        elif any(statuses.get(dep) != "closed" for x in selected for dep in graph.get(x, [])):
+        elif any(statuses.get(dep) != "closed" for x in selected
+                 if not (for_resume and statuses.get(x) == "blocked")
+                 for dep in graph.get(x, [])):
             reasons.append("batch-selected-with-open-dependency")
         if not _texts(batch["scope"], maximum=20) or not _text(batch["done_when"]):
             reasons.append("batch-exit-or-scope-missing")
@@ -154,7 +161,8 @@ def check(plan: dict, state: Optional[dict] = None) -> dict:
 
 
 def render(plan: dict, state: Optional[dict] = None) -> str:
-    lines = ["Goal 草案（未启动、未修改既有目标）：", plan["objective"],
+    heading = "Goal 只读恢复摘要：" if state is not None else "Goal 草案（未启动、未修改既有目标）："
+    lines = [heading, plan["objective"],
              "完整原合同：" + plan["original_goal_ref"],
              "约束：" + "；".join(plan["constraints"]),
              "当前批次：" + plan["batch"]["id"], "退出条件：" + plan["batch"]["done_when"],
@@ -170,7 +178,27 @@ def render(plan: dict, state: Optional[dict] = None) -> str:
              "阶段仅使用定向/里程碑验证；整体完成才运行 final。",
              "原目标全部验收保留；子项关闭不等于父目标完成，不重建或清零既有 Goal。"]
     if state is not None:
-        lines += ["当前：" + state["milestone"], "下一动作：", *state["next_actions"]]
+        lines += ["以下仅展示输入记录；证据内容未验真，不执行验证、重试或下一批次。",
+                  "read_only=true; runtime_authority=false; completion_allowed=false; evidence_contents_verified=false",
+                  "原批次条目（状态不代表执行许可）："]
+        items = {item["id"]: item for item in plan["deliverables"]}
+        for key in plan["batch"]["deliverables"]:
+            item = items[key]
+            dependencies = [f"{dep} [{items[dep]['status']}]" for dep in item["depends_on"]]
+            unresolved = [dep for dep in item["depends_on"] if items[dep]["status"] != "closed"]
+            lines += [f"{key} [{item['status']}]：{item['outcome']}",
+                      "  原验收：" + ", ".join(item["parents"]),
+                      "  依赖：" + (", ".join(dependencies) or "无"),
+                      "  未关闭依赖：" + (", ".join(unresolved) or "无"),
+                      "  证据引用：" + (", ".join(item["evidence"]) or "无"),
+                      "  验证入口（未执行）：" + "；".join(item["verify"])]
+        lines.append("当前状态（引用按需回读）：")
+        for field in ("goal_ref", "milestone", "blockers", "evidence_refs", "work_in_progress",
+                      "next_actions", "history_refs"):
+            if field in state:
+                value = state[field]
+                rendered = value if isinstance(value, str) else json.dumps(value, ensure_ascii=False)
+                lines.append(field + ": " + rendered)
     else:
         wanted = set(plan["batch"]["deliverables"])
         for item in plan["deliverables"]:
@@ -190,13 +218,15 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             raise ValueError("resume requires --state")
         plan, plan_raw = _load_document(args.plan, MAX_PLAN_BYTES)
         state = load(args.state, MAX_STATE_BYTES) if args.state else None
-        result = check(plan, state)
+        # Only the read-only resume action may show an inactive original batch.
+        # All evidence, dependency, state and input checks remain shared.
+        result = _check(plan, state, for_resume=True) if args.action == "resume" else check(plan, state)
         result["plan_sha256"] = hashlib.sha256(plan_raw).hexdigest()
         if args.action == "check" or result["status"] == "fail":
             print(json.dumps(result, ensure_ascii=False, separators=(",", ":")))
         else:
             output = render(plan, state)
-            if len(output.encode("utf-8")) > MAX_STATE_BYTES:
+            if len(output.encode("utf-8")) + 1 > MAX_STATE_BYTES:
                 raise ValueError("rendered frontier exceeds byte limit; shorten current batch without dropping original criteria")
             print(output)
         return 1 if result["status"] == "fail" else 0

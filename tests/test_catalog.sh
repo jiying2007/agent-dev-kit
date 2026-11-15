@@ -92,13 +92,35 @@ from pathlib import Path
 
 from agent_dev_kit.catalog_contract import (
     catalog_markdown,
+    find_rows,
     routing_matrix_markdown,
     workflow_matrix_markdown,
 )
 from agent_dev_kit.model import Manifest
+from agent_dev_kit.safe_yaml import safe_load
 
 root = Path(sys.argv[1]).resolve()
 manifest = Manifest.load(root)
+
+# A user should find a Skill by a phrase that the Skill itself advertises,
+# without knowing its internal name. Catalog discovery grants no execution.
+for section, kind, other_kind in (
+    ("skills", "skill", "optional-skill"),
+    ("optional_skills", "optional-skill", "skill"),
+):
+    for skill in manifest.data[section]:
+        content = (root / skill["path"]).read_text(encoding="utf-8")
+        meta = safe_load(content.split("---", 2)[1])
+        phrase = meta["triggers"][0]
+        expected = f"{kind}\t{skill['name']}\t"
+        rows = find_rows(manifest, kind, phrase)
+        assert any(row.startswith(expected) for row in rows[1:]), (skill["name"], phrase)
+        assert not any(f"\t{skill['name']}\t" in row for row in
+                       find_rows(manifest, other_kind, phrase)[1:])
+assert find_rows(manifest, "all", "no-such-adk-task-935283") == ["type\tname\tdescription\tpath"]
+assert find_rows(manifest, "optional-skill", "FETCH DATA") == find_rows(manifest, "optional-skill", "fetch data")
+assert any("\tadk-data-fetch\t" in row for row in find_rows(manifest, "optional-skill", "fetch data"))
+assert any("\tadk-hardware-debugging\t" in row for row in find_rows(manifest, "skill", "低功耗后无法唤醒"))
 
 cli_source = (root / "src/agent_dev_kit/cli.py").read_text(encoding="utf-8")
 runtime_source = (root / "src/agent_dev_kit/cli_runtime.py").read_text(encoding="utf-8")

@@ -1,8 +1,8 @@
 ---
 name: adk-token-context-governance
 description: "用于日志与上下文过长时设置 Token 预算、分层读取和原文回退门禁；不用于压缩掉高风险证据或放宽验证要求。"
-version: 1.3.2
-last_updated: 2026-11-14
+version: 1.3.3
+last_updated: 2026-11-15
 triggers:
   - "省 token"
   - "上下文太大"
@@ -66,7 +66,7 @@ constraints:
 7. 长期项目用 `PROJECT_MAP.md` 保存入口、测试、禁读目录、高风险区域和验证时间，不保存一次性日志。
 8. code intelligence 仅缩小阅读面；记录 `code_intelligence_provider_contract`：provider、query、provider_answered、fallback_used、confidence、returned_files、raw_evidence、omitted_reasons、source_reread_required；高风险完成前回读 source。
 9. 大型 tool/skill 目录按 `tool_search_context_contract` 延迟加载：记录 namespace_summary、initial_surface、deferred_surface、loaded_tools、trusted_inventory、schema_review、omitted_reasons；不得把 deferred loading 当成权限审批。
-10. 完成前跑 token budget 与 strict asset validation，并声明是否发生 `raw_fallback`。
+10. 完成前核对摘要能否支持当前决定、关键事实和阻塞是否保留、raw pointer 是否可用，并声明是否发生 `raw_fallback`。只有修改 ADK Skill/上下文策略资产且位于已核实源码工作区时才运行 token budget 与 strict asset validation；普通日志压缩不依赖 ADK Python 或内部测试。
 
 ## Impact-first Selection（有真实用量时）
 - 先按可观测的 `task_success / safety / latency / input_tokens / output_tokens / cached_tokens / tool_calls` 分清浪费来源：无新增事实的重复调用、串行外部检索瀑布、重复加载整段 reference、已知相同状态重复验证。能以缓存/确定性工具解决的，不触发额外模型轮次。
@@ -95,7 +95,7 @@ constraints:
 ## Quality Gate
 - `raw_evidence/confidence/fallback_condition` 齐全；预算配置含 `task_type/risk_level/read_tier/budget_profile/compress_allowed/raw_required`。
 - high risk 不以摘要为唯一依据；tool/skill 延迟加载记录 `trusted_inventory/deferred_surface/loaded_tools`，执行前完成 schema review。
-- 支持 usage 时记录 token/cache 指标；token budget 和 strict validation 通过。
+- 支持 usage 时记录 token/cache 指标，缺失记 `unavailable / not-measured`；资产维护时 token budget 和 strict validation 通过。资产大小检查不能代替当前任务的保真验证或真实 Token 测量。
 
 ## Evidence Template
 ```md

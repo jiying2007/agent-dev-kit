@@ -9,7 +9,7 @@
     "source_sha": "7aed1d2545babce16c41dc021ead01c8c324ce07"
   },
   "candidate": {
-    "planned_release": "v11.3.1",
+    "planned_release": "v11.3.2",
     "source_sha": null
   },
   "case_groups": {
@@ -67,6 +67,12 @@
   },
   "holdout_qualification": "development-fixture-only-after-author-exposure",
   "unexecuted_candidate_history": [
+    {
+      "planned_release": "v11.3.1",
+      "merged_main_sha": "c57f4f8a7983f52257c0587eb85881a006e6dc07",
+      "model_runs": 0,
+      "reason": "This development-fixture campaign still has no model results. The successor fixes task discovery and recovery plus existing Skill workflows; source and CLI checks do not become native behavior or cost evidence."
+    },
     {
       "planned_release": "v11.2.18",
       "reviewed_source_sha": "2d5306b8ce342b88d04420d55843ce752c0e5240",

@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+### 11.3.2 — Task discovery, recovery and usable Skill workflows
+
+- 修复 `catalog find` 只查名称/描述导致已声明任务表达无法找到 Skill 的问题；全部 65 项按正向 trigger 可检索，保留原类型范围与只读边界。
+- 修复 Goal 恢复丢失阻塞、证据和在途工作，以及已关闭/blocked 原批次不能展示的问题；严格执行选择、验收映射、依赖和输出预算不放宽，示例不再提供无观测的固定 300K 预算。
+- 在原 Skill 中修正简化示例的清理语义、测试设计/实际代码交付、API/ABI/行为兼容、头文件静态分析、RTOS 调度、性能诊断/比较、离线 core 和 URL/IMAP 内容获取流程。
+- 使用入口按真实任务组织；普通日志压缩和 Pilot 不再无条件依赖 ADK 内部维护脚本。已有需求探索与调试流程保留，不增加 Skill、运行时或巡检。
+- 验证区分源码/CLI 回归、实际示例和模型效果；真实任务成功率、Token、费用与端到端时延收益仍为 `not-measured`。
+
 ### 11.3.1 — Retry-safe task observations
 - Accept repeated native Skill-load events when identity, content digest and primary role agree, while retaining the complete raw event ledger and every retry/model/tool cost.
 - Aggregate repeated process checks with failure-preserving precedence. Validate every referenced evidence file before aggregation, keep output alias protection for unselected evidence, and preserve single-event report order and names.

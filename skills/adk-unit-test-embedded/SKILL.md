@@ -1,8 +1,8 @@
 ---
 name: adk-unit-test-embedded
 description: "用于 MCU/RTOS 的单元测试断言、替身与外设边界模拟；非跨模块测试策略，也不用于直接证明真实 HIL 性能。"
-version: 1.1.5
-last_updated: 2026-11-14
+version: 1.1.6
+last_updated: 2026-11-15
 triggers:
   - "单元测试"
   - "写测试"
@@ -12,7 +12,8 @@ non_triggers:
 inputs:
   - 模块接口、边界条件
 outputs:
-  - 单测清单与断言策略
+  - 仅设计时交付用例与断言；已授权实施后交付实际测试、fixture 路径、命令和结果
+  - 未覆盖的硬件或实时边界及后续验证条件
 constraints:
   - 优先覆盖边界与错误路径
 ---
@@ -28,20 +29,19 @@ constraints:
 - 需要跨板级、SIL/HIL、boot、OTA 或现场层次时使用 `references/embedded-tdd-matrix.md`。
 
 ## Target / Test Seam Gate
-- 只选择目标实际支持的 host-unit、cross-build compile-only、SIL/emulator 或 HIL/board-runner 之一；`ceedling/gcovr/lcov` 是条件性示例，必须先核实已安装工具与匹配的 compiler flags。无 libc/无 host runner 的 MCU 不应默认执行 host 工具。
+- 按目标选择最小必要组合：host-unit、cross-build compile-only、SIL/emulator、HIL/board-runner 可覆盖不同边界，分别记录结论；compile-only 不证明断言已运行。`ceedling/gcovr/lcov` 仅为条件性示例，先核实工具、runner 和 compiler flags，不默认在无 libc/无 host runner 的 MCU 上执行 host 工具。
 - 校验真实公开模块接口而不是 mock 的内部调用次数；W1C 寄存器、DMA ownership、ISR/任务竞态、队列溢出等边界应在可观察 seam 加负例。无法模拟的电气/实时行为保留 `needs-hil`，不推断板上已通过。
 
 ## Workflow
-1. 提炼可测单元：隔离外设依赖与全局状态。
-2. 设计用例：正常、边界、异常、时序四类。
-3. 编写断言：重点验证状态变化和错误处理。
-4. 构建回归集：把历史缺陷固化为回归测试。
-5. 执行与评估：统计通过率与失败根因。
+1. 读公开接口与现有测试入口，识别外设、时钟及全局状态的替身边界，不另建平行框架。
+2. 从验收和历史缺陷选择正常、边界、异常、时序用例，明确输入、期望状态或输出。
+3. 仅要求设计时交付清单；要求写测试时，交已有授权的实现职责编写测试与必要 fixture，再回传验证。本 Skill 不提升写权限，也不能用清单关闭实施任务。
+4. 采用项目已核实的定向命令；缺陷用例先确认原失败，再核修复及原通过路径。未执行写 `not-run`，保留真实退出码。
+5. 交付实际文件、命令和断言结果，区分编译、模拟与板上证据；不可模拟的时序保留 `needs-hil`。
 
 ## Commands
+从已选项目工具中使用适用入口，不逐项执行所有示例，不为未知 runner 追加通用 `--module` 参数。
 ```bash
-<unit-test-cmd> --module <module_name>
-<coverage-cmd> --module <module_name>
 # Unity 框架
 ceedling test:<module_name>
 ceedling gcov:<module_name>
@@ -52,16 +52,6 @@ ceedling "module:create[Sensor]"
 gcovr --root . --filter src/ --xml -o coverage.xml
 lcov --capture --directory build --output-file coverage.info
 genhtml coverage.info --output-directory coverage_html
-```
-
-## Unity/CMock 框架速查
-```c
-// Unity 常用断言
-TEST_ASSERT_EQUAL_INT(expected, actual);
-TEST_ASSERT_EQUAL_STRING(expected, actual);
-TEST_ASSERT_TRUE(condition);
-TEST_ASSERT_NULL(pointer);
-TEST_ASSERT_EQUAL_MEMORY(expected, actual, len);
 ```
 
 ## 测试覆盖率策略
@@ -76,11 +66,11 @@ TEST_ASSERT_EQUAL_MEMORY(expected, actual, len);
 
 ## Evidence Template
 ```md
-- Test Scope:
-- Case Matrix:
-- Assertion Strategy:
-- Coverage Snapshot:
-- Regression Cases Added:
+- Scope / Test Layer:
+- Cases / Assertions / Regression:
+- Test / Fixture Paths: actual paths | design-only
+- Command / Exit Code / Result: pass | fail | not-run
+- Coverage / needs-hil:
 ```
 
 ## Failure Handling
@@ -91,13 +81,3 @@ TEST_ASSERT_EQUAL_MEMORY(expected, actual, len);
 - 必须覆盖至少 1 条边界与 1 条错误路径。
 - 新增缺陷修复必须附对应回归用例。
 - 测试结果需可复现且可追溯到模块版本。
-
----
-
-## 合理化借口拦截
-
-| 借口 | 现实 | 正确做法 |
-|------|------|---------|
-| "硬件相关代码没法单元测试" | HAL mock 和 SIL 桩可以覆盖绝大多数逻辑 | 按 SKILL.md 分层策略，业务逻辑与硬件解耦后分别测试 |
-| "跑过集成测试就够了" | 集成测试无法精确定位模块内部缺陷 | 必须覆盖边界和错误路径的单元级验证 |
-| "改动很小不需要补测试" | 小改动也可能破坏隐含的不变量 | 行为变更或缺陷修复必须附相应回归或明确缺口；无行为变化采用最小适用验证 |

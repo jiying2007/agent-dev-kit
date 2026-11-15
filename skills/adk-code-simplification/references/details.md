@@ -42,20 +42,27 @@ void process(data_t *d) {
 }
 ```
 
-### 卫语句消除嵌套
+### 降低嵌套并保留后续处理
+
+普通条件块不能直接改成函数级 `return`：失败分支仍可能需要执行后续工作或资源清理。只有失败本来就应终止函数、且清理路径完整时才使用早返回；以下保留条件块后的 `cleanup()`。
+
 ```c
-// Before: 3 层嵌套
-if (a) {
-    if (b) {
-        if (c) { do_something(); }
+// bool 来自 <stdbool.h>；do_something/cleanup 为既有操作。
+void process_before(bool a, bool b, bool c) {
+    if (a) {
+        if (b) {
+            if (c) { do_something(); }
+        }
     }
+    cleanup();
 }
 
-// After: 早期返回
-if (!a) return;
-if (!b) return;
-if (!c) return;
-do_something();
+void process_after(bool a, bool b, bool c) {
+    if (a && b && c) {
+        do_something();
+    }
+    cleanup();
+}
 ```
 
 ### 表驱动替代复杂条件
