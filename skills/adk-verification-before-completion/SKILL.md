@@ -49,7 +49,7 @@ constraints:
 - Lifecycle Operation Evidence: contract / owner / runtime_evidence
 - Review Convergence Evidence: independence / replan
 - Completion Guard Payload: required / passed / stale / verifier
-- Codify Decision: promotion_candidate: true | false / do_not_promote_reason | checkpoint-deferred
+- Codify Decision: （适用的 goal-final/复用晋级；checkpoint 用 checkpoint-deferred）按 `templates/governance/codify-decision.md` 记录 delivery_goal / reusable_pattern / affected_asset / promotion_candidate: true | false / next_task_friction_reduced / reduced_by / reduction_evidence / do_not_promote_reason / owner_review / rollback_path / verification_evidence
 - Final Gate Result: pass | needs-fix / qualification_boundary / next_action
 
 ## Failure Handling / Quality Gate

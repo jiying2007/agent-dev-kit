@@ -114,8 +114,6 @@ findings 在此仅存级别。真实工具按实际 schema、范围和超时/取
 
 ## Full Evidence Template (goal-final or medium/high only)
 
-低风险用入口最小报告，缺证据不靠填表。Codify 模板：`templates/governance/codify-decision.md`。
-
 ```md
 - Scope Summary / Completion Claim Audit / Verification Command Results:
 - Runtime Config Audit / Prompt Regression Evidence / Model / Context Regression Evidence:
@@ -127,7 +125,7 @@ findings 在此仅存级别。真实工具按实际 schema、范围和超时/取
 - Appshots / UI Evidence Boundary: visible_text_boundary / permission_scope / sensitive_content_review / runtime_evidence_or_not_applicable
 - Runner Smoke Contract: event_stream_schema / sandbox_approval_cwd / thread_turn_or_resume_reply / failure_cancel_path
 - Tool / Skill Evidence Plan: primary_skill / supporting_skills / required_artifacts / skipped skills / tool_fallback / fallback_evidence / evidence_paths
-- Codify Decision: delivery_goal / reusable_pattern / affected_asset / promotion_candidate / next_task_friction_reduced / reduced_by / reduction_evidence / do_not_promote_reason / owner_review / rollback_path / verification_evidence
+- Codify Decision: 按 ../SKILL.md 的适用条件、权威模板和完整字段填写。
 - Completion Guard Payload: required_checks / passed_checks / failed_checks / skipped_with_reason / stale_checks / verifier / completion_allowed
 - Lifecycle Operation Evidence: not_applicable_reason | contract / owner / state-events / termination / runtime-evidence
 - Review Convergence Evidence: review_round / review_mode / finding_classes / new_finding_class_count / reopened_finding_count / consecutive_clean_reviews / contract_change_decision / replan_reason / reviewer_independence

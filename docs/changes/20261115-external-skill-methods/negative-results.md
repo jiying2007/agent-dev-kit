@@ -43,3 +43,13 @@
 原因是五项 Skill 描述已改进，但 `docs/agent-skill-catalog.md` 仍是旧生成投影。独立 reviewer 从原 stderr 发现并阻止 Quality 放行；修复使用既有 `catalog build --out docs/agent-skill-catalog.md`，不改生成器或测试。同步补上 `11.3.4` CHANGELOG 后重新冻结源码并完整重跑，最终结果另列。
 
 `evidence/catalog-drift-failure.json` 保留第一次实际命令、完整 stdout/stderr、计时与源摘要回执；原提交仍可定位，原完整 diff 的 SHA256 为 `32a438f5ec167583f0485f4b495f03a3c3625a16b5f5aa02ed97da06c6ec9cb9`。首次结果不被后续重跑覆盖。
+
+## 第二次冻结全量的完成入口字段失败
+
+第二源码 `5f42c1b096b702fbcfb4debb57115b21bc872f06`（tree `3b950a161da6dd16575bee097c445df1c8f49853`）于 `2026-11-15T14:32:53.024538Z` 至 `2026-11-15T14:40:27.541188Z` 运行，exit 1；目录组已通过，原全量在第 99 组 `test_capability_uplift` 停止，实际 **98 pass / 1 fail**，并非完整 102 组通过。46 个冻结文件前后摘要相同。
+
+该组原有 `check-codify-governance.sh` 要求完成验证入口直接包含 `delivery_goal`。精简后相应字段保留在详细 reference，却没有继续明确列在 `SKILL.md` 正文，形成原消费者契约遗漏。作者重新核对该测试委派的四个既有检查器，并在原预算内恢复入口要求；不改检查器、测试或阈值。最终修复与第三次冻结结果单独记录。
+
+`evidence/completion-contract-failure.json` 无损保存第二次四份原始全量文件，包含实际源身份、前后摘要、99 项执行计时和失败 stderr；对应原完整 diff SHA256 为 `36bc7e4c4b374542e7e73cd0e83265883704c2686f898f5caf0508b6cfe133bd`。旧运行目录与原提交保留，不能用之后的定向通过重写第二次结果。
+
+具体修复仅涉及 completion 的正文与自身 reference：11 个 Codify 字段及模板路径移回正文，reference 改为指向同 Skill 正文的适用条件与完整字段；可执行示例、frontmatter、Goal/Modes/Workflow/Failure Handling、reference 适用矩阵/25 步/checker/权限部分保持。两文件分别 +277 B / −262 B，总计 +15 B。原 capability 四检查器实际红→绿，94 项内容测试、SOP 与 8 个原预算通过，large-refactor 为 323,322 / 323,328 B。`evidence/completion-contract-fix.json` 保留完整修复回执及最后三组的补充预检；补充预检发生在未冻结工作区，不能替代最终全量。
