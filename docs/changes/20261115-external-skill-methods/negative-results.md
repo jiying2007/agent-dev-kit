@@ -35,3 +35,11 @@
 - root 复核将性质示例公开命令与测试对齐为 `python3 -I`，避免环境优化关闭 assert；本环境以 `PYTHONOPTIMIZE=1` 实测 `optimize=0`。同时将 UBSan 的“检测失败”改为成功报告程序缺陷、被测程序未通过；代码 fence 未变，既有 4 项重新通过。
 
 实际命令、原始退出码/日志、源码内容摘要与修复前后等价性见 `evidence/core-diagnostics.json`、`evidence/core-budget-followup.json`、`evidence/domain-diagnostics.json` 和 `evidence/prereview-routing.json`。JSON 包装只作无损文本编码，原始 UTF-8 字节可按保存的摘要验证；没有把加工文本声称为原始输出。
+
+## 第一次冻结全量的目录投影失败
+
+远端源码 `58f25a4e23d17e2e128cedbf791f3ea76d3653e5`（tree `6f1807a5df39705ece1884cbdc67108f2c423cbe`）的首次全量入口从 `2026-11-15T14:29:15.304781Z` 运行至 `2026-11-15T14:29:49.406496Z`，真实 exit 1。`--fail-fast` 在第三组 `test_catalog` 停止，实际只有 2 pass / 1 fail，不能计为已完成 102 组。43 个冻结源文件前后完全一致。
+
+原因是五项 Skill 描述已改进，但 `docs/agent-skill-catalog.md` 仍是旧生成投影。独立 reviewer 从原 stderr 发现并阻止 Quality 放行；修复使用既有 `catalog build --out docs/agent-skill-catalog.md`，不改生成器或测试。同步补上 `11.3.4` CHANGELOG 后重新冻结源码并完整重跑，最终结果另列。
+
+`evidence/catalog-drift-failure.json` 保留第一次实际命令、完整 stdout/stderr、计时与源摘要回执；原提交仍可定位，原完整 diff 的 SHA256 为 `32a438f5ec167583f0485f4b495f03a3c3625a16b5f5aa02ed97da06c6ec9cb9`。首次结果不被后续重跑覆盖。
