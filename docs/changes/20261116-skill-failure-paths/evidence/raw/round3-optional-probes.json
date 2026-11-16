@@ -1,0 +1,228 @@
+{
+  "schema": "round3-optional-probes/v1",
+  "secret_output": {
+    "fixture_only": true,
+    "real_credentials_read": false,
+    "fixture_directory": "/workspace/scratch/fe5385ca063a/optional-scan-probe-final-gmno7pu6",
+    "results": [
+      {
+        "source": "optional-skills/adk-security-supply-chain/SKILL.md",
+        "line": 74,
+        "published_command": "rg --hidden --no-ignore -l --glob \"!**/.git/**\" \"api[_-]?key|token|secret|password|PRIVATE KEY\" <candidate_path>  # 不回显值",
+        "baseline_exit_code": 0,
+        "baseline_stdout_contains_synthetic_secret": false,
+        "baseline_stderr_contains_synthetic_secret": false,
+        "paths_only_exit_code": 0,
+        "paths_only_stdout_contains_synthetic_secret": false,
+        "paths_only_stderr_contains_synthetic_secret": false,
+        "paths_only_preserves_candidate": true,
+        "no_match_exit_code": 1,
+        "missing_path_error_exit_code": 2,
+        "missing_path_error_has_diagnostic": true
+      },
+      {
+        "source": "optional-skills/adk-security-supply-chain/SKILL.md",
+        "line": 77,
+        "published_command": "rg -n \"license|LICENSE\" <candidate_path> | head -20",
+        "baseline_exit_code": 0,
+        "baseline_stdout_contains_synthetic_secret": true,
+        "baseline_stderr_contains_synthetic_secret": false,
+        "paths_only_exit_code": 0,
+        "paths_only_stdout_contains_synthetic_secret": false,
+        "paths_only_stderr_contains_synthetic_secret": false,
+        "paths_only_preserves_candidate": true,
+        "no_match_exit_code": 1,
+        "missing_path_error_exit_code": 2,
+        "missing_path_error_has_diagnostic": true
+      },
+      {
+        "source": "optional-skills/adk-security-supply-chain/SKILL.md",
+        "line": 78,
+        "published_command": "rg -n \"curl|wget|fetch|http|https\" <candidate_path>",
+        "baseline_exit_code": 0,
+        "baseline_stdout_contains_synthetic_secret": true,
+        "baseline_stderr_contains_synthetic_secret": false,
+        "paths_only_exit_code": 0,
+        "paths_only_stdout_contains_synthetic_secret": false,
+        "paths_only_stderr_contains_synthetic_secret": false,
+        "paths_only_preserves_candidate": true,
+        "no_match_exit_code": 1,
+        "missing_path_error_exit_code": 2,
+        "missing_path_error_has_diagnostic": true
+      },
+      {
+        "source": "optional-skills/adk-security-supply-chain/SKILL.md",
+        "line": 79,
+        "published_command": "rg -n \"writeFile|fs\\.write|os\\.path|open\\(\" <candidate_path>",
+        "baseline_exit_code": 0,
+        "baseline_stdout_contains_synthetic_secret": true,
+        "baseline_stderr_contains_synthetic_secret": false,
+        "paths_only_exit_code": 0,
+        "paths_only_stdout_contains_synthetic_secret": false,
+        "paths_only_stderr_contains_synthetic_secret": false,
+        "paths_only_preserves_candidate": true,
+        "no_match_exit_code": 1,
+        "missing_path_error_exit_code": 2,
+        "missing_path_error_has_diagnostic": true
+      },
+      {
+        "source": "optional-skills/adk-security-supply-chain/SKILL.md",
+        "line": 80,
+        "published_command": "rg -n \"BASE_URL|base_url|mcp|hook|approval|sandbox\" <candidate_path>",
+        "baseline_exit_code": 0,
+        "baseline_stdout_contains_synthetic_secret": true,
+        "baseline_stderr_contains_synthetic_secret": false,
+        "paths_only_exit_code": 0,
+        "paths_only_stdout_contains_synthetic_secret": false,
+        "paths_only_stderr_contains_synthetic_secret": false,
+        "paths_only_preserves_candidate": true,
+        "no_match_exit_code": 1,
+        "missing_path_error_exit_code": 2,
+        "missing_path_error_has_diagnostic": true
+      },
+      {
+        "source": "docs/runbooks/security-supply-chain.md",
+        "line": 42,
+        "published_command": "rg -n \"api[_-]?key|token|secret|password|PRIVATE KEY\" <candidate_path>",
+        "baseline_exit_code": 0,
+        "baseline_stdout_contains_synthetic_secret": true,
+        "baseline_stderr_contains_synthetic_secret": false,
+        "paths_only_exit_code": 0,
+        "paths_only_stdout_contains_synthetic_secret": false,
+        "paths_only_stderr_contains_synthetic_secret": false,
+        "paths_only_preserves_candidate": true,
+        "no_match_exit_code": 1,
+        "missing_path_error_exit_code": 2,
+        "missing_path_error_has_diagnostic": true
+      },
+      {
+        "source": "docs/runbooks/security-supply-chain.md",
+        "line": 44,
+        "published_command": "rg -n \"BASE_URL|base_url|mcp|hook|approval|sandbox\" <candidate_path>",
+        "baseline_exit_code": 0,
+        "baseline_stdout_contains_synthetic_secret": true,
+        "baseline_stderr_contains_synthetic_secret": false,
+        "paths_only_exit_code": 0,
+        "paths_only_stdout_contains_synthetic_secret": false,
+        "paths_only_stderr_contains_synthetic_secret": false,
+        "paths_only_preserves_candidate": true,
+        "no_match_exit_code": 1,
+        "missing_path_error_exit_code": 2,
+        "missing_path_error_has_diagnostic": true
+      }
+    ]
+  },
+  "sampling_cancellation": {
+    "source": "optional-skills/adk-test-flakiness-triage/references/details.md",
+    "source_sha256": "7723c6f6caa2c86a3ada3ccf95aaadf5ab7ea2a0003087f80c2e0ed9355959f0",
+    "requested_samples": 3,
+    "real_test_suite_run": false,
+    "user_keyboard_signal_simulated": false,
+    "cases": [
+      {
+        "child_case": "0",
+        "collector_exit": 0,
+        "attempts_after_signal_or_failure": 3,
+        "result_rows": [
+          "1\t0",
+          "2\t0",
+          "3\t0"
+        ],
+        "raw_evidence_directory": "/workspace/scratch/fe5385ca063a/optional-cancel-probe-final-63rja4lr/exit-0",
+        "collector_stdout": "attempts=3\nrecords=/workspace/scratch/fe5385ca063a/optional-cancel-probe-final-63rja4lr/exit-0/results.tsv\n",
+        "later_run_directory_created": true
+      },
+      {
+        "child_case": "1",
+        "collector_exit": 1,
+        "attempts_after_signal_or_failure": 3,
+        "result_rows": [
+          "1\t1",
+          "2\t1",
+          "3\t1"
+        ],
+        "raw_evidence_directory": "/workspace/scratch/fe5385ca063a/optional-cancel-probe-final-63rja4lr/exit-1",
+        "collector_stdout": "attempts=3\nrecords=/workspace/scratch/fe5385ca063a/optional-cancel-probe-final-63rja4lr/exit-1/results.tsv\n",
+        "later_run_directory_created": true
+      },
+      {
+        "child_case": "9",
+        "collector_exit": 1,
+        "attempts_after_signal_or_failure": 3,
+        "result_rows": [
+          "1\t9",
+          "2\t9",
+          "3\t9"
+        ],
+        "raw_evidence_directory": "/workspace/scratch/fe5385ca063a/optional-cancel-probe-final-63rja4lr/exit-9",
+        "collector_stdout": "attempts=3\nrecords=/workspace/scratch/fe5385ca063a/optional-cancel-probe-final-63rja4lr/exit-9/results.tsv\n",
+        "later_run_directory_created": true
+      },
+      {
+        "child_case": "124",
+        "collector_exit": 1,
+        "attempts_after_signal_or_failure": 3,
+        "result_rows": [
+          "1\t124",
+          "2\t124",
+          "3\t124"
+        ],
+        "raw_evidence_directory": "/workspace/scratch/fe5385ca063a/optional-cancel-probe-final-63rja4lr/exit-124",
+        "collector_stdout": "attempts=3\nrecords=/workspace/scratch/fe5385ca063a/optional-cancel-probe-final-63rja4lr/exit-124/results.tsv\n",
+        "later_run_directory_created": true
+      },
+      {
+        "child_case": "130",
+        "collector_exit": 1,
+        "attempts_after_signal_or_failure": 3,
+        "result_rows": [
+          "1\t130",
+          "2\t130",
+          "3\t130"
+        ],
+        "raw_evidence_directory": "/workspace/scratch/fe5385ca063a/optional-cancel-probe-final-63rja4lr/exit-130",
+        "collector_stdout": "attempts=3\nrecords=/workspace/scratch/fe5385ca063a/optional-cancel-probe-final-63rja4lr/exit-130/results.tsv\n",
+        "later_run_directory_created": true
+      },
+      {
+        "child_case": "143",
+        "collector_exit": 1,
+        "attempts_after_signal_or_failure": 3,
+        "result_rows": [
+          "1\t143",
+          "2\t143",
+          "3\t143"
+        ],
+        "raw_evidence_directory": "/workspace/scratch/fe5385ca063a/optional-cancel-probe-final-63rja4lr/exit-143",
+        "collector_stdout": "attempts=3\nrecords=/workspace/scratch/fe5385ca063a/optional-cancel-probe-final-63rja4lr/exit-143/results.tsv\n",
+        "later_run_directory_created": true
+      },
+      {
+        "child_case": "actual-sigint",
+        "collector_exit": 1,
+        "attempts_after_signal_or_failure": 3,
+        "result_rows": [
+          "1\t130",
+          "2\t130",
+          "3\t130"
+        ],
+        "raw_evidence_directory": "/workspace/scratch/fe5385ca063a/optional-cancel-probe-final-63rja4lr/exit-actual-sigint",
+        "collector_stdout": "attempts=3\nrecords=/workspace/scratch/fe5385ca063a/optional-cancel-probe-final-63rja4lr/exit-actual-sigint/results.tsv\n",
+        "later_run_directory_created": true
+      },
+      {
+        "child_case": "actual-sigterm",
+        "collector_exit": 1,
+        "attempts_after_signal_or_failure": 3,
+        "result_rows": [
+          "1\t143",
+          "2\t143",
+          "3\t143"
+        ],
+        "raw_evidence_directory": "/workspace/scratch/fe5385ca063a/optional-cancel-probe-final-63rja4lr/exit-actual-sigterm",
+        "collector_stdout": "attempts=3\nrecords=/workspace/scratch/fe5385ca063a/optional-cancel-probe-final-63rja4lr/exit-actual-sigterm/results.tsv\n",
+        "later_run_directory_created": true
+      }
+    ]
+  }
+}

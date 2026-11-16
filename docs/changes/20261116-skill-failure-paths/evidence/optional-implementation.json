@@ -1,0 +1,225 @@
+{
+  "schema": "round3-optional-implementation/v1",
+  "role": "implementer-only; not requirements/design owner or independent reviewer",
+  "status": "implementation-complete",
+  "baseline_commit": "80f8b2ea2885e3f62dcea455c45a2e8ebf071b2b",
+  "observed_head": "80f8b2ea2885e3f62dcea455c45a2e8ebf071b2b",
+  "observed_branch": "improve/skill-failure-paths-20261116",
+  "source_frozen_at_utc": "2026-11-16T07:54:19.812688+00:00",
+  "completed_at_utc": "2026-11-16T07:54:21.173686+00:00",
+  "source_unchanged_during_final_verification": true,
+  "source_files": [
+    {
+      "path": "optional-skills/adk-security-supply-chain/SKILL.md",
+      "base_bytes": 8270,
+      "bytes": 8422,
+      "net_bytes": 152,
+      "base_sha256": "acff83f54f2f15e0160d18b3e6b3e84f09be4b75b4d06e8b459c2b3345bc635f",
+      "sha256": "ee86e23878218150ef4f03dd4fc463d9e0ad68c6cdd278483f30490d3867ed58",
+      "changed": true
+    },
+    {
+      "path": "optional-skills/adk-security-supply-chain/references/skill-scan-coverage.md",
+      "base_bytes": 1879,
+      "bytes": 1879,
+      "net_bytes": 0,
+      "base_sha256": "6fc92933a7ea418d824d2e92eb64bdd26e0e25e53969d4dd3ce95de0c54b0d15",
+      "sha256": "6fc92933a7ea418d824d2e92eb64bdd26e0e25e53969d4dd3ce95de0c54b0d15",
+      "changed": false
+    },
+    {
+      "path": "optional-skills/adk-test-flakiness-triage/SKILL.md",
+      "base_bytes": 2427,
+      "bytes": 2427,
+      "net_bytes": 0,
+      "base_sha256": "2a36680bf3a8d60159bcd8672a8cda6995b0740d425970615ecbe23163236acf",
+      "sha256": "6d37c99701d7be57c837be6854484a263cc75b6a12e01db9969dd2cec2571a54",
+      "changed": true
+    },
+    {
+      "path": "optional-skills/adk-test-flakiness-triage/references/details.md",
+      "base_bytes": 4805,
+      "bytes": 4957,
+      "net_bytes": 152,
+      "base_sha256": "7723c6f6caa2c86a3ada3ccf95aaadf5ab7ea2a0003087f80c2e0ed9355959f0",
+      "sha256": "68522e43db6194ff02d275d65c3078ff363aab4329fc18f17f6e3594b30924e1",
+      "changed": true
+    },
+    {
+      "path": "docs/runbooks/security-supply-chain.md",
+      "base_bytes": 6179,
+      "bytes": 6481,
+      "net_bytes": 302,
+      "base_sha256": "c6c541bab0b1ed71c2084903bfa365bea4d6a9fc3af7f6082c42a4a6182fa1fb",
+      "sha256": "324d20206f40778300906051dc08775297017b2318ecec74100ef303efe423ce",
+      "changed": true
+    },
+    {
+      "path": "tests/test_skill_command_examples.py",
+      "base_bytes": 47008,
+      "bytes": 53862,
+      "net_bytes": 6854,
+      "base_sha256": "89ff11fbe1a8fe6accc915d0dad8f7de6f6a8f1f28078a0830ad832e92ab2bf0",
+      "sha256": "ddfd18b3fac98f15a1727f9c0014cc984dc3f5d0984c85951c4af6988ed60655",
+      "changed": true
+    }
+  ],
+  "changed_files": [
+    "optional-skills/adk-security-supply-chain/SKILL.md",
+    "optional-skills/adk-test-flakiness-triage/SKILL.md",
+    "optional-skills/adk-test-flakiness-triage/references/details.md",
+    "docs/runbooks/security-supply-chain.md",
+    "tests/test_skill_command_examples.py"
+  ],
+  "net_bytes": {
+    "all_changed_files": 7460,
+    "optional_skill_assets": 304,
+    "runbook": 302,
+    "tests": 6854
+  },
+  "skill_versions": {
+    "adk-security-supply-chain": {
+      "before": "1.1.4",
+      "after": "1.1.5",
+      "last_updated": "2026-11-16"
+    },
+    "adk-test-flakiness-triage": {
+      "before": "1.0.6",
+      "after": "1.0.7",
+      "last_updated": "2026-11-16",
+      "date_note": "Already dated today at baseline; retained the actual date."
+    }
+  },
+  "implementation": {
+    "F1": "All seven published rg scans emit candidate paths only; removed license head truncation, kept secret hidden/ignored/.git coverage, documented bounded redacted content review and scanner statuses without swallowing errors.",
+    "F2": "After closing the current log and appending TSV, return child status 130/143 immediately. Ordinary 0/1/2/9/124 sampling, fresh directory handling and collection errors remain unchanged."
+  },
+  "verification": [
+    {
+      "command": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "python3",
+        "-m",
+        "unittest",
+        "tests.test_skill_command_examples.SecurityScanExampleTests",
+        "tests.test_skill_command_examples.FlakySampleExampleTests",
+        "-v"
+      ],
+      "cwd": "/workspace/scratch/fe5385ca063a/agent-dev-kit",
+      "started_at_utc": "2026-11-16T07:54:19.858127+00:00",
+      "ended_at_utc": "2026-11-16T07:54:21.158461+00:00",
+      "duration_seconds": 1.3003365939985088,
+      "stdout": "",
+      "stderr": "test_all_scans_keep_candidate_paths_without_printing_matching_contents (tests.test_skill_command_examples.SecurityScanExampleTests.test_all_scans_keep_candidate_paths_without_printing_matching_contents) ... ok\ntest_no_match_and_io_errors_keep_distinct_status_and_diagnostics (tests.test_skill_command_examples.SecurityScanExampleTests.test_no_match_and_io_errors_keep_distinct_status_and_diagnostics) ... ok\ntest_secret_scan_preserves_hidden_ignored_coverage_and_git_exclusion (tests.test_skill_command_examples.SecurityScanExampleTests.test_secret_scan_preserves_hidden_ignored_coverage_and_git_exclusion) ... ok\ntest_child_self_signals_stop_sampling_without_claiming_parent_signal_handling (tests.test_skill_command_examples.FlakySampleExampleTests.test_child_self_signals_stop_sampling_without_claiming_parent_signal_handling) ... ok\ntest_environment_example_only_prints_names_not_synthetic_secret_values (tests.test_skill_command_examples.FlakySampleExampleTests.test_environment_example_only_prints_names_not_synthetic_secret_values) ... ok\ntest_existing_evidence_is_not_reused_or_overwritten (tests.test_skill_command_examples.FlakySampleExampleTests.test_existing_evidence_is_not_reused_or_overwritten) ... ok\ntest_interrupt_after_an_observation_preserves_both_samples_and_stops (tests.test_skill_command_examples.FlakySampleExampleTests.test_interrupt_after_an_observation_preserves_both_samples_and_stops) ... ok\ntest_invalid_sample_budgets_do_not_execute_or_create_output (tests.test_skill_command_examples.FlakySampleExampleTests.test_invalid_sample_budgets_do_not_execute_or_create_output) ... ok\ntest_reported_interrupt_status_stops_after_preserving_the_current_sample (tests.test_skill_command_examples.FlakySampleExampleTests.test_reported_interrupt_status_stops_after_preserving_the_current_sample) ... ok\ntest_sample_collection_failure_stops_without_fake_completed_attempt (tests.test_skill_command_examples.FlakySampleExampleTests.test_sample_collection_failure_stops_without_fake_completed_attempt) ... ok\ntest_status_write_failure_is_not_a_successful_collection (tests.test_skill_command_examples.FlakySampleExampleTests.test_status_write_failure_is_not_a_successful_collection) ... ok\ntest_success_failure_and_mixed_runs_keep_exact_exit_codes_and_reports (tests.test_skill_command_examples.FlakySampleExampleTests.test_success_failure_and_mixed_runs_keep_exact_exit_codes_and_reports) ... ok\n\n----------------------------------------------------------------------\nRan 12 tests in 1.196s\n\nOK\n",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "git",
+        "diff",
+        "--check",
+        "80f8b2ea2885e3f62dcea455c45a2e8ebf071b2b",
+        "--",
+        "optional-skills/adk-security-supply-chain/SKILL.md",
+        "optional-skills/adk-security-supply-chain/references/skill-scan-coverage.md",
+        "optional-skills/adk-test-flakiness-triage/SKILL.md",
+        "optional-skills/adk-test-flakiness-triage/references/details.md",
+        "docs/runbooks/security-supply-chain.md",
+        "tests/test_skill_command_examples.py"
+      ],
+      "cwd": "/workspace/scratch/fe5385ca063a/agent-dev-kit",
+      "started_at_utc": "2026-11-16T07:54:21.158487+00:00",
+      "ended_at_utc": "2026-11-16T07:54:21.167775+00:00",
+      "duration_seconds": 0.009301220998167992,
+      "stdout": "",
+      "stderr": "",
+      "exit_code": 0
+    }
+  ],
+  "red_green_evidence": [
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-optional-red.json",
+      "bytes": 190208,
+      "sha256": "b21c570e20ef6acee55bc7b89f1d7d7791bc78d953418b081d9edf51d36e6211",
+      "phase": "red",
+      "tests_run": 12,
+      "failures": 12,
+      "errors": 0,
+      "exit_code": 1,
+      "started_at_utc": "2026-11-16T07:51:21.749689+00:00",
+      "ended_at_utc": "2026-11-16T07:51:22.907932+00:00",
+      "actual_example_calls": 42,
+      "source_unchanged_during_tests": true
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-optional-green.json",
+      "bytes": 158034,
+      "sha256": "c228ea3b4b6c7c932ab214c762c7c6117735d33a2fd3746b4212501eec16c817",
+      "phase": "green",
+      "tests_run": 12,
+      "failures": 0,
+      "errors": 0,
+      "exit_code": 0,
+      "started_at_utc": "2026-11-16T07:52:22.690908+00:00",
+      "ended_at_utc": "2026-11-16T07:52:23.586285+00:00",
+      "actual_example_calls": 42,
+      "source_unchanged_during_tests": true
+    }
+  ],
+  "red_green_stream_semantics": "Each observations entry records actual child command stdout/stderr. The top-level stderr is captured unittest renderer text; wrapper delivery prints that text to stdout. Final verification above captures the actual outer stdout/stderr without the observation wrapper.",
+  "supporting_artifacts": [
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3_optional_test_evidence.py",
+      "bytes": 4546,
+      "sha256": "d794f68949c42cb25f0981b95f9218a1150d28027b110d95d419272e7389959a"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3_optional_finish.py",
+      "bytes": 8071,
+      "sha256": "b332d4755c085e8e89f1503695724348b42ad4a49db0be0d1297ec8fbcc47562"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-optional-audit.json",
+      "bytes": 61229,
+      "sha256": "028e65709f30b542e1f334e052aefe48196076825dae33b034fd2549d8c18fd7"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-optional-probes.json",
+      "bytes": 9640,
+      "sha256": "3fe1711257b902d42069bf3c04330d8b4b88fbe2e594e9d5b8a8ea03fa13d66a"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3_optional_probe.py",
+      "bytes": 5256,
+      "sha256": "1d3472b80a82e496fde283afa5ff3ec60097bcf20c50d4e851f578bffbb6ac3d"
+    }
+  ],
+  "negative_results": [
+    {
+      "command": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "rg",
+        "-n",
+        "-i",
+        "security|supply|flak|secret|中断|采样|泄漏",
+        "knowledge/L2-domain/lessons.md"
+      ],
+      "exit_code": 2,
+      "observation": "knowledge/L2-domain/lessons.md does not exist; no historical lesson claimed."
+    },
+    {
+      "observation": "A preliminary baseline byte calculation used filtered rtk git show output; its test-file size/hash was invalid and was discarded. Final baseline identities above use rtk bypass git show raw bytes at the fixed baseline commit."
+    }
+  ],
+  "boundaries": [
+    "No real credentials read, production commands or external business requests executed.",
+    "Synthetic values occur in file contents only; arbitrary sensitive filenames are not automatically redacted.",
+    "Only explicit child exit statuses and child self-SIGINT/SIGTERM are verified; parent-shell signals, whole process-group cancellation and keyboard Ctrl-C propagation are not verified.",
+    "No new dependency, Gate, Skill, test module registration or budget relaxation.",
+    "No manifest/global version/change-contract edits; no commit, push or merge.",
+    "Full regression, original Profile budgets, independent Spec/Quality review and release remain with the parent."
+  ]
+}

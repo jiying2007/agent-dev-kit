@@ -1,0 +1,272 @@
+{
+  "schema": "adk-independent-evidence-retained-map/v1",
+  "files": [
+    {
+      "evidence_id": "stage1_report",
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-independent-stage1-report.md",
+      "retained_path": "evidence/independent/round3-independent-stage1-report.md",
+      "sha256": "d44cd901ab0524ee219b6e7bb453e2e30197028dd80d51afa1be81482d6f3d7e",
+      "bytes": 6621
+    },
+    {
+      "evidence_id": "stage1_review_sources",
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-independent-stage1-review-sources.json",
+      "retained_path": "evidence/independent/round3-independent-stage1-review-sources.json",
+      "sha256": "a3f5237d1f313477c6dba34db67916c35c99de116a013b8a14465d800576b812",
+      "bytes": 9943
+    },
+    {
+      "evidence_id": "baseline_audit_identities",
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-independent-stage1/audit-identity-verification.json",
+      "retained_path": "evidence/independent/stage1/audit-identity-verification.json",
+      "sha256": "062e12abfc674ff0149cd3ce79aeb54e84da7b5c83f22902d69f69006fece683",
+      "bytes": 166858
+    },
+    {
+      "evidence_id": "independent_baseline_probe",
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-independent-stage1/summary.json",
+      "retained_path": "evidence/independent/stage1-summary.json",
+      "sha256": "9f8fd0c10eed9fad48013c3e1ce7d225078412233cebf185d9e37316af6483e9",
+      "bytes": 2110
+    },
+    {
+      "evidence_id": "independent_baseline_probe_runner",
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-independent-stage1-probe.py",
+      "retained_path": "evidence/independent/independent_baseline_probe_runner.py",
+      "sha256": "b1a7cf109be2dd2cc19764f8aaf4ff73e7ff13ca60d563dc0373088e0f923daf",
+      "bytes": 17027
+    },
+    {
+      "evidence_id": "consumer_review",
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-independent-consumer-review.json",
+      "retained_path": "evidence/independent/round3-independent-consumer-review.json",
+      "sha256": "9429f28e9d470723b5adb6228302f6d16d73682819c43075d1486b02a2e3966f",
+      "bytes": 9660
+    },
+    {
+      "evidence_id": "consumer_task",
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer-task.md",
+      "retained_path": "evidence/consumer-task.md",
+      "sha256": "3b8628b1d7b7414a79029ef1857cfe63f58ea08c42b83747ce38ab9c59e5754c",
+      "bytes": 1451
+    },
+    {
+      "evidence_id": "consumer_fixture",
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/fixture-before.json",
+      "retained_path": "evidence/consumer-fixture-before.json",
+      "sha256": "04240d53eef99547e1f0dab70c5535af8d9dbd0d6f40e6953a038feb8dddfc56",
+      "bytes": 7589
+    },
+    {
+      "evidence_id": "consumer_raw_response",
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/consumer-response.json",
+      "retained_path": "evidence/consumer-response.json",
+      "sha256": "7381e8dbe92148b3027887fa9f3c40c71732401d8e2993c0484fa435436da913",
+      "bytes": 116476
+    },
+    {
+      "evidence_id": "core_implementation",
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-core-implementation.json",
+      "retained_path": "evidence/core-implementation.json",
+      "sha256": "aa08562a16984202e3d86dee41a37429eb30d7dab46608de427193463d48a068",
+      "bytes": 22281
+    },
+    {
+      "evidence_id": "cmake_implementation",
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-implementation.json",
+      "retained_path": "evidence/cmake-implementation.json",
+      "sha256": "4d7dc0936ee80749b936d4f3ff669ec2a2b4ebcbde09db81843dd06c43712577",
+      "bytes": 15061
+    },
+    {
+      "evidence_id": "optional_implementation",
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-optional-implementation.json",
+      "retained_path": "evidence/optional-implementation.json",
+      "sha256": "cbab0902cc1d6350e3193130fd2e1673b5ba0b36ca2e55895ff6aad2509fb3cb",
+      "bytes": 11689
+    },
+    {
+      "evidence_id": "core_marker_fix",
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-core-contract-compatibility-fix.json",
+      "retained_path": "evidence/core-contract-compatibility-fix.json",
+      "sha256": "bbf4bbb472119556b888139348ae7d394314c8a0cb4d9c83545806b222910747",
+      "bytes": 120100
+    },
+    {
+      "evidence_id": "optional_line_fix",
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-optional-line-budget-fix.json",
+      "retained_path": "evidence/optional-line-budget-fix.json",
+      "sha256": "e472107a4c524ed95b4316a7637ad5bf2bce790a29d94791db393a1579437eca",
+      "bytes": 11411
+    },
+    {
+      "evidence_id": "first_regression_classification",
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-independent-first-regression-classification.json",
+      "retained_path": "evidence/independent/first_regression_classification.json",
+      "sha256": "1dd3a51a76f2c69f8bf2e2390322815204549cb7223ea86c454a26b9754d0185",
+      "bytes": 74065
+    },
+    {
+      "evidence_id": "first_regression_receipt",
+      "original_path": "/workspace/scratch/fe5385ca063a/adk-11.3.10-full-regression/receipt.json",
+      "retained_path": "evidence/initial-regression.json",
+      "sha256": "8bf51d5222567a73b0064dbf70f4b87338d9436dd8210e3282233e3d1800b80d",
+      "bytes": 1618
+    },
+    {
+      "evidence_id": "first_regression_timing",
+      "original_path": "/workspace/scratch/fe5385ca063a/adk-11.3.10-full-regression/timing.json",
+      "retained_path": "evidence/initial-regression-timing.json",
+      "sha256": "9ee0430d702585dda40d4555319841f51d19ddb3d3166bfaed99f8858132d4a4",
+      "bytes": 8184
+    },
+    {
+      "evidence_id": "first_regression_stdout",
+      "original_path": "/workspace/scratch/fe5385ca063a/adk-11.3.10-full-regression/stdout.log",
+      "retained_path": "evidence/initial-regression.stdout.log",
+      "sha256": "1e7d0d5bb5a39609a69da0864b5642b90f4035c57879a02b8735c226faa358ba",
+      "bytes": 2073
+    },
+    {
+      "evidence_id": "first_regression_stderr",
+      "original_path": "/workspace/scratch/fe5385ca063a/adk-11.3.10-full-regression/stderr.log",
+      "retained_path": "evidence/initial-regression.stderr.log",
+      "sha256": "01d510e23e65596f05025505775e66559651766873d508c43110698152c65a8e",
+      "bytes": 43291
+    },
+    {
+      "evidence_id": "final_regression_independent_check",
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-independent-final-regression-verification.json",
+      "retained_path": "evidence/independent/final_regression_independent_check.json",
+      "sha256": "adfee77a0f643df1f920692a9535515a513a31ced88fb39047fa14dd8af132e5",
+      "bytes": 15008
+    },
+    {
+      "evidence_id": "final_regression_started",
+      "original_path": "/workspace/scratch/fe5385ca063a/adk-11.3.10-corrected-regression/started.json",
+      "retained_path": "evidence/full-regression-started.json",
+      "sha256": "a8aa85a30a17248498e056b372d2b5a830aefa8938eabfdec70fd0869feb1996",
+      "bytes": 764
+    },
+    {
+      "evidence_id": "final_regression_receipt",
+      "original_path": "/workspace/scratch/fe5385ca063a/adk-11.3.10-corrected-regression/receipt.json",
+      "retained_path": "evidence/full-regression.json",
+      "sha256": "d655c80defe19e40627460f0cf6bd7c661c84849c7753d161064b2794d30a8ce",
+      "bytes": 1619
+    },
+    {
+      "evidence_id": "final_regression_timing",
+      "original_path": "/workspace/scratch/fe5385ca063a/adk-11.3.10-corrected-regression/timing.json",
+      "retained_path": "evidence/full-regression-timing.json",
+      "sha256": "f17e4c4873fc8dbc716b53050b3c3353dc5667700d324a1af5b68df84fbd403b",
+      "bytes": 8283
+    },
+    {
+      "evidence_id": "final_regression_stdout",
+      "original_path": "/workspace/scratch/fe5385ca063a/adk-11.3.10-corrected-regression/stdout.log",
+      "retained_path": "evidence/full-regression.stdout.log",
+      "sha256": "0d1bee4e82001511f12291d9c3be0867228a5a396f58b49d3acd176ef3eed61e",
+      "bytes": 3174
+    },
+    {
+      "evidence_id": "final_regression_stderr",
+      "original_path": "/workspace/scratch/fe5385ca063a/adk-11.3.10-corrected-regression/stderr.log",
+      "retained_path": "evidence/full-regression.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "evidence_id": "corrected_environment",
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-corrected-environment.json",
+      "retained_path": "evidence/corrected-environment.json",
+      "sha256": "f2082037fe36eec3d33f14e28e5d6bcd2cbb9a05f4445f9197d85a6eb0224df2",
+      "bytes": 1215
+    },
+    {
+      "evidence_id": "final_profiles_raw",
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-final-profiles-corrected.json",
+      "retained_path": "evidence/profile-context-checks.json",
+      "sha256": "94c51e84e986173f4f08eace2b8ae78a49c42b771e779cb6594eba35c8f9939b",
+      "bytes": 13094
+    },
+    {
+      "evidence_id": "final_profiles_independent_check",
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-independent-final-profile-recheck.json",
+      "retained_path": "evidence/independent/final_profiles_independent_check.json",
+      "sha256": "53a848a479986db6b05ec480f75228749439ca06daad0a7441201c8d524e0d60",
+      "bytes": 7626
+    },
+    {
+      "evidence_id": "first_frozen_focused_verification",
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-independent-focused-verification.json",
+      "retained_path": "evidence/independent/first_frozen_focused_verification.json",
+      "sha256": "38616091b9f52602125b4d049bc648c71bd20fb1d9b8b8cd004879f175030f7b",
+      "bytes": 5016
+    },
+    {
+      "evidence_id": "first_frozen_identity_check",
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-independent-frozen-identity-check.json",
+      "retained_path": "evidence/independent/first_frozen_identity_check.json",
+      "sha256": "a70d8477b8e8b192e2bf36fb226e1a21492656abccade0421fc93b60261bc3dd",
+      "bytes": 14757
+    },
+    {
+      "evidence_id": "final_source_identities",
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-independent-final-source-identities.json",
+      "retained_path": "evidence/independent/final_source_identities.json",
+      "sha256": "293070d1511cf7f11bcb2edb9d51a7a360585f56b1f5032f27bbc588941cdd3a",
+      "bytes": 20376
+    },
+    {
+      "evidence_id": "reviewed_source_index",
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-independent-reviewed-source-index.json",
+      "retained_path": "evidence/independent/reviewed_source_index.json",
+      "sha256": "78cbe0e2c2cf9b3a3f6caf0cf72464dbee4a6dba05ebc9746ffa58a3fc82f69e",
+      "bytes": 201437
+    },
+    {
+      "evidence_id": "canonical_patch",
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-final-source.patch",
+      "retained_path": "evidence/original.patch",
+      "sha256": "d82a42ee4620c923ebd4eaecae514f94551a733b4e9627f764a051efab1ab6c4",
+      "bytes": 528829
+    },
+    {
+      "evidence_id": "canonical_patch_check",
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-independent-canonical-patch-check.json",
+      "retained_path": "evidence/independent/canonical_patch_check.json",
+      "sha256": "7463306da773336a23fa679ccf880462a167065688768d78747727cf7f6bf842",
+      "bytes": 8754
+    },
+    {
+      "evidence_id": "interim_review",
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-independent-interim-review.json",
+      "retained_path": "evidence/independent/interim_review.json",
+      "sha256": "1e6df98c2ac756207d974d35eb6c35b877d1142b051cd7c9481ed5210cc8fbd7",
+      "bytes": 7934
+    },
+    {
+      "evidence_id": "interim_review_followup",
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-independent-interim-review-followup.json",
+      "retained_path": "evidence/independent/interim_review_followup.json",
+      "sha256": "c31ec72911649cbbfc3f725e1c491968a421f6e88a24c4c5acef0cf1194b6411",
+      "bytes": 2160
+    },
+    {
+      "evidence_id": "independent-source-review.json",
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-independent-final-review.json",
+      "retained_path": "evidence/independent-source-review.json",
+      "sha256": "3f0a5cbea1b7edca923052d313045574410202eb5fd312986dfe596cfb448c56",
+      "bytes": 41046
+    },
+    {
+      "evidence_id": "independent-source-review.md",
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-independent-final-review.md",
+      "retained_path": "evidence/independent-source-review.md",
+      "sha256": "ed937a661dc2a9b74763af3240a9324c76545057be719e8acc43391f51fc2d96",
+      "bytes": 7468
+    }
+  ],
+  "boundary": "Each independent source reference is byte-verified. Existing retained copies are reused. This preserves metadata and focused proofs, not a third-party source-code import."
+}

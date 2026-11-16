@@ -1,0 +1,4356 @@
+{
+  "reviewer": "/root/round3_independent_review",
+  "baseline_commit": "80f8b2ea2885e3f62dcea455c45a2e8ebf071b2b",
+  "baseline_tree": "ada1992f60ad6980bf8e1474db8a2a1b247c5c28",
+  "inputs": [
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-core-audit.json",
+      "bytes": 112393,
+      "sha256": "e184e3bc51e8deeb2297e977241895756b321d3cbb711372b7c8d5a744a43673"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-embedded-audit.json",
+      "bytes": 83212,
+      "sha256": "ef717877749d346be61a8d925f54c3867eafeb418cb6e3987c3f30afa59904f9"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-optional-audit.json",
+      "bytes": 61229,
+      "sha256": "028e65709f30b542e1f334e052aefe48196076825dae33b034fd2549d8c18fd7"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-platform-audit.json",
+      "bytes": 4559,
+      "sha256": "140f419bc48a74455c0c600ccffd6a48468688a5c3f1617bcbeeddd147bbd3a6"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-portfolio-audit.json",
+      "bytes": 165139,
+      "sha256": "5b2c73cb17234669536fade8073b73a02cad3eea4c02f6219e5125cdd67cd75b"
+    }
+  ],
+  "counts": {
+    "skills": 65,
+    "files": 153,
+    "bytes": 422088,
+    "decisions": {
+      "KEEP": 57,
+      "ENHANCE": 5,
+      "OBSERVE": 3
+    }
+  },
+  "errors": [],
+  "local_files": [
+    {
+      "path": "skills/adk-adr-writer/SKILL.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "ae3a98b5a0e1999d43ee9a36a2cce07fc427d382",
+      "sha256": "e013d6e67dc993a3c3a0cf589d6e1c1e3b4534c1a053422c8c1df0c04813dba2",
+      "bytes": 3680,
+      "lines": 58,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-58",
+          "read_at_utc": "2026-11-16T07:38:24.892881+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-after-action-review/SKILL.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "cec7d4b51daf500be270581c790aef7eeabaf104",
+      "sha256": "ae6e24987988e0d095ae4db176f0d180814c723337f0ced9038d989f3f042462",
+      "bytes": 3785,
+      "lines": 54,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-54",
+          "read_at_utc": "2026-11-16T07:38:24.892881+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-after-action-review/references/after-action-review.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "33c0825776ab10105d8381f59ad3b6bc8c04d5e0",
+      "sha256": "7cdb7dcf86c40457a9c4a008086c8dfb467b8c52fc9d1bd52b9f514edc24fab5",
+      "bytes": 436,
+      "lines": 47,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-47",
+          "read_at_utc": "2026-11-16T07:38:24.892881+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-after-action-review/references/codify-decision.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "52b1b474f54bc76b3d6fba1e8304e53e8f6d63ea",
+      "sha256": "bfa0e7b547453341f266799786286a30dc3af47bc23db020968c0e4c0fe94a90",
+      "bytes": 651,
+      "lines": 53,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-53",
+          "read_at_utc": "2026-11-16T07:38:24.892881+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-after-action-review/references/memory-candidate.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "702aced3a49cc5adddf33686afc081b7b1e8fb44",
+      "sha256": "3125b4c2cb0b38ecf8d542ff75b7db48feecb473742325abd05ee5a687888a3a",
+      "bytes": 1707,
+      "lines": 55,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-55",
+          "read_at_utc": "2026-11-16T07:38:24.892881+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-archive-governance/LICENSE",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "1c326f3a91d2e3889cb5259af82a3fdd96a4ba72",
+      "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
+      "bytes": 61,
+      "lines": 1,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-1",
+          "read_at_utc": "2026-11-16T07:38:24.892881+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-archive-governance/README.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "777dc00b02aa03d642041fb71a3e54a66ab94333",
+      "sha256": "f0d5f306b1d8ddafa6065d4c07883ae6bcfd123857e0cdec22fcdec7ba0036c6",
+      "bytes": 301,
+      "lines": 7,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-7",
+          "read_at_utc": "2026-11-16T07:38:24.892881+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-archive-governance/SKILL.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "39c95599cd3084210e8eaa8be33072d2f9eb4c12",
+      "sha256": "a950a9e9916c4ec1377a4f56dbc55bb12e1c3198a89be677540d783544c62876",
+      "bytes": 2687,
+      "lines": 75,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-75",
+          "read_at_utc": "2026-11-16T07:38:24.892881+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-archive-governance/agents/openai.yaml",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "174e9523634c71615fc7ff3d7094548a3fc186d9",
+      "sha256": "1a49a5ab0c79fab66f27c547d8dd7ea85307a96e214062611c4f8e4da8f90b96",
+      "bytes": 161,
+      "lines": 3,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-3",
+          "read_at_utc": "2026-11-16T07:38:24.892881+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-artifact-gating/SKILL.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "da4328a303fe3b0ea9dd116350961a71882122f6",
+      "sha256": "f19df4551579597b09c5a400c6ffdef6b48b4a8d0c27ce911c1429a5eb04947c",
+      "bytes": 2061,
+      "lines": 62,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-62",
+          "read_at_utc": "2026-11-16T07:38:24.892881+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-artifact-gating/references/details.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "ab51413bf831af643c805e7120fb23bd8d13866f",
+      "sha256": "def3c5a6ce7066b09bbd28a77260f1682e39c0ffd1f5383f5fe47d3e02b9e9e7",
+      "bytes": 2316,
+      "lines": 74,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-74",
+          "read_at_utc": "2026-11-16T07:38:24.892881+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-branch-closeout/SKILL.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "39a29b979bebb31093acf4e78330ae64469ce2eb",
+      "sha256": "141e64b1cbd2a8216e0ed40cf6a28573cfda831897f8a858f036f1c76e43f0e2",
+      "bytes": 3095,
+      "lines": 51,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "previous output was truncated; not counted as full reading"
+        },
+        {
+          "range": "all bytes; lines 1-51",
+          "read_at_utc": "2026-11-16T07:38:33.713595+00:00",
+          "method": "unfiltered full UTF-8 output, reread after output truncation"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-branch-closeout/references/closeout-options.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "4357bb2f6bb30e76734fd5954ef17c47d804468d",
+      "sha256": "2b4c0b4b065c9d1260418cba15aaee03893f06a022f499e140cdfc498d0d3d9e",
+      "bytes": 908,
+      "lines": 13,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "previous output was truncated; not counted as full reading"
+        },
+        {
+          "range": "all bytes; lines 1-13",
+          "read_at_utc": "2026-11-16T07:38:33.713595+00:00",
+          "method": "unfiltered full UTF-8 output, reread after output truncation"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-code-review-loop/SKILL.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "68cdd62c005b0b69aedf9d9193dc83f18a16fac2",
+      "sha256": "c9f9a8149babf7f51786a8b1d86f38f10b629051efcb355a0965b1ad8b1aa9fd",
+      "bytes": 6235,
+      "lines": 92,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "previous output was truncated; not counted as full reading"
+        },
+        {
+          "range": "all bytes; lines 1-92",
+          "read_at_utc": "2026-11-16T07:38:33.713595+00:00",
+          "method": "unfiltered full UTF-8 output, reread after output truncation"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-code-review-loop/references/review-communication-guidance.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "d52dfdd9db9f2a465df26414e8bb0023a9f45379",
+      "sha256": "0b68e9b0bbceceaf56458383137958c041ee7d75f343a12b5fd5a9cae71d8ddb",
+      "bytes": 1917,
+      "lines": 31,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-31",
+          "read_at_utc": "2026-11-16T07:38:24.892881+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-code-review-loop/references/review-evidence-template.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "70206c8d3234ed46757e06b6a8e639d7c6b2a6d4",
+      "sha256": "a82255232e618f5fd00f4532aa884c6df54f2dd97806da633d092286bc9d0af6",
+      "bytes": 3907,
+      "lines": 83,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-83",
+          "read_at_utc": "2026-11-16T07:38:24.892881+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-code-review-loop/references/review-feedback-fixtures.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "7de3c48c1d1961bd692797470fc5cb61523f7c45",
+      "sha256": "731f4b0dd24c9c3baea0e7d76bbeef6eeeb746d23335cf96893c694b68e91fa4",
+      "bytes": 2229,
+      "lines": 54,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-54",
+          "read_at_utc": "2026-11-16T07:38:24.892881+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-code-review-loop/references/review-governance-details.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "ed88058086d3797b9ab5dd0a274b7c65ded9528f",
+      "sha256": "b82d16825e3a0ee15e4b6cd08f1f4e736e32d63c93fdf7381922ffab60c0a2ea",
+      "bytes": 8750,
+      "lines": 85,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-85",
+          "read_at_utc": "2026-11-16T07:38:24.892881+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-code-simplification/SKILL.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "42b1540590869156af4f462958687cd2aac8500b",
+      "sha256": "ca77fa395fbbc17469890ec9f2409f01c442b0678904c9ec34115e8926e281e3",
+      "bytes": 3025,
+      "lines": 74,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-74",
+          "read_at_utc": "2026-11-16T07:38:42.315711+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-code-simplification/references/deep-module-design.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "7a294528019411649dfc84f5f5e79a7ab82e195f",
+      "sha256": "a5e463ebe150966c75e975feb6233914f1fa418d36abd1b588c5ae863e0ac797",
+      "bytes": 1275,
+      "lines": 11,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-11",
+          "read_at_utc": "2026-11-16T07:38:42.315711+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-code-simplification/references/details.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "4f5ec1be3bb629581b05a7849c8e5234a23adaf8",
+      "sha256": "46fb6f895ed2d2a6affac689756ea41b61b16faf4dabaa7136436933783360c6",
+      "bytes": 2582,
+      "lines": 80,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-80",
+          "read_at_utc": "2026-11-16T07:38:42.315711+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-commit-pr-quality-gate/SKILL.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "050cf95bc3c2f5b29f21e4658805ddb87c6058ee",
+      "sha256": "ac2559e3a0320be3aa3f83336ce0f3fa7359408625447eabcb00103b360abfc6",
+      "bytes": 3821,
+      "lines": 51,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-51",
+          "read_at_utc": "2026-11-16T07:38:42.315711+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-commit-pr-quality-gate/references/pr-risk-gates.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "cbd8582597fdc5d53b5d34701e48ed536f8cfde4",
+      "sha256": "dc5398ac9800eaeaaaac5800072b09801716be730d05d68a95b4c3400de67027",
+      "bytes": 1429,
+      "lines": 15,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-15",
+          "read_at_utc": "2026-11-16T07:38:42.315711+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-component-api-stability/SKILL.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "538407bb30b6e0579672f6234d793a0704e499a5",
+      "sha256": "345654c2510a7a9cef27388bd21b2f9df6d4f2c5b81de58a6912d1eb00d6d243",
+      "bytes": 5451,
+      "lines": 92,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-92",
+          "read_at_utc": "2026-11-16T07:38:42.315711+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-context-compress-handoff/LICENSE",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "1c326f3a91d2e3889cb5259af82a3fdd96a4ba72",
+      "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
+      "bytes": 61,
+      "lines": 1,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-1",
+          "read_at_utc": "2026-11-16T07:38:42.315711+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-context-compress-handoff/README.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "d1bf34ae8e15fa825bf64a85853bb639b61df22d",
+      "sha256": "4c76f8c71b05435bc10d614b20011d643f798be03ecb57d0c192a6852886ee14",
+      "bytes": 324,
+      "lines": 7,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-7",
+          "read_at_utc": "2026-11-16T07:38:42.315711+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-context-compress-handoff/SKILL.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "7596082ede5c535c724324fc2099c17968fc4c78",
+      "sha256": "f4d69f46f916f7bc2f5dd734875d3e6fbb5aae94c0ed0d2f95a1d7748b824d7c",
+      "bytes": 2578,
+      "lines": 69,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-69",
+          "read_at_utc": "2026-11-16T07:38:42.315711+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-context-compress-handoff/agents/openai.yaml",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "44f79d2174ec6c1b0e4e1f8e16fa512210d27778",
+      "sha256": "60e59ca0c78d7202172eea257a23803188f8017776d18d58851ef4934090e00c",
+      "bytes": 174,
+      "lines": 3,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-3",
+          "read_at_utc": "2026-11-16T07:38:42.315711+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-context-engineering/SKILL.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "1b53fcbe94688c5970e130017f6f1ab433be6522",
+      "sha256": "86dbb451b888eee79923388025f71c1cb92437d3d948ee628b10f24b50807ef5",
+      "bytes": 3927,
+      "lines": 86,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-86",
+          "read_at_utc": "2026-11-16T07:38:46.896516+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-cross-team-handoff/SKILL.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "3a99ac808bf02120abe6a5b508bef0010f673a28",
+      "sha256": "c02d4289a267bf655f0c22b9fdfac3638ee21067ad61aab60917fbdcc3334323",
+      "bytes": 3069,
+      "lines": 56,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-56",
+          "read_at_utc": "2026-11-16T07:38:46.896516+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-engineering-growth-review/LICENSE",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "3c2826303420c300cf2a933bd8c440bc511eeb77",
+      "sha256": "e69e969952b38b335005b8dd9d89ae0fd971ed7376ff66659bc5fae8099a6264",
+      "bytes": 1063,
+      "lines": 21,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-21",
+          "read_at_utc": "2026-11-16T07:38:46.896516+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-engineering-growth-review/README.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "689f3c5d738954df8e27c1daa992dba2318f01b8",
+      "sha256": "ba06dc6db2436cac1e51707248013dc732ee228c074d8730c7ee5d7703981f63",
+      "bytes": 745,
+      "lines": 13,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-13",
+          "read_at_utc": "2026-11-16T07:38:46.896516+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-engineering-growth-review/SKILL.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "0aedd7670b6bfb5743e6d2b9da14a73f166e19df",
+      "sha256": "0e3e8a5d3b55cbad4b32bdc113f3cace04ea36efeb20315033ceb8a6792991fd",
+      "bytes": 3853,
+      "lines": 57,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-57",
+          "read_at_utc": "2026-11-16T07:38:46.896516+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-engineering-growth-review/agents/openai.yaml",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "b66751d4185a004dce444b9a1e24ec82131f02ab",
+      "sha256": "17530036dc4d53ee862d6030d03cea86392d1e3ed1a4ce2e9178df4e8458bc05",
+      "bytes": 163,
+      "lines": 3,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-3",
+          "read_at_utc": "2026-11-16T07:38:46.896516+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-engineering-growth-review/references/growth-evidence-boundaries.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "e6540e1e825e08448da2f7721aec84baa5663837",
+      "sha256": "0b3f9a93d9cd77346dacb69840ec003c168d5885d9843842a3f22ac18c810653",
+      "bytes": 1266,
+      "lines": 15,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-15",
+          "read_at_utc": "2026-11-16T07:38:46.896516+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-goal-authoring/SKILL.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "08ec29da584e10cab9510b897ae75428d55dd643",
+      "sha256": "33ea3393563643e3e17a5615a10884834c87208ab3ea292ba4396ad7be7a702a",
+      "bytes": 3704,
+      "lines": 52,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-52",
+          "read_at_utc": "2026-11-16T07:38:46.896516+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-goal-authoring/references/goal-plan.json",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "7f35ee1caeb659b47cbc805f0107dd3284f123db",
+      "sha256": "e1a1facc23f826e4f65ec3b9a978a7c4feef889187d1d0302472215cd156a43b",
+      "bytes": 1844,
+      "lines": 21,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-21",
+          "read_at_utc": "2026-11-16T07:38:46.896516+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-interface-contract-design/SKILL.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "166bd9fdf3eb061cc5bfb90110fb0de921e32f04",
+      "sha256": "4bcf9f6d00ff3fdfeffef01a4c1e82383f02c0530f8dc632305780aedfc8592d",
+      "bytes": 4924,
+      "lines": 82,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-82",
+          "read_at_utc": "2026-11-16T07:38:52.672109+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/design-quality-methods.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "e28a344dd8989179e39f83c8afa405dee4055f75",
+      "sha256": "0d2a5ae8f32b3950d2b1a21ac913029905aded6f02bd1b0b2e591f61a29bcaf6",
+      "bytes": 2184,
+      "lines": 20,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-20",
+          "read_at_utc": "2026-11-16T07:38:52.672109+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/details.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "a30be6f0edee84c8f76cbcd3d8243ec650ef2880",
+      "sha256": "404798e52a85fde251c17986c95727b7b575c7425d7f73c5318a659e8bb57f23",
+      "bytes": 1938,
+      "lines": 45,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-45",
+          "read_at_utc": "2026-11-16T07:38:52.672109+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/lifecycle-operation-contract.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "dac285c357b87bda2cc468d64fc38d931330aa51",
+      "sha256": "22532bfe0e89fac9596023f0a2b708d46b98722d4acf6adc90bf833e0f82db71",
+      "bytes": 2393,
+      "lines": 35,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-35",
+          "read_at_utc": "2026-11-16T07:38:52.672109+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/spec-code-bidirectional.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "12b0ea0bec197ae0e9db6d4c59d93772efdf29e9",
+      "sha256": "cfb70c950ca482ce2a4136aa26fe2a3a60c21349949188192a5f0f13450923ce",
+      "bytes": 2238,
+      "lines": 21,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-21",
+          "read_at_utc": "2026-11-16T07:38:52.672109+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/tool-effect-contract.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "64865b9122ebf281971818bdea4f6446a1758ff0",
+      "sha256": "428be87b2acb671e01581ae83af46dfb0e87c8cdb1d24d11e18a231244b67ea4",
+      "bytes": 2845,
+      "lines": 24,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-24",
+          "read_at_utc": "2026-11-16T07:38:52.672109+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-knowledge-archive/LICENSE",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "1c326f3a91d2e3889cb5259af82a3fdd96a4ba72",
+      "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
+      "bytes": 61,
+      "lines": 1,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-1",
+          "read_at_utc": "2026-11-16T07:38:52.672109+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-knowledge-archive/README.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "de534394e4358dc6812dd3ac3a3d40410648d6c6",
+      "sha256": "07d5563a38ec220a6937c32a7339cd866942df34936c366ddfb1e4f2c4fde8ea",
+      "bytes": 329,
+      "lines": 7,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-7",
+          "read_at_utc": "2026-11-16T07:38:52.672109+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-knowledge-archive/SKILL.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "73d8519350051b9c02aadaadfa1293deebc3b269",
+      "sha256": "fb31246a4016f866dbcffefeb324595d5cc6569f5c331ab2b8f5c399c407baa7",
+      "bytes": 2236,
+      "lines": 45,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-45",
+          "read_at_utc": "2026-11-16T07:38:52.672109+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-knowledge-archive/agents/openai.yaml",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "2d3a49cb10ab7b49174564111133699c068bab1e",
+      "sha256": "c915127f7ac46ebdce1bd6afd512c0039cfea00a6fa6dc5fc8d5f4a653b5a7ba",
+      "bytes": 156,
+      "lines": 3,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-3",
+          "read_at_utc": "2026-11-16T07:38:52.672109+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-lightweight-planning/LICENSE",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "3c2826303420c300cf2a933bd8c440bc511eeb77",
+      "sha256": "e69e969952b38b335005b8dd9d89ae0fd971ed7376ff66659bc5fae8099a6264",
+      "bytes": 1063,
+      "lines": 21,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-21",
+          "read_at_utc": "2026-11-16T07:38:52.672109+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-lightweight-planning/README.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "411c8973c5fb8f81a24cdf9b11604b40a399eec7",
+      "sha256": "8df5c88632885b07dc4a341b6904b57d687de144db79f2bf06d39e31dd0e2985",
+      "bytes": 554,
+      "lines": 12,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-12",
+          "read_at_utc": "2026-11-16T07:38:52.672109+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-lightweight-planning/SKILL.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "fb572637a11ce11e7ae5d3c89ff56a8c194d3726",
+      "sha256": "43bc00ae93f65c5cabd61d61c455faa8cfa4382095e15b9f8d882739513c34bc",
+      "bytes": 2158,
+      "lines": 48,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-48",
+          "read_at_utc": "2026-11-16T07:38:52.672109+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-lightweight-planning/agents/openai.yaml",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "dfe6682034190c40960bfe36e2c1a89a3849a8fd",
+      "sha256": "29a33d35e237437b617366384e22e09a6b7c489fae8054f88c44dd51e25f20b5",
+      "bytes": 127,
+      "lines": 3,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-3",
+          "read_at_utc": "2026-11-16T07:38:52.672109+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-memory-curator/LICENSE",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "1c326f3a91d2e3889cb5259af82a3fdd96a4ba72",
+      "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
+      "bytes": 61,
+      "lines": 1,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-1",
+          "read_at_utc": "2026-11-16T07:38:52.672109+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-memory-curator/README.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "a90db02f1be4fa9f456e24f4a931cdad259a6903",
+      "sha256": "1c9f71a0511b8f6979e38c9825fd7aaaedcb62e62686316f9edeb1b55bf96933",
+      "bytes": 310,
+      "lines": 7,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-7",
+          "read_at_utc": "2026-11-16T07:38:52.672109+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-memory-curator/SKILL.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "b86d93a4421c4305b227053d7e6d63ae3fc2b820",
+      "sha256": "63673dfb7af45429772275b713093ead76275d39187ddae22b75477abe21ddf5",
+      "bytes": 3530,
+      "lines": 82,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-82",
+          "read_at_utc": "2026-11-16T07:38:52.672109+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-memory-curator/agents/openai.yaml",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "db0b084970bff6d5eb5cdd0726a976262b4b8fb1",
+      "sha256": "24ec7d756319b13019ccdb7b227d67f23066beae23e05e02e5339d4340231acc",
+      "bytes": 165,
+      "lines": 3,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-3",
+          "read_at_utc": "2026-11-16T07:38:52.672109+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-parallel-agent-governance/SKILL.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "332193235d528097389ee380b118c697ea0435ee",
+      "sha256": "1336d4e8a3de6e7bf2f3aab4d09675f3ee794f7cb0476826076ffbebcf523b7c",
+      "bytes": 4292,
+      "lines": 52,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-52",
+          "read_at_utc": "2026-11-16T07:40:28.556682+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-parallel-agent-governance/references/parallel-worktree-task-package.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "3431327dbbf22adc7db2f5ec3f6d1dd142b29f30",
+      "sha256": "8b9ae9c13249cb1cc002e7bf090c1799fe83a2f625359ec4b79395dfaf56f3be",
+      "bytes": 1716,
+      "lines": 39,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-39",
+          "read_at_utc": "2026-11-16T07:40:28.556682+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-parallel-agent-governance/references/subagent-review-checklist.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "e55eaf650d6f4690d92c8e6089d59d32f7a799f3",
+      "sha256": "b771c82410f6c982e9482c27cf79ad0a28a8bd5ffdf3ea15c63ed2ae592e843c",
+      "bytes": 643,
+      "lines": 33,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-33",
+          "read_at_utc": "2026-11-16T07:40:28.556682+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-pilot-framework/SKILL.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "904b084359c8a1fe284d0c57ee5c886dcf077771",
+      "sha256": "5ed0041ab153c4b0514402ad548216055b38db469ab0d30b422ee09899cfe253",
+      "bytes": 3765,
+      "lines": 72,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-72",
+          "read_at_utc": "2026-11-16T07:40:28.556682+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-pilot-framework/references/details.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "e0a681a96a5a86b32dc8dd7f591657b0d42e8560",
+      "sha256": "08faff8c175aba7641da273bdcec4fac21b14baf270de3efc16ba7abc1400361",
+      "bytes": 3632,
+      "lines": 81,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-81",
+          "read_at_utc": "2026-11-16T07:40:28.556682+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-planning-execution-loop/SKILL.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "0381bdee35c0801f87c15117f5ce578930b78d54",
+      "sha256": "4c9f80b8d5b7458b176b13869791dc17bd7047768745ae846f7e76067fc6c2ca",
+      "bytes": 4415,
+      "lines": 53,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-53",
+          "read_at_utc": "2026-11-16T07:40:28.556682+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-planning-execution-loop/references/long-task-recovery.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "5d2b37d5b1fc692a86d3dbaa5a04304ff6d2c968",
+      "sha256": "1bb86490fb7f335fd7f5f478a6be9c750b25ac0c025039b561a55bc4467bc375",
+      "bytes": 5155,
+      "lines": 85,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-85",
+          "read_at_utc": "2026-11-16T07:40:28.556682+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-production-field-readiness/SKILL.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "d864336f23a9563fad78f27b08dfdbddeb2105f1",
+      "sha256": "bc708d31b288c346035a97459e6a08c001112d7f4979adc65311a39fe8588c63",
+      "bytes": 5395,
+      "lines": 111,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-111",
+          "read_at_utc": "2026-11-16T07:40:46.167145+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-production-field-readiness/references/pilot-measurement-evidence.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "faf4083758a12cda2fe4a0e1a965468e9ef8f4bd",
+      "sha256": "ead5542e88462d8d5e599755991be6fecfa92b061fb4dc4471dfda8977c2a355",
+      "bytes": 1793,
+      "lines": 38,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-38",
+          "read_at_utc": "2026-11-16T07:40:46.167145+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-release-versioning/SKILL.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "5b00d772ab95e0978d7c4039c304887d4173843d",
+      "sha256": "4a80611ceda62c35c558371d47238d3b5f2516a20efc067160abefc3ce686163",
+      "bytes": 2776,
+      "lines": 60,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-60",
+          "read_at_utc": "2026-11-16T07:40:46.167145+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-release-versioning/references/details.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "b2c501842e5f22694538391f5d2ee617809290ee",
+      "sha256": "6da9f5f3ce85401938db084b0aa1df5e78683ad1f4132927c50ddbc55a4c1bed",
+      "bytes": 2471,
+      "lines": 49,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-49",
+          "read_at_utc": "2026-11-16T07:40:46.167145+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-repo-drift-remediation/LICENSE",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "1c326f3a91d2e3889cb5259af82a3fdd96a4ba72",
+      "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
+      "bytes": 61,
+      "lines": 1,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-1",
+          "read_at_utc": "2026-11-16T07:40:46.167145+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-repo-drift-remediation/README.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "bbb9ffc101cd6ac54317dac5183bd3ee015d85ea",
+      "sha256": "64a339900700aa3444f589aa9549d082124f2bf20e40ea58270d7ce8066bafa7",
+      "bytes": 303,
+      "lines": 7,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-7",
+          "read_at_utc": "2026-11-16T07:40:46.167145+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-repo-drift-remediation/SKILL.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "33c87bdfa806af97b0a8f11d7185be3bba76374c",
+      "sha256": "f41df2709a50aa3263df6b5224afafda9cb3a3d48e15b05efc9ce15970bbf6f2",
+      "bytes": 3021,
+      "lines": 76,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-76",
+          "read_at_utc": "2026-11-16T07:40:46.167145+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-repo-drift-remediation/agents/openai.yaml",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "697f5074deb1d789d265e0de0416e504fdf9fac9",
+      "sha256": "daf474758479bf0bbfbd6350e6215c76dfbe7d23233e613c262f0a9f2e149470",
+      "bytes": 166,
+      "lines": 3,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-3",
+          "read_at_utc": "2026-11-16T07:40:46.167145+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-repo-prompt-analysis/SKILL.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "8ae146546cb2806bc4d9e2f0b257572107f7b57a",
+      "sha256": "202f2a15d8bed57f78d28308d388e0424df4f94783de9e472f38f692ea922dc3",
+      "bytes": 3300,
+      "lines": 53,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-53",
+          "read_at_utc": "2026-11-16T07:40:46.167145+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-requirements-triage/SKILL.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "43e6e6e463d026ecbc44e3404c716bc838913587",
+      "sha256": "ea58deea04468736cda73a3231dfd58854e088f243987063962597d44d35a56a",
+      "bytes": 3400,
+      "lines": 64,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-64",
+          "read_at_utc": "2026-11-16T07:40:46.167145+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-requirements-triage/references/embedded-discovery-brief.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "b3983557b95917a1093ffa0d64ffebc2e5fd332b",
+      "sha256": "7e288b51e2512b725f14eb52285fc4391faae7b568d300c7538179038d9156da",
+      "bytes": 1558,
+      "lines": 64,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-64",
+          "read_at_utc": "2026-11-16T07:40:46.167145+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-requirements-triage/references/exploratory-requirements-brief.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "c2358903d236fba94ecc1dba697386638280c37d",
+      "sha256": "9c115653d3de2c5c31a984588082ba495198d9a51439a5e107066ff0046430fb",
+      "bytes": 579,
+      "lines": 7,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-7",
+          "read_at_utc": "2026-11-16T07:40:46.167145+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-runtime-router/SKILL.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "e4221a63cb951dfc206f9138c26141f5d8fd431f",
+      "sha256": "d77f73c6eaee5c9eea2bbe349eb12cc535b6c5628ddd106b95e4b0afd2dc14a3",
+      "bytes": 5443,
+      "lines": 98,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-98",
+          "read_at_utc": "2026-11-16T07:40:53.115991+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-runtime-router/references/runtime-routing-details.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "f30031e24580c72f1247119cab40dc52d366ca88",
+      "sha256": "7d4207293a5a99bc48434e34128841df290af30dc6794a923a9086fc4171bbe1",
+      "bytes": 7296,
+      "lines": 85,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-85",
+          "read_at_utc": "2026-11-16T07:40:53.115991+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-skill-deep-analysis/SKILL.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "0a66b30462bb56e3de2b57070c208316d8fa5f3a",
+      "sha256": "69eaff562babdcc57464582632d7491b3bc2f64000e71d86ada8ab193ef47ded",
+      "bytes": 5613,
+      "lines": 59,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-59",
+          "read_at_utc": "2026-11-16T07:40:53.115991+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-skill-deep-analysis/references/details.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "744430c8df357ad4cc16cf192cf37fa9554c5d9d",
+      "sha256": "582bfc5374a7d80847f570b5a4fce2fc6558c5e43f70cd8261956eadccd6e8e6",
+      "bytes": 2096,
+      "lines": 19,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-19",
+          "read_at_utc": "2026-11-16T07:40:53.115991+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-structured-requirements-questioning/SKILL.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "95be4669b9b91f8a6bd87f0bb97539656efea8d4",
+      "sha256": "0cb2f777e209b234fdc016130c1d9f0cbc8e65ed8e1b547a761862892b397d4e",
+      "bytes": 3458,
+      "lines": 55,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-55",
+          "read_at_utc": "2026-11-16T07:40:57.817031+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-structured-requirements-questioning/references/prototype-as-experiment.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "654a449ba2d86c2ff16fd14a88a309ccc337faa1",
+      "sha256": "b76187a6d57e2b954688953af08df4c1e75dd4bb456f55108d7d25e847e27129",
+      "bytes": 967,
+      "lines": 9,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-9",
+          "read_at_utc": "2026-11-16T07:40:57.817031+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-systematic-debugging/SKILL.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "a4de92609ea416c21af29f2f1e64f3e850f42ba7",
+      "sha256": "b3756b60fb0e07b591d06ca8957878b2ccb2c4835169b350c79daac6f2ea5edc",
+      "bytes": 2801,
+      "lines": 54,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-54",
+          "read_at_utc": "2026-11-16T07:40:57.817031+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-systematic-debugging/references/embedded-diagnosis-branches.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "099940f7dad76c01971be181caab997a93897e50",
+      "sha256": "b1f5e669d12c5923a60426aa7268f94ac0832072808f200a08d0a49be0ef6d89",
+      "bytes": 2793,
+      "lines": 22,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-22",
+          "read_at_utc": "2026-11-16T07:40:57.817031+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-systematic-debugging/references/sanitizer-validation.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "fe9d0ac7e8bd9c53f7cedeca4a5d26ab64e8dbf5",
+      "sha256": "2d708bd56c0147437a53fe568ae483d41be10dd3481d691485d9db48cdc89fdd",
+      "bytes": 2463,
+      "lines": 45,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-45",
+          "read_at_utc": "2026-11-16T07:40:57.817031+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-systematic-debugging/references/tight-feedback-loop.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "a8f806a520b6a45b6738bae52927ccf90fbe25ae",
+      "sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85",
+      "bytes": 1524,
+      "lines": 27,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-27",
+          "read_at_utc": "2026-11-16T07:40:57.817031+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-task-breakdown/SKILL.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "67edcf4f519e6cebca1ef8847a64644920076eed",
+      "sha256": "3d25e72fadcf2f74f4936223065097de9b7f26c41d4982ac0eb58ab4161c9f20",
+      "bytes": 3659,
+      "lines": 48,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-48",
+          "read_at_utc": "2026-11-16T07:40:57.817031+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-task-breakdown/references/task-packaging.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "c8dd41e0caa444c5af571c2d66a62a96ed2556b2",
+      "sha256": "6a417e248ca5bd0f31f63758d6921779ae68e8800365d67f463d89b54b5e5aa3",
+      "bytes": 1534,
+      "lines": 15,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-15",
+          "read_at_utc": "2026-11-16T07:40:57.817031+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-task-breakdown/references/vertical-slice-planning.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "1b0977d635e23911bd42a55e0b8354f78c11a0af",
+      "sha256": "f7267bb5a367369cbc40d0059d847f9e61d9d8f1d1cc23b17d5a3cf769de2260",
+      "bytes": 3796,
+      "lines": 63,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-63",
+          "read_at_utc": "2026-11-16T07:40:57.817031+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-token-context-governance/SKILL.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "03a735d7faae07fa35db8491e9944ebe11c0f367",
+      "sha256": "e426f29fa1f3a519c8932ade7caed1d43cf71728f902f781b0d9d24adcc25f1d",
+      "bytes": 7699,
+      "lines": 112,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-112",
+          "read_at_utc": "2026-11-16T07:41:03.240771+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-verification-before-completion/SKILL.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "1f185c64ec8d2070a07aa4d96fd1c7ceadcb8af2",
+      "sha256": "e9c8657959a756f91e05621267df953d293f7106a78e18e213a45b7100858b96",
+      "bytes": 4508,
+      "lines": 59,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-59",
+          "read_at_utc": "2026-11-16T07:41:07.734582+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-verification-before-completion/references/verification-governance-details.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "611dc0ab9757c0b7faa45339b7000d9592db40a9",
+      "sha256": "7e7ef78d237519ab391bb897dcd33a051b60b10f6b6406b571aee43b2cbee5aa",
+      "bytes": 8933,
+      "lines": 134,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-134",
+          "read_at_utc": "2026-11-16T07:41:07.734582+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-worktree-governance/SKILL.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "f3c91613e6e5922bd452f9960e9f6f7976febf31",
+      "sha256": "68ce46730100ce4cedbb3438747bd134666561dca1c00790bb3e2329a3461242",
+      "bytes": 3746,
+      "lines": 50,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-50",
+          "read_at_utc": "2026-11-16T07:41:07.734582+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-worktree-governance/references/parallel-worktree-task-package.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "bde4c96c974fdac56a09b50dd945e153081b6b4d",
+      "sha256": "f80471b63906ed9755a06b7b0c9f638509ff1a0951a1ccb79f8a566909f2d1f4",
+      "bytes": 654,
+      "lines": 43,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-43",
+          "read_at_utc": "2026-11-16T07:41:07.734582+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-worktree-governance/references/worktree-operation-boundaries.md",
+      "group": "core",
+      "mode": "100644",
+      "git_blob": "38d304e35e38587df7ee2e5e6313e3434cc1809c",
+      "sha256": "2ab200477eab8f816df4c958623030337693f05b3c5ea0dd2d23e1a36fe1eaa2",
+      "bytes": 1789,
+      "lines": 22,
+      "auditor_declared_read_ranges": [
+        {
+          "range": "all bytes; lines 1-22",
+          "read_at_utc": "2026-11-16T07:41:07.734582+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-bsp-analysis/SKILL.md",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "929e9ba760ad73979ba41e028385d7efaef2d5a4",
+      "sha256": "afb1112e6e10d1b605f9bccb6837afdca9506ccac2881f98dd044d344fe78835",
+      "bytes": 3928,
+      "lines": 81,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 81,
+          "byte_start": 0,
+          "byte_end_exclusive": 3928
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-bsp-analysis/references/bsp-analysis-details.md",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "b9016cd4f521354f72a6ec2abbf6a7b8fd425c67",
+      "sha256": "e371db7e0af45f212a4f9fc75d0b8049d78c2ed42270ab160b99707b26990c9c",
+      "bytes": 1666,
+      "lines": 38,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 38,
+          "byte_start": 0,
+          "byte_end_exclusive": 1666
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-bsp-porting-playbook/SKILL.md",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "2413d7cea3f01a73fc55a5d04067a5f2c79e51ca",
+      "sha256": "401b353282ae3029a97ec6456f1da5d11fc575b512c6f5f3bda13541f468ac68",
+      "bytes": 5335,
+      "lines": 94,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 94,
+          "byte_start": 0,
+          "byte_end_exclusive": 5335
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-cmake-cross-build/SKILL.md",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "5f9fa8ac96f75a659245007135eb99f8c38f6268",
+      "sha256": "e884e89f047dfd47248413a0d0a7d32c3f8a4e7724a9fe1b6a368f77e28a710a",
+      "bytes": 4709,
+      "lines": 111,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 111,
+          "byte_start": 0,
+          "byte_end_exclusive": 4709
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-driver-bringup-checklist/SKILL.md",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "7f5154f2926ef55538983d455767208b96fb740b",
+      "sha256": "80e53c502e62692275d5cddb3d1f21a23c8fdf02b477c205fa983ec1ef711441",
+      "bytes": 5457,
+      "lines": 100,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 100,
+          "byte_start": 0,
+          "byte_end_exclusive": 5457
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-driver-implementation/SKILL.md",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "e2a26df790d5f8f668caddf131e82838e7e0e564",
+      "sha256": "c915a72b5373f98234a7bdf6eef5df71bb99a8bc2201cc96a6a145038b06a409",
+      "bytes": 5130,
+      "lines": 96,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 96,
+          "byte_start": 0,
+          "byte_end_exclusive": 5130
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-embedded-debug-transport/LICENSE",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "1c326f3a91d2e3889cb5259af82a3fdd96a4ba72",
+      "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
+      "bytes": 61,
+      "lines": 1,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 1,
+          "byte_start": 0,
+          "byte_end_exclusive": 61
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-embedded-debug-transport/README.md",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "c975880282efd85f55780b4c423efcedcdf58edf",
+      "sha256": "453bf2b168e3ba1a2c7176e59803709ac714749701f07809163c39614fc3220d",
+      "bytes": 391,
+      "lines": 7,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 7,
+          "byte_start": 0,
+          "byte_end_exclusive": 391
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-embedded-debug-transport/SKILL.md",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "d4100591b2faa1f536bafce5b8a12837fcd31d09",
+      "sha256": "ccb5656dc5580d5f6d70290928f9b45a9573f376bc30cab92b62fa901875d1d4",
+      "bytes": 5745,
+      "lines": 101,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 101,
+          "byte_start": 0,
+          "byte_end_exclusive": 5745
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-embedded-debug-transport/agents/openai.yaml",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "a30652980d243b2de8379d1e02946e6ebfa18090",
+      "sha256": "5482eefa68e99a12a9c0a9ec90c1d958cfac588f30c516c419c216b7dfa7ae69",
+      "bytes": 173,
+      "lines": 3,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 3,
+          "byte_start": 0,
+          "byte_end_exclusive": 173
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-embedded-diagnostic-harness/LICENSE",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "1c326f3a91d2e3889cb5259af82a3fdd96a4ba72",
+      "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
+      "bytes": 61,
+      "lines": 1,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 1,
+          "byte_start": 0,
+          "byte_end_exclusive": 61
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-embedded-diagnostic-harness/README.md",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "6005feb11ddfc27c5db48f421e1e3e6986c0d04d",
+      "sha256": "37fc552aff1dd57ab25ce50cb3d2b669a6a59cd8e59cc70030139c63b9505751",
+      "bytes": 343,
+      "lines": 7,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 7,
+          "byte_start": 0,
+          "byte_end_exclusive": 343
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-embedded-diagnostic-harness/SKILL.md",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "844be83933a5cfc9014468bb77d9506cf9757eaf",
+      "sha256": "afd31fb7ec8264948a400fa83ed630b46d966ba4861b716b5f97cc561332f526",
+      "bytes": 3079,
+      "lines": 76,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 76,
+          "byte_start": 0,
+          "byte_end_exclusive": 3079
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-embedded-diagnostic-harness/agents/openai.yaml",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "ddb21a32a52583d51156e186585bdb0801b196c5",
+      "sha256": "e994baf88b865d08f5808d321936ea25fdbf5b7ef42abf8d196ce433f211122a",
+      "bytes": 168,
+      "lines": 3,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 3,
+          "byte_start": 0,
+          "byte_end_exclusive": 168
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-embedded-release-orchestration/LICENSE",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "1c326f3a91d2e3889cb5259af82a3fdd96a4ba72",
+      "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
+      "bytes": 61,
+      "lines": 1,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 1,
+          "byte_start": 0,
+          "byte_end_exclusive": 61
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-embedded-release-orchestration/README.md",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "f093c89f695ebc73ecb8895680aab8bfd6ea0804",
+      "sha256": "e917b29015b779f128478eb2e450f27c0e1cd19d1be639321e7000677b08d5d0",
+      "bytes": 342,
+      "lines": 7,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 7,
+          "byte_start": 0,
+          "byte_end_exclusive": 342
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-embedded-release-orchestration/SKILL.md",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "2e3275c050211de5e0f9f65b040327d92516165b",
+      "sha256": "32581c98888f97028cf36a8fc326143944055c53405a95b397d498f07cd56fc5",
+      "bytes": 5245,
+      "lines": 91,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 91,
+          "byte_start": 0,
+          "byte_end_exclusive": 5245
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-embedded-release-orchestration/agents/openai.yaml",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "3baaad6a3aeaf5a9b7728492c7681dcfec82a096",
+      "sha256": "42f5870f805301ab55c6d1a8fbcb378ecb1a9620cfc50c03dd297eddf82b1057",
+      "bytes": 177,
+      "lines": 3,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 3,
+          "byte_start": 0,
+          "byte_end_exclusive": 177
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-embedded-release-orchestration/references/multi-mcu-ota-recovery.md",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "ba9fd82c7e172aec3c58a666e7f4aad614f65367",
+      "sha256": "8e67f41286a6d36c70aa2090ee9f3a8bd62ce1244a3ffd608a47f0a68aeb175e",
+      "bytes": 1698,
+      "lines": 18,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 18,
+          "byte_start": 0,
+          "byte_end_exclusive": 1698
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-embedded-remote-debug-log-triage/LICENSE",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "1c326f3a91d2e3889cb5259af82a3fdd96a4ba72",
+      "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
+      "bytes": 61,
+      "lines": 1,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 1,
+          "byte_start": 0,
+          "byte_end_exclusive": 61
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-embedded-remote-debug-log-triage/README.md",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "b8ad51e75a696100dfc4381cba5db3c50b1fd7a4",
+      "sha256": "9aa267e1e3eda44db5c9fadba10ce9d422da36dca50183a6236a4266f1cb8487",
+      "bytes": 560,
+      "lines": 7,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 7,
+          "byte_start": 0,
+          "byte_end_exclusive": 560
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-embedded-remote-debug-log-triage/SKILL.md",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "9936e058634b407592f10e286ce3e3afa4e3ddb5",
+      "sha256": "af339cd5cb7f9155eff3dae00f3b49ff1da16ed90fc0d1dfafd6700d4dc820ff",
+      "bytes": 6746,
+      "lines": 121,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 121,
+          "byte_start": 0,
+          "byte_end_exclusive": 6746
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-embedded-remote-debug-log-triage/agents/openai.yaml",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "d50dba172a3732c982867bb1205024b2c193c2f2",
+      "sha256": "e627b547abc25a924ac9899add7d9158fa9f194a5f2a3cbf8cc4e4e30b1d380e",
+      "bytes": 189,
+      "lines": 3,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 3,
+          "byte_start": 0,
+          "byte_end_exclusive": 189
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-embedded-remote-debug-log-triage/references/remote-adb-hil-contract.md",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "6b573675b3a48548fdbda7649397c0304af69d43",
+      "sha256": "768139df1964829995b8fc0721638673079b3a488d4dabbd4f3516b981b5f7f8",
+      "bytes": 3301,
+      "lines": 80,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 80,
+          "byte_start": 0,
+          "byte_end_exclusive": 3301
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-embedded-storage-layout-migration/SKILL.md",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "a8e5e5a4533ecff63b5753f67515d7a702d32299",
+      "sha256": "7afc136ec22f48ef346c7535030e2590f5ccc919d4631ddf34853380ce0f4c76",
+      "bytes": 5590,
+      "lines": 98,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 98,
+          "byte_start": 0,
+          "byte_end_exclusive": 5590
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-fault-injection-recovery/SKILL.md",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "01ef6c409bdfa9d4c00cef778dea3177bf2d7e09",
+      "sha256": "8765aad5a698ff110e7765e72aa2c7286cfb9801557ec8b33ee0bb4e18c1e812",
+      "bytes": 3559,
+      "lines": 84,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 84,
+          "byte_start": 0,
+          "byte_end_exclusive": 3559
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-hardware-debugging/SKILL.md",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "4207ed8d0f287c908963e0859728bd977380a040",
+      "sha256": "69f3eade6355e566e1c7a4d3a59a8233401e491e517e00b46959f67a001847ec",
+      "bytes": 2701,
+      "lines": 68,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 68,
+          "byte_start": 0,
+          "byte_end_exclusive": 2701
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-hardware-debugging/references/mcu-fault-reset-wakeup.md",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "722fdb6ebfd3d5c68b48662a5750de5069c181f4",
+      "sha256": "8ce111266cca681154fd796de59efeb7319f4e6c2af9f6be2fdcb529531bcc04",
+      "bytes": 1919,
+      "lines": 22,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 22,
+          "byte_start": 0,
+          "byte_end_exclusive": 1919
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-integration-hil-sil/SKILL.md",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "edfed5940559e83040789791776716bd3f30dbda",
+      "sha256": "8ae810e665542db4ca20c46a911bd98d859d70fa97caf5bd5615595ee75fb8f2",
+      "bytes": 3866,
+      "lines": 70,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 70,
+          "byte_start": 0,
+          "byte_end_exclusive": 3866
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-interrupt-dma-patterns/SKILL.md",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "eb6d6b7ad74a355b2c049cef81477962244352b4",
+      "sha256": "49bfd3961ad45dc00afe801086c4b3974518180123bb003941d51c436e81eaea",
+      "bytes": 5406,
+      "lines": 92,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 92,
+          "byte_start": 0,
+          "byte_end_exclusive": 5406
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-interrupt-dma-patterns/references/details.md",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "59b883b26bdd3a3dd27c4845ffa344e938aab24d",
+      "sha256": "775bfc53ca049cfdb7c49b9ca8301019ac610e3fb3fa47785dbafe80a872d931",
+      "bytes": 1709,
+      "lines": 19,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 19,
+          "byte_start": 0,
+          "byte_end_exclusive": 1709
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-interrupt-dma-patterns/references/rtos-isr-dma-diagnostics.md",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "671a11e2df2fe49f98d2bdcd5401c123982d950d",
+      "sha256": "a85ea19b6ae121f4da011d2c96d86270826f430d88bbfa93df3b19d040dc5a14",
+      "bytes": 1645,
+      "lines": 13,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 13,
+          "byte_start": 0,
+          "byte_end_exclusive": 1645
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-offline-core-dump-triage/SKILL.md",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "bff5d56495dfacc6a986e9a211074b1a559d0958",
+      "sha256": "6a30f8a9ae8a47766e8196c9a8c6396a38e9b74b0d981220e11fe81f1dd777a9",
+      "bytes": 3562,
+      "lines": 75,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 75,
+          "byte_start": 0,
+          "byte_end_exclusive": 3562
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-performance-profiling-embedded/SKILL.md",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "1bd0416c8e0ab72f7099c09188cf3dd5c1a2bd78",
+      "sha256": "0db37bd62e0f54e13098390ad2e95b215961de0348701f7f172bcb9b1dca64cd",
+      "bytes": 2983,
+      "lines": 50,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 50,
+          "byte_start": 0,
+          "byte_end_exclusive": 2983
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-performance-profiling-embedded/references/mcu-memory-footprint.md",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "2c9c7b05532d2b28dc9d9585ee8e7a8788610700",
+      "sha256": "4c4d25e04a7bfbb34e975d48c255199df709672f926dbc10ea99dcbd3e24be02",
+      "bytes": 4590,
+      "lines": 56,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 56,
+          "byte_start": 0,
+          "byte_end_exclusive": 4590
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-protocol-stack-integration/SKILL.md",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "9963c190e57d1929448011b823bfe2d5cfb5b824",
+      "sha256": "b3c358d1f53f7f79de1d1ea381edcc1d8d41bda55bcbb46c2973de24f0692f7b",
+      "bytes": 3084,
+      "lines": 48,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 48,
+          "byte_start": 0,
+          "byte_end_exclusive": 3084
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-protocol-stack-integration/references/transport-boundaries.md",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "d2208cf38c5a57788237be1872ecdb95080a76d6",
+      "sha256": "6006f23c5e1d8ae8b1ea185fb4f2613c13af55b92a33cdc881fd909c6a199b9c",
+      "bytes": 1135,
+      "lines": 9,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 9,
+          "byte_start": 0,
+          "byte_end_exclusive": 1135
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-register-map-design/SKILL.md",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "06a3fa96385ee6b994fc55c4b796f6e7c03517c3",
+      "sha256": "15c1afbe3a8c9da0c710e813d93f6b61bdd92aed48cd3966984472d74e3e2919",
+      "bytes": 3856,
+      "lines": 88,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 88,
+          "byte_start": 0,
+          "byte_end_exclusive": 3856
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-rtos-task-design/SKILL.md",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "c447d6407ed33045e98770d24c9779ba6c44992c",
+      "sha256": "766bdf3679c4929bd950f3efd92a994579ad46084b55cae41e0716cfdf118482",
+      "bytes": 5718,
+      "lines": 75,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 75,
+          "byte_start": 0,
+          "byte_end_exclusive": 5718
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-static-analysis-c-cpp/SKILL.md",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "4bbb10a5553d0aa849c5133dba2d6bffca96476a",
+      "sha256": "285a91f97eec057220e0f0e12f6070c1a2011e511523f8f2287190747a5e107a",
+      "bytes": 3405,
+      "lines": 68,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 68,
+          "byte_start": 0,
+          "byte_end_exclusive": 3405
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-test-strategy/SKILL.md",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "786a30565cd7739340e497e0adb0e1c89100ab39",
+      "sha256": "e7442473f760be5402a114b61378686816c8f35a3cde1ada59801a6d11cf7378",
+      "bytes": 3612,
+      "lines": 53,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 53,
+          "byte_start": 0,
+          "byte_end_exclusive": 3612
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-test-strategy/references/high-value-tdd.md",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "05c40e1f1d6b19a3b98519dd3c542b4f2d3cde63",
+      "sha256": "256c691c86dfd8126412564435d19f33cdc37fe245ae5aa7fd34b1ca4f7e094f",
+      "bytes": 3247,
+      "lines": 48,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 48,
+          "byte_start": 0,
+          "byte_end_exclusive": 3247
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-unit-test-embedded/SKILL.md",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "b97d09d30973b1c54d0ad3067a1a405dd4c034e7",
+      "sha256": "dd6bb63fe1b749a5d24767ddc8819d3f66c7dfd8cba94bbc1fb8fc1a88563db3",
+      "bytes": 3068,
+      "lines": 55,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 55,
+          "byte_start": 0,
+          "byte_end_exclusive": 3068
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-unit-test-embedded/references/embedded-tdd-matrix.md",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "c1fa37aa190a10f549117442b93abe053f2464d4",
+      "sha256": "f244f5966faf07639c7cd3e94d6edaafe4489754963bd0c09b0279ba4b91b642",
+      "bytes": 783,
+      "lines": 12,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 12,
+          "byte_start": 0,
+          "byte_end_exclusive": 783
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "skills/adk-unit-test-embedded/references/property-stateful-tests.md",
+      "group": "embedded",
+      "mode": "100644",
+      "git_blob": "83c5ad4c600bf8a6e46dcdfd7f693e399ddfbc10",
+      "sha256": "393b50c821794982d2e482e99ece5f9a6753bfe7c36b37752f2b3af950fde1a4",
+      "bytes": 3315,
+      "lines": 61,
+      "auditor_declared_read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 61,
+          "byte_start": 0,
+          "byte_end_exclusive": 3315
+        }
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "optional-skills/adk-data-fetch/SKILL.md",
+      "group": "optional",
+      "mode": "100644",
+      "git_blob": "01e86153b30390e4a7e3c6a2f415d6a0810acc1e",
+      "sha256": "93f99ba41694cd8bc4931d67a7fcbaf4f62540c17811b2db41a14062430ab011",
+      "bytes": 4088,
+      "lines": 92,
+      "auditor_declared_read_ranges": [
+        [
+          1,
+          92
+        ]
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md",
+      "group": "optional",
+      "mode": "100644",
+      "git_blob": "db1594b7ace1cf64c6bec55658369fd7f27929e5",
+      "sha256": "3cff893650e3fa6da6ec383a3eb05bd18468f5de7794c3c2d9f1f067c2f7d373",
+      "bytes": 3047,
+      "lines": 57,
+      "auditor_declared_read_ranges": [
+        [
+          1,
+          57
+        ]
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "optional-skills/adk-data-fetch/adk-fetch-url-content/SKILL.md",
+      "group": "optional",
+      "mode": "100644",
+      "git_blob": "54ecaeec74ef1356e29e48df1c7534f187d39fe5",
+      "sha256": "39a05fb731de1c3251c887587ffdb9cedcfa10d5c547910f8fb0969748d64b39",
+      "bytes": 2892,
+      "lines": 56,
+      "auditor_declared_read_ranges": [
+        [
+          1,
+          56
+        ]
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "optional-skills/adk-external-practice-absorption/SKILL.md",
+      "group": "optional",
+      "mode": "100644",
+      "git_blob": "6a84b0ee88efaa1ba4542c15f037e997f91a9d25",
+      "sha256": "444ae0b685759d1ce27929d8597c7790fd065b4373e103edd980cd6e09703b9b",
+      "bytes": 8664,
+      "lines": 129,
+      "auditor_declared_read_ranges": [
+        [
+          1,
+          129
+        ]
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "optional-skills/adk-external-practice-absorption/agents/openai.yaml",
+      "group": "optional",
+      "mode": "100644",
+      "git_blob": "d5bfa4d04e441df464f7d93a819ca8254af1d6b4",
+      "sha256": "a3778c89b5a1937facc40e463d91966a70a0c8e7f31c2afbc50d4f302d8cb4fe",
+      "bytes": 337,
+      "lines": 6,
+      "auditor_declared_read_ranges": [
+        [
+          1,
+          6
+        ]
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "optional-skills/adk-incident-rca-report/SKILL.md",
+      "group": "optional",
+      "mode": "100644",
+      "git_blob": "a123dabd42d37fb08b803abf2a732bc7cd855512",
+      "sha256": "79a7b453da0a2edc5b98eaa595c36ef32032acdb2910655d741a25cd7519d405",
+      "bytes": 2416,
+      "lines": 48,
+      "auditor_declared_read_ranges": [
+        [
+          1,
+          48
+        ]
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "optional-skills/adk-prose-revision/SKILL.md",
+      "group": "optional",
+      "mode": "100644",
+      "git_blob": "382ed9cdf9aa6029d482d0e4a4a6b1fe3e43a51b",
+      "sha256": "5c0dbe215745f6d3aa09676a88f550248579e71a79dd3703ab82ec2c62ec0360",
+      "bytes": 4503,
+      "lines": 71,
+      "auditor_declared_read_ranges": [
+        [
+          1,
+          71
+        ]
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "optional-skills/adk-prose-revision/references/review-cases.md",
+      "group": "optional",
+      "mode": "100644",
+      "git_blob": "5feb15f8f3d14a0bb97a4f5156ac2d099e4766c6",
+      "sha256": "fb82979ca071f05be5c533370e05340d08bf705e5b78392c0facc263df03cfa5",
+      "bytes": 1851,
+      "lines": 16,
+      "auditor_declared_read_ranges": [
+        [
+          1,
+          16
+        ]
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "optional-skills/adk-security-supply-chain/SKILL.md",
+      "group": "optional",
+      "mode": "100644",
+      "git_blob": "e123bcdb9c01b3fe3059f17fd5df710476561ba5",
+      "sha256": "acff83f54f2f15e0160d18b3e6b3e84f09be4b75b4d06e8b459c2b3345bc635f",
+      "bytes": 8270,
+      "lines": 140,
+      "auditor_declared_read_ranges": [
+        [
+          1,
+          140
+        ]
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "optional-skills/adk-security-supply-chain/references/skill-scan-coverage.md",
+      "group": "optional",
+      "mode": "100644",
+      "git_blob": "b3d5842fd23228b869bc568121dbd5c2db412850",
+      "sha256": "6fc92933a7ea418d824d2e92eb64bdd26e0e25e53969d4dd3ce95de0c54b0d15",
+      "bytes": 1879,
+      "lines": 11,
+      "auditor_declared_read_ranges": [
+        [
+          1,
+          11
+        ]
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "optional-skills/adk-skill-composition-governance/SKILL.md",
+      "group": "optional",
+      "mode": "100644",
+      "git_blob": "52da1f2961c8235de2ded7578337caa3ea64d180",
+      "sha256": "b2685d8bb2f85a5c562ab28176204a294be0d1b9c87aef2b9749339f351f5e5f",
+      "bytes": 6646,
+      "lines": 125,
+      "auditor_declared_read_ranges": [
+        [
+          1,
+          125
+        ]
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "optional-skills/adk-skill-composition-governance/references/adk-skill-lifecycle.md",
+      "group": "optional",
+      "mode": "100644",
+      "git_blob": "d402bbbd3dee0cd795f7d9fb41756058578addc8",
+      "sha256": "f9b1a39f39f334f22ffc1ee878b02e00efe2400b0d7482a1d1ffb85153b11be0",
+      "bytes": 7050,
+      "lines": 106,
+      "auditor_declared_read_ranges": [
+        [
+          1,
+          106
+        ]
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "optional-skills/adk-skill-composition-governance/references/skill-behavior-evaluation.md",
+      "group": "optional",
+      "mode": "100644",
+      "git_blob": "204daead15aa9a7a67f6cf9ac6840bf15a42d235",
+      "sha256": "e54daf26764853d5fe8bb8b0b134442e3d500b12fcf5d33254ef8bab242eee82",
+      "bytes": 8108,
+      "lines": 47,
+      "auditor_declared_read_ranges": [
+        [
+          1,
+          47
+        ]
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "optional-skills/adk-test-flakiness-triage/SKILL.md",
+      "group": "optional",
+      "mode": "100644",
+      "git_blob": "8bd63f87cf6837fc00967656e17e66e49e3eb1b2",
+      "sha256": "2a36680bf3a8d60159bcd8672a8cda6995b0740d425970615ecbe23163236acf",
+      "bytes": 2427,
+      "lines": 62,
+      "auditor_declared_read_ranges": [
+        [
+          1,
+          62
+        ]
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    },
+    {
+      "path": "optional-skills/adk-test-flakiness-triage/references/details.md",
+      "group": "optional",
+      "mode": "100644",
+      "git_blob": "af110d715613b5f6ec5ec4798131d7cd75571cb6",
+      "sha256": "7723c6f6caa2c86a3ada3ccf95aaadf5ab7ea2a0003087f80c2e0ed9355959f0",
+      "bytes": 4805,
+      "lines": 80,
+      "auditor_declared_read_ranges": [
+        [
+          1,
+          80
+        ]
+      ],
+      "independent_review_scope": "full-byte identity verification; no independent full-content review claimed"
+    }
+  ],
+  "external_sources": [
+    {
+      "repository": null,
+      "commit": null,
+      "path": "",
+      "url": "https://sre.google/sre-book/postmortem-culture/",
+      "sha256": "ef876f0a0f09a88f3acc3294ec24eb922751b0059cba8be271aa6fe8474656c5",
+      "bytes": 55113,
+      "local_git_blob": null,
+      "read_scope": "partial",
+      "observations": [
+        {
+          "group": "optional",
+          "read_scope": "partial",
+          "read_ranges": [
+            [
+              493,
+              563
+            ],
+            [
+              649,
+              649
+            ]
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-optional-upstream/google-sre-postmortem.txt",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": null,
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": null,
+      "commit": null,
+      "path": "Exit-Status.html",
+      "url": "https://www.gnu.org/software/bash/manual/html_node/Exit-Status.html",
+      "sha256": "b5489d3d21e32da01de356e7a63093ec276a60a020d616a05fffcc9b7b19d983",
+      "bytes": 5187,
+      "local_git_blob": null,
+      "read_scope": "full",
+      "observations": [
+        {
+          "group": "optional",
+          "read_scope": "full",
+          "read_ranges": [
+            [
+              1,
+              112
+            ]
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-optional-upstream/bash-exit-status.html",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": null,
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": null,
+      "commit": null,
+      "path": "Signals.html",
+      "url": "https://www.gnu.org/software/bash/manual/html_node/Signals.html",
+      "sha256": "304a2dd8a7d3cb9bd49a2cf361f5bbb99217276bc0da45ff9a1cfc18d02eacad",
+      "bytes": 8888,
+      "local_git_blob": null,
+      "read_scope": "full",
+      "observations": [
+        {
+          "group": "optional",
+          "read_scope": "full",
+          "read_ranges": [
+            [
+              1,
+              167
+            ]
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-optional-upstream/bash-signals.html",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": null,
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": null,
+      "commit": null,
+      "path": "rfc9051.txt",
+      "url": "https://www.rfc-editor.org/rfc/rfc9051.txt",
+      "sha256": "acf52a50eb748ea21b5ffdcb31c761d3fbba6242d53d4f53c2555de039c5c3cf",
+      "bytes": 367391,
+      "local_git_blob": null,
+      "read_scope": "partial",
+      "observations": [
+        {
+          "group": "optional",
+          "read_scope": "partial",
+          "read_ranges": [
+            [
+              39,
+              56
+            ],
+            [
+              430,
+              520
+            ],
+            [
+              1868,
+              1901
+            ],
+            [
+              4395,
+              4447
+            ]
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-optional-upstream/rfc9051-imap.txt",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": null,
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": null,
+      "commit": null,
+      "path": "rfc9110.txt",
+      "url": "https://www.rfc-editor.org/rfc/rfc9110.txt",
+      "sha256": "21c1cdce6ab0e5509b04d84a28000836c7a087cf786efe6f04877ebfff47232a",
+      "bytes": 502941,
+      "local_git_blob": null,
+      "read_scope": "partial",
+      "observations": [
+        {
+          "group": "optional",
+          "read_scope": "partial",
+          "read_ranges": [
+            [
+              34,
+              65
+            ],
+            [
+              7066,
+              7123
+            ],
+            [
+              7444,
+              7482
+            ]
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-optional-upstream/rfc9110-http.txt",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": null,
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": null,
+      "commit": null,
+      "path": "rfc9309.txt",
+      "url": "https://www.rfc-editor.org/rfc/rfc9309.txt",
+      "sha256": "f633915daaa15b943cae56545d333bcf3ba4d156599e4555499686d6699fb207",
+      "bytes": 25265,
+      "local_git_blob": null,
+      "read_scope": "partial",
+      "observations": [
+        {
+          "group": "optional",
+          "read_scope": "partial",
+          "read_ranges": [
+            [
+              39,
+              55
+            ],
+            [
+              90,
+              110
+            ],
+            [
+              350,
+              450
+            ]
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-optional-upstream/rfc9309-robots.txt",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": null,
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "Kitware/CMake",
+      "commit": "859ca5c4d7396a011a462878179bc173e1283731",
+      "path": "Copyright.txt",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/859ca5c4d7396a011a462878179bc173e1283731/Copyright.txt",
+      "sha256": "0676e30827684487aa0ea8f72f01e9460a6320fa34a2888df0ad1dd3e8a06eb8",
+      "bytes": 5477,
+      "local_git_blob": "2074109b019445458a65e6cd3935aa24a0878c7c",
+      "read_scope": "full",
+      "observations": [
+        {
+          "group": "embedded",
+          "read_scope": "full",
+          "read_ranges": [
+            {
+              "line_start": 1,
+              "line_end_inclusive": 136,
+              "byte_start": 0,
+              "byte_end_exclusive": 5477
+            }
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/Kitware__CMake/859ca5c4d7396a011a462878179bc173e1283731/Copyright.txt",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": "2074109b019445458a65e6cd3935aa24a0878c7c",
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "Kitware/CMake",
+      "commit": "859ca5c4d7396a011a462878179bc173e1283731",
+      "path": "Help/envvar/CMAKE_TOOLCHAIN_FILE.rst",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/859ca5c4d7396a011a462878179bc173e1283731/Help/envvar/CMAKE_TOOLCHAIN_FILE.rst",
+      "sha256": "eb0773e4164a11f05c9d7f9736cdae902f25aecc2dead344a556435dcd31c27c",
+      "bytes": 424,
+      "local_git_blob": "7ea9cea3572100989b05f3d68379d817aeaa24b9",
+      "read_scope": "full",
+      "observations": [
+        {
+          "group": "embedded",
+          "read_scope": "full",
+          "read_ranges": [
+            {
+              "line_start": 1,
+              "line_end_inclusive": 12,
+              "byte_start": 0,
+              "byte_end_exclusive": 424
+            }
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/Kitware__CMake/859ca5c4d7396a011a462878179bc173e1283731/Help/envvar/CMAKE_TOOLCHAIN_FILE.rst",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": "7ea9cea3572100989b05f3d68379d817aeaa24b9",
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "Kitware/CMake",
+      "commit": "859ca5c4d7396a011a462878179bc173e1283731",
+      "path": "Help/variable/CMAKE_LANG_COMPILER.rst",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/859ca5c4d7396a011a462878179bc173e1283731/Help/variable/CMAKE_LANG_COMPILER.rst",
+      "sha256": "52b19a78ae0edb6fe8736dda7f5a095133d231943e0d5b23f3800a0dec1a3ade",
+      "bytes": 852,
+      "local_git_blob": "db8f4e1fafc481f4e9706fd9f48fe4373390a65f",
+      "read_scope": "full",
+      "observations": [
+        {
+          "group": "embedded",
+          "read_scope": "full",
+          "read_ranges": [
+            {
+              "line_start": 1,
+              "line_end_inclusive": 33,
+              "byte_start": 0,
+              "byte_end_exclusive": 852
+            }
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/Kitware__CMake/859ca5c4d7396a011a462878179bc173e1283731/Help/variable/CMAKE_LANG_COMPILER.rst",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": "db8f4e1fafc481f4e9706fd9f48fe4373390a65f",
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "Kitware/CMake",
+      "commit": "859ca5c4d7396a011a462878179bc173e1283731",
+      "path": "Modules/CMakeDetermineSystem.cmake",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/859ca5c4d7396a011a462878179bc173e1283731/Modules/CMakeDetermineSystem.cmake",
+      "sha256": "6b8e937c613dbedb64fd3acbc8305de861e57f8a9f7b030b6762b9305b57114a",
+      "bytes": 9367,
+      "local_git_blob": "b330ed9d509fceca4718ee30695a7ad65f669585",
+      "read_scope": "full",
+      "observations": [
+        {
+          "group": "embedded",
+          "read_scope": "full",
+          "read_ranges": [
+            {
+              "line_start": 1,
+              "line_end_inclusive": 222,
+              "byte_start": 0,
+              "byte_end_exclusive": 9367
+            }
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/Kitware__CMake/859ca5c4d7396a011a462878179bc173e1283731/Modules/CMakeDetermineSystem.cmake",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": "b330ed9d509fceca4718ee30695a7ad65f669585",
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "Kitware/CMake",
+      "commit": "859ca5c4d7396a011a462878179bc173e1283731",
+      "path": "Modules/CMakeSystem.cmake.in",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/859ca5c4d7396a011a462878179bc173e1283731/Modules/CMakeSystem.cmake.in",
+      "sha256": "60b5167875d6a01de4fb96c784a4e01d56f365f096fa9a257c6b6b6d9669e49a",
+      "bytes": 563,
+      "local_git_blob": "ef8aaa045032e95bce2d87609a1d5a7566be3458",
+      "read_scope": "full",
+      "observations": [
+        {
+          "group": "embedded",
+          "read_scope": "full",
+          "read_ranges": [
+            {
+              "line_start": 1,
+              "line_end_inclusive": 15,
+              "byte_start": 0,
+              "byte_end_exclusive": 563
+            }
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/Kitware__CMake/859ca5c4d7396a011a462878179bc173e1283731/Modules/CMakeSystem.cmake.in",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": "ef8aaa045032e95bce2d87609a1d5a7566be3458",
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "agentskills/agentskills",
+      "commit": "83021e2be457a9b6679148719c1f6074f0ad975e",
+      "path": "docs/LICENSE",
+      "url": "https://github.com/agentskills/agentskills/blob/83021e2be457a9b6679148719c1f6074f0ad975e/docs/LICENSE",
+      "sha256": "9e5f1b3c610b9c2da5c313bf81d577a7d1acec686bdb0384edefa6df0f90cd94",
+      "bytes": 18656,
+      "local_git_blob": "4ea99c213c5c0c005ae4e80df8e52169d06896ec",
+      "read_scope": "full",
+      "observations": [
+        {
+          "group": "platform",
+          "read_scope": "full",
+          "read_ranges": "full",
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-platform-upstream-raw/source-2.txt",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": "4ea99c213c5c0c005ae4e80df8e52169d06896ec",
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "agentskills/agentskills",
+      "commit": "83021e2be457a9b6679148719c1f6074f0ad975e",
+      "path": "docs/client-implementation/adding-skills-support.mdx",
+      "url": "https://github.com/agentskills/agentskills/blob/83021e2be457a9b6679148719c1f6074f0ad975e/docs/client-implementation/adding-skills-support.mdx",
+      "sha256": "e1a788f858766f4b54e0542e235ad3b1a965147e2c759926eb1c2b0a0129eef9",
+      "bytes": 20254,
+      "local_git_blob": "6c784309faec4ea27715e57734e1e0b5929c1977",
+      "read_scope": "full",
+      "observations": [
+        {
+          "group": "platform",
+          "read_scope": "full",
+          "read_ranges": "full",
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-platform-upstream-raw/source-1.txt",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": "6c784309faec4ea27715e57734e1e0b5929c1977",
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "agentskills/agentskills",
+      "commit": "83021e2be457a9b6679148719c1f6074f0ad975e",
+      "path": "docs/specification.mdx",
+      "url": "https://github.com/agentskills/agentskills/blob/83021e2be457a9b6679148719c1f6074f0ad975e/docs/specification.mdx",
+      "sha256": "b9079c0c10b7930e8c6a20ff2bc10cda2a3343c55185120e3f1116a1a529b220",
+      "bytes": 7166,
+      "local_git_blob": "d9a2db099d905da8b879a5c6f996728073985279",
+      "read_scope": "full",
+      "observations": [
+        {
+          "group": "platform",
+          "read_scope": "full",
+          "read_ranges": "full",
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-platform-upstream-raw/source-0.txt",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": "d9a2db099d905da8b879a5c6f996728073985279",
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "beriberikix/zephyr-agent-skills",
+      "commit": "ed63cdfb8cdfbeb5946ea39c33f4aa6bcf3a5cce",
+      "path": "LICENSE",
+      "url": "https://raw.githubusercontent.com/beriberikix/zephyr-agent-skills/ed63cdfb8cdfbeb5946ea39c33f4aa6bcf3a5cce/LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "bytes": 11357,
+      "local_git_blob": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+      "read_scope": "partial",
+      "observations": [
+        {
+          "group": "embedded",
+          "read_scope": "partial",
+          "read_ranges": [
+            {
+              "line_start": 1,
+              "line_end_inclusive": 15,
+              "byte_start": 0,
+              "byte_end_exclusive": 595
+            },
+            {
+              "line_start": 178,
+              "line_end_inclusive": 201,
+              "byte_start": 10174,
+              "byte_end_exclusive": 11357
+            }
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/beriberikix__zephyr-agent-skills/ed63cdfb8cdfbeb5946ea39c33f4aa6bcf3a5cce/LICENSE",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "beriberikix/zephyr-agent-skills",
+      "commit": "ed63cdfb8cdfbeb5946ea39c33f4aa6bcf3a5cce",
+      "path": "SKILL.md",
+      "url": "https://raw.githubusercontent.com/beriberikix/zephyr-agent-skills/ed63cdfb8cdfbeb5946ea39c33f4aa6bcf3a5cce/SKILL.md",
+      "sha256": "ed7256869f47aa7003f8df6fd84ebb75c073ee308b6e6f019fd9f110e94a9601",
+      "bytes": 1475,
+      "local_git_blob": "03df00f7bbe4b43367653e662298234e2b414f13",
+      "read_scope": "full",
+      "observations": [
+        {
+          "group": "embedded",
+          "read_scope": "full",
+          "read_ranges": [
+            {
+              "line_start": 1,
+              "line_end_inclusive": 27,
+              "byte_start": 0,
+              "byte_end_exclusive": 1475
+            }
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/beriberikix__zephyr-agent-skills/ed63cdfb8cdfbeb5946ea39c33f4aa6bcf3a5cce/SKILL.md",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": "03df00f7bbe4b43367653e662298234e2b414f13",
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "espressif/esp-dl",
+      "commit": "512ed0b0dc5f5320f3d9ca5a5aea189803f87f31",
+      "path": "LICENSE",
+      "url": "https://raw.githubusercontent.com/espressif/esp-dl/512ed0b0dc5f5320f3d9ca5a5aea189803f87f31/LICENSE",
+      "sha256": "3513f1605ebcc227f7364956f6c30a303412597e232648cb3090e76697ca5aa3",
+      "bytes": 1095,
+      "local_git_blob": "dc2be013b5edf43108b6081057b13b6ff276ffe5",
+      "read_scope": "full",
+      "observations": [
+        {
+          "group": "embedded",
+          "read_scope": "full",
+          "read_ranges": [
+            {
+              "line_start": 1,
+              "line_end_inclusive": 21,
+              "byte_start": 0,
+              "byte_end_exclusive": 1095
+            }
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/espressif__esp-dl/512ed0b0dc5f5320f3d9ca5a5aea189803f87f31/LICENSE",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": "dc2be013b5edf43108b6081057b13b6ff276ffe5",
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "espressif/esp-dl",
+      "commit": "512ed0b0dc5f5320f3d9ca5a5aea189803f87f31",
+      "path": "tools/agents/skills/espdl-operator/SKILL.md",
+      "url": "https://raw.githubusercontent.com/espressif/esp-dl/512ed0b0dc5f5320f3d9ca5a5aea189803f87f31/tools/agents/skills/espdl-operator/SKILL.md",
+      "sha256": "bac0d99a6ef39ae409054bbcdb1bcb85e36659163fd10344b0e5859f8efe4682",
+      "bytes": 35711,
+      "local_git_blob": "2db62d9529094b9df71c08d8993a7819146a7bd7",
+      "read_scope": "partial",
+      "observations": [
+        {
+          "group": "embedded",
+          "read_scope": "partial",
+          "read_ranges": [
+            {
+              "line_start": 1,
+              "line_end_inclusive": 123,
+              "byte_start": 0,
+              "byte_end_exclusive": 6806
+            },
+            {
+              "line_start": 442,
+              "line_end_inclusive": 497,
+              "byte_start": 20594,
+              "byte_end_exclusive": 23503
+            },
+            {
+              "line_start": 556,
+              "line_end_inclusive": 582,
+              "byte_start": 25447,
+              "byte_end_exclusive": 26754
+            },
+            {
+              "line_start": 609,
+              "line_end_inclusive": 710,
+              "byte_start": 27696,
+              "byte_end_exclusive": 32319
+            },
+            {
+              "line_start": 739,
+              "line_end_inclusive": 773,
+              "byte_start": 33520,
+              "byte_end_exclusive": 35711
+            }
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/espressif__esp-dl/512ed0b0dc5f5320f3d9ca5a5aea189803f87f31/tools/agents/skills/espdl-operator/SKILL.md",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": "2db62d9529094b9df71c08d8993a7819146a7bd7",
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "espressif/skills",
+      "commit": "ab44d6e1e34260b16de228aea1aa24169cbae53b",
+      "path": "LICENSE",
+      "url": "https://raw.githubusercontent.com/espressif/skills/ab44d6e1e34260b16de228aea1aa24169cbae53b/LICENSE",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "bytes": 11358,
+      "local_git_blob": "d645695673349e3947e8e5ae42332d0ac3164cd7",
+      "read_scope": "partial",
+      "observations": [
+        {
+          "group": "embedded",
+          "read_scope": "partial",
+          "read_ranges": [
+            {
+              "line_start": 1,
+              "line_end_inclusive": 15,
+              "byte_start": 0,
+              "byte_end_exclusive": 525
+            },
+            {
+              "line_start": 178,
+              "line_end_inclusive": 202,
+              "byte_start": 10174,
+              "byte_end_exclusive": 11358
+            }
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/espressif__skills/ab44d6e1e34260b16de228aea1aa24169cbae53b/LICENSE",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": "d645695673349e3947e8e5ae42332d0ac3164cd7",
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "espressif/skills",
+      "commit": "ab44d6e1e34260b16de228aea1aa24169cbae53b",
+      "path": "README.md",
+      "url": "https://raw.githubusercontent.com/espressif/skills/ab44d6e1e34260b16de228aea1aa24169cbae53b/README.md",
+      "sha256": "bc507a7781aa82ba7522d13593abe0dda9543a870c26f60ae9594a32994786fd",
+      "bytes": 689,
+      "local_git_blob": "53eeaafbc672b6decb7d906380d5c3efe704e1bf",
+      "read_scope": "full",
+      "observations": [
+        {
+          "group": "embedded",
+          "read_scope": "full",
+          "read_ranges": [
+            {
+              "line_start": 1,
+              "line_end_inclusive": 29,
+              "byte_start": 0,
+              "byte_end_exclusive": 689
+            }
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/espressif__skills/ab44d6e1e34260b16de228aea1aa24169cbae53b/README.md",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": "53eeaafbc672b6decb7d906380d5c3efe704e1bf",
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "getsentry/skills",
+      "commit": "a582c51ee29d0f35e6ac321340796f77d43da733",
+      "path": "LICENSE",
+      "url": "https://github.com/getsentry/skills/blob/a582c51ee29d0f35e6ac321340796f77d43da733/LICENSE",
+      "sha256": "96e78a9ce85795b117c8929887bdb78f88bf23f7b85a31f0872cde4dff7e92cd",
+      "bytes": 10785,
+      "local_git_blob": "753a6c03c60a9232405d05170bd3ad3cab49a1ef",
+      "read_scope": "partial",
+      "observations": [
+        {
+          "group": "core",
+          "read_scope": "partial",
+          "read_ranges": [
+            {
+              "range": "lines 1-15",
+              "method": "license identity header only; full bytes archived and hashed"
+            }
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-core-external/getsentry/skills/LICENSE",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": "753a6c03c60a9232405d05170bd3ad3cab49a1ef",
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "getsentry/skills",
+      "commit": "a582c51ee29d0f35e6ac321340796f77d43da733",
+      "path": "skills/agents-md/SKILL.md",
+      "url": "https://github.com/getsentry/skills/blob/a582c51ee29d0f35e6ac321340796f77d43da733/skills/agents-md/SKILL.md",
+      "sha256": "8a91ada35068f43ef7ee03e38937863bac4f407878b06f0a4f1ddb4af24bec7e",
+      "bytes": 3188,
+      "local_git_blob": "bd92e4a9df47f63bd943bc3d5011da0b3d6e04ff",
+      "read_scope": "full",
+      "observations": [
+        {
+          "group": "core",
+          "read_scope": "full",
+          "read_ranges": [
+            {
+              "range": "all bytes; lines 1-95",
+              "read_at_utc": "2026-11-16T07:41:46.014054+00:00",
+              "method": "unfiltered full UTF-8 output"
+            }
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-core-external/getsentry/skills/skills/agents-md/SKILL.md",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": "bd92e4a9df47f63bd943bc3d5011da0b3d6e04ff",
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "getsentry/skills",
+      "commit": "a582c51ee29d0f35e6ac321340796f77d43da733",
+      "path": "skills/pr-writer/SKILL.md",
+      "url": "https://github.com/getsentry/skills/blob/a582c51ee29d0f35e6ac321340796f77d43da733/skills/pr-writer/SKILL.md",
+      "sha256": "785a2b1f084407e42f61661f83c7b0c621889865a483774f44c893c0cbcf57bc",
+      "bytes": 5302,
+      "local_git_blob": "ce4da4c91a7308fa61b40b838aeee559cad2fd41",
+      "read_scope": "full",
+      "observations": [
+        {
+          "group": "core",
+          "read_scope": "full",
+          "read_ranges": [
+            {
+              "range": "all bytes; lines 1-160",
+              "read_at_utc": "2026-11-16T07:41:46.014121+00:00",
+              "method": "unfiltered full UTF-8 output"
+            }
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-core-external/getsentry/skills/skills/pr-writer/SKILL.md",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": "ce4da4c91a7308fa61b40b838aeee559cad2fd41",
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "gitleaks/gitleaks",
+      "commit": "5f6ec56cfa6f8c67648d863582c7ae2f206d5c1c",
+      "path": "LICENSE",
+      "url": "https://raw.githubusercontent.com/gitleaks/gitleaks/5f6ec56cfa6f8c67648d863582c7ae2f206d5c1c/LICENSE",
+      "sha256": "e3884b252b3bfc045e55be43a34d1e80da070bc6f804ac95bf4660e97d62ebc6",
+      "bytes": 1069,
+      "local_git_blob": "3c270b36c539ca8fbc4cc1017d3cbb7be1e44bbc",
+      "read_scope": "full",
+      "observations": [
+        {
+          "group": "optional",
+          "read_scope": "full",
+          "read_ranges": [
+            [
+              1,
+              21
+            ]
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-optional-upstream/gitleaks-license.txt",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": null,
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "gitleaks/gitleaks",
+      "commit": "5f6ec56cfa6f8c67648d863582c7ae2f206d5c1c",
+      "path": "README.md",
+      "url": "https://raw.githubusercontent.com/gitleaks/gitleaks/5f6ec56cfa6f8c67648d863582c7ae2f206d5c1c/README.md",
+      "sha256": "65e87e68f4a16aefa1f1fba55b2e7a9b9bc8716393b7ddb013fc7c7bef4e4bc1",
+      "bytes": 29328,
+      "local_git_blob": "6bdd5d960fd9f81a5221819509c4e9f5cb7d251e",
+      "read_scope": "partial",
+      "observations": [
+        {
+          "group": "optional",
+          "read_scope": "partial",
+          "read_ranges": [
+            [
+              117,
+              165
+            ],
+            [
+              569,
+              608
+            ],
+            [
+              620,
+              628
+            ]
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-optional-upstream/gitleaks-readme.txt",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": null,
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "google-gemini/gemini-cli",
+      "commit": "4ed06ed0ddc523a6d356a4ad35ddfea331041888",
+      "path": "LICENSE",
+      "url": "https://raw.githubusercontent.com/google-gemini/gemini-cli/4ed06ed0ddc523a6d356a4ad35ddfea331041888/LICENSE",
+      "sha256": "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd",
+      "bytes": 11357,
+      "local_git_blob": "7a4a3ea2424c09fbe48d455aed1eaa94d9124835",
+      "read_scope": "partial",
+      "observations": [
+        {
+          "group": "optional",
+          "read_scope": "partial",
+          "read_ranges": [
+            [
+              1,
+              12
+            ],
+            [
+              88,
+              121
+            ]
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-optional-upstream/gemini-license.txt",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": null,
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "google-gemini/gemini-cli",
+      "commit": "4ed06ed0ddc523a6d356a4ad35ddfea331041888",
+      "path": "docs/cli/skills-best-practices.md",
+      "url": "https://raw.githubusercontent.com/google-gemini/gemini-cli/4ed06ed0ddc523a6d356a4ad35ddfea331041888/docs/cli/skills-best-practices.md",
+      "sha256": "a064fd7fb55eab56d44e74b7367ad122f93a2f48fdfa5442e658ff3ba07d34f0",
+      "bytes": 3258,
+      "local_git_blob": "071f014fc4fd74d162470d32e2732ba96e4f3e23",
+      "read_scope": "full",
+      "observations": [
+        {
+          "group": "optional",
+          "read_scope": "full",
+          "read_ranges": [
+            [
+              1,
+              78
+            ]
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-optional-upstream/gemini-skills-best-practices.txt",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": null,
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "hashicorp/agent-skills",
+      "commit": "5e30fa5c867ba6777c37e4206babfd08049c396f",
+      "path": "LICENSE",
+      "url": "https://github.com/hashicorp/agent-skills/blob/5e30fa5c867ba6777c37e4206babfd08049c396f/LICENSE",
+      "sha256": "3f3d9e0024b1921b067d6f7f88deb4a60cbe7a78e76c64e3f1d7fc3b779b9d04",
+      "bytes": 16726,
+      "local_git_blob": "d0a1fa1482eea82e19510e7920cbe3a03e41f691",
+      "read_scope": "partial",
+      "observations": [
+        {
+          "group": "core",
+          "read_scope": "partial",
+          "read_ranges": [
+            {
+              "range": "lines 1-15",
+              "method": "license identity header only; full bytes archived and hashed"
+            }
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-core-external/hashicorp/agent-skills/LICENSE",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": "d0a1fa1482eea82e19510e7920cbe3a03e41f691",
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "hashicorp/agent-skills",
+      "commit": "5e30fa5c867ba6777c37e4206babfd08049c396f",
+      "path": "plugins/terraform/skills/terraform-test/SKILL.md",
+      "url": "https://github.com/hashicorp/agent-skills/blob/5e30fa5c867ba6777c37e4206babfd08049c396f/plugins/terraform/skills/terraform-test/SKILL.md",
+      "sha256": "bba613c50727af9a8e47e690b0e16a4093f0239afec495016e016b5152c9a598",
+      "bytes": 11148,
+      "local_git_blob": "2feebcc9f3c5b9e61a05119087f4fc328b9edf9f",
+      "read_scope": "partial",
+      "observations": [
+        {
+          "group": "core",
+          "read_scope": "partial",
+          "read_ranges": [
+            {
+              "range": {
+                "start_line": 1,
+                "end_line": 71
+              },
+              "method": "unfiltered numbered excerpt",
+              "read_at_utc": "2026-11-16T07:42:03.970787+00:00"
+            },
+            {
+              "range": {
+                "start_line": 330,
+                "end_line": 451
+              },
+              "method": "unfiltered numbered excerpt",
+              "read_at_utc": "2026-11-16T07:42:03.970842+00:00"
+            }
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-core-external/hashicorp/agent-skills/plugins/terraform/skills/terraform-test/SKILL.md",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": "2feebcc9f3c5b9e61a05119087f4fc328b9edf9f",
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "json-schema-org/website",
+      "commit": "8877a30594da239f86dc1746b3d30abe126a2eb7",
+      "path": "LICENSE",
+      "url": "https://github.com/json-schema-org/website/blob/8877a30594da239f86dc1746b3d30abe126a2eb7/LICENSE",
+      "sha256": "909b25a80d4945b21d3adb2fb17f90bf592e0274bdf117c069c088a8e44dc7b6",
+      "bytes": 11739,
+      "local_git_blob": "7d4605f1256bc903244a12288e2bb0fd72ccf01a",
+      "read_scope": "partial",
+      "observations": [
+        {
+          "group": "core",
+          "read_scope": "partial",
+          "read_ranges": [
+            {
+              "range": "lines 1-15",
+              "method": "license identity header only; full bytes archived and hashed"
+            },
+            {
+              "range": {
+                "start_line": 1,
+                "end_line": 45
+              },
+              "method": "unfiltered numbered excerpt",
+              "read_at_utc": "2026-11-16T07:41:39.329782+00:00"
+            }
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-core-external/json-schema-org/website/LICENSE",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": "7d4605f1256bc903244a12288e2bb0fd72ccf01a",
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "json-schema-org/website",
+      "commit": "8877a30594da239f86dc1746b3d30abe126a2eb7",
+      "path": "pages/understanding-json-schema/reference/object.md",
+      "url": "https://github.com/json-schema-org/website/blob/8877a30594da239f86dc1746b3d30abe126a2eb7/pages/understanding-json-schema/reference/object.md",
+      "sha256": "bc1ce98bdc556825c269d3c2c3e69729159c09a1f4c5ebb560ee721f0af33478",
+      "bytes": 19149,
+      "local_git_blob": "b9e337386fdaf658d501ba0aa3e4a3aa4b7246f4",
+      "read_scope": "partial",
+      "observations": [
+        {
+          "group": "core",
+          "read_scope": "partial",
+          "read_ranges": [
+            {
+              "range": {
+                "start_line": 322,
+                "end_line": 546
+              },
+              "method": "unfiltered numbered excerpt",
+              "read_at_utc": "2026-11-16T07:41:39.329674+00:00"
+            }
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-core-external/json-schema-org/website/pages/understanding-json-schema/reference/object.md",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": "b9e337386fdaf658d501ba0aa3e4a3aa4b7246f4",
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "microsoft/aspire",
+      "commit": "334b86dd6bde8d14dc971bdfda8df3f9812af935",
+      "path": ".agents/skills/fix-flaky-test/SKILL.md",
+      "url": "https://raw.githubusercontent.com/microsoft/aspire/334b86dd6bde8d14dc971bdfda8df3f9812af935/.agents/skills/fix-flaky-test/SKILL.md",
+      "sha256": "ce85a2ac940bc090a047e84f2eb73fb9365e0f2d7f322f5b94580e0ff61f18ca",
+      "bytes": 50849,
+      "local_git_blob": "500779007ab5b4ede8928f014265def400369631",
+      "read_scope": "partial",
+      "observations": [
+        {
+          "group": "optional",
+          "read_scope": "partial",
+          "read_ranges": [
+            [
+              236,
+              247
+            ],
+            [
+              675,
+              754
+            ],
+            [
+              1013,
+              1046
+            ]
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-optional-upstream/aspire-flaky.txt",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": null,
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "microsoft/aspire",
+      "commit": "334b86dd6bde8d14dc971bdfda8df3f9812af935",
+      "path": "LICENSE.TXT",
+      "url": "https://raw.githubusercontent.com/microsoft/aspire/334b86dd6bde8d14dc971bdfda8df3f9812af935/LICENSE.TXT",
+      "sha256": "ae48df11a335dc1a615f4f938b69cba73bcf4485c4f97af49b38efb0f216353b",
+      "bytes": 1115,
+      "local_git_blob": "a616ed188dfce68ee308f674350ad242d8588c2b",
+      "read_scope": "full",
+      "observations": [
+        {
+          "group": "optional",
+          "read_scope": "full",
+          "read_ranges": [
+            [
+              1,
+              23
+            ]
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-optional-upstream/aspire-license-resolved.txt",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": null,
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "microsoft/skills",
+      "commit": "f03ec5392f7a0f3aca12af47477e92f1edf7b44c",
+      "path": ".github/skills/skill-creator/SKILL.md",
+      "url": "https://github.com/microsoft/skills/blob/f03ec5392f7a0f3aca12af47477e92f1edf7b44c/.github/skills/skill-creator/SKILL.md",
+      "sha256": "15ce951aec071c813150e6794628664725c164223108792e15bd3db18e959da0",
+      "bytes": 68147,
+      "local_git_blob": "6429efa083961c855fc5c21da8079ae2f4949007",
+      "read_scope": "partial",
+      "observations": [
+        {
+          "group": "core",
+          "read_scope": "partial",
+          "read_ranges": [
+            {
+              "range": {
+                "start_line": 23,
+                "end_line": 66
+              },
+              "method": "unfiltered numbered excerpt",
+              "read_at_utc": "2026-11-16T07:41:39.330315+00:00"
+            },
+            {
+              "range": {
+                "start_line": 104,
+                "end_line": 183
+              },
+              "method": "unfiltered numbered excerpt",
+              "read_at_utc": "2026-11-16T07:41:39.330340+00:00"
+            },
+            {
+              "range": {
+                "start_line": 386,
+                "end_line": 449
+              },
+              "method": "unfiltered numbered excerpt",
+              "read_at_utc": "2026-11-16T07:41:39.330377+00:00"
+            },
+            {
+              "range": {
+                "start_line": 1043,
+                "end_line": 1133
+              },
+              "method": "unfiltered numbered excerpt",
+              "read_at_utc": "2026-11-16T07:41:39.330409+00:00"
+            }
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-core-external/microsoft/skills/.github/skills/skill-creator/SKILL.md",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": "6429efa083961c855fc5c21da8079ae2f4949007",
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "microsoft/skills",
+      "commit": "f03ec5392f7a0f3aca12af47477e92f1edf7b44c",
+      "path": "LICENSE",
+      "url": "https://github.com/microsoft/skills/blob/f03ec5392f7a0f3aca12af47477e92f1edf7b44c/LICENSE",
+      "sha256": "d9a1b1e30d633d5732ea18e3cba9538d293ebc53e1a9e4e96ab739e0c5c4f1cb",
+      "bytes": 1140,
+      "local_git_blob": "79656060de00aa4659ad2c276d5be8830664d544",
+      "read_scope": "partial",
+      "observations": [
+        {
+          "group": "core",
+          "read_scope": "partial",
+          "read_ranges": [
+            {
+              "range": "lines 1-15",
+              "method": "license identity header only; full bytes archived and hashed"
+            }
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-core-external/microsoft/skills/LICENSE",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": "79656060de00aa4659ad2c276d5be8830664d544",
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "mohitmishra786/low-level-dev-skills",
+      "commit": "d0d0a13d4e3caec7afb2d647a1fffdb7cb1ee058",
+      "path": "LICENSE",
+      "url": "https://raw.githubusercontent.com/mohitmishra786/low-level-dev-skills/d0d0a13d4e3caec7afb2d647a1fffdb7cb1ee058/LICENSE",
+      "sha256": "bff4c77f3ad34eeec1f1b00dc894d8f65ec529232cf1d9cec9f6429ba39069d7",
+      "bytes": 1065,
+      "local_git_blob": "026cd61daea26ee89b54f4d179c85e5a679f25fe",
+      "read_scope": "full",
+      "observations": [
+        {
+          "group": "embedded",
+          "read_scope": "full",
+          "read_ranges": [
+            {
+              "line_start": 1,
+              "line_end_inclusive": 21,
+              "byte_start": 0,
+              "byte_end_exclusive": 1065
+            }
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/mohitmishra786__low-level-dev-skills/d0d0a13d4e3caec7afb2d647a1fffdb7cb1ee058/LICENSE",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": "026cd61daea26ee89b54f4d179c85e5a679f25fe",
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "mohitmishra786/low-level-dev-skills",
+      "commit": "d0d0a13d4e3caec7afb2d647a1fffdb7cb1ee058",
+      "path": "skills/baremetal/dma-baremetal/SKILL.md",
+      "url": "https://raw.githubusercontent.com/mohitmishra786/low-level-dev-skills/d0d0a13d4e3caec7afb2d647a1fffdb7cb1ee058/skills/baremetal/dma-baremetal/SKILL.md",
+      "sha256": "53952a831378912af860b7f0ccbbabb48da99b126c080dccf3f6bd25bc1888e4",
+      "bytes": 2228,
+      "local_git_blob": "6459de27d061c8e32291bf464db0ce55d2bda139",
+      "read_scope": "full",
+      "observations": [
+        {
+          "group": "embedded",
+          "read_scope": "full",
+          "read_ranges": [
+            {
+              "line_start": 1,
+              "line_end_inclusive": 73,
+              "byte_start": 0,
+              "byte_end_exclusive": 2228
+            }
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/mohitmishra786__low-level-dev-skills/d0d0a13d4e3caec7afb2d647a1fffdb7cb1ee058/skills/baremetal/dma-baremetal/SKILL.md",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": "6459de27d061c8e32291bf464db0ce55d2bda139",
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "mohitmishra786/low-level-dev-skills",
+      "commit": "d0d0a13d4e3caec7afb2d647a1fffdb7cb1ee058",
+      "path": "skills/build-systems/cmake/SKILL.md",
+      "url": "https://raw.githubusercontent.com/mohitmishra786/low-level-dev-skills/d0d0a13d4e3caec7afb2d647a1fffdb7cb1ee058/skills/build-systems/cmake/SKILL.md",
+      "sha256": "3dc7ad6d429baf208ae6615036b53957e4ed4490f310ee09060e6b197361aa5d",
+      "bytes": 6732,
+      "local_git_blob": "54f67082ff7f5ff29ff491182a3685e81b9913b9",
+      "read_scope": "full",
+      "observations": [
+        {
+          "group": "embedded",
+          "read_scope": "full",
+          "read_ranges": [
+            {
+              "line_start": 1,
+              "line_end_inclusive": 241,
+              "byte_start": 0,
+              "byte_end_exclusive": 6732
+            }
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/mohitmishra786__low-level-dev-skills/d0d0a13d4e3caec7afb2d647a1fffdb7cb1ee058/skills/build-systems/cmake/SKILL.md",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": "54f67082ff7f5ff29ff491182a3685e81b9913b9",
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "torvalds/linux",
+      "commit": "7d0a66e4bb9081d75c82ec4957c50034cb0ea449",
+      "path": "COPYING",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/7d0a66e4bb9081d75c82ec4957c50034cb0ea449/COPYING",
+      "sha256": "fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0",
+      "bytes": 496,
+      "local_git_blob": "a635a38ef9405fdfcfe97f3a435393c1e9cae971",
+      "read_scope": "full",
+      "observations": [
+        {
+          "group": "embedded",
+          "read_scope": "full",
+          "read_ranges": [
+            {
+              "line_start": 1,
+              "line_end_inclusive": 20,
+              "byte_start": 0,
+              "byte_end_exclusive": 496
+            }
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/torvalds__linux/7d0a66e4bb9081d75c82ec4957c50034cb0ea449/COPYING",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": "a635a38ef9405fdfcfe97f3a435393c1e9cae971",
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "torvalds/linux",
+      "commit": "7d0a66e4bb9081d75c82ec4957c50034cb0ea449",
+      "path": "Documentation/driver-api/dmaengine/client.rst",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/7d0a66e4bb9081d75c82ec4957c50034cb0ea449/Documentation/driver-api/dmaengine/client.rst",
+      "sha256": "c3c9727e2bf5af0d452c988f8309b13353cb84985a17e1ce6bf904b4728590b7",
+      "bytes": 13748,
+      "local_git_blob": "d491e385d61a98b8a804cd823caf254a2dc62cf4",
+      "read_scope": "partial",
+      "observations": [
+        {
+          "group": "embedded",
+          "read_scope": "partial",
+          "read_ranges": [
+            {
+              "line_start": 1,
+              "line_end_inclusive": 35,
+              "byte_start": 0,
+              "byte_end_exclusive": 912
+            },
+            {
+              "line_start": 110,
+              "line_end_inclusive": 170,
+              "byte_start": 3644,
+              "byte_end_exclusive": 5927
+            },
+            {
+              "line_start": 300,
+              "line_end_inclusive": 388,
+              "byte_start": 10509,
+              "byte_end_exclusive": 13748
+            }
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/torvalds__linux/7d0a66e4bb9081d75c82ec4957c50034cb0ea449/Documentation/driver-api/dmaengine/client.rst",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": "d491e385d61a98b8a804cd823caf254a2dc62cf4",
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "torvalds/linux",
+      "commit": "7d0a66e4bb9081d75c82ec4957c50034cb0ea449",
+      "path": "LICENSES/preferred/GPL-2.0",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/7d0a66e4bb9081d75c82ec4957c50034cb0ea449/LICENSES/preferred/GPL-2.0",
+      "sha256": "8780e78a1a737e127f25a65f6d95269bffd36158dc261114de7859b490bfc5aa",
+      "bytes": 18600,
+      "local_git_blob": "ea8e93dc44bc462a2be34e484432cf2b9ec88527",
+      "read_scope": "partial",
+      "observations": [
+        {
+          "group": "embedded",
+          "read_scope": "partial",
+          "read_ranges": [
+            {
+              "line_start": 1,
+              "line_end_inclusive": 25,
+              "byte_start": 0,
+              "byte_end_exclusive": 922
+            }
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/torvalds__linux/7d0a66e4bb9081d75c82ec4957c50034cb0ea449/LICENSES/preferred/GPL-2.0",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": "ea8e93dc44bc462a2be34e484432cf2b9ec88527",
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "trailofbits/skills",
+      "commit": "149d7b21f4067765b82e67029730b42d228ef4b4",
+      "path": "LICENSE",
+      "url": "https://github.com/trailofbits/skills/blob/149d7b21f4067765b82e67029730b42d228ef4b4/LICENSE",
+      "sha256": "7abe19ec9bb73b36141b999b861d24ad855e808bafe0f81e84cce28556f6c297",
+      "bytes": 20131,
+      "local_git_blob": "3b7b82d0da2db857eda1a798dbd908ea136f07b5",
+      "read_scope": "partial",
+      "observations": [
+        {
+          "group": "core",
+          "read_scope": "partial",
+          "read_ranges": [
+            {
+              "range": "lines 1-15",
+              "method": "license identity header only; full bytes archived and hashed"
+            }
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-core-external/trailofbits/skills/LICENSE",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": "3b7b82d0da2db857eda1a798dbd908ea136f07b5",
+          "independent_local_hash_verified": true
+        },
+        {
+          "group": "optional",
+          "read_scope": "partial",
+          "read_ranges": [
+            [
+              1,
+              10
+            ],
+            [
+              225,
+              299
+            ]
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-optional-upstream/trailofbits-license.txt",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": null,
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "trailofbits/skills",
+      "commit": "149d7b21f4067765b82e67029730b42d228ef4b4",
+      "path": "plugins/supply-chain-risk-auditor/README.md",
+      "url": "https://raw.githubusercontent.com/trailofbits/skills/149d7b21f4067765b82e67029730b42d228ef4b4/plugins/supply-chain-risk-auditor/README.md",
+      "sha256": "a1de260cf368cd1ab1e595ec5268876b9cc413187de9bbc808ae19c170f28fb8",
+      "bytes": 3404,
+      "local_git_blob": "bf32545ef80fd36094ac8f27fbed8972a36fbdd8",
+      "read_scope": "full",
+      "observations": [
+        {
+          "group": "optional",
+          "read_scope": "full",
+          "read_ranges": [
+            [
+              1,
+              67
+            ]
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-optional-upstream/trailofbits-supply-chain-readme.txt",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": null,
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "trailofbits/skills",
+      "commit": "149d7b21f4067765b82e67029730b42d228ef4b4",
+      "path": "plugins/supply-chain-risk-auditor/skills/supply-chain-risk-auditor/SKILL.md",
+      "url": "https://raw.githubusercontent.com/trailofbits/skills/149d7b21f4067765b82e67029730b42d228ef4b4/plugins/supply-chain-risk-auditor/skills/supply-chain-risk-auditor/SKILL.md",
+      "sha256": "a1254b7f8d3a1731a9a7e1f9cd6c67b59cf84ed6ef7c7fb455db9a14c528ceb4",
+      "bytes": 6991,
+      "local_git_blob": "83affaaf2841182c5eb610338256f7f540b270aa",
+      "read_scope": "full",
+      "observations": [
+        {
+          "group": "optional",
+          "read_scope": "full",
+          "read_ranges": [
+            [
+              1,
+              122
+            ]
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-optional-upstream/trailofbits-supply-chain.txt",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": null,
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "trailofbits/skills",
+      "commit": "149d7b21f4067765b82e67029730b42d228ef4b4",
+      "path": "plugins/variant-analysis/evals/README.md",
+      "url": "https://github.com/trailofbits/skills/blob/149d7b21f4067765b82e67029730b42d228ef4b4/plugins/variant-analysis/evals/README.md",
+      "sha256": "dafb6f2c5fc07f6d85384cddb21e35eadd70f460d15a2ef3ec6812a26ad2bf80",
+      "bytes": 6614,
+      "local_git_blob": "21e8437181546e45b21a7fc51d6183e461c24b94",
+      "read_scope": "full",
+      "observations": [
+        {
+          "group": "core",
+          "read_scope": "full",
+          "read_ranges": [
+            {
+              "range": "all bytes; lines 1-116",
+              "read_at_utc": "2026-11-16T07:41:46.014261+00:00",
+              "method": "unfiltered full UTF-8 output"
+            }
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-core-external/trailofbits/skills/plugins/variant-analysis/evals/README.md",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": "21e8437181546e45b21a7fc51d6183e461c24b94",
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "trailofbits/skills",
+      "commit": "149d7b21f4067765b82e67029730b42d228ef4b4",
+      "path": "plugins/variant-analysis/skills/variant-analysis/SKILL.md",
+      "url": "https://github.com/trailofbits/skills/blob/149d7b21f4067765b82e67029730b42d228ef4b4/plugins/variant-analysis/skills/variant-analysis/SKILL.md",
+      "sha256": "7b6b78e499bcb88d05c68254ffc91ebc28edabf4e9808adcc40e2628ebb9407e",
+      "bytes": 3903,
+      "local_git_blob": "8f58f54b1883110f1a38a51c9360d4b9d1b195a8",
+      "read_scope": "full",
+      "observations": [
+        {
+          "group": "core",
+          "read_scope": "full",
+          "read_ranges": [
+            {
+              "range": "all bytes; lines 1-76",
+              "read_at_utc": "2026-11-16T07:41:46.014168+00:00",
+              "method": "unfiltered full UTF-8 output"
+            }
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-core-external/trailofbits/skills/plugins/variant-analysis/skills/variant-analysis/SKILL.md",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": "8f58f54b1883110f1a38a51c9360d4b9d1b195a8",
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "vercel-labs/agent-browser",
+      "commit": "53384771fbafc261ba67608ac806dd5aa70b84f0",
+      "path": "LICENSE",
+      "url": "https://github.com/vercel-labs/agent-browser/blob/53384771fbafc261ba67608ac806dd5aa70b84f0/LICENSE",
+      "sha256": "014bb31e83d5c2e76aea1cc6e82217346ab41362f32cb355ad0f5c10aa0aeaff",
+      "bytes": 10931,
+      "local_git_blob": "8226d363f88a734e52cc79ead7a5588cc55e76f7",
+      "read_scope": "partial",
+      "observations": [
+        {
+          "group": "core",
+          "read_scope": "partial",
+          "read_ranges": [
+            {
+              "range": "lines 1-15",
+              "method": "license identity header only; full bytes archived and hashed"
+            }
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-core-external/vercel-labs/agent-browser/LICENSE",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": "8226d363f88a734e52cc79ead7a5588cc55e76f7",
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "vercel-labs/agent-browser",
+      "commit": "53384771fbafc261ba67608ac806dd5aa70b84f0",
+      "path": "evals/README.md",
+      "url": "https://github.com/vercel-labs/agent-browser/blob/53384771fbafc261ba67608ac806dd5aa70b84f0/evals/README.md",
+      "sha256": "37448c3ac481e8b5f496b848c1f3762be1ef12337c1be8adec703fe45439ced3",
+      "bytes": 8602,
+      "local_git_blob": "e985c9a3bdbc01069e57fd66d65f20b8a8e4c58a",
+      "read_scope": "full",
+      "observations": [
+        {
+          "group": "core",
+          "read_scope": "full",
+          "read_ranges": [
+            {
+              "range": "all bytes; lines 1-161",
+              "read_at_utc": "2026-11-16T07:41:46.014323+00:00",
+              "method": "unfiltered full UTF-8 output"
+            }
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-core-external/vercel-labs/agent-browser/evals/README.md",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": "e985c9a3bdbc01069e57fd66d65f20b8a8e4c58a",
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "vercel-labs/skills",
+      "commit": "af860243b8c68053b3b5151e3732b9322933674d",
+      "path": "LICENSE",
+      "url": "https://github.com/vercel-labs/skills/blob/af860243b8c68053b3b5151e3732b9322933674d/LICENSE",
+      "sha256": "661142e53c313d2bb5e1b055f5c0a39001450ff1b5e27b89dc4bc7de9a6352ca",
+      "bytes": 1069,
+      "local_git_blob": "eabe3008f6c0275929faa8b07d406e82717648cc",
+      "read_scope": "full",
+      "observations": [
+        {
+          "group": "platform",
+          "read_scope": "full",
+          "read_ranges": "full",
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-platform-upstream-raw/source-4.txt",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": "eabe3008f6c0275929faa8b07d406e82717648cc",
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "vercel-labs/skills",
+      "commit": "af860243b8c68053b3b5151e3732b9322933674d",
+      "path": "README.md",
+      "url": "https://github.com/vercel-labs/skills/blob/af860243b8c68053b3b5151e3732b9322933674d/README.md",
+      "sha256": "1c0ef1c3d4bb3ce288c5aeb725d5074b25b231ce293cf50999406b13f04782c6",
+      "bytes": 8464,
+      "local_git_blob": "d7973f93ec761f978f419ca71399dbdc41109355",
+      "read_scope": "partial",
+      "observations": [
+        {
+          "group": "platform",
+          "read_scope": "partial",
+          "read_ranges": "section: Lock File Content Hash only; other sections not claimed reviewed",
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-platform-upstream-raw/source-3.txt",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": "d7973f93ec761f978f419ca71399dbdc41109355",
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "ylongw/embedded-review",
+      "commit": "bb500aa00fc3e548365305b537b211663323a3d9",
+      "path": "LICENSE",
+      "url": "https://raw.githubusercontent.com/ylongw/embedded-review/bb500aa00fc3e548365305b537b211663323a3d9/LICENSE",
+      "sha256": "e0512e5fdf9c0b51c3bf6452f4d0b788ba52149e30c2118f271ea99b5a528bf3",
+      "bytes": 1070,
+      "local_git_blob": "9b1c973dfd3cec755a018a9405e319ffdc2e687d",
+      "read_scope": "full",
+      "observations": [
+        {
+          "group": "embedded",
+          "read_scope": "full",
+          "read_ranges": [
+            {
+              "line_start": 1,
+              "line_end_inclusive": 21,
+              "byte_start": 0,
+              "byte_end_exclusive": 1070
+            }
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/ylongw__embedded-review/bb500aa00fc3e548365305b537b211663323a3d9/LICENSE",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": "9b1c973dfd3cec755a018a9405e319ffdc2e687d",
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "ylongw/embedded-review",
+      "commit": "bb500aa00fc3e548365305b537b211663323a3d9",
+      "path": "SKILL.md",
+      "url": "https://raw.githubusercontent.com/ylongw/embedded-review/bb500aa00fc3e548365305b537b211663323a3d9/SKILL.md",
+      "sha256": "edaaef437c52742e78e4d812ed8aee79728cfedd117fed42abacddcbf0b65aa7",
+      "bytes": 8727,
+      "local_git_blob": "ed3a5ea537396448c3c1b283c1e91b0d879ce1f4",
+      "read_scope": "full",
+      "observations": [
+        {
+          "group": "embedded",
+          "read_scope": "full",
+          "read_ranges": [
+            {
+              "line_start": 1,
+              "line_end_inclusive": 264,
+              "byte_start": 0,
+              "byte_end_exclusive": 8727
+            }
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/ylongw__embedded-review/bb500aa00fc3e548365305b537b211663323a3d9/SKILL.md",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": "ed3a5ea537396448c3c1b283c1e91b0d879ce1f4",
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "zephyrproject-rtos/zephyr",
+      "commit": "64e98eb5278d790f3b3e5279ca8b39b45097bbc0",
+      "path": "LICENSE",
+      "url": "https://raw.githubusercontent.com/zephyrproject-rtos/zephyr/64e98eb5278d790f3b3e5279ca8b39b45097bbc0/LICENSE",
+      "sha256": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08",
+      "bytes": 11358,
+      "local_git_blob": "8f71f43fee3f78649d238238cbde51e6d7055c82",
+      "read_scope": "partial",
+      "observations": [
+        {
+          "group": "embedded",
+          "read_scope": "partial",
+          "read_ranges": [
+            {
+              "line_start": 1,
+              "line_end_inclusive": 15,
+              "byte_start": 0,
+              "byte_end_exclusive": 595
+            },
+            {
+              "line_start": 178,
+              "line_end_inclusive": 202,
+              "byte_start": 10174,
+              "byte_end_exclusive": 11358
+            }
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/zephyrproject-rtos__zephyr/64e98eb5278d790f3b3e5279ca8b39b45097bbc0/LICENSE",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": "8f71f43fee3f78649d238238cbde51e6d7055c82",
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    },
+    {
+      "repository": "zephyrproject-rtos/zephyr",
+      "commit": "64e98eb5278d790f3b3e5279ca8b39b45097bbc0",
+      "path": "doc/kernel/services/threads/workqueue.rst",
+      "url": "https://raw.githubusercontent.com/zephyrproject-rtos/zephyr/64e98eb5278d790f3b3e5279ca8b39b45097bbc0/doc/kernel/services/threads/workqueue.rst",
+      "sha256": "2c905ec3cea73fa0b4d6ce4e711081b24732dec859b98e897d7082aa64548895",
+      "bytes": 24794,
+      "local_git_blob": "18c1cf0e31a6329c7738ee4c7b053e3f5a8486aa",
+      "read_scope": "partial",
+      "observations": [
+        {
+          "group": "embedded",
+          "read_scope": "partial",
+          "read_ranges": [
+            {
+              "line_start": 1,
+              "line_end_inclusive": 110,
+              "byte_start": 0,
+              "byte_end_exclusive": 5151
+            },
+            {
+              "line_start": 300,
+              "line_end_inclusive": 338,
+              "byte_start": 13017,
+              "byte_end_exclusive": 14706
+            },
+            {
+              "line_start": 390,
+              "line_end_inclusive": 552,
+              "byte_start": 17198,
+              "byte_end_exclusive": 24794
+            }
+          ],
+          "snapshot": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/zephyrproject-rtos__zephyr/64e98eb5278d790f3b3e5279ca8b39b45097bbc0/doc/kernel/services/threads/workqueue.rst",
+          "snapshot_sha256_reverified": true,
+          "provided_git_blob": "18c1cf0e31a6329c7738ee4c7b053e3f5a8486aa",
+          "independent_local_hash_verified": true
+        }
+      ],
+      "independent_remote_tree_attestation": "not-performed; local blob hashes alone do not attest remote membership"
+    }
+  ],
+  "reading_boundary": "Declarations are internally coherent metadata, not replayed mental reading. Independent semantic review is separately listed."
+}

@@ -1,0 +1,271 @@
+{
+  "kind": "real-host-cmake-cache-probe",
+  "checks": {
+    "initial_a": true,
+    "same_a_control": true,
+    "changed_toolchain_cache_says_b": true,
+    "changed_toolchain_still_a": true,
+    "fresh_b_control": true
+  },
+  "runs": [
+    {
+      "label": "tool-version",
+      "argv": [
+        "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin/cmake",
+        "--version"
+      ],
+      "exit_code": 0,
+      "stdout": "cmake version 3.31.6\n\nCMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
+      "stderr": ""
+    },
+    {
+      "label": "fresh-a-configure",
+      "argv": [
+        "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin/cmake",
+        "-S",
+        "/workspace/scratch/fe5385ca063a/round3-cmake-probe/src",
+        "-B",
+        "/workspace/scratch/fe5385ca063a/round3-cmake-probe/build-reused",
+        "-G",
+        "Ninja",
+        "-DCMAKE_MAKE_PROGRAM=/workspace/scratch/fe5385ca063a/verification-tools/ninja",
+        "-DCMAKE_TOOLCHAIN_FILE=/workspace/scratch/fe5385ca063a/round3-cmake-probe/toolchain-a.cmake",
+        "-DCMAKE_BUILD_TYPE=Debug",
+        "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+      ],
+      "exit_code": 0,
+      "stdout": "-- The C compiler identification is GNU 14.2.0\n-- Detecting C compiler ABI info\n-- Detecting C compiler ABI info - done\n-- Check for working C compiler: /usr/bin/gcc - skipped\n-- Detecting C compile features\n-- Detecting C compile features - done\n-- Observed compiler: /usr/bin/gcc\n-- Requested toolchain: /workspace/scratch/fe5385ca063a/round3-cmake-probe/toolchain-a.cmake\n-- Configuring done (0.2s)\n-- Generating done (0.0s)\n-- Build files have been written to: /workspace/scratch/fe5385ca063a/round3-cmake-probe/build-reused\n",
+      "stderr": ""
+    },
+    {
+      "label": "fresh-a-build",
+      "argv": [
+        "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin/cmake",
+        "--build",
+        "/workspace/scratch/fe5385ca063a/round3-cmake-probe/build-reused",
+        "--config",
+        "Debug",
+        "--parallel",
+        "1",
+        "--verbose"
+      ],
+      "exit_code": 0,
+      "stdout": "Change Dir: '/workspace/scratch/fe5385ca063a/round3-cmake-probe/build-reused'\n\nRun Build Command(s): /workspace/scratch/fe5385ca063a/verification-tools/ninja -v -j 1\n[1/2] /usr/bin/gcc   -DTOOLCHAIN_ID=101 -g -MD -MT CMakeFiles/probe.dir/main.c.o -MF CMakeFiles/probe.dir/main.c.o.d -o CMakeFiles/probe.dir/main.c.o -c /workspace/scratch/fe5385ca063a/round3-cmake-probe/src/main.c\n[2/2] : && /usr/bin/gcc -DTOOLCHAIN_ID=101 -g -Wl,--dependency-file=CMakeFiles/probe.dir/link.d CMakeFiles/probe.dir/main.c.o -o probe   && :\n\n",
+      "stderr": ""
+    },
+    {
+      "label": "fresh-a-execute",
+      "argv": [
+        "/workspace/scratch/fe5385ca063a/round3-cmake-probe/build-reused/probe"
+      ],
+      "exit_code": 0,
+      "stdout": "toolchain_id=101\n",
+      "stderr": ""
+    },
+    {
+      "label": "fresh-a-identity",
+      "actual": "toolchain_id=101",
+      "compile_commands": [
+        {
+          "directory": "/workspace/scratch/fe5385ca063a/round3-cmake-probe/build-reused",
+          "command": "/usr/bin/gcc -DTOOLCHAIN_ID=101 -g -o CMakeFiles/probe.dir/main.c.o -c /workspace/scratch/fe5385ca063a/round3-cmake-probe/src/main.c",
+          "file": "/workspace/scratch/fe5385ca063a/round3-cmake-probe/src/main.c",
+          "output": "CMakeFiles/probe.dir/main.c.o"
+        }
+      ],
+      "cache_toolchain": [
+        "CMAKE_TOOLCHAIN_FILE:FILEPATH=/workspace/scratch/fe5385ca063a/round3-cmake-probe/toolchain-a.cmake"
+      ],
+      "system_toolchain_includes": [
+        "include(\"/workspace/scratch/fe5385ca063a/round3-cmake-probe/toolchain-a.cmake\")"
+      ]
+    },
+    {
+      "label": "same-a-configure",
+      "argv": [
+        "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin/cmake",
+        "-S",
+        "/workspace/scratch/fe5385ca063a/round3-cmake-probe/src",
+        "-B",
+        "/workspace/scratch/fe5385ca063a/round3-cmake-probe/build-reused",
+        "-G",
+        "Ninja",
+        "-DCMAKE_MAKE_PROGRAM=/workspace/scratch/fe5385ca063a/verification-tools/ninja",
+        "-DCMAKE_TOOLCHAIN_FILE=/workspace/scratch/fe5385ca063a/round3-cmake-probe/toolchain-a.cmake",
+        "-DCMAKE_BUILD_TYPE=Debug",
+        "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+      ],
+      "exit_code": 0,
+      "stdout": "-- Observed compiler: /usr/bin/gcc\n-- Requested toolchain: /workspace/scratch/fe5385ca063a/round3-cmake-probe/toolchain-a.cmake\n-- Configuring done (0.0s)\n-- Generating done (0.0s)\n-- Build files have been written to: /workspace/scratch/fe5385ca063a/round3-cmake-probe/build-reused\n",
+      "stderr": ""
+    },
+    {
+      "label": "same-a-build",
+      "argv": [
+        "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin/cmake",
+        "--build",
+        "/workspace/scratch/fe5385ca063a/round3-cmake-probe/build-reused",
+        "--config",
+        "Debug",
+        "--parallel",
+        "1",
+        "--verbose"
+      ],
+      "exit_code": 0,
+      "stdout": "Change Dir: '/workspace/scratch/fe5385ca063a/round3-cmake-probe/build-reused'\n\nRun Build Command(s): /workspace/scratch/fe5385ca063a/verification-tools/ninja -v -j 1\nninja: no work to do.\n\n",
+      "stderr": ""
+    },
+    {
+      "label": "same-a-execute",
+      "argv": [
+        "/workspace/scratch/fe5385ca063a/round3-cmake-probe/build-reused/probe"
+      ],
+      "exit_code": 0,
+      "stdout": "toolchain_id=101\n",
+      "stderr": ""
+    },
+    {
+      "label": "same-a-identity",
+      "actual": "toolchain_id=101",
+      "compile_commands": [
+        {
+          "directory": "/workspace/scratch/fe5385ca063a/round3-cmake-probe/build-reused",
+          "command": "/usr/bin/gcc -DTOOLCHAIN_ID=101 -g -o CMakeFiles/probe.dir/main.c.o -c /workspace/scratch/fe5385ca063a/round3-cmake-probe/src/main.c",
+          "file": "/workspace/scratch/fe5385ca063a/round3-cmake-probe/src/main.c",
+          "output": "CMakeFiles/probe.dir/main.c.o"
+        }
+      ],
+      "cache_toolchain": [
+        "CMAKE_TOOLCHAIN_FILE:UNINITIALIZED=/workspace/scratch/fe5385ca063a/round3-cmake-probe/toolchain-a.cmake"
+      ],
+      "system_toolchain_includes": [
+        "include(\"/workspace/scratch/fe5385ca063a/round3-cmake-probe/toolchain-a.cmake\")"
+      ]
+    },
+    {
+      "label": "reused-to-b-configure",
+      "argv": [
+        "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin/cmake",
+        "-S",
+        "/workspace/scratch/fe5385ca063a/round3-cmake-probe/src",
+        "-B",
+        "/workspace/scratch/fe5385ca063a/round3-cmake-probe/build-reused",
+        "-G",
+        "Ninja",
+        "-DCMAKE_MAKE_PROGRAM=/workspace/scratch/fe5385ca063a/verification-tools/ninja",
+        "-DCMAKE_TOOLCHAIN_FILE=/workspace/scratch/fe5385ca063a/round3-cmake-probe/toolchain-b.cmake",
+        "-DCMAKE_BUILD_TYPE=Debug",
+        "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+      ],
+      "exit_code": 0,
+      "stdout": "-- Observed compiler: /usr/bin/gcc\n-- Requested toolchain: /workspace/scratch/fe5385ca063a/round3-cmake-probe/toolchain-b.cmake\n-- Configuring done (0.0s)\n-- Generating done (0.0s)\n-- Build files have been written to: /workspace/scratch/fe5385ca063a/round3-cmake-probe/build-reused\n",
+      "stderr": ""
+    },
+    {
+      "label": "reused-to-b-build",
+      "argv": [
+        "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin/cmake",
+        "--build",
+        "/workspace/scratch/fe5385ca063a/round3-cmake-probe/build-reused",
+        "--config",
+        "Debug",
+        "--parallel",
+        "1",
+        "--verbose"
+      ],
+      "exit_code": 0,
+      "stdout": "Change Dir: '/workspace/scratch/fe5385ca063a/round3-cmake-probe/build-reused'\n\nRun Build Command(s): /workspace/scratch/fe5385ca063a/verification-tools/ninja -v -j 1\nninja: no work to do.\n\n",
+      "stderr": ""
+    },
+    {
+      "label": "reused-to-b-execute",
+      "argv": [
+        "/workspace/scratch/fe5385ca063a/round3-cmake-probe/build-reused/probe"
+      ],
+      "exit_code": 0,
+      "stdout": "toolchain_id=101\n",
+      "stderr": ""
+    },
+    {
+      "label": "reused-to-b-identity",
+      "actual": "toolchain_id=101",
+      "compile_commands": [
+        {
+          "directory": "/workspace/scratch/fe5385ca063a/round3-cmake-probe/build-reused",
+          "command": "/usr/bin/gcc -DTOOLCHAIN_ID=101 -g -o CMakeFiles/probe.dir/main.c.o -c /workspace/scratch/fe5385ca063a/round3-cmake-probe/src/main.c",
+          "file": "/workspace/scratch/fe5385ca063a/round3-cmake-probe/src/main.c",
+          "output": "CMakeFiles/probe.dir/main.c.o"
+        }
+      ],
+      "cache_toolchain": [
+        "CMAKE_TOOLCHAIN_FILE:UNINITIALIZED=/workspace/scratch/fe5385ca063a/round3-cmake-probe/toolchain-b.cmake"
+      ],
+      "system_toolchain_includes": [
+        "include(\"/workspace/scratch/fe5385ca063a/round3-cmake-probe/toolchain-a.cmake\")"
+      ]
+    },
+    {
+      "label": "fresh-b-configure",
+      "argv": [
+        "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin/cmake",
+        "-S",
+        "/workspace/scratch/fe5385ca063a/round3-cmake-probe/src",
+        "-B",
+        "/workspace/scratch/fe5385ca063a/round3-cmake-probe/build-fresh-b",
+        "-G",
+        "Ninja",
+        "-DCMAKE_MAKE_PROGRAM=/workspace/scratch/fe5385ca063a/verification-tools/ninja",
+        "-DCMAKE_TOOLCHAIN_FILE=/workspace/scratch/fe5385ca063a/round3-cmake-probe/toolchain-b.cmake",
+        "-DCMAKE_BUILD_TYPE=Debug",
+        "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+      ],
+      "exit_code": 0,
+      "stdout": "-- The C compiler identification is GNU 14.2.0\n-- Detecting C compiler ABI info\n-- Detecting C compiler ABI info - done\n-- Check for working C compiler: /usr/bin/cc - skipped\n-- Detecting C compile features\n-- Detecting C compile features - done\n-- Observed compiler: /usr/bin/cc\n-- Requested toolchain: /workspace/scratch/fe5385ca063a/round3-cmake-probe/toolchain-b.cmake\n-- Configuring done (0.1s)\n-- Generating done (0.0s)\n-- Build files have been written to: /workspace/scratch/fe5385ca063a/round3-cmake-probe/build-fresh-b\n",
+      "stderr": ""
+    },
+    {
+      "label": "fresh-b-build",
+      "argv": [
+        "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin/cmake",
+        "--build",
+        "/workspace/scratch/fe5385ca063a/round3-cmake-probe/build-fresh-b",
+        "--config",
+        "Debug",
+        "--parallel",
+        "1",
+        "--verbose"
+      ],
+      "exit_code": 0,
+      "stdout": "Change Dir: '/workspace/scratch/fe5385ca063a/round3-cmake-probe/build-fresh-b'\n\nRun Build Command(s): /workspace/scratch/fe5385ca063a/verification-tools/ninja -v -j 1\n[1/2] /usr/bin/cc   -DTOOLCHAIN_ID=202 -g -MD -MT CMakeFiles/probe.dir/main.c.o -MF CMakeFiles/probe.dir/main.c.o.d -o CMakeFiles/probe.dir/main.c.o -c /workspace/scratch/fe5385ca063a/round3-cmake-probe/src/main.c\n[2/2] : && /usr/bin/cc -DTOOLCHAIN_ID=202 -g -Wl,--dependency-file=CMakeFiles/probe.dir/link.d CMakeFiles/probe.dir/main.c.o -o probe   && :\n\n",
+      "stderr": ""
+    },
+    {
+      "label": "fresh-b-execute",
+      "argv": [
+        "/workspace/scratch/fe5385ca063a/round3-cmake-probe/build-fresh-b/probe"
+      ],
+      "exit_code": 0,
+      "stdout": "toolchain_id=202\n",
+      "stderr": ""
+    },
+    {
+      "label": "fresh-b-identity",
+      "actual": "toolchain_id=202",
+      "compile_commands": [
+        {
+          "directory": "/workspace/scratch/fe5385ca063a/round3-cmake-probe/build-fresh-b",
+          "command": "/usr/bin/cc -DTOOLCHAIN_ID=202 -g -o CMakeFiles/probe.dir/main.c.o -c /workspace/scratch/fe5385ca063a/round3-cmake-probe/src/main.c",
+          "file": "/workspace/scratch/fe5385ca063a/round3-cmake-probe/src/main.c",
+          "output": "CMakeFiles/probe.dir/main.c.o"
+        }
+      ],
+      "cache_toolchain": [
+        "CMAKE_TOOLCHAIN_FILE:FILEPATH=/workspace/scratch/fe5385ca063a/round3-cmake-probe/toolchain-b.cmake"
+      ],
+      "system_toolchain_includes": [
+        "include(\"/workspace/scratch/fe5385ca063a/round3-cmake-probe/toolchain-b.cmake\")"
+      ]
+    }
+  ],
+  "limits": "Host compiler/toolchain configuration only; no cross-target, device, HIL, or model A/B claim."
+}

@@ -1,0 +1,48 @@
+{
+  "schema": "round3-independent-stage1-probes/v1",
+  "reviewer": "/root/round3_independent_review",
+  "baseline_commit": "80f8b2ea2885e3f62dcea455c45a2e8ebf071b2b",
+  "started_at": "2026-11-16T07:58:17.585315+00:00",
+  "completed_at": "2026-11-16T07:58:20.250886+00:00",
+  "identity_errors": [],
+  "five_original_failures_independently_reproduced": true,
+  "evidence": [
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-stage1/audit-identity-verification.json",
+      "bytes": 166858,
+      "sha256": "062e12abfc674ff0149cd3ce79aeb54e84da7b5c83f22902d69f69006fece683"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-stage1/scan-original-failure.json",
+      "bytes": 4478,
+      "sha256": "16cba4864556a7cbb5aca19fea375bc69727700d311b8cf3b73fd60b14900c2c"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-stage1/sampling-original-failure.json",
+      "bytes": 13151,
+      "sha256": "ec47cd5d06be35591420669663db702baa96e13d3bb99a4faca8fbdfe7dbfd66"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-stage1/cmake-original-failure.json",
+      "bytes": 14744,
+      "sha256": "c32e0e4aa4a91c6b789bf2ba1dd60036674392e96bef29a5b1dcb243d8472f76"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-stage1/schema-original-failure.json",
+      "bytes": 4263,
+      "sha256": "a8df8fe44df04c22e2fae7bd68849e060654b1c50357b4494efa8ac317dc65c8"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-stage1/checklist-original-failure.json",
+      "bytes": 1707,
+      "sha256": "527ede1a19c16f450c93ccfbd6d8354b8d0d1f6be3703e57ed723413b633b4d8"
+    }
+  ],
+  "boundaries": [
+    "No repository/index/ref mutation or fixes.",
+    "Only reviewer-owned scratch files created.",
+    "Baseline identity coverage is not full semantic re-review of all 153 files.",
+    "No native runtime/model A/B, paid models, device or process-group cancellation evidence.",
+    "Current worktree implementation remains unfrozen and is not adjudicated by this report."
+  ]
+}

@@ -1,0 +1,594 @@
+[FAIL] test_validate
+  stderr (last 80 lines):
+    [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5
+    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter
+[FAIL] test_catalog
+  stderr (last 80 lines):
+    [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5
+    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter
+[FAIL] test_skill_content
+  stderr (last 80 lines):
+    test_late_observation_reverses_event_order_across_timezones (tests.test_optional_incident_lifecycle.IncidentTimelineDesignCaseTests.test_late_observation_reverses_event_order_across_timezones) ... ok
+    test_blank_creation_gate_cannot_predeclare_success (tests.test_optional_incident_lifecycle.OptionalTemplateInvariantTests.test_blank_creation_gate_cannot_predeclare_success) ... ok
+    test_incident_output_preserves_distinct_clock_fields (tests.test_optional_incident_lifecycle.OptionalTemplateInvariantTests.test_incident_output_preserves_distinct_clock_fields) ... ok
+    test_all_present_openai_metadata_use_interface (tests.test_skill_openai_metadata.SkillOpenAIMetadataTests.test_all_present_openai_metadata_use_interface) ... ok
+    test_missing_interface_is_rejected (tests.test_skill_openai_metadata.SkillOpenAIMetadataTests.test_missing_interface_is_rejected) ... ok
+    test_breaking_and_invalid (tests.test_commit_message_policy.CommitMessagePolicyTests.test_breaking_and_invalid) ... ok
+    test_cli_is_read_only_and_returns_verdict (tests.test_commit_message_policy.CommitMessagePolicyTests.test_cli_is_read_only_and_returns_verdict) ... ok
+    test_issue_policy_is_opt_in (tests.test_commit_message_policy.CommitMessagePolicyTests.test_issue_policy_is_opt_in) ... ok
+    test_zh_and_en (tests.test_commit_message_policy.CommitMessagePolicyTests.test_zh_and_en) ... ok
+    
+    ======================================================================
+    FAIL: test_new_discovery_uses_production_matcher_without_granting_writes (tests.test_external_core_methods.ExternalCoreMethodsTests.test_new_discovery_uses_production_matcher_without_granting_writes) (phrase='公共契约迁移拆分', negated=False)
+    ----------------------------------------------------------------------
+    Traceback (most recent call last):
+      File "/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_external_core_methods.py", line 85, in test_new_discovery_uses_production_matcher_without_granting_writes
+        self.assertEqual(run.returncode, 1 if negated else 0, run.stdout + run.stderr)
+        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    AssertionError: 2 != 0 : [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5
+    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter
+    
+    
+    ======================================================================
+    FAIL: test_new_discovery_uses_production_matcher_without_granting_writes (tests.test_external_core_methods.ExternalCoreMethodsTests.test_new_discovery_uses_production_matcher_without_granting_writes) (phrase='公共契约迁移拆分', negated=True)
+    ----------------------------------------------------------------------
+    Traceback (most recent call last):
+      File "/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_external_core_methods.py", line 85, in test_new_discovery_uses_production_matcher_without_granting_writes
+        self.assertEqual(run.returncode, 1 if negated else 0, run.stdout + run.stderr)
+        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    AssertionError: 2 != 1 : [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5
+    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter
+    
+    
+    ======================================================================
+    FAIL: test_new_discovery_uses_production_matcher_without_granting_writes (tests.test_external_core_methods.ExternalCoreMethodsTests.test_new_discovery_uses_production_matcher_without_granting_writes) (phrase='独立断言', negated=False)
+    ----------------------------------------------------------------------
+    Traceback (most recent call last):
+      File "/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_external_core_methods.py", line 85, in test_new_discovery_uses_production_matcher_without_granting_writes
+        self.assertEqual(run.returncode, 1 if negated else 0, run.stdout + run.stderr)
+        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    AssertionError: 2 != 0 : [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5
+    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter
+    
+    
+    ======================================================================
+    FAIL: test_new_discovery_uses_production_matcher_without_granting_writes (tests.test_external_core_methods.ExternalCoreMethodsTests.test_new_discovery_uses_production_matcher_without_granting_writes) (phrase='独立断言', negated=True)
+    ----------------------------------------------------------------------
+    Traceback (most recent call last):
+      File "/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_external_core_methods.py", line 85, in test_new_discovery_uses_production_matcher_without_granting_writes
+        self.assertEqual(run.returncode, 1 if negated else 0, run.stdout + run.stderr)
+        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    AssertionError: 2 != 1 : [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5
+    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter
+    
+    
+    ======================================================================
+    FAIL: test_new_discovery_uses_production_matcher_without_granting_writes (tests.test_external_core_methods.ExternalCoreMethodsTests.test_new_discovery_uses_production_matcher_without_granting_writes) (phrase='检查器校准', negated=False)
+    ----------------------------------------------------------------------
+    Traceback (most recent call last):
+      File "/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_external_core_methods.py", line 85, in test_new_discovery_uses_production_matcher_without_granting_writes
+        self.assertEqual(run.returncode, 1 if negated else 0, run.stdout + run.stderr)
+        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    AssertionError: 2 != 0 : [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5
+    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter
+    
+    
+    ======================================================================
+    FAIL: test_new_discovery_uses_production_matcher_without_granting_writes (tests.test_external_core_methods.ExternalCoreMethodsTests.test_new_discovery_uses_production_matcher_without_granting_writes) (phrase='检查器校准', negated=True)
+    ----------------------------------------------------------------------
+    Traceback (most recent call last):
+      File "/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_external_core_methods.py", line 85, in test_new_discovery_uses_production_matcher_without_granting_writes
+        self.assertEqual(run.returncode, 1 if negated else 0, run.stdout + run.stderr)
+        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    AssertionError: 2 != 1 : [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5
+    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter
+    
+    
+    ----------------------------------------------------------------------
+    Ran 173 tests in 12.211s
+    
+    FAILED (failures=6)
+[FAIL] test_skill_trigger_matrix
+  stderr (last 80 lines):
+    ..FFF..........
+    ======================================================================
+    FAIL: test_cli_optional_install_requirement_and_negation (__main__.SkillTriggerMatrixTests.test_cli_optional_install_requirement_and_negation) (prompt='继续吸收外部成熟方法，提升已有 Skills 的实际执行效果')
+    ----------------------------------------------------------------------
+    Traceback (most recent call last):
+      File "/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_skill_trigger_matrix.py", line 116, in test_cli_optional_install_requirement_and_negation
+        self.assertEqual(completed.returncode, exit_code,
+        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                         completed.stderr or completed.stdout)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    AssertionError: 2 != 0 : [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5
+    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter
+    
+    
+    ======================================================================
+    FAIL: test_cli_optional_install_requirement_and_negation (__main__.SkillTriggerMatrixTests.test_cli_optional_install_requirement_and_negation) (prompt='不要吸收外部成熟方法')
+    ----------------------------------------------------------------------
+    Traceback (most recent call last):
+      File "/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_skill_trigger_matrix.py", line 116, in test_cli_optional_install_requirement_and_negation
+        self.assertEqual(completed.returncode, exit_code,
+        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                         completed.stderr or completed.stdout)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    AssertionError: 2 != 1 : [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5
+    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter
+    
+    
+    ======================================================================
+    FAIL: test_cli_smoke_uses_same_contract (__main__.SkillTriggerMatrixTests.test_cli_smoke_uses_same_contract)
+    ----------------------------------------------------------------------
+    Traceback (most recent call last):
+      File "/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_skill_trigger_matrix.py", line 94, in test_cli_smoke_uses_same_contract
+        self.assertEqual(completed.returncode, 0, completed.stderr or completed.stdout)
+        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    AssertionError: 2 != 0 : [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5
+    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter
+    
+    
+    ----------------------------------------------------------------------
+    Ran 14 tests in 0.639s
+    
+    FAILED (failures=3)
+[FAIL] test_skill_sop_quality
+  stderr (last 80 lines):
+    [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5
+    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter
+[FAIL] test_token_context_governance
+[FAIL] test_boundary_rehearsal
+  stderr (last 80 lines):
+    .E.
+    ======================================================================
+    ERROR: test_canonical_cli_from_non_repository_cwd (__main__.BoundaryRehearsalTests.test_canonical_cli_from_non_repository_cwd)
+    ----------------------------------------------------------------------
+    Traceback (most recent call last):
+      File "/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_boundary_rehearsal.py", line 27, in test_canonical_cli_from_non_repository_cwd
+        result = subprocess.run(["bash", str(root / "scripts/devkit.sh"), "eval", "boundaries", "--summary-json"],
+                                cwd="/tmp", text=True, capture_output=True, check=True, timeout=30)
+      File "/usr/lib/python3.13/subprocess.py", line 577, in run
+        raise CalledProcessError(retcode, process.args,
+                                 output=stdout, stderr=stderr)
+    subprocess.CalledProcessError: Command '['bash', '/workspace/scratch/fe5385ca063a/agent-dev-kit/scripts/devkit.sh', 'eval', 'boundaries', '--summary-json']' returned non-zero exit status 2.
+    
+    ----------------------------------------------------------------------
+    Ran 3 tests in 0.019s
+    
+    FAILED (errors=1)
+[FAIL] test_contract_registry
+  stderr (last 80 lines):
+    test_contract_schema_rejects_unknown_top_level_field (tests.test_phase_context.PhaseContextContractTests.test_contract_schema_rejects_unknown_top_level_field) ... ok
+    test_delivery_lifecycle_is_review_then_completion_then_commit_then_closeout (tests.test_phase_context.PhaseContextContractTests.test_delivery_lifecycle_is_review_then_completion_then_commit_then_closeout) ... ok
+    test_driver_phase_contains_implementation_bringup_and_interrupt_dma (tests.test_phase_context.PhaseContextContractTests.test_driver_phase_contains_implementation_bringup_and_interrupt_dma) ... ok
+    test_manifest_has_no_phase_to_skill_path_mirror (tests.test_phase_context.PhaseContextContractTests.test_manifest_has_no_phase_to_skill_path_mirror) ... ok
+    test_non_unique_group_cannot_be_promoted_to_exactly_one_primary (tests.test_phase_context.PhaseContextContractTests.test_non_unique_group_cannot_be_promoted_to_exactly_one_primary) ... ok
+    test_phase_resource_cannot_escape_repository_root (tests.test_phase_context.PhaseContextContractTests.test_phase_resource_cannot_escape_repository_root) ... ok
+    test_review_phase_uses_one_primary_without_language_duplicate (tests.test_phase_context.PhaseContextContractTests.test_review_phase_uses_one_primary_without_language_duplicate) ... ok
+    test_skill_selector_fails_closed_on_role_drift (tests.test_phase_context.PhaseContextContractTests.test_skill_selector_fails_closed_on_role_drift) ... ok
+    test_unknown_skill_fails_closed (tests.test_phase_context.PhaseContextContractTests.test_unknown_skill_fails_closed) ... ok
+    test_verify_phase_separates_test_execution_from_completion_gate (tests.test_phase_context.PhaseContextContractTests.test_verify_phase_separates_test_execution_from_completion_gate) ... ok
+    test_context_prerequisite_graph_is_acyclic (tests.test_skill_relationships.SkillRelationshipContractTests.test_context_prerequisite_graph_is_acyclic) ... ok
+    test_delivery_precedence_must_exactly_match_adjacent_lifecycle (tests.test_skill_relationships.SkillRelationshipContractTests.test_delivery_precedence_must_exactly_match_adjacent_lifecycle) ... ok
+    test_inverted_terminal_stage_order_fails_closed (tests.test_skill_relationships.SkillRelationshipContractTests.test_inverted_terminal_stage_order_fails_closed) ... ok
+    test_manifest_has_no_parallel_dependency_graph (tests.test_skill_relationships.SkillRelationshipContractTests.test_manifest_has_no_parallel_dependency_graph) ... ok
+    test_only_delivery_precedence_can_claim_sequencing_authority (tests.test_skill_relationships.SkillRelationshipContractTests.test_only_delivery_precedence_can_claim_sequencing_authority) ... ok
+    test_terminal_lifecycle_has_single_typed_authority (tests.test_skill_relationships.SkillRelationshipContractTests.test_terminal_lifecycle_has_single_typed_authority) ... ok
+    test_typed_relationships_are_the_only_relationship_authority (tests.test_skill_relationships.SkillRelationshipContractTests.test_typed_relationships_are_the_only_relationship_authority) ... ok
+    test_unknown_typed_endpoint_fails_closed (tests.test_skill_relationships.SkillRelationshipContractTests.test_unknown_typed_endpoint_fails_closed) ... ok
+    
+    ----------------------------------------------------------------------
+    Ran 18 tests in 0.142s
+    
+    OK
+    [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5
+    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter
+    Traceback (most recent call last):
+      File "<string>", line 1, in <module>
+        import json,sys; d=json.load(sys.stdin); assert d["schema"]=="adk-phase-context-resolution/v2"; rows={x["name"]:x for x in d["skills"]}; assert rows["adk-code-review-loop"]["runtime_role"]=="primary" and "adk-chinese-code-review" not in rows, d
+                           ~~~~~~~~~^^^^^^^^^^^
+      File "/usr/lib/python3.13/json/__init__.py", line 293, in load
+        return loads(fp.read(),
+            cls=cls, object_hook=object_hook,
+            parse_float=parse_float, parse_int=parse_int,
+            parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)
+      File "/usr/lib/python3.13/json/__init__.py", line 346, in loads
+        return _default_decoder.decode(s)
+               ~~~~~~~~~~~~~~~~~~~~~~~^^^
+      File "/usr/lib/python3.13/json/decoder.py", line 345, in decode
+        obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+                   ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+      File "/usr/lib/python3.13/json/decoder.py", line 363, in raw_decode
+        raise JSONDecodeError("Expecting value", s, err.value) from None
+    json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+[FAIL] test_manifest_composition_cli
+  stderr (last 80 lines):
+    [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5
+    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter
+[FAIL] test_python_launcher
+[FAIL] test_asset_content_quality
+  stderr (last 80 lines):
+    [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5
+    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter
+  stdout (last 80 lines):
+    [PASS] Agent/Skill content architecture checks=747 agents=13 skills=56+9
+[FAIL] test_install
+  stderr (last 80 lines):
+    [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5
+    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter
+[FAIL] test_optional_skills
+  stderr (last 80 lines):
+    [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5
+    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter
+[FAIL] test_convert
+  stderr (last 80 lines):
+    [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5
+    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter
+[FAIL] test_target_contracts
+  stderr (last 80 lines):
+    [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5
+    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter
+[FAIL] test_effect_eval
+  stderr (last 80 lines):
+    [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5
+    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter
+[FAIL] test_product_maturity
+  stderr (last 80 lines):
+    [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5
+    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter
+    Traceback (most recent call last):
+      File "<string>", line 1, in <module>
+        import json,sys; d=json.load(sys.stdin); assert d["status"]=="pass", d
+                           ~~~~~~~~~^^^^^^^^^^^
+      File "/usr/lib/python3.13/json/__init__.py", line 293, in load
+        return loads(fp.read(),
+            cls=cls, object_hook=object_hook,
+            parse_float=parse_float, parse_int=parse_int,
+            parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)
+      File "/usr/lib/python3.13/json/__init__.py", line 346, in loads
+        return _default_decoder.decode(s)
+               ~~~~~~~~~~~~~~~~~~~~~~~^^^
+      File "/usr/lib/python3.13/json/decoder.py", line 345, in decode
+        obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+                   ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+      File "/usr/lib/python3.13/json/decoder.py", line 363, in raw_decode
+        raise JSONDecodeError("Expecting value", s, err.value) from None
+    json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+[FAIL] test_software_m5_ready
+  stderr (last 80 lines):
+    [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5
+    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter
+[FAIL] test_repository_runtime_evidence
+  stderr (last 80 lines):
+    [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5
+    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter
+[FAIL] test_token_budget
+  stderr (last 80 lines):
+    [FAIL] token budget check failed
+      - skill token budget exceeded: optional-skills/adk-security-supply-chain/SKILL.md lines=142 limit=140
+  stdout (last 80 lines):
+    [INFO] agents_bytes=2914 soft=2975 hard=3500 estimated_tokens=729 budget_status=hard-limit-failed
+    [INFO] skill_files=65 max_skill_lines=142 max_skill_file=optional-skills/adk-security-supply-chain/SKILL.md limit=140
+    [INFO] doc_files=926 max_doc_lines=547 max_doc_file=docs/comprehensive-analysis-embedded-harness.md limit=560
+    [INFO] summary_json_scripts=3
+    [INFO] compact_test_runner=1
+    [INFO] context_governance_assets=11
+[FAIL] test_task_cost
+  stderr (last 80 lines):
+    [FAIL] ADK requires CPython 3.12.x; explicit-selected python3=3.13.5
+    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter
+[FAIL] test_execution_policy
+  stderr (last 80 lines):
+    
+    ======================================================================
+    FAIL: test_public_state_check_and_resume_agree_on_frontier_field_boundaries (test_goal_authoring.GoalPlanTests.test_public_state_check_and_resume_agree_on_frontier_field_boundaries) (field='history_refs', case='blank', action='state-check')
+    ----------------------------------------------------------------------
+    Traceback (most recent call last):
+      File "/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_goal_authoring.py", line 290, in test_public_state_check_and_resume_agree_on_frontier_field_boundaries
+        self.assertEqual(expected, result.returncode, result.stdout + result.stderr)
+        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    AssertionError: 1 != 2 : [FAIL] ADK requires CPython 3.12.x; explicit-selected /usr/bin/python3=3.13.5
+    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter
+    
+    
+    ======================================================================
+    FAIL: test_public_state_check_and_resume_agree_on_frontier_field_boundaries (test_goal_authoring.GoalPlanTests.test_public_state_check_and_resume_agree_on_frontier_field_boundaries) (field='history_refs', case='blank', action='resume')
+    ----------------------------------------------------------------------
+    Traceback (most recent call last):
+      File "/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_goal_authoring.py", line 290, in test_public_state_check_and_resume_agree_on_frontier_field_boundaries
+        self.assertEqual(expected, result.returncode, result.stdout + result.stderr)
+        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    AssertionError: 1 != 2 : [FAIL] ADK requires CPython 3.12.x; explicit-selected /usr/bin/python3=3.13.5
+    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter
+    
+    
+    ======================================================================
+    FAIL: test_public_state_check_and_resume_agree_on_frontier_field_boundaries (test_goal_authoring.GoalPlanTests.test_public_state_check_and_resume_agree_on_frontier_field_boundaries) (field='history_refs', case='wrong-type', action='state-check')
+    ----------------------------------------------------------------------
+    Traceback (most recent call last):
+      File "/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_goal_authoring.py", line 290, in test_public_state_check_and_resume_agree_on_frontier_field_boundaries
+        self.assertEqual(expected, result.returncode, result.stdout + result.stderr)
+        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    AssertionError: 1 != 2 : [FAIL] ADK requires CPython 3.12.x; explicit-selected /usr/bin/python3=3.13.5
+    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter
+    
+    
+    ======================================================================
+    FAIL: test_public_state_check_and_resume_agree_on_frontier_field_boundaries (test_goal_authoring.GoalPlanTests.test_public_state_check_and_resume_agree_on_frontier_field_boundaries) (field='history_refs', case='wrong-type', action='resume')
+    ----------------------------------------------------------------------
+    Traceback (most recent call last):
+      File "/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_goal_authoring.py", line 290, in test_public_state_check_and_resume_agree_on_frontier_field_boundaries
+        self.assertEqual(expected, result.returncode, result.stdout + result.stderr)
+        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    AssertionError: 1 != 2 : [FAIL] ADK requires CPython 3.12.x; explicit-selected /usr/bin/python3=3.13.5
+    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter
+    
+    
+    ======================================================================
+    FAIL: test_public_state_check_and_resume_agree_on_frontier_field_boundaries (test_goal_authoring.GoalPlanTests.test_public_state_check_and_resume_agree_on_frontier_field_boundaries) (field='history_refs', case='empty', action='state-check')
+    ----------------------------------------------------------------------
+    Traceback (most recent call last):
+      File "/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_goal_authoring.py", line 290, in test_public_state_check_and_resume_agree_on_frontier_field_boundaries
+        self.assertEqual(expected, result.returncode, result.stdout + result.stderr)
+        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    AssertionError: 0 != 2 : [FAIL] ADK requires CPython 3.12.x; explicit-selected /usr/bin/python3=3.13.5
+    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter
+    
+    
+    ======================================================================
+    FAIL: test_public_state_check_and_resume_agree_on_frontier_field_boundaries (test_goal_authoring.GoalPlanTests.test_public_state_check_and_resume_agree_on_frontier_field_boundaries) (field='history_refs', case='empty', action='resume')
+    ----------------------------------------------------------------------
+    Traceback (most recent call last):
+      File "/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_goal_authoring.py", line 290, in test_public_state_check_and_resume_agree_on_frontier_field_boundaries
+        self.assertEqual(expected, result.returncode, result.stdout + result.stderr)
+        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    AssertionError: 0 != 2 : [FAIL] ADK requires CPython 3.12.x; explicit-selected /usr/bin/python3=3.13.5
+    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter
+    
+    
+    ======================================================================
+    FAIL: test_public_state_error_vocabularies_and_schema_short_circuit_are_preserved (test_goal_authoring.GoalPlanTests.test_public_state_error_vocabularies_and_schema_short_circuit_are_preserved)
+    ----------------------------------------------------------------------
+    Traceback (most recent call last):
+      File "/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_goal_authoring.py", line 309, in test_public_state_error_vocabularies_and_schema_short_circuit_are_preserved
+        self.assertEqual(1, preflight.returncode)
+        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+    AssertionError: 1 != 2
+    
+    ----------------------------------------------------------------------
+    Ran 40 tests in 1.192s
+    
+    FAILED (failures=68)
+  stdout (last 80 lines):
+    {"schema_version":"adk.goal-plan-check/v1","status":"pass","read_only":true,"runtime_authority":false,"completion_allowed":false,"evidence_contents_verified":false,"reasons":[],"parent_count":2,"deliverable_count":2,"plan_sha256":"17012ffbcb456dca13e48a40ee9a1d7be4deff009a29ec908ad70e6671c4c68e"}
+    {"status": "fail", "read_only": true, "error": "resume requires --state"}
+[FAIL] test_official_docs_governance
+  stderr (last 80 lines):
+    [FAIL] execution-layer contract skills/adk-interface-contract-design/SKILL.md missing marker: additionalProperties=false
+[FAIL] test_intent_boundary_governance
+  stderr (last 80 lines):
+    test_existing_assets_require_context_only_and_low_attention (test_superagent_method_contract.SuperagentMethodContractTests.test_existing_assets_require_context_only_and_low_attention) ... ok
+    test_explicit_implementation_and_valid_prototype_baselines (test_superagent_method_contract.SuperagentMethodContractTests.test_explicit_implementation_and_valid_prototype_baselines) ... ok
+    test_external_research_does_not_gain_implementation_authority (test_superagent_method_contract.SuperagentMethodContractTests.test_external_research_does_not_gain_implementation_authority) ... ok
+    test_prototype_and_decision_reject_only_the_wrong_boundary (test_superagent_method_contract.SuperagentMethodContractTests.test_prototype_and_decision_reject_only_the_wrong_boundary) ... ok
+    test_prototype_artifact_does_not_hide_permission_failures (test_superagent_method_contract.SuperagentMethodContractTests.test_prototype_artifact_does_not_hide_permission_failures) ... ok
+    
+    ----------------------------------------------------------------------
+    Ran 5 tests in 0.001s
+    
+    OK
+    [FAIL] execution-layer contract skills/adk-interface-contract-design/SKILL.md missing marker: additionalProperties=false
+[FAIL] test_agent_ecosystem_standards
+  stderr (last 80 lines):
+    [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5
+    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter
+[FAIL] test_run_evidence
+  stderr (last 80 lines):
+    .....
+    ----------------------------------------------------------------------
+    Ran 5 tests in 0.424s
+    
+    OK
+    ........F..F......F........
+    ======================================================================
+    FAIL: test_grade_task_cli_to_import_cli_binds_real_artifact_check (__main__.TaskEvidenceTest.test_grade_task_cli_to_import_cli_binds_real_artifact_check)
+    ----------------------------------------------------------------------
+    Traceback (most recent call last):
+      File "/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_task_evidence.py", line 558, in test_grade_task_cli_to_import_cli_binds_real_artifact_check
+        self.assertEqual(completed.returncode, 0, completed.stdout + completed.stderr)
+        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    AssertionError: 2 != 0 : [FAIL] ADK requires CPython 3.12.x; explicit-selected /usr/bin/python3=3.13.5
+    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter
+    
+    
+    ======================================================================
+    FAIL: test_imports_feed_unchanged_comparator_and_real_compare_cli (__main__.TaskEvidenceTest.test_imports_feed_unchanged_comparator_and_real_compare_cli)
+    ----------------------------------------------------------------------
+    Traceback (most recent call last):
+      File "/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_task_evidence.py", line 600, in test_imports_feed_unchanged_comparator_and_real_compare_cli
+        self.assertEqual(completed.returncode, 0, completed.stderr)
+        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    AssertionError: 2 != 0 : [FAIL] ADK requires CPython 3.12.x; explicit-selected /usr/bin/python3=3.13.5
+    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter
+    
+    
+    ======================================================================
+    FAIL: test_real_cli_sanitizes_errors_and_outputs_imported_evidence (__main__.TaskEvidenceTest.test_real_cli_sanitizes_errors_and_outputs_imported_evidence)
+    ----------------------------------------------------------------------
+    Traceback (most recent call last):
+      File "/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_task_evidence.py", line 507, in test_real_cli_sanitizes_errors_and_outputs_imported_evidence
+        self.assertEqual(completed.returncode, 0, completed.stderr)
+        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    AssertionError: 2 != 0 : [FAIL] ADK requires CPython 3.12.x; explicit-selected /usr/bin/python3=3.13.5
+    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter
+    
+    
+    ----------------------------------------------------------------------
+    Ran 27 tests in 4.840s
+    
+    FAILED (failures=3)
+[FAIL] test_asset_taxonomy
+  stderr (last 80 lines):
+    [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5
+    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter
+  stdout (last 80 lines):
+    [PASS] asset taxonomy checks passed (source=manifest.json, skills=56, optional=9, profiles=8, workflows=7, routing=15)
+[FAIL] test_workflow_contract
+  stderr (last 80 lines):
+    [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5
+    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter
+[FAIL] test_harness_readiness
+  stderr (last 80 lines):
+    [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5
+    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter
+[FAIL] test_workflow
+  stderr (last 80 lines):
+    [FAIL] verify failed, see report: /tmp/tmp.C7lbStFjez/changes/smoke-change/verify-report.md
+  stdout (last 80 lines):
+    [OK] proposed: /tmp/tmp.C7lbStFjez/changes/smoke-change
+    [OK] applied: /tmp/tmp.C7lbStFjez/changes/smoke-change
+[FAIL] test_boundary_conditions_match
+  stdout (last 80 lines):
+    Running match boundary condition tests...
+    ==========================================
+    Testing Empty string input... [0;32mPASS[0m
+    Testing Very long input (1024 chars)... [0;31mFAIL[0m
+    Testing Special chars: double quotes... [0;31mFAIL[0m
+    Testing Special chars: single quotes... [0;31mFAIL[0m
+    Testing Special chars: backslash... [0;31mFAIL[0m
+    Testing Special chars: pipe... [0;31mFAIL[0m
+    Testing Unicode Chinese... [0;31mFAIL[0m
+    Testing Emoji input... [0;31mFAIL[0m
+    Testing Unicode mixed (EN+CN)... [0;31mFAIL[0m
+    Testing Routing 01: adk-requirements-triage... [0;31mFAIL[0m
+    Testing Routing 02: adk-task-breakdown... [0;31mFAIL[0m
+    Testing Routing 03: adk-interface-contract-design... [0;31mFAIL[0m
+    Testing Routing 04: adk-unit-test-embedded... [0;31mFAIL[0m
+    Testing Routing 05: adk-static-analysis-c-cpp... [0;31mFAIL[0m
+    Testing Routing 06: adk-systematic-debugging... [0;31mFAIL[0m
+    Testing Routing 07: adk-verification-before-completion... [0;31mFAIL[0m
+    Testing Routing 08: adk-commit-pr-quality-gate... [0;31mFAIL[0m
+    Testing Routing 09: adk-adr-writer... [0;31mFAIL[0m
+    Testing Routing 10: adk-register-map-design... [0;31mFAIL[0m
+    Testing Routing 11: adk-driver-bringup-checklist... [0;31mFAIL[0m
+    Testing Routing 12: adk-bsp-porting-playbook... [0;31mFAIL[0m
+    Testing Routing 12b: boot chain -> adk-bsp-porting-playbook... [0;31mFAIL[0m
+    Testing Routing 13: adk-rtos-task-design... [0;31mFAIL[0m
+    Testing Routing 14: adk-interrupt-dma-patterns... [0;31mFAIL[0m
+    Testing Routing 15: adk-protocol-stack-integration... [0;31mFAIL[0m
+    Testing Routing 16: adk-component-api-stability... [0;31mFAIL[0m
+    Testing Routing 17: adk-cmake-cross-build... [0;31mFAIL[0m
+    Testing Routing 18: adk-embedded-debug-transport... [0;31mFAIL[0m
+    Testing Routing 19: adk-integration-hil-sil... [0;31mFAIL[0m
+    Testing Routing 20: adk-fault-injection-recovery... [0;31mFAIL[0m
+    Testing Routing 21: adk-performance-profiling-embedded... [0;31mFAIL[0m
+    Testing Routing 22: adk-release-versioning... [0;31mFAIL[0m
+    Testing Routing 23: adk-production-field-readiness... [0;31mFAIL[0m
+    Testing Routing 23b: production-field sim-device alias... [0;31mFAIL[0m
+    Testing Routing 24: adk-skill-composition-governance... [0;31mFAIL[0m
+    Testing Multi-slash: first segment... [0;31mFAIL[0m
+    Testing Multi-slash: last segment... [0;31mFAIL[0m
+    Testing Multi-slash: middle segment... [0;31mFAIL[0m
+    Testing Multi-slash: partial match... [0;31mFAIL[0m
+    ==========================================
+    Total: 39, Passed: 1, Failed: 38
+    [0;31mSome match boundary condition tests failed[0m
+[FAIL] test_integration
+  stdout (last 80 lines):
+    Running integration tests...
+    ======================================
+    Testing Full workflow... [0;31mFAIL[0m
+    Testing State file updates... [0;32mPASS[0m
+    Testing History logging... [0;32mPASS[0m
+    Testing Required files created... [0;32mPASS[0m
+    Testing Verify report generation... [0;32mPASS[0m
+    Testing Review report generation... [0;31mFAIL[0m
+    Testing Archive functionality... [0;31mFAIL[0m
+    Testing Force archive... [0;32mPASS[0m
+    ======================================
+    Total: 8, Passed: 5, Failed: 3
+    [0;31mSome integration tests failed[0m
+[FAIL] test_match_effectiveness
+  stdout (last 80 lines):
+    === Match Effectiveness Tests ===
+    =================================
+    
+    --- Positive cases (should match routing) ---
+    Testing 开始任务前判断技能 -> adk-runtime-router... [0;31mFAIL[0m
+    Testing 需求不清楚 -> adk-requirements-triage... [0;31mFAIL[0m
+    Testing 新功能自然语言 -> adk-requirements-triage... [0;31mFAIL[0m
+    Testing 测试矩阵 -> adk-test-strategy... [0;31mFAIL[0m
+    Testing review 反馈闭环 -> adk-code-review-loop... [0;31mFAIL[0m
+    Testing 外部 Skill 名称只保留 review 意图 -> adk-code-review-loop... [0;31mFAIL[0m
+    Testing 多 agent 并行 -> adk-parallel-agent-governance... [0;31mFAIL[0m
+    Testing 子代理驱动开发 -> adk-parallel-agent-governance... [0;31mFAIL[0m
+    Testing worktree 隔离 -> adk-worktree-governance... [0;31mFAIL[0m
+    Testing 分支收尾 -> adk-branch-closeout... [0;31mFAIL[0m
+    Testing 任务太大 -> adk-task-breakdown... [0;31mFAIL[0m
+    Testing 写单元测试 -> adk-unit-test-embedded... [0;31mFAIL[0m
+    Testing 调试问题 -> adk-systematic-debugging... [0;31mFAIL[0m
+    Testing 真实问题排查 -> adk-systematic-debugging... [0;31mFAIL[0m
+    Testing 提交代码 -> adk-commit-pr-quality-gate... [0;31mFAIL[0m
+    Testing 设计寄存器 -> adk-register-map-design... [0;31mFAIL[0m
+    Testing 写驱动 -> adk-driver-implementation... [0;31mFAIL[0m
+    Testing 首板联调 -> adk-driver-bringup-checklist... [0;31mFAIL[0m
+    Testing 准备发布 -> adk-release-versioning... [0;31mFAIL[0m
+    Testing BSP移植 -> adk-bsp-porting-playbook... [0;31mFAIL[0m
+    Testing 启动链 -> adk-bsp-porting-playbook... [0;31mFAIL[0m
+    Testing 量产现场 -> adk-production-field-readiness... [0;31mFAIL[0m
+    Testing production-field pilot id -> adk-production-field-readiness... [0;31mFAIL[0m
+    Testing 性能分析 -> adk-performance-profiling-embedded... [0;31mFAIL[0m
+    Testing 长任务执行计划 -> adk-planning-execution-loop... [0;31mFAIL[0m
+    Testing 调试正向对照 -> adk-systematic-debugging... [0;31mFAIL[0m
+    Testing 调试 intent 限制实现权限... [0;31mFAIL[0m
+    Testing 否定 non-trigger 不得压制调试... [0;31mFAIL[0m
+    Testing 发布正向对照 -> adk-release-versioning... [0;31mFAIL[0m
+    Testing review mode -> readonly artifact mode + selection-group primary... [0;31mFAIL[0m
+    
+    --- Negative cases (should not match) ---
+    Testing 只读长任务且无需执行 -> abstain... [0;31mFAIL[0m
+    Testing 架构评估且不要调试 -> abstain... [0;31mFAIL[0m
+    Testing 只解释发布现状且不执行 -> abstain... [0;31mFAIL[0m
+    Testing 规划动作否定 phrase classes 变形 -> abstain... [0;31mFAIL[0m
+    Testing 调试动作否定 phrase classes 变形 -> abstain... [0;31mFAIL[0m
+    Testing 发布动作否定 phrase classes 变形 -> abstain... [0;31mFAIL[0m
+    Testing 多轮 release -> readonly 以最新 turn 为准... [0;31mFAIL[0m
+    Testing 多轮 readonly -> implementation mode 仍受 Skill effect ceiling 限制... [0;31mFAIL[0m
+    Testing 完全无关的文本xyz -> no match... [0;31mFAIL[0m
+    Testing 今天天气很好 -> no match... [0;31mFAIL[0m
+    Testing abc123 -> no match... [0;31mFAIL[0m
+    
+    =================================
+    Total: 41, Passed: 0, Failed: 41
+    [0;31mSome match effectiveness tests failed[0m
+[FAIL] test_skill_dependencies
+  stderr (last 80 lines):
+    [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5
+    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter
+    Traceback (most recent call last):
+      File "<string>", line 1, in <module>
+        import json,sys; d=json.load(sys.stdin); assert d["status"]=="pass", d; assert d["schema"]=="adk-skill-relationship-resolution/v2", d; assert d["relationship_count"]==len(d["typed_relationships"]), d; assert d["delivery_lifecycle"]["status"]=="pass", d
+                           ~~~~~~~~~^^^^^^^^^^^
+      File "/usr/lib/python3.13/json/__init__.py", line 293, in load
+        return loads(fp.read(),
+            cls=cls, object_hook=object_hook,
+            parse_float=parse_float, parse_int=parse_int,
+            parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)
+      File "/usr/lib/python3.13/json/__init__.py", line 346, in loads
+        return _default_decoder.decode(s)
+               ~~~~~~~~~~~~~~~~~~~~~~~^^^
+      File "/usr/lib/python3.13/json/decoder.py", line 345, in decode
+        obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+                   ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+      File "/usr/lib/python3.13/json/decoder.py", line 363, in raw_decode
+        raise JSONDecodeError("Expecting value", s, err.value) from None
+    json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+[FAIL] test_memory_governance
+  stderr (last 80 lines):
+    [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5
+    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter
+[FAIL] test_docs_cli_alignment
+  stderr (last 80 lines):
+    [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5
+    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter
+[FAIL] test_performance_ops

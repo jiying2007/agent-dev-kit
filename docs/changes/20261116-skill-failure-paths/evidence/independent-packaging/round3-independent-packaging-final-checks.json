@@ -1,0 +1,3526 @@
+{
+  "schema": "round3-independent-packaging-final-checks/v1",
+  "reviewer": "/root/round3_independent_review",
+  "started_at": "2026-11-16T08:34:38.984031+00:00",
+  "completed_at": "2026-11-16T08:34:39.042913+00:00",
+  "source_head": "d87e21d7750ec4a0042754d045979c137abfc528",
+  "source_tree": "617bdcb20e5fb629c1ddd175e29373b1b86aa0c5",
+  "canonical_patch_sha256": "d82a42ee4620c923ebd4eaecae514f94551a733b4e9627f764a051efab1ab6c4",
+  "prior_check": {
+    "path": "/workspace/scratch/fe5385ca063a/round3-independent-packaging-mechanical-checks.json",
+    "bytes": 201197,
+    "sha256": "cfabcd7a341b98dcb557142133be0153cfb565729a6dc1711e93ae922946c72c"
+  },
+  "inputs": {
+    "review-evidence.json": {
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/review-evidence.json",
+      "bytes": 16496,
+      "sha256": "48e8612510504645bce08f877a9a91dcaeb7132365238aaeb5ad3569437616b4"
+    },
+    "verification.md": {
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/verification.md",
+      "bytes": 5330,
+      "sha256": "894f91e091ff323eb13a454634a052cdfb645ade42937c0158010267d75c947d"
+    },
+    "evidence/source-bindings.json": {
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/source-bindings.json",
+      "bytes": 9002,
+      "sha256": "b70213ad578e4381bb28806e13de7026e173b4f64725526baa96a9bf35ac76e8"
+    },
+    "evidence/retained-files.json": {
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/retained-files.json",
+      "bytes": 23356,
+      "sha256": "69754e7d1900d875f316871dc2c6819d41b33c8692fc7eb6ee287637b8c969c8"
+    },
+    "evidence/independent-retained-files.json": {
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/independent-retained-files.json",
+      "bytes": 12974,
+      "sha256": "a867453fe32b5b2b4c566018e5603fe60e92dc5a1c25170ef68831461a05020e"
+    },
+    "evidence/consumer-materials.json": {
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/consumer-materials.json",
+      "bytes": 467789,
+      "sha256": "ff825bb4b150ff2c9d5aadb3e710b606b2d62cb4584411cb21de027e0d53b9fe"
+    },
+    "evidence/consumer-materials-completion.json": {
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/consumer-materials-completion.json",
+      "bytes": 23399,
+      "sha256": "6f5fd7fed33365fb36f24f05411b168108c0a6c463a2081c01a949c3e14ab678"
+    },
+    "evidence/packaging-validation-failure.json": {
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/packaging-validation-failure.json",
+      "bytes": 18450,
+      "sha256": "13169415a1dd854b335d372cbf5067c3a2252c17d20ceb6061ba89c1856a949f"
+    },
+    "evidence/review-validation.json": {
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/review-validation.json",
+      "bytes": 1031,
+      "sha256": "1338c1784f5c1635696621b01e1f952697186684ab552c66cfa7de000e534609"
+    }
+  },
+  "checks": [
+    {
+      "check": "original-94-bundle-exact-reconstruction",
+      "passed": true
+    },
+    {
+      "check": "retained-history-raw-bytes",
+      "passed": true,
+      "item": "previous_typed_record"
+    },
+    {
+      "check": "retained-history-raw-bytes",
+      "passed": true,
+      "item": "previous_validation"
+    },
+    {
+      "check": "completion-binds-independent-finding",
+      "passed": true
+    },
+    {
+      "check": "final-bundle-count",
+      "passed": true
+    },
+    {
+      "check": "exact-nine-missing-files-added",
+      "passed": true
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/BUILD-RESULT.md"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/BUILD-RESULT.md"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 0
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/01-project-inputs.json"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/01-project-inputs.json"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 1
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/01-project-inputs.stderr.log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/01-project-inputs.stderr.log"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 2
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/01-project-inputs.stdout.log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/01-project-inputs.stdout.log"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 3
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/02-existing-files.json"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/02-existing-files.json"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 4
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/02-existing-files.stderr.log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/02-existing-files.stderr.log"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 5
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/02-existing-files.stdout.log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/02-existing-files.stdout.log"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 6
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/03-tools.json"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/03-tools.json"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 7
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/03-tools.stderr.log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/03-tools.stderr.log"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 8
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/03-tools.stdout.log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/03-tools.stdout.log"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 9
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/04-old-identity.json"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/04-old-identity.json"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 10
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/04-old-identity.stderr.log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/04-old-identity.stderr.log"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 11
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/04-old-identity.stdout.log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/04-old-identity.stdout.log"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 12
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/05-old-cache.json"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/05-old-cache.json"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 13
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/05-old-cache.stderr.log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/05-old-cache.stderr.log"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 14
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/05-old-cache.stdout.log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/05-old-cache.stdout.log"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 15
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/06-original-manifest.json"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/06-original-manifest.json"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 16
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/06-original-manifest.stderr.log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/06-original-manifest.stderr.log"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 17
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/06-original-manifest.stdout.log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/06-original-manifest.stdout.log"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 18
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/07-compiler-platform.json"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/07-compiler-platform.json"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 19
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/07-compiler-platform.stderr.log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/07-compiler-platform.stderr.log"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 20
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/07-compiler-platform.stdout.log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/07-compiler-platform.stdout.log"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 21
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/08-configure.json"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/08-configure.json"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 22
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/08-configure.stderr.log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/08-configure.stderr.log"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 23
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/08-configure.stdout.log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/08-configure.stdout.log"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 24
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/09-build.json"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/09-build.json"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 25
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/09-build.stderr.log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/09-build.stderr.log"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 26
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/09-build.stdout.log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/09-build.stdout.log"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 27
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/10-build-identity.json"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/10-build-identity.json"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 28
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/10-build-identity.stderr.log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/10-build-identity.stderr.log"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 29
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/10-build-identity.stdout.log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/10-build-identity.stdout.log"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 30
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/11-ctest-report-directory.json"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/11-ctest-report-directory.json"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 31
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/11-ctest-report-directory.stderr.log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/11-ctest-report-directory.stderr.log"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 32
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/11-ctest-report-directory.stdout.log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/11-ctest-report-directory.stdout.log"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 33
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/12-ctest.json"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/12-ctest.json"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 34
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/12-ctest.stderr.log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/12-ctest.stderr.log"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 35
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/12-ctest.stdout.log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/12-ctest.stdout.log"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 36
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/13-program.json"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/13-program.json"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 37
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/13-program.stderr.log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/13-program.stderr.log"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 38
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/13-program.stdout.log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/13-program.stdout.log"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 39
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/14-artifact-file.json"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/14-artifact-file.json"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 40
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/14-artifact-file.stderr.log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/14-artifact-file.stderr.log"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 41
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/14-artifact-file.stdout.log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/14-artifact-file.stdout.log"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 42
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/15-artifact-size.json"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/15-artifact-size.json"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 43
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/15-artifact-size.stderr.log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/15-artifact-size.stderr.log"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 44
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/15-artifact-size.stdout.log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/15-artifact-size.stdout.log"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 45
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/16-artifact-sections.json"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/16-artifact-sections.json"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 46
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/16-artifact-sections.stderr.log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/16-artifact-sections.stderr.log"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 47
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/16-artifact-sections.stdout.log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/16-artifact-sections.stdout.log"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 48
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/17-artifact-elf-symbols.json"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/17-artifact-elf-symbols.json"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 49
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/17-artifact-elf-symbols.stderr.log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/17-artifact-elf-symbols.stderr.log"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 50
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/17-artifact-elf-symbols.stdout.log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/17-artifact-elf-symbols.stdout.log"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 51
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/18-verify-results.json"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/18-verify-results.json"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 52
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/18-verify-results.stderr.log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/18-verify-results.stderr.log"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 53
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/18-verify-results.stdout.log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/18-verify-results.stdout.log"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 54
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/bootstrap-commands.json"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/bootstrap-commands.json"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 55
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/build-identity.json"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/build-identity.json"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 56
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/ctest.zo0zMvE0/ctest.xml"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/ctest.zo0zMvE0/ctest.xml"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 57
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/verified-results.json"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/verified-results.json"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 58
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/finalize-response.py"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/finalize-response.py"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 59
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/inspect-build.py"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/inspect-build.py"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 60
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/CMakeLists.txt"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/CMakeLists.txt"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 61
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/main.c"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/main.c"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 62
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/.ninja_deps"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/.ninja_deps"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 63
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/.ninja_log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/.ninja_log"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 64
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/CMakeCache.txt"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/CMakeCache.txt"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 65
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/CMakeFiles/3.31.6/CMakeCCompiler.cmake"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/CMakeFiles/3.31.6/CMakeCCompiler.cmake"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 66
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/CMakeFiles/3.31.6/CMakeDetermineCompilerABI_C.bin"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/CMakeFiles/3.31.6/CMakeDetermineCompilerABI_C.bin"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 67
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/CMakeFiles/3.31.6/CMakeSystem.cmake"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/CMakeFiles/3.31.6/CMakeSystem.cmake"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 68
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/CMakeFiles/3.31.6/CompilerIdC/CMakeCCompilerId.c"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/CMakeFiles/3.31.6/CompilerIdC/CMakeCCompilerId.c"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 69
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/CMakeFiles/3.31.6/CompilerIdC/a.out"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/CMakeFiles/3.31.6/CompilerIdC/a.out"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 70
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/CMakeFiles/CMakeConfigureLog.yaml"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/CMakeFiles/CMakeConfigureLog.yaml"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 71
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/CMakeFiles/TargetDirectories.txt"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/CMakeFiles/TargetDirectories.txt"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 72
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/CMakeFiles/cmake.check_cache"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/CMakeFiles/cmake.check_cache"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 73
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/CMakeFiles/rules.ninja"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/CMakeFiles/rules.ninja"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 74
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/CMakeFiles/variant_demo.dir/main.c.o"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/CMakeFiles/variant_demo.dir/main.c.o"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 75
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/CTestTestfile.cmake"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/CTestTestfile.cmake"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 76
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/Testing/Temporary/CTestCostData.txt"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/Testing/Temporary/CTestCostData.txt"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 77
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/Testing/Temporary/LastTest.log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/Testing/Temporary/LastTest.log"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 78
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/build.ninja"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/build.ninja"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 79
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/cmake_install.cmake"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/cmake_install.cmake"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 80
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/compile_commands.json"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/compile_commands.json"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 81
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/variant_demo"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/variant_demo"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 82
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/.ninja_log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/.ninja_log"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 83
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/CMakeCache.txt"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/CMakeCache.txt"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 84
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/CMakeFiles/CMakeConfigureLog.yaml"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/CMakeFiles/CMakeConfigureLog.yaml"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 85
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/Testing/Temporary/LastTest.log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/Testing/Temporary/LastTest.log"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 86
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/compile_commands.json"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/compile_commands.json"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 87
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/variant_demo"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/variant_demo"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 88
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/variant_demo.map"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/variant_demo.map"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 89
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/toolchains/release-a.cmake"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/toolchains/release-a.cmake"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 90
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/toolchains/release-b.cmake"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/toolchains/release-b.cmake"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 91
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/run-recorded.py"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/run-recorded.py"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 92
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/verify-results.py"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/verify-results.py"
+    },
+    {
+      "check": "old-bundle-prefix-unchanged",
+      "passed": true,
+      "index": 93
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/.cmake/api/v1/reply/index-2026-11-16T07-56-14-0236.json"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/.cmake/api/v1/reply/index-2026-11-16T07-56-14-0236.json"
+    },
+    {
+      "check": "completion-added-file-identity",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/.cmake/api/v1/reply/index-2026-11-16T07-56-14-0236.json"
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/.cmake/api/v1/reply/codemodel-v2-9d25096ccecf2933e275.json"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/.cmake/api/v1/reply/codemodel-v2-9d25096ccecf2933e275.json"
+    },
+    {
+      "check": "completion-added-file-identity",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/.cmake/api/v1/reply/codemodel-v2-9d25096ccecf2933e275.json"
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/.cmake/api/v1/reply/target-variant_demo-Debug-f5b1153b2a68875b5f6f.json"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/.cmake/api/v1/reply/target-variant_demo-Debug-f5b1153b2a68875b5f6f.json"
+    },
+    {
+      "check": "completion-added-file-identity",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/.cmake/api/v1/reply/target-variant_demo-Debug-f5b1153b2a68875b5f6f.json"
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/CMakeFiles/3.31.6/CMakeSystem.cmake"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/CMakeFiles/3.31.6/CMakeSystem.cmake"
+    },
+    {
+      "check": "completion-added-file-identity",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/CMakeFiles/3.31.6/CMakeSystem.cmake"
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/CMakeFiles/3.31.6/CMakeCCompiler.cmake"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/CMakeFiles/3.31.6/CMakeCCompiler.cmake"
+    },
+    {
+      "check": "completion-added-file-identity",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/CMakeFiles/3.31.6/CMakeCCompiler.cmake"
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/bootstrap-entry-failure.log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/bootstrap-entry-failure.log"
+    },
+    {
+      "check": "completion-added-file-identity",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/bootstrap-entry-failure.log"
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/19-finalize.stdout.log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/19-finalize.stdout.log"
+    },
+    {
+      "check": "completion-added-file-identity",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/19-finalize.stdout.log"
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/19-finalize.stderr.log"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/19-finalize.stderr.log"
+    },
+    {
+      "check": "completion-added-file-identity",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/19-finalize.stderr.log"
+    },
+    {
+      "check": "bundle-unique-file",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/19-finalize.json"
+    },
+    {
+      "check": "final-bundle-decode-and-original",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/19-finalize.json"
+    },
+    {
+      "check": "completion-added-file-identity",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/19-finalize.json"
+    },
+    {
+      "check": "consumer-direct-reference-retention-closure",
+      "passed": true
+    },
+    {
+      "check": "prior-input-not-changed",
+      "passed": true,
+      "path": "evidence/retained-files.json"
+    },
+    {
+      "check": "prior-input-not-changed",
+      "passed": true,
+      "path": "evidence/independent-retained-files.json"
+    },
+    {
+      "check": "prior-input-not-changed",
+      "passed": true,
+      "path": "evidence/source-bindings.json"
+    },
+    {
+      "check": "prior-input-not-changed",
+      "passed": true,
+      "path": "evidence/packaging-validation-failure.json"
+    },
+    {
+      "check": "prior-input-not-changed",
+      "passed": true,
+      "path": "evidence/consumer-response.json"
+    },
+    {
+      "check": "prior-input-not-changed",
+      "passed": true,
+      "path": "evidence/skill-source-size-comparison.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/core-audit.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/embedded-audit.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/optional-audit.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/platform-audit.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/portfolio-audit.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/core-implementation.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/cmake-implementation.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/optional-implementation.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/core-contract-compatibility-fix.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/optional-line-budget-fix.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/corrected-environment.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/full-regression.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/full-regression-started.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/full-regression-timing.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/full-regression.stdout.log"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/full-regression.stderr.log"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/initial-regression.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/initial-regression-started.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/initial-regression-timing.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/initial-regression.stdout.log"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/core-raw/final-compressed-diff-check.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/core-raw/final-compressed-large-refactor-budget.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/core-raw/final-compressed-targeted-regressions.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/core-raw/final-diff-check.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/core-raw/final-large-refactor-budget.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/core-raw/final-targeted-regressions.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/core-raw/green-contract-methods.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/core-raw/lesson-lookup-replay.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/core-raw/red-contract-methods-corrected-parser.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/core-raw/red-contract-methods.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/core-raw/round3-core-run.py"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/cmake-raw/round3-cmake-test-baseline.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/cmake-raw/round3-cmake-test-repaired.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/cmake-raw/round3-cmake-regressions.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/cmake-raw/round3-cmake-test-runner.py"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/cmake-raw/evidence.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/cmake-raw/forced-rebuild-evidence.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/core-compat-raw/compat-red-official-docs.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/core-compat-raw/compat-red-intent-boundary.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/core-compat-raw/compat-green-semantic-fidelity.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/core-compat-raw/compat-green-official-docs.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/core-compat-raw/compat-green-large-refactor-budget.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/core-compat-raw/compat-green-diff-check.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/core-compat-raw/compat-green-intent-boundary.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/core-compat-raw/compat-green-official-execution-layer.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/core-compat-raw/compat-final-official-docs-after-optional-freeze.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/optional-line-raw/round3-optional-line-budget-red.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/optional-line-raw/round3-optional-line-budget-green-budget.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/optional-line-raw/round3-optional-line-budget-green-scans.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/optional-line-raw/round3-optional-line-budget-diff-check.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/raw/round3-optional-red.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/raw/round3-optional-green.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/raw/round3-optional-probes.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/raw/round3_optional_probe.py"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/raw/round3_optional_test_evidence.py"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/raw/round3-schema-composition-probe.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/raw/round3-schema-composition-probe.py"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/raw/round3-checklist-probe.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/raw/round3-checklist-probe.py"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/raw/round3-cmake-probe--run.py"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/raw/consolidate_round3_audit.py"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/raw/verify_round3_profiles.py"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/raw/run_command_receipt.py"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/raw/setup_round3_cmake_consumer.py"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/profile-context-checks.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/initial-profile-context-checks.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/consumer-task.md"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/consumer-response.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/consumer-fixture-before.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/independent/round3-independent-consumer-review.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/independent/round3-independent-stage1-report.md"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/independent/round3-independent-stage1-review-sources.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/independent/stage1-summary.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/independent/stage1/audit-identity-verification.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/independent/stage1/scan-original-failure.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/independent/stage1/sampling-original-failure.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/independent/stage1/cmake-original-failure.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/independent/stage1/schema-original-failure.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/independent/stage1/checklist-original-failure.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/independent/round3-independent-stage1-report.md"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/independent/round3-independent-stage1-review-sources.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/independent/stage1/audit-identity-verification.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/independent/stage1-summary.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/independent/independent_baseline_probe_runner.py"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/independent/round3-independent-consumer-review.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/consumer-task.md"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/consumer-fixture-before.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/consumer-response.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/core-implementation.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/cmake-implementation.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/optional-implementation.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/core-contract-compatibility-fix.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/optional-line-budget-fix.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/independent/first_regression_classification.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/initial-regression.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/initial-regression-timing.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/initial-regression.stdout.log"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/independent/final_regression_independent_check.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/full-regression-started.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/full-regression.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/full-regression-timing.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/full-regression.stdout.log"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/full-regression.stderr.log"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/corrected-environment.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/profile-context-checks.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/independent/final_profiles_independent_check.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/independent/first_frozen_focused_verification.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/independent/first_frozen_identity_check.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/independent/final_source_identities.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/independent/reviewed_source_index.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/original.patch"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/independent/canonical_patch_check.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/independent/interim_review.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/independent/interim_review_followup.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/independent-source-review.json"
+    },
+    {
+      "check": "retained-original-pair-still-identical",
+      "passed": true,
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/independent-source-review.md"
+    },
+    {
+      "check": "typed-source-verdict-and-identity-unchanged",
+      "passed": true
+    },
+    {
+      "check": "typed-only-bundle-digest-and-completion-added",
+      "passed": true
+    },
+    {
+      "check": "typed-final-reference-boundary",
+      "passed": true
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "sources",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/.version-lock"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "sources",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/CONTEXT.md"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "sources",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/README.md"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "sources",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/audit.md"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "sources",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/design.md"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "sources",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/core-audit.json"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "sources",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/embedded-audit.json"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "sources",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/optional-audit.json"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "sources",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/platform-audit.json"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "sources",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/portfolio-audit.json"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "sources",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/negative-results.md"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "sources",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/requirements.md"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "sources",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/source-review.md"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "sources",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/tasks.md"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "sources",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/runbooks/security-supply-chain.md"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "sources",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/manifest.json"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "sources",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/manifests/software_m5_eval_contract.json"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "sources",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/optional-skills/adk-security-supply-chain/SKILL.md"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "sources",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/optional-skills/adk-test-flakiness-triage/SKILL.md"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "sources",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/optional-skills/adk-test-flakiness-triage/references/details.md"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "sources",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/pyproject.toml"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "sources",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/skills/adk-cmake-cross-build/SKILL.md"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "sources",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/skills/adk-interface-contract-design/SKILL.md"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "sources",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/skills/adk-interface-contract-design/references/design-quality-methods.md"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "sources",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/skills/adk-interface-contract-design/references/details.md"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "sources",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/skills/adk-parallel-agent-governance/SKILL.md"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "sources",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/skills/adk-parallel-agent-governance/references/subagent-review-checklist.md"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "sources",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/src/agent_dev_kit/__init__.py"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "sources",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/fixtures/skill_method_ab_prereg.json"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "sources",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_skill_cmake_methods.py"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "sources",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_skill_command_examples.py"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "sources",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_skill_content.sh"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "sources",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_skill_contract_methods.py"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "sources",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/original.patch"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "evidence",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/independent-source-review.json"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "evidence",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/source-bindings.json"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "evidence",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/full-regression.json"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "evidence",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/full-regression-started.json"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "evidence",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/full-regression-timing.json"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "evidence",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/full-regression.stdout.log"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "evidence",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/initial-regression.json"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "evidence",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/retained-files.json"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "evidence",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/independent-retained-files.json"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "evidence",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/core-implementation.json"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "evidence",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/core-contract-compatibility-fix.json"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "evidence",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/optional-implementation.json"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "evidence",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/optional-line-budget-fix.json"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "evidence",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/cmake-implementation.json"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "evidence",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/consumer-task.md"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "evidence",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/consumer-response.json"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "evidence",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/consumer-materials.json"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "evidence",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/consumer-fixture-before.json"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "evidence",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/profile-context-checks.json"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "evidence",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/skill-source-size-comparison.json"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "evidence",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/corrected-environment.json"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "evidence",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/independent/round3-independent-consumer-review.json"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "evidence",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/independent/final_regression_independent_check.json"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "evidence",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/independent/final_profiles_independent_check.json"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "evidence",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/independent/canonical_patch_check.json"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "evidence",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/independent/first_regression_classification.json"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "evidence",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/independent/reviewed_source_index.json"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "evidence",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/verification.md"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "evidence",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/packaging-validation-failure.json"
+    },
+    {
+      "check": "final-typed-nonempty-reference",
+      "passed": true,
+      "kind": "evidence",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/consumer-materials-completion.json"
+    },
+    {
+      "check": "frozen-source-unchanged",
+      "passed": true,
+      "path": ".version-lock"
+    },
+    {
+      "check": "frozen-source-unchanged",
+      "passed": true,
+      "path": "CONTEXT.md"
+    },
+    {
+      "check": "frozen-source-unchanged",
+      "passed": true,
+      "path": "README.md"
+    },
+    {
+      "check": "frozen-source-unchanged",
+      "passed": true,
+      "path": "docs/changes/20261116-skill-failure-paths/audit.md"
+    },
+    {
+      "check": "frozen-source-unchanged",
+      "passed": true,
+      "path": "docs/changes/20261116-skill-failure-paths/design.md"
+    },
+    {
+      "check": "frozen-source-unchanged",
+      "passed": true,
+      "path": "docs/changes/20261116-skill-failure-paths/evidence/core-audit.json"
+    },
+    {
+      "check": "frozen-source-unchanged",
+      "passed": true,
+      "path": "docs/changes/20261116-skill-failure-paths/evidence/embedded-audit.json"
+    },
+    {
+      "check": "frozen-source-unchanged",
+      "passed": true,
+      "path": "docs/changes/20261116-skill-failure-paths/evidence/optional-audit.json"
+    },
+    {
+      "check": "frozen-source-unchanged",
+      "passed": true,
+      "path": "docs/changes/20261116-skill-failure-paths/evidence/platform-audit.json"
+    },
+    {
+      "check": "frozen-source-unchanged",
+      "passed": true,
+      "path": "docs/changes/20261116-skill-failure-paths/evidence/portfolio-audit.json"
+    },
+    {
+      "check": "frozen-source-unchanged",
+      "passed": true,
+      "path": "docs/changes/20261116-skill-failure-paths/negative-results.md"
+    },
+    {
+      "check": "frozen-source-unchanged",
+      "passed": true,
+      "path": "docs/changes/20261116-skill-failure-paths/requirements.md"
+    },
+    {
+      "check": "frozen-source-unchanged",
+      "passed": true,
+      "path": "docs/changes/20261116-skill-failure-paths/source-review.md"
+    },
+    {
+      "check": "frozen-source-unchanged",
+      "passed": true,
+      "path": "docs/changes/20261116-skill-failure-paths/tasks.md"
+    },
+    {
+      "check": "frozen-source-unchanged",
+      "passed": true,
+      "path": "docs/runbooks/security-supply-chain.md"
+    },
+    {
+      "check": "frozen-source-unchanged",
+      "passed": true,
+      "path": "manifest.json"
+    },
+    {
+      "check": "frozen-source-unchanged",
+      "passed": true,
+      "path": "manifests/software_m5_eval_contract.json"
+    },
+    {
+      "check": "frozen-source-unchanged",
+      "passed": true,
+      "path": "optional-skills/adk-security-supply-chain/SKILL.md"
+    },
+    {
+      "check": "frozen-source-unchanged",
+      "passed": true,
+      "path": "optional-skills/adk-test-flakiness-triage/SKILL.md"
+    },
+    {
+      "check": "frozen-source-unchanged",
+      "passed": true,
+      "path": "optional-skills/adk-test-flakiness-triage/references/details.md"
+    },
+    {
+      "check": "frozen-source-unchanged",
+      "passed": true,
+      "path": "pyproject.toml"
+    },
+    {
+      "check": "frozen-source-unchanged",
+      "passed": true,
+      "path": "skills/adk-cmake-cross-build/SKILL.md"
+    },
+    {
+      "check": "frozen-source-unchanged",
+      "passed": true,
+      "path": "skills/adk-interface-contract-design/SKILL.md"
+    },
+    {
+      "check": "frozen-source-unchanged",
+      "passed": true,
+      "path": "skills/adk-interface-contract-design/references/design-quality-methods.md"
+    },
+    {
+      "check": "frozen-source-unchanged",
+      "passed": true,
+      "path": "skills/adk-interface-contract-design/references/details.md"
+    },
+    {
+      "check": "frozen-source-unchanged",
+      "passed": true,
+      "path": "skills/adk-parallel-agent-governance/SKILL.md"
+    },
+    {
+      "check": "frozen-source-unchanged",
+      "passed": true,
+      "path": "skills/adk-parallel-agent-governance/references/subagent-review-checklist.md"
+    },
+    {
+      "check": "frozen-source-unchanged",
+      "passed": true,
+      "path": "src/agent_dev_kit/__init__.py"
+    },
+    {
+      "check": "frozen-source-unchanged",
+      "passed": true,
+      "path": "tests/fixtures/skill_method_ab_prereg.json"
+    },
+    {
+      "check": "frozen-source-unchanged",
+      "passed": true,
+      "path": "tests/test_skill_cmake_methods.py"
+    },
+    {
+      "check": "frozen-source-unchanged",
+      "passed": true,
+      "path": "tests/test_skill_command_examples.py"
+    },
+    {
+      "check": "frozen-source-unchanged",
+      "passed": true,
+      "path": "tests/test_skill_content.sh"
+    },
+    {
+      "check": "frozen-source-unchanged",
+      "passed": true,
+      "path": "tests/test_skill_contract_methods.py"
+    },
+    {
+      "check": "original-policy-validator-unchanged",
+      "passed": true,
+      "path": ".adk/review-policy.json"
+    },
+    {
+      "check": "original-policy-validator-unchanged",
+      "passed": true,
+      "path": ".adk/review-authorization.md"
+    },
+    {
+      "check": "original-policy-validator-unchanged",
+      "passed": true,
+      "path": "src/agent_dev_kit/review_evidence.py"
+    },
+    {
+      "check": "original-policy-validator-unchanged",
+      "passed": true,
+      "path": "src/agent_dev_kit/strict_json.py"
+    },
+    {
+      "check": "original-policy-validator-unchanged",
+      "passed": true,
+      "path": "src/agent_dev_kit/readiness_evidence.py"
+    },
+    {
+      "check": "full-stderr-still-empty",
+      "passed": true
+    },
+    {
+      "check": "final-bundle-expected-identity",
+      "passed": true
+    },
+    {
+      "check": "final-typed-expected-identity",
+      "passed": true
+    },
+    {
+      "check": "independent-production-validator-pass",
+      "passed": true
+    },
+    {
+      "check": "validation-does-not-authorize-runtime-or-release",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "bundle_counts": {
+    "total": 103,
+    "encodings": {
+      "utf-8": 97,
+      "base64": 6
+    }
+  },
+  "decoded_bundle_files": [
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/BUILD-RESULT.md",
+      "sha256": "76428ed55e455c7fc26ae8ab3f82a242f49730e8293430b73bae1b091efbe1ab",
+      "bytes": 4136,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/01-project-inputs.json",
+      "sha256": "00c28e9b54a9ad456e566a355965515c8fb2d6f34f3f51cd04a96834571ed3ad",
+      "bytes": 2000,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/01-project-inputs.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/01-project-inputs.stdout.log",
+      "sha256": "29f78c94095f0e8c8dc1e24847302a74401458a7a77434f947c24e74bb135005",
+      "bytes": 553,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/02-existing-files.json",
+      "sha256": "e0cec86caeadf9382de7a5992aee2fe7c6f75bd472d228131268af8e81d6bd64",
+      "bytes": 2183,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/02-existing-files.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/02-existing-files.stdout.log",
+      "sha256": "468b3742b30bb9116c119715317803fedfb669ec3b673bd97513bfac521e8bbe",
+      "bytes": 798,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/03-tools.json",
+      "sha256": "5bff1c65dffdb772ac4fd583969907735d2cee8d0932d75cdbd889288fa23fe0",
+      "bytes": 3061,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/03-tools.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/03-tools.stdout.log",
+      "sha256": "25408197eb391f5c4afe351ec9cb48623e9602d590df5a1c8264a04ccfb36519",
+      "bytes": 1169,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/04-old-identity.json",
+      "sha256": "6eabb1af13aaded4524d3dcdf5857d877f91737be716a556b5a46420e4ce1177",
+      "bytes": 6402,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/04-old-identity.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/04-old-identity.stdout.log",
+      "sha256": "414ca2a07d4416c42188cbfa25b9dddb726a722d7055fed11e9d249371ccf6d3",
+      "bytes": 4592,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/05-old-cache.json",
+      "sha256": "a433959a83610a3986f185541493ddaa5431434f6ae33c012921125776240b1d",
+      "bytes": 2698,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/05-old-cache.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/05-old-cache.stdout.log",
+      "sha256": "5d67e15665abf5a257d481ad78870137fb0b9be8a16d81c9fcfbc06cb44b699f",
+      "bytes": 1191,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/06-original-manifest.json",
+      "sha256": "fb8373b359ea8e621bfc83b49be70fade60bc59eeae3efd09cede2e8c292a553",
+      "bytes": 7342,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/06-original-manifest.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/06-original-manifest.stdout.log",
+      "sha256": "488a6da3896c64b96c1668f2705626ae76d766958c7808c992182aded6af01cb",
+      "bytes": 5067,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/07-compiler-platform.json",
+      "sha256": "02b2c2a58528287c87354a66be2d5713072ad4033953cb43e64cde9f858e9cf5",
+      "bytes": 2579,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/07-compiler-platform.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/07-compiler-platform.stdout.log",
+      "sha256": "4e9cc4a7cd6e3da43e5abd4ab28846c50ed2549e6a55e1c12fc7e8bd857f0763",
+      "bytes": 849,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/08-configure.json",
+      "sha256": "077130874a7ab5e651584cc2882f0dc8ae6794be74ef4db59811d76bebedb5de",
+      "bytes": 2384,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/08-configure.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/08-configure.stdout.log",
+      "sha256": "be67863322ddc37340c82bef4724aeb1a356a04e165088e11b97e64ea6e50554",
+      "bytes": 418,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/09-build.json",
+      "sha256": "ecaed6f8d913e95f98fb885aa0dc0cadaa4c12dfd03fc73a5ab185dee8e32e8d",
+      "bytes": 2254,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/09-build.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/09-build.stdout.log",
+      "sha256": "a597bde67ab311891be1d25e0628edf1d8c94149285da043faee35b1b5dcbd20",
+      "bytes": 702,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/10-build-identity.json",
+      "sha256": "6ff8fdc2e03ed3431aa296f5b8a76b3ea7111866e0bed957cabd09985d566363",
+      "bytes": 8131,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/10-build-identity.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/10-build-identity.stdout.log",
+      "sha256": "ca81a95235104c70bab7abc298765fe148183662cf11be11726fd967debfbfa0",
+      "bytes": 6236,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/11-ctest-report-directory.json",
+      "sha256": "131579c53a8a5c40c9abece5892a88d327eb19631ced957d6351d2082e367f6c",
+      "bytes": 1517,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/11-ctest-report-directory.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/11-ctest-report-directory.stdout.log",
+      "sha256": "0e5f05acbd352f17563a9c732f955419825ece4c1ea398b53410326590c03cfd",
+      "bytes": 78,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/12-ctest.json",
+      "sha256": "c5e6e727ee3e90edd5f67cf94371f65c40c982ef6a6793b8855e30d35fb36793",
+      "bytes": 2096,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/12-ctest.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/12-ctest.stdout.log",
+      "sha256": "20b8b0108456b3e19939253c0cb92702c3e64e333f5b103b4d68751593e3fca0",
+      "bytes": 394,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/13-program.json",
+      "sha256": "1847b9ecc24ba66396b86437b0185f48ed60fc7f0974b29cd315f44e6cf1a4e6",
+      "bytes": 1405,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/13-program.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/13-program.stdout.log",
+      "sha256": "5f6f78014e9fd77efca9f837840d29f72702652ea7eba90b0fec124f5a82a8bd",
+      "bytes": 18,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/14-artifact-file.json",
+      "sha256": "ff0f2b8aa79b67e261755f09bcd9b64d076301c268be04521a8415227f3ac9f4",
+      "bytes": 1747,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/14-artifact-file.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/14-artifact-file.stdout.log",
+      "sha256": "333d04d49fb7f3fa768f1b64876be248ca44186f7d5c7f4cfa40b420bb36b21d",
+      "bytes": 321,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/15-artifact-size.json",
+      "sha256": "6a21d9ede43a7b392882c7d7d02d3ebe8598d068b799310b91cd5889bbcd7960",
+      "bytes": 2755,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/15-artifact-size.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/15-artifact-size.stdout.log",
+      "sha256": "739fd47b63fd79dee46336ce6d9d6e4eb15439cc48e9d79a6790b45d6faf22a5",
+      "bytes": 1282,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/16-artifact-sections.json",
+      "sha256": "1b8edefbee32beea63e2126698fd71749230153134970053008887ce765bb9ab",
+      "bytes": 6096,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/16-artifact-sections.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/16-artifact-sections.stdout.log",
+      "sha256": "f9558cdb1d7521549bf000241f0f4504a197fc1fb669d935dc36ab8ce4819a51",
+      "bytes": 4574,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/17-artifact-elf-symbols.json",
+      "sha256": "1555db1c38a0bd1911624dd09547374a396994ef91a8b7d570aee2ad998be616",
+      "bytes": 5874,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/17-artifact-elf-symbols.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/17-artifact-elf-symbols.stdout.log",
+      "sha256": "35041d9265eeaadcc23b06aed350b0b677cdc999f4ce5f970bed6ecf42ea13fc",
+      "bytes": 4336,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/18-verify-results.json",
+      "sha256": "dce7518fa7bd8d771f8ab8a5f84b0b6a0ec436d7eb939b56195240ea6e114cec",
+      "bytes": 4121,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/18-verify-results.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/18-verify-results.stdout.log",
+      "sha256": "6d6fd9c656e6c9dad3dc47fc9a81d9c44c397f75ff4ab12483e66ef70b5cdb8d",
+      "bytes": 2567,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/bootstrap-commands.json",
+      "sha256": "7f5b10b65f30ec422040e83c3b9f5228323bcb7ab56e4ca344dddf88ea070a84",
+      "bytes": 9594,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/build-identity.json",
+      "sha256": "ca81a95235104c70bab7abc298765fe148183662cf11be11726fd967debfbfa0",
+      "bytes": 6236,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/ctest.zo0zMvE0/ctest.xml",
+      "sha256": "b89c1f7f76c7ced0c8831a7172c1bcd299b13df62a237d4fa90301c0ab7763fc",
+      "bytes": 354,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/verified-results.json",
+      "sha256": "6d6fd9c656e6c9dad3dc47fc9a81d9c44c397f75ff4ab12483e66ef70b5cdb8d",
+      "bytes": 2567,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/finalize-response.py",
+      "sha256": "9ede5a1940d5c7c2972975110133f1de1fdd9ad294cf1717f9830df3b1c4f07c",
+      "bytes": 9366,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/inspect-build.py",
+      "sha256": "54ef3212352b93206a871dc1cf649c25a026a7580076dca325fb2e471e362839",
+      "bytes": 3730,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/CMakeLists.txt",
+      "sha256": "0bb2ae1c1433cbb531dda4c2ba767edb23a53651663f24de4692b0999f76af48",
+      "bytes": 296,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/main.c",
+      "sha256": "b4abdad8b7584c9cbd744aca3b7a68bdeba91c0a1d940ea7aa5bf0bb1e881d70",
+      "bytes": 93,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/.ninja_deps",
+      "sha256": "ab28bd97ecd9c861b748982adec62cf924f5d8372da2075d2a3811b716818935",
+      "bytes": 2312,
+      "encoding": "base64"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/.ninja_log",
+      "sha256": "f517f8450f65df7e33e156023614e264866ccc53f23387de3d42fe2392fbd82b",
+      "bytes": 150,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/CMakeCache.txt",
+      "sha256": "039b4306b832adfd4c8b74044554af0de9790edbbbd6c4b2d2f178e2b0662eee",
+      "bytes": 13279,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/CMakeFiles/3.31.6/CMakeCCompiler.cmake",
+      "sha256": "4cac2d2dfcf7bc3431de8e7b8fca6469f4b3d3fab7bc6d51dec0a318f44e1234",
+      "bytes": 2779,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/CMakeFiles/3.31.6/CMakeDetermineCompilerABI_C.bin",
+      "sha256": "a43ee85c9a7927733e07adf045f2c64634af89ef19689e7b784862c453aed32a",
+      "bytes": 16024,
+      "encoding": "base64"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/CMakeFiles/3.31.6/CMakeSystem.cmake",
+      "sha256": "ea32fa55c82b6fac369891e5fb5adcc694a265326414302a04b50e1489433922",
+      "bytes": 461,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/CMakeFiles/3.31.6/CompilerIdC/CMakeCCompilerId.c",
+      "sha256": "60d0dc2f177f0317302cef41d454988d9d49759ad3e011365bd6f6c544dfd126",
+      "bytes": 27620,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/CMakeFiles/3.31.6/CompilerIdC/a.out",
+      "sha256": "f9cd58463890484b4463a8949a85bd1d6960e4b4fea9aecea139cad47ebf0b6d",
+      "bytes": 16136,
+      "encoding": "base64"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/CMakeFiles/CMakeConfigureLog.yaml",
+      "sha256": "e566cd8920b20b1d454cf4c68b52caaadf00fb9ea56a98d8a3e5b2e23a6396d0",
+      "bytes": 30332,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/CMakeFiles/TargetDirectories.txt",
+      "sha256": "e2b04de4035c7a1417b4982f27df4bc80e96a5d5effab5836f9812553d9e831f",
+      "bytes": 399,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/CMakeFiles/cmake.check_cache",
+      "sha256": "a26189e394421da57f45706a07713c5720acd200a41711b0c0c590c3c63371c4",
+      "bytes": 85,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/CMakeFiles/rules.ninja",
+      "sha256": "17c39994bbebf7b3dbe05d71c5b6644cbf0192e8b380223e04d3ee54685f1fcf",
+      "bytes": 2215,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/CMakeFiles/variant_demo.dir/main.c.o",
+      "sha256": "238267d70839814767d30a24ce25e0055df0fbf2b0dd5e576dba080a2572dfe6",
+      "bytes": 3736,
+      "encoding": "base64"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/CTestTestfile.cmake",
+      "sha256": "f5cf6bdd77a03571bfe3090e87a60cb1fe57522182f401d677c2347dfa73ef89",
+      "bytes": 756,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/Testing/Temporary/CTestCostData.txt",
+      "sha256": "5e63822ac7a59d8bee0754963f41cd4ab94e36ef3018d723b3871b9b7d569a69",
+      "bytes": 31,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/Testing/Temporary/LastTest.log",
+      "sha256": "258699e8f2da6225dcaa35c21c8635ddfe8c7ede4de2b5843dff4e78d0d9b24c",
+      "bytes": 807,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/build.ninja",
+      "sha256": "ad1246f2d9578d932263a0da1757efa320e742682172399d7d8e9613e51dc5a1",
+      "bytes": 28422,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/cmake_install.cmake",
+      "sha256": "d8fc65fde2519fa2b1aa976987a80130bf41c12fd1eb760fe15d2013356b7c59",
+      "bytes": 2214,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/compile_commands.json",
+      "sha256": "e84c90e074361a044af643b336fb01f7270a23d1204ef7149413a0464afb7865",
+      "bytes": 395,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/variant_demo",
+      "sha256": "c197c3fb72ec6f225ad237372c9f8cfc43ff3cfba29671f2e0d011a7fd76b636",
+      "bytes": 17248,
+      "encoding": "base64"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/.ninja_log",
+      "sha256": "aa7e492dd76e11224d8b7ebead8f99876c74a754dd4e227d3e9bd380d96bece6",
+      "bytes": 150,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/CMakeCache.txt",
+      "sha256": "5f8d5b6b27ec6daf7cede1bf0077abbe03fa6864bb494900cfbc2fc6325bdbbd",
+      "bytes": 13334,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/CMakeFiles/CMakeConfigureLog.yaml",
+      "sha256": "6e149753fe56516d8253e8fa8314b042ca14abc6af7f3826ba868aa0623b6f5c",
+      "bytes": 31719,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/Testing/Temporary/LastTest.log",
+      "sha256": "fef14927646edd7ba7c120e701eb1de8398afed00de96373a26e5a8cf22081eb",
+      "bytes": 823,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/compile_commands.json",
+      "sha256": "c1c8ce0a5e867ba473b737be45be331b4418b5ddfabb4c6c9f8f928a9dfaa008",
+      "bytes": 403,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/variant_demo",
+      "sha256": "c8199de7db21e32c56cc8c83c31931262f732bb15302f863790022228a47506a",
+      "bytes": 17256,
+      "encoding": "base64"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/variant_demo.map",
+      "sha256": "ff5cbaec9ef27b807bb45f46518792459f69360182e353c6b840553b393e7571",
+      "bytes": 20495,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/toolchains/release-a.cmake",
+      "sha256": "b3f4403cb6c886aa036c59409e06c11ef91c14ca1bb6751cd5c421a5eabeb51c",
+      "bytes": 82,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/toolchains/release-b.cmake",
+      "sha256": "5c5f33f8f20b670c7fb6f921afa883939cdb8e585e67bb03851db331d70fc7a5",
+      "bytes": 82,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/run-recorded.py",
+      "sha256": "df35a0ef850f02019d5f6adefc5f66c88c7a549d682e2c83a2c1d4d27fc6ec29",
+      "bytes": 2531,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/verify-results.py",
+      "sha256": "d7a6ed46f5f43c54dc193bac2cdcb5d26cd0fae3a0a7e5e5874d513b97117c0a",
+      "bytes": 3376,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/.cmake/api/v1/reply/index-2026-11-16T07-56-14-0236.json",
+      "sha256": "8e06c635d7edf3070fe118bd09b113ada0ba61edb5ca2932dfe967838fd84f7e",
+      "bytes": 1016,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/.cmake/api/v1/reply/codemodel-v2-9d25096ccecf2933e275.json",
+      "sha256": "3b3aa85678ad8f2be7065fbb1cb9c556f3ec8d1f8d9c11784aea6d56b5f2479a",
+      "bytes": 1024,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/.cmake/api/v1/reply/target-variant_demo-Debug-f5b1153b2a68875b5f6f.json",
+      "sha256": "2427a62266a3cec5f2bad20d87c1413cebb6ac30b851ae29e1d4cf6f8d4253af",
+      "bytes": 1222,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/CMakeFiles/3.31.6/CMakeSystem.cmake",
+      "sha256": "cf1eb2716e46b9059e47e32f23de1b527d1f9d678f596c9e074d07d459f00b40",
+      "bytes": 461,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/CMakeFiles/3.31.6/CMakeCCompiler.cmake",
+      "sha256": "4cac2d2dfcf7bc3431de8e7b8fca6469f4b3d3fab7bc6d51dec0a318f44e1234",
+      "bytes": 2779,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/bootstrap-entry-failure.log",
+      "sha256": "6cfca9cd86985f7adf9325b54161ad6f695704e5b233b992097f2b7400cebe2f",
+      "bytes": 42,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/19-finalize.stdout.log",
+      "sha256": "6486a56f572d7f560458883d5a2d29a111c2cfdfbf25a50ba254136a091d1928",
+      "bytes": 501,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/19-finalize.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "encoding": "utf-8"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/19-finalize.json",
+      "sha256": "9d604d2034e5561b74aad10ff87225c79dabc28942eb38b1ac18709263635964",
+      "bytes": 1918,
+      "encoding": "utf-8"
+    }
+  ],
+  "unretained_direct_consumer_refs": [],
+  "validator_receipt": {
+    "path": "/workspace/scratch/fe5385ca063a/round3-independent-packaging-validator-receipt.json",
+    "bytes": 18969,
+    "sha256": "54a00a3f7d7dea4d58f3afd3128aa97369720bbb5cf3619ebd270423d5949847"
+  },
+  "independent_validation": {
+    "call": "agent_dev_kit.review_evidence.validate_review",
+    "root": "/workspace/scratch/fe5385ca063a/agent-dev-kit",
+    "record_path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/review-evidence.json",
+    "expected_subject": "20261116-skill-failure-paths",
+    "expected_scope": "source-change",
+    "now_override": null,
+    "started_at": "2026-11-16T08:34:39.025869+00:00",
+    "completed_at": "2026-11-16T08:34:39.041131+00:00",
+    "duration_seconds": 0.015259719999448862,
+    "returned_status": "pass",
+    "record_sha256": "48e8612510504645bce08f877a9a91dcaeb7132365238aaeb5ad3569437616b4",
+    "stdout": "",
+    "stderr": "",
+    "validator_fingerprints": {
+      "src/agent_dev_kit/review_evidence.py": "be4892f464496a29dbbb41ebb56c48984bf103d8eabe2ee6117bd583d1032c47",
+      "src/agent_dev_kit/strict_json.py": "72f06f4dcaebfed83bd1ae9876e38d4f7d82d8a1473b40b66beffb6338ee94a5",
+      "src/agent_dev_kit/readiness_evidence.py": "6fdfd5bea3ee097ac21d2b2ab469378c8c84f78856061b680ebb0c5f9d726778"
+    },
+    "false_claim_flags": {
+      "human_review_performed": false,
+      "field_evidence_verified": false,
+      "provider_execution_performed": false,
+      "product_release_authorized": false
+    }
+  },
+  "source_verdict_time": "2026-11-16T08:23:33.804040+00:00",
+  "temporal_boundary": "Original source verdict stays at08:23:33 UTC. Packaging observations and mechanical checks are later independent events; this report does not backdate review of the packaging failure or completion to the source verdict."
+}

@@ -1,0 +1,936 @@
+{
+  "schema": "round3-independent-spec-quality-review/v1",
+  "reviewer_id": "round3-independent-reviewer",
+  "agent_task": "/root/round3_independent_review",
+  "role": "independent read-only reviewer; no implementation or repair performed",
+  "review_started_at": "2026-11-16T07:55:37Z",
+  "evidence_complete_at": "2026-11-16T08:21:23.592791+00:00",
+  "reviewed_at": "2026-11-16T08:23:33.804040+00:00",
+  "scope": "source-change",
+  "source": {
+    "repository": "/workspace/scratch/fe5385ca063a/agent-dev-kit",
+    "base_commit": "80f8b2ea2885e3f62dcea455c45a2e8ebf071b2b",
+    "base_tree": "ada1992f60ad6980bf8e1474db8a2a1b247c5c28",
+    "head_commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+    "head_tree": "617bdcb20e5fb629c1ddd175e29373b1b86aa0c5",
+    "changed_path_count": 33,
+    "canonical_patch_sha256": "d82a42ee4620c923ebd4eaecae514f94551a733b4e9627f764a051efab1ab6c4",
+    "canonical_patch_bytes": 528829,
+    "canonical_patch_ref": "canonical_patch",
+    "prior_reviewed_head": "6183982e1f5e4a1bb09727009a809514e160be64",
+    "prior_reviewed_tree": "09946e71e8ccee1063466d0c8df9088d6d036a3c",
+    "correction_paths": [
+      "docs/changes/20261116-skill-failure-paths/audit.md",
+      "docs/changes/20261116-skill-failure-paths/negative-results.md",
+      "optional-skills/adk-security-supply-chain/SKILL.md",
+      "skills/adk-interface-contract-design/SKILL.md"
+    ],
+    "identity_refs": [
+      "final_source_identities",
+      "reviewed_source_index",
+      "canonical_patch_check"
+    ]
+  },
+  "policy_and_validator_fingerprints": {
+    ".adk/review-policy.json": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+    ".adk/review-authorization.md": "1594e628184cb0e4ad6c669bf5ce39dcb1f333d03d0798bebb080856e703cda5",
+    "src/agent_dev_kit/review_evidence.py": "be4892f464496a29dbbb41ebb56c48984bf103d8eabe2ee6117bd583d1032c47",
+    "src/agent_dev_kit/strict_json.py": "72f06f4dcaebfed83bd1ae9876e38d4f7d82d8a1473b40b66beffb6338ee94a5",
+    "src/agent_dev_kit/readiness_evidence.py": "6fdfd5bea3ee097ac21d2b2ab469378c8c84f78856061b680ebb0c5f9d726778"
+  },
+  "verdicts": [
+    {
+      "type": "spec",
+      "result": "pass",
+      "scope": "source-change",
+      "open_blockers": 0,
+      "open_majors": 0,
+      "open_minors": 0,
+      "reason": "五项冻结行为验收及审计人口/来源/边界要求在本源审查范围内满足；审计ID修正完成。发布与Root接入仍为后续单独动作。"
+    },
+    {
+      "type": "quality",
+      "result": "pass",
+      "scope": "source-change",
+      "open_blockers": 0,
+      "open_majors": 0,
+      "open_minors": 0,
+      "reason": "两项真实集成缺陷均作保语义最小修正并通过精确最终源码完整回归；全部原预算保持；测试执行真实消费/反例而不只查关键词。"
+    }
+  ],
+  "findings": [
+    {
+      "id": "r3-review-01",
+      "display_id": "R3-REVIEW-01",
+      "type": "spec",
+      "severity": "minor",
+      "observed_in": "6183982e1f5e4a1bb09727009a809514e160be64",
+      "file": "docs/changes/20261116-skill-failure-paths/audit.md",
+      "counterexample": "审计正文写 adk-worktree-isolation；基线真实 Skill/原 core 审计项是 adk-worktree-governance。",
+      "disposition": "fixed",
+      "status": "resolved",
+      "resolved_in": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "resolution": "最终四路径 diff 仅校正文中 ID；原始 core 审计与观察结论本来正确。",
+      "verification_refs": [
+        "final_source_identities",
+        "canonical_patch_check"
+      ]
+    },
+    {
+      "id": "r3-integration-marker",
+      "display_id": "R3-INTEGRATION-MARKER",
+      "type": "quality",
+      "severity": "major",
+      "observed_in": "6183982e1f5e4a1bb09727009a809514e160be64",
+      "file": "skills/adk-interface-contract-design/SKILL.md",
+      "counterexample": "两项原治理测试实际拒绝入口缺少 additionalProperties=false；F4 定向语义测试通过不能替代已有入口契约。",
+      "disposition": "fixed",
+      "status": "resolved",
+      "resolved_in": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "resolution": "Workflow7 增加“同层用 additionalProperties=false”，保留消费者 dialect/validator/子集、required/enum/refusal/parse-failure、拒绝未知字段与组合闭合 reference。只增27字节，没有恢复无条件组合封闭，也未改既有contract/checker。原始RED、后继行数RED、最终GREEN均保留。",
+      "verification_refs": [
+        "core_marker_fix",
+        "final_regression_independent_check",
+        "final_source_identities"
+      ]
+    },
+    {
+      "id": "r3-review-02",
+      "display_id": "R3-REVIEW-02",
+      "type": "quality",
+      "severity": "major",
+      "observed_in": "6183982e1f5e4a1bb09727009a809514e160be64",
+      "file": "optional-skills/adk-security-supply-chain/SKILL.md",
+      "counterexample": "真实 token budget 检查及独立计数均为142行，超过原140行限制；8个profile字节预算通过不能覆盖此门。",
+      "disposition": "fixed",
+      "status": "resolved",
+      "resolved_in": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "resolution": "仅合并Goal两句和Prerequisites两句，142→140、净−9B；Commands到文件尾逐字节不变。原140阈值、生产checker和测试均未放宽；最终full包含token_budget/token_context/strict后继门通过。",
+      "verification_refs": [
+        "optional_line_fix",
+        "final_source_identities",
+        "final_regression_independent_check"
+      ]
+    }
+  ],
+  "open_findings": [],
+  "requirements_assessment": [
+    {
+      "id": "F1",
+      "verdict": "pass",
+      "assessment": "实际发布的7条rg初筛命令输出候选路径。独立基线反例中6条会泄漏合成sentinel；候选用实际命令验证24个候选不因head20丢失、stdout/stderr不回显内容、no-match1与I/O2区分、隐藏/忽略覆盖及.git排除保持。后续内容审查的范围/脱敏要求仍在；末次压缩未改变这些字节。",
+      "refs": [
+        "independent_baseline_probe",
+        "optional_implementation",
+        "optional_line_fix",
+        "first_frozen_focused_verification",
+        "final_regression_independent_check"
+      ],
+      "limits": "不保证文件名或任意真实秘密自动脱敏，不宣称完整安全扫描。"
+    },
+    {
+      "id": "F2",
+      "verdict": "pass",
+      "assessment": "helper 在当前轮日志/TSV和退出码保存后，对130/143立即以原码终止，避免下一轮。独立基线复现显式130/143与子进程自发SIGINT/SIGTERM继续三轮/归并为1；实际候选测试覆盖首轮/后轮中断、记录完整性、无后续轮及普通0/1/9/124有界路径。",
+      "refs": [
+        "independent_baseline_probe",
+        "optional_implementation",
+        "first_frozen_focused_verification",
+        "final_regression_independent_check"
+      ],
+      "limits": "不外推到父进程、完整process group或真实用户取消传播。"
+    },
+    {
+      "id": "F3",
+      "verdict": "pass",
+      "assessment": "明确先核toolchain路径/内容、compiler/target/sysroot/ABI、generator/configuration及旧cache/CMakeSystem/Compiler/编译证据；仅同身份增量复用，身份变化或无法证明时新建任务自有binaryDir并保存旧目录。实际CMake控制复现原目录cacheB但编译A，clean-first仍A，新目录B正常，同A增量正常。一个新消费者实际交付B二进制/JUnit，独立复跑旧A=101、新B=202，旧24文件(含20构建文件)完全未变。",
+      "refs": [
+        "independent_baseline_probe",
+        "cmake_implementation",
+        "consumer_review",
+        "consumer_raw_response",
+        "final_regression_independent_check"
+      ],
+      "limits": "命令块有意未变；证据是方法语义、真实host反例/控制及单次新上下文消费，不是模型A/B、SDK强制防护或目标ABI/设备资格。"
+    },
+    {
+      "id": "F4",
+      "verdict": "pass",
+      "assessment": "固定实际消费者dialect/validator/子集。同层additionalProperties闭合；仅实测支持的现代组合边界使用unevaluatedProperties；旧draft/窄子集同层展开或needs-fix，不静默放宽。新增测试从发布JSON提取两例并用真实validator运行5schema×6input，含合法、未知字段、缺id/mode、错类型、错枚举及旧Draft7忽略关键字控制。等义压缩保留方向性版本/能力/ABI、生命周期/授权/对账、反例/原型权限及not-checked边界；最后marker修正有自然的同层条件。",
+      "refs": [
+        "independent_baseline_probe",
+        "core_implementation",
+        "core_marker_fix",
+        "first_frozen_focused_verification",
+        "final_regression_independent_check"
+      ],
+      "limits": "本地jsonschema实际语义，不证明所有模型输出API或客户端支持同一子集。"
+    },
+    {
+      "id": "F5",
+      "verdict": "pass",
+      "assessment": "实际claude-code/opencode导出并从默认任务包解析相对引用；5行空Evidence的默认Result改为not-run，逐项有证据才能填结果。独立基线导出确实有5空证据/pass；候选实际export测试验证空行不预填成功，未新增gate/审批协议。",
+      "refs": [
+        "independent_baseline_probe",
+        "core_implementation",
+        "first_frozen_focused_verification",
+        "final_regression_independent_check"
+      ],
+      "limits": "结论限定实际导出的默认任务包；不将独立未被该默认路径消费的source模板镜像描述为全库已修。"
+    }
+  ],
+  "audit_assessment": {
+    "skills": 65,
+    "files": 153,
+    "bytes": 422088,
+    "groups": {
+      "core": {
+        "skills": 34,
+        "files": 93,
+        "bytes": 231726
+      },
+      "embedded": {
+        "skills": 22,
+        "files": 45,
+        "bytes": 123379
+      },
+      "optional": {
+        "skills": 9,
+        "files": 15,
+        "bytes": 66983
+      }
+    },
+    "decisions": {
+      "KEEP": 57,
+      "ENHANCE": 5,
+      "OBSERVE": 3
+    },
+    "population_duplicates": 0,
+    "population_missing": 0,
+    "population_extra": 0,
+    "external_unique_snapshots": 54,
+    "external_observations": 55,
+    "external_bytes": 1492456,
+    "fixed_repositories": 19,
+    "fixed_repository_files": 48,
+    "official_pages": 6,
+    "declared_full_reads": 30,
+    "declared_partial_reads": 24,
+    "refs": [
+      "baseline_audit_identities",
+      "stage1_report",
+      "reviewed_source_index"
+    ]
+  },
+  "regression_history": {
+    "first": {
+      "head": "6183982e1f5e4a1bb09727009a809514e160be64",
+      "tree": "09946e71e8ccee1063466d0c8df9088d6d036a3c",
+      "exit_code": 1,
+      "total": 102,
+      "passed": 65,
+      "failed": 37,
+      "classification_counts": {
+        "python-guard-observed": 26,
+        "per-skill-line-budget-propagation": 1,
+        "python-environment-confirmed-by-retry": 4,
+        "per-skill-line-budget-direct": 1,
+        "main-entry-marker-direct": 2,
+        "known-source-gates-propagation": 3
+      },
+      "status": "failed; preserved, never relabeled",
+      "refs": [
+        "first_regression_receipt",
+        "first_regression_timing",
+        "first_regression_stdout",
+        "first_regression_stderr",
+        "first_regression_classification"
+      ]
+    },
+    "final": {
+      "started_at": "2026-11-16T08:14:20.475042+00:00",
+      "finished_at": "2026-11-16T08:19:58.536238+00:00",
+      "elapsed_seconds": 338.04035697699874,
+      "exit_code": 0,
+      "timed_out": false,
+      "source_before_after_clean": true,
+      "full_suite_total": 102,
+      "passed": 102,
+      "failed": 0,
+      "head": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "tree": "617bdcb20e5fb629c1ddd175e29373b1b86aa0c5",
+      "registered_test_population_exact": true,
+      "raw_log_sha256_verified": true,
+      "refs": [
+        "final_regression_independent_check",
+        "final_regression_receipt",
+        "final_regression_timing",
+        "final_regression_stdout",
+        "final_regression_stderr",
+        "corrected_environment"
+      ]
+    }
+  },
+  "budget_assessment": {
+    "all8_pass": true,
+    "threshold_file_unchanged_from_baseline": true,
+    "ratchet_sha256": "f283524ecff14179cad628735bef9e20580da00c2505687ecca9530da3737bff",
+    "profile_results": {
+      "core": {
+        "schema": "adk-profile-context-ratchet-result/v1",
+        "status": "pass",
+        "profile": "core",
+        "actual": {
+          "entry_file_bytes": 97817,
+          "potential_full_source_bytes": 172867
+        },
+        "ratchet": {
+          "entry_file_bytes": 133940,
+          "potential_full_source_bytes": 184133
+        },
+        "asset_count": 27,
+        "asset_count_baseline": 27,
+        "failures": [],
+        "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+        "runtime_initial_context_claim": false,
+        "release_authorized": false
+      },
+      "release-hardening": {
+        "schema": "adk-profile-context-ratchet-result/v1",
+        "status": "pass",
+        "profile": "release-hardening",
+        "actual": {
+          "entry_file_bytes": 82293,
+          "potential_full_source_bytes": 156163
+        },
+        "ratchet": {
+          "entry_file_bytes": 112256,
+          "potential_full_source_bytes": 159576
+        },
+        "asset_count": 23,
+        "asset_count_baseline": 23,
+        "failures": [],
+        "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+        "runtime_initial_context_claim": false,
+        "release_authorized": false
+      },
+      "personal-core": {
+        "schema": "adk-profile-context-ratchet-result/v1",
+        "status": "pass",
+        "profile": "personal-core",
+        "actual": {
+          "entry_file_bytes": 112899,
+          "potential_full_source_bytes": 191686
+        },
+        "ratchet": {
+          "entry_file_bytes": 152918,
+          "potential_full_source_bytes": 204293
+        },
+        "asset_count": 32,
+        "asset_count_baseline": 32,
+        "failures": [],
+        "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+        "runtime_initial_context_claim": false,
+        "release_authorized": false
+      },
+      "embedded-fullstack": {
+        "schema": "adk-profile-context-ratchet-result/v1",
+        "status": "pass",
+        "profile": "embedded-fullstack",
+        "actual": {
+          "entry_file_bytes": 210209,
+          "potential_full_source_bytes": 316439
+        },
+        "ratchet": {
+          "entry_file_bytes": 245296,
+          "potential_full_source_bytes": 316854
+        },
+        "asset_count": 55,
+        "asset_count_baseline": 55,
+        "failures": [],
+        "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+        "runtime_initial_context_claim": false,
+        "release_authorized": false
+      },
+      "team-core": {
+        "schema": "adk-profile-context-ratchet-result/v1",
+        "status": "pass",
+        "profile": "team-core",
+        "actual": {
+          "entry_file_bytes": 123433,
+          "potential_full_source_bytes": 210852
+        },
+        "ratchet": {
+          "entry_file_bytes": 166442,
+          "potential_full_source_bytes": 223333
+        },
+        "asset_count": 35,
+        "asset_count_baseline": 35,
+        "failures": [],
+        "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+        "runtime_initial_context_claim": false,
+        "release_authorized": false
+      },
+      "large-refactor": {
+        "schema": "adk-profile-context-ratchet-result/v1",
+        "status": "pass",
+        "profile": "large-refactor",
+        "actual": {
+          "entry_file_bytes": 213234,
+          "potential_full_source_bytes": 323321
+        },
+        "ratchet": {
+          "entry_file_bytes": 248328,
+          "potential_full_source_bytes": 323328
+        },
+        "asset_count": 56,
+        "asset_count_baseline": 56,
+        "failures": [],
+        "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+        "runtime_initial_context_claim": false,
+        "release_authorized": false
+      },
+      "incident-response": {
+        "schema": "adk-profile-context-ratchet-result/v1",
+        "status": "pass",
+        "profile": "incident-response",
+        "actual": {
+          "entry_file_bytes": 30352,
+          "potential_full_source_bytes": 46452
+        },
+        "ratchet": {
+          "entry_file_bytes": 37797,
+          "potential_full_source_bytes": 46612
+        },
+        "asset_count": 9,
+        "asset_count_baseline": 9,
+        "failures": [],
+        "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+        "runtime_initial_context_claim": false,
+        "release_authorized": false
+      },
+      "research-intake": {
+        "schema": "adk-profile-context-ratchet-result/v1",
+        "status": "pass",
+        "profile": "research-intake",
+        "actual": {
+          "entry_file_bytes": 65344,
+          "potential_full_source_bytes": 117004
+        },
+        "ratchet": {
+          "entry_file_bytes": 86571,
+          "potential_full_source_bytes": 124543
+        },
+        "asset_count": 20,
+        "asset_count_baseline": 20,
+        "failures": [],
+        "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+        "runtime_initial_context_claim": false,
+        "release_authorized": false
+      }
+    },
+    "security_skill_lines": 140,
+    "unchanged_security_line_limit": 140,
+    "refs": [
+      "final_profiles_raw",
+      "final_profiles_independent_check",
+      "optional_line_fix"
+    ]
+  },
+  "independence": {
+    "implementation_participation": false,
+    "repository_writes": false,
+    "index_or_ref_writes": false,
+    "reviewer_writes": "scratch round3-independent-* reports and isolated probes only",
+    "entire_full_suite_reexecuted_by_reviewer": false,
+    "independent_baseline_counterexamples": true,
+    "independent_consumer_binary_and_hash_verification": true,
+    "independent_final_profile_recomputation": true,
+    "independent_canonical_patch_regeneration": true
+  },
+  "source_identities": [
+    {
+      "path": ".version-lock",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "9a1031322bfbacc3f7f619df51f5d015c041bd37",
+      "sha256": "835cee18fe2fcac7d1332ff64f585b27a70ad8c611378d85868682e2dccf4ffd",
+      "bytes": 85,
+      "lines": 3
+    },
+    {
+      "path": "CONTEXT.md",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "1740675c16a3e54c741e550b987833ee4e4bd6ea",
+      "sha256": "89343a690a4237f4dbc7ab5d64aa20a30bc6395d11c3b30683516f7754640b37",
+      "bytes": 8644,
+      "lines": 195
+    },
+    {
+      "path": "README.md",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "f0ce1553ad464eeb6df0d3f5a19ffae4d79f456e",
+      "sha256": "3a9f558c2ab08b0ad10a1af47aeed964403f8c43ee5bedab9d1bb8d7dcbf0dcc",
+      "bytes": 13087,
+      "lines": 187
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/audit.md",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "83d2e8d9a592be392565eaef71305372a60773bf",
+      "sha256": "17c9f19aaa0a16eccbd042806b3f5a752908a40693f251e375107e0d405084a4",
+      "bytes": 4447,
+      "lines": 40
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/design.md",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "0a4f6cd6958acac2455c62a2067c3f48b723ece3",
+      "sha256": "0bda596db331511e9487734860ee56236ea228a28c5ce37d3d9af2e7a053cf8b",
+      "bytes": 3965,
+      "lines": 36
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/evidence/core-audit.json",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "5bcc2aedb119a0f892233b4949347c664ac99d12",
+      "sha256": "e184e3bc51e8deeb2297e977241895756b321d3cbb711372b7c8d5a744a43673",
+      "bytes": 112393,
+      "lines": 2769
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/evidence/embedded-audit.json",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "68d7a98a5da6e5b51a12157feadde802c491ee81",
+      "sha256": "ef717877749d346be61a8d925f54c3867eafeb418cb6e3987c3f30afa59904f9",
+      "bytes": 83212,
+      "lines": 2030
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/evidence/optional-audit.json",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "bac301507d9b7924c8f2356e67c2ea642e7c792e",
+      "sha256": "028e65709f30b542e1f334e052aefe48196076825dae33b034fd2549d8c18fd7",
+      "bytes": 61229,
+      "lines": 1430
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/evidence/platform-audit.json",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "003af22322da289868b7f367a625111444524a36",
+      "sha256": "140f419bc48a74455c0c600ccffd6a48468688a5c3f1617bcbeeddd147bbd3a6",
+      "bytes": 4559,
+      "lines": 94
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/evidence/portfolio-audit.json",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "2c10df574b8b51e8e181c0e03ff6d129f4ff4623",
+      "sha256": "5b2c73cb17234669536fade8073b73a02cad3eea4c02f6219e5125cdd67cd75b",
+      "bytes": 165139,
+      "lines": 4021
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/negative-results.md",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "665d9c3c746846e8e50c0b791107d539e20377a3",
+      "sha256": "81f219f5c4bff060662d2f05486f0d13a0961d22ec1c9ba768a8a2886829294e",
+      "bytes": 5577,
+      "lines": 29
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/requirements.md",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "58166d1353e2f0d2ed4b38850e14b9e0bdb30707",
+      "sha256": "517734b8479b0df46a571ee7f1d0b806b4a61dc60a7ad53c3a0bf46e2eb0d033",
+      "bytes": 5489,
+      "lines": 46
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/source-review.md",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "6e2b4bb60a9981877f64792e0f76c398453a088b",
+      "sha256": "782dabec15e8a196036afffe44a984f4b8ca3ef7ed45409071ada02d05f54ca8",
+      "bytes": 5922,
+      "lines": 39
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/tasks.md",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "1007913dadff3a4e0a4be8b29adb8328e2d62562",
+      "sha256": "210350eaa74224193d111000a254cd1cf1bc4f659fb0e386717abd39b18240bb",
+      "bytes": 2042,
+      "lines": 17
+    },
+    {
+      "path": "docs/runbooks/security-supply-chain.md",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "6a11f8491eb4e624546dab5906629560b01219a1",
+      "sha256": "324d20206f40778300906051dc08775297017b2318ecec74100ef303efe423ce",
+      "bytes": 6481,
+      "lines": 62
+    },
+    {
+      "path": "manifest.json",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "609e37e7322060b3368d0a0648bc67c5c9f1aca6",
+      "sha256": "43caab611aba1d9843ee74ee92df803288b5a0d066e7cc4d6b655a7431850265",
+      "bytes": 90988,
+      "lines": 2881
+    },
+    {
+      "path": "manifests/software_m5_eval_contract.json",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "c60daa2c0681ed0d7a01a9344f9af838479d3324",
+      "sha256": "4f3ec4848646cfc1aa397fae471e5340f0f14fdece7aeab8b2f5d89e8ccb21c0",
+      "bytes": 706,
+      "lines": 31
+    },
+    {
+      "path": "optional-skills/adk-security-supply-chain/SKILL.md",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "ae75786916c5a04d7de20be32239685f77dc045d",
+      "sha256": "2d8453ce4525d0793ce1ee89a9503001189c4819fa3966588b561d8eb9a0474e",
+      "bytes": 8413,
+      "lines": 140
+    },
+    {
+      "path": "optional-skills/adk-test-flakiness-triage/SKILL.md",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "2ed30485f644e033e132d487280fb7d7ec69270f",
+      "sha256": "6d37c99701d7be57c837be6854484a263cc75b6a12e01db9969dd2cec2571a54",
+      "bytes": 2427,
+      "lines": 62
+    },
+    {
+      "path": "optional-skills/adk-test-flakiness-triage/references/details.md",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "2fa2291cc5ba327857678769f1427da9706ca950",
+      "sha256": "68522e43db6194ff02d275d65c3078ff363aab4329fc18f17f6e3594b30924e1",
+      "bytes": 4957,
+      "lines": 81
+    },
+    {
+      "path": "pyproject.toml",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "b89c46bef4f99846aba55b646f5a6cc67f527b5c",
+      "sha256": "eb973742535043bb63cef15243b0e0c9e6fb91bfb58599fe13f1bf9da498a7fb",
+      "bytes": 1310,
+      "lines": 59
+    },
+    {
+      "path": "skills/adk-cmake-cross-build/SKILL.md",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "960ee57879bfbab6f478dfaed1e958a00f9b7d2b",
+      "sha256": "543764125bfc4fd34be2b7b7a2ca6afc3468e7bdc0caf044d27c8d35107d4747",
+      "bytes": 5264,
+      "lines": 114
+    },
+    {
+      "path": "skills/adk-interface-contract-design/SKILL.md",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "a9c3bf50f753ca02f28994bd05731cb55eec6d39",
+      "sha256": "72045b42abf0abdcd54bab935241db7723c10dde2432e1d5ddb6882be3963cfe",
+      "bytes": 4317,
+      "lines": 75
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/design-quality-methods.md",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "720070607935eea1aff0eddb779b9702e8c12428",
+      "sha256": "4bfbfa3df2196616db1f491531b5bc5328afae24a2e54f4739c489d83ddcdd8b",
+      "bytes": 1598,
+      "lines": 20
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/details.md",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "a617bf5c439c4cd3f808f0d904ffb4a810ea340f",
+      "sha256": "e182fd8bc0edd58556700a0b4ce6d435a705128c6bf37b6ec2b13c624826a593",
+      "bytes": 2611,
+      "lines": 56
+    },
+    {
+      "path": "skills/adk-parallel-agent-governance/SKILL.md",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "95c69872cbb2938040ecbec2c1492679d22a19fc",
+      "sha256": "446a4a08ffd2d4dfc89bc9752dfea7000fe05818f490892308b08be312386c68",
+      "bytes": 4292,
+      "lines": 52
+    },
+    {
+      "path": "skills/adk-parallel-agent-governance/references/subagent-review-checklist.md",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "561939020cf66fc215d87105ea7e1b8383e3a659",
+      "sha256": "9fc2748d504d975cd3550c4809f66c3e10fecd753650f8d649b2bda124072fa3",
+      "bytes": 738,
+      "lines": 35
+    },
+    {
+      "path": "src/agent_dev_kit/__init__.py",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "ea35f74d1e27db49fc1812ce20cd801ff82ee526",
+      "sha256": "b2efd10f2292ffee0a0e07922b99846a58bb0cb5562e8af2685f3036be158c53",
+      "bytes": 71,
+      "lines": 3
+    },
+    {
+      "path": "tests/fixtures/skill_method_ab_prereg.json",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "325fcf6fc3e3de6c3d1eeda40aa65c3700893901",
+      "sha256": "ae24a81789c81ee82e3285a12ec15bc471550bfec2083b02e54bdfa10d8a5531",
+      "bytes": 6238,
+      "lines": 128
+    },
+    {
+      "path": "tests/test_skill_cmake_methods.py",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "677568227a714582d538e047073f39e821d1baa4",
+      "sha256": "c743fd55de0a8a07327c79d9f002d88b06d016389d0bb61ecb4b6e02a88ce433",
+      "bytes": 9142,
+      "lines": 166
+    },
+    {
+      "path": "tests/test_skill_command_examples.py",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "bf0cef6224ca5bf76214e58b9057e8a709199dee",
+      "sha256": "ddfd18b3fac98f15a1727f9c0014cc984dc3f5d0984c85951c4af6988ed60655",
+      "bytes": 53862,
+      "lines": 934
+    },
+    {
+      "path": "tests/test_skill_content.sh",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "988ea6e7a4ba1757cd711624380df035615998e3",
+      "sha256": "1d5bcad72ec6ea8ba832c2876c96325e1e015bd98f4428293e1674b5bcea6ed9",
+      "bytes": 1037,
+      "lines": 8
+    },
+    {
+      "path": "tests/test_skill_contract_methods.py",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "5b68f9e31c2a924a4a5018ad3d2b91926ae72a5c",
+      "sha256": "b52841a26b065b6de8727d2ba36cac3fc1902b76856fd264fa453c75c51b0e47",
+      "bytes": 6391,
+      "lines": 127
+    }
+  ],
+  "limits": [
+    "独立审查只覆盖精确baseline→d87e21源变更与已列证据。后续证据包装提交、受保护合并、fresh-main CI、正式release三资产核验和Root两文件source-only接入尚未由本报告验证。",
+    "source-only授权适用；缺宿主~/codex的native运行证据为unavailable/not-run。测试名称含native/field/pilot不等于实际宿主、板端、RTOS/HIL或现场资格。",
+    "未调用付费模型、Codex/Work CLI/Cloud任务、设备操作或外部写入。没有新的模型A/B、M5、token、费用或延迟收益结论。",
+    "已独立核153文件/54外部快照的完整字节身份与阅读范围元数据，阅读是各审计者声明，不能由哈希证明人的全文理解。我的完整语义阅读限所列规则、选中方法、变更diff和针对性上下文；未声称重新语义通读全部153/54。",
+    "19固定commit仓库48文件与6官方页面的本地摘要/记录可复核；未独立为每个远端tree做成员身份认证。官方CMake/JSON Schema语义交叉核验成功，Bash/部分固定raw访问失败保留，不伪造其成功。",
+    "CMake新消费者是单次新上下文host执行；没有独立transcript级上下文隔离证明或成对baseline模型run。前4次bootstrap仅executor合并输出/Walltime，缺原始分流UTC；19次正式命令有分流原始日志和时间，已独立核对。",
+    "首轮full原始runner只保存失败子项最后80行，报告保留实际可得范围；26段guard是观察到的首个阻断，不表示后继源码门一定没有问题。纠正环境后残留失败已进一步定位。",
+    "最终102/102是102个注册shell测试的结果；本审查独立核了实际执行回执/日志/人口，并未重复整套full，也未把所有嵌套分支或可跳过宿主路径认作都已执行。",
+    "原8项profile门是UTF-8源码增长预算，非provider token/运行时初始上下文/费用测量。large-refactor仅余7B，阈值未改。",
+    "reviewer自身探针两次实现失误（绝对Git tree路径、错误Manifest.profiles属性）是审查harness错误，已保留并纠正，不记为产品缺陷。"
+  ],
+  "evidence_refs": {
+    "stage1_report": {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-stage1-report.md",
+      "bytes": 6621,
+      "sha256": "d44cd901ab0524ee219b6e7bb453e2e30197028dd80d51afa1be81482d6f3d7e"
+    },
+    "stage1_review_sources": {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-stage1-review-sources.json",
+      "bytes": 9943,
+      "sha256": "a3f5237d1f313477c6dba34db67916c35c99de116a013b8a14465d800576b812"
+    },
+    "baseline_audit_identities": {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-stage1/audit-identity-verification.json",
+      "bytes": 166858,
+      "sha256": "062e12abfc674ff0149cd3ce79aeb54e84da7b5c83f22902d69f69006fece683"
+    },
+    "independent_baseline_probe": {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-stage1/summary.json",
+      "bytes": 2110,
+      "sha256": "9f8fd0c10eed9fad48013c3e1ce7d225078412233cebf185d9e37316af6483e9"
+    },
+    "independent_baseline_probe_runner": {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-stage1-probe.py",
+      "bytes": 17027,
+      "sha256": "b1a7cf109be2dd2cc19764f8aaf4ff73e7ff13ca60d563dc0373088e0f923daf"
+    },
+    "consumer_review": {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-consumer-review.json",
+      "bytes": 9660,
+      "sha256": "9429f28e9d470723b5adb6228302f6d16d73682819c43075d1486b02a2e3966f"
+    },
+    "consumer_task": {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer-task.md",
+      "bytes": 1451,
+      "sha256": "3b8628b1d7b7414a79029ef1857cfe63f58ea08c42b83747ce38ab9c59e5754c"
+    },
+    "consumer_fixture": {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/fixture-before.json",
+      "bytes": 7589,
+      "sha256": "04240d53eef99547e1f0dab70c5535af8d9dbd0d6f40e6953a038feb8dddfc56"
+    },
+    "consumer_raw_response": {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/consumer-response.json",
+      "bytes": 116476,
+      "sha256": "7381e8dbe92148b3027887fa9f3c40c71732401d8e2993c0484fa435436da913"
+    },
+    "core_implementation": {
+      "path": "/workspace/scratch/fe5385ca063a/round3-core-implementation.json",
+      "bytes": 22281,
+      "sha256": "aa08562a16984202e3d86dee41a37429eb30d7dab46608de427193463d48a068"
+    },
+    "cmake_implementation": {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-implementation.json",
+      "bytes": 15061,
+      "sha256": "4d7dc0936ee80749b936d4f3ff669ec2a2b4ebcbde09db81843dd06c43712577"
+    },
+    "optional_implementation": {
+      "path": "/workspace/scratch/fe5385ca063a/round3-optional-implementation.json",
+      "bytes": 11689,
+      "sha256": "cbab0902cc1d6350e3193130fd2e1673b5ba0b36ca2e55895ff6aad2509fb3cb"
+    },
+    "core_marker_fix": {
+      "path": "/workspace/scratch/fe5385ca063a/round3-core-contract-compatibility-fix.json",
+      "bytes": 120100,
+      "sha256": "bbf4bbb472119556b888139348ae7d394314c8a0cb4d9c83545806b222910747"
+    },
+    "optional_line_fix": {
+      "path": "/workspace/scratch/fe5385ca063a/round3-optional-line-budget-fix.json",
+      "bytes": 11411,
+      "sha256": "e472107a4c524ed95b4316a7637ad5bf2bce790a29d94791db393a1579437eca"
+    },
+    "first_regression_classification": {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-first-regression-classification.json",
+      "bytes": 74065,
+      "sha256": "1dd3a51a76f2c69f8bf2e2390322815204549cb7223ea86c454a26b9754d0185"
+    },
+    "first_regression_receipt": {
+      "path": "/workspace/scratch/fe5385ca063a/adk-11.3.10-full-regression/receipt.json",
+      "bytes": 1618,
+      "sha256": "8bf51d5222567a73b0064dbf70f4b87338d9436dd8210e3282233e3d1800b80d"
+    },
+    "first_regression_timing": {
+      "path": "/workspace/scratch/fe5385ca063a/adk-11.3.10-full-regression/timing.json",
+      "bytes": 8184,
+      "sha256": "9ee0430d702585dda40d4555319841f51d19ddb3d3166bfaed99f8858132d4a4"
+    },
+    "first_regression_stdout": {
+      "path": "/workspace/scratch/fe5385ca063a/adk-11.3.10-full-regression/stdout.log",
+      "bytes": 2073,
+      "sha256": "1e7d0d5bb5a39609a69da0864b5642b90f4035c57879a02b8735c226faa358ba"
+    },
+    "first_regression_stderr": {
+      "path": "/workspace/scratch/fe5385ca063a/adk-11.3.10-full-regression/stderr.log",
+      "bytes": 43291,
+      "sha256": "01d510e23e65596f05025505775e66559651766873d508c43110698152c65a8e"
+    },
+    "final_regression_independent_check": {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-final-regression-verification.json",
+      "bytes": 15008,
+      "sha256": "adfee77a0f643df1f920692a9535515a513a31ced88fb39047fa14dd8af132e5"
+    },
+    "final_regression_started": {
+      "path": "/workspace/scratch/fe5385ca063a/adk-11.3.10-corrected-regression/started.json",
+      "bytes": 764,
+      "sha256": "a8aa85a30a17248498e056b372d2b5a830aefa8938eabfdec70fd0869feb1996"
+    },
+    "final_regression_receipt": {
+      "path": "/workspace/scratch/fe5385ca063a/adk-11.3.10-corrected-regression/receipt.json",
+      "bytes": 1619,
+      "sha256": "d655c80defe19e40627460f0cf6bd7c661c84849c7753d161064b2794d30a8ce"
+    },
+    "final_regression_timing": {
+      "path": "/workspace/scratch/fe5385ca063a/adk-11.3.10-corrected-regression/timing.json",
+      "bytes": 8283,
+      "sha256": "f17e4c4873fc8dbc716b53050b3c3353dc5667700d324a1af5b68df84fbd403b"
+    },
+    "final_regression_stdout": {
+      "path": "/workspace/scratch/fe5385ca063a/adk-11.3.10-corrected-regression/stdout.log",
+      "bytes": 3174,
+      "sha256": "0d1bee4e82001511f12291d9c3be0867228a5a396f58b49d3acd176ef3eed61e"
+    },
+    "final_regression_stderr": {
+      "path": "/workspace/scratch/fe5385ca063a/adk-11.3.10-corrected-regression/stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "corrected_environment": {
+      "path": "/workspace/scratch/fe5385ca063a/round3-corrected-environment.json",
+      "bytes": 1215,
+      "sha256": "f2082037fe36eec3d33f14e28e5d6bcd2cbb9a05f4445f9197d85a6eb0224df2"
+    },
+    "final_profiles_raw": {
+      "path": "/workspace/scratch/fe5385ca063a/round3-final-profiles-corrected.json",
+      "bytes": 13094,
+      "sha256": "94c51e84e986173f4f08eace2b8ae78a49c42b771e779cb6594eba35c8f9939b"
+    },
+    "final_profiles_independent_check": {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-final-profile-recheck.json",
+      "bytes": 7626,
+      "sha256": "53a848a479986db6b05ec480f75228749439ca06daad0a7441201c8d524e0d60"
+    },
+    "first_frozen_focused_verification": {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-focused-verification.json",
+      "bytes": 5016,
+      "sha256": "38616091b9f52602125b4d049bc648c71bd20fb1d9b8b8cd004879f175030f7b"
+    },
+    "first_frozen_identity_check": {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-frozen-identity-check.json",
+      "bytes": 14757,
+      "sha256": "a70d8477b8e8b192e2bf36fb226e1a21492656abccade0421fc93b60261bc3dd"
+    },
+    "final_source_identities": {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-final-source-identities.json",
+      "bytes": 20376,
+      "sha256": "293070d1511cf7f11bcb2edb9d51a7a360585f56b1f5032f27bbc588941cdd3a"
+    },
+    "reviewed_source_index": {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-reviewed-source-index.json",
+      "bytes": 201437,
+      "sha256": "78cbe0e2c2cf9b3a3f6caf0cf72464dbee4a6dba05ebc9746ffa58a3fc82f69e"
+    },
+    "canonical_patch": {
+      "path": "/workspace/scratch/fe5385ca063a/round3-final-source.patch",
+      "bytes": 528829,
+      "sha256": "d82a42ee4620c923ebd4eaecae514f94551a733b4e9627f764a051efab1ab6c4"
+    },
+    "canonical_patch_check": {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-canonical-patch-check.json",
+      "bytes": 8754,
+      "sha256": "7463306da773336a23fa679ccf880462a167065688768d78747727cf7f6bf842"
+    },
+    "interim_review": {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-interim-review.json",
+      "bytes": 7934,
+      "sha256": "1e6df98c2ac756207d974d35eb6c35b877d1142b051cd7c9481ed5210cc8fbd7"
+    },
+    "interim_review_followup": {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-interim-review-followup.json",
+      "bytes": 2160,
+      "sha256": "c31ec72911649cbbfc3f725e1c491968a421f6e88a24c4c5acef0cf1194b6411"
+    }
+  },
+  "typed_review_mapping": {
+    "reviewer_id": "round3-independent-reviewer",
+    "scope": "source-change",
+    "source_base_commit": "80f8b2ea2885e3f62dcea455c45a2e8ebf071b2b",
+    "source_head_commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+    "source_head_tree": "617bdcb20e5fb629c1ddd175e29373b1b86aa0c5",
+    "source_diff_sha256": "d82a42ee4620c923ebd4eaecae514f94551a733b4e9627f764a051efab1ab6c4",
+    "reviewed_at": "2026-11-16T08:23:33.804040+00:00",
+    "evidence_complete_at": "2026-11-16T08:21:23.592791+00:00",
+    "spec_result": "pass",
+    "quality_result": "pass",
+    "finding_ids": [
+      "r3-review-01",
+      "r3-integration-marker",
+      "r3-review-02"
+    ],
+    "all_findings_disposition": "resolved by fixed source at d87e21; zero open findings",
+    "policy_fingerprints": {
+      ".adk/review-policy.json": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+      ".adk/review-authorization.md": "1594e628184cb0e4ad6c669bf5ce39dcb1f333d03d0798bebb080856e703cda5",
+      "src/agent_dev_kit/review_evidence.py": "be4892f464496a29dbbb41ebb56c48984bf103d8eabe2ee6117bd583d1032c47",
+      "src/agent_dev_kit/strict_json.py": "72f06f4dcaebfed83bd1ae9876e38d4f7d82d8a1473b40b66beffb6338ee94a5",
+      "src/agent_dev_kit/readiness_evidence.py": "6fdfd5bea3ee097ac21d2b2ab469378c8c84f78856061b680ebb0c5f9d726778"
+    }
+  }
+}

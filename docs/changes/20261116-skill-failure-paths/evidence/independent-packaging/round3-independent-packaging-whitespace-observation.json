@@ -1,0 +1,308 @@
+{
+  "schema": "round3-independent-packaging-whitespace-observation/v1",
+  "observed_at": "2026-11-16T08:37:16.978959+00:00",
+  "source_head": "d87e21d7750ec4a0042754d045979c137abfc528",
+  "raw_log": {
+    "path": "docs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log",
+    "bytes": 43291,
+    "sha256": "01d510e23e65596f05025505775e66559651766873d508c43110698152c65a8e",
+    "equals_original_execution_bytes": true,
+    "trailing_whitespace_line_count": 53,
+    "all_affected_lines_whitespace_only": true,
+    "lines": [
+      {
+        "line": 20,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 30,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 31,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 41,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 42,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 52,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 53,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 63,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 64,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 74,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 75,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 85,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 86,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 89,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 105,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 106,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 118,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 119,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 129,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 130,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 133,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 154,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 157,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 179,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 182,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 282,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 292,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 293,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 303,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 304,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 314,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 315,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 325,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 326,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 336,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 337,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 347,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 348,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 357,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 360,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 375,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 378,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 390,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 402,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 403,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 413,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 414,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 424,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 425,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 428,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 515,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 547,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      },
+      {
+        "line": 560,
+        "trailing_whitespace_bytes": 4,
+        "whitespace_only": true
+      }
+    ]
+  },
+  "check_attr": {
+    "argv": [
+      "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+      "bypass",
+      "git",
+      "check-attr",
+      "whitespace",
+      "--",
+      "docs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log"
+    ],
+    "exit_code": 0,
+    "stdout": "docs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log: whitespace: unset\n",
+    "stderr": ""
+  },
+  "assessment": "Confirmed raw runner indentation produces53 whitespace-only lines. Preserve exact history bytes. A single literal-path -whitespace attribute is consistent with the existing original.patch retention mechanism; final diff and actual RED/GREEN check are still pending.",
+  "attributes_at_observation": {
+    "path": ".gitattributes",
+    "bytes": 305,
+    "sha256": "1c5288f1aa3575dd4ce8f5c110e0fa48fb6ebc8d32863e840e33b5440c36d594",
+    "content": "# Retained original Git patches preserve exact context/trailing bytes as evidence.\ndocs/changes/**/evidence/original.patch -whitespace\n# Preserve the literal whitespace in this retained failed regression stderr.\ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log -whitespace\n"
+  },
+  "observation_note": "By the time of this first independent filesystem read, the parent had already applied the proposed literal-path exception. This is an after-change observation, not a reproduced before-change check.",
+  "frozen_source_attributes": {
+    "bytes": 135,
+    "sha256": "91c37a6e96bb1c968597ef9b306db52ca282ea7cbbdaf13b8743c4162ad1ed03",
+    "content": "# Retained original Git patches preserve exact context/trailing bytes as evidence.\ndocs/changes/**/evidence/original.patch -whitespace\n"
+  },
+  "observed_diff": "diff --git a/.gitattributes b/.gitattributes\nindex fc5e68cc..8c124e99 100644\n--- a/.gitattributes\n+++ b/.gitattributes\n@@ -1,2 +1,4 @@\n # Retained original Git patches preserve exact context/trailing bytes as evidence.\n docs/changes/**/evidence/original.patch -whitespace\n+# Preserve the literal whitespace in this retained failed regression stderr.\n+docs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log -whitespace\n"
+}

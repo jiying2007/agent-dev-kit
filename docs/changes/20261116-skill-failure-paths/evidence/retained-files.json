@@ -1,0 +1,489 @@
+{
+  "schema": "adk-evidence-retained-path-map/v1",
+  "files": [
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-core-audit.json",
+      "retained_path": "evidence/core-audit.json",
+      "sha256": "e184e3bc51e8deeb2297e977241895756b321d3cbb711372b7c8d5a744a43673",
+      "bytes": 112393
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-embedded-audit.json",
+      "retained_path": "evidence/embedded-audit.json",
+      "sha256": "ef717877749d346be61a8d925f54c3867eafeb418cb6e3987c3f30afa59904f9",
+      "bytes": 83212
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-optional-audit.json",
+      "retained_path": "evidence/optional-audit.json",
+      "sha256": "028e65709f30b542e1f334e052aefe48196076825dae33b034fd2549d8c18fd7",
+      "bytes": 61229
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-platform-audit.json",
+      "retained_path": "evidence/platform-audit.json",
+      "sha256": "140f419bc48a74455c0c600ccffd6a48468688a5c3f1617bcbeeddd147bbd3a6",
+      "bytes": 4559
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-portfolio-audit.json",
+      "retained_path": "evidence/portfolio-audit.json",
+      "sha256": "5b2c73cb17234669536fade8073b73a02cad3eea4c02f6219e5125cdd67cd75b",
+      "bytes": 165139
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-core-implementation.json",
+      "retained_path": "evidence/core-implementation.json",
+      "sha256": "aa08562a16984202e3d86dee41a37429eb30d7dab46608de427193463d48a068",
+      "bytes": 22281
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-implementation.json",
+      "retained_path": "evidence/cmake-implementation.json",
+      "sha256": "4d7dc0936ee80749b936d4f3ff669ec2a2b4ebcbde09db81843dd06c43712577",
+      "bytes": 15061
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-optional-implementation.json",
+      "retained_path": "evidence/optional-implementation.json",
+      "sha256": "cbab0902cc1d6350e3193130fd2e1673b5ba0b36ca2e55895ff6aad2509fb3cb",
+      "bytes": 11689
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-core-contract-compatibility-fix.json",
+      "retained_path": "evidence/core-contract-compatibility-fix.json",
+      "sha256": "bbf4bbb472119556b888139348ae7d394314c8a0cb4d9c83545806b222910747",
+      "bytes": 120100
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-optional-line-budget-fix.json",
+      "retained_path": "evidence/optional-line-budget-fix.json",
+      "sha256": "e472107a4c524ed95b4316a7637ad5bf2bce790a29d94791db393a1579437eca",
+      "bytes": 11411
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-corrected-environment.json",
+      "retained_path": "evidence/corrected-environment.json",
+      "sha256": "f2082037fe36eec3d33f14e28e5d6bcd2cbb9a05f4445f9197d85a6eb0224df2",
+      "bytes": 1215
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/adk-11.3.10-corrected-regression/receipt.json",
+      "retained_path": "evidence/full-regression.json",
+      "sha256": "d655c80defe19e40627460f0cf6bd7c661c84849c7753d161064b2794d30a8ce",
+      "bytes": 1619
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/adk-11.3.10-corrected-regression/started.json",
+      "retained_path": "evidence/full-regression-started.json",
+      "sha256": "a8aa85a30a17248498e056b372d2b5a830aefa8938eabfdec70fd0869feb1996",
+      "bytes": 764
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/adk-11.3.10-corrected-regression/timing.json",
+      "retained_path": "evidence/full-regression-timing.json",
+      "sha256": "f17e4c4873fc8dbc716b53050b3c3353dc5667700d324a1af5b68df84fbd403b",
+      "bytes": 8283
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/adk-11.3.10-corrected-regression/stdout.log",
+      "retained_path": "evidence/full-regression.stdout.log",
+      "sha256": "0d1bee4e82001511f12291d9c3be0867228a5a396f58b49d3acd176ef3eed61e",
+      "bytes": 3174
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/adk-11.3.10-corrected-regression/stderr.log",
+      "retained_path": "evidence/full-regression.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/adk-11.3.10-full-regression/receipt.json",
+      "retained_path": "evidence/initial-regression.json",
+      "sha256": "8bf51d5222567a73b0064dbf70f4b87338d9436dd8210e3282233e3d1800b80d",
+      "bytes": 1618
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/adk-11.3.10-full-regression/started.json",
+      "retained_path": "evidence/initial-regression-started.json",
+      "sha256": "b91a60c0879ea34c64e5c4fd6cdb3ee9d9d7d0d34c8c9995375fec3784752cfe",
+      "bytes": 759
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/adk-11.3.10-full-regression/timing.json",
+      "retained_path": "evidence/initial-regression-timing.json",
+      "sha256": "9ee0430d702585dda40d4555319841f51d19ddb3d3166bfaed99f8858132d4a4",
+      "bytes": 8184
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/adk-11.3.10-full-regression/stdout.log",
+      "retained_path": "evidence/initial-regression.stdout.log",
+      "sha256": "1e7d0d5bb5a39609a69da0864b5642b90f4035c57879a02b8735c226faa358ba",
+      "bytes": 2073
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/adk-11.3.10-full-regression/stderr.log",
+      "retained_path": "evidence/initial-regression.stderr.log",
+      "sha256": "01d510e23e65596f05025505775e66559651766873d508c43110698152c65a8e",
+      "bytes": 43291
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-core-runs/final-compressed-diff-check.json",
+      "retained_path": "evidence/core-raw/final-compressed-diff-check.json",
+      "sha256": "946d3b84cbf5e4dd379a51a3e43a54462205373968b81dad319c26cd39b63970",
+      "bytes": 9760
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-core-runs/final-compressed-large-refactor-budget.json",
+      "retained_path": "evidence/core-raw/final-compressed-large-refactor-budget.json",
+      "sha256": "adcb74d62dc91fd2e7700759b6dd683a969ff56c4708e1c1b4c9ccb132dfefb9",
+      "bytes": 10531
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-core-runs/final-compressed-targeted-regressions.json",
+      "retained_path": "evidence/core-raw/final-compressed-targeted-regressions.json",
+      "sha256": "83ef7c95577dca280606a58e394068a3858a2a0bea57a6ee38f93efd39b17f52",
+      "bytes": 11840
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-core-runs/final-diff-check.json",
+      "retained_path": "evidence/core-raw/final-diff-check.json",
+      "sha256": "e50980cda2014e2f4e30935586880c0de7b03202d91adba58d9ce9f719a36e00",
+      "bytes": 8723
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-core-runs/final-large-refactor-budget.json",
+      "retained_path": "evidence/core-raw/final-large-refactor-budget.json",
+      "sha256": "498bed387dbb4f6ead908bdf9db169b3f0510a4e2d58ff4788a16c9055d1b097",
+      "bytes": 9570
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-core-runs/final-targeted-regressions.json",
+      "retained_path": "evidence/core-raw/final-targeted-regressions.json",
+      "sha256": "2cc714b3e7f1ca4fe99c7d93f1fe87a996f441ca6e72ac7b434b41f7fff94fe5",
+      "bytes": 10804
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-core-runs/green-contract-methods.json",
+      "retained_path": "evidence/core-raw/green-contract-methods.json",
+      "sha256": "ffa45918504859694339ee2433f0e08dcb4ce34740ece96f24063ffbcdcdee4c",
+      "bytes": 9834
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-core-runs/lesson-lookup-replay.json",
+      "retained_path": "evidence/core-raw/lesson-lookup-replay.json",
+      "sha256": "5b7d2cd19c53cd6cb3647f22c77780fdd1369ce8b828d248902b2149b64457fe",
+      "bytes": 9875
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-core-runs/red-contract-methods-corrected-parser.json",
+      "retained_path": "evidence/core-raw/red-contract-methods-corrected-parser.json",
+      "sha256": "7b599d22a94bb1bace1fcc4d183f1349eb94bcecd245ca5ab5e2d057d3aae4af",
+      "bytes": 22744
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-core-runs/red-contract-methods.json",
+      "retained_path": "evidence/core-raw/red-contract-methods.json",
+      "sha256": "a473daf0edec66f848a06636b4bf48edd380f8f4f2c9d5e6e9bf57227d10d16e",
+      "bytes": 14700
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-core-run.py",
+      "retained_path": "evidence/core-raw/round3-core-run.py",
+      "sha256": "9444710f5b6eef6620c963305d76092b32ca60c9e19aacdf0316e5cf3fdf916b",
+      "bytes": 3305
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-test-baseline.json",
+      "retained_path": "evidence/cmake-raw/round3-cmake-test-baseline.json",
+      "sha256": "f11f3dcf5a44152c7e09f31df4bcc6f31129508c3585605eaee3de2ada0bfb58",
+      "bytes": 103443
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-test-repaired.json",
+      "retained_path": "evidence/cmake-raw/round3-cmake-test-repaired.json",
+      "sha256": "2b5b5d94890c6f604a48bfb8abc70dbc02961abd284aa8492d978274fd3846f0",
+      "bytes": 103443
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-regressions.json",
+      "retained_path": "evidence/cmake-raw/round3-cmake-regressions.json",
+      "sha256": "7bb5976f4d8fd4ecdb69c9d17054104cf4d5a6f433bdfc596afa4abe4b2d439b",
+      "bytes": 3683
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-test-runner.py",
+      "retained_path": "evidence/cmake-raw/round3-cmake-test-runner.py",
+      "sha256": "12e403781e6fa8124925db1f055f9ebb651f1f45802fa2829e5196970814a8d0",
+      "bytes": 2677
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-probe/evidence.json",
+      "retained_path": "evidence/cmake-raw/evidence.json",
+      "sha256": "30b1e0ab0d8157a7354ce33f5544d02cd05f6a09f63d409b45bff1218267b54d",
+      "bytes": 12418
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-probe/forced-rebuild-evidence.json",
+      "retained_path": "evidence/cmake-raw/forced-rebuild-evidence.json",
+      "sha256": "05f09c143e8a7c5ca2ce9e8d286f368ac938bf82496702cb58e7ba9066a3e5c4",
+      "bytes": 1327
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-core-runs/compat-red-official-docs.json",
+      "retained_path": "evidence/core-compat-raw/compat-red-official-docs.json",
+      "sha256": "d12157cc895a9133a932d2c560e762be75a002af5e8626f102f886e72b341b83",
+      "bytes": 9863
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-core-runs/compat-red-intent-boundary.json",
+      "retained_path": "evidence/core-compat-raw/compat-red-intent-boundary.json",
+      "sha256": "eaae61cab9c22375b8f1ba39a3bcac1d201c7871dea0fcd8240328ff1d43f756",
+      "bytes": 10925
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-core-runs/compat-green-semantic-fidelity.json",
+      "retained_path": "evidence/core-compat-raw/compat-green-semantic-fidelity.json",
+      "sha256": "866d0b9f2baa749493dc95f36a044cf14c831777fdc6ebb32f3311c60ba8e3de",
+      "bytes": 12004
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-core-runs/compat-green-official-docs.json",
+      "retained_path": "evidence/core-compat-raw/compat-green-official-docs.json",
+      "sha256": "0ea2a57ae720a42a6b7fcf093b18ae20b2efa9293270f17806c46d564f405b02",
+      "bytes": 9837
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-core-runs/compat-green-large-refactor-budget.json",
+      "retained_path": "evidence/core-compat-raw/compat-green-large-refactor-budget.json",
+      "sha256": "fb3e63fa6f56da12190a159dfcb35fb9d5995855543f13075bbe13b0b90bbfc8",
+      "bytes": 10697
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-core-runs/compat-green-diff-check.json",
+      "retained_path": "evidence/core-compat-raw/compat-green-diff-check.json",
+      "sha256": "5ad4ae419e0ca08a8eca933d02bf1997d7513145a9c54613c36d2824ae4d543b",
+      "bytes": 9676
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-core-runs/compat-green-intent-boundary.json",
+      "retained_path": "evidence/core-compat-raw/compat-green-intent-boundary.json",
+      "sha256": "9f35b781b1980b295f5b007b27aa32a1eeee39883f8b21f08e4b37d8e848537c",
+      "bytes": 10840
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-core-runs/compat-green-official-execution-layer.json",
+      "retained_path": "evidence/core-compat-raw/compat-green-official-execution-layer.json",
+      "sha256": "77002537e96e52b45d5a53dcfe79aaf411076a4a151034bcc8cccc437cbc281e",
+      "bytes": 9790
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-core-runs/compat-final-official-docs-after-optional-freeze.json",
+      "retained_path": "evidence/core-compat-raw/compat-final-official-docs-after-optional-freeze.json",
+      "sha256": "ecb340dc4e5ef6dbccae7441453c0638e808bd1331d80455c20ca2a18ee9c391",
+      "bytes": 9802
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-optional-line-budget-red.json",
+      "retained_path": "evidence/optional-line-raw/round3-optional-line-budget-red.json",
+      "sha256": "bd8d474d359b9b9f19cab06906c5b0772c1307ea5a7758e2d1625f4315554f11",
+      "bytes": 1693
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-optional-line-budget-green-budget.json",
+      "retained_path": "evidence/optional-line-raw/round3-optional-line-budget-green-budget.json",
+      "sha256": "b7d5b7ab0a88584a5f2b58b9d990cc216004f858ddc849063bd3a14b2231ab2e",
+      "bytes": 1624
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-optional-line-budget-green-scans.json",
+      "retained_path": "evidence/optional-line-raw/round3-optional-line-budget-green-scans.json",
+      "sha256": "96c949819185c40ef4bb82c0141e06bf576973b030d95c0bb9320c889facf22f",
+      "bytes": 1843
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-optional-line-budget-diff-check.json",
+      "retained_path": "evidence/optional-line-raw/round3-optional-line-budget-diff-check.json",
+      "sha256": "a4e8625c35ba92c134218afc25fadc3910802ee006ff0ccd896e77f80ef99899",
+      "bytes": 1058
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-optional-red.json",
+      "retained_path": "evidence/raw/round3-optional-red.json",
+      "sha256": "b21c570e20ef6acee55bc7b89f1d7d7791bc78d953418b081d9edf51d36e6211",
+      "bytes": 190208
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-optional-green.json",
+      "retained_path": "evidence/raw/round3-optional-green.json",
+      "sha256": "c228ea3b4b6c7c932ab214c762c7c6117735d33a2fd3746b4212501eec16c817",
+      "bytes": 158034
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-optional-probes.json",
+      "retained_path": "evidence/raw/round3-optional-probes.json",
+      "sha256": "3fe1711257b902d42069bf3c04330d8b4b88fbe2e594e9d5b8a8ea03fa13d66a",
+      "bytes": 9640
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3_optional_probe.py",
+      "retained_path": "evidence/raw/round3_optional_probe.py",
+      "sha256": "1d3472b80a82e496fde283afa5ff3ec60097bcf20c50d4e851f578bffbb6ac3d",
+      "bytes": 5256
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3_optional_test_evidence.py",
+      "retained_path": "evidence/raw/round3_optional_test_evidence.py",
+      "sha256": "d794f68949c42cb25f0981b95f9218a1150d28027b110d95d419272e7389959a",
+      "bytes": 4546
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-schema-composition-probe.json",
+      "retained_path": "evidence/raw/round3-schema-composition-probe.json",
+      "sha256": "bd4ac31c530654223295a486954f4ecc2c4819d787d4ce3cfa4918b9ff3fe221",
+      "bytes": 5964
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-schema-composition-probe.py",
+      "retained_path": "evidence/raw/round3-schema-composition-probe.py",
+      "sha256": "87ef33ba81de1599f486a8f7407b270ae79c1ffe0c65808c730f563509b0e2c2",
+      "bytes": 3697
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-checklist-probe.json",
+      "retained_path": "evidence/raw/round3-checklist-probe.json",
+      "sha256": "154aa278de5d51b33a6bb68481876a5708011d7e8044c0648528f342a207592b",
+      "bytes": 1481
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-checklist-probe.py",
+      "retained_path": "evidence/raw/round3-checklist-probe.py",
+      "sha256": "f83f1bc12c9f2da9e6b7334f588851dfcf1d2ceef7cb4dc43a5acc2feae85ef3",
+      "bytes": 3065
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-probe/run.py",
+      "retained_path": "evidence/raw/round3-cmake-probe--run.py",
+      "sha256": "e23170334f0265e061c56d23ab776750aef59b81b5f8a432edeef8f2b3005c7a",
+      "bytes": 3220
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/consolidate_round3_audit.py",
+      "retained_path": "evidence/raw/consolidate_round3_audit.py",
+      "sha256": "4afdc82eb489eab2ce4e8b48be52d96329c18692773228a219a3f7f13c0b7456",
+      "bytes": 9058
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/verify_round3_profiles.py",
+      "retained_path": "evidence/raw/verify_round3_profiles.py",
+      "sha256": "d911399d17f6de1b1a0ed296d6d611311daff09b736df0425efc01225ae0aba9",
+      "bytes": 2938
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/run_command_receipt.py",
+      "retained_path": "evidence/raw/run_command_receipt.py",
+      "sha256": "ca62aaa075d5a60c87b66af987543d2b14f9813f0228684b7a1379a7b6c5ecfe",
+      "bytes": 2718
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/setup_round3_cmake_consumer.py",
+      "retained_path": "evidence/raw/setup_round3_cmake_consumer.py",
+      "sha256": "1b263ec62d6cfab1f23fdd4e90b16d7a1824edd9abf30195ad3a75157b2ceda6",
+      "bytes": 2956
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-final-profiles-corrected.json",
+      "retained_path": "evidence/profile-context-checks.json",
+      "sha256": "94c51e84e986173f4f08eace2b8ae78a49c42b771e779cb6594eba35c8f9939b",
+      "bytes": 13094
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-final-profiles.json",
+      "retained_path": "evidence/initial-profile-context-checks.json",
+      "sha256": "078d3a3133b6e2e6edd490a5d6e4adff399de358f8731bc7836e1f94007349ae",
+      "bytes": 13094
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer-task.md",
+      "retained_path": "evidence/consumer-task.md",
+      "sha256": "3b8628b1d7b7414a79029ef1857cfe63f58ea08c42b83747ce38ab9c59e5754c",
+      "bytes": 1451
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/consumer-response.json",
+      "retained_path": "evidence/consumer-response.json",
+      "sha256": "7381e8dbe92148b3027887fa9f3c40c71732401d8e2993c0484fa435436da913",
+      "bytes": 116476
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/fixture-before.json",
+      "retained_path": "evidence/consumer-fixture-before.json",
+      "sha256": "04240d53eef99547e1f0dab70c5535af8d9dbd0d6f40e6953a038feb8dddfc56",
+      "bytes": 7589
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-independent-consumer-review.json",
+      "retained_path": "evidence/independent/round3-independent-consumer-review.json",
+      "sha256": "9429f28e9d470723b5adb6228302f6d16d73682819c43075d1486b02a2e3966f",
+      "bytes": 9660
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-independent-stage1-report.md",
+      "retained_path": "evidence/independent/round3-independent-stage1-report.md",
+      "sha256": "d44cd901ab0524ee219b6e7bb453e2e30197028dd80d51afa1be81482d6f3d7e",
+      "bytes": 6621
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-independent-stage1-review-sources.json",
+      "retained_path": "evidence/independent/round3-independent-stage1-review-sources.json",
+      "sha256": "a3f5237d1f313477c6dba34db67916c35c99de116a013b8a14465d800576b812",
+      "bytes": 9943
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-independent-stage1/summary.json",
+      "retained_path": "evidence/independent/stage1-summary.json",
+      "sha256": "9f8fd0c10eed9fad48013c3e1ce7d225078412233cebf185d9e37316af6483e9",
+      "bytes": 2110
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-independent-stage1/audit-identity-verification.json",
+      "retained_path": "evidence/independent/stage1/audit-identity-verification.json",
+      "sha256": "062e12abfc674ff0149cd3ce79aeb54e84da7b5c83f22902d69f69006fece683",
+      "bytes": 166858
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-independent-stage1/scan-original-failure.json",
+      "retained_path": "evidence/independent/stage1/scan-original-failure.json",
+      "sha256": "47cfa21f7ad710eecf973d20c121be04fd96bd8c5fdac4f811e0528b5bb734d9",
+      "bytes": 6527,
+      "original_sha256": "16cba4864556a7cbb5aca19fea375bc69727700d311b8cf3b73fd60b14900c2c",
+      "original_bytes": 4478,
+      "representation": "adk-raw-evidence-bundle/v1"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-independent-stage1/sampling-original-failure.json",
+      "retained_path": "evidence/independent/stage1/sampling-original-failure.json",
+      "sha256": "ec47cd5d06be35591420669663db702baa96e13d3bb99a4faca8fbdfe7dbfd66",
+      "bytes": 13151
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-independent-stage1/cmake-original-failure.json",
+      "retained_path": "evidence/independent/stage1/cmake-original-failure.json",
+      "sha256": "c32e0e4aa4a91c6b789bf2ba1dd60036674392e96bef29a5b1dcb243d8472f76",
+      "bytes": 14744
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-independent-stage1/schema-original-failure.json",
+      "retained_path": "evidence/independent/stage1/schema-original-failure.json",
+      "sha256": "a8df8fe44df04c22e2fae7bd68849e060654b1c50357b4494efa8ac317dc65c8",
+      "bytes": 4263
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round3-independent-stage1/checklist-original-failure.json",
+      "retained_path": "evidence/independent/stage1/checklist-original-failure.json",
+      "sha256": "527ede1a19c16f450c93ccfbd6d8354b8d0d1f6be3703e57ed723413b633b4d8",
+      "bytes": 1707
+    }
+  ],
+  "boundary": "Original paths identify actual execution locations. Direct copies remain byte-identical. The single explicitly marked adk-raw-evidence-bundle/v1 entry binds container SHA256/bytes and separate original SHA256/bytes; its base64 member decodes exactly to the original synthetic-credential observation. The consumer bundle likewise binds each embedded file. Third-party source bodies are not vendored."
+}

@@ -1,0 +1,223 @@
+{
+  "jsonschema_version": "4.26.0",
+  "payloads": [
+    {
+      "revision": 3,
+      "mode": "safe"
+    },
+    {
+      "revision": 3,
+      "mode": "safe",
+      "extra": true
+    },
+    {
+      "mode": "safe"
+    },
+    {
+      "revision": 3
+    },
+    {
+      "revision": "3",
+      "mode": "safe"
+    },
+    {
+      "revision": 3,
+      "mode": "admin"
+    }
+  ],
+  "cases": [
+    {
+      "case": "closed-subschema",
+      "validator": "Draft202012Validator",
+      "schema": {
+        "type": "object",
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "revision": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "revision"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "mode": {
+                "enum": [
+                  "safe",
+                  "fast"
+                ]
+              }
+            },
+            "required": [
+              "mode"
+            ]
+          }
+        ]
+      },
+      "accepted": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "case": "modern-composition",
+      "validator": "Draft202012Validator",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "revision": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "revision"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "mode": {
+                "enum": [
+                  "safe",
+                  "fast"
+                ]
+              }
+            },
+            "required": [
+              "mode"
+            ]
+          }
+        ],
+        "unevaluatedProperties": false
+      },
+      "accepted": [
+        true,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "case": "legacy-unsupported",
+      "validator": "Draft7Validator",
+      "schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "revision": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "revision"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "mode": {
+                "enum": [
+                  "safe",
+                  "fast"
+                ]
+              }
+            },
+            "required": [
+              "mode"
+            ]
+          }
+        ],
+        "unevaluatedProperties": false
+      },
+      "accepted": [
+        true,
+        true,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "case": "same-level-modern",
+      "validator": "Draft202012Validator",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "revision": {
+            "type": "integer"
+          },
+          "mode": {
+            "enum": [
+              "safe",
+              "fast"
+            ]
+          }
+        },
+        "required": [
+          "revision",
+          "mode"
+        ],
+        "additionalProperties": false
+      },
+      "accepted": [
+        true,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "case": "same-level-legacy",
+      "validator": "Draft7Validator",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "revision": {
+            "type": "integer"
+          },
+          "mode": {
+            "enum": [
+              "safe",
+              "fast"
+            ]
+          }
+        },
+        "required": [
+          "revision",
+          "mode"
+        ],
+        "additionalProperties": false
+      },
+      "accepted": [
+        true,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    }
+  ]
+}

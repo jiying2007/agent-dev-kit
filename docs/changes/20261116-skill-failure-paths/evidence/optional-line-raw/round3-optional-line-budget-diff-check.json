@@ -1,0 +1,33 @@
+{
+  "phase": "diff-check",
+  "command": [
+    "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+    "bypass",
+    "env",
+    "ADK_PYTHON_BIN=/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "git",
+    "diff",
+    "--check",
+    "HEAD",
+    "--",
+    "optional-skills/adk-security-supply-chain/SKILL.md"
+  ],
+  "cwd": "/workspace/scratch/fe5385ca063a/agent-dev-kit",
+  "started_at_utc": "2026-11-16T08:11:15.105264+00:00",
+  "ended_at_utc": "2026-11-16T08:11:15.113151+00:00",
+  "duration_seconds": 0.007883759000833379,
+  "stdout": "",
+  "stderr": "",
+  "exit_code": 0,
+  "source": {
+    "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/optional-skills/adk-security-supply-chain/SKILL.md",
+    "sha256": "2d8453ce4525d0793ce1ee89a9503001189c4819fa3966588b561d8eb9a0474e",
+    "bytes": 8413,
+    "lines": 140
+  },
+  "source_unchanged_during_run": true,
+  "environment": {
+    "ADK_PYTHON_BIN": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "PATH_inherited_unchanged": true
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "schema": "round3-independent-final-packaging-archive-manifest/v1",
+  "created_at": "2026-11-16T08:44:18.138594+00:00",
+  "final_verdict": "pass",
+  "final_review": "round3-independent-packaging-review-final.json",
+  "files": [
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-packaging-mechanical-checks.json",
+      "filename": "round3-independent-packaging-mechanical-checks.json",
+      "bytes": 201197,
+      "sha256": "cfabcd7a341b98dcb557142133be0153cfb565729a6dc1711e93ae922946c72c"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-packaging-final-checks.json",
+      "filename": "round3-independent-packaging-final-checks.json",
+      "bytes": 133303,
+      "sha256": "86356c5784971f935d2bcabf8f084517414bebcc2ce4618a387ca17b98360a26"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-packaging-validator-receipt.json",
+      "filename": "round3-independent-packaging-validator-receipt.json",
+      "bytes": 18969,
+      "sha256": "54a00a3f7d7dea4d58f3afd3128aa97369720bbb5cf3619ebd270423d5949847"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-packaging-review.json",
+      "filename": "round3-independent-packaging-review.json",
+      "bytes": 11103,
+      "sha256": "1bae1238e2b35c39f81c47cf653ca18f14f99ec5813492caa404d3775b483608"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-packaging-review.md",
+      "filename": "round3-independent-packaging-review.md",
+      "bytes": 3949,
+      "sha256": "ee54c1d68a2a374243ecf6c31d625651814c26ffd5e2ae58b624210404a1a729"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-packaging-archive-manifest.json",
+      "filename": "round3-independent-packaging-archive-manifest.json",
+      "bytes": 1702,
+      "sha256": "8094ece0100b8a8c0c034650aaf53396c0381a2fb87d21c409d480d93d500596"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-packaging-whitespace-observation.json",
+      "filename": "round3-independent-packaging-whitespace-observation.json",
+      "bytes": 8581,
+      "sha256": "e3acd7c159769bc5a3b60f86f13c9aea186332251d777115576a9d3cc6bf64d9"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-packaging-fixture-provenance.json",
+      "filename": "round3-independent-packaging-fixture-provenance.json",
+      "bytes": 13890,
+      "sha256": "cf89e82d44aa24bfda460d1284cdd73dd235192d390c9dd6a9527c0edb9cc3e5"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-packaging-archive-increment-checks.json",
+      "filename": "round3-independent-packaging-archive-increment-checks.json",
+      "bytes": 54895,
+      "sha256": "3fdac41547d7cb2e7ad9b380027a08e0b066898e674db36cb72a0e2dc01e6ca8"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-packaging-validator-final.json",
+      "filename": "round3-independent-packaging-validator-final.json",
+      "bytes": 18084,
+      "sha256": "72b32ecfa09fa97087bb01dc91f39e836e1b04a421e4d705bef065f88b64dbcd"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-packaging-review-final.json",
+      "filename": "round3-independent-packaging-review-final.json",
+      "bytes": 16739,
+      "sha256": "021105a8174b5b8d4d4bceb3a3af59042fdf4d0e9a5490f4979b9f55ea9e5036"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-packaging-review-final.md",
+      "filename": "round3-independent-packaging-review-final.md",
+      "bytes": 4399,
+      "sha256": "1ec49b9f1ebbaa3b513395d2a872410084407187c7956ec3366f6b92722ae660"
+    }
+  ],
+  "boundary": "Twelve actual report/check files to copy byte-for-byte. The08:36:27 report is historical;review-final.json is the current packaging verdict. This inventory has no circular self-hash."
+}

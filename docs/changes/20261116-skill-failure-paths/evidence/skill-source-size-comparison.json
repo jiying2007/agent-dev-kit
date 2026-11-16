@@ -1,0 +1,16 @@
+{
+  "baseline_commit": "80f8b2ea2885e3f62dcea455c45a2e8ebf071b2b",
+  "candidate_commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+  "tracked_file_count": 153,
+  "baseline_bytes": 422088,
+  "candidate_bytes": 422513,
+  "net_bytes": 425,
+  "changed_skill_net_bytes": {
+    "optional-skills/adk-security-supply-chain": 143,
+    "optional-skills/adk-test-flakiness-triage": 152,
+    "skills/adk-cmake-cross-build": 555,
+    "skills/adk-interface-contract-design": -520,
+    "skills/adk-parallel-agent-governance": 95
+  },
+  "boundary": "Repository bytes only, not tokenizer/runtime context/latency/cost measurement."
+}

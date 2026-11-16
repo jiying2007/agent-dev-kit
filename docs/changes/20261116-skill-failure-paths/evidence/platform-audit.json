@@ -1,0 +1,94 @@
+{
+  "schema": "adk-platform-upstream-review/v1",
+  "collected_at": "2026-11-16 07:47:09 UTC",
+  "baseline_commit": "80f8b2ea2885e3f62dcea455c45a2e8ebf071b2b",
+  "records": [
+    {
+      "key": "round3_agent_spec",
+      "repo": "agentskills/agentskills",
+      "commit": "83021e2be457a9b6679148719c1f6074f0ad975e",
+      "path": "docs/specification.mdx",
+      "license": "CC-BY-4.0",
+      "scope": "full",
+      "git_blob": "d9a2db099d905da8b879a5c6f996728073985279",
+      "url": "https://github.com/agentskills/agentskills/blob/83021e2be457a9b6679148719c1f6074f0ad975e/docs/specification.mdx",
+      "raw_file": "source-0.txt",
+      "bytes": 7166,
+      "sha256": "b9079c0c10b7930e8c6a20ff2bc10cda2a3343c55185120e3f1116a1a529b220",
+      "git_blob_verified": true
+    },
+    {
+      "key": "round3_agent_client",
+      "repo": "agentskills/agentskills",
+      "commit": "83021e2be457a9b6679148719c1f6074f0ad975e",
+      "path": "docs/client-implementation/adding-skills-support.mdx",
+      "license": "CC-BY-4.0",
+      "scope": "full",
+      "git_blob": "6c784309faec4ea27715e57734e1e0b5929c1977",
+      "url": "https://github.com/agentskills/agentskills/blob/83021e2be457a9b6679148719c1f6074f0ad975e/docs/client-implementation/adding-skills-support.mdx",
+      "raw_file": "source-1.txt",
+      "bytes": 20254,
+      "sha256": "e1a788f858766f4b54e0542e235ad3b1a965147e2c759926eb1c2b0a0129eef9",
+      "git_blob_verified": true
+    },
+    {
+      "key": "round3_agentskills_docs_license",
+      "repo": "agentskills/agentskills",
+      "commit": "83021e2be457a9b6679148719c1f6074f0ad975e",
+      "path": "docs/LICENSE",
+      "license": "CC-BY-4.0",
+      "scope": "full",
+      "git_blob": "4ea99c213c5c0c005ae4e80df8e52169d06896ec",
+      "url": "https://github.com/agentskills/agentskills/blob/83021e2be457a9b6679148719c1f6074f0ad975e/docs/LICENSE",
+      "raw_file": "source-2.txt",
+      "bytes": 18656,
+      "sha256": "9e5f1b3c610b9c2da5c313bf81d577a7d1acec686bdb0384edefa6df0f90cd94",
+      "git_blob_verified": true
+    },
+    {
+      "key": "round3_vercel_readme",
+      "repo": "vercel-labs/skills",
+      "commit": "af860243b8c68053b3b5151e3732b9322933674d",
+      "path": "README.md",
+      "license": "MIT",
+      "scope": "section: Lock File Content Hash only; other sections not claimed reviewed",
+      "git_blob": "d7973f93ec761f978f419ca71399dbdc41109355",
+      "url": "https://github.com/vercel-labs/skills/blob/af860243b8c68053b3b5151e3732b9322933674d/README.md",
+      "raw_file": "source-3.txt",
+      "bytes": 8464,
+      "sha256": "1c0ef1c3d4bb3ce288c5aeb725d5074b25b231ce293cf50999406b13f04782c6",
+      "git_blob_verified": true
+    },
+    {
+      "key": "round3_vercel_license",
+      "repo": "vercel-labs/skills",
+      "commit": "af860243b8c68053b3b5151e3732b9322933674d",
+      "path": "LICENSE",
+      "license": "MIT",
+      "scope": "full",
+      "git_blob": "eabe3008f6c0275929faa8b07d406e82717648cc",
+      "url": "https://github.com/vercel-labs/skills/blob/af860243b8c68053b3b5151e3732b9322933674d/LICENSE",
+      "raw_file": "source-4.txt",
+      "bytes": 1069,
+      "sha256": "661142e53c313d2bb5e1b055f5c0a39001450ff1b5e27b89dc4bc7de9a6352ca",
+      "git_blob_verified": true
+    }
+  ],
+  "decisions": [
+    {
+      "topic": "portable metadata and progressive disclosure",
+      "decision": "KEEP",
+      "rationale": "ADK targets._render_main projects standard name/description and namespaced provenance, target-specific fields stay in versioned target contracts. Existing source fields are internal, not copied indiscriminately. Baseline platform portable-skills reports pass across65 skills. This is static source/projection evidence, not native discovery/load/trigger."
+    },
+    {
+      "topic": "client discovery/permissions/context retention",
+      "decision": "NO_PLATFORM_IMPORT",
+      "rationale": "agentskills client guide concerns runtime discovery, trust, activation, pruning and permissions. ADK is the asset/compiler control plane. Do not adopt lenient malformed-YAML acceptance, ambient client folder scans, or directory permission allowlisting as new authority."
+    },
+    {
+      "topic": "versioned installed content integrity",
+      "decision": "KEEP",
+      "rationale": "Vercel pinned-commit/content-hash approach corroborates stable source vs installed-byte identities. ADK already separately binds source Git identity, canonical artifact digests and release/runtime evidence. Do not replace existing strict link policy or checksums with another install CLI/lock format."
+    }
+  ]
+}

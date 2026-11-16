@@ -1,0 +1,309 @@
+{
+  "schema": "adk-profile-check-observation/v1",
+  "before": {
+    "head": "6183982e1f5e4a1bb09727009a809514e160be64",
+    "tree": "09946e71e8ccee1063466d0c8df9088d6d036a3c",
+    "status": ""
+  },
+  "after": {
+    "head": "6183982e1f5e4a1bb09727009a809514e160be64",
+    "tree": "09946e71e8ccee1063466d0c8df9088d6d036a3c",
+    "status": ""
+  },
+  "baseline_commit": "80f8b2ea2885e3f62dcea455c45a2e8ebf071b2b",
+  "policy_path": "manifests/profile_context_ratchets.json",
+  "policy_sha256": "f283524ecff14179cad628735bef9e20580da00c2505687ecca9530da3737bff",
+  "thresholds_unchanged": true,
+  "results": [
+    {
+      "profile": "core",
+      "argv": [
+        "bash",
+        "scripts/devkit.sh",
+        "profile-footprint",
+        "--profile",
+        "core",
+        "--ratchet",
+        "--summary-json"
+      ],
+      "started_at": "2026-11-16T08:02:51.174165+00:00",
+      "finished_at": "2026-11-16T08:02:51.390155+00:00",
+      "exit_code": 0,
+      "stdout": "{\"actual\": {\"entry_file_bytes\": 97790, \"potential_full_source_bytes\": 172840}, \"asset_count\": 27, \"asset_count_baseline\": 27, \"failures\": [], \"profile\": \"core\", \"ratchet\": {\"entry_file_bytes\": 133940, \"potential_full_source_bytes\": 184133}, \"release_authorized\": false, \"runtime_initial_context_claim\": false, \"schema\": \"adk-profile-context-ratchet-result/v1\", \"semantics\": \"source-growth-review-ratchet-not-runtime-context-budget\", \"status\": \"pass\"}\n",
+      "stderr": "",
+      "result": {
+        "actual": {
+          "entry_file_bytes": 97790,
+          "potential_full_source_bytes": 172840
+        },
+        "asset_count": 27,
+        "asset_count_baseline": 27,
+        "failures": [],
+        "profile": "core",
+        "ratchet": {
+          "entry_file_bytes": 133940,
+          "potential_full_source_bytes": 184133
+        },
+        "release_authorized": false,
+        "runtime_initial_context_claim": false,
+        "schema": "adk-profile-context-ratchet-result/v1",
+        "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+        "status": "pass"
+      }
+    },
+    {
+      "profile": "embedded-fullstack",
+      "argv": [
+        "bash",
+        "scripts/devkit.sh",
+        "profile-footprint",
+        "--profile",
+        "embedded-fullstack",
+        "--ratchet",
+        "--summary-json"
+      ],
+      "started_at": "2026-11-16T08:02:51.390170+00:00",
+      "finished_at": "2026-11-16T08:02:51.589483+00:00",
+      "exit_code": 0,
+      "stdout": "{\"actual\": {\"entry_file_bytes\": 210182, \"potential_full_source_bytes\": 316412}, \"asset_count\": 55, \"asset_count_baseline\": 55, \"failures\": [], \"profile\": \"embedded-fullstack\", \"ratchet\": {\"entry_file_bytes\": 245296, \"potential_full_source_bytes\": 316854}, \"release_authorized\": false, \"runtime_initial_context_claim\": false, \"schema\": \"adk-profile-context-ratchet-result/v1\", \"semantics\": \"source-growth-review-ratchet-not-runtime-context-budget\", \"status\": \"pass\"}\n",
+      "stderr": "",
+      "result": {
+        "actual": {
+          "entry_file_bytes": 210182,
+          "potential_full_source_bytes": 316412
+        },
+        "asset_count": 55,
+        "asset_count_baseline": 55,
+        "failures": [],
+        "profile": "embedded-fullstack",
+        "ratchet": {
+          "entry_file_bytes": 245296,
+          "potential_full_source_bytes": 316854
+        },
+        "release_authorized": false,
+        "runtime_initial_context_claim": false,
+        "schema": "adk-profile-context-ratchet-result/v1",
+        "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+        "status": "pass"
+      }
+    },
+    {
+      "profile": "incident-response",
+      "argv": [
+        "bash",
+        "scripts/devkit.sh",
+        "profile-footprint",
+        "--profile",
+        "incident-response",
+        "--ratchet",
+        "--summary-json"
+      ],
+      "started_at": "2026-11-16T08:02:51.589498+00:00",
+      "finished_at": "2026-11-16T08:02:51.827270+00:00",
+      "exit_code": 0,
+      "stdout": "{\"actual\": {\"entry_file_bytes\": 30352, \"potential_full_source_bytes\": 46452}, \"asset_count\": 9, \"asset_count_baseline\": 9, \"failures\": [], \"profile\": \"incident-response\", \"ratchet\": {\"entry_file_bytes\": 37797, \"potential_full_source_bytes\": 46612}, \"release_authorized\": false, \"runtime_initial_context_claim\": false, \"schema\": \"adk-profile-context-ratchet-result/v1\", \"semantics\": \"source-growth-review-ratchet-not-runtime-context-budget\", \"status\": \"pass\"}\n",
+      "stderr": "",
+      "result": {
+        "actual": {
+          "entry_file_bytes": 30352,
+          "potential_full_source_bytes": 46452
+        },
+        "asset_count": 9,
+        "asset_count_baseline": 9,
+        "failures": [],
+        "profile": "incident-response",
+        "ratchet": {
+          "entry_file_bytes": 37797,
+          "potential_full_source_bytes": 46612
+        },
+        "release_authorized": false,
+        "runtime_initial_context_claim": false,
+        "schema": "adk-profile-context-ratchet-result/v1",
+        "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+        "status": "pass"
+      }
+    },
+    {
+      "profile": "large-refactor",
+      "argv": [
+        "bash",
+        "scripts/devkit.sh",
+        "profile-footprint",
+        "--profile",
+        "large-refactor",
+        "--ratchet",
+        "--summary-json"
+      ],
+      "started_at": "2026-11-16T08:02:51.827284+00:00",
+      "finished_at": "2026-11-16T08:02:52.042673+00:00",
+      "exit_code": 0,
+      "stdout": "{\"actual\": {\"entry_file_bytes\": 213207, \"potential_full_source_bytes\": 323294}, \"asset_count\": 56, \"asset_count_baseline\": 56, \"failures\": [], \"profile\": \"large-refactor\", \"ratchet\": {\"entry_file_bytes\": 248328, \"potential_full_source_bytes\": 323328}, \"release_authorized\": false, \"runtime_initial_context_claim\": false, \"schema\": \"adk-profile-context-ratchet-result/v1\", \"semantics\": \"source-growth-review-ratchet-not-runtime-context-budget\", \"status\": \"pass\"}\n",
+      "stderr": "",
+      "result": {
+        "actual": {
+          "entry_file_bytes": 213207,
+          "potential_full_source_bytes": 323294
+        },
+        "asset_count": 56,
+        "asset_count_baseline": 56,
+        "failures": [],
+        "profile": "large-refactor",
+        "ratchet": {
+          "entry_file_bytes": 248328,
+          "potential_full_source_bytes": 323328
+        },
+        "release_authorized": false,
+        "runtime_initial_context_claim": false,
+        "schema": "adk-profile-context-ratchet-result/v1",
+        "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+        "status": "pass"
+      }
+    },
+    {
+      "profile": "personal-core",
+      "argv": [
+        "bash",
+        "scripts/devkit.sh",
+        "profile-footprint",
+        "--profile",
+        "personal-core",
+        "--ratchet",
+        "--summary-json"
+      ],
+      "started_at": "2026-11-16T08:02:52.042689+00:00",
+      "finished_at": "2026-11-16T08:02:52.242287+00:00",
+      "exit_code": 0,
+      "stdout": "{\"actual\": {\"entry_file_bytes\": 112872, \"potential_full_source_bytes\": 191659}, \"asset_count\": 32, \"asset_count_baseline\": 32, \"failures\": [], \"profile\": \"personal-core\", \"ratchet\": {\"entry_file_bytes\": 152918, \"potential_full_source_bytes\": 204293}, \"release_authorized\": false, \"runtime_initial_context_claim\": false, \"schema\": \"adk-profile-context-ratchet-result/v1\", \"semantics\": \"source-growth-review-ratchet-not-runtime-context-budget\", \"status\": \"pass\"}\n",
+      "stderr": "",
+      "result": {
+        "actual": {
+          "entry_file_bytes": 112872,
+          "potential_full_source_bytes": 191659
+        },
+        "asset_count": 32,
+        "asset_count_baseline": 32,
+        "failures": [],
+        "profile": "personal-core",
+        "ratchet": {
+          "entry_file_bytes": 152918,
+          "potential_full_source_bytes": 204293
+        },
+        "release_authorized": false,
+        "runtime_initial_context_claim": false,
+        "schema": "adk-profile-context-ratchet-result/v1",
+        "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+        "status": "pass"
+      }
+    },
+    {
+      "profile": "release-hardening",
+      "argv": [
+        "bash",
+        "scripts/devkit.sh",
+        "profile-footprint",
+        "--profile",
+        "release-hardening",
+        "--ratchet",
+        "--summary-json"
+      ],
+      "started_at": "2026-11-16T08:02:52.242302+00:00",
+      "finished_at": "2026-11-16T08:02:52.491695+00:00",
+      "exit_code": 0,
+      "stdout": "{\"actual\": {\"entry_file_bytes\": 82266, \"potential_full_source_bytes\": 156136}, \"asset_count\": 23, \"asset_count_baseline\": 23, \"failures\": [], \"profile\": \"release-hardening\", \"ratchet\": {\"entry_file_bytes\": 112256, \"potential_full_source_bytes\": 159576}, \"release_authorized\": false, \"runtime_initial_context_claim\": false, \"schema\": \"adk-profile-context-ratchet-result/v1\", \"semantics\": \"source-growth-review-ratchet-not-runtime-context-budget\", \"status\": \"pass\"}\n",
+      "stderr": "",
+      "result": {
+        "actual": {
+          "entry_file_bytes": 82266,
+          "potential_full_source_bytes": 156136
+        },
+        "asset_count": 23,
+        "asset_count_baseline": 23,
+        "failures": [],
+        "profile": "release-hardening",
+        "ratchet": {
+          "entry_file_bytes": 112256,
+          "potential_full_source_bytes": 159576
+        },
+        "release_authorized": false,
+        "runtime_initial_context_claim": false,
+        "schema": "adk-profile-context-ratchet-result/v1",
+        "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+        "status": "pass"
+      }
+    },
+    {
+      "profile": "research-intake",
+      "argv": [
+        "bash",
+        "scripts/devkit.sh",
+        "profile-footprint",
+        "--profile",
+        "research-intake",
+        "--ratchet",
+        "--summary-json"
+      ],
+      "started_at": "2026-11-16T08:02:52.491711+00:00",
+      "finished_at": "2026-11-16T08:02:52.743973+00:00",
+      "exit_code": 0,
+      "stdout": "{\"actual\": {\"entry_file_bytes\": 65317, \"potential_full_source_bytes\": 116977}, \"asset_count\": 20, \"asset_count_baseline\": 20, \"failures\": [], \"profile\": \"research-intake\", \"ratchet\": {\"entry_file_bytes\": 86571, \"potential_full_source_bytes\": 124543}, \"release_authorized\": false, \"runtime_initial_context_claim\": false, \"schema\": \"adk-profile-context-ratchet-result/v1\", \"semantics\": \"source-growth-review-ratchet-not-runtime-context-budget\", \"status\": \"pass\"}\n",
+      "stderr": "",
+      "result": {
+        "actual": {
+          "entry_file_bytes": 65317,
+          "potential_full_source_bytes": 116977
+        },
+        "asset_count": 20,
+        "asset_count_baseline": 20,
+        "failures": [],
+        "profile": "research-intake",
+        "ratchet": {
+          "entry_file_bytes": 86571,
+          "potential_full_source_bytes": 124543
+        },
+        "release_authorized": false,
+        "runtime_initial_context_claim": false,
+        "schema": "adk-profile-context-ratchet-result/v1",
+        "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+        "status": "pass"
+      }
+    },
+    {
+      "profile": "team-core",
+      "argv": [
+        "bash",
+        "scripts/devkit.sh",
+        "profile-footprint",
+        "--profile",
+        "team-core",
+        "--ratchet",
+        "--summary-json"
+      ],
+      "started_at": "2026-11-16T08:02:52.743990+00:00",
+      "finished_at": "2026-11-16T08:02:52.966831+00:00",
+      "exit_code": 0,
+      "stdout": "{\"actual\": {\"entry_file_bytes\": 123406, \"potential_full_source_bytes\": 210825}, \"asset_count\": 35, \"asset_count_baseline\": 35, \"failures\": [], \"profile\": \"team-core\", \"ratchet\": {\"entry_file_bytes\": 166442, \"potential_full_source_bytes\": 223333}, \"release_authorized\": false, \"runtime_initial_context_claim\": false, \"schema\": \"adk-profile-context-ratchet-result/v1\", \"semantics\": \"source-growth-review-ratchet-not-runtime-context-budget\", \"status\": \"pass\"}\n",
+      "stderr": "",
+      "result": {
+        "actual": {
+          "entry_file_bytes": 123406,
+          "potential_full_source_bytes": 210825
+        },
+        "asset_count": 35,
+        "asset_count_baseline": 35,
+        "failures": [],
+        "profile": "team-core",
+        "ratchet": {
+          "entry_file_bytes": 166442,
+          "potential_full_source_bytes": 223333
+        },
+        "release_authorized": false,
+        "runtime_initial_context_claim": false,
+        "schema": "adk-profile-context-ratchet-result/v1",
+        "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+        "status": "pass"
+      }
+    }
+  ],
+  "status": "pass",
+  "boundary": "UTF-8 source budget only, not provider tokens, native initial context, latency or cost."
+}

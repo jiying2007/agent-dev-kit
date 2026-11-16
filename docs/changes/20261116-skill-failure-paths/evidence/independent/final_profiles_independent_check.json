@@ -1,0 +1,230 @@
+{
+  "schema": "round3-independent-final-profile-recheck/v1",
+  "reviewed_at": "2026-11-16T08:17:50.406343+00:00",
+  "head": "d87e21d7750ec4a0042754d045979c137abfc528",
+  "tree": "617bdcb20e5fb629c1ddd175e29373b1b86aa0c5",
+  "results": {
+    "core": {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "core",
+      "actual": {
+        "entry_file_bytes": 97817,
+        "potential_full_source_bytes": 172867
+      },
+      "ratchet": {
+        "entry_file_bytes": 133940,
+        "potential_full_source_bytes": 184133
+      },
+      "asset_count": 27,
+      "asset_count_baseline": 27,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    "release-hardening": {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "release-hardening",
+      "actual": {
+        "entry_file_bytes": 82293,
+        "potential_full_source_bytes": 156163
+      },
+      "ratchet": {
+        "entry_file_bytes": 112256,
+        "potential_full_source_bytes": 159576
+      },
+      "asset_count": 23,
+      "asset_count_baseline": 23,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    "personal-core": {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "personal-core",
+      "actual": {
+        "entry_file_bytes": 112899,
+        "potential_full_source_bytes": 191686
+      },
+      "ratchet": {
+        "entry_file_bytes": 152918,
+        "potential_full_source_bytes": 204293
+      },
+      "asset_count": 32,
+      "asset_count_baseline": 32,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    "embedded-fullstack": {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "embedded-fullstack",
+      "actual": {
+        "entry_file_bytes": 210209,
+        "potential_full_source_bytes": 316439
+      },
+      "ratchet": {
+        "entry_file_bytes": 245296,
+        "potential_full_source_bytes": 316854
+      },
+      "asset_count": 55,
+      "asset_count_baseline": 55,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    "team-core": {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "team-core",
+      "actual": {
+        "entry_file_bytes": 123433,
+        "potential_full_source_bytes": 210852
+      },
+      "ratchet": {
+        "entry_file_bytes": 166442,
+        "potential_full_source_bytes": 223333
+      },
+      "asset_count": 35,
+      "asset_count_baseline": 35,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    "large-refactor": {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "large-refactor",
+      "actual": {
+        "entry_file_bytes": 213234,
+        "potential_full_source_bytes": 323321
+      },
+      "ratchet": {
+        "entry_file_bytes": 248328,
+        "potential_full_source_bytes": 323328
+      },
+      "asset_count": 56,
+      "asset_count_baseline": 56,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    "incident-response": {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "incident-response",
+      "actual": {
+        "entry_file_bytes": 30352,
+        "potential_full_source_bytes": 46452
+      },
+      "ratchet": {
+        "entry_file_bytes": 37797,
+        "potential_full_source_bytes": 46612
+      },
+      "asset_count": 9,
+      "asset_count_baseline": 9,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    "research-intake": {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "research-intake",
+      "actual": {
+        "entry_file_bytes": 65344,
+        "potential_full_source_bytes": 117004
+      },
+      "ratchet": {
+        "entry_file_bytes": 86571,
+        "potential_full_source_bytes": 124543
+      },
+      "asset_count": 20,
+      "asset_count_baseline": 20,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    }
+  },
+  "parent_raw_comparisons": [
+    {
+      "profile": "core",
+      "raw_stdout_matches_independent_result": true,
+      "exit_code": 0,
+      "started_at": "2026-11-16T08:14:44.029549+00:00",
+      "finished_at": "2026-11-16T08:14:44.275494+00:00"
+    },
+    {
+      "profile": "embedded-fullstack",
+      "raw_stdout_matches_independent_result": true,
+      "exit_code": 0,
+      "started_at": "2026-11-16T08:14:44.275508+00:00",
+      "finished_at": "2026-11-16T08:14:44.500858+00:00"
+    },
+    {
+      "profile": "incident-response",
+      "raw_stdout_matches_independent_result": true,
+      "exit_code": 0,
+      "started_at": "2026-11-16T08:14:44.500874+00:00",
+      "finished_at": "2026-11-16T08:14:44.716486+00:00"
+    },
+    {
+      "profile": "large-refactor",
+      "raw_stdout_matches_independent_result": true,
+      "exit_code": 0,
+      "started_at": "2026-11-16T08:14:44.716500+00:00",
+      "finished_at": "2026-11-16T08:14:45.041950+00:00"
+    },
+    {
+      "profile": "personal-core",
+      "raw_stdout_matches_independent_result": true,
+      "exit_code": 0,
+      "started_at": "2026-11-16T08:14:45.041968+00:00",
+      "finished_at": "2026-11-16T08:14:45.276970+00:00"
+    },
+    {
+      "profile": "release-hardening",
+      "raw_stdout_matches_independent_result": true,
+      "exit_code": 0,
+      "started_at": "2026-11-16T08:14:45.276985+00:00",
+      "finished_at": "2026-11-16T08:14:45.490582+00:00"
+    },
+    {
+      "profile": "research-intake",
+      "raw_stdout_matches_independent_result": true,
+      "exit_code": 0,
+      "started_at": "2026-11-16T08:14:45.490600+00:00",
+      "finished_at": "2026-11-16T08:14:45.713155+00:00"
+    },
+    {
+      "profile": "team-core",
+      "raw_stdout_matches_independent_result": true,
+      "exit_code": 0,
+      "started_at": "2026-11-16T08:14:45.713197+00:00",
+      "finished_at": "2026-11-16T08:14:45.941543+00:00"
+    }
+  ],
+  "raw_parent_report": {
+    "path": "/workspace/scratch/fe5385ca063a/round3-final-profiles-corrected.json",
+    "sha256": "94c51e84e986173f4f08eace2b8ae78a49c42b771e779cb6594eba35c8f9939b"
+  },
+  "review_harness_correction": {
+    "tool_chunk": "9daa31",
+    "exit_code": 1,
+    "reason": "Reviewer initially attempted nonexistent Manifest.profiles attribute. Corrected only reviewer iteration to use actual ratchet policy profiles. Product source unchanged."
+  },
+  "limits": [
+    "Original production function executed against exact archived final source. Raw byte growth budgets only; no runtime context/token/cost or host qualification claim."
+  ]
+}

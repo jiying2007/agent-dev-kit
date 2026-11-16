@@ -1,0 +1,398 @@
+{
+  "schema": "round3-independent-frozen-identity-check/v1",
+  "reviewer": "round3-independent-reviewer",
+  "verified_at": "2026-11-16T08:05:50.742371+00:00",
+  "baseline": "80f8b2ea2885e3f62dcea455c45a2e8ebf071b2b",
+  "head": "6183982e1f5e4a1bb09727009a809514e160be64",
+  "tree": "09946e71e8ccee1063466d0c8df9088d6d036a3c",
+  "errors": [],
+  "sources": [
+    {
+      "path": ".version-lock",
+      "bytes": 85,
+      "sha256": "835cee18fe2fcac7d1332ff64f585b27a70ad8c611378d85868682e2dccf4ffd",
+      "git_blob": "9a1031322bfbacc3f7f619df51f5d015c041bd37"
+    },
+    {
+      "path": "CONTEXT.md",
+      "bytes": 8644,
+      "sha256": "89343a690a4237f4dbc7ab5d64aa20a30bc6395d11c3b30683516f7754640b37",
+      "git_blob": "1740675c16a3e54c741e550b987833ee4e4bd6ea"
+    },
+    {
+      "path": "README.md",
+      "bytes": 13087,
+      "sha256": "3a9f558c2ab08b0ad10a1af47aeed964403f8c43ee5bedab9d1bb8d7dcbf0dcc",
+      "git_blob": "f0ce1553ad464eeb6df0d3f5a19ffae4d79f456e"
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/audit.md",
+      "bytes": 4446,
+      "sha256": "c35ca4f53b7ec6fb8bc59b671518639800a80f52dcbe51cd6831b092598209fd",
+      "git_blob": "98254c910c0e9690222e14cef6e8f1d154450790"
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/design.md",
+      "bytes": 3965,
+      "sha256": "0bda596db331511e9487734860ee56236ea228a28c5ce37d3d9af2e7a053cf8b",
+      "git_blob": "0a4f6cd6958acac2455c62a2067c3f48b723ece3"
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/evidence/core-audit.json",
+      "bytes": 112393,
+      "sha256": "e184e3bc51e8deeb2297e977241895756b321d3cbb711372b7c8d5a744a43673",
+      "git_blob": "5bcc2aedb119a0f892233b4949347c664ac99d12",
+      "audited_stage1_snapshot": {
+        "path": "/workspace/scratch/fe5385ca063a/round3-core-audit.json",
+        "bytes": 112393,
+        "sha256": "e184e3bc51e8deeb2297e977241895756b321d3cbb711372b7c8d5a744a43673"
+      },
+      "identical_to_stage1": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/evidence/embedded-audit.json",
+      "bytes": 83212,
+      "sha256": "ef717877749d346be61a8d925f54c3867eafeb418cb6e3987c3f30afa59904f9",
+      "git_blob": "68d7a98a5da6e5b51a12157feadde802c491ee81",
+      "audited_stage1_snapshot": {
+        "path": "/workspace/scratch/fe5385ca063a/round3-embedded-audit.json",
+        "bytes": 83212,
+        "sha256": "ef717877749d346be61a8d925f54c3867eafeb418cb6e3987c3f30afa59904f9"
+      },
+      "identical_to_stage1": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/evidence/optional-audit.json",
+      "bytes": 61229,
+      "sha256": "028e65709f30b542e1f334e052aefe48196076825dae33b034fd2549d8c18fd7",
+      "git_blob": "bac301507d9b7924c8f2356e67c2ea642e7c792e",
+      "audited_stage1_snapshot": {
+        "path": "/workspace/scratch/fe5385ca063a/round3-optional-audit.json",
+        "bytes": 61229,
+        "sha256": "028e65709f30b542e1f334e052aefe48196076825dae33b034fd2549d8c18fd7"
+      },
+      "identical_to_stage1": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/evidence/platform-audit.json",
+      "bytes": 4559,
+      "sha256": "140f419bc48a74455c0c600ccffd6a48468688a5c3f1617bcbeeddd147bbd3a6",
+      "git_blob": "003af22322da289868b7f367a625111444524a36",
+      "audited_stage1_snapshot": {
+        "path": "/workspace/scratch/fe5385ca063a/round3-platform-audit.json",
+        "bytes": 4559,
+        "sha256": "140f419bc48a74455c0c600ccffd6a48468688a5c3f1617bcbeeddd147bbd3a6"
+      },
+      "identical_to_stage1": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/evidence/portfolio-audit.json",
+      "bytes": 165139,
+      "sha256": "5b2c73cb17234669536fade8073b73a02cad3eea4c02f6219e5125cdd67cd75b",
+      "git_blob": "2c10df574b8b51e8e181c0e03ff6d129f4ff4623",
+      "audited_stage1_snapshot": {
+        "path": "/workspace/scratch/fe5385ca063a/round3-portfolio-audit.json",
+        "bytes": 165139,
+        "sha256": "5b2c73cb17234669536fade8073b73a02cad3eea4c02f6219e5125cdd67cd75b"
+      },
+      "identical_to_stage1": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/negative-results.md",
+      "bytes": 3503,
+      "sha256": "9ab63378bc130783e02a96d205364a9aa97ab21ddf1a406fbfe9504f2dbac34d",
+      "git_blob": "84a6556bfea75ea5d2346315e7c119b7a6a67d6b"
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/requirements.md",
+      "bytes": 5489,
+      "sha256": "517734b8479b0df46a571ee7f1d0b806b4a61dc60a7ad53c3a0bf46e2eb0d033",
+      "git_blob": "58166d1353e2f0d2ed4b38850e14b9e0bdb30707"
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/source-review.md",
+      "bytes": 5922,
+      "sha256": "782dabec15e8a196036afffe44a984f4b8ca3ef7ed45409071ada02d05f54ca8",
+      "git_blob": "6e2b4bb60a9981877f64792e0f76c398453a088b"
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/tasks.md",
+      "bytes": 2042,
+      "sha256": "210350eaa74224193d111000a254cd1cf1bc4f659fb0e386717abd39b18240bb",
+      "git_blob": "1007913dadff3a4e0a4be8b29adb8328e2d62562"
+    },
+    {
+      "path": "docs/runbooks/security-supply-chain.md",
+      "bytes": 6481,
+      "sha256": "324d20206f40778300906051dc08775297017b2318ecec74100ef303efe423ce",
+      "git_blob": "6a11f8491eb4e624546dab5906629560b01219a1"
+    },
+    {
+      "path": "manifest.json",
+      "bytes": 90988,
+      "sha256": "43caab611aba1d9843ee74ee92df803288b5a0d066e7cc4d6b655a7431850265",
+      "git_blob": "609e37e7322060b3368d0a0648bc67c5c9f1aca6"
+    },
+    {
+      "path": "manifests/software_m5_eval_contract.json",
+      "bytes": 706,
+      "sha256": "4f3ec4848646cfc1aa397fae471e5340f0f14fdece7aeab8b2f5d89e8ccb21c0",
+      "git_blob": "c60daa2c0681ed0d7a01a9344f9af838479d3324"
+    },
+    {
+      "path": "optional-skills/adk-security-supply-chain/SKILL.md",
+      "bytes": 8422,
+      "sha256": "ee86e23878218150ef4f03dd4fc463d9e0ad68c6cdd278483f30490d3867ed58",
+      "git_blob": "24641db499776284d025d0efe572729b1c84d849"
+    },
+    {
+      "path": "optional-skills/adk-test-flakiness-triage/SKILL.md",
+      "bytes": 2427,
+      "sha256": "6d37c99701d7be57c837be6854484a263cc75b6a12e01db9969dd2cec2571a54",
+      "git_blob": "2ed30485f644e033e132d487280fb7d7ec69270f"
+    },
+    {
+      "path": "optional-skills/adk-test-flakiness-triage/references/details.md",
+      "bytes": 4957,
+      "sha256": "68522e43db6194ff02d275d65c3078ff363aab4329fc18f17f6e3594b30924e1",
+      "git_blob": "2fa2291cc5ba327857678769f1427da9706ca950"
+    },
+    {
+      "path": "pyproject.toml",
+      "bytes": 1310,
+      "sha256": "eb973742535043bb63cef15243b0e0c9e6fb91bfb58599fe13f1bf9da498a7fb",
+      "git_blob": "b89c46bef4f99846aba55b646f5a6cc67f527b5c"
+    },
+    {
+      "path": "skills/adk-cmake-cross-build/SKILL.md",
+      "bytes": 5264,
+      "sha256": "543764125bfc4fd34be2b7b7a2ca6afc3468e7bdc0caf044d27c8d35107d4747",
+      "git_blob": "960ee57879bfbab6f478dfaed1e958a00f9b7d2b"
+    },
+    {
+      "path": "skills/adk-interface-contract-design/SKILL.md",
+      "bytes": 4290,
+      "sha256": "94b66c15f2d9e6634fbb81ad49570319a390e0dd9ea25604bbe2dfa1f360db9b",
+      "git_blob": "7a6b64fd3abae89ae5557158696bb28bb307203f"
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/design-quality-methods.md",
+      "bytes": 1598,
+      "sha256": "4bfbfa3df2196616db1f491531b5bc5328afae24a2e54f4739c489d83ddcdd8b",
+      "git_blob": "720070607935eea1aff0eddb779b9702e8c12428"
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/details.md",
+      "bytes": 2611,
+      "sha256": "e182fd8bc0edd58556700a0b4ce6d435a705128c6bf37b6ec2b13c624826a593",
+      "git_blob": "a617bf5c439c4cd3f808f0d904ffb4a810ea340f"
+    },
+    {
+      "path": "skills/adk-parallel-agent-governance/SKILL.md",
+      "bytes": 4292,
+      "sha256": "446a4a08ffd2d4dfc89bc9752dfea7000fe05818f490892308b08be312386c68",
+      "git_blob": "95c69872cbb2938040ecbec2c1492679d22a19fc"
+    },
+    {
+      "path": "skills/adk-parallel-agent-governance/references/subagent-review-checklist.md",
+      "bytes": 738,
+      "sha256": "9fc2748d504d975cd3550c4809f66c3e10fecd753650f8d649b2bda124072fa3",
+      "git_blob": "561939020cf66fc215d87105ea7e1b8383e3a659"
+    },
+    {
+      "path": "src/agent_dev_kit/__init__.py",
+      "bytes": 71,
+      "sha256": "b2efd10f2292ffee0a0e07922b99846a58bb0cb5562e8af2685f3036be158c53",
+      "git_blob": "ea35f74d1e27db49fc1812ce20cd801ff82ee526"
+    },
+    {
+      "path": "tests/fixtures/skill_method_ab_prereg.json",
+      "bytes": 6238,
+      "sha256": "ae24a81789c81ee82e3285a12ec15bc471550bfec2083b02e54bdfa10d8a5531",
+      "git_blob": "325fcf6fc3e3de6c3d1eeda40aa65c3700893901"
+    },
+    {
+      "path": "tests/test_skill_cmake_methods.py",
+      "bytes": 9142,
+      "sha256": "c743fd55de0a8a07327c79d9f002d88b06d016389d0bb61ecb4b6e02a88ce433",
+      "git_blob": "677568227a714582d538e047073f39e821d1baa4"
+    },
+    {
+      "path": "tests/test_skill_command_examples.py",
+      "bytes": 53862,
+      "sha256": "ddfd18b3fac98f15a1727f9c0014cc984dc3f5d0984c85951c4af6988ed60655",
+      "git_blob": "bf0cef6224ca5bf76214e58b9057e8a709199dee"
+    },
+    {
+      "path": "tests/test_skill_content.sh",
+      "bytes": 1037,
+      "sha256": "1d5bcad72ec6ea8ba832c2876c96325e1e015bd98f4428293e1674b5bcea6ed9",
+      "git_blob": "988ea6e7a4ba1757cd711624380df035615998e3"
+    },
+    {
+      "path": "tests/test_skill_contract_methods.py",
+      "bytes": 6391,
+      "sha256": "b52841a26b065b6de8727d2ba36cac3fc1902b76856fd264fa453c75c51b0e47",
+      "git_blob": "5b68f9e31c2a924a4a5018ad3d2b91926ae72a5c"
+    }
+  ],
+  "implementation_reports": [
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-core-implementation.json",
+      "bytes": 22281,
+      "sha256": "aa08562a16984202e3d86dee41a37429eb30d7dab46608de427193463d48a068"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-implementation.json",
+      "bytes": 15061,
+      "sha256": "4d7dc0936ee80749b936d4f3ff669ec2a2b4ebcbde09db81843dd06c43712577"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-optional-implementation.json",
+      "bytes": 11689,
+      "sha256": "cbab0902cc1d6350e3193130fd2e1673b5ba0b36ca2e55895ff6aad2509fb3cb"
+    }
+  ],
+  "profiles_receipt": {
+    "path": "/workspace/scratch/fe5385ca063a/round3-final-profiles.json",
+    "bytes": 13094,
+    "sha256": "078d3a3133b6e2e6edd490a5d6e4adff399de358f8731bc7836e1f94007349ae"
+  },
+  "profiles_recomputed_from_exact_snapshot": [
+    {
+      "profile": "core",
+      "started_at": "2026-11-16T08:02:51.174165+00:00",
+      "finished_at": "2026-11-16T08:02:51.390155+00:00",
+      "exit_code": 0,
+      "actual": {
+        "entry_file_bytes": 97790,
+        "potential_full_source_bytes": 172840
+      },
+      "threshold": {
+        "entry_file_bytes": 133940,
+        "potential_full_source_bytes": 184133
+      },
+      "status": "pass"
+    },
+    {
+      "profile": "embedded-fullstack",
+      "started_at": "2026-11-16T08:02:51.390170+00:00",
+      "finished_at": "2026-11-16T08:02:51.589483+00:00",
+      "exit_code": 0,
+      "actual": {
+        "entry_file_bytes": 210182,
+        "potential_full_source_bytes": 316412
+      },
+      "threshold": {
+        "entry_file_bytes": 245296,
+        "potential_full_source_bytes": 316854
+      },
+      "status": "pass"
+    },
+    {
+      "profile": "incident-response",
+      "started_at": "2026-11-16T08:02:51.589498+00:00",
+      "finished_at": "2026-11-16T08:02:51.827270+00:00",
+      "exit_code": 0,
+      "actual": {
+        "entry_file_bytes": 30352,
+        "potential_full_source_bytes": 46452
+      },
+      "threshold": {
+        "entry_file_bytes": 37797,
+        "potential_full_source_bytes": 46612
+      },
+      "status": "pass"
+    },
+    {
+      "profile": "large-refactor",
+      "started_at": "2026-11-16T08:02:51.827284+00:00",
+      "finished_at": "2026-11-16T08:02:52.042673+00:00",
+      "exit_code": 0,
+      "actual": {
+        "entry_file_bytes": 213207,
+        "potential_full_source_bytes": 323294
+      },
+      "threshold": {
+        "entry_file_bytes": 248328,
+        "potential_full_source_bytes": 323328
+      },
+      "status": "pass"
+    },
+    {
+      "profile": "personal-core",
+      "started_at": "2026-11-16T08:02:52.042689+00:00",
+      "finished_at": "2026-11-16T08:02:52.242287+00:00",
+      "exit_code": 0,
+      "actual": {
+        "entry_file_bytes": 112872,
+        "potential_full_source_bytes": 191659
+      },
+      "threshold": {
+        "entry_file_bytes": 152918,
+        "potential_full_source_bytes": 204293
+      },
+      "status": "pass"
+    },
+    {
+      "profile": "release-hardening",
+      "started_at": "2026-11-16T08:02:52.242302+00:00",
+      "finished_at": "2026-11-16T08:02:52.491695+00:00",
+      "exit_code": 0,
+      "actual": {
+        "entry_file_bytes": 82266,
+        "potential_full_source_bytes": 156136
+      },
+      "threshold": {
+        "entry_file_bytes": 112256,
+        "potential_full_source_bytes": 159576
+      },
+      "status": "pass"
+    },
+    {
+      "profile": "research-intake",
+      "started_at": "2026-11-16T08:02:52.491711+00:00",
+      "finished_at": "2026-11-16T08:02:52.743973+00:00",
+      "exit_code": 0,
+      "actual": {
+        "entry_file_bytes": 65317,
+        "potential_full_source_bytes": 116977
+      },
+      "threshold": {
+        "entry_file_bytes": 86571,
+        "potential_full_source_bytes": 124543
+      },
+      "status": "pass"
+    },
+    {
+      "profile": "team-core",
+      "started_at": "2026-11-16T08:02:52.743990+00:00",
+      "finished_at": "2026-11-16T08:02:52.966831+00:00",
+      "exit_code": 0,
+      "actual": {
+        "entry_file_bytes": 123406,
+        "potential_full_source_bytes": 210825
+      },
+      "threshold": {
+        "entry_file_bytes": 166442,
+        "potential_full_source_bytes": 223333
+      },
+      "status": "pass"
+    }
+  ],
+  "budget_policy_identical_to_baseline": true,
+  "policy_sha256": "f283524ecff14179cad628735bef9e20580da00c2505687ecca9530da3737bff",
+  "original_patch": {
+    "path": "/workspace/scratch/fe5385ca063a/round3-independent-frozen-original.patch",
+    "bytes": 525727,
+    "sha256": "bae711025f6f35eec3e4b832de5002d0f664633998e94bc0fbf3f835d36429ae"
+  },
+  "reviewer_probe_negative_results": [
+    {
+      "tool_chunk": "fc814d",
+      "class": "review harness path normalization error",
+      "observation": "CMake implementation report used absolute paths; initial git show passed an absolute tree path and exited 128. No product defect inferred; normalized path to repository-relative and reran read-only checks.",
+      "timestamp": "not-captured"
+    }
+  ]
+}

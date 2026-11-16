@@ -11,13 +11,15 @@
 
 ## Completion Review
 
+Each row stays `not-run` until evidence supports `pass`/`needs-fix`/`blocked`.
+
 | Check | Result | Evidence |
 |---|---|---|
-| Scope stayed inside `scope_write` | pass |  |
-| No shared contract/schema/root config changed unexpectedly | pass |  |
-| Verification commands ran | pass |  |
-| Handoff summary is clear | pass |  |
-| Integration risk identified | pass |  |
+| Scope stayed inside `scope_write` | not-run |  |
+| No shared contract/schema/root config changed unexpectedly | not-run |  |
+| Verification commands ran | not-run |  |
+| Handoff summary is clear | not-run |  |
+| Integration risk identified | not-run |  |
 
 ## Rework Decision
 

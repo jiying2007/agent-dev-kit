@@ -1,0 +1,199 @@
+{
+  "schema": "round3-independent-packaging-review/v1",
+  "reviewer_id": "round3-independent-reviewer",
+  "agent_task": "/root/round3_independent_review",
+  "role": "independent read-only evidence packaging reviewer",
+  "review_started_at": "2026-11-16T08:28:57.819682+00:00",
+  "reviewed_at": "2026-11-16T08:36:27.200179+00:00",
+  "scope": "evidence-packaging",
+  "verdict": "pass",
+  "open_findings": [],
+  "open_counts": {
+    "blocker": 0,
+    "major": 0,
+    "minor": 0
+  },
+  "source": {
+    "head_commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+    "head_tree": "617bdcb20e5fb629c1ddd175e29373b1b86aa0c5",
+    "canonical_patch_sha256": "d82a42ee4620c923ebd4eaecae514f94551a733b4e9627f764a051efab1ab6c4",
+    "source_verdict_reviewed_at": "2026-11-16T08:23:33.804040+00:00",
+    "source_verdicts": {
+      "spec": "pass",
+      "quality": "pass"
+    },
+    "source_verdict_unchanged": true
+  },
+  "final_packaging_identities": {
+    "review-evidence.json": {
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/review-evidence.json",
+      "bytes": 16496,
+      "sha256": "48e8612510504645bce08f877a9a91dcaeb7132365238aaeb5ad3569437616b4"
+    },
+    "verification.md": {
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/verification.md",
+      "bytes": 5330,
+      "sha256": "894f91e091ff323eb13a454634a052cdfb645ade42937c0158010267d75c947d"
+    },
+    "evidence/source-bindings.json": {
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/source-bindings.json",
+      "bytes": 9002,
+      "sha256": "b70213ad578e4381bb28806e13de7026e173b4f64725526baa96a9bf35ac76e8"
+    },
+    "evidence/retained-files.json": {
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/retained-files.json",
+      "bytes": 23356,
+      "sha256": "69754e7d1900d875f316871dc2c6819d41b33c8692fc7eb6ee287637b8c969c8"
+    },
+    "evidence/independent-retained-files.json": {
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/independent-retained-files.json",
+      "bytes": 12974,
+      "sha256": "a867453fe32b5b2b4c566018e5603fe60e92dc5a1c25170ef68831461a05020e"
+    },
+    "evidence/consumer-materials.json": {
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/consumer-materials.json",
+      "bytes": 467789,
+      "sha256": "ff825bb4b150ff2c9d5aadb3e710b606b2d62cb4584411cb21de027e0d53b9fe"
+    },
+    "evidence/consumer-materials-completion.json": {
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/consumer-materials-completion.json",
+      "bytes": 23399,
+      "sha256": "6f5fd7fed33365fb36f24f05411b168108c0a6c463a2081c01a949c3e14ab678"
+    },
+    "evidence/packaging-validation-failure.json": {
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/packaging-validation-failure.json",
+      "bytes": 18450,
+      "sha256": "13169415a1dd854b335d372cbf5067c3a2252c17d20ceb6061ba89c1856a949f"
+    },
+    "evidence/review-validation.json": {
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/review-validation.json",
+      "bytes": 1031,
+      "sha256": "1338c1784f5c1635696621b01e1f952697186684ab552c66cfa7de000e534609"
+    }
+  },
+  "findings": [
+    {
+      "id": "r3-packaging-01",
+      "display_id": "R3-PACKAGING-01",
+      "severity": "minor",
+      "scope": "evidence-packaging",
+      "status": "resolved",
+      "disposition": "fixed",
+      "counterexample": "原94项consumer bundle与两份保留map均没有consumer-response直接引用的9个实际文件：3个File API回复、CMakeSystem/CMakeCCompiler、bootstrap入口失败日志、19-finalize的JSON/stdout/stderr。",
+      "resolution": "仅追加这9个已有文件形成103项bundle，逐项解码后与原始文件完整字节/大小/SHA一致；原94项前缀不变，按原序列化精确重构旧bundle。typed仅更新bundle摘要并追加completion引用，生产validator再次通过。",
+      "original_bundle_sha256": "37d9f73212b3cf9c234a80052ee66f9f475b398feb41331a2ff84ab0e9bb7937",
+      "resolved_bundle_sha256": "ff825bb4b150ff2c9d5aadb3e710b606b2d62cb4584411cb21de027e0d53b9fe",
+      "resolved_record_sha256": "48e8612510504645bce08f877a9a91dcaeb7132365238aaeb5ad3569437616b4",
+      "completion": {
+        "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/consumer-materials-completion.json",
+        "bytes": 23399,
+        "sha256": "6f5fd7fed33365fb36f24f05411b168108c0a6c463a2081c01a949c3e14ab678"
+      }
+    }
+  ],
+  "checks": {
+    "initial_mechanical_assertions": 589,
+    "initial_identity_errors": 0,
+    "final_delta_and_integrity_assertions": 550,
+    "final_errors": 0,
+    "retained_map_rows": 80,
+    "independent_retained_rows": 38,
+    "source_bindings": 33,
+    "typed_source_refs": 34,
+    "typed_evidence_refs": 30,
+    "typed_total_refs": 64,
+    "consumer_bundle_files": 103,
+    "consumer_utf8_files": 97,
+    "consumer_base64_files": 6,
+    "consumer_unretained_direct_file_refs": 0,
+    "old94_prefix_unchanged": true,
+    "old94_bundle_exact_bytes_reconstructable": true,
+    "independent_source_evidence_refs_36_all_mapped": true,
+    "skill_population_files": 153,
+    "skill_baseline_bytes": 422088,
+    "skill_final_bytes": 422513,
+    "skill_net_bytes": 425,
+    "verification_summary_numbers_consistent": true,
+    "all33_frozen_source_bytes_unchanged": true,
+    "original_policy_and_validator_fingerprints_unchanged": true
+  },
+  "independent_validator_execution": {
+    "call": "agent_dev_kit.review_evidence.validate_review",
+    "root": "/workspace/scratch/fe5385ca063a/agent-dev-kit",
+    "record_path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/review-evidence.json",
+    "expected_subject": "20261116-skill-failure-paths",
+    "expected_scope": "source-change",
+    "now_override": null,
+    "started_at": "2026-11-16T08:34:39.025869+00:00",
+    "completed_at": "2026-11-16T08:34:39.041131+00:00",
+    "duration_seconds": 0.015259719999448862,
+    "returned_status": "pass",
+    "record_sha256": "48e8612510504645bce08f877a9a91dcaeb7132365238aaeb5ad3569437616b4",
+    "stdout": "",
+    "stderr": "",
+    "validator_fingerprints": {
+      "src/agent_dev_kit/review_evidence.py": "be4892f464496a29dbbb41ebb56c48984bf103d8eabe2ee6117bd583d1032c47",
+      "src/agent_dev_kit/strict_json.py": "72f06f4dcaebfed83bd1ae9876e38d4f7d82d8a1473b40b66beffb6338ee94a5",
+      "src/agent_dev_kit/readiness_evidence.py": "6fdfd5bea3ee097ac21d2b2ab469378c8c84f78856061b680ebb0c5f9d726778"
+    },
+    "false_claim_flags": {
+      "human_review_performed": false,
+      "field_evidence_verified": false,
+      "provider_execution_performed": false,
+      "product_release_authorized": false
+    }
+  },
+  "failure_history": [
+    {
+      "kind": "packaging-validation-failure",
+      "product_source_failure": false,
+      "original_record_sha256": "7c4cae3f73a20b785ea115d61b9ba68e71ef8a9392678b245e1ad03a322b0bfb",
+      "error": "review evidence references cannot be empty",
+      "cause": "实际成功full的stderr为0 bytes，被冗余地作为需非空的typed直接evidence引用。",
+      "repair": "只替换该直接引用为保留的失败观察；原0-byte日志、full receipt、retained map及validator均不变。",
+      "retained_failure": {
+        "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/packaging-validation-failure.json",
+        "bytes": 18450,
+        "sha256": "13169415a1dd854b335d372cbf5067c3a2252c17d20ceb6061ba89c1856a949f"
+      }
+    },
+    {
+      "kind": "retention-completeness-failure",
+      "product_source_failure": false,
+      "finding_id": "r3-packaging-01",
+      "previous_valid_record_sha256": "58192cafd05b4255187a55505d1efdb3674985d2e0458c283c75e738a02a1bac",
+      "previous_validation_sha256": "de061433e411a94ef1ec51e5a161ed47e61be544d4505c00471355085c674b3c",
+      "repair": "新增9项原始文件；旧bundle可精确重构，旧typed和validator回执原文/大小/摘要保存在completion。"
+    }
+  ],
+  "semantic_assessment": "源与包装身份清晰分层；审查人/实施者独立身份、两个源pass、三个原source finding和十项原限制映射正确。verification.md的UTC/北京时间、102/102、首轮65/37、8预算、153文件425B净增及原证据边界与回执一致。未将包装通过扩展为发布或运行资格。",
+  "limits": [
+    "本次为后续证据包装审查；准确源码裁决仍为2026-11-16T08:23:33.804040+00:00，不把后来的包装失败或补齐工作倒签到源审查时间。",
+    "裁决绑定这里列明的typed记录、bundle、map及原始源身份；未来提交tree、PR/main CI、不可变release与Root接入仍由其真实回执确认。",
+    "完整解码/摘要核验覆盖bundle列出的103项及consumer-response的直接文件引用；不宣称打包了全部临时构建目录或第三方上游正文。",
+    "source-only、native unavailable/not-run、单次host消费者非模型A/B、非设备/M5/Token/费用/性能收益的原限制完整保留。",
+    "validator PASS仅证明其机械规则与字节绑定；human_review_performed、field_evidence_verified、provider_execution_performed、product_release_authorized均为false。",
+    "未重跑full、consumer或方法语义测试，未修改仓库/index/refs；只生成round3-independent-packaging-* scratch报告。一次审查路径识别harness错误已在初始检查报告记录并纠正，不算产品源码缺陷。"
+  ],
+  "inspection_artifacts": [
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-packaging-mechanical-checks.json",
+      "filename": "round3-independent-packaging-mechanical-checks.json",
+      "bytes": 201197,
+      "sha256": "cfabcd7a341b98dcb557142133be0153cfb565729a6dc1711e93ae922946c72c"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-packaging-final-checks.json",
+      "filename": "round3-independent-packaging-final-checks.json",
+      "bytes": 133303,
+      "sha256": "86356c5784971f935d2bcabf8f084517414bebcc2ce4618a387ca17b98360a26"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-packaging-validator-receipt.json",
+      "filename": "round3-independent-packaging-validator-receipt.json",
+      "bytes": 18969,
+      "sha256": "54a00a3f7d7dea4d58f3afd3128aa97369720bbb5cf3619ebd270423d5949847"
+    }
+  ],
+  "archival_note": "Archive this report and the three inspection artifacts byte-for-byte; the separate archive manifest will name all five JSON/Markdown deliverables and hashes. No bound source or existing review record needs modification to preserve these appendices."
+}

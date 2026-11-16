@@ -1,0 +1,218 @@
+{
+  "schema": "round3-independent-canonical-patch-check/v1",
+  "reviewer": "/root/round3_independent_review",
+  "started_at": "2026-11-16T08:19:07.499843+00:00",
+  "completed_at": "2026-11-16T08:19:07.829781+00:00",
+  "base": "80f8b2ea2885e3f62dcea455c45a2e8ebf071b2b",
+  "head": "d87e21d7750ec4a0042754d045979c137abfc528",
+  "tree": "617bdcb20e5fb629c1ddd175e29373b1b86aa0c5",
+  "canonical": {
+    "path": "/workspace/scratch/fe5385ca063a/round3-final-source.patch",
+    "bytes": 528829,
+    "sha256": "d82a42ee4620c923ebd4eaecae514f94551a733b4e9627f764a051efab1ab6c4",
+    "command_argv": [
+      "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+      "bypass",
+      "git",
+      "diff",
+      "--binary",
+      "--full-index",
+      "--no-ext-diff",
+      "--no-textconv",
+      "80f8b2ea2885e3f62dcea455c45a2e8ebf071b2b",
+      "d87e21d7750ec4a0042754d045979c137abfc528"
+    ],
+    "independently_regenerated_exact_bytes": true
+  },
+  "prior_observation": {
+    "path": "/workspace/scratch/fe5385ca063a/round3-independent-final-original.patch",
+    "bytes": 526717,
+    "sha256": "6905990c9f8049574661957a6779b20ff22e0c5def45a9631c9ab5908974f0bb",
+    "git_argv": [
+      "git",
+      "diff",
+      "--binary",
+      "--no-ext-diff",
+      "--no-renames",
+      "80f8b2ea2885e3f62dcea455c45a2e8ebf071b2b",
+      "d87e21d7750ec4a0042754d045979c137abfc528",
+      "--"
+    ]
+  },
+  "comparison": {
+    "changed_path_count": 33,
+    "index_lines_changed": 33,
+    "byte_difference": 2112,
+    "normalized_patch_body_identical": true,
+    "all_full_index_blobs_reconciled_to_base_head": true,
+    "explanation": "Only the 33 index lines differ: abbreviated8hex -> full40hex for both old/new blob IDs; 33*2*(40-8)=2112 extra bytes. Hunk/body/path content is byte-identical. Canonical patch is now the exact typed-review target."
+  },
+  "patch_blob_identities": [
+    {
+      "path": ".version-lock",
+      "old_git_blob": "c9713f8a9c7835da436f7dbbbc5074e3a8b0652d",
+      "new_git_blob": "9a1031322bfbacc3f7f619df51f5d015c041bd37"
+    },
+    {
+      "path": "CONTEXT.md",
+      "old_git_blob": "b4f52c8ef3c2c369d6714366922dd69fbe61d505",
+      "new_git_blob": "1740675c16a3e54c741e550b987833ee4e4bd6ea"
+    },
+    {
+      "path": "README.md",
+      "old_git_blob": "bffe23b1a7bf49bccb71025027f59dd5e0b73921",
+      "new_git_blob": "f0ce1553ad464eeb6df0d3f5a19ffae4d79f456e"
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/audit.md",
+      "old_git_blob": "0000000000000000000000000000000000000000",
+      "new_git_blob": "83d2e8d9a592be392565eaef71305372a60773bf"
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/design.md",
+      "old_git_blob": "0000000000000000000000000000000000000000",
+      "new_git_blob": "0a4f6cd6958acac2455c62a2067c3f48b723ece3"
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/evidence/core-audit.json",
+      "old_git_blob": "0000000000000000000000000000000000000000",
+      "new_git_blob": "5bcc2aedb119a0f892233b4949347c664ac99d12"
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/evidence/embedded-audit.json",
+      "old_git_blob": "0000000000000000000000000000000000000000",
+      "new_git_blob": "68d7a98a5da6e5b51a12157feadde802c491ee81"
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/evidence/optional-audit.json",
+      "old_git_blob": "0000000000000000000000000000000000000000",
+      "new_git_blob": "bac301507d9b7924c8f2356e67c2ea642e7c792e"
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/evidence/platform-audit.json",
+      "old_git_blob": "0000000000000000000000000000000000000000",
+      "new_git_blob": "003af22322da289868b7f367a625111444524a36"
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/evidence/portfolio-audit.json",
+      "old_git_blob": "0000000000000000000000000000000000000000",
+      "new_git_blob": "2c10df574b8b51e8e181c0e03ff6d129f4ff4623"
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/negative-results.md",
+      "old_git_blob": "0000000000000000000000000000000000000000",
+      "new_git_blob": "665d9c3c746846e8e50c0b791107d539e20377a3"
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/requirements.md",
+      "old_git_blob": "0000000000000000000000000000000000000000",
+      "new_git_blob": "58166d1353e2f0d2ed4b38850e14b9e0bdb30707"
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/source-review.md",
+      "old_git_blob": "0000000000000000000000000000000000000000",
+      "new_git_blob": "6e2b4bb60a9981877f64792e0f76c398453a088b"
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/tasks.md",
+      "old_git_blob": "0000000000000000000000000000000000000000",
+      "new_git_blob": "1007913dadff3a4e0a4be8b29adb8328e2d62562"
+    },
+    {
+      "path": "docs/runbooks/security-supply-chain.md",
+      "old_git_blob": "b8b0cd2ab3747671595d1d531da1cbff73151bb5",
+      "new_git_blob": "6a11f8491eb4e624546dab5906629560b01219a1"
+    },
+    {
+      "path": "manifest.json",
+      "old_git_blob": "c4316d8123a6487f86155d90ff6bcf202adc5fb7",
+      "new_git_blob": "609e37e7322060b3368d0a0648bc67c5c9f1aca6"
+    },
+    {
+      "path": "manifests/software_m5_eval_contract.json",
+      "old_git_blob": "025c788be69f9eccc099284708b41aa15b1b67a1",
+      "new_git_blob": "c60daa2c0681ed0d7a01a9344f9af838479d3324"
+    },
+    {
+      "path": "optional-skills/adk-security-supply-chain/SKILL.md",
+      "old_git_blob": "e123bcdb9c01b3fe3059f17fd5df710476561ba5",
+      "new_git_blob": "ae75786916c5a04d7de20be32239685f77dc045d"
+    },
+    {
+      "path": "optional-skills/adk-test-flakiness-triage/SKILL.md",
+      "old_git_blob": "8bd63f87cf6837fc00967656e17e66e49e3eb1b2",
+      "new_git_blob": "2ed30485f644e033e132d487280fb7d7ec69270f"
+    },
+    {
+      "path": "optional-skills/adk-test-flakiness-triage/references/details.md",
+      "old_git_blob": "af110d715613b5f6ec5ec4798131d7cd75571cb6",
+      "new_git_blob": "2fa2291cc5ba327857678769f1427da9706ca950"
+    },
+    {
+      "path": "pyproject.toml",
+      "old_git_blob": "4c29f556b59f64d7c4260e3070b5b6031105ccd6",
+      "new_git_blob": "b89c46bef4f99846aba55b646f5a6cc67f527b5c"
+    },
+    {
+      "path": "skills/adk-cmake-cross-build/SKILL.md",
+      "old_git_blob": "5f9fa8ac96f75a659245007135eb99f8c38f6268",
+      "new_git_blob": "960ee57879bfbab6f478dfaed1e958a00f9b7d2b"
+    },
+    {
+      "path": "skills/adk-interface-contract-design/SKILL.md",
+      "old_git_blob": "166bd9fdf3eb061cc5bfb90110fb0de921e32f04",
+      "new_git_blob": "a9c3bf50f753ca02f28994bd05731cb55eec6d39"
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/design-quality-methods.md",
+      "old_git_blob": "e28a344dd8989179e39f83c8afa405dee4055f75",
+      "new_git_blob": "720070607935eea1aff0eddb779b9702e8c12428"
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/details.md",
+      "old_git_blob": "a30be6f0edee84c8f76cbcd3d8243ec650ef2880",
+      "new_git_blob": "a617bf5c439c4cd3f808f0d904ffb4a810ea340f"
+    },
+    {
+      "path": "skills/adk-parallel-agent-governance/SKILL.md",
+      "old_git_blob": "332193235d528097389ee380b118c697ea0435ee",
+      "new_git_blob": "95c69872cbb2938040ecbec2c1492679d22a19fc"
+    },
+    {
+      "path": "skills/adk-parallel-agent-governance/references/subagent-review-checklist.md",
+      "old_git_blob": "e55eaf650d6f4690d92c8e6089d59d32f7a799f3",
+      "new_git_blob": "561939020cf66fc215d87105ea7e1b8383e3a659"
+    },
+    {
+      "path": "src/agent_dev_kit/__init__.py",
+      "old_git_blob": "08df3c4982ab63f51f7739a93265e272d9353c27",
+      "new_git_blob": "ea35f74d1e27db49fc1812ce20cd801ff82ee526"
+    },
+    {
+      "path": "tests/fixtures/skill_method_ab_prereg.json",
+      "old_git_blob": "9b8dbea72c585df87c6772e5599a5b1ce012689c",
+      "new_git_blob": "325fcf6fc3e3de6c3d1eeda40aa65c3700893901"
+    },
+    {
+      "path": "tests/test_skill_cmake_methods.py",
+      "old_git_blob": "0000000000000000000000000000000000000000",
+      "new_git_blob": "677568227a714582d538e047073f39e821d1baa4"
+    },
+    {
+      "path": "tests/test_skill_command_examples.py",
+      "old_git_blob": "d93d4aa18aff627fa3224179b88fc5ddceaa92f1",
+      "new_git_blob": "bf0cef6224ca5bf76214e58b9057e8a709199dee"
+    },
+    {
+      "path": "tests/test_skill_content.sh",
+      "old_git_blob": "6280e9a918be1a95d5b4649a01d5e1e6107d39ac",
+      "new_git_blob": "988ea6e7a4ba1757cd711624380df035615998e3"
+    },
+    {
+      "path": "tests/test_skill_contract_methods.py",
+      "old_git_blob": "0000000000000000000000000000000000000000",
+      "new_git_blob": "5b68f9e31c2a924a4a5018ad3d2b91926ae72a5c"
+    }
+  ],
+  "result": "pass"
+}

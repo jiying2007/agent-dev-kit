@@ -1,0 +1,206 @@
+{
+  "schema": "round3-optional-line-budget-fix/v1",
+  "review_item": "R3-REVIEW-02",
+  "role": "implementer-only",
+  "status": "complete",
+  "baseline_commit": "6183982e1f5e4a1bb09727009a809514e160be64",
+  "observed_head": "6183982e1f5e4a1bb09727009a809514e160be64",
+  "source_frozen_at_utc": "2026-11-16T08:11:51.313598+00:00",
+  "write_scope": [
+    "optional-skills/adk-security-supply-chain/SKILL.md"
+  ],
+  "change": "Merge the two Goal bullets and the two Prerequisites bullets without changing their meaning.",
+  "source": {
+    "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/optional-skills/adk-security-supply-chain/SKILL.md",
+    "before_sha256": "ee86e23878218150ef4f03dd4fc463d9e0ad68c6cdd278483f30490d3867ed58",
+    "sha256": "2d8453ce4525d0793ce1ee89a9503001189c4819fa3966588b561d8eb9a0474e",
+    "before_lines": 142,
+    "lines": 140,
+    "net_lines": -2,
+    "before_bytes": 8422,
+    "bytes": 8413,
+    "net_bytes": -9
+  },
+  "published_f1_sections_from_commands_to_end_unchanged": true,
+  "original_max_skill_lines_limit": 140,
+  "budget_and_test_sources": [
+    {
+      "path": "tests/test_token_budget.sh",
+      "sha256": "f3c6744d1d5bb5312772c05270b923f45c3779cbac8144fd2d037edb1237b933",
+      "baseline_sha256": "f3c6744d1d5bb5312772c05270b923f45c3779cbac8144fd2d037edb1237b933",
+      "unchanged": true
+    },
+    {
+      "path": "scripts/check-token-budget.sh",
+      "sha256": "913c702ac7c38d3e4dacfb5b9d5795e8a55f3e3f73fa86b8f8ac3e33b97bf6b2",
+      "baseline_sha256": "913c702ac7c38d3e4dacfb5b9d5795e8a55f3e3f73fa86b8f8ac3e33b97bf6b2",
+      "unchanged": true
+    },
+    {
+      "path": "tests/test_skill_command_examples.py",
+      "sha256": "ddfd18b3fac98f15a1727f9c0014cc984dc3f5d0984c85951c4af6988ed60655",
+      "baseline_sha256": "ddfd18b3fac98f15a1727f9c0014cc984dc3f5d0984c85951c4af6988ed60655",
+      "unchanged": true
+    }
+  ],
+  "executions": [
+    {
+      "phase": "red",
+      "command": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "env",
+        "ADK_PYTHON_BIN=/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "bash",
+        "tests/test_token_budget.sh"
+      ],
+      "cwd": "/workspace/scratch/fe5385ca063a/agent-dev-kit",
+      "started_at_utc": "2026-11-16T08:10:40.913881+00:00",
+      "ended_at_utc": "2026-11-16T08:10:43.316332+00:00",
+      "duration_seconds": 2.4024547439985326,
+      "stdout": "[INFO] agents_bytes=2914 soft=2975 hard=3500 estimated_tokens=729 budget_status=hard-limit-failed\n[INFO] skill_files=65 max_skill_lines=142 max_skill_file=optional-skills/adk-security-supply-chain/SKILL.md limit=140\n[INFO] doc_files=926 max_doc_lines=547 max_doc_file=docs/comprehensive-analysis-embedded-harness.md limit=560\n[INFO] summary_json_scripts=3\n[INFO] compact_test_runner=1\n[INFO] context_governance_assets=11\n",
+      "stderr": "[FAIL] token budget check failed\n  - skill token budget exceeded: optional-skills/adk-security-supply-chain/SKILL.md lines=142 limit=140\n",
+      "exit_code": 1,
+      "source": {
+        "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/optional-skills/adk-security-supply-chain/SKILL.md",
+        "sha256": "ee86e23878218150ef4f03dd4fc463d9e0ad68c6cdd278483f30490d3867ed58",
+        "bytes": 8422,
+        "lines": 142
+      },
+      "environment": {
+        "ADK_PYTHON_BIN": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "PATH_inherited_unchanged": true
+      },
+      "budget_script_sha256": "f3c6744d1d5bb5312772c05270b923f45c3779cbac8144fd2d037edb1237b933",
+      "budget_checker_sha256": "913c702ac7c38d3e4dacfb5b9d5795e8a55f3e3f73fa86b8f8ac3e33b97bf6b2"
+    },
+    {
+      "phase": "green-budget",
+      "command": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "env",
+        "ADK_PYTHON_BIN=/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "bash",
+        "tests/test_token_budget.sh"
+      ],
+      "cwd": "/workspace/scratch/fe5385ca063a/agent-dev-kit",
+      "started_at_utc": "2026-11-16T08:11:15.105965+00:00",
+      "ended_at_utc": "2026-11-16T08:11:22.184826+00:00",
+      "duration_seconds": 7.07886784099901,
+      "stdout": "[INFO] agents_bytes=2914 soft=2975 hard=3500 estimated_tokens=729 budget_status=within-soft-limit\n[INFO] skill_files=65 max_skill_lines=140 max_skill_file=optional-skills/adk-security-supply-chain/SKILL.md limit=140\n[INFO] doc_files=926 max_doc_lines=547 max_doc_file=docs/comprehensive-analysis-embedded-harness.md limit=560\n[INFO] summary_json_scripts=3\n[INFO] compact_test_runner=1\n[INFO] context_governance_assets=11\n[PASS] token budget checks passed\n[INFO] role_agent_files=13 role_agents_bytes=23636/64000 estimated_tokens=5909\n[INFO] max_role_agent=agents/architecture-planner/AGENTS.md bytes=2009/6000\n[PASS] token budget\n",
+      "stderr": "",
+      "exit_code": 0,
+      "source": {
+        "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/optional-skills/adk-security-supply-chain/SKILL.md",
+        "sha256": "2d8453ce4525d0793ce1ee89a9503001189c4819fa3966588b561d8eb9a0474e",
+        "bytes": 8413,
+        "lines": 140
+      },
+      "source_unchanged_during_run": true,
+      "environment": {
+        "ADK_PYTHON_BIN": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "PATH_inherited_unchanged": true
+      }
+    },
+    {
+      "phase": "green-scans",
+      "command": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "env",
+        "ADK_PYTHON_BIN=/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-m",
+        "unittest",
+        "tests.test_skill_command_examples.SecurityScanExampleTests",
+        "-v"
+      ],
+      "cwd": "/workspace/scratch/fe5385ca063a/agent-dev-kit",
+      "started_at_utc": "2026-11-16T08:11:15.374714+00:00",
+      "ended_at_utc": "2026-11-16T08:11:15.615881+00:00",
+      "duration_seconds": 0.24117000399928656,
+      "stdout": "",
+      "stderr": "test_all_scans_keep_candidate_paths_without_printing_matching_contents (tests.test_skill_command_examples.SecurityScanExampleTests.test_all_scans_keep_candidate_paths_without_printing_matching_contents) ... ok\ntest_no_match_and_io_errors_keep_distinct_status_and_diagnostics (tests.test_skill_command_examples.SecurityScanExampleTests.test_no_match_and_io_errors_keep_distinct_status_and_diagnostics) ... ok\ntest_secret_scan_preserves_hidden_ignored_coverage_and_git_exclusion (tests.test_skill_command_examples.SecurityScanExampleTests.test_secret_scan_preserves_hidden_ignored_coverage_and_git_exclusion) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.131s\n\nOK\n",
+      "exit_code": 0,
+      "source": {
+        "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/optional-skills/adk-security-supply-chain/SKILL.md",
+        "sha256": "2d8453ce4525d0793ce1ee89a9503001189c4819fa3966588b561d8eb9a0474e",
+        "bytes": 8413,
+        "lines": 140
+      },
+      "source_unchanged_during_run": true,
+      "environment": {
+        "ADK_PYTHON_BIN": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "PATH_inherited_unchanged": true
+      }
+    },
+    {
+      "phase": "diff-check",
+      "command": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "env",
+        "ADK_PYTHON_BIN=/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "git",
+        "diff",
+        "--check",
+        "HEAD",
+        "--",
+        "optional-skills/adk-security-supply-chain/SKILL.md"
+      ],
+      "cwd": "/workspace/scratch/fe5385ca063a/agent-dev-kit",
+      "started_at_utc": "2026-11-16T08:11:15.105264+00:00",
+      "ended_at_utc": "2026-11-16T08:11:15.113151+00:00",
+      "duration_seconds": 0.007883759000833379,
+      "stdout": "",
+      "stderr": "",
+      "exit_code": 0,
+      "source": {
+        "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/optional-skills/adk-security-supply-chain/SKILL.md",
+        "sha256": "2d8453ce4525d0793ce1ee89a9503001189c4819fa3966588b561d8eb9a0474e",
+        "bytes": 8413,
+        "lines": 140
+      },
+      "source_unchanged_during_run": true,
+      "environment": {
+        "ADK_PYTHON_BIN": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "PATH_inherited_unchanged": true
+      }
+    }
+  ],
+  "diff": "diff --git a/optional-skills/adk-security-supply-chain/SKILL.md b/optional-skills/adk-security-supply-chain/SKILL.md\nindex 24641db4..ae757869 100644\n--- a/optional-skills/adk-security-supply-chain/SKILL.md\n+++ b/optional-skills/adk-security-supply-chain/SKILL.md\n@@ -26,12 +26,10 @@ constraints:\n # adk-security-supply-chain\n \n ## Goal\n-- 防止第三方资产未经审查进入生产运行环境。\n-- 建立可追溯的供应链安全审查流程，确保每个引入决策有据可查。\n+- 防止第三方资产未经审查进入生产运行环境；建立可追溯的供应链安全审查流程，确保每个引入决策有据可查。\n \n ## Prerequisites\n-- 已明确候选资产来源、版本或 commit。\n-- 已明确安装范围：`core`、`optional`、`profile` 或 `reject`。\n+- 已明确候选资产来源、版本或 commit，以及安装范围：`core`、`optional`、`profile` 或 `reject`。\n \n ## Scope Gate（只选择适用的审查层）\n - **source-only intake**：仅引用第三方方法、没有导入脚本/依赖或启动工具，不执行 SBOM/CVE/签名器；核来源、许可未知、指令注入与当前权限，输出 `unverified` 的候选，不推断运行安全。纯背景研究仍由外部方法分析 Skill 负责。\n",
+  "environment": {
+    "ADK_PYTHON_BIN": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "python_version": "3.12.14",
+    "PATH_inherited_unchanged": true
+  },
+  "prior_receipt": {
+    "path": "/workspace/scratch/fe5385ca063a/round3-optional-implementation.json",
+    "sha256": "cbab0902cc1d6350e3193130fd2e1673b5ba0b36ca2e55895ff6aad2509fb3cb",
+    "unchanged_from_previous_receipt": true
+  },
+  "raw_receipts": [
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-optional-line-budget-red.json",
+      "sha256": "bd8d474d359b9b9f19cab06906c5b0772c1307ea5a7758e2d1625f4315554f11"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-optional-line-budget-green-budget.json",
+      "sha256": "b7d5b7ab0a88584a5f2b58b9d990cc216004f858ddc849063bd3a14b2231ab2e"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-optional-line-budget-green-scans.json",
+      "sha256": "96c949819185c40ef4bb82c0141e06bf576973b030d95c0bb9320c889facf22f"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-optional-line-budget-diff-check.json",
+      "sha256": "a4e8625c35ba92c134218afc25fadc3910802ee006ff0ccd896e77f80ef99899"
+    }
+  ],
+  "boundaries": [
+    "Only the authorized Skill entrypoint was edited; no other source, tests, budgets, global version or change documents were edited.",
+    "No commit, push or merge.",
+    "F1 candidate output, redaction guidance, exit statuses and coverage declarations remain unchanged."
+  ]
+}

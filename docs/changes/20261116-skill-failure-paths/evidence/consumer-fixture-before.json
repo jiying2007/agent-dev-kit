@@ -1,0 +1,185 @@
+{
+  "schema": "adk-consumer-fixture/v1",
+  "prepared_at": "2026-11-16T07:54:14.123679+00:00",
+  "records": [
+    {
+      "argv": [
+        "cmake",
+        "-S",
+        "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project",
+        "-B",
+        "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default",
+        "-G",
+        "Ninja",
+        "-DCMAKE_TOOLCHAIN_FILE=/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/toolchains/release-a.cmake",
+        "-DCMAKE_BUILD_TYPE=Debug"
+      ],
+      "started_at": "2026-11-16T07:54:13.876964+00:00",
+      "finished_at": "2026-11-16T07:54:14.060723+00:00",
+      "exit_code": 0,
+      "stdout": "-- The C compiler identification is GNU 14.2.0\n-- Detecting C compiler ABI info\n-- Detecting C compiler ABI info - done\n-- Check for working C compiler: /usr/bin/cc - skipped\n-- Detecting C compile features\n-- Detecting C compile features - done\n-- Configuring done (0.2s)\n-- Generating done (0.0s)\n-- Build files have been written to: /workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "cmake",
+        "--build",
+        "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default",
+        "--parallel",
+        "1",
+        "--verbose"
+      ],
+      "started_at": "2026-11-16T07:54:14.060742+00:00",
+      "finished_at": "2026-11-16T07:54:14.116236+00:00",
+      "exit_code": 0,
+      "stdout": "Change Dir: '/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default'\n\nRun Build Command(s): /workspace/scratch/fe5385ca063a/verification-tools/ninja -v -j 1\n[1/2] /usr/bin/cc   -DBUILD_VARIANT=101 -g -MD -MT CMakeFiles/variant_demo.dir/main.c.o -MF CMakeFiles/variant_demo.dir/main.c.o.d -o CMakeFiles/variant_demo.dir/main.c.o -c /workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/main.c\n[2/2] : && /usr/bin/cc -DBUILD_VARIANT=101 -g -Wl,--dependency-file=CMakeFiles/variant_demo.dir/link.d CMakeFiles/variant_demo.dir/main.c.o -o variant_demo   && :\n\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "ctest",
+        "--test-dir",
+        "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default",
+        "--output-on-failure"
+      ],
+      "started_at": "2026-11-16T07:54:14.116254+00:00",
+      "finished_at": "2026-11-16T07:54:14.122647+00:00",
+      "exit_code": 0,
+      "stdout": "Internal ctest changing into directory: /workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default\nTest project /workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default\n    Start 1: variant_smoke\n1/1 Test #1: variant_smoke ....................   Passed    0.00 sec\n\n100% tests passed, 0 tests failed out of 1\n\nTotal Test time (real) =   0.00 sec\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/variant_demo"
+      ],
+      "started_at": "2026-11-16T07:54:14.122658+00:00",
+      "finished_at": "2026-11-16T07:54:14.123672+00:00",
+      "exit_code": 0,
+      "stdout": "build_variant=101\n",
+      "stderr": ""
+    }
+  ],
+  "project_files": [
+    {
+      "path": "project/CMakeLists.txt",
+      "bytes": 296,
+      "sha256": "0bb2ae1c1433cbb531dda4c2ba767edb23a53651663f24de4692b0999f76af48"
+    },
+    {
+      "path": "project/main.c",
+      "bytes": 93,
+      "sha256": "b4abdad8b7584c9cbd744aca3b7a68bdeba91c0a1d940ea7aa5bf0bb1e881d70"
+    },
+    {
+      "path": "project/out/default/.ninja_deps",
+      "bytes": 2312,
+      "sha256": "ab28bd97ecd9c861b748982adec62cf924f5d8372da2075d2a3811b716818935"
+    },
+    {
+      "path": "project/out/default/.ninja_log",
+      "bytes": 150,
+      "sha256": "f517f8450f65df7e33e156023614e264866ccc53f23387de3d42fe2392fbd82b"
+    },
+    {
+      "path": "project/out/default/CMakeCache.txt",
+      "bytes": 13279,
+      "sha256": "039b4306b832adfd4c8b74044554af0de9790edbbbd6c4b2d2f178e2b0662eee"
+    },
+    {
+      "path": "project/out/default/CMakeFiles/3.31.6/CMakeCCompiler.cmake",
+      "bytes": 2779,
+      "sha256": "4cac2d2dfcf7bc3431de8e7b8fca6469f4b3d3fab7bc6d51dec0a318f44e1234"
+    },
+    {
+      "path": "project/out/default/CMakeFiles/3.31.6/CMakeDetermineCompilerABI_C.bin",
+      "bytes": 16024,
+      "sha256": "a43ee85c9a7927733e07adf045f2c64634af89ef19689e7b784862c453aed32a"
+    },
+    {
+      "path": "project/out/default/CMakeFiles/3.31.6/CMakeSystem.cmake",
+      "bytes": 461,
+      "sha256": "ea32fa55c82b6fac369891e5fb5adcc694a265326414302a04b50e1489433922"
+    },
+    {
+      "path": "project/out/default/CMakeFiles/3.31.6/CompilerIdC/CMakeCCompilerId.c",
+      "bytes": 27620,
+      "sha256": "60d0dc2f177f0317302cef41d454988d9d49759ad3e011365bd6f6c544dfd126"
+    },
+    {
+      "path": "project/out/default/CMakeFiles/3.31.6/CompilerIdC/a.out",
+      "bytes": 16136,
+      "sha256": "f9cd58463890484b4463a8949a85bd1d6960e4b4fea9aecea139cad47ebf0b6d"
+    },
+    {
+      "path": "project/out/default/CMakeFiles/CMakeConfigureLog.yaml",
+      "bytes": 30332,
+      "sha256": "e566cd8920b20b1d454cf4c68b52caaadf00fb9ea56a98d8a3e5b2e23a6396d0"
+    },
+    {
+      "path": "project/out/default/CMakeFiles/TargetDirectories.txt",
+      "bytes": 399,
+      "sha256": "e2b04de4035c7a1417b4982f27df4bc80e96a5d5effab5836f9812553d9e831f"
+    },
+    {
+      "path": "project/out/default/CMakeFiles/cmake.check_cache",
+      "bytes": 85,
+      "sha256": "a26189e394421da57f45706a07713c5720acd200a41711b0c0c590c3c63371c4"
+    },
+    {
+      "path": "project/out/default/CMakeFiles/rules.ninja",
+      "bytes": 2215,
+      "sha256": "17c39994bbebf7b3dbe05d71c5b6644cbf0192e8b380223e04d3ee54685f1fcf"
+    },
+    {
+      "path": "project/out/default/CMakeFiles/variant_demo.dir/main.c.o",
+      "bytes": 3736,
+      "sha256": "238267d70839814767d30a24ce25e0055df0fbf2b0dd5e576dba080a2572dfe6"
+    },
+    {
+      "path": "project/out/default/CTestTestfile.cmake",
+      "bytes": 756,
+      "sha256": "f5cf6bdd77a03571bfe3090e87a60cb1fe57522182f401d677c2347dfa73ef89"
+    },
+    {
+      "path": "project/out/default/Testing/Temporary/CTestCostData.txt",
+      "bytes": 31,
+      "sha256": "5e63822ac7a59d8bee0754963f41cd4ab94e36ef3018d723b3871b9b7d569a69"
+    },
+    {
+      "path": "project/out/default/Testing/Temporary/LastTest.log",
+      "bytes": 807,
+      "sha256": "258699e8f2da6225dcaa35c21c8635ddfe8c7ede4de2b5843dff4e78d0d9b24c"
+    },
+    {
+      "path": "project/out/default/build.ninja",
+      "bytes": 28422,
+      "sha256": "ad1246f2d9578d932263a0da1757efa320e742682172399d7d8e9613e51dc5a1"
+    },
+    {
+      "path": "project/out/default/cmake_install.cmake",
+      "bytes": 2214,
+      "sha256": "d8fc65fde2519fa2b1aa976987a80130bf41c12fd1eb760fe15d2013356b7c59"
+    },
+    {
+      "path": "project/out/default/compile_commands.json",
+      "bytes": 395,
+      "sha256": "e84c90e074361a044af643b336fb01f7270a23d1204ef7149413a0464afb7865"
+    },
+    {
+      "path": "project/out/default/variant_demo",
+      "bytes": 17248,
+      "sha256": "c197c3fb72ec6f225ad237372c9f8cfc43ff3cfba29671f2e0d011a7fd76b636"
+    },
+    {
+      "path": "project/toolchains/release-a.cmake",
+      "bytes": 82,
+      "sha256": "b3f4403cb6c886aa036c59409e06c11ef91c14ca1bb6751cd5c421a5eabeb51c"
+    },
+    {
+      "path": "project/toolchains/release-b.cmake",
+      "bytes": 82,
+      "sha256": "5c5f33f8f20b670c7fb6f921afa883939cdb8e585e67bb03851db331d70fc7a5"
+    }
+  ],
+  "boundary": "Host CMake fixture only; no architecture change or native runtime qualification."
+}

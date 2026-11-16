@@ -1,0 +1,3553 @@
+{
+  "schema": "round3-optional-regression-evidence/v1",
+  "phase": "red",
+  "invocation": [
+    "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+    "python3",
+    "/workspace/scratch/fe5385ca063a/round3_optional_test_evidence.py",
+    "red"
+  ],
+  "started_at_utc": "2026-11-16T07:51:21.749689+00:00",
+  "ended_at_utc": "2026-11-16T07:51:22.907932+00:00",
+  "duration_seconds": 1.1582381119987986,
+  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "source_before": {
+    "optional-skills/adk-security-supply-chain/SKILL.md": {
+      "bytes": 8270,
+      "sha256": "acff83f54f2f15e0160d18b3e6b3e84f09be4b75b4d06e8b459c2b3345bc635f"
+    },
+    "optional-skills/adk-security-supply-chain/references/skill-scan-coverage.md": {
+      "bytes": 1879,
+      "sha256": "6fc92933a7ea418d824d2e92eb64bdd26e0e25e53969d4dd3ce95de0c54b0d15"
+    },
+    "optional-skills/adk-test-flakiness-triage/SKILL.md": {
+      "bytes": 2427,
+      "sha256": "2a36680bf3a8d60159bcd8672a8cda6995b0740d425970615ecbe23163236acf"
+    },
+    "optional-skills/adk-test-flakiness-triage/references/details.md": {
+      "bytes": 4805,
+      "sha256": "7723c6f6caa2c86a3ada3ccf95aaadf5ab7ea2a0003087f80c2e0ed9355959f0"
+    },
+    "docs/runbooks/security-supply-chain.md": {
+      "bytes": 6179,
+      "sha256": "c6c541bab0b1ed71c2084903bfa365bea4d6a9fc3af7f6082c42a4a6182fa1fb"
+    },
+    "tests/test_skill_command_examples.py": {
+      "bytes": 53862,
+      "sha256": "ddfd18b3fac98f15a1727f9c0014cc984dc3f5d0984c85951c4af6988ed60655"
+    }
+  },
+  "source_after": {
+    "optional-skills/adk-security-supply-chain/SKILL.md": {
+      "bytes": 8270,
+      "sha256": "acff83f54f2f15e0160d18b3e6b3e84f09be4b75b4d06e8b459c2b3345bc635f"
+    },
+    "optional-skills/adk-security-supply-chain/references/skill-scan-coverage.md": {
+      "bytes": 1879,
+      "sha256": "6fc92933a7ea418d824d2e92eb64bdd26e0e25e53969d4dd3ce95de0c54b0d15"
+    },
+    "optional-skills/adk-test-flakiness-triage/SKILL.md": {
+      "bytes": 2427,
+      "sha256": "2a36680bf3a8d60159bcd8672a8cda6995b0740d425970615ecbe23163236acf"
+    },
+    "optional-skills/adk-test-flakiness-triage/references/details.md": {
+      "bytes": 4805,
+      "sha256": "7723c6f6caa2c86a3ada3ccf95aaadf5ab7ea2a0003087f80c2e0ed9355959f0"
+    },
+    "docs/runbooks/security-supply-chain.md": {
+      "bytes": 6179,
+      "sha256": "c6c541bab0b1ed71c2084903bfa365bea4d6a9fc3af7f6082c42a4a6182fa1fb"
+    },
+    "tests/test_skill_command_examples.py": {
+      "bytes": 53862,
+      "sha256": "ddfd18b3fac98f15a1727f9c0014cc984dc3f5d0984c85951c4af6988ed60655"
+    }
+  },
+  "source_unchanged_during_tests": true,
+  "tests_run": 12,
+  "failures": 12,
+  "errors": 0,
+  "skipped": 0,
+  "stdout": "",
+  "stderr": "test_all_scans_keep_candidate_paths_without_printing_matching_contents (tests.test_skill_command_examples.SecurityScanExampleTests.test_all_scans_keep_candidate_paths_without_printing_matching_contents) ... \n  test_all_scans_keep_candidate_paths_without_printing_matching_contents (tests.test_skill_command_examples.SecurityScanExampleTests.test_all_scans_keep_candidate_paths_without_printing_matching_contents) (source='optional-skills/adk-security-supply-chain/SKILL.md', command=2) ... FAIL\n  test_all_scans_keep_candidate_paths_without_printing_matching_contents (tests.test_skill_command_examples.SecurityScanExampleTests.test_all_scans_keep_candidate_paths_without_printing_matching_contents) (source='optional-skills/adk-security-supply-chain/SKILL.md', command=3) ... FAIL\n  test_all_scans_keep_candidate_paths_without_printing_matching_contents (tests.test_skill_command_examples.SecurityScanExampleTests.test_all_scans_keep_candidate_paths_without_printing_matching_contents) (source='optional-skills/adk-security-supply-chain/SKILL.md', command=4) ... FAIL\n  test_all_scans_keep_candidate_paths_without_printing_matching_contents (tests.test_skill_command_examples.SecurityScanExampleTests.test_all_scans_keep_candidate_paths_without_printing_matching_contents) (source='optional-skills/adk-security-supply-chain/SKILL.md', command=5) ... FAIL\n  test_all_scans_keep_candidate_paths_without_printing_matching_contents (tests.test_skill_command_examples.SecurityScanExampleTests.test_all_scans_keep_candidate_paths_without_printing_matching_contents) (source='docs/runbooks/security-supply-chain.md', command=1) ... FAIL\n  test_all_scans_keep_candidate_paths_without_printing_matching_contents (tests.test_skill_command_examples.SecurityScanExampleTests.test_all_scans_keep_candidate_paths_without_printing_matching_contents) (source='docs/runbooks/security-supply-chain.md', command=2) ... FAIL\ntest_no_match_and_io_errors_keep_distinct_status_and_diagnostics (tests.test_skill_command_examples.SecurityScanExampleTests.test_no_match_and_io_errors_keep_distinct_status_and_diagnostics) ... ok\ntest_secret_scan_preserves_hidden_ignored_coverage_and_git_exclusion (tests.test_skill_command_examples.SecurityScanExampleTests.test_secret_scan_preserves_hidden_ignored_coverage_and_git_exclusion) ... ok\ntest_child_self_signals_stop_sampling_without_claiming_parent_signal_handling (tests.test_skill_command_examples.FlakySampleExampleTests.test_child_self_signals_stop_sampling_without_claiming_parent_signal_handling) ... \n  test_child_self_signals_stop_sampling_without_claiming_parent_signal_handling (tests.test_skill_command_examples.FlakySampleExampleTests.test_child_self_signals_stop_sampling_without_claiming_parent_signal_handling) (signal='SIGINT') ... FAIL\n  test_child_self_signals_stop_sampling_without_claiming_parent_signal_handling (tests.test_skill_command_examples.FlakySampleExampleTests.test_child_self_signals_stop_sampling_without_claiming_parent_signal_handling) (signal='SIGTERM') ... FAIL\ntest_environment_example_only_prints_names_not_synthetic_secret_values (tests.test_skill_command_examples.FlakySampleExampleTests.test_environment_example_only_prints_names_not_synthetic_secret_values) ... ok\ntest_existing_evidence_is_not_reused_or_overwritten (tests.test_skill_command_examples.FlakySampleExampleTests.test_existing_evidence_is_not_reused_or_overwritten) ... ok\ntest_interrupt_after_an_observation_preserves_both_samples_and_stops (tests.test_skill_command_examples.FlakySampleExampleTests.test_interrupt_after_an_observation_preserves_both_samples_and_stops) ... \n  test_interrupt_after_an_observation_preserves_both_samples_and_stops (tests.test_skill_command_examples.FlakySampleExampleTests.test_interrupt_after_an_observation_preserves_both_samples_and_stops) (previous=0, status=130) ... FAIL\n  test_interrupt_after_an_observation_preserves_both_samples_and_stops (tests.test_skill_command_examples.FlakySampleExampleTests.test_interrupt_after_an_observation_preserves_both_samples_and_stops) (previous=9, status=143) ... FAIL\ntest_invalid_sample_budgets_do_not_execute_or_create_output (tests.test_skill_command_examples.FlakySampleExampleTests.test_invalid_sample_budgets_do_not_execute_or_create_output) ... ok\ntest_reported_interrupt_status_stops_after_preserving_the_current_sample (tests.test_skill_command_examples.FlakySampleExampleTests.test_reported_interrupt_status_stops_after_preserving_the_current_sample) ... \n  test_reported_interrupt_status_stops_after_preserving_the_current_sample (tests.test_skill_command_examples.FlakySampleExampleTests.test_reported_interrupt_status_stops_after_preserving_the_current_sample) (status=130) ... FAIL\n  test_reported_interrupt_status_stops_after_preserving_the_current_sample (tests.test_skill_command_examples.FlakySampleExampleTests.test_reported_interrupt_status_stops_after_preserving_the_current_sample) (status=143) ... FAIL\ntest_sample_collection_failure_stops_without_fake_completed_attempt (tests.test_skill_command_examples.FlakySampleExampleTests.test_sample_collection_failure_stops_without_fake_completed_attempt) ... ok\ntest_status_write_failure_is_not_a_successful_collection (tests.test_skill_command_examples.FlakySampleExampleTests.test_status_write_failure_is_not_a_successful_collection) ... ok\ntest_success_failure_and_mixed_runs_keep_exact_exit_codes_and_reports (tests.test_skill_command_examples.FlakySampleExampleTests.test_success_failure_and_mixed_runs_keep_exact_exit_codes_and_reports) ... ok\n\n======================================================================\nFAIL: test_all_scans_keep_candidate_paths_without_printing_matching_contents (tests.test_skill_command_examples.SecurityScanExampleTests.test_all_scans_keep_candidate_paths_without_printing_matching_contents) (source='optional-skills/adk-security-supply-chain/SKILL.md', command=2)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_skill_command_examples.py\", line 254, in test_all_scans_keep_candidate_paths_without_printing_matching_contents\n    self.assertFalse(self.sentinel in result.stdout + result.stderr,\nAssertionError: True is not false : published scan printed synthetic file contents\n\n======================================================================\nFAIL: test_all_scans_keep_candidate_paths_without_printing_matching_contents (tests.test_skill_command_examples.SecurityScanExampleTests.test_all_scans_keep_candidate_paths_without_printing_matching_contents) (source='optional-skills/adk-security-supply-chain/SKILL.md', command=3)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_skill_command_examples.py\", line 254, in test_all_scans_keep_candidate_paths_without_printing_matching_contents\n    self.assertFalse(self.sentinel in result.stdout + result.stderr,\nAssertionError: True is not false : published scan printed synthetic file contents\n\n======================================================================\nFAIL: test_all_scans_keep_candidate_paths_without_printing_matching_contents (tests.test_skill_command_examples.SecurityScanExampleTests.test_all_scans_keep_candidate_paths_without_printing_matching_contents) (source='optional-skills/adk-security-supply-chain/SKILL.md', command=4)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_skill_command_examples.py\", line 254, in test_all_scans_keep_candidate_paths_without_printing_matching_contents\n    self.assertFalse(self.sentinel in result.stdout + result.stderr,\nAssertionError: True is not false : published scan printed synthetic file contents\n\n======================================================================\nFAIL: test_all_scans_keep_candidate_paths_without_printing_matching_contents (tests.test_skill_command_examples.SecurityScanExampleTests.test_all_scans_keep_candidate_paths_without_printing_matching_contents) (source='optional-skills/adk-security-supply-chain/SKILL.md', command=5)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_skill_command_examples.py\", line 254, in test_all_scans_keep_candidate_paths_without_printing_matching_contents\n    self.assertFalse(self.sentinel in result.stdout + result.stderr,\nAssertionError: True is not false : published scan printed synthetic file contents\n\n======================================================================\nFAIL: test_all_scans_keep_candidate_paths_without_printing_matching_contents (tests.test_skill_command_examples.SecurityScanExampleTests.test_all_scans_keep_candidate_paths_without_printing_matching_contents) (source='docs/runbooks/security-supply-chain.md', command=1)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_skill_command_examples.py\", line 254, in test_all_scans_keep_candidate_paths_without_printing_matching_contents\n    self.assertFalse(self.sentinel in result.stdout + result.stderr,\nAssertionError: True is not false : published scan printed synthetic file contents\n\n======================================================================\nFAIL: test_all_scans_keep_candidate_paths_without_printing_matching_contents (tests.test_skill_command_examples.SecurityScanExampleTests.test_all_scans_keep_candidate_paths_without_printing_matching_contents) (source='docs/runbooks/security-supply-chain.md', command=2)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_skill_command_examples.py\", line 254, in test_all_scans_keep_candidate_paths_without_printing_matching_contents\n    self.assertFalse(self.sentinel in result.stdout + result.stderr,\nAssertionError: True is not false : published scan printed synthetic file contents\n\n======================================================================\nFAIL: test_child_self_signals_stop_sampling_without_claiming_parent_signal_handling (tests.test_skill_command_examples.FlakySampleExampleTests.test_child_self_signals_stop_sampling_without_claiming_parent_signal_handling) (signal='SIGINT')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_skill_command_examples.py\", line 371, in test_child_self_signals_stop_sampling_without_claiming_parent_signal_handling\n    self.assertEqual(status, result.returncode, result.stderr)\nAssertionError: 130 != 1 : \n\n======================================================================\nFAIL: test_child_self_signals_stop_sampling_without_claiming_parent_signal_handling (tests.test_skill_command_examples.FlakySampleExampleTests.test_child_self_signals_stop_sampling_without_claiming_parent_signal_handling) (signal='SIGTERM')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_skill_command_examples.py\", line 371, in test_child_self_signals_stop_sampling_without_claiming_parent_signal_handling\n    self.assertEqual(status, result.returncode, result.stderr)\nAssertionError: 143 != 1 : Terminated\nTerminated\nTerminated\n\n\n======================================================================\nFAIL: test_interrupt_after_an_observation_preserves_both_samples_and_stops (tests.test_skill_command_examples.FlakySampleExampleTests.test_interrupt_after_an_observation_preserves_both_samples_and_stops) (previous=0, status=130)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_skill_command_examples.py\", line 354, in test_interrupt_after_an_observation_preserves_both_samples_and_stops\n    self.assertEqual(status, result.returncode, result.stderr)\nAssertionError: 130 != 1 : \n\n======================================================================\nFAIL: test_interrupt_after_an_observation_preserves_both_samples_and_stops (tests.test_skill_command_examples.FlakySampleExampleTests.test_interrupt_after_an_observation_preserves_both_samples_and_stops) (previous=9, status=143)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_skill_command_examples.py\", line 354, in test_interrupt_after_an_observation_preserves_both_samples_and_stops\n    self.assertEqual(status, result.returncode, result.stderr)\nAssertionError: 143 != 1 : \n\n======================================================================\nFAIL: test_reported_interrupt_status_stops_after_preserving_the_current_sample (tests.test_skill_command_examples.FlakySampleExampleTests.test_reported_interrupt_status_stops_after_preserving_the_current_sample) (status=130)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_skill_command_examples.py\", line 339, in test_reported_interrupt_status_stops_after_preserving_the_current_sample\n    self.assertEqual(status, result.returncode, result.stderr)\nAssertionError: 130 != 1 : \n\n======================================================================\nFAIL: test_reported_interrupt_status_stops_after_preserving_the_current_sample (tests.test_skill_command_examples.FlakySampleExampleTests.test_reported_interrupt_status_stops_after_preserving_the_current_sample) (status=143)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_skill_command_examples.py\", line 339, in test_reported_interrupt_status_stops_after_preserving_the_current_sample\n    self.assertEqual(status, result.returncode, result.stderr)\nAssertionError: 143 != 1 : \n\n----------------------------------------------------------------------\nRan 12 tests in 1.157s\n\nFAILED (failures=12)\n",
+  "exit_code": 1,
+  "observations": [
+    {
+      "test": "tests.test_skill_command_examples.SecurityScanExampleTests.test_all_scans_keep_candidate_paths_without_printing_matching_contents",
+      "command": [
+        "bash",
+        "-c",
+        "set -euo pipefail\nrg --hidden --no-ignore -l --glob \"!**/.git/**\" \"api[_-]?key|token|secret|password|PRIVATE KEY\" \"$1\"  # 不回显值",
+        "skill-example",
+        "/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]"
+      ],
+      "cwd": "/tmp/adk scan evidence n80lg_3s",
+      "started_at_utc": "2026-11-16T07:51:21.751147+00:00",
+      "ended_at_utc": "2026-11-16T07:51:21.760413+00:00",
+      "duration_seconds": 0.009267967001505895,
+      "stdout": "/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-0.txt\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-1.txt\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-2.txt\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-3.txt\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-4.txt\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-5.txt\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-6.txt\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-7.txt\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-8.txt\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-9.txt\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-10.txt\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-11.txt\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-12.txt\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-13.txt\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-14.txt\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-15.txt\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-16.txt\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-17.txt\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-18.txt\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-19.txt\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-20.txt\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-21.txt\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-23.txt\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-22.txt\n",
+      "stderr": "",
+      "exit_code": 0,
+      "fixtures_after": [
+        {
+          "path": "candidate assets [fixture]",
+          "type": "directory"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-0.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-1.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-10.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-11.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-12.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-13.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-14.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-15.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-16.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-17.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-18.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-19.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-2.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-20.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-21.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-22.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-23.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-3.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-4.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-5.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-6.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-7.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-8.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-9.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_command_examples.SecurityScanExampleTests.test_all_scans_keep_candidate_paths_without_printing_matching_contents",
+      "command": [
+        "bash",
+        "-c",
+        "set -euo pipefail\nrg -n \"license|LICENSE\" \"$1\" | head -20",
+        "skill-example",
+        "/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]"
+      ],
+      "cwd": "/tmp/adk scan evidence n80lg_3s",
+      "started_at_utc": "2026-11-16T07:51:21.760465+00:00",
+      "ended_at_utc": "2026-11-16T07:51:21.770591+00:00",
+      "duration_seconds": 0.010131656999874394,
+      "stdout": "/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-0.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-1.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-2.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-3.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-4.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-5.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-6.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-7.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-8.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-9.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-10.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-11.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-12.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-13.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-14.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-15.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-16.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-17.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-18.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-19.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n",
+      "stderr": "",
+      "exit_code": 0,
+      "fixtures_after": [
+        {
+          "path": "candidate assets [fixture]",
+          "type": "directory"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-0.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-1.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-10.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-11.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-12.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-13.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-14.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-15.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-16.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-17.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-18.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-19.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-2.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-20.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-21.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-22.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-23.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-3.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-4.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-5.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-6.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-7.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-8.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-9.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_command_examples.SecurityScanExampleTests.test_all_scans_keep_candidate_paths_without_printing_matching_contents",
+      "command": [
+        "bash",
+        "-c",
+        "set -euo pipefail\nrg -n \"curl|wget|fetch|http|https\" \"$1\"",
+        "skill-example",
+        "/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]"
+      ],
+      "cwd": "/tmp/adk scan evidence n80lg_3s",
+      "started_at_utc": "2026-11-16T07:51:21.770955+00:00",
+      "ended_at_utc": "2026-11-16T07:51:21.778234+00:00",
+      "duration_seconds": 0.007282079001015518,
+      "stdout": "/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-0.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-1.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-2.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-3.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-4.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-5.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-18.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-19.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-20.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-21.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-22.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-23.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-15.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-16.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-17.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-14.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-13.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-9.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-10.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-11.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-8.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-7.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-6.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-12.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n",
+      "stderr": "",
+      "exit_code": 0,
+      "fixtures_after": [
+        {
+          "path": "candidate assets [fixture]",
+          "type": "directory"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-0.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-1.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-10.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-11.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-12.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-13.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-14.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-15.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-16.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-17.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-18.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-19.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-2.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-20.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-21.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-22.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-23.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-3.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-4.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-5.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-6.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-7.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-8.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-9.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_command_examples.SecurityScanExampleTests.test_all_scans_keep_candidate_paths_without_printing_matching_contents",
+      "command": [
+        "bash",
+        "-c",
+        "set -euo pipefail\nrg -n \"writeFile|fs\\.write|os\\.path|open\\(\" \"$1\"",
+        "skill-example",
+        "/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]"
+      ],
+      "cwd": "/tmp/adk scan evidence n80lg_3s",
+      "started_at_utc": "2026-11-16T07:51:21.778429+00:00",
+      "ended_at_utc": "2026-11-16T07:51:21.785769+00:00",
+      "duration_seconds": 0.007342729000811232,
+      "stdout": "/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-0.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-1.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-2.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-6.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-3.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-7.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-4.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-9.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-12.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-8.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-10.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-19.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-11.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-13.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-22.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-20.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-5.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-23.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-14.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-15.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-18.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-21.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-16.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-17.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n",
+      "stderr": "",
+      "exit_code": 0,
+      "fixtures_after": [
+        {
+          "path": "candidate assets [fixture]",
+          "type": "directory"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-0.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-1.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-10.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-11.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-12.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-13.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-14.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-15.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-16.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-17.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-18.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-19.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-2.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-20.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-21.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-22.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-23.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-3.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-4.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-5.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-6.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-7.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-8.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-9.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_command_examples.SecurityScanExampleTests.test_all_scans_keep_candidate_paths_without_printing_matching_contents",
+      "command": [
+        "bash",
+        "-c",
+        "set -euo pipefail\nrg -n \"BASE_URL|base_url|mcp|hook|approval|sandbox\" \"$1\"",
+        "skill-example",
+        "/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]"
+      ],
+      "cwd": "/tmp/adk scan evidence n80lg_3s",
+      "started_at_utc": "2026-11-16T07:51:21.785934+00:00",
+      "ended_at_utc": "2026-11-16T07:51:21.792609+00:00",
+      "duration_seconds": 0.006678181998722721,
+      "stdout": "/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-0.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-12.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-13.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-14.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-15.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-3.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-16.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-17.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-6.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-1.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-4.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-18.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-19.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-20.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-21.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-22.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-10.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-11.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-9.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-8.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-23.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-7.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-2.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-5.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n",
+      "stderr": "",
+      "exit_code": 0,
+      "fixtures_after": [
+        {
+          "path": "candidate assets [fixture]",
+          "type": "directory"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-0.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-1.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-10.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-11.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-12.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-13.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-14.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-15.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-16.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-17.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-18.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-19.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-2.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-20.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-21.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-22.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-23.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-3.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-4.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-5.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-6.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-7.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-8.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-9.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_command_examples.SecurityScanExampleTests.test_all_scans_keep_candidate_paths_without_printing_matching_contents",
+      "command": [
+        "bash",
+        "-c",
+        "set -euo pipefail\nrg -n \"api[_-]?key|token|secret|password|PRIVATE KEY\" \"$1\"",
+        "skill-example",
+        "/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]"
+      ],
+      "cwd": "/tmp/adk scan evidence n80lg_3s",
+      "started_at_utc": "2026-11-16T07:51:21.792743+00:00",
+      "ended_at_utc": "2026-11-16T07:51:21.802355+00:00",
+      "duration_seconds": 0.009617021001758985,
+      "stdout": "/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-0.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-1.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-2.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-3.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-12.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-4.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-13.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-14.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-5.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-15.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-16.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-6.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-17.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-7.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-18.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-19.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-8.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-9.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-20.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-21.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-10.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-22.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-23.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-11.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n",
+      "stderr": "",
+      "exit_code": 0,
+      "fixtures_after": [
+        {
+          "path": "candidate assets [fixture]",
+          "type": "directory"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-0.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-1.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-10.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-11.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-12.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-13.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-14.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-15.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-16.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-17.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-18.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-19.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-2.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-20.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-21.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-22.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-23.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-3.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-4.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-5.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-6.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-7.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-8.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-9.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_command_examples.SecurityScanExampleTests.test_all_scans_keep_candidate_paths_without_printing_matching_contents",
+      "command": [
+        "bash",
+        "-c",
+        "set -euo pipefail\nrg -n \"BASE_URL|base_url|mcp|hook|approval|sandbox\" \"$1\"",
+        "skill-example",
+        "/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]"
+      ],
+      "cwd": "/tmp/adk scan evidence n80lg_3s",
+      "started_at_utc": "2026-11-16T07:51:21.802491+00:00",
+      "ended_at_utc": "2026-11-16T07:51:21.808848+00:00",
+      "duration_seconds": 0.006363168002280872,
+      "stdout": "/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-0.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-1.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-2.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-3.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-4.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-5.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-6.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-7.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-8.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-9.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-10.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-11.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-12.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-13.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-14.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-15.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-16.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-17.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-18.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-19.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-20.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-21.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-22.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n/tmp/adk scan evidence n80lg_3s/candidate assets [fixture]/asset-23.txt:1:api_key=\"SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713\" license curl https writeFile BASE_URL\n",
+      "stderr": "",
+      "exit_code": 0,
+      "fixtures_after": [
+        {
+          "path": "candidate assets [fixture]",
+          "type": "directory"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-0.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-1.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-10.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-11.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-12.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-13.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-14.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-15.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-16.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-17.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-18.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-19.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-2.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-20.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-21.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-22.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-23.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-3.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-4.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-5.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-6.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-7.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-8.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate assets [fixture]/asset-9.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_command_examples.SecurityScanExampleTests.test_no_match_and_io_errors_keep_distinct_status_and_diagnostics",
+      "command": [
+        "bash",
+        "-c",
+        "set -euo pipefail\nrg --hidden --no-ignore -l --glob \"!**/.git/**\" \"api[_-]?key|token|secret|password|PRIVATE KEY\" \"$1\"  # 不回显值",
+        "skill-example",
+        "/tmp/adk scan evidence ddy8tzo5/ordinary.txt"
+      ],
+      "cwd": "/tmp/adk scan evidence ddy8tzo5",
+      "started_at_utc": "2026-11-16T07:51:21.809796+00:00",
+      "ended_at_utc": "2026-11-16T07:51:21.812993+00:00",
+      "duration_seconds": 0.003198038997652475,
+      "stdout": "",
+      "stderr": "",
+      "exit_code": 1,
+      "fixtures_after": [
+        {
+          "path": "ordinary.txt",
+          "type": "file",
+          "bytes": 23,
+          "sha256": "b22b1096ea87acce2665615c49afd9892082258d7205532178262fa66f398ded"
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_command_examples.SecurityScanExampleTests.test_no_match_and_io_errors_keep_distinct_status_and_diagnostics",
+      "command": [
+        "bash",
+        "-c",
+        "set -euo pipefail\nrg --hidden --no-ignore -l --glob \"!**/.git/**\" \"api[_-]?key|token|secret|password|PRIVATE KEY\" \"$1\"  # 不回显值",
+        "skill-example",
+        "/tmp/adk scan evidence ddy8tzo5/missing candidate.txt"
+      ],
+      "cwd": "/tmp/adk scan evidence ddy8tzo5",
+      "started_at_utc": "2026-11-16T07:51:21.813018+00:00",
+      "ended_at_utc": "2026-11-16T07:51:21.817324+00:00",
+      "duration_seconds": 0.0043093019994557835,
+      "stdout": "",
+      "stderr": "rg: /tmp/adk scan evidence ddy8tzo5/missing candidate.txt: IO error for operation on /tmp/adk scan evidence ddy8tzo5/missing candidate.txt: No such file or directory (os error 2)\n",
+      "exit_code": 2,
+      "fixtures_after": [
+        {
+          "path": "ordinary.txt",
+          "type": "file",
+          "bytes": 23,
+          "sha256": "b22b1096ea87acce2665615c49afd9892082258d7205532178262fa66f398ded"
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_command_examples.SecurityScanExampleTests.test_no_match_and_io_errors_keep_distinct_status_and_diagnostics",
+      "command": [
+        "bash",
+        "-c",
+        "set -euo pipefail\nrg -n \"license|LICENSE\" \"$1\" | head -20",
+        "skill-example",
+        "/tmp/adk scan evidence ddy8tzo5/ordinary.txt"
+      ],
+      "cwd": "/tmp/adk scan evidence ddy8tzo5",
+      "started_at_utc": "2026-11-16T07:51:21.817374+00:00",
+      "ended_at_utc": "2026-11-16T07:51:21.821344+00:00",
+      "duration_seconds": 0.003973868999310071,
+      "stdout": "",
+      "stderr": "",
+      "exit_code": 1,
+      "fixtures_after": [
+        {
+          "path": "ordinary.txt",
+          "type": "file",
+          "bytes": 23,
+          "sha256": "b22b1096ea87acce2665615c49afd9892082258d7205532178262fa66f398ded"
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_command_examples.SecurityScanExampleTests.test_no_match_and_io_errors_keep_distinct_status_and_diagnostics",
+      "command": [
+        "bash",
+        "-c",
+        "set -euo pipefail\nrg -n \"license|LICENSE\" \"$1\" | head -20",
+        "skill-example",
+        "/tmp/adk scan evidence ddy8tzo5/missing candidate.txt"
+      ],
+      "cwd": "/tmp/adk scan evidence ddy8tzo5",
+      "started_at_utc": "2026-11-16T07:51:21.821360+00:00",
+      "ended_at_utc": "2026-11-16T07:51:21.825417+00:00",
+      "duration_seconds": 0.0040607359987916425,
+      "stdout": "",
+      "stderr": "rg: /tmp/adk scan evidence ddy8tzo5/missing candidate.txt: IO error for operation on /tmp/adk scan evidence ddy8tzo5/missing candidate.txt: No such file or directory (os error 2)\n",
+      "exit_code": 2,
+      "fixtures_after": [
+        {
+          "path": "ordinary.txt",
+          "type": "file",
+          "bytes": 23,
+          "sha256": "b22b1096ea87acce2665615c49afd9892082258d7205532178262fa66f398ded"
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_command_examples.SecurityScanExampleTests.test_no_match_and_io_errors_keep_distinct_status_and_diagnostics",
+      "command": [
+        "bash",
+        "-c",
+        "set -euo pipefail\nrg -n \"curl|wget|fetch|http|https\" \"$1\"",
+        "skill-example",
+        "/tmp/adk scan evidence ddy8tzo5/ordinary.txt"
+      ],
+      "cwd": "/tmp/adk scan evidence ddy8tzo5",
+      "started_at_utc": "2026-11-16T07:51:21.825449+00:00",
+      "ended_at_utc": "2026-11-16T07:51:21.828620+00:00",
+      "duration_seconds": 0.0031746739987283945,
+      "stdout": "",
+      "stderr": "",
+      "exit_code": 1,
+      "fixtures_after": [
+        {
+          "path": "ordinary.txt",
+          "type": "file",
+          "bytes": 23,
+          "sha256": "b22b1096ea87acce2665615c49afd9892082258d7205532178262fa66f398ded"
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_command_examples.SecurityScanExampleTests.test_no_match_and_io_errors_keep_distinct_status_and_diagnostics",
+      "command": [
+        "bash",
+        "-c",
+        "set -euo pipefail\nrg -n \"curl|wget|fetch|http|https\" \"$1\"",
+        "skill-example",
+        "/tmp/adk scan evidence ddy8tzo5/missing candidate.txt"
+      ],
+      "cwd": "/tmp/adk scan evidence ddy8tzo5",
+      "started_at_utc": "2026-11-16T07:51:21.828631+00:00",
+      "ended_at_utc": "2026-11-16T07:51:21.831745+00:00",
+      "duration_seconds": 0.0031185420011752285,
+      "stdout": "",
+      "stderr": "rg: /tmp/adk scan evidence ddy8tzo5/missing candidate.txt: IO error for operation on /tmp/adk scan evidence ddy8tzo5/missing candidate.txt: No such file or directory (os error 2)\n",
+      "exit_code": 2,
+      "fixtures_after": [
+        {
+          "path": "ordinary.txt",
+          "type": "file",
+          "bytes": 23,
+          "sha256": "b22b1096ea87acce2665615c49afd9892082258d7205532178262fa66f398ded"
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_command_examples.SecurityScanExampleTests.test_no_match_and_io_errors_keep_distinct_status_and_diagnostics",
+      "command": [
+        "bash",
+        "-c",
+        "set -euo pipefail\nrg -n \"writeFile|fs\\.write|os\\.path|open\\(\" \"$1\"",
+        "skill-example",
+        "/tmp/adk scan evidence ddy8tzo5/ordinary.txt"
+      ],
+      "cwd": "/tmp/adk scan evidence ddy8tzo5",
+      "started_at_utc": "2026-11-16T07:51:21.831772+00:00",
+      "ended_at_utc": "2026-11-16T07:51:21.834969+00:00",
+      "duration_seconds": 0.00320031299997936,
+      "stdout": "",
+      "stderr": "",
+      "exit_code": 1,
+      "fixtures_after": [
+        {
+          "path": "ordinary.txt",
+          "type": "file",
+          "bytes": 23,
+          "sha256": "b22b1096ea87acce2665615c49afd9892082258d7205532178262fa66f398ded"
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_command_examples.SecurityScanExampleTests.test_no_match_and_io_errors_keep_distinct_status_and_diagnostics",
+      "command": [
+        "bash",
+        "-c",
+        "set -euo pipefail\nrg -n \"writeFile|fs\\.write|os\\.path|open\\(\" \"$1\"",
+        "skill-example",
+        "/tmp/adk scan evidence ddy8tzo5/missing candidate.txt"
+      ],
+      "cwd": "/tmp/adk scan evidence ddy8tzo5",
+      "started_at_utc": "2026-11-16T07:51:21.834980+00:00",
+      "ended_at_utc": "2026-11-16T07:51:21.838271+00:00",
+      "duration_seconds": 0.0032944000013230834,
+      "stdout": "",
+      "stderr": "rg: /tmp/adk scan evidence ddy8tzo5/missing candidate.txt: IO error for operation on /tmp/adk scan evidence ddy8tzo5/missing candidate.txt: No such file or directory (os error 2)\n",
+      "exit_code": 2,
+      "fixtures_after": [
+        {
+          "path": "ordinary.txt",
+          "type": "file",
+          "bytes": 23,
+          "sha256": "b22b1096ea87acce2665615c49afd9892082258d7205532178262fa66f398ded"
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_command_examples.SecurityScanExampleTests.test_no_match_and_io_errors_keep_distinct_status_and_diagnostics",
+      "command": [
+        "bash",
+        "-c",
+        "set -euo pipefail\nrg -n \"BASE_URL|base_url|mcp|hook|approval|sandbox\" \"$1\"",
+        "skill-example",
+        "/tmp/adk scan evidence ddy8tzo5/ordinary.txt"
+      ],
+      "cwd": "/tmp/adk scan evidence ddy8tzo5",
+      "started_at_utc": "2026-11-16T07:51:21.838300+00:00",
+      "ended_at_utc": "2026-11-16T07:51:21.841062+00:00",
+      "duration_seconds": 0.002764761997241294,
+      "stdout": "",
+      "stderr": "",
+      "exit_code": 1,
+      "fixtures_after": [
+        {
+          "path": "ordinary.txt",
+          "type": "file",
+          "bytes": 23,
+          "sha256": "b22b1096ea87acce2665615c49afd9892082258d7205532178262fa66f398ded"
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_command_examples.SecurityScanExampleTests.test_no_match_and_io_errors_keep_distinct_status_and_diagnostics",
+      "command": [
+        "bash",
+        "-c",
+        "set -euo pipefail\nrg -n \"BASE_URL|base_url|mcp|hook|approval|sandbox\" \"$1\"",
+        "skill-example",
+        "/tmp/adk scan evidence ddy8tzo5/missing candidate.txt"
+      ],
+      "cwd": "/tmp/adk scan evidence ddy8tzo5",
+      "started_at_utc": "2026-11-16T07:51:21.841073+00:00",
+      "ended_at_utc": "2026-11-16T07:51:21.844948+00:00",
+      "duration_seconds": 0.0038781680013926234,
+      "stdout": "",
+      "stderr": "rg: /tmp/adk scan evidence ddy8tzo5/missing candidate.txt: IO error for operation on /tmp/adk scan evidence ddy8tzo5/missing candidate.txt: No such file or directory (os error 2)\n",
+      "exit_code": 2,
+      "fixtures_after": [
+        {
+          "path": "ordinary.txt",
+          "type": "file",
+          "bytes": 23,
+          "sha256": "b22b1096ea87acce2665615c49afd9892082258d7205532178262fa66f398ded"
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_command_examples.SecurityScanExampleTests.test_no_match_and_io_errors_keep_distinct_status_and_diagnostics",
+      "command": [
+        "bash",
+        "-c",
+        "set -euo pipefail\nrg -n \"api[_-]?key|token|secret|password|PRIVATE KEY\" \"$1\"",
+        "skill-example",
+        "/tmp/adk scan evidence ddy8tzo5/ordinary.txt"
+      ],
+      "cwd": "/tmp/adk scan evidence ddy8tzo5",
+      "started_at_utc": "2026-11-16T07:51:21.844977+00:00",
+      "ended_at_utc": "2026-11-16T07:51:21.848518+00:00",
+      "duration_seconds": 0.0035440770006971434,
+      "stdout": "",
+      "stderr": "",
+      "exit_code": 1,
+      "fixtures_after": [
+        {
+          "path": "ordinary.txt",
+          "type": "file",
+          "bytes": 23,
+          "sha256": "b22b1096ea87acce2665615c49afd9892082258d7205532178262fa66f398ded"
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_command_examples.SecurityScanExampleTests.test_no_match_and_io_errors_keep_distinct_status_and_diagnostics",
+      "command": [
+        "bash",
+        "-c",
+        "set -euo pipefail\nrg -n \"api[_-]?key|token|secret|password|PRIVATE KEY\" \"$1\"",
+        "skill-example",
+        "/tmp/adk scan evidence ddy8tzo5/missing candidate.txt"
+      ],
+      "cwd": "/tmp/adk scan evidence ddy8tzo5",
+      "started_at_utc": "2026-11-16T07:51:21.848530+00:00",
+      "ended_at_utc": "2026-11-16T07:51:21.852093+00:00",
+      "duration_seconds": 0.003566170002159197,
+      "stdout": "",
+      "stderr": "rg: /tmp/adk scan evidence ddy8tzo5/missing candidate.txt: IO error for operation on /tmp/adk scan evidence ddy8tzo5/missing candidate.txt: No such file or directory (os error 2)\n",
+      "exit_code": 2,
+      "fixtures_after": [
+        {
+          "path": "ordinary.txt",
+          "type": "file",
+          "bytes": 23,
+          "sha256": "b22b1096ea87acce2665615c49afd9892082258d7205532178262fa66f398ded"
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_command_examples.SecurityScanExampleTests.test_no_match_and_io_errors_keep_distinct_status_and_diagnostics",
+      "command": [
+        "bash",
+        "-c",
+        "set -euo pipefail\nrg -n \"BASE_URL|base_url|mcp|hook|approval|sandbox\" \"$1\"",
+        "skill-example",
+        "/tmp/adk scan evidence ddy8tzo5/ordinary.txt"
+      ],
+      "cwd": "/tmp/adk scan evidence ddy8tzo5",
+      "started_at_utc": "2026-11-16T07:51:21.852120+00:00",
+      "ended_at_utc": "2026-11-16T07:51:21.855056+00:00",
+      "duration_seconds": 0.002937976998509839,
+      "stdout": "",
+      "stderr": "",
+      "exit_code": 1,
+      "fixtures_after": [
+        {
+          "path": "ordinary.txt",
+          "type": "file",
+          "bytes": 23,
+          "sha256": "b22b1096ea87acce2665615c49afd9892082258d7205532178262fa66f398ded"
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_command_examples.SecurityScanExampleTests.test_no_match_and_io_errors_keep_distinct_status_and_diagnostics",
+      "command": [
+        "bash",
+        "-c",
+        "set -euo pipefail\nrg -n \"BASE_URL|base_url|mcp|hook|approval|sandbox\" \"$1\"",
+        "skill-example",
+        "/tmp/adk scan evidence ddy8tzo5/missing candidate.txt"
+      ],
+      "cwd": "/tmp/adk scan evidence ddy8tzo5",
+      "started_at_utc": "2026-11-16T07:51:21.855067+00:00",
+      "ended_at_utc": "2026-11-16T07:51:21.857973+00:00",
+      "duration_seconds": 0.0029095150021021254,
+      "stdout": "",
+      "stderr": "rg: /tmp/adk scan evidence ddy8tzo5/missing candidate.txt: IO error for operation on /tmp/adk scan evidence ddy8tzo5/missing candidate.txt: No such file or directory (os error 2)\n",
+      "exit_code": 2,
+      "fixtures_after": [
+        {
+          "path": "ordinary.txt",
+          "type": "file",
+          "bytes": 23,
+          "sha256": "b22b1096ea87acce2665615c49afd9892082258d7205532178262fa66f398ded"
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_command_examples.SecurityScanExampleTests.test_secret_scan_preserves_hidden_ignored_coverage_and_git_exclusion",
+      "command": [
+        "bash",
+        "-c",
+        "set -euo pipefail\nrg --hidden --no-ignore -l --glob \"!**/.git/**\" \"api[_-]?key|token|secret|password|PRIVATE KEY\" \"$1\"  # 不回显值",
+        "skill-example",
+        "/tmp/adk scan evidence jztb0fi0/candidate"
+      ],
+      "cwd": "/tmp/adk scan evidence jztb0fi0",
+      "started_at_utc": "2026-11-16T07:51:21.859051+00:00",
+      "ended_at_utc": "2026-11-16T07:51:21.865177+00:00",
+      "duration_seconds": 0.00617375600268133,
+      "stdout": "/tmp/adk scan evidence jztb0fi0/candidate/.env\n/tmp/adk scan evidence jztb0fi0/candidate/ignored.txt\n",
+      "stderr": "",
+      "exit_code": 0,
+      "fixtures_after": [
+        {
+          "path": "candidate",
+          "type": "directory"
+        },
+        {
+          "path": "candidate/.env",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate/.git",
+          "type": "directory"
+        },
+        {
+          "path": "candidate/.git/config",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        },
+        {
+          "path": "candidate/.gitignore",
+          "type": "file",
+          "bytes": 12,
+          "sha256": "7d8bf54db0e090506421e6057a4020f598538b9ecc134a87376e4596309634b8"
+        },
+        {
+          "path": "candidate/ignored.txt",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "3b59fe049e98542c5da4fede84eed60c89f4f178b86885d8377984ebf279483f"
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_command_examples.FlakySampleExampleTests.test_child_self_signals_stop_sampling_without_claiming_parent_signal_handling",
+      "command": [
+        "bash",
+        "-c",
+        "run_flaky_samples() (\n  set -euo pipefail\n  (( $# >= 3 )) || { printf 'usage: run_flaky_samples <1-20> <new-directory> <command> [args...]\\n' >&2; exit 2; }\n  samples=$1\n  evidence=$2\n  shift 2\n  [[ \"$samples\" =~ ^([1-9]|1[0-9]|20)$ ]] || exit 2\n  mkdir -- \"$evidence\" || exit 2\n  evidence=$(cd -- \"$evidence\" && pwd -P) || exit 2\n  printf 'attempt\\texit_code\\n' > \"$evidence/results.tsv\" || exit 2\n  failed=0\n  for ((attempt=1; attempt<=samples; attempt++)); do\n    sample_dir=\"$evidence/run-$attempt\"\n    mkdir -- \"$sample_dir\" || exit 2\n    exec 3>\"$sample_dir/output.log\" || exit 2\n    result=0\n    FLAKY_SAMPLE_DIR=\"$sample_dir\" \"$@\" >&3 2>&1 || result=$?\n    exec 3>&- || exit 2\n    printf '%s\\t%s\\n' \"$attempt\" \"$result\" >> \"$evidence/results.tsv\" || exit 2\n    if (( result != 0 )); then failed=1; fi\n  done\n  printf 'attempts=%s\\nrecords=%s\\n' \"$samples\" \"$evidence/results.tsv\" || exit 2\n  exit \"$failed\"\n)\n\nrun_flaky_samples \"$@\"\n",
+        "skill-example",
+        "3",
+        "/tmp/tmpp865ub3u/SIGINT",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-c",
+        "import os, signal, sys\nprint('before child signal', flush=True)\nprint('child stderr retained', file=sys.stderr, flush=True)\nsignal.signal(2, signal.SIG_DFL)\nos.kill(os.getpid(), 2)\nraise AssertionError('child continued after its signal')\n"
+      ],
+      "cwd": "/tmp/tmpp865ub3u",
+      "started_at_utc": "2026-11-16T07:51:21.865653+00:00",
+      "ended_at_utc": "2026-11-16T07:51:21.938539+00:00",
+      "duration_seconds": 0.07289310199848842,
+      "stdout": "attempts=3\nrecords=/tmp/tmpp865ub3u/SIGINT/results.tsv\n",
+      "stderr": "",
+      "exit_code": 1,
+      "fixtures_after": [
+        {
+          "path": "SIGINT",
+          "type": "directory"
+        },
+        {
+          "path": "SIGINT/results.tsv",
+          "type": "file",
+          "bytes": 36,
+          "sha256": "0f803459798f2ada60cccef850c690f224e9e93e8abab4d36f18ef375a2eef68",
+          "content": "attempt\texit_code\n1\t130\n2\t130\n3\t130\n"
+        },
+        {
+          "path": "SIGINT/run-1",
+          "type": "directory"
+        },
+        {
+          "path": "SIGINT/run-1/output.log",
+          "type": "file",
+          "bytes": 42,
+          "sha256": "a9b88115f45808e722955c8e6501b5e2888b6d8b46200ef40fddf7324d1376bc",
+          "content": "before child signal\nchild stderr retained\n"
+        },
+        {
+          "path": "SIGINT/run-2",
+          "type": "directory"
+        },
+        {
+          "path": "SIGINT/run-2/output.log",
+          "type": "file",
+          "bytes": 42,
+          "sha256": "a9b88115f45808e722955c8e6501b5e2888b6d8b46200ef40fddf7324d1376bc",
+          "content": "before child signal\nchild stderr retained\n"
+        },
+        {
+          "path": "SIGINT/run-3",
+          "type": "directory"
+        },
+        {
+          "path": "SIGINT/run-3/output.log",
+          "type": "file",
+          "bytes": 42,
+          "sha256": "a9b88115f45808e722955c8e6501b5e2888b6d8b46200ef40fddf7324d1376bc",
+          "content": "before child signal\nchild stderr retained\n"
+        },
+        {
+          "path": "sample runner [fixture].py",
+          "type": "file",
+          "bytes": 502,
+          "sha256": "d243f9dbf6dd7abfd29bf66bfe4d1cfed85c745f5564847cb4bf2949b7f9ad2c"
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_command_examples.FlakySampleExampleTests.test_child_self_signals_stop_sampling_without_claiming_parent_signal_handling",
+      "command": [
+        "bash",
+        "-c",
+        "run_flaky_samples() (\n  set -euo pipefail\n  (( $# >= 3 )) || { printf 'usage: run_flaky_samples <1-20> <new-directory> <command> [args...]\\n' >&2; exit 2; }\n  samples=$1\n  evidence=$2\n  shift 2\n  [[ \"$samples\" =~ ^([1-9]|1[0-9]|20)$ ]] || exit 2\n  mkdir -- \"$evidence\" || exit 2\n  evidence=$(cd -- \"$evidence\" && pwd -P) || exit 2\n  printf 'attempt\\texit_code\\n' > \"$evidence/results.tsv\" || exit 2\n  failed=0\n  for ((attempt=1; attempt<=samples; attempt++)); do\n    sample_dir=\"$evidence/run-$attempt\"\n    mkdir -- \"$sample_dir\" || exit 2\n    exec 3>\"$sample_dir/output.log\" || exit 2\n    result=0\n    FLAKY_SAMPLE_DIR=\"$sample_dir\" \"$@\" >&3 2>&1 || result=$?\n    exec 3>&- || exit 2\n    printf '%s\\t%s\\n' \"$attempt\" \"$result\" >> \"$evidence/results.tsv\" || exit 2\n    if (( result != 0 )); then failed=1; fi\n  done\n  printf 'attempts=%s\\nrecords=%s\\n' \"$samples\" \"$evidence/results.tsv\" || exit 2\n  exit \"$failed\"\n)\n\nrun_flaky_samples \"$@\"\n",
+        "skill-example",
+        "3",
+        "/tmp/tmpp865ub3u/SIGTERM",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-c",
+        "import os, signal, sys\nprint('before child signal', flush=True)\nprint('child stderr retained', file=sys.stderr, flush=True)\nsignal.signal(15, signal.SIG_DFL)\nos.kill(os.getpid(), 15)\nraise AssertionError('child continued after its signal')\n"
+      ],
+      "cwd": "/tmp/tmpp865ub3u",
+      "started_at_utc": "2026-11-16T07:51:21.938848+00:00",
+      "ended_at_utc": "2026-11-16T07:51:21.988846+00:00",
+      "duration_seconds": 0.050005273002170725,
+      "stdout": "attempts=3\nrecords=/tmp/tmpp865ub3u/SIGTERM/results.tsv\n",
+      "stderr": "Terminated\nTerminated\nTerminated\n",
+      "exit_code": 1,
+      "fixtures_after": [
+        {
+          "path": "SIGINT",
+          "type": "directory"
+        },
+        {
+          "path": "SIGINT/results.tsv",
+          "type": "file",
+          "bytes": 36,
+          "sha256": "0f803459798f2ada60cccef850c690f224e9e93e8abab4d36f18ef375a2eef68",
+          "content": "attempt\texit_code\n1\t130\n2\t130\n3\t130\n"
+        },
+        {
+          "path": "SIGINT/run-1",
+          "type": "directory"
+        },
+        {
+          "path": "SIGINT/run-1/output.log",
+          "type": "file",
+          "bytes": 42,
+          "sha256": "a9b88115f45808e722955c8e6501b5e2888b6d8b46200ef40fddf7324d1376bc",
+          "content": "before child signal\nchild stderr retained\n"
+        },
+        {
+          "path": "SIGINT/run-2",
+          "type": "directory"
+        },
+        {
+          "path": "SIGINT/run-2/output.log",
+          "type": "file",
+          "bytes": 42,
+          "sha256": "a9b88115f45808e722955c8e6501b5e2888b6d8b46200ef40fddf7324d1376bc",
+          "content": "before child signal\nchild stderr retained\n"
+        },
+        {
+          "path": "SIGINT/run-3",
+          "type": "directory"
+        },
+        {
+          "path": "SIGINT/run-3/output.log",
+          "type": "file",
+          "bytes": 42,
+          "sha256": "a9b88115f45808e722955c8e6501b5e2888b6d8b46200ef40fddf7324d1376bc",
+          "content": "before child signal\nchild stderr retained\n"
+        },
+        {
+          "path": "SIGTERM",
+          "type": "directory"
+        },
+        {
+          "path": "SIGTERM/results.tsv",
+          "type": "file",
+          "bytes": 36,
+          "sha256": "7109b8b30f443b21c1e041d180cd49230ae73ae03e424a399482d073ba0ab584",
+          "content": "attempt\texit_code\n1\t143\n2\t143\n3\t143\n"
+        },
+        {
+          "path": "SIGTERM/run-1",
+          "type": "directory"
+        },
+        {
+          "path": "SIGTERM/run-1/output.log",
+          "type": "file",
+          "bytes": 42,
+          "sha256": "a9b88115f45808e722955c8e6501b5e2888b6d8b46200ef40fddf7324d1376bc",
+          "content": "before child signal\nchild stderr retained\n"
+        },
+        {
+          "path": "SIGTERM/run-2",
+          "type": "directory"
+        },
+        {
+          "path": "SIGTERM/run-2/output.log",
+          "type": "file",
+          "bytes": 42,
+          "sha256": "a9b88115f45808e722955c8e6501b5e2888b6d8b46200ef40fddf7324d1376bc",
+          "content": "before child signal\nchild stderr retained\n"
+        },
+        {
+          "path": "SIGTERM/run-3",
+          "type": "directory"
+        },
+        {
+          "path": "SIGTERM/run-3/output.log",
+          "type": "file",
+          "bytes": 42,
+          "sha256": "a9b88115f45808e722955c8e6501b5e2888b6d8b46200ef40fddf7324d1376bc",
+          "content": "before child signal\nchild stderr retained\n"
+        },
+        {
+          "path": "sample runner [fixture].py",
+          "type": "file",
+          "bytes": 502,
+          "sha256": "d243f9dbf6dd7abfd29bf66bfe4d1cfed85c745f5564847cb4bf2949b7f9ad2c"
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_command_examples.FlakySampleExampleTests.test_environment_example_only_prints_names_not_synthetic_secret_values",
+      "command": [
+        "bash",
+        "-c",
+        "# environment-names: values are never printed\npython3 - <<'PY'\nimport json, os\nprint(json.dumps(sorted(name for name in os.environ\n                       if any(key in name.upper() for key in (\"TEST\", \"CI\", \"DEBUG\")))))\nPY\n",
+        "skill-example"
+      ],
+      "cwd": "/tmp/tmpbp3qkg5j",
+      "started_at_utc": "2026-11-16T07:51:21.989532+00:00",
+      "ended_at_utc": "2026-11-16T07:51:22.012225+00:00",
+      "duration_seconds": 0.022698301003401866,
+      "stdout": "[\"CI_JOB_TOKEN\", \"TEST_PASSWORD\"]\n",
+      "stderr": "",
+      "exit_code": 0,
+      "fixtures_after": [
+        {
+          "path": "sample runner [fixture].py",
+          "type": "file",
+          "bytes": 502,
+          "sha256": "d243f9dbf6dd7abfd29bf66bfe4d1cfed85c745f5564847cb4bf2949b7f9ad2c"
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_command_examples.FlakySampleExampleTests.test_existing_evidence_is_not_reused_or_overwritten",
+      "command": [
+        "bash",
+        "-c",
+        "run_flaky_samples() (\n  set -euo pipefail\n  (( $# >= 3 )) || { printf 'usage: run_flaky_samples <1-20> <new-directory> <command> [args...]\\n' >&2; exit 2; }\n  samples=$1\n  evidence=$2\n  shift 2\n  [[ \"$samples\" =~ ^([1-9]|1[0-9]|20)$ ]] || exit 2\n  mkdir -- \"$evidence\" || exit 2\n  evidence=$(cd -- \"$evidence\" && pwd -P) || exit 2\n  printf 'attempt\\texit_code\\n' > \"$evidence/results.tsv\" || exit 2\n  failed=0\n  for ((attempt=1; attempt<=samples; attempt++)); do\n    sample_dir=\"$evidence/run-$attempt\"\n    mkdir -- \"$sample_dir\" || exit 2\n    exec 3>\"$sample_dir/output.log\" || exit 2\n    result=0\n    FLAKY_SAMPLE_DIR=\"$sample_dir\" \"$@\" >&3 2>&1 || result=$?\n    exec 3>&- || exit 2\n    printf '%s\\t%s\\n' \"$attempt\" \"$result\" >> \"$evidence/results.tsv\" || exit 2\n    if (( result != 0 )); then failed=1; fi\n  done\n  printf 'attempts=%s\\nrecords=%s\\n' \"$samples\" \"$evidence/results.tsv\" || exit 2\n  exit \"$failed\"\n)\n\nrun_flaky_samples \"$@\"\n",
+        "skill-example",
+        "1",
+        "/tmp/tmpm43xzcd5/new evidence",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "/tmp/tmpm43xzcd5/sample runner [fixture].py",
+        "0",
+        "test_items[case 1]"
+      ],
+      "cwd": "/tmp/tmpm43xzcd5",
+      "started_at_utc": "2026-11-16T07:51:22.012594+00:00",
+      "ended_at_utc": "2026-11-16T07:51:22.056075+00:00",
+      "duration_seconds": 0.043490330997883575,
+      "stdout": "attempts=1\nrecords=/tmp/tmpm43xzcd5/new evidence/results.tsv\n",
+      "stderr": "",
+      "exit_code": 0,
+      "fixtures_after": [
+        {
+          "path": "new evidence",
+          "type": "directory"
+        },
+        {
+          "path": "new evidence/results.tsv",
+          "type": "file",
+          "bytes": 22,
+          "sha256": "21031f1f4e8db9209782fd03008c3a88bfec65c092054fae1dc95e7a3e05c18b",
+          "content": "attempt\texit_code\n1\t0\n"
+        },
+        {
+          "path": "new evidence/run-1",
+          "type": "directory"
+        },
+        {
+          "path": "new evidence/run-1/output.log",
+          "type": "file",
+          "bytes": 86,
+          "sha256": "206e67bb2e2002a8954c7bdf2960736b23a009ca89fbf33da5a68cbce90cccf8",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\npassed test_items[case 1]\nstderr retained\n"
+        },
+        {
+          "path": "new evidence/run-1/result.json",
+          "type": "file",
+          "bytes": 51,
+          "sha256": "1a617fd3283a56a700f04b43662e6d519b7d621ed972230f868f3a72077dcdde",
+          "content": "{\"name\": \"test_items[case 1]\", \"outcome\": \"passed\"}"
+        },
+        {
+          "path": "sample runner [fixture].py",
+          "type": "file",
+          "bytes": 502,
+          "sha256": "d243f9dbf6dd7abfd29bf66bfe4d1cfed85c745f5564847cb4bf2949b7f9ad2c"
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_command_examples.FlakySampleExampleTests.test_existing_evidence_is_not_reused_or_overwritten",
+      "command": [
+        "bash",
+        "-c",
+        "run_flaky_samples() (\n  set -euo pipefail\n  (( $# >= 3 )) || { printf 'usage: run_flaky_samples <1-20> <new-directory> <command> [args...]\\n' >&2; exit 2; }\n  samples=$1\n  evidence=$2\n  shift 2\n  [[ \"$samples\" =~ ^([1-9]|1[0-9]|20)$ ]] || exit 2\n  mkdir -- \"$evidence\" || exit 2\n  evidence=$(cd -- \"$evidence\" && pwd -P) || exit 2\n  printf 'attempt\\texit_code\\n' > \"$evidence/results.tsv\" || exit 2\n  failed=0\n  for ((attempt=1; attempt<=samples; attempt++)); do\n    sample_dir=\"$evidence/run-$attempt\"\n    mkdir -- \"$sample_dir\" || exit 2\n    exec 3>\"$sample_dir/output.log\" || exit 2\n    result=0\n    FLAKY_SAMPLE_DIR=\"$sample_dir\" \"$@\" >&3 2>&1 || result=$?\n    exec 3>&- || exit 2\n    printf '%s\\t%s\\n' \"$attempt\" \"$result\" >> \"$evidence/results.tsv\" || exit 2\n    if (( result != 0 )); then failed=1; fi\n  done\n  printf 'attempts=%s\\nrecords=%s\\n' \"$samples\" \"$evidence/results.tsv\" || exit 2\n  exit \"$failed\"\n)\n\nrun_flaky_samples \"$@\"\n",
+        "skill-example",
+        "1",
+        "/tmp/tmpm43xzcd5/new evidence",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "/tmp/tmpm43xzcd5/sample runner [fixture].py",
+        "1",
+        "test_items[case 1]"
+      ],
+      "cwd": "/tmp/tmpm43xzcd5",
+      "started_at_utc": "2026-11-16T07:51:22.056284+00:00",
+      "ended_at_utc": "2026-11-16T07:51:22.061330+00:00",
+      "duration_seconds": 0.0050497899974288885,
+      "stdout": "",
+      "stderr": "mkdir: cannot create directory ‘/tmp/tmpm43xzcd5/new evidence’: File exists\n",
+      "exit_code": 2,
+      "fixtures_after": [
+        {
+          "path": "new evidence",
+          "type": "directory"
+        },
+        {
+          "path": "new evidence/results.tsv",
+          "type": "file",
+          "bytes": 22,
+          "sha256": "21031f1f4e8db9209782fd03008c3a88bfec65c092054fae1dc95e7a3e05c18b",
+          "content": "attempt\texit_code\n1\t0\n"
+        },
+        {
+          "path": "new evidence/run-1",
+          "type": "directory"
+        },
+        {
+          "path": "new evidence/run-1/output.log",
+          "type": "file",
+          "bytes": 86,
+          "sha256": "206e67bb2e2002a8954c7bdf2960736b23a009ca89fbf33da5a68cbce90cccf8",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\npassed test_items[case 1]\nstderr retained\n"
+        },
+        {
+          "path": "new evidence/run-1/result.json",
+          "type": "file",
+          "bytes": 51,
+          "sha256": "1a617fd3283a56a700f04b43662e6d519b7d621ed972230f868f3a72077dcdde",
+          "content": "{\"name\": \"test_items[case 1]\", \"outcome\": \"passed\"}"
+        },
+        {
+          "path": "sample runner [fixture].py",
+          "type": "file",
+          "bytes": 502,
+          "sha256": "d243f9dbf6dd7abfd29bf66bfe4d1cfed85c745f5564847cb4bf2949b7f9ad2c"
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_command_examples.FlakySampleExampleTests.test_interrupt_after_an_observation_preserves_both_samples_and_stops",
+      "command": [
+        "bash",
+        "-c",
+        "run_flaky_samples() (\n  set -euo pipefail\n  (( $# >= 3 )) || { printf 'usage: run_flaky_samples <1-20> <new-directory> <command> [args...]\\n' >&2; exit 2; }\n  samples=$1\n  evidence=$2\n  shift 2\n  [[ \"$samples\" =~ ^([1-9]|1[0-9]|20)$ ]] || exit 2\n  mkdir -- \"$evidence\" || exit 2\n  evidence=$(cd -- \"$evidence\" && pwd -P) || exit 2\n  printf 'attempt\\texit_code\\n' > \"$evidence/results.tsv\" || exit 2\n  failed=0\n  for ((attempt=1; attempt<=samples; attempt++)); do\n    sample_dir=\"$evidence/run-$attempt\"\n    mkdir -- \"$sample_dir\" || exit 2\n    exec 3>\"$sample_dir/output.log\" || exit 2\n    result=0\n    FLAKY_SAMPLE_DIR=\"$sample_dir\" \"$@\" >&3 2>&1 || result=$?\n    exec 3>&- || exit 2\n    printf '%s\\t%s\\n' \"$attempt\" \"$result\" >> \"$evidence/results.tsv\" || exit 2\n    if (( result != 0 )); then failed=1; fi\n  done\n  printf 'attempts=%s\\nrecords=%s\\n' \"$samples\" \"$evidence/results.tsv\" || exit 2\n  exit \"$failed\"\n)\n\nrun_flaky_samples \"$@\"\n",
+        "skill-example",
+        "3",
+        "/tmp/tmp2n8mg2_m/later-130",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "/tmp/tmp2n8mg2_m/sample runner [fixture].py",
+        "0,130,0",
+        "test_items[case 1]"
+      ],
+      "cwd": "/tmp/tmp2n8mg2_m",
+      "started_at_utc": "2026-11-16T07:51:22.062245+00:00",
+      "ended_at_utc": "2026-11-16T07:51:22.164670+00:00",
+      "duration_seconds": 0.10243171399997664,
+      "stdout": "attempts=3\nrecords=/tmp/tmp2n8mg2_m/later-130/results.tsv\n",
+      "stderr": "",
+      "exit_code": 1,
+      "fixtures_after": [
+        {
+          "path": "later-130",
+          "type": "directory"
+        },
+        {
+          "path": "later-130/results.tsv",
+          "type": "file",
+          "bytes": 32,
+          "sha256": "62ad03785438d82fb2d70bc628aa72c2256b75cc4178f456c70e4def68c3f7ce",
+          "content": "attempt\texit_code\n1\t0\n2\t130\n3\t0\n"
+        },
+        {
+          "path": "later-130/run-1",
+          "type": "directory"
+        },
+        {
+          "path": "later-130/run-1/output.log",
+          "type": "file",
+          "bytes": 86,
+          "sha256": "206e67bb2e2002a8954c7bdf2960736b23a009ca89fbf33da5a68cbce90cccf8",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\npassed test_items[case 1]\nstderr retained\n"
+        },
+        {
+          "path": "later-130/run-1/result.json",
+          "type": "file",
+          "bytes": 51,
+          "sha256": "1a617fd3283a56a700f04b43662e6d519b7d621ed972230f868f3a72077dcdde",
+          "content": "{\"name\": \"test_items[case 1]\", \"outcome\": \"passed\"}"
+        },
+        {
+          "path": "later-130/run-2",
+          "type": "directory"
+        },
+        {
+          "path": "later-130/run-2/output.log",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "1b5c13429767fc0ee715ac10e8133f99b22754a56297e904d67a827a29ae4dc0",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\nerror test_items[case 1]\nstderr retained\n"
+        },
+        {
+          "path": "later-130/run-2/result.json",
+          "type": "file",
+          "bytes": 50,
+          "sha256": "98e1ce41be6e696e0d15e9d825821a77cb962f178110f95810d1f0d8dc082bba",
+          "content": "{\"name\": \"test_items[case 1]\", \"outcome\": \"error\"}"
+        },
+        {
+          "path": "later-130/run-3",
+          "type": "directory"
+        },
+        {
+          "path": "later-130/run-3/output.log",
+          "type": "file",
+          "bytes": 86,
+          "sha256": "206e67bb2e2002a8954c7bdf2960736b23a009ca89fbf33da5a68cbce90cccf8",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\npassed test_items[case 1]\nstderr retained\n"
+        },
+        {
+          "path": "later-130/run-3/result.json",
+          "type": "file",
+          "bytes": 51,
+          "sha256": "1a617fd3283a56a700f04b43662e6d519b7d621ed972230f868f3a72077dcdde",
+          "content": "{\"name\": \"test_items[case 1]\", \"outcome\": \"passed\"}"
+        },
+        {
+          "path": "sample runner [fixture].py",
+          "type": "file",
+          "bytes": 502,
+          "sha256": "d243f9dbf6dd7abfd29bf66bfe4d1cfed85c745f5564847cb4bf2949b7f9ad2c"
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_command_examples.FlakySampleExampleTests.test_interrupt_after_an_observation_preserves_both_samples_and_stops",
+      "command": [
+        "bash",
+        "-c",
+        "run_flaky_samples() (\n  set -euo pipefail\n  (( $# >= 3 )) || { printf 'usage: run_flaky_samples <1-20> <new-directory> <command> [args...]\\n' >&2; exit 2; }\n  samples=$1\n  evidence=$2\n  shift 2\n  [[ \"$samples\" =~ ^([1-9]|1[0-9]|20)$ ]] || exit 2\n  mkdir -- \"$evidence\" || exit 2\n  evidence=$(cd -- \"$evidence\" && pwd -P) || exit 2\n  printf 'attempt\\texit_code\\n' > \"$evidence/results.tsv\" || exit 2\n  failed=0\n  for ((attempt=1; attempt<=samples; attempt++)); do\n    sample_dir=\"$evidence/run-$attempt\"\n    mkdir -- \"$sample_dir\" || exit 2\n    exec 3>\"$sample_dir/output.log\" || exit 2\n    result=0\n    FLAKY_SAMPLE_DIR=\"$sample_dir\" \"$@\" >&3 2>&1 || result=$?\n    exec 3>&- || exit 2\n    printf '%s\\t%s\\n' \"$attempt\" \"$result\" >> \"$evidence/results.tsv\" || exit 2\n    if (( result != 0 )); then failed=1; fi\n  done\n  printf 'attempts=%s\\nrecords=%s\\n' \"$samples\" \"$evidence/results.tsv\" || exit 2\n  exit \"$failed\"\n)\n\nrun_flaky_samples \"$@\"\n",
+        "skill-example",
+        "3",
+        "/tmp/tmp2n8mg2_m/later-143",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "/tmp/tmp2n8mg2_m/sample runner [fixture].py",
+        "9,143,0",
+        "test_items[case 1]"
+      ],
+      "cwd": "/tmp/tmp2n8mg2_m",
+      "started_at_utc": "2026-11-16T07:51:22.164924+00:00",
+      "ended_at_utc": "2026-11-16T07:51:22.247902+00:00",
+      "duration_seconds": 0.08298728299996583,
+      "stdout": "attempts=3\nrecords=/tmp/tmp2n8mg2_m/later-143/results.tsv\n",
+      "stderr": "",
+      "exit_code": 1,
+      "fixtures_after": [
+        {
+          "path": "later-130",
+          "type": "directory"
+        },
+        {
+          "path": "later-130/results.tsv",
+          "type": "file",
+          "bytes": 32,
+          "sha256": "62ad03785438d82fb2d70bc628aa72c2256b75cc4178f456c70e4def68c3f7ce",
+          "content": "attempt\texit_code\n1\t0\n2\t130\n3\t0\n"
+        },
+        {
+          "path": "later-130/run-1",
+          "type": "directory"
+        },
+        {
+          "path": "later-130/run-1/output.log",
+          "type": "file",
+          "bytes": 86,
+          "sha256": "206e67bb2e2002a8954c7bdf2960736b23a009ca89fbf33da5a68cbce90cccf8",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\npassed test_items[case 1]\nstderr retained\n"
+        },
+        {
+          "path": "later-130/run-1/result.json",
+          "type": "file",
+          "bytes": 51,
+          "sha256": "1a617fd3283a56a700f04b43662e6d519b7d621ed972230f868f3a72077dcdde",
+          "content": "{\"name\": \"test_items[case 1]\", \"outcome\": \"passed\"}"
+        },
+        {
+          "path": "later-130/run-2",
+          "type": "directory"
+        },
+        {
+          "path": "later-130/run-2/output.log",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "1b5c13429767fc0ee715ac10e8133f99b22754a56297e904d67a827a29ae4dc0",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\nerror test_items[case 1]\nstderr retained\n"
+        },
+        {
+          "path": "later-130/run-2/result.json",
+          "type": "file",
+          "bytes": 50,
+          "sha256": "98e1ce41be6e696e0d15e9d825821a77cb962f178110f95810d1f0d8dc082bba",
+          "content": "{\"name\": \"test_items[case 1]\", \"outcome\": \"error\"}"
+        },
+        {
+          "path": "later-130/run-3",
+          "type": "directory"
+        },
+        {
+          "path": "later-130/run-3/output.log",
+          "type": "file",
+          "bytes": 86,
+          "sha256": "206e67bb2e2002a8954c7bdf2960736b23a009ca89fbf33da5a68cbce90cccf8",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\npassed test_items[case 1]\nstderr retained\n"
+        },
+        {
+          "path": "later-130/run-3/result.json",
+          "type": "file",
+          "bytes": 51,
+          "sha256": "1a617fd3283a56a700f04b43662e6d519b7d621ed972230f868f3a72077dcdde",
+          "content": "{\"name\": \"test_items[case 1]\", \"outcome\": \"passed\"}"
+        },
+        {
+          "path": "later-143",
+          "type": "directory"
+        },
+        {
+          "path": "later-143/results.tsv",
+          "type": "file",
+          "bytes": 32,
+          "sha256": "df0bd9be38527c72dd7836a7afeef04d25fcde0f680f42f9d6c74b1ccf94d1a7",
+          "content": "attempt\texit_code\n1\t9\n2\t143\n3\t0\n"
+        },
+        {
+          "path": "later-143/run-1",
+          "type": "directory"
+        },
+        {
+          "path": "later-143/run-1/output.log",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "1b5c13429767fc0ee715ac10e8133f99b22754a56297e904d67a827a29ae4dc0",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\nerror test_items[case 1]\nstderr retained\n"
+        },
+        {
+          "path": "later-143/run-1/result.json",
+          "type": "file",
+          "bytes": 50,
+          "sha256": "98e1ce41be6e696e0d15e9d825821a77cb962f178110f95810d1f0d8dc082bba",
+          "content": "{\"name\": \"test_items[case 1]\", \"outcome\": \"error\"}"
+        },
+        {
+          "path": "later-143/run-2",
+          "type": "directory"
+        },
+        {
+          "path": "later-143/run-2/output.log",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "1b5c13429767fc0ee715ac10e8133f99b22754a56297e904d67a827a29ae4dc0",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\nerror test_items[case 1]\nstderr retained\n"
+        },
+        {
+          "path": "later-143/run-2/result.json",
+          "type": "file",
+          "bytes": 50,
+          "sha256": "98e1ce41be6e696e0d15e9d825821a77cb962f178110f95810d1f0d8dc082bba",
+          "content": "{\"name\": \"test_items[case 1]\", \"outcome\": \"error\"}"
+        },
+        {
+          "path": "later-143/run-3",
+          "type": "directory"
+        },
+        {
+          "path": "later-143/run-3/output.log",
+          "type": "file",
+          "bytes": 86,
+          "sha256": "206e67bb2e2002a8954c7bdf2960736b23a009ca89fbf33da5a68cbce90cccf8",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\npassed test_items[case 1]\nstderr retained\n"
+        },
+        {
+          "path": "later-143/run-3/result.json",
+          "type": "file",
+          "bytes": 51,
+          "sha256": "1a617fd3283a56a700f04b43662e6d519b7d621ed972230f868f3a72077dcdde",
+          "content": "{\"name\": \"test_items[case 1]\", \"outcome\": \"passed\"}"
+        },
+        {
+          "path": "sample runner [fixture].py",
+          "type": "file",
+          "bytes": 502,
+          "sha256": "d243f9dbf6dd7abfd29bf66bfe4d1cfed85c745f5564847cb4bf2949b7f9ad2c"
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_command_examples.FlakySampleExampleTests.test_invalid_sample_budgets_do_not_execute_or_create_output",
+      "command": [
+        "bash",
+        "-c",
+        "run_flaky_samples() (\n  set -euo pipefail\n  (( $# >= 3 )) || { printf 'usage: run_flaky_samples <1-20> <new-directory> <command> [args...]\\n' >&2; exit 2; }\n  samples=$1\n  evidence=$2\n  shift 2\n  [[ \"$samples\" =~ ^([1-9]|1[0-9]|20)$ ]] || exit 2\n  mkdir -- \"$evidence\" || exit 2\n  evidence=$(cd -- \"$evidence\" && pwd -P) || exit 2\n  printf 'attempt\\texit_code\\n' > \"$evidence/results.tsv\" || exit 2\n  failed=0\n  for ((attempt=1; attempt<=samples; attempt++)); do\n    sample_dir=\"$evidence/run-$attempt\"\n    mkdir -- \"$sample_dir\" || exit 2\n    exec 3>\"$sample_dir/output.log\" || exit 2\n    result=0\n    FLAKY_SAMPLE_DIR=\"$sample_dir\" \"$@\" >&3 2>&1 || result=$?\n    exec 3>&- || exit 2\n    printf '%s\\t%s\\n' \"$attempt\" \"$result\" >> \"$evidence/results.tsv\" || exit 2\n    if (( result != 0 )); then failed=1; fi\n  done\n  printf 'attempts=%s\\nrecords=%s\\n' \"$samples\" \"$evidence/results.tsv\" || exit 2\n  exit \"$failed\"\n)\n\nrun_flaky_samples \"$@\"\n",
+        "skill-example",
+        "0",
+        "/tmp/tmp8qwzulw0/not-created",
+        "false"
+      ],
+      "cwd": "/tmp/tmp8qwzulw0",
+      "started_at_utc": "2026-11-16T07:51:22.248534+00:00",
+      "ended_at_utc": "2026-11-16T07:51:22.251170+00:00",
+      "duration_seconds": 0.0026357430033385754,
+      "stdout": "",
+      "stderr": "",
+      "exit_code": 2,
+      "fixtures_after": [
+        {
+          "path": "sample runner [fixture].py",
+          "type": "file",
+          "bytes": 502,
+          "sha256": "d243f9dbf6dd7abfd29bf66bfe4d1cfed85c745f5564847cb4bf2949b7f9ad2c"
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_command_examples.FlakySampleExampleTests.test_invalid_sample_budgets_do_not_execute_or_create_output",
+      "command": [
+        "bash",
+        "-c",
+        "run_flaky_samples() (\n  set -euo pipefail\n  (( $# >= 3 )) || { printf 'usage: run_flaky_samples <1-20> <new-directory> <command> [args...]\\n' >&2; exit 2; }\n  samples=$1\n  evidence=$2\n  shift 2\n  [[ \"$samples\" =~ ^([1-9]|1[0-9]|20)$ ]] || exit 2\n  mkdir -- \"$evidence\" || exit 2\n  evidence=$(cd -- \"$evidence\" && pwd -P) || exit 2\n  printf 'attempt\\texit_code\\n' > \"$evidence/results.tsv\" || exit 2\n  failed=0\n  for ((attempt=1; attempt<=samples; attempt++)); do\n    sample_dir=\"$evidence/run-$attempt\"\n    mkdir -- \"$sample_dir\" || exit 2\n    exec 3>\"$sample_dir/output.log\" || exit 2\n    result=0\n    FLAKY_SAMPLE_DIR=\"$sample_dir\" \"$@\" >&3 2>&1 || result=$?\n    exec 3>&- || exit 2\n    printf '%s\\t%s\\n' \"$attempt\" \"$result\" >> \"$evidence/results.tsv\" || exit 2\n    if (( result != 0 )); then failed=1; fi\n  done\n  printf 'attempts=%s\\nrecords=%s\\n' \"$samples\" \"$evidence/results.tsv\" || exit 2\n  exit \"$failed\"\n)\n\nrun_flaky_samples \"$@\"\n",
+        "skill-example",
+        "21",
+        "/tmp/tmp8qwzulw0/not-created",
+        "false"
+      ],
+      "cwd": "/tmp/tmp8qwzulw0",
+      "started_at_utc": "2026-11-16T07:51:22.251319+00:00",
+      "ended_at_utc": "2026-11-16T07:51:22.253949+00:00",
+      "duration_seconds": 0.0026308759988751262,
+      "stdout": "",
+      "stderr": "",
+      "exit_code": 2,
+      "fixtures_after": [
+        {
+          "path": "sample runner [fixture].py",
+          "type": "file",
+          "bytes": 502,
+          "sha256": "d243f9dbf6dd7abfd29bf66bfe4d1cfed85c745f5564847cb4bf2949b7f9ad2c"
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_command_examples.FlakySampleExampleTests.test_invalid_sample_budgets_do_not_execute_or_create_output",
+      "command": [
+        "bash",
+        "-c",
+        "run_flaky_samples() (\n  set -euo pipefail\n  (( $# >= 3 )) || { printf 'usage: run_flaky_samples <1-20> <new-directory> <command> [args...]\\n' >&2; exit 2; }\n  samples=$1\n  evidence=$2\n  shift 2\n  [[ \"$samples\" =~ ^([1-9]|1[0-9]|20)$ ]] || exit 2\n  mkdir -- \"$evidence\" || exit 2\n  evidence=$(cd -- \"$evidence\" && pwd -P) || exit 2\n  printf 'attempt\\texit_code\\n' > \"$evidence/results.tsv\" || exit 2\n  failed=0\n  for ((attempt=1; attempt<=samples; attempt++)); do\n    sample_dir=\"$evidence/run-$attempt\"\n    mkdir -- \"$sample_dir\" || exit 2\n    exec 3>\"$sample_dir/output.log\" || exit 2\n    result=0\n    FLAKY_SAMPLE_DIR=\"$sample_dir\" \"$@\" >&3 2>&1 || result=$?\n    exec 3>&- || exit 2\n    printf '%s\\t%s\\n' \"$attempt\" \"$result\" >> \"$evidence/results.tsv\" || exit 2\n    if (( result != 0 )); then failed=1; fi\n  done\n  printf 'attempts=%s\\nrecords=%s\\n' \"$samples\" \"$evidence/results.tsv\" || exit 2\n  exit \"$failed\"\n)\n\nrun_flaky_samples \"$@\"\n",
+        "skill-example",
+        "-1",
+        "/tmp/tmp8qwzulw0/not-created",
+        "false"
+      ],
+      "cwd": "/tmp/tmp8qwzulw0",
+      "started_at_utc": "2026-11-16T07:51:22.253993+00:00",
+      "ended_at_utc": "2026-11-16T07:51:22.256649+00:00",
+      "duration_seconds": 0.0026593069997034036,
+      "stdout": "",
+      "stderr": "",
+      "exit_code": 2,
+      "fixtures_after": [
+        {
+          "path": "sample runner [fixture].py",
+          "type": "file",
+          "bytes": 502,
+          "sha256": "d243f9dbf6dd7abfd29bf66bfe4d1cfed85c745f5564847cb4bf2949b7f9ad2c"
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_command_examples.FlakySampleExampleTests.test_invalid_sample_budgets_do_not_execute_or_create_output",
+      "command": [
+        "bash",
+        "-c",
+        "run_flaky_samples() (\n  set -euo pipefail\n  (( $# >= 3 )) || { printf 'usage: run_flaky_samples <1-20> <new-directory> <command> [args...]\\n' >&2; exit 2; }\n  samples=$1\n  evidence=$2\n  shift 2\n  [[ \"$samples\" =~ ^([1-9]|1[0-9]|20)$ ]] || exit 2\n  mkdir -- \"$evidence\" || exit 2\n  evidence=$(cd -- \"$evidence\" && pwd -P) || exit 2\n  printf 'attempt\\texit_code\\n' > \"$evidence/results.tsv\" || exit 2\n  failed=0\n  for ((attempt=1; attempt<=samples; attempt++)); do\n    sample_dir=\"$evidence/run-$attempt\"\n    mkdir -- \"$sample_dir\" || exit 2\n    exec 3>\"$sample_dir/output.log\" || exit 2\n    result=0\n    FLAKY_SAMPLE_DIR=\"$sample_dir\" \"$@\" >&3 2>&1 || result=$?\n    exec 3>&- || exit 2\n    printf '%s\\t%s\\n' \"$attempt\" \"$result\" >> \"$evidence/results.tsv\" || exit 2\n    if (( result != 0 )); then failed=1; fi\n  done\n  printf 'attempts=%s\\nrecords=%s\\n' \"$samples\" \"$evidence/results.tsv\" || exit 2\n  exit \"$failed\"\n)\n\nrun_flaky_samples \"$@\"\n",
+        "skill-example",
+        "99999",
+        "/tmp/tmp8qwzulw0/not-created",
+        "false"
+      ],
+      "cwd": "/tmp/tmp8qwzulw0",
+      "started_at_utc": "2026-11-16T07:51:22.256696+00:00",
+      "ended_at_utc": "2026-11-16T07:51:22.259495+00:00",
+      "duration_seconds": 0.002801737002300797,
+      "stdout": "",
+      "stderr": "",
+      "exit_code": 2,
+      "fixtures_after": [
+        {
+          "path": "sample runner [fixture].py",
+          "type": "file",
+          "bytes": 502,
+          "sha256": "d243f9dbf6dd7abfd29bf66bfe4d1cfed85c745f5564847cb4bf2949b7f9ad2c"
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_command_examples.FlakySampleExampleTests.test_invalid_sample_budgets_do_not_execute_or_create_output",
+      "command": [
+        "bash",
+        "-c",
+        "run_flaky_samples() (\n  set -euo pipefail\n  (( $# >= 3 )) || { printf 'usage: run_flaky_samples <1-20> <new-directory> <command> [args...]\\n' >&2; exit 2; }\n  samples=$1\n  evidence=$2\n  shift 2\n  [[ \"$samples\" =~ ^([1-9]|1[0-9]|20)$ ]] || exit 2\n  mkdir -- \"$evidence\" || exit 2\n  evidence=$(cd -- \"$evidence\" && pwd -P) || exit 2\n  printf 'attempt\\texit_code\\n' > \"$evidence/results.tsv\" || exit 2\n  failed=0\n  for ((attempt=1; attempt<=samples; attempt++)); do\n    sample_dir=\"$evidence/run-$attempt\"\n    mkdir -- \"$sample_dir\" || exit 2\n    exec 3>\"$sample_dir/output.log\" || exit 2\n    result=0\n    FLAKY_SAMPLE_DIR=\"$sample_dir\" \"$@\" >&3 2>&1 || result=$?\n    exec 3>&- || exit 2\n    printf '%s\\t%s\\n' \"$attempt\" \"$result\" >> \"$evidence/results.tsv\" || exit 2\n    if (( result != 0 )); then failed=1; fi\n  done\n  printf 'attempts=%s\\nrecords=%s\\n' \"$samples\" \"$evidence/results.tsv\" || exit 2\n  exit \"$failed\"\n)\n\nrun_flaky_samples \"$@\"\n",
+        "skill-example",
+        "$(touch MUST_NOT_RUN)",
+        "/tmp/tmp8qwzulw0/not-created",
+        "false"
+      ],
+      "cwd": "/tmp/tmp8qwzulw0",
+      "started_at_utc": "2026-11-16T07:51:22.259543+00:00",
+      "ended_at_utc": "2026-11-16T07:51:22.261773+00:00",
+      "duration_seconds": 0.0022319189993140753,
+      "stdout": "",
+      "stderr": "",
+      "exit_code": 2,
+      "fixtures_after": [
+        {
+          "path": "sample runner [fixture].py",
+          "type": "file",
+          "bytes": 502,
+          "sha256": "d243f9dbf6dd7abfd29bf66bfe4d1cfed85c745f5564847cb4bf2949b7f9ad2c"
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_command_examples.FlakySampleExampleTests.test_reported_interrupt_status_stops_after_preserving_the_current_sample",
+      "command": [
+        "bash",
+        "-c",
+        "run_flaky_samples() (\n  set -euo pipefail\n  (( $# >= 3 )) || { printf 'usage: run_flaky_samples <1-20> <new-directory> <command> [args...]\\n' >&2; exit 2; }\n  samples=$1\n  evidence=$2\n  shift 2\n  [[ \"$samples\" =~ ^([1-9]|1[0-9]|20)$ ]] || exit 2\n  mkdir -- \"$evidence\" || exit 2\n  evidence=$(cd -- \"$evidence\" && pwd -P) || exit 2\n  printf 'attempt\\texit_code\\n' > \"$evidence/results.tsv\" || exit 2\n  failed=0\n  for ((attempt=1; attempt<=samples; attempt++)); do\n    sample_dir=\"$evidence/run-$attempt\"\n    mkdir -- \"$sample_dir\" || exit 2\n    exec 3>\"$sample_dir/output.log\" || exit 2\n    result=0\n    FLAKY_SAMPLE_DIR=\"$sample_dir\" \"$@\" >&3 2>&1 || result=$?\n    exec 3>&- || exit 2\n    printf '%s\\t%s\\n' \"$attempt\" \"$result\" >> \"$evidence/results.tsv\" || exit 2\n    if (( result != 0 )); then failed=1; fi\n  done\n  printf 'attempts=%s\\nrecords=%s\\n' \"$samples\" \"$evidence/results.tsv\" || exit 2\n  exit \"$failed\"\n)\n\nrun_flaky_samples \"$@\"\n",
+        "skill-example",
+        "3",
+        "/tmp/tmp6dkiawfz/reported-130",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "/tmp/tmp6dkiawfz/sample runner [fixture].py",
+        "130,0,0",
+        "test_items[case 1]"
+      ],
+      "cwd": "/tmp/tmp6dkiawfz",
+      "started_at_utc": "2026-11-16T07:51:22.262160+00:00",
+      "ended_at_utc": "2026-11-16T07:51:22.338661+00:00",
+      "duration_seconds": 0.07650910099982866,
+      "stdout": "attempts=3\nrecords=/tmp/tmp6dkiawfz/reported-130/results.tsv\n",
+      "stderr": "",
+      "exit_code": 1,
+      "fixtures_after": [
+        {
+          "path": "reported-130",
+          "type": "directory"
+        },
+        {
+          "path": "reported-130/results.tsv",
+          "type": "file",
+          "bytes": 32,
+          "sha256": "472dac78508a71331ae3bda9cd06e48d6b0d1e7858f791ca6d5db6d54cb0dc56",
+          "content": "attempt\texit_code\n1\t130\n2\t0\n3\t0\n"
+        },
+        {
+          "path": "reported-130/run-1",
+          "type": "directory"
+        },
+        {
+          "path": "reported-130/run-1/output.log",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "1b5c13429767fc0ee715ac10e8133f99b22754a56297e904d67a827a29ae4dc0",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\nerror test_items[case 1]\nstderr retained\n"
+        },
+        {
+          "path": "reported-130/run-1/result.json",
+          "type": "file",
+          "bytes": 50,
+          "sha256": "98e1ce41be6e696e0d15e9d825821a77cb962f178110f95810d1f0d8dc082bba",
+          "content": "{\"name\": \"test_items[case 1]\", \"outcome\": \"error\"}"
+        },
+        {
+          "path": "reported-130/run-2",
+          "type": "directory"
+        },
+        {
+          "path": "reported-130/run-2/output.log",
+          "type": "file",
+          "bytes": 86,
+          "sha256": "206e67bb2e2002a8954c7bdf2960736b23a009ca89fbf33da5a68cbce90cccf8",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\npassed test_items[case 1]\nstderr retained\n"
+        },
+        {
+          "path": "reported-130/run-2/result.json",
+          "type": "file",
+          "bytes": 51,
+          "sha256": "1a617fd3283a56a700f04b43662e6d519b7d621ed972230f868f3a72077dcdde",
+          "content": "{\"name\": \"test_items[case 1]\", \"outcome\": \"passed\"}"
+        },
+        {
+          "path": "reported-130/run-3",
+          "type": "directory"
+        },
+        {
+          "path": "reported-130/run-3/output.log",
+          "type": "file",
+          "bytes": 86,
+          "sha256": "206e67bb2e2002a8954c7bdf2960736b23a009ca89fbf33da5a68cbce90cccf8",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\npassed test_items[case 1]\nstderr retained\n"
+        },
+        {
+          "path": "reported-130/run-3/result.json",
+          "type": "file",
+          "bytes": 51,
+          "sha256": "1a617fd3283a56a700f04b43662e6d519b7d621ed972230f868f3a72077dcdde",
+          "content": "{\"name\": \"test_items[case 1]\", \"outcome\": \"passed\"}"
+        },
+        {
+          "path": "sample runner [fixture].py",
+          "type": "file",
+          "bytes": 502,
+          "sha256": "d243f9dbf6dd7abfd29bf66bfe4d1cfed85c745f5564847cb4bf2949b7f9ad2c"
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_command_examples.FlakySampleExampleTests.test_reported_interrupt_status_stops_after_preserving_the_current_sample",
+      "command": [
+        "bash",
+        "-c",
+        "run_flaky_samples() (\n  set -euo pipefail\n  (( $# >= 3 )) || { printf 'usage: run_flaky_samples <1-20> <new-directory> <command> [args...]\\n' >&2; exit 2; }\n  samples=$1\n  evidence=$2\n  shift 2\n  [[ \"$samples\" =~ ^([1-9]|1[0-9]|20)$ ]] || exit 2\n  mkdir -- \"$evidence\" || exit 2\n  evidence=$(cd -- \"$evidence\" && pwd -P) || exit 2\n  printf 'attempt\\texit_code\\n' > \"$evidence/results.tsv\" || exit 2\n  failed=0\n  for ((attempt=1; attempt<=samples; attempt++)); do\n    sample_dir=\"$evidence/run-$attempt\"\n    mkdir -- \"$sample_dir\" || exit 2\n    exec 3>\"$sample_dir/output.log\" || exit 2\n    result=0\n    FLAKY_SAMPLE_DIR=\"$sample_dir\" \"$@\" >&3 2>&1 || result=$?\n    exec 3>&- || exit 2\n    printf '%s\\t%s\\n' \"$attempt\" \"$result\" >> \"$evidence/results.tsv\" || exit 2\n    if (( result != 0 )); then failed=1; fi\n  done\n  printf 'attempts=%s\\nrecords=%s\\n' \"$samples\" \"$evidence/results.tsv\" || exit 2\n  exit \"$failed\"\n)\n\nrun_flaky_samples \"$@\"\n",
+        "skill-example",
+        "3",
+        "/tmp/tmp6dkiawfz/reported-143",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "/tmp/tmp6dkiawfz/sample runner [fixture].py",
+        "143,0,0",
+        "test_items[case 1]"
+      ],
+      "cwd": "/tmp/tmp6dkiawfz",
+      "started_at_utc": "2026-11-16T07:51:22.338932+00:00",
+      "ended_at_utc": "2026-11-16T07:51:22.431517+00:00",
+      "duration_seconds": 0.0925949149968801,
+      "stdout": "attempts=3\nrecords=/tmp/tmp6dkiawfz/reported-143/results.tsv\n",
+      "stderr": "",
+      "exit_code": 1,
+      "fixtures_after": [
+        {
+          "path": "reported-130",
+          "type": "directory"
+        },
+        {
+          "path": "reported-130/results.tsv",
+          "type": "file",
+          "bytes": 32,
+          "sha256": "472dac78508a71331ae3bda9cd06e48d6b0d1e7858f791ca6d5db6d54cb0dc56",
+          "content": "attempt\texit_code\n1\t130\n2\t0\n3\t0\n"
+        },
+        {
+          "path": "reported-130/run-1",
+          "type": "directory"
+        },
+        {
+          "path": "reported-130/run-1/output.log",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "1b5c13429767fc0ee715ac10e8133f99b22754a56297e904d67a827a29ae4dc0",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\nerror test_items[case 1]\nstderr retained\n"
+        },
+        {
+          "path": "reported-130/run-1/result.json",
+          "type": "file",
+          "bytes": 50,
+          "sha256": "98e1ce41be6e696e0d15e9d825821a77cb962f178110f95810d1f0d8dc082bba",
+          "content": "{\"name\": \"test_items[case 1]\", \"outcome\": \"error\"}"
+        },
+        {
+          "path": "reported-130/run-2",
+          "type": "directory"
+        },
+        {
+          "path": "reported-130/run-2/output.log",
+          "type": "file",
+          "bytes": 86,
+          "sha256": "206e67bb2e2002a8954c7bdf2960736b23a009ca89fbf33da5a68cbce90cccf8",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\npassed test_items[case 1]\nstderr retained\n"
+        },
+        {
+          "path": "reported-130/run-2/result.json",
+          "type": "file",
+          "bytes": 51,
+          "sha256": "1a617fd3283a56a700f04b43662e6d519b7d621ed972230f868f3a72077dcdde",
+          "content": "{\"name\": \"test_items[case 1]\", \"outcome\": \"passed\"}"
+        },
+        {
+          "path": "reported-130/run-3",
+          "type": "directory"
+        },
+        {
+          "path": "reported-130/run-3/output.log",
+          "type": "file",
+          "bytes": 86,
+          "sha256": "206e67bb2e2002a8954c7bdf2960736b23a009ca89fbf33da5a68cbce90cccf8",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\npassed test_items[case 1]\nstderr retained\n"
+        },
+        {
+          "path": "reported-130/run-3/result.json",
+          "type": "file",
+          "bytes": 51,
+          "sha256": "1a617fd3283a56a700f04b43662e6d519b7d621ed972230f868f3a72077dcdde",
+          "content": "{\"name\": \"test_items[case 1]\", \"outcome\": \"passed\"}"
+        },
+        {
+          "path": "reported-143",
+          "type": "directory"
+        },
+        {
+          "path": "reported-143/results.tsv",
+          "type": "file",
+          "bytes": 32,
+          "sha256": "dbd7a44371d1c9df5d3efb975451d3ac4cb85a443fbd19d444522a15fefc30ed",
+          "content": "attempt\texit_code\n1\t143\n2\t0\n3\t0\n"
+        },
+        {
+          "path": "reported-143/run-1",
+          "type": "directory"
+        },
+        {
+          "path": "reported-143/run-1/output.log",
+          "type": "file",
+          "bytes": 85,
+          "sha256": "1b5c13429767fc0ee715ac10e8133f99b22754a56297e904d67a827a29ae4dc0",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\nerror test_items[case 1]\nstderr retained\n"
+        },
+        {
+          "path": "reported-143/run-1/result.json",
+          "type": "file",
+          "bytes": 50,
+          "sha256": "98e1ce41be6e696e0d15e9d825821a77cb962f178110f95810d1f0d8dc082bba",
+          "content": "{\"name\": \"test_items[case 1]\", \"outcome\": \"error\"}"
+        },
+        {
+          "path": "reported-143/run-2",
+          "type": "directory"
+        },
+        {
+          "path": "reported-143/run-2/output.log",
+          "type": "file",
+          "bytes": 86,
+          "sha256": "206e67bb2e2002a8954c7bdf2960736b23a009ca89fbf33da5a68cbce90cccf8",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\npassed test_items[case 1]\nstderr retained\n"
+        },
+        {
+          "path": "reported-143/run-2/result.json",
+          "type": "file",
+          "bytes": 51,
+          "sha256": "1a617fd3283a56a700f04b43662e6d519b7d621ed972230f868f3a72077dcdde",
+          "content": "{\"name\": \"test_items[case 1]\", \"outcome\": \"passed\"}"
+        },
+        {
+          "path": "reported-143/run-3",
+          "type": "directory"
+        },
+        {
+          "path": "reported-143/run-3/output.log",
+          "type": "file",
+          "bytes": 86,
+          "sha256": "206e67bb2e2002a8954c7bdf2960736b23a009ca89fbf33da5a68cbce90cccf8",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\npassed test_items[case 1]\nstderr retained\n"
+        },
+        {
+          "path": "reported-143/run-3/result.json",
+          "type": "file",
+          "bytes": 51,
+          "sha256": "1a617fd3283a56a700f04b43662e6d519b7d621ed972230f868f3a72077dcdde",
+          "content": "{\"name\": \"test_items[case 1]\", \"outcome\": \"passed\"}"
+        },
+        {
+          "path": "sample runner [fixture].py",
+          "type": "file",
+          "bytes": 502,
+          "sha256": "d243f9dbf6dd7abfd29bf66bfe4d1cfed85c745f5564847cb4bf2949b7f9ad2c"
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_command_examples.FlakySampleExampleTests.test_sample_collection_failure_stops_without_fake_completed_attempt",
+      "command": [
+        "bash",
+        "-c",
+        "run_flaky_samples() (\n  set -euo pipefail\n  (( $# >= 3 )) || { printf 'usage: run_flaky_samples <1-20> <new-directory> <command> [args...]\\n' >&2; exit 2; }\n  samples=$1\n  evidence=$2\n  shift 2\n  [[ \"$samples\" =~ ^([1-9]|1[0-9]|20)$ ]] || exit 2\n  mkdir -- \"$evidence\" || exit 2\n  evidence=$(cd -- \"$evidence\" && pwd -P) || exit 2\n  printf 'attempt\\texit_code\\n' > \"$evidence/results.tsv\" || exit 2\n  failed=0\n  for ((attempt=1; attempt<=samples; attempt++)); do\n    sample_dir=\"$evidence/run-$attempt\"\n    mkdir -- \"$sample_dir\" || exit 2\n    exec 3>\"$sample_dir/output.log\" || exit 2\n    result=0\n    FLAKY_SAMPLE_DIR=\"$sample_dir\" \"$@\" >&3 2>&1 || result=$?\n    exec 3>&- || exit 2\n    printf '%s\\t%s\\n' \"$attempt\" \"$result\" >> \"$evidence/results.tsv\" || exit 2\n    if (( result != 0 )); then failed=1; fi\n  done\n  printf 'attempts=%s\\nrecords=%s\\n' \"$samples\" \"$evidence/results.tsv\" || exit 2\n  exit \"$failed\"\n)\n\nrun_flaky_samples \"$@\"\n",
+        "skill-example",
+        "3",
+        "/tmp/tmpnmt9x5bp/new evidence",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-c",
+        "import os; from pathlib import Path; sample=Path(os.environ['FLAKY_SAMPLE_DIR']); (sample.parent / 'run-2').write_text('blocked collection path'); print('first real observation')"
+      ],
+      "cwd": "/tmp/tmpnmt9x5bp",
+      "started_at_utc": "2026-11-16T07:51:22.432254+00:00",
+      "ended_at_utc": "2026-11-16T07:51:22.463992+00:00",
+      "duration_seconds": 0.0317466209999111,
+      "stdout": "",
+      "stderr": "mkdir: cannot create directory ‘/tmp/tmpnmt9x5bp/new evidence/run-2’: File exists\n",
+      "exit_code": 2,
+      "fixtures_after": [
+        {
+          "path": "new evidence",
+          "type": "directory"
+        },
+        {
+          "path": "new evidence/results.tsv",
+          "type": "file",
+          "bytes": 22,
+          "sha256": "21031f1f4e8db9209782fd03008c3a88bfec65c092054fae1dc95e7a3e05c18b",
+          "content": "attempt\texit_code\n1\t0\n"
+        },
+        {
+          "path": "new evidence/run-1",
+          "type": "directory"
+        },
+        {
+          "path": "new evidence/run-1/output.log",
+          "type": "file",
+          "bytes": 23,
+          "sha256": "21a42a07aae31863b4039d28fba78ae5f7ea9a26e9a991a7abe7c957e0de98c8",
+          "content": "first real observation\n"
+        },
+        {
+          "path": "new evidence/run-2",
+          "type": "file",
+          "bytes": 23,
+          "sha256": "7328bbed5b0d94597fd7ef5427af14a2a84f6d9d7829da8c2d41c14a5be6bf30"
+        },
+        {
+          "path": "sample runner [fixture].py",
+          "type": "file",
+          "bytes": 502,
+          "sha256": "d243f9dbf6dd7abfd29bf66bfe4d1cfed85c745f5564847cb4bf2949b7f9ad2c"
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_command_examples.FlakySampleExampleTests.test_status_write_failure_is_not_a_successful_collection",
+      "command": [
+        "bash",
+        "-c",
+        "run_flaky_samples() (\n  set -euo pipefail\n  (( $# >= 3 )) || { printf 'usage: run_flaky_samples <1-20> <new-directory> <command> [args...]\\n' >&2; exit 2; }\n  samples=$1\n  evidence=$2\n  shift 2\n  [[ \"$samples\" =~ ^([1-9]|1[0-9]|20)$ ]] || exit 2\n  mkdir -- \"$evidence\" || exit 2\n  evidence=$(cd -- \"$evidence\" && pwd -P) || exit 2\n  printf 'attempt\\texit_code\\n' > \"$evidence/results.tsv\" || exit 2\n  failed=0\n  for ((attempt=1; attempt<=samples; attempt++)); do\n    sample_dir=\"$evidence/run-$attempt\"\n    mkdir -- \"$sample_dir\" || exit 2\n    exec 3>\"$sample_dir/output.log\" || exit 2\n    result=0\n    FLAKY_SAMPLE_DIR=\"$sample_dir\" \"$@\" >&3 2>&1 || result=$?\n    exec 3>&- || exit 2\n    printf '%s\\t%s\\n' \"$attempt\" \"$result\" >> \"$evidence/results.tsv\" || exit 2\n    if (( result != 0 )); then failed=1; fi\n  done\n  printf 'attempts=%s\\nrecords=%s\\n' \"$samples\" \"$evidence/results.tsv\" || exit 2\n  exit \"$failed\"\n)\n\nrun_flaky_samples \"$@\"\n",
+        "skill-example",
+        "1",
+        "/tmp/tmpxmlxhtvi/new evidence",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-c",
+        "import os; from pathlib import Path; status=Path(os.environ['FLAKY_SAMPLE_DIR']).parent / 'results.tsv'; status.unlink(); status.mkdir(); print('test command returned zero')"
+      ],
+      "cwd": "/tmp/tmpxmlxhtvi",
+      "started_at_utc": "2026-11-16T07:51:22.464517+00:00",
+      "ended_at_utc": "2026-11-16T07:51:22.496861+00:00",
+      "duration_seconds": 0.03235086299901013,
+      "stdout": "",
+      "stderr": "environment: line 19: /tmp/tmpxmlxhtvi/new evidence/results.tsv: Is a directory\n",
+      "exit_code": 2,
+      "fixtures_after": [
+        {
+          "path": "new evidence",
+          "type": "directory"
+        },
+        {
+          "path": "new evidence/results.tsv",
+          "type": "directory"
+        },
+        {
+          "path": "new evidence/run-1",
+          "type": "directory"
+        },
+        {
+          "path": "new evidence/run-1/output.log",
+          "type": "file",
+          "bytes": 27,
+          "sha256": "bcfce5c5fdd62446d09792e102fc2da1875b01b2b8a21f44437d09bb3941059e",
+          "content": "test command returned zero\n"
+        },
+        {
+          "path": "sample runner [fixture].py",
+          "type": "file",
+          "bytes": 502,
+          "sha256": "d243f9dbf6dd7abfd29bf66bfe4d1cfed85c745f5564847cb4bf2949b7f9ad2c"
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_command_examples.FlakySampleExampleTests.test_success_failure_and_mixed_runs_keep_exact_exit_codes_and_reports",
+      "command": [
+        "bash",
+        "-c",
+        "run_flaky_samples() (\n  set -euo pipefail\n  (( $# >= 3 )) || { printf 'usage: run_flaky_samples <1-20> <new-directory> <command> [args...]\\n' >&2; exit 2; }\n  samples=$1\n  evidence=$2\n  shift 2\n  [[ \"$samples\" =~ ^([1-9]|1[0-9]|20)$ ]] || exit 2\n  mkdir -- \"$evidence\" || exit 2\n  evidence=$(cd -- \"$evidence\" && pwd -P) || exit 2\n  printf 'attempt\\texit_code\\n' > \"$evidence/results.tsv\" || exit 2\n  failed=0\n  for ((attempt=1; attempt<=samples; attempt++)); do\n    sample_dir=\"$evidence/run-$attempt\"\n    mkdir -- \"$sample_dir\" || exit 2\n    exec 3>\"$sample_dir/output.log\" || exit 2\n    result=0\n    FLAKY_SAMPLE_DIR=\"$sample_dir\" \"$@\" >&3 2>&1 || result=$?\n    exec 3>&- || exit 2\n    printf '%s\\t%s\\n' \"$attempt\" \"$result\" >> \"$evidence/results.tsv\" || exit 2\n    if (( result != 0 )); then failed=1; fi\n  done\n  printf 'attempts=%s\\nrecords=%s\\n' \"$samples\" \"$evidence/results.tsv\" || exit 2\n  exit \"$failed\"\n)\n\nrun_flaky_samples \"$@\"\n",
+        "skill-example",
+        "3",
+        "/tmp/tmpdh6v2zhp/runs-0-0-0",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "/tmp/tmpdh6v2zhp/sample runner [fixture].py",
+        "0,0,0",
+        "test_items[case 1]; $(touch MUST_NOT_RUN)"
+      ],
+      "cwd": "/tmp/tmpdh6v2zhp",
+      "started_at_utc": "2026-11-16T07:51:22.497469+00:00",
+      "ended_at_utc": "2026-11-16T07:51:22.595765+00:00",
+      "duration_seconds": 0.09830359899933683,
+      "stdout": "attempts=3\nrecords=/tmp/tmpdh6v2zhp/runs-0-0-0/results.tsv\n",
+      "stderr": "",
+      "exit_code": 0,
+      "fixtures_after": [
+        {
+          "path": "runs-0-0-0",
+          "type": "directory"
+        },
+        {
+          "path": "runs-0-0-0/results.tsv",
+          "type": "file",
+          "bytes": 30,
+          "sha256": "1c429a24186a8bac4913eedcd6c5ce0afaaa7db2237f0c9d9abb736b1d8af9ba",
+          "content": "attempt\texit_code\n1\t0\n2\t0\n3\t0\n"
+        },
+        {
+          "path": "runs-0-0-0/run-1",
+          "type": "directory"
+        },
+        {
+          "path": "runs-0-0-0/run-1/output.log",
+          "type": "file",
+          "bytes": 109,
+          "sha256": "46d602c506d95b3f74f35d93f1f2758eae10e602ff7771173c07fab654041ae6",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\npassed test_items[case 1]; $(touch MUST_NOT_RUN)\nstderr retained\n"
+        },
+        {
+          "path": "runs-0-0-0/run-1/result.json",
+          "type": "file",
+          "bytes": 74,
+          "sha256": "574b619eb4c3706dc5947322ac440c6730e75b1193296cba02a1d19e653d2562",
+          "content": "{\"name\": \"test_items[case 1]; $(touch MUST_NOT_RUN)\", \"outcome\": \"passed\"}"
+        },
+        {
+          "path": "runs-0-0-0/run-2",
+          "type": "directory"
+        },
+        {
+          "path": "runs-0-0-0/run-2/output.log",
+          "type": "file",
+          "bytes": 109,
+          "sha256": "46d602c506d95b3f74f35d93f1f2758eae10e602ff7771173c07fab654041ae6",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\npassed test_items[case 1]; $(touch MUST_NOT_RUN)\nstderr retained\n"
+        },
+        {
+          "path": "runs-0-0-0/run-2/result.json",
+          "type": "file",
+          "bytes": 74,
+          "sha256": "574b619eb4c3706dc5947322ac440c6730e75b1193296cba02a1d19e653d2562",
+          "content": "{\"name\": \"test_items[case 1]; $(touch MUST_NOT_RUN)\", \"outcome\": \"passed\"}"
+        },
+        {
+          "path": "runs-0-0-0/run-3",
+          "type": "directory"
+        },
+        {
+          "path": "runs-0-0-0/run-3/output.log",
+          "type": "file",
+          "bytes": 109,
+          "sha256": "46d602c506d95b3f74f35d93f1f2758eae10e602ff7771173c07fab654041ae6",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\npassed test_items[case 1]; $(touch MUST_NOT_RUN)\nstderr retained\n"
+        },
+        {
+          "path": "runs-0-0-0/run-3/result.json",
+          "type": "file",
+          "bytes": 74,
+          "sha256": "574b619eb4c3706dc5947322ac440c6730e75b1193296cba02a1d19e653d2562",
+          "content": "{\"name\": \"test_items[case 1]; $(touch MUST_NOT_RUN)\", \"outcome\": \"passed\"}"
+        },
+        {
+          "path": "sample runner [fixture].py",
+          "type": "file",
+          "bytes": 502,
+          "sha256": "d243f9dbf6dd7abfd29bf66bfe4d1cfed85c745f5564847cb4bf2949b7f9ad2c"
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_command_examples.FlakySampleExampleTests.test_success_failure_and_mixed_runs_keep_exact_exit_codes_and_reports",
+      "command": [
+        "bash",
+        "-c",
+        "run_flaky_samples() (\n  set -euo pipefail\n  (( $# >= 3 )) || { printf 'usage: run_flaky_samples <1-20> <new-directory> <command> [args...]\\n' >&2; exit 2; }\n  samples=$1\n  evidence=$2\n  shift 2\n  [[ \"$samples\" =~ ^([1-9]|1[0-9]|20)$ ]] || exit 2\n  mkdir -- \"$evidence\" || exit 2\n  evidence=$(cd -- \"$evidence\" && pwd -P) || exit 2\n  printf 'attempt\\texit_code\\n' > \"$evidence/results.tsv\" || exit 2\n  failed=0\n  for ((attempt=1; attempt<=samples; attempt++)); do\n    sample_dir=\"$evidence/run-$attempt\"\n    mkdir -- \"$sample_dir\" || exit 2\n    exec 3>\"$sample_dir/output.log\" || exit 2\n    result=0\n    FLAKY_SAMPLE_DIR=\"$sample_dir\" \"$@\" >&3 2>&1 || result=$?\n    exec 3>&- || exit 2\n    printf '%s\\t%s\\n' \"$attempt\" \"$result\" >> \"$evidence/results.tsv\" || exit 2\n    if (( result != 0 )); then failed=1; fi\n  done\n  printf 'attempts=%s\\nrecords=%s\\n' \"$samples\" \"$evidence/results.tsv\" || exit 2\n  exit \"$failed\"\n)\n\nrun_flaky_samples \"$@\"\n",
+        "skill-example",
+        "3",
+        "/tmp/tmpdh6v2zhp/runs-9-9-9",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "/tmp/tmpdh6v2zhp/sample runner [fixture].py",
+        "9,9,9",
+        "test_items[case 1]; $(touch MUST_NOT_RUN)"
+      ],
+      "cwd": "/tmp/tmpdh6v2zhp",
+      "started_at_utc": "2026-11-16T07:51:22.596048+00:00",
+      "ended_at_utc": "2026-11-16T07:51:22.682692+00:00",
+      "duration_seconds": 0.08665354000186198,
+      "stdout": "attempts=3\nrecords=/tmp/tmpdh6v2zhp/runs-9-9-9/results.tsv\n",
+      "stderr": "",
+      "exit_code": 1,
+      "fixtures_after": [
+        {
+          "path": "runs-0-0-0",
+          "type": "directory"
+        },
+        {
+          "path": "runs-0-0-0/results.tsv",
+          "type": "file",
+          "bytes": 30,
+          "sha256": "1c429a24186a8bac4913eedcd6c5ce0afaaa7db2237f0c9d9abb736b1d8af9ba",
+          "content": "attempt\texit_code\n1\t0\n2\t0\n3\t0\n"
+        },
+        {
+          "path": "runs-0-0-0/run-1",
+          "type": "directory"
+        },
+        {
+          "path": "runs-0-0-0/run-1/output.log",
+          "type": "file",
+          "bytes": 109,
+          "sha256": "46d602c506d95b3f74f35d93f1f2758eae10e602ff7771173c07fab654041ae6",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\npassed test_items[case 1]; $(touch MUST_NOT_RUN)\nstderr retained\n"
+        },
+        {
+          "path": "runs-0-0-0/run-1/result.json",
+          "type": "file",
+          "bytes": 74,
+          "sha256": "574b619eb4c3706dc5947322ac440c6730e75b1193296cba02a1d19e653d2562",
+          "content": "{\"name\": \"test_items[case 1]; $(touch MUST_NOT_RUN)\", \"outcome\": \"passed\"}"
+        },
+        {
+          "path": "runs-0-0-0/run-2",
+          "type": "directory"
+        },
+        {
+          "path": "runs-0-0-0/run-2/output.log",
+          "type": "file",
+          "bytes": 109,
+          "sha256": "46d602c506d95b3f74f35d93f1f2758eae10e602ff7771173c07fab654041ae6",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\npassed test_items[case 1]; $(touch MUST_NOT_RUN)\nstderr retained\n"
+        },
+        {
+          "path": "runs-0-0-0/run-2/result.json",
+          "type": "file",
+          "bytes": 74,
+          "sha256": "574b619eb4c3706dc5947322ac440c6730e75b1193296cba02a1d19e653d2562",
+          "content": "{\"name\": \"test_items[case 1]; $(touch MUST_NOT_RUN)\", \"outcome\": \"passed\"}"
+        },
+        {
+          "path": "runs-0-0-0/run-3",
+          "type": "directory"
+        },
+        {
+          "path": "runs-0-0-0/run-3/output.log",
+          "type": "file",
+          "bytes": 109,
+          "sha256": "46d602c506d95b3f74f35d93f1f2758eae10e602ff7771173c07fab654041ae6",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\npassed test_items[case 1]; $(touch MUST_NOT_RUN)\nstderr retained\n"
+        },
+        {
+          "path": "runs-0-0-0/run-3/result.json",
+          "type": "file",
+          "bytes": 74,
+          "sha256": "574b619eb4c3706dc5947322ac440c6730e75b1193296cba02a1d19e653d2562",
+          "content": "{\"name\": \"test_items[case 1]; $(touch MUST_NOT_RUN)\", \"outcome\": \"passed\"}"
+        },
+        {
+          "path": "runs-9-9-9",
+          "type": "directory"
+        },
+        {
+          "path": "runs-9-9-9/results.tsv",
+          "type": "file",
+          "bytes": 30,
+          "sha256": "22153743157654db7db295ba0022d59648eba92749cec87000684bb3e35b03d5",
+          "content": "attempt\texit_code\n1\t9\n2\t9\n3\t9\n"
+        },
+        {
+          "path": "runs-9-9-9/run-1",
+          "type": "directory"
+        },
+        {
+          "path": "runs-9-9-9/run-1/output.log",
+          "type": "file",
+          "bytes": 108,
+          "sha256": "2ddb90680ad52f238f044ea7a64f447ae78d15b11cb340bdf3b4b9087f1a261c",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\nerror test_items[case 1]; $(touch MUST_NOT_RUN)\nstderr retained\n"
+        },
+        {
+          "path": "runs-9-9-9/run-1/result.json",
+          "type": "file",
+          "bytes": 73,
+          "sha256": "5a21579567efc91274b2ebac833566905962149ad8e9a82e85f1053b6aad18fd",
+          "content": "{\"name\": \"test_items[case 1]; $(touch MUST_NOT_RUN)\", \"outcome\": \"error\"}"
+        },
+        {
+          "path": "runs-9-9-9/run-2",
+          "type": "directory"
+        },
+        {
+          "path": "runs-9-9-9/run-2/output.log",
+          "type": "file",
+          "bytes": 108,
+          "sha256": "2ddb90680ad52f238f044ea7a64f447ae78d15b11cb340bdf3b4b9087f1a261c",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\nerror test_items[case 1]; $(touch MUST_NOT_RUN)\nstderr retained\n"
+        },
+        {
+          "path": "runs-9-9-9/run-2/result.json",
+          "type": "file",
+          "bytes": 73,
+          "sha256": "5a21579567efc91274b2ebac833566905962149ad8e9a82e85f1053b6aad18fd",
+          "content": "{\"name\": \"test_items[case 1]; $(touch MUST_NOT_RUN)\", \"outcome\": \"error\"}"
+        },
+        {
+          "path": "runs-9-9-9/run-3",
+          "type": "directory"
+        },
+        {
+          "path": "runs-9-9-9/run-3/output.log",
+          "type": "file",
+          "bytes": 108,
+          "sha256": "2ddb90680ad52f238f044ea7a64f447ae78d15b11cb340bdf3b4b9087f1a261c",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\nerror test_items[case 1]; $(touch MUST_NOT_RUN)\nstderr retained\n"
+        },
+        {
+          "path": "runs-9-9-9/run-3/result.json",
+          "type": "file",
+          "bytes": 73,
+          "sha256": "5a21579567efc91274b2ebac833566905962149ad8e9a82e85f1053b6aad18fd",
+          "content": "{\"name\": \"test_items[case 1]; $(touch MUST_NOT_RUN)\", \"outcome\": \"error\"}"
+        },
+        {
+          "path": "sample runner [fixture].py",
+          "type": "file",
+          "bytes": 502,
+          "sha256": "d243f9dbf6dd7abfd29bf66bfe4d1cfed85c745f5564847cb4bf2949b7f9ad2c"
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_command_examples.FlakySampleExampleTests.test_success_failure_and_mixed_runs_keep_exact_exit_codes_and_reports",
+      "command": [
+        "bash",
+        "-c",
+        "run_flaky_samples() (\n  set -euo pipefail\n  (( $# >= 3 )) || { printf 'usage: run_flaky_samples <1-20> <new-directory> <command> [args...]\\n' >&2; exit 2; }\n  samples=$1\n  evidence=$2\n  shift 2\n  [[ \"$samples\" =~ ^([1-9]|1[0-9]|20)$ ]] || exit 2\n  mkdir -- \"$evidence\" || exit 2\n  evidence=$(cd -- \"$evidence\" && pwd -P) || exit 2\n  printf 'attempt\\texit_code\\n' > \"$evidence/results.tsv\" || exit 2\n  failed=0\n  for ((attempt=1; attempt<=samples; attempt++)); do\n    sample_dir=\"$evidence/run-$attempt\"\n    mkdir -- \"$sample_dir\" || exit 2\n    exec 3>\"$sample_dir/output.log\" || exit 2\n    result=0\n    FLAKY_SAMPLE_DIR=\"$sample_dir\" \"$@\" >&3 2>&1 || result=$?\n    exec 3>&- || exit 2\n    printf '%s\\t%s\\n' \"$attempt\" \"$result\" >> \"$evidence/results.tsv\" || exit 2\n    if (( result != 0 )); then failed=1; fi\n  done\n  printf 'attempts=%s\\nrecords=%s\\n' \"$samples\" \"$evidence/results.tsv\" || exit 2\n  exit \"$failed\"\n)\n\nrun_flaky_samples \"$@\"\n",
+        "skill-example",
+        "4",
+        "/tmp/tmpdh6v2zhp/runs-0-1-2-0",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "/tmp/tmpdh6v2zhp/sample runner [fixture].py",
+        "0,1,2,0",
+        "test_items[case 1]; $(touch MUST_NOT_RUN)"
+      ],
+      "cwd": "/tmp/tmpdh6v2zhp",
+      "started_at_utc": "2026-11-16T07:51:22.683073+00:00",
+      "ended_at_utc": "2026-11-16T07:51:22.799738+00:00",
+      "duration_seconds": 0.11667424100232893,
+      "stdout": "attempts=4\nrecords=/tmp/tmpdh6v2zhp/runs-0-1-2-0/results.tsv\n",
+      "stderr": "",
+      "exit_code": 1,
+      "fixtures_after": [
+        {
+          "path": "runs-0-0-0",
+          "type": "directory"
+        },
+        {
+          "path": "runs-0-0-0/results.tsv",
+          "type": "file",
+          "bytes": 30,
+          "sha256": "1c429a24186a8bac4913eedcd6c5ce0afaaa7db2237f0c9d9abb736b1d8af9ba",
+          "content": "attempt\texit_code\n1\t0\n2\t0\n3\t0\n"
+        },
+        {
+          "path": "runs-0-0-0/run-1",
+          "type": "directory"
+        },
+        {
+          "path": "runs-0-0-0/run-1/output.log",
+          "type": "file",
+          "bytes": 109,
+          "sha256": "46d602c506d95b3f74f35d93f1f2758eae10e602ff7771173c07fab654041ae6",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\npassed test_items[case 1]; $(touch MUST_NOT_RUN)\nstderr retained\n"
+        },
+        {
+          "path": "runs-0-0-0/run-1/result.json",
+          "type": "file",
+          "bytes": 74,
+          "sha256": "574b619eb4c3706dc5947322ac440c6730e75b1193296cba02a1d19e653d2562",
+          "content": "{\"name\": \"test_items[case 1]; $(touch MUST_NOT_RUN)\", \"outcome\": \"passed\"}"
+        },
+        {
+          "path": "runs-0-0-0/run-2",
+          "type": "directory"
+        },
+        {
+          "path": "runs-0-0-0/run-2/output.log",
+          "type": "file",
+          "bytes": 109,
+          "sha256": "46d602c506d95b3f74f35d93f1f2758eae10e602ff7771173c07fab654041ae6",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\npassed test_items[case 1]; $(touch MUST_NOT_RUN)\nstderr retained\n"
+        },
+        {
+          "path": "runs-0-0-0/run-2/result.json",
+          "type": "file",
+          "bytes": 74,
+          "sha256": "574b619eb4c3706dc5947322ac440c6730e75b1193296cba02a1d19e653d2562",
+          "content": "{\"name\": \"test_items[case 1]; $(touch MUST_NOT_RUN)\", \"outcome\": \"passed\"}"
+        },
+        {
+          "path": "runs-0-0-0/run-3",
+          "type": "directory"
+        },
+        {
+          "path": "runs-0-0-0/run-3/output.log",
+          "type": "file",
+          "bytes": 109,
+          "sha256": "46d602c506d95b3f74f35d93f1f2758eae10e602ff7771173c07fab654041ae6",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\npassed test_items[case 1]; $(touch MUST_NOT_RUN)\nstderr retained\n"
+        },
+        {
+          "path": "runs-0-0-0/run-3/result.json",
+          "type": "file",
+          "bytes": 74,
+          "sha256": "574b619eb4c3706dc5947322ac440c6730e75b1193296cba02a1d19e653d2562",
+          "content": "{\"name\": \"test_items[case 1]; $(touch MUST_NOT_RUN)\", \"outcome\": \"passed\"}"
+        },
+        {
+          "path": "runs-0-1-2-0",
+          "type": "directory"
+        },
+        {
+          "path": "runs-0-1-2-0/results.tsv",
+          "type": "file",
+          "bytes": 34,
+          "sha256": "572af335312976970a8e705a3befb1452ae0f38b433795ce9ba6653c9dee3af5",
+          "content": "attempt\texit_code\n1\t0\n2\t1\n3\t2\n4\t0\n"
+        },
+        {
+          "path": "runs-0-1-2-0/run-1",
+          "type": "directory"
+        },
+        {
+          "path": "runs-0-1-2-0/run-1/output.log",
+          "type": "file",
+          "bytes": 109,
+          "sha256": "46d602c506d95b3f74f35d93f1f2758eae10e602ff7771173c07fab654041ae6",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\npassed test_items[case 1]; $(touch MUST_NOT_RUN)\nstderr retained\n"
+        },
+        {
+          "path": "runs-0-1-2-0/run-1/result.json",
+          "type": "file",
+          "bytes": 74,
+          "sha256": "574b619eb4c3706dc5947322ac440c6730e75b1193296cba02a1d19e653d2562",
+          "content": "{\"name\": \"test_items[case 1]; $(touch MUST_NOT_RUN)\", \"outcome\": \"passed\"}"
+        },
+        {
+          "path": "runs-0-1-2-0/run-2",
+          "type": "directory"
+        },
+        {
+          "path": "runs-0-1-2-0/run-2/output.log",
+          "type": "file",
+          "bytes": 109,
+          "sha256": "f5b0353dbfe8be77230adf85f3fabe272d35129f821888e5ad69875ba7c07b59",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\nfailed test_items[case 1]; $(touch MUST_NOT_RUN)\nstderr retained\n"
+        },
+        {
+          "path": "runs-0-1-2-0/run-2/result.json",
+          "type": "file",
+          "bytes": 74,
+          "sha256": "556498957601c0728a898d304a5743c221bc881a94df44a17d4d423c1b3df969",
+          "content": "{\"name\": \"test_items[case 1]; $(touch MUST_NOT_RUN)\", \"outcome\": \"failed\"}"
+        },
+        {
+          "path": "runs-0-1-2-0/run-3",
+          "type": "directory"
+        },
+        {
+          "path": "runs-0-1-2-0/run-3/output.log",
+          "type": "file",
+          "bytes": 108,
+          "sha256": "2ddb90680ad52f238f044ea7a64f447ae78d15b11cb340bdf3b4b9087f1a261c",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\nerror test_items[case 1]; $(touch MUST_NOT_RUN)\nstderr retained\n"
+        },
+        {
+          "path": "runs-0-1-2-0/run-3/result.json",
+          "type": "file",
+          "bytes": 73,
+          "sha256": "5a21579567efc91274b2ebac833566905962149ad8e9a82e85f1053b6aad18fd",
+          "content": "{\"name\": \"test_items[case 1]; $(touch MUST_NOT_RUN)\", \"outcome\": \"error\"}"
+        },
+        {
+          "path": "runs-0-1-2-0/run-4",
+          "type": "directory"
+        },
+        {
+          "path": "runs-0-1-2-0/run-4/output.log",
+          "type": "file",
+          "bytes": 109,
+          "sha256": "46d602c506d95b3f74f35d93f1f2758eae10e602ff7771173c07fab654041ae6",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\npassed test_items[case 1]; $(touch MUST_NOT_RUN)\nstderr retained\n"
+        },
+        {
+          "path": "runs-0-1-2-0/run-4/result.json",
+          "type": "file",
+          "bytes": 74,
+          "sha256": "574b619eb4c3706dc5947322ac440c6730e75b1193296cba02a1d19e653d2562",
+          "content": "{\"name\": \"test_items[case 1]; $(touch MUST_NOT_RUN)\", \"outcome\": \"passed\"}"
+        },
+        {
+          "path": "runs-9-9-9",
+          "type": "directory"
+        },
+        {
+          "path": "runs-9-9-9/results.tsv",
+          "type": "file",
+          "bytes": 30,
+          "sha256": "22153743157654db7db295ba0022d59648eba92749cec87000684bb3e35b03d5",
+          "content": "attempt\texit_code\n1\t9\n2\t9\n3\t9\n"
+        },
+        {
+          "path": "runs-9-9-9/run-1",
+          "type": "directory"
+        },
+        {
+          "path": "runs-9-9-9/run-1/output.log",
+          "type": "file",
+          "bytes": 108,
+          "sha256": "2ddb90680ad52f238f044ea7a64f447ae78d15b11cb340bdf3b4b9087f1a261c",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\nerror test_items[case 1]; $(touch MUST_NOT_RUN)\nstderr retained\n"
+        },
+        {
+          "path": "runs-9-9-9/run-1/result.json",
+          "type": "file",
+          "bytes": 73,
+          "sha256": "5a21579567efc91274b2ebac833566905962149ad8e9a82e85f1053b6aad18fd",
+          "content": "{\"name\": \"test_items[case 1]; $(touch MUST_NOT_RUN)\", \"outcome\": \"error\"}"
+        },
+        {
+          "path": "runs-9-9-9/run-2",
+          "type": "directory"
+        },
+        {
+          "path": "runs-9-9-9/run-2/output.log",
+          "type": "file",
+          "bytes": 108,
+          "sha256": "2ddb90680ad52f238f044ea7a64f447ae78d15b11cb340bdf3b4b9087f1a261c",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\nerror test_items[case 1]; $(touch MUST_NOT_RUN)\nstderr retained\n"
+        },
+        {
+          "path": "runs-9-9-9/run-2/result.json",
+          "type": "file",
+          "bytes": 73,
+          "sha256": "5a21579567efc91274b2ebac833566905962149ad8e9a82e85f1053b6aad18fd",
+          "content": "{\"name\": \"test_items[case 1]; $(touch MUST_NOT_RUN)\", \"outcome\": \"error\"}"
+        },
+        {
+          "path": "runs-9-9-9/run-3",
+          "type": "directory"
+        },
+        {
+          "path": "runs-9-9-9/run-3/output.log",
+          "type": "file",
+          "bytes": 108,
+          "sha256": "2ddb90680ad52f238f044ea7a64f447ae78d15b11cb340bdf3b4b9087f1a261c",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\nerror test_items[case 1]; $(touch MUST_NOT_RUN)\nstderr retained\n"
+        },
+        {
+          "path": "runs-9-9-9/run-3/result.json",
+          "type": "file",
+          "bytes": 73,
+          "sha256": "5a21579567efc91274b2ebac833566905962149ad8e9a82e85f1053b6aad18fd",
+          "content": "{\"name\": \"test_items[case 1]; $(touch MUST_NOT_RUN)\", \"outcome\": \"error\"}"
+        },
+        {
+          "path": "sample runner [fixture].py",
+          "type": "file",
+          "bytes": 502,
+          "sha256": "d243f9dbf6dd7abfd29bf66bfe4d1cfed85c745f5564847cb4bf2949b7f9ad2c"
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_command_examples.FlakySampleExampleTests.test_success_failure_and_mixed_runs_keep_exact_exit_codes_and_reports",
+      "command": [
+        "bash",
+        "-c",
+        "run_flaky_samples() (\n  set -euo pipefail\n  (( $# >= 3 )) || { printf 'usage: run_flaky_samples <1-20> <new-directory> <command> [args...]\\n' >&2; exit 2; }\n  samples=$1\n  evidence=$2\n  shift 2\n  [[ \"$samples\" =~ ^([1-9]|1[0-9]|20)$ ]] || exit 2\n  mkdir -- \"$evidence\" || exit 2\n  evidence=$(cd -- \"$evidence\" && pwd -P) || exit 2\n  printf 'attempt\\texit_code\\n' > \"$evidence/results.tsv\" || exit 2\n  failed=0\n  for ((attempt=1; attempt<=samples; attempt++)); do\n    sample_dir=\"$evidence/run-$attempt\"\n    mkdir -- \"$sample_dir\" || exit 2\n    exec 3>\"$sample_dir/output.log\" || exit 2\n    result=0\n    FLAKY_SAMPLE_DIR=\"$sample_dir\" \"$@\" >&3 2>&1 || result=$?\n    exec 3>&- || exit 2\n    printf '%s\\t%s\\n' \"$attempt\" \"$result\" >> \"$evidence/results.tsv\" || exit 2\n    if (( result != 0 )); then failed=1; fi\n  done\n  printf 'attempts=%s\\nrecords=%s\\n' \"$samples\" \"$evidence/results.tsv\" || exit 2\n  exit \"$failed\"\n)\n\nrun_flaky_samples \"$@\"\n",
+        "skill-example",
+        "4",
+        "/tmp/tmpdh6v2zhp/runs-0-1-9-124",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "/tmp/tmpdh6v2zhp/sample runner [fixture].py",
+        "0,1,9,124",
+        "test_items[case 1]; $(touch MUST_NOT_RUN)"
+      ],
+      "cwd": "/tmp/tmpdh6v2zhp",
+      "started_at_utc": "2026-11-16T07:51:22.799990+00:00",
+      "ended_at_utc": "2026-11-16T07:51:22.906782+00:00",
+      "duration_seconds": 0.10680367299937643,
+      "stdout": "attempts=4\nrecords=/tmp/tmpdh6v2zhp/runs-0-1-9-124/results.tsv\n",
+      "stderr": "",
+      "exit_code": 1,
+      "fixtures_after": [
+        {
+          "path": "runs-0-0-0",
+          "type": "directory"
+        },
+        {
+          "path": "runs-0-0-0/results.tsv",
+          "type": "file",
+          "bytes": 30,
+          "sha256": "1c429a24186a8bac4913eedcd6c5ce0afaaa7db2237f0c9d9abb736b1d8af9ba",
+          "content": "attempt\texit_code\n1\t0\n2\t0\n3\t0\n"
+        },
+        {
+          "path": "runs-0-0-0/run-1",
+          "type": "directory"
+        },
+        {
+          "path": "runs-0-0-0/run-1/output.log",
+          "type": "file",
+          "bytes": 109,
+          "sha256": "46d602c506d95b3f74f35d93f1f2758eae10e602ff7771173c07fab654041ae6",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\npassed test_items[case 1]; $(touch MUST_NOT_RUN)\nstderr retained\n"
+        },
+        {
+          "path": "runs-0-0-0/run-1/result.json",
+          "type": "file",
+          "bytes": 74,
+          "sha256": "574b619eb4c3706dc5947322ac440c6730e75b1193296cba02a1d19e653d2562",
+          "content": "{\"name\": \"test_items[case 1]; $(touch MUST_NOT_RUN)\", \"outcome\": \"passed\"}"
+        },
+        {
+          "path": "runs-0-0-0/run-2",
+          "type": "directory"
+        },
+        {
+          "path": "runs-0-0-0/run-2/output.log",
+          "type": "file",
+          "bytes": 109,
+          "sha256": "46d602c506d95b3f74f35d93f1f2758eae10e602ff7771173c07fab654041ae6",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\npassed test_items[case 1]; $(touch MUST_NOT_RUN)\nstderr retained\n"
+        },
+        {
+          "path": "runs-0-0-0/run-2/result.json",
+          "type": "file",
+          "bytes": 74,
+          "sha256": "574b619eb4c3706dc5947322ac440c6730e75b1193296cba02a1d19e653d2562",
+          "content": "{\"name\": \"test_items[case 1]; $(touch MUST_NOT_RUN)\", \"outcome\": \"passed\"}"
+        },
+        {
+          "path": "runs-0-0-0/run-3",
+          "type": "directory"
+        },
+        {
+          "path": "runs-0-0-0/run-3/output.log",
+          "type": "file",
+          "bytes": 109,
+          "sha256": "46d602c506d95b3f74f35d93f1f2758eae10e602ff7771173c07fab654041ae6",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\npassed test_items[case 1]; $(touch MUST_NOT_RUN)\nstderr retained\n"
+        },
+        {
+          "path": "runs-0-0-0/run-3/result.json",
+          "type": "file",
+          "bytes": 74,
+          "sha256": "574b619eb4c3706dc5947322ac440c6730e75b1193296cba02a1d19e653d2562",
+          "content": "{\"name\": \"test_items[case 1]; $(touch MUST_NOT_RUN)\", \"outcome\": \"passed\"}"
+        },
+        {
+          "path": "runs-0-1-2-0",
+          "type": "directory"
+        },
+        {
+          "path": "runs-0-1-2-0/results.tsv",
+          "type": "file",
+          "bytes": 34,
+          "sha256": "572af335312976970a8e705a3befb1452ae0f38b433795ce9ba6653c9dee3af5",
+          "content": "attempt\texit_code\n1\t0\n2\t1\n3\t2\n4\t0\n"
+        },
+        {
+          "path": "runs-0-1-2-0/run-1",
+          "type": "directory"
+        },
+        {
+          "path": "runs-0-1-2-0/run-1/output.log",
+          "type": "file",
+          "bytes": 109,
+          "sha256": "46d602c506d95b3f74f35d93f1f2758eae10e602ff7771173c07fab654041ae6",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\npassed test_items[case 1]; $(touch MUST_NOT_RUN)\nstderr retained\n"
+        },
+        {
+          "path": "runs-0-1-2-0/run-1/result.json",
+          "type": "file",
+          "bytes": 74,
+          "sha256": "574b619eb4c3706dc5947322ac440c6730e75b1193296cba02a1d19e653d2562",
+          "content": "{\"name\": \"test_items[case 1]; $(touch MUST_NOT_RUN)\", \"outcome\": \"passed\"}"
+        },
+        {
+          "path": "runs-0-1-2-0/run-2",
+          "type": "directory"
+        },
+        {
+          "path": "runs-0-1-2-0/run-2/output.log",
+          "type": "file",
+          "bytes": 109,
+          "sha256": "f5b0353dbfe8be77230adf85f3fabe272d35129f821888e5ad69875ba7c07b59",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\nfailed test_items[case 1]; $(touch MUST_NOT_RUN)\nstderr retained\n"
+        },
+        {
+          "path": "runs-0-1-2-0/run-2/result.json",
+          "type": "file",
+          "bytes": 74,
+          "sha256": "556498957601c0728a898d304a5743c221bc881a94df44a17d4d423c1b3df969",
+          "content": "{\"name\": \"test_items[case 1]; $(touch MUST_NOT_RUN)\", \"outcome\": \"failed\"}"
+        },
+        {
+          "path": "runs-0-1-2-0/run-3",
+          "type": "directory"
+        },
+        {
+          "path": "runs-0-1-2-0/run-3/output.log",
+          "type": "file",
+          "bytes": 108,
+          "sha256": "2ddb90680ad52f238f044ea7a64f447ae78d15b11cb340bdf3b4b9087f1a261c",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\nerror test_items[case 1]; $(touch MUST_NOT_RUN)\nstderr retained\n"
+        },
+        {
+          "path": "runs-0-1-2-0/run-3/result.json",
+          "type": "file",
+          "bytes": 73,
+          "sha256": "5a21579567efc91274b2ebac833566905962149ad8e9a82e85f1053b6aad18fd",
+          "content": "{\"name\": \"test_items[case 1]; $(touch MUST_NOT_RUN)\", \"outcome\": \"error\"}"
+        },
+        {
+          "path": "runs-0-1-2-0/run-4",
+          "type": "directory"
+        },
+        {
+          "path": "runs-0-1-2-0/run-4/output.log",
+          "type": "file",
+          "bytes": 109,
+          "sha256": "46d602c506d95b3f74f35d93f1f2758eae10e602ff7771173c07fab654041ae6",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\npassed test_items[case 1]; $(touch MUST_NOT_RUN)\nstderr retained\n"
+        },
+        {
+          "path": "runs-0-1-2-0/run-4/result.json",
+          "type": "file",
+          "bytes": 74,
+          "sha256": "574b619eb4c3706dc5947322ac440c6730e75b1193296cba02a1d19e653d2562",
+          "content": "{\"name\": \"test_items[case 1]; $(touch MUST_NOT_RUN)\", \"outcome\": \"passed\"}"
+        },
+        {
+          "path": "runs-0-1-9-124",
+          "type": "directory"
+        },
+        {
+          "path": "runs-0-1-9-124/results.tsv",
+          "type": "file",
+          "bytes": 36,
+          "sha256": "93ab9124faa8a158f522e52507cb71e4a2d625f004594402eb2dbd6d1d0338c1",
+          "content": "attempt\texit_code\n1\t0\n2\t1\n3\t9\n4\t124\n"
+        },
+        {
+          "path": "runs-0-1-9-124/run-1",
+          "type": "directory"
+        },
+        {
+          "path": "runs-0-1-9-124/run-1/output.log",
+          "type": "file",
+          "bytes": 109,
+          "sha256": "46d602c506d95b3f74f35d93f1f2758eae10e602ff7771173c07fab654041ae6",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\npassed test_items[case 1]; $(touch MUST_NOT_RUN)\nstderr retained\n"
+        },
+        {
+          "path": "runs-0-1-9-124/run-1/result.json",
+          "type": "file",
+          "bytes": 74,
+          "sha256": "574b619eb4c3706dc5947322ac440c6730e75b1193296cba02a1d19e653d2562",
+          "content": "{\"name\": \"test_items[case 1]; $(touch MUST_NOT_RUN)\", \"outcome\": \"passed\"}"
+        },
+        {
+          "path": "runs-0-1-9-124/run-2",
+          "type": "directory"
+        },
+        {
+          "path": "runs-0-1-9-124/run-2/output.log",
+          "type": "file",
+          "bytes": 109,
+          "sha256": "f5b0353dbfe8be77230adf85f3fabe272d35129f821888e5ad69875ba7c07b59",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\nfailed test_items[case 1]; $(touch MUST_NOT_RUN)\nstderr retained\n"
+        },
+        {
+          "path": "runs-0-1-9-124/run-2/result.json",
+          "type": "file",
+          "bytes": 74,
+          "sha256": "556498957601c0728a898d304a5743c221bc881a94df44a17d4d423c1b3df969",
+          "content": "{\"name\": \"test_items[case 1]; $(touch MUST_NOT_RUN)\", \"outcome\": \"failed\"}"
+        },
+        {
+          "path": "runs-0-1-9-124/run-3",
+          "type": "directory"
+        },
+        {
+          "path": "runs-0-1-9-124/run-3/output.log",
+          "type": "file",
+          "bytes": 108,
+          "sha256": "2ddb90680ad52f238f044ea7a64f447ae78d15b11cb340bdf3b4b9087f1a261c",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\nerror test_items[case 1]; $(touch MUST_NOT_RUN)\nstderr retained\n"
+        },
+        {
+          "path": "runs-0-1-9-124/run-3/result.json",
+          "type": "file",
+          "bytes": 73,
+          "sha256": "5a21579567efc91274b2ebac833566905962149ad8e9a82e85f1053b6aad18fd",
+          "content": "{\"name\": \"test_items[case 1]; $(touch MUST_NOT_RUN)\", \"outcome\": \"error\"}"
+        },
+        {
+          "path": "runs-0-1-9-124/run-4",
+          "type": "directory"
+        },
+        {
+          "path": "runs-0-1-9-124/run-4/output.log",
+          "type": "file",
+          "bytes": 108,
+          "sha256": "2ddb90680ad52f238f044ea7a64f447ae78d15b11cb340bdf3b4b9087f1a261c",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\nerror test_items[case 1]; $(touch MUST_NOT_RUN)\nstderr retained\n"
+        },
+        {
+          "path": "runs-0-1-9-124/run-4/result.json",
+          "type": "file",
+          "bytes": 73,
+          "sha256": "5a21579567efc91274b2ebac833566905962149ad8e9a82e85f1053b6aad18fd",
+          "content": "{\"name\": \"test_items[case 1]; $(touch MUST_NOT_RUN)\", \"outcome\": \"error\"}"
+        },
+        {
+          "path": "runs-9-9-9",
+          "type": "directory"
+        },
+        {
+          "path": "runs-9-9-9/results.tsv",
+          "type": "file",
+          "bytes": 30,
+          "sha256": "22153743157654db7db295ba0022d59648eba92749cec87000684bb3e35b03d5",
+          "content": "attempt\texit_code\n1\t9\n2\t9\n3\t9\n"
+        },
+        {
+          "path": "runs-9-9-9/run-1",
+          "type": "directory"
+        },
+        {
+          "path": "runs-9-9-9/run-1/output.log",
+          "type": "file",
+          "bytes": 108,
+          "sha256": "2ddb90680ad52f238f044ea7a64f447ae78d15b11cb340bdf3b4b9087f1a261c",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\nerror test_items[case 1]; $(touch MUST_NOT_RUN)\nstderr retained\n"
+        },
+        {
+          "path": "runs-9-9-9/run-1/result.json",
+          "type": "file",
+          "bytes": 73,
+          "sha256": "5a21579567efc91274b2ebac833566905962149ad8e9a82e85f1053b6aad18fd",
+          "content": "{\"name\": \"test_items[case 1]; $(touch MUST_NOT_RUN)\", \"outcome\": \"error\"}"
+        },
+        {
+          "path": "runs-9-9-9/run-2",
+          "type": "directory"
+        },
+        {
+          "path": "runs-9-9-9/run-2/output.log",
+          "type": "file",
+          "bytes": 108,
+          "sha256": "2ddb90680ad52f238f044ea7a64f447ae78d15b11cb340bdf3b4b9087f1a261c",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\nerror test_items[case 1]; $(touch MUST_NOT_RUN)\nstderr retained\n"
+        },
+        {
+          "path": "runs-9-9-9/run-2/result.json",
+          "type": "file",
+          "bytes": 73,
+          "sha256": "5a21579567efc91274b2ebac833566905962149ad8e9a82e85f1053b6aad18fd",
+          "content": "{\"name\": \"test_items[case 1]; $(touch MUST_NOT_RUN)\", \"outcome\": \"error\"}"
+        },
+        {
+          "path": "runs-9-9-9/run-3",
+          "type": "directory"
+        },
+        {
+          "path": "runs-9-9-9/run-3/output.log",
+          "type": "file",
+          "bytes": 108,
+          "sha256": "2ddb90680ad52f238f044ea7a64f447ae78d15b11cb340bdf3b4b9087f1a261c",
+          "content": "PASSED noisy_log_name\nPASSED noisy_log_name\nerror test_items[case 1]; $(touch MUST_NOT_RUN)\nstderr retained\n"
+        },
+        {
+          "path": "runs-9-9-9/run-3/result.json",
+          "type": "file",
+          "bytes": 73,
+          "sha256": "5a21579567efc91274b2ebac833566905962149ad8e9a82e85f1053b6aad18fd",
+          "content": "{\"name\": \"test_items[case 1]; $(touch MUST_NOT_RUN)\", \"outcome\": \"error\"}"
+        },
+        {
+          "path": "sample runner [fixture].py",
+          "type": "file",
+          "bytes": 502,
+          "sha256": "d243f9dbf6dd7abfd29bf66bfe4d1cfed85c745f5564847cb4bf2949b7f9ad2c"
+        }
+      ]
+    }
+  ],
+  "boundary": "Synthetic file contents and owned child processes only; no real credentials, external requests, parent-shell signal delivery, process-group cancellation or keyboard Ctrl-C propagation are exercised."
+}

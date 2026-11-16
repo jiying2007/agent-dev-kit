@@ -1,0 +1,29 @@
+{
+  "phase": "green-budget",
+  "command": [
+    "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+    "bypass",
+    "env",
+    "ADK_PYTHON_BIN=/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "bash",
+    "tests/test_token_budget.sh"
+  ],
+  "cwd": "/workspace/scratch/fe5385ca063a/agent-dev-kit",
+  "started_at_utc": "2026-11-16T08:11:15.105965+00:00",
+  "ended_at_utc": "2026-11-16T08:11:22.184826+00:00",
+  "duration_seconds": 7.07886784099901,
+  "stdout": "[INFO] agents_bytes=2914 soft=2975 hard=3500 estimated_tokens=729 budget_status=within-soft-limit\n[INFO] skill_files=65 max_skill_lines=140 max_skill_file=optional-skills/adk-security-supply-chain/SKILL.md limit=140\n[INFO] doc_files=926 max_doc_lines=547 max_doc_file=docs/comprehensive-analysis-embedded-harness.md limit=560\n[INFO] summary_json_scripts=3\n[INFO] compact_test_runner=1\n[INFO] context_governance_assets=11\n[PASS] token budget checks passed\n[INFO] role_agent_files=13 role_agents_bytes=23636/64000 estimated_tokens=5909\n[INFO] max_role_agent=agents/architecture-planner/AGENTS.md bytes=2009/6000\n[PASS] token budget\n",
+  "stderr": "",
+  "exit_code": 0,
+  "source": {
+    "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/optional-skills/adk-security-supply-chain/SKILL.md",
+    "sha256": "2d8453ce4525d0793ce1ee89a9503001189c4819fa3966588b561d8eb9a0474e",
+    "bytes": 8413,
+    "lines": 140
+  },
+  "source_unchanged_during_run": true,
+  "environment": {
+    "ADK_PYTHON_BIN": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "PATH_inherited_unchanged": true
+  }
+}

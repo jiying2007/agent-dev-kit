@@ -1,0 +1,74 @@
+[
+  {
+    "target": "claude-code",
+    "rows": [
+      [
+        "Scope stayed inside `scope_write`",
+        "pass",
+        ""
+      ],
+      [
+        "No shared contract/schema/root config changed unexpectedly",
+        "pass",
+        ""
+      ],
+      [
+        "Verification commands ran",
+        "pass",
+        ""
+      ],
+      [
+        "Handoff summary is clear",
+        "pass",
+        ""
+      ],
+      [
+        "Integration risk identified",
+        "pass",
+        ""
+      ]
+    ],
+    "checklist": {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-stage1/exports/claude-code/skills/adk-parallel-agent-governance/references/subagent-review-checklist.md",
+      "bytes": 643,
+      "sha256": "b771c82410f6c982e9482c27cf79ad0a28a8bd5ffdf3ea15c63ed2ae592e843c"
+    },
+    "default_task_package_links_checklist": true
+  },
+  {
+    "target": "opencode",
+    "rows": [
+      [
+        "Scope stayed inside `scope_write`",
+        "pass",
+        ""
+      ],
+      [
+        "No shared contract/schema/root config changed unexpectedly",
+        "pass",
+        ""
+      ],
+      [
+        "Verification commands ran",
+        "pass",
+        ""
+      ],
+      [
+        "Handoff summary is clear",
+        "pass",
+        ""
+      ],
+      [
+        "Integration risk identified",
+        "pass",
+        ""
+      ]
+    ],
+    "checklist": {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-stage1/exports/opencode/skills/adk-parallel-agent-governance/references/subagent-review-checklist.md",
+      "bytes": 643,
+      "sha256": "b771c82410f6c982e9482c27cf79ad0a28a8bd5ffdf3ea15c63ed2ae592e843c"
+    },
+    "default_task_package_links_checklist": true
+  }
+]

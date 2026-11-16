@@ -1,0 +1,18 @@
+{
+  "kind": "existing-cmake-ctest-targeted-regressions",
+  "tool_chunk_id": "e5353c",
+  "command": [
+    "/workspace/scratch/fe5385ca063a/verification-tools/rtk", "run", "env",
+    "PATH=/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin:/workspace/scratch/fe5385ca063a/verification-tools:/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+    "python3", "-m", "unittest",
+    "tests.test_skill_command_examples.CmakeBuildExampleTests",
+    "tests.test_skill_command_examples.CtestQualificationExampleTests",
+    "tests.test_skill_command_examples.CtestReportReaderTests", "-v"
+  ],
+  "cwd": "/workspace/scratch/fe5385ca063a/agent-dev-kit",
+  "exit_code": 0,
+  "tests_run": 14,
+  "skipped": 0,
+  "wall_time_seconds": 3.92580698,
+  "output": "test_adc_cmake_target_builds_and_runs_with_a_strict_c90_default (tests.test_skill_command_examples.CmakeBuildExampleTests.test_adc_cmake_target_builds_and_runs_with_a_strict_c90_default) ... ok\ntest_compile_only_preserves_not_run_without_invoking_ctest (tests.test_skill_command_examples.CmakeBuildExampleTests.test_compile_only_preserves_not_run_without_invoking_ctest) ... ok\ntest_empty_ctest_selection_fails_after_a_real_successful_build (tests.test_skill_command_examples.CmakeBuildExampleTests.test_empty_ctest_selection_fails_after_a_real_successful_build) ... ok\ntest_manual_directory_configuration_tests_and_elf_do_not_invoke_presets (tests.test_skill_command_examples.CmakeBuildExampleTests.test_manual_directory_configuration_tests_and_elf_do_not_invoke_presets) ... ok\ntest_preset_names_bind_binary_directory_configuration_tests_and_elf (tests.test_skill_command_examples.CmakeBuildExampleTests.test_preset_names_bind_binary_directory_configuration_tests_and_elf) ... ok\ntest_all_skipped_is_rejected_despite_successful_ctest_exit (tests.test_skill_command_examples.CtestQualificationExampleTests.test_all_skipped_is_rejected_despite_successful_ctest_exit) ... ok\ntest_empty_and_all_disabled_selections_remain_failures (tests.test_skill_command_examples.CtestQualificationExampleTests.test_empty_and_all_disabled_selections_remain_failures) ... ok\ntest_failed_build_does_not_read_or_replace_an_old_report (tests.test_skill_command_examples.CtestQualificationExampleTests.test_failed_build_does_not_read_or_replace_an_old_report) ... ok\ntest_hil_collection_preserves_skip_evidence_without_claiming_qualification (tests.test_skill_command_examples.CtestQualificationExampleTests.test_hil_collection_preserves_skip_evidence_without_claiming_qualification) ... ok\ntest_mixed_results_report_partial_and_test_runs_only_once (tests.test_skill_command_examples.CtestQualificationExampleTests.test_mixed_results_report_partial_and_test_runs_only_once) ... ok\ntest_new_run_cannot_reuse_a_previous_passing_report (tests.test_skill_command_examples.CtestQualificationExampleTests.test_new_run_cannot_reuse_a_previous_passing_report) ... ok\ntest_preset_compile_only_needs_no_test_preset_or_python (tests.test_skill_command_examples.CtestQualificationExampleTests.test_preset_compile_only_needs_no_test_preset_or_python) ... ok\ntest_real_ctest_failure_keeps_its_nonzero_status (tests.test_skill_command_examples.CtestQualificationExampleTests.test_real_ctest_failure_keeps_its_nonzero_status) ... ok\ntest_published_reader_rejects_missing_malformed_unknown_and_failure_results (tests.test_skill_command_examples.CtestReportReaderTests.test_published_reader_rejects_missing_malformed_unknown_and_failure_results) ... ok\n\n----------------------------------------------------------------------\nRan 14 tests in 3.933s\n\nOK\n"
+}

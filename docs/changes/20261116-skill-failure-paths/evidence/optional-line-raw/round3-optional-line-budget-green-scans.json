@@ -1,0 +1,32 @@
+{
+  "phase": "green-scans",
+  "command": [
+    "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+    "bypass",
+    "env",
+    "ADK_PYTHON_BIN=/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "-m",
+    "unittest",
+    "tests.test_skill_command_examples.SecurityScanExampleTests",
+    "-v"
+  ],
+  "cwd": "/workspace/scratch/fe5385ca063a/agent-dev-kit",
+  "started_at_utc": "2026-11-16T08:11:15.374714+00:00",
+  "ended_at_utc": "2026-11-16T08:11:15.615881+00:00",
+  "duration_seconds": 0.24117000399928656,
+  "stdout": "",
+  "stderr": "test_all_scans_keep_candidate_paths_without_printing_matching_contents (tests.test_skill_command_examples.SecurityScanExampleTests.test_all_scans_keep_candidate_paths_without_printing_matching_contents) ... ok\ntest_no_match_and_io_errors_keep_distinct_status_and_diagnostics (tests.test_skill_command_examples.SecurityScanExampleTests.test_no_match_and_io_errors_keep_distinct_status_and_diagnostics) ... ok\ntest_secret_scan_preserves_hidden_ignored_coverage_and_git_exclusion (tests.test_skill_command_examples.SecurityScanExampleTests.test_secret_scan_preserves_hidden_ignored_coverage_and_git_exclusion) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.131s\n\nOK\n",
+  "exit_code": 0,
+  "source": {
+    "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/optional-skills/adk-security-supply-chain/SKILL.md",
+    "sha256": "2d8453ce4525d0793ce1ee89a9503001189c4819fa3966588b561d8eb9a0474e",
+    "bytes": 8413,
+    "lines": 140
+  },
+  "source_unchanged_during_run": true,
+  "environment": {
+    "ADK_PYTHON_BIN": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "PATH_inherited_unchanged": true
+  }
+}

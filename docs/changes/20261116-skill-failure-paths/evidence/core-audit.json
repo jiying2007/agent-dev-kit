@@ -1,0 +1,2769 @@
+{
+  "schema": "round3-core-skill-audit/v1",
+  "baseline_commit": "80f8b2ea2885e3f62dcea455c45a2e8ebf071b2b",
+  "started_at_utc": "2026-11-16T07:38:16.309739+00:00",
+  "group": "non-embedded-core",
+  "skill_count": 34,
+  "file_count": 93,
+  "bytes": 231726,
+  "skills": [
+    "adk-adr-writer",
+    "adk-after-action-review",
+    "adk-archive-governance",
+    "adk-artifact-gating",
+    "adk-branch-closeout",
+    "adk-code-review-loop",
+    "adk-code-simplification",
+    "adk-commit-pr-quality-gate",
+    "adk-component-api-stability",
+    "adk-context-compress-handoff",
+    "adk-context-engineering",
+    "adk-cross-team-handoff",
+    "adk-engineering-growth-review",
+    "adk-goal-authoring",
+    "adk-interface-contract-design",
+    "adk-knowledge-archive",
+    "adk-lightweight-planning",
+    "adk-memory-curator",
+    "adk-parallel-agent-governance",
+    "adk-pilot-framework",
+    "adk-planning-execution-loop",
+    "adk-production-field-readiness",
+    "adk-release-versioning",
+    "adk-repo-drift-remediation",
+    "adk-repo-prompt-analysis",
+    "adk-requirements-triage",
+    "adk-runtime-router",
+    "adk-skill-deep-analysis",
+    "adk-structured-requirements-questioning",
+    "adk-systematic-debugging",
+    "adk-task-breakdown",
+    "adk-token-context-governance",
+    "adk-verification-before-completion",
+    "adk-worktree-governance"
+  ],
+  "files": [
+    {
+      "path": "skills/adk-adr-writer/SKILL.md",
+      "skill": "adk-adr-writer",
+      "mode": "100644",
+      "git_blob": "ae3a98b5a0e1999d43ee9a36a2cce07fc427d382",
+      "sha256": "e013d6e67dc993a3c3a0cf589d6e1c1e3b4534c1a053422c8c1df0c04813dba2",
+      "bytes": 3680,
+      "lines": 58,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-58",
+          "read_at_utc": "2026-11-16T07:38:24.892881+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-after-action-review/SKILL.md",
+      "skill": "adk-after-action-review",
+      "mode": "100644",
+      "git_blob": "cec7d4b51daf500be270581c790aef7eeabaf104",
+      "sha256": "ae6e24987988e0d095ae4db176f0d180814c723337f0ced9038d989f3f042462",
+      "bytes": 3785,
+      "lines": 54,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-54",
+          "read_at_utc": "2026-11-16T07:38:24.892881+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-after-action-review/references/after-action-review.md",
+      "skill": "adk-after-action-review",
+      "mode": "100644",
+      "git_blob": "33c0825776ab10105d8381f59ad3b6bc8c04d5e0",
+      "sha256": "7cdb7dcf86c40457a9c4a008086c8dfb467b8c52fc9d1bd52b9f514edc24fab5",
+      "bytes": 436,
+      "lines": 47,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-47",
+          "read_at_utc": "2026-11-16T07:38:24.892881+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-after-action-review/references/codify-decision.md",
+      "skill": "adk-after-action-review",
+      "mode": "100644",
+      "git_blob": "52b1b474f54bc76b3d6fba1e8304e53e8f6d63ea",
+      "sha256": "bfa0e7b547453341f266799786286a30dc3af47bc23db020968c0e4c0fe94a90",
+      "bytes": 651,
+      "lines": 53,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-53",
+          "read_at_utc": "2026-11-16T07:38:24.892881+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-after-action-review/references/memory-candidate.md",
+      "skill": "adk-after-action-review",
+      "mode": "100644",
+      "git_blob": "702aced3a49cc5adddf33686afc081b7b1e8fb44",
+      "sha256": "3125b4c2cb0b38ecf8d542ff75b7db48feecb473742325abd05ee5a687888a3a",
+      "bytes": 1707,
+      "lines": 55,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-55",
+          "read_at_utc": "2026-11-16T07:38:24.892881+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-archive-governance/LICENSE",
+      "skill": "adk-archive-governance",
+      "mode": "100644",
+      "git_blob": "1c326f3a91d2e3889cb5259af82a3fdd96a4ba72",
+      "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
+      "bytes": 61,
+      "lines": 1,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-1",
+          "read_at_utc": "2026-11-16T07:38:24.892881+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-archive-governance/README.md",
+      "skill": "adk-archive-governance",
+      "mode": "100644",
+      "git_blob": "777dc00b02aa03d642041fb71a3e54a66ab94333",
+      "sha256": "f0d5f306b1d8ddafa6065d4c07883ae6bcfd123857e0cdec22fcdec7ba0036c6",
+      "bytes": 301,
+      "lines": 7,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-7",
+          "read_at_utc": "2026-11-16T07:38:24.892881+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-archive-governance/SKILL.md",
+      "skill": "adk-archive-governance",
+      "mode": "100644",
+      "git_blob": "39c95599cd3084210e8eaa8be33072d2f9eb4c12",
+      "sha256": "a950a9e9916c4ec1377a4f56dbc55bb12e1c3198a89be677540d783544c62876",
+      "bytes": 2687,
+      "lines": 75,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-75",
+          "read_at_utc": "2026-11-16T07:38:24.892881+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-archive-governance/agents/openai.yaml",
+      "skill": "adk-archive-governance",
+      "mode": "100644",
+      "git_blob": "174e9523634c71615fc7ff3d7094548a3fc186d9",
+      "sha256": "1a49a5ab0c79fab66f27c547d8dd7ea85307a96e214062611c4f8e4da8f90b96",
+      "bytes": 161,
+      "lines": 3,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-3",
+          "read_at_utc": "2026-11-16T07:38:24.892881+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-artifact-gating/SKILL.md",
+      "skill": "adk-artifact-gating",
+      "mode": "100644",
+      "git_blob": "da4328a303fe3b0ea9dd116350961a71882122f6",
+      "sha256": "f19df4551579597b09c5a400c6ffdef6b48b4a8d0c27ce911c1429a5eb04947c",
+      "bytes": 2061,
+      "lines": 62,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-62",
+          "read_at_utc": "2026-11-16T07:38:24.892881+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-artifact-gating/references/details.md",
+      "skill": "adk-artifact-gating",
+      "mode": "100644",
+      "git_blob": "ab51413bf831af643c805e7120fb23bd8d13866f",
+      "sha256": "def3c5a6ce7066b09bbd28a77260f1682e39c0ffd1f5383f5fe47d3e02b9e9e7",
+      "bytes": 2316,
+      "lines": 74,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-74",
+          "read_at_utc": "2026-11-16T07:38:24.892881+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-branch-closeout/SKILL.md",
+      "skill": "adk-branch-closeout",
+      "mode": "100644",
+      "git_blob": "39a29b979bebb31093acf4e78330ae64469ce2eb",
+      "sha256": "141e64b1cbd2a8216e0ed40cf6a28573cfda831897f8a858f036f1c76e43f0e2",
+      "bytes": 3095,
+      "lines": 51,
+      "reading": [
+        {
+          "range": "previous output was truncated; not counted as full reading"
+        },
+        {
+          "range": "all bytes; lines 1-51",
+          "read_at_utc": "2026-11-16T07:38:33.713595+00:00",
+          "method": "unfiltered full UTF-8 output, reread after output truncation"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-branch-closeout/references/closeout-options.md",
+      "skill": "adk-branch-closeout",
+      "mode": "100644",
+      "git_blob": "4357bb2f6bb30e76734fd5954ef17c47d804468d",
+      "sha256": "2b4c0b4b065c9d1260418cba15aaee03893f06a022f499e140cdfc498d0d3d9e",
+      "bytes": 908,
+      "lines": 13,
+      "reading": [
+        {
+          "range": "previous output was truncated; not counted as full reading"
+        },
+        {
+          "range": "all bytes; lines 1-13",
+          "read_at_utc": "2026-11-16T07:38:33.713595+00:00",
+          "method": "unfiltered full UTF-8 output, reread after output truncation"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-code-review-loop/SKILL.md",
+      "skill": "adk-code-review-loop",
+      "mode": "100644",
+      "git_blob": "68cdd62c005b0b69aedf9d9193dc83f18a16fac2",
+      "sha256": "c9f9a8149babf7f51786a8b1d86f38f10b629051efcb355a0965b1ad8b1aa9fd",
+      "bytes": 6235,
+      "lines": 92,
+      "reading": [
+        {
+          "range": "previous output was truncated; not counted as full reading"
+        },
+        {
+          "range": "all bytes; lines 1-92",
+          "read_at_utc": "2026-11-16T07:38:33.713595+00:00",
+          "method": "unfiltered full UTF-8 output, reread after output truncation"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-code-review-loop/references/review-communication-guidance.md",
+      "skill": "adk-code-review-loop",
+      "mode": "100644",
+      "git_blob": "d52dfdd9db9f2a465df26414e8bb0023a9f45379",
+      "sha256": "0b68e9b0bbceceaf56458383137958c041ee7d75f343a12b5fd5a9cae71d8ddb",
+      "bytes": 1917,
+      "lines": 31,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-31",
+          "read_at_utc": "2026-11-16T07:38:24.892881+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-code-review-loop/references/review-evidence-template.md",
+      "skill": "adk-code-review-loop",
+      "mode": "100644",
+      "git_blob": "70206c8d3234ed46757e06b6a8e639d7c6b2a6d4",
+      "sha256": "a82255232e618f5fd00f4532aa884c6df54f2dd97806da633d092286bc9d0af6",
+      "bytes": 3907,
+      "lines": 83,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-83",
+          "read_at_utc": "2026-11-16T07:38:24.892881+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-code-review-loop/references/review-feedback-fixtures.md",
+      "skill": "adk-code-review-loop",
+      "mode": "100644",
+      "git_blob": "7de3c48c1d1961bd692797470fc5cb61523f7c45",
+      "sha256": "731f4b0dd24c9c3baea0e7d76bbeef6eeeb746d23335cf96893c694b68e91fa4",
+      "bytes": 2229,
+      "lines": 54,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-54",
+          "read_at_utc": "2026-11-16T07:38:24.892881+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-code-review-loop/references/review-governance-details.md",
+      "skill": "adk-code-review-loop",
+      "mode": "100644",
+      "git_blob": "ed88058086d3797b9ab5dd0a274b7c65ded9528f",
+      "sha256": "b82d16825e3a0ee15e4b6cd08f1f4e736e32d63c93fdf7381922ffab60c0a2ea",
+      "bytes": 8750,
+      "lines": 85,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-85",
+          "read_at_utc": "2026-11-16T07:38:24.892881+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-code-simplification/SKILL.md",
+      "skill": "adk-code-simplification",
+      "mode": "100644",
+      "git_blob": "42b1540590869156af4f462958687cd2aac8500b",
+      "sha256": "ca77fa395fbbc17469890ec9f2409f01c442b0678904c9ec34115e8926e281e3",
+      "bytes": 3025,
+      "lines": 74,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-74",
+          "read_at_utc": "2026-11-16T07:38:42.315711+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-code-simplification/references/deep-module-design.md",
+      "skill": "adk-code-simplification",
+      "mode": "100644",
+      "git_blob": "7a294528019411649dfc84f5f5e79a7ab82e195f",
+      "sha256": "a5e463ebe150966c75e975feb6233914f1fa418d36abd1b588c5ae863e0ac797",
+      "bytes": 1275,
+      "lines": 11,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-11",
+          "read_at_utc": "2026-11-16T07:38:42.315711+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-code-simplification/references/details.md",
+      "skill": "adk-code-simplification",
+      "mode": "100644",
+      "git_blob": "4f5ec1be3bb629581b05a7849c8e5234a23adaf8",
+      "sha256": "46fb6f895ed2d2a6affac689756ea41b61b16faf4dabaa7136436933783360c6",
+      "bytes": 2582,
+      "lines": 80,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-80",
+          "read_at_utc": "2026-11-16T07:38:42.315711+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-commit-pr-quality-gate/SKILL.md",
+      "skill": "adk-commit-pr-quality-gate",
+      "mode": "100644",
+      "git_blob": "050cf95bc3c2f5b29f21e4658805ddb87c6058ee",
+      "sha256": "ac2559e3a0320be3aa3f83336ce0f3fa7359408625447eabcb00103b360abfc6",
+      "bytes": 3821,
+      "lines": 51,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-51",
+          "read_at_utc": "2026-11-16T07:38:42.315711+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-commit-pr-quality-gate/references/pr-risk-gates.md",
+      "skill": "adk-commit-pr-quality-gate",
+      "mode": "100644",
+      "git_blob": "cbd8582597fdc5d53b5d34701e48ed536f8cfde4",
+      "sha256": "dc5398ac9800eaeaaaac5800072b09801716be730d05d68a95b4c3400de67027",
+      "bytes": 1429,
+      "lines": 15,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-15",
+          "read_at_utc": "2026-11-16T07:38:42.315711+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-component-api-stability/SKILL.md",
+      "skill": "adk-component-api-stability",
+      "mode": "100644",
+      "git_blob": "538407bb30b6e0579672f6234d793a0704e499a5",
+      "sha256": "345654c2510a7a9cef27388bd21b2f9df6d4f2c5b81de58a6912d1eb00d6d243",
+      "bytes": 5451,
+      "lines": 92,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-92",
+          "read_at_utc": "2026-11-16T07:38:42.315711+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-context-compress-handoff/LICENSE",
+      "skill": "adk-context-compress-handoff",
+      "mode": "100644",
+      "git_blob": "1c326f3a91d2e3889cb5259af82a3fdd96a4ba72",
+      "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
+      "bytes": 61,
+      "lines": 1,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-1",
+          "read_at_utc": "2026-11-16T07:38:42.315711+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-context-compress-handoff/README.md",
+      "skill": "adk-context-compress-handoff",
+      "mode": "100644",
+      "git_blob": "d1bf34ae8e15fa825bf64a85853bb639b61df22d",
+      "sha256": "4c76f8c71b05435bc10d614b20011d643f798be03ecb57d0c192a6852886ee14",
+      "bytes": 324,
+      "lines": 7,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-7",
+          "read_at_utc": "2026-11-16T07:38:42.315711+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-context-compress-handoff/SKILL.md",
+      "skill": "adk-context-compress-handoff",
+      "mode": "100644",
+      "git_blob": "7596082ede5c535c724324fc2099c17968fc4c78",
+      "sha256": "f4d69f46f916f7bc2f5dd734875d3e6fbb5aae94c0ed0d2f95a1d7748b824d7c",
+      "bytes": 2578,
+      "lines": 69,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-69",
+          "read_at_utc": "2026-11-16T07:38:42.315711+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-context-compress-handoff/agents/openai.yaml",
+      "skill": "adk-context-compress-handoff",
+      "mode": "100644",
+      "git_blob": "44f79d2174ec6c1b0e4e1f8e16fa512210d27778",
+      "sha256": "60e59ca0c78d7202172eea257a23803188f8017776d18d58851ef4934090e00c",
+      "bytes": 174,
+      "lines": 3,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-3",
+          "read_at_utc": "2026-11-16T07:38:42.315711+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-context-engineering/SKILL.md",
+      "skill": "adk-context-engineering",
+      "mode": "100644",
+      "git_blob": "1b53fcbe94688c5970e130017f6f1ab433be6522",
+      "sha256": "86dbb451b888eee79923388025f71c1cb92437d3d948ee628b10f24b50807ef5",
+      "bytes": 3927,
+      "lines": 86,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-86",
+          "read_at_utc": "2026-11-16T07:38:46.896516+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-cross-team-handoff/SKILL.md",
+      "skill": "adk-cross-team-handoff",
+      "mode": "100644",
+      "git_blob": "3a99ac808bf02120abe6a5b508bef0010f673a28",
+      "sha256": "c02d4289a267bf655f0c22b9fdfac3638ee21067ad61aab60917fbdcc3334323",
+      "bytes": 3069,
+      "lines": 56,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-56",
+          "read_at_utc": "2026-11-16T07:38:46.896516+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-engineering-growth-review/LICENSE",
+      "skill": "adk-engineering-growth-review",
+      "mode": "100644",
+      "git_blob": "3c2826303420c300cf2a933bd8c440bc511eeb77",
+      "sha256": "e69e969952b38b335005b8dd9d89ae0fd971ed7376ff66659bc5fae8099a6264",
+      "bytes": 1063,
+      "lines": 21,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-21",
+          "read_at_utc": "2026-11-16T07:38:46.896516+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-engineering-growth-review/README.md",
+      "skill": "adk-engineering-growth-review",
+      "mode": "100644",
+      "git_blob": "689f3c5d738954df8e27c1daa992dba2318f01b8",
+      "sha256": "ba06dc6db2436cac1e51707248013dc732ee228c074d8730c7ee5d7703981f63",
+      "bytes": 745,
+      "lines": 13,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-13",
+          "read_at_utc": "2026-11-16T07:38:46.896516+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-engineering-growth-review/SKILL.md",
+      "skill": "adk-engineering-growth-review",
+      "mode": "100644",
+      "git_blob": "0aedd7670b6bfb5743e6d2b9da14a73f166e19df",
+      "sha256": "0e3e8a5d3b55cbad4b32bdc113f3cace04ea36efeb20315033ceb8a6792991fd",
+      "bytes": 3853,
+      "lines": 57,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-57",
+          "read_at_utc": "2026-11-16T07:38:46.896516+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-engineering-growth-review/agents/openai.yaml",
+      "skill": "adk-engineering-growth-review",
+      "mode": "100644",
+      "git_blob": "b66751d4185a004dce444b9a1e24ec82131f02ab",
+      "sha256": "17530036dc4d53ee862d6030d03cea86392d1e3ed1a4ce2e9178df4e8458bc05",
+      "bytes": 163,
+      "lines": 3,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-3",
+          "read_at_utc": "2026-11-16T07:38:46.896516+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-engineering-growth-review/references/growth-evidence-boundaries.md",
+      "skill": "adk-engineering-growth-review",
+      "mode": "100644",
+      "git_blob": "e6540e1e825e08448da2f7721aec84baa5663837",
+      "sha256": "0b3f9a93d9cd77346dacb69840ec003c168d5885d9843842a3f22ac18c810653",
+      "bytes": 1266,
+      "lines": 15,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-15",
+          "read_at_utc": "2026-11-16T07:38:46.896516+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-goal-authoring/SKILL.md",
+      "skill": "adk-goal-authoring",
+      "mode": "100644",
+      "git_blob": "08ec29da584e10cab9510b897ae75428d55dd643",
+      "sha256": "33ea3393563643e3e17a5615a10884834c87208ab3ea292ba4396ad7be7a702a",
+      "bytes": 3704,
+      "lines": 52,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-52",
+          "read_at_utc": "2026-11-16T07:38:46.896516+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-goal-authoring/references/goal-plan.json",
+      "skill": "adk-goal-authoring",
+      "mode": "100644",
+      "git_blob": "7f35ee1caeb659b47cbc805f0107dd3284f123db",
+      "sha256": "e1a1facc23f826e4f65ec3b9a978a7c4feef889187d1d0302472215cd156a43b",
+      "bytes": 1844,
+      "lines": 21,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-21",
+          "read_at_utc": "2026-11-16T07:38:46.896516+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-interface-contract-design/SKILL.md",
+      "skill": "adk-interface-contract-design",
+      "mode": "100644",
+      "git_blob": "166bd9fdf3eb061cc5bfb90110fb0de921e32f04",
+      "sha256": "4bcf9f6d00ff3fdfeffef01a4c1e82383f02c0530f8dc632305780aedfc8592d",
+      "bytes": 4924,
+      "lines": 82,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-82",
+          "read_at_utc": "2026-11-16T07:38:52.672109+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/design-quality-methods.md",
+      "skill": "adk-interface-contract-design",
+      "mode": "100644",
+      "git_blob": "e28a344dd8989179e39f83c8afa405dee4055f75",
+      "sha256": "0d2a5ae8f32b3950d2b1a21ac913029905aded6f02bd1b0b2e591f61a29bcaf6",
+      "bytes": 2184,
+      "lines": 20,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-20",
+          "read_at_utc": "2026-11-16T07:38:52.672109+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/details.md",
+      "skill": "adk-interface-contract-design",
+      "mode": "100644",
+      "git_blob": "a30be6f0edee84c8f76cbcd3d8243ec650ef2880",
+      "sha256": "404798e52a85fde251c17986c95727b7b575c7425d7f73c5318a659e8bb57f23",
+      "bytes": 1938,
+      "lines": 45,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-45",
+          "read_at_utc": "2026-11-16T07:38:52.672109+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/lifecycle-operation-contract.md",
+      "skill": "adk-interface-contract-design",
+      "mode": "100644",
+      "git_blob": "dac285c357b87bda2cc468d64fc38d931330aa51",
+      "sha256": "22532bfe0e89fac9596023f0a2b708d46b98722d4acf6adc90bf833e0f82db71",
+      "bytes": 2393,
+      "lines": 35,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-35",
+          "read_at_utc": "2026-11-16T07:38:52.672109+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/spec-code-bidirectional.md",
+      "skill": "adk-interface-contract-design",
+      "mode": "100644",
+      "git_blob": "12b0ea0bec197ae0e9db6d4c59d93772efdf29e9",
+      "sha256": "cfb70c950ca482ce2a4136aa26fe2a3a60c21349949188192a5f0f13450923ce",
+      "bytes": 2238,
+      "lines": 21,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-21",
+          "read_at_utc": "2026-11-16T07:38:52.672109+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/tool-effect-contract.md",
+      "skill": "adk-interface-contract-design",
+      "mode": "100644",
+      "git_blob": "64865b9122ebf281971818bdea4f6446a1758ff0",
+      "sha256": "428be87b2acb671e01581ae83af46dfb0e87c8cdb1d24d11e18a231244b67ea4",
+      "bytes": 2845,
+      "lines": 24,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-24",
+          "read_at_utc": "2026-11-16T07:38:52.672109+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-knowledge-archive/LICENSE",
+      "skill": "adk-knowledge-archive",
+      "mode": "100644",
+      "git_blob": "1c326f3a91d2e3889cb5259af82a3fdd96a4ba72",
+      "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
+      "bytes": 61,
+      "lines": 1,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-1",
+          "read_at_utc": "2026-11-16T07:38:52.672109+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-knowledge-archive/README.md",
+      "skill": "adk-knowledge-archive",
+      "mode": "100644",
+      "git_blob": "de534394e4358dc6812dd3ac3a3d40410648d6c6",
+      "sha256": "07d5563a38ec220a6937c32a7339cd866942df34936c366ddfb1e4f2c4fde8ea",
+      "bytes": 329,
+      "lines": 7,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-7",
+          "read_at_utc": "2026-11-16T07:38:52.672109+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-knowledge-archive/SKILL.md",
+      "skill": "adk-knowledge-archive",
+      "mode": "100644",
+      "git_blob": "73d8519350051b9c02aadaadfa1293deebc3b269",
+      "sha256": "fb31246a4016f866dbcffefeb324595d5cc6569f5c331ab2b8f5c399c407baa7",
+      "bytes": 2236,
+      "lines": 45,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-45",
+          "read_at_utc": "2026-11-16T07:38:52.672109+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-knowledge-archive/agents/openai.yaml",
+      "skill": "adk-knowledge-archive",
+      "mode": "100644",
+      "git_blob": "2d3a49cb10ab7b49174564111133699c068bab1e",
+      "sha256": "c915127f7ac46ebdce1bd6afd512c0039cfea00a6fa6dc5fc8d5f4a653b5a7ba",
+      "bytes": 156,
+      "lines": 3,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-3",
+          "read_at_utc": "2026-11-16T07:38:52.672109+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-lightweight-planning/LICENSE",
+      "skill": "adk-lightweight-planning",
+      "mode": "100644",
+      "git_blob": "3c2826303420c300cf2a933bd8c440bc511eeb77",
+      "sha256": "e69e969952b38b335005b8dd9d89ae0fd971ed7376ff66659bc5fae8099a6264",
+      "bytes": 1063,
+      "lines": 21,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-21",
+          "read_at_utc": "2026-11-16T07:38:52.672109+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-lightweight-planning/README.md",
+      "skill": "adk-lightweight-planning",
+      "mode": "100644",
+      "git_blob": "411c8973c5fb8f81a24cdf9b11604b40a399eec7",
+      "sha256": "8df5c88632885b07dc4a341b6904b57d687de144db79f2bf06d39e31dd0e2985",
+      "bytes": 554,
+      "lines": 12,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-12",
+          "read_at_utc": "2026-11-16T07:38:52.672109+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-lightweight-planning/SKILL.md",
+      "skill": "adk-lightweight-planning",
+      "mode": "100644",
+      "git_blob": "fb572637a11ce11e7ae5d3c89ff56a8c194d3726",
+      "sha256": "43bc00ae93f65c5cabd61d61c455faa8cfa4382095e15b9f8d882739513c34bc",
+      "bytes": 2158,
+      "lines": 48,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-48",
+          "read_at_utc": "2026-11-16T07:38:52.672109+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-lightweight-planning/agents/openai.yaml",
+      "skill": "adk-lightweight-planning",
+      "mode": "100644",
+      "git_blob": "dfe6682034190c40960bfe36e2c1a89a3849a8fd",
+      "sha256": "29a33d35e237437b617366384e22e09a6b7c489fae8054f88c44dd51e25f20b5",
+      "bytes": 127,
+      "lines": 3,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-3",
+          "read_at_utc": "2026-11-16T07:38:52.672109+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-memory-curator/LICENSE",
+      "skill": "adk-memory-curator",
+      "mode": "100644",
+      "git_blob": "1c326f3a91d2e3889cb5259af82a3fdd96a4ba72",
+      "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
+      "bytes": 61,
+      "lines": 1,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-1",
+          "read_at_utc": "2026-11-16T07:38:52.672109+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-memory-curator/README.md",
+      "skill": "adk-memory-curator",
+      "mode": "100644",
+      "git_blob": "a90db02f1be4fa9f456e24f4a931cdad259a6903",
+      "sha256": "1c9f71a0511b8f6979e38c9825fd7aaaedcb62e62686316f9edeb1b55bf96933",
+      "bytes": 310,
+      "lines": 7,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-7",
+          "read_at_utc": "2026-11-16T07:38:52.672109+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-memory-curator/SKILL.md",
+      "skill": "adk-memory-curator",
+      "mode": "100644",
+      "git_blob": "b86d93a4421c4305b227053d7e6d63ae3fc2b820",
+      "sha256": "63673dfb7af45429772275b713093ead76275d39187ddae22b75477abe21ddf5",
+      "bytes": 3530,
+      "lines": 82,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-82",
+          "read_at_utc": "2026-11-16T07:38:52.672109+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-memory-curator/agents/openai.yaml",
+      "skill": "adk-memory-curator",
+      "mode": "100644",
+      "git_blob": "db0b084970bff6d5eb5cdd0726a976262b4b8fb1",
+      "sha256": "24ec7d756319b13019ccdb7b227d67f23066beae23e05e02e5339d4340231acc",
+      "bytes": 165,
+      "lines": 3,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-3",
+          "read_at_utc": "2026-11-16T07:38:52.672109+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-parallel-agent-governance/SKILL.md",
+      "skill": "adk-parallel-agent-governance",
+      "mode": "100644",
+      "git_blob": "332193235d528097389ee380b118c697ea0435ee",
+      "sha256": "1336d4e8a3de6e7bf2f3aab4d09675f3ee794f7cb0476826076ffbebcf523b7c",
+      "bytes": 4292,
+      "lines": 52,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-52",
+          "read_at_utc": "2026-11-16T07:40:28.556682+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-parallel-agent-governance/references/parallel-worktree-task-package.md",
+      "skill": "adk-parallel-agent-governance",
+      "mode": "100644",
+      "git_blob": "3431327dbbf22adc7db2f5ec3f6d1dd142b29f30",
+      "sha256": "8b9ae9c13249cb1cc002e7bf090c1799fe83a2f625359ec4b79395dfaf56f3be",
+      "bytes": 1716,
+      "lines": 39,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-39",
+          "read_at_utc": "2026-11-16T07:40:28.556682+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-parallel-agent-governance/references/subagent-review-checklist.md",
+      "skill": "adk-parallel-agent-governance",
+      "mode": "100644",
+      "git_blob": "e55eaf650d6f4690d92c8e6089d59d32f7a799f3",
+      "sha256": "b771c82410f6c982e9482c27cf79ad0a28a8bd5ffdf3ea15c63ed2ae592e843c",
+      "bytes": 643,
+      "lines": 33,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-33",
+          "read_at_utc": "2026-11-16T07:40:28.556682+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-pilot-framework/SKILL.md",
+      "skill": "adk-pilot-framework",
+      "mode": "100644",
+      "git_blob": "904b084359c8a1fe284d0c57ee5c886dcf077771",
+      "sha256": "5ed0041ab153c4b0514402ad548216055b38db469ab0d30b422ee09899cfe253",
+      "bytes": 3765,
+      "lines": 72,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-72",
+          "read_at_utc": "2026-11-16T07:40:28.556682+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-pilot-framework/references/details.md",
+      "skill": "adk-pilot-framework",
+      "mode": "100644",
+      "git_blob": "e0a681a96a5a86b32dc8dd7f591657b0d42e8560",
+      "sha256": "08faff8c175aba7641da273bdcec4fac21b14baf270de3efc16ba7abc1400361",
+      "bytes": 3632,
+      "lines": 81,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-81",
+          "read_at_utc": "2026-11-16T07:40:28.556682+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-planning-execution-loop/SKILL.md",
+      "skill": "adk-planning-execution-loop",
+      "mode": "100644",
+      "git_blob": "0381bdee35c0801f87c15117f5ce578930b78d54",
+      "sha256": "4c9f80b8d5b7458b176b13869791dc17bd7047768745ae846f7e76067fc6c2ca",
+      "bytes": 4415,
+      "lines": 53,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-53",
+          "read_at_utc": "2026-11-16T07:40:28.556682+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-planning-execution-loop/references/long-task-recovery.md",
+      "skill": "adk-planning-execution-loop",
+      "mode": "100644",
+      "git_blob": "5d2b37d5b1fc692a86d3dbaa5a04304ff6d2c968",
+      "sha256": "1bb86490fb7f335fd7f5f478a6be9c750b25ac0c025039b561a55bc4467bc375",
+      "bytes": 5155,
+      "lines": 85,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-85",
+          "read_at_utc": "2026-11-16T07:40:28.556682+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-production-field-readiness/SKILL.md",
+      "skill": "adk-production-field-readiness",
+      "mode": "100644",
+      "git_blob": "d864336f23a9563fad78f27b08dfdbddeb2105f1",
+      "sha256": "bc708d31b288c346035a97459e6a08c001112d7f4979adc65311a39fe8588c63",
+      "bytes": 5395,
+      "lines": 111,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-111",
+          "read_at_utc": "2026-11-16T07:40:46.167145+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-production-field-readiness/references/pilot-measurement-evidence.md",
+      "skill": "adk-production-field-readiness",
+      "mode": "100644",
+      "git_blob": "faf4083758a12cda2fe4a0e1a965468e9ef8f4bd",
+      "sha256": "ead5542e88462d8d5e599755991be6fecfa92b061fb4dc4471dfda8977c2a355",
+      "bytes": 1793,
+      "lines": 38,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-38",
+          "read_at_utc": "2026-11-16T07:40:46.167145+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-release-versioning/SKILL.md",
+      "skill": "adk-release-versioning",
+      "mode": "100644",
+      "git_blob": "5b00d772ab95e0978d7c4039c304887d4173843d",
+      "sha256": "4a80611ceda62c35c558371d47238d3b5f2516a20efc067160abefc3ce686163",
+      "bytes": 2776,
+      "lines": 60,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-60",
+          "read_at_utc": "2026-11-16T07:40:46.167145+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-release-versioning/references/details.md",
+      "skill": "adk-release-versioning",
+      "mode": "100644",
+      "git_blob": "b2c501842e5f22694538391f5d2ee617809290ee",
+      "sha256": "6da9f5f3ce85401938db084b0aa1df5e78683ad1f4132927c50ddbc55a4c1bed",
+      "bytes": 2471,
+      "lines": 49,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-49",
+          "read_at_utc": "2026-11-16T07:40:46.167145+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-repo-drift-remediation/LICENSE",
+      "skill": "adk-repo-drift-remediation",
+      "mode": "100644",
+      "git_blob": "1c326f3a91d2e3889cb5259af82a3fdd96a4ba72",
+      "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
+      "bytes": 61,
+      "lines": 1,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-1",
+          "read_at_utc": "2026-11-16T07:40:46.167145+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-repo-drift-remediation/README.md",
+      "skill": "adk-repo-drift-remediation",
+      "mode": "100644",
+      "git_blob": "bbb9ffc101cd6ac54317dac5183bd3ee015d85ea",
+      "sha256": "64a339900700aa3444f589aa9549d082124f2bf20e40ea58270d7ce8066bafa7",
+      "bytes": 303,
+      "lines": 7,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-7",
+          "read_at_utc": "2026-11-16T07:40:46.167145+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-repo-drift-remediation/SKILL.md",
+      "skill": "adk-repo-drift-remediation",
+      "mode": "100644",
+      "git_blob": "33c87bdfa806af97b0a8f11d7185be3bba76374c",
+      "sha256": "f41df2709a50aa3263df6b5224afafda9cb3a3d48e15b05efc9ce15970bbf6f2",
+      "bytes": 3021,
+      "lines": 76,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-76",
+          "read_at_utc": "2026-11-16T07:40:46.167145+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-repo-drift-remediation/agents/openai.yaml",
+      "skill": "adk-repo-drift-remediation",
+      "mode": "100644",
+      "git_blob": "697f5074deb1d789d265e0de0416e504fdf9fac9",
+      "sha256": "daf474758479bf0bbfbd6350e6215c76dfbe7d23233e613c262f0a9f2e149470",
+      "bytes": 166,
+      "lines": 3,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-3",
+          "read_at_utc": "2026-11-16T07:40:46.167145+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-repo-prompt-analysis/SKILL.md",
+      "skill": "adk-repo-prompt-analysis",
+      "mode": "100644",
+      "git_blob": "8ae146546cb2806bc4d9e2f0b257572107f7b57a",
+      "sha256": "202f2a15d8bed57f78d28308d388e0424df4f94783de9e472f38f692ea922dc3",
+      "bytes": 3300,
+      "lines": 53,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-53",
+          "read_at_utc": "2026-11-16T07:40:46.167145+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-requirements-triage/SKILL.md",
+      "skill": "adk-requirements-triage",
+      "mode": "100644",
+      "git_blob": "43e6e6e463d026ecbc44e3404c716bc838913587",
+      "sha256": "ea58deea04468736cda73a3231dfd58854e088f243987063962597d44d35a56a",
+      "bytes": 3400,
+      "lines": 64,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-64",
+          "read_at_utc": "2026-11-16T07:40:46.167145+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-requirements-triage/references/embedded-discovery-brief.md",
+      "skill": "adk-requirements-triage",
+      "mode": "100644",
+      "git_blob": "b3983557b95917a1093ffa0d64ffebc2e5fd332b",
+      "sha256": "7e288b51e2512b725f14eb52285fc4391faae7b568d300c7538179038d9156da",
+      "bytes": 1558,
+      "lines": 64,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-64",
+          "read_at_utc": "2026-11-16T07:40:46.167145+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-requirements-triage/references/exploratory-requirements-brief.md",
+      "skill": "adk-requirements-triage",
+      "mode": "100644",
+      "git_blob": "c2358903d236fba94ecc1dba697386638280c37d",
+      "sha256": "9c115653d3de2c5c31a984588082ba495198d9a51439a5e107066ff0046430fb",
+      "bytes": 579,
+      "lines": 7,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-7",
+          "read_at_utc": "2026-11-16T07:40:46.167145+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-runtime-router/SKILL.md",
+      "skill": "adk-runtime-router",
+      "mode": "100644",
+      "git_blob": "e4221a63cb951dfc206f9138c26141f5d8fd431f",
+      "sha256": "d77f73c6eaee5c9eea2bbe349eb12cc535b6c5628ddd106b95e4b0afd2dc14a3",
+      "bytes": 5443,
+      "lines": 98,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-98",
+          "read_at_utc": "2026-11-16T07:40:53.115991+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-runtime-router/references/runtime-routing-details.md",
+      "skill": "adk-runtime-router",
+      "mode": "100644",
+      "git_blob": "f30031e24580c72f1247119cab40dc52d366ca88",
+      "sha256": "7d4207293a5a99bc48434e34128841df290af30dc6794a923a9086fc4171bbe1",
+      "bytes": 7296,
+      "lines": 85,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-85",
+          "read_at_utc": "2026-11-16T07:40:53.115991+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-skill-deep-analysis/SKILL.md",
+      "skill": "adk-skill-deep-analysis",
+      "mode": "100644",
+      "git_blob": "0a66b30462bb56e3de2b57070c208316d8fa5f3a",
+      "sha256": "69eaff562babdcc57464582632d7491b3bc2f64000e71d86ada8ab193ef47ded",
+      "bytes": 5613,
+      "lines": 59,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-59",
+          "read_at_utc": "2026-11-16T07:40:53.115991+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-skill-deep-analysis/references/details.md",
+      "skill": "adk-skill-deep-analysis",
+      "mode": "100644",
+      "git_blob": "744430c8df357ad4cc16cf192cf37fa9554c5d9d",
+      "sha256": "582bfc5374a7d80847f570b5a4fce2fc6558c5e43f70cd8261956eadccd6e8e6",
+      "bytes": 2096,
+      "lines": 19,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-19",
+          "read_at_utc": "2026-11-16T07:40:53.115991+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-structured-requirements-questioning/SKILL.md",
+      "skill": "adk-structured-requirements-questioning",
+      "mode": "100644",
+      "git_blob": "95be4669b9b91f8a6bd87f0bb97539656efea8d4",
+      "sha256": "0cb2f777e209b234fdc016130c1d9f0cbc8e65ed8e1b547a761862892b397d4e",
+      "bytes": 3458,
+      "lines": 55,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-55",
+          "read_at_utc": "2026-11-16T07:40:57.817031+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-structured-requirements-questioning/references/prototype-as-experiment.md",
+      "skill": "adk-structured-requirements-questioning",
+      "mode": "100644",
+      "git_blob": "654a449ba2d86c2ff16fd14a88a309ccc337faa1",
+      "sha256": "b76187a6d57e2b954688953af08df4c1e75dd4bb456f55108d7d25e847e27129",
+      "bytes": 967,
+      "lines": 9,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-9",
+          "read_at_utc": "2026-11-16T07:40:57.817031+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-systematic-debugging/SKILL.md",
+      "skill": "adk-systematic-debugging",
+      "mode": "100644",
+      "git_blob": "a4de92609ea416c21af29f2f1e64f3e850f42ba7",
+      "sha256": "b3756b60fb0e07b591d06ca8957878b2ccb2c4835169b350c79daac6f2ea5edc",
+      "bytes": 2801,
+      "lines": 54,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-54",
+          "read_at_utc": "2026-11-16T07:40:57.817031+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-systematic-debugging/references/embedded-diagnosis-branches.md",
+      "skill": "adk-systematic-debugging",
+      "mode": "100644",
+      "git_blob": "099940f7dad76c01971be181caab997a93897e50",
+      "sha256": "b1f5e669d12c5923a60426aa7268f94ac0832072808f200a08d0a49be0ef6d89",
+      "bytes": 2793,
+      "lines": 22,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-22",
+          "read_at_utc": "2026-11-16T07:40:57.817031+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-systematic-debugging/references/sanitizer-validation.md",
+      "skill": "adk-systematic-debugging",
+      "mode": "100644",
+      "git_blob": "fe9d0ac7e8bd9c53f7cedeca4a5d26ab64e8dbf5",
+      "sha256": "2d708bd56c0147437a53fe568ae483d41be10dd3481d691485d9db48cdc89fdd",
+      "bytes": 2463,
+      "lines": 45,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-45",
+          "read_at_utc": "2026-11-16T07:40:57.817031+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-systematic-debugging/references/tight-feedback-loop.md",
+      "skill": "adk-systematic-debugging",
+      "mode": "100644",
+      "git_blob": "a8f806a520b6a45b6738bae52927ccf90fbe25ae",
+      "sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85",
+      "bytes": 1524,
+      "lines": 27,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-27",
+          "read_at_utc": "2026-11-16T07:40:57.817031+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-task-breakdown/SKILL.md",
+      "skill": "adk-task-breakdown",
+      "mode": "100644",
+      "git_blob": "67edcf4f519e6cebca1ef8847a64644920076eed",
+      "sha256": "3d25e72fadcf2f74f4936223065097de9b7f26c41d4982ac0eb58ab4161c9f20",
+      "bytes": 3659,
+      "lines": 48,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-48",
+          "read_at_utc": "2026-11-16T07:40:57.817031+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-task-breakdown/references/task-packaging.md",
+      "skill": "adk-task-breakdown",
+      "mode": "100644",
+      "git_blob": "c8dd41e0caa444c5af571c2d66a62a96ed2556b2",
+      "sha256": "6a417e248ca5bd0f31f63758d6921779ae68e8800365d67f463d89b54b5e5aa3",
+      "bytes": 1534,
+      "lines": 15,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-15",
+          "read_at_utc": "2026-11-16T07:40:57.817031+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-task-breakdown/references/vertical-slice-planning.md",
+      "skill": "adk-task-breakdown",
+      "mode": "100644",
+      "git_blob": "1b0977d635e23911bd42a55e0b8354f78c11a0af",
+      "sha256": "f7267bb5a367369cbc40d0059d847f9e61d9d8f1d1cc23b17d5a3cf769de2260",
+      "bytes": 3796,
+      "lines": 63,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-63",
+          "read_at_utc": "2026-11-16T07:40:57.817031+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-token-context-governance/SKILL.md",
+      "skill": "adk-token-context-governance",
+      "mode": "100644",
+      "git_blob": "03a735d7faae07fa35db8491e9944ebe11c0f367",
+      "sha256": "e426f29fa1f3a519c8932ade7caed1d43cf71728f902f781b0d9d24adcc25f1d",
+      "bytes": 7699,
+      "lines": 112,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-112",
+          "read_at_utc": "2026-11-16T07:41:03.240771+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-verification-before-completion/SKILL.md",
+      "skill": "adk-verification-before-completion",
+      "mode": "100644",
+      "git_blob": "1f185c64ec8d2070a07aa4d96fd1c7ceadcb8af2",
+      "sha256": "e9c8657959a756f91e05621267df953d293f7106a78e18e213a45b7100858b96",
+      "bytes": 4508,
+      "lines": 59,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-59",
+          "read_at_utc": "2026-11-16T07:41:07.734582+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-verification-before-completion/references/verification-governance-details.md",
+      "skill": "adk-verification-before-completion",
+      "mode": "100644",
+      "git_blob": "611dc0ab9757c0b7faa45339b7000d9592db40a9",
+      "sha256": "7e7ef78d237519ab391bb897dcd33a051b60b10f6b6406b571aee43b2cbee5aa",
+      "bytes": 8933,
+      "lines": 134,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-134",
+          "read_at_utc": "2026-11-16T07:41:07.734582+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-worktree-governance/SKILL.md",
+      "skill": "adk-worktree-governance",
+      "mode": "100644",
+      "git_blob": "f3c91613e6e5922bd452f9960e9f6f7976febf31",
+      "sha256": "68ce46730100ce4cedbb3438747bd134666561dca1c00790bb3e2329a3461242",
+      "bytes": 3746,
+      "lines": 50,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-50",
+          "read_at_utc": "2026-11-16T07:41:07.734582+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-worktree-governance/references/parallel-worktree-task-package.md",
+      "skill": "adk-worktree-governance",
+      "mode": "100644",
+      "git_blob": "bde4c96c974fdac56a09b50dd945e153081b6b4d",
+      "sha256": "f80471b63906ed9755a06b7b0c9f638509ff1a0951a1ccb79f8a566909f2d1f4",
+      "bytes": 654,
+      "lines": 43,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-43",
+          "read_at_utc": "2026-11-16T07:41:07.734582+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "path": "skills/adk-worktree-governance/references/worktree-operation-boundaries.md",
+      "skill": "adk-worktree-governance",
+      "mode": "100644",
+      "git_blob": "38d304e35e38587df7ee2e5e6313e3434cc1809c",
+      "sha256": "2ab200477eab8f816df4c958623030337693f05b3c5ea0dd2d23e1a36fe1eaa2",
+      "bytes": 1789,
+      "lines": 22,
+      "reading": [
+        {
+          "range": "all bytes; lines 1-22",
+          "read_at_utc": "2026-11-16T07:41:07.734582+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    }
+  ],
+  "decisions": [
+    {
+      "skill": "adk-adr-writer",
+      "decision": "KEEP",
+      "basis": "当前正文按 lite/standard/deep 区分实际风险；不虚构备选、批准或量化评分，proposed/accepted 和作者冷读/独立验证明确分开。已有方法覆盖常见 ADR 假决策与过度模板问题。",
+      "checked_boundary": "单一路径不强凑 alternatives；定向修订保留非授权字段和限定语。",
+      "evidence_files": [
+        "skills/adk-adr-writer/SKILL.md"
+      ]
+    },
+    {
+      "skill": "adk-after-action-review",
+      "decision": "KEEP",
+      "basis": "当前 lite/standard/promotion 分流明确，普通复盘允许无 memory candidate；三个随包模板没有已验证状态预填。正式规则晋级独立保留 evidence/owner/rollback，事故 RCA 有单一责任入口。",
+      "checked_boundary": "一次性任务经验不能被包装成长期收益；无模型证据标 not-measured。",
+      "evidence_files": [
+        "skills/adk-after-action-review/SKILL.md",
+        "skills/adk-after-action-review/references/after-action-review.md",
+        "skills/adk-after-action-review/references/codify-decision.md",
+        "skills/adk-after-action-review/references/memory-candidate.md"
+      ]
+    },
+    {
+      "skill": "adk-archive-governance",
+      "decision": "KEEP",
+      "basis": "hash mismatch 要先保全旧 hash、实测 hash 和当前原文，并核可信原件/批准变更；不再把重算 hash 当修复。目标项目检查入口需实际存在，未执行不能记 pass。",
+      "checked_boundary": "未知内容改动保持 needs-fix，历史删除与目标路径均受原有授权约束。",
+      "evidence_files": [
+        "skills/adk-archive-governance/LICENSE",
+        "skills/adk-archive-governance/README.md",
+        "skills/adk-archive-governance/SKILL.md",
+        "skills/adk-archive-governance/agents/openai.yaml"
+      ]
+    },
+    {
+      "skill": "adk-artifact-gating",
+      "decision": "KEEP",
+      "basis": "计划 READY 与报告 PASS/NEEDS-FIX/BLOCKED、workflow stage 已明确分离；随包 PASS 模板显式标为真实通过记录，未验证不得预填，接收签收不替代验证。",
+      "checked_boundary": "与 parallel checklist 的空证据默认 pass 不是同一情况，因此不机械批量替换。",
+      "evidence_files": [
+        "skills/adk-artifact-gating/SKILL.md",
+        "skills/adk-artifact-gating/references/details.md"
+      ]
+    },
+    {
+      "skill": "adk-branch-closeout",
+      "decision": "KEEP",
+      "basis": "status-only/create-pr/merge/keep-discard 按真实操作分流；精确 HEAD/checks、未知写结果先对账、fresh-main 验证与单独清理授权均明确。既有同范围授权可延续，不重复索取。",
+      "checked_boundary": "功能分支通过、PR 创建、合并成功不冒充下游发布或资格。",
+      "evidence_files": [
+        "skills/adk-branch-closeout/SKILL.md",
+        "skills/adk-branch-closeout/references/closeout-options.md"
+      ]
+    },
+    {
+      "skill": "adk-code-review-loop",
+      "decision": "KEEP",
+      "basis": "有限反馈核验、定向复审与完整审查边界清楚；实际调用链、false-positive、Spec/Quality 双结论、原始 Git diff 身份和未查范围完整。reference 已要求原始复现、同根因变体与合法行为回归。",
+      "checked_boundary": "Trail of Bits 的根因族检索和 precision/recall 分离提供旁证；当前方法不因关键词或机械绿灯给语义 pass。",
+      "evidence_files": [
+        "skills/adk-code-review-loop/SKILL.md",
+        "skills/adk-code-review-loop/references/review-communication-guidance.md",
+        "skills/adk-code-review-loop/references/review-evidence-template.md",
+        "skills/adk-code-review-loop/references/review-feedback-fixtures.md",
+        "skills/adk-code-review-loop/references/review-governance-details.md"
+      ]
+    },
+    {
+      "skill": "adk-code-simplification",
+      "decision": "KEEP",
+      "basis": "先固定真实测试行为，再按调用者理解负担选择最小模式；示例保留条件块后的 cleanup，明确核错误/清理/副作用顺序。不用行数、缩进或重复次数证明等价。",
+      "checked_boundary": "架构 seam 只有真实使用和可验证局部性收益才引入，单次失败仅撤本轮补丁。",
+      "evidence_files": [
+        "skills/adk-code-simplification/SKILL.md",
+        "skills/adk-code-simplification/references/deep-module-design.md",
+        "skills/adk-code-simplification/references/details.md"
+      ]
+    },
+    {
+      "skill": "adk-commit-pr-quality-gate",
+      "decision": "KEEP",
+      "basis": "message-only 不触发构建或发布矩阵，PR-readiness 复用同快照有效证据，高风险仅按实际影响展开。Sentry pr-writer 的按读者风险最小表达已有对应，不必新增 PR Skill。",
+      "checked_boundary": "质量结论不授予 commit/push/merge 权限，外部 PR 文本不提供 trusted-trigger。",
+      "evidence_files": [
+        "skills/adk-commit-pr-quality-gate/SKILL.md",
+        "skills/adk-commit-pr-quality-gate/references/pr-risk-gates.md"
+      ]
+    },
+    {
+      "skill": "adk-component-api-stability",
+      "decision": "KEEP",
+      "basis": "源码 API、类型/调用约定 ABI、原始旧二进制和行为回归分别取证；工具错误、类型信息不足、runner 缺失不伪装兼容。示例库链接顺序和失败退出码均正确保留。",
+      "checked_boundary": "重编消费者或 nm 符号一致不能冒充旧二进制兼容。",
+      "evidence_files": [
+        "skills/adk-component-api-stability/SKILL.md"
+      ]
+    },
+    {
+      "skill": "adk-context-compress-handoff",
+      "decision": "KEEP",
+      "basis": "随包自包含模板包含目标、事实、权限、阻塞、原始证据与回退；ADK 源码模板仅为已核根目录下可选项。excluded 与下一动作上限限制恢复噪声。",
+      "checked_boundary": "压缩摘要不成为完成证据或长期记忆写入授权。",
+      "evidence_files": [
+        "skills/adk-context-compress-handoff/LICENSE",
+        "skills/adk-context-compress-handoff/README.md",
+        "skills/adk-context-compress-handoff/SKILL.md",
+        "skills/adk-context-compress-handoff/agents/openai.yaml"
+      ]
+    },
+    {
+      "skill": "adk-context-engineering",
+      "decision": "KEEP",
+      "basis": "稳定规则、动态任务、证据、按需能力与子任务隔离明确；缺 provenance 或压缩会丢失身份/权限/blocker 时回退。恢复核验以新执行者能定位行动所需信息为准。",
+      "checked_boundary": "不把临时引用或 code intelligence 当权威事实；模板在纯 Skill 导出内可用。",
+      "evidence_files": [
+        "skills/adk-context-engineering/SKILL.md"
+      ]
+    },
+    {
+      "skill": "adk-cross-team-handoff",
+      "decision": "KEEP",
+      "basis": "lite/formal 由真实风险决定，真实 receiver receipt 才 accepted；正式冷读区分作者自查与真实接收方验证。未签收、权限未转移或命令未执行保持 pending/not-run。",
+      "checked_boundary": "普通协作不强迫 RACI、三方签字或新模型轮次。",
+      "evidence_files": [
+        "skills/adk-cross-team-handoff/SKILL.md"
+      ]
+    },
+    {
+      "skill": "adk-engineering-growth-review",
+      "decision": "KEEP",
+      "basis": "index-first 与已授权项目/时间范围限制明确，长期趋势需要跨时点证据；不从一次故障或私人属性推断能力。普通建议按证据→动作→信号输出，正式规则晋级另行处理。",
+      "checked_boundary": "不默认全历史扫描、联网课程或外发消息。",
+      "evidence_files": [
+        "skills/adk-engineering-growth-review/LICENSE",
+        "skills/adk-engineering-growth-review/README.md",
+        "skills/adk-engineering-growth-review/SKILL.md",
+        "skills/adk-engineering-growth-review/agents/openai.yaml",
+        "skills/adk-engineering-growth-review/references/growth-evidence-boundaries.md"
+      ]
+    },
+    {
+      "skill": "adk-goal-authoring",
+      "decision": "KEEP",
+      "basis": "已有 Goal 不重建，保留原验收分母与子项映射，当前批次有依赖/关闭标准；未测预算为 null。resume 只展示状态，不运行命令、自动选择新批次或关闭父目标。",
+      "checked_boundary": "示例明确软件交付与板级验收分开，结构校验不证明业务完成。",
+      "evidence_files": [
+        "skills/adk-goal-authoring/SKILL.md",
+        "skills/adk-goal-authoring/references/goal-plan.json"
+      ]
+    },
+    {
+      "skill": "adk-interface-contract-design",
+      "decision": "ENHANCE",
+      "basis": "constraints 与 Workflow7 无条件要求 additionalProperties=false，缺少 schema dialect/消费端能力与 allOf 组合封闭规则。合法组合对象可因此被拒绝；反向无条件换 unevaluatedProperties 在 Draft7 会放行未知字段。",
+      "finding_ids": [
+        "CORE-R3-01"
+      ],
+      "checked_boundary": "严格拒绝未知字段保持不变；同层闭合、现代组合、旧 draft 与受限子集必须分别处理。",
+      "evidence_files": [
+        "skills/adk-interface-contract-design/SKILL.md",
+        "skills/adk-interface-contract-design/references/design-quality-methods.md",
+        "skills/adk-interface-contract-design/references/details.md",
+        "skills/adk-interface-contract-design/references/lifecycle-operation-contract.md",
+        "skills/adk-interface-contract-design/references/spec-code-bidirectional.md",
+        "skills/adk-interface-contract-design/references/tool-effect-contract.md"
+      ]
+    },
+    {
+      "skill": "adk-knowledge-archive",
+      "decision": "KEEP",
+      "basis": "新知识归档与既有归档治理分离，保留确切 source/date/版权边界和已核 topic；无复用价值不凑材料，未知目标路径不编造。",
+      "checked_boundary": "不把归档候选自动提升为规则，不保存完整会话或敏感原文。",
+      "evidence_files": [
+        "skills/adk-knowledge-archive/LICENSE",
+        "skills/adk-knowledge-archive/README.md",
+        "skills/adk-knowledge-archive/SKILL.md",
+        "skills/adk-knowledge-archive/agents/openai.yaml"
+      ]
+    },
+    {
+      "skill": "adk-lightweight-planning",
+      "decision": "KEEP",
+      "basis": "明确只读计划意图，动作数量由真实规模决定；具体路径/命令未知标 TBD，可逆假设不制造追问。用户要求执行即退出只读 Skill。",
+      "checked_boundary": "不为小任务默认启动全仓扫描、额外阶段、定时巡检或付费调用。",
+      "evidence_files": [
+        "skills/adk-lightweight-planning/LICENSE",
+        "skills/adk-lightweight-planning/README.md",
+        "skills/adk-lightweight-planning/SKILL.md",
+        "skills/adk-lightweight-planning/agents/openai.yaml"
+      ]
+    },
+    {
+      "skill": "adk-memory-curator",
+      "decision": "KEEP",
+      "basis": "report-only、授权范围、证据和冲突检查明确；敏感扫描仅列文件名，并说明未解码/排除范围限制。incident candidate 不自动晋升，长期写入仍需批准和回退。",
+      "checked_boundary": "关键词零命中不等于无秘密，评分和模型总结不替代原始证据。",
+      "evidence_files": [
+        "skills/adk-memory-curator/LICENSE",
+        "skills/adk-memory-curator/README.md",
+        "skills/adk-memory-curator/SKILL.md",
+        "skills/adk-memory-curator/agents/openai.yaml"
+      ]
+    },
+    {
+      "skill": "adk-parallel-agent-governance",
+      "decision": "ENHANCE",
+      "basis": "主流程的独立写集、最小并行、data-only 交接及统一集成保持；但默认随包任务包实际引用的 Completion Review 空表预填 5 个 pass，两个导出目标均原样携带。",
+      "finding_ids": [
+        "CORE-R3-02"
+      ],
+      "checked_boundary": "这是待填模板的状态真实性缺陷，不声称 runtime 已错误放行；仅改初始状态和填写语义，不新增 Gate。",
+      "evidence_files": [
+        "skills/adk-parallel-agent-governance/SKILL.md",
+        "skills/adk-parallel-agent-governance/references/parallel-worktree-task-package.md",
+        "skills/adk-parallel-agent-governance/references/subagent-review-checklist.md"
+      ]
+    },
+    {
+      "skill": "adk-pilot-framework",
+      "decision": "KEEP",
+      "basis": "smoke 与收益比较已分开；真实输入/输出/环境/失败与重试保留，任务失败、环境阻塞和证据不足区别处理，不以工具连通代替业务成功。",
+      "checked_boundary": "外部评测报告提示应观察真实 activation 和对照饱和，但本轮无本地模型对照可证缺陷，不据此扩增新评测框架。",
+      "evidence_files": [
+        "skills/adk-pilot-framework/SKILL.md",
+        "skills/adk-pilot-framework/references/details.md"
+      ]
+    },
+    {
+      "skill": "adk-planning-execution-loop",
+      "decision": "KEEP",
+      "basis": "原验收/current-state、可关闭批次、inline fast path 与同身份有效证据复用明确；无新信息停止重放，副作用结果未知先原 ID 对账，独立 ready 项可继续。",
+      "checked_boundary": "检查点不关闭父 Goal、不重置历史或扩权，也不把心跳当实际进展。",
+      "evidence_files": [
+        "skills/adk-planning-execution-loop/SKILL.md",
+        "skills/adk-planning-execution-loop/references/long-task-recovery.md"
+      ]
+    },
+    {
+      "skill": "adk-production-field-readiness",
+      "decision": "OBSERVE",
+      "basis": "设备/制品/烧录/产测/诊断/OTA-回滚实证边界完整，未发现应削弱的流程；但 pilot-measurement 的 human-active≤wall-clock 未明确是单操作者、区间并集还是多人累计，缺实际消费口径。",
+      "observation_id": "CORE-R3-O1",
+      "checked_boundary": "先取真实测量生产者/actor 口径，再决定是否更正不等式；本轮不宣称已证实效率计算错误。",
+      "evidence_files": [
+        "skills/adk-production-field-readiness/SKILL.md",
+        "skills/adk-production-field-readiness/references/pilot-measurement-evidence.md"
+      ]
+    },
+    {
+      "skill": "adk-release-versioning",
+      "decision": "KEEP",
+      "basis": "正式发布基线而非最近 tag，完整 hash/subject/body 历史、shallow 拒绝、祖先检查与非零失败保持；SemVer 建议、不可变 tag 和实际发布权限分开。",
+      "checked_boundary": "未知/revert/build/ci 变更保留审阅去向，空清单不自动等于可发布。",
+      "evidence_files": [
+        "skills/adk-release-versioning/SKILL.md",
+        "skills/adk-release-versioning/references/details.md"
+      ]
+    },
+    {
+      "skill": "adk-repo-drift-remediation",
+      "decision": "KEEP",
+      "basis": "实际源事实和 issue map 先于修复，共享 manifest/config/lockfile 串行，目标脚本须可用，未修项保留理由；不覆盖用户 dirty 或把过期 overview 作为原证据。",
+      "checked_boundary": "宏观扫描结果不能直接授权清理或越界修复。",
+      "evidence_files": [
+        "skills/adk-repo-drift-remediation/LICENSE",
+        "skills/adk-repo-drift-remediation/README.md",
+        "skills/adk-repo-drift-remediation/SKILL.md",
+        "skills/adk-repo-drift-remediation/agents/openai.yaml"
+      ]
+    },
+    {
+      "skill": "adk-repo-prompt-analysis",
+      "decision": "KEEP",
+      "basis": "从真实 callsite 追 role/模板/动态输入及 fallback，来源声明与实现区分；索引优先、未找到不推断不存在，外部 Prompt 始终是待审数据。",
+      "checked_boundary": "不默认大报告/评分或执行外部脚本，不直接写 adoption matrix。",
+      "evidence_files": [
+        "skills/adk-repo-prompt-analysis/SKILL.md"
+      ]
+    },
+    {
+      "skill": "adk-requirements-triage",
+      "decision": "KEEP",
+      "basis": "brief/execution-handoff/high-risk 分流避免普通讨论填假实现字段；已确认事实不重问，已有批准任务直接交执行，执行合同仍保留 done-when/evidence/blocker。",
+      "checked_boundary": "需求确定后不重新访谈，安全/接口/设备风险不因 brief 降级。",
+      "evidence_files": [
+        "skills/adk-requirements-triage/SKILL.md",
+        "skills/adk-requirements-triage/references/embedded-discovery-brief.md",
+        "skills/adk-requirements-triage/references/exploratory-requirements-brief.md"
+      ]
+    },
+    {
+      "skill": "adk-runtime-router",
+      "decision": "KEEP",
+      "basis": "唯一 primary、trusted inventory、version/fit 检查、optional catalog/installed/native-loaded 分离及显式排除优先均明确；已有任务包/续行不重复路由。",
+      "checked_boundary": "命中触发不等于适配/安装/执行许可，缺支持 capability 有明确 abstain 路径。",
+      "evidence_files": [
+        "skills/adk-runtime-router/SKILL.md",
+        "skills/adk-runtime-router/references/runtime-routing-details.md"
+      ]
+    },
+    {
+      "skill": "adk-skill-deep-analysis",
+      "decision": "KEEP",
+      "basis": "本轮实际使用的 source-discovery→固定来源→方法比较→最小实施交接闭环已有，描述不作效果证明；whole-source、脚本安全、真实模型行为按条件分层。",
+      "checked_boundary": "无可观察缺口选择 retain/observe，不因星数、官方名称或完整格式自动采纳。",
+      "evidence_files": [
+        "skills/adk-skill-deep-analysis/SKILL.md",
+        "skills/adk-skill-deep-analysis/references/details.md"
+      ]
+    },
+    {
+      "skill": "adk-structured-requirements-questioning",
+      "decision": "KEEP",
+      "basis": "Explore/Challenge 协议清晰，Frontier 依赖、问题 ID、部分回答、上游修订和未答状态都有具体处理；连续无进展收敛，明确执行意图不重开访谈。",
+      "checked_boundary": "AI 建议不冒充用户确认；原型规格不自动授权文件/设备写入。",
+      "evidence_files": [
+        "skills/adk-structured-requirements-questioning/SKILL.md",
+        "skills/adk-structured-requirements-questioning/references/prototype-as-experiment.md"
+      ]
+    },
+    {
+      "skill": "adk-systematic-debugging",
+      "decision": "KEEP",
+      "basis": "当前版本已保全重跑前易失证据，good/bad/untestable 分类和 128 中止包装完整；UBSan exit0 报警不算产品 pass，已知缺陷/修复校准与目标范围分开。",
+      "checked_boundary": "单变量、原版红→修版绿、通过范围保持以及无法复现时 proxy evidence 明确；不重复旧轮已修缺口。",
+      "evidence_files": [
+        "skills/adk-systematic-debugging/SKILL.md",
+        "skills/adk-systematic-debugging/references/embedded-diagnosis-branches.md",
+        "skills/adk-systematic-debugging/references/sanitizer-validation.md",
+        "skills/adk-systematic-debugging/references/tight-feedback-loop.md"
+      ]
+    },
+    {
+      "skill": "adk-task-breakdown",
+      "decision": "KEEP",
+      "basis": "真实纵向切片、依赖已满足 Ready Frontier、共享契约唯一 owner 和人工/机器交接字段分开；跨契约 expand→migrate→contract 示例实际运行两个消费者。",
+      "checked_boundary": "本地零引用不证明外部消费者已迁移，阶段通过不冒充全量交付。",
+      "evidence_files": [
+        "skills/adk-task-breakdown/SKILL.md",
+        "skills/adk-task-breakdown/references/task-packaging.md",
+        "skills/adk-task-breakdown/references/vertical-slice-planning.md"
+      ]
+    },
+    {
+      "skill": "adk-token-context-governance",
+      "decision": "KEEP",
+      "basis": "按真实 task success/safety/latency/token trace 选择瓶颈，保留 raw fallback 与高风险原文；字节减少、编译知识和工具摘要不替代质量或实际费用证据。",
+      "checked_boundary": "普通日志压缩不依赖 ADK 内部 Python/测试，不因省上下文降低原验证和权限。",
+      "evidence_files": [
+        "skills/adk-token-context-governance/SKILL.md"
+      ]
+    },
+    {
+      "skill": "adk-verification-before-completion",
+      "decision": "KEEP",
+      "basis": "checkpoint/goal-final 正交于风险；可疑或改变的 checker 才校准，示例有合法通过、违规、执行失败、缺覆盖/未知字段的实质判定。静态 completion_coverage 明言 completion_allowed=false。",
+      "checked_boundary": "原验收分母、独立 verifier、实际运行/发布/现场资格均不能被机械通过继承。",
+      "evidence_files": [
+        "skills/adk-verification-before-completion/SKILL.md",
+        "skills/adk-verification-before-completion/references/verification-governance-details.md"
+      ]
+    },
+    {
+      "skill": "adk-worktree-governance",
+      "decision": "OBSERVE",
+      "basis": "主入口的 stay-current/isolated/automation、dirty 保护和独立清理授权完整；旧随包 parallel-worktree-task-package 在空 scope 下预填 low/parallel，但未见主入口直接链接消费该模板，当前默认指导是 operation-boundaries。",
+      "observation_id": "CORE-R3-O2",
+      "checked_boundary": "保留静态模板歧义；若确认该旧表被工作流消费，再改为 unknown/pending，现阶段不声称已造成错误并行。",
+      "evidence_files": [
+        "skills/adk-worktree-governance/SKILL.md",
+        "skills/adk-worktree-governance/references/parallel-worktree-task-package.md",
+        "skills/adk-worktree-governance/references/worktree-operation-boundaries.md"
+      ]
+    }
+  ],
+  "external_sources": [
+    {
+      "repository": "json-schema-org/website",
+      "commit": "8877a30594da239f86dc1746b3d30abe126a2eb7",
+      "commit_date": "2026-11-15T05:45:14Z",
+      "tree": "d1842b27d81e0e3a4dc30ee2300ba6a92e6a992e",
+      "url": "https://github.com/json-schema-org/website/blob/8877a30594da239f86dc1746b3d30abe126a2eb7/pages/understanding-json-schema/reference/object.md",
+      "path": "pages/understanding-json-schema/reference/object.md",
+      "git_blob": "b9e337386fdaf658d501ba0aa3e4a3aa4b7246f4",
+      "encoding": "base64",
+      "sha256": "bc1ce98bdc556825c269d3c2c3e69729159c09a1f4c5ebb560ee721f0af33478",
+      "bytes": 19149,
+      "lines": 695,
+      "local_snapshot": "/workspace/scratch/fe5385ca063a/round3-core-external/json-schema-org/website/pages/understanding-json-schema/reference/object.md",
+      "fetched_at_utc": "2026-11-16T07:40:05.643313+00:00",
+      "reading": [
+        {
+          "range": {
+            "start_line": 322,
+            "end_line": 546
+          },
+          "method": "unfiltered numbered excerpt",
+          "read_at_utc": "2026-11-16T07:41:39.329674+00:00"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "repository": "json-schema-org/website",
+      "commit": "8877a30594da239f86dc1746b3d30abe126a2eb7",
+      "commit_date": "2026-11-15T05:45:14Z",
+      "tree": "d1842b27d81e0e3a4dc30ee2300ba6a92e6a992e",
+      "url": "https://github.com/json-schema-org/website/blob/8877a30594da239f86dc1746b3d30abe126a2eb7/LICENSE",
+      "path": "LICENSE",
+      "git_blob": "7d4605f1256bc903244a12288e2bb0fd72ccf01a",
+      "encoding": "base64",
+      "sha256": "909b25a80d4945b21d3adb2fb17f90bf592e0274bdf117c069c088a8e44dc7b6",
+      "bytes": 11739,
+      "lines": 213,
+      "local_snapshot": "/workspace/scratch/fe5385ca063a/round3-core-external/json-schema-org/website/LICENSE",
+      "fetched_at_utc": "2026-11-16T07:40:05.643520+00:00",
+      "reading": [
+        {
+          "range": "lines 1-15",
+          "method": "license identity header only; full bytes archived and hashed"
+        },
+        {
+          "range": {
+            "start_line": 1,
+            "end_line": 45
+          },
+          "method": "unfiltered numbered excerpt",
+          "read_at_utc": "2026-11-16T07:41:39.329782+00:00"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "repository": "getsentry/skills",
+      "commit": "a582c51ee29d0f35e6ac321340796f77d43da733",
+      "commit_date": "2026-11-14T19:38:57Z",
+      "tree": "e908e2dbcdcde94ebd1e5c5dc73cd4c7c12a1104",
+      "url": "https://github.com/getsentry/skills/blob/a582c51ee29d0f35e6ac321340796f77d43da733/skills/agents-md/SKILL.md",
+      "path": "skills/agents-md/SKILL.md",
+      "git_blob": "bd92e4a9df47f63bd943bc3d5011da0b3d6e04ff",
+      "encoding": "base64",
+      "sha256": "8a91ada35068f43ef7ee03e38937863bac4f407878b06f0a4f1ddb4af24bec7e",
+      "bytes": 3188,
+      "lines": 95,
+      "local_snapshot": "/workspace/scratch/fe5385ca063a/round3-core-external/getsentry/skills/skills/agents-md/SKILL.md",
+      "fetched_at_utc": "2026-11-16T07:40:06.628276+00:00",
+      "reading": [
+        {
+          "range": "all bytes; lines 1-95",
+          "read_at_utc": "2026-11-16T07:41:46.014054+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "repository": "getsentry/skills",
+      "commit": "a582c51ee29d0f35e6ac321340796f77d43da733",
+      "commit_date": "2026-11-14T19:38:57Z",
+      "tree": "e908e2dbcdcde94ebd1e5c5dc73cd4c7c12a1104",
+      "url": "https://github.com/getsentry/skills/blob/a582c51ee29d0f35e6ac321340796f77d43da733/skills/pr-writer/SKILL.md",
+      "path": "skills/pr-writer/SKILL.md",
+      "git_blob": "ce4da4c91a7308fa61b40b838aeee559cad2fd41",
+      "encoding": "base64",
+      "sha256": "785a2b1f084407e42f61661f83c7b0c621889865a483774f44c893c0cbcf57bc",
+      "bytes": 5302,
+      "lines": 160,
+      "local_snapshot": "/workspace/scratch/fe5385ca063a/round3-core-external/getsentry/skills/skills/pr-writer/SKILL.md",
+      "fetched_at_utc": "2026-11-16T07:40:06.628389+00:00",
+      "reading": [
+        {
+          "range": "all bytes; lines 1-160",
+          "read_at_utc": "2026-11-16T07:41:46.014121+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "repository": "getsentry/skills",
+      "commit": "a582c51ee29d0f35e6ac321340796f77d43da733",
+      "commit_date": "2026-11-14T19:38:57Z",
+      "tree": "e908e2dbcdcde94ebd1e5c5dc73cd4c7c12a1104",
+      "url": "https://github.com/getsentry/skills/blob/a582c51ee29d0f35e6ac321340796f77d43da733/LICENSE",
+      "path": "LICENSE",
+      "git_blob": "753a6c03c60a9232405d05170bd3ad3cab49a1ef",
+      "encoding": "base64",
+      "sha256": "96e78a9ce85795b117c8929887bdb78f88bf23f7b85a31f0872cde4dff7e92cd",
+      "bytes": 10785,
+      "lines": 190,
+      "local_snapshot": "/workspace/scratch/fe5385ca063a/round3-core-external/getsentry/skills/LICENSE",
+      "fetched_at_utc": "2026-11-16T07:40:06.628499+00:00",
+      "reading": [
+        {
+          "range": "lines 1-15",
+          "method": "license identity header only; full bytes archived and hashed"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "repository": "trailofbits/skills",
+      "commit": "149d7b21f4067765b82e67029730b42d228ef4b4",
+      "commit_date": "2026-11-12T17:48:47Z",
+      "tree": "c5c5969f30963626f70c4a7cf2b1fe1f445e999c",
+      "url": "https://github.com/trailofbits/skills/blob/149d7b21f4067765b82e67029730b42d228ef4b4/plugins/variant-analysis/skills/variant-analysis/SKILL.md",
+      "path": "plugins/variant-analysis/skills/variant-analysis/SKILL.md",
+      "git_blob": "8f58f54b1883110f1a38a51c9360d4b9d1b195a8",
+      "encoding": "base64",
+      "sha256": "7b6b78e499bcb88d05c68254ffc91ebc28edabf4e9808adcc40e2628ebb9407e",
+      "bytes": 3903,
+      "lines": 76,
+      "local_snapshot": "/workspace/scratch/fe5385ca063a/round3-core-external/trailofbits/skills/plugins/variant-analysis/skills/variant-analysis/SKILL.md",
+      "fetched_at_utc": "2026-11-16T07:40:07.625738+00:00",
+      "reading": [
+        {
+          "range": "all bytes; lines 1-76",
+          "read_at_utc": "2026-11-16T07:41:46.014168+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "repository": "trailofbits/skills",
+      "commit": "149d7b21f4067765b82e67029730b42d228ef4b4",
+      "commit_date": "2026-11-12T17:48:47Z",
+      "tree": "c5c5969f30963626f70c4a7cf2b1fe1f445e999c",
+      "url": "https://github.com/trailofbits/skills/blob/149d7b21f4067765b82e67029730b42d228ef4b4/plugins/variant-analysis/evals/README.md",
+      "path": "plugins/variant-analysis/evals/README.md",
+      "git_blob": "21e8437181546e45b21a7fc51d6183e461c24b94",
+      "encoding": "base64",
+      "sha256": "dafb6f2c5fc07f6d85384cddb21e35eadd70f460d15a2ef3ec6812a26ad2bf80",
+      "bytes": 6614,
+      "lines": 116,
+      "local_snapshot": "/workspace/scratch/fe5385ca063a/round3-core-external/trailofbits/skills/plugins/variant-analysis/evals/README.md",
+      "fetched_at_utc": "2026-11-16T07:40:07.625906+00:00",
+      "reading": [
+        {
+          "range": "all bytes; lines 1-116",
+          "read_at_utc": "2026-11-16T07:41:46.014261+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "repository": "trailofbits/skills",
+      "commit": "149d7b21f4067765b82e67029730b42d228ef4b4",
+      "commit_date": "2026-11-12T17:48:47Z",
+      "tree": "c5c5969f30963626f70c4a7cf2b1fe1f445e999c",
+      "url": "https://github.com/trailofbits/skills/blob/149d7b21f4067765b82e67029730b42d228ef4b4/LICENSE",
+      "path": "LICENSE",
+      "git_blob": "3b7b82d0da2db857eda1a798dbd908ea136f07b5",
+      "encoding": "base64",
+      "sha256": "7abe19ec9bb73b36141b999b861d24ad855e808bafe0f81e84cce28556f6c297",
+      "bytes": 20131,
+      "lines": 427,
+      "local_snapshot": "/workspace/scratch/fe5385ca063a/round3-core-external/trailofbits/skills/LICENSE",
+      "fetched_at_utc": "2026-11-16T07:40:07.626112+00:00",
+      "reading": [
+        {
+          "range": "lines 1-15",
+          "method": "license identity header only; full bytes archived and hashed"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "repository": "hashicorp/agent-skills",
+      "commit": "5e30fa5c867ba6777c37e4206babfd08049c396f",
+      "commit_date": "2026-11-04T01:26:36Z",
+      "tree": "c40e8eea283598685a7c89c39f07060cb06ab7cb",
+      "url": "https://github.com/hashicorp/agent-skills/blob/5e30fa5c867ba6777c37e4206babfd08049c396f/plugins/terraform/skills/terraform-test/SKILL.md",
+      "path": "plugins/terraform/skills/terraform-test/SKILL.md",
+      "git_blob": "2feebcc9f3c5b9e61a05119087f4fc328b9edf9f",
+      "encoding": "base64",
+      "sha256": "bba613c50727af9a8e47e690b0e16a4093f0239afec495016e016b5152c9a598",
+      "bytes": 11148,
+      "lines": 451,
+      "local_snapshot": "/workspace/scratch/fe5385ca063a/round3-core-external/hashicorp/agent-skills/plugins/terraform/skills/terraform-test/SKILL.md",
+      "fetched_at_utc": "2026-11-16T07:40:08.614039+00:00",
+      "reading": [
+        {
+          "range": {
+            "start_line": 1,
+            "end_line": 71
+          },
+          "method": "unfiltered numbered excerpt",
+          "read_at_utc": "2026-11-16T07:42:03.970787+00:00"
+        },
+        {
+          "range": {
+            "start_line": 330,
+            "end_line": 451
+          },
+          "method": "unfiltered numbered excerpt",
+          "read_at_utc": "2026-11-16T07:42:03.970842+00:00"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "repository": "hashicorp/agent-skills",
+      "commit": "5e30fa5c867ba6777c37e4206babfd08049c396f",
+      "commit_date": "2026-11-04T01:26:36Z",
+      "tree": "c40e8eea283598685a7c89c39f07060cb06ab7cb",
+      "url": "https://github.com/hashicorp/agent-skills/blob/5e30fa5c867ba6777c37e4206babfd08049c396f/LICENSE",
+      "path": "LICENSE",
+      "git_blob": "d0a1fa1482eea82e19510e7920cbe3a03e41f691",
+      "encoding": "base64",
+      "sha256": "3f3d9e0024b1921b067d6f7f88deb4a60cbe7a78e76c64e3f1d7fc3b779b9d04",
+      "bytes": 16726,
+      "lines": 373,
+      "local_snapshot": "/workspace/scratch/fe5385ca063a/round3-core-external/hashicorp/agent-skills/LICENSE",
+      "fetched_at_utc": "2026-11-16T07:40:08.614231+00:00",
+      "reading": [
+        {
+          "range": "lines 1-15",
+          "method": "license identity header only; full bytes archived and hashed"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "repository": "microsoft/skills",
+      "commit": "f03ec5392f7a0f3aca12af47477e92f1edf7b44c",
+      "commit_date": "2026-11-13T18:08:40Z",
+      "tree": "43d5c115244b235f0d720be300a175dfa40e13f2",
+      "url": "https://github.com/microsoft/skills/blob/f03ec5392f7a0f3aca12af47477e92f1edf7b44c/.github/skills/skill-creator/SKILL.md",
+      "path": ".github/skills/skill-creator/SKILL.md",
+      "git_blob": "6429efa083961c855fc5c21da8079ae2f4949007",
+      "encoding": "base64",
+      "sha256": "15ce951aec071c813150e6794628664725c164223108792e15bd3db18e959da0",
+      "bytes": 68147,
+      "lines": 1313,
+      "local_snapshot": "/workspace/scratch/fe5385ca063a/round3-core-external/microsoft/skills/.github/skills/skill-creator/SKILL.md",
+      "fetched_at_utc": "2026-11-16T07:40:09.637013+00:00",
+      "reading": [
+        {
+          "range": {
+            "start_line": 23,
+            "end_line": 66
+          },
+          "method": "unfiltered numbered excerpt",
+          "read_at_utc": "2026-11-16T07:41:39.330315+00:00"
+        },
+        {
+          "range": {
+            "start_line": 104,
+            "end_line": 183
+          },
+          "method": "unfiltered numbered excerpt",
+          "read_at_utc": "2026-11-16T07:41:39.330340+00:00"
+        },
+        {
+          "range": {
+            "start_line": 386,
+            "end_line": 449
+          },
+          "method": "unfiltered numbered excerpt",
+          "read_at_utc": "2026-11-16T07:41:39.330377+00:00"
+        },
+        {
+          "range": {
+            "start_line": 1043,
+            "end_line": 1133
+          },
+          "method": "unfiltered numbered excerpt",
+          "read_at_utc": "2026-11-16T07:41:39.330409+00:00"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "repository": "microsoft/skills",
+      "commit": "f03ec5392f7a0f3aca12af47477e92f1edf7b44c",
+      "commit_date": "2026-11-13T18:08:40Z",
+      "tree": "43d5c115244b235f0d720be300a175dfa40e13f2",
+      "url": "https://github.com/microsoft/skills/blob/f03ec5392f7a0f3aca12af47477e92f1edf7b44c/LICENSE",
+      "path": "LICENSE",
+      "git_blob": "79656060de00aa4659ad2c276d5be8830664d544",
+      "encoding": "base64",
+      "sha256": "d9a1b1e30d633d5732ea18e3cba9538d293ebc53e1a9e4e96ab739e0c5c4f1cb",
+      "bytes": 1140,
+      "lines": 21,
+      "local_snapshot": "/workspace/scratch/fe5385ca063a/round3-core-external/microsoft/skills/LICENSE",
+      "fetched_at_utc": "2026-11-16T07:40:09.637116+00:00",
+      "reading": [
+        {
+          "range": "lines 1-15",
+          "method": "license identity header only; full bytes archived and hashed"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "repository": "vercel-labs/agent-browser",
+      "commit": "53384771fbafc261ba67608ac806dd5aa70b84f0",
+      "commit_date": "2026-11-15T08:16:52Z",
+      "tree": "24d162ca8cc019ae30a8d68142e8a0ae0a016e31",
+      "url": "https://github.com/vercel-labs/agent-browser/blob/53384771fbafc261ba67608ac806dd5aa70b84f0/evals/README.md",
+      "path": "evals/README.md",
+      "git_blob": "e985c9a3bdbc01069e57fd66d65f20b8a8e4c58a",
+      "encoding": "base64",
+      "sha256": "37448c3ac481e8b5f496b848c1f3762be1ef12337c1be8adec703fe45439ced3",
+      "bytes": 8602,
+      "lines": 161,
+      "local_snapshot": "/workspace/scratch/fe5385ca063a/round3-core-external/vercel-labs/agent-browser/evals/README.md",
+      "fetched_at_utc": "2026-11-16T07:40:10.425094+00:00",
+      "reading": [
+        {
+          "range": "all bytes; lines 1-161",
+          "read_at_utc": "2026-11-16T07:41:46.014323+00:00",
+          "method": "unfiltered full UTF-8 output"
+        }
+      ],
+      "git_blob_verified": true
+    },
+    {
+      "repository": "vercel-labs/agent-browser",
+      "commit": "53384771fbafc261ba67608ac806dd5aa70b84f0",
+      "commit_date": "2026-11-15T08:16:52Z",
+      "tree": "24d162ca8cc019ae30a8d68142e8a0ae0a016e31",
+      "url": "https://github.com/vercel-labs/agent-browser/blob/53384771fbafc261ba67608ac806dd5aa70b84f0/LICENSE",
+      "path": "LICENSE",
+      "git_blob": "8226d363f88a734e52cc79ead7a5588cc55e76f7",
+      "encoding": "base64",
+      "sha256": "014bb31e83d5c2e76aea1cc6e82217346ab41362f32cb355ad0f5c10aa0aeaff",
+      "bytes": 10931,
+      "lines": 201,
+      "local_snapshot": "/workspace/scratch/fe5385ca063a/round3-core-external/vercel-labs/agent-browser/LICENSE",
+      "fetched_at_utc": "2026-11-16T07:40:10.425403+00:00",
+      "reading": [
+        {
+          "range": "lines 1-15",
+          "method": "license identity header only; full bytes archived and hashed"
+        }
+      ],
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    {
+      "id": "CORE-R3-01",
+      "severity": "major-method-candidate",
+      "status": "confirmed deterministic schema semantics; implementation handoff only",
+      "skill": "adk-interface-contract-design",
+      "locations": [
+        "skills/adk-interface-contract-design/SKILL.md:19",
+        "skills/adk-interface-contract-design/SKILL.md:51"
+      ],
+      "problem": "把 strict machine schema 等同于无条件 additionalProperties=false，既可能禁止一个正确的组合闭合契约，也未指导 allOf/$ref 的闭合层级和消费端方言能力。",
+      "minimal_counterexample": {
+        "input": {
+          "id": 1,
+          "mode": "safe"
+        },
+        "schema_shape": "Draft2020-12 allOf: base requires integer id and has additionalProperties=false; extension requires mode enum.",
+        "observed": "合法 mode 被当作额外字段拒绝，错误为 Additional properties are not allowed ('mode' was unexpected)。"
+      },
+      "expected_contract": "接受 id=1/mode=safe；拒绝未知 admin、缺 id、缺 mode、错误 id 类型和错误 mode 枚举。严格拒绝未知字段保持不变。",
+      "minimal_fix": "在既有 Skill constraints/Workflow7 指明先固定 $schema/dialect、validator 版本和消费端 keyword 子集；同层 properties 使用 additionalProperties=false；allOf/$ref 组合在支持 2019-09/2020-12 的消费端可用外层 unevaluatedProperties=false，不能在可扩展子 schema 提前封闭；旧 draft/窄子集同层展开并保留 additionalProperties=false，无法表达则 needs-fix，不静默退为 permissive。将小型正负用例放入现有 reference，无新 Skill/Gate。",
+      "meaningful_acceptance": [
+        "直接运行实际 validator 验证同层闭合合法样本通过且全部五种非法样本拒绝。",
+        "保留 broken allOf 负对照，再验证组合闭合法满足同一输入契约。",
+        "Draft7 对 unsupported unevaluatedProperties 的负对照必须显示未知字段漏放；Draft7 flatten 修法满足同一契约。",
+        "从随包 reference 的实际示例提取并执行，结合 Skill 方言选择说明审查；关键词存在不作为方法有效性证据。"
+      ],
+      "probe": {
+        "script": "/workspace/scratch/fe5385ca063a/round3-schema-composition-probe.py",
+        "result": "/workspace/scratch/fe5385ca063a/round3-schema-composition-probe.json",
+        "command": "/workspace/scratch/fe5385ca063a/verification-tools/rtk bypass python /workspace/scratch/fe5385ca063a/round3-schema-composition-probe.py",
+        "exit_code": 0,
+        "python": "3.12.14",
+        "jsonschema": "4.26.0",
+        "schema_variants": 5,
+        "inputs_per_variant": 6,
+        "scope": "library semantics diagnostic only; no production ADK or model behavior claim"
+      },
+      "fixed_source": "json-schema-org/website@8877a30594da239f86dc1746b3d30abe126a2eb7:pages/understanding-json-schema/reference/object.md:322-546",
+      "preserved_success": "原有 strict/required/enum/refusal/parse-failure、安全授权、生命周期和未知字段拒绝不降级。"
+    },
+    {
+      "id": "CORE-R3-02",
+      "severity": "major-evidence-template-candidate",
+      "status": "confirmed published template defaults; no runtime bypass claimed",
+      "skill": "adk-parallel-agent-governance",
+      "locations": [
+        "skills/adk-parallel-agent-governance/references/subagent-review-checklist.md:16-20",
+        "skills/adk-parallel-agent-governance/references/parallel-worktree-task-package.md:38",
+        "skills/adk-parallel-agent-governance/SKILL.md:41",
+        "tests/test_skill_content_contract.py:335-372"
+      ],
+      "problem": "默认随包 task package 连接的未填写 Completion Review 表，把五项检查均初始化为 pass，而 Evidence、Parent task、Owner 等全部为空；文本没有已完成示例声明。",
+      "minimal_counterexample": "仅复制该待填模板、不运行任何验证，即获得包含 Verification commands ran=pass 等五项肯定结论且证据全空的报告。claude-code/opencode 实际导出均保留这五行，非失效文档。",
+      "expected_contract": "未核验的空表只能 pending/not-run；得到实际范围/命令/快照证据后逐行填 pass；失败、阻塞或不适用需要对应真实状态/理由。模板本身不产生验证通过。",
+      "minimal_fix": "只修改五个默认 Result 和一句按实证填写说明；可保持既有表格与字段，不新建 Gate、协议或单独审查流程。",
+      "meaningful_acceptance": [
+        "通过真实 export_assets 分别检查两个导出目标，解析默认 task package 的实际 checklist 链接。",
+        "解析 Completion Review 表行语义，所有初始行 evidence 为空时不得标 pass，且字段/项目数量保持。",
+        "有明确示例且具真实证据的通过记录可保留 pass，不全仓机械替换合法的已完成示例。"
+      ],
+      "probe": {
+        "script": "/workspace/scratch/fe5385ca063a/round3-checklist-probe.py",
+        "result": "/workspace/scratch/fe5385ca063a/round3-checklist-probe.json",
+        "command": "/workspace/scratch/fe5385ca063a/verification-tools/rtk bypass python /workspace/scratch/fe5385ca063a/round3-checklist-probe.py",
+        "exit_code": 0,
+        "export_targets": [
+          "claude-code",
+          "opencode"
+        ],
+        "blank_evidence_pass_rows_per_target": 5,
+        "scope": "source/export template inspection; no model activation or incorrect runtime approval observed"
+      },
+      "preserved_success": "已存在的唯一写 owner、并行准入、scope、data-only handoff、实际命令验证与父任务集成责任保持。"
+    }
+  ],
+  "boundary": "read-only source audit; no runtime, model A/B, token, device or qualification claims",
+  "population_verification": {
+    "verified_at_utc": "2026-11-16T07:44:16.558855+00:00",
+    "tracked_files": 93,
+    "recorded_files": 93,
+    "missing": [],
+    "extra": [],
+    "unread": [],
+    "changed_during_audit": [],
+    "all_blobs_verified": true
+  },
+  "review_role": "independent read-only source and method audit; no repository edits, commits, refs, external messages, paid models, native runtime jobs or device writes",
+  "basis": "Every assigned current tracked file was read directly. The prior portfolio file was opened to identify group membership; its historical conclusions were visible in that output but were not used as current evidence. A truncated first batch was identified and the three affected files were reread in full.",
+  "decision_counts": {
+    "KEEP": 30,
+    "ENHANCE": 2,
+    "OBSERVE": 2
+  },
+  "observations": [
+    {
+      "id": "CORE-R3-O1",
+      "skill": "adk-production-field-readiness",
+      "location": "skills/adk-production-field-readiness/references/pilot-measurement-evidence.md:20",
+      "observation": "human-active 时间口径未声明。如果它是多人的累计 person-minutes，两个同时工作 20 分钟的人会产生 40>20；如果是单操作者或活动区间并集，则现有式子可成立。",
+      "needed_before_change": "真实测量来源、actor cardinality 和累计口径；不能凭歧义认定生产率计算已有错误。",
+      "decision": "OBSERVE"
+    },
+    {
+      "id": "CORE-R3-O2",
+      "skill": "adk-worktree-governance",
+      "location": "skills/adk-worktree-governance/references/parallel-worktree-task-package.md:30",
+      "observation": "空 scope/shared touchpoint 的示例给 low/parallel，主入口并未直接链接该旧表。",
+      "needed_before_change": "确认实际工作流是否消费该旧模板，以及它被当作示例还是默认结论；主入口的基于真实风险决策必须继续优先。",
+      "decision": "OBSERVE"
+    }
+  ],
+  "external_method_assessments": [
+    {
+      "repository": "json-schema-org/website",
+      "commit": "8877a30594da239f86dc1746b3d30abe126a2eb7",
+      "kind": "official technical documentation",
+      "paths": [
+        "pages/understanding-json-schema/reference/object.md"
+      ],
+      "license_observed": "repository LICENSE contains BSD 3-clause text and Academic Free License 3.0 text; no interpretation of their combination; method paraphrase only",
+      "verified_method": "additionalProperties 仅识别同 subschema 的 properties/patternProperties；组合 schema 的现代 unevaluatedProperties 可在外层收集已验证属性。方言能力决定可用方法。",
+      "adk_mapping": [
+        "adk-interface-contract-design"
+      ],
+      "decision": "ENHANCE through CORE-R3-01",
+      "quality_basis": "官方固定文档语义与本地实际 jsonschema 双方向控制实验吻合，不依赖星数或作者效果自述。"
+    },
+    {
+      "repository": "getsentry/skills",
+      "commit": "a582c51ee29d0f35e6ac321340796f77d43da733",
+      "kind": "first-party team skills",
+      "paths": [
+        "skills/agents-md/SKILL.md",
+        "skills/pr-writer/SKILL.md"
+      ],
+      "license_observed": "Apache-2.0 header",
+      "verified_method": "先核真实 repo 命令和路径，以精确引用替代复制；PR 以可观察行为和审阅风险组织最小文字，绑定完整分支差异。",
+      "adk_mapping": [
+        "adk-context-engineering",
+        "adk-repo-prompt-analysis",
+        "adk-commit-pr-quality-gate",
+        "adk-branch-closeout"
+      ],
+      "decision": "KEEP existing coverage; do not import",
+      "excluded_transfer": "不引入固定行数阈值、强制提交署名、默认创建分支/远端 PR 或省略项目必需验证；这些是来源自身政策。",
+      "quality_basis": "完整读到两个具体 SKILL.md，而不是以 description 或目录排名认定方法。"
+    },
+    {
+      "repository": "trailofbits/skills",
+      "commit": "149d7b21f4067765b82e67029730b42d228ef4b4",
+      "kind": "first-party security skills and evaluation account",
+      "paths": [
+        "plugins/variant-analysis/skills/variant-analysis/SKILL.md",
+        "plugins/variant-analysis/evals/README.md"
+      ],
+      "license_observed": "CC-BY-SA-4.0 header",
+      "verified_method": "以已知根因为搜索种子，逐轴一般化并人工核误报；评测分别看检索/precision/recall/activation，保留全安全面板，识别 baseline 饱和与候选 Skill 未实际触发时的不可归因比较。",
+      "adk_mapping": [
+        "adk-code-review-loop",
+        "adk-systematic-debugging",
+        "adk-pilot-framework",
+        "adk-skill-deep-analysis"
+      ],
+      "decision": "KEEP current review variants; OBSERVE evaluation-shape lessons for a future authorized native study",
+      "excluded_transfer": "不复制固定噪声比例、强制多 agent、来源指定模型或自动 CI 规则；未读取其 references/resources/tests 全体，未执行其评测。",
+      "quality_basis": "明确区分作者所述实测与本次读源码；来源量化效果没有在 ADK 复现。"
+    },
+    {
+      "repository": "hashicorp/agent-skills",
+      "commit": "5e30fa5c867ba6777c37e4206babfd08049c396f",
+      "kind": "first-party product skills",
+      "paths": [
+        "plugins/terraform/skills/terraform-test/SKILL.md"
+      ],
+      "license_observed": "MPL-2.0 header",
+      "verified_method": "按实际能力/版本选择按需 mock reference，区分 plan 的逻辑验证与 apply 的实际资源；独立测试资源及逆依赖清理有明确提示。",
+      "adk_mapping": [
+        "adk-pilot-framework",
+        "adk-interface-contract-design",
+        "adk-worktree-governance"
+      ],
+      "decision": "KEEP existing effect/target boundaries; no Terraform skill or command adoption",
+      "excluded_transfer": "仅阅读已记录摘录范围；未审全部 helper/reference，未验证其各条 Terraform CLI 选项，不把第一方身份当命令正确性或安全证明。",
+      "quality_basis": "以真实操作是否有资源副作用对照现有 ADK，不因来源自述 testing 就推断只读。"
+    },
+    {
+      "repository": "microsoft/skills",
+      "commit": "f03ec5392f7a0f3aca12af47477e92f1edf7b44c",
+      "kind": "first-party SDK skill authoring guidance",
+      "paths": [
+        ".github/skills/skill-creator/SKILL.md"
+      ],
+      "license_observed": "MIT header",
+      "verified_method": "按实际 SDK/语言版本查权威签名，刷新应精确到示例；核心工作流与真正次要示例分离，多条等价主路径不应因压缩误降为高级。",
+      "adk_mapping": [
+        "adk-runtime-router",
+        "adk-skill-deep-analysis",
+        "adk-token-context-governance"
+      ],
+      "decision": "KEEP version/fit and bounded disclosure; no imported framework",
+      "excluded_transfer": "不吸收固定 Token/行数/80-20 阈值、不把 mock/正则词句检查当行为验证；仅审已记录章节，其他 1,313 行文件区间未声明已读。",
+      "quality_basis": "明确的版本/hero-workflow 选择方法可迁移；来源内强制量词与平台专属依赖不可直接外推。"
+    },
+    {
+      "repository": "vercel-labs/agent-browser",
+      "commit": "53384771fbafc261ba67608ac806dd5aa70b84f0",
+      "kind": "first-party tool skill evaluation guidance",
+      "paths": [
+        "evals/README.md"
+      ],
+      "license_observed": "Apache-2.0 header",
+      "verified_method": "区分 skill-loading/selection/reference-routing 与最终任务状态；实际页面效果独立回读，ordinary 控制无工具路径，hostile 负例必须实际投递后才评价，允许安全备用路径。",
+      "adk_mapping": [
+        "adk-pilot-framework",
+        "adk-token-context-governance",
+        "adk-verification-before-completion"
+      ],
+      "decision": "OBSERVE future native evaluation design; KEEP current evidence boundaries",
+      "excluded_transfer": "未运行其 CLI/付费 gateway、未改 Codex 配置或启动 browser；README 描述并不证明其实现/效果已被本轮验证。",
+      "quality_basis": "检测真实效果、负例暴露和声明有限 smoke 范围具有方法价值；其早期正则输出检查不能替代真实效果。"
+    }
+  ],
+  "discovery": {
+    "web_search_calls": 3,
+    "query_count": 10,
+    "queries": [
+      {
+        "engine": "system2",
+        "query": "site:github.com getsentry skills code review SKILL.md",
+        "source_refs": [
+          "turn30search0",
+          "turn30search3"
+        ]
+      },
+      {
+        "engine": "system2",
+        "query": "site:github.com trailofbits skills differential-review variant-analysis",
+        "source_refs": [
+          "turn30search7",
+          "turn30search25",
+          "turn30search14"
+        ]
+      },
+      {
+        "engine": "system2",
+        "query": "site:github.com hashicorp agent-skills terraform skills",
+        "source_refs": [
+          "turn30search1",
+          "turn30search11"
+        ]
+      },
+      {
+        "engine": "system2",
+        "query": "site:github.com microsoft skills agent skills context",
+        "source_refs": [
+          "turn30search34",
+          "turn30search45"
+        ]
+      },
+      {
+        "engine": "system1",
+        "query": "site:json-schema.org understanding json schema additionalProperties allOf unevaluatedProperties extending closed schemas",
+        "source_refs": [
+          "turn34search0",
+          "turn34search1",
+          "turn34search2"
+        ]
+      },
+      {
+        "engine": "system1",
+        "query": "site:github.com trailofbits skills evaluation variant analysis cold run activation false positives",
+        "source_refs": [
+          "turn34search4",
+          "turn34search5"
+        ]
+      },
+      {
+        "engine": "system1",
+        "query": "site:github.com getsentry skills agents-md SKILL.md",
+        "source_refs": [
+          "turn34search6"
+        ]
+      },
+      {
+        "engine": "system2",
+        "query": "site:github.com/json-schema-org Extending Closed Schemas object",
+        "source_refs": [
+          "turn35search5"
+        ]
+      },
+      {
+        "engine": "system2",
+        "query": "site:github.com/vercel-labs/skills eval SKILL.md",
+        "source_refs": [
+          "turn35search7"
+        ]
+      },
+      {
+        "engine": "system2",
+        "query": "site:github.com/hashicorp/agent-skills terraform-test SKILL.md",
+        "source_refs": [
+          "turn35search0"
+        ]
+      }
+    ],
+    "pinned_repositories": 6,
+    "pinned_files": 14,
+    "content_files": 8,
+    "license_files": 6,
+    "selection": "5 first-party Skill/tool repositories and 1 official technical documentation repository; relevance and reproducible method, not stars",
+    "not_reviewed": "Other search results, entire external repositories, unlisted helper/reference files and external executable paths. Source snapshots are evidence only, never installed or executed."
+  },
+  "limitations": [
+    "This is a complete file-level source review of the assigned 34 Skills, not proof of defect freedom or native model/runtime effectiveness.",
+    "The only executions were isolated local JSON Schema semantic probes and existing ADK export into disposable scratch directories; no native Skill discovery/load/trigger run, paid model A/B, live-device test, network mutation, commit, ref operation or external message was performed.",
+    "Source bytes and complete reading coverage do not measure Token use, latency, task success, precision/recall or product qualification.",
+    "External full downloaded bytes were Git-blob checked, but actual reading was intentionally limited to recorded full/excerpt ranges; source-author evaluation results were not independently reproduced.",
+    "The schema finding is a prescriptive-method gap, not an assertion that a current ADK production schema or runtime accepts/rejects the demonstrated payload.",
+    "The checklist finding is an unsafe initial document state, not evidence that a real reviewer or runtime gate has already accepted missing evidence."
+  ],
+  "finished_at_utc": "2026-11-16T07:47:12.246257+00:00",
+  "finished_at_asia_shanghai": "2026-11-16T15:47:12.246257+08:00",
+  "supporting_reads": [
+    {
+      "path": "AGENTS.md",
+      "git_blob": "1daed34102e7f167796abf36e9c44dc89d723735",
+      "sha256": "61a06f86a6b5382855fab70a3098f878e9f7d3e0af653a86fbd199d8d5d13167",
+      "bytes": 2914,
+      "actual_read_range": "full"
+    },
+    {
+      "path": "docs/agent-operating-rules.md",
+      "git_blob": "b8ff7de94b6d18073514e830a390ea65f29011bb",
+      "sha256": "dc517366846889f088f350fdf1466719c4d655e9651bd5f2e12323e7ae8a541b",
+      "bytes": 13278,
+      "actual_read_range": "full"
+    },
+    {
+      "path": "README.md",
+      "git_blob": "bffe23b1a7bf49bccb71025027f59dd5e0b73921",
+      "sha256": "b1dfee0b243bded458d0ba3376c7dbcc3f7a349c76ebe9fdd090919fb1b76997",
+      "bytes": 13086,
+      "actual_read_range": "full"
+    },
+    {
+      "path": "tests/test_skill_content_contract.py",
+      "git_blob": "c84adc47119744f8502d7c71d594998cb76c0222",
+      "sha256": "ab1726165e55c5b4ead3073608f5786b5367d7b520c87abe26836fe909a5dae8",
+      "bytes": 30306,
+      "actual_read_range": [
+        328,
+        385
+      ]
+    }
+  ],
+  "probe_artifacts": [
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-schema-composition-probe.py",
+      "sha256": "87ef33ba81de1599f486a8f7407b270ae79c1ffe0c65808c730f563509b0e2c2",
+      "bytes": 3697
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-schema-composition-probe.json",
+      "sha256": "bd4ac31c530654223295a486954f4ecc2c4819d787d4ce3cfa4918b9ff3fe221",
+      "bytes": 5964
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-checklist-probe.py",
+      "sha256": "f83f1bc12c9f2da9e6b7334f588851dfcf1d2ceef7cb4dc43a5acc2feae85ef3",
+      "bytes": 3065
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-checklist-probe.json",
+      "sha256": "154aa278de5d51b33a6bb68481876a5708011d7e8044c0648528f342a207592b",
+      "bytes": 1481
+    }
+  ],
+  "file_categories": {
+    "SKILL.md": 34,
+    "references": 38,
+    "LICENSE": 7,
+    "README.md": 7,
+    "agents": 7
+  },
+  "external_content_reading_counts": {
+    "full_content_files": 5,
+    "excerpt_content_files": 3,
+    "license_header_or_excerpt_files": 6
+  }
+}
