@@ -1,0 +1,278 @@
+{
+  "observed_date": "2026-11-16",
+  "source_kind": "bounded-public-source-review",
+  "code_execution": "none (external scripts were read, not executed)",
+  "paid_model_calls": "none",
+  "adk_baseline": "5f442723",
+  "source_repositories": 10,
+  "optional_entrypoints_reviewed": 9,
+  "optional_references_reviewed": 5,
+  "source_review_boundary": "Selected primary source methods, not every skill in these repositories and not all internet skills.",
+  "behavior_status": "not-measured",
+  "sources": [
+    {
+      "repository": "anthropics/skills",
+      "path": "skills/skill-creator/scripts/run_eval.py",
+      "commit": "1780c5e5a552fd4d1c9d6a7b0cab26b0c2bef064",
+      "blob_sha": "e58c70bea39d5b252a1e819f242bbdcdf20e8b87",
+      "immutable_url": "https://github.com/anthropics/skills/blob/1780c5e5a552fd4d1c9d6a7b0cab26b0c2bef064/skills/skill-creator/scripts/run_eval.py",
+      "license_metadata": null,
+      "decision": "OBSERVE",
+      "method": "The generic grader must distinguish runtime error from a negative trigger; this implementation appends false on future exceptions, so an all-error negative case can count as passed. Do not import its executor.",
+      "read_status": "read",
+      "source_effect_status": "not-reproduced",
+      "imported": false
+    },
+    {
+      "repository": "getsentry/skills",
+      "path": "skills/prompt-optimizer/SKILL.md",
+      "commit": "a582c51ee29d0f35e6ac321340796f77d43da733",
+      "blob_sha": "b8132d287dbb6b3eac120514e9b5728dd431f7fc",
+      "immutable_url": "https://github.com/getsentry/skills/blob/a582c51ee29d0f35e6ac321340796f77d43da733/skills/prompt-optimizer/SKILL.md",
+      "license_metadata": "Apache-2.0",
+      "decision": "RETAIN",
+      "method": "Same-slice comparison, causal pruning, model adaptation, holdout and stopping conditions are largely covered in ADK.",
+      "read_status": "read",
+      "source_effect_status": "not-reproduced",
+      "imported": false
+    },
+    {
+      "repository": "getsentry/skills",
+      "path": "skills/prompt-optimizer/references/meta-optimization-loop.md",
+      "commit": "a582c51ee29d0f35e6ac321340796f77d43da733",
+      "blob_sha": "6aa685c61207d333b39eab6528c783ddbe01a9a7",
+      "immutable_url": "https://github.com/getsentry/skills/blob/a582c51ee29d0f35e6ac321340796f77d43da733/skills/prompt-optimizer/references/meta-optimization-loop.md",
+      "license_metadata": "Apache-2.0",
+      "decision": "RETAIN",
+      "method": "Keep minimal-diff candidate and record failed hypotheses; avoid recreating an optimizer engine.",
+      "read_status": "read",
+      "source_effect_status": "not-reproduced",
+      "imported": false
+    },
+    {
+      "repository": "getsentry/skills",
+      "path": "skills/security-model/SKILL.md",
+      "commit": "a582c51ee29d0f35e6ac321340796f77d43da733",
+      "blob_sha": "a1cc5a33ac409ac48b90c128b83d3e831900add9",
+      "immutable_url": "https://github.com/getsentry/skills/blob/a582c51ee29d0f35e6ac321340796f77d43da733/skills/security-model/SKILL.md",
+      "license_metadata": "Apache-2.0",
+      "decision": "RETAIN",
+      "method": "ADK already distinguishes source-to-sink proof, coverage and policy identity.",
+      "read_status": "read",
+      "source_effect_status": "not-reproduced",
+      "imported": false
+    },
+    {
+      "repository": "mattpocock/skills",
+      "path": "skills/productivity/writing-for-agents/SKILL.md",
+      "commit": "5863806dd4e15c63174bee4e7515a4256792ecfa",
+      "blob_sha": "a37608daf6e835e767deecfb498facecaaba82ba",
+      "immutable_url": "https://github.com/mattpocock/skills/blob/5863806dd4e15c63174bee4e7515a4256792ecfa/skills/productivity/writing-for-agents/SKILL.md",
+      "license_metadata": "MIT",
+      "decision": "RETAIN",
+      "method": "Conditional pointers and branch-wise disclosure; no global rewrite without observed failure.",
+      "read_status": "read",
+      "source_effect_status": "not-reproduced",
+      "imported": false
+    },
+    {
+      "repository": "mattpocock/skills",
+      "path": "skills/engineering/codebase-design/DESIGN-IT-TWICE.md",
+      "commit": "5863806dd4e15c63174bee4e7515a4256792ecfa",
+      "blob_sha": "aebdc9f8c05b40d7832de38e2fd8380e1e5507ac",
+      "immutable_url": "https://github.com/mattpocock/skills/blob/5863806dd4e15c63174bee4e7515a4256792ecfa/skills/engineering/codebase-design/DESIGN-IT-TWICE.md",
+      "license_metadata": "MIT",
+      "decision": "OBSERVE",
+      "method": "Alternative designs can be useful; never mandate 3+ agents on routine changes.",
+      "read_status": "read",
+      "source_effect_status": "not-reproduced",
+      "imported": false
+    },
+    {
+      "repository": "trailofbits/skills",
+      "path": "plugins/fp-check/skills/fp-check/references/bug-class-verification.md",
+      "commit": "149d7b21f4067765b82e67029730b42d228ef4b4",
+      "blob_sha": "3eb666d646b4c6071b82012d4911ba0650665078",
+      "immutable_url": "https://github.com/trailofbits/skills/blob/149d7b21f4067765b82e67029730b42d228ef4b4/plugins/fp-check/skills/fp-check/references/bug-class-verification.md",
+      "license_metadata": "CC-BY-SA-4.0",
+      "decision": "RETAIN",
+      "method": "Type-, lifetime-, concurrency- and reachability-specific verification; existing ADK safety reviews largely cover it.",
+      "read_status": "read",
+      "source_effect_status": "not-reproduced",
+      "imported": false
+    },
+    {
+      "repository": "trailofbits/skills",
+      "path": "plugins/mutation-testing/skills/mutation-testing/references/equivalent-mutants.md",
+      "commit": "149d7b21f4067765b82e67029730b42d228ef4b4",
+      "blob_sha": "f3a48370d8f7579ff43563142cfc008aa12ccebb",
+      "immutable_url": "https://github.com/trailofbits/skills/blob/149d7b21f4067765b82e67029730b42d228ef4b4/plugins/mutation-testing/skills/mutation-testing/references/equivalent-mutants.md",
+      "license_metadata": "CC-BY-SA-4.0",
+      "decision": "OBSERVE",
+      "method": "Survival alone does not establish an equivalent mutant; check typed domains, reachability, consumption and distinguishing inputs. Candidate low-cost addition when mutation evidence is used.",
+      "read_status": "read",
+      "source_effect_status": "not-reproduced",
+      "imported": false
+    },
+    {
+      "repository": "addyosmani/agent-skills",
+      "path": "evals/cases/performance-optimization.json",
+      "commit": "39b723ceebf81474d0557c1fecd01eddab585563",
+      "blob_sha": "4df2f68e8cc13d9535f3a05b480fb0cf0b4d9299",
+      "immutable_url": "https://github.com/addyosmani/agent-skills/blob/39b723ceebf81474d0557c1fecd01eddab585563/evals/cases/performance-optimization.json",
+      "license_metadata": "MIT",
+      "decision": "RETAIN",
+      "method": "Behavioral fixture demands a measured bottleneck and measured guard, not generic assertions.",
+      "read_status": "read",
+      "source_effect_status": "not-reproduced",
+      "imported": false
+    },
+    {
+      "repository": "vercel-labs/agent-skills",
+      "path": "skills/react-best-practices/rules/async-parallel.md",
+      "commit": "1a2c79d4e6c4a2283dc2c614b6538cbe1ed5ca62",
+      "blob_sha": "64133f6c31fec81eaaabd712586337d20122e09f",
+      "immutable_url": "https://github.com/vercel-labs/agent-skills/blob/1a2c79d4e6c4a2283dc2c614b6538cbe1ed5ca62/skills/react-best-practices/rules/async-parallel.md",
+      "license_metadata": null,
+      "decision": "RETAIN",
+      "method": "Independent reads can overlap; dependency and mutation operations remain ordered. React-specific tuning stays outside embedded core.",
+      "read_status": "read",
+      "source_effect_status": "not-reproduced",
+      "imported": false
+    },
+    {
+      "repository": "microsoft/playwright-cli",
+      "path": "skills/playwright-cli/SKILL.md",
+      "commit": "b21724888b8100b05ef8dee3a92f2bb03bf4dcde",
+      "blob_sha": "aa8dea4bba35a00b362fa925b25b8058b9a28fa6",
+      "immutable_url": "https://github.com/microsoft/playwright-cli/blob/b21724888b8100b05ef8dee3a92f2bb03bf4dcde/skills/playwright-cli/SKILL.md",
+      "license_metadata": "Apache-2.0",
+      "decision": "OBSERVE",
+      "method": "Scoped find/raw snapshots reduce browser context; no browser capability added to ADK solely for this method.",
+      "read_status": "read",
+      "source_effect_status": "not-reproduced",
+      "imported": false
+    },
+    {
+      "repository": "microsoft/onnxruntime",
+      "path": ".github/skills/ort-build/SKILL.md",
+      "commit": "d889b8bdebd234bcf8d343aa6b4deae5d729d42d",
+      "blob_sha": "4d96ebdd92a5ed89a33cdb3153303e23ec54bb66",
+      "immutable_url": "https://github.com/microsoft/onnxruntime/blob/d889b8bdebd234bcf8d343aa6b4deae5d729d42d/.github/skills/ort-build/SKILL.md",
+      "license_metadata": "MIT",
+      "decision": "ENHANCE-CANDIDATE",
+      "method": "Build options can silently change dispatch; verify actual running implementation before attributing hardware/kernel performance.",
+      "read_status": "read",
+      "source_effect_status": "not-reproduced",
+      "imported": false
+    },
+    {
+      "repository": "alibaba/MNN",
+      "path": "skills/cpu/shared/build-test-and-benchmark.md",
+      "commit": "b6a32165e2855106b76852fba80793d58a829663",
+      "blob_sha": "427dbb0e7645c53dbde82e97114ca7ce8844c249",
+      "immutable_url": "https://github.com/alibaba/MNN/blob/b6a32165e2855106b76852fba80793d58a829663/skills/cpu/shared/build-test-and-benchmark.md",
+      "license_metadata": "Apache-2.0",
+      "decision": "ENHANCE-CANDIDATE",
+      "method": "Verify loaded binary/library/dispatch and use a nonaffected control when drift contaminates A/B; do not copy repository-specific flags or universal same-binary mandates.",
+      "read_status": "read",
+      "source_effect_status": "not-reproduced",
+      "imported": false
+    },
+    {
+      "repository": "alibaba/MNN",
+      "path": "skills/cpu/optimize/SKILL.md",
+      "commit": "b6a32165e2855106b76852fba80793d58a829663",
+      "blob_sha": "ccb504eba87c1f9b070fcde339e9f97e96922fec",
+      "immutable_url": "https://github.com/alibaba/MNN/blob/b6a32165e2855106b76852fba80793d58a829663/skills/cpu/optimize/SKILL.md",
+      "license_metadata": "Apache-2.0",
+      "decision": "OBSERVE",
+      "method": "Separate diagnosis layers from kernel implementation; ADK already has profile boundaries.",
+      "read_status": "read",
+      "source_effect_status": "not-reproduced",
+      "imported": false
+    },
+    {
+      "repository": "obra/superpowers",
+      "path": "skills/systematic-debugging/condition-based-waiting.md",
+      "commit": "22f0b463e7a5e579904dd6211a520321035526f7",
+      "blob_sha": "70994f777c586f7d4c43033aac34c7cf0da6688b",
+      "immutable_url": "https://github.com/obra/superpowers/blob/22f0b463e7a5e579904dd6211a520321035526f7/skills/systematic-debugging/condition-based-waiting.md",
+      "license_metadata": "MIT",
+      "decision": "ENHANCE-CANDIDATE",
+      "method": "For proven asynchronous readiness failures, use exact-operation conditions/events with bounded monotonic deadlines and cancellation. Preserve timing-contract tests.",
+      "read_status": "read",
+      "source_effect_status": "not-reproduced",
+      "imported": false
+    }
+  ],
+  "optional": [
+    {
+      "name": "adk-data-fetch",
+      "decision": "RETAIN",
+      "reason": "Parent mapping preserves pass/partial/not-verified/needs-fix and explicitly requires selected child installation; protects incomplete output and least access."
+    },
+    {
+      "name": "adk-email-imap-fetch",
+      "decision": "RETAIN",
+      "reason": "EXAMINE and BODY.PEEK, mailbox/UIDVALIDITY/UID, budgets, MIME and partial results are explicit; no source-confirmed missing step requiring another rule."
+    },
+    {
+      "name": "adk-fetch-url-content",
+      "decision": "RETAIN",
+      "reason": "Origin/IP/redirect checks, byte/time limits, main-text extraction, relative URLs, untrusted content and partial states are already explicit."
+    },
+    {
+      "name": "adk-external-practice-absorption",
+      "decision": "RETAIN",
+      "reason": "Execution modes and source-root-qualified command examples already addressed latest prior defects; preserve separate source/owner/implementation evidence."
+    },
+    {
+      "name": "adk-incident-rca-report",
+      "decision": "RETAIN",
+      "reason": "Stable-incident scope, confirmed/hypothesis/unresolved chain and concise default avoid ritual 5-Why and invented accountability."
+    },
+    {
+      "name": "adk-prose-revision",
+      "decision": "RETAIN",
+      "reason": "Report/revise split, fact/literal preservation, no-edit outcome and eight counterexamples match current user constraints."
+    },
+    {
+      "name": "adk-security-supply-chain",
+      "decision": "RETAIN",
+      "reason": "Three review scopes, source-to-sink, inspected/omitted/unavailable and no static safety certification already incorporate useful external practices."
+    },
+    {
+      "name": "adk-skill-composition-governance",
+      "decision": "RETAIN",
+      "reason": "Collision-only fast path, unique primary, existing matcher/effect_trials, frozen holdout, invalid evaluation and outcome/overhead separation are already unusually complete."
+    },
+    {
+      "name": "adk-test-flakiness-triage",
+      "decision": "ENHANCE-CANDIDATE",
+      "reason": "Current details cover sample validity, bounded repetition and order pollution but omit a practical arbitrary-delay to exact-condition/event waiting repair branch; add only when readiness cause is evidenced."
+    }
+  ],
+  "unproven_proposals": [
+    {
+      "target": "skills/adk-performance-profiling-embedded/SKILL.md",
+      "gap": "Actual loaded implementation/dispatch identity is not explicit; source/build/input hash alone can still measure another library or fallback.",
+      "minimal_delta": "One conditional paragraph verifying executing binary/library and selected path, plus inert control when thermal drift is unresolved.",
+      "regression": "Isolated local two-library fixture with RUNPATH/LD_LIBRARY_PATH chooses a different implementation despite identical executable; observed path/symbol or marker detects mismatch.",
+      "evidence_level": "source-method gap; no production false-result reproduction"
+    },
+    {
+      "target": "optional-skills/adk-test-flakiness-triage/references/details.md",
+      "gap": "No exact-operation readiness/condition-wait branch.",
+      "minimal_delta": "Native event/barrier preferred; bounded monotonic deadline + cancellation; preserve debounce/timing semantics.",
+      "regression": "Use controlled readiness events rather than changing sleeps; asynchronous completion delayed until explicit release, then checked under the same process/worker boundary.",
+      "evidence_level": "source-method gap; no real CI failure attributed to this"
+    }
+  ],
+  "rejected_transplants": [
+    "Anthropic run_eval exception-as-false aggregation: negative queries may pass when all runs error (static code-path conclusion, not executed).",
+    "Superpowers generic 10ms polling and Date.now/truthiness helper are not portable timing policy; no use of its historical performance claims as ADK evidence.",
+    "MNN repository-specific build flags, universal same-binary A/B and md5 wording are not imported; method only.",
+    "Matt mandatory 3+ design agents and exhaustive interview loops are not made default."
+  ]
+}

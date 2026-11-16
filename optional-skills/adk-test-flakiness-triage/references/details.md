@@ -1,16 +1,13 @@
-# 测试波动 — 按需取证
+# 测试波动：按需取证
 
-沿用 `../SKILL.md` 的风险、权限、统计与隔离边界。重复次数只限定 smoke，不证明低失败率目标；不执行未经审查的测试或生产操作。
+遵守入口权限/统计边界，不执行未审查的测试/生产操作。
 
-## 先定义样本与结果
+## 样本与结果
+从原生JUnit/JSON取精确用例ID与逐次环境/结果；名称中的空格、方括号不作正则或shell分词。分开passed/failed/error/skipped/missing，日志命中数/进程非零不等于用例失败数。
+记录计划/实际次数与排除理由；缺报告、启动/采集错误、全跳过不算成功，不静默删除不利样本。仅逐轮报告完整且版本/选择器/环境可比时计算失败率并说明假设；否则保留退出码与未知项。
 
-- 从测试框架的 JUnit/JSON/原生报告读取精确用例 ID、每次结果和执行环境；空格、方括号等属于名称，不作为正则或 shell 分词。日志命中次数不是失败数，进程非零也不等于所有用例失败。
-- 分开记录 `passed / failed / error / skipped / missing`。分母来自真正执行的用例或同一用例的独立运行次数；报告计划次数、实际次数和排除原因。缺报告、收集/启动错误或全部跳过不能算成功样本，更不能从分母静默删除不利结果。
-- 只有逐轮报告完整、版本/选择器/环境可比，才计算用例失败率并说明统计假设；无法归因时只报告原退出码与未知项。框架已有统计工具优先，不用通用 grep 推算。
-
-## 有界命令采样（Bash）
-
-从项目已核测试入口构造 `test_command` 数组，再调用 `run_flaky_samples 10 <新证据目录> "${test_command[@]}"`。命令自身须有适用的超时/取消路径；次数限制不限制单次耗时。每次 `FLAKY_SAMPLE_DIR` 指向新目录，已审查的项目 runner 可用它保存 JUnit/JSON；不支持时仅取得日志和退出码，不宣称用例报告完整。没有 eval，不执行日志里的命令。
+## 有界采样
+用已核项目入口的命令数组执行 `run_flaky_samples 10 <新证据目录> "${test_command[@]}"`。runner须有单次超时/取消；次数不限制耗时。它可用每轮FLAKY_SAMPLE_DIR写原生报告，不支持则只取得日志/退出码。无eval，不执行日志命令。
 
 ```bash
 run_flaky_samples() (
@@ -39,13 +36,36 @@ run_flaky_samples() (
 )
 ```
 
-返回 0 只表示已采样命令均返回 0，仍须核真实报告和选择器；1 表示至少一次非零，2 表示参数或采集失败。任何失败保留目录与已得样本，不 append 旧日志、不重跑到绿；采集失败不得产出完整性/稳定性通过结论。
+0仅表示命令均返回0，仍核真实报告/选择器；1至少一次非零，2参数/采集错误。保留已得样本；不append旧日志、不重跑到绿，采集不完整不判稳定。
 
-## 环境比较与最小诊断
+## 就绪竞争（有证据时）
+日志/受控复现确认检查早于完成，才将猜测sleep改为原生event/barrier/condition，等待本次operation ID及明确ready。旧文件/旧响应不算完成，合法0/空结果不用truthiness判失败。需轮询时用monotonic截止期、适当间隔/取消；保留timeout/cancel与清理，不扩大超时掩盖缺陷。
 
-独跑与 suite 结果不同或有共享状态线索时，先保存原 runner 的顺序、seed、worker 和进程边界，再比较 victim 独跑、原 suite、可疑前序→victim 与反序；不把本来同进程的场景拆成新进程后宣称复现成功。逐步缩小前序集合，检查全局状态、环境、缓存、时钟和资源残留；多个污染者可能有非单调交互，普通二分不能保证定位。只改变待证伪变量，保留逐例原始报告。新进程全绿不单独证明同进程污染修复；若隔离本身是设计修复，另验证边界、成本与原失败路径。无顺序线索时不强制此矩阵。
+Python host例：生产/取消方在同一cv锁内更新state并notify_all；此例取消优先。Condition.wait_for按monotonic算剩余时间；不要求消费端安装Python，不证明MCU时序。
 
-先比较版本、已脱敏配置和资源状态。以下仅列相关变量**名称**；需要值时逐项使用已核安全白名单，凭据值不进入日志。
+```python
+from math import isfinite
+
+def wait_for_operation(cv, state, operation_id, timeout):
+    if timeout is None or not isfinite(timeout) or timeout < 0:
+        raise ValueError("a finite nonnegative timeout is required")
+    def terminal():
+        return state["id"] == operation_id and (
+            state["ready"] is True or state["cancelled"] is True)
+    with cv:
+        if not cv.wait_for(terminal, timeout=timeout):
+            raise TimeoutError("operation did not become ready")
+        if state["cancelled"] is True:
+            raise InterruptedError("operation cancelled")
+        return state["result"]
+```
+
+以事件控制先后，核未就绪、旧ID、虚假通知、合法0、超时/取消和旧成功路径。debounce/节流/退避/硬时限仍验证过早不得发生、期限内须发生；不能只等最终状态。锁内消费结果，其他并发模型选对应原语。见[Condition](https://docs.python.org/3.11/library/threading.html#condition-objects)。
+
+## 顺序与环境
+独跑/suite不同或有共享状态线索时，保存顺序/seed/worker/进程边界，比victim独跑、原suite、前序→victim与反序；同进程场景不拆进程假复现。缩小前序集并查全局/环境/缓存/时钟/资源；多污染者非单调交互不能保证二分定位。仅改变待证伪变量，留逐例报告；新进程全绿不证明原污染修复，隔离修复另核边界/成本/原失败。无顺序线索不强制矩阵。
+
+比版本、脱敏配置/资源；只列环境变量名，值须逐项安全白名单且不记录凭据：
 
 ```bash
 # environment-names: values are never printed
@@ -56,10 +76,5 @@ print(json.dumps(sorted(name for name in os.environ
 PY
 ```
 
-日志检索只定位假设，不作为统计结果：
-
-```bash
-rg -n 'timeout|race|port already in use|resource busy|connection refused' <test-log-directory>
-```
-
-单次实验记录 `hypothesis / changed variable / expected / observed / raw report / disproved-or-open`。重试方案记录原策略、预算、适用错误和停止条件；隔离记录 owner、原测试状态、解除条件及 CI 证据，不能把 quarantine 计为 PASS。只在证据支持跨层因果时展开 5-Why，验证修复后仍保留原失败与通过路径。
+`rg -n 'timeout|race|port already in use|resource busy|connection refused' <test-log-directory>`只定位假设，不做统计。
+记录hypothesis/changed variable/expected/observed/raw report/disproved-or-open；重试记原策略/预算/适用错误/停止条件。quarantine保留owner/原状态/解除条件/CI证据，不计PASS；保留原失败和成功路径。

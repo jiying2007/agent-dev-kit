@@ -8,7 +8,8 @@
 set -euo pipefail
 review_head=$(git rev-parse HEAD)
 printf '%s\n' "$review_head"
-git --no-optional-locks status --short --untracked-files=all
+review_git=(git --no-pager --no-optional-locks -c core.fsmonitor=false)
+"${review_git[@]}" status --porcelain=v1 --untracked-files=all --ignore-submodules=none
 case "${review_target:?set staged, working-tree or whole-branch}" in
   staged) review_diff=(--cached "$review_head") ;;
   working-tree) review_diff=("$review_head") ;;
@@ -19,12 +20,15 @@ case "${review_target:?set staged, working-tree or whole-branch}" in
     review_diff=("$review_start" "$review_head") ;;
   *) exit 2 ;;
 esac
-git -c diff.autoRefreshIndex=false diff "${review_diff[@]}"
-git -c diff.autoRefreshIndex=false diff --check "${review_diff[@]}"
+review_raw=(--no-ext-diff --no-textconv --no-color --no-relative --ignore-submodules=none --submodule=short)
+"${review_git[@]}" -c diff.autoRefreshIndex=false diff "${review_raw[@]}" "${review_diff[@]}"
+"${review_git[@]}" -c diff.autoRefreshIndex=false diff --check "${review_raw[@]}" "${review_diff[@]}"
 <project-lint-cmd> && <project-test-cmd>
 ```
 
 whole-branch 只含 merge-base 到 HEAD；status 中 dirty/untracked 为独立 overlay，未另审时 `latest_worktree_reviewed: false`。记录 base、merge-base、head 及实际 diff 身份；文件变化后重新取证。
+
+原始取证关闭 external diff、textconv、FSMonitor 和 pager，显式保留子模块及仓库范围，避免配置隐藏差异或调用这些 helper。二进制/gitlink 仍须按 blob/commit 另查，不能把无可读 hunk 当无变化。需要语义转换时在已有权限内另取派生视图，保留来源与原始差异；本命令不隔离其他 Git 内容过滤器或不可信仓库执行环境。
 
 ## Full report
 

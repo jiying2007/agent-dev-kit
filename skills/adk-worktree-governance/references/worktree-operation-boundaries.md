@@ -3,7 +3,7 @@
 Only read after the user explicitly needs an isolated worktree or an actual cleanup.
 
 ## Read-only preflight
-- Record `git status --short`, `git branch --show-current`, `git worktree list`, base HEAD.
+- Record `git --no-pager --no-optional-locks -c core.fsmonitor=false status --porcelain=v1 --untracked-files=all --ignore-submodules=none`, `git branch --show-current`, `git worktree list`, base HEAD.
 - Classify user's pre-existing dirty paths. Do not stash/commit/reset files or overwrite untracked paths without explicit separate instructions.
 - Check whether `.worktrees/`, `worktrees/` or a project-approved external path is already in use and safely ignored; never assume a directory exists.
 - Record the isolation goal, `scope_write`, potential shared contract and local device/cache dependencies.

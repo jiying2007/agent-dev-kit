@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "language": "zh-CN",
+  "answer": "# 三项工程判断\n\n以下结论仅依据给定任务记录及指定 Skill。证据标识 T、R、P、PB、M、MR 对应 read_files 中列出的实际读取路径与 SHA256。\n\n## A. 寄存器适配\n\n**可交付结论：0x100 的现有 POR 读回符合已定义的低 4 位；软件复位读回不能拿 POR 契约判错。0x104 的 POR 数值明确 undefined，普通复位读回检查不适用。0x108 是资料未查明，须保留 needs-fix。**（依据：T§A；R§复位有效位、Failure Handling。）\n\n### 复位表说明\n\n| 地址／复位条件 | 访问规则 | 应记录的数值语义 | 检查状态 |\n|---|---|---|---|\n| 0x100／POR | read-only；题给读取无副作用 | 低 4 位期望 0x3；题给高 4 位明确 undefined。已定义位比较值 expected=0x03，known_mask=0x0F | 可检查适用 POR 条件下的已定义位；undefined 位不参与数值判定 |\n| 0x100／软件复位 | 同上 | 该字段仅有 POR 约束；不能把 POR 的 expected/mask 套到软件复位，也不能把观测到的 0xB0 写成保证值 | POR 断言不适用；现有材料没有可用的软件复位数值契约，数值检查记 not-testable |\n| 0x104／POR | FIFO read-clear；读操作出队 | 数值明确 undefined；数值已定义位掩码为 0 | not-testable；没有可检查数值位，且读取有副作用，不做普通 readback |\n| 0x108／复位条件尚未查明 | 权限、宽度、读写副作用尚未查明 | reset_value、known_mask 等保持 null／未查明，不擅填 0，也不标成手册明确 undefined | needs-fix；暂停依赖其未知语义的实现和发布定义 |\n\n0x100 的 0x03 只是与掩码配合使用的已定义位比较值，不是全寄存器固定复位值。表中只覆盖题给位域；寄存器真实访问宽度、更多位及端序尚未给出，不从十六进制样例推定。0x104 的掩码为零不意味着读回为零；也不能凭恒成立的掩码表达式宣称验证通过。（依据：R§Prerequisites、SVD 生成与验证、复位有效位。）\n\n### 现有观察能支持什么\n\n- 0x100 的 POR 记录满足 `((0xA3 ^ 0x03) & 0x0F) == 0`。这支持“该次已报告 POR 观察中的低 4 位符合约束”。高 4 位为 A 不构成违例，也不能由一次观察推导其固定为 A、读零或任何其他保证；不能把该结果扩大为整个寄存器或所有复位种类通过。\n- 0x100 软件复位后为 0xB0，只能记录为这一条件下的观察。其低 4 位为 0 与 POR 后为 3 并不矛盾，因为题给约束只适用于 POR；现有记录不支持判定复位故障，也不能证明软件复位应保证 0xB0。\n- 0x104 尚未读取不需要用普通读回补齐。即使只比较掩码内位，读取本身仍然会出队；掩码无法消除访问副作用。该项不是数值验证通过，也不是因手册明确 undefined 而资料缺失。\n\n以上推导依据 T§A 与 R§复位有效位；没有新增设备观察。\n\n### 必要下一步\n\n在适配交付中分别保留“明确 undefined”“本复位种类未约束”“资料未查明”三种状态，并挂接手册版本、章节、勘误以及访问宽度、端序。0x108 先由资料负责人补齐手册定义，再推进受影响实现；不为未知项生成可发布的假值。0x104 若还需验证 FIFO 的复位状态或出队语义，应先依据手册定义专用访问序列和竞态处理，再安排后续获准验证，不能使用普通 read-modify-write 或复位 readback 模板。仅凭现有材料不启动这类验证。（依据：R§Workflow、位域设计规范、Failure Handling。）\n\n## B. 协议适配\n\n**stream 应按顺序交付两个完整 payload：`abc`（十六进制 61 62 63）和 `de`（64 65）。第三次接收的 0，在请求长度大于 0 的前提下表示接收 EOF；这一次 EOF 落在完整帧边界。合法空 datagram 是独立消息，MSG_TRUNC 则是不可作为完整消息交付的截断证据。**（依据：T§B；PB 第 1—4 项。）\n\n### 分帧结果与 EOF\n\n| 接收记录 | 累积解析 | 应交付结果 |\n|---|---|---|\n| 第一次：00 | 两字节长度头只收到 1 字节，保留残余 | 无 |\n| 第二次：03 61 62 63 00 02 64 65 | 与残余拼成 00 03 61 62 63 00 02 64 65；第一帧长度为 3，第二帧长度为 2，均不超过 4096 | 依次交付 abc、de；全部 9 字节已消费，无残帧 |\n| 第三次：0 | 若本次请求读取长度非零，则接收方向 EOF；没有未完成的头或 payload | 保留此前已交付结果，结束接收方向 |\n\n一次 recv 可以仅给部分头，也可以一次给出多个帧；解码器必须保留未完成 header/payload 和后续帧。若 EOF 时还留有半个头或不足长度的 payload，应报帧截断，不能把残片交付。stream 的接收 EOF 不自动等同于双向连接都已关闭，后续发送行为仍取决于协议；若 API 请求读取长度本身为 0，则返回 0 不能单独证明 EOF。（依据：PB 第 2、3 项；上述字节拆分直接取自 T§B。）\n\n### datagram 的空消息与截断\n\n题设已明确空 datagram 合法，因此应保留并按其消息契约处理这条长度为 0 的消息，继续处理后续独立的 `next`，不进入 stream 式 EOF 状态。消息边界不能被抹掉，也不能把 `next` 拼到空消息上。这里对 datagram 的判断是传输边界判断；具体应用内容仍按该 datagram 契约校验。（依据：T§B；PB 第 1、3 项。）\n\n另一次 recvmsg 的缓冲容量为 4，得到 `ABCD` 且 flags 含 MSG_TRUNC：应将本条接收标为截断并拒绝把 `ABCD` 当作完整 payload。剩余部分不能由下一次 recv 拼回；之后“没有可读数据”不会撤销已经观察到的截断标志，也不能证明原报文只有 4 字节。保留这次返回值、容量和 flags 作为错误证据。若协议允许恢复，可在后续按协议请求整条消息重发，或为后续接收使用满足协议上限的缓冲；不能通过续读补回本条丢失部分，也不能无限扩容。（依据：T§B；PB 第 3、4 项。）\n\n### 部分写、长度与超时\n\n- 对 stream 发送缓冲维护 offset。单次 write 返回 3，就只把 offset 增加 3，下一次从尚未发送的字节开始，不能重发前缀。例如 abc 的帧为 `00 03 61 62 63`，写出 3 字节后，后续只发送 `62 63`。按实际 API 处理可重试错误；无进展时等待可写或结束操作，不忙轮询。这个续写规则适用于 stream，不能把 datagram 的余下字节拆成另一个包来“续写”。\n- 在分配、复制以及计算 header+payload 前，先以大端解析长度，检查 payload 长度不超过 4096，并检查长度运算；仅对该帧格式，最大帧为 4098 字节。缓冲、交付队列和在途量也应设上限并提供背压，不能把单帧上限误当成总缓存上限。坏长度只按协议拒绝、关闭或有界重同步。\n- 各层独立维护 timeout 和状态机，参数依据协议、链路与产品预算。“每读到新字节就重设 30 秒总超时”需要修正：这实际允许持续少量进展不断延长同一操作。应在该逻辑操作开始时按单调钟固定 `deadline = start + 30s`，各阶段和等待只用本地阶段超时与剩余总预算的较小值；部分读写、尝试与退避都消耗同一预算，不刷新 deadline。预算耗尽即终止该操作。独立的新操作可以另开其预算，长连接寿命另定。\n\n以上处理依据 PB 第 2、4 项与 P§Retry and timing boundary；30 秒来自题给实现，不代表 Skill 建议的通用超时值。\n\n### 必要下一步\n\n给实现同事的修正项是：持久分帧状态、stream/datagram 返回值分支、明确拒绝截断消息、按实际字节推进发送 offset，以及固定总 deadline。在后续允许执行的项目回归中，逐项验证本题分片与合帧、完整帧后 EOF、残帧 EOF、空 datagram、MSG_TRUNC、部分写、超长输入，以及持续小字节进展仍会耗尽总预算。保留期望字节与实际返回值、交付帧；本轮仅推导，执行状态为 not-tested。（依据：PB 第 5 项；P§Retry and timing boundary。）\n\n## C. 测量判断\n\n**不能把性能变化归因于新 kernel。结论应标为 inconclusive：目标 kernel 的实际装载与执行未验证，且没有可复核的性能指标和样本。** 当前材料既不支持量化收益，也不支持 no-gain；没有无活动的证据，不能仅因缺 trace 就把整次运行判成无活动的 invalid。（依据：T§C；M§Workflow、按需实测；MR§运行对象。）\n\n### 现有证据及其边界\n\n| 已有材料 | 能支持的结论 | 不能推出的结论 |\n|---|---|---|\n| benchmark ELF 哈希未变 | 题给 benchmark 可执行文件哈希未变 | 动态库内容、运行时分派或实际执行的 kernel 相同／正确 |\n| 本次进程 maps 显示 /opt/baseline/libengine.so | 已观察到的库映射路径指向 baseline，与 candidate 路径不一致 | 仅凭映射确定执行了哪个 kernel；仅凭路径名确定加载内容的具体版本 |\n| /opt/candidate/libengine.so 的磁盘文件是新哈希 | candidate 路径上的文件内容已更新 | 本次进程装载了这份新内容，或执行了其中的新 kernel |\n| 测试报告 pass=12 | 报告记载 12 项测试通过 | 目标 kernel 已被覆盖、真实负载有效、性能改善，或变化可归因于该 kernel |\n| 没有 kernel／dispatch trace | 缺少题给的直接目标执行记录 | 可以补推目标 kernel 已执行；也不能据此宣称其绝不可能被执行 |\n\n本次唯一给出的映射证据指向 baseline，已足以阻断“candidate 文件哈希更新，所以本次跑了新 kernel”的论证。还必须保留 maps 只是映射这一边界：映射不等于执行，当前同名磁盘文件的 hash/build-id 也不自动代表此前实际加载的内容。（证据：T§C；判断规则：MR§运行对象。）\n\n### 证据缺口\n\n1. 同一次测量的运行对象身份链：进程身份与时点、PID/starttime、完整映射及实际加载内容的身份关联。candidate 路径上的新文件哈希无法独自完成这条关联。\n2. 目标 kernel 的执行证据：已有符号采样、计数或 dispatch/kernel 记录，以及相关 ISA、精度、线程／模型分支。当前没有提供这些证据，不能以测试计数替代。\n3. 性能比较证据：明确 KPI、样本数、原始结果、等价输入输出和有效工作量，以及设备、构建与环境条件。没有这些材料，无法核实所谓变化的方向、幅度或是否超出噪声。\n\n上述缺口依据 M§Workflow、交付要求及 MR§运行对象；没有推定任何性能数字。\n\n### 最小下一步\n\n本轮报告建议直接写：“候选 kernel 的实际装载与执行未验证；已知 maps 指向 baseline，candidate 的新哈希仅证明磁盘产物更新。现有证据不足以支持性能归因。”\n\n后续先请测量负责人提供同次运行已留存的装载身份材料、可证明实际分派的记录和原始 KPI，不假设这些记录存在。若没有可用的既存执行证据，当前分析就应停在证据不足；把“核实加载内容和目标 dispatch，再在等价有效负载下做重复 A/B/A/B 对比并评估漂移”列为后续正式测量窗口的待办。本轮不为补证启动 benchmark、采集或改库。（依据：M§Workflow、Target Execution Gate；MR§运行对象。）\n\n## 执行记录\n\n本轮只读取给定任务与指定 Skill／其必要引用，计算文件 SHA256，并写入本答复文件；没有访问设备、读取源仓 tests 或历史 change 报告、启动业务／benchmark／采集／训练／CI，也没有修改源仓。各项工程验证均未在本轮执行，已有观察只按任务给定证据使用。\n\n审查后的补充观察：本次仅在同一消费者会话内重读最终版 performance（1.1.7）和 protocol（1.0.6）入口，三项工程结论不变；B 的超时条目补充各层独立 timeout／状态机与参数来源。此重读不是新增盲测或独立重复试验，最终读取身份及此前所有哈希历史保存在 read_files。",
+  "read_files": [
+    {
+      "id": "T",
+      "path": "/workspace/scratch/fe5385ca063a/consumer-input/task.md",
+      "sha256": "2c01ee2ae5bf3053066201ab492ab6008d22af98239176e109a230defd91f4cc"
+    },
+    {
+      "id": "R",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/skills/adk-register-map-design/SKILL.md",
+      "sha256": "15c1afbe3a8c9da0c710e813d93f6b61bdd92aed48cd3966984472d74e3e2919"
+    },
+    {
+      "id": "P",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/skills/adk-protocol-stack-integration/SKILL.md",
+      "sha256": "b3c358d1f53f7f79de1d1ea381edcc1d8d41bda55bcbb46c2973de24f0692f7b",
+      "previously_read_sha256": [
+        "e320039d6090afa10820e3f7aaa64dc2aeb6f290dcbdab619409a2cfa96db647"
+      ],
+      "final_read_version": "1.0.6",
+      "final_reread_note": "同一消费者会话在审查修正后重读；入口恢复各层独立 timeout/状态机，以及参数依据协议/链路/产品预算的约束。三项工程结论不变，仅在 B 中显式补齐此要求。"
+    },
+    {
+      "id": "PB",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/skills/adk-protocol-stack-integration/references/transport-boundaries.md",
+      "sha256": "6006f23c5e1d8ae8b1ea185fb4f2613c13af55b92a33cdc881fd909c6a199b9c"
+    },
+    {
+      "id": "M",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/skills/adk-performance-profiling-embedded/SKILL.md",
+      "sha256": "0db37bd62e0f54e13098390ad2e95b215961de0348701f7f172bcb9b1dca64cd",
+      "previously_read_sha256": [
+        "d94193af935584b5a75f3154266c5bd560646296f582864b40f02127bddf9ba2",
+        "532e9e15e0c5bcec42ad8502887003e80f3db2540a348c99f4e07805a3edd8ad"
+      ],
+      "read_note": "落盘复核发现该文件在首次读取后发生并发更新；已重读当前版。变更仅压缩“按需实测”的引用导语，判断仍适用。保留两次实际读取身份；本任务未修改源仓。",
+      "final_read_version": "1.1.7",
+      "final_reread_note": "同一消费者会话在审查修正后重读；与上次读取相比，仅 frontmatter version 由 1.1.6 更新为 1.1.7。三项工程结论不变。此前 read_note 描述前次交付阶段的读取记录，予以原样保留。"
+    },
+    {
+      "id": "MR",
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/skills/adk-performance-profiling-embedded/references/mcu-memory-footprint.md",
+      "sha256": "4c4d25e04a7bfbb34e975d48c255199df709672f926dbc10ea99dcbd3e24be02"
+    }
+  ],
+  "execution_scope": {
+    "engineering_checks_executed": false,
+    "source_repository_modified": false,
+    "external_lookup_used": false,
+    "device_access_used": false,
+    "business_benchmark_capture_training_ci_started": false,
+    "source_tests_or_historical_change_reports_read": false,
+    "written_files": [
+      "/workspace/scratch/fe5385ca063a/consumer-output.json"
+    ]
+  },
+  "post_review_reread": {
+    "observation_kind": "same_consumer_session_post_review_reread",
+    "description": "同一新消费者会话在审查修正后的定向重读，不当作新增盲测或多次独立试验。",
+    "is_new_blind_trial": false,
+    "is_independent_repeat_trial": false,
+    "previous_output_sha256": "7fecba4c685d62775c36c1c03c3eb4f48c2205db1b32b5b0f716aaeb97900354",
+    "reread_source_ids": [
+      "P",
+      "M"
+    ],
+    "conclusions_changed": false,
+    "answer_edit": "仅在 B 超时意见中显式补充各层独立 timeout/状态机与参数依据，A、C 判断及 B 的工程结论均不变。",
+    "engineering_checks_executed": false,
+    "source_repository_modified": false,
+    "tests_or_historical_reports_read": false
+  }
+}
