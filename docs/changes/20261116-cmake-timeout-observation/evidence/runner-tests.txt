@@ -1,0 +1,10 @@
+test_default_budget_and_normal_exit_keep_the_original_contract (tests.test_skill_command_examples.CommandExampleRunnerTests.test_default_budget_and_normal_exit_keep_the_original_contract) ... ok
+test_process_snapshot_respects_record_and_expired_cleanup_budgets (tests.test_skill_command_examples.CommandExampleRunnerTests.test_process_snapshot_respects_record_and_expired_cleanup_budgets) ... ok
+test_process_snapshot_tolerates_missing_procfs_and_disappearing_processes (tests.test_skill_command_examples.CommandExampleRunnerTests.test_process_snapshot_tolerates_missing_procfs_and_disappearing_processes) ... ok
+test_timeout_keeps_both_streams_kills_its_descendant_and_spares_another_group (tests.test_skill_command_examples.CommandExampleRunnerTests.test_timeout_keeps_both_streams_kills_its_descendant_and_spares_another_group) ... ok
+test_unavailable_diagnostics_do_not_replace_timeout_or_child_cleanup (tests.test_skill_command_examples.CommandExampleRunnerTests.test_unavailable_diagnostics_do_not_replace_timeout_or_child_cleanup) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.616s
+
+OK

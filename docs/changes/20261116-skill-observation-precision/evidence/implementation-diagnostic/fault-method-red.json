@@ -1,0 +1,51 @@
+{
+  "argv": [
+    "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+    "bypass",
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "-m",
+    "unittest",
+    "tests.test_skill_fault_activation.FaultActivationMethodTests.test_unknown_activation_is_not_inferred_from_error_or_healthy_follow_up",
+    "-v"
+  ],
+  "cwd": "/workspace/scratch/2d4d08f07657/adk-other-skills",
+  "elapsed_seconds": 0.2719323310011532,
+  "exit_code": 1,
+  "stdout": "",
+  "stderr": "test_unknown_activation_is_not_inferred_from_error_or_healthy_follow_up (tests.test_skill_fault_activation.FaultActivationMethodTests.test_unknown_activation_is_not_inferred_from_error_or_healthy_follow_up) ... FAIL\n\n======================================================================\nFAIL: test_unknown_activation_is_not_inferred_from_error_or_healthy_follow_up (tests.test_skill_fault_activation.FaultActivationMethodTests.test_unknown_activation_is_not_inferred_from_error_or_healthy_follow_up)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/2d4d08f07657/adk-other-skills/tests/test_skill_fault_activation.py\", line 60, in setUp\n    self.assertEqual(1, len(matches), \"missing or ambiguous published observation example\")\nAssertionError: 1 != 0 : missing or ambiguous published observation example\n\n----------------------------------------------------------------------\nRan 1 test in 0.165s\n\nFAILED (failures=1)\n",
+  "source_identities": {
+    "skills/adk-fault-injection-recovery/SKILL.md": {
+      "bytes": 3559,
+      "sha256": "8765aad5a698ff110e7765e72aa2c7286cfb9801557ec8b33ee0bb4e18c1e812"
+    },
+    "optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md": {
+      "bytes": 3761,
+      "sha256": "e12bce6d2f996342c8307b38ea7ed8ec541cf54afd53def334c8455f170b984b"
+    },
+    "tests/test_skill_fault_activation.py": {
+      "bytes": 7217,
+      "sha256": "099d9a8c0b61c85292ba30da70ff512a0319971a46665391f32a98efe290f048"
+    },
+    "tests/fixtures/fault-activation.c": {
+      "bytes": 2298,
+      "sha256": "0b4327f02d2a791e971aad9989e3e86b49a21dadef861908d0f6361005f015d2"
+    },
+    "tests/test_skill_imap_time_methods.py": {
+      "bytes": 6836,
+      "sha256": "a5a00abb546dfc38756977a908c378d6f5ec552c68cccef17fefba0b491981fd"
+    },
+    "tests/test_skill_content.sh": {
+      "bytes": 1076,
+      "sha256": "2a3f4c1586dd29df7864e5db0c167badff0bf4831619b2abb1c40f5a63219507"
+    },
+    "manifest.json": {
+      "bytes": 90988,
+      "sha256": "982bb2b833e3379c34bc6b7677e0e9f158b29c3d07baad7a473ba98040dae0ea"
+    },
+    "manifests/profile_context_ratchets.json": {
+      "bytes": 5651,
+      "sha256": "f283524ecff14179cad628735bef9e20580da00c2505687ecca9530da3737bff"
+    }
+  },
+  "python": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3"
+}

@@ -1,0 +1,452 @@
+{
+  "reviewer": {
+    "id": "ai/root/embedded_methods",
+    "role": "independent-incremental-packaging-review"
+  },
+  "reviewed_at": "2026-11-16T15:01:17.534243+00:00",
+  "evidence_completed_at": "2026-11-16T15:01:17.534243+00:00",
+  "verdicts": {
+    "packaging": "pass"
+  },
+  "findings": [],
+  "source": {
+    "base": "fad9d4d170a97c5dbb2c5261432fa2120bfcc3c9",
+    "commit": "384bdcdfac75881891bce795991b68fa46d9b9d6",
+    "tree": "627aabff2317705de46b010126edf3b57a443d1f",
+    "patch_sha256": "ae27a8e2e298f8f4e98290adba4f2e2d4609d5a3d29a1eea11edbac8172e4823",
+    "patch_bytes": 451173,
+    "unchanged_frozen_paths": 45
+  },
+  "scope": "Only the nine appended packaging files; source Spec/Quality verdict remains bound to the previously tested commit.",
+  "checks": {
+    "new_files": 9,
+    "tracked_and_staged_diff_empty": true,
+    "source_byte_sha_blob_checks": 45,
+    "unique_reference_hash_checks": 51,
+    "decoded_payloads_equal_originals": 28,
+    "probe_directory_members_retained": 10,
+    "original_reports_byte_equal": true,
+    "timestamp_normalization_same_instant": true,
+    "raw_patch_preserved_exactly": true,
+    "validation_record_sha256": "f6fe33f7fe5235d5d6d1e04905c0b4497dbbc7c6e167f35ab746ec04f580fa2d",
+    "execution_summary_matches_archived_receipts": true
+  },
+  "packaging_snapshot": [
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/execution-bundle.json",
+      "bytes": 344638,
+      "sha256": "a4f203b13e018c56bc3ee2eb760ffa58087d91ef47bee71949a8658a136388c0"
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/execution-summary.json",
+      "bytes": 702,
+      "sha256": "01f0cb96982d2c786d6e49c4ae9a76eac1f356c2f31acafd4824b04668f42a05"
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/independent-source-review.json",
+      "bytes": 15709,
+      "sha256": "84df99e85c253f875a483cdb8e3364c944a7e79cae77a9b58d48a1cc231604e0"
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/independent-source-review.md",
+      "bytes": 5686,
+      "sha256": "78a5ad3069f84e68b412e79b21cf482ec0a38475e352f0e574702c6678446b2a"
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/original.patch",
+      "bytes": 451173,
+      "sha256": "ae27a8e2e298f8f4e98290adba4f2e2d4609d5a3d29a1eea11edbac8172e4823"
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/review-validation.json",
+      "bytes": 13777,
+      "sha256": "50e6eb8757fdf40c20c960a95969e9742a27b49216c55fb235b01af9ff7b66d5"
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/source-bindings.json",
+      "bytes": 12328,
+      "sha256": "1bcac7d4f3d2e04ae0e08df6f2e8db71725d310fba32abeff434b0f088b9964a"
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/review-evidence.json",
+      "bytes": 13390,
+      "sha256": "f6fe33f7fe5235d5d6d1e04905c0b4497dbbc7c6e167f35ab746ec04f580fa2d"
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/verification.md",
+      "bytes": 4488,
+      "sha256": "22d7187fbc906f8a54cbc6da2bebf86bd359250a241c6abc4015a9176bf2ee6a"
+    }
+  ],
+  "mechanical_commands": [
+    {
+      "argv": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "git",
+        "show",
+        "-s",
+        "--format=%H%n%T%n%P",
+        "HEAD"
+      ],
+      "cwd": "/workspace/scratch/2d4d08f07657/adk-other-skills",
+      "exit_code": 0,
+      "stdout": "384bdcdfac75881891bce795991b68fa46d9b9d6\n627aabff2317705de46b010126edf3b57a443d1f\nfad9d4d170a97c5dbb2c5261432fa2120bfcc3c9\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "git",
+        "diff",
+        "--name-status",
+        "HEAD"
+      ],
+      "cwd": "/workspace/scratch/2d4d08f07657/adk-other-skills",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "git",
+        "diff",
+        "--cached",
+        "--name-status"
+      ],
+      "cwd": "/workspace/scratch/2d4d08f07657/adk-other-skills",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "git",
+        "ls-files",
+        "--others",
+        "--exclude-standard"
+      ],
+      "cwd": "/workspace/scratch/2d4d08f07657/adk-other-skills",
+      "exit_code": 0,
+      "stdout": "docs/changes/20261116-skill-observation-precision/evidence/execution-bundle.json\ndocs/changes/20261116-skill-observation-precision/evidence/execution-summary.json\ndocs/changes/20261116-skill-observation-precision/evidence/independent-source-review.json\ndocs/changes/20261116-skill-observation-precision/evidence/independent-source-review.md\ndocs/changes/20261116-skill-observation-precision/evidence/original.patch\ndocs/changes/20261116-skill-observation-precision/evidence/review-validation.json\ndocs/changes/20261116-skill-observation-precision/evidence/source-bindings.json\ndocs/changes/20261116-skill-observation-precision/review-evidence.json\ndocs/changes/20261116-skill-observation-precision/verification.md\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "git",
+        "diff",
+        "--binary",
+        "--full-index",
+        "--no-ext-diff",
+        "fad9d4d170a97c5dbb2c5261432fa2120bfcc3c9",
+        "384bdcdfac75881891bce795991b68fa46d9b9d6"
+      ],
+      "cwd": "/workspace/scratch/2d4d08f07657/adk-other-skills",
+      "exit_code": 0,
+      "stdout": {
+        "bytes": 451173,
+        "sha256": "ae27a8e2e298f8f4e98290adba4f2e2d4609d5a3d29a1eea11edbac8172e4823"
+      },
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "git",
+        "diff",
+        "--name-status",
+        "HEAD"
+      ],
+      "cwd": "/workspace/scratch/2d4d08f07657/adk-other-skills",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "git",
+        "ls-files",
+        "--others",
+        "--exclude-standard"
+      ],
+      "cwd": "/workspace/scratch/2d4d08f07657/adk-other-skills",
+      "exit_code": 0,
+      "stdout": "docs/changes/20261116-skill-observation-precision/evidence/execution-bundle.json\ndocs/changes/20261116-skill-observation-precision/evidence/execution-summary.json\ndocs/changes/20261116-skill-observation-precision/evidence/independent-source-review.json\ndocs/changes/20261116-skill-observation-precision/evidence/independent-source-review.md\ndocs/changes/20261116-skill-observation-precision/evidence/original.patch\ndocs/changes/20261116-skill-observation-precision/evidence/review-validation.json\ndocs/changes/20261116-skill-observation-precision/evidence/source-bindings.json\ndocs/changes/20261116-skill-observation-precision/review-evidence.json\ndocs/changes/20261116-skill-observation-precision/verification.md\n",
+      "stderr": ""
+    }
+  ],
+  "payload_checks": [
+    {
+      "name": "other-skills-full-regression/receipt.json",
+      "bytes": 1639,
+      "sha256": "920ea24a5a2573cc2ca6ef1dd588697eca2d01d332a4524ccec1a50ee468658d",
+      "declared_identity_match": true,
+      "original_bytes_equal": true
+    },
+    {
+      "name": "other-skills-full-regression/started.json",
+      "bytes": 780,
+      "sha256": "d5448f4f5ed67a2034f88fbf0e7e5bed8f1f603e6d6c6d18f80c6de21ac166d7",
+      "declared_identity_match": true,
+      "original_bytes_equal": true
+    },
+    {
+      "name": "other-skills-full-regression/stderr.log",
+      "bytes": 61818,
+      "sha256": "67b503323794906f7b4e5fbad1b6e40aa18d450ca142795fddd8d8e72ff1386e",
+      "declared_identity_match": true,
+      "original_bytes_equal": true
+    },
+    {
+      "name": "other-skills-full-regression/stdout.log",
+      "bytes": 37357,
+      "sha256": "ba27488eb334f92873b8d8ae162858b85c90866e67eb576ed55b767376a5d184",
+      "declared_identity_match": true,
+      "original_bytes_equal": true
+    },
+    {
+      "name": "other-skills-full-regression/timing.json",
+      "bytes": 8225,
+      "sha256": "133a370ad21bee581544acb28691d1fdfd8fb82696eaf31d700ba3bdeb16755d",
+      "declared_identity_match": true,
+      "original_bytes_equal": true
+    },
+    {
+      "name": "other-skills-consumer/fault-SKILL.md",
+      "bytes": 3374,
+      "sha256": "e2ca83b2a2f6f67d379214f00584358c78f579c8883832c08be483b79e651bba",
+      "declared_identity_match": true,
+      "original_bytes_equal": true
+    },
+    {
+      "name": "other-skills-consumer/imap-SKILL.md",
+      "bytes": 3614,
+      "sha256": "09c31d595ff2aa073af02bcb3951ebf22a576b645e5f6b5164bed5326c8bb4d7",
+      "declared_identity_match": true,
+      "original_bytes_equal": true
+    },
+    {
+      "name": "other-skills-consumer/observations.json",
+      "bytes": 3860,
+      "sha256": "63a2b74c40b0e7a36da578e9347aca08ccc137915cc8959b168de183fbe02d6f",
+      "declared_identity_match": true,
+      "original_bytes_equal": true
+    },
+    {
+      "name": "other-skills-consumer/response.json",
+      "bytes": 20849,
+      "sha256": "92af74ffbead91fd20cb5fc9fd170df0050ba0ee9cf7373f2a2511a4dc345f48",
+      "declared_identity_match": true,
+      "original_bytes_equal": true
+    },
+    {
+      "name": "other-skills-consumer/response.md",
+      "bytes": 11367,
+      "sha256": "52b14f45c26f1d146f8786089c09ebc8ea2817e4b2d28541435420ebe91fb95a",
+      "declared_identity_match": true,
+      "original_bytes_equal": true
+    },
+    {
+      "name": "other-skills-consumer/task.md",
+      "bytes": 1514,
+      "sha256": "72931e7831069376febaef7cfa84d2ff7593aede268be68180ac0814cf2afb95",
+      "declared_identity_match": true,
+      "original_bytes_equal": true
+    },
+    {
+      "name": "other-skills-independent-probes/consumer-binding.json",
+      "bytes": 2085,
+      "sha256": "74169458e7165e58b89f192a315c405dffafe755a64bfd8880e6cef06de74288",
+      "declared_identity_match": true,
+      "original_bytes_equal": true
+    },
+    {
+      "name": "other-skills-independent-probes/finalize-review.py",
+      "bytes": 22184,
+      "sha256": "4b89adc7f280657c9014af8749cec61cceea62ad20295308e1f97ad325732563",
+      "declared_identity_match": true,
+      "original_bytes_equal": true
+    },
+    {
+      "name": "other-skills-independent-probes/full-verification.json",
+      "bytes": 4604,
+      "sha256": "8c92ffb182813cd65e1a712b95f1233730b9b50833e662e850e8e43581f64de1",
+      "declared_identity_match": true,
+      "original_bytes_equal": true
+    },
+    {
+      "name": "other-skills-independent-probes/ignore-activation-evidence.md",
+      "bytes": 3529,
+      "sha256": "58a81a596e9f689c38fc19356fcf5de82d7dec6b73da38fb631b24c68d6b4010",
+      "declared_identity_match": true,
+      "original_bytes_equal": true
+    },
+    {
+      "name": "other-skills-independent-probes/include-end-boundary.py",
+      "bytes": 11580,
+      "sha256": "c692e8b26f27063a5b0bbf3fdbf114e808ca3336550b290bf9dffe7f76101791",
+      "declared_identity_match": true,
+      "original_bytes_equal": true
+    },
+    {
+      "name": "other-skills-independent-probes/invent-timezone.py",
+      "bytes": 11596,
+      "sha256": "098a7e9c2ae9639e19e2271ca2859af2fc386ea5b6b19e2f362052a53c6b6ce9",
+      "declared_identity_match": true,
+      "original_bytes_equal": true
+    },
+    {
+      "name": "other-skills-independent-probes/receipt.json",
+      "bytes": 38682,
+      "sha256": "55643ff7a3673267e7e9f462f829b2d6fae8b378cc617b19a8c6b89475028ccc",
+      "declared_identity_match": true,
+      "original_bytes_equal": true
+    },
+    {
+      "name": "other-skills-independent-probes/review-probes.py",
+      "bytes": 7560,
+      "sha256": "db6626f5ad7a5b836e08e94bfcbe2cde1b0289a50a1805481dac8701721bcca8",
+      "declared_identity_match": true,
+      "original_bytes_equal": true
+    },
+    {
+      "name": "other-skills-independent-probes/source.patch",
+      "bytes": 451173,
+      "sha256": "ae27a8e2e298f8f4e98290adba4f2e2d4609d5a3d29a1eea11edbac8172e4823",
+      "declared_identity_match": true,
+      "original_bytes_equal": true
+    },
+    {
+      "name": "other-skills-independent-probes/use-date-instead-of-selected-field.py",
+      "bytes": 11642,
+      "sha256": "a61b49ee7026b91ac2be19f378797ef88aba6d3bf388b08a1e2a77b9a4f73027",
+      "declared_identity_match": true,
+      "original_bytes_equal": true
+    },
+    {
+      "name": "other-skills-consumer-inputs.json",
+      "bytes": 1895,
+      "sha256": "51ebb5f56f09f8ff811ec6d2fb2c11b3bee41987792685e3fe96dc8fa9638943",
+      "declared_identity_match": true,
+      "original_bytes_equal": true
+    },
+    {
+      "name": "prepare_other_skills_consumer.py",
+      "bytes": 2938,
+      "sha256": "a938cc7fce7afc9e08c48966cb1320355eb7bd95733e368bec6388be953f0ee3",
+      "declared_identity_match": true,
+      "original_bytes_equal": true
+    },
+    {
+      "name": "retain_other_skills_imap.py",
+      "bytes": 1624,
+      "sha256": "8a392ca22d8362d12d82d7c4c7276340b4ed81b9bff95ff7f605e49e6bdef1fc",
+      "declared_identity_match": true,
+      "original_bytes_equal": true
+    },
+    {
+      "name": "other-skills-independent-review.json",
+      "bytes": 15709,
+      "sha256": "84df99e85c253f875a483cdb8e3364c944a7e79cae77a9b58d48a1cc231604e0",
+      "declared_identity_match": true,
+      "original_bytes_equal": true
+    },
+    {
+      "name": "other-skills-independent-review.md",
+      "bytes": 5686,
+      "sha256": "78a5ad3069f84e68b412e79b21cf482ec0a38475e352f0e574702c6678446b2a",
+      "declared_identity_match": true,
+      "original_bytes_equal": true
+    },
+    {
+      "name": "run_command_receipt.py",
+      "bytes": 2718,
+      "sha256": "ca62aaa075d5a60c87b66af987543d2b14f9813f0228684b7a1379a7b6c5ecfe",
+      "declared_identity_match": true,
+      "original_bytes_equal": true
+    },
+    {
+      "name": "package_other_skills_review.py",
+      "bytes": 6982,
+      "sha256": "ff0072b3ab2b0d01bc61b43cd45ccaff202f1c71503c0c322de289d1e205e259",
+      "declared_identity_match": true,
+      "original_bytes_equal": true
+    }
+  ],
+  "wrapper_format_inspection": [
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/execution-bundle.json",
+      "check": "JSON parsing where applicable; LF/final newline/trailing-whitespace inspection",
+      "pass": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/execution-summary.json",
+      "check": "JSON parsing where applicable; LF/final newline/trailing-whitespace inspection",
+      "pass": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/independent-source-review.json",
+      "check": "JSON parsing where applicable; LF/final newline/trailing-whitespace inspection",
+      "pass": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/independent-source-review.md",
+      "check": "JSON parsing where applicable; LF/final newline/trailing-whitespace inspection",
+      "pass": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/original.patch",
+      "check": "immutable Git patch byte identity; no whitespace rewriting"
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/review-validation.json",
+      "check": "JSON parsing where applicable; LF/final newline/trailing-whitespace inspection",
+      "pass": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/source-bindings.json",
+      "check": "JSON parsing where applicable; LF/final newline/trailing-whitespace inspection",
+      "pass": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/review-evidence.json",
+      "check": "JSON parsing where applicable; LF/final newline/trailing-whitespace inspection",
+      "pass": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/verification.md",
+      "check": "JSON parsing where applicable; LF/final newline/trailing-whitespace inspection",
+      "pass": true
+    }
+  ],
+  "semantic_review": "verification.md and execution-summary.json preserve exact-source versus prefreeze hash-bound evidence, source-only consumer limits, fixture-derived SEARCH, and subsequent PR/main/release/Root steps. No completion, native or live qualification was added.",
+  "auxiliary_review": {
+    "reviewer": "ai/root/embedded_methods/evidence_binding_check",
+    "completed_at": "2026-11-16T14:58:31.192087+00:00",
+    "result": "No blocker in 51 refs, 45 source/tree blobs, report copies, timestamp equivalence, validator/policy hashes or wrapper claims."
+  },
+  "limitations": [
+    "No product tests, full suite or validator rerun; existing validator PASS was inspected and hash-bound.",
+    "Only the nine-file snapshot is approved; the two packaging-review reports may be copied verbatim afterward as agreed.",
+    "Existing format gates and thresholds were not modified. The immutable raw patch is identity-checked, not normalized for Git context-marker whitespace.",
+    "Source runtime/HIL/mailbox/SLA/native/A-B limitations from the original independent report remain unchanged."
+  ],
+  "negative_results": [
+    "One exploratory python -c metadata query had a syntax error; corrected before checks. It performed no writes and is not product evidence."
+  ],
+  "checker_source": {
+    "path": "/workspace/scratch/2d4d08f07657/other-skills-independent-packaging-check.py",
+    "sha256": "ec1158edf56bf77c38137d28c032779ff91dafcc55e9b68782881e5765ae436d"
+  },
+  "repository_writes_by_reviewer": false
+}

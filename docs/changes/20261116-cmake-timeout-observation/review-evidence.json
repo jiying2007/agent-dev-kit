@@ -1,0 +1,163 @@
+{
+  "schema": "adk-review-evidence/v1",
+  "subject_id": "20261116-cmake-timeout-observation",
+  "scope": "source-change",
+  "owner": "leiwenjun",
+  "author_id": "ai/root-skill-delivery-completion",
+  "reviewer": {
+    "id": "ai/root/root_prepare",
+    "kind": "ai",
+    "independence": "independent"
+  },
+  "reviewed_at": "2026-11-16T15:51:19.276443Z",
+  "evidence_completed_at": "2026-11-16T15:51:19.276443Z",
+  "verdicts": {
+    "spec": "pass",
+    "quality": "pass"
+  },
+  "findings": [
+    {
+      "id": "review-001",
+      "severity": "minor",
+      "disposition": "fixed",
+      "reason": "The Linux timeout test initially required a child snapshot even when the best-effort scan could legitimately return bounded, partial or unavailable. Source inspection identified the unconditional assertion; no separate pre-fix red execution is claimed. The frozen version requires child membership only for status=observed. Independent bounded/partial/unavailable injected-snapshot controls each execute the real timeout, child cleanup and unrelated process-group checks and pass."
+    },
+    {
+      "id": "review-002",
+      "severity": "minor",
+      "disposition": "fixed",
+      "reason": "The test-owned IMAP selector propagated a real stdlib RecursionError from a 1236-byte header, losing earlier successes while remaining below its byte budget. Independent pre-fix probes observed pass at100/300 nested comments and RecursionError at600. The parser-only HeaderParseError/ValueError/RecursionError handler now preserves prior/later successes, marks only the failed UID unparseable-from and returns partial. Independent final8 tests and100/300/600-depth closure probes passed."
+    }
+  ],
+  "limitations": [
+    "Historical ADC/CMake CI timeout root cause remains unknown.Local diagnostic/example success does not prove those failures repaired.",
+    "Procfs observation is best effort with entry/record/read-size/deadline checks and shared original cleanup deadline.Unknown/truncated observations remain explicit.",
+    "Selector is test-owned with a fixed known candidate superset.It does not implement production IMAP,total wire-byte limiting or arbitrary malformed-message guarantees.",
+    "One consumer observation was read as retained agent output;it is not an independently replayed model A/B or live-mailbox qualification.",
+    "Parent aggregate evidence came from the modified pre-commit worktree,not an exact checkout of the later-created commit.Final files are separately bound here;protected CI must test the exact submitted head.",
+    "Both tasks.md files changed after independent parser probes;final versions were reread and bound.The four implementation files match the closed-findings observations.",
+    "Reviewer did not run full repository regression,new PR/main CI,immutable Release or Root delivery;these remain subsequent parent-owned gates.",
+    "No native/mailbox-side-effect/TLS/authentication/hardware/HIL/M5/SLA/Token/monetary benefit is established.",
+    "Later evidence/documentation packaging needs incremental review.This report does not authorize later production-source edits."
+  ],
+  "policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+  "validator_sha256": {
+    "src/agent_dev_kit/review_evidence.py": "be4892f464496a29dbbb41ebb56c48984bf103d8eabe2ee6117bd583d1032c47",
+    "src/agent_dev_kit/strict_json.py": "72f06f4dcaebfed83bd1ae9876e38d4f7d82d8a1473b40b66beffb6338ee94a5",
+    "src/agent_dev_kit/readiness_evidence.py": "6fdfd5bea3ee097ac21d2b2ab469378c8c84f78856061b680ebb0c5f9d726778"
+  },
+  "target": {
+    "base_commit": "643bb1e93d118bb36c322094b4d1b70078ce78c5",
+    "head_commit": "fe5f908d821b8cf56db140d053134ae835127c57",
+    "original_patch_sha256": "36ecbc021107a56a05b4824cdfbb0c2e8b66dcf48351517c1277f1a562f4b761"
+  },
+  "sources": [
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-cmake-timeout-observation/design.md",
+      "sha256": "21a97b94e31f73ff684f7b08fed92f788168193773c980c5a82a4733ab6e67df"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-cmake-timeout-observation/evidence/runner-tests.txt",
+      "sha256": "8fcd307ef7eed7e99a36ede425ceab7f4c0a670119adb2e677587c3b7cec9cf6"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-cmake-timeout-observation/requirements.md",
+      "sha256": "e38d8d4b9737c8bfd1d5c656bf9f0b4d4e940590c23da0e6f7afc19ca6512176"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-cmake-timeout-observation/tasks.md",
+      "sha256": "3e98e76594d021a5c1992c1d265328ee44a9449211375e322d5ffdfc984a8ca0"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-cmake-timeout-observation/verification.md",
+      "sha256": "be67ab2dd79b9107cdcdd0d88d69d09c59ab5e670f3c0a0147d5a489ca5004cd"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-imap-exact-sender/consumer-observation.json",
+      "sha256": "e5e920983968f58d73495a28532197f8cf5ddb5cc9158a58b5dde79892aa4d20"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-imap-exact-sender/design.md",
+      "sha256": "97e7af5dd57fde83f7f3253ac3acf392d57abf8cf968e2809a09cea4c7261301"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-imap-exact-sender/implementation-verification.md",
+      "sha256": "3ea4dcc6dd53847339fa4d2612469a1e98094b1b72518e502e1fb591700585bb"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-imap-exact-sender/requirements.md",
+      "sha256": "6707a296e7a7539b038b2f8fbe4960fb7c53b26281de9c9cbff2a58c39413afe"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-imap-exact-sender/tasks.md",
+      "sha256": "32327d8a5cd1915bbe58fcd696de255b13c78ba4f1262cd191643cf3c4546ff4"
+    },
+    {
+      "base": "repository",
+      "path": "optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md",
+      "sha256": "2bc927093f8a44a855b7b03d837e33b6d3b160e1e6a15db5f401ec0545cc3a80"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_skill_command_examples.py",
+      "sha256": "301fb52ff31802f2601b6a8baf3416380735c420371a5d0fa22bc4913c461461"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_skill_content.sh",
+      "sha256": "a057f3b43aad34e4f52ecfedf3b7d96ed1a67c235703ddc8a60932e52950e710"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_skill_imap_sender_methods.py",
+      "sha256": "584b1719a107309306c8126617c2ff706e540cd67391cbbbb97432380ddfcbfa"
+    },
+    {
+      "base": "record",
+      "path": "evidence/original.patch",
+      "sha256": "36ecbc021107a56a05b4824cdfbb0c2e8b66dcf48351517c1277f1a562f4b761"
+    }
+  ],
+  "evidence": [
+    {
+      "base": "record",
+      "path": "evidence/final-source-review.json",
+      "sha256": "8e40ff77cde0df0b1f0f2f050790eda0f5af3cb9454bde6772eadb62af7ca9ed"
+    },
+    {
+      "base": "record",
+      "path": "evidence/source-review-observations.json",
+      "sha256": "f26c9a96b6bc2185a94e4a3dc7111b3465e887e4d26d42f7611e6be005636af3"
+    },
+    {
+      "base": "record",
+      "path": "evidence/prior-tool-transcripts.txt",
+      "sha256": "c350bdddadcb4b694ae60a7cd7bbc44cd2b03a06e44b9a53d6a77a149272d5ce"
+    },
+    {
+      "base": "record",
+      "path": "evidence/probe-review.py",
+      "sha256": "97eebd43e1cfa6a993f87124b45dafa1ad6b1374803d26d5e65c6d0b20c56ceb"
+    },
+    {
+      "base": "record",
+      "path": "evidence/integration-bundle.json",
+      "sha256": "ac2d0312aa12930fb1bf352eea6d2069a0c2d4cc8f993b0f7e34e79c01b4c829"
+    },
+    {
+      "base": "record",
+      "path": "evidence/source-bindings.json",
+      "sha256": "8f80f2b84d3bc42ebcd0e91ecd77394026b1cfb33d9462ee0683a0d16ed548e4"
+    }
+  ]
+}

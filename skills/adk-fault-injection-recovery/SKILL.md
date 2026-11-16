@@ -1,8 +1,8 @@
 ---
 name: adk-fault-injection-recovery
 description: "用于已授权的故障注入、失败路径与恢复能力验证，并记录可重放的回滚证据；不用于未经隔离的生产设备破坏性实验。"
-version: 1.0.3
-last_updated: 2026-11-10
+version: 1.0.4
+last_updated: 2026-11-16
 triggers:
   - "故障注入"
   - "故障恢复"
@@ -20,24 +20,28 @@ constraints:
 # adk-fault-injection-recovery
 
 ## Goal
-- 验证系统在故障场景下可检测、可恢复、可回归。
-- 量化检测时延与恢复时延，确认满足恢复 SLA。
+验证检测、恢复、回归及 SLA。
 
 ## Prerequisites
-- 定义故障模型（掉电、超时、资源耗尽、链路中断、看门狗超时）。
-- 设定恢复 SLA 与允许的数据损失边界。
-- 准备注入工具（debug transport 脚本、fault-injection 框架、硬件断电装置）。
+定义故障模型、恢复 SLA 和数据损失边界，核项目注入器与恢复通道。
 
 ## Workflow
 1. **选择注入点**：按影响范围和可复现性排序。
    - 软件注入：内存分配失败、I/O 返回错误、信号模拟。
    - 硬件注入：断电、信号干扰、温度异常。
-2. **看门狗配置与验证**：确保看门狗能捕获系统挂死。
-3. **设计注入实验**：一次只注入一种故障并记录前置状态。
-4. **观察恢复行为**：检测、隔离、重试、降级、恢复时延。
-5. **日志分析**：提取故障检测时间、恢复时间、数据一致性。
-6. **回归核验**：故障解除后验证功能恢复与数据一致性。
-7. **输出改进项**：恢复盲点、告警缺口、监控增强建议。
+2. 同输入先跑无故障对照；失败先排环境/基线。一次一种故障，保存前置状态、命令和原输出。
+3. 配置成功不等于触发；用目标路径的计数/事件证明命中。未命中或证据不可用记 `not_evaluated`，不能凭错误返回或健康 follow-up 反推命中。
+4. 确认命中后，以实际事件和时钟来源核检测、隔离、重试、降级、恢复；缺时间证据不填零时延，不判 SLA 通过。
+5. 撤销故障后核功能、数据一致性和资源恢复，交恢复盲点、告警/监控改进与真实回执。
+
+仅作 host 观察分流，非 SLA/设备资格判定；`hits=None` 表示无命中证据，后续仍须检查检测和全部恢复后置条件：
+<!-- adk-example: fault-observation -->
+```python
+def next_check(control_ok, hits):
+    if not control_ok or hits is None or hits <= 0:
+        return "not_evaluated"
+    return "待核检测与恢复"
+```
 
 ## Commands
 默认只读。此 Skill 不直接写入 `/sys/kernel/debug`、`/dev/watchdog`，也不启动资源耗尽负载。
@@ -54,31 +58,21 @@ journalctl -p err --since "10 min ago"
 ## Evidence Template
 ```md
 - Fault Model: [掉电/超时/资源耗尽/链路中断]
-- Injection Method: [software/hardware]
-- Injection Point: [module, function, line]
-- Watchdog Config: [timeout=___s, action=reset/interrupt]
-- Detection Time: ____ ms
-- Recovery Time: ____ ms
-- Recovery Strategy: [retry/degrade/failover/restart]
-- Data Loss: [none/___ bytes/logged]
-- Post-recovery Verification: [functional test pass/fail]
-- Log Analysis: [key timestamps and error distribution]
+- Method / Point / Preconditions:
+- Normal Control / Activation Count-or-event / Raw Evidence:
+- Watchdog Config (if applicable):
+- Detection / Recovery Time + Clock: measured ms / unknown
+- Recovery Strategy / Data Loss / Resource / Functional Result:
+- Commands / Logs / Receipts / SLA Result:
 ```
 
 ## Failure Handling
 - 出现不可逆破坏风险时立即停止注入并回滚环境。
-- 恢复失败时先保留现场（coredump + 日志），再进行最小化复现实验。
+- 恢复失败先保留 coredump/日志，再最小化复现；panic 先保存串口日志与 coredump 再重启。
 - 看门狗未触发时，检查喂狗逻辑是否在异常路径中被错误调用。
-- 注入后系统 panic，保存串口日志与 coredump 后再重启。
 
 ## Quality Gate
 - 必须覆盖项目风险分析要求的故障类型；掉电、超时和资源耗尽是候选，不为凑两类而开展无关或危险实验。
-- 必须记录检测时间和恢复时间。
-- 结论需包含是否满足恢复 SLA。
+- 记录命中、检测/恢复及 SLA 依据；未测时间保持 unknown，风险升高立即停止。
 - 仅当 watchdog 属于本次目标且已授权隔离实验时，验证 timeout/reset/recovery；缺条件标记 not-evaluated。
 - 恢复后必须通过功能回归测试。
-
----
-
-## 健壮性规范
-- 记录命令结果与恢复凭据；风险升高立即停止。

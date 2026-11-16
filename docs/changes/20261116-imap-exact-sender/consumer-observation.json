@@ -1,0 +1,32 @@
+{
+  "schema": "adk-source-method-consumer-observation/v1",
+  "agent": "ai/root/imap_consumer",
+  "context": "fresh thread; Skill path and offline task inputs only; no expected result or implementation diagnosis",
+  "skill_path": "optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md",
+  "skill_sha256": "2bc927093f8a44a855b7b03d837e33b6d3b160e1e6a15db5f401ec0545cc3a80",
+  "input": {
+    "mailbox": "INBOX", "uidvalidity": 901,
+    "target": "build@example.test", "local_part": "preserve", "domain": "case_insensitive",
+    "time": "already verified upstream", "candidate_uids": [101,102,103,104,105,106,107],
+    "header_count_budget": 6,
+    "headers": {
+      "101": "From: Build <build@example.test>",
+      "102": "From: \"build@example.test\" <noise@example.test>",
+      "103": "From: build@example.test.invalid",
+      "104": "From: build@EXAMPLE.TEST",
+      "105": "From: Build@example.test",
+      "106": "Subject: notice"
+    },
+    "unfetched": {"107": "header_count_budget_exhausted"}
+  },
+  "observed_output": {
+    "matched": [101,104], "excluded": [102,103,105],
+    "unresolved": [{"uid":106,"reason":"missing_from_header"},{"uid":107,"reason":"header_count_budget_exhausted"}],
+    "status": "partial", "body_status": "not_requested",
+    "connection_and_authentication": "not-verified", "mailbox_read_only_state": "not-verified",
+    "sender_authentication": "not-verified", "additional_headers_fetched": 0
+  },
+  "reported_execution": ["read the exact Skill", "sha256sum of Skill", "offline Python HeaderParser with email.policy.default on the six provided headers"],
+  "network_access": false, "source_modified": false,
+  "boundary": "One source-method observation, not a controlled A/B evaluation, live mailbox test, runtime qualification or token/cost measurement. This is a retained agent report, not a fabricated tool transcript."
+}

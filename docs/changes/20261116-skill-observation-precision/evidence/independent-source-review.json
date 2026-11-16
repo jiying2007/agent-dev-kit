@@ -1,0 +1,328 @@
+{
+  "schema": "adk-independent-source-review/v1",
+  "reviewer": {
+    "id": "ai/root/embedded_methods",
+    "kind": "ai",
+    "role": "independent-spec-quality-reviewer",
+    "participated_in_implementation": false
+  },
+  "reviewed_at": "2026-11-16T14:55:14.993112+00:00",
+  "evidence_completed_at": "2026-11-16T14:51:02.383334+00:00",
+  "evidence_completed_at_definition": "Completion of the latest executed evidence (the exact-source full run); subsequent digest review does not rerun tests.",
+  "verdicts": {
+    "spec": "pass",
+    "quality": "pass"
+  },
+  "overall": "pass",
+  "findings": [],
+  "source": {
+    "repository": "/workspace/scratch/2d4d08f07657/adk-other-skills",
+    "base_commit": "fad9d4d170a97c5dbb2c5261432fa2120bfcc3c9",
+    "commit": "384bdcdfac75881891bce795991b68fa46d9b9d6",
+    "tree": "627aabff2317705de46b010126edf3b57a443d1f",
+    "version": "11.3.12",
+    "changed_paths": 45,
+    "status": "clean detached",
+    "patch": {
+      "path": "/workspace/scratch/2d4d08f07657/other-skills-independent-probes/source.patch",
+      "bytes": 451173,
+      "sha256": "ae27a8e2e298f8f4e98290adba4f2e2d4609d5a3d29a1eea11edbac8172e4823"
+    },
+    "patch_command": [
+      "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+      "bypass",
+      "git",
+      "diff",
+      "--binary",
+      "--full-index",
+      "--no-ext-diff",
+      "fad9d4d170a97c5dbb2c5261432fa2120bfcc3c9",
+      "384bdcdfac75881891bce795991b68fa46d9b9d6"
+    ]
+  },
+  "conclusions": [
+    "F1 distinguishes configuration, observed activation, detection and recovery. Unknown/no-hit evidence stays not_evaluated and no timing or SLA is invented.",
+    "F1 preserves lab/device operator authorization, target identity, resource budget, recovery, rollback, stop conditions and functional/data/resource postconditions. Its 3558 bytes are within the 3559-byte baseline.",
+    "F2 is conditional on exact-time requests; ordinary calendar-day behavior remains. INTERNALDATE and Date are not substituted, candidates need a coverage basis, and missing/invalid/unknown-zone or budget-limited records remain partial.",
+    "Time tests use identical senders. The production change adds no complete-address matching and the consumer does not infer a sender condition.",
+    "The 13 targeted tests execute successfully on the exact source with zero skips. Four deliberately wrong scratch variants are rejected by existing behavioral assertions, not a missing marker or import error.",
+    "The completed full run covers 102 groups, all passing on the exact commit/tree with clean equal before/after states and matching raw-log digests.",
+    "No routing/Profile thresholds/product interfaces changed. Manifest equality apart from version, existing authorization and all eight original source-byte ratchets were corroborated by read-only mechanical review.",
+    "The single consumer observation is consistent with the raw prepared input. It is neither native qualification nor an A/B measurement."
+  ],
+  "design_followup_dispositions": [
+    {
+      "id": "D1-time-only-controls",
+      "disposition": "verified",
+      "reason": "All new fixture senders are identical; day mode and exact mode have independent literal UID outcomes."
+    },
+    {
+      "id": "D2-invalid-and-budget-partial",
+      "disposition": "verified",
+      "reason": "Received/sent missing, invalid and unknown-zone cases run in two TZ settings; count/byte limits actually stop content acquisition and preserve successful plus undecided UIDs."
+    },
+    {
+      "id": "D3-unobservable-activation",
+      "disposition": "verified",
+      "reason": "The host executable outputs null for unavailable hit observation while returning ENOMEM; the published branch remains not_evaluated despite healthy follow-up."
+    }
+  ],
+  "verification": {
+    "independent_targeted": {
+      "receipt": {
+        "path": "/workspace/scratch/2d4d08f07657/other-skills-independent-probes/receipt.json",
+        "bytes": 38682,
+        "sha256": "55643ff7a3673267e7e9f462f829b2d6fae8b378cc617b19a8c6b89475028ccc"
+      },
+      "tests": 13,
+      "skips": 0,
+      "mutants_rejected": 4,
+      "source": "exact reviewed commit"
+    },
+    "full": {
+      "receipt": {
+        "path": "/workspace/scratch/2d4d08f07657/other-skills-full-regression/receipt.json",
+        "bytes": 1639,
+        "sha256": "920ea24a5a2573cc2ca6ef1dd588697eca2d01d332a4524ccec1a50ee468658d"
+      },
+      "verification": {
+        "path": "/workspace/scratch/2d4d08f07657/other-skills-independent-probes/full-verification.json",
+        "bytes": 4604,
+        "sha256": "8c92ffb182813cd65e1a712b95f1233730b9b50833e662e850e8e43581f64de1"
+      },
+      "started_at": "2026-11-16T14:44:42.910664+00:00",
+      "finished_at": "2026-11-16T14:51:02.383334+00:00",
+      "elapsed_seconds": 379.4513539610052,
+      "groups": 102,
+      "pass": 102,
+      "fail": 0,
+      "exit_code": 0,
+      "rerun_by_reviewer": false
+    },
+    "consumer": {
+      "checked_at": "2026-11-16T14:55:14.992776+00:00",
+      "kind": "input/output digest binding only; no consumer rerun",
+      "inputs": [
+        {
+          "path": "/workspace/scratch/2d4d08f07657/other-skills-consumer/task.md",
+          "bytes": 1514,
+          "sha256": "72931e7831069376febaef7cfa84d2ff7593aede268be68180ac0814cf2afb95"
+        },
+        {
+          "path": "/workspace/scratch/2d4d08f07657/other-skills-consumer/observations.json",
+          "bytes": 3860,
+          "sha256": "63a2b74c40b0e7a36da578e9347aca08ccc137915cc8959b168de183fbe02d6f"
+        },
+        {
+          "path": "/workspace/scratch/2d4d08f07657/other-skills-consumer/fault-SKILL.md",
+          "bytes": 3374,
+          "sha256": "e2ca83b2a2f6f67d379214f00584358c78f579c8883832c08be483b79e651bba"
+        },
+        {
+          "path": "/workspace/scratch/2d4d08f07657/other-skills-consumer/imap-SKILL.md",
+          "bytes": 3614,
+          "sha256": "09c31d595ff2aa073af02bcb3951ebf22a576b645e5f6b5164bed5326c8bb4d7"
+        }
+      ],
+      "prepared_inputs": {
+        "path": "/workspace/scratch/2d4d08f07657/other-skills-consumer-inputs.json",
+        "bytes": 1895,
+        "sha256": "51ebb5f56f09f8ff811ec6d2fb2c11b3bee41987792685e3fe96dc8fa9638943"
+      },
+      "outputs": [
+        {
+          "path": "/workspace/scratch/2d4d08f07657/other-skills-consumer/response.json",
+          "bytes": 20849,
+          "sha256": "92af74ffbead91fd20cb5fc9fd170df0050ba0ee9cf7373f2a2511a4dc345f48"
+        },
+        {
+          "path": "/workspace/scratch/2d4d08f07657/other-skills-consumer/response.md",
+          "bytes": 11367,
+          "sha256": "52b14f45c26f1d146f8786089c09ebc8ea2817e4b2d28541435420ebe91fb95a"
+        }
+      ],
+      "reported_result_manually_reviewed": {
+        "fault": "B not_evaluated; C only finite host postconditions; D resource failure; all timing/SLA unknown",
+        "imap_return": [
+          101,
+          102,
+          104,
+          106,
+          107,
+          108,
+          201
+        ],
+        "imap_exclude": [
+          103,
+          105
+        ],
+        "imap_undetermined": [
+          202
+        ],
+        "imap_status": "partial"
+      },
+      "limitation": "Prepared source-only task. Its prior SEARCH list is fixture-derived, not a live mailbox command receipt."
+    },
+    "prefreeze_receipts": {
+      "classification": "Earlier real executions bound by per-file hashes, not retrospectively relabeled as executions on the final commit",
+      "results": "14 combined checks; strict pass; eight original Profile ratchets; actual Claude Code export of 99 payload files",
+      "receipt_directory": "/workspace/scratch/2d4d08f07657/adk-other-skills/docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic"
+    },
+    "auxiliary_readonly_review": {
+      "reviewer": "ai/root/embedded_methods/evidence_binding_check",
+      "completed_at": "2026-11-16T14:47:23+00:00",
+      "scope": "Mechanical source/receipt/archive/export/ratchet binding; no code implementation or full run",
+      "results": {
+        "archive_members_decoded_and_hash_matched": 40,
+        "actual_export_payloads_matched": 99,
+        "profile_ratchets_recomputed": 8,
+        "manifest_except_version_equal": true,
+        "ratchet_file_byte_identical_to_base": true
+      },
+      "retention_note": "Helper observations were delivered in the agent conversation; this report does not invent a separate raw-command receipt for that helper. Original implementation receipts and archived payloads remain available."
+    }
+  },
+  "actual_read_scope": [
+    {
+      "scope": "Inherited governance",
+      "files": [
+        "AGENTS.md",
+        "docs/agent-operating-rules.md",
+        "README.md",
+        "rules/00-global.md",
+        "rules/README.md"
+      ],
+      "detail": "Read at audit/design; unchanged governing files verified against base during design review."
+    },
+    {
+      "scope": "Current contract, full text",
+      "files": [
+        "docs/changes/20261116-skill-observation-precision/requirements.md",
+        "docs/changes/20261116-skill-observation-precision/design.md",
+        "docs/changes/20261116-skill-observation-precision/tasks.md",
+        "docs/changes/20261116-skill-observation-precision/design-review.md",
+        "docs/changes/20261116-skill-observation-precision/negative-results.md"
+      ]
+    },
+    {
+      "scope": "Production method bodies and full diff",
+      "files": [
+        "skills/adk-fault-injection-recovery/SKILL.md",
+        "optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md"
+      ]
+    },
+    {
+      "scope": "Complete new test and fixture source",
+      "files": [
+        "tests/test_skill_fault_activation.py",
+        "tests/fixtures/fault-activation.c",
+        "tests/test_skill_imap_time_methods.py",
+        "tests/fixtures/imap-time-fixture.py"
+      ]
+    },
+    {
+      "scope": "Full changed hunks",
+      "files": [
+        "tests/test_skill_content.sh",
+        "tests/fixtures/skill_method_ab_prereg.json"
+      ]
+    },
+    {
+      "scope": "Evidence",
+      "detail": "Original host and IMAP probe source/results read during independent design review; new command receipts, all targeted-test outputs and four rejection outputs read. Auxiliary reviewer parsed all archive JSON and hash-checked all decoded members; not every archived prose/log line received a fresh semantic review."
+    },
+    {
+      "scope": "Consumer",
+      "detail": "task.md and observations.json full; response.md full; response.json scope, manifests, fault judgments and complete IMAP assessment; copied export and preparation/source hashes verified."
+    },
+    {
+      "scope": "Full regression",
+      "detail": "Completed receipt and timing JSON parsed completely; both raw logs hashed; final summary, all 13 new test lines and fatal failure markers inspected. Individual unrelated passing test internals were not re-audited."
+    },
+    {
+      "scope": "45-path identity",
+      "detail": "All changed files are hash-bound in independent receipt; this is not a claim that every compressed evidence string was manually read."
+    }
+  ],
+  "primary_source_review": [
+    {
+      "url": "https://docs.kernel.org/6.12/fault-injection/fault-injection.html",
+      "version": "Linux 6.12",
+      "read_scope": "Configuration/filtering and fail-nth activation semantics, rendered lines 41-82 and 152-167; systematic example 362-417 inspected during design. No kernel injection was run."
+    },
+    {
+      "url": "https://www.rfc-editor.org/rfc/rfc9051.html",
+      "version": "RFC 9051, August 2021",
+      "read_scope": "2.3.3 Internal Date, rendered 417-419; SEARCH date and SENT keys, rendered 2580-2633."
+    },
+    {
+      "url": "https://docs.python.org/3.12/library/imaplib.html",
+      "version": "Python 3.12 documentation rendered as 3.12.16",
+      "read_scope": "IMAP4_stream, UID and response tuple semantics, rendered 57-94 and FETCH 153-156. Local test interpreter remains 3.12.14."
+    }
+  ],
+  "limitations": [
+    "Source-level Spec/Quality pass for this frozen commit; protected PR/main CI, release publication and Root source-only delivery remain parent-owned subsequent steps.",
+    "No native runtime discovery/load/trigger qualification, model A/B, token/cost improvement or general completion-rate result is established.",
+    "Host malloc instrumentation does not establish target-device fault behavior, detection/recovery timing, recovery SLA, DMA/RTOS/HIL or product qualification.",
+    "Local stdio IMAP peer is a fixed test fixture. It does not establish live server compatibility, TLS/authentication or live mailbox side-effect freedom.",
+    "IMAP byte-budget tests cover the selected content acquisition within this bounded fixture, not a generic total wire-byte limiter for every server response.",
+    "The prepared consumer SEARCH list is derived from fixture dates without a sender predicate, not a newly executed live mailbox query.",
+    "The two Skill changes are method enhancements; the test-owned wrong variants are not evidence of an existing ADK runtime implementation defect.",
+    "Any later evidence-only packaging commit requires the planned incremental packaging review. This report does not authorize changing the reviewed production source or relabeling executions.",
+    "The large-refactor source-byte ratchet has eight bytes of remaining headroom; thresholds were not raised."
+  ],
+  "raw_evidence_files": [
+    {
+      "path": "/workspace/scratch/2d4d08f07657/other-skills-independent-probes/review-probes.py",
+      "bytes": 7560,
+      "sha256": "db6626f5ad7a5b836e08e94bfcbe2cde1b0289a50a1805481dac8701721bcca8"
+    },
+    {
+      "path": "/workspace/scratch/2d4d08f07657/other-skills-independent-probes/receipt.json",
+      "bytes": 38682,
+      "sha256": "55643ff7a3673267e7e9f462f829b2d6fae8b378cc617b19a8c6b89475028ccc"
+    },
+    {
+      "path": "/workspace/scratch/2d4d08f07657/other-skills-independent-probes/source.patch",
+      "bytes": 451173,
+      "sha256": "ae27a8e2e298f8f4e98290adba4f2e2d4609d5a3d29a1eea11edbac8172e4823"
+    },
+    {
+      "path": "/workspace/scratch/2d4d08f07657/other-skills-independent-probes/ignore-activation-evidence.md",
+      "bytes": 3529,
+      "sha256": "58a81a596e9f689c38fc19356fcf5de82d7dec6b73da38fb631b24c68d6b4010"
+    },
+    {
+      "path": "/workspace/scratch/2d4d08f07657/other-skills-independent-probes/include-end-boundary.py",
+      "bytes": 11580,
+      "sha256": "c692e8b26f27063a5b0bbf3fdbf114e808ca3336550b290bf9dffe7f76101791"
+    },
+    {
+      "path": "/workspace/scratch/2d4d08f07657/other-skills-independent-probes/use-date-instead-of-selected-field.py",
+      "bytes": 11642,
+      "sha256": "a61b49ee7026b91ac2be19f378797ef88aba6d3bf388b08a1e2a77b9a4f73027"
+    },
+    {
+      "path": "/workspace/scratch/2d4d08f07657/other-skills-independent-probes/invent-timezone.py",
+      "bytes": 11596,
+      "sha256": "098a7e9c2ae9639e19e2271ca2859af2fc386ea5b6b19e2f362052a53c6b6ce9"
+    },
+    {
+      "path": "/workspace/scratch/2d4d08f07657/other-skills-independent-probes/full-verification.json",
+      "bytes": 4604,
+      "sha256": "8c92ffb182813cd65e1a712b95f1233730b9b50833e662e850e8e43581f64de1"
+    },
+    {
+      "path": "/workspace/scratch/2d4d08f07657/other-skills-independent-probes/consumer-binding.json",
+      "bytes": 2085,
+      "sha256": "74169458e7165e58b89f192a315c405dffafe755a64bfd8880e6cef06de74288"
+    },
+    {
+      "path": "/workspace/scratch/2d4d08f07657/other-skills-independent-probes/finalize-review.py",
+      "bytes": 22184,
+      "sha256": "4b89adc7f280657c9014af8749cec61cceea62ad20295308e1f97ad325732563"
+    }
+  ],
+  "repository_unchanged_by_reviewer": true
+}

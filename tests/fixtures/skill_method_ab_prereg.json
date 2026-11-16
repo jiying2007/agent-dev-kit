@@ -9,7 +9,7 @@
     "source_sha": "7aed1d2545babce16c41dc021ead01c8c324ce07"
   },
   "candidate": {
-    "planned_release": "v11.3.11",
+    "planned_release": "v11.3.12",
     "source_sha": null
   },
   "case_groups": {
@@ -67,6 +67,12 @@
   },
   "holdout_qualification": "development-fixture-only-after-author-exposure",
   "unexecuted_candidate_history": [
+    {
+      "planned_release": "v11.3.11",
+      "merged_main_sha": "fad9d4d170a97c5dbb2c5261432fa2120bfcc3c9",
+      "model_runs": 0,
+      "reason": "The source release completed without running this author-exposed campaign. The successor's host fault and local IMAP observations are deterministic method checks, not native A/B, provider-token, recovery-SLA or cost results."
+    },
     {
       "planned_release": "v11.3.10",
       "merged_main_sha": "b20df018ca62436dd026daed6ec6944d4a45cbbd",

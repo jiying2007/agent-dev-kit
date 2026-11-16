@@ -1,0 +1,265 @@
+{
+  "schema": "adk-independent-source-review-observations/v1",
+  "reviewer": "ai/root/root_prepare",
+  "started_at": "2026-11-16T15:47:18.342282+00:00",
+  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "recursion_limit": 1000,
+  "source_before": [
+    {
+      "path": "tests/test_skill_command_examples.py",
+      "bytes": 60666,
+      "sha256": "301fb52ff31802f2601b6a8baf3416380735c420371a5d0fa22bc4913c461461"
+    },
+    {
+      "path": "optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md",
+      "bytes": 4527,
+      "sha256": "2bc927093f8a44a855b7b03d837e33b6d3b160e1e6a15db5f401ec0545cc3a80"
+    },
+    {
+      "path": "tests/test_skill_imap_sender_methods.py",
+      "bytes": 8415,
+      "sha256": "584b1719a107309306c8126617c2ff706e540cd67391cbbbb97432380ddfcbfa"
+    },
+    {
+      "path": "tests/test_skill_content.sh",
+      "bytes": 1182,
+      "sha256": "a057f3b43aad34e4f52ecfedf3b7d96ed1a67c235703ddc8a60932e52950e710"
+    },
+    {
+      "path": "docs/changes/20261116-cmake-timeout-observation/design.md",
+      "bytes": 1265,
+      "sha256": "21a97b94e31f73ff684f7b08fed92f788168193773c980c5a82a4733ab6e67df"
+    },
+    {
+      "path": "docs/changes/20261116-cmake-timeout-observation/evidence/runner-tests.txt",
+      "bytes": 1143,
+      "sha256": "8fcd307ef7eed7e99a36ede425ceab7f4c0a670119adb2e677587c3b7cec9cf6"
+    },
+    {
+      "path": "docs/changes/20261116-cmake-timeout-observation/requirements.md",
+      "bytes": 1116,
+      "sha256": "e38d8d4b9737c8bfd1d5c656bf9f0b4d4e940590c23da0e6f7afc19ca6512176"
+    },
+    {
+      "path": "docs/changes/20261116-cmake-timeout-observation/tasks.md",
+      "bytes": 517,
+      "sha256": "fbee182c2185a5d769a0cab8bc9839eb8fefbb4d1508df12882ec8d111737089"
+    },
+    {
+      "path": "docs/changes/20261116-cmake-timeout-observation/verification.md",
+      "bytes": 2540,
+      "sha256": "be67ab2dd79b9107cdcdd0d88d69d09c59ab5e670f3c0a0147d5a489ca5004cd"
+    },
+    {
+      "path": "docs/changes/20261116-imap-exact-sender/consumer-observation.json",
+      "bytes": 1867,
+      "sha256": "e5e920983968f58d73495a28532197f8cf5ddb5cc9158a58b5dde79892aa4d20"
+    },
+    {
+      "path": "docs/changes/20261116-imap-exact-sender/design.md",
+      "bytes": 990,
+      "sha256": "97e7af5dd57fde83f7f3253ac3acf392d57abf8cf968e2809a09cea4c7261301"
+    },
+    {
+      "path": "docs/changes/20261116-imap-exact-sender/implementation-verification.md",
+      "bytes": 5939,
+      "sha256": "3ea4dcc6dd53847339fa4d2612469a1e98094b1b72518e502e1fb591700585bb"
+    },
+    {
+      "path": "docs/changes/20261116-imap-exact-sender/requirements.md",
+      "bytes": 972,
+      "sha256": "6707a296e7a7539b038b2f8fbe4960fb7c53b26281de9c9cbff2a58c39413afe"
+    },
+    {
+      "path": "docs/changes/20261116-imap-exact-sender/tasks.md",
+      "bytes": 502,
+      "sha256": "3a7a5c44ca02a8d837ee8d876bb9ec1a4c2a7c3697bf847e078bc63395d566be"
+    }
+  ],
+  "final_imap_tests": {
+    "command": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "-B",
+      "-m",
+      "unittest",
+      "tests.test_skill_imap_sender_methods",
+      "-v"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.1434866769996006,
+    "stdout": "",
+    "stderr": "test_count_and_header_byte_budgets_keep_success_and_unread_uids (tests.test_skill_imap_sender_methods.ImapSenderMethodTests.test_count_and_header_byte_budgets_keep_success_and_unread_uids) ... ok\ntest_domain_case_folds_but_local_part_and_aliases_are_preserved (tests.test_skill_imap_sender_methods.ImapSenderMethodTests.test_domain_case_folds_but_local_part_and_aliases_are_preserved) ... ok\ntest_exact_addresses_accept_positive_controls_and_reject_substring_decoys (tests.test_skill_imap_sender_methods.ImapSenderMethodTests.test_exact_addresses_accept_positive_controls_and_reject_substring_decoys) ... ok\ntest_fuzzy_request_keeps_server_candidates_without_exact_refiltering (tests.test_skill_imap_sender_methods.ImapSenderMethodTests.test_fuzzy_request_keeps_server_candidates_without_exact_refiltering) ... ok\ntest_missing_repeated_and_malformed_headers_preserve_partial_success (tests.test_skill_imap_sender_methods.ImapSenderMethodTests.test_missing_repeated_and_malformed_headers_preserve_partial_success) ... ok\ntest_parser_failure_isolated_between_successes_with_deep_positive_controls (tests.test_skill_imap_sender_methods.ImapSenderMethodTests.test_parser_failure_isolated_between_successes_with_deep_positive_controls) ... ok\ntest_source_separates_exact_address_from_substring_and_identity (tests.test_skill_imap_sender_methods.ImapSenderMethodTests.test_source_separates_exact_address_from_substring_and_identity) ... ok\ntest_undefined_address_semantics_leave_candidates_undecided (tests.test_skill_imap_sender_methods.ImapSenderMethodTests.test_undefined_address_semantics_leave_candidates_undecided) ... ok\n\n----------------------------------------------------------------------\nRan 8 tests in 0.019s\n\nOK\n"
+  },
+  "independent_parser_closure_probe": [
+    {
+      "depth": 100,
+      "header_bytes": 236,
+      "result": {
+        "matched": [
+          1,
+          2,
+          3
+        ],
+        "excluded": [],
+        "undecided": [],
+        "parsed": [
+          1,
+          2,
+          3
+        ],
+        "header_bytes": 292,
+        "status": "pass"
+      }
+    },
+    {
+      "depth": 300,
+      "header_bytes": 636,
+      "result": {
+        "matched": [
+          1,
+          2,
+          3
+        ],
+        "excluded": [],
+        "undecided": [],
+        "parsed": [
+          1,
+          2,
+          3
+        ],
+        "header_bytes": 692,
+        "status": "pass"
+      }
+    },
+    {
+      "depth": 600,
+      "header_bytes": 1236,
+      "result": {
+        "matched": [
+          1,
+          3
+        ],
+        "excluded": [],
+        "undecided": [
+          {
+            "uid": 2,
+            "reason": "unparseable-from"
+          }
+        ],
+        "parsed": [
+          1,
+          2,
+          3
+        ],
+        "header_bytes": 1292,
+        "status": "partial"
+      }
+    }
+  ],
+  "historical_review_relation": {
+    "original_target": {
+      "base_commit": "fad9d4d170a97c5dbb2c5261432fa2120bfcc3c9",
+      "head_commit": "384bdcdfac75881891bce795991b68fa46d9b9d6",
+      "original_patch_sha256": "ae27a8e2e298f8f4e98290adba4f2e2d4609d5a3d29a1eea11edbac8172e4823"
+    },
+    "mismatches_against_current_source": [
+      {
+        "path": "optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md",
+        "historical_sha256": "b109548aceb24d3f978e92eb4706cc0845847c82a741d05810ded49f44f351b7",
+        "current_sha256": "2bc927093f8a44a855b7b03d837e33b6d3b160e1e6a15db5f401ec0545cc3a80"
+      },
+      {
+        "path": "tests/test_skill_content.sh",
+        "historical_sha256": "6857bda2e84fa376012e974f612cd47609e3303ae9a9f364e7743b6b431afc2d",
+        "current_sha256": "a057f3b43aad34e4f52ecfedf3b7d96ed1a67c235703ddc8a60932e52950e710"
+      }
+    ],
+    "historical_directory_diff": {
+      "command": [
+        "git",
+        "diff",
+        "643bb1e93d118bb36c322094b4d1b70078ce78c5",
+        "--",
+        "docs/changes/20261116-skill-observation-precision"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.004844857001444325,
+      "stdout": "",
+      "stderr": ""
+    }
+  },
+  "source_after": [
+    {
+      "path": "tests/test_skill_command_examples.py",
+      "bytes": 60666,
+      "sha256": "301fb52ff31802f2601b6a8baf3416380735c420371a5d0fa22bc4913c461461"
+    },
+    {
+      "path": "optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md",
+      "bytes": 4527,
+      "sha256": "2bc927093f8a44a855b7b03d837e33b6d3b160e1e6a15db5f401ec0545cc3a80"
+    },
+    {
+      "path": "tests/test_skill_imap_sender_methods.py",
+      "bytes": 8415,
+      "sha256": "584b1719a107309306c8126617c2ff706e540cd67391cbbbb97432380ddfcbfa"
+    },
+    {
+      "path": "tests/test_skill_content.sh",
+      "bytes": 1182,
+      "sha256": "a057f3b43aad34e4f52ecfedf3b7d96ed1a67c235703ddc8a60932e52950e710"
+    },
+    {
+      "path": "docs/changes/20261116-cmake-timeout-observation/design.md",
+      "bytes": 1265,
+      "sha256": "21a97b94e31f73ff684f7b08fed92f788168193773c980c5a82a4733ab6e67df"
+    },
+    {
+      "path": "docs/changes/20261116-cmake-timeout-observation/evidence/runner-tests.txt",
+      "bytes": 1143,
+      "sha256": "8fcd307ef7eed7e99a36ede425ceab7f4c0a670119adb2e677587c3b7cec9cf6"
+    },
+    {
+      "path": "docs/changes/20261116-cmake-timeout-observation/requirements.md",
+      "bytes": 1116,
+      "sha256": "e38d8d4b9737c8bfd1d5c656bf9f0b4d4e940590c23da0e6f7afc19ca6512176"
+    },
+    {
+      "path": "docs/changes/20261116-cmake-timeout-observation/tasks.md",
+      "bytes": 517,
+      "sha256": "fbee182c2185a5d769a0cab8bc9839eb8fefbb4d1508df12882ec8d111737089"
+    },
+    {
+      "path": "docs/changes/20261116-cmake-timeout-observation/verification.md",
+      "bytes": 2540,
+      "sha256": "be67ab2dd79b9107cdcdd0d88d69d09c59ab5e670f3c0a0147d5a489ca5004cd"
+    },
+    {
+      "path": "docs/changes/20261116-imap-exact-sender/consumer-observation.json",
+      "bytes": 1867,
+      "sha256": "e5e920983968f58d73495a28532197f8cf5ddb5cc9158a58b5dde79892aa4d20"
+    },
+    {
+      "path": "docs/changes/20261116-imap-exact-sender/design.md",
+      "bytes": 990,
+      "sha256": "97e7af5dd57fde83f7f3253ac3acf392d57abf8cf968e2809a09cea4c7261301"
+    },
+    {
+      "path": "docs/changes/20261116-imap-exact-sender/implementation-verification.md",
+      "bytes": 5939,
+      "sha256": "3ea4dcc6dd53847339fa4d2612469a1e98094b1b72518e502e1fb591700585bb"
+    },
+    {
+      "path": "docs/changes/20261116-imap-exact-sender/requirements.md",
+      "bytes": 972,
+      "sha256": "6707a296e7a7539b038b2f8fbe4960fb7c53b26281de9c9cbff2a58c39413afe"
+    },
+    {
+      "path": "docs/changes/20261116-imap-exact-sender/tasks.md",
+      "bytes": 502,
+      "sha256": "3a7a5c44ca02a8d837ee8d876bb9ec1a4c2a7c3697bf847e078bc63395d566be"
+    }
+  ],
+  "source_unchanged_during_probes": true,
+  "completed_at": "2026-11-16T15:47:18.588434+00:00"
+}

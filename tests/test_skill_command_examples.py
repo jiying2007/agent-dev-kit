@@ -12,6 +12,7 @@ import sys
 import tempfile
 import time
 import unittest
+from unittest import mock
 import xml.etree.ElementTree as ET
 
 
@@ -35,6 +36,48 @@ def bash_example(path: str, marker: str) -> str:
     return matches[0]
 
 
+def owned_process_snapshot(process_group, deadline, *, proc_root=Path("/proc"), limit=16):
+    """Best-effort Linux status only; never collect arguments or environments."""
+    records = []
+    status = "observed"
+    # A diagnostic shares the caller's cleanup deadline and gets at most 50 ms.
+    deadline = min(deadline, time.monotonic() + 0.05)
+    if time.monotonic() >= deadline:
+        return {"status": "bounded", "processes": records}
+    try:
+        with os.scandir(proc_root) as entries:
+            for scanned, entry in enumerate(entries):
+                if scanned >= 256 or len(records) >= limit or time.monotonic() >= deadline:
+                    status = "bounded"
+                    break
+                if not entry.name.isdecimal():
+                    continue
+                process = Path(entry.path)
+                try:
+                    with (process / "stat").open(encoding="utf-8", errors="replace") as stream:
+                        raw = stream.read(4096)
+                    before, fields = raw.rsplit(") ", 1)
+                    pid, comm = before.split(" (", 1)
+                    fields = fields.split()
+                    if int(fields[2]) != process_group:
+                        continue
+                    record = {"pid": int(pid), "pgid": int(fields[2]), "comm": comm,
+                              "state": fields[0], "user_ticks": int(fields[11]),
+                              "system_ticks": int(fields[12]), "wchan": "unavailable"}
+                    if time.monotonic() < deadline:
+                        try:
+                            with (process / "wchan").open(encoding="utf-8", errors="replace") as stream:
+                                record["wchan"] = stream.read(128).strip()
+                        except OSError:
+                            pass  # A process can exit between its stat and wchan reads.
+                    records.append(record)
+                except (OSError, ValueError, IndexError):
+                    status = "partial"
+    except OSError:
+        status = "unavailable"
+    return {"status": status, "processes": records}
+
+
 def run_example(code: str, root: Path, *arguments: str, environment=None,
                 timeout=15, label="skill-example"):
     """Bound the whole example; keep diagnostics and terminate its own process group."""
@@ -48,6 +91,11 @@ def run_example(code: str, root: Path, *arguments: str, environment=None,
         work_elapsed = time.monotonic() - started
         cleanup_started = time.monotonic()
         cleanup_deadline = cleanup_started + 1
+        try:
+            snapshot = owned_process_snapshot(process.pid, cleanup_deadline)
+        except Exception as error:
+            # Diagnostics must never prevent termination or replace the timeout.
+            snapshot = {"status": "unavailable", "error": type(error).__name__, "processes": []}
         try:
             os.killpg(process.pid, signal.SIGKILL)
         except ProcessLookupError:
@@ -72,6 +120,7 @@ def run_example(code: str, root: Path, *arguments: str, environment=None,
         raise AssertionError(
             f"{label}: timeout; budget={timeout}s; work_elapsed={work_elapsed:.3f}s; "
             f"cleanup_elapsed={time.monotonic() - cleanup_started:.3f}s; cleanup={cleanup_status}\n"
+            f"process_snapshot: {json.dumps(snapshot, sort_keys=True)}\n"
             f"stdout:\n{decoded(stdout)}\nstderr:\n{decoded(stderr)}"
         ) from None
     return subprocess.CompletedProcess(command, process.returncode, stdout, stderr)
@@ -91,17 +140,34 @@ class CommandExampleRunnerTests(unittest.TestCase):
     def test_timeout_keeps_both_streams_kills_its_descendant_and_spares_another_group(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            unrelated = subprocess.Popen(["sleep", "60"], start_new_session=True)
+            private = "SYNTHETIC_PRIVATE_ARGUMENT_AND_ENVIRONMENT_8713"
+            environment = dict(os.environ, DIAGNOSTIC_TEST_SECRET=private)
+            unrelated = subprocess.Popen([sys.executable, "-c", "import time; time.sleep(60)", private],
+                                         env=environment, start_new_session=True)
             try:
-                code = ('sleep 60 & child=$!; printf "%s\\n" "$child" > child.pid; '
+                code = ('"$1" -c "import time; time.sleep(60)" "$2" & child=$!; '
+                        'printf "%s\\n" "$child" > child.pid; '
                         'printf "configure complete\\n"; printf "build waiting\\n" >&2; wait')
                 with self.assertRaises(AssertionError) as failure:
-                    run_example(code, root, timeout=0.5, label="timeout-fixture")
+                    run_example(code, root, sys.executable, private, environment=environment,
+                                timeout=0.5, label="timeout-fixture")
                 message = str(failure.exception)
                 for expected in ("timeout-fixture", "budget=0.5s", "work_elapsed=", "cleanup_elapsed=",
                                  "stdout:\nconfigure complete", "stderr:\nbuild waiting"):
                     self.assertIn(expected, message)
                 child = int((root / "child.pid").read_text())
+                snapshot = json.loads(message.split("process_snapshot: ", 1)[1].split("\nstdout:", 1)[0])
+                self.assertNotIn(private, message)
+                self.assertNotIn(unrelated.pid, [record["pid"] for record in snapshot["processes"]])
+                # Busy/inaccessible procfs may legitimately exhaust the small
+                # diagnostic budget; that must not introduce a new timing flake.
+                if sys.platform == "linux" and snapshot["status"] == "observed":
+                    self.assertIn(child, [record["pid"] for record in snapshot["processes"]])
+                if snapshot["processes"]:
+                    self.assertEqual(1, len({record["pgid"] for record in snapshot["processes"]}))
+                for record in snapshot["processes"]:
+                    self.assertEqual({"pid", "pgid", "comm", "state", "user_ticks", "system_ticks", "wchan"},
+                                     set(record))
                 # Linux may briefly retain an already killed orphan as a zombie;
                 # that is not a running child, and is reaped by its new parent.
                 state = Path(f"/proc/{child}/stat")
@@ -120,6 +186,52 @@ class CommandExampleRunnerTests(unittest.TestCase):
                         os.kill(int((root / "child.pid").read_text()), signal.SIGKILL)
                     except ProcessLookupError:
                         pass
+
+    def test_unavailable_diagnostics_do_not_replace_timeout_or_child_cleanup(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            with mock.patch(__name__ + ".owned_process_snapshot", side_effect=OSError("private detail")):
+                with self.assertRaises(AssertionError) as failure:
+                    run_example('printf "started\\n"; sleep 60', root, timeout=0.1)
+            message = str(failure.exception)
+            self.assertIn("timeout; budget=0.1s", message)
+            self.assertIn('"status": "unavailable"', message)
+            self.assertIn("cleanup=complete", message)
+            self.assertNotIn("private detail", message)
+
+    def test_process_snapshot_tolerates_missing_procfs_and_disappearing_processes(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            missing = owned_process_snapshot(123, time.monotonic() + 1, proc_root=root / "absent")
+            self.assertEqual("unavailable", missing["status"])
+            self.assertEqual([], missing["processes"])
+            (root / "123").mkdir()  # Process disappears before stat can be read.
+            (root / "124").mkdir()
+            (root / "124/stat").write_text("incomplete procfs record")
+            for pid, group in ((125, 123), (126, 999)):
+                (root / str(pid)).mkdir()
+                (root / str(pid) / "stat").write_text(
+                    f"{pid} (fixture process) S 1 {group} 0 0 0 0 0 0 0 0 7 8 0\n")
+                (root / str(pid) / "cmdline").write_text("SYNTHETIC_PRIVATE_ARGUMENT")
+                (root / str(pid) / "environ").write_text("SYNTHETIC_PRIVATE_ENVIRONMENT")
+            snapshot = owned_process_snapshot(123, time.monotonic() + 1, proc_root=root)
+            self.assertEqual([125], [record["pid"] for record in snapshot["processes"]])
+            self.assertEqual("unavailable", snapshot["processes"][0]["wchan"])
+            self.assertNotIn("SYNTHETIC_PRIVATE", json.dumps(snapshot))
+
+    def test_process_snapshot_respects_record_and_expired_cleanup_budgets(self):
+        with mock.patch("os.scandir", side_effect=AssertionError("expired diagnostic must not scan")):
+            result = owned_process_snapshot(123, time.monotonic() - 1)
+        self.assertEqual({"status": "bounded", "processes": []}, result)
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for pid in range(123, 128):
+                (root / str(pid)).mkdir()
+                (root / str(pid) / "stat").write_text(
+                    f"{pid} (fixture) S 1 123 0 0 0 0 0 0 0 0 7 8 0\n")
+            result = owned_process_snapshot(123, time.monotonic() + 1, proc_root=root, limit=2)
+            self.assertEqual("bounded", result["status"])
+            self.assertEqual(2, len(result["processes"]))
 
 
 class ReleaseHistoryExampleTests(unittest.TestCase):
@@ -620,7 +732,7 @@ class _CmakeExampleFixture:
         self.toolchain.write_text('set(CMAKE_C_COMPILER "' + shutil.which("cc") + '")\n')
         self.output = self.source / "out" / "manual build"
         self.environment = dict(
-            os.environ, CC=shutil.which("cc"), ADK_SOURCE_DIR=str(self.source),
+            os.environ, CC=shutil.which("cc"), VERBOSE="1", ADK_SOURCE_DIR=str(self.source),
             ADK_BINARY_DIR=str(self.output), ADK_GENERATOR=generator, ADK_BUILD_MODE="manual",
             ADK_TOOLCHAIN_FILE=str(self.toolchain), ADK_CONFIG="Release", ADK_BUILD_JOBS="1",
             ADK_TEST_BACKEND="host-unit", ADK_ELF=str(self.output / "firmware.elf"),
@@ -633,7 +745,7 @@ class _CmakeExampleFixture:
         environment = dict(self.environment, **overrides)
         # Fixture-only trace identifies the last configure/build/CTest command
         # if the aggregate example budget expires; the published block is intact.
-        return run_example("set -x\n" + bash_example(CMAKE, marker), self.source,
+        return run_example("PS4='+${EPOCHREALTIME} ${LINENO}: '\nset -x\n" + bash_example(CMAKE, marker), self.source,
                            environment=environment, label=f"CMake/{environment['ADK_BUILD_MODE']}/{marker}")
 
     def assert_identity(self, identity, output, artifact):
