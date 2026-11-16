@@ -1,8 +1,8 @@
 ---
 name: adk-skill-composition-governance
 description: "用于多个 Skill 的触发冲突、组合边界、fallback 和退役策略审查；不用于新增并行路由权威或直接提升工具写权限。"
-version: 1.1.6
-last_updated: 2026-11-14
+version: 1.1.7
+last_updated: 2026-11-16
 triggers:
   - "技能组合"
   - "触发冲突"

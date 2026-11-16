@@ -1,0 +1,455 @@
+{
+  "schema": "adk-skill-followup-audit/v1",
+  "baseline_commit": "913b6b3a0838ccddae252a3a8536ac7d41598810",
+  "verified_at": "2026-11-16T05:17:01.056736+00:00",
+  "skill_count": 65,
+  "file_count": 153,
+  "baseline_bytes": 421746,
+  "baseline_coverage": "all tracked core and optional files; blob/SHA256/bytes verified",
+  "selected_skills": [
+    "adk-incident-rca-report",
+    "adk-rtos-task-design",
+    "adk-skill-composition-governance",
+    "adk-systematic-debugging"
+  ],
+  "retained_count": 61,
+  "external_repository_count": 16,
+  "external_file_count": 23,
+  "external_repositories": [
+    "ARM-software/CMSIS_6",
+    "FreeRTOS/FreeRTOS-Kernel",
+    "FreeRTOS/FreeRTOS-Kernel-Book",
+    "Jeffallan/claude-skills",
+    "Mindrally/skills",
+    "anthropics/skills",
+    "cloudflare/skills",
+    "git/git",
+    "github/awesome-copilot",
+    "mattpocock/skills",
+    "obra/superpowers",
+    "open-telemetry/opentelemetry-specification",
+    "rovinax/embedded-skills",
+    "supabase/agent-skills",
+    "torvalds/linux",
+    "wshobson/agents"
+  ],
+  "audit_sources": [
+    {
+      "path": "evidence/core-audit.json",
+      "sha256": "273cf660b7ab6cb1f67bb0319c8ea911f370b38b075441e7ee757ab195fbb4f6",
+      "bytes": 44073
+    },
+    {
+      "path": "evidence/embedded-audit.json",
+      "sha256": "52330f35937ff3915296c6065e9945b4a08ba900dfa1a3d65776436547bd2fb9",
+      "bytes": 26856
+    },
+    {
+      "path": "evidence/optional-audit.json",
+      "sha256": "483124b8f8e08474da9db0670b70f25d7958ba6b60501063e1cdcb9e4579b32c",
+      "bytes": 20703
+    }
+  ],
+  "decisions": [
+    {
+      "skill": "adk-runtime-router",
+      "group": "core",
+      "decision": "RETAIN",
+      "reason": "唯一primary、版本适配与optional真实加载边界完整。"
+    },
+    {
+      "skill": "adk-context-engineering",
+      "group": "core",
+      "decision": "RETAIN",
+      "reason": "stable/dynamic/evidence隔离、自包含交接与按需读取已覆盖。"
+    },
+    {
+      "skill": "adk-token-context-governance",
+      "group": "core",
+      "decision": "RETAIN",
+      "reason": "真实trace优先、raw回退，源码字节不冒充Token收益。"
+    },
+    {
+      "skill": "adk-requirements-triage",
+      "group": "core",
+      "decision": "RETAIN",
+      "reason": "brief/execution/high-risk分流，既有批准直接进入执行。"
+    },
+    {
+      "skill": "adk-structured-requirements-questioning",
+      "group": "core",
+      "decision": "RETAIN",
+      "reason": "Explore/Challenge、frontier、部分回答和依赖修订完整。"
+    },
+    {
+      "skill": "adk-repo-prompt-analysis",
+      "group": "core",
+      "decision": "RETAIN",
+      "reason": "实际callsite、role和动态输入信任边界完整，最小报告。"
+    },
+    {
+      "skill": "adk-skill-deep-analysis",
+      "group": "core",
+      "decision": "RETAIN",
+      "reason": "有界source-discovery、固定来源、净增益与可实施handoff已有。"
+    },
+    {
+      "skill": "adk-lightweight-planning",
+      "group": "core",
+      "decision": "RETAIN",
+      "reason": "只读计划按真实规模最小化，执行意图退出此skill。"
+    },
+    {
+      "skill": "adk-task-breakdown",
+      "group": "core",
+      "decision": "RETAIN",
+      "reason": "纵向切片、expand/migrate/contract及Ready Frontier已有。"
+    },
+    {
+      "skill": "adk-parallel-agent-governance",
+      "group": "core",
+      "decision": "RETAIN",
+      "reason": "独立写集、data-only交接、summary-first与真实并行收益要求已有。"
+    },
+    {
+      "skill": "adk-worktree-governance",
+      "group": "core",
+      "decision": "RETAIN",
+      "reason": "上一轮Git只读取证已修，保留dirty保护与独立清理授权。"
+    },
+    {
+      "skill": "adk-context-compress-handoff",
+      "group": "core",
+      "decision": "RETAIN",
+      "reason": "自包含恢复摘要、raw指针、excluded及最多3动作保持。"
+    },
+    {
+      "skill": "adk-interface-contract-design",
+      "group": "core",
+      "decision": "RETAIN",
+      "reason": "方向性版本/能力协商、生命周期/副作用与双向规格核对完整。"
+    },
+    {
+      "skill": "adk-adr-writer",
+      "group": "core",
+      "decision": "RETAIN",
+      "reason": "按风险写ADR，真实备选、保真和冷读边界完整。"
+    },
+    {
+      "skill": "adk-component-api-stability",
+      "group": "core",
+      "decision": "RETAIN",
+      "reason": "源码API/二进制ABI/旧消费者/行为验证分离，保留真实退出码。"
+    },
+    {
+      "skill": "adk-goal-authoring",
+      "group": "core",
+      "decision": "RETAIN",
+      "reason": "原验收分母、可关闭批次、预算null与bounded resume已有。"
+    },
+    {
+      "skill": "adk-planning-execution-loop",
+      "group": "core",
+      "decision": "RETAIN",
+      "reason": "inline fast path、同快照复用、未知副作用对账和真实进展已有。"
+    },
+    {
+      "skill": "adk-code-simplification",
+      "group": "core",
+      "decision": "RETAIN",
+      "reason": "以理解负担而非行数判断，保留cleanup与副作用顺序。"
+    },
+    {
+      "skill": "adk-systematic-debugging",
+      "group": "core",
+      "decision": "ENHANCE",
+      "reason": "二分oracle分类和重跑前证据保全需补，其余因果/单变量/领域方法保留。"
+    },
+    {
+      "skill": "adk-artifact-gating",
+      "group": "core",
+      "decision": "RETAIN",
+      "reason": "READY/PASS与workflow阶段区分，真实通过才填PASS已澄清。"
+    },
+    {
+      "skill": "adk-pilot-framework",
+      "group": "core",
+      "decision": "RETAIN",
+      "reason": "smoke与收益比较、失败/blocked/inconclusive区分，保留重试。"
+    },
+    {
+      "skill": "adk-verification-before-completion",
+      "group": "core",
+      "decision": "RETAIN",
+      "reason": "checkpoint/goal-final、checker校准、实际运行与资格边界已覆盖。"
+    },
+    {
+      "skill": "adk-code-review-loop",
+      "group": "core",
+      "decision": "RETAIN",
+      "reason": "原始Git快照取证已落地，局部反馈/完整审查和双裁决保持。"
+    },
+    {
+      "skill": "adk-repo-drift-remediation",
+      "group": "core",
+      "decision": "RETAIN",
+      "reason": "源事实issue-map、共享配置串行、只读状态与残留理由已有。"
+    },
+    {
+      "skill": "adk-commit-pr-quality-gate",
+      "group": "core",
+      "decision": "RETAIN",
+      "reason": "message-only/PR-readiness/专项门禁按实际影响加载。"
+    },
+    {
+      "skill": "adk-release-versioning",
+      "group": "core",
+      "decision": "RETAIN",
+      "reason": "正式baseline、完整历史、不可变tag与精确资产身份已有。"
+    },
+    {
+      "skill": "adk-production-field-readiness",
+      "group": "core",
+      "decision": "RETAIN",
+      "reason": "设备六类证据/OTA回滚/生产签署边界完整；多人human-active定义疑点无真实消费依据，OBSERVE。"
+    },
+    {
+      "skill": "adk-cross-team-handoff",
+      "group": "core",
+      "decision": "RETAIN",
+      "reason": "lite/formal、真实receiver签收及冷读验收完整。"
+    },
+    {
+      "skill": "adk-branch-closeout",
+      "group": "core",
+      "decision": "RETAIN",
+      "reason": "同范围授权延续、精确head/check及fresh-main已有，删除单独授权。"
+    },
+    {
+      "skill": "adk-after-action-review",
+      "group": "core",
+      "decision": "RETAIN",
+      "reason": "lite/standard/promotion分流，普通复盘无需长期晋级空字段。"
+    },
+    {
+      "skill": "adk-memory-curator",
+      "group": "core",
+      "decision": "RETAIN",
+      "reason": "report-only、授权读取、仅文件名敏感扫描及冲突治理清晰。"
+    },
+    {
+      "skill": "adk-archive-governance",
+      "group": "core",
+      "decision": "RETAIN",
+      "reason": "hash mismatch保留原值和可信原件，不盲重算；入口需核验。"
+    },
+    {
+      "skill": "adk-knowledge-archive",
+      "group": "core",
+      "decision": "RETAIN",
+      "reason": "新归档/治理分离，topic/路径/来源/隐私边界完整。"
+    },
+    {
+      "skill": "adk-engineering-growth-review",
+      "group": "core",
+      "decision": "RETAIN",
+      "reason": "index-first、跨时点证据、不过度采集/外发，单次观察不代表长期能力。"
+    },
+    {
+      "skill": "adk-embedded-debug-transport",
+      "group": "embedded",
+      "decision": "保留：已区分被动/主动/状态改变/破坏性通道，含GDB暂停与MMIO读取副作用。",
+      "reason": ""
+    },
+    {
+      "skill": "adk-bsp-porting-playbook",
+      "group": "embedded",
+      "decision": "保留：目标ABI、独立输出目录、Kbuild实际参数、资源预算及设备handoff完整。",
+      "reason": ""
+    },
+    {
+      "skill": "adk-register-map-design",
+      "group": "embedded",
+      "decision": "保留：v11.3.8已补复位条件/有效位/undefined和安全读取；未发现新执行缺口。",
+      "reason": ""
+    },
+    {
+      "skill": "adk-embedded-remote-debug-log-triage",
+      "group": "embedded",
+      "decision": "保留：分层健康、输出语义、熔断、恢复后身份与HIL阶段覆盖；按问题加载详细参考。",
+      "reason": ""
+    },
+    {
+      "skill": "adk-embedded-release-orchestration",
+      "group": "embedded",
+      "decision": "保留：prepare/publish/device分权与多MCU部分成功恢复已有明确方法。",
+      "reason": ""
+    },
+    {
+      "skill": "adk-interrupt-dma-patterns",
+      "group": "embedded",
+      "decision": "保留：ownership、barrier、memory ordering与coherency分别要求；Linux官方coherent不保证顺序可作现有方法解释，未强行增改。",
+      "reason": ""
+    },
+    {
+      "skill": "adk-fault-injection-recovery",
+      "group": "embedded",
+      "decision": "保留：按实际风险选择故障、隔离授权、恢复SLA、功能/数据一致性及有条件watchdog验证。",
+      "reason": ""
+    },
+    {
+      "skill": "adk-performance-profiling-embedded",
+      "group": "embedded",
+      "decision": "保留：v11.3.8实际运行对象身份、栈边界、有效负载/工作点与不确定性已有执行证据。",
+      "reason": ""
+    },
+    {
+      "skill": "adk-embedded-storage-layout-migration",
+      "group": "embedded",
+      "decision": "保留：文件系统问题分流、数据保护、host演练和独立operator写操作边界明确。",
+      "reason": ""
+    },
+    {
+      "skill": "adk-unit-test-embedded",
+      "group": "embedded",
+      "decision": "保留：独立oracle、有界状态序列、复位/回放、覆盖局限与host/target边界已具体化。",
+      "reason": ""
+    },
+    {
+      "skill": "adk-driver-bringup-checklist",
+      "group": "embedded",
+      "decision": "保留：分阶段验收、主动探测/读副作用、异常恢复、not-run与未授权设备写边界。",
+      "reason": ""
+    },
+    {
+      "skill": "adk-cmake-cross-build",
+      "group": "embedded",
+      "decision": "保留：真实preset/binaryDir/config、JUnit执行状态、零/全skip、资源预算和工具链匹配已有真实测试。",
+      "reason": ""
+    },
+    {
+      "skill": "adk-offline-core-dump-triage",
+      "group": "embedded",
+      "decision": "保留：身份/库匹配与GDB提前关闭auto-load、有限可信帧及partial结论完整。",
+      "reason": ""
+    },
+    {
+      "skill": "adk-static-analysis-c-cpp",
+      "group": "embedded",
+      "decision": "保留：TU/头依赖、实际数据库、非空扫描、解析失败、警告升级与动态证据分层明确。",
+      "reason": ""
+    },
+    {
+      "skill": "adk-protocol-stack-integration",
+      "group": "embedded",
+      "decision": "保留：v11.3.8帧边界/部分IO/截断/缓冲限制/全程deadline与分层状态机已落实。",
+      "reason": ""
+    },
+    {
+      "skill": "adk-driver-implementation",
+      "group": "embedded",
+      "decision": "保留：runtime-specific生命周期、IRQ/DMA引用、partial init/cancel/late completion与资源所有权足够明确。",
+      "reason": ""
+    },
+    {
+      "skill": "adk-rtos-task-design",
+      "group": "embedded",
+      "decision": "改进：保留现有RTA模型，补实际周期API/单位量化与范围、到点与超期区别、有界超期策略，以及共享timer服务与异步stop/delete生命周期。",
+      "reason": ""
+    },
+    {
+      "skill": "adk-test-strategy",
+      "group": "embedded",
+      "decision": "保留：风险分级、独立expected/变体、checker校准、资源隔离及真实回执覆盖充分。",
+      "reason": ""
+    },
+    {
+      "skill": "adk-embedded-diagnostic-harness",
+      "group": "embedded",
+      "decision": "保留：expected/harness/product/environment区分，strict/env套件与实际CLI返回语义明确。",
+      "reason": ""
+    },
+    {
+      "skill": "adk-hardware-debugging",
+      "group": "embedded",
+      "decision": "保留：目标ELF/地址归一化与MCU fault差异，保留实际板端边界。",
+      "reason": ""
+    },
+    {
+      "skill": "adk-integration-hil-sil",
+      "group": "embedded",
+      "decision": "保留：实际runner身份、资源隔离、新鲜JUnit/必跑项、实际执行状态与设备后置健康要求。",
+      "reason": ""
+    },
+    {
+      "skill": "adk-bsp-analysis",
+      "group": "embedded",
+      "decision": "保留：按问题展开的初始化/资源链、权威章节、历史workaround与confirmed/inferred/unknown分离。",
+      "reason": ""
+    },
+    {
+      "skill": "adk-data-fetch",
+      "version": "1.0.3",
+      "decision": "RETAIN",
+      "reason": "独立安装父/子Skill、授权范围、缺子技能停止及partial/not-verified状态传递已经完整，未发现本轮可证新增缺口。",
+      "group": "optional"
+    },
+    {
+      "skill": "adk-fetch-url-content",
+      "version": "1.0.3",
+      "decision": "RETAIN",
+      "reason": "重定向/IP、请求预算、真实内容类型、编码、相对链接/base语义、登录壳与截断状态均明确；不为研究增加爬虫或执行器。",
+      "group": "optional"
+    },
+    {
+      "skill": "adk-email-imap-fetch",
+      "version": "1.0.3",
+      "decision": "RETAIN",
+      "reason": "EXAMINE、UIDVALIDITY+UID、BODY.PEEK、重连重查和逐项partial已有明确约束；无需新增邮箱写权限。",
+      "group": "optional"
+    },
+    {
+      "skill": "adk-external-practice-absorption",
+      "version": "1.0.2",
+      "decision": "RETAIN",
+      "reason": "已有source-only/scoped-adoption/portfolio-intake，来源pin与独立decision边界完整；继续任务不重复intake规则存在。",
+      "group": "optional"
+    },
+    {
+      "skill": "adk-incident-rca-report",
+      "version": "1.1.0",
+      "decision": "ENHANCE_CANDIDATE",
+      "reason": "简短RCA与证据因果方法保留；时间线缺乏事件/采集时间与时区/时钟偏差的明确区分，有有限可执行设计案例。",
+      "group": "optional"
+    },
+    {
+      "skill": "adk-prose-revision",
+      "version": "1.0.0",
+      "decision": "RETAIN",
+      "reason": "report/revise意图、事实与限定保真、原稿风格及无需修改路径完备，反例reference已清楚标记非模型实测。",
+      "group": "optional"
+    },
+    {
+      "skill": "adk-security-supply-chain",
+      "version": "1.1.4",
+      "decision": "RETAIN",
+      "reason": "source-only/adoption/runtime分层、source-to-sink、扫描遗漏与许可边界已有具体步骤；未以第三方词频或星数添加新的检查层。",
+      "group": "optional"
+    },
+    {
+      "skill": "adk-skill-composition-governance",
+      "version": "1.1.6",
+      "decision": "ENHANCE_CANDIDATE",
+      "reason": "主流程/按需评测保留；生命周期Creation Gate模板10行无证据却预填pass，建议改为待验证默认状态。",
+      "group": "optional"
+    },
+    {
+      "skill": "adk-test-flakiness-triage",
+      "version": "1.0.6",
+      "decision": "RETAIN",
+      "reason": "v11.3.8新增原生Condition/readiness/0值/取消与预算边界完整，样本统计和顺序污染限制明确；不重复改动。",
+      "group": "optional"
+    }
+  ],
+  "boundary": "Source audit and explicit design/diagnostic probes; not a native model A/B, token/cost, board or product qualification result."
+}

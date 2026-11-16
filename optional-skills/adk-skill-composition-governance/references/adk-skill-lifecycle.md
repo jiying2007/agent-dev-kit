@@ -10,18 +10,20 @@
 
 ## Creation Gate
 
+Blank rows are pending, not evidence; set decisions only from actual review results and link their evidence.
+
 | Gate | Decision | Evidence |
 |---|---|---|
-| Duplicate skill checked | pass |  |
-| Trigger overlap checked | pass |  |
-| Profile ownership decided | pass |  |
-| Reuse threshold met | pass |  |
-| Pilot requirement declared | pass |  |
-| Fallback / replaced_by declared | pass |  |
-| Output contract declared | pass |  |
-| Deterministic guard declared | pass |  |
-| Evolution evidence declared | pass |  |
-| Distribution channel reviewed | pass |  |
+| Duplicate skill checked | pending |  |
+| Trigger overlap checked | pending |  |
+| Profile ownership decided | pending |  |
+| Reuse threshold met | pending |  |
+| Pilot requirement declared | pending |  |
+| Fallback / replaced_by declared | pending |  |
+| Output contract declared | pending |  |
+| Deterministic guard declared | pending |  |
+| Evolution evidence declared | pending |  |
+| Distribution channel reviewed | pending |  |
 
 ## Pattern Classification
 

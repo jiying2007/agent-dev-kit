@@ -9,7 +9,7 @@
     "source_sha": "7aed1d2545babce16c41dc021ead01c8c324ce07"
   },
   "candidate": {
-    "planned_release": "v11.3.8",
+    "planned_release": "v11.3.9",
     "source_sha": null
   },
   "case_groups": {
@@ -67,6 +67,12 @@
   },
   "holdout_qualification": "development-fixture-only-after-author-exposure",
   "unexecuted_candidate_history": [
+    {
+      "planned_release": "v11.3.8",
+      "merged_main_sha": "913b6b3a0838ccddae252a3a8536ac7d41598810",
+      "model_runs": 0,
+      "reason": "The source release and consumer-source promotion did not execute this author-exposed model campaign. The successor's isolated Git, timer arithmetic, timestamp and template observations remain separate from native A/B, provider-token and cost results."
+    },
     {
       "planned_release": "v11.3.7",
       "merged_main_sha": "5f442723e95fa7ca846b7c3ddc9f9995c7a27065",

@@ -1,0 +1,454 @@
+{
+  "schema": "adk-readonly-optional-research/v1",
+  "reviewer": "ai/root/research_optional_effectiveness",
+  "baseline_commit": "913b6b3a0838ccddae252a3a8536ac7d41598810",
+  "observed_at": "2026-11-16T05:08:38Z",
+  "role": "read-only audit and source research",
+  "scope": {
+    "skills": 9,
+    "files": 15,
+    "file_reads": "complete",
+    "source_skills": 4,
+    "source_primary_specifications": 1,
+    "repo_mutations": false,
+    "external_scripts_executed": false,
+    "paid_models": false,
+    "optional_diff_at_observation": ""
+  },
+  "files": [
+    {
+      "path": "optional-skills/adk-data-fetch/SKILL.md",
+      "bytes": 4088,
+      "sha256": "93f99ba41694cd8bc4931d67a7fcbaf4f62540c17811b2db41a14062430ab011",
+      "git_blob": "01e86153b30390e4a7e3c6a2f415d6a0810acc1e",
+      "read": "complete"
+    },
+    {
+      "path": "optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md",
+      "bytes": 3047,
+      "sha256": "3cff893650e3fa6da6ec383a3eb05bd18468f5de7794c3c2d9f1f067c2f7d373",
+      "git_blob": "db1594b7ace1cf64c6bec55658369fd7f27929e5",
+      "read": "complete"
+    },
+    {
+      "path": "optional-skills/adk-data-fetch/adk-fetch-url-content/SKILL.md",
+      "bytes": 2892,
+      "sha256": "39a05fb731de1c3251c887587ffdb9cedcfa10d5c547910f8fb0969748d64b39",
+      "git_blob": "54ecaeec74ef1356e29e48df1c7534f187d39fe5",
+      "read": "complete"
+    },
+    {
+      "path": "optional-skills/adk-external-practice-absorption/SKILL.md",
+      "bytes": 8664,
+      "sha256": "444ae0b685759d1ce27929d8597c7790fd065b4373e103edd980cd6e09703b9b",
+      "git_blob": "6a84b0ee88efaa1ba4542c15f037e997f91a9d25",
+      "read": "complete"
+    },
+    {
+      "path": "optional-skills/adk-external-practice-absorption/agents/openai.yaml",
+      "bytes": 337,
+      "sha256": "a3778c89b5a1937facc40e463d91966a70a0c8e7f31c2afbc50d4f302d8cb4fe",
+      "git_blob": "d5bfa4d04e441df464f7d93a819ca8254af1d6b4",
+      "read": "complete"
+    },
+    {
+      "path": "optional-skills/adk-incident-rca-report/SKILL.md",
+      "bytes": 2301,
+      "sha256": "b653aafe11d25922f895874cc1e61989f7d1f8d892efec5e3b7f830c4fa09cb4",
+      "git_blob": "1942cac37965917b5979283eb8108f9bbdc5be5f",
+      "read": "complete"
+    },
+    {
+      "path": "optional-skills/adk-prose-revision/SKILL.md",
+      "bytes": 4503,
+      "sha256": "5c0dbe215745f6d3aa09676a88f550248579e71a79dd3703ab82ec2c62ec0360",
+      "git_blob": "382ed9cdf9aa6029d482d0e4a4a6b1fe3e43a51b",
+      "read": "complete"
+    },
+    {
+      "path": "optional-skills/adk-prose-revision/references/review-cases.md",
+      "bytes": 1851,
+      "sha256": "fb82979ca071f05be5c533370e05340d08bf705e5b78392c0facc263df03cfa5",
+      "git_blob": "5feb15f8f3d14a0bb97a4f5156ac2d099e4766c6",
+      "read": "complete"
+    },
+    {
+      "path": "optional-skills/adk-security-supply-chain/SKILL.md",
+      "bytes": 8270,
+      "sha256": "acff83f54f2f15e0160d18b3e6b3e84f09be4b75b4d06e8b459c2b3345bc635f",
+      "git_blob": "e123bcdb9c01b3fe3059f17fd5df710476561ba5",
+      "read": "complete"
+    },
+    {
+      "path": "optional-skills/adk-security-supply-chain/references/skill-scan-coverage.md",
+      "bytes": 1879,
+      "sha256": "6fc92933a7ea418d824d2e92eb64bdd26e0e25e53969d4dd3ce95de0c54b0d15",
+      "git_blob": "b3d5842fd23228b869bc568121dbd5c2db412850",
+      "read": "complete"
+    },
+    {
+      "path": "optional-skills/adk-skill-composition-governance/SKILL.md",
+      "bytes": 6646,
+      "sha256": "d50c3fc1512a58337ab066e60107d17ef25ddcae1bfc0a9914f444b7a5469fad",
+      "git_blob": "fbf4f9c71205fc5c018831dc26b4e28eb7fd7672",
+      "read": "complete"
+    },
+    {
+      "path": "optional-skills/adk-skill-composition-governance/references/adk-skill-lifecycle.md",
+      "bytes": 6726,
+      "sha256": "5aba1c61b0686bc0bb25818834eb01a91d60b05a0de91c40fb73cedda5e23de3",
+      "git_blob": "16bee5898462338d40cb2b07f6b4eac67b3d48a5",
+      "read": "complete"
+    },
+    {
+      "path": "optional-skills/adk-skill-composition-governance/references/skill-behavior-evaluation.md",
+      "bytes": 8108,
+      "sha256": "e54daf26764853d5fe8bb8b0b134442e3d500b12fcf5d33254ef8bab242eee82",
+      "git_blob": "204daead15aa9a7a67f6cf9ac6840bf15a42d235",
+      "read": "complete"
+    },
+    {
+      "path": "optional-skills/adk-test-flakiness-triage/SKILL.md",
+      "bytes": 2427,
+      "sha256": "2a36680bf3a8d60159bcd8672a8cda6995b0740d425970615ecbe23163236acf",
+      "git_blob": "8bd63f87cf6837fc00967656e17e66e49e3eb1b2",
+      "read": "complete"
+    },
+    {
+      "path": "optional-skills/adk-test-flakiness-triage/references/details.md",
+      "bytes": 4805,
+      "sha256": "7723c6f6caa2c86a3ada3ccf95aaadf5ab7ea2a0003087f80c2e0ed9355959f0",
+      "git_blob": "af110d715613b5f6ec5ec4798131d7cd75571cb6",
+      "read": "complete"
+    }
+  ],
+  "decisions": [
+    {
+      "skill": "adk-data-fetch",
+      "version": "1.0.3",
+      "decision": "RETAIN",
+      "reason": "独立安装父/子Skill、授权范围、缺子技能停止及partial/not-verified状态传递已经完整，未发现本轮可证新增缺口。"
+    },
+    {
+      "skill": "adk-fetch-url-content",
+      "version": "1.0.3",
+      "decision": "RETAIN",
+      "reason": "重定向/IP、请求预算、真实内容类型、编码、相对链接/base语义、登录壳与截断状态均明确；不为研究增加爬虫或执行器。"
+    },
+    {
+      "skill": "adk-email-imap-fetch",
+      "version": "1.0.3",
+      "decision": "RETAIN",
+      "reason": "EXAMINE、UIDVALIDITY+UID、BODY.PEEK、重连重查和逐项partial已有明确约束；无需新增邮箱写权限。"
+    },
+    {
+      "skill": "adk-external-practice-absorption",
+      "version": "1.0.2",
+      "decision": "RETAIN",
+      "reason": "已有source-only/scoped-adoption/portfolio-intake，来源pin与独立decision边界完整；继续任务不重复intake规则存在。"
+    },
+    {
+      "skill": "adk-incident-rca-report",
+      "version": "1.1.0",
+      "decision": "ENHANCE_CANDIDATE",
+      "reason": "简短RCA与证据因果方法保留；时间线缺乏事件/采集时间与时区/时钟偏差的明确区分，有有限可执行设计案例。"
+    },
+    {
+      "skill": "adk-prose-revision",
+      "version": "1.0.0",
+      "decision": "RETAIN",
+      "reason": "report/revise意图、事实与限定保真、原稿风格及无需修改路径完备，反例reference已清楚标记非模型实测。"
+    },
+    {
+      "skill": "adk-security-supply-chain",
+      "version": "1.1.4",
+      "decision": "RETAIN",
+      "reason": "source-only/adoption/runtime分层、source-to-sink、扫描遗漏与许可边界已有具体步骤；未以第三方词频或星数添加新的检查层。"
+    },
+    {
+      "skill": "adk-skill-composition-governance",
+      "version": "1.1.6",
+      "decision": "ENHANCE_CANDIDATE",
+      "reason": "主流程/按需评测保留；生命周期Creation Gate模板10行无证据却预填pass，建议改为待验证默认状态。"
+    },
+    {
+      "skill": "adk-test-flakiness-triage",
+      "version": "1.0.6",
+      "decision": "RETAIN",
+      "reason": "v11.3.8新增原生Condition/readiness/0值/取消与预算边界完整，样本统计和顺序污染限制明确；不重复改动。"
+    }
+  ],
+  "external_sources": [
+    {
+      "repo": "cloudflare/skills",
+      "path": "skills/workers-profiling/SKILL.md",
+      "commit": "cbf893b954222276bf1af57e5f23379231e0efb9",
+      "blob": "792be905e836a3a892200f2c9f5a3ecbdc710314",
+      "url": "https://github.com/cloudflare/skills/blob/cbf893b954222276bf1af57e5f23379231e0efb9/skills/workers-profiling/SKILL.md",
+      "license_blob": "7a4a3ea2424c09fbe48d455aed1eaa94d9124835",
+      "bytes": 2204,
+      "sha256": "fec05a080c90f019e1e93e5e1ca3416bb89362655dfc158458301f461cb29839",
+      "read": "complete",
+      "decision": "RETAIN",
+      "adk_target": "adk-performance-profiling-embedded",
+      "reason": "实际部署版本、profile source map和采样证据支持最小改动的方法与现有实运行身份/符号映射边界相符；不引入Cloudflare专属CLI或产品路由。"
+    },
+    {
+      "repo": "supabase/agent-skills",
+      "path": "skills/supabase-postgres-best-practices/SKILL.md",
+      "commit": "c9be0e931b7930f7d02126d04774d904c381e7d7",
+      "blob": "6400792389dfcc82c81953054e546bd72ebcd259",
+      "url": "https://github.com/supabase/agent-skills/blob/c9be0e931b7930f7d02126d04774d904c381e7d7/skills/supabase-postgres-best-practices/SKILL.md",
+      "license_blob": "d3c9e94fbc6c28f66ecb5a01407d543c99c811b6",
+      "bytes": 3231,
+      "sha256": "ad65e776f45e761bafc609d3f506c77c1032225aa65e0c4c02f241b8071e5855",
+      "read": "complete",
+      "decision": "OBSERVE",
+      "adk_target": "none",
+      "reason": "Postgres专属规则不属于现有ADK嵌入式技能职责；按影响分类与按需读reference已存在，不新增数据库skill或强制广触发。"
+    },
+    {
+      "repo": "github/awesome-copilot",
+      "path": "skills/incident-postmortem/SKILL.md",
+      "commit": "dc0083dbe22133bfa7ce3500dee85e187e0cd47a",
+      "blob": "383e3ad302b42b0812514d302094b26f234eade8",
+      "url": "https://github.com/github/awesome-copilot/blob/dc0083dbe22133bfa7ce3500dee85e187e0cd47a/skills/incident-postmortem/SKILL.md",
+      "license_blob": "89bc5e962c9944cdb050887062afdaaf89be504a",
+      "bytes": 9902,
+      "sha256": "9f5f3da1d92ff4e798ce02f8540d9554b647039089903b041f4107455059689b",
+      "read": "complete",
+      "decision": "ENHANCE_CANDIDATE",
+      "adk_target": "adk-incident-rca-report",
+      "reason": "可按需吸收UTC时间线与检测/缓解/预防行动区分；不采用每次必做鱼骨/5Why、逐节阻塞追问、固定输出目录或外部转换安装。"
+    },
+    {
+      "repo": "wshobson/agents",
+      "path": "plugins/incident-response/skills/postmortem-writing/SKILL.md",
+      "commit": "9c61ab243def98f72da12abd41cfcf5bcd91af9d",
+      "blob": "f68b37f973cbca925ce4503c656166968b7faf97",
+      "url": "https://github.com/wshobson/agents/blob/9c61ab243def98f72da12abd41cfcf5bcd91af9d/plugins/incident-response/skills/postmortem-writing/SKILL.md",
+      "license_blob": "326f0a55c96e672fedf9d807ca043c00df05ba0e",
+      "bytes": 6795,
+      "sha256": "1a9d5b19b9ab32acb6616fb0990b8307888da0169537929916762d91501b84e0",
+      "read": "complete",
+      "decision": "RETAIN",
+      "adk_target": "adk-incident-rca-report",
+      "reason": "保留基于证据的简短RCA，不吸收强制五层追问、固定会议/日程或把文档与测试缺失机械判根因；细节下沉方法现已存在。"
+    },
+    {
+      "repo": "open-telemetry/opentelemetry-specification",
+      "path": "specification/logs/data-model.md",
+      "commit": "a4e05d9704fc5218d85a4154fb5b143ea3f5340e",
+      "blob": "1e58b7f18fb547f45132b185f241f3b097f76bb0",
+      "url": "https://github.com/open-telemetry/opentelemetry-specification/blob/a4e05d9704fc5218d85a4154fb5b143ea3f5340e/specification/logs/data-model.md",
+      "bytes": 20155,
+      "sha256": "3ee2c391a5d3262130582df89a3dc5a5640d837d010734ea79458fe3ece31173",
+      "read": "complete",
+      "decision": "ENHANCE_CANDIDATE",
+      "adk_target": "adk-incident-rca-report",
+      "reason": "事件发生Timestamp与采集ObservedTimestamp语义不同；可补齐时间来源和时区/时钟偏差边界，不能用观察顺序制造因果。"
+    }
+  ],
+  "additional_primary_web_sources": [
+    {
+      "url": "https://sre.google/workbook/postmortem-culture/",
+      "ref": "turn23search0",
+      "coverage": "searched official primary page; concrete action ownership, priority and measurable end state corroboration"
+    },
+    {
+      "url": "https://sre.google/resources/practices-and-processes/incident-management-guide/",
+      "ref": "turn23search1",
+      "coverage": "searched official primary page; detection/mitigation/coordination improvement corroboration"
+    },
+    {
+      "url": "https://opentelemetry.io/docs/specs/otel/logs/data-model/",
+      "ref": "turn23search2",
+      "coverage": "searched official primary page then fetched complete commit-pinned source"
+    }
+  ],
+  "candidates": [
+    {
+      "id": "optional-rca-time-evidence",
+      "skill": "adk-incident-rca-report",
+      "classification": "design-case; missing explicit method, not reproduced model failure",
+      "minimal_change": "在现有Workflow第1步加入事件发生/采集时间、原时区、统一比较基准及未知时钟偏差；发生时间未知不把采集时刻当真实起点，不凭排序证明因果。第5步仅针对已观察缺口区分检测/缓解/预防行动；不强制三类全填。",
+      "acceptance": [
+        "对给定跨时区事件与迟到采集记录，正确区分两种顺序，避免把后发生部署归为前发生故障的充分根因。",
+        "时间或时钟偏差不明保持unknown；即便因果未证实，仍可提出与已证检测/缓解缺口对应的行动。",
+        "单因果短RCA、事实/假设/未决区分、已有权限与原始证据继续保留。"
+      ],
+      "actual_probe": {
+        "kind": "design-case-not-model-evaluation",
+        "event_order": [
+          "fault",
+          "deployment"
+        ],
+        "observed_order": [
+          "deployment",
+          "fault"
+        ],
+        "utc_event_times": {
+          "fault": "2026-11-16T04:00:10+00:00",
+          "deployment": "2026-11-16T04:00:40+00:00"
+        },
+        "deployment_after_fault_seconds": 30
+      },
+      "probe_exit": 0,
+      "model_behavior_effect": "not-measured"
+    },
+    {
+      "id": "optional-lifecycle-unproven-pass-default",
+      "skill": "adk-skill-composition-governance",
+      "classification": "observed template defect; no model failure claim",
+      "minimal_change": "Creation Gate空白模板默认待验证/not-run，而非pass；加入填写真实decision与evidence提示。",
+      "actual_observation": {
+        "predeclared_pass_rows": 10,
+        "rows": [
+          {
+            "gate": "Duplicate skill checked",
+            "default_decision": "pass",
+            "evidence": ""
+          },
+          {
+            "gate": "Trigger overlap checked",
+            "default_decision": "pass",
+            "evidence": ""
+          },
+          {
+            "gate": "Profile ownership decided",
+            "default_decision": "pass",
+            "evidence": ""
+          },
+          {
+            "gate": "Reuse threshold met",
+            "default_decision": "pass",
+            "evidence": ""
+          },
+          {
+            "gate": "Pilot requirement declared",
+            "default_decision": "pass",
+            "evidence": ""
+          },
+          {
+            "gate": "Fallback / replaced_by declared",
+            "default_decision": "pass",
+            "evidence": ""
+          },
+          {
+            "gate": "Output contract declared",
+            "default_decision": "pass",
+            "evidence": ""
+          },
+          {
+            "gate": "Deterministic guard declared",
+            "default_decision": "pass",
+            "evidence": ""
+          },
+          {
+            "gate": "Evolution evidence declared",
+            "default_decision": "pass",
+            "evidence": ""
+          },
+          {
+            "gate": "Distribution channel reviewed",
+            "default_decision": "pass",
+            "evidence": ""
+          }
+        ]
+      },
+      "acceptance": [
+        "未填证据的原始模板不能包含成功裁决默认值。",
+        "实际填写的通过裁决必须有证据；现有生命周期与行为资格边界不变。"
+      ],
+      "model_behavior_effect": "not-measured"
+    }
+  ],
+    "minimal_patch_suggestions": [
+      {
+        "path": "optional-skills/adk-incident-rca-report/SKILL.md",
+        "version": "1.1.0 -> 1.1.1",
+        "changes": [
+          {
+            "anchor": "Workflow 1",
+            "replacement": "1. 固定事件范围、版本、影响与证据；时间线保留原时区，区分事件发生与采集时间，仅可比时统一时基。未知时间/时钟偏差记 `unknown`，不凭排序断定因果。"
+          },
+          {
+            "anchor": "Workflow 5",
+            "replacement": "5. 按实际缺口选择检测/缓解/预防行动，给具体改进、复验信号与实际 owner（未知则待确认），不强制三类齐全。生产、安全、数据写入或回滚仍维持原权限与恢复边界。"
+          },
+          {
+            "anchor": "Report Incident field",
+            "replacement": "- Incident / status / time range + time source / timezone / uncertainty:"
+          },
+          {
+            "anchor": "Report Remediation field",
+            "replacement": "- Action (detect | mitigate | prevent) / owner / verification:"
+          }
+        ],
+        "preserve": "Workflow 2/3/4/6的短因果链、可选5-Why、unresolved、短报告默认；全部约束与文档保真保持。"
+      },
+      {
+        "path": "optional-skills/adk-skill-composition-governance/references/adk-skill-lifecycle.md",
+        "related_version": "adk-skill-composition-governance 1.1.6 -> 1.1.7",
+        "changes": [
+          {
+            "anchor": "Creation Gate table",
+            "replacement": "10个空白Evidence行的Decision从pass改为pending。"
+          },
+          {
+            "anchor": "Creation Gate intro",
+            "replacement": "仅按需增加一句：Blank rows are pending, not evidence; set a decision only from actual review results and link its evidence."
+          }
+        ],
+        "preserve": "不变更Canonical Manifest生命周期enum，不增加Gate/registry/engine；下方原行为与资格边界保留。"
+      }
+    ],
+    "existing_tests_and_assertions_to_preserve": [
+      {
+        "path": "tests/test_document_authoring_skills.py",
+        "assertions": [
+          "DocumentAuthoringSkillTests.test_known_overconstraint_regressions: RCA包含“5-Why 为可选分析工具”和“unresolved”，不包含“5-Why 分析必须至少穿透到第 3 层”。",
+          "test_preserve_evidence_and_optional_prose_boundary: RCA保留“文档保真”。",
+          "source cases schema adk-document-authoring-source-cases/v1、evaluation_status not-measured、unique IDs与原8种skill集合不变。"
+        ]
+      },
+      {
+        "path": "tests/fixtures/document_authoring_cases.json",
+        "assertions": [
+          "保留rca-confirmed、rca-unknown、rca-negative旧成功/未知/无设备边界；可追加一个迟到日志跨时区design case，保持not-measured。"
+        ]
+      },
+      {
+        "path": "tests/test_skill_quality_methods.py",
+        "assertions": [
+          "test_reader_first_acceptance_and_feedback_are_source_only所需生命周期markers继续存在：failure_trace_ref/source_sha/design-case/not-measured/holdout/Lifecycle Review (report-only)/required_and_forbidden_footprint/owner_decision。"
+        ]
+      },
+      {
+        "path": "manifests/skill_content_contracts_v2.json",
+        "assertions": [
+          "RCA support/fallback/read-only/explicit-only与composition meta/primary/read-only均不改变。"
+        ]
+      },
+      {
+        "path": "tests/test_optional_skills.sh + tests/test_convert.sh + tests/test_install.sh",
+        "assertions": [
+          "RCA仍仅显式选择安装并能转换；不引入平台依赖。"
+        ]
+      }
+    ],
+    "proposed_verification": [
+      "模板结构检查可以解析Creation Gate表，验证任何Evidence为空的模板行都没有pass/accepted等肯定结果；这是空证据不得预授成功的结构不变量，不以新增标语字符串作为唯一验收。",
+      "RCA时间设计案例沿用datetime实际比较，独立消费者只收到原日志与候选Skill；应输出真实UTC事件顺序、区分采集顺序、保留根因未知。不得把这个少量案例升级为真实模型A/B或生产效果证明。",
+      "运行既有document-authoring/skill-quality/optional/content定向测试；具体全回归由主Agent统筹，不重复全量执行。"
+    ],
+  "rejected_or_deferred": [
+    "不凭Skill仓数量/星数或官方品牌保证质量。",
+    "不复制上游完整Skill包、脚本或执行器。",
+    "不引入Supabase/Cloudflare平台专属运行与安装依赖。",
+    "不采用wshobson固定5-Why深度和固定事故会议时间表。",
+    "不采用awesome-copilot每次强制鱼骨、三组输入未齐便阻塞、固定文档目录和自动转换安装。",
+    "不以synthetic datetime设计案例冒充模型A/B、生产事故或RCA效果实测。",
+    "不为已充分覆盖的7项Optional制造改动。"
+  ]
+}
