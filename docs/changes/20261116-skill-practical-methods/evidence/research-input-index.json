@@ -1,0 +1,67 @@
+[
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/research/external-skill-findings.md",
+    "sha256": "2a1daf2fd12cd6bc4fae23c1e42e06b29bd54430778ee3ca4e83b3f248938c37",
+    "bytes": 15285
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/research/external-skill-counterexamples.py",
+    "sha256": "038332f8dcaf9ed2afd8748d4983cdc79df37e1648b10c431d952db31e6802ed",
+    "bytes": 6369
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/research/external-skill-counterexamples.json",
+    "sha256": "56fb088d18e6fdec6c0e3367c3658d15b5b9fe7f13de1c9bc64a4ef6439cc628",
+    "bytes": 3802
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/research/design-review.md",
+    "sha256": "fba02ef1bc5693d61bbbb41de0ae440a38662918ba9bff6e55a5889c4b628542",
+    "bytes": 10127
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/general/findings.md",
+    "sha256": "d6f14727f85dbd0f5ac52b60c6864715edc3a1f8f193eb508a4146015eacb843",
+    "bytes": 9482
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/general/results.json",
+    "sha256": "610940cd20035a1847a9e10208f4fef3bc24db1e683464e87fae640d94a4f203",
+    "bytes": 18151
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/general/reproduce_general_findings.py",
+    "sha256": "a4326601d4672601362a78c116f6a7b720977f67cfc78e07f871b294e4793da4",
+    "bytes": 7958
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/practical/audit.md",
+    "sha256": "dbf8f958466a79f32db99b9aaab2a7ed0ddb5d1c5a069e8c01191e1247aa151e",
+    "bytes": 8051
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/practical/adc-overflow-red.json",
+    "sha256": "3900f6775742b1d40c9027675585965c5fb0a4849352b6538d9885a648b57bf7",
+    "bytes": 4767
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/practical/reproduce-adc-overflow.py",
+    "sha256": "f4ff22641d6169429dd88ded848aaaa380d5addc7a835e3d577ca32604af2e5b",
+    "bytes": 2800
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/practical/adc-boundaries.c",
+    "sha256": "78b0e1cb3cdf5d5f8aa0b338e5722e70b77c6a475612bd2bd1eb79d30b0ec2b5",
+    "bytes": 1067
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/practical/cmake-preset-static-red.json",
+    "sha256": "71fea2addf9c885ddbcecc06aa235e83b781e96ae20cc6a5f2b53b0198789e8c",
+    "bytes": 2361
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/practical/inspect-cmake-preset-paths.py",
+    "sha256": "885069f05c2fbf8c44313ef90e94682b3a823997d9f13e0f6905724e88f0a770",
+    "bytes": 3188
+  }
+]

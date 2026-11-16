@@ -1,0 +1,295 @@
+{
+  "source_head": "5b88ec5bce351f68d4756d765e69a4f40bde3f07",
+  "source_sha256": {
+    "skills/adk-code-review-loop/SKILL.md": "d7bf180c0e288cb4450892f2b6ce0f61625735b43a89745bed0d5a6e76f62cf6",
+    "skills/adk-code-review-loop/references/review-evidence-template.md": "14be3cf96eb1d9eed590eb18d216046aca4a09b6a1787a8d82cfc4cb8c4d2c79",
+    "skills/adk-context-engineering/SKILL.md": "86dbb451b888eee79923388025f71c1cb92437d3d948ee628b10f24b50807ef5",
+    "skills/adk-context-compress-handoff/SKILL.md": "f4d69f46f916f7bc2f5dd734875d3e6fbb5aae94c0ed0d2f95a1d7748b824d7c",
+    "tests/test_skill_content_contract.py": "822dcb61d0cbb8c1689247cc0a32f956e33cdc236f2504afff31ad7c6da462c7"
+  },
+  "skill_source_byte_changes": [
+    {
+      "skill": "adk-code-review-loop",
+      "baseline_bytes": 23350,
+      "current_bytes": 23333,
+      "delta_bytes": -17
+    },
+    {
+      "skill": "adk-context-engineering",
+      "baseline_bytes": 4029,
+      "current_bytes": 3927,
+      "delta_bytes": -102
+    },
+    {
+      "skill": "adk-context-compress-handoff",
+      "baseline_bytes": 3174,
+      "current_bytes": 3137,
+      "delta_bytes": -37
+    }
+  ],
+  "git_diff_check": {
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "exports": [
+    {
+      "target": "claude-code",
+      "status": "pass",
+      "output": "/workspace/scratch/2d6ca6dc3d38/audit-general-v2/implementation/delivery-final-exports/claude-code",
+      "export_manifest_sha256": "194d83210649c6767b0be261e25efe15f4131b6d9b8811c0aa9f5bf45ede09f6",
+      "skills": [
+        {
+          "skill": "adk-code-review-loop",
+          "body": "/workspace/scratch/2d6ca6dc3d38/audit-general-v2/implementation/delivery-final-exports/claude-code/skills/adk-code-review-loop/SKILL.md",
+          "sha256": "ef8c7eef44694c891582dbe4695fb0d94416661c8968ab18660bdd575b6994f5",
+          "snapshot_reference": "/workspace/scratch/2d6ca6dc3d38/audit-general-v2/implementation/delivery-final-exports/claude-code/skills/adk-code-review-loop/references/review-evidence-template.md",
+          "snapshot_reference_sha256": "14be3cf96eb1d9eed590eb18d216046aca4a09b6a1787a8d82cfc4cb8c4d2c79"
+        },
+        {
+          "skill": "adk-context-engineering",
+          "body": "/workspace/scratch/2d6ca6dc3d38/audit-general-v2/implementation/delivery-final-exports/claude-code/skills/adk-context-engineering/SKILL.md",
+          "sha256": "695b062a6ce0cf559cd9c92320289dbf839602fcb89838114bb3b6fbb5d37bb9",
+          "source_only_reference": "schemas/agent-handoff-v1.schema.json",
+          "reference_condition": "5. 交接默认使用下方模板，不扩大权限；仅在 ADK 源码根已确认且文件可读时，可选根下 `schemas/agent-handoff-v1.schema.json`；未使用不声称 schema 验证。",
+          "template_fields": [
+            "Objective / Phase",
+            "Confirmed Facts",
+            "State / Blockers",
+            "Scope / Permission",
+            "Evidence / Fallback",
+            "Next Actions",
+            "Context decisions",
+            "Missing / conflicting evidence",
+            "Recovery check",
+            "Efficiency observation"
+          ],
+          "source_aid_present_in_consumer": false
+        },
+        {
+          "skill": "adk-context-compress-handoff",
+          "body": "/workspace/scratch/2d6ca6dc3d38/audit-general-v2/implementation/delivery-final-exports/claude-code/skills/adk-context-compress-handoff/SKILL.md",
+          "sha256": "574999bc74dddf9a1f6654e7aeb4f1392ae475f0ee0c6980ef00d95406472655",
+          "source_only_reference": "templates/context/continuity-attestation.md",
+          "reference_condition": "3. 连续性证明：默认使用下方模板记录 active plan/findings/progress/attestation；仅在 ADK 源码根已确认且文件可读时，可选根下 `templates/context/continuity-attestation.md`。",
+          "template_fields": [
+            "Latest Goal",
+            "Invalidated Goals",
+            "Stable Context",
+            "Confirmed Facts",
+            "State / Blockers",
+            "Scope / Permission",
+            "Evidence / Fallback",
+            "Continuity Attestation",
+            "Excluded Context",
+            "Next Actions",
+            "Resume Prompt",
+            "Memory Candidates",
+            "Archive Candidates",
+            "Gate Result"
+          ],
+          "source_aid_present_in_consumer": false
+        }
+      ]
+    },
+    {
+      "target": "opencode",
+      "status": "pass",
+      "output": "/workspace/scratch/2d6ca6dc3d38/audit-general-v2/implementation/delivery-final-exports/opencode",
+      "export_manifest_sha256": "6df389a41144dbd6c084889df1dc11de26e1b9e31363553db0afa68ee84ceaaa",
+      "skills": [
+        {
+          "skill": "adk-code-review-loop",
+          "body": "/workspace/scratch/2d6ca6dc3d38/audit-general-v2/implementation/delivery-final-exports/opencode/skills/adk-code-review-loop/SKILL.md",
+          "sha256": "f14c6d13f65c4f89140e96145087421840393f3082a29f125146148c6337fed7",
+          "snapshot_reference": "/workspace/scratch/2d6ca6dc3d38/audit-general-v2/implementation/delivery-final-exports/opencode/skills/adk-code-review-loop/references/review-evidence-template.md",
+          "snapshot_reference_sha256": "14be3cf96eb1d9eed590eb18d216046aca4a09b6a1787a8d82cfc4cb8c4d2c79"
+        },
+        {
+          "skill": "adk-context-engineering",
+          "body": "/workspace/scratch/2d6ca6dc3d38/audit-general-v2/implementation/delivery-final-exports/opencode/skills/adk-context-engineering/SKILL.md",
+          "sha256": "aa6a619a7ada42fce1d08b7016bd136eb8eb3c24a52d65bc019358d086b4378e",
+          "source_only_reference": "schemas/agent-handoff-v1.schema.json",
+          "reference_condition": "5. 交接默认使用下方模板，不扩大权限；仅在 ADK 源码根已确认且文件可读时，可选根下 `schemas/agent-handoff-v1.schema.json`；未使用不声称 schema 验证。",
+          "template_fields": [
+            "Objective / Phase",
+            "Confirmed Facts",
+            "State / Blockers",
+            "Scope / Permission",
+            "Evidence / Fallback",
+            "Next Actions",
+            "Context decisions",
+            "Missing / conflicting evidence",
+            "Recovery check",
+            "Efficiency observation"
+          ],
+          "source_aid_present_in_consumer": false
+        },
+        {
+          "skill": "adk-context-compress-handoff",
+          "body": "/workspace/scratch/2d6ca6dc3d38/audit-general-v2/implementation/delivery-final-exports/opencode/skills/adk-context-compress-handoff/SKILL.md",
+          "sha256": "375e32eb8dcb31fdcc9c63cdf7ce154d5b817074f3e242ac24ca9f95f33ae859",
+          "source_only_reference": "templates/context/continuity-attestation.md",
+          "reference_condition": "3. 连续性证明：默认使用下方模板记录 active plan/findings/progress/attestation；仅在 ADK 源码根已确认且文件可读时，可选根下 `templates/context/continuity-attestation.md`。",
+          "template_fields": [
+            "Latest Goal",
+            "Invalidated Goals",
+            "Stable Context",
+            "Confirmed Facts",
+            "State / Blockers",
+            "Scope / Permission",
+            "Evidence / Fallback",
+            "Continuity Attestation",
+            "Excluded Context",
+            "Next Actions",
+            "Resume Prompt",
+            "Memory Candidates",
+            "Archive Candidates",
+            "Gate Result"
+          ],
+          "source_aid_present_in_consumer": false
+        }
+      ]
+    }
+  ],
+  "red_evidence": "/workspace/scratch/2d6ca6dc3d38/audit-general-v2/implementation/red.json",
+  "stat_only_red_evidence": "/workspace/scratch/2d6ca6dc3d38/audit-general-v2/implementation/red-stat-only.json",
+  "green_evidence": "/workspace/scratch/2d6ca6dc3d38/audit-general-v2/implementation/green-index-refresh.json",
+  "verification_history": [
+    {
+      "phase": "red",
+      "record": "/workspace/scratch/2d6ca6dc3d38/audit-general-v2/implementation/red.json",
+      "returncode": 1,
+      "sha256": "01b4d051114954e998101ac7ae53ecf70bc7ea0ae3c09269d910bbcc108c5a6b",
+      "log": "/workspace/scratch/2d6ca6dc3d38/audit-general-v2/implementation/red.log"
+    },
+    {
+      "phase": "red-stat-only",
+      "record": "/workspace/scratch/2d6ca6dc3d38/audit-general-v2/implementation/red-stat-only.json",
+      "returncode": 1,
+      "sha256": "04f864da6e1ae5b8db7e0cafa01840dc3a36225fd68c72178731fe241ab498b7",
+      "log": "/workspace/scratch/2d6ca6dc3d38/audit-general-v2/implementation/red-stat-only.log"
+    },
+    {
+      "phase": "green-stat-only-final",
+      "record": "/workspace/scratch/2d6ca6dc3d38/audit-general-v2/implementation/green-stat-only-final.json",
+      "returncode": 1,
+      "sha256": "194bffd2b361591bf132f8d00910a741c85bc563ef02b6ff99d983c9c400559a",
+      "log": "/workspace/scratch/2d6ca6dc3d38/audit-general-v2/implementation/green-stat-only-final.log"
+    },
+    {
+      "phase": "green-index-refresh",
+      "record": "/workspace/scratch/2d6ca6dc3d38/audit-general-v2/implementation/green-index-refresh.json",
+      "returncode": 0,
+      "sha256": "cb3326c0abf1dc32b28cf90480da340466320021956b0c14054e385b533cf6cc",
+      "log": "/workspace/scratch/2d6ca6dc3d38/audit-general-v2/implementation/green-index-refresh.log"
+    }
+  ],
+  "index_refresh_experiment": {
+    "record": "/workspace/scratch/2d6ca6dc3d38/audit-general-v2/implementation/index-refresh-experiment.json",
+    "sha256": "6cd5db7b51af6f12bb9a3b0b19d502e86c5219a332a998d51b0b818dcb1eeb94",
+    "git_version": "git version 2.52.0",
+    "cases": [
+      {
+        "command": [
+          "git",
+          "--no-optional-locks",
+          "status",
+          "--short",
+          "--untracked-files=all"
+        ],
+        "returncode": 0,
+        "stdout": " M fixture.py\n",
+        "stderr": "",
+        "before_index_sha256": "0e10ae3a27b23fae69fbc1c8c94d76cfe83a32886ab44ec0e7e00f2e9dbe8880",
+        "after_index_sha256": "0e10ae3a27b23fae69fbc1c8c94d76cfe83a32886ab44ec0e7e00f2e9dbe8880",
+        "index_changed": false
+      },
+      {
+        "command": [
+          "git",
+          "diff",
+          "HEAD"
+        ],
+        "returncode": 0,
+        "stdout": "diff --git a/fixture.py b/fixture.py\nindex a6b710e..602f7c1 100644\n--- a/fixture.py\n+++ b/fixture.py\n@@ -1 +1 @@\n-value = 100\n+value = 1000\n",
+        "stderr": "",
+        "before_index_sha256": "ad90277547bd7b3ca11bda821f732e6cdc2fab97f8602d825053af4077a2741a",
+        "after_index_sha256": "9877cef4b1f49f3bba04893197b099f969b8c90cdc192721adf81af22e8bad96",
+        "index_changed": true
+      },
+      {
+        "command": [
+          "git",
+          "--no-optional-locks",
+          "diff",
+          "HEAD"
+        ],
+        "returncode": 0,
+        "stdout": "diff --git a/fixture.py b/fixture.py\nindex a6b710e..602f7c1 100644\n--- a/fixture.py\n+++ b/fixture.py\n@@ -1 +1 @@\n-value = 100\n+value = 1000\n",
+        "stderr": "",
+        "before_index_sha256": "1381b3c2dee2ab898396202fc481d2201dd3834fd4cc270f5b3bcff51c18d1ac",
+        "after_index_sha256": "c0ac0acc2796d5ac5a6f4c2add6e7ec70b83b1796545dcc76734e8dddf224785",
+        "index_changed": true
+      },
+      {
+        "command": [
+          "git",
+          "--no-optional-locks",
+          "diff",
+          "--check",
+          "HEAD"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "",
+        "before_index_sha256": "47cc3b62a3ef23cb5d7ecbff4e241b8f3d8f845e78b5b9303c63bf85bd6cf73f",
+        "after_index_sha256": "15c317fef434ec27803efc2a5bf9b1a152b268212466914174473e575baf3d47",
+        "index_changed": true
+      },
+      {
+        "command": [
+          "git",
+          "-c",
+          "diff.autoRefreshIndex=false",
+          "diff",
+          "HEAD"
+        ],
+        "returncode": 0,
+        "stdout": "diff --git a/fixture.py b/fixture.py\nindex a6b710e..602f7c1 100644\n--- a/fixture.py\n+++ b/fixture.py\n@@ -1 +1 @@\n-value = 100\n+value = 1000\n",
+        "stderr": "",
+        "before_index_sha256": "5329c92e9f90034747dbf230fee6f6e3f0d207fb74a4c74fe912482dcc2d5e32",
+        "after_index_sha256": "5329c92e9f90034747dbf230fee6f6e3f0d207fb74a4c74fe912482dcc2d5e32",
+        "index_changed": false
+      },
+      {
+        "command": [
+          "git",
+          "-c",
+          "diff.autoRefreshIndex=false",
+          "diff",
+          "--check",
+          "HEAD"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "",
+        "before_index_sha256": "cfa30e919c663c7e5805bb24ef6886c8f7ea41e577f3e72df414449621ce4759",
+        "after_index_sha256": "cfa30e919c663c7e5805bb24ef6886c8f7ea41e577f3e72df414449621ce4759",
+        "index_changed": false
+      }
+    ]
+  },
+  "negative_results": [
+    "Original exported snapshot omitted the unstaged/committed/mixed target patch; original context defaults depended on absent source files.",
+    "The stat-only fixture failed before the extra guard, and --no-optional-locks alone still failed for diff on Git 2.52.0.",
+    "Command-local diff.autoRefreshIndex=false retained patch output and kept the index unchanged; no repository config change is shipped.",
+    "rtk and knowledge/L2-domain/lessons.md are unavailable; the assigned task explicitly permits direct tools."
+  ],
+  "primary_reference": "https://git-scm.com/docs/git-diff",
+  "limits": [
+    "Real shell and export verification only; no model or native host performance measurement.",
+    "The context assertions inspect shipped field and source-aid contracts, not generated model handoffs.",
+    "Version/fixture/catalog/integration ratchets and publication remain root-owned."
+  ]
+}

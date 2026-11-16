@@ -1,0 +1,223 @@
+{
+  "source_commit": "9a918fa33e02313681649a52713d04750ef0bf0b",
+  "completed_at": "2026-11-16T01:05:00.263701Z",
+  "source_unchanged": true,
+  "checks": [
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "started_at": "2026-11-16T01:04:51.168831Z",
+      "elapsed_seconds": 0.004431977999956871,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "bash",
+        "scripts/devkit.sh",
+        "validate",
+        "--strict"
+      ],
+      "started_at": "2026-11-16T01:04:51.173342Z",
+      "elapsed_seconds": 2.6046870150003087,
+      "exit_code": 0,
+      "stdout": "Validation passed. strict=1 quick=0\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "bash",
+        "scripts/check-token-budget.sh",
+        "--summary-json"
+      ],
+      "started_at": "2026-11-16T01:04:53.778113Z",
+      "elapsed_seconds": 2.5527539079994312,
+      "exit_code": 0,
+      "stdout": "{\"status\":\"pass\",\"budget_status\":\"within-soft-limit\",\"estimate_method\":\"utf8-bytes-ceil-div-4\",\"agents_bytes\":2914,\"agents_soft_limit\":2975,\"agents_limit\":3500,\"agents_estimated_tokens\":729,\"skill_files\":65,\"max_skill_lines\":140,\"max_skill_file\":\"optional-skills/adk-security-supply-chain/SKILL.md\",\"doc_files\":885,\"max_doc_lines\":547,\"max_doc_file\":\"docs/comprehensive-analysis-embedded-harness.md\",\"summary_scripts\":3,\"compact_test_runner\":1,\"context_governance_assets\":11,\"warnings\":0,\"failures\":0}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "bash",
+        "tests/test_module_size_budget.sh"
+      ],
+      "started_at": "2026-11-16T01:04:56.330930Z",
+      "elapsed_seconds": 3.4441038290005963,
+      "exit_code": 0,
+      "stdout": "{\"default_max_bytes\": 30000, \"import_fan_out_hotspot\": \"src/agent_dev_kit/cli.py\", \"largest_baseline_bytes\": 0, \"legacy_exception_count\": 0, \"max_import_fan_out\": 28, \"observed_max_import_fan_out\": 28, \"preferred_execution_namespace\": \"execution_policy\", \"schema\": \"adk-module-size-budget/v1\", \"status\": \"pass\", \"support_module_count\": 0, \"transitional_support_debt_count\": 0}\n[PASS] module size and bounded-context architecture policy pass\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "bash",
+        "scripts/devkit.sh",
+        "release",
+        "check"
+      ],
+      "started_at": "2026-11-16T01:04:59.775111Z",
+      "elapsed_seconds": 0.27442099600011716,
+      "exit_code": 0,
+      "stdout": "{\n  \"schema_version\": 1,\n  \"status\": \"pass\",\n  \"version\": \"11.3.6\",\n  \"direct_targets\": [\n    \"claude-code\",\n    \"opencode\"\n  ],\n  \"external_targets\": [\n    \"codex\"\n  ],\n  \"eval_catalog\": {\n    \"catalog_valid\": true,\n    \"catalog_sha256\": \"f8c77405ee0ae55a33caaffa5b31ba4118d6e7d17afd38db7c49b93eb34914b1\",\n    \"snapshot_atomic\": false,\n    \"dataset_fixture_alignment_scope\": [\n      \"governance-eval-guardrail-regression-dataset\"\n    ],\n    \"contract_only_suite_count\": 9,\n    \"runtime_eval_executed\": false\n  },\n  \"failures\": []\n}\n",
+      "stderr": ""
+    }
+  ],
+  "profile_ratchets": [
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "core",
+      "actual": {
+        "entry_file_bytes": 98496,
+        "potential_full_source_bytes": 173552
+      },
+      "ratchet": {
+        "entry_file_bytes": 133940,
+        "potential_full_source_bytes": 184133
+      },
+      "asset_count": 27,
+      "asset_count_baseline": 27,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "release-hardening",
+      "actual": {
+        "entry_file_bytes": 83145,
+        "potential_full_source_bytes": 157226
+      },
+      "ratchet": {
+        "entry_file_bytes": 112256,
+        "potential_full_source_bytes": 159576
+      },
+      "asset_count": 23,
+      "asset_count_baseline": 23,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "personal-core",
+      "actual": {
+        "entry_file_bytes": 113428,
+        "potential_full_source_bytes": 192221
+      },
+      "ratchet": {
+        "entry_file_bytes": 152918,
+        "potential_full_source_bytes": 204293
+      },
+      "asset_count": 32,
+      "asset_count_baseline": 32,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "embedded-fullstack",
+      "actual": {
+        "entry_file_bytes": 211227,
+        "potential_full_source_bytes": 316321
+      },
+      "ratchet": {
+        "entry_file_bytes": 245296,
+        "potential_full_source_bytes": 316854
+      },
+      "asset_count": 55,
+      "asset_count_baseline": 55,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "team-core",
+      "actual": {
+        "entry_file_bytes": 123962,
+        "potential_full_source_bytes": 211387
+      },
+      "ratchet": {
+        "entry_file_bytes": 166442,
+        "potential_full_source_bytes": 223333
+      },
+      "asset_count": 35,
+      "asset_count_baseline": 35,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "large-refactor",
+      "actual": {
+        "entry_file_bytes": 214252,
+        "potential_full_source_bytes": 323203
+      },
+      "ratchet": {
+        "entry_file_bytes": 248328,
+        "potential_full_source_bytes": 323328
+      },
+      "asset_count": 56,
+      "asset_count_baseline": 56,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "incident-response",
+      "actual": {
+        "entry_file_bytes": 30800,
+        "potential_full_source_bytes": 46556
+      },
+      "ratchet": {
+        "entry_file_bytes": 37797,
+        "potential_full_source_bytes": 46612
+      },
+      "asset_count": 9,
+      "asset_count_baseline": 9,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "research-intake",
+      "actual": {
+        "entry_file_bytes": 65806,
+        "potential_full_source_bytes": 118021
+      },
+      "ratchet": {
+        "entry_file_bytes": 86571,
+        "potential_full_source_bytes": 124543
+      },
+      "asset_count": 20,
+      "asset_count_baseline": 20,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    }
+  ],
+  "ratchet_policy_sha256": "f283524ecff14179cad628735bef9e20580da00c2505687ecca9530da3737bff"
+}

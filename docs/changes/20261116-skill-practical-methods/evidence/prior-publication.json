@@ -1,0 +1,98 @@
+{
+  "schema": "adk-platform-publication-observation/v1",
+  "observed_at": "2026-11-16 01:01:20 UTC",
+  "repository": "jiying2007/agent-dev-kit",
+  "authorization": "The current user explicitly allowed push and merge. Prior blocked observations remain historical and unmodified.",
+  "pr": {
+    "number": 270,
+    "url": "https://github.com/jiying2007/agent-dev-kit/pull/270",
+    "head": "5b88ec5bce351f68d4756d765e69a4f40bde3f07",
+    "merge_commit": "008c789312ed374f38d6d71a113f8fc91f89e63c",
+    "method": "squash",
+    "merged": true,
+    "checks_before_merge": "All applicable checks success; conditional promotion-evidence/branch-gc-apply skipped on PR."
+  },
+  "main_ci": {
+    "run_id": 43782374659,
+    "url": "https://github.com/jiying2007/agent-dev-kit/actions/runs/43782374659",
+    "head": "008c789312ed374f38d6d71a113f8fc91f89e63c",
+    "conclusion": "success"
+  },
+  "release_workflow": {
+    "run_id": 43782987159,
+    "url": "https://github.com/jiying2007/agent-dev-kit/actions/runs/43782987159",
+    "jobs": [
+      {
+        "id": 133024200577,
+        "name": "promote-tag",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 133024292731,
+        "name": "release / package",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 133026034023,
+        "name": "discover-orphaned-releases",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 133026443180,
+        "name": "repair-orphaned-release",
+        "status": "completed",
+        "conclusion": "skipped"
+      }
+    ]
+  },
+  "tag": {
+    "name": "v11.3.5",
+    "object": "2501f8e8be4293952f56e8633a999f2f11c046b9",
+    "type": "annotated",
+    "target": "008c789312ed374f38d6d71a113f8fc91f89e63c",
+    "tagger_date": "2026-11-16T00:53:21Z"
+  },
+  "release": {
+    "id": 446493758,
+    "tag": "v11.3.5",
+    "url": "https://github.com/jiying2007/agent-dev-kit/releases/tag/v11.3.5",
+    "draft": false,
+    "immutable": true,
+    "published_at": "2026-11-16T00:59:00Z",
+    "assets": [
+      {
+        "name": "agent-dev-kit-11.3.5.tar.gz",
+        "size": 4279207,
+        "digest": "sha256:0614531d827a2d16d7b9bef8d61a595c6eed4cd96a6827a8af49498dc083fe4e",
+        "url": "https://github.com/jiying2007/agent-dev-kit/releases/download/v11.3.5/agent-dev-kit-11.3.5.tar.gz"
+      },
+      {
+        "name": "agent-dev-kit-11.3.5.tar.gz.sha256",
+        "size": 94,
+        "digest": "sha256:2cede37a1712edd2cfd588d07c20c0221cf4ae147552f5a3044b987555cc1623",
+        "url": "https://github.com/jiying2007/agent-dev-kit/releases/download/v11.3.5/agent-dev-kit-11.3.5.tar.gz.sha256"
+      },
+      {
+        "name": "release-contract.json",
+        "size": 592,
+        "digest": "sha256:312075fef4500becf510b6aa04620476fe91097c66127e777e042d650fd97a3f",
+        "url": "https://github.com/jiying2007/agent-dev-kit/releases/download/v11.3.5/release-contract.json"
+      }
+    ]
+  },
+  "transport": {
+    "source_tree": "46070d6ce1a72bfd7a117bbac34a51c42cb1e167",
+    "published_tree_with_bridge": "72fa9e545532d184185ed7193cbd1f594a227d9f",
+    "git_cli_push": "credential-unavailable",
+    "connector_tree_equality_verified": true,
+    "source_history_bundle_retained": true
+  },
+  "limitations": [
+    "This is a platform observation, not model/hardware qualification.",
+    "Annotated tag identity and immutable release metadata verified; no claim of a GPG-signed tag.",
+    "Release asset digests are GitHub metadata observations; local asset re-download was not performed."
+  ]
+}

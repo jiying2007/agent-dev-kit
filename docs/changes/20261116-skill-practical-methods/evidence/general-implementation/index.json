@@ -1,0 +1,47 @@
+[
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/general-implementation/red.json",
+    "sha256": "01b4d051114954e998101ac7ae53ecf70bc7ea0ae3c09269d910bbcc108c5a6b",
+    "bytes": 14698
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/general-implementation/green-initial.json",
+    "sha256": "4e3d74fab4b7c3e379604a9e57bdf0fbaa9cf400e13f0417002ef140c91d211c",
+    "bytes": 2420
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/general-implementation/green-contracts.json",
+    "sha256": "93928c2c0c691af650f3f5498c1b5ace001755ba3270fa22dcc4363cd8704ee3",
+    "bytes": 6511
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/general-implementation/green-final.json",
+    "sha256": "7e9176a52a73d82079b1081ab67ee7c2001340c34bf04270faeebd5ea957cbf6",
+    "bytes": 6507
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/general-implementation/red-stat-only.json",
+    "sha256": "04f864da6e1ae5b8db7e0cafa01840dc3a36225fd68c72178731fe241ab498b7",
+    "bytes": 4244
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/general-implementation/green-stat-only-final.json",
+    "sha256": "194bffd2b361591bf132f8d00910a741c85bc563ef02b6ff99d983c9c400559a",
+    "bytes": 9017
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/general-implementation/index-refresh-experiment.json",
+    "sha256": "6cd5db7b51af6f12bb9a3b0b19d502e86c5219a332a998d51b0b818dcb1eeb94",
+    "bytes": 3101
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/general-implementation/green-index-refresh.json",
+    "sha256": "cb3326c0abf1dc32b28cf90480da340466320021956b0c14054e385b533cf6cc",
+    "bytes": 6515
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/general-implementation/delivery-final.json",
+    "sha256": "c9df25e0a808e5736826eebabad629b3a03760ffd8354725b30d742a9643a86c",
+    "bytes": 13686
+  }
+]

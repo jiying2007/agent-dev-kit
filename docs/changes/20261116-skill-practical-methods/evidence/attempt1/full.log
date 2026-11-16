@@ -1,0 +1,8 @@
+[PASS] test_validate
+[PASS] test_manifest_contract
+[PASS] test_catalog
+[PASS] test_skill_content
+[PASS] test_skill_trigger_matrix
+[FAIL] test_skill_sop_quality
+  stderr (last 80 lines):
+    [FAIL] skills/adk-code-review-loop/SKILL.md missing required pattern: Snapshot ID:

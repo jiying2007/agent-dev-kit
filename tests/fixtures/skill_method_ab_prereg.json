@@ -9,7 +9,7 @@
     "source_sha": "7aed1d2545babce16c41dc021ead01c8c324ce07"
   },
   "candidate": {
-    "planned_release": "v11.3.5",
+    "planned_release": "v11.3.6",
     "source_sha": null
   },
   "case_groups": {
@@ -67,6 +67,12 @@
   },
   "holdout_qualification": "development-fixture-only-after-author-exposure",
   "unexecuted_candidate_history": [
+    {
+      "planned_release": "v11.3.5",
+      "merged_main_sha": "008c789312ed374f38d6d71a113f8fc91f89e63c",
+      "model_runs": 0,
+      "reason": "The source change merged without native model trials. Its synthetic comparator timings and this successor's Git/export/C/CTest method fixtures do not populate the author-exposed model campaign or qualify its holdout."
+    },
     {
       "planned_release": "v11.3.4",
       "merged_main_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",

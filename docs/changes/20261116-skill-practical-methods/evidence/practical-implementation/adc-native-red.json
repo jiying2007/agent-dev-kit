@@ -1,0 +1,33 @@
+{
+  "schema": "adk-practical-command-observation/v1",
+  "cwd": "/workspace/scratch/2d6ca6dc3d38/adk-practical",
+  "command": [
+    "python",
+    "tests/test_skill_command_examples.py",
+    "EmbeddedAdcExampleTests",
+    "-v"
+  ],
+  "started_at": "2026-11-16T00:50:29.150366+00:00",
+  "head": "5b88ec5bce351f68d4756d765e69a4f40bde3f07",
+  "working_source_sha256": {
+    "examples/embedded-test-matrix/src/adc_scale.c": "8806bfc9e6c58d26c709e507d890d29c2d1e0966ed29709cf525d3c779cf4e20",
+    "examples/embedded-test-matrix/src/adc_scale.h": "0b542659a54daae9b3104bea7106597591815d084360a6aa8d62e56d588ebc26",
+    "examples/embedded-test-matrix/tests/test_adc_scale.c": "d2bb3325da8041f68fbd2bdba0b1030fc9fd91cb7d968709940edacc2a98827d",
+    "examples/embedded-test-matrix/README.md": "97c937c04847f64370ffb0cbace9121fce028ce73d45ea2df6225c85b86c9e84",
+    "tests/test_skill_command_examples.py": "ff10c114abda06c4450d0ba0cdd3caa7c643d1df5f01823af8a80e23ec79b39e",
+    "skills/adk-cmake-cross-build/SKILL.md": "fe07fc732eabeaf8628f58c02bf37334964dfa6487ffc4fa03d8fab4f7dd19f1",
+    "skills/adk-performance-profiling-embedded/SKILL.md": "c4c6b3e039bc022224a832d146f833b4ca9b69eefc08ee6f3b4a7f53dbaf2a3a"
+  },
+  "tools": {
+    "cc": "/usr/bin/cc",
+    "cmake": null,
+    "ctest": null,
+    "ninja": null,
+    "valgrind": null,
+    "rtk": null
+  },
+  "exit_code": 1,
+  "stdout": "",
+  "stderr": "test_native_endpoints_clamping_and_invalid_inputs (__main__.EmbeddedAdcExampleTests.test_native_endpoints_clamping_and_invalid_inputs) ... FAIL\ntest_native_endpoints_with_supported_ubsan (__main__.EmbeddedAdcExampleTests.test_native_endpoints_with_supported_ubsan) ... FAIL\n\n======================================================================\nFAIL: test_native_endpoints_clamping_and_invalid_inputs (__main__.EmbeddedAdcExampleTests.test_native_endpoints_clamping_and_invalid_inputs)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/2d6ca6dc3d38/adk-practical/tests/test_skill_command_examples.py\", line 360, in test_native_endpoints_clamping_and_invalid_inputs\n    self.compile_and_run(\"-DNDEBUG\")\n  File \"/workspace/scratch/2d6ca6dc3d38/adk-practical/tests/test_skill_command_examples.py\", line 355, in compile_and_run\n    self.assertEqual(0, result.returncode, result.stdout + result.stderr)\nAssertionError: 0 != 1 : PASS zero expected=0 actual=0\nPASS full-scale expected=3300 actual=3300\nPASS invalid expected=-1 actual=-1\nFAIL maximum-int-full-scale expected=2147483647 actual=0\nFAIL maximum-int-clamped expected=2147483647 actual=-1\nPASS maximum-int-zero expected=0 actual=0\nPASS clamped expected=3300 actual=3300\nPASS invalid-minimum expected=-1 actual=-1\nPASS zero-reference expected=-1 actual=-1\nPASS negative-reference expected=-1 actual=-1\nPASS zero-maximum expected=-1 actual=-1\nPASS negative-maximum expected=-1 actual=-1\nFAIL 24-bit-full-scale expected=3300 actual=-28\nFAIL 24-bit-clamped expected=3300 actual=-28\n\n\n======================================================================\nFAIL: test_native_endpoints_with_supported_ubsan (__main__.EmbeddedAdcExampleTests.test_native_endpoints_with_supported_ubsan)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/2d6ca6dc3d38/adk-practical/tests/test_skill_command_examples.py\", line 375, in test_native_endpoints_with_supported_ubsan\n    self.compile_and_run(*flags)\n  File \"/workspace/scratch/2d6ca6dc3d38/adk-practical/tests/test_skill_command_examples.py\", line 355, in compile_and_run\n    self.assertEqual(0, result.returncode, result.stdout + result.stderr)\nAssertionError: 0 != 1 : /workspace/scratch/2d6ca6dc3d38/adk-practical/examples/embedded-test-matrix/src/adc_scale.c:10:15: runtime error: signed integer overflow: 2147483647 * 2147483647 cannot be represented in type 'int'\n\n\n----------------------------------------------------------------------\nRan 2 tests in 0.289s\n\nFAILED (failures=2)\n",
+  "finished_at": "2026-11-16T00:50:29.545673+00:00"
+}

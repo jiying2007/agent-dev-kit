@@ -1,0 +1,123 @@
+{
+  "schema": "adk-practical-baseline-observation/v1",
+  "source_commit": "63e8f61ad9a023b4349851ebb4c9a6eca042a119",
+  "scope": "Native host C fixture only; no MCU, CMake, external service or device execution",
+  "observed_at": "2026-11-16T00:36:08.810580+00:00",
+  "source_sha256": {
+    "examples/embedded-test-matrix/src/adc_scale.h": "0b542659a54daae9b3104bea7106597591815d084360a6aa8d62e56d588ebc26",
+    "examples/embedded-test-matrix/src/adc_scale.c": "8806bfc9e6c58d26c709e507d890d29c2d1e0966ed29709cf525d3c779cf4e20",
+    "examples/embedded-test-matrix/tests/test_adc_scale.c": "75b3ef17d706af99e295a40c495790ed68d61341ba36a1465b78f5ba2aa07c10"
+  },
+  "compiler": {
+    "command": [
+      "/usr/bin/cc",
+      "--version"
+    ],
+    "started_at": "2026-11-16T00:36:08.810583+00:00",
+    "finished_at": "2026-11-16T00:36:08.811851+00:00",
+    "exit_code": 0,
+    "stdout": "cc (Debian 14.2.0-19) 14.2.0\nCopyright (C) 2024 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+    "stderr": ""
+  },
+  "expectation": "Valid full-scale raw equals the positive reference voltage regardless of ADC count width; no signed overflow.",
+  "steps": [
+    {
+      "command": [
+        "/usr/bin/cc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-O2",
+        "-I",
+        "/workspace/scratch/2d6ca6dc3d38/practical-v2",
+        "/workspace/scratch/2d6ca6dc3d38/practical-v2/adc_scale.c",
+        "/workspace/scratch/2d6ca6dc3d38/practical-v2/test_adc_scale.c",
+        "-o",
+        "/workspace/scratch/2d6ca6dc3d38/practical-v2/original-tests"
+      ],
+      "started_at": "2026-11-16T00:36:08.549560+00:00",
+      "finished_at": "2026-11-16T00:36:08.623659+00:00",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/workspace/scratch/2d6ca6dc3d38/practical-v2/original-tests"
+      ],
+      "started_at": "2026-11-16T00:36:08.623790+00:00",
+      "finished_at": "2026-11-16T00:36:08.624636+00:00",
+      "exit_code": 0,
+      "stdout": "PASS zero expected=0 actual=0\nPASS full-scale expected=3300 actual=3300\nPASS invalid expected=-1 actual=-1\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/cc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-O2",
+        "-I",
+        "/workspace/scratch/2d6ca6dc3d38/practical-v2",
+        "/workspace/scratch/2d6ca6dc3d38/practical-v2/adc_scale.c",
+        "/workspace/scratch/2d6ca6dc3d38/practical-v2/adc-boundaries.c",
+        "-o",
+        "/workspace/scratch/2d6ca6dc3d38/practical-v2/boundary-tests"
+      ],
+      "started_at": "2026-11-16T00:36:08.624671+00:00",
+      "finished_at": "2026-11-16T00:36:08.687855+00:00",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/workspace/scratch/2d6ca6dc3d38/practical-v2/boundary-tests"
+      ],
+      "started_at": "2026-11-16T00:36:08.687921+00:00",
+      "finished_at": "2026-11-16T00:36:08.688741+00:00",
+      "exit_code": 1,
+      "stdout": "12-bit-full-scale: expected=3300 actual=3300\n24-bit-full-scale: expected=3300 actual=-28\nint-max-full-scale: expected=3300 actual=0\n24-bit-clamped: expected=3300 actual=-28\nzero: expected=0 actual=0\ninvalid-reference: expected=-1 actual=-1\ninvalid-maximum: expected=-1 actual=-1\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/cc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-O2",
+        "-I",
+        "/workspace/scratch/2d6ca6dc3d38/practical-v2",
+        "-fsanitize=signed-integer-overflow",
+        "-fno-sanitize-recover=all",
+        "/workspace/scratch/2d6ca6dc3d38/practical-v2/adc_scale.c",
+        "/workspace/scratch/2d6ca6dc3d38/practical-v2/adc-boundaries.c",
+        "-o",
+        "/workspace/scratch/2d6ca6dc3d38/practical-v2/sanitized-boundary-tests"
+      ],
+      "started_at": "2026-11-16T00:36:08.688774+00:00",
+      "finished_at": "2026-11-16T00:36:08.808252+00:00",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/workspace/scratch/2d6ca6dc3d38/practical-v2/sanitized-boundary-tests"
+      ],
+      "started_at": "2026-11-16T00:36:08.808321+00:00",
+      "finished_at": "2026-11-16T00:36:08.810572+00:00",
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "/workspace/scratch/2d6ca6dc3d38/practical-v2/adc_scale.c:10:15: runtime error: signed integer overflow: 16777215 * 3300 cannot be represented in type 'int'\n"
+    }
+  ],
+  "cmake_available": false,
+  "ninja_available": false,
+  "model_calls_executed_by_script": 0
+}

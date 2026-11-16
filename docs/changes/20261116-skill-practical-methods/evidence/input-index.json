@@ -1,0 +1,362 @@
+[
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/audit.md",
+    "sha256": "c8e1222690a89d33b261f0e4f09b05113ac8dbf98f36c50ac2882937efa7541d",
+    "bytes": 3123
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/design.md",
+    "sha256": "a5786f6d76b3a920949760cf61d03ec3c47c4b676bd2cbfdc3878233828ce437",
+    "bytes": 2262
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/attempt1/archive-receipt.json",
+    "sha256": "80129593ad53e5af66621076448564e085c6476d412b39757c670e283d342774",
+    "bytes": 848
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/attempt1/full-receipt.json",
+    "sha256": "984321b8df8d31ccf3140da9f5ebe3e9145be8e9faf14e2313d55cd2011b93b5",
+    "bytes": 1197
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/attempt1/full-timing.json",
+    "sha256": "0091040493f95a108197bfb9c424191c2ea1da35270ec051ce80c7bbd472ad51",
+    "bytes": 643
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/attempt1/full.log",
+    "sha256": "e5f8e859452936a37c3f002ca14da86b308c6fcfa509536b9117ec0697f8588f",
+    "bytes": 273
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/attempt1/original.patch",
+    "sha256": "0d41b45361ed9e003f43a326fcf5e48b83949090f2607eda031f2d1256c7fb4a",
+    "bytes": 88541
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/attempt1/pre-freeze-gates.json",
+    "sha256": "f2182242249e0bc4d81fc5829a6fd0b06e40c2fd1cdf186bd4a9ac32c95b1fc2",
+    "bytes": 2907
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/attempt1/profile-budgets.json",
+    "sha256": "a2ec8f4bb4f5fa1d7ace936eb4008d62fd280ced47a1dd5814e768fe90bebd70",
+    "bytes": 4380
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/attempt1/source-freeze.json",
+    "sha256": "defc3602e26346978c8a5d705cadb16079d108298b419ce019ec73ae65844f2d",
+    "bytes": 4998
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/base-reconciliation.json",
+    "sha256": "9ff6d27c7fe2a8103c3d521200d2c371934479a68d1e649e8d8b9ccdbd9ff32f",
+    "bytes": 254
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/final-gates.json",
+    "sha256": "85df3a80427308583a2704bc742e95eb32d21dcfa8e7c2c885c97bc7d521a4e1",
+    "bytes": 7967
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/full-receipt.json",
+    "sha256": "11ff5e4bf00dbfa5b9fc3f17c3bcb8b6d397c207ab247b5e63f47cdb8055ac30",
+    "bytes": 1197
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/full-timing.json",
+    "sha256": "12c9c41389943439df3b447ecd7f99e3d0d1d08ccc36d9e8c4bb8971319f8593",
+    "bytes": 8219
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/full.log",
+    "sha256": "0d1bee4e82001511f12291d9c3be0867228a5a396f58b49d3acd176ef3eed61e",
+    "bytes": 3174
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/general/findings.md",
+    "sha256": "d6f14727f85dbd0f5ac52b60c6864715edc3a1f8f193eb508a4146015eacb843",
+    "bytes": 9482
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/general/reproduce_general_findings.py",
+    "sha256": "a4326601d4672601362a78c116f6a7b720977f67cfc78e07f871b294e4793da4",
+    "bytes": 7958
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/general/results.json",
+    "sha256": "610940cd20035a1847a9e10208f4fef3bc24db1e683464e87fae640d94a4f203",
+    "bytes": 18151
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/general-implementation/delivery-final.json",
+    "sha256": "c9df25e0a808e5736826eebabad629b3a03760ffd8354725b30d742a9643a86c",
+    "bytes": 13686
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/general-implementation/green-contracts.json",
+    "sha256": "93928c2c0c691af650f3f5498c1b5ace001755ba3270fa22dcc4363cd8704ee3",
+    "bytes": 6511
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/general-implementation/green-final.json",
+    "sha256": "7e9176a52a73d82079b1081ab67ee7c2001340c34bf04270faeebd5ea957cbf6",
+    "bytes": 6507
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/general-implementation/green-index-refresh.json",
+    "sha256": "cb3326c0abf1dc32b28cf90480da340466320021956b0c14054e385b533cf6cc",
+    "bytes": 6515
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/general-implementation/green-initial.json",
+    "sha256": "4e3d74fab4b7c3e379604a9e57bdf0fbaa9cf400e13f0417002ef140c91d211c",
+    "bytes": 2420
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/general-implementation/green-stat-only-final.json",
+    "sha256": "194bffd2b361591bf132f8d00910a741c85bc563ef02b6ff99d983c9c400559a",
+    "bytes": 9017
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/general-implementation/index-refresh-experiment.json",
+    "sha256": "6cd5db7b51af6f12bb9a3b0b19d502e86c5219a332a998d51b0b818dcb1eeb94",
+    "bytes": 3101
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/general-implementation/index.json",
+    "sha256": "067421b10a469f8169e14457027c97c65d37fc1aa5a28690b78a58ba13895043",
+    "bytes": 2010
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/general-implementation/red-stat-only.json",
+    "sha256": "04f864da6e1ae5b8db7e0cafa01840dc3a36225fd68c72178731fe241ab498b7",
+    "bytes": 4244
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/general-implementation/red.json",
+    "sha256": "01b4d051114954e998101ac7ae53ecf70bc7ea0ae3c09269d910bbcc108c5a6b",
+    "bytes": 14698
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/implementation-input-index.json",
+    "sha256": "4bccc99e74010444824b2b0b70848015b938125595662b72032ed6ef61d37cae",
+    "bytes": 2711
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/independent-final-verification.json",
+    "sha256": "23199f3716ec4674d0b5e21f497adf803c0b6030a05d8c5f167adfbbe7863c29",
+    "bytes": 8499
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/independent-general/independent-two-methods.json",
+    "sha256": "7fda70558d2f33f3746da26bcd1d8cd99b2cf9faa6337749095a0b807abd8216",
+    "bytes": 1865
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/independent-general/review-snapshot.json",
+    "sha256": "05df3ead199b896b20b88a6d6b0e9062405faac357d4c4260e66459a63c0b9ce",
+    "bytes": 4534
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/independent-general/review.md",
+    "sha256": "b311fe65d7b60dcddd377fff1203c797bedb80d5afbb117fcd7ed31c31db0e1d",
+    "bytes": 9904
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/independent-targeted-verification.json",
+    "sha256": "793d88854c38d26bc96a5b8d7520640178283ab89a05c3f6fd835740509d81da",
+    "bytes": 11314
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/original.patch",
+    "sha256": "f25ae36bf5504c3a5127f07fdd6a3c54a032a6fb48beeb7d20ab0f74ebde4f57",
+    "bytes": 89173
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/practical/adc-boundaries.c",
+    "sha256": "78b0e1cb3cdf5d5f8aa0b338e5722e70b77c6a475612bd2bd1eb79d30b0ec2b5",
+    "bytes": 1067
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/practical/adc-overflow-red.json",
+    "sha256": "3900f6775742b1d40c9027675585965c5fb0a4849352b6538d9885a648b57bf7",
+    "bytes": 4767
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/practical/audit.md",
+    "sha256": "dbf8f958466a79f32db99b9aaab2a7ed0ddb5d1c5a069e8c01191e1247aa151e",
+    "bytes": 8051
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/practical/cmake-preset-static-red.json",
+    "sha256": "71fea2addf9c885ddbcecc06aa235e83b781e96ae20cc6a5f2b53b0198789e8c",
+    "bytes": 2361
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/practical/inspect-cmake-preset-paths.py",
+    "sha256": "885069f05c2fbf8c44313ef90e94682b3a823997d9f13e0f6905724e88f0a770",
+    "bytes": 3188
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/practical/reproduce-adc-overflow.py",
+    "sha256": "f4ff22641d6169429dd88ded848aaaa380d5addc7a835e3d577ca32604af2e5b",
+    "bytes": 2800
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/practical-implementation/adc-native-green.json",
+    "sha256": "4f589055957fb109031994396a5581dcc1ac505899df44bcf5d543bb58324491",
+    "bytes": 1822
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/practical-implementation/adc-native-red.json",
+    "sha256": "ed4c8e131ddb9d54c0072063e870c949b9a9045e6b6839c31ff28341431a81de",
+    "bytes": 4138
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/practical-implementation/adc-structural-check.json",
+    "sha256": "4df0cf5b417e9763261b1c2c3c5acfca0006ddb0ca272164d64b0e7b43734de6",
+    "bytes": 1447
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/practical-implementation/cmake-ci-tool-refusal.json",
+    "sha256": "edc96b3f483f2fcba9676f68f7a8df4ed86ccf601b312dcf08c99ba86eeed7a8",
+    "bytes": 5802
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/practical-implementation/cmake-shell-syntax.json",
+    "sha256": "ea99fbe417c71f8f3bbe0f0fcc590e0e0672d9ce806f7128e52854139c7421c0",
+    "bytes": 2194
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/practical-implementation/command-examples-final-local.json",
+    "sha256": "959e065f480840e995b714fa2dbc3c0ecfccdd0f0fd5c392f2dfdc15651cc018",
+    "bytes": 6468
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/practical-implementation/command-examples-local.json",
+    "sha256": "e88bb10a1526252992ccb09355db1b0f87b3b35f21b563e728fed1a23d51c9c2",
+    "bytes": 5968
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/practical-implementation/handoff.json",
+    "sha256": "cf34524ecdf38689c51c4031125f3c98f7124a44e259825443142565aa7c071d",
+    "bytes": 3004
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/practical-implementation/handoff.md",
+    "sha256": "8568c67244888973535ae562cfd9850d5a87854512683c03d9535788e5079a82",
+    "bytes": 3990
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/practical-implementation/portfolio-local.json",
+    "sha256": "7017324ec768a5f76509fc57ff8f31daed436156163082945e909ece7710881d",
+    "bytes": 2556
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/pre-freeze-gates.json",
+    "sha256": "f2182242249e0bc4d81fc5829a6fd0b06e40c2fd1cdf186bd4a9ac32c95b1fc2",
+    "bytes": 2907
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/prior-publication.json",
+    "sha256": "d10454fdcac1773e4564e8e3ce77549f9c5ea7ac601541acfa00927054fa6499",
+    "bytes": 3586
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/profile-budgets.json",
+    "sha256": "9b5242486c2c69048fbaf4e7992a999fbc846b7347d6d567747d3b032e33812b",
+    "bytes": 4380
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/research/design-review.md",
+    "sha256": "fba02ef1bc5693d61bbbb41de0ae440a38662918ba9bff6e55a5889c4b628542",
+    "bytes": 10127
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/research/external-skill-counterexamples.json",
+    "sha256": "56fb088d18e6fdec6c0e3367c3658d15b5b9fe7f13de1c9bc64a4ef6439cc628",
+    "bytes": 3802
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/research/external-skill-counterexamples.py",
+    "sha256": "038332f8dcaf9ed2afd8748d4983cdc79df37e1648b10c431d952db31e6802ed",
+    "bytes": 6369
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/research/external-skill-findings.md",
+    "sha256": "2a1daf2fd12cd6bc4fae23c1e42e06b29bd54430778ee3ca4e83b3f248938c37",
+    "bytes": 15285
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/research/root-method-review.md",
+    "sha256": "2c9509ab95918e863c71d640ab7455ea49ba262a4fd7ea800933333b5892b873",
+    "bytes": 8323
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/research-input-index.json",
+    "sha256": "83081e0a165e3963100d55475aa4239099b5c381e04590a35b6f8efbfdf23935",
+    "bytes": 2755
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/sop-contract-fix/budget-before.json",
+    "sha256": "9b6734b7df6e1f47e3c2fed5e44b820157723140f65a34b31f6729a1446d80df",
+    "bytes": 1145
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/sop-contract-fix/delivery.json",
+    "sha256": "ade98fd1c5ea0ff7c281c25b45c9aa77f000eb05a50abc202c9b2e1b58b87401",
+    "bytes": 6964
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/sop-contract-fix/green-sop.json",
+    "sha256": "1105e429a6d92ccc243a648728b4358b535fa2f934500741f13124e4c1676604",
+    "bytes": 4676
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/sop-contract-fix/green-t2.json",
+    "sha256": "04b07f64b90281bfd10c6db100b923b846e7b3856509f59e5821c0255c7425af",
+    "bytes": 1804
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/sop-contract-fix/red-sop.json",
+    "sha256": "5e073d1b93f08c31dc0c4df7035e7cd9c9b4b9021f57f4d9904f8e534e9a5be2",
+    "bytes": 654
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/source-freeze.json",
+    "sha256": "cd5c2717dc2323ed05364e91febac19c563b6490e497cb29fc319c2a45dc552a",
+    "bytes": 4998
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/negative-results.md",
+    "sha256": "6165e719da4f52856059b8cc83438b5f42470170be16dc1fdd3c5b1b0e60666f",
+    "bytes": 3111
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/requirements.md",
+    "sha256": "2242052b60589fcf1dfa427dcd9371624b0d2208b124593ba2127a5692a46ed8",
+    "bytes": 3047
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/review-findings.md",
+    "sha256": "658e8c6b2df9d8adf5a078bc968aa8e23e11389f83a7f20e892ac84f8e0dd00e",
+    "bytes": 2225
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/source-review.md",
+    "sha256": "8b80f4d07ad78da7772c92e0c4da977d3fa75018f7076b94b8c8b440b18a1c3a",
+    "bytes": 5834
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/tasks.md",
+    "sha256": "4c49c1f8bc8e2039e43d5a2f5c9be1744207f1953c35fbfe10034fc76680c1e1",
+    "bytes": 3497
+  },
+  {
+    "path": "docs/changes/20261116-skill-practical-methods/verification.md",
+    "sha256": "6dacccdacb204172c26e32b2007feff7a35c5b4208c50bac7f9388fe95d25e4f",
+    "bytes": 5001
+  }
+]

@@ -1,0 +1,32 @@
+{
+  "review_type": "independent scoped implementation review; not blind model A/B",
+  "timestamp_utc": "2026-11-16T00:56:14.070026+00:00",
+  "repository": "/workspace/scratch/2d6ca6dc3d38/adk-practical",
+  "head": "5b88ec5bce351f68d4756d765e69a4f40bde3f07",
+  "methods": [
+    "test_exported_review_snapshot_captures_selected_target_without_staging",
+    "test_exported_context_defaults_are_self_contained"
+  ],
+  "tests_run": 2,
+  "failures": 0,
+  "errors": 0,
+  "skips": 0,
+  "unexpected_successes": 0,
+  "elapsed_seconds": 0.5870558750002601,
+  "success": true,
+  "source_sha256_before": {
+    "skills/adk-code-review-loop/SKILL.md": "d7bf180c0e288cb4450892f2b6ce0f61625735b43a89745bed0d5a6e76f62cf6",
+    "skills/adk-code-review-loop/references/review-evidence-template.md": "14be3cf96eb1d9eed590eb18d216046aca4a09b6a1787a8d82cfc4cb8c4d2c79",
+    "skills/adk-context-engineering/SKILL.md": "86dbb451b888eee79923388025f71c1cb92437d3d948ee628b10f24b50807ef5",
+    "skills/adk-context-compress-handoff/SKILL.md": "f4d69f46f916f7bc2f5dd734875d3e6fbb5aae94c0ed0d2f95a1d7748b824d7c",
+    "tests/test_skill_content_contract.py": "822dcb61d0cbb8c1689247cc0a32f956e33cdc236f2504afff31ad7c6da462c7"
+  },
+  "source_sha256_after": {
+    "skills/adk-code-review-loop/SKILL.md": "d7bf180c0e288cb4450892f2b6ce0f61625735b43a89745bed0d5a6e76f62cf6",
+    "skills/adk-code-review-loop/references/review-evidence-template.md": "14be3cf96eb1d9eed590eb18d216046aca4a09b6a1787a8d82cfc4cb8c4d2c79",
+    "skills/adk-context-engineering/SKILL.md": "86dbb451b888eee79923388025f71c1cb92437d3d948ee628b10f24b50807ef5",
+    "skills/adk-context-compress-handoff/SKILL.md": "f4d69f46f916f7bc2f5dd734875d3e6fbb5aae94c0ed0d2f95a1d7748b824d7c",
+    "tests/test_skill_content_contract.py": "822dcb61d0cbb8c1689247cc0a32f956e33cdc236f2504afff31ad7c6da462c7"
+  },
+  "source_files_unchanged": true
+}

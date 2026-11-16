@@ -1,0 +1,34 @@
+{
+  "schema": "adk-practical-command-observation/v1",
+  "cwd": "/workspace/scratch/2d6ca6dc3d38/adk-practical",
+  "command": [
+    "python",
+    "tests/test_skill_command_examples.py",
+    "-v"
+  ],
+  "started_at": "2026-11-16T00:58:34.799825+00:00",
+  "head": "5b88ec5bce351f68d4756d765e69a4f40bde3f07",
+  "working_source_sha256": {
+    "examples/embedded-test-matrix/src/adc_scale.c": "0cdc5959b1782b31f7f79246cff7dd560f97b9016a7016aec5fbf1641cd72f5e",
+    "examples/embedded-test-matrix/src/adc_scale.h": "9ebff9bb1af11f9f19ec2f26a7ce9a3c8c1174454a1af3b38f18567d8a9977fe",
+    "examples/embedded-test-matrix/tests/test_adc_scale.c": "d2bb3325da8041f68fbd2bdba0b1030fc9fd91cb7d968709940edacc2a98827d",
+    "examples/embedded-test-matrix/README.md": "e0a80a4380a4e491b8ab2ebce7dc2d0be239fd7923d76ab3f341a8d487542fee",
+    "examples/embedded-test-matrix/CMakeLists.txt": "b2c094a53310e12a8fa1a1ac360adfb36eaa427e944f964cf0b7f0cc713b37da",
+    "examples/embedded-test-matrix/cross-build/smoke-command.txt": "8f9c8ca44f723b2fc1c264bae9ade786fbe26ee5fac6dc5c748f482c4faee446",
+    "tests/test_skill_command_examples.py": "3ded6eb0ada9bddeecc4f36daaefdf6eae6721c76617b27274dd582036e2891a",
+    "skills/adk-cmake-cross-build/SKILL.md": "be35369d55aef6e5d4b0ac5ef371f9d773beb3aa05cf39d4a73607173b2b8841",
+    "skills/adk-performance-profiling-embedded/SKILL.md": "e62c18ad0300794718e7b582d54e0b44458df2e25a580b25fa9a5d7b5e7f92cc"
+  },
+  "tools": {
+    "cc": "/usr/bin/cc",
+    "cmake": null,
+    "ctest": null,
+    "ninja": null,
+    "valgrind": null,
+    "rtk": null
+  },
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "test_build_failure_is_reported_and_keeps_config_for_diagnosis (__main__.BspBuildExampleTests.test_build_failure_is_reported_and_keeps_config_for_diagnosis) ... ok\ntest_config_failure_prevents_image_and_dt_commands (__main__.BspBuildExampleTests.test_config_failure_prevents_image_and_dt_commands) ... ok\ntest_existing_output_and_config_are_never_reused_or_reset (__main__.BspBuildExampleTests.test_existing_output_and_config_are_never_reused_or_reset) ... ok\ntest_invalid_job_budget_stops_before_configuration_or_output_creation (__main__.BspBuildExampleTests.test_invalid_job_budget_stops_before_configuration_or_output_creation) ... ok\ntest_make_preserves_selected_arch_toolchain_config_output_and_cpu_ram_budget (__main__.BspBuildExampleTests.test_make_preserves_selected_arch_toolchain_config_output_and_cpu_ram_budget) ... ok\ntest_missing_identity_input_and_relative_output_do_not_build (__main__.BspBuildExampleTests.test_missing_identity_input_and_relative_output_do_not_build) ... ok\ntest_no_dt_target_does_not_invent_a_dt_build (__main__.BspBuildExampleTests.test_no_dt_target_does_not_invent_a_dt_build) ... ok\ntest_adc_cmake_target_builds_and_runs_with_a_strict_c90_default (__main__.CmakeBuildExampleTests.test_adc_cmake_target_builds_and_runs_with_a_strict_c90_default) ... skipped 'real CMake example not executed; missing tools: cmake, ctest, ninja'\ntest_compile_only_preserves_not_run_without_invoking_ctest (__main__.CmakeBuildExampleTests.test_compile_only_preserves_not_run_without_invoking_ctest) ... skipped 'real CMake example not executed; missing tools: cmake, ctest, ninja'\ntest_empty_ctest_selection_fails_after_a_real_successful_build (__main__.CmakeBuildExampleTests.test_empty_ctest_selection_fails_after_a_real_successful_build) ... skipped 'real CMake example not executed; missing tools: cmake, ctest, ninja'\ntest_manual_directory_configuration_tests_and_elf_do_not_invoke_presets (__main__.CmakeBuildExampleTests.test_manual_directory_configuration_tests_and_elf_do_not_invoke_presets) ... skipped 'real CMake example not executed; missing tools: cmake, ctest, ninja'\ntest_preset_names_bind_binary_directory_configuration_tests_and_elf (__main__.CmakeBuildExampleTests.test_preset_names_bind_binary_directory_configuration_tests_and_elf) ... skipped 'real CMake example not executed; missing tools: cmake, ctest, ninja'\ntest_native_endpoints_clamping_and_invalid_inputs (__main__.EmbeddedAdcExampleTests.test_native_endpoints_clamping_and_invalid_inputs) ... ok\ntest_native_endpoints_with_supported_ubsan (__main__.EmbeddedAdcExampleTests.test_native_endpoints_with_supported_ubsan) ... ok\ntest_environment_example_only_prints_names_not_synthetic_secret_values (__main__.FlakySampleExampleTests.test_environment_example_only_prints_names_not_synthetic_secret_values) ... ok\ntest_existing_evidence_is_not_reused_or_overwritten (__main__.FlakySampleExampleTests.test_existing_evidence_is_not_reused_or_overwritten) ... ok\ntest_invalid_sample_budgets_do_not_execute_or_create_output (__main__.FlakySampleExampleTests.test_invalid_sample_budgets_do_not_execute_or_create_output) ... ok\ntest_sample_collection_failure_stops_without_fake_completed_attempt (__main__.FlakySampleExampleTests.test_sample_collection_failure_stops_without_fake_completed_attempt) ... ok\ntest_status_write_failure_is_not_a_successful_collection (__main__.FlakySampleExampleTests.test_status_write_failure_is_not_a_successful_collection) ... ok\ntest_success_failure_and_mixed_runs_keep_exact_exit_codes_and_reports (__main__.FlakySampleExampleTests.test_success_failure_and_mixed_runs_keep_exact_exit_codes_and_reports) ... ok\ntest_compiled_consumer_requires_minor_21_and_async_cancel (__main__.InterfaceVersionExampleTests.test_compiled_consumer_requires_minor_21_and_async_cancel) ... ok\ntest_empty_verified_range_is_distinct_from_git_or_usage_failure (__main__.ReleaseHistoryExampleTests.test_empty_verified_range_is_distinct_from_git_or_usage_failure) ... ok\ntest_initial_release_preserves_all_commits_without_tags (__main__.ReleaseHistoryExampleTests.test_initial_release_preserves_all_commits_without_tags) ... ok\ntest_invalid_or_unrelated_baseline_fails_without_initial_fallback (__main__.ReleaseHistoryExampleTests.test_invalid_or_unrelated_baseline_fails_without_initial_fallback) ... ok\ntest_shallow_history_is_rejected_even_for_explicit_initial_mode (__main__.ReleaseHistoryExampleTests.test_shallow_history_is_rejected_even_for_explicit_initial_mode) ... ok\ntest_verified_release_range_keeps_breaking_revert_and_unknown_types (__main__.ReleaseHistoryExampleTests.test_verified_release_range_keeps_breaking_revert_and_unknown_types) ... ok\n\n----------------------------------------------------------------------\nRan 26 tests in 0.898s\n\nOK (skipped=5)\n",
+  "finished_at": "2026-11-16T00:58:35.797850+00:00"
+}

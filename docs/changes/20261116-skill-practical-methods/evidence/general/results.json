@@ -1,0 +1,499 @@
+{
+  "scope": "read-only audit of repository source; synthetic Git and exports in scratch",
+  "repository": "/workspace/scratch/2d6ca6dc3d38/agent-dev-kit",
+  "head": "63e8f61ad9a023b4349851ebb4c9a6eca042a119",
+  "source_sha256": {
+    "skills/adk-code-review-loop/references/review-evidence-template.md": "5c9550491f44aa9c9d07595bc637bafe199d98ed223c35e86384feb209a6fc05",
+    "skills/adk-context-engineering/SKILL.md": "2036424ab37e7722043f8e41a662ff890108d5beae83c7f7fc0b19b64bef8038",
+    "skills/adk-context-compress-handoff/SKILL.md": "697c701f0907297d5239d4669b8a6e2573422166a887d4e523ca283c8ddc34a1",
+    "src/agent_dev_kit/compiler.py": "72a981a3ad66bebce77960339eafd55ce3abd75553bef5fa1cfcbcb37471f3c0",
+    "src/agent_dev_kit/targets.py": "582fdc2cc6695cc8dd862196b8e6fa66f8a3c56bccf751076af50c2cf41ef87c",
+    "tests/test_skill_content_contract.py": "1c9890bfc7adcf05c949eaa44078936ba089430fb5cacd167501bae45a37bff9"
+  },
+  "snapshot_commands_from_rendered_asset": "git rev-parse HEAD\ngit status --short\ngit diff --check\ngit diff --cached\ngit diff --check --cached",
+  "review_cases": [
+    {
+      "review_target": "staged",
+      "base": "2769759a514ab321f9a08782a7ea5035220ecfe8",
+      "commands": [
+        {
+          "command": "git rev-parse HEAD",
+          "returncode": 0,
+          "stdout": "2769759a514ab321f9a08782a7ea5035220ecfe8\n",
+          "stderr": ""
+        },
+        {
+          "command": "git status --short",
+          "returncode": 0,
+          "stdout": "M  fixture.py\n",
+          "stderr": ""
+        },
+        {
+          "command": "git diff --check",
+          "returncode": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": "git diff --cached",
+          "returncode": 0,
+          "stdout": "diff --git a/fixture.py b/fixture.py\nindex e7de451..623456c 100644\n--- a/fixture.py\n+++ b/fixture.py\n@@ -1,2 +1,2 @@\n def cents_to_dollars(cents):\n-    return cents / 100\n+    return cents / 1000  # WORKTREE_REGRESSION\n",
+          "stderr": ""
+        },
+        {
+          "command": "git diff --check --cached",
+          "returncode": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "expected_changed_content": "WORKTREE_REGRESSION",
+      "template_captured_expected_content": true,
+      "comparison_control": {
+        "command": "git diff --cached",
+        "returncode": 0,
+        "stdout": "diff --git a/fixture.py b/fixture.py\nindex e7de451..623456c 100644\n--- a/fixture.py\n+++ b/fixture.py\n@@ -1,2 +1,2 @@\n def cents_to_dollars(cents):\n-    return cents / 100\n+    return cents / 1000  # WORKTREE_REGRESSION\n",
+        "stderr": ""
+      }
+    },
+    {
+      "review_target": "working-tree-unstaged",
+      "base": "2769759a514ab321f9a08782a7ea5035220ecfe8",
+      "commands": [
+        {
+          "command": "git rev-parse HEAD",
+          "returncode": 0,
+          "stdout": "2769759a514ab321f9a08782a7ea5035220ecfe8\n",
+          "stderr": ""
+        },
+        {
+          "command": "git status --short",
+          "returncode": 0,
+          "stdout": " M fixture.py\n",
+          "stderr": ""
+        },
+        {
+          "command": "git diff --check",
+          "returncode": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": "git diff --cached",
+          "returncode": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": "git diff --check --cached",
+          "returncode": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "expected_changed_content": "WORKTREE_REGRESSION",
+      "template_captured_expected_content": false,
+      "comparison_control": {
+        "command": "git diff HEAD",
+        "returncode": 0,
+        "stdout": "diff --git a/fixture.py b/fixture.py\nindex e7de451..623456c 100644\n--- a/fixture.py\n+++ b/fixture.py\n@@ -1,2 +1,2 @@\n def cents_to_dollars(cents):\n-    return cents / 100\n+    return cents / 1000  # WORKTREE_REGRESSION\n",
+        "stderr": ""
+      }
+    },
+    {
+      "review_target": "whole-branch-clean",
+      "base": "2769759a514ab321f9a08782a7ea5035220ecfe8",
+      "commands": [
+        {
+          "command": "git rev-parse HEAD",
+          "returncode": 0,
+          "stdout": "459058cadcb4bb82e6419b8182bb050ce002ef19\n",
+          "stderr": ""
+        },
+        {
+          "command": "git status --short",
+          "returncode": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": "git diff --check",
+          "returncode": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": "git diff --cached",
+          "returncode": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": "git diff --check --cached",
+          "returncode": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "expected_changed_content": "WHOLE_BRANCH_REGRESSION",
+      "template_captured_expected_content": false,
+      "comparison_control": {
+        "command": "git diff 2769759a514ab321f9a08782a7ea5035220ecfe8...HEAD",
+        "returncode": 0,
+        "stdout": "diff --git a/fixture.py b/fixture.py\nindex e7de451..e88bf35 100644\n--- a/fixture.py\n+++ b/fixture.py\n@@ -1,2 +1,2 @@\n def cents_to_dollars(cents):\n-    return cents / 100\n+    return cents / 1000  # WHOLE_BRANCH_REGRESSION\n",
+        "stderr": ""
+      }
+    },
+    {
+      "review_target": "working-tree-mixed",
+      "base": "2769759a514ab321f9a08782a7ea5035220ecfe8",
+      "commands": [
+        {
+          "command": "git rev-parse HEAD",
+          "returncode": 0,
+          "stdout": "2769759a514ab321f9a08782a7ea5035220ecfe8\n",
+          "stderr": ""
+        },
+        {
+          "command": "git status --short",
+          "returncode": 0,
+          "stdout": "MM fixture.py\n",
+          "stderr": ""
+        },
+        {
+          "command": "git diff --check",
+          "returncode": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": "git diff --cached",
+          "returncode": 0,
+          "stdout": "diff --git a/fixture.py b/fixture.py\nindex e7de451..e2dd19b 100644\n--- a/fixture.py\n+++ b/fixture.py\n@@ -1,2 +1,2 @@\n def cents_to_dollars(cents):\n-    return cents / 100\n+    return cents / 100.0  # STAGED_BENIGN_CHANGE\n",
+          "stderr": ""
+        },
+        {
+          "command": "git diff --check --cached",
+          "returncode": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "expected_changed_content": "WORKTREE_REGRESSION",
+      "template_captured_expected_content": false,
+      "comparison_control": {
+        "command": "git diff HEAD",
+        "returncode": 0,
+        "stdout": "diff --git a/fixture.py b/fixture.py\nindex e7de451..623456c 100644\n--- a/fixture.py\n+++ b/fixture.py\n@@ -1,2 +1,2 @@\n def cents_to_dollars(cents):\n-    return cents / 100\n+    return cents / 1000  # WORKTREE_REGRESSION\n",
+        "stderr": ""
+      }
+    }
+  ],
+  "context_profile_checks": [
+    {
+      "profile": "core",
+      "target": "claude-code",
+      "file_count": 57,
+      "missing": [
+        {
+          "skill": "adk-context-compress-handoff",
+          "body_destination": "skills/adk-context-compress-handoff/SKILL.md",
+          "reference": "templates/context/continuity-attestation.md",
+          "source_exists": true,
+          "matching_exported_dependencies": []
+        },
+        {
+          "skill": "adk-context-engineering",
+          "body_destination": "skills/adk-context-engineering/SKILL.md",
+          "reference": "schemas/agent-handoff-v1.schema.json",
+          "source_exists": true,
+          "matching_exported_dependencies": []
+        }
+      ]
+    },
+    {
+      "profile": "core",
+      "target": "opencode",
+      "file_count": 57,
+      "missing": [
+        {
+          "skill": "adk-context-compress-handoff",
+          "body_destination": "skills/adk-context-compress-handoff/SKILL.md",
+          "reference": "templates/context/continuity-attestation.md",
+          "source_exists": true,
+          "matching_exported_dependencies": []
+        },
+        {
+          "skill": "adk-context-engineering",
+          "body_destination": "skills/adk-context-engineering/SKILL.md",
+          "reference": "schemas/agent-handoff-v1.schema.json",
+          "source_exists": true,
+          "matching_exported_dependencies": []
+        }
+      ]
+    },
+    {
+      "profile": "release-hardening",
+      "target": "claude-code",
+      "file_count": 52,
+      "missing": [
+        {
+          "skill": "adk-context-compress-handoff",
+          "body_destination": "skills/adk-context-compress-handoff/SKILL.md",
+          "reference": "templates/context/continuity-attestation.md",
+          "source_exists": true,
+          "matching_exported_dependencies": []
+        }
+      ]
+    },
+    {
+      "profile": "release-hardening",
+      "target": "opencode",
+      "file_count": 52,
+      "missing": [
+        {
+          "skill": "adk-context-compress-handoff",
+          "body_destination": "skills/adk-context-compress-handoff/SKILL.md",
+          "reference": "templates/context/continuity-attestation.md",
+          "source_exists": true,
+          "matching_exported_dependencies": []
+        }
+      ]
+    },
+    {
+      "profile": "personal-core",
+      "target": "claude-code",
+      "file_count": 64,
+      "missing": [
+        {
+          "skill": "adk-context-compress-handoff",
+          "body_destination": "skills/adk-context-compress-handoff/SKILL.md",
+          "reference": "templates/context/continuity-attestation.md",
+          "source_exists": true,
+          "matching_exported_dependencies": []
+        },
+        {
+          "skill": "adk-context-engineering",
+          "body_destination": "skills/adk-context-engineering/SKILL.md",
+          "reference": "schemas/agent-handoff-v1.schema.json",
+          "source_exists": true,
+          "matching_exported_dependencies": []
+        }
+      ]
+    },
+    {
+      "profile": "personal-core",
+      "target": "opencode",
+      "file_count": 64,
+      "missing": [
+        {
+          "skill": "adk-context-compress-handoff",
+          "body_destination": "skills/adk-context-compress-handoff/SKILL.md",
+          "reference": "templates/context/continuity-attestation.md",
+          "source_exists": true,
+          "matching_exported_dependencies": []
+        },
+        {
+          "skill": "adk-context-engineering",
+          "body_destination": "skills/adk-context-engineering/SKILL.md",
+          "reference": "schemas/agent-handoff-v1.schema.json",
+          "source_exists": true,
+          "matching_exported_dependencies": []
+        }
+      ]
+    },
+    {
+      "profile": "embedded-fullstack",
+      "target": "claude-code",
+      "file_count": 97,
+      "missing": [
+        {
+          "skill": "adk-context-compress-handoff",
+          "body_destination": "skills/adk-context-compress-handoff/SKILL.md",
+          "reference": "templates/context/continuity-attestation.md",
+          "source_exists": true,
+          "matching_exported_dependencies": []
+        },
+        {
+          "skill": "adk-context-engineering",
+          "body_destination": "skills/adk-context-engineering/SKILL.md",
+          "reference": "schemas/agent-handoff-v1.schema.json",
+          "source_exists": true,
+          "matching_exported_dependencies": []
+        }
+      ]
+    },
+    {
+      "profile": "embedded-fullstack",
+      "target": "opencode",
+      "file_count": 97,
+      "missing": [
+        {
+          "skill": "adk-context-compress-handoff",
+          "body_destination": "skills/adk-context-compress-handoff/SKILL.md",
+          "reference": "templates/context/continuity-attestation.md",
+          "source_exists": true,
+          "matching_exported_dependencies": []
+        },
+        {
+          "skill": "adk-context-engineering",
+          "body_destination": "skills/adk-context-engineering/SKILL.md",
+          "reference": "schemas/agent-handoff-v1.schema.json",
+          "source_exists": true,
+          "matching_exported_dependencies": []
+        }
+      ]
+    },
+    {
+      "profile": "team-core",
+      "target": "claude-code",
+      "file_count": 69,
+      "missing": [
+        {
+          "skill": "adk-context-compress-handoff",
+          "body_destination": "skills/adk-context-compress-handoff/SKILL.md",
+          "reference": "templates/context/continuity-attestation.md",
+          "source_exists": true,
+          "matching_exported_dependencies": []
+        },
+        {
+          "skill": "adk-context-engineering",
+          "body_destination": "skills/adk-context-engineering/SKILL.md",
+          "reference": "schemas/agent-handoff-v1.schema.json",
+          "source_exists": true,
+          "matching_exported_dependencies": []
+        }
+      ]
+    },
+    {
+      "profile": "team-core",
+      "target": "opencode",
+      "file_count": 69,
+      "missing": [
+        {
+          "skill": "adk-context-compress-handoff",
+          "body_destination": "skills/adk-context-compress-handoff/SKILL.md",
+          "reference": "templates/context/continuity-attestation.md",
+          "source_exists": true,
+          "matching_exported_dependencies": []
+        },
+        {
+          "skill": "adk-context-engineering",
+          "body_destination": "skills/adk-context-engineering/SKILL.md",
+          "reference": "schemas/agent-handoff-v1.schema.json",
+          "source_exists": true,
+          "matching_exported_dependencies": []
+        }
+      ]
+    },
+    {
+      "profile": "large-refactor",
+      "target": "claude-code",
+      "file_count": 100,
+      "missing": [
+        {
+          "skill": "adk-context-compress-handoff",
+          "body_destination": "skills/adk-context-compress-handoff/SKILL.md",
+          "reference": "templates/context/continuity-attestation.md",
+          "source_exists": true,
+          "matching_exported_dependencies": []
+        },
+        {
+          "skill": "adk-context-engineering",
+          "body_destination": "skills/adk-context-engineering/SKILL.md",
+          "reference": "schemas/agent-handoff-v1.schema.json",
+          "source_exists": true,
+          "matching_exported_dependencies": []
+        }
+      ]
+    },
+    {
+      "profile": "large-refactor",
+      "target": "opencode",
+      "file_count": 100,
+      "missing": [
+        {
+          "skill": "adk-context-compress-handoff",
+          "body_destination": "skills/adk-context-compress-handoff/SKILL.md",
+          "reference": "templates/context/continuity-attestation.md",
+          "source_exists": true,
+          "matching_exported_dependencies": []
+        },
+        {
+          "skill": "adk-context-engineering",
+          "body_destination": "skills/adk-context-engineering/SKILL.md",
+          "reference": "schemas/agent-handoff-v1.schema.json",
+          "source_exists": true,
+          "matching_exported_dependencies": []
+        }
+      ]
+    }
+  ],
+  "actual_export_checks": [
+    {
+      "target": "claude-code",
+      "output": "/workspace/scratch/2d6ca6dc3d38/audit-general-v2/core-exports/claude-code",
+      "checks": [
+        {
+          "skill": "adk-context-engineering",
+          "body": "/workspace/scratch/2d6ca6dc3d38/audit-general-v2/core-exports/claude-code/skills/adk-context-engineering/SKILL.md",
+          "attempted_locations": [
+            "/workspace/scratch/2d6ca6dc3d38/audit-general-v2/core-exports/claude-code/schemas/agent-handoff-v1.schema.json",
+            "/workspace/scratch/2d6ca6dc3d38/audit-general-v2/core-exports/claude-code/skills/adk-context-engineering/schemas/agent-handoff-v1.schema.json"
+          ],
+          "missing_locations": [
+            true,
+            true
+          ]
+        },
+        {
+          "skill": "adk-context-compress-handoff",
+          "body": "/workspace/scratch/2d6ca6dc3d38/audit-general-v2/core-exports/claude-code/skills/adk-context-compress-handoff/SKILL.md",
+          "attempted_locations": [
+            "/workspace/scratch/2d6ca6dc3d38/audit-general-v2/core-exports/claude-code/templates/context/continuity-attestation.md",
+            "/workspace/scratch/2d6ca6dc3d38/audit-general-v2/core-exports/claude-code/skills/adk-context-compress-handoff/templates/context/continuity-attestation.md"
+          ],
+          "missing_locations": [
+            true,
+            true
+          ]
+        }
+      ]
+    },
+    {
+      "target": "opencode",
+      "output": "/workspace/scratch/2d6ca6dc3d38/audit-general-v2/core-exports/opencode",
+      "checks": [
+        {
+          "skill": "adk-context-engineering",
+          "body": "/workspace/scratch/2d6ca6dc3d38/audit-general-v2/core-exports/opencode/skills/adk-context-engineering/SKILL.md",
+          "attempted_locations": [
+            "/workspace/scratch/2d6ca6dc3d38/audit-general-v2/core-exports/opencode/schemas/agent-handoff-v1.schema.json",
+            "/workspace/scratch/2d6ca6dc3d38/audit-general-v2/core-exports/opencode/skills/adk-context-engineering/schemas/agent-handoff-v1.schema.json"
+          ],
+          "missing_locations": [
+            true,
+            true
+          ]
+        },
+        {
+          "skill": "adk-context-compress-handoff",
+          "body": "/workspace/scratch/2d6ca6dc3d38/audit-general-v2/core-exports/opencode/skills/adk-context-compress-handoff/SKILL.md",
+          "attempted_locations": [
+            "/workspace/scratch/2d6ca6dc3d38/audit-general-v2/core-exports/opencode/templates/context/continuity-attestation.md",
+            "/workspace/scratch/2d6ca6dc3d38/audit-general-v2/core-exports/opencode/skills/adk-context-compress-handoff/templates/context/continuity-attestation.md"
+          ],
+          "missing_locations": [
+            true,
+            true
+          ]
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "No model execution; template evidence coverage is measured, not model review accuracy.",
+    "No native host invocation; exported file contents and existence are measured.",
+    "Project lint/test placeholders were not executed."
+  ]
+}

@@ -1,7 +1,7 @@
 ---
 name: adk-code-review-loop
 description: "用于独立代码审查、问题复核与反馈闭环；不用于自动批准或代替提交前门禁。"
-version: 1.7.7
+version: 1.7.8
 last_updated: 2026-11-16
 triggers:
   - "独立代码审查"
@@ -31,33 +31,29 @@ constraints:
 # adk-code-review-loop
 
 ## Goal
-- 审查必须能复现、能闭环。
-- 区分缺陷、误报、越界建议与无法验证项。
-- 机械、语义及 readiness 分别裁决。
+冻结对象、验证发现、复核修复；机械、语义及 readiness 分别裁决。
 
 ## 输出语言
 
-输出语言遵守用户请求或项目 locale；统一分级不变。表达提示按需读取 `references/review-communication-guidance.md`。
+按用户请求或项目 locale 输出，统一分级；表达提示见 `references/review-communication-guidance.md`。
 
 ## Prerequisites
 
 - 完整审查冻结目标、diff、测试、HEAD/index 与 `staged/working-tree/whole-branch` overlay；单条反馈仅绑定来源快照和相关证据。
-- 标记 `independent` 或 `author-self-review`，不得以自审冒充独立复审。
 - 生命周期变更需 Requirement Baseline，不适用时标 `not_applicable`。
-- SCM comment 仅由结构化 findings 和可信 trigger/secret 边界生成。
 
 ## Workflow
 1. **按意图分流**：`feedback-triage` 仅核单条/有限条反馈。只读来源快照、相关代码/测试/契约和反证；判 `valid / false-positive / question / cannot-verify-from-diff`。不强制 whole-diff/全量 CI/额外 reviewer，不修改文件或发 SCM comment，**不得**给 `Final Verdict: pass`、`Final Readiness: true`。跨文件、共享状态、生命周期、安全/权限及无界影响升级完整审查；缺证据不猜。
-2. **定向复核**：`targeted-finding-review` 只核已知 finding 修复；更新 staged Snapshot ID、overlay、reopened；**不能**替代最终 `whole-diff-review` 或适用的 `whole-lifecycle-review`。
-3. **最终完整审查**：`whole-diff-review` 冻结 HEAD/index/diff 和 Requirement/Domain Model/Verification Baseline；核机械 build/test/format 和语义正确性，同轮输出 Spec/Quality 双 verdict；共享生命周期追加 whole-lifecycle，保留独立 reviewer；大范围/高风险时记录 `Review Coverage Ledger`。
+2. **定向复核**：`targeted-finding-review` 只核已知 finding 修复；更新目标 Snapshot ID、overlay、reopened；**不能**替代最终 `whole-diff-review` 或适用的 `whole-lifecycle-review`。
+3. **最终完整审查**：`whole-diff-review` 冻结 HEAD/index/diff 和 Requirement/Domain Model/Verification Baseline；核机械 build/test/format 与语义，同轮输出 Spec/Quality 双 verdict；共享生命周期追加 whole-lifecycle 和独立 reviewer；大范围/高风险记录 `Review Coverage Ledger`。
 4. **设计变更分流与收敛**：按 blocker/major/minor/question/cannot-verify-from-diff 分类并附证据；owner/state/event/resource/termination 或取消/超时/恢复变更标 `design-change` 并 replan；记录 new/reopened/clean rounds，不顺带重构。
 5. **门禁交接**：最终 review 交 `adk-commit-pr-quality-gate` 或 `adk-verification-before-completion`；不自动批准；重复模式经 trace-feedback-eval-handoff/AAR 才成为 durable rule。
 
-E2/E3 应对冻结合同的关键前提提出可复现证伪；优先减法，CI 绿不等于真实有效；自审须标 `author-self-review`。
+E2/E3 对冻结合同的关键前提提出可复现证伪；优先减法，CI 绿不等于真实有效。
 
 连续两轮出现新的 blocker 或 major finding class，任一 finding 为 `design-change`，或同一逻辑任务 `author-self-review` 超过两轮时，必须停止局部补丁循环并 `replan`。
 
-完整分级表、18-step 解释、收敛例外、CI/PR 发布边界见 `references/review-governance-details.md`；完整报告见 `references/review-evidence-template.md`；反馈样例见 `references/review-feedback-fixtures.md`。
+完整分级、收敛例外及 CI/PR 边界见 `references/review-governance-details.md`；反馈样例见 `references/review-feedback-fixtures.md`。
 
 ## Failure Handling
 - 反馈不清楚：改写成可验证命题；仍不清楚则 `question`。
@@ -68,24 +64,18 @@ E2/E3 应对冻结合同的关键前提提出可复现证伪；优先减法，CI
 
 ## Commands
 
-只读取证命令和例外流程按需见 `references/review-governance-details.md`，不得由本 Skill 直接扩大权限。
+按目标取证见 `references/review-evidence-template.md`；不扩大权限。
 
 ## Evidence Template
+完整字段见 `references/review-evidence-template.md`；未覆盖范围显式标记。
+
 ```md
-- Review Target: staged | working-tree | whole-branch
-- Snapshot ID: <head + index_or_diff identity>
-- Working Tree Overlay: <none | paths>
-- latest_worktree_reviewed: true | false
+- Snapshot ID: <所选目标的 head + index/diff；分支另记 base/merge-base>
+- Working Tree Overlay: none | <paths>
 - Reviewer Independence: independent | author-self-review
-- Review Round / Mode: <n> / feedback-triage | targeted-finding-review | whole-diff-review | whole-lifecycle-review
-- Finding Classes / New Finding Class Count / Reopened Finding Count / Consecutive Clean Reviews:
-- Review Coverage Ledger: not-applicable | inspected / uninspected / evidence / risk-decision
-- Lifecycle Operation Baseline: not_applicable | <path + digest>
-- Contract Change Decision: none | design-change
-- Replan Reason: <none | reason>
+- Review Round / Mode: <n> / <mode>; New Finding Class Count: <n>
 - Mechanical Gate: pass | fail | not-run
-- Spec Verdict / Quality Verdict:
-- Final Verdict: pass | needs-fix
+- Contract Change Decision: none | design-change
 ```
 
 ## Quality Gate
@@ -96,7 +86,6 @@ E2/E3 应对冻结合同的关键前提提出可复现证伪；优先减法，CI
 - `cannot-verify-from-diff` 必须补证据、owner 接受风险或明确不适用；高风险必需范围若为 `uninspected` 且无 owner 风险决策不得 pass。
 - 缺需求基线或 Spec↔Code 双向核对证据时，不得给完整 spec-compliance pass；细节见按需 reference。
 - 受控生命周期操作缺 owner/state/event baseline，或 `design-change` 未回设计阶段时，spec-compliance 固定不通过。
-- `targeted-finding-review` 不得替代 whole-diff 或适用的 whole-lifecycle review。
 - reviewer 只读：不得修改工作树、切分支、执行破坏性操作，也不得被要求忽略发现或预设严重级别。
 - Owner 显式委派时，独立 AI 可完成授权范围的 Spec/Quality 最终裁决；须记录 AI 身份、委派来源、快照与证据，不冒充人类。未委派的高风险或责任裁决仍交 owner。
 - 机器发布 review comment 前必须有 schema-backed findings；不能从自由文本直接生成 SCM 写 payload；untrusted PR/fork/public PR 默认不接收 protected secrets，缺 trusted-trigger 决策时只允许只读分析；inline comment 位置无法验证时，必须降级为 summary finding。

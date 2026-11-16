@@ -1,0 +1,7 @@
+{
+  "source_commit": "9a918fa33e02313681649a52713d04750ef0bf0b",
+  "evidence_completed_at": "2026-11-16T01:11:27.082036Z",
+  "input_count": 72,
+  "input_index_sha256": "cac7b9a72611378daa1fa67767731cccea844c024cf2627d22c080f0bb9c9021",
+  "limitations": "This input boundary precedes formal independent review and does not claim PR CMake execution or merge readiness."
+}

@@ -1,0 +1,94 @@
+{
+  "git_version": "git version 2.52.0",
+  "cases": [
+    {
+      "command": [
+        "git",
+        "--no-optional-locks",
+        "status",
+        "--short",
+        "--untracked-files=all"
+      ],
+      "returncode": 0,
+      "stdout": " M fixture.py\n",
+      "stderr": "",
+      "before_index_sha256": "0e10ae3a27b23fae69fbc1c8c94d76cfe83a32886ab44ec0e7e00f2e9dbe8880",
+      "after_index_sha256": "0e10ae3a27b23fae69fbc1c8c94d76cfe83a32886ab44ec0e7e00f2e9dbe8880",
+      "index_changed": false
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "HEAD"
+      ],
+      "returncode": 0,
+      "stdout": "diff --git a/fixture.py b/fixture.py\nindex a6b710e..602f7c1 100644\n--- a/fixture.py\n+++ b/fixture.py\n@@ -1 +1 @@\n-value = 100\n+value = 1000\n",
+      "stderr": "",
+      "before_index_sha256": "ad90277547bd7b3ca11bda821f732e6cdc2fab97f8602d825053af4077a2741a",
+      "after_index_sha256": "9877cef4b1f49f3bba04893197b099f969b8c90cdc192721adf81af22e8bad96",
+      "index_changed": true
+    },
+    {
+      "command": [
+        "git",
+        "--no-optional-locks",
+        "diff",
+        "HEAD"
+      ],
+      "returncode": 0,
+      "stdout": "diff --git a/fixture.py b/fixture.py\nindex a6b710e..602f7c1 100644\n--- a/fixture.py\n+++ b/fixture.py\n@@ -1 +1 @@\n-value = 100\n+value = 1000\n",
+      "stderr": "",
+      "before_index_sha256": "1381b3c2dee2ab898396202fc481d2201dd3834fd4cc270f5b3bcff51c18d1ac",
+      "after_index_sha256": "c0ac0acc2796d5ac5a6f4c2add6e7ec70b83b1796545dcc76734e8dddf224785",
+      "index_changed": true
+    },
+    {
+      "command": [
+        "git",
+        "--no-optional-locks",
+        "diff",
+        "--check",
+        "HEAD"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "before_index_sha256": "47cc3b62a3ef23cb5d7ecbff4e241b8f3d8f845e78b5b9303c63bf85bd6cf73f",
+      "after_index_sha256": "15c317fef434ec27803efc2a5bf9b1a152b268212466914174473e575baf3d47",
+      "index_changed": true
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "diff.autoRefreshIndex=false",
+        "diff",
+        "HEAD"
+      ],
+      "returncode": 0,
+      "stdout": "diff --git a/fixture.py b/fixture.py\nindex a6b710e..602f7c1 100644\n--- a/fixture.py\n+++ b/fixture.py\n@@ -1 +1 @@\n-value = 100\n+value = 1000\n",
+      "stderr": "",
+      "before_index_sha256": "5329c92e9f90034747dbf230fee6f6e3f0d207fb74a4c74fe912482dcc2d5e32",
+      "after_index_sha256": "5329c92e9f90034747dbf230fee6f6e3f0d207fb74a4c74fe912482dcc2d5e32",
+      "index_changed": false
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "diff.autoRefreshIndex=false",
+        "diff",
+        "--check",
+        "HEAD"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "before_index_sha256": "cfa30e919c663c7e5805bb24ef6886c8f7ea41e577f3e72df414449621ce4759",
+      "after_index_sha256": "cfa30e919c663c7e5805bb24ef6886c8f7ea41e577f3e72df414449621ce4759",
+      "index_changed": false
+    }
+  ],
+  "scope": "fresh synthetic repository for each command; no source index access"
+}

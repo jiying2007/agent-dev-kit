@@ -1,0 +1,563 @@
+{
+  "schema": "adk-independent-source-review/v1",
+  "reviewed_at": "2026-11-16T01:12:41.916238Z",
+  "reviewer": {
+    "id": "/root/external_skill_scan_v2",
+    "delegated_by": "/root",
+    "independence": "independent",
+    "implementation_modified": false,
+    "scope": "Complete frozen source diff, surrounding relevant contracts, final evidence packaging, bounded independent verification",
+    "methodology": "Source/spec/quality review; not blind model A/B. Reviewer authored only scratch research and verification artifacts."
+  },
+  "source": {
+    "repository": "/workspace/scratch/2d6ca6dc3d38/adk-practical",
+    "base_commit": "008c789312ed374f38d6d71a113f8fc91f89e63c",
+    "head_commit": "9a918fa33e02313681649a52713d04750ef0bf0b",
+    "tree": "bef1da3b91570b849d5e7373b9ab545e09b823aa",
+    "patch_sha256": "f25ae36bf5504c3a5127f07fdd6a3c54a032a6fb48beeb7d20ab0f74ebde4f57",
+    "source_count": 30,
+    "working_files_equal_frozen_and_committed_blobs": true,
+    "reviewed_paths": [
+      {
+        "path": ".version-lock",
+        "sha256": "17b62daa713323c29d166eb57e90830981898445091d527e51b531e17db5ebcc"
+      },
+      {
+        "path": "CHANGELOG.md",
+        "sha256": "c72a667b5ca56ac9f92cc7edb9141d6aaa391e1df9e6688dee7292f36a113708"
+      },
+      {
+        "path": "CONTEXT.md",
+        "sha256": "ebc030dd782c12d7b314a6d965010513af2c9673c27bcda5ca562d9272a4a73f"
+      },
+      {
+        "path": "README.md",
+        "sha256": "8cfc8d0d37f87d19496700f5ae45789948015ff8cd7fb51385f7318b7636d3e2"
+      },
+      {
+        "path": "docs/changes/20261116-skill-practical-methods/design.md",
+        "sha256": "a5786f6d76b3a920949760cf61d03ec3c47c4b676bd2cbfdc3878233828ce437"
+      },
+      {
+        "path": "docs/changes/20261116-skill-practical-methods/negative-results.md",
+        "sha256": "6165e719da4f52856059b8cc83438b5f42470170be16dc1fdd3c5b1b0e60666f"
+      },
+      {
+        "path": "docs/changes/20261116-skill-practical-methods/requirements.md",
+        "sha256": "2242052b60589fcf1dfa427dcd9371624b0d2208b124593ba2127a5692a46ed8"
+      },
+      {
+        "path": "docs/changes/20261116-skill-practical-methods/source-review.md",
+        "sha256": "8b80f4d07ad78da7772c92e0c4da977d3fa75018f7076b94b8c8b440b18a1c3a"
+      },
+      {
+        "path": "examples/embedded-test-matrix/CMakeLists.txt",
+        "sha256": "b2c094a53310e12a8fa1a1ac360adfb36eaa427e944f964cf0b7f0cc713b37da"
+      },
+      {
+        "path": "examples/embedded-test-matrix/README.md",
+        "sha256": "e0a80a4380a4e491b8ab2ebce7dc2d0be239fd7923d76ab3f341a8d487542fee"
+      },
+      {
+        "path": "examples/embedded-test-matrix/cross-build/smoke-command.txt",
+        "sha256": "8f9c8ca44f723b2fc1c264bae9ade786fbe26ee5fac6dc5c748f482c4faee446"
+      },
+      {
+        "path": "examples/embedded-test-matrix/src/adc_scale.c",
+        "sha256": "0cdc5959b1782b31f7f79246cff7dd560f97b9016a7016aec5fbf1641cd72f5e"
+      },
+      {
+        "path": "examples/embedded-test-matrix/src/adc_scale.h",
+        "sha256": "9ebff9bb1af11f9f19ec2f26a7ce9a3c8c1174454a1af3b38f18567d8a9977fe"
+      },
+      {
+        "path": "examples/embedded-test-matrix/tests/test_adc_scale.c",
+        "sha256": "d2bb3325da8041f68fbd2bdba0b1030fc9fd91cb7d968709940edacc2a98827d"
+      },
+      {
+        "path": "manifest.json",
+        "sha256": "a62b0eb9e27d2d2bce2f97b6bfb22eb00f42a197e0f33c69b1fa9bcd33607c6f"
+      },
+      {
+        "path": "manifests/software_m5_eval_contract.json",
+        "sha256": "780589d3fb6a91df329627ac4ea8c9125bfcd94b305caa13a8aa36122d60f769"
+      },
+      {
+        "path": "optional-skills/adk-test-flakiness-triage/SKILL.md",
+        "sha256": "7fec646e0f30fa1f69fa56ef677508ae0881596be0baf4f1b0e56eb532899dec"
+      },
+      {
+        "path": "optional-skills/adk-test-flakiness-triage/references/details.md",
+        "sha256": "c388887f84aba2ba5e55187586765b08f54c7eef0a064d9f9cd35352d71d4c9e"
+      },
+      {
+        "path": "pyproject.toml",
+        "sha256": "b346f959dc551558b9042581b14a342a03a75798bc396fd69568546102d7d9cf"
+      },
+      {
+        "path": "skills/adk-cmake-cross-build/SKILL.md",
+        "sha256": "be35369d55aef6e5d4b0ac5ef371f9d773beb3aa05cf39d4a73607173b2b8841"
+      },
+      {
+        "path": "skills/adk-code-review-loop/SKILL.md",
+        "sha256": "e47ea7c376430a10780a09d74ef689471228c220ae5660290f11a067d46f350d"
+      },
+      {
+        "path": "skills/adk-code-review-loop/references/review-evidence-template.md",
+        "sha256": "14be3cf96eb1d9eed590eb18d216046aca4a09b6a1787a8d82cfc4cb8c4d2c79"
+      },
+      {
+        "path": "skills/adk-context-compress-handoff/SKILL.md",
+        "sha256": "f4d69f46f916f7bc2f5dd734875d3e6fbb5aae94c0ed0d2f95a1d7748b824d7c"
+      },
+      {
+        "path": "skills/adk-context-engineering/SKILL.md",
+        "sha256": "86dbb451b888eee79923388025f71c1cb92437d3d948ee628b10f24b50807ef5"
+      },
+      {
+        "path": "skills/adk-performance-profiling-embedded/SKILL.md",
+        "sha256": "e62c18ad0300794718e7b582d54e0b44458df2e25a580b25fa9a5d7b5e7f92cc"
+      },
+      {
+        "path": "skills/adk-protocol-stack-integration/SKILL.md",
+        "sha256": "f48e308097b2f7023ba4dc80ea8325dc4136939f688b48c60a5629a6d36ab8ef"
+      },
+      {
+        "path": "src/agent_dev_kit/__init__.py",
+        "sha256": "c03511681929d10e6afa0b546a6a01442df3942597faf84aaa718d493740fb56"
+      },
+      {
+        "path": "tests/fixtures/skill_method_ab_prereg.json",
+        "sha256": "6e4dcdd1f5c9df89f6510991849b03f3194549df2462cf3886116886679d674f"
+      },
+      {
+        "path": "tests/test_skill_command_examples.py",
+        "sha256": "3ded6eb0ada9bddeecc4f36daaefdf6eae6721c76617b27274dd582036e2891a"
+      },
+      {
+        "path": "tests/test_skill_content_contract.py",
+        "sha256": "822dcb61d0cbb8c1689247cc0a32f956e33cdc236f2504afff31ad7c6da462c7"
+      }
+    ],
+    "complete_patch_diff_check_exit_code": 0
+  },
+  "evidence_boundary": {
+    "evidence_completed_at": "2026-11-16T01:11:27.082036Z",
+    "input_count": 72,
+    "input_index_path": "/workspace/scratch/2d6ca6dc3d38/adk-practical/docs/changes/20261116-skill-practical-methods/evidence/input-index.json",
+    "input_index_sha256": "cac7b9a72611378daa1fa67767731cccea844c024cf2627d22c080f0bb9c9021",
+    "input_sha256_and_byte_sizes_verified": true,
+    "reviewed_after_evidence_boundary": true,
+    "independent_evidence": [
+      {
+        "path": "/workspace/scratch/2d6ca6dc3d38/research-v2/final-review/targeted-verification.json",
+        "sha256": "793d88854c38d26bc96a5b8d7520640178283ab89a05c3f6fd835740509d81da"
+      },
+      {
+        "path": "/workspace/scratch/2d6ca6dc3d38/research-v2/final-review/final-verification.json",
+        "sha256": "23199f3716ec4674d0b5e21f497adf803c0b6030a05d8c5f167adfbbe7863c29"
+      },
+      {
+        "path": "/workspace/scratch/2d6ca6dc3d38/research-v2/final-review/independent-profile-budgets.json",
+        "sha256": "9b5242486c2c69048fbaf4e7992a999fbc846b7347d6d567747d3b032e33812b"
+      },
+      {
+        "path": "/workspace/scratch/2d6ca6dc3d38/research-v2/final-review/snapshot-check.json",
+        "sha256": "25bec83d3986c93b759ef01162249e39f481a703c2b970bd3501147f5f39e930"
+      }
+    ],
+    "note": "72 input integrity checks are not 72 runtime tests. Later copied review outputs or typed packaging records are outside this already-reviewed input set."
+  },
+  "spec": {
+    "verdict": "pass",
+    "approval_scope": "source submission for existing PR CI",
+    "full_requirements_runtime_acceptance": "pending requirement 7 real CMake/CTest CI execution",
+    "open_blockers": 0,
+    "open_majors": 0,
+    "requirements": [
+      {
+        "id": 1,
+        "status": "pass",
+        "scope": "source and actual controlled Git/export execution",
+        "assessment": "Explicit staged, working-tree and whole-branch endpoints include the intended tracked patch; dirty/untracked overlays remain separate; the published commands preserve index bytes, validate the base and do not enlarge execution authorization."
+      },
+      {
+        "id": 2,
+        "status": "pass",
+        "scope": "source and actual export structure",
+        "assessment": "Both exported context Skills default to shipped evidence fields. Source-only schema/template aids require a verified readable ADK source root. No model handoff success-rate or schema-validation claim is inferred."
+      },
+      {
+        "id": 3,
+        "status": "pass",
+        "scope": "native C, supported signed-overflow sanitizer and integer proof",
+        "assessment": "Widening occurs before multiplication. Guards, clamping and truncation remain. C11 implementation and strict C90 consumer compile/link separately and execute 14 endpoint vectors; actual CMake integration execution is still part of requirement 7's pending CI gate."
+      },
+      {
+        "id": 4,
+        "status": "pass",
+        "scope": "method/source review",
+        "assessment": "Massif answers heap peak/time-series questions, Memcheck answers memory-error/leak questions, and RSS remains separate; instrumentation and missing-tool limits are explicit. No local Valgrind result is claimed."
+      },
+      {
+        "id": 5,
+        "status": "pass",
+        "scope": "method/source review and controlled shared-state counterexample",
+        "assessment": "Order/seed/worker/process context is preserved when shared-state evidence warrants it; victim-alone, original suite, predecessor-to-victim and reverse comparisons are bounded, with non-monotonic predecessor interactions acknowledged. Isolation is conditional and must preserve the original failed-state evidence."
+      },
+      {
+        "id": 6,
+        "status": "pass",
+        "scope": "method/source review and controlled timing/retry counterexamples",
+        "assessment": "Completed-operation deadlines bound phases, attempts and backoff; retry responsibility and nested amplification are explicit. Protocol-required retransmissions, non-idempotent UNKNOWN reconciliation, cross-host clock boundaries and long-connection lifetimes remain distinct."
+      },
+      {
+        "id": 7,
+        "status": "source-pass-runtime-acceptance-pending-ci",
+        "scope": "reviewed published CMake commands, five real fixtures, official docs and local missing-tool refusal",
+        "assessment": "Preset/manual paths bind the actual binary directory, configuration, test backend and artifact. Five CMake fixtures exist, including the real ADC project under a strict C90 default; missing tools fail in GitHub Actions. Local cmake/ctest/ninja are absent, so real execution is required before merge."
+      },
+      {
+        "id": 8,
+        "status": "pass",
+        "scope": "source contracts, latest bound full receipt and independent footprint calculation",
+        "assessment": "Version 11.3.6 is coherent. Original profile ratchets, workflow gates and SOP gate are unchanged; eight original profiles pass without raising thresholds. No external models, shared quota, schedules, device operations or measured token/cost claims were introduced."
+      }
+    ]
+  },
+  "quality": {
+    "verdict": "pass",
+    "approval_scope": "frozen source",
+    "open_blockers": 0,
+    "open_majors": 0,
+    "open_minors": 0,
+    "new_unresolved_defects": [],
+    "findings": [
+      {
+        "id": "F1",
+        "severity": "major-resolved",
+        "origin": "first full regression by integrator; independently reviewed closure",
+        "status": "closed",
+        "summary": "Compacting the review entry removed seven existing SOP evidence markers.",
+        "original_source": "e0c3b97ef8382366939e3b5ed40263307604bd03",
+        "evidence": "attempt1/full-receipt.json: 6 entries total, 5 pass, 1 fail, exit 1; historical patch/log/timing retained",
+        "resolution": "Actual compact evidence fields restored in 9a918fa; no tests or gates weakened. Final bound suite is 102/102 and independent final two exported-method checks are 2/2."
+      },
+      {
+        "id": "F2",
+        "severity": "suggestion-resolved",
+        "origin": "independent early review R1",
+        "status": "closed",
+        "summary": "Retry-After language could be read as extending an expired operation deadline.",
+        "resolution": "Final source explicitly ends the current operation first; business deferral does not revive its expired budget."
+      },
+      {
+        "id": "F3",
+        "severity": "suggestion-resolved",
+        "origin": "independent early review R2",
+        "status": "closed",
+        "summary": "Old flaky workflow wording prescribed isolation unconditionally.",
+        "resolution": "Final source makes isolation conditional, requires boundary validation, and preserves the original failure state."
+      },
+      {
+        "id": "F4",
+        "severity": "minor-resolved",
+        "origin": "independent final evidence-packaging review",
+        "status": "closed",
+        "summary": "T2 task row described the older green-index-refresh receipt as the final source binding.",
+        "resolution": "Final tasks row distinguishes the historical 27-method receipt from the later SOP fix and latest full receipt; hash included in the 72-input index."
+      },
+      {
+        "id": "F5",
+        "severity": "minor-resolved",
+        "origin": "independent final evidence-packaging review",
+        "status": "closed",
+        "summary": "Review findings referenced nonexistent general/red.json.",
+        "resolution": "Final wrapper references the actual general/results.json and separate general-implementation/red.json; hash included in the 72-input index."
+      }
+    ],
+    "boundary_preservation": "No source-level authorization, evidence, tool-availability, backend or publication gate relaxation was found. No original profile threshold or workflow/SOP gate changed."
+  },
+  "verification": {
+    "full_regression": {
+      "executor": "parent integrator /root; independently checked here",
+      "total_entries": 102,
+      "passed_entries": 102,
+      "failed_entries": 0,
+      "receipt_sha256": "11ff5e4bf00dbfa5b9fc3f17c3bcb8b6d397c207ab247b5e63f47cdb8055ac30",
+      "log_sha256": "0d1bee4e82001511f12291d9c3be0867228a5a396f58b49d3acd176ef3eed61e",
+      "timing_sha256": "12c9c41389943439df3b447ecd7f99e3d0d1d08ccc36d9e8c4bb8971319f8593",
+      "all_hashes_and_source_binding_match": true,
+      "started_at": "2026-11-16T01:04:19.453333Z",
+      "completed_at": "2026-11-16T01:09:15.949071Z",
+      "elapsed_seconds": 296.4957473029999,
+      "exit_code": 0,
+      "source_unchanged": true,
+      "unit_of_count": "top-level run_all entries; not individual assertions",
+      "local_cmake_execution": false,
+      "explicit_local_cmake_skips": 5
+    },
+    "independent_latest_exports": {
+      "source_head": "9a918fa33e02313681649a52713d04750ef0bf0b",
+      "methods": [
+        "test_exported_review_snapshot_captures_selected_target_without_staging",
+        "test_exported_context_defaults_are_self_contained"
+      ],
+      "tests_run": 2,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "elapsed_seconds": 0.5694073240001671,
+      "completed_at": "2026-11-16T01:09:53.102658+00:00",
+      "source_files_unchanged": true,
+      "evidence": "/workspace/scratch/2d6ca6dc3d38/research-v2/final-review/final-verification.json"
+    },
+    "independent_native_adc": {
+      "observed_head": "e0c3b97ef8382366939e3b5ed40263307604bd03",
+      "source_binding": "Seven scoped ADC/CMake/test assets are byte-identical in final 9a918fa freeze; no older whole-source result is represented as final.",
+      "native_test_methods": 2,
+      "failures": 0,
+      "skips": 0,
+      "sanitizer": "supported signed-integer-overflow sanitizer actually executed",
+      "separate_language_build": "C11 implementation, strict C90 consumer, link and execution all exited 0",
+      "c_assertion_vectors": 14,
+      "evidence": "/workspace/scratch/2d6ca6dc3d38/research-v2/final-review/targeted-verification.json"
+    },
+    "independent_cmake_missing_tool_refusal": {
+      "environment": "local subprocess with GITHUB_ACTIONS=true",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "fixture_failures_due_to_missing_tools": 5,
+      "missing_tools": [
+        "cmake",
+        "ctest",
+        "ninja"
+      ],
+      "actual_ci_execution": false,
+      "actual_cmake_execution": false,
+      "evidence": "/workspace/scratch/2d6ca6dc3d38/research-v2/final-review/targeted-verification.json"
+    },
+    "profile_budgets": {
+      "executor": "independent reviewer using actual repository enforcement function",
+      "policy_unchanged_from_base": true,
+      "profiles_passed": 8,
+      "profiles_failed": 0,
+      "large_refactor_total_bytes": 323203,
+      "large_refactor_original_limit_bytes": 323328,
+      "large_refactor_slack_bytes": 125,
+      "measurements": [
+        {
+          "schema": "adk-profile-context-ratchet-result/v1",
+          "status": "pass",
+          "profile": "core",
+          "actual": {
+            "entry_file_bytes": 98496,
+            "potential_full_source_bytes": 173552
+          },
+          "ratchet": {
+            "entry_file_bytes": 133940,
+            "potential_full_source_bytes": 184133
+          },
+          "asset_count": 27,
+          "asset_count_baseline": 27,
+          "failures": [],
+          "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+          "runtime_initial_context_claim": false,
+          "release_authorized": false
+        },
+        {
+          "schema": "adk-profile-context-ratchet-result/v1",
+          "status": "pass",
+          "profile": "release-hardening",
+          "actual": {
+            "entry_file_bytes": 83145,
+            "potential_full_source_bytes": 157226
+          },
+          "ratchet": {
+            "entry_file_bytes": 112256,
+            "potential_full_source_bytes": 159576
+          },
+          "asset_count": 23,
+          "asset_count_baseline": 23,
+          "failures": [],
+          "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+          "runtime_initial_context_claim": false,
+          "release_authorized": false
+        },
+        {
+          "schema": "adk-profile-context-ratchet-result/v1",
+          "status": "pass",
+          "profile": "personal-core",
+          "actual": {
+            "entry_file_bytes": 113428,
+            "potential_full_source_bytes": 192221
+          },
+          "ratchet": {
+            "entry_file_bytes": 152918,
+            "potential_full_source_bytes": 204293
+          },
+          "asset_count": 32,
+          "asset_count_baseline": 32,
+          "failures": [],
+          "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+          "runtime_initial_context_claim": false,
+          "release_authorized": false
+        },
+        {
+          "schema": "adk-profile-context-ratchet-result/v1",
+          "status": "pass",
+          "profile": "embedded-fullstack",
+          "actual": {
+            "entry_file_bytes": 211227,
+            "potential_full_source_bytes": 316321
+          },
+          "ratchet": {
+            "entry_file_bytes": 245296,
+            "potential_full_source_bytes": 316854
+          },
+          "asset_count": 55,
+          "asset_count_baseline": 55,
+          "failures": [],
+          "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+          "runtime_initial_context_claim": false,
+          "release_authorized": false
+        },
+        {
+          "schema": "adk-profile-context-ratchet-result/v1",
+          "status": "pass",
+          "profile": "team-core",
+          "actual": {
+            "entry_file_bytes": 123962,
+            "potential_full_source_bytes": 211387
+          },
+          "ratchet": {
+            "entry_file_bytes": 166442,
+            "potential_full_source_bytes": 223333
+          },
+          "asset_count": 35,
+          "asset_count_baseline": 35,
+          "failures": [],
+          "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+          "runtime_initial_context_claim": false,
+          "release_authorized": false
+        },
+        {
+          "schema": "adk-profile-context-ratchet-result/v1",
+          "status": "pass",
+          "profile": "large-refactor",
+          "actual": {
+            "entry_file_bytes": 214252,
+            "potential_full_source_bytes": 323203
+          },
+          "ratchet": {
+            "entry_file_bytes": 248328,
+            "potential_full_source_bytes": 323328
+          },
+          "asset_count": 56,
+          "asset_count_baseline": 56,
+          "failures": [],
+          "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+          "runtime_initial_context_claim": false,
+          "release_authorized": false
+        },
+        {
+          "schema": "adk-profile-context-ratchet-result/v1",
+          "status": "pass",
+          "profile": "incident-response",
+          "actual": {
+            "entry_file_bytes": 30800,
+            "potential_full_source_bytes": 46556
+          },
+          "ratchet": {
+            "entry_file_bytes": 37797,
+            "potential_full_source_bytes": 46612
+          },
+          "asset_count": 9,
+          "asset_count_baseline": 9,
+          "failures": [],
+          "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+          "runtime_initial_context_claim": false,
+          "release_authorized": false
+        },
+        {
+          "schema": "adk-profile-context-ratchet-result/v1",
+          "status": "pass",
+          "profile": "research-intake",
+          "actual": {
+            "entry_file_bytes": 65806,
+            "potential_full_source_bytes": 118021
+          },
+          "ratchet": {
+            "entry_file_bytes": 86571,
+            "potential_full_source_bytes": 124543
+          },
+          "asset_count": 20,
+          "asset_count_baseline": 20,
+          "failures": [],
+          "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+          "runtime_initial_context_claim": false,
+          "release_authorized": false
+        }
+      ],
+      "evidence": "/workspace/scratch/2d6ca6dc3d38/research-v2/final-review/independent-profile-budgets.json"
+    },
+    "mechanical_source_gates": {
+      "executor": "/root; latest final-gates receipt independently read",
+      "source_head": "9a918fa33e02313681649a52713d04750ef0bf0b",
+      "all_pass": true,
+      "checks": [
+        "strict validation",
+        "content/token-estimate budget",
+        "module size",
+        "release source check"
+      ],
+      "evidence": "/workspace/scratch/2d6ca6dc3d38/adk-practical/docs/changes/20261116-skill-practical-methods/evidence/final-gates.json"
+    }
+  },
+  "adc_integer_proof": {
+    "supported_domain": "After validation and clamping: 0 <= raw <= max_count <= INT_MAX <= INT32_MAX; 0 < reference_mv <= INT_MAX.",
+    "maximum_product": "(2^31 - 1)^2 = 4611686014132420609 < INT64_MAX",
+    "evaluation": "The cast precedes multiplication, the divisor is positive, and the quotient lies in [0, reference_mv], so both intermediate and return conversion are representable.",
+    "build_boundary": "PRIVATE c_std_11 applies only to the implementation target; public header/consumer remain compatible with strict C90. Cross smoke explicitly requests -std=c11."
+  },
+  "readiness": {
+    "source_approved_for_pr_ci": true,
+    "merge_ready": false,
+    "release_ready": false,
+    "reason": "Actual PR CI has not yet been observed. Requirement 7's five real CMake cases must execute successfully on the final PR HEAD, followed by existing mandatory checks and normal merge/main/release qualification.",
+    "pending": [
+      {
+        "id": "CMAKE-REAL-CI",
+        "type": "required execution evidence gate, not an open source defect",
+        "required_before": "merge",
+        "owner": "integrator using existing PR CI",
+        "cases": [
+          "preset directory/configuration/artifact binding",
+          "manual RelWithDebInfo binding",
+          "empty CTest selection fails",
+          "compile-only preserves not-run",
+          "real ADC CMake project with PRIVATE C11 and strict C90 default"
+        ]
+      }
+    ]
+  },
+  "limitations": [
+    "Source approval does not assert completed platform, merge or release readiness.",
+    "Five CMake/CTest cases were skipped locally; the refusal experiment is not real CI execution.",
+    "No ARM cross-compilation, board/emulator/device actions, Valgrind profiling or hardware performance qualification occurred.",
+    "No model or native agent-host task execution, blind A/B, task success-rate, provider-token or cost improvement was measured.",
+    "The independent reviewer did not rerun the full suite; the integrator's exact final-source receipt was independently verified.",
+    "Native ADC checks establish the declared integer-domain behavior and local compiler execution, not every compiler/target's qualification.",
+    "Historical early reviews and green-named receipts retain their own source identities and failures; current approval binds only the specified final head and input index.",
+    "The 65 registered Skills are not all rewritten or newly behaviorally evaluated in this change; the complete diff covers seven existing Skills plus the ADC example and supporting contracts.",
+    "Prior 11.3.5 remote publication is integrator-provided evidence; this reviewer did not independently query those remote platform objects."
+  ],
+  "supporting_primary_documents": [
+    "https://cmake.org/cmake/help/v3.16/command/target_compile_features.html",
+    "https://cmake.org/cmake/help/v3.16/prop_gbl/CMAKE_C_KNOWN_FEATURES.html",
+    "https://cmake.org/cmake/help/v3.27/manual/cmake-presets.7.html",
+    "https://cmake.org/cmake/help/v3.20/manual/ctest.1.html",
+    "https://valgrind.org/docs/manual/ms-manual.html",
+    "https://valgrind.org/docs/manual/mc-manual.html"
+  ]
+}

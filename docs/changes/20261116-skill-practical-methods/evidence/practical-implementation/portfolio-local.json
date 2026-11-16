@@ -1,0 +1,32 @@
+{
+  "schema": "adk-practical-command-observation/v1",
+  "cwd": "/workspace/scratch/2d6ca6dc3d38/adk-practical",
+  "command": [
+    "python",
+    "tests/test_skill_portfolio_quality.py",
+    "-v"
+  ],
+  "started_at": "2026-11-16T00:54:37.390653+00:00",
+  "head": "5b88ec5bce351f68d4756d765e69a4f40bde3f07",
+  "working_source_sha256": {
+    "examples/embedded-test-matrix/src/adc_scale.c": "0cdc5959b1782b31f7f79246cff7dd560f97b9016a7016aec5fbf1641cd72f5e",
+    "examples/embedded-test-matrix/src/adc_scale.h": "9ebff9bb1af11f9f19ec2f26a7ce9a3c8c1174454a1af3b38f18567d8a9977fe",
+    "examples/embedded-test-matrix/tests/test_adc_scale.c": "d2bb3325da8041f68fbd2bdba0b1030fc9fd91cb7d968709940edacc2a98827d",
+    "examples/embedded-test-matrix/README.md": "ebe8b53b32f845f41bc90d146fb604ab2ab9ee4275b1ce78f7297f5aaa365c01",
+    "tests/test_skill_command_examples.py": "5d89c4d557009a7a2f3660110b908696103e135cc12f812f33f823d16f423010",
+    "skills/adk-cmake-cross-build/SKILL.md": "be35369d55aef6e5d4b0ac5ef371f9d773beb3aa05cf39d4a73607173b2b8841",
+    "skills/adk-performance-profiling-embedded/SKILL.md": "e62c18ad0300794718e7b582d54e0b44458df2e25a580b25fa9a5d7b5e7f92cc"
+  },
+  "tools": {
+    "cc": "/usr/bin/cc",
+    "cmake": null,
+    "ctest": null,
+    "ninja": null,
+    "valgrind": null,
+    "rtk": null
+  },
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "test_65_manifest_skills_have_one_frozen_source_audit_row (__main__.SkillPortfolioQualityTests.test_65_manifest_skills_have_one_frozen_source_audit_row) ... ok\ntest_composition_light_mode_does_not_downgrade_risk (__main__.SkillPortfolioQualityTests.test_composition_light_mode_does_not_downgrade_risk) ... ok\ntest_embedded_tool_and_fake_register_example_gates (__main__.SkillPortfolioQualityTests.test_embedded_tool_and_fake_register_example_gates) ... ok\ntest_external_fetch_untrusted_url_and_redirect_denials (__main__.SkillPortfolioQualityTests.test_external_fetch_untrusted_url_and_redirect_denials) ... ok\ntest_imap_read_does_not_imply_mailbox_mutation (__main__.SkillPortfolioQualityTests.test_imap_read_does_not_imply_mailbox_mutation) ... ok\ntest_scenarios_are_unmeasured_hypotheses (__main__.SkillPortfolioQualityTests.test_scenarios_are_unmeasured_hypotheses) ... ok\ntest_supply_chain_has_readonly_and_install_boundaries (__main__.SkillPortfolioQualityTests.test_supply_chain_has_readonly_and_install_boundaries) ... ok\n\n----------------------------------------------------------------------\nRan 7 tests in 0.004s\n\nOK\n",
+  "finished_at": "2026-11-16T00:54:37.484500+00:00"
+}

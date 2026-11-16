@@ -1,0 +1,26 @@
+{
+  "schema": "adk-local-full-regression-receipt/v1",
+  "source_commit": "9a918fa33e02313681649a52713d04750ef0bf0b",
+  "source_tree": "bef1da3b91570b849d5e7373b9ab545e09b823aa",
+  "source_patch_sha256": "f25ae36bf5504c3a5127f07fdd6a3c54a032a6fb48beeb7d20ab0f74ebde4f57",
+  "command": [
+    "bash",
+    "tests/run_all.sh",
+    "--fail-fast",
+    "--timing-json",
+    "/workspace/scratch/2d6ca6dc3d38/adk-practical/docs/changes/20261116-skill-practical-methods/evidence/full-timing.json"
+  ],
+  "started_at": "2026-11-16T01:04:19.453333Z",
+  "completed_at": "2026-11-16T01:09:15.949071Z",
+  "elapsed_seconds": 296.4957473029999,
+  "exit_code": 0,
+  "source_files": 30,
+  "source_unchanged": true,
+  "log_sha256": "0d1bee4e82001511f12291d9c3be0867228a5a396f58b49d3acd176ef3eed61e",
+  "timing_sha256": "12c9c41389943439df3b447ecd7f99e3d0d1d08ccc36d9e8c4bb8971319f8593",
+  "limitations": [
+    "Compact full-suite output does not include every successful child log.",
+    "Five real CMake cases are explicitly skipped locally because tools are unavailable; GitHub Actions must execute them or fail.",
+    "No model calls, native host qualification, ARM cross-compilation or live-device actions."
+  ]
+}
