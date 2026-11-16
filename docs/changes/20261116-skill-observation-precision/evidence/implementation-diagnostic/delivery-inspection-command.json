@@ -1,0 +1,49 @@
+{
+  "argv": [
+    "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+    "bypass",
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/inspect-delivery.py",
+    "delivery-inspection"
+  ],
+  "cwd": "/workspace/scratch/2d4d08f07657/adk-other-skills",
+  "elapsed_seconds": 0.42917583599773934,
+  "exit_code": 0,
+  "stdout": "{\"status\": \"pass\", \"receipt\": \"/workspace/scratch/2d4d08f07657/adk-other-skills/docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/delivery-inspection.json\", \"profiles\": 8, \"exported\": [{\"name\": \"adk-fault-injection-recovery\", \"source\": \"skills/adk-fault-injection-recovery/SKILL.md\", \"source_sha256\": \"cfffdf6b98594802f65acee8f0258ed44eff8d5bb5c2a02eca6f5df60567f209\", \"exported_sha256\": \"e2ca83b2a2f6f67d379214f00584358c78f579c8883832c08be483b79e651bba\", \"retained\": \"docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/exported-consumer/adk-fault-injection-recovery/SKILL.md\", \"body_equal\": true}, {\"name\": \"adk-email-imap-fetch\", \"source\": \"optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md\", \"source_sha256\": \"b109548aceb24d3f978e92eb4706cc0845847c82a741d05810ded49f44f351b7\", \"exported_sha256\": \"09c31d595ff2aa073af02bcb3951ebf22a576b645e5f6b5164bed5326c8bb4d7\", \"retained\": \"docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/exported-consumer/adk-email-imap-fetch/SKILL.md\", \"body_equal\": true}]}\n",
+  "stderr": "",
+  "source_identities": {
+    "skills/adk-fault-injection-recovery/SKILL.md": {
+      "bytes": 3558,
+      "sha256": "cfffdf6b98594802f65acee8f0258ed44eff8d5bb5c2a02eca6f5df60567f209"
+    },
+    "optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md": {
+      "bytes": 3782,
+      "sha256": "b109548aceb24d3f978e92eb4706cc0845847c82a741d05810ded49f44f351b7"
+    },
+    "tests/test_skill_fault_activation.py": {
+      "bytes": 7217,
+      "sha256": "099d9a8c0b61c85292ba30da70ff512a0319971a46665391f32a98efe290f048"
+    },
+    "tests/fixtures/fault-activation.c": {
+      "bytes": 2298,
+      "sha256": "0b4327f02d2a791e971aad9989e3e86b49a21dadef861908d0f6361005f015d2"
+    },
+    "tests/test_skill_imap_time_methods.py": {
+      "bytes": 6935,
+      "sha256": "4a169bc6113cb55a86c8ea6f0146d47f93acdb4a4c0f521ee82cec5e35f385e0"
+    },
+    "tests/test_skill_content.sh": {
+      "bytes": 1145,
+      "sha256": "6857bda2e84fa376012e974f612cd47609e3303ae9a9f364e7743b6b431afc2d"
+    },
+    "manifest.json": {
+      "bytes": 90988,
+      "sha256": "266e98e149084fcbdd33c34ef46a31dadd500e17ef70e16269288ba6feeefaaf"
+    },
+    "manifests/profile_context_ratchets.json": {
+      "bytes": 5651,
+      "sha256": "f283524ecff14179cad628735bef9e20580da00c2505687ecca9530da3737bff"
+    }
+  },
+  "python": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3"
+}
