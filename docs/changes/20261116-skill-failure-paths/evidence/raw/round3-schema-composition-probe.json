@@ -1,0 +1,254 @@
+{
+  "generated_at_utc": "2026-11-16T07:42:39.444507+00:00",
+  "python": "3.12.14",
+  "jsonschema": "4.26.0",
+  "cases": {
+    "legitimate": {
+      "id": 1,
+      "mode": "safe"
+    },
+    "unknown_field": {
+      "id": 1,
+      "mode": "safe",
+      "admin": true
+    },
+    "missing_id": {
+      "mode": "safe"
+    },
+    "missing_mode": {
+      "id": 1
+    },
+    "invalid_type": {
+      "id": "1",
+      "mode": "safe"
+    },
+    "invalid_enum": {
+      "id": 1,
+      "mode": "superuser"
+    }
+  },
+  "required_acceptance": {
+    "legitimate": true,
+    "unknown_field": false,
+    "missing_id": false,
+    "missing_mode": false,
+    "invalid_type": false,
+    "invalid_enum": false
+  },
+  "results": [
+    {
+      "variant": "same_level_closed",
+      "validator": "Draft202012Validator",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "mode": {
+            "enum": [
+              "safe",
+              "fast"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "mode"
+        ],
+        "additionalProperties": false
+      },
+      "observed_acceptance": {
+        "legitimate": true,
+        "unknown_field": false,
+        "missing_id": false,
+        "missing_mode": false,
+        "invalid_type": false,
+        "invalid_enum": false
+      },
+      "meets_input_contract": true,
+      "legitimate_errors": []
+    },
+    {
+      "variant": "allof_closed_subschema",
+      "validator": "Draft202012Validator",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "id"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "mode": {
+                "enum": [
+                  "safe",
+                  "fast"
+                ]
+              }
+            },
+            "required": [
+              "mode"
+            ]
+          }
+        ]
+      },
+      "observed_acceptance": {
+        "legitimate": false,
+        "unknown_field": false,
+        "missing_id": false,
+        "missing_mode": false,
+        "invalid_type": false,
+        "invalid_enum": false
+      },
+      "meets_input_contract": false,
+      "legitimate_errors": [
+        "Additional properties are not allowed ('mode' was unexpected)"
+      ]
+    },
+    {
+      "variant": "allof_composed_closure",
+      "validator": "Draft202012Validator",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "id"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "mode": {
+                "enum": [
+                  "safe",
+                  "fast"
+                ]
+              }
+            },
+            "required": [
+              "mode"
+            ]
+          }
+        ],
+        "unevaluatedProperties": false
+      },
+      "observed_acceptance": {
+        "legitimate": true,
+        "unknown_field": false,
+        "missing_id": false,
+        "missing_mode": false,
+        "invalid_type": false,
+        "invalid_enum": false
+      },
+      "meets_input_contract": true,
+      "legitimate_errors": []
+    },
+    {
+      "variant": "draft7_unsupported_keyword",
+      "validator": "Draft7Validator",
+      "schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "id"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "mode": {
+                "enum": [
+                  "safe",
+                  "fast"
+                ]
+              }
+            },
+            "required": [
+              "mode"
+            ]
+          }
+        ],
+        "unevaluatedProperties": false
+      },
+      "observed_acceptance": {
+        "legitimate": true,
+        "unknown_field": true,
+        "missing_id": false,
+        "missing_mode": false,
+        "invalid_type": false,
+        "invalid_enum": false
+      },
+      "meets_input_contract": false,
+      "legitimate_errors": []
+    },
+    {
+      "variant": "draft7_flattened_closure",
+      "validator": "Draft7Validator",
+      "schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "mode": {
+            "enum": [
+              "safe",
+              "fast"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "mode"
+        ],
+        "additionalProperties": false
+      },
+      "observed_acceptance": {
+        "legitimate": true,
+        "unknown_field": false,
+        "missing_id": false,
+        "missing_mode": false,
+        "invalid_type": false,
+        "invalid_enum": false
+      },
+      "meets_input_contract": true,
+      "legitimate_errors": []
+    }
+  ],
+  "boundary": "Deterministic JSON Schema semantics only; no LLM, native runtime, or ADK production validator result."
+}

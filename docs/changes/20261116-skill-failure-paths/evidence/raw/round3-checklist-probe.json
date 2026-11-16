@@ -1,0 +1,50 @@
+{
+  "observed_at_utc": "2026-11-16T07:43:15.554980+00:00",
+  "source": "skills/adk-parallel-agent-governance/references/subagent-review-checklist.md",
+  "source_sha256": "b771c82410f6c982e9482c27cf79ad0a28a8bd5ffdf3ea15c63ed2ae592e843c",
+  "source_rows": [
+    {
+      "check": "Scope stayed inside `scope_write`",
+      "result": "pass",
+      "evidence": ""
+    },
+    {
+      "check": "No shared contract/schema/root config changed unexpectedly",
+      "result": "pass",
+      "evidence": ""
+    },
+    {
+      "check": "Verification commands ran",
+      "result": "pass",
+      "evidence": ""
+    },
+    {
+      "check": "Handoff summary is clear",
+      "result": "pass",
+      "evidence": ""
+    },
+    {
+      "check": "Integration risk identified",
+      "result": "pass",
+      "evidence": ""
+    }
+  ],
+  "source_blank_evidence_pass_rows": 5,
+  "exports": [
+    {
+      "target": "claude-code",
+      "skill_entry": "skills/adk-parallel-agent-governance/SKILL.md",
+      "default_package_references_checklist": true,
+      "checklist_source_identical": true,
+      "blank_evidence_pass_rows": 5
+    },
+    {
+      "target": "opencode",
+      "skill_entry": "skills/adk-parallel-agent-governance/SKILL.md",
+      "default_package_references_checklist": true,
+      "checklist_source_identical": true,
+      "blank_evidence_pass_rows": 5
+    }
+  ],
+  "boundary": "Template states and export identity only; does not measure an agent or claim a runtime gate was bypassed."
+}

@@ -1,0 +1,1784 @@
+{
+  "schema": "round3-independent-packaging-archive-increment-checks/v1",
+  "reviewer": "/root/round3_independent_review",
+  "started_at": "2026-11-16T08:42:43.976040+00:00",
+  "completed_at": "2026-11-16T08:42:44.638279+00:00",
+  "source_head": "d87e21d7750ec4a0042754d045979c137abfc528",
+  "source_tree": "617bdcb20e5fb629c1ddd175e29373b1b86aa0c5",
+  "canonical_patch_sha256": "d82a42ee4620c923ebd4eaecae514f94551a733b4e9627f764a051efab1ab6c4",
+  "inputs": {
+    "review-evidence.json": {
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/review-evidence.json",
+      "bytes": 16486,
+      "sha256": "7a21c4856fefcdeec13ec6d5f4fdd4e1d0c1858db0672594fcdc3ddbeac0abad"
+    },
+    "verification.md": {
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/verification.md",
+      "bytes": 5330,
+      "sha256": "894f91e091ff323eb13a454634a052cdfb645ade42937c0158010267d75c947d"
+    },
+    "evidence/retained-files.json": {
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/retained-files.json",
+      "bytes": 23735,
+      "sha256": "b1db208bca147660ecd47dc013a10ddf2ff324b6c58485c5c50a449559401132"
+    },
+    "evidence/independent-retained-files.json": {
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/independent-retained-files.json",
+      "bytes": 12974,
+      "sha256": "a867453fe32b5b2b4c566018e5603fe60e92dc5a1c25170ef68831461a05020e"
+    },
+    "evidence/consumer-materials.json": {
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/consumer-materials.json",
+      "bytes": 467789,
+      "sha256": "ff825bb4b150ff2c9d5aadb3e710b606b2d62cb4584411cb21de027e0d53b9fe"
+    },
+    "evidence/packaging-archive-fixes.json": {
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/packaging-archive-fixes.json",
+      "bytes": 5257904,
+      "sha256": "3de888c3ac924db98c32feb08a699ec90091fc420b612f17c5dc3224aab24eab"
+    },
+    "evidence/review-validation.json": {
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/review-validation.json",
+      "bytes": 1129,
+      "sha256": "17c8f56fd14f7e587b803399ae9303e21326c0d9e49b469f05c18c066dafc913"
+    },
+    "evidence/independent/stage1/scan-original-failure.json": {
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/independent/stage1/scan-original-failure.json",
+      "bytes": 6527,
+      "sha256": "47cfa21f7ad710eecf973d20c121be04fd96bd8c5fdac4f811e0528b5bb734d9"
+    }
+  },
+  "additional_reviewed_packaging_source": {
+    "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/.gitattributes",
+    "bytes": 305,
+    "sha256": "1c5288f1aa3575dd4ce8f5c110e0fa48fb6ebc8d32863e840e33b5440c36d594",
+    "original_sha256": "91c37a6e96bb1c968597ef9b306db52ca282ea7cbbdaf13b8743c4162ad1ed03",
+    "append_only_diff": "# Preserve the literal whitespace in this retained failed regression stderr.\ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log -whitespace\n",
+    "scope": "Only literal historical raw-log whitespace preservation; separately reviewed after original33-source freeze."
+  },
+  "checks": [
+    {
+      "check": "previous-packaging-literal-history",
+      "passed": true,
+      "item": "retained_map"
+    },
+    {
+      "check": "previous-packaging-literal-history",
+      "passed": true,
+      "item": "typed_record"
+    },
+    {
+      "check": "previous-packaging-literal-history",
+      "passed": true,
+      "item": "validation"
+    },
+    {
+      "check": "one-encoded-map-entry",
+      "passed": true
+    },
+    {
+      "check": "existing-bundle-schema",
+      "passed": true
+    },
+    {
+      "check": "synthetic-negative-exact-decoded-original",
+      "passed": true
+    },
+    {
+      "check": "container-and-original-identities-separate",
+      "passed": true
+    },
+    {
+      "check": "proof-matches-map-encoded-entry",
+      "passed": true
+    },
+    {
+      "check": "map-only-single-row-representation-changed",
+      "passed": true
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/core-audit.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/core-audit.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/embedded-audit.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/embedded-audit.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/optional-audit.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/optional-audit.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/platform-audit.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/platform-audit.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/portfolio-audit.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/portfolio-audit.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/core-implementation.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/core-implementation.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/cmake-implementation.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/cmake-implementation.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/optional-implementation.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/optional-implementation.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/core-contract-compatibility-fix.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/core-contract-compatibility-fix.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/optional-line-budget-fix.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/optional-line-budget-fix.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/corrected-environment.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/corrected-environment.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/full-regression.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/full-regression.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/full-regression-started.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/full-regression-started.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/full-regression-timing.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/full-regression-timing.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/full-regression.stdout.log"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/full-regression.stdout.log"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/full-regression.stderr.log"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/full-regression.stderr.log"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/initial-regression.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/initial-regression.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/initial-regression-started.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/initial-regression-started.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/initial-regression-timing.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/initial-regression-timing.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/initial-regression.stdout.log"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/initial-regression.stdout.log"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/initial-regression.stderr.log"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/initial-regression.stderr.log"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/core-raw/final-compressed-diff-check.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/core-raw/final-compressed-diff-check.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/core-raw/final-compressed-large-refactor-budget.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/core-raw/final-compressed-large-refactor-budget.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/core-raw/final-compressed-targeted-regressions.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/core-raw/final-compressed-targeted-regressions.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/core-raw/final-diff-check.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/core-raw/final-diff-check.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/core-raw/final-large-refactor-budget.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/core-raw/final-large-refactor-budget.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/core-raw/final-targeted-regressions.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/core-raw/final-targeted-regressions.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/core-raw/green-contract-methods.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/core-raw/green-contract-methods.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/core-raw/lesson-lookup-replay.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/core-raw/lesson-lookup-replay.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/core-raw/red-contract-methods-corrected-parser.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/core-raw/red-contract-methods-corrected-parser.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/core-raw/red-contract-methods.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/core-raw/red-contract-methods.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/core-raw/round3-core-run.py"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/core-raw/round3-core-run.py"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/cmake-raw/round3-cmake-test-baseline.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/cmake-raw/round3-cmake-test-baseline.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/cmake-raw/round3-cmake-test-repaired.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/cmake-raw/round3-cmake-test-repaired.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/cmake-raw/round3-cmake-regressions.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/cmake-raw/round3-cmake-regressions.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/cmake-raw/round3-cmake-test-runner.py"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/cmake-raw/round3-cmake-test-runner.py"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/cmake-raw/evidence.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/cmake-raw/evidence.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/cmake-raw/forced-rebuild-evidence.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/cmake-raw/forced-rebuild-evidence.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/core-compat-raw/compat-red-official-docs.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/core-compat-raw/compat-red-official-docs.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/core-compat-raw/compat-red-intent-boundary.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/core-compat-raw/compat-red-intent-boundary.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/core-compat-raw/compat-green-semantic-fidelity.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/core-compat-raw/compat-green-semantic-fidelity.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/core-compat-raw/compat-green-official-docs.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/core-compat-raw/compat-green-official-docs.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/core-compat-raw/compat-green-large-refactor-budget.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/core-compat-raw/compat-green-large-refactor-budget.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/core-compat-raw/compat-green-diff-check.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/core-compat-raw/compat-green-diff-check.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/core-compat-raw/compat-green-intent-boundary.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/core-compat-raw/compat-green-intent-boundary.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/core-compat-raw/compat-green-official-execution-layer.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/core-compat-raw/compat-green-official-execution-layer.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/core-compat-raw/compat-final-official-docs-after-optional-freeze.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/core-compat-raw/compat-final-official-docs-after-optional-freeze.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/optional-line-raw/round3-optional-line-budget-red.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/optional-line-raw/round3-optional-line-budget-red.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/optional-line-raw/round3-optional-line-budget-green-budget.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/optional-line-raw/round3-optional-line-budget-green-budget.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/optional-line-raw/round3-optional-line-budget-green-scans.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/optional-line-raw/round3-optional-line-budget-green-scans.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/optional-line-raw/round3-optional-line-budget-diff-check.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/optional-line-raw/round3-optional-line-budget-diff-check.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/raw/round3-optional-red.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/raw/round3-optional-red.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/raw/round3-optional-green.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/raw/round3-optional-green.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/raw/round3-optional-probes.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/raw/round3-optional-probes.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/raw/round3_optional_probe.py"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/raw/round3_optional_probe.py"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/raw/round3_optional_test_evidence.py"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/raw/round3_optional_test_evidence.py"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/raw/round3-schema-composition-probe.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/raw/round3-schema-composition-probe.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/raw/round3-schema-composition-probe.py"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/raw/round3-schema-composition-probe.py"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/raw/round3-checklist-probe.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/raw/round3-checklist-probe.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/raw/round3-checklist-probe.py"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/raw/round3-checklist-probe.py"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/raw/round3-cmake-probe--run.py"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/raw/round3-cmake-probe--run.py"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/raw/consolidate_round3_audit.py"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/raw/consolidate_round3_audit.py"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/raw/verify_round3_profiles.py"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/raw/verify_round3_profiles.py"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/raw/run_command_receipt.py"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/raw/run_command_receipt.py"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/raw/setup_round3_cmake_consumer.py"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/raw/setup_round3_cmake_consumer.py"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/profile-context-checks.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/profile-context-checks.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/initial-profile-context-checks.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/initial-profile-context-checks.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/consumer-task.md"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/consumer-task.md"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/consumer-response.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/consumer-response.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/consumer-fixture-before.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/consumer-fixture-before.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/independent/round3-independent-consumer-review.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/independent/round3-independent-consumer-review.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/independent/round3-independent-stage1-report.md"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/independent/round3-independent-stage1-report.md"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/independent/round3-independent-stage1-review-sources.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/independent/round3-independent-stage1-review-sources.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/independent/stage1-summary.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/independent/stage1-summary.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/independent/stage1/audit-identity-verification.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/independent/stage1/audit-identity-verification.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/independent/stage1/scan-original-failure.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/independent/stage1/sampling-original-failure.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/independent/stage1/sampling-original-failure.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/independent/stage1/cmake-original-failure.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/independent/stage1/cmake-original-failure.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/independent/stage1/schema-original-failure.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/independent/stage1/schema-original-failure.json"
+    },
+    {
+      "check": "current-retained-container-or-copy",
+      "passed": true,
+      "path": "evidence/independent/stage1/checklist-original-failure.json"
+    },
+    {
+      "check": "remaining-79-direct-copies-exact",
+      "passed": true,
+      "path": "evidence/independent/stage1/checklist-original-failure.json"
+    },
+    {
+      "check": "single-literal-path-whitespace-append",
+      "passed": true
+    },
+    {
+      "check": "additional-packaging-attribute-bound",
+      "passed": true
+    },
+    {
+      "check": "original-whitespace-log-unmodified",
+      "passed": true
+    },
+    {
+      "check": "raw-gate-observation-roundtrip",
+      "passed": true,
+      "gate": "round3-packaging-format-initial",
+      "file": "receipt.json"
+    },
+    {
+      "check": "raw-gate-observation-roundtrip",
+      "passed": true,
+      "gate": "round3-packaging-format-initial",
+      "file": "stdout.log"
+    },
+    {
+      "check": "raw-gate-observation-roundtrip",
+      "passed": true,
+      "gate": "round3-packaging-format-initial",
+      "file": "stderr.log"
+    },
+    {
+      "check": "gate-receipt-log-bindings",
+      "passed": true,
+      "gate": "round3-packaging-format-initial",
+      "file": "stdout.log"
+    },
+    {
+      "check": "gate-receipt-log-bindings",
+      "passed": true,
+      "gate": "round3-packaging-format-initial",
+      "file": "stderr.log"
+    },
+    {
+      "check": "actual-format-red-only-53-original-log-lines",
+      "passed": true
+    },
+    {
+      "check": "raw-gate-observation-roundtrip",
+      "passed": true,
+      "gate": "round3-packaging-format-final",
+      "file": "receipt.json"
+    },
+    {
+      "check": "raw-gate-observation-roundtrip",
+      "passed": true,
+      "gate": "round3-packaging-format-final",
+      "file": "stdout.log"
+    },
+    {
+      "check": "raw-gate-observation-roundtrip",
+      "passed": true,
+      "gate": "round3-packaging-format-final",
+      "file": "stderr.log"
+    },
+    {
+      "check": "gate-receipt-log-bindings",
+      "passed": true,
+      "gate": "round3-packaging-format-final",
+      "file": "stdout.log"
+    },
+    {
+      "check": "gate-receipt-log-bindings",
+      "passed": true,
+      "gate": "round3-packaging-format-final",
+      "file": "stderr.log"
+    },
+    {
+      "check": "actual-format-green",
+      "passed": true
+    },
+    {
+      "check": "raw-gate-observation-roundtrip",
+      "passed": true,
+      "gate": "round3-packaging-security-final",
+      "file": "receipt.json"
+    },
+    {
+      "check": "raw-gate-observation-roundtrip",
+      "passed": true,
+      "gate": "round3-packaging-security-final",
+      "file": "stdout.log"
+    },
+    {
+      "check": "raw-gate-observation-roundtrip",
+      "passed": true,
+      "gate": "round3-packaging-security-final",
+      "file": "stderr.log"
+    },
+    {
+      "check": "gate-receipt-log-bindings",
+      "passed": true,
+      "gate": "round3-packaging-security-final",
+      "file": "stdout.log"
+    },
+    {
+      "check": "gate-receipt-log-bindings",
+      "passed": true,
+      "gate": "round3-packaging-security-final",
+      "file": "stderr.log"
+    },
+    {
+      "check": "actual-security-red-only-fixed-synthetic-fixture",
+      "passed": true
+    },
+    {
+      "check": "raw-gate-observation-roundtrip",
+      "passed": true,
+      "gate": "round3-packaging-security-corrected",
+      "file": "receipt.json"
+    },
+    {
+      "check": "raw-gate-observation-roundtrip",
+      "passed": true,
+      "gate": "round3-packaging-security-corrected",
+      "file": "stdout.log"
+    },
+    {
+      "check": "raw-gate-observation-roundtrip",
+      "passed": true,
+      "gate": "round3-packaging-security-corrected",
+      "file": "stderr.log"
+    },
+    {
+      "check": "gate-receipt-log-bindings",
+      "passed": true,
+      "gate": "round3-packaging-security-corrected",
+      "file": "stdout.log"
+    },
+    {
+      "check": "gate-receipt-log-bindings",
+      "passed": true,
+      "gate": "round3-packaging-security-corrected",
+      "file": "stderr.log"
+    },
+    {
+      "check": "actual-security-green",
+      "passed": true
+    },
+    {
+      "check": "oversized-proof-exact-reconstruction",
+      "passed": true
+    },
+    {
+      "check": "oversized-rejection-typed-record-preserved",
+      "passed": true
+    },
+    {
+      "check": "unchanged-reference-cap-respected-by-compression",
+      "passed": true
+    },
+    {
+      "check": "final-compressed-proof-identity",
+      "passed": true
+    },
+    {
+      "check": "source-verdict-fields-time-and-target-unchanged",
+      "passed": true
+    },
+    {
+      "check": "only-redundant-source-index-direct-reference-replaced",
+      "passed": true
+    },
+    {
+      "check": "only-existing-map-digest-changed",
+      "passed": true
+    },
+    {
+      "check": "source-index-still-bound-through-independent-map",
+      "passed": true
+    },
+    {
+      "check": "reference-count-still64",
+      "passed": true
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "sources",
+      "path": ".version-lock"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "sources",
+      "path": "CONTEXT.md"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "sources",
+      "path": "README.md"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "sources",
+      "path": "docs/changes/20261116-skill-failure-paths/audit.md"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "sources",
+      "path": "docs/changes/20261116-skill-failure-paths/design.md"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "sources",
+      "path": "docs/changes/20261116-skill-failure-paths/evidence/core-audit.json"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "sources",
+      "path": "docs/changes/20261116-skill-failure-paths/evidence/embedded-audit.json"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "sources",
+      "path": "docs/changes/20261116-skill-failure-paths/evidence/optional-audit.json"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "sources",
+      "path": "docs/changes/20261116-skill-failure-paths/evidence/platform-audit.json"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "sources",
+      "path": "docs/changes/20261116-skill-failure-paths/evidence/portfolio-audit.json"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "sources",
+      "path": "docs/changes/20261116-skill-failure-paths/negative-results.md"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "sources",
+      "path": "docs/changes/20261116-skill-failure-paths/requirements.md"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "sources",
+      "path": "docs/changes/20261116-skill-failure-paths/source-review.md"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "sources",
+      "path": "docs/changes/20261116-skill-failure-paths/tasks.md"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "sources",
+      "path": "docs/runbooks/security-supply-chain.md"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "sources",
+      "path": "manifest.json"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "sources",
+      "path": "manifests/software_m5_eval_contract.json"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "sources",
+      "path": "optional-skills/adk-security-supply-chain/SKILL.md"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "sources",
+      "path": "optional-skills/adk-test-flakiness-triage/SKILL.md"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "sources",
+      "path": "optional-skills/adk-test-flakiness-triage/references/details.md"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "sources",
+      "path": "pyproject.toml"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "sources",
+      "path": "skills/adk-cmake-cross-build/SKILL.md"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "sources",
+      "path": "skills/adk-interface-contract-design/SKILL.md"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "sources",
+      "path": "skills/adk-interface-contract-design/references/design-quality-methods.md"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "sources",
+      "path": "skills/adk-interface-contract-design/references/details.md"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "sources",
+      "path": "skills/adk-parallel-agent-governance/SKILL.md"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "sources",
+      "path": "skills/adk-parallel-agent-governance/references/subagent-review-checklist.md"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "sources",
+      "path": "src/agent_dev_kit/__init__.py"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "sources",
+      "path": "tests/fixtures/skill_method_ab_prereg.json"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "sources",
+      "path": "tests/test_skill_cmake_methods.py"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "sources",
+      "path": "tests/test_skill_command_examples.py"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "sources",
+      "path": "tests/test_skill_content.sh"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "sources",
+      "path": "tests/test_skill_contract_methods.py"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "sources",
+      "path": "evidence/original.patch"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "evidence",
+      "path": "evidence/independent-source-review.json"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "evidence",
+      "path": "evidence/source-bindings.json"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "evidence",
+      "path": "evidence/full-regression.json"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "evidence",
+      "path": "evidence/full-regression-started.json"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "evidence",
+      "path": "evidence/full-regression-timing.json"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "evidence",
+      "path": "evidence/full-regression.stdout.log"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "evidence",
+      "path": "evidence/initial-regression.json"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "evidence",
+      "path": "evidence/retained-files.json"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "evidence",
+      "path": "evidence/independent-retained-files.json"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "evidence",
+      "path": "evidence/core-implementation.json"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "evidence",
+      "path": "evidence/core-contract-compatibility-fix.json"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "evidence",
+      "path": "evidence/optional-implementation.json"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "evidence",
+      "path": "evidence/optional-line-budget-fix.json"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "evidence",
+      "path": "evidence/cmake-implementation.json"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "evidence",
+      "path": "evidence/consumer-task.md"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "evidence",
+      "path": "evidence/consumer-response.json"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "evidence",
+      "path": "evidence/consumer-materials.json"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "evidence",
+      "path": "evidence/consumer-fixture-before.json"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "evidence",
+      "path": "evidence/profile-context-checks.json"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "evidence",
+      "path": "evidence/skill-source-size-comparison.json"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "evidence",
+      "path": "evidence/corrected-environment.json"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "evidence",
+      "path": "evidence/independent/round3-independent-consumer-review.json"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "evidence",
+      "path": "evidence/independent/final_regression_independent_check.json"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "evidence",
+      "path": "evidence/independent/final_profiles_independent_check.json"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "evidence",
+      "path": "evidence/independent/canonical_patch_check.json"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "evidence",
+      "path": "evidence/independent/first_regression_classification.json"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "evidence",
+      "path": "verification.md"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "evidence",
+      "path": "evidence/packaging-validation-failure.json"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "evidence",
+      "path": "evidence/consumer-materials-completion.json"
+    },
+    {
+      "check": "typed-all-final-direct-references",
+      "passed": true,
+      "kind": "evidence",
+      "path": "evidence/packaging-archive-fixes.json"
+    },
+    {
+      "check": "frozen-source-still-unchanged",
+      "passed": true,
+      "path": ".version-lock"
+    },
+    {
+      "check": "frozen-source-still-unchanged",
+      "passed": true,
+      "path": "CONTEXT.md"
+    },
+    {
+      "check": "frozen-source-still-unchanged",
+      "passed": true,
+      "path": "README.md"
+    },
+    {
+      "check": "frozen-source-still-unchanged",
+      "passed": true,
+      "path": "docs/changes/20261116-skill-failure-paths/audit.md"
+    },
+    {
+      "check": "frozen-source-still-unchanged",
+      "passed": true,
+      "path": "docs/changes/20261116-skill-failure-paths/design.md"
+    },
+    {
+      "check": "frozen-source-still-unchanged",
+      "passed": true,
+      "path": "docs/changes/20261116-skill-failure-paths/evidence/core-audit.json"
+    },
+    {
+      "check": "frozen-source-still-unchanged",
+      "passed": true,
+      "path": "docs/changes/20261116-skill-failure-paths/evidence/embedded-audit.json"
+    },
+    {
+      "check": "frozen-source-still-unchanged",
+      "passed": true,
+      "path": "docs/changes/20261116-skill-failure-paths/evidence/optional-audit.json"
+    },
+    {
+      "check": "frozen-source-still-unchanged",
+      "passed": true,
+      "path": "docs/changes/20261116-skill-failure-paths/evidence/platform-audit.json"
+    },
+    {
+      "check": "frozen-source-still-unchanged",
+      "passed": true,
+      "path": "docs/changes/20261116-skill-failure-paths/evidence/portfolio-audit.json"
+    },
+    {
+      "check": "frozen-source-still-unchanged",
+      "passed": true,
+      "path": "docs/changes/20261116-skill-failure-paths/negative-results.md"
+    },
+    {
+      "check": "frozen-source-still-unchanged",
+      "passed": true,
+      "path": "docs/changes/20261116-skill-failure-paths/requirements.md"
+    },
+    {
+      "check": "frozen-source-still-unchanged",
+      "passed": true,
+      "path": "docs/changes/20261116-skill-failure-paths/source-review.md"
+    },
+    {
+      "check": "frozen-source-still-unchanged",
+      "passed": true,
+      "path": "docs/changes/20261116-skill-failure-paths/tasks.md"
+    },
+    {
+      "check": "frozen-source-still-unchanged",
+      "passed": true,
+      "path": "docs/runbooks/security-supply-chain.md"
+    },
+    {
+      "check": "frozen-source-still-unchanged",
+      "passed": true,
+      "path": "manifest.json"
+    },
+    {
+      "check": "frozen-source-still-unchanged",
+      "passed": true,
+      "path": "manifests/software_m5_eval_contract.json"
+    },
+    {
+      "check": "frozen-source-still-unchanged",
+      "passed": true,
+      "path": "optional-skills/adk-security-supply-chain/SKILL.md"
+    },
+    {
+      "check": "frozen-source-still-unchanged",
+      "passed": true,
+      "path": "optional-skills/adk-test-flakiness-triage/SKILL.md"
+    },
+    {
+      "check": "frozen-source-still-unchanged",
+      "passed": true,
+      "path": "optional-skills/adk-test-flakiness-triage/references/details.md"
+    },
+    {
+      "check": "frozen-source-still-unchanged",
+      "passed": true,
+      "path": "pyproject.toml"
+    },
+    {
+      "check": "frozen-source-still-unchanged",
+      "passed": true,
+      "path": "skills/adk-cmake-cross-build/SKILL.md"
+    },
+    {
+      "check": "frozen-source-still-unchanged",
+      "passed": true,
+      "path": "skills/adk-interface-contract-design/SKILL.md"
+    },
+    {
+      "check": "frozen-source-still-unchanged",
+      "passed": true,
+      "path": "skills/adk-interface-contract-design/references/design-quality-methods.md"
+    },
+    {
+      "check": "frozen-source-still-unchanged",
+      "passed": true,
+      "path": "skills/adk-interface-contract-design/references/details.md"
+    },
+    {
+      "check": "frozen-source-still-unchanged",
+      "passed": true,
+      "path": "skills/adk-parallel-agent-governance/SKILL.md"
+    },
+    {
+      "check": "frozen-source-still-unchanged",
+      "passed": true,
+      "path": "skills/adk-parallel-agent-governance/references/subagent-review-checklist.md"
+    },
+    {
+      "check": "frozen-source-still-unchanged",
+      "passed": true,
+      "path": "src/agent_dev_kit/__init__.py"
+    },
+    {
+      "check": "frozen-source-still-unchanged",
+      "passed": true,
+      "path": "tests/fixtures/skill_method_ab_prereg.json"
+    },
+    {
+      "check": "frozen-source-still-unchanged",
+      "passed": true,
+      "path": "tests/test_skill_cmake_methods.py"
+    },
+    {
+      "check": "frozen-source-still-unchanged",
+      "passed": true,
+      "path": "tests/test_skill_command_examples.py"
+    },
+    {
+      "check": "frozen-source-still-unchanged",
+      "passed": true,
+      "path": "tests/test_skill_content.sh"
+    },
+    {
+      "check": "frozen-source-still-unchanged",
+      "passed": true,
+      "path": "tests/test_skill_contract_methods.py"
+    },
+    {
+      "check": "policy-validator-still-unchanged",
+      "passed": true,
+      "path": ".adk/review-policy.json"
+    },
+    {
+      "check": "policy-validator-still-unchanged",
+      "passed": true,
+      "path": ".adk/review-authorization.md"
+    },
+    {
+      "check": "policy-validator-still-unchanged",
+      "passed": true,
+      "path": "src/agent_dev_kit/review_evidence.py"
+    },
+    {
+      "check": "policy-validator-still-unchanged",
+      "passed": true,
+      "path": "src/agent_dev_kit/strict_json.py"
+    },
+    {
+      "check": "policy-validator-still-unchanged",
+      "passed": true,
+      "path": "src/agent_dev_kit/readiness_evidence.py"
+    },
+    {
+      "check": "no-other-tracked-code-gate-or-budget-change",
+      "passed": true,
+      "outside": []
+    },
+    {
+      "check": "final-production-validator-independent-pass",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "gate_observations": [
+    {
+      "name": "round3-packaging-format-initial",
+      "receipt_sha256": "1361201ea149500f4065f784c5d6bec007d89be3b68827276aa0c00c874bab08",
+      "receipt_bytes": 6660430,
+      "command": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "git",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "started_at": "2026-11-16T08:36:25.878724+00:00",
+      "finished_at": "2026-11-16T08:36:26.051917+00:00",
+      "exit_code": 2,
+      "timed_out": false,
+      "head_before": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "head_after": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "stdout_sha256": "a308891983cb9f1351f4bda4d3450667e3acd07536cecf4243827087a2204581",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": null,
+      "warning_count": 0
+    },
+    {
+      "name": "round3-packaging-format-final",
+      "receipt_sha256": "bc148346bc60e3758bbc080ad8f6527a9b821a9a434f5e191d565e70bcd167f1",
+      "receipt_bytes": 6661286,
+      "command": [
+        "bash",
+        "scripts/check-format.sh"
+      ],
+      "started_at": "2026-11-16T08:36:43.618306+00:00",
+      "finished_at": "2026-11-16T08:36:44.229732+00:00",
+      "exit_code": 0,
+      "timed_out": false,
+      "head_before": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "head_after": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "stdout_sha256": "e9164f6e26a94c516e08caffa2e6a611fb00b5ea8833ac84da6e8744a75c4a8d",
+      "stderr_sha256": "ba241a80ee282a69548178ca731ea45dd3def86ad87431abfc4ae7d5be4b41aa",
+      "stdout": null,
+      "warning_count": 34
+    },
+    {
+      "name": "round3-packaging-security-final",
+      "receipt_sha256": "fe1f29daa2a4cef8c864f5e02d1827d537311ecab2d85eb08b2aae317f055aab",
+      "receipt_bytes": 6661306,
+      "command": [
+        "bash",
+        "scripts/devkit.sh",
+        "security",
+        "check"
+      ],
+      "started_at": "2026-11-16T08:36:43.644816+00:00",
+      "finished_at": "2026-11-16T08:36:45.305490+00:00",
+      "exit_code": 1,
+      "timed_out": false,
+      "head_before": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "head_after": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "stdout_sha256": "eb7b399a1af106d88f78d8443ae92ca948cdb69b00d030578acc91b877658597",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "{\n  \"schema_version\": 1,\n  \"status\": \"fail\",\n  \"failures\": [\n    \"credential-like content: docs/changes/20261116-skill-failure-paths/evidence/independent/stage1/scan-original-failure.json\"\n  ],\n  \"warnings\": [],\n  \"inventory_source\": \"git\",\n  \"files_scanned\": 2575,\n  \"scan_limit\": 50000\n}\n",
+      "warning_count": 0
+    },
+    {
+      "name": "round3-packaging-security-corrected",
+      "receipt_sha256": "8401f5fba17a7e93cb782c17f76d368cbd3ce44c9344c5fe717b117fc5c35ff2",
+      "receipt_bytes": 6661307,
+      "command": [
+        "bash",
+        "scripts/devkit.sh",
+        "security",
+        "check"
+      ],
+      "started_at": "2026-11-16T08:38:33.764073+00:00",
+      "finished_at": "2026-11-16T08:38:34.880342+00:00",
+      "exit_code": 0,
+      "timed_out": false,
+      "head_before": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "head_after": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "stdout_sha256": "e16698754caff73bf37fe5da4d74629238afdbe6fa16779fd8a46d90b56c9200",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "{\n  \"schema_version\": 1,\n  \"status\": \"pass\",\n  \"failures\": [],\n  \"warnings\": [],\n  \"inventory_source\": \"git\",\n  \"files_scanned\": 2575,\n  \"scan_limit\": 50000\n}\n",
+      "warning_count": 0
+    }
+  ],
+  "encoded_original": {
+    "bytes": 4478,
+    "sha256": "16cba4864556a7cbb5aca19fea375bc69727700d311b8cf3b73fd60b14900c2c",
+    "container": {
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/independent/stage1/scan-original-failure.json",
+      "bytes": 6527,
+      "sha256": "47cfa21f7ad710eecf973d20c121be04fd96bd8c5fdac4f811e0528b5bb734d9"
+    }
+  },
+  "oversized_original_proof": {
+    "bytes": 29728971,
+    "sha256": "9b87dcbf217788fec9adfc6f574a07595238f1f2949c982a8c683f7de7c66ebc",
+    "exactly_reconstructed": true
+  },
+  "independent_validator": {
+    "call": "agent_dev_kit.review_evidence.validate_review",
+    "started_at": "2026-11-16T08:42:44.617126+00:00",
+    "completed_at": "2026-11-16T08:42:44.632949+00:00",
+    "duration_seconds": 0.015826299000764266,
+    "now_override": null,
+    "stdout": "",
+    "stderr": "",
+    "status": "pass",
+    "record_sha256": "7a21c4856fefcdeec13ec6d5f4fdd4e1d0c1858db0672594fcdc3ddbeac0abad"
+  },
+  "validator_receipt": {
+    "path": "/workspace/scratch/fe5385ca063a/round3-independent-packaging-validator-final.json",
+    "bytes": 18084,
+    "sha256": "72b32ecfa09fa97087bb01dc91f39e836e1b04a421e4d705bef065f88b64dbcd"
+  },
+  "limits": [
+    "Only encoding/map/typed/attribute and original gate observations checked; no full suite, consumer or behavioral probe rerun.",
+    "Source verdict time remains08:23:33 UTC; this later packaging and root-attribute review has its own actual time.",
+    "No plaintext synthetic credential assignment is copied into this report; raw observations remain exactly decodable."
+  ]
+}

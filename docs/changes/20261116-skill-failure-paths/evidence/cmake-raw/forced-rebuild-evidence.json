@@ -1,0 +1,26 @@
+[
+  {
+    "label": "forced-rebuild-still-a",
+    "argv": [
+      "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin/cmake",
+      "--build",
+      "/workspace/scratch/fe5385ca063a/round3-cmake-probe/build-reused",
+      "--clean-first",
+      "--parallel",
+      "1",
+      "--verbose"
+    ],
+    "exit_code": 0,
+    "stdout": "Change Dir: '/workspace/scratch/fe5385ca063a/round3-cmake-probe/build-reused'\n\nRun Clean Command: /workspace/scratch/fe5385ca063a/verification-tools/ninja -v -j 1 clean\n[1/1] /workspace/scratch/fe5385ca063a/verification-tools/ninja  -t clean \nCleaning... 2 files.\n\nRun Build Command(s): /workspace/scratch/fe5385ca063a/verification-tools/ninja -v -j 1\n[1/2] /usr/bin/gcc   -DTOOLCHAIN_ID=101 -g -MD -MT CMakeFiles/probe.dir/main.c.o -MF CMakeFiles/probe.dir/main.c.o.d -o CMakeFiles/probe.dir/main.c.o -c /workspace/scratch/fe5385ca063a/round3-cmake-probe/src/main.c\n[2/2] : && /usr/bin/gcc -DTOOLCHAIN_ID=101 -g -Wl,--dependency-file=CMakeFiles/probe.dir/link.d CMakeFiles/probe.dir/main.c.o -o probe   && :\n\n",
+    "stderr": ""
+  },
+  {
+    "label": "execute-after-forced-rebuild",
+    "argv": [
+      "/workspace/scratch/fe5385ca063a/round3-cmake-probe/build-reused/probe"
+    ],
+    "exit_code": 0,
+    "stdout": "toolchain_id=101\n",
+    "stderr": ""
+  }
+]

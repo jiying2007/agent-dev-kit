@@ -1,0 +1,17 @@
+{
+  "status": "pass",
+  "record_sha256": "7a21c4856fefcdeec13ec6d5f4fdd4e1d0c1858db0672594fcdc3ddbeac0abad",
+  "review_policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+  "review_scope": "source-change",
+  "human_review_performed": false,
+  "field_evidence_verified": false,
+  "provider_execution_performed": false,
+  "product_release_authorized": false,
+  "checked_at": "2026-11-16T08:39:30.377273+00:00",
+  "source_commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+  "sources": 34,
+  "evidence": 30,
+  "call": "agent_dev_kit.review_evidence.validate_review",
+  "reference_scope": "33 frozen source files plus canonical patch; 30 primary evidence references. Independent-retained map binds the source index. Packaging gate receipts retain exact original bytes in explicitly marked gzip+base64 form, within unchanged budgets.",
+  "boundary": "Mechanical digest binding only. Later independent packaging review separately covers the exact whitespace attribute, encoded synthetic-test archive, and compressed execution receipts; no native, field, model or release qualification is inferred."
+}

@@ -1,0 +1,37 @@
+{
+  "schema": "round3-independent-packaging-archive-manifest/v1",
+  "created_at": "2026-11-16T08:36:27.202435+00:00",
+  "files": [
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-packaging-mechanical-checks.json",
+      "filename": "round3-independent-packaging-mechanical-checks.json",
+      "bytes": 201197,
+      "sha256": "cfabcd7a341b98dcb557142133be0153cfb565729a6dc1711e93ae922946c72c"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-packaging-final-checks.json",
+      "filename": "round3-independent-packaging-final-checks.json",
+      "bytes": 133303,
+      "sha256": "86356c5784971f935d2bcabf8f084517414bebcc2ce4618a387ca17b98360a26"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-packaging-validator-receipt.json",
+      "filename": "round3-independent-packaging-validator-receipt.json",
+      "bytes": 18969,
+      "sha256": "54a00a3f7d7dea4d58f3afd3128aa97369720bbb5cf3619ebd270423d5949847"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-packaging-review.json",
+      "filename": "round3-independent-packaging-review.json",
+      "bytes": 11103,
+      "sha256": "1bae1238e2b35c39f81c47cf653ca18f14f99ec5813492caa404d3775b483608"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-packaging-review.md",
+      "filename": "round3-independent-packaging-review.md",
+      "bytes": 3949,
+      "sha256": "ee54c1d68a2a374243ecf6c31d625651814c26ffd5e2ae58b624210404a1a729"
+    }
+  ],
+  "boundary": "Append these exact report bytes after the reviewed package. This manifest is an archival inventory, not a new source, runtime or release verdict."
+}

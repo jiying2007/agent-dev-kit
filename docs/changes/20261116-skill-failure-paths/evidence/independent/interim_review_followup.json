@@ -1,0 +1,27 @@
+{
+  "schema": "round3-independent-interim-review-followup/v1",
+  "reviewer": "round3-independent-reviewer",
+  "reviewed_at": "2026-11-16T08:09:29.502895+00:00",
+  "target_commit": "6183982e1f5e4a1bb09727009a809514e160be64",
+  "finding": {
+    "id": "r3-review-02",
+    "severity": "major",
+    "disposition": "open",
+    "source": "optional-skills/adk-security-supply-chain/SKILL.md",
+    "source_sha256": "ee86e23878218150ef4f03dd4fc463d9e0ad68c6cdd278483f30490d3867ed58",
+    "independent_line_count": 142,
+    "existing_limit": 140,
+    "counterexample": "[FAIL] test_token_budget\n  stderr (last 80 lines):\n    [FAIL] token budget check failed\n      - skill token budget exceeded: optional-skills/adk-security-supply-chain/SKILL.md lines=142 limit=140\n  stdout (last 80 lines):\n    [INFO] agents_bytes=2914 soft=2975 hard=3500 estimated_tokens=729 budget_status=hard-limit-failed\n    [INFO] skill_files=65 max_skill_lines=142 max_skill_file=optional-skills/adk-security-supply-chain/SKILL.md limit=140\n    [INFO] doc_files=926 max_doc_lines=547 max_doc_file=docs/comprehensive-analysis-embedded-harness.md limit=560\n    [INFO] summary_json_scripts=3\n    [INFO] compact_test_runner=1\n    [INFO] context_governance_assets=11\n",
+    "task": "Reduce within the existing Skill while preserving F1 semantics and unchanged 140-line threshold, then verify token-budget plus published scanner controls.",
+    "discovered_by": "independent review of remaining complete-regression failure sections"
+  },
+  "notes": [
+    "Passing all eight profile byte ratchets is separate from the per-Skill line limit.",
+    "First full regression has at least these source integration failures: two executions of the lost entry marker contract and one per-Skill line-budget failure, plus numerous explicit Python version failures.",
+    "Unexplained failure tails are not silently assigned a cause; the corrected complete regression must resolve all failures."
+  ],
+  "previous_interim_report": {
+    "path": "/workspace/scratch/fe5385ca063a/round3-independent-interim-review.json",
+    "sha256": "1e6df98c2ac756207d974d35eb6c35b877d1142b051cd7c9481ed5210cc8fbd7"
+  }
+}

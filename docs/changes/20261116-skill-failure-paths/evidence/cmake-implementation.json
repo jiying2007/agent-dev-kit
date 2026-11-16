@@ -1,0 +1,327 @@
+{
+  "kind": "F3-cmake-method-implementation",
+  "role": "implementation-only: /root/round3_cmake_impl",
+  "observed_at_utc": "2026-11-16T07:54:04.687587+00:00",
+  "repository": "/workspace/scratch/fe5385ca063a/agent-dev-kit",
+  "branch": "improve/skill-failure-paths-20261116",
+  "baseline_commit": "80f8b2ea2885e3f62dcea455c45a2e8ebf071b2b",
+  "state": "assigned source frozen; targeted host validation passed; consumer and independent review pending",
+  "write_set": [
+    {
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/skills/adk-cmake-cross-build/SKILL.md",
+      "bytes": 5264,
+      "sha256": "543764125bfc4fd34be2b7b7a2ca6afc3468e7bdc0caf044d27c8d35107d4747"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_skill_cmake_methods.py",
+      "bytes": 9142,
+      "sha256": "c743fd55de0a8a07327c79d9f002d88b06d016389d0bb61ecb4b6e02a88ce433"
+    }
+  ],
+  "skill_version": {
+    "before": "1.0.6",
+    "after": "1.0.7"
+  },
+  "source_delta_bytes": 555,
+  "changes": [
+    "Require evidence of existing toolchain path/content, compiler, target, sysroot, ABI, generator and configuration before reusing a binary directory.",
+    "Use CMakeCache, generated CMakeSystem/CMake compiler files and actual compile commands/logs; do not trust a changed cache path or successful configure alone.",
+    "Reuse incrementally only with the same proven identity; choose a new task-owned binary directory/matching preset on changed or unprovable old identity while retaining old cache/logs.",
+    "Reject manual cache mutation and blind cleaning; --clean-first does not replace configuration identity.",
+    "Preserve published build/CTest code, resource budget, JUnit backend accounting, output identity and existing failure handling."
+  ],
+  "tests": [
+    {
+      "stage": "before Skill edit",
+      "tests_run": 4,
+      "successful": true,
+      "skipped": 0,
+      "evidence": "/workspace/scratch/fe5385ca063a/round3-cmake-test-baseline.json",
+      "interpretation": "Physical controls already pass; this is not a model RED assertion."
+    },
+    {
+      "stage": "after Skill edit",
+      "tests_run": 4,
+      "successful": true,
+      "skipped": 0,
+      "evidence": "/workspace/scratch/fe5385ca063a/round3-cmake-test-repaired.json"
+    },
+    {
+      "stage": "existing CMake/CTest examples",
+      "tests_run": 14,
+      "exit_code": 0,
+      "skipped": 0,
+      "evidence": "/workspace/scratch/fe5385ca063a/round3-cmake-regressions.json"
+    },
+    {
+      "stage": "scoped whitespace check",
+      "tool_chunk_id": "a19df8",
+      "exit_code": 0,
+      "command": "rtk git diff --check -- skills/adk-cmake-cross-build/SKILL.md tests/test_skill_cmake_methods.py"
+    }
+  ],
+  "same_published_command_block_sha256_before_and_after": "359921deecfb290648d05ef6072efc9882e957044c6719b885b6a9154fecbebb",
+  "tools": {
+    "python": "3.12.14",
+    "cmake": {
+      "path": "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin/cmake",
+      "exit_code": 0,
+      "stdout": "cmake version 3.31.6\n\nCMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
+      "stderr": ""
+    },
+    "ctest": {
+      "path": "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin/ctest",
+      "exit_code": 0,
+      "stdout": "ctest version 3.31.6\n\nCMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
+      "stderr": ""
+    },
+    "ninja": {
+      "path": "/workspace/scratch/fe5385ca063a/verification-tools/ninja",
+      "exit_code": 0,
+      "stdout": "1.11.1.git.kitware.jobserver-1\n",
+      "stderr": ""
+    },
+    "cc": {
+      "path": "/usr/bin/cc",
+      "exit_code": 0,
+      "stdout": "cc (Debian 14.2.0-19) 14.2.0\nCopyright (C) 2024 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+      "stderr": ""
+    },
+    "rtk": {
+      "path": "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+      "exit_code": 0,
+      "stdout": "rtk 1.2.0\n",
+      "stderr": ""
+    }
+  },
+  "observations": [
+    {
+      "test": "tests.test_skill_cmake_methods.CmakeBuildIdentityMethodsTests.test_matching_preset_selects_fresh_b_and_preserves_old_directory",
+      "identities": [
+        {
+          "binary_dir": "/tmp/adk cmake identity 8fl8kge2/build a",
+          "program_stdout": "toolchain_id=101\n",
+          "cache_toolchain": "/tmp/adk cmake identity 8fl8kge2/toolchain-a.cmake",
+          "system_toolchain_include": [
+            "include(\"/tmp/adk cmake identity 8fl8kge2/toolchain-a.cmake\")"
+          ],
+          "compile_commands": [
+            {
+              "directory": "/tmp/adk cmake identity 8fl8kge2/build a",
+              "command": "/usr/bin/cc -DTOOLCHAIN_ID=101 -g -o CMakeFiles/probe.dir/main.c.o -c \"/tmp/adk cmake identity 8fl8kge2/source/main.c\"",
+              "file": "/tmp/adk cmake identity 8fl8kge2/source/main.c",
+              "output": "CMakeFiles/probe.dir/main.c.o"
+            }
+          ]
+        },
+        {
+          "binary_dir": "/tmp/adk cmake identity 8fl8kge2/build b",
+          "program_stdout": "toolchain_id=202\n",
+          "cache_toolchain": "/tmp/adk cmake identity 8fl8kge2/toolchain-b.cmake",
+          "system_toolchain_include": [
+            "include(\"/tmp/adk cmake identity 8fl8kge2/toolchain-b.cmake\")"
+          ],
+          "compile_commands": [
+            {
+              "directory": "/tmp/adk cmake identity 8fl8kge2/build b",
+              "command": "/usr/bin/cc -DTOOLCHAIN_ID=202 -g -o CMakeFiles/probe.dir/main.c.o -c \"/tmp/adk cmake identity 8fl8kge2/source/main.c\"",
+              "file": "/tmp/adk cmake identity 8fl8kge2/source/main.c",
+              "output": "CMakeFiles/probe.dir/main.c.o"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_cmake_methods.CmakeBuildIdentityMethodsTests.test_new_manual_directory_builds_b_and_preserves_old_cache_and_logs",
+      "identities": [
+        {
+          "binary_dir": "/tmp/adk cmake identity gt54t047/build a",
+          "program_stdout": "toolchain_id=101\n",
+          "cache_toolchain": "/tmp/adk cmake identity gt54t047/toolchain-a.cmake",
+          "system_toolchain_include": [
+            "include(\"/tmp/adk cmake identity gt54t047/toolchain-a.cmake\")"
+          ],
+          "compile_commands": [
+            {
+              "directory": "/tmp/adk cmake identity gt54t047/build a",
+              "command": "/usr/bin/cc -DTOOLCHAIN_ID=101 -g -o CMakeFiles/probe.dir/main.c.o -c \"/tmp/adk cmake identity gt54t047/source/main.c\"",
+              "file": "/tmp/adk cmake identity gt54t047/source/main.c",
+              "output": "CMakeFiles/probe.dir/main.c.o"
+            }
+          ]
+        },
+        {
+          "binary_dir": "/tmp/adk cmake identity gt54t047/build b",
+          "program_stdout": "toolchain_id=202\n",
+          "cache_toolchain": "/tmp/adk cmake identity gt54t047/toolchain-b.cmake",
+          "system_toolchain_include": [
+            "include(\"/tmp/adk cmake identity gt54t047/toolchain-b.cmake\")"
+          ],
+          "compile_commands": [
+            {
+              "directory": "/tmp/adk cmake identity gt54t047/build b",
+              "command": "/usr/bin/cc -DTOOLCHAIN_ID=202 -g -o CMakeFiles/probe.dir/main.c.o -c \"/tmp/adk cmake identity gt54t047/source/main.c\"",
+              "file": "/tmp/adk cmake identity gt54t047/source/main.c",
+              "output": "CMakeFiles/probe.dir/main.c.o"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_cmake_methods.CmakeBuildIdentityMethodsTests.test_old_directory_can_report_b_but_build_a_even_after_clean_first",
+      "identities": [
+        {
+          "binary_dir": "/tmp/adk cmake identity er42wx9t/build a",
+          "program_stdout": "toolchain_id=101\n",
+          "cache_toolchain": "/tmp/adk cmake identity er42wx9t/toolchain-b.cmake",
+          "system_toolchain_include": [
+            "include(\"/tmp/adk cmake identity er42wx9t/toolchain-a.cmake\")"
+          ],
+          "compile_commands": [
+            {
+              "directory": "/tmp/adk cmake identity er42wx9t/build a",
+              "command": "/usr/bin/cc -DTOOLCHAIN_ID=101 -g -o CMakeFiles/probe.dir/main.c.o -c \"/tmp/adk cmake identity er42wx9t/source/main.c\"",
+              "file": "/tmp/adk cmake identity er42wx9t/source/main.c",
+              "output": "CMakeFiles/probe.dir/main.c.o"
+            }
+          ]
+        },
+        {
+          "binary_dir": "/tmp/adk cmake identity er42wx9t/build a",
+          "program_stdout": "toolchain_id=101\n",
+          "cache_toolchain": "/tmp/adk cmake identity er42wx9t/toolchain-b.cmake",
+          "system_toolchain_include": [
+            "include(\"/tmp/adk cmake identity er42wx9t/toolchain-a.cmake\")"
+          ],
+          "compile_commands": [
+            {
+              "directory": "/tmp/adk cmake identity er42wx9t/build a",
+              "command": "/usr/bin/cc -DTOOLCHAIN_ID=101 -g -o CMakeFiles/probe.dir/main.c.o -c \"/tmp/adk cmake identity er42wx9t/source/main.c\"",
+              "file": "/tmp/adk cmake identity er42wx9t/source/main.c",
+              "output": "CMakeFiles/probe.dir/main.c.o"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "test": "tests.test_skill_cmake_methods.CmakeBuildIdentityMethodsTests.test_same_identity_keeps_incremental_build",
+      "identities": [
+        {
+          "binary_dir": "/tmp/adk cmake identity oayp7s4m/build a",
+          "program_stdout": "toolchain_id=101\n",
+          "cache_toolchain": "/tmp/adk cmake identity oayp7s4m/toolchain-a.cmake",
+          "system_toolchain_include": [
+            "include(\"/tmp/adk cmake identity oayp7s4m/toolchain-a.cmake\")"
+          ],
+          "compile_commands": [
+            {
+              "directory": "/tmp/adk cmake identity oayp7s4m/build a",
+              "command": "/usr/bin/cc -DTOOLCHAIN_ID=101 -g -o CMakeFiles/probe.dir/main.c.o -c \"/tmp/adk cmake identity oayp7s4m/source/main.c\"",
+              "file": "/tmp/adk cmake identity oayp7s4m/source/main.c",
+              "output": "CMakeFiles/probe.dir/main.c.o"
+            }
+          ]
+        },
+        {
+          "binary_dir": "/tmp/adk cmake identity oayp7s4m/build a",
+          "program_stdout": "toolchain_id=101\n",
+          "cache_toolchain": "/tmp/adk cmake identity oayp7s4m/toolchain-a.cmake",
+          "system_toolchain_include": [
+            "include(\"/tmp/adk cmake identity oayp7s4m/toolchain-a.cmake\")"
+          ],
+          "compile_commands": [
+            {
+              "directory": "/tmp/adk cmake identity oayp7s4m/build a",
+              "command": "/usr/bin/cc -DTOOLCHAIN_ID=101 -g -o CMakeFiles/probe.dir/main.c.o -c \"/tmp/adk cmake identity oayp7s4m/source/main.c\"",
+              "file": "/tmp/adk cmake identity oayp7s4m/source/main.c",
+              "output": "CMakeFiles/probe.dir/main.c.o"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "external_source": {
+    "repository": "Kitware/CMake",
+    "commit": "859ca5c4d7396a011a462878179bc173e1283731",
+    "license": "BSD-3-Clause",
+    "source_code_copied": false,
+    "full_read": [
+      {
+        "path": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/Kitware__CMake/859ca5c4d7396a011a462878179bc173e1283731/Help/variable/CMAKE_LANG_COMPILER.rst",
+        "bytes": 852,
+        "sha256": "52b19a78ae0edb6fe8736dda7f5a095133d231943e0d5b23f3800a0dec1a3ade"
+      },
+      {
+        "path": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/Kitware__CMake/859ca5c4d7396a011a462878179bc173e1283731/Help/envvar/CMAKE_TOOLCHAIN_FILE.rst",
+        "bytes": 424,
+        "sha256": "eb0773e4164a11f05c9d7f9736cdae902f25aecc2dead344a556435dcd31c27c"
+      },
+      {
+        "path": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/Kitware__CMake/859ca5c4d7396a011a462878179bc173e1283731/Modules/CMakeSystem.cmake.in",
+        "bytes": 563,
+        "sha256": "60b5167875d6a01de4fb96c784a4e01d56f365f096fa9a257c6b6b6d9669e49a"
+      }
+    ]
+  },
+  "negative_results": [
+    {
+      "check": "cross-task lessons",
+      "path": "knowledge/L2-domain/lessons.md",
+      "command": "rtk rg -n -i 'cmake|toolchain|binarydir|构建身份' knowledge/L2-domain/lessons.md",
+      "exit_code": 2,
+      "result": "file absent; no historical lesson claimed"
+    },
+    {
+      "check": "unsafe in-place A to B and forced rebuild",
+      "result": "Both configure/build succeed and cache says B, but system configuration and real compiler command remain A; output 101. Expected wrong-identity observation, not a harness assertion failure."
+    }
+  ],
+  "evidence_manifest": [
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-test-baseline.json",
+      "bytes": 103443,
+      "sha256": "f11f3dcf5a44152c7e09f31df4bcc6f31129508c3585605eaee3de2ada0bfb58"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-test-repaired.json",
+      "bytes": 103443,
+      "sha256": "2b5b5d94890c6f604a48bfb8abc70dbc02961abd284aa8492d978274fd3846f0"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-regressions.json",
+      "bytes": 3683,
+      "sha256": "7bb5976f4d8fd4ecdb69c9d17054104cf4d5a6f433bdfc596afa4abe4b2d439b"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-test-runner.py",
+      "bytes": 2677,
+      "sha256": "12e403781e6fa8124925db1f055f9ebb651f1f45802fa2829e5196970814a8d0"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-probe/evidence.json",
+      "bytes": 12418,
+      "sha256": "30b1e0ab0d8157a7354ce33f5544d02cd05f6a09f63d409b45bff1218267b54d"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-probe/forced-rebuild-evidence.json",
+      "bytes": 1327,
+      "sha256": "05f09c143e8a7c5ca2ce9e8d286f368ac938bf82496702cb58e7ba9066a3e5c4"
+    }
+  ],
+  "limits": [
+    "Method prose changed; published command block unchanged. Host controls do not measure model compliance or native runtime effect, and no RED/GREEN model claim is made.",
+    "Controlled CMake 3.31.6, Ninja and native GCC only. Toolchain marker values 101/202 are fixture observables, not target ABI or hardware qualification.",
+    "No new SDK identity guard, registry, Gate, external dependency, device access, external message, commit, push or merge.",
+    "No changes to manifest, global versions, tests/test_skill_content.sh or frozen change contracts; unrelated concurrent writes were left untouched.",
+    "Global profile budgets and full suite remain the parent integration responsibility; no thresholds were relaxed."
+  ],
+  "parent_next_actions": [
+    "Register tests.test_skill_cmake_methods in the shared test entry point.",
+    "Run the planned minimal-context new consumer task and retain actual input/output separately from the host controls.",
+    "Integrate source, budget checks and independent Spec/Quality review before release."
+  ]
+}

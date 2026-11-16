@@ -1,0 +1,186 @@
+[
+  {
+    "case": "0",
+    "observation": {
+      "argv": [
+        "bash",
+        "-c",
+        "run_flaky_samples() (\n  set -euo pipefail\n  (( $# >= 3 )) || { printf 'usage: run_flaky_samples <1-20> <new-directory> <command> [args...]\\n' >&2; exit 2; }\n  samples=$1\n  evidence=$2\n  shift 2\n  [[ \"$samples\" =~ ^([1-9]|1[0-9]|20)$ ]] || exit 2\n  mkdir -- \"$evidence\" || exit 2\n  evidence=$(cd -- \"$evidence\" && pwd -P) || exit 2\n  printf 'attempt\\texit_code\\n' > \"$evidence/results.tsv\" || exit 2\n  failed=0\n  for ((attempt=1; attempt<=samples; attempt++)); do\n    sample_dir=\"$evidence/run-$attempt\"\n    mkdir -- \"$sample_dir\" || exit 2\n    exec 3>\"$sample_dir/output.log\" || exit 2\n    result=0\n    FLAKY_SAMPLE_DIR=\"$sample_dir\" \"$@\" >&3 2>&1 || result=$?\n    exec 3>&- || exit 2\n    printf '%s\\t%s\\n' \"$attempt\" \"$result\" >> \"$evidence/results.tsv\" || exit 2\n    if (( result != 0 )); then failed=1; fi\n  done\n  printf 'attempts=%s\\nrecords=%s\\n' \"$samples\" \"$evidence/results.tsv\" || exit 2\n  exit \"$failed\"\n)\nrun_flaky_samples 3 \"$1\" \"$2\" -c \"$3\"\n",
+        "independent-sampling",
+        "/workspace/scratch/fe5385ca063a/round3-independent-stage1/sampling-0",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "raise SystemExit(0)"
+      ],
+      "exit_code": 0,
+      "stdout": "attempts=3\nrecords=/workspace/scratch/fe5385ca063a/round3-independent-stage1/sampling-0/results.tsv\n",
+      "stderr": ""
+    },
+    "rows": [
+      "1\t0",
+      "2\t0",
+      "3\t0"
+    ],
+    "run_2_exists": true
+  },
+  {
+    "case": "1",
+    "observation": {
+      "argv": [
+        "bash",
+        "-c",
+        "run_flaky_samples() (\n  set -euo pipefail\n  (( $# >= 3 )) || { printf 'usage: run_flaky_samples <1-20> <new-directory> <command> [args...]\\n' >&2; exit 2; }\n  samples=$1\n  evidence=$2\n  shift 2\n  [[ \"$samples\" =~ ^([1-9]|1[0-9]|20)$ ]] || exit 2\n  mkdir -- \"$evidence\" || exit 2\n  evidence=$(cd -- \"$evidence\" && pwd -P) || exit 2\n  printf 'attempt\\texit_code\\n' > \"$evidence/results.tsv\" || exit 2\n  failed=0\n  for ((attempt=1; attempt<=samples; attempt++)); do\n    sample_dir=\"$evidence/run-$attempt\"\n    mkdir -- \"$sample_dir\" || exit 2\n    exec 3>\"$sample_dir/output.log\" || exit 2\n    result=0\n    FLAKY_SAMPLE_DIR=\"$sample_dir\" \"$@\" >&3 2>&1 || result=$?\n    exec 3>&- || exit 2\n    printf '%s\\t%s\\n' \"$attempt\" \"$result\" >> \"$evidence/results.tsv\" || exit 2\n    if (( result != 0 )); then failed=1; fi\n  done\n  printf 'attempts=%s\\nrecords=%s\\n' \"$samples\" \"$evidence/results.tsv\" || exit 2\n  exit \"$failed\"\n)\nrun_flaky_samples 3 \"$1\" \"$2\" -c \"$3\"\n",
+        "independent-sampling",
+        "/workspace/scratch/fe5385ca063a/round3-independent-stage1/sampling-1",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "raise SystemExit(1)"
+      ],
+      "exit_code": 1,
+      "stdout": "attempts=3\nrecords=/workspace/scratch/fe5385ca063a/round3-independent-stage1/sampling-1/results.tsv\n",
+      "stderr": ""
+    },
+    "rows": [
+      "1\t1",
+      "2\t1",
+      "3\t1"
+    ],
+    "run_2_exists": true
+  },
+  {
+    "case": "9",
+    "observation": {
+      "argv": [
+        "bash",
+        "-c",
+        "run_flaky_samples() (\n  set -euo pipefail\n  (( $# >= 3 )) || { printf 'usage: run_flaky_samples <1-20> <new-directory> <command> [args...]\\n' >&2; exit 2; }\n  samples=$1\n  evidence=$2\n  shift 2\n  [[ \"$samples\" =~ ^([1-9]|1[0-9]|20)$ ]] || exit 2\n  mkdir -- \"$evidence\" || exit 2\n  evidence=$(cd -- \"$evidence\" && pwd -P) || exit 2\n  printf 'attempt\\texit_code\\n' > \"$evidence/results.tsv\" || exit 2\n  failed=0\n  for ((attempt=1; attempt<=samples; attempt++)); do\n    sample_dir=\"$evidence/run-$attempt\"\n    mkdir -- \"$sample_dir\" || exit 2\n    exec 3>\"$sample_dir/output.log\" || exit 2\n    result=0\n    FLAKY_SAMPLE_DIR=\"$sample_dir\" \"$@\" >&3 2>&1 || result=$?\n    exec 3>&- || exit 2\n    printf '%s\\t%s\\n' \"$attempt\" \"$result\" >> \"$evidence/results.tsv\" || exit 2\n    if (( result != 0 )); then failed=1; fi\n  done\n  printf 'attempts=%s\\nrecords=%s\\n' \"$samples\" \"$evidence/results.tsv\" || exit 2\n  exit \"$failed\"\n)\nrun_flaky_samples 3 \"$1\" \"$2\" -c \"$3\"\n",
+        "independent-sampling",
+        "/workspace/scratch/fe5385ca063a/round3-independent-stage1/sampling-9",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "raise SystemExit(9)"
+      ],
+      "exit_code": 1,
+      "stdout": "attempts=3\nrecords=/workspace/scratch/fe5385ca063a/round3-independent-stage1/sampling-9/results.tsv\n",
+      "stderr": ""
+    },
+    "rows": [
+      "1\t9",
+      "2\t9",
+      "3\t9"
+    ],
+    "run_2_exists": true
+  },
+  {
+    "case": "124",
+    "observation": {
+      "argv": [
+        "bash",
+        "-c",
+        "run_flaky_samples() (\n  set -euo pipefail\n  (( $# >= 3 )) || { printf 'usage: run_flaky_samples <1-20> <new-directory> <command> [args...]\\n' >&2; exit 2; }\n  samples=$1\n  evidence=$2\n  shift 2\n  [[ \"$samples\" =~ ^([1-9]|1[0-9]|20)$ ]] || exit 2\n  mkdir -- \"$evidence\" || exit 2\n  evidence=$(cd -- \"$evidence\" && pwd -P) || exit 2\n  printf 'attempt\\texit_code\\n' > \"$evidence/results.tsv\" || exit 2\n  failed=0\n  for ((attempt=1; attempt<=samples; attempt++)); do\n    sample_dir=\"$evidence/run-$attempt\"\n    mkdir -- \"$sample_dir\" || exit 2\n    exec 3>\"$sample_dir/output.log\" || exit 2\n    result=0\n    FLAKY_SAMPLE_DIR=\"$sample_dir\" \"$@\" >&3 2>&1 || result=$?\n    exec 3>&- || exit 2\n    printf '%s\\t%s\\n' \"$attempt\" \"$result\" >> \"$evidence/results.tsv\" || exit 2\n    if (( result != 0 )); then failed=1; fi\n  done\n  printf 'attempts=%s\\nrecords=%s\\n' \"$samples\" \"$evidence/results.tsv\" || exit 2\n  exit \"$failed\"\n)\nrun_flaky_samples 3 \"$1\" \"$2\" -c \"$3\"\n",
+        "independent-sampling",
+        "/workspace/scratch/fe5385ca063a/round3-independent-stage1/sampling-124",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "raise SystemExit(124)"
+      ],
+      "exit_code": 1,
+      "stdout": "attempts=3\nrecords=/workspace/scratch/fe5385ca063a/round3-independent-stage1/sampling-124/results.tsv\n",
+      "stderr": ""
+    },
+    "rows": [
+      "1\t124",
+      "2\t124",
+      "3\t124"
+    ],
+    "run_2_exists": true
+  },
+  {
+    "case": "130",
+    "observation": {
+      "argv": [
+        "bash",
+        "-c",
+        "run_flaky_samples() (\n  set -euo pipefail\n  (( $# >= 3 )) || { printf 'usage: run_flaky_samples <1-20> <new-directory> <command> [args...]\\n' >&2; exit 2; }\n  samples=$1\n  evidence=$2\n  shift 2\n  [[ \"$samples\" =~ ^([1-9]|1[0-9]|20)$ ]] || exit 2\n  mkdir -- \"$evidence\" || exit 2\n  evidence=$(cd -- \"$evidence\" && pwd -P) || exit 2\n  printf 'attempt\\texit_code\\n' > \"$evidence/results.tsv\" || exit 2\n  failed=0\n  for ((attempt=1; attempt<=samples; attempt++)); do\n    sample_dir=\"$evidence/run-$attempt\"\n    mkdir -- \"$sample_dir\" || exit 2\n    exec 3>\"$sample_dir/output.log\" || exit 2\n    result=0\n    FLAKY_SAMPLE_DIR=\"$sample_dir\" \"$@\" >&3 2>&1 || result=$?\n    exec 3>&- || exit 2\n    printf '%s\\t%s\\n' \"$attempt\" \"$result\" >> \"$evidence/results.tsv\" || exit 2\n    if (( result != 0 )); then failed=1; fi\n  done\n  printf 'attempts=%s\\nrecords=%s\\n' \"$samples\" \"$evidence/results.tsv\" || exit 2\n  exit \"$failed\"\n)\nrun_flaky_samples 3 \"$1\" \"$2\" -c \"$3\"\n",
+        "independent-sampling",
+        "/workspace/scratch/fe5385ca063a/round3-independent-stage1/sampling-130",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "raise SystemExit(130)"
+      ],
+      "exit_code": 1,
+      "stdout": "attempts=3\nrecords=/workspace/scratch/fe5385ca063a/round3-independent-stage1/sampling-130/results.tsv\n",
+      "stderr": ""
+    },
+    "rows": [
+      "1\t130",
+      "2\t130",
+      "3\t130"
+    ],
+    "run_2_exists": true
+  },
+  {
+    "case": "143",
+    "observation": {
+      "argv": [
+        "bash",
+        "-c",
+        "run_flaky_samples() (\n  set -euo pipefail\n  (( $# >= 3 )) || { printf 'usage: run_flaky_samples <1-20> <new-directory> <command> [args...]\\n' >&2; exit 2; }\n  samples=$1\n  evidence=$2\n  shift 2\n  [[ \"$samples\" =~ ^([1-9]|1[0-9]|20)$ ]] || exit 2\n  mkdir -- \"$evidence\" || exit 2\n  evidence=$(cd -- \"$evidence\" && pwd -P) || exit 2\n  printf 'attempt\\texit_code\\n' > \"$evidence/results.tsv\" || exit 2\n  failed=0\n  for ((attempt=1; attempt<=samples; attempt++)); do\n    sample_dir=\"$evidence/run-$attempt\"\n    mkdir -- \"$sample_dir\" || exit 2\n    exec 3>\"$sample_dir/output.log\" || exit 2\n    result=0\n    FLAKY_SAMPLE_DIR=\"$sample_dir\" \"$@\" >&3 2>&1 || result=$?\n    exec 3>&- || exit 2\n    printf '%s\\t%s\\n' \"$attempt\" \"$result\" >> \"$evidence/results.tsv\" || exit 2\n    if (( result != 0 )); then failed=1; fi\n  done\n  printf 'attempts=%s\\nrecords=%s\\n' \"$samples\" \"$evidence/results.tsv\" || exit 2\n  exit \"$failed\"\n)\nrun_flaky_samples 3 \"$1\" \"$2\" -c \"$3\"\n",
+        "independent-sampling",
+        "/workspace/scratch/fe5385ca063a/round3-independent-stage1/sampling-143",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "raise SystemExit(143)"
+      ],
+      "exit_code": 1,
+      "stdout": "attempts=3\nrecords=/workspace/scratch/fe5385ca063a/round3-independent-stage1/sampling-143/results.tsv\n",
+      "stderr": ""
+    },
+    "rows": [
+      "1\t143",
+      "2\t143",
+      "3\t143"
+    ],
+    "run_2_exists": true
+  },
+  {
+    "case": "sigint",
+    "observation": {
+      "argv": [
+        "bash",
+        "-c",
+        "run_flaky_samples() (\n  set -euo pipefail\n  (( $# >= 3 )) || { printf 'usage: run_flaky_samples <1-20> <new-directory> <command> [args...]\\n' >&2; exit 2; }\n  samples=$1\n  evidence=$2\n  shift 2\n  [[ \"$samples\" =~ ^([1-9]|1[0-9]|20)$ ]] || exit 2\n  mkdir -- \"$evidence\" || exit 2\n  evidence=$(cd -- \"$evidence\" && pwd -P) || exit 2\n  printf 'attempt\\texit_code\\n' > \"$evidence/results.tsv\" || exit 2\n  failed=0\n  for ((attempt=1; attempt<=samples; attempt++)); do\n    sample_dir=\"$evidence/run-$attempt\"\n    mkdir -- \"$sample_dir\" || exit 2\n    exec 3>\"$sample_dir/output.log\" || exit 2\n    result=0\n    FLAKY_SAMPLE_DIR=\"$sample_dir\" \"$@\" >&3 2>&1 || result=$?\n    exec 3>&- || exit 2\n    printf '%s\\t%s\\n' \"$attempt\" \"$result\" >> \"$evidence/results.tsv\" || exit 2\n    if (( result != 0 )); then failed=1; fi\n  done\n  printf 'attempts=%s\\nrecords=%s\\n' \"$samples\" \"$evidence/results.tsv\" || exit 2\n  exit \"$failed\"\n)\nrun_flaky_samples 3 \"$1\" \"$2\" -c \"$3\"\n",
+        "independent-sampling",
+        "/workspace/scratch/fe5385ca063a/round3-independent-stage1/sampling-sigint",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "import os,signal;os.kill(os.getpid(),signal.SIGINT)"
+      ],
+      "exit_code": 1,
+      "stdout": "attempts=3\nrecords=/workspace/scratch/fe5385ca063a/round3-independent-stage1/sampling-sigint/results.tsv\n",
+      "stderr": ""
+    },
+    "rows": [
+      "1\t130",
+      "2\t130",
+      "3\t130"
+    ],
+    "run_2_exists": true
+  },
+  {
+    "case": "sigterm",
+    "observation": {
+      "argv": [
+        "bash",
+        "-c",
+        "run_flaky_samples() (\n  set -euo pipefail\n  (( $# >= 3 )) || { printf 'usage: run_flaky_samples <1-20> <new-directory> <command> [args...]\\n' >&2; exit 2; }\n  samples=$1\n  evidence=$2\n  shift 2\n  [[ \"$samples\" =~ ^([1-9]|1[0-9]|20)$ ]] || exit 2\n  mkdir -- \"$evidence\" || exit 2\n  evidence=$(cd -- \"$evidence\" && pwd -P) || exit 2\n  printf 'attempt\\texit_code\\n' > \"$evidence/results.tsv\" || exit 2\n  failed=0\n  for ((attempt=1; attempt<=samples; attempt++)); do\n    sample_dir=\"$evidence/run-$attempt\"\n    mkdir -- \"$sample_dir\" || exit 2\n    exec 3>\"$sample_dir/output.log\" || exit 2\n    result=0\n    FLAKY_SAMPLE_DIR=\"$sample_dir\" \"$@\" >&3 2>&1 || result=$?\n    exec 3>&- || exit 2\n    printf '%s\\t%s\\n' \"$attempt\" \"$result\" >> \"$evidence/results.tsv\" || exit 2\n    if (( result != 0 )); then failed=1; fi\n  done\n  printf 'attempts=%s\\nrecords=%s\\n' \"$samples\" \"$evidence/results.tsv\" || exit 2\n  exit \"$failed\"\n)\nrun_flaky_samples 3 \"$1\" \"$2\" -c \"$3\"\n",
+        "independent-sampling",
+        "/workspace/scratch/fe5385ca063a/round3-independent-stage1/sampling-sigterm",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "import os,signal;os.kill(os.getpid(),signal.SIGTERM)"
+      ],
+      "exit_code": 1,
+      "stdout": "attempts=3\nrecords=/workspace/scratch/fe5385ca063a/round3-independent-stage1/sampling-sigterm/results.tsv\n",
+      "stderr": "Terminated\nTerminated\nTerminated\n"
+    },
+    "rows": [
+      "1\t143",
+      "2\t143",
+      "3\t143"
+    ],
+    "run_2_exists": true
+  }
+]

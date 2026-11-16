@@ -1,0 +1,1120 @@
+{
+  "schema_version": 1,
+  "task": "release-b.cmake Debug / Ninja / host-unit 构建消费者",
+  "status": "pass",
+  "assembled_at_utc": "2026-11-16T07:59:05.435707+00:00",
+  "summary": "在新目录完成 release-b Debug Ninja 构建，并行度 1；程序输出 build_variant=202；CTest 1/1 实际执行并通过。源码、toolchain 及旧构建 24 个文件均保持原样。",
+  "task_directory": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer",
+  "consumer_response_path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/consumer-response.json",
+  "skill": {
+    "name": "adk-cmake-cross-build",
+    "version": "1.0.7",
+    "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/skills/adk-cmake-cross-build/SKILL.md",
+    "sha256": "543764125bfc4fd34be2b7b7a2ca6afc3468e7bdc0caf044d27c8d35107d4747"
+  },
+  "decision": {
+    "mode": "manual",
+    "reason": "项目未提供 preset；旧构建 cache、CMakeSystem、编译命令和日志一致属于 release-a / BUILD_VARIANT=101。本次 release-b / BUILD_VARIANT=202 造成身份变化，故在新任务自有目录构建。",
+    "old_binary_dir": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default",
+    "new_binary_dir": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug",
+    "old_directory_reused": false,
+    "old_cache_or_logs_modified": false,
+    "source_or_toolchain_modified": false,
+    "extra_link_option": "-Wl,-Map=/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/variant_demo.map",
+    "extra_link_option_reason": "生成本次链接 map 作为可复核产物证据。"
+  },
+  "environment": {
+    "build": "Linux x86_64",
+    "host": "Linux x86_64",
+    "target": "Linux x86_64",
+    "compiler_target": "x86_64-linux-gnu",
+    "compiler": "/usr/bin/cc",
+    "compiler_version": "GNU 14.2.0",
+    "cmake_version": "3.31.6",
+    "ctest_version": "3.31.6",
+    "ninja_version": "1.11.1.git.kitware.jobserver-1",
+    "python_version": "3.12.14",
+    "rtk": "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+    "rtk_version": "1.2.0",
+    "crosscompiling": false,
+    "sysroot": "No CMake sysroot override; compiler -print-sysroot produced an empty line."
+  },
+  "build_identity": {
+    "status": "verified",
+    "mode": "manual",
+    "generator": "Ninja",
+    "configuration": "Debug",
+    "source_dir": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project",
+    "binary_dir": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug",
+    "parallelism": 1,
+    "toolchain": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/toolchains/release-b.cmake",
+    "toolchain_sha256": "5c5f33f8f20b670c7fb6f921afa883939cdb8e585e67bb03851db331d70fc7a5",
+    "compiler": "/usr/bin/cc",
+    "compiler_target": "x86_64-linux-gnu",
+    "abi": "ELF; 64-bit pointers; little-endian",
+    "crosscompiling": false,
+    "backend": "host-unit",
+    "sysroot": "No CMake sysroot override; compiler -print-sysroot produced an empty line.",
+    "file_api_index": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/.cmake/api/v1/reply/index-2026-11-16T07-56-14-0236.json",
+    "file_api_codemodel": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/.cmake/api/v1/reply/codemodel-v2-9d25096ccecf2933e275.json",
+    "file_api_target": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/.cmake/api/v1/reply/target-variant_demo-Debug-f5b1153b2a68875b5f6f.json",
+    "artifact": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/variant_demo",
+    "artifact_sha256": "c8199de7db21e32c56cc8c83c31931262f732bb15302f863790022228a47506a",
+    "artifact_size_bytes": 17256,
+    "cache": {
+      "CMAKE_BUILD_TYPE": "Debug",
+      "CMAKE_C_FLAGS": "-DBUILD_VARIANT=202",
+      "CMAKE_C_FLAGS_DEBUG": "-g",
+      "CMAKE_EXE_LINKER_FLAGS": "-Wl,-Map=/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/variant_demo.map",
+      "CMAKE_MAKE_PROGRAM": "/workspace/scratch/fe5385ca063a/verification-tools/ninja",
+      "CMAKE_TOOLCHAIN_FILE": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/toolchains/release-b.cmake",
+      "CMAKE_GENERATOR": "Ninja"
+    },
+    "system_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/CMakeFiles/3.31.6/CMakeSystem.cmake",
+    "system_contents": "set(CMAKE_HOST_SYSTEM \"Linux-6.18.57\")\nset(CMAKE_HOST_SYSTEM_NAME \"Linux\")\nset(CMAKE_HOST_SYSTEM_VERSION \"6.18.57\")\nset(CMAKE_HOST_SYSTEM_PROCESSOR \"x86_64\")\n\ninclude(\"/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/toolchains/release-b.cmake\")\n\nset(CMAKE_SYSTEM \"Linux-6.18.57\")\nset(CMAKE_SYSTEM_NAME \"Linux\")\nset(CMAKE_SYSTEM_VERSION \"6.18.57\")\nset(CMAKE_SYSTEM_PROCESSOR \"x86_64\")\n\nset(CMAKE_CROSSCOMPILING \"FALSE\")\n\nset(CMAKE_SYSTEM_LOADED 1)\n",
+    "compiler_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/CMakeFiles/3.31.6/CMakeCCompiler.cmake",
+    "compiler_contents": "set(CMAKE_C_COMPILER \"/usr/bin/cc\")\nset(CMAKE_C_COMPILER_ARG1 \"\")\nset(CMAKE_C_COMPILER_ID \"GNU\")\nset(CMAKE_C_COMPILER_VERSION \"14.2.0\")\nset(CMAKE_C_COMPILER_VERSION_INTERNAL \"\")\nset(CMAKE_C_COMPILER_WRAPPER \"\")\nset(CMAKE_C_STANDARD_COMPUTED_DEFAULT \"17\")\nset(CMAKE_C_EXTENSIONS_COMPUTED_DEFAULT \"ON\")\nset(CMAKE_C_STANDARD_LATEST \"23\")\nset(CMAKE_C_COMPILE_FEATURES \"c_std_90;c_function_prototypes;c_std_99;c_restrict;c_variadic_macros;c_std_11;c_static_assert;c_std_17;c_std_23\")\nset(CMAKE_C90_COMPILE_FEATURES \"c_std_90;c_function_prototypes\")\nset(CMAKE_C99_COMPILE_FEATURES \"c_std_99;c_restrict;c_variadic_macros\")\nset(CMAKE_C11_COMPILE_FEATURES \"c_std_11;c_static_assert\")\nset(CMAKE_C17_COMPILE_FEATURES \"c_std_17\")\nset(CMAKE_C23_COMPILE_FEATURES \"c_std_23\")\n\nset(CMAKE_C_PLATFORM_ID \"Linux\")\nset(CMAKE_C_SIMULATE_ID \"\")\nset(CMAKE_C_COMPILER_FRONTEND_VARIANT \"GNU\")\nset(CMAKE_C_SIMULATE_VERSION \"\")\n\n\n\n\nset(CMAKE_AR \"/usr/bin/ar\")\nset(CMAKE_C_COMPILER_AR \"/usr/bin/gcc-ar-14\")\nset(CMAKE_RANLIB \"/usr/bin/ranlib\")\nset(CMAKE_C_COMPILER_RANLIB \"/usr/bin/gcc-ranlib-14\")\nset(CMAKE_LINKER \"/usr/bin/ld\")\nset(CMAKE_LINKER_LINK \"\")\nset(CMAKE_LINKER_LLD \"\")\nset(CMAKE_C_COMPILER_LINKER \"/usr/bin/ld\")\nset(CMAKE_C_COMPILER_LINKER_ID \"GNU\")\nset(CMAKE_C_COMPILER_LINKER_VERSION 2.44)\nset(CMAKE_C_COMPILER_LINKER_FRONTEND_VARIANT GNU)\nset(CMAKE_MT \"\")\nset(CMAKE_TAPI \"CMAKE_TAPI-NOTFOUND\")\nset(CMAKE_COMPILER_IS_GNUCC 1)\nset(CMAKE_C_COMPILER_LOADED 1)\nset(CMAKE_C_COMPILER_WORKS TRUE)\nset(CMAKE_C_ABI_COMPILED TRUE)\n\nset(CMAKE_C_COMPILER_ENV_VAR \"CC\")\n\nset(CMAKE_C_COMPILER_ID_RUN 1)\nset(CMAKE_C_SOURCE_FILE_EXTENSIONS c;m)\nset(CMAKE_C_IGNORE_EXTENSIONS h;H;o;O;obj;OBJ;def;DEF;rc;RC)\nset(CMAKE_C_LINKER_PREFERENCE 10)\nset(CMAKE_C_LINKER_DEPFILE_SUPPORTED )\n\n# Save compiler ABI information.\nset(CMAKE_C_SIZEOF_DATA_PTR \"8\")\nset(CMAKE_C_COMPILER_ABI \"ELF\")\nset(CMAKE_C_BYTE_ORDER \"LITTLE_ENDIAN\")\nset(CMAKE_C_LIBRARY_ARCHITECTURE \"x86_64-linux-gnu\")\n\nif(CMAKE_C_SIZEOF_DATA_PTR)\n  set(CMAKE_SIZEOF_VOID_P \"${CMAKE_C_SIZEOF_DATA_PTR}\")\nendif()\n\nif(CMAKE_C_COMPILER_ABI)\n  set(CMAKE_INTERNAL_PLATFORM_ABI \"${CMAKE_C_COMPILER_ABI}\")\nendif()\n\nif(CMAKE_C_LIBRARY_ARCHITECTURE)\n  set(CMAKE_LIBRARY_ARCHITECTURE \"x86_64-linux-gnu\")\nendif()\n\nset(CMAKE_C_CL_SHOWINCLUDES_PREFIX \"\")\nif(CMAKE_C_CL_SHOWINCLUDES_PREFIX)\n  set(CMAKE_CL_SHOWINCLUDES_PREFIX \"${CMAKE_C_CL_SHOWINCLUDES_PREFIX}\")\nendif()\n\n\n\n\n\nset(CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES \"/usr/lib/gcc/x86_64-linux-gnu/14/include;/usr/local/include;/usr/include/x86_64-linux-gnu;/usr/include\")\nset(CMAKE_C_IMPLICIT_LINK_LIBRARIES \"gcc;gcc_s;c;gcc;gcc_s\")\nset(CMAKE_C_IMPLICIT_LINK_DIRECTORIES \"/usr/lib/gcc/x86_64-linux-gnu/14;/usr/lib/x86_64-linux-gnu;/usr/lib;/lib/x86_64-linux-gnu;/lib\")\nset(CMAKE_C_IMPLICIT_LINK_FRAMEWORK_DIRECTORIES \"\")\n",
+    "compile_commands": [
+      {
+        "directory": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug",
+        "command": "/usr/bin/cc -DBUILD_VARIANT=202 -g -o CMakeFiles/variant_demo.dir/main.c.o -c /workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/main.c",
+        "file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/main.c",
+        "output": "CMakeFiles/variant_demo.dir/main.c.o"
+      }
+    ]
+  },
+  "result": {
+    "configure_exit_code": 0,
+    "build_exit_code": 0,
+    "ctest_exit_code": 0,
+    "direct_program_exit_code": 0,
+    "direct_program_stdout": "build_variant=202\n",
+    "host_test_backend": "host-unit",
+    "selected": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "disabled": 0,
+    "not_run": 0,
+    "artifact_architecture": "ELF64 little endian x86-64 PIE; dynamic; debug_info; not stripped",
+    "artifact_size_bytes": 17256,
+    "artifact_sha256": "c8199de7db21e32c56cc8c83c31931262f732bb15302f863790022228a47506a",
+    "section_sizes_bytes": {
+      ".text": 269,
+      ".data": 16,
+      ".bss": 8
+    },
+    "main_symbol": {
+      "address_hex": "0x1139",
+      "size_bytes": 36
+    },
+    "verification": {
+      "status": "pass",
+      "backend": "host-unit",
+      "junit_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/ctest.zo0zMvE0/ctest.xml",
+      "selected": 1,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "disabled": 0,
+      "not_run": 0,
+      "testcases": [
+        {
+          "name": "variant_smoke",
+          "status": "run",
+          "stdout": "build_variant=202\n"
+        }
+      ],
+      "direct_program_stdout": "build_variant=202\n",
+      "direct_program_exit_code": 0,
+      "preserved_file_count": 24,
+      "old_build_file_count": 20,
+      "original_files_unchanged": true,
+      "original_manifest": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/06-original-manifest.stdout.log",
+      "map_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/variant_demo.map",
+      "map_sha256": "ff5cbaec9ef27b807bb45f46518792459f69360182e353c6b840553b393e7571",
+      "map_evidence": [
+        "libc.so.6                     /usr/lib/gcc/x86_64-linux-gnu/14/../../../x86_64-linux-gnu/Scrt1.o (__libc_start_main@@GLIBC_2.34)",
+        "LOAD CMakeFiles/variant_demo.dir/main.c.o",
+        ".text           0x0000000000001050      0x10d",
+        " .text          0x0000000000001139       0x24 CMakeFiles/variant_demo.dir/main.c.o",
+        "                0x0000000000001139                main",
+        " .rodata        0x0000000000002004       0x12 CMakeFiles/variant_demo.dir/main.c.o",
+        " .eh_frame      0x00000000000020d0       0x20 CMakeFiles/variant_demo.dir/main.c.o",
+        "                0x00000000000020f4        0x0 CMakeFiles/variant_demo.dir/main.c.o",
+        ".data           0x0000000000004008       0x10",
+        " .data          0x0000000000004018        0x0 CMakeFiles/variant_demo.dir/main.c.o",
+        ".bss            0x0000000000004018        0x8",
+        " .bss           0x0000000000004019        0x0 CMakeFiles/variant_demo.dir/main.c.o",
+        " .comment       0x000000000000001f       0x20 CMakeFiles/variant_demo.dir/main.c.o",
+        "                0x0000000000000000       0x30 CMakeFiles/variant_demo.dir/main.c.o",
+        " .debug_info    0x0000000000000000       0xaf CMakeFiles/variant_demo.dir/main.c.o",
+        " .debug_abbrev  0x0000000000000000       0x78 CMakeFiles/variant_demo.dir/main.c.o",
+        " .debug_line    0x0000000000000000       0x64 CMakeFiles/variant_demo.dir/main.c.o",
+        " .debug_str     0x0000000000000000       0x9e CMakeFiles/variant_demo.dir/main.c.o",
+        "                0x0000000000000000       0xea CMakeFiles/variant_demo.dir/main.c.o"
+      ],
+      "artifact_sha256": "c8199de7db21e32c56cc8c83c31931262f732bb15302f863790022228a47506a"
+    }
+  },
+  "timing": {
+    "unit": "seconds",
+    "measurement": "single observed subprocess wall duration, including RTK bypass invocation",
+    "configure": 0.18600720000176807,
+    "build": 0.053262574001564644,
+    "ctest": 0.011462504000519402,
+    "direct_execution": 0.004789434002304915,
+    "benchmark_claim": false
+  },
+  "bootstrap_commands": [
+    {
+      "command": "rtk read /workspace/scratch/fe5385ca063a/round3-cmake-consumer-task.md",
+      "cwd": "/workspace/scratch/fe5385ca063a",
+      "exit_code": 127,
+      "executor_wall_time_seconds": 2.6407e-05,
+      "combined_output": "/bin/bash: line 1: rtk: command not found\n",
+      "combined_output_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/bootstrap-entry-failure.log",
+      "negative_result": "rtk was not available through the initial PATH; this invocation did not reach the RTK executable.",
+      "started_at_utc": null,
+      "ended_at_utc": null,
+      "stdout_stderr_separated": false,
+      "timing_limit": "Executor-reported wall time only; absolute timestamps were not supplied for these bootstrap calls."
+    },
+    {
+      "command": "/workspace/scratch/fe5385ca063a/verification-tools/rtk read /workspace/scratch/fe5385ca063a/round3-cmake-consumer-task.md",
+      "cwd": "/workspace/scratch/fe5385ca063a",
+      "exit_code": 0,
+      "executor_wall_time_seconds": 3.8213e-05,
+      "combined_output": "# CMake 消费者任务\n\n在 `/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project` 完成 `toolchains/release-b.cmake` 的 Debug、Ninja、host-unit 构建，并交付实际程序、CTest 结果和可复核构建证据。项目已有 `out/default` 构建及记录，来自 `toolchains/release-a.cmake`。本次不修改源码或 toolchain；构建并行度为 1。\n\n只使用本任务、项目文件及 `/workspace/scratch/fe5385ca063a/agent-dev-kit/skills/adk-cmake-cross-build/SKILL.md`，不要查阅其他审计、实现、测试、旧对话或报告。可以读环境工具版本。根据 Skill 自行决定操作与交付内容，不向其他 Agent 请求方案。\n\n所有 shell 经 `/workspace/scratch/fe5385ca063a/verification-tools/rtk`；CMake 所在目录为 `/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin`，Ninja 在 `/workspace/scratch/fe5385ca063a/verification-tools`。需要写脚本或说明时用 apply_patch。允许写入的范围仅为本任务目录 `/workspace/scratch/fe5385ca063a/round3-cmake-consumer`，不改 ADK 仓库，不运行 Git 写操作，不调用付费模型或原生 CLI/Cloud 作业。\n\n请将实际命令、退出码、时间、原始 stdout/stderr、交付文件及摘要、必要限制写到任务目录下 `consumer-response.json`，并保留原始日志；正文说明你的选择与实际结果。不要把本次主机构建说成板端或模型对照测量。\n",
+      "output_preservation": "Read output text, matching the task input; per-stream raw capture was not enabled.",
+      "started_at_utc": null,
+      "ended_at_utc": null,
+      "stdout_stderr_separated": false,
+      "timing_limit": "Executor-reported wall time only; absolute timestamps were not supplied for these bootstrap calls."
+    },
+    {
+      "command": "/workspace/scratch/fe5385ca063a/verification-tools/rtk read /workspace/scratch/fe5385ca063a/agent-dev-kit/skills/adk-cmake-cross-build/SKILL.md",
+      "cwd": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer",
+      "exit_code": 0,
+      "executor_wall_time_seconds": 3.479e-05,
+      "combined_output": "---\nname: adk-cmake-cross-build\ndescription: \"用于嵌入式 CMake 工程的交叉编译、工具链配置与多目标构建排障；不用于无 CMake 的构建系统或直接设备部署。\"\nversion: 1.0.7\nlast_updated: 2026-11-16\ntriggers:\n  - \"CMake\"\n  - \"CMake交叉编译\"\n  - \"CMakePresets\"\n  - \"CMake工具链\"\nnon_triggers:\n  - 与构建无关的需求分析\n  - Autotools缺少aclocal\n  - Makefile-only 工程\ninputs:\n  - toolchain 文件、构建目标\noutputs:\n  - 构建配置方案\nconstraints:\n  - 必须区分 host/build/target\n---\n\n# adk-cmake-cross-build\n\n## Goal\n复现目标 CMake 交叉构建，区分构建与执行。\n\n## Prerequisites\n核 host/build/target、权限和目录归属。测试需 CTest ≥3.21 和 host Python 3 标准库；compile-only 不需 Python。\n\n## Workflow\n1. 选 `ADK_BUILD_MODE=preset|manual`。preset 名称可不同，但 `configurePreset`、`binaryDir`、configuration 须匹配；否则按核实参数手工配置。\n2. 复用前对照本次期望与旧构建证据：toolchain 路径/内容、compiler/target/sysroot/ABI、generator/configuration。核旧 cache、`CMakeFiles` 下的 `CMakeSystem.cmake`/`CMake*Compiler.cmake`、编译命令/日志；cache 新路径或 configure 成功不证明身份已变。\n3. 同身份才增量复用；变化或旧身份无法证明时换新任务自有 binaryDir 及匹配 preset，保留旧 cache/log。不硬改旧 cache 或盲清目录；`--clean-first` 不切换配置身份。\n4. 核 `host-unit|compile-only|emulator|board-runner`；emulator 配真实 `CROSSCOMPILING_EMULATOR`。缺后端用 compile-only；host 不证明板端运行。\n5. 从本次 binaryDir/configuration 定位 `ADK_ELF`，不猜路径；目标工具核架构、段/符号/map。失败不消费旧产物。\n\n## Commands\n完成身份核对后在源码根运行，变量经核实、路径为绝对值。`ADK_CONFIG` 固定配置，`ADK_BUILD_JOBS` 按 CPU/RAM/CI 配额取正整数（`--parallel <resource-budget>`）。测试时 `ADK_EVIDENCE_DIR` 为已有任务证据目录，保留新 JUnit。\n```bash\n# cmake-build:\nset -euo pipefail\ncase \"$ADK_BUILD_MODE\" in\n  preset)\n    cmake --preset \"$ADK_CONFIGURE_PRESET\"\n    build_args=(--preset \"$ADK_BUILD_PRESET\") ;;\n  manual)\n    cmake -S \"$ADK_SOURCE_DIR\" -B \"$ADK_BINARY_DIR\" -G \"$ADK_GENERATOR\" \\\n      -DCMAKE_TOOLCHAIN_FILE=\"$ADK_TOOLCHAIN_FILE\" -DCMAKE_BUILD_TYPE=\"$ADK_CONFIG\"\n    build_args=(\"$ADK_BINARY_DIR\") ;;\n  *) exit 2 ;;\nesac\ncmake --build \"${build_args[@]}\" --config \"$ADK_CONFIG\" --parallel \"$ADK_BUILD_JOBS\"\ncase \"$ADK_TEST_BACKEND\" in\n  compile-only) printf 'target tests: not-run\\n' ;;\n  host-unit|emulator|board-runner)\n    if [[ \"$ADK_BUILD_MODE\" == preset ]]; then\n      test_args=(--preset \"${ADK_TEST_PRESET:?}\")\n    else\n      test_args=(--test-dir \"$ADK_BINARY_DIR\")\n    fi\n    report_dir=$(mktemp -d \"$ADK_EVIDENCE_DIR/ctest.XXXXXXXX\")\n    report=\"$report_dir/ctest.xml\"\n    printf 'CTest report: %s\\n' \"$report\"\n    ctest \"${test_args[@]}\" -C \"$ADK_CONFIG\" --output-on-failure --no-tests=error --output-junit \"$report\"\n    python3 - \"$report\" <<'PY'\nimport sys, xml.etree.ElementTree as ET\nroot = ET.parse(sys.argv[1]).getroot()\ncases = root.findall(\"testcase\")\nstates = [c.get(\"status\") for c in cases]\nif root.tag != \"testsuite\" or len(cases) != int(root.get(\"tests\", \"-1\")) or any(s not in (\"run\", \"notrun\", \"disabled\", \"fail\") for s in states):\n    raise SystemExit(\"invalid CTest report\")\nif any(c.find(k) is not None for c in cases for k in (\"failure\", \"error\")) or \"fail\" in states:\n    raise SystemExit(\"CTest failures in report\")\nif any(c.get(\"status\") == \"run\" and c.find(\"skipped\") is not None for c in cases):\n    raise SystemExit(\"invalid passing status\")\npassed = states.count(\"run\")\nstatus = \"pass\" if passed == len(cases) and passed else \"partial\"\nprint(f\"status={status} passed={passed} selected={len(cases)} skipped={states.count('notrun')} disabled={states.count('disabled')}\")\nif not passed:\n    raise SystemExit(\"no executed passing tests: not-run\")\nPY\n    ;;\n  *) exit 2 ;;\nesac\n```\n混合结果须核必跑用例；skip/disabled 不算通过，缺项保持 partial/blocked。`--no-tests=error` 不拒绝全部动态 skip。\n\n产物工具用已核实目标路径：\n```bash\n# built-artifact:\nset -euo pipefail\nfile \"$ADK_ELF\"\n\"$ADK_SIZE\" -A \"$ADK_ELF\"\n\"$ADK_OBJDUMP\" -h \"$ADK_ELF\"\n```\n\n## Evidence Template\n```md\n- Host / Target / Toolchain / Sysroot:\n- Build Identity / Evidence / Reuse or New Directory Reason:\n- Mode / Presets or Parameters / binaryDir / Configuration:\n- Commands / Exit Codes / Duration / Logs / JUnit:\n- ELF / Hash / Architecture / Sections / Size:\n- Backend / Selected / Pass / Skip / Disabled / Not-run / Limitations:\n```\n\n## Failure Handling\n依赖失败核 sysroot/`CMAKE_FIND_ROOT_PATH`；host 工具查找核 `CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER`；链接失败核 ABI，preset 失败核版本/引用链，不盲重跑。\n\n## Quality Gate\n目标构建成功；裸 bin 的 `file` 不证明 CPU，未运行测试记 not-run。只清理任务自有构建目录，保留日志及受版本控制的 toolchain。\n\n依据：[Presets](https://cmake.org/cmake/help/v3.27/manual/cmake-presets.7.html)、[CTest](https://cmake.org/cmake/help/v3.21/manual/ctest.1.html)。\n",
+      "output_preservation": "Read output text, matching the allowed Skill input; per-stream raw capture was not enabled.",
+      "started_at_utc": null,
+      "ended_at_utc": null,
+      "stdout_stderr_separated": false,
+      "timing_limit": "Executor-reported wall time only; absolute timestamps were not supplied for these bootstrap calls."
+    },
+    {
+      "command": "/workspace/scratch/fe5385ca063a/verification-tools/rtk bypass rg --files -g '!out/**' -g '!build/**' -g '!**/.git/**' .",
+      "cwd": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project",
+      "exit_code": 0,
+      "executor_wall_time_seconds": 3.3758e-05,
+      "combined_output": "./main.c\n./CMakeLists.txt\n./toolchains/release-b.cmake\n./toolchains/release-a.cmake\n",
+      "started_at_utc": null,
+      "ended_at_utc": null,
+      "stdout_stderr_separated": false,
+      "timing_limit": "Executor-reported wall time only; absolute timestamps were not supplied for these bootstrap calls."
+    }
+  ],
+  "commands": [
+    {
+      "label": "01-project-inputs",
+      "argv": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "cat",
+        "CMakeLists.txt",
+        "main.c",
+        "toolchains/release-a.cmake",
+        "toolchains/release-b.cmake"
+      ],
+      "cwd": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project",
+      "environment_overrides": {
+        "PATH": "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin:/workspace/scratch/fe5385ca063a/verification-tools:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/override:/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin:/opt/codex/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/agent/.local/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/fallback",
+        "TMPDIR": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/tmp"
+      },
+      "started_at_utc": "2026-11-16T07:55:41.950419+00:00",
+      "ended_at_utc": "2026-11-16T07:55:41.955389+00:00",
+      "duration_seconds": 0.0049548720016900916,
+      "exit_code": 0,
+      "stdout_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/01-project-inputs.stdout.log",
+      "stderr_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/01-project-inputs.stderr.log",
+      "stdout": "cmake_minimum_required(VERSION 3.21)\nproject(variant_demo C)\nset(CMAKE_EXPORT_COMPILE_COMMANDS ON)\nadd_executable(variant_demo main.c)\nenable_testing()\nadd_test(NAME variant_smoke COMMAND variant_demo)\nset_tests_properties(variant_smoke PROPERTIES PASS_REGULAR_EXPRESSION \"build_variant=[0-9]+\")\n#include <stdio.h>\nint main(void) { printf(\"build_variant=%d\\n\", BUILD_VARIANT); return 0; }\nset(CMAKE_C_COMPILER \"/usr/bin/cc\")\nset(CMAKE_C_FLAGS_INIT \"-DBUILD_VARIANT=101\")\nset(CMAKE_C_COMPILER \"/usr/bin/cc\")\nset(CMAKE_C_FLAGS_INIT \"-DBUILD_VARIANT=202\")\n",
+      "stderr": "",
+      "shell_display": "/workspace/scratch/fe5385ca063a/verification-tools/rtk bypass cat CMakeLists.txt main.c toolchains/release-a.cmake toolchains/release-b.cmake"
+    },
+    {
+      "label": "02-existing-files",
+      "argv": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "rg",
+        "--files",
+        "--hidden",
+        "out/default"
+      ],
+      "cwd": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project",
+      "environment_overrides": {
+        "PATH": "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin:/workspace/scratch/fe5385ca063a/verification-tools:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/override:/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin:/opt/codex/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/agent/.local/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/fallback",
+        "TMPDIR": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/tmp"
+      },
+      "started_at_utc": "2026-11-16T07:55:41.956701+00:00",
+      "ended_at_utc": "2026-11-16T07:55:41.966081+00:00",
+      "duration_seconds": 0.009367776001454331,
+      "exit_code": 0,
+      "stdout_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/02-existing-files.stdout.log",
+      "stderr_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/02-existing-files.stderr.log",
+      "stdout": "out/default/build.ninja\nout/default/cmake_install.cmake\nout/default/CMakeCache.txt\nout/default/CTestTestfile.cmake\nout/default/CMakeFiles/rules.ninja\nout/default/CMakeFiles/TargetDirectories.txt\nout/default/CMakeFiles/variant_demo.dir/main.c.o\nout/default/.ninja_deps\nout/default/variant_demo\nout/default/CMakeFiles/CMakeConfigureLog.yaml\nout/default/CMakeFiles/cmake.check_cache\nout/default/compile_commands.json\nout/default/.ninja_log\nout/default/Testing/Temporary/LastTest.log\nout/default/Testing/Temporary/CTestCostData.txt\nout/default/CMakeFiles/3.31.6/CMakeCCompiler.cmake\nout/default/CMakeFiles/3.31.6/CMakeSystem.cmake\nout/default/CMakeFiles/3.31.6/CompilerIdC/CMakeCCompilerId.c\nout/default/CMakeFiles/3.31.6/CompilerIdC/a.out\nout/default/CMakeFiles/3.31.6/CMakeDetermineCompilerABI_C.bin\n",
+      "stderr": "",
+      "shell_display": "/workspace/scratch/fe5385ca063a/verification-tools/rtk bypass rg --files --hidden out/default"
+    },
+    {
+      "label": "03-tools",
+      "argv": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "python3",
+        "-c",
+        "import json,shutil,subprocess,platform; names=[\"cmake\",\"ctest\",\"ninja\",\"cc\",\"gcc\",\"file\",\"size\",\"objdump\",\"readelf\",\"python3\"]; print(json.dumps({\"platform\":platform.platform(),\"machine\":platform.machine(),\"tools\":{n:shutil.which(n) for n in names}},indent=2)); [(print(\"VERSION\",n,flush=True),subprocess.run([\"/workspace/scratch/fe5385ca063a/verification-tools/rtk\",\"bypass\",n,\"--version\"],check=True)) for n in [\"cmake\",\"ctest\",\"ninja\",\"cc\",\"python3\"]]"
+      ],
+      "cwd": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project",
+      "environment_overrides": {
+        "PATH": "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin:/workspace/scratch/fe5385ca063a/verification-tools:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/override:/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin:/opt/codex/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/agent/.local/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/fallback",
+        "TMPDIR": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/tmp"
+      },
+      "started_at_utc": "2026-11-16T07:55:41.958543+00:00",
+      "ended_at_utc": "2026-11-16T07:55:42.014453+00:00",
+      "duration_seconds": 0.05589697899995372,
+      "exit_code": 0,
+      "stdout_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/03-tools.stdout.log",
+      "stderr_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/03-tools.stderr.log",
+      "stdout": "{\n  \"platform\": \"Linux-6.18.57-x86_64-with-glibc2.41\",\n  \"machine\": \"x86_64\",\n  \"tools\": {\n    \"cmake\": \"/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin/cmake\",\n    \"ctest\": \"/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin/ctest\",\n    \"ninja\": \"/workspace/scratch/fe5385ca063a/verification-tools/ninja\",\n    \"cc\": \"/usr/bin/cc\",\n    \"gcc\": \"/usr/bin/gcc\",\n    \"file\": \"/usr/bin/file\",\n    \"size\": \"/usr/bin/size\",\n    \"objdump\": \"/usr/bin/objdump\",\n    \"readelf\": \"/usr/bin/readelf\",\n    \"python3\": \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3\"\n  }\n}\nVERSION cmake\ncmake version 3.31.6\n\nCMake suite maintained and supported by Kitware (kitware.com/cmake).\nVERSION ctest\nctest version 3.31.6\n\nCMake suite maintained and supported by Kitware (kitware.com/cmake).\nVERSION ninja\n1.11.1.git.kitware.jobserver-1\nVERSION cc\ncc (Debian 14.2.0-19) 14.2.0\nCopyright (C) 2024 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\nVERSION python3\nPython 3.12.14\n",
+      "stderr": "",
+      "shell_display": "/workspace/scratch/fe5385ca063a/verification-tools/rtk bypass python3 -c 'import json,shutil,subprocess,platform; names=[\"cmake\",\"ctest\",\"ninja\",\"cc\",\"gcc\",\"file\",\"size\",\"objdump\",\"readelf\",\"python3\"]; print(json.dumps({\"platform\":platform.platform(),\"machine\":platform.machine(),\"tools\":{n:shutil.which(n) for n in names}},indent=2)); [(print(\"VERSION\",n,flush=True),subprocess.run([\"/workspace/scratch/fe5385ca063a/verification-tools/rtk\",\"bypass\",n,\"--version\"],check=True)) for n in [\"cmake\",\"ctest\",\"ninja\",\"cc\",\"python3\"]]'"
+    },
+    {
+      "label": "04-old-identity",
+      "argv": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "cat",
+        "out/default/CMakeFiles/3.31.6/CMakeSystem.cmake",
+        "out/default/CMakeFiles/3.31.6/CMakeCCompiler.cmake",
+        "out/default/compile_commands.json",
+        "out/default/.ninja_log",
+        "out/default/Testing/Temporary/LastTest.log"
+      ],
+      "cwd": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project",
+      "environment_overrides": {
+        "PATH": "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin:/workspace/scratch/fe5385ca063a/verification-tools:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/override:/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin:/opt/codex/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/agent/.local/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/fallback",
+        "TMPDIR": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/tmp"
+      },
+      "started_at_utc": "2026-11-16T07:55:56.020877+00:00",
+      "ended_at_utc": "2026-11-16T07:55:56.028671+00:00",
+      "duration_seconds": 0.007783064000250306,
+      "exit_code": 0,
+      "stdout_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/04-old-identity.stdout.log",
+      "stderr_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/04-old-identity.stderr.log",
+      "stdout": "set(CMAKE_HOST_SYSTEM \"Linux-6.18.57\")\nset(CMAKE_HOST_SYSTEM_NAME \"Linux\")\nset(CMAKE_HOST_SYSTEM_VERSION \"6.18.57\")\nset(CMAKE_HOST_SYSTEM_PROCESSOR \"x86_64\")\n\ninclude(\"/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/toolchains/release-a.cmake\")\n\nset(CMAKE_SYSTEM \"Linux-6.18.57\")\nset(CMAKE_SYSTEM_NAME \"Linux\")\nset(CMAKE_SYSTEM_VERSION \"6.18.57\")\nset(CMAKE_SYSTEM_PROCESSOR \"x86_64\")\n\nset(CMAKE_CROSSCOMPILING \"FALSE\")\n\nset(CMAKE_SYSTEM_LOADED 1)\nset(CMAKE_C_COMPILER \"/usr/bin/cc\")\nset(CMAKE_C_COMPILER_ARG1 \"\")\nset(CMAKE_C_COMPILER_ID \"GNU\")\nset(CMAKE_C_COMPILER_VERSION \"14.2.0\")\nset(CMAKE_C_COMPILER_VERSION_INTERNAL \"\")\nset(CMAKE_C_COMPILER_WRAPPER \"\")\nset(CMAKE_C_STANDARD_COMPUTED_DEFAULT \"17\")\nset(CMAKE_C_EXTENSIONS_COMPUTED_DEFAULT \"ON\")\nset(CMAKE_C_STANDARD_LATEST \"23\")\nset(CMAKE_C_COMPILE_FEATURES \"c_std_90;c_function_prototypes;c_std_99;c_restrict;c_variadic_macros;c_std_11;c_static_assert;c_std_17;c_std_23\")\nset(CMAKE_C90_COMPILE_FEATURES \"c_std_90;c_function_prototypes\")\nset(CMAKE_C99_COMPILE_FEATURES \"c_std_99;c_restrict;c_variadic_macros\")\nset(CMAKE_C11_COMPILE_FEATURES \"c_std_11;c_static_assert\")\nset(CMAKE_C17_COMPILE_FEATURES \"c_std_17\")\nset(CMAKE_C23_COMPILE_FEATURES \"c_std_23\")\n\nset(CMAKE_C_PLATFORM_ID \"Linux\")\nset(CMAKE_C_SIMULATE_ID \"\")\nset(CMAKE_C_COMPILER_FRONTEND_VARIANT \"GNU\")\nset(CMAKE_C_SIMULATE_VERSION \"\")\n\n\n\n\nset(CMAKE_AR \"/usr/bin/ar\")\nset(CMAKE_C_COMPILER_AR \"/usr/bin/gcc-ar-14\")\nset(CMAKE_RANLIB \"/usr/bin/ranlib\")\nset(CMAKE_C_COMPILER_RANLIB \"/usr/bin/gcc-ranlib-14\")\nset(CMAKE_LINKER \"/usr/bin/ld\")\nset(CMAKE_LINKER_LINK \"\")\nset(CMAKE_LINKER_LLD \"\")\nset(CMAKE_C_COMPILER_LINKER \"/usr/bin/ld\")\nset(CMAKE_C_COMPILER_LINKER_ID \"GNU\")\nset(CMAKE_C_COMPILER_LINKER_VERSION 2.44)\nset(CMAKE_C_COMPILER_LINKER_FRONTEND_VARIANT GNU)\nset(CMAKE_MT \"\")\nset(CMAKE_TAPI \"CMAKE_TAPI-NOTFOUND\")\nset(CMAKE_COMPILER_IS_GNUCC 1)\nset(CMAKE_C_COMPILER_LOADED 1)\nset(CMAKE_C_COMPILER_WORKS TRUE)\nset(CMAKE_C_ABI_COMPILED TRUE)\n\nset(CMAKE_C_COMPILER_ENV_VAR \"CC\")\n\nset(CMAKE_C_COMPILER_ID_RUN 1)\nset(CMAKE_C_SOURCE_FILE_EXTENSIONS c;m)\nset(CMAKE_C_IGNORE_EXTENSIONS h;H;o;O;obj;OBJ;def;DEF;rc;RC)\nset(CMAKE_C_LINKER_PREFERENCE 10)\nset(CMAKE_C_LINKER_DEPFILE_SUPPORTED )\n\n# Save compiler ABI information.\nset(CMAKE_C_SIZEOF_DATA_PTR \"8\")\nset(CMAKE_C_COMPILER_ABI \"ELF\")\nset(CMAKE_C_BYTE_ORDER \"LITTLE_ENDIAN\")\nset(CMAKE_C_LIBRARY_ARCHITECTURE \"x86_64-linux-gnu\")\n\nif(CMAKE_C_SIZEOF_DATA_PTR)\n  set(CMAKE_SIZEOF_VOID_P \"${CMAKE_C_SIZEOF_DATA_PTR}\")\nendif()\n\nif(CMAKE_C_COMPILER_ABI)\n  set(CMAKE_INTERNAL_PLATFORM_ABI \"${CMAKE_C_COMPILER_ABI}\")\nendif()\n\nif(CMAKE_C_LIBRARY_ARCHITECTURE)\n  set(CMAKE_LIBRARY_ARCHITECTURE \"x86_64-linux-gnu\")\nendif()\n\nset(CMAKE_C_CL_SHOWINCLUDES_PREFIX \"\")\nif(CMAKE_C_CL_SHOWINCLUDES_PREFIX)\n  set(CMAKE_CL_SHOWINCLUDES_PREFIX \"${CMAKE_C_CL_SHOWINCLUDES_PREFIX}\")\nendif()\n\n\n\n\n\nset(CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES \"/usr/lib/gcc/x86_64-linux-gnu/14/include;/usr/local/include;/usr/include/x86_64-linux-gnu;/usr/include\")\nset(CMAKE_C_IMPLICIT_LINK_LIBRARIES \"gcc;gcc_s;c;gcc;gcc_s\")\nset(CMAKE_C_IMPLICIT_LINK_DIRECTORIES \"/usr/lib/gcc/x86_64-linux-gnu/14;/usr/lib/x86_64-linux-gnu;/usr/lib;/lib/x86_64-linux-gnu;/lib\")\nset(CMAKE_C_IMPLICIT_LINK_FRAMEWORK_DIRECTORIES \"\")\n[\n{\n  \"directory\": \"/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default\",\n  \"command\": \"/usr/bin/cc -DBUILD_VARIANT=101 -g -o CMakeFiles/variant_demo.dir/main.c.o -c /workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/main.c\",\n  \"file\": \"/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/main.c\",\n  \"output\": \"CMakeFiles/variant_demo.dir/main.c.o\"\n}\n]# ninja log v5\n0\t34\t1794815654097657708\tCMakeFiles/variant_demo.dir/main.c.o\tb89b6109c8f58499\n34\t51\t1794815654114446620\tvariant_demo\tcd73cdbfae4f6199\nStart testing: Nov 16 15:54 +08\n----------------------------------------------------------\n1/1 Testing: variant_smoke\n1/1 Test: variant_smoke\nCommand: \"/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default/variant_demo\"\nDirectory: /workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/default\n\"variant_smoke\" start time: Nov 16 15:54 +08\nOutput:\n----------------------------------------------------------\nbuild_variant=101\n<end of output>\nTest time =   0.00 sec\n----------------------------------------------------------\nTest Pass Reason:\nRequired regular expression found. Regex=[build_variant=[0-9]+]\n\"variant_smoke\" end time: Nov 16 15:54 +08\n\"variant_smoke\" time elapsed: 00:00:00\n----------------------------------------------------------\n\nEnd testing: Nov 16 15:54 +08\n",
+      "stderr": "",
+      "shell_display": "/workspace/scratch/fe5385ca063a/verification-tools/rtk bypass cat out/default/CMakeFiles/3.31.6/CMakeSystem.cmake out/default/CMakeFiles/3.31.6/CMakeCCompiler.cmake out/default/compile_commands.json out/default/.ninja_log out/default/Testing/Temporary/LastTest.log"
+    },
+    {
+      "label": "05-old-cache",
+      "argv": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "rg",
+        "-n",
+        "^(CMAKE_(BUILD_TYPE|C_FLAGS|C_COMPILER|TOOLCHAIN_FILE|GENERATOR|SYSROOT|SYSTEM|MAKE_PROGRAM|HOME_DIRECTORY)|.*COMPILER_TARGET|.*ABI)",
+        "out/default/CMakeCache.txt"
+      ],
+      "cwd": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project",
+      "environment_overrides": {
+        "PATH": "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin:/workspace/scratch/fe5385ca063a/verification-tools:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/override:/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin:/opt/codex/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/agent/.local/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/fallback",
+        "TMPDIR": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/tmp"
+      },
+      "started_at_utc": "2026-11-16T07:55:56.031607+00:00",
+      "ended_at_utc": "2026-11-16T07:55:56.040909+00:00",
+      "duration_seconds": 0.009290874000726035,
+      "exit_code": 0,
+      "stdout_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/05-old-cache.stdout.log",
+      "stderr_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/05-old-cache.stderr.log",
+      "stdout": "25:CMAKE_BUILD_TYPE:STRING=Debug\n29:CMAKE_C_COMPILER_AR:FILEPATH=/usr/bin/gcc-ar-14\n33:CMAKE_C_COMPILER_RANLIB:FILEPATH=/usr/bin/gcc-ranlib-14\n36:CMAKE_C_FLAGS:STRING=-DBUILD_VARIANT=101\n39:CMAKE_C_FLAGS_DEBUG:STRING=-g\n42:CMAKE_C_FLAGS_MINSIZEREL:STRING=-Os -DNDEBUG\n45:CMAKE_C_FLAGS_RELEASE:STRING=-O3 -DNDEBUG\n48:CMAKE_C_FLAGS_RELWITHDEBINFO:STRING=-O2 -g -DNDEBUG\n84:CMAKE_MAKE_PROGRAM:FILEPATH=/workspace/scratch/fe5385ca063a/verification-tools/ninja\n184:CMAKE_TOOLCHAIN_FILE:FILEPATH=/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/toolchains/release-a.cmake\n225:CMAKE_C_COMPILER_AR-ADVANCED:INTERNAL=1\n227:CMAKE_C_COMPILER_RANLIB-ADVANCED:INTERNAL=1\n229:CMAKE_C_FLAGS-ADVANCED:INTERNAL=1\n231:CMAKE_C_FLAGS_DEBUG-ADVANCED:INTERNAL=1\n233:CMAKE_C_FLAGS_MINSIZEREL-ADVANCED:INTERNAL=1\n235:CMAKE_C_FLAGS_RELEASE-ADVANCED:INTERNAL=1\n237:CMAKE_C_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1\n259:CMAKE_GENERATOR:INTERNAL=Ninja\n261:CMAKE_GENERATOR_INSTANCE:INTERNAL=\n263:CMAKE_GENERATOR_PLATFORM:INTERNAL=\n265:CMAKE_GENERATOR_TOOLSET:INTERNAL=\n268:CMAKE_HOME_DIRECTORY:INTERNAL=/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project\n274:CMAKE_MAKE_PROGRAM-ADVANCED:INTERNAL=1\n",
+      "stderr": "",
+      "shell_display": "/workspace/scratch/fe5385ca063a/verification-tools/rtk bypass rg -n '^(CMAKE_(BUILD_TYPE|C_FLAGS|C_COMPILER|TOOLCHAIN_FILE|GENERATOR|SYSROOT|SYSTEM|MAKE_PROGRAM|HOME_DIRECTORY)|.*COMPILER_TARGET|.*ABI)' out/default/CMakeCache.txt"
+    },
+    {
+      "label": "06-original-manifest",
+      "argv": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "python3",
+        "-c",
+        "from pathlib import Path; import json,hashlib; root=Path.cwd(); paths=[root/\"CMakeLists.txt\",root/\"main.c\",*sorted((root/\"toolchains\").rglob(\"*\")),*sorted((root/\"out/default\").rglob(\"*\"))]; print(json.dumps({str(p.relative_to(root)):{\"sha256\":hashlib.sha256(p.read_bytes()).hexdigest(),\"size_bytes\":p.stat().st_size,\"mode\":oct(p.stat().st_mode & 0o777),\"mtime_ns\":p.stat().st_mtime_ns} for p in paths if p.is_file()},indent=2))"
+      ],
+      "cwd": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project",
+      "environment_overrides": {
+        "PATH": "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin:/workspace/scratch/fe5385ca063a/verification-tools:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/override:/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin:/opt/codex/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/agent/.local/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/fallback",
+        "TMPDIR": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/tmp"
+      },
+      "started_at_utc": "2026-11-16T07:55:56.201684+00:00",
+      "ended_at_utc": "2026-11-16T07:55:56.233326+00:00",
+      "duration_seconds": 0.03162676400097553,
+      "exit_code": 0,
+      "stdout_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/06-original-manifest.stdout.log",
+      "stderr_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/06-original-manifest.stderr.log",
+      "stdout": "{\n  \"CMakeLists.txt\": {\n    \"sha256\": \"0bb2ae1c1433cbb531dda4c2ba767edb23a53651663f24de4692b0999f76af48\",\n    \"size_bytes\": 296,\n    \"mode\": \"0o644\",\n    \"mtime_ns\": 1794815653876695900\n  },\n  \"main.c\": {\n    \"sha256\": \"b4abdad8b7584c9cbd744aca3b7a68bdeba91c0a1d940ea7aa5bf0bb1e881d70\",\n    \"size_bytes\": 93,\n    \"mode\": \"0o644\",\n    \"mtime_ns\": 1794815653876772773\n  },\n  \"toolchains/release-a.cmake\": {\n    \"sha256\": \"b3f4403cb6c886aa036c59409e06c11ef91c14ca1bb6751cd5c421a5eabeb51c\",\n    \"size_bytes\": 82,\n    \"mode\": \"0o644\",\n    \"mtime_ns\": 1794815653876810648\n  },\n  \"toolchains/release-b.cmake\": {\n    \"sha256\": \"5c5f33f8f20b670c7fb6f921afa883939cdb8e585e67bb03851db331d70fc7a5\",\n    \"size_bytes\": 82,\n    \"mode\": \"0o644\",\n    \"mtime_ns\": 1794815653876839541\n  },\n  \"out/default/.ninja_deps\": {\n    \"sha256\": \"ab28bd97ecd9c861b748982adec62cf924f5d8372da2075d2a3811b716818935\",\n    \"size_bytes\": 2312,\n    \"mode\": \"0o644\",\n    \"mtime_ns\": 1794815654114455453\n  },\n  \"out/default/.ninja_log\": {\n    \"sha256\": \"f517f8450f65df7e33e156023614e264866ccc53f23387de3d42fe2392fbd82b\",\n    \"size_bytes\": 150,\n    \"mode\": \"0o644\",\n    \"mtime_ns\": 1794815654114455453\n  },\n  \"out/default/CMakeCache.txt\": {\n    \"sha256\": \"039b4306b832adfd4c8b74044554af0de9790edbbbd6c4b2d2f178e2b0662eee\",\n    \"size_bytes\": 13279,\n    \"mode\": \"0o644\",\n    \"mtime_ns\": 1794815654053681101\n  },\n  \"out/default/CMakeFiles/3.31.6/CMakeCCompiler.cmake\": {\n    \"sha256\": \"4cac2d2dfcf7bc3431de8e7b8fca6469f4b3d3fab7bc6d51dec0a318f44e1234\",\n    \"size_bytes\": 2779,\n    \"mode\": \"0o644\",\n    \"mtime_ns\": 1794815654045681185\n  },\n  \"out/default/CMakeFiles/3.31.6/CMakeDetermineCompilerABI_C.bin\": {\n    \"sha256\": \"a43ee85c9a7927733e07adf045f2c64634af89ef19689e7b784862c453aed32a\",\n    \"size_bytes\": 16024,\n    \"mode\": \"0o755\",\n    \"mtime_ns\": 1794815654029681352\n  },\n  \"out/default/CMakeFiles/3.31.6/CMakeSystem.cmake\": {\n    \"sha256\": \"ea32fa55c82b6fac369891e5fb5adcc694a265326414302a04b50e1489433922\",\n    \"size_bytes\": 461,\n    \"mode\": \"0o644\",\n    \"mtime_ns\": 1794815653885682853\n  },\n  \"out/default/CMakeFiles/3.31.6/CompilerIdC/CMakeCCompilerId.c\": {\n    \"sha256\": \"60d0dc2f177f0317302cef41d454988d9d49759ad3e011365bd6f6c544dfd126\",\n    \"size_bytes\": 27620,\n    \"mode\": \"0o644\",\n    \"mtime_ns\": 1794815653893682770\n  },\n  \"out/default/CMakeFiles/3.31.6/CompilerIdC/a.out\": {\n    \"sha256\": \"f9cd58463890484b4463a8949a85bd1d6960e4b4fea9aecea139cad47ebf0b6d\",\n    \"size_bytes\": 16136,\n    \"mode\": \"0o755\",\n    \"mtime_ns\": 1794815653949734150\n  },\n  \"out/default/CMakeFiles/CMakeConfigureLog.yaml\": {\n    \"sha256\": \"e566cd8920b20b1d454cf4c68b52caaadf00fb9ea56a98d8a3e5b2e23a6396d0\",\n    \"size_bytes\": 30332,\n    \"mode\": \"0o644\",\n    \"mtime_ns\": 1794815654053681101\n  },\n  \"out/default/CMakeFiles/TargetDirectories.txt\": {\n    \"sha256\": \"e2b04de4035c7a1417b4982f27df4bc80e96a5d5effab5836f9812553d9e831f\",\n    \"size_bytes\": 399,\n    \"mode\": \"0o644\",\n    \"mtime_ns\": 1794815654056556662\n  },\n  \"out/default/CMakeFiles/cmake.check_cache\": {\n    \"sha256\": \"a26189e394421da57f45706a07713c5720acd200a41711b0c0c590c3c63371c4\",\n    \"size_bytes\": 85,\n    \"mode\": \"0o644\",\n    \"mtime_ns\": 1794815654058751058\n  },\n  \"out/default/CMakeFiles/rules.ninja\": {\n    \"sha256\": \"17c39994bbebf7b3dbe05d71c5b6644cbf0192e8b380223e04d3ee54685f1fcf\",\n    \"size_bytes\": 2215,\n    \"mode\": \"0o644\",\n    \"mtime_ns\": 1794815654056556662\n  },\n  \"out/default/CMakeFiles/variant_demo.dir/main.c.o\": {\n    \"sha256\": \"238267d70839814767d30a24ce25e0055df0fbf2b0dd5e576dba080a2572dfe6\",\n    \"size_bytes\": 3736,\n    \"mode\": \"0o644\",\n    \"mtime_ns\": 1794815654097657708\n  },\n  \"out/default/CTestTestfile.cmake\": {\n    \"sha256\": \"f5cf6bdd77a03571bfe3090e87a60cb1fe57522182f401d677c2347dfa73ef89\",\n    \"size_bytes\": 756,\n    \"mode\": \"0o644\",\n    \"mtime_ns\": 1794815654056528049\n  },\n  \"out/default/Testing/Temporary/CTestCostData.txt\": {\n    \"sha256\": \"5e63822ac7a59d8bee0754963f41cd4ab94e36ef3018d723b3871b9b7d569a69\",\n    \"size_bytes\": 31,\n    \"mode\": \"0o644\",\n    \"mtime_ns\": 1794815654121680391\n  },\n  \"out/default/Testing/Temporary/LastTest.log\": {\n    \"sha256\": \"258699e8f2da6225dcaa35c21c8635ddfe8c7ede4de2b5843dff4e78d0d9b24c\",\n    \"size_bytes\": 807,\n    \"mode\": \"0o644\",\n    \"mtime_ns\": 1794815654121680391\n  },\n  \"out/default/build.ninja\": {\n    \"sha256\": \"ad1246f2d9578d932263a0da1757efa320e742682172399d7d8e9613e51dc5a1\",\n    \"size_bytes\": 28422,\n    \"mode\": \"0o644\",\n    \"mtime_ns\": 1794815654056556662\n  },\n  \"out/default/cmake_install.cmake\": {\n    \"sha256\": \"d8fc65fde2519fa2b1aa976987a80130bf41c12fd1eb760fe15d2013356b7c59\",\n    \"size_bytes\": 2214,\n    \"mode\": \"0o644\",\n    \"mtime_ns\": 1794815654056395925\n  },\n  \"out/default/compile_commands.json\": {\n    \"sha256\": \"e84c90e074361a044af643b336fb01f7270a23d1204ef7149413a0464afb7865\",\n    \"size_bytes\": 395,\n    \"mode\": \"0o644\",\n    \"mtime_ns\": 1794815654056556662\n  },\n  \"out/default/variant_demo\": {\n    \"sha256\": \"c197c3fb72ec6f225ad237372c9f8cfc43ff3cfba29671f2e0d011a7fd76b636\",\n    \"size_bytes\": 17248,\n    \"mode\": \"0o755\",\n    \"mtime_ns\": 1794815654114446620\n  }\n}\n",
+      "stderr": "",
+      "shell_display": "/workspace/scratch/fe5385ca063a/verification-tools/rtk bypass python3 -c 'from pathlib import Path; import json,hashlib; root=Path.cwd(); paths=[root/\"CMakeLists.txt\",root/\"main.c\",*sorted((root/\"toolchains\").rglob(\"*\")),*sorted((root/\"out/default\").rglob(\"*\"))]; print(json.dumps({str(p.relative_to(root)):{\"sha256\":hashlib.sha256(p.read_bytes()).hexdigest(),\"size_bytes\":p.stat().st_size,\"mode\":oct(p.stat().st_mode & 0o777),\"mtime_ns\":p.stat().st_mtime_ns} for p in paths if p.is_file()},indent=2))'"
+    },
+    {
+      "label": "07-compiler-platform",
+      "argv": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "python3",
+        "-c",
+        "import subprocess; rtk=\"/workspace/scratch/fe5385ca063a/verification-tools/rtk\"; commands=[[\"/usr/bin/cc\",\"-dumpmachine\"],[\"/usr/bin/cc\",\"-print-sysroot\"],[\"/usr/bin/readelf\",\"--version\"],[\"/usr/bin/objdump\",\"--version\"],[rtk,\"--version\"]]; [(print(\"COMMAND\",cmd,flush=True),subprocess.run([rtk,\"bypass\",*cmd],check=True)) for cmd in commands]"
+      ],
+      "cwd": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project",
+      "environment_overrides": {
+        "PATH": "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin:/workspace/scratch/fe5385ca063a/verification-tools:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/override:/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin:/opt/codex/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/agent/.local/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/fallback",
+        "TMPDIR": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/tmp"
+      },
+      "started_at_utc": "2026-11-16T07:55:56.016948+00:00",
+      "ended_at_utc": "2026-11-16T07:55:56.072601+00:00",
+      "duration_seconds": 0.05563663400243968,
+      "exit_code": 0,
+      "stdout_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/07-compiler-platform.stdout.log",
+      "stderr_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/07-compiler-platform.stderr.log",
+      "stdout": "COMMAND ['/usr/bin/cc', '-dumpmachine']\nx86_64-linux-gnu\nCOMMAND ['/usr/bin/cc', '-print-sysroot']\nCOMMAND ['/usr/bin/readelf', '--version']\nGNU readelf (GNU Binutils for Debian) 2.44\nCopyright (C) 2025 Free Software Foundation, Inc.\nThis program is free software; you may redistribute it under the terms of\nthe GNU General Public License version 3 or (at your option) any later version.\nThis program has absolutely no warranty.\nCOMMAND ['/usr/bin/objdump', '--version']\nGNU objdump (GNU Binutils for Debian) 2.44\nCopyright (C) 2025 Free Software Foundation, Inc.\nThis program is free software; you may redistribute it under the terms of\nthe GNU General Public License version 3 or (at your option) any later version.\nThis program has absolutely no warranty.\nCOMMAND ['/workspace/scratch/fe5385ca063a/verification-tools/rtk', '--version']\nrtk 1.2.0\n",
+      "stderr": "",
+      "shell_display": "/workspace/scratch/fe5385ca063a/verification-tools/rtk bypass python3 -c 'import subprocess; rtk=\"/workspace/scratch/fe5385ca063a/verification-tools/rtk\"; commands=[[\"/usr/bin/cc\",\"-dumpmachine\"],[\"/usr/bin/cc\",\"-print-sysroot\"],[\"/usr/bin/readelf\",\"--version\"],[\"/usr/bin/objdump\",\"--version\"],[rtk,\"--version\"]]; [(print(\"COMMAND\",cmd,flush=True),subprocess.run([rtk,\"bypass\",*cmd],check=True)) for cmd in commands]'"
+    },
+    {
+      "label": "08-configure",
+      "argv": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin/cmake",
+        "-S",
+        "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project",
+        "-B",
+        "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug",
+        "-G",
+        "Ninja",
+        "-DCMAKE_TOOLCHAIN_FILE=/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/toolchains/release-b.cmake",
+        "-DCMAKE_BUILD_TYPE=Debug",
+        "-DCMAKE_MAKE_PROGRAM=/workspace/scratch/fe5385ca063a/verification-tools/ninja",
+        "-DCMAKE_EXE_LINKER_FLAGS=-Wl,-Map=/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/variant_demo.map"
+      ],
+      "cwd": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project",
+      "environment_overrides": {
+        "PATH": "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin:/workspace/scratch/fe5385ca063a/verification-tools:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/override:/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin:/opt/codex/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/agent/.local/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/fallback",
+        "TMPDIR": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/tmp"
+      },
+      "started_at_utc": "2026-11-16T07:56:14.053500+00:00",
+      "ended_at_utc": "2026-11-16T07:56:14.239524+00:00",
+      "duration_seconds": 0.18600720000176807,
+      "exit_code": 0,
+      "stdout_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/08-configure.stdout.log",
+      "stderr_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/08-configure.stderr.log",
+      "stdout": "-- The C compiler identification is GNU 14.2.0\n-- Detecting C compiler ABI info\n-- Detecting C compiler ABI info - done\n-- Check for working C compiler: /usr/bin/cc - skipped\n-- Detecting C compile features\n-- Detecting C compile features - done\n-- Configuring done (0.2s)\n-- Generating done (0.0s)\n-- Build files have been written to: /workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug\n",
+      "stderr": "",
+      "shell_display": "/workspace/scratch/fe5385ca063a/verification-tools/rtk bypass /workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin/cmake -S /workspace/scratch/fe5385ca063a/round3-cmake-consumer/project -B /workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug -G Ninja -DCMAKE_TOOLCHAIN_FILE=/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/toolchains/release-b.cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/workspace/scratch/fe5385ca063a/verification-tools/ninja -DCMAKE_EXE_LINKER_FLAGS=-Wl,-Map=/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/variant_demo.map"
+    },
+    {
+      "label": "09-build",
+      "argv": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin/cmake",
+        "--build",
+        "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug",
+        "--config",
+        "Debug",
+        "--parallel",
+        "1",
+        "--verbose"
+      ],
+      "cwd": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project",
+      "environment_overrides": {
+        "PATH": "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin:/workspace/scratch/fe5385ca063a/verification-tools:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/override:/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin:/opt/codex/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/agent/.local/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/fallback",
+        "TMPDIR": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/tmp"
+      },
+      "started_at_utc": "2026-11-16T07:56:17.232247+00:00",
+      "ended_at_utc": "2026-11-16T07:56:17.285531+00:00",
+      "duration_seconds": 0.053262574001564644,
+      "exit_code": 0,
+      "stdout_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/09-build.stdout.log",
+      "stderr_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/09-build.stderr.log",
+      "stdout": "Change Dir: '/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug'\n\nRun Build Command(s): /workspace/scratch/fe5385ca063a/verification-tools/ninja -v -j 1\n[1/2] /usr/bin/cc   -DBUILD_VARIANT=202 -g -MD -MT CMakeFiles/variant_demo.dir/main.c.o -MF CMakeFiles/variant_demo.dir/main.c.o.d -o CMakeFiles/variant_demo.dir/main.c.o -c /workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/main.c\n[2/2] : && /usr/bin/cc -DBUILD_VARIANT=202 -g -Wl,-Map=/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/variant_demo.map    -Wl,--dependency-file=CMakeFiles/variant_demo.dir/link.d CMakeFiles/variant_demo.dir/main.c.o -o variant_demo   && :\n\n",
+      "stderr": "",
+      "shell_display": "/workspace/scratch/fe5385ca063a/verification-tools/rtk bypass /workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin/cmake --build /workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug --config Debug --parallel 1 --verbose"
+    },
+    {
+      "label": "10-build-identity",
+      "argv": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "python3",
+        "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/inspect-build.py"
+      ],
+      "cwd": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project",
+      "environment_overrides": {
+        "PATH": "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin:/workspace/scratch/fe5385ca063a/verification-tools:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/override:/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin:/opt/codex/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/agent/.local/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/fallback",
+        "TMPDIR": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/tmp"
+      },
+      "started_at_utc": "2026-11-16T07:56:42.721589+00:00",
+      "ended_at_utc": "2026-11-16T07:56:42.756264+00:00",
+      "duration_seconds": 0.03466430199841852,
+      "exit_code": 0,
+      "stdout_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/10-build-identity.stdout.log",
+      "stderr_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/10-build-identity.stderr.log",
+      "stdout": "{\n  \"status\": \"verified\",\n  \"mode\": \"manual\",\n  \"generator\": \"Ninja\",\n  \"configuration\": \"Debug\",\n  \"source_dir\": \"/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project\",\n  \"binary_dir\": \"/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug\",\n  \"parallelism\": 1,\n  \"toolchain\": \"/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/toolchains/release-b.cmake\",\n  \"toolchain_sha256\": \"5c5f33f8f20b670c7fb6f921afa883939cdb8e585e67bb03851db331d70fc7a5\",\n  \"compiler\": \"/usr/bin/cc\",\n  \"compiler_target\": \"x86_64-linux-gnu\",\n  \"abi\": \"ELF; 64-bit pointers; little-endian\",\n  \"crosscompiling\": false,\n  \"backend\": \"host-unit\",\n  \"sysroot\": \"No CMake sysroot override; compiler -print-sysroot produced an empty line.\",\n  \"file_api_index\": \"/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/.cmake/api/v1/reply/index-2026-11-16T07-56-14-0236.json\",\n  \"file_api_codemodel\": \"/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/.cmake/api/v1/reply/codemodel-v2-9d25096ccecf2933e275.json\",\n  \"file_api_target\": \"/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/.cmake/api/v1/reply/target-variant_demo-Debug-f5b1153b2a68875b5f6f.json\",\n  \"artifact\": \"/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/variant_demo\",\n  \"artifact_sha256\": \"c8199de7db21e32c56cc8c83c31931262f732bb15302f863790022228a47506a\",\n  \"artifact_size_bytes\": 17256,\n  \"cache\": {\n    \"CMAKE_BUILD_TYPE\": \"Debug\",\n    \"CMAKE_C_FLAGS\": \"-DBUILD_VARIANT=202\",\n    \"CMAKE_C_FLAGS_DEBUG\": \"-g\",\n    \"CMAKE_EXE_LINKER_FLAGS\": \"-Wl,-Map=/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/variant_demo.map\",\n    \"CMAKE_MAKE_PROGRAM\": \"/workspace/scratch/fe5385ca063a/verification-tools/ninja\",\n    \"CMAKE_TOOLCHAIN_FILE\": \"/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/toolchains/release-b.cmake\",\n    \"CMAKE_GENERATOR\": \"Ninja\"\n  },\n  \"system_file\": \"/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/CMakeFiles/3.31.6/CMakeSystem.cmake\",\n  \"system_contents\": \"set(CMAKE_HOST_SYSTEM \\\"Linux-6.18.57\\\")\\nset(CMAKE_HOST_SYSTEM_NAME \\\"Linux\\\")\\nset(CMAKE_HOST_SYSTEM_VERSION \\\"6.18.57\\\")\\nset(CMAKE_HOST_SYSTEM_PROCESSOR \\\"x86_64\\\")\\n\\ninclude(\\\"/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/toolchains/release-b.cmake\\\")\\n\\nset(CMAKE_SYSTEM \\\"Linux-6.18.57\\\")\\nset(CMAKE_SYSTEM_NAME \\\"Linux\\\")\\nset(CMAKE_SYSTEM_VERSION \\\"6.18.57\\\")\\nset(CMAKE_SYSTEM_PROCESSOR \\\"x86_64\\\")\\n\\nset(CMAKE_CROSSCOMPILING \\\"FALSE\\\")\\n\\nset(CMAKE_SYSTEM_LOADED 1)\\n\",\n  \"compiler_file\": \"/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/CMakeFiles/3.31.6/CMakeCCompiler.cmake\",\n  \"compiler_contents\": \"set(CMAKE_C_COMPILER \\\"/usr/bin/cc\\\")\\nset(CMAKE_C_COMPILER_ARG1 \\\"\\\")\\nset(CMAKE_C_COMPILER_ID \\\"GNU\\\")\\nset(CMAKE_C_COMPILER_VERSION \\\"14.2.0\\\")\\nset(CMAKE_C_COMPILER_VERSION_INTERNAL \\\"\\\")\\nset(CMAKE_C_COMPILER_WRAPPER \\\"\\\")\\nset(CMAKE_C_STANDARD_COMPUTED_DEFAULT \\\"17\\\")\\nset(CMAKE_C_EXTENSIONS_COMPUTED_DEFAULT \\\"ON\\\")\\nset(CMAKE_C_STANDARD_LATEST \\\"23\\\")\\nset(CMAKE_C_COMPILE_FEATURES \\\"c_std_90;c_function_prototypes;c_std_99;c_restrict;c_variadic_macros;c_std_11;c_static_assert;c_std_17;c_std_23\\\")\\nset(CMAKE_C90_COMPILE_FEATURES \\\"c_std_90;c_function_prototypes\\\")\\nset(CMAKE_C99_COMPILE_FEATURES \\\"c_std_99;c_restrict;c_variadic_macros\\\")\\nset(CMAKE_C11_COMPILE_FEATURES \\\"c_std_11;c_static_assert\\\")\\nset(CMAKE_C17_COMPILE_FEATURES \\\"c_std_17\\\")\\nset(CMAKE_C23_COMPILE_FEATURES \\\"c_std_23\\\")\\n\\nset(CMAKE_C_PLATFORM_ID \\\"Linux\\\")\\nset(CMAKE_C_SIMULATE_ID \\\"\\\")\\nset(CMAKE_C_COMPILER_FRONTEND_VARIANT \\\"GNU\\\")\\nset(CMAKE_C_SIMULATE_VERSION \\\"\\\")\\n\\n\\n\\n\\nset(CMAKE_AR \\\"/usr/bin/ar\\\")\\nset(CMAKE_C_COMPILER_AR \\\"/usr/bin/gcc-ar-14\\\")\\nset(CMAKE_RANLIB \\\"/usr/bin/ranlib\\\")\\nset(CMAKE_C_COMPILER_RANLIB \\\"/usr/bin/gcc-ranlib-14\\\")\\nset(CMAKE_LINKER \\\"/usr/bin/ld\\\")\\nset(CMAKE_LINKER_LINK \\\"\\\")\\nset(CMAKE_LINKER_LLD \\\"\\\")\\nset(CMAKE_C_COMPILER_LINKER \\\"/usr/bin/ld\\\")\\nset(CMAKE_C_COMPILER_LINKER_ID \\\"GNU\\\")\\nset(CMAKE_C_COMPILER_LINKER_VERSION 2.44)\\nset(CMAKE_C_COMPILER_LINKER_FRONTEND_VARIANT GNU)\\nset(CMAKE_MT \\\"\\\")\\nset(CMAKE_TAPI \\\"CMAKE_TAPI-NOTFOUND\\\")\\nset(CMAKE_COMPILER_IS_GNUCC 1)\\nset(CMAKE_C_COMPILER_LOADED 1)\\nset(CMAKE_C_COMPILER_WORKS TRUE)\\nset(CMAKE_C_ABI_COMPILED TRUE)\\n\\nset(CMAKE_C_COMPILER_ENV_VAR \\\"CC\\\")\\n\\nset(CMAKE_C_COMPILER_ID_RUN 1)\\nset(CMAKE_C_SOURCE_FILE_EXTENSIONS c;m)\\nset(CMAKE_C_IGNORE_EXTENSIONS h;H;o;O;obj;OBJ;def;DEF;rc;RC)\\nset(CMAKE_C_LINKER_PREFERENCE 10)\\nset(CMAKE_C_LINKER_DEPFILE_SUPPORTED )\\n\\n# Save compiler ABI information.\\nset(CMAKE_C_SIZEOF_DATA_PTR \\\"8\\\")\\nset(CMAKE_C_COMPILER_ABI \\\"ELF\\\")\\nset(CMAKE_C_BYTE_ORDER \\\"LITTLE_ENDIAN\\\")\\nset(CMAKE_C_LIBRARY_ARCHITECTURE \\\"x86_64-linux-gnu\\\")\\n\\nif(CMAKE_C_SIZEOF_DATA_PTR)\\n  set(CMAKE_SIZEOF_VOID_P \\\"${CMAKE_C_SIZEOF_DATA_PTR}\\\")\\nendif()\\n\\nif(CMAKE_C_COMPILER_ABI)\\n  set(CMAKE_INTERNAL_PLATFORM_ABI \\\"${CMAKE_C_COMPILER_ABI}\\\")\\nendif()\\n\\nif(CMAKE_C_LIBRARY_ARCHITECTURE)\\n  set(CMAKE_LIBRARY_ARCHITECTURE \\\"x86_64-linux-gnu\\\")\\nendif()\\n\\nset(CMAKE_C_CL_SHOWINCLUDES_PREFIX \\\"\\\")\\nif(CMAKE_C_CL_SHOWINCLUDES_PREFIX)\\n  set(CMAKE_CL_SHOWINCLUDES_PREFIX \\\"${CMAKE_C_CL_SHOWINCLUDES_PREFIX}\\\")\\nendif()\\n\\n\\n\\n\\n\\nset(CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES \\\"/usr/lib/gcc/x86_64-linux-gnu/14/include;/usr/local/include;/usr/include/x86_64-linux-gnu;/usr/include\\\")\\nset(CMAKE_C_IMPLICIT_LINK_LIBRARIES \\\"gcc;gcc_s;c;gcc;gcc_s\\\")\\nset(CMAKE_C_IMPLICIT_LINK_DIRECTORIES \\\"/usr/lib/gcc/x86_64-linux-gnu/14;/usr/lib/x86_64-linux-gnu;/usr/lib;/lib/x86_64-linux-gnu;/lib\\\")\\nset(CMAKE_C_IMPLICIT_LINK_FRAMEWORK_DIRECTORIES \\\"\\\")\\n\",\n  \"compile_commands\": [\n    {\n      \"directory\": \"/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug\",\n      \"command\": \"/usr/bin/cc -DBUILD_VARIANT=202 -g -o CMakeFiles/variant_demo.dir/main.c.o -c /workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/main.c\",\n      \"file\": \"/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/main.c\",\n      \"output\": \"CMakeFiles/variant_demo.dir/main.c.o\"\n    }\n  ]\n}\n",
+      "stderr": "",
+      "shell_display": "/workspace/scratch/fe5385ca063a/verification-tools/rtk bypass python3 /workspace/scratch/fe5385ca063a/round3-cmake-consumer/inspect-build.py"
+    },
+    {
+      "label": "11-ctest-report-directory",
+      "argv": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "mktemp",
+        "-d",
+        "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/ctest.XXXXXXXX"
+      ],
+      "cwd": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project",
+      "environment_overrides": {
+        "PATH": "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin:/workspace/scratch/fe5385ca063a/verification-tools:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/override:/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin:/opt/codex/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/agent/.local/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/fallback",
+        "TMPDIR": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/tmp"
+      },
+      "started_at_utc": "2026-11-16T07:56:42.721043+00:00",
+      "ended_at_utc": "2026-11-16T07:56:42.725166+00:00",
+      "duration_seconds": 0.004108331002498744,
+      "exit_code": 0,
+      "stdout_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/11-ctest-report-directory.stdout.log",
+      "stderr_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/11-ctest-report-directory.stderr.log",
+      "stdout": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/ctest.zo0zMvE0\n",
+      "stderr": "",
+      "shell_display": "/workspace/scratch/fe5385ca063a/verification-tools/rtk bypass mktemp -d /workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/ctest.XXXXXXXX"
+    },
+    {
+      "label": "12-ctest",
+      "argv": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin/ctest",
+        "--test-dir",
+        "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug",
+        "-C",
+        "Debug",
+        "--parallel",
+        "1",
+        "--output-on-failure",
+        "--no-tests=error",
+        "--output-junit",
+        "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/ctest.zo0zMvE0/ctest.xml"
+      ],
+      "cwd": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project",
+      "environment_overrides": {
+        "PATH": "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin:/workspace/scratch/fe5385ca063a/verification-tools:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/override:/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin:/opt/codex/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/agent/.local/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/fallback",
+        "TMPDIR": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/tmp"
+      },
+      "started_at_utc": "2026-11-16T07:56:53.190015+00:00",
+      "ended_at_utc": "2026-11-16T07:56:53.201489+00:00",
+      "duration_seconds": 0.011462504000519402,
+      "exit_code": 0,
+      "stdout_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/12-ctest.stdout.log",
+      "stderr_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/12-ctest.stderr.log",
+      "stdout": "Internal ctest changing into directory: /workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug\nTest project /workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug\n    Start 1: variant_smoke\n1/1 Test #1: variant_smoke ....................   Passed    0.00 sec\n\n100% tests passed, 0 tests failed out of 1\n\nTotal Test time (real) =   0.00 sec\n",
+      "stderr": "",
+      "shell_display": "/workspace/scratch/fe5385ca063a/verification-tools/rtk bypass /workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin/ctest --test-dir /workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug -C Debug --parallel 1 --output-on-failure --no-tests=error --output-junit /workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/ctest.zo0zMvE0/ctest.xml"
+    },
+    {
+      "label": "13-program",
+      "argv": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/variant_demo"
+      ],
+      "cwd": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project",
+      "environment_overrides": {
+        "PATH": "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin:/workspace/scratch/fe5385ca063a/verification-tools:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/override:/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin:/opt/codex/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/agent/.local/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/fallback",
+        "TMPDIR": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/tmp"
+      },
+      "started_at_utc": "2026-11-16T07:56:53.171341+00:00",
+      "ended_at_utc": "2026-11-16T07:56:53.176147+00:00",
+      "duration_seconds": 0.004789434002304915,
+      "exit_code": 0,
+      "stdout_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/13-program.stdout.log",
+      "stderr_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/13-program.stderr.log",
+      "stdout": "build_variant=202\n",
+      "stderr": "",
+      "shell_display": "/workspace/scratch/fe5385ca063a/verification-tools/rtk bypass /workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/variant_demo"
+    },
+    {
+      "label": "14-artifact-file",
+      "argv": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "/usr/bin/file",
+        "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/variant_demo"
+      ],
+      "cwd": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project",
+      "environment_overrides": {
+        "PATH": "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin:/workspace/scratch/fe5385ca063a/verification-tools:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/override:/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin:/opt/codex/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/agent/.local/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/fallback",
+        "TMPDIR": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/tmp"
+      },
+      "started_at_utc": "2026-11-16T07:56:53.178029+00:00",
+      "ended_at_utc": "2026-11-16T07:56:53.185027+00:00",
+      "duration_seconds": 0.006985628999245819,
+      "exit_code": 0,
+      "stdout_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/14-artifact-file.stdout.log",
+      "stderr_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/14-artifact-file.stderr.log",
+      "stdout": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/variant_demo: ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=98b14f274c9497b8e4cba1a163d5bf7b5862f6e9, for GNU/Linux 3.2.0, with debug_info, not stripped\n",
+      "stderr": "",
+      "shell_display": "/workspace/scratch/fe5385ca063a/verification-tools/rtk bypass /usr/bin/file /workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/variant_demo"
+    },
+    {
+      "label": "15-artifact-size",
+      "argv": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "/usr/bin/size",
+        "-A",
+        "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/variant_demo"
+      ],
+      "cwd": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project",
+      "environment_overrides": {
+        "PATH": "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin:/workspace/scratch/fe5385ca063a/verification-tools:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/override:/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin:/opt/codex/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/agent/.local/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/fallback",
+        "TMPDIR": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/tmp"
+      },
+      "started_at_utc": "2026-11-16T07:56:53.364663+00:00",
+      "ended_at_utc": "2026-11-16T07:56:53.376485+00:00",
+      "duration_seconds": 0.011809790001279907,
+      "exit_code": 0,
+      "stdout_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/15-artifact-size.stdout.log",
+      "stderr_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/15-artifact-size.stderr.log",
+      "stdout": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/variant_demo  :\nsection              size    addr\n.note.gnu.property     32     848\n.note.gnu.build-id     36     880\n.interp                28     916\n.gnu.hash              36     944\n.dynsym               168     984\n.dynstr               143    1152\n.gnu.version           14    1296\n.gnu.version_r         48    1312\n.rela.dyn             192    1360\n.rela.plt              24    1552\n.init                  23    4096\n.plt                   32    4128\n.plt.got                8    4160\n.text                 269    4176\n.fini                   9    4448\n.rodata                22    8192\n.eh_frame_hdr          44    8216\n.eh_frame             172    8264\n.note.ABI-tag          32    8436\n.init_array             8   15824\n.fini_array             8   15832\n.dynamic              480   15840\n.got                   40   16320\n.got.plt               32   16360\n.data                  16   16392\n.bss                    8   16408\n.comment               31       0\n.debug_aranges         48       0\n.debug_info           175       0\n.debug_abbrev         120       0\n.debug_line           100       0\n.debug_str            158       0\n.debug_line_str       234       0\nTotal                2790\n\n\n",
+      "stderr": "",
+      "shell_display": "/workspace/scratch/fe5385ca063a/verification-tools/rtk bypass /usr/bin/size -A /workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/variant_demo"
+    },
+    {
+      "label": "16-artifact-sections",
+      "argv": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "/usr/bin/objdump",
+        "-h",
+        "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/variant_demo"
+      ],
+      "cwd": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project",
+      "environment_overrides": {
+        "PATH": "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin:/workspace/scratch/fe5385ca063a/verification-tools:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/override:/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin:/opt/codex/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/agent/.local/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/fallback",
+        "TMPDIR": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/tmp"
+      },
+      "started_at_utc": "2026-11-16T07:56:53.356391+00:00",
+      "ended_at_utc": "2026-11-16T07:56:53.362224+00:00",
+      "duration_seconds": 0.0058185599991702475,
+      "exit_code": 0,
+      "stdout_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/16-artifact-sections.stdout.log",
+      "stderr_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/16-artifact-sections.stderr.log",
+      "stdout": "\n/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/variant_demo:     file format elf64-x86-64\n\nSections:\nIdx Name          Size      VMA               LMA               File off  Algn\n  0 .note.gnu.property 00000020  0000000000000350  0000000000000350  00000350  2**3\n                  CONTENTS, ALLOC, LOAD, READONLY, DATA\n  1 .note.gnu.build-id 00000024  0000000000000370  0000000000000370  00000370  2**2\n                  CONTENTS, ALLOC, LOAD, READONLY, DATA\n  2 .interp       0000001c  0000000000000394  0000000000000394  00000394  2**0\n                  CONTENTS, ALLOC, LOAD, READONLY, DATA\n  3 .gnu.hash     00000024  00000000000003b0  00000000000003b0  000003b0  2**3\n                  CONTENTS, ALLOC, LOAD, READONLY, DATA\n  4 .dynsym       000000a8  00000000000003d8  00000000000003d8  000003d8  2**3\n                  CONTENTS, ALLOC, LOAD, READONLY, DATA\n  5 .dynstr       0000008f  0000000000000480  0000000000000480  00000480  2**0\n                  CONTENTS, ALLOC, LOAD, READONLY, DATA\n  6 .gnu.version  0000000e  0000000000000510  0000000000000510  00000510  2**1\n                  CONTENTS, ALLOC, LOAD, READONLY, DATA\n  7 .gnu.version_r 00000030  0000000000000520  0000000000000520  00000520  2**3\n                  CONTENTS, ALLOC, LOAD, READONLY, DATA\n  8 .rela.dyn     000000c0  0000000000000550  0000000000000550  00000550  2**3\n                  CONTENTS, ALLOC, LOAD, READONLY, DATA\n  9 .rela.plt     00000018  0000000000000610  0000000000000610  00000610  2**3\n                  CONTENTS, ALLOC, LOAD, READONLY, DATA\n 10 .init         00000017  0000000000001000  0000000000001000  00001000  2**2\n                  CONTENTS, ALLOC, LOAD, READONLY, CODE\n 11 .plt          00000020  0000000000001020  0000000000001020  00001020  2**4\n                  CONTENTS, ALLOC, LOAD, READONLY, CODE\n 12 .plt.got      00000008  0000000000001040  0000000000001040  00001040  2**3\n                  CONTENTS, ALLOC, LOAD, READONLY, CODE\n 13 .text         0000010d  0000000000001050  0000000000001050  00001050  2**4\n                  CONTENTS, ALLOC, LOAD, READONLY, CODE\n 14 .fini         00000009  0000000000001160  0000000000001160  00001160  2**2\n                  CONTENTS, ALLOC, LOAD, READONLY, CODE\n 15 .rodata       00000016  0000000000002000  0000000000002000  00002000  2**2\n                  CONTENTS, ALLOC, LOAD, READONLY, DATA\n 16 .eh_frame_hdr 0000002c  0000000000002018  0000000000002018  00002018  2**2\n                  CONTENTS, ALLOC, LOAD, READONLY, DATA\n 17 .eh_frame     000000ac  0000000000002048  0000000000002048  00002048  2**3\n                  CONTENTS, ALLOC, LOAD, READONLY, DATA\n 18 .note.ABI-tag 00000020  00000000000020f4  00000000000020f4  000020f4  2**2\n                  CONTENTS, ALLOC, LOAD, READONLY, DATA\n 19 .init_array   00000008  0000000000003dd0  0000000000003dd0  00002dd0  2**3\n                  CONTENTS, ALLOC, LOAD, DATA\n 20 .fini_array   00000008  0000000000003dd8  0000000000003dd8  00002dd8  2**3\n                  CONTENTS, ALLOC, LOAD, DATA\n 21 .dynamic      000001e0  0000000000003de0  0000000000003de0  00002de0  2**3\n                  CONTENTS, ALLOC, LOAD, DATA\n 22 .got          00000028  0000000000003fc0  0000000000003fc0  00002fc0  2**3\n                  CONTENTS, ALLOC, LOAD, DATA\n 23 .got.plt      00000020  0000000000003fe8  0000000000003fe8  00002fe8  2**3\n                  CONTENTS, ALLOC, LOAD, DATA\n 24 .data         00000010  0000000000004008  0000000000004008  00003008  2**3\n                  CONTENTS, ALLOC, LOAD, DATA\n 25 .bss          00000008  0000000000004018  0000000000004018  00003018  2**0\n                  ALLOC\n 26 .comment      0000001f  0000000000000000  0000000000000000  00003018  2**0\n                  CONTENTS, READONLY\n 27 .debug_aranges 00000030  0000000000000000  0000000000000000  00003037  2**0\n                  CONTENTS, READONLY, DEBUGGING, OCTETS\n 28 .debug_info   000000af  0000000000000000  0000000000000000  00003067  2**0\n                  CONTENTS, READONLY, DEBUGGING, OCTETS\n 29 .debug_abbrev 00000078  0000000000000000  0000000000000000  00003116  2**0\n                  CONTENTS, READONLY, DEBUGGING, OCTETS\n 30 .debug_line   00000064  0000000000000000  0000000000000000  0000318e  2**0\n                  CONTENTS, READONLY, DEBUGGING, OCTETS\n 31 .debug_str    0000009e  0000000000000000  0000000000000000  000031f2  2**0\n                  CONTENTS, READONLY, DEBUGGING, OCTETS\n 32 .debug_line_str 000000ea  0000000000000000  0000000000000000  00003290  2**0\n                  CONTENTS, READONLY, DEBUGGING, OCTETS\n",
+      "stderr": "",
+      "shell_display": "/workspace/scratch/fe5385ca063a/verification-tools/rtk bypass /usr/bin/objdump -h /workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/variant_demo"
+    },
+    {
+      "label": "17-artifact-elf-symbols",
+      "argv": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "/usr/bin/readelf",
+        "-h",
+        "-s",
+        "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/variant_demo"
+      ],
+      "cwd": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project",
+      "environment_overrides": {
+        "PATH": "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin:/workspace/scratch/fe5385ca063a/verification-tools:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/override:/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin:/opt/codex/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/agent/.local/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/fallback",
+        "TMPDIR": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/tmp"
+      },
+      "started_at_utc": "2026-11-16T07:56:53.370500+00:00",
+      "ended_at_utc": "2026-11-16T07:56:53.376000+00:00",
+      "duration_seconds": 0.005487662998348242,
+      "exit_code": 0,
+      "stdout_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/17-artifact-elf-symbols.stdout.log",
+      "stderr_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/17-artifact-elf-symbols.stderr.log",
+      "stdout": "ELF Header:\n  Magic:   7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00 \n  Class:                             ELF64\n  Data:                              2's complement, little endian\n  Version:                           1 (current)\n  OS/ABI:                            UNIX - System V\n  ABI Version:                       0\n  Type:                              DYN (Position-Independent Executable file)\n  Machine:                           Advanced Micro Devices X86-64\n  Version:                           0x1\n  Entry point address:               0x1050\n  Start of program headers:          64 (bytes into file)\n  Start of section headers:          14888 (bytes into file)\n  Flags:                             0x0\n  Size of this header:               64 (bytes)\n  Size of program headers:           56 (bytes)\n  Number of program headers:         14\n  Size of section headers:           64 (bytes)\n  Number of section headers:         37\n  Section header string table index: 36\n\nSymbol table '.dynsym' contains 7 entries:\n   Num:    Value          Size Type    Bind   Vis      Ndx Name\n     0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND \n     1: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND _[...]@GLIBC_2.34 (2)\n     2: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND _ITM_deregisterT[...]\n     3: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND [...]@GLIBC_2.2.5 (3)\n     4: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND __gmon_start__\n     5: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND _ITM_registerTMC[...]\n     6: 0000000000000000     0 FUNC    WEAK   DEFAULT  UND [...]@GLIBC_2.2.5 (3)\n\nSymbol table '.symtab' contains 36 entries:\n   Num:    Value          Size Type    Bind   Vis      Ndx Name\n     0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND \n     1: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS Scrt1.o\n     2: 00000000000020f4    32 OBJECT  LOCAL  DEFAULT   19 __abi_tag\n     3: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS crtstuff.c\n     4: 0000000000001080     0 FUNC    LOCAL  DEFAULT   14 deregister_tm_clones\n     5: 00000000000010b0     0 FUNC    LOCAL  DEFAULT   14 register_tm_clones\n     6: 00000000000010f0     0 FUNC    LOCAL  DEFAULT   14 __do_global_dtors_aux\n     7: 0000000000004018     1 OBJECT  LOCAL  DEFAULT   26 completed.0\n     8: 0000000000003dd8     0 OBJECT  LOCAL  DEFAULT   21 __do_global_dtor[...]\n     9: 0000000000001130     0 FUNC    LOCAL  DEFAULT   14 frame_dummy\n    10: 0000000000003dd0     0 OBJECT  LOCAL  DEFAULT   20 __frame_dummy_in[...]\n    11: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS main.c\n    12: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS crtstuff.c\n    13: 00000000000020f0     0 OBJECT  LOCAL  DEFAULT   18 __FRAME_END__\n    14: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS \n    15: 0000000000003de0     0 OBJECT  LOCAL  DEFAULT   22 _DYNAMIC\n    16: 0000000000002018     0 NOTYPE  LOCAL  DEFAULT   17 __GNU_EH_FRAME_HDR\n    17: 0000000000003fe8     0 OBJECT  LOCAL  DEFAULT   24 _GLOBAL_OFFSET_TABLE_\n    18: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __libc_start_mai[...]\n    19: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND _ITM_deregisterT[...]\n    20: 0000000000004008     0 NOTYPE  WEAK   DEFAULT   25 data_start\n    21: 0000000000004018     0 NOTYPE  GLOBAL DEFAULT   25 _edata\n    22: 0000000000001160     0 FUNC    GLOBAL HIDDEN    15 _fini\n    23: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND printf@GLIBC_2.2.5\n    24: 0000000000004008     0 NOTYPE  GLOBAL DEFAULT   25 __data_start\n    25: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND __gmon_start__\n    26: 0000000000004010     0 OBJECT  GLOBAL HIDDEN    25 __dso_handle\n    27: 0000000000002000     4 OBJECT  GLOBAL DEFAULT   16 _IO_stdin_used\n    28: 0000000000004020     0 NOTYPE  GLOBAL DEFAULT   26 _end\n    29: 0000000000001050    34 FUNC    GLOBAL DEFAULT   14 _start\n    30: 0000000000004018     0 NOTYPE  GLOBAL DEFAULT   26 __bss_start\n    31: 0000000000001139    36 FUNC    GLOBAL DEFAULT   14 main\n    32: 0000000000004018     0 OBJECT  GLOBAL HIDDEN    25 __TMC_END__\n    33: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND _ITM_registerTMC[...]\n    34: 0000000000000000     0 FUNC    WEAK   DEFAULT  UND __cxa_finalize@G[...]\n    35: 0000000000001000     0 FUNC    GLOBAL HIDDEN    11 _init\n",
+      "stderr": "",
+      "shell_display": "/workspace/scratch/fe5385ca063a/verification-tools/rtk bypass /usr/bin/readelf -h -s /workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/variant_demo"
+    },
+    {
+      "label": "18-verify-results",
+      "argv": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "python3",
+        "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/verify-results.py"
+      ],
+      "cwd": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project",
+      "environment_overrides": {
+        "PATH": "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin:/workspace/scratch/fe5385ca063a/verification-tools:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/override:/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin:/opt/codex/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/agent/.local/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/fallback",
+        "TMPDIR": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/tmp"
+      },
+      "started_at_utc": "2026-11-16T07:57:21.775376+00:00",
+      "ended_at_utc": "2026-11-16T07:57:21.822761+00:00",
+      "duration_seconds": 0.04736975099876872,
+      "exit_code": 0,
+      "stdout_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/18-verify-results.stdout.log",
+      "stderr_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/18-verify-results.stderr.log",
+      "stdout": "{\n  \"status\": \"pass\",\n  \"backend\": \"host-unit\",\n  \"junit_file\": \"/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/ctest.zo0zMvE0/ctest.xml\",\n  \"selected\": 1,\n  \"passed\": 1,\n  \"failed\": 0,\n  \"skipped\": 0,\n  \"disabled\": 0,\n  \"not_run\": 0,\n  \"testcases\": [\n    {\n      \"name\": \"variant_smoke\",\n      \"status\": \"run\",\n      \"stdout\": \"build_variant=202\\n\"\n    }\n  ],\n  \"direct_program_stdout\": \"build_variant=202\\n\",\n  \"direct_program_exit_code\": 0,\n  \"preserved_file_count\": 24,\n  \"old_build_file_count\": 20,\n  \"original_files_unchanged\": true,\n  \"original_manifest\": \"/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/06-original-manifest.stdout.log\",\n  \"map_file\": \"/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/variant_demo.map\",\n  \"map_sha256\": \"ff5cbaec9ef27b807bb45f46518792459f69360182e353c6b840553b393e7571\",\n  \"map_evidence\": [\n    \"libc.so.6                     /usr/lib/gcc/x86_64-linux-gnu/14/../../../x86_64-linux-gnu/Scrt1.o (__libc_start_main@@GLIBC_2.34)\",\n    \"LOAD CMakeFiles/variant_demo.dir/main.c.o\",\n    \".text           0x0000000000001050      0x10d\",\n    \" .text          0x0000000000001139       0x24 CMakeFiles/variant_demo.dir/main.c.o\",\n    \"                0x0000000000001139                main\",\n    \" .rodata        0x0000000000002004       0x12 CMakeFiles/variant_demo.dir/main.c.o\",\n    \" .eh_frame      0x00000000000020d0       0x20 CMakeFiles/variant_demo.dir/main.c.o\",\n    \"                0x00000000000020f4        0x0 CMakeFiles/variant_demo.dir/main.c.o\",\n    \".data           0x0000000000004008       0x10\",\n    \" .data          0x0000000000004018        0x0 CMakeFiles/variant_demo.dir/main.c.o\",\n    \".bss            0x0000000000004018        0x8\",\n    \" .bss           0x0000000000004019        0x0 CMakeFiles/variant_demo.dir/main.c.o\",\n    \" .comment       0x000000000000001f       0x20 CMakeFiles/variant_demo.dir/main.c.o\",\n    \"                0x0000000000000000       0x30 CMakeFiles/variant_demo.dir/main.c.o\",\n    \" .debug_info    0x0000000000000000       0xaf CMakeFiles/variant_demo.dir/main.c.o\",\n    \" .debug_abbrev  0x0000000000000000       0x78 CMakeFiles/variant_demo.dir/main.c.o\",\n    \" .debug_line    0x0000000000000000       0x64 CMakeFiles/variant_demo.dir/main.c.o\",\n    \" .debug_str     0x0000000000000000       0x9e CMakeFiles/variant_demo.dir/main.c.o\",\n    \"                0x0000000000000000       0xea CMakeFiles/variant_demo.dir/main.c.o\"\n  ],\n  \"artifact_sha256\": \"c8199de7db21e32c56cc8c83c31931262f732bb15302f863790022228a47506a\"\n}\n",
+      "stderr": "",
+      "shell_display": "/workspace/scratch/fe5385ca063a/verification-tools/rtk bypass python3 /workspace/scratch/fe5385ca063a/round3-cmake-consumer/verify-results.py"
+    },
+    {
+      "label": "19-finalize",
+      "argv": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "python3",
+        "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/finalize-response.py"
+      ],
+      "cwd": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project",
+      "environment_overrides": {
+        "PATH": "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin:/workspace/scratch/fe5385ca063a/verification-tools:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/override:/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin:/opt/codex/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/agent/.local/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/fallback",
+        "TMPDIR": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/tmp"
+      },
+      "started_at_utc": "2026-11-16T07:59:05.388381+00:00",
+      "ended_at_utc": "2026-11-16T07:59:05.447084+00:00",
+      "duration_seconds": 0.058685394000349334,
+      "exit_code": 0,
+      "stdout_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/19-finalize.stdout.log",
+      "stderr_file": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/19-finalize.stderr.log",
+      "stdout": "{\n  \"status\": \"pass\",\n  \"consumer_response\": \"/workspace/scratch/fe5385ca063a/round3-cmake-consumer/consumer-response.json\",\n  \"artifact\": \"/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/variant_demo\",\n  \"artifact_sha256\": \"c8199de7db21e32c56cc8c83c31931262f732bb15302f863790022228a47506a\",\n  \"junit\": \"/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/ctest.zo0zMvE0/ctest.xml\",\n  \"recorded_commands_before_finalization\": 18,\n  \"preserved_files\": 24\n}\n",
+      "stderr": ""
+    }
+  ],
+  "deliverables": [
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/variant_demo",
+      "purpose": "本次 release-b / Debug 可执行程序，路径来自 CMake File API",
+      "size_bytes": 17256,
+      "sha256": "c8199de7db21e32c56cc8c83c31931262f732bb15302f863790022228a47506a"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/ctest.zo0zMvE0/ctest.xml",
+      "purpose": "全新 CTest JUnit：1/1 用例实际执行并通过",
+      "size_bytes": 354,
+      "sha256": "b89c1f7f76c7ced0c8831a7172c1bcd299b13df62a237d4fa90301c0ab7763fc"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/variant_demo.map",
+      "purpose": "本次链接 map",
+      "size_bytes": 20495,
+      "sha256": "ff5cbaec9ef27b807bb45f46518792459f69360182e353c6b840553b393e7571"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/BUILD-RESULT.md",
+      "purpose": "选择、实际结果、证据位置与限制的中文说明",
+      "size_bytes": 4136,
+      "sha256": "76428ed55e455c7fc26ae8ab3f82a242f49730e8293430b73bae1b091efbe1ab"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/build-identity.json",
+      "purpose": "新构建身份与产物来源",
+      "size_bytes": 6236,
+      "sha256": "ca81a95235104c70bab7abc298765fe148183662cf11be11726fd967debfbfa0"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/verified-results.json",
+      "purpose": "JUnit、精确输出、原文件完整性及 map 的验证结果",
+      "size_bytes": 2567,
+      "sha256": "6d6fd9c656e6c9dad3dc47fc9a81d9c44c397f75ff4ab12483e66ef70b5cdb8d"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/compile_commands.json",
+      "purpose": "实际编译命令：BUILD_VARIANT=202、-g",
+      "size_bytes": 403,
+      "sha256": "c1c8ce0a5e867ba473b737be45be331b4418b5ddfabb4c6c9f8f928a9dfaa008"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/CMakeCache.txt",
+      "purpose": "新配置 cache",
+      "size_bytes": 13334,
+      "sha256": "5f8d5b6b27ec6daf7cede1bf0077abbe03fa6864bb494900cfbc2fc6325bdbbd"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/CMakeFiles/CMakeConfigureLog.yaml",
+      "purpose": "本次 CMake 配置原始日志",
+      "size_bytes": 31719,
+      "sha256": "6e149753fe56516d8253e8fa8314b042ca14abc6af7f3826ba868aa0623b6f5c"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/.ninja_log",
+      "purpose": "本次 Ninja 原始构建日志",
+      "size_bytes": 150,
+      "sha256": "aa7e492dd76e11224d8b7ebead8f99876c74a754dd4e227d3e9bd380d96bece6"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/project/out/release-b-debug/Testing/Temporary/LastTest.log",
+      "purpose": "本次 CTest 原始测试日志",
+      "size_bytes": 823,
+      "sha256": "fef14927646edd7ba7c120e701eb1de8398afed00de96373a26e5a8cf22081eb"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/06-original-manifest.stdout.log",
+      "purpose": "旧构建及源码/toolchain 的初始哈希、大小、模式与 mtime",
+      "size_bytes": 5067,
+      "sha256": "488a6da3896c64b96c1668f2705626ae76d766958c7808c992182aded6af01cb"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/bootstrap-commands.json",
+      "purpose": "正式日志记录器启用前的实际命令和已观测结果，包括入口失败",
+      "size_bytes": 9594,
+      "sha256": "7f5b10b65f30ec422040e83c3b9f5228323bcb7ab56e4ca344dddf88ea070a84"
+    }
+  ],
+  "raw_log_inventory": [
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/01-project-inputs.json",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 2000,
+      "sha256": "00c28e9b54a9ad456e566a355965515c8fb2d6f34f3f51cd04a96834571ed3ad"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/01-project-inputs.stderr.log",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/01-project-inputs.stdout.log",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 553,
+      "sha256": "29f78c94095f0e8c8dc1e24847302a74401458a7a77434f947c24e74bb135005"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/02-existing-files.json",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 2183,
+      "sha256": "e0cec86caeadf9382de7a5992aee2fe7c6f75bd472d228131268af8e81d6bd64"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/02-existing-files.stderr.log",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/02-existing-files.stdout.log",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 798,
+      "sha256": "468b3742b30bb9116c119715317803fedfb669ec3b673bd97513bfac521e8bbe"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/03-tools.json",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 3061,
+      "sha256": "5bff1c65dffdb772ac4fd583969907735d2cee8d0932d75cdbd889288fa23fe0"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/03-tools.stderr.log",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/03-tools.stdout.log",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 1169,
+      "sha256": "25408197eb391f5c4afe351ec9cb48623e9602d590df5a1c8264a04ccfb36519"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/04-old-identity.json",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 6402,
+      "sha256": "6eabb1af13aaded4524d3dcdf5857d877f91737be716a556b5a46420e4ce1177"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/04-old-identity.stderr.log",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/04-old-identity.stdout.log",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 4592,
+      "sha256": "414ca2a07d4416c42188cbfa25b9dddb726a722d7055fed11e9d249371ccf6d3"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/05-old-cache.json",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 2698,
+      "sha256": "a433959a83610a3986f185541493ddaa5431434f6ae33c012921125776240b1d"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/05-old-cache.stderr.log",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/05-old-cache.stdout.log",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 1191,
+      "sha256": "5d67e15665abf5a257d481ad78870137fb0b9be8a16d81c9fcfbc06cb44b699f"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/06-original-manifest.json",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 7342,
+      "sha256": "fb8373b359ea8e621bfc83b49be70fade60bc59eeae3efd09cede2e8c292a553"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/06-original-manifest.stderr.log",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/06-original-manifest.stdout.log",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 5067,
+      "sha256": "488a6da3896c64b96c1668f2705626ae76d766958c7808c992182aded6af01cb"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/07-compiler-platform.json",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 2579,
+      "sha256": "02b2c2a58528287c87354a66be2d5713072ad4033953cb43e64cde9f858e9cf5"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/07-compiler-platform.stderr.log",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/07-compiler-platform.stdout.log",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 849,
+      "sha256": "4e9cc4a7cd6e3da43e5abd4ab28846c50ed2549e6a55e1c12fc7e8bd857f0763"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/08-configure.json",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 2384,
+      "sha256": "077130874a7ab5e651584cc2882f0dc8ae6794be74ef4db59811d76bebedb5de"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/08-configure.stderr.log",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/08-configure.stdout.log",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 418,
+      "sha256": "be67863322ddc37340c82bef4724aeb1a356a04e165088e11b97e64ea6e50554"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/09-build.json",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 2254,
+      "sha256": "ecaed6f8d913e95f98fb885aa0dc0cadaa4c12dfd03fc73a5ab185dee8e32e8d"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/09-build.stderr.log",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/09-build.stdout.log",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 702,
+      "sha256": "a597bde67ab311891be1d25e0628edf1d8c94149285da043faee35b1b5dcbd20"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/10-build-identity.json",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 8131,
+      "sha256": "6ff8fdc2e03ed3431aa296f5b8a76b3ea7111866e0bed957cabd09985d566363"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/10-build-identity.stderr.log",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/10-build-identity.stdout.log",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 6236,
+      "sha256": "ca81a95235104c70bab7abc298765fe148183662cf11be11726fd967debfbfa0"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/11-ctest-report-directory.json",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 1517,
+      "sha256": "131579c53a8a5c40c9abece5892a88d327eb19631ced957d6351d2082e367f6c"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/11-ctest-report-directory.stderr.log",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/11-ctest-report-directory.stdout.log",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 78,
+      "sha256": "0e5f05acbd352f17563a9c732f955419825ece4c1ea398b53410326590c03cfd"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/12-ctest.json",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 2096,
+      "sha256": "c5e6e727ee3e90edd5f67cf94371f65c40c982ef6a6793b8855e30d35fb36793"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/12-ctest.stderr.log",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/12-ctest.stdout.log",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 394,
+      "sha256": "20b8b0108456b3e19939253c0cb92702c3e64e333f5b103b4d68751593e3fca0"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/13-program.json",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 1405,
+      "sha256": "1847b9ecc24ba66396b86437b0185f48ed60fc7f0974b29cd315f44e6cf1a4e6"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/13-program.stderr.log",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/13-program.stdout.log",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 18,
+      "sha256": "5f6f78014e9fd77efca9f837840d29f72702652ea7eba90b0fec124f5a82a8bd"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/14-artifact-file.json",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 1747,
+      "sha256": "ff0f2b8aa79b67e261755f09bcd9b64d076301c268be04521a8415227f3ac9f4"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/14-artifact-file.stderr.log",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/14-artifact-file.stdout.log",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 321,
+      "sha256": "333d04d49fb7f3fa768f1b64876be248ca44186f7d5c7f4cfa40b420bb36b21d"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/15-artifact-size.json",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 2755,
+      "sha256": "6a21d9ede43a7b392882c7d7d02d3ebe8598d068b799310b91cd5889bbcd7960"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/15-artifact-size.stderr.log",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/15-artifact-size.stdout.log",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 1282,
+      "sha256": "739fd47b63fd79dee46336ce6d9d6e4eb15439cc48e9d79a6790b45d6faf22a5"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/16-artifact-sections.json",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 6096,
+      "sha256": "1b8edefbee32beea63e2126698fd71749230153134970053008887ce765bb9ab"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/16-artifact-sections.stderr.log",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/16-artifact-sections.stdout.log",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 4574,
+      "sha256": "f9558cdb1d7521549bf000241f0f4504a197fc1fb669d935dc36ab8ce4819a51"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/17-artifact-elf-symbols.json",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 5874,
+      "sha256": "1555db1c38a0bd1911624dd09547374a396994ef91a8b7d570aee2ad998be616"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/17-artifact-elf-symbols.stderr.log",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/17-artifact-elf-symbols.stdout.log",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 4336,
+      "sha256": "35041d9265eeaadcc23b06aed350b0b677cdc999f4ce5f970bed6ecf42ea13fc"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/18-verify-results.json",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 4121,
+      "sha256": "dce7518fa7bd8d771f8ab8a5f84b0b6a0ec436d7eb939b56195240ea6e114cec"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/18-verify-results.stderr.log",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/18-verify-results.stdout.log",
+      "purpose": "逐命令原始日志或命令元数据",
+      "size_bytes": 2567,
+      "sha256": "6d6fd9c656e6c9dad3dc47fc9a81d9c44c397f75ff4ab12483e66ef70b5cdb8d"
+    }
+  ],
+  "finalization_command_record": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/19-finalize.json",
+  "limitations": [
+    "仅验证本机 host-unit 构建与执行；不代表板端、模拟器或远程执行。",
+    "没有调用付费模型或原生 CLI/Cloud 作业，没有模型对照测量。",
+    "现有 smoke 断言只匹配任意数值；已额外核对本次 JUnit 和实际程序输出精确为 build_variant=202。",
+    "最初四条 bootstrap 命令仅有 executor 合并输出和 wall_time_seconds，未获得分别的 stdout/stderr 或 UTC 起止时间；正式记录器后的命令全部有分开原始流、UTC 时间和退出码。",
+    "首次 rtk 不在 PATH，入口调用退出 127；后续使用任务指定的真实 RTK 绝对路径。",
+    "耗时是单次观测，不构成性能基准；ELF 文件或段大小不代表板端内存预算。"
+  ],
+  "finalization": {
+    "status": "complete",
+    "record": "/workspace/scratch/fe5385ca063a/round3-cmake-consumer/evidence/19-finalize.json",
+    "ended_at_utc": "2026-11-16T07:59:05.447084+00:00",
+    "exit_code": 0
+  }
+}

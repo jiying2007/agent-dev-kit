@@ -1,0 +1,312 @@
+{
+  "schema": "round3-independent-final-packaging-review/v1",
+  "reviewer_id": "round3-independent-reviewer",
+  "agent_task": "/root/round3_independent_review",
+  "role": "independent read-only final packaging reviewer",
+  "review_started_at": "2026-11-16T08:28:57.819682+00:00",
+  "reviewed_at": "2026-11-16T08:44:18.133224+00:00",
+  "scope": "evidence-packaging",
+  "verdict": "pass",
+  "open_counts": {
+    "blocker": 0,
+    "major": 0,
+    "minor": 0
+  },
+  "open_findings": [],
+  "source": {
+    "head_commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+    "head_tree": "617bdcb20e5fb629c1ddd175e29373b1b86aa0c5",
+    "canonical_patch_sha256": "d82a42ee4620c923ebd4eaecae514f94551a733b4e9627f764a051efab1ab6c4",
+    "source_verdict_reviewed_at": "2026-11-16T08:23:33.804040+00:00",
+    "source_verdicts": {
+      "spec": "pass",
+      "quality": "pass"
+    },
+    "source_verdict_unchanged": true
+  },
+  "final_typed_record": {
+    "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/review-evidence.json",
+    "bytes": 16486,
+    "sha256": "7a21c4856fefcdeec13ec6d5f4fdd4e1d0c1858db0672594fcdc3ddbeac0abad"
+  },
+  "final_archive_proof": {
+    "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/packaging-archive-fixes.json",
+    "bytes": 5257904,
+    "sha256": "3de888c3ac924db98c32feb08a699ec90091fc420b612f17c5dc3224aab24eab"
+  },
+  "final_consumer_bundle": {
+    "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/consumer-materials.json",
+    "bytes": 467789,
+    "sha256": "ff825bb4b150ff2c9d5aadb3e710b606b2d62cb4584411cb21de027e0d53b9fe"
+  },
+  "final_retained_map": {
+    "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/retained-files.json",
+    "bytes": 23735,
+    "sha256": "b1db208bca147660ecd47dc013a10ddf2ff324b6c58485c5c50a449559401132"
+  },
+  "additional_reviewed_packaging_source": {
+    "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/.gitattributes",
+    "bytes": 305,
+    "sha256": "1c5288f1aa3575dd4ce8f5c110e0fa48fb6ebc8d32863e840e33b5440c36d594",
+    "original_sha256": "91c37a6e96bb1c968597ef9b306db52ca282ea7cbbdaf13b8743c4162ad1ed03",
+    "append_only_diff": "# Preserve the literal whitespace in this retained failed regression stderr.\ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log -whitespace\n",
+    "scope": "Only literal historical raw-log whitespace preservation; separately reviewed after original33-source freeze."
+  },
+  "superseded_as_final_but_retained_history": {
+    "path": "/workspace/scratch/fe5385ca063a/round3-independent-packaging-review.json",
+    "filename": "round3-independent-packaging-review.json",
+    "bytes": 11103,
+    "sha256": "1bae1238e2b35c39f81c47cf653ca18f14f99ec5813492caa404d3775b483608"
+  },
+  "findings": [
+    {
+      "id": "r3-packaging-01",
+      "display_id": "R3-PACKAGING-01",
+      "severity": "minor",
+      "scope": "evidence-packaging",
+      "status": "resolved",
+      "disposition": "fixed",
+      "counterexample": "原94项consumer bundle与两份保留map均没有consumer-response直接引用的9个实际文件：3个File API回复、CMakeSystem/CMakeCCompiler、bootstrap入口失败日志、19-finalize的JSON/stdout/stderr。",
+      "resolution": "仅追加这9个已有文件形成103项bundle，逐项解码后与原始文件完整字节/大小/SHA一致；原94项前缀不变，按原序列化精确重构旧bundle。typed仅更新bundle摘要并追加completion引用，生产validator再次通过。",
+      "original_bundle_sha256": "37d9f73212b3cf9c234a80052ee66f9f475b398feb41331a2ff84ab0e9bb7937",
+      "resolved_bundle_sha256": "ff825bb4b150ff2c9d5aadb3e710b606b2d62cb4584411cb21de027e0d53b9fe",
+      "resolved_record_sha256": "48e8612510504645bce08f877a9a91dcaeb7132365238aaeb5ad3569437616b4",
+      "completion": {
+        "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/consumer-materials-completion.json",
+        "bytes": 23399,
+        "sha256": "6f5fd7fed33365fb36f24f05411b168108c0a6c463a2081c01a949c3e14ab678"
+      }
+    }
+  ],
+  "closing_checks": {
+    "retained_map_rows": 80,
+    "direct_byte_identical_rows": 79,
+    "explicitly_encoded_original_rows": 1,
+    "independent_retained_rows": 38,
+    "consumer_bundle_files": 103,
+    "consumer_utf8_files": 97,
+    "consumer_base64_files": 6,
+    "consumer_direct_references_missing": 0,
+    "original94_bundle_exactly_reconstructable": true,
+    "typed_sources": 34,
+    "typed_evidence": 30,
+    "typed_total_refs": 64,
+    "final_increment_checks": 308,
+    "final_increment_errors": 0,
+    "all33_frozen_source_files_unchanged": true,
+    "original_policy_validator_and_budget_sources_unchanged": true,
+    "unexpected_tracked_changes_outside_change_evidence_and_exact_attribute": []
+  },
+  "original_synthetic_observation": {
+    "bytes": 4478,
+    "sha256": "16cba4864556a7cbb5aca19fea375bc69727700d311b8cf3b73fd60b14900c2c",
+    "container": {
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/changes/20261116-skill-failure-paths/evidence/independent/stage1/scan-original-failure.json",
+      "bytes": 6527,
+      "sha256": "47cfa21f7ad710eecf973d20c121be04fd96bd8c5fdac4f811e0528b5bb734d9"
+    }
+  },
+  "original_oversized_proof": {
+    "bytes": 29728971,
+    "sha256": "9b87dcbf217788fec9adfc6f574a07595238f1f2949c982a8c683f7de7c66ebc",
+    "exactly_reconstructed": true
+  },
+  "gate_observations": [
+    {
+      "name": "round3-packaging-format-initial",
+      "receipt_sha256": "1361201ea149500f4065f784c5d6bec007d89be3b68827276aa0c00c874bab08",
+      "receipt_bytes": 6660430,
+      "command": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "git",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "started_at": "2026-11-16T08:36:25.878724+00:00",
+      "finished_at": "2026-11-16T08:36:26.051917+00:00",
+      "exit_code": 2,
+      "timed_out": false,
+      "head_before": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "head_after": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "stdout_sha256": "a308891983cb9f1351f4bda4d3450667e3acd07536cecf4243827087a2204581",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": null,
+      "warning_count": 0
+    },
+    {
+      "name": "round3-packaging-format-final",
+      "receipt_sha256": "bc148346bc60e3758bbc080ad8f6527a9b821a9a434f5e191d565e70bcd167f1",
+      "receipt_bytes": 6661286,
+      "command": [
+        "bash",
+        "scripts/check-format.sh"
+      ],
+      "started_at": "2026-11-16T08:36:43.618306+00:00",
+      "finished_at": "2026-11-16T08:36:44.229732+00:00",
+      "exit_code": 0,
+      "timed_out": false,
+      "head_before": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "head_after": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "stdout_sha256": "e9164f6e26a94c516e08caffa2e6a611fb00b5ea8833ac84da6e8744a75c4a8d",
+      "stderr_sha256": "ba241a80ee282a69548178ca731ea45dd3def86ad87431abfc4ae7d5be4b41aa",
+      "stdout": null,
+      "warning_count": 34
+    },
+    {
+      "name": "round3-packaging-security-final",
+      "receipt_sha256": "fe1f29daa2a4cef8c864f5e02d1827d537311ecab2d85eb08b2aae317f055aab",
+      "receipt_bytes": 6661306,
+      "command": [
+        "bash",
+        "scripts/devkit.sh",
+        "security",
+        "check"
+      ],
+      "started_at": "2026-11-16T08:36:43.644816+00:00",
+      "finished_at": "2026-11-16T08:36:45.305490+00:00",
+      "exit_code": 1,
+      "timed_out": false,
+      "head_before": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "head_after": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "stdout_sha256": "eb7b399a1af106d88f78d8443ae92ca948cdb69b00d030578acc91b877658597",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "{\n  \"schema_version\": 1,\n  \"status\": \"fail\",\n  \"failures\": [\n    \"credential-like content: docs/changes/20261116-skill-failure-paths/evidence/independent/stage1/scan-original-failure.json\"\n  ],\n  \"warnings\": [],\n  \"inventory_source\": \"git\",\n  \"files_scanned\": 2575,\n  \"scan_limit\": 50000\n}\n",
+      "warning_count": 0
+    },
+    {
+      "name": "round3-packaging-security-corrected",
+      "receipt_sha256": "8401f5fba17a7e93cb782c17f76d368cbd3ce44c9344c5fe717b117fc5c35ff2",
+      "receipt_bytes": 6661307,
+      "command": [
+        "bash",
+        "scripts/devkit.sh",
+        "security",
+        "check"
+      ],
+      "started_at": "2026-11-16T08:38:33.764073+00:00",
+      "finished_at": "2026-11-16T08:38:34.880342+00:00",
+      "exit_code": 0,
+      "timed_out": false,
+      "head_before": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "head_after": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "stdout_sha256": "e16698754caff73bf37fe5da4d74629238afdbe6fa16779fd8a46d90b56c9200",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "{\n  \"schema_version\": 1,\n  \"status\": \"pass\",\n  \"failures\": [],\n  \"warnings\": [],\n  \"inventory_source\": \"git\",\n  \"files_scanned\": 2575,\n  \"scan_limit\": 50000\n}\n",
+      "warning_count": 0
+    }
+  ],
+  "independent_final_validator": {
+    "call": "agent_dev_kit.review_evidence.validate_review",
+    "started_at": "2026-11-16T08:42:44.617126+00:00",
+    "completed_at": "2026-11-16T08:42:44.632949+00:00",
+    "duration_seconds": 0.015826299000764266,
+    "now_override": null,
+    "stdout": "",
+    "stderr": "",
+    "status": "pass",
+    "record_sha256": "7a21c4856fefcdeec13ec6d5f4fdd4e1d0c1858db0672594fcdc3ddbeac0abad"
+  },
+  "history": [
+    {
+      "event": "Initial typed nonempty-reference rejection",
+      "record_sha256": "7c4cae3f73a20b785ea115d61b9ba68e71ef8a9392678b245e1ad03a322b0bfb",
+      "resolution": "Only redundant empty-stderr direct reference was replaced; actual empty file, receipt and map remain."
+    },
+    {
+      "event": "R3-PACKAGING-01 missing nine direct consumer files",
+      "disposition": "fixed",
+      "resolution": "Append exactly nine existing files;103-member bundle, original94-prefix unchanged; old typed/validation retained."
+    },
+    {
+      "event": "Staged whitespace rejection",
+      "observed_exit_code": 2,
+      "resolution": "Single literal raw-log path receives -whitespace;43291 raw bytes and53 whitespace-only lines preserved;check-format exit0 with existing script warnings retained."
+    },
+    {
+      "event": "Fixed synthetic fixture flagged by security scanner",
+      "observed_exit_code": 1,
+      "resolution": "Confirmed fixed independent fixture provenance, preserve exact4478 bytes via existing base64 bundle representation and dual map identity;security exit0, same2575 scanned files."
+    },
+    {
+      "event": "29.73MB proof rejected by original16MiB reference limit",
+      "resolution": "Only four receipt representations compressed with standard gzip+base64;decompressed originals and exact29,728,971-byte former proof independently reproduced;final5,257,904-byte proof accepted. No limit changed."
+    }
+  ],
+  "semantic_assessment": "包装提供可恢复的原始失败与成功观察，明确区分原始字节和容器字节。source审查与后续包装时间、33路径冻结与额外单路径格式属性、行为验证与存储编码均有独立身份。当前typed映射保留正确的独立reviewer、原两个source pass、三个source历史finding和全部原限制。R3-PACKAGING-01关闭，当前包装可用于后续提交与既有受保护流程。",
+  "limits": [
+    "本报告是实际晚于08:23:33 source verdict的最终包装补充审查。08:36:27包装报告保留为较早快照；最终当前身份以本报告为准，历史时间和原始失败均不改写。",
+    "source Spec/Quality仍绑定原d87e21/617bd/33路径及canonical d82a42 patch；新增.gitattributes两行是本报告单独读审并绑定的包装属性，不能声称它包含于较早33路径source full执行。",
+    "格式属性只针对已指明的一个历史原始日志保留空白；没有新增通配、没有改gate实现、扫描规则、review validator、预算或任何Skill。",
+    "base64归档只针对已证明来自本审查固定fixture的合成负例；原scratch观察未变，原始/容器双身份明确。此处没有对真实凭据或一般扫描拒绝作豁免判断。",
+    "gzip+base64仅改变四份历史receipt的存储表示，完整解压身份与过大初版可逆重构均核实；16MiB与64引用原限制未改。",
+    "没有重跑full、消费者、方法语义或模型/设备试验。实际format/security gate由主线程运行，本审查读取并核对其原始回执/日志；typed validator在本审查中实际独立调用。",
+    "后续最终提交tree、受保护PR/main CI、正式release和Root source-only接入仍须以其真实回执确认；本地包装pass不预先授权产品发布或运行资格。",
+    "原source-only、native unavailable/not-run、单次host消费者非模型A/B、无RTOS/HIL/现场/M5/token/费用/性能新结论等边界继续成立。",
+    "仅生成round3-independent-packaging-* scratch报告，无仓库、index或refs写入。归档清单包含实际已生成材料；新增普通文本不重抄合成负例赋值。"
+  ],
+  "inspection_artifacts": [
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-packaging-mechanical-checks.json",
+      "filename": "round3-independent-packaging-mechanical-checks.json",
+      "bytes": 201197,
+      "sha256": "cfabcd7a341b98dcb557142133be0153cfb565729a6dc1711e93ae922946c72c"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-packaging-final-checks.json",
+      "filename": "round3-independent-packaging-final-checks.json",
+      "bytes": 133303,
+      "sha256": "86356c5784971f935d2bcabf8f084517414bebcc2ce4618a387ca17b98360a26"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-packaging-validator-receipt.json",
+      "filename": "round3-independent-packaging-validator-receipt.json",
+      "bytes": 18969,
+      "sha256": "54a00a3f7d7dea4d58f3afd3128aa97369720bbb5cf3619ebd270423d5949847"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-packaging-review.json",
+      "filename": "round3-independent-packaging-review.json",
+      "bytes": 11103,
+      "sha256": "1bae1238e2b35c39f81c47cf653ca18f14f99ec5813492caa404d3775b483608"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-packaging-review.md",
+      "filename": "round3-independent-packaging-review.md",
+      "bytes": 3949,
+      "sha256": "ee54c1d68a2a374243ecf6c31d625651814c26ffd5e2ae58b624210404a1a729"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-packaging-archive-manifest.json",
+      "filename": "round3-independent-packaging-archive-manifest.json",
+      "bytes": 1702,
+      "sha256": "8094ece0100b8a8c0c034650aaf53396c0381a2fb87d21c409d480d93d500596"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-packaging-whitespace-observation.json",
+      "filename": "round3-independent-packaging-whitespace-observation.json",
+      "bytes": 8581,
+      "sha256": "e3acd7c159769bc5a3b60f86f13c9aea186332251d777115576a9d3cc6bf64d9"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-packaging-fixture-provenance.json",
+      "filename": "round3-independent-packaging-fixture-provenance.json",
+      "bytes": 13890,
+      "sha256": "cf89e82d44aa24bfda460d1284cdd73dd235192d390c9dd6a9527c0edb9cc3e5"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-packaging-archive-increment-checks.json",
+      "filename": "round3-independent-packaging-archive-increment-checks.json",
+      "bytes": 54895,
+      "sha256": "3fdac41547d7cb2e7ad9b380027a08e0b066898e674db36cb72a0e2dc01e6ca8"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-packaging-validator-final.json",
+      "filename": "round3-independent-packaging-validator-final.json",
+      "bytes": 18084,
+      "sha256": "72b32ecfa09fa97087bb01dc91f39e836e1b04a421e4d705bef065f88b64dbcd"
+    }
+  ],
+  "archive_instructions": "Preserve all files in round3-independent-packaging-archive-final.json byte-for-byte. The final report supersedes the08:36:27 packaging report only as current packaging verdict; preserve that earlier report as history. Existing source verdict record timestamps remain unchanged."
+}

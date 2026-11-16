@@ -1,2 +1,4 @@
 # Retained original Git patches preserve exact context/trailing bytes as evidence.
 docs/changes/**/evidence/original.patch -whitespace
+# Preserve the literal whitespace in this retained failed regression stderr.
+docs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log -whitespace

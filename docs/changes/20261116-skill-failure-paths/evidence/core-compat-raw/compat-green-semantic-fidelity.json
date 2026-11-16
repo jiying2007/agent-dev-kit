@@ -1,0 +1,239 @@
+{
+  "label": "compat-green-semantic-fidelity",
+  "command_argv": [
+    "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+    "run",
+    "env",
+    "ADK_PYTHON_BIN=/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "-m",
+    "unittest",
+    "tests.test_skill_contract_methods",
+    "tests.test_skill_command_examples.InterfaceVersionExampleTests",
+    "tests.test_skill_content_contract.SkillContentContractTests.test_exported_parallel_worker_package_is_self_contained",
+    "tests.test_skill_quality_methods.SkillQualityMethodsTests.test_spec_to_code_is_bidirectional_and_unchecked_is_not_success",
+    "-v"
+  ],
+  "cwd": "/workspace/scratch/fe5385ca063a/agent-dev-kit",
+  "environment_overrides": {
+    "PYTHONPATH": "/workspace/scratch/fe5385ca063a/agent-dev-kit/src"
+  },
+  "head": "6183982e1f5e4a1bb09727009a809514e160be64",
+  "started_at_utc": "2026-11-16T08:09:31.065007+00:00",
+  "finished_at_utc": "2026-11-16T08:09:31.682392+00:00",
+  "duration_seconds": 0.6186377690028166,
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "test_blank_evidence_never_starts_with_a_pass (tests.test_skill_contract_methods.ExportedReviewChecklistTests.test_blank_evidence_never_starts_with_a_pass) ... ok\ntest_closed_subschema_control_rejects_legitimate_extension (tests.test_skill_contract_methods.SchemaClosureExampleTests.test_closed_subschema_control_rejects_legitimate_extension) ... ok\ntest_old_dialect_ignores_composition_closure_control (tests.test_skill_contract_methods.SchemaClosureExampleTests.test_old_dialect_ignores_composition_closure_control) ... ok\ntest_published_composed_closure_accepts_only_contract_inputs (tests.test_skill_contract_methods.SchemaClosureExampleTests.test_published_composed_closure_accepts_only_contract_inputs) ... ok\ntest_published_legacy_flattening_accepts_only_contract_inputs (tests.test_skill_contract_methods.SchemaClosureExampleTests.test_published_legacy_flattening_accepts_only_contract_inputs) ... ok\ntest_same_level_closure_accepts_only_contract_inputs (tests.test_skill_contract_methods.SchemaClosureExampleTests.test_same_level_closure_accepts_only_contract_inputs) ... ok\ntest_compiled_consumer_requires_minor_21_and_async_cancel (tests.test_skill_command_examples.InterfaceVersionExampleTests.test_compiled_consumer_requires_minor_21_and_async_cancel) ... ok\ntest_exported_parallel_worker_package_is_self_contained (tests.test_skill_content_contract.SkillContentContractTests.test_exported_parallel_worker_package_is_self_contained)\nResolve the published default from actual packages without ADK source aids. ... ok\ntest_spec_to_code_is_bidirectional_and_unchecked_is_not_success (tests.test_skill_quality_methods.SkillQualityMethodsTests.test_spec_to_code_is_bidirectional_and_unchecked_is_not_success) ... ok\n\n----------------------------------------------------------------------\nRan 9 tests in 0.360s\n\nOK\n",
+  "python": "3.12.14",
+  "jsonschema": "4.26.0",
+  "source_before": [
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/audit.md",
+      "bytes": 4447,
+      "sha256": "17c9f19aaa0a16eccbd042806b3f5a752908a40693f251e375107e0d405084a4",
+      "git_blob_sha1": "83d2e8d9a592be392565eaef71305372a60773bf"
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/design.md",
+      "bytes": 3965,
+      "sha256": "0bda596db331511e9487734860ee56236ea228a28c5ce37d3d9af2e7a053cf8b",
+      "git_blob_sha1": "0a4f6cd6958acac2455c62a2067c3f48b723ece3"
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/negative-results.md",
+      "bytes": 5132,
+      "sha256": "3ece7341571cead444d4f2d60d7ed86bce0b13daf58bf2a43d2ef27d95ae64aa",
+      "git_blob_sha1": "aa22ead2bc8158338faceef630688f08d1ef713a"
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/requirements.md",
+      "bytes": 5489,
+      "sha256": "517734b8479b0df46a571ee7f1d0b806b4a61dc60a7ad53c3a0bf46e2eb0d033",
+      "git_blob_sha1": "58166d1353e2f0d2ed4b38850e14b9e0bdb30707"
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/source-review.md",
+      "bytes": 5922,
+      "sha256": "782dabec15e8a196036afffe44a984f4b8ca3ef7ed45409071ada02d05f54ca8",
+      "git_blob_sha1": "6e2b4bb60a9981877f64792e0f76c398453a088b"
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/tasks.md",
+      "bytes": 2042,
+      "sha256": "210350eaa74224193d111000a254cd1cf1bc4f659fb0e386717abd39b18240bb",
+      "git_blob_sha1": "1007913dadff3a4e0a4be8b29adb8328e2d62562"
+    },
+    {
+      "path": "manifests/profile_context_ratchets.json",
+      "bytes": 5651,
+      "sha256": "f283524ecff14179cad628735bef9e20580da00c2505687ecca9530da3737bff",
+      "git_blob_sha1": "9252e18651a29882438d61bf7b7c848eeb38f075"
+    },
+    {
+      "path": "skills/adk-interface-contract-design/SKILL.md",
+      "bytes": 4317,
+      "sha256": "72045b42abf0abdcd54bab935241db7723c10dde2432e1d5ddb6882be3963cfe",
+      "git_blob_sha1": "a9c3bf50f753ca02f28994bd05731cb55eec6d39"
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/design-quality-methods.md",
+      "bytes": 1598,
+      "sha256": "4bfbfa3df2196616db1f491531b5bc5328afae24a2e54f4739c489d83ddcdd8b",
+      "git_blob_sha1": "720070607935eea1aff0eddb779b9702e8c12428"
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/details.md",
+      "bytes": 2611,
+      "sha256": "e182fd8bc0edd58556700a0b4ce6d435a705128c6bf37b6ec2b13c624826a593",
+      "git_blob_sha1": "a617bf5c439c4cd3f808f0d904ffb4a810ea340f"
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/lifecycle-operation-contract.md",
+      "bytes": 2393,
+      "sha256": "22532bfe0e89fac9596023f0a2b708d46b98722d4acf6adc90bf833e0f82db71",
+      "git_blob_sha1": "dac285c357b87bda2cc468d64fc38d931330aa51"
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/spec-code-bidirectional.md",
+      "bytes": 2238,
+      "sha256": "cfb70c950ca482ce2a4136aa26fe2a3a60c21349949188192a5f0f13450923ce",
+      "git_blob_sha1": "12b0ea0bec197ae0e9db6d4c59d93772efdf29e9"
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/tool-effect-contract.md",
+      "bytes": 2845,
+      "sha256": "428be87b2acb671e01581ae83af46dfb0e87c8cdb1d24d11e18a231244b67ea4",
+      "git_blob_sha1": "64865b9122ebf281971818bdea4f6446a1758ff0"
+    },
+    {
+      "path": "skills/adk-parallel-agent-governance/SKILL.md",
+      "bytes": 4292,
+      "sha256": "446a4a08ffd2d4dfc89bc9752dfea7000fe05818f490892308b08be312386c68",
+      "git_blob_sha1": "95c69872cbb2938040ecbec2c1492679d22a19fc"
+    },
+    {
+      "path": "skills/adk-parallel-agent-governance/references/parallel-worktree-task-package.md",
+      "bytes": 1716,
+      "sha256": "8b9ae9c13249cb1cc002e7bf090c1799fe83a2f625359ec4b79395dfaf56f3be",
+      "git_blob_sha1": "3431327dbbf22adc7db2f5ec3f6d1dd142b29f30"
+    },
+    {
+      "path": "skills/adk-parallel-agent-governance/references/subagent-review-checklist.md",
+      "bytes": 738,
+      "sha256": "9fc2748d504d975cd3550c4809f66c3e10fecd753650f8d649b2bda124072fa3",
+      "git_blob_sha1": "561939020cf66fc215d87105ea7e1b8383e3a659"
+    },
+    {
+      "path": "tests/test_skill_contract_methods.py",
+      "bytes": 6391,
+      "sha256": "b52841a26b065b6de8727d2ba36cac3fc1902b76856fd264fa453c75c51b0e47",
+      "git_blob_sha1": "5b68f9e31c2a924a4a5018ad3d2b91926ae72a5c"
+    }
+  ],
+  "source_after": [
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/audit.md",
+      "bytes": 4447,
+      "sha256": "17c9f19aaa0a16eccbd042806b3f5a752908a40693f251e375107e0d405084a4",
+      "git_blob_sha1": "83d2e8d9a592be392565eaef71305372a60773bf"
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/design.md",
+      "bytes": 3965,
+      "sha256": "0bda596db331511e9487734860ee56236ea228a28c5ce37d3d9af2e7a053cf8b",
+      "git_blob_sha1": "0a4f6cd6958acac2455c62a2067c3f48b723ece3"
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/negative-results.md",
+      "bytes": 5132,
+      "sha256": "3ece7341571cead444d4f2d60d7ed86bce0b13daf58bf2a43d2ef27d95ae64aa",
+      "git_blob_sha1": "aa22ead2bc8158338faceef630688f08d1ef713a"
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/requirements.md",
+      "bytes": 5489,
+      "sha256": "517734b8479b0df46a571ee7f1d0b806b4a61dc60a7ad53c3a0bf46e2eb0d033",
+      "git_blob_sha1": "58166d1353e2f0d2ed4b38850e14b9e0bdb30707"
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/source-review.md",
+      "bytes": 5922,
+      "sha256": "782dabec15e8a196036afffe44a984f4b8ca3ef7ed45409071ada02d05f54ca8",
+      "git_blob_sha1": "6e2b4bb60a9981877f64792e0f76c398453a088b"
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/tasks.md",
+      "bytes": 2042,
+      "sha256": "210350eaa74224193d111000a254cd1cf1bc4f659fb0e386717abd39b18240bb",
+      "git_blob_sha1": "1007913dadff3a4e0a4be8b29adb8328e2d62562"
+    },
+    {
+      "path": "manifests/profile_context_ratchets.json",
+      "bytes": 5651,
+      "sha256": "f283524ecff14179cad628735bef9e20580da00c2505687ecca9530da3737bff",
+      "git_blob_sha1": "9252e18651a29882438d61bf7b7c848eeb38f075"
+    },
+    {
+      "path": "skills/adk-interface-contract-design/SKILL.md",
+      "bytes": 4317,
+      "sha256": "72045b42abf0abdcd54bab935241db7723c10dde2432e1d5ddb6882be3963cfe",
+      "git_blob_sha1": "a9c3bf50f753ca02f28994bd05731cb55eec6d39"
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/design-quality-methods.md",
+      "bytes": 1598,
+      "sha256": "4bfbfa3df2196616db1f491531b5bc5328afae24a2e54f4739c489d83ddcdd8b",
+      "git_blob_sha1": "720070607935eea1aff0eddb779b9702e8c12428"
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/details.md",
+      "bytes": 2611,
+      "sha256": "e182fd8bc0edd58556700a0b4ce6d435a705128c6bf37b6ec2b13c624826a593",
+      "git_blob_sha1": "a617bf5c439c4cd3f808f0d904ffb4a810ea340f"
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/lifecycle-operation-contract.md",
+      "bytes": 2393,
+      "sha256": "22532bfe0e89fac9596023f0a2b708d46b98722d4acf6adc90bf833e0f82db71",
+      "git_blob_sha1": "dac285c357b87bda2cc468d64fc38d931330aa51"
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/spec-code-bidirectional.md",
+      "bytes": 2238,
+      "sha256": "cfb70c950ca482ce2a4136aa26fe2a3a60c21349949188192a5f0f13450923ce",
+      "git_blob_sha1": "12b0ea0bec197ae0e9db6d4c59d93772efdf29e9"
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/tool-effect-contract.md",
+      "bytes": 2845,
+      "sha256": "428be87b2acb671e01581ae83af46dfb0e87c8cdb1d24d11e18a231244b67ea4",
+      "git_blob_sha1": "64865b9122ebf281971818bdea4f6446a1758ff0"
+    },
+    {
+      "path": "skills/adk-parallel-agent-governance/SKILL.md",
+      "bytes": 4292,
+      "sha256": "446a4a08ffd2d4dfc89bc9752dfea7000fe05818f490892308b08be312386c68",
+      "git_blob_sha1": "95c69872cbb2938040ecbec2c1492679d22a19fc"
+    },
+    {
+      "path": "skills/adk-parallel-agent-governance/references/parallel-worktree-task-package.md",
+      "bytes": 1716,
+      "sha256": "8b9ae9c13249cb1cc002e7bf090c1799fe83a2f625359ec4b79395dfaf56f3be",
+      "git_blob_sha1": "3431327dbbf22adc7db2f5ec3f6d1dd142b29f30"
+    },
+    {
+      "path": "skills/adk-parallel-agent-governance/references/subagent-review-checklist.md",
+      "bytes": 738,
+      "sha256": "9fc2748d504d975cd3550c4809f66c3e10fecd753650f8d649b2bda124072fa3",
+      "git_blob_sha1": "561939020cf66fc215d87105ea7e1b8383e3a659"
+    },
+    {
+      "path": "tests/test_skill_contract_methods.py",
+      "bytes": 6391,
+      "sha256": "b52841a26b065b6de8727d2ba36cac3fc1902b76856fd264fa453c75c51b0e47",
+      "git_blob_sha1": "5b68f9e31c2a924a4a5018ad3d2b91926ae72a5c"
+    }
+  ],
+  "source_unchanged_during_command": true
+}

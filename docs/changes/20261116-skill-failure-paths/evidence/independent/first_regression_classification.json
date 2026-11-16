@@ -1,0 +1,438 @@
+{
+  "schema": "round3-independent-first-regression-failure-classification/v1",
+  "reviewer": "/root/round3_independent_review",
+  "reviewed_at": "2026-11-16T08:16:02.689387+00:00",
+  "source_commit": "6183982e1f5e4a1bb09727009a809514e160be64",
+  "source_tree": "09946e71e8ccee1063466d0c8df9088d6d036a3c",
+  "first_regression": {
+    "started.json": {
+      "path": "/workspace/scratch/fe5385ca063a/adk-11.3.10-full-regression/started.json",
+      "sha256": "b91a60c0879ea34c64e5c4fd6cdb3ee9d9d7d0d34c8c9995375fec3784752cfe"
+    },
+    "receipt.json": {
+      "path": "/workspace/scratch/fe5385ca063a/adk-11.3.10-full-regression/receipt.json",
+      "sha256": "8bf51d5222567a73b0064dbf70f4b87338d9436dd8210e3282233e3d1800b80d"
+    },
+    "timing.json": {
+      "path": "/workspace/scratch/fe5385ca063a/adk-11.3.10-full-regression/timing.json",
+      "sha256": "9ee0430d702585dda40d4555319841f51d19ddb3d3166bfaed99f8858132d4a4"
+    },
+    "stdout.log": {
+      "path": "/workspace/scratch/fe5385ca063a/adk-11.3.10-full-regression/stdout.log",
+      "sha256": "1e7d0d5bb5a39609a69da0864b5642b90f4035c57879a02b8735c226faa358ba"
+    },
+    "stderr.log": {
+      "path": "/workspace/scratch/fe5385ca063a/adk-11.3.10-full-regression/stderr.log",
+      "sha256": "01d510e23e65596f05025505775e66559651766873d508c43110698152c65a8e"
+    }
+  },
+  "counts": {
+    "python-guard-observed": 26,
+    "per-skill-line-budget-propagation": 1,
+    "python-environment-confirmed-by-retry": 4,
+    "per-skill-line-budget-direct": 1,
+    "main-entry-marker-direct": 2,
+    "known-source-gates-propagation": 3
+  },
+  "failures": [
+    {
+      "test": "test_validate",
+      "category": "python-guard-observed",
+      "reason": "Captured first-run failure contains the explicit CPython 3.12 guard rejecting Python 3.13.5. This is an observed blocking cause, not proof of no later source failure. Strict validate can additionally expose the two known source gates after the environment is corrected.",
+      "raw_first_run_section": "[FAIL] test_validate\n  stderr (last 80 lines):\n    [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5\n    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter\n",
+      "raw_section_sha256": "23a9f992f1554789f51c3c281aa71e293e88edc4d2903c957b574810f736468a",
+      "followup": []
+    },
+    {
+      "test": "test_catalog",
+      "category": "python-guard-observed",
+      "reason": "Captured first-run failure contains the explicit CPython 3.12 guard rejecting Python 3.13.5. This is an observed blocking cause, not proof of no later source failure. Strict validate can additionally expose the two known source gates after the environment is corrected.",
+      "raw_first_run_section": "[FAIL] test_catalog\n  stderr (last 80 lines):\n    [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5\n    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter\n",
+      "raw_section_sha256": "9cb1b624b1a6fa31c2c6378501dee2e686e98e718f1614950592173af5644f3d",
+      "followup": []
+    },
+    {
+      "test": "test_skill_content",
+      "category": "python-guard-observed",
+      "reason": "Captured first-run failure contains the explicit CPython 3.12 guard rejecting Python 3.13.5. This is an observed blocking cause, not proof of no later source failure. Strict validate can additionally expose the two known source gates after the environment is corrected.",
+      "raw_first_run_section": "[FAIL] test_skill_content\n  stderr (last 80 lines):\n    test_late_observation_reverses_event_order_across_timezones (tests.test_optional_incident_lifecycle.IncidentTimelineDesignCaseTests.test_late_observation_reverses_event_order_across_timezones) ... ok\n    test_blank_creation_gate_cannot_predeclare_success (tests.test_optional_incident_lifecycle.OptionalTemplateInvariantTests.test_blank_creation_gate_cannot_predeclare_success) ... ok\n    test_incident_output_preserves_distinct_clock_fields (tests.test_optional_incident_lifecycle.OptionalTemplateInvariantTests.test_incident_output_preserves_distinct_clock_fields) ... ok\n    test_all_present_openai_metadata_use_interface (tests.test_skill_openai_metadata.SkillOpenAIMetadataTests.test_all_present_openai_metadata_use_interface) ... ok\n    test_missing_interface_is_rejected (tests.test_skill_openai_metadata.SkillOpenAIMetadataTests.test_missing_interface_is_rejected) ... ok\n    test_breaking_and_invalid (tests.test_commit_message_policy.CommitMessagePolicyTests.test_breaking_and_invalid) ... ok\n    test_cli_is_read_only_and_returns_verdict (tests.test_commit_message_policy.CommitMessagePolicyTests.test_cli_is_read_only_and_returns_verdict) ... ok\n    test_issue_policy_is_opt_in (tests.test_commit_message_policy.CommitMessagePolicyTests.test_issue_policy_is_opt_in) ... ok\n    test_zh_and_en (tests.test_commit_message_policy.CommitMessagePolicyTests.test_zh_and_en) ... ok\n    \n    ======================================================================\n    FAIL: test_new_discovery_uses_production_matcher_without_granting_writes (tests.test_external_core_methods.ExternalCoreMethodsTests.test_new_discovery_uses_production_matcher_without_granting_writes) (phrase='公共契约迁移拆分', negated=False)\n    ----------------------------------------------------------------------\n    Traceback (most recent call last):\n      File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_external_core_methods.py\", line 85, in test_new_discovery_uses_production_matcher_without_granting_writes\n        self.assertEqual(run.returncode, 1 if negated else 0, run.stdout + run.stderr)\n        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    AssertionError: 2 != 0 : [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5\n    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter\n    \n    \n    ======================================================================\n    FAIL: test_new_discovery_uses_production_matcher_without_granting_writes (tests.test_external_core_methods.ExternalCoreMethodsTests.test_new_discovery_uses_production_matcher_without_granting_writes) (phrase='公共契约迁移拆分', negated=True)\n    ----------------------------------------------------------------------\n    Traceback (most recent call last):\n      File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_external_core_methods.py\", line 85, in test_new_discovery_uses_production_matcher_without_granting_writes\n        self.assertEqual(run.returncode, 1 if negated else 0, run.stdout + run.stderr)\n        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    AssertionError: 2 != 1 : [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5\n    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter\n    \n    \n    ======================================================================\n    FAIL: test_new_discovery_uses_production_matcher_without_granting_writes (tests.test_external_core_methods.ExternalCoreMethodsTests.test_new_discovery_uses_production_matcher_without_granting_writes) (phrase='独立断言', negated=False)\n    ----------------------------------------------------------------------\n    Traceback (most recent call last):\n      File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_external_core_methods.py\", line 85, in test_new_discovery_uses_production_matcher_without_granting_writes\n        self.assertEqual(run.returncode, 1 if negated else 0, run.stdout + run.stderr)\n        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    AssertionError: 2 != 0 : [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5\n    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter\n    \n    \n    ======================================================================\n    FAIL: test_new_discovery_uses_production_matcher_without_granting_writes (tests.test_external_core_methods.ExternalCoreMethodsTests.test_new_discovery_uses_production_matcher_without_granting_writes) (phrase='独立断言', negated=True)\n    ----------------------------------------------------------------------\n    Traceback (most recent call last):\n      File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_external_core_methods.py\", line 85, in test_new_discovery_uses_production_matcher_without_granting_writes\n        self.assertEqual(run.returncode, 1 if negated else 0, run.stdout + run.stderr)\n        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    AssertionError: 2 != 1 : [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5\n    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter\n    \n    \n    ======================================================================\n    FAIL: test_new_discovery_uses_production_matcher_without_granting_writes (tests.test_external_core_methods.ExternalCoreMethodsTests.test_new_discovery_uses_production_matcher_without_granting_writes) (phrase='检查器校准', negated=False)\n    ----------------------------------------------------------------------\n    Traceback (most recent call last):\n      File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_external_core_methods.py\", line 85, in test_new_discovery_uses_production_matcher_without_granting_writes\n        self.assertEqual(run.returncode, 1 if negated else 0, run.stdout + run.stderr)\n        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    AssertionError: 2 != 0 : [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5\n    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter\n    \n    \n    ======================================================================\n    FAIL: test_new_discovery_uses_production_matcher_without_granting_writes (tests.test_external_core_methods.ExternalCoreMethodsTests.test_new_discovery_uses_production_matcher_without_granting_writes) (phrase='检查器校准', negated=True)\n    ----------------------------------------------------------------------\n    Traceback (most recent call last):\n      File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_external_core_methods.py\", line 85, in test_new_discovery_uses_production_matcher_without_granting_writes\n        self.assertEqual(run.returncode, 1 if negated else 0, run.stdout + run.stderr)\n        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    AssertionError: 2 != 1 : [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5\n    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter\n    \n    \n    ----------------------------------------------------------------------\n    Ran 173 tests in 12.211s\n    \n    FAILED (failures=6)\n",
+      "raw_section_sha256": "81eaa373924d88c5ceb2f50243fe84728df8b7ca48171916934e6b89b27a5852",
+      "followup": []
+    },
+    {
+      "test": "test_skill_trigger_matrix",
+      "category": "python-guard-observed",
+      "reason": "Captured first-run failure contains the explicit CPython 3.12 guard rejecting Python 3.13.5. This is an observed blocking cause, not proof of no later source failure. Strict validate can additionally expose the two known source gates after the environment is corrected.",
+      "raw_first_run_section": "[FAIL] test_skill_trigger_matrix\n  stderr (last 80 lines):\n    ..FFF..........\n    ======================================================================\n    FAIL: test_cli_optional_install_requirement_and_negation (__main__.SkillTriggerMatrixTests.test_cli_optional_install_requirement_and_negation) (prompt='继续吸收外部成熟方法，提升已有 Skills 的实际执行效果')\n    ----------------------------------------------------------------------\n    Traceback (most recent call last):\n      File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_skill_trigger_matrix.py\", line 116, in test_cli_optional_install_requirement_and_negation\n        self.assertEqual(completed.returncode, exit_code,\n        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                         completed.stderr or completed.stdout)\n                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    AssertionError: 2 != 0 : [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5\n    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter\n    \n    \n    ======================================================================\n    FAIL: test_cli_optional_install_requirement_and_negation (__main__.SkillTriggerMatrixTests.test_cli_optional_install_requirement_and_negation) (prompt='不要吸收外部成熟方法')\n    ----------------------------------------------------------------------\n    Traceback (most recent call last):\n      File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_skill_trigger_matrix.py\", line 116, in test_cli_optional_install_requirement_and_negation\n        self.assertEqual(completed.returncode, exit_code,\n        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                         completed.stderr or completed.stdout)\n                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    AssertionError: 2 != 1 : [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5\n    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter\n    \n    \n    ======================================================================\n    FAIL: test_cli_smoke_uses_same_contract (__main__.SkillTriggerMatrixTests.test_cli_smoke_uses_same_contract)\n    ----------------------------------------------------------------------\n    Traceback (most recent call last):\n      File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_skill_trigger_matrix.py\", line 94, in test_cli_smoke_uses_same_contract\n        self.assertEqual(completed.returncode, 0, completed.stderr or completed.stdout)\n        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    AssertionError: 2 != 0 : [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5\n    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter\n    \n    \n    ----------------------------------------------------------------------\n    Ran 14 tests in 0.639s\n    \n    FAILED (failures=3)\n",
+      "raw_section_sha256": "456fac97318ac177ea2e80437e61350b8265c1f5c0480cf5b228b39660d4236c",
+      "followup": []
+    },
+    {
+      "test": "test_skill_sop_quality",
+      "category": "python-guard-observed",
+      "reason": "Captured first-run failure contains the explicit CPython 3.12 guard rejecting Python 3.13.5. This is an observed blocking cause, not proof of no later source failure. Strict validate can additionally expose the two known source gates after the environment is corrected.",
+      "raw_first_run_section": "[FAIL] test_skill_sop_quality\n  stderr (last 80 lines):\n    [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5\n    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter\n",
+      "raw_section_sha256": "31b34ccad73bad3b0adce798ce6338b97b51f4db1747553a49ab44067d2a7415",
+      "followup": []
+    },
+    {
+      "test": "test_token_context_governance",
+      "category": "per-skill-line-budget-propagation",
+      "reason": "First set-e command is check-token-budget --summary-json; old frozen source with Python 3.12 returns max_skill_lines=142, one failure. Rest of this wrapper was not re-executed by reviewer because its unrelated hardcoded /tmp write is outside the reviewer scratch scope.",
+      "raw_first_run_section": "[FAIL] test_token_context_governance\n",
+      "raw_section_sha256": "dc25f04140b07908faecac0a75f7656f60fe5513b32fb49fd4383e9c9d5ddb38",
+      "followup": [
+        {
+          "path": "/workspace/scratch/fe5385ca063a/round3-independent-failure-classification/token_context_first_command.json",
+          "sha256": "8d1465422ae53eeeff02b282a241627ac6163c48ac6baf27475f54d4894ff249",
+          "exit_code": 1
+        }
+      ]
+    },
+    {
+      "test": "test_boundary_rehearsal",
+      "category": "python-environment-confirmed-by-retry",
+      "reason": "Unchanged exact frozen source passes corrected Python 3.12; initial tail showed CLI code 2 without surfaced guard message.",
+      "raw_first_run_section": "[FAIL] test_boundary_rehearsal\n  stderr (last 80 lines):\n    .E.\n    ======================================================================\n    ERROR: test_canonical_cli_from_non_repository_cwd (__main__.BoundaryRehearsalTests.test_canonical_cli_from_non_repository_cwd)\n    ----------------------------------------------------------------------\n    Traceback (most recent call last):\n      File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_boundary_rehearsal.py\", line 27, in test_canonical_cli_from_non_repository_cwd\n        result = subprocess.run([\"bash\", str(root / \"scripts/devkit.sh\"), \"eval\", \"boundaries\", \"--summary-json\"],\n                                cwd=\"/tmp\", text=True, capture_output=True, check=True, timeout=30)\n      File \"/usr/lib/python3.13/subprocess.py\", line 577, in run\n        raise CalledProcessError(retcode, process.args,\n                                 output=stdout, stderr=stderr)\n    subprocess.CalledProcessError: Command '['bash', '/workspace/scratch/fe5385ca063a/agent-dev-kit/scripts/devkit.sh', 'eval', 'boundaries', '--summary-json']' returned non-zero exit status 2.\n    \n    ----------------------------------------------------------------------\n    Ran 3 tests in 0.019s\n    \n    FAILED (errors=1)\n",
+      "raw_section_sha256": "f6eb08ed0e2b8872001b4ec84d59137fe1a639eb15bc9dc87158f8aae3cdddda",
+      "followup": [
+        {
+          "path": "/workspace/scratch/fe5385ca063a/round3-independent-failure-classification/test_boundary_rehearsal.json",
+          "sha256": "e4928b065f898e6db6a5b321299c49a78b12500d6e6907039f925ae3d86c7789",
+          "exit_code": 0
+        }
+      ]
+    },
+    {
+      "test": "test_contract_registry",
+      "category": "python-guard-observed",
+      "reason": "Captured first-run failure contains the explicit CPython 3.12 guard rejecting Python 3.13.5. This is an observed blocking cause, not proof of no later source failure. Strict validate can additionally expose the two known source gates after the environment is corrected.",
+      "raw_first_run_section": "[FAIL] test_contract_registry\n  stderr (last 80 lines):\n    test_contract_schema_rejects_unknown_top_level_field (tests.test_phase_context.PhaseContextContractTests.test_contract_schema_rejects_unknown_top_level_field) ... ok\n    test_delivery_lifecycle_is_review_then_completion_then_commit_then_closeout (tests.test_phase_context.PhaseContextContractTests.test_delivery_lifecycle_is_review_then_completion_then_commit_then_closeout) ... ok\n    test_driver_phase_contains_implementation_bringup_and_interrupt_dma (tests.test_phase_context.PhaseContextContractTests.test_driver_phase_contains_implementation_bringup_and_interrupt_dma) ... ok\n    test_manifest_has_no_phase_to_skill_path_mirror (tests.test_phase_context.PhaseContextContractTests.test_manifest_has_no_phase_to_skill_path_mirror) ... ok\n    test_non_unique_group_cannot_be_promoted_to_exactly_one_primary (tests.test_phase_context.PhaseContextContractTests.test_non_unique_group_cannot_be_promoted_to_exactly_one_primary) ... ok\n    test_phase_resource_cannot_escape_repository_root (tests.test_phase_context.PhaseContextContractTests.test_phase_resource_cannot_escape_repository_root) ... ok\n    test_review_phase_uses_one_primary_without_language_duplicate (tests.test_phase_context.PhaseContextContractTests.test_review_phase_uses_one_primary_without_language_duplicate) ... ok\n    test_skill_selector_fails_closed_on_role_drift (tests.test_phase_context.PhaseContextContractTests.test_skill_selector_fails_closed_on_role_drift) ... ok\n    test_unknown_skill_fails_closed (tests.test_phase_context.PhaseContextContractTests.test_unknown_skill_fails_closed) ... ok\n    test_verify_phase_separates_test_execution_from_completion_gate (tests.test_phase_context.PhaseContextContractTests.test_verify_phase_separates_test_execution_from_completion_gate) ... ok\n    test_context_prerequisite_graph_is_acyclic (tests.test_skill_relationships.SkillRelationshipContractTests.test_context_prerequisite_graph_is_acyclic) ... ok\n    test_delivery_precedence_must_exactly_match_adjacent_lifecycle (tests.test_skill_relationships.SkillRelationshipContractTests.test_delivery_precedence_must_exactly_match_adjacent_lifecycle) ... ok\n    test_inverted_terminal_stage_order_fails_closed (tests.test_skill_relationships.SkillRelationshipContractTests.test_inverted_terminal_stage_order_fails_closed) ... ok\n    test_manifest_has_no_parallel_dependency_graph (tests.test_skill_relationships.SkillRelationshipContractTests.test_manifest_has_no_parallel_dependency_graph) ... ok\n    test_only_delivery_precedence_can_claim_sequencing_authority (tests.test_skill_relationships.SkillRelationshipContractTests.test_only_delivery_precedence_can_claim_sequencing_authority) ... ok\n    test_terminal_lifecycle_has_single_typed_authority (tests.test_skill_relationships.SkillRelationshipContractTests.test_terminal_lifecycle_has_single_typed_authority) ... ok\n    test_typed_relationships_are_the_only_relationship_authority (tests.test_skill_relationships.SkillRelationshipContractTests.test_typed_relationships_are_the_only_relationship_authority) ... ok\n    test_unknown_typed_endpoint_fails_closed (tests.test_skill_relationships.SkillRelationshipContractTests.test_unknown_typed_endpoint_fails_closed) ... ok\n    \n    ----------------------------------------------------------------------\n    Ran 18 tests in 0.142s\n    \n    OK\n    [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5\n    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter\n    Traceback (most recent call last):\n      File \"<string>\", line 1, in <module>\n        import json,sys; d=json.load(sys.stdin); assert d[\"schema\"]==\"adk-phase-context-resolution/v2\"; rows={x[\"name\"]:x for x in d[\"skills\"]}; assert rows[\"adk-code-review-loop\"][\"runtime_role\"]==\"primary\" and \"adk-chinese-code-review\" not in rows, d\n                           ~~~~~~~~~^^^^^^^^^^^\n      File \"/usr/lib/python3.13/json/__init__.py\", line 293, in load\n        return loads(fp.read(),\n            cls=cls, object_hook=object_hook,\n            parse_float=parse_float, parse_int=parse_int,\n            parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)\n      File \"/usr/lib/python3.13/json/__init__.py\", line 346, in loads\n        return _default_decoder.decode(s)\n               ~~~~~~~~~~~~~~~~~~~~~~~^^^\n      File \"/usr/lib/python3.13/json/decoder.py\", line 345, in decode\n        obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n                   ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^\n      File \"/usr/lib/python3.13/json/decoder.py\", line 363, in raw_decode\n        raise JSONDecodeError(\"Expecting value\", s, err.value) from None\n    json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)\n",
+      "raw_section_sha256": "30594f7b30c0f85aaec77262d15d3b1454bd5cf9d276855f5a0bbc44ba5a5ae2",
+      "followup": []
+    },
+    {
+      "test": "test_manifest_composition_cli",
+      "category": "python-guard-observed",
+      "reason": "Captured first-run failure contains the explicit CPython 3.12 guard rejecting Python 3.13.5. This is an observed blocking cause, not proof of no later source failure. Strict validate can additionally expose the two known source gates after the environment is corrected.",
+      "raw_first_run_section": "[FAIL] test_manifest_composition_cli\n  stderr (last 80 lines):\n    [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5\n    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter\n",
+      "raw_section_sha256": "b725010911d73c0f7808f95a9b00a1cc2da1184b1ce21cef91c53a61f5cb9288",
+      "followup": []
+    },
+    {
+      "test": "test_python_launcher",
+      "category": "python-environment-confirmed-by-retry",
+      "reason": "Unchanged exact frozen source passes corrected Python 3.12; test hides stderr from the actual final python3 entry.",
+      "raw_first_run_section": "[FAIL] test_python_launcher\n",
+      "raw_section_sha256": "727fe5eaae75da930a3276e286834f93b5d55b41ea02fefde64ee90f763b0168",
+      "followup": [
+        {
+          "path": "/workspace/scratch/fe5385ca063a/round3-independent-failure-classification/test_python_launcher.json",
+          "sha256": "7f8a99fce147ebfd9c5416448ab0be719b5b49ee2345f851df364c6e31cdf6e2",
+          "exit_code": 0
+        }
+      ]
+    },
+    {
+      "test": "test_asset_content_quality",
+      "category": "python-guard-observed",
+      "reason": "Captured first-run failure contains the explicit CPython 3.12 guard rejecting Python 3.13.5. This is an observed blocking cause, not proof of no later source failure. Strict validate can additionally expose the two known source gates after the environment is corrected.",
+      "raw_first_run_section": "[FAIL] test_asset_content_quality\n  stderr (last 80 lines):\n    [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5\n    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter\n  stdout (last 80 lines):\n    [PASS] Agent/Skill content architecture checks=747 agents=13 skills=56+9\n",
+      "raw_section_sha256": "ff8e55f9ff6aa5b24268475ff69fe6b410d72cb81e5c6c85417d2463dbf5b1d1",
+      "followup": []
+    },
+    {
+      "test": "test_install",
+      "category": "python-guard-observed",
+      "reason": "Captured first-run failure contains the explicit CPython 3.12 guard rejecting Python 3.13.5. This is an observed blocking cause, not proof of no later source failure. Strict validate can additionally expose the two known source gates after the environment is corrected.",
+      "raw_first_run_section": "[FAIL] test_install\n  stderr (last 80 lines):\n    [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5\n    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter\n",
+      "raw_section_sha256": "24ac2ce8c46826c2bb85f9ac02bbb7e0a4b9193853568aec1f750b226a6378bf",
+      "followup": []
+    },
+    {
+      "test": "test_optional_skills",
+      "category": "python-guard-observed",
+      "reason": "Captured first-run failure contains the explicit CPython 3.12 guard rejecting Python 3.13.5. This is an observed blocking cause, not proof of no later source failure. Strict validate can additionally expose the two known source gates after the environment is corrected.",
+      "raw_first_run_section": "[FAIL] test_optional_skills\n  stderr (last 80 lines):\n    [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5\n    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter\n",
+      "raw_section_sha256": "50fb059ca6b9fa6033d908e3a59502bedf8ee950a59ceeeaa990cef6a4a199b7",
+      "followup": []
+    },
+    {
+      "test": "test_convert",
+      "category": "python-guard-observed",
+      "reason": "Captured first-run failure contains the explicit CPython 3.12 guard rejecting Python 3.13.5. This is an observed blocking cause, not proof of no later source failure. Strict validate can additionally expose the two known source gates after the environment is corrected.",
+      "raw_first_run_section": "[FAIL] test_convert\n  stderr (last 80 lines):\n    [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5\n    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter\n",
+      "raw_section_sha256": "6bc0a8419b63889aa2293ec99b6855f7cada1111be96ac4b22020f0b8ba94faa",
+      "followup": []
+    },
+    {
+      "test": "test_target_contracts",
+      "category": "python-guard-observed",
+      "reason": "Captured first-run failure contains the explicit CPython 3.12 guard rejecting Python 3.13.5. This is an observed blocking cause, not proof of no later source failure. Strict validate can additionally expose the two known source gates after the environment is corrected.",
+      "raw_first_run_section": "[FAIL] test_target_contracts\n  stderr (last 80 lines):\n    [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5\n    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter\n",
+      "raw_section_sha256": "0157af8e1f9d40958592fadf5a39a62f9e1cacd18187c7002fef94db410d893e",
+      "followup": []
+    },
+    {
+      "test": "test_effect_eval",
+      "category": "python-guard-observed",
+      "reason": "Captured first-run failure contains the explicit CPython 3.12 guard rejecting Python 3.13.5. This is an observed blocking cause, not proof of no later source failure. Strict validate can additionally expose the two known source gates after the environment is corrected.",
+      "raw_first_run_section": "[FAIL] test_effect_eval\n  stderr (last 80 lines):\n    [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5\n    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter\n",
+      "raw_section_sha256": "c043cadaa086592e8b27a65282817d0bc49ba48e8ac30e1b754a600caf81b17a",
+      "followup": []
+    },
+    {
+      "test": "test_product_maturity",
+      "category": "python-guard-observed",
+      "reason": "Captured first-run failure contains the explicit CPython 3.12 guard rejecting Python 3.13.5. This is an observed blocking cause, not proof of no later source failure. Strict validate can additionally expose the two known source gates after the environment is corrected.",
+      "raw_first_run_section": "[FAIL] test_product_maturity\n  stderr (last 80 lines):\n    [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5\n    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter\n    Traceback (most recent call last):\n      File \"<string>\", line 1, in <module>\n        import json,sys; d=json.load(sys.stdin); assert d[\"status\"]==\"pass\", d\n                           ~~~~~~~~~^^^^^^^^^^^\n      File \"/usr/lib/python3.13/json/__init__.py\", line 293, in load\n        return loads(fp.read(),\n            cls=cls, object_hook=object_hook,\n            parse_float=parse_float, parse_int=parse_int,\n            parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)\n      File \"/usr/lib/python3.13/json/__init__.py\", line 346, in loads\n        return _default_decoder.decode(s)\n               ~~~~~~~~~~~~~~~~~~~~~~~^^^\n      File \"/usr/lib/python3.13/json/decoder.py\", line 345, in decode\n        obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n                   ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^\n      File \"/usr/lib/python3.13/json/decoder.py\", line 363, in raw_decode\n        raise JSONDecodeError(\"Expecting value\", s, err.value) from None\n    json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)\n",
+      "raw_section_sha256": "f706ce6b2438837b85d15470c83a2d37c061b3efbddb165f4d07954a2eafac40",
+      "followup": []
+    },
+    {
+      "test": "test_software_m5_ready",
+      "category": "python-guard-observed",
+      "reason": "Captured first-run failure contains the explicit CPython 3.12 guard rejecting Python 3.13.5. This is an observed blocking cause, not proof of no later source failure. Strict validate can additionally expose the two known source gates after the environment is corrected.",
+      "raw_first_run_section": "[FAIL] test_software_m5_ready\n  stderr (last 80 lines):\n    [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5\n    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter\n",
+      "raw_section_sha256": "43e2fcbb50b48610fd45da436288cd3d07412a0b0258eca199ea83fd76e02241",
+      "followup": []
+    },
+    {
+      "test": "test_repository_runtime_evidence",
+      "category": "python-guard-observed",
+      "reason": "Captured first-run failure contains the explicit CPython 3.12 guard rejecting Python 3.13.5. This is an observed blocking cause, not proof of no later source failure. Strict validate can additionally expose the two known source gates after the environment is corrected.",
+      "raw_first_run_section": "[FAIL] test_repository_runtime_evidence\n  stderr (last 80 lines):\n    [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5\n    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter\n",
+      "raw_section_sha256": "1e6b45e671a879baecb1db621e0ecc3bed0d6be6bc982c6d8651234248eebcc8",
+      "followup": []
+    },
+    {
+      "test": "test_token_budget",
+      "category": "per-skill-line-budget-direct",
+      "reason": "Original raw tail explicitly says security 142 lines > unchanged limit140; independent count and production checker agree.",
+      "raw_first_run_section": "[FAIL] test_token_budget\n  stderr (last 80 lines):\n    [FAIL] token budget check failed\n      - skill token budget exceeded: optional-skills/adk-security-supply-chain/SKILL.md lines=142 limit=140\n  stdout (last 80 lines):\n    [INFO] agents_bytes=2914 soft=2975 hard=3500 estimated_tokens=729 budget_status=hard-limit-failed\n    [INFO] skill_files=65 max_skill_lines=142 max_skill_file=optional-skills/adk-security-supply-chain/SKILL.md limit=140\n    [INFO] doc_files=926 max_doc_lines=547 max_doc_file=docs/comprehensive-analysis-embedded-harness.md limit=560\n    [INFO] summary_json_scripts=3\n    [INFO] compact_test_runner=1\n    [INFO] context_governance_assets=11\n",
+      "raw_section_sha256": "9d435d7b8d8eaa51a484997e6bb5f546df241d34dcad2e664f06ef58d42ee6db",
+      "followup": [
+        {
+          "path": "/workspace/scratch/fe5385ca063a/round3-independent-failure-classification/token_context_first_command.json",
+          "sha256": "8d1465422ae53eeeff02b282a241627ac6163c48ac6baf27475f54d4894ff249",
+          "exit_code": 1
+        }
+      ]
+    },
+    {
+      "test": "test_task_cost",
+      "category": "python-guard-observed",
+      "reason": "Captured first-run failure contains the explicit CPython 3.12 guard rejecting Python 3.13.5. This is an observed blocking cause, not proof of no later source failure. Strict validate can additionally expose the two known source gates after the environment is corrected.",
+      "raw_first_run_section": "[FAIL] test_task_cost\n  stderr (last 80 lines):\n    [FAIL] ADK requires CPython 3.12.x; explicit-selected python3=3.13.5\n    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter\n",
+      "raw_section_sha256": "b8814ed4f42e9ec608ca6e0fb9ec4e41726cd168baa19046424018654c82cd6e",
+      "followup": []
+    },
+    {
+      "test": "test_execution_policy",
+      "category": "python-guard-observed",
+      "reason": "Captured first-run failure contains the explicit CPython 3.12 guard rejecting Python 3.13.5. This is an observed blocking cause, not proof of no later source failure. Strict validate can additionally expose the two known source gates after the environment is corrected.",
+      "raw_first_run_section": "[FAIL] test_execution_policy\n  stderr (last 80 lines):\n    \n    ======================================================================\n    FAIL: test_public_state_check_and_resume_agree_on_frontier_field_boundaries (test_goal_authoring.GoalPlanTests.test_public_state_check_and_resume_agree_on_frontier_field_boundaries) (field='history_refs', case='blank', action='state-check')\n    ----------------------------------------------------------------------\n    Traceback (most recent call last):\n      File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_goal_authoring.py\", line 290, in test_public_state_check_and_resume_agree_on_frontier_field_boundaries\n        self.assertEqual(expected, result.returncode, result.stdout + result.stderr)\n        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    AssertionError: 1 != 2 : [FAIL] ADK requires CPython 3.12.x; explicit-selected /usr/bin/python3=3.13.5\n    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter\n    \n    \n    ======================================================================\n    FAIL: test_public_state_check_and_resume_agree_on_frontier_field_boundaries (test_goal_authoring.GoalPlanTests.test_public_state_check_and_resume_agree_on_frontier_field_boundaries) (field='history_refs', case='blank', action='resume')\n    ----------------------------------------------------------------------\n    Traceback (most recent call last):\n      File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_goal_authoring.py\", line 290, in test_public_state_check_and_resume_agree_on_frontier_field_boundaries\n        self.assertEqual(expected, result.returncode, result.stdout + result.stderr)\n        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    AssertionError: 1 != 2 : [FAIL] ADK requires CPython 3.12.x; explicit-selected /usr/bin/python3=3.13.5\n    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter\n    \n    \n    ======================================================================\n    FAIL: test_public_state_check_and_resume_agree_on_frontier_field_boundaries (test_goal_authoring.GoalPlanTests.test_public_state_check_and_resume_agree_on_frontier_field_boundaries) (field='history_refs', case='wrong-type', action='state-check')\n    ----------------------------------------------------------------------\n    Traceback (most recent call last):\n      File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_goal_authoring.py\", line 290, in test_public_state_check_and_resume_agree_on_frontier_field_boundaries\n        self.assertEqual(expected, result.returncode, result.stdout + result.stderr)\n        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    AssertionError: 1 != 2 : [FAIL] ADK requires CPython 3.12.x; explicit-selected /usr/bin/python3=3.13.5\n    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter\n    \n    \n    ======================================================================\n    FAIL: test_public_state_check_and_resume_agree_on_frontier_field_boundaries (test_goal_authoring.GoalPlanTests.test_public_state_check_and_resume_agree_on_frontier_field_boundaries) (field='history_refs', case='wrong-type', action='resume')\n    ----------------------------------------------------------------------\n    Traceback (most recent call last):\n      File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_goal_authoring.py\", line 290, in test_public_state_check_and_resume_agree_on_frontier_field_boundaries\n        self.assertEqual(expected, result.returncode, result.stdout + result.stderr)\n        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    AssertionError: 1 != 2 : [FAIL] ADK requires CPython 3.12.x; explicit-selected /usr/bin/python3=3.13.5\n    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter\n    \n    \n    ======================================================================\n    FAIL: test_public_state_check_and_resume_agree_on_frontier_field_boundaries (test_goal_authoring.GoalPlanTests.test_public_state_check_and_resume_agree_on_frontier_field_boundaries) (field='history_refs', case='empty', action='state-check')\n    ----------------------------------------------------------------------\n    Traceback (most recent call last):\n      File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_goal_authoring.py\", line 290, in test_public_state_check_and_resume_agree_on_frontier_field_boundaries\n        self.assertEqual(expected, result.returncode, result.stdout + result.stderr)\n        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    AssertionError: 0 != 2 : [FAIL] ADK requires CPython 3.12.x; explicit-selected /usr/bin/python3=3.13.5\n    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter\n    \n    \n    ======================================================================\n    FAIL: test_public_state_check_and_resume_agree_on_frontier_field_boundaries (test_goal_authoring.GoalPlanTests.test_public_state_check_and_resume_agree_on_frontier_field_boundaries) (field='history_refs', case='empty', action='resume')\n    ----------------------------------------------------------------------\n    Traceback (most recent call last):\n      File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_goal_authoring.py\", line 290, in test_public_state_check_and_resume_agree_on_frontier_field_boundaries\n        self.assertEqual(expected, result.returncode, result.stdout + result.stderr)\n        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    AssertionError: 0 != 2 : [FAIL] ADK requires CPython 3.12.x; explicit-selected /usr/bin/python3=3.13.5\n    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter\n    \n    \n    ======================================================================\n    FAIL: test_public_state_error_vocabularies_and_schema_short_circuit_are_preserved (test_goal_authoring.GoalPlanTests.test_public_state_error_vocabularies_and_schema_short_circuit_are_preserved)\n    ----------------------------------------------------------------------\n    Traceback (most recent call last):\n      File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_goal_authoring.py\", line 309, in test_public_state_error_vocabularies_and_schema_short_circuit_are_preserved\n        self.assertEqual(1, preflight.returncode)\n        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^\n    AssertionError: 1 != 2\n    \n    ----------------------------------------------------------------------\n    Ran 40 tests in 1.192s\n    \n    FAILED (failures=68)\n  stdout (last 80 lines):\n    {\"schema_version\":\"adk.goal-plan-check/v1\",\"status\":\"pass\",\"read_only\":true,\"runtime_authority\":false,\"completion_allowed\":false,\"evidence_contents_verified\":false,\"reasons\":[],\"parent_count\":2,\"deliverable_count\":2,\"plan_sha256\":\"17012ffbcb456dca13e48a40ee9a1d7be4deff009a29ec908ad70e6671c4c68e\"}\n    {\"status\": \"fail\", \"read_only\": true, \"error\": \"resume requires --state\"}\n",
+      "raw_section_sha256": "64bbeb3ae6f1f60866b4f36316f779a2f98e14ccf0c4f387da4da467fb21cb77",
+      "followup": []
+    },
+    {
+      "test": "test_official_docs_governance",
+      "category": "main-entry-marker-direct",
+      "reason": "Original raw tail names missing additionalProperties=false in interface main SKILL.md.",
+      "raw_first_run_section": "[FAIL] test_official_docs_governance\n  stderr (last 80 lines):\n    [FAIL] execution-layer contract skills/adk-interface-contract-design/SKILL.md missing marker: additionalProperties=false\n",
+      "raw_section_sha256": "5444325a73cd07b5fb761ca41c0ad52f20c9c7a9ed311c6c298ae1f9da7a2d6b",
+      "followup": []
+    },
+    {
+      "test": "test_intent_boundary_governance",
+      "category": "main-entry-marker-direct",
+      "reason": "Original method tests pass, then downstream original execution-layer gate names missing additionalProperties=false in interface main SKILL.md.",
+      "raw_first_run_section": "[FAIL] test_intent_boundary_governance\n  stderr (last 80 lines):\n    test_existing_assets_require_context_only_and_low_attention (test_superagent_method_contract.SuperagentMethodContractTests.test_existing_assets_require_context_only_and_low_attention) ... ok\n    test_explicit_implementation_and_valid_prototype_baselines (test_superagent_method_contract.SuperagentMethodContractTests.test_explicit_implementation_and_valid_prototype_baselines) ... ok\n    test_external_research_does_not_gain_implementation_authority (test_superagent_method_contract.SuperagentMethodContractTests.test_external_research_does_not_gain_implementation_authority) ... ok\n    test_prototype_and_decision_reject_only_the_wrong_boundary (test_superagent_method_contract.SuperagentMethodContractTests.test_prototype_and_decision_reject_only_the_wrong_boundary) ... ok\n    test_prototype_artifact_does_not_hide_permission_failures (test_superagent_method_contract.SuperagentMethodContractTests.test_prototype_artifact_does_not_hide_permission_failures) ... ok\n    \n    ----------------------------------------------------------------------\n    Ran 5 tests in 0.001s\n    \n    OK\n    [FAIL] execution-layer contract skills/adk-interface-contract-design/SKILL.md missing marker: additionalProperties=false\n",
+      "raw_section_sha256": "0145a2dc791a22087bc529dd5dde092541fb85342a0cc4f3b5db1cf00cdb8b4d",
+      "followup": []
+    },
+    {
+      "test": "test_agent_ecosystem_standards",
+      "category": "python-guard-observed",
+      "reason": "Captured first-run failure contains the explicit CPython 3.12 guard rejecting Python 3.13.5. This is an observed blocking cause, not proof of no later source failure. Strict validate can additionally expose the two known source gates after the environment is corrected.",
+      "raw_first_run_section": "[FAIL] test_agent_ecosystem_standards\n  stderr (last 80 lines):\n    [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5\n    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter\n",
+      "raw_section_sha256": "f0c37cc41c6b64fe82beaf1999536071e9de9294a6897f156957c6134d59dfb9",
+      "followup": []
+    },
+    {
+      "test": "test_run_evidence",
+      "category": "python-guard-observed",
+      "reason": "Captured first-run failure contains the explicit CPython 3.12 guard rejecting Python 3.13.5. This is an observed blocking cause, not proof of no later source failure. Strict validate can additionally expose the two known source gates after the environment is corrected.",
+      "raw_first_run_section": "[FAIL] test_run_evidence\n  stderr (last 80 lines):\n    .....\n    ----------------------------------------------------------------------\n    Ran 5 tests in 0.424s\n    \n    OK\n    ........F..F......F........\n    ======================================================================\n    FAIL: test_grade_task_cli_to_import_cli_binds_real_artifact_check (__main__.TaskEvidenceTest.test_grade_task_cli_to_import_cli_binds_real_artifact_check)\n    ----------------------------------------------------------------------\n    Traceback (most recent call last):\n      File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_task_evidence.py\", line 558, in test_grade_task_cli_to_import_cli_binds_real_artifact_check\n        self.assertEqual(completed.returncode, 0, completed.stdout + completed.stderr)\n        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    AssertionError: 2 != 0 : [FAIL] ADK requires CPython 3.12.x; explicit-selected /usr/bin/python3=3.13.5\n    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter\n    \n    \n    ======================================================================\n    FAIL: test_imports_feed_unchanged_comparator_and_real_compare_cli (__main__.TaskEvidenceTest.test_imports_feed_unchanged_comparator_and_real_compare_cli)\n    ----------------------------------------------------------------------\n    Traceback (most recent call last):\n      File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_task_evidence.py\", line 600, in test_imports_feed_unchanged_comparator_and_real_compare_cli\n        self.assertEqual(completed.returncode, 0, completed.stderr)\n        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    AssertionError: 2 != 0 : [FAIL] ADK requires CPython 3.12.x; explicit-selected /usr/bin/python3=3.13.5\n    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter\n    \n    \n    ======================================================================\n    FAIL: test_real_cli_sanitizes_errors_and_outputs_imported_evidence (__main__.TaskEvidenceTest.test_real_cli_sanitizes_errors_and_outputs_imported_evidence)\n    ----------------------------------------------------------------------\n    Traceback (most recent call last):\n      File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_task_evidence.py\", line 507, in test_real_cli_sanitizes_errors_and_outputs_imported_evidence\n        self.assertEqual(completed.returncode, 0, completed.stderr)\n        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    AssertionError: 2 != 0 : [FAIL] ADK requires CPython 3.12.x; explicit-selected /usr/bin/python3=3.13.5\n    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter\n    \n    \n    ----------------------------------------------------------------------\n    Ran 27 tests in 4.840s\n    \n    FAILED (failures=3)\n",
+      "raw_section_sha256": "94edfadaf34886e16bccc991752e8a997962d983e8b8c246a3a3012ce1c124e5",
+      "followup": []
+    },
+    {
+      "test": "test_asset_taxonomy",
+      "category": "python-guard-observed",
+      "reason": "Captured first-run failure contains the explicit CPython 3.12 guard rejecting Python 3.13.5. This is an observed blocking cause, not proof of no later source failure. Strict validate can additionally expose the two known source gates after the environment is corrected.",
+      "raw_first_run_section": "[FAIL] test_asset_taxonomy\n  stderr (last 80 lines):\n    [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5\n    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter\n  stdout (last 80 lines):\n    [PASS] asset taxonomy checks passed (source=manifest.json, skills=56, optional=9, profiles=8, workflows=7, routing=15)\n",
+      "raw_section_sha256": "cf89d9eaeba9bcee9c7191c50e089e42f6e7845c4b4351b37b595d12e67e35d6",
+      "followup": []
+    },
+    {
+      "test": "test_workflow_contract",
+      "category": "python-guard-observed",
+      "reason": "Captured first-run failure contains the explicit CPython 3.12 guard rejecting Python 3.13.5. This is an observed blocking cause, not proof of no later source failure. Strict validate can additionally expose the two known source gates after the environment is corrected.",
+      "raw_first_run_section": "[FAIL] test_workflow_contract\n  stderr (last 80 lines):\n    [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5\n    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter\n",
+      "raw_section_sha256": "f97352eeb7e88630169d91934ba7b278a1d7057c4fdc80b87db98a727a303ea8",
+      "followup": []
+    },
+    {
+      "test": "test_harness_readiness",
+      "category": "python-guard-observed",
+      "reason": "Captured first-run failure contains the explicit CPython 3.12 guard rejecting Python 3.13.5. This is an observed blocking cause, not proof of no later source failure. Strict validate can additionally expose the two known source gates after the environment is corrected.",
+      "raw_first_run_section": "[FAIL] test_harness_readiness\n  stderr (last 80 lines):\n    [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5\n    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter\n",
+      "raw_section_sha256": "22d01d343683e9b2dec96e26adce36b5f4c79e3cd28b715e20789280727ea70e",
+      "followup": []
+    },
+    {
+      "test": "test_workflow",
+      "category": "known-source-gates-propagation",
+      "reason": "Corrected-environment unchanged-source rerun stops at verification. Retained equivalent smoke fixture reports precisely security 142>140 and missing main-entry additionalProperties=false.",
+      "raw_first_run_section": "[FAIL] test_workflow\n  stderr (last 80 lines):\n    [FAIL] verify failed, see report: /tmp/tmp.C7lbStFjez/changes/smoke-change/verify-report.md\n  stdout (last 80 lines):\n    [OK] proposed: /tmp/tmp.C7lbStFjez/changes/smoke-change\n    [OK] applied: /tmp/tmp.C7lbStFjez/changes/smoke-change\n",
+      "raw_section_sha256": "1ae4a187bed93c1a393772bf82e94119d846f63eb5916f9a6c5dc57cca908ec9",
+      "followup": [
+        {
+          "path": "/workspace/scratch/fe5385ca063a/round3-independent-failure-classification/test_workflow.json",
+          "sha256": "f5f410ca073a69b8b5904f54d7ed35124654da1699cab7ca462b2492443a6f6c",
+          "exit_code": 1
+        },
+        {
+          "path": "/workspace/scratch/fe5385ca063a/round3-independent-failure-classification/workflow_verify_retained.json",
+          "sha256": "99aaae970c589e569f245355e4bb9479371eb306d434cb1717696736622a8d52",
+          "exit_code": 1
+        }
+      ]
+    },
+    {
+      "test": "test_boundary_conditions_match",
+      "category": "python-environment-confirmed-by-retry",
+      "reason": "All original cases pass unchanged exact frozen source with corrected Python 3.12.",
+      "raw_first_run_section": "[FAIL] test_boundary_conditions_match\n  stdout (last 80 lines):\n    Running match boundary condition tests...\n    ==========================================\n    Testing Empty string input... \u001b[0;32mPASS\u001b[0m\n    Testing Very long input (1024 chars)... \u001b[0;31mFAIL\u001b[0m\n    Testing Special chars: double quotes... \u001b[0;31mFAIL\u001b[0m\n    Testing Special chars: single quotes... \u001b[0;31mFAIL\u001b[0m\n    Testing Special chars: backslash... \u001b[0;31mFAIL\u001b[0m\n    Testing Special chars: pipe... \u001b[0;31mFAIL\u001b[0m\n    Testing Unicode Chinese... \u001b[0;31mFAIL\u001b[0m\n    Testing Emoji input... \u001b[0;31mFAIL\u001b[0m\n    Testing Unicode mixed (EN+CN)... \u001b[0;31mFAIL\u001b[0m\n    Testing Routing 01: adk-requirements-triage... \u001b[0;31mFAIL\u001b[0m\n    Testing Routing 02: adk-task-breakdown... \u001b[0;31mFAIL\u001b[0m\n    Testing Routing 03: adk-interface-contract-design... \u001b[0;31mFAIL\u001b[0m\n    Testing Routing 04: adk-unit-test-embedded... \u001b[0;31mFAIL\u001b[0m\n    Testing Routing 05: adk-static-analysis-c-cpp... \u001b[0;31mFAIL\u001b[0m\n    Testing Routing 06: adk-systematic-debugging... \u001b[0;31mFAIL\u001b[0m\n    Testing Routing 07: adk-verification-before-completion... \u001b[0;31mFAIL\u001b[0m\n    Testing Routing 08: adk-commit-pr-quality-gate... \u001b[0;31mFAIL\u001b[0m\n    Testing Routing 09: adk-adr-writer... \u001b[0;31mFAIL\u001b[0m\n    Testing Routing 10: adk-register-map-design... \u001b[0;31mFAIL\u001b[0m\n    Testing Routing 11: adk-driver-bringup-checklist... \u001b[0;31mFAIL\u001b[0m\n    Testing Routing 12: adk-bsp-porting-playbook... \u001b[0;31mFAIL\u001b[0m\n    Testing Routing 12b: boot chain -> adk-bsp-porting-playbook... \u001b[0;31mFAIL\u001b[0m\n    Testing Routing 13: adk-rtos-task-design... \u001b[0;31mFAIL\u001b[0m\n    Testing Routing 14: adk-interrupt-dma-patterns... \u001b[0;31mFAIL\u001b[0m\n    Testing Routing 15: adk-protocol-stack-integration... \u001b[0;31mFAIL\u001b[0m\n    Testing Routing 16: adk-component-api-stability... \u001b[0;31mFAIL\u001b[0m\n    Testing Routing 17: adk-cmake-cross-build... \u001b[0;31mFAIL\u001b[0m\n    Testing Routing 18: adk-embedded-debug-transport... \u001b[0;31mFAIL\u001b[0m\n    Testing Routing 19: adk-integration-hil-sil... \u001b[0;31mFAIL\u001b[0m\n    Testing Routing 20: adk-fault-injection-recovery... \u001b[0;31mFAIL\u001b[0m\n    Testing Routing 21: adk-performance-profiling-embedded... \u001b[0;31mFAIL\u001b[0m\n    Testing Routing 22: adk-release-versioning... \u001b[0;31mFAIL\u001b[0m\n    Testing Routing 23: adk-production-field-readiness... \u001b[0;31mFAIL\u001b[0m\n    Testing Routing 23b: production-field sim-device alias... \u001b[0;31mFAIL\u001b[0m\n    Testing Routing 24: adk-skill-composition-governance... \u001b[0;31mFAIL\u001b[0m\n    Testing Multi-slash: first segment... \u001b[0;31mFAIL\u001b[0m\n    Testing Multi-slash: last segment... \u001b[0;31mFAIL\u001b[0m\n    Testing Multi-slash: middle segment... \u001b[0;31mFAIL\u001b[0m\n    Testing Multi-slash: partial match... \u001b[0;31mFAIL\u001b[0m\n    ==========================================\n    Total: 39, Passed: 1, Failed: 38\n    \u001b[0;31mSome match boundary condition tests failed\u001b[0m\n",
+      "raw_section_sha256": "43b9172d4d3e5888ce3287598f0fe1c1ea012eb22b24dbcc3d940ab1e99a11da",
+      "followup": [
+        {
+          "path": "/workspace/scratch/fe5385ca063a/round3-independent-failure-classification/test_boundary_conditions_match.json",
+          "sha256": "12ba662fd08d7355a8e3d9ffa00224277462de731a4213a25a875c014dcd432f",
+          "exit_code": 0
+        }
+      ]
+    },
+    {
+      "test": "test_integration",
+      "category": "known-source-gates-propagation",
+      "reason": "Corrected-environment unchanged-source rerun repeats the same 3/8 failures. All three retained verify reports name precisely security 142>140 and missing main-entry additionalProperties=false; review/archive then cannot proceed from verify-failed.",
+      "raw_first_run_section": "[FAIL] test_integration\n  stdout (last 80 lines):\n    Running integration tests...\n    ======================================\n    Testing Full workflow... \u001b[0;31mFAIL\u001b[0m\n    Testing State file updates... \u001b[0;32mPASS\u001b[0m\n    Testing History logging... \u001b[0;32mPASS\u001b[0m\n    Testing Required files created... \u001b[0;32mPASS\u001b[0m\n    Testing Verify report generation... \u001b[0;32mPASS\u001b[0m\n    Testing Review report generation... \u001b[0;31mFAIL\u001b[0m\n    Testing Archive functionality... \u001b[0;31mFAIL\u001b[0m\n    Testing Force archive... \u001b[0;32mPASS\u001b[0m\n    ======================================\n    Total: 8, Passed: 5, Failed: 3\n    \u001b[0;31mSome integration tests failed\u001b[0m\n",
+      "raw_section_sha256": "0fc3c0789ff1d60c1ce71e09f6879473cd645fb0276b76a035b4b23619442da9",
+      "followup": [
+        {
+          "path": "/workspace/scratch/fe5385ca063a/round3-independent-failure-classification/test_integration.json",
+          "sha256": "d2d9399f3886adb0bfaf627f119c566639ef5ff066ecf75dd99ac8292f0f9da8",
+          "exit_code": 1
+        }
+      ]
+    },
+    {
+      "test": "test_match_effectiveness",
+      "category": "python-environment-confirmed-by-retry",
+      "reason": "All original cases pass unchanged exact frozen source with corrected Python 3.12.",
+      "raw_first_run_section": "[FAIL] test_match_effectiveness\n  stdout (last 80 lines):\n    === Match Effectiveness Tests ===\n    =================================\n    \n    --- Positive cases (should match routing) ---\n    Testing 开始任务前判断技能 -> adk-runtime-router... \u001b[0;31mFAIL\u001b[0m\n    Testing 需求不清楚 -> adk-requirements-triage... \u001b[0;31mFAIL\u001b[0m\n    Testing 新功能自然语言 -> adk-requirements-triage... \u001b[0;31mFAIL\u001b[0m\n    Testing 测试矩阵 -> adk-test-strategy... \u001b[0;31mFAIL\u001b[0m\n    Testing review 反馈闭环 -> adk-code-review-loop... \u001b[0;31mFAIL\u001b[0m\n    Testing 外部 Skill 名称只保留 review 意图 -> adk-code-review-loop... \u001b[0;31mFAIL\u001b[0m\n    Testing 多 agent 并行 -> adk-parallel-agent-governance... \u001b[0;31mFAIL\u001b[0m\n    Testing 子代理驱动开发 -> adk-parallel-agent-governance... \u001b[0;31mFAIL\u001b[0m\n    Testing worktree 隔离 -> adk-worktree-governance... \u001b[0;31mFAIL\u001b[0m\n    Testing 分支收尾 -> adk-branch-closeout... \u001b[0;31mFAIL\u001b[0m\n    Testing 任务太大 -> adk-task-breakdown... \u001b[0;31mFAIL\u001b[0m\n    Testing 写单元测试 -> adk-unit-test-embedded... \u001b[0;31mFAIL\u001b[0m\n    Testing 调试问题 -> adk-systematic-debugging... \u001b[0;31mFAIL\u001b[0m\n    Testing 真实问题排查 -> adk-systematic-debugging... \u001b[0;31mFAIL\u001b[0m\n    Testing 提交代码 -> adk-commit-pr-quality-gate... \u001b[0;31mFAIL\u001b[0m\n    Testing 设计寄存器 -> adk-register-map-design... \u001b[0;31mFAIL\u001b[0m\n    Testing 写驱动 -> adk-driver-implementation... \u001b[0;31mFAIL\u001b[0m\n    Testing 首板联调 -> adk-driver-bringup-checklist... \u001b[0;31mFAIL\u001b[0m\n    Testing 准备发布 -> adk-release-versioning... \u001b[0;31mFAIL\u001b[0m\n    Testing BSP移植 -> adk-bsp-porting-playbook... \u001b[0;31mFAIL\u001b[0m\n    Testing 启动链 -> adk-bsp-porting-playbook... \u001b[0;31mFAIL\u001b[0m\n    Testing 量产现场 -> adk-production-field-readiness... \u001b[0;31mFAIL\u001b[0m\n    Testing production-field pilot id -> adk-production-field-readiness... \u001b[0;31mFAIL\u001b[0m\n    Testing 性能分析 -> adk-performance-profiling-embedded... \u001b[0;31mFAIL\u001b[0m\n    Testing 长任务执行计划 -> adk-planning-execution-loop... \u001b[0;31mFAIL\u001b[0m\n    Testing 调试正向对照 -> adk-systematic-debugging... \u001b[0;31mFAIL\u001b[0m\n    Testing 调试 intent 限制实现权限... \u001b[0;31mFAIL\u001b[0m\n    Testing 否定 non-trigger 不得压制调试... \u001b[0;31mFAIL\u001b[0m\n    Testing 发布正向对照 -> adk-release-versioning... \u001b[0;31mFAIL\u001b[0m\n    Testing review mode -> readonly artifact mode + selection-group primary... \u001b[0;31mFAIL\u001b[0m\n    \n    --- Negative cases (should not match) ---\n    Testing 只读长任务且无需执行 -> abstain... \u001b[0;31mFAIL\u001b[0m\n    Testing 架构评估且不要调试 -> abstain... \u001b[0;31mFAIL\u001b[0m\n    Testing 只解释发布现状且不执行 -> abstain... \u001b[0;31mFAIL\u001b[0m\n    Testing 规划动作否定 phrase classes 变形 -> abstain... \u001b[0;31mFAIL\u001b[0m\n    Testing 调试动作否定 phrase classes 变形 -> abstain... \u001b[0;31mFAIL\u001b[0m\n    Testing 发布动作否定 phrase classes 变形 -> abstain... \u001b[0;31mFAIL\u001b[0m\n    Testing 多轮 release -> readonly 以最新 turn 为准... \u001b[0;31mFAIL\u001b[0m\n    Testing 多轮 readonly -> implementation mode 仍受 Skill effect ceiling 限制... \u001b[0;31mFAIL\u001b[0m\n    Testing 完全无关的文本xyz -> no match... \u001b[0;31mFAIL\u001b[0m\n    Testing 今天天气很好 -> no match... \u001b[0;31mFAIL\u001b[0m\n    Testing abc123 -> no match... \u001b[0;31mFAIL\u001b[0m\n    \n    =================================\n    Total: 41, Passed: 0, Failed: 41\n    \u001b[0;31mSome match effectiveness tests failed\u001b[0m\n",
+      "raw_section_sha256": "93ad6d2eba8f7d4777b6295b9374306900adc7e0f3e0502f8a320de0f41349e0",
+      "followup": [
+        {
+          "path": "/workspace/scratch/fe5385ca063a/round3-independent-failure-classification/test_match_effectiveness.json",
+          "sha256": "e1e68a77a4484e73c7fb70aa4aafb68b80942fc1f2af56306dbb7cdfcf3ff529",
+          "exit_code": 0
+        }
+      ]
+    },
+    {
+      "test": "test_skill_dependencies",
+      "category": "python-guard-observed",
+      "reason": "Captured first-run failure contains the explicit CPython 3.12 guard rejecting Python 3.13.5. This is an observed blocking cause, not proof of no later source failure. Strict validate can additionally expose the two known source gates after the environment is corrected.",
+      "raw_first_run_section": "[FAIL] test_skill_dependencies\n  stderr (last 80 lines):\n    [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5\n    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter\n    Traceback (most recent call last):\n      File \"<string>\", line 1, in <module>\n        import json,sys; d=json.load(sys.stdin); assert d[\"status\"]==\"pass\", d; assert d[\"schema\"]==\"adk-skill-relationship-resolution/v2\", d; assert d[\"relationship_count\"]==len(d[\"typed_relationships\"]), d; assert d[\"delivery_lifecycle\"][\"status\"]==\"pass\", d\n                           ~~~~~~~~~^^^^^^^^^^^\n      File \"/usr/lib/python3.13/json/__init__.py\", line 293, in load\n        return loads(fp.read(),\n            cls=cls, object_hook=object_hook,\n            parse_float=parse_float, parse_int=parse_int,\n            parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)\n      File \"/usr/lib/python3.13/json/__init__.py\", line 346, in loads\n        return _default_decoder.decode(s)\n               ~~~~~~~~~~~~~~~~~~~~~~~^^^\n      File \"/usr/lib/python3.13/json/decoder.py\", line 345, in decode\n        obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n                   ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^\n      File \"/usr/lib/python3.13/json/decoder.py\", line 363, in raw_decode\n        raise JSONDecodeError(\"Expecting value\", s, err.value) from None\n    json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)\n",
+      "raw_section_sha256": "0a8dbb4d23fab2153eb68c1a13eba30c8dc5aec8848f2deece658daa9a3f1eb3",
+      "followup": []
+    },
+    {
+      "test": "test_memory_governance",
+      "category": "python-guard-observed",
+      "reason": "Captured first-run failure contains the explicit CPython 3.12 guard rejecting Python 3.13.5. This is an observed blocking cause, not proof of no later source failure. Strict validate can additionally expose the two known source gates after the environment is corrected.",
+      "raw_first_run_section": "[FAIL] test_memory_governance\n  stderr (last 80 lines):\n    [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5\n    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter\n",
+      "raw_section_sha256": "cf10c103b075696e751ab0c69d12b78a33c98d8ac15c917c992fb784d88f38ab",
+      "followup": []
+    },
+    {
+      "test": "test_docs_cli_alignment",
+      "category": "python-guard-observed",
+      "reason": "Captured first-run failure contains the explicit CPython 3.12 guard rejecting Python 3.13.5. This is an observed blocking cause, not proof of no later source failure. Strict validate can additionally expose the two known source gates after the environment is corrected.",
+      "raw_first_run_section": "[FAIL] test_docs_cli_alignment\n  stderr (last 80 lines):\n    [FAIL] ADK requires CPython 3.12.x; auto-selected python3=3.13.5\n    [INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter\n",
+      "raw_section_sha256": "024a1f01403712fe62a375dfc5752578765e4f55bf031ea7ce55195df7729ee1",
+      "followup": []
+    },
+    {
+      "test": "test_performance_ops",
+      "category": "known-source-gates-propagation",
+      "reason": "Corrected-environment unchanged-source trace stops at default benchmark. Health passes; test_validate stops at strict validate, whose actual JSON lists precisely security 142>140 and missing main-entry additionalProperties=false.",
+      "raw_first_run_section": "[FAIL] test_performance_ops\n",
+      "raw_section_sha256": "c842fe0beeae503269a576039d563518799854f9f7f28bda52422fa39c96ce8d",
+      "followup": [
+        {
+          "path": "/workspace/scratch/fe5385ca063a/round3-independent-failure-classification/test_performance_ops.json",
+          "sha256": "67086c3511e823ca5096b1345c6cb890333ae26d9ee0deb8e94ca0eadbe4409f",
+          "exit_code": 1
+        },
+        {
+          "path": "/workspace/scratch/fe5385ca063a/round3-independent-failure-classification/performance_health.json",
+          "sha256": "9dc24a4e7f56d55888bc921ac5bd3bc2c2f8fd6d12f181e81b90703e24381f7b",
+          "exit_code": 0
+        },
+        {
+          "path": "/workspace/scratch/fe5385ca063a/round3-independent-failure-classification/performance_validate.json",
+          "sha256": "cce5aafa5202da525b0a10ab242950c6f08c16adfc8aa9626bee4a33d2818be3",
+          "exit_code": 1
+        },
+        {
+          "path": "/workspace/scratch/fe5385ca063a/round3-independent-failure-classification/strict_validate_diagnostic.json",
+          "sha256": "9c924a64865f3be137e3794a03b73fea97fb164985e5686392ef876833c870fa",
+          "exit_code": 1
+        }
+      ]
+    }
+  ],
+  "retained_workflow_reports": [
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-failure-classification/last-diagnostics/workflow-retained/smoke-change/verify-report.md",
+      "sha256": "1db35dcc6aac97dab0426d2e82b1af493db7cc643501baf5c6c62d0493a101bd",
+      "content": "# 验证报告：smoke-change\n\n- 时间：2026-11-16T08:15:08Z\n- 执行人：unknown\n- 验证命令：\n  - scripts/devkit.sh validate --strict\n  - scripts/check-format.sh\n  - scripts/check-change-governance.sh <change_dir>\n- 工件检查：proposal/design/tasks/checklist/negative-results\n\n## Verification Traceability\n- VERIFY-001: workflow verification gate + Evidence Index\n\n[PASS] change governance checks passed: /workspace/scratch/fe5385ca063a/round3-independent-failure-classification/last-diagnostics/workflow-retained/smoke-change\n[FAIL] skill entry exceeds 140 lines: optional-skills/adk-security-supply-chain/SKILL.md (142)\n[FAIL] official-docs-governance: [FAIL] execution-layer contract skills/adk-interface-contract-design/SKILL.md missing marker: additionalProperties=false\n"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-failure-classification/tmp-test_integration/tmp.8oP3UyrHuE/changes/review-test/verify-report.md",
+      "sha256": "af2065cbd6b40cbcd6a960118faebb922ba0657bd7acca4bb43807413de4f613",
+      "content": "# 验证报告：review-test\n\n- 时间：2026-11-16T08:11:47Z\n- 执行人：unknown\n- 验证命令：\n  - scripts/devkit.sh validate --strict\n  - scripts/check-format.sh\n  - scripts/check-change-governance.sh <change_dir>\n- 工件检查：proposal/design/tasks/checklist/negative-results\n\n## Verification Traceability\n- VERIFY-001: workflow verification gate + Evidence Index\n\n[PASS] change governance checks passed: /workspace/scratch/fe5385ca063a/round3-independent-failure-classification/tmp-test_integration/tmp.8oP3UyrHuE/changes/review-test\n[FAIL] skill entry exceeds 140 lines: optional-skills/adk-security-supply-chain/SKILL.md (142)\n[FAIL] official-docs-governance: [FAIL] execution-layer contract skills/adk-interface-contract-design/SKILL.md missing marker: additionalProperties=false\n"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-failure-classification/tmp-test_integration/tmp.FqMZDzSgAO/changes/archive-test/verify-report.md",
+      "sha256": "3f20fd8d84fddaa100e0ee5efb4846f0d50c3d0010c6f781207a3bf31811573f",
+      "content": "# 验证报告：archive-test\n\n- 时间：2026-11-16T08:11:49Z\n- 执行人：unknown\n- 验证命令：\n  - scripts/devkit.sh validate --strict\n  - scripts/check-format.sh\n  - scripts/check-change-governance.sh <change_dir>\n- 工件检查：proposal/design/tasks/checklist/negative-results\n\n## Verification Traceability\n- VERIFY-001: workflow verification gate + Evidence Index\n\n[PASS] change governance checks passed: /workspace/scratch/fe5385ca063a/round3-independent-failure-classification/tmp-test_integration/tmp.FqMZDzSgAO/changes/archive-test\n[FAIL] skill entry exceeds 140 lines: optional-skills/adk-security-supply-chain/SKILL.md (142)\n[FAIL] official-docs-governance: [FAIL] execution-layer contract skills/adk-interface-contract-design/SKILL.md missing marker: additionalProperties=false\n"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-failure-classification/tmp-test_integration/tmp.TKYAxjDF1X/changes/integration-test/verify-report.md",
+      "sha256": "7ea7026c22197a730f1921e577b3c136d7c9c5697a048c67dbeda0bdf8a801d0",
+      "content": "# 验证报告：integration-test\n\n- 时间：2026-11-16T08:11:42Z\n- 执行人：unknown\n- 验证命令：\n  - scripts/devkit.sh validate --strict\n  - scripts/check-format.sh\n  - scripts/check-change-governance.sh <change_dir>\n- 工件检查：proposal/design/tasks/checklist/negative-results\n\n## Verification Traceability\n- VERIFY-001: workflow verification gate + Evidence Index\n\n[PASS] change governance checks passed: /workspace/scratch/fe5385ca063a/round3-independent-failure-classification/tmp-test_integration/tmp.TKYAxjDF1X/changes/integration-test\n[FAIL] skill entry exceeds 140 lines: optional-skills/adk-security-supply-chain/SKILL.md (142)\n[FAIL] official-docs-governance: [FAIL] execution-layer contract skills/adk-interface-contract-design/SKILL.md missing marker: additionalProperties=false\n"
+    }
+  ],
+  "conclusion": "All 37 observed failures classified. Thirty have direct guard or unchanged-source corrected-environment pass evidence. Seven are direct or propagated observations of two real source gates: missing interface main marker and security entry142>140. No fourth source gate found in the observed first-failure paths. First full remains failed; the corrected final source still needs its own full regression.",
+  "limits": [
+    "Full runner captured last80 stdout/stderr lines per failed test; this report preserves those exact available sections, not unretained earlier child logs.",
+    "Direct guard classification is not exclusive attribution: a guard can hide subsequent source checks.",
+    "Corrected-environment diagnostic runs are on unchanged archived source618398, not the later final candidate. They do not substitute for final full verification.",
+    "No gate or repository source was changed. All reviewer probe/fixture writes are under round3-independent-* scratch paths."
+  ]
+}

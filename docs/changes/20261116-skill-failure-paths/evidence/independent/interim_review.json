@@ -1,0 +1,242 @@
+{
+  "schema": "round3-independent-interim-review/v1",
+  "reviewer": "round3-independent-reviewer",
+  "reviewed_at": "2026-11-16T08:08:45.815164+00:00",
+  "target": {
+    "base_commit": "80f8b2ea2885e3f62dcea455c45a2e8ebf071b2b",
+    "head_commit": "6183982e1f5e4a1bb09727009a809514e160be64",
+    "tree": "09946e71e8ccee1063466d0c8df9088d6d036a3c",
+    "original_patch_sha256": "bae711025f6f35eec3e4b832de5002d0f664633998e94bc0fbf3f835d36429ae"
+  },
+  "status": "needs-fix-pending-new-source-and-complete-regression",
+  "findings": [
+    {
+      "id": "r3-review-01",
+      "severity": "minor",
+      "disposition": "open",
+      "source": "docs/changes/20261116-skill-failure-paths/audit.md:31",
+      "finding": "OBSERVE incorrectly identifies nonexistent adk-worktree-isolation rather than actual adk-worktree-governance.",
+      "task": "Correct only the Skill ID; preserve observation meaning.",
+      "discovered_by": "independent reviewer"
+    },
+    {
+      "id": "r3-integration-marker",
+      "severity": "major",
+      "disposition": "open",
+      "source": "skills/adk-interface-contract-design/SKILL.md",
+      "finding": "Existing execution-layer contract checks reject this source because the entry lost required additionalProperties=false marker. Both official_docs_governance and intent_boundary_governance failed.",
+      "task": "Restore a semantically correct same-level closure condition while preserving modern composition/dialect guidance and original budget; rerun applicable integration/full checks.",
+      "discovered_by": "parent complete regression, independently inspected by reviewer"
+    }
+  ],
+  "preserved_successes": {
+    "focused_verification": {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-focused-verification.json",
+      "bytes": 5016,
+      "sha256": "38616091b9f52602125b4d049bc648c71bd20fb1d9b8b8cd004879f175030f7b"
+    },
+    "budget_identity_verification": {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-frozen-identity-check.json",
+      "bytes": 14757,
+      "sha256": "a70d8477b8e8b192e2bf36fb226e1a21492656abccade0421fc93b60261bc3dd"
+    },
+    "consumer_review": {
+      "path": "/workspace/scratch/fe5385ca063a/round3-independent-consumer-review.json",
+      "bytes": 9660,
+      "sha256": "9429f28e9d470723b5adb6228302f6d16d73682819c43075d1486b02a2e3966f"
+    }
+  },
+  "full_regression_failure": {
+    "receipt": {
+      "path": "/workspace/scratch/fe5385ca063a/adk-11.3.10-full-regression/receipt.json",
+      "bytes": 1618,
+      "sha256": "8bf51d5222567a73b0064dbf70f4b87338d9436dd8210e3282233e3d1800b80d"
+    },
+    "timing": {
+      "path": "/workspace/scratch/fe5385ca063a/adk-11.3.10-full-regression/timing.json",
+      "bytes": 8184,
+      "sha256": "9ee0430d702585dda40d4555319841f51d19ddb3d3166bfaed99f8858132d4a4"
+    },
+    "stdout": {
+      "path": "/workspace/scratch/fe5385ca063a/adk-11.3.10-full-regression/stdout.log",
+      "bytes": 2073,
+      "sha256": "1e7d0d5bb5a39609a69da0864b5642b90f4035c57879a02b8735c226faa358ba"
+    },
+    "stderr": {
+      "path": "/workspace/scratch/fe5385ca063a/adk-11.3.10-full-regression/stderr.log",
+      "bytes": 43291,
+      "sha256": "01d510e23e65596f05025505775e66559651766873d508c43110698152c65a8e"
+    },
+    "exit_code": 1,
+    "total": 102,
+    "pass": 65,
+    "fail": 37,
+    "source_remained_clean": true,
+    "log_digest_checks": [
+      {
+        "path": "stdout.log",
+        "matches": true
+      },
+      {
+        "path": "stderr.log",
+        "matches": true
+      }
+    ],
+    "failure_tail_classification": [
+      {
+        "test": "test_validate",
+        "category": "python-version-explicit"
+      },
+      {
+        "test": "test_catalog",
+        "category": "python-version-explicit"
+      },
+      {
+        "test": "test_skill_content",
+        "category": "python-version-explicit"
+      },
+      {
+        "test": "test_skill_trigger_matrix",
+        "category": "python-version-explicit"
+      },
+      {
+        "test": "test_skill_sop_quality",
+        "category": "python-version-explicit"
+      },
+      {
+        "test": "test_token_context_governance",
+        "category": "not-resolved-from-captured-tail"
+      },
+      {
+        "test": "test_boundary_rehearsal",
+        "category": "not-resolved-from-captured-tail"
+      },
+      {
+        "test": "test_contract_registry",
+        "category": "python-version-explicit"
+      },
+      {
+        "test": "test_manifest_composition_cli",
+        "category": "python-version-explicit"
+      },
+      {
+        "test": "test_python_launcher",
+        "category": "not-resolved-from-captured-tail"
+      },
+      {
+        "test": "test_asset_content_quality",
+        "category": "python-version-explicit"
+      },
+      {
+        "test": "test_install",
+        "category": "python-version-explicit"
+      },
+      {
+        "test": "test_optional_skills",
+        "category": "python-version-explicit"
+      },
+      {
+        "test": "test_convert",
+        "category": "python-version-explicit"
+      },
+      {
+        "test": "test_target_contracts",
+        "category": "python-version-explicit"
+      },
+      {
+        "test": "test_effect_eval",
+        "category": "python-version-explicit"
+      },
+      {
+        "test": "test_product_maturity",
+        "category": "python-version-explicit"
+      },
+      {
+        "test": "test_software_m5_ready",
+        "category": "python-version-explicit"
+      },
+      {
+        "test": "test_repository_runtime_evidence",
+        "category": "python-version-explicit"
+      },
+      {
+        "test": "test_token_budget",
+        "category": "not-resolved-from-captured-tail"
+      },
+      {
+        "test": "test_task_cost",
+        "category": "not-resolved-from-captured-tail"
+      },
+      {
+        "test": "test_execution_policy",
+        "category": "not-resolved-from-captured-tail"
+      },
+      {
+        "test": "test_official_docs_governance",
+        "category": "execution-contract-marker"
+      },
+      {
+        "test": "test_intent_boundary_governance",
+        "category": "execution-contract-marker"
+      },
+      {
+        "test": "test_agent_ecosystem_standards",
+        "category": "python-version-explicit"
+      },
+      {
+        "test": "test_run_evidence",
+        "category": "not-resolved-from-captured-tail"
+      },
+      {
+        "test": "test_asset_taxonomy",
+        "category": "python-version-explicit"
+      },
+      {
+        "test": "test_workflow_contract",
+        "category": "python-version-explicit"
+      },
+      {
+        "test": "test_harness_readiness",
+        "category": "python-version-explicit"
+      },
+      {
+        "test": "test_workflow",
+        "category": "not-resolved-from-captured-tail"
+      },
+      {
+        "test": "test_boundary_conditions_match",
+        "category": "not-resolved-from-captured-tail"
+      },
+      {
+        "test": "test_integration",
+        "category": "not-resolved-from-captured-tail"
+      },
+      {
+        "test": "test_match_effectiveness",
+        "category": "not-resolved-from-captured-tail"
+      },
+      {
+        "test": "test_skill_dependencies",
+        "category": "python-version-explicit"
+      },
+      {
+        "test": "test_memory_governance",
+        "category": "python-version-explicit"
+      },
+      {
+        "test": "test_docs_cli_alignment",
+        "category": "python-version-explicit"
+      },
+      {
+        "test": "test_performance_ops",
+        "category": "not-resolved-from-captured-tail"
+      }
+    ]
+  },
+  "limits": [
+    "This is not a final Spec/Quality approval.",
+    "A passing method-focused test does not waive existing integration contracts.",
+    "Do not attribute every failed test to environment merely because many tails contain the same Python diagnostic.",
+    "Pending source/doc fix and corrected-environment full regression must retain separate exact source identities."
+  ]
+}

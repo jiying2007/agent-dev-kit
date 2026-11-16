@@ -1,0 +1,210 @@
+{
+  "label": "red-contract-methods",
+  "command_argv": [
+    "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+    "run",
+    "python3.12",
+    "-m",
+    "unittest",
+    "tests.test_skill_contract_methods",
+    "-v"
+  ],
+  "cwd": "/workspace/scratch/fe5385ca063a/agent-dev-kit",
+  "environment_overrides": {
+    "PYTHONPATH": "/workspace/scratch/fe5385ca063a/agent-dev-kit/src"
+  },
+  "head": "80f8b2ea2885e3f62dcea455c45a2e8ebf071b2b",
+  "started_at_utc": "2026-11-16T07:51:29.989177+00:00",
+  "finished_at_utc": "2026-11-16T07:51:30.377666+00:00",
+  "duration_seconds": 0.3905309559995658,
+  "exit_code": 1,
+  "stdout": "",
+  "stderr": "test_blank_evidence_never_starts_with_a_pass (tests.test_skill_contract_methods.ExportedReviewChecklistTests.test_blank_evidence_never_starts_with_a_pass) ... \n  test_blank_evidence_never_starts_with_a_pass (tests.test_skill_contract_methods.ExportedReviewChecklistTests.test_blank_evidence_never_starts_with_a_pass) (runtime='claude-code') ... FAIL\n  test_blank_evidence_never_starts_with_a_pass (tests.test_skill_contract_methods.ExportedReviewChecklistTests.test_blank_evidence_never_starts_with_a_pass) (runtime='opencode') ... FAIL\ntest_closed_subschema_control_rejects_legitimate_extension (tests.test_skill_contract_methods.SchemaClosureExampleTests.test_closed_subschema_control_rejects_legitimate_extension) ... FAIL\ntest_old_dialect_ignores_composition_closure_control (tests.test_skill_contract_methods.SchemaClosureExampleTests.test_old_dialect_ignores_composition_closure_control) ... FAIL\ntest_published_composed_closure_accepts_only_contract_inputs (tests.test_skill_contract_methods.SchemaClosureExampleTests.test_published_composed_closure_accepts_only_contract_inputs) ... FAIL\ntest_published_legacy_flattening_accepts_only_contract_inputs (tests.test_skill_contract_methods.SchemaClosureExampleTests.test_published_legacy_flattening_accepts_only_contract_inputs) ... FAIL\ntest_same_level_closure_accepts_only_contract_inputs (tests.test_skill_contract_methods.SchemaClosureExampleTests.test_same_level_closure_accepts_only_contract_inputs) ... FAIL\n\n======================================================================\nFAIL: test_blank_evidence_never_starts_with_a_pass (tests.test_skill_contract_methods.ExportedReviewChecklistTests.test_blank_evidence_never_starts_with_a_pass) (runtime='claude-code')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_skill_contract_methods.py\", line 106, in test_blank_evidence_never_starts_with_a_pass\n    self.assertEqual(1, len(checklist_links))\nAssertionError: 1 != 0\n\n======================================================================\nFAIL: test_blank_evidence_never_starts_with_a_pass (tests.test_skill_contract_methods.ExportedReviewChecklistTests.test_blank_evidence_never_starts_with_a_pass) (runtime='opencode')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_skill_contract_methods.py\", line 106, in test_blank_evidence_never_starts_with_a_pass\n    self.assertEqual(1, len(checklist_links))\nAssertionError: 1 != 0\n\n======================================================================\nFAIL: test_closed_subschema_control_rejects_legitimate_extension (tests.test_skill_contract_methods.SchemaClosureExampleTests.test_closed_subschema_control_rejects_legitimate_extension)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_skill_contract_methods.py\", line 40, in setUp\n    self.assertEqual(2, len(schemas), \"publish flat and composed executable schema examples\")\nAssertionError: 2 != 0 : publish flat and composed executable schema examples\n\n======================================================================\nFAIL: test_old_dialect_ignores_composition_closure_control (tests.test_skill_contract_methods.SchemaClosureExampleTests.test_old_dialect_ignores_composition_closure_control)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_skill_contract_methods.py\", line 40, in setUp\n    self.assertEqual(2, len(schemas), \"publish flat and composed executable schema examples\")\nAssertionError: 2 != 0 : publish flat and composed executable schema examples\n\n======================================================================\nFAIL: test_published_composed_closure_accepts_only_contract_inputs (tests.test_skill_contract_methods.SchemaClosureExampleTests.test_published_composed_closure_accepts_only_contract_inputs)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_skill_contract_methods.py\", line 40, in setUp\n    self.assertEqual(2, len(schemas), \"publish flat and composed executable schema examples\")\nAssertionError: 2 != 0 : publish flat and composed executable schema examples\n\n======================================================================\nFAIL: test_published_legacy_flattening_accepts_only_contract_inputs (tests.test_skill_contract_methods.SchemaClosureExampleTests.test_published_legacy_flattening_accepts_only_contract_inputs)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_skill_contract_methods.py\", line 40, in setUp\n    self.assertEqual(2, len(schemas), \"publish flat and composed executable schema examples\")\nAssertionError: 2 != 0 : publish flat and composed executable schema examples\n\n======================================================================\nFAIL: test_same_level_closure_accepts_only_contract_inputs (tests.test_skill_contract_methods.SchemaClosureExampleTests.test_same_level_closure_accepts_only_contract_inputs)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_skill_contract_methods.py\", line 40, in setUp\n    self.assertEqual(2, len(schemas), \"publish flat and composed executable schema examples\")\nAssertionError: 2 != 0 : publish flat and composed executable schema examples\n\n----------------------------------------------------------------------\nRan 6 tests in 0.186s\n\nFAILED (failures=7)\n",
+  "python": "3.12.14",
+  "jsonschema": "4.26.0",
+  "source_before": [
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/design.md",
+      "bytes": 3965,
+      "sha256": "0bda596db331511e9487734860ee56236ea228a28c5ce37d3d9af2e7a053cf8b",
+      "git_blob_sha1": "0a4f6cd6958acac2455c62a2067c3f48b723ece3"
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/negative-results.md",
+      "bytes": 502,
+      "sha256": "e496e2c31f5a66027a3237a59aa0b35bab7a55dfd2f04b29305416550399596d",
+      "git_blob_sha1": "5ea6e6a413cc939781ee86cde4f7fdb7a19b62f2"
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/requirements.md",
+      "bytes": 5483,
+      "sha256": "f679e5bbf6621b00204c850ef243ac2d4d05a390abe8f42b73bf77c87f3de9da",
+      "git_blob_sha1": "3385f5332fec6f3ef00155d78abfc68490b9ebde"
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/tasks.md",
+      "bytes": 1817,
+      "sha256": "9581358112365798cbece54ff2dd7164d9265d5186f1395104e3476daa1bf5aa",
+      "git_blob_sha1": "94e24a2049fc3eeb97436ebf0ff442f2a5791367"
+    },
+    {
+      "path": "manifests/profile_context_ratchets.json",
+      "bytes": 5651,
+      "sha256": "f283524ecff14179cad628735bef9e20580da00c2505687ecca9530da3737bff",
+      "git_blob_sha1": "9252e18651a29882438d61bf7b7c848eeb38f075"
+    },
+    {
+      "path": "skills/adk-interface-contract-design/SKILL.md",
+      "bytes": 4924,
+      "sha256": "4bcf9f6d00ff3fdfeffef01a4c1e82383f02c0530f8dc632305780aedfc8592d",
+      "git_blob_sha1": "166bd9fdf3eb061cc5bfb90110fb0de921e32f04"
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/design-quality-methods.md",
+      "bytes": 2184,
+      "sha256": "0d2a5ae8f32b3950d2b1a21ac913029905aded6f02bd1b0b2e591f61a29bcaf6",
+      "git_blob_sha1": "e28a344dd8989179e39f83c8afa405dee4055f75"
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/details.md",
+      "bytes": 1938,
+      "sha256": "404798e52a85fde251c17986c95727b7b575c7425d7f73c5318a659e8bb57f23",
+      "git_blob_sha1": "a30be6f0edee84c8f76cbcd3d8243ec650ef2880"
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/lifecycle-operation-contract.md",
+      "bytes": 2393,
+      "sha256": "22532bfe0e89fac9596023f0a2b708d46b98722d4acf6adc90bf833e0f82db71",
+      "git_blob_sha1": "dac285c357b87bda2cc468d64fc38d931330aa51"
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/spec-code-bidirectional.md",
+      "bytes": 2238,
+      "sha256": "cfb70c950ca482ce2a4136aa26fe2a3a60c21349949188192a5f0f13450923ce",
+      "git_blob_sha1": "12b0ea0bec197ae0e9db6d4c59d93772efdf29e9"
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/tool-effect-contract.md",
+      "bytes": 2845,
+      "sha256": "428be87b2acb671e01581ae83af46dfb0e87c8cdb1d24d11e18a231244b67ea4",
+      "git_blob_sha1": "64865b9122ebf281971818bdea4f6446a1758ff0"
+    },
+    {
+      "path": "skills/adk-parallel-agent-governance/SKILL.md",
+      "bytes": 4292,
+      "sha256": "1336d4e8a3de6e7bf2f3aab4d09675f3ee794f7cb0476826076ffbebcf523b7c",
+      "git_blob_sha1": "332193235d528097389ee380b118c697ea0435ee"
+    },
+    {
+      "path": "skills/adk-parallel-agent-governance/references/parallel-worktree-task-package.md",
+      "bytes": 1716,
+      "sha256": "8b9ae9c13249cb1cc002e7bf090c1799fe83a2f625359ec4b79395dfaf56f3be",
+      "git_blob_sha1": "3431327dbbf22adc7db2f5ec3f6d1dd142b29f30"
+    },
+    {
+      "path": "skills/adk-parallel-agent-governance/references/subagent-review-checklist.md",
+      "bytes": 643,
+      "sha256": "b771c82410f6c982e9482c27cf79ad0a28a8bd5ffdf3ea15c63ed2ae592e843c",
+      "git_blob_sha1": "e55eaf650d6f4690d92c8e6089d59d32f7a799f3"
+    },
+    {
+      "path": "tests/test_skill_contract_methods.py",
+      "bytes": 6389,
+      "sha256": "3b9e82e27631ff0d04cebcf6489367edf3b54771321f75d31e034b7188063a05",
+      "git_blob_sha1": "5f36b9e034a4edf034e4fe62ab2281dc6e233046"
+    }
+  ],
+  "source_after": [
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/design.md",
+      "bytes": 3965,
+      "sha256": "0bda596db331511e9487734860ee56236ea228a28c5ce37d3d9af2e7a053cf8b",
+      "git_blob_sha1": "0a4f6cd6958acac2455c62a2067c3f48b723ece3"
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/negative-results.md",
+      "bytes": 502,
+      "sha256": "e496e2c31f5a66027a3237a59aa0b35bab7a55dfd2f04b29305416550399596d",
+      "git_blob_sha1": "5ea6e6a413cc939781ee86cde4f7fdb7a19b62f2"
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/requirements.md",
+      "bytes": 5483,
+      "sha256": "f679e5bbf6621b00204c850ef243ac2d4d05a390abe8f42b73bf77c87f3de9da",
+      "git_blob_sha1": "3385f5332fec6f3ef00155d78abfc68490b9ebde"
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/tasks.md",
+      "bytes": 1817,
+      "sha256": "9581358112365798cbece54ff2dd7164d9265d5186f1395104e3476daa1bf5aa",
+      "git_blob_sha1": "94e24a2049fc3eeb97436ebf0ff442f2a5791367"
+    },
+    {
+      "path": "manifests/profile_context_ratchets.json",
+      "bytes": 5651,
+      "sha256": "f283524ecff14179cad628735bef9e20580da00c2505687ecca9530da3737bff",
+      "git_blob_sha1": "9252e18651a29882438d61bf7b7c848eeb38f075"
+    },
+    {
+      "path": "skills/adk-interface-contract-design/SKILL.md",
+      "bytes": 4924,
+      "sha256": "4bcf9f6d00ff3fdfeffef01a4c1e82383f02c0530f8dc632305780aedfc8592d",
+      "git_blob_sha1": "166bd9fdf3eb061cc5bfb90110fb0de921e32f04"
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/design-quality-methods.md",
+      "bytes": 2184,
+      "sha256": "0d2a5ae8f32b3950d2b1a21ac913029905aded6f02bd1b0b2e591f61a29bcaf6",
+      "git_blob_sha1": "e28a344dd8989179e39f83c8afa405dee4055f75"
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/details.md",
+      "bytes": 1938,
+      "sha256": "404798e52a85fde251c17986c95727b7b575c7425d7f73c5318a659e8bb57f23",
+      "git_blob_sha1": "a30be6f0edee84c8f76cbcd3d8243ec650ef2880"
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/lifecycle-operation-contract.md",
+      "bytes": 2393,
+      "sha256": "22532bfe0e89fac9596023f0a2b708d46b98722d4acf6adc90bf833e0f82db71",
+      "git_blob_sha1": "dac285c357b87bda2cc468d64fc38d931330aa51"
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/spec-code-bidirectional.md",
+      "bytes": 2238,
+      "sha256": "cfb70c950ca482ce2a4136aa26fe2a3a60c21349949188192a5f0f13450923ce",
+      "git_blob_sha1": "12b0ea0bec197ae0e9db6d4c59d93772efdf29e9"
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/tool-effect-contract.md",
+      "bytes": 2845,
+      "sha256": "428be87b2acb671e01581ae83af46dfb0e87c8cdb1d24d11e18a231244b67ea4",
+      "git_blob_sha1": "64865b9122ebf281971818bdea4f6446a1758ff0"
+    },
+    {
+      "path": "skills/adk-parallel-agent-governance/SKILL.md",
+      "bytes": 4292,
+      "sha256": "1336d4e8a3de6e7bf2f3aab4d09675f3ee794f7cb0476826076ffbebcf523b7c",
+      "git_blob_sha1": "332193235d528097389ee380b118c697ea0435ee"
+    },
+    {
+      "path": "skills/adk-parallel-agent-governance/references/parallel-worktree-task-package.md",
+      "bytes": 1716,
+      "sha256": "8b9ae9c13249cb1cc002e7bf090c1799fe83a2f625359ec4b79395dfaf56f3be",
+      "git_blob_sha1": "3431327dbbf22adc7db2f5ec3f6d1dd142b29f30"
+    },
+    {
+      "path": "skills/adk-parallel-agent-governance/references/subagent-review-checklist.md",
+      "bytes": 643,
+      "sha256": "b771c82410f6c982e9482c27cf79ad0a28a8bd5ffdf3ea15c63ed2ae592e843c",
+      "git_blob_sha1": "e55eaf650d6f4690d92c8e6089d59d32f7a799f3"
+    },
+    {
+      "path": "tests/test_skill_contract_methods.py",
+      "bytes": 6389,
+      "sha256": "3b9e82e27631ff0d04cebcf6489367edf3b54771321f75d31e034b7188063a05",
+      "git_blob_sha1": "5f36b9e034a4edf034e4fe62ab2281dc6e233046"
+    }
+  ],
+  "source_unchanged_during_command": true
+}

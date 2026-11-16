@@ -1,0 +1,464 @@
+{
+  "schema": "round3-core-implementation/v1",
+  "completed_at_utc": "2026-11-16T08:01:41.705920+00:00",
+  "role": "implementation only; not requirements/design owner or independent reviewer",
+  "task_ids": [
+    "F4",
+    "F5"
+  ],
+  "baseline_head": "80f8b2ea2885e3f62dcea455c45a2e8ebf071b2b",
+  "branch": "improve/skill-failure-paths-20261116",
+  "status": "implemented; source frozen; targeted regression and current shared-workspace large-refactor budget passed",
+  "changed_files": [
+    {
+      "path": "skills/adk-interface-contract-design/SKILL.md",
+      "bytes": 4290,
+      "sha256": "94b66c15f2d9e6634fbb81ad49570319a390e0dd9ea25604bbe2dfa1f360db9b",
+      "git_blob_sha1": "7a6b64fd3abae89ae5557158696bb28bb307203f",
+      "exists_in_baseline_git": true,
+      "matches_final_test_source": true,
+      "baseline_sha256": "4bcf9f6d00ff3fdfeffef01a4c1e82383f02c0530f8dc632305780aedfc8592d",
+      "baseline_bytes": 4924,
+      "byte_delta": -634
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/details.md",
+      "bytes": 2611,
+      "sha256": "e182fd8bc0edd58556700a0b4ce6d435a705128c6bf37b6ec2b13c624826a593",
+      "git_blob_sha1": "a617bf5c439c4cd3f808f0d904ffb4a810ea340f",
+      "exists_in_baseline_git": true,
+      "matches_final_test_source": true,
+      "baseline_sha256": "404798e52a85fde251c17986c95727b7b575c7425d7f73c5318a659e8bb57f23",
+      "baseline_bytes": 1938,
+      "byte_delta": 673
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/design-quality-methods.md",
+      "bytes": 1598,
+      "sha256": "4bfbfa3df2196616db1f491531b5bc5328afae24a2e54f4739c489d83ddcdd8b",
+      "git_blob_sha1": "720070607935eea1aff0eddb779b9702e8c12428",
+      "exists_in_baseline_git": true,
+      "matches_final_test_source": true,
+      "baseline_sha256": "0d2a5ae8f32b3950d2b1a21ac913029905aded6f02bd1b0b2e591f61a29bcaf6",
+      "baseline_bytes": 2184,
+      "byte_delta": -586
+    },
+    {
+      "path": "skills/adk-parallel-agent-governance/SKILL.md",
+      "bytes": 4292,
+      "sha256": "446a4a08ffd2d4dfc89bc9752dfea7000fe05818f490892308b08be312386c68",
+      "git_blob_sha1": "95c69872cbb2938040ecbec2c1492679d22a19fc",
+      "exists_in_baseline_git": true,
+      "matches_final_test_source": true,
+      "baseline_sha256": "1336d4e8a3de6e7bf2f3aab4d09675f3ee794f7cb0476826076ffbebcf523b7c",
+      "baseline_bytes": 4292,
+      "byte_delta": 0
+    },
+    {
+      "path": "skills/adk-parallel-agent-governance/references/subagent-review-checklist.md",
+      "bytes": 738,
+      "sha256": "9fc2748d504d975cd3550c4809f66c3e10fecd753650f8d649b2bda124072fa3",
+      "git_blob_sha1": "561939020cf66fc215d87105ea7e1b8383e3a659",
+      "exists_in_baseline_git": true,
+      "matches_final_test_source": true,
+      "baseline_sha256": "b771c82410f6c982e9482c27cf79ad0a28a8bd5ffdf3ea15c63ed2ae592e843c",
+      "baseline_bytes": 643,
+      "byte_delta": 95
+    },
+    {
+      "path": "tests/test_skill_contract_methods.py",
+      "bytes": 6391,
+      "sha256": "b52841a26b065b6de8727d2ba36cac3fc1902b76856fd264fa453c75c51b0e47",
+      "git_blob_sha1": "5b68f9e31c2a924a4a5018ad3d2b91926ae72a5c",
+      "exists_in_baseline_git": false,
+      "matches_final_test_source": true
+    }
+  ],
+  "skill_versions": {
+    "adk-interface-contract-design": {
+      "before": "1.3.7",
+      "after": "1.3.8"
+    },
+    "adk-parallel-agent-governance": {
+      "before": "1.5.1",
+      "after": "1.5.2"
+    }
+  },
+  "date_note": "Both last_updated fields already matched the actual 2026-11-16 date and remain 2026-11-16; no future date was invented.",
+  "behavior": {
+    "F4": "Fix the consumer dialect, validator version and keyword subset; close same-level properties with additionalProperties; use unevaluatedProperties only at a supported modern composition boundary; flatten older/narrow consumers or needs-fix, never silently widen. Two actual JSON examples are parsed by the new regression.",
+    "F5": "Only the shipped blank checklist defaults change to not-run, with one per-row evidence instruction. The actual default task package and checklist link are resolved from both exported targets; all five empty evidence rows must remain unverified.",
+    "preserved": "Trigger/non-trigger scope, strict unknown-field rejection, required/enum/refusal/parse failure handling, version capability checks, ABI boundaries, owner/state/lifecycle matrix, permission before side effects, replay/reconciliation and prototype permission boundaries remain. The C version-check implementation is unchanged except its equivalent precondition comment.",
+    "budget_adjustment": "Existing interface wording/headings and duplicated checklist/matrix explanations were shortened within the three assigned interface files. No threshold, manifest, shared test registry, global version or other implementation group was edited by this agent."
+  },
+  "validation": {
+    "python": "3.12.14",
+    "jsonschema": "4.26.0",
+    "final_unittest_count": 9,
+    "new_regression_tests": 6,
+    "schema_matrix": {
+      "variants": [
+        "same-level modern closed",
+        "closed allOf subschema negative control",
+        "modern composed closure",
+        "Draft7 unsupported keyword negative control",
+        "published Draft7 flattened closure"
+      ],
+      "input_names": [
+        "legitimate",
+        "unknown_field",
+        "missing_id",
+        "missing_mode",
+        "invalid_type",
+        "invalid_enum"
+      ],
+      "checks": 30,
+      "interpretation": "The two negative controls intentionally preserve the original bad observations; all positive examples satisfy the consumer acceptance contract."
+    },
+    "export_targets": [
+      "claude-code",
+      "opencode"
+    ],
+    "export_blank_rows_checked": 10,
+    "preservation_regressions": [
+      "compiled original C version/capability example",
+      "existing exported default worker package self-containment",
+      "existing Spec-to-Code and unchecked status contract"
+    ],
+    "final_budget": {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "large-refactor",
+      "actual": {
+        "entry_file_bytes": 213207,
+        "potential_full_source_bytes": 323294
+      },
+      "ratchet": {
+        "entry_file_bytes": 248328,
+        "potential_full_source_bytes": 323328
+      },
+      "asset_count": 56,
+      "asset_count_baseline": 56,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    "own_skill_byte_delta": -452,
+    "remaining_shared_large_refactor_bytes": 34,
+    "commands": [
+      {
+        "label": "red-contract-methods",
+        "command_argv": [
+          "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+          "run",
+          "python3.12",
+          "-m",
+          "unittest",
+          "tests.test_skill_contract_methods",
+          "-v"
+        ],
+        "started_at_utc": "2026-11-16T07:51:29.989177+00:00",
+        "finished_at_utc": "2026-11-16T07:51:30.377666+00:00",
+        "exit_code": 1,
+        "source_unchanged_during_command": true,
+        "raw_receipt": "/workspace/scratch/fe5385ca063a/round3-core-runs/red-contract-methods.json"
+      },
+      {
+        "label": "red-contract-methods-corrected-parser",
+        "command_argv": [
+          "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+          "run",
+          "python3.12",
+          "-m",
+          "unittest",
+          "tests.test_skill_contract_methods",
+          "-v"
+        ],
+        "started_at_utc": "2026-11-16T07:51:44.444694+00:00",
+        "finished_at_utc": "2026-11-16T07:51:44.825895+00:00",
+        "exit_code": 1,
+        "source_unchanged_during_command": true,
+        "raw_receipt": "/workspace/scratch/fe5385ca063a/round3-core-runs/red-contract-methods-corrected-parser.json"
+      },
+      {
+        "label": "green-contract-methods",
+        "command_argv": [
+          "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+          "run",
+          "python3.12",
+          "-m",
+          "unittest",
+          "tests.test_skill_contract_methods",
+          "-v"
+        ],
+        "started_at_utc": "2026-11-16T07:54:21.316440+00:00",
+        "finished_at_utc": "2026-11-16T07:54:21.688259+00:00",
+        "exit_code": 0,
+        "source_unchanged_during_command": true,
+        "raw_receipt": "/workspace/scratch/fe5385ca063a/round3-core-runs/green-contract-methods.json"
+      },
+      {
+        "label": "final-targeted-regressions",
+        "command_argv": [
+          "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+          "run",
+          "python3.12",
+          "-m",
+          "unittest",
+          "tests.test_skill_contract_methods",
+          "tests.test_skill_command_examples.InterfaceVersionExampleTests",
+          "tests.test_skill_content_contract.SkillContentContractTests.test_exported_parallel_worker_package_is_self_contained",
+          "tests.test_skill_quality_methods.SkillQualityMethodsTests.test_spec_to_code_is_bidirectional_and_unchecked_is_not_success",
+          "-v"
+        ],
+        "started_at_utc": "2026-11-16T07:55:35.331746+00:00",
+        "finished_at_utc": "2026-11-16T07:55:35.929764+00:00",
+        "exit_code": 0,
+        "source_unchanged_during_command": true,
+        "raw_receipt": "/workspace/scratch/fe5385ca063a/round3-core-runs/final-targeted-regressions.json"
+      },
+      {
+        "label": "final-diff-check",
+        "command_argv": [
+          "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+          "run",
+          "git",
+          "diff",
+          "--check",
+          "--",
+          "skills/adk-interface-contract-design",
+          "skills/adk-parallel-agent-governance",
+          "tests/test_skill_contract_methods.py"
+        ],
+        "started_at_utc": "2026-11-16T07:55:35.343329+00:00",
+        "finished_at_utc": "2026-11-16T07:55:35.354465+00:00",
+        "exit_code": 0,
+        "source_unchanged_during_command": true,
+        "raw_receipt": "/workspace/scratch/fe5385ca063a/round3-core-runs/final-diff-check.json"
+      },
+      {
+        "label": "final-large-refactor-budget",
+        "command_argv": [
+          "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+          "run",
+          "python3.12",
+          "-c",
+          "import json; from pathlib import Path; from agent_dev_kit.model import Manifest; from agent_dev_kit.profile_context_footprint import enforce_profile_ratchet; result=enforce_profile_ratchet(Manifest.load(Path(\".\")),\"large-refactor\"); print(json.dumps(result,ensure_ascii=False,indent=2)); raise SystemExit(result[\"status\"]!=\"pass\")"
+        ],
+        "started_at_utc": "2026-11-16T07:55:35.477005+00:00",
+        "finished_at_utc": "2026-11-16T07:55:35.720055+00:00",
+        "exit_code": 1,
+        "source_unchanged_during_command": true,
+        "raw_receipt": "/workspace/scratch/fe5385ca063a/round3-core-runs/final-large-refactor-budget.json"
+      },
+      {
+        "label": "final-compressed-targeted-regressions",
+        "command_argv": [
+          "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+          "run",
+          "python3.12",
+          "-m",
+          "unittest",
+          "tests.test_skill_contract_methods",
+          "tests.test_skill_command_examples.InterfaceVersionExampleTests",
+          "tests.test_skill_content_contract.SkillContentContractTests.test_exported_parallel_worker_package_is_self_contained",
+          "tests.test_skill_quality_methods.SkillQualityMethodsTests.test_spec_to_code_is_bidirectional_and_unchecked_is_not_success",
+          "-v"
+        ],
+        "started_at_utc": "2026-11-16T08:00:34.615270+00:00",
+        "finished_at_utc": "2026-11-16T08:00:35.231527+00:00",
+        "exit_code": 0,
+        "source_unchanged_during_command": true,
+        "raw_receipt": "/workspace/scratch/fe5385ca063a/round3-core-runs/final-compressed-targeted-regressions.json"
+      },
+      {
+        "label": "final-compressed-diff-check",
+        "command_argv": [
+          "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+          "run",
+          "git",
+          "diff",
+          "--check",
+          "--",
+          "skills/adk-interface-contract-design",
+          "skills/adk-parallel-agent-governance",
+          "tests/test_skill_contract_methods.py"
+        ],
+        "started_at_utc": "2026-11-16T08:00:34.684032+00:00",
+        "finished_at_utc": "2026-11-16T08:00:34.696030+00:00",
+        "exit_code": 0,
+        "source_unchanged_during_command": true,
+        "raw_receipt": "/workspace/scratch/fe5385ca063a/round3-core-runs/final-compressed-diff-check.json"
+      },
+      {
+        "label": "final-compressed-large-refactor-budget",
+        "command_argv": [
+          "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+          "run",
+          "python3.12",
+          "-c",
+          "import json; from pathlib import Path; from agent_dev_kit.model import Manifest; from agent_dev_kit.profile_context_footprint import enforce_profile_ratchet; result=enforce_profile_ratchet(Manifest.load(Path(\".\")),\"large-refactor\"); print(json.dumps(result,ensure_ascii=False,indent=2)); raise SystemExit(result[\"status\"]!=\"pass\")"
+        ],
+        "started_at_utc": "2026-11-16T08:00:34.684837+00:00",
+        "finished_at_utc": "2026-11-16T08:00:34.999840+00:00",
+        "exit_code": 0,
+        "source_unchanged_during_command": true,
+        "raw_receipt": "/workspace/scratch/fe5385ca063a/round3-core-runs/final-compressed-large-refactor-budget.json"
+      },
+      {
+        "label": "lesson-lookup-replay",
+        "command_argv": [
+          "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+          "run",
+          "rg",
+          "-n",
+          "schema|方言|allOf|additionalProperties|审核模板|Evidence|并行|interface-contract|parallel-agent",
+          "knowledge/L2-domain/lessons.md"
+        ],
+        "started_at_utc": "2026-11-16T08:00:56.402150+00:00",
+        "finished_at_utc": "2026-11-16T08:00:56.425492+00:00",
+        "exit_code": 2,
+        "source_unchanged_during_command": true,
+        "raw_receipt": "/workspace/scratch/fe5385ca063a/round3-core-runs/lesson-lookup-replay.json"
+      }
+    ]
+  },
+  "retained_failures": [
+    {
+      "receipt": "/workspace/scratch/fe5385ca063a/round3-core-runs/red-contract-methods.json",
+      "classification": "The first RED contained a checklist-link parser defect caused by matching across Markdown fences. It is not claimed as the F5 product failure; the test parser was corrected before product edits."
+    },
+    {
+      "receipt": "/workspace/scratch/fe5385ca063a/round3-core-runs/red-contract-methods-corrected-parser.json",
+      "classification": "Actual pre-edit RED: 10 exported rows prefilled pass with empty evidence; 5 schema methods failed on absent published JSON examples. The earlier 5x6 semantic diagnostic is separately identified and not relabeled as this RED."
+    },
+    {
+      "receipt": "/workspace/scratch/fe5385ca063a/round3-core-runs/final-large-refactor-budget.json",
+      "classification": "Intermediate shared-workspace budget failed at 323771 > 323328. Further equivalent compression produced the separate final passing receipt; the failure was not overwritten."
+    },
+    {
+      "receipt": "/workspace/scratch/fe5385ca063a/round3-core-runs/lesson-lookup-replay.json",
+      "classification": "R1.8 lookup source knowledge/L2-domain/lessons.md does not exist (exit 2). This timestamped replay preserves the same negative observation seen before implementation."
+    },
+    {
+      "classification": "Preflight harness call Manifest.load(\".\") used str instead of Path and raised AttributeError; a corrected Path call succeeded before RED. This was not a product defect.",
+      "command": "/workspace/scratch/fe5385ca063a/verification-tools/rtk run env PYTHONPATH=src python3.12 -c 'import json; from agent_dev_kit.model import Manifest; from agent_dev_kit.profile_context_footprint import enforce_profile_ratchet; m=Manifest.load(\".\"); print(json.dumps(enforce_profile_ratchet(m,\"large-refactor\"),ensure_ascii=False,indent=2))'",
+      "exit_code": 1,
+      "timestamp": null,
+      "timestamp_note": "The initial tool call did not capture wall-clock time; no reconstructed time is asserted.",
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/src/agent_dev_kit/model.py\", line 138, in load\n    root = root.resolve()\n           ^^^^^^^^^^^^\nAttributeError: 'str' object has no attribute 'resolve'\n",
+      "tool_chunk_id": "9b396b"
+    }
+  ],
+  "artifact_index": [
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-core-runs/final-compressed-diff-check.json",
+      "bytes": 9760,
+      "sha256": "946d3b84cbf5e4dd379a51a3e43a54462205373968b81dad319c26cd39b63970",
+      "git_blob_sha1": "1bde66d85f59e05125fab8927c6148b31a5f58ac"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-core-runs/final-compressed-large-refactor-budget.json",
+      "bytes": 10531,
+      "sha256": "adcb74d62dc91fd2e7700759b6dd683a969ff56c4708e1c1b4c9ccb132dfefb9",
+      "git_blob_sha1": "13e8661ad86d7475ccfaa77b8fafbf62952b695b"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-core-runs/final-compressed-targeted-regressions.json",
+      "bytes": 11840,
+      "sha256": "83ef7c95577dca280606a58e394068a3858a2a0bea57a6ee38f93efd39b17f52",
+      "git_blob_sha1": "f7d4e30b29c72efe3912cfd19357cc8a2fa088f6"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-core-runs/final-diff-check.json",
+      "bytes": 8723,
+      "sha256": "e50980cda2014e2f4e30935586880c0de7b03202d91adba58d9ce9f719a36e00",
+      "git_blob_sha1": "3f518d8b106168f8d7a866cd9c6a659ee801db1a"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-core-runs/final-large-refactor-budget.json",
+      "bytes": 9570,
+      "sha256": "498bed387dbb4f6ead908bdf9db169b3f0510a4e2d58ff4788a16c9055d1b097",
+      "git_blob_sha1": "e1f2c06b9e58cfd0a1af93da320b6a7c69b96919"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-core-runs/final-targeted-regressions.json",
+      "bytes": 10804,
+      "sha256": "2cc714b3e7f1ca4fe99c7d93f1fe87a996f441ca6e72ac7b434b41f7fff94fe5",
+      "git_blob_sha1": "73f6d5c756a17d2a2e6853972b78293e8db1697a"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-core-runs/green-contract-methods.json",
+      "bytes": 9834,
+      "sha256": "ffa45918504859694339ee2433f0e08dcb4ce34740ece96f24063ffbcdcdee4c",
+      "git_blob_sha1": "a4513c599fcce51b873ff7f2e971c2d5abe45c30"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-core-runs/lesson-lookup-replay.json",
+      "bytes": 9875,
+      "sha256": "5b7d2cd19c53cd6cb3647f22c77780fdd1369ce8b828d248902b2149b64457fe",
+      "git_blob_sha1": "e9186b7c16a9740bab696d90ecd674c0ee876730"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-core-runs/red-contract-methods-corrected-parser.json",
+      "bytes": 22744,
+      "sha256": "7b599d22a94bb1bace1fcc4d183f1349eb94bcecd245ca5ab5e2d057d3aae4af",
+      "git_blob_sha1": "a0aa4a9d068c19bb70698770ef58e1cef23b7cd9"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-core-runs/red-contract-methods.json",
+      "bytes": 14700,
+      "sha256": "a473daf0edec66f848a06636b4bf48edd380f8f4f2c9d5e6e9bf57227d10d16e",
+      "git_blob_sha1": "2349374fef5453db73b52ae0e868b60c6f970263"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-core-run.py",
+      "bytes": 3305,
+      "sha256": "9444710f5b6eef6620c963305d76092b32ca60c9e19aacdf0316e5cf3fdf916b",
+      "git_blob_sha1": "03f402e073f2abeb6e14df531a3657b8087be9a0"
+    }
+  ],
+  "prior_diagnostics_not_this_tdd_red": [
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-core-audit.json",
+      "bytes": 112393,
+      "sha256": "e184e3bc51e8deeb2297e977241895756b321d3cbb711372b7c8d5a744a43673",
+      "git_blob_sha1": "5bcc2aedb119a0f892233b4949347c664ac99d12"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-schema-composition-probe.py",
+      "bytes": 3697,
+      "sha256": "87ef33ba81de1599f486a8f7407b270ae79c1ffe0c65808c730f563509b0e2c2",
+      "git_blob_sha1": "a35483e9b1bfad8ed09a7ff1f58ac7e973f0941a"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-schema-composition-probe.json",
+      "bytes": 5964,
+      "sha256": "bd4ac31c530654223295a486954f4ecc2c4819d787d4ce3cfa4918b9ff3fe221",
+      "git_blob_sha1": "1c6b0fec24348d937c139df1ae5048c156cbf306"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-checklist-probe.py",
+      "bytes": 3065,
+      "sha256": "f83f1bc12c9f2da9e6b7334f588851dfcf1d2ceef7cb4dc43a5acc2feae85ef3",
+      "git_blob_sha1": "3542006a3a54d9a9de7ba6e3dd393f829253a3aa"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-checklist-probe.json",
+      "bytes": 1481,
+      "sha256": "154aa278de5d51b33a6bb68481876a5708011d7e8044c0648528f342a207592b",
+      "git_blob_sha1": "49df10c21f0039db1e4f79798afedbed5df7e189"
+    }
+  ],
+  "limitations": [
+    "JSON Schema library semantics and exported document defaults only; no native model, actual platform validator subset, runtime discovery/load/trigger, product approval, field or token-effect claim.",
+    "The checklist is a document template; this test does not implement or certify a runtime review gate.",
+    "The new schemas are executable examples, not production ADK schema changes.",
+    "Only targeted tests and the requested large-refactor measurement ran here; the parent owns full regression, test registration, global versioning, independent review and publishing.",
+    "The shared-workspace budget result is bound to its actual execution time and unchanged thresholds, not to a committed release tree.",
+    "The source-only templates/task-packages/subagent-review-checklist.md mirror is outside this frozen implementation write set and was not modified.",
+    "No commit, push, merge, dependency installation, external message or permission/Gate system was introduced."
+  ]
+}

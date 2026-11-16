@@ -1,0 +1,33 @@
+{
+  "schema": "local-command-observation/v1",
+  "cwd": "/workspace/scratch/fe5385ca063a/agent-dev-kit",
+  "command": [
+    "bash",
+    "tests/run_all.sh",
+    "--timing-json",
+    "/workspace/scratch/fe5385ca063a/adk-11.3.10-full-regression/timing.json"
+  ],
+  "started_at": "2026-11-16T08:02:28.006002+00:00",
+  "before": {
+    "head": {
+      "exit_code": 0,
+      "stdout": "6183982e1f5e4a1bb09727009a809514e160be64\n",
+      "stderr": ""
+    },
+    "indexed_tree": {
+      "exit_code": 0,
+      "stdout": "09946e71e8ccee1063466d0c8df9088d6d036a3c\n",
+      "stderr": ""
+    },
+    "status": {
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "staged_diff": {
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  }
+}

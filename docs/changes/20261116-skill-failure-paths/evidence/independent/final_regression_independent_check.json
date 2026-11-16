@@ -1,0 +1,348 @@
+{
+  "schema": "round3-independent-final-regression-verification/v1",
+  "reviewer": "/root/round3_independent_review",
+  "verified_at": "2026-11-16T08:21:23.592791+00:00",
+  "source": {
+    "head": "d87e21d7750ec4a0042754d045979c137abfc528",
+    "tree": "617bdcb20e5fb629c1ddd175e29373b1b86aa0c5",
+    "all33_frozen_source_bytes_unchanged_at_review": true,
+    "current_status_during_separate_parent_evidence_packaging": "?? docs/changes/20261116-skill-failure-paths/evidence/cmake-implementation.json\n?? docs/changes/20261116-skill-failure-paths/evidence/cmake-raw/\n?? docs/changes/20261116-skill-failure-paths/evidence/consumer-fixture-before.json\n?? docs/changes/20261116-skill-failure-paths/evidence/consumer-materials.json\n?? docs/changes/20261116-skill-failure-paths/evidence/consumer-response.json\n?? docs/changes/20261116-skill-failure-paths/evidence/consumer-task.md\n?? docs/changes/20261116-skill-failure-paths/evidence/core-compat-raw/\n?? docs/changes/20261116-skill-failure-paths/evidence/core-contract-compatibility-fix.json\n?? docs/changes/20261116-skill-failure-paths/evidence/core-implementation.json\n?? docs/changes/20261116-skill-failure-paths/evidence/core-raw/\n?? docs/changes/20261116-skill-failure-paths/evidence/corrected-environment.json\n?? docs/changes/20261116-skill-failure-paths/evidence/full-regression-started.json\n?? docs/changes/20261116-skill-failure-paths/evidence/full-regression-timing.json\n?? docs/changes/20261116-skill-failure-paths/evidence/full-regression.json\n?? docs/changes/20261116-skill-failure-paths/evidence/independent/\n?? docs/changes/20261116-skill-failure-paths/evidence/initial-profile-context-checks.json\n?? docs/changes/20261116-skill-failure-paths/evidence/initial-regression-started.json\n?? docs/changes/20261116-skill-failure-paths/evidence/initial-regression-timing.json\n?? docs/changes/20261116-skill-failure-paths/evidence/initial-regression.json\n?? docs/changes/20261116-skill-failure-paths/evidence/optional-implementation.json\n?? docs/changes/20261116-skill-failure-paths/evidence/optional-line-budget-fix.json\n?? docs/changes/20261116-skill-failure-paths/evidence/optional-line-raw/\n?? docs/changes/20261116-skill-failure-paths/evidence/original.patch\n?? docs/changes/20261116-skill-failure-paths/evidence/profile-context-checks.json\n?? docs/changes/20261116-skill-failure-paths/evidence/raw/\n?? docs/changes/20261116-skill-failure-paths/evidence/retained-files.json\n?? docs/changes/20261116-skill-failure-paths/evidence/skill-source-size-comparison.json\n?? docs/changes/20261116-skill-failure-paths/evidence/source-bindings.json\n"
+  },
+  "run": {
+    "started_at": "2026-11-16T08:14:20.475042+00:00",
+    "finished_at": "2026-11-16T08:19:58.536238+00:00",
+    "elapsed_seconds": 338.04035697699874,
+    "exit_code": 0,
+    "timed_out": false,
+    "source_before_after_clean": true,
+    "full_suite_total": 102,
+    "passed": 102,
+    "failed": 0
+  },
+  "inputs": [
+    {
+      "path": "/workspace/scratch/fe5385ca063a/adk-11.3.10-corrected-regression/started.json",
+      "bytes": 764,
+      "sha256": "a8aa85a30a17248498e056b372d2b5a830aefa8938eabfdec70fd0869feb1996"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/adk-11.3.10-corrected-regression/receipt.json",
+      "bytes": 1619,
+      "sha256": "d655c80defe19e40627460f0cf6bd7c661c84849c7753d161064b2794d30a8ce"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/adk-11.3.10-corrected-regression/timing.json",
+      "bytes": 8283,
+      "sha256": "f17e4c4873fc8dbc716b53050b3c3353dc5667700d324a1af5b68df84fbd403b"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/adk-11.3.10-corrected-regression/stdout.log",
+      "bytes": 3174,
+      "sha256": "0d1bee4e82001511f12291d9c3be0867228a5a396f58b49d3acd176ef3eed61e"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/adk-11.3.10-corrected-regression/stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "registry": [
+    {
+      "path": "tests/run_all.sh",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "sha256": "dd522f4d2f0a8a1e13f531c53bf69744943b6ddd1a4c1f30b12033b41eeb2cd7",
+      "bytes": 10526,
+      "read_scope": "Full full-mode test population parsed and exact module registration inspected; no independent semantic review of all registered tests claimed."
+    },
+    {
+      "path": "tests/test_skill_content.sh",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "sha256": "1d5bcad72ec6ea8ba832c2876c96325e1e015bd98f4428293e1674b5bcea6ed9",
+      "bytes": 1037,
+      "read_scope": "Full full-mode test population parsed and exact module registration inspected; no independent semantic review of all registered tests claimed."
+    }
+  ],
+  "registered_test_names": [
+    "test_validate",
+    "test_manifest_contract",
+    "test_catalog",
+    "test_skill_content",
+    "test_skill_trigger_matrix",
+    "test_skill_sop_quality",
+    "test_token_context_governance",
+    "test_strict_json",
+    "test_contract_hardening",
+    "test_boundary_rehearsal",
+    "test_contract_registry",
+    "test_schema_resource_sync",
+    "test_manifest_consumer_boundary",
+    "test_manifest_composition_contract",
+    "test_manifest_composition_cli",
+    "test_test_registry",
+    "test_python_launcher",
+    "test_asset_content_quality",
+    "test_format",
+    "test_no_external_repo_refs",
+    "test_file_modes",
+    "test_install",
+    "test_profile_coherence",
+    "test_profile_context_footprint",
+    "test_optional_skills",
+    "test_convert",
+    "test_runtime_boundary",
+    "test_target_contracts",
+    "test_target_adapter_spi",
+    "test_native_trust",
+    "test_sigstore_blob",
+    "test_native_campaign",
+    "test_native_campaign_boundaries",
+    "test_native_campaign_diagnostics",
+    "test_target_source_probe",
+    "test_effect_eval",
+    "test_completion_coverage",
+    "test_eval_catalog",
+    "test_external_reference_binding",
+    "test_runtime_comparison_contract",
+    "test_product_maturity",
+    "test_runtime_bundle",
+    "test_release_manifest_contract",
+    "test_software_m5_ready",
+    "test_repository_runtime_evidence",
+    "test_token_budget",
+    "test_task_cost",
+    "test_execution_policy",
+    "test_official_docs_governance",
+    "test_official_docs_timezone",
+    "test_official_upstream_drift",
+    "test_intent_boundary_governance",
+    "test_agent_ecosystem_standards",
+    "test_agent_value",
+    "test_agent_value_trust",
+    "test_trace_summary",
+    "test_run_evidence",
+    "test_evidence_envelope",
+    "test_evidence_bridge",
+    "test_effect_comparator",
+    "test_effect_trials",
+    "test_effect_campaign_materializer",
+    "test_runtime_capabilities",
+    "test_tool_skill_evidence_contracts",
+    "test_asset_taxonomy",
+    "test_workflow_contract",
+    "test_workflow_ir",
+    "test_workflow_closure",
+    "test_goal_contracts",
+    "test_capability_health",
+    "test_harness_readiness",
+    "test_review_evidence",
+    "test_archive_restore",
+    "test_local_ci_parity",
+    "test_hosted_workflow_hygiene",
+    "test_github_governance_admin",
+    "test_performance_budgets",
+    "test_change_governance",
+    "test_evidence_index",
+    "test_evidence_graph",
+    "test_pilot_readiness",
+    "test_embedded_production_field_pilot",
+    "test_embedded_workflow_pilots",
+    "test_embedded_test_matrix_example",
+    "test_workflow",
+    "test_workflow_verify_fail_closed",
+    "test_openspec_isolation",
+    "test_boundary_conditions_match",
+    "test_enhanced_gate_check",
+    "test_templates",
+    "test_context_md",
+    "test_boundary_conditions",
+    "test_integration",
+    "test_profile_coherence_enhanced",
+    "test_match_effectiveness",
+    "test_skill_governance",
+    "test_skill_dependencies",
+    "test_memory_governance",
+    "test_capability_uplift",
+    "test_docs_cli_alignment",
+    "test_performance_ops",
+    "test_scripts_smoke"
+  ],
+  "timing_population_exact_match": true,
+  "stdout_population_exact_match": true,
+  "new_method_module_registration": [
+    "tests.test_skill_command_examples",
+    "tests.test_skill_cmake_methods",
+    "tests.test_skill_contract_methods"
+  ],
+  "worktree_source_checks": [
+    {
+      "path": ".version-lock",
+      "sha256": "835cee18fe2fcac7d1332ff64f585b27a70ad8c611378d85868682e2dccf4ffd",
+      "equals_frozen": true
+    },
+    {
+      "path": "CONTEXT.md",
+      "sha256": "89343a690a4237f4dbc7ab5d64aa20a30bc6395d11c3b30683516f7754640b37",
+      "equals_frozen": true
+    },
+    {
+      "path": "README.md",
+      "sha256": "3a9f558c2ab08b0ad10a1af47aeed964403f8c43ee5bedab9d1bb8d7dcbf0dcc",
+      "equals_frozen": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/audit.md",
+      "sha256": "17c9f19aaa0a16eccbd042806b3f5a752908a40693f251e375107e0d405084a4",
+      "equals_frozen": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/design.md",
+      "sha256": "0bda596db331511e9487734860ee56236ea228a28c5ce37d3d9af2e7a053cf8b",
+      "equals_frozen": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/evidence/core-audit.json",
+      "sha256": "e184e3bc51e8deeb2297e977241895756b321d3cbb711372b7c8d5a744a43673",
+      "equals_frozen": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/evidence/embedded-audit.json",
+      "sha256": "ef717877749d346be61a8d925f54c3867eafeb418cb6e3987c3f30afa59904f9",
+      "equals_frozen": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/evidence/optional-audit.json",
+      "sha256": "028e65709f30b542e1f334e052aefe48196076825dae33b034fd2549d8c18fd7",
+      "equals_frozen": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/evidence/platform-audit.json",
+      "sha256": "140f419bc48a74455c0c600ccffd6a48468688a5c3f1617bcbeeddd147bbd3a6",
+      "equals_frozen": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/evidence/portfolio-audit.json",
+      "sha256": "5b2c73cb17234669536fade8073b73a02cad3eea4c02f6219e5125cdd67cd75b",
+      "equals_frozen": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/negative-results.md",
+      "sha256": "81f219f5c4bff060662d2f05486f0d13a0961d22ec1c9ba768a8a2886829294e",
+      "equals_frozen": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/requirements.md",
+      "sha256": "517734b8479b0df46a571ee7f1d0b806b4a61dc60a7ad53c3a0bf46e2eb0d033",
+      "equals_frozen": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/source-review.md",
+      "sha256": "782dabec15e8a196036afffe44a984f4b8ca3ef7ed45409071ada02d05f54ca8",
+      "equals_frozen": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/tasks.md",
+      "sha256": "210350eaa74224193d111000a254cd1cf1bc4f659fb0e386717abd39b18240bb",
+      "equals_frozen": true
+    },
+    {
+      "path": "docs/runbooks/security-supply-chain.md",
+      "sha256": "324d20206f40778300906051dc08775297017b2318ecec74100ef303efe423ce",
+      "equals_frozen": true
+    },
+    {
+      "path": "manifest.json",
+      "sha256": "43caab611aba1d9843ee74ee92df803288b5a0d066e7cc4d6b655a7431850265",
+      "equals_frozen": true
+    },
+    {
+      "path": "manifests/software_m5_eval_contract.json",
+      "sha256": "4f3ec4848646cfc1aa397fae471e5340f0f14fdece7aeab8b2f5d89e8ccb21c0",
+      "equals_frozen": true
+    },
+    {
+      "path": "optional-skills/adk-security-supply-chain/SKILL.md",
+      "sha256": "2d8453ce4525d0793ce1ee89a9503001189c4819fa3966588b561d8eb9a0474e",
+      "equals_frozen": true
+    },
+    {
+      "path": "optional-skills/adk-test-flakiness-triage/SKILL.md",
+      "sha256": "6d37c99701d7be57c837be6854484a263cc75b6a12e01db9969dd2cec2571a54",
+      "equals_frozen": true
+    },
+    {
+      "path": "optional-skills/adk-test-flakiness-triage/references/details.md",
+      "sha256": "68522e43db6194ff02d275d65c3078ff363aab4329fc18f17f6e3594b30924e1",
+      "equals_frozen": true
+    },
+    {
+      "path": "pyproject.toml",
+      "sha256": "eb973742535043bb63cef15243b0e0c9e6fb91bfb58599fe13f1bf9da498a7fb",
+      "equals_frozen": true
+    },
+    {
+      "path": "skills/adk-cmake-cross-build/SKILL.md",
+      "sha256": "543764125bfc4fd34be2b7b7a2ca6afc3468e7bdc0caf044d27c8d35107d4747",
+      "equals_frozen": true
+    },
+    {
+      "path": "skills/adk-interface-contract-design/SKILL.md",
+      "sha256": "72045b42abf0abdcd54bab935241db7723c10dde2432e1d5ddb6882be3963cfe",
+      "equals_frozen": true
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/design-quality-methods.md",
+      "sha256": "4bfbfa3df2196616db1f491531b5bc5328afae24a2e54f4739c489d83ddcdd8b",
+      "equals_frozen": true
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/details.md",
+      "sha256": "e182fd8bc0edd58556700a0b4ce6d435a705128c6bf37b6ec2b13c624826a593",
+      "equals_frozen": true
+    },
+    {
+      "path": "skills/adk-parallel-agent-governance/SKILL.md",
+      "sha256": "446a4a08ffd2d4dfc89bc9752dfea7000fe05818f490892308b08be312386c68",
+      "equals_frozen": true
+    },
+    {
+      "path": "skills/adk-parallel-agent-governance/references/subagent-review-checklist.md",
+      "sha256": "9fc2748d504d975cd3550c4809f66c3e10fecd753650f8d649b2bda124072fa3",
+      "equals_frozen": true
+    },
+    {
+      "path": "src/agent_dev_kit/__init__.py",
+      "sha256": "b2efd10f2292ffee0a0e07922b99846a58bb0cb5562e8af2685f3036be158c53",
+      "equals_frozen": true
+    },
+    {
+      "path": "tests/fixtures/skill_method_ab_prereg.json",
+      "sha256": "ae24a81789c81ee82e3285a12ec15bc471550bfec2083b02e54bdfa10d8a5531",
+      "equals_frozen": true
+    },
+    {
+      "path": "tests/test_skill_cmake_methods.py",
+      "sha256": "c743fd55de0a8a07327c79d9f002d88b06d016389d0bb61ecb4b6e02a88ce433",
+      "equals_frozen": true
+    },
+    {
+      "path": "tests/test_skill_command_examples.py",
+      "sha256": "ddfd18b3fac98f15a1727f9c0014cc984dc3f5d0984c85951c4af6988ed60655",
+      "equals_frozen": true
+    },
+    {
+      "path": "tests/test_skill_content.sh",
+      "sha256": "1d5bcad72ec6ea8ba832c2876c96325e1e015bd98f4428293e1674b5bcea6ed9",
+      "equals_frozen": true
+    },
+    {
+      "path": "tests/test_skill_contract_methods.py",
+      "sha256": "b52841a26b065b6de8727d2ba36cac3fc1902b76856fd264fa453c75c51b0e47",
+      "equals_frozen": true
+    }
+  ],
+  "limits": [
+    "This independently verifies the actual parent-run full receipt, raw logs, population and frozen source identity; reviewer did not rerun the entire full suite.",
+    "102 pass is registered shell-test status, not a claim that every nested branch/native runtime/device integration ran without skip. Separate actual host semantic/consumer evidence is cited for F1-F5.",
+    "Parent may append evidence-only packaging after the recorded clean final full run; its eventual package commit is outside this exact source verdict."
+  ]
+}

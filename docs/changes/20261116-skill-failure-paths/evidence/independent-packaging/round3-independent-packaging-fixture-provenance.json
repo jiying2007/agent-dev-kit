@@ -1,0 +1,130 @@
+{
+  "schema": "round3-independent-packaging-negative-fixture-provenance/v1",
+  "observed_at": "2026-11-16T08:39:36.902183+00:00",
+  "raw_observation": {
+    "path": "/workspace/scratch/fe5385ca063a/round3-independent-stage1/scan-original-failure.json",
+    "bytes": 4478,
+    "sha256": "16cba4864556a7cbb5aca19fea375bc69727700d311b8cf3b73fd60b14900c2c"
+  },
+  "runner": {
+    "path": "/workspace/scratch/fe5385ca063a/round3-independent-stage1-probe.py",
+    "bytes": 17027,
+    "sha256": "b1a7cf109be2dd2cc19764f8aaf4ff73e7ff13ca60d563dc0373088e0f923daf"
+  },
+  "fixture": {
+    "path": "/workspace/scratch/fe5385ca063a/round3-independent-stage1/scan/candidate.txt",
+    "bytes": 266,
+    "sha256": "e1d65d843c1e0b133383938444d5ad3406f4ef40e0af49e2b96c87e9eabb4be0"
+  },
+  "synthetic_value_sha256": "2c8efc778225a08f01d806a2b7d48988c35a4427a59cf98b86265a18f9e45385",
+  "fixture_equals_own_fixed_literal_construction": true,
+  "no_real_credentials_in_fixture": true,
+  "baseline_calls": 7,
+  "synthetic_content_leaks": 6,
+  "provenance": "Constant assigned in independent runner line162 and written by line164-166 to its own scratch fixture, with example.invalid domain. Observation contains exact baseline-command stdout, not fetched credentials. Only the storage representation may change; original observation bytes remain immutable.",
+  "actual_packaging_gate_history": [
+    {
+      "name": "round3-packaging-format-initial",
+      "receipt": {
+        "path": "/workspace/scratch/fe5385ca063a/round3-packaging-format-initial/receipt.json",
+        "bytes": 6660430,
+        "sha256": "1361201ea149500f4065f784c5d6bec007d89be3b68827276aa0c00c874bab08"
+      },
+      "command": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "git",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "started_at": "2026-11-16T08:36:25.878724+00:00",
+      "finished_at": "2026-11-16T08:36:26.051917+00:00",
+      "exit_code": 2,
+      "timed_out": false,
+      "head_before": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "head_after": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "logs": [
+        {
+          "path": "/workspace/scratch/fe5385ca063a/round3-packaging-format-initial/stdout.log",
+          "bytes": 5975,
+          "sha256": "a308891983cb9f1351f4bda4d3450667e3acd07536cecf4243827087a2204581"
+        },
+        {
+          "path": "/workspace/scratch/fe5385ca063a/round3-packaging-format-initial/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "stdout": "docs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:20: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:30: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:31: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:41: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:42: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:52: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:53: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:63: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:64: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:74: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:75: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:85: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:86: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:89: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:105: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:106: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:118: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:119: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:129: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:130: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:133: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:154: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:157: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:179: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:182: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:282: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:292: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:293: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:303: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:304: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:314: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:315: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:325: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:326: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:336: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:337: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:347: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:348: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:357: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:360: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:375: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:378: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:390: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:402: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:403: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:413: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:414: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:424: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:425: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:428: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:515: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:547: trailing whitespace.\n+    \ndocs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log:560: trailing whitespace.\n+    \n",
+      "stderr": ""
+    },
+    {
+      "name": "round3-packaging-format-final",
+      "receipt": {
+        "path": "/workspace/scratch/fe5385ca063a/round3-packaging-format-final/receipt.json",
+        "bytes": 6661286,
+        "sha256": "bc148346bc60e3758bbc080ad8f6527a9b821a9a434f5e191d565e70bcd167f1"
+      },
+      "command": [
+        "bash",
+        "scripts/check-format.sh"
+      ],
+      "started_at": "2026-11-16T08:36:43.618306+00:00",
+      "finished_at": "2026-11-16T08:36:44.229732+00:00",
+      "exit_code": 0,
+      "timed_out": false,
+      "head_before": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "head_after": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "logs": [
+        {
+          "path": "/workspace/scratch/fe5385ca063a/round3-packaging-format-final/stdout.log",
+          "bytes": 20,
+          "sha256": "e9164f6e26a94c516e08caffa2e6a611fb00b5ea8833ac84da6e8744a75c4a8d"
+        },
+        {
+          "path": "/workspace/scratch/fe5385ca063a/round3-packaging-format-final/stderr.log",
+          "bytes": 2231,
+          "sha256": "ba241a80ee282a69548178ca731ea45dd3def86ad87431abfc4ae7d5be4b41aa"
+        }
+      ],
+      "stdout": "Format check passed\n",
+      "stderr": "[WARN] script is not executable: tests/run_all.sh\n[WARN] script is not executable: tests/test_agent_platform.sh\n[WARN] script is not executable: tests/test_agent_value_trust.sh\n[WARN] script is not executable: tests/test_archive_restore.sh\n[WARN] script is not executable: tests/test_asset_taxonomy.sh\n[WARN] script is not executable: tests/test_branch_gc.sh\n[WARN] script is not executable: tests/test_catalog.sh\n[WARN] script is not executable: tests/test_change_governance.sh\n[WARN] script is not executable: tests/test_effect_campaign_materializer.sh\n[WARN] script is not executable: tests/test_evidence_bridge.sh\n[WARN] script is not executable: tests/test_evidence_envelope.sh\n[WARN] script is not executable: tests/test_execution_policy.sh\n[WARN] script is not executable: tests/test_external_reference_binding.sh\n[WARN] script is not executable: tests/test_manifest_composition_cli.sh\n[WARN] script is not executable: tests/test_mcp_freshness_ssot.sh\n[WARN] script is not executable: tests/test_native_campaign.sh\n[WARN] script is not executable: tests/test_native_campaign_boundaries.sh\n[WARN] script is not executable: tests/test_native_campaign_diagnostics.sh\n[WARN] script is not executable: tests/test_native_trust.sh\n[WARN] script is not executable: tests/test_official_upstream_drift.sh\n[WARN] script is not executable: tests/test_optional_skills.sh\n[WARN] script is not executable: tests/test_performance_budgets.sh\n[WARN] script is not executable: tests/test_profile_coherence.sh\n[WARN] script is not executable: tests/test_profile_context_footprint.sh\n[WARN] script is not executable: tests/test_review_evidence.sh\n[WARN] script is not executable: tests/test_runtime_comparison_contract.sh\n[WARN] script is not executable: tests/test_schema_resource_sync.sh\n[WARN] script is not executable: tests/test_sigstore_blob.sh\n[WARN] script is not executable: tests/test_skill_content.sh\n[WARN] script is not executable: tests/test_skill_governance.sh\n[WARN] script is not executable: tests/test_target_adapter_spi.sh\n[WARN] script is not executable: tests/test_target_contracts.sh\n[WARN] script is not executable: tests/test_target_source_probe.sh\n[WARN] script is not executable: tests/test_token_context_governance.sh\n"
+    },
+    {
+      "name": "round3-packaging-security-final",
+      "receipt": {
+        "path": "/workspace/scratch/fe5385ca063a/round3-packaging-security-final/receipt.json",
+        "bytes": 6661306,
+        "sha256": "fe1f29daa2a4cef8c864f5e02d1827d537311ecab2d85eb08b2aae317f055aab"
+      },
+      "command": [
+        "bash",
+        "scripts/devkit.sh",
+        "security",
+        "check"
+      ],
+      "started_at": "2026-11-16T08:36:43.644816+00:00",
+      "finished_at": "2026-11-16T08:36:45.305490+00:00",
+      "exit_code": 1,
+      "timed_out": false,
+      "head_before": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "head_after": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "logs": [
+        {
+          "path": "/workspace/scratch/fe5385ca063a/round3-packaging-security-final/stdout.log",
+          "bytes": 290,
+          "sha256": "eb7b399a1af106d88f78d8443ae92ca948cdb69b00d030578acc91b877658597"
+        },
+        {
+          "path": "/workspace/scratch/fe5385ca063a/round3-packaging-security-final/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "stdout": "{\n  \"schema_version\": 1,\n  \"status\": \"fail\",\n  \"failures\": [\n    \"credential-like content: docs/changes/20261116-skill-failure-paths/evidence/independent/stage1/scan-original-failure.json\"\n  ],\n  \"warnings\": [],\n  \"inventory_source\": \"git\",\n  \"files_scanned\": 2575,\n  \"scan_limit\": 50000\n}\n",
+      "stderr": ""
+    }
+  ],
+  "classification": "Packaging compatibility observations, not new product-source failures. Exact raw evidence must survive the packaging fixes."
+}

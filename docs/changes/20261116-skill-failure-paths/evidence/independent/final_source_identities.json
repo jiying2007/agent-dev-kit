@@ -1,0 +1,481 @@
+{
+  "schema": "round3-independent-final-source-identities/v1",
+  "recorded_at": "2026-11-16T08:16:25.330286+00:00",
+  "reviewer": "/root/round3_independent_review",
+  "base": "80f8b2ea2885e3f62dcea455c45a2e8ebf071b2b",
+  "head": "d87e21d7750ec4a0042754d045979c137abfc528",
+  "tree": "617bdcb20e5fb629c1ddd175e29373b1b86aa0c5",
+  "observed_head": "d87e21d7750ec4a0042754d045979c137abfc528",
+  "observed_status": "",
+  "paths": [
+    {
+      "path": ".version-lock",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "9a1031322bfbacc3f7f619df51f5d015c041bd37",
+      "sha256": "835cee18fe2fcac7d1332ff64f585b27a70ad8c611378d85868682e2dccf4ffd",
+      "bytes": 85,
+      "lines": 3
+    },
+    {
+      "path": "CONTEXT.md",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "1740675c16a3e54c741e550b987833ee4e4bd6ea",
+      "sha256": "89343a690a4237f4dbc7ab5d64aa20a30bc6395d11c3b30683516f7754640b37",
+      "bytes": 8644,
+      "lines": 195
+    },
+    {
+      "path": "README.md",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "f0ce1553ad464eeb6df0d3f5a19ffae4d79f456e",
+      "sha256": "3a9f558c2ab08b0ad10a1af47aeed964403f8c43ee5bedab9d1bb8d7dcbf0dcc",
+      "bytes": 13087,
+      "lines": 187
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/audit.md",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "83d2e8d9a592be392565eaef71305372a60773bf",
+      "sha256": "17c9f19aaa0a16eccbd042806b3f5a752908a40693f251e375107e0d405084a4",
+      "bytes": 4447,
+      "lines": 40
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/design.md",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "0a4f6cd6958acac2455c62a2067c3f48b723ece3",
+      "sha256": "0bda596db331511e9487734860ee56236ea228a28c5ce37d3d9af2e7a053cf8b",
+      "bytes": 3965,
+      "lines": 36
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/evidence/core-audit.json",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "5bcc2aedb119a0f892233b4949347c664ac99d12",
+      "sha256": "e184e3bc51e8deeb2297e977241895756b321d3cbb711372b7c8d5a744a43673",
+      "bytes": 112393,
+      "lines": 2769
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/evidence/embedded-audit.json",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "68d7a98a5da6e5b51a12157feadde802c491ee81",
+      "sha256": "ef717877749d346be61a8d925f54c3867eafeb418cb6e3987c3f30afa59904f9",
+      "bytes": 83212,
+      "lines": 2030
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/evidence/optional-audit.json",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "bac301507d9b7924c8f2356e67c2ea642e7c792e",
+      "sha256": "028e65709f30b542e1f334e052aefe48196076825dae33b034fd2549d8c18fd7",
+      "bytes": 61229,
+      "lines": 1430
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/evidence/platform-audit.json",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "003af22322da289868b7f367a625111444524a36",
+      "sha256": "140f419bc48a74455c0c600ccffd6a48468688a5c3f1617bcbeeddd147bbd3a6",
+      "bytes": 4559,
+      "lines": 94
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/evidence/portfolio-audit.json",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "2c10df574b8b51e8e181c0e03ff6d129f4ff4623",
+      "sha256": "5b2c73cb17234669536fade8073b73a02cad3eea4c02f6219e5125cdd67cd75b",
+      "bytes": 165139,
+      "lines": 4021
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/negative-results.md",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "665d9c3c746846e8e50c0b791107d539e20377a3",
+      "sha256": "81f219f5c4bff060662d2f05486f0d13a0961d22ec1c9ba768a8a2886829294e",
+      "bytes": 5577,
+      "lines": 29
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/requirements.md",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "58166d1353e2f0d2ed4b38850e14b9e0bdb30707",
+      "sha256": "517734b8479b0df46a571ee7f1d0b806b4a61dc60a7ad53c3a0bf46e2eb0d033",
+      "bytes": 5489,
+      "lines": 46
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/source-review.md",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "6e2b4bb60a9981877f64792e0f76c398453a088b",
+      "sha256": "782dabec15e8a196036afffe44a984f4b8ca3ef7ed45409071ada02d05f54ca8",
+      "bytes": 5922,
+      "lines": 39
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/tasks.md",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "1007913dadff3a4e0a4be8b29adb8328e2d62562",
+      "sha256": "210350eaa74224193d111000a254cd1cf1bc4f659fb0e386717abd39b18240bb",
+      "bytes": 2042,
+      "lines": 17
+    },
+    {
+      "path": "docs/runbooks/security-supply-chain.md",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "6a11f8491eb4e624546dab5906629560b01219a1",
+      "sha256": "324d20206f40778300906051dc08775297017b2318ecec74100ef303efe423ce",
+      "bytes": 6481,
+      "lines": 62
+    },
+    {
+      "path": "manifest.json",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "609e37e7322060b3368d0a0648bc67c5c9f1aca6",
+      "sha256": "43caab611aba1d9843ee74ee92df803288b5a0d066e7cc4d6b655a7431850265",
+      "bytes": 90988,
+      "lines": 2881
+    },
+    {
+      "path": "manifests/software_m5_eval_contract.json",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "c60daa2c0681ed0d7a01a9344f9af838479d3324",
+      "sha256": "4f3ec4848646cfc1aa397fae471e5340f0f14fdece7aeab8b2f5d89e8ccb21c0",
+      "bytes": 706,
+      "lines": 31
+    },
+    {
+      "path": "optional-skills/adk-security-supply-chain/SKILL.md",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "ae75786916c5a04d7de20be32239685f77dc045d",
+      "sha256": "2d8453ce4525d0793ce1ee89a9503001189c4819fa3966588b561d8eb9a0474e",
+      "bytes": 8413,
+      "lines": 140
+    },
+    {
+      "path": "optional-skills/adk-test-flakiness-triage/SKILL.md",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "2ed30485f644e033e132d487280fb7d7ec69270f",
+      "sha256": "6d37c99701d7be57c837be6854484a263cc75b6a12e01db9969dd2cec2571a54",
+      "bytes": 2427,
+      "lines": 62
+    },
+    {
+      "path": "optional-skills/adk-test-flakiness-triage/references/details.md",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "2fa2291cc5ba327857678769f1427da9706ca950",
+      "sha256": "68522e43db6194ff02d275d65c3078ff363aab4329fc18f17f6e3594b30924e1",
+      "bytes": 4957,
+      "lines": 81
+    },
+    {
+      "path": "pyproject.toml",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "b89c46bef4f99846aba55b646f5a6cc67f527b5c",
+      "sha256": "eb973742535043bb63cef15243b0e0c9e6fb91bfb58599fe13f1bf9da498a7fb",
+      "bytes": 1310,
+      "lines": 59
+    },
+    {
+      "path": "skills/adk-cmake-cross-build/SKILL.md",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "960ee57879bfbab6f478dfaed1e958a00f9b7d2b",
+      "sha256": "543764125bfc4fd34be2b7b7a2ca6afc3468e7bdc0caf044d27c8d35107d4747",
+      "bytes": 5264,
+      "lines": 114
+    },
+    {
+      "path": "skills/adk-interface-contract-design/SKILL.md",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "a9c3bf50f753ca02f28994bd05731cb55eec6d39",
+      "sha256": "72045b42abf0abdcd54bab935241db7723c10dde2432e1d5ddb6882be3963cfe",
+      "bytes": 4317,
+      "lines": 75
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/design-quality-methods.md",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "720070607935eea1aff0eddb779b9702e8c12428",
+      "sha256": "4bfbfa3df2196616db1f491531b5bc5328afae24a2e54f4739c489d83ddcdd8b",
+      "bytes": 1598,
+      "lines": 20
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/details.md",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "a617bf5c439c4cd3f808f0d904ffb4a810ea340f",
+      "sha256": "e182fd8bc0edd58556700a0b4ce6d435a705128c6bf37b6ec2b13c624826a593",
+      "bytes": 2611,
+      "lines": 56
+    },
+    {
+      "path": "skills/adk-parallel-agent-governance/SKILL.md",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "95c69872cbb2938040ecbec2c1492679d22a19fc",
+      "sha256": "446a4a08ffd2d4dfc89bc9752dfea7000fe05818f490892308b08be312386c68",
+      "bytes": 4292,
+      "lines": 52
+    },
+    {
+      "path": "skills/adk-parallel-agent-governance/references/subagent-review-checklist.md",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "561939020cf66fc215d87105ea7e1b8383e3a659",
+      "sha256": "9fc2748d504d975cd3550c4809f66c3e10fecd753650f8d649b2bda124072fa3",
+      "bytes": 738,
+      "lines": 35
+    },
+    {
+      "path": "src/agent_dev_kit/__init__.py",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "ea35f74d1e27db49fc1812ce20cd801ff82ee526",
+      "sha256": "b2efd10f2292ffee0a0e07922b99846a58bb0cb5562e8af2685f3036be158c53",
+      "bytes": 71,
+      "lines": 3
+    },
+    {
+      "path": "tests/fixtures/skill_method_ab_prereg.json",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "325fcf6fc3e3de6c3d1eeda40aa65c3700893901",
+      "sha256": "ae24a81789c81ee82e3285a12ec15bc471550bfec2083b02e54bdfa10d8a5531",
+      "bytes": 6238,
+      "lines": 128
+    },
+    {
+      "path": "tests/test_skill_cmake_methods.py",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "677568227a714582d538e047073f39e821d1baa4",
+      "sha256": "c743fd55de0a8a07327c79d9f002d88b06d016389d0bb61ecb4b6e02a88ce433",
+      "bytes": 9142,
+      "lines": 166
+    },
+    {
+      "path": "tests/test_skill_command_examples.py",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "bf0cef6224ca5bf76214e58b9057e8a709199dee",
+      "sha256": "ddfd18b3fac98f15a1727f9c0014cc984dc3f5d0984c85951c4af6988ed60655",
+      "bytes": 53862,
+      "lines": 934
+    },
+    {
+      "path": "tests/test_skill_content.sh",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "988ea6e7a4ba1757cd711624380df035615998e3",
+      "sha256": "1d5bcad72ec6ea8ba832c2876c96325e1e015bd98f4428293e1674b5bcea6ed9",
+      "bytes": 1037,
+      "lines": 8
+    },
+    {
+      "path": "tests/test_skill_contract_methods.py",
+      "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+      "git_blob_sha1": "5b68f9e31c2a924a4a5018ad3d2b91926ae72a5c",
+      "sha256": "b52841a26b065b6de8727d2ba36cac3fc1902b76856fd264fa453c75c51b0e47",
+      "bytes": 6391,
+      "lines": 127
+    }
+  ],
+  "previous_reviewed_head": "6183982e1f5e4a1bb09727009a809514e160be64",
+  "corrections": [
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/audit.md",
+      "old": {
+        "path": "docs/changes/20261116-skill-failure-paths/audit.md",
+        "commit": "6183982e1f5e4a1bb09727009a809514e160be64",
+        "git_blob_sha1": "98254c910c0e9690222e14cef6e8f1d154450790",
+        "sha256": "c35ca4f53b7ec6fb8bc59b671518639800a80f52dcbe51cd6831b092598209fd",
+        "bytes": 4446,
+        "lines": 40
+      },
+      "new": {
+        "path": "docs/changes/20261116-skill-failure-paths/audit.md",
+        "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+        "git_blob_sha1": "83d2e8d9a592be392565eaef71305372a60773bf",
+        "sha256": "17c9f19aaa0a16eccbd042806b3f5a752908a40693f251e375107e0d405084a4",
+        "bytes": 4447,
+        "lines": 40
+      }
+    },
+    {
+      "path": "docs/changes/20261116-skill-failure-paths/negative-results.md",
+      "old": {
+        "path": "docs/changes/20261116-skill-failure-paths/negative-results.md",
+        "commit": "6183982e1f5e4a1bb09727009a809514e160be64",
+        "git_blob_sha1": "84a6556bfea75ea5d2346315e7c119b7a6a67d6b",
+        "sha256": "9ab63378bc130783e02a96d205364a9aa97ab21ddf1a406fbfe9504f2dbac34d",
+        "bytes": 3503,
+        "lines": 25
+      },
+      "new": {
+        "path": "docs/changes/20261116-skill-failure-paths/negative-results.md",
+        "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+        "git_blob_sha1": "665d9c3c746846e8e50c0b791107d539e20377a3",
+        "sha256": "81f219f5c4bff060662d2f05486f0d13a0961d22ec1c9ba768a8a2886829294e",
+        "bytes": 5577,
+        "lines": 29
+      }
+    },
+    {
+      "path": "optional-skills/adk-security-supply-chain/SKILL.md",
+      "old": {
+        "path": "optional-skills/adk-security-supply-chain/SKILL.md",
+        "commit": "6183982e1f5e4a1bb09727009a809514e160be64",
+        "git_blob_sha1": "24641db499776284d025d0efe572729b1c84d849",
+        "sha256": "ee86e23878218150ef4f03dd4fc463d9e0ad68c6cdd278483f30490d3867ed58",
+        "bytes": 8422,
+        "lines": 142
+      },
+      "new": {
+        "path": "optional-skills/adk-security-supply-chain/SKILL.md",
+        "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+        "git_blob_sha1": "ae75786916c5a04d7de20be32239685f77dc045d",
+        "sha256": "2d8453ce4525d0793ce1ee89a9503001189c4819fa3966588b561d8eb9a0474e",
+        "bytes": 8413,
+        "lines": 140
+      }
+    },
+    {
+      "path": "skills/adk-interface-contract-design/SKILL.md",
+      "old": {
+        "path": "skills/adk-interface-contract-design/SKILL.md",
+        "commit": "6183982e1f5e4a1bb09727009a809514e160be64",
+        "git_blob_sha1": "7a6b64fd3abae89ae5557158696bb28bb307203f",
+        "sha256": "94b66c15f2d9e6634fbb81ad49570319a390e0dd9ea25604bbe2dfa1f360db9b",
+        "bytes": 4290,
+        "lines": 75
+      },
+      "new": {
+        "path": "skills/adk-interface-contract-design/SKILL.md",
+        "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+        "git_blob_sha1": "a9c3bf50f753ca02f28994bd05731cb55eec6d39",
+        "sha256": "72045b42abf0abdcd54bab935241db7723c10dde2432e1d5ddb6882be3963cfe",
+        "bytes": 4317,
+        "lines": 75
+      }
+    }
+  ],
+  "unchanged_from_previous_reviewed": [
+    ".version-lock",
+    "CONTEXT.md",
+    "README.md",
+    "docs/changes/20261116-skill-failure-paths/design.md",
+    "docs/changes/20261116-skill-failure-paths/evidence/core-audit.json",
+    "docs/changes/20261116-skill-failure-paths/evidence/embedded-audit.json",
+    "docs/changes/20261116-skill-failure-paths/evidence/optional-audit.json",
+    "docs/changes/20261116-skill-failure-paths/evidence/platform-audit.json",
+    "docs/changes/20261116-skill-failure-paths/evidence/portfolio-audit.json",
+    "docs/changes/20261116-skill-failure-paths/requirements.md",
+    "docs/changes/20261116-skill-failure-paths/source-review.md",
+    "docs/changes/20261116-skill-failure-paths/tasks.md",
+    "docs/runbooks/security-supply-chain.md",
+    "manifest.json",
+    "manifests/software_m5_eval_contract.json",
+    "optional-skills/adk-test-flakiness-triage/SKILL.md",
+    "optional-skills/adk-test-flakiness-triage/references/details.md",
+    "pyproject.toml",
+    "skills/adk-cmake-cross-build/SKILL.md",
+    "skills/adk-interface-contract-design/references/design-quality-methods.md",
+    "skills/adk-interface-contract-design/references/details.md",
+    "skills/adk-parallel-agent-governance/SKILL.md",
+    "skills/adk-parallel-agent-governance/references/subagent-review-checklist.md",
+    "src/agent_dev_kit/__init__.py",
+    "tests/fixtures/skill_method_ab_prereg.json",
+    "tests/test_skill_cmake_methods.py",
+    "tests/test_skill_command_examples.py",
+    "tests/test_skill_content.sh",
+    "tests/test_skill_contract_methods.py"
+  ],
+  "full_patch": {
+    "path": "/workspace/scratch/fe5385ca063a/round3-independent-final-original.patch",
+    "bytes": 526717,
+    "sha256": "6905990c9f8049574661957a6779b20ff22e0c5def45a9631c9ab5908974f0bb"
+  },
+  "archive": "/workspace/scratch/fe5385ca063a/round3-independent-frozen-d87e21",
+  "security_commands_to_end_byte_identical": true,
+  "security_lines": 140,
+  "original_profile_ratchet_unchanged": {
+    "path": "manifests/profile_context_ratchets.json",
+    "commit": "d87e21d7750ec4a0042754d045979c137abfc528",
+    "git_blob_sha1": "9252e18651a29882438d61bf7b7c848eeb38f075",
+    "sha256": "f283524ecff14179cad628735bef9e20580da00c2505687ecca9530da3737bff",
+    "bytes": 5651,
+    "lines": 62
+  },
+  "fix_report_checks": [
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-optional-line-budget-fix.json",
+      "sha256": "e472107a4c524ed95b4316a7637ad5bf2bce790a29d94791db393a1579437eca",
+      "artifact_checks": [
+        {
+          "path": "/workspace/scratch/fe5385ca063a/round3-optional-line-budget-red.json",
+          "sha256": "bd8d474d359b9b9f19cab06906c5b0772c1307ea5a7758e2d1625f4315554f11",
+          "verified": true
+        },
+        {
+          "path": "/workspace/scratch/fe5385ca063a/round3-optional-line-budget-green-budget.json",
+          "sha256": "b7d5b7ab0a88584a5f2b58b9d990cc216004f858ddc849063bd3a14b2231ab2e",
+          "verified": true
+        },
+        {
+          "path": "/workspace/scratch/fe5385ca063a/round3-optional-line-budget-green-scans.json",
+          "sha256": "96c949819185c40ef4bb82c0141e06bf576973b030d95c0bb9320c889facf22f",
+          "verified": true
+        },
+        {
+          "path": "/workspace/scratch/fe5385ca063a/round3-optional-line-budget-diff-check.json",
+          "sha256": "a4e8625c35ba92c134218afc25fadc3910802ee006ff0ccd896e77f80ef99899",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-core-contract-compatibility-fix.json",
+      "sha256": "bbf4bbb472119556b888139348ae7d394314c8a0cb4d9c83545806b222910747",
+      "artifact_checks": [
+        {
+          "path": "/workspace/scratch/fe5385ca063a/round3-core-runs/compat-red-official-docs.json",
+          "sha256": "d12157cc895a9133a932d2c560e762be75a002af5e8626f102f886e72b341b83",
+          "verified": true
+        },
+        {
+          "path": "/workspace/scratch/fe5385ca063a/round3-core-runs/compat-red-intent-boundary.json",
+          "sha256": "eaae61cab9c22375b8f1ba39a3bcac1d201c7871dea0fcd8240328ff1d43f756",
+          "verified": true
+        },
+        {
+          "path": "/workspace/scratch/fe5385ca063a/round3-core-runs/compat-green-semantic-fidelity.json",
+          "sha256": "866d0b9f2baa749493dc95f36a044cf14c831777fdc6ebb32f3311c60ba8e3de",
+          "verified": true
+        },
+        {
+          "path": "/workspace/scratch/fe5385ca063a/round3-core-runs/compat-green-official-docs.json",
+          "sha256": "0ea2a57ae720a42a6b7fcf093b18ae20b2efa9293270f17806c46d564f405b02",
+          "verified": true
+        },
+        {
+          "path": "/workspace/scratch/fe5385ca063a/round3-core-runs/compat-green-large-refactor-budget.json",
+          "sha256": "fb3e63fa6f56da12190a159dfcb35fb9d5995855543f13075bbe13b0b90bbfc8",
+          "verified": true
+        },
+        {
+          "path": "/workspace/scratch/fe5385ca063a/round3-core-runs/compat-green-diff-check.json",
+          "sha256": "5ad4ae419e0ca08a8eca933d02bf1997d7513145a9c54613c36d2824ae4d543b",
+          "verified": true
+        },
+        {
+          "path": "/workspace/scratch/fe5385ca063a/round3-core-runs/compat-green-intent-boundary.json",
+          "sha256": "9f35b781b1980b295f5b007b27aa32a1eeee39883f8b21f08e4b37d8e848537c",
+          "verified": true
+        },
+        {
+          "path": "/workspace/scratch/fe5385ca063a/round3-core-runs/compat-green-official-execution-layer.json",
+          "sha256": "77002537e96e52b45d5a53dcfe79aaf411076a4a151034bcc8cccc437cbc281e",
+          "verified": true
+        },
+        {
+          "path": "/workspace/scratch/fe5385ca063a/round3-core-runs/compat-final-official-docs-after-optional-freeze.json",
+          "sha256": "ecb340dc4e5ef6dbccae7441453c0638e808bd1331d80455c20ca2a18ee9c391",
+          "verified": true
+        }
+      ]
+    }
+  ]
+}

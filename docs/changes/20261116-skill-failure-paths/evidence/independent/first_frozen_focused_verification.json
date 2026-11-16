@@ -1,0 +1,30 @@
+{
+  "schema": "round3-independent-focused-verification/v1",
+  "reviewer": "round3-independent-reviewer",
+  "source_commit": "6183982e1f5e4a1bb09727009a809514e160be64",
+  "source_tree": "09946e71e8ccee1063466d0c8df9088d6d036a3c",
+  "snapshot": "/workspace/scratch/fe5385ca063a/round3-independent-frozen-618398",
+  "argv": [
+    "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+    "bypass",
+    "python",
+    "-m",
+    "unittest",
+    "tests.test_skill_contract_methods",
+    "tests.test_skill_command_examples.SecurityScanExampleTests",
+    "tests.test_skill_command_examples.FlakySampleExampleTests",
+    "tests.test_skill_command_examples.InterfaceVersionExampleTests",
+    "-v"
+  ],
+  "started_at": "2026-11-16T08:05:02.546311+00:00",
+  "completed_at": "2026-11-16T08:05:04.201341+00:00",
+  "duration_seconds": 1.6550371440025629,
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "test_blank_evidence_never_starts_with_a_pass (tests.test_skill_contract_methods.ExportedReviewChecklistTests.test_blank_evidence_never_starts_with_a_pass) ... ok\ntest_closed_subschema_control_rejects_legitimate_extension (tests.test_skill_contract_methods.SchemaClosureExampleTests.test_closed_subschema_control_rejects_legitimate_extension) ... ok\ntest_old_dialect_ignores_composition_closure_control (tests.test_skill_contract_methods.SchemaClosureExampleTests.test_old_dialect_ignores_composition_closure_control) ... ok\ntest_published_composed_closure_accepts_only_contract_inputs (tests.test_skill_contract_methods.SchemaClosureExampleTests.test_published_composed_closure_accepts_only_contract_inputs) ... ok\ntest_published_legacy_flattening_accepts_only_contract_inputs (tests.test_skill_contract_methods.SchemaClosureExampleTests.test_published_legacy_flattening_accepts_only_contract_inputs) ... ok\ntest_same_level_closure_accepts_only_contract_inputs (tests.test_skill_contract_methods.SchemaClosureExampleTests.test_same_level_closure_accepts_only_contract_inputs) ... ok\ntest_all_scans_keep_candidate_paths_without_printing_matching_contents (tests.test_skill_command_examples.SecurityScanExampleTests.test_all_scans_keep_candidate_paths_without_printing_matching_contents) ... ok\ntest_no_match_and_io_errors_keep_distinct_status_and_diagnostics (tests.test_skill_command_examples.SecurityScanExampleTests.test_no_match_and_io_errors_keep_distinct_status_and_diagnostics) ... ok\ntest_secret_scan_preserves_hidden_ignored_coverage_and_git_exclusion (tests.test_skill_command_examples.SecurityScanExampleTests.test_secret_scan_preserves_hidden_ignored_coverage_and_git_exclusion) ... ok\ntest_child_self_signals_stop_sampling_without_claiming_parent_signal_handling (tests.test_skill_command_examples.FlakySampleExampleTests.test_child_self_signals_stop_sampling_without_claiming_parent_signal_handling) ... ok\ntest_environment_example_only_prints_names_not_synthetic_secret_values (tests.test_skill_command_examples.FlakySampleExampleTests.test_environment_example_only_prints_names_not_synthetic_secret_values) ... ok\ntest_existing_evidence_is_not_reused_or_overwritten (tests.test_skill_command_examples.FlakySampleExampleTests.test_existing_evidence_is_not_reused_or_overwritten) ... ok\ntest_interrupt_after_an_observation_preserves_both_samples_and_stops (tests.test_skill_command_examples.FlakySampleExampleTests.test_interrupt_after_an_observation_preserves_both_samples_and_stops) ... ok\ntest_invalid_sample_budgets_do_not_execute_or_create_output (tests.test_skill_command_examples.FlakySampleExampleTests.test_invalid_sample_budgets_do_not_execute_or_create_output) ... ok\ntest_reported_interrupt_status_stops_after_preserving_the_current_sample (tests.test_skill_command_examples.FlakySampleExampleTests.test_reported_interrupt_status_stops_after_preserving_the_current_sample) ... ok\ntest_sample_collection_failure_stops_without_fake_completed_attempt (tests.test_skill_command_examples.FlakySampleExampleTests.test_sample_collection_failure_stops_without_fake_completed_attempt) ... ok\ntest_status_write_failure_is_not_a_successful_collection (tests.test_skill_command_examples.FlakySampleExampleTests.test_status_write_failure_is_not_a_successful_collection) ... ok\ntest_success_failure_and_mixed_runs_keep_exact_exit_codes_and_reports (tests.test_skill_command_examples.FlakySampleExampleTests.test_success_failure_and_mixed_runs_keep_exact_exit_codes_and_reports) ... ok\ntest_compiled_consumer_requires_minor_21_and_async_cancel (tests.test_skill_command_examples.InterfaceVersionExampleTests.test_compiled_consumer_requires_minor_21_and_async_cancel) ... ok\n\n----------------------------------------------------------------------\nRan 19 tests in 1.359s\n\nOK\n",
+  "limits": [
+    "Targeted published-method verification only; parent owns complete regression.",
+    "Real exported checklists and jsonschema matrices, actual rg/Bash children and original compiled version example.",
+    "No native model, process-group cancellation, provider A/B or hardware certification."
+  ]
+}
