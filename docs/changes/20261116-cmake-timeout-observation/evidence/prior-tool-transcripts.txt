@@ -1,0 +1,124 @@
+Independent reviewer: ai/root/root_prepare
+Capture provenance: the stdout/stderr text below is transcribed from this reviewer's actual exec tool results, not reconstructed by re-running a changed source. The tool did not record a wall-clock timestamp for each early invocation. These observations preceded the fingerprint observation at 2026-11-16T15:44:36.784904+00:00, except where stated otherwise. Exact early full-file source hashes were not captured; do not assign a later source hash to the initial runner invocation.
+
+=== Initial targeted invocation, default tool PATH ===
+Command after rtk:
+python3 -m unittest tests.test_skill_command_examples.CommandExampleRunnerTests tests.test_skill_command_examples.CmakeBuildExampleTests.test_adc_cmake_target_builds_and_runs_with_a_strict_c90_default tests.test_skill_imap_sender_methods -v
+Observed exit_code: 0
+Raw combined output:
+test_default_budget_and_normal_exit_keep_the_original_contract (tests.test_skill_command_examples.CommandExampleRunnerTests.test_default_budget_and_normal_exit_keep_the_original_contract) ... ok
+test_process_snapshot_respects_record_and_expired_cleanup_budgets (tests.test_skill_command_examples.CommandExampleRunnerTests.test_process_snapshot_respects_record_and_expired_cleanup_budgets) ... ok
+test_process_snapshot_tolerates_missing_procfs_and_disappearing_processes (tests.test_skill_command_examples.CommandExampleRunnerTests.test_process_snapshot_tolerates_missing_procfs_and_disappearing_processes) ... ok
+test_timeout_keeps_both_streams_kills_its_descendant_and_spares_another_group (tests.test_skill_command_examples.CommandExampleRunnerTests.test_timeout_keeps_both_streams_kills_its_descendant_and_spares_another_group) ... ok
+test_unavailable_diagnostics_do_not_replace_timeout_or_child_cleanup (tests.test_skill_command_examples.CommandExampleRunnerTests.test_unavailable_diagnostics_do_not_replace_timeout_or_child_cleanup) ... ok
+test_adc_cmake_target_builds_and_runs_with_a_strict_c90_default (tests.test_skill_command_examples.CmakeBuildExampleTests.test_adc_cmake_target_builds_and_runs_with_a_strict_c90_default) ... skipped 'real CMake example not executed; missing tools: cmake, ctest, ninja'
+test_count_and_header_byte_budgets_keep_success_and_unread_uids (tests.test_skill_imap_sender_methods.ImapSenderMethodTests.test_count_and_header_byte_budgets_keep_success_and_unread_uids) ... ok
+test_domain_case_folds_but_local_part_and_aliases_are_preserved (tests.test_skill_imap_sender_methods.ImapSenderMethodTests.test_domain_case_folds_but_local_part_and_aliases_are_preserved) ... ok
+test_exact_addresses_accept_positive_controls_and_reject_substring_decoys (tests.test_skill_imap_sender_methods.ImapSenderMethodTests.test_exact_addresses_accept_positive_controls_and_reject_substring_decoys) ... ok
+test_fuzzy_request_keeps_server_candidates_without_exact_refiltering (tests.test_skill_imap_sender_methods.ImapSenderMethodTests.test_fuzzy_request_keeps_server_candidates_without_exact_refiltering) ... ok
+test_missing_repeated_and_malformed_headers_preserve_partial_success (tests.test_skill_imap_sender_methods.ImapSenderMethodTests.test_missing_repeated_and_malformed_headers_preserve_partial_success) ... ok
+test_source_separates_exact_address_from_substring_and_identity (tests.test_skill_imap_sender_methods.ImapSenderMethodTests.test_source_separates_exact_address_from_substring_and_identity) ... ok
+test_undefined_address_semantics_leave_candidates_undecided (tests.test_skill_imap_sender_methods.ImapSenderMethodTests.test_undefined_address_semantics_leave_candidates_undecided) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 0.628s
+
+OK (skipped=1)
+
+Interpretation: 12 passed, 1 skipped; this is not a 13/13 execution result. Python was independently inspected as CPython 3.12.14.
+
+=== Parser finding reproduction before exception isolation ===
+Test-owned selector SHA256 at the subsequent unchanged pre-fix inspection: 7e5c29f785aaf8d9e3c6dd595631cae924cb7e8e8f7263e996bea31b14c980f6.
+Probe input construction:
+raw = b"From: " + b"(" * depth + b"comment" + b")" * depth + b" build@example.test\r\n\r\n"
+select([(1, header(TARGET)), (2, raw)])
+Probe exception handler recorded only the exception type and did not change the selector.
+Observed exit_code of probe wrapper: 0; the recorded RecursionError is the failed selector operation.
+Raw stdout:
+[
+  {
+    "depth": 100,
+    "bytes": 236,
+    "result": {
+      "matched": [
+        1,
+        2
+      ],
+      "excluded": [],
+      "undecided": [],
+      "parsed": [
+        1,
+        2
+      ],
+      "header_bytes": 264,
+      "status": "pass"
+    }
+  },
+  {
+    "depth": 300,
+    "bytes": 636,
+    "result": {
+      "matched": [
+        1,
+        2
+      ],
+      "excluded": [],
+      "undecided": [],
+      "parsed": [
+        1,
+        2
+      ],
+      "header_bytes": 664,
+      "status": "pass"
+    }
+  },
+  {
+    "depth": 600,
+    "bytes": 1236,
+    "error": "RecursionError"
+  }
+]
+
+=== Bounded, partial and unavailable diagnostic controls after runner fix ===
+Reviewed runner SHA256: 301fb52ff31802f2601b6a8baf3416380735c420371a5d0fa22bc4913c461461.
+Probe: patch only owned_process_snapshot to return each allowed unknown status with processes=[], then execute the actual test_timeout_keeps_both_streams_kills_its_descendant_and_spares_another_group. The real slow fixture, timeout, kill/reap and unrelated process group still execute. No reviewed file was modified.
+Observed exit_code: 0
+Raw output across initial tool output and its session continuation:
+test_timeout_keeps_both_streams_kills_its_descendant_and_spares_another_group (tests.test_skill_command_examples.CommandExampleRunnerTests.test_timeout_keeps_both_streams_kills_its_descendant_and_spares_another_group) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.505s
+
+OK
+test_timeout_keeps_both_streams_kills_its_descendant_and_spares_another_group (tests.test_skill_command_examples.CommandExampleRunnerTests.test_timeout_keeps_both_streams_kills_its_descendant_and_spares_another_group) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.506s
+
+OK
+test_timeout_keeps_both_streams_kills_its_descendant_and_spares_another_group (tests.test_skill_command_examples.CommandExampleRunnerTests.test_timeout_keeps_both_streams_kills_its_descendant_and_spares_another_group) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.504s
+
+diagnostic_status=bounded outcome=True
+diagnostic_status=partial outcome=True
+diagnostic_status=unavailable outcome=True
+OK
+
+The pre-fix unconditional Linux child assertion was observed by source inspection, not by a separate red execution. Parent independently identified and fixed it before the closure probe. Do not claim an executed pre-fix red test for that finding.
+
+=== Actual ADC/CMake invocation after correcting the tool PATH ===
+PATH=/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin:/workspace/scratch/fe5385ca063a/verification-tools:/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin:/usr/local/bin:/usr/bin:/bin
+Command after rtk:
+python3 -m unittest tests.test_skill_command_examples.CmakeBuildExampleTests.test_adc_cmake_target_builds_and_runs_with_a_strict_c90_default -v
+Observed exit_code: 0
+Raw output:
+test_adc_cmake_target_builds_and_runs_with_a_strict_c90_default (tests.test_skill_command_examples.CmakeBuildExampleTests.test_adc_cmake_target_builds_and_runs_with_a_strict_c90_default) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.351s
+
+OK
+
+Interpretation: a real local execution passed under the original 15-second work budget. This does not explain or repair the two historical GitHub CI timeouts.

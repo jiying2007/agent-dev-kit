@@ -1,0 +1,81 @@
+{
+  "baseline": "643bb1e93d118bb36c322094b4d1b70078ce78c5",
+  "canonical_source": "fe5f908d821b8cf56db140d053134ae835127c57",
+  "local_source": "5cef7a190806f8c8cc35762b35f3d5057d66a56d",
+  "same_commit": false,
+  "same_parent_and_tree": true,
+  "tree": "eddbe93c5cc0202e2a29e95364197260e1d2464f",
+  "patch_sha256": "36ecbc021107a56a05b4824cdfbb0c2e8b66dcf48351517c1277f1a562f4b761",
+  "files": [
+    {
+      "path": "docs/changes/20261116-cmake-timeout-observation/design.md",
+      "bytes": 1265,
+      "sha256": "21a97b94e31f73ff684f7b08fed92f788168193773c980c5a82a4733ab6e67df"
+    },
+    {
+      "path": "docs/changes/20261116-cmake-timeout-observation/evidence/runner-tests.txt",
+      "bytes": 1143,
+      "sha256": "8fcd307ef7eed7e99a36ede425ceab7f4c0a670119adb2e677587c3b7cec9cf6"
+    },
+    {
+      "path": "docs/changes/20261116-cmake-timeout-observation/requirements.md",
+      "bytes": 1116,
+      "sha256": "e38d8d4b9737c8bfd1d5c656bf9f0b4d4e940590c23da0e6f7afc19ca6512176"
+    },
+    {
+      "path": "docs/changes/20261116-cmake-timeout-observation/tasks.md",
+      "bytes": 711,
+      "sha256": "3e98e76594d021a5c1992c1d265328ee44a9449211375e322d5ffdfc984a8ca0"
+    },
+    {
+      "path": "docs/changes/20261116-cmake-timeout-observation/verification.md",
+      "bytes": 2540,
+      "sha256": "be67ab2dd79b9107cdcdd0d88d69d09c59ab5e670f3c0a0147d5a489ca5004cd"
+    },
+    {
+      "path": "docs/changes/20261116-imap-exact-sender/consumer-observation.json",
+      "bytes": 1867,
+      "sha256": "e5e920983968f58d73495a28532197f8cf5ddb5cc9158a58b5dde79892aa4d20"
+    },
+    {
+      "path": "docs/changes/20261116-imap-exact-sender/design.md",
+      "bytes": 990,
+      "sha256": "97e7af5dd57fde83f7f3253ac3acf392d57abf8cf968e2809a09cea4c7261301"
+    },
+    {
+      "path": "docs/changes/20261116-imap-exact-sender/implementation-verification.md",
+      "bytes": 5939,
+      "sha256": "3ea4dcc6dd53847339fa4d2612469a1e98094b1b72518e502e1fb591700585bb"
+    },
+    {
+      "path": "docs/changes/20261116-imap-exact-sender/requirements.md",
+      "bytes": 972,
+      "sha256": "6707a296e7a7539b038b2f8fbe4960fb7c53b26281de9c9cbff2a58c39413afe"
+    },
+    {
+      "path": "docs/changes/20261116-imap-exact-sender/tasks.md",
+      "bytes": 794,
+      "sha256": "32327d8a5cd1915bbe58fcd696de255b13c78ba4f1262cd191643cf3c4546ff4"
+    },
+    {
+      "path": "optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md",
+      "bytes": 4527,
+      "sha256": "2bc927093f8a44a855b7b03d837e33b6d3b160e1e6a15db5f401ec0545cc3a80"
+    },
+    {
+      "path": "tests/test_skill_command_examples.py",
+      "bytes": 60666,
+      "sha256": "301fb52ff31802f2601b6a8baf3416380735c420371a5d0fa22bc4913c461461"
+    },
+    {
+      "path": "tests/test_skill_content.sh",
+      "bytes": 1182,
+      "sha256": "a057f3b43aad34e4f52ecfedf3b7d96ed1a67c235703ddc8a60932e52950e710"
+    },
+    {
+      "path": "tests/test_skill_imap_sender_methods.py",
+      "bytes": 8415,
+      "sha256": "584b1719a107309306c8126617c2ff706e540cd67391cbbbb97432380ddfcbfa"
+    }
+  ]
+}

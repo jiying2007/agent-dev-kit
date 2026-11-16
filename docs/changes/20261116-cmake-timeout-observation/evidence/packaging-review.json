@@ -1,0 +1,277 @@
+{
+  "schema": "adk-independent-packaging-review/v1",
+  "reviewer": "ai/root/root_prepare",
+  "started_at": "2026-11-16T15:55:44.025597+00:00",
+  "completed_at": "2026-11-16T15:55:44.112637+00:00",
+  "status": "pass",
+  "findings": [],
+  "source_commit": "fe5f908d821b8cf56db140d053134ae835127c57",
+  "source_tree": "eddbe93c5cc0202e2a29e95364197260e1d2464f",
+  "checks": {
+    "new_paths_exact_whitelist": true,
+    "added_files": 9,
+    "original_14_source_files_unchanged": true,
+    "tracked_diff_empty": true,
+    "copied_reports_byte_identical": true,
+    "copied_reports": 4,
+    "bundle_encoding_lengths_hashes": true,
+    "bundle_items_verified": 13,
+    "original_patch_equals_full_index_binary_git_diff": true,
+    "source_bindings_match_all_14_files": true,
+    "formal_review_validator": "pass",
+    "formal_review_reference_count": 21,
+    "repository_status_unchanged": true
+  },
+  "added_file_bindings": [
+    {
+      "path": "docs/changes/20261116-cmake-timeout-observation/completion-verification.md",
+      "bytes": 3729,
+      "sha256": "cf388b933936ab4440381c9c72d3fbb2109fc24c276c6c5e1fd2ba49e5dd3f59"
+    },
+    {
+      "path": "docs/changes/20261116-cmake-timeout-observation/evidence/final-source-review.json",
+      "bytes": 13067,
+      "sha256": "8e40ff77cde0df0b1f0f2f050790eda0f5af3cb9454bde6772eadb62af7ca9ed"
+    },
+    {
+      "path": "docs/changes/20261116-cmake-timeout-observation/evidence/integration-bundle.json",
+      "bytes": 54626,
+      "sha256": "ac2d0312aa12930fb1bf352eea6d2069a0c2d4cc8f993b0f7e34e79c01b4c829"
+    },
+    {
+      "path": "docs/changes/20261116-cmake-timeout-observation/evidence/original.patch",
+      "bytes": 46353,
+      "sha256": "36ecbc021107a56a05b4824cdfbb0c2e8b66dcf48351517c1277f1a562f4b761"
+    },
+    {
+      "path": "docs/changes/20261116-cmake-timeout-observation/evidence/prior-tool-transcripts.txt",
+      "bytes": 7865,
+      "sha256": "c350bdddadcb4b694ae60a7cd7bbc44cd2b03a06e44b9a53d6a77a149272d5ce"
+    },
+    {
+      "path": "docs/changes/20261116-cmake-timeout-observation/evidence/probe-review.py",
+      "bytes": 4219,
+      "sha256": "97eebd43e1cfa6a993f87124b45dafa1ad6b1374803d26d5e65c6d0b20c56ceb"
+    },
+    {
+      "path": "docs/changes/20261116-cmake-timeout-observation/evidence/source-bindings.json",
+      "bytes": 3050,
+      "sha256": "8f80f2b84d3bc42ebcd0e91ecd77394026b1cfb33d9462ee0683a0d16ed548e4"
+    },
+    {
+      "path": "docs/changes/20261116-cmake-timeout-observation/evidence/source-review-observations.json",
+      "bytes": 10096,
+      "sha256": "f26c9a96b6bc2185a94e4a3dc7111b3465e887e4d26d42f7611e6be005636af3"
+    },
+    {
+      "path": "docs/changes/20261116-cmake-timeout-observation/review-evidence.json",
+      "bytes": 7786,
+      "sha256": "24ebf332c21ca6bf18bfa7213120d05f8866b721c6d098aa9a08e2fe7e94f43f"
+    }
+  ],
+  "source_bindings": [
+    {
+      "path": "docs/changes/20261116-cmake-timeout-observation/design.md",
+      "bytes": 1265,
+      "sha256": "21a97b94e31f73ff684f7b08fed92f788168193773c980c5a82a4733ab6e67df"
+    },
+    {
+      "path": "docs/changes/20261116-cmake-timeout-observation/evidence/runner-tests.txt",
+      "bytes": 1143,
+      "sha256": "8fcd307ef7eed7e99a36ede425ceab7f4c0a670119adb2e677587c3b7cec9cf6"
+    },
+    {
+      "path": "docs/changes/20261116-cmake-timeout-observation/requirements.md",
+      "bytes": 1116,
+      "sha256": "e38d8d4b9737c8bfd1d5c656bf9f0b4d4e940590c23da0e6f7afc19ca6512176"
+    },
+    {
+      "path": "docs/changes/20261116-cmake-timeout-observation/tasks.md",
+      "bytes": 711,
+      "sha256": "3e98e76594d021a5c1992c1d265328ee44a9449211375e322d5ffdfc984a8ca0"
+    },
+    {
+      "path": "docs/changes/20261116-cmake-timeout-observation/verification.md",
+      "bytes": 2540,
+      "sha256": "be67ab2dd79b9107cdcdd0d88d69d09c59ab5e670f3c0a0147d5a489ca5004cd"
+    },
+    {
+      "path": "docs/changes/20261116-imap-exact-sender/consumer-observation.json",
+      "bytes": 1867,
+      "sha256": "e5e920983968f58d73495a28532197f8cf5ddb5cc9158a58b5dde79892aa4d20"
+    },
+    {
+      "path": "docs/changes/20261116-imap-exact-sender/design.md",
+      "bytes": 990,
+      "sha256": "97e7af5dd57fde83f7f3253ac3acf392d57abf8cf968e2809a09cea4c7261301"
+    },
+    {
+      "path": "docs/changes/20261116-imap-exact-sender/implementation-verification.md",
+      "bytes": 5939,
+      "sha256": "3ea4dcc6dd53847339fa4d2612469a1e98094b1b72518e502e1fb591700585bb"
+    },
+    {
+      "path": "docs/changes/20261116-imap-exact-sender/requirements.md",
+      "bytes": 972,
+      "sha256": "6707a296e7a7539b038b2f8fbe4960fb7c53b26281de9c9cbff2a58c39413afe"
+    },
+    {
+      "path": "docs/changes/20261116-imap-exact-sender/tasks.md",
+      "bytes": 794,
+      "sha256": "32327d8a5cd1915bbe58fcd696de255b13c78ba4f1262cd191643cf3c4546ff4"
+    },
+    {
+      "path": "optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md",
+      "bytes": 4527,
+      "sha256": "2bc927093f8a44a855b7b03d837e33b6d3b160e1e6a15db5f401ec0545cc3a80"
+    },
+    {
+      "path": "tests/test_skill_command_examples.py",
+      "bytes": 60666,
+      "sha256": "301fb52ff31802f2601b6a8baf3416380735c420371a5d0fa22bc4913c461461"
+    },
+    {
+      "path": "tests/test_skill_content.sh",
+      "bytes": 1182,
+      "sha256": "a057f3b43aad34e4f52ecfedf3b7d96ed1a67c235703ddc8a60932e52950e710"
+    },
+    {
+      "path": "tests/test_skill_imap_sender_methods.py",
+      "bytes": 8415,
+      "sha256": "584b1719a107309306c8126617c2ff706e540cd67391cbbbb97432380ddfcbfa"
+    }
+  ],
+  "copied_report_bindings": [
+    {
+      "path": "docs/changes/20261116-cmake-timeout-observation/evidence/final-source-review.json",
+      "bytes": 13067,
+      "sha256": "8e40ff77cde0df0b1f0f2f050790eda0f5af3cb9454bde6772eadb62af7ca9ed"
+    },
+    {
+      "path": "docs/changes/20261116-cmake-timeout-observation/evidence/source-review-observations.json",
+      "bytes": 10096,
+      "sha256": "f26c9a96b6bc2185a94e4a3dc7111b3465e887e4d26d42f7611e6be005636af3"
+    },
+    {
+      "path": "docs/changes/20261116-cmake-timeout-observation/evidence/prior-tool-transcripts.txt",
+      "bytes": 7865,
+      "sha256": "c350bdddadcb4b694ae60a7cd7bbc44cd2b03a06e44b9a53d6a77a149272d5ce"
+    },
+    {
+      "path": "docs/changes/20261116-cmake-timeout-observation/evidence/probe-review.py",
+      "bytes": 4219,
+      "sha256": "97eebd43e1cfa6a993f87124b45dafa1ad6b1374803d26d5e65c6d0b20c56ceb"
+    }
+  ],
+  "bundle_item_bindings": [
+    {
+      "name": "ci-attempt-1-job-133388257363.log",
+      "bytes": 61719,
+      "sha256": "e2208bff1992f91578e0c99b4b7abeededa8f3651fd914c02d6894c9baeaa7d0",
+      "original_scratch_file_compared": false,
+      "original_scratch_bytes_equal": null
+    },
+    {
+      "name": "ci-attempt-2-job-133398015004.log",
+      "bytes": 63285,
+      "sha256": "395a17093a5a6f8f10705d112d6d91aa5a6586c63320abc19b1c760c9c3df6f0",
+      "original_scratch_file_compared": false,
+      "original_scratch_bytes_equal": null
+    },
+    {
+      "name": "final-methods/receipt.json",
+      "bytes": 2079,
+      "sha256": "1e5abcd47472bc8d9ccc3d3c73288693bf8f4773a787374d5aff1202cd023d1e",
+      "original_scratch_file_compared": true,
+      "original_scratch_bytes_equal": true
+    },
+    {
+      "name": "final-methods/started.json",
+      "bytes": 940,
+      "sha256": "5e39402f330ad9e6189c388f6e5c6d309b7b280f30723bc4ba74db1071e41cbf",
+      "original_scratch_file_compared": true,
+      "original_scratch_bytes_equal": true
+    },
+    {
+      "name": "final-methods/stderr.log",
+      "bytes": 37854,
+      "sha256": "4fd552e7515b232cdecba93cdeb0820a216193b0259fbd6952592322964b948e",
+      "original_scratch_file_compared": true,
+      "original_scratch_bytes_equal": true
+    },
+    {
+      "name": "final-methods/stdout.log",
+      "bytes": 3136,
+      "sha256": "e41d80844fd8720b0b5869824f1a7615af0ddcd99152201013af8a00ae8b5b55",
+      "original_scratch_file_compared": true,
+      "original_scratch_bytes_equal": true
+    },
+    {
+      "name": "strict-validation/receipt.json",
+      "bytes": 2095,
+      "sha256": "00d8d4636f3bb04487fda681f5a4e8041014e873e04f6c3f2f1ab94389c362b7",
+      "original_scratch_file_compared": true,
+      "original_scratch_bytes_equal": true
+    },
+    {
+      "name": "strict-validation/started.json",
+      "bytes": 962,
+      "sha256": "4df52571bf4c8d295bf49e422e80b0a0805e0789084ef956a0e89346241c40c2",
+      "original_scratch_file_compared": true,
+      "original_scratch_bytes_equal": true
+    },
+    {
+      "name": "strict-validation/stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_scratch_file_compared": true,
+      "original_scratch_bytes_equal": true
+    },
+    {
+      "name": "strict-validation/stdout.log",
+      "bytes": 36,
+      "sha256": "217441b0093d06aee8580867f6b676d59324c8118079d0f1be5a8ccf88043848",
+      "original_scratch_file_compared": true,
+      "original_scratch_bytes_equal": true
+    },
+    {
+      "name": "profiles.json",
+      "bytes": 12613,
+      "sha256": "257909c89e964a3fb656afca656c90839cb1261cbef1ad3bcf2a986f1ebadcca",
+      "original_scratch_file_compared": true,
+      "original_scratch_bytes_equal": true
+    },
+    {
+      "name": "verify_profiles.py",
+      "bytes": 1762,
+      "sha256": "76cf7962ec662a552705b900a4fe60794f2e8838ba483092896854a2879215d1",
+      "original_scratch_file_compared": true,
+      "original_scratch_bytes_equal": true
+    },
+    {
+      "name": "pack_completion.py",
+      "bytes": 3928,
+      "sha256": "af2929c283c02b3247673da2783f2617457a829cfe7a0b3039ef4d3039cea0e8",
+      "original_scratch_file_compared": true,
+      "original_scratch_bytes_equal": true
+    }
+  ],
+  "original_patch_sha256": "36ecbc021107a56a05b4824cdfbb0c2e8b66dcf48351517c1277f1a562f4b761",
+  "review_record_sha256": "24ebf332c21ca6bf18bfa7213120d05f8866b721c6d098aa9a08e2fe7e94f43f",
+  "narrative_review": {
+    "completion_verification_fully_read": true,
+    "future_ci_main_release_root_success_prefilled": false,
+    "historical_timeouts_remain_unknown": true,
+    "initial_cmake_skip_preserved": true,
+    "test_owned_parser_defect_scope_preserved": true,
+    "source_review_target_and_historical_binding_boundary_preserved": true,
+    "source_stage_14_files_and_packaging_stage_9_files_separate": true
+  },
+  "limitations": [
+    "No product tests were re-run. This operation checked evidence packaging only.",
+    "The two CI log items were verified against envelope hashes and sizes; their decoded text is not claimed to be byte-identical to original GitHub binary log archives.",
+    "Formal review reviewed_at retains the earlier source review timestamp. This separate packaging review records the later packaging observation time.",
+    "Protected exact-head CI, main CI, immutable Release and Root delivery remain subsequent steps.",
+    "No runtime, hardware/HIL, mailbox authentication/side-effect, M5 or Token/cost qualification is established."
+  ]
+}

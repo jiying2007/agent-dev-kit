@@ -1,0 +1,658 @@
+diff --git a/docs/changes/20261116-cmake-timeout-observation/design.md b/docs/changes/20261116-cmake-timeout-observation/design.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..9844b82690502cd5c4355353179f4cd96899c1e8
+--- /dev/null
++++ b/docs/changes/20261116-cmake-timeout-observation/design.md
+@@ -0,0 +1,9 @@
++# 设计
++
++职责：parent冻结需求和设计；diagnose_adc实现；另一个只读Agent独立审查。
++
++在现有CMake fixture中使用Bash内建EPOCHREALTIME作为PS4前缀并开启VERBOSE，保持从SKILL.md提取的代码不变。只在已发生TimeoutExpired后记录本次Popen会话/进程组的Linux procfs快照；字段仅PID、PGID、state、comm、CPU计数及wchan，禁止argv/environ。给快照明确的条数和短时间上限，与原1秒清理截止时间共用预算；读取失败降为诊断不可得，仍执行原kill/reap及抛错。不得诊断全机或为成功路径增加轮询。
++
++回归使用真实独立进程组与可控sleep；同时建立不相关组和含敏感标记的参数/环境，确认快照不泄漏且清理不误杀。保持正常退出0/7控制和缺procfs、进程竞态的错误路径。
++
++这只是观测增强，后续根因修复必须由新证据支持。回滚为撤销本change的fixture修改，旧失败及证据仍保留。仓库已授权source-only执行；~/codex不可用，宿主知识与执行策略门禁未运行，不作为通过。外部读写使用既有GitHub connector、限定jiying2007授权仓库/PR，拒绝密钥/运行态目录写入，失败退回本地保留成果，不伪造回执。
+diff --git a/docs/changes/20261116-cmake-timeout-observation/evidence/runner-tests.txt b/docs/changes/20261116-cmake-timeout-observation/evidence/runner-tests.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..012c116b149236009b5cc031b49c6f4bc10f6ac3
+--- /dev/null
++++ b/docs/changes/20261116-cmake-timeout-observation/evidence/runner-tests.txt
+@@ -0,0 +1,10 @@
++test_default_budget_and_normal_exit_keep_the_original_contract (tests.test_skill_command_examples.CommandExampleRunnerTests.test_default_budget_and_normal_exit_keep_the_original_contract) ... ok
++test_process_snapshot_respects_record_and_expired_cleanup_budgets (tests.test_skill_command_examples.CommandExampleRunnerTests.test_process_snapshot_respects_record_and_expired_cleanup_budgets) ... ok
++test_process_snapshot_tolerates_missing_procfs_and_disappearing_processes (tests.test_skill_command_examples.CommandExampleRunnerTests.test_process_snapshot_tolerates_missing_procfs_and_disappearing_processes) ... ok
++test_timeout_keeps_both_streams_kills_its_descendant_and_spares_another_group (tests.test_skill_command_examples.CommandExampleRunnerTests.test_timeout_keeps_both_streams_kills_its_descendant_and_spares_another_group) ... ok
++test_unavailable_diagnostics_do_not_replace_timeout_or_child_cleanup (tests.test_skill_command_examples.CommandExampleRunnerTests.test_unavailable_diagnostics_do_not_replace_timeout_or_child_cleanup) ... ok
++
++----------------------------------------------------------------------
++Ran 5 tests in 0.616s
++
++OK
+diff --git a/docs/changes/20261116-cmake-timeout-observation/requirements.md b/docs/changes/20261116-cmake-timeout-observation/requirements.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..bf3e0912554dccf430435e8bebd352bccdd4fe7c
+--- /dev/null
++++ b/docs/changes/20261116-cmake-timeout-observation/requirements.md
+@@ -0,0 +1,16 @@
++# CMake 示例超时的可判定诊断
++
++## 目标与依据
++
++PR #278 的 run 43892815480 两次完整回归均为101/102。首次最后命令为CTest，第二次为build；异常后回放的GitHub行时间不能说明阶段耗时。根因未知。本变更为下一次失败保留可区分的阶段时间和本次自有进程组状态。
++
++## 边界
++
++仅修改测试fixture及其确定性回归；不改ADC、发布Skill命令、15秒工作预算、1秒清理预算、失败判据或skip策略。不增加依赖、周期任务或外部模型调用。观察成功只表示该次执行通过，不能反推历史故障根因。
++
++## 验收
++
++1. fixture的原样命令保留时间戳与实际编译命令，普通成功/非零退出语义不变。
++2. 超时仍失败、只终止自有进程组；诊断只记录自有进程的非敏感状态，排除参数、环境、其他组，受数量和时间限制。
++3. 实际慢子进程证明原超时/清理合同仍有效；进程消失或procfs不可用不遮蔽原始失败。
++4. 新CI保留原失败与后续观察；仅精确候选全部必需检查通过才推进合并。
+diff --git a/docs/changes/20261116-cmake-timeout-observation/tasks.md b/docs/changes/20261116-cmake-timeout-observation/tasks.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..b42d8f94cf617eb6d124fc1516772b9cae5c2a63
+--- /dev/null
++++ b/docs/changes/20261116-cmake-timeout-observation/tasks.md
+@@ -0,0 +1,9 @@
++# 当前任务
++
++- [x] 冻结目标、边界、设计；历史lessons路径不存在，记录为未命中。
++- [x] diagnose_adc：实现有界诊断；5项定向验证通过，进程快照不足不制造新失败。
++- [x] parent：原ADC、CMake方法及最终200项方法聚合通过，保留原预算；strict和8个原Profile阈值通过。
++- [ ] independent reviewer：Spec/Quality只读审查及失败假设检查。
++- [ ] parent：精确候选CI；基于新证据决定修复或保留unknown，不盲目重复；成功后合并、不可变Release及Root接入。
++
++此文件冻结源码准备阶段；后续独立审查与交付回执追加在completion-verification.md和PR #278，不改写历史失败。
+diff --git a/docs/changes/20261116-cmake-timeout-observation/verification.md b/docs/changes/20261116-cmake-timeout-observation/verification.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..1630c3353942e0dace965a9f6bbdf0102cabd09b
+--- /dev/null
++++ b/docs/changes/20261116-cmake-timeout-observation/verification.md
+@@ -0,0 +1,31 @@
++# 实现与定向验证
++
++## 实现范围
++
++仅修改 `tests/test_skill_command_examples.py`：
++
++- CMake fixture 的 xtrace 使用 Bash 内建 `EPOCHREALTIME` 时间戳，并设置 `VERBOSE=1`；发布的 Skill 代码块未修改。
++- 只在原 `TimeoutExpired` 路径采集当前 `Popen` 所属进程组的 procfs 状态；输出仅含 PID、PGID、comm、state、CPU ticks、wchan，不读取 argv/environ。
++- 进程发现最多检查256个目录项、输出16条记录，分配至多50ms检查窗口。所有读取均使用固定长度，并在循环及可选wchan读取前核对截止时间。诊断与原kill/reap共用原有1秒清理截止，不新增工作预算。
++- procfs缺失、进程退出、非法记录或诊断异常只影响诊断状态；仍终止自有进程组并报告原始超时。
++
++这是失败观测增强；没有宣称解释或修复历史ADC/CMake超时。
++
++## 实际执行
++
++在 `/workspace/scratch/fe8de3b42084/adk` 执行：
++
++```bash
++/workspace/scratch/fe5385ca063a/verification-tools/rtk bypass env \
++  PATH=/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin:/workspace/scratch/fe5385ca063a/verification-tools:/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin:/usr/local/bin:/usr/bin:/bin \
++  /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 -B \
++  -m unittest tests.test_skill_command_examples.CommandExampleRunnerTests -v
++```
++
++最终定向复验结果：exit 0，5/5通过，0 skips，unittest记录0.616秒。原始输出见 `evidence/runner-tests.txt`。此前首次定向执行同为5/5通过（0.615秒）；整合复读发现繁忙procfs可合法耗尽诊断预算，因此最终版本只在完整observed扫描时要求真实child被观测，bounded/partial不改变原清理断言。可控procfs夹具独立验证数量上限和非本组排除。
++
++验证内容：正常exit 0/7及原15秒默认值；真实慢子进程仍在0.5秒工作预算超时、保留stdout/stderr并被清理；独立进程组保持存活；参数和环境的合成敏感标记不进入诊断；缺procfs、消失/不完整记录及缺wchan不抛新异常；记录条数受限；清理截止已过时不访问procfs；诊断异常不泄漏异常文本、不替换超时或阻止cleanup。`git diff --check` 同次执行通过。
++
++## 尚待整合
++
++原ADC/CMake实例、方法聚合、独立Spec/Quality审查及精确候选CI由parent执行并补充真实回执。这里不把本地定向通过表示为CI恢复、根因结论、Release或Root接入完成。
+diff --git a/docs/changes/20261116-imap-exact-sender/consumer-observation.json b/docs/changes/20261116-imap-exact-sender/consumer-observation.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..92468b2aa1fcc21e81177f405e6477bae1b0f53e
+--- /dev/null
++++ b/docs/changes/20261116-imap-exact-sender/consumer-observation.json
+@@ -0,0 +1,32 @@
++{
++  "schema": "adk-source-method-consumer-observation/v1",
++  "agent": "ai/root/imap_consumer",
++  "context": "fresh thread; Skill path and offline task inputs only; no expected result or implementation diagnosis",
++  "skill_path": "optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md",
++  "skill_sha256": "2bc927093f8a44a855b7b03d837e33b6d3b160e1e6a15db5f401ec0545cc3a80",
++  "input": {
++    "mailbox": "INBOX", "uidvalidity": 901,
++    "target": "build@example.test", "local_part": "preserve", "domain": "case_insensitive",
++    "time": "already verified upstream", "candidate_uids": [101,102,103,104,105,106,107],
++    "header_count_budget": 6,
++    "headers": {
++      "101": "From: Build <build@example.test>",
++      "102": "From: \"build@example.test\" <noise@example.test>",
++      "103": "From: build@example.test.invalid",
++      "104": "From: build@EXAMPLE.TEST",
++      "105": "From: Build@example.test",
++      "106": "Subject: notice"
++    },
++    "unfetched": {"107": "header_count_budget_exhausted"}
++  },
++  "observed_output": {
++    "matched": [101,104], "excluded": [102,103,105],
++    "unresolved": [{"uid":106,"reason":"missing_from_header"},{"uid":107,"reason":"header_count_budget_exhausted"}],
++    "status": "partial", "body_status": "not_requested",
++    "connection_and_authentication": "not-verified", "mailbox_read_only_state": "not-verified",
++    "sender_authentication": "not-verified", "additional_headers_fetched": 0
++  },
++  "reported_execution": ["read the exact Skill", "sha256sum of Skill", "offline Python HeaderParser with email.policy.default on the six provided headers"],
++  "network_access": false, "source_modified": false,
++  "boundary": "One source-method observation, not a controlled A/B evaluation, live mailbox test, runtime qualification or token/cost measurement. This is a retained agent report, not a fabricated tool transcript."
++}
+diff --git a/docs/changes/20261116-imap-exact-sender/design.md b/docs/changes/20261116-imap-exact-sender/design.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..b7e2d2c63de31e7393a2561ad5e4ddef1eac9bf6
+--- /dev/null
++++ b/docs/changes/20261116-imap-exact-sender/design.md
+@@ -0,0 +1,9 @@
++# 设计
++
++职责：parent冻结需求与设计；skills_audit实现；另一个只读Agent独立审查。
++
++仅增强现有adk-email-imap-fetch的条件方法段和证据字段，版本前移patch；不增加新的Skill或邮件客户端。以RFC9051与RFC5321/5322地址语义为依据，不把SEARCH FROM当精确等值；按已明确的From mailbox条件解析headers，保持原时间分支独立。
++
++新增小型test-owned标准库解析控制及源方法断言，行为控制展示方法而非ADK运行态。用同一输入的错误子串变体证明假阳性；正向控制避免“拒绝所有”伪通过。测试放独立文件，由parent在原聚合入口注册。禁止测试自证真实邮箱只读/认证效果或Token收益。
++
++原#278冻结审查是历史证据；新源需独立追加审查，不改写旧审查结论。回滚撤销本Skill增量及对应测试，不改原时间精筛和身份规则。所有数据使用example.test虚构邮件，不访问真实邮箱。
+diff --git a/docs/changes/20261116-imap-exact-sender/implementation-verification.md b/docs/changes/20261116-imap-exact-sender/implementation-verification.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..9db7fbfa3924d126c9811d5d49e6dc7e7890f944
+--- /dev/null
++++ b/docs/changes/20261116-imap-exact-sender/implementation-verification.md
+@@ -0,0 +1,54 @@
++# IMAP 完整发件地址方法实施验证
++
++实施范围仅为既有 optional IMAP Skill 与 `tests/test_skill_imap_sender_methods.py`；聚合测试注册、ADK版本、Manifest、Profile预算与最终交付由parent整合。没有新增生产邮件客户端、协议服务器、依赖或Skill。没有连接真实邮箱或启动外部模型。
++
++## 一手来源
++
++2026-11-16读取以下规范的对应正文：
++
++- RFC9051 §6.4.4：字符串搜索默认是子串，FROM搜索针对envelope的FROM字段；https://www.rfc-editor.org/rfc/rfc9051.html#section-6.4.4 。
++- RFC5321 §2.4、§4.1.2：保留local-part大小写，域名不区分大小写；等价quoted形式按解析后语义比较，不能据此推广特定供应商的别名规则；https://www.rfc-editor.org/rfc/rfc5321.html#section-2.4 、https://www.rfc-editor.org/rfc/rfc5321.html#section-4.1.2 。
++- RFC5322 §3.4、§3.6.2：显示名与mailbox地址分开，From是mailbox-list；https://www.rfc-editor.org/rfc/rfc5322.html#section-3.4 、https://www.rfc-editor.org/rfc/rfc5322.html#section-3.6.2 。
++
++Skill新增独立的“仅完整发件地址请求”段，保留普通模糊请求、原精确时间分支、EXAMINE/BODY.PEEK/UIDVALIDITY和原预算约束。语义或头信息不足时保留成功项与未判定UID，不以地址匹配声称身份认证。
++
++## 实际执行
++
++执行器：CPython3.12.14；工作目录 `/workspace/scratch/fe8de3b42084/adk`。以下命令均通过已发现的 `/workspace/scratch/fe5385ca063a/verification-tools/rtk` 运行。
++
++| 阶段 | 命令（rtk之后） | 实际结果 |
++| --- | --- | --- |
++| 源方法RED | `python3 -B tests/test_skill_imap_sender_methods.py`，Skill仍为1.0.4 | exit1；7个测试中6个行为控制通过，1个源契约测试含7个缺词subtest失败；不是ADK运行态bug复现 |
++| 方法GREEN | 同一测试命令，Skill更新1.0.5 | exit0；7/7，0.003秒 |
++| 原时间路径 | `python3 -B tests/test_skill_imap_time_methods.py` | exit0；7/7，1.527秒 |
++| 定向差异格式 | `git diff --check -- optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md tests/test_skill_imap_sender_methods.py` | exit0 |
++
++第一次RED的assertIn错误包含整份Skill文本；仅将断言失败显示改为缺词提示后重放RED，仍是相同7个缺词subtest失败。未更改判定条件，也未据此放宽验收。失败词为“完整发件地址、FROM、子串、local-part、别名、身份认证、模糊”。
++
++7项测试包含：源码条件方法与旧只读边界；裸地址/显示名正确地址与显示名伪装/后缀域名对照；域名大小写/local-part/别名/quoted形式；缺失/重复/畸形头；未知地址语义；数量与头字节预算；普通模糊请求兼容。相同输入下错误子串方法接受全部4个样本，真实解析方法仅接受2个正向样本，避免“全部拒绝”伪通过。
++
++测试中的selector是test-owned方法控制，使用真实标准库解析器；它只处理给定的headers和已证明覆盖的固定候选。计数/字节预算指这些已给定头字节，不是生产IMAP wire-byte限流实现。其通过不证明任意邮件格式、真实服务器、认证/只读副作用、native触发、泛化A/B或Token/费用收益。
++
++## 受测文件身份与规模
++
++于2026-11-16 23:41:54北京时间核验；这是未提交源码快照，不冒充最终commit或CI执行。
++
++| 路径 | bytes | SHA256 |
++| --- | ---: | --- |
++| 原IMAP Skill1.0.4 | 3782 | b109548aceb24d3f978e92eb4706cc0845847c82a741d05810ded49f44f351b7 |
++| 受测IMAP Skill1.0.5 | 4527 | 2bc927093f8a44a855b7b03d837e33b6d3b160e1e6a15db5f401ec0545cc3a80 |
++| 新sender方法测试 | 7362 | 7e5c29f785aaf8d9e3c6dd595631cae924cb7e8e8f7263e996bea31b14c980f6 |
++
++入口增量745字节，来自一个条件方法段、一行证据字段及版本patch。没有更改任何Profile阈值；原Profile预算尚待parent执行真实检查，不能由optional身份直接推断通过。独立审查、聚合/完整回归、不可变Release与Root接入也仍由各自实际回执决定。
++
++## 独立审查后的解析异常修复
++
++独立审查发现：符合4096字节fixture预算的600层嵌套注释头（1236字节）在CPython3.12.14的`message.get_all("From")`惰性解析阶段抛出`RecursionError`。原helper未隔离该异常，因而无法交付此前成功项。这是新test-owned示例的实际异常缺口，不升级为ADK生产邮箱漏洞。
++
++新增1项回归，将正常项、100层和300层注释正向控制、600层失败项、后续正常项置于同一候选序列；整个序列少于4096字节，避免由预算跳过掩盖解析失败。
++
++- 修改helper前先运行 `python3 -B tests/test_skill_imap_sender_methods.py ImapSenderMethodTests.test_parser_failure_isolated_between_successes_with_deep_positive_controls`：exit1，1项ERROR，`RecursionError: maximum recursion depth exceeded`，0.042秒。原helper未改变；错误发生于`get_all`，栈随后位于标准库`all_defects`递归。
++- 最小修复将`parsebytes/get_all/addresses/groups`的解析区域限定在异常隔离块，仅捕获`HeaderParseError/ValueError/RecursionError`；该UID记`unparseable-from`、最终`partial`，继续后续候选。不捕获一般`Exception`，不修改解析器递归上限。
++- 修复后运行 `python3 -B tests/test_skill_imap_sender_methods.py`：exit0，**8/8**，0.012秒；100/300层和失败项前后的正常项均保留，只有600层项未判定。`git diff --check -- tests/test_skill_imap_sender_methods.py`为exit0。
++
++2026-11-16 23:45:32北京时间记录最终本地测试文件：8415字节，SHA256 `584b1719a107309306c8126617c2ff706e540cd67391cbbbb97432380ddfcbfa`。CPython3.12.14，递归上限实测1000。上表的7362字节/7项记录保留为首轮历史，不能再代表本次修复后的最终测试。Skill本身没有追加文本，4527字节及其hash不变；聚合和CI须按修复后文件重新核验。
+diff --git a/docs/changes/20261116-imap-exact-sender/requirements.md b/docs/changes/20261116-imap-exact-sender/requirements.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..31d6fdedd573fad256be3897c4ed962d29eeed6d
+--- /dev/null
++++ b/docs/changes/20261116-imap-exact-sender/requirements.md
+@@ -0,0 +1,11 @@
++# IMAP 完整发件地址判定
++
++## 目标
++
++补齐现有optional IMAP Skill在明确完整发件地址请求下的最终筛选。RFC9051的FROM搜索为子串候选，显示名伪装和相似域名不能冒充完整邮箱相等。该问题已有上一轮审计观察，但未实施。
++
++## 边界与验收
++
++普通模糊发件人请求保留原语义；只有明确完整地址条件才解析From并按明确邮箱语义筛选。不得擅自将local-part转小写、折叠别名或视为身份认证。候选需有覆盖依据；缺失/畸形/语义不明或预算不足保留成功项和未判定UID，partial，不扩大邮箱或下载无关正文。
++
++验证真实标准库解析下：裸地址、显示名+正确地址通过；显示名中伪装目标和后缀域名排除；域名大小写与local-part/别名条件按明确语义处理；缺失/畸形头、数量/字节预算及模糊模式保持可解释结果。保留EXAMINE/BODY.PEEK/UIDVALIDITY与凭证限制。
+diff --git a/docs/changes/20261116-imap-exact-sender/tasks.md b/docs/changes/20261116-imap-exact-sender/tasks.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..f7d46d0faf77d7c7ea719234ca8646cc646d321f
+--- /dev/null
++++ b/docs/changes/20261116-imap-exact-sender/tasks.md
+@@ -0,0 +1,9 @@
++# 当前任务
++
++- [x] 冻结目标、边界、设计；复核上一轮audit中的保留观察。
++- [x] skills_audit：核一手RFC；8项真实解析方法控制通过，包含独立审查发现的解析异常隔离。
++- [x] parent：原聚合注册一次，最终200项通过；旧时间/只读合同与8个原Profile预算通过。
++- [ ] independent reviewer：Spec/Quality及一次最小上下文消费观察。
++- [ ] parent：与#278完成最新CI、不可变Release及Root source-only接入；缺失运行态资格继续保留。
++
++此文件冻结源码准备阶段；后续独立审查与交付回执统一见../20261116-cmake-timeout-observation/completion-verification.md及PR #278。一次fresh消费观察已保留在consumer-observation.json，不作模型A/B或真实邮箱资格。
+diff --git a/optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md b/optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md
+index 463c15106cfd15072eace59ee5732078ced4b250..60f859c40ef007cae493cb61447fa93b7830f488 100644
+--- a/optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md
++++ b/optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md
+@@ -1,7 +1,7 @@
+ ---
+ name: adk-email-imap-fetch
+ description: "用于已授权邮箱的只读 IMAP 邮件列表及正文提取，并限制凭据与输出范围；不用于邮件发送、归档写入或扫描无关邮箱。"
+-version: 1.0.4
++version: 1.0.5
+ last_updated: 2026-11-16
+ triggers:
+   - "获取邮件"
+@@ -35,6 +35,8 @@ constraints:
+ 
+    **仅精确时间请求**：`SINCE/BEFORE/ON` 按内部日期、`SENT*` 按 `Date` 做日级筛选，均忽略时间和时区。候选边界须有覆盖依据，不无条件前后扩一天；只读取得所选时间字段后，统一时区精筛。所选时间缺失/非法、时区未知或候选超数量/字节预算时，保留成功项、未判定 UID/范围与原因，沿用 `partial`；不改用另一时间字段、主机时区或全邮箱扩扫。
+ 
++   **仅完整发件地址请求**：`FROM` 搜索是子串候选；在有覆盖依据且预算内只读取得必要 headers，解析 `From` mailbox 后按已明确语义匹配，不以显示名或后缀域名命中代替完整地址。域名不区分大小写；local-part 不擅自转小写或折叠别名。头缺失/畸形、语义不明或预算不足时保留成功项与未判定 UID，记 `partial`；普通模糊请求不强加精确条件。地址匹配不证明身份认证；地址语义见 [RFC5321 §2.4](https://www.rfc-editor.org/rfc/rfc5321.html#section-2.4) 与 [RFC5322 §3.6.2](https://www.rfc-editor.org/rfc/rfc5322.html#section-3.6.2)。
++
+ 4. **decode**: 按 MIME、传输编码和字符集解析主题/正文，区分 plain text、HTML 与附件；附件不默认下载。列表后被删除、单封超时或解码失败分别记录，保留已经取得的成功项。
+ 5. **deliver**: 输出 JSON 邮件列表，含邮箱引用、UIDVALIDITY、UID、必要 headers、正文状态和逐项错误；说明数量/字节限制及未获取部分。只有所请求范围完整取得才记 pass，局部结果记 partial，不把缺失邮件或正文当空内容成功。
+ 
+@@ -50,6 +52,7 @@ constraints:
+ - 获取状态: pass / partial / needs-fix / not-verified + 未获取原因
+ - Mailbox / UIDVALIDITY / UID 范围 / 数量与字节限制:
+ - 精确时间（适用时）: 基准 / 时区 / 区间 / 候选覆盖依据 / 未判定范围
++- 完整地址（适用时）: From匹配语义 / 候选覆盖依据 / 未判定UID
+ ```
+ 
+ ## 健壮性规范
+diff --git a/tests/test_skill_command_examples.py b/tests/test_skill_command_examples.py
+index bf0cef6224ca5bf76214e58b9057e8a709199dee..931440a31fb245ffb49c67f52851eb6391e774f0 100644
+--- a/tests/test_skill_command_examples.py
++++ b/tests/test_skill_command_examples.py
+@@ -12,6 +12,7 @@ import sys
+ import tempfile
+ import time
+ import unittest
++from unittest import mock
+ import xml.etree.ElementTree as ET
+ 
+ 
+@@ -35,6 +36,48 @@ def bash_example(path: str, marker: str) -> str:
+     return matches[0]
+ 
+ 
++def owned_process_snapshot(process_group, deadline, *, proc_root=Path("/proc"), limit=16):
++    """Best-effort Linux status only; never collect arguments or environments."""
++    records = []
++    status = "observed"
++    # A diagnostic shares the caller's cleanup deadline and gets at most 50 ms.
++    deadline = min(deadline, time.monotonic() + 0.05)
++    if time.monotonic() >= deadline:
++        return {"status": "bounded", "processes": records}
++    try:
++        with os.scandir(proc_root) as entries:
++            for scanned, entry in enumerate(entries):
++                if scanned >= 256 or len(records) >= limit or time.monotonic() >= deadline:
++                    status = "bounded"
++                    break
++                if not entry.name.isdecimal():
++                    continue
++                process = Path(entry.path)
++                try:
++                    with (process / "stat").open(encoding="utf-8", errors="replace") as stream:
++                        raw = stream.read(4096)
++                    before, fields = raw.rsplit(") ", 1)
++                    pid, comm = before.split(" (", 1)
++                    fields = fields.split()
++                    if int(fields[2]) != process_group:
++                        continue
++                    record = {"pid": int(pid), "pgid": int(fields[2]), "comm": comm,
++                              "state": fields[0], "user_ticks": int(fields[11]),
++                              "system_ticks": int(fields[12]), "wchan": "unavailable"}
++                    if time.monotonic() < deadline:
++                        try:
++                            with (process / "wchan").open(encoding="utf-8", errors="replace") as stream:
++                                record["wchan"] = stream.read(128).strip()
++                        except OSError:
++                            pass  # A process can exit between its stat and wchan reads.
++                    records.append(record)
++                except (OSError, ValueError, IndexError):
++                    status = "partial"
++    except OSError:
++        status = "unavailable"
++    return {"status": status, "processes": records}
++
++
+ def run_example(code: str, root: Path, *arguments: str, environment=None,
+                 timeout=15, label="skill-example"):
+     """Bound the whole example; keep diagnostics and terminate its own process group."""
+@@ -48,6 +91,11 @@ def run_example(code: str, root: Path, *arguments: str, environment=None,
+         work_elapsed = time.monotonic() - started
+         cleanup_started = time.monotonic()
+         cleanup_deadline = cleanup_started + 1
++        try:
++            snapshot = owned_process_snapshot(process.pid, cleanup_deadline)
++        except Exception as error:
++            # Diagnostics must never prevent termination or replace the timeout.
++            snapshot = {"status": "unavailable", "error": type(error).__name__, "processes": []}
+         try:
+             os.killpg(process.pid, signal.SIGKILL)
+         except ProcessLookupError:
+@@ -72,6 +120,7 @@ def run_example(code: str, root: Path, *arguments: str, environment=None,
+         raise AssertionError(
+             f"{label}: timeout; budget={timeout}s; work_elapsed={work_elapsed:.3f}s; "
+             f"cleanup_elapsed={time.monotonic() - cleanup_started:.3f}s; cleanup={cleanup_status}\n"
++            f"process_snapshot: {json.dumps(snapshot, sort_keys=True)}\n"
+             f"stdout:\n{decoded(stdout)}\nstderr:\n{decoded(stderr)}"
+         ) from None
+     return subprocess.CompletedProcess(command, process.returncode, stdout, stderr)
+@@ -91,17 +140,34 @@ class CommandExampleRunnerTests(unittest.TestCase):
+     def test_timeout_keeps_both_streams_kills_its_descendant_and_spares_another_group(self):
+         with tempfile.TemporaryDirectory() as directory:
+             root = Path(directory)
+-            unrelated = subprocess.Popen(["sleep", "60"], start_new_session=True)
++            private = "SYNTHETIC_PRIVATE_ARGUMENT_AND_ENVIRONMENT_8713"
++            environment = dict(os.environ, DIAGNOSTIC_TEST_SECRET=private)
++            unrelated = subprocess.Popen([sys.executable, "-c", "import time; time.sleep(60)", private],
++                                         env=environment, start_new_session=True)
+             try:
+-                code = ('sleep 60 & child=$!; printf "%s\\n" "$child" > child.pid; '
++                code = ('"$1" -c "import time; time.sleep(60)" "$2" & child=$!; '
++                        'printf "%s\\n" "$child" > child.pid; '
+                         'printf "configure complete\\n"; printf "build waiting\\n" >&2; wait')
+                 with self.assertRaises(AssertionError) as failure:
+-                    run_example(code, root, timeout=0.5, label="timeout-fixture")
++                    run_example(code, root, sys.executable, private, environment=environment,
++                                timeout=0.5, label="timeout-fixture")
+                 message = str(failure.exception)
+                 for expected in ("timeout-fixture", "budget=0.5s", "work_elapsed=", "cleanup_elapsed=",
+                                  "stdout:\nconfigure complete", "stderr:\nbuild waiting"):
+                     self.assertIn(expected, message)
+                 child = int((root / "child.pid").read_text())
++                snapshot = json.loads(message.split("process_snapshot: ", 1)[1].split("\nstdout:", 1)[0])
++                self.assertNotIn(private, message)
++                self.assertNotIn(unrelated.pid, [record["pid"] for record in snapshot["processes"]])
++                # Busy/inaccessible procfs may legitimately exhaust the small
++                # diagnostic budget; that must not introduce a new timing flake.
++                if sys.platform == "linux" and snapshot["status"] == "observed":
++                    self.assertIn(child, [record["pid"] for record in snapshot["processes"]])
++                if snapshot["processes"]:
++                    self.assertEqual(1, len({record["pgid"] for record in snapshot["processes"]}))
++                for record in snapshot["processes"]:
++                    self.assertEqual({"pid", "pgid", "comm", "state", "user_ticks", "system_ticks", "wchan"},
++                                     set(record))
+                 # Linux may briefly retain an already killed orphan as a zombie;
+                 # that is not a running child, and is reaped by its new parent.
+                 state = Path(f"/proc/{child}/stat")
+@@ -121,6 +187,52 @@ class CommandExampleRunnerTests(unittest.TestCase):
+                     except ProcessLookupError:
+                         pass
+ 
++    def test_unavailable_diagnostics_do_not_replace_timeout_or_child_cleanup(self):
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            with mock.patch(__name__ + ".owned_process_snapshot", side_effect=OSError("private detail")):
++                with self.assertRaises(AssertionError) as failure:
++                    run_example('printf "started\\n"; sleep 60', root, timeout=0.1)
++            message = str(failure.exception)
++            self.assertIn("timeout; budget=0.1s", message)
++            self.assertIn('"status": "unavailable"', message)
++            self.assertIn("cleanup=complete", message)
++            self.assertNotIn("private detail", message)
++
++    def test_process_snapshot_tolerates_missing_procfs_and_disappearing_processes(self):
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            missing = owned_process_snapshot(123, time.monotonic() + 1, proc_root=root / "absent")
++            self.assertEqual("unavailable", missing["status"])
++            self.assertEqual([], missing["processes"])
++            (root / "123").mkdir()  # Process disappears before stat can be read.
++            (root / "124").mkdir()
++            (root / "124/stat").write_text("incomplete procfs record")
++            for pid, group in ((125, 123), (126, 999)):
++                (root / str(pid)).mkdir()
++                (root / str(pid) / "stat").write_text(
++                    f"{pid} (fixture process) S 1 {group} 0 0 0 0 0 0 0 0 7 8 0\n")
++                (root / str(pid) / "cmdline").write_text("SYNTHETIC_PRIVATE_ARGUMENT")
++                (root / str(pid) / "environ").write_text("SYNTHETIC_PRIVATE_ENVIRONMENT")
++            snapshot = owned_process_snapshot(123, time.monotonic() + 1, proc_root=root)
++            self.assertEqual([125], [record["pid"] for record in snapshot["processes"]])
++            self.assertEqual("unavailable", snapshot["processes"][0]["wchan"])
++            self.assertNotIn("SYNTHETIC_PRIVATE", json.dumps(snapshot))
++
++    def test_process_snapshot_respects_record_and_expired_cleanup_budgets(self):
++        with mock.patch("os.scandir", side_effect=AssertionError("expired diagnostic must not scan")):
++            result = owned_process_snapshot(123, time.monotonic() - 1)
++        self.assertEqual({"status": "bounded", "processes": []}, result)
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            for pid in range(123, 128):
++                (root / str(pid)).mkdir()
++                (root / str(pid) / "stat").write_text(
++                    f"{pid} (fixture) S 1 123 0 0 0 0 0 0 0 0 7 8 0\n")
++            result = owned_process_snapshot(123, time.monotonic() + 1, proc_root=root, limit=2)
++            self.assertEqual("bounded", result["status"])
++            self.assertEqual(2, len(result["processes"]))
++
+ 
+ class ReleaseHistoryExampleTests(unittest.TestCase):
+     def setUp(self):
+@@ -620,7 +732,7 @@ class _CmakeExampleFixture:
+         self.toolchain.write_text('set(CMAKE_C_COMPILER "' + shutil.which("cc") + '")\n')
+         self.output = self.source / "out" / "manual build"
+         self.environment = dict(
+-            os.environ, CC=shutil.which("cc"), ADK_SOURCE_DIR=str(self.source),
++            os.environ, CC=shutil.which("cc"), VERBOSE="1", ADK_SOURCE_DIR=str(self.source),
+             ADK_BINARY_DIR=str(self.output), ADK_GENERATOR=generator, ADK_BUILD_MODE="manual",
+             ADK_TOOLCHAIN_FILE=str(self.toolchain), ADK_CONFIG="Release", ADK_BUILD_JOBS="1",
+             ADK_TEST_BACKEND="host-unit", ADK_ELF=str(self.output / "firmware.elf"),
+@@ -633,7 +745,7 @@ class _CmakeExampleFixture:
+         environment = dict(self.environment, **overrides)
+         # Fixture-only trace identifies the last configure/build/CTest command
+         # if the aggregate example budget expires; the published block is intact.
+-        return run_example("set -x\n" + bash_example(CMAKE, marker), self.source,
++        return run_example("PS4='+${EPOCHREALTIME} ${LINENO}: '\nset -x\n" + bash_example(CMAKE, marker), self.source,
+                            environment=environment, label=f"CMake/{environment['ADK_BUILD_MODE']}/{marker}")
+ 
+     def assert_identity(self, identity, output, artifact):
+diff --git a/tests/test_skill_content.sh b/tests/test_skill_content.sh
+index 17368a8eacd0ca26f10ad81e9798f75b8c297ab2..9f65ef3e616d1c4bde763555c0f158926dee0df3 100644
+--- a/tests/test_skill_content.sh
++++ b/tests/test_skill_content.sh
+@@ -4,5 +4,5 @@ ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+ export PYTHONPATH="$ROOT_DIR/src"
+ cd "$ROOT_DIR"
+ # Content v2 has no universal SOP headings or minimum line count.
+-python3 -m unittest tests.test_skill_content_contract tests.test_document_authoring_skills tests.test_skill_method_efficiency tests.test_skill_quality_methods tests.test_verification_stage_economy tests.test_skill_portfolio_quality tests.test_external_method_intake tests.test_external_core_methods tests.test_external_domain_methods tests.test_skill_fault_activation tests.test_skill_imap_time_methods tests.test_repository_workflow_efficiency tests.test_skill_execution_tasks tests.test_skill_command_examples tests.test_review_raw_diff tests.test_skill_domain_execution tests.test_skill_runtime_methods tests.test_skill_bisect_methods tests.test_skill_rtos_methods tests.test_skill_contract_methods tests.test_skill_cmake_methods tests.test_optional_incident_lifecycle tests.test_skill_serialization_methods tests.test_skill_openai_metadata tests.test_commit_message_policy -v
++python3 -m unittest tests.test_skill_content_contract tests.test_document_authoring_skills tests.test_skill_method_efficiency tests.test_skill_quality_methods tests.test_verification_stage_economy tests.test_skill_portfolio_quality tests.test_external_method_intake tests.test_external_core_methods tests.test_external_domain_methods tests.test_skill_fault_activation tests.test_skill_imap_time_methods tests.test_skill_imap_sender_methods tests.test_repository_workflow_efficiency tests.test_skill_execution_tasks tests.test_skill_command_examples tests.test_review_raw_diff tests.test_skill_domain_execution tests.test_skill_runtime_methods tests.test_skill_bisect_methods tests.test_skill_rtos_methods tests.test_skill_contract_methods tests.test_skill_cmake_methods tests.test_optional_incident_lifecycle tests.test_skill_serialization_methods tests.test_skill_openai_metadata tests.test_commit_message_policy -v
+ echo "[PASS] Skills content v2, OpenAI metadata and Commit Policy"
+diff --git a/tests/test_skill_imap_sender_methods.py b/tests/test_skill_imap_sender_methods.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..3012ead8258db90b9e899baaf4208513aa9e6374
+--- /dev/null
++++ b/tests/test_skill_imap_sender_methods.py
+@@ -0,0 +1,171 @@
++"""Exact-From method controls using the real stdlib header parser.
++
++The selector is test-owned, not an ADK mail client. Header octet/count budgets
++refer only to these supplied fixtures; no live protocol or identity claim.
++Only the source-contract test is expected to fail on the old Skill.
++"""
++from __future__ import annotations
++
++from email import policy
++from email.errors import HeaderParseError
++from email.headerregistry import Address
++from email.parser import BytesParser
++from pathlib import Path
++import unittest
++
++
++ROOT = Path(__file__).resolve().parents[1]
++SKILL = ROOT / "optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md"
++TARGET = "build@example.test"
++
++
++def header(sender: str) -> bytes:
++    return f"From: {sender}\r\n\r\n".encode("ascii")
++
++
++def select(candidates: list[tuple[int, bytes]], *, mode: str = "exact",
++           semantics: str | None = "standard-mailbox", count_budget: int = 20,
++           byte_budget: int = 4096) -> dict:
++    """Fixture candidates are a known superset; any From mailbox may match.
++
++    Exact mode explicitly preserves local-part and folds only the domain.
++    Fuzzy mode preserves the supplied server search results without imposing
++    exact-address semantics. Missing semantics never grants an exact result.
++    """
++    target = Address(addr_spec=TARGET)
++    matched, excluded, undecided, parsed = [], [], [], []
++    used = 0
++    for uid, raw in candidates:
++        reason = None
++        if mode == "exact" and semantics != "standard-mailbox":
++            reason = "unknown-address-semantics"
++        elif len(parsed) >= count_budget:
++            reason = "count-budget"
++        elif len(raw) > byte_budget - used:
++            reason = "byte-budget"
++        if reason is not None:
++            undecided.append({"uid": uid, "reason": reason})
++            continue
++        parsed.append(uid)
++        used += len(raw)
++        if mode == "fuzzy":
++            matched.append(uid)
++            continue
++        try:
++            message = BytesParser(policy=policy.default).parsebytes(raw)
++            fields = message.get_all("From", [])
++            if len(fields) != 1:
++                undecided.append({"uid": uid, "reason": "missing-or-repeated-from"})
++                continue
++            field = fields[0]
++            addresses = field.addresses
++            invalid = (message.defects or field.defects or not addresses
++                       or any(not a.username or not a.domain for a in addresses)
++                       or any(group.display_name is not None for group in field.groups))
++        except (HeaderParseError, ValueError, RecursionError):
++            undecided.append({"uid": uid, "reason": "unparseable-from"})
++            continue
++        if invalid:
++            undecided.append({"uid": uid, "reason": "invalid-from"})
++            continue
++        same = any(a.username == target.username
++                   and a.domain.lower() == target.domain.lower() for a in addresses)
++        (matched if same else excluded).append(uid)
++    return {"matched": matched, "excluded": excluded, "undecided": undecided,
++            "parsed": parsed, "header_bytes": used,
++            "status": "partial" if undecided else "pass"}
++
++
++class ImapSenderMethodTests(unittest.TestCase):
++    def test_source_separates_exact_address_from_substring_and_identity(self):
++        text = SKILL.read_text(encoding="utf-8")
++        for term in ("完整发件地址", "FROM", "子串", "解析", "local-part",
++                     "别名", "身份认证", "模糊", "未判定", "partial"):
++            with self.subTest(term=term):
++                self.assertTrue(term in text, f"missing source method: {term}")
++        for retained in ("EXAMINE", "BODY.PEEK", "UIDVALIDITY", "最大封数与字节预算",
++                         "INTERNALDATE", "另一时间字段", "not-verified"):
++            self.assertIn(retained, text)
++
++    def test_exact_addresses_accept_positive_controls_and_reject_substring_decoys(self):
++        inputs = [(101, header(TARGET)), (102, header(f"Build <{TARGET}>")),
++                  (103, header(f'"{TARGET}" <noise@example.test>')),
++                  (104, header(f"{TARGET}.invalid"))]
++        result = select(inputs)
++        self.assertEqual([101, 102], result["matched"])
++        self.assertEqual([103, 104], result["excluded"])
++        self.assertEqual([], result["undecided"])
++        self.assertEqual("pass", result["status"])
++        # Wrong substring logic accepts both decoys on the same raw inputs.
++        wrong = [uid for uid, raw in inputs if TARGET.lower().encode() in raw.lower()]
++        self.assertEqual([101, 102, 103, 104], wrong)
++        self.assertNotEqual(result["matched"], wrong)
++
++    def test_domain_case_folds_but_local_part_and_aliases_are_preserved(self):
++        inputs = [(201, header("build@EXAMPLE.TEST")),
++                  (202, header("Build@example.test")),
++                  (203, header("build+ci@example.test")),
++                  (204, header("b.uild@example.test")),
++                  (205, header('"build"@example.test'))]
++        result = select(inputs)
++        self.assertEqual([201, 205], result["matched"])
++        self.assertEqual([202, 203, 204], result["excluded"])
++        self.assertEqual("pass", result["status"])
++
++    def test_missing_repeated_and_malformed_headers_preserve_partial_success(self):
++        inputs = [(301, header(TARGET)), (302, b"Subject: fixture\r\n\r\n"),
++                  (303, b"From: build@@example.test\r\n\r\n"),
++                  (304, b"From: build@example.test\r\nFrom: noise@example.test\r\n\r\n")]
++        result = select(inputs)
++        self.assertEqual([301], result["matched"])
++        self.assertEqual([], result["excluded"])
++        self.assertEqual([{"uid": 302, "reason": "missing-or-repeated-from"},
++                          {"uid": 303, "reason": "invalid-from"},
++                          {"uid": 304, "reason": "missing-or-repeated-from"}], result["undecided"])
++        self.assertEqual("partial", result["status"])
++
++    def test_undefined_address_semantics_leave_candidates_undecided(self):
++        result = select([(401, header(TARGET))], semantics=None)
++        self.assertEqual([], result["matched"])
++        self.assertEqual([], result["parsed"])
++        self.assertEqual([{"uid": 401, "reason": "unknown-address-semantics"}], result["undecided"])
++        self.assertEqual("partial", result["status"])
++
++    def test_parser_failure_isolated_between_successes_with_deep_positive_controls(self):
++        def commented(depth: int) -> bytes:
++            return b"From: " + b"(" * depth + b"comment" + b")" * depth + b" build@example.test\r\n\r\n"
++
++        inputs = [(411, header(TARGET)), (412, commented(100)),
++                  (413, commented(300)), (414, commented(600)),
++                  (415, header(TARGET))]
++        self.assertLess(sum(len(raw) for _, raw in inputs), 4096)
++        result = select(inputs)
++        self.assertEqual([411, 412, 413, 415], result["matched"])
++        self.assertEqual([], result["excluded"])
++        self.assertEqual([{"uid": 414, "reason": "unparseable-from"}], result["undecided"])
++        self.assertEqual("partial", result["status"])
++
++    def test_count_and_header_byte_budgets_keep_success_and_unread_uids(self):
++        inputs = [(501, header(TARGET)), (502, header(TARGET)), (503, header(TARGET))]
++        for options, reason in (({"count_budget": 1}, "count-budget"),
++                                ({"byte_budget": len(inputs[0][1])}, "byte-budget")):
++            with self.subTest(reason=reason):
++                result = select(inputs, **options)
++                self.assertEqual([501], result["matched"])
++                self.assertEqual([501], result["parsed"])
++                self.assertEqual(len(inputs[0][1]), result["header_bytes"])
++                self.assertEqual([{"uid": 502, "reason": reason},
++                                  {"uid": 503, "reason": reason}], result["undecided"])
++                self.assertEqual("partial", result["status"])
++
++    def test_fuzzy_request_keeps_server_candidates_without_exact_refiltering(self):
++        inputs = [(601, header(TARGET)),
++                  (602, header(f'"{TARGET}" <noise@example.test>'))]
++        result = select(inputs, mode="fuzzy")
++        self.assertEqual([601, 602], result["matched"])
++        self.assertEqual([], result["excluded"])
++        self.assertEqual("pass", result["status"])
++
++
++if __name__ == "__main__":
++    unittest.main()
