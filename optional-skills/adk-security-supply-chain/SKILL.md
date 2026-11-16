@@ -26,12 +26,10 @@ constraints:
 # adk-security-supply-chain
 
 ## Goal
-- 防止第三方资产未经审查进入生产运行环境。
-- 建立可追溯的供应链安全审查流程，确保每个引入决策有据可查。
+- 防止第三方资产未经审查进入生产运行环境；建立可追溯的供应链安全审查流程，确保每个引入决策有据可查。
 
 ## Prerequisites
-- 已明确候选资产来源、版本或 commit。
-- 已明确安装范围：`core`、`optional`、`profile` 或 `reject`。
+- 已明确候选资产来源、版本或 commit，以及安装范围：`core`、`optional`、`profile` 或 `reject`。
 
 ## Scope Gate（只选择适用的审查层）
 - **source-only intake**：仅引用第三方方法、没有导入脚本/依赖或启动工具，不执行 SBOM/CVE/签名器；核来源、许可未知、指令注入与当前权限，输出 `unverified` 的候选，不推断运行安全。纯背景研究仍由外部方法分析 Skill 负责。

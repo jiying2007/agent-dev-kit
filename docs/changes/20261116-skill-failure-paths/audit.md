@@ -28,7 +28,7 @@
 ## 保持观察的三项
 
 - `adk-production-field-readiness` 的 human-active 与 wall-time 含义：缺真实 producer/单人或累计多人定义，不能仅凭词义改约束。
-- `adk-worktree-isolation` 的旧任务模板默认低风险：当前实际链接消费路径不同，尚未证明旧模板是默认入口，不扩大改动。
+- `adk-worktree-governance` 的旧任务模板默认低风险：当前实际链接消费路径不同，尚未证明旧模板是默认入口，不扩大改动。
 - Embedded diagnostic harness 的 invocation 关联：需要真实 adapter/schema/replay 才能判断缺陷；相邻 HIL 方法已有 freshness/identity 边界，不凭审计新增通用 run-id。
 
 这些是明确保留待证伪问题，不作为已修复缺陷或新认证。

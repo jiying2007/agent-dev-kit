@@ -42,7 +42,7 @@ constraints:
 4. **异常预算**：超时/限流/重试/降级按目标协议、链路/设备预算及可证伪实验确定，禁通用固定值。
 5. **受控生命周期契约**：跨状态/独占资源操作明确下述矩阵、状态可见性/取消/超时/恢复/迟到完成及 generation/op-id 隔离；按需读 `references/lifecycle-operation-contract.md`。
 6. **副作用**：按参数/目标在写前授权；拒绝/未知结果/重放对账见 `references/tool-effect-contract.md`。
-7. **结构化输出**：固定消费者 dialect/validator/子集，声明 required fields/enum/refusal handling/parse-failure 并拒绝未知字段；闭合层级/示例见 `references/details.md`。
+7. **结构化输出**：固定消费者 dialect/validator/子集及 required fields/enum/refusal handling/parse-failure；拒绝未知字段，同层用 `additionalProperties=false`，组合闭合见 `references/details.md`。
 8. **契约用例**：至少正常/边界/异常断言及真实构建/测试入口；覆盖最低版本、缺必需能力、跨 major，禁虚构命令。
 9. **设计挑战**：高风险/长期公共接口比较两种边界的可见约束/演进成本/验证 seam；单路径说明限制。反例固定术语/状态/边界，变化才更新既有 glossary/ADR。深模块/原型见 `references/design-quality-methods.md`。
 10. **Spec-to-Code 双向核对**：有实现按 `references/spec-code-bidirectional.md` 核规格→实现、可观察行为→规格；未查/未知 `not-checked`，纯设计待验证。
