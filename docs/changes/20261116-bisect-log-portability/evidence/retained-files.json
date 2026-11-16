@@ -1,0 +1,79 @@
+{
+  "files": [
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round2-pr-first-regression.log",
+      "retained_path": "evidence/initial-ci-regression.json",
+      "bytes": 61083,
+      "sha256": "716b2a2096deb0085d76da883a0427bd424ea413dc9c0bbd75084a4929e1f892",
+      "retained_encoding": "json-utf8-text",
+      "content_field": "text",
+      "original_bytes": 59412,
+      "original_sha256": "aa4a2bf14b427d2b4dd216308a70564d40a57cbf55cc4be4c697c47cb8bc35e2"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round2-ci-parser-fix.json",
+      "retained_path": "evidence/parser-red-green.json",
+      "bytes": 299564,
+      "sha256": "b4a6a6495e94dfff62ba0c15c3e7e22fbcc8dc68a8789660d01308ab82a007d7"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/run-round2-ci-parser-fix.py",
+      "retained_path": "evidence/parser-evidence-runner.py",
+      "bytes": 3549,
+      "sha256": "8b6b4f34d98878112edef8c92071c454b9c424a044375b0b11bde4e0d85529cd"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round2-ci-parser-content-check/receipt.json",
+      "retained_path": "evidence/initial-content.json",
+      "bytes": 1832,
+      "sha256": "85d8c72e6c216e228993555067fec9af5bf249bfbf708ba72c1333b094298d91"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round2-ci-parser-content-check/started.json",
+      "retained_path": "evidence/initial-content-started.json",
+      "bytes": 823,
+      "sha256": "f5e64ac3323d4722ea1be20fcaaa3b51316a8a78e089a4a70ab930c2309d9297"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round2-ci-parser-content-check/stdout.log",
+      "retained_path": "evidence/initial-content.stdout.log",
+      "bytes": 60,
+      "sha256": "a1d41f1ff1943113e4f98d3e1a6622a2e4ee9a8ae5d0061625cf5849121531b0"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round2-ci-parser-content-check/stderr.log",
+      "retained_path": "evidence/initial-content.stderr.json",
+      "bytes": 31292,
+      "sha256": "50a2d0bda04b2c4e87d7bfad846346b42b25465542a9dfc1c02dfaa01b4b6dfc",
+      "retained_encoding": "json-utf8-text",
+      "content_field": "text",
+      "original_bytes": 30766,
+      "original_sha256": "d1aa237db48bf148be00fff7f9b0bf13a6068793970ea1a2c0b35e8c8ea6c6e5"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round2-ci-parser-content-supported/receipt.json",
+      "retained_path": "evidence/supported-content.json",
+      "bytes": 17938,
+      "sha256": "1ca855501358346a90a2822fd8bf41adc0429f68bd82591349b8d79c0c446897"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round2-ci-parser-content-supported/started.json",
+      "retained_path": "evidence/supported-content-started.json",
+      "bytes": 823,
+      "sha256": "d421fa5122dbf96f537a115868b1220f8108ed873b6cd86d3cbf396f9a9875a5"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round2-ci-parser-content-supported/stdout.log",
+      "retained_path": "evidence/supported-content.stdout.log",
+      "bytes": 60,
+      "sha256": "a1d41f1ff1943113e4f98d3e1a6622a2e4ee9a8ae5d0061625cf5849121531b0"
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round2-ci-parser-content-supported/stderr.log",
+      "retained_path": "evidence/supported-content.stderr.log",
+      "bytes": 29399,
+      "sha256": "ff4a0adbeb070a5d272658cb8d7d8bb13a449f64fdab8ec7ad8767aa357b5b95"
+    }
+  ],
+  "boundary": "Plain copies remain byte-identical. Entries marked json-utf8-text preserve original bytes by decoding the named text field; original and encoded hashes are separate."
+}

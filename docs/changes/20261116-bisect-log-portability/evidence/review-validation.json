@@ -1,0 +1,14 @@
+{
+  "status": "pass",
+  "record_sha256": "5717f1059bd045bd823a9049c537eb1e121ebefc098e9032ff29caf4a3c3cdb9",
+  "review_scope": "source-change",
+  "human_review_performed": false,
+  "provider_execution_performed": false,
+  "field_evidence_verified": false,
+  "product_release_authorized": false,
+  "checked_at": "2026-11-16T06:06:55.297808+00:00",
+  "source_commit": "f23d41e2a4d7e4ea5b5cb392f514827d01178ed8",
+  "sources": 12,
+  "evidence": 22,
+  "boundary": "New test-only source review. Original method source review remains historical; new-head hosted full CI is required before protected merge."
+}

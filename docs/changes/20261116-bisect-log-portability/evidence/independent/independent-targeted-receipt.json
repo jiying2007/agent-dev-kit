@@ -1,0 +1,73 @@
+{
+  "schema": "independent-ci-followup-execution/v1",
+  "started_at": "2026-11-16T06:01:16.520659+00:00",
+  "finished_at": "2026-11-16T06:01:17.639973+00:00",
+  "test_file_sha256_before": "f8cb68ec55b1898842fb482958f640bcf1d17bf02da974e876fe491e8b895eee",
+  "test_file_sha256_after": "f8cb68ec55b1898842fb482958f640bcf1d17bf02da974e876fe491e8b895eee",
+  "expected_frozen_file_sha256": "f8cb68ec55b1898842fb482958f640bcf1d17bf02da974e876fe491e8b895eee",
+  "source_file_stable": true,
+  "command": [
+    "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+    "bypass",
+    "env",
+    "PYTHONDONTWRITEBYTECODE=1",
+    "PYTHONPATH=src",
+    "GIT_OPTIONAL_LOCKS=0",
+    "python3",
+    "-m",
+    "unittest",
+    "tests.test_skill_bisect_methods",
+    "-v"
+  ],
+  "cwd": "/workspace/scratch/fe5385ca063a/agent-dev-kit",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "test_ambiguity_evidence_accepts_observed_git_output_formats (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_ambiguity_evidence_accepts_observed_git_output_formats) ... ok\ntest_ambiguity_evidence_rejects_missing_or_partial_headings (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_ambiguity_evidence_rejects_missing_or_partial_headings) ... ok\ntest_no_first_bad_rejects_both_observed_verdict_formats (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_no_first_bad_rejects_both_observed_verdict_formats) ... ok\ntest_published_oracle_preserves_outcomes_and_aborts_unknown_results (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_published_oracle_preserves_outcomes_and_aborts_unknown_results) ... ok\ntest_real_bisect_aborts_instead_of_blames_infrastructure_error (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_aborts_instead_of_blames_infrastructure_error) ... ok\ntest_real_bisect_preserves_ambiguity_next_to_skipped_boundary (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_preserves_ambiguity_next_to_skipped_boundary) ... ok\ntest_real_bisect_skips_unrelated_unbuildable_revision (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_skips_unrelated_unbuildable_revision) ... ok\ntest_real_bisect_treats_build_failure_as_bad_for_build_regression (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_treats_build_failure_as_bad_for_build_regression) ... ok\ntest_unique_first_bad_accepts_observed_git_log_formats (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_unique_first_bad_accepts_observed_git_log_formats) ... ok\ntest_unique_first_bad_rejects_missing_duplicate_or_failed_evidence (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_unique_first_bad_rejects_missing_duplicate_or_failed_evidence) ... ok\n\n----------------------------------------------------------------------\nRan 10 tests in 0.961s\n\nOK\n",
+  "version_command": [
+    "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+    "bypass",
+    "git",
+    "--version"
+  ],
+  "local_git_version": "git version 2.52.0",
+  "raw_ci_log": "/workspace/scratch/fe5385ca063a/round2-pr-first-regression.log",
+  "raw_ci_log_sha256": "aa4a2bf14b427d2b4dd216308a70564d40a57cbf55cc4be4c697c47cb8bc35e2",
+  "ci_text_replay_probes": [
+    {
+      "name": "actual-CI-terminal-line",
+      "input": "# first 'bad' commit: [5f3ac9869c103734217df1fbb66f78b4bd7dbac0] controlled state 4",
+      "expected": "5f3ac9869c103734217df1fbb66f78b4bd7dbac0",
+      "actual": "5f3ac9869c103734217df1fbb66f78b4bd7dbac0",
+      "pass": true
+    },
+    {
+      "name": "actual-CI-terminal-line",
+      "input": "# first 'bad' commit: [5f3c14db7890439ff92dc559f73edd227a4b44cd] controlled state 2",
+      "expected": "5f3c14db7890439ff92dc559f73edd227a4b44cd",
+      "actual": "5f3c14db7890439ff92dc559f73edd227a4b44cd",
+      "pass": true
+    },
+    {
+      "name": "actual-CI-ambiguity-output",
+      "input_sha256": "2107fa2ee5cf5de926409e72ce4e2250302787ddf8d32230567d5b07b219e102",
+      "actual": "accepted explicit quoted ambiguity heading",
+      "pass": true
+    },
+    {
+      "name": "nonzero127-with-actual-terminal",
+      "expected": "AssertionError",
+      "pass": true
+    },
+    {
+      "name": "unique-plus-malformed-terminal",
+      "expected": "AssertionError",
+      "pass": true
+    },
+    {
+      "name": "absence-rejects-actual-quoted-terminal",
+      "expected": "AssertionError",
+      "pass": true
+    }
+  ],
+  "boundary": "Actual local unittest execution uses Git2.52.0; quoted-format observations are direct replay of recorded Git2.56.1CI output, not a local2.56.1execution. No full local regression or remote action was performed."
+}

@@ -1,0 +1,359 @@
+{
+  "schema": "adk-independent-ci-followup-review/v1",
+  "reviewer": "ai/root/independent_round2_review",
+  "role": "Independent read-only reviewer; did not implement this fix, write target repository/index/refs, or perform remote actions.",
+  "status": "source-review-complete-fresh-pr-ci-pending",
+  "source": {
+    "baseline_commit": "bc2f4b2ca3bbef2cb5515322048a144639e79004",
+    "reviewed_source_commit": "f23d41e2a4d7e4ea5b5cb392f514827d01178ed8",
+    "tree": "1197f5560a7a8fc03f5454dfa16460da8c2a108c",
+    "original_patch_sha256": "78f40cc8970c097e427e20e8c59a06dfc3e595a9186719fac162e1e468a068e4"
+  },
+  "source_files": [
+    {
+      "path": "docs/changes/20261116-bisect-log-portability/design.md",
+      "bytes": 1490,
+      "sha256": "6603003904b80d86a8a66a81a98021fc3a8e524fce83e2ef5edf6d5080b5b185",
+      "blob": "4a7f1426c45a2067209f8769e325239864c5d85f"
+    },
+    {
+      "path": "docs/changes/20261116-bisect-log-portability/requirements.md",
+      "bytes": 1351,
+      "sha256": "555dcf02b2fc9992675147669ee91ea8d14a6c74acfd67eabb26d1cf9b8a435d",
+      "blob": "51c5e42870a1f7b89b5189d9148c22206c86d623"
+    },
+    {
+      "path": "docs/changes/20261116-bisect-log-portability/tasks.md",
+      "bytes": 939,
+      "sha256": "8c5129bf336880afc7fcdd6abc12a8dd9bd6d300aeacd60f3d9b9e3424aa8e77",
+      "blob": "2fdc289c78cd2f0bec17751a03be8fc2b427c297"
+    },
+    {
+      "path": "docs/changes/20261116-skill-timing-diagnosis/ci-followup.md",
+      "bytes": 4143,
+      "sha256": "93a9fd0ab336580c348f3f424f713b0bfef472f5fc50bc36810be412216eb3be",
+      "blob": "192674e860457cf0bf3d78c36759a88145aed295"
+    },
+    {
+      "path": "tests/test_skill_bisect_methods.py",
+      "bytes": 13121,
+      "sha256": "f8cb68ec55b1898842fb482958f640bcf1d17bf02da974e876fe491e8b895eee",
+      "blob": "05e1fcafcbc4f82c0ad6125bf07419b10e87ecd5"
+    }
+  ],
+  "changed_file_count": 5,
+  "evidence_completed_at": "2026-11-16T06:04:30.644859Z",
+  "evidence_completed_at_basis": "Actual final independent digest/source-file and preserved-history checks completed at this timestamp; earlier execution and identity-check end times remain in their raw receipts.",
+  "verdicts": {
+    "spec": {
+      "result": "pass",
+      "scope": "Five-file source follow-up and actual local targeted evidence; mandatory fresh PR complete CI remains an external pre-merge gate.",
+      "basis": "The test helpers accept the two observed Git terminal/ambiguity forms, retain successful-exit/exact-single-record/full-SHA checks, and preserve all original real Git behavioral assertions. New requirements/design/tasks accurately constrain this repair."
+    },
+    "quality": {
+      "result": "pass",
+      "scope": "Implementation, regression design and evidence honesty for this test-only compatibility fix. This is not a completed hosted-platform or release verdict.",
+      "basis": "No remaining blocking defect found in the reviewed patch. Shared terminal matching also fixes the negative-path blind spot. Positive cases use actual observed text; negatives fail on original behavior. The independent 10-test execution and direct CI-log replays pass without skipping tests."
+    }
+  },
+  "findings": [
+    {
+      "id": "IR-CI1",
+      "severity": "major",
+      "status": "closed",
+      "title": "Git 2.56.1 terminal wording was not recognized by the newly added diagnostic tests",
+      "original_status": "blocking failure observed in PR CI; 101/102 suites passed",
+      "evidence": {
+        "ci_run_id": 43812320483,
+        "ci_job_id": 133116507717,
+        "ci_url": "https://github.com/jiying2007/agent-dev-kit/actions/runs/43812320483/job/133116507717",
+        "pr_head": "bc2f4b2ca3bbef2cb5515322048a144639e79004",
+        "ci_checkout_commit": "f6a34cc5dc329268b9028c3e5aee7328e01973ee",
+        "ci_checkout_ref": "refs/pull/275/merge",
+        "ci_reported_merge": "Merge bc2f4b2ca3bbef2cb5515322048a144639e79004 into 913b6b3a0838ccddae252a3a8536ac7d41598810",
+        "ci_git_version": "2.56.1",
+        "log": {
+          "path": "/workspace/scratch/fe5385ca063a/round2-pr-first-regression.log",
+          "bytes": 59412,
+          "sha256": "aa4a2bf14b427d2b4dd216308a70564d40a57cbf55cc4be4c697c47cb8bc35e2"
+        },
+        "actual_failures": [
+          "Two unique_first_bad calls received correct quoted terminal records but old regex extracted zero candidates.",
+          "Ambiguity case had nonzero exit and two candidates, then failed the old unquoted heading assertion."
+        ],
+        "additional_gap": "Original absence assertions only rejected the unquoted terminal prefix, so the quoted form could evade negative checks."
+      },
+      "correction": {
+        "source_commit": "f23d41e2a4d7e4ea5b5cb392f514827d01178ed8",
+        "path": "tests/test_skill_bisect_methods.py",
+        "before_sha256": "a413b9fccf6dce8abc236a44554c100c69a0db2d5a304009a592040409daca74",
+        "after_sha256": "f8cb68ec55b1898842fb482958f640bcf1d17bf02da974e876fe491e8b895eee",
+        "change": "Centralize exactly the observed bad and quoted-bad terminal forms. Count all recognized terminal records before validating a single 40-hex SHA; use the same matcher for absence assertions, including missing-SHA prefixes. Require an anchored complete ambiguity heading in either observed form. Keep original target SHA, skip, abort, exit-code and candidate-set assertions. Add five deterministic format regression methods."
+      },
+      "closure_verification": {
+        "result": "closed for source correction after independent local execution and replay of the actual recorded CI text",
+        "reason": "10/10 local methods passed with no skips. Independent replay accepted both actual remote terminal records and the real ambiguity output, and rejected exit127 with a terminal, a valid plus malformed duplicate terminal, and an actual quoted terminal in the absence path. Existing real Git histories still execute the published wrapper and compare exact targets.",
+        "independent_execution": {
+          "path": "/workspace/scratch/fe5385ca063a/round2-ci-followup-review-artifacts/independent-targeted-receipt.json",
+          "bytes": 4625,
+          "sha256": "2e9560b1c9d9fe9df2daf9682453bbeaa6de134845b85a649c56170133862241"
+        },
+        "supported_content_gate": {
+          "path": "/workspace/scratch/fe5385ca063a/round2-ci-parser-content-supported/receipt.json",
+          "bytes": 17938,
+          "sha256": "1ca855501358346a90a2822fd8bf41adc0429f68bd82591349b8d79c0c446897"
+        },
+        "hosted_confirmation": "not-yet-completed for the updated PR head; required before merge, independently of this source finding closure."
+      },
+      "review_history_boundary": "Original b4 source and bc packaging reviews are preserved as historical observations. Their local Git2.52 and102-suite results did not cover this later-revealed Git2.56 wording compatibility defect and are not reused as proof for the new source."
+    }
+  ],
+  "analysis": {
+    "root_cause": "The failing remote tests had already reached correct bisect outcomes. Two parser assertions and one ambiguity text assertion were restricted to the unquoted bad wording; actual Git2.56.1 output quoted the term. No diagnostic-oracle classification failure is demonstrated by the supplied logs. Later assertions that were not reached in those failed tests are not counted as remotely passed.",
+    "semantic_constraints_preserved": [
+      "Unique result requires process exit0, exactly one recognized terminal record, and a full40-hex commit; duplicate identical hashes remain duplicates.",
+      "Unrelated unbuildable revision must be skipped; build-regression target must be classified bad. Exact expected commits remain unchanged.",
+      "Infrastructure failures still require nonzero exit and exit128 evidence, and must not label the affected revision bad or skip.",
+      "Skipped-boundary ambiguity still requires nonzero exit, both exact candidate commits and no unique-terminal record.",
+      "Published wrapper extraction and execution, environment isolation and all original five behavioral tests remain in place."
+    ],
+    "regression_quality": "Five added test methods cover observed plain/quoted terminals and ambiguity headings; missing/duplicate/mixed records, malformed hashes/quotes, nonzero exits and malformed headings are rejected. The source is exercised through assertions, not a replacement successful mock. The author RED run has8real subtest failures, and original five tests still run. Independent extra replay consumes actual CI log text rather than relying solely on constructed fixture strings.",
+    "scope_control": "Only one test module and four documentation files changed. Whole Git objects for skills, optional-skills, src, scripts, .github, manifests and manifest.json are unchanged from bc2. No production method, workflow, threshold, version or validator weakening."
+  },
+  "verification": {
+    "author_receipt": {
+      "path": "/workspace/scratch/fe5385ca063a/round2-ci-parser-fix.json",
+      "bytes": 299564,
+      "sha256": "b4a6a6495e94dfff62ba0c15c3e7e22fbcc8dc68a8789660d01308ab82a007d7"
+    },
+    "author_runner": {
+      "path": "/workspace/scratch/fe5385ca063a/run-round2-ci-parser-fix.py",
+      "bytes": 3549,
+      "sha256": "8b6b4f34d98878112edef8c92071c454b9c424a044375b0b11bde4e0d85529cd"
+    },
+    "author_runs": [
+      {
+        "phase": "baseline",
+        "started_at": "2026-11-16T05:57:38.091428Z",
+        "finished_at": "2026-11-16T05:57:39.183294Z",
+        "source_head": "bc2f4b2ca3bbef2cb5515322048a144639e79004",
+        "test_file": {
+          "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_skill_bisect_methods.py",
+          "bytes": 8897,
+          "sha256": "a413b9fccf6dce8abc236a44554c100c69a0db2d5a304009a592040409daca74"
+        },
+        "tests_run": 5,
+        "failures": 0,
+        "errors": 0,
+        "exit_code": 0,
+        "git_version": "git version 2.52.0",
+        "actual_command_receipt_count": 139
+      },
+      {
+        "phase": "red",
+        "started_at": "2026-11-16T05:58:43.196613Z",
+        "finished_at": "2026-11-16T05:58:44.319488Z",
+        "source_head": "bc2f4b2ca3bbef2cb5515322048a144639e79004",
+        "test_file": {
+          "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_skill_bisect_methods.py",
+          "bytes": 12868,
+          "sha256": "e1f0e125bc70aa49be453b34f297b6550f83a2a4c4b39d90c48e1d034141be32"
+        },
+        "tests_run": 10,
+        "failures": 8,
+        "errors": 0,
+        "exit_code": 1,
+        "git_version": "git version 2.52.0",
+        "actual_command_receipt_count": 164
+      },
+      {
+        "phase": "green",
+        "started_at": "2026-11-16T05:59:05.977494Z",
+        "finished_at": "2026-11-16T05:59:07.153639Z",
+        "source_head": "bc2f4b2ca3bbef2cb5515322048a144639e79004",
+        "test_file": {
+          "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_skill_bisect_methods.py",
+          "bytes": 13121,
+          "sha256": "f8cb68ec55b1898842fb482958f640bcf1d17bf02da974e876fe491e8b895eee"
+        },
+        "tests_run": 10,
+        "failures": 0,
+        "errors": 0,
+        "exit_code": 0,
+        "git_version": "git version 2.52.0",
+        "actual_command_receipt_count": 164
+      }
+    ],
+    "independent_targeted": {
+      "receipt": {
+        "path": "/workspace/scratch/fe5385ca063a/round2-ci-followup-review-artifacts/independent-targeted-receipt.json",
+        "bytes": 4625,
+        "sha256": "2e9560b1c9d9fe9df2daf9682453bbeaa6de134845b85a649c56170133862241"
+      },
+      "command": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "env",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "PYTHONPATH=src",
+        "GIT_OPTIONAL_LOCKS=0",
+        "python3",
+        "-m",
+        "unittest",
+        "tests.test_skill_bisect_methods",
+        "-v"
+      ],
+      "started_at": "2026-11-16T06:01:16.520659+00:00",
+      "finished_at": "2026-11-16T06:01:17.639973+00:00",
+      "local_git_version": "git version 2.52.0",
+      "tests_run": 10,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "exit_code": 0,
+      "actual_ci_text_probe_count": 6,
+      "all_text_probes_pass": true
+    },
+    "content_gate": {
+      "initial": {
+        "receipt": {
+          "path": "/workspace/scratch/fe5385ca063a/round2-ci-parser-content-check/receipt.json",
+          "bytes": 1832,
+          "sha256": "85d8c72e6c216e228993555067fec9af5bf249bfbf708ba72c1333b094298d91"
+        },
+        "stderr": {
+          "path": "/workspace/scratch/fe5385ca063a/round2-ci-parser-content-check/stderr.log",
+          "bytes": 30766,
+          "sha256": "d1aa237db48bf148be00fff7f9b0bf13a6068793970ea1a2c0b35e8c8ea6c6e5"
+        },
+        "tests_run": 157,
+        "skip_entries": 14,
+        "exit_code": 0,
+        "acceptance": "not accepted as complete content coverage; cmake/ctest missing from PATH"
+      },
+      "supported_rerun": {
+        "receipt": {
+          "path": "/workspace/scratch/fe5385ca063a/round2-ci-parser-content-supported/receipt.json",
+          "bytes": 17938,
+          "sha256": "1ca855501358346a90a2822fd8bf41adc0429f68bd82591349b8d79c0c446897"
+        },
+        "stdout": {
+          "path": "/workspace/scratch/fe5385ca063a/round2-ci-parser-content-supported/stdout.log",
+          "bytes": 60,
+          "sha256": "a1d41f1ff1943113e4f98d3e1a6622a2e4ee9a8ae5d0061625cf5849121531b0"
+        },
+        "stderr": {
+          "path": "/workspace/scratch/fe5385ca063a/round2-ci-parser-content-supported/stderr.log",
+          "bytes": 29399,
+          "sha256": "ff4a0adbeb070a5d272658cb8d7d8bb13a449f64fdab8ec7ad8767aa357b5b95"
+        },
+        "tests_run": 157,
+        "skip_entries": 0,
+        "exit_code": 0,
+        "finished_at": "2026-11-16T06:01:13.424501+00:00",
+        "acceptance": "pass; all157content methods executed without unittest skips"
+      },
+      "independent_log_hash_and_summary_check": {
+        "path": "/workspace/scratch/fe5385ca063a/round2-ci-followup-review-artifacts/content-gate-verification.json",
+        "bytes": 6829,
+        "sha256": "abb3ffd152498aff2012e72101723c46dcb9a1a47a08d5977d6531845f8f8b91"
+      },
+      "source_binding_limit": "Runs occurred before canonical source commit. HEAD remainedbc2; supported run index moved from17aca to1197 during staging without source-byte edits. The test file is bound byf8cb68...before/after authorGREEN and independent execution and matchesf23. No clean final-HEAD execution is claimed."
+    },
+    "additional_local_full_regression": {
+      "decision": "not-required-for-this-followup",
+      "executed": false,
+      "reason": "Change is confined to test text parsing and documentation; all production/Skill/CI objects are unchanged. The exact changed module, its actual Git cases, direct recordedCI text, and complete157-method content entry are verified. Another local102-suite run on the same Git2.52 environment would not resolve the remaining hostedGit2.56 risk; fresh complete PRCI is explicitly required."
+    }
+  },
+  "identity_evidence": {
+    "full_patch": {
+      "path": "/workspace/scratch/fe5385ca063a/round2-ci-followup-review-artifacts/original.patch",
+      "bytes": 15919,
+      "sha256": "78f40cc8970c097e427e20e8c59a06dfc3e595a9186719fac162e1e468a068e4"
+    },
+    "source_identity": {
+      "path": "/workspace/scratch/fe5385ca063a/round2-ci-followup-review-artifacts/source-identity-check.json",
+      "bytes": 3245,
+      "sha256": "5e57a7e4b8fd064314f7c3700ed601cdefc880abb74a8c0fe8178a523e51ae27"
+    },
+    "exact_read_commands_and_raw_outputs": {
+      "path": "/workspace/scratch/fe5385ca063a/round2-ci-followup-review-artifacts/source-inspection-commands.json",
+      "bytes": 46708,
+      "sha256": "cb8253a55a027867c8c8858c27df4eb14d17813ff47d009a11ed134f74a4b1e3"
+    },
+    "supplied_identity": {
+      "path": "/workspace/scratch/fe5385ca063a/source-11.3.9-ci-fix/identity.json",
+      "bytes": 1836,
+      "sha256": "0c86d740d6d2f15cdf14eeff153b4eb67cc7ca354349369d4d5c12210cb682dc"
+    },
+    "production_and_ci_objects": {
+      "skills": {
+        "baseline_object": "ba1b9dd6710de55d3b13fed986cffd8237e1160b",
+        "source_object": "ba1b9dd6710de55d3b13fed986cffd8237e1160b",
+        "unchanged": true
+      },
+      "optional-skills": {
+        "baseline_object": "fb5a5b0bcc536cd06776cec8eaffd57f26fb3036",
+        "source_object": "fb5a5b0bcc536cd06776cec8eaffd57f26fb3036",
+        "unchanged": true
+      },
+      "src": {
+        "baseline_object": "12247d2df3629d76284c958d63ebba973358b623",
+        "source_object": "12247d2df3629d76284c958d63ebba973358b623",
+        "unchanged": true
+      },
+      "scripts": {
+        "baseline_object": "a864daaca9ed6bd1b8cb2a5c2493d1eb13ed6b95",
+        "source_object": "a864daaca9ed6bd1b8cb2a5c2493d1eb13ed6b95",
+        "unchanged": true
+      },
+      ".github": {
+        "baseline_object": "6013b1cf1d1417c3f8b50747f1a5ada6474390cc",
+        "source_object": "6013b1cf1d1417c3f8b50747f1a5ada6474390cc",
+        "unchanged": true
+      },
+      "manifests": {
+        "baseline_object": "22dfeaf58f37af82891056aea126eb3e714b7701",
+        "source_object": "22dfeaf58f37af82891056aea126eb3e714b7701",
+        "unchanged": true
+      },
+      "manifest.json": {
+        "baseline_object": "c4316d8123a6487f86155d90ff6bcf202adc5fb7",
+        "source_object": "c4316d8123a6487f86155d90ff6bcf202adc5fb7",
+        "unchanged": true
+      }
+    }
+  },
+  "history": {
+    "original_source_review": {
+      "path": "/workspace/scratch/fe5385ca063a/round2-independent-review.json",
+      "bytes": 39396,
+      "sha256": "1c2ab7375a637881e25b403cd4e76c2227158a053fc1196ba3ba625ea66ae28a"
+    },
+    "original_packaging_review": {
+      "path": "/workspace/scratch/fe5385ca063a/round2-packaging-review.json",
+      "bytes": 53755,
+      "sha256": "af1193bb679cd013e838aa00c120f290ad4f19b44ab5f6067f7aa48e8d8ae94d"
+    },
+    "preserved_unmodified": true,
+    "original_full_regression_source": "b4c2a30384542abdd2db1b6ba524f7f3a3b002b9",
+    "original_full_regression_result": "102/102 on that historical local source only; not a new-source result",
+    "initial_failed_pr_ci_result": "101/102 at mergef6a34cc for headbc2, preserved as an actual failure"
+  },
+  "remaining_required_gate": {
+    "name": "fresh complete existing PRCI",
+    "status": "pending",
+    "required_before": "protected merge and release continuation",
+    "identity_requirement": "Bind observed hosted run and checkout/PRhead to the actual updated candidate; retain the first failed CI as history.",
+    "no_substitution": "Local10/10, supported157/157, old102/102, or replay of2.56text must not be presented as completed new-source hostedCI."
+  },
+  "limitations": [
+    "No local Git2.56.1 binary was executed; local test environment is Git2.52.0. The quoted variant was verified by actual CI-text replay and deterministic regressions, pending fresh hosted execution.",
+    "This review covers the five-file test-compatibility follow-up. It does not re-certify original Skill effectiveness,65-Skill model behavior,native loading,RTOS/HIL,token/cost or product/field qualification.",
+    "Source review pass does not mean platform delivery is complete. Mandatory new-head full PRCI is pending at review time; merge/release remain gated by it.",
+    "Targeted and content runs precede source commit creation; tested file identities, actual HEAD/index chronology and skipped first content attempt are retained rather than relabeled.",
+    "No target repository edits,index/ref writes,remote writes,paid model calls or device actions were performed by this reviewer. Scratch reports and isolated local probes only."
+  ],
+  "reviewed_at": "2026-11-16T06:04:30.645653Z"
+}

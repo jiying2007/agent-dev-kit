@@ -1,0 +1,222 @@
+diff --git a/docs/changes/20261116-bisect-log-portability/design.md b/docs/changes/20261116-bisect-log-portability/design.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4a7f1426c45a2067209f8769e325239864c5d85f
+--- /dev/null
++++ b/docs/changes/20261116-bisect-log-portability/design.md
+@@ -0,0 +1,11 @@
++# Git 二分测试日志兼容：设计
++
++基线为先前已完成源码及包装独立审查的 PR head `bc2f4b2ca3bbef2cb5515322048a144639e79004`。源码方法与其本地完整回归保留在 `../20261116-skill-timing-diagnosis/`；本变更只修复随后 CI 暴露的测试证据适配缺口。
++
++在现有测试模块中集中识别两个明确的 `bad` 显示形式。正向提取和“没有唯一裁决”的否定断言消费同一规则，避免只修正正向路径却让 quoted 形态绕过拒绝检查。歧义提示保持明确的终局标题，保留候选提交和非零退出要求。不把任意包含 SHA 的日志行当成终局。
++
++使用真实观察到的格式作为回归输入；以缺失、重复、错误终局或非零退出检查保持 fail-closed。真实 Git 历史继续执行实际已发布 shell，固定目标提交断言不变。是否在本地运行新 Git 版本必须据实际工具版本声明；引用 CI 文本不等于本地已执行该版本。
++
++独立审核者只读核对原始 CI 日志、完整修复 diff、正反例和真实执行回执。新源身份和原有方法冻结身份分别保留；后续 typed 记录以本变更独立 original.patch 绑定，避免覆盖旧报告。测试范围由本次局部变化和所需平台门禁决定，远端完整 CI 是合并前的必要条件。
++
++回滚恢复测试模块前一版本，并阻止该不兼容候选合并；不通过修改 GitHub runner、跳过测试或放宽门槛规避失败。
+diff --git a/docs/changes/20261116-bisect-log-portability/requirements.md b/docs/changes/20261116-bisect-log-portability/requirements.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..51c5e42870a1f7b89b5189d9148c22206c86d623
+--- /dev/null
++++ b/docs/changes/20261116-bisect-log-portability/requirements.md
+@@ -0,0 +1,17 @@
++# Git 二分测试日志兼容：需求
++
++## 已观察问题
++
++ADK PR #275 的 CI run `43812320483` / job `133116507717` 在 Git 2.56.1 上实际运行 102 组测试，101 组通过。新增 Git 方法测试中的两项唯一裁决已经得到正确提交，但只识别 `# first bad commit:` 的测试解析器未识别 `# first 'bad' commit:`；另一项歧义断言未识别 `The first 'bad' commit could be any of:`。本地 Git 2.52.0 使用无引号形式。原始失败是测试兼容性缺口，不是可无改动重跑的偶发成功判据。
++
++## 目标与验收
++
++- 支持两种实际观察到的终局与歧义日志形态。
++- 唯一裁决仍必须要求成功退出、准确 SHA 和恰好一个终局；缺失、重复、畸形、歧义或执行失败均不得通过。
++- 保留已发布 shell 的真实 Git 历史案例、unknown/error 中止，以及 skipped boundary 不得伪造唯一裁决的检查。
++- 新旧形态的确定性正反例、完整 Git 方法测试和既有 Skill 内容入口通过；新 PR head 必须完成既有完整 CI。
++- 原方法源码、CI、阈值、版本与旧失败证据保持各自身份，不把历史本地 102/102 转记为新来源结果。
++
++## 非目标
++
++不新增生产日志解析器或 Git 依赖，不修改 Skill 方法、运行权限、发布资格、全量审计结论或 GitHub 工作流。
+diff --git a/docs/changes/20261116-bisect-log-portability/tasks.md b/docs/changes/20261116-bisect-log-portability/tasks.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..2fdc289c78cd2f0bec17751a03be8fc2b427c297
+--- /dev/null
++++ b/docs/changes/20261116-bisect-log-portability/tasks.md
+@@ -0,0 +1,8 @@
++# Git 二分测试日志兼容：任务
++
++- T1 固定失败：核对原 CI job、Git 版本、三项失败及 101/102 汇总；保留原日志与实际 RED。
++- T2 修复测试适配：集中两种真实格式并覆盖唯一/歧义/错误退出正反例，保留所有已发布 shell 的真实 Git 历史断言；verify 为定向模块及 Skill 内容入口。
++- T3 冻结并独立审查：绑定准确 source/tree/patch、逐文件 SHA256 和原方法文件未变身份；独立 Spec/Quality 裁决不得冒充新来源全量 CI。
++- T4 平台交付：同 PR 更新准确 head，既有完整 CI 必须通过，再按原授权受保护合并、发布和 Root source-only 接入。结果按实际发生时间追加验证记录与 PR。
++
++实现者负责测试模块和父变更的 CI follow-up 说明；主整合者负责本合同与证据包装；独立审核者不改实现。原方法级源码审查及其当时回归保持历史身份。
+diff --git a/docs/changes/20261116-skill-timing-diagnosis/ci-followup.md b/docs/changes/20261116-skill-timing-diagnosis/ci-followup.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..192674e860457cf0bf3d78c36759a88145aed295
+--- /dev/null
++++ b/docs/changes/20261116-skill-timing-diagnosis/ci-followup.md
+@@ -0,0 +1,37 @@
++# CI 跟进：Git bisect 证据解析兼容
++
++## 故障与范围
++
++PR #275 源码 `bc2f4b2ca3bbef2cb5515322048a144639e79004` 的 [CI run 43812320483 / job 133116507717](https://github.com/jiying2007/agent-dev-kit/actions/runs/43812320483/job/133116507717) 记录 Git 2.56.1；完整回归为 101/102，失败组的 152 个 unittest 中有 3 个失败。
++
++两项唯一裁决案例的 `git bisect log` 已输出目标提交，但旧解析器只识别 `# first bad commit: [sha] subject`，没有识别实际 `# first 'bad' commit: [sha] subject`。歧义案例已非零退出并输出两个候选，随后因断言只接受 `The first bad commit could be any of:`、实际输出 `The first 'bad' commit could be any of:` 而失败。基础设施中止与 oracle 退出码案例在原 CI 中通过；原有终局否定断言仍只覆盖无引号形式，存在漏检风险。
++
++本跟进仅修复 `tests/test_skill_bisect_methods.py` 对这两种已观察格式的证据解析。保留 good/bad/untestable、unknown-abort、准确目标 SHA、skip、非零退出及歧义候选断言。终局仍要求退出码为零且恰好一个记录；同一 SHA 重复出现也不能通过。生产 Skill、CI、门槛、版本及原审查记录不变。
++
++## 验证计划与证据边界
++
++- 先在本地 Git 2.52.0 记录原有五项真实隔离 Git 验收；加入已观察日志形态与缺失、重复、非零退出、误终局等回归，记录修复前 RED。
++- 终局正反断言共用两格式 matcher；歧义标题仅接受完整的两种已观察标题。定向运行同一文件取得 GREEN，并核对 diff。
++- 本地不运行 Git 2.56.1，不以日志形态回放冒充新版 Git 执行；新 head 的完整回归、独立审查与 CI 由主 PR 流程重新执行。
++
++`knowledge/L2-domain/lessons.md` 不存在，关键词检索返回 exit 2；没有可引用的历史条目。原 CI 原始日志指针为 `/workspace/scratch/fe5385ca063a/round2-pr-first-regression.log`；实际命令、UTC 起止时间、源 SHA 与文件 SHA256 追加到 `/workspace/scratch/fe5385ca063a/round2-ci-parser-fix.json`。本记录由本次实现者维护，不替代独立审查。
++
++## 实际验证
++
++2026-11-16 本地实际环境为 CPython 3.12.14、Git 2.52.0。以下均由同一证据 runner 执行，源 HEAD 保持 `bc2f4b2ca3bbef2cb5515322048a144639e79004`，工作树中的被测文件另以 SHA256 绑定。
++
++| 阶段 | UTC 开始—结束 | 真实结果 |
++| --- | --- | --- |
++| 原始基线 | 05:57:38.091428—05:57:39.183294 | 原有 5 项通过；原始日志实际使用无引号格式。 |
++| RED | 05:58:43.196613—05:58:44.319488 | 10 项运行，8 个子断言失败，0 error；暴露带引号正例、终局否定漏检、混合格式重复及不完整歧义标题问题。原有 5 项仍通过。 |
++| GREEN | 05:59:05.977494—05:59:07.153639 | 同一文件 10 项全部通过，0 failure / 0 error；包含原有 5 项真实 Git 验收与 5 项证据格式回归。 |
++
++终局 matcher 先识别两种裁决记录，正例再检查恰好一条记录及完整 40 位 SHA；否定路径用相同 matcher，缺 SHA 的终局前缀也不能漏过。缺失、同格式重复、混合格式重复、不同提交多终局、截断 SHA、残缺引号，以及退出码 1/125/128/255 搭配终局的反例均被拒绝。歧义标题使用整行匹配，保留两个准确候选与非零退出的真实 Git 检查。
++
++被测文件 SHA256：
++
++- 原始基线：`a413b9fccf6dce8abc236a44554c100c69a0db2d5a304009a592040409daca74`。
++- RED：`e1f0e125bc70aa49be453b34f297b6550f83a2a4c4b39d90c48e1d034141be32`。
++- GREEN：`f8cb68ec55b1898842fb482958f640bcf1d17bf02da974e876fe491e8b895eee`。
++
++原 CI 日志为 59,412 bytes，SHA256 `aa4a2bf14b427d2b4dd216308a70564d40a57cbf55cc4be4c697c47cb8bc35e2`。`round2-ci-parser-fix.json` 保留每阶段的完整实际命令、时间、stdout/stderr、每个隔离 Git 命令回执及所消费 Skill reference 的 SHA256。未在本地运行 Git 2.56.1；本记录不把形态回归或原 CI 中尚未执行到的后续断言算作新版 Git 验证通过。新 head 的完整回归与 CI 仍由主 PR 流程承担。
+diff --git a/tests/test_skill_bisect_methods.py b/tests/test_skill_bisect_methods.py
+index 4ad7ae7f45e5de13a3e0515150a7e4c0e0fc2b72..05e1fcafcbc4f82c0ad6125bf07419b10e87ecd5 100644
+--- a/tests/test_skill_bisect_methods.py
++++ b/tests/test_skill_bisect_methods.py
+@@ -18,6 +18,9 @@ from agent_dev_kit.targets import load_target_contract, render_asset
+ 
+ ROOT = Path(__file__).resolve().parents[1]
+ RECEIPTS: list[dict[str, object]] = []
++FIRST_BAD_COMMIT = re.compile(r"^# first (?:bad|'bad') commit:(.*)$", re.MULTILINE)
++AMBIGUOUS_FIRST_BAD = re.compile(
++    r"^The first (?:bad|'bad') commit could be any of:$", re.MULTILINE)
+ 
+ 
+ class DiagnosticBisectTests(unittest.TestCase):
+@@ -114,9 +117,86 @@ class DiagnosticBisectTests(unittest.TestCase):
+ 
+     def unique_first_bad(self, result: subprocess.CompletedProcess[str], log: str) -> str:
+         self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+-        candidates = re.findall(r"^# first bad commit: \[([0-9a-f]{40})\]", log, re.MULTILINE)
++        candidates = FIRST_BAD_COMMIT.findall(log)
+         self.assertEqual(1, len(candidates), log)
+-        return candidates[0]
++        commit = re.match(r" \[([0-9a-f]{40})\]", candidates[0])
++        if commit is None:
++            self.fail(log)
++        return commit.group(1)
++
++    def assert_no_first_bad(self, log: str) -> None:
++        self.assertNotRegex(log, FIRST_BAD_COMMIT)
++
++    def assert_ambiguous_first_bad(self, output: str) -> None:
++        self.assertRegex(output, AMBIGUOUS_FIRST_BAD)
++
++    def test_unique_first_bad_accepts_observed_git_log_formats(self) -> None:
++        # These spellings were observed with Git 2.52.0 locally and 2.56.1 in CI.
++        commit = "5f3ac9869c103734217df1fbb66f78b4bd7dbac0"
++        result = subprocess.CompletedProcess(["git", "bisect", "run"], 0, "", "")
++        for term in ("bad", "'bad'"):
++            with self.subTest(term=term):
++                log = (f"# bad: [{commit}] controlled state 4\n"
++                       f"git bisect bad {commit}\n"
++                       f"# first {term} commit: [{commit}] controlled state 4\n")
++                self.assertEqual(commit, self.unique_first_bad(result, log))
++
++    def test_unique_first_bad_rejects_missing_duplicate_or_failed_evidence(self) -> None:
++        commit = "5f3ac9869c103734217df1fbb66f78b4bd7dbac0"
++        other = "5f3c14db7890439ff92dc559f73edd227a4b44cd"
++        plain = f"# first bad commit: [{commit}] controlled state 4\n"
++        quoted = f"# first 'bad' commit: [{commit}] controlled state 4\n"
++        result = subprocess.CompletedProcess(["git", "bisect", "run"], 0, "", "")
++        for log in (
++            "", f"# bad: [{commit}] controlled state 4\n",
++            f"# possible first bad commit: [{commit}] controlled state 4\n",
++            plain + plain, quoted + quoted, plain + quoted,
++            plain + quoted.replace(commit, other),
++            plain.replace(commit, commit[:-1]),
++            quoted.replace("'bad'", "'bad"),
++        ):
++            with self.subTest(log=log):
++                with self.assertRaises(AssertionError):
++                    self.unique_first_bad(result, log)
++        for process_exit in (1, 125, 128, 255):
++            for log in (plain, quoted):
++                with self.subTest(process_exit=process_exit, log=log):
++                    failed = subprocess.CompletedProcess(
++                        ["git", "bisect", "run"], process_exit, "", "")
++                    with self.assertRaises(AssertionError):
++                        self.unique_first_bad(failed, log)
++
++    def test_no_first_bad_rejects_both_observed_verdict_formats(self) -> None:
++        commit = "5f3ac9869c103734217df1fbb66f78b4bd7dbac0"
++        self.assert_no_first_bad(f"# bad: [{commit}] controlled state 4\n")
++        self.assert_no_first_bad(f"# possible first bad commit: [{commit}] controlled state 4\n")
++        for term in ("bad", "'bad'"):
++            for suffix in (f" [{commit}] controlled state 4", ""):
++                with self.subTest(term=term, suffix=suffix):
++                    with self.assertRaises(AssertionError):
++                        self.assert_no_first_bad(f"# first {term} commit:{suffix}\n")
++
++    def test_ambiguity_evidence_accepts_observed_git_output_formats(self) -> None:
++        for term in ("bad", "'bad'"):
++            with self.subTest(term=term):
++                output = ("There are only 'skip'ped commits left to test.\n"
++                          f"The first {term} commit could be any of:\n"
++                          "5f3c14db7890439ff92dc559f73edd227a4b44cd\n"
++                          "4810cfb9384edf7b46738dc708fc3800b13ac2cd\n"
++                          "We cannot bisect more!\n")
++                self.assert_ambiguous_first_bad(output)
++
++    def test_ambiguity_evidence_rejects_missing_or_partial_headings(self) -> None:
++        for output in (
++            "", "bisect found first bad commit\n",
++            "The first bad commit could be any of\n",
++            "prefix The first bad commit could be any of:\n",
++            "The first 'bad commit could be any of:\n",
++            "The first 'broken' commit could be any of:\n",
++        ):
++            with self.subTest(output=output):
++                with self.assertRaises(AssertionError):
++                    self.assert_ambiguous_first_bad(output)
+ 
+     def test_published_oracle_preserves_outcomes_and_aborts_unknown_results(self) -> None:
+         prefix = [self.bash_binary, "--noprofile", "--norc", str(self.wrapper)]
+@@ -158,7 +238,7 @@ class DiagnosticBisectTests(unittest.TestCase):
+         result, log = self.bisect(commits)
+         self.assertNotEqual(0, result.returncode)
+         self.assertIn("exit code 128", result.stdout + result.stderr)
+-        self.assertNotIn("# first bad commit:", log)
++        self.assert_no_first_bad(log)
+         self.assertNotIn("git bisect bad " + commits[2], log)
+         self.assertNotIn("git bisect skip " + commits[2], log)
+ 
+@@ -169,10 +249,10 @@ class DiagnosticBisectTests(unittest.TestCase):
+                                 bad, bad, bad])
+         result, log = self.bisect(commits)
+         self.assertNotEqual(0, result.returncode)
+-        self.assertIn("first bad commit could be any of", result.stdout)
++        self.assert_ambiguous_first_bad(result.stdout)
+         self.assertIn(commits[2], result.stdout)
+         self.assertIn(commits[3], result.stdout)
+-        self.assertNotIn("# first bad commit:", log)
++        self.assert_no_first_bad(log)
+ 
+ 
+ if __name__ == "__main__":

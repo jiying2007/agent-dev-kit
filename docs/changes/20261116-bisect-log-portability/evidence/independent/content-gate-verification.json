@@ -1,0 +1,109 @@
+{
+  "checked_at": "2026-11-16T06:02:45.421920+00:00",
+  "runs": [
+    {
+      "directory": "/workspace/scratch/fe5385ca063a/round2-ci-parser-content-check",
+      "command": [
+        "bash",
+        "tests/test_skill_content.sh"
+      ],
+      "started_at": "2026-11-16T06:00:12.866880+00:00",
+      "finished_at": "2026-11-16T06:00:20.704319+00:00",
+      "exit_code": 0,
+      "elapsed_seconds": 7.799725614000636,
+      "timed_out": false,
+      "logs": {
+        "stdout.log": {
+          "bytes": 60,
+          "sha256": "a1d41f1ff1943113e4f98d3e1a6622a2e4ee9a8ae5d0061625cf5849121531b0",
+          "match": true
+        },
+        "stderr.log": {
+          "bytes": 30766,
+          "sha256": "d1aa237db48bf148be00fff7f9b0bf13a6068793970ea1a2c0b35e8c8ea6c6e5",
+          "match": true
+        }
+      },
+      "unittest_count": [
+        [
+          "157",
+          "7.550s"
+        ]
+      ],
+      "skip_lines": [
+        "test_adc_cmake_target_builds_and_runs_with_a_strict_c90_default (tests.test_skill_command_examples.CmakeBuildExampleTests.test_adc_cmake_target_builds_and_runs_with_a_strict_c90_default) ... skipped 'real CMake example not executed; missing tools: cmake, ctest'",
+        "test_compile_only_preserves_not_run_without_invoking_ctest (tests.test_skill_command_examples.CmakeBuildExampleTests.test_compile_only_preserves_not_run_without_invoking_ctest) ... skipped 'real CMake example not executed; missing tools: cmake, ctest'",
+        "test_empty_ctest_selection_fails_after_a_real_successful_build (tests.test_skill_command_examples.CmakeBuildExampleTests.test_empty_ctest_selection_fails_after_a_real_successful_build) ... skipped 'real CMake example not executed; missing tools: cmake, ctest'",
+        "test_manual_directory_configuration_tests_and_elf_do_not_invoke_presets (tests.test_skill_command_examples.CmakeBuildExampleTests.test_manual_directory_configuration_tests_and_elf_do_not_invoke_presets) ... skipped 'real CMake example not executed; missing tools: cmake, ctest'",
+        "test_preset_names_bind_binary_directory_configuration_tests_and_elf (tests.test_skill_command_examples.CmakeBuildExampleTests.test_preset_names_bind_binary_directory_configuration_tests_and_elf) ... skipped 'real CMake example not executed; missing tools: cmake, ctest'",
+        "test_all_skipped_is_rejected_despite_successful_ctest_exit (tests.test_skill_command_examples.CtestQualificationExampleTests.test_all_skipped_is_rejected_despite_successful_ctest_exit) ... skipped 'real CMake example not executed; missing tools: cmake, ctest'",
+        "  test_empty_and_all_disabled_selections_remain_failures (tests.test_skill_command_examples.CtestQualificationExampleTests.test_empty_and_all_disabled_selections_remain_failures) (disabled=False) ... skipped 'real CMake example not executed; missing tools: cmake, ctest'",
+        "  test_empty_and_all_disabled_selections_remain_failures (tests.test_skill_command_examples.CtestQualificationExampleTests.test_empty_and_all_disabled_selections_remain_failures) (disabled=True) ... skipped 'real CMake example not executed; missing tools: cmake, ctest'",
+        "test_failed_build_does_not_read_or_replace_an_old_report (tests.test_skill_command_examples.CtestQualificationExampleTests.test_failed_build_does_not_read_or_replace_an_old_report) ... skipped 'real CMake example not executed; missing tools: cmake, ctest'",
+        "test_hil_collection_preserves_skip_evidence_without_claiming_qualification (tests.test_skill_command_examples.CtestQualificationExampleTests.test_hil_collection_preserves_skip_evidence_without_claiming_qualification) ... skipped 'real CMake example not executed; missing tools: cmake, ctest'",
+        "test_mixed_results_report_partial_and_test_runs_only_once (tests.test_skill_command_examples.CtestQualificationExampleTests.test_mixed_results_report_partial_and_test_runs_only_once) ... skipped 'real CMake example not executed; missing tools: cmake, ctest'",
+        "test_new_run_cannot_reuse_a_previous_passing_report (tests.test_skill_command_examples.CtestQualificationExampleTests.test_new_run_cannot_reuse_a_previous_passing_report) ... skipped 'real CMake example not executed; missing tools: cmake, ctest'",
+        "test_preset_compile_only_needs_no_test_preset_or_python (tests.test_skill_command_examples.CtestQualificationExampleTests.test_preset_compile_only_needs_no_test_preset_or_python) ... skipped 'real CMake example not executed; missing tools: cmake, ctest'",
+        "test_real_ctest_failure_keeps_its_nonzero_status (tests.test_skill_command_examples.CtestQualificationExampleTests.test_real_ctest_failure_keeps_its_nonzero_status) ... skipped 'real CMake example not executed; missing tools: cmake, ctest'"
+      ],
+      "summary_lines": [
+        "OK (skipped=14)"
+      ],
+      "before_after_head": [
+        "bc2f4b2ca3bbef2cb5515322048a144639e79004",
+        "bc2f4b2ca3bbef2cb5515322048a144639e79004"
+      ],
+      "before_after_indexed_tree": [
+        "17acaeff0a4d88b54290f714d80a099f646b7462",
+        "17acaeff0a4d88b54290f714d80a099f646b7462"
+      ],
+      "before_after_status_equal": true,
+      "stdout": "[PASS] Skills content v2, OpenAI metadata and Commit Policy\n"
+    },
+    {
+      "directory": "/workspace/scratch/fe5385ca063a/round2-ci-parser-content-supported",
+      "command": [
+        "bash",
+        "tests/test_skill_content.sh"
+      ],
+      "started_at": "2026-11-16T06:01:02.068710+00:00",
+      "finished_at": "2026-11-16T06:01:13.424501+00:00",
+      "exit_code": 0,
+      "elapsed_seconds": 11.336821191998752,
+      "timed_out": false,
+      "logs": {
+        "stdout.log": {
+          "bytes": 60,
+          "sha256": "a1d41f1ff1943113e4f98d3e1a6622a2e4ee9a8ae5d0061625cf5849121531b0",
+          "match": true
+        },
+        "stderr.log": {
+          "bytes": 29399,
+          "sha256": "ff4a0adbeb070a5d272658cb8d7d8bb13a449f64fdab8ec7ad8767aa357b5b95",
+          "match": true
+        }
+      },
+      "unittest_count": [
+        [
+          "157",
+          "11.090s"
+        ]
+      ],
+      "skip_lines": [],
+      "summary_lines": [
+        "OK"
+      ],
+      "before_after_head": [
+        "bc2f4b2ca3bbef2cb5515322048a144639e79004",
+        "bc2f4b2ca3bbef2cb5515322048a144639e79004"
+      ],
+      "before_after_indexed_tree": [
+        "17acaeff0a4d88b54290f714d80a099f646b7462",
+        "1197f5560a7a8fc03f5454dfa16460da8c2a108c"
+      ],
+      "before_after_status_equal": false,
+      "stdout": "[PASS] Skills content v2, OpenAI metadata and Commit Policy\n"
+    }
+  ],
+  "boundary": "These commands ran before canonical source commit; sourceHEAD remainedbc2 and supported run index changed during staging. They are observations of the workingtree test-file bytes later frozen; no clean final-source-head execution is claimed."
+}

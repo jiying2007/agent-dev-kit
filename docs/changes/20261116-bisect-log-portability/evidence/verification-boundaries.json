@@ -1,0 +1,20 @@
+{
+  "first_ci": {
+    "run_id": 43812320483,
+    "job_id": 133116507717,
+    "pr_head": "bc2f4b2ca3bbef2cb5515322048a144639e79004",
+    "executed_merge_commit": "f6a34cc5dc329268b9028c3e5aee7328e01973ee",
+    "git_version": "2.56.1",
+    "suites_passed": 101,
+    "suites_total": 102,
+    "unit_test_failures": 3,
+    "source_file_count": 78
+  },
+  "local_git_version": "2.52.0",
+  "local_git_2_56_1_run": false,
+  "initial_content_run": "157 tests completed with 14 CMake-related skips because the installed CMake directory was not included in PATH; original receipt retained.",
+  "supported_content_run": "Same source bytes; installed CMake3.31.6 and ninja PATH restored.157 tests completed with no skips, exit0. During this run the five unchanged source files were staged; the receipt is not described as a clean frozen-HEAD run.",
+  "new_source_full_ci": "required before merge; not yet completed when this local evidence was prepared",
+  "new_source_local_full_regression": "not repeated for this test-only follow-up; previous102/102 belongs to method sourceb4c2a, not this new source",
+  "permission_or_qualification_change": false
+}

@@ -1,0 +1,73 @@
+{
+  "schema": "adk-reviewed-source-bindings/v1",
+  "baseline_commit": "bc2f4b2ca3bbef2cb5515322048a144639e79004",
+  "reviewed_source_commit": "f23d41e2a4d7e4ea5b5cb392f514827d01178ed8",
+  "source_tree": "1197f5560a7a8fc03f5454dfa16460da8c2a108c",
+  "files": [
+    {
+      "path": "docs/changes/20261116-bisect-log-portability/design.md",
+      "sha256": "6603003904b80d86a8a66a81a98021fc3a8e524fce83e2ef5edf6d5080b5b185",
+      "bytes": 1490,
+      "git_blob": "4a7f1426c45a2067209f8769e325239864c5d85f"
+    },
+    {
+      "path": "docs/changes/20261116-bisect-log-portability/requirements.md",
+      "sha256": "555dcf02b2fc9992675147669ee91ea8d14a6c74acfd67eabb26d1cf9b8a435d",
+      "bytes": 1351,
+      "git_blob": "51c5e42870a1f7b89b5189d9148c22206c86d623"
+    },
+    {
+      "path": "docs/changes/20261116-bisect-log-portability/tasks.md",
+      "sha256": "8c5129bf336880afc7fcdd6abc12a8dd9bd6d300aeacd60f3d9b9e3424aa8e77",
+      "bytes": 939,
+      "git_blob": "2fdc289c78cd2f0bec17751a03be8fc2b427c297"
+    },
+    {
+      "path": "docs/changes/20261116-skill-timing-diagnosis/ci-followup.md",
+      "sha256": "93a9fd0ab336580c348f3f424f713b0bfef472f5fc50bc36810be412216eb3be",
+      "bytes": 4143,
+      "git_blob": "192674e860457cf0bf3d78c36759a88145aed295"
+    },
+    {
+      "path": "tests/test_skill_bisect_methods.py",
+      "sha256": "f8cb68ec55b1898842fb482958f640bcf1d17bf02da974e876fe491e8b895eee",
+      "bytes": 13121,
+      "git_blob": "05e1fcafcbc4f82c0ad6125bf07419b10e87ecd5"
+    }
+  ],
+  "original_patch_sha256": "78f40cc8970c097e427e20e8c59a06dfc3e595a9186719fac162e1e468a068e4",
+  "unchanged_method_files": [
+    {
+      "path": "optional-skills/adk-incident-rca-report/SKILL.md",
+      "sha256": "79a7b453da0a2edc5b98eaa595c36ef32032acdb2910655d741a25cd7519d405",
+      "bytes": 2416
+    },
+    {
+      "path": "optional-skills/adk-skill-composition-governance/SKILL.md",
+      "sha256": "b2685d8bb2f85a5c562ab28176204a294be0d1b9c87aef2b9749339f351f5e5f",
+      "bytes": 6646
+    },
+    {
+      "path": "optional-skills/adk-skill-composition-governance/references/adk-skill-lifecycle.md",
+      "sha256": "f9b1a39f39f334f22ffc1ee878b02e00efe2400b0d7482a1d1ffb85153b11be0",
+      "bytes": 7050
+    },
+    {
+      "path": "skills/adk-rtos-task-design/SKILL.md",
+      "sha256": "766bdf3679c4929bd950f3efd92a994579ad46084b55cae41e0716cfdf118482",
+      "bytes": 5718
+    },
+    {
+      "path": "skills/adk-systematic-debugging/SKILL.md",
+      "sha256": "b3756b60fb0e07b591d06ca8957878b2ccb2c4835169b350c79daac6f2ea5edc",
+      "bytes": 2801
+    },
+    {
+      "path": "skills/adk-systematic-debugging/references/tight-feedback-loop.md",
+      "sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85",
+      "bytes": 1524
+    }
+  ],
+  "observed_at": "2026-11-16T06:02:43.873415+00:00",
+  "boundary": "Test-only follow-up and change documents. Prior method review, CI failure and current targeted verification have separate identities."
+}
