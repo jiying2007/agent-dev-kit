@@ -1,0 +1,19 @@
+{
+  "schema": "adk-local-validation-receipt/v1",
+  "command": [
+    "bash",
+    "tests/run_all.sh",
+    "--fail-fast",
+    "--timing-json",
+    "/workspace/scratch/2d6ca6dc3d38/audit-repros/full-timing.json"
+  ],
+  "source_commit": "016d673331ef458ac94f72d08ec67537a000cc4b",
+  "started_at": "2026-11-16T00:13:30.750100Z",
+  "finished_at": "2026-11-16T00:18:19.032952Z",
+  "elapsed_seconds": 288.283988636,
+  "exit_code": 0,
+  "source_files_changed_during_run": [],
+  "log_sha256": "0d1bee4e82001511f12291d9c3be0867228a5a396f58b49d3acd176ef3eed61e",
+  "source_freeze_sha256": "8d523426e9eec6e778f4fbb69a92abc1c37ddd64591539003166f4a79b3d64a6",
+  "scope": "Full 102-group repository entrypoint; compact stdout/stderr, not all successful child outputs"
+}

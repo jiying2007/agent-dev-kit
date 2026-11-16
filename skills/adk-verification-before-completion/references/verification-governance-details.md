@@ -110,7 +110,7 @@ findings 在此仅存级别。真实工具按实际 schema、范围和超时/取
 
 ### Completion Guard 静态覆盖审计
 
-源仓 `rtk python3 -m agent_dev_kit.completion_coverage --input <completion-coverage.json> --summary-json` 核封闭字段、同源快照、退出码/新鲜度；输入见 `tests/fixtures/completion_coverage_valid.json`。必需项缺失/跳过/失败/过期 → needs-fix；畸形 → invalid。`status=pass` 仅自报结构和集合覆盖，`completion_allowed=false` 始终成立；命令、证据 ref、verifier、目标环境仍需独立核对。
+源仓 `python3 -m agent_dev_kit.completion_coverage --input <completion-coverage.json> --summary-json` 核封闭字段、同源快照、退出码/新鲜度；输入见 `tests/fixtures/completion_coverage_valid.json`。必需项缺失/跳过/失败/过期 → needs-fix；畸形 → invalid。`status=pass` 仅自报结构和集合覆盖，`completion_allowed=false` 始终成立；命令、证据 ref、verifier、目标环境仍需独立核对。
 
 ## Full Evidence Template (goal-final or medium/high only)
 

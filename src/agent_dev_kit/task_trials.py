@@ -17,12 +17,13 @@ import re
 from pathlib import Path
 from typing import Any
 
-from .effect_trials import compare_effect_trials
+from .agent_value_contracts import load_contract
+from .effect_trials import _compare_effect_trials
 from .model import Manifest, ManifestError, canonical_json_bytes, sha256_bytes
 from .privacy_ref import validate_identifier, validate_sha256
 from .strict_json import loads
 from .task_evidence import (
-    _Package, _choice, _list, _object, _reference, publish_task_report, read_task_evidence,
+    _Package, _choice, _list, _object, _read_task_evidence, _reference, _timestamp, publish_task_report,
 )
 
 MAX_OBSERVATIONS = 120
@@ -89,11 +90,18 @@ def _compare(package: _Package, manifest: Manifest) -> tuple[dict[str, Any], tup
             or plan["controls"].get("dataset_ref") != task_trial_controls_ref(data)):
         raise ManifestError("task trials: frozen plan must bind the complete task input/state population")
     plan_ref, controls_ref = _ref(plan), _ref(plan["controls"])
+    window = plan.get("window")
+    if not isinstance(window, dict):
+        raise ManifestError("task trials: missing observation window")
+    registered = _timestamp(plan.get("registered_at"))
+    start, through = (_timestamp(window.get(key)) for key in ("from", "through"))
+    contract = load_contract(manifest.root / "manifests/agent_value_contracts.json")
     trials: list[dict[str, Any]] = []
     inputs: list[Path] = []
     observations: set[str] = set()
     observation_refs: list[str] = []
     bytes_read = 0
+    acceptance_compositions: dict[str, str] = {}
     for raw_trial in _list(data["trials"], 64, "task trials"):
         trial = _object(raw_trial, {"trial_id", "infrastructure_status", "baseline", "candidate"}, "task trial")
         composed: dict[str, Any] = {"trial_id": trial["trial_id"], "infrastructure_status": trial["infrastructure_status"]}
@@ -106,8 +114,8 @@ def _compare(package: _Package, manifest: Manifest) -> tuple[dict[str, Any], tup
                 observations.add(relative)
                 # Descriptor-relative checking first, then the imported binding
                 # must match these exact bytes even if the path changes later.
-                _, observation_ref = package.checked(reference)
-                imported = read_task_evidence(package.directory / relative, manifest)
+                observation_bytes, observation_ref = package.checked(reference)
+                imported = _read_task_evidence(package.directory / relative, manifest, contract)
                 bytes_read += imported.bytes_read
                 if bytes_read + package.total > MAX_CAMPAIGN_BYTES:
                     raise ManifestError("task trials: campaign byte limit")
@@ -128,6 +136,21 @@ def _compare(package: _Package, manifest: Manifest) -> tuple[dict[str, Any], tup
                     raise ManifestError("task trials: input or initial workspace/source drift")
                 if report["assigned_exposure"] != conditions[side][task_id] or binding["grader_id"] != grader:
                     raise ManifestError("task trials: assignment or grader differs from frozen controls")
+                observation = loads(observation_bytes)["run"]
+                started, finished = (_timestamp(observation[key]) for key in ("started_at", "finished_at"))
+                if not registered <= start <= started <= finished <= through:
+                    raise ManifestError(f"task trials: {task_id} run falls outside the registered observation window")
+                summary = run["trace_summary"]
+                # Names bind composition only. Status and evidence differ by run;
+                # identical names do not attest to identical grader semantics.
+                composition = _ref({
+                    "checks": sorted(item["name"] for item in summary["verification"]
+                                     if item["name"].startswith("acceptance/")),
+                    "guardrails": sorted(item["name"] for item in summary["guardrails"]
+                                         if item["name"].startswith("artifact/")),
+                })
+                if acceptance_compositions.setdefault(task_id, composition) != composition:
+                    raise ManifestError(f"task trials: {task_id} acceptance composition differs across observations")
                 # Do not filter by primary_skill, wrong_skill, task outcome or
                 # whether a load happened. Compare the entire assigned group.
                 runs.append({"run": run, "plan_ref": plan_ref, "controls_ref": controls_ref})
@@ -135,7 +158,8 @@ def _compare(package: _Package, manifest: Manifest) -> tuple[dict[str, Any], tup
                 observation_refs.append(observation_ref)
             composed[side] = runs
         trials.append(composed)
-    comparison = compare_effect_trials({"schema_version": "adk-effect-trials/v1", "plan": plan, "trials": trials}, manifest)
+    comparison = _compare_effect_trials({"schema_version": "adk-effect-trials/v1", "plan": plan, "trials": trials},
+                                        manifest, contract)
     result = {
         "schema_version": "adk-task-trial-comparison/v1", "status": "compared", "verdict": comparison["verdict"],
         "provenance": provenance, "trust": "caller-observed", "evidence_scope": "test-only",

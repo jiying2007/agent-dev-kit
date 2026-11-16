@@ -1,8 +1,8 @@
 ---
 name: adk-embedded-diagnostic-harness
 description: "用于诊断 CLI、prog_tool、strict 套件及 HIL/SIL 证据的返回码和行为验证；不用于无许可的现场产测写入或直接放行量产。"
-version: 1.0.1
-last_updated: 2026-11-03
+version: 1.0.2
+last_updated: 2026-11-16
 triggers:
   - "诊断 harness"
   - "diag 命令"
@@ -47,8 +47,8 @@ constraints:
 
 ## Commands
 ```bash
-rtk rg -n "prog_tool|diag|invoke_ret|strict|env|suite|expected" <repo>
-rtk rg -n "return code|exit code|timeout|device|serial|HDI|API" <diagnostic-path>
+rg -n "prog_tool|diag|invoke_ret|strict|env|suite|expected" <repo>
+rg -n "return code|exit code|timeout|device|serial|HDI|API" <diagnostic-path>
 <diag-command> --help
 <diag-command> run --suite strict
 <diag-command> run --suite env

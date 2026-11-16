@@ -1,8 +1,8 @@
 ---
 name: adk-embedded-storage-layout-migration
 description: "用于 MTD、UBI、分区及文件系统布局迁移的 host 端检查、演练和回退设计；不用于未授权的设备存储写入或纯日志检索。"
-version: 2.0.2
-last_updated: 2026-11-10
+version: 2.0.3
+last_updated: 2026-11-16
 triggers:
   - "UBIFS转SquashFS"
   - "SquashFS转UBIFS"
@@ -53,9 +53,9 @@ constraints:
 ## Commands
 ```bash
 # 只读/host-side；真实设备写入不在此 Skill 执行。
-rtk rg -n "UBIFS|squashfs|ubiblock|factory|data|ota|ubinize|partition|layout" <repo>
-rtk rg -n "MOUNTPT|MOUNTPARAM|FSTYPE|VOL_TYPE|rootfstype|ubi.mtd" <repo>
-rtk rg -n "ubi0:|ubiblock|Mounted root|mounting .*customer|Kernel command line" <boot-log>
+rg -n "UBIFS|squashfs|ubiblock|factory|data|ota|ubinize|partition|layout" <repo>
+rg -n "MOUNTPT|MOUNTPARAM|FSTYPE|VOL_TYPE|rootfstype|ubi.mtd" <repo>
+rg -n "ubi0:|ubiblock|Mounted root|mounting .*customer|Kernel command line" <boot-log>
 sha256sum <image-or-ota-package>
 <migration-check-command> --dry-run
 ```

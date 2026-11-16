@@ -1,0 +1,109 @@
+{
+  "synthetic": true,
+  "phase": "baseline",
+  "started_at": "2026-11-15T23:58:10.856275+00:00",
+  "finished_at": "2026-11-15T23:58:29.139083+00:00",
+  "head": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+  "runs": 36,
+  "verdict": "improved",
+  "samples_seconds": [
+    1.7772925390000296,
+    1.6229774099999759,
+    1.4617931580000345
+  ],
+  "median_seconds": 1.6229774099999759,
+  "profiles": [
+    {
+      "wall_seconds": 4.224484127999972,
+      "profile": "/workspace/scratch/2d6ca6dc3d38/audit-repros/task-trials-baseline-0.pstats",
+      "selected": [
+        {
+          "file": "/workspace/scratch/2d6ca6dc3d38/agent-dev-kit/src/agent_dev_kit/task_evidence.py",
+          "line": 475,
+          "function": "read_task_evidence",
+          "calls": 36,
+          "self_seconds": 0.0029071920000000003,
+          "cumulative_seconds": 3.6004757990000003
+        },
+        {
+          "file": "/workspace/scratch/2d6ca6dc3d38/agent-dev-kit/src/agent_dev_kit/agent_value_contracts.py",
+          "line": 118,
+          "function": "load_contract",
+          "calls": 39,
+          "self_seconds": 0.00023127500000000002,
+          "cumulative_seconds": 3.5234168180000003
+        },
+        {
+          "file": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/jsonschema/validators.py",
+          "line": 306,
+          "function": "check_schema",
+          "calls": 42,
+          "self_seconds": 0.000188504,
+          "cumulative_seconds": 2.5362937420000002
+        }
+      ]
+    },
+    {
+      "wall_seconds": 4.502511144000039,
+      "profile": "/workspace/scratch/2d6ca6dc3d38/audit-repros/task-trials-baseline-1.pstats",
+      "selected": [
+        {
+          "file": "/workspace/scratch/2d6ca6dc3d38/agent-dev-kit/src/agent_dev_kit/task_evidence.py",
+          "line": 475,
+          "function": "read_task_evidence",
+          "calls": 36,
+          "self_seconds": 0.002823555,
+          "cumulative_seconds": 3.757504672
+        },
+        {
+          "file": "/workspace/scratch/2d6ca6dc3d38/agent-dev-kit/src/agent_dev_kit/agent_value_contracts.py",
+          "line": 118,
+          "function": "load_contract",
+          "calls": 39,
+          "self_seconds": 0.00022881000000000003,
+          "cumulative_seconds": 3.7159267760000003
+        },
+        {
+          "file": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/jsonschema/validators.py",
+          "line": 306,
+          "function": "check_schema",
+          "calls": 42,
+          "self_seconds": 0.000250703,
+          "cumulative_seconds": 2.6974297970000003
+        }
+      ]
+    },
+    {
+      "wall_seconds": 4.684642702000019,
+      "profile": "/workspace/scratch/2d6ca6dc3d38/audit-repros/task-trials-baseline-2.pstats",
+      "selected": [
+        {
+          "file": "/workspace/scratch/2d6ca6dc3d38/agent-dev-kit/src/agent_dev_kit/task_evidence.py",
+          "line": 475,
+          "function": "read_task_evidence",
+          "calls": 36,
+          "self_seconds": 0.002844145,
+          "cumulative_seconds": 3.9996200300000004
+        },
+        {
+          "file": "/workspace/scratch/2d6ca6dc3d38/agent-dev-kit/src/agent_dev_kit/agent_value_contracts.py",
+          "line": 118,
+          "function": "load_contract",
+          "calls": 39,
+          "self_seconds": 0.000276877,
+          "cumulative_seconds": 3.9184497
+        },
+        {
+          "file": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/jsonschema/validators.py",
+          "line": 306,
+          "function": "check_schema",
+          "calls": 42,
+          "self_seconds": 0.000201122,
+          "cumulative_seconds": 2.8333917900000003
+        }
+      ]
+    }
+  ],
+  "model_calls_executed": 0,
+  "limitations": "local synthetic comparison overhead; no model, Token, device or production metric"
+}

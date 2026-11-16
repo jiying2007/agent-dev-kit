@@ -1,8 +1,8 @@
 ---
 name: adk-systematic-debugging
 description: "用于根因不明问题的复现、单变量实验、sanitizer 取证与回归；不用于跳过取证猜修复或替代性能基准。"
-version: 1.2.3
-last_updated: 2026-11-15
+version: 1.2.4
+last_updated: 2026-11-16
 triggers:
   - "调试"
   - "排查问题"
@@ -57,6 +57,6 @@ constraints:
 
 ## Commands
 ```bash
-rtk rg -n "error|fatal|panic|timeout|reset" <log-or-src>
+rg -n "error|fatal|panic|timeout|reset" <log-or-src>
 ```
 transport/debugger 仅用已核实的只读入口；交付所选方法适用性、上述原始证据和结果，未跑记 `not-run`。

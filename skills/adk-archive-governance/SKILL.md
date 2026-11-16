@@ -1,8 +1,8 @@
 ---
 name: adk-archive-governance
 description: "用于检查和修复现有归档的元数据、topic、hash 与安全问题；不负责新建知识笔记或代替知识候选的正式审核。"
-version: 1.0.3
-last_updated: 2026-11-04
+version: 1.0.4
+last_updated: 2026-11-16
 triggers:
   - "归档治理"
   - "归档检查"
@@ -46,9 +46,10 @@ constraints:
 7. 最终运行 archive check 和项目总检查。
 
 ## Commands
+先核实目标仓路径与检查脚本；没有对应目录/脚本则记录 unavailable 并用已声明的目标项目入口，不假定纯 Skill 导出包包含 ADK 源码。
 ```bash
-rtk rg -n "archive|meta|topic|registry|content_sha256" docs/archive scripts
-rtk bash scripts/check-memory-governance.sh
+rg -n "archive|meta|topic|registry|content_sha256" docs/archive scripts
+bash scripts/check-memory-governance.sh
 # 归档专用检查器由目标项目声明；缺失则 blocked。
 ```
 

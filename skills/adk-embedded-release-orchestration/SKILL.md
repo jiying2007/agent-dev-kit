@@ -1,8 +1,8 @@
 ---
 name: adk-embedded-release-orchestration
 description: "用于嵌入式固件 OTA 制品的发布准备、签名证据和回滚编排；不用于未经单独授权的真实 publish、设备 flash 或发布批准。"
-version: 2.0.2
-last_updated: 2026-11-10
+version: 2.0.3
+last_updated: 2026-11-16
 triggers:
   - "嵌入式发布编排"
   - "固件发布"
@@ -51,8 +51,8 @@ constraints:
 
 ## Commands
 ```bash
-rtk rg -n "build|package|ota|firmware|release|checksum|manifest|publish|tag" <repo>
-rtk git status --short
+rg -n "build|package|ota|firmware|release|checksum|manifest|publish|tag" <repo>
+git status --short
 <build-command>
 <package-command> --dry-run
 <check-command>

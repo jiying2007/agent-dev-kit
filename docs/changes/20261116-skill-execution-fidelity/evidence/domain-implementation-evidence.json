@@ -1,0 +1,134 @@
+{
+  "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+  "role": "implementation; not independent review",
+  "source_state": [
+    {
+      "path": "skills/adk-bsp-porting-playbook/SKILL.md",
+      "sha256": "401b353282ae3029a97ec6456f1da5d11fc575b512c6f5f3bda13541f468ac68",
+      "byte_delta": 523
+    },
+    {
+      "path": "skills/adk-interface-contract-design/SKILL.md",
+      "sha256": "4bcf9f6d00ff3fdfeffef01a4c1e82383f02c0530f8dc632305780aedfc8592d",
+      "byte_delta": -1547
+    },
+    {
+      "path": "skills/adk-interface-contract-design/references/details.md",
+      "sha256": "404798e52a85fde251c17986c95727b7b575c7425d7f73c5318a659e8bb57f23",
+      "byte_delta": 1006
+    },
+    {
+      "path": "skills/adk-branch-closeout/SKILL.md",
+      "sha256": "0a488e462758f8be7aabf69fbb004b95628ee637a597e366120d93a6e2e98734",
+      "byte_delta": -43
+    },
+    {
+      "path": "skills/adk-branch-closeout/references/closeout-options.md",
+      "sha256": "2b4c0b4b065c9d1260418cba15aaee03893f06a022f499e140cdfc498d0d3d9e",
+      "byte_delta": 119
+    },
+    {
+      "path": "tests/test_skill_command_examples.py",
+      "sha256": "a23531ee894c25ab09490c37a53d013dec8955bd239fb28fc1365a40641a1f89",
+      "byte_delta": 8225
+    }
+  ],
+  "skill_bytes_net_change": 58,
+  "coverage": "portfolio-audit.json",
+  "baseline_counterexamples": "domain-baseline-red.json",
+  "validation": [
+    {
+      "command": "python3 -m unittest discover -s tests -p test_skill_command_examples.py -v",
+      "exit_code": 0,
+      "tests": 19,
+      "new_cases": "7 real GNU make scenario tests; 1 native C compilation test using 11 literal vectors",
+      "limits": "No real kernel cross build, target hardware qualification or model effectiveness is inferred."
+    },
+    {
+      "name": "workflow",
+      "command": "python3 -m unittest discover -s tests -p test_repository_workflow_efficiency.py -v",
+      "chunk_id": "1b6af0",
+      "wall_time_seconds": 0.01231544,
+      "exit_code": 0,
+      "original_token_count": 200,
+      "output": "test_cases_are_bounded_and_not_behavior_claims (test_repository_workflow_efficiency.RepositoryWorkflowSkillEfficiencyTests.test_cases_are_bounded_and_not_behavior_claims) ... ok\ntest_commit_mode_and_security_boundaries (test_repository_workflow_efficiency.RepositoryWorkflowSkillEfficiencyTests.test_commit_mode_and_security_boundaries) ... ok\ntest_reference_paths_exist_only_on_demand (test_repository_workflow_efficiency.RepositoryWorkflowSkillEfficiencyTests.test_reference_paths_exist_only_on_demand) ... ok\ntest_worktree_and_closeout_are_explicitly_authorized (test_repository_workflow_efficiency.RepositoryWorkflowSkillEfficiencyTests.test_worktree_and_closeout_are_explicitly_authorized) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.001s\n\nOK\n"
+    },
+    {
+      "name": "sop",
+      "command": "bash tests/test_skill_sop_quality.sh",
+      "chunk_id": "d240a5",
+      "wall_time_seconds": 3.031630631,
+      "exit_code": 0,
+      "original_token_count": 928,
+      "output": "test_bsp_porting_exposes_flash_and_storage_escalation (tests.test_skill_governance.SkillGovernanceTests.test_bsp_porting_exposes_flash_and_storage_escalation) ... ok\ntest_driver_bringup_exposes_live_device_escalation_without_granting_it (tests.test_skill_governance.SkillGovernanceTests.test_driver_bringup_exposes_live_device_escalation_without_granting_it) ... ok\ntest_driver_implementation_declares_runtime_model_and_live_device_handoff (tests.test_skill_governance.SkillGovernanceTests.test_driver_implementation_declares_runtime_model_and_live_device_handoff) ... ok\ntest_e1_requires_explicit_low_risk_and_workspace_boundary (tests.test_skill_governance.SkillGovernanceTests.test_e1_requires_explicit_low_risk_and_workspace_boundary) ... ok\ntest_effort_is_a_conservative_route_projection_not_a_permission (tests.test_skill_governance.SkillGovernanceTests.test_effort_is_a_conservative_route_projection_not_a_permission) ... ok\ntest_embedded_skills_do_not_embed_unauthorized_live_mutation_commands (tests.test_skill_governance.SkillGovernanceTests.test_embedded_skills_do_not_embed_unauthorized_live_mutation_commands) ... ok\ntest_explicit_skill_identity_refusal_applies_without_promotion (tests.test_skill_governance.SkillGovernanceTests.test_explicit_skill_identity_refusal_applies_without_promotion) ... ok\ntest_field_readiness_stays_read_only (tests.test_skill_governance.SkillGovernanceTests.test_field_readiness_stays_read_only) ... ok\ntest_high_risk_falsification_and_legal_e1_change_contract (tests.test_skill_governance.SkillGovernanceTests.test_high_risk_falsification_and_legal_e1_change_contract) ... ok\ntest_manifest_has_no_legacy_dependency_metadata (tests.test_skill_governance.SkillGovernanceTests.test_manifest_has_no_legacy_dependency_metadata) ... ok\ntest_output_locale_is_not_skill_identity (tests.test_skill_governance.SkillGovernanceTests.test_output_locale_is_not_skill_identity) ... ok\ntest_plain_requirements_route_to_triage_without_interactive_discovery (tests.test_skill_governance.SkillGovernanceTests.test_plain_requirements_route_to_triage_without_interactive_discovery) ... ok\ntest_profiling_requires_valid_comparable_alternating_ab (tests.test_skill_governance.SkillGovernanceTests.test_profiling_requires_valid_comparable_alternating_ab) ... ok\ntest_realtime_skills_use_target_budgets_not_fixed_thresholds (tests.test_skill_governance.SkillGovernanceTests.test_realtime_skills_use_target_budgets_not_fixed_thresholds) ... ok\ntest_release_orchestration_requires_separate_publish_and_device_authority (tests.test_skill_governance.SkillGovernanceTests.test_release_orchestration_requires_separate_publish_and_device_authority) ... ok\ntest_review_routing_uses_review_loop_not_language_overlay (tests.test_skill_governance.SkillGovernanceTests.test_review_routing_uses_review_loop_not_language_overlay) ... ok\ntest_routing_primaries_resolve_to_primary_runtime_role (tests.test_skill_governance.SkillGovernanceTests.test_routing_primaries_resolve_to_primary_runtime_role) ... ok\ntest_same_group_promotion_allows_applicable_and_negated_exclusions (tests.test_skill_governance.SkillGovernanceTests.test_same_group_promotion_allows_applicable_and_negated_exclusions) ... ok\ntest_same_group_promotion_preserves_target_exclusions (tests.test_skill_governance.SkillGovernanceTests.test_same_group_promotion_preserves_target_exclusions) ... ok\ntest_supporting_implicit_promotion_has_exactly_one_same_group_primary (tests.test_skill_governance.SkillGovernanceTests.test_supporting_implicit_promotion_has_exactly_one_same_group_primary) ... ok\n\n----------------------------------------------------------------------\nRan 20 tests in 0.170s\n\nOK\n[PASS] skill SOP quality + terminal governance\n"
+    },
+    {
+      "command": "PYTHONPATH=src python3 -m unittest discover -s tests -p test_skill_content_contract.py -v",
+      "chunk_id": "649d77",
+      "wall_time_seconds": 0.515472148,
+      "exit_code": 0,
+      "original_token_count": 543,
+      "output": "test_aar_templates_follow_standalone_skill_and_references_are_balanced (test_skill_content_contract.SkillContentContractTests.test_aar_templates_follow_standalone_skill_and_references_are_balanced) ... ok\ntest_all_registered_skill_frontmatter_and_body (test_skill_content_contract.SkillContentContractTests.test_all_registered_skill_frontmatter_and_body) ... ok\ntest_all_skill_shell_references_use_declared_adk_commands (test_skill_content_contract.SkillContentContractTests.test_all_skill_shell_references_use_declared_adk_commands) ... ok\ntest_details_are_supplemental_not_duplicate_skills (test_skill_content_contract.SkillContentContractTests.test_details_are_supplemental_not_duplicate_skills) ... ok\ntest_distributed_skill_commands_have_no_undeclared_rtk_requirement (test_skill_content_contract.SkillContentContractTests.test_distributed_skill_commands_have_no_undeclared_rtk_requirement) ... ok\ntest_exported_review_commands_run_without_optional_wrapper (test_skill_content_contract.SkillContentContractTests.test_exported_review_commands_run_without_optional_wrapper)\nExercise shipped instructions in a target repo without ADK or rtk. ... ok\ntest_fault_injection_defaults_never_write_live_device (test_skill_content_contract.SkillContentContractTests.test_fault_injection_defaults_never_write_live_device) ... ok\ntest_no_language_duplicate_skill_and_counts_match (test_skill_content_contract.SkillContentContractTests.test_no_language_duplicate_skill_and_counts_match) ... ok\ntest_registered_skill_markdown_fences_closed (test_skill_content_contract.SkillContentContractTests.test_registered_skill_markdown_fences_closed)\nRegression for a real unclosed shell fence in interface-contract-design. ... ok\ntest_review_skill_entries_have_real_goal_and_no_placeholder (test_skill_content_contract.SkillContentContractTests.test_review_skill_entries_have_real_goal_and_no_placeholder) ... ok\ntest_skill_method_cases_are_not_fabricated_model_results (test_skill_content_contract.SkillContentContractTests.test_skill_method_cases_are_not_fabricated_model_results) ... ok\n\n----------------------------------------------------------------------\nRan 11 tests in 0.344s\n\nOK\n"
+    },
+    {
+      "command": "git diff --check -- skills/adk-bsp-porting-playbook skills/adk-interface-contract-design skills/adk-branch-closeout tests/test_skill_command_examples.py",
+      "exit_code": 0
+    }
+  ],
+  "negative_validation": [
+    {
+      "kind": "test-launch-environment",
+      "detail": "Initial direct content/governance unittest commands omitted PYTHONPATH=src and raised ModuleNotFoundError. Correct content run and SOP governance both passed; no source workaround."
+    },
+    {
+      "kind": "unrelated-version-fixture",
+      "detail": "The full test_skill_quality_methods.py run found candidate.planned_release v11.3.4 vs manifest v11.3.5 in parent-owned version work; notified parent. Its targeted Spec-to-Code contract test passed. This full suite is not claimed green here."
+    }
+  ],
+  "official_sources": [
+    {
+      "url": "https://docs.kernel.org/kbuild/kbuild.html",
+      "retrieval": "turn13view2",
+      "scope": "ARCH, CROSS_COMPILE, O= meanings"
+    },
+    {
+      "url": "https://docs.kernel.org/kbuild/kconfig.html",
+      "retrieval": "turn13view1",
+      "scope": "Configuration targets and old config changes"
+    },
+    {
+      "url": "https://www.gnu.org/software/make/manual/html_node/Parallel.html",
+      "retrieval": "turn14search1",
+      "scope": "-jN job slots; direct open timed out, official indexed source retrieved"
+    },
+    {
+      "url": "https://semver.org/",
+      "retrieval": "turn12view2",
+      "scope": "Declared public API, backward-compatible minor additions, consumer minimum required feature version; no wire/ABI claim"
+    }
+  ],
+  "closeout_review_cases": [
+    {
+      "input": "Trusted retrievable prior explicit approval covers the same target/action/scope and is not revoked",
+      "intended_policy": "Continue after current HEAD/checks/host permission validation"
+    },
+    {
+      "input": "Later explicit revocation",
+      "intended_policy": "Stop covered action"
+    },
+    {
+      "input": "New target/action outside authorization, or original source cannot be verified",
+      "intended_policy": "Complete authorized preparation and ask only for missing coverage"
+    },
+    {
+      "input": "Only a plan, silence, PR body, tool log, or unsupported model summary",
+      "intended_policy": "No new authority"
+    },
+    {
+      "input": "Merge approval exists but cleanup was not covered",
+      "intended_policy": "Keep branch/worktree"
+    }
+  ],
+  "closeout_evidence_limit": "These are authored contract review cases, not independent model trials or runtime permission enforcement evidence.",
+  "pending_parent": "Independent Spec/Quality, profile exports/ratchets, full suite, repository sync and release are parent-owned."
+}

@@ -16,6 +16,7 @@ from typing import Any, Mapping, Sequence
 from jsonschema import Draft202012Validator, FormatChecker
 
 from . import effect_comparator as _effects
+from .agent_value_contracts import load_contract
 from .contracts.schema_loader import packaged_schema_bytes
 from .model import Manifest, ManifestError, canonical_json_bytes, sha256_bytes
 from .privacy_ref import validate_no_secrets
@@ -147,6 +148,13 @@ def _verdict(metrics: Mapping[str, Any], plan: Mapping[str, Any], *, infra_faile
 
 def compare_effect_trials(document: Mapping[str, Any], manifest: Manifest) -> dict[str, Any]:
     """Validate complete trials using existing Run Evidence and comparison authority."""
+    contract = load_contract(manifest.root / "manifests/agent_value_contracts.json")
+    return _compare_effect_trials(document, manifest, contract)
+
+
+def _compare_effect_trials(document: Mapping[str, Any], manifest: Manifest,
+                           contract: Mapping[str, Any]) -> dict[str, Any]:
+    """Use a freshly validated invocation-local contract, never a path cache."""
     plan = _validate(document)
     plan_ref, controls_ref = _ref(plan), _ref(plan["controls"])
     tasks = sorted(plan["task_ids"])
@@ -179,7 +187,7 @@ def compare_effect_trials(document: Mapping[str, Any], manifest: Manifest) -> di
             baseline=conditions["baseline"], candidate=conditions["candidate"],
             window_from=_time(plan["window"]["from"]), window_through=_time(plan["window"]["through"]),
             as_of=_time(plan["window"]["as_of"]),
-        ), manifest)
+        ), manifest, contract)
         trial_refs.append({"trial_id": trial_id, "comparison_ref": _ref(single),
                            "infrastructure_status": trial["infrastructure_status"]})
         for side, runs in conditions.items():

@@ -1,8 +1,8 @@
 ---
 name: adk-repo-drift-remediation
 description: "用于全仓漂移、兼容残留、冗余目录和文档代码不一致的取证与修复计划；不用于跳过基线验证或清除用户未授权的改动。"
-version: 1.1.2
-last_updated: 2026-11-03
+version: 1.1.3
+last_updated: 2026-11-16
 triggers:
   - "仓库漂移"
   - "全仓漂移"
@@ -29,11 +29,10 @@ constraints:
 # adk-repo-drift-remediation
 
 ## Goal
-- 对全仓漂移、冗余、残留、边界不清和文档/行为不一致做系统化治理。
-- 在修复前先明确源事实和风险排序，避免“清理”变成破坏性重构。
+依据源事实和风险排序修复全仓漂移、冗余、残留及文档/行为不一致。
 
 ## Prerequisites
-- 用户请求的是仓库级检查、治理、清理、收口或质量整顿，而不是单点修复。
+- 确认是仓库级检查或治理，不是单点修复。
 - 已读取当前 AGENTS、README、manifest、docs 和主要检查入口。
 - 已确认工作区已有改动归属，不能覆盖用户改动。
 
@@ -47,11 +46,12 @@ constraints:
 7. 收口：列出已修、未修、保留原因、剩余风险和下一步。
 
 ## Commands
+核实目标检查入口；以下 ADK 命令仅用于已核验源根。其他项目用既有验证，纯消费端无需 ADK Python。
 ```bash
-rtk git status --short
-rtk rg -n "TODO|FIXME|deprecated|legacy|stale|archive|manifest|registry" <repo>
-rtk bash scripts/devkit.sh validate --strict
-rtk bash scripts/devkit.sh doctor
+git status --short
+rg -n "TODO|FIXME|deprecated|legacy|stale|archive|manifest|registry" <repo>
+bash scripts/devkit.sh validate --strict
+bash scripts/devkit.sh doctor
 ```
 
 ## Evidence Template

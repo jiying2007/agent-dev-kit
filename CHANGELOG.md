@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+### 11.3.5 — Reliable Skill selection, portable methods and faster comparisons
+
+- 修复辅助 Skill 同组提升绕过主 Skill 排除条件，以及中英文显式拒绝 Skill 身份仍可被选中的路径；正常匹配、read-only 与宿主权限边界保持。
+- 设计拷问保留问题编号、部分回答与依赖修订；分支收尾复用可核验同范围既有授权，计划、模型摘要和撤销授权不构成许可。
+- BSP 示例绑定真实架构、工具链、板级配置和 CPU/RAM 预算，保护既有配置并在失败时停止；接口示例校验最低能力与方向性版本条件，不无条件降级。
+- 分发 Skill 命令去除未声明的 rtk 依赖，注明 ADK/llm_agent 源仓管理命令的适用位置；不要求纯消费端拥有 ADK 源码/Python。
+- 任务对照拒绝预注册/观察窗口外的开始时间与同任务验收项组成漂移；单次比较复用已验证合同，跨调用重读合同及 Schema，保留公开函数签名和资格边界。
+- 保留真实失败、编译/make/导出/路由测试与同机合成比较耗时；不把源码字节、本地工具加速或个别对话观察当成原生模型效果、Token/费用收益。
+
 ### 11.3.4 — Verified external methods and focused Skill guidance
 
 - 逐项审查全部 65 项 Skill，对照 17 个原始仓库及工具官方依据，补足兼容迁移、独立期望值、检查器校准、性质与状态序列测试、sanitizer 和栈分析六类任务方法。

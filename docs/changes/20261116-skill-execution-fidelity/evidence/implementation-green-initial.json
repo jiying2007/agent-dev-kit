@@ -1,0 +1,18 @@
+{
+  "started_at": "2026-11-15T23:59:11.453265+00:00",
+  "finished_at": "2026-11-15T23:59:30.967925+00:00",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-m",
+    "unittest",
+    "test_task_trials",
+    "test_task_evidence",
+    "test_effect_trials",
+    "test_skill_execution_tasks"
+  ],
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "...............................................................................................\n----------------------------------------------------------------------\nRan 95 tests in 19.078s\n\nOK\n",
+  "expected_phase": "GREEN",
+  "synthetic": true
+}

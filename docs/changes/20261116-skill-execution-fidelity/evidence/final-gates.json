@@ -1,0 +1,47 @@
+{
+  "source_commit": "016d673331ef458ac94f72d08ec67537a000cc4b",
+  "checks": [
+    {
+      "command": [
+        "bash",
+        "scripts/check-performance-budgets.sh",
+        "--strict",
+        "--summary-json",
+        "--timing-json",
+        "/workspace/scratch/2d6ca6dc3d38/audit-repros/full-timing.json"
+      ],
+      "started_at": "2026-11-16T00:19:16.801192Z",
+      "finished_at": "2026-11-16T00:19:16.889408Z",
+      "exit_code": 0,
+      "stdout": "{\"schema_version\":1,\"status\":\"pass\",\"budgets\":3,\"checked\":14,\"failures\":0,\"warnings\":0,\"mode\":\"full\",\"elapsed_ms\":288169,\"budget_ms\":600000,\"strict\":1}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "bash",
+        "scripts/devkit.sh",
+        "release",
+        "check",
+        "--summary-json"
+      ],
+      "started_at": "2026-11-16T00:19:16.889424Z",
+      "finished_at": "2026-11-16T00:19:17.230887Z",
+      "exit_code": 0,
+      "stdout": "{\"schema_version\":1,\"status\":\"pass\",\"version\":\"11.3.5\",\"direct_targets\":[\"claude-code\",\"opencode\"],\"external_targets\":[\"codex\"],\"eval_catalog\":{\"catalog_valid\":true,\"catalog_sha256\":\"f8c77405ee0ae55a33caaffa5b31ba4118d6e7d17afd38db7c49b93eb34914b1\",\"snapshot_atomic\":false,\"dataset_fixture_alignment_scope\":[\"governance-eval-guardrail-regression-dataset\"],\"contract_only_suite_count\":9,\"runtime_eval_executed\":false},\"failures\":[]}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "started_at": "2026-11-16T00:19:17.230907Z",
+      "finished_at": "2026-11-16T00:19:17.234680Z",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "local_ruff_mypy": "unavailable; not installed or executed; remote CI not run because push blocked"
+}

@@ -1,0 +1,160 @@
+{
+  "reviewer": "/root/research_skill_methods",
+  "review_mode": "independent-read-only-source-review",
+  "phase": "corrected-source-reviewed-awaiting-full-and-archive-evidence",
+  "review_started_at": "2026-11-16T00:10:01Z",
+  "observations_recorded_at": "2026-11-16T00:17:03Z",
+  "corrected_source_review_started_at": "2026-11-16T00:13:39Z",
+  "repository": "/workspace/scratch/2d6ca6dc3d38/agent-dev-kit",
+  "base_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+  "source_sha": "016d673331ef458ac94f72d08ec67537a000cc4b",
+  "superseded_source_sha": "4f9346e488a37926df560fa39ad8a275873e6c21",
+  "source_tree_clean_at_review": true,
+  "changed_files_reviewed": 45,
+  "corrective_increment_files_reviewed": 3,
+  "scope": [
+    "All files changed from base to frozen source SHA",
+    "Current requirements, design, tasks and negative-results",
+    "Matcher explicit, routing, lexical and same-group promotion paths",
+    "Task observation chronology, acceptance composition and invocation-local contract loading",
+    "BSP and C interface examples, authorization continuity, questioning and portable command references"
+  ],
+  "independent_execution": [
+    {
+      "source_sha": "4f9346e488a37926df560fa39ad8a275873e6c21",
+      "command": "git diff --check 907080d5a0f6e49daa93e217f60383b23ed89d37..4f9346e488a37926df560fa39ad8a275873e6c21",
+      "exit_code": 0
+    },
+    {
+      "source_sha": "4f9346e488a37926df560fa39ad8a275873e6c21",
+      "command": "PYTHONPATH=src:tests python3 -m unittest test_skill_command_examples.BspBuildExampleTests test_skill_command_examples.InterfaceVersionExampleTests test_skill_content_contract.SkillContentContractTests.test_exported_review_commands_run_without_optional_wrapper test_skill_content_contract.SkillContentContractTests.test_distributed_skill_commands_have_no_undeclared_rtk_requirement -v",
+      "exit_code": 0,
+      "tests_run": 10,
+      "elapsed_seconds_reported_by_unittest": 0.492,
+      "scope": "Native C compiler and literal contract vectors; GNU make recording fixture; real rendered reference with no rtk in PATH; all rendered Skill shell blocks scanned"
+    },
+    {
+      "source_sha": "4f9346e488a37926df560fa39ad8a275873e6c21",
+      "kind": "direct-matcher-reproduction",
+      "original_r1_chinese": "pass-rejected",
+      "original_r1_english": "pass-rejected",
+      "active_trigger_plus_explicit_decline": "pass-rejected",
+      "normal_same_group_promotion": "pass-matched",
+      "affirmative_skill_name": "pass-matched",
+      "did_not_reject_context": "pass-matched",
+      "markdown_backtick_chinese_decline": "fail-matched",
+      "markdown_backtick_english_decline": "fail-matched",
+      "dollar_invocation_prefix_decline": "fail-matched",
+      "different_suffixed_skill_decline": "fail-rejected-canonical-skill"
+    },
+    {
+      "source_sha": "016d673331ef458ac94f72d08ec67537a000cc4b",
+      "command": "git diff --check 907080d5a0f6e49daa93e217f60383b23ed89d37..016d673331ef458ac94f72d08ec67537a000cc4b",
+      "exit_code": 0
+    },
+    {
+      "source_sha": "016d673331ef458ac94f72d08ec67537a000cc4b",
+      "command": "PYTHONPATH=src:tests python3 -m unittest test_skill_governance test_task_trials test_task_evidence test_effect_trials test_skill_command_examples.BspBuildExampleTests test_skill_command_examples.InterfaceVersionExampleTests test_skill_content_contract.SkillContentContractTests.test_exported_review_commands_run_without_optional_wrapper test_skill_content_contract.SkillContentContractTests.test_distributed_skill_commands_have_no_undeclared_rtk_requirement -q",
+      "exit_code": 0,
+      "tests_run": 116,
+      "elapsed_seconds_reported_by_unittest": 22.180,
+      "scope": "Routing, task/effect evaluation chronology and composition, invocation-local contract reuse and cross-call reload; native C example, GNU make fixture and real no-wrapper exported commands"
+    },
+    {
+      "source_sha": "016d673331ef458ac94f72d08ec67537a000cc4b",
+      "kind": "independent-direct-matcher-revalidation",
+      "checks_run": 27,
+      "exit_code": 0,
+      "status": "all-passed",
+      "declined_identity_checks": {
+        "paths": ["auto", "explicit"],
+        "cases": ["original-r1-zh", "original-r1-en", "backtick-zh", "backtick-en", "dollar", "at-sign", "backtick-dollar", "backtick-at", "casefold-positive-trigger", "lexical"],
+        "observed": "match=false in all 20 checks; automatic routing retains mutation_permission=deny"
+      },
+      "normal_identity_checks": {
+        "path": "auto",
+        "cases": ["normal-promotion", "affirmative", "did-not-reject", "exact-suffix-repro", "different-underscore", "different-number", "different-prefix"],
+        "observed": "All 7 checks select adk-token-context-governance and retain mutation_permission=deny"
+      }
+    }
+  ],
+  "closed_findings": [
+    {
+      "id": "R1-format-residual",
+      "detected_source_sha": "4f9346e488a37926df560fa39ad8a275873e6c21",
+      "resolved_source_sha": "016d673331ef458ac94f72d08ec67537a000cc4b",
+      "status": "closed-by-independent-source-and-execution-review",
+      "severity": "major",
+      "location": "src/agent_dev_kit/_matcher_kernel.py::_skill_identity_declined",
+      "finding": "Markdown backticks and the explicit invocation prefix remain between the denial verb and Skill identity, so common formatted explicit refusals still select the rejected primary.",
+      "reproductions": [
+        "上下文工程，不要使用 `adk-token-context-governance`",
+        "context planning, do not use `adk-token-context-governance`",
+        "context planning, do not use $adk-token-context-governance"
+      ],
+      "observed": "match=true and selection_group_promoted=true",
+      "expected": "The explicitly refused primary must not be selected; mutation permission remains denied."
+    },
+    {
+      "id": "R1-identity-boundary",
+      "detected_source_sha": "4f9346e488a37926df560fa39ad8a275873e6c21",
+      "resolved_source_sha": "016d673331ef458ac94f72d08ec67537a000cc4b",
+      "status": "closed-by-independent-source-and-execution-review",
+      "severity": "major",
+      "location": "src/agent_dev_kit/_matcher_kernel.py::_skill_identity_declined",
+      "finding": "Declining a distinct name with a longer suffix is interpreted as declining the canonical Skill identity even when that canonical identity is affirmatively requested.",
+      "reproductions": [
+        "上下文工程，使用 adk-token-context-governance，不要使用 adk-token-context-governance-experimental"
+      ],
+      "observed": "match=false, reason=promoted-primary-excluded, excluded_skill=adk-token-context-governance",
+      "expected": "The different suffixed identity must not suppress the canonical Skill's valid same-group promotion."
+    }
+  ],
+  "open_findings": [],
+  "supporting_evidence_checks": {
+    "frozen_source_manifest": {
+      "source_sha": "016d673331ef458ac94f72d08ec67537a000cc4b",
+      "method": "Read each of the 45 recorded paths from git show at the frozen SHA and compare SHA-256 with source-freeze.json",
+      "digests_checked": 45,
+      "mismatches": []
+    },
+    "portfolio_coverage": {
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "method": "Verify another reviewer's coverage manifest against all baseline Manifest skill identities, then verify every recorded file digest against git show",
+      "skill_entries": 65,
+      "unique_entrypoint_and_reference_paths": 118,
+      "missing_catalog_entries": [],
+      "extra_catalog_entries": [],
+      "digest_mismatches": [],
+      "reported_decisions": {"fix": 15, "retain": 50},
+      "limitation": "This verifies the coverage manifest and source identity; it does not claim this reviewer independently read all 118 complete baseline files."
+    },
+    "performance_source_binding": {
+      "method": "Read benchmark script and raw baseline/candidate/comparison records; compare all four candidate source hashes with current frozen source files",
+      "matched_candidate_source_hashes": 4,
+      "benchmark_reexecuted_by_this_reviewer": false,
+      "scope": "36 synthetic observations, three unprofiled timing samples plus three profiling runs per phase; local comparator overhead only",
+      "limitation": "Both raw head fields record the base commit because the candidate was measured in a modified worktree; candidate source hashes provide the later binding. No model, Token, cost, native host or hardware effect is inferred."
+    },
+    "questioning_observations": {
+      "method": "Read both saved isolated-conversation observations and their capture/version limitations",
+      "partial_answer_version": "Earlier pre-compression wording; not treated as exact-final-Skill execution evidence",
+      "revision_dependency_version": "Observer reports complete text equality with the final Skill; hash was captured later, not during the scenario",
+      "limitation": "Supplementary qualitative observations only; no controlled model A/B, native host qualification or Token measurement."
+    }
+  },
+  "source_assessment": {
+    "spec": "source-conforms-pending-full-and-archive-evidence",
+    "quality": "no-blocker-or-major-observed-pending-full-and-archive-evidence",
+    "other_blocker_or_major_findings": 0,
+    "final_signoff": false
+  },
+  "limitations": [
+    "Full regression, archive evidence, final reviewer binding, remote CI, merge and release have not been observed for this frozen source in this phase.",
+    "Earlier intermediate review independently ran 103 routing/task/effect tests and four additional invalid-time cases; those runs predate this source freeze and are not claimed as exact-SHA final evidence.",
+    "Acceptance composition compares names, not grader implementation semantics; timestamps and identity remain caller observations.",
+    "BSP fixture verifies command arguments and failure handling, not a real cross-compiled firmware or hardware result.",
+    "No external model invocation or real model A/B, Token/cost or native runtime qualification was performed.",
+    "Bounded lexical negation does not claim complete natural-language or double-negation understanding."
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "evidence_kind": "isolated_conversation_observation",
+  "observer_task": "/root/discovery_revision",
+  "scenario_name": "questioning_revision_dependency_invalidation",
+  "capture": {
+    "saved_at_utc": "2026-11-16 00:11:16 UTC",
+    "saved_at_basis": "clock__curr_time sampled immediately before the initial apply_patch save; this is a capture/save timestamp, not the scenario start time.",
+    "run_started_at_utc": null,
+    "run_finished_at_utc": null,
+    "run_time_note": "The original isolated conversation did not capture start or finish timestamps. They have not been inferred from the later save time.",
+    "original_run_already_completed": true,
+    "scenario_rerun_for_capture": false,
+    "capture_instruction_verbatim": "请将你刚完成的隔离对话观察保存为 scratch 证据 /workspace/scratch/2d6ca6dc3d38/audit-repros/questioning-revision-observation.json，使用 apply_patch。保留你收到的实际场景输入（Q10/Q11/Q12/Q14）和你的实际完整回复，读取 /workspace/scratch/2d6ca6dc3d38/agent-dev-kit/skills/adk-structured-requirements-questioning/SKILL.md 获取现在SHA-256并说明与运行时读取是否同一版本。记录实际保存UTC；不能用保存时间伪造开始时间。不计入provider/native host控制A/B或Token测量。你不参与实现，无需新跑场景。"
+  },
+  "measurement_scope": {
+    "provider_or_native_host_control_ab": false,
+    "token_measurement": false,
+    "implementation_changes": false,
+    "classification": "Supplementary qualitative observation of one completed isolated conversation only.",
+    "limitations": [
+      "This is not a provider/native-host-controlled A/B run.",
+      "No token counts or timing measurements of the original scenario were collected.",
+      "No new scenario was run to create this evidence."
+    ]
+  },
+  "skill": {
+    "path": "/workspace/scratch/2d6ca6dc3d38/agent-dev-kit/skills/adk-structured-requirements-questioning/SKILL.md",
+    "original_runtime_read": {
+      "method": "exec_command cat; complete SKILL.md text returned before the scenario response",
+      "version_observed": "1.2.2",
+      "last_updated_observed": "2026-11-16",
+      "sha256_captured_at_runtime": null
+    },
+    "capture_time_read": {
+      "method": "Python pathlib.read_bytes and hashlib.sha256",
+      "read_observed_utc": "2026-11-16 00:10:24 UTC",
+      "read_time_basis": "UTC clock sampled concurrently with the capture-time file read.",
+      "version_observed": "1.2.2",
+      "last_updated_observed": "2026-11-16",
+      "sha256": "0cb2f777e209b234fdc016130c1d9f0cbc8e65ed8e1b547a761862892b397d4e"
+    },
+    "same_version_as_runtime_read": true,
+    "version_comparison_basis": "The current version metadata and complete displayed text match the full text returned by the original runtime read. The SHA-256 above was measured only during evidence capture, not during the original run; no runtime digest is being claimed."
+  },
+  "actual_scenario_input_verbatim": "使用 /workspace/scratch/2d6ca6dc3d38/agent-dev-kit/skills/adk-structured-requirements-questioning/SKILL.md 继续以下产品设计讨论，只在聊天回复，不写文件、不操作外部系统。请先读这份 Skill，然后处理用户刚给的修订。\n\n已有决定：Q10『工具仅在单人浏览器离线使用』已确认；Q11『localStorage 保存全部记录，不需要服务端』已确认，依赖 Q10。仍开放：Q12『操作记录保留7天还是30天』，建议30天；Q14『是否允许向外部伙伴分享记录』，尚无建议。\n\n用户刚回复：『Q10 改成团队实时协作。Q12 按30天。Q14 以后再说，接着讨论。』\n\n请接着回复用户。",
+  "actual_assistant_reply": {
+    "commentary_verbatim": "我会先阅读指定的需求澄清 Skill，核对这次修订对已有决定的影响。",
+    "final_verbatim": "已更新。**Q10 改为团队实时协作后，依赖它的 Q11 需要重新判断**；Q12 确认为 30 天，Q14 暂缓。\n\n| ID | 当前记录 | 已知依赖 `depends_on` | 状态 `status` | 答案来源 `answer_source` |\n|---|---|---|---|---|\n| Q10 | **团队实时协作**。旧答案“单人浏览器离线使用”保留为历史。 | — | `confirmed` | 新答案：你本轮修订；旧答案：你此前确认 |\n| Q11 | 旧答案“localStorage 保存全部记录，不需要服务端”因 Q10 修订而失效，重新开放。 | Q10 | 旧答案 `invalidated`；当前 `unresolved` | 旧答案：你此前确认；重新开放：依赖重算 |\n| Q12 | **操作记录保留 30 天** | — | `confirmed` | 你本轮确认 |\n| Q14 | 是否允许向外部伙伴分享记录：暂缓，仍未决定。 | — | `unresolved`（暂缓） | 你本轮要求延后 |\n\n### Q11：记录如何存储，是否需要服务端？\n\n这仍是原来的存储决策。现在要支持团队实时协作，仅靠各浏览器的 localStorage 不能完成成员之间的记录同步。可以考虑两个方向：\n\n- **A．服务端保存共享记录，浏览器本地存储用于缓存。** 协作围绕同一份共享数据进行，方案较直接；断网后编辑会受限。\n- **B．浏览器保存可编辑的本地副本，通过服务端同步。** 可以保留离线编辑能力，但需要处理重新联网后的合并，以及多人修改同一记录时的冲突。\n\n**AI 建议：A。** 当前已经确认团队实时协作，是否仍须支持离线编辑尚未明确。若成员经常断网，而且断网时也必须继续编辑，就是推荐 A 的反例，B 会更合适。\n\n**Q11 你倾向 A 还是 B？**"
+  },
+  "observed_behavior": [
+    "The response preserved Q10, Q11, Q12 and Q14 identities.",
+    "It recorded the revised Q10 and 30-day Q12 as user-confirmed.",
+    "It retained the prior Q10 and Q11 answers and their user sources.",
+    "It invalidated the prior Q11 answer because Q11 depends on the revised Q10, then reopened Q11 as unresolved.",
+    "It kept Q14 unresolved and deferred, without assigning an answer.",
+    "It asked the reopened Q11 and labeled its recommendation as AI advice."
+  ]
+}

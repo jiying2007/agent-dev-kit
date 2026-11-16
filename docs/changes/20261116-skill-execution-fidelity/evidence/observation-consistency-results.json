@@ -1,0 +1,27 @@
+{
+  "synthetic": true,
+  "results": [
+    {
+      "case": "run-starts-before-registration",
+      "started_at": "2026-09-24T09:00:00Z",
+      "registered_at": "2026-09-24T10:00:00Z",
+      "window": {
+        "from": "2026-09-24T11:00:00Z",
+        "through": "2026-09-24T14:00:00Z",
+        "as_of": "2026-09-24T18:00:00Z"
+      },
+      "actual_verdict": "improved",
+      "actual_reason": "primary-benefit-exceeds-declared-threshold",
+      "expected": "reject explicit start-before-registration or fixed-window contradiction"
+    },
+    {
+      "case": "same-grader-id-different-contract",
+      "grader_id": "synthetic-independent-grader",
+      "actual_verdict": "improved",
+      "actual_reason": "primary-benefit-exceeds-declared-threshold",
+      "actual_control_grader_ref": "ref:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "expected": "bind task-specific grader/check contract before declaring controlled comparison",
+      "qualification": "missing frozen control; report remains explicitly caller-observed/test-only"
+    }
+  ]
+}

@@ -73,6 +73,79 @@ class SkillGovernanceTests(unittest.TestCase):
         self.assertNotIn("skill_runtime_role", result)
         self.assertFalse(result.get("selection_group_promoted", False), result)
 
+    def test_same_group_promotion_preserves_target_exclusions(self) -> None:
+        # These are actual catalog collisions: the supporting context Skill
+        # matches, but its primary is explicitly inapplicable or declined.
+        for prompt in (
+            "只做短文本问答，上下文工程",
+            "高风险审计要求直接看原文，跨会话恢复",
+            "单文件小改且上下文已充足，context planning",
+            "上下文工程，不要压缩输出",
+            "context planning; do not compress output; 不要省 token",
+            "上下文工程，不要使用 adk-token-context-governance",
+            "context planning, do not use adk-token-context-governance",
+            "需要省 token，但不要加载 adk-token-context-governance；上下文工程",
+        ):
+            with self.subTest(prompt=prompt):
+                result = match_text(self.manifest, prompt)
+                self.assertFalse(result.get("match"), result)
+                self.assertEqual(result.get("decision"), "abstain", result)
+                self.assertEqual(result.get("mutation_permission"), "deny", result)
+                self.assertEqual(result.get("reason"), "promoted-primary-excluded", result)
+
+    def test_same_group_promotion_allows_applicable_and_negated_exclusions(self) -> None:
+        for prompt in (
+            "上下文工程",
+            "跨会话恢复",
+            "context planning",
+            "不是只做短文本问答，需要上下文工程",
+            "上下文工程，使用 adk-token-context-governance",
+            "context planning, I did not reject adk-token-context-governance",
+        ):
+            with self.subTest(prompt=prompt):
+                result = match_text(self.manifest, prompt)
+                self.assertTrue(result.get("match"), result)
+                self.assertEqual(result.get("skill"), "adk-token-context-governance", result)
+                self.assertTrue(result.get("selection_group_promoted"), result)
+                self.assertEqual(result.get("mutation_permission"), "deny", result)
+
+    def test_explicit_skill_identity_refusal_applies_without_promotion(self) -> None:
+        name = "adk-token-context-governance"
+        for prompt in (f"需要省 token，但不要使用 {name}",
+                       f"token budget; do not use {name}"):
+            for explicit in (None, name):
+                with self.subTest(prompt=prompt, explicit=explicit):
+                    result = match_text(self.manifest, prompt, skill=explicit)
+                    self.assertFalse(result.get("match"), result)
+                    if explicit is None:
+                        self.assertEqual(result.get("mutation_permission"), "deny", result)
+
+    def test_displayed_skill_identity_refusal_preserves_all_selection_paths(self) -> None:
+        name = "adk-token-context-governance"
+        identities = (name, f"`{name}`", f"${name}", f"@{name}", f"`${name}`", f"`@{name}`")
+        for identity in identities:
+            for prefix in ("上下文工程，不要使用 ", "context planning, do not use ",
+                           "需要省 token，但不要加载 "):
+                for explicit in (None, name):
+                    with self.subTest(identity=identity, prefix=prefix, explicit=explicit):
+                        result = match_text(self.manifest, prefix + identity, skill=explicit)
+                        self.assertFalse(result.get("match"), result)
+                        if explicit is None:
+                            self.assertEqual(result.get("mutation_permission"), "deny", result)
+
+    def test_skill_identity_boundaries_and_affirmative_displays(self) -> None:
+        name = "adk-token-context-governance"
+        prompts = [f"context planning, use {identity}" for identity in
+                   (f"`{name}`", f"${name}", f"@{name}", f"`${name}`", f"`@{name}`")]
+        prompts += [f"context planning, do not use {identity}" for identity in
+                    (f"{name}-experimental", f"{name}_test", f"{name}2", f"other-{name}")]
+        for prompt in prompts:
+            with self.subTest(prompt=prompt):
+                result = match_text(self.manifest, prompt)
+                self.assertTrue(result.get("match"), result)
+                self.assertEqual(result.get("skill"), name, result)
+                self.assertEqual(result.get("mutation_permission"), "deny", result)
+
     def test_review_routing_uses_review_loop_not_language_overlay(self) -> None:
         result = match_text(self.manifest, "代码审查")
         self.assertTrue(result.get("match"), result)

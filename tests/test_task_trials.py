@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import copy
+import cProfile
 import json
 import os
 import subprocess
@@ -12,7 +13,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from agent_dev_kit.model import ManifestError, canonical_json_bytes, sha256_bytes
+from agent_dev_kit.model import Manifest, ManifestError, canonical_json_bytes, sha256_bytes
 from agent_dev_kit.task_trials import compare_task_trials, task_trial_controls_ref
 
 from test_effect_trials import document
@@ -98,6 +99,97 @@ class TaskTrialsTest(unittest.TestCase):
         self.assertFalse(value["release_authorized"])
         self.assertFalse(value["quality_evidence_eligible"])
         self.assertEqual(value["evidence_scope"], "test-only")
+
+    def test_task_start_must_follow_registration_and_fit_the_window(self):
+        for started_at in ("2026-09-24T09:00:00Z", "2026-09-24T10:30:00Z",
+                           "2026-09-24T10:59:59.999999Z"):
+            with self.subTest(started_at=started_at):
+                self.data = synthetic_task_trials(self.root)
+                self.mutate_observation(lambda envelope, *_: envelope["run"].update(started_at=started_at))
+                with self.assertRaisesRegex(ManifestError, "task-0.*observation window"):
+                    self.compare()
+
+    def test_task_window_boundaries_and_equivalent_timezones_are_valid(self):
+        def change(envelope, *_):
+            envelope["run"].update(started_at="2026-09-24T19:00:00+08:00",
+                                   finished_at="2026-09-24T22:00:00+08:00")
+
+        self.mutate_observation(change)
+        self.assertEqual(self.compare()["comparison"]["run_count"], 36)
+
+    def test_same_task_acceptance_composition_cannot_drift(self):
+        for category in ("checks", "guardrails"):
+            for mutation in ("rename", "add", "remove"):
+                for side, trial in (("candidate", 0), ("baseline", 1)):
+                    with self.subTest(category=category, mutation=mutation, side=side, trial=trial):
+                        self.data = synthetic_task_trials(self.root)
+
+                        def change(envelope, events, acceptance, root):
+                            if mutation == "rename":
+                                acceptance[category][0]["name"] = "changed-criterion"
+                            elif mutation == "add":
+                                extra = copy.deepcopy(acceptance[category][0])
+                                extra["name"] = "added-criterion"
+                                acceptance[category].append(extra)
+                            else:
+                                acceptance[category] = []
+                                if category == "checks":
+                                    acceptance["status"] = "not-run"
+
+                        self.mutate_observation(change, side=side, trial=trial)
+                        with self.assertRaisesRegex(ManifestError, "task-0.*acceptance composition"):
+                            self.compare()
+
+    def test_acceptance_composition_ignores_results_order_and_other_tasks(self):
+        for side in ("baseline", "candidate"):
+            for trial in range(3):
+                def change(envelope, events, acceptance, root):
+                    for category in ("checks", "guardrails"):
+                        first = copy.deepcopy(acceptance[category][0])
+                        first["name"] = "task-one-first"
+                        second = copy.deepcopy(first)
+                        second["name"] = "task-one-second"
+                        acceptance[category] = [first, second] if side == "baseline" else [second, first]
+                    if side == "candidate" and trial == 1:
+                        acceptance["status"] = acceptance["checks"][0]["status"] = "failed"
+                        acceptance["checks"][0]["evidence"] = write_json(root / "failed-check.json", {
+                            "synthetic": True, "observation": "failed",
+                        })
+
+                self.mutate_observation(change, side=side, task=1, trial=trial)
+        value = self.compare()
+        self.assertEqual(value["comparison"]["run_count"], 36)
+        self.assertEqual(value["comparison"]["outcome_counts"]["candidate"]["failed"], 1)
+
+    def test_contract_is_checked_once_and_reloaded_on_the_next_invocation(self):
+        repository = self.root.parent / "contract-source"
+        for relative in ("manifests/agent_value_contracts.json", "schemas/agent-value-contracts-v1.schema.json"):
+            destination = repository / relative
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            destination.write_bytes((ROOT / relative).read_bytes())
+        manifest = Manifest(repository, MANIFEST.data, repository / "manifest.json")
+        profile = cProfile.Profile()
+        profile.enable()
+        value = compare_task_trials(self.path, manifest)
+        profile.disable()
+        self.assertEqual(value["comparison"]["run_count"], 36)
+        loads = [entry for entry in profile.getstats() if not isinstance(entry.code, str)
+                 and entry.code.co_name == "load_contract"
+                 and entry.code.co_filename.endswith("/agent_value_contracts.py")]
+        self.assertEqual(sum(entry.callcount for entry in loads), 1)
+
+        contract_path = repository / "manifests/agent_value_contracts.json"
+        original = contract_path.read_bytes()
+        write_json(contract_path, {"schema_version": "invalid-contract"})
+        with self.assertRaisesRegex(ManifestError, "agent value contract"):
+            compare_task_trials(self.path, manifest)
+        contract_path.write_bytes(original)
+        schema_path = repository / "schemas/agent-value-contracts-v1.schema.json"
+        schema = json.loads(schema_path.read_text())
+        schema["required"].append("new-required-field")
+        write_json(schema_path, schema)
+        with self.assertRaisesRegex(ManifestError, "agent value contract"):
+            compare_task_trials(self.path, manifest)
 
     def test_same_input_different_workspace_cannot_be_controlled_comparison(self):
         def change(envelope, events, acceptance, root):

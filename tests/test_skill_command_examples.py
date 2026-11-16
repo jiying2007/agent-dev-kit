@@ -5,6 +5,7 @@ import json
 import os
 from pathlib import Path
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -14,6 +15,8 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 RELEASE = "skills/adk-release-versioning/references/details.md"
 FLAKY = "optional-skills/adk-test-flakiness-triage/references/details.md"
+BSP = "skills/adk-bsp-porting-playbook/SKILL.md"
+INTERFACE = "skills/adk-interface-contract-design/references/details.md"
 
 
 def bash_example(path: str, marker: str) -> str:
@@ -220,6 +223,147 @@ class FlakySampleExampleTests(unittest.TestCase):
         self.assertEqual(["CI_JOB_TOKEN", "TEST_PASSWORD"], json.loads(result.stdout))
         for value in environment.values():
             self.assertNotIn(value, result.stdout)
+
+
+class BspBuildExampleTests(unittest.TestCase):
+    """Run GNU make with a tiny recording Makefile, not a simulated device build."""
+
+    def setUp(self):
+        self.assertIsNotNone(shutil.which("make"), "the published example requires GNU make")
+        self.temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temporary.cleanup)
+        self.root = Path(self.temporary.name)
+        self.source = self.root / "source tree"
+        self.source.mkdir()
+        self.output = self.root / "build output"
+        self.capture = self.root / "make-calls.tsv"
+        record = ('\t@printf "%s\\t%s\\t%s\\t%s\\t%s\\t%s\\n" '
+                  '"$@" "$(ARCH)" "$(CROSS_COMPILE)" "$(O)" "$(MAKEFLAGS)" '
+                  '"$(CURDIR)" >> "$(BSP_CAPTURE)"\n')
+        (self.source / "Makefile").write_text(
+            ".PHONY: board_defconfig board-image board.dtb\n"
+            "board_defconfig:\n" + record +
+            '\t@test "$(FAIL_CONFIG)" != "1"\n'
+            '\t@printf "CONFIG_BOARD=y\\n" > "$(O)/.config"\n'
+            "board-image board.dtb:\n" + record +
+            '\t@test -f "$(O)/.config"\n'
+            '\t@test "$(FAIL_BUILD)" != "1"\n'
+            '\t@printf "fixture artifact\\n" > "$(O)/$@"\n'
+        )
+        self.environment = dict(os.environ, BSP_SOURCE_DIR=str(self.source), BSP_OUTPUT_DIR=str(self.output),
+                                BSP_ARCH="arm", BSP_CROSS_COMPILE="arm-linux-gnueabihf-",
+                                BSP_DEFCONFIG="board_defconfig", BSP_IMAGE_TARGET="board-image",
+                                BSP_DT_TARGET="board.dtb", BSP_BUILD_JOBS="2", BSP_CAPTURE=str(self.capture),
+                                ARCH="arm64", CROSS_COMPILE="wrong-host-toolchain-", MAKEFLAGS="-j17",
+                                FAIL_CONFIG="0", FAIL_BUILD="0")
+        self.code = bash_example(BSP, "# verified-linux-kbuild:")
+
+    def build(self, **overrides):
+        return run_example(self.code, self.root, environment=dict(self.environment, **overrides))
+
+    def calls(self):
+        return [line.split("\t") for line in self.capture.read_text().splitlines()]
+
+    def test_make_preserves_selected_arch_toolchain_config_output_and_cpu_ram_budget(self):
+        result = self.build()
+        self.assertEqual(0, result.returncode, result.stderr)
+        rows = self.calls()
+        self.assertEqual("board_defconfig", rows[0][0])
+        self.assertCountEqual(["board-image", "board.dtb"], [row[0] for row in rows[1:]])
+        for target, arch, cross, output, flags, source in rows:
+            self.assertEqual("arm", arch, target)
+            self.assertEqual("arm-linux-gnueabihf-", cross, target)
+            self.assertEqual(str(self.output), output)
+            self.assertEqual(str(self.source), source)
+            self.assertRegex(flags, r"(?:^|\s)-j2(?:\s|$)")
+            self.assertNotIn("-j17", flags)
+        self.assertEqual("CONFIG_BOARD=y\n", (self.output / ".config").read_text())
+        self.assertTrue((self.output / "board-image").is_file())
+        self.assertTrue((self.output / "board.dtb").is_file())
+
+    def test_no_dt_target_does_not_invent_a_dt_build(self):
+        result = self.build(BSP_ARCH="arm64", BSP_CROSS_COMPILE="aarch64-linux-gnu-", BSP_DT_TARGET="")
+        self.assertEqual(0, result.returncode, result.stderr)
+        self.assertEqual(["board_defconfig", "board-image"], [row[0] for row in self.calls()])
+        self.assertTrue(all(row[1:3] == ["arm64", "aarch64-linux-gnu-"] for row in self.calls()))
+        self.assertFalse((self.output / "board.dtb").exists())
+
+    def test_invalid_job_budget_stops_before_configuration_or_output_creation(self):
+        for jobs in ("", "0", "-1", "02", "2.5", "$(touch MUST_NOT_RUN)"):
+            with self.subTest(jobs=jobs):
+                result = self.build(BSP_BUILD_JOBS=jobs)
+                self.assertNotEqual(0, result.returncode)
+                self.assertFalse(self.output.exists())
+                self.assertFalse(self.capture.exists())
+        self.assertFalse((self.root / "MUST_NOT_RUN").exists())
+
+    def test_existing_output_and_config_are_never_reused_or_reset(self):
+        self.output.mkdir()
+        original = self.output / ".config"
+        original.write_text("CONFIG_USER_SETTING=y\n")
+        result = self.build()
+        self.assertNotEqual(0, result.returncode)
+        self.assertEqual("CONFIG_USER_SETTING=y\n", original.read_text())
+        self.assertFalse(self.capture.exists())
+
+    def test_config_failure_prevents_image_and_dt_commands(self):
+        result = self.build(FAIL_CONFIG="1")
+        self.assertNotEqual(0, result.returncode)
+        self.assertEqual(["board_defconfig"], [row[0] for row in self.calls()])
+        self.assertFalse((self.output / "board-image").exists())
+        self.assertFalse((self.output / "board.dtb").exists())
+
+    def test_build_failure_is_reported_and_keeps_config_for_diagnosis(self):
+        result = self.build(FAIL_BUILD="1", BSP_DT_TARGET="")
+        self.assertNotEqual(0, result.returncode)
+        self.assertTrue((self.output / ".config").is_file())
+        self.assertFalse((self.output / "board-image").exists())
+
+    def test_missing_identity_input_and_relative_output_do_not_build(self):
+        for name in ("BSP_SOURCE_DIR", "BSP_OUTPUT_DIR", "BSP_ARCH", "BSP_CROSS_COMPILE",
+                     "BSP_DEFCONFIG", "BSP_IMAGE_TARGET"):
+            with self.subTest(missing=name):
+                result = self.build(**{name: ""})
+                self.assertNotEqual(0, result.returncode)
+                self.assertFalse(self.output.exists())
+                self.assertFalse(self.capture.exists())
+        result = self.build(BSP_OUTPUT_DIR="relative-output")
+        self.assertNotEqual(0, result.returncode)
+        self.assertFalse((self.root / "relative-output").exists())
+
+
+class InterfaceVersionExampleTests(unittest.TestCase):
+    def test_compiled_consumer_requires_minor_21_and_async_cancel(self):
+        compiler = shutil.which("cc")
+        self.assertIsNotNone(compiler, "compile the published C example with a real native compiler")
+        blocks = re.findall(r"```c\n(.*?)```", (ROOT / INTERFACE).read_text(), re.S)
+        code, = [block for block in blocks if "iface_version_compatible(" in block]
+        # Literal vectors derive from the consumer contract, not the implementation macros.
+        vectors = [(0x0000, 1, 0), (0x01ff, 1, 0), (0x0200, 1, 0), (0x0201, 1, 1),
+                   (0x0202, 1, 1), (0x02ff, 1, 1), (0x0300, 1, 0), (0xffff, 1, 0),
+                   (0x0201, 0, 0), (0x0202, 2, 0), (0x0202, 3, 1)]
+        rows = ",\n".join(f"{{{version}, {caps}, {expected}}}" for version, caps, expected in vectors)
+        harness = ('\n#include <stdio.h>\n'
+                   'int main(void) {\n'
+                   '  const struct { uint16_t version; uint32_t caps; bool expected; } cases[] = {\n' + rows +
+                   '\n  };\n'
+                   '  for (unsigned int i = 0; i < sizeof cases / sizeof cases[0]; ++i) {\n'
+                   '    bool actual = iface_version_compatible(cases[i].version, cases[i].caps);\n'
+                   '    if (actual != cases[i].expected) {\n'
+                   '      fprintf(stderr, "case %u: actual=%d expected=%d\\n", i, actual, cases[i].expected);\n'
+                   '      return 1;\n'
+                   '    }\n'
+                   '  }\n'
+                   '  return 0;\n'
+                   '}\n')
+        with tempfile.TemporaryDirectory() as directory:
+            source, executable = Path(directory) / "version.c", Path(directory) / "version-check"
+            source.write_text(code + harness)
+            compiled = subprocess.run([compiler, "-std=c11", "-Wall", "-Wextra", "-Werror",
+                                       str(source), "-o", str(executable)], capture_output=True, text=True, timeout=15)
+            self.assertEqual(0, compiled.returncode, compiled.stderr)
+            result = subprocess.run([str(executable)], capture_output=True, text=True, timeout=15)
+            self.assertEqual(0, result.returncode, result.stderr)
 
 
 if __name__ == "__main__":
